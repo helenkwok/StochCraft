@@ -152,6 +152,80 @@ fn every_screen_is_translated() {
     assert!(missed.is_empty(), "drawn without translation: {missed:#?}");
 }
 
+/// The states the screens above don't reach: the offer to recover unsaved changes, a run in
+/// progress, a watched run and an error in the status bar. (Not yet the Analysis view: four of
+/// its parameter labels, "{block}: mean service time" and the like, have no row in any catalog,
+/// and drawing it here would add them to what `every_string_has_a_row_in_every_catalog` checks.)
+#[test]
+fn every_state_is_translated() {
+    let mut missed = BTreeSet::new();
+
+    // The offer to recover a copy kept by a session that ended with unsaved changes.
+    let copy = {
+        let mut h = pseudo();
+        let e = &EXAMPLES[0];
+        h.state_mut().open_file(e.file, e.bytes);
+        h.state_mut().execute(
+            "block.rename",
+            serde_json::json!({"id": "serve", "name": "Clerk"}),
+        );
+        match h.state_mut().autosave() {
+            stochcraft_ui_egui::Autosave::Write(c) => c,
+            other => panic!("expected a copy, got {other:?}"),
+        }
+    };
+    let mut h = pseudo();
+    h.state_mut().offer_recovery(&copy);
+    settle(&mut h);
+    h.get_by_label_contains("Recover unsaved changes?");
+    missed.extend(untranslated(&h));
+    h.get_by_role_and_label(Role::Button, "⟦Recover⟧").click();
+    settle(&mut h);
+    missed.extend(untranslated(&h));
+
+    // A run in progress: long enough that it is still running when drawn.
+    let e = &EXAMPLES[0];
+    h.state_mut().open_file(e.file, e.bytes);
+    h.state_mut().execute(
+        "experiment.set",
+        serde_json::json!({"replications": 200, "duration": 1_000_000.0}),
+    );
+    settle(&mut h);
+    h.state_mut().run();
+    h.run_steps(2);
+    assert!(h.state().is_running(), "{}", h.state().status());
+    missed.extend(untranslated(&h));
+    h.state_mut().cancel_run();
+    settle(&mut h);
+    missed.extend(untranslated(&h));
+
+    // Watching a run: paused at the start, then a step on.
+    h.state_mut().execute(
+        "experiment.set",
+        serde_json::json!({"replications": 4, "duration": 600.0}),
+    );
+    h.state_mut().run_command(&CommandRef::new(commands::WATCH));
+    h.run_steps(3);
+    missed.extend(untranslated(&h));
+    h.get_by_role_and_label(Role::Button, "⟦Step⟧").click();
+    h.run_steps(3);
+    missed.extend(untranslated(&h));
+    h.state_mut()
+        .run_command(&CommandRef::new(commands::STOP_WATCHING));
+    settle(&mut h);
+
+    // An error in the status bar: a file that cannot be read. The message is the engine's own,
+    // in English until the engine's strings have a catalog (see `ENGINE`); everything around it
+    // is the interface's.
+    h.state_mut().open_file("broken.bpmn", b"<not a model");
+    settle(&mut h);
+    let message = h.state().status().to_owned();
+    assert!(message.starts_with("broken.bpmn: "), "{message}");
+    missed.extend(untranslated(&h).into_iter().filter(|l| *l != message));
+
+    assert!(missed.is_empty(), "drawn without translation: {missed:#?}");
+}
+
 /// Every string the interface looks up has a row in every one of StochCraft's catalogs, so no
 /// language shows English beside its own words. The strings come from two places: the source
 /// text passed straight to `t`, `tf`, `tc`, `tn` and `tnf` (read from the code of the interface
