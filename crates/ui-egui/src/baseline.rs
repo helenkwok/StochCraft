@@ -168,7 +168,16 @@ fn rows(baseline: &Value, now: &Value, comparison: &Value) -> Vec<Row> {
                 "" => change,
                 u => format!("{change} {u}"),
             };
-            let base = c["a"]["mean"].as_f64();
+            // Paired, with a run that has no value in one of them: the baseline and now are the
+            // means over the same pairs as the difference, so the three agree.
+            let pairs = c["pairs"].as_u64();
+            let partial = comparison["paired"] == true
+                && (c["a"]["n"].as_u64() != pairs || c["b"]["n"].as_u64() != pairs);
+            let (m_base, m_now) = match partial.then(|| paired_means(baseline, now, id, key)) {
+                Some(Some((a, b))) => (json!({ "mean": a }), json!({ "mean": b })),
+                _ => (m_base.clone(), m_now.clone()),
+            };
+            let base = m_base["mean"].as_f64();
             let relative = match (d, base) {
                 (Some(d), Some(a)) if a != 0.0 => Some((d / a.abs(), hw.unwrap_or(0.0) / a.abs())),
                 _ => None,
@@ -176,15 +185,38 @@ fn rows(baseline: &Value, now: &Value, comparison: &Value) -> Vec<Row> {
             Some(Row {
                 block: results::block_name(e).to_owned(),
                 measure: label.to_owned(),
-                before: results::said(m_base, &unit, time).unwrap_or_else(|| "–".into()),
-                after: results::said(m_now, &unit, time).unwrap_or_else(|| "–".into()),
+                before: results::said(&m_base, &unit, time).unwrap_or_else(|| "–".into()),
+                after: results::said(&m_now, &unit, time).unwrap_or_else(|| "–".into()),
                 change,
                 relative,
                 verdict: verdict(c),
-                split: !m_now["split"].is_null() || !m_base["split"].is_null(),
+                split: !e["metrics"][key]["split"].is_null()
+                    || !b["metrics"][key]["split"].is_null(),
             })
         })
         .collect()
+}
+
+/// The means of `key` of block `id` in `baseline` and `now` over the runs where both have a
+/// value (the pairs a paired difference is over); `None` without such a run.
+fn paired_means(baseline: &Value, now: &Value, id: &str, key: &str) -> Option<(f64, f64)> {
+    let (xa, xb) = (
+        baseline["values"][id][key].as_array()?,
+        now["values"][id][key].as_array()?,
+    );
+    let pairs: Vec<(f64, f64)> = xa
+        .iter()
+        .zip(xb)
+        .filter_map(|(a, b)| Some((a.as_f64()?, b.as_f64()?)))
+        .filter(|(a, b)| a.is_finite() && b.is_finite())
+        .collect();
+    let n = pairs.len() as f64;
+    (n > 0.0).then(|| {
+        let (sa, sb) = pairs
+            .iter()
+            .fold((0.0, 0.0), |(sa, sb), (a, b)| (sa + a, sb + b));
+        (sa / n, sb / n)
+    })
 }
 
 /// How the two runs were run: paired (the same seed and runs) or not, and a time unit that
@@ -259,7 +291,9 @@ fn sentences(rows: &[Row]) -> Vec<(bool, String)> {
         })
         .collect();
     let chance = rows.iter().filter(|r| r.verdict == Verdict::Chance).count();
-    if real.is_empty() {
+    // "None" only when no row is real: a real change in a result whose runs split gets no sentence,
+    // but it is still a change.
+    if !rows.iter().any(|r| r.verdict.real()) {
         if chance > 0 {
             out.push((
                 false,
@@ -620,6 +654,34 @@ mod tests {
             verdict(&json!({ "difference": 1.0, "half_width": null, "significant": null })),
             Verdict::Unknown
         );
+    }
+
+    #[test]
+    fn paired_means_take_only_runs_with_both_values() {
+        let run = |xs: Value| json!({ "values": { "serve": { "mean_wait": xs } } });
+        let a = run(json!([10.0, 20.0, 30.0]));
+        let b = run(json!([null, 10.0, 70.0]));
+        assert_eq!(
+            paired_means(&a, &b, "serve", "mean_wait"),
+            Some((25.0, 40.0))
+        );
+        assert_eq!(paired_means(&a, &b, "serve", "left"), None);
+    }
+
+    #[test]
+    fn a_real_change_in_a_split_result_is_not_called_none() {
+        let row = |verdict, split| Row {
+            block: "Serve".into(),
+            measure: "Mean wait".into(),
+            before: "4".into(),
+            after: "2".into(),
+            change: "-2 ± 1".into(),
+            relative: Some((-0.5, 0.25)),
+            verdict,
+            split,
+        };
+        let said = sentences(&[row(Verdict::Lower, true), row(Verdict::Chance, false)]);
+        assert!(said.iter().all(|(_, s)| !s.starts_with("None")), "{said:?}");
     }
 
     #[test]
