@@ -335,3 +335,25 @@ fn models_without_buffers_report_no_buffer_metrics() {
         }
     }
 }
+
+/// A batch held up by a full buffer still holds its entities: they count in its work in
+/// progress, and the batch leaves when it gets in. Arrivals at 1 to 4 make batches of 2 at 2
+/// and 4; the desk takes the first at 2 and serves it to 12, so the second waits from 4. Up to
+/// 10: one entity waits to be batched over 1–2 and 3–4, and two are held over 4–10, so the mean
+/// work in progress is (1 + 1 + 12) / 10.
+#[test]
+fn a_batch_held_by_a_full_buffer_keeps_its_entities() {
+    let mut b = Builder::new();
+    let src = b.source("in", Dist::Constant(1.0), Some(4));
+    let pack = b.batch("pack", 2);
+    let desk = b.buffered_server("desk", 1, Dist::Constant(10.0), 0);
+    let out = b.sink("out");
+    b.connect(src, pack);
+    b.connect(pack, desk);
+    b.connect(desk, out);
+    let r = run_once(&b, 10.0);
+    is(&r, "pack", Metric::Left, 1.0);
+    is(&r, "pack", Metric::WorkInProgress, 2.0);
+    is(&r, "pack", Metric::MeanWorkInProgress, 1.4);
+    is(&r, "desk", Metric::Entered, 1.0);
+}

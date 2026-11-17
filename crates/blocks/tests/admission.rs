@@ -344,12 +344,12 @@ fn the_turned_away_way_takes_entities_from_a_gateway_which_never_waits() {
     assert_eq!(a.left, 2, "{a:?}");
     assert_eq!(a.mean_time_in_system, Some(0.0), "{a:?}");
     assert_eq!(element(&r, "door").left, 3);
-    // Without the way, the second waits at the gateway (counted as gone its way), the third
-    // behind it.
+    // Without the way, the second waits at the gateway (not yet gone: it leaves as it gets in,
+    // as from a server), the third behind it.
     let r = run_once(&build(false), 5.0);
     assert_eq!(element(&r, "desk").lost, Some(0));
     assert_eq!(element(&r, "desk").entered, 1);
-    assert_eq!(element(&r, "door").left, 2);
+    assert_eq!(element(&r, "door").left, 1);
 }
 
 /// A server feeding a full room with a way for those turned away is never blocked: its
