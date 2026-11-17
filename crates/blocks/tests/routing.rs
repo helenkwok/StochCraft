@@ -252,6 +252,88 @@ fn a_fork_and_join_waits_for_the_slower_branch() {
     assert_eq!(sum, Some(3.0));
 }
 
+/// Two entities, ids 1 and 2, arriving at times 1 and 2, each copied down branches a and b
+/// and joined. Branch b takes 1 for both and records which entity it carried (`b`); branch a
+/// takes `first_on_a` for entity 1 and 1 for entity 2. After the join, entities whose `id`
+/// and `b` agree (both halves from the same entity) leave by `same`, the others by `mixed`.
+fn fork_and_join(first_on_a: f64) -> Report {
+    let mut m = Builder::new();
+    let one = m.source("one", Dist::Constant(1.0), Some(1));
+    m.property(one, "id", None, PropertyValue::Number(1.0));
+    m.property(one, "who", None, PropertyValue::Text("first".into()));
+    let two = m.source("two", Dist::Constant(2.0), Some(1));
+    m.property(two, "id", None, PropertyValue::Number(2.0));
+    m.property(two, "who", None, PropertyValue::Text("second".into()));
+    // A gateway with two inputs is a join: the sources meet at a delay first.
+    let start = m.delay("start", Dist::Constant(0.0));
+    let split = m.parallel("split");
+    let a = m.delay("a", Dist::Constant(1.0));
+    m.processing_by(
+        a,
+        "who",
+        vec![
+            ("first", Dist::Constant(first_on_a)),
+            ("second", Dist::Constant(1.0)),
+        ],
+    );
+    let b = m.delay("b", Dist::Constant(1.0));
+    m.property(
+        b,
+        "b",
+        None,
+        PropertyValue::Expression("getProperty('id')".into()),
+    );
+    let join = m.parallel("join");
+    let check = m.exclusive("check");
+    let same = m.sink("same");
+    let mixed = m.sink("mixed");
+    m.connect(one, start);
+    m.connect(two, start);
+    m.connect(start, split);
+    m.connect(split, a);
+    m.connect(split, b);
+    // a is the join's first input: the entity it sends on is a's, with b's properties added.
+    m.connect(a, join);
+    m.connect(b, join);
+    m.connect(join, check);
+    m.route(
+        check,
+        same,
+        None,
+        Some("getProperty('id') = getProperty('b')"),
+    );
+    m.route(check, mixed, None, None);
+    m.default_route(check, mixed);
+    once(&m, 100.0)
+}
+
+#[test]
+fn a_join_pairs_copies_by_arrival_order_even_when_a_branch_overtakes() {
+    // Neither entity overtakes the other: each is joined with its own copy, both 1 in system.
+    let r = fork_and_join(1.0);
+    assert_eq!(entered(&r, "same"), 2);
+    assert_eq!(entered(&r, "mixed"), 0);
+    assert_eq!(
+        r.element("same").and_then(|e| e.mean_time_in_system),
+        Some(1.0)
+    );
+
+    // Entity 1 takes 10 on branch a, so entity 2 overtakes it there. The join pairs the next
+    // copy waiting on each input, whichever entity made it (the documented behaviour of
+    // `spawn_parallel`): at time 3, entity 2 from a with entity 1 from b (waiting since 2);
+    // at time 11, entity 1 from a with entity 2 from b. Both joined entities are mixed.
+    let r = fork_and_join(10.0);
+    assert_eq!(entered(&r, "join"), 2);
+    assert_eq!(entered(&r, "same"), 0);
+    assert_eq!(entered(&r, "mixed"), 2);
+    // Each keeps branch a's entity, so its own arrival time: entity 2 from 2 to 3, entity 1
+    // from 1 to 11, a mean of 5.5.
+    assert_eq!(
+        r.element("mixed").and_then(|e| e.mean_time_in_system),
+        Some(5.5)
+    );
+}
+
 #[test]
 fn connections_without_a_probability_share_what_is_left() {
     // One connection takes 0.5; the other two share the rest: 0.25 each.
