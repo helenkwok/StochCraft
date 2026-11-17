@@ -1619,6 +1619,127 @@ pub enum Problem {
     NormalOftenNegative {
         parameter: &'static str,
     },
+    /// Found from a run's results, not by [`Model::validate`]: a behaviour check (a check that
+    /// needs no reference, made on each replication's results) failed in `replications` of the
+    /// `of` run; `found` is what it found in the replication where it was furthest off.
+    Behaviour {
+        found: Behaviour,
+        replications: u64,
+        of: u64,
+    },
+}
+
+/// What a behaviour check found in one replication's results ([`Problem::Behaviour`]). Each
+/// holds the numbers that should agree, or the one out of its range.
+#[derive(Debug, Clone, PartialEq)]
+pub enum Behaviour {
+    /// An element's entities do not add up: `came` came in, or were inside as the statistics
+    /// started, against `went`, that left, were lost, gave up or are still inside.
+    Unbalanced { came: u64, went: u64 },
+    /// The model's entities do not add up: `came` created, or inside as the statistics started,
+    /// against `went`, that reached an exit, left the model elsewhere (lost, or giving up or
+    /// balking with nowhere to go) or are still inside.
+    Unaccounted { came: u64, went: u64 },
+    /// Of `came` entities created or inside as the statistics started, none reached an exit.
+    NothingOut { came: u64 },
+    /// Little's law does not hold at an element: the time-average number inside was `mean`, but
+    /// the entities' own times in it (from when each came in and went out) give `from_stays`.
+    LittlesLaw { mean: f64, from_stays: f64 },
+    /// A server's units counted busy (time-average units with a job, `busy`) are not those
+    /// working: at least `working` were processing or setting up, and at most `could` were
+    /// processing, setting up, failed or restarting (a unit idle, blocked or off shift is not
+    /// busy).
+    BusyNotWorking { busy: f64, working: f64, could: f64 },
+    /// The shares of a server's units' time in each state add up to `total`, not 1.
+    StatesTotal { total: f64 },
+    /// A share (`metric`, a fraction of time) is `value`, outside 0 to 1.
+    OutOfRange { metric: &'static str, value: f64 },
+}
+
+impl Behaviour {
+    /// A stable snake_case name for files, the command line and agents.
+    pub fn code(&self) -> &'static str {
+        match self {
+            Behaviour::Unbalanced { .. } => "unbalanced",
+            Behaviour::Unaccounted { .. } => "unaccounted",
+            Behaviour::NothingOut { .. } => "nothing_out",
+            Behaviour::LittlesLaw { .. } => "littles_law",
+            Behaviour::BusyNotWorking { .. } => "busy_not_working",
+            Behaviour::StatesTotal { .. } => "states_total",
+            Behaviour::OutOfRange { .. } => "out_of_range",
+        }
+    }
+
+    /// How far off it is, to pick the worst of several replications.
+    pub fn gap(&self) -> f64 {
+        match self {
+            Behaviour::Unbalanced { came, went } | Behaviour::Unaccounted { came, went } => {
+                came.abs_diff(*went) as f64
+            }
+            Behaviour::NothingOut { came } => *came as f64,
+            Behaviour::LittlesLaw { mean, from_stays } => (mean - from_stays).abs(),
+            Behaviour::BusyNotWorking {
+                busy,
+                working,
+                could,
+            } => (working - busy).max(busy - could),
+            Behaviour::StatesTotal { total } => (total - 1.0).abs(),
+            Behaviour::OutOfRange { value, .. } => (value - value.clamp(0.0, 1.0)).abs(),
+        }
+    }
+}
+
+impl std::fmt::Display for Behaviour {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        // All but one can only fail through a fault in the simulation itself, not the model.
+        const FAULT: &str = "this points to a fault in StochCraft rather than in the model; please report it with the model";
+        match self {
+            Behaviour::Unbalanced { came, went } => write!(
+                f,
+                "its entities do not add up: {came} came in or were inside at the start, but {went} left, were lost, gave up or are still inside; {FAULT}"
+            ),
+            Behaviour::Unaccounted { came, went } => write!(
+                f,
+                "the model's entities do not add up: {came} were created or inside at the start, but {went} reached an exit, left the model elsewhere (lost, or giving up or balking with nowhere to go) or are still inside; {FAULT}"
+            ),
+            Behaviour::NothingOut { came } => write!(
+                f,
+                "no entity reached an exit, of {came} created or inside at the start: check that the routing leads to an exit and that the run is long enough for an entity to get through"
+            ),
+            Behaviour::LittlesLaw { mean, from_stays } => write!(
+                f,
+                "Little's law does not hold: the time-average number inside was {}, but the entities' own times inside (from when each came in and went out, within the run) give {}; {FAULT}",
+                short(*mean),
+                short(*from_stays)
+            ),
+            Behaviour::BusyNotWorking {
+                busy,
+                working,
+                could,
+            } => write!(
+                f,
+                "its utilisation counts {} units busy on average, but {} were processing or setting up and at most {} could hold a job (processing, setting up, failed or restarting): {}; {FAULT}",
+                short(*busy),
+                short(*working),
+                short(*could),
+                if busy > could {
+                    "units idle, blocked or off shift were counted busy"
+                } else {
+                    "units at work were not counted busy"
+                }
+            ),
+            Behaviour::StatesTotal { total } => write!(
+                f,
+                "the shares of its units' time in each state add up to {}, not 1; {FAULT}",
+                short(*total)
+            ),
+            Behaviour::OutOfRange { metric, value } => write!(
+                f,
+                "{metric} is {}, outside 0 to 1 (0% to 100%); {FAULT}",
+                short(*value)
+            ),
+        }
+    }
 }
 
 /// Φ⁻¹(0.99): a normal distribution draws below 0 more than 1% of the time when its mean is less
@@ -1709,6 +1830,7 @@ impl Problem {
             Problem::BadEstimate { .. } => "bad_estimate",
             Problem::EstimateMismatch => "estimate_mismatch",
             Problem::NormalOftenNegative { .. } => "normal_often_negative",
+            Problem::Behaviour { found, .. } => found.code(),
         }
     }
 }
@@ -2063,6 +2185,19 @@ impl std::fmt::Display for Diagnostic {
                 f,
                 "{parameter}: this normal distribution draws below 0 more than 1 time in 100 (its mean is less than 2.33 standard deviations), and each such time counts as 0, so the times are longer on average than its mean; use a truncated normal with min 0, or a log-normal"
             ),
+            Problem::Behaviour {
+                found,
+                replications,
+                of,
+            } => {
+                if *of > 1 {
+                    write!(
+                        f,
+                        "in {replications} of {of} replications (the furthest off shown), "
+                    )?;
+                }
+                write!(f, "{found}")
+            }
         }
     }
 }

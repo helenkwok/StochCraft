@@ -19,6 +19,7 @@ use std::sync::Mutex;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 use serde_json::{Value, json};
+use stochcraft_blocks::checks::check_reports;
 use stochcraft_blocks::{Compiled, Live, Report, RunError, summarise};
 use stochcraft_experiment::{Control, Experiment, ExperimentError};
 
@@ -80,11 +81,13 @@ impl Plan {
     }
 
     fn results(&self, reports: &[Report]) -> Value {
+        let model = self.compiled.model();
         let mut v = wire::results(
-            self.compiled.model(),
+            model,
             self.experiment.replications,
             self.experiment.seed,
             &summarise(reports),
+            &check_reports(model, reports),
         );
         v["record"] = self.record.clone();
         v

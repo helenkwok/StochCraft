@@ -2053,7 +2053,16 @@ pub fn diagnostics(ds: &[Diagnostic]) -> Value {
 /// With the replications' results over time (`Compiled::record_every`), `series` gives them and
 /// `warmup_suggestion` the warm-up MSER-5 suggests ([`series`] and [`warmup_suggestion`]);
 /// both are `null` otherwise.
-pub fn results(model: &Model, replications: u64, seed: u64, summary: &ExperimentSummary) -> Value {
+///
+/// `warnings` has what the summary shows ([`stochcraft_blocks::run_warnings`]), then `checks`:
+/// what the behaviour checks found in the replications ([`stochcraft_blocks::checks`]).
+pub fn results(
+    model: &Model,
+    replications: u64,
+    seed: u64,
+    summary: &ExperimentSummary,
+    checks: &[Diagnostic],
+) -> Value {
     let x = &model.experiment;
     // Every result whose runs split, in table order, with the side of each replication.
     let found: Vec<(usize, Metric, Split, Vec<Option<bool>>)> = summary
@@ -2162,7 +2171,12 @@ pub fn results(model: &Model, replications: u64, seed: u64, summary: &Experiment
             "mean_duration": summary.mean_measured(),
         },
         // What the results show that the model could not: as the run record's warnings.
-        "warnings": diagnostics(&stochcraft_blocks::run_warnings(model, summary)),
+        "warnings": diagnostics(
+            &stochcraft_blocks::run_warnings(model, summary)
+                .into_iter()
+                .chain(checks.iter().cloned())
+                .collect::<Vec<_>>()
+        ),
         "series": summary.series.as_ref().map_or(Value::Null, series),
         "warmup_suggestion": summary
             .series
@@ -2441,7 +2455,7 @@ mod tests {
             measured: vec![],
             series: None,
         };
-        let r = results(&Model::default(), 13, 1, &s);
+        let r = results(&Model::default(), 13, 1, &s, &[]);
         let metrics = &r["elements"][0]["metrics"];
         assert!(metrics["entered"].get("split").is_none(), "{metrics}");
         let got = &metrics["mean_in_service"]["split"];
@@ -2481,7 +2495,7 @@ mod tests {
             .samples
             .retain(|(m, _)| *m == Metric::Entered);
         assert!(
-            results(&Model::default(), 13, 1, &calm)
+            results(&Model::default(), 13, 1, &calm, &[])
                 .get("splits")
                 .is_none()
         );

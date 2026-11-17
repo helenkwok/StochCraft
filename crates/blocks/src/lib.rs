@@ -35,6 +35,7 @@
 //! assert!(report.element("machine").and_then(|e| e.utilisation).is_some());
 //! ```
 
+pub mod checks;
 mod runtime;
 pub mod series;
 
@@ -868,6 +869,20 @@ pub struct ElementReport {
     /// For each property the element assigns, in the element's order: the mean of the values
     /// it assigned (`None` when it assigned none, or the property holds text).
     pub properties: Vec<(String, Option<f64>)>,
+    /// Not metrics, but what the behaviour checks ([`checks`]) need: the entities inside the
+    /// element when the statistics started (0, or those inside as the warm-up ended) and at
+    /// the end (0 for a pool).
+    pub inside_at_start: u64,
+    pub inside_at_end: u64,
+    /// Servers, shared tasks and delays, for the behaviour checks: the time entities spent
+    /// inside over the measured window, from the times each came in and went out (those inside
+    /// at its start from then, those inside at its end until then), apart from the counts of
+    /// entities inside that give [`Metric::MeanWorkInProgress`].
+    pub time_inside: Option<f64>,
+    /// Servers whose units go off shift, for the behaviour checks: the time-average number of
+    /// units on shift (those finishing a job after their shift included), which their
+    /// [`Metric::Utilisation`] is over.
+    pub on_shift: Option<f64>,
 }
 
 impl ElementReport {

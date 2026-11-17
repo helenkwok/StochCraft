@@ -1322,16 +1322,25 @@ ch. 10 §10.4, in Brailsford, Churilov and Dangerfield, eds., 2014). Related and
     CI. The checks are saved with the experiment (a `stochcraft:` vendor extension) and can
     write a short report (Markdown) of the checks, the settings and the results. Also offered
     by desflow (MIT, `desflow experiment`), seen 2026-11.
-  - Not yet: **behaviour checks after every run.** Checks that need no reference, run after
-    each replication and reported as warnings, in the window, the CLI and to agents: every
-    entity is accounted for (created = in sinks + still inside + lost), something reaches an
-    exit, Little's law holds per element (mean contents against throughput times mean time
-    inside, within the run's own interval, with end effects allowed for over short runs), no
-    unit counts as busy while it is down, off shift or on a break, and utilisation stays within
-    0–100%. Pernas-Álvarez and Crespo-Pereira (arXiv 2611.10602, 2026) found that agents'
-    wrong models were all "silent" (they built and ran, and answered wrongly); checks like
-    these caught about half, the most common being a break counted as busy time. The tests'
-    `balanced` check in `blocks/tests` is the first of these.
+  - **Done:** **behaviour checks after every run** (`blocks/src/checks.rs`). Checks that need
+    no reference, made on each replication's results and reported as warnings, one per element
+    and check, saying in how many replications it failed (in the run's `warnings`, so the CLI's
+    table, the window's results and agents get them): every element's entities add up, with
+    those inside as the statistics started (`unbalanced`), and the model's (created or inside
+    at the start = reached an exit + left elsewhere + still inside: `unaccounted`; not where
+    entities are copied, combined or split); some entity reaches an exit (`nothing_out`);
+    Little's law holds at every server, shared task and delay (`littles_law`: the time-average
+    inside against the entities' own times inside, from when each came in and went out, those
+    inside at the window's start and end counted to it, so it is exact over any window and the
+    tolerance is rounding only); a server counts busy only units with a job, none idle, blocked
+    or off shift on a break (`busy_not_working`), and its units' shares of time in each state
+    add up to 1 (`states_total`); utilisation and the other shares of time stay within 0–100%
+    (`out_of_range`). Pernas-Álvarez and Crespo-Pereira (arXiv 2611.10602, 2026) found that
+    agents' wrong models were all "silent" (they built and ran, and answered wrongly); checks
+    like these caught about half, the most common being a break counted as busy time.
+  - Not yet: a unit that fails part-way through a job still counts as busy (utilisation is
+    the share of units with a job), so "no unit busy while down" is not checked; whether
+    utilisation should leave that time out is open.
 - **A capacity table.** Before a run, each station's offered load and utilisation worked out
   from the model's own numbers (arrival rates, mean service times, units), shown beside the
   simulated values after the run. The gap between the two is what variability and blocking

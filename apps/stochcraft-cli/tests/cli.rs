@@ -80,7 +80,44 @@ fn every_template_is_written_validated_and_run() {
         let r = json(&ok(&["run", &p, "--reps", "4", "--format", "json"]));
         assert_eq!(r["replications"], 4, "{name}");
         assert_eq!(r["record"]["file"], p.as_ref());
+        // No behaviour check (stochcraft_blocks::checks) finds anything wrong in its results.
+        let behaviour = [
+            "unbalanced",
+            "unaccounted",
+            "nothing_out",
+            "littles_law",
+            "busy_not_working",
+            "states_total",
+            "out_of_range",
+        ];
+        let found: Vec<&Value> = r["warnings"]
+            .as_array()
+            .into_iter()
+            .flatten()
+            .filter(|w| behaviour.contains(&w["code"].as_str().unwrap_or("")))
+            .collect();
+        assert!(found.is_empty(), "{name}: {found:?}");
     }
+}
+
+/// The behaviour checks' warnings are printed with the results: a model whose entities never
+/// get through to its exit in the run says so.
+#[test]
+fn a_run_prints_what_the_behaviour_checks_find() {
+    let path = scratch("never-out.bpmn");
+    let p = path.to_string_lossy();
+    ok(&["new", "--template", "mm1", &p, "--force"]);
+    let table = ok(&[
+        "run",
+        &p,
+        "--reps",
+        "2",
+        "--warmup",
+        "100",
+        "--duration",
+        "0.000001",
+    ]);
+    assert!(table.contains("no entity reached an exit"), "{table}");
 }
 
 #[test]
