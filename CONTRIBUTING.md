@@ -19,6 +19,8 @@ submit work you wrote yourself or have the right to license this way.
    similarly licensed code, including desim and other GPL simulation libraries.
 3. **Dependencies** must be licensed compatibly with MIT OR Apache-2.0. `cargo deny check licenses`
    (in CI) enforces the allow list in `deny.toml`; say in the PR why a new dependency is needed.
+   `cargo deny check advisories` (also in CI) fails on a RustSec advisory; ignore one in
+   `deny.toml` only with the reason it doesn't apply.
 4. **Assets** (icons, images, models, fonts, example models) must be original or openly licensed,
    each with a row in ATTRIBUTION.md.
 
