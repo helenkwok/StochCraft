@@ -216,6 +216,11 @@ impl Platform {
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 enum Replace {
     New,
+    /// A new, empty model to build on the canvas (the start page's Start from a blank model),
+    /// with Getting started beside it for Build a first model.
+    Build {
+        getting_started: bool,
+    },
     Open,
     Example(usize),
     /// File ▸ Open Recent: the recent file at this index.
@@ -1282,6 +1287,15 @@ impl App {
                     self.info(t("New model"));
                 }
             }
+            Replace::Build { getting_started } => {
+                if self.execute("model.new", json!({})).is_some() {
+                    self.forget_view();
+                    self.building = true;
+                    if getting_started {
+                        self.show_help_at(help::Section::GettingStarted);
+                    }
+                }
+            }
             Replace::Open => self.requests.push(Request::PickOpen),
             Replace::Example(i) => {
                 if let Some(e) = EXAMPLES.get(i) {
@@ -2317,14 +2331,17 @@ impl App {
         let action = start::show(ui, &mut self.start, &cards, &recent, &key);
         match action {
             Some(start::Action::Example(i)) => self.replace(Replace::Example(i)),
-            Some(start::Action::FirstModel) => {
-                self.building = true;
-                self.show_help_at(help::Section::GettingStarted);
-            }
+            // A new document (asking about unsaved changes first), so nothing of the last one's
+            // file or undo history carries over.
+            Some(start::Action::FirstModel) => self.replace(Replace::Build {
+                getting_started: true,
+            }),
             Some(start::Action::Switching) => self.open_url(help::SWITCHING),
             Some(start::Action::Open) => self.replace(Replace::Open),
             Some(start::Action::Recent(i)) => self.replace(Replace::Recent(i)),
-            Some(start::Action::Blank) => self.building = true,
+            Some(start::Action::Blank) => self.replace(Replace::Build {
+                getting_started: false,
+            }),
             None => {}
         }
     }

@@ -310,6 +310,20 @@ fn the_start_page_asks_what_to_find_out() {
     settle(&mut h);
     assert_eq!(h.state().engine().model().elements.len(), 3);
 
+    // With every block removed, the start page is back; a blank model from it is a new document
+    // (after the unsaved-changes question), not the old one's file and history.
+    for id in ["arrive", "serve", "leave"] {
+        h.state_mut().execute("block.remove", json!({ "id": id }));
+    }
+    settle(&mut h);
+    h.get_by_label("What do you want to find out?");
+    h.get_by_label("Start from a blank model").click_accesskit();
+    settle(&mut h);
+    click(&mut h, "Don't Save");
+    assert_eq!(h.state().engine().path(), None);
+    assert!(!h.state().has_unsaved_changes());
+    assert!(h.query_by_label("What do you want to find out?").is_none());
+
     // Build a first model (below the cards in this narrow window, so from the keyboard): an
     // empty model on the canvas with Getting started beside it.
     let mut h = harness(Platform::DESKTOP);
