@@ -31,6 +31,10 @@ permissions:
 env:
   CARGO_TERM_COLOR: always
   TRUNK_VERSION: v0.21.14
+  # SHA-256 of trunk-x86_64-unknown-linux-gnu.tar.gz in that release, as its own .sha256 asset
+  # gives it (https://github.com/trunk-rs/trunk/releases/tag/v0.21.14); the same hash was
+  # computed from the downloaded asset. Update both together.
+  TRUNK_SHA256: f2b4680cd239693a646a2795e4633c625328d7b2a044fbe749fa3a2fe9e7036b
   # storytold/craft-fonts (OFL faces), pinned; ci.yml's wasm job checks out the same commit.
   CRAFT_FONTS_REV: aced4137c022f1f587624d48e81ec77e1914a9cc
 
@@ -59,7 +63,10 @@ jobs:
       - name: Install trunk
         run: |
           mkdir -p "$HOME/.local/bin"
-          curl -sSfL "https://github.com/trunk-rs/trunk/releases/download/${TRUNK_VERSION}/trunk-x86_64-unknown-linux-gnu.tar.gz" | tar -xz -C "$HOME/.local/bin"
+          tarball="$RUNNER_TEMP/trunk-x86_64-unknown-linux-gnu.tar.gz"
+          curl -sSfL -o "$tarball" "https://github.com/trunk-rs/trunk/releases/download/${TRUNK_VERSION}/trunk-x86_64-unknown-linux-gnu.tar.gz"
+          echo "${TRUNK_SHA256}  ${tarball}" | sha256sum -c -
+          tar -xzf "$tarball" -C "$HOME/.local/bin"
           echo "$HOME/.local/bin" >> "$GITHUB_PATH"
       - name: trunk build --release
         working-directory: apps/stochcraft-web
