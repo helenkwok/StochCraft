@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- A small repair shop, written for StochCraft's golden-results test (MIT OR Apache-2.0) by
+     stochcraft-cli exec (model.set, property.set, flow.set, file.save). It covers what the
+     other golden models do not: exclusive gateways routing by condition with a default (a
+     repair loop while a job has issues left, and a sort by a text property), entity properties
+     (a mix, a random count, an expression, a boolean), a parallel split and join, a shared pool
+     (the crew) needed by two tasks, and a finite buffer (Pack waits for at most 2) that blocks
+     the delay feeding it. -->
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:bpsim="http://www.bpsim.org/schemas/2.0" id="definitions" name="Repair shop" targetNamespace="https://github.com/helenkwok/StochCraft/model" exporter="StochCraft" exporterVersion="0.1.0">
+  <bpmn:resource id="crew" name="Crew"/>
+  <bpmn:resource id="pack_resource" name="Pack"/>
+  <bpmn:process id="process" name="Repair shop" isExecutable="false">
+    <bpmn:startEvent id="jobs" name="Jobs arrive">
+      <bpmn:outgoing>flow-1</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:exclusiveGateway id="check" name="Issues left?" default="flow-3">
+      <bpmn:incoming>flow-1</bpmn:incoming>
+      <bpmn:incoming>flow-4</bpmn:incoming>
+      <bpmn:outgoing>flow-2</bpmn:outgoing>
+      <bpmn:outgoing>flow-3</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:task id="repair" name="Repair">
+      <bpmn:incoming>flow-2</bpmn:incoming>
+      <bpmn:outgoing>flow-4</bpmn:outgoing>
+      <bpmn:performer>
+        <bpmn:resourceRef>crew</bpmn:resourceRef>
+      </bpmn:performer>
+    </bpmn:task>
+    <bpmn:parallelGateway id="split" name="Split">
+      <bpmn:incoming>flow-3</bpmn:incoming>
+      <bpmn:outgoing>flow-5</bpmn:outgoing>
+      <bpmn:outgoing>flow-6</bpmn:outgoing>
+    </bpmn:parallelGateway>
+    <bpmn:task id="inspect" name="Inspect">
+      <bpmn:incoming>flow-5</bpmn:incoming>
+      <bpmn:outgoing>flow-7</bpmn:outgoing>
+      <bpmn:performer>
+        <bpmn:resourceRef>crew</bpmn:resourceRef>
+      </bpmn:performer>
+    </bpmn:task>
+    <bpmn:task id="paperwork" name="Paperwork">
+      <bpmn:incoming>flow-6</bpmn:incoming>
+      <bpmn:outgoing>flow-8</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:parallelGateway id="join" name="Join">
+      <bpmn:incoming>flow-7</bpmn:incoming>
+      <bpmn:incoming>flow-8</bpmn:incoming>
+      <bpmn:outgoing>flow-9</bpmn:outgoing>
+    </bpmn:parallelGateway>
+    <bpmn:task id="label" name="Label">
+      <bpmn:incoming>flow-9</bpmn:incoming>
+      <bpmn:outgoing>flow-13</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="pack" name="Pack">
+      <bpmn:incoming>flow-13</bpmn:incoming>
+      <bpmn:outgoing>flow-10</bpmn:outgoing>
+      <bpmn:performer>
+        <bpmn:resourceRef>pack_resource</bpmn:resourceRef>
+      </bpmn:performer>
+    </bpmn:task>
+    <bpmn:exclusiveGateway id="sort" name="Sort by kind" default="flow-12">
+      <bpmn:incoming>flow-10</bpmn:incoming>
+      <bpmn:outgoing>flow-11</bpmn:outgoing>
+      <bpmn:outgoing>flow-12</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:endEvent id="shipped_a" name="Kind A shipped">
+      <bpmn:incoming>flow-11</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:endEvent id="shipped_b" name="Kind B shipped">
+      <bpmn:incoming>flow-12</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="flow-1" sourceRef="jobs" targetRef="check"/>
+    <bpmn:sequenceFlow id="flow-2" sourceRef="check" targetRef="repair"/>
+    <bpmn:sequenceFlow id="flow-3" sourceRef="check" targetRef="split"/>
+    <bpmn:sequenceFlow id="flow-4" sourceRef="repair" targetRef="check"/>
+    <bpmn:sequenceFlow id="flow-5" sourceRef="split" targetRef="inspect"/>
+    <bpmn:sequenceFlow id="flow-6" sourceRef="split" targetRef="paperwork"/>
+    <bpmn:sequenceFlow id="flow-7" sourceRef="inspect" targetRef="join"/>
+    <bpmn:sequenceFlow id="flow-8" sourceRef="paperwork" targetRef="join"/>
+    <bpmn:sequenceFlow id="flow-9" sourceRef="join" targetRef="label"/>
+    <bpmn:sequenceFlow id="flow-13" sourceRef="label" targetRef="pack"/>
+    <bpmn:sequenceFlow id="flow-10" sourceRef="pack" targetRef="sort"/>
+    <bpmn:sequenceFlow id="flow-11" sourceRef="sort" targetRef="shipped_a"/>
+    <bpmn:sequenceFlow id="flow-12" sourceRef="sort" targetRef="shipped_b"/>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="diagram">
+    <bpmndi:BPMNPlane id="plane" bpmnElement="process">
+      <bpmndi:BPMNShape id="jobs_di" bpmnElement="jobs">
+        <dc:Bounds x="82" y="82" width="36" height="36"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="check_di" bpmnElement="check">
+        <dc:Bounds x="255" y="75" width="50" height="50"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="repair_di" bpmnElement="repair">
+        <dc:Bounds x="410" y="60" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="split_di" bpmnElement="split">
+        <dc:Bounds x="435" y="215" width="50" height="50"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="inspect_di" bpmnElement="inspect">
+        <dc:Bounds x="590" y="60" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="paperwork_di" bpmnElement="paperwork">
+        <dc:Bounds x="590" y="200" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="join_di" bpmnElement="join">
+        <dc:Bounds x="795" y="75" width="50" height="50"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="label_di" bpmnElement="label">
+        <dc:Bounds x="950" y="60" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="pack_di" bpmnElement="pack">
+        <dc:Bounds x="1130" y="60" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sort_di" bpmnElement="sort">
+        <dc:Bounds x="1335" y="75" width="50" height="50"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shipped_a_di" bpmnElement="shipped_a">
+        <dc:Bounds x="1522" y="82" width="36" height="36"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shipped_b_di" bpmnElement="shipped_b">
+        <dc:Bounds x="1522" y="222" width="36" height="36"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="flow-1_di" bpmnElement="flow-1">
+        <di:waypoint x="118" y="100"/>
+        <di:waypoint x="255" y="100"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow-2_di" bpmnElement="flow-2">
+        <di:waypoint x="305" y="100"/>
+        <di:waypoint x="410" y="100"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow-3_di" bpmnElement="flow-3">
+        <di:waypoint x="305" y="100"/>
+        <di:waypoint x="435" y="240"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow-4_di" bpmnElement="flow-4">
+        <di:waypoint x="410" y="100"/>
+        <di:waypoint x="305" y="100"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow-5_di" bpmnElement="flow-5">
+        <di:waypoint x="485" y="240"/>
+        <di:waypoint x="590" y="100"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow-6_di" bpmnElement="flow-6">
+        <di:waypoint x="485" y="240"/>
+        <di:waypoint x="590" y="240"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow-7_di" bpmnElement="flow-7">
+        <di:waypoint x="690" y="100"/>
+        <di:waypoint x="795" y="100"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow-8_di" bpmnElement="flow-8">
+        <di:waypoint x="690" y="240"/>
+        <di:waypoint x="795" y="100"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow-9_di" bpmnElement="flow-9">
+        <di:waypoint x="845" y="100"/>
+        <di:waypoint x="950" y="100"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow-13_di" bpmnElement="flow-13">
+        <di:waypoint x="1050" y="100"/>
+        <di:waypoint x="1130" y="100"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow-10_di" bpmnElement="flow-10">
+        <di:waypoint x="1230" y="100"/>
+        <di:waypoint x="1335" y="100"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow-11_di" bpmnElement="flow-11">
+        <di:waypoint x="1385" y="100"/>
+        <di:waypoint x="1522" y="100"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow-12_di" bpmnElement="flow-12">
+        <di:waypoint x="1385" y="100"/>
+        <di:waypoint x="1522" y="240"/>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+  <bpmn:relationship type="BPSimData">
+    <bpmn:extensionElements>
+      <bpsim:BPSimData>
+        <bpsim:Scenario id="scenario" name="Repair shop" vendor="StochCraft" version="0.1.0">
+          <bpsim:ScenarioParameters replication="4" seed="46" baseTimeUnit="min">
+            <bpsim:Duration>
+              <bpsim:FloatingParameter value="2400"/>
+            </bpsim:Duration>
+            <bpsim:Warmup>
+              <bpsim:FloatingParameter value="400"/>
+            </bpsim:Warmup>
+          </bpsim:ScenarioParameters>
+          <bpsim:ElementParameters elementRef="jobs">
+            <bpsim:ControlParameters>
+              <bpsim:InterTriggerTimer>
+                <bpsim:NegativeExponentialDistribution mean="4"/>
+              </bpsim:InterTriggerTimer>
+            </bpsim:ControlParameters>
+            <bpsim:PropertyParameters>
+              <bpsim:Property name="issues" type="long">
+                <bpsim:PoissonDistribution mean="1"/>
+              </bpsim:Property>
+              <bpsim:Property name="kind">
+                <bpsim:UserDistribution discrete="true">
+                  <bpsim:UserDistributionDataPoint probability="0.6">
+                    <bpsim:StringParameter value="A"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.4">
+                    <bpsim:StringParameter value="B"/>
+                  </bpsim:UserDistributionDataPoint>
+                </bpsim:UserDistribution>
+              </bpsim:Property>
+            </bpsim:PropertyParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="repair">
+            <bpsim:TimeParameters>
+              <bpsim:ProcessingTime>
+                <bpsim:NegativeExponentialDistribution mean="2"/>
+              </bpsim:ProcessingTime>
+            </bpsim:TimeParameters>
+            <bpsim:ResourceParameters>
+              <bpsim:Selection>
+                <bpsim:ExpressionParameter value="getResource('crew', 1)"/>
+              </bpsim:Selection>
+            </bpsim:ResourceParameters>
+            <bpsim:PriorityParameters>
+              <bpsim:Priority>
+                <bpsim:FloatingParameter value="1"/>
+              </bpsim:Priority>
+            </bpsim:PriorityParameters>
+            <bpsim:PropertyParameters>
+              <bpsim:Property name="issues">
+                <bpsim:ExpressionParameter value="getProperty('issues') - 1"/>
+              </bpsim:Property>
+            </bpsim:PropertyParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="inspect">
+            <bpsim:TimeParameters>
+              <bpsim:ProcessingTime>
+                <bpsim:TriangularDistribution mode="2" min="1" max="4"/>
+              </bpsim:ProcessingTime>
+            </bpsim:TimeParameters>
+            <bpsim:ResourceParameters>
+              <bpsim:Selection>
+                <bpsim:ExpressionParameter value="getResource('crew', 1)"/>
+              </bpsim:Selection>
+            </bpsim:ResourceParameters>
+            <bpsim:PriorityParameters>
+              <bpsim:Priority>
+                <bpsim:FloatingParameter value="2"/>
+              </bpsim:Priority>
+            </bpsim:PriorityParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="paperwork">
+            <bpsim:TimeParameters>
+              <bpsim:ProcessingTime>
+                <bpsim:UniformDistribution min="1" max="3"/>
+              </bpsim:ProcessingTime>
+            </bpsim:TimeParameters>
+            <bpsim:PropertyParameters>
+              <bpsim:Property name="signed">
+                <bpsim:BooleanParameter value="true"/>
+              </bpsim:Property>
+            </bpsim:PropertyParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="label">
+            <bpsim:TimeParameters>
+              <bpsim:ProcessingTime>
+                <bpsim:FloatingParameter value="0.5"/>
+              </bpsim:ProcessingTime>
+            </bpsim:TimeParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="pack">
+            <bpsim:TimeParameters>
+              <bpsim:ProcessingTime>
+                <bpsim:NegativeExponentialDistribution mean="3.2"/>
+              </bpsim:ProcessingTime>
+            </bpsim:TimeParameters>
+            <bpsim:ResourceParameters>
+              <bpsim:Selection>
+                <bpsim:ExpressionParameter value="getResource('pack_resource', 1)"/>
+              </bpsim:Selection>
+            </bpsim:ResourceParameters>
+            <bpsim:VendorExtension name="stochcraft:queueCapacity" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1" stochcraft:value="2"/>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="flow-2">
+            <bpsim:ControlParameters>
+              <bpsim:Condition>
+                <bpsim:ExpressionParameter value="getProperty('issues') &gt; 0"/>
+              </bpsim:Condition>
+            </bpsim:ControlParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="flow-11">
+            <bpsim:ControlParameters>
+              <bpsim:Condition>
+                <bpsim:ExpressionParameter value="getProperty('kind') = 'A'"/>
+              </bpsim:Condition>
+            </bpsim:ControlParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="pack_resource">
+            <bpsim:ResourceParameters>
+              <bpsim:Quantity>
+                <bpsim:NumericParameter value="1"/>
+              </bpsim:Quantity>
+            </bpsim:ResourceParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="crew">
+            <bpsim:ResourceParameters>
+              <bpsim:Quantity>
+                <bpsim:NumericParameter value="2"/>
+              </bpsim:Quantity>
+            </bpsim:ResourceParameters>
+            <bpsim:VendorExtension name="stochcraft:pool" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1" stochcraft:value="true"/>
+          </bpsim:ElementParameters>
+        </bpsim:Scenario>
+      </bpsim:BPSimData>
+    </bpmn:extensionElements>
+    <bpmn:source>definitions</bpmn:source>
+    <bpmn:target>definitions</bpmn:target>
+  </bpmn:relationship>
+</bpmn:definitions>

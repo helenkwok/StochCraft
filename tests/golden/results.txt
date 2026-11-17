@@ -3,4 +3,5 @@
 # alter results, and say why in the commit.
 distributions.bpmn 0baa04902ced7f39528f2edb2b412cf6bbc8d7a4e875a5b76e071a6cc163a746
 mm1.bpmn 217dd018ca1e5ccc0a4987cc54b7c62ae0fd2acf518957a7e47d618999c4b3ac
+repair-shop.bpmn 9fea667bf10727092e79c15db9e31081ca357a540b9286d1f8ee7d18f2cc7a8b
 tandem.xpdl 7d5d56be1cb5960d70b34c72695804baa887f5cbf5e165519a557b3cab44ae9f
