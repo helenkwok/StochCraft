@@ -749,6 +749,18 @@ unit	yr	년
 	Keep as baseline	기준선으로 유지
 	Keep these results, change the model, run it again, and see what the change did.	이 결과를 유지하고, 모델을 변경해 다시 실행한 뒤 변경의 효과를 확인하세요.
 	Clear baseline	기준선 지우기
+	Added {block}	{block} 추가됨
+	Removed {block}	{block} 제거됨
+	Renamed {before} to {after}	{before}의 이름을 {after}(으)로 변경함
+	Disconnected {from} from {to}	{from}을(를) {to}에서 연결 해제함
+	Pool	풀
+	{field}, {part}	{field}, {part}
+	{block} › {field} changed	{block} › {field} 변경됨
+	{block} › {field}: {before} → {after}	{block} › {field}: {before} → {after}
+	on	켬
+	off	끔
+	Changed since the baseline:	기준선 이후 변경된 사항:
+	Nothing in the model has changed since the baseline.	기준선 이후 모델에서 변경된 것이 없습니다.
 @plural	Added {n} block|Added {n} blocks	블록 {n}개 추가됨
 @plural	Copied {n} block|Copied {n} blocks	블록 {n}개 복사됨
 @plural	Finished {n} run|Finished {n} runs	실행 {n}회 완료
@@ -770,3 +782,4 @@ unit	yr	년
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	실행 {n}회 사용(약 ± 5%)
 @plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	둘 다 난수 시드 {seed}와 같은 실행 {n}회를 사용했으므로 각 실행은 짝이 되는 실행과 같은 난수를 받습니다. 차이는 우연한 추출이 아니라 변경에서 나옵니다.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	다른 주요 지표 {n}개는 우연이 만들 수 있는 정도 이상으로 움직이지 않았습니다.
+@plural	and {n} more change|and {n} more changes	외 {n}개 변경

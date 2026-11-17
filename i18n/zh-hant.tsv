@@ -749,6 +749,18 @@ unit	yr	年
 	Keep as baseline	保留為基準
 	Keep these results, change the model, run it again, and see what the change did.	保留這些結果，變更模型，再次執行，看看變更產生了什麼作用。
 	Clear baseline	清除基準
+	Added {block}	已新增 {block}
+	Removed {block}	已移除 {block}
+	Renamed {before} to {after}	已將 {before} 重新命名為 {after}
+	Disconnected {from} from {to}	已中斷 {from} 與 {to} 的連接
+	Pool	資源池
+	{field}, {part}	{field}，{part}
+	{block} › {field} changed	{block} › {field} 已變更
+	{block} › {field}: {before} → {after}	{block} › {field}：{before} → {after}
+	on	開
+	off	關
+	Changed since the baseline:	自基準以來的變更：
+	Nothing in the model has changed since the baseline.	自基準以來，模型沒有任何變更。
 @plural	Added {n} block|Added {n} blocks	已新增 {n} 個區塊
 @plural	Copied {n} block|Copied {n} blocks	已複製 {n} 個區塊
 @plural	Finished {n} run|Finished {n} runs	已完成 {n} 次執行
@@ -770,3 +782,4 @@ unit	yr	年
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	使用 {n} 次執行（約 ± 5%）
 @plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	兩者都使用隨機種子 {seed} 與相同的 {n} 次執行，因此每次執行與其配對的執行取得相同的隨機數：差異來自變更，而非隨機抽取。
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	其他 {n} 個關鍵指標的變動未超出偶然所能造成的程度。
+@plural	and {n} more change|and {n} more changes	以及另外 {n} 項變更

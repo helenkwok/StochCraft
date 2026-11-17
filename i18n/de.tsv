@@ -749,6 +749,18 @@ unit	yr	J.
 	Keep as baseline	Als Referenz behalten
 	Keep these results, change the model, run it again, and see what the change did.	Behalten Sie diese Ergebnisse, ändern Sie das Modell, führen Sie es erneut aus und sehen Sie, was die Änderung bewirkt hat.
 	Clear baseline	Referenz entfernen
+	Added {block}	{block} hinzugefügt
+	Removed {block}	{block} entfernt
+	Renamed {before} to {after}	{before} in {after} umbenannt
+	Disconnected {from} from {to}	{from} von {to} getrennt
+	Pool	Pool
+	{field}, {part}	{field}, {part}
+	{block} › {field} changed	{block} › {field} geändert
+	{block} › {field}: {before} → {after}	{block} › {field}: {before} → {after}
+	on	an
+	off	aus
+	Changed since the baseline:	Seit der Referenz geändert:
+	Nothing in the model has changed since the baseline.	Am Modell hat sich seit der Referenz nichts geändert.
 @plural	Added {n} block|Added {n} blocks	{n} Block hinzugefügt|{n} Blöcke hinzugefügt
 @plural	Copied {n} block|Copied {n} blocks	{n} Block kopiert|{n} Blöcke kopiert
 @plural	Finished {n} run|Finished {n} runs	{n} Lauf abgeschlossen|{n} Läufe abgeschlossen
@@ -770,3 +782,4 @@ unit	yr	J.
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	{n} Lauf verwenden (etwa ± 5%)|{n} Läufe verwenden (etwa ± 5%)
 @plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Beide verwendeten Startwert {seed} und denselben {n} Lauf, sodass jeder Lauf dieselben Zufallszahlen erhält wie sein Gegenstück: Die Unterschiede kommen von der Änderung, nicht von zufälligen Ziehungen.|Beide verwendeten Startwert {seed} und dieselben {n} Läufe, sodass jeder Lauf dieselben Zufallszahlen erhält wie sein Gegenstück: Die Unterschiede kommen von der Änderung, nicht von zufälligen Ziehungen.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	{n} weitere wichtige Kennzahl hat sich nicht stärker bewegt, als der Zufall es könnte.|{n} weitere wichtige Kennzahlen haben sich nicht stärker bewegt, als der Zufall es könnte.
+@plural	and {n} more change|and {n} more changes	und {n} weitere Änderung|und {n} weitere Änderungen

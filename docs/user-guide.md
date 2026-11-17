@@ -267,6 +267,9 @@ table explain anything left out, such as entities still inside at the end.
 To see what a change does, click **Keep as baseline** under the run record, change the model
 (for example a faster service time), and run it again. Over the new results you then see:
 
+- **Changed since the baseline:** what is different in the model, block by block, with both
+  values, for example "Paint › Service time, Mean: 5.2 → 4.6". A change that was undone is not
+  listed; moving blocks is not a change.
 - **How the runs were compared.** With the same seed and number of runs, run 1 of each meets the
   same random numbers, and so on, and the runs are compared in pairs: the difference comes from
   the change, not from chance draws. With another seed or number of runs (for example after

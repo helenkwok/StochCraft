@@ -749,6 +749,18 @@ unit	yr	l.
 	Keep as baseline	Ohrani kot referenco
 	Keep these results, change the model, run it again, and see what the change did.	Ohranite te rezultate, spremenite model, ga znova zaženite in poglejte, kaj je naredila sprememba.
 	Clear baseline	Počisti referenco
+	Added {block}	Dodan {block}
+	Removed {block}	Odstranjen {block}
+	Renamed {before} to {after}	{before} preimenovan v {after}
+	Disconnected {from} from {to}	{from} je odklopljen od {to}
+	Pool	Skupina
+	{field}, {part}	{field}, {part}
+	{block} › {field} changed	{block} › {field} spremenjeno
+	{block} › {field}: {before} → {after}	{block} › {field}: {before} → {after}
+	on	vklopljeno
+	off	izklopljeno
+	Changed since the baseline:	Spremenjeno od reference:
+	Nothing in the model has changed since the baseline.	V modelu se od reference ni nič spremenilo.
 @plural	Added {n} block|Added {n} blocks	Dodan je {n} blok|Dodana sta {n} bloka|Dodani so {n} bloki|Dodanih je {n} blokov
 @plural	Copied {n} block|Copied {n} blocks	Kopiran je {n} blok|Kopirana sta {n} bloka|Kopirani so {n} bloki|Kopiranih je {n} blokov
 @plural	Finished {n} run|Finished {n} runs	Končan je {n} zagon|Končana sta {n} zagona|Končani so {n} zagoni|Končanih je {n} zagonov
@@ -770,3 +782,4 @@ unit	yr	l.
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	Uporabi {n} zagon (približno ± 5%)|Uporabi {n} zagona (približno ± 5%)|Uporabi {n} zagone (približno ± 5%)|Uporabi {n} zagonov (približno ± 5%)
 @plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Oba sta uporabila seme {seed} in isti {n} zagon, zato vsak zagon dobi enaka naključna števila kot njegov par: razlike izhajajo iz spremembe, ne iz naključnih izborov.|Oba sta uporabila seme {seed} in ista {n} zagona, zato vsak zagon dobi enaka naključna števila kot njegov par: razlike izhajajo iz spremembe, ne iz naključnih izborov.|Oba sta uporabila seme {seed} in iste {n} zagone, zato vsak zagon dobi enaka naključna števila kot njegov par: razlike izhajajo iz spremembe, ne iz naključnih izborov.|Oba sta uporabila seme {seed} in istih {n} zagonov, zato vsak zagon dobi enaka naključna števila kot njegov par: razlike izhajajo iz spremembe, ne iz naključnih izborov.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	Še {n} ključni kazalnik se ni premaknil bolj, kot bi lahko naključje.|Še {n} ključna kazalnika se nista premaknila bolj, kot bi lahko naključje.|Še {n} ključni kazalniki se niso premaknili bolj, kot bi lahko naključje.|Še {n} ključnih kazalnikov se ni premaknilo bolj, kot bi lahko naključje.
+@plural	and {n} more change|and {n} more changes	in še {n} sprememba|in še {n} spremembi|in še {n} spremembe|in še {n} sprememb

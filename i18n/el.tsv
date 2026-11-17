@@ -749,6 +749,18 @@ unit	yr	έτ
 	Keep as baseline	Διατήρηση ως βάσης αναφοράς
 	Keep these results, change the model, run it again, and see what the change did.	Κρατήστε αυτά τα αποτελέσματα, αλλάξτε το μοντέλο, εκτελέστε το ξανά και δείτε τι έκανε η αλλαγή.
 	Clear baseline	Εκκαθάριση βάσης αναφοράς
+	Added {block}	Προστέθηκε το {block}
+	Removed {block}	Αφαιρέθηκε το {block}
+	Renamed {before} to {after}	Μετονομάστηκε το {before} σε {after}
+	Disconnected {from} from {to}	Αποσυνδέθηκε το {from} από το {to}
+	Pool	Δεξαμενή
+	{field}, {part}	{field}, {part}
+	{block} › {field} changed	{block} › {field}: άλλαξε
+	{block} › {field}: {before} → {after}	{block} › {field}: {before} → {after}
+	on	ενεργό
+	off	ανενεργό
+	Changed since the baseline:	Αλλαγές από τη βάση αναφοράς:
+	Nothing in the model has changed since the baseline.	Τίποτα στο μοντέλο δεν έχει αλλάξει από τη βάση αναφοράς.
 @plural	Added {n} block|Added {n} blocks	Προστέθηκε {n} μπλοκ|Προστέθηκαν {n} μπλοκ
 @plural	Copied {n} block|Copied {n} blocks	Αντιγράφηκε {n} μπλοκ|Αντιγράφηκαν {n} μπλοκ
 @plural	Finished {n} run|Finished {n} runs	Ολοκληρώθηκε {n} εκτέλεση|Ολοκληρώθηκαν {n} εκτελέσεις
@@ -770,3 +782,4 @@ unit	yr	έτ
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	Χρήση {n} εκτέλεσης (περίπου ± 5%)|Χρήση {n} εκτελέσεων (περίπου ± 5%)
 @plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Και οι δύο χρησιμοποίησαν τον σπόρο {seed} και την ίδια {n} εκτέλεση, οπότε κάθε εκτέλεση παίρνει τους ίδιους τυχαίους αριθμούς με το ζεύγος της: οι διαφορές οφείλονται στην αλλαγή, όχι σε τυχαίες κληρώσεις.|Και οι δύο χρησιμοποίησαν τον σπόρο {seed} και τις ίδιες {n} εκτελέσεις, οπότε κάθε εκτέλεση παίρνει τους ίδιους τυχαίους αριθμούς με το ζεύγος της: οι διαφορές οφείλονται στην αλλαγή, όχι σε τυχαίες κληρώσεις.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	{n} ακόμη κύρια μετρική δεν μετακινήθηκε περισσότερο απ' όσο θα μπορούσε η τύχη.|{n} ακόμη κύριες μετρικές δεν μετακινήθηκαν περισσότερο απ' όσο θα μπορούσε η τύχη.
+@plural	and {n} more change|and {n} more changes	και {n} ακόμη αλλαγή|και {n} ακόμη αλλαγές

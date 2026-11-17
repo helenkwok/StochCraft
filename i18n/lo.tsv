@@ -749,6 +749,18 @@ unit	yr	ປີ
 	Keep as baseline	ເກັບເປັນເສັ້ນຖານ
 	Keep these results, change the model, run it again, and see what the change did.	ເກັບຜົນໄດ້ຮັບເຫຼົ່ານີ້ໄວ້, ປ່ຽນແບບຈຳລອງ, ແລ່ນອີກຄັ້ງ ແລ້ວເບິ່ງວ່າການປ່ຽນແປງເຮັດຫຍັງ.
 	Clear baseline	ລ້າງເສັ້ນຖານ
+	Added {block}	ເພີ່ມ {block} ແລ້ວ
+	Removed {block}	ລຶບ {block} ແລ້ວ
+	Renamed {before} to {after}	ປ່ຽນຊື່ {before} ເປັນ {after} ແລ້ວ
+	Disconnected {from} from {to}	ຕັດການເຊື່ອມຕໍ່ {from} ຈາກ {to} ແລ້ວ
+	Pool	ກຸ່ມຊັບພະຍາກອນ
+	{field}, {part}	{field}, {part}
+	{block} › {field} changed	{block} › {field} ປ່ຽນແລ້ວ
+	{block} › {field}: {before} → {after}	{block} › {field}: {before} → {after}
+	on	ເປີດ
+	off	ປິດ
+	Changed since the baseline:	ປ່ຽນແປງນັບແຕ່ເສັ້ນຖານ:
+	Nothing in the model has changed since the baseline.	ບໍ່ມີຫຍັງໃນແບບຈຳລອງປ່ຽນແປງນັບແຕ່ເສັ້ນຖານ.
 @plural	Added {n} block|Added {n} blocks	ເພີ່ມ {n} ບລັອກແລ້ວ
 @plural	Copied {n} block|Copied {n} blocks	ສຳເນົາ {n} ບລັອກແລ້ວ
 @plural	Finished {n} run|Finished {n} runs	ຈຳລອງຊ້ຳສຳເລັດ {n} ຮອບ
@@ -770,3 +782,4 @@ unit	yr	ປີ
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	ໃຊ້ການຈຳລອງຊ້ຳ {n} ຮອບ (ປະມານ ± 5%)
 @plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	ທັງສອງໃຊ້ເມັດສຸ່ມ {seed} ແລະ {n} ຮອບດຽວກັນ, ແຕ່ລະຮອບຈຶ່ງໄດ້ຕົວເລກສຸ່ມຊຸດດຽວກັນກັບຄູ່ຂອງມັນ: ຄວາມແຕກຕ່າງມາຈາກການປ່ຽນແປງ ບໍ່ແມ່ນຈາກການສຸ່ມໂດຍບັງເອີນ.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	ຕົວຊີ້ວັດຫຼັກອື່ນອີກ {n} ອັນປ່ຽນໄປບໍ່ເກີນທີ່ຄວາມບັງເອີນຈະເຮັດໄດ້.
+@plural	and {n} more change|and {n} more changes	ແລະ ການປ່ຽນແປງອື່ນອີກ {n} ລາຍການ

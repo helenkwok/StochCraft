@@ -22,6 +22,9 @@ use crate::theme;
 pub struct Baseline {
     /// The results, as the run returned them.
     pub results: Value,
+    /// The model they came from, as the app keeps results against it, for what has changed
+    /// since ([`crate::changes::changes`]).
+    pub model: Value,
     /// Which results of this window they were (the app counts every results it shows).
     pub serial: u64,
 }
@@ -313,7 +316,13 @@ fn sentences(rows: &[Row]) -> Vec<(bool, String)> {
 
 /// The comparison over the results: how the runs were compared, what the change did, and the
 /// table of key measures.
-pub fn show(ui: &mut egui::Ui, baseline: &Value, now: &Value, comparison: &Value) {
+pub fn show(
+    ui: &mut egui::Ui,
+    baseline: &Value,
+    now: &Value,
+    comparison: &Value,
+    changes: &[String],
+) {
     let p = theme::palette(ui.ctx());
     let rows = rows(baseline, now, comparison);
     egui::Frame::new()
@@ -322,6 +331,8 @@ pub fn show(ui: &mut egui::Ui, baseline: &Value, now: &Value, comparison: &Value
         .inner_margin(egui::Margin::symmetric(14, 10))
         .show(ui, |ui| {
             ui.set_width(ui.available_width());
+            changed_line(ui, changes);
+            ui.add_space(2.0);
             for line in how_compared(baseline, now, comparison) {
                 ui.add(egui::Label::new(theme::weak(ui, line)).wrap());
             }
@@ -353,6 +364,39 @@ pub fn show(ui: &mut egui::Ui, baseline: &Value, now: &Value, comparison: &Value
         ui.add_space(10.0);
     }
     table(ui, &p, &rows, comparison["paired"] == true);
+}
+
+/// The most changes "Changed since the baseline" lists before "and n more changes".
+const LISTED: usize = 6;
+
+/// "Changed since the baseline:" and the changes, or that nothing in the model changed.
+fn changed_line(ui: &mut egui::Ui, changes: &[String]) {
+    if changes.is_empty() {
+        ui.label(theme::strong(t(
+            "Nothing in the model has changed since the baseline.",
+        )));
+        return;
+    }
+    let mut text = changes
+        .iter()
+        .take(LISTED)
+        .cloned()
+        .collect::<Vec<_>>()
+        .join("; ");
+    if changes.len() > LISTED {
+        let more = (changes.len() - LISTED) as u64;
+        text.push_str("; ");
+        text.push_str(&tnf(
+            more,
+            "and {n} more change",
+            "and {n} more changes",
+            &[],
+        ));
+    }
+    ui.horizontal_wrapped(|ui| {
+        ui.label(theme::strong(t("Changed since the baseline:")));
+        ui.label(text);
+    });
 }
 
 /// "≈", the mark of a difference that could be chance.

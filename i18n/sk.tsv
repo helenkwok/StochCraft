@@ -749,6 +749,18 @@ unit	yr	r.
 	Keep as baseline	Ponechať ako referenciu
 	Keep these results, change the model, run it again, and see what the change did.	Ponechajte si tieto výsledky, zmeňte model, spustite ho znova a pozrite sa, čo zmena urobila.
 	Clear baseline	Zrušiť referenciu
+	Added {block}	Pridaný {block}
+	Removed {block}	Odstránený {block}
+	Renamed {before} to {after}	{before} premenované na {after}
+	Disconnected {from} from {to}	{from} odpojené od {to}
+	Pool	Skupina
+	{field}, {part}	{field}, {part}
+	{block} › {field} changed	{block} › {field} zmenené
+	{block} › {field}: {before} → {after}	{block} › {field}: {before} → {after}
+	on	zapnuté
+	off	vypnuté
+	Changed since the baseline:	Zmenené od referencie:
+	Nothing in the model has changed since the baseline.	Od referencie sa v modeli nič nezmenilo.
 @plural	Added {n} block|Added {n} blocks	Pridaný {n} blok|Pridané {n} bloky|Pridaných {n} blokov
 @plural	Copied {n} block|Copied {n} blocks	Skopírovaný {n} blok|Skopírované {n} bloky|Skopírovaných {n} blokov
 @plural	Finished {n} run|Finished {n} runs	Dokončený {n} beh|Dokončené {n} behy|Dokončených {n} behov
@@ -770,3 +782,4 @@ unit	yr	r.
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	Použiť {n} beh (asi ± 5%)|Použiť {n} behy (asi ± 5%)|Použiť {n} behov (asi ± 5%)
 @plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Oba použili počiatočnú hodnotu generátora {seed} a ten istý {n} beh, takže každý beh dostane rovnaké náhodné čísla ako jeho náprotivok: rozdiely pochádzajú zo zmeny, nie z náhodných ťahov.|Oba použili počiatočnú hodnotu generátora {seed} a tie isté {n} behy, takže každý beh dostane rovnaké náhodné čísla ako jeho náprotivok: rozdiely pochádzajú zo zmeny, nie z náhodných ťahov.|Oba použili počiatočnú hodnotu generátora {seed} a tých istých {n} behov, takže každý beh dostane rovnaké náhodné čísla ako jeho náprotivok: rozdiely pochádzajú zo zmeny, nie z náhodných ťahov.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	Ešte {n} kľúčová metrika sa nepohla viac, než by dokázala náhoda.|Ešte {n} kľúčové metriky sa nepohli viac, než by dokázala náhoda.|Ešte {n} kľúčových metrík sa nepohlo viac, než by dokázala náhoda.
+@plural	and {n} more change|and {n} more changes	a ešte {n} zmena|a ešte {n} zmeny|a ešte {n} zmien

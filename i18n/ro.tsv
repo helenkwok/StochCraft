@@ -749,6 +749,18 @@ unit	yr	a
 	Keep as baseline	Păstrează ca referință
 	Keep these results, change the model, run it again, and see what the change did.	Păstrați aceste rezultate, modificați modelul, rulați-l din nou și vedeți ce a făcut modificarea.
 	Clear baseline	Șterge referința
+	Added {block}	S-a adăugat {block}
+	Removed {block}	S-a eliminat {block}
+	Renamed {before} to {after}	S-a redenumit {before} în {after}
+	Disconnected {from} from {to}	S-a deconectat {from} de la {to}
+	Pool	Grup
+	{field}, {part}	{field}, {part}
+	{block} › {field} changed	{block} › {field} modificat
+	{block} › {field}: {before} → {after}	{block} › {field}: {before} → {after}
+	on	activat
+	off	dezactivat
+	Changed since the baseline:	Modificări de la referință:
+	Nothing in the model has changed since the baseline.	Nimic din model nu s-a schimbat de la referință.
 @plural	Added {n} block|Added {n} blocks	S-a adăugat {n} bloc|S-au adăugat {n} blocuri|S-au adăugat {n} de blocuri
 @plural	Copied {n} block|Copied {n} blocks	S-a copiat {n} bloc|S-au copiat {n} blocuri|S-au copiat {n} de blocuri
 @plural	Finished {n} run|Finished {n} runs	S-a încheiat {n} rulare|S-au încheiat {n} rulări|S-au încheiat {n} de rulări
@@ -770,3 +782,4 @@ unit	yr	a
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	Folosește {n} rulare (circa ± 5%)|Folosește {n} rulări (circa ± 5%)|Folosește {n} de rulări (circa ± 5%)
 @plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Ambele au folosit sămânța {seed} și aceeași {n} rulare, deci fiecare rulare primește aceleași numere aleatoare ca perechea sa: diferențele vin din modificare, nu din extrageri întâmplătoare.|Ambele au folosit sămânța {seed} și aceleași {n} rulări, deci fiecare rulare primește aceleași numere aleatoare ca perechea sa: diferențele vin din modificare, nu din extrageri întâmplătoare.|Ambele au folosit sămânța {seed} și aceleași {n} de rulări, deci fiecare rulare primește aceleași numere aleatoare ca perechea sa: diferențele vin din modificare, nu din extrageri întâmplătoare.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	Încă {n} indicator principal nu s-a mișcat mai mult decât ar putea întâmplarea.|Încă {n} indicatori principali nu s-au mișcat mai mult decât ar putea întâmplarea.|Încă {n} de indicatori principali nu s-au mișcat mai mult decât ar putea întâmplarea.
+@plural	and {n} more change|and {n} more changes	și încă {n} modificare|și încă {n} modificări|și încă {n} de modificări

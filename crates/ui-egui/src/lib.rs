@@ -15,6 +15,7 @@ mod autosave;
 mod baseline;
 mod calendars;
 mod canvas;
+mod changes;
 mod chart_editor;
 pub mod chart_palette;
 mod charts;
@@ -277,8 +278,9 @@ pub struct App {
     results_serial: u64,
     /// Results kept to compare later runs with ("Keep as baseline").
     baseline: Option<baseline::Baseline>,
-    /// The engine's comparison of the baseline with the results on show, by their serials.
-    comparison: Option<((u64, u64), Value)>,
+    /// The engine's comparison of the baseline with the results on show, and what changed in
+    /// the model between them, by their serials.
+    comparison: Option<((u64, u64), Value, Vec<String>)>,
     running: Option<Running>,
     /// The shell's workers for runs, if it has any.
     workers: Option<Box<dyn Workers>>,
@@ -524,9 +526,10 @@ impl App {
 
     /// "Keep as baseline": the results on show become the baseline.
     pub fn keep_baseline(&mut self) {
-        if let Some(results) = &self.results {
+        if let (Some(results), Some(model)) = (&self.results, &self.results_model) {
             self.baseline = Some(baseline::Baseline {
                 results: results.clone(),
+                model: model.clone(),
                 serial: self.results_serial,
             });
             self.comparison = None;
@@ -542,7 +545,7 @@ impl App {
     /// The baseline, the results on show and their comparison, when there is a baseline and the
     /// results are not it. The comparison is the engine's (`results.compare`), worked out once
     /// for each pair of results.
-    fn compared(&mut self) -> Option<(Value, Value, Value)> {
+    fn compared(&mut self) -> Option<(Value, Value, Value, Vec<String>)> {
         let b = self.baseline.as_ref()?;
         let now = self.results.as_ref()?;
         if b.serial == self.results_serial {
@@ -560,11 +563,16 @@ impl App {
                 .engine
                 .execute("results.compare", params)
                 .unwrap_or(Value::Null);
-            self.comparison = Some((key, answer));
+            let changes = self
+                .results_model
+                .as_ref()
+                .map(|m| changes::changes(&b.model, m))
+                .unwrap_or_default();
+            self.comparison = Some((key, answer, changes));
         }
-        let c = &self.comparison.as_ref()?.1;
+        let (_, c, changes) = self.comparison.as_ref()?;
         c.is_object()
-            .then(|| (b.results.clone(), now.clone(), c.clone()))
+            .then(|| (b.results.clone(), now.clone(), c.clone(), changes.clone()))
     }
 
     /// Forgets the results: another model or file replaces the one they came from.
@@ -1627,8 +1635,8 @@ impl App {
                 }
                 baseline_action = self.baseline_line(ui);
                 ui.add_space(6.0);
-                if let Some((before, now, comparison)) = &compared {
-                    baseline::show(ui, before, now, comparison);
+                if let Some((before, now, comparison, changes)) = &compared {
+                    baseline::show(ui, before, now, comparison, changes);
                     ui.add_space(12.0);
                 }
                 results::findings(ui, &results);

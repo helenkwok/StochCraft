@@ -749,6 +749,18 @@ unit	yr	m.
 	Keep as baseline	Išlaikyti kaip atskaitos tašką
 	Keep these results, change the model, run it again, and see what the change did.	Išlaikykite šiuos rezultatus, pakeiskite modelį, paleiskite jį dar kartą ir pažiūrėkite, ką padarė pakeitimas.
 	Clear baseline	Išvalyti atskaitos tašką
+	Added {block}	Pridėta {block}
+	Removed {block}	Pašalinta {block}
+	Renamed {before} to {after}	{before} pervadinta į {after}
+	Disconnected {from} from {to}	{from} atjungta nuo {to}
+	Pool	Grupė
+	{field}, {part}	{field}, {part}
+	{block} › {field} changed	{block} › {field} pakeista
+	{block} › {field}: {before} → {after}	{block} › {field}: {before} → {after}
+	on	įjungta
+	off	išjungta
+	Changed since the baseline:	Pakeista nuo atskaitos taško:
+	Nothing in the model has changed since the baseline.	Nuo atskaitos taško modelyje niekas nepasikeitė.
 @plural	Added {n} block|Added {n} blocks	Pridėtas {n} blokas|Pridėti {n} blokai|Pridėta {n} blokų
 @plural	Copied {n} block|Copied {n} blocks	Nukopijuotas {n} blokas|Nukopijuoti {n} blokai|Nukopijuota {n} blokų
 @plural	Finished {n} run|Finished {n} runs	Baigtas {n} vykdymas|Baigti {n} vykdymai|Baigta {n} vykdymų
@@ -770,3 +782,4 @@ unit	yr	m.
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	Naudoti {n} vykdymą (apie ± 5%)|Naudoti {n} vykdymus (apie ± 5%)|Naudoti {n} vykdymų (apie ± 5%)
 @plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Abu naudojo sėklą {seed} ir tą patį {n} vykdymą, todėl kiekvienas vykdymas gauna tuos pačius atsitiktinius skaičius kaip jo pora: skirtumai kyla iš pakeitimo, o ne iš atsitiktinių traukimų.|Abu naudojo sėklą {seed} ir tuos pačius {n} vykdymus, todėl kiekvienas vykdymas gauna tuos pačius atsitiktinius skaičius kaip jo pora: skirtumai kyla iš pakeitimo, o ne iš atsitiktinių traukimų.|Abu naudojo sėklą {seed} ir tuos pačius {n} vykdymų, todėl kiekvienas vykdymas gauna tuos pačius atsitiktinius skaičius kaip jo pora: skirtumai kyla iš pakeitimo, o ne iš atsitiktinių traukimų.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	Dar {n} pagrindinis rodiklis pasikeitė ne daugiau, nei galėtų atsitiktinumas.|Dar {n} pagrindiniai rodikliai pasikeitė ne daugiau, nei galėtų atsitiktinumas.|Dar {n} pagrindinių rodiklių pasikeitė ne daugiau, nei galėtų atsitiktinumas.
+@plural	and {n} more change|and {n} more changes	ir dar {n} pakeitimas|ir dar {n} pakeitimai|ir dar {n} pakeitimų

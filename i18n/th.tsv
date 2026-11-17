@@ -749,6 +749,18 @@ unit	yr	ปี
 	Keep as baseline	เก็บเป็นเส้นฐาน
 	Keep these results, change the model, run it again, and see what the change did.	เก็บผลลัพธ์เหล่านี้ไว้ เปลี่ยนแบบจำลอง รันอีกครั้ง แล้วดูว่าการเปลี่ยนแปลงทำอะไร
 	Clear baseline	ล้างเส้นฐาน
+	Added {block}	เพิ่ม {block} แล้ว
+	Removed {block}	นำ {block} ออกแล้ว
+	Renamed {before} to {after}	เปลี่ยนชื่อ {before} เป็น {after} แล้ว
+	Disconnected {from} from {to}	ตัดการเชื่อมต่อ {from} จาก {to} แล้ว
+	Pool	กลุ่มทรัพยากร
+	{field}, {part}	{field}, {part}
+	{block} › {field} changed	{block} › {field} เปลี่ยนแล้ว
+	{block} › {field}: {before} → {after}	{block} › {field}: {before} → {after}
+	on	เปิด
+	off	ปิด
+	Changed since the baseline:	เปลี่ยนแปลงตั้งแต่เส้นฐาน:
+	Nothing in the model has changed since the baseline.	ไม่มีสิ่งใดในแบบจำลองเปลี่ยนแปลงตั้งแต่เส้นฐาน
 @plural	Added {n} block|Added {n} blocks	เพิ่ม {n} บล็อกแล้ว
 @plural	Copied {n} block|Copied {n} blocks	คัดลอก {n} บล็อกแล้ว
 @plural	Finished {n} run|Finished {n} runs	การรันเสร็จสิ้น {n} รอบ
@@ -770,3 +782,4 @@ unit	yr	ปี
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	ใช้การรัน {n} รอบ (ประมาณ ± 5%)
 @plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	ทั้งสองใช้เมล็ดสุ่ม {seed} และการรัน {n} รอบชุดเดียวกัน แต่ละการรันจึงได้ตัวเลขสุ่มชุดเดียวกับคู่ของมัน: ความแตกต่างมาจากการเปลี่ยนแปลง ไม่ใช่จากการสุ่มโดยบังเอิญ
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	ตัวชี้วัดหลักอื่นอีก {n} ตัวเปลี่ยนไปไม่เกินที่ความบังเอิญจะทำได้
+@plural	and {n} more change|and {n} more changes	และการเปลี่ยนแปลงอื่นอีก {n} รายการ

@@ -749,6 +749,18 @@ unit	yr	år
 	Keep as baseline	Behåll som referens
 	Keep these results, change the model, run it again, and see what the change did.	Behåll de här resultaten, ändra modellen, kör den igen och se vad ändringen gjorde.
 	Clear baseline	Rensa referens
+	Added {block}	Lade till {block}
+	Removed {block}	Tog bort {block}
+	Renamed {before} to {after}	Bytte namn på {before} till {after}
+	Disconnected {from} from {to}	Kopplade bort {from} från {to}
+	Pool	Pool
+	{field}, {part}	{field}, {part}
+	{block} › {field} changed	{block} › {field} ändrat
+	{block} › {field}: {before} → {after}	{block} › {field}: {before} → {after}
+	on	på
+	off	av
+	Changed since the baseline:	Ändrat sedan referensen:
+	Nothing in the model has changed since the baseline.	Inget i modellen har ändrats sedan referensen.
 @plural	Added {n} block|Added {n} blocks	Lade till {n} block|Lade till {n} block
 @plural	Copied {n} block|Copied {n} blocks	Kopierade {n} block|Kopierade {n} block
 @plural	Finished {n} run|Finished {n} runs	{n} körning klar|{n} körningar klara
@@ -770,3 +782,4 @@ unit	yr	år
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	Använd {n} körning (ungefär ± 5%)|Använd {n} körningar (ungefär ± 5%)
 @plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Båda använde slumpfrö {seed} och samma {n} körning, så varje körning får samma slumptal som sin partner: skillnaderna kommer från ändringen, inte från slumpmässiga dragningar.|Båda använde slumpfrö {seed} och samma {n} körningar, så varje körning får samma slumptal som sin partner: skillnaderna kommer från ändringen, inte från slumpmässiga dragningar.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	{n} annat viktigt mått rörde sig inte mer än slumpen kunde.|{n} andra viktiga mått rörde sig inte mer än slumpen kunde.
+@plural	and {n} more change|and {n} more changes	och {n} ändring till|och {n} ändringar till

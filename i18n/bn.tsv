@@ -749,6 +749,18 @@ unit	yr	বছর
 	Keep as baseline	ভিত্তিরেখা হিসেবে রাখুন
 	Keep these results, change the model, run it again, and see what the change did.	এই ফলাফলগুলো রাখুন, মডেল বদলান, আবার চালান, এবং দেখুন পরিবর্তন কী করেছে।
 	Clear baseline	ভিত্তিরেখা মুছুন
+	Added {block}	{block} যোগ করা হয়েছে
+	Removed {block}	{block} সরানো হয়েছে
+	Renamed {before} to {after}	{before}-এর নাম বদলে {after} করা হয়েছে
+	Disconnected {from} from {to}	{from} কে {to} থেকে বিচ্ছিন্ন করা হয়েছে
+	Pool	পুল
+	{field}, {part}	{field}, {part}
+	{block} › {field} changed	{block} › {field} বদলেছে
+	{block} › {field}: {before} → {after}	{block} › {field}: {before} → {after}
+	on	চালু
+	off	বন্ধ
+	Changed since the baseline:	ভিত্তিরেখার পর থেকে পরিবর্তিত:
+	Nothing in the model has changed since the baseline.	ভিত্তিরেখার পর থেকে মডেলে কিছুই বদলায়নি।
 @plural	Added {n} block|Added {n} blocks	{n}টি ব্লক যোগ করা হয়েছে|{n}টি ব্লক যোগ করা হয়েছে
 @plural	Copied {n} block|Copied {n} blocks	{n}টি ব্লক কপি করা হয়েছে|{n}টি ব্লক কপি করা হয়েছে
 @plural	Finished {n} run|Finished {n} runs	{n}টি পুনরাবৃত্তি সম্পন্ন হয়েছে|{n}টি পুনরাবৃত্তি সম্পন্ন হয়েছে
@@ -770,3 +782,4 @@ unit	yr	বছর
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	{n}টি পুনরাবৃত্তি ব্যবহার করুন (প্রায় ± 5%)|{n}টি পুনরাবৃত্তি ব্যবহার করুন (প্রায় ± 5%)
 @plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	দুটিই যদৃচ্ছ বীজ {seed} এবং একই {n}টি পুনরাবৃত্তি ব্যবহার করেছে, তাই প্রতিটি পুনরাবৃত্তি তার জোড়ার মতো একই যদৃচ্ছ সংখ্যা পায়: পার্থক্য আসে পরিবর্তন থেকে, দৈবক্রমের টানা থেকে নয়।|দুটিই যদৃচ্ছ বীজ {seed} এবং একই {n}টি পুনরাবৃত্তি ব্যবহার করেছে, তাই প্রতিটি পুনরাবৃত্তি তার জোড়ার মতো একই যদৃচ্ছ সংখ্যা পায়: পার্থক্য আসে পরিবর্তন থেকে, দৈবক্রমের টানা থেকে নয়।
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	আরও {n}টি প্রধান পরিমাপক দৈবক্রমের সীমার চেয়ে বেশি নড়েনি।|আরও {n}টি প্রধান পরিমাপক দৈবক্রমের সীমার চেয়ে বেশি নড়েনি।
+@plural	and {n} more change|and {n} more changes	এবং আরও {n}টি পরিবর্তন|এবং আরও {n}টি পরিবর্তন

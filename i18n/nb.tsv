@@ -749,6 +749,18 @@ unit	yr	år
 	Keep as baseline	Behold som referanse
 	Keep these results, change the model, run it again, and see what the change did.	Behold disse resultatene, endre modellen, kjør den igjen og se hva endringen gjorde.
 	Clear baseline	Fjern referanse
+	Added {block}	La til {block}
+	Removed {block}	Fjernet {block}
+	Renamed {before} to {after}	Endret navn fra {before} til {after}
+	Disconnected {from} from {to}	Koblet {from} fra {to}
+	Pool	Pulje
+	{field}, {part}	{field}, {part}
+	{block} › {field} changed	{block} › {field} endret
+	{block} › {field}: {before} → {after}	{block} › {field}: {before} → {after}
+	on	på
+	off	av
+	Changed since the baseline:	Endret siden referansen:
+	Nothing in the model has changed since the baseline.	Ingenting i modellen er endret siden referansen.
 @plural	Added {n} block|Added {n} blocks	La til {n} blokk|La til {n} blokker
 @plural	Copied {n} block|Copied {n} blocks	Kopierte {n} blokk|Kopierte {n} blokker
 @plural	Finished {n} run|Finished {n} runs	{n} kjøring fullført|{n} kjøringer fullført
@@ -770,3 +782,4 @@ unit	yr	år
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	Bruk {n} kjøring (ca. ± 5%)|Bruk {n} kjøringer (ca. ± 5%)
 @plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Begge brukte tilfeldighetsfrø {seed} og den samme {n} kjøringen, så hver kjøring får de samme tilfeldige tallene som sin partner: forskjellene kommer fra endringen, ikke fra tilfeldige trekk.|Begge brukte tilfeldighetsfrø {seed} og de samme {n} kjøringene, så hver kjøring får de samme tilfeldige tallene som sin partner: forskjellene kommer fra endringen, ikke fra tilfeldige trekk.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	{n} annet viktig måltall endret seg ikke mer enn tilfeldigheter kunne.|{n} andre viktige måltall endret seg ikke mer enn tilfeldigheter kunne.
+@plural	and {n} more change|and {n} more changes	og {n} endring til|og {n} endringer til

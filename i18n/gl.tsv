@@ -749,6 +749,18 @@ unit	yr	a
 	Keep as baseline	Gardar como referencia
 	Keep these results, change the model, run it again, and see what the change did.	Garde estes resultados, cambie o modelo, execúteo de novo e vexa que fixo o cambio.
 	Clear baseline	Quitar a referencia
+	Added {block}	Engadiuse {block}
+	Removed {block}	Eliminouse {block}
+	Renamed {before} to {after}	Renomeouse {before} como {after}
+	Disconnected {from} from {to}	Desconectouse {from} de {to}
+	Pool	Grupo
+	{field}, {part}	{field}, {part}
+	{block} › {field} changed	{block} › {field} cambiou
+	{block} › {field}: {before} → {after}	{block} › {field}: {before} → {after}
+	on	activado
+	off	desactivado
+	Changed since the baseline:	Cambios desde a referencia:
+	Nothing in the model has changed since the baseline.	Nada cambiou no modelo desde a referencia.
 @plural	Added {n} block|Added {n} blocks	Engadiuse {n} bloque|Engadíronse {n} bloques
 @plural	Copied {n} block|Copied {n} blocks	Copiouse {n} bloque|Copiáronse {n} bloques
 @plural	Finished {n} run|Finished {n} runs	Rematou {n} execución|Remataron {n} execucións
@@ -770,3 +782,4 @@ unit	yr	a
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	Usar {n} execución (aprox. ± 5%)|Usar {n} execucións (aprox. ± 5%)
 @plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Ambas usaron a semente {seed} e a mesma {n} execución, así que cada execución recibe os mesmos números aleatorios ca súa parella: as diferenzas veñen do cambio, non de extraccións ao azar.|Ambas usaron a semente {seed} e as mesmas {n} execucións, así que cada execución recibe os mesmos números aleatorios ca súa parella: as diferenzas veñen do cambio, non de extraccións ao azar.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	{n} outra métrica clave non se moveu máis do que podería o azar.|{n} outras métricas clave non se moveron máis do que podería o azar.
+@plural	and {n} more change|and {n} more changes	e {n} cambio máis|e {n} cambios máis
