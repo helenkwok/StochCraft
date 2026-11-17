@@ -2287,6 +2287,80 @@ pub fn warmup_suggestion(w: &stochcraft_blocks::series::WarmupSuggestion) -> Val
     })
 }
 
+/// `v` as one CSV field (RFC 4180): quoted, with its quotes doubled, where it holds a comma, a
+/// quote or a line break; as it is otherwise.
+pub fn csv_field(v: &str) -> String {
+    if v.contains([',', '"', '\n', '\r']) {
+        format!("\"{}\"", v.replace('"', "\"\""))
+    } else {
+        v.to_owned()
+    }
+}
+
+/// [`results`] as CSV, one row per element and metric, and per property it assigns (metric
+/// `property:<name>`), as the app's Export table (CSV) and `stochcraft-cli run --format csv` write
+/// them. Where a result's replications split into two outcomes, the last six columns give the
+/// cut, each group's count and mean, and which group of results that split the same runs it is in
+/// (empty otherwise).
+pub fn results_csv(results: &Value) -> String {
+    let text = |v: &Value| csv_field(v.as_str().unwrap_or(""));
+    let mut out = String::from(
+        "element,name,kind,metric,mean,half_width,std_dev,n,\
+         split_cut,split_low_n,split_low_mean,split_high_n,split_high_mean,split_group\n",
+    );
+    for e in results["elements"].as_array().into_iter().flatten() {
+        let mut rows: Vec<(String, &Value)> = results["metrics"]
+            .as_array()
+            .into_iter()
+            .flatten()
+            .filter_map(Value::as_str)
+            .map(|m| (m.to_owned(), &e["metrics"][m]))
+            .filter(|(_, v)| !v.is_null())
+            .collect();
+        for (name, v) in e["properties"].as_object().into_iter().flatten() {
+            rows.push((format!("property:{name}"), v));
+        }
+        for (metric, m) in rows {
+            out.push_str(&format!(
+                "{},{},{},{},{},{},{},{},{}\n",
+                text(&e["id"]),
+                text(&e["name"]),
+                text(&e["kind"]),
+                csv_field(&metric),
+                m["mean"],
+                m["half_width"],
+                m["std_dev"],
+                m["n"],
+                split_fields(&m["split"])
+            ));
+        }
+    }
+    out
+}
+
+/// The six split columns of a CSV row: the cut, each group's count and mean, and the split's
+/// group, or six empty fields where the result does not split.
+fn split_fields(split: &Value) -> String {
+    [
+        &split["cut"],
+        &split["low"]["n"],
+        &split["low"]["mean"],
+        &split["high"]["n"],
+        &split["high"]["mean"],
+        &split["group"],
+    ]
+    .iter()
+    .map(|v| {
+        if v.is_null() {
+            String::new()
+        } else {
+            v.to_string()
+        }
+    })
+    .collect::<Vec<_>>()
+    .join(",")
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -2498,5 +2572,40 @@ mod tests {
                 on_shift_end: OnShiftEndSpec::Finish,
             })
         );
+    }
+
+    #[test]
+    fn results_csv_gives_properties_and_escapes_text() {
+        let m = |mean: f64| json!({ "mean": mean, "half_width": 0.5, "std_dev": 1.0, "n": 4 });
+        let results = json!({
+            "metrics": ["entered", "mean_wait"],
+            "elements": [{
+                "id": "desk", "name": "Desk, \"front\"", "kind": "server",
+                "metrics": { "entered": m(10.0) },
+                "properties": { "a,b": m(2.0) },
+            }],
+        });
+        let csv = results_csv(&results);
+        let lines: Vec<&str> = csv.lines().collect();
+        assert_eq!(lines.len(), 3, "{csv}");
+        assert_eq!(
+            lines[1],
+            "desk,\"Desk, \"\"front\"\"\",server,entered,10.0,0.5,1.0,4,,,,,,"
+        );
+        assert_eq!(
+            lines[2],
+            "desk,\"Desk, \"\"front\"\"\",server,\"property:a,b\",2.0,0.5,1.0,4,,,,,,"
+        );
+        assert_eq!(csv_field("line\r\nbreak"), "\"line\r\nbreak\"");
+    }
+
+    #[test]
+    fn results_csv_gives_the_split_where_the_runs_split() {
+        let split = json!({
+            "cut": 5.8, "low": { "n": 99, "mean": 1.7 }, "high": { "n": 29, "mean": 9.9 },
+            "group": 2,
+        });
+        assert_eq!(split_fields(&split), "5.8,99,1.7,29,9.9,2");
+        assert_eq!(split_fields(&Value::Null), ",,,,,");
     }
 }

@@ -803,76 +803,6 @@ pub fn png(image: &egui::ColorImage, area: Rect, pixels_per_point: f32) -> Optio
     Some(out)
 }
 
-/// The results as CSV, one row per element and metric (and per property it assigns), as
-/// `stochcraft-cli run --format csv` writes them. Where a result's replications split into two
-/// outcomes, the last six columns give the cut, each group's count and mean, and which group of
-/// results that split the same runs it is in (empty otherwise).
-pub fn csv(results: &Value) -> String {
-    fn field(v: &str) -> String {
-        if v.contains([',', '"', '\n']) {
-            format!("\"{}\"", v.replace('"', "\"\""))
-        } else {
-            v.to_owned()
-        }
-    }
-    let mut out = String::from(
-        "element,name,kind,metric,mean,half_width,std_dev,n,\
-         split_cut,split_low_n,split_low_mean,split_high_n,split_high_mean,split_group\n",
-    );
-    for e in results["elements"].as_array().into_iter().flatten() {
-        let s = |k: &str| e[k].as_str().unwrap_or("").to_owned();
-        let mut rows: Vec<(String, &Value)> = results["metrics"]
-            .as_array()
-            .into_iter()
-            .flatten()
-            .filter_map(Value::as_str)
-            .map(|m| (m.to_owned(), &e["metrics"][m]))
-            .filter(|(_, v)| !v.is_null())
-            .collect();
-        for (name, v) in e["properties"].as_object().into_iter().flatten() {
-            rows.push((format!("property:{name}"), v));
-        }
-        for (metric, m) in rows {
-            out.push_str(&format!(
-                "{},{},{},{},{},{},{},{},{}\n",
-                field(&s("id")),
-                field(&s("name")),
-                s("kind"),
-                field(&metric),
-                m["mean"],
-                m["half_width"],
-                m["std_dev"],
-                m["n"],
-                split_fields(&m["split"])
-            ));
-        }
-    }
-    out
-}
-
-/// The six split columns of a CSV row: the cut, each group's count and mean, and the split's
-/// group, or six empty fields where the result does not split.
-fn split_fields(split: &Value) -> String {
-    [
-        &split["cut"],
-        &split["low"]["n"],
-        &split["low"]["mean"],
-        &split["high"]["n"],
-        &split["high"]["mean"],
-        &split["group"],
-    ]
-    .iter()
-    .map(|v| {
-        if v.is_null() {
-            String::new()
-        } else {
-            v.to_string()
-        }
-    })
-    .collect::<Vec<_>>()
-    .join(",")
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -915,16 +845,6 @@ mod tests {
         let parts = super::parts(&results, &["serve".to_owned()]).unwrap_or_default();
         assert_eq!(parts.len(), 1);
         assert!((parts[0].work - 1.0).abs() < 1e-12, "{}", parts[0].work);
-    }
-
-    #[test]
-    fn csv_gives_the_split_where_the_runs_split() {
-        let split = serde_json::json!({
-            "cut": 5.8, "low": { "n": 99, "mean": 1.7 }, "high": { "n": 29, "mean": 9.9 },
-            "group": 2,
-        });
-        assert_eq!(split_fields(&split), "5.8,99,1.7,29,9.9,2");
-        assert_eq!(split_fields(&Value::Null), ",,,,,");
     }
 
     #[test]
