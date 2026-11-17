@@ -220,11 +220,7 @@ fn copy_dir(from: &Path, to: &Path) -> Result<usize, String> {
 fn cmd_golden() -> Result<(), String> {
     let runner = root().join("xtask").join("wasi-run.mjs");
     let mut c = cargo();
-    c.env(
-        "CARGO_TARGET_WASM32_WASIP1_RUNNER",
-        format!("node --no-warnings {}", runner.display()),
-    )
-    .args([
+    c.args(["--config", &wasi_runner(&runner)]).args([
         "test",
         "--locked",
         "-p",
@@ -233,6 +229,20 @@ fn cmd_golden() -> Result<(), String> {
         "wasm32-wasip1",
     ]);
     run(c, "golden results on wasm32-wasip1 (Node WASI)")
+}
+
+/// Cargo's runner for wasm32-wasip1 as a `--config` value: a TOML array, so a path with spaces
+/// stays one argument (the `CARGO_TARGET_*_RUNNER` variable is split on spaces). Each string is
+/// written as JSON, whose escapes are valid in a TOML basic string. `--config` also outranks the
+/// variable, should one be set.
+fn wasi_runner(script: &Path) -> String {
+    let quoted = |s: &str| serde_json::Value::from(s).to_string();
+    format!(
+        "target.wasm32-wasip1.runner = [{}, {}, {}]",
+        quoted("node"),
+        quoted("--no-warnings"),
+        quoted(&script.to_string_lossy())
+    )
 }
 
 fn cmd_ci(affected_base: Option<&str>) -> Result<(), String> {
@@ -275,4 +285,18 @@ fn cmd_ci(affected_base: Option<&str>) -> Result<(), String> {
     test.args(["test", "--locked"]);
     select(&mut test);
     run(test, "cargo test")
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn the_wasi_runner_keeps_a_path_with_spaces_whole() {
+        let path = Path::new(r#"C:\My Work\it's "here"\wasi-run.mjs"#);
+        assert_eq!(
+            wasi_runner(path),
+            r#"target.wasm32-wasip1.runner = ["node", "--no-warnings", "C:\\My Work\\it's \"here\"\\wasi-run.mjs"]"#
+        );
+    }
 }
