@@ -3268,9 +3268,9 @@ impl Model {
     }
 
     /// Finite buffers fed through gateways, and loops of finite buffers that can deadlock.
-    fn check_buffers(
-        &self,
-        outgoing: &BTreeMap<&ElementId, Vec<&ElementId>>,
+    fn check_buffers<'a>(
+        &'a self,
+        outgoing: &BTreeMap<&'a ElementId, Vec<&'a ElementId>>,
         out: &mut Vec<Diagnostic>,
     ) {
         // A finite waiting room that holds its senders up: not one whose entities finding no
@@ -3316,11 +3316,44 @@ impl Model {
             }
         }
         // A loop among finite-buffer servers alone: anything else on the way has unlimited room.
-        let next = |id: &ElementId| -> Vec<&ElementId> {
-            outgoing
-                .get(id)
-                .map(|tos| tos.iter().copied().filter(|t| finite(t)).collect())
-                .unwrap_or_default()
+        // A sender into a shortest-queue gateway routes through it and waits only when every
+        // way is full, so it waits for the gateway's ways when all of them are finite buffers.
+        // A way into another gateway is not: that gateway takes the entity in itself, without
+        // limit, and does its own waiting. The buffers an entity sent to `to` may wait for.
+        let shortest_queue = |id: &ElementId| {
+            self.element(id).is_some_and(|g| {
+                matches!(
+                    g.kind,
+                    ElementKind::ExclusiveGateway {
+                        routing: Routing::ShortestQueue,
+                        ..
+                    }
+                )
+            })
+        };
+        let waits_for = |to: &'a ElementId| -> Vec<&'a ElementId> {
+            if finite(to) {
+                return vec![to];
+            }
+            match outgoing.get(to) {
+                Some(ways)
+                    if shortest_queue(to) && !ways.is_empty() && ways.iter().all(|w| finite(w)) =>
+                {
+                    ways.clone()
+                }
+                _ => Vec::new(),
+            }
+        };
+        let next = |id: &ElementId| -> Vec<&'a ElementId> {
+            let mut tos: Vec<&ElementId> = Vec::new();
+            for &to in outgoing.get(id).into_iter().flatten() {
+                for t in waits_for(to) {
+                    if !tos.contains(&t) {
+                        tos.push(t);
+                    }
+                }
+            }
+            tos
         };
         let mut reported: BTreeSet<&ElementId> = BTreeSet::new();
         for e in &self.elements {
@@ -3877,6 +3910,69 @@ mod tests {
             .collect();
         assert_eq!(cycle.len(), 1, "{ds:?}");
         assert!(cycle[0].to_string().contains("`a` → `b`"), "{}", cycle[0]);
+    }
+
+    #[test]
+    fn a_loop_through_a_shortest_queue_gateway_may_deadlock() {
+        let server = |q| ElementKind::Server {
+            processing_by: None,
+            capacity: 1,
+            service: Dist::Constant(1.0),
+            queue_capacity: q,
+            breakdown: None,
+            transfer: None,
+            available: true,
+            availability: Vec::new(),
+            power: None,
+            setup: None,
+            planned_run_time: None,
+            patience: None,
+            balking: None,
+            health_check: None,
+            shifts: Vec::new(),
+            on_shift_end: OnShiftEnd::Finish,
+            queue_limit: QueueLimit::Fixed,
+        };
+        let shortest = || ElementKind::ExclusiveGateway {
+            default: None,
+            routing: Routing::ShortestQueue,
+        };
+        let cycles = |m: &Model| -> Vec<String> {
+            m.validate()
+                .iter()
+                .filter(|d| d.problem.code() == "blocking_cycle")
+                .map(ToString::to_string)
+                .collect()
+        };
+        // machine → a → pick → b → a: the gateway waits while b is full, so a waits for b and b
+        // for a.
+        let mut m = mm1();
+        m.elements.push(el("a", server(Some(1))));
+        m.elements.push(el("b", server(Some(1))));
+        m.elements.push(el("pick", shortest()));
+        m.connections[1].to = ElementId::unchecked("a");
+        m.connections.push(link("f3", "a", "pick"));
+        m.connections.push(link("f4", "pick", "b"));
+        m.connections.push(link("f5", "b", "a"));
+        let found = cycles(&m);
+        assert_eq!(found.len(), 1, "{found:?}");
+        assert!(found[0].contains("`a` → `b`"), "{found:?}");
+        // A way into another gateway: that one takes entities in without limit and waits
+        // itself, so a → pick → again → b → a holds nothing up in a loop.
+        m.elements.push(el("again", shortest()));
+        m.connections.retain(|c| c.id.as_str() != "f4");
+        m.connections.push(link("f6", "pick", "again"));
+        m.connections.push(link("f7", "again", "b"));
+        assert_eq!(cycles(&m), Vec::<String>::new());
+        // A way out with unlimited room means the gateway never waits: no loop.
+        m.connections
+            .retain(|c| c.id.as_str() != "f6" && c.id.as_str() != "f7");
+        m.connections.push(link("f8", "pick", "b"));
+        m.connections.push(link("f9", "pick", "exit"));
+        assert_eq!(cycles(&m), Vec::<String>::new());
+        m.connections.retain(|c| c.id.as_str() != "f9");
+        let found = cycles(&m);
+        assert_eq!(found.len(), 1, "{found:?}");
     }
 
     #[test]
