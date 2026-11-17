@@ -61,9 +61,9 @@ program exits with a failure if a check fails.
   W = N / (μ − λ), leaving out the first 10% of customers as a warm-up, and that every customer
   left. The band is three standard errors of one station's mean (from the 64 replications
   above, scaled by 1/√n): about 18% at 100,000 customers, since at ρ = 0.9 successive
-  customers' times are strongly correlated. It catches a broken model, not a small bias. In one run
-  of 1,000,000 customers with every customer counted (no warm-up), both paths came within 0.1%
-  (`des`) and 2.7% (`blocks`) of theory at every N. The two paths draw from different streams (blocks gives each element its own), so they are
+  customers' times are strongly correlated. It catches a broken model, not a small bias. With 1,000,000
+  customers (`tandem 1000000`, band about 6%) every run passed: `des` came within 0.1%, 0.3% and
+  0.2% of theory at N = 5, 50 and 200, and `blocks` within 3.3%, 1.6% and 1.2%. The two paths draw from different streams (blocks gives each element its own), so they are
   checked against theory, not against each other.
 - **hold**: the classic hold model. P = 10, 1,000 and 100,000 processes each hold for an
   exponential time (mean 1) over and over, about 2,000,000 events per population. The event list
@@ -77,7 +77,9 @@ program exits with a failure if a check fails.
   1 to 3. Each atomic model is a `des` process with a store as its input port. Couplings are
   flattened when the model is built: an output goes straight to the atomic models it reaches.
   A process engine has no coupled-model protocol, so HO costs what HI costs plus delivering the
-  outputs that reach the top model's second port. Every run checks that its internal
+  outputs that reach the top model's second port. Runs also count the events reaching the top
+  model's outputs: 1, and for HO also every event the top level's atomic models send. This is a
+  reading of Figure 3 (the next level's second output is unconnected), not a published formula. Every run checks that its internal
   transitions, external transitions and events each equal the closed form: 1 + (d − 1)(w − 1)
   for LI and 1 + (d − 1)·w(w − 1)/2 for HI and HO. These are the paper's Eqs. 7 to 17, the same
   as Herguedas-Pinedo et al., ANNSIM'25, Eqs. 3 to 5. The time t of a model is building, running
@@ -86,7 +88,7 @@ program exits with a failure if a check fails.
   three types they are combined with Eq. 16, the geometric mean. Because of the 1 + t, t̂ is
   never below 1 s, and runs well under a second all come out close to 1. t̂ depends on the grid,
   so it is comparable only between runs on the same grid. The paper used 100 to 1,200 in steps
-  of 50, which here would take hours. No reference engine was run, so no RPU (Eq. 15) is
+  of 50, which here would take hours (an estimate from the rates below, not a run). No reference engine was run, so no RPU (Eq. 15) is
   given.
 
 ```bash
@@ -105,7 +107,7 @@ yet.
 
 ### Results on a desktop
 
-Windows 11 Pro desktop, Intel Core i7-12700K (8 performance and 4 efficiency cores, 20 threads),
+Windows 11 Pro desktop, Intel Core i7-12700K (12 cores, 20 threads),
 64 GB RAM, 18 November 2026. Rust 1.95.0 release builds, the median of three runs of `models`
 (the 400 grid ran once). This is a different machine from the cloud machine of the M/M/1 table
 above, so do not compare the two tables row by row.

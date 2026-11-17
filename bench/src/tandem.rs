@@ -102,7 +102,9 @@ fn des_tandem(stations: usize, n: u64, rng: Rng) -> Run {
     }
 }
 
-fn blocks_tandem(stations: usize, n: u64, rng: Rng) -> Run {
+/// Runs the line through `blocks` for `duration` after the warm-up; long enough for every
+/// customer to arrive and leave, the run ends when no event is left.
+fn blocks_tandem(stations: usize, n: u64, rng: Rng, duration: f64) -> Run {
     let mut m = Builder::new();
     let arrivals = m.source("arrivals", Dist::exponential_rate(LAMBDA), Some(n));
     let mut last = arrivals;
@@ -113,10 +115,9 @@ fn blocks_tandem(stations: usize, n: u64, rng: Rng) -> Run {
     }
     let exit = m.sink("exit");
     m.connect(last, exit);
-    // Long enough for every customer to arrive and leave: the run ends when no event is left.
     let experiment = Experiment {
         warmup: WARMUP * n as f64 / LAMBDA,
-        duration: 1e15,
+        duration,
         replications: 1,
         ..Experiment::default()
     };
@@ -171,8 +172,21 @@ pub fn run(n: u64) -> bool {
     for stations in STATIONS {
         ok &= report("des", stations, n, || des_tandem(stations, n, Rng::new(1)));
         ok &= report("blocks", stations, n, || {
-            blocks_tandem(stations, n, Rng::new(1))
+            blocks_tandem(stations, n, Rng::new(1), 1e15)
         });
     }
     ok
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn a_line_that_has_not_drained_fails_its_check() {
+        assert!(des_tandem(5, 1_000, Rng::new(1)).drained);
+        assert!(blocks_tandem(5, 1_000, Rng::new(1), 1e15).drained);
+        // Cut off long before the last of 1,000 customers (about 1,100 time units) has left.
+        assert!(!blocks_tandem(5, 1_000, Rng::new(1), 100.0).drained);
+    }
 }
