@@ -13,6 +13,8 @@ pub const USER_GUIDE: &str = "https://github.com/helenkwok/StochCraft/blob/main/
 /// The user guide's section on reading the results.
 pub const RESULTS_GUIDE: &str =
     "https://github.com/helenkwok/StochCraft/blob/main/docs/user-guide.md#read-the-results";
+/// The guide for people coming from another simulation tool.
+pub const SWITCHING: &str = "https://github.com/helenkwok/StochCraft/blob/main/docs/switching.md";
 /// Where problems are reported.
 pub const REPORT: &str = "https://github.com/helenkwok/StochCraft/issues/new";
 

@@ -818,6 +818,52 @@ unit	yr	yıl
 	What the Results Mean	Sonuçlar Ne Anlama Geliyor
 	User Guide	Kullanım Kılavuzu
 	Report a Problem	Sorun Bildir
+	Where is the bottleneck?	Darboğaz nerede?
+	How many people or machines?	Kaç kişi ya da makine?
+	Will a change help?	Bir değişiklik işe yarar mı?
+	Why did it break down?	Neden arızalandı?
+	Manufacturing	İmalat
+	Healthcare	Sağlık
+	Contact centre	Çağrı merkezi
+	IT operations	BT operasyonları
+	Reference	Referans modeller
+	Checked against queueing theory	Kuyruk teorisiyle doğrulandı
+	Matches a published study	Yayımlanmış bir çalışmayla örtüşüyor
+	What do you want to find out?	Neyi öğrenmek istiyorsunuz?
+	Simulate a process, compare what-ifs, and see which differences are real. Each example asks one question and shows how the answer was found.	Bir süreci simüle edin, ya şöyle olsaydı senaryolarını karşılaştırın ve hangi farkların gerçek olduğunu görün. Her örnek bir soru sorar ve cevabın nasıl bulunduğunu gösterir.
+	Questions	Sorular
+	All	Tümü
+	Industry	Sektör
+	All industries	Tüm sektörler
+	No example matches these choices yet.	Henüz bu seçimlere uyan bir örnek yok.
+	Show the featured examples only	Yalnızca öne çıkan örnekleri göster
+	Teaches:	Öğrettikleri:
+	New to simulation?	Simülasyonda yeni misiniz?
+	Build a first model in five short steps on the real canvas: arrivals, a task, departures, run, then read the finding. Getting started ticks each step as you go.	Gerçek ana yüzeyde beş kısa adımda ilk modelinizi kurun: gelişler, bir görev, çıkışlar, çalıştırma ve ardından bulguyu okuma. “Başlarken” her adımı siz ilerledikçe işaretler.
+	Build a first model	İlk modeli kur
+	Coming from another simulation tool?	Başka bir simülasyon aracından mı geliyorsunuz?
+	How blocks, runs and confidence intervals work here, which keys do what, and how to bring in a process diagram you already have.	Bloklar, çalıştırmalar ve güven aralıkları burada nasıl işler, hangi tuş ne yapar ve elinizdeki bir süreç diyagramını nasıl içe aktarırsınız.
+	Read the two-page guide	İki sayfalık kılavuzu okuyun
+	Open a file	Dosya aç
+	Open a file…	Dosya aç…
+	Recent	Son Kullanılanlar
+	Start from a blank model	Boş bir modelle başla
+	See all {n} examples, including reference models	Referans modeller dahil {n} örneğin tümünü gör
+	{n} min	{n} dk
+	Four-machine line with weekend breaks (Schmitt et al. 2026, Case A)	Hafta sonu duruşlu dört makineli hat (Schmitt et al. 2026, Vaka A)
+	Seven-machine line with two presses (Schmitt et al. 2026, Case B)	İki presli yedi makineli hat (Schmitt et al. 2026, Vaka B)
+	Four machines in series with failures, small buffers, weekend breaks and power per machine.	Arızalar, küçük bekleme alanları, hafta sonu duruşları ve makine başına güç ile seri bağlı dört makine.
+	Two presses in parallel fed by the shorter queue, rejects at quality, weekend breaks.	Daha kısa kuyruktan beslenen iki paralel pres, kalite kontrolde ret, hafta sonu duruşları.
+	How long do customers wait at one busy clerk?	Çok meşgul tek bir görevlide müşteriler ne kadar bekler?
+	How do two stations in a row share the waiting?	Art arda iki istasyon beklemeyi nasıl paylaşır?
+	How do the time distributions differ?	Süre dağılımları nasıl farklılaşır?
+	What do failures and weekend breaks do to a line's output and energy per part?	Arızalar ve hafta sonu duruşları bir hattın çıktısını ve parça başına enerjiyi nasıl etkiler?
+	Which machine holds back a line with two presses in parallel?	İki paralel presli bir hattı hangi makine yavaşlatır?
+	Why a clerk busy three quarters of the time already means a queue.	Zamanın dörtte üçünde meşgul bir görevli neden zaten kuyruk demektir.
+	Reading a process diagram from another file format.	Başka bir dosya biçiminden süreç diyagramı okuma.
+	One task for each distribution, to compare their spread.	Yayılımlarını karşılaştırmak için her dağılıma bir görev.
+	Failures, small buffers, shifts and energy per machine state.	Arızalar, küçük bekleme alanları, vardiyalar ve makine durumuna göre enerji.
+	Parallel machines fed by the shorter queue, and parts rejected at quality.	Daha kısa kuyruktan beslenen paralel makineler ve kalite kontrolde reddedilen parçalar.
 @plural	Added {n} block|Added {n} blocks	{n} blok eklendi|{n} blok eklendi
 @plural	Copied {n} block|Copied {n} blocks	{n} blok kopyalandı|{n} blok kopyalandı
 @plural	Finished {n} run|Finished {n} runs	{n} çalıştırma tamamlandı|{n} çalıştırma tamamlandı

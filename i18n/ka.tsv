@@ -818,6 +818,52 @@ unit	yr	წელი
 	What the Results Mean	რას ნიშნავს შედეგები
 	User Guide	მომხმარებლის სახელმძღვანელო
 	Report a Problem	პრობლემის შეტყობინება
+	Where is the bottleneck?	სად არის ვიწრო ადგილი?
+	How many people or machines?	რამდენი ადამიანი ან მანქანა?
+	Will a change help?	დაეხმარება ცვლილება?
+	Why did it break down?	რატომ მოხდა გაუმართაობა?
+	Manufacturing	წარმოება
+	Healthcare	ჯანდაცვა
+	Contact centre	ქოლ-ცენტრი
+	IT operations	IT ოპერაციები
+	Reference	საცნობარო მოდელები
+	Checked against queueing theory	შემოწმებულია რიგების თეორიით
+	Matches a published study	ემთხვევა გამოქვეყნებულ კვლევას
+	What do you want to find out?	რისი გაგება გსურთ?
+	Simulate a process, compare what-ifs, and see which differences are real. Each example asks one question and shows how the answer was found.	მოახდინეთ პროცესის სიმულაცია, შეადარეთ „რა მოხდება, თუ“ ვარიანტები და ნახეთ, რომელი განსხვავებებია რეალური. თითოეული მაგალითი სვამს ერთ კითხვას და აჩვენებს, როგორ მოიძებნა პასუხი.
+	Questions	კითხვები
+	All	ყველა
+	Industry	დარგი
+	All industries	ყველა დარგი
+	No example matches these choices yet.	ამ არჩევანს ჯერ არცერთი მაგალითი არ შეესაბამება.
+	Show the featured examples only	მხოლოდ რჩეული მაგალითების ჩვენება
+	Teaches:	ასწავლის:
+	New to simulation?	სიმულაციაში ახალი ხართ?
+	Build a first model in five short steps on the real canvas: arrivals, a task, departures, run, then read the finding. Getting started ticks each step as you go.	ააწყვეთ პირველი მოდელი ხუთ მოკლე ნაბიჯად ნამდვილ მთავარ ზედაპირზე: შემოსვლები, დავალება, გასვლები, გაშვება და შემდეგ წაიკითხეთ მიგნება. „დაწყება“ ყოველ ნაბიჯს მონიშნავს, როგორც კი შეასრულებთ.
+	Build a first model	პირველი მოდელის აწყობა
+	Coming from another simulation tool?	სხვა სიმულაციის ხელსაწყოდან გადმოდიხართ?
+	How blocks, runs and confidence intervals work here, which keys do what, and how to bring in a process diagram you already have.	როგორ მუშაობს აქ ბლოკები, გაშვებები და ნდობის ინტერვალები, რომელი კლავიში რას აკეთებს და როგორ შემოიტანოთ უკვე არსებული პროცესის დიაგრამა.
+	Read the two-page guide	ორგვერდიანი სახელმძღვანელოს წაკითხვა
+	Open a file	ფაილის გახსნა
+	Open a file…	ფაილის გახსნა…
+	Recent	ბოლო ფაილები
+	Start from a blank model	ცარიელი მოდელით დაწყება
+	See all {n} examples, including reference models	ყველა მაგალითის ნახვა ({n}), საცნობარო მოდელების ჩათვლით
+	{n} min	{n} წთ
+	Four-machine line with weekend breaks (Schmitt et al. 2026, Case A)	ოთხმანქანიანი ხაზი შაბათ-კვირის შესვენებებით (Schmitt et al. 2026, შემთხვევა A)
+	Seven-machine line with two presses (Schmitt et al. 2026, Case B)	შვიდმანქანიანი ხაზი ორი წნეხით (Schmitt et al. 2026, შემთხვევა B)
+	Four machines in series with failures, small buffers, weekend breaks and power per machine.	ოთხი მიმდევრობითი მანქანა გაუმართაობებით, პატარა მოსაცდელი სივრცეებით, შაბათ-კვირის შესვენებებით და თითოეული მანქანის სიმძლავრით.
+	Two presses in parallel fed by the shorter queue, rejects at quality, weekend breaks.	ორი პარალელური წნეხი, რომლებსაც უფრო მოკლე რიგი კვებავს, წუნი ხარისხის კონტროლზე, შაბათ-კვირის შესვენებები.
+	How long do customers wait at one busy clerk?	რამდენ ხანს ელოდებიან კლიენტები ერთ დატვირთულ თანამშრომელს?
+	How do two stations in a row share the waiting?	როგორ ინაწილებს ლოდინს ორი მიმდევრობითი სადგური?
+	How do the time distributions differ?	რით განსხვავდება დროის განაწილებები?
+	What do failures and weekend breaks do to a line's output and energy per part?	რას უშვრება გაუმართაობები და შაბათ-კვირის შესვენებები ხაზის გამოშვებას და ენერგიას ერთ დეტალზე?
+	Which machine holds back a line with two presses in parallel?	რომელი მანქანა აფერხებს ხაზს ორი პარალელური წნეხით?
+	Why a clerk busy three quarters of the time already means a queue.	რატომ ნიშნავს უკვე რიგს თანამშრომელი, რომელიც დროის სამ მეოთხედს დაკავებულია.
+	Reading a process diagram from another file format.	პროცესის დიაგრამის წაკითხვა სხვა ფაილის ფორმატიდან.
+	One task for each distribution, to compare their spread.	თითო დავალება ყოველ განაწილებაზე, მათი გაფანტვის შესადარებლად.
+	Failures, small buffers, shifts and energy per machine state.	გაუმართაობები, პატარა მოსაცდელი სივრცეები, ცვლები და ენერგია მანქანის მდგომარეობის მიხედვით.
+	Parallel machines fed by the shorter queue, and parts rejected at quality.	პარალელური მანქანები, რომლებსაც უფრო მოკლე რიგი კვებავს, და ხარისხის კონტროლზე უარყოფილი დეტალები.
 @plural	Added {n} block|Added {n} blocks	დამატებულია {n} ბლოკი|დამატებულია {n} ბლოკი
 @plural	Copied {n} block|Copied {n} blocks	დაკოპირებულია {n} ბლოკი|დაკოპირებულია {n} ბლოკი
 @plural	Finished {n} run|Finished {n} runs	დასრულდა {n} გაშვება|დასრულდა {n} გაშვება

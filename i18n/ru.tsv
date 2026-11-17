@@ -818,6 +818,52 @@ unit	yr	г.
 	What the Results Mean	Что означают результаты
 	User Guide	Руководство пользователя
 	Report a Problem	Сообщить о проблеме
+	Where is the bottleneck?	Где узкое место?
+	How many people or machines?	Сколько людей или станков?
+	Will a change help?	Поможет ли изменение?
+	Why did it break down?	Почему произошёл отказ?
+	Manufacturing	Производство
+	Healthcare	Здравоохранение
+	Contact centre	Колл-центр
+	IT operations	ИТ-эксплуатация
+	Reference	Эталонные модели
+	Checked against queueing theory	Проверено по теории массового обслуживания
+	Matches a published study	Совпадает с опубликованным исследованием
+	What do you want to find out?	Что вы хотите узнать?
+	Simulate a process, compare what-ifs, and see which differences are real. Each example asks one question and shows how the answer was found.	Смоделируйте процесс, сравните варианты «что если» и посмотрите, какие различия реальны. Каждый пример задаёт один вопрос и показывает, как был найден ответ.
+	Questions	Вопросы
+	All	Все
+	Industry	Отрасль
+	All industries	Все отрасли
+	No example matches these choices yet.	Пока ни один пример не подходит под этот выбор.
+	Show the featured examples only	Показать только избранные примеры
+	Teaches:	Чему учит:
+	New to simulation?	Впервые в моделировании?
+	Build a first model in five short steps on the real canvas: arrivals, a task, departures, run, then read the finding. Getting started ticks each step as you go.	Постройте первую модель за пять коротких шагов на настоящей основной поверхности: прибытия, задача, выходы, запуск, а затем прочитайте наблюдение. «Начало работы» отмечает каждый шаг по мере продвижения.
+	Build a first model	Построить первую модель
+	Coming from another simulation tool?	Переходите с другого инструмента моделирования?
+	How blocks, runs and confidence intervals work here, which keys do what, and how to bring in a process diagram you already have.	Как здесь устроены блоки, запуски и доверительные интервалы, какие клавиши что делают и как импортировать уже готовую диаграмму процесса.
+	Read the two-page guide	Прочитать руководство на двух страницах
+	Open a file	Открыть файл
+	Open a file…	Открыть файл…
+	Recent	Недавние
+	Start from a blank model	Начать с пустой модели
+	See all {n} examples, including reference models	Показать все примеры ({n}), включая эталонные модели
+	{n} min	{n} мин
+	Four-machine line with weekend breaks (Schmitt et al. 2026, Case A)	Линия из четырёх станков с остановками на выходные (Schmitt et al. 2026, случай A)
+	Seven-machine line with two presses (Schmitt et al. 2026, Case B)	Линия из семи станков с двумя прессами (Schmitt et al. 2026, случай B)
+	Four machines in series with failures, small buffers, weekend breaks and power per machine.	Четыре последовательных станка с отказами, малыми местами ожидания, остановками на выходные и мощностью каждого станка.
+	Two presses in parallel fed by the shorter queue, rejects at quality, weekend breaks.	Два параллельных пресса, загружаемых из более короткой очереди, брак на контроле качества, остановки на выходные.
+	How long do customers wait at one busy clerk?	Сколько ждут клиенты у одного загруженного оператора?
+	How do two stations in a row share the waiting?	Как два последовательных поста делят ожидание?
+	How do the time distributions differ?	Чем различаются распределения времени?
+	What do failures and weekend breaks do to a line's output and energy per part?	Как отказы и остановки на выходные влияют на выпуск линии и энергию на деталь?
+	Which machine holds back a line with two presses in parallel?	Какой станок сдерживает линию с двумя параллельными прессами?
+	Why a clerk busy three quarters of the time already means a queue.	Почему оператор, занятый три четверти времени, уже означает очередь.
+	Reading a process diagram from another file format.	Чтение диаграммы процесса из другого формата файла.
+	One task for each distribution, to compare their spread.	По одной задаче на каждое распределение для сравнения разброса.
+	Failures, small buffers, shifts and energy per machine state.	Отказы, малые места ожидания, смены и энергия по состояниям станка.
+	Parallel machines fed by the shorter queue, and parts rejected at quality.	Параллельные станки, загружаемые из более короткой очереди, и детали, отбракованные на контроле качества.
 @plural	Added {n} block|Added {n} blocks	Добавлен {n} блок|Добавлено {n} блока|Добавлено {n} блоков
 @plural	Copied {n} block|Copied {n} blocks	Скопирован {n} блок|Скопировано {n} блока|Скопировано {n} блоков
 @plural	Finished {n} run|Finished {n} runs	Завершён {n} запуск|Завершены {n} запуска|Завершено {n} запусков

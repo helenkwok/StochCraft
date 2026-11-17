@@ -818,6 +818,52 @@ unit	yr	ж.
 	What the Results Mean	Нәтижелер нені білдіреді
 	User Guide	Пайдаланушы нұсқаулығы
 	Report a Problem	Мәселе туралы хабарлау
+	Where is the bottleneck?	Тар жер қайда?
+	How many people or machines?	Қанша адам не машина?
+	Will a change help?	Өзгеріс көмектесе ме?
+	Why did it break down?	Неге ақау болды?
+	Manufacturing	Өндіріс
+	Healthcare	Денсаулық сақтау
+	Contact centre	Байланыс орталығы
+	IT operations	IT операциялары
+	Reference	Эталондық модельдер
+	Checked against queueing theory	Кезек теориясымен тексерілген
+	Matches a published study	Жарияланған зерттеуге сәйкес келеді
+	What do you want to find out?	Нені анықтағыңыз келеді?
+	Simulate a process, compare what-ifs, and see which differences are real. Each example asks one question and shows how the answer was found.	Процесті модельдеңіз, «егер былай болса» нұсқаларын салыстырыңыз және қай айырмашылықтар шынайы екенін көріңіз. Әр мысал бір сұрақ қояды және жауаптың қалай табылғанын көрсетеді.
+	Questions	Сұрақтар
+	All	Барлығы
+	Industry	Сала
+	All industries	Барлық салалар
+	No example matches these choices yet.	Бұл таңдауларға әзірге ешбір мысал сәйкес келмейді.
+	Show the featured examples only	Тек таңдаулы мысалдарды көрсету
+	Teaches:	Үйретеді:
+	New to simulation?	Модельдеуде жаңасыз ба?
+	Build a first model in five short steps on the real canvas: arrivals, a task, departures, run, then read the finding. Getting started ticks each step as you go.	Нақты негізгі бетте бес қысқа қадаммен алғашқы модельді құрыңыз: келулер, тапсырма, кетулер, іске қосу, содан кейін тұжырымды оқыңыз. «Жұмысты бастау» әр қадамды орындаған сайын белгілейді.
+	Build a first model	Алғашқы модельді құру
+	Coming from another simulation tool?	Басқа модельдеу құралынан келдіңіз бе?
+	How blocks, runs and confidence intervals work here, which keys do what, and how to bring in a process diagram you already have.	Мұнда блоктар, іске қосулар және сенімділік аралықтары қалай жұмыс істейді, қай перне не істейді және бар процесс диаграммасын қалай импорттауға болады.
+	Read the two-page guide	Екі беттік нұсқаулықты оқу
+	Open a file	Файлды ашу
+	Open a file…	Файлды ашу…
+	Recent	Соңғы файлдар
+	Start from a blank model	Бос модельден бастау
+	See all {n} examples, including reference models	Барлық мысалдарды көру ({n}), эталондық модельдерді қоса
+	{n} min	{n} мин
+	Four-machine line with weekend breaks (Schmitt et al. 2026, Case A)	Демалыс күнгі үзілістері бар төрт машиналы желі (Schmitt et al. 2026, A жағдайы)
+	Seven-machine line with two presses (Schmitt et al. 2026, Case B)	Екі пресі бар жеті машиналы желі (Schmitt et al. 2026, B жағдайы)
+	Four machines in series with failures, small buffers, weekend breaks and power per machine.	Ақаулары, шағын күту орындары, демалыс күнгі үзілістері және әр машинаның қуаты бар тізбектей төрт машина.
+	Two presses in parallel fed by the shorter queue, rejects at quality, weekend breaks.	Қысқарақ кезектен берілетін екі параллель пресс, сапа бақылауында жарамсыз деп табылғандар, демалыс күнгі үзілістер.
+	How long do customers wait at one busy clerk?	Бір бос емес қызметкердің алдында клиенттер қанша күтеді?
+	How do two stations in a row share the waiting?	Тізбектей екі станция күтуді қалай бөліседі?
+	How do the time distributions differ?	Уақыт үлестірімдері қалай ерекшеленеді?
+	What do failures and weekend breaks do to a line's output and energy per part?	Ақаулар мен демалыс күнгі үзілістер желінің өнімі мен бір бөлшекке энергияға қалай әсер етеді?
+	Which machine holds back a line with two presses in parallel?	Екі параллель пресі бар желіні қай машина тежейді?
+	Why a clerk busy three quarters of the time already means a queue.	Уақыттың төрттен үшінде бос емес қызметкер неге кезек дегенді білдіреді.
+	Reading a process diagram from another file format.	Басқа файл пішімінен процесс диаграммасын оқу.
+	One task for each distribution, to compare their spread.	Таралуын салыстыру үшін әр үлестірімге бір тапсырма.
+	Failures, small buffers, shifts and energy per machine state.	Ақаулар, шағын күту орындары, ауысымдар және машина күйі бойынша энергия.
+	Parallel machines fed by the shorter queue, and parts rejected at quality.	Қысқарақ кезектен берілетін параллель машиналар және сапа бақылауында жарамсыз деп табылған бөлшектер.
 @plural	Added {n} block|Added {n} blocks	{n} блок қосылды|{n} блок қосылды
 @plural	Copied {n} block|Copied {n} blocks	{n} блок көшірілді|{n} блок көшірілді
 @plural	Finished {n} run|Finished {n} runs	{n} іске қосу аяқталды|{n} іске қосу аяқталды

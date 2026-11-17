@@ -818,6 +818,52 @@ unit	yr	वर्ष
 	What the Results Mean	परिणामों का अर्थ
 	User Guide	उपयोगकर्ता गाइड
 	Report a Problem	समस्या की रिपोर्ट करें
+	Where is the bottleneck?	बॉटलनेक कहाँ है?
+	How many people or machines?	कितने लोग या मशीनें?
+	Will a change help?	क्या बदलाव से मदद मिलेगी?
+	Why did it break down?	यह खराब क्यों हुआ?
+	Manufacturing	विनिर्माण
+	Healthcare	स्वास्थ्य सेवा
+	Contact centre	कॉल सेंटर
+	IT operations	आईटी संचालन
+	Reference	संदर्भ मॉडल
+	Checked against queueing theory	कतार सिद्धांत से जाँचा गया
+	Matches a published study	एक प्रकाशित अध्ययन से मेल खाता है
+	What do you want to find out?	आप क्या पता लगाना चाहते हैं?
+	Simulate a process, compare what-ifs, and see which differences are real. Each example asks one question and shows how the answer was found.	किसी प्रक्रिया का सिमुलेशन करें, “क्या होगा अगर” विकल्पों की तुलना करें और देखें कि कौन-से अंतर वास्तविक हैं। हर उदाहरण एक प्रश्न पूछता है और दिखाता है कि उत्तर कैसे मिला।
+	Questions	प्रश्न
+	All	सभी
+	Industry	उद्योग
+	All industries	सभी उद्योग
+	No example matches these choices yet.	अभी कोई उदाहरण इन विकल्पों से मेल नहीं खाता।
+	Show the featured examples only	केवल चुनिंदा उदाहरण दिखाएँ
+	Teaches:	सिखाता है:
+	New to simulation?	सिमुलेशन में नए हैं?
+	Build a first model in five short steps on the real canvas: arrivals, a task, departures, run, then read the finding. Getting started ticks each step as you go.	असली मुख्य सतह पर पाँच छोटे चरणों में पहला मॉडल बनाएँ: आगमन, एक कार्य, प्रस्थान, रन, फिर निष्कर्ष पढ़ें। “शुरुआत करें” हर चरण पूरा होते ही उस पर निशान लगाता है।
+	Build a first model	पहला मॉडल बनाएँ
+	Coming from another simulation tool?	किसी दूसरे सिमुलेशन टूल से आ रहे हैं?
+	How blocks, runs and confidence intervals work here, which keys do what, and how to bring in a process diagram you already have.	यहाँ ब्लॉक, रन और विश्वास अंतराल कैसे काम करते हैं, कौन-सी कुंजी क्या करती है, और अपने पास पहले से मौजूद प्रक्रिया आरेख को कैसे लाएँ।
+	Read the two-page guide	दो पेज की गाइड पढ़ें
+	Open a file	फ़ाइल खोलें
+	Open a file…	फ़ाइल खोलें…
+	Recent	हाल की फ़ाइलें
+	Start from a blank model	खाली मॉडल से शुरू करें
+	See all {n} examples, including reference models	संदर्भ मॉडलों सहित सभी {n} उदाहरण देखें
+	{n} min	{n} min
+	Four-machine line with weekend breaks (Schmitt et al. 2026, Case A)	सप्ताहांत विरामों वाली चार मशीनों की लाइन (Schmitt et al. 2026, केस A)
+	Seven-machine line with two presses (Schmitt et al. 2026, Case B)	दो प्रेस वाली सात मशीनों की लाइन (Schmitt et al. 2026, केस B)
+	Four machines in series with failures, small buffers, weekend breaks and power per machine.	श्रृंखला में चार मशीनें, खराबियों, छोटे प्रतीक्षा कक्षों, सप्ताहांत विरामों और प्रति मशीन शक्ति के साथ।
+	Two presses in parallel fed by the shorter queue, rejects at quality, weekend breaks.	छोटी कतार से भरे जाने वाले दो समानांतर प्रेस, गुणवत्ता जाँच पर अस्वीकृत, सप्ताहांत विराम।
+	How long do customers wait at one busy clerk?	एक व्यस्त कर्मचारी के पास ग्राहक कितनी देर प्रतीक्षा करते हैं?
+	How do two stations in a row share the waiting?	क्रम में लगे दो स्टेशन प्रतीक्षा को कैसे बाँटते हैं?
+	How do the time distributions differ?	समय वितरण एक-दूसरे से कैसे अलग हैं?
+	What do failures and weekend breaks do to a line's output and energy per part?	खराबियाँ और सप्ताहांत विराम किसी लाइन के उत्पादन और प्रति पुर्जा ऊर्जा पर क्या असर डालते हैं?
+	Which machine holds back a line with two presses in parallel?	दो समानांतर प्रेस वाली लाइन को कौन-सी मशीन रोके रखती है?
+	Why a clerk busy three quarters of the time already means a queue.	तीन-चौथाई समय व्यस्त रहने वाले कर्मचारी का मतलब पहले से ही एक कतार क्यों है।
+	Reading a process diagram from another file format.	किसी दूसरे फ़ाइल प्रारूप से प्रक्रिया आरेख पढ़ना।
+	One task for each distribution, to compare their spread.	प्रसार की तुलना के लिए प्रत्येक वितरण पर एक कार्य।
+	Failures, small buffers, shifts and energy per machine state.	खराबियाँ, छोटे प्रतीक्षा कक्ष, पालियाँ और मशीन की हर अवस्था में ऊर्जा।
+	Parallel machines fed by the shorter queue, and parts rejected at quality.	छोटी कतार से भरी जाने वाली समानांतर मशीनें, और गुणवत्ता जाँच पर अस्वीकृत पुर्जे।
 @plural	Added {n} block|Added {n} blocks	{n} ब्लॉक जोड़ा गया|{n} ब्लॉक जोड़े गए
 @plural	Copied {n} block|Copied {n} blocks	{n} ब्लॉक कॉपी किया गया|{n} ब्लॉक कॉपी किए गए
 @plural	Finished {n} run|Finished {n} runs	{n} रन पूरा हुआ|{n} रन पूरे हुए

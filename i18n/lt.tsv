@@ -818,6 +818,52 @@ unit	yr	m.
 	What the Results Mean	Ką reiškia rezultatai
 	User Guide	Naudotojo vadovas
 	Report a Problem	Pranešti apie problemą
+	Where is the bottleneck?	Kur yra siauroji vieta?
+	How many people or machines?	Kiek žmonių ar mašinų?
+	Will a change help?	Ar pakeitimas padės?
+	Why did it break down?	Kodėl sutriko?
+	Manufacturing	Gamyba
+	Healthcare	Sveikatos priežiūra
+	Contact centre	Skambučių centras
+	IT operations	IT operacijos
+	Reference	Etaloniniai modeliai
+	Checked against queueing theory	Patikrinta pagal eilių teoriją
+	Matches a published study	Atitinka paskelbtą tyrimą
+	What do you want to find out?	Ką norite sužinoti?
+	Simulate a process, compare what-ifs, and see which differences are real. Each example asks one question and shows how the answer was found.	Imituokite procesą, palyginkite „kas būtų, jei“ variantus ir pamatykite, kurie skirtumai yra tikri. Kiekvienas pavyzdys užduoda vieną klausimą ir parodo, kaip buvo rastas atsakymas.
+	Questions	Klausimai
+	All	Visi
+	Industry	Sritis
+	All industries	Visos sritys
+	No example matches these choices yet.	Kol kas joks pavyzdys neatitinka šių pasirinkimų.
+	Show the featured examples only	Rodyti tik išskirtus pavyzdžius
+	Teaches:	Moko:
+	New to simulation?	Naujokas simuliacijoje?
+	Build a first model in five short steps on the real canvas: arrivals, a task, departures, run, then read the finding. Getting started ticks each step as you go.	Sukurkite pirmąjį modelį penkiais trumpais žingsniais tikrame pagrindiniame paviršiuje: atvykimai, užduotis, išvykimai, vykdymas, tada perskaitykite pastebėjimą. „Pradžia“ pažymi kiekvieną žingsnį, kai jį atliekate.
+	Build a first model	Sukurti pirmąjį modelį
+	Coming from another simulation tool?	Pereinate iš kito simuliacijos įrankio?
+	How blocks, runs and confidence intervals work here, which keys do what, and how to bring in a process diagram you already have.	Kaip čia veikia blokai, vykdymai ir pasikliautinieji intervalai, kurie klavišai ką daro ir kaip importuoti jau turimą proceso diagramą.
+	Read the two-page guide	Perskaityti dviejų puslapių vadovą
+	Open a file	Atverti failą
+	Open a file…	Atverti failą…
+	Recent	Paskiausiai naudoti
+	Start from a blank model	Pradėti nuo tuščio modelio
+	See all {n} examples, including reference models	Žiūrėti visus pavyzdžius ({n}), įskaitant etaloninius modelius
+	{n} min	{n} min
+	Four-machine line with weekend breaks (Schmitt et al. 2026, Case A)	Keturių mašinų linija su savaitgalio prastovomis (Schmitt et al. 2026, A atvejis)
+	Seven-machine line with two presses (Schmitt et al. 2026, Case B)	Septynių mašinų linija su dviem presais (Schmitt et al. 2026, B atvejis)
+	Four machines in series with failures, small buffers, weekend breaks and power per machine.	Keturios nuoseklios mašinos su gedimais, mažais laukiamaisiais, savaitgalio prastovomis ir kiekvienos mašinos galia.
+	Two presses in parallel fed by the shorter queue, rejects at quality, weekend breaks.	Du lygiagretūs presai, tiekiami iš trumpesnės eilės, brokas kokybės kontrolėje, savaitgalio prastovos.
+	How long do customers wait at one busy clerk?	Kiek laiko klientai laukia prie vieno užimto darbuotojo?
+	How do two stations in a row share the waiting?	Kaip dvi nuoseklios stotys pasidalija laukimą?
+	How do the time distributions differ?	Kuo skiriasi laiko skirstiniai?
+	What do failures and weekend breaks do to a line's output and energy per part?	Ką gedimai ir savaitgalio prastovos daro linijos produkcijai ir energijai vienai detalei?
+	Which machine holds back a line with two presses in parallel?	Kuri mašina stabdo liniją su dviem lygiagrečiais presais?
+	Why a clerk busy three quarters of the time already means a queue.	Kodėl tris ketvirtadalius laiko užimtas darbuotojas jau reiškia eilę.
+	Reading a process diagram from another file format.	Proceso diagramos skaitymas iš kito failo formato.
+	One task for each distribution, to compare their spread.	Po vieną užduotį kiekvienam skirstiniui, kad būtų galima palyginti jų sklaidą.
+	Failures, small buffers, shifts and energy per machine state.	Gedimai, maži laukiamieji, pamainos ir energija pagal mašinos būseną.
+	Parallel machines fed by the shorter queue, and parts rejected at quality.	Lygiagrečios mašinos, tiekiamos iš trumpesnės eilės, ir kokybės kontrolėje atmestos detalės.
 @plural	Added {n} block|Added {n} blocks	Pridėtas {n} blokas|Pridėti {n} blokai|Pridėta {n} blokų
 @plural	Copied {n} block|Copied {n} blocks	Nukopijuotas {n} blokas|Nukopijuoti {n} blokai|Nukopijuota {n} blokų
 @plural	Finished {n} run|Finished {n} runs	Baigtas {n} vykdymas|Baigti {n} vykdymai|Baigta {n} vykdymų

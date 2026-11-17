@@ -818,6 +818,52 @@ unit	yr	年
 	What the Results Mean	結果的意義
 	User Guide	使用者指南
 	Report a Problem	回報問題
+	Where is the bottleneck?	瓶頸在哪裡？
+	How many people or machines?	需要多少人或機器？
+	Will a change help?	改動會有幫助嗎？
+	Why did it break down?	為什麼會出故障？
+	Manufacturing	製造業
+	Healthcare	醫療
+	Contact centre	客服中心
+	IT operations	IT 維運
+	Reference	參考模型
+	Checked against queueing theory	已用排隊理論驗證
+	Matches a published study	與已發表的研究一致
+	What do you want to find out?	你想弄清楚什麼？
+	Simulate a process, compare what-ifs, and see which differences are real. Each example asks one question and shows how the answer was found.	模擬一個流程，比較各種假設情境，看看哪些差異是真實的。每個範例提出一個問題，並展示答案是如何得出的。
+	Questions	問題
+	All	全部
+	Industry	產業
+	All industries	所有產業
+	No example matches these choices yet.	還沒有符合這些選擇的範例。
+	Show the featured examples only	只顯示精選範例
+	Teaches:	學習重點：
+	New to simulation?	剛接觸模擬？
+	Build a first model in five short steps on the real canvas: arrivals, a task, departures, run, then read the finding. Getting started ticks each step as you go.	在真實的畫布上用五個簡短步驟建立第一個模型：到達、任務、離開、執行，然後閱讀發現。「入門」會在你完成時逐步打勾。
+	Build a first model	建立第一個模型
+	Coming from another simulation tool?	從其他模擬工具轉過來？
+	How blocks, runs and confidence intervals work here, which keys do what, and how to bring in a process diagram you already have.	區塊、執行和信賴區間在這裡如何運作，哪些按鍵做什麼，以及如何匯入你已有的流程圖。
+	Read the two-page guide	閱讀兩頁指南
+	Open a file	開啟檔案
+	Open a file…	開啟檔案…
+	Recent	最近開啟的檔案
+	Start from a blank model	從空白模型開始
+	See all {n} examples, including reference models	查看全部 {n} 個範例，包括參考模型
+	{n} min	{n} 分鐘
+	Four-machine line with weekend breaks (Schmitt et al. 2026, Case A)	有週末停機的四機器產線（Schmitt et al. 2026，案例 A）
+	Seven-machine line with two presses (Schmitt et al. 2026, Case B)	有兩台沖壓機的七機器產線（Schmitt et al. 2026，案例 B）
+	Four machines in series with failures, small buffers, weekend breaks and power per machine.	四台串聯機器，含故障、小等待區、週末停機和每台機器的功率。
+	Two presses in parallel fed by the shorter queue, rejects at quality, weekend breaks.	兩台並聯沖壓機，由較短的佇列供料，品檢剔除，週末停機。
+	How long do customers wait at one busy clerk?	一名忙碌的服務員前，顧客要等多久？
+	How do two stations in a row share the waiting?	兩個串聯工作站如何分擔等待？
+	How do the time distributions differ?	各種時間分布有何不同？
+	What do failures and weekend breaks do to a line's output and energy per part?	故障和週末停機對產線產出和單件能耗有什麼影響？
+	Which machine holds back a line with two presses in parallel?	有兩台並聯沖壓機的產線，是哪台機器拖了後腿？
+	Why a clerk busy three quarters of the time already means a queue.	為什麼一名服務員只要四分之三的時間在忙，就已經會排隊。
+	Reading a process diagram from another file format.	從另一種檔案格式讀取流程圖。
+	One task for each distribution, to compare their spread.	每種分布各設一個任務，用於比較其離散程度。
+	Failures, small buffers, shifts and energy per machine state.	故障、小等待區、班次以及按機器狀態計的能耗。
+	Parallel machines fed by the shorter queue, and parts rejected at quality.	由較短佇列供料的並聯機器，以及在品檢時被剔除的零件。
 @plural	Added {n} block|Added {n} blocks	已新增 {n} 個區塊
 @plural	Copied {n} block|Copied {n} blocks	已複製 {n} 個區塊
 @plural	Finished {n} run|Finished {n} runs	已完成 {n} 次執行

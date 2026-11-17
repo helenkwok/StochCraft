@@ -818,6 +818,52 @@ unit	yr	a
 	What the Results Mean	Què volen dir els resultats
 	User Guide	Guia de l'usuari
 	Report a Problem	Informa d'un problema
+	Where is the bottleneck?	On és el coll d'ampolla?
+	How many people or machines?	Quantes persones o màquines?
+	Will a change help?	Ajudarà un canvi?
+	Why did it break down?	Per què ha fallat?
+	Manufacturing	Fabricació
+	Healthcare	Salut
+	Contact centre	Centre de trucades
+	IT operations	Operacions de TI
+	Reference	Models de referència
+	Checked against queueing theory	Contrastat amb la teoria de cues
+	Matches a published study	Coincideix amb un estudi publicat
+	What do you want to find out?	Què voleu esbrinar?
+	Simulate a process, compare what-ifs, and see which differences are real. Each example asks one question and shows how the answer was found.	Simuleu un procés, compareu hipòtesis i vegeu quines diferències són reals. Cada exemple planteja una pregunta i mostra com s'ha trobat la resposta.
+	Questions	Preguntes
+	All	Totes
+	Industry	Sector
+	All industries	Tots els sectors
+	No example matches these choices yet.	Encara no hi ha cap exemple que coincideixi amb aquestes opcions.
+	Show the featured examples only	Mostra només els exemples destacats
+	Teaches:	Ensenya:
+	New to simulation?	Nou en la simulació?
+	Build a first model in five short steps on the real canvas: arrivals, a task, departures, run, then read the finding. Getting started ticks each step as you go.	Construïu un primer model en cinc passos curts a la superfície principal real: arribades, una tasca, sortides, executar i llegir la constatació. «Primers passos» marca cada pas a mesura que avanceu.
+	Build a first model	Construeix un primer model
+	Coming from another simulation tool?	Veniu d'una altra eina de simulació?
+	How blocks, runs and confidence intervals work here, which keys do what, and how to bring in a process diagram you already have.	Com funcionen aquí els blocs, les execucions i els intervals de confiança, què fa cada tecla i com importar un diagrama de procés que ja tingueu.
+	Read the two-page guide	Llegiu la guia de dues pàgines
+	Open a file	Obre un fitxer
+	Open a file…	Obre un fitxer…
+	Recent	Recents
+	Start from a blank model	Comença amb un model buit
+	See all {n} examples, including reference models	Mostra els {n} exemples, inclosos els models de referència
+	{n} min	{n} min
+	Four-machine line with weekend breaks (Schmitt et al. 2026, Case A)	Línia de quatre màquines amb aturades de cap de setmana (Schmitt et al. 2026, cas A)
+	Seven-machine line with two presses (Schmitt et al. 2026, Case B)	Línia de set màquines amb dues premses (Schmitt et al. 2026, cas B)
+	Four machines in series with failures, small buffers, weekend breaks and power per machine.	Quatre màquines en sèrie amb avaries, sales d'espera petites, aturades de cap de setmana i potència per màquina.
+	Two presses in parallel fed by the shorter queue, rejects at quality, weekend breaks.	Dues premses en paral·lel alimentades per la cua més curta, rebuigs a qualitat, aturades de cap de setmana.
+	How long do customers wait at one busy clerk?	Quant esperen els clients davant d'un sol treballador molt ocupat?
+	How do two stations in a row share the waiting?	Com es reparteixen l'espera dues estacions en sèrie?
+	How do the time distributions differ?	En què es diferencien les distribucions de temps?
+	What do failures and weekend breaks do to a line's output and energy per part?	Quin efecte tenen les avaries i les aturades de cap de setmana en la producció d'una línia i en l'energia per peça?
+	Which machine holds back a line with two presses in parallel?	Quina màquina frena una línia amb dues premses en paral·lel?
+	Why a clerk busy three quarters of the time already means a queue.	Per què un treballador ocupat tres quartes parts del temps ja vol dir una cua.
+	Reading a process diagram from another file format.	Llegir un diagrama de procés d'un altre format de fitxer.
+	One task for each distribution, to compare their spread.	Una tasca per cada distribució, per comparar-ne la dispersió.
+	Failures, small buffers, shifts and energy per machine state.	Avaries, sales d'espera petites, torns i energia per estat de màquina.
+	Parallel machines fed by the shorter queue, and parts rejected at quality.	Màquines en paral·lel alimentades per la cua més curta i peces rebutjades a qualitat.
 @plural	Added {n} block|Added {n} blocks	S'ha afegit {n} bloc|S'han afegit {n} blocs
 @plural	Copied {n} block|Copied {n} blocks	S'ha copiat {n} bloc|S'han copiat {n} blocs
 @plural	Finished {n} run|Finished {n} runs	Acabada {n} execució|Acabades {n} execucions

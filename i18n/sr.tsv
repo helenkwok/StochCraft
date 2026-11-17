@@ -818,6 +818,52 @@ unit	yr	год.
 	What the Results Mean	Шта значе резултати
 	User Guide	Корисничко упутство
 	Report a Problem	Пријави проблем
+	Where is the bottleneck?	Где је уско грло?
+	How many people or machines?	Колико људи или машина?
+	Will a change help?	Да ли ће промена помоћи?
+	Why did it break down?	Зашто је отказало?
+	Manufacturing	Производња
+	Healthcare	Здравство
+	Contact centre	Позивни центар
+	IT operations	ИТ операције
+	Reference	Референтни модели
+	Checked against queueing theory	Проверено теоријом редова чекања
+	Matches a published study	Поклапа се са објављеном студијом
+	What do you want to find out?	Шта желите да сазнате?
+	Simulate a process, compare what-ifs, and see which differences are real. Each example asks one question and shows how the answer was found.	Симулирајте процес, упоредите варијанте „шта ако” и погледајте које су разлике стварне. Сваки пример поставља једно питање и показује како је одговор пронађен.
+	Questions	Питања
+	All	Све
+	Industry	Делатност
+	All industries	Све делатности
+	No example matches these choices yet.	Ниједан пример још не одговара овом избору.
+	Show the featured examples only	Прикажи само истакнуте примере
+	Teaches:	Учи:
+	New to simulation?	Нови сте у симулацији?
+	Build a first model in five short steps on the real canvas: arrivals, a task, departures, run, then read the finding. Getting started ticks each step as you go.	Направите први модел у пет кратких корака на правој главној површини: доласци, задатак, одласци, покретање, а затим прочитајте налаз. „Први кораци” означава сваки корак како напредујете.
+	Build a first model	Направи први модел
+	Coming from another simulation tool?	Долазите из другог алата за симулацију?
+	How blocks, runs and confidence intervals work here, which keys do what, and how to bring in a process diagram you already have.	Како овде раде блокови, покретања и интервали поверења, који тастери шта раде и како да увезете дијаграм процеса који већ имате.
+	Read the two-page guide	Прочитај водич од две стране
+	Open a file	Отвори фајл
+	Open a file…	Отвори фајл…
+	Recent	Недавне
+	Start from a blank model	Почни од празног модела
+	See all {n} examples, including reference models	Прикажи све примере ({n}), укључујући референтне моделе
+	{n} min	{n} мин
+	Four-machine line with weekend breaks (Schmitt et al. 2026, Case A)	Линија са четири машине и викенд-застојима (Schmitt et al. 2026, случај A)
+	Seven-machine line with two presses (Schmitt et al. 2026, Case B)	Линија са седам машина и две пресе (Schmitt et al. 2026, случај B)
+	Four machines in series with failures, small buffers, weekend breaks and power per machine.	Четири машине у низу са кваровима, малим чекаоницама, викенд-застојима и снагом по машини.
+	Two presses in parallel fed by the shorter queue, rejects at quality, weekend breaks.	Две паралелне пресе које се пуне из краћег реда, шкарт на контроли квалитета, викенд-застоји.
+	How long do customers wait at one busy clerk?	Колико дуго купци чекају код једног заузетог службеника?
+	How do two stations in a row share the waiting?	Како две узастопне станице деле чекање?
+	How do the time distributions differ?	По чему се разликују дистрибуције времена?
+	What do failures and weekend breaks do to a line's output and energy per part?	Шта кварови и викенд-застоји чине учинку линије и енергији по дијелу?
+	Which machine holds back a line with two presses in parallel?	Која машина кочи линију са две паралелне пресе?
+	Why a clerk busy three quarters of the time already means a queue.	Зашто службеник заузет три четвртине времена већ значи ред чекања.
+	Reading a process diagram from another file format.	Читање дијаграма процеса из другог формата фајла.
+	One task for each distribution, to compare their spread.	По један задатак за сваку дистрибуцију ради поређења њихове распршености.
+	Failures, small buffers, shifts and energy per machine state.	Кварови, мале чекаонице, смене и енергија по стању машине.
+	Parallel machines fed by the shorter queue, and parts rejected at quality.	Паралелне машине које се пуне из краћег реда и делови одбачени на контроли квалитета.
 @plural	Added {n} block|Added {n} blocks	Додат је {n} блок|Додата су {n} блока|Додато је {n} блокова
 @plural	Copied {n} block|Copied {n} blocks	Копиран је {n} блок|Копирана су {n} блока|Копирано је {n} блокова
 @plural	Finished {n} run|Finished {n} runs	Завршено је {n} покретање|Завршена су {n} покретања|Завршено је {n} покретања

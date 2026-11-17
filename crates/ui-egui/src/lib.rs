@@ -29,6 +29,7 @@ pub mod i18n;
 mod live;
 mod pools;
 mod results;
+mod start;
 pub mod theme;
 mod theme_editor;
 
@@ -38,26 +39,119 @@ use stochcraft_engine::{CommandError, Engine, ErrorCode};
 
 use crate::i18n::{t, td, tf, tn, tnf};
 
-/// The models offered under File ▸ Open Example, built in so the browser app has something to
-/// open: the golden models of `stochcraft-testkit`.
+/// The models offered on the start page and under File ▸ Open Example, built in so the browser
+/// app has something to open: the golden models of `stochcraft-testkit` and the published
+/// benchmarks whose answers the engine's tests check.
 pub const EXAMPLES: &[Example] = &[
     Example {
         title: "M/M/1 queue",
         about: "One clerk, random arrivals: the textbook queue, checked against theory.",
         file: "mm1.bpmn",
         bytes: include_bytes!("../../../tests/models/mm1.bpmn"),
+        card: start::Card {
+            question: "How long do customers wait at one busy clerk?",
+            industry: start::Industry::Services,
+            topics: &[start::Topic::Staffing],
+            teaches: "Why a clerk busy three quarters of the time already means a queue.",
+            minutes: 2,
+            proof: Some(start::Proof::Theory),
+            flow: &[
+                start::Glyph::Arrivals,
+                start::Glyph::Resource,
+                start::Glyph::Departures,
+            ],
+            featured: true,
+        },
     },
     Example {
         title: "Tandem line",
         about: "Two stations in series, read from an XPDL file.",
         file: "tandem.xpdl",
         bytes: include_bytes!("../../../tests/models/tandem.xpdl"),
+        card: start::Card {
+            question: "How do two stations in a row share the waiting?",
+            industry: start::Industry::Reference,
+            topics: &[],
+            teaches: "Reading a process diagram from another file format.",
+            minutes: 2,
+            proof: None,
+            flow: &[
+                start::Glyph::Arrivals,
+                start::Glyph::Resource,
+                start::Glyph::Resource,
+                start::Glyph::Departures,
+            ],
+            featured: false,
+        },
     },
     Example {
         title: "Every distribution",
         about: "One task per BPSim distribution, to compare their spread.",
         file: "distributions.bpmn",
         bytes: include_bytes!("../../../tests/models/distributions.bpmn"),
+        card: start::Card {
+            question: "How do the time distributions differ?",
+            industry: start::Industry::Reference,
+            topics: &[],
+            teaches: "One task for each distribution, to compare their spread.",
+            minutes: 3,
+            proof: None,
+            flow: &[
+                start::Glyph::Arrivals,
+                start::Glyph::Task,
+                start::Glyph::Task,
+                start::Glyph::Departures,
+            ],
+            featured: false,
+        },
+    },
+    Example {
+        title: "Four-machine line with weekend breaks (Schmitt et al. 2026, Case A)",
+        about: "Four machines in series with failures, small buffers, weekend breaks and power per machine.",
+        file: "case-a.bpmn",
+        bytes: include_bytes!("../../../tests/models/case-a.bpmn"),
+        card: start::Card {
+            question: "What do failures and weekend breaks do to a line's output and energy per part?",
+            industry: start::Industry::Manufacturing,
+            topics: &[start::Topic::Bottleneck, start::Topic::Breakdown],
+            teaches: "Failures, small buffers, shifts and energy per machine state.",
+            minutes: 8,
+            proof: Some(start::Proof::Published),
+            flow: &[
+                start::Glyph::Arrivals,
+                start::Glyph::Resource,
+                start::Glyph::Resource,
+                start::Glyph::Resource,
+                start::Glyph::Resource,
+                start::Glyph::Resource,
+                start::Glyph::Departures,
+            ],
+            featured: true,
+        },
+    },
+    Example {
+        title: "Seven-machine line with two presses (Schmitt et al. 2026, Case B)",
+        about: "Two presses in parallel fed by the shorter queue, rejects at quality, weekend breaks.",
+        file: "case-b.bpmn",
+        bytes: include_bytes!("../../../tests/models/case-b.bpmn"),
+        card: start::Card {
+            question: "Which machine holds back a line with two presses in parallel?",
+            industry: start::Industry::Manufacturing,
+            topics: &[start::Topic::Bottleneck],
+            teaches: "Parallel machines fed by the shorter queue, and parts rejected at quality.",
+            minutes: 8,
+            proof: Some(start::Proof::Published),
+            flow: &[
+                start::Glyph::Arrivals,
+                start::Glyph::Resource,
+                start::Glyph::Decision,
+                start::Glyph::Resource,
+                start::Glyph::Resource,
+                start::Glyph::Decision,
+                start::Glyph::Departures,
+            ],
+            featured: true,
+        },
     },
 ];
 
@@ -68,6 +162,8 @@ pub struct Example {
     pub about: &'static str,
     pub file: &'static str,
     pub bytes: &'static [u8],
+    /// Its card on the start page.
+    pub card: start::Card,
 }
 
 /// Something only the shell can do, asked for by the app.
@@ -344,6 +440,11 @@ pub struct App {
     decide: decide::Decide,
     /// The Help panel.
     help: help::Help,
+    /// The start page's filters.
+    start: start::Start,
+    /// An empty model is being built (from the start page), so the model view shows rather than
+    /// the start page.
+    building: bool,
     /// Where the charts were drawn last frame, for exporting them.
     charts_rect: Option<egui::Rect>,
     /// A screenshot asked for to export the charts, filled in by the renderer.
@@ -435,6 +536,8 @@ impl App {
             show_analysis: false,
             decide: decide::Decide::default(),
             help: help::Help::default(),
+            start: start::Start::default(),
+            building: false,
             charts_rect: None,
             screenshot: std::sync::Arc::default(),
             pending_png: None,
@@ -914,6 +1017,7 @@ impl App {
     /// canvas's view, a watched run and half-typed fields.
     fn forget_view(&mut self) {
         self.clear_results();
+        self.building = false;
         self.help.read_results = false;
         self.selected = None;
         self.canvas = canvas::Canvas::default();
@@ -1476,7 +1580,11 @@ impl App {
                     .inner_margin(egui::Margin::symmetric(28, 22)),
             )
             .show(ui, |ui| {
-                let has_model = !self.engine.model().elements.is_empty();
+                let has_model = !self.engine.model().elements.is_empty() || self.building;
+                if !has_model && self.results.is_none() && self.running.is_none() {
+                    self.start_page(ui);
+                    return;
+                }
                 if has_model || self.results.is_some() || self.running.is_some() {
                     self.tabs(ui, &p);
                     ui.add_space(14.0);
@@ -1499,7 +1607,7 @@ impl App {
                                 let (done, partial, total) = (r.done, r.partial, r.total);
                                 self.running_view(ui, done, partial, total);
                             } else if self.engine.model().elements.is_empty() {
-                                self.welcome(ui, &p);
+                                self.start_page(ui);
                             } else {
                                 self.ready(ui);
                             }
@@ -2197,52 +2305,27 @@ impl App {
         });
     }
 
-    /// The empty state: what StochCraft opens, and a way in.
-    fn welcome(&mut self, ui: &mut egui::Ui, p: &theme::Palette) {
-        ui.add_space(24.0);
-        ui.heading(t("Open a model to simulate it"));
-        ui.add_space(6.0);
-        ui.label(theme::weak(
-            ui,
-            t(
-                "StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, \
-               runs them as replicated experiments and reports every result with its confidence \
-               interval.",
-            ),
-        ));
-        ui.add_space(16.0);
-        ui.horizontal(|ui| {
-            if ui.add(theme::primary(ui, t("Open a model…"))).clicked() {
-                self.replace(Replace::Open);
+    /// The start page, for an empty model not being built: examples by question, and ways in.
+    fn start_page(&mut self, ui: &mut egui::Ui) {
+        let cards: Vec<&start::Card> = EXAMPLES.iter().map(|e| &e.card).collect();
+        let recent: Vec<String> = self
+            .recent
+            .iter()
+            .map(|p| file_name(p).to_owned())
+            .collect();
+        let key = self.shortcut(commands::OPEN, ui.ctx()).unwrap_or_default();
+        let action = start::show(ui, &mut self.start, &cards, &recent, &key);
+        match action {
+            Some(start::Action::Example(i)) => self.replace(Replace::Example(i)),
+            Some(start::Action::FirstModel) => {
+                self.building = true;
+                self.show_help_at(help::Section::GettingStarted);
             }
-            let key = self.shortcut(commands::OPEN, ui.ctx()).unwrap_or_default();
-            ui.label(theme::weak(ui, key));
-        });
-        ui.add_space(28.0);
-        ui.label(theme::strong(t("Or start from an example")));
-        ui.add_space(6.0);
-        for (i, e) in EXAMPLES.iter().enumerate() {
-            let r = egui::Frame::new()
-                .stroke(egui::Stroke::new(1.0, p.border))
-                .corner_radius(8)
-                .inner_margin(egui::Margin::symmetric(12, 9))
-                .show(ui, |ui| {
-                    ui.set_width(ui.available_width());
-                    ui.horizontal(|ui| {
-                        ui.vertical(|ui| {
-                            ui.label(theme::strong(t(e.title)));
-                            ui.label(theme::weak(ui, t(e.about)));
-                        });
-                        ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
-                            if ui.add(theme::secondary(ui, t("Open"))).clicked() {
-                                self.replace(Replace::Example(i));
-                            }
-                            ui.label(theme::weak(ui, e.file).monospace());
-                        });
-                    });
-                });
-            let _ = r;
-            ui.add_space(6.0);
+            Some(start::Action::Switching) => self.open_url(help::SWITCHING),
+            Some(start::Action::Open) => self.replace(Replace::Open),
+            Some(start::Action::Recent(i)) => self.replace(Replace::Recent(i)),
+            Some(start::Action::Blank) => self.building = true,
+            None => {}
         }
     }
 

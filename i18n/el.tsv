@@ -818,6 +818,52 @@ unit	yr	έτ
 	What the Results Mean	Τι σημαίνουν τα αποτελέσματα
 	User Guide	Οδηγός χρήσης
 	Report a Problem	Αναφορά προβλήματος
+	Where is the bottleneck?	Πού είναι η στενωπός;
+	How many people or machines?	Πόσοι άνθρωποι ή μηχανές;
+	Will a change help?	Θα βοηθήσει μια αλλαγή;
+	Why did it break down?	Γιατί κατέρρευσε;
+	Manufacturing	Μεταποίηση
+	Healthcare	Υγεία
+	Contact centre	Τηλεφωνικό κέντρο
+	IT operations	Λειτουργίες IT
+	Reference	Μοντέλα αναφοράς
+	Checked against queueing theory	Ελεγμένο με τη θεωρία ουρών
+	Matches a published study	Συμφωνεί με δημοσιευμένη μελέτη
+	What do you want to find out?	Τι θέλετε να μάθετε;
+	Simulate a process, compare what-ifs, and see which differences are real. Each example asks one question and shows how the answer was found.	Προσομοιώστε μια διαδικασία, συγκρίνετε σενάρια «τι θα γινόταν αν» και δείτε ποιες διαφορές είναι πραγματικές. Κάθε παράδειγμα θέτει ένα ερώτημα και δείχνει πώς βρέθηκε η απάντηση.
+	Questions	Ερωτήσεις
+	All	Όλες
+	Industry	Κλάδος
+	All industries	Όλοι οι κλάδοι
+	No example matches these choices yet.	Κανένα παράδειγμα δεν ταιριάζει ακόμη με αυτές τις επιλογές.
+	Show the featured examples only	Εμφάνιση μόνο των προτεινόμενων παραδειγμάτων
+	Teaches:	Διδάσκει:
+	New to simulation?	Νέοι στην προσομοίωση;
+	Build a first model in five short steps on the real canvas: arrivals, a task, departures, run, then read the finding. Getting started ticks each step as you go.	Φτιάξτε ένα πρώτο μοντέλο σε πέντε σύντομα βήματα στην πραγματική κύρια επιφάνεια: αφίξεις, μια εργασία, αναχωρήσεις, εκτέλεση και μετά διαβάστε τη διαπίστωση. Τα «Πρώτα βήματα» σημειώνουν κάθε βήμα καθώς προχωράτε.
+	Build a first model	Φτιάξτε ένα πρώτο μοντέλο
+	Coming from another simulation tool?	Έρχεστε από άλλο εργαλείο προσομοίωσης;
+	How blocks, runs and confidence intervals work here, which keys do what, and how to bring in a process diagram you already have.	Πώς λειτουργούν εδώ τα μπλοκ, οι εκτελέσεις και τα διαστήματα εμπιστοσύνης, ποια πλήκτρα κάνουν τι και πώς να εισαγάγετε ένα διάγραμμα διαδικασίας που ήδη έχετε.
+	Read the two-page guide	Διαβάστε τον οδηγό δύο σελίδων
+	Open a file	Άνοιγμα αρχείου
+	Open a file…	Άνοιγμα αρχείου…
+	Recent	Πρόσφατα
+	Start from a blank model	Έναρξη από κενό μοντέλο
+	See all {n} examples, including reference models	Εμφάνιση όλων των παραδειγμάτων ({n}), μαζί με τα μοντέλα αναφοράς
+	{n} min	{n} λ
+	Four-machine line with weekend breaks (Schmitt et al. 2026, Case A)	Γραμμή τεσσάρων μηχανών με διακοπές Σαββατοκύριακου (Schmitt et al. 2026, περίπτωση A)
+	Seven-machine line with two presses (Schmitt et al. 2026, Case B)	Γραμμή επτά μηχανών με δύο πρέσες (Schmitt et al. 2026, περίπτωση B)
+	Four machines in series with failures, small buffers, weekend breaks and power per machine.	Τέσσερις μηχανές σε σειρά με βλάβες, μικρούς χώρους αναμονής, διακοπές Σαββατοκύριακου και ισχύ ανά μηχανή.
+	Two presses in parallel fed by the shorter queue, rejects at quality, weekend breaks.	Δύο παράλληλες πρέσες που τροφοδοτούνται από τη συντομότερη ουρά, απορρίψεις στον ποιοτικό έλεγχο, διακοπές Σαββατοκύριακου.
+	How long do customers wait at one busy clerk?	Πόσο περιμένουν οι πελάτες σε έναν πολυάσχολο υπάλληλο;
+	How do two stations in a row share the waiting?	Πώς μοιράζονται την αναμονή δύο διαδοχικοί σταθμοί;
+	How do the time distributions differ?	Σε τι διαφέρουν οι κατανομές χρόνου;
+	What do failures and weekend breaks do to a line's output and energy per part?	Τι κάνουν οι βλάβες και οι διακοπές Σαββατοκύριακου στην παραγωγή μιας γραμμής και στην ενέργεια ανά τεμάχιο;
+	Which machine holds back a line with two presses in parallel?	Ποια μηχανή φρενάρει μια γραμμή με δύο παράλληλες πρέσες;
+	Why a clerk busy three quarters of the time already means a queue.	Γιατί ένας υπάλληλος απασχολημένος τα τρία τέταρτα του χρόνου σημαίνει ήδη ουρά.
+	Reading a process diagram from another file format.	Ανάγνωση διαγράμματος διαδικασίας από άλλη μορφή αρχείου.
+	One task for each distribution, to compare their spread.	Μία εργασία ανά κατανομή για σύγκριση της διασποράς τους.
+	Failures, small buffers, shifts and energy per machine state.	Βλάβες, μικροί χώροι αναμονής, βάρδιες και ενέργεια ανά κατάσταση μηχανής.
+	Parallel machines fed by the shorter queue, and parts rejected at quality.	Παράλληλες μηχανές που τροφοδοτούνται από τη συντομότερη ουρά και τεμάχια που απορρίπτονται στον ποιοτικό έλεγχο.
 @plural	Added {n} block|Added {n} blocks	Προστέθηκε {n} μπλοκ|Προστέθηκαν {n} μπλοκ
 @plural	Copied {n} block|Copied {n} blocks	Αντιγράφηκε {n} μπλοκ|Αντιγράφηκαν {n} μπλοκ
 @plural	Finished {n} run|Finished {n} runs	Ολοκληρώθηκε {n} εκτέλεση|Ολοκληρώθηκαν {n} εκτελέσεις

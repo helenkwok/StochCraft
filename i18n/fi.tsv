@@ -818,6 +818,52 @@ unit	yr	v
 	What the Results Mean	Mitä tulokset tarkoittavat
 	User Guide	Käyttöopas
 	Report a Problem	Ilmoita ongelmasta
+	Where is the bottleneck?	Missä on pullonkaula?
+	How many people or machines?	Kuinka monta ihmistä tai konetta?
+	Will a change help?	Auttaako muutos?
+	Why did it break down?	Miksi se petti?
+	Manufacturing	Valmistus
+	Healthcare	Terveydenhuolto
+	Contact centre	Puhelinpalvelu
+	IT operations	IT-palvelut
+	Reference	Viitemallit
+	Checked against queueing theory	Tarkistettu jonoteoriaa vasten
+	Matches a published study	Vastaa julkaistua tutkimusta
+	What do you want to find out?	Mitä haluat selvittää?
+	Simulate a process, compare what-ifs, and see which differences are real. Each example asks one question and shows how the answer was found.	Simuloi prosessi, vertaa mitä jos -vaihtoehtoja ja näe, mitkä erot ovat todellisia. Jokainen esimerkki esittää yhden kysymyksen ja näyttää, miten vastaus löydettiin.
+	Questions	Kysymykset
+	All	Kaikki
+	Industry	Toimiala
+	All industries	Kaikki toimialat
+	No example matches these choices yet.	Mikään esimerkki ei vielä vastaa näitä valintoja.
+	Show the featured examples only	Näytä vain esille nostetut esimerkit
+	Teaches:	Opettaa:
+	New to simulation?	Uusi simuloinnissa?
+	Build a first model in five short steps on the real canvas: arrivals, a task, departures, run, then read the finding. Getting started ticks each step as you go.	Rakenna ensimmäinen malli viidessä lyhyessä vaiheessa oikealla pääpinnalla: saapumiset, tehtävä, poistumiset, ajo ja lopuksi havainnon lukeminen. ”Aloitus” merkitsee jokaisen vaiheen tehdyksi sitä mukaa kuin etenet.
+	Build a first model	Rakenna ensimmäinen malli
+	Coming from another simulation tool?	Tuletko toisesta simulointityökalusta?
+	How blocks, runs and confidence intervals work here, which keys do what, and how to bring in a process diagram you already have.	Miten lohkot, ajot ja luottamusvälit toimivat täällä, mitkä näppäimet tekevät mitäkin ja miten tuot mukaan jo olemassa olevan prosessikaavion.
+	Read the two-page guide	Lue kaksisivuinen opas
+	Open a file	Avaa tiedosto
+	Open a file…	Avaa tiedosto…
+	Recent	Viimeisimmät
+	Start from a blank model	Aloita tyhjästä mallista
+	See all {n} examples, including reference models	Näytä kaikki {n} esimerkkiä, myös viitemallit
+	{n} min	{n} min
+	Four-machine line with weekend breaks (Schmitt et al. 2026, Case A)	Neljän koneen linja ja viikonloppukatkot (Schmitt et al. 2026, tapaus A)
+	Seven-machine line with two presses (Schmitt et al. 2026, Case B)	Seitsemän koneen linja ja kaksi puristinta (Schmitt et al. 2026, tapaus B)
+	Four machines in series with failures, small buffers, weekend breaks and power per machine.	Neljä peräkkäistä konetta, vikaantumiset, pienet odotustilat, viikonloppukatkot ja teho koneittain.
+	Two presses in parallel fed by the shorter queue, rejects at quality, weekend breaks.	Kaksi rinnakkaista puristinta, joille syötetään lyhyemmästä jonosta, hylkäykset laaduntarkastuksessa, viikonloppukatkot.
+	How long do customers wait at one busy clerk?	Kuinka kauan asiakkaat odottavat yhtä kiireistä palvelijaa?
+	How do two stations in a row share the waiting?	Miten kaksi peräkkäistä asemaa jakavat odotuksen?
+	How do the time distributions differ?	Miten aikajakaumat eroavat toisistaan?
+	What do failures and weekend breaks do to a line's output and energy per part?	Mitä vikaantumiset ja viikonloppukatkot tekevät linjan tuotokselle ja energialle osaa kohden?
+	Which machine holds back a line with two presses in parallel?	Mikä kone jarruttaa linjaa, jossa on kaksi rinnakkaista puristinta?
+	Why a clerk busy three quarters of the time already means a queue.	Miksi palvelija, joka on varattu kolme neljäsosaa ajasta, tarkoittaa jo jonoa.
+	Reading a process diagram from another file format.	Prosessikaavion lukeminen toisesta tiedostomuodosta.
+	One task for each distribution, to compare their spread.	Yksi tehtävä kutakin jakaumaa kohti niiden hajonnan vertailuun.
+	Failures, small buffers, shifts and energy per machine state.	Vikaantumiset, pienet odotustilat, vuorot ja energia koneen tilan mukaan.
+	Parallel machines fed by the shorter queue, and parts rejected at quality.	Rinnakkaiset koneet, joille syötetään lyhyemmästä jonosta, ja laaduntarkastuksessa hylätyt osat.
 @plural	Added {n} block|Added {n} blocks	Lisättiin {n} lohko|Lisättiin {n} lohkoa
 @plural	Copied {n} block|Copied {n} blocks	Kopioitiin {n} lohko|Kopioitiin {n} lohkoa
 @plural	Finished {n} run|Finished {n} runs	{n} ajo valmistui|{n} ajoa valmistui

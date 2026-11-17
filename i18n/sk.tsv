@@ -818,6 +818,52 @@ unit	yr	r.
 	What the Results Mean	Čo znamenajú výsledky
 	User Guide	Používateľská príručka
 	Report a Problem	Nahlásiť problém
+	Where is the bottleneck?	Kde je úzke miesto?
+	How many people or machines?	Koľko ľudí alebo strojov?
+	Will a change help?	Pomôže zmena?
+	Why did it break down?	Prečo došlo k poruche?
+	Manufacturing	Výroba
+	Healthcare	Zdravotníctvo
+	Contact centre	Call centrum
+	IT operations	Prevádzka IT
+	Reference	Referenčné modely
+	Checked against queueing theory	Overené teóriou hromadnej obsluhy
+	Matches a published study	Zodpovedá publikovanej štúdii
+	What do you want to find out?	Čo chcete zistiť?
+	Simulate a process, compare what-ifs, and see which differences are real. Each example asks one question and shows how the answer was found.	Simulujte proces, porovnajte varianty „čo ak“ a zistite, ktoré rozdiely sú skutočné. Každý príklad kladie jednu otázku a ukazuje, ako sa našla odpoveď.
+	Questions	Otázky
+	All	Všetko
+	Industry	Odvetvie
+	All industries	Všetky odvetvia
+	No example matches these choices yet.	Týmto voľbám zatiaľ nezodpovedá žiadny príklad.
+	Show the featured examples only	Zobraziť len odporúčané príklady
+	Teaches:	Učí:
+	New to simulation?	So simuláciou začínate?
+	Build a first model in five short steps on the real canvas: arrivals, a task, departures, run, then read the finding. Getting started ticks each step as you go.	Postavte prvý model v piatich krátkych krokoch na skutočnej hlavnej ploche: príchody, úloha, odchody, spustenie a potom prečítanie zistenia. „Začíname“ odškrtáva každý krok, ako postupujete.
+	Build a first model	Postaviť prvý model
+	Coming from another simulation tool?	Prechádzate z iného simulačného nástroja?
+	How blocks, runs and confidence intervals work here, which keys do what, and how to bring in a process diagram you already have.	Ako tu fungujú bloky, behy a intervaly spoľahlivosti, ktoré klávesy čo robia a ako importovať diagram procesu, ktorý už máte.
+	Read the two-page guide	Prečítať dvojstranového sprievodcu
+	Open a file	Otvoriť súbor
+	Open a file…	Otvoriť súbor…
+	Recent	Nedávne
+	Start from a blank model	Začať s prázdnym modelom
+	See all {n} examples, including reference models	Zobraziť všetky príklady ({n}) vrátane referenčných modelov
+	{n} min	{n} min
+	Four-machine line with weekend breaks (Schmitt et al. 2026, Case A)	Linka so štyrmi strojmi a víkendovými prestávkami (Schmitt et al. 2026, prípad A)
+	Seven-machine line with two presses (Schmitt et al. 2026, Case B)	Linka so siedmimi strojmi a dvoma lismi (Schmitt et al. 2026, prípad B)
+	Four machines in series with failures, small buffers, weekend breaks and power per machine.	Štyri stroje v sérii s poruchami, malými čakárňami, víkendovými prestávkami a príkonom každého stroja.
+	Two presses in parallel fed by the shorter queue, rejects at quality, weekend breaks.	Dva paralelné lisy zásobované z kratšieho radu, nepodarky pri kontrole kvality, víkendové prestávky.
+	How long do customers wait at one busy clerk?	Ako dlho čakajú zákazníci pri jednom vyťaženom pracovníkovi?
+	How do two stations in a row share the waiting?	Ako sa dve stanice za sebou delia o čakanie?
+	How do the time distributions differ?	Ako sa líšia rozdelenia časov?
+	What do failures and weekend breaks do to a line's output and energy per part?	Čo robia poruchy a víkendové prestávky s výkonom linky a energiou na diel?
+	Which machine holds back a line with two presses in parallel?	Ktorý stroj brzdí linku s dvoma paralelnými lismi?
+	Why a clerk busy three quarters of the time already means a queue.	Prečo pracovník vyťažený tri štvrtiny času už znamená rad.
+	Reading a process diagram from another file format.	Načítanie diagramu procesu z iného formátu súboru.
+	One task for each distribution, to compare their spread.	Jedna úloha pre každé rozdelenie na porovnanie ich variability.
+	Failures, small buffers, shifts and energy per machine state.	Poruchy, malé čakárne, zmeny a energia podľa stavu stroja.
+	Parallel machines fed by the shorter queue, and parts rejected at quality.	Paralelné stroje zásobované z kratšieho radu a diely vyradené pri kontrole kvality.
 @plural	Added {n} block|Added {n} blocks	Pridaný {n} blok|Pridané {n} bloky|Pridaných {n} blokov
 @plural	Copied {n} block|Copied {n} blocks	Skopírovaný {n} blok|Skopírované {n} bloky|Skopírovaných {n} blokov
 @plural	Finished {n} run|Finished {n} runs	Dokončený {n} beh|Dokončené {n} behy|Dokončených {n} behov

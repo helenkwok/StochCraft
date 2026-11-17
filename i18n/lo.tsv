@@ -818,6 +818,52 @@ unit	yr	ປີ
 	What the Results Mean	ຄວາມໝາຍຂອງຜົນລັບ
 	User Guide	ຄູ່ມືຜູ້ໃຊ້
 	Report a Problem	ລາຍງານບັນຫາ
+	Where is the bottleneck?	ຈຸດຄໍຂວດຢູ່ໃສ?
+	How many people or machines?	ຕ້ອງການຄົນ ຫຼື ເຄື່ອງຈັກຈັກໜ່ວຍ?
+	Will a change help?	ການປ່ຽນແປງຈະຊ່ວຍບໍ?
+	Why did it break down?	ເປັນຫຍັງຈຶ່ງເສຍ?
+	Manufacturing	ການຜະລິດ
+	Healthcare	ການດູແລສຸຂະພາບ
+	Contact centre	ສູນບໍລິການໂທລະສັບ
+	IT operations	ການດຳເນີນງານໄອທີ
+	Reference	ແບບຈຳລອງອ້າງອີງ
+	Checked against queueing theory	ກວດທຽບກັບທິດສະດີແຖວຄອຍແລ້ວ
+	Matches a published study	ກົງກັບການສຶກສາທີ່ຕີພິມແລ້ວ
+	What do you want to find out?	ທ່ານຢາກຮູ້ຫຍັງ?
+	Simulate a process, compare what-ifs, and see which differences are real. Each example asks one question and shows how the answer was found.	ຈຳລອງຂະບວນການ, ປຽບທຽບສະຖານະການສົມມຸດ ແລະ ເບິ່ງວ່າຄວາມແຕກຕ່າງໃດເປັນຂອງແທ້. ແຕ່ລະຕົວຢ່າງຖາມຄຳຖາມໜຶ່ງຂໍ້ ແລະ ສະແດງວ່າພົບຄຳຕອບແນວໃດ.
+	Questions	ຄຳຖາມ
+	All	ທັງໝົດ
+	Industry	ອຸດສາຫະກຳ
+	All industries	ທຸກອຸດສາຫະກຳ
+	No example matches these choices yet.	ຍັງບໍ່ມີຕົວຢ່າງທີ່ກົງກັບຕົວເລືອກເຫຼົ່ານີ້.
+	Show the featured examples only	ສະແດງສະເພາະຕົວຢ່າງແນະນຳ
+	Teaches:	ສອນເລື່ອງ:
+	New to simulation?	ຫາກໍເລີ່ມໃຊ້ການຈຳລອງບໍ?
+	Build a first model in five short steps on the real canvas: arrivals, a task, departures, run, then read the finding. Getting started ticks each step as you go.	ສ້າງແບບຈຳລອງທຳອິດໃນ 5 ຂັ້ນຕອນສັ້ນໆ ເທິງພື້ນຜິວຫຼັກແທ້: ການມາຮອດ, ໜ້າວຽກ, ການອອກ, ປະມວນຜົນ, ແລ້ວອ່ານຂໍ້ຄົ້ນພົບ. “ເລີ່ມຕົ້ນໃຊ້ງານ” ຈະໝາຍແຕ່ລະຂັ້ນຕອນເມື່ອທ່ານເຮັດສຳເລັດ.
+	Build a first model	ສ້າງແບບຈຳລອງທຳອິດ
+	Coming from another simulation tool?	ຍ້າຍມາຈາກເຄື່ອງມືຈຳລອງອື່ນບໍ?
+	How blocks, runs and confidence intervals work here, which keys do what, and how to bring in a process diagram you already have.	ບລັອກ, ຮອບຈຳລອງຊ້ຳ ແລະ ຊ່ວງຄວາມເຊື່ອໝັ້ນເຮັດວຽກແນວໃດຢູ່ນີ້, ປຸ່ມໃດເຮັດຫຍັງ ແລະ ຈະນຳແຜນວາດຂະບວນການທີ່ທ່ານມີຢູ່ແລ້ວເຂົ້າມາແນວໃດ.
+	Read the two-page guide	ອ່ານຄູ່ມືສອງໜ້າ
+	Open a file	ເປີດໄຟລ໌
+	Open a file…	ເປີດໄຟລ໌…
+	Recent	ລ່າສຸດ
+	Start from a blank model	ເລີ່ມຈາກແບບຈຳລອງເປົ່າ
+	See all {n} examples, including reference models	ເບິ່ງຕົວຢ່າງທັງໝົດ {n} ລາຍການ ລວມທັງແບບຈຳລອງອ້າງອີງ
+	{n} min	{n} ນາທີ
+	Four-machine line with weekend breaks (Schmitt et al. 2026, Case A)	ສາຍການຜະລິດສີ່ເຄື່ອງຈັກທີ່ມີການຢຸດທ້າຍອາທິດ (Schmitt et al. 2026, ກໍລະນີ A)
+	Seven-machine line with two presses (Schmitt et al. 2026, Case B)	ສາຍການຜະລິດເຈັດເຄື່ອງຈັກທີ່ມີເຄື່ອງອັດສອງເຄື່ອງ (Schmitt et al. 2026, ກໍລະນີ B)
+	Four machines in series with failures, small buffers, weekend breaks and power per machine.	ເຄື່ອງຈັກສີ່ເຄື່ອງຕໍ່ເນື່ອງກັນ ທີ່ມີການເສຍ, ຫ້ອງລໍຖ້າຂະໜາດນ້ອຍ, ການຢຸດທ້າຍອາທິດ ແລະ ກຳລັງໄຟຟ້າຕໍ່ເຄື່ອງ.
+	Two presses in parallel fed by the shorter queue, rejects at quality, weekend breaks.	ເຄື່ອງອັດສອງເຄື່ອງແບບຂະໜານທີ່ປ້ອນຈາກແຖວຄອຍທີ່ສັ້ນກວ່າ, ຂອງເສຍທີ່ຈຸດກວດຄຸນນະພາບ, ການຢຸດທ້າຍອາທິດ.
+	How long do customers wait at one busy clerk?	ລູກຄ້າລໍຖ້າດົນເທົ່າໃດຢູ່ກັບພະນັກງານຄົນດຽວທີ່ຫຍຸ້ງ?
+	How do two stations in a row share the waiting?	ສອງສະຖານີຕໍ່ເນື່ອງກັນແບ່ງການລໍຖ້າກັນແນວໃດ?
+	How do the time distributions differ?	ການແຈກຢາຍຂອງເວລາແຕກຕ່າງກັນແນວໃດ?
+	What do failures and weekend breaks do to a line's output and energy per part?	ການເສຍ ແລະ ການຢຸດທ້າຍອາທິດສົ່ງຜົນແນວໃດຕໍ່ຜົນຜະລິດຂອງສາຍການຜະລິດ ແລະ ພະລັງງານຕໍ່ຊິ້ນ?
+	Which machine holds back a line with two presses in parallel?	ເຄື່ອງຈັກໃດຖ່ວງສາຍການຜະລິດທີ່ມີເຄື່ອງອັດສອງເຄື່ອງແບບຂະໜານ?
+	Why a clerk busy three quarters of the time already means a queue.	ເປັນຫຍັງພະນັກງານທີ່ຫຍຸ້ງສາມສ່ວນສີ່ຂອງເວລາຈຶ່ງໝາຍເຖິງມີແຖວຄອຍແລ້ວ.
+	Reading a process diagram from another file format.	ການອ່ານແຜນວາດຂະບວນການຈາກຮູບແບບໄຟລ໌ອື່ນ.
+	One task for each distribution, to compare their spread.	ໜຶ່ງໜ້າວຽກຕໍ່ແຕ່ລະການແຈກຢາຍ ເພື່ອປຽບທຽບການກະຈາຍ.
+	Failures, small buffers, shifts and energy per machine state.	ການເສຍ, ຫ້ອງລໍຖ້າຂະໜາດນ້ອຍ, ກະ ແລະ ພະລັງງານຕາມສະຖານະເຄື່ອງຈັກ.
+	Parallel machines fed by the shorter queue, and parts rejected at quality.	ເຄື່ອງຈັກແບບຂະໜານທີ່ປ້ອນຈາກແຖວຄອຍທີ່ສັ້ນກວ່າ ແລະ ຊິ້ນສ່ວນທີ່ຖືກປະຕິເສດທີ່ຈຸດກວດຄຸນນະພາບ.
 @plural	Added {n} block|Added {n} blocks	ເພີ່ມ {n} ບລັອກແລ້ວ
 @plural	Copied {n} block|Copied {n} blocks	ສຳເນົາ {n} ບລັອກແລ້ວ
 @plural	Finished {n} run|Finished {n} runs	ຈຳລອງຊ້ຳສຳເລັດ {n} ຮອບ
