@@ -219,6 +219,56 @@ fn results_stay_marked_out_of_date_after_an_edit() {
 }
 
 #[test]
+fn a_baseline_is_compared_with_the_next_run() {
+    // Wide enough for the change marks.
+    let mut h = Harness::builder()
+        .with_size(egui::vec2(1600.0, 900.0))
+        .build_ui_state(
+            |ui, app: &mut App| app.ui(ui),
+            english(App::new(Platform::DESKTOP)),
+        );
+    h.run();
+    menu(&mut h, &["File", "Open Example", "M/M/1 queue"]);
+    menu(&mut h, &["Model", "Run"]);
+    finish_run(&mut h);
+    click(&mut h, "Keep as baseline");
+    assert!(h.state().baseline().is_some());
+    h.get_by_label("This run is the baseline.");
+    assert!(h.query_by_label("What the change did").is_none());
+
+    // A second server: the same seed and runs, so the runs are compared in pairs.
+    h.state_mut()
+        .execute("block.set", json!({ "id": "serve", "capacity": 2 }));
+    settle(&mut h);
+    menu(&mut h, &["Model", "Run"]);
+    finish_run(&mut h);
+    h.get_by_label("Compared with the baseline:");
+    h.get_by_label_contains("Both used seed");
+    h.get_by_label("What the change did");
+    assert!(h.query_all_by_label_contains("fell from").count() >= 2);
+    h.get_by_label("Difference (paired, 95%)");
+    assert!(h.query_all_by_label("Real: lower").count() >= 2);
+    // Each change is drawn against zero, and says what it is.
+    assert!(h.query_all_by_label_contains(" ± ").count() >= 4);
+
+    // Kept again, the new run is the baseline; cleared, there is none.
+    click(&mut h, "Keep this as the baseline");
+    h.get_by_label("This run is the baseline.");
+    assert!(h.query_by_label("What the change did").is_none());
+    click(&mut h, "Clear baseline");
+    assert!(h.state().baseline().is_none());
+    h.get_by_role_and_label(egui::accesskit::Role::Button, "Keep as baseline");
+
+    // Another model forgets it.
+    click(&mut h, "Keep as baseline");
+    assert!(h.state().baseline().is_some());
+    h.state_mut()
+        .control("model.new", json!({}))
+        .expect("a new model");
+    assert!(h.state().baseline().is_none());
+}
+
+#[test]
 fn unsaved_changes_are_asked_about_before_they_are_lost() {
     let mut h = harness(Platform::DESKTOP);
     h.state_mut()

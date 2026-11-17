@@ -720,6 +720,35 @@ unit	yr	m.
 	the model has changed since this run.	modelis pasikeitė po šio vykdymo.
 	Run again	Vykdyti dar kartą
 	· out of date	· pasenę
+	Real: lower	Tikras: mažesnis
+	Real: higher	Tikras: didesnis
+	Could be chance	Gali būti atsitiktinumas
+	No change	Jokio pokyčio
+	Too few runs to tell	Per mažai vykdymų, kad būtų galima spręsti
+	{value} points	{value} procentinio punkto
+	The baseline used seed {seed_a} and {n_a} runs, this run seed {seed_b} and {n_b} runs, so they are compared as independent runs and the intervals are wider. The same seed and number of runs gives a paired comparison.	Atskaitos taške naudota sėkla {seed_a} ir vykdymų skaičius {n_a}, šiame vykdyme – sėkla {seed_b} ir vykdymų skaičius {n_b}, todėl jie lyginami kaip nepriklausomi vykdymai, o intervalai platesni. Ta pati sėkla ir tas pats vykdymų skaičius duoda porinį palyginimą.
+	The baseline measured time in {a} and this run in {b}, so times are not compared.	Atskaitos taške laikas matuotas vienetais {a}, o šiame vykdyme – {b}, todėl laikai nelyginami.
+	{measure} ({block}) fell from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) sumažėjo nuo {before} iki {after}, {change}: daugiau, nei paaiškintų atsitiktinumas.
+	{measure} ({block}) rose from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) padidėjo nuo {before} iki {after}, {change}: daugiau, nei paaiškintų atsitiktinumas.
+	None of the key measures moved by more than chance: the change may do little, or more runs may show it.	Nė vienas pagrindinis rodiklis nepasikeitė daugiau, nei paaiškintų atsitiktinumas: pakeitimas galbūt mažai ką keičia, arba daugiau vykdymų tai parodytų.
+	What the change did	Ką padarė pakeitimas
+	Baseline and now, key measures	Atskaitos taškas ir dabar, pagrindiniai rodikliai
+	Difference (paired, 95%)	Skirtumas (porinis, 95 %)
+	Difference (95%)	Skirtumas (95 %)
+	Measure	Rodiklis
+	Baseline	Atskaitos taškas
+	Now	Dabar
+	Change from baseline	Pokytis nuo atskaitos taško
+	Verdict	Išvada
+	{block}: {measure}	{block}: {measure}
+	A verdict is real when the difference's 95% interval leaves out zero. Each row is judged on its own.	Išvada tikra, kai skirtumo 95 % intervalas neapima nulio. Kiekviena eilutė vertinama atskirai.
+	This run is the baseline.	Šis vykdymas yra atskaitos taškas.
+	Change the model and run it again to compare.	Pakeiskite modelį ir paleiskite jį dar kartą, kad palygintumėte.
+	Compared with the baseline:	Lyginant su atskaitos tašku:
+	Keep this as the baseline	Išlaikyti šį vykdymą kaip atskaitos tašką
+	Keep as baseline	Išlaikyti kaip atskaitos tašką
+	Keep these results, change the model, run it again, and see what the change did.	Išlaikykite šiuos rezultatus, pakeiskite modelį, paleiskite jį dar kartą ir pažiūrėkite, ką padarė pakeitimas.
+	Clear baseline	Išvalyti atskaitos tašką
 @plural	Added {n} block|Added {n} blocks	Pridėtas {n} blokas|Pridėti {n} blokai|Pridėta {n} blokų
 @plural	Copied {n} block|Copied {n} blocks	Nukopijuotas {n} blokas|Nukopijuoti {n} blokai|Nukopijuota {n} blokų
 @plural	Finished {n} run|Finished {n} runs	Baigtas {n} vykdymas|Baigti {n} vykdymai|Baigta {n} vykdymų
@@ -739,3 +768,5 @@ unit	yr	m.
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} problema: {blocks}|{n} problemos: {blocks}|{n} problemų: {blocks}
 @plural	Use {n} run|Use {n} runs	Naudoti {n} vykdymą|Naudoti {n} vykdymus|Naudoti {n} vykdymų
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	Naudoti {n} vykdymą (apie ± 5%)|Naudoti {n} vykdymus (apie ± 5%)|Naudoti {n} vykdymų (apie ± 5%)
+@plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Abu naudojo sėklą {seed} ir tą patį {n} vykdymą, todėl kiekvienas vykdymas gauna tuos pačius atsitiktinius skaičius kaip jo pora: skirtumai kyla iš pakeitimo, o ne iš atsitiktinių traukimų.|Abu naudojo sėklą {seed} ir tuos pačius {n} vykdymus, todėl kiekvienas vykdymas gauna tuos pačius atsitiktinius skaičius kaip jo pora: skirtumai kyla iš pakeitimo, o ne iš atsitiktinių traukimų.|Abu naudojo sėklą {seed} ir tuos pačius {n} vykdymų, todėl kiekvienas vykdymas gauna tuos pačius atsitiktinius skaičius kaip jo pora: skirtumai kyla iš pakeitimo, o ne iš atsitiktinių traukimų.
+@plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	Dar {n} pagrindinis rodiklis pasikeitė ne daugiau, nei galėtų atsitiktinumas.|Dar {n} pagrindiniai rodikliai pasikeitė ne daugiau, nei galėtų atsitiktinumas.|Dar {n} pagrindinių rodiklių pasikeitė ne daugiau, nei galėtų atsitiktinumas.

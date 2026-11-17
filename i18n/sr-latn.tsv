@@ -720,6 +720,35 @@ unit	yr	god.
 	the model has changed since this run.	model je promenjen posle ovog pokretanja.
 	Run again	Pokreni ponovo
 	· out of date	· zastarelo
+	Real: lower	Stvarno: niže
+	Real: higher	Stvarno: više
+	Could be chance	Može biti slučaj
+	No change	Bez promene
+	Too few runs to tell	Premalo pokretanja za procenu
+	{value} points	{value} p. p.
+	The baseline used seed {seed_a} and {n_a} runs, this run seed {seed_b} and {n_b} runs, so they are compared as independent runs and the intervals are wider. The same seed and number of runs gives a paired comparison.	Referenca je koristila seme {seed_a} i broj pokretanja {n_a}, ovo pokretanje seme {seed_b} i broj pokretanja {n_b}, pa se upoređuju kao nezavisna pokretanja i intervali su širi. Isto seme i isti broj pokretanja daju poređenje u parovima.
+	The baseline measured time in {a} and this run in {b}, so times are not compared.	Referenca je merila vreme u {a}, a ovo pokretanje u {b}, pa se vremena ne upoređuju.
+	{measure} ({block}) fell from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) je pao sa {before} na {after}, za {change}: više nego što bi objasnio slučaj.
+	{measure} ({block}) rose from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) je porastao sa {before} na {after}, za {change}: više nego što bi objasnio slučaj.
+	None of the key measures moved by more than chance: the change may do little, or more runs may show it.	Nijedna ključna metrika se nije pomerila više nego što bi objasnio slučaj: promena možda čini malo, ili bi to pokazalo više pokretanja.
+	What the change did	Šta je promena uradila
+	Baseline and now, key measures	Referenca i sada, ključne metrike
+	Difference (paired, 95%)	Razlika (u parovima, 95%)
+	Difference (95%)	Razlika (95%)
+	Measure	Metrika
+	Baseline	Referenca
+	Now	Sada
+	Change from baseline	Promena u odnosu na referencu
+	Verdict	Ocena
+	{block}: {measure}	{block}: {measure}
+	A verdict is real when the difference's 95% interval leaves out zero. Each row is judged on its own.	Ocena je stvarna kada 95% interval razlike ne obuhvata nulu. Svaki red se ocenjuje zasebno.
+	This run is the baseline.	Ovo pokretanje je referenca.
+	Change the model and run it again to compare.	Promenite model i ponovo ga pokrenite radi poređenja.
+	Compared with the baseline:	U poređenju sa referencom:
+	Keep this as the baseline	Zadrži ovo pokretanje kao referencu
+	Keep as baseline	Zadrži kao referencu
+	Keep these results, change the model, run it again, and see what the change did.	Zadržite ove rezultate, promenite model, ponovo ga pokrenite i pogledajte šta je promena uradila.
+	Clear baseline	Ukloni referencu
 @plural	Added {n} block|Added {n} blocks	Dodat je {n} blok|Dodata su {n} bloka|Dodato je {n} blokova
 @plural	Copied {n} block|Copied {n} blocks	Kopiran je {n} blok|Kopirana su {n} bloka|Kopirano je {n} blokova
 @plural	Finished {n} run|Finished {n} runs	Završeno je {n} pokretanje|Završena su {n} pokretanja|Završeno je {n} pokretanja
@@ -739,3 +768,5 @@ unit	yr	god.
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} problem: {blocks}|{n} problema: {blocks}|{n} problema: {blocks}
 @plural	Use {n} run|Use {n} runs	Koristi {n} pokretanje|Koristi {n} pokretanja|Koristi {n} pokretanja
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	Koristi {n} pokretanje (oko ± 5%)|Koristi {n} pokretanja (oko ± 5%)|Koristi {n} pokretanja (oko ± 5%)
+@plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Oba su koristila seme {seed} i isto {n} pokretanje, pa svako pokretanje dobija iste slučajne brojeve kao njegov par: razlike dolaze od promene, a ne od slučajnih izvlačenja.|Oba su koristila seme {seed} i ista {n} pokretanja, pa svako pokretanje dobija iste slučajne brojeve kao njegov par: razlike dolaze od promene, a ne od slučajnih izvlačenja.|Oba su koristila seme {seed} i istih {n} pokretanja, pa svako pokretanje dobija iste slučajne brojeve kao njegov par: razlike dolaze od promene, a ne od slučajnih izvlačenja.
+@plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	Još {n} ključna metrika se nije pomerila više nego što bi mogao slučaj.|Još {n} ključne metrike se nisu pomerile više nego što bi mogao slučaj.|Još {n} ključnih metrika se nije pomerilo više nego što bi mogao slučaj.

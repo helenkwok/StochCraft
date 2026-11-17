@@ -720,6 +720,35 @@ unit	yr	yıl
 	the model has changed since this run.	model bu çalıştırmadan sonra değişti.
 	Run again	Yeniden çalıştır
 	· out of date	· güncel değil
+	Real: lower	Gerçek: daha düşük
+	Real: higher	Gerçek: daha yüksek
+	Could be chance	Şans olabilir
+	No change	Değişiklik yok
+	Too few runs to tell	Karar için çok az çalıştırma
+	{value} points	{value} yüzde puan
+	The baseline used seed {seed_a} and {n_a} runs, this run seed {seed_b} and {n_b} runs, so they are compared as independent runs and the intervals are wider. The same seed and number of runs gives a paired comparison.	Referans {seed_a} rastgelelik tohumunu ve {n_a} çalıştırmayı, bu çalıştırma ise {seed_b} rastgelelik tohumunu ve {n_b} çalıştırmayı kullandı; bu yüzden bağımsız çalıştırmalar olarak karşılaştırılırlar ve aralıklar daha geniştir. Aynı tohum ve aynı çalıştırma sayısı eşleştirilmiş bir karşılaştırma sağlar.
+	The baseline measured time in {a} and this run in {b}, so times are not compared.	Referans süreyi {a} cinsinden, bu çalıştırma ise {b} cinsinden ölçtü; bu yüzden süreler karşılaştırılmaz.
+	{measure} ({block}) fell from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) {before} değerinden {after} değerine, {change} düştü: şansın açıklayacağından fazla.
+	{measure} ({block}) rose from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) {before} değerinden {after} değerine, {change} yükseldi: şansın açıklayacağından fazla.
+	None of the key measures moved by more than chance: the change may do little, or more runs may show it.	Temel ölçütlerin hiçbiri şansın açıklayacağından fazla değişmedi: değişikliğin etkisi az olabilir ya da daha fazla çalıştırma bunu gösterebilir.
+	What the change did	Değişiklik ne yaptı
+	Baseline and now, key measures	Referans ve şimdi, temel ölçütler
+	Difference (paired, 95%)	Fark (eşleştirilmiş, %95)
+	Difference (95%)	Fark (%95)
+	Measure	Ölçüt
+	Baseline	Referans
+	Now	Şimdi
+	Change from baseline	Referansa göre değişim
+	Verdict	Karar
+	{block}: {measure}	{block}: {measure}
+	A verdict is real when the difference's 95% interval leaves out zero. Each row is judged on its own.	Farkın %95 aralığı sıfırı dışarıda bıraktığında karar gerçektir. Her satır kendi başına değerlendirilir.
+	This run is the baseline.	Bu çalıştırma referanstır.
+	Change the model and run it again to compare.	Karşılaştırmak için modeli değiştirip yeniden çalıştırın.
+	Compared with the baseline:	Referansla karşılaştırıldığında:
+	Keep this as the baseline	Bu çalıştırmayı referans olarak tut
+	Keep as baseline	Referans olarak tut
+	Keep these results, change the model, run it again, and see what the change did.	Bu sonuçları tutun, modeli değiştirin, yeniden çalıştırın ve değişikliğin ne yaptığını görün.
+	Clear baseline	Referansı temizle
 @plural	Added {n} block|Added {n} blocks	{n} blok eklendi|{n} blok eklendi
 @plural	Copied {n} block|Copied {n} blocks	{n} blok kopyalandı|{n} blok kopyalandı
 @plural	Finished {n} run|Finished {n} runs	{n} çalıştırma tamamlandı|{n} çalıştırma tamamlandı
@@ -739,3 +768,5 @@ unit	yr	yıl
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} sorun: {blocks}|{n} sorun: {blocks}
 @plural	Use {n} run|Use {n} runs	{n} çalıştırma kullan|{n} çalıştırma kullan
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	{n} çalıştırma kullan (yaklaşık ± 5%)|{n} çalıştırma kullan (yaklaşık ± 5%)
+@plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	İkisi de {seed} rastgelelik tohumunu ve aynı {n} çalıştırmayı kullandı; böylece her çalıştırma eşiyle aynı rastgele sayıları alır: farklar şans çekilişlerinden değil, değişiklikten gelir.|İkisi de {seed} rastgelelik tohumunu ve aynı {n} çalıştırmayı kullandı; böylece her çalıştırma eşiyle aynı rastgele sayıları alır: farklar şans çekilişlerinden değil, değişiklikten gelir.
+@plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	Diğer {n} temel ölçüt, şansın yapabileceğinden fazla değişmedi.|Diğer {n} temel ölçüt, şansın yapabileceğinden fazla değişmedi.

@@ -720,6 +720,35 @@ unit	yr	r.
 	the model has changed since this run.	model se od tohoto běhu změnil.
 	Run again	Spustit znovu
 	· out of date	· zastaralé
+	Real: lower	Skutečné: nižší
+	Real: higher	Skutečné: vyšší
+	Could be chance	Může být náhoda
+	No change	Beze změny
+	Too few runs to tell	Příliš málo běhů k posouzení
+	{value} points	{value} p. b.
+	The baseline used seed {seed_a} and {n_a} runs, this run seed {seed_b} and {n_b} runs, so they are compared as independent runs and the intervals are wider. The same seed and number of runs gives a paired comparison.	Reference použila počáteční hodnotu generátoru {seed_a} a počet běhů {n_a}, tento běh hodnotu {seed_b} a počet běhů {n_b}, takže se porovnávají jako nezávislé běhy a intervaly jsou širší. Stejná počáteční hodnota a stejný počet běhů dávají párové porovnání.
+	The baseline measured time in {a} and this run in {b}, so times are not compared.	Reference měřila čas v jednotkách {a} a tento běh v {b}, takže časy se neporovnávají.
+	{measure} ({block}) fell from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) klesl z {before} na {after}, o {change}: víc, než by vysvětlila náhoda.
+	{measure} ({block}) rose from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) stoupl z {before} na {after}, o {change}: víc, než by vysvětlila náhoda.
+	None of the key measures moved by more than chance: the change may do little, or more runs may show it.	Žádná z klíčových metrik se nepohnula víc, než by vysvětlila náhoda: změna možná dělá málo, nebo to ukáže více běhů.
+	What the change did	Co změna udělala
+	Baseline and now, key measures	Reference a nyní, klíčové metriky
+	Difference (paired, 95%)	Rozdíl (párový, 95%)
+	Difference (95%)	Rozdíl (95%)
+	Measure	Metrika
+	Baseline	Reference
+	Now	Nyní
+	Change from baseline	Změna oproti referenci
+	Verdict	Verdikt
+	{block}: {measure}	{block}: {measure}
+	A verdict is real when the difference's 95% interval leaves out zero. Each row is judged on its own.	Verdikt je skutečný, když 95% interval rozdílu nezahrnuje nulu. Každý řádek se posuzuje samostatně.
+	This run is the baseline.	Tento běh je referencí.
+	Change the model and run it again to compare.	Změňte model a spusťte ho znovu pro porovnání.
+	Compared with the baseline:	Ve srovnání s referencí:
+	Keep this as the baseline	Ponechat tento běh jako referenci
+	Keep as baseline	Ponechat jako referenci
+	Keep these results, change the model, run it again, and see what the change did.	Ponechte si tyto výsledky, změňte model, spusťte ho znovu a podívejte se, co změna udělala.
+	Clear baseline	Zrušit referenci
 @plural	Added {n} block|Added {n} blocks	Přidán {n} blok|Přidány {n} bloky|Přidáno {n} bloků
 @plural	Copied {n} block|Copied {n} blocks	Zkopírován {n} blok|Zkopírovány {n} bloky|Zkopírováno {n} bloků
 @plural	Finished {n} run|Finished {n} runs	Dokončen {n} běh|Dokončeny {n} běhy|Dokončeno {n} běhů
@@ -739,3 +768,5 @@ unit	yr	r.
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} problém: {blocks}|{n} problémy: {blocks}|{n} problémů: {blocks}
 @plural	Use {n} run|Use {n} runs	Použít {n} běh|Použít {n} běhy|Použít {n} běhů
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	Použít {n} běh (asi ± 5%)|Použít {n} běhy (asi ± 5%)|Použít {n} běhů (asi ± 5%)
+@plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Oba použily počáteční hodnotu generátoru {seed} a tentýž {n} běh, takže každý běh dostane stejná náhodná čísla jako jeho protějšek: rozdíly pocházejí ze změny, ne z náhodných tahů.|Oba použily počáteční hodnotu generátoru {seed} a tytéž {n} běhy, takže každý běh dostane stejná náhodná čísla jako jeho protějšek: rozdíly pocházejí ze změny, ne z náhodných tahů.|Oba použily počáteční hodnotu generátoru {seed} a tytéž {n} běhů, takže každý běh dostane stejná náhodná čísla jako jeho protějšek: rozdíly pocházejí ze změny, ne z náhodných tahů.
+@plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	Ještě {n} klíčová metrika se nepohnula víc, než by dokázala náhoda.|Ještě {n} klíčové metriky se nepohnuly víc, než by dokázala náhoda.|Ještě {n} klíčových metrik se nepohnulo víc, než by dokázala náhoda.

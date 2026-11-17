@@ -720,6 +720,35 @@ unit	yr	ปี
 	the model has changed since this run.	แบบจำลองเปลี่ยนไปหลังจากการรันครั้งนี้
 	Run again	รันอีกครั้ง
 	· out of date	· ล้าสมัย
+	Real: lower	จริง: ต่ำลง
+	Real: higher	จริง: สูงขึ้น
+	Could be chance	อาจเป็นความบังเอิญ
+	No change	ไม่เปลี่ยนแปลง
+	Too few runs to tell	จำนวนการรันน้อยเกินไปที่จะบอกได้
+	{value} points	{value} จุดร้อยละ
+	The baseline used seed {seed_a} and {n_a} runs, this run seed {seed_b} and {n_b} runs, so they are compared as independent runs and the intervals are wider. The same seed and number of runs gives a paired comparison.	เส้นฐานใช้เมล็ดสุ่ม {seed_a} และรัน {n_a} รอบ การรันนี้ใช้เมล็ดสุ่ม {seed_b} และรัน {n_b} รอบ จึงเปรียบเทียบแบบการรันที่เป็นอิสระต่อกันและช่วงจะกว้างขึ้น การใช้เมล็ดสุ่มและจำนวนรอบเดียวกันจะให้การเปรียบเทียบแบบจับคู่
+	The baseline measured time in {a} and this run in {b}, so times are not compared.	เส้นฐานวัดเวลาเป็น {a} ส่วนการรันนี้วัดเป็น {b} จึงไม่เปรียบเทียบเวลา
+	{measure} ({block}) fell from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) ลดลงจาก {before} เป็น {after} ต่างกัน {change}: มากกว่าที่ความบังเอิญจะอธิบายได้
+	{measure} ({block}) rose from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) เพิ่มขึ้นจาก {before} เป็น {after} ต่างกัน {change}: มากกว่าที่ความบังเอิญจะอธิบายได้
+	None of the key measures moved by more than chance: the change may do little, or more runs may show it.	ไม่มีตัวชี้วัดหลักใดเปลี่ยนไปมากกว่าที่ความบังเอิญจะอธิบายได้: การเปลี่ยนแปลงอาจมีผลน้อย หรือการรันเพิ่มอาจแสดงให้เห็น
+	What the change did	ผลของการเปลี่ยนแปลง
+	Baseline and now, key measures	เส้นฐานและปัจจุบัน ตัวชี้วัดหลัก
+	Difference (paired, 95%)	ผลต่าง (จับคู่, 95%)
+	Difference (95%)	ผลต่าง (95%)
+	Measure	ตัวชี้วัด
+	Baseline	เส้นฐาน
+	Now	ปัจจุบัน
+	Change from baseline	การเปลี่ยนแปลงจากเส้นฐาน
+	Verdict	ผลตัดสิน
+	{block}: {measure}	{block}: {measure}
+	A verdict is real when the difference's 95% interval leaves out zero. Each row is judged on its own.	ผลตัดสินเป็นจริงเมื่อช่วง 95% ของผลต่างไม่รวมศูนย์ แต่ละแถวตัดสินแยกกัน
+	This run is the baseline.	การรันนี้คือเส้นฐาน
+	Change the model and run it again to compare.	เปลี่ยนแบบจำลองแล้วรันอีกครั้งเพื่อเปรียบเทียบ
+	Compared with the baseline:	เทียบกับเส้นฐาน:
+	Keep this as the baseline	เก็บการรันนี้เป็นเส้นฐาน
+	Keep as baseline	เก็บเป็นเส้นฐาน
+	Keep these results, change the model, run it again, and see what the change did.	เก็บผลลัพธ์เหล่านี้ไว้ เปลี่ยนแบบจำลอง รันอีกครั้ง แล้วดูว่าการเปลี่ยนแปลงทำอะไร
+	Clear baseline	ล้างเส้นฐาน
 @plural	Added {n} block|Added {n} blocks	เพิ่ม {n} บล็อกแล้ว
 @plural	Copied {n} block|Copied {n} blocks	คัดลอก {n} บล็อกแล้ว
 @plural	Finished {n} run|Finished {n} runs	การรันเสร็จสิ้น {n} รอบ
@@ -739,3 +768,5 @@ unit	yr	ปี
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	ปัญหา {n} รายการ: {blocks}
 @plural	Use {n} run|Use {n} runs	ใช้การรัน {n} รอบ
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	ใช้การรัน {n} รอบ (ประมาณ ± 5%)
+@plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	ทั้งสองใช้เมล็ดสุ่ม {seed} และการรัน {n} รอบชุดเดียวกัน แต่ละการรันจึงได้ตัวเลขสุ่มชุดเดียวกับคู่ของมัน: ความแตกต่างมาจากการเปลี่ยนแปลง ไม่ใช่จากการสุ่มโดยบังเอิญ
+@plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	ตัวชี้วัดหลักอื่นอีก {n} ตัวเปลี่ยนไปไม่เกินที่ความบังเอิญจะทำได้

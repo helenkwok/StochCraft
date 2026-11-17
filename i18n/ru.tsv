@@ -720,6 +720,35 @@ unit	yr	г.
 	the model has changed since this run.	модель изменилась после этого запуска.
 	Run again	Запустить снова
 	· out of date	· устарели
+	Real: lower	Реально: ниже
+	Real: higher	Реально: выше
+	Could be chance	Может быть случайностью
+	No change	Без изменений
+	Too few runs to tell	Слишком мало запусков для вывода
+	{value} points	{value} п. п.
+	The baseline used seed {seed_a} and {n_a} runs, this run seed {seed_b} and {n_b} runs, so they are compared as independent runs and the intervals are wider. The same seed and number of runs gives a paired comparison.	Базовый вариант использовал начальное значение генератора {seed_a} и число запусков {n_a}, этот запуск — значение {seed_b} и число запусков {n_b}, поэтому они сравниваются как независимые запуски и интервалы шире. Одинаковые начальное значение и число запусков дают парное сравнение.
+	The baseline measured time in {a} and this run in {b}, so times are not compared.	Базовый вариант измерял время в {a}, а этот запуск — в {b}, поэтому время не сравнивается.
+	{measure} ({block}) fell from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) снизился с {before} до {after}, на {change}: больше, чем объяснила бы случайность.
+	{measure} ({block}) rose from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) вырос с {before} до {after}, на {change}: больше, чем объяснила бы случайность.
+	None of the key measures moved by more than chance: the change may do little, or more runs may show it.	Ни один из основных показателей не изменился больше, чем объяснила бы случайность: изменение, возможно, мало что даёт, или больше запусков это покажут.
+	What the change did	Что дало изменение
+	Baseline and now, key measures	Базовый вариант и сейчас, основные показатели
+	Difference (paired, 95%)	Разница (парная, 95%)
+	Difference (95%)	Разница (95%)
+	Measure	Показатель
+	Baseline	Базовый вариант
+	Now	Сейчас
+	Change from baseline	Изменение от базового варианта
+	Verdict	Вывод
+	{block}: {measure}	{block}: {measure}
+	A verdict is real when the difference's 95% interval leaves out zero. Each row is judged on its own.	Вывод реален, когда 95% интервал разницы не включает ноль. Каждая строка оценивается отдельно.
+	This run is the baseline.	Этот запуск — базовый вариант.
+	Change the model and run it again to compare.	Измените модель и запустите её снова, чтобы сравнить.
+	Compared with the baseline:	По сравнению с базовым вариантом:
+	Keep this as the baseline	Сохранить этот запуск как базовый вариант
+	Keep as baseline	Сохранить как базовый вариант
+	Keep these results, change the model, run it again, and see what the change did.	Сохраните эти результаты, измените модель, запустите её снова и посмотрите, что дало изменение.
+	Clear baseline	Сбросить базовый вариант
 @plural	Added {n} block|Added {n} blocks	Добавлен {n} блок|Добавлено {n} блока|Добавлено {n} блоков
 @plural	Copied {n} block|Copied {n} blocks	Скопирован {n} блок|Скопировано {n} блока|Скопировано {n} блоков
 @plural	Finished {n} run|Finished {n} runs	Завершён {n} запуск|Завершены {n} запуска|Завершено {n} запусков
@@ -739,3 +768,5 @@ unit	yr	г.
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} проблема: {blocks}|{n} проблемы: {blocks}|{n} проблем: {blocks}
 @plural	Use {n} run|Use {n} runs	Использовать {n} запуск|Использовать {n} запуска|Использовать {n} запусков
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	Использовать {n} запуск (около ± 5%)|Использовать {n} запуска (около ± 5%)|Использовать {n} запусков (около ± 5%)
+@plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Оба использовали начальное значение генератора {seed} и тот же {n} запуск, поэтому каждый запуск получает те же случайные числа, что и его пара: различия вызваны изменением, а не случайными выборками.|Оба использовали начальное значение генератора {seed} и те же {n} запуска, поэтому каждый запуск получает те же случайные числа, что и его пара: различия вызваны изменением, а не случайными выборками.|Оба использовали начальное значение генератора {seed} и те же {n} запусков, поэтому каждый запуск получает те же случайные числа, что и его пара: различия вызваны изменением, а не случайными выборками.
+@plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	Ещё {n} основной показатель изменился не больше, чем могла бы случайность.|Ещё {n} основных показателя изменились не больше, чем могла бы случайность.|Ещё {n} основных показателей изменились не больше, чем могла бы случайность.

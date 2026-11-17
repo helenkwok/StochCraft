@@ -720,6 +720,35 @@ unit	yr	j
 	the model has changed since this run.	het model is sinds deze uitvoering gewijzigd.
 	Run again	Opnieuw uitvoeren
 	· out of date	· verouderd
+	Real: lower	Echt: lager
+	Real: higher	Echt: hoger
+	Could be chance	Kan toeval zijn
+	No change	Geen verandering
+	Too few runs to tell	Te weinig uitvoeringen om te beoordelen
+	{value} points	{value} procentpunten
+	The baseline used seed {seed_a} and {n_a} runs, this run seed {seed_b} and {n_b} runs, so they are compared as independent runs and the intervals are wider. The same seed and number of runs gives a paired comparison.	De referentie gebruikte startwaarde {seed_a} en {n_a} uitvoeringen, deze uitvoering startwaarde {seed_b} en {n_b} uitvoeringen, dus ze worden vergeleken als onafhankelijke uitvoeringen en de intervallen zijn breder. Dezelfde startwaarde en hetzelfde aantal uitvoeringen geven een gepaarde vergelijking.
+	The baseline measured time in {a} and this run in {b}, so times are not compared.	De referentie mat tijd in {a} en deze uitvoering in {b}, dus tijden worden niet vergeleken.
+	{measure} ({block}) fell from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) daalde van {before} naar {after}, met {change}: meer dan toeval zou verklaren.
+	{measure} ({block}) rose from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) steeg van {before} naar {after}, met {change}: meer dan toeval zou verklaren.
+	None of the key measures moved by more than chance: the change may do little, or more runs may show it.	Geen van de belangrijkste metrieken bewoog meer dan toeval zou verklaren: de wijziging doet misschien weinig, of meer uitvoeringen kunnen het laten zien.
+	What the change did	Wat de wijziging deed
+	Baseline and now, key measures	Referentie en nu, belangrijkste metrieken
+	Difference (paired, 95%)	Verschil (gepaard, 95%)
+	Difference (95%)	Verschil (95%)
+	Measure	Metriek
+	Baseline	Referentie
+	Now	Nu
+	Change from baseline	Verandering t.o.v. referentie
+	Verdict	Oordeel
+	{block}: {measure}	{block}: {measure}
+	A verdict is real when the difference's 95% interval leaves out zero. Each row is judged on its own.	Een oordeel is echt als het 95%-interval van het verschil nul uitsluit. Elke rij wordt apart beoordeeld.
+	This run is the baseline.	Deze uitvoering is de referentie.
+	Change the model and run it again to compare.	Wijzig het model en voer het opnieuw uit om te vergelijken.
+	Compared with the baseline:	Vergeleken met de referentie:
+	Keep this as the baseline	Deze uitvoering als referentie bewaren
+	Keep as baseline	Als referentie bewaren
+	Keep these results, change the model, run it again, and see what the change did.	Bewaar deze resultaten, wijzig het model, voer het opnieuw uit en zie wat de wijziging deed.
+	Clear baseline	Referentie wissen
 @plural	Added {n} block|Added {n} blocks	{n} blok toegevoegd|{n} blokken toegevoegd
 @plural	Copied {n} block|Copied {n} blocks	{n} blok gekopieerd|{n} blokken gekopieerd
 @plural	Finished {n} run|Finished {n} runs	{n} uitvoering voltooid|{n} uitvoeringen voltooid
@@ -739,3 +768,5 @@ unit	yr	j
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} probleem: {blocks}|{n} problemen: {blocks}
 @plural	Use {n} run|Use {n} runs	{n} uitvoering gebruiken|{n} uitvoeringen gebruiken
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	{n} uitvoering gebruiken (ongeveer ± 5%)|{n} uitvoeringen gebruiken (ongeveer ± 5%)
+@plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Beide gebruikten startwaarde {seed} en dezelfde {n} uitvoering, dus elke uitvoering krijgt dezelfde willekeurige getallen als haar tegenhanger: de verschillen komen van de wijziging, niet van toevallige trekkingen.|Beide gebruikten startwaarde {seed} en dezelfde {n} uitvoeringen, dus elke uitvoering krijgt dezelfde willekeurige getallen als haar tegenhanger: de verschillen komen van de wijziging, niet van toevallige trekkingen.
+@plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	{n} andere belangrijke metriek bewoog niet meer dan toeval zou kunnen.|{n} andere belangrijke metrieken bewogen niet meer dan toeval zou kunnen.

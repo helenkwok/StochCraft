@@ -720,6 +720,35 @@ unit	yr	an
 	the model has changed since this run.	le modèle a changé depuis cette exécution.
 	Run again	Exécuter à nouveau
 	· out of date	· obsolètes
+	Real: lower	Réel : plus bas
+	Real: higher	Réel : plus haut
+	Could be chance	Peut-être le hasard
+	No change	Aucun changement
+	Too few runs to tell	Trop peu d'exécutions pour conclure
+	{value} points	{value} points
+	The baseline used seed {seed_a} and {n_a} runs, this run seed {seed_b} and {n_b} runs, so they are compared as independent runs and the intervals are wider. The same seed and number of runs gives a paired comparison.	La référence a utilisé la graine {seed_a} et {n_a} exécutions, cette exécution la graine {seed_b} et {n_b} exécutions : elles sont donc comparées comme des exécutions indépendantes et les intervalles sont plus larges. La même graine et le même nombre d'exécutions donnent une comparaison appariée.
+	The baseline measured time in {a} and this run in {b}, so times are not compared.	La référence a mesuré le temps en {a} et cette exécution en {b} : les temps ne sont donc pas comparés.
+	{measure} ({block}) fell from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) est passé de {before} à {after}, en baisse de {change} : plus que le hasard ne l'expliquerait.
+	{measure} ({block}) rose from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) est passé de {before} à {after}, en hausse de {change} : plus que le hasard ne l'expliquerait.
+	None of the key measures moved by more than chance: the change may do little, or more runs may show it.	Aucun des indicateurs clés n'a varié plus que le hasard ne l'expliquerait : le changement a peut-être peu d'effet, ou davantage d'exécutions pourraient le montrer.
+	What the change did	Ce que le changement a fait
+	Baseline and now, key measures	Référence et maintenant, indicateurs clés
+	Difference (paired, 95%)	Différence (appariée, 95 %)
+	Difference (95%)	Différence (95 %)
+	Measure	Indicateur
+	Baseline	Référence
+	Now	Maintenant
+	Change from baseline	Écart par rapport à la référence
+	Verdict	Verdict
+	{block}: {measure}	{block} : {measure}
+	A verdict is real when the difference's 95% interval leaves out zero. Each row is judged on its own.	Un verdict est réel lorsque l'intervalle à 95 % de la différence exclut zéro. Chaque ligne est jugée séparément.
+	This run is the baseline.	Cette exécution est la référence.
+	Change the model and run it again to compare.	Modifiez le modèle et exécutez-le à nouveau pour comparer.
+	Compared with the baseline:	Par rapport à la référence :
+	Keep this as the baseline	Garder cette exécution comme référence
+	Keep as baseline	Garder comme référence
+	Keep these results, change the model, run it again, and see what the change did.	Gardez ces résultats, modifiez le modèle, exécutez-le à nouveau et voyez ce que le changement a fait.
+	Clear baseline	Effacer la référence
 @plural	Added {n} block|Added {n} blocks	{n} bloc ajouté|{n} blocs ajoutés
 @plural	Copied {n} block|Copied {n} blocks	{n} bloc copié|{n} blocs copiés
 @plural	Finished {n} run|Finished {n} runs	{n} exécution terminée|{n} exécutions terminées
@@ -739,3 +768,5 @@ unit	yr	an
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} problème : {blocks}|{n} problèmes : {blocks}
 @plural	Use {n} run|Use {n} runs	Utiliser {n} exécution|Utiliser {n} exécutions
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	Utiliser {n} exécution (environ ± 5 %)|Utiliser {n} exécutions (environ ± 5 %)
+@plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Les deux ont utilisé la graine {seed} et la même {n} exécution, donc chaque exécution reçoit les mêmes nombres aléatoires que sa paire : les différences viennent du changement, pas de tirages au hasard.|Les deux ont utilisé la graine {seed} et les mêmes {n} exécutions, donc chaque exécution reçoit les mêmes nombres aléatoires que sa paire : les différences viennent du changement, pas de tirages au hasard.
+@plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	{n} autre indicateur clé n'a pas varié plus que le hasard ne le pourrait.|{n} autres indicateurs clés n'ont pas varié plus que le hasard ne le pourrait.

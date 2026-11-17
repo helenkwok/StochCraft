@@ -46,7 +46,7 @@ pub fn number(v: f64) -> String {
 
 /// How a metric reads, and its unit: `Time` takes the model's time unit, `Share` shows as a
 /// percentage.
-enum Unit {
+pub(crate) enum Unit {
     Count,
     Time,
     Share,
@@ -56,7 +56,7 @@ enum Unit {
 }
 
 /// The label and unit of metric `name` on an element of kind `kind`.
-fn metric<'a>(name: &'a str, kind: &str) -> (&'a str, Unit) {
+pub(crate) fn metric<'a>(name: &'a str, kind: &str) -> (&'a str, Unit) {
     match name {
         "entered" => (t("Entered"), Unit::Count),
         "left" => (t("Left"), Unit::Count),
@@ -672,7 +672,7 @@ fn key_candidates(kind: &str) -> &'static [(&'static str, bool)] {
 }
 
 /// The key measures of block `e`: up to four of its results by [`key_candidates`].
-fn key_of(e: &Value) -> Vec<&'static str> {
+pub(crate) fn key_of(e: &Value) -> Vec<&'static str> {
     let kind = e["kind"].as_str().unwrap_or("");
     key_candidates(kind)
         .iter()
@@ -830,7 +830,7 @@ pub fn rounded(mean: f64, half_width: f64) -> (String, String) {
 
 /// The power of ten of `v`'s first significant figure (`v` finite and not zero), by repeated
 /// scaling rather than `log10`, as in [`number`].
-fn magnitude(v: f64) -> i32 {
+pub(crate) fn magnitude(v: f64) -> i32 {
     let mut m = 0i32;
     let mut a = v.abs();
     while a >= 10.0 && m < 400 {
@@ -846,7 +846,7 @@ fn magnitude(v: f64) -> i32 {
 
 /// Ten to the power `e`, by repeated multiplication (`powi` is disallowed: it can differ between
 /// platforms); exact for the few places a table rounds to.
-fn pow10(e: i32) -> f64 {
+pub(crate) fn pow10(e: i32) -> f64 {
     let f = (0..e.unsigned_abs().min(400)).fold(1.0, |f, _| f * 10.0);
     if e < 0 { 1.0 / f } else { f }
 }
@@ -881,7 +881,7 @@ fn fixed(v: f64, places: i32) -> String {
 
 /// How a metric of `kind` is shown: the factor its values are multiplied by, and its unit
 /// (`time` for times).
-fn scale_and_unit<'a>(kind: &Unit, time: &'a str) -> (f64, &'a str) {
+pub(crate) fn scale_and_unit<'a>(kind: &Unit, time: &'a str) -> (f64, &'a str) {
     match kind {
         Unit::Share => (100.0, "%"),
         Unit::Time => (1.0, time),
@@ -977,14 +977,14 @@ fn scroll_target() -> egui::Id {
 }
 
 /// A block's name, or its id where it has none.
-fn block_name(e: &Value) -> &str {
+pub(crate) fn block_name(e: &Value) -> &str {
     let id = e["id"].as_str().unwrap_or("");
     e["name"].as_str().filter(|n| !n.is_empty()).unwrap_or(id)
 }
 
 /// A result's mean as a finding writes it: rounded to what its interval supports, with its unit
 /// (`time` for times). `None` without a mean.
-fn said(m: &Value, kind: &Unit, time: &str) -> Option<String> {
+pub(crate) fn said(m: &Value, kind: &Unit, time: &str) -> Option<String> {
     let (scale, unit) = scale_and_unit(kind, time);
     let mean = m["mean"].as_f64()?;
     let text = match m["half_width"].as_f64() {

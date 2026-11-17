@@ -720,6 +720,35 @@ unit	yr	г.
 	the model has changed since this run.	моделът е променен след това изпълнение.
 	Run again	Стартиране отново
 	· out of date	· остарели
+	Real: lower	Реално: по-ниско
+	Real: higher	Реално: по-високо
+	Could be chance	Може да е случайност
+	No change	Без промяна
+	Too few runs to tell	Твърде малко изпълнения за извод
+	{value} points	{value} процентни пункта
+	The baseline used seed {seed_a} and {n_a} runs, this run seed {seed_b} and {n_b} runs, so they are compared as independent runs and the intervals are wider. The same seed and number of runs gives a paired comparison.	Базовият вариант използва начална стойност {seed_a} и {n_a} изпълнения, а това изпълнение — начална стойност {seed_b} и {n_b} изпълнения, затова се сравняват като независими изпълнения и интервалите са по-широки. Същата начална стойност и същият брой изпълнения дават сдвоено сравнение.
+	The baseline measured time in {a} and this run in {b}, so times are not compared.	Базовият вариант е измервал времето в {a}, а това изпълнение — в {b}, затова времената не се сравняват.
+	{measure} ({block}) fell from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) спадна от {before} на {after}, с {change}: повече, отколкото би обяснила случайността.
+	{measure} ({block}) rose from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) се повиши от {before} на {after}, с {change}: повече, отколкото би обяснила случайността.
+	None of the key measures moved by more than chance: the change may do little, or more runs may show it.	Нито един от основните показатели не се промени повече, отколкото би обяснила случайността: промяната може би прави малко, или повече изпълнения ще го покажат.
+	What the change did	Какво направи промяната
+	Baseline and now, key measures	Базов вариант и сега, основни показатели
+	Difference (paired, 95%)	Разлика (сдвоена, 95%)
+	Difference (95%)	Разлика (95%)
+	Measure	Показател
+	Baseline	Базов вариант
+	Now	Сега
+	Change from baseline	Промяна спрямо базовия вариант
+	Verdict	Извод
+	{block}: {measure}	{block}: {measure}
+	A verdict is real when the difference's 95% interval leaves out zero. Each row is judged on its own.	Изводът е реален, когато 95% интервал на разликата изключва нулата. Всеки ред се оценява самостоятелно.
+	This run is the baseline.	Това изпълнение е базовият вариант.
+	Change the model and run it again to compare.	Променете модела и го изпълнете отново, за да сравните.
+	Compared with the baseline:	Спрямо базовия вариант:
+	Keep this as the baseline	Запазване на това изпълнение като базов вариант
+	Keep as baseline	Запазване като базов вариант
+	Keep these results, change the model, run it again, and see what the change did.	Запазете тези резултати, променете модела, изпълнете го отново и вижте какво направи промяната.
+	Clear baseline	Изчистване на базовия вариант
 @plural	Added {n} block|Added {n} blocks	Добавен е {n} блок|Добавени са {n} блока
 @plural	Copied {n} block|Copied {n} blocks	Копиран е {n} блок|Копирани са {n} блока
 @plural	Finished {n} run|Finished {n} runs	Завършено е {n} изпълнение|Завършени са {n} изпълнения
@@ -739,3 +768,5 @@ unit	yr	г.
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} проблем: {blocks}|{n} проблема: {blocks}
 @plural	Use {n} run|Use {n} runs	Използване на {n} изпълнение|Използване на {n} изпълнения
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	Използване на {n} изпълнение (около ± 5%)|Използване на {n} изпълнения (около ± 5%)
+@plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	И двете използваха начална стойност {seed} и същото {n} изпълнение, така че всяко изпълнение получава същите случайни числа като своята двойка: разликите идват от промяната, а не от случайни тегления.|И двете използваха начална стойност {seed} и същите {n} изпълнения, така че всяко изпълнение получава същите случайни числа като своята двойка: разликите идват от промяната, а не от случайни тегления.
+@plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	Още {n} основен показател не се промени повече, отколкото би могла случайността.|Още {n} основни показателя не се промениха повече, отколкото би могла случайността.

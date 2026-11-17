@@ -720,6 +720,35 @@ unit	yr	l.
 	the model has changed since this run.	model se je od tega zagona spremenil.
 	Run again	Zaženi znova
 	· out of date	· zastarelo
+	Real: lower	Resnično: nižje
+	Real: higher	Resnično: višje
+	Could be chance	Lahko je naključje
+	No change	Brez spremembe
+	Too few runs to tell	Premalo zagonov za oceno
+	{value} points	{value} o. t.
+	The baseline used seed {seed_a} and {n_a} runs, this run seed {seed_b} and {n_b} runs, so they are compared as independent runs and the intervals are wider. The same seed and number of runs gives a paired comparison.	Referenca je uporabila seme {seed_a} in število zagonov {n_a}, ta zagon pa seme {seed_b} in število zagonov {n_b}, zato se primerjata kot neodvisna zagona in intervali so širši. Isto seme in isto število zagonov dajeta primerjavo v parih.
+	The baseline measured time in {a} and this run in {b}, so times are not compared.	Referenca je čas merila v {a}, ta zagon pa v {b}, zato se časi ne primerjajo.
+	{measure} ({block}) fell from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) je padel s {before} na {after}, za {change}: več, kot bi pojasnilo naključje.
+	{measure} ({block}) rose from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) je narasel s {before} na {after}, za {change}: več, kot bi pojasnilo naključje.
+	None of the key measures moved by more than chance: the change may do little, or more runs may show it.	Noben ključni kazalnik se ni premaknil bolj, kot bi pojasnilo naključje: sprememba morda naredi malo, ali pa bi to pokazalo več zagonov.
+	What the change did	Kaj je naredila sprememba
+	Baseline and now, key measures	Referenca in zdaj, ključni kazalniki
+	Difference (paired, 95%)	Razlika (v parih, 95 %)
+	Difference (95%)	Razlika (95 %)
+	Measure	Kazalnik
+	Baseline	Referenca
+	Now	Zdaj
+	Change from baseline	Sprememba glede na referenco
+	Verdict	Ocena
+	{block}: {measure}	{block}: {measure}
+	A verdict is real when the difference's 95% interval leaves out zero. Each row is judged on its own.	Ocena je resnična, ko 95-odstotni interval razlike ne vsebuje ničle. Vsaka vrstica se ocenjuje posebej.
+	This run is the baseline.	Ta zagon je referenca.
+	Change the model and run it again to compare.	Spremenite model in ga znova zaženite za primerjavo.
+	Compared with the baseline:	V primerjavi z referenco:
+	Keep this as the baseline	Ohrani ta zagon kot referenco
+	Keep as baseline	Ohrani kot referenco
+	Keep these results, change the model, run it again, and see what the change did.	Ohranite te rezultate, spremenite model, ga znova zaženite in poglejte, kaj je naredila sprememba.
+	Clear baseline	Počisti referenco
 @plural	Added {n} block|Added {n} blocks	Dodan je {n} blok|Dodana sta {n} bloka|Dodani so {n} bloki|Dodanih je {n} blokov
 @plural	Copied {n} block|Copied {n} blocks	Kopiran je {n} blok|Kopirana sta {n} bloka|Kopirani so {n} bloki|Kopiranih je {n} blokov
 @plural	Finished {n} run|Finished {n} runs	Končan je {n} zagon|Končana sta {n} zagona|Končani so {n} zagoni|Končanih je {n} zagonov
@@ -739,3 +768,5 @@ unit	yr	l.
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} težava: {blocks}|{n} težavi: {blocks}|{n} težave: {blocks}|{n} težav: {blocks}
 @plural	Use {n} run|Use {n} runs	Uporabi {n} zagon|Uporabi {n} zagona|Uporabi {n} zagone|Uporabi {n} zagonov
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	Uporabi {n} zagon (približno ± 5%)|Uporabi {n} zagona (približno ± 5%)|Uporabi {n} zagone (približno ± 5%)|Uporabi {n} zagonov (približno ± 5%)
+@plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Oba sta uporabila seme {seed} in isti {n} zagon, zato vsak zagon dobi enaka naključna števila kot njegov par: razlike izhajajo iz spremembe, ne iz naključnih izborov.|Oba sta uporabila seme {seed} in ista {n} zagona, zato vsak zagon dobi enaka naključna števila kot njegov par: razlike izhajajo iz spremembe, ne iz naključnih izborov.|Oba sta uporabila seme {seed} in iste {n} zagone, zato vsak zagon dobi enaka naključna števila kot njegov par: razlike izhajajo iz spremembe, ne iz naključnih izborov.|Oba sta uporabila seme {seed} in istih {n} zagonov, zato vsak zagon dobi enaka naključna števila kot njegov par: razlike izhajajo iz spremembe, ne iz naključnih izborov.
+@plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	Še {n} ključni kazalnik se ni premaknil bolj, kot bi lahko naključje.|Še {n} ključna kazalnika se nista premaknila bolj, kot bi lahko naključje.|Še {n} ključni kazalniki se niso premaknili bolj, kot bi lahko naključje.|Še {n} ključnih kazalnikov se ni premaknilo bolj, kot bi lahko naključje.

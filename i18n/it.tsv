@@ -720,6 +720,35 @@ unit	yr	a
 	the model has changed since this run.	il modello è cambiato dopo questa esecuzione.
 	Run again	Esegui di nuovo
 	· out of date	· non aggiornati
+	Real: lower	Reale: più basso
+	Real: higher	Reale: più alto
+	Could be chance	Potrebbe essere il caso
+	No change	Nessuna variazione
+	Too few runs to tell	Troppo poche esecuzioni per dirlo
+	{value} points	{value} punti
+	The baseline used seed {seed_a} and {n_a} runs, this run seed {seed_b} and {n_b} runs, so they are compared as independent runs and the intervals are wider. The same seed and number of runs gives a paired comparison.	Il riferimento ha usato il seme {seed_a} e {n_a} esecuzioni, questa esecuzione il seme {seed_b} e {n_b} esecuzioni, quindi sono confrontate come esecuzioni indipendenti e gli intervalli sono più ampi. Lo stesso seme e lo stesso numero di esecuzioni danno un confronto appaiato.
+	The baseline measured time in {a} and this run in {b}, so times are not compared.	Il riferimento ha misurato il tempo in {a} e questa esecuzione in {b}, quindi i tempi non vengono confrontati.
+	{measure} ({block}) fell from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) è sceso da {before} a {after}, di {change}: più di quanto spiegherebbe il caso.
+	{measure} ({block}) rose from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) è salito da {before} a {after}, di {change}: più di quanto spiegherebbe il caso.
+	None of the key measures moved by more than chance: the change may do little, or more runs may show it.	Nessuna delle metriche principali si è mossa più di quanto spiegherebbe il caso: la modifica potrebbe fare poco, o più esecuzioni potrebbero mostrarlo.
+	What the change did	Cosa ha fatto la modifica
+	Baseline and now, key measures	Riferimento e ora, metriche principali
+	Difference (paired, 95%)	Differenza (appaiata, 95%)
+	Difference (95%)	Differenza (95%)
+	Measure	Metrica
+	Baseline	Riferimento
+	Now	Ora
+	Change from baseline	Variazione dal riferimento
+	Verdict	Verdetto
+	{block}: {measure}	{block}: {measure}
+	A verdict is real when the difference's 95% interval leaves out zero. Each row is judged on its own.	Un verdetto è reale quando l'intervallo al 95% della differenza esclude lo zero. Ogni riga è giudicata a sé.
+	This run is the baseline.	Questa esecuzione è il riferimento.
+	Change the model and run it again to compare.	Modifica il modello ed eseguilo di nuovo per confrontare.
+	Compared with the baseline:	Rispetto al riferimento:
+	Keep this as the baseline	Tieni questa esecuzione come riferimento
+	Keep as baseline	Tieni come riferimento
+	Keep these results, change the model, run it again, and see what the change did.	Tieni questi risultati, modifica il modello, eseguilo di nuovo e guarda cosa ha fatto la modifica.
+	Clear baseline	Rimuovi il riferimento
 @plural	Added {n} block|Added {n} blocks	Aggiunto {n} blocco|Aggiunti {n} blocchi
 @plural	Copied {n} block|Copied {n} blocks	Copiato {n} blocco|Copiati {n} blocchi
 @plural	Finished {n} run|Finished {n} runs	Completata {n} esecuzione|Completate {n} esecuzioni
@@ -739,3 +768,5 @@ unit	yr	a
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} problema: {blocks}|{n} problemi: {blocks}
 @plural	Use {n} run|Use {n} runs	Usa {n} esecuzione|Usa {n} esecuzioni
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	Usa {n} esecuzione (circa ± 5%)|Usa {n} esecuzioni (circa ± 5%)
+@plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Entrambe hanno usato il seme {seed} e la stessa {n} esecuzione, quindi ogni esecuzione riceve gli stessi numeri casuali della sua coppia: le differenze vengono dalla modifica, non da estrazioni casuali.|Entrambe hanno usato il seme {seed} e le stesse {n} esecuzioni, quindi ogni esecuzione riceve gli stessi numeri casuali della sua coppia: le differenze vengono dalla modifica, non da estrazioni casuali.
+@plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	{n} altra metrica principale non si è mossa più di quanto potrebbe il caso.|{n} altre metriche principali non si sono mosse più di quanto potrebbe il caso.

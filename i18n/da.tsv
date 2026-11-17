@@ -720,6 +720,35 @@ unit	yr	år
 	the model has changed since this run.	modellen er ændret siden denne kørsel.
 	Run again	Kør igen
 	· out of date	· forældet
+	Real: lower	Reel: lavere
+	Real: higher	Reel: højere
+	Could be chance	Kan være tilfældighed
+	No change	Ingen ændring
+	Too few runs to tell	For få kørsler til at afgøre
+	{value} points	{value} procentpoint
+	The baseline used seed {seed_a} and {n_a} runs, this run seed {seed_b} and {n_b} runs, so they are compared as independent runs and the intervals are wider. The same seed and number of runs gives a paired comparison.	Referencen brugte tilfældighedsfrø {seed_a} og {n_a} kørsler, denne kørsel tilfældighedsfrø {seed_b} og {n_b} kørsler, så de sammenlignes som uafhængige kørsler, og intervallerne er bredere. Samme tilfældighedsfrø og antal kørsler giver en parret sammenligning.
+	The baseline measured time in {a} and this run in {b}, so times are not compared.	Referencen målte tid i {a} og denne kørsel i {b}, så tider sammenlignes ikke.
+	{measure} ({block}) fell from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) faldt fra {before} til {after}, med {change}: mere end tilfældighed ville forklare.
+	{measure} ({block}) rose from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) steg fra {before} til {after}, med {change}: mere end tilfældighed ville forklare.
+	None of the key measures moved by more than chance: the change may do little, or more runs may show it.	Ingen af de vigtigste målepunkter flyttede sig mere, end tilfældighed ville forklare: ændringen gør måske kun lidt, eller flere kørsler kan vise det.
+	What the change did	Hvad ændringen gjorde
+	Baseline and now, key measures	Reference og nu, vigtigste målepunkter
+	Difference (paired, 95%)	Forskel (parret, 95 %)
+	Difference (95%)	Forskel (95 %)
+	Measure	Målepunkt
+	Baseline	Reference
+	Now	Nu
+	Change from baseline	Ændring fra reference
+	Verdict	Vurdering
+	{block}: {measure}	{block}: {measure}
+	A verdict is real when the difference's 95% interval leaves out zero. Each row is judged on its own.	En vurdering er reel, når forskellens 95 %-interval udelukker nul. Hver række vurderes for sig.
+	This run is the baseline.	Denne kørsel er referencen.
+	Change the model and run it again to compare.	Ændr modellen, og kør den igen for at sammenligne.
+	Compared with the baseline:	Sammenlignet med referencen:
+	Keep this as the baseline	Behold denne kørsel som reference
+	Keep as baseline	Behold som reference
+	Keep these results, change the model, run it again, and see what the change did.	Behold disse resultater, ændr modellen, kør den igen, og se, hvad ændringen gjorde.
+	Clear baseline	Ryd reference
 @plural	Added {n} block|Added {n} blocks	Tilføjede {n} blok|Tilføjede {n} blokke
 @plural	Copied {n} block|Copied {n} blocks	Kopierede {n} blok|Kopierede {n} blokke
 @plural	Finished {n} run|Finished {n} runs	{n} kørsel fuldført|{n} kørsler fuldført
@@ -739,3 +768,5 @@ unit	yr	år
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} problem: {blocks}|{n} problemer: {blocks}
 @plural	Use {n} run|Use {n} runs	Brug {n} kørsel|Brug {n} kørsler
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	Brug {n} kørsel (ca. ± 5%)|Brug {n} kørsler (ca. ± 5%)
+@plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Begge brugte tilfældighedsfrø {seed} og den samme {n} kørsel, så hver kørsel får de samme tilfældige tal som sin partner: forskellene kommer fra ændringen, ikke fra tilfældige træk.|Begge brugte tilfældighedsfrø {seed} og de samme {n} kørsler, så hver kørsel får de samme tilfældige tal som sin partner: forskellene kommer fra ændringen, ikke fra tilfældige træk.
+@plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	{n} andet vigtigt målepunkt flyttede sig ikke mere, end tilfældighed kunne.|{n} andre vigtige målepunkter flyttede sig ikke mere, end tilfældighed kunne.

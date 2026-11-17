@@ -720,6 +720,35 @@ unit	yr	v
 	the model has changed since this run.	modeli ka ndryshuar pas këtij ekzekutimi.
 	Run again	Ekzekuto përsëri
 	· out of date	· të vjetruara
+	Real: lower	Real: më i ulët
+	Real: higher	Real: më i lartë
+	Could be chance	Mund të jetë rastësi
+	No change	Pa ndryshim
+	Too few runs to tell	Shumë pak ekzekutime për të gjykuar
+	{value} points	{value} pikë përqindjeje
+	The baseline used seed {seed_a} and {n_a} runs, this run seed {seed_b} and {n_b} runs, so they are compared as independent runs and the intervals are wider. The same seed and number of runs gives a paired comparison.	Referenca përdori farën {seed_a} dhe {n_a} ekzekutime, ky ekzekutim farën {seed_b} dhe {n_b} ekzekutime, kështu që krahasohen si ekzekutime të pavarura dhe intervalet janë më të gjera. E njëjta farë dhe i njëjti numër ekzekutimesh japin një krahasim në çifte.
+	The baseline measured time in {a} and this run in {b}, so times are not compared.	Referenca e mati kohën në {a} dhe ky ekzekutim në {b}, kështu që kohët nuk krahasohen.
+	{measure} ({block}) fell from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) ra nga {before} në {after}, me {change}: më shumë se sa do ta shpjegonte rastësia.
+	{measure} ({block}) rose from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) u rrit nga {before} në {after}, me {change}: më shumë se sa do ta shpjegonte rastësia.
+	None of the key measures moved by more than chance: the change may do little, or more runs may show it.	Asnjë nga treguesit kryesorë nuk lëvizi më shumë se sa do ta shpjegonte rastësia: ndryshimi mund të bëjë pak, ose më shumë ekzekutime mund ta tregojnë.
+	What the change did	Çfarë bëri ndryshimi
+	Baseline and now, key measures	Referenca dhe tani, treguesit kryesorë
+	Difference (paired, 95%)	Dallimi (në çifte, 95%)
+	Difference (95%)	Dallimi (95%)
+	Measure	Treguesi
+	Baseline	Referenca
+	Now	Tani
+	Change from baseline	Ndryshimi nga referenca
+	Verdict	Vendimi
+	{block}: {measure}	{block}: {measure}
+	A verdict is real when the difference's 95% interval leaves out zero. Each row is judged on its own.	Një vendim është real kur intervali 95% i dallimit e përjashton zeron. Çdo rresht gjykohet më vete.
+	This run is the baseline.	Ky ekzekutim është referenca.
+	Change the model and run it again to compare.	Ndryshoni modelin dhe ekzekutojeni përsëri për të krahasuar.
+	Compared with the baseline:	Krahasuar me referencën:
+	Keep this as the baseline	Mbaje këtë ekzekutim si referencë
+	Keep as baseline	Mbaje si referencë
+	Keep these results, change the model, run it again, and see what the change did.	Mbajini këto rezultate, ndryshoni modelin, ekzekutojeni përsëri dhe shihni çfarë bëri ndryshimi.
+	Clear baseline	Pastro referencën
 @plural	Added {n} block|Added {n} blocks	U shtua {n} bllok|U shtuan {n} blloqe
 @plural	Copied {n} block|Copied {n} blocks	U kopjua {n} bllok|U kopjuan {n} blloqe
 @plural	Finished {n} run|Finished {n} runs	Përfundoi {n} ekzekutim|Përfunduan {n} ekzekutime
@@ -739,3 +768,5 @@ unit	yr	v
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} problem: {blocks}|{n} probleme: {blocks}
 @plural	Use {n} run|Use {n} runs	Përdor {n} ekzekutim|Përdor {n} ekzekutime
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	Përdor {n} ekzekutim (rreth ± 5%)|Përdor {n} ekzekutime (rreth ± 5%)
+@plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Të dy përdorën farën {seed} dhe të njëjtin {n} ekzekutim, kështu që çdo ekzekutim merr të njëjtët numra të rastësishëm si çifti i tij: dallimet vijnë nga ndryshimi, jo nga tërheqjet e rastësishme.|Të dy përdorën farën {seed} dhe të njëjtat {n} ekzekutime, kështu që çdo ekzekutim merr të njëjtët numra të rastësishëm si çifti i tij: dallimet vijnë nga ndryshimi, jo nga tërheqjet e rastësishme.
+@plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	{n} tregues tjetër kryesor nuk lëvizi më shumë se sa mund të bënte rastësia.|{n} tregues të tjerë kryesorë nuk lëvizën më shumë se sa mund të bënte rastësia.

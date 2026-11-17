@@ -720,6 +720,35 @@ unit	yr	år
 	the model has changed since this run.	modellen er endret siden denne kjøringen.
 	Run again	Kjør på nytt
 	· out of date	· utdatert
+	Real: lower	Reell: lavere
+	Real: higher	Reell: høyere
+	Could be chance	Kan være tilfeldig
+	No change	Ingen endring
+	Too few runs to tell	For få kjøringer til å avgjøre
+	{value} points	{value} prosentpoeng
+	The baseline used seed {seed_a} and {n_a} runs, this run seed {seed_b} and {n_b} runs, so they are compared as independent runs and the intervals are wider. The same seed and number of runs gives a paired comparison.	Referansen brukte tilfeldighetsfrø {seed_a} og {n_a} kjøringer, denne kjøringen tilfeldighetsfrø {seed_b} og {n_b} kjøringer, så de sammenlignes som uavhengige kjøringer, og intervallene er bredere. Samme tilfeldighetsfrø og antall kjøringer gir en parvis sammenligning.
+	The baseline measured time in {a} and this run in {b}, so times are not compared.	Referansen målte tid i {a} og denne kjøringen i {b}, så tider sammenlignes ikke.
+	{measure} ({block}) fell from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) falt fra {before} til {after}, med {change}: mer enn tilfeldigheter ville forklare.
+	{measure} ({block}) rose from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) steg fra {before} til {after}, med {change}: mer enn tilfeldigheter ville forklare.
+	None of the key measures moved by more than chance: the change may do little, or more runs may show it.	Ingen av de viktigste måltallene endret seg mer enn tilfeldigheter ville forklare: endringen gjør kanskje lite, eller flere kjøringer kan vise det.
+	What the change did	Hva endringen gjorde
+	Baseline and now, key measures	Referanse og nå, viktigste måltall
+	Difference (paired, 95%)	Differanse (parvis, 95 %)
+	Difference (95%)	Differanse (95 %)
+	Measure	Måltall
+	Baseline	Referanse
+	Now	Nå
+	Change from baseline	Endring fra referanse
+	Verdict	Vurdering
+	{block}: {measure}	{block}: {measure}
+	A verdict is real when the difference's 95% interval leaves out zero. Each row is judged on its own.	En vurdering er reell når differansens 95 %-intervall utelukker null. Hver rad vurderes for seg.
+	This run is the baseline.	Denne kjøringen er referansen.
+	Change the model and run it again to compare.	Endre modellen og kjør den igjen for å sammenligne.
+	Compared with the baseline:	Sammenlignet med referansen:
+	Keep this as the baseline	Behold denne kjøringen som referanse
+	Keep as baseline	Behold som referanse
+	Keep these results, change the model, run it again, and see what the change did.	Behold disse resultatene, endre modellen, kjør den igjen og se hva endringen gjorde.
+	Clear baseline	Fjern referanse
 @plural	Added {n} block|Added {n} blocks	La til {n} blokk|La til {n} blokker
 @plural	Copied {n} block|Copied {n} blocks	Kopierte {n} blokk|Kopierte {n} blokker
 @plural	Finished {n} run|Finished {n} runs	{n} kjøring fullført|{n} kjøringer fullført
@@ -739,3 +768,5 @@ unit	yr	år
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} problem: {blocks}|{n} problemer: {blocks}
 @plural	Use {n} run|Use {n} runs	Bruk {n} kjøring|Bruk {n} kjøringer
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	Bruk {n} kjøring (ca. ± 5%)|Bruk {n} kjøringer (ca. ± 5%)
+@plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Begge brukte tilfeldighetsfrø {seed} og den samme {n} kjøringen, så hver kjøring får de samme tilfeldige tallene som sin partner: forskjellene kommer fra endringen, ikke fra tilfeldige trekk.|Begge brukte tilfeldighetsfrø {seed} og de samme {n} kjøringene, så hver kjøring får de samme tilfeldige tallene som sin partner: forskjellene kommer fra endringen, ikke fra tilfeldige trekk.
+@plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	{n} annet viktig måltall endret seg ikke mer enn tilfeldigheter kunne.|{n} andre viktige måltall endret seg ikke mer enn tilfeldigheter kunne.

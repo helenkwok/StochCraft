@@ -262,6 +262,26 @@ The **Results** tab shows, from the top:
 the ± is large compared with the difference you care about, add runs. Notes under the
 table explain anything left out, such as entities still inside at the end.
 
+### Compare with a baseline
+
+To see what a change does, click **Keep as baseline** under the run record, change the model
+(for example a faster service time), and run it again. Over the new results you then see:
+
+- **How the runs were compared.** With the same seed and number of runs, run 1 of each meets the
+  same random numbers, and so on, and the runs are compared in pairs: the difference comes from
+  the change, not from chance draws. With another seed or number of runs (for example after
+  **Use N runs**), they are compared as independent runs, and the intervals are wider.
+- **What the change did:** the largest real changes in sentences, for example "Mean wait (Paint)
+  fell from 38 min to 17 min, by −21 ± 6 min: more than chance would explain".
+- **Baseline and now, key measures:** each block's key measures in both runs, the difference with
+  its 95% interval (shares in percentage points), a mark of the change against a zero line, and a
+  verdict: **Real: lower**, **Real: higher**, **Could be chance**, **No change** (every run gave
+  the same value), or **Too few runs to tell**. A verdict is real when the difference's interval
+  leaves out zero. Each row is judged on its own, so with many rows one may look real by chance.
+
+**Keep this as the baseline** makes the new run the baseline; **Clear baseline** removes it.
+Opening another model or file clears it too.
+
 ## Watch a run
 
 To see the model move, click **Watch a run** above the canvas, or **Model ▸ Watch a Run**. It
@@ -362,8 +382,8 @@ Ctrl on Windows and Linux is ⌘ on a Mac.
 ## Limitations
 
 - There is no downloadable desktop release yet; see the [installation guide](installation.md).
-- There is no side-by-side comparison of two versions of a model in the window yet; use the
-  Analysis view, or run each version with the [command line](developers.md#the-command-line) and compare the numbers.
+- A baseline compares two versions of a model, one change at a time; there is no table of named
+  scenarios yet. For several values of one parameter, use the Analysis view's sweep.
 - Charts can't be configured beyond their colours.
 - The canvas is one drawn surface, so screen readers can't yet read its blocks; the menus,
   dialogs and status messages are readable.

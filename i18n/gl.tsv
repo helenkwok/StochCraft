@@ -720,6 +720,35 @@ unit	yr	a
 	the model has changed since this run.	o modelo cambiou desde esta execución.
 	Run again	Executar de novo
 	· out of date	· desactualizados
+	Real: lower	Real: menor
+	Real: higher	Real: maior
+	Could be chance	Pode ser azar
+	No change	Sen cambio
+	Too few runs to tell	Poucas execucións para sabelo
+	{value} points	{value} puntos
+	The baseline used seed {seed_a} and {n_a} runs, this run seed {seed_b} and {n_b} runs, so they are compared as independent runs and the intervals are wider. The same seed and number of runs gives a paired comparison.	A referencia usou a semente {seed_a} e {n_a} execucións, e esta execución a semente {seed_b} e {n_b} execucións, así que se comparan como execucións independentes e os intervalos son máis anchos. A mesma semente e o mesmo número de execucións dan unha comparación emparellada.
+	The baseline measured time in {a} and this run in {b}, so times are not compared.	A referencia mediu o tempo en {a} e esta execución en {b}, así que os tempos non se comparan.
+	{measure} ({block}) fell from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) baixou de {before} a {after}, en {change}: máis do que explicaría o azar.
+	{measure} ({block}) rose from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) subiu de {before} a {after}, en {change}: máis do que explicaría o azar.
+	None of the key measures moved by more than chance: the change may do little, or more runs may show it.	Ningunha das métricas clave se moveu máis do que explicaría o azar: pode que o cambio faga pouco, ou que máis execucións o mostren.
+	What the change did	Que fixo o cambio
+	Baseline and now, key measures	Referencia e agora, métricas clave
+	Difference (paired, 95%)	Diferenza (emparellada, 95 %)
+	Difference (95%)	Diferenza (95 %)
+	Measure	Métrica
+	Baseline	Referencia
+	Now	Agora
+	Change from baseline	Cambio respecto da referencia
+	Verdict	Veredicto
+	{block}: {measure}	{block}: {measure}
+	A verdict is real when the difference's 95% interval leaves out zero. Each row is judged on its own.	Un veredicto é real cando o intervalo do 95 % da diferenza exclúe o cero. Cada fila xúlgase por separado.
+	This run is the baseline.	Esta execución é a referencia.
+	Change the model and run it again to compare.	Cambie o modelo e execúteo de novo para comparar.
+	Compared with the baseline:	Comparado coa referencia:
+	Keep this as the baseline	Gardar esta execución como referencia
+	Keep as baseline	Gardar como referencia
+	Keep these results, change the model, run it again, and see what the change did.	Garde estes resultados, cambie o modelo, execúteo de novo e vexa que fixo o cambio.
+	Clear baseline	Quitar a referencia
 @plural	Added {n} block|Added {n} blocks	Engadiuse {n} bloque|Engadíronse {n} bloques
 @plural	Copied {n} block|Copied {n} blocks	Copiouse {n} bloque|Copiáronse {n} bloques
 @plural	Finished {n} run|Finished {n} runs	Rematou {n} execución|Remataron {n} execucións
@@ -739,3 +768,5 @@ unit	yr	a
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} problema: {blocks}|{n} problemas: {blocks}
 @plural	Use {n} run|Use {n} runs	Usar {n} execución|Usar {n} execucións
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	Usar {n} execución (aprox. ± 5%)|Usar {n} execucións (aprox. ± 5%)
+@plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Ambas usaron a semente {seed} e a mesma {n} execución, así que cada execución recibe os mesmos números aleatorios ca súa parella: as diferenzas veñen do cambio, non de extraccións ao azar.|Ambas usaron a semente {seed} e as mesmas {n} execucións, así que cada execución recibe os mesmos números aleatorios ca súa parella: as diferenzas veñen do cambio, non de extraccións ao azar.
+@plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	{n} outra métrica clave non se moveu máis do que podería o azar.|{n} outras métricas clave non se moveron máis do que podería o azar.

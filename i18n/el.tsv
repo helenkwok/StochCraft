@@ -720,6 +720,35 @@ unit	yr	έτ
 	the model has changed since this run.	το μοντέλο άλλαξε μετά από αυτή την εκτέλεση.
 	Run again	Εκτέλεση ξανά
 	· out of date	· παρωχημένα
+	Real: lower	Πραγματικό: χαμηλότερο
+	Real: higher	Πραγματικό: υψηλότερο
+	Could be chance	Ίσως τύχη
+	No change	Καμία αλλαγή
+	Too few runs to tell	Πολύ λίγες εκτελέσεις για κρίση
+	{value} points	{value} ποσοστιαίες μονάδες
+	The baseline used seed {seed_a} and {n_a} runs, this run seed {seed_b} and {n_b} runs, so they are compared as independent runs and the intervals are wider. The same seed and number of runs gives a paired comparison.	Η βάση αναφοράς χρησιμοποίησε τον σπόρο {seed_a} και {n_a} εκτελέσεις, αυτή η εκτέλεση τον σπόρο {seed_b} και {n_b} εκτελέσεις, οπότε συγκρίνονται ως ανεξάρτητες εκτελέσεις και τα διαστήματα είναι ευρύτερα. Ο ίδιος σπόρος και ο ίδιος αριθμός εκτελέσεων δίνουν σύγκριση κατά ζεύγη.
+	The baseline measured time in {a} and this run in {b}, so times are not compared.	Η βάση αναφοράς μέτρησε τον χρόνο σε {a} και αυτή η εκτέλεση σε {b}, οπότε οι χρόνοι δεν συγκρίνονται.
+	{measure} ({block}) fell from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}): μειώθηκε από {before} σε {after}, κατά {change}: περισσότερο απ' όσο θα εξηγούσε η τύχη.
+	{measure} ({block}) rose from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}): αυξήθηκε από {before} σε {after}, κατά {change}: περισσότερο απ' όσο θα εξηγούσε η τύχη.
+	None of the key measures moved by more than chance: the change may do little, or more runs may show it.	Καμία από τις κύριες μετρικές δεν μετακινήθηκε περισσότερο απ' όσο θα εξηγούσε η τύχη: η αλλαγή ίσως κάνει λίγα, ή περισσότερες εκτελέσεις μπορεί να το δείξουν.
+	What the change did	Τι έκανε η αλλαγή
+	Baseline and now, key measures	Βάση αναφοράς και τώρα, κύριες μετρικές
+	Difference (paired, 95%)	Διαφορά (κατά ζεύγη, 95%)
+	Difference (95%)	Διαφορά (95%)
+	Measure	Μετρική
+	Baseline	Βάση αναφοράς
+	Now	Τώρα
+	Change from baseline	Αλλαγή από τη βάση αναφοράς
+	Verdict	Ετυμηγορία
+	{block}: {measure}	{block}: {measure}
+	A verdict is real when the difference's 95% interval leaves out zero. Each row is judged on its own.	Μια ετυμηγορία είναι πραγματική όταν το διάστημα 95% της διαφοράς αποκλείει το μηδέν. Κάθε γραμμή κρίνεται χωριστά.
+	This run is the baseline.	Αυτή η εκτέλεση είναι η βάση αναφοράς.
+	Change the model and run it again to compare.	Αλλάξτε το μοντέλο και εκτελέστε το ξανά για σύγκριση.
+	Compared with the baseline:	Σε σύγκριση με τη βάση αναφοράς:
+	Keep this as the baseline	Διατήρηση αυτής της εκτέλεσης ως βάσης αναφοράς
+	Keep as baseline	Διατήρηση ως βάσης αναφοράς
+	Keep these results, change the model, run it again, and see what the change did.	Κρατήστε αυτά τα αποτελέσματα, αλλάξτε το μοντέλο, εκτελέστε το ξανά και δείτε τι έκανε η αλλαγή.
+	Clear baseline	Εκκαθάριση βάσης αναφοράς
 @plural	Added {n} block|Added {n} blocks	Προστέθηκε {n} μπλοκ|Προστέθηκαν {n} μπλοκ
 @plural	Copied {n} block|Copied {n} blocks	Αντιγράφηκε {n} μπλοκ|Αντιγράφηκαν {n} μπλοκ
 @plural	Finished {n} run|Finished {n} runs	Ολοκληρώθηκε {n} εκτέλεση|Ολοκληρώθηκαν {n} εκτελέσεις
@@ -739,3 +768,5 @@ unit	yr	έτ
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} πρόβλημα: {blocks}|{n} προβλήματα: {blocks}
 @plural	Use {n} run|Use {n} runs	Χρήση {n} εκτέλεσης|Χρήση {n} εκτελέσεων
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	Χρήση {n} εκτέλεσης (περίπου ± 5%)|Χρήση {n} εκτελέσεων (περίπου ± 5%)
+@plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Και οι δύο χρησιμοποίησαν τον σπόρο {seed} και την ίδια {n} εκτέλεση, οπότε κάθε εκτέλεση παίρνει τους ίδιους τυχαίους αριθμούς με το ζεύγος της: οι διαφορές οφείλονται στην αλλαγή, όχι σε τυχαίες κληρώσεις.|Και οι δύο χρησιμοποίησαν τον σπόρο {seed} και τις ίδιες {n} εκτελέσεις, οπότε κάθε εκτέλεση παίρνει τους ίδιους τυχαίους αριθμούς με το ζεύγος της: οι διαφορές οφείλονται στην αλλαγή, όχι σε τυχαίες κληρώσεις.
+@plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	{n} ακόμη κύρια μετρική δεν μετακινήθηκε περισσότερο απ' όσο θα μπορούσε η τύχη.|{n} ακόμη κύριες μετρικές δεν μετακινήθηκαν περισσότερο απ' όσο θα μπορούσε η τύχη.

@@ -720,6 +720,35 @@ unit	yr	సం.
 	the model has changed since this run.	ఈ అమలు తర్వాత మోడల్ మారింది.
 	Run again	మళ్లీ అమలు చేయి
 	· out of date	· పాతవి
+	Real: lower	నిజం: తక్కువ
+	Real: higher	నిజం: ఎక్కువ
+	Could be chance	యాదృచ్ఛికం కావచ్చు
+	No change	మార్పు లేదు
+	Too few runs to tell	చెప్పడానికి అమలులు చాలా తక్కువ
+	{value} points	{value} శాతం పాయింట్లు
+	The baseline used seed {seed_a} and {n_a} runs, this run seed {seed_b} and {n_b} runs, so they are compared as independent runs and the intervals are wider. The same seed and number of runs gives a paired comparison.	ప్రాతిపదిక యాదృచ్ఛిక బీజం {seed_a} మరియు {n_a} అమలులను ఉపయోగించింది, ఈ అమలు యాదృచ్ఛిక బీజం {seed_b} మరియు {n_b} అమలులను, కాబట్టి వాటిని స్వతంత్ర అమలులుగా పోలుస్తారు మరియు అంతరాలు విశాలంగా ఉంటాయి. అదే యాదృచ్ఛిక బీజం మరియు అదే సంఖ్యలో అమలులు జత పోలికను ఇస్తాయి.
+	The baseline measured time in {a} and this run in {b}, so times are not compared.	ప్రాతిపదిక సమయాన్ని {a}లో కొలిచింది, ఈ అమలు {b}లో, కాబట్టి సమయాలను పోల్చరు.
+	{measure} ({block}) fell from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) {before} నుండి {after}కి తగ్గింది, {change} మేర: యాదృచ్ఛికత వివరించగలదానికంటే ఎక్కువ.
+	{measure} ({block}) rose from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) {before} నుండి {after}కి పెరిగింది, {change} మేర: యాదృచ్ఛికత వివరించగలదానికంటే ఎక్కువ.
+	None of the key measures moved by more than chance: the change may do little, or more runs may show it.	ఏ ముఖ్య కొలమానమూ యాదృచ్ఛికత వివరించగలదానికంటే ఎక్కువ మారలేదు: మార్పు ప్రభావం తక్కువ కావచ్చు, లేదా మరిన్ని అమలులు దాన్ని చూపవచ్చు.
+	What the change did	మార్పు ఏమి చేసింది
+	Baseline and now, key measures	ప్రాతిపదిక మరియు ఇప్పుడు, ముఖ్య కొలమానాలు
+	Difference (paired, 95%)	తేడా (జత, 95%)
+	Difference (95%)	తేడా (95%)
+	Measure	కొలమానం
+	Baseline	ప్రాతిపదిక
+	Now	ఇప్పుడు
+	Change from baseline	ప్రాతిపదిక నుండి మార్పు
+	Verdict	తీర్పు
+	{block}: {measure}	{block}: {measure}
+	A verdict is real when the difference's 95% interval leaves out zero. Each row is judged on its own.	తేడా యొక్క 95% అంతరం సున్నాను మినహాయించినప్పుడు తీర్పు నిజం. ప్రతి వరుసను విడిగా నిర్ణయిస్తారు.
+	This run is the baseline.	ఈ అమలే ప్రాతిపదిక.
+	Change the model and run it again to compare.	పోల్చడానికి మోడల్‌ను మార్చి మళ్లీ అమలు చేయండి.
+	Compared with the baseline:	ప్రాతిపదికతో పోలిస్తే:
+	Keep this as the baseline	ఈ అమలును ప్రాతిపదికగా ఉంచు
+	Keep as baseline	ప్రాతిపదికగా ఉంచు
+	Keep these results, change the model, run it again, and see what the change did.	ఈ ఫలితాలను ఉంచుకోండి, మోడల్‌ను మార్చండి, మళ్లీ అమలు చేయండి, మార్పు ఏమి చేసిందో చూడండి.
+	Clear baseline	ప్రాతిపదికను తొలగించు
 @plural	Added {n} block|Added {n} blocks	{n} బ్లాక్ జోడించబడింది|{n} బ్లాక్‌లు జోడించబడ్డాయి
 @plural	Copied {n} block|Copied {n} blocks	{n} బ్లాక్ కాపీ చేయబడింది|{n} బ్లాక్‌లు కాపీ చేయబడ్డాయి
 @plural	Finished {n} run|Finished {n} runs	{n} అమలు పూర్తయింది|{n} అమలులు పూర్తయ్యాయి
@@ -739,3 +768,5 @@ unit	yr	సం.
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} సమస్య: {blocks}|{n} సమస్యలు: {blocks}
 @plural	Use {n} run|Use {n} runs	{n} అమలును ఉపయోగించు|{n} అమలులను ఉపయోగించు
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	{n} అమలును ఉపయోగించు (సుమారు ± 5%)|{n} అమలులను ఉపయోగించు (సుమారు ± 5%)
+@plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	రెండూ యాదృచ్ఛిక బీజం {seed} మరియు అదే {n} అమలును ఉపయోగించాయి, కాబట్టి ప్రతి అమలుకు దాని జతకు వచ్చిన అవే యాదృచ్ఛిక సంఖ్యలు వస్తాయి: తేడాలు యాదృచ్ఛిక ఎంపికల నుండి కాక మార్పు నుండి వస్తాయి.|రెండూ యాదృచ్ఛిక బీజం {seed} మరియు అవే {n} అమలులను ఉపయోగించాయి, కాబట్టి ప్రతి అమలుకు దాని జతకు వచ్చిన అవే యాదృచ్ఛిక సంఖ్యలు వస్తాయి: తేడాలు యాదృచ్ఛిక ఎంపికల నుండి కాక మార్పు నుండి వస్తాయి.
+@plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	మరో {n} ముఖ్య కొలమానం యాదృచ్ఛికత చేయగలదానికంటే ఎక్కువ మారలేదు.|మరో {n} ముఖ్య కొలమానాలు యాదృచ్ఛికత చేయగలదానికంటే ఎక్కువ మారలేదు.

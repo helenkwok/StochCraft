@@ -720,6 +720,35 @@ unit	yr	年
 	the model has changed since this run.	此次執行後模型已變更。
 	Run again	再次執行
 	· out of date	· 已過時
+	Real: lower	確實：較低
+	Real: higher	確實：較高
+	Could be chance	可能是偶然
+	No change	無變化
+	Too few runs to tell	執行次數太少，無法判斷
+	{value} points	{value} 個百分點
+	The baseline used seed {seed_a} and {n_a} runs, this run seed {seed_b} and {n_b} runs, so they are compared as independent runs and the intervals are wider. The same seed and number of runs gives a paired comparison.	基準使用隨機種子 {seed_a} 與 {n_a} 次執行，此次執行使用隨機種子 {seed_b} 與 {n_b} 次執行，因此以獨立執行進行比較，區間較寬。使用相同的隨機種子與執行次數即可進行配對比較。
+	The baseline measured time in {a} and this run in {b}, so times are not compared.	基準以 {a} 計時，此次執行以 {b} 計時，因此不比較時間。
+	{measure} ({block}) fell from {before} to {after}, by {change}: more than chance would explain.	{measure}（{block}）從 {before} 降至 {after}，下降 {change}：超出偶然所能解釋的程度。
+	{measure} ({block}) rose from {before} to {after}, by {change}: more than chance would explain.	{measure}（{block}）從 {before} 升至 {after}，上升 {change}：超出偶然所能解釋的程度。
+	None of the key measures moved by more than chance: the change may do little, or more runs may show it.	沒有任何關鍵指標的變動超出偶然所能解釋的程度：變更的作用可能很小，或需要更多次執行才能顯示出來。
+	What the change did	變更的作用
+	Baseline and now, key measures	基準與目前的關鍵指標
+	Difference (paired, 95%)	差值（配對，95%）
+	Difference (95%)	差值（95%）
+	Measure	指標
+	Baseline	基準
+	Now	目前
+	Change from baseline	相對基準的變化
+	Verdict	結論
+	{block}: {measure}	{block}：{measure}
+	A verdict is real when the difference's 95% interval leaves out zero. Each row is judged on its own.	當差值的 95% 區間不包含零時，結論為確實。每一列分別判斷。
+	This run is the baseline.	此次執行即為基準。
+	Change the model and run it again to compare.	變更模型並再次執行即可比較。
+	Compared with the baseline:	與基準相比：
+	Keep this as the baseline	將此次執行保留為基準
+	Keep as baseline	保留為基準
+	Keep these results, change the model, run it again, and see what the change did.	保留這些結果，變更模型，再次執行，看看變更產生了什麼作用。
+	Clear baseline	清除基準
 @plural	Added {n} block|Added {n} blocks	已新增 {n} 個區塊
 @plural	Copied {n} block|Copied {n} blocks	已複製 {n} 個區塊
 @plural	Finished {n} run|Finished {n} runs	已完成 {n} 次執行
@@ -739,3 +768,5 @@ unit	yr	年
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} 個問題：{blocks}
 @plural	Use {n} run|Use {n} runs	使用 {n} 次執行
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	使用 {n} 次執行（約 ± 5%）
+@plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	兩者都使用隨機種子 {seed} 與相同的 {n} 次執行，因此每次執行與其配對的執行取得相同的隨機數：差異來自變更，而非隨機抽取。
+@plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	其他 {n} 個關鍵指標的變動未超出偶然所能造成的程度。
