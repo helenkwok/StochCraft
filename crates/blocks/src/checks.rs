@@ -206,8 +206,9 @@ fn unbalanced(kind: &ElementKind, e: &ElementReport) -> Option<Behaviour> {
 /// away at a full buffer with no way out for them (through a shortest-queue gateway, counted by
 /// the gateway instead); and those giving up or balking at a server with no way marked for them.
 /// Not checked where entities are copied, combined or split (parallel gateways, batches,
-/// unbatches), nor where a shortest-queue gateway sends to another (whose entities wait for room
-/// counted nowhere).
+/// unbatches), nor where they can wait for room counted nowhere: where a shortest-queue gateway
+/// sends to another, or a way marked for those giving up, balking or turned away leads to a
+/// finite buffer or a shortest-queue gateway.
 fn unaccounted(model: &Model, report: &Report) -> Option<Behaviour> {
     let kinds = || model.elements.iter().map(|e| &e.kind);
     if kinds().any(|k| {
@@ -225,19 +226,29 @@ fn unaccounted(model: &Model, report: &Report) -> Option<Behaviour> {
             .find(|c| &c.from == from)
             .and_then(|c| model.element(&c.to))
     };
-    let chained = model.elements.iter().any(|e| {
-        shortest_queue(&e.kind)
-            && model
-                .connections
-                .iter()
-                .filter(|c| c.from == e.id)
-                .any(|c| {
-                    model
-                        .element(&c.to)
-                        .is_some_and(|t| shortest_queue(&t.kind))
-                })
+    // Whether an entity sent to `to` may wait for room there.
+    let needs_room = |to: &ElementId| {
+        model.element(to).is_some_and(|t| {
+            shortest_queue(&t.kind)
+                || matches!(
+                    t.kind,
+                    ElementKind::Server {
+                        queue_capacity: Some(_),
+                        ..
+                    }
+                )
+        })
+    };
+    // Entities waiting for room are counted nowhere: at a shortest-queue gateway sent to by
+    // another (the sender holds them otherwise), and on a way marked for those giving up,
+    // balking or turned away (the server they leave no longer holds them, unlike on its
+    // ordinary way out).
+    let sq = |id: &ElementId| model.element(id).is_some_and(|e| shortest_queue(&e.kind));
+    let unheld = model.connections.iter().any(|c| {
+        (sq(&c.from) && sq(&c.to))
+            || ((c.abandoned || c.balked || c.turned_away) && needs_room(&c.to))
     });
-    if chained {
+    if unheld {
         return None;
     }
     // Whether element `id` has a way marked by `marked` (abandoned, balked, turned away).

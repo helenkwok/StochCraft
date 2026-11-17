@@ -261,3 +261,34 @@ fn replications_are_merged_into_one_warning_with_the_worst() {
     let text = merged[0].to_string();
     assert!(text.contains("in 2 of 3 replications"), "{text}");
 }
+
+/// Those who give up take their way to a callback desk with one place, which holds them up when
+/// it is full: waiting for room on the way, they are in neither element. The model's count is
+/// not checked then, so a model that is right gets no warning.
+#[test]
+fn entities_waiting_for_room_on_a_marked_way_are_not_counted_missing() {
+    let mut b = Builder::new();
+    let calls = b.source("calls", Dist::exponential_rate(2.0), None);
+    let desk = b.server("desk", 1, Dist::exponential_rate(1.0));
+    b.patience(
+        desk,
+        Patience {
+            time: Dist::Exponential { mean: 1.0 },
+            until: PatienceUntil::Start,
+        },
+    );
+    let callback = b.buffered_server("callback", 1, Dist::Constant(5.0), 1);
+    let out = b.sink("out");
+    b.connect(calls, desk);
+    b.connect(desk, out);
+    b.abandoned(desk, callback);
+    b.connect(callback, out);
+    let model = b.build(Experiment {
+        warmup: 20.0,
+        duration: 200.0,
+        ..Experiment::default()
+    });
+    for seed in 1..=10 {
+        assert_eq!(found(&model, &run(&model, seed)), vec![], "seed {seed}");
+    }
+}
