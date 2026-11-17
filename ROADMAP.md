@@ -770,6 +770,13 @@ taken together, and a large need waiting without holding back a smaller one.
   none, with a `timeToFailure` and a `repairTime` distribution; BPSim's own `Interruptible`
   chooses whether a failure interrupts the job under way.
   - Each unit fails on its own, in elapsed time (busy or idle) since its last repair.
+  - Not yet: **failures counted in working time.** A choice of clock for the time to failure:
+    elapsed time (today's rule) or only the time the unit is busy, since the last repair. Machines
+    that wear with use fail by working hours, so a slower line fails less often per day; with
+    the elapsed-time clock it fails as often idle as busy. Saved as an attribute of
+    `stochcraft:breakdown` (default: elapsed, so files read as before), with a check against
+    the closed form for a single machine whose failures count in busy time (availability
+    against the share of time worked). Also offered by desflow (MIT), seen 2026-11.
   - Interruptible: the job stops and resumes on the same unit after the repair, with the
     service time it had left (preemptive resume). Otherwise the failure waits for the job to
     finish, and the unit takes no new job meanwhile.
@@ -1028,6 +1035,15 @@ From DES practice at NASA, NNSA and the Aerospace Corporation (docs/research.md)
   percentile) as elicited from experts (triangular, PERT as a scaled beta, lognormal, Weibull),
   written as a standard BPSim distribution; the triad and its source are kept as the parameter's
   pedigree (a `stochcraft:` vendor extension).
+- Not yet: **fitting a distribution to measured data.** A column of measured times (CSV, or
+  pasted) fitted to each candidate family by maximum likelihood, ranked by a goodness-of-fit
+  measure (Anderson–Darling, with the Kolmogorov–Smirnov distance beside it), with bounds for
+  censored or clipped data and a minimum sample size below which no fit is offered. The best
+  fit is written as a standard BPSim distribution, with the data's file, count and fit kept
+  as the parameter's pedigree, as for three-point estimates. In the window: the histogram with
+  the fitted density over it, and the empirical distribution beside the fitted one; in the
+  CLI, a `fit` command; to agents, an engine command. Closes the fitting part of docs/gaps.md
+  row 11. Also offered by desflow (MIT, `desflow fit`), seen 2026-11.
 - **Sweeps and sensitivity:** a parameter varied over a range, results per point, and a record of
   which parameters drive which results (NASA-STD-7009B [M&S 30]).
 - **Capacity sizing:** add a unit at the bottleneck (the busiest resource) and run again, until
@@ -1288,6 +1304,15 @@ ch. 10 §10.4, in Brailsford, Churilov and Dangerfield, eds., 2014). Related and
   once, with the reason in the commit.
 - **Validation against observed data.** Compare a run's results with held-out real data (black-box
   validation, ch. 6 §6.5.5 and ch. 10 §10.4.1).
+  - Not yet: **checks that pass or fail.** An experiment can carry checks on its results: a
+    bound ("mean wait under 2 min", "throughput at least 400 a day", with the 95% interval
+    deciding, not the mean alone), a comparison of two scenarios with common random numbers
+    ("the third packer cuts the wait"), or observed values with their spread. A run reports
+    each check as met, not met, or not decided (the interval straddles the bound), and
+    `stochcraft-cli check` exits non-zero when a check is not met, so a model can be tested in
+    CI. The checks are saved with the experiment (a `stochcraft:` vendor extension) and can
+    write a short report (Markdown) of the checks, the settings and the results. Also offered
+    by desflow (MIT, `desflow experiment`), seen 2026-11.
 - **A capacity table.** Before a run, each station's offered load and utilisation worked out
   from the model's own numbers (arrival rates, mean service times, units), shown beside the
   simulated values after the run. The gap between the two is what variability and blocking
@@ -1295,6 +1320,14 @@ ch. 10 §10.4, in Brailsford, Churilov and Dangerfield, eds., 2014). Related and
   part of the model's validation (`Model::check_load` in `model/src/lib.rs`) and covers only
   servers with an unlimited queue fed straight from sources with steady arrivals; the table
   needs the load passed on through routing, joins and shared pools too.
+  - For each station: arrival rate, service rate, units and utilisation, marked as fine,
+    congested (above a target, 85% by default) or unstable (at 100% or more), the bottleneck
+    named, and the units that would bring it under the target. Where a queueing formula holds
+    (M/M/c, M/G/1, Erlang A with patience), its mean wait too; where none does, why not.
+  - Available without running: in the window beside the model, as `stochcraft-cli explain`,
+    and as an engine command for agents. A verify option runs replications and says, for each
+    number, whether the formula falls inside the simulated 95% interval.
+  - Also offered by desflow (MIT, `desflow explain`), seen 2026-11.
 
 Starting a run with entities already inside, the other answer to a warm-up, stays with
 "starting a run from an observed state" under digital twins (After M3).
