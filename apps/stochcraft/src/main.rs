@@ -159,6 +159,11 @@ impl Desktop {
                         Then::Export(bytes),
                     );
                 }
+                Request::OpenUrl { url } => {
+                    if let Err(e) = open_in_browser(&url) {
+                        self.app.report_error(format!("{url}: {e}"));
+                    }
+                }
                 Request::Quit => {
                     self.may_close = true;
                     // On macOS the platform's quit; elsewhere closing the window.
@@ -394,6 +399,34 @@ fn main() -> eframe::Result {
             Ok(Box::new(desktop))
         }),
     )
+}
+
+/// Opens `url` in the system's web browser, with the platform's own opener (no browser is
+/// started by the app itself). Only Help's fixed https addresses come here.
+fn open_in_browser(url: &str) -> std::io::Result<()> {
+    if !url.starts_with("https://") {
+        return Err(std::io::Error::other("not a web address"));
+    }
+    #[cfg(target_os = "windows")]
+    let mut command = {
+        // `start` is a shell built-in; the empty title keeps the URL from being taken as one.
+        let mut c = std::process::Command::new("cmd");
+        c.args(["/C", "start", "", url]);
+        c
+    };
+    #[cfg(target_os = "macos")]
+    let mut command = {
+        let mut c = std::process::Command::new("open");
+        c.arg(url);
+        c
+    };
+    #[cfg(not(any(target_os = "windows", target_os = "macos")))]
+    let mut command = {
+        let mut c = std::process::Command::new("xdg-open");
+        c.arg(url);
+        c
+    };
+    command.spawn().map(|_| ())
 }
 
 #[cfg(test)]

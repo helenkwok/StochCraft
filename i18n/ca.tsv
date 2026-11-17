@@ -761,6 +761,63 @@ unit	yr	a
 	off	desactivat
 	Changed since the baseline:	Canvis des de la referència:
 	Nothing in the model has changed since the baseline.	No ha canviat res del model des de la referència.
+	One step of the process on the canvas: where entities arrive, wait, are worked on, are routed or leave.	Un pas del procés al llenç: on les entitats arriben, esperen, es processen, s'encaminen o surten.
+	Entity	Entitat
+	What flows through the blocks: a part, a patient, a call, an order.	El que flueix pels blocs: una peça, un pacient, una trucada, una comanda.
+	The block where entities enter the model, with the time between one arrival and the next.	El bloc per on les entitats entren al model, amb el temps entre una arribada i la següent.
+	A step that takes time, with no limit on how many entities it works on at once.	Un pas que requereix temps, sense límit de quantes entitats processa alhora.
+	A step done by a limited number of units, such as machines or clerks. Entities wait in its waiting room until a unit is free.	Un pas fet per un nombre limitat d'unitats, com ara màquines o empleats. Les entitats esperen a la seva sala d'espera fins que una unitat queda lliure.
+	A step that borrows units from a pool that several tasks share, such as a team of nurses.	Un pas que agafa en préstec unitats d'un grup que comparteixen diverses tasques, com ara un equip d'infermeres.
+	The block where entities leave the model; it counts them and their time in the system.	El bloc per on les entitats surten del model; les compta juntament amb el seu temps al sistema.
+	Sends each entity down one of its ways out, by chance or by a condition.	Envia cada entitat per una de les seves sortides, a l'atzar o segons una condició.
+	How many entities a task with a resource can work on at the same time: its machines, clerks or beds.	Quantes entitats pot processar alhora una tasca amb un recurs: les seves màquines, empleats o llits.
+	Where entities wait for a free unit (a queue). It can have a limit; an entity that finds it full is lost or waits upstream.	On les entitats esperen una unitat lliure (una cua). Pot tenir un límit; una entitat que la troba plena es perd o espera abans.
+	How long a unit takes with one entity, drawn from a distribution each time.	Quant de temps triga una unitat amb una entitat, extret d'una distribució cada vegada.
+	Distribution	Distribució
+	How a time or a quantity varies from one entity to the next: its shape and its mean.	Com varia un temps o una quantitat d'una entitat a la següent: la seva forma i la seva mitjana.
+	One pass of the model from start to end with its own random numbers. Textbooks call it a replication.	Una passada del model de principi a fi amb els seus propis nombres aleatoris. Els manuals en diuen rèplica.
+	All the runs together, with the same settings: how many runs, the seed, the warm-up and the time measured.	Totes les execucions juntes, amb la mateixa configuració: quantes execucions, la llavor, l'escalfament i el temps mesurat.
+	The starting point of the random numbers. The same model with the same seed always gives the same results.	El punt de partida dels nombres aleatoris. El mateix model amb la mateixa llavor sempre dona els mateixos resultats.
+	Time at the start of each run that is simulated but not measured, so an empty model filling up does not pull the results.	Temps a l'inici de cada execució que se simula però no es mesura, perquè un model buit que s'omple no arrossegui els resultats.
+	The share of the time a task's units are busy, counted over the time they are on shift.	La proporció del temps en què les unitats d'una tasca estan ocupades, comptada sobre el temps en què són de torn.
+	The average time an entity spends in a waiting room before a unit takes it.	El temps mitjà que una entitat passa en una sala d'espera abans que una unitat l'agafi.
+	The average number of entities in a waiting room, over the time measured.	El nombre mitjà d'entitats en una sala d'espera, durant el temps mesurat.
+	Time in system	Temps al sistema
+	How long an entity spends from its arrival to its departure, waiting and being worked on.	Quant de temps passa una entitat des de la seva arribada fins a la seva sortida, esperant i essent processada.
+	Blocked	Bloquejat
+	A unit has finished but cannot pass the entity on, because the next waiting room is full.	Una unitat ha acabat però no pot passar l'entitat, perquè la sala d'espera següent és plena.
+	Starved	Sense feina
+	A unit is free but has no entity to work on.	Una unitat és lliure però no té cap entitat per processar.
+	95% confidence interval	Interval de confiança del 95%
+	Written ± after a mean: how far the true mean could plausibly be from the one shown. More runs narrow it.	S'escriu ± després d'una mitjana: fins on podria raonablement allunyar-se la mitjana real de la que es mostra. Més execucions l'estrenyen.
+	Settled	Estable
+	A result known well enough to act on: to ± 5% of its mean, or ± 1 percentage point for a share.	Un resultat prou conegut per actuar-hi: amb ± 5% de la seva mitjana, o ± 1 punt per a una proporció.
+	Results kept to compare a later run with, to see what a change to the model did.	Resultats desats per comparar-hi una execució posterior i veure què ha fet un canvi al model.
+	A difference whose 95% interval takes in zero: the runs cannot tell it from random variation.	Una diferència l'interval del 95% de la qual inclou el zero: les execucions no la poden distingir de la variació aleatòria.
+	Add Arrivals	Afegeix Arribades
+	Add a task and connect Arrivals to it	Afegeix una tasca i connecta-hi Arribades
+	Add Departures and connect the task to it	Afegeix Sortides i connecta-hi la tasca
+	Run the model: press F5	Executa el model: premeu F5
+	Read what the run found	Llegiu què ha trobat l'execució
+	Close Help (F1)	Tanca l'ajuda (F1)
+	Search help and terms	Cerca a l'ajuda i als termes
+	Getting started	Primers passos
+	{k} of {n} done	{k} de {n} fets
+	Glossary	Glossari
+	No term matches “{text}”.	Cap terme coincideix amb «{text}».
+	Keyboard shortcuts	Dreceres de teclat
+	Change keys	Canvia les tecles
+	More help	Més ajuda
+	User guide	Guia de l'usuari
+	What the results mean	Què volen dir els resultats
+	Report a problem	Informa d'un problema
+	These open in your web browser.	S'obren al vostre navegador web.
+	Space	Espai
+	Play or pause a watched run	Reprodueix o posa en pausa una execució observada
+	Getting Started	Primers passos
+	What the Results Mean	Què volen dir els resultats
+	User Guide	Guia de l'usuari
+	Report a Problem	Informa d'un problema
 @plural	Added {n} block|Added {n} blocks	S'ha afegit {n} bloc|S'han afegit {n} blocs
 @plural	Copied {n} block|Copied {n} blocks	S'ha copiat {n} bloc|S'han copiat {n} blocs
 @plural	Finished {n} run|Finished {n} runs	Acabada {n} execució|Acabades {n} execucions

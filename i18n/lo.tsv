@@ -761,6 +761,63 @@ unit	yr	ປີ
 	off	ປິດ
 	Changed since the baseline:	ປ່ຽນແປງນັບແຕ່ເສັ້ນຖານ:
 	Nothing in the model has changed since the baseline.	ບໍ່ມີຫຍັງໃນແບບຈຳລອງປ່ຽນແປງນັບແຕ່ເສັ້ນຖານ.
+	One step of the process on the canvas: where entities arrive, wait, are worked on, are routed or leave.	ຂັ້ນຕອນໜຶ່ງຂອງຂະບວນການເທິງພື້ນວາດ: ບ່ອນທີ່ເອນທິຕີມາຮອດ, ລໍຖ້າ, ຖືກເຮັດວຽກ, ຖືກສົ່ງຕໍ່ ຫຼື ອອກໄປ.
+	Entity	ເອນທິຕີ
+	What flows through the blocks: a part, a patient, a call, an order.	ສິ່ງທີ່ໄຫຼຜ່ານບລັອກ: ຊິ້ນສ່ວນ, ຄົນເຈັບ, ການໂທ, ຄຳສັ່ງຊື້.
+	The block where entities enter the model, with the time between one arrival and the next.	ບລັອກທີ່ເອນທິຕີເຂົ້າສູ່ແບບຈຳລອງ, ພ້ອມເວລາລະຫວ່າງການມາຮອດຄັ້ງໜຶ່ງກັບຄັ້ງຕໍ່ໄປ.
+	A step that takes time, with no limit on how many entities it works on at once.	ຂັ້ນຕອນທີ່ໃຊ້ເວລາ, ໂດຍບໍ່ຈຳກັດຈຳນວນເອນທິຕີທີ່ເຮັດວຽກພ້ອມກັນ.
+	A step done by a limited number of units, such as machines or clerks. Entities wait in its waiting room until a unit is free.	ຂັ້ນຕອນທີ່ເຮັດໂດຍໜ່ວຍຈຳນວນຈຳກັດ ເຊັ່ນ ເຄື່ອງຈັກ ຫຼື ພະນັກງານ. ເອນທິຕີລໍຖ້າໃນຫ້ອງລໍຖ້າຂອງມັນຈົນກວ່າຈະມີໜ່ວຍວ່າງ.
+	A step that borrows units from a pool that several tasks share, such as a team of nurses.	ຂັ້ນຕອນທີ່ຢືມໜ່ວຍຈາກກຸ່ມຊັບພະຍາກອນທີ່ຫຼາຍໜ້າວຽກໃຊ້ຮ່ວມກັນ ເຊັ່ນ ທີມພະຍາບານ.
+	The block where entities leave the model; it counts them and their time in the system.	ບລັອກທີ່ເອນທິຕີອອກຈາກແບບຈຳລອງ; ມັນນັບເອນທິຕີ ແລະ ເວລາຂອງພວກມັນໃນລະບົບ.
+	Sends each entity down one of its ways out, by chance or by a condition.	ສົ່ງແຕ່ລະເອນທິຕີໄປທາງອອກໃດໜຶ່ງຂອງມັນ, ໂດຍສຸ່ມ ຫຼື ຕາມເງື່ອນໄຂ.
+	How many entities a task with a resource can work on at the same time: its machines, clerks or beds.	ຈຳນວນເອນທິຕີທີ່ໜ້າວຽກທີ່ຕ້ອງໃຊ້ຊັບພະຍາກອນເຮັດວຽກໄດ້ພ້ອມກັນ: ເຄື່ອງຈັກ, ພະນັກງານ ຫຼື ຕຽງຂອງມັນ.
+	Where entities wait for a free unit (a queue). It can have a limit; an entity that finds it full is lost or waits upstream.	ບ່ອນທີ່ເອນທິຕີລໍຖ້າໜ່ວຍທີ່ວ່າງ (ແຖວຄອຍ). ມັນອາດມີຂີດຈຳກັດ; ເອນທິຕີທີ່ພົບວ່າເຕັມຈະສູນເສຍ ຫຼື ລໍຖ້າຢູ່ຂັ້ນຕອນກ່ອນໜ້າ.
+	How long a unit takes with one entity, drawn from a distribution each time.	ເວລາທີ່ໜ່ວຍໜຶ່ງໃຊ້ກັບເອນທິຕີໜຶ່ງ, ສຸ່ມຈາກການແຈກຢາຍທຸກຄັ້ງ.
+	Distribution	ການແຈກຢາຍ
+	How a time or a quantity varies from one entity to the next: its shape and its mean.	ເວລາ ຫຼື ປະລິມານປ່ຽນແປງແນວໃດຈາກເອນທິຕີໜຶ່ງໄປຫາເອນທິຕີຕໍ່ໄປ: ຮູບຮ່າງ ແລະ ຄ່າສະເລ່ຍຂອງມັນ.
+	One pass of the model from start to end with its own random numbers. Textbooks call it a replication.	ການປະມວນຜົນແບບຈຳລອງໜຶ່ງເທື່ອຕັ້ງແຕ່ຕົ້ນຈົນຈົບດ້ວຍເລກສຸ່ມຂອງມັນເອງ. ຕຳລາເອີ້ນວ່າການຈຳລອງຊ້ຳ.
+	All the runs together, with the same settings: how many runs, the seed, the warm-up and the time measured.	ຮອບຈຳລອງຊ້ຳທັງໝົດລວມກັນດ້ວຍການຕັ້ງຄ່າດຽວກັນ: ຈຳນວນຮອບຈຳລອງຊ້ຳ, ເມັດສຸ່ມ, ໄລຍະອຸ່ນເຄື່ອງ ແລະ ເວລາທີ່ວັດ.
+	The starting point of the random numbers. The same model with the same seed always gives the same results.	ຈຸດເລີ່ມຕົ້ນຂອງເລກສຸ່ມ. ແບບຈຳລອງດຽວກັນກັບເມັດສຸ່ມດຽວກັນໃຫ້ຜົນຄືກັນສະເໝີ.
+	Time at the start of each run that is simulated but not measured, so an empty model filling up does not pull the results.	ເວລາຊ່ວງຕົ້ນຂອງແຕ່ລະຮອບຈຳລອງຊ້ຳທີ່ຈຳລອງແຕ່ບໍ່ວັດຜົນ, ເພື່ອບໍ່ໃຫ້ແບບຈຳລອງທີ່ວ່າງເປົ່າກຳລັງເຕັມຂຶ້ນດຶງຜົນລັບ.
+	The share of the time a task's units are busy, counted over the time they are on shift.	ສັດສ່ວນເວລາທີ່ໜ່ວຍຂອງໜ້າວຽກບໍ່ວ່າງ, ນັບຈາກເວລາທີ່ພວກມັນຢູ່ໃນກະ.
+	The average time an entity spends in a waiting room before a unit takes it.	ເວລາສະເລ່ຍທີ່ເອນທິຕີໃຊ້ໃນຫ້ອງລໍຖ້າກ່ອນທີ່ໜ່ວຍຈະຮັບໄປ.
+	The average number of entities in a waiting room, over the time measured.	ຈຳນວນເອນທິຕີສະເລ່ຍໃນຫ້ອງລໍຖ້າ, ຕະຫຼອດເວລາທີ່ວັດ.
+	Time in system	ເວລາໃນລະບົບ
+	How long an entity spends from its arrival to its departure, waiting and being worked on.	ເວລາທີ່ເອນທິຕີໃຊ້ຕັ້ງແຕ່ມາຮອດຈົນອອກໄປ, ທັງລໍຖ້າ ແລະ ຖືກເຮັດວຽກ.
+	Blocked	ຖືກຂັດຂວາງ
+	A unit has finished but cannot pass the entity on, because the next waiting room is full.	ໜ່ວຍເຮັດວຽກແລ້ວແຕ່ສົ່ງເອນທິຕີຕໍ່ບໍ່ໄດ້, ເພາະຫ້ອງລໍຖ້າຕໍ່ໄປເຕັມ.
+	Starved	ບໍ່ມີວຽກ
+	A unit is free but has no entity to work on.	ໜ່ວຍວ່າງແຕ່ບໍ່ມີເອນທິຕີໃຫ້ເຮັດວຽກ.
+	95% confidence interval	ຊ່ວງຄວາມເຊື່ອໝັ້ນ 95%
+	Written ± after a mean: how far the true mean could plausibly be from the one shown. More runs narrow it.	ຂຽນເປັນ ± ຫຼັງຄ່າສະເລ່ຍ: ຄ່າສະເລ່ຍແທ້ອາດຫ່າງຈາກຄ່າທີ່ສະແດງໄດ້ຫຼາຍປານໃດ. ຮອບຈຳລອງຊ້ຳຫຼາຍຂຶ້ນເຮັດໃຫ້ມັນແຄບລົງ.
+	Settled	ຄົງທີ່
+	A result known well enough to act on: to ± 5% of its mean, or ± 1 percentage point for a share.	ຜົນທີ່ຮູ້ໄດ້ດີພໍທີ່ຈະນຳໄປໃຊ້: ພາຍໃນ ± 5% ຂອງຄ່າສະເລ່ຍ, ຫຼື ± 1 ຈຸດສຳລັບສັດສ່ວນ.
+	Results kept to compare a later run with, to see what a change to the model did.	ຜົນທີ່ເກັບໄວ້ປຽບທຽບກັບຮອບຈຳລອງຊ້ຳພາຍຫຼັງ, ເພື່ອເບິ່ງວ່າການປ່ຽນແປງແບບຈຳລອງເຮັດຫຍັງ.
+	A difference whose 95% interval takes in zero: the runs cannot tell it from random variation.	ຜົນຕ່າງທີ່ຊ່ວງ 95% ຂອງມັນລວມສູນ: ຮອບຈຳລອງຊ້ຳແຍກມັນອອກຈາກຄວາມແປຜັນແບບສຸ່ມບໍ່ໄດ້.
+	Add Arrivals	ເພີ່ມການມາຮອດ
+	Add a task and connect Arrivals to it	ເພີ່ມໜ້າວຽກ ແລະ ເຊື່ອມການມາຮອດເຂົ້າກັບມັນ
+	Add Departures and connect the task to it	ເພີ່ມການອອກ ແລະ ເຊື່ອມໜ້າວຽກເຂົ້າກັບມັນ
+	Run the model: press F5	ປະມວນຜົນແບບຈຳລອງ: ກົດ F5
+	Read what the run found	ອ່ານສິ່ງທີ່ຮອບຈຳລອງຊ້ຳພົບ
+	Close Help (F1)	ປິດຊ່ວຍເຫຼືອ (F1)
+	Search help and terms	ຊອກຫາໃນຊ່ວຍເຫຼືອ ແລະ ຄຳສັບ
+	Getting started	ເລີ່ມຕົ້ນໃຊ້ງານ
+	{k} of {n} done	ສຳເລັດ {k} ຈາກ {n}
+	Glossary	ອະພິທານສັບ
+	No term matches “{text}”.	ບໍ່ມີຄຳສັບທີ່ກົງກັບ “{text}”.
+	Keyboard shortcuts	ປຸ່ມລັດ
+	Change keys	ປ່ຽນປຸ່ມ
+	More help	ຊ່ວຍເຫຼືອເພີ່ມເຕີມ
+	User guide	ຄູ່ມືຜູ້ໃຊ້
+	What the results mean	ຄວາມໝາຍຂອງຜົນລັບ
+	Report a problem	ລາຍງານບັນຫາ
+	These open in your web browser.	ລິ້ງເຫຼົ່ານີ້ເປີດໃນເວັບບຣາວເຊີຂອງທ່ານ.
+	Space	ຍະຫວ່າງ
+	Play or pause a watched run	ຫຼິ້ນ ຫຼື ຢຸດຊົ່ວຄາວຮອບຈຳລອງຊ້ຳທີ່ກຳລັງຕິດຕາມ
+	Getting Started	ເລີ່ມຕົ້ນໃຊ້ງານ
+	What the Results Mean	ຄວາມໝາຍຂອງຜົນລັບ
+	User Guide	ຄູ່ມືຜູ້ໃຊ້
+	Report a Problem	ລາຍງານບັນຫາ
 @plural	Added {n} block|Added {n} blocks	ເພີ່ມ {n} ບລັອກແລ້ວ
 @plural	Copied {n} block|Copied {n} blocks	ສຳເນົາ {n} ບລັອກແລ້ວ
 @plural	Finished {n} run|Finished {n} runs	ຈຳລອງຊ້ຳສຳເລັດ {n} ຮອບ

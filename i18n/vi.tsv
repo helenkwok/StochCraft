@@ -761,6 +761,63 @@ unit	yr	năm
 	off	tắt
 	Changed since the baseline:	Đã thay đổi kể từ mốc so sánh:
 	Nothing in the model has changed since the baseline.	Không có gì trong mô hình thay đổi kể từ mốc so sánh.
+	One step of the process on the canvas: where entities arrive, wait, are worked on, are routed or leave.	Một bước của quy trình trên khung vẽ: nơi thực thể đến, chờ, được xử lý, được định tuyến hoặc rời đi.
+	Entity	Thực thể
+	What flows through the blocks: a part, a patient, a call, an order.	Những gì chảy qua các khối: một chi tiết, một bệnh nhân, một cuộc gọi, một đơn hàng.
+	The block where entities enter the model, with the time between one arrival and the next.	Khối nơi thực thể đi vào mô hình, với thời gian giữa một lượt đến và lượt đến tiếp theo.
+	A step that takes time, with no limit on how many entities it works on at once.	Một bước tốn thời gian, không giới hạn số thực thể được xử lý cùng lúc.
+	A step done by a limited number of units, such as machines or clerks. Entities wait in its waiting room until a unit is free.	Một bước do một số đơn vị có hạn thực hiện, như máy móc hay nhân viên. Thực thể chờ trong khu vực chờ của bước đó cho đến khi có đơn vị rảnh.
+	A step that borrows units from a pool that several tasks share, such as a team of nurses.	Một bước mượn đơn vị từ một nhóm mà nhiều tác vụ dùng chung, như một đội y tá.
+	The block where entities leave the model; it counts them and their time in the system.	Khối nơi thực thể rời khỏi mô hình; khối này đếm số thực thể và thời gian của chúng trong hệ thống.
+	Sends each entity down one of its ways out, by chance or by a condition.	Gửi mỗi thực thể theo một trong các lối ra của nó, ngẫu nhiên hoặc theo điều kiện.
+	How many entities a task with a resource can work on at the same time: its machines, clerks or beds.	Số thực thể mà một tác vụ có tài nguyên có thể xử lý cùng lúc: máy móc, nhân viên hay giường bệnh của nó.
+	Where entities wait for a free unit (a queue). It can have a limit; an entity that finds it full is lost or waits upstream.	Nơi thực thể chờ một đơn vị rảnh (một hàng đợi). Có thể đặt giới hạn; thực thể thấy nó đầy sẽ bị mất hoặc chờ ở phía trước.
+	How long a unit takes with one entity, drawn from a distribution each time.	Thời gian một đơn vị dành cho một thực thể, được rút từ một phân phối mỗi lần.
+	Distribution	Phân phối
+	How a time or a quantity varies from one entity to the next: its shape and its mean.	Cách một thời gian hay một số lượng thay đổi từ thực thể này sang thực thể khác: hình dạng và giá trị trung bình của nó.
+	One pass of the model from start to end with its own random numbers. Textbooks call it a replication.	Một lượt chạy mô hình từ đầu đến cuối với các số ngẫu nhiên riêng. Sách giáo khoa gọi đó là một lần lặp (replication).
+	All the runs together, with the same settings: how many runs, the seed, the warm-up and the time measured.	Tất cả các lần chạy cùng nhau, với cùng thiết lập: số lần chạy, hạt giống ngẫu nhiên, giai đoạn khởi động và thời gian đo.
+	The starting point of the random numbers. The same model with the same seed always gives the same results.	Điểm bắt đầu của các số ngẫu nhiên. Cùng một mô hình với cùng hạt giống ngẫu nhiên luôn cho cùng kết quả.
+	Time at the start of each run that is simulated but not measured, so an empty model filling up does not pull the results.	Thời gian ở đầu mỗi lần chạy được mô phỏng nhưng không được đo, để một mô hình trống đang đầy dần không kéo lệch kết quả.
+	The share of the time a task's units are busy, counted over the time they are on shift.	Tỷ lệ thời gian các đơn vị của một tác vụ bận, tính trên thời gian chúng trong ca.
+	The average time an entity spends in a waiting room before a unit takes it.	Thời gian trung bình một thực thể ở trong khu vực chờ trước khi một đơn vị nhận nó.
+	The average number of entities in a waiting room, over the time measured.	Số thực thể trung bình trong khu vực chờ, tính trên thời gian đo.
+	Time in system	Thời gian trong hệ thống
+	How long an entity spends from its arrival to its departure, waiting and being worked on.	Khoảng thời gian một thực thể trải qua từ lúc đến tới lúc rời đi, gồm cả chờ và được xử lý.
+	Blocked	Bị chặn
+	A unit has finished but cannot pass the entity on, because the next waiting room is full.	Một đơn vị đã xong nhưng không thể chuyển thực thể đi, vì khu vực chờ tiếp theo đã đầy.
+	Starved	Không có việc
+	A unit is free but has no entity to work on.	Một đơn vị đang rảnh nhưng không có thực thể nào để xử lý.
+	95% confidence interval	Khoảng tin cậy 95%
+	Written ± after a mean: how far the true mean could plausibly be from the one shown. More runs narrow it.	Viết là ± sau giá trị trung bình: giá trị trung bình thật có thể cách giá trị hiển thị bao xa. Chạy nhiều lần hơn sẽ thu hẹp nó.
+	Settled	Đã ổn định
+	A result known well enough to act on: to ± 5% of its mean, or ± 1 percentage point for a share.	Một kết quả được biết đủ rõ để hành động: trong khoảng ± 5% giá trị trung bình, hoặc ± 1 điểm phần trăm với tỷ lệ.
+	Results kept to compare a later run with, to see what a change to the model did.	Kết quả được giữ lại để so sánh với một lần chạy sau, nhằm xem một thay đổi trong mô hình đã tạo ra điều gì.
+	A difference whose 95% interval takes in zero: the runs cannot tell it from random variation.	Một chênh lệch có khoảng 95% chứa số 0: các lần chạy không thể phân biệt nó với biến động ngẫu nhiên.
+	Add Arrivals	Thêm Lượt đến
+	Add a task and connect Arrivals to it	Thêm một tác vụ và nối Lượt đến với nó
+	Add Departures and connect the task to it	Thêm Lượt rời đi và nối tác vụ với nó
+	Run the model: press F5	Chạy mô hình: nhấn F5
+	Read what the run found	Đọc những gì lần chạy tìm thấy
+	Close Help (F1)	Đóng Trợ giúp (F1)
+	Search help and terms	Tìm trong trợ giúp và thuật ngữ
+	Getting started	Bắt đầu
+	{k} of {n} done	Đã xong {k}/{n}
+	Glossary	Thuật ngữ
+	No term matches “{text}”.	Không có thuật ngữ nào khớp với “{text}”.
+	Keyboard shortcuts	Phím tắt
+	Change keys	Đổi phím
+	More help	Thêm trợ giúp
+	User guide	Hướng dẫn sử dụng
+	What the results mean	Ý nghĩa của kết quả
+	Report a problem	Báo cáo sự cố
+	These open in your web browser.	Các mục này mở trong trình duyệt web của bạn.
+	Space	Phím cách
+	Play or pause a watched run	Phát hoặc tạm dừng lần chạy đang theo dõi
+	Getting Started	Bắt đầu
+	What the Results Mean	Ý nghĩa của kết quả
+	User Guide	Hướng dẫn sử dụng
+	Report a Problem	Báo cáo sự cố
 @plural	Added {n} block|Added {n} blocks	Đã thêm {n} khối
 @plural	Copied {n} block|Copied {n} blocks	Đã sao chép {n} khối
 @plural	Finished {n} run|Finished {n} runs	Đã hoàn thành {n} lần chạy

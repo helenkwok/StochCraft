@@ -761,6 +761,63 @@ unit	yr	år
 	off	fra
 	Changed since the baseline:	Ændret siden referencen:
 	Nothing in the model has changed since the baseline.	Intet i modellen er ændret siden referencen.
+	One step of the process on the canvas: where entities arrive, wait, are worked on, are routed or leave.	Ét trin i processen på hovedfladen: hvor enheder ankommer, venter, bliver bearbejdet, sendes videre eller forlader modellen.
+	Entity	Enhed
+	What flows through the blocks: a part, a patient, a call, an order.	Det, der strømmer gennem blokkene: en del, en patient, et opkald, en ordre.
+	The block where entities enter the model, with the time between one arrival and the next.	Blokken, hvor enheder kommer ind i modellen, med tiden fra én ankomst til den næste.
+	A step that takes time, with no limit on how many entities it works on at once.	Et trin, der tager tid, uden grænse for, hvor mange enheder det bearbejder ad gangen.
+	A step done by a limited number of units, such as machines or clerks. Entities wait in its waiting room until a unit is free.	Et trin, der udføres af et begrænset antal ressourceenheder, f.eks. maskiner eller ekspedienter. Enheder venter i venteværelset, til en ressourceenhed er ledig.
+	A step that borrows units from a pool that several tasks share, such as a team of nurses.	Et trin, der låner ressourceenheder fra en pulje, som flere opgaver deler, f.eks. et team af sygeplejersker.
+	The block where entities leave the model; it counts them and their time in the system.	Blokken, hvor enheder forlader modellen; den tæller dem og deres tid i systemet.
+	Sends each entity down one of its ways out, by chance or by a condition.	Sender hver enhed ud ad én af sine veje ud, tilfældigt eller efter en betingelse.
+	How many entities a task with a resource can work on at the same time: its machines, clerks or beds.	Hvor mange enheder en opgave med ressource kan bearbejde på samme tid: dens maskiner, ekspedienter eller senge.
+	Where entities wait for a free unit (a queue). It can have a limit; an entity that finds it full is lost or waits upstream.	Hvor enheder venter på en ledig ressourceenhed (en kø). Det kan have en grænse; en enhed, der finder det fuldt, går tabt eller venter før opgaven.
+	How long a unit takes with one entity, drawn from a distribution each time.	Hvor lang tid en ressourceenhed er om én enhed, trukket fra en fordeling hver gang.
+	Distribution	Fordeling
+	How a time or a quantity varies from one entity to the next: its shape and its mean.	Hvordan en tid eller en mængde varierer fra én enhed til den næste: dens form og dens gennemsnit.
+	One pass of the model from start to end with its own random numbers. Textbooks call it a replication.	Ét gennemløb af modellen fra start til slut med sine egne tilfældige tal. Lærebøger kalder det en replikation.
+	All the runs together, with the same settings: how many runs, the seed, the warm-up and the time measured.	Alle kørslerne samlet, med de samme indstillinger: antal kørsler, tilfældighedsfrøet, opvarmningen og den målte tid.
+	The starting point of the random numbers. The same model with the same seed always gives the same results.	Udgangspunktet for de tilfældige tal. Den samme model med det samme tilfældighedsfrø giver altid de samme resultater.
+	Time at the start of each run that is simulated but not measured, so an empty model filling up does not pull the results.	Tid i starten af hver kørsel, der simuleres, men ikke måles, så en tom model, der fyldes op, ikke trækker resultaterne skævt.
+	The share of the time a task's units are busy, counted over the time they are on shift.	Den andel af tiden, en opgaves ressourceenheder er optaget, regnet over den tid, de er på skift.
+	The average time an entity spends in a waiting room before a unit takes it.	Den gennemsnitlige tid, en enhed tilbringer i et venteværelse, før en ressourceenhed tager den.
+	The average number of entities in a waiting room, over the time measured.	Det gennemsnitlige antal enheder i et venteværelse over den målte tid.
+	Time in system	Tid i systemet
+	How long an entity spends from its arrival to its departure, waiting and being worked on.	Hvor længe en enhed er i systemet fra ankomst til afgang, ventende og under bearbejdning.
+	Blocked	Blokeret
+	A unit has finished but cannot pass the entity on, because the next waiting room is full.	En ressourceenhed er færdig, men kan ikke sende enheden videre, fordi det næste venteværelse er fuldt.
+	Starved	Uden arbejde
+	A unit is free but has no entity to work on.	En ressourceenhed er ledig, men har ingen enhed at arbejde på.
+	95% confidence interval	95 %-konfidensinterval
+	Written ± after a mean: how far the true mean could plausibly be from the one shown. More runs narrow it.	Skrives ± efter et gennemsnit: hvor langt det sande gennemsnit plausibelt kan ligge fra det viste. Flere kørsler gør det smallere.
+	Settled	Stabil
+	A result known well enough to act on: to ± 5% of its mean, or ± 1 percentage point for a share.	Et resultat, der kendes godt nok til at handle på: med ± 5% af gennemsnittet eller ± 1 procentpoint for en andel.
+	Results kept to compare a later run with, to see what a change to the model did.	Resultater, der gemmes til at sammenligne en senere kørsel med, for at se, hvad en ændring af modellen gjorde.
+	A difference whose 95% interval takes in zero: the runs cannot tell it from random variation.	En forskel, hvis 95 %-interval omfatter nul: kørslerne kan ikke skelne den fra tilfældig variation.
+	Add Arrivals	Tilføj Ankomster
+	Add a task and connect Arrivals to it	Tilføj en opgave, og forbind Ankomster med den
+	Add Departures and connect the task to it	Tilføj Afgange, og forbind opgaven med den
+	Run the model: press F5	Kør modellen: tryk på F5
+	Read what the run found	Læs, hvad kørslen fandt
+	Close Help (F1)	Luk Hjælp (F1)
+	Search help and terms	Søg i hjælp og begreber
+	Getting started	Kom i gang
+	{k} of {n} done	{k} af {n} udført
+	Glossary	Ordliste
+	No term matches “{text}”.	Intet begreb matcher »{text}«.
+	Keyboard shortcuts	Tastaturgenveje
+	Change keys	Skift taster
+	More help	Mere hjælp
+	User guide	Brugervejledning
+	What the results mean	Hvad resultaterne betyder
+	Report a problem	Rapportér et problem
+	These open in your web browser.	Disse åbnes i din webbrowser.
+	Space	Mellemrum
+	Play or pause a watched run	Afspil eller sæt en fulgt kørsel på pause
+	Getting Started	Kom i gang
+	What the Results Mean	Hvad resultaterne betyder
+	User Guide	Brugervejledning
+	Report a Problem	Rapportér et problem
 @plural	Added {n} block|Added {n} blocks	Tilføjede {n} blok|Tilføjede {n} blokke
 @plural	Copied {n} block|Copied {n} blocks	Kopierede {n} blok|Kopierede {n} blokke
 @plural	Finished {n} run|Finished {n} runs	{n} kørsel fuldført|{n} kørsler fuldført

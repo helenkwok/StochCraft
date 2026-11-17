@@ -761,6 +761,63 @@ unit	yr	r.
 	off	vypnuté
 	Changed since the baseline:	Zmenené od referencie:
 	Nothing in the model has changed since the baseline.	Od referencie sa v modeli nič nezmenilo.
+	One step of the process on the canvas: where entities arrive, wait, are worked on, are routed or leave.	Jeden krok procesu v diagrame: miesto, kde entity prichádzajú, čakajú, sú spracované, smerované ďalej alebo odchádzajú.
+	Entity	Entita
+	What flows through the blocks: a part, a patient, a call, an order.	To, čo preteká blokmi: diel, pacient, hovor, objednávka.
+	The block where entities enter the model, with the time between one arrival and the next.	Blok, kde entity vstupujú do modelu, s časom medzi jedným príchodom a ďalším.
+	A step that takes time, with no limit on how many entities it works on at once.	Krok, ktorý trvá určitý čas, bez obmedzenia počtu entít, ktoré spracúva naraz.
+	A step done by a limited number of units, such as machines or clerks. Entities wait in its waiting room until a unit is free.	Krok vykonávaný obmedzeným počtom jednotiek, napríklad strojov alebo úradníkov. Entity čakajú v jeho čakárni, kým sa jednotka neuvoľní.
+	A step that borrows units from a pool that several tasks share, such as a team of nurses.	Krok, ktorý si požičiava jednotky zo skupiny zdieľanej viacerými úlohami, napríklad tímu zdravotných sestier.
+	The block where entities leave the model; it counts them and their time in the system.	Blok, kde entity opúšťajú model; počíta ich a ich čas v systéme.
+	Sends each entity down one of its ways out, by chance or by a condition.	Posiela každú entitu jednou zo svojich ciest von, náhodne alebo podľa podmienky.
+	How many entities a task with a resource can work on at the same time: its machines, clerks or beds.	Koľko entít môže úloha so zdrojom spracúvať súčasne: jej stroje, úradníci alebo lôžka.
+	Where entities wait for a free unit (a queue). It can have a limit; an entity that finds it full is lost or waits upstream.	Kde entity čakajú na voľnú jednotku (rad). Môže mať limit; entita, ktorá ju nájde plnú, sa stratí alebo čaká v predchádzajúcom kroku.
+	How long a unit takes with one entity, drawn from a distribution each time.	Ako dlho jednotka obsluhuje jednu entitu; zakaždým sa losuje z rozdelenia.
+	Distribution	Rozdelenie
+	How a time or a quantity varies from one entity to the next: its shape and its mean.	Ako sa čas alebo množstvo mení od jednej entity k ďalšej: jeho tvar a priemer.
+	One pass of the model from start to end with its own random numbers. Textbooks call it a replication.	Jeden prechod modelom od začiatku do konca s vlastnými náhodnými číslami. Učebnice to nazývajú replikácia.
+	All the runs together, with the same settings: how many runs, the seed, the warm-up and the time measured.	Všetky behy spolu s rovnakými nastaveniami: počet behov, počiatočná hodnota generátora, zahrievanie a meraný čas.
+	The starting point of the random numbers. The same model with the same seed always gives the same results.	Východiskový bod náhodných čísel. Rovnaký model s rovnakou počiatočnou hodnotou generátora dáva vždy rovnaké výsledky.
+	Time at the start of each run that is simulated but not measured, so an empty model filling up does not pull the results.	Čas na začiatku každého behu, ktorý sa simuluje, ale nemeria, aby plnenie prázdneho modelu neskresľovalo výsledky.
+	The share of the time a task's units are busy, counted over the time they are on shift.	Podiel času, keď sú jednotky úlohy obsadené, počítaný z času, keď sú na zmene.
+	The average time an entity spends in a waiting room before a unit takes it.	Priemerný čas, ktorý entita strávi v čakárni, kým ju jednotka prevezme.
+	The average number of entities in a waiting room, over the time measured.	Priemerný počet entít v čakárni počas meraného času.
+	Time in system	Čas v systéme
+	How long an entity spends from its arrival to its departure, waiting and being worked on.	Ako dlho entita strávi od svojho príchodu po odchod, čakaním a spracovaním.
+	Blocked	Blokovanie
+	A unit has finished but cannot pass the entity on, because the next waiting room is full.	Jednotka dokončila prácu, ale nemôže entitu odovzdať ďalej, pretože ďalšia čakáreň je plná.
+	Starved	Bez práce
+	A unit is free but has no entity to work on.	Jednotka je voľná, ale nemá žiadnu entitu na spracovanie.
+	95% confidence interval	95% interval spoľahlivosti
+	Written ± after a mean: how far the true mean could plausibly be from the one shown. More runs narrow it.	Píše sa ako ± za priemerom: ako ďaleko môže byť skutočný priemer od zobrazeného. Viac behov ho zúži.
+	Settled	Ustálená
+	A result known well enough to act on: to ± 5% of its mean, or ± 1 percentage point for a share.	Výsledok známy dosť dobre na to, aby sa podľa neho dalo konať: s presnosťou ± 5% priemeru alebo ± 1 percentuálny bod pri podiele.
+	Results kept to compare a later run with, to see what a change to the model did.	Výsledky uložené na porovnanie s neskorším behom, aby bolo vidieť, čo spôsobila zmena modelu.
+	A difference whose 95% interval takes in zero: the runs cannot tell it from random variation.	Rozdiel, ktorého 95 % interval zahŕňa nulu: behy ho nedokážu odlíšiť od náhodného kolísania.
+	Add Arrivals	Pridať blok Príchody
+	Add a task and connect Arrivals to it	Pridať úlohu a prepojiť s ňou Príchody
+	Add Departures and connect the task to it	Pridať Odchody a prepojiť s nimi úlohu
+	Run the model: press F5	Spustiť model: stlačte F5
+	Read what the run found	Prečítajte si, čo beh zistil
+	Close Help (F1)	Zavrieť pomocníka (F1)
+	Search help and terms	Hľadať v pomocníkovi a pojmoch
+	Getting started	Začíname
+	{k} of {n} done	Hotovo {k} z {n}
+	Glossary	Slovník pojmov
+	No term matches “{text}”.	Žiadny pojem nezodpovedá „{text}“.
+	Keyboard shortcuts	Klávesové skratky
+	Change keys	Zmeniť klávesy
+	More help	Ďalšia pomoc
+	User guide	Používateľská príručka
+	What the results mean	Čo znamenajú výsledky
+	Report a problem	Nahlásiť problém
+	These open in your web browser.	Otvoria sa vo webovom prehliadači.
+	Space	Medzerník
+	Play or pause a watched run	Prehrať alebo pozastaviť sledovaný beh
+	Getting Started	Začíname
+	What the Results Mean	Čo znamenajú výsledky
+	User Guide	Používateľská príručka
+	Report a Problem	Nahlásiť problém
 @plural	Added {n} block|Added {n} blocks	Pridaný {n} blok|Pridané {n} bloky|Pridaných {n} blokov
 @plural	Copied {n} block|Copied {n} blocks	Skopírovaný {n} blok|Skopírované {n} bloky|Skopírovaných {n} blokov
 @plural	Finished {n} run|Finished {n} runs	Dokončený {n} beh|Dokončené {n} behy|Dokončených {n} behov

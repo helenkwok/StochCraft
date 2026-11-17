@@ -761,6 +761,63 @@ unit	yr	v
 	off	joaktiv
 	Changed since the baseline:	Ndryshuar që nga referenca:
 	Nothing in the model has changed since the baseline.	Asgjë në model nuk ka ndryshuar që nga referenca.
+	One step of the process on the canvas: where entities arrive, wait, are worked on, are routed or leave.	Një hap i procesit në diagram: ku entitetet mbërrijnë, presin, përpunohen, drejtohen ose largohen.
+	Entity	Entitet
+	What flows through the blocks: a part, a patient, a call, an order.	Ajo që rrjedh nëpër blloqe: një pjesë, një pacient, një telefonatë, një porosi.
+	The block where entities enter the model, with the time between one arrival and the next.	Blloku ku entitetet hyjnë në model, me kohën ndërmjet një mbërritjeje dhe tjetrës.
+	A step that takes time, with no limit on how many entities it works on at once.	Një hap që merr kohë, pa kufi se sa entitete përpunon njëkohësisht.
+	A step done by a limited number of units, such as machines or clerks. Entities wait in its waiting room until a unit is free.	Një hap që kryhet nga një numër i kufizuar njësish, si makina ose nëpunës. Entitetet presin në dhomën e tij të pritjes derisa të lirohet një njësi.
+	A step that borrows units from a pool that several tasks share, such as a team of nurses.	Një hap që merr hua njësi nga një grup që e ndajnë disa detyra, si një ekip infermierësh.
+	The block where entities leave the model; it counts them and their time in the system.	Blloku ku entitetet largohen nga modeli; i numëron ato dhe kohën e tyre në sistem.
+	Sends each entity down one of its ways out, by chance or by a condition.	Dërgon çdo entitet në një nga daljet e tij, rastësisht ose sipas një kushti.
+	How many entities a task with a resource can work on at the same time: its machines, clerks or beds.	Sa entitete mund të përpunojë njëkohësisht një detyrë me burim: makinat, nëpunësit ose shtretërit e saj.
+	Where entities wait for a free unit (a queue). It can have a limit; an entity that finds it full is lost or waits upstream.	Ku entitetet presin për një njësi të lirë (një radhë). Mund të ketë një kufi; një entitet që e gjen plot humbet ose pret më përpara në rrjedhë.
+	How long a unit takes with one entity, drawn from a distribution each time.	Sa kohë i duhet një njësie për një entitet, e hedhur nga një shpërndarje çdo herë.
+	Distribution	Shpërndarje
+	How a time or a quantity varies from one entity to the next: its shape and its mean.	Si ndryshon një kohë ose një sasi nga një entitet te tjetri: forma dhe mesatarja e saj.
+	One pass of the model from start to end with its own random numbers. Textbooks call it a replication.	Një kalim i modelit nga fillimi në fund me numrat e vet të rastësishëm. Tekstet mësimore e quajnë përsëritje (replikim).
+	All the runs together, with the same settings: how many runs, the seed, the warm-up and the time measured.	Të gjitha ekzekutimet bashkë, me të njëjtat cilësime: sa ekzekutime, fara, ngrohja dhe koha e matur.
+	The starting point of the random numbers. The same model with the same seed always gives the same results.	Pika e nisjes e numrave të rastësishëm. I njëjti model me të njëjtën farë jep gjithmonë të njëjtat rezultate.
+	Time at the start of each run that is simulated but not measured, so an empty model filling up does not pull the results.	Koha në fillim të çdo ekzekutimi që simulohet por nuk matet, që mbushja e një modeli bosh të mos i shtrembërojë rezultatet.
+	The share of the time a task's units are busy, counted over the time they are on shift.	Pjesa e kohës kur njësitë e një detyre janë të zëna, e numëruar mbi kohën kur janë në turn.
+	The average time an entity spends in a waiting room before a unit takes it.	Koha mesatare që një entitet kalon në një dhomë pritjeje para se ta marrë një njësi.
+	The average number of entities in a waiting room, over the time measured.	Numri mesatar i entiteteve në një dhomë pritjeje, gjatë kohës së matur.
+	Time in system	Koha në sistem
+	How long an entity spends from its arrival to its departure, waiting and being worked on.	Sa kohë kalon një entitet nga mbërritja deri te largimi, në pritje dhe në përpunim.
+	Blocked	I bllokuar
+	A unit has finished but cannot pass the entity on, because the next waiting room is full.	Një njësi ka mbaruar, por nuk mund ta kalojë entitetin më tej, sepse dhoma tjetër e pritjes është plot.
+	Starved	Pa punë
+	A unit is free but has no entity to work on.	Një njësi është e lirë, por nuk ka asnjë entitet për të përpunuar.
+	95% confidence interval	Interval besimi 95%
+	Written ± after a mean: how far the true mean could plausibly be from the one shown. More runs narrow it.	Shkruhet me ± pas një mesatareje: sa larg mund të jetë në mënyrë të besueshme mesatarja e vërtetë nga ajo e treguar. Më shumë ekzekutime e ngushtojnë.
+	Settled	I qëndrueshëm
+	A result known well enough to act on: to ± 5% of its mean, or ± 1 percentage point for a share.	Një rezultat i njohur mjaft mirë për të vepruar mbi të: me ± 5% të mesatares së tij, ose ± 1 pikë përqindjeje për një pjesë.
+	Results kept to compare a later run with, to see what a change to the model did.	Rezultate të ruajtura për t'i krahasuar me një ekzekutim të mëvonshëm, për të parë çfarë bëri një ndryshim në model.
+	A difference whose 95% interval takes in zero: the runs cannot tell it from random variation.	Një dallim, intervali 95% i të cilit përfshin zeron: ekzekutimet nuk mund ta dallojnë nga ndryshueshmëria e rastësishme.
+	Add Arrivals	Shtoni «Mbërritjet»
+	Add a task and connect Arrivals to it	Shtoni një detyrë dhe lidhni «Mbërritjet» me të
+	Add Departures and connect the task to it	Shtoni «Largimet» dhe lidhni detyrën me to
+	Run the model: press F5	Ekzekutoni modelin: shtypni F5
+	Read what the run found	Lexoni çfarë gjeti ekzekutimi
+	Close Help (F1)	Mbyll ndihmën (F1)
+	Search help and terms	Kërko në ndihmë dhe terma
+	Getting started	Si të fillosh
+	{k} of {n} done	{k} nga {n} të kryera
+	Glossary	Fjalorth
+	No term matches “{text}”.	Asnjë term nuk përputhet me «{text}».
+	Keyboard shortcuts	Shkurtoret e tastierës
+	Change keys	Ndrysho tastet
+	More help	Më shumë ndihmë
+	User guide	Udhëzuesi i përdoruesit
+	What the results mean	Çfarë do të thonë rezultatet
+	Report a problem	Raporto një problem
+	These open in your web browser.	Këto hapen në shfletuesin tuaj të uebit.
+	Space	Hapësirë
+	Play or pause a watched run	Luaj ose ndalo përkohësisht një ekzekutim të vëzhguar
+	Getting Started	Si të fillosh
+	What the Results Mean	Çfarë do të thonë rezultatet
+	User Guide	Udhëzuesi i përdoruesit
+	Report a Problem	Raporto një problem
 @plural	Added {n} block|Added {n} blocks	U shtua {n} bllok|U shtuan {n} blloqe
 @plural	Copied {n} block|Copied {n} blocks	U kopjua {n} bllok|U kopjuan {n} blloqe
 @plural	Finished {n} run|Finished {n} runs	Përfundoi {n} ekzekutim|Përfunduan {n} ekzekutime

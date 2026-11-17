@@ -761,6 +761,63 @@ unit	yr	ж.
 	off	өшірулі
 	Changed since the baseline:	Базалық нұсқадан бері өзгергендер:
 	Nothing in the model has changed since the baseline.	Базалық нұсқадан бері модельде ештеңе өзгерген жоқ.
+	One step of the process on the canvas: where entities arrive, wait, are worked on, are routed or leave.	Диаграммадағы процестің бір қадамы: нысандар келетін, күтетін, өңделетін, бағытталатын немесе кететін орын.
+	Entity	Нысан
+	What flows through the blocks: a part, a patient, a call, an order.	Блоктар арқылы өтетін нәрсе: бөлшек, науқас, қоңырау, тапсырыс.
+	The block where entities enter the model, with the time between one arrival and the next.	Нысандар модельге кіретін блок, бір келу мен келесісі арасындағы уақытпен.
+	A step that takes time, with no limit on how many entities it works on at once.	Уақыт алатын қадам; бір мезгілде қанша нысанды өңдейтініне шек жоқ.
+	A step done by a limited number of units, such as machines or clerks. Entities wait in its waiting room until a unit is free.	Шектеулі бірліктер, мысалы, машиналар не қызметкерлер орындайтын қадам. Нысандар бос бірлік болғанша оның күту орнында күтеді.
+	A step that borrows units from a pool that several tasks share, such as a team of nurses.	Бірнеше тапсырма ортақ пайдаланатын қордан бірліктер алатын қадам, мысалы, мейірбикелер тобы.
+	The block where entities leave the model; it counts them and their time in the system.	Нысандар модельден шығатын блок; ол оларды және олардың жүйедегі уақытын санайды.
+	Sends each entity down one of its ways out, by chance or by a condition.	Әр нысанды кездейсоқ немесе шарт бойынша өзінің шығатын жолдарының біріне жібереді.
+	How many entities a task with a resource can work on at the same time: its machines, clerks or beds.	Ресурсы бар тапсырма бір мезгілде қанша нысанды өңдей алады: оның машиналары, қызметкерлері не төсектері.
+	Where entities wait for a free unit (a queue). It can have a limit; an entity that finds it full is lost or waits upstream.	Нысандар бос бірлікті күтетін орын (кезек). Оның шегі болуы мүмкін; оны толы деп тапқан нысан жоғалады немесе ағынның алдыңғы жағында күтеді.
+	How long a unit takes with one entity, drawn from a distribution each time.	Бір бірліктің бір нысанға жұмсайтын уақыты; әр жолы үлестірімнен алынады.
+	Distribution	Үлестірім
+	How a time or a quantity varies from one entity to the next: its shape and its mean.	Уақыт не шама бір нысаннан келесісіне қалай өзгереді: оның пішіні мен орташа мәні.
+	One pass of the model from start to end with its own random numbers. Textbooks call it a replication.	Модельдің басынан соңына дейін өз кездейсоқ сандарымен бір рет өтуі. Оқулықтарда оны репликация деп атайды.
+	All the runs together, with the same settings: how many runs, the seed, the warm-up and the time measured.	Бірдей параметрлермен барлық іске қосулар бірге: іске қосулар саны, кездейсоқ тұқым, қыздыру кезеңі және өлшенетін уақыт.
+	The starting point of the random numbers. The same model with the same seed always gives the same results.	Кездейсоқ сандардың бастапқы нүктесі. Бір модель бірдей кездейсоқ тұқыммен әрқашан бірдей нәтиже береді.
+	Time at the start of each run that is simulated but not measured, so an empty model filling up does not pull the results.	Әр іске қосудың басындағы модельденетін, бірақ өлшенбейтін уақыт: бос модельдің толуы нәтижелерді ауытқытпауы үшін.
+	The share of the time a task's units are busy, counted over the time they are on shift.	Тапсырма бірліктерінің бос емес уақыт үлесі, олардың ауысымда болған уақыты бойынша есептеледі.
+	The average time an entity spends in a waiting room before a unit takes it.	Нысанның бірлік оны алғанға дейін күту орнында өткізетін орташа уақыты.
+	The average number of entities in a waiting room, over the time measured.	Өлшенетін уақыт ішінде күту орнындағы нысандардың орташа саны.
+	Time in system	Жүйедегі уақыт
+	How long an entity spends from its arrival to its departure, waiting and being worked on.	Нысанның келгенінен кеткеніне дейінгі уақыты, күту мен өңделуді қоса.
+	Blocked	Бұғатталған
+	A unit has finished but cannot pass the entity on, because the next waiting room is full.	Бірлік жұмысын аяқтады, бірақ нысанды әрі қарай бере алмайды, өйткені келесі күту орны толы.
+	Starved	Жұмыссыз
+	A unit is free but has no entity to work on.	Бірлік бос, бірақ өңдейтін нысаны жоқ.
+	95% confidence interval	95% сенімділік аралығы
+	Written ± after a mean: how far the true mean could plausibly be from the one shown. More runs narrow it.	Орташа мәннен кейін ± белгісімен жазылады: шынайы орташа мән көрсетілгеннен қаншалықты алыс болуы мүмкін. Іске қосулар көбейген сайын ол тарылады.
+	Settled	Тұрақты
+	A result known well enough to act on: to ± 5% of its mean, or ± 1 percentage point for a share.	Соған сүйеніп әрекет етуге жеткілікті дәл белгілі нәтиже: орташа мәнінің ± 5%-ы немесе үлес үшін ± 1 пайыздық тармақ дәлдігімен.
+	Results kept to compare a later run with, to see what a change to the model did.	Модельдегі өзгерістің не бергенін көру үшін кейінгі іске қосумен салыстыруға сақталған нәтижелер.
+	A difference whose 95% interval takes in zero: the runs cannot tell it from random variation.	95% аралығы нөлді қамтитын айырма: іске қосулар оны кездейсоқ ауытқудан ажырата алмайды.
+	Add Arrivals	«Келулер» қосыңыз
+	Add a task and connect Arrivals to it	Тапсырма қосып, оған «Келулер» блогын жалғаңыз
+	Add Departures and connect the task to it	«Кетулер» қосып, тапсырманы оған жалғаңыз
+	Run the model: press F5	Модельді іске қосыңыз: F5 басыңыз
+	Read what the run found	Іске қосу нәтижесін оқыңыз
+	Close Help (F1)	Көмекті жабу (F1)
+	Search help and terms	Көмек пен терминдерден іздеу
+	Getting started	Жұмысты бастау
+	{k} of {n} done	{n} ішінен {k} орындалды
+	Glossary	Глоссарий
+	No term matches “{text}”.	«{text}» сөзіне сәйкес термин жоқ.
+	Keyboard shortcuts	Пернетақта тіркесімдері
+	Change keys	Пернелерді өзгерту
+	More help	Қосымша көмек
+	User guide	Пайдаланушы нұсқаулығы
+	What the results mean	Нәтижелер нені білдіреді
+	Report a problem	Мәселе туралы хабарлау
+	These open in your web browser.	Олар веб-шолғышта ашылады.
+	Space	Бос орын
+	Play or pause a watched run	Бақыланатын іске қосуды ойнату немесе кідірту
+	Getting Started	Жұмысты бастау
+	What the Results Mean	Нәтижелер нені білдіреді
+	User Guide	Пайдаланушы нұсқаулығы
+	Report a Problem	Мәселе туралы хабарлау
 @plural	Added {n} block|Added {n} blocks	{n} блок қосылды|{n} блок қосылды
 @plural	Copied {n} block|Copied {n} blocks	{n} блок көшірілді|{n} блок көшірілді
 @plural	Finished {n} run|Finished {n} runs	{n} іске қосу аяқталды|{n} іске қосу аяқталды

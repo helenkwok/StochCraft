@@ -761,6 +761,63 @@ unit	yr	г.
 	off	изкл.
 	Changed since the baseline:	Променено спрямо базовия вариант:
 	Nothing in the model has changed since the baseline.	В модела нищо не е променено спрямо базовия вариант.
+	One step of the process on the canvas: where entities arrive, wait, are worked on, are routed or leave.	Една стъпка от процеса в диаграмата: тук същностите пристигат, чакат, обработват се, насочват се или напускат.
+	Entity	Същност
+	What flows through the blocks: a part, a patient, a call, an order.	Това, което преминава през блоковете: детайл, пациент, обаждане, поръчка.
+	The block where entities enter the model, with the time between one arrival and the next.	Блокът, през който същностите влизат в модела, с времето между едно пристигане и следващото.
+	A step that takes time, with no limit on how many entities it works on at once.	Стъпка, която отнема време, без ограничение колко същности обработва едновременно.
+	A step done by a limited number of units, such as machines or clerks. Entities wait in its waiting room until a unit is free.	Стъпка, изпълнявана от ограничен брой единици, например машини или служители. Същностите чакат в чакалнята ѝ, докато се освободи единица.
+	A step that borrows units from a pool that several tasks share, such as a team of nurses.	Стъпка, която заема единици от пул, споделен от няколко задачи, например екип медицински сестри.
+	The block where entities leave the model; it counts them and their time in the system.	Блокът, през който същностите напускат модела; той ги брои и отчита времето им в системата.
+	Sends each entity down one of its ways out, by chance or by a condition.	Изпраща всяка същност по един от изходите си, случайно или според условие.
+	How many entities a task with a resource can work on at the same time: its machines, clerks or beds.	Колко същности може да обработва едновременно задача с ресурс: нейните машини, служители или легла.
+	Where entities wait for a free unit (a queue). It can have a limit; an entity that finds it full is lost or waits upstream.	Мястото, където същностите чакат свободна единица (опашка). Може да има ограничение; същност, която я намери пълна, се губи или чака по-нагоре по потока.
+	How long a unit takes with one entity, drawn from a distribution each time.	Колко време отнема на една единица една същност; изтегля се от разпределение всеки път.
+	Distribution	Разпределение
+	How a time or a quantity varies from one entity to the next: its shape and its mean.	Как време или количество се променя от една същност към следващата: формата и средната му стойност.
+	One pass of the model from start to end with its own random numbers. Textbooks call it a replication.	Едно преминаване на модела от началото до края със собствени случайни числа. В учебниците се нарича повторение (репликация).
+	All the runs together, with the same settings: how many runs, the seed, the warm-up and the time measured.	Всички изпълнения заедно, с едни и същи настройки: колко изпълнения, началната стойност, загряването и измерваното време.
+	The starting point of the random numbers. The same model with the same seed always gives the same results.	Началната точка на случайните числа. Един и същ модел с една и съща начална стойност винаги дава едни и същи резултати.
+	Time at the start of each run that is simulated but not measured, so an empty model filling up does not pull the results.	Време в началото на всяко изпълнение, което се симулира, но не се измерва, за да не изкривява резултатите запълването на празния модел.
+	The share of the time a task's units are busy, counted over the time they are on shift.	Делът от времето, в който единиците на задачата са заети, отчетен спрямо времето, в което са на смяна.
+	The average time an entity spends in a waiting room before a unit takes it.	Средното време, което същността прекарва в чакалнята, преди да я поеме единица.
+	The average number of entities in a waiting room, over the time measured.	Средният брой същности в чакалнята за измерваното време.
+	Time in system	Време в системата
+	How long an entity spends from its arrival to its departure, waiting and being worked on.	Колко време прекарва същността от пристигането до напускането си, в чакане и обработка.
+	Blocked	В блокиране
+	A unit has finished but cannot pass the entity on, because the next waiting room is full.	Единицата е приключила, но не може да предаде същността нататък, защото следващата чакалня е пълна.
+	Starved	Без работа
+	A unit is free but has no entity to work on.	Единицата е свободна, но няма същност за обработка.
+	95% confidence interval	95% доверителен интервал
+	Written ± after a mean: how far the true mean could plausibly be from the one shown. More runs narrow it.	Пише се след средната стойност със знак ±: колко правдоподобно може истинската средна стойност да се отличава от показаната. Повече изпълнения го стесняват.
+	Settled	Установен
+	A result known well enough to act on: to ± 5% of its mean, or ± 1 percentage point for a share.	Резултат, известен достатъчно добре, за да се действа по него: с точност ± 5% от средната му стойност или ± 1 процентен пункт за дял.
+	Results kept to compare a later run with, to see what a change to the model did.	Резултати, запазени за сравнение с по-късно изпълнение, за да се види какво е направила промяната в модела.
+	A difference whose 95% interval takes in zero: the runs cannot tell it from random variation.	Разлика, чийто 95% интервал включва нулата: изпълненията не могат да я различат от случайни колебания.
+	Add Arrivals	Добавете „Пристигания“
+	Add a task and connect Arrivals to it	Добавете задача и свържете „Пристигания“ с нея
+	Add Departures and connect the task to it	Добавете „Напускания“ и свържете задачата с тях
+	Run the model: press F5	Стартирайте модела: натиснете F5
+	Read what the run found	Вижте какво показа изпълнението
+	Close Help (F1)	Затваряне на помощта (F1)
+	Search help and terms	Търсене в помощта и термините
+	Getting started	Първи стъпки
+	{k} of {n} done	{k} от {n} готови
+	Glossary	Речник на термините
+	No term matches “{text}”.	Няма термин, който съвпада с „{text}“.
+	Keyboard shortcuts	Клавишни комбинации
+	Change keys	Промяна на клавишите
+	More help	Още помощ
+	User guide	Ръководство за потребителя
+	What the results mean	Какво означават резултатите
+	Report a problem	Докладване на проблем
+	These open in your web browser.	Те се отварят в уеб браузъра.
+	Space	Интервал
+	Play or pause a watched run	Пускане или пауза на наблюдавано изпълнение
+	Getting Started	Първи стъпки
+	What the Results Mean	Какво означават резултатите
+	User Guide	Ръководство за потребителя
+	Report a Problem	Докладване на проблем
 @plural	Added {n} block|Added {n} blocks	Добавен е {n} блок|Добавени са {n} блока
 @plural	Copied {n} block|Copied {n} blocks	Копиран е {n} блок|Копирани са {n} блока
 @plural	Finished {n} run|Finished {n} runs	Завършено е {n} изпълнение|Завършени са {n} изпълнения

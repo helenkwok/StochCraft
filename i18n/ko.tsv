@@ -761,6 +761,63 @@ unit	yr	년
 	off	끔
 	Changed since the baseline:	기준선 이후 변경된 사항:
 	Nothing in the model has changed since the baseline.	기준선 이후 모델에서 변경된 것이 없습니다.
+	One step of the process on the canvas: where entities arrive, wait, are worked on, are routed or leave.	캔버스에 있는 프로세스의 한 단계로, 엔터티가 도착하고, 기다리고, 처리되고, 경로가 정해지거나 떠나는 곳입니다.
+	Entity	엔터티
+	What flows through the blocks: a part, a patient, a call, an order.	블록을 통해 흐르는 것: 부품, 환자, 통화, 주문 등.
+	The block where entities enter the model, with the time between one arrival and the next.	엔터티가 모델에 들어오는 블록으로, 한 도착과 다음 도착 사이의 시간을 정합니다.
+	A step that takes time, with no limit on how many entities it works on at once.	시간이 걸리는 단계로, 한 번에 처리하는 엔터티 수에 제한이 없습니다.
+	A step done by a limited number of units, such as machines or clerks. Entities wait in its waiting room until a unit is free.	기계나 창구 직원처럼 수가 제한된 자원 단위가 수행하는 단계입니다. 엔터티는 자원 단위가 빌 때까지 대기실에서 기다립니다.
+	A step that borrows units from a pool that several tasks share, such as a team of nurses.	간호사 팀처럼 여러 작업이 공유하는 풀에서 자원 단위를 빌려 쓰는 단계입니다.
+	The block where entities leave the model; it counts them and their time in the system.	엔터티가 모델을 떠나는 블록으로, 엔터티 수와 시스템에 머문 시간을 셉니다.
+	Sends each entity down one of its ways out, by chance or by a condition.	각 엔터티를 확률이나 조건에 따라 나가는 경로 중 하나로 보냅니다.
+	How many entities a task with a resource can work on at the same time: its machines, clerks or beds.	자원을 사용하는 작업이 동시에 처리할 수 있는 엔터티 수: 기계, 창구 직원 또는 병상의 수입니다.
+	Where entities wait for a free unit (a queue). It can have a limit; an entity that finds it full is lost or waits upstream.	엔터티가 빈 자원 단위를 기다리는 곳(대기열)입니다. 한도를 둘 수 있으며, 가득 찬 것을 본 엔터티는 손실되거나 상류에서 기다립니다.
+	How long a unit takes with one entity, drawn from a distribution each time.	자원 단위 하나가 엔터티 하나에 걸리는 시간으로, 매번 분포에서 추출됩니다.
+	Distribution	분포
+	How a time or a quantity varies from one entity to the next: its shape and its mean.	시간이나 수량이 엔터티마다 어떻게 달라지는지를 나타냅니다: 그 모양과 평균.
+	One pass of the model from start to end with its own random numbers. Textbooks call it a replication.	자체 난수를 사용해 모델을 처음부터 끝까지 한 번 실행하는 것입니다. 교과서에서는 반복 실행(replication)이라고 합니다.
+	All the runs together, with the same settings: how many runs, the seed, the warm-up and the time measured.	같은 설정으로 수행한 모든 실행: 실행 횟수, 난수 시드, 준비 기간, 측정 시간.
+	The starting point of the random numbers. The same model with the same seed always gives the same results.	난수의 시작점입니다. 같은 모델에 같은 난수 시드를 쓰면 항상 같은 결과가 나옵니다.
+	Time at the start of each run that is simulated but not measured, so an empty model filling up does not pull the results.	각 실행의 시작 부분에서 시뮬레이션은 하지만 측정하지 않는 시간으로, 빈 모델이 채워지는 과정이 결과를 왜곡하지 않게 합니다.
+	The share of the time a task's units are busy, counted over the time they are on shift.	작업의 자원 단위가 가동 중인 시간의 비율로, 근무 중인 시간을 기준으로 셉니다.
+	The average time an entity spends in a waiting room before a unit takes it.	엔터티가 자원 단위에 의해 처리되기 전까지 대기실에서 보내는 평균 시간입니다.
+	The average number of entities in a waiting room, over the time measured.	측정 시간 동안 대기실에 있는 엔터티의 평균 수입니다.
+	Time in system	시스템 내 체류 시간
+	How long an entity spends from its arrival to its departure, waiting and being worked on.	엔터티가 도착부터 이탈까지 대기하고 처리되며 머무는 시간입니다.
+	Blocked	차단됨
+	A unit has finished but cannot pass the entity on, because the next waiting room is full.	자원 단위가 작업을 마쳤지만 다음 대기실이 가득 차서 엔터티를 넘길 수 없는 상태입니다.
+	Starved	작업 대기
+	A unit is free but has no entity to work on.	자원 단위가 비어 있지만 처리할 엔터티가 없는 상태입니다.
+	95% confidence interval	95% 신뢰 구간
+	Written ± after a mean: how far the true mean could plausibly be from the one shown. More runs narrow it.	평균 뒤에 ±로 표시됩니다: 실제 평균이 표시된 평균에서 얼마나 떨어져 있을 수 있는지를 나타냅니다. 실행이 많을수록 좁아집니다.
+	Settled	안정됨
+	A result known well enough to act on: to ± 5% of its mean, or ± 1 percentage point for a share.	판단의 근거로 삼을 만큼 충분히 알려진 결과: 평균의 ± 5% 이내, 비율은 ± 1%p 이내.
+	Results kept to compare a later run with, to see what a change to the model did.	이후 실행과 비교하기 위해 보관한 결과로, 모델 변경이 어떤 영향을 주었는지 볼 수 있습니다.
+	A difference whose 95% interval takes in zero: the runs cannot tell it from random variation.	95% 구간이 0을 포함하는 차이: 실행만으로는 무작위 변동과 구별할 수 없습니다.
+	Add Arrivals	도착 추가
+	Add a task and connect Arrivals to it	작업을 추가하고 도착을 연결
+	Add Departures and connect the task to it	이탈을 추가하고 작업을 연결
+	Run the model: press F5	모델 실행: F5 누르기
+	Read what the run found	실행 결과 읽기
+	Close Help (F1)	도움말 닫기 (F1)
+	Search help and terms	도움말 및 용어 검색
+	Getting started	시작하기
+	{k} of {n} done	{n}개 중 {k}개 완료
+	Glossary	용어집
+	No term matches “{text}”.	“{text}”와(과) 일치하는 용어가 없습니다.
+	Keyboard shortcuts	키보드 단축키
+	Change keys	키 변경
+	More help	추가 도움말
+	User guide	사용자 가이드
+	What the results mean	결과의 의미
+	Report a problem	문제 보고
+	These open in your web browser.	웹 브라우저에서 열립니다.
+	Space	스페이스
+	Play or pause a watched run	관찰 중인 실행 재생 또는 일시 중지
+	Getting Started	시작하기
+	What the Results Mean	결과의 의미
+	User Guide	사용자 가이드
+	Report a Problem	문제 보고
 @plural	Added {n} block|Added {n} blocks	블록 {n}개 추가됨
 @plural	Copied {n} block|Copied {n} blocks	블록 {n}개 복사됨
 @plural	Finished {n} run|Finished {n} runs	실행 {n}회 완료

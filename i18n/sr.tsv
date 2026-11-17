@@ -761,6 +761,63 @@ unit	yr	год.
 	off	искључено
 	Changed since the baseline:	Промењено од референце:
 	Nothing in the model has changed since the baseline.	У моделу се ништа није променило од референце.
+	One step of the process on the canvas: where entities arrive, wait, are worked on, are routed or leave.	Један корак процеса на дијаграму: где ентитети долазе, чекају, обрађују се, усмеравају даље или одлазе.
+	Entity	Ентитет
+	What flows through the blocks: a part, a patient, a call, an order.	Оно што тече кроз блокове: део, пацијент, позив, поруџбина.
+	The block where entities enter the model, with the time between one arrival and the next.	Блок у коме ентитети улазе у модел, са временом између једног доласка и следећег.
+	A step that takes time, with no limit on how many entities it works on at once.	Корак који траје неко време, без ограничења колико ентитета обрађује одједном.
+	A step done by a limited number of units, such as machines or clerks. Entities wait in its waiting room until a unit is free.	Корак који обавља ограничен број јединица, нпр. машина или службеника. Ентитети чекају у његовој чекаоници док се јединица не ослободи.
+	A step that borrows units from a pool that several tasks share, such as a team of nurses.	Корак који позајмљује јединице из фонда који дели више задатака, нпр. тима медицинских сестара.
+	The block where entities leave the model; it counts them and their time in the system.	Блок у коме ентитети напуштају модел; броји их и њихово време у систему.
+	Sends each entity down one of its ways out, by chance or by a condition.	Шаље сваки ентитет једним од својих излаза, случајно или према услову.
+	How many entities a task with a resource can work on at the same time: its machines, clerks or beds.	Колико ентитета задатак с ресурсом може да обрађује истовремено: његове машине, службеници или кревети.
+	Where entities wait for a free unit (a queue). It can have a limit; an entity that finds it full is lost or waits upstream.	Где ентитети чекају слободну јединицу (ред). Може имати ограничење; ентитет који је затекне пуну изгубљен је или чека у претходном кораку.
+	How long a unit takes with one entity, drawn from a distribution each time.	Колико је јединици потребно за један ентитет; сваки пут се извлачи из дистрибуције.
+	Distribution	Дистрибуција
+	How a time or a quantity varies from one entity to the next: its shape and its mean.	Како се време или количина мења од једног ентитета до следећег: њен облик и средња вредност.
+	One pass of the model from start to end with its own random numbers. Textbooks call it a replication.	Један пролаз модела од почетка до краја са сопственим случајним бројевима. Уџбеници то зову репликација.
+	All the runs together, with the same settings: how many runs, the seed, the warm-up and the time measured.	Сва покретања заједно, са истим подешавањима: колико покретања, семе, загревање и мерено време.
+	The starting point of the random numbers. The same model with the same seed always gives the same results.	Почетна тачка случајних бројева. Исти модел са истим семеном увек даје исте резултате.
+	Time at the start of each run that is simulated but not measured, so an empty model filling up does not pull the results.	Време на почетку сваког покретања које се симулира, али не мери, како пуњење празног модела не би искривило резултате.
+	The share of the time a task's units are busy, counted over the time they are on shift.	Удео времена у коме су јединице задатка заузете, рачунато кроз време док су у смени.
+	The average time an entity spends in a waiting room before a unit takes it.	Просечно време које ентитет проведе у чекаоници пре него што га јединица преузме.
+	The average number of entities in a waiting room, over the time measured.	Просечан број ентитета у чекаоници током мереног времена.
+	Time in system	Време у систему
+	How long an entity spends from its arrival to its departure, waiting and being worked on.	Колико времена ентитет проведе од доласка до одласка, чекајући и док се обрађује.
+	Blocked	Блокада
+	A unit has finished but cannot pass the entity on, because the next waiting room is full.	Јединица је завршила, али не може да преда ентитет даље јер је следећа чекаоница пуна.
+	Starved	Без посла
+	A unit is free but has no entity to work on.	Јединица је слободна, али нема ентитет за обраду.
+	95% confidence interval	95% интервал поверења
+	Written ± after a mean: how far the true mean could plausibly be from the one shown. More runs narrow it.	Пише се као ± иза средње вредности: колико би права средња вредност могла да буде удаљена од приказане. Више покретања га сужава.
+	Settled	Устаљена
+	A result known well enough to act on: to ± 5% of its mean, or ± 1 percentage point for a share.	Резултат познат довољно добро да се према њему делује: до ± 5% средње вредности или ± 1 процентни поен за удео.
+	Results kept to compare a later run with, to see what a change to the model did.	Резултати сачувани за поређење са каснијим покретањем, да се види шта је промена модела учинила.
+	A difference whose 95% interval takes in zero: the runs cannot tell it from random variation.	Разлика чији 95% интервал обухвата нулу: покретања не могу да је разликују од случајних варијација.
+	Add Arrivals	Додај блок Доласци
+	Add a task and connect Arrivals to it	Додај задатак и повежи Доласке са њим
+	Add Departures and connect the task to it	Додај Одласке и повежи задатак са њима
+	Run the model: press F5	Покрени модел: притисните F5
+	Read what the run found	Прочитајте шта је покретање открило
+	Close Help (F1)	Затвори помоћ (F1)
+	Search help and terms	Претражи помоћ и појмове
+	Getting started	Први кораци
+	{k} of {n} done	Готово {k} од {n}
+	Glossary	Појмовник
+	No term matches “{text}”.	Ниједан појам не одговара „{text}”.
+	Keyboard shortcuts	Пречице на тастатури
+	Change keys	Промени тастере
+	More help	Додатна помоћ
+	User guide	Корисничко упутство
+	What the results mean	Шта значе резултати
+	Report a problem	Пријави проблем
+	These open in your web browser.	Отварају се у веб-прегледачу.
+	Space	Размак
+	Play or pause a watched run	Пусти или паузирај праћено покретање
+	Getting Started	Први кораци
+	What the Results Mean	Шта значе резултати
+	User Guide	Корисничко упутство
+	Report a Problem	Пријави проблем
 @plural	Added {n} block|Added {n} blocks	Додат је {n} блок|Додата су {n} блока|Додато је {n} блокова
 @plural	Copied {n} block|Copied {n} blocks	Копиран је {n} блок|Копирана су {n} блока|Копирано је {n} блокова
 @plural	Finished {n} run|Finished {n} runs	Завршено је {n} покретање|Завршена су {n} покретања|Завршено је {n} покретања

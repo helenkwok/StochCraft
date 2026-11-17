@@ -761,6 +761,63 @@ unit	yr	р.
 	off	вимк.
 	Changed since the baseline:	Змінено порівняно з базовим варіантом:
 	Nothing in the model has changed since the baseline.	У моделі нічого не змінилося порівняно з базовим варіантом.
+	One step of the process on the canvas: where entities arrive, wait, are worked on, are routed or leave.	Один крок процесу на діаграмі: тут сутності прибувають, чекають, обробляються, спрямовуються далі або виходять.
+	Entity	Сутність
+	What flows through the blocks: a part, a patient, a call, an order.	Те, що проходить через блоки: деталь, пацієнт, дзвінок, замовлення.
+	The block where entities enter the model, with the time between one arrival and the next.	Блок, через який сутності входять у модель, із часом між одним прибуттям і наступним.
+	A step that takes time, with no limit on how many entities it works on at once.	Крок, що забирає час, без обмеження на кількість сутностей, які обробляються одночасно.
+	A step done by a limited number of units, such as machines or clerks. Entities wait in its waiting room until a unit is free.	Крок, який виконує обмежена кількість одиниць, наприклад верстатів чи службовців. Сутності чекають у його місцях очікування, доки не звільниться одиниця.
+	A step that borrows units from a pool that several tasks share, such as a team of nurses.	Крок, який бере одиниці з пулу, спільного для кількох завдань, наприклад бригади медсестер.
+	The block where entities leave the model; it counts them and their time in the system.	Блок, через який сутності залишають модель; він рахує їх і їхній час у системі.
+	Sends each entity down one of its ways out, by chance or by a condition.	Спрямовує кожну сутність одним зі своїх виходів — випадково або за умовою.
+	How many entities a task with a resource can work on at the same time: its machines, clerks or beds.	Скільки сутностей завдання з ресурсом може обробляти одночасно: його верстати, службовці чи ліжка.
+	Where entities wait for a free unit (a queue). It can have a limit; an entity that finds it full is lost or waits upstream.	Де сутності чекають на вільну одиницю (черга). Кількість місць може бути обмежена; сутність, яка застає їх зайнятими, втрачається або чекає вище за потоком.
+	How long a unit takes with one entity, drawn from a distribution each time.	Скільки часу одиниця витрачає на одну сутність; щоразу розігрується з розподілу.
+	Distribution	Розподіл
+	How a time or a quantity varies from one entity to the next: its shape and its mean.	Як час або кількість змінюється від однієї сутності до іншої: його форма та середнє значення.
+	One pass of the model from start to end with its own random numbers. Textbooks call it a replication.	Один прохід моделі від початку до кінця з власними випадковими числами. У підручниках його називають повторенням (реплікацією).
+	All the runs together, with the same settings: how many runs, the seed, the warm-up and the time measured.	Усі запуски разом, з однаковими налаштуваннями: кількість запусків, початкове значення генератора, розігрів і час вимірювання.
+	The starting point of the random numbers. The same model with the same seed always gives the same results.	Початкова точка випадкових чисел. Та сама модель із тим самим початковим значенням генератора завжди дає ті самі результати.
+	Time at the start of each run that is simulated but not measured, so an empty model filling up does not pull the results.	Час на початку кожного запуску, який моделюється, але не вимірюється, щоб заповнення порожньої моделі не зміщувало результати.
+	The share of the time a task's units are busy, counted over the time they are on shift.	Частка часу, коли одиниці завдання зайняті, рахуючи за часом, коли вони на зміні.
+	The average time an entity spends in a waiting room before a unit takes it.	Середній час, який сутність проводить у місцях очікування, перш ніж її візьме одиниця.
+	The average number of entities in a waiting room, over the time measured.	Середня кількість сутностей у місцях очікування за час вимірювання.
+	Time in system	Час у системі
+	How long an entity spends from its arrival to its departure, waiting and being worked on.	Скільки часу сутність проводить від прибуття до вибуття, разом з очікуванням і обробкою.
+	Blocked	Блокування
+	A unit has finished but cannot pass the entity on, because the next waiting room is full.	Одиниця завершила роботу, але не може передати сутність далі, бо наступні місця очікування зайняті.
+	Starved	Без роботи
+	A unit is free but has no entity to work on.	Одиниця вільна, але не має сутності для обробки.
+	95% confidence interval	95% довірчий інтервал
+	Written ± after a mean: how far the true mean could plausibly be from the one shown. More runs narrow it.	Пишеться після середнього зі знаком ±: наскільки справжнє середнє може правдоподібно відрізнятися від показаного. Більше запусків звужують його.
+	Settled	Усталений
+	A result known well enough to act on: to ± 5% of its mean, or ± 1 percentage point for a share.	Результат, відомий достатньо точно, щоб на нього спиратися: з точністю ± 5% від його середнього або ± 1 відсотковий пункт для частки.
+	Results kept to compare a later run with, to see what a change to the model did.	Результати, збережені для порівняння з пізнішим запуском, щоб побачити, що дала зміна моделі.
+	A difference whose 95% interval takes in zero: the runs cannot tell it from random variation.	Різниця, 95% інтервал якої містить нуль: за запусками її не можна відрізнити від випадкового розкиду.
+	Add Arrivals	Додайте «Прибуття»
+	Add a task and connect Arrivals to it	Додайте завдання і з'єднайте з ним «Прибуття»
+	Add Departures and connect the task to it	Додайте «Вибуття» і з'єднайте з ним завдання
+	Run the model: press F5	Запустіть модель: натисніть F5
+	Read what the run found	Перегляньте, що показав запуск
+	Close Help (F1)	Закрити довідку (F1)
+	Search help and terms	Пошук у довідці та термінах
+	Getting started	Початок роботи
+	{k} of {n} done	{k} з {n} виконано
+	Glossary	Глосарій
+	No term matches “{text}”.	Немає термінів, що відповідають «{text}».
+	Keyboard shortcuts	Клавіатурні скорочення
+	Change keys	Змінити клавіші
+	More help	Додаткова довідка
+	User guide	Посібник користувача
+	What the results mean	Що означають результати
+	Report a problem	Повідомити про проблему
+	These open in your web browser.	Вони відкриваються у веббраузері.
+	Space	Пробіл
+	Play or pause a watched run	Відтворити або призупинити запуск, за яким ви спостерігаєте
+	Getting Started	Початок роботи
+	What the Results Mean	Що означають результати
+	User Guide	Посібник користувача
+	Report a Problem	Повідомити про проблему
 @plural	Added {n} block|Added {n} blocks	Додано {n} блок|Додано {n} блоки|Додано {n} блоків
 @plural	Copied {n} block|Copied {n} blocks	Скопійовано {n} блок|Скопійовано {n} блоки|Скопійовано {n} блоків
 @plural	Finished {n} run|Finished {n} runs	Завершено {n} запуск|Завершено {n} запуски|Завершено {n} запусків

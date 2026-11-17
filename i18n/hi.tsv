@@ -761,6 +761,63 @@ unit	yr	वर्ष
 	off	बंद
 	Changed since the baseline:	आधार रेखा के बाद से बदला गया:
 	Nothing in the model has changed since the baseline.	आधार रेखा के बाद से मॉडल में कुछ नहीं बदला।
+	One step of the process on the canvas: where entities arrive, wait, are worked on, are routed or leave.	कैनवास पर प्रक्रिया का एक चरण: जहाँ इकाइयाँ आती हैं, प्रतीक्षा करती हैं, उन पर काम होता है, उन्हें आगे भेजा जाता है या वे निकल जाती हैं।
+	Entity	इकाई
+	What flows through the blocks: a part, a patient, a call, an order.	जो ब्लॉकों से होकर बहता है: कोई पुर्ज़ा, मरीज़, कॉल या ऑर्डर।
+	The block where entities enter the model, with the time between one arrival and the next.	वह ब्लॉक जहाँ इकाइयाँ मॉडल में प्रवेश करती हैं, एक आगमन और अगले आगमन के बीच के समय के साथ।
+	A step that takes time, with no limit on how many entities it works on at once.	समय लेने वाला चरण, जिसमें इस पर कोई सीमा नहीं कि वह एक साथ कितनी इकाइयों पर काम करे।
+	A step done by a limited number of units, such as machines or clerks. Entities wait in its waiting room until a unit is free.	सीमित संख्या की संसाधन इकाइयों, जैसे मशीनों या क्लर्कों, द्वारा किया जाने वाला चरण। इकाइयाँ इसके प्रतीक्षा कक्ष में तब तक प्रतीक्षा करती हैं जब तक कोई संसाधन इकाई खाली न हो।
+	A step that borrows units from a pool that several tasks share, such as a team of nurses.	ऐसा चरण जो उस पूल से संसाधन इकाइयाँ उधार लेता है जिसे कई कार्य साझा करते हैं, जैसे नर्सों की एक टीम।
+	The block where entities leave the model; it counts them and their time in the system.	वह ब्लॉक जहाँ इकाइयाँ मॉडल से निकलती हैं; यह उन्हें और सिस्टम में उनके समय को गिनता है।
+	Sends each entity down one of its ways out, by chance or by a condition.	हर इकाई को उसके बाहर जाने के रास्तों में से एक पर भेजता है, संयोग से या किसी शर्त के अनुसार।
+	How many entities a task with a resource can work on at the same time: its machines, clerks or beds.	संसाधन वाला कार्य एक ही समय में कितनी इकाइयों पर काम कर सकता है: उसकी मशीनें, क्लर्क या बिस्तर।
+	Where entities wait for a free unit (a queue). It can have a limit; an entity that finds it full is lost or waits upstream.	जहाँ इकाइयाँ खाली संसाधन इकाई की प्रतीक्षा करती हैं (एक कतार)। इसकी सीमा हो सकती है; जो इकाई इसे भरा पाती है, वह खो जाती है या पहले वाले चरण में प्रतीक्षा करती है।
+	How long a unit takes with one entity, drawn from a distribution each time.	एक संसाधन इकाई एक इकाई पर कितना समय लगाती है, जो हर बार एक वितरण से निकाला जाता है।
+	Distribution	वितरण
+	How a time or a quantity varies from one entity to the next: its shape and its mean.	कोई समय या मात्रा एक इकाई से अगली इकाई तक कैसे बदलती है: उसका आकार और उसका माध्य।
+	One pass of the model from start to end with its own random numbers. Textbooks call it a replication.	मॉडल का शुरू से अंत तक एक पूरा रन, अपनी यादृच्छिक संख्याओं के साथ। पाठ्यपुस्तकें इसे पुनरावृत्ति कहती हैं।
+	All the runs together, with the same settings: how many runs, the seed, the warm-up and the time measured.	एक ही सेटिंग वाले सभी रन मिलकर: कितने रन, यादृच्छिक बीज, वार्म-अप और मापा गया समय।
+	The starting point of the random numbers. The same model with the same seed always gives the same results.	यादृच्छिक संख्याओं का प्रारंभिक बिंदु। एक ही मॉडल एक ही यादृच्छिक बीज के साथ हमेशा एक जैसे परिणाम देता है।
+	Time at the start of each run that is simulated but not measured, so an empty model filling up does not pull the results.	हर रन की शुरुआत का वह समय जो सिमुलेट होता है पर मापा नहीं जाता, ताकि भरता हुआ खाली मॉडल परिणामों को न खींचे।
+	The share of the time a task's units are busy, counted over the time they are on shift.	किसी कार्य की संसाधन इकाइयाँ कितने हिस्से समय व्यस्त रहती हैं, उनके पाली पर रहने के समय पर गिना गया।
+	The average time an entity spends in a waiting room before a unit takes it.	कोई इकाई प्रतीक्षा कक्ष में संसाधन इकाई द्वारा लिए जाने से पहले औसतन कितना समय बिताती है।
+	The average number of entities in a waiting room, over the time measured.	प्रतीक्षा कक्ष में इकाइयों की औसत संख्या, मापे गए समय पर।
+	Time in system	सिस्टम में समय
+	How long an entity spends from its arrival to its departure, waiting and being worked on.	कोई इकाई अपने आगमन से प्रस्थान तक कितना समय बिताती है, प्रतीक्षा में और उस पर काम होने में।
+	Blocked	अवरुद्ध
+	A unit has finished but cannot pass the entity on, because the next waiting room is full.	संसाधन इकाई ने काम पूरा कर लिया है पर इकाई को आगे नहीं भेज सकती, क्योंकि अगला प्रतीक्षा कक्ष भरा है।
+	Starved	बिना काम
+	A unit is free but has no entity to work on.	संसाधन इकाई खाली है पर उसके पास काम करने के लिए कोई इकाई नहीं है।
+	95% confidence interval	95% विश्वास अंतराल
+	Written ± after a mean: how far the true mean could plausibly be from the one shown. More runs narrow it.	माध्य के बाद ± के रूप में लिखा जाता है: वास्तविक माध्य दिखाए गए माध्य से संभवतः कितना दूर हो सकता है। अधिक रन इसे संकरा करते हैं।
+	Settled	स्थिर
+	A result known well enough to act on: to ± 5% of its mean, or ± 1 percentage point for a share.	ऐसा परिणाम जो कार्रवाई के लिए पर्याप्त रूप से ज्ञात हो: अपने माध्य के ± 5% तक, या अनुपात के लिए ± 1 प्रतिशत अंक तक।
+	Results kept to compare a later run with, to see what a change to the model did.	बाद के किसी रन से तुलना के लिए रखे गए परिणाम, यह देखने के लिए कि मॉडल में बदलाव ने क्या किया।
+	A difference whose 95% interval takes in zero: the runs cannot tell it from random variation.	ऐसा अंतर जिसका 95% अंतराल शून्य को शामिल करता है: रन इसे यादृच्छिक भिन्नता से अलग नहीं कर सकते।
+	Add Arrivals	आगमन जोड़ें
+	Add a task and connect Arrivals to it	एक कार्य जोड़ें और आगमन को उससे जोड़ें
+	Add Departures and connect the task to it	प्रस्थान जोड़ें और कार्य को उससे जोड़ें
+	Run the model: press F5	मॉडल चलाएँ: F5 दबाएँ
+	Read what the run found	पढ़ें कि रन में क्या मिला
+	Close Help (F1)	सहायता बंद करें (F1)
+	Search help and terms	सहायता और शब्द खोजें
+	Getting started	शुरुआत करें
+	{k} of {n} done	{n} में से {k} पूरे
+	Glossary	शब्दावली
+	No term matches “{text}”.	कोई शब्द “{text}” से मेल नहीं खाता।
+	Keyboard shortcuts	कीबोर्ड शॉर्टकट
+	Change keys	कुंजियाँ बदलें
+	More help	और सहायता
+	User guide	उपयोगकर्ता गाइड
+	What the results mean	परिणामों का अर्थ
+	Report a problem	समस्या की रिपोर्ट करें
+	These open in your web browser.	ये आपके वेब ब्राउज़र में खुलते हैं।
+	Space	स्पेस
+	Play or pause a watched run	देखे जा रहे रन को चलाएँ या रोकें
+	Getting Started	शुरुआत करें
+	What the Results Mean	परिणामों का अर्थ
+	User Guide	उपयोगकर्ता गाइड
+	Report a Problem	समस्या की रिपोर्ट करें
 @plural	Added {n} block|Added {n} blocks	{n} ब्लॉक जोड़ा गया|{n} ब्लॉक जोड़े गए
 @plural	Copied {n} block|Copied {n} blocks	{n} ब्लॉक कॉपी किया गया|{n} ब्लॉक कॉपी किए गए
 @plural	Finished {n} run|Finished {n} runs	{n} रन पूरा हुआ|{n} रन पूरे हुए

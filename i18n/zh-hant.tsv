@@ -761,6 +761,63 @@ unit	yr	年
 	off	關
 	Changed since the baseline:	自基準以來的變更：
 	Nothing in the model has changed since the baseline.	自基準以來，模型沒有任何變更。
+	One step of the process on the canvas: where entities arrive, wait, are worked on, are routed or leave.	畫布上流程的一個步驟：實體在此到達、等待、接受處理、分流或離開。
+	Entity	實體
+	What flows through the blocks: a part, a patient, a call, an order.	流經區塊的對象：零件、病人、電話、訂單。
+	The block where entities enter the model, with the time between one arrival and the next.	實體進入模型的區塊，並設定相鄰兩次到達之間的時間。
+	A step that takes time, with no limit on how many entities it works on at once.	需要耗費時間的步驟，同時處理的實體數量不受限制。
+	A step done by a limited number of units, such as machines or clerks. Entities wait in its waiting room until a unit is free.	由數量有限的資源單元（如機器或辦事員）完成的步驟。實體在其等待區等待，直到有資源單元空閒。
+	A step that borrows units from a pool that several tasks share, such as a team of nurses.	從多個任務共享的資源池中借用資源單元的步驟，例如一組護理師。
+	The block where entities leave the model; it counts them and their time in the system.	實體離開模型的區塊；它統計實體數量及其系統內時間。
+	Sends each entity down one of its ways out, by chance or by a condition.	依機率或依條件，將每個實體送往其中一個出口。
+	How many entities a task with a resource can work on at the same time: its machines, clerks or beds.	需要資源的任務能同時處理的實體數量：即其機器、辦事員或床位的數量。
+	Where entities wait for a free unit (a queue). It can have a limit; an entity that finds it full is lost or waits upstream.	實體等待空閒資源單元的地方（佇列）。它可以設上限；發現等待區已滿的實體會流失或在上游等待。
+	How long a unit takes with one entity, drawn from a distribution each time.	一個資源單元處理一個實體所需的時間，每次從分布中抽取。
+	Distribution	分布
+	How a time or a quantity varies from one entity to the next: its shape and its mean.	時間或數量在不同實體之間如何變化：其形狀與平均值。
+	One pass of the model from start to end with its own random numbers. Textbooks call it a replication.	模型從開始到結束的一次執行，使用自己的隨機數。教科書稱之為一次重複（replication）。
+	All the runs together, with the same settings: how many runs, the seed, the warm-up and the time measured.	採用相同設定的所有執行：執行次數、隨機種子、暖機期與測量時間。
+	The starting point of the random numbers. The same model with the same seed always gives the same results.	隨機數的起點。同一模型使用相同的隨機種子，總會得到相同的結果。
+	Time at the start of each run that is simulated but not measured, so an empty model filling up does not pull the results.	每次執行開始時只模擬、不測量的時間，以免空模型逐漸填滿的過程影響結果。
+	The share of the time a task's units are busy, counted over the time they are on shift.	任務的資源單元處於忙碌狀態的時間比例，依其當班時間計算。
+	The average time an entity spends in a waiting room before a unit takes it.	實體在等待區中等到資源單元接手之前的平均時間。
+	The average number of entities in a waiting room, over the time measured.	測量期間等待區中實體的平均數量。
+	Time in system	系統內時間
+	How long an entity spends from its arrival to its departure, waiting and being worked on.	實體從到達到離開所經歷的時間，包括等待與接受處理。
+	Blocked	阻塞
+	A unit has finished but cannot pass the entity on, because the next waiting room is full.	資源單元已完成處理，但由於下一個等待區已滿，無法將實體傳遞下去。
+	Starved	待料
+	A unit is free but has no entity to work on.	資源單元空閒，但沒有可處理的實體。
+	95% confidence interval	95% 信賴區間
+	Written ± after a mean: how far the true mean could plausibly be from the one shown. More runs narrow it.	寫在平均值後的 ± 部分：真實平均值與所示平均值可能相差多遠。執行次數越多，區間越窄。
+	Settled	已穩定
+	A result known well enough to act on: to ± 5% of its mean, or ± 1 percentage point for a share.	精確到足以據此行動的結果：在其平均值的 ± 5% 以內，比例則在 ± 1 個百分點以內。
+	Results kept to compare a later run with, to see what a change to the model did.	保留下來與之後的執行比較的結果，用於查看對模型的變更帶來了什麼影響。
+	A difference whose 95% interval takes in zero: the runs cannot tell it from random variation.	95% 區間包含零的差值：這些執行無法將其與隨機波動區分開。
+	Add Arrivals	新增到達
+	Add a task and connect Arrivals to it	新增任務並將到達連接到它
+	Add Departures and connect the task to it	新增離開並將任務連接到它
+	Run the model: press F5	執行模型：按 F5
+	Read what the run found	查看執行結果
+	Close Help (F1)	關閉說明 (F1)
+	Search help and terms	搜尋說明與術語
+	Getting started	入門
+	{k} of {n} done	已完成 {k}/{n}
+	Glossary	術語表
+	No term matches “{text}”.	沒有與「{text}」相符的術語。
+	Keyboard shortcuts	鍵盤快捷鍵
+	Change keys	變更按鍵
+	More help	更多說明
+	User guide	使用者指南
+	What the results mean	結果的意義
+	Report a problem	回報問題
+	These open in your web browser.	這些連結會在網頁瀏覽器中開啟。
+	Space	空白鍵
+	Play or pause a watched run	播放或暫停正在觀察的執行
+	Getting Started	入門
+	What the Results Mean	結果的意義
+	User Guide	使用者指南
+	Report a Problem	回報問題
 @plural	Added {n} block|Added {n} blocks	已新增 {n} 個區塊
 @plural	Copied {n} block|Copied {n} blocks	已複製 {n} 個區塊
 @plural	Finished {n} run|Finished {n} runs	已完成 {n} 次執行

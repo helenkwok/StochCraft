@@ -53,7 +53,7 @@ fn is_data(label: &str, model_words: &BTreeSet<String>) -> bool {
         // A shortcut ("Ctrl+O", "Cmd+Shift+S").
         || (label.contains('+') && !label.contains(' '))
         // The brand and key names.
-        || ["StochCraft", "Esc", "F5"].contains(&label)
+        || ["StochCraft", "Esc", "F1", "F5"].contains(&label)
         // egui's own labels, and the version line of About.
         || ["Resize panel", "Close window"].contains(&label)
         || label.strip_prefix("StochCraft ").is_some_and(|v| !v.contains(' '))
@@ -76,15 +76,30 @@ fn untranslated(h: &Harness<'static, App>) -> BTreeSet<String> {
     if let Some(n) = model["name"].as_str() {
         model_words.insert(n.to_owned());
     }
-    h.query_all(By::new())
+    let texts: Vec<String> = h
+        .query_all(By::new())
         .filter_map(|n| {
             let a = n.accesskit_node();
             let text = a.label().or_else(|| a.value())?;
-            let text = text.trim().to_owned();
-            // A wrapped label's later lines carry only the closing mark.
-            let marked = text.contains('⟦') || text.contains('⟧');
-            (!text.is_empty() && !marked && !is_data(&text, &model_words)).then_some(text)
+            Some(text.trim().to_owned())
         })
+        .collect();
+    // A label wrapped over three lines or more has lines in the middle with neither mark; they
+    // are part of a marked label's text.
+    let marked: Vec<&String> = texts
+        .iter()
+        .filter(|t| t.contains('⟦') || t.contains('⟧'))
+        .collect();
+    texts
+        .iter()
+        .filter(|text| {
+            let is_marked = text.contains('⟦') || text.contains('⟧');
+            let inside = marked
+                .iter()
+                .any(|m| m.len() > text.len() && m.contains(text.as_str()));
+            !text.is_empty() && !is_marked && !inside && !is_data(text, &model_words)
+        })
+        .cloned()
         .collect()
 }
 
@@ -92,8 +107,13 @@ fn untranslated(h: &Harness<'static, App>) -> BTreeSet<String> {
 fn every_screen_is_translated() {
     let mut h = pseudo();
     let mut missed = BTreeSet::new();
-    // The welcome screen.
+    // The welcome screen, then with the Help panel open.
     missed.extend(untranslated(&h));
+    h.state_mut().show_help(true);
+    settle(&mut h);
+    missed.extend(untranslated(&h));
+    h.state_mut().show_help(false);
+    settle(&mut h);
 
     // A model: the overview, then a block's inspector.
     let e = &EXAMPLES[0];
@@ -435,6 +455,11 @@ fn literal(code: &str, at: usize) -> Option<(String, usize)> {
 fn looked_up_on_screen() -> BTreeSet<String> {
     // Tall enough that every block in the longest example can be clicked.
     let mut h = pseudo_sized(egui::vec2(1200.0, 2400.0));
+    // The Help panel: its glossary, Getting started and shortcuts.
+    h.state_mut().show_help(true);
+    settle(&mut h);
+    h.state_mut().show_help(false);
+    settle(&mut h);
     let every_block = |h: &mut Harness<'static, App>| {
         let blocks = h.get_all_by_role(Role::ListBoxOption).count();
         for i in 0..blocks {

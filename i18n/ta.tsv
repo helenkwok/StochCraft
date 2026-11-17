@@ -761,6 +761,63 @@ unit	yr	ஆண்டு
 	off	முடக்கத்தில்
 	Changed since the baseline:	ஒப்பீட்டு அடிப்படைக்குப் பிறகு மாறியவை:
 	Nothing in the model has changed since the baseline.	ஒப்பீட்டு அடிப்படைக்குப் பிறகு மாதிரியில் எதுவும் மாறவில்லை.
+	One step of the process on the canvas: where entities arrive, wait, are worked on, are routed or leave.	வரைதளத்தில் செயல்முறையின் ஒரு படி: உருப்படிகள் வருவது, காத்திருப்பது, அவற்றில் வேலை செய்யப்படுவது, வழி அனுப்பப்படுவது அல்லது வெளியேறுவது இங்கே நடக்கும்.
+	Entity	உருப்படி
+	What flows through the blocks: a part, a patient, a call, an order.	தொகுதிகள் வழியாகச் செல்வது: ஒரு பாகம், ஒரு நோயாளி, ஓர் அழைப்பு, ஓர் ஆர்டர்.
+	The block where entities enter the model, with the time between one arrival and the next.	உருப்படிகள் மாதிரிக்குள் நுழையும் தொகுதி, ஒரு வருகைக்கும் அடுத்த வருகைக்கும் இடையிலான நேரத்துடன்.
+	A step that takes time, with no limit on how many entities it works on at once.	நேரம் எடுக்கும் ஒரு படி; ஒரே நேரத்தில் எத்தனை உருப்படிகளில் வேலை செய்யலாம் என்பதற்கு வரம்பு இல்லை.
+	A step done by a limited number of units, such as machines or clerks. Entities wait in its waiting room until a unit is free.	இயந்திரங்கள் அல்லது எழுத்தர்கள் போன்ற குறிப்பிட்ட எண்ணிக்கை அலகுகள் செய்யும் ஒரு படி. ஓர் அலகு காலியாகும் வரை உருப்படிகள் அதன் காத்திருப்பு அறையில் காத்திருக்கின்றன.
+	A step that borrows units from a pool that several tasks share, such as a team of nurses.	பல பணிகள் பகிர்ந்துகொள்ளும் ஒரு தொகுப்பிலிருந்து அலகுகளை இரவல் பெறும் ஒரு படி, செவிலியர் குழு போல.
+	The block where entities leave the model; it counts them and their time in the system.	உருப்படிகள் மாதிரியிலிருந்து வெளியேறும் தொகுதி; இது அவற்றையும் அமைப்பில் அவை கழித்த நேரத்தையும் கணக்கிடுகிறது.
+	Sends each entity down one of its ways out, by chance or by a condition.	ஒவ்வோர் உருப்படியையும் அதன் வெளியேறும் வழிகளில் ஒன்றில் அனுப்புகிறது, தற்செயலாகவோ ஒரு நிபந்தனைப்படியோ.
+	How many entities a task with a resource can work on at the same time: its machines, clerks or beds.	வளம் தேவைப்படும் பணி ஒரே நேரத்தில் எத்தனை உருப்படிகளில் வேலை செய்யலாம்: அதன் இயந்திரங்கள், எழுத்தர்கள் அல்லது படுக்கைகள்.
+	Where entities wait for a free unit (a queue). It can have a limit; an entity that finds it full is lost or waits upstream.	உருப்படிகள் காலியான அலகுக்காகக் காத்திருக்கும் இடம் (ஒரு வரிசை). இதற்கு வரம்பு இருக்கலாம்; அது நிரம்பியிருப்பதைக் காணும் உருப்படி இழக்கப்படும் அல்லது முந்தைய படியில் காத்திருக்கும்.
+	How long a unit takes with one entity, drawn from a distribution each time.	ஓர் அலகு ஓர் உருப்படிக்கு எடுக்கும் நேரம், ஒவ்வொரு முறையும் ஒரு பரவலிலிருந்து எடுக்கப்படுகிறது.
+	Distribution	பரவல்
+	How a time or a quantity varies from one entity to the next: its shape and its mean.	ஒரு நேரம் அல்லது அளவு ஓர் உருப்படியிலிருந்து அடுத்ததற்கு எப்படி மாறுகிறது: அதன் வடிவமும் அதன் சராசரியும்.
+	One pass of the model from start to end with its own random numbers. Textbooks call it a replication.	சொந்தச் சீரற்ற எண்களுடன் மாதிரியைத் தொடக்கம் முதல் முடிவு வரை ஒருமுறை இயக்குதல். பாடநூல்கள் இதை மீள்சோதனை என்கின்றன.
+	All the runs together, with the same settings: how many runs, the seed, the warm-up and the time measured.	ஒரே அமைப்புகளுடன் அனைத்து மீள் இயக்கங்களும் சேர்ந்து: எத்தனை மீள் இயக்கங்கள், சீரற்ற விதை, தொடக்கச் சீராக்க நேரம், அளவிடப்படும் நேரம்.
+	The starting point of the random numbers. The same model with the same seed always gives the same results.	சீரற்ற எண்களின் தொடக்கப் புள்ளி. ஒரே மாதிரி ஒரே சீரற்ற விதையுடன் எப்போதும் ஒரே முடிவுகளைத் தரும்.
+	Time at the start of each run that is simulated but not measured, so an empty model filling up does not pull the results.	ஒவ்வொரு மீள் இயக்கத்தின் தொடக்கத்தில் உருவகப்படுத்தப்படும் ஆனால் அளவிடப்படாத நேரம், காலியான மாதிரி நிரம்புவது முடிவுகளை இழுக்காமல் இருக்க.
+	The share of the time a task's units are busy, counted over the time they are on shift.	ஒரு பணியின் அலகுகள் பணியில் இருக்கும் நேரத்தின் பங்கு, அவை பணிமுறையில் இருக்கும் நேரத்தில் கணக்கிடப்படுகிறது.
+	The average time an entity spends in a waiting room before a unit takes it.	ஓர் அலகு எடுத்துக்கொள்ளும் முன் ஓர் உருப்படி காத்திருப்பு அறையில் கழிக்கும் சராசரி நேரம்.
+	The average number of entities in a waiting room, over the time measured.	அளவிடப்படும் நேரத்தில் காத்திருப்பு அறையில் உள்ள உருப்படிகளின் சராசரி எண்ணிக்கை.
+	Time in system	அமைப்பில் கழித்த நேரம்
+	How long an entity spends from its arrival to its departure, waiting and being worked on.	ஓர் உருப்படி அதன் வருகை முதல் வெளியேற்றம் வரை, காத்திருப்பதிலும் வேலை செய்யப்படுவதிலும் கழிக்கும் நேரம்.
+	Blocked	தடுக்கப்பட்டது
+	A unit has finished but cannot pass the entity on, because the next waiting room is full.	ஓர் அலகு வேலையை முடித்துவிட்டது, ஆனால் அடுத்த காத்திருப்பு அறை நிரம்பியிருப்பதால் உருப்படியை அனுப்ப முடியவில்லை.
+	Starved	வேலையில்லை
+	A unit is free but has no entity to work on.	ஓர் அலகு காலியாக உள்ளது, ஆனால் வேலை செய்ய உருப்படி இல்லை.
+	95% confidence interval	95% நம்பிக்கை இடைவெளி
+	Written ± after a mean: how far the true mean could plausibly be from the one shown. More runs narrow it.	சராசரிக்குப் பின் ± என எழுதப்படுகிறது: உண்மையான சராசரி காட்டப்பட்டதிலிருந்து எவ்வளவு தொலைவில் இருக்கக்கூடும். அதிக மீள் இயக்கங்கள் இதைக் குறுக்கும்.
+	Settled	நிலைபெற்றது
+	A result known well enough to act on: to ± 5% of its mean, or ± 1 percentage point for a share.	செயல்படப் போதுமான அளவு தெரிந்த முடிவு: அதன் சராசரியின் ± 5% வரை, அல்லது விகிதத்திற்கு ± 1 சதவீதப் புள்ளி வரை.
+	Results kept to compare a later run with, to see what a change to the model did.	பின்னர் வரும் மீள் இயக்கத்துடன் ஒப்பிட வைத்திருக்கும் முடிவுகள், மாதிரியில் செய்த மாற்றம் என்ன செய்தது என்று பார்க்க.
+	A difference whose 95% interval takes in zero: the runs cannot tell it from random variation.	95% இடைவெளி பூஜ்ஜியத்தை உள்ளடக்கும் வேறுபாடு: மீள் இயக்கங்களால் அதைச் சீரற்ற மாறுபாட்டிலிருந்து பிரித்தறிய முடியாது.
+	Add Arrivals	வருகைகளைச் சேர்
+	Add a task and connect Arrivals to it	ஒரு பணியைச் சேர்த்து, வருகைகளை அதனுடன் இணை
+	Add Departures and connect the task to it	வெளியேற்றங்களைச் சேர்த்து, பணியை அதனுடன் இணை
+	Run the model: press F5	மாதிரியை இயக்கு: F5 ஐ அழுத்து
+	Read what the run found	மீள் இயக்கம் கண்டறிந்ததைப் படி
+	Close Help (F1)	உதவியை மூடு (F1)
+	Search help and terms	உதவியிலும் சொற்களிலும் தேடு
+	Getting started	தொடங்குதல்
+	{k} of {n} done	{n} இல் {k} முடிந்தது
+	Glossary	சொற்களஞ்சியம்
+	No term matches “{text}”.	“{text}” உடன் பொருந்தும் சொல் இல்லை.
+	Keyboard shortcuts	விசைப்பலகை குறுக்குவழிகள்
+	Change keys	விசைகளை மாற்று
+	More help	மேலும் உதவி
+	User guide	பயனர் வழிகாட்டி
+	What the results mean	முடிவுகளின் பொருள்
+	Report a problem	சிக்கலைப் புகாரளி
+	These open in your web browser.	இவை உங்கள் இணைய உலாவியில் திறக்கும்.
+	Space	ஸ்பேஸ்
+	Play or pause a watched run	கவனிக்கும் மீள் இயக்கத்தை இயக்கு அல்லது இடைநிறுத்து
+	Getting Started	தொடங்குதல்
+	What the Results Mean	முடிவுகளின் பொருள்
+	User Guide	பயனர் வழிகாட்டி
+	Report a Problem	சிக்கலைப் புகாரளி
 @plural	Added {n} block|Added {n} blocks	{n} தொகுதி சேர்க்கப்பட்டது|{n} தொகுதிகள் சேர்க்கப்பட்டன
 @plural	Copied {n} block|Copied {n} blocks	{n} தொகுதி நகலெடுக்கப்பட்டது|{n} தொகுதிகள் நகலெடுக்கப்பட்டன
 @plural	Finished {n} run|Finished {n} runs	{n} மீள் இயக்கம் முடிந்தது|{n} மீள் இயக்கங்கள் முடிந்தன

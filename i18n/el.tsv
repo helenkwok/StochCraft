@@ -761,6 +761,63 @@ unit	yr	έτ
 	off	ανενεργό
 	Changed since the baseline:	Αλλαγές από τη βάση αναφοράς:
 	Nothing in the model has changed since the baseline.	Τίποτα στο μοντέλο δεν έχει αλλάξει από τη βάση αναφοράς.
+	One step of the process on the canvas: where entities arrive, wait, are worked on, are routed or leave.	Ένα βήμα της διαδικασίας στο διάγραμμα: εκεί όπου οι οντότητες φτάνουν, περιμένουν, υφίστανται επεξεργασία, δρομολογούνται ή αποχωρούν.
+	Entity	Οντότητα
+	What flows through the blocks: a part, a patient, a call, an order.	Ό,τι ρέει μέσα από τα μπλοκ: ένα εξάρτημα, ένας ασθενής, μια κλήση, μια παραγγελία.
+	The block where entities enter the model, with the time between one arrival and the next.	Το μπλοκ από όπου οι οντότητες εισέρχονται στο μοντέλο, με τον χρόνο ανάμεσα σε μια άφιξη και την επόμενη.
+	A step that takes time, with no limit on how many entities it works on at once.	Ένα βήμα που διαρκεί κάποιο χρόνο, χωρίς όριο στο πόσες οντότητες επεξεργάζεται ταυτόχρονα.
+	A step done by a limited number of units, such as machines or clerks. Entities wait in its waiting room until a unit is free.	Ένα βήμα που εκτελείται από περιορισμένο αριθμό μονάδων, όπως μηχανές ή υπάλληλοι. Οι οντότητες περιμένουν στον χώρο αναμονής του μέχρι να ελευθερωθεί μια μονάδα.
+	A step that borrows units from a pool that several tasks share, such as a team of nurses.	Ένα βήμα που δανείζεται μονάδες από μια δεξαμενή κοινή σε πολλές εργασίες, όπως μια ομάδα νοσηλευτών.
+	The block where entities leave the model; it counts them and their time in the system.	Το μπλοκ από όπου οι οντότητες αποχωρούν από το μοντέλο· τις μετρά, μαζί με τον χρόνο τους στο σύστημα.
+	Sends each entity down one of its ways out, by chance or by a condition.	Στέλνει κάθε οντότητα σε μία από τις εξόδους του, τυχαία ή βάσει συνθήκης.
+	How many entities a task with a resource can work on at the same time: its machines, clerks or beds.	Πόσες οντότητες μπορεί να επεξεργάζεται ταυτόχρονα μια εργασία με πόρο: οι μηχανές, οι υπάλληλοι ή τα κρεβάτια της.
+	Where entities wait for a free unit (a queue). It can have a limit; an entity that finds it full is lost or waits upstream.	Εκεί όπου οι οντότητες περιμένουν για ελεύθερη μονάδα (μια ουρά). Μπορεί να έχει όριο· μια οντότητα που τον βρίσκει γεμάτο χάνεται ή περιμένει πιο πριν στη ροή.
+	How long a unit takes with one entity, drawn from a distribution each time.	Πόσο χρόνο χρειάζεται μια μονάδα για μία οντότητα, κληρωμένος κάθε φορά από μια κατανομή.
+	Distribution	Κατανομή
+	How a time or a quantity varies from one entity to the next: its shape and its mean.	Πώς ένας χρόνος ή μια ποσότητα διαφέρει από τη μία οντότητα στην επόμενη: η μορφή και η μέση τιμή της.
+	One pass of the model from start to end with its own random numbers. Textbooks call it a replication.	Ένα πέρασμα του μοντέλου από την αρχή ως το τέλος με τους δικούς του τυχαίους αριθμούς. Τα εγχειρίδια το λένε επανάληψη.
+	All the runs together, with the same settings: how many runs, the seed, the warm-up and the time measured.	Όλες οι εκτελέσεις μαζί, με τις ίδιες ρυθμίσεις: πόσες εκτελέσεις, ο σπόρος, η προθέρμανση και ο χρόνος που μετριέται.
+	The starting point of the random numbers. The same model with the same seed always gives the same results.	Το σημείο εκκίνησης των τυχαίων αριθμών. Το ίδιο μοντέλο με τον ίδιο σπόρο δίνει πάντα τα ίδια αποτελέσματα.
+	Time at the start of each run that is simulated but not measured, so an empty model filling up does not pull the results.	Χρόνος στην αρχή κάθε εκτέλεσης που προσομοιώνεται αλλά δεν μετριέται, ώστε το γέμισμα ενός άδειου μοντέλου να μη μετατοπίζει τα αποτελέσματα.
+	The share of the time a task's units are busy, counted over the time they are on shift.	Το ποσοστό του χρόνου που οι μονάδες μιας εργασίας είναι απασχολημένες, υπολογισμένο στον χρόνο που είναι σε βάρδια.
+	The average time an entity spends in a waiting room before a unit takes it.	Ο μέσος χρόνος που περνά μια οντότητα σε έναν χώρο αναμονής πριν την αναλάβει μια μονάδα.
+	The average number of entities in a waiting room, over the time measured.	Το μέσο πλήθος οντοτήτων σε έναν χώρο αναμονής, στον χρόνο που μετριέται.
+	Time in system	Χρόνος στο σύστημα
+	How long an entity spends from its arrival to its departure, waiting and being worked on.	Πόσο χρόνο περνά μια οντότητα από την άφιξη ως την αναχώρησή της, σε αναμονή και σε επεξεργασία.
+	Blocked	Αποκλεισμός
+	A unit has finished but cannot pass the entity on, because the next waiting room is full.	Μια μονάδα έχει τελειώσει αλλά δεν μπορεί να προωθήσει την οντότητα, επειδή ο επόμενος χώρος αναμονής είναι γεμάτος.
+	Starved	Χωρίς εργασία
+	A unit is free but has no entity to work on.	Μια μονάδα είναι ελεύθερη αλλά δεν έχει οντότητα για επεξεργασία.
+	95% confidence interval	Διάστημα εμπιστοσύνης 95%
+	Written ± after a mean: how far the true mean could plausibly be from the one shown. More runs narrow it.	Γράφεται με ± μετά από μια μέση τιμή: πόσο μακριά θα μπορούσε εύλογα να είναι η πραγματική μέση τιμή από αυτήν που φαίνεται. Περισσότερες εκτελέσεις το στενεύουν.
+	Settled	Σταθεροποιημένο
+	A result known well enough to act on: to ± 5% of its mean, or ± 1 percentage point for a share.	Ένα αποτέλεσμα γνωστό αρκετά καλά για να βασιστείτε σε αυτό: με ± 5% της μέσης τιμής του ή ± 1 ποσοστιαία μονάδα για ποσοστό.
+	Results kept to compare a later run with, to see what a change to the model did.	Αποτελέσματα που κρατούνται για σύγκριση με μια μεταγενέστερη εκτέλεση, ώστε να φανεί τι έκανε μια αλλαγή στο μοντέλο.
+	A difference whose 95% interval takes in zero: the runs cannot tell it from random variation.	Μια διαφορά της οποίας το διάστημα 95% περιλαμβάνει το μηδέν: οι εκτελέσεις δεν μπορούν να τη διακρίνουν από την τυχαία διακύμανση.
+	Add Arrivals	Προσθέστε «Αφίξεις»
+	Add a task and connect Arrivals to it	Προσθέστε μια εργασία και συνδέστε τις «Αφίξεις» σε αυτήν
+	Add Departures and connect the task to it	Προσθέστε «Αναχωρήσεις» και συνδέστε την εργασία σε αυτές
+	Run the model: press F5	Εκτελέστε το μοντέλο: πατήστε F5
+	Read what the run found	Διαβάστε τι βρήκε η εκτέλεση
+	Close Help (F1)	Κλείσιμο βοήθειας (F1)
+	Search help and terms	Αναζήτηση στη βοήθεια και στους όρους
+	Getting started	Πρώτα βήματα
+	{k} of {n} done	{k} από {n} ολοκληρώθηκαν
+	Glossary	Γλωσσάριο
+	No term matches “{text}”.	Κανένας όρος δεν ταιριάζει με «{text}».
+	Keyboard shortcuts	Συντομεύσεις πληκτρολογίου
+	Change keys	Αλλαγή πλήκτρων
+	More help	Περισσότερη βοήθεια
+	User guide	Οδηγός χρήσης
+	What the results mean	Τι σημαίνουν τα αποτελέσματα
+	Report a problem	Αναφορά προβλήματος
+	These open in your web browser.	Αυτά ανοίγουν στο πρόγραμμα περιήγησης.
+	Space	Διάστημα
+	Play or pause a watched run	Αναπαραγωγή ή παύση μιας εκτέλεσης υπό παρακολούθηση
+	Getting Started	Πρώτα βήματα
+	What the Results Mean	Τι σημαίνουν τα αποτελέσματα
+	User Guide	Οδηγός χρήσης
+	Report a Problem	Αναφορά προβλήματος
 @plural	Added {n} block|Added {n} blocks	Προστέθηκε {n} μπλοκ|Προστέθηκαν {n} μπλοκ
 @plural	Copied {n} block|Copied {n} blocks	Αντιγράφηκε {n} μπλοκ|Αντιγράφηκαν {n} μπλοκ
 @plural	Finished {n} run|Finished {n} runs	Ολοκληρώθηκε {n} εκτέλεση|Ολοκληρώθηκαν {n} εκτελέσεις
