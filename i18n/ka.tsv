@@ -884,6 +884,19 @@ unit	yr	წელი
 	Callers who give up: the share lost and the wait of those who stay.	აბონენტები, რომლებიც ნებდებიან: დაკარგული წილი და დარჩენილების ლოდინი.
 	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	ბლოკირება, პატარა მოსაცდელი სივრცეები და გაუმართაობები: ხაზის დასაწყისში უარყოფილი დეტალები.
 	Health checks that take busy servers out send their requests back to the queue.	მდგომარეობის შემოწმებები, რომლებიც დაკავებულ სერვერებს მუშაობიდან გამოიყვანენ, მათ მოთხოვნებს რიგში აბრუნებენ.
+	Show me	მაჩვენეთ
+	Point at where to do this step	მიუთითეთ, სად შესრულდეს ეს ნაბიჯი
+	Step {k} of {n}	ნაბიჯი {k} / {n}
+	Stop the guide (Esc)	გზამკვლევის შეჩერება (Esc)
+	Done	დასრულებულია
+	Drag Arrivals onto the canvas, or click it.	გადაათრიეთ „შემოსვლები“ მთავარ ზედაპირზე ან დააწკაპუნეთ მასზე.
+	Now add a task: drag “Task with a resource” onto the canvas.	ახლა დაამატეთ დავალება: გადაათრიეთ „დავალება რესურსით“ მთავარ ზედაპირზე.
+	Drag from the dot on Arrivals to the task to connect them, or choose the task under “Add a flow to…” in the inspector.	გადაათრიეთ „შემოსვლების“ წერტილიდან დავალებამდე მათ დასაკავშირებლად, ან აირჩიეთ დავალება თვისებების პანელში „ნაკადის დამატება (სამიზნე)…“ ქვეშ.
+	Add Departures, where entities leave: drag it onto the canvas.	დაამატეთ „გასვლები“, სადაც ერთეულები გადიან: გადაათრიეთ მთავარ ზედაპირზე.
+	Drag from the dot on the task to Departures, or choose Departures under “Add a flow to…” in the inspector.	გადაათრიეთ დავალების წერტილიდან „გასვლებამდე“, ან აირჩიეთ „გასვლები“ თვისებების პანელში „ნაკადის დამატება (სამიზნე)…“ ქვეშ.
+	Press Run to run the model.	მოდელის გასაშვებად დააჭირეთ „გაშვებას“.
+	Open Results to read what the run found.	გახსენით „შედეგები“, რომ წაიკითხოთ, რა აღმოაჩინა გაშვებამ.
+	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	ეს არის თქვენი პირველი მოდელი. „შედეგების“ პირველი სტრიქონები გეუბნებათ, რა აღმოაჩინა გაშვებამ; დახმარება ▸ რას ნიშნავს შედეგები ყოველ რიცხვს განმარტავს.
 @plural	Added {n} block|Added {n} blocks	დამატებულია {n} ბლოკი|დამატებულია {n} ბლოკი
 @plural	Copied {n} block|Copied {n} blocks	დაკოპირებულია {n} ბლოკი|დაკოპირებულია {n} ბლოკი
 @plural	Finished {n} run|Finished {n} runs	დასრულდა {n} გაშვება|დასრულდა {n} გაშვება

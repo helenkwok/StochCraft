@@ -884,6 +884,19 @@ unit	yr	г.
 	Callers who give up: the share lost and the wait of those who stay.	Обаждащи се, които се отказват: загубеният дял и чакането на останалите.
 	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	Блокиране, малки чакални и повреди: части, отхвърлени в началото на линията.
 	Health checks that take busy servers out send their requests back to the queue.	Проверките на състоянието, които извеждат натоварени сървъри от работа, връщат заявките им в опашката.
+	Show me	Покажи ми
+	Point at where to do this step	Посочете къде се прави тази стъпка
+	Step {k} of {n}	Стъпка {k} от {n}
+	Stop the guide (Esc)	Спиране на упътването (Esc)
+	Done	Готово
+	Drag Arrivals onto the canvas, or click it.	Плъзнете Пристигания върху основната повърхност или щракнете върху тях.
+	Now add a task: drag “Task with a resource” onto the canvas.	Сега добавете задача: плъзнете „Задача с ресурс“ върху основната повърхност.
+	Drag from the dot on Arrivals to the task to connect them, or choose the task under “Add a flow to…” in the inspector.	Плъзнете от точката на Пристигания към задачата, за да ги свържете, или изберете задачата под „Добавяне на поток към…“ в панела със свойства.
+	Add Departures, where entities leave: drag it onto the canvas.	Добавете Напускания, където същностите напускат: плъзнете ги върху основната повърхност.
+	Drag from the dot on the task to Departures, or choose Departures under “Add a flow to…” in the inspector.	Плъзнете от точката на задачата към Напускания или изберете Напускания под „Добавяне на поток към…“ в панела със свойства.
+	Press Run to run the model.	Натиснете Стартиране, за да стартирате модела.
+	Open Results to read what the run found.	Отворете Резултати, за да прочетете какво е установило стартирането.
+	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	Това е първият ви модел. Първите редове на Резултати казват какво е установило стартирането; Помощ ▸ Какво означават резултатите обяснява всяко число.
 @plural	Added {n} block|Added {n} blocks	Добавен е {n} блок|Добавени са {n} блока
 @plural	Copied {n} block|Copied {n} blocks	Копиран е {n} блок|Копирани са {n} блока
 @plural	Finished {n} run|Finished {n} runs	Завършено е {n} изпълнение|Завършени са {n} изпълнения

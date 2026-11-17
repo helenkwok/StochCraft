@@ -884,6 +884,19 @@ unit	yr	J.
 	Callers who give up: the share lost and the wait of those who stay.	Anrufer, die aufgeben: der verlorene Anteil und die Wartezeit derer, die bleiben.
 	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	Blockieren, kleine Warteräume und Ausfälle: Teile, die am Anfang der Linie abgewiesen werden.
 	Health checks that take busy servers out send their requests back to the queue.	Healthchecks, die ausgelastete Server außer Betrieb nehmen, schicken deren Anfragen zurück in die Warteschlange.
+	Show me	Zeigen
+	Point at where to do this step	Zeigen, wo dieser Schritt auszuführen ist
+	Step {k} of {n}	Schritt {k} von {n}
+	Stop the guide (Esc)	Anleitung beenden (Esc)
+	Done	Fertig
+	Drag Arrivals onto the canvas, or click it.	Ankünfte auf die Arbeitsfläche ziehen oder anklicken.
+	Now add a task: drag “Task with a resource” onto the canvas.	Jetzt eine Aufgabe hinzufügen: „Aufgabe mit Ressource“ auf die Arbeitsfläche ziehen.
+	Drag from the dot on Arrivals to the task to connect them, or choose the task under “Add a flow to…” in the inspector.	Vom Punkt an Ankünfte zur Aufgabe ziehen, um sie zu verbinden, oder die Aufgabe unter „Verbindung hinzufügen zu…“ im Bereich Eigenschaften wählen.
+	Add Departures, where entities leave: drag it onto the canvas.	Abgänge hinzufügen, wo Entitäten das Modell verlassen: auf die Arbeitsfläche ziehen.
+	Drag from the dot on the task to Departures, or choose Departures under “Add a flow to…” in the inspector.	Vom Punkt an der Aufgabe zu Abgänge ziehen oder Abgänge unter „Verbindung hinzufügen zu…“ im Bereich Eigenschaften wählen.
+	Press Run to run the model.	Ausführen drücken, um das Modell auszuführen.
+	Open Results to read what the run found.	Ergebnisse öffnen, um zu lesen, was der Lauf ergeben hat.
+	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	Das ist das erste Modell. Die ersten Zeilen unter Ergebnisse sagen, was der Lauf ergeben hat; Hilfe ▸ Was die Ergebnisse bedeuten erklärt jede Zahl.
 @plural	Added {n} block|Added {n} blocks	{n} Block hinzugefügt|{n} Blöcke hinzugefügt
 @plural	Copied {n} block|Copied {n} blocks	{n} Block kopiert|{n} Blöcke kopiert
 @plural	Finished {n} run|Finished {n} runs	{n} Lauf abgeschlossen|{n} Läufe abgeschlossen

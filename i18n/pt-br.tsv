@@ -884,6 +884,19 @@ unit	yr	a
 	Callers who give up: the share lost and the wait of those who stay.	Chamadores que desistem: a proporção perdida e a espera dos que ficam.
 	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	Bloqueio, salas de espera pequenas e falhas: peças recusadas no início da linha.
 	Health checks that take busy servers out send their requests back to the queue.	Verificações de estado que retiram servidores ocupados devolvem as requisições deles à fila.
+	Show me	Mostre-me
+	Point at where to do this step	Aponte onde fazer este passo
+	Step {k} of {n}	Passo {k} de {n}
+	Stop the guide (Esc)	Parar o guia (Esc)
+	Done	Concluído
+	Drag Arrivals onto the canvas, or click it.	Arraste Chegadas para a superfície principal ou clique nele.
+	Now add a task: drag “Task with a resource” onto the canvas.	Agora adicione uma tarefa: arraste “Tarefa com recurso” para a superfície principal.
+	Drag from the dot on Arrivals to the task to connect them, or choose the task under “Add a flow to…” in the inspector.	Arraste do ponto em Chegadas até a tarefa para conectá-las, ou escolha a tarefa em “Adicionar fluxo para…” no painel de propriedades.
+	Add Departures, where entities leave: drag it onto the canvas.	Adicione Saídas, onde as entidades saem: arraste para a superfície principal.
+	Drag from the dot on the task to Departures, or choose Departures under “Add a flow to…” in the inspector.	Arraste do ponto na tarefa até Saídas, ou escolha Saídas em “Adicionar fluxo para…” no painel de propriedades.
+	Press Run to run the model.	Pressione Executar para executar o modelo.
+	Open Results to read what the run found.	Abra Resultados para ler o que a execução encontrou.
+	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	Esse é o seu primeiro modelo. As primeiras linhas de Resultados dizem o que a execução encontrou; Ajuda ▸ O que os resultados significam explica cada número.
 @plural	Added {n} block|Added {n} blocks	{n} bloco adicionado|{n} blocos adicionados
 @plural	Copied {n} block|Copied {n} blocks	{n} bloco copiado|{n} blocos copiados
 @plural	Finished {n} run|Finished {n} runs	Concluída {n} execução|Concluídas {n} execuções

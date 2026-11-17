@@ -884,6 +884,19 @@ unit	yr	năm
 	Callers who give up: the share lost and the wait of those who stay.	Người gọi bỏ cuộc: tỷ lệ bị mất và thời gian chờ của những người ở lại.
 	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	Tắc nghẽn, khu vực chờ nhỏ và hỏng hóc: chi tiết bị từ chối ở đầu dây chuyền.
 	Health checks that take busy servers out send their requests back to the queue.	Kiểm tra tình trạng đưa máy chủ đang bận ra khỏi hoạt động sẽ trả yêu cầu của chúng về hàng đợi.
+	Show me	Cho tôi xem
+	Point at where to do this step	Chỉ vào nơi thực hiện bước này
+	Step {k} of {n}	Bước {k} / {n}
+	Stop the guide (Esc)	Dừng hướng dẫn (Esc)
+	Done	Xong
+	Drag Arrivals onto the canvas, or click it.	Kéo “Lượt đến” vào bề mặt chính, hoặc nhấp vào đó.
+	Now add a task: drag “Task with a resource” onto the canvas.	Giờ hãy thêm một tác vụ: kéo “Tác vụ có tài nguyên” vào bề mặt chính.
+	Drag from the dot on Arrivals to the task to connect them, or choose the task under “Add a flow to…” in the inspector.	Kéo từ chấm trên “Lượt đến” sang tác vụ để nối chúng, hoặc chọn tác vụ bên dưới “Thêm luồng đến…” trong bảng thuộc tính.
+	Add Departures, where entities leave: drag it onto the canvas.	Thêm “Lượt rời đi”, nơi các thực thể rời khỏi: kéo nó vào bề mặt chính.
+	Drag from the dot on the task to Departures, or choose Departures under “Add a flow to…” in the inspector.	Kéo từ chấm trên tác vụ sang “Lượt rời đi”, hoặc chọn “Lượt rời đi” bên dưới “Thêm luồng đến…” trong bảng thuộc tính.
+	Press Run to run the model.	Nhấn “Chạy” để chạy mô hình.
+	Open Results to read what the run found.	Mở “Kết quả” để đọc những gì lần chạy đã tìm ra.
+	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	Đây là mô hình đầu tiên của bạn. Những dòng đầu của “Kết quả” cho biết lần chạy đã tìm ra gì; Trợ giúp ▸ Ý nghĩa của kết quả giải thích từng con số.
 @plural	Added {n} block|Added {n} blocks	Đã thêm {n} khối
 @plural	Copied {n} block|Copied {n} blocks	Đã sao chép {n} khối
 @plural	Finished {n} run|Finished {n} runs	Đã hoàn thành {n} lần chạy

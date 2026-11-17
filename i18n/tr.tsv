@@ -884,6 +884,19 @@ unit	yr	yıl
 	Callers who give up: the share lost and the wait of those who stay.	Vazgeçen arayanlar: kaybedilen oran ve kalanların beklemesi.
 	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	Engellenme, küçük bekleme alanları ve arızalar: hattın başında geri çevrilen parçalar.
 	Health checks that take busy servers out send their requests back to the queue.	Meşgul sunucuları hizmetten çıkaran durum denetimleri, onların isteklerini kuyruğa geri gönderir.
+	Show me	Bana göster
+	Point at where to do this step	Bu adımın nerede yapılacağını göster
+	Step {k} of {n}	Adım {k} / {n}
+	Stop the guide (Esc)	Kılavuzu durdur (Esc)
+	Done	Bitti
+	Drag Arrivals onto the canvas, or click it.	Gelişler'i ana yüzeye sürükleyin veya üzerine tıklayın.
+	Now add a task: drag “Task with a resource” onto the canvas.	Şimdi bir görev ekleyin: “Kaynak kullanan görev” öğesini ana yüzeye sürükleyin.
+	Drag from the dot on Arrivals to the task to connect them, or choose the task under “Add a flow to…” in the inspector.	Bağlamak için Gelişler üzerindeki noktadan göreve sürükleyin veya özellikler panelinde “Hedef…” altından görevi seçin.
+	Add Departures, where entities leave: drag it onto the canvas.	Varlıkların ayrıldığı yer olan Çıkışlar'ı ekleyin: ana yüzeye sürükleyin.
+	Drag from the dot on the task to Departures, or choose Departures under “Add a flow to…” in the inspector.	Görevdeki noktadan Çıkışlar'a sürükleyin veya özellikler panelinde “Hedef…” altından Çıkışlar'ı seçin.
+	Press Run to run the model.	Modeli çalıştırmak için Çalıştır'a basın.
+	Open Results to read what the run found.	Çalıştırmanın ne bulduğunu okumak için Sonuçlar'ı açın.
+	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	Bu sizin ilk modeliniz. Sonuçlar'ın ilk satırları çalıştırmanın ne bulduğunu söyler; Yardım ▸ Sonuçlar Ne Anlama Geliyor her sayıyı açıklar.
 @plural	Added {n} block|Added {n} blocks	{n} blok eklendi|{n} blok eklendi
 @plural	Copied {n} block|Copied {n} blocks	{n} blok kopyalandı|{n} blok kopyalandı
 @plural	Finished {n} run|Finished {n} runs	{n} çalıştırma tamamlandı|{n} çalıştırma tamamlandı

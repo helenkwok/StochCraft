@@ -884,6 +884,19 @@ unit	yr	р.
 	Callers who give up: the share lost and the wait of those who stay.	Абоненти, які здаються: втрачена частка й очікування тих, хто лишається.
 	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	Блокування, малі місця очікування й відмови: деталі, яким відмовлено на початку лінії.
 	Health checks that take busy servers out send their requests back to the queue.	Перевірки працездатності, які виводять зайняті сервери з роботи, повертають їхні запити в чергу.
+	Show me	Покажіть
+	Point at where to do this step	Вкажіть, де виконати цей крок
+	Step {k} of {n}	Крок {k} з {n}
+	Stop the guide (Esc)	Зупинити посібник (Esc)
+	Done	Готово
+	Drag Arrivals onto the canvas, or click it.	Перетягніть «Прибуття» на основну поверхню або клацніть на цьому елементі.
+	Now add a task: drag “Task with a resource” onto the canvas.	Тепер додайте завдання: перетягніть «Завдання з ресурсом» на основну поверхню.
+	Drag from the dot on Arrivals to the task to connect them, or choose the task under “Add a flow to…” in the inspector.	Перетягніть від точки на «Прибуття» до завдання, щоб з’єднати їх, або виберіть завдання в розділі «Додати потік до…» на панелі властивостей.
+	Add Departures, where entities leave: drag it onto the canvas.	Додайте «Вибуття», де сутності залишають модель: перетягніть цей елемент на основну поверхню.
+	Drag from the dot on the task to Departures, or choose Departures under “Add a flow to…” in the inspector.	Перетягніть від точки на завданні до «Вибуття» або виберіть «Вибуття» в розділі «Додати потік до…» на панелі властивостей.
+	Press Run to run the model.	Натисніть «Запустити», щоб запустити модель.
+	Open Results to read what the run found.	Відкрийте «Результати», щоб прочитати, що виявив запуск.
+	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	Це ваша перша модель. Перші рядки у розділі «Результати» розповідають, що виявив запуск; Довідка ▸ Що означають результати пояснює кожне число.
 @plural	Added {n} block|Added {n} blocks	Додано {n} блок|Додано {n} блоки|Додано {n} блоків
 @plural	Copied {n} block|Copied {n} blocks	Скопійовано {n} блок|Скопійовано {n} блоки|Скопійовано {n} блоків
 @plural	Finished {n} run|Finished {n} runs	Завершено {n} запуск|Завершено {n} запуски|Завершено {n} запусків

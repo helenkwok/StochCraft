@@ -884,6 +884,19 @@ unit	yr	年
 	Callers who give up: the share lost and the wait of those who stay.	放棄等待的來電者：流失比例和留下者的等待時間。
 	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	阻塞、小等待區和故障：在產線入口被拒收的零件。
 	Health checks that take busy servers out send their requests back to the queue.	將忙碌伺服器下線的健康檢查會把它們的請求送回佇列。
+	Show me	帶我看看
+	Point at where to do this step	指出這一步在哪裡操作
+	Step {k} of {n}	第 {k} 步，共 {n} 步
+	Stop the guide (Esc)	停止引導 (Esc)
+	Done	已完成
+	Drag Arrivals onto the canvas, or click it.	把「到達」拖到畫布上，或按一下它。
+	Now add a task: drag “Task with a resource” onto the canvas.	現在新增一個任務：把「需要資源的任務」拖到畫布上。
+	Drag from the dot on Arrivals to the task to connect them, or choose the task under “Add a flow to…” in the inspector.	從「到達」上的圓點拖到任務上以連接兩者，或在屬性面板中的「新增順序流，通往…」下選擇該任務。
+	Add Departures, where entities leave: drag it onto the canvas.	新增「離開」，實體在此離開：把它拖到畫布上。
+	Drag from the dot on the task to Departures, or choose Departures under “Add a flow to…” in the inspector.	從任務上的圓點拖到「離開」，或在屬性面板中的「新增順序流，通往…」下選擇「離開」。
+	Press Run to run the model.	按一下「執行」來執行模型。
+	Open Results to read what the run found.	開啟「結果」，查看本次執行的發現。
+	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	這就是你的第一個模型。「結果」開頭幾行說明本次執行的發現；說明 ▸ 結果的意義 解釋每個數字。
 @plural	Added {n} block|Added {n} blocks	已新增 {n} 個區塊
 @plural	Copied {n} block|Copied {n} blocks	已複製 {n} 個區塊
 @plural	Finished {n} run|Finished {n} runs	已完成 {n} 次執行

@@ -884,6 +884,19 @@ unit	yr	年
 	Callers who give up: the share lost and the wait of those who stay.	放弃等待的来电者：流失比例和留下者的等待时间。
 	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	阻塞、小等待区和故障：在产线入口被拒收的零件。
 	Health checks that take busy servers out send their requests back to the queue.	将繁忙服务器下线的健康检查会把它们的请求送回队列。
+	Show me	带我看看
+	Point at where to do this step	指出这一步在哪里操作
+	Step {k} of {n}	第 {k} 步，共 {n} 步
+	Stop the guide (Esc)	停止引导 (Esc)
+	Done	已完成
+	Drag Arrivals onto the canvas, or click it.	把“到达”拖到画布上，或单击它。
+	Now add a task: drag “Task with a resource” onto the canvas.	现在添加一个任务：把“需要资源的任务”拖到画布上。
+	Drag from the dot on Arrivals to the task to connect them, or choose the task under “Add a flow to…” in the inspector.	从“到达”上的圆点拖到任务上以连接两者，或在属性面板中的“添加顺序流，通往…”下选择该任务。
+	Add Departures, where entities leave: drag it onto the canvas.	添加“离开”，实体在此离开：把它拖到画布上。
+	Drag from the dot on the task to Departures, or choose Departures under “Add a flow to…” in the inspector.	从任务上的圆点拖到“离开”，或在属性面板中的“添加顺序流，通往…”下选择“离开”。
+	Press Run to run the model.	点击“运行”来运行模型。
+	Open Results to read what the run found.	打开“结果”，查看本次运行的发现。
+	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	这就是你的第一个模型。“结果”开头几行说明本次运行的发现；帮助 ▸ 结果的含义 解释每个数字。
 @plural	Added {n} block|Added {n} blocks	已添加 {n} 个区块
 @plural	Copied {n} block|Copied {n} blocks	已复制 {n} 个区块
 @plural	Finished {n} run|Finished {n} runs	已完成 {n} 次运行

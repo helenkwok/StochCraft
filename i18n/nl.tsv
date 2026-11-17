@@ -884,6 +884,19 @@ unit	yr	j
 	Callers who give up: the share lost and the wait of those who stay.	Bellers die afhaken: het verloren aandeel en de wachttijd van wie blijft.
 	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	Blokkeren, kleine wachtruimtes en storingen: onderdelen die aan het begin van de lijn worden geweigerd.
 	Health checks that take busy servers out send their requests back to the queue.	Statuscontroles die drukke servers uit dienst nemen, sturen hun verzoeken terug naar de wachtrij.
+	Show me	Laat zien
+	Point at where to do this step	Wijs aan waar u deze stap uitvoert
+	Step {k} of {n}	Stap {k} van {n}
+	Stop the guide (Esc)	Stop de gids (Esc)
+	Done	Klaar
+	Drag Arrivals onto the canvas, or click it.	Sleep Aankomsten naar het hoofdvlak, of klik erop.
+	Now add a task: drag “Task with a resource” onto the canvas.	Voeg nu een taak toe: sleep ‘Taak met een hulpbron’ naar het hoofdvlak.
+	Drag from the dot on Arrivals to the task to connect them, or choose the task under “Add a flow to…” in the inspector.	Sleep van de stip op Aankomsten naar de taak om ze te verbinden, of kies de taak onder ‘Stroom toevoegen naar…’ in het eigenschappenpaneel.
+	Add Departures, where entities leave: drag it onto the canvas.	Voeg Vertrekken toe, waar entiteiten vertrekken: sleep het naar het hoofdvlak.
+	Drag from the dot on the task to Departures, or choose Departures under “Add a flow to…” in the inspector.	Sleep van de stip op de taak naar Vertrekken, of kies Vertrekken onder ‘Stroom toevoegen naar…’ in het eigenschappenpaneel.
+	Press Run to run the model.	Druk op Uitvoeren om het model uit te voeren.
+	Open Results to read what the run found.	Open Resultaten om te lezen wat de uitvoering heeft gevonden.
+	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	Dat is uw eerste model. De eerste regels van Resultaten vertellen wat de uitvoering heeft gevonden; Help ▸ Wat de resultaten betekenen legt elk getal uit.
 @plural	Added {n} block|Added {n} blocks	{n} blok toegevoegd|{n} blokken toegevoegd
 @plural	Copied {n} block|Copied {n} blocks	{n} blok gekopieerd|{n} blokken gekopieerd
 @plural	Finished {n} run|Finished {n} runs	{n} uitvoering voltooid|{n} uitvoeringen voltooid

@@ -884,6 +884,19 @@ unit	yr	년
 	Callers who give up: the share lost and the wait of those who stay.	포기하는 발신자: 잃는 비율과 남은 사람의 대기 시간.
 	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	차단, 작은 대기실, 고장: 라인 입구에서 받아들여지지 않는 부품.
 	Health checks that take busy servers out send their requests back to the queue.	바쁜 서버를 제외하는 상태 검사는 그 요청을 대기열로 되돌려 보냄.
+	Show me	보여 주세요
+	Point at where to do this step	이 단계를 어디서 하는지 가리킵니다
+	Step {k} of {n}	{n}단계 중 {k}단계
+	Stop the guide (Esc)	가이드 중지 (Esc)
+	Done	완료
+	Drag Arrivals onto the canvas, or click it.	도착을 캔버스로 끌어 놓거나 클릭하세요.
+	Now add a task: drag “Task with a resource” onto the canvas.	이제 작업을 추가합니다. “자원을 사용하는 작업”을 캔버스로 끌어 놓으세요.
+	Drag from the dot on Arrivals to the task to connect them, or choose the task under “Add a flow to…” in the inspector.	도착의 점에서 작업으로 끌어 연결하거나, 속성 패널의 “끝 블록…”에서 작업을 선택하세요.
+	Add Departures, where entities leave: drag it onto the canvas.	엔터티가 떠나는 이탈을 추가합니다. 캔버스로 끌어 놓으세요.
+	Drag from the dot on the task to Departures, or choose Departures under “Add a flow to…” in the inspector.	작업의 점에서 이탈로 끌어 연결하거나, 속성 패널의 “끝 블록…”에서 이탈을 선택하세요.
+	Press Run to run the model.	실행을 눌러 모델을 실행하세요.
+	Open Results to read what the run found.	결과를 열어 실행으로 알아낸 내용을 읽으세요.
+	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	첫 모델이 완성되었습니다. 결과의 첫 줄들이 실행으로 알아낸 내용을 알려 주며, 도움말 ▸ 결과의 의미에서 각 숫자를 설명합니다.
 @plural	Added {n} block|Added {n} blocks	블록 {n}개 추가됨
 @plural	Copied {n} block|Copied {n} blocks	블록 {n}개 복사됨
 @plural	Finished {n} run|Finished {n} runs	실행 {n}회 완료

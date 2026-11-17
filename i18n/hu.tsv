@@ -884,6 +884,19 @@ unit	yr	év
 	Callers who give up: the share lost and the wait of those who stay.	Feladó hívók: az elvesztett arány és a maradók várakozása.
 	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	Blokkolás, kis várakozóhelyek és meghibásodások: a sor elején visszautasított darabok.
 	Health checks that take busy servers out send their requests back to the queue.	A foglalt szervereket kivonó állapot-ellenőrzések visszaküldik azok kéréseit a sorba.
+	Show me	Mutassa meg
+	Point at where to do this step	Mutassa, hol végezhető el ez a lépés
+	Step {k} of {n}	{k}. lépés / {n}
+	Stop the guide (Esc)	Útmutató leállítása (Esc)
+	Done	Kész
+	Drag Arrivals onto the canvas, or click it.	Húzza az Érkezések elemet a fő felületre, vagy kattintson rá.
+	Now add a task: drag “Task with a resource” onto the canvas.	Most adjon hozzá egy feladatot: húzza az „Erőforrást használó feladat” elemet a fő felületre.
+	Drag from the dot on Arrivals to the task to connect them, or choose the task under “Add a flow to…” in the inspector.	Húzzon az Érkezések pontjáról a feladatra az összekötésükhöz, vagy válassza ki a feladatot a Tulajdonságok panel „Folyamat hozzáadása ide: …” listájában.
+	Add Departures, where entities leave: drag it onto the canvas.	Adja hozzá a Távozások elemet, ahol az entitások távoznak: húzza a fő felületre.
+	Drag from the dot on the task to Departures, or choose Departures under “Add a flow to…” in the inspector.	Húzzon a feladat pontjáról a Távozások elemre, vagy válassza a Távozások elemet a Tulajdonságok panel „Folyamat hozzáadása ide: …” listájában.
+	Press Run to run the model.	A modell futtatásához nyomja meg a Futtatás gombot.
+	Open Results to read what the run found.	Nyissa meg az Eredmények nézetet, hogy elolvassa, mit talált a futtatás.
+	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	Ez az első modellje. Az Eredmények első sorai megmondják, mit talált a futtatás; a Súgó ▸ Mit jelentenek az eredmények minden számot elmagyaráz.
 @plural	Added {n} block|Added {n} blocks	{n} blokk hozzáadva|{n} blokk hozzáadva
 @plural	Copied {n} block|Copied {n} blocks	{n} blokk másolva|{n} blokk másolva
 @plural	Finished {n} run|Finished {n} runs	{n} futás befejezve|{n} futás befejezve

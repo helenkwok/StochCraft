@@ -884,6 +884,19 @@ unit	yr	l.
 	Callers who give up: the share lost and the wait of those who stay.	Klicatelji, ki odnehajo: izgubljeni delež in čakanje tistih, ki ostanejo.
 	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	Blokiranje, majhne čakalnice in okvare: kosi, zavrnjeni na začetku linije.
 	Health checks that take busy servers out send their requests back to the queue.	Preverjanja stanja, ki zasedene strežnike vzamejo iz delovanja, pošljejo njihove zahteve nazaj v čakalno vrsto.
+	Show me	Pokažite mi
+	Point at where to do this step	Pokažite, kje izvesti ta korak
+	Step {k} of {n}	Korak {k} od {n}
+	Stop the guide (Esc)	Ustavite vodnik (Esc)
+	Done	Končano
+	Drag Arrivals onto the canvas, or click it.	Povlecite Prihodi na glavno površino ali kliknite nanje.
+	Now add a task: drag “Task with a resource” onto the canvas.	Zdaj dodajte nalogo: povlecite »Naloga z virom« na glavno površino.
+	Drag from the dot on Arrivals to the task to connect them, or choose the task under “Add a flow to…” in the inspector.	Povlecite od pike na bloku Prihodi do naloge, da ju povežete, ali izberite nalogo pod »Dodaj tok v…« na plošči z lastnostmi.
+	Add Departures, where entities leave: drag it onto the canvas.	Dodajte Odhodi, kjer entitete odhajajo: povlecite jih na glavno površino.
+	Drag from the dot on the task to Departures, or choose Departures under “Add a flow to…” in the inspector.	Povlecite od pike na nalogi do bloka Odhodi ali izberite Odhodi pod »Dodaj tok v…« na plošči z lastnostmi.
+	Press Run to run the model.	Pritisnite Zaženi, da zaženete model.
+	Open Results to read what the run found.	Odprite Rezultati, da preberete, kaj je zagon ugotovil.
+	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	To je vaš prvi model. Prve vrstice v Rezultati povedo, kaj je zagon ugotovil; Pomoč ▸ Kaj pomenijo rezultati razloži vsako številko.
 @plural	Added {n} block|Added {n} blocks	Dodan je {n} blok|Dodana sta {n} bloka|Dodani so {n} bloki|Dodanih je {n} blokov
 @plural	Copied {n} block|Copied {n} blocks	Kopiran je {n} blok|Kopirana sta {n} bloka|Kopirani so {n} bloki|Kopiranih je {n} blokov
 @plural	Finished {n} run|Finished {n} runs	Končan je {n} zagon|Končana sta {n} zagona|Končani so {n} zagoni|Končanih je {n} zagonov

@@ -884,6 +884,19 @@ unit	yr	god.
 	Callers who give up: the share lost and the wait of those who stay.	Pozivatelji koji odustanu: izgubljeni udio i čekanje onih koji ostanu.
 	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	Blokiranje, male čekaonice i kvarovi: dijelovi odbijeni na početku linije.
 	Health checks that take busy servers out send their requests back to the queue.	Provjere stanja koje izbacuju zauzete poslužitelje iz rada vraćaju njihove zahtjeve u red.
+	Show me	Pokaži mi
+	Point at where to do this step	Pokaži gdje obaviti ovaj korak
+	Step {k} of {n}	Korak {k} od {n}
+	Stop the guide (Esc)	Zaustavi vodič (Esc)
+	Done	Gotovo
+	Drag Arrivals onto the canvas, or click it.	Povucite Dolasci na glavnu površinu ili kliknite na njih.
+	Now add a task: drag “Task with a resource” onto the canvas.	Sada dodajte zadatak: povucite „Zadatak s resursom” na glavnu površinu.
+	Drag from the dot on Arrivals to the task to connect them, or choose the task under “Add a flow to…” in the inspector.	Povucite od točke na Dolascima do zadatka da ih povežete ili odaberite zadatak pod „Dodaj tok prema…” u oknu Svojstva.
+	Add Departures, where entities leave: drag it onto the canvas.	Dodajte Odlasci, gdje entiteti odlaze: povucite ih na glavnu površinu.
+	Drag from the dot on the task to Departures, or choose Departures under “Add a flow to…” in the inspector.	Povucite od točke na zadatku do Odlazaka ili odaberite Odlasci pod „Dodaj tok prema…” u oknu Svojstva.
+	Press Run to run the model.	Pritisnite Pokreni da biste pokrenuli model.
+	Open Results to read what the run found.	Otvorite Rezultati da pročitate što je pokretanje pronašlo.
+	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	To je vaš prvi model. Prvi retci Rezultata govore što je pokretanje pronašlo; Pomoć ▸ Što znače rezultati objašnjava svaki broj.
 @plural	Added {n} block|Added {n} blocks	Dodan je {n} blok|Dodana su {n} bloka|Dodano je {n} blokova
 @plural	Copied {n} block|Copied {n} blocks	Kopiran je {n} blok|Kopirana su {n} bloka|Kopirano je {n} blokova
 @plural	Finished {n} run|Finished {n} runs	Završeno je {n} pokretanje|Završena su {n} pokretanja|Završeno je {n} pokretanja

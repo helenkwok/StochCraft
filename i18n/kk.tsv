@@ -884,6 +884,19 @@ unit	yr	ж.
 	Callers who give up: the share lost and the wait of those who stay.	Бас тартқан қоңырау шалушылар: жоғалған үлес және қалғандардың күтуі.
 	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	Бұғаттау, шағын күту орындары және ақаулар: желінің басында қабылданбаған бөлшектер.
 	Health checks that take busy servers out send their requests back to the queue.	Бос емес серверлерді жұмыстан шығаратын күйді тексерулер олардың сұрауларын кезекке қайтарады.
+	Show me	Көрсетіңіз
+	Point at where to do this step	Бұл қадамды қайда орындау керегін көрсетіңіз
+	Step {k} of {n}	{k}-қадам / {n}
+	Stop the guide (Esc)	Нұсқаулықты тоқтату (Esc)
+	Done	Дайын
+	Drag Arrivals onto the canvas, or click it.	«Келулер» элементін негізгі бетке сүйреңіз немесе оны басыңыз.
+	Now add a task: drag “Task with a resource” onto the canvas.	Енді тапсырма қосыңыз: «Ресурсы бар тапсырма» элементін негізгі бетке сүйреңіз.
+	Drag from the dot on Arrivals to the task to connect them, or choose the task under “Add a flow to…” in the inspector.	Оларды қосу үшін «Келулер» элементіндегі нүктеден тапсырмаға қарай сүйреңіз немесе қасиеттер тақтасындағы «Қайда…» астынан тапсырманы таңдаңыз.
+	Add Departures, where entities leave: drag it onto the canvas.	Нысандар кететін «Кетулер» элементін қосыңыз: оны негізгі бетке сүйреңіз.
+	Drag from the dot on the task to Departures, or choose Departures under “Add a flow to…” in the inspector.	Тапсырмадағы нүктеден «Кетулер» элементіне қарай сүйреңіз немесе қасиеттер тақтасындағы «Қайда…» астынан «Кетулер» таңдаңыз.
+	Press Run to run the model.	Модельді іске қосу үшін «Іске қосу» түймесін басыңыз.
+	Open Results to read what the run found.	Іске қосу нені тапқанын оқу үшін «Нәтижелер» бөлімін ашыңыз.
+	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	Бұл – сіздің алғашқы модельіңіз. «Нәтижелер» бөлімінің алғашқы жолдары іске қосу нені тапқанын айтады; «Көмек» ▸ «Нәтижелер нені білдіреді» әр санды түсіндіреді.
 @plural	Added {n} block|Added {n} blocks	{n} блок қосылды|{n} блок қосылды
 @plural	Copied {n} block|Copied {n} blocks	{n} блок көшірілді|{n} блок көшірілді
 @plural	Finished {n} run|Finished {n} runs	{n} іске қосу аяқталды|{n} іске қосу аяқталды

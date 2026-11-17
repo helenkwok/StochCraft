@@ -884,6 +884,19 @@ unit	yr	έτ
 	Callers who give up: the share lost and the wait of those who stay.	Καλούντες που εγκαταλείπουν: το χαμένο ποσοστό και η αναμονή όσων μένουν.
 	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	Αποκλεισμός, μικροί χώροι αναμονής και βλάβες: τεμάχια που απορρίπτονται στην αρχή της γραμμής.
 	Health checks that take busy servers out send their requests back to the queue.	Οι έλεγχοι κατάστασης που θέτουν εκτός λειτουργίας απασχολημένους εξυπηρετητές στέλνουν τα αιτήματά τους πίσω στην ουρά.
+	Show me	Δείξτε μου
+	Point at where to do this step	Δείξτε πού γίνεται αυτό το βήμα
+	Step {k} of {n}	Βήμα {k} από {n}
+	Stop the guide (Esc)	Διακοπή οδηγού (Esc)
+	Done	Ολοκληρώθηκε
+	Drag Arrivals onto the canvas, or click it.	Σύρετε τις Αφίξεις στην κύρια επιφάνεια ή κάντε κλικ σε αυτές.
+	Now add a task: drag “Task with a resource” onto the canvas.	Τώρα προσθέστε μια εργασία: σύρετε την «Εργασία με πόρο» στην κύρια επιφάνεια.
+	Drag from the dot on Arrivals to the task to connect them, or choose the task under “Add a flow to…” in the inspector.	Σύρετε από την κουκκίδα στις Αφίξεις προς την εργασία για να τις συνδέσετε ή επιλέξτε την εργασία κάτω από «Προσθήκη ροής προς…» στον πίνακα Ιδιότητες.
+	Add Departures, where entities leave: drag it onto the canvas.	Προσθέστε Αναχωρήσεις, όπου οι οντότητες αποχωρούν: σύρετέ τες στην κύρια επιφάνεια.
+	Drag from the dot on the task to Departures, or choose Departures under “Add a flow to…” in the inspector.	Σύρετε από την κουκκίδα στην εργασία προς τις Αναχωρήσεις ή επιλέξτε Αναχωρήσεις κάτω από «Προσθήκη ροής προς…» στον πίνακα Ιδιότητες.
+	Press Run to run the model.	Πατήστε Εκτέλεση για να εκτελέσετε το μοντέλο.
+	Open Results to read what the run found.	Ανοίξτε τα Αποτελέσματα για να διαβάσετε τι διαπίστωσε η εκτέλεση.
+	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	Αυτό είναι το πρώτο σας μοντέλο. Οι πρώτες γραμμές των Αποτελεσμάτων λένε τι διαπίστωσε η εκτέλεση· Βοήθεια ▸ Τι σημαίνουν τα αποτελέσματα εξηγεί κάθε αριθμό.
 @plural	Added {n} block|Added {n} blocks	Προστέθηκε {n} μπλοκ|Προστέθηκαν {n} μπλοκ
 @plural	Copied {n} block|Copied {n} blocks	Αντιγράφηκε {n} μπλοκ|Αντιγράφηκαν {n} μπλοκ
 @plural	Finished {n} run|Finished {n} runs	Ολοκληρώθηκε {n} εκτέλεση|Ολοκληρώθηκαν {n} εκτελέσεις

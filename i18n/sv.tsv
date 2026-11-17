@@ -884,6 +884,19 @@ unit	yr	år
 	Callers who give up: the share lost and the wait of those who stay.	Uppringare som ger upp: andelen som förloras och väntan för dem som stannar.
 	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	Blockering, små väntrum och haverier: detaljer som avvisas i början av linjen.
 	Health checks that take busy servers out send their requests back to the queue.	Hälsokontroller som tar upptagna servrar ur drift skickar deras förfrågningar tillbaka till kön.
+	Show me	Visa mig
+	Point at where to do this step	Peka ut var du gör det här steget
+	Step {k} of {n}	Steg {k} av {n}
+	Stop the guide (Esc)	Avsluta guiden (Esc)
+	Done	Klart
+	Drag Arrivals onto the canvas, or click it.	Dra Ankomster till huvudytan eller klicka på det.
+	Now add a task: drag “Task with a resource” onto the canvas.	Lägg nu till en uppgift: dra ”Uppgift med resurs” till huvudytan.
+	Drag from the dot on Arrivals to the task to connect them, or choose the task under “Add a flow to…” in the inspector.	Dra från pricken på Ankomster till uppgiften för att koppla ihop dem, eller välj uppgiften under ”Lägg till flöde till…” i egenskapspanelen.
+	Add Departures, where entities leave: drag it onto the canvas.	Lägg till Avgångar, där entiteter lämnar modellen: dra det till huvudytan.
+	Drag from the dot on the task to Departures, or choose Departures under “Add a flow to…” in the inspector.	Dra från pricken på uppgiften till Avgångar, eller välj Avgångar under ”Lägg till flöde till…” i egenskapspanelen.
+	Press Run to run the model.	Tryck på Kör för att köra modellen.
+	Open Results to read what the run found.	Öppna Resultat för att läsa vad körningen kom fram till.
+	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	Det här är din första modell. De första raderna i Resultat berättar vad körningen kom fram till; Hjälp ▸ Vad resultaten betyder förklarar varje siffra.
 @plural	Added {n} block|Added {n} blocks	Lade till {n} block|Lade till {n} block
 @plural	Copied {n} block|Copied {n} blocks	Kopierade {n} block|Kopierade {n} block
 @plural	Finished {n} run|Finished {n} runs	{n} körning klar|{n} körningar klara

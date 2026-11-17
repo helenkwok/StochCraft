@@ -146,10 +146,23 @@ pub const GLOSSARY: &[(&str, &str)] = &[
     ),
 ];
 
-/// The steps of Getting started, and whether each is done for `model` (its wire form):
-/// arrivals, a task that entities from them reach, departures they reach through a task, a run,
-/// and reading what it found.
-pub fn steps(model: &Value, ran: bool, read: bool) -> [(&'static str, bool); 5] {
+/// What a walk along the connections from Arrivals finds in a model.
+pub(crate) struct Walk {
+    /// The first Arrivals block.
+    pub arrivals: Option<String>,
+    /// The model has a task, reached or not.
+    pub any_task: bool,
+    /// The first task entities from Arrivals reach.
+    pub task: Option<String>,
+    /// The model has Departures, reached or not.
+    pub any_sink: bool,
+    /// Entities reach Departures through a task.
+    pub departures: bool,
+}
+
+/// Walks the connections of `model` (its wire form) from every Arrivals block, noting whether a
+/// task has been passed.
+pub(crate) fn walk(model: &Value) -> Walk {
     let elements = model["elements"]
         .as_array()
         .map(Vec::as_slice)
@@ -166,13 +179,12 @@ pub fn steps(model: &Value, ran: bool, read: bool) -> [(&'static str, bool); 5] 
             .unwrap_or("")
     };
     let is_task = |id: &str| matches!(kind(id), "server" | "delay" | "shared_task");
-    // Walk the connections from every Arrivals block, noting whether a task has been passed.
     let mut reached: Vec<(String, bool)> = elements
         .iter()
         .filter(|e| e["kind"] == "source")
         .filter_map(|e| Some((e["id"].as_str()?.to_owned(), false)))
         .collect();
-    let arrivals = !reached.is_empty();
+    let arrivals = reached.first().map(|r| r.0.clone());
     let mut i = 0;
     while i < reached.len() {
         let (at, via_task) = reached[i].clone();
@@ -186,14 +198,30 @@ pub fn steps(model: &Value, ran: bool, read: bool) -> [(&'static str, bool); 5] 
         }
         i += 1;
     }
-    let task = reached.iter().any(|(id, _)| is_task(id));
-    let departures = reached
-        .iter()
-        .any(|(id, via_task)| kind(id) == "sink" && *via_task);
+    let ids = |k: &str| elements.iter().any(|e| e["kind"] == k);
+    Walk {
+        arrivals,
+        any_task: ids("server") || ids("delay") || ids("shared_task"),
+        task: reached
+            .iter()
+            .find(|(id, _)| is_task(id))
+            .map(|r| r.0.clone()),
+        any_sink: ids("sink"),
+        departures: reached
+            .iter()
+            .any(|(id, via_task)| kind(id) == "sink" && *via_task),
+    }
+}
+
+/// The steps of Getting started, and whether each is done for `model` (its wire form):
+/// arrivals, a task that entities from them reach, departures they reach through a task, a run,
+/// and reading what it found.
+pub fn steps(model: &Value, ran: bool, read: bool) -> [(&'static str, bool); 5] {
+    let w = walk(model);
     [
-        ("Add Arrivals", arrivals),
-        ("Add a task and connect Arrivals to it", task),
-        ("Add Departures and connect the task to it", departures),
+        ("Add Arrivals", w.arrivals.is_some()),
+        ("Add a task and connect Arrivals to it", w.task.is_some()),
+        ("Add Departures and connect the task to it", w.departures),
         ("Run the model: press F5", ran),
         ("Read what the run found", read),
     ]
@@ -207,6 +235,8 @@ pub enum Action {
     Open(&'static str),
     /// Open the keyboard shortcuts dialog to change keys.
     ChangeKeys,
+    /// Start the guide, which points at the control the next step uses.
+    ShowMe,
 }
 
 /// Whether `query` (already lower-cased) is found in `term` or `meaning`, in the interface
@@ -299,6 +329,20 @@ pub fn show(
                             text
                         };
                         ui.label(text);
+                        if next == Some(i) {
+                            ui.with_layout(
+                                egui::Layout::right_to_left(egui::Align::Center),
+                                |ui| {
+                                    if ui
+                                        .link(t("Show me"))
+                                        .on_hover_text(t("Point at where to do this step"))
+                                        .clicked()
+                                    {
+                                        action = Some(Action::ShowMe);
+                                    }
+                                },
+                            );
+                        }
                     });
                 }
                 ui.add_space(10.0);

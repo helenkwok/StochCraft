@@ -884,6 +884,19 @@ unit	yr	a
 	Callers who give up: the share lost and the wait of those who stay.	Persones que es rendeixen: la proporció perduda i l'espera de les que es queden.
 	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	Bloqueig, sales d'espera petites i avaries: peces rebutjades a l'inici de la línia.
 	Health checks that take busy servers out send their requests back to the queue.	Les comprovacions d'estat que retiren els servidors ocupats tornen les seves sol·licituds a la cua.
+	Show me	Mostra-m'ho
+	Point at where to do this step	Assenyala on fer aquest pas
+	Step {k} of {n}	Pas {k} de {n}
+	Stop the guide (Esc)	Atura la guia (Esc)
+	Done	Fet
+	Drag Arrivals onto the canvas, or click it.	Arrossegueu Arribades a la superfície principal, o feu-hi clic.
+	Now add a task: drag “Task with a resource” onto the canvas.	Ara afegiu una tasca: arrossegueu «Tasca amb un recurs» a la superfície principal.
+	Drag from the dot on Arrivals to the task to connect them, or choose the task under “Add a flow to…” in the inspector.	Arrossegueu des del punt d'Arribades fins a la tasca per connectar-les, o trieu la tasca sota «Afegeix un flux cap a…» al panell Propietats.
+	Add Departures, where entities leave: drag it onto the canvas.	Afegiu Sortides, on les entitats surten: arrossegueu-les a la superfície principal.
+	Drag from the dot on the task to Departures, or choose Departures under “Add a flow to…” in the inspector.	Arrossegueu des del punt de la tasca fins a Sortides, o trieu Sortides sota «Afegeix un flux cap a…» al panell Propietats.
+	Press Run to run the model.	Premeu Executa per executar el model.
+	Open Results to read what the run found.	Obriu Resultats per llegir què ha trobat l'execució.
+	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	Aquest és el vostre primer model. Les primeres línies de Resultats diuen què ha trobat l'execució; Ajuda ▸ Què volen dir els resultats explica cada número.
 @plural	Added {n} block|Added {n} blocks	S'ha afegit {n} bloc|S'han afegit {n} blocs
 @plural	Copied {n} block|Copied {n} blocks	S'ha copiat {n} bloc|S'han copiat {n} blocs
 @plural	Finished {n} run|Finished {n} runs	Acabada {n} execució|Acabades {n} execucions

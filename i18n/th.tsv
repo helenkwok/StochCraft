@@ -884,6 +884,19 @@ unit	yr	ปี
 	Callers who give up: the share lost and the wait of those who stay.	ผู้โทรที่ล้มเลิก: สัดส่วนที่สูญเสียและเวลารอของผู้ที่ยังอยู่
 	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	การบล็อก พื้นที่รอขนาดเล็ก และการขัดข้อง: ชิ้นงานที่ถูกปฏิเสธที่ต้นสายการผลิต
 	Health checks that take busy servers out send their requests back to the queue.	การตรวจสถานะที่นำเซิร์ฟเวอร์ที่ไม่ว่างออกจากการใช้งานจะส่งคำขอของเซิร์ฟเวอร์นั้นกลับเข้าคิว
+	Show me	แสดงให้ดู
+	Point at where to do this step	ชี้ไปยังจุดที่ทำขั้นตอนนี้
+	Step {k} of {n}	ขั้นที่ {k} จาก {n}
+	Stop the guide (Esc)	หยุดคำแนะนำ (Esc)
+	Done	เสร็จแล้ว
+	Drag Arrivals onto the canvas, or click it.	ลาก “ขาเข้า” ไปวางบนพื้นผิวหลัก หรือคลิกที่ขาเข้า
+	Now add a task: drag “Task with a resource” onto the canvas.	ตอนนี้เพิ่มงาน: ลาก “งานที่ใช้ทรัพยากร” ไปวางบนพื้นผิวหลัก
+	Drag from the dot on Arrivals to the task to connect them, or choose the task under “Add a flow to…” in the inspector.	ลากจากจุดบน “ขาเข้า” ไปยังงานเพื่อเชื่อมต่อ หรือเลือกงานภายใต้ “เพิ่มโฟลว์ไปยัง…” ในแผงคุณสมบัติ
+	Add Departures, where entities leave: drag it onto the canvas.	เพิ่ม “ขาออก” ซึ่งเป็นที่ที่เอนทิตีออกไป: ลากไปวางบนพื้นผิวหลัก
+	Drag from the dot on the task to Departures, or choose Departures under “Add a flow to…” in the inspector.	ลากจากจุดบนงานไปยัง “ขาออก” หรือเลือก “ขาออก” ภายใต้ “เพิ่มโฟลว์ไปยัง…” ในแผงคุณสมบัติ
+	Press Run to run the model.	กด “รัน” เพื่อรันแบบจำลอง
+	Open Results to read what the run found.	เปิด “ผลลัพธ์” เพื่ออ่านสิ่งที่การรันพบ
+	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	นี่คือแบบจำลองแรกของคุณ บรรทัดแรกของ “ผลลัพธ์” บอกสิ่งที่การรันพบ วิธีใช้ ▸ ความหมายของผลลัพธ์ อธิบายแต่ละตัวเลข
 @plural	Added {n} block|Added {n} blocks	เพิ่ม {n} บล็อกแล้ว
 @plural	Copied {n} block|Copied {n} blocks	คัดลอก {n} บล็อกแล้ว
 @plural	Finished {n} run|Finished {n} runs	การรันเสร็จสิ้น {n} รอบ
