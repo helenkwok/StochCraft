@@ -1,15 +1,19 @@
 //! Charts of a run's results: one measure per chart (one axis), one bar per block with the 95%
 //! confidence interval as a whisker, the value at the bar's tip and a tooltip on hover. The
-//! table below them holds every number, so the charts carry no legend: each has one series,
+//! table below them holds every number, so these charts carry no legend: each has one series,
 //! named by its title.
 //!
 //! Marks follow the dataviz rules: bars at most 16 px thick, square at the baseline with a 4 px
-//! rounded end, a recessive grid, text in text colours (never the bar's). The bar hue is
-//! validated per theme against its surface (`theme::Palette::chart`).
+//! rounded end, a recessive grid, text in text colours (never the bar's). A chart of one series
+//! keeps the theme's chart hue, validated per theme against its surface
+//! (`theme::Palette::chart`). A chart of several series, such as worked on and waiting in "Where
+//! an entity's time goes", gives series `i` the chart palette's colour `i`
+//! ([`series_color`], View ▸ Appearance ▸ Chart colours…) and names them in a legend.
 
-use egui::{Align2, FontId, Rect, Stroke, pos2, vec2};
+use egui::{Align2, Color32, FontId, Rect, Stroke, pos2, vec2};
 use serde_json::Value;
 
+use crate::chart_palette::series_color;
 use crate::i18n::{t, tf, tnf};
 use crate::results::{grouped, round_sig, rounded, unit_label};
 use crate::theme;
@@ -302,9 +306,14 @@ fn work_per_run(results: &Value, id: &str) -> Option<f64> {
 
 /// "Where an entity's time goes": one bar the length of the time in the system's parts, each
 /// task's time worked on filled and its wait outlined (a shape as well as a colour), its name
-/// under it where it fits, and a tooltip on each part.
+/// under it where it fits, and a tooltip on each part. Worked on and waiting are two series, so
+/// they take the chart palette's first two colours ([`series_color`]).
 fn time_chart(ui: &mut egui::Ui, results: &Value, parts: &[Part], unit: &str, width: f32) {
     let p = theme::palette(ui.ctx());
+    let series = [series_color(ui.ctx(), 0), series_color(ui.ctx(), 1)];
+    // A hovered part moves a third of the way to the text colour: darker on a light theme,
+    // lighter on a dark one, whatever the palette.
+    let hovered = |c: Color32| c.lerp_to_gamma(p.text, 0.3);
     let sum: f64 = parts.iter().map(|x| x.work + x.wait).sum();
     if sum <= 0.0 {
         return;
@@ -343,13 +352,14 @@ fn time_chart(ui: &mut egui::Ui, results: &Value, parts: &[Part], unit: &str, wi
             }
             let seg = Rect::from_min_size(pos2(x, rect.top()), vec2((w - 2.0).max(1.0), bar_h));
             let hover = ui.rect_contains_pointer(seg);
+            let colour = if hover { hovered(series[j]) } else { series[j] };
             if filled {
-                painter.rect_filled(seg, 2.0, if hover { p.chart_hover } else { p.chart });
+                painter.rect_filled(seg, 2.0, colour);
             } else {
                 painter.rect_stroke(
                     seg.shrink(0.75),
                     2.0,
-                    Stroke::new(1.5, if hover { p.chart_hover } else { p.chart }),
+                    Stroke::new(1.5, colour),
                     egui::StrokeKind::Inside,
                 );
             }
@@ -399,15 +409,18 @@ fn time_chart(ui: &mut egui::Ui, results: &Value, parts: &[Part], unit: &str, wi
     }
     // The legend: the two marks and their words.
     ui.horizontal(|ui| {
-        for (filled, label) in [(true, t("Worked on")), (false, t("Waiting"))] {
+        for (colour, filled, label) in [
+            (series[0], true, t("Worked on")),
+            (series[1], false, t("Waiting")),
+        ] {
             let (r, _) = ui.allocate_exact_size(vec2(12.0, 12.0), egui::Sense::hover());
             if filled {
-                ui.painter().rect_filled(r, 2.0, p.chart);
+                ui.painter().rect_filled(r, 2.0, colour);
             } else {
                 ui.painter().rect_stroke(
                     r.shrink(0.75),
                     2.0,
-                    Stroke::new(1.5, p.chart),
+                    Stroke::new(1.5, colour),
                     egui::StrokeKind::Inside,
                 );
             }
@@ -845,6 +858,71 @@ mod tests {
         let parts = super::parts(&results, &["serve".to_owned()]).unwrap_or_default();
         assert_eq!(parts.len(), 1);
         assert!((parts[0].work - 1.0).abs() < 1e-12, "{}", parts[0].work);
+    }
+
+    /// The fills and outline colours one frame of `time_chart` paints with `palette` in use.
+    fn time_chart_colours(
+        palette: &crate::chart_palette::ChartPalette,
+    ) -> (Vec<Color32>, Vec<Color32>) {
+        let ctx = egui::Context::default();
+        let parts = [
+            Part {
+                name: "Serve".into(),
+                work: 1.0,
+                wait: 3.0,
+            },
+            Part {
+                name: "Pack".into(),
+                work: 2.0,
+                wait: 2.0,
+            },
+        ];
+        let mut output = ctx.run_ui(egui::RawInput::default(), |ui| {
+            crate::chart_palette::use_palette(ui.ctx(), palette, theme::palette(ui.ctx()).canvas);
+            time_chart(ui, &Value::Null, &parts, "min", 600.0);
+        });
+        // Nothing is rendered: the font textures egui made are not needed.
+        output.textures_delta.clear();
+        let (mut fills, mut strokes) = (Vec::new(), Vec::new());
+        for clipped in &output.shapes {
+            if let egui::Shape::Rect(r) = &clipped.shape {
+                if r.fill != Color32::TRANSPARENT {
+                    fills.push(r.fill);
+                }
+                if r.stroke.width > 0.0 {
+                    strokes.push(r.stroke.color);
+                }
+            }
+        }
+        (fills, strokes)
+    }
+
+    #[test]
+    fn worked_on_and_waiting_take_the_chosen_palettes_first_two_colours() {
+        let ctx = egui::Context::default();
+        for name in ["Tol bright", "ColorBrewer Dark2"] {
+            let palette = crate::chart_palette::find(name, &[]);
+            assert_eq!(palette.name, name);
+            let canvas = theme::palette(&ctx).canvas;
+            let order = crate::chart_palette::draw_order(&palette, canvas);
+            let (first, second) = (palette.colors[order[0]], palette.colors[order[1]]);
+            let (fills, strokes) = time_chart_colours(&palette);
+            // Two worked-on parts and the legend's swatch filled with the first colour; two
+            // waits and the legend's swatch outlined with the second.
+            assert_eq!(
+                fills.iter().filter(|c| **c == first).count(),
+                3,
+                "{name}: {fills:?}"
+            );
+            assert_eq!(
+                strokes.iter().filter(|c| **c == second).count(),
+                3,
+                "{name}: {strokes:?}"
+            );
+            // Nothing in the theme's single-series hue.
+            let theme_hue = theme::palette(&ctx).chart;
+            assert!(!fills.contains(&theme_hue) && !strokes.contains(&theme_hue));
+        }
     }
 
     #[test]
