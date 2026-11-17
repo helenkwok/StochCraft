@@ -749,6 +749,18 @@ unit	yr	ஆண்டு
 	Keep as baseline	ஒப்பீட்டு அடிப்படையாக வைத்திரு
 	Keep these results, change the model, run it again, and see what the change did.	இந்த முடிவுகளை வைத்துக்கொண்டு, மாதிரியை மாற்றி, மீண்டும் இயக்கி, மாற்றம் என்ன செய்தது என்று பாருங்கள்.
 	Clear baseline	ஒப்பீட்டு அடிப்படையை அழி
+	Added {block}	{block} சேர்க்கப்பட்டது
+	Removed {block}	{block} அகற்றப்பட்டது
+	Renamed {before} to {after}	{before} என்பது {after} எனப் பெயர் மாற்றப்பட்டது
+	Disconnected {from} from {to}	{from} ஐ {to} இலிருந்து துண்டித்தது
+	Pool	தொகுப்பு
+	{field}, {part}	{field}, {part}
+	{block} › {field} changed	{block} › {field} மாற்றப்பட்டது
+	{block} › {field}: {before} → {after}	{block} › {field}: {before} → {after}
+	on	இயக்கத்தில்
+	off	முடக்கத்தில்
+	Changed since the baseline:	ஒப்பீட்டு அடிப்படைக்குப் பிறகு மாறியவை:
+	Nothing in the model has changed since the baseline.	ஒப்பீட்டு அடிப்படைக்குப் பிறகு மாதிரியில் எதுவும் மாறவில்லை.
 @plural	Added {n} block|Added {n} blocks	{n} தொகுதி சேர்க்கப்பட்டது|{n} தொகுதிகள் சேர்க்கப்பட்டன
 @plural	Copied {n} block|Copied {n} blocks	{n} தொகுதி நகலெடுக்கப்பட்டது|{n} தொகுதிகள் நகலெடுக்கப்பட்டன
 @plural	Finished {n} run|Finished {n} runs	{n} மீள் இயக்கம் முடிந்தது|{n} மீள் இயக்கங்கள் முடிந்தன
@@ -770,3 +782,4 @@ unit	yr	ஆண்டு
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	{n} மீள் இயக்கத்தைப் பயன்படுத்து (சுமார் ± 5%)|{n} மீள் இயக்கங்களைப் பயன்படுத்து (சுமார் ± 5%)
 @plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	இரண்டும் சீரற்ற விதை {seed} மற்றும் அதே {n} மீள் இயக்கத்தைப் பயன்படுத்தின, எனவே ஒவ்வொரு மீள் இயக்கமும் அதன் இணையைப் போலவே அதே சீரற்ற எண்களைப் பெறுகிறது: வேறுபாடுகள் தற்செயலான எடுப்புகளால் அல்ல, மாற்றத்தால் வருகின்றன.|இரண்டும் சீரற்ற விதை {seed} மற்றும் அதே {n} மீள் இயக்கங்களைப் பயன்படுத்தின, எனவே ஒவ்வொரு மீள் இயக்கமும் அதன் இணையைப் போலவே அதே சீரற்ற எண்களைப் பெறுகிறது: வேறுபாடுகள் தற்செயலான எடுப்புகளால் அல்ல, மாற்றத்தால் வருகின்றன.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	மேலும் {n} முக்கிய அளவீடு தற்செயல் செய்யக்கூடியதை விட அதிகமாக மாறவில்லை.|மேலும் {n} முக்கிய அளவீடுகள் தற்செயல் செய்யக்கூடியதை விட அதிகமாக மாறவில்லை.
+@plural	and {n} more change|and {n} more changes	மேலும் {n} மாற்றம்|மேலும் {n} மாற்றங்கள்

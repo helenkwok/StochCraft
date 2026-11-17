@@ -749,6 +749,18 @@ unit	yr	a
 	Keep as baseline	Tieni come riferimento
 	Keep these results, change the model, run it again, and see what the change did.	Tieni questi risultati, modifica il modello, eseguilo di nuovo e guarda cosa ha fatto la modifica.
 	Clear baseline	Rimuovi il riferimento
+	Added {block}	Aggiunto {block}
+	Removed {block}	Rimosso {block}
+	Renamed {before} to {after}	Rinominato {before} in {after}
+	Disconnected {from} from {to}	{from} disconnesso da {to}
+	Pool	Pool
+	{field}, {part}	{field}, {part}
+	{block} › {field} changed	{block} › {field} modificato
+	{block} › {field}: {before} → {after}	{block} › {field}: {before} → {after}
+	on	attivo
+	off	disattivo
+	Changed since the baseline:	Modifiche rispetto al riferimento:
+	Nothing in the model has changed since the baseline.	Nel modello non è cambiato nulla rispetto al riferimento.
 @plural	Added {n} block|Added {n} blocks	Aggiunto {n} blocco|Aggiunti {n} blocchi
 @plural	Copied {n} block|Copied {n} blocks	Copiato {n} blocco|Copiati {n} blocchi
 @plural	Finished {n} run|Finished {n} runs	Completata {n} esecuzione|Completate {n} esecuzioni
@@ -770,3 +782,4 @@ unit	yr	a
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	Usa {n} esecuzione (circa ± 5%)|Usa {n} esecuzioni (circa ± 5%)
 @plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Entrambe hanno usato il seme {seed} e la stessa {n} esecuzione, quindi ogni esecuzione riceve gli stessi numeri casuali della sua coppia: le differenze vengono dalla modifica, non da estrazioni casuali.|Entrambe hanno usato il seme {seed} e le stesse {n} esecuzioni, quindi ogni esecuzione riceve gli stessi numeri casuali della sua coppia: le differenze vengono dalla modifica, non da estrazioni casuali.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	{n} altra metrica principale non si è mossa più di quanto potrebbe il caso.|{n} altre metriche principali non si sono mosse più di quanto potrebbe il caso.
+@plural	and {n} more change|and {n} more changes	e {n} altra modifica|e {n} altre modifiche

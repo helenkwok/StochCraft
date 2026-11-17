@@ -749,6 +749,18 @@ unit	yr	a
 	Keep as baseline	Hoia võrdlusalusena
 	Keep these results, change the model, run it again, and see what the change did.	Hoia need tulemused, muuda mudelit, käivita see uuesti ja vaata, mida muudatus tegi.
 	Clear baseline	Eemalda võrdlusalus
+	Added {block}	Lisati {block}
+	Removed {block}	Eemaldati {block}
+	Renamed {before} to {after}	{before} nimetati ümber: {after}
+	Disconnected {from} from {to}	Lahutati {from} plokist {to}
+	Pool	Kogum
+	{field}, {part}	{field}, {part}
+	{block} › {field} changed	{block} › {field} muudetud
+	{block} › {field}: {before} → {after}	{block} › {field}: {before} → {after}
+	on	sees
+	off	väljas
+	Changed since the baseline:	Muutunud pärast võrdlusalust:
+	Nothing in the model has changed since the baseline.	Mudelis pole pärast võrdlusalust midagi muutunud.
 @plural	Added {n} block|Added {n} blocks	Lisati {n} plokk|Lisati {n} plokki
 @plural	Copied {n} block|Copied {n} blocks	Kopeeriti {n} plokk|Kopeeriti {n} plokki
 @plural	Finished {n} run|Finished {n} runs	{n} käivitamine lõpetatud|{n} käivitamist lõpetatud
@@ -770,3 +782,4 @@ unit	yr	a
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	Kasuta {n} käivitamine (umbes ± 5%)|Kasuta {n} käivitamist (umbes ± 5%)
 @plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Mõlemad kasutasid juhuarvuseemet {seed} ja sama {n} käivitamist, nii et iga käivitamine saab samad juhuslikud arvud kui tema paariline: erinevused tulevad muudatusest, mitte juhuslikest valikutest.|Mõlemad kasutasid juhuarvuseemet {seed} ja samu {n} käivitamist, nii et iga käivitamine saab samad juhuslikud arvud kui tema paariline: erinevused tulevad muudatusest, mitte juhuslikest valikutest.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	Veel {n} peamine mõõdik ei muutunud rohkem, kui juhus võiks.|Veel {n} peamist mõõdikut ei muutunud rohkem, kui juhus võiks.
+@plural	and {n} more change|and {n} more changes	ja veel {n} muudatus|ja veel {n} muudatust

@@ -749,6 +749,18 @@ unit	yr	г.
 	Keep as baseline	Сохранить как базовый вариант
 	Keep these results, change the model, run it again, and see what the change did.	Сохраните эти результаты, измените модель, запустите её снова и посмотрите, что дало изменение.
 	Clear baseline	Сбросить базовый вариант
+	Added {block}	Добавлен {block}
+	Removed {block}	Удалён {block}
+	Renamed {before} to {after}	{before} переименован в {after}
+	Disconnected {from} from {to}	{from} отсоединён от {to}
+	Pool	Пул
+	{field}, {part}	{field}, {part}
+	{block} › {field} changed	{block} › {field} изменено
+	{block} › {field}: {before} → {after}	{block} › {field}: {before} → {after}
+	on	вкл.
+	off	выкл.
+	Changed since the baseline:	Изменено по сравнению с базовым вариантом:
+	Nothing in the model has changed since the baseline.	В модели ничего не изменилось по сравнению с базовым вариантом.
 @plural	Added {n} block|Added {n} blocks	Добавлен {n} блок|Добавлено {n} блока|Добавлено {n} блоков
 @plural	Copied {n} block|Copied {n} blocks	Скопирован {n} блок|Скопировано {n} блока|Скопировано {n} блоков
 @plural	Finished {n} run|Finished {n} runs	Завершён {n} запуск|Завершены {n} запуска|Завершено {n} запусков
@@ -770,3 +782,4 @@ unit	yr	г.
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	Использовать {n} запуск (около ± 5%)|Использовать {n} запуска (около ± 5%)|Использовать {n} запусков (около ± 5%)
 @plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Оба использовали начальное значение генератора {seed} и тот же {n} запуск, поэтому каждый запуск получает те же случайные числа, что и его пара: различия вызваны изменением, а не случайными выборками.|Оба использовали начальное значение генератора {seed} и те же {n} запуска, поэтому каждый запуск получает те же случайные числа, что и его пара: различия вызваны изменением, а не случайными выборками.|Оба использовали начальное значение генератора {seed} и те же {n} запусков, поэтому каждый запуск получает те же случайные числа, что и его пара: различия вызваны изменением, а не случайными выборками.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	Ещё {n} основной показатель изменился не больше, чем могла бы случайность.|Ещё {n} основных показателя изменились не больше, чем могла бы случайность.|Ещё {n} основных показателей изменились не больше, чем могла бы случайность.
+@plural	and {n} more change|and {n} more changes	и ещё {n} изменение|и ещё {n} изменения|и ещё {n} изменений

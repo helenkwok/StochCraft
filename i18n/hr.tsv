@@ -749,6 +749,18 @@ unit	yr	god.
 	Keep as baseline	Zadrži kao referencu
 	Keep these results, change the model, run it again, and see what the change did.	Zadržite ove rezultate, promijenite model, ponovno ga pokrenite i pogledajte što je promjena učinila.
 	Clear baseline	Ukloni referencu
+	Added {block}	Dodan je {block}
+	Removed {block}	Uklonjeno: {block}
+	Renamed {before} to {after}	{before} preimenovan u {after}
+	Disconnected {from} from {to}	{from} je odspojen od {to}
+	Pool	Fond
+	{field}, {part}	{field}, {part}
+	{block} › {field} changed	{block} › {field} promijenjeno
+	{block} › {field}: {before} → {after}	{block} › {field}: {before} → {after}
+	on	uključeno
+	off	isključeno
+	Changed since the baseline:	Promijenjeno od reference:
+	Nothing in the model has changed since the baseline.	U modelu se ništa nije promijenilo od reference.
 @plural	Added {n} block|Added {n} blocks	Dodan je {n} blok|Dodana su {n} bloka|Dodano je {n} blokova
 @plural	Copied {n} block|Copied {n} blocks	Kopiran je {n} blok|Kopirana su {n} bloka|Kopirano je {n} blokova
 @plural	Finished {n} run|Finished {n} runs	Završeno je {n} pokretanje|Završena su {n} pokretanja|Završeno je {n} pokretanja
@@ -770,3 +782,4 @@ unit	yr	god.
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	Koristi {n} pokretanje (oko ± 5%)|Koristi {n} pokretanja (oko ± 5%)|Koristi {n} pokretanja (oko ± 5%)
 @plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Oba su koristila sjeme {seed} i isto {n} pokretanje, pa svako pokretanje dobiva iste slučajne brojeve kao njegov par: razlike dolaze od promjene, a ne od slučajnih izvlačenja.|Oba su koristila sjeme {seed} i ista {n} pokretanja, pa svako pokretanje dobiva iste slučajne brojeve kao njegov par: razlike dolaze od promjene, a ne od slučajnih izvlačenja.|Oba su koristila sjeme {seed} i istih {n} pokretanja, pa svako pokretanje dobiva iste slučajne brojeve kao njegov par: razlike dolaze od promjene, a ne od slučajnih izvlačenja.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	Još {n} ključna metrika nije se pomaknula više nego što bi mogao slučaj.|Još {n} ključne metrike nisu se pomaknule više nego što bi mogao slučaj.|Još {n} ključnih metrika nije se pomaknulo više nego što bi mogao slučaj.
+@plural	and {n} more change|and {n} more changes	i još {n} promjena|i još {n} promjene|i još {n} promjena

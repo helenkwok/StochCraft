@@ -749,6 +749,18 @@ unit	yr	г.
 	Keep as baseline	Запазване като базов вариант
 	Keep these results, change the model, run it again, and see what the change did.	Запазете тези резултати, променете модела, изпълнете го отново и вижте какво направи промяната.
 	Clear baseline	Изчистване на базовия вариант
+	Added {block}	Добавен е {block}
+	Removed {block}	Премахнат е {block}
+	Renamed {before} to {after}	{before} е преименуван на {after}
+	Disconnected {from} from {to}	{from} е разкачен от {to}
+	Pool	Пул
+	{field}, {part}	{field}, {part}
+	{block} › {field} changed	{block} › {field} е променено
+	{block} › {field}: {before} → {after}	{block} › {field}: {before} → {after}
+	on	вкл.
+	off	изкл.
+	Changed since the baseline:	Променено спрямо базовия вариант:
+	Nothing in the model has changed since the baseline.	В модела нищо не е променено спрямо базовия вариант.
 @plural	Added {n} block|Added {n} blocks	Добавен е {n} блок|Добавени са {n} блока
 @plural	Copied {n} block|Copied {n} blocks	Копиран е {n} блок|Копирани са {n} блока
 @plural	Finished {n} run|Finished {n} runs	Завършено е {n} изпълнение|Завършени са {n} изпълнения
@@ -770,3 +782,4 @@ unit	yr	г.
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	Използване на {n} изпълнение (около ± 5%)|Използване на {n} изпълнения (около ± 5%)
 @plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	И двете използваха начална стойност {seed} и същото {n} изпълнение, така че всяко изпълнение получава същите случайни числа като своята двойка: разликите идват от промяната, а не от случайни тегления.|И двете използваха начална стойност {seed} и същите {n} изпълнения, така че всяко изпълнение получава същите случайни числа като своята двойка: разликите идват от промяната, а не от случайни тегления.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	Още {n} основен показател не се промени повече, отколкото би могла случайността.|Още {n} основни показателя не се промениха повече, отколкото би могла случайността.
+@plural	and {n} more change|and {n} more changes	и още {n} промяна|и още {n} промени

@@ -749,6 +749,18 @@ unit	yr	j
 	Keep as baseline	Als referentie bewaren
 	Keep these results, change the model, run it again, and see what the change did.	Bewaar deze resultaten, wijzig het model, voer het opnieuw uit en zie wat de wijziging deed.
 	Clear baseline	Referentie wissen
+	Added {block}	{block} toegevoegd
+	Removed {block}	{block} verwijderd
+	Renamed {before} to {after}	{before} hernoemd naar {after}
+	Disconnected {from} from {to}	{from} losgekoppeld van {to}
+	Pool	Pool
+	{field}, {part}	{field}, {part}
+	{block} › {field} changed	{block} › {field} gewijzigd
+	{block} › {field}: {before} → {after}	{block} › {field}: {before} → {after}
+	on	aan
+	off	uit
+	Changed since the baseline:	Gewijzigd sinds de referentie:
+	Nothing in the model has changed since the baseline.	Er is niets in het model gewijzigd sinds de referentie.
 @plural	Added {n} block|Added {n} blocks	{n} blok toegevoegd|{n} blokken toegevoegd
 @plural	Copied {n} block|Copied {n} blocks	{n} blok gekopieerd|{n} blokken gekopieerd
 @plural	Finished {n} run|Finished {n} runs	{n} uitvoering voltooid|{n} uitvoeringen voltooid
@@ -770,3 +782,4 @@ unit	yr	j
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	{n} uitvoering gebruiken (ongeveer ± 5%)|{n} uitvoeringen gebruiken (ongeveer ± 5%)
 @plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Beide gebruikten startwaarde {seed} en dezelfde {n} uitvoering, dus elke uitvoering krijgt dezelfde willekeurige getallen als haar tegenhanger: de verschillen komen van de wijziging, niet van toevallige trekkingen.|Beide gebruikten startwaarde {seed} en dezelfde {n} uitvoeringen, dus elke uitvoering krijgt dezelfde willekeurige getallen als haar tegenhanger: de verschillen komen van de wijziging, niet van toevallige trekkingen.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	{n} andere belangrijke metriek bewoog niet meer dan toeval zou kunnen.|{n} andere belangrijke metrieken bewogen niet meer dan toeval zou kunnen.
+@plural	and {n} more change|and {n} more changes	en nog {n} wijziging|en nog {n} wijzigingen

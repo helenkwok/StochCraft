@@ -749,6 +749,18 @@ unit	yr	წელი
 	Keep as baseline	შენარჩუნება საბაზისო ვარიანტად
 	Keep these results, change the model, run it again, and see what the change did.	შეინახეთ ეს შედეგები, შეცვალეთ მოდელი, ხელახლა გაუშვით და ნახეთ, რა მოახდინა ცვლილებამ.
 	Clear baseline	საბაზისო ვარიანტის გასუფთავება
+	Added {block}	დამატებულია {block}
+	Removed {block}	წაშლილია {block}
+	Renamed {before} to {after}	{before} გადაერქვა {after}-ად
+	Disconnected {from} from {to}	{from} გაითიშა {to}-დან
+	Pool	პული
+	{field}, {part}	{field}, {part}
+	{block} › {field} changed	{block} › {field} შეიცვალა
+	{block} › {field}: {before} → {after}	{block} › {field}: {before} → {after}
+	on	ჩართული
+	off	გამორთული
+	Changed since the baseline:	შეიცვალა საბაზისო ვარიანტის შემდეგ:
+	Nothing in the model has changed since the baseline.	საბაზისო ვარიანტის შემდეგ მოდელში არაფერი შეცვლილა.
 @plural	Added {n} block|Added {n} blocks	დამატებულია {n} ბლოკი|დამატებულია {n} ბლოკი
 @plural	Copied {n} block|Copied {n} blocks	დაკოპირებულია {n} ბლოკი|დაკოპირებულია {n} ბლოკი
 @plural	Finished {n} run|Finished {n} runs	დასრულდა {n} გაშვება|დასრულდა {n} გაშვება
@@ -770,3 +782,4 @@ unit	yr	წელი
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	{n} გაშვების გამოყენება (დაახლ. ± 5%)|{n} გაშვების გამოყენება (დაახლ. ± 5%)
 @plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	ორივემ გამოიყენა საწყისი მნიშვნელობა {seed} და იგივე {n} გაშვება, ამიტომ ყოველი გაშვება იღებს იმავე შემთხვევით რიცხვებს, რასაც მისი წყვილი: განსხვავებები ცვლილებიდან მოდის და არა შემთხვევითი ამორჩევიდან.|ორივემ გამოიყენა საწყისი მნიშვნელობა {seed} და იგივე {n} გაშვება, ამიტომ ყოველი გაშვება იღებს იმავე შემთხვევით რიცხვებს, რასაც მისი წყვილი: განსხვავებები ცვლილებიდან მოდის და არა შემთხვევითი ამორჩევიდან.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	კიდევ {n} ძირითადი მაჩვენებელი არ შეცვლილა იმაზე მეტად, ვიდრე შემთხვევითობას შეეძლო.|კიდევ {n} ძირითადი მაჩვენებელი არ შეცვლილა იმაზე მეტად, ვიდრე შემთხვევითობას შეეძლო.
+@plural	and {n} more change|and {n} more changes	და კიდევ {n} ცვლილება|და კიდევ {n} ცვლილება

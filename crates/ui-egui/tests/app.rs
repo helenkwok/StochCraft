@@ -243,6 +243,9 @@ fn a_baseline_is_compared_with_the_next_run() {
     menu(&mut h, &["Model", "Run"]);
     finish_run(&mut h);
     h.get_by_label("Compared with the baseline:");
+    // What changed, by block and field, both values.
+    h.get_by_label("Changed since the baseline:");
+    h.get_by_label("Serve customer \u{203a} Capacity: 1 \u{2192} 2");
     h.get_by_label_contains("Both used seed");
     h.get_by_label("What the change did");
     assert!(h.query_all_by_label_contains("fell from").count() >= 2);

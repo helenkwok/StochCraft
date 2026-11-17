@@ -749,6 +749,18 @@ unit	yr	år
 	Keep as baseline	Behold som reference
 	Keep these results, change the model, run it again, and see what the change did.	Behold disse resultater, ændr modellen, kør den igen, og se, hvad ændringen gjorde.
 	Clear baseline	Ryd reference
+	Added {block}	Tilføjede {block}
+	Removed {block}	Fjernede {block}
+	Renamed {before} to {after}	Omdøbte {before} til {after}
+	Disconnected {from} from {to}	Afbrød forbindelsen fra {from} til {to}
+	Pool	Pulje
+	{field}, {part}	{field}, {part}
+	{block} › {field} changed	{block} › {field} ændret
+	{block} › {field}: {before} → {after}	{block} › {field}: {before} → {after}
+	on	til
+	off	fra
+	Changed since the baseline:	Ændret siden referencen:
+	Nothing in the model has changed since the baseline.	Intet i modellen er ændret siden referencen.
 @plural	Added {n} block|Added {n} blocks	Tilføjede {n} blok|Tilføjede {n} blokke
 @plural	Copied {n} block|Copied {n} blocks	Kopierede {n} blok|Kopierede {n} blokke
 @plural	Finished {n} run|Finished {n} runs	{n} kørsel fuldført|{n} kørsler fuldført
@@ -770,3 +782,4 @@ unit	yr	år
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	Brug {n} kørsel (ca. ± 5%)|Brug {n} kørsler (ca. ± 5%)
 @plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Begge brugte tilfældighedsfrø {seed} og den samme {n} kørsel, så hver kørsel får de samme tilfældige tal som sin partner: forskellene kommer fra ændringen, ikke fra tilfældige træk.|Begge brugte tilfældighedsfrø {seed} og de samme {n} kørsler, så hver kørsel får de samme tilfældige tal som sin partner: forskellene kommer fra ændringen, ikke fra tilfældige træk.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	{n} andet vigtigt målepunkt flyttede sig ikke mere, end tilfældighed kunne.|{n} andre vigtige målepunkter flyttede sig ikke mere, end tilfældighed kunne.
+@plural	and {n} more change|and {n} more changes	og {n} ændring mere|og {n} ændringer mere

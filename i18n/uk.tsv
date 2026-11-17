@@ -749,6 +749,18 @@ unit	yr	р.
 	Keep as baseline	Зберегти як базовий варіант
 	Keep these results, change the model, run it again, and see what the change did.	Збережіть ці результати, змініть модель, запустіть її знову й подивіться, що дала зміна.
 	Clear baseline	Скинути базовий варіант
+	Added {block}	Додано {block}
+	Removed {block}	Видалено {block}
+	Renamed {before} to {after}	{before} перейменовано на {after}
+	Disconnected {from} from {to}	{from} від'єднано від {to}
+	Pool	Пул
+	{field}, {part}	{field}, {part}
+	{block} › {field} changed	{block} › {field} змінено
+	{block} › {field}: {before} → {after}	{block} › {field}: {before} → {after}
+	on	увімк.
+	off	вимк.
+	Changed since the baseline:	Змінено порівняно з базовим варіантом:
+	Nothing in the model has changed since the baseline.	У моделі нічого не змінилося порівняно з базовим варіантом.
 @plural	Added {n} block|Added {n} blocks	Додано {n} блок|Додано {n} блоки|Додано {n} блоків
 @plural	Copied {n} block|Copied {n} blocks	Скопійовано {n} блок|Скопійовано {n} блоки|Скопійовано {n} блоків
 @plural	Finished {n} run|Finished {n} runs	Завершено {n} запуск|Завершено {n} запуски|Завершено {n} запусків
@@ -770,3 +782,4 @@ unit	yr	р.
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	Використати {n} запуск (близько ± 5%)|Використати {n} запуски (близько ± 5%)|Використати {n} запусків (близько ± 5%)
 @plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Обидва використали початкове значення генератора {seed} і той самий {n} запуск, тож кожен запуск отримує ті самі випадкові числа, що й його пара: відмінності спричинені зміною, а не випадковими вибірками.|Обидва використали початкове значення генератора {seed} і ті самі {n} запуски, тож кожен запуск отримує ті самі випадкові числа, що й його пара: відмінності спричинені зміною, а не випадковими вибірками.|Обидва використали початкове значення генератора {seed} і ті самі {n} запусків, тож кожен запуск отримує ті самі випадкові числа, що й його пара: відмінності спричинені зміною, а не випадковими вибірками.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	Ще {n} основний показник змінився не більше, ніж могла б випадковість.|Ще {n} основні показники змінилися не більше, ніж могла б випадковість.|Ще {n} основних показників змінилися не більше, ніж могла б випадковість.
+@plural	and {n} more change|and {n} more changes	і ще {n} зміна|і ще {n} зміни|і ще {n} змін

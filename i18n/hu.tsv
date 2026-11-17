@@ -749,6 +749,18 @@ unit	yr	év
 	Keep as baseline	Megtartás viszonyítási alapként
 	Keep these results, change the model, run it again, and see what the change did.	Tartsd meg ezeket az eredményeket, módosítsd a modellt, futtasd újra, és nézd meg, mit tett a változtatás.
 	Clear baseline	Viszonyítási alap törlése
+	Added {block}	{block} hozzáadva
+	Removed {block}	{block} eltávolítva
+	Renamed {before} to {after}	{before} átnevezve erre: {after}
+	Disconnected {from} from {to}	{from} leválasztva erről: {to}
+	Pool	Készlet
+	{field}, {part}	{field}, {part}
+	{block} › {field} changed	{block} › {field} módosítva
+	{block} › {field}: {before} → {after}	{block} › {field}: {before} → {after}
+	on	be
+	off	ki
+	Changed since the baseline:	Változott a viszonyítási alap óta:
+	Nothing in the model has changed since the baseline.	A modellben semmi sem változott a viszonyítási alap óta.
 @plural	Added {n} block|Added {n} blocks	{n} blokk hozzáadva|{n} blokk hozzáadva
 @plural	Copied {n} block|Copied {n} blocks	{n} blokk másolva|{n} blokk másolva
 @plural	Finished {n} run|Finished {n} runs	{n} futás befejezve|{n} futás befejezve
@@ -770,3 +782,4 @@ unit	yr	év
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	{n} futás használata (kb. ± 5%)|{n} futás használata (kb. ± 5%)
 @plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Mindkettő a(z) {seed} véletlenszám-magot és ugyanazt a(z) {n} futást használta, így minden futás ugyanazokat a véletlen számokat kapja, mint a párja: a különbségek a változtatásból erednek, nem véletlen húzásokból.|Mindkettő a(z) {seed} véletlenszám-magot és ugyanazt a(z) {n} futást használta, így minden futás ugyanazokat a véletlen számokat kapja, mint a párja: a különbségek a változtatásból erednek, nem véletlen húzásokból.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	További {n} fő mérőszám nem változott többel, mint amennyit a véletlen okozhat.|További {n} fő mérőszám nem változott többel, mint amennyit a véletlen okozhat.
+@plural	and {n} more change|and {n} more changes	és még {n} módosítás|és még {n} módosítás

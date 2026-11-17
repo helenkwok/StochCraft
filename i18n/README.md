@@ -655,6 +655,11 @@ engine's messages (validation, file notes) are English too.
   in cs, sk, pl, sl, hr, bs, sr, sr-latn, ru and uk, so a number of any size takes it. Serbian
   Cyrillic is transliterated from the Latin. Not checked against a source, and not reviewed by
   native speakers; the least certain are ka, kk, ta, te, bn, lo and th.
+- The rows for "Changed since the baseline" (issue #148, thirteen strings: added, removed, renamed
+  and disconnected blocks, a field changed from one value to another, on and off, Pool) were
+  drafted the same way, with each catalog's words for block, pool and model; "Connected {from} to
+  {to}" already had a row and was reused. Not checked against a source, and not reviewed by
+  native speakers.
 
 **Adding or changing a string:** add the English in the code through `i18n::t` (or `tf`, `tn`),
 then add its row to each catalog here, or leave it out to show English until it is translated.

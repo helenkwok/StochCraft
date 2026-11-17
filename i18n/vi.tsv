@@ -749,6 +749,18 @@ unit	yr	năm
 	Keep as baseline	Giữ làm mốc so sánh
 	Keep these results, change the model, run it again, and see what the change did.	Giữ các kết quả này, thay đổi mô hình, chạy lại và xem thay đổi đã tác động gì.
 	Clear baseline	Xóa mốc so sánh
+	Added {block}	Đã thêm {block}
+	Removed {block}	Đã xóa {block}
+	Renamed {before} to {after}	Đã đổi tên {before} thành {after}
+	Disconnected {from} from {to}	Đã ngắt kết nối {from} khỏi {to}
+	Pool	Nhóm
+	{field}, {part}	{field}, {part}
+	{block} › {field} changed	{block} › {field} đã thay đổi
+	{block} › {field}: {before} → {after}	{block} › {field}: {before} → {after}
+	on	bật
+	off	tắt
+	Changed since the baseline:	Đã thay đổi kể từ mốc so sánh:
+	Nothing in the model has changed since the baseline.	Không có gì trong mô hình thay đổi kể từ mốc so sánh.
 @plural	Added {n} block|Added {n} blocks	Đã thêm {n} khối
 @plural	Copied {n} block|Copied {n} blocks	Đã sao chép {n} khối
 @plural	Finished {n} run|Finished {n} runs	Đã hoàn thành {n} lần chạy
@@ -770,3 +782,4 @@ unit	yr	năm
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	Dùng {n} lần chạy (khoảng ± 5%)
 @plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Cả hai dùng hạt giống ngẫu nhiên {seed} và cùng {n} lần chạy, nên mỗi lần chạy nhận cùng các số ngẫu nhiên như lần chạy cặp với nó: khác biệt đến từ thay đổi, không phải từ các lần rút ngẫu nhiên.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	{n} chỉ số chính khác thay đổi không quá mức ngẫu nhiên có thể gây ra.
+@plural	and {n} more change|and {n} more changes	và {n} thay đổi khác

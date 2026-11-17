@@ -749,6 +749,18 @@ unit	yr	an
 	Keep as baseline	Garder comme référence
 	Keep these results, change the model, run it again, and see what the change did.	Gardez ces résultats, modifiez le modèle, exécutez-le à nouveau et voyez ce que le changement a fait.
 	Clear baseline	Effacer la référence
+	Added {block}	{block} ajouté
+	Removed {block}	{block} supprimé
+	Renamed {before} to {after}	{before} renommé en {after}
+	Disconnected {from} from {to}	{from} déconnecté de {to}
+	Pool	Pool
+	{field}, {part}	{field}, {part}
+	{block} › {field} changed	{block} › {field} modifié
+	{block} › {field}: {before} → {after}	{block} › {field} : {before} → {after}
+	on	activé
+	off	désactivé
+	Changed since the baseline:	Modifié depuis la référence :
+	Nothing in the model has changed since the baseline.	Rien n'a changé dans le modèle depuis la référence.
 @plural	Added {n} block|Added {n} blocks	{n} bloc ajouté|{n} blocs ajoutés
 @plural	Copied {n} block|Copied {n} blocks	{n} bloc copié|{n} blocs copiés
 @plural	Finished {n} run|Finished {n} runs	{n} exécution terminée|{n} exécutions terminées
@@ -770,3 +782,4 @@ unit	yr	an
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	Utiliser {n} exécution (environ ± 5 %)|Utiliser {n} exécutions (environ ± 5 %)
 @plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Les deux ont utilisé la graine {seed} et la même {n} exécution, donc chaque exécution reçoit les mêmes nombres aléatoires que sa paire : les différences viennent du changement, pas de tirages au hasard.|Les deux ont utilisé la graine {seed} et les mêmes {n} exécutions, donc chaque exécution reçoit les mêmes nombres aléatoires que sa paire : les différences viennent du changement, pas de tirages au hasard.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	{n} autre indicateur clé n'a pas varié plus que le hasard ne le pourrait.|{n} autres indicateurs clés n'ont pas varié plus que le hasard ne le pourrait.
+@plural	and {n} more change|and {n} more changes	et {n} autre modification|et {n} autres modifications

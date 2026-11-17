@@ -749,6 +749,18 @@ unit	yr	yıl
 	Keep as baseline	Referans olarak tut
 	Keep these results, change the model, run it again, and see what the change did.	Bu sonuçları tutun, modeli değiştirin, yeniden çalıştırın ve değişikliğin ne yaptığını görün.
 	Clear baseline	Referansı temizle
+	Added {block}	{block} eklendi
+	Removed {block}	{block} kaldırıldı
+	Renamed {before} to {after}	{before}, {after} olarak yeniden adlandırıldı
+	Disconnected {from} from {to}	{from} ile {to} arasındaki bağlantı kesildi
+	Pool	Havuz
+	{field}, {part}	{field}, {part}
+	{block} › {field} changed	{block} › {field} değişti
+	{block} › {field}: {before} → {after}	{block} › {field}: {before} → {after}
+	on	açık
+	off	kapalı
+	Changed since the baseline:	Referanstan bu yana değişenler:
+	Nothing in the model has changed since the baseline.	Referanstan bu yana modelde hiçbir şey değişmedi.
 @plural	Added {n} block|Added {n} blocks	{n} blok eklendi|{n} blok eklendi
 @plural	Copied {n} block|Copied {n} blocks	{n} blok kopyalandı|{n} blok kopyalandı
 @plural	Finished {n} run|Finished {n} runs	{n} çalıştırma tamamlandı|{n} çalıştırma tamamlandı
@@ -770,3 +782,4 @@ unit	yr	yıl
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	{n} çalıştırma kullan (yaklaşık ± 5%)|{n} çalıştırma kullan (yaklaşık ± 5%)
 @plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	İkisi de {seed} rastgelelik tohumunu ve aynı {n} çalıştırmayı kullandı; böylece her çalıştırma eşiyle aynı rastgele sayıları alır: farklar şans çekilişlerinden değil, değişiklikten gelir.|İkisi de {seed} rastgelelik tohumunu ve aynı {n} çalıştırmayı kullandı; böylece her çalıştırma eşiyle aynı rastgele sayıları alır: farklar şans çekilişlerinden değil, değişiklikten gelir.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	Diğer {n} temel ölçüt, şansın yapabileceğinden fazla değişmedi.|Diğer {n} temel ölçüt, şansın yapabileceğinden fazla değişmedi.
+@plural	and {n} more change|and {n} more changes	ve {n} değişiklik daha|ve {n} değişiklik daha

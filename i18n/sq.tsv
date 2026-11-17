@@ -749,6 +749,18 @@ unit	yr	v
 	Keep as baseline	Mbaje si referencë
 	Keep these results, change the model, run it again, and see what the change did.	Mbajini këto rezultate, ndryshoni modelin, ekzekutojeni përsëri dhe shihni çfarë bëri ndryshimi.
 	Clear baseline	Pastro referencën
+	Added {block}	U shtua {block}
+	Removed {block}	U hoq {block}
+	Renamed {before} to {after}	{before} u riemërtua në {after}
+	Disconnected {from} from {to}	U shkëput {from} nga {to}
+	Pool	Grup
+	{field}, {part}	{field}, {part}
+	{block} › {field} changed	{block} › {field} u ndryshua
+	{block} › {field}: {before} → {after}	{block} › {field}: {before} → {after}
+	on	aktiv
+	off	joaktiv
+	Changed since the baseline:	Ndryshuar që nga referenca:
+	Nothing in the model has changed since the baseline.	Asgjë në model nuk ka ndryshuar që nga referenca.
 @plural	Added {n} block|Added {n} blocks	U shtua {n} bllok|U shtuan {n} blloqe
 @plural	Copied {n} block|Copied {n} blocks	U kopjua {n} bllok|U kopjuan {n} blloqe
 @plural	Finished {n} run|Finished {n} runs	Përfundoi {n} ekzekutim|Përfunduan {n} ekzekutime
@@ -770,3 +782,4 @@ unit	yr	v
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	Përdor {n} ekzekutim (rreth ± 5%)|Përdor {n} ekzekutime (rreth ± 5%)
 @plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Të dy përdorën farën {seed} dhe të njëjtin {n} ekzekutim, kështu që çdo ekzekutim merr të njëjtët numra të rastësishëm si çifti i tij: dallimet vijnë nga ndryshimi, jo nga tërheqjet e rastësishme.|Të dy përdorën farën {seed} dhe të njëjtat {n} ekzekutime, kështu që çdo ekzekutim merr të njëjtët numra të rastësishëm si çifti i tij: dallimet vijnë nga ndryshimi, jo nga tërheqjet e rastësishme.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	{n} tregues tjetër kryesor nuk lëvizi më shumë se sa mund të bënte rastësia.|{n} tregues të tjerë kryesorë nuk lëvizën më shumë se sa mund të bënte rastësia.
+@plural	and {n} more change|and {n} more changes	dhe {n} ndryshim tjetër|dhe {n} ndryshime të tjera

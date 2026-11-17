@@ -749,6 +749,18 @@ unit	yr	वर्ष
 	Keep as baseline	आधार रेखा के रूप में रखें
 	Keep these results, change the model, run it again, and see what the change did.	इन परिणामों को रखें, मॉडल बदलें, उसे फिर से चलाएँ, और देखें कि बदलाव ने क्या किया।
 	Clear baseline	आधार रेखा हटाएँ
+	Added {block}	{block} जोड़ा गया
+	Removed {block}	{block} हटाया गया
+	Renamed {before} to {after}	{before} का नाम बदलकर {after} किया गया
+	Disconnected {from} from {to}	{from} को {to} से अलग किया गया
+	Pool	पूल
+	{field}, {part}	{field}, {part}
+	{block} › {field} changed	{block} › {field} बदला गया
+	{block} › {field}: {before} → {after}	{block} › {field}: {before} → {after}
+	on	चालू
+	off	बंद
+	Changed since the baseline:	आधार रेखा के बाद से बदला गया:
+	Nothing in the model has changed since the baseline.	आधार रेखा के बाद से मॉडल में कुछ नहीं बदला।
 @plural	Added {n} block|Added {n} blocks	{n} ब्लॉक जोड़ा गया|{n} ब्लॉक जोड़े गए
 @plural	Copied {n} block|Copied {n} blocks	{n} ब्लॉक कॉपी किया गया|{n} ब्लॉक कॉपी किए गए
 @plural	Finished {n} run|Finished {n} runs	{n} रन पूरा हुआ|{n} रन पूरे हुए
@@ -770,3 +782,4 @@ unit	yr	वर्ष
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	{n} रन उपयोग करें (लगभग ± 5%)|{n} रन उपयोग करें (लगभग ± 5%)
 @plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	दोनों ने यादृच्छिक बीज {seed} और वही {n} रन इस्तेमाल किया, इसलिए हर रन को अपने जोड़ीदार जैसी ही यादृच्छिक संख्याएँ मिलती हैं: अंतर बदलाव से आते हैं, संयोग से निकली संख्याओं से नहीं।|दोनों ने यादृच्छिक बीज {seed} और वही {n} रन इस्तेमाल किए, इसलिए हर रन को अपने जोड़ीदार जैसी ही यादृच्छिक संख्याएँ मिलती हैं: अंतर बदलाव से आते हैं, संयोग से निकली संख्याओं से नहीं।
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	{n} अन्य मुख्य मापदंड संयोग की सीमा से अधिक नहीं बदला।|{n} अन्य मुख्य मापदंड संयोग की सीमा से अधिक नहीं बदले।
+@plural	and {n} more change|and {n} more changes	और {n} अन्य बदलाव|और {n} अन्य बदलाव

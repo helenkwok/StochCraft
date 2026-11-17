@@ -749,6 +749,18 @@ unit	yr	a
 	Keep as baseline	Conserva com a referència
 	Keep these results, change the model, run it again, and see what the change did.	Conserva aquests resultats, canvia el model, torna'l a executar i mira què ha fet el canvi.
 	Clear baseline	Treu la referència
+	Added {block}	S'ha afegit {block}
+	Removed {block}	S'ha eliminat {block}
+	Renamed {before} to {after}	S'ha canviat el nom de {before} a {after}
+	Disconnected {from} from {to}	S'ha desconnectat {from} de {to}
+	Pool	Grup
+	{field}, {part}	{field}, {part}
+	{block} › {field} changed	{block} › {field} ha canviat
+	{block} › {field}: {before} → {after}	{block} › {field}: {before} → {after}
+	on	activat
+	off	desactivat
+	Changed since the baseline:	Canvis des de la referència:
+	Nothing in the model has changed since the baseline.	No ha canviat res del model des de la referència.
 @plural	Added {n} block|Added {n} blocks	S'ha afegit {n} bloc|S'han afegit {n} blocs
 @plural	Copied {n} block|Copied {n} blocks	S'ha copiat {n} bloc|S'han copiat {n} blocs
 @plural	Finished {n} run|Finished {n} runs	Acabada {n} execució|Acabades {n} execucions
@@ -770,3 +782,4 @@ unit	yr	a
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	Usa {n} execució (aprox. ± 5%)|Usa {n} execucions (aprox. ± 5%)
 @plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Totes dues van usar la llavor {seed} i la mateixa {n} execució, de manera que cada execució rep els mateixos nombres aleatoris que la seva parella: les diferències vénen del canvi, no de tirades a l'atzar.|Totes dues van usar la llavor {seed} i les mateixes {n} execucions, de manera que cada execució rep els mateixos nombres aleatoris que la seva parella: les diferències vénen del canvi, no de tirades a l'atzar.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	{n} altra mètrica clau no s'ha mogut més del que podria l'atzar.|{n} altres mètriques clau no s'han mogut més del que podria l'atzar.
+@plural	and {n} more change|and {n} more changes	i {n} canvi més|i {n} canvis més

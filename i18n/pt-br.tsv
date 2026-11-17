@@ -749,6 +749,18 @@ unit	yr	a
 	Keep as baseline	Manter como referência
 	Keep these results, change the model, run it again, and see what the change did.	Mantenha estes resultados, altere o modelo, execute-o de novo e veja o que a mudança fez.
 	Clear baseline	Limpar referência
+	Added {block}	{block} adicionado
+	Removed {block}	{block} removido
+	Renamed {before} to {after}	{before} renomeado para {after}
+	Disconnected {from} from {to}	{from} desconectado de {to}
+	Pool	Pool
+	{field}, {part}	{field}, {part}
+	{block} › {field} changed	{block} › {field} alterado
+	{block} › {field}: {before} → {after}	{block} › {field}: {before} → {after}
+	on	ligado
+	off	desligado
+	Changed since the baseline:	Alterações desde a referência:
+	Nothing in the model has changed since the baseline.	Nada mudou no modelo desde a referência.
 @plural	Added {n} block|Added {n} blocks	{n} bloco adicionado|{n} blocos adicionados
 @plural	Copied {n} block|Copied {n} blocks	{n} bloco copiado|{n} blocos copiados
 @plural	Finished {n} run|Finished {n} runs	Concluída {n} execução|Concluídas {n} execuções
@@ -770,3 +782,4 @@ unit	yr	a
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	Usar {n} execução (cerca de ± 5%)|Usar {n} execuções (cerca de ± 5%)
 @plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Ambas usaram a semente {seed} e a mesma {n} execução, então cada execução recebe os mesmos números aleatórios que seu par: as diferenças vêm da mudança, não de sorteios ao acaso.|Ambas usaram a semente {seed} e as mesmas {n} execuções, então cada execução recebe os mesmos números aleatórios que seu par: as diferenças vêm da mudança, não de sorteios ao acaso.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	{n} outra métrica principal não mudou mais do que o acaso poderia.|{n} outras métricas principais não mudaram mais do que o acaso poderia.
+@plural	and {n} more change|and {n} more changes	e mais {n} alteração|e mais {n} alterações

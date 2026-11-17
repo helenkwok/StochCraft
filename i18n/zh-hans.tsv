@@ -749,6 +749,18 @@ unit	yr	年
 	Keep as baseline	保留为基线
 	Keep these results, change the model, run it again, and see what the change did.	保留这些结果，更改模型，再次运行，看看更改起了什么作用。
 	Clear baseline	清除基线
+	Added {block}	已添加 {block}
+	Removed {block}	已移除 {block}
+	Renamed {before} to {after}	已将 {before} 重命名为 {after}
+	Disconnected {from} from {to}	已断开 {from} 与 {to} 的连接
+	Pool	资源池
+	{field}, {part}	{field}，{part}
+	{block} › {field} changed	{block} › {field} 已更改
+	{block} › {field}: {before} → {after}	{block} › {field}：{before} → {after}
+	on	开
+	off	关
+	Changed since the baseline:	自基线以来的更改：
+	Nothing in the model has changed since the baseline.	自基线以来，模型没有任何更改。
 @plural	Added {n} block|Added {n} blocks	已添加 {n} 个区块
 @plural	Copied {n} block|Copied {n} blocks	已复制 {n} 个区块
 @plural	Finished {n} run|Finished {n} runs	已完成 {n} 次运行
@@ -770,3 +782,4 @@ unit	yr	年
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	使用 {n} 次运行（约 ± 5%）
 @plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	两者都使用随机种子 {seed} 和相同的 {n} 次运行，因此每次运行与其配对的运行得到相同的随机数：差异来自更改，而不是随机抽取。
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	其他 {n} 个关键指标的变动没有超出偶然所能造成的程度。
+@plural	and {n} more change|and {n} more changes	以及另外 {n} 项更改

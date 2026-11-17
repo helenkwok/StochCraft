@@ -749,6 +749,18 @@ unit	yr	ж.
 	Keep as baseline	Базалық нұсқа ретінде сақтау
 	Keep these results, change the model, run it again, and see what the change did.	Осы нәтижелерді сақтаңыз, модельді өзгертіңіз, қайта іске қосыңыз және өзгеріс не істегенін көріңіз.
 	Clear baseline	Базалық нұсқаны тазалау
+	Added {block}	{block} қосылды
+	Removed {block}	{block} жойылды
+	Renamed {before} to {after}	{before} атауы {after} болып өзгертілді
+	Disconnected {from} from {to}	{from} мен {to} ажыратылды
+	Pool	Қор
+	{field}, {part}	{field}, {part}
+	{block} › {field} changed	{block} › {field} өзгерді
+	{block} › {field}: {before} → {after}	{block} › {field}: {before} → {after}
+	on	қосулы
+	off	өшірулі
+	Changed since the baseline:	Базалық нұсқадан бері өзгергендер:
+	Nothing in the model has changed since the baseline.	Базалық нұсқадан бері модельде ештеңе өзгерген жоқ.
 @plural	Added {n} block|Added {n} blocks	{n} блок қосылды|{n} блок қосылды
 @plural	Copied {n} block|Copied {n} blocks	{n} блок көшірілді|{n} блок көшірілді
 @plural	Finished {n} run|Finished {n} runs	{n} іске қосу аяқталды|{n} іске қосу аяқталды
@@ -770,3 +782,4 @@ unit	yr	ж.
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	{n} іске қосуды пайдалану (шамамен ± 5%)|{n} іске қосуды пайдалану (шамамен ± 5%)
 @plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Екеуі де {seed} кездейсоқ тұқымын және сол {n} іске қосуды пайдаланды, сондықтан әр іске қосу өз жұбымен бірдей кездейсоқ сандар алады: айырмашылықтар кездейсоқ таңдаудан емес, өзгерістен шығады.|Екеуі де {seed} кездейсоқ тұқымын және сол {n} іске қосуды пайдаланды, сондықтан әр іске қосу өз жұбымен бірдей кездейсоқ сандар алады: айырмашылықтар кездейсоқ таңдаудан емес, өзгерістен шығады.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	Тағы {n} негізгі көрсеткіш кездейсоқтық істей алатыннан көп өзгерген жоқ.|Тағы {n} негізгі көрсеткіш кездейсоқтық істей алатыннан көп өзгерген жоқ.
+@plural	and {n} more change|and {n} more changes	және тағы {n} өзгеріс|және тағы {n} өзгеріс

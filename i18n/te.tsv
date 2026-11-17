@@ -749,6 +749,18 @@ unit	yr	సం.
 	Keep as baseline	ప్రాతిపదికగా ఉంచు
 	Keep these results, change the model, run it again, and see what the change did.	ఈ ఫలితాలను ఉంచుకోండి, మోడల్‌ను మార్చండి, మళ్లీ అమలు చేయండి, మార్పు ఏమి చేసిందో చూడండి.
 	Clear baseline	ప్రాతిపదికను తొలగించు
+	Added {block}	{block} జోడించబడింది
+	Removed {block}	{block} తొలగించబడింది
+	Renamed {before} to {after}	{before} పేరు {after}గా మార్చబడింది
+	Disconnected {from} from {to}	{from} ను {to} నుండి వేరు చేయబడింది
+	Pool	పూల్
+	{field}, {part}	{field}, {part}
+	{block} › {field} changed	{block} › {field} మార్చబడింది
+	{block} › {field}: {before} → {after}	{block} › {field}: {before} → {after}
+	on	ఆన్
+	off	ఆఫ్
+	Changed since the baseline:	ప్రాతిపదిక తర్వాత మారినవి:
+	Nothing in the model has changed since the baseline.	ప్రాతిపదిక తర్వాత మోడల్‌లో ఏదీ మారలేదు.
 @plural	Added {n} block|Added {n} blocks	{n} బ్లాక్ జోడించబడింది|{n} బ్లాక్‌లు జోడించబడ్డాయి
 @plural	Copied {n} block|Copied {n} blocks	{n} బ్లాక్ కాపీ చేయబడింది|{n} బ్లాక్‌లు కాపీ చేయబడ్డాయి
 @plural	Finished {n} run|Finished {n} runs	{n} అమలు పూర్తయింది|{n} అమలులు పూర్తయ్యాయి
@@ -770,3 +782,4 @@ unit	yr	సం.
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	{n} అమలును ఉపయోగించు (సుమారు ± 5%)|{n} అమలులను ఉపయోగించు (సుమారు ± 5%)
 @plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	రెండూ యాదృచ్ఛిక బీజం {seed} మరియు అదే {n} అమలును ఉపయోగించాయి, కాబట్టి ప్రతి అమలుకు దాని జతకు వచ్చిన అవే యాదృచ్ఛిక సంఖ్యలు వస్తాయి: తేడాలు యాదృచ్ఛిక ఎంపికల నుండి కాక మార్పు నుండి వస్తాయి.|రెండూ యాదృచ్ఛిక బీజం {seed} మరియు అవే {n} అమలులను ఉపయోగించాయి, కాబట్టి ప్రతి అమలుకు దాని జతకు వచ్చిన అవే యాదృచ్ఛిక సంఖ్యలు వస్తాయి: తేడాలు యాదృచ్ఛిక ఎంపికల నుండి కాక మార్పు నుండి వస్తాయి.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	మరో {n} ముఖ్య కొలమానం యాదృచ్ఛికత చేయగలదానికంటే ఎక్కువ మారలేదు.|మరో {n} ముఖ్య కొలమానాలు యాదృచ్ఛికత చేయగలదానికంటే ఎక్కువ మారలేదు.
+@plural	and {n} more change|and {n} more changes	మరియు మరో {n} మార్పు|మరియు మరో {n} మార్పులు
