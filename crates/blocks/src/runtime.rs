@@ -3175,16 +3175,29 @@ struct UnitServer {
 /// no more than its waiting room (and the other units' places) meanwhile. Taken only if a place
 /// is free at that moment (none is when every place already holds an entity, such as one taken
 /// for the unit before a break). With `out_too` ([`PlaceWhileOut::Reserved`]), so does a unit
-/// out restarting after a health check, until its restart ends.
-fn reserve_place(units: &RefCell<Vec<Unit>>, u: usize, places: Option<&Rc<Places>>, out_too: bool) {
+/// out restarting after a health check, until its restart ends. `own` is a place the unit has
+/// in hand already (that of a job given up as it was taken out): kept if the unit keeps one,
+/// else given back.
+fn reserve_place(
+    units: &RefCell<Vec<Unit>>,
+    u: usize,
+    places: Option<&Rc<Places>>,
+    out_too: bool,
+    own: Option<ResourceGuard>,
+) {
     let Some(p) = places else { return };
-    let mut units = units.borrow_mut();
-    if let Some(x) = units.get_mut(u)
-        && keeps_place(x, out_too)
-        && !x.busy
-        && x.reserved.is_none()
-    {
-        x.reserved = p.reserve();
+    let spare = {
+        let mut units = units.borrow_mut();
+        match units.get_mut(u) {
+            Some(x) if keeps_place(x, out_too) && !x.busy && x.reserved.is_none() => {
+                x.reserved = own.or_else(|| p.reserve());
+                None
+            }
+            _ => own,
+        }
+    };
+    if let Some(g) = spare {
+        p.give_back(g);
     }
 }
 
@@ -3338,7 +3351,7 @@ fn spawn_unit_server(sim: &mut Sim, mut env: BlockEnv, parts: UnitServer) {
                     book.change(&e, u, |d| d.down = true);
                 }
                 let places = env.borrow().places.clone();
-                reserve_place(&units, u, places.as_ref(), out_too);
+                reserve_place(&units, u, places.as_ref(), out_too, None);
                 if let Some(pid) = serving {
                     c.interrupt(pid, FAILED);
                 }
@@ -3398,7 +3411,7 @@ fn spawn_unit_server(sim: &mut Sim, mut env: BlockEnv, parts: UnitServer) {
                 // Its place, if it has no job (one retried takes it once the job is back in
                 // the queue).
                 let places = env.borrow().places.clone();
-                reserve_place(&units, u, places.as_ref(), out_too);
+                reserve_place(&units, u, places.as_ref(), out_too, None);
                 if let Some(pid) = serving {
                     c.interrupt(pid, TAKEN_OUT);
                 }
@@ -3613,11 +3626,12 @@ fn spawn_unit_server(sim: &mut Sim, mut env: BlockEnv, parts: UnitServer) {
                     x.serving = None;
                 }
                 if let Some(work) = retried {
-                    retry(&env2, &book2, unit, entity, work, started, measured);
+                    let freed = retry(&env2, &book2, unit, entity, work, started, measured);
                     free_unit(&units2, unit, &env2.borrow());
-                    // Taken out, the unit now takes its place ([`PlaceWhileOut::Reserved`]).
+                    // Taken out, the unit now takes its place ([`PlaceWhileOut::Reserved`]):
+                    // that of a job given up, if there was one, before anyone waiting for room.
                     let places = env2.borrow().places.clone();
-                    reserve_place(&units2, unit, places.as_ref(), out_too);
+                    reserve_place(&units2, unit, places.as_ref(), out_too, freed);
                     if let Some(d) = done2.get(unit) {
                         d.notify_all();
                     }
@@ -3821,8 +3835,9 @@ fn take_out(
 /// shift ([`OnShiftEnd::Retry`]): the `work` done on it is
 /// wasted, and the entity goes back to the head of the queue at once, for any unit to start
 /// afresh (with a fresh patience). One that had given up during the job already (patience
-/// until done) is discarded instead, neither left nor produced, and its place here goes back.
-/// The wait recorded as it started
+/// until done) is discarded instead, neither left nor produced; its place here, if it has one,
+/// is returned for the unit to keep or give back ([`reserve_place`]). The wait recorded as it
+/// started
 /// (`started`, into the statistics as they were after `resets` resets) is taken back.
 fn retry(
     env: &Rc<RefCell<BlockEnv>>,
@@ -3832,7 +3847,7 @@ fn retry(
     work: f64,
     started: f64,
     resets: u64,
-) {
+) -> Option<ResourceGuard> {
     let e = env.borrow();
     e.with_stats(|s| {
         s.wasted += work;
@@ -3846,13 +3861,14 @@ fn retry(
         d.setup = false;
     });
     if e.patient.as_ref().is_some_and(|p| !p.retry(entity.id)) {
-        if let Some(p) = &e.places {
-            p.leave(entity.id);
-        }
-        return;
+        return e
+            .places
+            .as_ref()
+            .and_then(|p| p.leave_or_keep(entity.id, true));
     }
     e.adjust(|s| &mut s.waiting, 1.0);
     e.input.put_front(entity);
+    None
 }
 
 /// An entity whose service or delay is over leaves for the next element. Into a full finite
@@ -4608,7 +4624,16 @@ fn spawn_unbatch(sim: &mut Sim, env: BlockEnv) {
             let mut entity = env.input.get().await;
             env.adjust(|s| &mut s.waiting, -1.0);
             let members = std::mem::take(&mut entity.members);
-            for e in std::iter::once(entity).chain(members) {
+            // The members still to go wait here, blocked, while the one before them waits for
+            // room ([`send_on`] counts each from its turn).
+            let blocks = env.out.as_ref().is_some_and(Port::may_block);
+            let mut behind = if blocks { members.len() as f64 } else { 0.0 };
+            env.adjust(|s| &mut s.blocked, behind);
+            for (k, e) in std::iter::once(entity).chain(members).enumerate() {
+                if k > 0 && behind > 0.0 {
+                    env.adjust(|s| &mut s.blocked, -1.0);
+                    behind -= 1.0;
+                }
                 match &env.out {
                     Some(out) => send_on(&env, out, e, 1.0).await,
                     None => env.with_stats(|s| s.left += 1),

@@ -809,3 +809,49 @@ fn a_job_given_up_in_service_gives_its_place_back_when_its_unit_is_taken_out() {
     assert_eq!(desk.lost.unwrap_or(0), 0, "{desk:?}");
     assert_eq!(desk.entered, 5, "{desk:?}");
 }
+
+/// As above, but with the unit out keeping a place (reserved) and a sender waiting upstream for
+/// room: the place A gave up becomes the unit's, not the sender's. A is served from 0 and gives
+/// up at 3; B arrives at 3.5 and waits; prep finishes at 3.6 and waits for room. The check at
+/// 4 takes the unit out until 8: it keeps A's place, so prep still waits at 5.
+#[test]
+fn a_given_up_job_s_place_goes_to_its_unit_out_before_a_waiting_sender() {
+    let mut b = Builder::new();
+    let a = b.source("a", Dist::Constant(0.0), Some(1));
+    let late = b.source("b", Dist::Constant(3.5), Some(1));
+    let parts = b.source("parts", Dist::Constant(0.0), Some(1));
+    let prep = b.server("prep", 1, Dist::Constant(3.6));
+    let desk = b.buffered_server("desk", 1, Dist::Constant(10.0), 1);
+    let exit = b.sink("exit");
+    let gave_up = b.sink("gave_up");
+    b.connect(a, desk);
+    b.connect(late, desk);
+    b.connect(parts, prep);
+    b.connect(prep, desk);
+    b.connect(desk, exit);
+    b.abandoned(desk, gave_up);
+    b.patience(
+        desk,
+        Patience {
+            time: Dist::Constant(3.0),
+            until: PatienceUntil::Done,
+        },
+    );
+    b.health_check(
+        desk,
+        check(
+            Dist::Constant(4.0),
+            0.0,
+            Dist::Constant(4.0),
+            None,
+            OnTakeout::Retry,
+        ),
+    );
+    let r = b
+        .run(Rng::new(1), 0.0, 5.0)
+        .unwrap_or_else(|e| panic!("{e:?}"));
+    let desk = element(&r, "desk");
+    assert_eq!(desk.taken_out, Some(1), "{desk:?}");
+    assert_eq!(desk.entered, 2, "prep's part must still wait: {desk:?}");
+    assert_eq!(element(&r, "prep").left, 0, "{r:?}");
+}
