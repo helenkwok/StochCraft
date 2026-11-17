@@ -3361,6 +3361,28 @@ fn a_demand_gives_takt_and_is_removed() {
     assert_eq!(metric(&r, "desk", "cycle_time"), None, "{r}");
 }
 
+/// A calendar a demand counts its shifts by cannot be removed while the demand names it.
+#[test]
+fn a_calendar_a_demand_uses_is_not_removed() {
+    let mut e = help_desk();
+    ok(
+        &mut e,
+        "calendar.add",
+        json!({"id": "shifts", "events": [{"start": "2016-01-01T08:00:00", "end": "2016-01-01T16:00:00", "repeat": "FREQ=DAILY"}]}),
+    );
+    ok(
+        &mut e,
+        "block.set",
+        json!({"id": "exit", "demand": {"quantity": 30.0, "per": "shift", "calendar": "shifts"}}),
+    );
+    assert_eq!(
+        err(&mut e, "calendar.remove", json!({"id": "shifts"})),
+        ErrorCode::Conflict
+    );
+    ok(&mut e, "block.set", json!({"id": "exit", "demand": null}));
+    ok(&mut e, "calendar.remove", json!({"id": "shifts"}));
+}
+
 /// Processing times by property value: set on a server, read back, run, refused where they do
 /// not apply, and removed.
 #[test]
