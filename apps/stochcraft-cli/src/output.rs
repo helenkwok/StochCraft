@@ -239,6 +239,15 @@ pub fn capacity(file: &Path, t: &Value) -> String {
             s(&st["name"]),
             bounded(&st["load"], true)
         );
+    } else if stations
+        .iter()
+        .any(|st| st["kind"] == "server" || st["kind"] == "pool")
+    {
+        out.push_str(
+            "
+Bottleneck: not known before a run (a load not known, or only bounded, could be the highest).
+",
+        );
     }
     if !unknown.is_empty() {
         out.push_str("\nNot known before a run:\n");

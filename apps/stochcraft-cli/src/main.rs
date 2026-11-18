@@ -322,7 +322,26 @@ fn explain(
     format: CheckFormat,
 ) -> Result<u8, Failure> {
     let mut engine = Engine::new();
-    open(&mut engine, file, scenario)?;
+    let opened = open(&mut engine, file, scenario)?;
+    // A model with errors has no table worth trusting: say what they are, as `run` does.
+    let errors: Vec<String> = opened["notes"]
+        .as_array()
+        .into_iter()
+        .chain(opened["diagnostics"].as_array())
+        .flatten()
+        .filter(|n| n["severity"] == "error")
+        .map(|n| n["message"].as_str().unwrap_or("").to_owned())
+        .collect();
+    if !errors.is_empty() {
+        eprintln!(
+            "{} cannot be explained: it has errors (stochcraft-cli validate lists them):",
+            file.display()
+        );
+        for e in &errors {
+            eprintln!("  {e}");
+        }
+        return Ok(1);
+    }
     let table = engine.execute("model.capacity", json!({ "target": target }))?;
     match format {
         CheckFormat::Json => println!(

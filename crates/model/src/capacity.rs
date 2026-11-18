@@ -183,7 +183,8 @@ pub enum Why {
     SharedPool,
     /// The service time is not exponential, with a finite queue, patience or balking.
     NotExponential,
-    /// A full waiting room at this element can hold up the station's units (blocking).
+    /// This element can hold up the station's units (blocking): a full waiting room, or a
+    /// transfer into it that keeps the sending unit.
     HeldUp(ElementId),
 }
 
@@ -264,7 +265,8 @@ impl Why {
                 "arrivals are at most a rate and the units vary by shift: no bound follows".into()
             }
             Why::HeldUp(id) => format!(
-                "a full waiting room at {} can hold up the units (blocking)",
+                "the units can be held up by {} (a full waiting room, or a transfer that keeps \
+                 them)",
                 name(id)
             ),
             Why::Unstable => "at 100% or more the queue grows without limit".into(),
@@ -350,22 +352,29 @@ impl Status {
     }
 }
 
-/// A queueing formula's results at a station, in the model's time unit.
+/// A queueing formula's results at a station, in the model's time unit, each defined as the
+/// result of the same name is, so the two can be set side by side.
 #[derive(Debug, Clone, PartialEq)]
 pub struct Formula {
     /// The model in Kendall's notation (`M/M/2`, `M/M/1/5+M`, `M/G/1`, `M/G/∞`).
     pub name: String,
-    /// The mean wait for a unit, of the entities that join the queue.
+    /// The mean time from arrival to the start of service, of the entities served
+    /// (`mean_wait`).
     pub mean_wait: f64,
-    /// The mean number waiting.
+    /// The time-average number waiting (`mean_queue_length`).
     pub mean_queue: f64,
     /// The chance an entity that joins has to wait.
     pub wait_probability: Option<f64>,
-    /// The share of arrivals that do not join: turned away by a full waiting room, or balking.
+    /// With a finite waiting room: the share of attempts to get in turned away
+    /// (`loss_probability`).
     pub lost_share: Option<f64>,
-    /// The share of those joining that give up waiting.
+    /// With balking: the share of arrivals that balk (`balked_share`).
+    pub balked_share: Option<f64>,
+    /// With patience: the share of those joining that give up (`abandoned_share`).
     pub abandoned_share: Option<f64>,
-    /// The mean number inside, waiting or served.
+    /// The share of arrivals served.
+    pub served_share: f64,
+    /// The time-average number inside, waiting or served.
     pub mean_inside: f64,
 }
 
@@ -529,13 +538,17 @@ impl<'a> Net<'a> {
                 balking,
                 ..
             } => {
-                // Entities lost here (arrivals from a source into a full room, those giving up
-                // or balking) leave by a marked way or the model, not the ordinary way.
+                // Entities lost here (arrivals from a source into a full room, or turned away
+                // by a way of their own, those giving up or balking) leave by a marked way or
+                // the model, not the ordinary way.
                 let fed_by_source = self.ins[i].iter().any(|&k| {
                     self.start_of(k)
                         .is_some_and(|f| matches!(self.element(f).kind, ElementKind::Source { .. }))
                 });
-                (queue_capacity.is_some() && fed_by_source)
+                let turns_away = self.outs[i]
+                    .iter()
+                    .any(|&k| self.model.connections[k].turned_away);
+                (queue_capacity.is_some() && (fed_by_source || turns_away))
                     || patience.is_some()
                     || balking.is_some()
             }
@@ -561,7 +574,7 @@ impl<'a> Net<'a> {
                     sizes.insert(size);
                 }
                 ElementKind::Source { .. } => bare = true,
-                ElementKind::Unbatch => {}
+                ElementKind::Unbatch => bare = true,
                 _ => todo.extend(self.ins[j].iter().filter_map(|&k| self.start_of(k))),
             }
         }
@@ -907,7 +920,9 @@ impl<'a> Net<'a> {
                             mean_queue: 0.0,
                             wait_probability: Some(0.0),
                             lost_share: None,
+                            balked_share: None,
                             abandoned_share: None,
+                            served_share: 1.0,
                             mean_inside: *value,
                         }),
                         Value::Unknown(w) => Err(w.clone()),
@@ -923,6 +938,20 @@ impl<'a> Net<'a> {
                     st.load = st
                         .utilisation
                         .combine(&Value::exact(avail[i].unwrap_or(1.0)), true);
+                    // Held up, a unit is occupied longer than its service: at least this load.
+                    if self.held_up_by(i).is_some() {
+                        st.load = match st.load {
+                            Value::Known {
+                                value,
+                                bound: Bound::Exact | Bound::AtLeast,
+                            } => Value::Known {
+                                value,
+                                bound: Bound::AtLeast,
+                            },
+                            Value::Known { .. } => Value::Unknown(Why::Bounds),
+                            unknown => unknown,
+                        };
+                    }
                     (st.status, st.units_for_target) =
                         judge(&st.load, &work, avail[i], target, gives_up(&e.kind));
                     unstable[i] = st.status == Status::Unstable;
@@ -949,18 +978,7 @@ impl<'a> Net<'a> {
         }
         self.pools(&mut stations, &rates, &service, &unstable, target);
 
-        let bottleneck = stations
-            .iter()
-            .filter(|s| s.kind != StationKind::Delay && s.kind != StationKind::SharedTask)
-            .filter_map(|s| match s.load {
-                Value::Known {
-                    value,
-                    bound: Bound::Exact | Bound::AtLeast,
-                } => Some((value, &s.id)),
-                _ => None,
-            })
-            .max_by(|a, b| a.0.total_cmp(&b.0))
-            .map(|(_, id)| id.clone());
+        let bottleneck = bottleneck(&stations);
         Capacity {
             target,
             stations,
@@ -1082,6 +1100,9 @@ impl<'a> Net<'a> {
                 continue;
             }
             match &self.element(j).kind {
+                ElementKind::Server {
+                    transfer: Some(t), ..
+                } if t.holds_sender => return Some(j),
                 ElementKind::Server {
                     queue_capacity: Some(_),
                     ..
@@ -1299,6 +1320,38 @@ impl<'a> Net<'a> {
     }
 }
 
+/// The station whose load is surely the highest: at least as high as every other server's and
+/// pool's could be. None when a load that is not known, or only bounded below, could be higher.
+fn bottleneck(stations: &[Station]) -> Option<ElementId> {
+    let candidates: Vec<&Station> = stations
+        .iter()
+        .filter(|s| matches!(s.kind, StationKind::Server | StationKind::Pool))
+        .collect();
+    let low = |s: &Station| match s.load {
+        Value::Known {
+            value,
+            bound: Bound::Exact | Bound::AtLeast,
+        } => Some(value),
+        _ => None,
+    };
+    let high = |s: &Station| match s.load {
+        Value::Known {
+            value,
+            bound: Bound::Exact | Bound::AtMost,
+        } => Some(value),
+        _ => None,
+    };
+    let (best, value) = candidates
+        .iter()
+        .filter_map(|s| low(s).map(|v| (s, v)))
+        .max_by(|a, b| a.1.total_cmp(&b.1))?;
+    candidates
+        .iter()
+        .filter(|s| s.id != best.id)
+        .all(|s| high(s).is_some_and(|h| h <= value))
+        .then(|| best.id.clone())
+}
+
 fn add(a: &Value, b: &Value) -> Value {
     match (a, b) {
         (Value::Unknown(w), _) | (_, Value::Unknown(w)) => Value::Unknown(w.clone()),
@@ -1316,8 +1369,7 @@ fn add(a: &Value, b: &Value) -> Value {
 
 /// The rate of entities a formula's station serves, out of `lambda` arriving.
 fn served_rate(f: &Formula, lambda: f64) -> f64 {
-    let joined = lambda * (1.0 - f.lost_share.unwrap_or(0.0));
-    joined * (1.0 - f.abandoned_share.unwrap_or(0.0))
+    lambda * f.served_share
 }
 
 /// Whether entities can leave this server other than by being served, so it never overflows.
@@ -1382,22 +1434,33 @@ fn mean_service(e: &Element) -> Value {
         ElementKind::Delay { duration, .. } => (duration, None),
         _ => return Value::Unknown(Why::NoMean),
     };
-    if e.kind.processing_by().is_some() {
-        return Value::Unknown(Why::ByProperty);
+    // With times by property value, the least of the means; with changeovers, none: what the
+    // entities' mix or order adds is not known, so the mean is at least this.
+    let mut bound = Bound::Exact;
+    let mut least = mean_of(time);
+    if let Some(by) = e.kind.processing_by() {
+        bound = Bound::AtLeast;
+        for v in &by.by_value {
+            least = match (least, mean_of(&v.time)) {
+                (Some(a), Some(b)) => Some(a.min(b)),
+                _ => None,
+            };
+        }
     }
     let setup_mean = match setup {
-        None => 0.0,
+        None => Some(0.0),
         Some(s) if s.on_change_of.is_some() || !s.by_change.is_empty() => {
-            return Value::Unknown(Why::Changeover);
+            bound = Bound::AtLeast;
+            Some(0.0)
         }
-        Some(s) => match mean_of(&s.time) {
-            Some(m) => m,
-            None => return Value::Unknown(Why::NoMean),
-        },
+        Some(s) => mean_of(&s.time),
     };
-    match mean_of(time) {
-        Some(m) => Value::exact(m + setup_mean),
-        None => Value::Unknown(Why::NoMean),
+    match (least, setup_mean) {
+        (Some(m), Some(su)) => Value::Known {
+            value: m + su,
+            bound,
+        },
+        _ => Value::Unknown(Why::NoMean),
     }
 }
 
@@ -1493,7 +1556,9 @@ fn erlang_c(lambda: f64, mu: f64, c: u32) -> Option<Formula> {
             mean_queue: 0.0,
             wait_probability: Some(0.0),
             lost_share: None,
+            balked_share: None,
             abandoned_share: None,
+            served_share: 1.0,
             mean_inside: 0.0,
         });
     }
@@ -1510,7 +1575,9 @@ fn erlang_c(lambda: f64, mu: f64, c: u32) -> Option<Formula> {
         mean_queue,
         wait_probability: Some(wait),
         lost_share: None,
+        balked_share: None,
         abandoned_share: None,
+        served_share: 1.0,
         mean_inside: mean_queue + a,
     })
 }
@@ -1529,7 +1596,9 @@ fn pollaczek_khinchine(lambda: f64, s: f64, variance: f64) -> Option<Formula> {
         mean_queue,
         wait_probability: Some(rho),
         lost_share: None,
+        balked_share: None,
         abandoned_share: None,
+        served_share: 1.0,
         mean_inside: mean_queue + rho,
     })
 }
@@ -1567,6 +1636,7 @@ fn birth_death(
     }
     // Log weights of the states n = 0, 1, …, until they are negligible.
     let mut logs = vec![0.0_f64];
+    let mut peak = 0.0_f64;
     let mut n: u64 = 0;
     loop {
         if last.is_some_and(|l| n >= l) {
@@ -1581,8 +1651,8 @@ fn birth_death(
             (k.min(u64::from(c)) as f64) * mu + (k.saturating_sub(u64::from(c)) as f64) * theta;
         let next = logs[logs.len() - 1] + ln(up / down);
         logs.push(next);
+        peak = peak.max(next);
         n = k;
-        let peak = logs.iter().copied().fold(f64::NEG_INFINITY, f64::max);
         if last.is_none() && k > u64::from(c) && up < down && next < peak - 50.0 {
             break;
         }
@@ -1590,36 +1660,47 @@ fn birth_death(
             return None;
         }
     }
-    let peak = logs.iter().copied().fold(f64::NEG_INFINITY, f64::max);
     let weights: Vec<f64> = logs.iter().map(|l| exp(l - peak)).collect();
     let total: f64 = weights.iter().sum();
     let p: Vec<f64> = weights.iter().map(|w| w / total).collect();
-    let (mut arriving, mut joining, mut waiting_join, mut lq, mut inside) =
+    // An entity joining at place q in the queue (q − 1 ahead of it, all units busy) moves up at
+    // rate cμ + (q − 1)θ and gives up at rate θ: the time to the next event does not depend on
+    // which it is (competing exponentials), so it is served with chance Π a_i and, if so, after
+    // Σ 1/(cμ + iθ) (Garnett, Mandelbaum and Reiman 2002 for M/M/N+M).
+    let rate_c = cf * mu;
+    let (mut reach, mut time) = (1.0_f64, 0.0_f64);
+    let mut served_at = Vec::with_capacity(p.len());
+    for q in 1..=p.len().saturating_sub(c as usize) {
+        let qf = q as f64;
+        reach *= (rate_c + (qf - 1.0) * theta) / (rate_c + qf * theta);
+        time += 1.0 / (rate_c + qf * theta);
+        served_at.push((reach, time));
+    }
+    let (mut joining, mut full, mut balked) = (0.0, 0.0, 0.0);
+    let (mut served, mut served_wait, mut waiting_join, mut lq, mut inside) =
         (0.0, 0.0, 0.0, 0.0, 0.0);
     for (n, &pn) in p.iter().enumerate() {
-        let n = n as u64;
-        let full = last.is_some_and(|l| n >= l);
-        let j = if full { 0.0 } else { join(n) };
-        arriving += pn;
-        joining += pn * j;
-        if n >= u64::from(c) {
-            waiting_join += pn * j;
+        let is_full = last.is_some_and(|l| n as u64 >= l);
+        if is_full {
+            full += pn;
+        } else {
+            let j = join(n as u64);
+            joining += pn * j;
+            balked += pn * (1.0 - j);
+            if n < c as usize {
+                served += pn * j;
+            } else {
+                waiting_join += pn * j;
+                if let Some(&(chance, wait)) = served_at.get(n - c as usize) {
+                    served += pn * j * chance;
+                    served_wait += pn * j * chance * wait;
+                }
+            }
         }
-        let w = n.saturating_sub(u64::from(c)) as f64;
-        lq += pn * w;
+        lq += pn * n.saturating_sub(c as usize) as f64;
         inside += pn * n as f64;
     }
-    let joined_rate = lambda * joining;
-    let mean_wait = if joined_rate > 0.0 {
-        lq / joined_rate
-    } else {
-        0.0
-    };
-    let abandoned = if joined_rate > 0.0 {
-        theta * lq / joined_rate
-    } else {
-        0.0
-    };
+    let share = |a: f64, b: f64| if b > 0.0 { a / b } else { 0.0 };
     let mut name = format!("M/M/{c}");
     if let Some(l) = last {
         name.push_str(&format!("/{l}"));
@@ -1632,15 +1713,13 @@ fn birth_death(
     }
     Some(Formula {
         name,
-        mean_wait,
+        mean_wait: share(served_wait, served),
         mean_queue: lq,
-        wait_probability: Some(if joining > 0.0 {
-            waiting_join / joining
-        } else {
-            0.0
-        }),
-        lost_share: Some(1.0 - joining / arriving),
-        abandoned_share: (theta > 0.0).then_some(abandoned),
+        wait_probability: Some(share(waiting_join, joining)),
+        lost_share: last.map(|_| share(full, full + joining)),
+        balked_share: balking.map(|_| balked),
+        abandoned_share: (theta > 0.0).then(|| share(theta * lq, lambda * joining)),
+        served_share: served,
         mean_inside: inside,
     })
 }

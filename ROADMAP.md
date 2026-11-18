@@ -1388,9 +1388,15 @@ ch. 10 §10.4, in Brailsford, Churilov and Dangerfield, eds., 2014). Related and
     - A formula is given only where it is exact. M/M/c (Erlang C) holds through rework loops
       when every station feeding it is exponential with an unlimited queue (a Jackson
       network). M/M/c/K, Erlang A and balking (as a birth–death queue) and M/G/1
-      (Pollaczek–Khinchine) need Poisson arrivals. A station whose units a full room further on
-      can hold up (blocking) gets none, nor does one that holds up the station sending to it.
-      Every other station gets the reason.
+      (Pollaczek–Khinchine) need Poisson arrivals. A station whose units something further on
+      can hold up gets none, nor does one that holds up the station sending to it. That
+      something is a full room, or a transfer that keeps the sending unit. Every other
+      station gets the reason. Each number is defined as the result of the same name is: the
+      mean wait is that of the entities served, as in Garnett, Mandelbaum and Reiman's M/M/N+M.
+      Every family is checked against the simulator's 95% intervals
+      (`blocks/tests/capacity_theory.rs`).
+    - The bottleneck is named only when its load is surely the highest. A load that is not
+      known, or only bounded, that could be higher leaves it unnamed.
     - Still to do: showing the table in the window beside the model and the simulated values
       beside it after a run; the verify option; Cobham's formula for a pool shared by
       priorities; time averages over calendars, where today the most units on shift are

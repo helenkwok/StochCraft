@@ -522,8 +522,16 @@ fn times_by_property_are_not_guessed() {
         });
     }
     let c = m.capacity(DEFAULT_TARGET);
-    assert_eq!(row(&c, "s").mean_service, Value::Unknown(Why::ByProperty));
+    // At least the least mean (here the only one, 0.5), as the overloaded check takes it.
+    assert_eq!(
+        row(&c, "s").mean_service,
+        Value::Known {
+            value: 0.5,
+            bound: Bound::AtLeast
+        }
+    );
     assert_eq!(row(&c, "s").status, Status::Unknown);
+    assert_eq!(reason(row(&c, "s")), &Why::ByProperty);
 }
 
 #[test]
@@ -664,4 +672,135 @@ fn a_delay_after_an_unknown_rate_is_not_called_fine() {
     m.connections[1].condition = Some("getProperty('x') > 1".into());
     let c = m.capacity(DEFAULT_TARGET);
     assert_eq!(row(&c, "wait").status, Status::Unknown);
+}
+
+#[test]
+fn erlang_a_waits_are_those_of_the_entities_served() {
+    // M/M/1+M, λ = μ = θ = 1. From place q in the queue an entity is served with chance
+    // Π_{i ≤ q} i/(i + 1) = 1/(q + 1), after Σ_{i ≤ q} 1/(1 + i). States are Poisson(1):
+    // p_n = e⁻¹/n!, an arrival finding n ≥ 1 joins at place n. So the served share is
+    // Σ_n p_n/(n + 1) = 1 − e⁻¹ and their waits sum to Σ_{n ≥ 1} p_n H'(n)/(n + 1), with
+    // H'(n) = Σ_{i=1..n} 1/(1 + i).
+    let mut m = line(1.0, 1, Dist::exponential_rate(1.0));
+    if let ElementKind::Server { patience, .. } = &mut m.elements[1].kind {
+        *patience = Some(Patience {
+            time: Dist::exponential_rate(1.0),
+            until: PatienceUntil::Start,
+        });
+    }
+    let f = formula(row(&m.capacity(DEFAULT_TARGET), "s")).clone();
+    let e1 = stochcraft_random::math::exp(-1.0);
+    let (mut served, mut waits, mut pn, mut h) = (e1, 0.0, e1, 0.0);
+    for n in 1..60 {
+        pn /= f64::from(n);
+        h += 1.0 / f64::from(1 + n);
+        served += pn / f64::from(n + 1);
+        waits += pn * h / f64::from(n + 1);
+    }
+    assert!(near(f.served_share, 1.0 - e1), "{f:?}");
+    assert!(near(f.mean_wait, waits / served), "{f:?}");
+}
+
+#[test]
+fn the_bottleneck_is_named_only_when_sure() {
+    // Paint's load is only at most 86.5% (Weld's room can lose arrivals): it could be above
+    // Weld's 61.5%, so no bottleneck is named.
+    let mut m = model(
+        vec![
+            source("in", Dist::exponential_rate(1.0 / 6.5)),
+            server("weld", 1, Dist::exponential_rate(0.25)),
+            server("paint", 1, Dist::exponential_rate(0.2)),
+            sink("out"),
+        ],
+        vec![
+            link("in", "weld"),
+            link("weld", "paint"),
+            link("paint", "out"),
+        ],
+    );
+    if let ElementKind::Server { queue_capacity, .. } = &mut m.elements[1].kind {
+        *queue_capacity = Some(3);
+    }
+    let c = m.capacity(DEFAULT_TARGET);
+    assert!(matches!(
+        row(&c, "paint").load,
+        Value::Known {
+            bound: Bound::AtMost,
+            ..
+        }
+    ));
+    assert_eq!(c.bottleneck, None);
+    // With every load exact, the highest is named.
+    m.elements[1] = server("weld", 1, Dist::exponential_rate(0.25));
+    assert_eq!(m.capacity(DEFAULT_TARGET).bottleneck, Some(id("paint")));
+}
+
+#[test]
+fn a_room_turning_entities_away_passes_on_at_most_its_arrivals() {
+    let mut m = model(
+        vec![
+            source("in", Dist::exponential_rate(0.5)),
+            server("first", 1, Dist::exponential_rate(1.0)),
+            gateway("pass"),
+            server("second", 1, Dist::exponential_rate(1.0)),
+            server("third", 1, Dist::exponential_rate(1.0)),
+            sink("out"),
+            sink("away"),
+        ],
+        vec![
+            link("in", "first"),
+            link("first", "pass"),
+            link("pass", "second"),
+            link("second", "third"),
+            link("third", "out"),
+            Connection {
+                turned_away: true,
+                ..link("second", "away")
+            },
+        ],
+    );
+    if let ElementKind::Server { queue_capacity, .. } = &mut m.elements[3].kind {
+        *queue_capacity = Some(1);
+    }
+    let c = m.capacity(DEFAULT_TARGET);
+    assert_eq!(
+        row(&c, "third").arrival_rate,
+        Value::Known {
+            value: 0.5,
+            bound: Bound::AtMost
+        }
+    );
+}
+
+#[test]
+fn a_transfer_that_keeps_the_sender_holds_it_up() {
+    let mut m = model(
+        vec![
+            source("in", Dist::exponential_rate(0.5)),
+            server("first", 1, Dist::exponential_rate(1.0)),
+            server("second", 1, Dist::exponential_rate(1.0)),
+            sink("out"),
+        ],
+        vec![
+            link("in", "first"),
+            link("first", "second"),
+            link("second", "out"),
+        ],
+    );
+    if let ElementKind::Server { transfer, .. } = &mut m.elements[2].kind {
+        *transfer = Some(crate::Transfer::holding(Dist::Constant(0.5)));
+    }
+    let c = m.capacity(DEFAULT_TARGET);
+    let first = row(&c, "first");
+    assert_eq!(reason(first), &Why::HeldUp(id("second")));
+    // Busy as the results count it is still exact; the unit is occupied at least that long.
+    assert!(near(first.utilisation.exact_value().unwrap_or(0.0), 0.5));
+    assert!(matches!(
+        first.load,
+        Value::Known {
+            bound: Bound::AtLeast,
+            ..
+        }
+    ));
+    assert_eq!(reason(row(&c, "second")), &Why::Transfer);
 }

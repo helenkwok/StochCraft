@@ -587,8 +587,31 @@ fn explain_gives_the_capacity_table_without_running() {
     assert_eq!(j["stations"][0]["units_for_target"], 2);
     // Blocking: Weld can be held up by Paint's full room, and says so.
     let text = ok(&["explain", &model("weld-paint.bpmn")]);
-    assert!(text.contains("can hold up the units"), "{text}");
+    assert!(text.contains("can be held up by Paint"), "{text}");
+    assert!(
+        text.contains("Bottleneck: not known before a run"),
+        "{text}"
+    );
     let bad = cli(&["explain", &model("mm1.bpmn"), "--target", "1.5"]);
     assert_ne!(bad.status.code(), Some(0));
     assert!(stderr(&bad).contains("between 0 and 1"), "{}", stderr(&bad));
+}
+
+#[test]
+fn explain_refuses_a_model_with_errors() {
+    let broken = scratch("broken-explain.bpmn");
+    let script = scratch("make-broken-explain.json");
+    let _ = std::fs::write(
+        &script,
+        format!(
+            r#"[{{"command": "block.add", "params": {{"kind": "server", "id": "lonely"}}}},
+               {{"command": "file.save", "params": {{"path": {:?}}}}}]"#,
+            broken.to_string_lossy()
+        ),
+    );
+    ok(&["exec", &script.to_string_lossy()]);
+    let o = cli(&["explain", &broken.to_string_lossy()]);
+    assert_eq!(o.status.code(), Some(1));
+    assert!(stderr(&o).contains("cannot be explained"), "{}", stderr(&o));
+    assert!(stdout(&o).is_empty(), "{}", stdout(&o));
 }
