@@ -533,7 +533,12 @@ impl<'a> Net<'a> {
     fn bounds_onward(&self, i: usize) -> bool {
         let e = self.element(i);
         match &e.kind {
-            ElementKind::Source { limit, timed, .. } => limit.is_some() || !timed.is_empty(),
+            ElementKind::Source {
+                limit,
+                timed,
+                idle_outside,
+                ..
+            } => limit.is_some() || !timed.is_empty() || *idle_outside,
             ElementKind::Server {
                 queue_capacity,
                 patience,
@@ -780,8 +785,17 @@ impl<'a> Net<'a> {
     fn arrivals(&self, flows: &[Flow], at_most: &[bool], i: usize) -> Value {
         let e = self.element(i);
         if let Some(r) = Self::source_rate(e) {
+            // A source with a limit stops; one with calendars has its highest rate only at
+            // times: either way, at most this rate in the long run.
             return match r {
-                Ok(v) => Value::exact(v),
+                Ok(value) => Value::Known {
+                    value,
+                    bound: if self.bounds_onward(i) {
+                        Bound::AtMost
+                    } else {
+                        Bound::Exact
+                    },
+                },
                 Err(w) => Value::Unknown(w),
             };
         }

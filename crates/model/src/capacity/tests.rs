@@ -1005,3 +1005,42 @@ fn a_later_balking_row_that_takes_in_more_is_not_cut_off() {
     let f = formula(row(&c, "s"));
     assert!(f.mean_queue > 90.0, "{f:?}");
 }
+
+#[test]
+fn the_overloaded_warning_follows_the_table() {
+    let overloaded = |m: &Model| -> Vec<String> {
+        m.validate()
+            .into_iter()
+            .filter(|d| matches!(d.problem, crate::Problem::Overloaded { .. }))
+            .filter_map(|d| d.at.map(|a| a.to_string()))
+            .collect()
+    };
+    // Through a gateway: 0.7 of 2 a minute onto one unit of a minute each.
+    let mut m = model(
+        vec![
+            source("in", Dist::exponential_rate(2.0)),
+            gateway("which"),
+            server("a", 1, Dist::exponential_rate(1.0)),
+            server("b", 1, Dist::exponential_rate(1.0)),
+            sink("out"),
+        ],
+        vec![
+            link("in", "which"),
+            chance("which", "a", 0.7),
+            chance("which", "b", 0.3),
+            link("a", "out"),
+            link("b", "out"),
+        ],
+    );
+    assert_eq!(overloaded(&m), vec!["a".to_owned()]);
+    // A pool its tasks overload together.
+    m.elements[2] = shared_task("a", 1.0);
+    m.elements[3] = shared_task("b", 1.0);
+    m.resources = vec![ResourcePool::new(id("staff"), "Staff", 1, Vec::new())];
+    assert_eq!(overloaded(&m), vec!["staff".to_owned()]);
+    // A source with a limit stops: no warning.
+    if let ElementKind::Source { limit, .. } = &mut m.elements[0].kind {
+        *limit = Some(10);
+    }
+    assert_eq!(overloaded(&m), Vec::<String>::new());
+}

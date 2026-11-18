@@ -1399,9 +1399,12 @@ ch. 10 §10.4, in Brailsford, Churilov and Dangerfield, eds., 2014). Related and
       known, or only bounded, that could be higher leaves it unnamed.
     - Still to do: showing the table in the window beside the model and the simulated values
       beside it after a run; the verify option; Cobham's formula for a pool shared by
-      priorities; time averages over calendars, where today the most units on shift are
-      used; and basing the `overloaded` check on the table, which would warn about more
-      models.
+      priorities; and time averages over calendars, where today the most units on shift are
+      used.
+    - The `overloaded` warning comes from the table (Helen, 2026-11-18). A server or pool is
+      warned about when it is surely at 100% or more, however its arrivals reach it: through
+      routing, delays, joins or shared pools. Arrivals from a source with a limit or a
+      calendar are at most a rate, and give no warning.
 
 Starting a run with entities already inside, the other answer to a warm-up, stays with
 "starting a run from an observed state" under digital twins (After M3).
