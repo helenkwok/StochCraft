@@ -51,6 +51,21 @@ enum Command {
         #[arg(long, value_enum, default_value_t = CheckFormat::Table)]
         format: CheckFormat,
     },
+    /// Without running: each station's arrival rate, mean service time, units and utilisation
+    /// worked out from the model's own numbers, marked fine, congested or unstable, the
+    /// bottleneck, the units that would bring a station under the target, and the mean wait
+    /// where a queueing formula holds exactly (or why none does).
+    Explain {
+        file: PathBuf,
+        /// The BPSim scenario to read (default: the first).
+        #[arg(long)]
+        scenario: Option<String>,
+        /// The utilisation above which a station is congested, between 0 and 1.
+        #[arg(long, default_value_t = 0.85, value_parser = target)]
+        target: f64,
+        #[arg(long, value_enum, default_value_t = CheckFormat::Table)]
+        format: CheckFormat,
+    },
     /// Run a model's experiment and print the results with their run record.
     Run {
         file: PathBuf,
@@ -300,6 +315,54 @@ fn validate(file: &Path, scenario: Option<&str>, format: CheckFormat) -> Result<
     Ok(u8::from(errors > 0))
 }
 
+/// A target utilisation: a number strictly between 0 and 1 (not NaN or infinite).
+fn target(s: &str) -> Result<f64, String> {
+    let v: f64 = s.parse().map_err(|e| format!("{e}"))?;
+    if v > 0.0 && v < 1.0 {
+        Ok(v)
+    } else {
+        Err(format!("the target must be between 0 and 1, not {s}"))
+    }
+}
+
+fn explain(
+    file: &Path,
+    scenario: Option<&str>,
+    target: f64,
+    format: CheckFormat,
+) -> Result<u8, Failure> {
+    let mut engine = Engine::new();
+    let opened = open(&mut engine, file, scenario)?;
+    // A model with errors has no table worth trusting: say what they are, as `run` does.
+    let errors: Vec<String> = opened["notes"]
+        .as_array()
+        .into_iter()
+        .chain(opened["diagnostics"].as_array())
+        .flatten()
+        .filter(|n| n["severity"] == "error")
+        .map(|n| n["message"].as_str().unwrap_or("").to_owned())
+        .collect();
+    if !errors.is_empty() {
+        eprintln!(
+            "{} cannot be explained: it has errors (stochcraft-cli validate lists them):",
+            file.display()
+        );
+        for e in &errors {
+            eprintln!("  {e}");
+        }
+        return Ok(1);
+    }
+    let table = engine.execute("model.capacity", json!({ "target": target }))?;
+    match format {
+        CheckFormat::Json => println!(
+            "{}",
+            serde_json::to_string_pretty(&table).unwrap_or_default()
+        ),
+        CheckFormat::Table => print!("{}", output::capacity(file, &table)),
+    }
+    Ok(0)
+}
+
 #[allow(clippy::too_many_arguments)] // One per command-line option.
 fn run(
     file: &Path,
@@ -509,6 +572,12 @@ fn main() -> ExitCode {
             scenario,
             format,
         } => validate(&file, scenario.as_deref(), format),
+        Command::Explain {
+            file,
+            scenario,
+            target,
+            format,
+        } => explain(&file, scenario.as_deref(), target, format),
         Command::Run {
             file,
             scenario,

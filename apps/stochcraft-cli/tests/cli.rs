@@ -562,3 +562,61 @@ fn fit_refuses_too_few_values_and_data_no_family_fits() {
     assert_eq!(two.status.code(), Some(1));
     assert!(stderr(&two).contains("--column"), "{}", stderr(&two));
 }
+
+#[test]
+fn explain_gives_the_capacity_table_without_running() {
+    // M/M/1 at λ = 0.75, μ = 1: 75%, a wait of 3.
+    let text = ok(&["explain", &model("mm1.bpmn")]);
+    assert!(text.contains("M/M/1"), "{text}");
+    assert!(text.contains("75%"), "{text}");
+    assert!(text.contains("Bottleneck: Serve customer"), "{text}");
+    let j = json(&ok(&["explain", &model("mm1.bpmn"), "--format", "json"]));
+    let row = &j["stations"][0];
+    assert_eq!(row["status"], "fine");
+    assert!((row["formula"]["mean_wait"].as_f64().unwrap_or(0.0) - 3.0).abs() < 1e-9);
+    // At a target of 70%, the same station is congested and needs a second unit.
+    let j = json(&ok(&[
+        "explain",
+        &model("mm1.bpmn"),
+        "--target",
+        "0.7",
+        "--format",
+        "json",
+    ]));
+    assert_eq!(j["stations"][0]["status"], "congested");
+    assert_eq!(j["stations"][0]["units_for_target"], 2);
+    // Blocking: Weld can be held up by Paint's full room, and says so.
+    let text = ok(&["explain", &model("weld-paint.bpmn")]);
+    assert!(text.contains("can be held up by Paint"), "{text}");
+    assert!(
+        text.contains("Bottleneck: not known before a run"),
+        "{text}"
+    );
+    for bad in ["1.5", "NaN", "inf", "0"] {
+        let o = cli(&["explain", &model("mm1.bpmn"), "--target", bad]);
+        assert_eq!(o.status.code(), Some(2), "{bad}");
+        assert!(stderr(&o).contains("between 0 and 1"), "{}", stderr(&o));
+    }
+    // Tasks sharing a pool say why they have no formula.
+    let text = ok(&["explain", &model("triage.bpmn")]);
+    assert!(text.contains("Standard: the pool is shared"), "{text}");
+}
+
+#[test]
+fn explain_refuses_a_model_with_errors() {
+    let broken = scratch("broken-explain.bpmn");
+    let script = scratch("make-broken-explain.json");
+    let _ = std::fs::write(
+        &script,
+        format!(
+            r#"[{{"command": "block.add", "params": {{"kind": "server", "id": "lonely"}}}},
+               {{"command": "file.save", "params": {{"path": {:?}}}}}]"#,
+            broken.to_string_lossy()
+        ),
+    );
+    ok(&["exec", &script.to_string_lossy()]);
+    let o = cli(&["explain", &broken.to_string_lossy()]);
+    assert_eq!(o.status.code(), Some(1));
+    assert!(stderr(&o).contains("cannot be explained"), "{}", stderr(&o));
+    assert!(stdout(&o).is_empty(), "{}", stdout(&o));
+}

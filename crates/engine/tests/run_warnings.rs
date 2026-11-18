@@ -200,8 +200,9 @@ fn an_overloaded_queue_is_warned_about_before_and_after_the_run() {
 
 #[test]
 fn an_overload_the_model_cannot_show_is_found_from_the_results() {
-    // The issue's case: the help desk mm1.bpmn with service mean 1.5 (12.5% more work than
-    // capacity), reached through a delay, so the offered load is not worked out before the run.
+    // The help desk mm1.bpmn with service mean 1.5 (12.5% more work than capacity), its times
+    // by a tier: every caller is standard, but before the run only the least time (gold's,
+    // 0.1) bounds the work, so the overload shows only in the results.
     let mut e = Engine::new();
     ok(
         &mut e,
@@ -209,9 +210,11 @@ fn an_overload_the_model_cannot_show_is_found_from_the_results() {
         json!({ "model": {
             "name": "Hidden overload",
             "elements": [
-                {"id": "arrivals", "kind": "source", "interarrival": {"type": "exponential", "mean": 1.3333333}},
+                {"id": "arrivals", "kind": "source", "interarrival": {"type": "exponential", "mean": 1.3333333},
+                 "properties": [{"name": "tier", "value": {"text": "standard"}}]},
                 {"id": "walk", "kind": "delay", "duration": {"type": "constant", "value": 1.0}},
-                {"id": "desk", "kind": "server", "capacity": 1, "service": {"type": "exponential", "mean": 1.5}},
+                {"id": "desk", "kind": "server", "capacity": 1, "service": {"type": "exponential", "mean": 1.5},
+                 "processing_by": {"property": "tier", "by_value": [{"value": "gold", "time": {"type": "constant", "value": 0.1}}]}},
                 {"id": "exit", "kind": "sink"}
             ],
             "connections": [
@@ -226,6 +229,17 @@ fn an_overload_the_model_cannot_show_is_found_from_the_results() {
     assert_eq!(v["diagnostics"], json!([]), "{v}");
     let r = ok(&mut e, "run", json!({}));
     assert_eq!(codes(&r), vec!["no_steady_state".to_owned()]);
+
+    // Reached through a delay, as in the issue, the load is worked out before the run: the
+    // capacity table passes the rate on.
+    ok(
+        &mut e,
+        "block.set",
+        json!({"id": "desk", "processing_by": null}),
+    );
+    let v = ok(&mut e, "model.validate", json!({}));
+    assert_eq!(v["diagnostics"][0]["code"], "overloaded", "{v}");
+    assert_eq!(v["diagnostics"][0]["at"], "desk", "{v}");
 }
 
 #[test]

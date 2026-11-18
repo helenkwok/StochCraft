@@ -7,7 +7,7 @@ use serde::{Deserialize, Deserializer};
 use serde_json::{Value, json};
 use stochcraft_model::{
     Bounds, Connection, Element, ElementId, ElementKind, Model, Need, Property, QueueLimit,
-    ResourcePool, Transfer, calendar::Calendar,
+    ResourcePool, Transfer, calendar::Calendar, capacity,
 };
 
 use crate::edit::Op;
@@ -191,6 +191,15 @@ fn existing_element(model: &Model, s: &str) -> Result<ElementId, CommandError> {
 
 // ---------------------------------------------------------------------------------------------
 // Parameters
+
+/// The capacity table's parameters.
+#[derive(Debug, Deserialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
+pub struct CapacityParams {
+    /// The utilisation above which a station is congested, between 0 and 1 (default 0.85).
+    #[serde(default)]
+    pub target: Option<f64>,
+}
 
 #[derive(Debug, Deserialize, JsonSchema)]
 #[serde(deny_unknown_fields)]
@@ -702,6 +711,18 @@ fn model_get(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
 fn model_validate(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
     parse::<NoParams>(p)?;
     Ok(json!({ "diagnostics": wire::diagnostics(&e.model().validate()) }))
+}
+
+fn model_capacity(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
+    let p: CapacityParams = parse(p)?;
+    let target = p.target.unwrap_or(capacity::DEFAULT_TARGET);
+    if !(target > 0.0 && target < 1.0) {
+        return Err(CommandError::new(
+            ErrorCode::InvalidParams,
+            format!("the target must be between 0 and 1, not {target}"),
+        ));
+    }
+    Ok(wire::capacity(e.model(), &e.model().capacity(target)))
 }
 
 fn model_new(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
@@ -1957,6 +1978,14 @@ pub static COMMANDS: &[Command] = &[
         schema: schema::<NoParams>,
         example: || json!({}),
         run: model_validate,
+    },
+    Command {
+        name: "model.capacity",
+        summary: "The capacity table, without running: each server's, shared task's, delay's and                   pool's arrival rate, mean service time, units, utilisation and load (marked                   fine, congested above `target`, default 0.85, or unstable at 100%), the units                   that would bring it under the target, and its mean wait where a queueing                   formula holds exactly (M/M/c, M/M/c/K, Erlang A, balking, M/G/1), or why not;                   rates that depend on the run are not guessed. Rates and times in the model's                   time unit.",
+        kind: CommandKind::Query,
+        schema: schema::<CapacityParams>,
+        example: || json!({ "target": 0.85 }),
+        run: model_capacity,
     },
     Command {
         name: "model.rename",

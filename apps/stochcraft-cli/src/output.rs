@@ -114,6 +114,156 @@ fn aligned<R: AsRef<[String]>>(rows: &[R], left: &[bool], out: &mut String) {
     }
 }
 
+/// A capacity table number (`{value, bound}` or `{unknown}`) for a table: `≤` or `≥` before a
+/// bound, `?` when not known; `percent` prints it as a percentage.
+fn bounded(v: &Value, percent: bool) -> String {
+    let Some(x) = v["value"].as_f64() else {
+        return "?".into();
+    };
+    let shown = if percent {
+        format!("{}%", number((x * 1000.0).round() / 10.0))
+    } else {
+        number(x)
+    };
+    match s(&v["bound"]) {
+        "at_most" => format!("≤ {shown}"),
+        "at_least" => format!("≥ {shown}"),
+        _ => shown,
+    }
+}
+
+/// The capacity table (`model.capacity`) as text: a row per station, the bottleneck, then what
+/// is not known before a run and why no formula holds where none does.
+pub fn capacity(file: &Path, t: &Value) -> String {
+    let mut out = String::new();
+    let unit = s(&t["time_unit"]);
+    let target = t["target"].as_f64().unwrap_or(0.85);
+    let _ = writeln!(
+        out,
+        "Capacity of {} before any run (rates per {unit}, target {}%)\n",
+        file.display(),
+        number(target * 100.0)
+    );
+    let stations = t["stations"].as_array().cloned().unwrap_or_default();
+    if stations.is_empty() {
+        out.push_str("No servers, shared tasks, delays or pools.\n");
+        return out;
+    }
+    let mut rows = vec![vec![
+        "Station".to_owned(),
+        "Kind".into(),
+        "Arrivals".into(),
+        "Service".into(),
+        "Units".into(),
+        "Utilisation".into(),
+        "Load".into(),
+        "Status".into(),
+        format!("Units for {}%", number(target * 100.0)),
+        "Formula".into(),
+        "Mean wait".into(),
+    ]];
+    let (mut unknown, mut no_formula) = (Vec::new(), Vec::new());
+    for st in &stations {
+        let name = s(&st["name"]).to_owned();
+        let kind = s(&st["kind"]).replace('_', " ");
+        let units = match st["units"].as_u64() {
+            None => "-".to_owned(),
+            Some(u) if st["units_vary"] == true => format!("up to {u}"),
+            Some(u) => u.to_string(),
+        };
+        let pool = st["kind"] == "pool";
+        let delay = st["kind"] == "delay";
+        for (what, key) in [
+            ("arrival rate", "arrival_rate"),
+            ("service time", "mean_service"),
+            ("utilisation", "utilisation"),
+        ] {
+            if pool && key != "utilisation" {
+                continue;
+            }
+            if let Some(m) = st[key]["unknown"]["message"].as_str() {
+                unknown.push(format!("  {name}: {what}: {m}."));
+                break;
+            }
+        }
+        if !pool && let Some(m) = st["no_formula"]["message"].as_str() {
+            no_formula.push(format!("  {name}: {m}."));
+        }
+        rows.push(vec![
+            name,
+            kind,
+            if pool {
+                "-".into()
+            } else {
+                bounded(&st["arrival_rate"], false)
+            },
+            if pool {
+                "-".into()
+            } else {
+                bounded(&st["mean_service"], false)
+            },
+            units,
+            if delay {
+                "-".into()
+            } else {
+                bounded(&st["utilisation"], true)
+            },
+            if delay {
+                "-".into()
+            } else {
+                bounded(&st["load"], true)
+            },
+            s(&st["status"]).to_owned(),
+            st["units_for_target"]
+                .as_u64()
+                .map_or_else(|| "-".into(), |u| u.to_string()),
+            s(&st["formula"]["name"]).to_owned(),
+            if delay {
+                "-".into()
+            } else {
+                f(&st["formula"]["mean_wait"])
+            },
+        ]);
+    }
+    aligned(&rows, &[true, true], &mut out);
+    if let Some(b) = t["bottleneck"].as_str()
+        && let Some(st) = stations.iter().find(|st| st["id"] == b)
+    {
+        let _ = writeln!(
+            out,
+            "\nBottleneck: {} (load {}).",
+            s(&st["name"]),
+            bounded(&st["load"], true)
+        );
+    } else if stations
+        .iter()
+        .any(|st| st["kind"] == "server" || st["kind"] == "pool")
+    {
+        out.push_str(
+            "
+Bottleneck: not known before a run (a load not known, or only bounded, could be the highest).
+",
+        );
+    }
+    if !unknown.is_empty() {
+        out.push_str("\nNot known before a run:\n");
+        for l in &unknown {
+            let _ = writeln!(out, "{l}");
+        }
+    }
+    if !no_formula.is_empty() {
+        out.push_str("\nNo exact formula for the wait:\n");
+        for l in &no_formula {
+            let _ = writeln!(out, "{l}");
+        }
+    }
+    out.push_str(
+        "\nUtilisation is arrivals × service ÷ units, as the results count it; the load is that \
+         over the units' availability. A run adds what variability and blocking cost.\n",
+    );
+    out
+}
+
 /// A factor or parameter `{id, field}` as `id.field`.
 fn label(v: &Value) -> String {
     format!("{}.{}", s(&v["id"]), s(&v["field"]))

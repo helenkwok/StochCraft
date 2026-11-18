@@ -74,6 +74,18 @@ stochcraft-cli new --template mm1 queue.bpmn
 stochcraft-cli validate queue.bpmn
 ```
 
+Before running, `explain` works out each station's arrival rate, mean service time, units and
+utilisation from the model's own numbers, marks it fine, congested (above `--target`, 85% by
+default) or unstable, names the bottleneck and the units that would bring a station under the
+target, and gives the mean wait where a queueing formula holds exactly (M/M/c, M/M/c/K, Erlang A,
+balking, M/G/1), or says why none does. Rates that depend on the run (routing by condition, the
+shortest queue, those giving up) are not guessed. `--format json` gives the engine's
+`model.capacity` answer.
+
+```bash
+stochcraft-cli explain queue.bpmn
+```
+
 ```bash
 stochcraft-cli run queue.bpmn --reps 20
 ```

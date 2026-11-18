@@ -18,6 +18,7 @@
 //!   incoming connections (a merge).
 
 pub mod calendar;
+pub mod capacity;
 pub mod expr;
 
 pub use calendar::{Calendar, DateTime, Timed};
@@ -1575,9 +1576,11 @@ pub enum Problem {
         replications: u64,
         of: u64,
     },
-    /// A server fed straight from sources with steady arrivals is offered at least `load` times
-    /// the work its units can do (arrival rate × mean service time ÷ units, at least 1): its
-    /// queue grows without limit, so the run has no steady state.
+    /// A server, or a pool, is offered at least `load` times the work its units can do (arrival
+    /// rate × mean service time ÷ units, over the share of time they are up; for a pool, the
+    /// work of every task on it), at least 1, as the capacity table ([`Model::capacity`]) passes
+    /// rates on through routing, joins and pools: its queue grows without limit, so the run has
+    /// no steady state.
     Overloaded {
         load: f64,
     },
@@ -2121,7 +2124,7 @@ impl std::fmt::Display for Diagnostic {
             ),
             Problem::Overloaded { load } => write!(
                 f,
-                "its arrivals bring {:.0}% of the work its units can do (arrival rate × mean service time ÷ units), so its queue grows without limit and the results describe no steady state; add units or shorten the service",
+                "its arrivals bring {:.0}% of the work its units can do (arrival rate × mean service time ÷ units, over the time they are up), so its queue grows without limit and the results describe no steady state; add units or shorten the service (stochcraft-cli explain shows the capacity table)",
                 load * 100.0
             ),
             Problem::NoSteadyState {
@@ -3282,50 +3285,17 @@ impl Model {
     /// other way are left out, so the load found is a lower bound and the warning conservative.
     /// (Negative service draws count as 0, which only makes the true load higher.)
     fn check_load(&self, out: &mut Vec<Diagnostic>) {
-        for e in &self.elements {
-            // Entities that give up keep a patient server's queue from growing without limit.
-            let ElementKind::Server {
-                service,
-                queue_capacity: None,
-                patience: None,
-                balking: None,
-                health_check: None,
-                ..
-            } = &e.kind
-            else {
-                continue;
-            };
-            // With times by property value, the least of the means: a lower bound on the work.
-            let mean_service = std::iter::once(service)
-                .chain(by_value_times(e.kind.processing_by()))
-                .map(Dist::mean)
-                .try_fold(f64::INFINITY, |least, m| Some(least.min(m?)));
-            let Some(mean_service) = mean_service.filter(|m| m.is_finite() && *m > 0.0) else {
-                continue;
-            };
-            let rate: f64 = self
-                .connections
-                .iter()
-                .filter(|c| c.to == e.id)
-                .filter_map(|c| match &self.element(&c.from)?.kind {
-                    ElementKind::Source {
-                        interarrival,
-                        limit: None,
-                        timed,
-                        idle_outside: false,
-                    } if timed.is_empty() && never_negative(interarrival) => interarrival
-                        .mean()
-                        .filter(|m| m.is_finite() && *m > 0.0)
-                        .map(|m| 1.0 / m),
-                    _ => None,
-                })
-                .sum();
-            // With shifts, over the most units on shift: a lower bound on the load.
-            let units = e.kind.most_units().unwrap_or(1).max(1);
-            let load = rate * mean_service / f64::from(units);
-            if load >= 1.0 {
+        // The capacity table passes the load on through routing, joins and shared pools; a
+        // station is warned about only when it is surely at 100% or more (a lower bound, such
+        // as the least of times by property or the most units on shift, will do).
+        for st in self.capacity(capacity::DEFAULT_TARGET).stations {
+            // A shared task shares its pool's status: the pool is warned about, once.
+            if st.status == capacity::Status::Unstable
+                && st.kind != capacity::StationKind::SharedTask
+                && let Some(load) = st.load.value()
+            {
                 out.push(Diagnostic::warning(
-                    Some(&e.id),
+                    Some(&st.id),
                     Problem::Overloaded { load },
                 ));
             }
