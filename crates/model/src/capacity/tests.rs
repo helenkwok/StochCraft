@@ -1044,3 +1044,83 @@ fn the_overloaded_warning_follows_the_table() {
     }
     assert_eq!(overloaded(&m), Vec::<String>::new());
 }
+
+#[test]
+fn a_station_of_uncertain_capacity_bounds_what_follows() {
+    // s → next: with failures of exact availability, what s gets reaches next; with an
+    // availability only at least or not known, s may be over 100%, so next gets at most that.
+    let failing = |interruptible: bool, time_to_failure: Dist| {
+        let mut m = model(
+            vec![
+                source("in", Dist::exponential_rate(0.5)),
+                server("s", 1, Dist::exponential_rate(1.0)),
+                server("next", 4, Dist::exponential_rate(1.0)),
+                sink("out"),
+            ],
+            vec![link("in", "s"), link("s", "next"), link("next", "out")],
+        );
+        if let ElementKind::Server { breakdown, .. } = &mut m.elements[1].kind {
+            *breakdown = Some(Breakdown {
+                time_to_failure,
+                repair: Dist::Constant(1.0),
+                interruptible,
+                hands_on_while_down: true,
+            });
+        }
+        row(&m.capacity(DEFAULT_TARGET), "next")
+            .arrival_rate
+            .clone()
+    };
+    assert_eq!(failing(true, Dist::Constant(9.0)), Value::exact(0.5));
+    let at_most = Value::Known {
+        value: 0.5,
+        bound: Bound::AtMost,
+    };
+    assert_eq!(failing(false, Dist::Constant(9.0)), at_most);
+    let no_mean = Dist::Normal {
+        mean: 9.0,
+        std_dev: 1.0,
+    };
+    assert_eq!(failing(true, no_mean), at_most);
+}
+
+#[test]
+fn a_task_of_unknown_rate_may_overload_its_pool() {
+    // a's load alone is 0.5 of the one unit; b, reached by a condition, adds an unknown load,
+    // so a may get less than it is sent and next gets at most that.
+    let mut m = model(
+        vec![
+            source("in", Dist::exponential_rate(0.5)),
+            shared_task("a", 1.0),
+            server("next", 4, Dist::exponential_rate(1.0)),
+            source("other", Dist::exponential_rate(1.0)),
+            gateway("which"),
+            shared_task("b", 1.0),
+            sink("out"),
+        ],
+        vec![
+            link("in", "a"),
+            link("a", "next"),
+            link("next", "out"),
+            link("other", "which"),
+            link("which", "b"),
+            link("which", "out"),
+            link("b", "out"),
+        ],
+    );
+    m.resources = vec![ResourcePool::new(id("staff"), "Staff", 1, Vec::new())];
+    m.connections[4].condition = Some("getProperty('x') > 1".into());
+    let c = m.capacity(DEFAULT_TARGET);
+    assert_eq!(
+        row(&c, "next").arrival_rate,
+        Value::Known {
+            value: 0.5,
+            bound: Bound::AtMost
+        }
+    );
+    // By a probability b's load is known (0.5 + 0.2 of the unit): next gets all a gets.
+    m.connections[4].condition = None;
+    m.connections[4].probability = Some(0.2);
+    let c = m.capacity(DEFAULT_TARGET);
+    assert_eq!(row(&c, "next").arrival_rate, Value::exact(0.5));
+}

@@ -907,15 +907,34 @@ impl<'a> Net<'a> {
                 Some(units * a / s)
             })
             .collect();
-        let (mut flows, mut at_most) = self.flows(&caps, &vec![false; n]);
+        // A station whose capacity is not certain (a service time or availability not exact,
+        // units on a calendar, a task with alternatives) may pass on less than it gets, so
+        // what follows it is at most.
+        let unsure: Vec<bool> = (0..n)
+            .map(|i| {
+                let vary = match (&units[i], self.pool_use(i)) {
+                    (Some((_, vary)), _) => *vary,
+                    (None, Some(Ok((j, _)))) => {
+                        let p = &model.resources[j];
+                        !p.shifts.is_empty() || !p.availability.is_empty() || !p.available
+                    }
+                    (None, Some(Err(_))) => true,
+                    (None, None) => return false,
+                };
+                vary || service[i].exact_value().is_none()
+                    || avail[i].as_ref().is_some_and(|a| a.exact_value().is_none())
+            })
+            .collect();
+        let (mut flows, mut at_most) = self.flows(&caps, &unsure);
         let mut rates: Vec<Value> = (0..n).map(|i| self.arrivals(&flows, &at_most, i)).collect();
-        // Tasks on a pool loaded to 100% or more pass on at most what they get: again, with
-        // what follows them bounded.
+        // Tasks on a pool that may be loaded to 100% or more pass on at most what they get:
+        // again, with what follows them bounded.
         // The pools' own rows use the rates offered, before that bound.
         let offered = rates.clone();
         let overloaded = self.overloaded_pool_users(&rates, &service);
         if overloaded.iter().any(|b| *b) {
-            (flows, at_most) = self.flows(&caps, &overloaded);
+            let bounded: Vec<bool> = (0..n).map(|i| unsure[i] || overloaded[i]).collect();
+            (flows, at_most) = self.flows(&caps, &bounded);
             rates = (0..n).map(|i| self.arrivals(&flows, &at_most, i)).collect();
         }
 
@@ -1212,25 +1231,55 @@ impl<'a> Net<'a> {
         })
     }
 
-    /// The shared tasks on a pool whose known load is 100% or more.
+    /// The shared tasks on a pool that may be loaded to 100% or more: its load is that or more,
+    /// or not bounded above (a rate or service time not known or only at least, a task with
+    /// alternatives that might use it).
     fn overloaded_pool_users(&self, rates: &[Value], service: &[Value]) -> Vec<bool> {
         let n = self.model.elements.len();
-        let uses: Vec<Option<(usize, u32)>> = (0..n)
-            .map(|i| self.pool_use(i).and_then(Result::ok))
-            .collect();
-        let mut work = vec![0.0_f64; self.model.resources.len()];
+        let uses: Vec<Option<PoolUse>> = (0..n).map(|i| self.pool_use(i)).collect();
+        let pools = self.model.resources.len();
+        let mut work = vec![0.0_f64; pools];
+        let mut unbounded = vec![false; pools];
         for (i, u) in uses.iter().enumerate() {
-            if let (Some((j, q)), Some(r), Some(s)) = (u, rates[i].value(), service[i].value()) {
-                work[*j] += r * s * f64::from(*q);
+            match u {
+                Some(Ok((j, q))) => {
+                    let w = rates[i]
+                        .combine(&service[i], false)
+                        .combine(&Value::exact(f64::from(*q)), false);
+                    match w {
+                        Value::Known {
+                            value,
+                            bound: Bound::Exact | Bound::AtMost,
+                        } => work[*j] += value,
+                        _ => unbounded[*j] = true,
+                    }
+                }
+                Some(Err(_)) => {
+                    for (j, flag) in unbounded.iter_mut().enumerate() {
+                        *flag |= self.might_use(i, j);
+                    }
+                }
+                None => {}
             }
         }
         uses.iter()
             .map(|u| {
-                u.is_some_and(|(j, _)| {
-                    work[j] >= f64::from(self.model.resources[j].most_units().max(1))
-                })
+                matches!(u, Some(Ok((j, _))) if unbounded[*j]
+                    || work[*j] >= f64::from(self.model.resources[*j].most_units().max(1)))
             })
             .collect()
+    }
+
+    /// Whether shared task `i` names pool `j` among its needs.
+    fn might_use(&self, i: usize, j: usize) -> bool {
+        let ElementKind::SharedTask { needs, .. } = &self.element(i).kind else {
+            return false;
+        };
+        let p = &self.model.resources[j];
+        needs.iter().any(|n| match n {
+            Need::Resource { id, .. } => &p.id == id,
+            Need::Roles { roles, .. } => roles.iter().all(|r| p.roles.contains(r)),
+        })
     }
 
     /// The pools' rows, and the shared tasks' utilisation and formulas.
@@ -1246,24 +1295,13 @@ impl<'a> Net<'a> {
         let tasks: Vec<(usize, PoolUse)> = (0..model.elements.len())
             .filter_map(|i| self.pool_use(i).map(|u| (i, u)))
             .collect();
-        // Which pools a task with alternatives might use.
-        let might_use = |i: usize, j: usize| -> bool {
-            let ElementKind::SharedTask { needs, .. } = &self.element(i).kind else {
-                return false;
-            };
-            let p = &model.resources[j];
-            needs.iter().any(|n| match n {
-                Need::Resource { id, .. } => &p.id == id,
-                Need::Roles { roles, .. } => roles.iter().all(|r| p.roles.contains(r)),
-            })
-        };
         let mut pool_rows = Vec::new();
         for (j, pool) in model.resources.iter().enumerate() {
             let users: Vec<usize> = tasks
                 .iter()
                 .filter(|(i, r)| match r {
                     Ok((p, _)) => *p == j,
-                    Err(_) => might_use(*i, j),
+                    Err(_) => self.might_use(*i, j),
                 })
                 .map(|(i, _)| *i)
                 .collect();
