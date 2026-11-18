@@ -7,6 +7,7 @@ use serde::{Deserialize, Serialize};
 use serde_json::{Value, json};
 use stochcraft_blocks::{ExperimentSummary, Metric};
 use stochcraft_model::calendar::{Calendar, DateTime, Event, Rule};
+use stochcraft_model::capacity;
 use stochcraft_model::{
     BalkJoin, BalkRow, Balking, Bounds, Breakdown, ByValue, Change, Connection, Demand, DemandPer,
     Diagnostic, Dist, Element, ElementId, ElementKind, Estimate, Experiment, Family, HealthCheck,
@@ -2373,6 +2374,74 @@ fn split_fields(split: &Value) -> String {
     })
     .collect::<Vec<_>>()
     .join(",")
+}
+
+/// The capacity table as JSON ([`stochcraft_model::capacity`]): the target, the bottleneck and
+/// a row per station. Each number is `{value, bound}` (`exact`, `at_most` or `at_least`) or
+/// `{unknown: {code, at, message}}`; `formula` has the queueing formula's results or is `null`,
+/// with `no_formula` saying why. Rates and times are in the model's time unit.
+pub fn capacity(model: &Model, table: &capacity::Capacity) -> Value {
+    let name = |id: &ElementId| {
+        model
+            .element(id)
+            .map(|e| e.name.clone())
+            .or_else(|| {
+                model
+                    .resources
+                    .iter()
+                    .find(|p| &p.id == id)
+                    .map(|p| p.name.clone())
+            })
+            .filter(|n| !n.is_empty())
+            .unwrap_or_else(|| id.to_string())
+    };
+    let why = |w: &capacity::Why| {
+        json!({
+            "code": w.code(),
+            "at": w.at().map(ElementId::as_str),
+            "message": w.message(name),
+        })
+    };
+    let value = |v: &capacity::Value| match v {
+        capacity::Value::Known { value, bound } => json!({ "value": value, "bound": bound.name() }),
+        capacity::Value::Unknown(w) => json!({ "unknown": why(w) }),
+    };
+    let stations: Vec<Value> = table
+        .stations
+        .iter()
+        .map(|s| {
+            json!({
+                "id": s.id.as_str(),
+                "name": name(&s.id),
+                "kind": s.kind.name(),
+                "arrival_rate": value(&s.arrival_rate),
+                "mean_service": value(&s.mean_service),
+                "units": s.units,
+                "units_vary": s.units_vary,
+                "availability": s.availability,
+                "utilisation": value(&s.utilisation),
+                "load": value(&s.load),
+                "status": s.status.name(),
+                "units_for_target": s.units_for_target,
+                "formula": s.formula.as_ref().ok().map(|f| json!({
+                    "name": f.name,
+                    "mean_wait": f.mean_wait,
+                    "mean_queue": f.mean_queue,
+                    "wait_probability": f.wait_probability,
+                    "lost_share": f.lost_share,
+                    "abandoned_share": f.abandoned_share,
+                    "mean_inside": f.mean_inside,
+                })),
+                "no_formula": s.formula.as_ref().err().map(why),
+            })
+        })
+        .collect();
+    json!({
+        "time_unit": TimeUnitSpec::from(model.experiment.time_unit),
+        "target": table.target,
+        "bottleneck": table.bottleneck.as_ref().map(ElementId::as_str),
+        "stations": stations,
+    })
 }
 
 #[cfg(test)]

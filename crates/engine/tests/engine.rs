@@ -3746,3 +3746,31 @@ fn measured_data_are_fitted_ranked_and_applied_with_block_set() {
         json!({ "data": data[..10].to_vec(), "min_count": 10 }),
     );
 }
+
+#[test]
+fn the_capacity_table_is_a_query() {
+    let mm1 = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../tests/models/mm1.bpmn");
+    let mut e = Engine::new();
+    ok(&mut e, "file.open", json!({"path": mm1.to_string_lossy()}));
+    let t = ok(&mut e, "model.capacity", json!({}));
+    assert_eq!(t["target"], 0.85);
+    assert_eq!(t["time_unit"], "min");
+    let row = &t["stations"][0];
+    assert_eq!(row["kind"], "server");
+    assert_eq!(
+        row["arrival_rate"],
+        json!({"value": 0.75, "bound": "exact"})
+    );
+    assert_eq!(row["formula"]["name"], "M/M/1");
+    assert_eq!(row["no_formula"], Value::Null);
+    assert_eq!(t["bottleneck"], row["id"]);
+    // A query: nothing to undo.
+    assert_eq!(err(&mut e, "undo", json!({})), ErrorCode::NothingToUndo);
+    for bad in [
+        json!({"target": 1.0}),
+        json!({"target": 0}),
+        json!({"tagret": 0.8}),
+    ] {
+        assert_eq!(err(&mut e, "model.capacity", bad), ErrorCode::InvalidParams);
+    }
+}

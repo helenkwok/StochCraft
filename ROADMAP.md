@@ -1376,6 +1376,26 @@ ch. 10 §10.4, in Brailsford, Churilov and Dangerfield, eds., 2014). Related and
     and as an engine command for agents. A verify option runs replications and says, for each
     number, whether the formula falls inside the simulated 95% interval.
   - Also offered by desflow (MIT, `desflow explain`), seen 2026-11.
+  - Done: the table itself (`Model::capacity` in `model/src/capacity.rs`), as
+    `stochcraft-cli explain` and the engine command `model.capacity`.
+    - Rates pass through the routing by the traffic equations: shares by probability, copies
+      at a parallel gateway, the least of a join's inputs, a batch's size, and rework loops.
+      Where a rate depends on the run, the table says on what and does not guess: a condition,
+      the shortest queue, or those giving up, balking or turned away. Rates after entities are
+      lost, or after a station at 100%, are given as at most.
+    - Utilisation is counted as the results count it, failed time not busy. The load that
+      marks a station is taken over the units' availability, mean up over mean up plus repair.
+    - A formula is given only where it is exact. M/M/c (Erlang C) holds through rework loops
+      when every station feeding it is exponential with an unlimited queue (a Jackson
+      network). M/M/c/K, Erlang A and balking (as a birth–death queue) and M/G/1
+      (Pollaczek–Khinchine) need Poisson arrivals. A station whose units a full room further on
+      can hold up (blocking) gets none, nor does one that holds up the station sending to it.
+      Every other station gets the reason.
+    - Still to do: showing the table in the window beside the model and the simulated values
+      beside it after a run; the verify option; Cobham's formula for a pool shared by
+      priorities; time averages over calendars, where today the most units on shift are
+      used; and basing the `overloaded` check on the table, which would warn about more
+      models.
 
 Starting a run with entities already inside, the other answer to a warm-up, stays with
 "starting a run from an observed state" under digital twins (After M3).

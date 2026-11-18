@@ -51,6 +51,21 @@ enum Command {
         #[arg(long, value_enum, default_value_t = CheckFormat::Table)]
         format: CheckFormat,
     },
+    /// Without running: each station's arrival rate, mean service time, units and utilisation
+    /// worked out from the model's own numbers, marked fine, congested or unstable, the
+    /// bottleneck, the units that would bring a station under the target, and the mean wait
+    /// where a queueing formula holds exactly (or why none does).
+    Explain {
+        file: PathBuf,
+        /// The BPSim scenario to read (default: the first).
+        #[arg(long)]
+        scenario: Option<String>,
+        /// The utilisation above which a station is congested, between 0 and 1.
+        #[arg(long, default_value_t = 0.85)]
+        target: f64,
+        #[arg(long, value_enum, default_value_t = CheckFormat::Table)]
+        format: CheckFormat,
+    },
     /// Run a model's experiment and print the results with their run record.
     Run {
         file: PathBuf,
@@ -300,6 +315,25 @@ fn validate(file: &Path, scenario: Option<&str>, format: CheckFormat) -> Result<
     Ok(u8::from(errors > 0))
 }
 
+fn explain(
+    file: &Path,
+    scenario: Option<&str>,
+    target: f64,
+    format: CheckFormat,
+) -> Result<u8, Failure> {
+    let mut engine = Engine::new();
+    open(&mut engine, file, scenario)?;
+    let table = engine.execute("model.capacity", json!({ "target": target }))?;
+    match format {
+        CheckFormat::Json => println!(
+            "{}",
+            serde_json::to_string_pretty(&table).unwrap_or_default()
+        ),
+        CheckFormat::Table => print!("{}", output::capacity(file, &table)),
+    }
+    Ok(0)
+}
+
 #[allow(clippy::too_many_arguments)] // One per command-line option.
 fn run(
     file: &Path,
@@ -509,6 +543,12 @@ fn main() -> ExitCode {
             scenario,
             format,
         } => validate(&file, scenario.as_deref(), format),
+        Command::Explain {
+            file,
+            scenario,
+            target,
+            format,
+        } => explain(&file, scenario.as_deref(), target, format),
         Command::Run {
             file,
             scenario,

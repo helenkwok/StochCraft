@@ -18,6 +18,7 @@
 //!   incoming connections (a merge).
 
 pub mod calendar;
+pub mod capacity;
 pub mod expr;
 
 pub use calendar::{Calendar, DateTime, Timed};

@@ -562,3 +562,33 @@ fn fit_refuses_too_few_values_and_data_no_family_fits() {
     assert_eq!(two.status.code(), Some(1));
     assert!(stderr(&two).contains("--column"), "{}", stderr(&two));
 }
+
+#[test]
+fn explain_gives_the_capacity_table_without_running() {
+    // M/M/1 at λ = 0.75, μ = 1: 75%, a wait of 3.
+    let text = ok(&["explain", &model("mm1.bpmn")]);
+    assert!(text.contains("M/M/1"), "{text}");
+    assert!(text.contains("75%"), "{text}");
+    assert!(text.contains("Bottleneck: Serve customer"), "{text}");
+    let j = json(&ok(&["explain", &model("mm1.bpmn"), "--format", "json"]));
+    let row = &j["stations"][0];
+    assert_eq!(row["status"], "fine");
+    assert!((row["formula"]["mean_wait"].as_f64().unwrap_or(0.0) - 3.0).abs() < 1e-9);
+    // At a target of 70%, the same station is congested and needs a second unit.
+    let j = json(&ok(&[
+        "explain",
+        &model("mm1.bpmn"),
+        "--target",
+        "0.7",
+        "--format",
+        "json",
+    ]));
+    assert_eq!(j["stations"][0]["status"], "congested");
+    assert_eq!(j["stations"][0]["units_for_target"], 2);
+    // Blocking: Weld can be held up by Paint's full room, and says so.
+    let text = ok(&["explain", &model("weld-paint.bpmn")]);
+    assert!(text.contains("can hold up the units"), "{text}");
+    let bad = cli(&["explain", &model("mm1.bpmn"), "--target", "1.5"]);
+    assert_ne!(bad.status.code(), Some(0));
+    assert!(stderr(&bad).contains("between 0 and 1"), "{}", stderr(&bad));
+}
