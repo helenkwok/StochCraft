@@ -186,11 +186,7 @@ pub fn capacity(file: &Path, t: &Value) -> String {
                 break;
             }
         }
-        if !pool
-            && !delay
-            && let Some(m) = st["no_formula"]["message"].as_str()
-            && st["no_formula"]["code"] != "shared_pool"
-        {
+        if !pool && let Some(m) = st["no_formula"]["message"].as_str() {
             no_formula.push(format!("  {name}: {m}."));
         }
         rows.push(vec![

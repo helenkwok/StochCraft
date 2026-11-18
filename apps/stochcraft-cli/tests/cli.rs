@@ -592,9 +592,14 @@ fn explain_gives_the_capacity_table_without_running() {
         text.contains("Bottleneck: not known before a run"),
         "{text}"
     );
-    let bad = cli(&["explain", &model("mm1.bpmn"), "--target", "1.5"]);
-    assert_ne!(bad.status.code(), Some(0));
-    assert!(stderr(&bad).contains("between 0 and 1"), "{}", stderr(&bad));
+    for bad in ["1.5", "NaN", "inf", "0"] {
+        let o = cli(&["explain", &model("mm1.bpmn"), "--target", bad]);
+        assert_eq!(o.status.code(), Some(2), "{bad}");
+        assert!(stderr(&o).contains("between 0 and 1"), "{}", stderr(&o));
+    }
+    // Tasks sharing a pool say why they have no formula.
+    let text = ok(&["explain", &model("triage.bpmn")]);
+    assert!(text.contains("Standard: the pool is shared"), "{text}");
 }
 
 #[test]

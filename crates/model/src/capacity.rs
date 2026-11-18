@@ -24,8 +24,8 @@
 use std::collections::{BTreeMap, BTreeSet, VecDeque};
 
 use crate::{
-    Connection, Dist, Element, ElementId, ElementKind, Model, Need, PatienceUntil, Routing,
-    never_negative,
+    BalkJoin, Connection, Dist, Element, ElementId, ElementKind, Model, Need, PatienceUntil,
+    Routing, never_negative,
 };
 use stochcraft_random::math::{exp, ln};
 
@@ -393,8 +393,10 @@ pub struct Station {
     pub units: Option<u32>,
     /// The units follow a calendar: `units` is the most on shift.
     pub units_vary: bool,
-    /// The share of time a unit is not failed (`None`: units never fail).
-    pub availability: Option<f64>,
+    /// The share of time a unit is not failed (`None`: units never fail). At least the mean
+    /// time to failure over that plus the mean repair when failures wait for the job to end,
+    /// which keeps a unit up longer.
+    pub availability: Option<Value>,
     /// Arrival rate × mean service ÷ units, as utilisation is in the results (for a delay: the
     /// mean number inside).
     pub utilisation: Value,
@@ -587,7 +589,7 @@ impl<'a> Net<'a> {
 
     /// Each connection's rate: the traffic equations, solved by passing rates on until they
     /// settle (they rise to the least solution; a loop sending everything back never settles).
-    fn flows(&self, caps: &[Option<f64>]) -> (Vec<Flow>, Vec<bool>) {
+    fn flows(&self, caps: &[Option<f64>], bounded_too: &[bool]) -> (Vec<Flow>, Vec<bool>) {
         let (n, m) = (self.model.elements.len(), self.model.connections.len());
         let mut flow = vec![0.0_f64; m];
         // Connections whose rate is not known: fixed before the rates are passed on.
@@ -725,6 +727,7 @@ impl<'a> Net<'a> {
         let bounded: Vec<usize> = (0..n)
             .filter(|&i| {
                 self.bounds_onward(i)
+                    || bounded_too[i]
                     || caps[i].is_some_and(|c| input(&flow, i) > c * (1.0 - 1e-12))
             })
             .collect();
@@ -869,16 +872,38 @@ impl<'a> Net<'a> {
         // First the stations' own numbers, then the rates (which a station over 100% caps).
         let service: Vec<Value> = (0..n).map(|i| mean_service(self.element(i))).collect();
         let units: Vec<Option<(u32, bool)>> = model.elements.iter().map(server_units).collect();
-        let avail: Vec<Option<f64>> = model.elements.iter().map(availability).collect();
+        let avail: Vec<Option<Value>> = model.elements.iter().map(availability).collect();
+        // What a station can pass on at most: its units (a task: its pool's, as if alone on
+        // it) over the service time, times the availability where that is exact (else 1, still
+        // an upper bound).
         let caps: Vec<Option<f64>> = (0..n)
             .map(|i| {
-                let (c, _) = units[i]?;
                 let s = service[i].value().filter(|s| *s > 0.0)?;
-                Some(f64::from(c) * avail[i].unwrap_or(1.0) / s)
+                let units = match (&units[i], self.pool_use(i)) {
+                    (Some((c, _)), _) => f64::from(*c),
+                    (None, Some(Ok((j, q)))) => {
+                        f64::from(model.resources[j].most_units()) / f64::from(q.max(1))
+                    }
+                    _ => return None,
+                };
+                let a = avail[i]
+                    .as_ref()
+                    .and_then(Value::exact_value)
+                    .unwrap_or(1.0);
+                Some(units * a / s)
             })
             .collect();
-        let (flows, at_most) = self.flows(&caps);
-        let rates: Vec<Value> = (0..n).map(|i| self.arrivals(&flows, &at_most, i)).collect();
+        let (mut flows, mut at_most) = self.flows(&caps, &vec![false; n]);
+        let mut rates: Vec<Value> = (0..n).map(|i| self.arrivals(&flows, &at_most, i)).collect();
+        // Tasks on a pool loaded to 100% or more pass on at most what they get: again, with
+        // what follows them bounded.
+        // The pools' own rows use the rates offered, before that bound.
+        let offered = rates.clone();
+        let overloaded = self.overloaded_pool_users(&rates, &service);
+        if overloaded.iter().any(|b| *b) {
+            (flows, at_most) = self.flows(&caps, &overloaded);
+            rates = (0..n).map(|i| self.arrivals(&flows, &at_most, i)).collect();
+        }
 
         let mut stations = Vec::new();
         let mut unstable = vec![false; n];
@@ -896,7 +921,7 @@ impl<'a> Net<'a> {
                 mean_service: service[i].clone(),
                 units: units[i].map(|(c, _)| c),
                 units_vary: units[i].is_some_and(|(_, v)| v),
-                availability: avail[i],
+                availability: avail[i].clone(),
                 utilisation: Value::Unknown(Why::SharedPool),
                 load: Value::Unknown(Why::SharedPool),
                 status: Status::Unknown,
@@ -914,7 +939,10 @@ impl<'a> Net<'a> {
                         Status::Unknown
                     };
                     st.formula = match &work {
-                        Value::Known { value, .. } => Ok(Formula {
+                        Value::Known {
+                            value,
+                            bound: Bound::Exact,
+                        } => Ok(Formula {
                             name: "M/G/∞".into(),
                             mean_wait: 0.0,
                             mean_queue: 0.0,
@@ -925,6 +953,10 @@ impl<'a> Net<'a> {
                             served_share: 1.0,
                             mean_inside: *value,
                         }),
+                        Value::Known { .. } if e.kind.processing_by().is_some() => {
+                            Err(Why::ByProperty)
+                        }
+                        Value::Known { .. } => Err(Why::Bounds),
                         Value::Unknown(w) => Err(w.clone()),
                     };
                 }
@@ -937,7 +969,7 @@ impl<'a> Net<'a> {
                     st.utilisation = work.combine(&units_value, true);
                     st.load = st
                         .utilisation
-                        .combine(&Value::exact(avail[i].unwrap_or(1.0)), true);
+                        .combine(avail[i].as_ref().unwrap_or(&Value::exact(1.0)), true);
                     // Held up, a unit is occupied longer than its service: at least this load.
                     if self.held_up_by(i).is_some() {
                         st.load = match st.load {
@@ -952,8 +984,13 @@ impl<'a> Net<'a> {
                             unknown => unknown,
                         };
                     }
-                    (st.status, st.units_for_target) =
-                        judge(&st.load, &work, avail[i], target, gives_up(&e.kind));
+                    (st.status, st.units_for_target) = judge(
+                        &st.load,
+                        &work,
+                        avail[i].as_ref(),
+                        target,
+                        tail_join(&e.kind),
+                    );
                     unstable[i] = st.status == Status::Unstable;
                 }
                 StationKind::SharedTask | StationKind::Pool => {}
@@ -976,7 +1013,7 @@ impl<'a> Net<'a> {
                 }
             }
         }
-        self.pools(&mut stations, &rates, &service, &unstable, target);
+        self.pools(&mut stations, &offered, &service, &unstable, target);
 
         let bottleneck = bottleneck(&stations);
         Capacity {
@@ -1135,6 +1172,53 @@ impl<'a> Net<'a> {
             })
     }
 
+    /// The one pool shared task `i` uses and how many units, or why it has no one pool (`None`:
+    /// not a shared task).
+    fn pool_use(&self, i: usize) -> Option<PoolUse> {
+        let ElementKind::SharedTask { needs, .. } = &self.element(i).kind else {
+            return None;
+        };
+        let [need] = &needs[..] else {
+            return Some(Err(Why::Alternatives));
+        };
+        let matching: Vec<usize> = self
+            .model
+            .resources
+            .iter()
+            .enumerate()
+            .filter(|(_, p)| match need {
+                Need::Resource { id, .. } => &p.id == id,
+                Need::Roles { roles, .. } => roles.iter().all(|r| p.roles.contains(r)),
+            })
+            .map(|(j, _)| j)
+            .collect();
+        Some(match matching[..] {
+            [j] => Ok((j, need.quantity())),
+            _ => Err(Why::Alternatives),
+        })
+    }
+
+    /// The shared tasks on a pool whose known load is 100% or more.
+    fn overloaded_pool_users(&self, rates: &[Value], service: &[Value]) -> Vec<bool> {
+        let n = self.model.elements.len();
+        let uses: Vec<Option<(usize, u32)>> = (0..n)
+            .map(|i| self.pool_use(i).and_then(Result::ok))
+            .collect();
+        let mut work = vec![0.0_f64; self.model.resources.len()];
+        for (i, u) in uses.iter().enumerate() {
+            if let (Some((j, q)), Some(r), Some(s)) = (u, rates[i].value(), service[i].value()) {
+                work[*j] += r * s * f64::from(*q);
+            }
+        }
+        uses.iter()
+            .map(|u| {
+                u.is_some_and(|(j, _)| {
+                    work[j] >= f64::from(self.model.resources[j].most_units().max(1))
+                })
+            })
+            .collect()
+    }
+
     /// The pools' rows, and the shared tasks' utilisation and formulas.
     fn pools(
         &self,
@@ -1145,34 +1229,8 @@ impl<'a> Net<'a> {
         target: f64,
     ) {
         let model = self.model;
-        // Each shared task's pool, if it needs exactly one pool.
-        let pool_of = |needs: &[Need]| -> PoolUse {
-            let [need] = needs else {
-                return Err(Why::Alternatives);
-            };
-            let matching: Vec<usize> = model
-                .resources
-                .iter()
-                .enumerate()
-                .filter(|(_, p)| match need {
-                    Need::Resource { id, .. } => &p.id == id,
-                    Need::Roles { roles, .. } => roles.iter().all(|r| p.roles.contains(r)),
-                })
-                .map(|(j, _)| j)
-                .collect();
-            match matching[..] {
-                [j] => Ok((j, need.quantity())),
-                _ => Err(Why::Alternatives),
-            }
-        };
-        let tasks: Vec<(usize, PoolUse)> = model
-            .elements
-            .iter()
-            .enumerate()
-            .filter_map(|(i, e)| match &e.kind {
-                ElementKind::SharedTask { needs, .. } => Some((i, pool_of(needs))),
-                _ => None,
-            })
+        let tasks: Vec<(usize, PoolUse)> = (0..model.elements.len())
+            .filter_map(|i| self.pool_use(i).map(|u| (i, u)))
             .collect();
         // Which pools a task with alternatives might use.
         let might_use = |i: usize, j: usize| -> bool {
@@ -1232,7 +1290,7 @@ impl<'a> Net<'a> {
                 bound: if vary { Bound::AtMost } else { Bound::Exact },
             };
             let utilisation = work.combine(&units_value, true);
-            let (status, units_for_target) = judge(&utilisation, &work, None, target, false);
+            let (status, units_for_target) = judge(&utilisation, &work, None, target, 1.0);
             pool_rows.push(Station {
                 id: pool.id.clone(),
                 kind: StationKind::Pool,
@@ -1372,27 +1430,41 @@ fn served_rate(f: &Formula, lambda: f64) -> f64 {
     lambda * f.served_share
 }
 
-/// Whether entities can leave this server other than by being served, so it never overflows.
-fn gives_up(kind: &ElementKind) -> bool {
-    matches!(
-        kind,
-        ElementKind::Server { queue_capacity, patience, balking, .. }
-            if queue_capacity.is_some() || patience.is_some() || balking.is_some()
-    )
+/// The share of arrivals a server still takes in when its queue is very long: 0 with a finite
+/// room, patience or balking that falls to 0 (the queue cannot grow without limit), the last
+/// balking row's chance, else 1. A load times this of 100% or more is unstable.
+fn tail_join(kind: &ElementKind) -> f64 {
+    let ElementKind::Server {
+        queue_capacity,
+        patience,
+        balking,
+        ..
+    } = kind
+    else {
+        return 1.0;
+    };
+    if queue_capacity.is_some() || patience.is_some() {
+        return 0.0;
+    }
+    match balking.as_ref().map(|b| &b.join) {
+        None => 1.0,
+        Some(BalkJoin::Reciprocal) => 0.0,
+        Some(BalkJoin::Table(rows)) => rows.last().map_or(1.0, |r| r.probability.clamp(0.0, 1.0)),
+    }
 }
 
 /// The station's status, and the units that would bring it under the target.
 fn judge(
     load: &Value,
     work: &Value,
-    availability: Option<f64>,
+    availability: Option<&Value>,
     target: f64,
-    loses: bool,
+    tail: f64,
 ) -> (Status, Option<u32>) {
     let status = match load {
         Value::Known { value, bound } => {
             let level = |v: f64| {
-                if v >= 1.0 && !loses {
+                if v * tail >= 1.0 {
                     Status::Unstable
                 } else if v >= target {
                     Status::Congested
@@ -1411,12 +1483,24 @@ fn judge(
         }
         Value::Unknown(_) => Status::Unknown,
     };
-    let needed = match (status, work) {
-        (Status::Congested | Status::Unstable, Value::Known { value, .. }) => {
-            let per_unit = target * availability.unwrap_or(1.0);
+    // Only from exact numbers: a bounded work or availability gives no number of units.
+    let a = match availability {
+        None => Some(1.0),
+        Some(v) => v.exact_value(),
+    };
+    let needed = match (status, work, a) {
+        (
+            Status::Congested | Status::Unstable,
+            Value::Known {
+                value,
+                bound: Bound::Exact,
+            },
+            Some(a),
+        ) => {
+            let per_unit = target * a;
             // The fewest units whose load is under the target (strictly, so 85% is not fine).
             let mut c = (value / per_unit).ceil().max(1.0);
-            if value / (c * availability.unwrap_or(1.0)) >= target {
+            if value / (c * a) >= target {
                 c += 1.0;
             }
             Some(c as u32)
@@ -1480,17 +1564,26 @@ fn server_units(e: &Element) -> Option<(u32, bool)> {
 }
 
 /// The share of time a server's unit is not failed: the mean time to failure over that plus
-/// the mean repair (the failure clock runs in elapsed time from the end of each repair; for
-/// failures that wait for the job to end, a little more).
-fn availability(e: &Element) -> Option<f64> {
+/// the mean repair, the failure clock running in elapsed time from the end of each repair. For
+/// failures that wait for the job to end the unit stays up longer, so it is at least that.
+fn availability(e: &Element) -> Option<Value> {
     let ElementKind::Server {
         breakdown: Some(b), ..
     } = &e.kind
     else {
         return None;
     };
-    let (f, r) = (mean_of(&b.time_to_failure)?, mean_of(&b.repair)?);
-    (f + r > 0.0).then(|| f / (f + r))
+    Some(match (mean_of(&b.time_to_failure), mean_of(&b.repair)) {
+        (Some(f), Some(r)) if f + r > 0.0 => Value::Known {
+            value: f / (f + r),
+            bound: if b.interruptible {
+                Bound::Exact
+            } else {
+                Bound::AtLeast
+            },
+        },
+        _ => Value::Unknown(Why::NoMean),
+    })
 }
 
 /// Whether a server is plain M/M/c: exponential times and none of the features that change
@@ -1630,9 +1723,37 @@ fn birth_death(
         }
     };
     let last = queue.map(|q| u64::from(c) + u64::from(q));
-    // With nothing to bound the queue, it must be stable on its own.
-    if last.is_none() && theta <= 0.0 && balking.is_none() && lambda >= cf * mu {
-        return None;
+    // The most any state from n on takes in: a later balking row can take in more.
+    let most_from = |n: u64| -> f64 {
+        let now = join(n);
+        match balking.map(|b| (&b.join, b.counts_in_service)) {
+            Some((crate::BalkJoin::Table(rows), in_service)) => {
+                let counted = if in_service {
+                    n
+                } else {
+                    n.saturating_sub(u64::from(c))
+                };
+                rows.iter()
+                    .filter(|r| u64::from(r.waiting) > counted)
+                    .map(|r| r.probability.clamp(0.0, 1.0))
+                    .fold(now, f64::max)
+            }
+            _ => now,
+        }
+    };
+    // With nothing to bound the queue, what it takes in at length must be less than the units
+    // serve.
+    if last.is_none() && theta <= 0.0 {
+        let tail = match balking.map(|b| &b.join) {
+            None => 1.0,
+            Some(crate::BalkJoin::Reciprocal) => 0.0,
+            Some(crate::BalkJoin::Table(rows)) => {
+                rows.last().map_or(1.0, |r| r.probability.clamp(0.0, 1.0))
+            }
+        };
+        if lambda * tail >= cf * mu {
+            return None;
+        }
     }
     // Log weights of the states n = 0, 1, …, until they are negligible.
     let mut logs = vec![0.0_f64];
@@ -1653,7 +1774,8 @@ fn birth_death(
         logs.push(next);
         peak = peak.max(next);
         n = k;
-        if last.is_none() && k > u64::from(c) && up < down && next < peak - 50.0 {
+        if last.is_none() && k > u64::from(c) && lambda * most_from(k) < down && next < peak - 50.0
+        {
             break;
         }
         if logs.len() > 5_000_000 {

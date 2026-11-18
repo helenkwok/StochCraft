@@ -61,7 +61,7 @@ enum Command {
         #[arg(long)]
         scenario: Option<String>,
         /// The utilisation above which a station is congested, between 0 and 1.
-        #[arg(long, default_value_t = 0.85)]
+        #[arg(long, default_value_t = 0.85, value_parser = target)]
         target: f64,
         #[arg(long, value_enum, default_value_t = CheckFormat::Table)]
         format: CheckFormat,
@@ -313,6 +313,16 @@ fn validate(file: &Path, scenario: Option<&str>, format: CheckFormat) -> Result<
         CheckFormat::Table => print!("{}", output::validation(file, &opened, errors)),
     }
     Ok(u8::from(errors > 0))
+}
+
+/// A target utilisation: a number strictly between 0 and 1 (not NaN or infinite).
+fn target(s: &str) -> Result<f64, String> {
+    let v: f64 = s.parse().map_err(|e| format!("{e}"))?;
+    if v > 0.0 && v < 1.0 {
+        Ok(v)
+    } else {
+        Err(format!("the target must be between 0 and 1, not {s}"))
+    }
 }
 
 fn explain(

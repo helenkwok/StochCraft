@@ -504,7 +504,7 @@ fn breakdowns_leave_utilisation_as_the_results_count_it() {
     }
     let c = m.capacity(DEFAULT_TARGET);
     let s = row(&c, "s");
-    assert!(near(s.availability.unwrap_or(0.0), 0.9));
+    assert_eq!(s.availability, Some(Value::exact(0.9)));
     assert!(near(s.utilisation.exact_value().unwrap_or(0.0), 0.8));
     assert!(near(s.load.exact_value().unwrap_or(0.0), 0.8 / 0.9));
     assert_eq!(s.status, Status::Congested);
@@ -803,4 +803,205 @@ fn a_transfer_that_keeps_the_sender_holds_it_up() {
         }
     ));
     assert_eq!(reason(row(&c, "second")), &Why::Transfer);
+}
+
+fn shared_task(i: &str, mean: f64) -> Element {
+    el(
+        i,
+        ElementKind::SharedTask {
+            service: Dist::exponential_rate(1.0 / mean),
+            processing_by: None,
+            needs: vec![Need::Resource {
+                id: id("staff"),
+                quantity: 1,
+            }],
+            priority: 0.0,
+        },
+    )
+}
+
+#[test]
+fn an_overloaded_pool_bounds_what_follows() {
+    // Two a minute on one unit of a minute each: at most one a minute gets through.
+    let mut m = model(
+        vec![
+            source("in", Dist::exponential_rate(2.0)),
+            shared_task("a", 1.0),
+            server("next", 4, Dist::exponential_rate(1.0)),
+            sink("out"),
+        ],
+        vec![link("in", "a"), link("a", "next"), link("next", "out")],
+    );
+    m.resources = vec![ResourcePool::new(id("staff"), "Staff", 1, Vec::new())];
+    let c = m.capacity(DEFAULT_TARGET);
+    assert_eq!(row(&c, "staff").status, Status::Unstable);
+    assert_eq!(
+        row(&c, "next").arrival_rate,
+        Value::Known {
+            value: 1.0,
+            bound: Bound::AtMost
+        }
+    );
+
+    // Two tasks each under the pool alone but over it together: what follows is bounded.
+    let mut m = model(
+        vec![
+            source("in", Dist::exponential_rate(0.6)),
+            shared_task("a", 1.0),
+            shared_task("b", 1.0),
+            server("next", 4, Dist::exponential_rate(1.0)),
+            sink("out"),
+        ],
+        vec![
+            link("in", "a"),
+            link("a", "b"),
+            link("b", "next"),
+            link("next", "out"),
+        ],
+    );
+    m.resources = vec![ResourcePool::new(id("staff"), "Staff", 1, Vec::new())];
+    let c = m.capacity(DEFAULT_TARGET);
+    assert_eq!(row(&c, "staff").status, Status::Unstable);
+    assert!(matches!(
+        row(&c, "next").arrival_rate,
+        Value::Known {
+            bound: Bound::AtMost,
+            ..
+        }
+    ));
+}
+
+#[test]
+fn a_delay_by_property_has_no_exact_occupancy() {
+    let mut m = model(
+        vec![
+            source("in", Dist::exponential_rate(1.0)),
+            el(
+                "wait",
+                ElementKind::Delay {
+                    duration: Dist::Constant(1.0),
+                    processing_by: Some(crate::ProcessingBy {
+                        property: "type".into(),
+                        by_value: vec![crate::ByValue {
+                            value: "slow".into(),
+                            time: Dist::Constant(10.0),
+                        }],
+                    }),
+                },
+            ),
+            sink("out"),
+        ],
+        vec![link("in", "wait"), link("wait", "out")],
+    );
+    let c = m.capacity(DEFAULT_TARGET);
+    assert_eq!(reason(row(&c, "wait")), &Why::ByProperty);
+    // And a server with such times gets no number of units: all could be slow.
+    m.elements[1] = server("wait", 1, Dist::Constant(1.0));
+    if let ElementKind::Server { processing_by, .. } = &mut m.elements[1].kind {
+        *processing_by = Some(crate::ProcessingBy {
+            property: "type".into(),
+            by_value: vec![crate::ByValue {
+                value: "slow".into(),
+                time: Dist::Constant(10.0),
+            }],
+        });
+    }
+    let c = m.capacity(DEFAULT_TARGET);
+    let s = row(&c, "wait");
+    assert_eq!(s.status, Status::Unstable);
+    assert_eq!(s.units_for_target, None);
+}
+
+#[test]
+fn availability_is_exact_only_for_failures_that_interrupt() {
+    let failing = |interruptible: bool, time_to_failure: Dist| {
+        let mut m = line(0.5, 1, Dist::exponential_rate(1.0));
+        if let ElementKind::Server { breakdown, .. } = &mut m.elements[1].kind {
+            *breakdown = Some(Breakdown {
+                time_to_failure,
+                repair: Dist::Constant(1.0),
+                interruptible,
+                hands_on_while_down: true,
+            });
+        }
+        m.capacity(DEFAULT_TARGET)
+    };
+    // A failure waiting for the job to end keeps the unit up longer: at least 90%, so the load
+    // is at most 0.5 / 0.9.
+    let c = failing(false, Dist::Constant(9.0));
+    let s = row(&c, "s");
+    assert_eq!(
+        s.availability,
+        Some(Value::Known {
+            value: 0.9,
+            bound: Bound::AtLeast
+        })
+    );
+    assert!(matches!(
+        s.load,
+        Value::Known {
+            bound: Bound::AtMost,
+            ..
+        }
+    ));
+    // A time to failure with no usable mean: the load is not known, not taken at 100% up.
+    let c = failing(
+        true,
+        Dist::Normal {
+            mean: 9.0,
+            std_dev: 1.0,
+        },
+    );
+    let s = row(&c, "s");
+    assert_eq!(s.availability, Some(Value::Unknown(Why::NoMean)));
+    assert_eq!(s.load, Value::Unknown(Why::NoMean));
+    assert_eq!(s.status, Status::Unknown);
+}
+
+#[test]
+fn balking_that_still_takes_in_too_much_is_unstable() {
+    // Three a minute, half join whatever the queue: 150% of one unit.
+    let mut m = line(3.0, 1, Dist::exponential_rate(1.0));
+    if let ElementKind::Server { balking, .. } = &mut m.elements[1].kind {
+        *balking = Some(Balking {
+            join: BalkJoin::Table(vec![crate::BalkRow {
+                waiting: 0,
+                probability: 0.5,
+            }]),
+            counts_in_service: false,
+        });
+    }
+    let c = m.capacity(DEFAULT_TARGET);
+    let s = row(&c, "s");
+    assert_eq!(s.status, Status::Unstable);
+    assert_eq!(reason(s), &Why::Unstable);
+}
+
+#[test]
+fn a_later_balking_row_that_takes_in_more_is_not_cut_off() {
+    // Nearly all balk from 1 inside, all join from 30, none from 100: the queue sits near 100,
+    // far past where the weights first fall away.
+    let mut m = line(10.0, 1, Dist::exponential_rate(1.0));
+    if let ElementKind::Server { balking, .. } = &mut m.elements[1].kind {
+        *balking = Some(Balking {
+            join: BalkJoin::Table(vec![
+                crate::BalkRow {
+                    waiting: 1,
+                    probability: 0.001,
+                },
+                crate::BalkRow {
+                    waiting: 30,
+                    probability: 1.0,
+                },
+                crate::BalkRow {
+                    waiting: 100,
+                    probability: 0.0,
+                },
+            ]),
+            counts_in_service: true,
+        });
+    }
+    let c = m.capacity(DEFAULT_TARGET);
+    let f = formula(row(&c, "s"));
+    assert!(f.mean_queue > 90.0, "{f:?}");
 }

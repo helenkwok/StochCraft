@@ -2418,7 +2418,7 @@ pub fn capacity(model: &Model, table: &capacity::Capacity) -> Value {
                 "mean_service": value(&s.mean_service),
                 "units": s.units,
                 "units_vary": s.units_vary,
-                "availability": s.availability,
+                "availability": s.availability.as_ref().map(value),
                 "utilisation": value(&s.utilisation),
                 "load": value(&s.load),
                 "status": s.status.name(),
