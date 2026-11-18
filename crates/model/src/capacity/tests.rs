@@ -1047,8 +1047,9 @@ fn the_overloaded_warning_follows_the_table() {
 
 #[test]
 fn a_station_of_uncertain_capacity_bounds_what_follows() {
-    // s → next: with failures of exact availability, what s gets reaches next; with an
-    // availability only at least or not known, s may be over 100%, so next gets at most that.
+    // s → next: with failures of exact availability, or at least an availability that
+    // certainly carries what s gets, all of it reaches next; with an availability not known, s
+    // may be over 100%, so next gets at most that.
     let failing = |interruptible: bool, time_to_failure: Dist| {
         let mut m = model(
             vec![
@@ -1076,7 +1077,9 @@ fn a_station_of_uncertain_capacity_bounds_what_follows() {
         value: 0.5,
         bound: Bound::AtMost,
     };
-    assert_eq!(failing(false, Dist::Constant(9.0)), at_most);
+    assert_eq!(failing(false, Dist::Constant(9.0)), Value::exact(0.5));
+    // At least 1/3 up: 0.5 a minute may be more than s passes on.
+    assert_eq!(failing(false, Dist::Constant(0.5)), at_most);
     let no_mean = Dist::Normal {
         mean: 9.0,
         std_dev: 1.0,
@@ -1123,4 +1126,43 @@ fn a_task_of_unknown_rate_may_overload_its_pool() {
     m.connections[4].probability = Some(0.2);
     let c = m.capacity(DEFAULT_TARGET);
     assert_eq!(row(&c, "next").arrival_rate, Value::exact(0.5));
+}
+
+#[test]
+fn a_station_of_uncertain_capacity_on_its_own_loop_is_judged_on_what_it_is_offered() {
+    // One a minute in, half sent back: two a minute offered to s, whose times by property are
+    // at least 0.6. Its load is at least 1.2: unstable, and what follows it at most.
+    let back = chance("check", "s", 0.5);
+    let mut m = model(
+        vec![
+            source("in", Dist::exponential_rate(1.0)),
+            server("s", 1, Dist::exponential_rate(1.0 / 0.6)),
+            gateway("check"),
+            sink("out"),
+        ],
+        vec![
+            link("in", "s"),
+            link("s", "check"),
+            back,
+            chance("check", "out", 0.5),
+        ],
+    );
+    if let ElementKind::Server { processing_by, .. } = &mut m.elements[1].kind {
+        *processing_by = Some(crate::ProcessingBy {
+            property: "type".into(),
+            by_value: Vec::new(),
+        });
+    }
+    let c = m.capacity(DEFAULT_TARGET);
+    let s = row(&c, "s");
+    assert_eq!(
+        s.arrival_rate.exact_value().map(|r| near(r, 2.0)),
+        Some(true)
+    );
+    assert_eq!(s.status, Status::Unstable);
+    assert!(
+        m.validate()
+            .iter()
+            .any(|d| matches!(d.problem, crate::Problem::Overloaded { .. }))
+    );
 }

@@ -1382,7 +1382,9 @@ ch. 10 §10.4, in Brailsford, Churilov and Dangerfield, eds., 2014). Related and
       at a parallel gateway, the least of a join's inputs, a batch's size, and rework loops.
       Where a rate depends on the run, the table says on what and does not guess: a condition,
       the shortest queue, or those giving up, balking or turned away. Rates after entities are
-      lost, or after a station at 100%, are given as at most.
+      lost, or after a station that may be at 100%, are given as at most: one sent more than
+      it certainly carries (its availability or service time not known exactly, units on a
+      calendar, a task with alternatives, a pool whose load is not bounded above).
     - Utilisation is counted as the results count it, failed time not busy. The load that
       marks a station is taken over the units' availability, mean up over mean up plus repair.
     - A formula is given only where it is exact. M/M/c (Erlang C) holds through rework loops

@@ -8,7 +8,9 @@
 //! on the least of its incoming rates (each over its quantity), a batch divides it by its size
 //! and an unbatch multiplies it back, and a rework loop is solved as a whole. Where a rate
 //! depends on what happens in the run (a condition on a property, the shortest queue, entities
-//! giving up or turned away), it is not guessed: the table says what it depends on.
+//! giving up or turned away), it is not guessed: the table says what it depends on. What
+//! follows entities lost, or a station sent more than it certainly carries (its capacity is not
+//! known exactly, or its pool may be overloaded), is at most its rate.
 //!
 //! Utilisation is defined as in the results (busy is processing and setting up, failed time
 //! not busy): the arrival rate times the mean service time over the units. The load, which
@@ -594,7 +596,9 @@ impl<'a> Net<'a> {
 
     /// Each connection's rate: the traffic equations, solved by passing rates on until they
     /// settle (they rise to the least solution; a loop sending everything back never settles).
-    fn flows(&self, caps: &[Option<f64>], bounded_too: &[bool]) -> (Vec<Flow>, Vec<bool>) {
+    /// `caps[i]`: the most station `i` can pass on; `sure[i]`: what it certainly passes on, so
+    /// that more coming in makes what follows at most.
+    fn flows(&self, caps: &[Option<f64>], sure: &[Option<f64>]) -> (Vec<Flow>, Vec<bool>) {
         let (n, m) = (self.model.elements.len(), self.model.connections.len());
         let mut flow = vec![0.0_f64; m];
         // Connections whose rate is not known: fixed before the rates are passed on.
@@ -728,23 +732,27 @@ impl<'a> Net<'a> {
                 }
             }
         }
-        // Bounds: what comes after a loss or a cap is at most its rate.
-        let bounded: Vec<usize> = (0..n)
-            .filter(|&i| {
-                self.bounds_onward(i)
-                    || bounded_too[i]
-                    || caps[i].is_some_and(|c| input(&flow, i) > c * (1.0 - 1e-12))
-            })
-            .collect();
+        // Bounds: what comes after a loss, or a station that may not pass on all it gets, is at
+        // most its rate. A station is not bounded by itself through a loop for its capacity
+        // alone: its arrivals are those it is offered, as its load is judged on them.
         let mut at_most = vec![false; n];
-        let mut queue: VecDeque<usize> = bounded
-            .iter()
-            .flat_map(|&i| self.outs[i].iter().filter_map(|&k| self.end_of(k)))
-            .collect();
-        while let Some(i) = queue.pop_front() {
-            if !at_most[i] {
-                at_most[i] = true;
-                queue.extend(self.outs[i].iter().filter_map(|&k| self.end_of(k)));
+        for (j, certain) in sure.iter().enumerate() {
+            let loses = self.bounds_onward(j);
+            let short = certain.is_some_and(|c| input(&flow, j) > c * (1.0 - 1e-12));
+            if !loses && !short {
+                continue;
+            }
+            let mut seen = vec![false; n];
+            let mut queue: VecDeque<usize> = self.outs[j]
+                .iter()
+                .filter_map(|&k| self.end_of(k))
+                .collect();
+            while let Some(i) = queue.pop_front() {
+                if !seen[i] {
+                    seen[i] = true;
+                    at_most[i] |= i != j || loses;
+                    queue.extend(self.outs[i].iter().filter_map(|&k| self.end_of(k)));
+                }
             }
         }
         (out, at_most)
@@ -907,25 +915,48 @@ impl<'a> Net<'a> {
                 Some(units * a / s)
             })
             .collect();
-        // A station whose capacity is not certain (a service time or availability not exact,
-        // units on a calendar, a task with alternatives) may pass on less than it gets, so
-        // what follows it is at most.
-        let unsure: Vec<bool> = (0..n)
+        // What a station certainly passes on: its fixed units over the exact service time,
+        // times the least availability. None is certain (0) with units on a calendar, a service
+        // time only at least or not known, an availability not known, or a task with
+        // alternatives.
+        let sure: Vec<Option<f64>> = (0..n)
             .map(|i| {
-                let vary = match (&units[i], self.pool_use(i)) {
-                    (Some((_, vary)), _) => *vary,
-                    (None, Some(Ok((j, _)))) => {
+                let units = match (&units[i], self.pool_use(i)) {
+                    (Some((c, false)), _) => f64::from(*c),
+                    (None, Some(Ok((j, q)))) => {
                         let p = &model.resources[j];
-                        !p.shifts.is_empty() || !p.availability.is_empty() || !p.available
+                        if !p.shifts.is_empty() || !p.availability.is_empty() || !p.available {
+                            return Some(0.0);
+                        }
+                        f64::from(p.most_units()) / f64::from(q.max(1))
                     }
-                    (None, Some(Err(_))) => true,
-                    (None, None) => return false,
+                    (None, None) => return None,
+                    _ => return Some(0.0),
                 };
-                vary || service[i].exact_value().is_none()
-                    || avail[i].as_ref().is_some_and(|a| a.exact_value().is_none())
+                let Some(s) = service[i].exact_value() else {
+                    return Some(0.0);
+                };
+                let a = match &avail[i] {
+                    None => 1.0,
+                    Some(Value::Known { value, .. }) => *value,
+                    Some(Value::Unknown(_)) => 0.0,
+                };
+                Some(if s > 0.0 {
+                    units * a / s
+                } else {
+                    f64::INFINITY
+                })
             })
             .collect();
-        let (mut flows, mut at_most) = self.flows(&caps, &unsure);
+        // Cut to an upper bound of its capacity, a station on a loop would seem to get less
+        // than it is offered, and not certainly so: there rates are cut only to a certain one.
+        let caps: Vec<Option<f64>> = (0..n)
+            .map(|i| match (caps[i], sure[i]) {
+                (Some(c), Some(s)) if self.looped[i] && s < c * (1.0 - 1e-12) => None,
+                (c, _) => c,
+            })
+            .collect();
+        let (mut flows, mut at_most) = self.flows(&caps, &sure);
         let mut rates: Vec<Value> = (0..n).map(|i| self.arrivals(&flows, &at_most, i)).collect();
         // Tasks on a pool that may be loaded to 100% or more pass on at most what they get:
         // again, with what follows them bounded.
@@ -933,8 +964,10 @@ impl<'a> Net<'a> {
         let offered = rates.clone();
         let overloaded = self.overloaded_pool_users(&rates, &service);
         if overloaded.iter().any(|b| *b) {
-            let bounded: Vec<bool> = (0..n).map(|i| unsure[i] || overloaded[i]).collect();
-            (flows, at_most) = self.flows(&caps, &bounded);
+            let sure: Vec<Option<f64>> = (0..n)
+                .map(|i| if overloaded[i] { Some(0.0) } else { sure[i] })
+                .collect();
+            (flows, at_most) = self.flows(&caps, &sure);
             rates = (0..n).map(|i| self.arrivals(&flows, &at_most, i)).collect();
         }
 
