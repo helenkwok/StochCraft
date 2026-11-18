@@ -1327,8 +1327,8 @@ ch. 10 §10.4, in Brailsford, Churilov and Dangerfield, eds., 2014). Related and
     and check, saying in how many replications it failed (in the run's `warnings`, so the CLI's
     table, the window's results and agents get them): every element's entities add up, with
     those inside as the statistics started (`unbalanced`), and the model's (created or inside
-    at the start = reached an exit + left elsewhere + still inside: `unaccounted`; not where
-    entities are copied, combined or split); some entity reaches an exit (`nothing_out`);
+    at the start = reached an exit + left elsewhere + still inside: `unaccounted`); some
+    entity leaves the model, at an exit or by any other way out (`nothing_out`);
     Little's law holds at every server, shared task and delay (`littles_law`: the time-average
     inside against the entities' own times inside, from when each came in and went out, those
     inside at the window's start and end counted to it, so it is exact over any window and the
@@ -1338,6 +1338,22 @@ ch. 10 §10.4, in Brailsford, Churilov and Dangerfield, eds., 2014). Related and
     (`out_of_range`). Pernas-Álvarez and Crespo-Pereira (arXiv 2611.10602, 2026) found that
     agents' wrong models were all "silent" (they built and ran, and answered wrongly); checks
     like these caught about half, the most common being a break counted as busy time.
+  - Every entity is counted in one place, as in the common tools: an entity that gives up
+    during its job (patience until done) is counted as abandoned then, though its unit carries
+    on with the job; one waiting for room on a way marked for those giving up, balking or turned
+    away is counted as leaving the element it left; copies, batches and unbatched entities are
+    new entities, and those combined into a batch ended. So both counts are exact, where before
+    they allowed ± a server's units or were not checked. Still not checked: the model's count
+    where a parallel gateway joins, or a shortest-queue gateway sends to another; each
+    element's count at parallel gateways, unbatches and shortest-queue gateways; Little's law
+    at batches and joins.
+  - Any way out of the model is a way out for `nothing_out`, as reaching any sink is in the
+    common tools; a gateway where no condition holds and there is no default is warned about
+    as the model is checked (`no_default`; BPMN 2.0.2 §13.4.2 makes it an exception).
+  - Experiment designs (`experiment.sweep`, `.sensitivity`, `.design`, `.size`) check every
+    run they make as a single run is checked, and give each point the warnings its run gives
+    (`warnings`): each run of an experiment is an ordinary run. The window does not show them
+    yet.
   - Utilisation counts a unit failed or restarting part-way through a job as not busy: that
     time is capacity lost, still in the units' time (Law, *Simulation Modeling and Analysis*,
     5th ed., §14.4.2; ISO 22400-2's busy time), and planned time off shift is left out of both.

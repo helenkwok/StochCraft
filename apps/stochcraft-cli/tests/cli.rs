@@ -117,7 +117,7 @@ fn a_run_prints_what_the_behaviour_checks_find() {
         "--duration",
         "0.000001",
     ]);
-    assert!(table.contains("no entity reached an exit"), "{table}");
+    assert!(table.contains("no entity left the model"), "{table}");
 }
 
 #[test]

@@ -877,6 +877,14 @@ pub struct ElementReport {
     /// the end (0 for a pool).
     pub inside_at_start: u64,
     pub inside_at_end: u64,
+    /// Servers with patience until done, for the behaviour checks: of those inside at the start
+    /// and at the end, the entities that had given up during their job (counted as abandoned
+    /// then, a stand-in taking their way out) while their unit carried on with it.
+    pub given_up_inside: [u64; 2],
+    /// For the behaviour checks: entities that had left this element by a way marked for those
+    /// giving up, balking or turned away and were waiting for room on it, counted inside
+    /// neither element, at the start and at the end.
+    pub leaving: [u64; 2],
     /// Servers, shared tasks and delays, for the behaviour checks: the time entities spent
     /// inside over the measured window, from the times each came in and went out (those inside
     /// at its start from then, those inside at its end until then), apart from the counts of

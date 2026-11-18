@@ -146,11 +146,16 @@ struct EncodedElement {
     work_in_progress: Option<u64>,
     properties: Vec<Option<u64>>,
     /// What the behaviour checks need: the entities inside at the start and the end, the time
-    /// inside and the units on shift.
+    /// inside and the units on shift, and at the start and the end those inside that had given
+    /// up and those leaving by a marked way.
     #[serde(default)]
     inside: [u64; 2],
     #[serde(default)]
     checks: [Option<u64>; 2],
+    #[serde(default)]
+    given_up_inside: [u64; 2],
+    #[serde(default)]
+    leaving: [u64; 2],
 }
 
 fn bits(x: Option<f64>) -> Option<u64> {
@@ -236,6 +241,8 @@ impl Encoded {
                     properties: e.properties.iter().map(|(_, v)| bits(*v)).collect(),
                     inside: [e.inside_at_start, e.inside_at_end],
                     checks: [bits(e.time_inside), bits(e.on_shift)],
+                    given_up_inside: e.given_up_inside,
+                    leaving: e.leaving,
                 })
                 .collect(),
         }
@@ -345,6 +352,8 @@ impl Encoded {
                         .collect(),
                     inside_at_start,
                     inside_at_end,
+                    given_up_inside: e.given_up_inside,
+                    leaving: e.leaving,
                     time_inside: float(time_inside),
                     on_shift: float(on_shift),
                 })

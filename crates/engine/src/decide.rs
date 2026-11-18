@@ -11,7 +11,8 @@
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 use serde_json::{Value, json};
-use stochcraft_blocks::{ExperimentSummary, Metric, compile, summarise};
+use stochcraft_blocks::checks::check_reports;
+use stochcraft_blocks::{ExperimentSummary, Metric, compile, run_warnings, summarise};
 use stochcraft_experiment::Experiment;
 use stochcraft_model::{Dist, ElementId, ElementKind, Model, ResourcePool};
 use stochcraft_stats::{Proportion, difference};
@@ -222,8 +223,15 @@ fn time_mut<'a>(model: &'a mut Model, id: &ElementId) -> Option<&'a mut Dist> {
     }
 }
 
-/// Runs `model`'s experiment with `replications` and `seed` and summarises it.
-pub fn run(model: &Model, replications: u64, seed: u64) -> Result<ExperimentSummary, CommandError> {
+/// Runs `model`'s experiment with `replications` and `seed` and summarises it, with the
+/// warnings a single run of it gives (as its results' `warnings`): what the results show, then
+/// what the behaviour checks found. Every run an experiment design makes is an ordinary run,
+/// checked as one.
+pub fn run(
+    model: &Model,
+    replications: u64,
+    seed: u64,
+) -> Result<(ExperimentSummary, Value), CommandError> {
     let compiled = compile(model).map_err(|ds| CommandError {
         code: ErrorCode::InvalidModel,
         message: "the model has errors and cannot run".into(),
@@ -235,7 +243,14 @@ pub fn run(model: &Model, replications: u64, seed: u64) -> Result<ExperimentSumm
         .into_iter()
         .collect::<Result<Vec<_>, _>>()
         .map_err(|e| CommandError::new(ErrorCode::TimeStopped, e.to_string()))?;
-    Ok(summarise(&reports))
+    let summary = summarise(&reports);
+    let warnings = wire::diagnostics(
+        &run_warnings(model, &summary)
+            .into_iter()
+            .chain(check_reports(model, &reports))
+            .collect::<Vec<_>>(),
+    );
+    Ok((summary, warnings))
 }
 
 pub(crate) fn metric(name: &str) -> Result<Metric, CommandError> {
@@ -366,7 +381,7 @@ pub fn sweep(model: &Model, p: &SweepParams) -> Result<Value, CommandError> {
     for &v in &p.values {
         let mut m = model.clone();
         p.parameter.set(&mut m, v)?;
-        let s = run(&m, reps, seed)?;
+        let (s, warnings) = run(&m, reps, seed)?;
         let mut results = Vec::new();
         for o in &p.results {
             let x = value(&s, o)?;
@@ -377,7 +392,7 @@ pub fn sweep(model: &Model, p: &SweepParams) -> Result<Value, CommandError> {
                 "half_width": x.map(|x| x.1),
             }));
         }
-        points.push(json!({ "value": v, "results": results }));
+        points.push(json!({ "value": v, "results": results, "warnings": warnings }));
         summaries.push(s);
     }
     // Across the range: how much each result moved, and whether more than the noise, from the
@@ -425,8 +440,16 @@ pub fn sensitivity(model: &Model, p: &SensitivityParams) -> Result<Value, Comman
         return Err(invalid("`change` must be between 0 and 1"));
     }
     let (reps, seed) = reps_seed(model, p.replications, p.seed);
-    let base = run(model, reps, seed)?;
+    let (base, base_warnings) = run(model, reps, seed)?;
     let mut rows = Vec::new();
+    // Every run with warnings: the parameter moved (none for the model as it is) and its value.
+    let mut warned = Vec::new();
+    let mut warn = |parameter: Option<&Param>, value: Option<f64>, warnings: Value| {
+        if warnings.as_array().is_some_and(|w| !w.is_empty()) {
+            warned.push(json!({ "parameter": parameter, "value": value, "warnings": warnings }));
+        }
+    };
+    warn(None, None, base_warnings);
     for param in &p.parameters {
         let x0 = param.get(model)?;
         let step = if param.field.integral() {
@@ -441,11 +464,14 @@ pub fn sensitivity(model: &Model, p: &SensitivityParams) -> Result<Value, Comman
             Field::QueueCapacity | Field::Mean => 0.0,
         };
         let (down, up) = ((x0 - step).max(floor.min(x0)), x0 + step);
-        let at = |v: f64| -> Result<ExperimentSummary, CommandError> {
+        let mut at = |v: f64| -> Result<ExperimentSummary, CommandError> {
             let mut m = model.clone();
             param.set(&mut m, v)?;
-            run(&m, reps, seed)
+            let (s, warnings) = run(&m, reps, seed)?;
+            warn(Some(param), Some(v), warnings);
+            Ok(s)
         };
+        // At its floor, down is the model as it is: its run, and warnings, are the base's.
         let s_down = if down == x0 { base.clone() } else { at(down)? };
         let s_up = at(up)?;
         for o in &p.results {
@@ -486,6 +512,7 @@ pub fn sensitivity(model: &Model, p: &SensitivityParams) -> Result<Value, Comman
         "seed": seed,
         "effects": rows,
         "tests": tests,
+        "warnings": warned,
         "method": "one parameter at a time, down and up by `change`, the same seed throughout (common random numbers), so replication i of every run meets the same random numbers; elasticity: the relative change in the result over the relative change in the parameter; difference: the mean over the replications of the result at up minus at down, with half_width its 95% paired-t half-width (n − 1 degrees of freedom, n the replications where both have a value); significant: that interval excludes 0 (null with fewer than two pairs). Each of the `tests` effects is tested on its own at 95%, so about one in twenty of those with no real effect still shows as significant by chance; for 95% confidence in all of them at once (Bonferroni), each would need its own interval at 1 − 0.05/tests, which is wider",
     }))
 }
@@ -630,7 +657,7 @@ fn grow(
     let limit = p.max_added.unwrap_or(50);
     let mut added = 0;
     loop {
-        let s = run(&m, reps, seed)?;
+        let (s, warnings) = run(&m, reps, seed)?;
         let met = p.target.met(&s)?;
         let probability = met.estimate().unwrap_or(0.0);
         // The busiest of the resources that may grow.
@@ -649,6 +676,7 @@ fn grow(
             "units": units,
             "probability": probability,
             "interval": met.wilson(0.95),
+            "warnings": warnings,
         });
         if probability >= p.target_share {
             steps.push(step);

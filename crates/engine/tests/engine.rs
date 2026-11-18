@@ -2369,6 +2369,72 @@ fn sensitivity_ranks_what_drives_the_time_in_system() {
     assert!(effects.iter().all(|x| x["significant"] == true));
 }
 
+/// Every run an experiment design makes is checked as a single run is: each point (value,
+/// step, run moved) comes with the warnings a run of it gives. With one replication, each
+/// warns of that, as `run` does.
+#[test]
+fn experiment_designs_give_each_run_s_warnings() {
+    let mut e = help_desk();
+    let codes = |w: &Value| -> Vec<String> {
+        w.as_array()
+            .into_iter()
+            .flatten()
+            .filter_map(|d| d["code"].as_str().map(String::from))
+            .collect()
+    };
+    let wait = json!([{ "element": "desk", "metric": "mean_wait" }]);
+    let sweep = ok(
+        &mut e,
+        "experiment.sweep",
+        json!({
+            "parameter": { "id": "desk", "field": "capacity" }, "values": [1, 2],
+            "results": wait, "replications": 1
+        }),
+    );
+    let design = ok(
+        &mut e,
+        "experiment.design",
+        json!({
+            "factors": [{ "id": "desk", "field": "mean", "levels": [0.8, 1.2] }],
+            "results": wait, "replications": 1
+        }),
+    );
+    let sensitivity = ok(
+        &mut e,
+        "experiment.sensitivity",
+        json!({
+            "parameters": [{ "id": "desk", "field": "mean" }],
+            "results": wait, "replications": 1
+        }),
+    );
+    let mut points: Vec<Value> = Vec::new();
+    for r in [&sweep, &design] {
+        points.extend(r["points"].as_array().into_iter().flatten().cloned());
+    }
+    // The model as it is, then the service time down and up.
+    let runs = sensitivity["warnings"]
+        .as_array()
+        .cloned()
+        .unwrap_or_default();
+    assert_eq!(runs.len(), 3, "{sensitivity}");
+    assert_eq!(runs[0]["parameter"], Value::Null);
+    assert_eq!(runs[1]["parameter"]["id"], "desk");
+    points.extend(runs);
+    assert_eq!(points.len(), 7);
+    for p in &points {
+        assert!(
+            codes(&p["warnings"]).contains(&"one_replication".to_owned()),
+            "{p}"
+        );
+    }
+    // As a single run of the model warns.
+    let single = ok(&mut e, "run", json!({ "replications": 1 }));
+    assert_eq!(
+        codes(&single["warnings"]),
+        codes(&sensitivity["warnings"][0]["warnings"])
+    );
+}
+
 /// The `mm1` template of the command line (arrivals 0.75 a minute, one server with mean service
 /// 1 minute), run short as in issue #66: warm-up 200, duration 3000, 10 replications, seed 2026.
 fn short_mm1() -> Engine {

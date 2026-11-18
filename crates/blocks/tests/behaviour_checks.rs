@@ -26,8 +26,7 @@ fn once(from: (u32, u32), to: (u32, u32)) -> Event {
 /// A line with something of everything the checks look at: arrivals turned away at a full
 /// buffer; a press with two units that fail (part-way through jobs) and stop for two breaks,
 /// finishing the job under way; a desk whose entities give up waiting, or during their job; a
-/// delay; and, with `batch`, a batch of 2 before the exit (the model's count is not checked
-/// with one, since a batch combines entities).
+/// delay; and, with `batch`, a batch of 2 before the exit.
 fn line(batch: bool) -> Model {
     let mut b = Builder::new();
     b.calendar(
@@ -139,10 +138,13 @@ fn no_check_fires_on_runs_that_are_right() {
             let r = run(&m, 5);
             assert_eq!(found(&m, &r), vec![], "{warmup} {duration}");
         }
-        // Too short for any entity to get out: that, and nothing else, is found.
+        // Too short for any entity to reach the exit: some arrivals, turned away at the press's
+        // full buffer, still left the model, so nothing is found.
         let mut m = model.clone();
         m.experiment.duration = 0.5;
-        assert_eq!(found(&m, &run(&m, 5)), vec![(None, "nothing_out")]);
+        let r = run(&m, 5);
+        assert_eq!(r.element("out").map(|e| e.entered), Some(0));
+        assert_eq!(found(&m, &r), vec![]);
     }
 }
 
@@ -158,15 +160,44 @@ fn an_entity_missing_from_an_element_is_found() {
 
 #[test]
 fn an_entity_missing_from_the_model_is_found() {
-    // Two more reaching the exit than came in (the desk, where entities give up in service,
-    // allows one either way): the exit's own count still adds up.
+    // One more reaching the exit than came in, with a batch and without: the exit's own count
+    // still adds up.
+    for batch in [true, false] {
+        let (model, mut r) = good_line(batch);
+        let out = element(&mut r, "out");
+        out.entered += 1;
+        out.left += 1;
+        let f = found(&model, &r);
+        only(f.clone(), None, "unaccounted");
+        assert!(!f.iter().any(|(a, _)| a.as_deref() == Some("out")), "{f:?}");
+    }
+}
+
+/// An entity that gives up during its job (patience until done) is counted once: abandoned as
+/// it gives up, its stand-in taking its way, though it stays inside until its unit is done with
+/// it. So the desk's count is exact, even where the statistics start or end with such entities
+/// inside, and one entity missing there is found.
+#[test]
+fn an_entity_given_up_during_its_job_is_counted_once() {
+    let model = line(false);
+    let (mut at_start, mut at_end) = (false, false);
+    for seed in 1..=40 {
+        for warmup in [30.0, 31.5, 47.0] {
+            let mut m = model.clone();
+            m.experiment.warmup = warmup;
+            let r = run(&m, seed);
+            assert_eq!(found(&m, &r), vec![], "seed {seed} warm-up {warmup}");
+            let desk = r.element("desk").unwrap_or_else(|| panic!("no desk"));
+            at_start |= desk.given_up_inside[0] > 0;
+            at_end |= desk.given_up_inside[1] > 0;
+        }
+    }
+    // The boundaries were crossed with such entities inside.
+    assert!(at_start && at_end, "{at_start} {at_end}");
+    // One entity missing from the desk, which the allowance of its units hid before.
     let (model, mut r) = good_line(false);
-    let out = element(&mut r, "out");
-    out.entered += 2;
-    out.left += 2;
-    let f = found(&model, &r);
-    only(f.clone(), None, "unaccounted");
-    assert!(!f.iter().any(|(a, _)| a.as_deref() == Some("out")), "{f:?}");
+    element(&mut r, "desk").left -= 1;
+    only(found(&model, &r), Some("desk"), "unbalanced");
 }
 
 #[test]
@@ -305,10 +336,11 @@ fn replications_are_merged_into_one_warning_with_the_worst() {
 }
 
 /// Those who give up take their way to a callback desk with one place, which holds them up when
-/// it is full: waiting for room on the way, they are in neither element. The model's count is
-/// not checked then, so a model that is right gets no warning.
+/// it is full: waiting for room on the way, they are in neither element, and are counted as
+/// leaving the desk they gave up at. So the model's count is exact, also where the statistics
+/// start or end with such entities waiting, and one of them missing is found.
 #[test]
-fn entities_waiting_for_room_on_a_marked_way_are_not_counted_missing() {
+fn entities_waiting_for_room_on_a_marked_way_are_counted() {
     let mut b = Builder::new();
     let calls = b.source("calls", Dist::exponential_rate(2.0), None);
     let desk = b.server("desk", 1, Dist::exponential_rate(1.0));
@@ -330,7 +362,104 @@ fn entities_waiting_for_room_on_a_marked_way_are_not_counted_missing() {
         duration: 200.0,
         ..Experiment::default()
     });
-    for seed in 1..=10 {
-        assert_eq!(found(&model, &run(&model, seed)), vec![], "seed {seed}");
+    let (mut at_start, mut at_end) = (false, false);
+    let mut missing = None;
+    for seed in 1..=20 {
+        let r = run(&model, seed);
+        assert_eq!(found(&model, &r), vec![], "seed {seed}");
+        let desk = r.element("desk").unwrap_or_else(|| panic!("no desk"));
+        at_start |= desk.leaving[0] > 0;
+        if desk.leaving[1] > 0 {
+            at_end = true;
+            missing.get_or_insert(r);
+        }
     }
+    assert!(at_start && at_end, "{at_start} {at_end}");
+    // One of those waiting at the end missing.
+    let Some(mut r) = missing else {
+        panic!("none waiting at the end");
+    };
+    element(&mut r, "desk").leaving[1] -= 1;
+    assert_eq!(found(&model, &r), vec![(None, "unaccounted")]);
+}
+
+/// Where entities are copied, combined and split, the model's count holds with the copies and
+/// the batches as new entities, and those combined into them ended: a parallel gateway sends
+/// each part to a press and a copy to a delay, the press's parts are packed in threes and
+/// unpacked again.
+#[test]
+fn copies_and_batches_are_counted_as_new_entities() {
+    let mut b = Builder::new();
+    let parts = b.source("parts", Dist::exponential_rate(1.0), None);
+    let split = b.parallel("split");
+    let press = b.server("press", 2, Dist::exponential_rate(0.7));
+    let pack = b.batch("pack", 3);
+    let unpack = b.unbatch("unpack");
+    let cure = b.delay("cure", Dist::Uniform { min: 1.0, max: 5.0 });
+    let out = b.sink("out");
+    b.connect(parts, split);
+    b.connect(split, press);
+    b.connect(split, cure);
+    b.connect(press, pack);
+    b.connect(pack, unpack);
+    b.connect(unpack, out);
+    b.connect(cure, out);
+    let model = b.build(Experiment {
+        warmup: 20.0,
+        duration: 200.0,
+        ..Experiment::default()
+    });
+    for seed in 1..=20 {
+        for warmup in [0.0, 20.0, 33.3] {
+            let mut m = model.clone();
+            m.experiment.warmup = warmup;
+            assert_eq!(
+                found(&m, &run(&m, seed)),
+                vec![],
+                "seed {seed} warm-up {warmup}"
+            );
+        }
+    }
+    // A copy, a batch or an unpacked part too many or too few is found.
+    for (id, by) in [("split", 1i64), ("pack", -1), ("unpack", 1)] {
+        let mut r = run(&model, 3);
+        let e = element(&mut r, id);
+        e.left = e.left.saturating_add_signed(by);
+        assert!(
+            found(&model, &r).contains(&(None, "unaccounted")),
+            "{id}: {:?}",
+            found(&model, &r)
+        );
+    }
+}
+
+/// Entities that leave the model other than at an exit (here, all of them give up, with no way
+/// marked for them) have got out: no warning that nothing did.
+#[test]
+fn leaving_by_any_way_out_counts_as_getting_out() {
+    let mut b = Builder::new();
+    let calls = b.source("calls", Dist::exponential_rate(1.0), None);
+    let desk = b.server("desk", 1, Dist::Constant(1_000.0));
+    b.patience(
+        desk,
+        Patience {
+            time: Dist::Constant(2.0),
+            until: PatienceUntil::Start,
+        },
+    );
+    let out = b.sink("out");
+    b.connect(calls, desk);
+    b.connect(desk, out);
+    let model = b.build(Experiment {
+        duration: 100.0,
+        ..Experiment::default()
+    });
+    let r = run(&model, 1);
+    assert_eq!(r.element("out").map(|e| e.entered), Some(0), "{r:?}");
+    assert!(
+        r.element("desk")
+            .and_then(|e| e.abandoned)
+            .is_some_and(|n| n > 0)
+    );
+    assert_eq!(found(&model, &r), vec![]);
 }
