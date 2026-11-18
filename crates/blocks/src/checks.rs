@@ -204,9 +204,12 @@ fn unbalanced(kind: &ElementKind, e: &ElementReport) -> Option<Behaviour> {
 /// (`came`), those that left the model (`out`) and those inside anywhere at the end (`inside`);
 /// those started and ended where entities are copied, combined or split (`made`, `ended`); and
 /// whether every entity is counted in one place only, so that `came + made` must equal
-/// `out + ended + inside` ([`unaccounted`]).
+/// `out + ended + inside` ([`unaccounted`]). `present`: the entities created at a source or
+/// inside anywhere as the statistics started, those where entities are copied, combined or
+/// split included ([`nothing_out`]).
 struct Flows {
     came: u64,
+    present: u64,
     made: u64,
     out: u64,
     ended: u64,
@@ -240,6 +243,7 @@ fn flows(model: &Model, report: &Report) -> Flows {
     let sq = |id: &ElementId| model.element(id).is_some_and(|e| shortest_queue(&e.kind));
     let mut f = Flows {
         came: 0,
+        present: 0,
         made: 0,
         out: 0,
         ended: 0,
@@ -253,6 +257,7 @@ fn flows(model: &Model, report: &Report) -> Flows {
         let [leaving_at_start, leaving_at_end] = e.leaving;
         f.came += leaving_at_start;
         f.inside += leaving_at_end;
+        f.present += leaving_at_start + inside(e).0;
         match &element.kind {
             // What comes in ends here, and what leaves starts here: only the counts across
             // the element's edges matter, not those inside it.
@@ -266,6 +271,7 @@ fn flows(model: &Model, report: &Report) -> Flows {
             }
             ElementKind::Source { .. } => {
                 f.came += e.entered;
+                f.present += e.entered;
                 // Turned away where it sends: gone, unless that buffer has a way out for those
                 // (then they take it) or it is a shortest-queue gateway (which counts them).
                 let kept = target(&e.id)
@@ -303,12 +309,13 @@ fn unaccounted(model: &Model, report: &Report) -> Option<Behaviour> {
 
 /// Some entity left the model, by any way out ([`flows`]): an exit, or giving up, balking,
 /// being turned away or finding no way at a gateway with no way marked for those. Checked when
-/// some entity was created, or inside as the statistics started. An entity that leaves by any
+/// some entity was created, or inside anywhere as the statistics started (a batch filling
+/// included). An entity that leaves by any
 /// way has got through the model, as at any exit; a gateway with no way for some is warned
 /// about as the model is checked ([`stochcraft_model::Problem::NoDefault`]).
 fn nothing_out(model: &Model, report: &Report) -> Option<Behaviour> {
     let f = flows(model, report);
-    (f.came > 0 && f.out == 0).then_some(Behaviour::NothingOut { came: f.came })
+    (f.present > 0 && f.out == 0).then_some(Behaviour::NothingOut { came: f.present })
 }
 
 /// Little's law, over the run's own window: the time-average number inside times the window is

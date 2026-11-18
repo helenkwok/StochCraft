@@ -226,7 +226,9 @@ fn time_mut<'a>(model: &'a mut Model, id: &ElementId) -> Option<&'a mut Dist> {
 /// Runs `model`'s experiment with `replications` and `seed` and summarises it, with the
 /// warnings a single run of it gives (as its results' `warnings`): what the results show, then
 /// what the behaviour checks found. Every run an experiment design makes is an ordinary run,
-/// checked as one.
+/// checked as one. It records no results over time (as `run` with `series: false`), which
+/// would cost memory at every point, so it gives no warm-up suggestion (`no_warmup`): that is
+/// for a run of the model itself.
 pub fn run(
     model: &Model,
     replications: u64,

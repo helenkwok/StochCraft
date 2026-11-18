@@ -1352,8 +1352,9 @@ ch. 10 §10.4, in Brailsford, Churilov and Dangerfield, eds., 2014). Related and
     as the model is checked (`no_default`; BPMN 2.0.2 §13.4.2 makes it an exception).
   - Experiment designs (`experiment.sweep`, `.sensitivity`, `.design`, `.size`) check every
     run they make as a single run is checked, and give each point the warnings its run gives
-    (`warnings`): each run of an experiment is an ordinary run. The window does not show them
-    yet.
+    (`warnings`): each run of an experiment is an ordinary run. They record no results over
+    time, so the warm-up suggestion (`no_warmup`) is left to a run of the model itself. The
+    window does not show them yet.
   - Utilisation counts a unit failed or restarting part-way through a job as not busy: that
     time is capacity lost, still in the units' time (Law, *Simulation Modeling and Analysis*,
     5th ed., §14.4.2; ISO 22400-2's busy time), and planned time off shift is left out of both.

@@ -463,3 +463,27 @@ fn leaving_by_any_way_out_counts_as_getting_out() {
     );
     assert_eq!(found(&model, &r), vec![]);
 }
+
+/// An entity inside a batch that is still filling as the statistics start was there, though
+/// the batch's counts in and out do not show it: none leaving is found.
+#[test]
+fn an_entity_waiting_in_a_batch_and_never_out_is_found() {
+    let mut b = Builder::new();
+    let one = b.source("one", Dist::Constant(1.0), Some(1));
+    let pack = b.batch("pack", 2);
+    let out = b.sink("out");
+    b.connect(one, pack);
+    b.connect(pack, out);
+    let model = b.build(Experiment {
+        warmup: 5.0,
+        duration: 10.0,
+        ..Experiment::default()
+    });
+    let r = run(&model, 1);
+    assert_eq!(
+        r.element("pack").map(|e| e.inside_at_start),
+        Some(1),
+        "{r:?}"
+    );
+    assert_eq!(found(&model, &r), vec![(None, "nothing_out")]);
+}

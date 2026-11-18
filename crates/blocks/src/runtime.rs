@@ -4025,13 +4025,25 @@ async fn move_on(
                 }
             }
         }
-        Some(out) => match out.make_room(&mut entity).await {
-            Ok(to) => Some(to),
-            Err(why) => {
-                turned = Some((out, why));
-                None
+        Some(out) => {
+            // A buffer that turns away those finding no room can still take a place freed at
+            // this instant, waiting for it within the instant: if the entity gave up meanwhile,
+            // it is discarded as when held, above.
+            let to = out.make_room(&mut entity).await;
+            if let Some(work) = gave_up(entity.id) {
+                if let Some(p) = to.as_ref().ok().and_then(|to| to.places.as_ref()) {
+                    p.leave(entity.id);
+                }
+                return discard(env, entity.id, work, keep);
             }
-        },
+            match to {
+                Ok(to) => Some(to),
+                Err(why) => {
+                    turned = Some((out, why));
+                    None
+                }
+            }
+        }
         None => None,
     };
     if let Some(p) = &patient {
