@@ -2184,7 +2184,7 @@ pub static COMMANDS: &[Command] = &[
     },
     Command {
         name: "experiment.sweep",
-        summary: "Run the experiment at each value of one parameter (a task's or pool's units, a buffer, a time's mean) with the same seed, and report the results asked for at each and how much they moved.",
+        summary: "Run the experiment at each value of one parameter (a task's or pool's units, a buffer, a time's mean) with the same seed, and report the results asked for at each and how much they moved. Each value comes with the warnings its run gives, as a single run's without results over time (`warnings`).",
         kind: CommandKind::Action,
         schema: schema::<crate::decide::SweepParams>,
         example: || json!({ "parameter": { "id": "desk", "field": "capacity" }, "values": [1, 2, 3], "results": [{ "element": "desk", "metric": "mean_wait" }], "replications": 4 }),
@@ -2192,7 +2192,7 @@ pub static COMMANDS: &[Command] = &[
     },
     Command {
         name: "experiment.sensitivity",
-        summary: "Move each parameter down and up in turn and rank which results it drives (their elasticities); recorded in later runs' records.",
+        summary: "Move each parameter down and up in turn and rank which results it drives (their elasticities); recorded in later runs' records. The runs that give warnings, as a single run's without results over time, are listed with them (`warnings`).",
         kind: CommandKind::Action,
         schema: schema::<crate::decide::SensitivityParams>,
         example: || json!({ "parameters": [{ "id": "desk", "field": "mean" }, { "id": "arrivals", "field": "mean" }], "results": [{ "element": "exit", "metric": "mean_time_in_system" }], "replications": 4 }),
@@ -2200,7 +2200,7 @@ pub static COMMANDS: &[Command] = &[
     },
     Command {
         name: "experiment.design",
-        summary: "Run a designed experiment with several factors at once: every combination of their levels (`full_factorial`, the default) or a Latin hypercube of their ranges, each point with the same seed; reports each result at each point, the factors' main effects and two-way interactions with paired intervals (or rank correlations for a Latin hypercube). At most 10,000 runs (points × replications).",
+        summary: "Run a designed experiment with several factors at once: every combination of their levels (`full_factorial`, the default) or a Latin hypercube of their ranges, each point with the same seed; reports each result at each point, the factors' main effects and two-way interactions with paired intervals (or rank correlations for a Latin hypercube). At most 10,000 runs (points × replications). Each point comes with the warnings its run gives, as a single run's without results over time (`warnings`).",
         kind: CommandKind::Action,
         schema: schema::<crate::design::DesignParams>,
         example: || json!({ "factors": [{ "id": "arrivals", "field": "mean", "levels": [2.0, 3.0] }, { "id": "desk", "field": "mean", "levels": [0.8, 1.2] }], "results": [{ "element": "desk", "metric": "mean_wait" }], "replications": 4 }),
@@ -2208,7 +2208,7 @@ pub static COMMANDS: &[Command] = &[
     },
     Command {
         name: "experiment.size",
-        summary: "Add units at the bottleneck until the share of replications meeting a target reaches `target_share` (`confidence` is its old name), with the answer from mean times beside it; `apply` makes it the model's.",
+        summary: "Add units at the bottleneck until the share of replications meeting a target reaches `target_share` (`confidence` is its old name), with the answer from mean times beside it; `apply` makes it the model's. Each step comes with the warnings its run gives, as a single run's without results over time (`warnings`).",
         kind: CommandKind::Edit,
         schema: schema::<crate::decide::SizeParams>,
         example: || json!({ "target": { "element": "desk", "metric": "mean_wait", "at_most": 1.0 }, "target_share": 0.7, "replications": 4, "apply": true }),

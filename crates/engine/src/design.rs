@@ -384,8 +384,11 @@ pub fn design(model: &Model, p: &DesignParams) -> Result<Value, CommandError> {
         .collect::<Result<_, CommandError>>()?;
     // The points one after another, as in a sweep; each runs its replications in parallel.
     let mut cells: Vec<Vec<Cell>> = Vec::with_capacity(models.len());
+    // Each point's warnings, as a run of it gives.
+    let mut warned: Vec<Value> = Vec::with_capacity(models.len());
     for m in &models {
-        let s = run(m, reps, seed)?;
+        let (s, warnings) = run(m, reps, seed)?;
+        warned.push(warnings);
         let row = p
             .results
             .iter()
@@ -404,7 +407,8 @@ pub fn design(model: &Model, p: &DesignParams) -> Result<Value, CommandError> {
     let point_json: Vec<Value> = points
         .iter()
         .zip(&cells)
-        .map(|(xs, row)| {
+        .zip(warned)
+        .map(|((xs, row), warnings)| {
             let results: Vec<Value> = p
                 .results
                 .iter()
@@ -419,7 +423,7 @@ pub fn design(model: &Model, p: &DesignParams) -> Result<Value, CommandError> {
                     })
                 })
                 .collect();
-            json!({ "values": xs, "results": results })
+            json!({ "values": xs, "results": results, "warnings": warnings })
         })
         .collect();
     let factors_json: Vec<Value> = p

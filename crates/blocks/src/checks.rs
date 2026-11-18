@@ -11,7 +11,7 @@
 //! - Every element's entities add up ([`Behaviour::Unbalanced`]), and the model's
 //!   ([`Behaviour::Unaccounted`]): what came in (or was inside as the statistics started) left,
 //!   was lost, gave up or is still inside.
-//! - Some entity reaches an exit ([`Behaviour::NothingOut`]).
+//! - Some entity leaves the model, at an exit or by any other way out ([`Behaviour::NothingOut`]).
 //! - Little's law holds at every server, task with shared resources and delay
 //!   ([`Behaviour::LittlesLaw`]).
 //! - A server counts busy exactly the units processing or setting up: none idle, blocked, off
@@ -22,7 +22,7 @@
 use std::collections::BTreeMap;
 
 use stochcraft_model::{
-    Behaviour, Diagnostic, ElementId, ElementKind, Model, PatienceUntil, Problem, Routing, Severity,
+    Behaviour, Diagnostic, ElementId, ElementKind, Model, Problem, Routing, Severity,
 };
 
 use crate::{ElementReport, Report};
@@ -164,61 +164,71 @@ fn shortest_queue(kind: &ElementKind) -> bool {
     )
 }
 
-/// A server with patience until done: an entity that gives up in service counts as abandoned
-/// at once but stays inside until its unit is done with it, so its counts can be off by up to
-/// one such entity per unit, at the start and at the end.
-fn gives_up_in_service(kind: &ElementKind) -> Option<u64> {
-    match kind {
-        ElementKind::Server {
-            patience: Some(p), ..
-        } if p.until == PatienceUntil::Done => kind.most_units().map(u64::from),
-        _ => None,
-    }
+/// The entities inside element `e` at the start and the end, less those that had given up
+/// during their job while their unit carried on with it (patience until done): each of those
+/// is counted once, as abandoned when it gave up (a stand-in taking its way out).
+fn inside(e: &ElementReport) -> (u64, u64) {
+    let [gone_start, gone_end] = e.given_up_inside;
+    (
+        e.inside_at_start.saturating_sub(gone_start),
+        e.inside_at_end.saturating_sub(gone_end),
+    )
 }
 
 /// Every element balances: what came in, or was inside as the statistics started, left, was
 /// lost, gave up or is still inside. Not checked where entities are copied, combined or split
-/// (parallel gateways, unbatches), nor at shortest-queue gateways (see [`shortest_queue`]).
+/// (parallel gateways, unbatches), whose counts in and out are of different things, nor at
+/// shortest-queue gateways (see [`shortest_queue`]); the model's count covers them.
 fn unbalanced(kind: &ElementKind, e: &ElementReport) -> Option<Behaviour> {
-    let came = e.entered + e.inside_at_start;
+    let (inside_at_start, inside_at_end) = inside(e);
+    let came = e.entered + inside_at_start;
     let went = match kind {
         // Sources hold nothing: each arrival created leaves or is lost.
         ElementKind::Source { .. } => e.left + e.lost.unwrap_or(0),
         // A server's lost and balked arrivals never came in.
-        ElementKind::Server { .. } => e.left + e.abandoned.unwrap_or(0) + e.inside_at_end,
+        ElementKind::Server { .. } => e.left + e.abandoned.unwrap_or(0) + inside_at_end,
         ElementKind::SharedTask { .. } | ElementKind::Delay { .. } | ElementKind::Sink { .. } => {
-            e.left + e.inside_at_end
+            e.left + inside_at_end
         }
         ElementKind::ExclusiveGateway { .. } if !shortest_queue(kind) => {
-            e.left + e.lost.unwrap_or(0) + e.inside_at_end
+            e.left + e.lost.unwrap_or(0) + inside_at_end
         }
         // Each batch that leaves carries `size` entities.
-        ElementKind::Batch { size } => e.left * u64::from(*size).max(1) + e.inside_at_end,
+        ElementKind::Batch { size } => e.left * u64::from(*size).max(1) + inside_at_end,
         _ => return None,
     };
-    let slack = gives_up_in_service(kind).unwrap_or(0);
-    (came.abs_diff(went) > slack).then_some(Behaviour::Unbalanced { came, went })
+    (came != went).then_some(Behaviour::Unbalanced { came, went })
 }
 
-/// The model balances: the entities created, or inside anywhere as the statistics started,
-/// reached an exit, left the model elsewhere, or are still inside. Where entities leave the
-/// model elsewhere: an exclusive gateway's lost (no way to take); a source's arrivals turned
-/// away at a full buffer with no way out for them (through a shortest-queue gateway, counted by
-/// the gateway instead); and those giving up or balking at a server with no way marked for them.
-/// Not checked where entities are copied, combined or split (parallel gateways, batches,
-/// unbatches), nor where they can wait for room counted nowhere: where a shortest-queue gateway
-/// sends to another, or a way marked for those giving up, balking or turned away leads to a
-/// finite buffer or a shortest-queue gateway.
-fn unaccounted(model: &Model, report: &Report) -> Option<Behaviour> {
-    let kinds = || model.elements.iter().map(|e| &e.kind);
-    if kinds().any(|k| {
-        matches!(
-            k,
-            ElementKind::ParallelGateway | ElementKind::Batch { .. } | ElementKind::Unbatch
-        )
-    }) {
-        return None;
-    }
+/// The model's entities: those created at a source or inside anywhere as the statistics started
+/// (`came`), those that left the model (`out`) and those inside anywhere at the end (`inside`);
+/// those started and ended where entities are copied, combined or split (`made`, `ended`); and
+/// whether every entity is counted in one place only, so that `came + made` must equal
+/// `out + ended + inside` ([`unaccounted`]). `present`: the entities created at a source or
+/// inside anywhere as the statistics started, those where entities are copied, combined or
+/// split included ([`nothing_out`]).
+struct Flows {
+    came: u64,
+    present: u64,
+    made: u64,
+    out: u64,
+    ended: u64,
+    inside: u64,
+    exact: bool,
+}
+
+/// Counts the model's entities ([`Flows`]). Each entity is in one place: an element, or on its
+/// way out of one by a way marked for those giving up, balking or turned away while it waits
+/// for room there ([`ElementReport::leaving`]). Entities leave the model at an exit; at an
+/// exclusive gateway with no way to take (its lost); turned away from a source's full buffer
+/// with no way out for them (through a shortest-queue gateway, counted by the gateway instead);
+/// and giving up or balking at a server with no way marked for them. A parallel gateway that
+/// copies, a batch and an unbatch end the entities that come in and start those that leave,
+/// as new ones. Not exact (the counts are of different things) at a parallel gateway that
+/// joins, whose second and later inputs are not counted as entering, nor where a
+/// shortest-queue gateway sends to another, holding entities that wait for room on the way.
+fn flows(model: &Model, report: &Report) -> Flows {
+    let into = |id: &ElementId| model.connections.iter().filter(|c| &c.to == id).count();
     let target = |from: &ElementId| {
         model
             .connections
@@ -226,89 +236,86 @@ fn unaccounted(model: &Model, report: &Report) -> Option<Behaviour> {
             .find(|c| &c.from == from)
             .and_then(|c| model.element(&c.to))
     };
-    // Whether an entity sent to `to` may wait for room there.
-    let needs_room = |to: &ElementId| {
-        model.element(to).is_some_and(|t| {
-            shortest_queue(&t.kind)
-                || matches!(
-                    t.kind,
-                    ElementKind::Server {
-                        queue_capacity: Some(_),
-                        ..
-                    }
-                )
-        })
-    };
-    // Entities waiting for room are counted nowhere: at a shortest-queue gateway sent to by
-    // another (the sender holds them otherwise), and on a way marked for those giving up,
-    // balking or turned away (the server they leave no longer holds them, unlike on its
-    // ordinary way out).
-    let sq = |id: &ElementId| model.element(id).is_some_and(|e| shortest_queue(&e.kind));
-    let unheld = model.connections.iter().any(|c| {
-        (sq(&c.from) && sq(&c.to))
-            || ((c.abandoned || c.balked || c.turned_away) && needs_room(&c.to))
-    });
-    if unheld {
-        return None;
-    }
     // Whether element `id` has a way marked by `marked` (abandoned, balked, turned away).
     let marked = |id: &ElementId, way: fn(&stochcraft_model::Connection) -> bool| {
         model.connections.iter().any(|c| &c.from == id && way(c))
     };
-    let (mut came, mut went) = (0u64, 0u64);
-    let mut slack = 0u64;
+    let sq = |id: &ElementId| model.element(id).is_some_and(|e| shortest_queue(&e.kind));
+    let mut f = Flows {
+        came: 0,
+        present: 0,
+        made: 0,
+        out: 0,
+        ended: 0,
+        inside: 0,
+        exact: !model.connections.iter().any(|c| sq(&c.from) && sq(&c.to)),
+    };
     for e in report.elements.iter().filter(|e| e.kind != "resource") {
         let Some(element) = model.element(&e.id) else {
             continue;
         };
-        came += e.inside_at_start;
-        went += e.inside_at_end;
+        let [leaving_at_start, leaving_at_end] = e.leaving;
+        f.came += leaving_at_start;
+        f.inside += leaving_at_end;
+        f.present += leaving_at_start + inside(e).0;
         match &element.kind {
+            // What comes in ends here, and what leaves starts here: only the counts across
+            // the element's edges matter, not those inside it.
+            ElementKind::Batch { .. } | ElementKind::Unbatch | ElementKind::ParallelGateway => {
+                f.ended += e.entered;
+                f.made += e.left;
+                if matches!(element.kind, ElementKind::ParallelGateway) && into(&e.id) > 1 {
+                    f.exact = false;
+                }
+                continue;
+            }
             ElementKind::Source { .. } => {
-                came += e.entered;
+                f.came += e.entered;
+                f.present += e.entered;
                 // Turned away where it sends: gone, unless that buffer has a way out for those
                 // (then they take it) or it is a shortest-queue gateway (which counts them).
                 let kept = target(&e.id)
                     .is_some_and(|t| shortest_queue(&t.kind) || marked(&t.id, |c| c.turned_away));
                 if !kept {
-                    went += e.lost.unwrap_or(0);
+                    f.out += e.lost.unwrap_or(0);
                 }
             }
-            ElementKind::Sink { .. } => went += e.left,
-            ElementKind::ExclusiveGateway { .. } => went += e.lost.unwrap_or(0),
-            kind @ ElementKind::Server { .. } => {
+            ElementKind::Sink { .. } => f.out += e.left,
+            ElementKind::ExclusiveGateway { .. } => f.out += e.lost.unwrap_or(0),
+            ElementKind::Server { .. } => {
                 if !marked(&e.id, |c| c.abandoned) {
-                    went += e.abandoned.unwrap_or(0);
+                    f.out += e.abandoned.unwrap_or(0);
                 }
                 if !marked(&e.id, |c| c.balked) {
-                    went += e.balked.unwrap_or(0);
+                    f.out += e.balked.unwrap_or(0);
                 }
-                slack += gives_up_in_service(kind).unwrap_or(0);
             }
             _ => {}
         }
+        let (inside_at_start, inside_at_end) = inside(e);
+        f.came += inside_at_start;
+        f.inside += inside_at_end;
     }
-    (came.abs_diff(went) > slack).then_some(Behaviour::Unaccounted { came, went })
+    f
 }
 
-/// Some entity reaches an exit: checked when the model has an exit and some entity was
-/// created, or inside as the statistics started.
+/// The model balances: the entities created, or inside anywhere as the statistics started,
+/// left the model or are still inside ([`flows`], which says where it cannot be checked).
+fn unaccounted(model: &Model, report: &Report) -> Option<Behaviour> {
+    let f = flows(model, report);
+    let (came, went) = (f.came + f.made, f.out + f.ended + f.inside);
+    (f.exact && came != went).then_some(Behaviour::Unaccounted { came, went })
+}
+
+/// Some entity left the model, by any way out ([`flows`]): an exit, or giving up, balking,
+/// being turned away or finding no way at a gateway with no way marked for those. Checked when
+/// some entity was created, or inside anywhere as the statistics started (a batch filling
+/// included). An entity that leaves by any
+/// way has got through the model, as at any exit; a gateway with no way for some is warned
+/// about as the model is checked ([`stochcraft_model::Problem::NoDefault`]).
 fn nothing_out(model: &Model, report: &Report) -> Option<Behaviour> {
-    let (mut came, mut out, mut exits) = (0u64, 0u64, false);
-    for e in &report.elements {
-        match model.element(&e.id).map(|x| &x.kind) {
-            Some(ElementKind::Source { .. }) => came += e.entered,
-            Some(ElementKind::Sink { .. }) => {
-                exits = true;
-                out += e.entered;
-            }
-            _ => {}
-        }
-        if e.kind != "resource" {
-            came += e.inside_at_start;
-        }
-    }
-    (exits && came > 0 && out == 0).then_some(Behaviour::NothingOut { came })
+    let f = flows(model, report);
+    (f.present > 0 && f.out == 0).then_some(Behaviour::NothingOut { came: f.present })
 }
 
 /// Little's law, over the run's own window: the time-average number inside times the window is

@@ -1217,6 +1217,16 @@ pub(crate) struct BlockStats {
     /// hold them against the time-average inside (Little's law).
     stays_started: f64,
     stays_ended: f64,
+    /// Servers with patience until done, for the behaviour checks: entities inside whose job
+    /// goes on after they gave up (counted as abandoned then; a stand-in took their way), now
+    /// and as the statistics started.
+    given_up_inside: u64,
+    given_up_inside_at_start: u64,
+    /// For the behaviour checks: entities that left by a way marked for those giving up,
+    /// balking or turned away and wait for room on it, in neither element, now and as the
+    /// statistics started.
+    leaving: u64,
+    leaving_at_start: u64,
 }
 
 /// What an element sends to, for its report.
@@ -1446,6 +1456,10 @@ impl BlockStats {
             inside_at_start: 0,
             stays_started: 0.0,
             stays_ended: 0.0,
+            given_up_inside: 0,
+            given_up_inside_at_start: 0,
+            leaving: 0,
+            leaving_at_start: 0,
         }
     }
 
@@ -1500,6 +1514,8 @@ impl BlockStats {
         self.resets += 1;
         self.staffed.reset(t);
         self.inside_at_start = self.inside();
+        self.given_up_inside_at_start = self.given_up_inside;
+        self.leaving_at_start = self.leaving;
         self.from = t;
         self.stays_started = 0.0;
         self.stays_ended = 0.0;
@@ -1887,6 +1903,8 @@ impl BlockStats {
                 .collect(),
             inside_at_start: self.inside_at_start,
             inside_at_end: self.inside(),
+            given_up_inside: [self.given_up_inside_at_start, self.given_up_inside],
+            leaving: [self.leaving_at_start, self.leaving],
             time_inside: match kind {
                 ElementKind::Server { .. }
                 | ElementKind::SharedTask { .. }
@@ -1983,15 +2001,31 @@ impl Balk {
         let Some(way) = self.way.borrow().clone() else {
             return;
         };
-        let c = self.ctx.clone();
-        self.ctx.spawn_tagged(tag(self.index), async move {
-            if way.needs_room() {
-                way.deliver(&c, e).await;
-            } else {
-                way.dispatch(&c, e);
-            }
-        });
+        leave_by(&self.ctx, &self.stats, self.index, way, e);
     }
+}
+
+/// `e` leaves element `index` by a way marked for those giving up, balking or turned away, on
+/// its own, as a process (started now): where the way can hold it up, it waits there for room
+/// (or is turned away there), counted meanwhile as leaving `index`, since neither element
+/// holds it; otherwise it is sent straight on.
+fn leave_by(ctx: &Ctx, stats: &Rc<Vec<RefCell<BlockStats>>>, index: usize, way: Port, e: Entity) {
+    let waits = way.needs_room();
+    if waits && let Some(s) = stats.get(index) {
+        s.borrow_mut().leaving += 1;
+    }
+    let (c, stats) = (ctx.clone(), Rc::clone(stats));
+    ctx.spawn_tagged(tag(index), async move {
+        if waits {
+            way.deliver(&c, e).await;
+            if let Some(s) = stats.get(index) {
+                let mut s = s.borrow_mut();
+                s.leaving = s.leaving.saturating_sub(1);
+            }
+        } else {
+            way.dispatch(&c, e);
+        }
+    });
 }
 
 /// A finite buffer's places (see [`Compiled::run_for`]), with the one each entity there holds;
@@ -2088,14 +2122,7 @@ impl Away {
     /// event queue, where the guard on events at one time stops it, rather than looping within
     /// one step.
     fn take(&self, e: Entity) {
-        let (way, c) = (self.way.clone(), self.ctx.clone());
-        self.ctx.spawn_tagged(tag(self.index), async move {
-            if way.needs_room() {
-                way.deliver(&c, e).await;
-            } else {
-                way.dispatch(&c, e);
-            }
-        });
+        leave_by(&self.ctx, &self.way.stats, self.index, self.way.clone(), e);
     }
 }
 
@@ -2319,6 +2346,10 @@ impl Patient {
                     *n += 1;
                     id
                 };
+                // The original stays inside until its unit is done with it.
+                if let Some(s) = self.stats.get(self.index) {
+                    s.borrow_mut().given_up_inside += 1;
+                }
                 self.give_up(stand_in, waited);
             }
             None => {
@@ -2362,10 +2393,7 @@ impl Patient {
         };
         if way.needs_room() {
             // It waits for room on its own, as a process (or is turned away there).
-            let c = self.ctx.clone();
-            self.ctx.spawn_tagged(tag(self.index), async move {
-                way.deliver(&c, e).await;
-            });
+            leave_by(&self.ctx, &self.stats, self.index, way, e);
         } else {
             way.dispatch(&self.ctx, e);
         }
@@ -2418,6 +2446,7 @@ impl Patient {
             }) => {
                 let work = *work;
                 stays.remove(&id);
+                self.given_up_goes();
                 Some(work)
             }
             _ => None,
@@ -2438,10 +2467,21 @@ impl Patient {
             self.stays.borrow_mut().remove(&id).map(|s| s.stage),
             Some(Stage::Serving { gone: true, .. })
         );
-        if !gone {
+        if gone {
+            self.given_up_goes();
+        } else {
             self.arm(id, Stage::Waiting);
         }
         !gone
+    }
+
+    /// An entity that gave up during its job, still inside, goes now (its job ended or
+    /// stopped).
+    fn given_up_goes(&self) {
+        if let Some(s) = self.stats.get(self.index) {
+            let mut s = s.borrow_mut();
+            s.given_up_inside = s.given_up_inside.saturating_sub(1);
+        }
     }
 }
 
@@ -3985,13 +4025,25 @@ async fn move_on(
                 }
             }
         }
-        Some(out) => match out.make_room(&mut entity).await {
-            Ok(to) => Some(to),
-            Err(why) => {
-                turned = Some((out, why));
-                None
+        Some(out) => {
+            // A buffer that turns away those finding no room can still take a place freed at
+            // this instant, waiting for it within the instant: if the entity gave up meanwhile,
+            // it is discarded as when held, above.
+            let to = out.make_room(&mut entity).await;
+            if let Some(work) = gave_up(entity.id) {
+                if let Some(p) = to.as_ref().ok().and_then(|to| to.places.as_ref()) {
+                    p.leave(entity.id);
+                }
+                return discard(env, entity.id, work, keep);
             }
-        },
+            match to {
+                Ok(to) => Some(to),
+                Err(why) => {
+                    turned = Some((out, why));
+                    None
+                }
+            }
+        }
         None => None,
     };
     if let Some(p) = &patient {
@@ -4404,6 +4456,8 @@ impl Pools {
                     properties: Vec::new(),
                     inside_at_start: 0,
                     inside_at_end: 0,
+                    given_up_inside: [0, 0],
+                    leaving: [0, 0],
                     time_inside: None,
                     on_shift: None,
                 }

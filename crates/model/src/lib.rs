@@ -1640,7 +1640,8 @@ pub enum Behaviour {
     /// against `went`, that reached an exit, left the model elsewhere (lost, or giving up or
     /// balking with nowhere to go) or are still inside.
     Unaccounted { came: u64, went: u64 },
-    /// Of `came` entities created or inside as the statistics started, none reached an exit.
+    /// Of `came` entities created or inside as the statistics started, none left the model: none
+    /// reached an exit, nor gave up, balked, was turned away or found no way with nowhere to go.
     NothingOut { came: u64 },
     /// Little's law does not hold at an element: the time-average number inside was `mean`, but
     /// the entities' own times in it (from when each came in and went out) give `from_stays`.
@@ -1699,7 +1700,7 @@ impl std::fmt::Display for Behaviour {
             ),
             Behaviour::NothingOut { came } => write!(
                 f,
-                "no entity reached an exit, of {came} created or inside at the start: check that the routing leads to an exit and that the run is long enough for an entity to get through"
+                "no entity left the model, of {came} created or inside at the start: check that the routing leads to an exit and that the run is long enough for an entity to get through"
             ),
             Behaviour::LittlesLaw { mean, from_stays } => write!(
                 f,

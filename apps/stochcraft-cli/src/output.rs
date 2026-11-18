@@ -275,6 +275,25 @@ pub fn design_table(name: &str, d: &Value) -> String {
         }));
         aligned(&rows, &[true, true, false, false], &mut out);
     }
+    // What a run of each point warns of, as for a single run.
+    let warned: Vec<String> = points
+        .iter()
+        .enumerate()
+        .flat_map(|(i, p)| {
+            p["warnings"]
+                .as_array()
+                .into_iter()
+                .flatten()
+                .filter(|n| n["severity"] != "info")
+                .map(move |n| format!("point {}: {}", i + 1, s(&n["message"])))
+        })
+        .collect();
+    if !warned.is_empty() {
+        out.push('\n');
+        for w in warned {
+            let _ = writeln!(out, "{w}");
+        }
+    }
     out
 }
 
