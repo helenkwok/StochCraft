@@ -35,6 +35,7 @@
 //! assert!(report.element("machine").and_then(|e| e.utilisation).is_some());
 //! ```
 
+pub mod checks;
 mod runtime;
 pub mod series;
 
@@ -530,10 +531,13 @@ pub enum Metric {
     /// entities that started service. Entities still waiting at the end are left out, so for an overloaded server the
     /// mean is biased low.
     MeanWait,
-    /// Servers: time-average fraction of units busy. A server whose units go off shift (shifts,
-    /// or an availability calendar): the time-average of units with a job (a job paused off
-    /// shift left out) over the time-average of units on shift (those finishing a job after
-    /// their shift included), as for a pool; the time off shift is in the unit states.
+    /// Servers: time-average fraction of units busy, that is processing or setting up. A unit
+    /// idle, blocked (holding a finished entity), failed or restarting is not busy, even holding a
+    /// job: time failed part-way through a job is capacity lost, as in Law's busy time within up
+    /// time and ISO 22400-2's busy time. A server whose units go off shift (shifts, or an
+    /// availability calendar): over the time-average of units on shift (those finishing a job
+    /// after their shift included), as for a pool, so planned time off is left out of both; it
+    /// is in the unit states.
     Utilisation,
     /// Servers and delays: time-average number of entities being served or delayed.
     MeanContents,
@@ -868,6 +872,20 @@ pub struct ElementReport {
     /// For each property the element assigns, in the element's order: the mean of the values
     /// it assigned (`None` when it assigned none, or the property holds text).
     pub properties: Vec<(String, Option<f64>)>,
+    /// Not metrics, but what the behaviour checks ([`checks`]) need: the entities inside the
+    /// element when the statistics started (0, or those inside as the warm-up ended) and at
+    /// the end (0 for a pool).
+    pub inside_at_start: u64,
+    pub inside_at_end: u64,
+    /// Servers, shared tasks and delays, for the behaviour checks: the time entities spent
+    /// inside over the measured window, from the times each came in and went out (those inside
+    /// at its start from then, those inside at its end until then), apart from the counts of
+    /// entities inside that give [`Metric::MeanWorkInProgress`].
+    pub time_inside: Option<f64>,
+    /// Servers whose units go off shift, for the behaviour checks: the time-average number of
+    /// units on shift (those finishing a job after their shift included), which their
+    /// [`Metric::Utilisation`] is over.
+    pub on_shift: Option<f64>,
 }
 
 impl ElementReport {

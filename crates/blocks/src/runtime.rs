@@ -1209,9 +1209,14 @@ pub(crate) struct BlockStats {
     /// Servers: units on shift, and those finishing a job before going off ([`OnShiftEnd`]):
     /// the units the server has, for the utilisation of a server with shifts.
     staffed: TimeWeighted,
-    /// Servers resuming jobs after their shift ([`OnShiftEnd::Resume`]): units holding a job
-    /// paused off shift. In `busy` (the entity is inside), but neither on shift nor working.
-    paused: TimeWeighted,
+    /// When the statistics last started (0, or the warm-up's end), and the entities inside then.
+    from: f64,
+    inside_at_start: u64,
+    /// The times entities came in and went out since `from`, each counted from `from`, summed
+    /// where they come and go (not from the counts inside), so that the behaviour checks can
+    /// hold them against the time-average inside (Little's law).
+    stays_started: f64,
+    stays_ended: f64,
 }
 
 /// What an element sends to, for its report.
@@ -1437,8 +1442,33 @@ impl BlockStats {
             unwait: Tally::new(),
             resets: 0,
             staffed: TimeWeighted::new(t, 0.0),
-            paused: TimeWeighted::new(t, 0.0),
+            from: t,
+            inside_at_start: 0,
+            stays_started: 0.0,
+            stays_ended: 0.0,
         }
+    }
+
+    /// An entity comes in, at `now`.
+    fn stay_starts(&mut self, now: f64) {
+        self.stays_started += now - self.from;
+    }
+
+    /// A server's time-average number of units working: processing or setting up.
+    fn working(&self, end: f64) -> Option<f64> {
+        let setup = self.states.setup.average(end).unwrap_or(0.0);
+        self.states.processing.average(end).map(|p| p + setup)
+    }
+
+    /// An entity goes out (to the next element, giving up or discarded), at `now`.
+    fn stay_ends(&mut self, now: f64) {
+        self.stays_ended += now - self.from;
+    }
+
+    /// The time entities spent inside from `from` to `end`, from the times they came in and
+    /// went out: those inside at `from` from then, those still inside at `end` until then.
+    fn time_inside(&self, end: f64) -> f64 {
+        self.stays_ended - self.stays_started + self.inside() as f64 * (end - self.from)
     }
 
     fn reset(&mut self, t: f64) {
@@ -1469,7 +1499,10 @@ impl BlockStats {
         self.unwait = Tally::new();
         self.resets += 1;
         self.staffed.reset(t);
-        self.paused.reset(t);
+        self.inside_at_start = self.inside();
+        self.from = t;
+        self.stays_started = 0.0;
+        self.stays_ended = 0.0;
     }
 
     /// The mean of the waits recorded at service starts, less those of starts that were retried.
@@ -1668,17 +1701,20 @@ impl BlockStats {
                 None
             },
             mean_wait: if server { self.mean_wait() } else { None },
+            // Units working (processing or setting up) over the units there to work. A unit
+            // failed or restarting part-way through a job is not busy: that time is capacity
+            // lost, still in the units' time, as Law (Simulation Modeling and Analysis, 5th ed.,
+            // §14.4.2: busy time is part of up time) and ISO 22400-2's busy time count it.
+            // Blocked units hold a finished entity and are not busy either.
             utilisation: match kind {
-                // Jobs under way (paused ones left out) over the units on shift, both averaged
-                // over time; none on shift: 0.
+                // Over the units on shift (time off shift is planned, so left out of both),
+                // both averaged over time; none on shift: 0.
                 ElementKind::Server { .. } if on_calendar => self
-                    .busy
-                    .average(end)
-                    .zip(self.paused.average(end))
+                    .working(end)
                     .zip(self.staffed.average(end))
-                    .map(|((b, p), s)| if s > 0.0 { (b - p) / s } else { 0.0 }),
+                    .map(|(w, s)| if s > 0.0 { w / s } else { 0.0 }),
                 ElementKind::Server { capacity, .. } => {
-                    self.busy.average(end).map(|b| b / f64::from(*capacity))
+                    self.working(end).map(|w| w / f64::from(*capacity))
                 }
                 _ => None,
             },
@@ -1849,6 +1885,18 @@ impl BlockStats {
                 .zip(&self.properties)
                 .map(|(a, t)| (a.name.clone(), t.mean()))
                 .collect(),
+            inside_at_start: self.inside_at_start,
+            inside_at_end: self.inside(),
+            time_inside: match kind {
+                ElementKind::Server { .. }
+                | ElementKind::SharedTask { .. }
+                | ElementKind::Delay { .. } => Some(self.time_inside(end)),
+                _ => None,
+            },
+            on_shift: match kind {
+                ElementKind::Server { .. } if on_calendar => self.staffed.average(end),
+                _ => None,
+            },
         }
     }
 }
@@ -2291,6 +2339,7 @@ impl Patient {
                     let mut s = s.borrow_mut();
                     let w = s.waiting.value() - 1.0;
                     s.waiting.set(now, w);
+                    s.stay_ends(now);
                 }
                 if let Some(p) = &self.places {
                     p.leave(id);
@@ -2658,6 +2707,7 @@ impl Port {
             if self.counts {
                 s.entered += 1;
             }
+            s.stay_starts(now);
             let n = s.transit.value() + 1.0;
             s.transit.set(now, n);
         }
@@ -2685,6 +2735,8 @@ impl Port {
             if gave_up.is_none() {
                 let w = s.waiting.value() + 1.0;
                 s.waiting.set(now, w);
+            } else {
+                s.stay_ends(now);
             }
         }
         match (patient, gave_up) {
@@ -2741,6 +2793,7 @@ impl Port {
             if self.counts {
                 s.entered += 1;
             }
+            s.stay_starts(now);
             let w = s.waiting.value() + 1.0;
             s.waiting.set(now, w);
         }
@@ -3704,7 +3757,6 @@ fn staff(units: &RefCell<Vec<Unit>>, env: &BlockEnv) {
 /// The job on unit `u` pauses until the unit is on shift again (`on`), or carries on.
 fn pause(env: &Rc<RefCell<BlockEnv>>, book: &UnitBook, u: usize, on: bool) {
     let e = env.borrow();
-    e.adjust(|s| &mut s.paused, if on { 1.0 } else { -1.0 });
     book.change(&e, u, |d| d.paused = on);
 }
 
@@ -3861,6 +3913,9 @@ fn retry(
         d.setup = false;
     });
     if e.patient.as_ref().is_some_and(|p| !p.retry(entity.id)) {
+        // It gave up during the job: it goes, counted as abandoned already.
+        let now = e.ctx.now();
+        e.with_stats(|s| s.stay_ends(now));
         return e
             .places
             .as_ref()
@@ -3949,7 +4004,11 @@ async fn move_on(
         // it gets there; the entity is the next element's from the start, and keeps its place
         // here (which is the unit's) until the unit is free.
         (Some(out), Some(dt)) if holds => {
-            env.borrow().with_stats(|s| s.left += 1);
+            let now = ctx.now();
+            env.borrow().with_stats(|s| {
+                s.left += 1;
+                s.stay_ends(now);
+            });
             let id = entity.id;
             let entity = out.depart(ctx.now(), entity);
             env.borrow().adjust(|s| &mut s.transferring, 1.0);
@@ -3964,7 +4023,11 @@ async fn move_on(
         (out, transfer) => {
             let kept = {
                 let e = env.borrow();
-                e.with_stats(|s| s.left += 1);
+                let now = ctx.now();
+                e.with_stats(|s| {
+                    s.left += 1;
+                    s.stay_ends(now);
+                });
                 e.places
                     .as_ref()
                     .and_then(|p| p.leave_or_keep(entity.id, keep()))
@@ -3990,10 +4053,12 @@ fn discard(
     keep: &dyn Fn() -> bool,
 ) -> Option<ResourceGuard> {
     let e = env.borrow();
+    let now = e.ctx.now();
     e.with_stats(|s| {
         s.wasted += work;
         // Counted as produced when its job ended.
         s.produced = s.produced.saturating_sub(1);
+        s.stay_ends(now);
     });
     e.places.as_ref().and_then(|p| p.leave_or_keep(id, keep()))
 }
@@ -4337,6 +4402,10 @@ impl Pools {
                     mean_in_service: None,
                     time_restarting: None,
                     properties: Vec::new(),
+                    inside_at_start: 0,
+                    inside_at_end: 0,
+                    time_inside: None,
+                    on_shift: None,
                 }
             })
             .collect()

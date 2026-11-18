@@ -145,6 +145,12 @@ struct EncodedElement {
     taken_out: Option<u64>,
     work_in_progress: Option<u64>,
     properties: Vec<Option<u64>>,
+    /// What the behaviour checks need: the entities inside at the start and the end, the time
+    /// inside and the units on shift.
+    #[serde(default)]
+    inside: [u64; 2],
+    #[serde(default)]
+    checks: [Option<u64>; 2],
 }
 
 fn bits(x: Option<f64>) -> Option<u64> {
@@ -228,6 +234,8 @@ impl Encoded {
                     taken_out: e.taken_out,
                     work_in_progress: e.work_in_progress,
                     properties: e.properties.iter().map(|(_, v)| bits(*v)).collect(),
+                    inside: [e.inside_at_start, e.inside_at_end],
+                    checks: [bits(e.time_inside), bits(e.on_shift)],
                 })
                 .collect(),
         }
@@ -280,6 +288,8 @@ impl Encoded {
                 let [ash, aw, wa, wsh] = e.patience;
                 let [mis, rs] = e.health;
                 let [bsh] = e.balking;
+                let [inside_at_start, inside_at_end] = e.inside;
+                let [time_inside, on_shift] = e.checks;
                 Some(ElementReport {
                     id: t.id.clone(),
                     name: t.name.clone(),
@@ -333,6 +343,10 @@ impl Encoded {
                         .zip(e.properties)
                         .map(|((name, _), v)| (name.clone(), float(v)))
                         .collect(),
+                    inside_at_start,
+                    inside_at_end,
+                    time_inside: float(time_inside),
+                    on_shift: float(on_shift),
                 })
             })
             .collect::<Option<Vec<_>>>()?;
