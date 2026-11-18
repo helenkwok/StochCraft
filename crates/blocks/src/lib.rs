@@ -531,10 +531,13 @@ pub enum Metric {
     /// entities that started service. Entities still waiting at the end are left out, so for an overloaded server the
     /// mean is biased low.
     MeanWait,
-    /// Servers: time-average fraction of units busy. A server whose units go off shift (shifts,
-    /// or an availability calendar): the time-average of units with a job (a job paused off
-    /// shift left out) over the time-average of units on shift (those finishing a job after
-    /// their shift included), as for a pool; the time off shift is in the unit states.
+    /// Servers: time-average fraction of units busy, that is processing or setting up. A unit
+    /// idle, blocked (holding a finished entity), failed or restarting is not busy, even holding a
+    /// job: time failed part-way through a job is capacity lost, as in Law's busy time within up
+    /// time and ISO 22400-2's busy time. A server whose units go off shift (shifts, or an
+    /// availability calendar): over the time-average of units on shift (those finishing a job
+    /// after their shift included), as for a pool, so planned time off is left out of both; it
+    /// is in the unit states.
     Utilisation,
     /// Servers and delays: time-average number of entities being served or delayed.
     MeanContents,

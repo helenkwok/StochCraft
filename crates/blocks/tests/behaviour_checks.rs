@@ -210,11 +210,53 @@ fn a_break_counted_as_busy_is_found() {
     let off = press.time_off_shift.unwrap_or(0.0);
     press.utilisation = press.utilisation.map(|u| u + off);
     only(found(&model, &r), Some("press"), "busy_not_working");
+    // Time failed part-way through a job counted busy.
+    let (model, mut r) = good();
+    let press = element(&mut r, "press");
+    let failed = press.time_failed.unwrap_or(0.0);
+    press.utilisation = press.utilisation.map(|u| u + failed);
+    only(found(&model, &r), Some("press"), "busy_not_working");
     // And the other way: processing not counted busy.
     let (model, mut r) = good();
     let press = element(&mut r, "press");
     press.utilisation = press.utilisation.map(|u| u * 0.9);
     only(found(&model, &r), Some("press"), "busy_not_working");
+}
+
+#[test]
+fn a_unit_failed_with_a_job_is_not_busy() {
+    // Without breaks, the press's utilisation is its share of time processing exactly, though
+    // its units fail part-way through jobs and keep holding them while down.
+    let mut b = Builder::new();
+    let parts = b.source("parts", Dist::exponential_rate(1.0), None);
+    let press = b.server("press", 2, Dist::exponential_rate(0.6));
+    b.breakdown(
+        press,
+        Breakdown {
+            time_to_failure: Dist::Exponential { mean: 30.0 },
+            repair: Dist::Exponential { mean: 10.0 },
+            interruptible: true,
+            hands_on_while_down: true,
+        },
+    );
+    let out = b.sink("out");
+    b.connect(parts, press);
+    b.connect(press, out);
+    let model = b.build(Experiment {
+        duration: 2_000.0,
+        ..Experiment::default()
+    });
+    let r = run(&model, 5);
+    let p = r.element("press").unwrap_or_else(|| panic!("no press"));
+    let (u, processing, failed) = (
+        p.utilisation.unwrap_or(f64::NAN),
+        p.time_processing.unwrap_or(f64::NAN),
+        p.time_failed.unwrap_or(0.0),
+    );
+    assert!(failed > 0.05, "{p:?}");
+    assert!((u - processing).abs() < 1e-12, "{u} vs {processing}");
+    // Its units held more jobs than they worked on: the contents count the entities inside.
+    assert!(p.mean_contents.is_some_and(|c| c / 2.0 > u + 0.01), "{p:?}");
 }
 
 #[test]

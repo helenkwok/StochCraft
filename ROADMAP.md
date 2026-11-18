@@ -1332,15 +1332,18 @@ ch. 10 §10.4, in Brailsford, Churilov and Dangerfield, eds., 2014). Related and
     Little's law holds at every server, shared task and delay (`littles_law`: the time-average
     inside against the entities' own times inside, from when each came in and went out, those
     inside at the window's start and end counted to it, so it is exact over any window and the
-    tolerance is rounding only); a server counts busy only units with a job, none idle, blocked
-    or off shift on a break (`busy_not_working`), and its units' shares of time in each state
+    tolerance is rounding only); a server counts busy exactly the units processing or setting
+    up, none idle, blocked, off shift on a break, failed or restarting (`busy_not_working`), and its units' shares of time in each state
     add up to 1 (`states_total`); utilisation and the other shares of time stay within 0–100%
     (`out_of_range`). Pernas-Álvarez and Crespo-Pereira (arXiv 2611.10602, 2026) found that
     agents' wrong models were all "silent" (they built and ran, and answered wrongly); checks
     like these caught about half, the most common being a break counted as busy time.
-  - Not yet: a unit that fails part-way through a job still counts as busy (utilisation is
-    the share of units with a job), so "no unit busy while down" is not checked; whether
-    utilisation should leave that time out is open.
+  - Utilisation counts a unit failed or restarting part-way through a job as not busy: that
+    time is capacity lost, still in the units' time (Law, *Simulation Modeling and Analysis*,
+    5th ed., §14.4.2; ISO 22400-2's busy time), and planned time off shift is left out of both.
+    Most tools do the same by default; some count it busy, or let the modeller choose. Until
+    2026-11 StochCraft counted it busy, which put a failing machine's utilisation above its
+    processing share (on the weld and paint test model, paint: 73.2% against 65.2%).
 - **A capacity table.** Before a run, each station's offered load and utilisation worked out
   from the model's own numbers (arrival rates, mean service times, units), shown beside the
   simulated values after the run. The gap between the two is what variability and blocking

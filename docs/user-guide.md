@@ -32,7 +32,9 @@ differ, it says so. To get the app, see the [installation guide](installation.md
 - **Warm-up:** time at the start of each run that is simulated but not measured, so an
   empty model filling up does not distort the results.
 - **Utilisation:** the share of the time a task's units are busy, counted over the time they are
-  on shift.
+  on shift. Busy means processing or setting up: a unit that breaks down part-way through a job
+  is not busy while it is broken, and one holding a finished entity it cannot pass on (blocked)
+  is not busy either.
 
 ## Start: open an example
 

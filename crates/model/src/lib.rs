@@ -1645,11 +1645,10 @@ pub enum Behaviour {
     /// Little's law does not hold at an element: the time-average number inside was `mean`, but
     /// the entities' own times in it (from when each came in and went out) give `from_stays`.
     LittlesLaw { mean: f64, from_stays: f64 },
-    /// A server's units counted busy (time-average units with a job, `busy`) are not those
-    /// working: at least `working` were processing or setting up, and at most `could` were
-    /// processing, setting up, failed or restarting (a unit idle, blocked or off shift is not
-    /// busy).
-    BusyNotWorking { busy: f64, working: f64, could: f64 },
+    /// A server's units counted busy in its utilisation (time-average, `busy`) are not those
+    /// working (`working`: processing or setting up). A unit idle, blocked, off shift, failed or
+    /// restarting is not busy, even holding a job.
+    BusyNotWorking { busy: f64, working: f64 },
     /// The shares of a server's units' time in each state add up to `total`, not 1.
     StatesTotal { total: f64 },
     /// A share (`metric`, a fraction of time) is `value`, outside 0 to 1.
@@ -1678,11 +1677,7 @@ impl Behaviour {
             }
             Behaviour::NothingOut { came } => *came as f64,
             Behaviour::LittlesLaw { mean, from_stays } => (mean - from_stays).abs(),
-            Behaviour::BusyNotWorking {
-                busy,
-                working,
-                could,
-            } => (working - busy).max(busy - could),
+            Behaviour::BusyNotWorking { busy, working } => (busy - working).abs(),
             Behaviour::StatesTotal { total } => (total - 1.0).abs(),
             Behaviour::OutOfRange { value, .. } => (value - value.clamp(0.0, 1.0)).abs(),
         }
@@ -1712,18 +1707,13 @@ impl std::fmt::Display for Behaviour {
                 short(*mean),
                 short(*from_stays)
             ),
-            Behaviour::BusyNotWorking {
-                busy,
-                working,
-                could,
-            } => write!(
+            Behaviour::BusyNotWorking { busy, working } => write!(
                 f,
-                "its utilisation counts {} units busy on average, but {} were processing or setting up and at most {} could hold a job (processing, setting up, failed or restarting): {}; {FAULT}",
+                "its utilisation counts {} units busy on average, but {} were processing or setting up: {}; {FAULT}",
                 short(*busy),
                 short(*working),
-                short(*could),
-                if busy > could {
-                    "units idle, blocked or off shift were counted busy"
+                if busy > working {
+                    "units idle, blocked, off shift, failed or restarting were counted busy"
                 } else {
                     "units at work were not counted busy"
                 }

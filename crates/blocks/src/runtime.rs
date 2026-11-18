@@ -1209,9 +1209,6 @@ pub(crate) struct BlockStats {
     /// Servers: units on shift, and those finishing a job before going off ([`OnShiftEnd`]):
     /// the units the server has, for the utilisation of a server with shifts.
     staffed: TimeWeighted,
-    /// Servers resuming jobs after their shift ([`OnShiftEnd::Resume`]): units holding a job
-    /// paused off shift. In `busy` (the entity is inside), but neither on shift nor working.
-    paused: TimeWeighted,
     /// When the statistics last started (0, or the warm-up's end), and the entities inside then.
     from: f64,
     inside_at_start: u64,
@@ -1445,7 +1442,6 @@ impl BlockStats {
             unwait: Tally::new(),
             resets: 0,
             staffed: TimeWeighted::new(t, 0.0),
-            paused: TimeWeighted::new(t, 0.0),
             from: t,
             inside_at_start: 0,
             stays_started: 0.0,
@@ -1456,6 +1452,12 @@ impl BlockStats {
     /// An entity comes in, at `now`.
     fn stay_starts(&mut self, now: f64) {
         self.stays_started += now - self.from;
+    }
+
+    /// A server's time-average number of units working: processing or setting up.
+    fn working(&self, end: f64) -> Option<f64> {
+        let setup = self.states.setup.average(end).unwrap_or(0.0);
+        self.states.processing.average(end).map(|p| p + setup)
     }
 
     /// An entity goes out (to the next element, giving up or discarded), at `now`.
@@ -1497,7 +1499,6 @@ impl BlockStats {
         self.unwait = Tally::new();
         self.resets += 1;
         self.staffed.reset(t);
-        self.paused.reset(t);
         self.inside_at_start = self.inside();
         self.from = t;
         self.stays_started = 0.0;
@@ -1700,17 +1701,20 @@ impl BlockStats {
                 None
             },
             mean_wait: if server { self.mean_wait() } else { None },
+            // Units working (processing or setting up) over the units there to work. A unit
+            // failed or restarting part-way through a job is not busy: that time is capacity
+            // lost, still in the units' time, as Law (Simulation Modeling and Analysis, 5th ed.,
+            // §14.4.2: busy time is part of up time) and ISO 22400-2's busy time count it.
+            // Blocked units hold a finished entity and are not busy either.
             utilisation: match kind {
-                // Jobs under way (paused ones left out) over the units on shift, both averaged
-                // over time; none on shift: 0.
+                // Over the units on shift (time off shift is planned, so left out of both),
+                // both averaged over time; none on shift: 0.
                 ElementKind::Server { .. } if on_calendar => self
-                    .busy
-                    .average(end)
-                    .zip(self.paused.average(end))
+                    .working(end)
                     .zip(self.staffed.average(end))
-                    .map(|((b, p), s)| if s > 0.0 { (b - p) / s } else { 0.0 }),
+                    .map(|(w, s)| if s > 0.0 { w / s } else { 0.0 }),
                 ElementKind::Server { capacity, .. } => {
-                    self.busy.average(end).map(|b| b / f64::from(*capacity))
+                    self.working(end).map(|w| w / f64::from(*capacity))
                 }
                 _ => None,
             },
@@ -3753,7 +3757,6 @@ fn staff(units: &RefCell<Vec<Unit>>, env: &BlockEnv) {
 /// The job on unit `u` pauses until the unit is on shift again (`on`), or carries on.
 fn pause(env: &Rc<RefCell<BlockEnv>>, book: &UnitBook, u: usize, on: bool) {
     let e = env.borrow();
-    e.adjust(|s| &mut s.paused, if on { 1.0 } else { -1.0 });
     book.change(&e, u, |d| d.paused = on);
 }
 

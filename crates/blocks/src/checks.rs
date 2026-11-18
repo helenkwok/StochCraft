@@ -14,8 +14,8 @@
 //! - Some entity reaches an exit ([`Behaviour::NothingOut`]).
 //! - Little's law holds at every server, task with shared resources and delay
 //!   ([`Behaviour::LittlesLaw`]).
-//! - A server counts busy only units with a job: none idle, blocked or off shift
-//!   ([`Behaviour::BusyNotWorking`]), and its units' shares of time in each state add up to 1
+//! - A server counts busy exactly the units processing or setting up: none idle, blocked, off
+//!   shift, failed or restarting ([`Behaviour::BusyNotWorking`]), and its units' shares of time in each state add up to 1
 //!   ([`Behaviour::StatesTotal`]).
 //! - Utilisation and the other shares of time stay within 0 to 1 ([`Behaviour::OutOfRange`]).
 
@@ -330,26 +330,19 @@ fn littles_law(e: &ElementReport, window: f64) -> Option<Behaviour> {
     })
 }
 
-/// A server counts busy (in its utilisation) the units with a job under way: each is
-/// processing, setting up, or failed or out restarting part-way through it. So the units busy
-/// lie between those processing or setting up and those in any of these four states; any more
-/// means units idle, blocked or off shift (on a break) counted busy. `capacity` is what a server
-/// without shifts has its utilisation over, `units` what its shares of time are over.
+/// A server counts busy (in its utilisation) exactly the units processing or setting up: not
+/// those idle, blocked or off shift (on a break), nor those failed or restarting part-way through
+/// a job, whose time is capacity lost. `capacity` is what a server without shifts has its
+/// utilisation over, `units` what its shares of time are over.
 fn busy_not_working(e: &ElementReport, capacity: u32, units: f64) -> Option<Behaviour> {
     let (Some(u), Some(processing)) = (e.utilisation, e.time_processing) else {
         return None;
     };
     // With shifts or a calendar, utilisation is over the units on shift.
     let busy = u * e.on_shift.unwrap_or(f64::from(capacity));
-    let share = |x: Option<f64>| x.unwrap_or(0.0);
-    let working = units * (processing + share(e.time_setup));
-    let could = working + units * (share(e.time_failed) + share(e.time_restarting));
+    let working = units * (processing + e.time_setup.unwrap_or(0.0));
     let tol = SHARE_TOLERANCE * units.max(1.0);
-    (busy < working - tol || busy > could + tol).then_some(Behaviour::BusyNotWorking {
-        busy,
-        working,
-        could,
-    })
+    ((busy - working).abs() > tol).then_some(Behaviour::BusyNotWorking { busy, working })
 }
 
 /// Each of a server's units is in one state at a time, so the shares of time it reports add up
