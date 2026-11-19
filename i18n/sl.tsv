@@ -602,6 +602,7 @@
 	a model	model
 	arrivals	prihodi
 	batch	serija
+	conveyor	tekoči trak
 	days	dnevi
 	decision: one way	odločitev: ena pot
 	departures	odhodi

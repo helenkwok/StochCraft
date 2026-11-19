@@ -602,6 +602,7 @@
 	a model	модел
 	arrivals	доласци
 	batch	серија
+	conveyor	транспортер
 	days	дани
 	decision: one way	одлука: један пут
 	departures	одласци

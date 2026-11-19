@@ -602,6 +602,7 @@
 	a model	ein Modell
 	arrivals	Ankünfte
 	batch	Charge
+	conveyor	Förderband
 	days	Tage
 	decision: one way	Entscheidung: ein Weg
 	departures	Abgänge

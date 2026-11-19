@@ -121,6 +121,46 @@ impl TimeUnit {
     }
 }
 
+/// The unit lengths are given in (a conveyor's length, speed and item size), set on the
+/// experiment beside its [`TimeUnit`]. A speed is in this unit per the experiment's time unit.
+/// A StochCraft vendor extension on the scenario (`stochcraft:lengthUnit`); BPSim has none.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+pub enum LengthUnit {
+    Millimetres,
+    Centimetres,
+    #[default]
+    Metres,
+    Kilometres,
+    Inches,
+    Feet,
+}
+
+impl LengthUnit {
+    /// The unit's short name, as it is written in files and shown (`m` for metres).
+    pub fn name(self) -> &'static str {
+        match self {
+            LengthUnit::Millimetres => "mm",
+            LengthUnit::Centimetres => "cm",
+            LengthUnit::Metres => "m",
+            LengthUnit::Kilometres => "km",
+            LengthUnit::Inches => "in",
+            LengthUnit::Feet => "ft",
+        }
+    }
+
+    pub fn from_name(s: &str) -> Option<Self> {
+        Some(match s {
+            "mm" => LengthUnit::Millimetres,
+            "cm" => LengthUnit::Centimetres,
+            "m" => LengthUnit::Metres,
+            "km" => LengthUnit::Kilometres,
+            "in" => LengthUnit::Inches,
+            "ft" => LengthUnit::Feet,
+            _ => return None,
+        })
+    }
+}
+
 /// What an element does: a source, a task with a resource (a server), a task with shared
 /// resources, a delay, a sink, a gateway, a batch or an unbatch. Resource pools are separate
 /// ([`ResourcePool`]).
@@ -272,6 +312,56 @@ pub enum ElementKind {
     /// StochCraft vendor extension on a task, `stochcraft:unbatch`). An entity that is not a
     /// batch passes through as it is.
     Unbatch,
+    /// A straight conveyor that an entity rides from one end to the other (a StochCraft vendor
+    /// extension on a task, `stochcraft:conveyor`). An entity enters at 0 and leaves at the
+    /// `length`; every entity takes a slot of pitch `item_length + gap`. At most
+    /// ⌊`length` / pitch⌋ are on it at once, and it carries at most `speed` / pitch entities per
+    /// unit of time. It is not simulated yet (ROADMAP.md, M5.1).
+    Conveyor {
+        /// The conveyor's length, in the experiment's [`LengthUnit`]; above 0.
+        length: f64,
+        /// How far an entity travels in one unit of model time, in the experiment's length
+        /// unit per its time unit; above 0.
+        speed: f64,
+        /// Whether entities slip on a stopped one ahead (the ones behind keep moving until each
+        /// stops a pitch behind the one ahead), or the whole belt stops when the front entity
+        /// cannot leave.
+        accumulating: bool,
+        /// The length of belt an entity takes, in the length unit; above 0.
+        item_length: f64,
+        /// The least free belt between one entity and the next, in the length unit; 0 or more.
+        gap: f64,
+    },
+}
+
+impl ElementKind {
+    /// A conveyor's slot for one entity: its item length plus its gap. `None` for any other
+    /// element.
+    pub fn conveyor_pitch(&self) -> Option<f64> {
+        match self {
+            ElementKind::Conveyor {
+                item_length, gap, ..
+            } => Some(item_length + gap),
+            _ => None,
+        }
+    }
+
+    /// The most entities a conveyor holds at once, ⌊length / pitch⌋: 0 when its numbers are
+    /// not valid (see [`Problem::BadConveyorValue`]). `None` for any other element.
+    pub fn conveyor_places(&self) -> Option<u64> {
+        match self {
+            ElementKind::Conveyor { length, .. } => {
+                let pitch = self.conveyor_pitch()?;
+                // A float-to-integer cast saturates and turns a NaN into 0.
+                Some(if pitch > 0.0 && pitch.is_finite() {
+                    (length / pitch).floor() as u64
+                } else {
+                    0
+                })
+            }
+            _ => None,
+        }
+    }
 }
 
 /// The electrical power a server's unit draws in each state, in kilowatts. At every instant a
@@ -864,6 +954,7 @@ impl ElementKind {
             ElementKind::ParallelGateway => "parallel_gateway",
             ElementKind::Batch { .. } => "batch",
             ElementKind::Unbatch => "unbatch",
+            ElementKind::Conveyor { .. } => "conveyor",
         }
     }
 
@@ -962,7 +1053,8 @@ impl ElementKind {
             | ElementKind::ExclusiveGateway { .. }
             | ElementKind::ParallelGateway
             | ElementKind::Batch { .. }
-            | ElementKind::Unbatch => vec![],
+            | ElementKind::Unbatch
+            | ElementKind::Conveyor { .. } => vec![],
         }
     }
 }
@@ -1207,6 +1299,8 @@ impl Connection {
 #[derive(Debug, Clone, PartialEq)]
 pub struct Experiment {
     pub time_unit: TimeUnit,
+    /// The unit lengths are in (a conveyor's); metres unless the scenario says otherwise.
+    pub length_unit: LengthUnit,
     /// Simulated time before statistics are collected.
     pub warmup: f64,
     /// Simulated time over which statistics are collected, after the warm-up.
@@ -1262,6 +1356,7 @@ impl Default for Experiment {
     fn default() -> Self {
         Self {
             time_unit: TimeUnit::Minutes,
+            length_unit: LengthUnit::Metres,
             warmup: 0.0,
             duration: 480.0,
             replications: 10,
@@ -1319,7 +1414,8 @@ impl ElementKind {
             | ElementKind::SharedTask { .. }
             | ElementKind::Delay { .. }
             | ElementKind::Batch { .. }
-            | ElementKind::Unbatch => (100.0, 80.0),
+            | ElementKind::Unbatch
+            | ElementKind::Conveyor { .. } => (100.0, 80.0),
         }
     }
 }
@@ -1555,6 +1651,17 @@ pub enum Problem {
     TimedIgnored,
     /// A batch of no entities.
     ZeroBatchSize,
+    /// A conveyor's `field` (length, speed or item length) is not above 0 and finite, or its
+    /// gap is not 0 or more and finite.
+    BadConveyorValue {
+        field: &'static str,
+    },
+    /// A conveyor too short for even one entity: its `length` is under its `pitch` (item length
+    /// plus gap), so ⌊length / pitch⌋ is 0.
+    ConveyorTooShort {
+        length: f64,
+        pitch: f64,
+    },
     /// A bill of materials asking for no entities from a connection.
     ZeroQuantity,
     /// A quantity on a connection that does not go into a parallel gateway, where it does
@@ -1594,6 +1701,9 @@ pub enum Problem {
         left: f64,
         utilisation: f64,
     },
+    /// Found when the model is prepared to run, not by [`Model::validate`] (a conveyor can be
+    /// drawn, saved and sized meanwhile): conveyors are not simulated yet.
+    ConveyorNotSimulated,
     /// Found from a run's results, not by [`Model::validate`]: the run had one replication, so
     /// its results have no confidence interval and cannot be told from chance.
     OneReplication,
@@ -1811,6 +1921,9 @@ impl Problem {
             Problem::EmptyCalendar => "empty_calendar",
             Problem::TimedIgnored => "timed_ignored",
             Problem::ZeroBatchSize => "zero_batch_size",
+            Problem::ConveyorNotSimulated => "conveyor_not_simulated",
+            Problem::BadConveyorValue { .. } => "bad_conveyor_value",
+            Problem::ConveyorTooShort { .. } => "conveyor_too_short",
             Problem::ZeroQuantity => "zero_quantity",
             Problem::QuantityIgnored => "quantity_ignored",
             Problem::NothingToUnbatch => "nothing_to_unbatch",
@@ -2100,6 +2213,19 @@ impl std::fmt::Display for Diagnostic {
                 "there are no arrivals outside the calendars, but none is given, so this start event never fires"
             ),
             Problem::ZeroBatchSize => write!(f, "a batch needs at least 1 entity"),
+            Problem::ConveyorNotSimulated => write!(f, "conveyors are not simulated yet"),
+            Problem::BadConveyorValue { field } => {
+                let need = if *field == "gap" {
+                    "0 or more"
+                } else {
+                    "above 0"
+                };
+                write!(f, "the conveyor's {field} must be a finite number, {need}")
+            }
+            Problem::ConveyorTooShort { length, pitch } => write!(
+                f,
+                "the conveyor is {length} long but each item takes {pitch} (item length plus gap), so not even one fits; lengthen the conveyor or shorten the item or the gap"
+            ),
             Problem::ZeroQuantity => {
                 write!(
                     f,
@@ -2501,6 +2627,40 @@ impl Model {
             }
             if let ElementKind::Batch { size: 0 } = e.kind {
                 out.push(Diagnostic::error(Some(&e.id), Problem::ZeroBatchSize));
+            }
+            if let ElementKind::Conveyor {
+                length,
+                speed,
+                item_length,
+                gap,
+                ..
+            } = e.kind
+            {
+                let above_zero = |x: f64| x.is_finite() && x > 0.0;
+                let mut bad = false;
+                for (field, ok) in [
+                    ("length", above_zero(length)),
+                    ("speed", above_zero(speed)),
+                    ("item length", above_zero(item_length)),
+                    ("gap", gap.is_finite() && gap >= 0.0),
+                ] {
+                    if !ok {
+                        bad = true;
+                        out.push(Diagnostic::error(
+                            Some(&e.id),
+                            Problem::BadConveyorValue { field },
+                        ));
+                    }
+                }
+                if !bad && e.kind.conveyor_places() == Some(0) {
+                    out.push(Diagnostic::error(
+                        Some(&e.id),
+                        Problem::ConveyorTooShort {
+                            length,
+                            pitch: item_length + gap,
+                        },
+                    ));
+                }
             }
             if matches!(e.kind, ElementKind::Unbatch)
                 && !self
@@ -4328,6 +4488,86 @@ mod tests {
             ..Model::default()
         };
         assert!(problems(&lonely).iter().any(|(_, _, s)| s == "NoSource"));
+    }
+
+    #[test]
+    fn length_units_read_back_by_name() {
+        for u in [
+            LengthUnit::Millimetres,
+            LengthUnit::Centimetres,
+            LengthUnit::Metres,
+            LengthUnit::Kilometres,
+            LengthUnit::Inches,
+            LengthUnit::Feet,
+        ] {
+            assert_eq!(LengthUnit::from_name(u.name()), Some(u));
+        }
+        assert_eq!(LengthUnit::default(), LengthUnit::Metres);
+        assert_eq!(LengthUnit::from_name("metres"), None);
+    }
+
+    #[test]
+    fn conveyors_are_checked() {
+        let belt = |length, speed, item_length, gap| ElementKind::Conveyor {
+            length,
+            speed,
+            accumulating: true,
+            item_length,
+            gap,
+        };
+        let mut m = mm1();
+        m.elements[1].kind = belt(10.0, 5.0, 0.8, 0.2);
+        assert_eq!(m.elements[1].kind.conveyor_places(), Some(10));
+        assert!(
+            m.validate().iter().all(|d| d.severity != Severity::Error),
+            "{:?}",
+            m.validate()
+        );
+        // Each number: not above 0, or not finite; the gap may be 0.
+        for (kind, field) in [
+            (belt(0.0, 0.5, 0.8, 0.2), "length"),
+            (belt(10.0, -1.0, 0.8, 0.2), "speed"),
+            (belt(10.0, 5.0, f64::NAN, 0.2), "item length"),
+            (belt(10.0, 5.0, 0.8, -0.1), "gap"),
+            (belt(f64::INFINITY, 5.0, 0.8, 0.2), "length"),
+        ] {
+            m.elements[1].kind = kind;
+            let p = problems(&m);
+            assert!(
+                p.iter().any(|(s, at, x)| *s == Severity::Error
+                    && at.as_deref() == Some("machine")
+                    && x == &format!("BadConveyorValue {{ field: {field:?} }}")),
+                "{field}: {p:?}"
+            );
+        }
+        m.elements[1].kind = belt(10.0, 5.0, 0.8, 0.0);
+        assert!(
+            m.validate().iter().all(|d| d.severity != Severity::Error),
+            "a gap of 0 is allowed"
+        );
+        // Shorter than one pitch: nothing fits.
+        m.elements[1].kind = belt(1.0, 5.0, 0.8, 0.5);
+        assert!(
+            problems(&m)
+                .iter()
+                .any(|(s, _, x)| *s == Severity::Error && x.starts_with("ConveyorTooShort")),
+            "{:?}",
+            problems(&m)
+        );
+        // Exactly one output, as for a server.
+        m.elements[1].kind = belt(10.0, 5.0, 0.8, 0.2);
+        let out = m.connections[1].clone();
+        let mut second = out.clone();
+        second.id = ElementId::unchecked("out2");
+        m.connections.push(second);
+        assert!(
+            problems(&m)
+                .iter()
+                .any(|(_, at, x)| at.as_deref() == Some("machine")
+                    && x.starts_with("SeveralOutputs")),
+            "{:?}",
+            problems(&m)
+        );
     }
 
     #[test]

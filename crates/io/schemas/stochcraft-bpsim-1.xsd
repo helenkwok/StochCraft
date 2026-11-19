@@ -225,6 +225,19 @@
       <stochcraft:power processing="12.5" idle="2" failed="0.5" offShift="0"/>
     </bpsim:VendorExtension>
 
+  stochcraft:conveyor, on a task's ElementParameters: the task is a straight conveyor. length,
+  speed (the length travelled per base time unit), itemLength (above 0) and gap (0 or more) are
+  in the scenario's length unit; every item takes a slot of itemLength + gap. accumulating says
+  whether items stop behind a stopped one ahead (true) or the whole belt stops (false). Other
+  tools see a plain task.
+
+    <bpsim:VendorExtension name="stochcraft:conveyor" xmlns:stochcraft="…">
+      <stochcraft:conveyor length="12.5" speed="0.5" accumulating="true" itemLength="0.8" gap="0.2"/>
+    </bpsim:VendorExtension>
+
+  stochcraft:lengthUnit, on the scenario's ScenarioParameters, with the value mm, cm, m, km, in
+  or ft: the unit lengths are in (metres without it).
+
   stochcraft:stopCount, on an element's ElementParameters: each replication ends once this many
   entities (a whole number of at least 1) have left the element since time 0 (for an end event:
   arrived there), or at the scenario's duration if that comes first.
@@ -419,6 +432,15 @@
       <xs:attribute name="blocked" type="xs:double"/>
       <xs:attribute name="failed" type="xs:double"/>
       <xs:attribute name="offShift" type="xs:double"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="conveyor">
+    <xs:complexType>
+      <xs:attribute name="length" type="xs:double" use="required"/>
+      <xs:attribute name="speed" type="xs:double" use="required"/>
+      <xs:attribute name="accumulating" type="xs:boolean" use="required"/>
+      <xs:attribute name="itemLength" type="xs:double" use="required"/>
+      <xs:attribute name="gap" type="xs:double" use="required"/>
     </xs:complexType>
   </xs:element>
   <xs:element name="estimate">

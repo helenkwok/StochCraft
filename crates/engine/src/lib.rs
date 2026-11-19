@@ -539,6 +539,7 @@ impl Engine {
             "seed": experiment.seed,
             "replications": experiment.replications,
             "time_unit": wire::TimeUnitSpec::from(x.time_unit),
+            "length_unit": wire::LengthUnitSpec::from(x.length_unit),
             "warmup": x.warmup,
             "duration": x.duration,
             "random_streams": "one xoshiro256** stream per replication, seeded from the experiment seed and the replication index; each element draws from its own stream",

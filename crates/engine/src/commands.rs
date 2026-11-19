@@ -14,9 +14,10 @@ use crate::edit::Op;
 use crate::run::RunMode;
 use crate::wire::{
     self, AvailabilityDoc, BalkingSpec, BreakdownSpec, DemandSpec, DistSpec, EstimateDoc, EventDoc,
-    FamilySpec, HealthCheckSpec, KindSpec, ModelDoc, NeedSpec, OnShiftEndSpec, PatienceSpec,
-    PowerSpec, ProcessingBySpec, PropertyDoc, PropertyTypeSpec, PropertyValueSpec, QueueShiftDoc,
-    RoutingSpec, ScrapSpec, SetupSpec, ShiftDoc, Stamp, StopSpec, TimeUnitSpec, TimedDist,
+    FamilySpec, HealthCheckSpec, KindSpec, LengthUnitSpec, ModelDoc, NeedSpec, OnShiftEndSpec,
+    PatienceSpec, PowerSpec, ProcessingBySpec, PropertyDoc, PropertyTypeSpec, PropertyValueSpec,
+    QueueShiftDoc, RoutingSpec, ScrapSpec, SetupSpec, ShiftDoc, Stamp, StopSpec, TimeUnitSpec,
+    TimedDist,
 };
 use crate::{CommandError, Engine, ErrorCode, HistoryEntry};
 
@@ -127,6 +128,7 @@ fn check_keys(v: &Value, extra: &[&str]) -> Result<(), CommandError> {
         Some("delay") => &["duration", "processing_by"],
         Some("exclusive_gateway") => &["default", "routing"],
         Some("batch") => &["size"],
+        Some("conveyor") => &["length", "speed", "accumulating", "item_length", "gap"],
         _ => &[],
     };
     for k in obj.keys() {
@@ -425,6 +427,22 @@ pub struct BlockSet {
     /// A batch: how many entities it collects before sending them on together.
     #[serde(default)]
     pub size: Option<u32>,
+    /// Conveyors: the length, in the experiment's `length_unit`; above 0.
+    #[serde(default)]
+    pub length: Option<f64>,
+    /// Conveyors: the distance an entity travels in one model time unit; above 0.
+    #[serde(default)]
+    pub speed: Option<f64>,
+    /// Conveyors: whether entities stop behind a stopped one ahead while the belt keeps moving
+    /// (true), or the whole belt stops (false).
+    #[serde(default)]
+    pub accumulating: Option<bool>,
+    /// Conveyors: the length of belt an entity takes; above 0.
+    #[serde(default)]
+    pub item_length: Option<f64>,
+    /// Conveyors: the least free belt between one entity and the next; 0 or more.
+    #[serde(default)]
+    pub gap: Option<f64>,
 }
 
 /// A new shared resource pool.
@@ -586,6 +604,10 @@ pub struct Disconnect {
 pub struct ExperimentSet {
     #[serde(default)]
     pub time_unit: Option<TimeUnitSpec>,
+    /// The unit lengths (a conveyor's) are in. Changing it does not convert lengths already in
+    /// the model.
+    #[serde(default)]
+    pub length_unit: Option<LengthUnitSpec>,
     /// Time before statistics are collected.
     #[serde(default)]
     pub warmup: Option<f64>,
@@ -1226,6 +1248,11 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         ("default", p.default.is_some()),
         ("routing", p.routing.is_some()),
         ("size", p.size.is_some()),
+        ("length", p.length.is_some()),
+        ("speed", p.speed.is_some()),
+        ("accumulating", p.accumulating.is_some()),
+        ("item_length", p.item_length.is_some()),
+        ("gap", p.gap.is_some()),
     ];
     let applies: &[&str] = match kind {
         ElementKind::Source { .. } => &["interarrival", "limit", "timed", "idle_outside"],
@@ -1255,6 +1282,7 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         ElementKind::ExclusiveGateway { .. } => &["default", "routing"],
         ElementKind::Batch { .. } => &["size"],
         ElementKind::Sink { .. } => &["scrap", "demand"],
+        ElementKind::Conveyor { .. } => &["length", "speed", "accumulating", "item_length", "gap"],
         ElementKind::ParallelGateway | ElementKind::Unbatch => &[],
     };
     if let Some((name, _)) = given.iter().find(|(n, g)| *g && !applies.contains(n)) {
@@ -1437,6 +1465,29 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
                 *scrap = s.map(|s| stochcraft_model::Scrap {
                     charged_to: s.charged_to.as_deref().map(ElementId::unchecked),
                 });
+            }
+        }
+        ElementKind::Conveyor {
+            length,
+            speed,
+            accumulating,
+            item_length,
+            gap,
+        } => {
+            if let Some(x) = p.length {
+                *length = x;
+            }
+            if let Some(x) = p.speed {
+                *speed = x;
+            }
+            if let Some(x) = p.accumulating {
+                *accumulating = x;
+            }
+            if let Some(x) = p.item_length {
+                *item_length = x;
+            }
+            if let Some(x) = p.gap {
+                *gap = x;
             }
         }
         ElementKind::ParallelGateway | ElementKind::Unbatch => {}
@@ -1831,6 +1882,9 @@ fn experiment_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
     if let Some(t) = p.time_unit {
         x.time_unit = t.into();
     }
+    if let Some(u) = p.length_unit {
+        x.length_unit = u.into();
+    }
     x.warmup = p.warmup.unwrap_or(x.warmup);
     x.duration = p.duration.unwrap_or(x.duration);
     x.replications = p.replications.unwrap_or(x.replications);
@@ -1848,6 +1902,7 @@ fn experiment_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         p.stop.is_some(),
         p.start.is_some(),
         p.time_unit.is_some(),
+        p.length_unit.is_some(),
         p.warmup.is_some(),
         p.duration.is_some(),
         p.replications.is_some(),

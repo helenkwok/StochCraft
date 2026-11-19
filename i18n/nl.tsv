@@ -602,6 +602,7 @@
 	a model	een model
 	arrivals	aankomsten
 	batch	batch
+	conveyor	transportband
 	days	dagen
 	decision: one way	beslissing: één route
 	departures	vertrekken

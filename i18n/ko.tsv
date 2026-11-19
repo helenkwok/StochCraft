@@ -602,6 +602,7 @@
 	a model	모델
 	arrivals	도착
 	batch	배치
+	conveyor	컨베이어
 	days	일
 	decision: one way	의사 결정: 한 경로
 	departures	이탈

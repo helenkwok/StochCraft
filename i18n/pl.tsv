@@ -602,6 +602,7 @@
 	a model	model
 	arrivals	przybycia
 	batch	partia
+	conveyor	przenośnik
 	days	dni
 	decision: one way	decyzja: jedna ścieżka
 	departures	wyjścia

@@ -22,11 +22,11 @@ use crate::read::{self, BPMN, XPDL};
 use crate::write::{
     abandoned_element, availability_param, balked_element, balking_element, batching_element,
     bpmn_local, breakdown_element, calendar_element, changeover_element, condition_element,
-    demand_element, dist_element, edge_ends, estimate_element, health_check_element,
-    interruptible_param, numeric, on_shift_end_element, own_marker, patience_element,
-    planned_element, power_element, probability_element, processing_by_element, property_element,
-    quantity_element, quantity_param, queue_capacity_element, rework_element, routing_element,
-    scrap_element, size, start_param, stop_element, timer_param, transfer_element,
+    conveyor_element, demand_element, dist_element, edge_ends, estimate_element,
+    health_check_element, interruptible_param, numeric, on_shift_end_element, own_marker,
+    patience_element, planned_element, power_element, probability_element, processing_by_element,
+    property_element, quantity_element, quantity_param, queue_capacity_element, rework_element,
+    routing_element, scrap_element, size, start_param, stop_element, timer_param, transfer_element,
     turned_away_element, units_param, vendor_value_element,
 };
 use crate::xml::{self, Element, Node};
@@ -717,7 +717,8 @@ fn category(k: &ElementKind) -> u8 {
         | ElementKind::SharedTask { .. }
         | ElementKind::Delay { .. }
         | ElementKind::Batch { .. }
-        | ElementKind::Unbatch => 2,
+        | ElementKind::Unbatch
+        | ElementKind::Conveyor { .. } => 2,
         ElementKind::ExclusiveGateway { .. } => 3,
         ElementKind::ParallelGateway => 4,
     }
@@ -2366,8 +2367,8 @@ impl Editor {
                         writes.push((id.clone(), "PriorityParameters", "Priority", v));
                     }
                 }
-                ElementKind::Batch { .. } | ElementKind::Unbatch => {
-                    // A batch or a split takes no time and holds no resource.
+                ElementKind::Batch { .. } | ElementKind::Unbatch | ElementKind::Conveyor { .. } => {
+                    // A batch, a split or a conveyor takes no time and holds no resource.
                     if matches!(
                         was,
                         Some(ElementKind::Server { .. } | ElementKind::Delay { .. })
@@ -2472,6 +2473,22 @@ impl Editor {
                     splits(Some(&e.kind))
                         .then(|| batching_element(&e.kind))
                         .flatten(),
+                ));
+            }
+            // A conveyor's vendor extension, where it changed; gone when the element stops
+            // being a conveyor.
+            let belt_changed = match (was, &e.kind) {
+                (Some(old @ ElementKind::Conveyor { .. }), new @ ElementKind::Conveyor { .. }) => {
+                    old != new
+                }
+                (Some(ElementKind::Conveyor { .. }), _) | (_, ElementKind::Conveyor { .. }) => true,
+                _ => false,
+            };
+            if belt_changed {
+                vendor_writes.push((
+                    id.clone(),
+                    crate::bpsim::CONVEYOR,
+                    conveyor_element(&e.kind),
                 ));
             }
             // An exclusive gateway's routing rule, where that changed.
@@ -2863,6 +2880,18 @@ impl Editor {
                 Some(float(a.warmup)),
                 &["Start", "Duration"],
             );
+        }
+        if b.length_unit != a.length_unit {
+            // Written even for metres, so it overrides what an inherited scenario says.
+            let is_unit = |x: &Element| {
+                x.is_any(&NSS, "VendorExtension")
+                    && x.attr("name").as_deref() == Some(crate::bpsim::LENGTH_UNIT)
+            };
+            remove_all(sp, &is_unit);
+            let mut v = vendor_value_element(crate::bpsim::LENGTH_UNIT, a.length_unit.name());
+            rename(&mut v, &prefix, &ns);
+            let at = end_of(sp);
+            sp.children.insert(at, Node::Element(v));
         }
         if relabel {
             self.keep_inheriting(root, scenario, b.time_unit, &rescaled, default_duration);

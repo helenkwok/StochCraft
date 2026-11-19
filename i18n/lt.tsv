@@ -602,6 +602,7 @@
 	a model	modelis
 	arrivals	atvykimai
 	batch	partija
+	conveyor	konvejeris
 	days	dienos
 	decision: one way	sprendimas: vienas kelias
 	departures	išvykimai

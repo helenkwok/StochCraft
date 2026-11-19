@@ -602,6 +602,7 @@
 	a model	un modelo
 	arrivals	llegadas
 	batch	lote
+	conveyor	cinta transportadora
 	days	días
 	decision: one way	decisión: una salida
 	departures	salidas

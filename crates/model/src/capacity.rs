@@ -188,6 +188,9 @@ pub enum Why {
     /// This element can hold up the station's units (blocking): a full waiting room, or a
     /// transfer into it that keeps the sending unit.
     HeldUp(ElementId),
+    /// A conveyor has no queueing formula: its time on it is its length over its speed, and its
+    /// waiting is before it, at what sends to it.
+    ConveyorTime,
 }
 
 impl Why {
@@ -224,6 +227,7 @@ impl Why {
             Why::SharedPool => "shared_pool",
             Why::NotExponential => "not_exponential",
             Why::HeldUp(_) => "held_up",
+            Why::ConveyorTime => "conveyor_time",
         }
     }
 
@@ -300,6 +304,7 @@ impl Why {
             Why::SharedPool => {
                 "the pool is shared with other tasks, or more than one unit is needed".into()
             }
+            Why::ConveyorTime => "a conveyor's time is its length over its speed".into(),
             Why::NotExponential => {
                 "the service time is not exponential, with a finite queue, patience or balking"
                     .into()
@@ -315,6 +320,8 @@ pub enum StationKind {
     SharedTask,
     Delay,
     Pool,
+    /// A conveyor: it carries at most speed / pitch entities per unit of time.
+    Conveyor,
 }
 
 impl StationKind {
@@ -325,6 +332,7 @@ impl StationKind {
             StationKind::SharedTask => "shared_task",
             StationKind::Delay => "delay",
             StationKind::Pool => "pool",
+            StationKind::Conveyor => "conveyor",
         }
     }
 }
@@ -408,6 +416,9 @@ pub struct Station {
     /// The fewest units that bring the load under the target, if more are needed.
     pub units_for_target: Option<u32>,
     pub formula: Result<Formula, Why>,
+    /// A conveyor's mean time on it, its length over its speed: exact unless something after
+    /// it can hold it up (see `held_up_by`), then at least. `None` for any other row.
+    pub time_on: Option<Value>,
 }
 
 /// The capacity table.
@@ -978,6 +989,7 @@ impl<'a> Net<'a> {
                 ElementKind::Server { .. } => StationKind::Server,
                 ElementKind::SharedTask { .. } => StationKind::SharedTask,
                 ElementKind::Delay { .. } => StationKind::Delay,
+                ElementKind::Conveyor { .. } => StationKind::Conveyor,
                 _ => continue,
             };
             let mut st = Station {
@@ -993,6 +1005,7 @@ impl<'a> Net<'a> {
                 status: Status::Unknown,
                 units_for_target: None,
                 formula: Err(Why::SharedPool),
+                time_on: None,
             };
             let work = rates[i].combine(&service[i], false);
             match kind {
@@ -1058,6 +1071,19 @@ impl<'a> Net<'a> {
                         tail_join(&e.kind),
                     );
                     unstable[i] = st.status == Status::Unstable;
+                }
+                StationKind::Conveyor => {
+                    // One unit carrying a slot of pitch p at speed v: p / v per entity, so the
+                    // utilisation (and load) is the arrival rate × p / v.
+                    let one = Value::exact(1.0);
+                    st.utilisation = work.combine(&one, true);
+                    st.load = st.utilisation.clone();
+                    // No count of units is given: a faster conveyor or a smaller pitch helps,
+                    // not more units.
+                    st.status = judge(&st.load, &work, None, target, 1.0).0;
+                    unstable[i] = st.status == Status::Unstable;
+                    st.formula = Err(Why::ConveyorTime);
+                    st.time_on = Some(self.conveyor_time_on(i));
                 }
                 StationKind::SharedTask | StationKind::Pool => {}
             }
@@ -1183,6 +1209,25 @@ impl<'a> Net<'a> {
             .sum::<Option<f64>>()
             .ok_or(Why::NoVariance)?;
         pollaczek_khinchine(lambda, s, variance).ok_or(Why::Unstable)
+    }
+
+    /// A conveyor's mean time on it: its length over its speed, exactly when nothing after it
+    /// can hold it up, else at least (an item stops at the end while what follows is full).
+    fn conveyor_time_on(&self, i: usize) -> Value {
+        let ElementKind::Conveyor { length, speed, .. } = &self.element(i).kind else {
+            return Value::Unknown(Why::NoMean);
+        };
+        if !(length.is_finite() && speed.is_finite() && *length > 0.0 && *speed > 0.0) {
+            return Value::Unknown(Why::NoMean);
+        }
+        Value::Known {
+            value: length / speed,
+            bound: if self.held_up_by(i).is_some() {
+                Bound::AtLeast
+            } else {
+                Bound::Exact
+            },
+        }
     }
 
     /// The server whose full waiting room can hold up element `i`'s units: the next server on
@@ -1389,6 +1434,7 @@ impl<'a> Net<'a> {
                 status,
                 units_for_target,
                 formula: Err(Why::SharedPool),
+                time_on: None,
             });
             // A pool serving one task, one unit at a time, at fixed units: that task is an
             // ordinary station with the pool's units.
@@ -1468,7 +1514,12 @@ impl<'a> Net<'a> {
 fn bottleneck(stations: &[Station]) -> Option<ElementId> {
     let candidates: Vec<&Station> = stations
         .iter()
-        .filter(|s| matches!(s.kind, StationKind::Server | StationKind::Pool))
+        .filter(|s| {
+            matches!(
+                s.kind,
+                StationKind::Server | StationKind::Pool | StationKind::Conveyor
+            )
+        })
         .collect();
     let low = |s: &Station| match s.load {
         Value::Known {
@@ -1597,6 +1648,15 @@ fn judge(
 
 /// The mean time an entity holds a unit at a station, with setups before every job.
 fn mean_service(e: &Element) -> Value {
+    // A conveyor's slot takes pitch over speed to pass: the most it carries is its inverse.
+    if let ElementKind::Conveyor { speed, .. } = &e.kind {
+        return match e.kind.conveyor_pitch() {
+            Some(p) if p.is_finite() && p > 0.0 && speed.is_finite() && *speed > 0.0 => {
+                Value::exact(p / speed)
+            }
+            _ => Value::Unknown(Why::NoMean),
+        };
+    }
     let (time, setup) = match &e.kind {
         ElementKind::Server { service, setup, .. } => (service, setup.as_ref()),
         ElementKind::SharedTask { service, .. } => (service, None),
@@ -1635,6 +1695,10 @@ fn mean_service(e: &Element) -> Value {
 
 /// A server's units, and whether they follow a calendar (then the most on shift).
 fn server_units(e: &Element) -> Option<(u32, bool)> {
+    // A conveyor is one station: its slots are not units.
+    if matches!(e.kind, ElementKind::Conveyor { .. }) {
+        return Some((1, false));
+    }
     let ElementKind::Server {
         shifts,
         available,

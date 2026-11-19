@@ -602,6 +602,7 @@
 	a model	malli
 	arrivals	saapumiset
 	batch	erä
+	conveyor	kuljetin
 	days	päivää
 	decision: one way	päätös: yksi reitti
 	departures	poistumiset

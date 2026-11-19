@@ -8,9 +8,9 @@ use std::collections::{BTreeMap, BTreeSet};
 
 use stochcraft_model::{
     BalkJoin, Balking, Bounds, Breakdown, Calendar, DateTime, Demand, Dist, ElementKind, Estimate,
-    HealthCheck, Model, Need, OnShiftEnd, OnTakeout, Patience, PatienceUntil, PlaceWhileOut, Power,
-    ProcessingBy, Property, PropertyType, PropertyValue, QueueLimit, ResourcePool, Routing, Scrap,
-    Setup, Stop, Timed, Transfer,
+    HealthCheck, LengthUnit, Model, Need, OnShiftEnd, OnTakeout, Patience, PatienceUntil,
+    PlaceWhileOut, Power, ProcessingBy, Property, PropertyType, PropertyValue, QueueLimit,
+    ResourcePool, Routing, Scrap, Setup, Stop, Timed, Transfer,
 };
 
 use crate::bpsim::NS2;
@@ -260,7 +260,8 @@ pub(crate) fn bpmn_local(kind: &ElementKind) -> &'static str {
         | ElementKind::SharedTask { .. }
         | ElementKind::Delay { .. }
         | ElementKind::Batch { .. }
-        | ElementKind::Unbatch => "task",
+        | ElementKind::Unbatch
+        | ElementKind::Conveyor { .. } => "task",
         ElementKind::ExclusiveGateway { .. } => "exclusiveGateway",
         ElementKind::ParallelGateway => "parallelGateway",
     }
@@ -303,6 +304,40 @@ pub(crate) fn batching_element(kind: &ElementKind) -> Option<Element> {
         ElementKind::Unbatch => Some(vendor_value_element(crate::bpsim::UNBATCH, "true")),
         _ => None,
     }
+}
+
+/// A conveyor as StochCraft's vendor extension ([`crate::bpsim::CONVEYOR`]), if `kind` is one.
+pub(crate) fn conveyor_element(kind: &ElementKind) -> Option<Element> {
+    let ElementKind::Conveyor {
+        length,
+        speed,
+        accumulating,
+        item_length,
+        gap,
+    } = kind
+    else {
+        return None;
+    };
+    let ns = crate::bpsim::STOCHCRAFT_NS;
+    let body = Element::new("stochcraft:conveyor", Some(ns))
+        .with_attr("length", &num(*length))
+        .with_attr("speed", &num(*speed))
+        .with_attr("accumulating", if *accumulating { "true" } else { "false" })
+        .with_attr("itemLength", &num(*item_length))
+        .with_attr("gap", &num(*gap));
+    Some(
+        s("VendorExtension")
+            .with_attr("name", crate::bpsim::CONVEYOR)
+            .with_attr("xmlns:stochcraft", ns)
+            .with_child(body),
+    )
+}
+
+/// The scenario's length unit as StochCraft's vendor extension ([`crate::bpsim::LENGTH_UNIT`]),
+/// unless it is the default, metres.
+pub(crate) fn length_unit_element(unit: LengthUnit) -> Option<Element> {
+    (unit != LengthUnit::default())
+        .then(|| vendor_value_element(crate::bpsim::LENGTH_UNIT, unit.name()))
 }
 
 /// A connection's bill-of-materials quantity as a vendor extension.
@@ -776,6 +811,10 @@ pub fn write_new(model: &Model) -> Vec<u8> {
             s("FloatingParameter").with_attr("value", &num(x.warmup)),
         ));
     }
+    // After the other parameters, as a vendor extension is.
+    if let Some(u) = length_unit_element(x.length_unit) {
+        sp.push(u);
+    }
     let mut scenario = s("Scenario")
         .with_attr("id", &ids.fresh("scenario"))
         .with_attr(
@@ -856,7 +895,8 @@ pub fn write_new(model: &Model) -> Vec<u8> {
             | ElementKind::ExclusiveGateway { .. }
             | ElementKind::ParallelGateway
             | ElementKind::Batch { .. }
-            | ElementKind::Unbatch => {}
+            | ElementKind::Unbatch
+            | ElementKind::Conveyor { .. } => {}
         }
         if !e.properties.is_empty() {
             let mut pp = s("PropertyParameters");
@@ -942,6 +982,9 @@ pub fn write_new(model: &Model) -> Vec<u8> {
             ep.push(x);
         }
         if let Some(x) = batching_element(&e.kind) {
+            ep.push(x);
+        }
+        if let Some(x) = conveyor_element(&e.kind) {
             ep.push(x);
         }
         if let Some(stop) = model

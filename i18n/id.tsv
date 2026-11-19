@@ -602,6 +602,7 @@
 	a model	sebuah model
 	arrivals	kedatangan
 	batch	batch
+	conveyor	konveyor
 	days	hari
 	decision: one way	keputusan: satu jalur
 	departures	keberangkatan

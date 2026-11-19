@@ -206,6 +206,7 @@ pub fn showcase() -> Model {
     m.availability(cut, true, &[("once", false)]);
     let mut model = m.build(Experiment {
         time_unit: TimeUnit::Hours,
+        length_unit: stochcraft_model::LengthUnit::Metres,
         warmup: 2.5,
         duration: 40.0,
         replications: 7,
@@ -1980,4 +1981,116 @@ fn an_inherited_waiting_room_set_another_way_is_saved() {
     };
     let mut saved_base = read_as("base");
     assert_eq!(serve(&mut saved_base), serve(&mut base.model));
+}
+
+/// A source, a conveyor and a sink, with lengths in feet.
+fn belt_model() -> Model {
+    use stochcraft_model::{Connection, Element, ElementId, LengthUnit};
+    let id = |s: &str| ElementId::unchecked(s);
+    Model {
+        name: "Belt".into(),
+        elements: vec![
+            Element::new(
+                id("in"),
+                "in",
+                ElementKind::Source {
+                    interarrival: Dist::Constant(1.0),
+                    limit: None,
+                    timed: Vec::new(),
+                    idle_outside: false,
+                },
+            ),
+            Element::new(
+                id("belt"),
+                "belt",
+                ElementKind::Conveyor {
+                    length: 12.5,
+                    speed: 4.0,
+                    accumulating: true,
+                    item_length: 1.5,
+                    gap: 0.5,
+                },
+            ),
+            Element::new(
+                id("out"),
+                "out",
+                ElementKind::Sink {
+                    scrap: None,
+                    demand: None,
+                },
+            ),
+        ],
+        connections: vec![
+            Connection::new(id("f1"), id("in"), id("belt")),
+            Connection::new(id("f2"), id("belt"), id("out")),
+        ],
+        experiment: Experiment {
+            length_unit: LengthUnit::Feet,
+            ..Experiment::default()
+        },
+        ..Model::default()
+    }
+}
+
+/// A conveyor and the scenario's length unit are written as StochCraft's vendor extensions on a
+/// plain task and the scenario, read back as they were, and saved in place when they change:
+/// the extension goes when the element stops being a conveyor.
+#[test]
+fn a_conveyor_and_the_length_unit_write_read_and_save() {
+    use stochcraft_model::{LengthUnit, Severity};
+    let model = belt_model();
+    assert!(
+        model
+            .validate()
+            .iter()
+            .all(|d| d.severity != Severity::Error),
+        "{:#?}",
+        model.validate()
+    );
+    let bytes = write_new(&model);
+    let text = String::from_utf8_lossy(&bytes);
+    assert!(text.contains("stochcraft:conveyor") && text.contains("stochcraft:lengthUnit"));
+    let Ok(loaded) = read(&bytes) else {
+        unreachable!()
+    };
+    assert!(loaded.notes.is_empty(), "{:#?}", loaded.notes);
+    assert_eq!(loaded.model, laid_out(model));
+    assert_eq!(loaded.opened.save(&loaded.model), Ok(bytes.clone()));
+
+    // Another speed, a belt that does not accumulate, and metres.
+    let mut edited = loaded.model.clone();
+    edited.experiment.length_unit = LengthUnit::Metres;
+    for e in &mut edited.elements {
+        if let ElementKind::Conveyor {
+            speed,
+            accumulating,
+            ..
+        } = &mut e.kind
+        {
+            *speed = 0.25;
+            *accumulating = false;
+        }
+    }
+    let saved = loaded.opened.save(&edited);
+    let back = saved.as_deref().map(|b| read(b).map(|l| l.model));
+    assert_eq!(back, Ok(Ok(edited.clone())));
+
+    // It stops being a conveyor: the extension is gone from the file.
+    let Ok(saved) = saved else { return };
+    let Ok(again) = read(&saved) else {
+        unreachable!()
+    };
+    let mut delay = edited;
+    delay.elements[1].kind = ElementKind::Delay {
+        processing_by: None,
+        duration: Dist::Constant(3.0),
+    };
+    let saved = again.opened.save(&delay);
+    let text = saved
+        .as_deref()
+        .map(String::from_utf8_lossy)
+        .map(|t| t.contains("stochcraft:conveyor"));
+    assert_eq!(text, Ok(false));
+    let back = saved.as_deref().map(|b| read(b).map(|l| l.model));
+    assert_eq!(back, Ok(Ok(delay)));
 }
