@@ -1,7 +1,7 @@
 # Where StochCraft's window falls short
 
-> **Last reviewed:** 2026-11-15 · **Last updated:** 2026-11-15 · **Target:** what users of FlexSim
-> (User Manual 2026) and AnyLogic 8 (public help) see and do, and what a newcomer needs
+> **Last reviewed:** 2026-11-15 · **Last updated:** 2026-11-15 · **Target:** what users of established commercial simulation tools see and do (from their public documentation),
+> and what a newcomer needs
 
 Every known shortfall of the window, one entry each, ranked by how much it stops a switcher or a
 newcomer from getting a trustworthy answer. Pick work from the top unless the owner says
