@@ -975,3 +975,33 @@ unit	yr	a
 	3D view of the model	Vista 3D do modelo
 	Drag to orbit · Scroll to zoom · Shift-drag to pan	Arrastra para orbitar · Despraza para ampliar · Maiús e arrastra para mover
 	Parcel sorter	Clasificador de paquetes
+	Dashboard	Panel
+	Throughput	Rendemento
+	{n} per hour	{n} por hora
+	95% interval {low} to {high} per hour	Intervalo do 95 %: de {low} a {high} por hora
+	So far in the run being watched	Ata agora na execución observada
+	No sink in this model	Non hai ningún sumidoiro neste modelo
+	Nothing left the model in this run	Nesta execución nada saíu do modelo
+	Everything that left the model through its sinks, per hour.	Todo o que saíu do modelo polos seus sumidoiros, por hora.
+	Utilisation by resource	Utilización por recurso
+	{name}: {busy} busy	{name}: {busy} ocupado
+	Idle	Inactivo
+	and {n} more	e {n} máis
+	How each resource spends its time, and its busy share.	Como pasa o tempo cada recurso e a súa porción de ocupación.
+	No resource reports how it spends its time	Ningún recurso informa de como pasa o tempo
+	Time on conveyors	Tempo nas cintas transportadoras
+	No conveyors in this model	Non hai cintas transportadoras neste modelo
+	Fills in when the run ends	Énchese cando remata a execución
+	How long each item spends on the conveyors.	Canto tempo pasa cada peza nas cintas transportadoras.
+	No item has left a conveyor yet	Ningunha peza saíu aínda dunha cinta
+	Share of items by time on a conveyor, in {unit}	Proporción de pezas segundo o tempo nunha cinta, en {unit}
+	Time on conveyors: {n} items between {lo} and {hi} {unit}	Tempo nas cintas: {n} pezas entre {lo} e {hi} {unit}
+	{from} to {to} {unit}: {share} of items ({n})	De {from} a {to} {unit}: {share} das pezas ({n})
+	Items on conveyors over time	Pezas nas cintas ao longo do tempo
+	Items in the model over time	Pezas no modelo ao longo do tempo
+	How many items are on the conveyors over time.	Cantas pezas hai nas cintas ao longo do tempo.
+	How many items are in the model over time.	Cantas pezas hai no modelo ao longo do tempo.
+	Nothing was recorded over time in these results	Nestes resultados non se rexistrou nada ao longo do tempo
+	At {time} {unit}: {n} items	En {time} {unit}: {n} pezas
+	Run the model to fill the dashboard	Executa o modelo para encher o panel
+	The resource and conveyor charts show the last run until this one ends	Os gráficos de recursos e cintas amosan a última execución ata que esta remate

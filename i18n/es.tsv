@@ -975,3 +975,33 @@ unit	yr	a
 	3D view of the model	Vista 3D del modelo
 	Drag to orbit · Scroll to zoom · Shift-drag to pan	Arrastre para orbitar · Desplace para acercar · Mayús y arrastre para desplazar
 	Parcel sorter	Clasificador de paquetes
+	Dashboard	Panel
+	Throughput	Rendimiento
+	{n} per hour	{n} por hora
+	95% interval {low} to {high} per hour	Intervalo del 95 %: de {low} a {high} por hora
+	So far in the run being watched	Hasta ahora en la ejecución observada
+	No sink in this model	No hay sumideros en este modelo
+	Nothing left the model in this run	Nada salió del modelo en esta ejecución
+	Everything that left the model through its sinks, per hour.	Todo lo que salió del modelo por sus sumideros, por hora.
+	Utilisation by resource	Utilización por recurso
+	{name}: {busy} busy	{name}: {busy} ocupado
+	Idle	Inactivo
+	and {n} more	y {n} más
+	How each resource spends its time, and its busy share.	Cómo pasa su tiempo cada recurso, y su porcentaje de ocupación.
+	No resource reports how it spends its time	Ningún recurso informa de cómo pasa su tiempo
+	Time on conveyors	Tiempo en las cintas transportadoras
+	No conveyors in this model	No hay cintas transportadoras en este modelo
+	Fills in when the run ends	Se rellena cuando termina la ejecución
+	How long each item spends on the conveyors.	Cuánto tiempo pasa cada pieza en las cintas transportadoras.
+	No item has left a conveyor yet	Ninguna pieza ha salido aún de una cinta
+	Share of items by time on a conveyor, in {unit}	Proporción de piezas según el tiempo en una cinta, en {unit}
+	Time on conveyors: {n} items between {lo} and {hi} {unit}	Tiempo en las cintas: {n} piezas entre {lo} y {hi} {unit}
+	{from} to {to} {unit}: {share} of items ({n})	De {from} a {to} {unit}: {share} de las piezas ({n})
+	Items on conveyors over time	Piezas en las cintas a lo largo del tiempo
+	Items in the model over time	Piezas en el modelo a lo largo del tiempo
+	How many items are on the conveyors over time.	Cuántas piezas hay en las cintas a lo largo del tiempo.
+	How many items are in the model over time.	Cuántas piezas hay en el modelo a lo largo del tiempo.
+	Nothing was recorded over time in these results	No se registró nada a lo largo del tiempo en estos resultados
+	At {time} {unit}: {n} items	En {time} {unit}: {n} piezas
+	Run the model to fill the dashboard	Ejecute el modelo para rellenar el panel
+	The resource and conveyor charts show the last run until this one ends	Los gráficos de recursos y cintas muestran la última ejecución hasta que termine esta

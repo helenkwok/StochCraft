@@ -975,3 +975,33 @@ unit	yr	년
 	3D view of the model	모델의 3D 보기
 	Drag to orbit · Scroll to zoom · Shift-drag to pan	드래그하여 회전 · 스크롤하여 확대/축소 · Shift+드래그하여 이동
 	Parcel sorter	소포 분류기
+	Dashboard	대시보드
+	Throughput	처리량
+	{n} per hour	시간당 {n}
+	95% interval {low} to {high} per hour	95% 구간: 시간당 {low}에서 {high}
+	So far in the run being watched	지금까지 지켜보는 실행에서
+	No sink in this model	이 모델에는 출구가 없습니다
+	Nothing left the model in this run	이번 실행에서는 모델을 떠난 것이 없습니다
+	Everything that left the model through its sinks, per hour.	출구를 통해 모델을 떠난 모든 것, 시간당.
+	Utilisation by resource	자원별 가동률
+	{name}: {busy} busy	{name}: {busy} 사용 중
+	Idle	유휴
+	and {n} more	외 {n}개
+	How each resource spends its time, and its busy share.	각 자원이 시간을 보내는 방식과 사용 중인 비율.
+	No resource reports how it spends its time	시간을 보내는 방식을 보고하는 자원이 없습니다
+	Time on conveyors	컨베이어 위의 시간
+	No conveyors in this model	이 모델에는 컨베이어가 없습니다
+	Fills in when the run ends	실행이 끝나면 채워집니다
+	How long each item spends on the conveyors.	각 항목이 컨베이어 위에서 보내는 시간.
+	No item has left a conveyor yet	아직 컨베이어를 떠난 항목이 없습니다
+	Share of items by time on a conveyor, in {unit}	컨베이어 위 시간별 항목 비율({unit})
+	Time on conveyors: {n} items between {lo} and {hi} {unit}	컨베이어 위의 시간: {lo}에서 {hi} {unit} 사이의 항목 {n}개
+	{from} to {to} {unit}: {share} of items ({n})	{from}에서 {to} {unit}: 항목의 {share}({n})
+	Items on conveyors over time	컨베이어 위 항목 수의 시간 변화
+	Items in the model over time	모델 안 항목 수의 시간 변화
+	How many items are on the conveyors over time.	컨베이어 위에 있는 항목 수의 시간 변화.
+	How many items are in the model over time.	모델 안에 있는 항목 수의 시간 변화.
+	Nothing was recorded over time in these results	이 결과에는 시간에 따른 기록이 없습니다
+	At {time} {unit}: {n} items	{time} {unit} 시점: 항목 {n}개
+	Run the model to fill the dashboard	대시보드를 채우려면 모델을 실행하세요
+	The resource and conveyor charts show the last run until this one ends	자원과 컨베이어 차트는 이 실행이 끝날 때까지 지난 실행을 보여 줍니다

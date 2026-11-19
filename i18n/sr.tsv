@@ -975,3 +975,33 @@ unit	yr	год.
 	3D view of the model	3D приказ модела
 	Drag to orbit · Scroll to zoom · Shift-drag to pan	Превуците за ротацију · Скролујте за зумирање · Shift и превлачење за померање
 	Parcel sorter	Сортер пакета
+	Dashboard	Контролна табла
+	Throughput	Пропусност
+	{n} per hour	{n} на сат
+	95% interval {low} to {high} per hour	95-процентни интервал од {low} до {high} на сат
+	So far in the run being watched	До сада у праћеном извршавању
+	No sink in this model	У овом моделу нема излаза
+	Nothing left the model in this run	У овом извршавању ништа није напустило модел
+	Everything that left the model through its sinks, per hour.	Све што је напустило модел кроз његове излазе, на сат.
+	Utilisation by resource	Искоришћеност по ресурсу
+	{name}: {busy} busy	{name}: {busy} заузет
+	Idle	Неактиван
+	and {n} more	и још {n}
+	How each resource spends its time, and its busy share.	Како сваки ресурс троши време и његов удео заузетости.
+	No resource reports how it spends its time	Ниједан ресурс не извештава како троши време
+	Time on conveyors	Време на транспортним тракама
+	No conveyors in this model	У овом моделу нема транспортних трака
+	Fills in when the run ends	Попуниће се кад извршавање заврши
+	How long each item spends on the conveyors.	Колико дуго је свака ставка на транспортним тракама.
+	No item has left a conveyor yet	Ниједна ставка још није напустила транспортну траку
+	Share of items by time on a conveyor, in {unit}	Удео ставки према времену на транспортној траци, у {unit}
+	Time on conveyors: {n} items between {lo} and {hi} {unit}	Време на транспортним тракама: {n} ставки између {lo} и {hi} {unit}
+	{from} to {to} {unit}: {share} of items ({n})	Од {from} до {to} {unit}: {share} ставки ({n})
+	Items on conveyors over time	Ставке на транспортним тракама кроз време
+	Items in the model over time	Ставке у моделу кроз време
+	How many items are on the conveyors over time.	Колико је ставки на транспортним тракама кроз време.
+	How many items are in the model over time.	Колико је ставки у моделу кроз време.
+	Nothing was recorded over time in these results	У овим резултатима ништа није забележено кроз време
+	At {time} {unit}: {n} items	У {time} {unit}: {n} ставки
+	Run the model to fill the dashboard	Покрените модел да се контролна табла попуни
+	The resource and conveyor charts show the last run until this one ends	Графикони ресурса и транспортних трака приказују последње извршавање док ово не заврши

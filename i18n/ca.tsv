@@ -975,3 +975,33 @@ unit	yr	a
 	3D view of the model	Vista 3D del model
 	Drag to orbit · Scroll to zoom · Shift-drag to pan	Arrossegueu per orbitar · Desplaceu per ampliar · Maj i arrossegueu per desplaçar
 	Parcel sorter	Classificador de paquets
+	Dashboard	Tauler
+	Throughput	Rendiment
+	{n} per hour	{n} per hora
+	95% interval {low} to {high} per hour	Interval del 95 %: de {low} a {high} per hora
+	So far in the run being watched	Fins ara en l'execució observada
+	No sink in this model	No hi ha cap sortida en aquest model
+	Nothing left the model in this run	En aquesta execució res no ha sortit del model
+	Everything that left the model through its sinks, per hour.	Tot el que ha sortit del model per les seves sortides, per hora.
+	Utilisation by resource	Utilització per recurs
+	{name}: {busy} busy	{name}: {busy} ocupat
+	Idle	Inactiu
+	and {n} more	i {n} més
+	How each resource spends its time, and its busy share.	Com passa el temps cada recurs i la seva part d'ocupació.
+	No resource reports how it spends its time	Cap recurs informa de com passa el temps
+	Time on conveyors	Temps a les cintes transportadores
+	No conveyors in this model	No hi ha cintes transportadores en aquest model
+	Fills in when the run ends	S'omple quan acaba l'execució
+	How long each item spends on the conveyors.	Quant de temps passa cada peça a les cintes transportadores.
+	No item has left a conveyor yet	Cap peça no ha sortit encara d'una cinta
+	Share of items by time on a conveyor, in {unit}	Proporció de peces segons el temps en una cinta, en {unit}
+	Time on conveyors: {n} items between {lo} and {hi} {unit}	Temps a les cintes: {n} peces entre {lo} i {hi} {unit}
+	{from} to {to} {unit}: {share} of items ({n})	De {from} a {to} {unit}: {share} de les peces ({n})
+	Items on conveyors over time	Peces a les cintes al llarg del temps
+	Items in the model over time	Peces al model al llarg del temps
+	How many items are on the conveyors over time.	Quantes peces hi ha a les cintes al llarg del temps.
+	How many items are in the model over time.	Quantes peces hi ha al model al llarg del temps.
+	Nothing was recorded over time in these results	En aquests resultats no s'ha enregistrat res al llarg del temps
+	At {time} {unit}: {n} items	A {time} {unit}: {n} peces
+	Run the model to fill the dashboard	Executeu el model per omplir el tauler
+	The resource and conveyor charts show the last run until this one ends	Els gràfics de recursos i cintes mostren l'última execució fins que aquesta acabi

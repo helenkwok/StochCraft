@@ -975,3 +975,33 @@ unit	yr	år
 	3D view of the model	3D-visning av modellen
 	Drag to orbit · Scroll to zoom · Shift-drag to pan	Dra for å rotere · Rull for å zoome · Shift og dra for å panorere
 	Parcel sorter	Pakkesorterer
+	Dashboard	Dashbord
+	Throughput	Gjennomstrømning
+	{n} per hour	{n} per time
+	95% interval {low} to {high} per hour	95 %-intervall {low} til {high} per time
+	So far in the run being watched	Så langt i den fulgte kjøringen
+	No sink in this model	Ingen utgang i denne modellen
+	Nothing left the model in this run	Ingenting forlot modellen i denne kjøringen
+	Everything that left the model through its sinks, per hour.	Alt som forlot modellen gjennom utgangene, per time.
+	Utilisation by resource	Utnyttelse per ressurs
+	{name}: {busy} busy	{name}: {busy} opptatt
+	Idle	Ledig
+	and {n} more	og {n} til
+	How each resource spends its time, and its busy share.	Hvordan hver ressurs bruker tiden sin, og andelen opptatt.
+	No resource reports how it spends its time	Ingen ressurs rapporterer hvordan den bruker tiden
+	Time on conveyors	Tid på transportbånd
+	No conveyors in this model	Ingen transportbånd i denne modellen
+	Fills in when the run ends	Fylles når kjøringen er ferdig
+	How long each item spends on the conveyors.	Hvor lenge hver enhet er på transportbåndene.
+	No item has left a conveyor yet	Ingen enhet har forlatt et transportbånd ennå
+	Share of items by time on a conveyor, in {unit}	Andel enheter etter tid på et transportbånd, i {unit}
+	Time on conveyors: {n} items between {lo} and {hi} {unit}	Tid på transportbånd: {n} enheter mellom {lo} og {hi} {unit}
+	{from} to {to} {unit}: {share} of items ({n})	{from} til {to} {unit}: {share} av enhetene ({n})
+	Items on conveyors over time	Enheter på transportbånd over tid
+	Items in the model over time	Enheter i modellen over tid
+	How many items are on the conveyors over time.	Hvor mange enheter som er på transportbåndene over tid.
+	How many items are in the model over time.	Hvor mange enheter som er i modellen over tid.
+	Nothing was recorded over time in these results	Ingenting ble registrert over tid i disse resultatene
+	At {time} {unit}: {n} items	Ved {time} {unit}: {n} enheter
+	Run the model to fill the dashboard	Kjør modellen for å fylle dashbordet
+	The resource and conveyor charts show the last run until this one ends	Diagrammene for ressurser og transportbånd viser den siste kjøringen til denne er ferdig

@@ -975,3 +975,33 @@ unit	yr	वर्ष
 	3D view of the model	मॉडल का 3D दृश्य
 	Drag to orbit · Scroll to zoom · Shift-drag to pan	घुमाने के लिए खींचें · ज़ूम के लिए स्क्रॉल करें · खिसकाने के लिए Shift दबाकर खींचें
 	Parcel sorter	पार्सल सॉर्टर
+	Dashboard	डैशबोर्ड
+	Throughput	थ्रूपुट
+	{n} per hour	प्रति घंटा {n}
+	95% interval {low} to {high} per hour	95% अंतराल: प्रति घंटा {low} से {high}
+	So far in the run being watched	देखे जा रहे रन में अब तक
+	No sink in this model	इस मॉडल में कोई निकास नहीं है
+	Nothing left the model in this run	इस रन में मॉडल से कुछ भी बाहर नहीं गया
+	Everything that left the model through its sinks, per hour.	निकासों के रास्ते मॉडल से बाहर गया सब कुछ, प्रति घंटा।
+	Utilisation by resource	संसाधन के अनुसार उपयोग
+	{name}: {busy} busy	{name}: {busy} व्यस्त
+	Idle	निष्क्रिय
+	and {n} more	और {n} और
+	How each resource spends its time, and its busy share.	हर संसाधन अपना समय कैसे बिताता है और उसका व्यस्त हिस्सा।
+	No resource reports how it spends its time	कोई संसाधन नहीं बताता कि वह अपना समय कैसे बिताता है
+	Time on conveyors	कन्वेयर पर समय
+	No conveyors in this model	इस मॉडल में कोई कन्वेयर नहीं है
+	Fills in when the run ends	रन पूरा होने पर भरेगा
+	How long each item spends on the conveyors.	हर वस्तु कन्वेयर पर कितना समय बिताती है।
+	No item has left a conveyor yet	अभी तक कोई वस्तु कन्वेयर से बाहर नहीं निकली
+	Share of items by time on a conveyor, in {unit}	कन्वेयर पर समय के अनुसार वस्तुओं का हिस्सा, {unit} में
+	Time on conveyors: {n} items between {lo} and {hi} {unit}	कन्वेयर पर समय: {lo} और {hi} {unit} के बीच {n} वस्तुएँ
+	{from} to {to} {unit}: {share} of items ({n})	{from} से {to} {unit}: वस्तुओं का {share} ({n})
+	Items on conveyors over time	समय के साथ कन्वेयर पर वस्तुएँ
+	Items in the model over time	समय के साथ मॉडल में वस्तुएँ
+	How many items are on the conveyors over time.	समय के साथ कन्वेयर पर कितनी वस्तुएँ हैं।
+	How many items are in the model over time.	समय के साथ मॉडल में कितनी वस्तुएँ हैं।
+	Nothing was recorded over time in these results	इन परिणामों में समय के साथ कुछ भी दर्ज नहीं हुआ
+	At {time} {unit}: {n} items	{time} {unit} पर: {n} वस्तुएँ
+	Run the model to fill the dashboard	डैशबोर्ड भरने के लिए मॉडल चलाएँ
+	The resource and conveyor charts show the last run until this one ends	संसाधन और कन्वेयर के चार्ट इस रन के खत्म होने तक पिछला रन दिखाते हैं
