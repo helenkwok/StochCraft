@@ -211,7 +211,6 @@ impl App {
         chart_palette::use_palette(&ctx, &self.active_chart_palette(), canvas);
         self.shortcuts(&ctx);
         self.tick_watching(&ctx);
-        self.mark_stale_results();
         self.guide.targets = guide::Targets::default();
         let p = theme::palette(&ctx);
 

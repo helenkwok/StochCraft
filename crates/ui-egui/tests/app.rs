@@ -273,6 +273,37 @@ fn a_baseline_is_compared_with_the_next_run() {
 }
 
 #[test]
+fn what_changed_since_the_baseline_follows_the_interface_language() {
+    let mut h = Harness::builder()
+        .with_size(egui::vec2(1600.0, 900.0))
+        .build_ui_state(
+            |ui, app: &mut App| app.ui(ui),
+            english(App::new(Platform::DESKTOP)),
+        );
+    h.run();
+    menu(&mut h, &["File", "Open Example", "M/M/1 queue"]);
+    menu(&mut h, &["Model", "Run"]);
+    finish_run(&mut h);
+    click(&mut h, "Keep as baseline");
+    h.state_mut()
+        .execute("block.set", json!({ "id": "serve", "capacity": 2 }));
+    settle(&mut h);
+    menu(&mut h, &["Model", "Run"]);
+    finish_run(&mut h);
+    let english_line = "Serve customer \u{203a} Capacity: 1 \u{2192} 2";
+    h.get_by_label(english_line);
+    // In German the list of changes is written again, not kept from before.
+    h.state_mut().set_language(Some("de"));
+    settle(&mut h);
+    assert!(h.query_by_label(english_line).is_none());
+    assert!(
+        h.query_all_by_label_contains("Serve customer \u{203a} ")
+            .count()
+            > 0
+    );
+}
+
+#[test]
 fn the_start_page_asks_what_to_find_out() {
     let mut h = harness(Platform::DESKTOP);
     h.get_by_label("What do you want to find out?");
@@ -879,6 +910,143 @@ fn exporting_the_charts_brings_them_into_view_first() {
     // Scrolled into view before the screenshot is asked for.
     let top = h.get_by_label(title).rect().top();
     assert!(top > 0.0 && bottom(&h) < 700.0, "{top} {}", bottom(&h));
+    // They fit, so the capture went ahead.
+    assert!(
+        !h.state().status().starts_with("The charts are taller"),
+        "{}",
+        h.state().status()
+    );
+}
+
+#[test]
+fn charts_taller_than_the_window_are_not_exported_in_part() {
+    // Too short a window for the charts to be on screen whole, however far it scrolls.
+    let mut h = Harness::builder()
+        .with_size(egui::vec2(1000.0, 300.0))
+        .build_ui_state(
+            |ui, app: &mut App| app.ui(ui),
+            english(App::new(Platform::DESKTOP)),
+        );
+    h.run();
+    let e = &stochcraft_ui_egui::EXAMPLES[0];
+    h.state_mut().open_file(e.file, e.bytes);
+    h.state_mut().run();
+    finish_run(&mut h);
+    assert!(h.state().results().is_some(), "{}", h.state().status());
+    click(&mut h, "Export charts (PNG)");
+    for _ in 0..6 {
+        h.step();
+    }
+    assert_eq!(
+        h.state().status(),
+        "The charts are taller than the window: make the window taller, then export them again."
+    );
+    assert_eq!(h.state_mut().take_requests(), vec![]);
+}
+
+#[test]
+fn the_results_tab_before_the_first_run_offers_to_run() {
+    let mut h = harness(Platform::DESKTOP);
+    menu(&mut h, &["File", "Open Example", "M/M/1 queue"]);
+    h.get_by_role_and_label(egui::accesskit::Role::Tab, "Results")
+        .click();
+    settle(&mut h);
+    h.get_by_label("No results yet");
+    click(&mut h, "Run experiment");
+    finish_run(&mut h);
+    assert!(h.state().results().is_some());
+    assert!(h.query_by_label("No results yet").is_none());
+}
+
+#[test]
+fn results_are_marked_out_of_date_in_the_frame_an_undo_from_the_menu_makes() {
+    let mut h = harness(Platform::DESKTOP);
+    menu(&mut h, &["File", "Open Example", "M/M/1 queue"]);
+    menu(&mut h, &["Model", "Run"]);
+    finish_run(&mut h);
+    h.state_mut()
+        .execute("block.set", json!({ "id": "serve", "capacity": 2 }));
+    settle(&mut h);
+    h.get_by_label("Out of date:");
+    // Edit ▸ Undo in the window's menu bar, drawn before the Results view: every frame, the
+    // view says what the model is now.
+    h.get_by_role_and_label(egui::accesskit::Role::MenuItem, "Edit")
+        .click();
+    settle(&mut h);
+    // The item's label carries what it undoes ("Undo …").
+    h.get_by_label_contains("Undo ").click();
+    for _ in 0..4 {
+        h.step();
+        assert_eq!(
+            h.query_by_label("Out of date:").is_some(),
+            h.state().results_out_of_date()
+        );
+    }
+    assert!(!h.state().results_out_of_date(), "undone");
+}
+
+#[test]
+fn the_new_file_question_holds_back_shortcuts() {
+    let mut h = harness(Platform::DESKTOP);
+    menu(&mut h, &["File", "Open Example", "Tandem line"]);
+    h.state_mut().save_to("/tmp/tandem.bpmn");
+    settle(&mut h);
+    h.get_by_label("Save as a new BPMN file?");
+    assert!(h.state().has_open_dialog());
+    // File ▸ New's shortcut waits: the model the question is about stays.
+    h.key_press_modifiers(egui::Modifiers::COMMAND, egui::Key::N);
+    settle(&mut h);
+    assert!(!h.state().engine().model().elements.is_empty());
+    h.get_by_label("Save as a new BPMN file?");
+    click(&mut h, "Cancel");
+    assert!(!h.state().has_open_dialog());
+}
+
+#[test]
+fn an_error_elsewhere_during_a_save_keeps_what_follows_it() {
+    let mut h = harness(Platform::DESKTOP);
+    h.state_mut()
+        .execute("model.rename", json!({ "name": "Draft" }));
+    settle(&mut h);
+    menu(&mut h, &["File", "New"]);
+    click(&mut h, "Save");
+    assert!(matches!(
+        h.state_mut().take_requests().as_slice(),
+        [Request::PickSave { .. }]
+    ));
+    // While the Save dialog is open, something unrelated fails (the settings, say).
+    h.state_mut()
+        .report_error("the settings could not be saved");
+    h.state_mut().save_to("/tmp/Draft.bpmn");
+    let Some(Request::Write { path, bytes }) = h.state_mut().take_requests().pop() else {
+        panic!("expected a write");
+    };
+    h.state_mut().written(&path, &bytes);
+    settle(&mut h);
+    assert_eq!(h.state().engine().model().name, "", "New followed the save");
+}
+
+#[test]
+fn a_save_dialog_that_fails_drops_the_agreement_to_a_new_file() {
+    let mut h = mm1_with_a_new_pool(Platform::DESKTOP);
+    menu(&mut h, &["File", "New"]);
+    click(&mut h, "Save");
+    h.get_by_label("Save as a new BPMN file?");
+    click(&mut h, "Save As…");
+    assert!(matches!(
+        h.state_mut().take_requests().as_slice(),
+        [Request::PickSave { .. }]
+    ));
+    // The Save dialog can't be shown: nothing is saved and New does not follow.
+    h.state_mut().save_failed("no file dialog");
+    settle(&mut h);
+    assert_eq!(h.state().status(), "no file dialog");
+    assert_eq!(h.state().engine().model().resources.len(), 1, "no New");
+    // A later Save As asks again before it writes a new file.
+    h.state_mut().save_to("/tmp/mm1-copy.bpmn");
+    assert_eq!(h.state_mut().take_requests(), vec![], "asked first");
+    settle(&mut h);
+    h.get_by_label("Save as a new BPMN file?");
 }
 
 /// Workers that run the replications they are given on this thread, the last first, two per

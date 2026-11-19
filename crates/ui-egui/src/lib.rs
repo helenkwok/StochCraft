@@ -8,8 +8,8 @@
 //! What differs between platforms stays in the shells. The app never touches the file system or
 //! shows a native dialog: it hands the shell a [`Request`] (pick a file to open, pick where to
 //! save, write these bytes, offer them as a download) through [`App::take_requests`], and the shell
-//! answers by calling [`App::open_file`], [`App::save_to`], [`App::written`] or
-//! [`App::report_error`].
+//! answers by calling [`App::open_file`], [`App::save_to`], [`App::written`],
+//! [`App::save_failed`] or [`App::report_error`].
 
 mod autosave;
 mod baseline;
@@ -312,13 +312,15 @@ pub enum Request {
     /// Read the file at `path` (File ▸ Open Recent); answer with [`App::open_file`], or
     /// [`App::report_error`] if it can't be read.
     OpenPath { path: String },
-    /// Ask where to save, suggesting `name`; answer with [`App::save_to`]. BPMN is offered, and
-    /// with `xpdl` XPDL too: the model came from an XPDL file, which it can be saved into.
+    /// Ask where to save, suggesting `name`; answer with [`App::save_to`], with
+    /// [`App::save_cancelled`] if the user closes the dialog, or with [`App::save_failed`] if it
+    /// can't be shown. BPMN is offered, and with `xpdl` XPDL too: the model came from an XPDL
+    /// file, which it can be saved into.
     PickSave { name: String, xpdl: bool },
-    /// Write `bytes` to `path`; answer with [`App::written`] or [`App::report_error`].
+    /// Write `bytes` to `path`; answer with [`App::written`] or [`App::save_failed`].
     Write { path: String, bytes: Vec<u8> },
     /// Offer `bytes` as a download named `name` (where there is no file system); answer with
-    /// [`App::downloaded`] once the download has started, or [`App::report_error`].
+    /// [`App::downloaded`] once the download has started, or [`App::save_failed`].
     Download { name: String, bytes: Vec<u8> },
     /// Save an exported file (results as CSV, charts as PNG) named `name`: ask where (or
     /// download it); answer with [`App::exported`] or [`App::report_error`].
@@ -535,8 +537,9 @@ pub struct App {
     /// Results kept to compare later runs with ("Keep as baseline").
     baseline: Option<baseline::Baseline>,
     /// The engine's comparison of the baseline with the results on show, and what changed in
-    /// the model between them, by their serials.
-    comparison: Option<((u64, u64), Value, Vec<String>)>,
+    /// the model between them, by their serials and the interface language the changes are
+    /// written in.
+    comparison: Option<((u64, u64, craft_i18n::Lang), Value, Vec<String>)>,
     running: Option<Running>,
     /// The shell's workers for runs, if it has any.
     workers: Option<Box<dyn Workers>>,

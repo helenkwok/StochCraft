@@ -1019,3 +1019,4 @@ unit	yr	år
 	x {x} m, y {y} m	x {x} m, y {y} m
 	Unplaced	Ej placerade
 	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	Tills vidare placeras varje block utifrån diagrammet. Ett block som diagrammet utelämnar listas här och ritas inte.
+	The charts are taller than the window: make the window taller, then export them again.	Diagrammen är högre än fönstret: gör fönstret högre och exportera dem sedan igen.
