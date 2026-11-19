@@ -15,6 +15,7 @@ mod autosave;
 mod baseline;
 mod calendars;
 mod canvas;
+mod capacity;
 mod changes;
 mod chart_editor;
 pub mod chart_palette;
@@ -570,6 +571,10 @@ pub struct App {
     /// The work area shows the Analysis view (sweeps, sensitivity, sizing), unless the results
     /// are shown.
     show_analysis: bool,
+    /// The work area shows the Capacity view (the table worked out from the model, no run).
+    show_capacity: bool,
+    /// The Capacity view's target and its table for the model's revision.
+    capacity: capacity::State,
     /// The M2.8 screens' choices and last answers.
     decide: decide::Decide,
     /// The Help panel.
@@ -673,6 +678,8 @@ impl App {
             connect_to: None,
             show_results: false,
             show_analysis: false,
+            show_capacity: false,
+            capacity: capacity::State::default(),
             decide: decide::Decide::default(),
             help: help::Help::default(),
             guide: guide::Guide::default(),
@@ -1218,6 +1225,7 @@ impl App {
         self.drafts.clear();
         self.show_results = false;
         self.show_analysis = false;
+        self.show_capacity = false;
     }
 
     /// Runs an engine command for an agent (the MCP server, through the desktop app's control
@@ -1807,6 +1815,8 @@ impl App {
                     self.results_view(ui);
                 } else if self.show_analysis && has_model && !self.show_results {
                     self.analysis_view(ui);
+                } else if self.show_capacity && has_model && !self.show_results {
+                    self.capacity_view(ui);
                 } else if has_model && !(self.show_results && self.running.is_some()) {
                     self.model_view(ui, &p);
                 } else {
@@ -1867,10 +1877,12 @@ impl App {
                     self.select(std::collections::BTreeSet::from([id.clone()]));
                     self.show_results = false;
                     self.show_analysis = false;
+                    self.show_capacity = false;
                 }
                 Some(guide::Target::Chip(_)) => {
                     self.show_results = false;
                     self.show_analysis = false;
+                    self.show_capacity = false;
                 }
                 _ => {}
             }
@@ -2223,16 +2235,24 @@ impl App {
     fn tabs(&mut self, ui: &mut egui::Ui, p: &theme::Palette) {
         // craft-ui's Tab: an accessible tab (role, keyboard focus) the app lays out and paints.
         let font = egui::FontId::new(14.0, egui::FontFamily::Name(theme::STRONG.into()));
-        ui.horizontal(|ui| {
-            // 0: the model, 1: the results, 2: the Analysis view.
+        // Wrapped: four tabs and the results note must not widen the work area past the window.
+        ui.horizontal_wrapped(|ui| {
+            // 0: the model, 1: the results, 2: the Analysis view, 3: the Capacity view.
             let current = if self.show_results {
                 1
             } else if self.show_analysis {
                 2
+            } else if self.show_capacity {
+                3
             } else {
                 0
             };
-            for (label, view) in [(t("Model"), 0), (t("Results"), 1), (t("Analysis"), 2)] {
+            for (label, view) in [
+                (t("Model"), 0),
+                (t("Results"), 1),
+                (t("Analysis"), 2),
+                (t("Capacity"), 3),
+            ] {
                 let on = current == view;
                 let width = ui.fonts_mut(|f| {
                     f.layout_no_wrap(label.into(), font.clone(), p.text)
@@ -2273,6 +2293,7 @@ impl App {
                 if r.clicked() {
                     self.show_results = view == 1;
                     self.show_analysis = view == 2;
+                    self.show_capacity = view == 3;
                 }
             }
             if self.results.is_none() && self.running.is_none() {
@@ -2483,6 +2504,7 @@ impl App {
                                 self.add_block(kind);
                                 self.show_results = false;
                                 self.show_analysis = false;
+                                self.show_capacity = false;
                             }
                         }
                     },
@@ -2542,6 +2564,7 @@ impl App {
             self.selected = sel;
             self.show_results = false;
             self.show_analysis = false;
+            self.show_capacity = false;
         }
         let model = self.engine.model();
         ui.with_layout(egui::Layout::bottom_up(egui::Align::Min), |ui| {

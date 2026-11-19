@@ -923,3 +923,34 @@ unit	yr	yıl
 @plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	İkisi de {seed} rastgelelik tohumunu ve aynı {n} çalıştırmayı kullandı; böylece her çalıştırma eşiyle aynı rastgele sayıları alır: farklar şans çekilişlerinden değil, değişiklikten gelir.|İkisi de {seed} rastgelelik tohumunu ve aynı {n} çalıştırmayı kullandı; böylece her çalıştırma eşiyle aynı rastgele sayıları alır: farklar şans çekilişlerinden değil, değişiklikten gelir.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	Diğer {n} temel ölçüt, şansın yapabileceğinden fazla değişmedi.|Diğer {n} temel ölçüt, şansın yapabileceğinden fazla değişmedi.
 @plural	and {n} more change|and {n} more changes	ve {n} değişiklik daha|ve {n} değişiklik daha
+	Station	İstasyon
+	Kind	Tür
+	Service	Hizmet
+	Load	Yük
+	Status	Durum
+	Units for {target}%	{target} % için birim
+	Formula	Formül
+	Simulated utilisation	Simüle edilen kullanım
+	Simulated mean wait	Simüle edilen ortalama bekleme
+	Target utilisation	Hedef kullanım
+	Must be above 0% and below 100%	0 %'nin üzerinde ve 100 %'ün altında olmalı
+	The utilisation above which a station counts as congested	Bir istasyonun tıkanmış sayıldığı kullanım düzeyi
+	Fine	İyi
+	Congested	Tıkanmış
+	Unstable	Kararsız
+	Unknown	Bilinmiyor
+	up to {n}	en çok {n}
+	Bottleneck: {name} (load {load}).	Darboğaz: {name} (yük {load}).
+	Bottleneck: not known before a run (a load not known, or only bounded, could be the highest).	Darboğaz: çalıştırmadan önce bilinmiyor (bilinmeyen veya yalnızca sınırlı bir yük en yüksek olabilir).
+	Not known before a run:	Çalıştırmadan önce bilinmiyor:
+	No exact formula for the wait:	Bekleme için kesin formül yok:
+	Utilisation is arrivals × service ÷ units, as the results count it; the load is that over the units' availability. A run adds what variability and blocking cost.	Kullanım, gelişler × hizmet ÷ birim olarak sonuçların saydığı gibidir; yük, bunun birimlerin kullanılabilirliğine oranıdır. Bir çalıştırma, değişkenliğin ve tıkanmanın maliyetini ekler.
+	No servers, shared tasks, delays or pools.	Sunucu, ortak görev, gecikme veya havuz yok.
+	arrival rate	geliş hızı
+	service time	hizmet süresi
+	utilisation	kullanım
+	{station}: {what}: {message}.	{station}: {what}: {message}.
+	{station}: {message}.	{station}: {message}.
+	From the last run; – when there are none, or they are out of date.	Son çalıştırmadan; – yoksa veya güncel değilse.
+	Show this block	Bu bloğu göster
+	Rates and times are per {unit}.	Hızlar ve süreler {unit} başınadır.

@@ -923,3 +923,34 @@ unit	yr	năm
 @plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Cả hai dùng hạt giống ngẫu nhiên {seed} và cùng {n} lần chạy, nên mỗi lần chạy nhận cùng các số ngẫu nhiên như lần chạy cặp với nó: khác biệt đến từ thay đổi, không phải từ các lần rút ngẫu nhiên.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	{n} chỉ số chính khác thay đổi không quá mức ngẫu nhiên có thể gây ra.
 @plural	and {n} more change|and {n} more changes	và {n} thay đổi khác
+	Station	Trạm
+	Kind	Loại
+	Service	Phục vụ
+	Load	Tải
+	Status	Trạng thái
+	Units for {target}%	Số đơn vị cho {target}%
+	Formula	Công thức
+	Simulated utilisation	Mức sử dụng mô phỏng
+	Simulated mean wait	Thời gian chờ trung bình mô phỏng
+	Target utilisation	Mức sử dụng mục tiêu
+	Must be above 0% and below 100%	Phải lớn hơn 0% và nhỏ hơn 100%
+	The utilisation above which a station counts as congested	Mức sử dụng mà trên đó một trạm bị coi là tắc nghẽn
+	Fine	Tốt
+	Congested	Tắc nghẽn
+	Unstable	Không ổn định
+	Unknown	Không rõ
+	up to {n}	tối đa {n}
+	Bottleneck: {name} (load {load}).	Nút cổ chai: {name} (tải {load}).
+	Bottleneck: not known before a run (a load not known, or only bounded, could be the highest).	Nút cổ chai: chưa biết trước khi chạy (một tải chưa biết, hoặc chỉ có giới hạn, có thể là cao nhất).
+	Not known before a run:	Chưa biết trước khi chạy:
+	No exact formula for the wait:	Không có công thức chính xác cho thời gian chờ:
+	Utilisation is arrivals × service ÷ units, as the results count it; the load is that over the units' availability. A run adds what variability and blocking cost.	Mức sử dụng là lượt đến × phục vụ ÷ số đơn vị, như kết quả tính; tải là giá trị đó so với độ sẵn sàng của các đơn vị. Một lần chạy thêm phần chi phí do biến động và nghẽn.
+	No servers, shared tasks, delays or pools.	Không có máy chủ, tác vụ dùng chung, độ trễ hoặc nhóm.
+	arrival rate	tốc độ đến
+	service time	thời gian phục vụ
+	utilisation	mức sử dụng
+	{station}: {what}: {message}.	{station}: {what}: {message}.
+	{station}: {message}.	{station}: {message}.
+	From the last run; – when there are none, or they are out of date.	Từ lần chạy gần nhất; – nếu chưa có hoặc đã cũ.
+	Show this block	Hiện khối này
+	Rates and times are per {unit}.	Tốc độ và thời gian tính theo {unit}.

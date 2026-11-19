@@ -2050,7 +2050,7 @@ pub static COMMANDS: &[Command] = &[
     },
     Command {
         name: "model.capacity",
-        summary: "The capacity table, without running: each server's, shared task's, delay's and                   pool's arrival rate, mean service time, units, utilisation and load (marked                   fine, congested above `target`, default 0.85, or unstable at 100%), the units                   that would bring it under the target, and its mean wait where a queueing                   formula holds exactly (M/M/c, M/M/c/K, Erlang A, balking, M/G/1), or why not;                   rates that depend on the run are not guessed. Rates and times in the model's                   time unit.",
+        summary: "The capacity table, without running: each server's, shared task's, delay's and pool's arrival rate, mean service time, units, utilisation and load (marked fine, congested above `target`, default 0.85, or unstable at 100%), the units that would bring it under the target, and its mean wait where a queueing formula holds exactly (M/M/c, M/M/c/K, Erlang A, balking, M/G/1), or why not; rates that depend on the run are not guessed. Rates and times in the model's time unit.",
         kind: CommandKind::Query,
         schema: schema::<CapacityParams>,
         example: || json!({ "target": 0.85 }),
