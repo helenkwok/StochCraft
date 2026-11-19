@@ -14,10 +14,10 @@ use crate::edit::Op;
 use crate::run::RunMode;
 use crate::wire::{
     self, AvailabilityDoc, BalkingSpec, BreakdownSpec, DemandSpec, DistSpec, EstimateDoc, EventDoc,
-    FamilySpec, HealthCheckSpec, KindSpec, LengthUnitSpec, ModelDoc, NeedSpec, OnShiftEndSpec,
-    PatienceSpec, PowerSpec, ProcessingBySpec, PropertyDoc, PropertyTypeSpec, PropertyValueSpec,
-    QueueShiftDoc, RoutingSpec, ScrapSpec, SetupSpec, ShiftDoc, Stamp, StopSpec, TimeUnitSpec,
-    TimedDist,
+    FamilySpec, HealthCheckSpec, KindSpec, LengthUnitSpec, MobilityDoc, ModelDoc, NeedSpec,
+    OnShiftEndSpec, PatienceSpec, PowerSpec, ProcessingBySpec, PropertyDoc, PropertyTypeSpec,
+    PropertyValueSpec, QueueShiftDoc, RoutingSpec, ScrapSpec, SetupSpec, ShiftDoc, Stamp, StopSpec,
+    TimeUnitSpec, TimedDist,
 };
 use crate::{CommandError, Engine, ErrorCode, HistoryEntry};
 
@@ -129,6 +129,7 @@ fn check_keys(v: &Value, extra: &[&str]) -> Result<(), CommandError> {
         Some("exclusive_gateway") => &["default", "routing"],
         Some("batch") => &["size"],
         Some("conveyor") => &["length", "speed", "accumulating", "item_length", "gap"],
+        Some("transport") => &["pool", "load", "unload"],
         _ => &[],
     };
     for k in obj.keys() {
@@ -487,6 +488,15 @@ pub struct BlockSet {
     /// Conveyors: the least free belt between one entity and the next; 0 or more.
     #[serde(default)]
     pub gap: Option<f64>,
+    /// Transports: the id of the mobile pool whose units carry the items.
+    #[serde(default)]
+    pub pool: Option<String>,
+    /// Transports: the time to load an item at the pickup.
+    #[serde(default)]
+    pub load: Option<DistSpec>,
+    /// Transports: the time to unload an item at the drop-off.
+    #[serde(default)]
+    pub unload: Option<DistSpec>,
 }
 
 /// A new shared resource pool.
@@ -505,6 +515,10 @@ pub struct ResourceAdd {
     /// The roles its units play, for tasks that need units by role.
     #[serde(default)]
     pub roles: Vec<String>,
+    /// Makes the units mobile, for `transport` blocks: speeds, the home element and what a
+    /// unit does after a job.
+    #[serde(default)]
+    pub mobility: Option<MobilityDoc>,
 }
 
 fn one_unit() -> u32 {
@@ -533,6 +547,10 @@ pub struct ResourceSet {
     /// Replaces the pool's availability while each calendar is active.
     #[serde(default)]
     pub availability: Option<Vec<AvailabilityDoc>>,
+    /// The pool's mobility (see `resource.add`); `null` makes its units stay where they are.
+    #[serde(default, deserialize_with = "some")]
+    #[schemars(with = "Option<MobilityDoc>")]
+    pub mobility: Option<Option<MobilityDoc>>,
 }
 
 /// A new calendar.
@@ -652,6 +670,10 @@ pub struct ExperimentSet {
     /// the model.
     #[serde(default)]
     pub length_unit: Option<LengthUnitSpec>,
+    /// Length units per drawing unit of the canvas, above 0: a distance between two elements
+    /// (for a transport) is the straight line between their centres, times this.
+    #[serde(default)]
+    pub layout_scale: Option<f64>,
     /// Time before statistics are collected.
     #[serde(default)]
     pub warmup: Option<f64>,
@@ -1322,6 +1344,9 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         ("accumulating", p.accumulating.is_some()),
         ("item_length", p.item_length.is_some()),
         ("gap", p.gap.is_some()),
+        ("pool", p.pool.is_some()),
+        ("load", p.load.is_some()),
+        ("unload", p.unload.is_some()),
     ];
     let applies: &[&str] = match kind {
         ElementKind::Source { .. } => &["interarrival", "limit", "timed", "idle_outside"],
@@ -1352,6 +1377,7 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         ElementKind::Batch { .. } => &["size"],
         ElementKind::Sink { .. } => &["scrap", "demand"],
         ElementKind::Conveyor { .. } => &["length", "speed", "accumulating", "item_length", "gap"],
+        ElementKind::Transport { .. } => &["pool", "load", "unload"],
         ElementKind::ParallelGateway | ElementKind::Unbatch => &[],
     };
     if let Some((name, _)) = given.iter().find(|(n, g)| *g && !applies.contains(n)) {
@@ -1559,6 +1585,17 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
                 *gap = x;
             }
         }
+        ElementKind::Transport { pool, load, unload } => {
+            if let Some(x) = p.pool {
+                *pool = ElementId::unchecked(&x);
+            }
+            if let Some(d) = p.load {
+                *load = d.into();
+            }
+            if let Some(d) = p.unload {
+                *unload = d.into();
+            }
+        }
         ElementKind::ParallelGateway | ElementKind::Unbatch => {}
     }
     e.edit("block.set", Op::SetKind(id, kind))?;
@@ -1582,12 +1619,14 @@ fn resource_add(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
     let p: ResourceAdd = parse(p)?;
     let id = new_id(e, p.id.as_deref(), "resource")?;
     let mut pools = e.model().resources.clone();
-    pools.push(ResourcePool::new(
+    let mut pool = ResourcePool::new(
         id.clone(),
         p.name.unwrap_or_else(|| id.to_string()),
         p.quantity,
         p.roles,
-    ));
+    );
+    pool.mobility = p.mobility.map(Into::into);
+    pools.push(pool);
     e.edit("resource.add", Op::SetResources(pools))?;
     Ok(json!({ "id": id.as_str() }))
 }
@@ -1601,6 +1640,7 @@ fn resource_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         && p.shifts.is_none()
         && p.available.is_none()
         && p.availability.is_none()
+        && p.mobility.is_none()
     {
         return Err(CommandError::new(
             ErrorCode::InvalidParams,
@@ -1626,6 +1666,9 @@ fn resource_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         }
         if let Some(a) = p.availability {
             r.availability = a.into_iter().map(Into::into).collect();
+        }
+        if let Some(m) = p.mobility {
+            r.mobility = m.map(Into::into);
         }
     }
     e.edit("resource.set", Op::SetResources(pools))?;
@@ -1954,6 +1997,7 @@ fn experiment_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
     if let Some(u) = p.length_unit {
         x.length_unit = u.into();
     }
+    x.layout_scale = p.layout_scale.unwrap_or(x.layout_scale);
     x.warmup = p.warmup.unwrap_or(x.warmup);
     x.duration = p.duration.unwrap_or(x.duration);
     x.replications = p.replications.unwrap_or(x.replications);
@@ -1972,6 +2016,7 @@ fn experiment_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         p.start.is_some(),
         p.time_unit.is_some(),
         p.length_unit.is_some(),
+        p.layout_scale.is_some(),
         p.warmup.is_some(),
         p.duration.is_some(),
         p.replications.is_some(),

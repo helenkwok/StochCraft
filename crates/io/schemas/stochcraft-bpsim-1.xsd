@@ -238,6 +238,31 @@
   stochcraft:lengthUnit, on the scenario's ScenarioParameters, with the value mm, cm, m, km, in
   or ft: the unit lengths are in (metres without it).
 
+  stochcraft:layoutScale, on the scenario's ScenarioParameters, with a number above 0 as its
+  value: the length units per drawing unit of the diagram (1 without it). The distance between
+  two elements is the straight line between the centres of their shapes, times this.
+
+  stochcraft:transport, on a task's ElementParameters: the task carries each item from the
+  element before it to the element after it with a unit of the mobile resource `pool`. The unit
+  loads for a time drawn from load and unloads for one drawn from unload. Other tools see a
+  plain task.
+
+    <bpsim:VendorExtension name="stochcraft:transport" xmlns:stochcraft="…">
+      <stochcraft:transport pool="operators">
+        <stochcraft:load><bpsim:FloatingParameter value="1"/></stochcraft:load>
+        <stochcraft:unload><bpsim:FloatingParameter value="1"/></stochcraft:unload>
+      </stochcraft:transport>
+    </bpsim:VendorExtension>
+
+  stochcraft:mobility, on a resource's ElementParameters (with stochcraft:pool): its units move.
+  speedEmpty and speedLoaded (above 0) are in the scenario's length unit per base time unit;
+  home is the id of the element the units start at; afterJob is stay (where the unit put the
+  item down) or goHome.
+
+    <bpsim:VendorExtension name="stochcraft:mobility" xmlns:stochcraft="…">
+      <stochcraft:mobility speedEmpty="1" speedLoaded="2" home="store" afterJob="stay"/>
+    </bpsim:VendorExtension>
+
   stochcraft:stopCount, on an element's ElementParameters: each replication ends once this many
   entities (a whole number of at least 1) have left the element since time 0 (for an end event:
   arrived there), or at the scenario's duration if that comes first.
@@ -441,6 +466,30 @@
       <xs:attribute name="accumulating" type="xs:boolean" use="required"/>
       <xs:attribute name="itemLength" type="xs:double" use="required"/>
       <xs:attribute name="gap" type="xs:double" use="required"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="transport">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="load" type="stochcraft:Value"/>
+        <xs:element name="unload" type="stochcraft:Value"/>
+      </xs:sequence>
+      <xs:attribute name="pool" type="xs:string" use="required"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="mobility">
+    <xs:complexType>
+      <xs:attribute name="speedEmpty" type="xs:double" use="required"/>
+      <xs:attribute name="speedLoaded" type="xs:double" use="required"/>
+      <xs:attribute name="home" type="xs:string" use="required"/>
+      <xs:attribute name="afterJob" use="required">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="stay"/>
+            <xs:enumeration value="goHome"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
     </xs:complexType>
   </xs:element>
   <xs:element name="estimate">

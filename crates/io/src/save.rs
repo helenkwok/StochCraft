@@ -23,11 +23,12 @@ use crate::write::{
     abandoned_element, availability_param, balked_element, balking_element, batching_element,
     bpmn_local, breakdown_element, calendar_element, changeover_element, condition_element,
     conveyor_element, demand_element, dist_element, edge_ends, estimate_element,
-    health_check_element, interruptible_param, numeric, on_shift_end_element, own_marker,
-    patience_element, planned_element, power_element, probability_element, processing_by_element,
-    property_element, quantity_element, quantity_param, queue_capacity_element, rework_element,
-    routing_element, scrap_element, size, start_param, stop_element, timer_param, transfer_element,
-    turned_away_element, units_param, vendor_value_element,
+    health_check_element, interruptible_param, mobility_element, numeric, on_shift_end_element,
+    own_marker, patience_element, planned_element, power_element, probability_element,
+    processing_by_element, property_element, quantity_element, quantity_param,
+    queue_capacity_element, rework_element, routing_element, scrap_element, size, start_param,
+    stop_element, timer_param, transfer_element, transport_element, turned_away_element,
+    units_param, vendor_value_element,
 };
 use crate::xml::{self, Element, Node};
 use crate::{Format, SaveError};
@@ -718,7 +719,8 @@ fn category(k: &ElementKind) -> u8 {
         | ElementKind::Delay { .. }
         | ElementKind::Batch { .. }
         | ElementKind::Unbatch
-        | ElementKind::Conveyor { .. } => 2,
+        | ElementKind::Conveyor { .. }
+        | ElementKind::Transport { .. } => 2,
         ElementKind::ExclusiveGateway { .. } => 3,
         ElementKind::ParallelGateway => 4,
     }
@@ -2367,7 +2369,10 @@ impl Editor {
                         writes.push((id.clone(), "PriorityParameters", "Priority", v));
                     }
                 }
-                ElementKind::Batch { .. } | ElementKind::Unbatch | ElementKind::Conveyor { .. } => {
+                ElementKind::Batch { .. }
+                | ElementKind::Unbatch
+                | ElementKind::Conveyor { .. }
+                | ElementKind::Transport { .. } => {
                     // A batch, a split or a conveyor takes no time and holds no resource.
                     if matches!(
                         was,
@@ -2491,6 +2496,25 @@ impl Editor {
                     conveyor_element(&e.kind),
                 ));
             }
+            // A transport's vendor extension, where it changed; gone when the element stops
+            // being a transport.
+            let carry_changed = match (was, &e.kind) {
+                (
+                    Some(old @ ElementKind::Transport { .. }),
+                    new @ ElementKind::Transport { .. },
+                ) => old != new,
+                (Some(ElementKind::Transport { .. }), _) | (_, ElementKind::Transport { .. }) => {
+                    true
+                }
+                _ => false,
+            };
+            if carry_changed {
+                vendor_writes.push((
+                    id.clone(),
+                    crate::bpsim::TRANSPORT,
+                    transport_element(&e.kind),
+                ));
+            }
             // An exclusive gateway's routing rule, where that changed.
             let routing = |k: Option<&ElementKind>| match k {
                 Some(ElementKind::ExclusiveGateway { routing, .. }) => *routing,
@@ -2513,6 +2537,9 @@ impl Editor {
         }
         for r in std::mem::take(&mut self.pool_quantity) {
             let id = r.id.to_string();
+            // The pool's mobility, written again (or removed when it has none) as the pool
+            // changed.
+            vendor_writes.push((id.clone(), crate::bpsim::MOBILITY, mobility_element(&r)));
             writes.push((
                 id.clone(),
                 "ResourceParameters",
@@ -2889,6 +2916,19 @@ impl Editor {
             };
             remove_all(sp, &is_unit);
             let mut v = vendor_value_element(crate::bpsim::LENGTH_UNIT, a.length_unit.name());
+            rename(&mut v, &prefix, &ns);
+            let at = end_of(sp);
+            sp.children.insert(at, Node::Element(v));
+        }
+        if b.layout_scale != a.layout_scale {
+            // Written even for 1, so it overrides what an inherited scenario says.
+            let is_scale = |x: &Element| {
+                x.is_any(&NSS, "VendorExtension")
+                    && x.attr("name").as_deref() == Some(crate::bpsim::LAYOUT_SCALE)
+            };
+            remove_all(sp, &is_scale);
+            let mut v =
+                vendor_value_element(crate::bpsim::LAYOUT_SCALE, &trim_float(a.layout_scale));
             rename(&mut v, &prefix, &ns);
             let at = end_of(sp);
             sp.children.insert(at, Node::Element(v));
@@ -3750,6 +3790,7 @@ mod tests {
             roles: vec!["clerk".into()],
             availability: Vec::new(),
             available: true,
+            mobility: None,
             shifts: Vec::new(),
         };
         let mut want = Model::default();

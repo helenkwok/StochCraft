@@ -193,6 +193,9 @@ pub enum Why {
     /// A conveyor has no queueing formula: its time on it is its length over its speed, and its
     /// waiting is before it, at what sends to it.
     ConveyorTime,
+    /// A transport's empty trips depend on where its pool's units are, which is not known before
+    /// a run: only its loaded work is counted.
+    TransportTrips,
 }
 
 impl Why {
@@ -231,6 +234,7 @@ impl Why {
             Why::NotExponential => "not_exponential",
             Why::HeldUp(_) => "held_up",
             Why::ConveyorTime => "conveyor_time",
+            Why::TransportTrips => "transport_trips",
         }
     }
 
@@ -310,6 +314,7 @@ impl Why {
                 "the pool is shared with other tasks, or more than one unit is needed".into()
             }
             Why::ConveyorTime => "a conveyor's time is its length over its speed".into(),
+            Why::TransportTrips => "the empty trips depend on where the units are".into(),
             Why::NotExponential => {
                 "the service time is not exponential, with a finite queue, patience or balking"
                     .into()
@@ -327,6 +332,9 @@ pub enum StationKind {
     Pool,
     /// A conveyor: it carries at most speed / pitch entities per unit of time.
     Conveyor,
+    /// A transport: a task on a mobile pool, whose work per item is at least its load, unload
+    /// and loaded trip.
+    Transport,
 }
 
 impl StationKind {
@@ -338,6 +346,7 @@ impl StationKind {
             StationKind::Delay => "delay",
             StationKind::Pool => "pool",
             StationKind::Conveyor => "conveyor",
+            StationKind::Transport => "transport",
         }
     }
 }
@@ -518,6 +527,49 @@ impl<'a> Net<'a> {
 
     fn start_of(&self, k: usize) -> Option<usize> {
         self.index.get(&self.model.connections[k].from).copied()
+    }
+
+    /// Element `i`'s mean time holding a unit: [`mean_service`], and for a transport the least
+    /// work per item, [`Net::transport_work`].
+    fn service_of(&self, i: usize) -> Value {
+        match &self.element(i).kind {
+            ElementKind::Transport { .. } => self.transport_work(i),
+            _ => mean_service(self.element(i)),
+        }
+    }
+
+    /// A transport's work per item, at least its mean load plus its mean unload plus the loaded
+    /// trip from its pickup (the element before it) to its drop-off (the element after it) at
+    /// the pool's loaded speed. Not more is known: the empty trip depends on where the unit is.
+    fn transport_work(&self, i: usize) -> Value {
+        let ElementKind::Transport { pool, load, unload } = &self.element(i).kind else {
+            return Value::Unknown(Why::NoMean);
+        };
+        let (Some(load), Some(unload)) = (mean_of(load), mean_of(unload)) else {
+            return Value::Unknown(Why::NoMean);
+        };
+        let speed = self
+            .model
+            .resources
+            .iter()
+            .find(|p| &p.id == pool)
+            .and_then(|p| p.mobility.as_ref())
+            .map(|m| m.speed_loaded)
+            .filter(|s| s.is_finite() && *s > 0.0);
+        let ([pickup], [dropoff]) = (&self.ins[i][..], &self.outs[i][..]) else {
+            return Value::Unknown(Why::NoMean);
+        };
+        let distance = self.model.distance(
+            &self.model.connections[*pickup].from,
+            &self.model.connections[*dropoff].to,
+        );
+        match (speed, distance) {
+            (Some(speed), Some(distance)) => Value::Known {
+                value: load + unload + distance / speed,
+                bound: Bound::AtLeast,
+            },
+            _ => Value::Unknown(Why::NoMean),
+        }
     }
 
     /// The external arrival rate of a source.
@@ -912,7 +964,7 @@ impl<'a> Net<'a> {
         let model = self.model;
         let n = model.elements.len();
         // First the stations' own numbers, then the rates (which a station over 100% caps).
-        let service: Vec<Value> = (0..n).map(|i| mean_service(self.element(i))).collect();
+        let service: Vec<Value> = (0..n).map(|i| self.service_of(i)).collect();
         let units: Vec<Option<(u32, bool)>> = model.elements.iter().map(server_units).collect();
         let avail: Vec<Option<Value>> = model.elements.iter().map(availability).collect();
         // What a station can pass on at most: its units (a task: its pool's, as if alone on
@@ -999,6 +1051,7 @@ impl<'a> Net<'a> {
                 ElementKind::SharedTask { .. } => StationKind::SharedTask,
                 ElementKind::Delay { .. } => StationKind::Delay,
                 ElementKind::Conveyor { .. } => StationKind::Conveyor,
+                ElementKind::Transport { .. } => StationKind::Transport,
                 _ => continue,
             };
             let mut st = Station {
@@ -1094,7 +1147,7 @@ impl<'a> Net<'a> {
                     st.formula = Err(Why::ConveyorTime);
                     st.time_on = Some(self.conveyor_time_on(i));
                 }
-                StationKind::SharedTask | StationKind::Pool => {}
+                StationKind::SharedTask | StationKind::Pool | StationKind::Transport => {}
             }
             stations.push(st);
         }
@@ -1295,6 +1348,15 @@ impl<'a> Net<'a> {
     /// The one pool shared task `i` uses and how many units, or why it has no one pool (`None`:
     /// not a shared task).
     fn pool_use(&self, i: usize) -> Option<PoolUse> {
+        // A transport takes one unit of its pool (a pool that is missing is the model's error).
+        if let ElementKind::Transport { pool, .. } = &self.element(i).kind {
+            return self
+                .model
+                .resources
+                .iter()
+                .position(|p| &p.id == pool)
+                .map(|j| Ok((j, 1)));
+        }
         let ElementKind::SharedTask { needs, .. } = &self.element(i).kind else {
             return None;
         };
@@ -1359,6 +1421,9 @@ impl<'a> Net<'a> {
 
     /// Whether shared task `i` names pool `j` among its needs.
     fn might_use(&self, i: usize, j: usize) -> bool {
+        if let ElementKind::Transport { pool, .. } = &self.element(i).kind {
+            return &self.model.resources[j].id == pool;
+        }
         let ElementKind::SharedTask { needs, .. } = &self.element(i).kind else {
             return false;
         };
@@ -1430,6 +1495,16 @@ impl<'a> Net<'a> {
             };
             let utilisation = work.combine(&units_value, true);
             let (status, units_for_target) = judge(&utilisation, &work, None, target, 1.0);
+            // A transport's work is only a lower bound (the empty trips are not counted): its
+            // pool is unstable when even that reaches 100%, else not known before a run.
+            let moves = users
+                .iter()
+                .any(|&i| matches!(self.element(i).kind, ElementKind::Transport { .. }));
+            let status = if moves && status == Status::Congested {
+                Status::Unknown
+            } else {
+                status
+            };
             pool_rows.push(Station {
                 id: pool.id.clone(),
                 kind: StationKind::Pool,
@@ -1470,7 +1545,10 @@ impl<'a> Net<'a> {
                 };
                 st.load = st.utilisation.clone();
                 st.status = pool_rows.last().map_or(Status::Unknown, |p| p.status);
-                st.formula = if alone {
+                st.formula = if st.kind == StationKind::Transport {
+                    st.units = None;
+                    Err(Why::TransportTrips)
+                } else if alone {
                     self.task_formula(i, &st.arrival_rate, &service[i], units, unstable)
                 } else {
                     Err(Why::SharedPool)
