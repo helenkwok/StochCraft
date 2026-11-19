@@ -388,3 +388,131 @@ fn the_same_input_gives_the_same_balance() {
         assert_eq!(first, second);
     }
 }
+
+/// Groover, *Automation, Production Systems, and Computer-Integrated Manufacturing*, 4th ed.,
+/// 2015, Example 15.1 (Table 15.4): twelve work elements, 4.0 min of work, balanced to a service
+/// time of 1.00 min.
+fn groover() -> Vec<WorkElement> {
+    vec![
+        el("1", 0.2, &[]),
+        el("2", 0.4, &[]),
+        el("3", 0.7, &["1"]),
+        el("4", 0.1, &["1", "2"]),
+        el("5", 0.3, &["2"]),
+        el("6", 0.11, &["3"]),
+        el("7", 0.32, &["3"]),
+        el("8", 0.6, &["3", "4"]),
+        el("9", 0.27, &["6", "7", "8"]),
+        el("10", 0.38, &["5", "8"]),
+        el("11", 0.5, &["9", "10"]),
+        el("12", 0.12, &["11"]),
+    ]
+}
+
+/// The stations as sets of element names, and their times.
+fn stations(b: &Balance) -> Vec<(Vec<&str>, f64)> {
+    b.stations
+        .iter()
+        .map(|s| {
+            let mut n = names(s);
+            n.sort_unstable();
+            (n, s.time)
+        })
+        .collect()
+}
+
+fn expect(b: &Balance, want: &[(&[&str], f64)]) {
+    let got = stations(b);
+    assert_eq!(got.len(), want.len(), "{got:?}");
+    for ((names, time), (w_names, w_time)) in got.iter().zip(want) {
+        let mut w: Vec<&str> = w_names.to_vec();
+        w.sort_unstable();
+        assert_eq!(names, &w, "{got:?}");
+        assert!(close(*time, *w_time), "{got:?}");
+    }
+}
+
+#[test]
+fn groover_example_15_1() {
+    let c = compare(&groover(), 1.0).must();
+    assert!(close(c.work_content, 4.0));
+    assert_eq!(c.theoretical_min, 4);
+}
+
+#[test]
+fn groover_largest_candidate_rule() {
+    // Example 15.2, Table 15.6 and Figure 15.6.
+    let b = balance(&groover(), 1.0, Heuristic::LargestCandidate).must();
+    expect(
+        &b,
+        &[
+            (&["2", "5", "1", "4"], 1.0),
+            (&["3", "6"], 0.81),
+            (&["8", "10"], 0.98),
+            (&["7", "9"], 0.59),
+            (&["11", "12"], 0.62),
+        ],
+    );
+    assert!(close(b.efficiency, 0.8));
+    assert!(close(b.delay, 0.2));
+    let sq = |x: f64| x * x;
+    let smooth = (sq(0.19) + sq(0.02) + sq(0.41) + sq(0.38)).sqrt();
+    assert!((b.smoothness - smooth).abs() < 1e-9);
+}
+
+#[test]
+fn groover_kilbridge_and_wester() {
+    // Example 15.3, Tables 15.7 and 15.8.
+    let b = balance(&groover(), 1.0, Heuristic::KilbridgeWester).must();
+    expect(
+        &b,
+        &[
+            (&["2", "1", "5", "4"], 1.0),
+            (&["3", "6"], 0.81),
+            (&["8", "7"], 0.92),
+            (&["10", "9"], 0.65),
+            (&["11", "12"], 0.62),
+        ],
+    );
+    assert!(close(b.efficiency, 0.8));
+}
+
+#[test]
+fn groover_ranked_positional_weights() {
+    // Example 15.4, Tables 15.9 and 15.10 (the book rounds the weights to two places).
+    let w = positional_weights(&groover()).must();
+    let want = [
+        ("1", 3.30),
+        ("2", 2.67),
+        ("3", 3.00),
+        ("4", 1.97),
+        ("5", 1.30),
+        ("6", 1.00),
+        ("7", 1.21),
+        ("8", 1.87),
+        ("9", 0.89),
+        ("10", 1.00),
+        ("11", 0.62),
+        ("12", 0.12),
+    ];
+    for (id, rpw) in want {
+        let got = w
+            .iter()
+            .find(|(e, _)| e.as_str() == id)
+            .map(|(_, v)| *v)
+            .must();
+        assert!((got - rpw).abs() < 0.005, "{id}: {got} vs {rpw}");
+    }
+    let b = balance(&groover(), 1.0, Heuristic::RankedPositionalWeight).must();
+    expect(
+        &b,
+        &[
+            (&["1", "3"], 0.9),
+            (&["2", "4", "5", "6"], 0.91),
+            (&["8", "7"], 0.92),
+            (&["10", "9"], 0.65),
+            (&["11", "12"], 0.62),
+        ],
+    );
+    assert!((b.efficiency - 4.0 / (5.0 * 0.92)).abs() < 1e-9);
+}

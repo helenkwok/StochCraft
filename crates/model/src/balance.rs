@@ -351,7 +351,13 @@ impl<'a> Line<'a> {
             Heuristic::KilbridgeWester => {
                 let column = g.columns();
                 let mut order: Vec<usize> = (0..n).collect();
-                order.sort_by_key(|&i| (column[i], i));
+                // By column, the largest first within a column (Groover, Table 15.7).
+                order.sort_by(|&a, &b| {
+                    column[a]
+                        .cmp(&column[b])
+                        .then(g.times[b].total_cmp(&g.times[a]))
+                        .then(a.cmp(&b))
+                });
                 order
             }
             Heuristic::RankedPositionalWeight => {
