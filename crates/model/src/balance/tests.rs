@@ -103,21 +103,23 @@ fn six_elements_worked_by_hand() {
     assert!(close(lcr.delay, 0.2));
     assert!(close(lcr.smoothness, 26f64.sqrt()));
 
-    // Kilbridge and Wester: column 0 is A, C, E; then column 1 is B, D, F.
+    // Kilbridge and Wester: the first column largest first is E, C, A; then B, D, F. E(6) and
+    // A(4) fill station 1; C(5) and B(4) make 9; D(3) and F(2) make 5: here the same stations
+    // as the largest candidate rule.
     let kw = &c.balances[1];
     assert_eq!(kw.heuristic, Heuristic::KilbridgeWester);
     let shape: Vec<(Vec<&str>, f64)> = kw.stations.iter().map(|s| (names(s), s.time)).collect();
     assert_eq!(
         shape,
         vec![
-            (vec!["A", "C"], 9.0),
-            (vec!["E", "B"], 10.0),
+            (vec!["E", "A"], 10.0),
+            (vec!["C", "B"], 9.0),
             (vec!["D", "F"], 5.0),
         ]
     );
 
     // Ranked positional weight: A, C and E weigh 8 (own time plus the follower's), B 4, D 3,
-    // F 2; the same stations as Kilbridge and Wester here.
+    // F 2.
     let rpw = &c.balances[2];
     assert_eq!(rpw.heuristic, Heuristic::RankedPositionalWeight);
     let shape: Vec<(Vec<&str>, f64)> = rpw.stations.iter().map(|s| (names(s), s.time)).collect();
