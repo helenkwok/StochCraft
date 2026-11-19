@@ -81,7 +81,10 @@ fn a_run_fills_the_throughput_and_utilisation_tiles_and_a_model_without_conveyor
         per_hour
             .iter()
             .any(|l| l.chars().next().is_some_and(|c| c.is_ascii_digit())),
-        "{per_hour:?}"
+        "{per_hour:?}; every label: {:?}",
+        h.query_all_by_label_contains("")
+            .filter_map(|n| n.accesskit_node().label())
+            .collect::<Vec<_>>()
     );
     // Utilisation: the server's bar, with its busy share.
     assert!(
