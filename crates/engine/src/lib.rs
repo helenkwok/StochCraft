@@ -246,7 +246,7 @@ pub enum ReplayMode {
 }
 
 /// The commands [`ReplayMode::EditsOnly`] skips.
-const SKIPPED_BY_DEFAULT: [&str; 9] = [
+const SKIPPED_BY_DEFAULT: [&str; 8] = [
     "file.save",
     "run",
     "run.start",
