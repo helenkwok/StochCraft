@@ -152,13 +152,14 @@ fn replay_in_all_mode_carries_out_every_step() {
         force: false,
     };
     let r = e.replay_journal(&journal, options);
-    // The run of an empty model fails, which shows it was carried out, and stops the replay.
+    // Every step ran: the run gives results, and the edit after it is applied.
     assert!(
-        r.as_ref()
-            .is_err_and(|err| err.index == 1 && err.command == "run"),
+        r.as_ref().is_ok_and(|steps| steps.len() == 3
+            && steps.iter().all(|s| matches!(s, ReplayStep::Applied(_)))
+            && matches!(&steps[1], ReplayStep::Applied(v) if v.get("replications").is_some())),
         "{r:?}"
     );
-    assert_eq!(e.model().name, "Replayed");
+    assert_eq!(e.model().name, "Unreached");
 }
 
 #[test]
@@ -168,7 +169,12 @@ fn the_old_replay_of_a_plain_script_still_carries_out_every_step() {
         step("run", json!({})),
     ];
     let r = Engine::new().replay(&script);
-    assert!(r.is_err_and(|err| err.index == 1), "run is not skipped");
+    // The run is carried out: its result holds the replications.
+    assert!(
+        r.as_ref()
+            .is_ok_and(|out| out.len() == 2 && out[1].get("replications").is_some()),
+        "run is not skipped: {r:?}"
+    );
 }
 
 #[test]
@@ -177,7 +183,6 @@ fn skipped_commands_are_catalogue_commands_that_are_not_queries() {
         "file.save",
         "run",
         "run.start",
-        "run.status",
         "run.cancel",
         "experiment.sweep",
         "experiment.sensitivity",

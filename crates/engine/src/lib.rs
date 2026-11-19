@@ -250,7 +250,6 @@ const SKIPPED_BY_DEFAULT: [&str; 9] = [
     "file.save",
     "run",
     "run.start",
-    "run.status",
     "run.cancel",
     "experiment.sweep",
     "experiment.sensitivity",

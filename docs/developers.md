@@ -177,7 +177,7 @@ also when a step failed, as a JSON object:
 Replaying a journal (`exec journal.json`) first checks that the model is the one it started from
 (`--open` the same file; a journal that began with `model.new` starts its own model) and refuses
 with a `conflict` error if not, unless `--force`. It then re-applies the edits, undo and redo, and
-skips the saves, runs and experiments (`file.save`, `run`, `run.start`, `run.status`,
+skips the saves, runs and experiments (`file.save`, `run`, `run.start`,
 `run.cancel`, `experiment.sweep`, `experiment.sensitivity`, `experiment.design`,
 `experiment.size`), printing `"skipped": true` for each; `--all` carries them out too. In Rust,
 `Engine::journal_document` gives the journal and `Engine::replay_journal` replays it
