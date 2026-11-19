@@ -1005,3 +1005,8 @@ unit	yr	ж.
 	At {time} {unit}: {n} items	{time} {unit} сәтінде: {n} элемент
 	Run the model to fill the dashboard	Бақылау тақтасын толтыру үшін модельді жүгіртіңіз
 	The resource and conveyor charts show the last run until this one ends	Ресурстар мен конвейерлер диаграммалары бұл аяқталғанша соңғы жүгіруді көрсетеді
+	Reset	Қайта бастау
+	As fast as possible	Мүмкіндігінше жылдам
+	Pause at	Осы уақытта кідірту
+	Halve Speed	Жылдамдықты екі есе азайту
+	Double Speed	Жылдамдықты екі есе арттыру

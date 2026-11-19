@@ -1005,3 +1005,8 @@ unit	yr	év
 	At {time} {unit}: {n} items	{time} {unit} időpontban: {n} elem
 	Run the model to fill the dashboard	Futtassa a modellt az irányítópult kitöltéséhez
 	The resource and conveyor charts show the last run until this one ends	Az erőforrás- és szalagdiagramok az utolsó futtatást mutatják, amíg ez véget nem ér
+	Reset	Visszaállítás
+	As fast as possible	A lehető leggyorsabban
+	Pause at	Szünet ekkor
+	Halve Speed	Sebesség felezése
+	Double Speed	Sebesség duplázása

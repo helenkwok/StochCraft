@@ -1005,3 +1005,8 @@ unit	yr	वर्ष
 	At {time} {unit}: {n} items	{time} {unit} पर: {n} वस्तुएँ
 	Run the model to fill the dashboard	डैशबोर्ड भरने के लिए मॉडल चलाएँ
 	The resource and conveyor charts show the last run until this one ends	संसाधन और कन्वेयर के चार्ट इस रन के खत्म होने तक पिछला रन दिखाते हैं
+	Reset	रीसेट करें
+	As fast as possible	जितना तेज़ हो सके
+	Pause at	इस समय रोकें
+	Halve Speed	गति आधी करें
+	Double Speed	गति दोगुनी करें

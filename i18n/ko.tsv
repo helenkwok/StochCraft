@@ -1005,3 +1005,8 @@ unit	yr	년
 	At {time} {unit}: {n} items	{time} {unit} 시점: 항목 {n}개
 	Run the model to fill the dashboard	대시보드를 채우려면 모델을 실행하세요
 	The resource and conveyor charts show the last run until this one ends	자원과 컨베이어 차트는 이 실행이 끝날 때까지 지난 실행을 보여 줍니다
+	Reset	초기화
+	As fast as possible	가능한 한 빠르게
+	Pause at	지정 시각에 일시 중지
+	Halve Speed	속도 절반으로 줄이기
+	Double Speed	속도 두 배로 높이기

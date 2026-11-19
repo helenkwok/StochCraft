@@ -1005,3 +1005,8 @@ unit	yr	సం.
 	At {time} {unit}: {n} items	{time} {unit} వద్ద: {n} వస్తువులు
 	Run the model to fill the dashboard	డాష్‌బోర్డ్ నింపడానికి మోడల్‌ను రన్ చేయండి
 	The resource and conveyor charts show the last run until this one ends	ఇది ముగిసే వరకు వనరు, కన్వేయర్ చార్టులు చివరి రన్‌ను చూపిస్తాయి
+	Reset	రీసెట్ చేయి
+	As fast as possible	వీలైనంత వేగంగా
+	Pause at	ఈ సమయంలో విరామం
+	Halve Speed	వేగాన్ని సగం చేయి
+	Double Speed	వేగాన్ని రెట్టింపు చేయి

@@ -1005,3 +1005,8 @@ unit	yr	J.
 	At {time} {unit}: {n} items	Bei {time} {unit}: {n} Teile
 	Run the model to fill the dashboard	Das Modell ausführen, um das Dashboard zu füllen
 	The resource and conveyor charts show the last run until this one ends	Die Ressourcen- und Förderband-Diagramme zeigen den letzten Lauf, bis dieser endet
+	Reset	Zurücksetzen
+	As fast as possible	So schnell wie möglich
+	Pause at	Pause bei
+	Halve Speed	Geschwindigkeit halbieren
+	Double Speed	Geschwindigkeit verdoppeln

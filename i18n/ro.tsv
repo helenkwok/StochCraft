@@ -1005,3 +1005,8 @@ unit	yr	a
 	At {time} {unit}: {n} items	La {time} {unit}: {n} articole
 	Run the model to fill the dashboard	Rulați modelul pentru a completa tabloul de bord
 	The resource and conveyor charts show the last run until this one ends	Graficele resurselor și benzilor arată ultima rulare până se încheie aceasta
+	Reset	Resetează
+	As fast as possible	Cât mai repede posibil
+	Pause at	Pauză la
+	Halve Speed	Înjumătățește viteza
+	Double Speed	Dublează viteza

@@ -1005,3 +1005,8 @@ unit	yr	thn
 	At {time} {unit}: {n} items	Pada {time} {unit}: {n} item
 	Run the model to fill the dashboard	Jalankan model untuk mengisi dasbor
 	The resource and conveyor charts show the last run until this one ends	Grafik sumber daya dan konveyor menampilkan proses terakhir sampai proses ini selesai
+	Reset	Atur ulang
+	As fast as possible	Secepat mungkin
+	Pause at	Jeda pada
+	Halve Speed	Kurangi kecepatan setengahnya
+	Double Speed	Gandakan kecepatan

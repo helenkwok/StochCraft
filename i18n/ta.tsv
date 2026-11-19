@@ -1005,3 +1005,8 @@ unit	yr	ஆண்டு
 	At {time} {unit}: {n} items	{time} {unit} நேரத்தில்: {n} பொருட்கள்
 	Run the model to fill the dashboard	டாஷ்போர்டை நிரப்ப மாதிரியை இயக்கவும்
 	The resource and conveyor charts show the last run until this one ends	இது முடியும் வரை வளம் மற்றும் கன்வேயர் வரைபடங்கள் கடைசி ஓட்டத்தைக் காட்டும்
+	Reset	மீட்டமை
+	As fast as possible	முடிந்தவரை விரைவாக
+	Pause at	இந்த நேரத்தில் இடைநிறுத்து
+	Halve Speed	வேகத்தை பாதியாக்கு
+	Double Speed	வேகத்தை இரட்டிப்பாக்கு

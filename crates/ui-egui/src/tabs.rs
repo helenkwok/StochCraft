@@ -87,9 +87,38 @@ impl App {
             .hline(rect.x_range(), y, egui::Stroke::new(1.0, p.border));
     }
 
-    /// The work area: the tabs, then the view they select (or the start page, or a run's progress).
+    /// Whether the model has anything to show: blocks, or a model being built.
+    fn has_model(&self) -> bool {
+        !self.engine.model().elements.is_empty() || self.building
+    }
+
+    /// The view the work area draws now, in the order [`App::work_area`] dispatches.
+    fn view_shown(&self) -> View {
+        let has_model = self.has_model();
+        if self.show_results && self.results.is_some() && self.running.is_none() {
+            View::Results
+        } else if self.show_analysis && has_model && !self.show_results {
+            View::Analysis
+        } else if self.show_3d && has_model && !self.show_results {
+            View::ThreeD
+        } else if self.show_capacity && has_model && !self.show_results {
+            View::Capacity
+        } else if has_model && !(self.show_results && self.running.is_some()) {
+            View::Model
+        } else {
+            View::Other
+        }
+    }
+
+    /// Whether the run bar is on screen: on the views that show the model (Model, 3D).
+    pub(crate) fn run_bar_shown(&self) -> bool {
+        matches!(self.view_shown(), View::Model | View::ThreeD)
+    }
+
+    /// The work area: the tabs, the run bar over the views that show the model, then the view
+    /// the tabs select (or the start page, or a run's progress).
     pub(crate) fn work_area(&mut self, ui: &mut egui::Ui, p: &theme::Palette) {
-        let has_model = !self.engine.model().elements.is_empty() || self.building;
+        let has_model = self.has_model();
         if !has_model && self.results.is_none() && self.running.is_none() {
             self.start_page(ui);
             return;
@@ -98,30 +127,42 @@ impl App {
             self.tabs(ui, p);
             ui.add_space(14.0);
         }
+        let view = self.view_shown();
+        if matches!(view, View::Model | View::ThreeD) {
+            self.watch_bar(ui, p);
+        }
         // A run in progress shows its progress, not the results it will replace.
-        if self.show_results && self.results.is_some() && self.running.is_none() {
-            self.results_view(ui);
-        } else if self.show_analysis && has_model && !self.show_results {
-            self.analysis_view(ui);
-        } else if self.show_3d && has_model && !self.show_results {
-            self.view3d_view(ui);
-        } else if self.show_capacity && has_model && !self.show_results {
-            self.capacity_view(ui);
-        } else if has_model && !(self.show_results && self.running.is_some()) {
-            self.model_view(ui, p);
-        } else {
-            // A readable column, not the full width of a wide window.
-            let size = egui::vec2(ui.available_width().min(640.0), ui.available_height());
-            ui.allocate_ui_with_layout(size, egui::Layout::top_down(egui::Align::Min), |ui| {
-                if let Some(r) = &self.running {
-                    let (done, partial, total) = (r.done, r.partial, r.total);
-                    self.running_view(ui, done, partial, total);
-                } else if self.engine.model().elements.is_empty() {
-                    self.start_page(ui);
-                } else {
-                    self.ready(ui);
-                }
-            });
+        match view {
+            View::Results => self.results_view(ui),
+            View::Analysis => self.analysis_view(ui),
+            View::ThreeD => self.view3d_view(ui),
+            View::Capacity => self.capacity_view(ui),
+            View::Model => self.model_view(ui, p),
+            View::Other => {
+                // A readable column, not the full width of a wide window.
+                let size = egui::vec2(ui.available_width().min(640.0), ui.available_height());
+                ui.allocate_ui_with_layout(size, egui::Layout::top_down(egui::Align::Min), |ui| {
+                    if let Some(r) = &self.running {
+                        let (done, partial, total) = (r.done, r.partial, r.total);
+                        self.running_view(ui, done, partial, total);
+                    } else if self.engine.model().elements.is_empty() {
+                        self.start_page(ui);
+                    } else {
+                        self.ready(ui);
+                    }
+                });
+            }
         }
     }
+}
+
+/// What the work area shows.
+enum View {
+    Results,
+    Analysis,
+    ThreeD,
+    Capacity,
+    Model,
+    /// A run's progress, the "ready" page or the start page.
+    Other,
 }

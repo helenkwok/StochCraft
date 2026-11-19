@@ -1005,3 +1005,8 @@ unit	yr	r.
 	At {time} {unit}: {n} items	V čase {time} {unit}: {n} položek
 	Run the model to fill the dashboard	Spusťte model, aby se přehled naplnil
 	The resource and conveyor charts show the last run until this one ends	Grafy zdrojů a dopravníků ukazují poslední běh, dokud tento neskončí
+	Reset	Vynulovat
+	As fast as possible	Co nejrychleji
+	Pause at	Pozastavit v
+	Halve Speed	Zpomalit na polovinu
+	Double Speed	Zdvojnásobit rychlost

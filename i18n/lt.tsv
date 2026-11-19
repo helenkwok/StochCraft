@@ -1005,3 +1005,8 @@ unit	yr	m.
 	At {time} {unit}: {n} items	Momentu {time} {unit}: {n} elementų
 	Run the model to fill the dashboard	Paleiskite modelį, kad užsipildytų skydelis
 	The resource and conveyor charts show the last run until this one ends	Išteklių ir konvejerių diagramos rodo paskutinį vykdymą, kol šis baigsis
+	Reset	Atstatyti
+	As fast as possible	Kuo greičiau
+	Pause at	Pristabdyti ties
+	Halve Speed	Perpus sumažinti greitį
+	Double Speed	Dvigubai padidinti greitį

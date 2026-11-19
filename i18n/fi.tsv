@@ -1005,3 +1005,8 @@ unit	yr	v
 	At {time} {unit}: {n} items	Hetkellä {time} {unit}: {n} kappaletta
 	Run the model to fill the dashboard	Aja malli täyttääksesi koontinäytön
 	The resource and conveyor charts show the last run until this one ends	Resurssi- ja kuljetinkaaviot näyttävät viimeisen ajon, kunnes tämä päättyy
+	Reset	Nollaa
+	As fast as possible	Mahdollisimman nopeasti
+	Pause at	Tauko kohdassa
+	Halve Speed	Puolita nopeus
+	Double Speed	Kaksinkertaista nopeus

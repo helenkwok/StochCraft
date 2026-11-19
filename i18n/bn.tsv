@@ -1005,3 +1005,8 @@ unit	yr	বছর
 	At {time} {unit}: {n} items	{time} {unit} সময়ে: {n}টি আইটেম
 	Run the model to fill the dashboard	ড্যাশবোর্ড ভরতে মডেল চালান
 	The resource and conveyor charts show the last run until this one ends	রিসোর্স ও কনভেয়ারের চার্ট এই রান শেষ না হওয়া পর্যন্ত আগের রান দেখায়
+	Reset	রিসেট
+	As fast as possible	যত দ্রুত সম্ভব
+	Pause at	এই সময়ে বিরতি
+	Halve Speed	গতি অর্ধেক করুন
+	Double Speed	গতি দ্বিগুণ করুন

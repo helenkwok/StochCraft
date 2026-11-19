@@ -1005,3 +1005,8 @@ unit	yr	a
 	At {time} {unit}: {n} items	Ajahetkel {time} {unit}: {n} eset
 	Run the model to fill the dashboard	Töölaua täitmiseks käivitage mudel
 	The resource and conveyor charts show the last run until this one ends	Ressursside ja konveierite diagrammid näitavad viimast käivitust, kuni see lõpeb
+	Reset	Lähtesta
+	As fast as possible	Nii kiiresti kui võimalik
+	Pause at	Paus ajahetkel
+	Halve Speed	Vähenda kiirust poole võrra
+	Double Speed	Kahekordista kiirust

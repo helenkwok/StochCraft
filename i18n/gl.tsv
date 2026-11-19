@@ -1005,3 +1005,8 @@ unit	yr	a
 	At {time} {unit}: {n} items	En {time} {unit}: {n} pezas
 	Run the model to fill the dashboard	Executa o modelo para encher o panel
 	The resource and conveyor charts show the last run until this one ends	Os gráficos de recursos e cintas amosan a última execución ata que esta remate
+	Reset	Reiniciar
+	As fast as possible	O máis rápido posible
+	Pause at	Pausa en
+	Halve Speed	Reducir a velocidade á metade
+	Double Speed	Duplicar a velocidade

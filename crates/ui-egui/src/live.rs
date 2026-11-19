@@ -1,7 +1,7 @@
 //! Watching a run (M3.5): one replication of the experiment, stepped at a chosen speed, with each
 //! block's state drawn on the canvas as it runs (entities waiting, units busy, how many came and
 //! went) and the selected block's queue over time in the inspector. Play, pause, step one event,
-//! or jump to a time. It is replication 1 of the experiment: the same events, and at its end the
+//! or pause at a time. It is replication 1 of the experiment: the same events, and at its end the
 //! same statistics, as replication 1 of Run.
 //!
 //! Watching only reads the model. Changing anything a run depends on stops it; moving shapes
@@ -56,19 +56,31 @@ pub(crate) struct Watching {
     pub(crate) playing: bool,
     /// Simulated time units per second.
     speed: f64,
+    /// Run as fast as the frame's budget allows, whatever the speed says.
+    fast: bool,
     /// The model as it was when watching started.
     model: Model,
     /// Over time: each element's entities waiting and units busy (or entities inside).
     trace: Vec<(f64, Vec<(f64, f64)>)>,
     /// The state now, by element id.
     states: BTreeMap<String, LiveState>,
-    /// Text typed into the jump field.
-    jump: String,
-    /// The jump field's text wasn't a time when Jump was last pressed; cleared by typing.
-    jump_invalid: bool,
-    /// A time a step or a jump is going to, over as many frames as it takes, and whether to
-    /// say so when it gets to the end.
+    /// Text typed into the "Pause at" field.
+    pause_text: String,
+    /// The field's text wasn't a time when Pause at was last pressed; cleared by typing.
+    pause_invalid: bool,
+    /// A time to pause at: the run plays on, at its speed, until the clock gets there.
+    pause_at: Option<f64>,
+    /// A time a step is going to, over as many frames as it takes, and whether to say so when
+    /// it gets to the end.
     heading: Option<(f64, bool)>,
+}
+
+/// The slowest and fastest speeds halving and doubling reach, in time units per second.
+const SPEED_RANGE: (f64, f64) = (0.01, 1_000_000.0);
+
+/// A speed as the bar shows it: "×10", with at most three decimals.
+fn speed_text(speed: f64) -> String {
+    format!("×{}", grouped((speed * 1_000.0).round() / 1_000.0))
 }
 
 /// Whether `b` would run exactly as `a`: everything but the names and the diagram.
@@ -101,11 +113,13 @@ impl Watching {
             run,
             playing: true,
             speed,
+            fast: false,
             model,
             trace: Vec::new(),
             states: BTreeMap::new(),
-            jump: String::new(),
-            jump_invalid: false,
+            pause_text: String::new(),
+            pause_invalid: false,
+            pause_at: None,
             heading: None,
         };
         w.sample();
@@ -251,6 +265,11 @@ impl App {
         self.watching.is_some()
     }
 
+    /// The speed of the run being watched, in time units per second (the run bar's ×N).
+    pub fn watch_speed(&self) -> Option<f64> {
+        self.watching.as_ref().map(|w| w.speed)
+    }
+
     /// Advances the run by what this frame's time is worth, and stops watching if the model
     /// changed in a way that matters to the run.
     pub(crate) fn tick_watching(&mut self, ctx: &egui::Context) {
@@ -270,7 +289,7 @@ impl App {
                 Ok(false) => {}
                 Ok(true) => {
                     w.heading = None;
-                    // A jump's arrival at the end is said as playing's is; a step's is not.
+                    // A step's arrival at the end is not said, as playing's is.
                     let playing = w.playing;
                     w.playing = announce;
                     self.after_advance(Ok(()));
@@ -289,12 +308,29 @@ impl App {
             return;
         }
         let dt = f64::from(ctx.input(|i| i.stable_dt).clamp(0.0, 0.25));
-        let target = w.run.now() + w.speed * dt;
+        let mut target = if w.fast {
+            w.run.end()
+        } else {
+            w.run.now() + w.speed * dt
+        };
+        if let Some(at) = w.pause_at {
+            target = target.min(at);
+        }
         // What doesn't fit in the frame's budget is dropped: the run plays slower than asked
         // rather than freezing the page.
         let r = advance_for(&mut w.run, target, FRAME_BUDGET).map(|_| ());
         w.sample();
         ctx.request_repaint();
+        // Got to the time to pause at: pause there (the end of the run is reported as ever).
+        if let Some(at) = w.pause_at
+            && r.is_ok()
+            && w.run.now() >= at
+        {
+            w.pause_at = None;
+            if !w.run.is_done() {
+                w.playing = false;
+            }
+        }
         self.after_advance(r);
     }
 
@@ -327,6 +363,46 @@ impl App {
                 return;
             }
             w.playing = !w.playing;
+            if !w.playing {
+                w.pause_at = None;
+            }
+        }
+    }
+
+    /// The run bar's Space: play or pause the run being watched, or start watching one.
+    pub(crate) fn run_or_pause(&mut self) {
+        if self.is_watching() {
+            self.toggle_playing();
+        } else if self.running.is_none() && !self.engine.model().elements.is_empty() {
+            self.start_watching();
+        }
+    }
+
+    /// Starts the watched run over, paused at its start, at the same speed.
+    pub(crate) fn reset_watching(&mut self) {
+        let Some(old) = &self.watching else {
+            return;
+        };
+        let (speed, fast) = (old.speed, old.fast);
+        match self.engine.live_run(0) {
+            Ok(run) => {
+                let mut w = Watching::new(run, self.engine.model().clone());
+                w.speed = speed;
+                w.fast = fast;
+                w.playing = false;
+                self.watching = Some(w);
+                self.info(t("Watching run 1"));
+            }
+            Err(e) => self.report_error(e.message),
+        }
+    }
+
+    /// Halves or doubles the speed (`factor` 0.5 or 2.0), within the range the bar offers;
+    /// choosing a speed ends "as fast as possible".
+    pub(crate) fn scale_speed(&mut self, factor: f64) {
+        if let Some(w) = &mut self.watching {
+            w.speed = (w.speed * factor).clamp(SPEED_RANGE.0, SPEED_RANGE.1);
+            w.fast = false;
         }
     }
 
@@ -340,14 +416,26 @@ impl App {
         w.heading = Some((to, false));
     }
 
-    /// Runs to time `to` (a time already passed is not gone back to), from the next frame on.
-    pub(crate) fn jump_to(&mut self, to: f64) {
+    /// Plays on until the clock is at `to`, then pauses there (a time already passed pauses
+    /// now: the run is not taken back).
+    pub(crate) fn pause_at_time(&mut self, to: f64) {
         if let Some(w) = &mut self.watching {
-            w.heading = Some((to, true));
+            if w.run.is_done() {
+                return;
+            }
+            if to <= w.run.now() {
+                w.playing = false;
+                w.pause_at = None;
+            } else {
+                w.playing = true;
+                w.pause_at = Some(to);
+            }
         }
     }
 
-    /// The bar above the canvas: Watch a run, or the run's controls and clock.
+    /// The run bar, above the Model and 3D views: Watch a run, or the run's controls and clock.
+    /// It is for watching one run; Run in the header runs the whole experiment, fast and
+    /// without animation.
     pub(crate) fn watch_bar(&mut self, ui: &mut egui::Ui, p: &theme::Palette) {
         let unit = self.time_unit_label();
         let can_watch = self.running.is_none();
@@ -368,13 +456,19 @@ impl App {
         };
         let mut toggle = false;
         let mut step = false;
+        let mut reset = false;
         let mut stop = false;
-        let mut jump: Option<f64> = None;
+        let mut slower = false;
+        let mut faster = false;
+        let mut pause_at: Option<f64> = None;
         let done = w.run.is_done();
         ui.horizontal_wrapped(|ui| {
             let play = if w.playing { t("Pause") } else { t("Play") };
             if ui.add_enabled(!done, theme::primary(ui, play)).clicked() {
                 toggle = true;
+            }
+            if ui.add(theme::secondary(ui, t("Reset"))).clicked() {
+                reset = true;
             }
             if ui
                 .add_enabled(!done, theme::secondary(ui, t("Step")))
@@ -383,54 +477,64 @@ impl App {
             {
                 step = true;
             }
-            let speed_text = |s: f64| {
-                tf(
+            ui.separator();
+            ui.label(theme::weak(ui, t("Speed")));
+            let halve = ui.add(theme::secondary(ui, "÷2"));
+            halve.widget_info(|| {
+                egui::WidgetInfo::labeled(egui::Role::Button, true, t("Halve Speed"))
+            });
+            if halve.on_hover_text(t("Halve Speed")).clicked() {
+                slower = true;
+            }
+            ui.label(theme::strong(speed_text(w.speed)))
+                .on_hover_text(tf(
                     "{n} {unit} per second",
-                    &[("n", &grouped(s)), ("unit", &unit)],
-                )
-            };
-            let r = craft_ui::ComboBox::from_id_salt("watch-speed")
-                .selected_text(speed_text(w.speed))
-                .width(150.0)
-                .show_ui(ui, |ui| {
-                    for s in SPEEDS {
-                        if ui.selectable_label(w.speed == s, speed_text(s)).clicked() {
-                            w.speed = s;
-                        }
-                    }
-                });
-            r.response
-                .widget_info(|| egui::WidgetInfo::labeled(egui::Role::ComboBox, true, t("Speed")));
+                    &[("n", &grouped(w.speed)), ("unit", &unit)],
+                ));
+            let double = ui.add(theme::secondary(ui, "×2"));
+            double.widget_info(|| {
+                egui::WidgetInfo::labeled(egui::Role::Button, true, t("Double Speed"))
+            });
+            if double.on_hover_text(t("Double Speed")).clicked() {
+                faster = true;
+            }
+            ui.toggle_value(&mut w.fast, t("As fast as possible"));
+            ui.separator();
             let field = ui.add(
-                egui::TextEdit::singleline(&mut w.jump)
+                egui::TextEdit::singleline(&mut w.pause_text)
                     .desired_width(70.0)
                     .hint_text(t("time")),
             );
             field.widget_info(|| {
-                egui::WidgetInfo::labeled(egui::Role::TextInput, true, t("Jump to time"))
+                egui::WidgetInfo::labeled(egui::Role::TextInput, true, t("Pause at"))
             });
             if field.changed() {
-                w.jump_invalid = false;
+                w.pause_invalid = false;
             }
             let entered = field.lost_focus() && ui.input(|i| i.key_pressed(egui::Key::Enter));
-            if ui.add(theme::secondary(ui, t("Jump"))).clicked() || entered {
+            if ui
+                .add_enabled(!done, theme::secondary(ui, t("Pause at")))
+                .clicked()
+                || entered
+            {
                 // Text that isn't a time is said so, not ignored (WCAG 3.3.1).
-                match self.numbers.parse(w.jump.trim()) {
-                    Ok(v) => {
-                        jump = Some(v);
-                        w.jump_invalid = false;
+                match self.numbers.parse(w.pause_text.trim()) {
+                    Ok(v) if v >= 0.0 && v.is_finite() => {
+                        pause_at = Some(v);
+                        w.pause_invalid = false;
                     }
-                    Err(_) => w.jump_invalid = true,
+                    _ => w.pause_invalid = true,
                 }
             }
+            ui.separator();
             if ui.add(theme::secondary(ui, t("Stop watching"))).clicked() {
                 stop = true;
             }
         });
-        // The clock: where the run is, the warm-up, and the end.
+        // The clock: where the run is, the warm-up, the end, and how far along.
         let now = w.run.now();
         let end = w.run.end();
-        if w.jump_invalid {
+        if w.pause_invalid {
             theme::error_message(
                 ui,
                 tf(
@@ -459,10 +563,15 @@ impl App {
                 ],
             )
         };
-        let fraction = if end > 0.0 { (now / end) as f32 } else { 1.0 };
+        let fraction = if end > 0.0 {
+            ((now / end) as f32).clamp(0.0, 1.0)
+        } else {
+            1.0
+        };
+        let per_cent = (fraction * 100.0).floor();
         ui.add(
-            egui::ProgressBar::new(fraction.clamp(0.0, 1.0))
-                .text(clock)
+            egui::ProgressBar::new(fraction)
+                .text(format!("{clock} · {per_cent}%"))
                 .fill(p.accent_soft),
         );
         // One animated run hides the variation between runs: say what this one is.
@@ -483,10 +592,19 @@ impl App {
         if step {
             self.step_watching();
         }
-        if let Some(v) = jump {
-            self.jump_to(v);
+        if reset {
+            self.reset_watching();
         }
-        if step || jump.is_some() {
+        if slower {
+            self.scale_speed(0.5);
+        }
+        if faster {
+            self.scale_speed(2.0);
+        }
+        if let Some(v) = pause_at {
+            self.pause_at_time(v);
+        }
+        if step || pause_at.is_some() {
             ui.ctx().request_repaint();
         }
         if stop {

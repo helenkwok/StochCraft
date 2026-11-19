@@ -1005,3 +1005,8 @@ unit	yr	წელი
 	At {time} {unit}: {n} items	{time} {unit}-ზე: {n} ელემენტი
 	Run the model to fill the dashboard	დაფის შესავსებად გაუშვით მოდელი
 	The resource and conveyor charts show the last run until this one ends	რესურსებისა და ლენტების დიაგრამები აჩვენებს ბოლო გაშვებას, ამის დასრულებამდე
+	Reset	საწყისზე დაბრუნება
+	As fast as possible	რაც შეიძლება სწრაფად
+	Pause at	პაუზა მომენტში
+	Halve Speed	სიჩქარის განახევრება
+	Double Speed	სიჩქარის გაორმაგება

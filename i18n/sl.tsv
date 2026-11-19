@@ -1005,3 +1005,8 @@ unit	yr	l.
 	At {time} {unit}: {n} items	Ob {time} {unit}: {n} predmetov
 	Run the model to fill the dashboard	Zaženite model, da se nadzorna plošča zapolni
 	The resource and conveyor charts show the last run until this one ends	Grafi virov in tekočih trakov kažejo zadnji tek, dokler se ta ne konča
+	Reset	Ponastavi
+	As fast as possible	Čim hitreje
+	Pause at	Premor ob
+	Halve Speed	Prepolovi hitrost
+	Double Speed	Podvoji hitrost

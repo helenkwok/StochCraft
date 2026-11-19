@@ -1005,3 +1005,8 @@ unit	yr	年
 	At {time} {unit}: {n} items	在 {time} {unit}：{n} 個物品
 	Run the model to fill the dashboard	執行模型以填入儀表板
 	The resource and conveyor charts show the last run until this one ends	資源和輸送帶圖表顯示上一次執行，直到本次結束
+	Reset	重設
+	As fast as possible	盡可能快
+	Pause at	暫停於
+	Halve Speed	速度減半
+	Double Speed	速度加倍
