@@ -66,6 +66,22 @@ enum Command {
         #[arg(long, value_enum, default_value_t = CheckFormat::Table)]
         format: CheckFormat,
     },
+    /// Balance assembly work elements across stations for a cycle time (the engine's
+    /// `line.balance`). Reads a CSV file with header `id,time,after` (`after` lists
+    /// predecessors separated by `;`).
+    Balance {
+        /// A CSV file with header `id,time,after`.
+        file: PathBuf,
+        /// The cycle time (the longest any station may take), in the same unit as the element
+        /// times.
+        #[arg(long, value_parser = positive_finite)]
+        cycle: f64,
+        /// One heuristic to run (default: all three compared).
+        #[arg(long, value_enum)]
+        heuristic: Option<BalanceHeuristic>,
+        #[arg(long, value_enum, default_value_t = CheckFormat::Table)]
+        format: CheckFormat,
+    },
     /// Run a model's experiment and print the results with their run record.
     Run {
         file: PathBuf,
@@ -193,6 +209,26 @@ enum Format {
 enum CheckFormat {
     Table,
     Json,
+}
+
+#[derive(Clone, Copy, PartialEq, Eq, ValueEnum)]
+enum BalanceHeuristic {
+    #[value(name = "largest_candidate", alias = "largest-candidate")]
+    LargestCandidate,
+    #[value(name = "kilbridge_wester", alias = "kilbridge-wester")]
+    KilbridgeWester,
+    #[value(name = "ranked_positional_weight", alias = "ranked-positional-weight")]
+    RankedPositionalWeight,
+}
+
+impl BalanceHeuristic {
+    fn name(self) -> &'static str {
+        match self {
+            BalanceHeuristic::LargestCandidate => "largest_candidate",
+            BalanceHeuristic::KilbridgeWester => "kilbridge_wester",
+            BalanceHeuristic::RankedPositionalWeight => "ranked_positional_weight",
+        }
+    }
 }
 
 #[derive(Clone, Copy, PartialEq, Eq, ValueEnum)]
@@ -359,6 +395,154 @@ fn explain(
             serde_json::to_string_pretty(&table).unwrap_or_default()
         ),
         CheckFormat::Table => print!("{}", output::capacity(file, &table)),
+    }
+    Ok(0)
+}
+
+/// A positive, finite number (for `--cycle`).
+fn positive_finite(s: &str) -> Result<f64, String> {
+    let v: f64 = s.parse().map_err(|e| format!("{e}"))?;
+    if v.is_finite() && v > 0.0 {
+        Ok(v)
+    } else {
+        Err(format!(
+            "the cycle time must be positive and finite, not {s}"
+        ))
+    }
+}
+
+struct CsvElement {
+    id: String,
+    time: f64,
+    after: Vec<String>,
+}
+
+fn csv_row(line: &str, line_no: usize) -> Result<Vec<String>, String> {
+    let mut out = Vec::new();
+    let mut cell = String::new();
+    let mut quoted = false;
+    let mut chars = line.chars().peekable();
+    while let Some(c) = chars.next() {
+        match c {
+            '"' if quoted && chars.peek() == Some(&'"') => {
+                cell.push('"');
+                chars.next();
+            }
+            '"' => quoted = !quoted,
+            ',' if !quoted => out.push(std::mem::take(&mut cell).trim().to_owned()),
+            c => cell.push(c),
+        }
+    }
+    if quoted {
+        return Err(format!("line {line_no}: unclosed double quote"));
+    }
+    out.push(cell.trim().to_owned());
+    Ok(out)
+}
+
+fn read_balance_csv(text: &str) -> Result<Vec<CsvElement>, String> {
+    let text = text.strip_prefix('\u{feff}').unwrap_or(text);
+    let mut rows = text
+        .lines()
+        .enumerate()
+        .map(|(i, line)| (i + 1, line))
+        .filter(|(_, line)| !line.trim().is_empty());
+    let Some((header_line, header_text)) = rows.next() else {
+        return Err("the CSV file is empty (expected header `id,time,after`)".into());
+    };
+    let header = csv_row(header_text, header_line)?;
+    let [h0, h1, h2] = header.as_slice() else {
+        return Err(format!(
+            "line {header_line}: expected header `id,time,after`, got `{}`",
+            header_text.trim()
+        ));
+    };
+    if h0 != "id" || h1 != "time" || h2 != "after" {
+        return Err(format!(
+            "line {header_line}: expected header `id,time,after`, got `{}`",
+            header_text.trim()
+        ));
+    }
+    let mut elements = Vec::new();
+    for (line_no, line) in rows {
+        let fields = csv_row(line, line_no)?;
+        let [id, time_str, after_str] = fields.as_slice() else {
+            return Err(format!(
+                "line {line_no}: expected 3 fields (`id,time,after`), found {}",
+                fields.len()
+            ));
+        };
+        if id.is_empty() {
+            return Err(format!("line {line_no}: missing work element `id`"));
+        }
+        let time: f64 = time_str
+            .parse()
+            .map_err(|_| format!("line {line_no}: `{time_str}` is not a valid time"))?;
+        if !(time.is_finite() && time > 0.0) {
+            return Err(format!(
+                "line {line_no}: time must be positive and finite, not `{time_str}`"
+            ));
+        }
+        let after = if after_str.is_empty() {
+            Vec::new()
+        } else {
+            after_str
+                .split(';')
+                .map(str::trim)
+                .filter(|s| !s.is_empty())
+                .map(str::to_owned)
+                .collect()
+        };
+        elements.push(CsvElement {
+            id: id.clone(),
+            time,
+            after,
+        });
+    }
+    if elements.is_empty() {
+        return Err(format!("line {header_line}: no work elements after header"));
+    }
+    Ok(elements)
+}
+
+fn balance(
+    file: &Path,
+    cycle: f64,
+    heuristic: Option<BalanceHeuristic>,
+    format: CheckFormat,
+) -> Result<u8, Failure> {
+    let text = std::fs::read_to_string(file)
+        .map_err(|e| Failure(format!("cannot read {}: {e}", file.display())))?;
+    let elements = match read_balance_csv(&text) {
+        Ok(els) => els,
+        Err(msg) => {
+            eprintln!("error: {msg}");
+            return Ok(2);
+        }
+    };
+    let mut params = json!({
+        "elements": elements
+            .iter()
+            .map(|e| json!({ "id": e.id, "time": e.time, "after": e.after }))
+            .collect::<Vec<_>>(),
+        "cycle": cycle,
+    });
+    if let Some(h) = heuristic {
+        params["heuristic"] = json!(h.name());
+    }
+    let answer = match Engine::new().execute("line.balance", params) {
+        Ok(v) => v,
+        Err(err) => {
+            eprintln!("error: {}", err.message);
+            return Ok(2);
+        }
+    };
+    match format {
+        CheckFormat::Json => println!(
+            "{}",
+            serde_json::to_string_pretty(&answer).unwrap_or_default()
+        ),
+        CheckFormat::Table => print!("{}", output::balance(file, &answer)),
     }
     Ok(0)
 }
@@ -578,6 +762,12 @@ fn main() -> ExitCode {
             target,
             format,
         } => explain(&file, scenario.as_deref(), target, format),
+        Command::Balance {
+            file,
+            cycle,
+            heuristic,
+            format,
+        } => balance(&file, cycle, heuristic, format),
         Command::Run {
             file,
             scenario,

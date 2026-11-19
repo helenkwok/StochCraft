@@ -86,6 +86,15 @@ shortest queue, those giving up) are not guessed. `--format json` gives the engi
 stochcraft-cli explain queue.bpmn
 ```
 
+To balance work elements of an assembly line across stations for a cycle time, `balance` reads a
+CSV file (`id,time,after`, with `;`-separated predecessors) and compares the largest candidate
+rule, Kilbridge and Wester, and ranked positional weights against the theoretical minimum
+(`--heuristic` runs one; `--format json` gives the engine's `line.balance` answer):
+
+```bash
+stochcraft-cli balance elements.csv --cycle 1.0
+```
+
 ```bash
 stochcraft-cli run queue.bpmn --reps 20
 ```

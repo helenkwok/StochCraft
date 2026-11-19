@@ -3774,3 +3774,88 @@ fn the_capacity_table_is_a_query() {
         assert_eq!(err(&mut e, "model.capacity", bad), ErrorCode::InvalidParams);
     }
 }
+
+#[test]
+fn line_balance_is_a_query_matching_groover_and_refusing_loops() {
+    let groover = json!([
+        {"id": "1", "time": 0.2},
+        {"id": "2", "time": 0.4},
+        {"id": "3", "time": 0.7, "after": ["1"]},
+        {"id": "4", "time": 0.1, "after": ["1", "2"]},
+        {"id": "5", "time": 0.3, "after": ["2"]},
+        {"id": "6", "time": 0.11, "after": ["3"]},
+        {"id": "7", "time": 0.32, "after": ["3"]},
+        {"id": "8", "time": 0.6, "after": ["3", "4"]},
+        {"id": "9", "time": 0.27, "after": ["6", "7", "8"]},
+        {"id": "10", "time": 0.38, "after": ["5", "8"]},
+        {"id": "11", "time": 0.5, "after": ["9", "10"]},
+        {"id": "12", "time": 0.12, "after": ["11"]}
+    ]);
+    // Works with no model open.
+    let mut e = Engine::new();
+    let r = ok(
+        &mut e,
+        "line.balance",
+        json!({"elements": groover, "cycle": 1.0}),
+    );
+    assert_eq!(r["cycle"], 1.0);
+    assert!((r["work_content"].as_f64().unwrap_or(0.0) - 4.0).abs() < 1e-9);
+    assert_eq!(r["theoretical_min"], 4);
+    let balances = r["balances"].as_array().map_or(&[][..], Vec::as_slice);
+    assert_eq!(balances.len(), 3);
+    assert_eq!(balances[0]["heuristic"], "largest_candidate");
+    let times: Vec<f64> = balances[0]["stations"]
+        .as_array()
+        .into_iter()
+        .flatten()
+        .map(|s| s["time"].as_f64().unwrap_or(f64::NAN))
+        .collect();
+    let want = [1.0, 0.81, 0.98, 0.59, 0.62];
+    assert_eq!(times.len(), want.len(), "{r}");
+    for (got, expected) in times.iter().zip(want) {
+        assert!((got - expected).abs() < 1e-9, "{times:?} vs {want:?}");
+    }
+    assert!((balances[0]["efficiency"].as_f64().unwrap_or(0.0) - 0.8).abs() < 1e-9);
+    // Asking for one heuristic returns only that one.
+    let single = ok(
+        &mut e,
+        "line.balance",
+        json!({"elements": groover, "cycle": 1.0, "heuristic": "largest_candidate"}),
+    );
+    assert_eq!(single["balances"].as_array().map(Vec::len), Some(1));
+    assert_eq!(single["balances"][0], balances[0]);
+    // A query: nothing is journalled or undoable.
+    assert!(e.journal().is_empty());
+    assert_eq!(err(&mut e, "undo", json!({})), ErrorCode::NothingToUndo);
+
+    // A loop in `after` is refused with a message naming the element.
+    let loop_err = e
+        .execute(
+            "line.balance",
+            json!({
+                "elements": [
+                    {"id": "A", "time": 1.0, "after": ["B"]},
+                    {"id": "B", "time": 1.0, "after": ["A"]}
+                ],
+                "cycle": 2.0
+            }),
+        )
+        .err();
+    assert_eq!(
+        loop_err.as_ref().map(|x| x.code),
+        Some(ErrorCode::InvalidParams)
+    );
+    assert!(
+        loop_err.as_ref().is_some_and(|x| x.message.contains('A')),
+        "{loop_err:?}"
+    );
+    for bad in [
+        json!({"elements": [], "cycle": 1.0}),
+        json!({"elements": [{"id": "A", "time": 1.0}], "cycle": 0.0}),
+        json!({"elements": [{"id": "A", "time": 2.0}], "cycle": 1.0}),
+        json!({"elements": [{"id": "A", "time": 1.0, "after": ["Q"]}], "cycle": 2.0}),
+        json!({"elements": [{"id": "A", "time": 1.0}], "cycle": 1.0, "extra": true}),
+    ] {
+        assert_eq!(err(&mut e, "line.balance", bad), ErrorCode::InvalidParams);
+    }
+}
