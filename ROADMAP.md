@@ -2469,8 +2469,9 @@ answers, and ships as an example model with its write-up ("Examples for teaching
      need), built as the viewport's mesh type. CADCraft is 2D drafting with no meshes, and no
      `craft-factory` exists in any Craft repository.
    - **What reuse costs, to settle first:**
-     - the apps move from eframe's glow backend to wgpu, as SolidCraft runs (D22), and the
-       browser build is checked again on WebGPU and on wgpu's WebGL2 fallback;
+     - only if the CPU renderer is measured too slow (D27): the apps move from eframe's glow
+       backend to wgpu, as SolidCraft runs, and the browser build is checked again on WebGPU
+       and on wgpu's WebGL2 fallback;
      - both apps must build the same egui: StochCraft pins the storytold fork at a revision,
        SolidCraft vendors its own copy, so the viewport crates come in at a matching revision
        (or move to `craft-libs` first);
@@ -2479,7 +2480,7 @@ answers, and ships as an example model with its write-up ("Examples for teaching
        split out of it is the fallback;
      - many moving entities: `InstancedMesh` keeps one copy of a mesh on the GPU and re-sends
        only the placements each frame; 100 and 5,000 moving totes are measured on WebGL2 and
-       an integrated GPU before M5.3 depends on it;
+       an integrated GPU before the 3D view depends on it;
      - the egui-wgpu changes SolidCraft's viewport relies on (the drawable acquired before the
        paint callbacks are prepared, the multisampling clamp) go into the shared egui fork;
      - its mesh type lives in `solidcore-tess`, which compiles SolidCraft's B-rep kernel: the
@@ -2594,7 +2595,8 @@ layout. The flagship example is a parcel super hub.
 #### `Path`: geometry with exact lengths
 
 - A `Path` is a list of segments in metres: `Line { length, rise }`, `Arc { radius, angle,
-  rise }` (degrees, positive turns left) and `Helix { radius, rise, turns }`, each continuing from
+  rise }` (degrees, positive turns left) and `Helix { radius, rise, turns }` (`rise` is always the segment's total rise, for a helix over
+  all its turns), each continuing from
   the end frame of the one before, from a start frame (x, y, z, heading). `length` is measured
   along the slope, so an incline is a line with a rise and a spiral is a helix. A clothoid
   segment can come later.
@@ -2645,8 +2647,12 @@ layout. The flagship example is a parcel super hub.
   2. Spacing is a distance, never a time: an item stops `gap` behind the rear of the item ahead,
      whatever their lengths. Pitch p = length + gap holds for items of one length; mixed lengths
      use each item's own.
-  3. No overhang. An item is on a section until its front reaches the end and the next section
-     takes it; then it is wholly on the next. Capacity counts whole items.
+  3. Crossing a junction takes travel. When an item's front reaches the end of a section, the
+     next section takes the front (after the junction's transfer time, 0 by default) and the
+     rear follows: the item occupies both sections until its rear is across, moving at the
+     lower of the two speeds and stopping if either section stops. Both sections count it while
+     it spans the junction, so entry needs room on the next one. Positions never jump, and a
+     path's travel time does not depend on how many sections it crosses.
   4. Entry, at the start or at a merge `s`, needs the stretch it will occupy plus the gap clear;
      otherwise the sender waits, first asked, first in.
   5. All items on a section share its speed. A speed change takes effect at the event that makes
@@ -2973,7 +2979,7 @@ our choice, to be stated in the example's write-up (STRESS-DES).
 #### Checks with known answers
 
 - **Paths:** an arc's length is √((r × θ)² + rise²) (θ in radians; r × θ when flat), and
-  `point_at` measures distance along that slope; a helix's is turns × √((2πr)² + rise²); a
+  `point_at` measures distance along that slope; a helix's is √((2πr × turns)² + rise²), ending `rise` above its start; a
   line with a rise is √(run² + rise²); `point_at(length())` is the end frame, worked by hand for a
   line, a quarter arc and two helix turns.
 - **Split stretches:** a drawn belt cut at a divert gives the same item times as M5.1's single
@@ -3356,7 +3362,7 @@ and the Pages preview of an M3 pull request shows the blocks already merged.
 | D19 | Python (M6.1) | Settled (2026-11-16): a native package, `pip install stochcraft`, the engine built into a Python module with PyO3 and maturin; Python drives models from outside, and logic inside a run is M6.3's, not Python's |
 | D20 | Plugins (M6.2, M6.3) | Settled (2026-11-16): sandboxed WebAssembly plugins in `wasmi`, as the other Craft apps have; command plugins first (through the engine's commands, one undo step, permissions in a manifest), then logic plugins called during a run with the engine's random streams, an instruction budget and a memory cap |
 | D21 | What comes after the capacity table, and where the sorter sits | Recommended: the sorter (M5.1 conveyors, M5.2 operators, M5.3 the layout view in 2D then 3D, M5.4 its dashboard) first, built alongside M3.7 because it changes `model`, `blocks` and the engine while M3.7 changes `ui-egui`; M5.3 follows #151's moving entities so it reuses them. Then M7.1 line balancing (small, needs no run, reuses takt and the capacity table), M7.2 the from-to chart (reuses the capacity table's rates, and M5.5's layout distances; `layout_scale` only for a model with no layout), M7.3 inventory, M7.4 sharing. M4 waits until the sorter's first two steps are in. M5.5's layout layer then comes before M7.2, which draws on it |
-| D22 | Moving the apps from eframe's glow backend to wgpu | **Recommended, at M5.3:** the 3D view reuses the Craft apps' shared viewport from SolidCraft (camera, picking, shading, a headless rasterizer, a browser build already working), which runs on wgpu. The alternative, a renderer of our own through an `egui_glow` paint callback, keeps today's backend but rewrites all of that. The move is its own PR before M5.3, with the browser build checked on WebGPU and WebGL2. Since then the 3D view shipped on a CPU renderer (`view3d.rs`); see D27 |
+| D22 | Moving the apps from eframe's glow backend to wgpu | **Superseded by D27**, the single renderer decision. Kept for the record: it recommended the move at M5.3, as its own PR before it, so the 3D view could reuse the Craft apps' shared viewport from SolidCraft (camera, picking, shading, a headless rasterizer, a browser build already working), which runs on wgpu. The alternative, a renderer of our own through an `egui_glow` paint callback, keeps today's backend but rewrites all of that. The 3D view then shipped on a CPU renderer (`view3d.rs`), and D27 keeps it until a measurement shows it too slow |
 | D23 | Conveyor length: typed or from its path (M5.5) | **Recommended: from the path.** The path's exact length is the length the run uses; a typed length stays as an override, shown beside the drawn length with a warning. An existing file whose `length` differs from its path reads that `length` as the override, so no validated result moves |
 | D24 | Where layout data lives (M5.5) | **Recommended:** all of it in the BPMN file as `stochcraft:` extensions (what the run reads, and scenery in `stochcraft:scene`), with glTF 2.0 as the exchange format. No sidecar: a TOML or JSON file would use a standard syntax but a vocabulary of our own, against principle 1. Cost: larger BPMN files and noisier diffs that other BPMN tools carry blindly |
 | D25 | A divert: a point on a conveyor, or a gateway block linked to one (M5.5) | **Recommended: both, one per layer.** The logic stays an exclusive gateway (M5.1's divert routing, conditions, DMN), so BPMN tools still read it; the gateway is placed at a divert point at `s` on a section, which gives it its position and lane. A divert point without a gateway is not allowed |
