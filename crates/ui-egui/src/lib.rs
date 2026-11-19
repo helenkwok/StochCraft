@@ -515,6 +515,10 @@ pub trait Workers {
     fn stop(&mut self);
 }
 
+/// The engine's comparison of the baseline with the results on show, keyed by their serials and
+/// the interface language its list of changes is written in.
+type Comparison = ((u64, u64, craft_i18n::Lang), Value, Vec<String>);
+
 /// The application: one model document and what the window shows of it.
 pub struct App {
     engine: Engine,
@@ -539,7 +543,7 @@ pub struct App {
     /// The engine's comparison of the baseline with the results on show, and what changed in
     /// the model between them, by their serials and the interface language the changes are
     /// written in.
-    comparison: Option<((u64, u64, craft_i18n::Lang), Value, Vec<String>)>,
+    comparison: Option<Comparison>,
     running: Option<Running>,
     /// The shell's workers for runs, if it has any.
     workers: Option<Box<dyn Workers>>,
