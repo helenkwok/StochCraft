@@ -970,3 +970,33 @@ unit	yr	a
 	From the last run; – when there are none, or they are out of date.	Da última simulação; – se não houver ou estiverem desatualizados.
 	Show this block	Mostrar este bloco
 	Rates and times are per {unit}.	Taxas e tempos são por {unit}.
+	Dashboard	Painel
+	Throughput	Vazão
+	{n} per hour	{n} por hora
+	95% interval {low} to {high} per hour	Intervalo de 95%: de {low} a {high} por hora
+	So far in the run being watched	Até agora na execução acompanhada
+	No sink in this model	Nenhum ponto de saída neste modelo
+	Nothing left the model in this run	Nada saiu do modelo nesta execução
+	Everything that left the model through its sinks, per hour.	Tudo o que saiu do modelo pelos seus pontos de saída, por hora.
+	Utilisation by resource	Utilização por recurso
+	{name}: {busy} busy	{name}: {busy} ocupado
+	Idle	Ocioso
+	and {n} more	e mais {n}
+	How each resource spends its time, and its busy share.	Como cada recurso gasta seu tempo e sua parcela de ocupação.
+	No resource reports how it spends its time	Nenhum recurso informa como gasta seu tempo
+	Time on conveyors	Tempo nas esteiras
+	No conveyors in this model	Nenhuma esteira neste modelo
+	Fills in when the run ends	Preenche quando a execução termina
+	How long each item spends on the conveyors.	Quanto tempo cada item passa nas esteiras.
+	No item has left a conveyor yet	Nenhum item saiu de uma esteira ainda
+	Share of items by time on a conveyor, in {unit}	Parcela de itens por tempo em uma esteira, em {unit}
+	Time on conveyors: {n} items between {lo} and {hi} {unit}	Tempo nas esteiras: {n} itens entre {lo} e {hi} {unit}
+	{from} to {to} {unit}: {share} of items ({n})	De {from} a {to} {unit}: {share} dos itens ({n})
+	Items on conveyors over time	Itens nas esteiras ao longo do tempo
+	Items in the model over time	Itens no modelo ao longo do tempo
+	How many items are on the conveyors over time.	Quantos itens estão nas esteiras ao longo do tempo.
+	How many items are in the model over time.	Quantos itens estão no modelo ao longo do tempo.
+	Nothing was recorded over time in these results	Nada foi registrado ao longo do tempo nestes resultados
+	At {time} {unit}: {n} items	Em {time} {unit}: {n} itens
+	Run the model to fill the dashboard	Execute o modelo para preencher o painel
+	The resource and conveyor charts show the last run until this one ends	Os gráficos de recursos e esteiras mostram a última execução até esta terminar

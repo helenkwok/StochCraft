@@ -970,3 +970,33 @@ unit	yr	a
 	From the last run; – when there are none, or they are out of date.	Din ultima simulare; – dacă nu există sau sunt depășite.
 	Show this block	Arată acest bloc
 	Rates and times are per {unit}.	Ratele și duratele sunt pe {unit}.
+	Dashboard	Tablou de bord
+	Throughput	Debit
+	{n} per hour	{n} pe oră
+	95% interval {low} to {high} per hour	Interval de 95%: de la {low} la {high} pe oră
+	So far in the run being watched	Până acum în rularea urmărită
+	No sink in this model	Nicio ieșire în acest model
+	Nothing left the model in this run	Nimic nu a părăsit modelul în această rulare
+	Everything that left the model through its sinks, per hour.	Tot ce a părăsit modelul prin ieșirile sale, pe oră.
+	Utilisation by resource	Utilizare pe resursă
+	{name}: {busy} busy	{name}: {busy} ocupat
+	Idle	Inactiv
+	and {n} more	și încă {n}
+	How each resource spends its time, and its busy share.	Cum își petrece timpul fiecare resursă și ponderea sa de ocupare.
+	No resource reports how it spends its time	Nicio resursă nu raportează cum își petrece timpul
+	Time on conveyors	Timp pe benzi transportoare
+	No conveyors in this model	Nicio bandă transportoare în acest model
+	Fills in when the run ends	Se completează la sfârșitul rulării
+	How long each item spends on the conveyors.	Cât timp petrece fiecare articol pe benzile transportoare.
+	No item has left a conveyor yet	Niciun articol nu a părăsit încă o bandă
+	Share of items by time on a conveyor, in {unit}	Ponderea articolelor după timpul pe o bandă, în {unit}
+	Time on conveyors: {n} items between {lo} and {hi} {unit}	Timp pe benzi: {n} articole între {lo} și {hi} {unit}
+	{from} to {to} {unit}: {share} of items ({n})	De la {from} la {to} {unit}: {share} din articole ({n})
+	Items on conveyors over time	Articole pe benzi în timp
+	Items in the model over time	Articole în model în timp
+	How many items are on the conveyors over time.	Câte articole sunt pe benzi în timp.
+	How many items are in the model over time.	Câte articole sunt în model în timp.
+	Nothing was recorded over time in these results	În aceste rezultate nu s-a înregistrat nimic în timp
+	At {time} {unit}: {n} items	La {time} {unit}: {n} articole
+	Run the model to fill the dashboard	Rulați modelul pentru a completa tabloul de bord
+	The resource and conveyor charts show the last run until this one ends	Graficele resurselor și benzilor arată ultima rulare până se încheie aceasta

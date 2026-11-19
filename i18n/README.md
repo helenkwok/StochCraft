@@ -727,6 +727,17 @@ engine's messages (validation, file notes) are English too.
   least certain are lo, th, ta, te, bn, ka, kk, hi, sq, et and lt, the use of "Service" as the
   column for the mean service time, and the word for congested in el, hu, tr and fi.
 
+- The rows added for the Dashboard panel (M5.4: its name, "Throughput", the tiles' titles, empty
+  states, tooltips and descriptions) were machine-drafted with Claude Code from the plain meaning
+  of the English, reusing each catalog's own words for utilisation, conveyor and 95% interval
+  where it has them. "Throughput" (items through the model per unit of time), "Idle" (a
+  resource's time with nothing to do, kept apart from "starved" and "off shift") and "Dashboard"
+  (a panel of tiles, often kept as a loanword) are the words most open to a better choice. Not
+  checked against any other source, and not reviewed by native speakers; the least certain are
+  lo, th, ta, te, bn, ka, kk, hi, sq, et and lt, and the count nouns after "{n}" ("items",
+  "more") in languages that inflect them by number (pl, cs, sk, sl, hr, bs, sr, ru, uk, lt, lo):
+  the rows are not plural rows, so the form after a count may be wrong for some counts.
+
 **Adding or changing a string:** add the English in the code through `i18n::t` (or `tf`, `tn`),
 then add its row to each catalog here, or leave it out to show English until it is translated.
 Right-to-left languages are not offered until the layout is mirrored.

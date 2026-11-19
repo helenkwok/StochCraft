@@ -970,3 +970,33 @@ unit	yr	ж.
 	From the last run; – when there are none, or they are out of date.	Соңғы іске қосудан; – олар жоқ немесе ескірген болса.
 	Show this block	Бұл блокты көрсету
 	Rates and times are per {unit}.	Қарқындар мен уақыттар {unit} бойынша берілген.
+	Dashboard	Бақылау тақтасы
+	Throughput	Өткізу қабілеті
+	{n} per hour	Сағатына {n}
+	95% interval {low} to {high} per hour	95% аралық: сағатына {low} мен {high} арасы
+	So far in the run being watched	Бақыланатын жүгіруде осы уақытқа дейін
+	No sink in this model	Бұл модельде шығыс жоқ
+	Nothing left the model in this run	Бұл жүгіруде модельден ештеңе шықпады
+	Everything that left the model through its sinks, per hour.	Модельден оның шығыстары арқылы шыққан барлығы, сағатына.
+	Utilisation by resource	Ресурс бойынша пайдалану
+	{name}: {busy} busy	{name}: {busy} бос емес
+	Idle	Бос тұру
+	and {n} more	және тағы {n}
+	How each resource spends its time, and its busy share.	Әр ресурс уақытын қалай өткізеді және оның бос емес үлесі.
+	No resource reports how it spends its time	Ешбір ресурс уақытын қалай өткізетінін хабарламайды
+	Time on conveyors	Конвейерлердегі уақыт
+	No conveyors in this model	Бұл модельде конвейер жоқ
+	Fills in when the run ends	Жүгіру аяқталғанда толады
+	How long each item spends on the conveyors.	Әр элемент конвейерлерде қанша уақыт болады.
+	No item has left a conveyor yet	Әзірге ешбір элемент конвейерден шыққан жоқ
+	Share of items by time on a conveyor, in {unit}	Конвейердегі уақыт бойынша элементтер үлесі, {unit}
+	Time on conveyors: {n} items between {lo} and {hi} {unit}	Конвейерлердегі уақыт: {lo} мен {hi} {unit} арасында {n} элемент
+	{from} to {to} {unit}: {share} of items ({n})	{from} мен {to} {unit} арасы: элементтердің {share} ({n})
+	Items on conveyors over time	Конвейерлердегі элементтер уақыт бойынша
+	Items in the model over time	Модельдегі элементтер уақыт бойынша
+	How many items are on the conveyors over time.	Конвейерлерде уақыт бойынша қанша элемент бар.
+	How many items are in the model over time.	Модельде уақыт бойынша қанша элемент бар.
+	Nothing was recorded over time in these results	Бұл нәтижелерде уақыт бойынша ештеңе жазылмаған
+	At {time} {unit}: {n} items	{time} {unit} сәтінде: {n} элемент
+	Run the model to fill the dashboard	Бақылау тақтасын толтыру үшін модельді жүгіртіңіз
+	The resource and conveyor charts show the last run until this one ends	Ресурстар мен конвейерлер диаграммалары бұл аяқталғанша соңғы жүгіруді көрсетеді

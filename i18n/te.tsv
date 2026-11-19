@@ -970,3 +970,33 @@ unit	yr	సం.
 	From the last run; – when there are none, or they are out of date.	చివరి రన్ నుండి; – లేకపోతే లేదా పాతబడితే.
 	Show this block	ఈ బ్లాక్‌ను చూపండి
 	Rates and times are per {unit}.	రేట్లు, సమయాలు ప్రతి {unit}కు.
+	Dashboard	డాష్‌బోర్డ్
+	Throughput	త్రూపుట్
+	{n} per hour	గంటకు {n}
+	95% interval {low} to {high} per hour	95% అంతరం: గంటకు {low} నుండి {high}
+	So far in the run being watched	గమనిస్తున్న రన్‌లో ఇప్పటివరకు
+	No sink in this model	ఈ మోడల్‌లో నిష్క్రమణ లేదు
+	Nothing left the model in this run	ఈ రన్‌లో మోడల్ నుండి ఏదీ బయటకు వెళ్లలేదు
+	Everything that left the model through its sinks, per hour.	నిష్క్రమణల ద్వారా మోడల్ నుండి బయటకు వెళ్లినవన్నీ, గంటకు.
+	Utilisation by resource	వనరు వారీగా వినియోగం
+	{name}: {busy} busy	{name}: {busy} బిజీ
+	Idle	ఖాళీ
+	and {n} more	మరో {n}
+	How each resource spends its time, and its busy share.	ప్రతి వనరు సమయాన్ని ఎలా గడుపుతుంది, దాని బిజీ వాటా.
+	No resource reports how it spends its time	ఏ వనరూ తన సమయాన్ని ఎలా గడుపుతుందో నివేదించదు
+	Time on conveyors	కన్వేయర్లపై సమయం
+	No conveyors in this model	ఈ మోడల్‌లో కన్వేయర్లు లేవు
+	Fills in when the run ends	రన్ ముగిసినప్పుడు నిండుతుంది
+	How long each item spends on the conveyors.	ప్రతి వస్తువు కన్వేయర్లపై ఎంత సమయం గడుపుతుంది.
+	No item has left a conveyor yet	ఇంకా ఏ వస్తువూ కన్వేయర్‌ను వదలలేదు
+	Share of items by time on a conveyor, in {unit}	కన్వేయర్‌పై సమయం ప్రకారం వస్తువుల వాటా, {unit}లో
+	Time on conveyors: {n} items between {lo} and {hi} {unit}	కన్వేయర్లపై సమయం: {lo} మరియు {hi} {unit} మధ్య {n} వస్తువులు
+	{from} to {to} {unit}: {share} of items ({n})	{from} నుండి {to} {unit}: వస్తువులలో {share} ({n})
+	Items on conveyors over time	కాలక్రమేణా కన్వేయర్లపై వస్తువులు
+	Items in the model over time	కాలక్రమేణా మోడల్‌లో వస్తువులు
+	How many items are on the conveyors over time.	కాలక్రమేణా కన్వేయర్లపై ఎన్ని వస్తువులు ఉన్నాయి.
+	How many items are in the model over time.	కాలక్రమేణా మోడల్‌లో ఎన్ని వస్తువులు ఉన్నాయి.
+	Nothing was recorded over time in these results	ఈ ఫలితాలలో కాలక్రమేణా ఏదీ నమోదు కాలేదు
+	At {time} {unit}: {n} items	{time} {unit} వద్ద: {n} వస్తువులు
+	Run the model to fill the dashboard	డాష్‌బోర్డ్ నింపడానికి మోడల్‌ను రన్ చేయండి
+	The resource and conveyor charts show the last run until this one ends	ఇది ముగిసే వరకు వనరు, కన్వేయర్ చార్టులు చివరి రన్‌ను చూపిస్తాయి

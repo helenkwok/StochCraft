@@ -970,3 +970,33 @@ unit	yr	år
 	From the last run; – when there are none, or they are out of date.	Från den senaste körningen; – om det saknas eller är inaktuellt.
 	Show this block	Visa det här blocket
 	Rates and times are per {unit}.	Intensiteter och tider anges per {unit}.
+	Dashboard	Instrumentpanel
+	Throughput	Genomströmning
+	{n} per hour	{n} per timme
+	95% interval {low} to {high} per hour	95-procentigt intervall {low} till {high} per timme
+	So far in the run being watched	Hittills i den följda körningen
+	No sink in this model	Ingen utgång i den här modellen
+	Nothing left the model in this run	Inget lämnade modellen i den här körningen
+	Everything that left the model through its sinks, per hour.	Allt som lämnade modellen via dess utgångar, per timme.
+	Utilisation by resource	Utnyttjande per resurs
+	{name}: {busy} busy	{name}: {busy} upptagen
+	Idle	Overksam
+	and {n} more	och {n} till
+	How each resource spends its time, and its busy share.	Hur varje resurs använder sin tid och dess upptagna andel.
+	No resource reports how it spends its time	Ingen resurs rapporterar hur den använder sin tid
+	Time on conveyors	Tid på transportband
+	No conveyors in this model	Inga transportband i den här modellen
+	Fills in when the run ends	Fylls när körningen är klar
+	How long each item spends on the conveyors.	Hur länge varje objekt är på transportbanden.
+	No item has left a conveyor yet	Inget objekt har lämnat ett transportband än
+	Share of items by time on a conveyor, in {unit}	Andel objekt efter tid på ett transportband, i {unit}
+	Time on conveyors: {n} items between {lo} and {hi} {unit}	Tid på transportband: {n} objekt mellan {lo} och {hi} {unit}
+	{from} to {to} {unit}: {share} of items ({n})	{from} till {to} {unit}: {share} av objekten ({n})
+	Items on conveyors over time	Objekt på transportband över tid
+	Items in the model over time	Objekt i modellen över tid
+	How many items are on the conveyors over time.	Hur många objekt som finns på transportbanden över tid.
+	How many items are in the model over time.	Hur många objekt som finns i modellen över tid.
+	Nothing was recorded over time in these results	Inget registrerades över tid i de här resultaten
+	At {time} {unit}: {n} items	Vid {time} {unit}: {n} objekt
+	Run the model to fill the dashboard	Kör modellen för att fylla instrumentpanelen
+	The resource and conveyor charts show the last run until this one ends	Diagrammen för resurser och transportband visar den senaste körningen tills den här är klar

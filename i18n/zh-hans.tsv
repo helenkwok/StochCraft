@@ -970,3 +970,33 @@ unit	yr	年
 	From the last run; – when there are none, or they are out of date.	来自最近一次运行；没有或已过期时显示 –
 	Show this block	显示此模块
 	Rates and times are per {unit}.	速率和时间均为每 {unit}。
+	Dashboard	仪表板
+	Throughput	吞吐量
+	{n} per hour	每小时 {n}
+	95% interval {low} to {high} per hour	95% 区间：每小时 {low} 至 {high}
+	So far in the run being watched	截至目前，在观察的运行中
+	No sink in this model	此模型没有出口
+	Nothing left the model in this run	本次运行中没有任何东西离开模型
+	Everything that left the model through its sinks, per hour.	经由出口离开模型的全部，按每小时计。
+	Utilisation by resource	各资源的利用率
+	{name}: {busy} busy	{name}：{busy} 忙碌
+	Idle	空闲
+	and {n} more	以及另外 {n} 个
+	How each resource spends its time, and its busy share.	每个资源如何度过时间，以及其忙碌占比。
+	No resource reports how it spends its time	没有资源报告其时间的使用情况
+	Time on conveyors	在传送带上的时间
+	No conveyors in this model	此模型中没有传送带
+	Fills in when the run ends	运行结束后填充
+	How long each item spends on the conveyors.	每个物品在传送带上停留多久。
+	No item has left a conveyor yet	还没有物品离开传送带
+	Share of items by time on a conveyor, in {unit}	按在传送带上的时间划分的物品占比，单位 {unit}
+	Time on conveyors: {n} items between {lo} and {hi} {unit}	在传送带上的时间：{lo} 到 {hi} {unit} 之间有 {n} 个物品
+	{from} to {to} {unit}: {share} of items ({n})	{from} 到 {to} {unit}：占物品的 {share}（{n}）
+	Items on conveyors over time	传送带上的物品数随时间变化
+	Items in the model over time	模型中的物品数随时间变化
+	How many items are on the conveyors over time.	传送带上有多少物品随时间变化。
+	How many items are in the model over time.	模型中有多少物品随时间变化。
+	Nothing was recorded over time in these results	这些结果中没有记录随时间变化的数据
+	At {time} {unit}: {n} items	在 {time} {unit}：{n} 个物品
+	Run the model to fill the dashboard	运行模型以填充仪表板
+	The resource and conveyor charts show the last run until this one ends	资源和传送带图表显示上一次运行，直到本次结束

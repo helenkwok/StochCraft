@@ -970,3 +970,33 @@ unit	yr	j
 	From the last run; – when there are none, or they are out of date.	Van de laatste run; – als er geen zijn of ze verouderd zijn.
 	Show this block	Dit blok tonen
 	Rates and times are per {unit}.	Snelheden en tijden zijn per {unit}.
+	Dashboard	Dashboard
+	Throughput	Doorvoer
+	{n} per hour	{n} per uur
+	95% interval {low} to {high} per hour	95%-interval {low} tot {high} per uur
+	So far in the run being watched	Tot nu toe in de gevolgde run
+	No sink in this model	Geen uitgang in dit model
+	Nothing left the model in this run	In deze run heeft niets het model verlaten
+	Everything that left the model through its sinks, per hour.	Alles wat het model via de uitgangen heeft verlaten, per uur.
+	Utilisation by resource	Bezetting per middel
+	{name}: {busy} busy	{name}: {busy} bezet
+	Idle	Inactief
+	and {n} more	en nog {n}
+	How each resource spends its time, and its busy share.	Hoe elk middel zijn tijd besteedt en het bezette deel.
+	No resource reports how it spends its time	Geen enkel middel meldt hoe het zijn tijd besteedt
+	Time on conveyors	Tijd op transportbanden
+	No conveyors in this model	Geen transportbanden in dit model
+	Fills in when the run ends	Wordt gevuld als de run eindigt
+	How long each item spends on the conveyors.	Hoe lang elk item op de transportbanden doorbrengt.
+	No item has left a conveyor yet	Nog geen item heeft een transportband verlaten
+	Share of items by time on a conveyor, in {unit}	Aandeel items naar tijd op een transportband, in {unit}
+	Time on conveyors: {n} items between {lo} and {hi} {unit}	Tijd op transportbanden: {n} items tussen {lo} en {hi} {unit}
+	{from} to {to} {unit}: {share} of items ({n})	{from} tot {to} {unit}: {share} van de items ({n})
+	Items on conveyors over time	Items op transportbanden in de tijd
+	Items in the model over time	Items in het model in de tijd
+	How many items are on the conveyors over time.	Hoeveel items er in de tijd op de transportbanden zijn.
+	How many items are in the model over time.	Hoeveel items er in de tijd in het model zijn.
+	Nothing was recorded over time in these results	In deze resultaten is niets in de tijd vastgelegd
+	At {time} {unit}: {n} items	Op {time} {unit}: {n} items
+	Run the model to fill the dashboard	Voer het model uit om het dashboard te vullen
+	The resource and conveyor charts show the last run until this one ends	De grafieken van middelen en transportbanden tonen de laatste run totdat deze eindigt

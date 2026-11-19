@@ -970,3 +970,33 @@ unit	yr	έτ
 	From the last run; – when there are none, or they are out of date.	Από την τελευταία εκτέλεση· – αν δεν υπάρχουν ή είναι παλιά.
 	Show this block	Εμφάνιση αυτού του μπλοκ
 	Rates and times are per {unit}.	Οι ρυθμοί και οι χρόνοι είναι ανά {unit}.
+	Dashboard	Πίνακας ελέγχου
+	Throughput	Ρυθμός διέλευσης
+	{n} per hour	{n} ανά ώρα
+	95% interval {low} to {high} per hour	Διάστημα 95%: από {low} έως {high} ανά ώρα
+	So far in the run being watched	Μέχρι τώρα στην εκτέλεση που παρακολουθείται
+	No sink in this model	Δεν υπάρχει έξοδος σε αυτό το μοντέλο
+	Nothing left the model in this run	Σε αυτή την εκτέλεση δεν βγήκε τίποτα από το μοντέλο
+	Everything that left the model through its sinks, per hour.	Ό,τι βγήκε από το μοντέλο μέσω των εξόδων του, ανά ώρα.
+	Utilisation by resource	Αξιοποίηση ανά πόρο
+	{name}: {busy} busy	{name}: {busy} απασχολημένος
+	Idle	Αδράνεια
+	and {n} more	και {n} ακόμη
+	How each resource spends its time, and its busy share.	Πώς περνά ο καθένας πόρος τον χρόνο του και το μερίδιο απασχόλησής του.
+	No resource reports how it spends its time	Κανένας πόρος δεν αναφέρει πώς περνά τον χρόνο του
+	Time on conveyors	Χρόνος στους μεταφορικούς ιμάντες
+	No conveyors in this model	Δεν υπάρχουν μεταφορικοί ιμάντες σε αυτό το μοντέλο
+	Fills in when the run ends	Γεμίζει όταν τελειώσει η εκτέλεση
+	How long each item spends on the conveyors.	Πόσο χρόνο περνά κάθε αντικείμενο στους μεταφορικούς ιμάντες.
+	No item has left a conveyor yet	Κανένα αντικείμενο δεν έχει βγει ακόμη από ιμάντα
+	Share of items by time on a conveyor, in {unit}	Μερίδιο αντικειμένων ανά χρόνο σε ιμάντα, σε {unit}
+	Time on conveyors: {n} items between {lo} and {hi} {unit}	Χρόνος στους ιμάντες: {n} αντικείμενα μεταξύ {lo} και {hi} {unit}
+	{from} to {to} {unit}: {share} of items ({n})	Από {from} έως {to} {unit}: {share} των αντικειμένων ({n})
+	Items on conveyors over time	Αντικείμενα στους ιμάντες στον χρόνο
+	Items in the model over time	Αντικείμενα στο μοντέλο στον χρόνο
+	How many items are on the conveyors over time.	Πόσα αντικείμενα βρίσκονται στους ιμάντες στον χρόνο.
+	How many items are in the model over time.	Πόσα αντικείμενα βρίσκονται στο μοντέλο στον χρόνο.
+	Nothing was recorded over time in these results	Σε αυτά τα αποτελέσματα δεν καταγράφηκε τίποτα στον χρόνο
+	At {time} {unit}: {n} items	Τη στιγμή {time} {unit}: {n} αντικείμενα
+	Run the model to fill the dashboard	Εκτελέστε το μοντέλο για να γεμίσει ο πίνακας ελέγχου
+	The resource and conveyor charts show the last run until this one ends	Τα γραφήματα πόρων και ιμάντων δείχνουν την τελευταία εκτέλεση μέχρι να τελειώσει αυτή

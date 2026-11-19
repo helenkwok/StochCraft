@@ -970,3 +970,33 @@ unit	yr	v
 	From the last run; – when there are none, or they are out of date.	Viimeisestä ajosta; – jos tuloksia ei ole tai ne ovat vanhentuneet.
 	Show this block	Näytä tämä lohko
 	Rates and times are per {unit}.	Nopeudet ja ajat ovat yksikössä {unit}.
+	Dashboard	Koontinäyttö
+	Throughput	Läpimeno
+	{n} per hour	{n} tunnissa
+	95% interval {low} to {high} per hour	95 %:n luottamusväli {low}–{high} tunnissa
+	So far in the run being watched	Tähän asti seuratussa ajossa
+	No sink in this model	Tässä mallissa ei ole poistumispistettä
+	Nothing left the model in this run	Mikään ei poistunut mallista tässä ajossa
+	Everything that left the model through its sinks, per hour.	Kaikki, mikä poistui mallista poistumispisteiden kautta, tunnissa.
+	Utilisation by resource	Käyttöaste resurssin mukaan
+	{name}: {busy} busy	{name}: {busy} varattu
+	Idle	Joutilas
+	and {n} more	ja {n} muuta
+	How each resource spends its time, and its busy share.	Miten kukin resurssi käyttää aikansa, ja sen varattu osuus.
+	No resource reports how it spends its time	Mikään resurssi ei kerro, miten se käyttää aikansa
+	Time on conveyors	Aika kuljettimilla
+	No conveyors in this model	Tässä mallissa ei ole kuljettimia
+	Fills in when the run ends	Täyttyy, kun ajo päättyy
+	How long each item spends on the conveyors.	Kuinka kauan kukin kappale on kuljettimilla.
+	No item has left a conveyor yet	Yksikään kappale ei ole vielä poistunut kuljettimelta
+	Share of items by time on a conveyor, in {unit}	Kappaleiden osuus ajan mukaan kuljettimella, yksikkö {unit}
+	Time on conveyors: {n} items between {lo} and {hi} {unit}	Aika kuljettimilla: {n} kappaletta välillä {lo}–{hi} {unit}
+	{from} to {to} {unit}: {share} of items ({n})	{from}–{to} {unit}: {share} kappaleista ({n})
+	Items on conveyors over time	Kappaleet kuljettimilla ajan mukaan
+	Items in the model over time	Kappaleet mallissa ajan mukaan
+	How many items are on the conveyors over time.	Kuinka monta kappaletta on kuljettimilla ajan mukaan.
+	How many items are in the model over time.	Kuinka monta kappaletta on mallissa ajan mukaan.
+	Nothing was recorded over time in these results	Näihin tuloksiin ei tallennettu mitään ajan mukaan
+	At {time} {unit}: {n} items	Hetkellä {time} {unit}: {n} kappaletta
+	Run the model to fill the dashboard	Aja malli täyttääksesi koontinäytön
+	The resource and conveyor charts show the last run until this one ends	Resurssi- ja kuljetinkaaviot näyttävät viimeisen ajon, kunnes tämä päättyy

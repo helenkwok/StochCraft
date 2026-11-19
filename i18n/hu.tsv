@@ -970,3 +970,33 @@ unit	yr	év
 	From the last run; – when there are none, or they are out of date.	Az utolsó futtatásból; – ha nincs, vagy elavult.
 	Show this block	Blokk megjelenítése
 	Rates and times are per {unit}.	A ráták és az idők {unit} szerint értendők.
+	Dashboard	Irányítópult
+	Throughput	Átbocsátás
+	{n} per hour	{n} óránként
+	95% interval {low} to {high} per hour	95%-os intervallum: {low}–{high} óránként
+	So far in the run being watched	Eddig a követett futtatásban
+	No sink in this model	Nincs kimenet ebben a modellben
+	Nothing left the model in this run	Ebben a futtatásban semmi nem hagyta el a modellt
+	Everything that left the model through its sinks, per hour.	Minden, ami a kimeneteken át elhagyta a modellt, óránként.
+	Utilisation by resource	Kihasználtság erőforrásonként
+	{name}: {busy} busy	{name}: {busy} foglalt
+	Idle	Tétlen
+	and {n} more	és még {n}
+	How each resource spends its time, and its busy share.	Hogyan tölti az idejét az egyes erőforrás, és foglalt hányada.
+	No resource reports how it spends its time	Egy erőforrás sem jelzi, hogyan tölti az idejét
+	Time on conveyors	Idő a szállítószalagokon
+	No conveyors in this model	Nincs szállítószalag ebben a modellben
+	Fills in when the run ends	Kitöltődik, amikor a futtatás véget ér
+	How long each item spends on the conveyors.	Mennyi időt tölt az egyes elem a szállítószalagokon.
+	No item has left a conveyor yet	Még egy elem sem hagyott el szállítószalagot
+	Share of items by time on a conveyor, in {unit}	Az elemek aránya a szalagon töltött idő szerint, {unit}
+	Time on conveyors: {n} items between {lo} and {hi} {unit}	Idő a szalagokon: {n} elem {lo} és {hi} {unit} között
+	{from} to {to} {unit}: {share} of items ({n})	{from}–{to} {unit}: az elemek {share} része ({n})
+	Items on conveyors over time	Elemek a szalagokon az idő függvényében
+	Items in the model over time	Elemek a modellben az idő függvényében
+	How many items are on the conveyors over time.	Hány elem van a szalagokon az idő függvényében.
+	How many items are in the model over time.	Hány elem van a modellben az idő függvényében.
+	Nothing was recorded over time in these results	Ezekben az eredményekben nem rögzítettek semmit az idő függvényében
+	At {time} {unit}: {n} items	{time} {unit} időpontban: {n} elem
+	Run the model to fill the dashboard	Futtassa a modellt az irányítópult kitöltéséhez
+	The resource and conveyor charts show the last run until this one ends	Az erőforrás- és szalagdiagramok az utolsó futtatást mutatják, amíg ez véget nem ér

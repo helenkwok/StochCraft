@@ -970,3 +970,33 @@ unit	yr	г.
 	From the last run; – when there are none, or they are out of date.	От последното пускане; – ако няма или са остарели.
 	Show this block	Покажи този блок
 	Rates and times are per {unit}.	Интензивностите и времената са за {unit}.
+	Dashboard	Табло
+	Throughput	Пропускателна способност
+	{n} per hour	{n} на час
+	95% interval {low} to {high} per hour	95% интервал от {low} до {high} на час
+	So far in the run being watched	Досега в наблюдавания пуск
+	No sink in this model	Няма изход в този модел
+	Nothing left the model in this run	В този пуск нищо не напусна модела
+	Everything that left the model through its sinks, per hour.	Всичко, което напусна модела през изходите му, на час.
+	Utilisation by resource	Използване по ресурс
+	{name}: {busy} busy	{name}: {busy} зает
+	Idle	Бездействие
+	and {n} more	и още {n}
+	How each resource spends its time, and its busy share.	Как всеки ресурс прекарва времето си и делът му на заетост.
+	No resource reports how it spends its time	Никой ресурс не отчита как прекарва времето си
+	Time on conveyors	Време по лентите
+	No conveyors in this model	Няма ленти в този модел
+	Fills in when the run ends	Попълва се, когато пускът приключи
+	How long each item spends on the conveyors.	Колко време всеки елемент прекарва по лентите.
+	No item has left a conveyor yet	Още никой елемент не е напуснал лента
+	Share of items by time on a conveyor, in {unit}	Дял на елементите по време на лентата, в {unit}
+	Time on conveyors: {n} items between {lo} and {hi} {unit}	Време по лентите: {n} елемента между {lo} и {hi} {unit}
+	{from} to {to} {unit}: {share} of items ({n})	От {from} до {to} {unit}: {share} от елементите ({n})
+	Items on conveyors over time	Елементи по лентите във времето
+	Items in the model over time	Елементи в модела във времето
+	How many items are on the conveyors over time.	Колко елемента има по лентите във времето.
+	How many items are in the model over time.	Колко елемента има в модела във времето.
+	Nothing was recorded over time in these results	В тези резултати нищо не е записано във времето
+	At {time} {unit}: {n} items	В {time} {unit}: {n} елемента
+	Run the model to fill the dashboard	Пуснете модела, за да се попълни таблото
+	The resource and conveyor charts show the last run until this one ends	Графиките на ресурсите и лентите показват последния пуск, докато този приключи

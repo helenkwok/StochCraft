@@ -970,3 +970,33 @@ unit	yr	god.
 	From the last run; – when there are none, or they are out of date.	Iz posljednjeg pokretanja; – ako ga nema ili je zastarjelo.
 	Show this block	Prikaži ovaj blok
 	Rates and times are per {unit}.	Intenziteti i vremena su po {unit}.
+	Dashboard	Nadzorna ploča
+	Throughput	Propusnost
+	{n} per hour	{n} na sat
+	95% interval {low} to {high} per hour	95-postotni interval od {low} do {high} na sat
+	So far in the run being watched	Dosad u praćenom izvođenju
+	No sink in this model	U ovom modelu nema izlaza
+	Nothing left the model in this run	U ovom izvođenju ništa nije napustilo model
+	Everything that left the model through its sinks, per hour.	Sve što je napustilo model kroz njegove izlaze, na sat.
+	Utilisation by resource	Iskorištenost po resursu
+	{name}: {busy} busy	{name}: {busy} zauzet
+	Idle	Neaktivan
+	and {n} more	i još {n}
+	How each resource spends its time, and its busy share.	Kako svaki resurs troši vrijeme i njegov udio zauzetosti.
+	No resource reports how it spends its time	Nijedan resurs ne izvještava kako troši vrijeme
+	Time on conveyors	Vrijeme na transportnim trakama
+	No conveyors in this model	U ovom modelu nema transportnih traka
+	Fills in when the run ends	Popunit će se kad izvođenje završi
+	How long each item spends on the conveyors.	Koliko dugo je svaka stavka na transportnim trakama.
+	No item has left a conveyor yet	Nijedna stavka još nije napustila transportnu traku
+	Share of items by time on a conveyor, in {unit}	Udio stavki prema vremenu na transportnoj traci, u {unit}
+	Time on conveyors: {n} items between {lo} and {hi} {unit}	Vrijeme na transportnim trakama: {n} stavki između {lo} i {hi} {unit}
+	{from} to {to} {unit}: {share} of items ({n})	Od {from} do {to} {unit}: {share} stavki ({n})
+	Items on conveyors over time	Stavke na transportnim trakama kroz vrijeme
+	Items in the model over time	Stavke u modelu kroz vrijeme
+	How many items are on the conveyors over time.	Koliko je stavki na transportnim trakama kroz vrijeme.
+	How many items are in the model over time.	Koliko je stavki u modelu kroz vrijeme.
+	Nothing was recorded over time in these results	U ovim rezultatima ništa nije zabilježeno kroz vrijeme
+	At {time} {unit}: {n} items	U {time} {unit}: {n} stavki
+	Run the model to fill the dashboard	Pokrenite model da se nadzorna ploča popuni
+	The resource and conveyor charts show the last run until this one ends	Grafikoni resursa i transportnih traka prikazuju zadnje izvođenje dok ovo ne završi

@@ -102,7 +102,7 @@ fn bars(results: &Value, m: &Measure) -> Vec<Bar> {
 
 /// A round step for about `ticks` gridlines up to `max` (1, 2 or 5 times a power of ten),
 /// found without logarithms (which differ between platforms; this only places gridlines).
-fn nice_step(max: f64, ticks: f64) -> f64 {
+pub(crate) fn nice_step(max: f64, ticks: f64) -> f64 {
     let raw = (max / ticks).max(f64::MIN_POSITIVE);
     let mut p = 1.0;
     while p > raw {
@@ -121,7 +121,7 @@ fn nice_step(max: f64, ticks: f64) -> f64 {
 /// The axis for bars reaching up to `max`: the gridline step and the value at the right end.
 /// With nothing above zero (every bar 0, as a queue that never forms) the axis runs from 0 to 1,
 /// so the zero bars sit at its start under round labels.
-fn axis(max: f64) -> (f64, f64) {
+pub(crate) fn axis(max: f64) -> (f64, f64) {
     let max = if max.is_finite() && max > 0.0 {
         max
     } else {
@@ -767,7 +767,7 @@ fn chart(ui: &mut egui::Ui, m: &Measure, bars: &[Bar], unit: &str, width: f32) {
 }
 
 /// `text`, shortened with an ellipsis to fit `width`.
-fn truncate(text: &str, width: f32, ui: &egui::Ui) -> String {
+pub(crate) fn truncate(text: &str, width: f32, ui: &egui::Ui) -> String {
     let font = FontId::proportional(13.0);
     let fits = |s: &str| {
         ui.fonts_mut(|f| {

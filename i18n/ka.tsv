@@ -970,3 +970,33 @@ unit	yr	წელი
 	From the last run; – when there are none, or they are out of date.	ბოლო გაშვებიდან; – თუ არ არის ან მოძველებულია.
 	Show this block	ამ ბლოკის ჩვენება
 	Rates and times are per {unit}.	ინტენსივობები და დროები მოცემულია {unit}-ზე.
+	Dashboard	დაფა
+	Throughput	გამტარუნარიანობა
+	{n} per hour	{n} საათში
+	95% interval {low} to {high} per hour	95%-იანი ინტერვალი: {low}-დან {high}-მდე საათში
+	So far in the run being watched	აქამდე დაკვირვებად გაშვებაში
+	No sink in this model	ამ მოდელში გასასვლელი არ არის
+	Nothing left the model in this run	ამ გაშვებაში მოდელიდან არაფერი გასულა
+	Everything that left the model through its sinks, per hour.	ყველაფერი, რაც მოდელიდან გასასვლელებით გავიდა, საათში.
+	Utilisation by resource	გამოყენება რესურსების მიხედვით
+	{name}: {busy} busy	{name}: {busy} დაკავებული
+	Idle	უქმე
+	and {n} more	და კიდევ {n}
+	How each resource spends its time, and its busy share.	როგორ ატარებს თითოეული რესურსი დროს და მისი დაკავებულობის წილი.
+	No resource reports how it spends its time	არც ერთი რესურსი არ აცნობებს, როგორ ატარებს დროს
+	Time on conveyors	დრო ლენტებზე
+	No conveyors in this model	ამ მოდელში ლენტები არ არის
+	Fills in when the run ends	შეივსება გაშვების დასრულებისას
+	How long each item spends on the conveyors.	რამდენ ხანს არის თითოეული ელემენტი ლენტებზე.
+	No item has left a conveyor yet	ჯერ არც ერთი ელემენტი არ გასულა ლენტიდან
+	Share of items by time on a conveyor, in {unit}	ელემენტების წილი ლენტზე გატარებული დროის მიხედვით, {unit}-ში
+	Time on conveyors: {n} items between {lo} and {hi} {unit}	დრო ლენტებზე: {n} ელემენტი {lo}-სა და {hi} {unit}-ს შორის
+	{from} to {to} {unit}: {share} of items ({n})	{from}-დან {to} {unit}-მდე: ელემენტების {share} ({n})
+	Items on conveyors over time	ელემენტები ლენტებზე დროის განმავლობაში
+	Items in the model over time	ელემენტები მოდელში დროის განმავლობაში
+	How many items are on the conveyors over time.	რამდენი ელემენტია ლენტებზე დროის განმავლობაში.
+	How many items are in the model over time.	რამდენი ელემენტია მოდელში დროის განმავლობაში.
+	Nothing was recorded over time in these results	ამ შედეგებში დროის განმავლობაში არაფერი ჩაწერილა
+	At {time} {unit}: {n} items	{time} {unit}-ზე: {n} ელემენტი
+	Run the model to fill the dashboard	დაფის შესავსებად გაუშვით მოდელი
+	The resource and conveyor charts show the last run until this one ends	რესურსებისა და ლენტების დიაგრამები აჩვენებს ბოლო გაშვებას, ამის დასრულებამდე

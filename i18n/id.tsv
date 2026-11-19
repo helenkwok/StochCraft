@@ -970,3 +970,33 @@ unit	yr	thn
 	From the last run; – when there are none, or they are out of date.	Dari proses terakhir; – jika tidak ada atau sudah usang.
 	Show this block	Tampilkan blok ini
 	Rates and times are per {unit}.	Laju dan waktu dihitung per {unit}.
+	Dashboard	Dasbor
+	Throughput	Throughput
+	{n} per hour	{n} per jam
+	95% interval {low} to {high} per hour	Interval 95%: {low} hingga {high} per jam
+	So far in the run being watched	Sejauh ini dalam proses yang diamati
+	No sink in this model	Tidak ada keluaran pada model ini
+	Nothing left the model in this run	Tidak ada yang keluar dari model pada proses ini
+	Everything that left the model through its sinks, per hour.	Semua yang keluar dari model melalui keluarannya, per jam.
+	Utilisation by resource	Utilisasi per sumber daya
+	{name}: {busy} busy	{name}: {busy} sibuk
+	Idle	Menganggur
+	and {n} more	dan {n} lainnya
+	How each resource spends its time, and its busy share.	Bagaimana tiap sumber daya menghabiskan waktu dan porsi sibuknya.
+	No resource reports how it spends its time	Tidak ada sumber daya yang melaporkan penggunaan waktunya
+	Time on conveyors	Waktu di konveyor
+	No conveyors in this model	Tidak ada konveyor pada model ini
+	Fills in when the run ends	Terisi saat proses selesai
+	How long each item spends on the conveyors.	Berapa lama tiap item berada di konveyor.
+	No item has left a conveyor yet	Belum ada item yang meninggalkan konveyor
+	Share of items by time on a conveyor, in {unit}	Porsi item menurut waktu di konveyor, dalam {unit}
+	Time on conveyors: {n} items between {lo} and {hi} {unit}	Waktu di konveyor: {n} item antara {lo} dan {hi} {unit}
+	{from} to {to} {unit}: {share} of items ({n})	Dari {from} hingga {to} {unit}: {share} dari item ({n})
+	Items on conveyors over time	Item di konveyor dari waktu ke waktu
+	Items in the model over time	Item dalam model dari waktu ke waktu
+	How many items are on the conveyors over time.	Berapa banyak item di konveyor dari waktu ke waktu.
+	How many items are in the model over time.	Berapa banyak item dalam model dari waktu ke waktu.
+	Nothing was recorded over time in these results	Tidak ada yang dicatat dari waktu ke waktu dalam hasil ini
+	At {time} {unit}: {n} items	Pada {time} {unit}: {n} item
+	Run the model to fill the dashboard	Jalankan model untuk mengisi dasbor
+	The resource and conveyor charts show the last run until this one ends	Grafik sumber daya dan konveyor menampilkan proses terakhir sampai proses ini selesai

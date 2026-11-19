@@ -970,3 +970,33 @@ unit	yr	a
 	From the last run; – when there are none, or they are out of date.	Viimasest käivitusest; – kui neid pole või need on aegunud.
 	Show this block	Näita seda plokki
 	Rates and times are per {unit}.	Kiirused ja ajad on {unit} kohta.
+	Dashboard	Töölaud
+	Throughput	Läbilaskevõime
+	{n} per hour	{n} tunnis
+	95% interval {low} to {high} per hour	95% usaldusvahemik {low} kuni {high} tunnis
+	So far in the run being watched	Siiani jälgitavas käivituses
+	No sink in this model	Selles mudelis pole väljundit
+	Nothing left the model in this run	Selles käivituses ei lahkunud mudelist midagi
+	Everything that left the model through its sinks, per hour.	Kõik, mis lahkus mudelist selle väljundite kaudu, tunnis.
+	Utilisation by resource	Ressursside kasutus
+	{name}: {busy} busy	{name}: {busy} hõivatud
+	Idle	Jõudeolek
+	and {n} more	ja veel {n}
+	How each resource spends its time, and its busy share.	Kuidas iga ressurss aega veedab ning selle hõivatuse osa.
+	No resource reports how it spends its time	Ükski ressurss ei teata, kuidas ta aega veedab
+	Time on conveyors	Aeg konveieritel
+	No conveyors in this model	Selles mudelis pole konveiereid
+	Fills in when the run ends	Täitub käivituse lõppedes
+	How long each item spends on the conveyors.	Kui kaua iga ese konveieritel on.
+	No item has left a conveyor yet	Ükski ese pole veel konveierilt lahkunud
+	Share of items by time on a conveyor, in {unit}	Esemete osa konveieril veedetud aja järgi, ühikuga {unit}
+	Time on conveyors: {n} items between {lo} and {hi} {unit}	Aeg konveieritel: {n} eset vahemikus {lo} kuni {hi} {unit}
+	{from} to {to} {unit}: {share} of items ({n})	{from} kuni {to} {unit}: {share} esemetest ({n})
+	Items on conveyors over time	Esemed konveieritel ajas
+	Items in the model over time	Esemed mudelis ajas
+	How many items are on the conveyors over time.	Kui palju esemeid on konveieritel ajas.
+	How many items are in the model over time.	Kui palju esemeid on mudelis ajas.
+	Nothing was recorded over time in these results	Nendes tulemustes ei salvestatud ajas midagi
+	At {time} {unit}: {n} items	Ajahetkel {time} {unit}: {n} eset
+	Run the model to fill the dashboard	Töölaua täitmiseks käivitage mudel
+	The resource and conveyor charts show the last run until this one ends	Ressursside ja konveierite diagrammid näitavad viimast käivitust, kuni see lõpeb

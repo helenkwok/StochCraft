@@ -970,3 +970,33 @@ unit	yr	р.
 	From the last run; – when there are none, or they are out of date.	З останнього запуску; – якщо його немає або він застарів.
 	Show this block	Показати цей блок
 	Rates and times are per {unit}.	Інтенсивності й часи вказано на {unit}.
+	Dashboard	Панель
+	Throughput	Пропускна здатність
+	{n} per hour	{n} на годину
+	95% interval {low} to {high} per hour	95-відсотковий інтервал від {low} до {high} на годину
+	So far in the run being watched	Поки що в спостережуваному прогоні
+	No sink in this model	У цій моделі немає виходів
+	Nothing left the model in this run	У цьому прогоні ніщо не залишило модель
+	Everything that left the model through its sinks, per hour.	Усе, що залишило модель через її виходи, на годину.
+	Utilisation by resource	Завантаження за ресурсами
+	{name}: {busy} busy	{name}: {busy} зайнятий
+	Idle	Простій
+	and {n} more	і ще {n}
+	How each resource spends its time, and its busy share.	Як кожен ресурс проводить час і його частка зайнятості.
+	No resource reports how it spends its time	Жоден ресурс не повідомляє, як він проводить час
+	Time on conveyors	Час на конвеєрах
+	No conveyors in this model	У цій моделі немає конвеєрів
+	Fills in when the run ends	Заповниться по завершенні прогону
+	How long each item spends on the conveyors.	Скільки часу кожен елемент проводить на конвеєрах.
+	No item has left a conveyor yet	Жоден елемент ще не залишив конвеєр
+	Share of items by time on a conveyor, in {unit}	Частка елементів за часом на конвеєрі, в {unit}
+	Time on conveyors: {n} items between {lo} and {hi} {unit}	Час на конвеєрах: {n} елементів між {lo} і {hi} {unit}
+	{from} to {to} {unit}: {share} of items ({n})	Від {from} до {to} {unit}: {share} елементів ({n})
+	Items on conveyors over time	Елементи на конвеєрах у часі
+	Items in the model over time	Елементи в моделі в часі
+	How many items are on the conveyors over time.	Скільки елементів на конвеєрах у часі.
+	How many items are in the model over time.	Скільки елементів у моделі в часі.
+	Nothing was recorded over time in these results	У цих результатах нічого не записано в часі
+	At {time} {unit}: {n} items	У момент {time} {unit}: {n} елементів
+	Run the model to fill the dashboard	Запустіть модель, щоб заповнити панель
+	The resource and conveyor charts show the last run until this one ends	Графіки ресурсів і конвеєрів показують останній прогін, доки цей не завершиться

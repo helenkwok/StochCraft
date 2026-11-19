@@ -970,3 +970,33 @@ unit	yr	v
 	From the last run; – when there are none, or they are out of date.	Nga ekzekutimi i fundit; – nëse nuk ka ose janë të vjetruar.
 	Show this block	Shfaq këtë bllok
 	Rates and times are per {unit}.	Shpejtësitë dhe kohët janë për {unit}.
+	Dashboard	Paneli
+	Throughput	Kapaciteti kalues
+	{n} per hour	{n} në orë
+	95% interval {low} to {high} per hour	Intervali 95%: nga {low} në {high} në orë
+	So far in the run being watched	Deri tani në ekzekutimin e ndjekur
+	No sink in this model	Nuk ka dalje në këtë model
+	Nothing left the model in this run	Në këtë ekzekutim asgjë nuk e la modelin
+	Everything that left the model through its sinks, per hour.	Gjithçka që e la modelin nëpërmjet daljeve të tij, në orë.
+	Utilisation by resource	Shfrytëzimi sipas burimit
+	{name}: {busy} busy	{name}: {busy} i zënë
+	Idle	Pa punë
+	and {n} more	dhe edhe {n}
+	How each resource spends its time, and its busy share.	Si e kalon kohën çdo burim dhe pjesa e tij e zënies.
+	No resource reports how it spends its time	Asnjë burim nuk raporton si e kalon kohën
+	Time on conveyors	Koha në rripat transportues
+	No conveyors in this model	Nuk ka rripa transportues në këtë model
+	Fills in when the run ends	Plotësohet kur përfundon ekzekutimi
+	How long each item spends on the conveyors.	Sa kohë e kalon çdo artikull në rripat transportues.
+	No item has left a conveyor yet	Asnjë artikull nuk e ka lënë ende një rrip
+	Share of items by time on a conveyor, in {unit}	Pjesa e artikujve sipas kohës në një rrip, në {unit}
+	Time on conveyors: {n} items between {lo} and {hi} {unit}	Koha në rripa: {n} artikuj mes {lo} dhe {hi} {unit}
+	{from} to {to} {unit}: {share} of items ({n})	Nga {from} në {to} {unit}: {share} e artikujve ({n})
+	Items on conveyors over time	Artikujt në rripa me kalimin e kohës
+	Items in the model over time	Artikujt në model me kalimin e kohës
+	How many items are on the conveyors over time.	Sa artikuj ka në rripa me kalimin e kohës.
+	How many items are in the model over time.	Sa artikuj ka në model me kalimin e kohës.
+	Nothing was recorded over time in these results	Në këto rezultate nuk u regjistrua asgjë me kalimin e kohës
+	At {time} {unit}: {n} items	Në {time} {unit}: {n} artikuj
+	Run the model to fill the dashboard	Ekzekutoni modelin për të plotësuar panelin
+	The resource and conveyor charts show the last run until this one ends	Grafikët e burimeve dhe rripave tregojnë ekzekutimin e fundit derisa ky të përfundojë

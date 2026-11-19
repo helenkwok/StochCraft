@@ -970,3 +970,33 @@ unit	yr	a
 	From the last run; – when there are none, or they are out of date.	Dall'ultima simulazione; – se non ce ne sono o sono obsoleti.
 	Show this block	Mostra questo blocco
 	Rates and times are per {unit}.	Tassi e tempi sono per {unit}.
+	Dashboard	Dashboard
+	Throughput	Produttività
+	{n} per hour	{n} all'ora
+	95% interval {low} to {high} per hour	Intervallo al 95%: da {low} a {high} all'ora
+	So far in the run being watched	Finora nell'esecuzione osservata
+	No sink in this model	Nessun punto di uscita in questo modello
+	Nothing left the model in this run	Nulla è uscito dal modello in questa esecuzione
+	Everything that left the model through its sinks, per hour.	Tutto ciò che è uscito dal modello dai suoi punti di uscita, all'ora.
+	Utilisation by resource	Utilizzo per risorsa
+	{name}: {busy} busy	{name}: {busy} occupato
+	Idle	Inattivo
+	and {n} more	e altri {n}
+	How each resource spends its time, and its busy share.	Come ogni risorsa trascorre il tempo e la sua quota di occupazione.
+	No resource reports how it spends its time	Nessuna risorsa riporta come trascorre il tempo
+	Time on conveyors	Tempo sui trasportatori
+	No conveyors in this model	Nessun trasportatore in questo modello
+	Fills in when the run ends	Si riempie al termine dell'esecuzione
+	How long each item spends on the conveyors.	Quanto tempo ogni elemento trascorre sui trasportatori.
+	No item has left a conveyor yet	Nessun elemento ha ancora lasciato un trasportatore
+	Share of items by time on a conveyor, in {unit}	Quota di elementi per tempo su un trasportatore, in {unit}
+	Time on conveyors: {n} items between {lo} and {hi} {unit}	Tempo sui trasportatori: {n} elementi tra {lo} e {hi} {unit}
+	{from} to {to} {unit}: {share} of items ({n})	Da {from} a {to} {unit}: {share} degli elementi ({n})
+	Items on conveyors over time	Elementi sui trasportatori nel tempo
+	Items in the model over time	Elementi nel modello nel tempo
+	How many items are on the conveyors over time.	Quanti elementi sono sui trasportatori nel tempo.
+	How many items are in the model over time.	Quanti elementi sono nel modello nel tempo.
+	Nothing was recorded over time in these results	In questi risultati non è stato registrato nulla nel tempo
+	At {time} {unit}: {n} items	A {time} {unit}: {n} elementi
+	Run the model to fill the dashboard	Esegui il modello per riempire il dashboard
+	The resource and conveyor charts show the last run until this one ends	I grafici di risorse e trasportatori mostrano l'ultima esecuzione finché questa non termina

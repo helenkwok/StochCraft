@@ -970,3 +970,33 @@ unit	yr	m.
 	From the last run; – when there are none, or they are out of date.	Iš paskutinio paleidimo; – jei jų nėra arba jie pasenę.
 	Show this block	Rodyti šį bloką
 	Rates and times are per {unit}.	Intensyvumai ir laikai nurodyti per {unit}.
+	Dashboard	Skydelis
+	Throughput	Pralaidumas
+	{n} per hour	{n} per valandą
+	95% interval {low} to {high} per hour	95 % intervalas: nuo {low} iki {high} per valandą
+	So far in the run being watched	Iki šiol stebimame vykdyme
+	No sink in this model	Šiame modelyje nėra išėjimo
+	Nothing left the model in this run	Šiame vykdyme nieko nepaliko modelio
+	Everything that left the model through its sinks, per hour.	Viskas, kas paliko modelį per jo išėjimus, per valandą.
+	Utilisation by resource	Naudojimas pagal išteklių
+	{name}: {busy} busy	{name}: {busy} užimtas
+	Idle	Neveikia
+	and {n} more	ir dar {n}
+	How each resource spends its time, and its busy share.	Kaip kiekvienas išteklius leidžia laiką ir jo užimtumo dalis.
+	No resource reports how it spends its time	Joks išteklius nepraneša, kaip leidžia laiką
+	Time on conveyors	Laikas ant konvejerių
+	No conveyors in this model	Šiame modelyje nėra konvejerių
+	Fills in when the run ends	Užsipildys vykdymui pasibaigus
+	How long each item spends on the conveyors.	Kiek laiko kiekvienas elementas praleidžia ant konvejerių.
+	No item has left a conveyor yet	Dar joks elementas nepaliko konvejerio
+	Share of items by time on a conveyor, in {unit}	Elementų dalis pagal laiką ant konvejerio, {unit}
+	Time on conveyors: {n} items between {lo} and {hi} {unit}	Laikas ant konvejerių: {n} elementų tarp {lo} ir {hi} {unit}
+	{from} to {to} {unit}: {share} of items ({n})	Nuo {from} iki {to} {unit}: {share} elementų ({n})
+	Items on conveyors over time	Elementai ant konvejerių laikui bėgant
+	Items in the model over time	Elementai modelyje laikui bėgant
+	How many items are on the conveyors over time.	Kiek elementų yra ant konvejerių laikui bėgant.
+	How many items are in the model over time.	Kiek elementų yra modelyje laikui bėgant.
+	Nothing was recorded over time in these results	Šiuose rezultatuose nieko neįrašyta laikui bėgant
+	At {time} {unit}: {n} items	Momentu {time} {unit}: {n} elementų
+	Run the model to fill the dashboard	Paleiskite modelį, kad užsipildytų skydelis
+	The resource and conveyor charts show the last run until this one ends	Išteklių ir konvejerių diagramos rodo paskutinį vykdymą, kol šis baigsis

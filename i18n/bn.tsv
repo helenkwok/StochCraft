@@ -970,3 +970,33 @@ unit	yr	বছর
 	From the last run; – when there are none, or they are out of date.	শেষ রান থেকে; – না থাকলে বা পুরোনো হলে।
 	Show this block	এই ব্লকটি দেখান
 	Rates and times are per {unit}.	হার ও সময় প্রতি {unit}।
+	Dashboard	ড্যাশবোর্ড
+	Throughput	থ্রুপুট
+	{n} per hour	প্রতি ঘণ্টায় {n}
+	95% interval {low} to {high} per hour	৯৫% ব্যবধান: প্রতি ঘণ্টায় {low} থেকে {high}
+	So far in the run being watched	পর্যবেক্ষণ করা রানে এ পর্যন্ত
+	No sink in this model	এই মডেলে কোনো প্রস্থান নেই
+	Nothing left the model in this run	এই রানে মডেল থেকে কিছুই বের হয়নি
+	Everything that left the model through its sinks, per hour.	প্রস্থানের মাধ্যমে মডেল থেকে বের হওয়া সবকিছু, প্রতি ঘণ্টায়।
+	Utilisation by resource	রিসোর্স অনুযায়ী ব্যবহার
+	{name}: {busy} busy	{name}: {busy} ব্যস্ত
+	Idle	নিষ্ক্রিয়
+	and {n} more	এবং আরও {n}টি
+	How each resource spends its time, and its busy share.	প্রতিটি রিসোর্স কীভাবে সময় কাটায় এবং তার ব্যস্ত অংশ।
+	No resource reports how it spends its time	কোনো রিসোর্স জানায় না সে কীভাবে সময় কাটায়
+	Time on conveyors	কনভেয়ারে সময়
+	No conveyors in this model	এই মডেলে কোনো কনভেয়ার নেই
+	Fills in when the run ends	রান শেষ হলে ভরে উঠবে
+	How long each item spends on the conveyors.	প্রতিটি আইটেম কনভেয়ারে কত সময় কাটায়।
+	No item has left a conveyor yet	এখনও কোনো আইটেম কনভেয়ার ছাড়েনি
+	Share of items by time on a conveyor, in {unit}	কনভেয়ারে সময় অনুযায়ী আইটেমের অংশ, {unit} এককে
+	Time on conveyors: {n} items between {lo} and {hi} {unit}	কনভেয়ারে সময়: {lo} ও {hi} {unit}-এর মধ্যে {n}টি আইটেম
+	{from} to {to} {unit}: {share} of items ({n})	{from} থেকে {to} {unit}: আইটেমের {share} ({n})
+	Items on conveyors over time	সময়ের সঙ্গে কনভেয়ারে আইটেম
+	Items in the model over time	সময়ের সঙ্গে মডেলে আইটেম
+	How many items are on the conveyors over time.	সময়ের সঙ্গে কনভেয়ারে কতগুলো আইটেম আছে।
+	How many items are in the model over time.	সময়ের সঙ্গে মডেলে কতগুলো আইটেম আছে।
+	Nothing was recorded over time in these results	এই ফলাফলে সময়ের সঙ্গে কিছুই রেকর্ড করা হয়নি
+	At {time} {unit}: {n} items	{time} {unit} সময়ে: {n}টি আইটেম
+	Run the model to fill the dashboard	ড্যাশবোর্ড ভরতে মডেল চালান
+	The resource and conveyor charts show the last run until this one ends	রিসোর্স ও কনভেয়ারের চার্ট এই রান শেষ না হওয়া পর্যন্ত আগের রান দেখায়

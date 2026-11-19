@@ -970,3 +970,33 @@ unit	yr	năm
 	From the last run; – when there are none, or they are out of date.	Từ lần chạy gần nhất; – nếu chưa có hoặc đã cũ.
 	Show this block	Hiện khối này
 	Rates and times are per {unit}.	Tốc độ và thời gian tính theo {unit}.
+	Dashboard	Bảng điều khiển
+	Throughput	Thông lượng
+	{n} per hour	{n} mỗi giờ
+	95% interval {low} to {high} per hour	Khoảng tin cậy 95%: từ {low} đến {high} mỗi giờ
+	So far in the run being watched	Đến lúc này trong lần chạy đang theo dõi
+	No sink in this model	Mô hình này không có điểm ra
+	Nothing left the model in this run	Trong lần chạy này không có gì rời khỏi mô hình
+	Everything that left the model through its sinks, per hour.	Mọi thứ rời khỏi mô hình qua các điểm ra, mỗi giờ.
+	Utilisation by resource	Mức sử dụng theo tài nguyên
+	{name}: {busy} busy	{name}: {busy} bận
+	Idle	Nhàn rỗi
+	and {n} more	và {n} nữa
+	How each resource spends its time, and its busy share.	Mỗi tài nguyên dùng thời gian ra sao và tỷ lệ bận của nó.
+	No resource reports how it spends its time	Không tài nguyên nào báo cách nó dùng thời gian
+	Time on conveyors	Thời gian trên băng tải
+	No conveyors in this model	Mô hình này không có băng tải
+	Fills in when the run ends	Sẽ được điền khi lần chạy kết thúc
+	How long each item spends on the conveyors.	Mỗi mục ở trên băng tải bao lâu.
+	No item has left a conveyor yet	Chưa có mục nào rời khỏi băng tải
+	Share of items by time on a conveyor, in {unit}	Tỷ lệ các mục theo thời gian trên băng tải, tính bằng {unit}
+	Time on conveyors: {n} items between {lo} and {hi} {unit}	Thời gian trên băng tải: {n} mục trong khoảng {lo} đến {hi} {unit}
+	{from} to {to} {unit}: {share} of items ({n})	Từ {from} đến {to} {unit}: {share} số mục ({n})
+	Items on conveyors over time	Số mục trên băng tải theo thời gian
+	Items in the model over time	Số mục trong mô hình theo thời gian
+	How many items are on the conveyors over time.	Có bao nhiêu mục trên băng tải theo thời gian.
+	How many items are in the model over time.	Có bao nhiêu mục trong mô hình theo thời gian.
+	Nothing was recorded over time in these results	Không có gì được ghi theo thời gian trong các kết quả này
+	At {time} {unit}: {n} items	Tại {time} {unit}: {n} mục
+	Run the model to fill the dashboard	Chạy mô hình để điền vào bảng điều khiển
+	The resource and conveyor charts show the last run until this one ends	Biểu đồ tài nguyên và băng tải hiển thị lần chạy gần nhất cho đến khi lần này kết thúc

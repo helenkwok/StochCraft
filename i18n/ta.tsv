@@ -970,3 +970,33 @@ unit	yr	ஆண்டு
 	From the last run; – when there are none, or they are out of date.	கடைசி ஓட்டத்திலிருந்து; – இல்லையெனில் அல்லது காலாவதியானால்.
 	Show this block	இந்தத் தொகுதியைக் காட்டு
 	Rates and times are per {unit}.	வீதங்களும் நேரங்களும் ஒவ்வொரு {unit}-க்கும்.
+	Dashboard	டாஷ்போர்டு
+	Throughput	செயல்திறன்
+	{n} per hour	மணிக்கு {n}
+	95% interval {low} to {high} per hour	95% இடைவெளி: மணிக்கு {low} முதல் {high} வரை
+	So far in the run being watched	கவனிக்கப்படும் ஓட்டத்தில் இதுவரை
+	No sink in this model	இந்த மாதிரியில் வெளியேற்றம் இல்லை
+	Nothing left the model in this run	இந்த ஓட்டத்தில் மாதிரியிலிருந்து எதுவும் வெளியேறவில்லை
+	Everything that left the model through its sinks, per hour.	வெளியேற்றங்கள் வழியாக மாதிரியிலிருந்து வெளியேறிய அனைத்தும், மணிக்கு.
+	Utilisation by resource	வளம் வாரியான பயன்பாடு
+	{name}: {busy} busy	{name}: {busy} பணியில்
+	Idle	செயலற்றது
+	and {n} more	மேலும் {n}
+	How each resource spends its time, and its busy share.	ஒவ்வொரு வளமும் நேரத்தை எப்படிச் செலவிடுகிறது, அதன் பணி விகிதம்.
+	No resource reports how it spends its time	எந்த வளமும் தன் நேரத்தை எப்படிச் செலவிடுகிறது என்று தெரிவிக்கவில்லை
+	Time on conveyors	கன்வேயர்களில் நேரம்
+	No conveyors in this model	இந்த மாதிரியில் கன்வேயர்கள் இல்லை
+	Fills in when the run ends	ஓட்டம் முடிந்ததும் நிரம்பும்
+	How long each item spends on the conveyors.	ஒவ்வொரு பொருளும் கன்வேயர்களில் எவ்வளவு நேரம் இருக்கிறது.
+	No item has left a conveyor yet	இதுவரை எந்தப் பொருளும் கன்வேயரை விட்டு வெளியேறவில்லை
+	Share of items by time on a conveyor, in {unit}	கன்வேயரில் நேரத்தின்படி பொருட்களின் பங்கு, {unit} அலகில்
+	Time on conveyors: {n} items between {lo} and {hi} {unit}	கன்வேயர்களில் நேரம்: {lo} மற்றும் {hi} {unit} இடையே {n} பொருட்கள்
+	{from} to {to} {unit}: {share} of items ({n})	{from} முதல் {to} {unit}: பொருட்களில் {share} ({n})
+	Items on conveyors over time	காலப்போக்கில் கன்வேயர்களில் பொருட்கள்
+	Items in the model over time	காலப்போக்கில் மாதிரியில் பொருட்கள்
+	How many items are on the conveyors over time.	காலப்போக்கில் கன்வேயர்களில் எத்தனை பொருட்கள் உள்ளன.
+	How many items are in the model over time.	காலப்போக்கில் மாதிரியில் எத்தனை பொருட்கள் உள்ளன.
+	Nothing was recorded over time in these results	இந்த முடிவுகளில் காலப்போக்கில் எதுவும் பதிவாகவில்லை
+	At {time} {unit}: {n} items	{time} {unit} நேரத்தில்: {n} பொருட்கள்
+	Run the model to fill the dashboard	டாஷ்போர்டை நிரப்ப மாதிரியை இயக்கவும்
+	The resource and conveyor charts show the last run until this one ends	இது முடியும் வரை வளம் மற்றும் கன்வேயர் வரைபடங்கள் கடைசி ஓட்டத்தைக் காட்டும்

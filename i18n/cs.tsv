@@ -970,3 +970,33 @@ unit	yr	r.
 	From the last run; – when there are none, or they are out of date.	Z posledního běhu; – pokud žádné nejsou nebo jsou zastaralé.
 	Show this block	Zobrazit tento blok
 	Rates and times are per {unit}.	Intenzity a časy jsou na {unit}.
+	Dashboard	Přehled
+	Throughput	Propustnost
+	{n} per hour	{n} za hodinu
+	95% interval {low} to {high} per hour	95% interval od {low} do {high} za hodinu
+	So far in the run being watched	Dosud ve sledovaném běhu
+	No sink in this model	V tomto modelu není žádný výstup
+	Nothing left the model in this run	V tomto běhu model nic neopustilo
+	Everything that left the model through its sinks, per hour.	Vše, co model opustilo jeho výstupy, za hodinu.
+	Utilisation by resource	Využití podle zdroje
+	{name}: {busy} busy	{name}: {busy} vytíženo
+	Idle	Nečinný
+	and {n} more	a {n} dalších
+	How each resource spends its time, and its busy share.	Jak každý zdroj tráví čas a jeho podíl vytížení.
+	No resource reports how it spends its time	Žádný zdroj nehlásí, jak tráví čas
+	Time on conveyors	Čas na dopravnících
+	No conveyors in this model	V tomto modelu nejsou žádné dopravníky
+	Fills in when the run ends	Naplní se po skončení běhu
+	How long each item spends on the conveyors.	Jak dlouho je každá položka na dopravnících.
+	No item has left a conveyor yet	Zatím žádná položka neopustila dopravník
+	Share of items by time on a conveyor, in {unit}	Podíl položek podle času na dopravníku, v {unit}
+	Time on conveyors: {n} items between {lo} and {hi} {unit}	Čas na dopravnících: {n} položek mezi {lo} a {hi} {unit}
+	{from} to {to} {unit}: {share} of items ({n})	Od {from} do {to} {unit}: {share} položek ({n})
+	Items on conveyors over time	Položky na dopravnících v čase
+	Items in the model over time	Položky v modelu v čase
+	How many items are on the conveyors over time.	Kolik položek je na dopravnících v čase.
+	How many items are in the model over time.	Kolik položek je v modelu v čase.
+	Nothing was recorded over time in these results	V těchto výsledcích se v čase nic nezaznamenalo
+	At {time} {unit}: {n} items	V čase {time} {unit}: {n} položek
+	Run the model to fill the dashboard	Spusťte model, aby se přehled naplnil
+	The resource and conveyor charts show the last run until this one ends	Grafy zdrojů a dopravníků ukazují poslední běh, dokud tento neskončí

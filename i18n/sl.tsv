@@ -970,3 +970,33 @@ unit	yr	l.
 	From the last run; – when there are none, or they are out of date.	Iz zadnjega zagona; – če ga ni ali je zastarel.
 	Show this block	Pokaži ta blok
 	Rates and times are per {unit}.	Stopnje in časi so na {unit}.
+	Dashboard	Nadzorna plošča
+	Throughput	Prepustnost
+	{n} per hour	{n} na uro
+	95% interval {low} to {high} per hour	95-odstotni interval od {low} do {high} na uro
+	So far in the run being watched	Doslej v spremljanem teku
+	No sink in this model	V tem modelu ni izhoda
+	Nothing left the model in this run	V tem teku ni nič zapustilo modela
+	Everything that left the model through its sinks, per hour.	Vse, kar je zapustilo model prek izhodov, na uro.
+	Utilisation by resource	Izkoriščenost po viru
+	{name}: {busy} busy	{name}: {busy} zaseden
+	Idle	Nedejaven
+	and {n} more	in še {n}
+	How each resource spends its time, and its busy share.	Kako vsak vir porablja čas in njegov delež zasedenosti.
+	No resource reports how it spends its time	Noben vir ne poroča, kako porablja čas
+	Time on conveyors	Čas na tekočih trakovih
+	No conveyors in this model	V tem modelu ni tekočih trakov
+	Fills in when the run ends	Zapolni se, ko se tek konča
+	How long each item spends on the conveyors.	Koliko časa je vsak predmet na tekočih trakovih.
+	No item has left a conveyor yet	Noben predmet še ni zapustil tekočega traku
+	Share of items by time on a conveyor, in {unit}	Delež predmetov glede na čas na tekočem traku, v {unit}
+	Time on conveyors: {n} items between {lo} and {hi} {unit}	Čas na tekočih trakovih: {n} predmetov med {lo} in {hi} {unit}
+	{from} to {to} {unit}: {share} of items ({n})	Od {from} do {to} {unit}: {share} predmetov ({n})
+	Items on conveyors over time	Predmeti na tekočih trakovih skozi čas
+	Items in the model over time	Predmeti v modelu skozi čas
+	How many items are on the conveyors over time.	Koliko predmetov je na tekočih trakovih skozi čas.
+	How many items are in the model over time.	Koliko predmetov je v modelu skozi čas.
+	Nothing was recorded over time in these results	V teh rezultatih ni bilo nič zabeleženo skozi čas
+	At {time} {unit}: {n} items	Ob {time} {unit}: {n} predmetov
+	Run the model to fill the dashboard	Zaženite model, da se nadzorna plošča zapolni
+	The resource and conveyor charts show the last run until this one ends	Grafi virov in tekočih trakov kažejo zadnji tek, dokler se ta ne konča

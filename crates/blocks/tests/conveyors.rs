@@ -170,3 +170,51 @@ fn a_divert_needs_a_default_way() {
     let codes: Vec<&str> = model.validate().iter().map(|d| d.problem.code()).collect();
     assert!(codes.contains(&"divert_no_default"), "{codes:?}");
 }
+
+#[test]
+fn the_times_on_a_belt_all_in_one_bin_when_they_are_all_equal() {
+    // One every 5 onto 10 at 1 a unit of time: every item 10 on it, so one bin holds them all.
+    let mut m = Builder::new();
+    let src = m.source("in", Dist::Constant(5.0), Some(20));
+    let belt = m.conveyor("belt", 10.0, 1.0, false, 0.5, 0.5);
+    let out = m.sink("out");
+    m.connect(src, belt);
+    m.connect(belt, out);
+    let r = run(&m, 1_000.0);
+    let e = r.element("belt").unwrap_or_else(|| panic!("no belt"));
+    let h = e
+        .time_on_histogram
+        .as_ref()
+        .unwrap_or_else(|| panic!("no histogram"));
+    assert_eq!(h.counts.iter().sum::<u64>(), e.left);
+    assert_eq!(h.counts.iter().filter(|n| **n > 0).count(), 1);
+    assert!((h.start - 10.0).abs() < 1e-9, "{}", h.start);
+    // Nothing else reports one.
+    let src_report = r.element("in").unwrap_or_else(|| panic!("no source"));
+    assert!(src_report.time_on_histogram.is_none());
+}
+
+#[test]
+fn two_different_times_on_a_belt_fill_two_bins() {
+    // Two items, at 0 and 3, onto 4 at 1 a unit of time into a machine of 5 with no waiting
+    // room: the first leaves the belt at 4 (4 on it), the second reaches the end at 7, waits for
+    // the machine until 9 (6 on it).
+    let mut m = Builder::new();
+    let src = m.source("in", Dist::Constant(3.0), Some(2));
+    let belt = m.conveyor("belt", 4.0, 1.0, false, 1.0, 0.0);
+    let machine = m.buffered_server("machine", 1, Dist::Constant(5.0), 0);
+    let out = m.sink("out");
+    m.connect(src, belt);
+    m.connect(belt, machine);
+    m.connect(machine, out);
+    let r = run(&m, 100.0);
+    let e = r.element("belt").unwrap_or_else(|| panic!("no belt"));
+    let h = e
+        .time_on_histogram
+        .as_ref()
+        .unwrap_or_else(|| panic!("no histogram"));
+    assert_eq!(h.counts.len(), 20);
+    assert_eq!(h.counts.iter().filter(|n| **n > 0).count(), 2);
+    assert_eq!((h.counts[0], h.counts[19]), (1, 1));
+    assert!((h.start - 4.0).abs() < 1e-9 && (h.width - 0.1).abs() < 1e-9);
+}
