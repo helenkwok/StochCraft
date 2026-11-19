@@ -298,8 +298,11 @@ const NOT_TEXT: &[&str] = &[
     "MIT OR Apache-2.0",
     // The fonts in About: names and the SPDX id (the browser app's rows are not drawn here).
     "IBM Plex Sans, IBM Plex Mono",
+    "Hack",
+    "MIT AND Bitstream-Vera",
+    "Noto Emoji",
     "BIZ UDPGothic, Noto Sans CJK SC, NanumGothic",
-    "Noto Sans Arabic, Thai, Georgian, Hebrew, Devanagari, Symbols",
+    "Noto Sans Arabic, Thai, Georgian, Hebrew, Devanagari, Symbols, Symbols 2",
     "OFL-1.1",
 ];
 
