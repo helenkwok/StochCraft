@@ -916,6 +916,7 @@ mod tests {
                 accumulating: false,
                 item_length: 0.5,
                 gap: 0.1,
+                shape: Default::default(),
             },
         ));
         m.elements.push(Element::new(

@@ -1176,6 +1176,7 @@ fn conveyor(i: &str, length: f64, speed: f64, item_length: f64, gap: f64) -> Ele
             accumulating: true,
             item_length,
             gap,
+            shape: Default::default(),
         },
     )
 }
