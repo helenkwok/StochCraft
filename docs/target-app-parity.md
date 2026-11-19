@@ -1,9 +1,9 @@
-# StochCraft parity with FlexSim and AnyLogic
+# StochCraft parity with established tools
 
-> **Last reviewed:** 2026-11-15 · **Last updated:** 2026-11-15 · **Target:** what users of FlexSim
-> (User Manual 2026) and AnyLogic 8 (public help) see and do, from the start screen to the report
+> **Last reviewed:** 2026-11-15 · **Last updated:** 2026-11-15 · **Target:** what users of established commercial simulation tools see and do (from their public documentation),
+> from the start screen to the report
 
-How close StochCraft's window is to what a FlexSim or AnyLogic user expects, and to what a
+How close StochCraft's window is to what a user of an established tool expects, and to what a
 newcomer to simulation needs. The checklist behind the numbers is [ui-parity.md](ui-parity.md);
 the ranked work list is [gaps.md](gaps.md). This is about the user experience only. The engine's
 results are checked against queueing theory and published papers (README, ROADMAP); no results of
@@ -15,10 +15,10 @@ the vendor tools are compared here.
 |---|---|---|
 | UI/UX fidelity, weighted to the first hour | **~44%** | estimated from the checklist (rule below) |
 | Fidelity of the 23 first-hour rows alone | **~55%** | estimated (7 done, 2 done (ours), 9 partial, 5 missing) |
-| FlexSim's first tutorial (its first two tasks) done in StochCraft | **9.5 of 17 steps** | estimated, step by step |
-| AnyLogic's first tutorial (its first four phases) done in StochCraft | **6 of 11 steps** | estimated, step by step; the steps are from public summaries, not confirmed |
-| Ready for a FlexSim switcher | **~51%** | estimated (area weights below) |
-| Ready for an AnyLogic switcher | **~54%** | estimated |
+| A 3D-first tool's first tutorial (its first two tasks) done in StochCraft | **9.5 of 17 steps** | estimated, step by step |
+| A flowchart-first tool's first tutorial (its first four phases) done in StochCraft | **6 of 11 steps** | estimated, step by step; the steps are from public summaries, not confirmed |
+| Ready for a switcher from a 3D-first tool | **~51%** | estimated (area weights below) |
+| Ready for a switcher from a flowchart-first tool | **~54%** | estimated |
 | Ready for a newcomer to simulation | **~51%** | estimated |
 | Nielsen's ten heuristics | **20 / 40** | judged; the bottom of the "acceptable" band (most real interfaces score 20–32) |
 | Cognitive-load checklist | **5 of 8 failed** | judged; critical |
@@ -27,7 +27,7 @@ the vendor tools are compared here.
 
 **Verdict.** The engine is ahead of the interface. A switcher can do a little over half of their
 usual first-hour steps, but the missing half is the visible half: the first run shows counts in
-badges where FlexSim shows items moving and piling up in a queue (and AnyLogic, from public
+badges where a 3D-first tool shows items moving and piling up in a queue (and a flowchart-first tool, from public
 summaries, not confirmed, animates them once the space is drawn); the library is a strip of text
 chips where the vendors have a docked panel of icons; there is nothing like their user-built
 dashboards; and Help holds only About. The visual style is calm and readable and does not look
@@ -39,8 +39,8 @@ help, and an app that works for keyboard and screen-reader users.
 
 | Audience | Ready | Work that dominates |
 |---|---|---|
-| FlexSim switcher | ~51% | layout and animation weigh most (a 3D-first tool): moving entities ([gaps](gaps.md) #2), the library (#3), user-chosen charts and dashboards (#10); a 2D layout and 3D later |
-| AnyLogic switcher | ~54% | flowchart users lean on parameters and experiments (from public summaries, not confirmed): what-if comparison and scenarios (#4), named parameters and outputs (#11), the library (#3), moving entities (#2) |
+| Switcher from a 3D-first tool | ~51% | layout and animation weigh most (it is taught 3D first): moving entities ([gaps](gaps.md) #2), the library (#3), user-chosen charts and dashboards (#10); a 2D layout and 3D later |
+| Switcher from a flowchart-first tool | ~54% | flowchart users lean on parameters and experiments (from public summaries, not confirmed): what-if comparison and scenarios (#4), named parameters and outputs (#11), the library (#3), moving entities (#2) |
 | Newcomer to simulation | ~51% | results that answer the question (#1), help, a guided first model and examples that show something (#5), one vocabulary (#7), field errors (#8) |
 
 Estimated remaining effort (one worker, sequential, tests included), summed from the hour ranges
@@ -58,7 +58,7 @@ Fidelity counts the done, partial and missing rows whose vendor side was checked
 counts StochCraft's own strengths ("done (ours)"). One partial row, findings stated in words, has
 no vendor counterpart but counts in fidelity like any partial (see the end of this page).
 
-| # | Area | FlexSim weight | AnyLogic weight | Newcomer weight | Fidelity | Ready |
+| # | Area | 3D-first tool weight | Flowchart-first tool weight | Newcomer weight | Fidelity | Ready |
 |---|---|---|---|---|---|---|
 | 1 | Start screen, new model, examples | 5 | 5 | 10 | 44% | 50% |
 | 2 | Library and canvas | 15 | 15 | 10 | 46% | 56% |
@@ -75,8 +75,8 @@ no vendor counterpart but counts in fidelity like any partial (see the end of th
 | 13 | Files and projects | 0 | 0 | 0 | 50% | 86% |
 
 Area 2 is where the first impression is made, so treat it as a fourth weak area beside 6, 10 and
-11. Why these weights: FlexSim is taught 3D first (its opening tutorial builds a 3D layout before
-any logic), so layout and animation weigh most for its users; AnyLogic users start from a flowchart
+11. Why these weights: the 3D-first tool is taught 3D first (its opening tutorial builds a 3D layout before
+any logic), so layout and animation weigh most for its users; users of the flowchart-first tool start from a flowchart
 of process blocks and lean on parameters, code and experiments (from public summaries, not
 confirmed); a newcomer needs the start screen,
 help, explained results and errors most. Files carry no weight: StochCraft's are already at par or
@@ -87,9 +87,9 @@ ahead, and a switcher does not judge a tool by them in the first hour.
 Checked in the code (`crates/ui-egui/src`) or the ROADMAP:
 
 - **Every run is replicated.** Run gives 10 replications by default, in parallel, each mean with a
-  95% interval and the method stated, with a run record and a digest of the model. In FlexSim's
-  window a run is one replication, and replications need an experiment set up first (AnyLogic the
-  same, from public summaries, not confirmed).
+  95% interval and the method stated, with a run record and a digest of the model. In the 3D-first
+  tool's window a run is one replication, and replications need an experiment set up first (the
+  flowchart-first tool the same, from public summaries, not confirmed).
 - **The spread across replications**: percentiles, the empirical distribution with its confidence
   band and the probability of meeting a target, with no set-up.
 - **Sensitivity and sizing with no set-up**: rank every parameter by its effect on a result; add
@@ -159,12 +159,12 @@ agrees with eframe's web backend having no AccessKit adapter.
   commits before `6292048` (those two change the waiting-room and delay logic and seven lines of
   the inspector). The app itself was not driven for it, and no click counts were measured: step
   counts are the steps of the vendors' own first tutorials.
-- **FlexSim**: 39 pages of the public User Manual 2026 read as text; most cited pages read in full,
+- **3D-first tool**: 39 pages of its public user manual read as text; most cited pages read in full,
   about ten only in their opening paragraphs.
-- **AnyLogic**: its help pages refuse automated reading, so its rows rest on search summaries of
+- **Flowchart-first tool**: its help pages refuse automated reading, so its rows rest on search summaries of
   the official help pages and say "from public summaries, not confirmed"; a person with a browser
-  should confirm them. The vendor's features page was read directly. Rows describe AnyLogic 8
-  (desktop) unless they say otherwise.
+  should confirm them. The vendor's features page was read directly. Rows describe its desktop
+  version unless they say otherwise.
 - **Clean room** (ROADMAP principle 6): the vendors' documentation was read as prose and is
   described here in generic terms. Nothing was copied, no vendor software was run, and no vendor
   images or example models were used. A vendor behaviour not found in the pages read is "not found
@@ -176,5 +176,5 @@ agrees with eframe's web backend having no AccessKit adapter.
   weights are written above to be argued with, so every percentage is an estimate.
 - **Changed from the review.** The review listed "findings stated in words" as done (ours); the
   code has them only for split outcomes, so the row is partial here. That moves fidelity from ~43%
-  to ~44% (the row now counts) and FlexSim readiness from ~52% to ~51%.
+  to ~44% (the row now counts) and readiness for a switcher from a 3D-first tool from ~52% to ~51%.
 - StochCraft has no users yet; nothing here is user research.
