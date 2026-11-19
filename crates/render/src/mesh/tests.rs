@@ -20,7 +20,7 @@ fn assert_valid_mesh(mesh: &Mesh) {
         "positions and normals must have equal length"
     );
     let vert_count = mesh.positions.len();
-    for tri in mesh.indices.chunks_exact(3) {
+    for tri in mesh.indices.as_chunks::<3>().0 {
         let [i0, i1, i2] = [tri[0] as usize, tri[1] as usize, tri[2] as usize];
         assert!(i0 < vert_count && i1 < vert_count && i2 < vert_count);
         let p0 = mesh.positions[i0];
@@ -41,7 +41,7 @@ fn assert_valid_mesh(mesh: &Mesh) {
 
 fn signed_volume(mesh: &Mesh) -> f32 {
     let mut sum = 0.0_f32;
-    for tri in mesh.indices.chunks_exact(3) {
+    for tri in mesh.indices.as_chunks::<3>().0 {
         let a = mesh.positions[tri[0] as usize];
         let b = mesh.positions[tri[1] as usize];
         let c = mesh.positions[tri[2] as usize];
@@ -60,7 +60,7 @@ fn quantize(p: [f32; 3]) -> [i64; 3] {
 
 fn assert_watertight(mesh: &Mesh) {
     let mut edges: BTreeMap<([i64; 3], [i64; 3]), u32> = BTreeMap::new();
-    for tri in mesh.indices.chunks_exact(3) {
+    for tri in mesh.indices.as_chunks::<3>().0 {
         let pts = [
             quantize(mesh.positions[tri[0] as usize]),
             quantize(mesh.positions[tri[1] as usize]),
@@ -90,7 +90,7 @@ fn box_mesh_is_closed_and_outward() {
     assert!(close3(max, [1.0, 1.5, 2.0], 1e-6));
 
     let centre = [0.0, 0.0, 0.0];
-    for tri in m.indices.chunks_exact(3) {
+    for tri in m.indices.as_chunks::<3>().0 {
         let a = m.positions[tri[0] as usize];
         let b = m.positions[tri[1] as usize];
         let c = m.positions[tri[2] as usize];
