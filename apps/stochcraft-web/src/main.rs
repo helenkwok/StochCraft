@@ -1,6 +1,6 @@
 //! StochCraft in the browser: the shared interface ([`stochcraft_ui_egui::App`]) through eframe's
-//! web runner (WebGL2). There is no file system: File ▸ Open uses the browser's file picker,
-//! saving downloads the model, and a model file dropped on the page opens. Runs go to web
+//! web runner (wgpu: WebGPU, falling back to WebGL2). There is no file system: File ▸ Open uses
+//! the browser's file picker, saving downloads the model, and a model file dropped on the page opens. Runs go to web
 //! workers, one per core (src/pool.rs, src/worker.rs), and a service worker (sw.js) keeps the
 //! app for offline use; the manifest makes it installable.
 //!

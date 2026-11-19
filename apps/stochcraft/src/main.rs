@@ -334,7 +334,7 @@ impl eframe::App for Desktop {
         self.dialogs.show_pending(Some(frame));
     }
 
-    fn on_exit(&mut self, _gl: Option<&eframe::glow::Context>) {
+    fn on_exit(&mut self) {
         self.autosave(None, true);
         self.sync_settings(None);
         if let Err(e) = self.settings.flush() {

@@ -102,7 +102,7 @@ pub const UI_CRATES: &[&str] = &[
     "craft-keymap",
     "craft-dialogs",
     "craft-quit",
-    // OpenGL, which eframe draws with.
+    // OpenGL, which eframe's glow backend drew with (the apps use wgpu now; layers below L5 still may not).
     "glow",
 ];
 

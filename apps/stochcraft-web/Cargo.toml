@@ -1,6 +1,6 @@
 [package]
 name = "stochcraft-web"
-description = "StochCraft in the browser (eframe's web runner, WebGL2)"
+description = "StochCraft in the browser (eframe's web runner on wgpu: WebGPU, falling back to WebGL2)"
 version.workspace = true
 edition.workspace = true
 license.workspace = true
@@ -24,7 +24,7 @@ path = "src/worker.rs"
 [target.'cfg(target_arch = "wasm32")'.dependencies]
 stochcraft-ui-egui = { workspace = true }
 stochcraft-engine = { workspace = true }
-eframe = { workspace = true, features = ["default_fonts", "glow", "accesskit", "persistence"] }
+eframe = { workspace = true, features = ["default_fonts", "wgpu", "accesskit", "persistence"] }
 craft-platform = { workspace = true, features = ["browser"] }
 serde_json = "1"
 egui = { workspace = true }
