@@ -1010,3 +1010,12 @@ unit	yr	a
 	Pause at	Paus ajahetkel
 	Halve Speed	Vähenda kiirust poole võrra
 	Double Speed	Kahekordista kiirust
+	Layout	Paigutus
+	Layout of the model, to scale	Mudeli paigutus mõõtkavas
+	Drag to pan · Scroll to zoom	Lohistage nihutamiseks · Kerige suumimiseks
+	Positions from the diagram	Asukohad skeemilt
+	Scale bar: {length} m	Mõõtkavariba: {length} m
+	{length} m	{length} m
+	x {x} m, y {y} m	x {x} m, y {y} m
+	Unplaced	Paigutamata
+	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	Praegu paigutatakse iga plokk skeemi järgi. Plokk, mille skeem välja jätab, on siin loetletud ja seda ei joonistata.

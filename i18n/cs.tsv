@@ -1010,3 +1010,12 @@ unit	yr	r.
 	Pause at	Pozastavit v
 	Halve Speed	Zpomalit na polovinu
 	Double Speed	Zdvojnásobit rychlost
+	Layout	Rozvržení
+	Layout of the model, to scale	Rozvržení modelu v měřítku
+	Drag to pan · Scroll to zoom	Tažením posouváte · Kolečkem přibližujete
+	Positions from the diagram	Pozice z diagramu
+	Scale bar: {length} m	Úsečka měřítka: {length} m
+	{length} m	{length} m
+	x {x} m, y {y} m	x {x} m, y {y} m
+	Unplaced	Neumístěné
+	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	Zatím je každý blok umístěn podle diagramu. Blok, který diagram vynechává, je uveden zde a nekreslí se.

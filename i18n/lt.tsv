@@ -1010,3 +1010,12 @@ unit	yr	m.
 	Pause at	Pristabdyti ties
 	Halve Speed	Perpus sumažinti greitį
 	Double Speed	Dvigubai padidinti greitį
+	Layout	Išdėstymas
+	Layout of the model, to scale	Modelio išdėstymas, mastelio
+	Drag to pan · Scroll to zoom	Vilkite perkelti · Slinkite didinti
+	Positions from the diagram	Pozicijos iš diagramos
+	Scale bar: {length} m	Mastelio juosta: {length} m
+	{length} m	{length} m
+	x {x} m, y {y} m	x {x} m, y {y} m
+	Unplaced	Neišdėstyta
+	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	Kol kas kiekvienas blokas išdėstomas pagal diagramą. Blokas, kurio diagrama nenurodo, išvardytas čia ir nebraižomas.

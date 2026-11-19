@@ -1010,3 +1010,12 @@ unit	yr	yıl
 	Pause at	Şurada duraklat
 	Halve Speed	Hızı yarıya indir
 	Double Speed	Hızı ikiye katla
+	Layout	Yerleşim
+	Layout of the model, to scale	Modelin yerleşimi, ölçekli
+	Drag to pan · Scroll to zoom	Kaydırmak için sürükleyin · Yakınlaştırmak için kaydırın
+	Positions from the diagram	Diyagramdan konumlar
+	Scale bar: {length} m	Ölçek çubuğu: {length} m
+	{length} m	{length} m
+	x {x} m, y {y} m	x {x} m, y {y} m
+	Unplaced	Yerleştirilmemiş
+	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	Şimdilik her blok diyagrama göre yerleştirilir. Diyagramın dışarıda bıraktığı bir blok burada listelenir ve çizilmez.

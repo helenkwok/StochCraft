@@ -1010,3 +1010,12 @@ unit	yr	ปี
 	Pause at	หยุดชั่วคราวที่
 	Halve Speed	ลดความเร็วลงครึ่งหนึ่ง
 	Double Speed	เพิ่มความเร็วเป็นสองเท่า
+	Layout	ผัง
+	Layout of the model, to scale	ผังของแบบจำลอง ตามมาตราส่วน
+	Drag to pan · Scroll to zoom	ลากเพื่อเลื่อน · เลื่อนเพื่อซูม
+	Positions from the diagram	ตำแหน่งจากแผนภาพ
+	Scale bar: {length} m	แถบมาตราส่วน: {length} m
+	{length} m	{length} m
+	x {x} m, y {y} m	x {x} m, y {y} m
+	Unplaced	ยังไม่ได้วาง
+	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	ขณะนี้ทุกบล็อกถูกวางตามแผนภาพ บล็อกที่แผนภาพไม่มีจะแสดงรายการไว้ที่นี่และไม่ถูกวาด

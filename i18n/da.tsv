@@ -1010,3 +1010,12 @@ unit	yr	år
 	Pause at	Pause ved
 	Halve Speed	Halvér hastigheden
 	Double Speed	Fordobl hastigheden
+	Layout	Layout
+	Layout of the model, to scale	Modellens layout i målestok
+	Drag to pan · Scroll to zoom	Træk for at panorere · Rul for at zoome
+	Positions from the diagram	Placeringer fra diagrammet
+	Scale bar: {length} m	Målestok: {length} m
+	{length} m	{length} m
+	x {x} m, y {y} m	x {x} m, y {y} m
+	Unplaced	Ikke placeret
+	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	Indtil videre er hver blok placeret ud fra diagrammet. En blok, som diagrammet udelader, vises her og tegnes ikke.

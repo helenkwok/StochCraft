@@ -1010,3 +1010,12 @@ unit	yr	ж.
 	Pause at	Осы уақытта кідірту
 	Halve Speed	Жылдамдықты екі есе азайту
 	Double Speed	Жылдамдықты екі есе арттыру
+	Layout	Орналасу
+	Layout of the model, to scale	Модельдің орналасуы, масштабпен
+	Drag to pan · Scroll to zoom	Жылжыту үшін сүйреңіз · Масштабтау үшін айналдырыңыз
+	Positions from the diagram	Орындар диаграммадан
+	Scale bar: {length} m	Масштаб сызғышы: {length} м
+	{length} m	{length} м
+	x {x} m, y {y} m	x {x} м, y {y} м
+	Unplaced	Орналастырылмаған
+	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	Әзірге әр блок диаграмма бойынша орналастырылады. Диаграмма қалдырып кеткен блок осында тізімделеді және сызылмайды.

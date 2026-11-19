@@ -1010,3 +1010,12 @@ unit	yr	J.
 	Pause at	Pause bei
 	Halve Speed	Geschwindigkeit halbieren
 	Double Speed	Geschwindigkeit verdoppeln
+	Layout	Layout
+	Layout of the model, to scale	Layout des Modells, maßstabsgetreu
+	Drag to pan · Scroll to zoom	Ziehen zum Verschieben · Scrollen zum Zoomen
+	Positions from the diagram	Positionen aus dem Diagramm
+	Scale bar: {length} m	Maßstabsleiste: {length} m
+	{length} m	{length} m
+	x {x} m, y {y} m	x {x} m, y {y} m
+	Unplaced	Nicht platziert
+	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	Vorerst wird jeder Block anhand des Diagramms platziert. Ein Block, den das Diagramm auslässt, steht hier und wird nicht gezeichnet.

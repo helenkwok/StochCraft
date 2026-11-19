@@ -1010,3 +1010,12 @@ unit	yr	년
 	Pause at	지정 시각에 일시 중지
 	Halve Speed	속도 절반으로 줄이기
 	Double Speed	속도 두 배로 높이기
+	Layout	배치도
+	Layout of the model, to scale	축척에 맞춘 모델 배치도
+	Drag to pan · Scroll to zoom	드래그하여 이동 · 스크롤하여 확대/축소
+	Positions from the diagram	다이어그램에서 가져온 위치
+	Scale bar: {length} m	축척 막대: {length} m
+	{length} m	{length} m
+	x {x} m, y {y} m	x {x} m, y {y} m
+	Unplaced	미배치
+	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	현재는 모든 블록이 다이어그램을 기준으로 배치됩니다. 다이어그램에 없는 블록은 여기에 나열되며 그려지지 않습니다.
