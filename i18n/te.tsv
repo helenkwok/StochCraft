@@ -924,3 +924,18 @@ unit	yr	సం.
 @plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	రెండూ యాదృచ్ఛిక బీజం {seed} మరియు అదే {n} అమలును ఉపయోగించాయి, కాబట్టి ప్రతి అమలుకు దాని జతకు వచ్చిన అవే యాదృచ్ఛిక సంఖ్యలు వస్తాయి: తేడాలు యాదృచ్ఛిక ఎంపికల నుండి కాక మార్పు నుండి వస్తాయి.|రెండూ యాదృచ్ఛిక బీజం {seed} మరియు అవే {n} అమలులను ఉపయోగించాయి, కాబట్టి ప్రతి అమలుకు దాని జతకు వచ్చిన అవే యాదృచ్ఛిక సంఖ్యలు వస్తాయి: తేడాలు యాదృచ్ఛిక ఎంపికల నుండి కాక మార్పు నుండి వస్తాయి.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	మరో {n} ముఖ్య కొలమానం యాదృచ్ఛికత చేయగలదానికంటే ఎక్కువ మారలేదు.|మరో {n} ముఖ్య కొలమానాలు యాదృచ్ఛికత చేయగలదానికంటే ఎక్కువ మారలేదు.
 @plural	and {n} more change|and {n} more changes	మరియు మరో {n} మార్పు|మరియు మరో {n} మార్పులు
+	Conveyor	కన్వేయర్
+	Mean time on the conveyor	కన్వేయర్‌పై సగటు సమయం
+	Length	పొడవు
+	Accumulating	పోగుపడే
+	Item length	వస్తువు పొడవు
+	Gap	ఖాళీ
+	Length unit	పొడవు యూనిట్
+	millimetres	మిల్లీమీటర్లు
+	centimetres	సెంటీమీటర్లు
+	metres	మీటర్లు
+	kilometres	కిలోమీటర్లు
+	inches	అంగుళాలు
+	feet	అడుగులు
+	Ticked, items queue up at the end while the rest keep moving. Unticked, the whole belt stops when the item at the end cannot leave.	ఎంచుకుంటే, మిగతావి కదులుతూ ఉండగా వస్తువులు చివర వరుసలో నిలుస్తాయి. ఎంచుకోకపోతే, చివరన ఉన్న వస్తువు బయటకు వెళ్లలేనప్పుడు మొత్తం బెల్ట్ ఆగిపోతుంది.
+	A belt that carries entities from one end to the other. It has a length and a speed, and each entity takes a pitch of belt: its item length plus the gap kept free after it. So it holds at most length ÷ pitch entities and carries at most speed ÷ pitch per time unit. Accumulating: entities queue up at the end while the rest keep moving; otherwise the whole belt stops.	ఎంటిటీలను ఒక చివర నుండి మరో చివరకు తీసుకెళ్లే బెల్ట్. దానికి పొడవు, వేగం ఉంటాయి; ప్రతి ఎంటిటీ బెల్ట్‌లో ఒక పిచ్ తీసుకుంటుంది: దాని వస్తువు పొడవు, దాని వెనుక ఖాళీగా ఉంచే ఖాళీ కలిపి. కాబట్టి ఇందులో గరిష్ఠంగా పొడవు ÷ పిచ్ ఎంటిటీలు పడతాయి, ప్రతి సమయ యూనిట్‌కు గరిష్ఠంగా వేగం ÷ పిచ్ మోస్తుంది. పోగుపడే: మిగతావి కదులుతూ ఉండగా ఎంటిటీలు చివర వరుసలో నిలుస్తాయి; లేకపోతే మొత్తం బెల్ట్ ఆగిపోతుంది.

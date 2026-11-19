@@ -924,3 +924,18 @@ unit	yr	a
 @plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Mõlemad kasutasid juhuarvuseemet {seed} ja sama {n} käivitamist, nii et iga käivitamine saab samad juhuslikud arvud kui tema paariline: erinevused tulevad muudatusest, mitte juhuslikest valikutest.|Mõlemad kasutasid juhuarvuseemet {seed} ja samu {n} käivitamist, nii et iga käivitamine saab samad juhuslikud arvud kui tema paariline: erinevused tulevad muudatusest, mitte juhuslikest valikutest.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	Veel {n} peamine mõõdik ei muutunud rohkem, kui juhus võiks.|Veel {n} peamist mõõdikut ei muutunud rohkem, kui juhus võiks.
 @plural	and {n} more change|and {n} more changes	ja veel {n} muudatus|ja veel {n} muudatust
+	Conveyor	Konveier
+	Mean time on the conveyor	Keskmine aeg konveieril
+	Length	Pikkus
+	Accumulating	Kuhjuv
+	Item length	Eseme pikkus
+	Gap	Vahe
+	Length unit	Pikkuseühik
+	millimetres	millimeetrid
+	centimetres	sentimeetrid
+	metres	meetrid
+	kilometres	kilomeetrid
+	inches	tollid
+	feet	jalad
+	Ticked, items queue up at the end while the rest keep moving. Unticked, the whole belt stops when the item at the end cannot leave.	Märgitud: esemed jäävad lõppu järjekorda, samal ajal kui teised liiguvad edasi. Märkimata: kogu lint peatub, kui lõpus olev ese ei saa lahkuda.
+	A belt that carries entities from one end to the other. It has a length and a speed, and each entity takes a pitch of belt: its item length plus the gap kept free after it. So it holds at most length ÷ pitch entities and carries at most speed ÷ pitch per time unit. Accumulating: entities queue up at the end while the rest keep moving; otherwise the whole belt stops.	Lint, mis kannab olemeid ühest otsast teise. Sel on pikkus ja kiirus ning iga olem võtab lindil sammu: oma eseme pikkuse pluss selle taha vabaks jäetud vahe. Seega mahub lindile kuni pikkus ÷ samm olemit ja see veab ajaühikus kuni kiirus ÷ samm olemit. Kuhjuv: olemid jäävad lõppu järjekorda, samal ajal kui teised liiguvad edasi; muidu peatub kogu lint.

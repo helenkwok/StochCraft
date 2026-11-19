@@ -149,6 +149,12 @@ fn metrics_for(kind: &str) -> &'static [&'static str] {
     match kind {
         "server" | "shared_task" => &["mean_wait", "mean_queue_length", "utilisation", "left"],
         "delay" | "batch" | "unbatch" => &["mean_contents", "left"],
+        "conveyor" => &[
+            "mean_time_on",
+            "mean_contents",
+            "blocking_probability",
+            "left",
+        ],
         "sink" => &["mean_time_in_system", "entered"],
         "resource" => &["utilisation"],
         "exclusive_gateway" => &["left", "lost"],

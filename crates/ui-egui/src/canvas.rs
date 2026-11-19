@@ -640,12 +640,28 @@ impl App {
                     let caption_font = FontId::proportional(small.size * shrink);
                     let caption = fitted(&painter, &kind, caption_font, p.text_weak, inner, 1);
                     let name_row = painter.ctx().fonts_mut(|f| f.row_height(&font));
-                    let room = r.height() - 2.0 * pad;
+                    // A conveyor has a belt along its top: a line with a roller at each end.
+                    let belt = if matches!(e.kind, ElementKind::Conveyor { .. })
+                        && r.height() >= 40.0 * view.zoom
+                    {
+                        let y = r.top() + pad + 4.0 * view.zoom;
+                        let (left, right) =
+                            (r.left() + 2.0 * pad + 4.0, r.right() - 2.0 * pad - 4.0);
+                        let line = Stroke::new(1.5, p.text_weak);
+                        painter.line_segment([Pos2::new(left, y), Pos2::new(right, y)], line);
+                        for x in [left, right] {
+                            painter.circle_stroke(Pos2::new(x, y), 3.0 * view.zoom, line);
+                        }
+                        8.0 * view.zoom
+                    } else {
+                        0.0
+                    };
+                    let room = r.height() - 2.0 * pad - belt;
                     let caption = (room >= caption.size().y + name_row).then_some(caption);
                     let name_room = room - caption.as_ref().map_or(0.0, |c| c.size().y);
                     let rows = ((name_room / name_row).floor() as usize).max(1);
                     let g = fitted(&painter, name, font.clone(), p.text, inner, rows);
-                    let middle = r.top() + pad + name_room / 2.0;
+                    let middle = r.top() + pad + belt + name_room / 2.0;
                     painter.galley(
                         // Centred lines are laid out about x = 0: drawn at the middle.
                         Pos2::new(r.center().x, middle - g.size().y / 2.0),

@@ -924,3 +924,18 @@ unit	yr	a
 @plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Ambele au folosit sămânța {seed} și aceeași {n} rulare, deci fiecare rulare primește aceleași numere aleatoare ca perechea sa: diferențele vin din modificare, nu din extrageri întâmplătoare.|Ambele au folosit sămânța {seed} și aceleași {n} rulări, deci fiecare rulare primește aceleași numere aleatoare ca perechea sa: diferențele vin din modificare, nu din extrageri întâmplătoare.|Ambele au folosit sămânța {seed} și aceleași {n} de rulări, deci fiecare rulare primește aceleași numere aleatoare ca perechea sa: diferențele vin din modificare, nu din extrageri întâmplătoare.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	Încă {n} indicator principal nu s-a mișcat mai mult decât ar putea întâmplarea.|Încă {n} indicatori principali nu s-au mișcat mai mult decât ar putea întâmplarea.|Încă {n} de indicatori principali nu s-au mișcat mai mult decât ar putea întâmplarea.
 @plural	and {n} more change|and {n} more changes	și încă {n} modificare|și încă {n} modificări|și încă {n} de modificări
+	Conveyor	Transportor
+	Mean time on the conveyor	Timpul mediu pe transportor
+	Length	Lungime
+	Accumulating	Acumulare
+	Item length	Lungimea articolului
+	Gap	Spațiu
+	Length unit	Unitate de lungime
+	millimetres	milimetri
+	centimetres	centimetri
+	metres	metri
+	kilometres	kilometri
+	inches	inci
+	feet	picioare
+	Ticked, items queue up at the end while the rest keep moving. Unticked, the whole belt stops when the item at the end cannot leave.	Bifat, articolele fac coadă la capăt, în timp ce celelalte continuă să se miște. Nebifat, toată banda se oprește când articolul de la capăt nu poate pleca.
+	A belt that carries entities from one end to the other. It has a length and a speed, and each entity takes a pitch of belt: its item length plus the gap kept free after it. So it holds at most length ÷ pitch entities and carries at most speed ÷ pitch per time unit. Accumulating: entities queue up at the end while the rest keep moving; otherwise the whole belt stops.	O bandă care duce entități de la un capăt la altul. Are o lungime și o viteză, iar fiecare entitate ocupă un pas de bandă: lungimea articolului ei plus spațiul lăsat liber în urma lui. Astfel, banda cuprinde cel mult lungime ÷ pas entități și transportă cel mult viteză ÷ pas pe unitatea de timp. Acumulare: entitățile fac coadă la capăt, în timp ce celelalte continuă să se miște; altfel, se oprește toată banda.

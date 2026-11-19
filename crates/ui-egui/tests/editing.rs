@@ -1458,3 +1458,102 @@ fn balking_and_a_balked_way_are_set_in_the_inspector() {
     click(&mut h, Role::Button, "None");
     assert!(element(&h, "serve").get("balking").is_none());
 }
+
+/// A conveyor is added from the palette with its default numbers, which show in the inspector
+/// with their units; a number typed there is one `block.set`, and the length unit is chosen on
+/// the model page.
+#[test]
+fn a_conveyor_is_added_from_the_palette_and_edited_in_its_form() {
+    let mut h = harness();
+    h.state_mut().execute("model.new", json!({"name": "Belt"}));
+    settle(&mut h);
+    click(&mut h, Role::Button, "+ Add block");
+    click(&mut h, Role::Button, "Conveyor");
+    let id = model(&h)["elements"][0]["id"]
+        .as_str()
+        .expect("an id")
+        .to_owned();
+    let belt = element(&h, &id);
+    assert_eq!(belt["kind"], json!("conveyor"));
+    assert_eq!(belt["name"], json!("Conveyor 1"));
+    assert_eq!(belt["length"], json!(10.0));
+    assert_eq!(belt["speed"], json!(1.0));
+    assert_eq!(belt["accumulating"], json!(true));
+    assert_eq!(belt["item_length"], json!(1.0));
+
+    // The five fields, each named in plain words.
+    for label in ["Length", "Speed", "Item length", "Gap"] {
+        h.get_by_role_and_label(Role::TextInput, label);
+    }
+    h.get_by_role_and_label(Role::CheckBox, "Accumulating");
+
+    type_into(&mut h, "Speed", "2.5");
+    assert_eq!(element(&h, &id)["speed"], json!(2.5));
+    // A length of nothing is refused, as the model would.
+    type_into(&mut h, "Length", "0");
+    assert_eq!(element(&h, &id)["length"], json!(10.0));
+    type_into(&mut h, "Length", "12");
+    assert_eq!(element(&h, &id)["length"], json!(12.0));
+    click(&mut h, Role::CheckBox, "Accumulating");
+    assert_eq!(element(&h, &id)["accumulating"], json!(false));
+
+    // The length unit is chosen beside the time unit.
+    h.key_press(egui::Key::Escape);
+    settle(&mut h);
+    click(&mut h, Role::ComboBox, "Length unit");
+    click(&mut h, Role::Button, "feet");
+    assert_eq!(model(&h)["experiment"]["length_unit"], json!("ft"));
+}
+
+/// A run of source → conveyor → sink reports the conveyor's mean time on: ten long at a speed of
+/// two takes five, whatever the arrivals, while they are further apart than that.
+#[test]
+fn the_results_show_a_conveyors_mean_time_on() {
+    let mut h = harness();
+    h.state_mut().execute("model.new", json!({"name": "Belt"}));
+    let add = |h: &mut Harness<'static, App>, params: Value| -> String {
+        h.state_mut()
+            .execute("block.add", params)
+            .and_then(|r| r["id"].as_str().map(str::to_owned))
+            .expect("a block")
+    };
+    let source = add(
+        &mut h,
+        json!({"kind": "source", "interarrival": {"type": "constant", "value": 20.0}}),
+    );
+    let belt = add(
+        &mut h,
+        json!({"kind": "conveyor", "length": 10.0, "speed": 2.0}),
+    );
+    let sink = add(&mut h, json!({"kind": "sink"}));
+    for (from, to) in [(&source, &belt), (&belt, &sink)] {
+        h.state_mut()
+            .execute("connect", json!({"from": from, "to": to}))
+            .expect("a flow");
+    }
+    h.state_mut()
+        .execute(
+            "experiment.set",
+            json!({"duration": 400.0, "warmup": 0.0, "replications": 3}),
+        )
+        .expect("an experiment");
+    settle(&mut h);
+
+    h.state_mut().run();
+    for _ in 0..5000 {
+        if !h.state().is_running() {
+            break;
+        }
+        h.step();
+    }
+    settle(&mut h);
+    let results = h.state().results().expect("results").clone();
+    let on = results["elements"]
+        .as_array()
+        .and_then(|es| es.iter().find(|e| e["id"] == belt.as_str()))
+        .and_then(|e| e["metrics"]["mean_time_on"]["mean"].as_f64())
+        .unwrap_or_default();
+    assert!((on - 5.0).abs() < 1e-9, "{results}");
+    click(&mut h, Role::Tab, "Results");
+    assert!(h.get_all_by_label("Mean time on the conveyor").count() > 0);
+}

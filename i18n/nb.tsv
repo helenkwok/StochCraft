@@ -924,3 +924,18 @@ unit	yr	år
 @plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Begge brukte tilfeldighetsfrø {seed} og den samme {n} kjøringen, så hver kjøring får de samme tilfeldige tallene som sin partner: forskjellene kommer fra endringen, ikke fra tilfeldige trekk.|Begge brukte tilfeldighetsfrø {seed} og de samme {n} kjøringene, så hver kjøring får de samme tilfeldige tallene som sin partner: forskjellene kommer fra endringen, ikke fra tilfeldige trekk.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	{n} annet viktig måltall endret seg ikke mer enn tilfeldigheter kunne.|{n} andre viktige måltall endret seg ikke mer enn tilfeldigheter kunne.
 @plural	and {n} more change|and {n} more changes	og {n} endring til|og {n} endringer til
+	Conveyor	Transportbånd
+	Mean time on the conveyor	Gjennomsnittlig tid på båndet
+	Length	Lengde
+	Accumulating	Akkumulerende
+	Item length	Gjenstandens lengde
+	Gap	Mellomrom
+	Length unit	Lengdeenhet
+	millimetres	millimeter
+	centimetres	centimeter
+	metres	meter
+	kilometres	kilometer
+	inches	tommer
+	feet	fot
+	Ticked, items queue up at the end while the rest keep moving. Unticked, the whole belt stops when the item at the end cannot leave.	Avkrysset: gjenstandene står i kø i enden mens de andre fortsetter. Ikke avkrysset: hele båndet stopper når gjenstanden i enden ikke kommer videre.
+	A belt that carries entities from one end to the other. It has a length and a speed, and each entity takes a pitch of belt: its item length plus the gap kept free after it. So it holds at most length ÷ pitch entities and carries at most speed ÷ pitch per time unit. Accumulating: entities queue up at the end while the rest keep moving; otherwise the whole belt stops.	Et bånd som bærer enheter fra den ene enden til den andre. Det har en lengde og en hastighet, og hver enhet tar en deling av båndet: lengden på gjenstanden pluss mellomrommet som holdes ledig etter den. Det rommer derfor høyst lengde ÷ deling enheter og bærer høyst hastighet ÷ deling per tidsenhet. Akkumulerende: enhetene står i kø i enden mens de andre fortsetter; ellers stopper hele båndet.

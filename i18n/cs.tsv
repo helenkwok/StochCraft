@@ -924,3 +924,18 @@ unit	yr	r.
 @plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Oba použily počáteční hodnotu generátoru {seed} a tentýž {n} běh, takže každý běh dostane stejná náhodná čísla jako jeho protějšek: rozdíly pocházejí ze změny, ne z náhodných tahů.|Oba použily počáteční hodnotu generátoru {seed} a tytéž {n} běhy, takže každý běh dostane stejná náhodná čísla jako jeho protějšek: rozdíly pocházejí ze změny, ne z náhodných tahů.|Oba použily počáteční hodnotu generátoru {seed} a tytéž {n} běhů, takže každý běh dostane stejná náhodná čísla jako jeho protějšek: rozdíly pocházejí ze změny, ne z náhodných tahů.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	Ještě {n} klíčová metrika se nepohnula víc, než by dokázala náhoda.|Ještě {n} klíčové metriky se nepohnuly víc, než by dokázala náhoda.|Ještě {n} klíčových metrik se nepohnulo víc, než by dokázala náhoda.
 @plural	and {n} more change|and {n} more changes	a ještě {n} změna|a ještě {n} změny|a ještě {n} změn
+	Conveyor	Dopravník
+	Mean time on the conveyor	Průměrná doba na dopravníku
+	Length	Délka
+	Accumulating	Akumulace
+	Item length	Délka položky
+	Gap	Mezera
+	Length unit	Jednotka délky
+	millimetres	milimetry
+	centimetres	centimetry
+	metres	metry
+	kilometres	kilometry
+	inches	palce
+	feet	stopy
+	Ticked, items queue up at the end while the rest keep moving. Unticked, the whole belt stops when the item at the end cannot leave.	Zaškrtnuto: položky se na konci řadí do fronty, zatímco ostatní jedou dál. Nezaškrtnuto: celý pás se zastaví, když položka na konci nemůže odejít.
+	A belt that carries entities from one end to the other. It has a length and a speed, and each entity takes a pitch of belt: its item length plus the gap kept free after it. So it holds at most length ÷ pitch entities and carries at most speed ÷ pitch per time unit. Accumulating: entities queue up at the end while the rest keep moving; otherwise the whole belt stops.	Pás, který nese entity z jednoho konce na druhý. Má délku a rychlost a každá entita zabere rozteč pásu: délku své položky plus mezeru, která za ní zůstane volná. Pojme tedy nejvýše délka ÷ rozteč entit a za jednotku času unese nejvýše rychlost ÷ rozteč. Akumulace: entity se na konci řadí do fronty, zatímco ostatní jedou dál; jinak se zastaví celý pás.

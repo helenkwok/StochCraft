@@ -924,3 +924,18 @@ unit	yr	বছর
 @plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	দুটিই যদৃচ্ছ বীজ {seed} এবং একই {n}টি পুনরাবৃত্তি ব্যবহার করেছে, তাই প্রতিটি পুনরাবৃত্তি তার জোড়ার মতো একই যদৃচ্ছ সংখ্যা পায়: পার্থক্য আসে পরিবর্তন থেকে, দৈবক্রমের টানা থেকে নয়।|দুটিই যদৃচ্ছ বীজ {seed} এবং একই {n}টি পুনরাবৃত্তি ব্যবহার করেছে, তাই প্রতিটি পুনরাবৃত্তি তার জোড়ার মতো একই যদৃচ্ছ সংখ্যা পায়: পার্থক্য আসে পরিবর্তন থেকে, দৈবক্রমের টানা থেকে নয়।
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	আরও {n}টি প্রধান পরিমাপক দৈবক্রমের সীমার চেয়ে বেশি নড়েনি।|আরও {n}টি প্রধান পরিমাপক দৈবক্রমের সীমার চেয়ে বেশি নড়েনি।
 @plural	and {n} more change|and {n} more changes	এবং আরও {n}টি পরিবর্তন|এবং আরও {n}টি পরিবর্তন
+	Conveyor	কনভেয়র
+	Mean time on the conveyor	কনভেয়রে গড় সময়
+	Length	দৈর্ঘ্য
+	Accumulating	জমা হওয়া
+	Item length	আইটেমের দৈর্ঘ্য
+	Gap	ফাঁক
+	Length unit	দৈর্ঘ্যের একক
+	millimetres	মিলিমিটার
+	centimetres	সেন্টিমিটার
+	metres	মিটার
+	kilometres	কিলোমিটার
+	inches	ইঞ্চি
+	feet	ফুট
+	Ticked, items queue up at the end while the rest keep moving. Unticked, the whole belt stops when the item at the end cannot leave.	টিক দিলে, শেষ প্রান্তে আইটেমগুলো সারি বাঁধে আর বাকিগুলো চলতে থাকে। টিক না দিলে, শেষ প্রান্তের আইটেম বেরোতে না পারলে পুরো বেল্ট থেমে যায়।
+	A belt that carries entities from one end to the other. It has a length and a speed, and each entity takes a pitch of belt: its item length plus the gap kept free after it. So it holds at most length ÷ pitch entities and carries at most speed ÷ pitch per time unit. Accumulating: entities queue up at the end while the rest keep moving; otherwise the whole belt stops.	একটি বেল্ট, যা সত্তাদের এক প্রান্ত থেকে অন্য প্রান্তে নিয়ে যায়। এর একটি দৈর্ঘ্য ও একটি গতি আছে, আর প্রতিটি সত্তা বেল্টের একটি পিচ নেয়: তার আইটেমের দৈর্ঘ্য এবং তার পরে খালি রাখা ফাঁক। তাই এতে সর্বোচ্চ দৈর্ঘ্য ÷ পিচ সংখ্যক সত্তা ধরে এবং প্রতি সময়-একক সর্বোচ্চ গতি ÷ পিচ সংখ্যক সত্তা বহন করে। জমা হওয়া: সত্তারা শেষ প্রান্তে সারি বাঁধে আর বাকিরা চলতে থাকে; না হলে পুরো বেল্ট থেমে যায়।

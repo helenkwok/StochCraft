@@ -924,3 +924,18 @@ unit	yr	р.
 @plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Обидва використали початкове значення генератора {seed} і той самий {n} запуск, тож кожен запуск отримує ті самі випадкові числа, що й його пара: відмінності спричинені зміною, а не випадковими вибірками.|Обидва використали початкове значення генератора {seed} і ті самі {n} запуски, тож кожен запуск отримує ті самі випадкові числа, що й його пара: відмінності спричинені зміною, а не випадковими вибірками.|Обидва використали початкове значення генератора {seed} і ті самі {n} запусків, тож кожен запуск отримує ті самі випадкові числа, що й його пара: відмінності спричинені зміною, а не випадковими вибірками.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	Ще {n} основний показник змінився не більше, ніж могла б випадковість.|Ще {n} основні показники змінилися не більше, ніж могла б випадковість.|Ще {n} основних показників змінилися не більше, ніж могла б випадковість.
 @plural	and {n} more change|and {n} more changes	і ще {n} зміна|і ще {n} зміни|і ще {n} змін
+	Conveyor	Конвеєр
+	Mean time on the conveyor	Середній час на конвеєрі
+	Length	Довжина
+	Accumulating	Накопичення
+	Item length	Довжина виробу
+	Gap	Проміжок
+	Length unit	Одиниця довжини
+	millimetres	міліметри
+	centimetres	сантиметри
+	metres	метри
+	kilometres	кілометри
+	inches	дюйми
+	feet	фути
+	Ticked, items queue up at the end while the rest keep moving. Unticked, the whole belt stops when the item at the end cannot leave.	Якщо позначено, вироби вишиковуються в чергу в кінці, поки решта продовжує рухатися. Якщо ні, уся стрічка зупиняється, коли виріб у кінці не може піти.
+	A belt that carries entities from one end to the other. It has a length and a speed, and each entity takes a pitch of belt: its item length plus the gap kept free after it. So it holds at most length ÷ pitch entities and carries at most speed ÷ pitch per time unit. Accumulating: entities queue up at the end while the rest keep moving; otherwise the whole belt stops.	Стрічка, що переносить сутності від одного кінця до іншого. Вона має довжину і швидкість, а кожна сутність займає крок стрічки: довжину свого виробу плюс проміжок, що лишається вільним за нею. Тож на стрічці вміщується не більше довжина ÷ крок сутностей, і вона переносить не більше швидкість ÷ крок за одиницю часу. Накопичення: сутності вишиковуються в чергу в кінці, поки решта продовжує рухатися; інакше зупиняється вся стрічка.

@@ -924,3 +924,18 @@ unit	yr	ປີ
 @plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	ທັງສອງໃຊ້ເມັດສຸ່ມ {seed} ແລະ {n} ຮອບດຽວກັນ, ແຕ່ລະຮອບຈຶ່ງໄດ້ຕົວເລກສຸ່ມຊຸດດຽວກັນກັບຄູ່ຂອງມັນ: ຄວາມແຕກຕ່າງມາຈາກການປ່ຽນແປງ ບໍ່ແມ່ນຈາກການສຸ່ມໂດຍບັງເອີນ.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	ຕົວຊີ້ວັດຫຼັກອື່ນອີກ {n} ອັນປ່ຽນໄປບໍ່ເກີນທີ່ຄວາມບັງເອີນຈະເຮັດໄດ້.
 @plural	and {n} more change|and {n} more changes	ແລະ ການປ່ຽນແປງອື່ນອີກ {n} ລາຍການ
+	Conveyor	ສາຍພານລຳລຽງ
+	Mean time on the conveyor	ເວລາສະເລ່ຍເທິງສາຍພານ
+	Length	ຄວາມຍາວ
+	Accumulating	ສະສົມ
+	Item length	ຄວາມຍາວຂອງຊິ້ນງານ
+	Gap	ຊ່ອງວ່າງ
+	Length unit	ຫົວໜ່ວຍຄວາມຍາວ
+	millimetres	ມິນລີແມັດ
+	centimetres	ຊັງຕີແມັດ
+	metres	ແມັດ
+	kilometres	ກິໂລແມັດ
+	inches	ນິ້ວ
+	feet	ຟຸດ
+	Ticked, items queue up at the end while the rest keep moving. Unticked, the whole belt stops when the item at the end cannot leave.	ເມື່ອເລືອກ ຊິ້ນງານຈະຕໍ່ແຖວຢູ່ປາຍ ໃນຂະນະທີ່ຊິ້ນອື່ນຍັງເຄື່ອນຕໍ່ໄປ. ເມື່ອບໍ່ເລືອກ ສາຍພານທັງເສັ້ນຈະຢຸດເມື່ອຊິ້ນງານຢູ່ປາຍອອກບໍ່ໄດ້.
+	A belt that carries entities from one end to the other. It has a length and a speed, and each entity takes a pitch of belt: its item length plus the gap kept free after it. So it holds at most length ÷ pitch entities and carries at most speed ÷ pitch per time unit. Accumulating: entities queue up at the end while the rest keep moving; otherwise the whole belt stops.	ສາຍພານທີ່ພາເອນທິຕີຈາກປາຍໜຶ່ງໄປອີກປາຍໜຶ່ງ. ມີຄວາມຍາວແລະຄວາມໄວ ແລະແຕ່ລະເອນທິຕີໃຊ້ໜຶ່ງຊ່ວງຂອງສາຍພານ ຄືຄວາມຍາວຂອງຊິ້ນງານບວກຊ່ອງວ່າງທີ່ເຫຼືອໄວ້ທາງຫຼັງ. ສະນັ້ນຈຶ່ງບັນຈຸໄດ້ສູງສຸດ ຄວາມຍາວ ÷ ຊ່ວງ ເອນທິຕີ ແລະພາໄປໄດ້ສູງສຸດ ຄວາມໄວ ÷ ຊ່ວງ ຕໍ່ໜຶ່ງຫົວໜ່ວຍເວລາ. ສະສົມ: ເອນທິຕີຕໍ່ແຖວຢູ່ປາຍໃນຂະນະທີ່ຕົວອື່ນຍັງເຄື່ອນຕໍ່ໄປ; ບໍ່ດັ່ງນັ້ນສາຍພານທັງເສັ້ນຈະຢຸດ.

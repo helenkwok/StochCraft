@@ -924,3 +924,18 @@ unit	yr	v
 @plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Të dy përdorën farën {seed} dhe të njëjtin {n} ekzekutim, kështu që çdo ekzekutim merr të njëjtët numra të rastësishëm si çifti i tij: dallimet vijnë nga ndryshimi, jo nga tërheqjet e rastësishme.|Të dy përdorën farën {seed} dhe të njëjtat {n} ekzekutime, kështu që çdo ekzekutim merr të njëjtët numra të rastësishëm si çifti i tij: dallimet vijnë nga ndryshimi, jo nga tërheqjet e rastësishme.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	{n} tregues tjetër kryesor nuk lëvizi më shumë se sa mund të bënte rastësia.|{n} tregues të tjerë kryesorë nuk lëvizën më shumë se sa mund të bënte rastësia.
 @plural	and {n} more change|and {n} more changes	dhe {n} ndryshim tjetër|dhe {n} ndryshime të tjera
+	Conveyor	Transportier
+	Mean time on the conveyor	Koha mesatare në transportier
+	Length	Gjatësia
+	Accumulating	Grumbullues
+	Item length	Gjatësia e artikullit
+	Gap	Hapësira
+	Length unit	Njësia e gjatësisë
+	millimetres	milimetra
+	centimetres	centimetra
+	metres	metra
+	kilometres	kilometra
+	inches	inç
+	feet	këmbë
+	Ticked, items queue up at the end while the rest keep moving. Unticked, the whole belt stops when the item at the end cannot leave.	Nëse është e shënuar, artikujt radhiten në fund ndërsa të tjerët vazhdojnë të lëvizin. Nëse jo, e gjithë shiriti ndalon kur artikulli në fund nuk mund të dalë.
+	A belt that carries entities from one end to the other. It has a length and a speed, and each entity takes a pitch of belt: its item length plus the gap kept free after it. So it holds at most length ÷ pitch entities and carries at most speed ÷ pitch per time unit. Accumulating: entities queue up at the end while the rest keep moving; otherwise the whole belt stops.	Një shirit që bart entitete nga njëri skaj te tjetri. Ka gjatësi dhe shpejtësi, dhe çdo entitet zë një hap të shiritit: gjatësinë e artikullit të tij plus hapësirën që mbahet e lirë pas tij. Kështu mban më së shumti gjatësia ÷ hapi entitete dhe bart më së shumti shpejtësia ÷ hapi për njësi kohe. Grumbullues: entitetet radhiten në fund ndërsa të tjerët vazhdojnë të lëvizin; përndryshe ndalon e gjithë shiriti.

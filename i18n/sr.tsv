@@ -924,3 +924,18 @@ unit	yr	год.
 @plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Оба су користила семе {seed} и исто {n} покретање, па свако покретање добија исте случајне бројеве као његов пар: разлике долазе од промене, а не од случајних извлачења.|Оба су користила семе {seed} и иста {n} покретања, па свако покретање добија исте случајне бројеве као његов пар: разлике долазе од промене, а не од случајних извлачења.|Оба су користила семе {seed} и истих {n} покретања, па свако покретање добија исте случајне бројеве као његов пар: разлике долазе од промене, а не од случајних извлачења.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	Још {n} кључна метрика се није померила више него што би могао случај.|Још {n} кључне метрике се нису помериле више него што би могао случај.|Још {n} кључних метрика се није померило више него што би могао случај.
 @plural	and {n} more change|and {n} more changes	и још {n} промена|и још {n} промене|и још {n} промена
+	Conveyor	Транспортер
+	Mean time on the conveyor	Просечно време на транспортеру
+	Length	Дужина
+	Accumulating	Акумулација
+	Item length	Дужина предмета
+	Gap	Размак
+	Length unit	Јединица дужине
+	millimetres	милиметри
+	centimetres	центиметри
+	metres	метри
+	kilometres	километри
+	inches	инчи
+	feet	стопе
+	Ticked, items queue up at the end while the rest keep moving. Unticked, the whole belt stops when the item at the end cannot leave.	Означено: предмети се ређају на крају док се остали настављају да се крећу. Неозначено: цела трака стаје када предмет на крају не може да изађе.
+	A belt that carries entities from one end to the other. It has a length and a speed, and each entity takes a pitch of belt: its item length plus the gap kept free after it. So it holds at most length ÷ pitch entities and carries at most speed ÷ pitch per time unit. Accumulating: entities queue up at the end while the rest keep moving; otherwise the whole belt stops.	Трака која носи ентитете са једног краја на други. Има дужину и брзину, а сваки ентитет заузима корак траке: дужину свог предмета плус размак који остаје слободан иза њега. Зато носи највише дужина ÷ корак ентитета и преноси највише брзина ÷ корак по јединици времена. Акумулација: ентитети се ређају на крају док се остали настављају да се крећу; иначе стаје цела трака.

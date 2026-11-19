@@ -924,3 +924,18 @@ unit	yr	ж.
 @plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Екеуі де {seed} кездейсоқ тұқымын және сол {n} іске қосуды пайдаланды, сондықтан әр іске қосу өз жұбымен бірдей кездейсоқ сандар алады: айырмашылықтар кездейсоқ таңдаудан емес, өзгерістен шығады.|Екеуі де {seed} кездейсоқ тұқымын және сол {n} іске қосуды пайдаланды, сондықтан әр іске қосу өз жұбымен бірдей кездейсоқ сандар алады: айырмашылықтар кездейсоқ таңдаудан емес, өзгерістен шығады.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	Тағы {n} негізгі көрсеткіш кездейсоқтық істей алатыннан көп өзгерген жоқ.|Тағы {n} негізгі көрсеткіш кездейсоқтық істей алатыннан көп өзгерген жоқ.
 @plural	and {n} more change|and {n} more changes	және тағы {n} өзгеріс|және тағы {n} өзгеріс
+	Conveyor	Конвейер
+	Mean time on the conveyor	Конвейердегі орташа уақыт
+	Length	Ұзындығы
+	Accumulating	Жинақтаушы
+	Item length	Бұйым ұзындығы
+	Gap	Аралық
+	Length unit	Ұзындық бірлігі
+	millimetres	миллиметр
+	centimetres	сантиметр
+	metres	метр
+	kilometres	километр
+	inches	дюйм
+	feet	фут
+	Ticked, items queue up at the end while the rest keep moving. Unticked, the whole belt stops when the item at the end cannot leave.	Белгіленсе, бұйымдар соңында кезекке тұрады, ал қалғандары жылжи береді. Белгіленбесе, соңындағы бұйым кете алмаған кезде бүкіл лента тоқтайды.
+	A belt that carries entities from one end to the other. It has a length and a speed, and each entity takes a pitch of belt: its item length plus the gap kept free after it. So it holds at most length ÷ pitch entities and carries at most speed ÷ pitch per time unit. Accumulating: entities queue up at the end while the rest keep moving; otherwise the whole belt stops.	Нысандарды бір шетінен екінші шетіне тасымалдайтын лента. Оның ұзындығы мен жылдамдығы бар, ал әр нысан лентаның бір қадамын алады: өз бұйымының ұзындығы мен оның артында бос қалдырылатын аралық. Сондықтан онда ең көбі ұзындық ÷ қадам нысан сияды және бір уақыт бірлігінде ең көбі жылдамдық ÷ қадам нысан тасымалданады. Жинақтаушы: нысандар соңында кезекке тұрады, ал қалғандары жылжи береді; әйтпесе бүкіл лента тоқтайды.

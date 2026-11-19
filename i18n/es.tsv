@@ -924,3 +924,18 @@ unit	yr	a
 @plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Ambas usaron la semilla {seed} y la misma {n} ejecución, así que cada ejecución recibe los mismos números aleatorios que su pareja: las diferencias vienen del cambio, no de extracciones al azar.|Ambas usaron la semilla {seed} y las mismas {n} ejecuciones, así que cada ejecución recibe los mismos números aleatorios que su pareja: las diferencias vienen del cambio, no de extracciones al azar.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	{n} otra métrica clave no se movió más de lo que podría el azar.|{n} otras métricas clave no se movieron más de lo que podría el azar.
 @plural	and {n} more change|and {n} more changes	y {n} cambio más|y {n} cambios más
+	Conveyor	Cinta transportadora
+	Mean time on the conveyor	Tiempo medio en la cinta
+	Length	Longitud
+	Accumulating	Acumulación
+	Item length	Longitud del elemento
+	Gap	Separación
+	Length unit	Unidad de longitud
+	millimetres	milímetros
+	centimetres	centímetros
+	metres	metros
+	kilometres	kilómetros
+	inches	pulgadas
+	feet	pies
+	Ticked, items queue up at the end while the rest keep moving. Unticked, the whole belt stops when the item at the end cannot leave.	Marcada, los elementos hacen cola al final mientras los demás siguen avanzando. Desmarcada, toda la cinta se detiene cuando el elemento del final no puede salir.
+	A belt that carries entities from one end to the other. It has a length and a speed, and each entity takes a pitch of belt: its item length plus the gap kept free after it. So it holds at most length ÷ pitch entities and carries at most speed ÷ pitch per time unit. Accumulating: entities queue up at the end while the rest keep moving; otherwise the whole belt stops.	Una cinta que lleva entidades de un extremo al otro. Tiene una longitud y una velocidad, y cada entidad ocupa un paso de cinta: la longitud de su elemento más la separación que queda libre tras él. Por eso admite como máximo longitud ÷ paso entidades y transporta como máximo velocidad ÷ paso por unidad de tiempo. Acumulación: las entidades hacen cola al final mientras las demás siguen avanzando; si no, se detiene toda la cinta.

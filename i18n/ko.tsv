@@ -924,3 +924,18 @@ unit	yr	년
 @plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	둘 다 난수 시드 {seed}와 같은 실행 {n}회를 사용했으므로 각 실행은 짝이 되는 실행과 같은 난수를 받습니다. 차이는 우연한 추출이 아니라 변경에서 나옵니다.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	다른 주요 지표 {n}개는 우연이 만들 수 있는 정도 이상으로 움직이지 않았습니다.
 @plural	and {n} more change|and {n} more changes	외 {n}개 변경
+	Conveyor	컨베이어
+	Mean time on the conveyor	컨베이어 위 평균 시간
+	Length	길이
+	Accumulating	누적
+	Item length	품목 길이
+	Gap	간격
+	Length unit	길이 단위
+	millimetres	밀리미터
+	centimetres	센티미터
+	metres	미터
+	kilometres	킬로미터
+	inches	인치
+	feet	피트
+	Ticked, items queue up at the end while the rest keep moving. Unticked, the whole belt stops when the item at the end cannot leave.	선택하면 끝에서 품목이 줄을 서고 나머지는 계속 움직입니다. 선택하지 않으면 끝의 품목이 나가지 못할 때 벨트 전체가 멈춥니다.
+	A belt that carries entities from one end to the other. It has a length and a speed, and each entity takes a pitch of belt: its item length plus the gap kept free after it. So it holds at most length ÷ pitch entities and carries at most speed ÷ pitch per time unit. Accumulating: entities queue up at the end while the rest keep moving; otherwise the whole belt stops.	엔터티를 한쪽 끝에서 다른 쪽 끝으로 나르는 벨트입니다. 길이와 속도가 있으며, 각 엔터티는 벨트의 피치를 차지합니다. 피치는 품목 길이에 그 뒤에 비워 두는 간격을 더한 값입니다. 따라서 최대 길이 ÷ 피치 개의 엔터티를 담고, 단위 시간당 최대 속도 ÷ 피치 개를 나릅니다. 누적: 엔터티가 끝에서 줄을 서고 나머지는 계속 움직입니다. 그렇지 않으면 벨트 전체가 멈춥니다.

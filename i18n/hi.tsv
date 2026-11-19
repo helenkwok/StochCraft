@@ -924,3 +924,18 @@ unit	yr	वर्ष
 @plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	दोनों ने यादृच्छिक बीज {seed} और वही {n} रन इस्तेमाल किया, इसलिए हर रन को अपने जोड़ीदार जैसी ही यादृच्छिक संख्याएँ मिलती हैं: अंतर बदलाव से आते हैं, संयोग से निकली संख्याओं से नहीं।|दोनों ने यादृच्छिक बीज {seed} और वही {n} रन इस्तेमाल किए, इसलिए हर रन को अपने जोड़ीदार जैसी ही यादृच्छिक संख्याएँ मिलती हैं: अंतर बदलाव से आते हैं, संयोग से निकली संख्याओं से नहीं।
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	{n} अन्य मुख्य मापदंड संयोग की सीमा से अधिक नहीं बदला।|{n} अन्य मुख्य मापदंड संयोग की सीमा से अधिक नहीं बदले।
 @plural	and {n} more change|and {n} more changes	और {n} अन्य बदलाव|और {n} अन्य बदलाव
+	Conveyor	कन्वेयर
+	Mean time on the conveyor	कन्वेयर पर औसत समय
+	Length	लंबाई
+	Accumulating	संचयी
+	Item length	वस्तु की लंबाई
+	Gap	अंतराल
+	Length unit	लंबाई की इकाई
+	millimetres	मिलीमीटर
+	centimetres	सेंटीमीटर
+	metres	मीटर
+	kilometres	किलोमीटर
+	inches	इंच
+	feet	फ़ुट
+	Ticked, items queue up at the end while the rest keep moving. Unticked, the whole belt stops when the item at the end cannot leave.	चुनने पर, वस्तुएँ अंत में कतार में लगती हैं जबकि बाकी चलती रहती हैं। न चुनने पर, अंत की वस्तु के बाहर न जा पाने पर पूरा बेल्ट रुक जाता है।
+	A belt that carries entities from one end to the other. It has a length and a speed, and each entity takes a pitch of belt: its item length plus the gap kept free after it. So it holds at most length ÷ pitch entities and carries at most speed ÷ pitch per time unit. Accumulating: entities queue up at the end while the rest keep moving; otherwise the whole belt stops.	एक बेल्ट जो इकाइयों को एक सिरे से दूसरे सिरे तक ले जाता है। इसकी एक लंबाई और एक गति होती है, और हर इकाई बेल्ट का एक पिच लेती है: उसकी वस्तु की लंबाई और उसके पीछे खाली छोड़ा गया अंतराल। इसलिए इस पर अधिकतम लंबाई ÷ पिच इकाइयाँ आती हैं और यह प्रति समय-इकाई अधिकतम गति ÷ पिच इकाइयाँ ले जाता है। संचयी: इकाइयाँ अंत में कतार में लगती हैं जबकि बाकी चलती रहती हैं; अन्यथा पूरा बेल्ट रुक जाता है।

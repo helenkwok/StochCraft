@@ -924,3 +924,18 @@ unit	yr	έτ
 @plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Και οι δύο χρησιμοποίησαν τον σπόρο {seed} και την ίδια {n} εκτέλεση, οπότε κάθε εκτέλεση παίρνει τους ίδιους τυχαίους αριθμούς με το ζεύγος της: οι διαφορές οφείλονται στην αλλαγή, όχι σε τυχαίες κληρώσεις.|Και οι δύο χρησιμοποίησαν τον σπόρο {seed} και τις ίδιες {n} εκτελέσεις, οπότε κάθε εκτέλεση παίρνει τους ίδιους τυχαίους αριθμούς με το ζεύγος της: οι διαφορές οφείλονται στην αλλαγή, όχι σε τυχαίες κληρώσεις.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	{n} ακόμη κύρια μετρική δεν μετακινήθηκε περισσότερο απ' όσο θα μπορούσε η τύχη.|{n} ακόμη κύριες μετρικές δεν μετακινήθηκαν περισσότερο απ' όσο θα μπορούσε η τύχη.
 @plural	and {n} more change|and {n} more changes	και {n} ακόμη αλλαγή|και {n} ακόμη αλλαγές
+	Conveyor	Μεταφορέας
+	Mean time on the conveyor	Μέσος χρόνος στον μεταφορέα
+	Length	Μήκος
+	Accumulating	Συσσώρευση
+	Item length	Μήκος αντικειμένου
+	Gap	Κενό
+	Length unit	Μονάδα μήκους
+	millimetres	χιλιοστά
+	centimetres	εκατοστά
+	metres	μέτρα
+	kilometres	χιλιόμετρα
+	inches	ίντσες
+	feet	πόδια
+	Ticked, items queue up at the end while the rest keep moving. Unticked, the whole belt stops when the item at the end cannot leave.	Αν είναι επιλεγμένο, τα αντικείμενα σχηματίζουν ουρά στο τέλος ενώ τα υπόλοιπα συνεχίζουν να κινούνται. Αν όχι, ολόκληρη η ταινία σταματά όταν το αντικείμενο στο τέλος δεν μπορεί να φύγει.
+	A belt that carries entities from one end to the other. It has a length and a speed, and each entity takes a pitch of belt: its item length plus the gap kept free after it. So it holds at most length ÷ pitch entities and carries at most speed ÷ pitch per time unit. Accumulating: entities queue up at the end while the rest keep moving; otherwise the whole belt stops.	Μια ταινία που μεταφέρει οντότητες από το ένα άκρο στο άλλο. Έχει μήκος και ταχύτητα, και κάθε οντότητα παίρνει ένα βήμα ταινίας: το μήκος του αντικειμένου της συν το κενό που μένει ελεύθερο πίσω της. Έτσι χωρά το πολύ μήκος ÷ βήμα οντότητες και μεταφέρει το πολύ ταχύτητα ÷ βήμα ανά μονάδα χρόνου. Συσσώρευση: οι οντότητες σχηματίζουν ουρά στο τέλος ενώ οι υπόλοιπες συνεχίζουν να κινούνται· αλλιώς σταματά ολόκληρη η ταινία.

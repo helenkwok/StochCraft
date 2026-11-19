@@ -924,3 +924,18 @@ unit	yr	年
 @plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	兩者都使用隨機種子 {seed} 與相同的 {n} 次執行，因此每次執行與其配對的執行取得相同的隨機數：差異來自變更，而非隨機抽取。
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	其他 {n} 個關鍵指標的變動未超出偶然所能造成的程度。
 @plural	and {n} more change|and {n} more changes	以及另外 {n} 項變更
+	Conveyor	輸送帶
+	Mean time on the conveyor	在輸送帶上的平均時間
+	Length	長度
+	Accumulating	累積
+	Item length	物品長度
+	Gap	間隙
+	Length unit	長度單位
+	millimetres	毫米
+	centimetres	公分
+	metres	公尺
+	kilometres	公里
+	inches	英寸
+	feet	英尺
+	Ticked, items queue up at the end while the rest keep moving. Unticked, the whole belt stops when the item at the end cannot leave.	勾選後，物品在末端排隊，其餘的繼續移動。不勾選時，末端的物品無法離開，整條輸送帶就會停下。
+	A belt that carries entities from one end to the other. It has a length and a speed, and each entity takes a pitch of belt: its item length plus the gap kept free after it. So it holds at most length ÷ pitch entities and carries at most speed ÷ pitch per time unit. Accumulating: entities queue up at the end while the rest keep moving; otherwise the whole belt stops.	把實體從一端運到另一端的輸送帶。它有長度和速度，每個實體佔用一個節距：物品長度加上其後留空的間隙。因此它最多容納 長度 ÷ 節距 個實體，每個時間單位最多運送 速度 ÷ 節距 個。累積：實體在末端排隊，其餘的繼續移動；否則整條輸送帶停下。

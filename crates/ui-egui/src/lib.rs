@@ -3035,6 +3035,16 @@ fn time_unit(engine: &Engine) -> String {
     .unwrap_or_default()
 }
 
+/// The model's length unit as written after a number ("m", "cm", "ft"): the unit's own symbol.
+fn length_unit(engine: &Engine) -> String {
+    serde_json::to_value(stochcraft_engine::wire::LengthUnitSpec::from(
+        engine.model().experiment.length_unit,
+    ))
+    .ok()
+    .and_then(|v| v.as_str().map(str::to_owned))
+    .unwrap_or_default()
+}
+
 /// The main libraries the app is built on, for the About box. Every dependency's licence is
 /// checked by `cargo deny` against the allowed list in `deny.toml`.
 const CREDITS: &[(&str, &str)] = &[

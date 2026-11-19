@@ -924,3 +924,18 @@ unit	yr	a
 @plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Entrambe hanno usato il seme {seed} e la stessa {n} esecuzione, quindi ogni esecuzione riceve gli stessi numeri casuali della sua coppia: le differenze vengono dalla modifica, non da estrazioni casuali.|Entrambe hanno usato il seme {seed} e le stesse {n} esecuzioni, quindi ogni esecuzione riceve gli stessi numeri casuali della sua coppia: le differenze vengono dalla modifica, non da estrazioni casuali.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	{n} altra metrica principale non si è mossa più di quanto potrebbe il caso.|{n} altre metriche principali non si sono mosse più di quanto potrebbe il caso.
 @plural	and {n} more change|and {n} more changes	e {n} altra modifica|e {n} altre modifiche
+	Conveyor	Nastro trasportatore
+	Mean time on the conveyor	Tempo medio sul nastro
+	Length	Lunghezza
+	Accumulating	Accumulo
+	Item length	Lunghezza dell'elemento
+	Gap	Distanza
+	Length unit	Unità di lunghezza
+	millimetres	millimetri
+	centimetres	centimetri
+	metres	metri
+	kilometres	chilometri
+	inches	pollici
+	feet	piedi
+	Ticked, items queue up at the end while the rest keep moving. Unticked, the whole belt stops when the item at the end cannot leave.	Se selezionato, gli elementi si accodano in fondo mentre gli altri continuano a muoversi. Se non selezionato, l'intero nastro si ferma quando l'elemento in fondo non può uscire.
+	A belt that carries entities from one end to the other. It has a length and a speed, and each entity takes a pitch of belt: its item length plus the gap kept free after it. So it holds at most length ÷ pitch entities and carries at most speed ÷ pitch per time unit. Accumulating: entities queue up at the end while the rest keep moving; otherwise the whole belt stops.	Un nastro che porta entità da un'estremità all'altra. Ha una lunghezza e una velocità, e ogni entità occupa un passo di nastro: la lunghezza del suo elemento più la distanza lasciata libera dietro di esso. Quindi contiene al massimo lunghezza ÷ passo entità e trasporta al massimo velocità ÷ passo per unità di tempo. Accumulo: le entità si accodano in fondo mentre le altre continuano a muoversi; altrimenti si ferma l'intero nastro.

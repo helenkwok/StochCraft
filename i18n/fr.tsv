@@ -924,3 +924,18 @@ unit	yr	an
 @plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Les deux ont utilisé la graine {seed} et la même {n} exécution, donc chaque exécution reçoit les mêmes nombres aléatoires que sa paire : les différences viennent du changement, pas de tirages au hasard.|Les deux ont utilisé la graine {seed} et les mêmes {n} exécutions, donc chaque exécution reçoit les mêmes nombres aléatoires que sa paire : les différences viennent du changement, pas de tirages au hasard.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	{n} autre indicateur clé n'a pas varié plus que le hasard ne le pourrait.|{n} autres indicateurs clés n'ont pas varié plus que le hasard ne le pourrait.
 @plural	and {n} more change|and {n} more changes	et {n} autre modification|et {n} autres modifications
+	Conveyor	Convoyeur
+	Mean time on the conveyor	Temps moyen sur le convoyeur
+	Length	Longueur
+	Accumulating	Accumulation
+	Item length	Longueur de l'article
+	Gap	Espacement
+	Length unit	Unité de longueur
+	millimetres	millimètres
+	centimetres	centimètres
+	metres	mètres
+	kilometres	kilomètres
+	inches	pouces
+	feet	pieds
+	Ticked, items queue up at the end while the rest keep moving. Unticked, the whole belt stops when the item at the end cannot leave.	Cochée, les articles font la queue au bout pendant que les autres continuent d'avancer. Décochée, tout le convoyeur s'arrête quand l'article du bout ne peut pas sortir.
+	A belt that carries entities from one end to the other. It has a length and a speed, and each entity takes a pitch of belt: its item length plus the gap kept free after it. So it holds at most length ÷ pitch entities and carries at most speed ÷ pitch per time unit. Accumulating: entities queue up at the end while the rest keep moving; otherwise the whole belt stops.	Un convoyeur qui porte des entités d'une extrémité à l'autre. Il a une longueur et une vitesse, et chaque entité occupe un pas de convoyeur : la longueur de son article plus l'espacement laissé libre derrière lui. Il contient donc au plus longueur ÷ pas entités et transporte au plus vitesse ÷ pas par unité de temps. Accumulation : les entités font la queue au bout pendant que les autres continuent d'avancer ; sinon, tout le convoyeur s'arrête.

@@ -612,6 +612,16 @@ fn looked_up_on_screen() -> BTreeSet<String> {
             }),
         )
         .expect("a source with arrivals by calendar");
+    // A conveyor, for its fields, and a length unit other than metres.
+    h.state_mut()
+        .execute(
+            "block.add",
+            serde_json::json!({"kind": "conveyor", "length": 10.0, "speed": 1.0}),
+        )
+        .expect("a conveyor");
+    h.state_mut()
+        .execute("experiment.set", serde_json::json!({"length_unit": "ft"}))
+        .expect("a length unit");
     h.state_mut()
         .execute(
             "resource.set",

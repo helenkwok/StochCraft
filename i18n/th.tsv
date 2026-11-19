@@ -924,3 +924,18 @@ unit	yr	ปี
 @plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	ทั้งสองใช้เมล็ดสุ่ม {seed} และการรัน {n} รอบชุดเดียวกัน แต่ละการรันจึงได้ตัวเลขสุ่มชุดเดียวกับคู่ของมัน: ความแตกต่างมาจากการเปลี่ยนแปลง ไม่ใช่จากการสุ่มโดยบังเอิญ
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	ตัวชี้วัดหลักอื่นอีก {n} ตัวเปลี่ยนไปไม่เกินที่ความบังเอิญจะทำได้
 @plural	and {n} more change|and {n} more changes	และการเปลี่ยนแปลงอื่นอีก {n} รายการ
+	Conveyor	สายพานลำเลียง
+	Mean time on the conveyor	เวลาเฉลี่ยบนสายพาน
+	Length	ความยาว
+	Accumulating	สะสม
+	Item length	ความยาวของชิ้นงาน
+	Gap	ช่องว่าง
+	Length unit	หน่วยความยาว
+	millimetres	มิลลิเมตร
+	centimetres	เซนติเมตร
+	metres	เมตร
+	kilometres	กิโลเมตร
+	inches	นิ้ว
+	feet	ฟุต
+	Ticked, items queue up at the end while the rest keep moving. Unticked, the whole belt stops when the item at the end cannot leave.	เมื่อเลือก ชิ้นงานจะต่อคิวที่ปลายทางขณะที่ชิ้นอื่นเคลื่อนต่อไป เมื่อไม่เลือก สายพานทั้งเส้นจะหยุดเมื่อชิ้นงานที่ปลายออกไม่ได้
+	A belt that carries entities from one end to the other. It has a length and a speed, and each entity takes a pitch of belt: its item length plus the gap kept free after it. So it holds at most length ÷ pitch entities and carries at most speed ÷ pitch per time unit. Accumulating: entities queue up at the end while the rest keep moving; otherwise the whole belt stops.	สายพานที่พาเอนทิตีจากปลายด้านหนึ่งไปอีกด้านหนึ่ง มีความยาวและความเร็ว และเอนทิตีแต่ละตัวใช้พื้นที่หนึ่งช่วงของสายพาน คือความยาวชิ้นงานบวกช่องว่างที่เว้นไว้ด้านหลัง ดังนั้นจึงรับได้สูงสุด ความยาว ÷ ช่วง เอนทิตี และพาไปได้สูงสุด ความเร็ว ÷ ช่วง ต่อหนึ่งหน่วยเวลา สะสม: เอนทิตีต่อคิวที่ปลายขณะที่ตัวอื่นเคลื่อนต่อไป มิฉะนั้นสายพานทั้งเส้นจะหยุด

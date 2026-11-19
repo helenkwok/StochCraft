@@ -924,3 +924,18 @@ unit	yr	év
 @plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Mindkettő a(z) {seed} véletlenszám-magot és ugyanazt a(z) {n} futást használta, így minden futás ugyanazokat a véletlen számokat kapja, mint a párja: a különbségek a változtatásból erednek, nem véletlen húzásokból.|Mindkettő a(z) {seed} véletlenszám-magot és ugyanazt a(z) {n} futást használta, így minden futás ugyanazokat a véletlen számokat kapja, mint a párja: a különbségek a változtatásból erednek, nem véletlen húzásokból.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	További {n} fő mérőszám nem változott többel, mint amennyit a véletlen okozhat.|További {n} fő mérőszám nem változott többel, mint amennyit a véletlen okozhat.
 @plural	and {n} more change|and {n} more changes	és még {n} módosítás|és még {n} módosítás
+	Conveyor	Szállítószalag
+	Mean time on the conveyor	Átlagos idő a szalagon
+	Length	Hossz
+	Accumulating	Felhalmozó
+	Item length	Darab hossza
+	Gap	Rés
+	Length unit	Hosszúság mértékegysége
+	millimetres	milliméter
+	centimetres	centiméter
+	metres	méter
+	kilometres	kilométer
+	inches	hüvelyk
+	feet	láb
+	Ticked, items queue up at the end while the rest keep moving. Unticked, the whole belt stops when the item at the end cannot leave.	Bejelölve a darabok sorba állnak a végén, míg a többi tovább halad. Bejelölés nélkül az egész szalag megáll, ha a végén lévő darab nem tud távozni.
+	A belt that carries entities from one end to the other. It has a length and a speed, and each entity takes a pitch of belt: its item length plus the gap kept free after it. So it holds at most length ÷ pitch entities and carries at most speed ÷ pitch per time unit. Accumulating: entities queue up at the end while the rest keep moving; otherwise the whole belt stops.	Szalag, amely entitásokat visz az egyik végétől a másikig. Hossza és sebessége van, és minden entitás egy szalaglépést foglal el: a darabja hosszát plusz a mögötte szabadon hagyott rést. Így legfeljebb hossz ÷ lépés entitás fér rá, és időegységenként legfeljebb sebesség ÷ lépés entitást szállít. Felhalmozó: az entitások sorba állnak a végén, míg a többi tovább halad; különben az egész szalag megáll.

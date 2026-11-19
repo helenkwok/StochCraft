@@ -924,3 +924,18 @@ unit	yr	v
 @plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Molemmat käyttivät siementä {seed} ja samaa {n} ajoa, joten kukin ajo saa samat satunnaisluvut kuin parinsa: erot johtuvat muutoksesta eivätkä sattumanvaraisista arvonnoista.|Molemmat käyttivät siementä {seed} ja samoja {n} ajoa, joten kukin ajo saa samat satunnaisluvut kuin parinsa: erot johtuvat muutoksesta eivätkä sattumanvaraisista arvonnoista.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	{n} muu tärkeä mittari ei muuttunut enempää kuin sattuma voisi.|{n} muuta tärkeää mittaria ei muuttunut enempää kuin sattuma voisi.
 @plural	and {n} more change|and {n} more changes	ja {n} muu muutos|ja {n} muuta muutosta
+	Conveyor	Kuljetin
+	Mean time on the conveyor	Keskimääräinen aika kuljettimella
+	Length	Pituus
+	Accumulating	Kasautuva
+	Item length	Kappaleen pituus
+	Gap	Väli
+	Length unit	Pituusyksikkö
+	millimetres	millimetriä
+	centimetres	senttimetriä
+	metres	metriä
+	kilometres	kilometriä
+	inches	tuumaa
+	feet	jalkaa
+	Ticked, items queue up at the end while the rest keep moving. Unticked, the whole belt stops when the item at the end cannot leave.	Valittuna kappaleet jonottavat päässä, kun muut jatkavat liikettä. Ilman valintaa koko kuljetin pysähtyy, kun päässä oleva kappale ei pääse pois.
+	A belt that carries entities from one end to the other. It has a length and a speed, and each entity takes a pitch of belt: its item length plus the gap kept free after it. So it holds at most length ÷ pitch entities and carries at most speed ÷ pitch per time unit. Accumulating: entities queue up at the end while the rest keep moving; otherwise the whole belt stops.	Kuljetin, joka kantaa entiteettejä päästä päähän. Sillä on pituus ja nopeus, ja jokainen entiteetti vie kuljettimelta jaon: kappaleensa pituuden ja sen perään vapaaksi jätettävän välin. Kuljettimelle mahtuu siis enintään pituus ÷ jako entiteettiä, ja se kuljettaa aikayksikössä enintään nopeus ÷ jako. Kasautuva: entiteetit jonottavat päässä, kun muut jatkavat liikettä; muuten koko kuljetin pysähtyy.

@@ -924,3 +924,18 @@ unit	yr	l.
 @plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Oba sta uporabila seme {seed} in isti {n} zagon, zato vsak zagon dobi enaka naključna števila kot njegov par: razlike izhajajo iz spremembe, ne iz naključnih izborov.|Oba sta uporabila seme {seed} in ista {n} zagona, zato vsak zagon dobi enaka naključna števila kot njegov par: razlike izhajajo iz spremembe, ne iz naključnih izborov.|Oba sta uporabila seme {seed} in iste {n} zagone, zato vsak zagon dobi enaka naključna števila kot njegov par: razlike izhajajo iz spremembe, ne iz naključnih izborov.|Oba sta uporabila seme {seed} in istih {n} zagonov, zato vsak zagon dobi enaka naključna števila kot njegov par: razlike izhajajo iz spremembe, ne iz naključnih izborov.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	Še {n} ključni kazalnik se ni premaknil bolj, kot bi lahko naključje.|Še {n} ključna kazalnika se nista premaknila bolj, kot bi lahko naključje.|Še {n} ključni kazalniki se niso premaknili bolj, kot bi lahko naključje.|Še {n} ključnih kazalnikov se ni premaknilo bolj, kot bi lahko naključje.
 @plural	and {n} more change|and {n} more changes	in še {n} sprememba|in še {n} spremembi|in še {n} spremembe|in še {n} sprememb
+	Conveyor	Tekoči trak
+	Mean time on the conveyor	Povprečni čas na traku
+	Length	Dolžina
+	Accumulating	Kopičenje
+	Item length	Dolžina predmeta
+	Gap	Razmik
+	Length unit	Enota dolžine
+	millimetres	milimetri
+	centimetres	centimetri
+	metres	metri
+	kilometres	kilometri
+	inches	palci
+	feet	čevlji
+	Ticked, items queue up at the end while the rest keep moving. Unticked, the whole belt stops when the item at the end cannot leave.	Označeno: predmeti se na koncu postavijo v vrsto, medtem ko se drugi premikajo naprej. Neoznačeno: celoten trak se ustavi, ko predmet na koncu ne more oditi.
+	A belt that carries entities from one end to the other. It has a length and a speed, and each entity takes a pitch of belt: its item length plus the gap kept free after it. So it holds at most length ÷ pitch entities and carries at most speed ÷ pitch per time unit. Accumulating: entities queue up at the end while the rest keep moving; otherwise the whole belt stops.	Trak, ki nosi entitete z enega konca na drugega. Ima dolžino in hitrost, vsaka entiteta pa zavzame korak traku: dolžino svojega predmeta plus razmik, ki ostane prost za njo. Tako sprejme največ dolžina ÷ korak entitet in prenese največ hitrost ÷ korak na časovno enoto. Kopičenje: entitete se na koncu postavijo v vrsto, medtem ko se druge premikajo naprej; sicer se ustavi celoten trak.
