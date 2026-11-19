@@ -2374,9 +2374,11 @@ answers, and ships as an example model with its write-up ("Examples for teaching
      - the scene has no instancing: each entity is a mesh of its own. That holds for hundreds
        of totes; for thousands, instancing is added to the shared viewport upstream.
 
-   Checks for the view: an entity's drawn position at time t is its entry point plus
-   speed × (t − entry time) along the conveyor's path, read from a live run in a test; the 2D
-   and 3D views place every entity at the same layout point.
+   Checks for the view, read from a live run in a test: an entity moving freely is drawn at its
+   entry point plus speed × (time moving) along the conveyor's path; one stopped (its exit
+   blocked, or queued behind the item ahead) is drawn where it stopped, at the exit or one item
+   length plus gap behind the next, until it moves again; the 2D and 3D views place every
+   entity at the same layout point.
 4. **The sorter's dashboard** (M5.4): the four charts, mostly from what exists today:
    - products sorted per hour: departures over the time run (exists);
    - the operators' stacked state bars: the state times every server reports today (exists)
@@ -2525,8 +2527,11 @@ Where each part of that request sits:
 ### M7.1 Line balancing
 
 - **Outcome:** given the work elements of an assembly, their times and which must come before
-  which, the fewest stations for a cycle time, the elements assigned to each, and the line built
-  as a model to run with variability.
+  which, a station assignment for a cycle time from each heuristic below, with the theoretical
+  minimum beside it so any gap shows (the heuristics do not promise the fewest stations: times
+  6, 5, 3, 2, 2 and 2 with a cycle of 10 take three stations by the largest candidate rule,
+  where two suffice, 6 + 2 + 2 and 5 + 3 + 2; exact methods come later), and the line built as
+  a model to run with variability.
 - **Input:** a precedence graph of work elements with times; the cycle time is the takt of the
   line's demand (M2.11's `stochcraft:demand` and `takt`, done) or a number given.
 - **Heuristics:** the largest candidate rule, Kilbridge and Wester's column method and Helgeson
@@ -2590,11 +2595,15 @@ Where each part of that request sits:
 - **Where it lives:** a new block kind, the stock point, with a `stochcraft:inventory` vendor
   extension (BPMN has no stock), and its demand from a source or from downstream orders.
   Multi-echelon chains later.
-- **Checks:** base stock with Poisson demand of single units and a fixed lead time: an order
-  is filled at once when lead-time demand is at most the base-stock level less one, so the fill
-  rate is that Poisson probability (Hopp and Spearman, *Factory Physics*, 3rd ed., 2008, §2.4.2
-  "The Base Stock Model"); (Q, r) with Poisson demand against the same book's §2.4.3 "The (Q, r)
-  Model".
+- **Checks**, continuous review, Poisson demand of single units, a fixed lead time L, one
+  order per unit taken (base stock S):
+  - demand not met at once is backordered: an order is filled at once when lead-time demand is
+    at most S − 1, so the fill rate is that Poisson probability with mean λL (Hopp and
+    Spearman, *Factory Physics*, 3rd ed., 2008, §2.4.2 "The Base Stock Model");
+  - demand not met at once is lost: the units on order behave as an Erlang loss system with S
+    servers (Palm's theorem), so the fill rate is 1 − B(S, λL), Erlang's loss formula; for
+    S = 1 and λL = 1 it is 1/2, not the e⁻¹ of the backorder case;
+  - (Q, r) with backorders against the same book's §2.4.3 "The (Q, r) Model".
 
 ### M7.4 Sharing a model
 
