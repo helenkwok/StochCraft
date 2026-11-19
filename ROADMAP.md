@@ -2404,8 +2404,9 @@ answers, and ships as an example model with its write-up ("Examples for teaching
      travelling loaded, unloading (and off shift where the pool follows a calendar). They add up
      to all of the time.
    - **Results.** For the pool: each state's share of the time and the distance travelled
-     empty and loaded per unit. For the block: the mean wait for transport and the mean time
-     from pickup to drop-off.
+     empty and loaded per unit. For the block: the mean wait for transport (from reaching it
+     until loading starts, the unit's walk to it included) and the mean time from pickup to
+     drop-off.
    - **The capacity table.** A transport's work per item is at least load + unload + the loaded
      distance over the loaded speed (the empty trip depends on where the unit was), so its
      pool's load is at least that; the status is unstable when even that reaches 100%, else not
@@ -2418,7 +2419,8 @@ answers, and ships as an example model with its write-up ("Examples for teaching
        1, staying where it puts the item down, items always waiting: each cycle is walk back 10,
        load 1, carry 5, unload 1, so 17, the throughput 1/17, and the states 10/17, 1/17, 5/17,
        1/17 and no idle;
-     - the same with items arriving every 40: idle 23/40 of the time, the waits 0;
+     - the same with items arriving every 40: idle 23/40 of the time, and each item waits 10,
+       the walk back, since its wait for transport runs until loading starts;
      - two operators at different places and a request between them: the nearer one goes,
        worked by hand;
      - going home after each job: the walk home counts as travelling empty;
