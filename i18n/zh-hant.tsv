@@ -1141,6 +1141,11 @@ unit	yr	年
 	How many entities are in the model over time.	模型中有多少實體隨時間變化。
 	At {time} {unit}: {n} entities	在 {time} {unit}：{n} 個實體
 @plural	Makes {n} independent run of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval across them.	從隨機種子 {seed} 開始，對模型進行 {n} 次獨立執行。每個區塊的結果都包含 95% 信賴區間的半寬。
+	Reset	重設
+	As fast as possible	盡可能快
+	Pause at	暫停於
+	Halve Speed	速度減半
+	Double Speed	速度加倍
 	Layout	佈局
 	Layout of the model, to scale	依比例繪製的模型佈局
 	Drag to pan · Scroll to zoom	拖曳平移 · 捲動縮放

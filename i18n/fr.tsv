@@ -1141,6 +1141,11 @@ unit	yr	an
 	How many entities are in the model over time.	Combien d'entités sont dans le modèle au fil du temps.
 	At {time} {unit}: {n} entities	À {time} {unit} : {n} entités
 @plural	Makes {n} independent run of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval across them.	Effectue {n} exécution indépendante du modèle à partir de la graine {seed}. Les résultats de chaque bloc incluent la demi-largeur d'un intervalle de confiance à 95 %.|Effectue {n} exécutions indépendantes du modèle à partir de la graine {seed}. Les résultats de chaque bloc incluent la demi-largeur d'un intervalle de confiance à 95 %.
+	Reset	Réinitialiser
+	As fast as possible	Aussi vite que possible
+	Pause at	Pause à
+	Halve Speed	Diviser la vitesse par deux
+	Double Speed	Doubler la vitesse
 	Layout	Implantation
 	Layout of the model, to scale	Implantation du modèle, à l'échelle
 	Drag to pan · Scroll to zoom	Glisser pour déplacer · Défiler pour zoomer

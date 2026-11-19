@@ -1141,6 +1141,11 @@ unit	yr	წელი
 	How many entities are in the model over time.	რამდენი ერთეულია მოდელში დროის განმავლობაში.
 	At {time} {unit}: {n} entities	{time} {unit}-ზე: {n} ერთეული
 @plural	Makes {n} independent run of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval across them.	მოდელის {n} დამოუკიდებელ გაშვებას ასრულებს საწყისი მნიშვნელობით {seed}. თითოეული ბლოკის შედეგები შეიცავს 95% ნდობის ინტერვალის ნახევარსიგანეს.|მოდელის {n} დამოუკიდებელ გაშვებას ასრულებს საწყისი მნიშვნელობით {seed}. თითოეული ბლოკის შედეგები შეიცავს 95% ნდობის ინტერვალის ნახევარსიგანეს.
+	Reset	საწყისზე დაბრუნება
+	As fast as possible	რაც შეიძლება სწრაფად
+	Pause at	პაუზა მომენტში
+	Halve Speed	სიჩქარის განახევრება
+	Double Speed	სიჩქარის გაორმაგება
 	Layout	განლაგება
 	Layout of the model, to scale	მოდელის განლაგება, მასშტაბით
 	Drag to pan · Scroll to zoom	გადაათრიეთ გადასაადგილებლად · გადაახვიეთ გასადიდებლად

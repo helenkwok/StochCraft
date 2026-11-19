@@ -1141,6 +1141,11 @@ unit	yr	v
 	How many entities are in the model over time.	Kuinka monta entiteettiä on mallissa ajan mukaan.
 	At {time} {unit}: {n} entities	Hetkellä {time} {unit}: {n} entiteettiä
 @plural	Makes {n} independent run of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval across them.	Suorittaa {n} mallin riippumattoman ajon siemenellä {seed}. Kunkin lohkon tulokset sisältävät 95%:n luottamusvälin puolileveyden.|Suorittaa {n} mallin riippumatonta ajoa siemenellä {seed}. Kunkin lohkon tulokset sisältävät 95%:n luottamusvälin puolileveyden.
+	Reset	Nollaa
+	As fast as possible	Mahdollisimman nopeasti
+	Pause at	Tauko kohdassa
+	Halve Speed	Puolita nopeus
+	Double Speed	Kaksinkertaista nopeus
 	Layout	Asettelu
 	Layout of the model, to scale	Mallin asettelu mittakaavassa
 	Drag to pan · Scroll to zoom	Vedä panoroidaksesi · Vieritä zoomataksesi

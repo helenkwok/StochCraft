@@ -1141,6 +1141,11 @@ unit	yr	ປີ
 	How many entities are in the model over time.	ມີຈັກເອນທິຕີໃນແບບຈຳລອງຕາມເວລາ.
 	At {time} {unit}: {n} entities	ທີ່ {time} {unit}: {n} ເອນທິຕີ
 @plural	Makes {n} independent run of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval across them.	ປະມວນຜົນແບບຈຳລອງຢ່າງອິດສະຫຼະ {n} ຮອບ ໂດຍໃຊ້ເມັດສຸ່ມ {seed}. ຜົນຂອງແຕ່ລະບລັອກມີເຄິ່ງໜຶ່ງຂອງຄວາມກວ້າງຊ່ວງຄວາມເຊື່ອໝັ້ນ 95% ຈາກທຸກຮອບ.
+	Reset	ຣີເຊັດ
+	As fast as possible	ໄວທີ່ສຸດເທົ່າທີ່ເປັນໄປໄດ້
+	Pause at	ຢຸດຊົ່ວຄາວທີ່
+	Halve Speed	ຫຼຸດຄວາມໄວເຄິ່ງໜຶ່ງ
+	Double Speed	ເພີ່ມຄວາມໄວສອງເທົ່າ
 	Layout	ແຜນຜັງ
 	Layout of the model, to scale	ແຜນຜັງຂອງແບບຈຳລອງ ຕາມມາດຕາສ່ວນ
 	Drag to pan · Scroll to zoom	ລາກເພື່ອຍ້າຍ · ເລື່ອນເພື່ອຊູມ

@@ -1141,6 +1141,11 @@ unit	yr	m.
 	How many entities are in the model over time.	Kiek objektų yra modelyje laikui bėgant.
 	At {time} {unit}: {n} entities	Momentu {time} {unit}: {n} objektų
 @plural	Makes {n} independent run of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval across them.	Atlieka {n} nepriklausomą modelio vykdymą su sėkla {seed}. Kiekvieno bloko rezultatuose pateikiamas 95% pasikliautinojo intervalo pusplotis.|Atlieka {n} nepriklausomus modelio vykdymus su sėkla {seed}. Kiekvieno bloko rezultatuose pateikiamas 95% pasikliautinojo intervalo pusplotis.|Atlieka {n} nepriklausomų modelio vykdymų su sėkla {seed}. Kiekvieno bloko rezultatuose pateikiamas 95% pasikliautinojo intervalo pusplotis.
+	Reset	Atstatyti
+	As fast as possible	Kuo greičiau
+	Pause at	Pristabdyti ties
+	Halve Speed	Perpus sumažinti greitį
+	Double Speed	Dvigubai padidinti greitį
 	Layout	Išdėstymas
 	Layout of the model, to scale	Modelio išdėstymas, mastelio
 	Drag to pan · Scroll to zoom	Vilkite perkelti · Slinkite didinti

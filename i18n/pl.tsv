@@ -1141,6 +1141,11 @@ unit	yr	r.
 	How many entities are in the model over time.	Ile jednostek jest w modelu w czasie.
 	At {time} {unit}: {n} entities	W chwili {time} {unit}: {n} jednostek
 @plural	Makes {n} independent run of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval across them.	Wykonuje {n} niezależne uruchomienie modelu od ziarna {seed}. Wyniki każdego bloku zawierają połowę szerokości 95% przedziału ufności.|Wykonuje {n} niezależne uruchomienia modelu od ziarna {seed}. Wyniki każdego bloku zawierają połowę szerokości 95% przedziału ufności.|Wykonuje {n} niezależnych uruchomień modelu od ziarna {seed}. Wyniki każdego bloku zawierają połowę szerokości 95% przedziału ufności.
+	Reset	Resetuj
+	As fast as possible	Jak najszybciej
+	Pause at	Wstrzymaj przy
+	Halve Speed	Zmniejsz szybkość o połowę
+	Double Speed	Podwój szybkość
 	Layout	Układ
 	Layout of the model, to scale	Układ modelu w skali
 	Drag to pan · Scroll to zoom	Przeciągnij, aby przesuwać · Przewiń, aby powiększać

@@ -1141,6 +1141,11 @@ unit	yr	r.
 	How many entities are in the model over time.	Koľko entít je v modeli v čase.
 	At {time} {unit}: {n} entities	V čase {time} {unit}: {n} entít
 @plural	Makes {n} independent run of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval across them.	Spustí {n} nezávislý beh modelu od počiatočnej hodnoty {seed}. Výsledky každého bloku obsahujú polovičnú šírku 95% intervalu spoľahlivosti.|Spustí {n} nezávislé behy modelu od počiatočnej hodnoty {seed}. Výsledky každého bloku obsahujú polovičnú šírku 95% intervalu spoľahlivosti.|Spustí {n} nezávislých behov modelu od počiatočnej hodnoty {seed}. Výsledky každého bloku obsahujú polovičnú šírku 95% intervalu spoľahlivosti.
+	Reset	Vynulovať
+	As fast as possible	Čo najrýchlejšie
+	Pause at	Pozastaviť pri
+	Halve Speed	Znížiť rýchlosť na polovicu
+	Double Speed	Zdvojnásobiť rýchlosť
 	Layout	Rozloženie
 	Layout of the model, to scale	Rozloženie modelu v mierke
 	Drag to pan · Scroll to zoom	Ťahaním posúvate · Kolieskom približujete

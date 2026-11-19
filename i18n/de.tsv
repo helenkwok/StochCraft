@@ -1141,6 +1141,11 @@ unit	yr	J.
 	How many entities are in the model over time.	Wie viele Entitäten sich im Zeitverlauf im Modell befinden.
 	At {time} {unit}: {n} entities	Bei {time} {unit}: {n} Entitäten
 @plural	Makes {n} independent run of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval across them.	Führt {n} unabhängigen Lauf des Modells mit dem Startwert {seed} aus. Die Ergebnisse jedes Blocks enthalten die halbe Breite eines 95%-Konfidenzintervalls.|Führt {n} unabhängige Läufe des Modells mit dem Startwert {seed} aus. Die Ergebnisse jedes Blocks enthalten die halbe Breite eines 95%-Konfidenzintervalls.
+	Reset	Zurücksetzen
+	As fast as possible	So schnell wie möglich
+	Pause at	Pause bei
+	Halve Speed	Geschwindigkeit halbieren
+	Double Speed	Geschwindigkeit verdoppeln
 	Layout	Layout
 	Layout of the model, to scale	Layout des Modells, maßstabsgetreu
 	Drag to pan · Scroll to zoom	Ziehen zum Verschieben · Scrollen zum Zoomen

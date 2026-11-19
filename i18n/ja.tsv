@@ -1141,6 +1141,11 @@ unit	yr	年
 	How many entities are in the model over time.	モデル内にあるエンティティ数の推移。
 	At {time} {unit}: {n} entities	{time} {unit} 時点: エンティティ {n} 個
 @plural	Makes {n} independent run of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval across them.	シード {seed} からモデルを {n} 回独立に実行します。各ブロックの結果には、95% 信頼区間の半幅が示されます。
+	Reset	リセット
+	As fast as possible	できるだけ速く
+	Pause at	指定時刻で一時停止
+	Halve Speed	速度を半分にする
+	Double Speed	速度を2倍にする
 	Layout	レイアウト
 	Layout of the model, to scale	縮尺どおりのモデルのレイアウト
 	Drag to pan · Scroll to zoom	ドラッグで移動 · スクロールでズーム

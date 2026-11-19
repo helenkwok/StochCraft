@@ -313,12 +313,17 @@ Opening another model or file clears it too.
 
 ## Watch a run
 
-To see the model move, click **Watch a run** above the canvas, or **Model ▸ Watch a Run**. It
-plays the first run on the canvas: each block shows how many entities were created,
-are waiting, are busy or are done.
+To see the model move, click **Watch a run** in the run bar above the Model and 3D views, press
+Space, or choose **Model ▸ Watch a Run**. It plays the first run on the canvas: each block shows
+how many entities were created, are waiting, are busy or are done. The run bar is for watching
+one run; **Run** in the header runs the whole experiment, fast and without animation.
 
-- **Play/Pause** (Space), **Step** to the next event, and a **Speed** list.
-- Type a time and click **Jump** to go straight there.
+- **Play/Pause** (Space), **Reset** (back to the start, paused), and **Step** (`.`) to the next
+  event.
+- **Speed** as ×N, in model time units per second: `[` halves it, `]` doubles it, and **As fast as
+  possible** runs flat out.
+- The clock shows the model time, how much of the run is done, and **warm-up** while it lasts.
+- Type a time and click **Pause at** to play on and pause when the clock gets there.
 - Select a block to see its waiting room over time in the inspector, under **This run**.
 - **Stop watching** returns to editing.
 

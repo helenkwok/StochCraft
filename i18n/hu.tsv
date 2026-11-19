@@ -1141,6 +1141,11 @@ unit	yr	év
 	How many entities are in the model over time.	Hány entitás van a modellben az idő függvényében.
 	At {time} {unit}: {n} entities	{time} {unit} időpontban: {n} entitás
 @plural	Makes {n} independent run of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval across them.	A modellt {n} független futásban futtatja a(z) {seed} véletlenszám-maggal. A blokkok eredményei tartalmazzák a 95%-os konfidenciaintervallum fél szélességét.|A modellt {n} független futásban futtatja a(z) {seed} véletlenszám-maggal. A blokkok eredményei tartalmazzák a 95%-os konfidenciaintervallum fél szélességét.
+	Reset	Visszaállítás
+	As fast as possible	A lehető leggyorsabban
+	Pause at	Szünet ekkor
+	Halve Speed	Sebesség felezése
+	Double Speed	Sebesség duplázása
 	Layout	Elrendezés
 	Layout of the model, to scale	A modell elrendezése, méretarányosan
 	Drag to pan · Scroll to zoom	Húzás: eltolás · Görgetés: nagyítás

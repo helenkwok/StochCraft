@@ -1141,6 +1141,11 @@ unit	yr	år
 	How many entities are in the model over time.	Hvor mange enheter som er i modellen over tid.
 	At {time} {unit}: {n} entities	Ved {time} {unit}: {n} enheter
 @plural	Makes {n} independent run of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval across them.	Utfører {n} uavhengig kjøring av modellen fra tilfeldig frø {seed}. Resultatene for hver blokk inneholder halvbredden til et 95% konfidensintervall.|Utfører {n} uavhengige kjøringer av modellen fra tilfeldig frø {seed}. Resultatene for hver blokk inneholder halvbredden til et 95% konfidensintervall.
+	Reset	Nullstill
+	As fast as possible	Så fort som mulig
+	Pause at	Pause ved
+	Halve Speed	Halver hastigheten
+	Double Speed	Doble hastigheten
 	Layout	Layout
 	Layout of the model, to scale	Modellens layout i målestokk
 	Drag to pan · Scroll to zoom	Dra for å panorere · Rull for å zoome

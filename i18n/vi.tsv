@@ -1141,6 +1141,11 @@ unit	yr	năm
 	How many entities are in the model over time.	Có bao nhiêu thực thể trong mô hình theo thời gian.
 	At {time} {unit}: {n} entities	Tại {time} {unit}: {n} thực thể
 @plural	Makes {n} independent run of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval across them.	Thực hiện {n} lần chạy độc lập của mô hình từ hạt giống {seed}. Kết quả của mỗi khối kèm nửa độ rộng khoảng tin cậy 95%.
+	Reset	Đặt lại
+	As fast as possible	Nhanh nhất có thể
+	Pause at	Tạm dừng tại
+	Halve Speed	Giảm một nửa tốc độ
+	Double Speed	Tăng gấp đôi tốc độ
 	Layout	Mặt bằng
 	Layout of the model, to scale	Mặt bằng của mô hình, theo tỷ lệ
 	Drag to pan · Scroll to zoom	Kéo để dịch chuyển · Cuộn để thu phóng

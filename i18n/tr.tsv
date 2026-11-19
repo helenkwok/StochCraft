@@ -1141,6 +1141,11 @@ unit	yr	yıl
 	How many entities are in the model over time.	Modelde zamanla kaç varlık olduğu.
 	At {time} {unit}: {n} entities	{time} {unit} anında: {n} varlık
 @plural	Makes {n} independent run of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval across them.	Modelin {n} bağımsız çalıştırmasını {seed} tohumundan yapar. Her bloğun sonuçları 95% güven aralığının yarı genişliğini içerir.|Modelin {n} bağımsız çalıştırmasını {seed} tohumundan yapar. Her bloğun sonuçları 95% güven aralığının yarı genişliğini içerir.
+	Reset	Sıfırla
+	As fast as possible	Olabildiğince hızlı
+	Pause at	Şurada duraklat
+	Halve Speed	Hızı yarıya indir
+	Double Speed	Hızı ikiye katla
 	Layout	Yerleşim
 	Layout of the model, to scale	Modelin yerleşimi, ölçekli
 	Drag to pan · Scroll to zoom	Kaydırmak için sürükleyin · Yakınlaştırmak için kaydırın

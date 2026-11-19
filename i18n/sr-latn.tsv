@@ -1141,6 +1141,11 @@ unit	yr	god.
 	How many entities are in the model over time.	Koliko je entiteta u modelu kroz vreme.
 	At {time} {unit}: {n} entities	U {time} {unit}: {n} entiteta
 @plural	Makes {n} independent run of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval across them.	Izvodi {n} nezavisno pokretanje modela od semena {seed}. Rezultati svakog bloka uključuju poluširinu 95% intervala pouzdanosti.|Izvodi {n} nezavisna pokretanja modela od semena {seed}. Rezultati svakog bloka uključuju poluširinu 95% intervala pouzdanosti.|Izvodi {n} nezavisnih pokretanja modela od semena {seed}. Rezultati svakog bloka uključuju poluširinu 95% intervala pouzdanosti.
+	Reset	Vrati na početak
+	As fast as possible	Što brže moguće
+	Pause at	Pauza u
+	Halve Speed	Prepolovi brzinu
+	Double Speed	Udvostruči brzinu
 	Layout	Raspored
 	Layout of the model, to scale	Raspored modela, u razmeri
 	Drag to pan · Scroll to zoom	Prevucite za pomeranje · Skrolujte za zumiranje

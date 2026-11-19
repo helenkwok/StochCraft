@@ -1141,6 +1141,11 @@ unit	yr	ж.
 	How many entities are in the model over time.	Модельде уақыт бойынша қанша нысан бар.
 	At {time} {unit}: {n} entities	{time} {unit} сәтінде: {n} нысан
 @plural	Makes {n} independent run of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval across them.	Модельдің {n} тәуелсіз іске қосуын {seed} тұқымынан орындайды. Әр блок нәтижесінде 95% сенімділік аралығының жарты ені беріледі.|Модельдің {n} тәуелсіз іске қосуын {seed} тұқымынан орындайды. Әр блок нәтижесінде 95% сенімділік аралығының жарты ені беріледі.
+	Reset	Қайта бастау
+	As fast as possible	Мүмкіндігінше жылдам
+	Pause at	Осы уақытта кідірту
+	Halve Speed	Жылдамдықты екі есе азайту
+	Double Speed	Жылдамдықты екі есе арттыру
 	Layout	Орналасу
 	Layout of the model, to scale	Модельдің орналасуы, масштабпен
 	Drag to pan · Scroll to zoom	Жылжыту үшін сүйреңіз · Масштабтау үшін айналдырыңыз

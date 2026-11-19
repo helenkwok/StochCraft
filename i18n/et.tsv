@@ -1141,6 +1141,11 @@ unit	yr	a
 	How many entities are in the model over time.	Kui palju olemeid on mudelis ajas.
 	At {time} {unit}: {n} entities	Ajahetkel {time} {unit}: {n} olemit
 @plural	Makes {n} independent run of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval across them.	Teeb {n} sõltumatu mudeli käivitamise seemnega {seed}. Iga ploki tulemused sisaldavad 95% usaldusvahemiku poollaiust.|Teeb {n} sõltumatut mudeli käivitamist seemnega {seed}. Iga ploki tulemused sisaldavad 95% usaldusvahemiku poollaiust.
+	Reset	Lähtesta
+	As fast as possible	Nii kiiresti kui võimalik
+	Pause at	Paus ajahetkel
+	Halve Speed	Vähenda kiirust poole võrra
+	Double Speed	Kahekordista kiirust
 	Layout	Paigutus
 	Layout of the model, to scale	Mudeli paigutus mõõtkavas
 	Drag to pan · Scroll to zoom	Lohistage nihutamiseks · Kerige suumimiseks

@@ -1141,6 +1141,11 @@ unit	yr	j
 	How many entities are in the model over time.	Hoeveel entiteiten er in de tijd in het model zijn.
 	At {time} {unit}: {n} entities	Op {time} {unit}: {n} entiteiten
 @plural	Makes {n} independent run of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval across them.	Doet {n} onafhankelijke uitvoering van het model met startwaarde {seed}. De resultaten van elk blok bevatten de halve breedte van een 95%-betrouwbaarheidsinterval.|Doet {n} onafhankelijke uitvoeringen van het model met startwaarde {seed}. De resultaten van elk blok bevatten de halve breedte van een 95%-betrouwbaarheidsinterval.
+	Reset	Resetten
+	As fast as possible	Zo snel mogelijk
+	Pause at	Pauzeren bij
+	Halve Speed	Snelheid halveren
+	Double Speed	Snelheid verdubbelen
 	Layout	Layout
 	Layout of the model, to scale	Layout van het model, op schaal
 	Drag to pan · Scroll to zoom	Sleep om te verschuiven · Scroll om te zoomen

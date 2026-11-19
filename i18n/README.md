@@ -750,6 +750,12 @@ fields (`“Service time”`) are named in the messages by their own rows.
   lo, th, ta, te, bn, ka, kk, hi, sq, et and lt, and the count nouns after "{n}" ("items",
   "more") in languages that inflect them by number (pl, cs, sk, sl, hr, bs, sr, ru, uk, lt, lo):
   the rows are not plural rows, so the form after a count may be wrong for some counts.
+- The rows added for the run bar (M5.5 U1: Reset, As fast as possible, Pause at, Halve Speed,
+  Double Speed) were machine-drafted with Claude Code from the plain meaning of the English,
+  reusing each catalog's own words for pause, speed and run ("Pause at" follows the catalog's
+  Pause; "Reset" is the usual word for returning to the start, or "back to the start" where
+  the language has no short one). Not checked against any other source, and not reviewed by
+  native speakers; the least certain are lo, th, ta, te, bn, ka, kk, hi, sq, et and lt.
 
 - The rows added for issue #145 (the window's validation messages, each naming a block and saying
   how to fix it; the labels "Angle", "Failed", "Lost", "Off shift", "Processing", "Radius",

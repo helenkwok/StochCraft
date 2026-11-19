@@ -1141,6 +1141,11 @@ unit	yr	р.
 	How many entities are in the model over time.	Скільки сутностей у моделі в часі.
 	At {time} {unit}: {n} entities	У момент {time} {unit}: {n} сутностей
 @plural	Makes {n} independent run of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval across them.	Виконує {n} незалежний запуск моделі з початковим значенням {seed}. Результати кожного блока містять півширину 95% довірчого інтервалу.|Виконує {n} незалежні запуски моделі з початковим значенням {seed}. Результати кожного блока містять півширину 95% довірчого інтервалу.|Виконує {n} незалежних запусків моделі з початковим значенням {seed}. Результати кожного блока містять півширину 95% довірчого інтервалу.
+	Reset	Скинути
+	As fast as possible	Якнайшвидше
+	Pause at	Пауза на
+	Halve Speed	Зменшити швидкість удвічі
+	Double Speed	Збільшити швидкість удвічі
 	Layout	Планування
 	Layout of the model, to scale	Планування моделі в масштабі
 	Drag to pan · Scroll to zoom	Перетягніть для зсуву · Прокрутіть для масштабу
