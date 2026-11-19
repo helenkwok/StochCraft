@@ -923,3 +923,34 @@ unit	yr	an
 @plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Les deux ont utilisé la graine {seed} et la même {n} exécution, donc chaque exécution reçoit les mêmes nombres aléatoires que sa paire : les différences viennent du changement, pas de tirages au hasard.|Les deux ont utilisé la graine {seed} et les mêmes {n} exécutions, donc chaque exécution reçoit les mêmes nombres aléatoires que sa paire : les différences viennent du changement, pas de tirages au hasard.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	{n} autre indicateur clé n'a pas varié plus que le hasard ne le pourrait.|{n} autres indicateurs clés n'ont pas varié plus que le hasard ne le pourrait.
 @plural	and {n} more change|and {n} more changes	et {n} autre modification|et {n} autres modifications
+	Station	Poste
+	Kind	Type
+	Service	Service
+	Load	Charge
+	Status	État
+	Units for {target}%	Unités pour {target} %
+	Formula	Formule
+	Simulated utilisation	Utilisation simulée
+	Simulated mean wait	Attente moyenne simulée
+	Target utilisation	Utilisation cible
+	Must be above 0% and below 100%	Doit être supérieure à 0 % et inférieure à 100 %
+	The utilisation above which a station counts as congested	L'utilisation au-delà de laquelle un poste est considéré comme congestionné
+	Fine	Correct
+	Congested	Congestionné
+	Unstable	Instable
+	Unknown	Inconnu
+	up to {n}	jusqu'à {n}
+	Bottleneck: {name} (load {load}).	Goulot d'étranglement : {name} (charge {load}).
+	Bottleneck: not known before a run (a load not known, or only bounded, could be the highest).	Goulot d'étranglement : inconnu avant une simulation (une charge inconnue, ou seulement bornée, pourrait être la plus élevée).
+	Not known before a run:	Inconnu avant une simulation :
+	No exact formula for the wait:	Pas de formule exacte pour l'attente :
+	Utilisation is arrivals × service ÷ units, as the results count it; the load is that over the units' availability. A run adds what variability and blocking cost.	L'utilisation est arrivées × service ÷ unités, comme les résultats la comptent ; la charge est cette valeur rapportée à la disponibilité des unités. Une simulation ajoute ce que coûtent la variabilité et le blocage.
+	No servers, shared tasks, delays or pools.	Aucun serveur, tâche partagée, délai ni pool.
+	arrival rate	taux d'arrivée
+	service time	temps de service
+	utilisation	utilisation
+	{station}: {what}: {message}.	{station} : {what} : {message}.
+	{station}: {message}.	{station} : {message}.
+	From the last run; – when there are none, or they are out of date.	De la dernière simulation ; – s'il n'y en a pas ou si elles sont périmées.
+	Show this block	Afficher ce bloc
+	Rates and times are per {unit}.	Les taux et les durées sont par {unit}.

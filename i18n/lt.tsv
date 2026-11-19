@@ -923,3 +923,34 @@ unit	yr	m.
 @plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Abu naudojo sėklą {seed} ir tą patį {n} vykdymą, todėl kiekvienas vykdymas gauna tuos pačius atsitiktinius skaičius kaip jo pora: skirtumai kyla iš pakeitimo, o ne iš atsitiktinių traukimų.|Abu naudojo sėklą {seed} ir tuos pačius {n} vykdymus, todėl kiekvienas vykdymas gauna tuos pačius atsitiktinius skaičius kaip jo pora: skirtumai kyla iš pakeitimo, o ne iš atsitiktinių traukimų.|Abu naudojo sėklą {seed} ir tuos pačius {n} vykdymų, todėl kiekvienas vykdymas gauna tuos pačius atsitiktinius skaičius kaip jo pora: skirtumai kyla iš pakeitimo, o ne iš atsitiktinių traukimų.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	Dar {n} pagrindinis rodiklis pasikeitė ne daugiau, nei galėtų atsitiktinumas.|Dar {n} pagrindiniai rodikliai pasikeitė ne daugiau, nei galėtų atsitiktinumas.|Dar {n} pagrindinių rodiklių pasikeitė ne daugiau, nei galėtų atsitiktinumas.
 @plural	and {n} more change|and {n} more changes	ir dar {n} pakeitimas|ir dar {n} pakeitimai|ir dar {n} pakeitimų
+	Station	Stotis
+	Kind	Rūšis
+	Service	Aptarnavimas
+	Load	Apkrova
+	Status	Būsena
+	Units for {target}%	Vienetai {target} %
+	Formula	Formulė
+	Simulated utilisation	Simuliuotas naudojimas
+	Simulated mean wait	Simuliuotas vidutinis laukimas
+	Target utilisation	Tikslinis naudojimas
+	Must be above 0% and below 100%	Turi būti didesnis nei 0 % ir mažesnis nei 100 %
+	The utilisation above which a station counts as congested	Naudojimas, virš kurio stotis laikoma perkrauta
+	Fine	Gerai
+	Congested	Perkrauta
+	Unstable	Nestabili
+	Unknown	Nežinoma
+	up to {n}	iki {n}
+	Bottleneck: {name} (load {load}).	Kliūtis: {name} (apkrova {load}).
+	Bottleneck: not known before a run (a load not known, or only bounded, could be the highest).	Kliūtis: prieš paleidimą nežinoma (nežinoma arba tik apribota apkrova gali būti didžiausia).
+	Not known before a run:	Prieš paleidimą nežinoma:
+	No exact formula for the wait:	Laukimui tikslios formulės nėra:
+	Utilisation is arrivals × service ÷ units, as the results count it; the load is that over the units' availability. A run adds what variability and blocking cost.	Naudojimas yra atvykimai × aptarnavimas ÷ vienetai, kaip jį skaičiuoja rezultatai; apkrova yra jis, palyginti su vienetų prieinamumu. Paleidimas prideda tai, kiek kainuoja kintamumas ir blokavimas.
+	No servers, shared tasks, delays or pools.	Nėra serverių, bendrų užduočių, vėlavimų ar telkinių.
+	arrival rate	atvykimo intensyvumas
+	service time	aptarnavimo laikas
+	utilisation	naudojimas
+	{station}: {what}: {message}.	{station}: {what}: {message}.
+	{station}: {message}.	{station}: {message}.
+	From the last run; – when there are none, or they are out of date.	Iš paskutinio paleidimo; – jei jų nėra arba jie pasenę.
+	Show this block	Rodyti šį bloką
+	Rates and times are per {unit}.	Intensyvumai ir laikai nurodyti per {unit}.

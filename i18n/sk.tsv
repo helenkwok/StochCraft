@@ -923,3 +923,34 @@ unit	yr	r.
 @plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Oba použili počiatočnú hodnotu generátora {seed} a ten istý {n} beh, takže každý beh dostane rovnaké náhodné čísla ako jeho náprotivok: rozdiely pochádzajú zo zmeny, nie z náhodných ťahov.|Oba použili počiatočnú hodnotu generátora {seed} a tie isté {n} behy, takže každý beh dostane rovnaké náhodné čísla ako jeho náprotivok: rozdiely pochádzajú zo zmeny, nie z náhodných ťahov.|Oba použili počiatočnú hodnotu generátora {seed} a tých istých {n} behov, takže každý beh dostane rovnaké náhodné čísla ako jeho náprotivok: rozdiely pochádzajú zo zmeny, nie z náhodných ťahov.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	Ešte {n} kľúčová metrika sa nepohla viac, než by dokázala náhoda.|Ešte {n} kľúčové metriky sa nepohli viac, než by dokázala náhoda.|Ešte {n} kľúčových metrík sa nepohlo viac, než by dokázala náhoda.
 @plural	and {n} more change|and {n} more changes	a ešte {n} zmena|a ešte {n} zmeny|a ešte {n} zmien
+	Station	Stanovište
+	Kind	Druh
+	Service	Obsluha
+	Load	Zaťaženie
+	Status	Stav
+	Units for {target}%	Jednotky pre {target} %
+	Formula	Vzorec
+	Simulated utilisation	Simulované využitie
+	Simulated mean wait	Simulované priemerné čakanie
+	Target utilisation	Cieľové využitie
+	Must be above 0% and below 100%	Musí byť väčšie ako 0 % a menšie ako 100 %
+	The utilisation above which a station counts as congested	Využitie, nad ktorým sa stanovište považuje za preťažené
+	Fine	V poriadku
+	Congested	Preťažené
+	Unstable	Nestabilné
+	Unknown	Neznáme
+	up to {n}	až {n}
+	Bottleneck: {name} (load {load}).	Úzke miesto: {name} (zaťaženie {load}).
+	Bottleneck: not known before a run (a load not known, or only bounded, could be the highest).	Úzke miesto: pred behom neznáme (neznáme alebo len obmedzené zaťaženie môže byť najvyššie).
+	Not known before a run:	Neznáme pred behom:
+	No exact formula for the wait:	Pre čakanie nie je presný vzorec:
+	Utilisation is arrivals × service ÷ units, as the results count it; the load is that over the units' availability. A run adds what variability and blocking cost.	Využitie je príchody × obsluha ÷ jednotky, ako ho počítajú výsledky; zaťaženie je táto hodnota voči dostupnosti jednotiek. Beh pridáva to, čo stojí premenlivosť a blokovanie.
+	No servers, shared tasks, delays or pools.	Žiadne servery, zdieľané úlohy, oneskorenia ani fondy.
+	arrival rate	intenzita príchodov
+	service time	čas obsluhy
+	utilisation	využitie
+	{station}: {what}: {message}.	{station}: {what}: {message}.
+	{station}: {message}.	{station}: {message}.
+	From the last run; – when there are none, or they are out of date.	Z posledného behu; – ak žiadne nie sú alebo sú zastarané.
+	Show this block	Zobraziť tento blok
+	Rates and times are per {unit}.	Intenzity a časy sú na {unit}.
