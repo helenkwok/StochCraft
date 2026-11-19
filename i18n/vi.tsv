@@ -1005,6 +1005,11 @@ unit	yr	năm
 	At {time} {unit}: {n} items	Tại {time} {unit}: {n} mục
 	Run the model to fill the dashboard	Chạy mô hình để điền vào bảng điều khiển
 	The resource and conveyor charts show the last run until this one ends	Biểu đồ tài nguyên và băng tải hiển thị lần chạy gần nhất cho đến khi lần này kết thúc
+	Reset	Đặt lại
+	As fast as possible	Nhanh nhất có thể
+	Pause at	Tạm dừng tại
+	Halve Speed	Giảm một nửa tốc độ
+	Double Speed	Tăng gấp đôi tốc độ
 	Layout	Mặt bằng
 	Layout of the model, to scale	Mặt bằng của mô hình, theo tỷ lệ
 	Drag to pan · Scroll to zoom	Kéo để dịch chuyển · Cuộn để thu phóng

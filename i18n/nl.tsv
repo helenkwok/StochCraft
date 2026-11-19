@@ -1005,6 +1005,11 @@ unit	yr	j
 	At {time} {unit}: {n} items	Op {time} {unit}: {n} items
 	Run the model to fill the dashboard	Voer het model uit om het dashboard te vullen
 	The resource and conveyor charts show the last run until this one ends	De grafieken van middelen en transportbanden tonen de laatste run totdat deze eindigt
+	Reset	Resetten
+	As fast as possible	Zo snel mogelijk
+	Pause at	Pauzeren bij
+	Halve Speed	Snelheid halveren
+	Double Speed	Snelheid verdubbelen
 	Layout	Layout
 	Layout of the model, to scale	Layout van het model, op schaal
 	Drag to pan · Scroll to zoom	Sleep om te verschuiven · Scroll om te zoomen

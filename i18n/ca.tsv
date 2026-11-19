@@ -1005,6 +1005,11 @@ unit	yr	a
 	At {time} {unit}: {n} items	A {time} {unit}: {n} peces
 	Run the model to fill the dashboard	Executeu el model per omplir el tauler
 	The resource and conveyor charts show the last run until this one ends	Els gràfics de recursos i cintes mostren l'última execució fins que aquesta acabi
+	Reset	Reinicia
+	As fast as possible	Tan ràpid com sigui possible
+	Pause at	Pausa a
+	Halve Speed	Redueix la velocitat a la meitat
+	Double Speed	Duplica la velocitat
 	Layout	Disposició
 	Layout of the model, to scale	Disposició del model, a escala
 	Drag to pan · Scroll to zoom	Arrossegueu per desplaçar · Desplaceu per ampliar

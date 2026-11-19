@@ -1005,6 +1005,11 @@ unit	yr	年
 	At {time} {unit}: {n} items	{time} {unit} 時点: アイテム {n} 個
 	Run the model to fill the dashboard	ダッシュボードを表示するにはモデルを実行してください
 	The resource and conveyor charts show the last run until this one ends	リソースとコンベヤのグラフは、この実行が終わるまで前回の実行を表示します
+	Reset	リセット
+	As fast as possible	できるだけ速く
+	Pause at	指定時刻で一時停止
+	Halve Speed	速度を半分にする
+	Double Speed	速度を2倍にする
 	Layout	レイアウト
 	Layout of the model, to scale	縮尺どおりのモデルのレイアウト
 	Drag to pan · Scroll to zoom	ドラッグで移動 · スクロールでズーム

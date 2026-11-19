@@ -1005,6 +1005,11 @@ unit	yr	ປີ
 	At {time} {unit}: {n} items	ທີ່ {time} {unit}: {n} ລາຍການ
 	Run the model to fill the dashboard	ແລ່ນແບບຈຳລອງເພື່ອເຕີມແດຊບອດ
 	The resource and conveyor charts show the last run until this one ends	ແຜນພາບຊັບພະຍາກອນ ແລະ ສາຍພານສະແດງການແລ່ນຄັ້ງຫຼ້າສຸດຈົນກວ່າຄັ້ງນີ້ຈະສຳເລັດ
+	Reset	ຣີເຊັດ
+	As fast as possible	ໄວທີ່ສຸດເທົ່າທີ່ເປັນໄປໄດ້
+	Pause at	ຢຸດຊົ່ວຄາວທີ່
+	Halve Speed	ຫຼຸດຄວາມໄວເຄິ່ງໜຶ່ງ
+	Double Speed	ເພີ່ມຄວາມໄວສອງເທົ່າ
 	Layout	ແຜນຜັງ
 	Layout of the model, to scale	ແຜນຜັງຂອງແບບຈຳລອງ ຕາມມາດຕາສ່ວນ
 	Drag to pan · Scroll to zoom	ລາກເພື່ອຍ້າຍ · ເລື່ອນເພື່ອຊູມ

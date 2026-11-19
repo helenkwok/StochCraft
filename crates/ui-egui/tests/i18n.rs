@@ -306,12 +306,12 @@ const NOT_TEXT: &[&str] = &[
 
 /// Whether a string looked up on screen is left to craft-i18n's shared catalog: craft-keymap's
 /// shortcuts dialog draws its own words (`craft_keymap::ui::STRINGS`, for the shared catalog,
-/// not the app's) and asks for key caps by name ("N", "F5", under context `key`). StochCraft's
+/// not the app's) and asks for key caps by name ("N", "F5", "[", under context `key`). StochCraft's
 /// own uses of the same words are still checked, as they come from its code.
 fn is_shared(s: &str) -> bool {
     let key_cap = s.len() == 1
         && s.chars()
-            .all(|c| c.is_ascii_uppercase() || c.is_ascii_digit())
+            .all(|c| c.is_ascii_uppercase() || c.is_ascii_digit() || c.is_ascii_punctuation())
         || s.strip_prefix('F')
             .is_some_and(|n| !n.is_empty() && n.chars().all(|c| c.is_ascii_digit()));
     NOT_TEXT.contains(&s) || key_cap || craft_keymap::ui::STRINGS.contains(&s)

@@ -1005,6 +1005,11 @@ unit	yr	r.
 	At {time} {unit}: {n} items	V čase {time} {unit}: {n} položiek
 	Run the model to fill the dashboard	Spustite model, aby sa prehľad naplnil
 	The resource and conveyor charts show the last run until this one ends	Grafy zdrojov a dopravníkov ukazujú posledný beh, kým tento neskončí
+	Reset	Vynulovať
+	As fast as possible	Čo najrýchlejšie
+	Pause at	Pozastaviť pri
+	Halve Speed	Znížiť rýchlosť na polovicu
+	Double Speed	Zdvojnásobiť rýchlosť
 	Layout	Rozloženie
 	Layout of the model, to scale	Rozloženie modelu v mierke
 	Drag to pan · Scroll to zoom	Ťahaním posúvate · Kolieskom približujete

@@ -1005,6 +1005,11 @@ unit	yr	р.
 	At {time} {unit}: {n} items	У момент {time} {unit}: {n} елементів
 	Run the model to fill the dashboard	Запустіть модель, щоб заповнити панель
 	The resource and conveyor charts show the last run until this one ends	Графіки ресурсів і конвеєрів показують останній прогін, доки цей не завершиться
+	Reset	Скинути
+	As fast as possible	Якнайшвидше
+	Pause at	Пауза на
+	Halve Speed	Зменшити швидкість удвічі
+	Double Speed	Збільшити швидкість удвічі
 	Layout	Планування
 	Layout of the model, to scale	Планування моделі в масштабі
 	Drag to pan · Scroll to zoom	Перетягніть для зсуву · Прокрутіть для масштабу
