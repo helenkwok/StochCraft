@@ -7,12 +7,18 @@ use stochcraft_model::{Dist, Experiment};
 use stochcraft_random::Rng;
 
 fn run(m: &Builder, duration: f64) -> Report {
+    run_warned(m, duration, &[])
+}
+
+/// As [`run`], with the warnings `warned` (problem codes) expected from the model.
+fn run_warned(m: &Builder, duration: f64, warned: &[&str]) -> Report {
     let model = m.build(Experiment {
         warmup: 0.0,
         duration,
         ..Experiment::default()
     });
-    assert_eq!(model.validate(), vec![]);
+    let codes: Vec<&str> = model.validate().iter().map(|d| d.problem.code()).collect();
+    assert_eq!(codes, warned);
     let compiled = compile(&model).unwrap_or_else(|e| panic!("{e:?}"));
     compiled.run(Rng::new(1)).unwrap_or_else(|e| panic!("{e}"))
 }
@@ -108,7 +114,8 @@ fn a_conveyor_carries_at_most_its_speed_over_its_pitch() {
     let out = m.sink("out");
     m.connect(src, belt);
     m.connect(belt, out);
-    let r = run(&m, 1_000.0);
+    // The capacity table sees it before the run: offered 2 a unit of time, it carries 0.5.
+    let r = run_warned(&m, 1_000.0, &["overloaded"]);
     let e = r.element("belt").unwrap_or_else(|| panic!("no belt"));
     // One gets on every 2 (from the first arrival, at 0 or 0.5): 500 in 1,000. Those that got
     // on in the last 10 are still on it, four or five as the first arrival falls.
