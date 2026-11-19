@@ -1141,6 +1141,9 @@ unit	yr	г.
 	How many entities are in the model over time.	Колко същности има в модела във времето.
 	At {time} {unit}: {n} entities	В {time} {unit}: {n} същности
 @plural	Makes {n} independent run of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval across them.	Прави {n} независимо изпълнение на модела с начална стойност {seed}. Резултатите за всеки блок включват половината ширина на 95% доверителен интервал.|Прави {n} независими изпълнения на модела с начална стойност {seed}. Резултатите за всеки блок включват половината ширина на 95% доверителен интервал.
+	Fonts	Шрифтове
+	The full list of third-party licences is in the file THIRD-PARTY-LICENSES.html, which comes with the download.	Пълният списък с лицензите на външните компоненти е във файла THIRD-PARTY-LICENSES.html, който е в изтеглената програма.
+	Full list of third-party licences	Пълен списък с лицензите на външните компоненти
 	Reset	Нулиране
 	As fast as possible	Възможно най-бързо
 	Pause at	Пауза при

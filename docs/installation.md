@@ -50,3 +50,9 @@ Releases will be on the [releases page](https://github.com/helenkwok/StochCraft/
   Windows may warn you the first time: click **More info**, then **Run anyway**.
 - **macOS (Apple silicon and Intel):** a disk image; drag StochCraft to Applications.
 - **Linux (x86-64 and ARM64):** a `.tar.gz` with both programs.
+
+Each download also holds the licence files (`LICENSE-APACHE`, `LICENSE-MIT` and `NOTICE`) and
+`THIRD-PARTY-LICENSES.html`, which lists every open-source Rust library in the programs with its
+version and licence text, and `OFL-IBM-Plex.txt`, the licence of the interface font. On macOS the files are inside the app (right-click StochCraft, then
+**Show Package Contents**, then `Contents/Resources`). The browser app serves the same list as
+`THIRD-PARTY-LICENSES.html` beside the app, and the About box links to it.

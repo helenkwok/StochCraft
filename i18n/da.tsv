@@ -1141,6 +1141,9 @@ unit	yr	år
 	How many entities are in the model over time.	Hvor mange enheder der er i modellen over tid.
 	At {time} {unit}: {n} entities	Ved {time} {unit}: {n} enheder
 @plural	Makes {n} independent run of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval across them.	Udfører {n} uafhængig kørsel af modellen med frø {seed}. Hver bloks resultater indeholder den halve bredde af et 95% konfidensinterval.|Udfører {n} uafhængige kørsler af modellen med frø {seed}. Hver bloks resultater indeholder den halve bredde af et 95% konfidensinterval.
+	Fonts	Skrifttyper
+	The full list of third-party licences is in the file THIRD-PARTY-LICENSES.html, which comes with the download.	Den fulde liste over tredjepartslicenser findes i filen THIRD-PARTY-LICENSES.html, som følger med downloaden.
+	Full list of third-party licences	Fuld liste over tredjepartslicenser
 	Reset	Nulstil
 	As fast as possible	Så hurtigt som muligt
 	Pause at	Pause ved

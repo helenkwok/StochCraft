@@ -1141,6 +1141,9 @@ unit	yr	년
 	How many entities are in the model over time.	모델 안에 있는 엔터티 수의 시간 변화.
 	At {time} {unit}: {n} entities	{time} {unit} 시점: 엔터티 {n}개
 @plural	Makes {n} independent run of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval across them.	시드 {seed}부터 모델을 독립적으로 {n}회 실행합니다. 각 블록의 결과에는 95% 신뢰 구간의 반폭이 포함됩니다.
+	Fonts	글꼴
+	The full list of third-party licences is in the file THIRD-PARTY-LICENSES.html, which comes with the download.	서드파티 라이선스 전체 목록은 다운로드에 포함된 THIRD-PARTY-LICENSES.html 파일에 있습니다.
+	Full list of third-party licences	서드파티 라이선스 전체 목록
 	Reset	초기화
 	As fast as possible	가능한 한 빠르게
 	Pause at	지정 시각에 일시 중지

@@ -1141,6 +1141,9 @@ unit	yr	సం.
 	How many entities are in the model over time.	కాలక్రమేణా మోడల్‌లో ఎన్ని ఎంటిటీలు ఉన్నాయి.
 	At {time} {unit}: {n} entities	{time} {unit} వద్ద: {n} ఎంటిటీలు
 @plural	Makes {n} independent run of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval across them.	{seed} బీజంతో నమూనాను {n} స్వతంత్ర అమలుగా నడుపుతుంది. ప్రతి బ్లాక్ ఫలితానికి 95% విశ్వసనీయత అంతరం సగం వెడల్పు ఇవ్వబడుతుంది.|{seed} బీజంతో నమూనాను {n} స్వతంత్ర అమలులుగా నడుపుతుంది. అన్ని అమలుల నుంచి ప్రతి బ్లాక్ ఫలితానికి 95% విశ్వసనీయత అంతరం సగం వెడల్పు ఇవ్వబడుతుంది.
+	Fonts	ఫాంట్లు
+	The full list of third-party licences is in the file THIRD-PARTY-LICENSES.html, which comes with the download.	థర్డ్-పార్టీ లైసెన్స్‌ల పూర్తి జాబితా THIRD-PARTY-LICENSES.html ఫైల్‌లో ఉంది, ఇది డౌన్‌లోడ్‌తో వస్తుంది.
+	Full list of third-party licences	థర్డ్-పార్టీ లైసెన్స్‌ల పూర్తి జాబితా
 	Reset	రీసెట్ చేయి
 	As fast as possible	వీలైనంత వేగంగా
 	Pause at	ఈ సమయంలో విరామం

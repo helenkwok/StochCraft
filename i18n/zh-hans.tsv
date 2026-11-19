@@ -1141,6 +1141,9 @@ unit	yr	年
 	How many entities are in the model over time.	模型中有多少实体随时间变化。
 	At {time} {unit}: {n} entities	在 {time} {unit}：{n} 个实体
 @plural	Makes {n} independent run of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval across them.	从随机种子 {seed} 开始，对模型进行 {n} 次独立运行。每个区块的结果都包含 95% 置信区间的半宽。
+	Fonts	字体
+	The full list of third-party licences is in the file THIRD-PARTY-LICENSES.html, which comes with the download.	第三方许可证的完整列表在随下载附带的文件 THIRD-PARTY-LICENSES.html 中。
+	Full list of third-party licences	第三方许可证完整列表
 	Reset	重置
 	As fast as possible	尽可能快
 	Pause at	暂停于

@@ -1141,6 +1141,9 @@ unit	yr	a
 	How many entities are in the model over time.	Cantas entidades hai no modelo ao longo do tempo.
 	At {time} {unit}: {n} entities	En {time} {unit}: {n} entidades
 @plural	Makes {n} independent run of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval across them.	Realiza {n} execución independente do modelo a partir da semente {seed}. Os resultados de cada bloque inclúen a semiamplitude dun intervalo de confianza do 95%.|Realiza {n} execucións independentes do modelo a partir da semente {seed}. Os resultados de cada bloque inclúen a semiamplitude dun intervalo de confianza do 95%.
+	Fonts	Tipos de letra
+	The full list of third-party licences is in the file THIRD-PARTY-LICENSES.html, which comes with the download.	A lista completa de licenzas de terceiros está no ficheiro THIRD-PARTY-LICENSES.html, que vai incluído na descarga.
+	Full list of third-party licences	Lista completa de licenzas de terceiros
 	Reset	Reiniciar
 	As fast as possible	O máis rápido posible
 	Pause at	Pausa en

@@ -12,6 +12,8 @@
 #[cfg(target_arch = "wasm32")]
 mod pool;
 #[cfg(any(target_arch = "wasm32", test))]
+mod schedule;
+#[cfg(any(target_arch = "wasm32", test))]
 mod storage;
 #[cfg(target_arch = "wasm32")]
 mod web;

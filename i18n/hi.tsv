@@ -1141,6 +1141,9 @@ unit	yr	वर्ष
 	How many entities are in the model over time.	समय के साथ मॉडल में कितनी इकाइयाँ हैं।
 	At {time} {unit}: {n} entities	{time} {unit} पर: {n} इकाइयाँ
 @plural	Makes {n} independent run of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval across them.	बीज {seed} से मॉडल का {n} स्वतंत्र रन चलाता है। प्रत्येक ब्लॉक के परिणामों में 95% विश्वास अंतराल की आधी चौड़ाई शामिल है।|बीज {seed} से मॉडल के {n} स्वतंत्र रन चलाता है। प्रत्येक ब्लॉक के परिणामों में 95% विश्वास अंतराल की आधी चौड़ाई शामिल है।
+	Fonts	फ़ॉन्ट
+	The full list of third-party licences is in the file THIRD-PARTY-LICENSES.html, which comes with the download.	तीसरे पक्ष के लाइसेंस की पूरी सूची फ़ाइल THIRD-PARTY-LICENSES.html में है, जो डाउनलोड के साथ आती है।
+	Full list of third-party licences	तीसरे पक्ष के लाइसेंस की पूरी सूची
 	Reset	रीसेट करें
 	As fast as possible	जितना तेज़ हो सके
 	Pause at	इस समय रोकें

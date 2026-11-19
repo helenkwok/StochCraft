@@ -162,9 +162,7 @@ fn every_screen_is_translated() {
 }
 
 /// The states the screens above don't reach: the offer to recover unsaved changes, a run in
-/// progress, a watched run and an error in the status bar. (Not yet the Analysis view: four of
-/// its parameter labels, "{block}: mean service time" and the like, have no row in any catalog,
-/// and drawing it here would add them to what `every_string_has_a_row_in_every_catalog` checks.)
+/// progress, a watched run, the Analysis view and an error in the status bar.
 #[test]
 fn every_state_is_translated() {
     let mut missed = BTreeSet::new();
@@ -221,6 +219,14 @@ fn every_state_is_translated() {
     missed.extend(untranslated(&h));
     h.state_mut()
         .run_command(&CommandRef::new(commands::STOP_WATCHING));
+    settle(&mut h);
+
+    // The Analysis view: its sweep, sensitivity and sizing sections, with their parameters.
+    h.get_by_role_and_label(Role::Tab, "⟦Analysis⟧").click();
+    settle(&mut h);
+    h.get_by_label("⟦Sweep a parameter⟧");
+    missed.extend(untranslated(&h));
+    h.get_by_role_and_label(Role::Tab, "⟦Model⟧").click();
     settle(&mut h);
 
     // A model with a problem: its message is built from the catalog's wording, with the block's
@@ -436,13 +442,21 @@ fn every_string_has_a_row_in_every_catalog() {
 /// Message templates the window never shows: the results say it in "How sure are these numbers?".
 const NOT_SHOWN: &[&str] = &["no_warmup_at", "no_warmup_late"];
 
-/// Looked-up text that is data, not words to translate: library names and licences in About.
+/// Looked-up text that is data, not words to translate: library and font names and licences in About.
 const NOT_TEXT: &[&str] = &[
     "craft-libs",
     "serde, serde_json",
     "libm",
     "sha2",
     "MIT OR Apache-2.0",
+    // The fonts in About: names and the SPDX id (the browser app's rows are not drawn here).
+    "IBM Plex Sans, IBM Plex Mono",
+    "Hack",
+    "MIT AND Bitstream-Vera",
+    "Noto Emoji",
+    "BIZ UDPGothic, Noto Sans CJK SC, NanumGothic",
+    "Noto Sans Arabic, Thai, Georgian, Hebrew, Devanagari, Symbols, Symbols 2",
+    "OFL-1.1",
 ];
 
 /// Whether a string looked up on screen is left to craft-i18n's shared catalog: craft-keymap's

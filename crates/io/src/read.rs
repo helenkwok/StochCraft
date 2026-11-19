@@ -1349,6 +1349,17 @@ fn to_model(p: Process, scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> M
             balked: vendor_flag(scenario, id, bpsim::BALKED, notes),
         });
     }
+    // A default flow to a block that was not kept is no connection, so it is no default either:
+    // the model never names a connection it does not have.
+    for e in &mut elements {
+        if let ElementKind::ExclusiveGateway { default, .. } = &mut e.kind
+            && default
+                .as_ref()
+                .is_some_and(|d| !connections.iter().any(|c| &c.id == d))
+        {
+            *default = None;
+        }
+    }
     let mut experiment = experiment(scenario, notes);
     experiment.stop = stop_of(scenario, &elements, notes);
     let estimates = estimates_of(scenario, &elements, notes);

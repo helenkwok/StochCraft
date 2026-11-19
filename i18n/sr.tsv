@@ -1141,6 +1141,9 @@ unit	yr	год.
 	How many entities are in the model over time.	Колико је ентитета у моделу кроз време.
 	At {time} {unit}: {n} entities	У {time} {unit}: {n} ентитета
 @plural	Makes {n} independent run of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval across them.	Изводи {n} независно покретање модела од семена {seed}. Резултати сваког блока укључују полуширину 95% интервала поузданости.|Изводи {n} независна покретања модела од семена {seed}. Резултати сваког блока укључују полуширину 95% интервала поузданости.|Изводи {n} независних покретања модела од семена {seed}. Резултати сваког блока укључују полуширину 95% интервала поузданости.
+	Fonts	Фонтови
+	The full list of third-party licences is in the file THIRD-PARTY-LICENSES.html, which comes with the download.	Потпуни списак лиценци трећих страна налази се у датотеци THIRD-PARTY-LICENSES.html, која долази уз преузимање.
+	Full list of third-party licences	Потпуни списак лиценци трећих страна
 	Reset	Врати на почетак
 	As fast as possible	Што брже могуће
 	Pause at	Пауза у

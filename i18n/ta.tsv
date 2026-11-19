@@ -1141,6 +1141,9 @@ unit	yr	ஆண்டு
 	How many entities are in the model over time.	காலப்போக்கில் மாதிரியில் எத்தனை உருப்படிகள் உள்ளன.
 	At {time} {unit}: {n} entities	{time} {unit} நேரத்தில்: {n} உருப்படிகள்
 @plural	Makes {n} independent run of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval across them.	{seed} என்ற சீரற்ற விதையிலிருந்து மாதிரியின் {n} தனித்த மீள் இயக்கத்தை நடத்துகிறது. ஒவ்வொரு தொகுதியின் முடிவும் 95% நம்பிக்கை இடைவெளியின் அரை அகலத்துடன் வழங்கப்படுகிறது.|{seed} என்ற சீரற்ற விதையிலிருந்து மாதிரியின் {n} தனித்த மீள் இயக்கங்களை நடத்துகிறது. ஒவ்வொரு தொகுதியின் முடிவும் அவற்றின் 95% நம்பிக்கை இடைவெளியின் அரை அகலத்துடன் வழங்கப்படுகிறது.
+	Fonts	எழுத்துருக்கள்
+	The full list of third-party licences is in the file THIRD-PARTY-LICENSES.html, which comes with the download.	மூன்றாம் தரப்பு உரிமங்களின் முழுப் பட்டியல் THIRD-PARTY-LICENSES.html கோப்பில் உள்ளது; அது பதிவிறக்கத்துடன் வருகிறது.
+	Full list of third-party licences	மூன்றாம் தரப்பு உரிமங்களின் முழுப் பட்டியல்
 	Reset	மீட்டமை
 	As fast as possible	முடிந்தவரை விரைவாக
 	Pause at	இந்த நேரத்தில் இடைநிறுத்து

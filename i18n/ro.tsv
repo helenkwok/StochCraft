@@ -1141,6 +1141,9 @@ unit	yr	a
 	How many entities are in the model over time.	Câte entități sunt în model în timp.
 	At {time} {unit}: {n} entities	La {time} {unit}: {n} entități
 @plural	Makes {n} independent run of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval across them.	Efectuează {n} rulare independentă a modelului de la sămânța {seed}. Rezultatele fiecărui bloc includ semilățimea unui interval de încredere de 95%.|Efectuează {n} rulări independente ale modelului de la sămânța {seed}. Rezultatele fiecărui bloc includ semilățimea unui interval de încredere de 95%.|Efectuează {n} de rulări independente ale modelului de la sămânța {seed}. Rezultatele fiecărui bloc includ semilățimea unui interval de încredere de 95%.
+	Fonts	Fonturi
+	The full list of third-party licences is in the file THIRD-PARTY-LICENSES.html, which comes with the download.	Lista completă a licențelor terților se află în fișierul THIRD-PARTY-LICENSES.html, inclus în descărcare.
+	Full list of third-party licences	Lista completă a licențelor terților
 	Reset	Resetează
 	As fast as possible	Cât mai repede posibil
 	Pause at	Pauză la

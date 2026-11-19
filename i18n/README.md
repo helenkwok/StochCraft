@@ -750,6 +750,13 @@ fields (`“Service time”`) are named in the messages by their own rows.
   lo, th, ta, te, bn, ka, kk, hi, sq, et and lt, and the count nouns after "{n}" ("items",
   "more") in languages that inflect them by number (pl, cs, sk, sl, hr, bs, sr, ru, uk, lt, lo):
   the rows are not plural rows, so the form after a count may be wrong for some counts.
+- The rows for the About box's font credits and licence list ("Fonts", the sentence naming
+  THIRD-PARTY-LICENSES.html and the link "Full list of third-party licences") were
+  machine-drafted with Claude Code from the plain meaning of the English, with each catalog's
+  own word for "licence" where it has one (from "Licensed under the MIT License...") and the
+  everyday word for a font on a computer; "third party" is rendered as the language's
+  ordinary business term. Not checked against any other source, and not reviewed by native
+  speakers. The least certain are lo, th, ta, te, bn, ka, kk, hi and sq.
 - The rows added for the run bar (M5.5 U1: Reset, As fast as possible, Pause at, Halve Speed,
   Double Speed) were machine-drafted with Claude Code from the plain meaning of the English,
   reusing each catalog's own words for pause, speed and run ("Pause at" follows the catalog's

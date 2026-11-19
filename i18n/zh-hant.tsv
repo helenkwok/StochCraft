@@ -1141,6 +1141,9 @@ unit	yr	年
 	How many entities are in the model over time.	模型中有多少實體隨時間變化。
 	At {time} {unit}: {n} entities	在 {time} {unit}：{n} 個實體
 @plural	Makes {n} independent run of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval across them.	從隨機種子 {seed} 開始，對模型進行 {n} 次獨立執行。每個區塊的結果都包含 95% 信賴區間的半寬。
+	Fonts	字型
+	The full list of third-party licences is in the file THIRD-PARTY-LICENSES.html, which comes with the download.	第三方授權的完整清單在隨下載附帶的檔案 THIRD-PARTY-LICENSES.html 中。
+	Full list of third-party licences	第三方授權完整清單
 	Reset	重設
 	As fast as possible	盡可能快
 	Pause at	暫停於

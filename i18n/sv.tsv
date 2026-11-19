@@ -1141,6 +1141,9 @@ unit	yr	år
 	How many entities are in the model over time.	Hur många entiteter som finns i modellen över tid.
 	At {time} {unit}: {n} entities	Vid {time} {unit}: {n} entiteter
 @plural	Makes {n} independent run of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval across them.	Gör {n} oberoende körning av modellen från slumpfrö {seed}. Resultaten för varje block visar halva bredden på ett 95% konfidensintervall.|Gör {n} oberoende körningar av modellen från slumpfrö {seed}. Resultaten för varje block visar halva bredden på ett 95% konfidensintervall.
+	Fonts	Typsnitt
+	The full list of third-party licences is in the file THIRD-PARTY-LICENSES.html, which comes with the download.	Den fullständiga listan över tredjepartslicenser finns i filen THIRD-PARTY-LICENSES.html, som följer med nedladdningen.
+	Full list of third-party licences	Fullständig lista över tredjepartslicenser
 	Reset	Återställ
 	As fast as possible	Så fort som möjligt
 	Pause at	Pausa vid

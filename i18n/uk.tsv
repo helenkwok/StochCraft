@@ -1141,6 +1141,9 @@ unit	yr	р.
 	How many entities are in the model over time.	Скільки сутностей у моделі в часі.
 	At {time} {unit}: {n} entities	У момент {time} {unit}: {n} сутностей
 @plural	Makes {n} independent run of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval across them.	Виконує {n} незалежний запуск моделі з початковим значенням {seed}. Результати кожного блока містять півширину 95% довірчого інтервалу.|Виконує {n} незалежні запуски моделі з початковим значенням {seed}. Результати кожного блока містять півширину 95% довірчого інтервалу.|Виконує {n} незалежних запусків моделі з початковим значенням {seed}. Результати кожного блока містять півширину 95% довірчого інтервалу.
+	Fonts	Шрифти
+	The full list of third-party licences is in the file THIRD-PARTY-LICENSES.html, which comes with the download.	Повний список ліцензій сторонніх компонентів міститься у файлі THIRD-PARTY-LICENSES.html, що входить до завантаження.
+	Full list of third-party licences	Повний список ліцензій сторонніх компонентів
 	Reset	Скинути
 	As fast as possible	Якнайшвидше
 	Pause at	Пауза на

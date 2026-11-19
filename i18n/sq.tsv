@@ -1141,6 +1141,9 @@ unit	yr	v
 	How many entities are in the model over time.	Sa entitete ka në model me kalimin e kohës.
 	At {time} {unit}: {n} entities	Në {time} {unit}: {n} entitete
 @plural	Makes {n} independent run of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval across them.	Bën {n} ekzekutim të pavarur të modelit nga fara {seed}. Rezultatet e çdo blloku përfshijnë gjysmën e gjerësisë së intervalit të besimit 95%.|Bën {n} ekzekutime të pavarura të modelit nga fara {seed}. Rezultatet e çdo blloku përfshijnë gjysmën e gjerësisë së intervalit të besimit 95%.
+	Fonts	Shkronjat
+	The full list of third-party licences is in the file THIRD-PARTY-LICENSES.html, which comes with the download.	Lista e plotë e licencave të palëve të treta është në skedarin THIRD-PARTY-LICENSES.html, që vjen me shkarkimin.
+	Full list of third-party licences	Lista e plotë e licencave të palëve të treta
 	Reset	Rivendos
 	As fast as possible	Sa më shpejt të jetë e mundur
 	Pause at	Pauzë në

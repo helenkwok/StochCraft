@@ -1141,6 +1141,9 @@ unit	yr	m.
 	How many entities are in the model over time.	Kiek objektų yra modelyje laikui bėgant.
 	At {time} {unit}: {n} entities	Momentu {time} {unit}: {n} objektų
 @plural	Makes {n} independent run of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval across them.	Atlieka {n} nepriklausomą modelio vykdymą su sėkla {seed}. Kiekvieno bloko rezultatuose pateikiamas 95% pasikliautinojo intervalo pusplotis.|Atlieka {n} nepriklausomus modelio vykdymus su sėkla {seed}. Kiekvieno bloko rezultatuose pateikiamas 95% pasikliautinojo intervalo pusplotis.|Atlieka {n} nepriklausomų modelio vykdymų su sėkla {seed}. Kiekvieno bloko rezultatuose pateikiamas 95% pasikliautinojo intervalo pusplotis.
+	Fonts	Šriftai
+	The full list of third-party licences is in the file THIRD-PARTY-LICENSES.html, which comes with the download.	Visas trečiųjų šalių licencijų sąrašas yra faile THIRD-PARTY-LICENSES.html, kuris pateikiamas su atsisiuntimu.
+	Full list of third-party licences	Visas trečiųjų šalių licencijų sąrašas
 	Reset	Atstatyti
 	As fast as possible	Kuo greičiau
 	Pause at	Pristabdyti ties
