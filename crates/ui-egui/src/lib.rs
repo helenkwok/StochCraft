@@ -21,6 +21,7 @@ mod chart_editor;
 pub mod chart_palette;
 mod charts;
 pub mod commands;
+mod dashboard;
 mod decide;
 pub use autosave::Autosave;
 mod editor;
@@ -590,6 +591,8 @@ pub struct App {
     connect_to: Option<String>,
     /// The work area shows the results rather than the model.
     show_results: bool,
+    /// The Dashboard panel (View ▸ Dashboard).
+    show_dashboard: bool,
     /// The work area shows the Analysis view (sweeps, sensitivity, sizing), unless the results
     /// are shown.
     show_analysis: bool,
@@ -703,6 +706,7 @@ impl App {
             connect_from: None,
             connect_to: None,
             show_results: false,
+            show_dashboard: false,
             show_analysis: false,
             show_capacity: false,
             show_3d: false,
@@ -1813,6 +1817,9 @@ impl App {
         if self.help.open {
             self.help_panel(ui, &p);
         }
+        if self.show_dashboard {
+            self.dashboard_panel(ui, &p);
+        }
         egui::Panel::left("outline")
             .resizable(true)
             .default_size(280.0)
@@ -2334,6 +2341,7 @@ impl App {
                     self.show_3d = view == 4;
                 }
             }
+            ui.toggle_value(&mut self.show_dashboard, t("Dashboard"));
             if self.results.is_none() && self.running.is_none() {
                 ui.label(theme::weak(ui, t("· no results yet")));
             } else if self.results_stale && self.running.is_none() {

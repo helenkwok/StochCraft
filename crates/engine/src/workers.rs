@@ -156,6 +156,9 @@ struct EncodedElement {
     given_up_inside: [u64; 2],
     #[serde(default)]
     leaving: [u64; 2],
+    /// A conveyor's histogram of the times on it: start and width (as bits) and the counts.
+    #[serde(default)]
+    time_on_histogram: Option<(u64, u64, Vec<u64>)>,
     /// Transports and mobile pools: the mean time carried, the shares of time idle, travelling
     /// empty, loading, travelling loaded and unloading, and the mean distances travelled empty
     /// and loaded.
@@ -249,6 +252,10 @@ impl Encoded {
                     checks: [bits(e.time_inside), bits(e.on_shift)],
                     given_up_inside: e.given_up_inside,
                     leaving: e.leaving,
+                    time_on_histogram: e
+                        .time_on_histogram
+                        .as_ref()
+                        .map(|h| (h.start.to_bits(), h.width.to_bits(), h.counts.clone())),
                     operators: [
                         bits(e.mean_time_carried),
                         bits(e.time_idle),
@@ -339,6 +346,13 @@ impl Encoded {
                     mean_time_in_system: float(s),
                     mean_blocked_time: float(b),
                     mean_time_on: float(on),
+                    time_on_histogram: e.time_on_histogram.map(|(start, width, counts)| {
+                        stochcraft_blocks::Histogram {
+                            start: f64::from_bits(start),
+                            width: f64::from_bits(width),
+                            counts,
+                        }
+                    }),
                     blocking_probability: float(bp),
                     availability: float(a),
                     lost: e.lost,

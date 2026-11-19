@@ -975,3 +975,33 @@ unit	yr	г.
 	3D view of the model	3D-вид модели
 	Drag to orbit · Scroll to zoom · Shift-drag to pan	Перетащите, чтобы вращать · Прокрутите для масштаба · Shift и перетаскивание для сдвига
 	Parcel sorter	Сортировщик посылок
+	Dashboard	Дашборд
+	Throughput	Пропускная способность
+	{n} per hour	{n} в час
+	95% interval {low} to {high} per hour	95%-й интервал от {low} до {high} в час
+	So far in the run being watched	Пока что в наблюдаемом прогоне
+	No sink in this model	В этой модели нет выходов
+	Nothing left the model in this run	В этом прогоне ничто не покинуло модель
+	Everything that left the model through its sinks, per hour.	Всё, что покинуло модель через её выходы, в час.
+	Utilisation by resource	Загрузка по ресурсам
+	{name}: {busy} busy	{name}: {busy} занят
+	Idle	Простой
+	and {n} more	и ещё {n}
+	How each resource spends its time, and its busy share.	Как каждый ресурс проводит время и его доля занятости.
+	No resource reports how it spends its time	Ни один ресурс не сообщает, как он проводит время
+	Time on conveyors	Время на конвейерах
+	No conveyors in this model	В этой модели нет конвейеров
+	Fills in when the run ends	Заполнится по окончании прогона
+	How long each item spends on the conveyors.	Сколько времени каждый элемент проводит на конвейерах.
+	No item has left a conveyor yet	Ни один элемент ещё не покинул конвейер
+	Share of items by time on a conveyor, in {unit}	Доля элементов по времени на конвейере, в {unit}
+	Time on conveyors: {n} items between {lo} and {hi} {unit}	Время на конвейерах: {n} элементов между {lo} и {hi} {unit}
+	{from} to {to} {unit}: {share} of items ({n})	От {from} до {to} {unit}: {share} элементов ({n})
+	Items on conveyors over time	Элементы на конвейерах во времени
+	Items in the model over time	Элементы в модели во времени
+	How many items are on the conveyors over time.	Сколько элементов находится на конвейерах во времени.
+	How many items are in the model over time.	Сколько элементов находится в модели во времени.
+	Nothing was recorded over time in these results	В этих результатах ничего не записано во времени
+	At {time} {unit}: {n} items	В момент {time} {unit}: {n} элементов
+	Run the model to fill the dashboard	Запустите модель, чтобы заполнить дашборд
+	The resource and conveyor charts show the last run until this one ends	Графики ресурсов и конвейеров показывают последний прогон, пока этот не закончится

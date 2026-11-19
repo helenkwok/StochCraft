@@ -975,3 +975,33 @@ unit	yr	ปี
 	3D view of the model	มุมมอง 3 มิติของแบบจำลอง
 	Drag to orbit · Scroll to zoom · Shift-drag to pan	ลากเพื่อหมุน · เลื่อนเพื่อซูม · กด Shift แล้วลากเพื่อเลื่อน
 	Parcel sorter	เครื่องคัดแยกพัสดุ
+	Dashboard	แดชบอร์ด
+	Throughput	ปริมาณงานที่ผ่าน
+	{n} per hour	{n} ต่อชั่วโมง
+	95% interval {low} to {high} per hour	ช่วง 95%: {low} ถึง {high} ต่อชั่วโมง
+	So far in the run being watched	จนถึงตอนนี้ในการรันที่กำลังดู
+	No sink in this model	โมเดลนี้ไม่มีทางออก
+	Nothing left the model in this run	ในการรันนี้ไม่มีอะไรออกจากโมเดล
+	Everything that left the model through its sinks, per hour.	ทุกอย่างที่ออกจากโมเดลผ่านทางออก ต่อชั่วโมง
+	Utilisation by resource	การใช้งานตามทรัพยากร
+	{name}: {busy} busy	{name}: {busy} ไม่ว่าง
+	Idle	ว่าง
+	and {n} more	และอีก {n}
+	How each resource spends its time, and its busy share.	ทรัพยากรแต่ละตัวใช้เวลาอย่างไร และสัดส่วนที่ไม่ว่าง
+	No resource reports how it spends its time	ไม่มีทรัพยากรใดรายงานว่าใช้เวลาอย่างไร
+	Time on conveyors	เวลาบนสายพาน
+	No conveyors in this model	โมเดลนี้ไม่มีสายพาน
+	Fills in when the run ends	จะแสดงเมื่อการรันสิ้นสุด
+	How long each item spends on the conveyors.	แต่ละรายการอยู่บนสายพานนานเท่าใด
+	No item has left a conveyor yet	ยังไม่มีรายการใดออกจากสายพาน
+	Share of items by time on a conveyor, in {unit}	สัดส่วนของรายการตามเวลาบนสายพาน หน่วย {unit}
+	Time on conveyors: {n} items between {lo} and {hi} {unit}	เวลาบนสายพาน: {n} รายการระหว่าง {lo} ถึง {hi} {unit}
+	{from} to {to} {unit}: {share} of items ({n})	{from} ถึง {to} {unit}: {share} ของรายการ ({n})
+	Items on conveyors over time	รายการบนสายพานตามเวลา
+	Items in the model over time	รายการในโมเดลตามเวลา
+	How many items are on the conveyors over time.	มีกี่รายการบนสายพานตามเวลา
+	How many items are in the model over time.	มีกี่รายการในโมเดลตามเวลา
+	Nothing was recorded over time in these results	ผลลัพธ์นี้ไม่ได้บันทึกอะไรตามเวลา
+	At {time} {unit}: {n} items	ที่ {time} {unit}: {n} รายการ
+	Run the model to fill the dashboard	รันโมเดลเพื่อเติมแดชบอร์ด
+	The resource and conveyor charts show the last run until this one ends	แผนภูมิทรัพยากรและสายพานแสดงการรันครั้งล่าสุดจนกว่าครั้งนี้จะสิ้นสุด

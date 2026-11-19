@@ -142,6 +142,91 @@ impl Watching {
     pub(crate) fn conveyor_items(&self, id: &str) -> Vec<(f32, u64, u32)> {
         self.run.conveyor_items(id)
     }
+    /// What the Dashboard shows of the run so far.
+    pub(crate) fn glimpse(&self) -> Glimpse {
+        let now = self.run.now();
+        let warmup = self.model.experiment.warmup;
+        let mut left = 0.0;
+        let mut conveyors = false;
+        // Per element index: how the trace's (waiting, busy) pair counts items inside, and
+        // whether it is a conveyor.
+        let mut shape: Vec<(bool, bool)> = Vec::with_capacity(self.model.elements.len());
+        for e in &self.model.elements {
+            match &e.kind {
+                ElementKind::Sink { .. } => {
+                    left += self
+                        .states
+                        .get(e.id.as_str())
+                        .map_or(0.0, |s| s.left as f64);
+                    shape.push((false, false));
+                }
+                ElementKind::Server { .. } | ElementKind::SharedTask { .. } => {
+                    shape.push((true, false));
+                }
+                ElementKind::Delay { .. } => shape.push((false, false)),
+                ElementKind::Conveyor { .. } => {
+                    conveyors = true;
+                    shape.push((false, true));
+                }
+                _ => shape.push((false, false)),
+            }
+        }
+        let kinds_inside: Vec<bool> = self
+            .model
+            .elements
+            .iter()
+            .map(|e| {
+                matches!(
+                    e.kind,
+                    ElementKind::Server { .. }
+                        | ElementKind::SharedTask { .. }
+                        | ElementKind::Delay { .. }
+                        | ElementKind::Conveyor { .. }
+                )
+            })
+            .collect();
+        let sum = |only_conveyors: bool| -> Vec<(f64, f64)> {
+            self.trace
+                .iter()
+                .map(|(time, v)| {
+                    let total: f64 = v
+                        .iter()
+                        .enumerate()
+                        .filter(|(i, _)| {
+                            kinds_inside.get(*i).copied().unwrap_or(false)
+                                && (!only_conveyors || shape.get(*i).is_some_and(|s| s.1))
+                        })
+                        .map(|(i, (waiting, busy))| {
+                            if shape.get(i).is_some_and(|s| s.0) {
+                                waiting + busy
+                            } else {
+                                *busy
+                            }
+                        })
+                        .sum();
+                    (*time, total)
+                })
+                .collect()
+        };
+        Glimpse {
+            left,
+            measured: if now > warmup { now - warmup } else { now },
+            end: self.run.end(),
+            on_conveyors: conveyors.then(|| sum(true)),
+            in_model: sum(false),
+        }
+    }
+}
+
+/// What the Dashboard shows of a run being watched: the items that have left through the sinks
+/// and the time measured so far, and the number of items on the conveyors (when the model has
+/// any) and in every station over time, as the trace sampled them.
+pub(crate) struct Glimpse {
+    pub left: f64,
+    pub measured: f64,
+    pub end: f64,
+    pub on_conveyors: Option<Vec<(f64, f64)>>,
+    pub in_model: Vec<(f64, f64)>,
 }
 
 impl App {

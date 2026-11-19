@@ -1429,6 +1429,8 @@ pub(crate) struct BlockStats {
     blocked_time: Tally,
     /// Each item's time on a conveyor, from getting on until it has left the end.
     time_on: Tally,
+    /// The same times one by one, for the histogram of them.
+    time_on_samples: Vec<f64>,
     /// Each item's time carried by a transport, from the unit starting to load it until it has
     /// unloaded it.
     time_carried: Tally,
@@ -1701,6 +1703,7 @@ impl BlockStats {
             blocked: TimeWeighted::new(t, 0.0),
             blocked_time: Tally::new(),
             time_on: Tally::new(),
+            time_on_samples: Vec::new(),
             time_carried: Tally::new(),
             lost: 0,
             down: TimeWeighted::new(t, 0.0),
@@ -1764,6 +1767,7 @@ impl BlockStats {
         self.blocked.reset(t);
         self.blocked_time = Tally::new();
         self.time_on = Tally::new();
+        self.time_on_samples.clear();
         self.time_carried = Tally::new();
         self.lost = 0;
         self.down.reset(t);
@@ -2051,6 +2055,11 @@ impl BlockStats {
             },
             mean_time_on: if matches!(kind, ElementKind::Conveyor { .. }) {
                 self.time_on.mean()
+            } else {
+                None
+            },
+            time_on_histogram: if matches!(kind, ElementKind::Conveyor { .. }) {
+                crate::Histogram::of(&self.time_on_samples)
             } else {
                 None
             },
@@ -4838,6 +4847,7 @@ impl Pools {
                     mean_time_in_system: None,
                     mean_blocked_time: None,
                     mean_time_on: None,
+                    time_on_histogram: None,
                     blocking_probability: None,
                     availability: None,
                     time_off_shift: None,
@@ -5072,7 +5082,10 @@ fn spawn_conveyor(
             if !accumulating {
                 clock.start(now);
             }
-            env.borrow().with_stats(|s| s.time_on.add(now - got_on));
+            env.borrow().with_stats(|s| {
+                s.time_on.add(now - got_on);
+                s.time_on_samples.push(now - got_on);
+            });
             last_left = now;
             // It stays in the view until it has left, even while it waits at the end.
             seen.items.borrow_mut().pop_front();

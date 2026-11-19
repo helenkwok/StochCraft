@@ -42,6 +42,7 @@ pub const COLOR_THEME: &str = "view.color_theme";
 pub const EDIT_THEMES: &str = "view.edit_themes";
 pub const EDIT_CHART_COLOURS: &str = "view.edit_chart_colours";
 pub const LANGUAGE: &str = "view.language";
+pub const DASHBOARD: &str = "view.dashboard";
 pub const ABOUT: &str = "help.about";
 pub const HELP: &str = "help.panel";
 pub const GETTING_STARTED: &str = "help.getting_started";
@@ -81,6 +82,7 @@ fn catalog() -> Vec<Bindable> {
         b(CANCEL_RUN, "Cancel Run", &["Model"], &[]),
         b(WATCH, "Watch a Run", &["Model"], &[]),
         b(STOP_WATCHING, "Stop Watching", &["Model"], &[]),
+        b(DASHBOARD, "Dashboard", &["View"], &[]),
         b(HELP, "Help", &["Help"], &["F1"]),
         b(ABOUT, "About StochCraft", &["Help"], &[]),
     ]
@@ -225,7 +227,10 @@ impl App {
         appearance.push(item(EDIT_THEMES, "Edit themes…"));
         appearance.push(item(EDIT_CHART_COLOURS, "Chart colours…"));
         let appearance = Node::submenu(t("Appearance"), appearance).role(ItemRole::Appearance);
-        let mut view = vec![appearance];
+        let mut view = vec![
+            appearance,
+            Node::Item(Item::new(DASHBOARD, t("Dashboard")).check(self.show_dashboard)),
+        ];
         // View ▸ Language, once there is more than English to choose from.
         let languages = crate::i18n::languages();
         if languages.len() > 1 {
@@ -393,6 +398,7 @@ impl App {
             }
             ABOUT => self.about = true,
             SHORTCUTS => self.open_shortcuts(),
+            DASHBOARD => self.show_dashboard = !self.show_dashboard,
             HELP => self.help.open = !self.help.open,
             GETTING_STARTED => self.show_help_at(crate::help::Section::GettingStarted),
             GLOSSARY => self.show_help_at(crate::help::Section::Glossary),
