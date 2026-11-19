@@ -447,7 +447,8 @@ fn edits() -> Vec<Edit> {
                         | ElementKind::ParallelGateway
                         | ElementKind::Batch { .. }
                         | ElementKind::Unbatch
-                        | ElementKind::Conveyor { .. } => {}
+                        | ElementKind::Conveyor { .. }
+                        | ElementKind::Transport { .. } => {}
                     }
                 }
             }),
@@ -960,6 +961,7 @@ fn showcase() -> Model {
     m.build(Experiment {
         time_unit: TimeUnit::Hours,
         length_unit: stochcraft_model::LengthUnit::Metres,
+        layout_scale: 1.0,
         warmup: 2.5,
         duration: 40.0,
         replications: 7,
