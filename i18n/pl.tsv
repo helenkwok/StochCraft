@@ -1005,3 +1005,6 @@ unit	yr	r.
 	At {time} {unit}: {n} items	W chwili {time} {unit}: {n} elementów
 	Run the model to fill the dashboard	Uruchom model, aby wypełnić pulpit
 	The resource and conveyor charts show the last run until this one ends	Wykresy zasobów i przenośników pokazują ostatni przebieg, dopóki ten się nie zakończy
+	Fonts	Czcionki
+	The full list of third-party licences is in the file THIRD-PARTY-LICENSES.html, which comes with the download.	Pełna lista licencji podmiotów trzecich znajduje się w pliku THIRD-PARTY-LICENSES.html, dołączonym do pobranej wersji.
+	Full list of third-party licences	Pełna lista licencji podmiotów trzecich

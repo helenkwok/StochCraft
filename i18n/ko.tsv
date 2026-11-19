@@ -1005,3 +1005,6 @@ unit	yr	년
 	At {time} {unit}: {n} items	{time} {unit} 시점: 항목 {n}개
 	Run the model to fill the dashboard	대시보드를 채우려면 모델을 실행하세요
 	The resource and conveyor charts show the last run until this one ends	자원과 컨베이어 차트는 이 실행이 끝날 때까지 지난 실행을 보여 줍니다
+	Fonts	글꼴
+	The full list of third-party licences is in the file THIRD-PARTY-LICENSES.html, which comes with the download.	서드파티 라이선스 전체 목록은 다운로드에 포함된 THIRD-PARTY-LICENSES.html 파일에 있습니다.
+	Full list of third-party licences	서드파티 라이선스 전체 목록

@@ -568,6 +568,28 @@ impl App {
                             ui.end_row();
                         }
                     });
+                ui.add_space(10.0);
+                ui.label(theme::strong(t("Fonts")));
+                for (names, licence) in FONTS {
+                    // Font names and the SPDX licence: data, laid out to wrap, as the longer
+                    // names do not fit the credits' two columns.
+                    ui.horizontal_wrapped(|ui| {
+                        ui.label(td(names));
+                        ui.label(theme::weak(ui, td(licence)));
+                    });
+                }
+                ui.add_space(10.0);
+                // The list the build makes of every Rust crate with its licence text: a file
+                // in the download, a page beside the app on the web.
+                #[cfg(not(target_arch = "wasm32"))]
+                ui.label(t(
+                    "The full list of third-party licences is in the file THIRD-PARTY-LICENSES.html, which comes with the download.",
+                ));
+                #[cfg(target_arch = "wasm32")]
+                ui.hyperlink_to(
+                    t("Full list of third-party licences"),
+                    "THIRD-PARTY-LICENSES.html",
+                );
             });
         self.about = open && self.about;
         if ctx.input(|i| i.key_pressed(Key::Escape)) {
@@ -632,6 +654,20 @@ const CREDITS: &[(&str, &str)] = &[
     ("serde, serde_json", "MIT OR Apache-2.0"),
     ("libm", "MIT OR Apache-2.0"),
     ("sha2", "MIT OR Apache-2.0"),
+];
+
+/// The fonts the app carries, for the About box (ATTRIBUTION.md, Assets): IBM Plex is embedded
+/// everywhere; the browser app also serves the craft-fonts faces beside it. The desktop release
+/// builds embed none of the others (no `CRAFT_FONTS_DIR`).
+const FONTS: &[(&str, &str)] = &[
+    ("IBM Plex Sans, IBM Plex Mono", "OFL-1.1"),
+    #[cfg(target_arch = "wasm32")]
+    ("BIZ UDPGothic, Noto Sans CJK SC, NanumGothic", "OFL-1.1"),
+    #[cfg(target_arch = "wasm32")]
+    (
+        "Noto Sans Arabic, Thai, Georgian, Hebrew, Devanagari, Symbols",
+        "OFL-1.1",
+    ),
 ];
 
 #[derive(Clone, Copy)]

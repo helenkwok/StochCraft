@@ -1005,3 +1005,6 @@ unit	yr	ஆண்டு
 	At {time} {unit}: {n} items	{time} {unit} நேரத்தில்: {n} பொருட்கள்
 	Run the model to fill the dashboard	டாஷ்போர்டை நிரப்ப மாதிரியை இயக்கவும்
 	The resource and conveyor charts show the last run until this one ends	இது முடியும் வரை வளம் மற்றும் கன்வேயர் வரைபடங்கள் கடைசி ஓட்டத்தைக் காட்டும்
+	Fonts	எழுத்துருக்கள்
+	The full list of third-party licences is in the file THIRD-PARTY-LICENSES.html, which comes with the download.	மூன்றாம் தரப்பு உரிமங்களின் முழுப் பட்டியல் THIRD-PARTY-LICENSES.html கோப்பில் உள்ளது; அது பதிவிறக்கத்துடன் வருகிறது.
+	Full list of third-party licences	மூன்றாம் தரப்பு உரிமங்களின் முழுப் பட்டியல்

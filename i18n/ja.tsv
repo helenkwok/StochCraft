@@ -1005,3 +1005,6 @@ unit	yr	年
 	At {time} {unit}: {n} items	{time} {unit} 時点: アイテム {n} 個
 	Run the model to fill the dashboard	ダッシュボードを表示するにはモデルを実行してください
 	The resource and conveyor charts show the last run until this one ends	リソースとコンベヤのグラフは、この実行が終わるまで前回の実行を表示します
+	Fonts	フォント
+	The full list of third-party licences is in the file THIRD-PARTY-LICENSES.html, which comes with the download.	サードパーティのライセンスの一覧は、ダウンロードに含まれるファイル THIRD-PARTY-LICENSES.html にあります。
+	Full list of third-party licences	サードパーティのライセンス一覧

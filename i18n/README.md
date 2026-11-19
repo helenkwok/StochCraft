@@ -742,6 +742,13 @@ engine's messages (validation, file notes) are English too.
   lo, th, ta, te, bn, ka, kk, hi, sq, et and lt, and the count nouns after "{n}" ("items",
   "more") in languages that inflect them by number (pl, cs, sk, sl, hr, bs, sr, ru, uk, lt, lo):
   the rows are not plural rows, so the form after a count may be wrong for some counts.
+- The rows for the About box's font credits and licence list ("Fonts", the sentence naming
+  THIRD-PARTY-LICENSES.html and the link "Full list of third-party licences") were
+  machine-drafted with Claude Code from the plain meaning of the English, with each catalog's
+  own word for "licence" where it has one (from "Licensed under the MIT License...") and the
+  everyday word for a font on a computer; "third party" is rendered as the language's
+  ordinary business term. Not checked against any other source, and not reviewed by native
+  speakers. The least certain are lo, th, ta, te, bn, ka, kk, hi and sq.
 
 **Adding or changing a string:** add the English in the code through `i18n::t` (or `tf`, `tn`),
 then add its row to each catalog here, or leave it out to show English until it is translated.

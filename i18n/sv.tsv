@@ -1005,3 +1005,6 @@ unit	yr	år
 	At {time} {unit}: {n} items	Vid {time} {unit}: {n} objekt
 	Run the model to fill the dashboard	Kör modellen för att fylla instrumentpanelen
 	The resource and conveyor charts show the last run until this one ends	Diagrammen för resurser och transportband visar den senaste körningen tills den här är klar
+	Fonts	Typsnitt
+	The full list of third-party licences is in the file THIRD-PARTY-LICENSES.html, which comes with the download.	Den fullständiga listan över tredjepartslicenser finns i filen THIRD-PARTY-LICENSES.html, som följer med nedladdningen.
+	Full list of third-party licences	Fullständig lista över tredjepartslicenser

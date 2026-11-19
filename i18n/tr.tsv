@@ -1005,3 +1005,6 @@ unit	yr	yıl
 	At {time} {unit}: {n} items	{time} {unit} anında: {n} öğe
 	Run the model to fill the dashboard	Panoyu doldurmak için modeli çalıştırın
 	The resource and conveyor charts show the last run until this one ends	Kaynak ve konveyör grafikleri, bu bitene kadar son çalıştırmayı gösterir
+	Fonts	Yazı tipleri
+	The full list of third-party licences is in the file THIRD-PARTY-LICENSES.html, which comes with the download.	Üçüncü taraf lisanslarının tam listesi, indirmeyle birlikte gelen THIRD-PARTY-LICENSES.html dosyasındadır.
+	Full list of third-party licences	Üçüncü taraf lisanslarının tam listesi

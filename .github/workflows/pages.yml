@@ -47,6 +47,9 @@ env:
   TRUNK_SHA256: f2b4680cd239693a646a2795e4633c625328d7b2a044fbe749fa3a2fe9e7036b
   # storytold/craft-fonts (OFL faces), pinned; ci.yml's wasm job checks out the same commit.
   CRAFT_FONTS_REV: aced4137c022f1f587624d48e81ec77e1914a9cc
+  # cargo-about (MIT OR Apache-2.0, https://github.com/EmbarkStudios/cargo-about), pinned;
+  # release.yml pins the same version: update both together.
+  CARGO_ABOUT_VERSION: 0.9.3
 
 jobs:
   build:
@@ -95,6 +98,17 @@ jobs:
           # A pull request's preview fetches the main site's fonts and copies none (see the top).
           STOCHCRAFT_PAGES_PREVIEW: ${{ github.event_name == 'pull_request' && '1' || '' }}
         run: trunk build --release --public-url ./
+      # The list of every Rust crate in the app with its licence text, served beside it (the About
+      # box links to it). Made for all targets at once, so it is the same file the release
+      # archives carry. Version pinned as in release.yml.
+      - name: Install cargo-about
+        run: cargo install cargo-about --version "$CARGO_ABOUT_VERSION" --locked
+      - name: THIRD-PARTY-LICENSES.html
+        run: |
+          cargo about generate --locked --workspace --fail --config about.toml \
+            --output-file dist/web/THIRD-PARTY-LICENSES.html about.hbs
+          ls -l dist/web/THIRD-PARTY-LICENSES.html
+          grep -q 'serde_json' dist/web/THIRD-PARTY-LICENSES.html
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: web

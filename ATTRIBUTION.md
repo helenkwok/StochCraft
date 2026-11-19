@@ -25,6 +25,7 @@ such file is listed below. GPL, LGPL, AGPL and similar sources are never read or
 | crates/mcp/src/server.rs, crates/mcp/src/tools.rs, crates/mcp/src/backend.rs, crates/mcp/src/lib.rs, docs/mcp.md | FieldCraft's `crates/mcp` and `docs/mcp.md` (https://github.com/tangency-labs/fieldcraft, commit 46c3ebf): the JSON-RPC framing, line and batch limits and lifecycle (`server.rs`, close to FieldCraft's), the tool definitions' shape, argument checking and the `batch` tool (`tools.rs`), the headless and connected backends (`backend.rs`), the `--connect` fallback (`lib.rs`) and the layout of the documentation. Copyright (c) 2026 FieldCraft contributors. The tools are StochCraft's own (open, run, check_model…; FieldCraft's meshing, solving and picture tools are not used), as is the control channel. | MIT OR Apache-2.0 |
 | crates/mcp/src/roots.rs | FieldCraft `crates/io/src/roots.rs` (same commit): read and write roots, links followed, whole-folder comparison. Copyright (c) 2026 FieldCraft contributors. Errors as plain messages; no "writes within" mode. | MIT OR Apache-2.0 |
 | crates/model/src/calendar.rs (`days_from_civil`, `civil_from_days`) | The day-count algorithms of Howard Hinnant's "chrono-Compatible Low-Level Date Algorithms" (https://howardhinnant.github.io/date_algorithms.html), in Rust for StochCraft. | Public domain (as their author dedicates them) |
+| about.hbs, about.toml | The template's data fields and loops (`overview`, `licenses`, `used_by`) follow the sample template of cargo-about (https://github.com/EmbarkStudios/cargo-about, 0.9.3, `about.hbs`); the page and its wording are StochCraft's. The tool itself is installed in CI (pinned, `--locked`) to make THIRD-PARTY-LICENSES.html and is not distributed. Copyright (c) 2020-2024 Embark Studios. | MIT OR Apache-2.0 |
 | i18n/*.tsv | The translations of general interface words (File, Edit, View, Save As…, Undo, Cancel…) and each language's name are taken from craft-i18n's shared catalogs, `locales/<locale>/common.tsv` (https://github.com/storytold/craft-i18n, commit 7dfcc8e), so StochCraft reads like the other Craft apps; the other rows are StochCraft's own. Those rows are machine-drafted and not reviewed by native speakers; i18n/README.md says how each set was written and which terms were checked against published sources. Copyright (c) 2026 craft-i18n contributors. | MIT OR Apache-2.0 |
 
 The interface's design (crates/ui-egui) follows the guidance of Impeccable's design skill for
@@ -33,6 +34,11 @@ https://github.com/pbakaus/impeccable, commit 695cea5, Apache-2.0). No code or t
 included.
 
 ## Assets
+
+The About box credits the fonts below (IBM Plex everywhere; the served faces on the web only)
+and links to THIRD-PARTY-LICENSES.html, the list of every Rust crate in the builds with its
+licence text, which CI makes with cargo-about (about.toml, about.hbs) and puts in each release
+archive and in the web build.
 
 | File | Author | Source | Licence |
 |---|---|---|---|

@@ -1005,3 +1005,6 @@ unit	yr	v
 	At {time} {unit}: {n} items	Hetkellä {time} {unit}: {n} kappaletta
 	Run the model to fill the dashboard	Aja malli täyttääksesi koontinäytön
 	The resource and conveyor charts show the last run until this one ends	Resurssi- ja kuljetinkaaviot näyttävät viimeisen ajon, kunnes tämä päättyy
+	Fonts	Fontit
+	The full list of third-party licences is in the file THIRD-PARTY-LICENSES.html, which comes with the download.	Kolmansien osapuolten lisenssien täydellinen luettelo on tiedostossa THIRD-PARTY-LICENSES.html, joka tulee latauksen mukana.
+	Full list of third-party licences	Kolmansien osapuolten lisenssien täydellinen luettelo

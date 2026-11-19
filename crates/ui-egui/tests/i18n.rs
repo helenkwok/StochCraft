@@ -289,13 +289,18 @@ fn every_string_has_a_row_in_every_catalog() {
     assert!(report.is_empty(), "strings without a translation:{report}");
 }
 
-/// Looked-up text that is data, not words to translate: library names and licences in About.
+/// Looked-up text that is data, not words to translate: library and font names and licences in About.
 const NOT_TEXT: &[&str] = &[
     "craft-libs",
     "serde, serde_json",
     "libm",
     "sha2",
     "MIT OR Apache-2.0",
+    // The fonts in About: names and the SPDX id (the browser app's rows are not drawn here).
+    "IBM Plex Sans, IBM Plex Mono",
+    "BIZ UDPGothic, Noto Sans CJK SC, NanumGothic",
+    "Noto Sans Arabic, Thai, Georgian, Hebrew, Devanagari, Symbols",
+    "OFL-1.1",
 ];
 
 /// Whether a string looked up on screen is left to craft-i18n's shared catalog: craft-keymap's

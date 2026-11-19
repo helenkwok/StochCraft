@@ -1005,3 +1005,6 @@ unit	yr	r.
 	At {time} {unit}: {n} items	V čase {time} {unit}: {n} položek
 	Run the model to fill the dashboard	Spusťte model, aby se přehled naplnil
 	The resource and conveyor charts show the last run until this one ends	Grafy zdrojů a dopravníků ukazují poslední běh, dokud tento neskončí
+	Fonts	Písma
+	The full list of third-party licences is in the file THIRD-PARTY-LICENSES.html, which comes with the download.	Úplný seznam licencí třetích stran je v souboru THIRD-PARTY-LICENSES.html, který je součástí stažené verze.
+	Full list of third-party licences	Úplný seznam licencí třetích stran

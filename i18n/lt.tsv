@@ -1005,3 +1005,6 @@ unit	yr	m.
 	At {time} {unit}: {n} items	Momentu {time} {unit}: {n} elementų
 	Run the model to fill the dashboard	Paleiskite modelį, kad užsipildytų skydelis
 	The resource and conveyor charts show the last run until this one ends	Išteklių ir konvejerių diagramos rodo paskutinį vykdymą, kol šis baigsis
+	Fonts	Šriftai
+	The full list of third-party licences is in the file THIRD-PARTY-LICENSES.html, which comes with the download.	Visas trečiųjų šalių licencijų sąrašas yra faile THIRD-PARTY-LICENSES.html, kuris pateikiamas su atsisiuntimu.
+	Full list of third-party licences	Visas trečiųjų šalių licencijų sąrašas
