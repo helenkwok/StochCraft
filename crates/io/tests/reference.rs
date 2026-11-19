@@ -446,7 +446,8 @@ fn edits() -> Vec<Edit> {
                         | ElementKind::ExclusiveGateway { .. }
                         | ElementKind::ParallelGateway
                         | ElementKind::Batch { .. }
-                        | ElementKind::Unbatch => {}
+                        | ElementKind::Unbatch
+                        | ElementKind::Conveyor { .. } => {}
                     }
                 }
             }),
