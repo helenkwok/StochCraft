@@ -321,19 +321,7 @@ fn compile_assign(p: &Property, slots: &[String], ty: PropertyType) -> Option<As
 /// Checks `model` and prepares it to run. On any error, returns every diagnostic (errors and
 /// warnings) so all of them can be fixed at once.
 pub fn compile(model: &Model) -> Result<Compiled, Vec<Diagnostic>> {
-    let mut diagnostics = model.validate();
-    // Conveyors can be built and saved, but there is no runtime for them yet (M5.1).
-    diagnostics.extend(
-        model
-            .elements
-            .iter()
-            .filter(|e| matches!(e.kind, ElementKind::Conveyor { .. }))
-            .map(|e| Diagnostic {
-                severity: Severity::Error,
-                at: Some(e.id.clone()),
-                problem: Problem::ConveyorNotSimulated,
-            }),
-    );
+    let diagnostics = model.validate();
     if diagnostics.iter().any(|d| d.severity == Severity::Error) {
         return Err(diagnostics);
     }
@@ -573,6 +561,9 @@ pub enum Metric {
     /// Servers and delays sending to a finite buffer: mean time an entity that left waited,
     /// after its service or delay, for room in the next buffer (zero when there was room).
     MeanBlockedTime,
+    /// A conveyor's mean time from an item getting on until it has left its end, waiting at the
+    /// end included.
+    MeanTimeOn,
     /// Servers sending to a finite buffer: time-average fraction of units blocked (holding a
     /// served entity while the next buffer is full).
     BlockingProbability,
@@ -712,6 +703,7 @@ impl Metric {
         Metric::MeanWorkInProgress,
         Metric::MeanTimeInSystem,
         Metric::MeanBlockedTime,
+        Metric::MeanTimeOn,
         Metric::BlockingProbability,
         Metric::Lost,
         Metric::LossProbability,
@@ -765,6 +757,7 @@ impl Metric {
             Metric::MeanWorkInProgress => "mean_work_in_progress",
             Metric::MeanTimeInSystem => "mean_time_in_system",
             Metric::MeanBlockedTime => "mean_blocked_time",
+            Metric::MeanTimeOn => "mean_time_on",
             Metric::BlockingProbability => "blocking_probability",
             Metric::Lost => "lost",
             Metric::LossProbability => "loss_probability",
@@ -826,6 +819,8 @@ pub struct ElementReport {
     /// as before): see [`Metric::MeanBlockedTime`] and the metrics after it. `lost` is also
     /// reported by every exclusive gateway, buffer or not.
     pub mean_blocked_time: Option<f64>,
+    /// A conveyor's mean time on it ([`Metric::MeanTimeOn`]).
+    pub mean_time_on: Option<f64>,
     pub blocking_probability: Option<f64>,
     /// Servers whose units fail: [`Metric::Availability`].
     pub availability: Option<f64>,
@@ -922,6 +917,7 @@ impl ElementReport {
             Metric::MeanWorkInProgress => self.mean_work_in_progress,
             Metric::MeanTimeInSystem => self.mean_time_in_system,
             Metric::MeanBlockedTime => self.mean_blocked_time,
+            Metric::MeanTimeOn => self.mean_time_on,
             Metric::BlockingProbability => self.blocking_probability,
             Metric::Lost => self.lost.map(|n| n as f64),
             Metric::LossProbability => self.loss_probability,
@@ -1731,6 +1727,29 @@ impl Builder {
             ElementKind::Delay {
                 duration,
                 processing_by: None,
+            },
+        )
+    }
+
+    /// A conveyor of `length` at `speed`, each item taking `item_length + gap` of it
+    /// ([`ElementKind::Conveyor`]).
+    pub fn conveyor(
+        &mut self,
+        name: &str,
+        length: f64,
+        speed: f64,
+        accumulating: bool,
+        item_length: f64,
+        gap: f64,
+    ) -> BlockId {
+        self.add(
+            name,
+            ElementKind::Conveyor {
+                length,
+                speed,
+                accumulating,
+                item_length,
+                gap,
             },
         )
     }

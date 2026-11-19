@@ -316,7 +316,7 @@ pub enum ElementKind {
     /// extension on a task, `stochcraft:conveyor`). An entity enters at 0 and leaves at the
     /// `length`; every entity takes a slot of pitch `item_length + gap`. At most
     /// ⌊`length` / pitch⌋ are on it at once, and it carries at most `speed` / pitch entities per
-    /// unit of time. It is not simulated yet (ROADMAP.md, M5.1).
+    /// unit of time; how it moves them is in ROADMAP.md, M5.1.
     Conveyor {
         /// The conveyor's length, in the experiment's [`LengthUnit`]; above 0.
         length: f64,
@@ -1701,9 +1701,6 @@ pub enum Problem {
         left: f64,
         utilisation: f64,
     },
-    /// Found when the model is prepared to run, not by [`Model::validate`] (a conveyor can be
-    /// drawn, saved and sized meanwhile): conveyors are not simulated yet.
-    ConveyorNotSimulated,
     /// Found from a run's results, not by [`Model::validate`]: the run had one replication, so
     /// its results have no confidence interval and cannot be told from chance.
     OneReplication,
@@ -1921,7 +1918,6 @@ impl Problem {
             Problem::EmptyCalendar => "empty_calendar",
             Problem::TimedIgnored => "timed_ignored",
             Problem::ZeroBatchSize => "zero_batch_size",
-            Problem::ConveyorNotSimulated => "conveyor_not_simulated",
             Problem::BadConveyorValue { .. } => "bad_conveyor_value",
             Problem::ConveyorTooShort { .. } => "conveyor_too_short",
             Problem::ZeroQuantity => "zero_quantity",
@@ -2213,7 +2209,6 @@ impl std::fmt::Display for Diagnostic {
                 "there are no arrivals outside the calendars, but none is given, so this start event never fires"
             ),
             Problem::ZeroBatchSize => write!(f, "a batch needs at least 1 entity"),
-            Problem::ConveyorNotSimulated => write!(f, "conveyors are not simulated yet"),
             Problem::BadConveyorValue { field } => {
                 let need = if *field == "gap" {
                     "0 or more"
