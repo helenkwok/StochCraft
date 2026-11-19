@@ -210,7 +210,9 @@ fn a_loop_at_one_time_never_freezes_a_frame() {
     frames(&mut h, 1);
     h.key_press(egui::Key::Enter);
     frames(&mut h, 30);
-    assert!(slowest.as_millis() < 500, "a frame took {slowest:?}");
+    // A frame that freezes on the loop takes seconds (7.9 s before the per-frame event budget);
+    // shared CI runners alone have taken over 600 ms for an ordinary frame (#196).
+    assert!(slowest.as_millis() < 2_000, "a frame took {slowest:?}");
     assert_eq!(time(&h), 1.0, "{}", clock(&h));
     assert_eq!(h.state().status(), "Watching run 1");
 }
