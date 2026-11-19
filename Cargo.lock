@@ -3411,7 +3411,7 @@ checksum = "a2eb9349b6444b326872e140eb1cf5e7c522154d69e7a0ffb0fb81c06b37543f"
 
 [[package]]
 name = "stochcraft"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "craft-atomic",
  "craft-dialogs",
@@ -3431,7 +3431,7 @@ dependencies = [
 
 [[package]]
 name = "stochcraft-blocks"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "stochcraft-des",
  "stochcraft-model",
@@ -3441,7 +3441,7 @@ dependencies = [
 
 [[package]]
 name = "stochcraft-cli"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "clap",
  "serde_json",
@@ -3451,14 +3451,14 @@ dependencies = [
 
 [[package]]
 name = "stochcraft-des"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "stochcraft-random",
 ]
 
 [[package]]
 name = "stochcraft-engine"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "craft-atomic",
  "schemars",
@@ -3475,7 +3475,7 @@ dependencies = [
 
 [[package]]
 name = "stochcraft-experiment"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "stochcraft-blocks",
  "stochcraft-des",
@@ -3486,7 +3486,7 @@ dependencies = [
 
 [[package]]
 name = "stochcraft-io"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "quick-xml 0.42.0",
  "stochcraft-blocks",
@@ -3496,7 +3496,7 @@ dependencies = [
 
 [[package]]
 name = "stochcraft-mcp"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "serde_json",
  "stochcraft-engine",
@@ -3504,35 +3504,35 @@ dependencies = [
 
 [[package]]
 name = "stochcraft-model"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "stochcraft-random",
 ]
 
 [[package]]
 name = "stochcraft-random"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "libm",
 ]
 
 [[package]]
 name = "stochcraft-render"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "libm",
 ]
 
 [[package]]
 name = "stochcraft-stats"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "libm",
 ]
 
 [[package]]
 name = "stochcraft-testkit"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "serde_json",
  "sha2",
@@ -3541,7 +3541,7 @@ dependencies = [
 
 [[package]]
 name = "stochcraft-ui-egui"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "craft-fonts-build",
  "craft-i18n",
@@ -3564,7 +3564,7 @@ dependencies = [
 
 [[package]]
 name = "stochcraft-web"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "craft-platform",
  "eframe",
@@ -4670,7 +4670,7 @@ checksum = "e450f9b2ed1dff33c94c12589a87338689467b9c4f5d8a5710bd09a847d2c8a7"
 
 [[package]]
 name = "xtask"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "serde_json",
  "sha2",
