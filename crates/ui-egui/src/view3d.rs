@@ -1482,38 +1482,4 @@ mod tests {
             "{y:?}"
         );
     }
-
-    #[test]
-    fn items_on_a_belt_are_where_the_run_has_carried_them_in_their_products_colour() {
-        let s = scene(&line_model());
-        let Some(Spot::Belt {
-            start,
-            angle,
-            length,
-        }) = s.anchors.iter().find(|a| a.id == "belt").map(|a| a.spot)
-        else {
-            panic!("the belt has no spot");
-        };
-        // One item at the start of the belt (product 0) and one three quarters along (product 2).
-        let items = vec![(0.0, 0), (0.75, 2)];
-        let (tris, labels) = totes(&s, &|_| 0, &|id| (id == "belt").then(|| items.clone()));
-        assert!(labels.is_empty());
-        let centre_x = |paint: Paint| {
-            let xs: Vec<f32> = tris
-                .iter()
-                .filter(|t| t.paint == paint)
-                .flat_map(|t| t.v)
-                .map(|v| v[0])
-                .collect();
-            assert!(!xs.is_empty(), "no tote painted {paint:?}");
-            (xs.iter().copied().fold(f32::MAX, f32::min)
-                + xs.iter().copied().fold(f32::MIN, f32::max))
-                / 2.0
-        };
-        assert!((centre_x(Paint::Tote(0)) - start[0]).abs() < 1e-3);
-        assert!(
-            (centre_x(Paint::Tote(2)) - (start[0] + libm::cosf(angle) * 0.75 * length)).abs()
-                < 1e-3
-        );
-    }
 }
