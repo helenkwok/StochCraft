@@ -751,6 +751,13 @@ fn part(key: &'static str, args: Args) -> Vec<Part> {
 
 /// A number as short as it reads: at most four decimals, no trailing zeros.
 fn num(v: f64) -> String {
+    // A value that is no number at all is said in words: users read "NaN" and "inf" as codes.
+    if v.is_nan() {
+        return "undefined".to_owned();
+    }
+    if v.is_infinite() {
+        return "infinite".to_owned();
+    }
     let s = format!("{v:.4}");
     if s.contains('.') {
         s.trim_end_matches('0').trim_end_matches('.').to_owned()
