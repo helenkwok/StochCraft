@@ -3565,13 +3565,13 @@ impl Model {
                 continue;
             }
             for (from, tos) in outgoing {
-                // A shortest-queue gateway leaves the waiting to its sender.
+                // A shortest-queue or divert gateway leaves the waiting to its sender.
                 let holds_up = self.element(from).is_some_and(|g| {
                     g.kind.is_gateway()
                         && !matches!(
                             g.kind,
                             ElementKind::ExclusiveGateway {
-                                routing: Routing::ShortestQueue,
+                                routing: Routing::ShortestQueue | Routing::Divert,
                                 ..
                             }
                         )
