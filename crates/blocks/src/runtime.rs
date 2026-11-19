@@ -13,8 +13,8 @@ use stochcraft_des::{
 use stochcraft_model::calendar::{self, Calendar, DateTime};
 use stochcraft_model::{
     Balking, Breakdown, Demand, DemandPer, Element, ElementId, ElementKind, HealthCheck, Model,
-    Need, OnShiftEnd, OnTakeout, PatienceUntil, PlaceWhileOut, Power, PropertyType, PropertyValue,
-    QueueLimit, ResourcePool, Routing, Setup, Timed,
+    Need, OnShiftEnd, OnTakeout, PatienceUntil, PlaceWhileOut, Power, QueueLimit, ResourcePool,
+    Routing, Setup, Timed,
 };
 use stochcraft_random::{Dist, Rng};
 use stochcraft_stats::{Tally, TimeWeighted};
@@ -4963,37 +4963,11 @@ struct Product {
 }
 
 impl Product {
-    /// The first property (in the order elements and their properties are declared) that is text,
-    /// if the model has one. Its values are those of every assignment of it that gives text: a
-    /// mix's values in order, and fixed text.
+    /// The model's product ([`Model::product_values`]), if it has one.
     fn of(model: &Model, slots: &[String]) -> Option<Self> {
-        let types = model.property_types();
-        let name = model
-            .elements
-            .iter()
-            .flat_map(|e| &e.properties)
-            .map(|p| &p.name)
-            .find(|n| matches!(types.get(*n), Some(PropertyType::String)))?;
-        let mut values: Vec<String> = Vec::new();
-        for p in model
-            .elements
-            .iter()
-            .flat_map(|e| &e.properties)
-            .filter(|p| p.name == *name)
-        {
-            let texts: Vec<&String> = match &p.value {
-                PropertyValue::Choice(v) => v.iter().map(|(_, s)| s).collect(),
-                PropertyValue::Text(s) => vec![s],
-                _ => Vec::new(),
-            };
-            for s in texts {
-                if !values.contains(s) {
-                    values.push(s.clone());
-                }
-            }
-        }
+        let (name, values) = model.product_values()?;
         Some(Self {
-            slot: slots.binary_search(name).ok()?,
+            slot: slots.binary_search(&name).ok()?,
             values,
         })
     }
