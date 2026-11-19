@@ -1100,7 +1100,7 @@ fn a_patience_and_an_abandoned_way_are_set_in_the_inspector() {
                 .and_then(|c| c["id"].as_str().map(str::to_owned))
         })
         .expect("the way out");
-    click(&mut h, Role::CheckBox, &format!("Abandoned on {way}"));
+    click(&mut h, Role::CheckBox, &format!("Gave up on {way}"));
     let abandoned = model(&h)["connections"]
         .as_array()
         .and_then(|cs| cs.iter().find(|c| c["id"] == way.as_str()).cloned())

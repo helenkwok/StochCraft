@@ -168,29 +168,24 @@ pub struct Problem {
     pub at: Option<String>,
     /// The engine's stable code for it (`zero_capacity`, `bad_distribution`…).
     pub code: String,
-    pub message: String,
+    /// The diagnostic as the engine sent it: what the message is built from in the interface
+    /// language ([`crate::i18n::engine_message`]).
+    diagnostic: Value,
 }
 
 impl Problem {
-    /// The message without the engine's "error at `id`: " or "error: ": the word is a label of
-    /// its own, and the place is the block shown.
-    pub fn short_message(&self) -> &str {
-        let m = &self.message;
-        ["error at `", "warning at `"]
-            .iter()
-            .find_map(|head| {
-                m.strip_prefix(head)
-                    .and_then(|rest| rest.split_once("`: "))
-                    .map(|(_, m)| m)
-            })
-            .or_else(|| m.strip_prefix("error: "))
-            .or_else(|| m.strip_prefix("warning: "))
-            .unwrap_or(m)
+    /// The message in the interface language, without the word "Error" or "Warning", which is a
+    /// label of its own. It names the block and says what to do; the place is the block shown.
+    pub fn text(&self) -> String {
+        crate::i18n::engine_message(&self.diagnostic)
     }
 
     /// The field it concerns, as the inspector keys it under its block (`capacity`,
     /// `service`, `breakdown/repair`) or the model page keys it (`x/replications`), when known.
     pub fn field(&self) -> Option<String> {
+        if let Some(f) = self.diagnostic["field"].as_str() {
+            return Some(f.to_owned());
+        }
         let f = match self.code.as_str() {
             "zero_capacity" => "capacity",
             "zero_batch_size" => "size",
@@ -199,21 +194,6 @@ impl Problem {
             "patience_negative" => "patience",
             "health_check_interval_not_positive" => "health_check/check_interval",
             "health_check_limit_not_valid" => "health_check/check_limit",
-            // "`id`: service: the mean …": the parameter named first.
-            "bad_distribution" => match self.short_message().split_once(':')?.0 {
-                p @ ("interarrival" | "service" | "duration" | "transfer" | "setup"
-                | "planned_run_time" | "patience") => p,
-                "time_to_failure" => "breakdown/time_to_failure",
-                "repair" => "breakdown/repair",
-                _ => return None,
-            },
-            "bad_experiment" => {
-                let m = self.short_message();
-                return ["replications", "warm-up", "duration"]
-                    .iter()
-                    .find(|f| m.contains(*f))
-                    .map(|f| format!("x/{}", f.replace("warm-up", "warmup")));
-            }
             _ => return None,
         };
         Some(f.to_owned())
@@ -247,7 +227,7 @@ impl App {
                 error: d["severity"] == "error",
                 at: d["at"].as_str().map(str::to_owned),
                 code: d["code"].as_str().unwrap_or("").to_owned(),
-                message: d["message"].as_str().unwrap_or("").to_owned(),
+                diagnostic: d.clone(),
             })
             .collect()
     }
@@ -296,7 +276,7 @@ impl App {
             Some(b) if !f.starts_with("x/") => format!("{b}/{f}"),
             _ => f,
         }));
-        self.report_error(pr.short_message().to_owned());
+        self.report_error(pr.text());
         self.status_at = block;
         true
     }
@@ -619,7 +599,7 @@ impl App {
             ui.label(theme::strong(word).color(color));
             // The word is the label and the place is the inspector or the Show link, so only
             // the rest of the engine's message is shown.
-            ui.label(pr.short_message());
+            ui.label(pr.text());
             if link
                 && let Some(at) = &pr.at
                 && ui.link(tf("Show {id}", &[("id", at)])).clicked()
@@ -726,7 +706,7 @@ impl App {
         schema["properties"]["gap"]["minimum"] = json!(0.0);
         schema["properties"]["gap"]["description"] = Value::Null;
         schema["properties"]["accumulating"]["description"] = json!(t(
-            "Ticked, items queue up at the end while the rest keep moving. Unticked, the whole belt stops when the item at the end cannot leave."
+            "Ticked, entities queue up at the end while the rest keep moving. Unticked, the whole belt stops when the entity at the end cannot leave."
         ));
         let unit = self.time_unit_label();
         // A conveyor's lengths are in the length unit, its speed in that per the time unit.
@@ -1482,10 +1462,10 @@ impl App {
     /// way out.
     fn abandoned_field(&mut self, ui: &mut egui::Ui, cid: &str, c: &Value) {
         let mut abandoned = c["abandoned"].as_bool().unwrap_or(false);
-        let r = ui.checkbox(&mut abandoned, t("Abandoned")).on_hover_text(t(
+        let r = ui.checkbox(&mut abandoned, t("Gave up")).on_hover_text(t(
             "Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.",
         ));
-        let (ticked, name) = (abandoned, tf("Abandoned on {id}", &[("id", cid)]));
+        let (ticked, name) = (abandoned, tf("Gave up on {id}", &[("id", cid)]));
         r.widget_info(|| egui::WidgetInfo::selected(egui::Role::CheckBox, true, ticked, &name));
         if r.changed() {
             self.execute("flow.set", json!({ "id": cid, "abandoned": abandoned }));
@@ -1511,7 +1491,7 @@ impl App {
     fn balked_field(&mut self, ui: &mut egui::Ui, cid: &str, c: &Value) {
         let mut balked = c["balked"].as_bool().unwrap_or(false);
         let r = ui.checkbox(&mut balked, t("Balked")).on_hover_text(t(
-            "Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.",
+            "Entities that do not join the waiting room take this flow at once (to try again later, say), instead of being lost; they count as balked here.",
         ));
         let (ticked, name) = (balked, tf("Balked on {id}", &[("id", cid)]));
         r.widget_info(|| egui::WidgetInfo::selected(egui::Role::CheckBox, true, ticked, &name));
@@ -1580,7 +1560,7 @@ impl App {
         let patience = el["patience"].clone();
         let mut on = patience.is_object();
         let r = ui.checkbox(&mut on, t("Entities give up waiting")).on_hover_text(t(
-            "Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.",
+            "Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the flow ticked “Gave up”, or leaves the model.",
         ));
         if r.changed() {
             let v = if on {
@@ -1673,7 +1653,7 @@ impl App {
             ));
         ui.radio_value(&mut chosen, "retry".to_owned(), t("Retry elsewhere"))
             .on_hover_text(t(
-                "The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.",
+                "The job stops at once: the entity goes back to the front of the waiting room for any server on shift, and the work done on it is wasted.",
             ));
         ui.radio_value(&mut chosen, "resume".to_owned(), t("Resume when back on shift"))
             .on_hover_text(t(
@@ -1771,7 +1751,7 @@ impl App {
         ui.label(t("Job under way on a server taken out:"));
         ui.radio_value(&mut chosen, "retry".to_owned(), t("Retry elsewhere"))
             .on_hover_text(t(
-                "The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.",
+                "The connection drops and the client tries again: the entity goes back to the front of the waiting room at once, and the work done on it is wasted.",
             ));
         ui.radio_value(&mut chosen, "resume".to_owned(), t("Resume after restart"))
             .on_hover_text(t(

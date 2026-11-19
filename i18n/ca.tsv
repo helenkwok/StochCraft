@@ -21,8 +21,6 @@
 	A caller on hold: once a unit takes it, the entity stays.	Una trucada en espera: un cop una unitat l'agafa, l'entitat es queda.
 	A client that times out: if its time runs out during service, it gives up then, and the unit finishes the job anyway (wasted work).	Un client que esgota el temps d'espera: si el temps se li acaba durant el servei, abandona en aquell moment, i la unitat acaba la feina igualment (treball malbaratat).
 	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	El fitxer nou només conté el model: el que StochCraft no entén de {file} queda fora.
-	Abandoned	Abandonades
-	Abandoned on {id}	Abandonades a {id}
 	About StochCraft	Quant a StochCraft
 	About {app}	Quant a {app}
 	Accent	Accent
@@ -162,7 +160,6 @@
 	Duration	Durada
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Cada anàlisi executa l'experiment diverses vegades amb la mateixa llavor, de manera que les diferències vénen del canvi, no de l'atzar. Pot trigar una estona.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Cada entitat pren, tota alhora, la primera d'aquestes alternatives que es pugui satisfer en aquell moment i torna les unitats quan surt.
-	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Cada entitat espera aquí com a màxim un temps que se li assigna a l'atzar quan arriba, i després abandona: pren la sortida marcada com a «Abandonades» o surt del model.
 	Each server (unit) is checked every so often, as a load balancer probes the servers behind it. One that fails, with too many waiting, is taken out of service for a restart, then comes back.	Cada servidor (unitat) es comprova cada cert temps, com un distribuïdor de càrrega sondeja els servidors que té darrere. El que falla, amb massa entitats esperant, es retira del servei per a un reinici i després torna.
 	Edit	Edita
 	Edit themes…	Edita els temes…
@@ -412,7 +409,6 @@
 	Run	Executa
 	Run cancelled	Execució cancel·lada
 	Run experiment	Executa l'experiment
-	Play run 1 step by step and see each block's queue on the diagram	Reprodueix l'execució 1 pas a pas i mostra la cua de cada bloc al diagrama
 	Run the experiment ({shortcut})	Executa l'experiment ({shortcut})
 	Run the experiment again to see this result's spread.	Torneu a executar l'experiment per veure la dispersió d'aquest resultat.
 	Run the experiment at each value of one parameter, and compare a result.	Executar l'experiment amb cada valor d'un paràmetre i comparar un resultat.
@@ -433,7 +429,6 @@
 	Scrap ratio	Proporció de rebuig
 	Seed	Llavor
 	Select All	Selecciona-ho tot
-	Select a block to see its queue over time.	Seleccioneu un bloc per veure'n la cua al llarg del temps.
 	Sender waits during transfer	L'emissor espera durant la transferència
 	Separate the values with semicolons or spaces.	Separeu els valors amb punts i comes o espais.
 	Sequential	Seqüencials
@@ -497,10 +492,8 @@
 	Text	Text
 	Text on accent	Text sobre l'accent
 	Text on header	Text de la capçalera
-	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	La connexió cau i el client ho torna a intentar: l'entitat torna de seguida al capdavant de la cua, i el treball fet en ella es malbarata.
 	The entity waits on its server and the job carries on with what was left once the server is back.	L'entitat espera al seu servidor i la feina continua amb el que quedava quan el servidor torna.
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more runs would narrow it.	L'interval arriba per sota de la proporció objectiu del {share}, de manera que no es demostra amb un 95% de confiança que es compleixi; més execucions l'estretirien.
-	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	La feina s'atura de seguida: l'entitat torna al capdavant de la cua per a qualsevol servidor de torn, i el treball fet en ella es malbarata.
 	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	La feina s'atura de seguida; l'entitat espera al seu servidor i la feina continua amb el que quedava quan aquest servidor torna a ser de torn.
 	The last task with a resource it finished at	L'última tasca amb un recurs per on ha passat la peça
 	The mean time to the stop condition is over the runs that met it only; the others ran to their time limit.	El temps mitjà fins a la condició d'aturada és només sobre les execucions que l'han complert; les altres han arribat al seu límit de temps.
@@ -690,7 +683,6 @@ unit	yr	a
 	Balked on {id}	No s'hi han afegit a {id}
 	Balking	No afegir-se a la cua
 	Count those in service	Comptar també les que són en servei
-	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Les entitats que no s'afegeixen a la cua prenen aquest flux de seguida (per tornar-ho a provar més tard, per exemple), en lloc de perdre's; aquí compten com a no afegides a la cua.
 	Joins with probability	S'afegeix a la cua amb probabilitat
 	Number waiting	Nombre en espera
 	Share balked	Proporció que no s'hi ha afegit
@@ -908,7 +900,6 @@ unit	yr	a
 @plural	Finished {n} run|Finished {n} runs	Acabada {n} execució|Acabades {n} execucions
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	S'ha obert {file} ({n} avís)|S'ha obert {file} ({n} avisos)
 @plural	Removed {n} block|Removed {n} blocks	S'ha eliminat {n} bloc|S'han eliminat {n} blocs
-@plural	Makes {n} independent run of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Fa {n} execució independent del model a partir de la llavor {seed}. Els resultats de cada element inclouen la semiamplada d'un interval de confiança del 95%.|Fa {n} execucions independents del model a partir de la llavor {seed}. Els resultats de cada element inclouen la semiamplada d'un interval de confiança del 95%.
 @plural	The stop condition was met in {met} of {n} run, after {time} {unit} on average.|The stop condition was met in {met} of {n} runs, after {time} {unit} on average.	La condició d'aturada s'ha complert en {met} de {n} execució, després de {time} {unit} de mitjana.|La condició d'aturada s'ha complert en {met} de {n} execucions, després de {time} {unit} de mitjana.
 @plural	{done} of {n} run finished|{done} of {n} runs finished	Acabada {done} de {n} execució|Acabades {done} de {n} execucions
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} run|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} runs	{name}: {mean}{unit}\nInterval del 95% de {low} a {high}{unit}\nen {n} execució|{name}: {mean}{unit}\nInterval del 95% de {low} a {high}{unit}\nen {n} execucions
@@ -938,7 +929,6 @@ unit	yr	a
 	kilometres	quilòmetres
 	inches	polzades
 	feet	peus
-	Ticked, items queue up at the end while the rest keep moving. Unticked, the whole belt stops when the item at the end cannot leave.	Marcat, els elements fan cua al final mentre els altres continuen avançant. Desmarcat, tota la cinta s'atura quan l'element del final no pot sortir.
 	A belt that carries entities from one end to the other. It has a length and a speed, and each entity takes a pitch of belt: its item length plus the gap kept free after it. So it holds at most length ÷ pitch entities and carries at most speed ÷ pitch per time unit. Accumulating: entities queue up at the end while the rest keep moving; otherwise the whole belt stops.	Una cinta que porta entitats d'un extrem a l'altre. Té una longitud i una velocitat, i cada entitat ocupa un pas de cinta: la longitud del seu element més la separació que es deixa lliure darrere seu. Per tant, hi caben com a màxim longitud ÷ pas entitats i en transporta com a màxim velocitat ÷ pas per unitat de temps. Acumulació: les entitats fan cua al final mentre les altres continuen avançant; si no, s'atura tota la cinta.
 	Station	Estació
 	Kind	Tipus
@@ -992,16 +982,162 @@ unit	yr	a
 	Time on conveyors	Temps a les cintes transportadores
 	No conveyors in this model	No hi ha cintes transportadores en aquest model
 	Fills in when the run ends	S'omple quan acaba l'execució
-	How long each item spends on the conveyors.	Quant de temps passa cada peça a les cintes transportadores.
-	No item has left a conveyor yet	Cap peça no ha sortit encara d'una cinta
-	Share of items by time on a conveyor, in {unit}	Proporció de peces segons el temps en una cinta, en {unit}
-	Time on conveyors: {n} items between {lo} and {hi} {unit}	Temps a les cintes: {n} peces entre {lo} i {hi} {unit}
-	{from} to {to} {unit}: {share} of items ({n})	De {from} a {to} {unit}: {share} de les peces ({n})
-	Items on conveyors over time	Peces a les cintes al llarg del temps
-	Items in the model over time	Peces al model al llarg del temps
-	How many items are on the conveyors over time.	Quantes peces hi ha a les cintes al llarg del temps.
-	How many items are in the model over time.	Quantes peces hi ha al model al llarg del temps.
 	Nothing was recorded over time in these results	En aquests resultats no s'ha enregistrat res al llarg del temps
-	At {time} {unit}: {n} items	A {time} {unit}: {n} peces
 	Run the model to fill the dashboard	Executeu el model per omplir el tauler
 	The resource and conveyor charts show the last run until this one ends	Els gràfics de recursos i cintes mostren l'última execució fins que aquesta acabi
+# Validation messages, new labels and word changes (issue #145)
+	The id “{id}” is not valid. Start an id with a letter or an underscore, then use only letters, digits, dots, hyphens and underscores.	L'identificador «{id}» no és vàlid. Comenceu un identificador amb una lletra o un guió baix i useu després només lletres, dígits, punts, guionets i guions baixos.
+	More than one block, flow, pool or calendar has the id “{id}”. Give each its own id.	Més d'un bloc, flux, grup o calendari té l'identificador «{id}». Doneu a cadascun el seu propi identificador.
+	The flow {flow} uses a block that does not exist. Remove the flow, or connect it to a block that exists.	El flux {flow} fa servir un bloc que no existeix. Elimineu el flux o connecteu-lo a un bloc que existeixi.
+	The flow {flow} leads into an Arrivals block, which takes no input. Remove the flow, or send it to another block.	El flux {flow} arriba a un bloc Arribades, que no admet entrada. Elimineu el flux o envieu-lo a un altre bloc.
+	The flow {flow} leaves a Departures block, which has no output. Remove the flow, or start it from another block.	El flux {flow} surt d'un bloc Sortides, que no té sortida. Elimineu el flux o feu que parteixi d'un altre bloc.
+	The flow {flow} leads from a block back to itself. Remove it, or send it to another block.	El flux {flow} va d'un bloc a ell mateix. Elimineu-lo o envieu-lo a un altre bloc.
+	{block} has nowhere to send entities. Add a flow from it to the next block.	{block} no té on enviar les entitats. Afegiu un flux des d'ell fins al bloc següent.
+	{block} has {count} flows out, and only a Decision or a Split or join block can send entities down several. Remove the extra flows, or add a Decision block.	{block} té {count} fluxos de sortida, i només un bloc Decisió o Divideix o uneix pot enviar entitats per diversos. Elimineu els fluxos sobrants o afegiu un bloc Decisió.
+	In “{field}” of {block}, set “{param}” to a finite number.	A «{field}» del bloc {block}, establiu «{param}» en un nombre finit.
+	In “{field}” of {block}, set “{param}” to a number above 0.	A «{field}» del bloc {block}, establiu «{param}» en un nombre més gran que 0.
+	In “{field}” of {block}, set “{param}” to 0 or more.	A «{field}» del bloc {block}, establiu «{param}» en 0 o més.
+	In “{field}” of {block}, set “{param}” to 1 or more.	A «{field}» del bloc {block}, establiu «{param}» en 1 o més.
+	In “{field}” of {block}, set “{param}” to a number from 0 to 1.	A «{field}» del bloc {block}, establiu «{param}» en un nombre de 0 a 1.
+	In “{field}” of {block}, set “Minimum” below “Maximum”, and any “Most likely” value between them.	A «{field}» del bloc {block}, establiu «Mínim» per sota de «Màxim», i qualsevol valor de «Més probable» entre tots dos.
+	In “{field}” of {block}, add data points whose probabilities add up to more than 0.	A «{field}» del bloc {block}, afegiu punts de dades les probabilitats dels quals sumin més de 0.
+	{block} would never have a unit to work with. Give it at least 1 unit.	{block} no tindria mai cap unitat amb què treballar. Doneu-li almenys 1 unitat.
+	{block} would make entities without end, because its “Time between arrivals” is always 0. Give it a time above 0, or set an “Arrival limit”.	{block} crearia entitats sense fi, perquè el seu «Temps entre arribades» és sempre 0. Doneu-li un temps més gran que 0 o definiu un «Límit d'arribades».
+	The model has no Arrivals block, so nothing will happen. Add an Arrivals block.	El model no té cap bloc Arribades, així que no passarà res. Afegiu un bloc Arribades.
+	The model has no Departures block, so no time in system is measured. Add a Departures block.	El model no té cap bloc Sortides, així que no es mesura cap temps al sistema. Afegiu un bloc Sortides.
+	No entity can reach {block} from an Arrivals block. Connect it to a block that entities pass through.	Cap entitat no pot arribar a {block} des d'un bloc Arribades. Connecteu-lo a un bloc pel qual passin les entitats.
+	Entities in {block} can never reach a Departures block. Connect it on towards Departures.	Les entitats de {block} no poden arribar mai a un bloc Sortides. Connecteu-lo, de bloc en bloc, fins a Sortides.
+	Set the “{state}” power of {block} to a number of kilowatts, 0 or more.	Establiu la potència «{state}» del bloc {block} en un nombre de quilowatts, 0 o més.
+	Set the warm-up of the experiment to 0 or more.	Establiu l'escalfament de l'experiment en 0 o més.
+	Set the duration of the experiment to more than 0.	Establiu la durada de l'experiment en un valor més gran que 0.
+	Set the number of runs of the experiment to 1 or more.	Establiu el nombre d'execucions de l'experiment en 1 o més.
+	Set the layout scale (length units per drawing unit) to a finite number above 0.	Establiu l'escala de la disposició (unitats de longitud per unitat de dibuix) en un nombre finit més gran que 0.
+	A property of {block} has no name. Give it a name, or remove it.	Una propietat del bloc {block} no té nom. Poseu-li un nom o elimineu-la.
+	{block} sets the property “{name}” twice. Keep one of them.	{block} defineix dues vegades la propietat «{name}». Conserveu-ne només una.
+	The property “{name}” of {block} needs shares that are not negative and add up to more than 0. Change the shares.	La propietat «{name}» del bloc {block} necessita proporcions no negatives que sumin més de 0. Canvieu les proporcions.
+	The property “{name}” has the type “{type2}” on {block} but “{type}” on another block. Give it one type everywhere.	La propietat «{name}» té el tipus «{type2}» a {block} però «{type}» en un altre bloc. Doneu-li un sol tipus a tot arreu.
+	The value of the property “{name}” on {block} does not fit its type, “{type}”. Change the value or the type.	El valor de la propietat «{name}» a {block} no correspon al seu tipus, «{type}». Canvieu el valor o el tipus.
+	The expression for the property “{name}” on {block} cannot be used: {error}. Correct “{expression}”.	L'expressió de la propietat «{name}» a {block} no es pot fer servir: {error}. Corregiu «{expression}».
+	{block} reads the property “{name}”, which no block sets, so it would read as empty. Set it on an earlier block, or correct the name.	{block} llegeix la propietat «{name}», que cap bloc no estableix, així que es llegiria com a buida. Establiu-la en un bloc anterior o corregiu el nom.
+	The setup of {block} has times for particular changes but no property to watch. Choose a property under “Only when this property changes”.	La preparació del bloc {block} té temps per a canvis concrets però cap propietat per vigilar. Trieu una propietat a «Només quan canvia aquesta propietat».
+	{block} has times for particular values but no property to read them from. Choose a property under “Service time by property”.	{block} té temps per a valors concrets però cap propietat de la qual llegir-los. Trieu una propietat a «Temps de servei segons una propietat».
+	{block} has two times for the value “{value}”. Keep one.	{block} té dos temps per al valor «{value}». Conserveu-ne només un.
+	Set the time of {block} for the value “{value}” to a mean of 0 or more.	Establiu el temps del bloc {block} per al valor «{value}» en una mitjana de 0 o més.
+	The scrap at {block} counts against {other}, which is not a task with a resource. Choose a task with a resource.	El rebuig a {block} es compta contra {other}, que no és una tasca amb un recurs. Trieu una tasca amb un recurs.
+	Set “Planned run time per item” of {block} to a mean above 0.	Establiu «Temps d'execució planificat per peça» del bloc {block} en una mitjana més gran que 0.
+	Set “Time before giving up” of {block} to a mean of 0 or more.	Establiu «Temps abans d'abandonar» del bloc {block} en una mitjana de 0 o més.
+	The flow {flow} is ticked “Gave up”, but only a task with a resource and a “Time before giving up” sends entities that give up. Untick it, or set a “Time before giving up” on {block}.	El flux {flow} està marcat com a «Han abandonat», però només una tasca amb un recurs i un «Temps abans d'abandonar» envia entitats que abandonen. Desmarqueu-lo o definiu un «Temps abans d'abandonar» a {block}.
+	{count} flows out of {block} are ticked “{way}”; at most one can be. Untick all but one.	{count} fluxos de sortida del bloc {block} estan marcats com a «{way}»; només un ho pot estar. Desmarqueu-los tots menys un.
+	The flow {flow} is ticked “Turned away”, but only a task with a resource and a limited waiting room turns entities away. Untick it, or limit the waiting room of {block}.	El flux {flow} està marcat com a «Rebutjades», però només una tasca amb un recurs i una sala d'espera limitada rebutja entitats. Desmarqueu-lo o limiteu la sala d'espera del bloc {block}.
+	The flow {flow} is ticked both “Gave up” and “Turned away”. Keep one of them.	El flux {flow} està marcat alhora com a «Han abandonat» i «Rebutjades». Conserveu-ne només una de les dues marques.
+	Set every chance of joining in the balking table of {block} to a number from 0 to 1.	A la taula de no afegir-se a la cua del bloc {block}, establiu cada probabilitat d'afegir-s'hi en un nombre de 0 a 1.
+	Put the rows of the balking table of {block} in increasing order of “Number waiting”.	A la taula de no afegir-se a la cua del bloc {block}, poseu les files en ordre creixent de «Nombre en espera».
+	The flow {flow} is ticked “Balked”, but only a task with a resource and balking sends entities that balk. Untick it, or turn on balking for {block}.	El flux {flow} està marcat com a «No s'hi han afegit», però només una tasca amb un recurs amb l'opció de no afegir-se a la cua envia entitats que no s'hi afegeixen. Desmarqueu-lo o activeu aquesta opció a {block}.
+	The flow {flow} is ticked “Balked” and also “Gave up” or “Turned away”. Keep one of them.	El flux {flow} està marcat com a «No s'hi han afegit» i també com a «Han abandonat» o «Rebutjades». Conserveu-ne només una de les marques.
+	The waiting room of {block} is set by calendar or per working server, but has no number of places, so it is unlimited. Give it a number of places, or make it fixed.	La sala d'espera del bloc {block} es defineix per calendari o per servidor en servei, però no té nombre de places, així que és il·limitada. Indiqueu-hi un nombre de places o feu-la fixa.
+	The waiting room of {block} is set by calendar, but no calendar has a value. Add a value for a calendar, or make the waiting room fixed.	La sala d'espera del bloc {block} es defineix per calendari, però cap calendari no té cap valor. Afegiu un valor per a un calendari o feu fixa la sala d'espera.
+	Set “Fails above, waiting per working server” of {block} to a number of 0 or more.	Establiu «Falla per sobre de, en espera per servidor en servei» del bloc {block} en un nombre de 0 o més.
+	Set “Check every” of {block} to a mean above 0.	Establiu «Comprovar cada» del bloc {block} en una mitjana més gran que 0.
+	Set the demand of {block} to a number of parts above 0.	Establiu la demanda del bloc {block} en un nombre de peces més gran que 0.
+	The demand of {block} is per shift but names no calendar to say when the shifts are. Choose a calendar.	La demanda del bloc {block} és per torn però no indica cap calendari que digui quan són els torns. Trieu un calendari.
+	The demand of {block} names a calendar that does not exist. Choose a calendar that exists.	La demanda del bloc {block} indica un calendari que no existeix. Trieu un calendari que existeixi.
+	The probability {value} on the flow {flow} is not from 0 to 1. Enter a probability from 0 to 1.	La probabilitat {value} del flux {flow} no està entre 0 i 1. Introduïu una probabilitat de 0 a 1.
+	The probabilities of the flows out of {block} add up to {sum}, not 1, so they are used in proportion. Change them to add up to 1 if that is not what you want.	Les probabilitats dels fluxos de sortida del bloc {block} sumen {sum}, no 1, així que s'usen en proporció. Canvieu-les perquè sumin 1 si no és el que voleu.
+	The condition on the flow {flow} cannot be used: {error}. Correct “{expression}”.	La condició del flux {flow} no es pot fer servir: {error}. Corregiu «{expression}».
+	The condition on the flow {flow} is ignored, because only flows out of a Decision block choose a route. Remove the condition.	La condició del flux {flow} s'ignora, perquè només els fluxos que surten d'un bloc Decisió trien un camí. Elimineu la condició.
+	The probability on the flow {flow} is ignored, because only flows out of a Decision block choose a route. Remove the probability.	La probabilitat del flux {flow} s'ignora, perquè només els fluxos que surten d'un bloc Decisió trien un camí. Elimineu la probabilitat.
+	The condition on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the condition.	La condició del flux {flow} s'ignora, perquè la Decisió envia les entitats a la cua més curta. Elimineu la condició.
+	The probability on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the probability.	La probabilitat del flux {flow} s'ignora, perquè la Decisió envia les entitats a la cua més curta. Elimineu la probabilitat.
+	The default on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the default.	El valor predeterminat del flux {flow} s'ignora, perquè la Decisió envia les entitats a la cua més curta. Elimineu el valor predeterminat.
+	The probability on the flow {flow} is ignored, because the Decision routes by condition. Remove the probability.	La probabilitat del flux {flow} s'ignora, perquè la Decisió tria el camí per condició. Elimineu la probabilitat.
+	The default flow of {block} is not one of its own flows out. Choose one of the flows out of {block} as the default.	El flux predeterminat del bloc {block} no és un dels seus propis fluxos de sortida. Trieu un dels fluxos de sortida del bloc {block} com a predeterminat.
+	{block} routes by condition but has no default flow, so an entity for which no condition holds leaves the model here. Choose a default flow.	{block} tria el camí per condició però no té flux predeterminat, així que una entitat per a la qual no es compleix cap condició surt del model aquí. Trieu un flux predeterminat.
+	{block} diverts entities but has no default flow, so an entity whose way is full has nowhere else to go. Choose a default flow.	{block} desvia entitats però no té flux predeterminat, així que una entitat la via de la qual està plena no té cap altre lloc on anar. Trieu un flux predeterminat.
+	{block} waits for an entity on the flow {flow}, which none can reach, so it never sends one on. Remove that flow, or connect it to a block that entities reach.	{block} espera una entitat pel flux {flow}, a la qual no en pot arribar cap, així que no n'envia mai cap. Elimineu aquest flux o connecteu-lo a un bloc al qual arribin entitats.
+	{block} has a limited waiting room and is fed through {gateway}. While it is full, {gateway} holds up every entity behind it, and they wait before it without limit. Remove the gateway before {block}, or remove the limit.	{block} té una sala d'espera limitada i s'alimenta a través de {gateway}. Mentre és plena, {gateway} reté totes les entitats que van darrere, i aquestes esperen abans sense límit. Traieu el bloc d'encaminament anterior a {block} o traieu el límit.
+	The limited waiting rooms of {loop} feed each other in a loop, so when all of them are full the loop deadlocks. Remove the limit on one of them, or break the loop.	Les sales d'espera limitades dels blocs {loop} s'alimenten entre elles en un bucle, així que quan totes són plenes el bucle es bloqueja. Traieu el límit d'una d'elles o trenqueu el bucle.
+	The pool {block} has no units. Give it at least 1 unit.	El grup {block} no té unitats. Doneu-li almenys 1 unitat.
+	{block} names no resource it needs. Add one under “Needs”.	{block} no indica cap recurs que necessiti. Afegiu-ne un a «Necessitats».
+	{block} needs a resource pool that does not exist. Choose a pool that exists.	{block} necessita un grup de recursos que no existeix. Trieu un grup que existeixi.
+	{block} needs units with the roles {roles}, which no pool has. Give a pool those roles, or change what {block} needs.	{block} necessita unitats amb els rols {roles}, que cap grup no té. Doneu aquests rols a un grup o canvieu el que necessita {block}.
+	{block} needs {needed} units at once, but at most {available} exist, so this can never be met. Ask for fewer units, or add units to the pool.	{block} necessita {needed} unitats alhora, però n'hi ha com a màxim {available}, així que això no es pot complir mai. Demaneu menys unitats o afegiu unitats al grup.
+	Set the priority of {block} to a finite number, not {value}.	Establiu la prioritat del bloc {block} en un nombre finit, no en {value}.
+	No task uses the pool {block}. Add it to a task's needs, or remove the pool.	Cap tasca no fa servir el grup {block}. Afegiu-lo a les necessitats d'una tasca o elimineu el grup.
+	{block} has a value for a calendar that does not exist. Choose a calendar that exists, or remove the value.	{block} té un valor per a un calendari que no existeix. Trieu un calendari que existeixi o elimineu el valor.
+	The calendar {block} has no entries, so it is never active. Add an entry.	El calendari {block} no té entrades, així que no és mai actiu. Afegiu una entrada.
+	{block} allows no arrivals outside the calendars but names no calendar, so it never creates entities. Add arrivals by calendar, or allow arrivals outside calendars.	{block} no permet arribades fora dels calendaris però no indica cap calendari, així que no crea mai entitats. Afegiu arribades per calendari o permeteu arribades fora dels calendaris.
+	Set the batch size of {block} to 1 or more.	Establiu la mida de lot del bloc {block} en 1 o més.
+	Set “{field}” of the conveyor {block} to a finite number above 0.	Establiu «{field}» de la cinta transportadora {block} en un nombre finit més gran que 0.
+	Set “{field}” of the conveyor {block} to a finite number of 0 or more.	Establiu «{field}» de la cinta transportadora {block} en un nombre finit de 0 o més.
+	Set “{field}” of the conveyor {block} to a finite number other than 0.	Establiu «{field}» de la cinta transportadora {block} en un nombre finit diferent de 0.
+	The conveyor {block} is {length} long but each entity takes {pitch} (item length plus gap), so not even one fits. Lengthen the conveyor, or shorten the item or the gap.	La cinta transportadora {block} fa {length} de llarg però cada entitat ocupa {pitch} (longitud de l'element més la separació), així que no hi cap ni una. Allargueu la cinta o escurceu l'element o la separació.
+	The drawn path of the conveyor {block} is {path_length} long, but its “Length” is {length}, so the drawing and the run disagree. Make “Length” match the path, or change the shape.	El traçat dibuixat de la cinta transportadora {block} fa {path_length}, però la seva «Longitud» és {length}, així que el dibuix i l'execució no concorden. Feu que «Longitud» coincideixi amb el traçat o canvieu la forma.
+	{block} is a transport, which StochCraft does not simulate yet. Remove it to run the model.	{block} és un transport, que StochCraft encara no simula. Elimineu-lo per executar el model.
+	The pool {pool} of the transport {block} does not exist. Choose a pool that exists.	El grup {pool} del transport {block} no existeix. Trieu un grup que existeixi.
+	The pool {pool} of the transport {block} is not mobile. Give the pool speeds and a home.	El grup {pool} del transport {block} no és mòbil. Doneu al grup velocitats i una base.
+	Set “{field}” of the pool {block} to a finite number above 0.	Establiu «{field}» del grup {block} en un nombre finit més gran que 0.
+	The home of the pool {block} is not a block of the model. Choose a block as its home.	La base del grup {block} no és un bloc del model. Trieu un bloc com a base.
+	The transport {block} needs one block before it, where it picks up, and one after it, where it drops off, but has {inputs} before and {outputs} after. Connect it to one block on each side.	El transport {block} necessita un bloc abans, on recull, i un després, on deixa, però en té {inputs} abans i {outputs} després. Connecteu-lo a un bloc a cada costat.
+	{other} has no place on the canvas, so the distances for {block} are not known. Place {other} on the canvas.	{other} no té lloc a la superfície principal, així que no es coneixen les distàncies de {block}. Col·loqueu {other} a la superfície principal.
+	The flow {flow} asks for no entities. Set its “Units” to 1 or more.	El flux {flow} no demana cap entitat. Establiu-ne les «Unitats» en 1 o més.
+	The “Units” on the flow {flow} is ignored, because only a Split or join block takes several entities from one flow. Remove it.	Les «Unitats» del flux {flow} s'ignoren, perquè només un bloc Divideix o uneix pren diverses entitats d'un mateix flux. Elimineu-les.
+	No block makes batches, so {block} passes every entity through. Add a Batch block before it, or remove {block}.	Cap bloc no forma lots, així que {block} deixa passar totes les entitats. Afegiu-hi un bloc Lot abans o elimineu {block}.
+	The stop condition names a block that does not exist. Choose a block that exists.	La condició d'aturada indica un bloc que no existeix. Trieu un bloc que existeixi.
+	Set the count of the stop condition for {block} to 1 or more.	Establiu el recompte de la condició d'aturada de {block} en 1 o més.
+	The stop condition waits for {block} to empty, but only a task can empty. Choose a task.	La condició d'aturada espera que {block} es buidi, però només una tasca es pot buidar. Trieu una tasca.
+	The stop condition at {block} can be met before the warm-up ends. A run that stops during the warm-up has no statistics after it and is left out of the results. Shorten the warm-up, or stop later.	La condició d'aturada de {block} es pot complir abans que acabi l'escalfament. Una execució que s'atura durant l'escalfament no té estadístiques després i queda fora dels resultats. Escurceu l'escalfament o atureu-vos més tard.
+	Every run stopped before the warm-up ended, so no metric is reported. Shorten the warm-up, or stop later.	Totes les execucions s'han aturat abans que acabés l'escalfament, així que no s'informa de cap mètrica. Escurceu l'escalfament o atureu-vos més tard.
+	{replications} of {of} runs stopped before the warm-up ended, so their statistics are left out of every metric. Shorten the warm-up, or stop later.	{replications} de {of} execucions s'han aturat abans que acabés l'escalfament, així que les seves estadístiques queden fora de totes les mètriques. Escurceu l'escalfament o atureu-vos més tard.
+	{block} is offered {load}% of the work its units can do, so its waiting room grows without limit and the results describe no steady state. Add units, or shorten the service.	A {block} se li ofereix el {load}% del treball que poden fer les seves unitats, així que la sala d'espera creix sense límit i els resultats no descriuen un règim estacionari. Afegiu unitats o escurceu el servei.
+	{block} is busy {utilisation}% of the time, and at the end at least {backlog} entities are still waiting against {left} that left. Work arrives faster than it is done, so the results describe no steady state. Add units, or shorten the service.	{block} està ocupat el {utilisation}% del temps i, al final, almenys {backlog} entitats encara esperen davant de {left} que han sortit. El treball arriba més de pressa del que es fa, així que els resultats no descriuen un règim estacionari. Afegiu unitats o escurceu el servei.
+	The experiment has one run, so its results cannot be told from chance. Set the number of runs to at least 2, and usually 10 or more.	L'experiment té una sola execució, així que els seus resultats no es poden distingir de l'atzar. Establiu el nombre d'execucions en almenys 2, i en general en 10 o més.
+	{block} has a three-point estimate but no time to fit it to, so the estimate is ignored. Remove the estimate.	{block} té una estimació de tres punts però cap temps al qual ajustar-la, així que l'estimació s'ignora. Elimineu l'estimació.
+	The three-point estimate of {block} cannot be fitted: every point must be a finite number. Correct the points.	L'estimació de tres punts del bloc {block} no es pot ajustar: cada punt ha de ser un nombre finit. Corregiu els punts.
+	The three-point estimate of {block} cannot be fitted: the points must be in order, minimum, most likely, then maximum or 95th percentile. Correct the points.	L'estimació de tres punts del bloc {block} no es pot ajustar: els punts han d'estar en ordre, mínim, més probable i després màxim o percentil 95. Corregiu els punts.
+	The three-point estimate of {block} cannot be fitted: log-normal and Weibull estimates have no maximum. Give a 95th percentile instead.	L'estimació de tres punts del bloc {block} no es pot ajustar: les estimacions log-normal i Weibull no tenen màxim. Doneu un percentil 95 en el seu lloc.
+	The time of {block} is no longer the one fitted from its three-point estimate. Fit it again, or remove the estimate.	El temps del bloc {block} ja no és el que s'ha ajustat a partir de la seva estimació de tres punts. Ajusteu-lo de nou o elimineu l'estimació.
+	In “{field}” of {block}, the normal distribution draws below 0 more than 1 time in 100, and each such draw counts as 0, so the times are longer on average than its mean. Use a truncated normal with a minimum of 0, or a log-normal.	A «{field}» del bloc {block}, la distribució normal dona valors per sota de 0 més d'1 vegada de cada 100, i cadascun compta com a 0, així que els temps són de mitjana més llargs que la seva mitjana. Feu servir una normal truncada amb un mínim de 0 o una log-normal.
+	The entities of {block} do not add up: {came} came in or were inside at the start, but {went} left, were lost, gave up or are still inside.	Les entitats del bloc {block} no quadren: {came} han entrat o eren a dins al començament, però {went} han sortit, s'han perdut, han abandonat o encara són a dins.
+	The entities of the model do not add up: {came} were created or inside at the start, but {went} reached Departures, left the model elsewhere or are still inside.	Les entitats del model no quadren: {came} s'han creat o eren a dins al començament, però {went} han arribat a Sortides, han sortit del model per un altre lloc o encara són a dins.
+	No entity left the model, of {came} created or inside at the start. Check that the routing leads to Departures and that the run is long enough for an entity to get through.	Cap entitat no ha sortit del model, de {came} creades o a dins al començament. Comproveu que l'encaminament porta a Sortides i que l'execució dura prou perquè una entitat arribi fins al final.
+	Little's law does not hold at {block}: the time-average number inside was {mean}, but the entities' own times inside give {from_stays}.	La llei de Little no es compleix a {block}: el nombre mitjà ponderat pel temps a dins era {mean}, però els temps a dins de les mateixes entitats donen {from_stays}.
+	The utilisation of {block} counts {busy} units busy on average, but {working} were processing or setting up: units idle, blocked, off shift, failed or restarting were counted busy.	La utilització del bloc {block} compta {busy} unitats ocupades de mitjana, però {working} estaven processant o preparant-se: unitats inactives, bloquejades, fora de torn, avariades o reiniciant-se s'han comptat com a ocupades.
+	The utilisation of {block} counts {busy} units busy on average, but {working} were processing or setting up: units at work were not counted busy.	La utilització del bloc {block} compta {busy} unitats ocupades de mitjana, però {working} estaven processant o preparant-se: unitats que treballaven no s'han comptat com a ocupades.
+	The shares of the time of the units of {block} in each state add up to {total}, not 1.	Les proporcions del temps de les unitats del bloc {block} en cada estat sumen {total}, no 1.
+	“{metric}” of {block} is {value}, outside 0 to 1 (0% to 100%).	«{metric}» del bloc {block} és {value}, fora de 0 a 1 (0% a 100%).
+	This was found in {replications} of {of} runs, and the furthest off is shown.	Això s'ha trobat en {replications} de {of} execucions, i es mostra la més allunyada.
+	This points to a fault in StochCraft rather than in the model. Please report it with the model.	Això apunta a un error de StochCraft i no del model. Informeu-ne, si us plau, juntament amb el model.
+	Angle	Angle
+	Failed	Avariat
+	Off shift	Fora de torn
+	Processing	Processant
+	Radius	Radi
+	Rise	Pujada
+	Speed empty	Velocitat en buit
+	Speed loaded	Velocitat amb càrrega
+	Turns	Voltes
+	Unload	Descàrrega
+	Lost	Perdudes
+	An entity that leaves a waiting room before a unit takes it, because it has waited as long as it was willing to.	Una entitat que surt d'una sala d'espera abans que una unitat se l'endugui, perquè ha esperat tant com estava disposada a esperar.
+	An entity that does not join a waiting room at all, because the number already waiting put it off.	Una entitat que no s'afegeix de cap manera a una sala d'espera, perquè el nombre d'entitats que ja hi esperen l'ha desanimada.
+	An entity that finds the waiting room full and takes the flow ticked “Turned away” instead of waiting.	Una entitat que troba plena la sala d'espera i pren el flux marcat com a «Rebutjades» en lloc d'esperar.
+	An entity that leaves the model without reaching Departures: it found the waiting room full with nowhere else to go, or a decision with no way out for it.	Una entitat que surt del model sense arribar a Sortides: ha trobat plena la sala d'espera sense cap altra sortida, o una decisió sense camí per a ella.
+	Gave up on {id}	Han abandonat a {id}
+	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the flow ticked “Gave up”, or leaves the model.	Cada entitat espera aquí com a màxim un temps que se li assigna a l'atzar quan arriba, i després abandona: pren el flux marcat com a «Han abandonat» o surt del model.
+	Entities that do not join the waiting room take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Les entitats que no s'afegeixen a la sala d'espera prenen aquest flux de seguida (per tornar-ho a provar més tard, per exemple), en lloc de perdre's; aquí compten com a no afegides.
+	The job stops at once: the entity goes back to the front of the waiting room for any server on shift, and the work done on it is wasted.	La feina s'atura de seguida: l'entitat torna al capdavant de la sala d'espera per a qualsevol servidor de torn, i el treball fet en ella es malbarata.
+	The connection drops and the client tries again: the entity goes back to the front of the waiting room at once, and the work done on it is wasted.	La connexió cau i el client ho torna a intentar: l'entitat torna de seguida al capdavant de la sala d'espera, i el treball fet en ella es malbarata.
+	Ticked, entities queue up at the end while the rest keep moving. Unticked, the whole belt stops when the entity at the end cannot leave.	Marcat, les entitats fan cua al final mentre les altres continuen avançant. Desmarcat, tota la cinta s'atura quan l'entitat del final no pot sortir.
+	Play run 1 step by step and see each block's waiting room on the diagram	Reprodueix l'execució 1 pas a pas i mostra la sala d'espera de cada bloc al diagrama
+	Select a block to see its waiting room over time.	Seleccioneu un bloc per veure'n la sala d'espera al llarg del temps.
+	Entities on conveyors over time	Entitats a les cintes al llarg del temps
+	Entities in the model over time	Entitats al model al llarg del temps
+	How long each entity spends on the conveyors.	Quant de temps passa cada entitat a les cintes transportadores.
+	No entity has left a conveyor yet	Cap entitat no ha sortit encara d'una cinta
+	Share of entities by time on a conveyor, in {unit}	Proporció d'entitats segons el temps en una cinta, en {unit}
+	Time on conveyors: {n} entities between {lo} and {hi} {unit}	Temps a les cintes: {n} entitats entre {lo} i {hi} {unit}
+	{from} to {to} {unit}: {share} of entities ({n})	De {from} a {to} {unit}: {share} de les entitats ({n})
+	How many entities are on the conveyors over time.	Quantes entitats hi ha a les cintes al llarg del temps.
+	How many entities are in the model over time.	Quantes entitats hi ha al model al llarg del temps.
+	At {time} {unit}: {n} entities	A {time} {unit}: {n} entitats
+@plural	Makes {n} independent run of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval across them.	Fa {n} execució independent del model a partir de la llavor {seed}. Els resultats de cada bloc inclouen la semiamplada d'un interval de confiança del 95%.|Fa {n} execucions independents del model a partir de la llavor {seed}. Els resultats de cada bloc inclouen la semiamplada d'un interval de confiança del 95%.

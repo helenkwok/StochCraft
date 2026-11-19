@@ -21,8 +21,6 @@
 	A caller on hold: once a unit takes it, the entity stays.	대기 중인 통화: 자원 단위가 일단 받으면 엔터티는 남습니다.
 	A client that times out: if its time runs out during service, it gives up then, and the unit finishes the job anyway (wasted work).	시간 초과되는 클라이언트: 서비스 중에 시간이 다 되면 그때 포기하고, 자원 단위는 그래도 작업을 끝냅니다(낭비된 작업).
 	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	새 파일에는 모델만 들어갑니다. {file}에서 StochCraft가 이해하지 못하는 내용은 빠집니다.
-	Abandoned	포기
-	Abandoned on {id}	{id} 포기
 	About StochCraft	StochCraft 정보
 	About {app}	{app} 정보
 	Accent	강조색
@@ -162,7 +160,6 @@
 	Duration	길이
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	각 분석은 같은 난수 시드로 실험을 여러 번 실행하므로 차이는 우연이 아니라 변경에서 나옵니다. 시간이 걸릴 수 있습니다.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	각 엔터티는 이 중 지금 한꺼번에 모두 충족할 수 있는 첫 번째 항목을 가져가고, 떠날 때 자원 단위를 반환합니다.
-	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	각 엔터티는 도착할 때 무작위로 정해진 시간까지만 여기서 기다린 뒤 포기합니다. '포기'로 표시된 나갈 경로로 가거나 모델을 떠납니다.
 	Each server (unit) is checked every so often, as a load balancer probes the servers behind it. One that fails, with too many waiting, is taken out of service for a restart, then comes back.	각 서버(자원 단위)는 부하 분산기가 뒤에 있는 서버를 확인하듯이 일정 간격으로 검사됩니다. 대기가 너무 많아 검사에 실패한 서버는 재기동을 위해 가동에서 제외되었다가 다시 돌아옵니다.
 	Edit	편집
 	Edit themes…	테마 편집…
@@ -412,7 +409,6 @@
 	Run	실행
 	Run cancelled	실행이 취소되었습니다
 	Run experiment	실험 실행
-	Play run 1 step by step and see each block's queue on the diagram	실행 1을 단계별로 재생하고 다이어그램에서 각 블록의 대기열 보기
 	Run the experiment ({shortcut})	실험 실행 ({shortcut})
 	Run the experiment again to see this result's spread.	이 결과의 분포를 보려면 실험을 다시 실행하세요.
 	Run the experiment at each value of one parameter, and compare a result.	한 매개변수의 각 값에서 실험을 실행하고 결과를 비교합니다.
@@ -433,7 +429,6 @@
 	Scrap ratio	폐기율
 	Seed	난수 시드
 	Select All	모두 선택
-	Select a block to see its queue over time.	블록을 선택하면 시간에 따른 대기열을 볼 수 있습니다.
 	Sender waits during transfer	이송 중 보내는 쪽 대기
 	Separate the values with semicolons or spaces.	값은 세미콜론이나 공백으로 구분하세요.
 	Sequential	순차형
@@ -497,10 +492,8 @@
 	Text	텍스트
 	Text on accent	강조색 위 텍스트
 	Text on header	헤더의 텍스트
-	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	연결이 끊기고 클라이언트가 다시 시도합니다. 엔터티는 즉시 대기열 맨 앞으로 돌아가고, 그때까지 한 작업은 낭비됩니다.
 	The entity waits on its server and the job carries on with what was left once the server is back.	엔터티는 자기 서버에서 기다리고, 서버가 돌아오면 남은 작업부터 계속합니다.
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more runs would narrow it.	구간이 목표 비율 {share}보다 아래까지 내려가므로, 비율 충족이 95% 신뢰도로 확인되지 않았습니다. 실행 횟수를 늘리면 구간이 좁아집니다.
-	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	작업이 즉시 멈춥니다. 엔터티는 근무 중인 아무 서버를 기다리도록 대기열 맨 앞으로 돌아가고, 그때까지 한 작업은 낭비됩니다.
 	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	작업이 즉시 멈춥니다. 엔터티는 자기 서버에서 기다리고, 그 서버가 다시 근무하면 남은 작업부터 계속합니다.
 	The last task with a resource it finished at	부품이 마지막으로 거친 자원을 사용하는 작업
 	The mean time to the stop condition is over the runs that met it only; the others ran to their time limit.	중지 조건까지의 평균 시간은 중지 조건에 도달한 실행만으로 계산됩니다. 나머지 실행은 시간 제한까지 진행되었습니다.
@@ -690,7 +683,6 @@ unit	yr	년
 	Balked on {id}	{id} 진입 포기
 	Balking	진입 포기
 	Count those in service	서비스 중인 것도 셈
-	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	대기열에 합류하지 않는 엔터티는 곧바로 이 흐름을 따릅니다(예를 들어 나중에 다시 시도하기 위해). 손실되지 않으며, 여기서는 진입 포기로 셉니다.
 	Joins with probability	대기열 합류 확률
 	Number waiting	대기 수
 	Share balked	진입 포기 비율
@@ -908,7 +900,6 @@ unit	yr	년
 @plural	Finished {n} run|Finished {n} runs	실행 {n}회 완료
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	{file} 열림(경고 {n}개)
 @plural	Removed {n} block|Removed {n} blocks	블록 {n}개 제거됨
-@plural	Makes {n} independent run of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	시드 {seed}부터 모델을 독립적으로 {n}회 실행합니다. 각 요소의 결과에는 95% 신뢰 구간의 반폭이 포함됩니다.
 @plural	The stop condition was met in {met} of {n} run, after {time} {unit} on average.|The stop condition was met in {met} of {n} runs, after {time} {unit} on average.	중지 조건은 {n}회 중 {met}회의 실행에서 평균 {time} {unit} 후에 도달했습니다.
 @plural	{done} of {n} run finished|{done} of {n} runs finished	{n}회 중 {done}회 실행 완료
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} run|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} runs	{name}: {mean}{unit}\n95% 구간 {low}~{high}{unit}\n{n}회 실행 기준
@@ -938,7 +929,6 @@ unit	yr	년
 	kilometres	킬로미터
 	inches	인치
 	feet	피트
-	Ticked, items queue up at the end while the rest keep moving. Unticked, the whole belt stops when the item at the end cannot leave.	선택하면 끝에서 품목이 줄을 서고 나머지는 계속 움직입니다. 선택하지 않으면 끝의 품목이 나가지 못할 때 벨트 전체가 멈춥니다.
 	A belt that carries entities from one end to the other. It has a length and a speed, and each entity takes a pitch of belt: its item length plus the gap kept free after it. So it holds at most length ÷ pitch entities and carries at most speed ÷ pitch per time unit. Accumulating: entities queue up at the end while the rest keep moving; otherwise the whole belt stops.	엔터티를 한쪽 끝에서 다른 쪽 끝으로 나르는 벨트입니다. 길이와 속도가 있으며, 각 엔터티는 벨트의 피치를 차지합니다. 피치는 품목 길이에 그 뒤에 비워 두는 간격을 더한 값입니다. 따라서 최대 길이 ÷ 피치 개의 엔터티를 담고, 단위 시간당 최대 속도 ÷ 피치 개를 나릅니다. 누적: 엔터티가 끝에서 줄을 서고 나머지는 계속 움직입니다. 그렇지 않으면 벨트 전체가 멈춥니다.
 	Station	스테이션
 	Kind	종류
@@ -992,16 +982,162 @@ unit	yr	년
 	Time on conveyors	컨베이어 위의 시간
 	No conveyors in this model	이 모델에는 컨베이어가 없습니다
 	Fills in when the run ends	실행이 끝나면 채워집니다
-	How long each item spends on the conveyors.	각 항목이 컨베이어 위에서 보내는 시간.
-	No item has left a conveyor yet	아직 컨베이어를 떠난 항목이 없습니다
-	Share of items by time on a conveyor, in {unit}	컨베이어 위 시간별 항목 비율({unit})
-	Time on conveyors: {n} items between {lo} and {hi} {unit}	컨베이어 위의 시간: {lo}에서 {hi} {unit} 사이의 항목 {n}개
-	{from} to {to} {unit}: {share} of items ({n})	{from}에서 {to} {unit}: 항목의 {share}({n})
-	Items on conveyors over time	컨베이어 위 항목 수의 시간 변화
-	Items in the model over time	모델 안 항목 수의 시간 변화
-	How many items are on the conveyors over time.	컨베이어 위에 있는 항목 수의 시간 변화.
-	How many items are in the model over time.	모델 안에 있는 항목 수의 시간 변화.
 	Nothing was recorded over time in these results	이 결과에는 시간에 따른 기록이 없습니다
-	At {time} {unit}: {n} items	{time} {unit} 시점: 항목 {n}개
 	Run the model to fill the dashboard	대시보드를 채우려면 모델을 실행하세요
 	The resource and conveyor charts show the last run until this one ends	자원과 컨베이어 차트는 이 실행이 끝날 때까지 지난 실행을 보여 줍니다
+# Validation messages, new labels and word changes (issue #145)
+	The id “{id}” is not valid. Start an id with a letter or an underscore, then use only letters, digits, dots, hyphens and underscores.	ID “{id}”은(는) 올바르지 않습니다. ID는 문자나 밑줄로 시작하고, 그 뒤에는 문자, 숫자, 점, 하이픈, 밑줄만 사용하세요.
+	More than one block, flow, pool or calendar has the id “{id}”. Give each its own id.	ID가 “{id}”인 블록, 흐름, 풀 또는 캘린더가 둘 이상입니다. 각각 고유한 ID를 지정하세요.
+	The flow {flow} uses a block that does not exist. Remove the flow, or connect it to a block that exists.	흐름 {flow}이(가) 존재하지 않는 블록을 사용합니다. 흐름을 제거하거나 존재하는 블록에 연결하세요.
+	The flow {flow} leads into an Arrivals block, which takes no input. Remove the flow, or send it to another block.	흐름 {flow}이(가) 입력을 받지 않는 도착 블록으로 들어갑니다. 흐름을 제거하거나 다른 블록으로 보내세요.
+	The flow {flow} leaves a Departures block, which has no output. Remove the flow, or start it from another block.	흐름 {flow}이(가) 출력이 없는 이탈 블록에서 나옵니다. 흐름을 제거하거나 다른 블록에서 시작하세요.
+	The flow {flow} leads from a block back to itself. Remove it, or send it to another block.	흐름 {flow}이(가) 블록에서 자기 자신으로 되돌아옵니다. 제거하거나 다른 블록으로 보내세요.
+	{block} has nowhere to send entities. Add a flow from it to the next block.	{block}에는 엔터티를 보낼 곳이 없습니다. 다음 블록으로 가는 흐름을 추가하세요.
+	{block} has {count} flows out, and only a Decision or a Split or join block can send entities down several. Remove the extra flows, or add a Decision block.	{block}에서 나가는 흐름이 {count}개이며, 여러 흐름으로 엔터티를 보낼 수 있는 것은 의사 결정 블록이나 분할 또는 병합 블록뿐입니다. 남는 흐름을 제거하거나 의사 결정 블록을 추가하세요.
+	In “{field}” of {block}, set “{param}” to a finite number.	{block}의 “{field}”에서 “{param}” 값을 유한한 숫자로 설정하세요.
+	In “{field}” of {block}, set “{param}” to a number above 0.	{block}의 “{field}”에서 “{param}” 값을 0보다 큰 숫자로 설정하세요.
+	In “{field}” of {block}, set “{param}” to 0 or more.	{block}의 “{field}”에서 “{param}” 값을 0 이상의 숫자로 설정하세요.
+	In “{field}” of {block}, set “{param}” to 1 or more.	{block}의 “{field}”에서 “{param}” 값을 1 이상의 숫자로 설정하세요.
+	In “{field}” of {block}, set “{param}” to a number from 0 to 1.	{block}의 “{field}”에서 “{param}” 값을 0에서 1 사이의 숫자로 설정하세요.
+	In “{field}” of {block}, set “Minimum” below “Maximum”, and any “Most likely” value between them.	{block}의 “{field}”에서 “최솟값”을 “최댓값”보다 작게 설정하고, “최빈값”이 있으면 그 사이의 값으로 설정하세요.
+	In “{field}” of {block}, add data points whose probabilities add up to more than 0.	{block}의 “{field}”에 확률의 합이 0보다 큰 데이터 점을 추가하세요.
+	{block} would never have a unit to work with. Give it at least 1 unit.	{block}에는 작업할 자원 단위가 하나도 없게 됩니다. 자원 단위를 1개 이상으로 설정하세요.
+	{block} would make entities without end, because its “Time between arrivals” is always 0. Give it a time above 0, or set an “Arrival limit”.	{block}은(는) “도착 간격”이 항상 0이라서 엔터티를 끝없이 만들어 냅니다. 0보다 큰 시간을 지정하거나 “도착 수 제한”을 설정하세요.
+	The model has no Arrivals block, so nothing will happen. Add an Arrivals block.	모델에 도착 블록이 없어 아무 일도 일어나지 않습니다. 도착 블록을 추가하세요.
+	The model has no Departures block, so no time in system is measured. Add a Departures block.	모델에 이탈 블록이 없어 시스템 내 체류 시간이 측정되지 않습니다. 이탈 블록을 추가하세요.
+	No entity can reach {block} from an Arrivals block. Connect it to a block that entities pass through.	도착 블록에서 {block}에 도달할 수 있는 엔터티가 없습니다. 엔터티가 지나가는 블록에 연결하세요.
+	Entities in {block} can never reach a Departures block. Connect it on towards Departures.	{block} 안의 엔터티는 이탈 블록에 도달할 수 없습니다. 이탈 블록 쪽으로 이어서 연결하세요.
+	Set the “{state}” power of {block} to a number of kilowatts, 0 or more.	{block}의 “{state}” 전력을 0 이상의 킬로와트 수로 설정하세요.
+	Set the warm-up of the experiment to 0 or more.	실험의 준비 기간을 0 이상으로 설정하세요.
+	Set the duration of the experiment to more than 0.	실험의 길이를 0보다 크게 설정하세요.
+	Set the number of runs of the experiment to 1 or more.	실험의 실행 횟수를 1 이상으로 설정하세요.
+	Set the layout scale (length units per drawing unit) to a finite number above 0.	레이아웃 척도(그림 단위당 길이 단위)를 0보다 큰 유한한 숫자로 설정하세요.
+	A property of {block} has no name. Give it a name, or remove it.	{block}의 속성 하나에 이름이 없습니다. 이름을 지정하거나 제거하세요.
+	{block} sets the property “{name}” twice. Keep one of them.	{block}에서 속성 “{name}”이(가) 두 번 설정되어 있습니다. 하나만 남기세요.
+	The property “{name}” of {block} needs shares that are not negative and add up to more than 0. Change the shares.	{block}의 속성 “{name}”에는 음수가 아니고 합이 0보다 큰 비율이 필요합니다. 비율을 변경하세요.
+	The property “{name}” has the type “{type2}” on {block} but “{type}” on another block. Give it one type everywhere.	속성 “{name}”의 종류가 {block}에서는 “{type2}”이고 다른 블록에서는 “{type}”입니다. 모든 블록에서 하나의 종류로 통일하세요.
+	The value of the property “{name}” on {block} does not fit its type, “{type}”. Change the value or the type.	{block}의 속성 “{name}” 값이 종류 “{type}”에 맞지 않습니다. 값이나 종류를 변경하세요.
+	The expression for the property “{name}” on {block} cannot be used: {error}. Correct “{expression}”.	{block}의 속성 “{name}” 식을 사용할 수 없습니다: {error}. “{expression}”을(를) 수정하세요.
+	{block} reads the property “{name}”, which no block sets, so it would read as empty. Set it on an earlier block, or correct the name.	{block}이(가) 속성 “{name}”을(를) 읽지만 이를 설정하는 블록이 없어 빈 값으로 읽힙니다. 앞쪽 블록에서 설정하거나 이름을 수정하세요.
+	The setup of {block} has times for particular changes but no property to watch. Choose a property under “Only when this property changes”.	{block}의 셋업에 특정 변경에 대한 시간은 있지만 지켜볼 속성이 없습니다. “이 속성이 바뀔 때만”에서 속성을 선택하세요.
+	{block} has times for particular values but no property to read them from. Choose a property under “Service time by property”.	{block}에 특정 값에 대한 시간은 있지만 그 시간을 읽어 올 속성이 없습니다. “속성별 서비스 시간”에서 속성을 선택하세요.
+	{block} has two times for the value “{value}”. Keep one.	{block}에 값 “{value}”에 대한 시간이 둘 있습니다. 하나만 남기세요.
+	Set the time of {block} for the value “{value}” to a mean of 0 or more.	{block}의 값 “{value}”에 대한 시간을 평균 0 이상으로 설정하세요.
+	The scrap at {block} counts against {other}, which is not a task with a resource. Choose a task with a resource.	{block}의 폐기는 {other}을(를) 기준으로 계산되지만, 이는 자원을 사용하는 작업이 아닙니다. 자원을 사용하는 작업을 선택하세요.
+	Set “Planned run time per item” of {block} to a mean above 0.	{block}의 “부품당 계획 가동 시간”을 0보다 큰 평균으로 설정하세요.
+	Set “Time before giving up” of {block} to a mean of 0 or more.	{block}의 “포기까지의 시간”을 0 이상의 평균으로 설정하세요.
+	The flow {flow} is ticked “Gave up”, but only a task with a resource and a “Time before giving up” sends entities that give up. Untick it, or set a “Time before giving up” on {block}.	흐름 {flow}에 “포기” 항목이 선택되어 있지만, 포기하는 엔터티를 보내는 것은 “포기까지의 시간”이 설정된 자원을 사용하는 작업뿐입니다. 선택을 해제하거나 {block}에 “포기까지의 시간”을 설정하세요.
+	{count} flows out of {block} are ticked “{way}”; at most one can be. Untick all but one.	{block}에서 나가는 흐름 {count}개에 “{way}” 항목이 선택되어 있지만, 선택할 수 있는 것은 최대 하나입니다. 하나만 남기고 선택을 해제하세요.
+	The flow {flow} is ticked “Turned away”, but only a task with a resource and a limited waiting room turns entities away. Untick it, or limit the waiting room of {block}.	흐름 {flow}에 “거절” 항목이 선택되어 있지만, 엔터티를 거절하는 것은 대기실이 제한된 자원을 사용하는 작업뿐입니다. 선택을 해제하거나 {block}의 대기실을 제한하세요.
+	The flow {flow} is ticked both “Gave up” and “Turned away”. Keep one of them.	흐름 {flow}에 “포기”와 “거절” 항목이 모두 선택되어 있습니다. 하나만 남기세요.
+	Set every chance of joining in the balking table of {block} to a number from 0 to 1.	{block}의 진입 포기 표에서 합류할 확률을 모두 0에서 1 사이의 숫자로 설정하세요.
+	Put the rows of the balking table of {block} in increasing order of “Number waiting”.	{block}의 진입 포기 표의 행을 “대기 수”가 커지는 순서로 배열하세요.
+	The flow {flow} is ticked “Balked”, but only a task with a resource and balking sends entities that balk. Untick it, or turn on balking for {block}.	흐름 {flow}에 “진입 포기” 항목이 선택되어 있지만, 진입을 포기하는 엔터티를 보내는 것은 진입 포기가 설정된 자원을 사용하는 작업뿐입니다. 선택을 해제하거나 {block}의 진입 포기를 켜세요.
+	The flow {flow} is ticked “Balked” and also “Gave up” or “Turned away”. Keep one of them.	흐름 {flow}에 “진입 포기”와 함께 “포기” 또는 “거절” 항목도 선택되어 있습니다. 하나만 남기세요.
+	The waiting room of {block} is set by calendar or per working server, but has no number of places, so it is unlimited. Give it a number of places, or make it fixed.	{block}의 대기실은 캘린더 또는 가동 중인 서버 수에 따라 정해지지만 자리 수가 없어 무제한입니다. 자리 수를 지정하거나 고정으로 바꾸세요.
+	The waiting room of {block} is set by calendar, but no calendar has a value. Add a value for a calendar, or make the waiting room fixed.	{block}의 대기실은 캘린더에 따라 정해지지만 값이 있는 캘린더가 없습니다. 캘린더의 값을 추가하거나 대기실을 고정으로 바꾸세요.
+	Set “Fails above, waiting per working server” of {block} to a number of 0 or more.	{block}의 “실패 기준(가동 중인 서버당 대기 수)”을 0 이상의 숫자로 설정하세요.
+	Set “Check every” of {block} to a mean above 0.	{block}의 “검사 간격”을 0보다 큰 평균으로 설정하세요.
+	Set the demand of {block} to a number of parts above 0.	{block}의 수요를 0보다 큰 부품 수로 설정하세요.
+	The demand of {block} is per shift but names no calendar to say when the shifts are. Choose a calendar.	{block}의 수요는 근무조당이지만 근무조가 언제인지 알려 주는 캘린더가 지정되어 있지 않습니다. 캘린더를 선택하세요.
+	The demand of {block} names a calendar that does not exist. Choose a calendar that exists.	{block}의 수요가 존재하지 않는 캘린더를 지정합니다. 존재하는 캘린더를 선택하세요.
+	The probability {value} on the flow {flow} is not from 0 to 1. Enter a probability from 0 to 1.	흐름 {flow}의 확률 {value}이(가) 0에서 1 사이가 아닙니다. 0에서 1 사이의 확률을 입력하세요.
+	The probabilities of the flows out of {block} add up to {sum}, not 1, so they are used in proportion. Change them to add up to 1 if that is not what you want.	{block}에서 나가는 흐름의 확률 합이 1이 아니라 {sum}이므로 비율에 따라 사용됩니다. 의도한 것이 아니라면 합이 1이 되도록 변경하세요.
+	The condition on the flow {flow} cannot be used: {error}. Correct “{expression}”.	흐름 {flow}의 조건을 사용할 수 없습니다: {error}. “{expression}”을(를) 수정하세요.
+	The condition on the flow {flow} is ignored, because only flows out of a Decision block choose a route. Remove the condition.	흐름 {flow}의 조건은 무시됩니다. 경로를 고르는 것은 의사 결정 블록에서 나가는 흐름뿐이기 때문입니다. 조건을 제거하세요.
+	The probability on the flow {flow} is ignored, because only flows out of a Decision block choose a route. Remove the probability.	흐름 {flow}의 확률은 무시됩니다. 경로를 고르는 것은 의사 결정 블록에서 나가는 흐름뿐이기 때문입니다. 확률을 제거하세요.
+	The condition on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the condition.	흐름 {flow}의 조건은 무시됩니다. 의사 결정이 엔터티를 가장 짧은 대기열로 보내기 때문입니다. 조건을 제거하세요.
+	The probability on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the probability.	흐름 {flow}의 확률은 무시됩니다. 의사 결정이 엔터티를 가장 짧은 대기열로 보내기 때문입니다. 확률을 제거하세요.
+	The default on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the default.	흐름 {flow}의 기본값은 무시됩니다. 의사 결정이 엔터티를 가장 짧은 대기열로 보내기 때문입니다. 기본값을 제거하세요.
+	The probability on the flow {flow} is ignored, because the Decision routes by condition. Remove the probability.	흐름 {flow}의 확률은 무시됩니다. 의사 결정이 조건으로 경로를 고르기 때문입니다. 확률을 제거하세요.
+	The default flow of {block} is not one of its own flows out. Choose one of the flows out of {block} as the default.	{block}의 기본 흐름이 그 블록 자신에게서 나가는 흐름이 아닙니다. {block}에서 나가는 흐름 중 하나를 기본으로 선택하세요.
+	{block} routes by condition but has no default flow, so an entity for which no condition holds leaves the model here. Choose a default flow.	{block}은(는) 조건으로 경로를 고르지만 기본 흐름이 없어, 어떤 조건도 맞지 않는 엔터티는 여기서 모델을 떠납니다. 기본 흐름을 선택하세요.
+	{block} diverts entities but has no default flow, so an entity whose way is full has nowhere else to go. Choose a default flow.	{block}은(는) 엔터티를 우회시키지만 기본 흐름이 없어, 자기 경로가 가득 찬 엔터티는 달리 갈 곳이 없습니다. 기본 흐름을 선택하세요.
+	{block} waits for an entity on the flow {flow}, which none can reach, so it never sends one on. Remove that flow, or connect it to a block that entities reach.	{block}은(는) 흐름 {flow}에서 엔터티가 오기를 기다리지만, 그 흐름에는 도달할 수 있는 엔터티가 없어 다음으로 보내는 일이 없습니다. 그 흐름을 제거하거나 엔터티가 도달하는 블록에 연결하세요.
+	{block} has a limited waiting room and is fed through {gateway}. While it is full, {gateway} holds up every entity behind it, and they wait before it without limit. Remove the gateway before {block}, or remove the limit.	{block}은(는) 대기실이 제한되어 있고 {gateway}을(를) 거쳐 공급됩니다. 대기실이 가득 찬 동안 {gateway}은(는) 그 뒤의 모든 엔터티를 붙잡아 두며, 엔터티는 그 앞에서 끝없이 기다립니다. {block} 앞의 게이트웨이를 제거하거나 제한을 제거하세요.
+	The limited waiting rooms of {loop} feed each other in a loop, so when all of them are full the loop deadlocks. Remove the limit on one of them, or break the loop.	{loop}의 제한된 대기실이 고리 모양으로 서로를 공급하므로, 모두 가득 차면 고리가 교착 상태에 빠집니다. 그중 하나의 제한을 없애거나 고리를 끊으세요.
+	The pool {block} has no units. Give it at least 1 unit.	풀 {block}에 자원 단위가 없습니다. 자원 단위를 1개 이상 지정하세요.
+	{block} names no resource it needs. Add one under “Needs”.	{block}에 필요한 자원이 지정되어 있지 않습니다. “필요 자원”에서 추가하세요.
+	{block} needs a resource pool that does not exist. Choose a pool that exists.	{block}에 필요한 자원 풀이 존재하지 않습니다. 존재하는 풀을 선택하세요.
+	{block} needs units with the roles {roles}, which no pool has. Give a pool those roles, or change what {block} needs.	{block}에 역할이 {roles}인 자원 단위가 필요하지만 그런 풀이 없습니다. 풀에 해당 역할을 지정하거나 {block}의 필요 자원을 변경하세요.
+	{block} needs {needed} units at once, but at most {available} exist, so this can never be met. Ask for fewer units, or add units to the pool.	{block}에 자원 단위 {needed}개가 동시에 필요하지만 존재하는 것은 최대 {available}개라서 충족할 수 없습니다. 요청하는 수를 줄이거나 풀의 자원 단위를 늘리세요.
+	Set the priority of {block} to a finite number, not {value}.	{block}의 우선순위를 {value}이(가) 아닌 유한한 숫자로 설정하세요.
+	No task uses the pool {block}. Add it to a task's needs, or remove the pool.	풀 {block}을(를) 사용하는 작업이 없습니다. 작업의 필요 자원에 추가하거나 풀을 제거하세요.
+	{block} has a value for a calendar that does not exist. Choose a calendar that exists, or remove the value.	{block}에 존재하지 않는 캘린더의 값이 있습니다. 존재하는 캘린더를 선택하거나 그 값을 제거하세요.
+	The calendar {block} has no entries, so it is never active. Add an entry.	캘린더 {block}에는 항목이 없어 활성 상태가 되지 않습니다. 항목을 추가하세요.
+	{block} allows no arrivals outside the calendars but names no calendar, so it never creates entities. Add arrivals by calendar, or allow arrivals outside calendars.	{block}은(는) 캘린더 밖의 도착을 허용하지 않으면서 캘린더도 지정하지 않아 엔터티를 만들지 않습니다. 캘린더별 도착을 추가하거나 캘린더 밖의 도착을 허용하세요.
+	Set the batch size of {block} to 1 or more.	{block}의 배치 크기를 1 이상으로 설정하세요.
+	Set “{field}” of the conveyor {block} to a finite number above 0.	컨베이어 {block}의 “{field}” 값을 0보다 큰 유한한 숫자로 설정하세요.
+	Set “{field}” of the conveyor {block} to a finite number of 0 or more.	컨베이어 {block}의 “{field}” 값을 0 이상의 유한한 숫자로 설정하세요.
+	Set “{field}” of the conveyor {block} to a finite number other than 0.	컨베이어 {block}의 “{field}” 값을 0이 아닌 유한한 숫자로 설정하세요.
+	The conveyor {block} is {length} long but each entity takes {pitch} (item length plus gap), so not even one fits. Lengthen the conveyor, or shorten the item or the gap.	컨베이어 {block}의 길이는 {length}이지만 엔터티마다 {pitch}(품목 길이에 간격을 더한 값)가 필요해 하나도 들어가지 않습니다. 컨베이어를 늘이거나 품목이나 간격을 줄이세요.
+	The drawn path of the conveyor {block} is {path_length} long, but its “Length” is {length}, so the drawing and the run disagree. Make “Length” match the path, or change the shape.	컨베이어 {block}의 그려진 경로 길이는 {path_length}이지만 “길이”는 {length}이므로 그림과 실행이 맞지 않습니다. “길이”를 경로에 맞추거나 모양을 바꾸세요.
+	{block} is a transport, which StochCraft does not simulate yet. Remove it to run the model.	{block}은(는) 운반인데, StochCraft는 아직 운반을 시뮬레이션하지 않습니다. 모델을 실행하려면 제거하세요.
+	The pool {pool} of the transport {block} does not exist. Choose a pool that exists.	운반 {block}의 풀 {pool}이(가) 존재하지 않습니다. 존재하는 풀을 선택하세요.
+	The pool {pool} of the transport {block} is not mobile. Give the pool speeds and a home.	운반 {block}의 풀 {pool}은(는) 이동식이 아닙니다. 풀에 속도와 기점을 지정하세요.
+	Set “{field}” of the pool {block} to a finite number above 0.	풀 {block}의 “{field}” 값을 0보다 큰 유한한 숫자로 설정하세요.
+	The home of the pool {block} is not a block of the model. Choose a block as its home.	풀 {block}의 기점이 모델의 블록이 아닙니다. 기점으로 삼을 블록을 선택하세요.
+	The transport {block} needs one block before it, where it picks up, and one after it, where it drops off, but has {inputs} before and {outputs} after. Connect it to one block on each side.	운반 {block}에는 싣는 곳인 앞 블록 하나와 내리는 곳인 뒤 블록 하나가 필요하지만 앞에 {inputs}개, 뒤에 {outputs}개가 있습니다. 양쪽에 블록을 하나씩 연결하세요.
+	{other} has no place on the canvas, so the distances for {block} are not known. Place {other} on the canvas.	{other}이(가) 캔버스에 놓여 있지 않아 {block}의 거리를 알 수 없습니다. {other}을(를) 캔버스에 배치하세요.
+	The flow {flow} asks for no entities. Set its “Units” to 1 or more.	흐름 {flow}이(가) 엔터티를 하나도 요구하지 않습니다. “수량”을 1 이상으로 설정하세요.
+	The “Units” on the flow {flow} is ignored, because only a Split or join block takes several entities from one flow. Remove it.	흐름 {flow}의 “수량”은 무시됩니다. 한 흐름에서 여러 엔터티를 가져가는 것은 분할 또는 병합 블록뿐입니다. “수량”을 제거하세요.
+	No block makes batches, so {block} passes every entity through. Add a Batch block before it, or remove {block}.	배치를 만드는 블록이 없어 {block}은(는) 모든 엔터티를 그대로 통과시킵니다. 그 앞에 배치 블록을 추가하거나 {block}을(를) 제거하세요.
+	The stop condition names a block that does not exist. Choose a block that exists.	중지 조건이 존재하지 않는 블록을 지정합니다. 존재하는 블록을 선택하세요.
+	Set the count of the stop condition for {block} to 1 or more.	{block}의 중지 조건 횟수를 1 이상으로 설정하세요.
+	The stop condition waits for {block} to empty, but only a task can empty. Choose a task.	중지 조건이 {block}이(가) 비기를 기다리지만, 비울 수 있는 것은 작업뿐입니다. 작업을 선택하세요.
+	The stop condition at {block} can be met before the warm-up ends. A run that stops during the warm-up has no statistics after it and is left out of the results. Shorten the warm-up, or stop later.	{block}의 중지 조건이 준비 기간이 끝나기 전에 충족될 수 있습니다. 준비 기간 중에 멈춘 실행은 그 이후의 통계가 없어 결과에서 제외됩니다. 준비 기간을 줄이거나 더 늦게 멈추세요.
+	Every run stopped before the warm-up ended, so no metric is reported. Shorten the warm-up, or stop later.	모든 실행이 준비 기간이 끝나기 전에 멈춰서 보고되는 지표가 없습니다. 준비 기간을 줄이거나 더 늦게 멈추세요.
+	{replications} of {of} runs stopped before the warm-up ended, so their statistics are left out of every metric. Shorten the warm-up, or stop later.	실행 {of}회 중 {replications}회가 준비 기간이 끝나기 전에 멈춰서 그 통계가 모든 지표에서 제외됩니다. 준비 기간을 줄이거나 더 늦게 멈추세요.
+	{block} is offered {load}% of the work its units can do, so its waiting room grows without limit and the results describe no steady state. Add units, or shorten the service.	{block}에는 자원 단위가 처리할 수 있는 작업의 {load}%가 들어와 대기실이 끝없이 늘어나며, 결과가 정상 상태를 나타내지 않습니다. 자원 단위를 늘리거나 서비스 시간을 줄이세요.
+	{block} is busy {utilisation}% of the time, and at the end at least {backlog} entities are still waiting against {left} that left. Work arrives faster than it is done, so the results describe no steady state. Add units, or shorten the service.	{block}은(는) 시간의 {utilisation}% 동안 가동 중이며, 끝날 때 엔터티가 {left}개 떠난 데 비해 적어도 {backlog}개가 여전히 대기 중입니다. 작업이 처리되는 속도보다 빠르게 도착하므로 결과가 정상 상태를 나타내지 않습니다. 자원 단위를 늘리거나 서비스 시간을 줄이세요.
+	The experiment has one run, so its results cannot be told from chance. Set the number of runs to at least 2, and usually 10 or more.	실험의 실행이 1회뿐이라 결과를 우연과 구별할 수 없습니다. 실행 횟수를 2 이상, 보통은 10 이상으로 설정하세요.
+	{block} has a three-point estimate but no time to fit it to, so the estimate is ignored. Remove the estimate.	{block}에 3점 추정은 있지만 그것을 맞출 시간이 없어 추정이 무시됩니다. 추정을 제거하세요.
+	The three-point estimate of {block} cannot be fitted: every point must be a finite number. Correct the points.	{block}의 3점 추정을 맞출 수 없습니다. 모든 점이 유한한 숫자여야 합니다. 점을 수정하세요.
+	The three-point estimate of {block} cannot be fitted: the points must be in order, minimum, most likely, then maximum or 95th percentile. Correct the points.	{block}의 3점 추정을 맞출 수 없습니다. 점은 최솟값, 최빈값, 그다음 최댓값 또는 95번째 백분위수의 순서여야 합니다. 점을 수정하세요.
+	The three-point estimate of {block} cannot be fitted: log-normal and Weibull estimates have no maximum. Give a 95th percentile instead.	{block}의 3점 추정을 맞출 수 없습니다. 로그 정규 분포와 와이블 분포의 추정에는 최댓값이 없습니다. 대신 95번째 백분위수를 지정하세요.
+	The time of {block} is no longer the one fitted from its three-point estimate. Fit it again, or remove the estimate.	{block}의 시간이 더 이상 3점 추정에서 맞춘 값이 아닙니다. 다시 맞추거나 추정을 제거하세요.
+	In “{field}” of {block}, the normal distribution draws below 0 more than 1 time in 100, and each such draw counts as 0, so the times are longer on average than its mean. Use a truncated normal with a minimum of 0, or a log-normal.	{block}의 “{field}”에서 정규 분포가 100번에 한 번보다 자주 0 아래의 값을 뽑고, 그런 값은 모두 0으로 계산되므로 시간이 평균보다 길어집니다. 최솟값이 0인 절단 정규 분포나 로그 정규 분포를 사용하세요.
+	The entities of {block} do not add up: {came} came in or were inside at the start, but {went} left, were lost, gave up or are still inside.	{block}의 엔터티 수가 맞지 않습니다: {came}개가 들어왔거나 시작할 때 안에 있었지만, {went}개가 나갔거나 손실되었거나 포기했거나 아직 안에 있습니다.
+	The entities of the model do not add up: {came} were created or inside at the start, but {went} reached Departures, left the model elsewhere or are still inside.	모델의 엔터티 수가 맞지 않습니다: {came}개가 만들어졌거나 시작할 때 안에 있었지만, {went}개가 이탈 블록에 도달했거나 다른 곳에서 모델을 떠났거나 아직 안에 있습니다.
+	No entity left the model, of {came} created or inside at the start. Check that the routing leads to Departures and that the run is long enough for an entity to get through.	만들어졌거나 시작할 때 안에 있던 엔터티 {came}개 중 모델을 떠난 엔터티가 없습니다. 경로가 이탈 블록으로 이어지는지, 엔터티가 통과할 만큼 실행이 긴지 확인하세요.
+	Little's law does not hold at {block}: the time-average number inside was {mean}, but the entities' own times inside give {from_stays}.	{block}에서 리틀의 법칙이 성립하지 않습니다: 안에 있는 수의 시간 평균은 {mean}이었지만, 엔터티 각각이 안에 머문 시간으로 계산하면 {from_stays}입니다.
+	The utilisation of {block} counts {busy} units busy on average, but {working} were processing or setting up: units idle, blocked, off shift, failed or restarting were counted busy.	{block}의 가동률은 평균 {busy}개의 자원 단위를 가동 중으로 세지만, 처리 중이거나 셋업 중인 것은 {working}개였습니다. 유휴, 차단됨, 근무 외, 고장, 재기동 상태의 자원 단위가 가동 중으로 계산되었습니다.
+	The utilisation of {block} counts {busy} units busy on average, but {working} were processing or setting up: units at work were not counted busy.	{block}의 가동률은 평균 {busy}개의 자원 단위를 가동 중으로 세지만, 처리 중이거나 셋업 중인 것은 {working}개였습니다. 작업 중인 자원 단위가 가동 중으로 계산되지 않았습니다.
+	The shares of the time of the units of {block} in each state add up to {total}, not 1.	{block}의 자원 단위가 각 상태에서 보낸 시간의 비율을 합하면 1이 아니라 {total}입니다.
+	“{metric}” of {block} is {value}, outside 0 to 1 (0% to 100%).	{block}의 “{metric}” 값은 {value}이며 0에서 1(0%에서 100%)의 범위를 벗어납니다.
+	This was found in {replications} of {of} runs, and the furthest off is shown.	이 문제는 실행 {of}회 중 {replications}회에서 발견되었으며, 가장 크게 벗어난 값을 보여 줍니다.
+	This points to a fault in StochCraft rather than in the model. Please report it with the model.	이는 모델이 아니라 StochCraft의 결함을 가리킵니다. 모델과 함께 보고해 주세요.
+	Angle	각도
+	Failed	고장
+	Off shift	근무 외
+	Processing	처리
+	Radius	반지름
+	Rise	상승 높이
+	Speed empty	빈 상태 속도
+	Speed loaded	적재 시 속도
+	Turns	회전 수
+	Unload	하역
+	Lost	손실
+	An entity that leaves a waiting room before a unit takes it, because it has waited as long as it was willing to.	기다릴 수 있는 만큼 기다린 뒤, 자원 단위가 처리하기 전에 대기실을 떠나는 엔터티입니다.
+	An entity that does not join a waiting room at all, because the number already waiting put it off.	이미 대기 중인 수 때문에 아예 대기실에 합류하지 않는 엔터티입니다.
+	An entity that finds the waiting room full and takes the flow ticked “Turned away” instead of waiting.	대기실이 가득 찬 것을 보고 기다리는 대신 “거절” 항목이 선택된 흐름으로 가는 엔터티입니다.
+	An entity that leaves the model without reaching Departures: it found the waiting room full with nowhere else to go, or a decision with no way out for it.	이탈 블록에 도달하지 못하고 모델을 떠나는 엔터티입니다. 대기실이 가득 찼는데 달리 갈 곳이 없었거나, 의사 결정에 그 엔터티가 나갈 경로가 없었던 경우입니다.
+	Gave up on {id}	{id} 포기
+	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the flow ticked “Gave up”, or leaves the model.	각 엔터티는 도착할 때 무작위로 정해진 시간까지만 여기서 기다린 뒤 포기합니다. “포기” 항목이 선택된 흐름으로 가거나 모델을 떠납니다.
+	Entities that do not join the waiting room take this flow at once (to try again later, say), instead of being lost; they count as balked here.	대기실에 합류하지 않는 엔터티는 곧바로 이 흐름을 따릅니다(예를 들어 나중에 다시 시도하기 위해). 손실되지 않으며, 여기서는 진입 포기로 셉니다.
+	The job stops at once: the entity goes back to the front of the waiting room for any server on shift, and the work done on it is wasted.	작업이 즉시 멈춥니다. 엔터티는 근무 중인 아무 서버를 기다리도록 대기실 맨 앞으로 돌아가고, 그때까지 한 작업은 낭비됩니다.
+	The connection drops and the client tries again: the entity goes back to the front of the waiting room at once, and the work done on it is wasted.	연결이 끊기고 클라이언트가 다시 시도합니다. 엔터티는 즉시 대기실 맨 앞으로 돌아가고, 그때까지 한 작업은 낭비됩니다.
+	Ticked, entities queue up at the end while the rest keep moving. Unticked, the whole belt stops when the entity at the end cannot leave.	선택하면 끝에서 엔터티가 줄을 서고 나머지는 계속 움직입니다. 선택하지 않으면 끝의 엔터티가 나가지 못할 때 벨트 전체가 멈춥니다.
+	Play run 1 step by step and see each block's waiting room on the diagram	실행 1을 단계별로 재생하고 다이어그램에서 각 블록의 대기실 보기
+	Select a block to see its waiting room over time.	블록을 선택하면 시간에 따른 대기실을 볼 수 있습니다.
+	Entities on conveyors over time	컨베이어 위 엔터티 수의 시간 변화
+	Entities in the model over time	모델 안 엔터티 수의 시간 변화
+	How long each entity spends on the conveyors.	각 엔터티가 컨베이어 위에서 보내는 시간.
+	No entity has left a conveyor yet	아직 컨베이어를 떠난 엔터티가 없습니다
+	Share of entities by time on a conveyor, in {unit}	컨베이어 위 시간별 엔터티 비율({unit})
+	Time on conveyors: {n} entities between {lo} and {hi} {unit}	컨베이어 위의 시간: {lo}에서 {hi} {unit} 사이의 엔터티 {n}개
+	{from} to {to} {unit}: {share} of entities ({n})	{from}에서 {to} {unit}: 엔터티의 {share}({n})
+	How many entities are on the conveyors over time.	컨베이어 위에 있는 엔터티 수의 시간 변화.
+	How many entities are in the model over time.	모델 안에 있는 엔터티 수의 시간 변화.
+	At {time} {unit}: {n} entities	{time} {unit} 시점: 엔터티 {n}개
+@plural	Makes {n} independent run of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval across them.	시드 {seed}부터 모델을 독립적으로 {n}회 실행합니다. 각 블록의 결과에는 95% 신뢰 구간의 반폭이 포함됩니다.

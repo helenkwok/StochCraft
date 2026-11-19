@@ -88,6 +88,22 @@ pub const GLOSSARY: &[(&str, &str)] = &[
         "Where entities wait for a free unit (a queue). It can have a limit; an entity that finds it full is lost or waits upstream.",
     ),
     (
+        "Gave up",
+        "An entity that leaves a waiting room before a unit takes it, because it has waited as long as it was willing to.",
+    ),
+    (
+        "Balked",
+        "An entity that does not join a waiting room at all, because the number already waiting put it off.",
+    ),
+    (
+        "Turned away",
+        "An entity that finds the waiting room full and takes the flow ticked “Turned away” instead of waiting.",
+    ),
+    (
+        "Lost",
+        "An entity that leaves the model without reaching Departures: it found the waiting room full with nowhere else to go, or a decision with no way out for it.",
+    ),
+    (
         "Service time",
         "How long a unit takes with one entity, drawn from a distribution each time.",
     ),

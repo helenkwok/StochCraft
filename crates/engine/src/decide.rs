@@ -237,7 +237,7 @@ pub fn run(
     let compiled = compile(model).map_err(|ds| CommandError {
         code: ErrorCode::InvalidModel,
         message: "the model has errors and cannot run".into(),
-        details: Some(wire::diagnostics(&ds)),
+        details: Some(wire::diagnostics(model, &ds)),
     })?;
     let reports = Experiment::new(replications, seed)
         .run(|r| compiled.run(r.rng))
@@ -247,6 +247,7 @@ pub fn run(
         .map_err(|e| CommandError::new(ErrorCode::TimeStopped, e.to_string()))?;
     let summary = summarise(&reports);
     let warnings = wire::diagnostics(
+        model,
         &run_warnings(model, &summary)
             .into_iter()
             .chain(check_reports(model, &reports))

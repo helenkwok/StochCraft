@@ -21,8 +21,6 @@
 	A caller on hold: once a unit takes it, the entity stays.	En opkalder i kø: når en ressourceenhed har taget den, bliver enheden.
 	A client that times out: if its time runs out during service, it gives up then, and the unit finishes the job anyway (wasted work).	En klient med timeout: hvis dens tid løber ud under servicen, giver den op i det øjeblik, og ressourceenheden gør jobbet færdigt alligevel (spildt arbejde).
 	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	Den nye fil indeholder kun modellen: det, StochCraft ikke forstår i {file}, udelades.
-	Abandoned	Gav op
-	Abandoned on {id}	Gav op på {id}
 	About StochCraft	Om StochCraft
 	About {app}	Om {app}
 	Accent	Accent
@@ -162,7 +160,6 @@
 	Duration	Varighed
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Hver analyse kører eksperimentet flere gange med samme tilfældighedsfrø, så forskellene kommer fra ændringen, ikke fra tilfældighed. Det kan tage et stykke tid.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Hver enhed tager det første af disse alternativer, der kan opfyldes nu, alt på én gang, og giver ressourceenhederne tilbage, når den forlader opgaven.
-	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Hver enhed venter her højst en tid, der trækkes tilfældigt for den ved ankomsten, og giver så op: den tager vejen ud markeret »Gav op«, eller forlader modellen.
 	Each server (unit) is checked every so often, as a load balancer probes the servers behind it. One that fails, with too many waiting, is taken out of service for a restart, then comes back.	Hver server (ressourceenhed) kontrolleres med mellemrum, sådan som en load balancer afprøver serverne bag sig. En, der dumper, fordi for mange venter, tages ud af drift til en genstart og kommer så tilbage.
 	Edit	Redigér
 	Edit themes…	Redigér temaer…
@@ -412,7 +409,6 @@
 	Run	Kør
 	Run cancelled	Kørsel annulleret
 	Run experiment	Kør eksperiment
-	Play run 1 step by step and see each block's queue on the diagram	Afspil kørsel 1 trin for trin, og se hver bloks kø i diagrammet
 	Run the experiment ({shortcut})	Kør eksperimentet ({shortcut})
 	Run the experiment again to see this result's spread.	Kør eksperimentet igen for at se spredningen i dette resultat.
 	Run the experiment at each value of one parameter, and compare a result.	Kør eksperimentet ved hver værdi af én parameter, og sammenlign et resultat.
@@ -433,7 +429,6 @@
 	Scrap ratio	Kassationsandel
 	Seed	Tilfældighedsfrø
 	Select All	Vælg alt
-	Select a block to see its queue over time.	Vælg en blok for at se dens kø over tid.
 	Sender waits during transfer	Afsenderen venter under overførslen
 	Separate the values with semicolons or spaces.	Adskil værdierne med semikolon eller mellemrum.
 	Sequential	Sekventielle
@@ -497,10 +492,8 @@
 	Text	Tekst
 	Text on accent	Tekst på accent
 	Text on header	Tekst på topbjælke
-	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	Forbindelsen afbrydes, og klienten prøver igen: enheden går straks tilbage forrest i køen, og arbejdet udført på den er spildt.
 	The entity waits on its server and the job carries on with what was left once the server is back.	Enheden venter ved sin server, og jobbet fortsætter med det, der var tilbage, når serveren er tilbage.
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more runs would narrow it.	Intervallet går under målandelen på {share}, så det er ikke vist med 95 % sikkerhed, at andelen nås; flere kørsler ville gøre det smallere.
-	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	Jobbet stopper straks: enheden går tilbage forrest i køen til en hvilken som helst server på skift, og arbejdet udført på den er spildt.
 	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	Jobbet stopper straks; enheden venter ved sin server, og jobbet fortsætter med det, der var tilbage, når den server er på skift igen.
 	The last task with a resource it finished at	Den sidste opgave med ressource, emnet gik igennem
 	The mean time to the stop condition is over the runs that met it only; the others ran to their time limit.	Den gennemsnitlige tid til stopbetingelsen er kun over de kørsler, der nåede den; de øvrige kørte til deres tidsgrænse.
@@ -690,7 +683,6 @@ unit	yr	år
 	Balked on {id}	Fravalgte køen på {id}
 	Balking	Fravalg af kø
 	Count those in service	Medregn dem under betjening
-	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Enheder, der ikke stiller sig i køen, tager straks dette flow (for at prøve igen senere, f.eks.) i stedet for at gå tabt; de tælles her som at have fravalgt køen.
 	Joins with probability	Stiller sig i kø med sandsynlighed
 	Number waiting	Antal ventende
 	Share balked	Andel, der fravalgte køen
@@ -908,7 +900,6 @@ unit	yr	år
 @plural	Finished {n} run|Finished {n} runs	{n} kørsel fuldført|{n} kørsler fuldført
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	Åbnede {file} ({n} advarsel)|Åbnede {file} ({n} advarsler)
 @plural	Removed {n} block|Removed {n} blocks	Fjernede {n} blok|Fjernede {n} blokke
-@plural	Makes {n} independent run of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Udfører {n} uafhængig kørsel af modellen med frø {seed}. Hvert elements resultater indeholder den halve bredde af et 95% konfidensinterval.|Udfører {n} uafhængige kørsler af modellen med frø {seed}. Hvert elements resultater indeholder den halve bredde af et 95% konfidensinterval.
 @plural	The stop condition was met in {met} of {n} run, after {time} {unit} on average.|The stop condition was met in {met} of {n} runs, after {time} {unit} on average.	Stopbetingelsen blev nået i {met} af {n} kørsel, efter gennemsnitligt {time} {unit}.|Stopbetingelsen blev nået i {met} af {n} kørsler, efter gennemsnitligt {time} {unit}.
 @plural	{done} of {n} run finished|{done} of {n} runs finished	{done} af {n} kørsel fuldført|{done} af {n} kørsler fuldført
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} run|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} runs	{name}: {mean}{unit}\n95% interval fra {low} til {high}{unit}\npå tværs af {n} kørsel|{name}: {mean}{unit}\n95% interval fra {low} til {high}{unit}\npå tværs af {n} kørsler
@@ -938,7 +929,6 @@ unit	yr	år
 	kilometres	kilometer
 	inches	tommer
 	feet	fod
-	Ticked, items queue up at the end while the rest keep moving. Unticked, the whole belt stops when the item at the end cannot leave.	Markeret: emnerne står i kø for enden, mens de øvrige fortsætter. Ikke markeret: hele båndet stopper, når emnet for enden ikke kan komme videre.
 	A belt that carries entities from one end to the other. It has a length and a speed, and each entity takes a pitch of belt: its item length plus the gap kept free after it. So it holds at most length ÷ pitch entities and carries at most speed ÷ pitch per time unit. Accumulating: entities queue up at the end while the rest keep moving; otherwise the whole belt stops.	Et bånd, der bærer enheder fra den ene ende til den anden. Det har en længde og en hastighed, og hver enhed optager en deling af båndet: sit emnes længde plus mellemrummet, der holdes frit efter det. Det rummer derfor højst længde ÷ deling enheder og bærer højst hastighed ÷ deling pr. tidsenhed. Akkumulerende: enhederne står i kø for enden, mens de øvrige fortsætter; ellers stopper hele båndet.
 	Station	Station
 	Kind	Type
@@ -992,16 +982,162 @@ unit	yr	år
 	Time on conveyors	Tid på transportbånd
 	No conveyors in this model	Ingen transportbånd i denne model
 	Fills in when the run ends	Udfyldes, når kørslen slutter
-	How long each item spends on the conveyors.	Hvor længe hver enhed er på transportbåndene.
-	No item has left a conveyor yet	Ingen enhed har forladt et transportbånd endnu
-	Share of items by time on a conveyor, in {unit}	Andel af enheder efter tid på et transportbånd, i {unit}
-	Time on conveyors: {n} items between {lo} and {hi} {unit}	Tid på transportbånd: {n} enheder mellem {lo} og {hi} {unit}
-	{from} to {to} {unit}: {share} of items ({n})	{from} til {to} {unit}: {share} af enhederne ({n})
-	Items on conveyors over time	Enheder på transportbånd over tid
-	Items in the model over time	Enheder i modellen over tid
-	How many items are on the conveyors over time.	Hvor mange enheder der er på transportbåndene over tid.
-	How many items are in the model over time.	Hvor mange enheder der er i modellen over tid.
 	Nothing was recorded over time in these results	Intet blev registreret over tid i disse resultater
-	At {time} {unit}: {n} items	Ved {time} {unit}: {n} enheder
 	Run the model to fill the dashboard	Kør modellen for at fylde dashboardet
 	The resource and conveyor charts show the last run until this one ends	Diagrammerne for ressourcer og transportbånd viser den seneste kørsel, indtil denne slutter
+# Validation messages, new labels and word changes (issue #145)
+	The id “{id}” is not valid. Start an id with a letter or an underscore, then use only letters, digits, dots, hyphens and underscores.	Id'et »{id}« er ikke gyldigt. Begynd et id med et bogstav eller en understregning, og brug derefter kun bogstaver, cifre, punktummer, bindestreger og understregninger.
+	More than one block, flow, pool or calendar has the id “{id}”. Give each its own id.	Mere end én blok, ét flow, én pulje eller én kalender har id'et »{id}«. Giv hver sit eget id.
+	The flow {flow} uses a block that does not exist. Remove the flow, or connect it to a block that exists.	Flowet {flow} bruger en blok, der ikke findes. Fjern flowet, eller forbind det med en blok, der findes.
+	The flow {flow} leads into an Arrivals block, which takes no input. Remove the flow, or send it to another block.	Flowet {flow} fører ind i blokken Ankomster, som ikke tager imod input. Fjern flowet, eller send det til en anden blok.
+	The flow {flow} leaves a Departures block, which has no output. Remove the flow, or start it from another block.	Flowet {flow} forlader blokken Afgange, som ikke har noget output. Fjern flowet, eller lad det starte fra en anden blok.
+	The flow {flow} leads from a block back to itself. Remove it, or send it to another block.	Flowet {flow} fører fra en blok tilbage til den selv. Fjern flowet, eller send det til en anden blok.
+	{block} has nowhere to send entities. Add a flow from it to the next block.	{block} har ingen steder at sende enheder hen. Tilføj et flow fra blokken til den næste blok.
+	{block} has {count} flows out, and only a Decision or a Split or join block can send entities down several. Remove the extra flows, or add a Decision block.	{block} har {count} flow ud, og kun en blok Beslutning eller Opdel eller sammenflet kan sende enheder ad flere. Fjern de ekstra flow, eller tilføj en blok Beslutning.
+	In “{field}” of {block}, set “{param}” to a finite number.	Sæt »{param}« i »{field}« for {block} til et endeligt tal.
+	In “{field}” of {block}, set “{param}” to a number above 0.	Sæt »{param}« i »{field}« for {block} til et tal over 0.
+	In “{field}” of {block}, set “{param}” to 0 or more.	Sæt »{param}« i »{field}« for {block} til 0 eller mere.
+	In “{field}” of {block}, set “{param}” to 1 or more.	Sæt »{param}« i »{field}« for {block} til 1 eller mere.
+	In “{field}” of {block}, set “{param}” to a number from 0 to 1.	Sæt »{param}« i »{field}« for {block} til et tal fra 0 til 1.
+	In “{field}” of {block}, set “Minimum” below “Maximum”, and any “Most likely” value between them.	Sæt »Minimum« under »Maksimum« i »{field}« for {block}, og en eventuel værdi for »Mest sandsynlig« derimellem.
+	In “{field}” of {block}, add data points whose probabilities add up to more than 0.	Tilføj datapunkter i »{field}« for {block}, hvis sandsynligheder tilsammen er over 0.
+	{block} would never have a unit to work with. Give it at least 1 unit.	{block} ville aldrig have en ressourceenhed at arbejde med. Giv blokken mindst 1 ressourceenhed.
+	{block} would make entities without end, because its “Time between arrivals” is always 0. Give it a time above 0, or set an “Arrival limit”.	{block} ville lave enheder uden ende, fordi »Tid mellem ankomster« altid er 0. Giv den en tid over 0, eller angiv en »Grænse for ankomster«.
+	The model has no Arrivals block, so nothing will happen. Add an Arrivals block.	Modellen har ingen blok Ankomster, så der sker ingenting. Tilføj en blok Ankomster.
+	The model has no Departures block, so no time in system is measured. Add a Departures block.	Modellen har ingen blok Afgange, så der måles ingen tid i systemet. Tilføj en blok Afgange.
+	No entity can reach {block} from an Arrivals block. Connect it to a block that entities pass through.	Ingen enhed kan nå {block} fra en blok Ankomster. Forbind blokken med en blok, som enheder passerer.
+	Entities in {block} can never reach a Departures block. Connect it on towards Departures.	Enheder i {block} kan aldrig nå en blok Afgange. Forbind blokken videre mod Afgange.
+	Set the “{state}” power of {block} to a number of kilowatts, 0 or more.	Angiv effekten »{state}« for {block} som et antal kilowatt, 0 eller mere.
+	Set the warm-up of the experiment to 0 or more.	Sæt eksperimentets opvarmning til 0 eller mere.
+	Set the duration of the experiment to more than 0.	Sæt eksperimentets varighed til mere end 0.
+	Set the number of runs of the experiment to 1 or more.	Sæt antallet af kørsler i eksperimentet til 1 eller mere.
+	Set the layout scale (length units per drawing unit) to a finite number above 0.	Sæt layoutets skala (længdeenheder pr. tegneenhed) til et endeligt tal over 0.
+	A property of {block} has no name. Give it a name, or remove it.	En egenskab for {block} har intet navn. Giv den et navn, eller fjern den.
+	{block} sets the property “{name}” twice. Keep one of them.	{block} angiver egenskaben »{name}« to gange. Behold en af dem.
+	The property “{name}” of {block} needs shares that are not negative and add up to more than 0. Change the shares.	Egenskaben »{name}« for {block} kræver andele, der ikke er negative og tilsammen er over 0. Ret andelene.
+	The property “{name}” has the type “{type2}” on {block} but “{type}” on another block. Give it one type everywhere.	Egenskaben »{name}« har typen »{type2}« på {block}, men »{type}« på en anden blok. Giv den én type overalt.
+	The value of the property “{name}” on {block} does not fit its type, “{type}”. Change the value or the type.	Værdien af egenskaben »{name}« på {block} passer ikke til dens type, »{type}«. Ret værdien eller typen.
+	The expression for the property “{name}” on {block} cannot be used: {error}. Correct “{expression}”.	Udtrykket for egenskaben »{name}« på {block} kan ikke bruges: {error}. Ret »{expression}«.
+	{block} reads the property “{name}”, which no block sets, so it would read as empty. Set it on an earlier block, or correct the name.	{block} læser egenskaben »{name}«, som ingen blok angiver, så den ville blive læst som tom. Angiv den på en tidligere blok, eller ret navnet.
+	The setup of {block} has times for particular changes but no property to watch. Choose a property under “Only when this property changes”.	Omstillingen for {block} har tider for bestemte ændringer, men ingen egenskab at holde øje med. Vælg en egenskab under »Kun når denne egenskab ændres«.
+	{block} has times for particular values but no property to read them from. Choose a property under “Service time by property”.	{block} har tider for bestemte værdier, men ingen egenskab at læse dem fra. Vælg en egenskab under »Servicetid efter egenskab«.
+	{block} has two times for the value “{value}”. Keep one.	{block} har to tider for værdien »{value}«. Behold en af dem.
+	Set the time of {block} for the value “{value}” to a mean of 0 or more.	Sæt tiden for {block} for værdien »{value}« til et gennemsnit på 0 eller mere.
+	The scrap at {block} counts against {other}, which is not a task with a resource. Choose a task with a resource.	Kassationen ved {block} tæller mod {other}, som ikke er en opgave med ressource. Vælg en opgave med ressource.
+	Set “Planned run time per item” of {block} to a mean above 0.	Sæt »Planlagt kørselstid pr. emne« for {block} til et gennemsnit over 0.
+	Set “Time before giving up” of {block} to a mean of 0 or more.	Sæt »Tid før den giver op« for {block} til et gennemsnit på 0 eller mere.
+	The flow {flow} is ticked “Gave up”, but only a task with a resource and a “Time before giving up” sends entities that give up. Untick it, or set a “Time before giving up” on {block}.	Flowet {flow} er markeret som »Gav op«, men kun en opgave med ressource og en »Tid før den giver op« sender enheder, der giver op. Fjern markeringen, eller angiv en »Tid før den giver op« for {block}.
+	{count} flows out of {block} are ticked “{way}”; at most one can be. Untick all but one.	{count} flow ud af {block} er markeret som »{way}«; højst ét må være det. Fjern markeringen på alle undtagen ét.
+	The flow {flow} is ticked “Turned away”, but only a task with a resource and a limited waiting room turns entities away. Untick it, or limit the waiting room of {block}.	Flowet {flow} er markeret som »Afvist«, men kun en opgave med ressource og et begrænset venteværelse afviser enheder. Fjern markeringen, eller begræns venteværelset for {block}.
+	The flow {flow} is ticked both “Gave up” and “Turned away”. Keep one of them.	Flowet {flow} er markeret som både »Gav op« og »Afvist«. Behold en af dem.
+	Set every chance of joining in the balking table of {block} to a number from 0 to 1.	Sæt hver chance for at stille sig i køen i tabellen for fravalg af kø for {block} til et tal fra 0 til 1.
+	Put the rows of the balking table of {block} in increasing order of “Number waiting”.	Sæt rækkerne i tabellen for fravalg af kø for {block} i stigende rækkefølge efter »Antal ventende«.
+	The flow {flow} is ticked “Balked”, but only a task with a resource and balking sends entities that balk. Untick it, or turn on balking for {block}.	Flowet {flow} er markeret som »Fravalgte køen«, men kun en opgave med ressource og fravalg af kø sender enheder, der fravælger køen. Fjern markeringen, eller slå fravalg af kø til for {block}.
+	The flow {flow} is ticked “Balked” and also “Gave up” or “Turned away”. Keep one of them.	Flowet {flow} er markeret som »Fravalgte køen« og også som »Gav op« eller »Afvist«. Behold en af dem.
+	The waiting room of {block} is set by calendar or per working server, but has no number of places, so it is unlimited. Give it a number of places, or make it fixed.	Venteværelset for {block} angives pr. kalender eller pr. server i drift, men har ikke noget antal pladser og er derfor ubegrænset. Giv det et antal pladser, eller gør det fast.
+	The waiting room of {block} is set by calendar, but no calendar has a value. Add a value for a calendar, or make the waiting room fixed.	Venteværelset for {block} angives pr. kalender, men ingen kalender har en værdi. Tilføj en værdi for en kalender, eller gør venteværelset fast.
+	Set “Fails above, waiting per working server” of {block} to a number of 0 or more.	Sæt »Dumper over, ventende pr. server i drift« for {block} til et tal på 0 eller mere.
+	Set “Check every” of {block} to a mean above 0.	Sæt »Kontrol hver« for {block} til et gennemsnit over 0.
+	Set the demand of {block} to a number of parts above 0.	Sæt behovet for {block} til et antal emner over 0.
+	The demand of {block} is per shift but names no calendar to say when the shifts are. Choose a calendar.	Behovet for {block} gælder pr. skift, men angiver ingen kalender, der siger, hvornår skiftene er. Vælg en kalender.
+	The demand of {block} names a calendar that does not exist. Choose a calendar that exists.	Behovet for {block} angiver en kalender, der ikke findes. Vælg en kalender, der findes.
+	The probability {value} on the flow {flow} is not from 0 to 1. Enter a probability from 0 to 1.	Sandsynligheden {value} på flowet {flow} er ikke fra 0 til 1. Angiv en sandsynlighed fra 0 til 1.
+	The probabilities of the flows out of {block} add up to {sum}, not 1, so they are used in proportion. Change them to add up to 1 if that is not what you want.	Sandsynlighederne for flowene ud af {block} summerer til {sum}, ikke 1, så de bruges forholdsmæssigt. Ret dem, så de summerer til 1, hvis det ikke er det, du vil.
+	The condition on the flow {flow} cannot be used: {error}. Correct “{expression}”.	Betingelsen på flowet {flow} kan ikke bruges: {error}. Ret »{expression}«.
+	The condition on the flow {flow} is ignored, because only flows out of a Decision block choose a route. Remove the condition.	Betingelsen på flowet {flow} ignoreres, fordi kun flow ud af en blok Beslutning vælger rute. Fjern betingelsen.
+	The probability on the flow {flow} is ignored, because only flows out of a Decision block choose a route. Remove the probability.	Sandsynligheden på flowet {flow} ignoreres, fordi kun flow ud af en blok Beslutning vælger rute. Fjern sandsynligheden.
+	The condition on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the condition.	Betingelsen på flowet {flow} ignoreres, fordi Beslutningen sender enheder til den korteste kø. Fjern betingelsen.
+	The probability on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the probability.	Sandsynligheden på flowet {flow} ignoreres, fordi Beslutningen sender enheder til den korteste kø. Fjern sandsynligheden.
+	The default on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the default.	Standardindstillingen på flowet {flow} ignoreres, fordi Beslutningen sender enheder til den korteste kø. Fjern standardindstillingen.
+	The probability on the flow {flow} is ignored, because the Decision routes by condition. Remove the probability.	Sandsynligheden på flowet {flow} ignoreres, fordi Beslutningen vælger rute efter betingelse. Fjern sandsynligheden.
+	The default flow of {block} is not one of its own flows out. Choose one of the flows out of {block} as the default.	Standardflowet for {block} er ikke et af blokkens egne flow ud. Vælg et af flowene ud af {block} som standard.
+	{block} routes by condition but has no default flow, so an entity for which no condition holds leaves the model here. Choose a default flow.	{block} vælger rute efter betingelse, men har intet standardflow, så en enhed, som ingen betingelse gælder for, forlader modellen her. Vælg et standardflow.
+	{block} diverts entities but has no default flow, so an entity whose way is full has nowhere else to go. Choose a default flow.	{block} omdirigerer enheder, men har intet standardflow, så en enhed, hvis vej er fuld, ikke har nogen anden vej at gå. Vælg et standardflow.
+	{block} waits for an entity on the flow {flow}, which none can reach, so it never sends one on. Remove that flow, or connect it to a block that entities reach.	{block} venter på en enhed på flowet {flow}, som ingen kan nå, så den sender aldrig nogen videre. Fjern det flow, eller forbind det med en blok, som enheder når.
+	{block} has a limited waiting room and is fed through {gateway}. While it is full, {gateway} holds up every entity behind it, and they wait before it without limit. Remove the gateway before {block}, or remove the limit.	{block} har et begrænset venteværelse og fødes via blokken {gateway}. Mens venteværelset er fuldt, holder den blok alle enheder bagved tilbage, og de venter foran det uden grænse. Fjern blokken {gateway} før {block}, eller fjern grænsen.
+	The limited waiting rooms of {loop} feed each other in a loop, so when all of them are full the loop deadlocks. Remove the limit on one of them, or break the loop.	De begrænsede venteværelser i {loop} fodrer hinanden i en løkke, så når alle er fulde, går løkken i baglås. Fjern grænsen for et af dem, eller bryd løkken.
+	The pool {block} has no units. Give it at least 1 unit.	Puljen {block} har ingen ressourceenheder. Giv den mindst 1 ressourceenhed.
+	{block} names no resource it needs. Add one under “Needs”.	{block} angiver ingen ressource, den har brug for. Tilføj en under »Behov«.
+	{block} needs a resource pool that does not exist. Choose a pool that exists.	{block} har brug for en ressourcepulje, der ikke findes. Vælg en pulje, der findes.
+	{block} needs units with the roles {roles}, which no pool has. Give a pool those roles, or change what {block} needs.	{block} har brug for ressourceenheder med rollerne {roles}, som ingen pulje har. Giv en pulje de roller, eller ret, hvad {block} har brug for.
+	{block} needs {needed} units at once, but at most {available} exist, so this can never be met. Ask for fewer units, or add units to the pool.	{block} har brug for flere ressourceenheder på én gang, end der findes (behov: {needed}, findes: {available}), så det kan aldrig opfyldes. Bed om færre ressourceenheder, eller tilføj ressourceenheder til puljen.
+	Set the priority of {block} to a finite number, not {value}.	Sæt prioriteten for {block} til et endeligt tal, ikke til {value}.
+	No task uses the pool {block}. Add it to a task's needs, or remove the pool.	Ingen opgave bruger puljen {block}. Tilføj den til en opgaves behov, eller fjern puljen.
+	{block} has a value for a calendar that does not exist. Choose a calendar that exists, or remove the value.	{block} har en værdi for en kalender, der ikke findes. Vælg en kalender, der findes, eller fjern værdien.
+	The calendar {block} has no entries, so it is never active. Add an entry.	Kalenderen {block} har ingen poster og er derfor aldrig aktiv. Tilføj en post.
+	{block} allows no arrivals outside the calendars but names no calendar, so it never creates entities. Add arrivals by calendar, or allow arrivals outside calendars.	{block} tillader ingen ankomster uden for kalenderne, men angiver ingen kalender, så den laver aldrig enheder. Tilføj ankomster pr. kalender, eller tillad ankomster uden for kalendere.
+	Set the batch size of {block} to 1 or more.	Sæt partistørrelsen for {block} til 1 eller mere.
+	Set “{field}” of the conveyor {block} to a finite number above 0.	Sæt »{field}« for transportbåndet {block} til et endeligt tal over 0.
+	Set “{field}” of the conveyor {block} to a finite number of 0 or more.	Sæt »{field}« for transportbåndet {block} til et endeligt tal på 0 eller mere.
+	Set “{field}” of the conveyor {block} to a finite number other than 0.	Sæt »{field}« for transportbåndet {block} til et endeligt tal, der ikke er 0.
+	The conveyor {block} is {length} long but each entity takes {pitch} (item length plus gap), so not even one fits. Lengthen the conveyor, or shorten the item or the gap.	Transportbåndet {block} er {length} langt, men hver enhed fylder {pitch} (emnets længde plus mellemrum), så ikke engang én er der plads til. Gør transportbåndet længere, eller emnet eller mellemrummet kortere.
+	The drawn path of the conveyor {block} is {path_length} long, but its “Length” is {length}, so the drawing and the run disagree. Make “Length” match the path, or change the shape.	Den tegnede bane for transportbåndet {block} er {path_length} lang, men dets »Længde« er {length}, så tegningen og kørslen stemmer ikke overens. Lad »Længde« passe til banen, eller ret formen.
+	{block} is a transport, which StochCraft does not simulate yet. Remove it to run the model.	{block} er en transport, som StochCraft ikke simulerer endnu. Fjern blokken for at køre modellen.
+	The pool {pool} of the transport {block} does not exist. Choose a pool that exists.	Puljen {pool} for transporten {block} findes ikke. Vælg en pulje, der findes.
+	The pool {pool} of the transport {block} is not mobile. Give the pool speeds and a home.	Puljen {pool} for transporten {block} er ikke mobil. Giv puljen hastigheder og et hjemsted.
+	Set “{field}” of the pool {block} to a finite number above 0.	Sæt »{field}« for puljen {block} til et endeligt tal over 0.
+	The home of the pool {block} is not a block of the model. Choose a block as its home.	Hjemstedet for puljen {block} er ikke en blok i modellen. Vælg en blok som hjemsted.
+	The transport {block} needs one block before it, where it picks up, and one after it, where it drops off, but has {inputs} before and {outputs} after. Connect it to one block on each side.	Transporten {block} har brug for en blok før sig, hvor den henter, og en efter sig, hvor den afleverer. Nu er antallet før: {inputs} og efter: {outputs}. Forbind den med en blok på hver side.
+	{other} has no place on the canvas, so the distances for {block} are not known. Place {other} on the canvas.	{other} har ingen plads på hovedfladen, så afstandene for {block} er ikke kendt. Placer {other} på hovedfladen.
+	The flow {flow} asks for no entities. Set its “Units” to 1 or more.	Flowet {flow} beder om ingen enheder. Sæt dets »Enheder« til 1 eller mere.
+	The “Units” on the flow {flow} is ignored, because only a Split or join block takes several entities from one flow. Remove it.	»Enheder« på flowet {flow} ignoreres, fordi kun en blok Opdel eller sammenflet tager flere enheder fra ét flow. Fjern dem.
+	No block makes batches, so {block} passes every entity through. Add a Batch block before it, or remove {block}.	Ingen blok laver partier, så {block} lader hver enhed passere. Tilføj en blok Parti før den, eller fjern {block}.
+	The stop condition names a block that does not exist. Choose a block that exists.	Stopbetingelsen angiver en blok, der ikke findes. Vælg en blok, der findes.
+	Set the count of the stop condition for {block} to 1 or more.	Sæt antallet i stopbetingelsen for {block} til 1 eller mere.
+	The stop condition waits for {block} to empty, but only a task can empty. Choose a task.	Stopbetingelsen venter på, at {block} bliver tom, men kun en opgave kan blive tom. Vælg en opgave.
+	The stop condition at {block} can be met before the warm-up ends. A run that stops during the warm-up has no statistics after it and is left out of the results. Shorten the warm-up, or stop later.	Stopbetingelsen ved {block} kan opfyldes, før opvarmningen er slut. En kørsel, der stopper under opvarmningen, har ingen statistik efter den og udelades af resultaterne. Forkort opvarmningen, eller stop senere.
+	Every run stopped before the warm-up ended, so no metric is reported. Shorten the warm-up, or stop later.	Hver kørsel stoppede, før opvarmningen var slut, så intet målepunkt rapporteres. Forkort opvarmningen, eller stop senere.
+	{replications} of {of} runs stopped before the warm-up ended, so their statistics are left out of every metric. Shorten the warm-up, or stop later.	{replications} af {of} kørsler stoppede, før opvarmningen var slut, så deres statistik udelades af alle målepunkter. Forkort opvarmningen, eller stop senere.
+	{block} is offered {load}% of the work its units can do, so its waiting room grows without limit and the results describe no steady state. Add units, or shorten the service.	{block} tilbydes {load}% af det arbejde, dets ressourceenheder kan udføre, så dets venteværelse vokser uden grænse, og resultaterne beskriver ingen stabil tilstand. Tilføj ressourceenheder, eller forkort servicen.
+	{block} is busy {utilisation}% of the time, and at the end at least {backlog} entities are still waiting against {left} that left. Work arrives faster than it is done, so the results describe no steady state. Add units, or shorten the service.	{block} er optaget {utilisation}% af tiden, og ved slutningen venter der stadig enheder (mindst: {backlog}) mod forladte enheder ({left}). Arbejde kommer ind hurtigere, end det udføres, så resultaterne beskriver ingen stabil tilstand. Tilføj ressourceenheder, eller forkort servicen.
+	The experiment has one run, so its results cannot be told from chance. Set the number of runs to at least 2, and usually 10 or more.	Eksperimentet har én kørsel, så dets resultater kan ikke skelnes fra tilfældighed. Sæt antallet af kørsler til mindst 2, og oftest 10 eller flere.
+	{block} has a three-point estimate but no time to fit it to, so the estimate is ignored. Remove the estimate.	{block} har et trepunktsestimat, men ingen tid at tilpasse det til, så estimatet ignoreres. Fjern estimatet.
+	The three-point estimate of {block} cannot be fitted: every point must be a finite number. Correct the points.	Trepunktsestimatet for {block} kan ikke tilpasses: hvert punkt skal være et endeligt tal. Ret punkterne.
+	The three-point estimate of {block} cannot be fitted: the points must be in order, minimum, most likely, then maximum or 95th percentile. Correct the points.	Trepunktsestimatet for {block} kan ikke tilpasses: punkterne skal stå i rækkefølge: minimum, mest sandsynlig, derefter maksimum eller 95. percentil. Ret punkterne.
+	The three-point estimate of {block} cannot be fitted: log-normal and Weibull estimates have no maximum. Give a 95th percentile instead.	Trepunktsestimatet for {block} kan ikke tilpasses: lognormale og Weibull-estimater har intet maksimum. Angiv i stedet en 95. percentil.
+	The time of {block} is no longer the one fitted from its three-point estimate. Fit it again, or remove the estimate.	Tiden for {block} er ikke længere den, der blev tilpasset ud fra dens trepunktsestimat. Tilpas den igen, eller fjern estimatet.
+	In “{field}” of {block}, the normal distribution draws below 0 more than 1 time in 100, and each such draw counts as 0, so the times are longer on average than its mean. Use a truncated normal with a minimum of 0, or a log-normal.	I »{field}« for {block} trækker normalfordelingen under 0 oftere end 1 gang ud af 100, og hvert sådant træk tæller som 0, så tiderne er længere i gennemsnit end dens gennemsnit. Brug en afkortet normal med et minimum på 0, eller en lognormal.
+	The entities of {block} do not add up: {came} came in or were inside at the start, but {went} left, were lost, gave up or are still inside.	Enhederne i {block} stemmer ikke. Kom ind eller var der ved starten: {came}. Forlod, gik tabt, gav op eller er der stadig: {went}.
+	The entities of the model do not add up: {came} were created or inside at the start, but {went} reached Departures, left the model elsewhere or are still inside.	Enhederne i modellen stemmer ikke. Blev oprettet eller var der ved starten: {came}. Nåede Afgange, forlod modellen andetsteds eller er der stadig: {went}.
+	No entity left the model, of {came} created or inside at the start. Check that the routing leads to Departures and that the run is long enough for an entity to get through.	Ingen enhed forlod modellen (oprettet eller til stede ved starten: {came}). Tjek, at ruten fører til Afgange, og at kørslen er lang nok til, at en enhed kan nå igennem.
+	Little's law does not hold at {block}: the time-average number inside was {mean}, but the entities' own times inside give {from_stays}.	Littles lov gælder ikke ved {block}: tidsgennemsnittet af antallet inde var {mean}, men enhedernes egne tider inde giver {from_stays}.
+	The utilisation of {block} counts {busy} units busy on average, but {working} were processing or setting up: units idle, blocked, off shift, failed or restarting were counted busy.	Udnyttelsesgraden for {block} tæller i gennemsnit {busy} ressourceenheder som optaget, men {working} var i gang med at behandle eller omstille: enheder, der var ledige, blokeret, uden for skift, i nedbrud eller genstartede, blev talt som optaget.
+	The utilisation of {block} counts {busy} units busy on average, but {working} were processing or setting up: units at work were not counted busy.	Udnyttelsesgraden for {block} tæller i gennemsnit {busy} ressourceenheder som optaget, men {working} var i gang med at behandle eller omstille: enheder i arbejde blev ikke talt som optaget.
+	The shares of the time of the units of {block} in each state add up to {total}, not 1.	Andelene af tiden for ressourceenhederne i {block} i hver tilstand summerer til {total}, ikke 1.
+	“{metric}” of {block} is {value}, outside 0 to 1 (0% to 100%).	»{metric}« for {block} er {value}, uden for 0 til 1 (0% til 100%).
+	This was found in {replications} of {of} runs, and the furthest off is shown.	Dette blev fundet i {replications} af {of} kørsler, og den, der ligger længst fra, vises.
+	This points to a fault in StochCraft rather than in the model. Please report it with the model.	Dette peger på en fejl i StochCraft frem for i modellen. Rapportér den sammen med modellen.
+	Angle	Vinkel
+	Failed	I nedbrud
+	Off shift	Uden for skift
+	Processing	Under behandling
+	Radius	Radius
+	Rise	Stigning
+	Speed empty	Hastighed tom
+	Speed loaded	Hastighed læsset
+	Turns	Omdrejninger
+	Unload	Aflæsning
+	Lost	Tabt
+	An entity that leaves a waiting room before a unit takes it, because it has waited as long as it was willing to.	En enhed, der forlader et venteværelse, før en ressourceenhed tager den, fordi den har ventet så længe, som den ville.
+	An entity that does not join a waiting room at all, because the number already waiting put it off.	En enhed, der slet ikke stiller sig i et venteværelse, fordi antallet, der allerede venter, afskrækkede den.
+	An entity that finds the waiting room full and takes the flow ticked “Turned away” instead of waiting.	En enhed, der finder venteværelset fuldt og tager flowet markeret »Afvist« i stedet for at vente.
+	An entity that leaves the model without reaching Departures: it found the waiting room full with nowhere else to go, or a decision with no way out for it.	En enhed, der forlader modellen uden at nå Afgange: den fandt venteværelset fuldt uden nogen anden vej, eller en beslutning uden vej ud for den.
+	Gave up on {id}	Gav op på {id}
+	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the flow ticked “Gave up”, or leaves the model.	Hver enhed venter her højst en tid, der trækkes tilfældigt for den ved ankomsten, og giver så op: den tager flowet markeret »Gav op«, eller forlader modellen.
+	Entities that do not join the waiting room take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Enheder, der ikke stiller sig i venteværelset, tager straks dette flow (for at prøve igen senere, f.eks.) i stedet for at gå tabt; de tælles her som at have fravalgt køen.
+	The job stops at once: the entity goes back to the front of the waiting room for any server on shift, and the work done on it is wasted.	Jobbet stopper straks: enheden går tilbage forrest i venteværelset til en hvilken som helst server på skift, og arbejdet udført på den er spildt.
+	The connection drops and the client tries again: the entity goes back to the front of the waiting room at once, and the work done on it is wasted.	Forbindelsen afbrydes, og klienten prøver igen: enheden går straks tilbage forrest i venteværelset, og arbejdet udført på den er spildt.
+	Ticked, entities queue up at the end while the rest keep moving. Unticked, the whole belt stops when the entity at the end cannot leave.	Markeret: enhederne står i kø for enden, mens de øvrige fortsætter. Ikke markeret: hele båndet stopper, når enheden for enden ikke kan komme videre.
+	Play run 1 step by step and see each block's waiting room on the diagram	Afspil kørsel 1 trin for trin, og se hver bloks venteværelse i diagrammet
+	Select a block to see its waiting room over time.	Vælg en blok for at se dens venteværelse over tid.
+	Entities on conveyors over time	Enheder på transportbånd over tid
+	Entities in the model over time	Enheder i modellen over tid
+	How long each entity spends on the conveyors.	Hvor længe hver enhed er på transportbåndene.
+	No entity has left a conveyor yet	Ingen enhed har forladt et transportbånd endnu
+	Share of entities by time on a conveyor, in {unit}	Andel af enheder efter tid på et transportbånd, i {unit}
+	Time on conveyors: {n} entities between {lo} and {hi} {unit}	Tid på transportbånd: {n} enheder mellem {lo} og {hi} {unit}
+	{from} to {to} {unit}: {share} of entities ({n})	{from} til {to} {unit}: {share} af enhederne ({n})
+	How many entities are on the conveyors over time.	Hvor mange enheder der er på transportbåndene over tid.
+	How many entities are in the model over time.	Hvor mange enheder der er i modellen over tid.
+	At {time} {unit}: {n} entities	Ved {time} {unit}: {n} enheder
+@plural	Makes {n} independent run of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval across them.	Udfører {n} uafhængig kørsel af modellen med frø {seed}. Hver bloks resultater indeholder den halve bredde af et 95% konfidensinterval.|Udfører {n} uafhængige kørsler af modellen med frø {seed}. Hver bloks resultater indeholder den halve bredde af et 95% konfidensinterval.

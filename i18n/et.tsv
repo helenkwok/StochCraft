@@ -21,8 +21,6 @@
 	A caller on hold: once a unit takes it, the entity stays.	Ootel helistaja: kui ühik on ta vastu võtnud, jääb olem alles.
 	A client that times out: if its time runs out during service, it gives up then, and the unit finishes the job anyway (wasted work).	Ajalõpuga klient: kui tema aeg saab teeninduse ajal otsa, loobub ta siis ja ühik teeb töö ikkagi lõpuni (raisatud töö).
 	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	Uues failis on ainult mudel: see, millest StochCraft failis {file} aru ei saa, jäetakse välja.
-	Abandoned	Loobunud
-	Abandoned on {id}	Loobunud voos {id}
 	About StochCraft	Teave StochCrafti kohta
 	About {app}	Teave: {app}
 	Accent	Rõhuvärv
@@ -162,7 +160,6 @@
 	Duration	Kestus
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Iga analüüs käitab eksperimenti mitu korda sama juhuarvuseemnega, nii et erinevused tulevad muudatusest, mitte juhusest. See võib võtta aega.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Iga olem võtab neist esimese, mida saab kohe täita, kõik korraga, ja annab ühikud tagasi, kui ülesandest lahkub.
-	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Iga olem ootab siin kõige rohkem aja, mis talle saabumisel juhuslikult määratakse, ja loobub siis: ta läheb väljapääsu kaudu, mis on märgitud „Loobunud”, või lahkub mudelist.
 	Each server (unit) is checked every so often, as a load balancer probes the servers behind it. One that fails, with too many waiting, is taken out of service for a restart, then comes back.	Iga serverit (ühikut) kontrollitakse aeg-ajalt, nii nagu koormusjaotur kontrollib enda taga olevaid servereid. Kontrollis läbi kukkunud server, mille juures ootab liiga palju, võetakse taaskäivituseks kasutusest välja ja see tuleb siis tagasi.
 	Edit	Muuda
 	Edit themes…	Muuda teemasid…
@@ -412,7 +409,6 @@
 	Run	Käivita
 	Run cancelled	Käivitus tühistatud
 	Run experiment	Käivita eksperiment
-	Play run 1 step by step and see each block's queue on the diagram	Esita käivitamine 1 samm-sammult ja vaata iga ploki järjekorda diagrammil
 	Run the experiment ({shortcut})	Käivita eksperiment ({shortcut})
 	Run the experiment again to see this result's spread.	Käivita eksperiment uuesti, et näha selle tulemuse hajuvust.
 	Run the experiment at each value of one parameter, and compare a result.	Käivita eksperiment ühe parameetri iga väärtusega ja võrdle tulemust.
@@ -433,7 +429,6 @@
 	Scrap ratio	Praagi osakaal
 	Seed	Juhuarvuseeme
 	Select All	Vali kõik
-	Select a block to see its queue over time.	Vali plokk, et näha selle järjekorda aja jooksul.
 	Sender waits during transfer	Saatja ootab ülekande ajal
 	Separate the values with semicolons or spaces.	Eralda väärtused semikoolonite või tühikutega.
 	Sequential	Järjestikused
@@ -497,10 +492,8 @@
 	Text	Tekst
 	Text on accent	Tekst rõhuvärvil
 	Text on header	Tekst päisel
-	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	Ühendus katkeb ja klient proovib uuesti: olem läheb kohe tagasi järjekorra algusesse ja talle tehtud töö on raisatud.
 	The entity waits on its server and the job carries on with what was left once the server is back.	Olem ootab oma serveri juures ja töö jätkub ülejäänuga, kui server on tagasi.
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more runs would narrow it.	Vahemik ulatub alla sihtosakaalu {share}, seega pole 95% usaldusega näidatud, et osakaal on saavutatud; rohkem käivitamisi kitsendaks seda.
-	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	Töö peatub kohe: olem läheb tagasi järjekorra algusesse ükskõik millise vahetuses oleva serveri jaoks ja talle tehtud töö on raisatud.
 	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	Töö peatub kohe; olem ootab oma serveri juures ja töö jätkub ülejäänuga, kui see server on taas vahetuses.
 	The last task with a resource it finished at	Viimane ressursiga ülesanne, mille detail läbis
 	The mean time to the stop condition is over the runs that met it only; the others ran to their time limit.	Keskmine aeg peatamistingimuseni on ainult nende käivitamiste põhjal, mis selle saavutasid; ülejäänud kestsid oma ajapiirini.
@@ -690,7 +683,6 @@ unit	yr	a
 	Balked on {id}	Ei liitunud järjekorraga voos {id}
 	Balking	Järjekorraga mitteliitumine
 	Count those in service	Arvesta ka teenindatavaid
-	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Olemid, kes järjekorraga ei liitu, lähevad kohe seda voogu mööda (näiteks hiljem uuesti proovima), selle asemel et kaotsi minna; siin loetakse need järjekorraga mitteliitunuks.
 	Joins with probability	Liitub järjekorraga tõenäosusega
 	Number waiting	Ootel olevate arv
 	Share balked	Järjekorraga mitteliitunute osakaal
@@ -908,7 +900,6 @@ unit	yr	a
 @plural	Finished {n} run|Finished {n} runs	{n} käivitamine lõpetatud|{n} käivitamist lõpetatud
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	Avati {file} ({n} hoiatus)|Avati {file} ({n} hoiatust)
 @plural	Removed {n} block|Removed {n} blocks	Eemaldati {n} plokk|Eemaldati {n} plokki
-@plural	Makes {n} independent run of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Teeb {n} sõltumatu mudeli käivitamise seemnega {seed}. Iga elemendi tulemused sisaldavad 95% usaldusvahemiku poollaiust.|Teeb {n} sõltumatut mudeli käivitamist seemnega {seed}. Iga elemendi tulemused sisaldavad 95% usaldusvahemiku poollaiust.
 @plural	The stop condition was met in {met} of {n} run, after {time} {unit} on average.|The stop condition was met in {met} of {n} runs, after {time} {unit} on average.	Peatamistingimus saavutati {met} korral {n} käivitamisest, keskmiselt {time} {unit} järel.|Peatamistingimus saavutati {met} korral {n} käivitamisest, keskmiselt {time} {unit} järel.
 @plural	{done} of {n} run finished|{done} of {n} runs finished	{done} käivitamine {n}-st lõpetatud|{done} käivitamist {n}-st lõpetatud
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} run|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} runs	{name}: {mean}{unit}\n95% vahemik {low} kuni {high}{unit}\n{n} käivitamise põhjal|{name}: {mean}{unit}\n95% vahemik {low} kuni {high}{unit}\n{n} käivitamise põhjal
@@ -938,7 +929,6 @@ unit	yr	a
 	kilometres	kilomeetrid
 	inches	tollid
 	feet	jalad
-	Ticked, items queue up at the end while the rest keep moving. Unticked, the whole belt stops when the item at the end cannot leave.	Märgitud: esemed jäävad lõppu järjekorda, samal ajal kui teised liiguvad edasi. Märkimata: kogu lint peatub, kui lõpus olev ese ei saa lahkuda.
 	A belt that carries entities from one end to the other. It has a length and a speed, and each entity takes a pitch of belt: its item length plus the gap kept free after it. So it holds at most length ÷ pitch entities and carries at most speed ÷ pitch per time unit. Accumulating: entities queue up at the end while the rest keep moving; otherwise the whole belt stops.	Lint, mis kannab olemeid ühest otsast teise. Sel on pikkus ja kiirus ning iga olem võtab lindil sammu: oma eseme pikkuse pluss selle taha vabaks jäetud vahe. Seega mahub lindile kuni pikkus ÷ samm olemit ja see veab ajaühikus kuni kiirus ÷ samm olemit. Kuhjuv: olemid jäävad lõppu järjekorda, samal ajal kui teised liiguvad edasi; muidu peatub kogu lint.
 	Station	Jaam
 	Kind	Liik
@@ -992,16 +982,162 @@ unit	yr	a
 	Time on conveyors	Aeg konveieritel
 	No conveyors in this model	Selles mudelis pole konveiereid
 	Fills in when the run ends	Täitub käivituse lõppedes
-	How long each item spends on the conveyors.	Kui kaua iga ese konveieritel on.
-	No item has left a conveyor yet	Ükski ese pole veel konveierilt lahkunud
-	Share of items by time on a conveyor, in {unit}	Esemete osa konveieril veedetud aja järgi, ühikuga {unit}
-	Time on conveyors: {n} items between {lo} and {hi} {unit}	Aeg konveieritel: {n} eset vahemikus {lo} kuni {hi} {unit}
-	{from} to {to} {unit}: {share} of items ({n})	{from} kuni {to} {unit}: {share} esemetest ({n})
-	Items on conveyors over time	Esemed konveieritel ajas
-	Items in the model over time	Esemed mudelis ajas
-	How many items are on the conveyors over time.	Kui palju esemeid on konveieritel ajas.
-	How many items are in the model over time.	Kui palju esemeid on mudelis ajas.
 	Nothing was recorded over time in these results	Nendes tulemustes ei salvestatud ajas midagi
-	At {time} {unit}: {n} items	Ajahetkel {time} {unit}: {n} eset
 	Run the model to fill the dashboard	Töölaua täitmiseks käivitage mudel
 	The resource and conveyor charts show the last run until this one ends	Ressursside ja konveierite diagrammid näitavad viimast käivitust, kuni see lõpeb
+# Validation messages, new labels and word changes (issue #145)
+	The id “{id}” is not valid. Start an id with a letter or an underscore, then use only letters, digits, dots, hyphens and underscores.	Tunnus „{id}” ei sobi. Alusta tunnust tähe või alakriipsuga, seejärel kasuta ainult tähti, numbreid, punkte, sidekriipse ja alakriipse.
+	More than one block, flow, pool or calendar has the id “{id}”. Give each its own id.	Rohkem kui ühel plokil, voogul, kogumil või kalendril on tunnus „{id}”. Anna igaühele oma tunnus.
+	The flow {flow} uses a block that does not exist. Remove the flow, or connect it to a block that exists.	Voog {flow} kasutab plokki, mida pole olemas. Eemalda voog või ühenda see olemasoleva plokiga.
+	The flow {flow} leads into an Arrivals block, which takes no input. Remove the flow, or send it to another block.	Voog {flow} viib plokki „Saabumised”, mis ei võta sisendit. Eemalda voog või suuna see teise plokki.
+	The flow {flow} leaves a Departures block, which has no output. Remove the flow, or start it from another block.	Voog {flow} väljub plokist „Lahkumised”, millel pole väljundit. Eemalda voog või alusta see teisest plokist.
+	The flow {flow} leads from a block back to itself. Remove it, or send it to another block.	Voog {flow} viib plokist tagasi sama plokki. Eemalda see või suuna see teise plokki.
+	{block} has nowhere to send entities. Add a flow from it to the next block.	Plokil {block} pole kuhu olemeid saata. Lisa sellest voog järgmisse plokki.
+	{block} has {count} flows out, and only a Decision or a Split or join block can send entities down several. Remove the extra flows, or add a Decision block.	Plokist {block} väljuvate voogude arv: {count}. Mitut voogu mööda saavad olemeid saata ainult plokid „Otsus” ja „Hargneda või ühineda”. Eemalda üleliigsed voogud või lisa plokk „Otsus”.
+	In “{field}” of {block}, set “{param}” to a finite number.	Ploki {block} väljal „{field}” määra „{param}” lõplikuks arvuks.
+	In “{field}” of {block}, set “{param}” to a number above 0.	Ploki {block} väljal „{field}” määra „{param}” arvuks, mis on suurem kui 0.
+	In “{field}” of {block}, set “{param}” to 0 or more.	Ploki {block} väljal „{field}” määra „{param}” väärtuseks 0 või rohkem.
+	In “{field}” of {block}, set “{param}” to 1 or more.	Ploki {block} väljal „{field}” määra „{param}” väärtuseks 1 või rohkem.
+	In “{field}” of {block}, set “{param}” to a number from 0 to 1.	Ploki {block} väljal „{field}” määra „{param}” arvuks vahemikus 0 kuni 1.
+	In “{field}” of {block}, set “Minimum” below “Maximum”, and any “Most likely” value between them.	Ploki {block} väljal „{field}” määra „Miinimum” väiksemaks kui „Maksimum” ja võimalik „Kõige tõenäolisem” väärtus nende vahele.
+	In “{field}” of {block}, add data points whose probabilities add up to more than 0.	Ploki {block} väljal „{field}” lisa andmepunktid, mille tõenäosuste summa on suurem kui 0.
+	{block} would never have a unit to work with. Give it at least 1 unit.	Plokil {block} poleks kunagi ühikut, millega töötada. Anna sellele vähemalt 1 ühik.
+	{block} would make entities without end, because its “Time between arrivals” is always 0. Give it a time above 0, or set an “Arrival limit”.	Plokk {block} looks olemeid lõputult, sest selle „Saabumiste vaheline aeg” on alati 0. Anna aeg, mis on suurem kui 0, või määra „Saabumiste piirang”.
+	The model has no Arrivals block, so nothing will happen. Add an Arrivals block.	Mudelis pole ühtegi plokki „Saabumised”, seega ei juhtu midagi. Lisa plokk „Saabumised”.
+	The model has no Departures block, so no time in system is measured. Add a Departures block.	Mudelis pole ühtegi plokki „Lahkumised”, seega ei mõõdeta aega süsteemis. Lisa plokk „Lahkumised”.
+	No entity can reach {block} from an Arrivals block. Connect it to a block that entities pass through.	Ükski olem ei jõua plokini {block} plokist „Saabumised”. Ühenda see plokiga, mida olemid läbivad.
+	Entities in {block} can never reach a Departures block. Connect it on towards Departures.	Plokis {block} olevad olemid ei jõua kunagi plokini „Lahkumised”. Ühenda see edasi plokiga „Lahkumised”.
+	Set the “{state}” power of {block} to a number of kilowatts, 0 or more.	Määra ploki {block} võimsus „{state}” kilovattide arvuks, 0 või rohkem.
+	Set the warm-up of the experiment to 0 or more.	Määra eksperimendi soojendus väärtuseks 0 või rohkem.
+	Set the duration of the experiment to more than 0.	Määra eksperimendi kestus suuremaks kui 0.
+	Set the number of runs of the experiment to 1 or more.	Määra eksperimendi käivitamiste arvuks 1 või rohkem.
+	Set the layout scale (length units per drawing unit) to a finite number above 0.	Määra paigutuse skaala (pikkuseühikuid joonise ühiku kohta) lõplikuks arvuks, mis on suurem kui 0.
+	A property of {block} has no name. Give it a name, or remove it.	Ploki {block} ühel omadusel pole nime. Anna sellele nimi või eemalda see.
+	{block} sets the property “{name}” twice. Keep one of them.	Plokk {block} määrab omaduse „{name}” kaks korda. Jäta üks neist.
+	The property “{name}” of {block} needs shares that are not negative and add up to more than 0. Change the shares.	Omadus „{name}” vajab plokis {block} osakaale, mis ei ole negatiivsed ja mille summa on suurem kui 0. Muuda osakaalusid.
+	The property “{name}” has the type “{type2}” on {block} but “{type}” on another block. Give it one type everywhere.	Omaduse „{name}” tüüp on plokis {block} „{type2}”, kuid teises plokis „{type}”. Anna sellele kõikjal üks tüüp.
+	The value of the property “{name}” on {block} does not fit its type, “{type}”. Change the value or the type.	Omaduse „{name}” väärtus plokis {block} ei sobi selle tüübiga „{type}”. Muuda väärtust või tüüpi.
+	The expression for the property “{name}” on {block} cannot be used: {error}. Correct “{expression}”.	Omaduse „{name}” avaldist plokis {block} ei saa kasutada: {error}. Paranda „{expression}”.
+	{block} reads the property “{name}”, which no block sets, so it would read as empty. Set it on an earlier block, or correct the name.	Plokk {block} loeb omadust „{name}”, mida ükski plokk ei määra, seega loetaks see tühjana. Määra see varasemas plokis või paranda nimi.
+	The setup of {block} has times for particular changes but no property to watch. Choose a property under “Only when this property changes”.	Ploki {block} ümberseadistusel on ajad teatud muutustele, kuid pole jälgitavat omadust. Vali omadus väljal „Ainult siis, kui see omadus muutub”.
+	{block} has times for particular values but no property to read them from. Choose a property under “Service time by property”.	Plokil {block} on ajad teatud väärtustele, kuid pole omadust, millest neid lugeda. Vali omadus väljal „Teenindusaeg omaduse järgi”.
+	{block} has two times for the value “{value}”. Keep one.	Plokil {block} on kaks aega väärtusele „{value}”. Jäta üks.
+	Set the time of {block} for the value “{value}” to a mean of 0 or more.	Määra ploki {block} aja keskmiseks väärtuse „{value}” jaoks 0 või rohkem.
+	The scrap at {block} counts against {other}, which is not a task with a resource. Choose a task with a resource.	Praak plokis {block} arvestatakse ploki {other} vastu, mis ei ole ressursiga ülesanne. Vali ressursiga ülesanne.
+	Set “Planned run time per item” of {block} to a mean above 0.	Määra ploki {block} „Kavandatud tööaeg detaili kohta” keskmiseks suurem kui 0.
+	Set “Time before giving up” of {block} to a mean of 0 or more.	Määra ploki {block} „Aeg loobumiseni” keskmiseks 0 või rohkem.
+	The flow {flow} is ticked “Gave up”, but only a task with a resource and a “Time before giving up” sends entities that give up. Untick it, or set a “Time before giving up” on {block}.	Voog {flow} on märgitud „Loobusid”, kuid loobuvaid olemeid saadab ainult ressursiga ülesanne, millel on „Aeg loobumiseni”. Eemalda märge või määra plokile {block} „Aeg loobumiseni”.
+	{count} flows out of {block} are ticked “{way}”; at most one can be. Untick all but one.	Plokist {block} väljuvate voogude arv, mis on märgitud „{way}”: {count}; märgitud võib olla kõige rohkem üks. Eemalda märge kõigilt peale ühe.
+	The flow {flow} is ticked “Turned away”, but only a task with a resource and a limited waiting room turns entities away. Untick it, or limit the waiting room of {block}.	Voog {flow} on märgitud „Tagasi lükatud”, kuid olemeid lükkab tagasi ainult ressursiga ülesanne, millel on piiratud ooteruum. Eemalda märge või piira ploki {block} ooteruumi.
+	The flow {flow} is ticked both “Gave up” and “Turned away”. Keep one of them.	Voog {flow} on märgitud nii „Loobusid” kui ka „Tagasi lükatud”. Jäta üks neist.
+	Set every chance of joining in the balking table of {block} to a number from 0 to 1.	Määra ploki {block} järjekorraga mitteliitumise tabelis iga liitumise tõenäosus arvuks vahemikus 0 kuni 1.
+	Put the rows of the balking table of {block} in increasing order of “Number waiting”.	Pane ploki {block} järjekorraga mitteliitumise tabeli read „Ootel olevate arv” kasvavasse järjekorda.
+	The flow {flow} is ticked “Balked”, but only a task with a resource and balking sends entities that balk. Untick it, or turn on balking for {block}.	Voog {flow} on märgitud „Ei liitunud järjekorraga”, kuid järjekorraga mitteliituvaid olemeid saadab ainult ressursiga ülesanne, millel on mitteliitumine sisse lülitatud. Eemalda märge või lülita plokil {block} mitteliitumine sisse.
+	The flow {flow} is ticked “Balked” and also “Gave up” or “Turned away”. Keep one of them.	Voog {flow} on märgitud „Ei liitunud järjekorraga” ja ka „Loobusid” või „Tagasi lükatud”. Jäta üks neist.
+	The waiting room of {block} is set by calendar or per working server, but has no number of places, so it is unlimited. Give it a number of places, or make it fixed.	Ploki {block} ooteruum on määratud kalendri või töötava serveri järgi, kuid kohtade arv puudub, seega on see piiramatu. Anna kohtade arv või tee see püsivaks.
+	The waiting room of {block} is set by calendar, but no calendar has a value. Add a value for a calendar, or make the waiting room fixed.	Ploki {block} ooteruum on määratud kalendri järgi, kuid ühelgi kalendril pole väärtust. Lisa kalendrile väärtus või tee ooteruum püsivaks.
+	Set “Fails above, waiting per working server” of {block} to a number of 0 or more.	Määra ploki {block} „Kukub läbi üle, ootajaid kasutuses oleva serveri kohta” arvuks 0 või rohkem.
+	Set “Check every” of {block} to a mean above 0.	Määra ploki {block} „Kontroll iga” keskmiseks suurem kui 0.
+	Set the demand of {block} to a number of parts above 0.	Määra ploki {block} nõudlus detailide arvuks, mis on suurem kui 0.
+	The demand of {block} is per shift but names no calendar to say when the shifts are. Choose a calendar.	Ploki {block} nõudlus on vahetuse kohta, kuid kalendrit, mis ütleb, millal vahetused on, pole nimetatud. Vali kalender.
+	The demand of {block} names a calendar that does not exist. Choose a calendar that exists.	Ploki {block} nõudlus nimetab kalendrit, mida pole olemas. Vali olemasolev kalender.
+	The probability {value} on the flow {flow} is not from 0 to 1. Enter a probability from 0 to 1.	Tõenäosus {value} voos {flow} ei ole vahemikus 0 kuni 1. Sisesta tõenäosus vahemikus 0 kuni 1.
+	The probabilities of the flows out of {block} add up to {sum}, not 1, so they are used in proportion. Change them to add up to 1 if that is not what you want.	Plokist {block} väljuvate voogude tõenäosuste summa on {sum}, mitte 1, seega kasutatakse neid proportsionaalselt. Kui see pole soovitud, muuda need nii, et summa oleks 1.
+	The condition on the flow {flow} cannot be used: {error}. Correct “{expression}”.	Voo {flow} tingimust ei saa kasutada: {error}. Paranda „{expression}”.
+	The condition on the flow {flow} is ignored, because only flows out of a Decision block choose a route. Remove the condition.	Voo {flow} tingimust ei arvestata, sest marsruudi valivad ainult plokist „Otsus” väljuvad voogud. Eemalda tingimus.
+	The probability on the flow {flow} is ignored, because only flows out of a Decision block choose a route. Remove the probability.	Voo {flow} tõenäosust ei arvestata, sest marsruudi valivad ainult plokist „Otsus” väljuvad voogud. Eemalda tõenäosus.
+	The condition on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the condition.	Voo {flow} tingimust ei arvestata, sest plokk „Otsus” saadab olemid lühimasse järjekorda. Eemalda tingimus.
+	The probability on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the probability.	Voo {flow} tõenäosust ei arvestata, sest plokk „Otsus” saadab olemid lühimasse järjekorda. Eemalda tõenäosus.
+	The default on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the default.	Voo {flow} vaikeseadet ei arvestata, sest plokk „Otsus” saadab olemid lühimasse järjekorda. Eemalda vaikeseade.
+	The probability on the flow {flow} is ignored, because the Decision routes by condition. Remove the probability.	Voo {flow} tõenäosust ei arvestata, sest plokk „Otsus” valib tingimuse järgi. Eemalda tõenäosus.
+	The default flow of {block} is not one of its own flows out. Choose one of the flows out of {block} as the default.	Ploki {block} vaikevoog ei ole üks selle enda väljuvatest voogudest. Vali vaikevooguks üks plokist {block} väljuvatest voogudest.
+	{block} routes by condition but has no default flow, so an entity for which no condition holds leaves the model here. Choose a default flow.	Plokk {block} valib tingimuse järgi, kuid sellel pole vaikevoogu, seega olem, kellele ükski tingimus ei kehti, lahkub siin mudelist. Vali vaikevoog.
+	{block} diverts entities but has no default flow, so an entity whose way is full has nowhere else to go. Choose a default flow.	Plokk {block} suunab olemeid mujale, kuid sellel pole vaikevoogu, seega olemil, kelle tee on täis, pole kuhugi minna. Vali vaikevoog.
+	{block} waits for an entity on the flow {flow}, which none can reach, so it never sends one on. Remove that flow, or connect it to a block that entities reach.	Plokk {block} ootab olemit voos {flow}, milleni ükski olem ei jõua, seega ei saada see kunagi olemit edasi. Eemalda see voog või ühenda see plokiga, milleni olemid jõuavad.
+	{block} has a limited waiting room and is fed through {gateway}. While it is full, {gateway} holds up every entity behind it, and they wait before it without limit. Remove the gateway before {block}, or remove the limit.	Plokil {block} on piiratud ooteruum ja seda toidab värav {gateway}. Kui ooteruum on täis, hoiab värav {gateway} kinni kõiki selle taga olevaid olemeid ning need ootavad värava ees piiramatult. Eemalda värav enne ploki {block} või eemalda piirang.
+	The limited waiting rooms of {loop} feed each other in a loop, so when all of them are full the loop deadlocks. Remove the limit on one of them, or break the loop.	Plokkide {loop} piiratud ooteruumid toidavad üksteist ringis, seega kui kõik on täis, jääb ring lukku. Eemalda ühelt neist piirang või katkesta ring.
+	The pool {block} has no units. Give it at least 1 unit.	Kogumil {block} pole ühikuid. Anna sellele vähemalt 1 ühik.
+	{block} names no resource it needs. Add one under “Needs”.	Plokk {block} ei nimeta ühtegi vajalikku ressurssi. Lisa üks väljal „Vajadused”.
+	{block} needs a resource pool that does not exist. Choose a pool that exists.	Plokk {block} vajab ressursikogumit, mida pole olemas. Vali olemasolev kogum.
+	{block} needs units with the roles {roles}, which no pool has. Give a pool those roles, or change what {block} needs.	Plokk {block} vajab ühikuid rollidega {roles}, mida ühelgi kogumil pole. Anna mõnele kogumile need rollid või muuda seda, mida plokk {block} vajab.
+	{block} needs {needed} units at once, but at most {available} exist, so this can never be met. Ask for fewer units, or add units to the pool.	Plokile {block} korraga vajalike ühikute arv: {needed}, kuid neid on kokku kõige rohkem {available}, seega ei saa seda kunagi täita. Küsi vähem ühikuid või lisa kogumile ühikuid.
+	Set the priority of {block} to a finite number, not {value}.	Määra ploki {block} prioriteet lõplikuks arvuks, mitte {value}.
+	No task uses the pool {block}. Add it to a task's needs, or remove the pool.	Ükski ülesanne ei kasuta kogumit {block}. Lisa see ülesande vajadustesse või eemalda kogum.
+	{block} has a value for a calendar that does not exist. Choose a calendar that exists, or remove the value.	Plokil {block} on väärtus kalendrile, mida pole olemas. Vali olemasolev kalender või eemalda väärtus.
+	The calendar {block} has no entries, so it is never active. Add an entry.	Kalendril {block} pole kirjeid, seega pole see kunagi aktiivne. Lisa kirje.
+	{block} allows no arrivals outside the calendars but names no calendar, so it never creates entities. Add arrivals by calendar, or allow arrivals outside calendars.	Plokk {block} ei luba saabumisi väljaspool kalendreid, kuid ei nimeta kalendrit, seega ei loo see kunagi olemeid. Lisa saabumised kalendri järgi või luba saabumised väljaspool kalendreid.
+	Set the batch size of {block} to 1 or more.	Määra ploki {block} partii suuruseks 1 või rohkem.
+	Set “{field}” of the conveyor {block} to a finite number above 0.	Määra konveieri {block} „{field}” lõplikuks arvuks, mis on suurem kui 0.
+	Set “{field}” of the conveyor {block} to a finite number of 0 or more.	Määra konveieri {block} „{field}” lõplikuks arvuks, mis on 0 või suurem.
+	Set “{field}” of the conveyor {block} to a finite number other than 0.	Määra konveieri {block} „{field}” lõplikuks arvuks, mis ei ole 0.
+	The conveyor {block} is {length} long but each entity takes {pitch} (item length plus gap), so not even one fits. Lengthen the conveyor, or shorten the item or the gap.	Konveier {block} on {length} pikk, kuid iga olem võtab {pitch} (eseme pikkus pluss vahe), seega ei mahu isegi üks. Pikenda konveierit või lühenda eset või vahet.
+	The drawn path of the conveyor {block} is {path_length} long, but its “Length” is {length}, so the drawing and the run disagree. Make “Length” match the path, or change the shape.	Konveieri {block} joonistatud tee on {path_length} pikk, kuid selle „Pikkus” on {length}, seega joonis ja käivitamine lähevad vastuollu. Tee „Pikkus” teega ühtivaks või muuda kuju.
+	{block} is a transport, which StochCraft does not simulate yet. Remove it to run the model.	Plokk {block} on transport, mida StochCraft veel ei simuleeri. Eemalda see, et mudelit käivitada.
+	The pool {pool} of the transport {block} does not exist. Choose a pool that exists.	Transpordi {block} kogumit {pool} pole olemas. Vali olemasolev kogum.
+	The pool {pool} of the transport {block} is not mobile. Give the pool speeds and a home.	Transpordi {block} kogum {pool} ei ole liikuv. Anna kogumile kiirused ja baas.
+	Set “{field}” of the pool {block} to a finite number above 0.	Määra kogumi {block} „{field}” lõplikuks arvuks, mis on suurem kui 0.
+	The home of the pool {block} is not a block of the model. Choose a block as its home.	Kogumi {block} baas ei ole mudeli plokk. Vali plokk selle baasiks.
+	The transport {block} needs one block before it, where it picks up, and one after it, where it drops off, but has {inputs} before and {outputs} after. Connect it to one block on each side.	Transport {block} vajab ühte plokki enne ennast, kust see peale võtab, ja ühte pärast, kuhu see maha jätab. Plokkide arv enne: {inputs}, pärast: {outputs}. Ühenda see ühe plokiga kummalgi poolel.
+	{other} has no place on the canvas, so the distances for {block} are not known. Place {other} on the canvas.	Plokil {other} pole kohta põhipinnal, seega ploki {block} kaugused pole teada. Aseta plokk {other} põhipinnale.
+	The flow {flow} asks for no entities. Set its “Units” to 1 or more.	Voog {flow} ei küsi ühtegi olemit. Määra selle „Ühikud” väärtuseks 1 või rohkem.
+	The “Units” on the flow {flow} is ignored, because only a Split or join block takes several entities from one flow. Remove it.	Voo {flow} „Ühikud” ei arvestata, sest mitut olemit ühest voost võtab ainult plokk „Hargneda või ühineda”. Eemalda need.
+	No block makes batches, so {block} passes every entity through. Add a Batch block before it, or remove {block}.	Ükski plokk ei tee partiisid, seega plokk {block} laseb iga olemi läbi. Lisa enne seda plokk „Partii” või eemalda plokk {block}.
+	The stop condition names a block that does not exist. Choose a block that exists.	Peatamistingimus nimetab plokki, mida pole olemas. Vali olemasolev plokk.
+	Set the count of the stop condition for {block} to 1 or more.	Määra ploki {block} peatamistingimuse arvuks 1 või rohkem.
+	The stop condition waits for {block} to empty, but only a task can empty. Choose a task.	Peatamistingimus ootab, kuni plokk {block} tühjeneb, kuid tühjeneda saab ainult ülesanne. Vali ülesanne.
+	The stop condition at {block} can be met before the warm-up ends. A run that stops during the warm-up has no statistics after it and is left out of the results. Shorten the warm-up, or stop later.	Peatamistingimus plokis {block} võib täituda enne soojenduse lõppu. Käivitamisel, mis peatub soojenduse ajal, pole pärast seda statistikat ja see jäetakse tulemustest välja. Lühenda soojendust või peata hiljem.
+	Every run stopped before the warm-up ended, so no metric is reported. Shorten the warm-up, or stop later.	Kõik käivitamised peatusid enne soojenduse lõppu, seega ühtegi mõõdikut ei esitata. Lühenda soojendust või peata hiljem.
+	{replications} of {of} runs stopped before the warm-up ended, so their statistics are left out of every metric. Shorten the warm-up, or stop later.	Enne soojenduse lõppu peatunud käivitamiste arv: {replications} / {of}; nende statistika jäetakse kõigist mõõdikutest välja. Lühenda soojendust või peata hiljem.
+	{block} is offered {load}% of the work its units can do, so its waiting room grows without limit and the results describe no steady state. Add units, or shorten the service.	Plokile {block} pakutakse {load}% tööst, mida selle ühikud jõuavad teha, seega selle ooteruum kasvab piiramatult ja tulemused ei kirjelda püsiseisundit. Lisa ühikuid või lühenda teenindust.
+	{block} is busy {utilisation}% of the time, and at the end at least {backlog} entities are still waiting against {left} that left. Work arrives faster than it is done, so the results describe no steady state. Add units, or shorten the service.	Plokk {block} on hõivatud {utilisation}% ajast. Lõpus ootab endiselt vähemalt {backlog} olemit, lahkunud on {left}. Töö saabub kiiremini, kui seda tehakse, seega tulemused ei kirjelda püsiseisundit. Lisa ühikuid või lühenda teenindust.
+	The experiment has one run, so its results cannot be told from chance. Set the number of runs to at least 2, and usually 10 or more.	Eksperimendil on üks käivitamine, seega ei saa selle tulemusi juhusest eristada. Määra käivitamisi vähemalt 2 ja tavaliselt 10 või rohkem.
+	{block} has a three-point estimate but no time to fit it to, so the estimate is ignored. Remove the estimate.	Plokil {block} on kolmepunktihinnang, kuid pole aega, millele seda sobitada, seega hinnangut ei arvestata. Eemalda hinnang.
+	The three-point estimate of {block} cannot be fitted: every point must be a finite number. Correct the points.	Ploki {block} kolmepunktihinnangut ei saa sobitada: iga punkt peab olema lõplik arv. Paranda punktid.
+	The three-point estimate of {block} cannot be fitted: the points must be in order, minimum, most likely, then maximum or 95th percentile. Correct the points.	Ploki {block} kolmepunktihinnangut ei saa sobitada: punktid peavad olema järjekorras: miinimum, kõige tõenäolisem, seejärel maksimum või 95. protsentiil. Paranda punktid.
+	The three-point estimate of {block} cannot be fitted: log-normal and Weibull estimates have no maximum. Give a 95th percentile instead.	Ploki {block} kolmepunktihinnangut ei saa sobitada: lognormaalsel ja Weibulli hinnangul pole maksimumi. Anna selle asemel 95. protsentiil.
+	The time of {block} is no longer the one fitted from its three-point estimate. Fit it again, or remove the estimate.	Ploki {block} aeg ei ole enam see, mis sobitati selle kolmepunktihinnangust. Sobita see uuesti või eemalda hinnang.
+	In “{field}” of {block}, the normal distribution draws below 0 more than 1 time in 100, and each such draw counts as 0, so the times are longer on average than its mean. Use a truncated normal with a minimum of 0, or a log-normal.	Ploki {block} väljal „{field}” loosib normaaljaotus rohkem kui 1 kord 100-st väärtuse alla 0 ja iga selline loos arvestatakse nulliks, seega on ajad keskmiselt pikemad kui selle keskmine. Kasuta jaotust „Kärbitud normaalne” miinimumiga 0 või lognormaalset jaotust.
+	The entities of {block} do not add up: {came} came in or were inside at the start, but {went} left, were lost, gave up or are still inside.	Ploki {block} olemid ei klapi. Olemite arv, kes tulid sisse või olid alguses sees: {came}. Olemite arv, kes lahkusid, kaotsi läksid, loobusid või on endiselt sees: {went}.
+	The entities of the model do not add up: {came} were created or inside at the start, but {went} reached Departures, left the model elsewhere or are still inside.	Mudeli olemid ei klapi. Loodud või alguses sees olnud olemite arv: {came}. Olemite arv, kes jõudsid plokini „Lahkumised”, lahkusid mudelist mujal või on endiselt sees: {went}.
+	No entity left the model, of {came} created or inside at the start. Check that the routing leads to Departures and that the run is long enough for an entity to get through.	Ükski olem ei lahkunud mudelist; loodud või alguses sees olnud olemite arv: {came}. Kontrolli, et marsruudid viivad plokini „Lahkumised” ja et käivitamine on piisavalt pikk, et olem jõuaks läbi.
+	Little's law does not hold at {block}: the time-average number inside was {mean}, but the entities' own times inside give {from_stays}.	Littlei seadus ei kehti plokis {block}: ajakaalutud keskmine olemite arv sees oli {mean}, kuid olemite enda sees veedetud ajad annavad {from_stays}.
+	The utilisation of {block} counts {busy} units busy on average, but {working} were processing or setting up: units idle, blocked, off shift, failed or restarting were counted busy.	Ploki {block} kasutusmäär loeb hõivatuks keskmiselt {busy} ühikut, kuid töötles või seadistas {working}: jõude, blokeeritud, vahetusest väljas, rikkis või taaskäivituvad ühikud loeti hõivatuks.
+	The utilisation of {block} counts {busy} units busy on average, but {working} were processing or setting up: units at work were not counted busy.	Ploki {block} kasutusmäär loeb hõivatuks keskmiselt {busy} ühikut, kuid töötles või seadistas {working}: töötavaid ühikuid ei loetud hõivatuks.
+	The shares of the time of the units of {block} in each state add up to {total}, not 1.	Ploki {block} ühikute aja osakaalude summa igas olekus on {total}, mitte 1.
+	“{metric}” of {block} is {value}, outside 0 to 1 (0% to 100%).	Ploki {block} „{metric}” on {value}, väljaspool vahemikku 0 kuni 1 (0% kuni 100%).
+	This was found in {replications} of {of} runs, and the furthest off is shown.	Seda leiti käivitamistest: {replications} / {of}; kuvatakse kõige kaugemale kalduv.
+	This points to a fault in StochCraft rather than in the model. Please report it with the model.	See viitab veale StochCraftis, mitte mudelis. Teata sellest koos mudeliga.
+	Angle	Nurk
+	Failed	Rikkis
+	Off shift	Vahetusest väljas
+	Processing	Töötlemine
+	Radius	Raadius
+	Rise	Tõus
+	Speed empty	Kiirus tühjalt
+	Speed loaded	Kiirus koormaga
+	Turns	Pöörded
+	Unload	Mahalaadimine
+	Lost	Kaotatud
+	An entity that leaves a waiting room before a unit takes it, because it has waited as long as it was willing to.	Olem, kes lahkub ooteruumist enne, kui ühik ta võtab, sest on oodanud nii kaua, kui oli nõus.
+	An entity that does not join a waiting room at all, because the number already waiting put it off.	Olem, kes ooteruumiga üldse ei liitu, sest teda heidutab juba ootajate arv.
+	An entity that finds the waiting room full and takes the flow ticked “Turned away” instead of waiting.	Olem, kes leiab ooteruumi täis olevat ja läheb ootamise asemel mööda voogu, mis on märgitud „Tagasi lükatud”.
+	An entity that leaves the model without reaching Departures: it found the waiting room full with nowhere else to go, or a decision with no way out for it.	Olem, kes lahkub mudelist plokini „Lahkumised” jõudmata: ta leidis ooteruumi täis ja tal polnud kuhugi mujale minna või sattus otsusesse, kus talle väljapääsu pole.
+	Gave up on {id}	Loobusid: {id}
+	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the flow ticked “Gave up”, or leaves the model.	Iga olem ootab siin kõige rohkem aja, mis talle saabumisel juhuslikult määratakse, ja loobub siis: ta läheb mööda voogu, mis on märgitud „Loobusid”, või lahkub mudelist.
+	Entities that do not join the waiting room take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Olemid, kes ooteruumiga ei liitu, lähevad kohe seda voogu mööda (näiteks hiljem uuesti proovima), selle asemel et kaotsi minna; siin loetakse need järjekorraga mitteliitunuks.
+	The job stops at once: the entity goes back to the front of the waiting room for any server on shift, and the work done on it is wasted.	Töö peatub kohe: olem läheb tagasi ooteruumi algusesse ükskõik millise vahetuses oleva serveri jaoks ja talle tehtud töö on raisatud.
+	The connection drops and the client tries again: the entity goes back to the front of the waiting room at once, and the work done on it is wasted.	Ühendus katkeb ja klient proovib uuesti: olem läheb kohe tagasi ooteruumi algusesse ja talle tehtud töö on raisatud.
+	Ticked, entities queue up at the end while the rest keep moving. Unticked, the whole belt stops when the entity at the end cannot leave.	Märgitud: olemid jäävad lõppu järjekorda, samal ajal kui teised liiguvad edasi. Märkimata: kogu lint peatub, kui lõpus olev olem ei saa lahkuda.
+	Play run 1 step by step and see each block's waiting room on the diagram	Esita käivitamine 1 samm-sammult ja vaata iga ploki ooteruumi diagrammil
+	Select a block to see its waiting room over time.	Vali plokk, et näha selle ooteruumi aja jooksul.
+	Entities on conveyors over time	Olemid konveieritel ajas
+	Entities in the model over time	Olemid mudelis ajas
+	How long each entity spends on the conveyors.	Kui kaua iga olem konveieritel on.
+	No entity has left a conveyor yet	Ükski olem pole veel konveierilt lahkunud
+	Share of entities by time on a conveyor, in {unit}	Olemite osa konveieril veedetud aja järgi, ühikuga {unit}
+	Time on conveyors: {n} entities between {lo} and {hi} {unit}	Aeg konveieritel: {n} olemit vahemikus {lo} kuni {hi} {unit}
+	{from} to {to} {unit}: {share} of entities ({n})	{from} kuni {to} {unit}: {share} olemitest ({n})
+	How many entities are on the conveyors over time.	Kui palju olemeid on konveieritel ajas.
+	How many entities are in the model over time.	Kui palju olemeid on mudelis ajas.
+	At {time} {unit}: {n} entities	Ajahetkel {time} {unit}: {n} olemit
+@plural	Makes {n} independent run of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval across them.	Teeb {n} sõltumatu mudeli käivitamise seemnega {seed}. Iga ploki tulemused sisaldavad 95% usaldusvahemiku poollaiust.|Teeb {n} sõltumatut mudeli käivitamist seemnega {seed}. Iga ploki tulemused sisaldavad 95% usaldusvahemiku poollaiust.

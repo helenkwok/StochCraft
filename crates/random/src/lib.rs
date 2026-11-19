@@ -131,7 +131,7 @@ fn fnv1a64(s: &str) -> u64 {
 }
 
 mod dist;
-pub use dist::{Dist, DistError, ln_gamma};
+pub use dist::{Dist, DistError, Requirement, ln_gamma};
 pub mod estimate;
 pub mod fit;
 pub use estimate::{Family, FitError, ThreePoint, Upper};

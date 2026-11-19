@@ -21,8 +21,6 @@
 	A caller on hold: once a unit takes it, the entity stays.	Volajúci na linke: keď si ho jednotka vezme, entita zostane.
 	A client that times out: if its time runs out during service, it gives up then, and the unit finishes the job anyway (wasted work).	Klient s časovým limitom: ak mu čas vyprší počas obsluhy, vzdá to v tej chvíli a jednotka prácu aj tak dokončí (zbytočná práca).
 	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	Nový súbor obsahuje len model: čomu StochCraft v {file} nerozumie, sa vynechá.
-	Abandoned	Vzdané
-	Abandoned on {id}	Vzdané na {id}
 	About StochCraft	O aplikácii StochCraft
 	About {app}	O aplikácii {app}
 	Accent	Zvýraznenie
@@ -162,7 +160,6 @@
 	Duration	Trvanie
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Každá analýza spúšťa experiment niekoľkokrát s rovnakou počiatočnou hodnotou generátora, takže rozdiely pochádzajú zo zmeny, nie z náhody. Môže to chvíľu trvať.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Každá entita si naraz vezme celú prvú z týchto alternatív, ktorú možno práve splniť, a jednotky vráti, keď odchádza.
-	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Každá entita tu čaká najviac čas, ktorý sa jej náhodne určí pri príchode, a potom to vzdá: odíde cestou označenou „Vzdané“ alebo opustí model.
 	Each server (unit) is checked every so often, as a load balancer probes the servers behind it. One that fails, with too many waiting, is taken out of service for a restart, then comes back.	Každý server (jednotka) sa raz za čas kontroluje, tak ako load balancer skúša servery za sebou. Ten, ktorý neprejde, lebo naň čaká priveľa entít, sa vyradí z prevádzky na reštart a potom sa vráti.
 	Edit	Upraviť
 	Edit themes…	Upraviť motívy…
@@ -412,7 +409,6 @@
 	Run	Spustiť
 	Run cancelled	Beh bol zrušený
 	Run experiment	Spustiť experiment
-	Play run 1 step by step and see each block's queue on the diagram	Prehrať beh 1 krok za krokom a sledovať front každého bloku v diagrame
 	Run the experiment ({shortcut})	Spustiť experiment ({shortcut})
 	Run the experiment again to see this result's spread.	Spustite experiment znova, aby ste videli rozptyl tohto výsledku.
 	Run the experiment at each value of one parameter, and compare a result.	Spustiť experiment pre každú hodnotu jedného parametra a porovnať výsledok.
@@ -433,7 +429,6 @@
 	Scrap ratio	Podiel nepodarkov
 	Seed	Počiatočná hodnota generátora
 	Select All	Vybrať všetko
-	Select a block to see its queue over time.	Vyberte blok, aby ste videli jeho front v čase.
 	Sender waits during transfer	Odosielateľ čaká počas presunu
 	Separate the values with semicolons or spaces.	Oddeľte hodnoty bodkočiarkami alebo medzerami.
 	Sequential	Sekvenčné
@@ -497,10 +492,8 @@
 	Text	Text
 	Text on accent	Text na zvýraznení
 	Text on header	Text v záhlaví
-	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	Spojenie spadne a klient to skúsi znova: entita sa hneď vráti na začiatok radu a práca na nej vykonaná je zbytočná.
 	The entity waits on its server and the job carries on with what was left once the server is back.	Entita čaká pri svojom serveri a práca pokračuje so zvyškom, len čo je server späť.
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more runs would narrow it.	Interval siaha pod cieľový podiel {share}, takže splnenie podielu nie je preukázané s 95 % spoľahlivosťou; viac behov by ho zúžilo.
-	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	Práca sa hneď zastaví: entita sa vráti na začiatok radu pre ktorýkoľvek server na zmene a práca na nej vykonaná je zbytočná.
 	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	Práca sa hneď zastaví; entita čaká pri svojom serveri a práca pokračuje so zvyškom, len čo je tento server opäť na zmene.
 	The last task with a resource it finished at	Posledná úloha so zdrojom, ktorou diel prešiel
 	The mean time to the stop condition is over the runs that met it only; the others ran to their time limit.	Priemerný čas do podmienky zastavenia je iba z behov, ktoré ju splnili; ostatné bežali do svojho časového limitu.
@@ -690,7 +683,6 @@ unit	yr	r.
 	Balked on {id}	Nezaradené na {id}
 	Balking	Nezaradenie do radu
 	Count those in service	Započítať aj obsluhované
-	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Entity, ktoré sa nezaradia do radu, idú hneď týmto tokom (napríklad aby to neskôr skúsili znova), namiesto toho, aby sa stratili; tu sa počítajú ako nezaradené.
 	Joins with probability	Zaradí sa do radu s pravdepodobnosťou
 	Number waiting	Počet čakajúcich
 	Share balked	Podiel nezaradených
@@ -908,7 +900,6 @@ unit	yr	r.
 @plural	Finished {n} run|Finished {n} runs	Dokončený {n} beh|Dokončené {n} behy|Dokončených {n} behov
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	Otvorený {file} ({n} upozornenie)|Otvorený {file} ({n} upozornenia)|Otvorený {file} ({n} upozornení)
 @plural	Removed {n} block|Removed {n} blocks	Odstránený {n} blok|Odstránené {n} bloky|Odstránených {n} blokov
-@plural	Makes {n} independent run of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Spustí {n} nezávislý beh modelu od počiatočnej hodnoty {seed}. Výsledky každého prvku obsahujú polovičnú šírku 95% intervalu spoľahlivosti.|Spustí {n} nezávislé behy modelu od počiatočnej hodnoty {seed}. Výsledky každého prvku obsahujú polovičnú šírku 95% intervalu spoľahlivosti.|Spustí {n} nezávislých behov modelu od počiatočnej hodnoty {seed}. Výsledky každého prvku obsahujú polovičnú šírku 95% intervalu spoľahlivosti.
 @plural	The stop condition was met in {met} of {n} run, after {time} {unit} on average.|The stop condition was met in {met} of {n} runs, after {time} {unit} on average.	Podmienka zastavenia bola splnená v {met} z {n} behu, v priemere po {time} {unit}.|Podmienka zastavenia bola splnená v {met} z {n} behov, v priemere po {time} {unit}.|Podmienka zastavenia bola splnená v {met} z {n} behov, v priemere po {time} {unit}.
 @plural	{done} of {n} run finished|{done} of {n} runs finished	Dokončený {done} z {n} behu|Dokončených {done} z {n} behov|Dokončených {done} z {n} behov
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} run|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} runs	{name}: {mean}{unit}\n95% interval od {low} do {high}{unit}\nz {n} behu|{name}: {mean}{unit}\n95% interval od {low} do {high}{unit}\nz {n} behov|{name}: {mean}{unit}\n95% interval od {low} do {high}{unit}\nz {n} behov
@@ -938,7 +929,6 @@ unit	yr	r.
 	kilometres	kilometre
 	inches	palce
 	feet	stopy
-	Ticked, items queue up at the end while the rest keep moving. Unticked, the whole belt stops when the item at the end cannot leave.	Zaškrtnuté: položky sa na konci radia do radu, kým ostatné idú ďalej. Nezaškrtnuté: celý pás sa zastaví, keď položka na konci nemôže odísť.
 	A belt that carries entities from one end to the other. It has a length and a speed, and each entity takes a pitch of belt: its item length plus the gap kept free after it. So it holds at most length ÷ pitch entities and carries at most speed ÷ pitch per time unit. Accumulating: entities queue up at the end while the rest keep moving; otherwise the whole belt stops.	Pás, ktorý nesie entity z jedného konca na druhý. Má dĺžku a rýchlosť a každá entita zaberie rozstup pásu: dĺžku svojej položky plus medzeru, ktorá za ňou zostane voľná. Pojme teda najviac dĺžka ÷ rozstup entít a za jednotku času unesie najviac rýchlosť ÷ rozstup. Akumulácia: entity sa na konci radia do radu, kým ostatné idú ďalej; inak sa zastaví celý pás.
 	Station	Stanovište
 	Kind	Druh
@@ -992,16 +982,162 @@ unit	yr	r.
 	Time on conveyors	Čas na dopravníkoch
 	No conveyors in this model	V tomto modeli nie sú žiadne dopravníky
 	Fills in when the run ends	Naplní sa po skončení behu
-	How long each item spends on the conveyors.	Ako dlho je každá položka na dopravníkoch.
-	No item has left a conveyor yet	Zatiaľ žiadna položka neopustila dopravník
-	Share of items by time on a conveyor, in {unit}	Podiel položiek podľa času na dopravníku, v {unit}
-	Time on conveyors: {n} items between {lo} and {hi} {unit}	Čas na dopravníkoch: {n} položiek medzi {lo} a {hi} {unit}
-	{from} to {to} {unit}: {share} of items ({n})	Od {from} do {to} {unit}: {share} položiek ({n})
-	Items on conveyors over time	Položky na dopravníkoch v čase
-	Items in the model over time	Položky v modeli v čase
-	How many items are on the conveyors over time.	Koľko položiek je na dopravníkoch v čase.
-	How many items are in the model over time.	Koľko položiek je v modeli v čase.
 	Nothing was recorded over time in these results	V týchto výsledkoch sa v čase nič nezaznamenalo
-	At {time} {unit}: {n} items	V čase {time} {unit}: {n} položiek
 	Run the model to fill the dashboard	Spustite model, aby sa prehľad naplnil
 	The resource and conveyor charts show the last run until this one ends	Grafy zdrojov a dopravníkov ukazujú posledný beh, kým tento neskončí
+# Validation messages, new labels and word changes (issue #145)
+	The id “{id}” is not valid. Start an id with a letter or an underscore, then use only letters, digits, dots, hyphens and underscores.	Id „{id}“ nie je platné. Id musí začínať písmenom alebo podčiarkovníkom, ďalej používajte iba písmená, číslice, bodky, spojovníky a podčiarkovníky.
+	More than one block, flow, pool or calendar has the id “{id}”. Give each its own id.	Viac ako jeden blok, tok, skupina alebo kalendár má id „{id}“. Každému dajte vlastné id.
+	The flow {flow} uses a block that does not exist. Remove the flow, or connect it to a block that exists.	Tok {flow} používa blok, ktorý neexistuje. Odstráňte tok, alebo ho prepojte s existujúcim blokom.
+	The flow {flow} leads into an Arrivals block, which takes no input. Remove the flow, or send it to another block.	Tok {flow} vedie do bloku Príchody, ktorý neprijíma vstup. Odstráňte tok, alebo ho veďte do iného bloku.
+	The flow {flow} leaves a Departures block, which has no output. Remove the flow, or start it from another block.	Tok {flow} vychádza z bloku Odchody, ktorý nemá výstup. Odstráňte tok, alebo ho začnite v inom bloku.
+	The flow {flow} leads from a block back to itself. Remove it, or send it to another block.	Tok {flow} vedie z bloku späť do neho samého. Odstráňte ho, alebo ho veďte do iného bloku.
+	{block} has nowhere to send entities. Add a flow from it to the next block.	{block} nemá kam posielať entity. Pridajte tok od neho k ďalšiemu bloku.
+	{block} has {count} flows out, and only a Decision or a Split or join block can send entities down several. Remove the extra flows, or add a Decision block.	Počet výstupných tokov z {block} je {count}, ale entity môže posielať viacerými tokmi iba blok Rozhodnutie alebo blok „Rozdeliť alebo spojiť“. Odstráňte nadbytočné toky, alebo pridajte blok Rozhodnutie.
+	In “{field}” of {block}, set “{param}” to a finite number.	V poli „{field}“ bloku {block} nastavte „{param}“ na konečné číslo.
+	In “{field}” of {block}, set “{param}” to a number above 0.	V poli „{field}“ bloku {block} nastavte „{param}“ na číslo väčšie ako 0.
+	In “{field}” of {block}, set “{param}” to 0 or more.	V poli „{field}“ bloku {block} nastavte „{param}“ na 0 alebo viac.
+	In “{field}” of {block}, set “{param}” to 1 or more.	V poli „{field}“ bloku {block} nastavte „{param}“ na 1 alebo viac.
+	In “{field}” of {block}, set “{param}” to a number from 0 to 1.	V poli „{field}“ bloku {block} nastavte „{param}“ na číslo od 0 do 1.
+	In “{field}” of {block}, set “Minimum” below “Maximum”, and any “Most likely” value between them.	V poli „{field}“ bloku {block} nastavte „Minimum“ pod „Maximum“ a prípadnú hodnotu „Najpravdepodobnejšia hodnota“ medzi ne.
+	In “{field}” of {block}, add data points whose probabilities add up to more than 0.	V poli „{field}“ bloku {block} pridajte dátové body, ktorých pravdepodobnosti dokopy dávajú viac ako 0.
+	{block} would never have a unit to work with. Give it at least 1 unit.	{block} by nikdy nemal jednotku, s ktorou by pracoval. Dajte mu aspoň 1 jednotku.
+	{block} would make entities without end, because its “Time between arrivals” is always 0. Give it a time above 0, or set an “Arrival limit”.	{block} by vytváral entity donekonečna, pretože jeho „Čas medzi príchodmi“ je vždy 0. Zadajte čas väčší ako 0, alebo nastavte „Limit príchodov“.
+	The model has no Arrivals block, so nothing will happen. Add an Arrivals block.	Model nemá blok Príchody, takže sa nič nestane. Pridajte blok Príchody.
+	The model has no Departures block, so no time in system is measured. Add a Departures block.	Model nemá blok Odchody, takže sa nemeria čas v systéme. Pridajte blok Odchody.
+	No entity can reach {block} from an Arrivals block. Connect it to a block that entities pass through.	Žiadna entita sa nemôže dostať do bloku {block} z bloku Príchody. Prepojte ho s blokom, cez ktorý entity prechádzajú.
+	Entities in {block} can never reach a Departures block. Connect it on towards Departures.	Entity v bloku {block} sa nikdy nemôžu dostať do bloku Odchody. Prepojte ho ďalej smerom k Odchodom.
+	Set the “{state}” power of {block} to a number of kilowatts, 0 or more.	Príkon bloku {block} v stave „{state}“ nastavte na počet kilowattov, 0 alebo viac.
+	Set the warm-up of the experiment to 0 or more.	Zahrievanie experimentu nastavte na 0 alebo viac.
+	Set the duration of the experiment to more than 0.	Trvanie experimentu nastavte na viac ako 0.
+	Set the number of runs of the experiment to 1 or more.	Počet behov experimentu nastavte na 1 alebo viac.
+	Set the layout scale (length units per drawing unit) to a finite number above 0.	Mierku rozloženia (jednotky dĺžky na jednotku výkresu) nastavte na konečné číslo väčšie ako 0.
+	A property of {block} has no name. Give it a name, or remove it.	Vlastnosť bloku {block} nemá názov. Pomenujte ju, alebo ju odstráňte.
+	{block} sets the property “{name}” twice. Keep one of them.	{block} nastavuje vlastnosť „{name}“ dvakrát. Ponechajte jednu z nich.
+	The property “{name}” of {block} needs shares that are not negative and add up to more than 0. Change the shares.	Vlastnosť „{name}“ bloku {block} potrebuje podiely, ktoré nie sú záporné a dokopy dávajú viac ako 0. Zmeňte podiely.
+	The property “{name}” has the type “{type2}” on {block} but “{type}” on another block. Give it one type everywhere.	Vlastnosť „{name}“ má na bloku {block} typ „{type2}“, ale na inom bloku typ „{type}“. Dajte jej všade rovnaký typ.
+	The value of the property “{name}” on {block} does not fit its type, “{type}”. Change the value or the type.	Hodnota vlastnosti „{name}“ na bloku {block} nezodpovedá jej typu, „{type}“. Zmeňte hodnotu alebo typ.
+	The expression for the property “{name}” on {block} cannot be used: {error}. Correct “{expression}”.	Výraz pre vlastnosť „{name}“ na bloku {block} nemožno použiť: {error}. Opravte „{expression}“.
+	{block} reads the property “{name}”, which no block sets, so it would read as empty. Set it on an earlier block, or correct the name.	{block} číta vlastnosť „{name}“, ktorú žiadny blok nenastavuje, takže by sa čítala ako prázdna. Nastavte ju na skoršom bloku, alebo opravte názov.
+	The setup of {block} has times for particular changes but no property to watch. Choose a property under “Only when this property changes”.	Nastavenie bloku {block} má časy pre určité zmeny, ale žiadnu vlastnosť na sledovanie. Vyberte vlastnosť v poli „Len pri zmene tejto vlastnosti“.
+	{block} has times for particular values but no property to read them from. Choose a property under “Service time by property”.	{block} má časy pre určité hodnoty, ale žiadnu vlastnosť, z ktorej ich číta. Vyberte vlastnosť v poli „Čas obsluhy podľa vlastnosti“.
+	{block} has two times for the value “{value}”. Keep one.	{block} má dva časy pre hodnotu „{value}“. Ponechajte jeden.
+	Set the time of {block} for the value “{value}” to a mean of 0 or more.	Čas bloku {block} pre hodnotu „{value}“ nastavte na priemer 0 alebo viac.
+	The scrap at {block} counts against {other}, which is not a task with a resource. Choose a task with a resource.	Nepodarky na bloku {block} sa započítavajú proti bloku {other}, ktorý nie je úloha so zdrojom. Vyberte úlohu so zdrojom.
+	Set “Planned run time per item” of {block} to a mean above 0.	„Plánovaný čas behu na diel“ bloku {block} nastavte na priemer väčší ako 0.
+	Set “Time before giving up” of {block} to a mean of 0 or more.	„Čas do vzdania“ bloku {block} nastavte na priemer 0 alebo viac.
+	The flow {flow} is ticked “Gave up”, but only a task with a resource and a “Time before giving up” sends entities that give up. Untick it, or set a “Time before giving up” on {block}.	Tok {flow} je označený „Vzdali to“, ale entity, ktoré to vzdajú, posiela iba úloha so zdrojom a s nastavenou položkou „Čas do vzdania“. Zrušte označenie, alebo nastavte „Čas do vzdania“ na bloku {block}.
+	{count} flows out of {block} are ticked “{way}”; at most one can be. Untick all but one.	Počet tokov z bloku {block} označených „{way}“ je {count}; smie byť najviac jeden. Zrušte označenie pri všetkých okrem jedného.
+	The flow {flow} is ticked “Turned away”, but only a task with a resource and a limited waiting room turns entities away. Untick it, or limit the waiting room of {block}.	Tok {flow} je označený „Odmietnuté“, ale entity odmieta iba úloha so zdrojom a s obmedzenou čakárňou. Zrušte označenie, alebo obmedzte čakáreň bloku {block}.
+	The flow {flow} is ticked both “Gave up” and “Turned away”. Keep one of them.	Tok {flow} je označený súčasne „Vzdali to“ aj „Odmietnuté“. Ponechajte jedno.
+	Set every chance of joining in the balking table of {block} to a number from 0 to 1.	Každú pravdepodobnosť zaradenia do radu v tabuľke nezaradenia bloku {block} nastavte na číslo od 0 do 1.
+	Put the rows of the balking table of {block} in increasing order of “Number waiting”.	Riadky tabuľky nezaradenia bloku {block} zoraďte vzostupne podľa „Počet čakajúcich“.
+	The flow {flow} is ticked “Balked”, but only a task with a resource and balking sends entities that balk. Untick it, or turn on balking for {block}.	Tok {flow} je označený „Nezaradené“, ale entity, ktoré sa nezaradia, posiela iba úloha so zdrojom a s nezaradením. Zrušte označenie, alebo zapnite nezaradenie pre {block}.
+	The flow {flow} is ticked “Balked” and also “Gave up” or “Turned away”. Keep one of them.	Tok {flow} je označený „Nezaradené“ a tiež „Vzdali to“ alebo „Odmietnuté“. Ponechajte jedno.
+	The waiting room of {block} is set by calendar or per working server, but has no number of places, so it is unlimited. Give it a number of places, or make it fixed.	Čakáreň bloku {block} sa riadi kalendárom alebo počtom serverov v prevádzke, ale nemá počet miest, takže je neobmedzená. Zadajte počet miest, alebo nastavte čakáreň ako pevnú.
+	The waiting room of {block} is set by calendar, but no calendar has a value. Add a value for a calendar, or make the waiting room fixed.	Čakáreň bloku {block} sa riadi kalendárom, ale žiadny kalendár nemá hodnotu. Pridajte hodnotu pre kalendár, alebo nastavte čakáreň ako pevnú.
+	Set “Fails above, waiting per working server” of {block} to a number of 0 or more.	„Neprejde nad, čakajúcich na server v prevádzke“ bloku {block} nastavte na číslo 0 alebo viac.
+	Set “Check every” of {block} to a mean above 0.	„Kontrola každých“ bloku {block} nastavte na priemer väčší ako 0.
+	Set the demand of {block} to a number of parts above 0.	Dopyt bloku {block} nastavte na počet dielov väčší ako 0.
+	The demand of {block} is per shift but names no calendar to say when the shifts are. Choose a calendar.	Dopyt bloku {block} je za zmenu, ale neuvádza kalendár, ktorý hovorí, kedy zmeny sú. Vyberte kalendár.
+	The demand of {block} names a calendar that does not exist. Choose a calendar that exists.	Dopyt bloku {block} uvádza kalendár, ktorý neexistuje. Vyberte existujúci kalendár.
+	The probability {value} on the flow {flow} is not from 0 to 1. Enter a probability from 0 to 1.	Pravdepodobnosť {value} na toku {flow} nie je od 0 do 1. Zadajte pravdepodobnosť od 0 do 1.
+	The probabilities of the flows out of {block} add up to {sum}, not 1, so they are used in proportion. Change them to add up to 1 if that is not what you want.	Pravdepodobnosti tokov z bloku {block} dávajú dokopy {sum}, nie 1, a preto sa použijú v pomere. Zmeňte ich tak, aby dávali 1, ak to nechcete.
+	The condition on the flow {flow} cannot be used: {error}. Correct “{expression}”.	Podmienku na toku {flow} nemožno použiť: {error}. Opravte „{expression}“.
+	The condition on the flow {flow} is ignored, because only flows out of a Decision block choose a route. Remove the condition.	Podmienka na toku {flow} sa ignoruje, pretože trasu vyberajú iba toky z bloku Rozhodnutie. Odstráňte podmienku.
+	The probability on the flow {flow} is ignored, because only flows out of a Decision block choose a route. Remove the probability.	Pravdepodobnosť na toku {flow} sa ignoruje, pretože trasu vyberajú iba toky z bloku Rozhodnutie. Odstráňte pravdepodobnosť.
+	The condition on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the condition.	Podmienka na toku {flow} sa ignoruje, pretože Rozhodnutie posiela entity do najkratšieho radu. Odstráňte podmienku.
+	The probability on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the probability.	Pravdepodobnosť na toku {flow} sa ignoruje, pretože Rozhodnutie posiela entity do najkratšieho radu. Odstráňte pravdepodobnosť.
+	The default on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the default.	Predvolené označenie na toku {flow} sa ignoruje, pretože Rozhodnutie posiela entity do najkratšieho radu. Odstráňte predvolené označenie.
+	The probability on the flow {flow} is ignored, because the Decision routes by condition. Remove the probability.	Pravdepodobnosť na toku {flow} sa ignoruje, pretože Rozhodnutie vyberá trasu podľa podmienky. Odstráňte pravdepodobnosť.
+	The default flow of {block} is not one of its own flows out. Choose one of the flows out of {block} as the default.	Predvolený tok bloku {block} nie je jedným z jeho výstupných tokov. Ako predvolený vyberte jeden z výstupných tokov bloku {block}.
+	{block} routes by condition but has no default flow, so an entity for which no condition holds leaves the model here. Choose a default flow.	{block} vyberá trasu podľa podmienky, ale nemá predvolený tok, takže entita, pre ktorú neplatí žiadna podmienka, tu model opustí. Vyberte predvolený tok.
+	{block} diverts entities but has no default flow, so an entity whose way is full has nowhere else to go. Choose a default flow.	{block} odkláňa entity, ale nemá predvolený tok, takže entita, ktorej cesta je plná, nemá kam inam. Vyberte predvolený tok.
+	{block} waits for an entity on the flow {flow}, which none can reach, so it never sends one on. Remove that flow, or connect it to a block that entities reach.	{block} čaká na entitu na toku {flow}, ku ktorej sa žiadna nedostane, takže žiadnu nikdy nepošle ďalej. Odstráňte ten tok, alebo ho prepojte s blokom, ku ktorému sa entity dostanú.
+	{block} has a limited waiting room and is fed through {gateway}. While it is full, {gateway} holds up every entity behind it, and they wait before it without limit. Remove the gateway before {block}, or remove the limit.	{block} má obmedzenú čakáreň a je napájaný cez {gateway}. Kým je plná, {gateway} zdržiava každú entitu za sebou a tie čakajú bez obmedzenia. Odstráňte tento blok pred blokom {block}, alebo odstráňte obmedzenie.
+	The limited waiting rooms of {loop} feed each other in a loop, so when all of them are full the loop deadlocks. Remove the limit on one of them, or break the loop.	Obmedzené čakárne v slučke ({loop}) sa navzájom napájajú, takže keď sú všetky plné, slučka sa zablokuje. Odstráňte obmedzenie pri jednej z nich, alebo slučku prerušte.
+	The pool {block} has no units. Give it at least 1 unit.	Skupina {block} nemá žiadne jednotky. Pridajte aspoň 1 jednotku.
+	{block} names no resource it needs. Add one under “Needs”.	{block} neuvádza žiadny zdroj, ktorý potrebuje. Pridajte jeden v poli „Potreby“.
+	{block} needs a resource pool that does not exist. Choose a pool that exists.	{block} potrebuje skupinu zdrojov, ktorá neexistuje. Vyberte existujúcu skupinu.
+	{block} needs units with the roles {roles}, which no pool has. Give a pool those roles, or change what {block} needs.	{block} potrebuje jednotky s rolami {roles}, ktoré nemá žiadna skupina. Dajte niektorej skupine tieto roly, alebo zmeňte, čo {block} potrebuje.
+	{block} needs {needed} units at once, but at most {available} exist, so this can never be met. Ask for fewer units, or add units to the pool.	Počet jednotiek, ktoré {block} potrebuje naraz, je {needed}, ale existuje ich najviac {available}, takže to nemožno nikdy splniť. Požadujte menej jednotiek, alebo pridajte jednotky do skupiny.
+	Set the priority of {block} to a finite number, not {value}.	Prioritu bloku {block} nastavte na konečné číslo, nie na {value}.
+	No task uses the pool {block}. Add it to a task's needs, or remove the pool.	Žiadna úloha nepoužíva skupinu {block}. Pridajte ju k potrebám nejakej úlohy, alebo skupinu odstráňte.
+	{block} has a value for a calendar that does not exist. Choose a calendar that exists, or remove the value.	{block} má hodnotu pre kalendár, ktorý neexistuje. Vyberte existujúci kalendár, alebo hodnotu odstráňte.
+	The calendar {block} has no entries, so it is never active. Add an entry.	Kalendár {block} nemá žiadne záznamy, takže nie je nikdy aktívny. Pridajte záznam.
+	{block} allows no arrivals outside the calendars but names no calendar, so it never creates entities. Add arrivals by calendar, or allow arrivals outside calendars.	{block} nepovoľuje príchody mimo kalendárov, ale neuvádza žiadny kalendár, takže nikdy nevytvára entity. Pridajte príchody podľa kalendára, alebo povoľte príchody mimo kalendárov.
+	Set the batch size of {block} to 1 or more.	Veľkosť dávky bloku {block} nastavte na 1 alebo viac.
+	Set “{field}” of the conveyor {block} to a finite number above 0.	„{field}“ dopravníka {block} nastavte na konečné číslo väčšie ako 0.
+	Set “{field}” of the conveyor {block} to a finite number of 0 or more.	„{field}“ dopravníka {block} nastavte na konečné číslo 0 alebo viac.
+	Set “{field}” of the conveyor {block} to a finite number other than 0.	„{field}“ dopravníka {block} nastavte na konečné číslo rôzne od 0.
+	The conveyor {block} is {length} long but each entity takes {pitch} (item length plus gap), so not even one fits. Lengthen the conveyor, or shorten the item or the gap.	Dopravník {block} je dlhý {length}, ale každá entita zaberá {pitch} (dĺžka položky plus medzera), takže sa nezmestí ani jedna. Predĺžte dopravník, alebo skráťte položku či medzeru.
+	The drawn path of the conveyor {block} is {path_length} long, but its “Length” is {length}, so the drawing and the run disagree. Make “Length” match the path, or change the shape.	Nakreslená dráha dopravníka {block} je dlhá {path_length}, ale jeho „Dĺžka“ je {length}, takže sa výkres a beh líšia. Upravte „Dĺžka“ podľa dráhy, alebo zmeňte tvar.
+	{block} is a transport, which StochCraft does not simulate yet. Remove it to run the model.	{block} je doprava, ktorú StochCraft zatiaľ nesimuluje. Odstráňte ju, aby ste mohli model spustiť.
+	The pool {pool} of the transport {block} does not exist. Choose a pool that exists.	Skupina {pool} dopravy {block} neexistuje. Vyberte existujúcu skupinu.
+	The pool {pool} of the transport {block} is not mobile. Give the pool speeds and a home.	Skupina {pool} dopravy {block} nie je mobilná. Zadajte skupine rýchlosti a domovský blok.
+	Set “{field}” of the pool {block} to a finite number above 0.	„{field}“ skupiny {block} nastavte na konečné číslo väčšie ako 0.
+	The home of the pool {block} is not a block of the model. Choose a block as its home.	Domovský blok skupiny {block} nie je blokom modelu. Vyberte blok ako jej domov.
+	The transport {block} needs one block before it, where it picks up, and one after it, where it drops off, but has {inputs} before and {outputs} after. Connect it to one block on each side.	Doprava {block} potrebuje jeden blok pred sebou, kde entity vyzdvihuje, a jeden za sebou, kde ich odkladá. Blokov pred ňou je {inputs} a za ňou {outputs}. Prepojte ju s jedným blokom na každej strane.
+	{other} has no place on the canvas, so the distances for {block} are not known. Place {other} on the canvas.	{other} nemá miesto v diagrame, takže vzdialenosti pre {block} nie sú známe. Umiestnite {other} do diagramu.
+	The flow {flow} asks for no entities. Set its “Units” to 1 or more.	Tok {flow} nežiada žiadne entity. Nastavte jeho „Jednotky“ na 1 alebo viac.
+	The “Units” on the flow {flow} is ignored, because only a Split or join block takes several entities from one flow. Remove it.	„Jednotky“ na toku {flow} sa ignorujú, pretože viac entít z jedného toku berie iba blok „Rozdeliť alebo spojiť“. Odstráňte ich.
+	No block makes batches, so {block} passes every entity through. Add a Batch block before it, or remove {block}.	Žiadny blok nevytvára dávky, takže {block} prepúšťa každú entitu. Pridajte pred neho blok Dávka, alebo {block} odstráňte.
+	The stop condition names a block that does not exist. Choose a block that exists.	Podmienka zastavenia uvádza blok, ktorý neexistuje. Vyberte existujúci blok.
+	Set the count of the stop condition for {block} to 1 or more.	Počet v podmienke zastavenia pre {block} nastavte na 1 alebo viac.
+	The stop condition waits for {block} to empty, but only a task can empty. Choose a task.	Podmienka zastavenia čaká, kým sa {block} vyprázdni, ale vyprázdniť sa môže iba úloha. Vyberte úlohu.
+	The stop condition at {block} can be met before the warm-up ends. A run that stops during the warm-up has no statistics after it and is left out of the results. Shorten the warm-up, or stop later.	Podmienka zastavenia pri bloku {block} môže byť splnená pred koncom zahrievania. Beh, ktorý sa zastaví počas zahrievania, nemá po ňom žiadne štatistiky a vo výsledkoch sa vynecháva. Skráťte zahrievanie, alebo zastavte neskôr.
+	Every run stopped before the warm-up ended, so no metric is reported. Shorten the warm-up, or stop later.	Každý beh sa zastavil pred koncom zahrievania, takže sa nehlási žiadna metrika. Skráťte zahrievanie, alebo zastavte neskôr.
+	{replications} of {of} runs stopped before the warm-up ended, so their statistics are left out of every metric. Shorten the warm-up, or stop later.	Počet behov, ktoré sa zastavili pred koncom zahrievania, je {replications} z {of}, takže ich štatistiky sú vynechané zo všetkých metrík. Skráťte zahrievanie, alebo zastavte neskôr.
+	{block} is offered {load}% of the work its units can do, so its waiting room grows without limit and the results describe no steady state. Add units, or shorten the service.	{block} dostáva {load}% práce, ktorú jeho jednotky zvládnu, takže jeho čakáreň rastie bez obmedzenia a výsledky nepopisujú ustálený stav. Pridajte jednotky, alebo skráťte obsluhu.
+	{block} is busy {utilisation}% of the time, and at the end at least {backlog} entities are still waiting against {left} that left. Work arrives faster than it is done, so the results describe no steady state. Add units, or shorten the service.	{block} je vyťažený {utilisation}% času a na konci ešte čaká aspoň {backlog} entít, zatiaľ čo ich odišlo {left}. Práca prichádza rýchlejšie, než sa vybavuje, takže výsledky nepopisujú ustálený stav. Pridajte jednotky, alebo skráťte obsluhu.
+	The experiment has one run, so its results cannot be told from chance. Set the number of runs to at least 2, and usually 10 or more.	Experiment má jeden beh, takže jeho výsledky nemožno odlíšiť od náhody. Nastavte počet behov aspoň na 2, zvyčajne na 10 alebo viac.
+	{block} has a three-point estimate but no time to fit it to, so the estimate is ignored. Remove the estimate.	{block} má trojbodový odhad, ale žiadny čas, ktorý by sa podľa neho upravil, takže sa odhad ignoruje. Odstráňte odhad.
+	The three-point estimate of {block} cannot be fitted: every point must be a finite number. Correct the points.	Trojbodový odhad bloku {block} nemožno prispôsobiť: každý bod musí byť konečné číslo. Opravte body.
+	The three-point estimate of {block} cannot be fitted: the points must be in order, minimum, most likely, then maximum or 95th percentile. Correct the points.	Trojbodový odhad bloku {block} nemožno prispôsobiť: body musia byť zoradené, minimum, najpravdepodobnejšia hodnota, potom maximum alebo 95. percentil. Opravte body.
+	The three-point estimate of {block} cannot be fitted: log-normal and Weibull estimates have no maximum. Give a 95th percentile instead.	Trojbodový odhad bloku {block} nemožno prispôsobiť: lognormálne a Weibullove odhady nemajú maximum. Zadajte namiesto toho 95. percentil.
+	The time of {block} is no longer the one fitted from its three-point estimate. Fit it again, or remove the estimate.	Čas bloku {block} už nie je ten, ktorý bol prispôsobený z jeho trojbodového odhadu. Prispôsobte ho znova, alebo odhad odstráňte.
+	In “{field}” of {block}, the normal distribution draws below 0 more than 1 time in 100, and each such draw counts as 0, so the times are longer on average than its mean. Use a truncated normal with a minimum of 0, or a log-normal.	V poli „{field}“ bloku {block} normálne rozdelenie losuje hodnoty pod 0 častejšie než v 1 prípade zo 100, každé takéto losovanie sa počíta ako 0, takže časy sú v priemere dlhšie než jeho priemer. Použite orezané normálne rozdelenie s minimom 0, alebo lognormálne.
+	The entities of {block} do not add up: {came} came in or were inside at the start, but {went} left, were lost, gave up or are still inside.	Entity bloku {block} nesedia: na začiatku vnútri alebo prišlo: {came}; odišlo, stratené, vzdalo to alebo je stále vnútri: {went}.
+	The entities of the model do not add up: {came} were created or inside at the start, but {went} reached Departures, left the model elsewhere or are still inside.	Entity modelu nesedia: vytvorené alebo na začiatku vnútri: {came}; dorazilo do Odchodov, opustilo model inde alebo je stále vnútri: {went}.
+	No entity left the model, of {came} created or inside at the start. Check that the routing leads to Departures and that the run is long enough for an entity to get through.	Žiadna entita neopustila model z {came} vytvorených alebo na začiatku vnútri. Skontrolujte, či smerovanie vedie do Odchodov a či je beh dosť dlhý, aby entita prešla.
+	Little's law does not hold at {block}: the time-average number inside was {mean}, but the entities' own times inside give {from_stays}.	Littleov zákon pri bloku {block} neplatí: časovo priemerný počet vnútri bol {mean}, ale vlastné časy entít vnútri dávajú {from_stays}.
+	The utilisation of {block} counts {busy} units busy on average, but {working} were processing or setting up: units idle, blocked, off shift, failed or restarting were counted busy.	Využitie bloku {block} počíta v priemere {busy} obsadených jednotiek, ale {working} ich spracúvalo alebo sa nastavovalo: jednotky nečinné, blokované, mimo zmeny, v poruche alebo sa reštartujúce sa počítali ako obsadené.
+	The utilisation of {block} counts {busy} units busy on average, but {working} were processing or setting up: units at work were not counted busy.	Využitie bloku {block} počíta v priemere {busy} obsadených jednotiek, ale {working} ich spracúvalo alebo sa nastavovalo: jednotky pri práci sa nepočítali ako obsadené.
+	The shares of the time of the units of {block} in each state add up to {total}, not 1.	Podiely času jednotiek bloku {block} v jednotlivých stavoch dávajú dokopy {total}, nie 1.
+	“{metric}” of {block} is {value}, outside 0 to 1 (0% to 100%).	„{metric}“ bloku {block} je {value}, mimo rozsahu od 0 do 1 (0% až 100%).
+	This was found in {replications} of {of} runs, and the furthest off is shown.	Toto bolo zistené v {replications} z {of} behov a zobrazený je ten s najväčšou odchýlkou.
+	This points to a fault in StochCraft rather than in the model. Please report it with the model.	Toto poukazuje na chybu v programe StochCraft, nie v modeli. Nahláste ju spolu s modelom.
+	Angle	Uhol
+	Failed	V poruche
+	Off shift	Mimo zmeny
+	Processing	Spracovanie
+	Radius	Polomer
+	Rise	Stúpanie
+	Speed empty	Rýchlosť bez nákladu
+	Speed loaded	Rýchlosť s nákladom
+	Turns	Závity
+	Unload	Vykládka
+	Lost	Stratené
+	An entity that leaves a waiting room before a unit takes it, because it has waited as long as it was willing to.	Entita, ktorá opustí čakáreň skôr, než ju prevezme jednotka, pretože čakala tak dlho, ako bola ochotná.
+	An entity that does not join a waiting room at all, because the number already waiting put it off.	Entita, ktorá do čakárne vôbec nevstúpi, pretože ju odradil počet už čakajúcich.
+	An entity that finds the waiting room full and takes the flow ticked “Turned away” instead of waiting.	Entita, ktorá nájde čakáreň plnú a namiesto čakania ide tokom označeným „Odmietnuté“.
+	An entity that leaves the model without reaching Departures: it found the waiting room full with nowhere else to go, or a decision with no way out for it.	Entita, ktorá opustí model bez toho, aby dosiahla Odchody: našla plnú čakáreň bez inej cesty, alebo rozhodnutie bez cesty von pre ňu.
+	Gave up on {id}	Vzdali to na {id}
+	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the flow ticked “Gave up”, or leaves the model.	Každá entita tu čaká najviac čas, ktorý sa jej náhodne určí pri príchode, a potom to vzdá: odíde tokom označeným „Vzdali to“ alebo opustí model.
+	Entities that do not join the waiting room take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Entity, ktoré sa nezaradia do čakárne, idú hneď týmto tokom (napríklad aby to neskôr skúsili znova), namiesto toho, aby sa stratili; tu sa počítajú ako nezaradené.
+	The job stops at once: the entity goes back to the front of the waiting room for any server on shift, and the work done on it is wasted.	Práca sa hneď zastaví: entita sa vráti na začiatok čakárne pre ktorýkoľvek server na zmene a práca na nej vykonaná je zbytočná.
+	The connection drops and the client tries again: the entity goes back to the front of the waiting room at once, and the work done on it is wasted.	Spojenie spadne a klient to skúsi znova: entita sa hneď vráti na začiatok čakárne a práca na nej vykonaná je zbytočná.
+	Ticked, entities queue up at the end while the rest keep moving. Unticked, the whole belt stops when the entity at the end cannot leave.	Zaškrtnuté: entity sa na konci radia do radu, kým ostatné idú ďalej. Nezaškrtnuté: celý pás sa zastaví, keď entita na konci nemôže odísť.
+	Play run 1 step by step and see each block's waiting room on the diagram	Prehrať beh 1 krok za krokom a sledovať čakáreň každého bloku v diagrame
+	Select a block to see its waiting room over time.	Vyberte blok, aby ste videli jeho čakáreň v čase.
+	Entities on conveyors over time	Entity na dopravníkoch v čase
+	Entities in the model over time	Entity v modeli v čase
+	How long each entity spends on the conveyors.	Ako dlho je každá entita na dopravníkoch.
+	No entity has left a conveyor yet	Zatiaľ žiadna entita neopustila dopravník
+	Share of entities by time on a conveyor, in {unit}	Podiel entít podľa času na dopravníku, v {unit}
+	Time on conveyors: {n} entities between {lo} and {hi} {unit}	Čas na dopravníkoch: {n} entít medzi {lo} a {hi} {unit}
+	{from} to {to} {unit}: {share} of entities ({n})	Od {from} do {to} {unit}: {share} entít ({n})
+	How many entities are on the conveyors over time.	Koľko entít je na dopravníkoch v čase.
+	How many entities are in the model over time.	Koľko entít je v modeli v čase.
+	At {time} {unit}: {n} entities	V čase {time} {unit}: {n} entít
+@plural	Makes {n} independent run of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval across them.	Spustí {n} nezávislý beh modelu od počiatočnej hodnoty {seed}. Výsledky každého bloku obsahujú polovičnú šírku 95% intervalu spoľahlivosti.|Spustí {n} nezávislé behy modelu od počiatočnej hodnoty {seed}. Výsledky každého bloku obsahujú polovičnú šírku 95% intervalu spoľahlivosti.|Spustí {n} nezávislých behov modelu od počiatočnej hodnoty {seed}. Výsledky každého bloku obsahujú polovičnú šírku 95% intervalu spoľahlivosti.

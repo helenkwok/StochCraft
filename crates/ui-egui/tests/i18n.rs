@@ -34,8 +34,9 @@ fn pseudo_sized(size: egui::Vec2) -> Harness<'static, App> {
     h
 }
 
-/// Messages the engine writes (file notes, validation), which are English until the engine's own
-/// strings have a catalog.
+/// Messages the engine writes that the window shows as they are: the file notes (what StochCraft
+/// does not understand in a file) are English until they have a catalog. Validation messages go
+/// through the catalogs ([`a_problem_is_shown_in_the_interface_language`]).
 const ENGINE: &[&str] = &[];
 
 /// Text that is the model's or the user's, not the interface's: names and ids from the model,
@@ -222,6 +223,25 @@ fn every_state_is_translated() {
         .run_command(&CommandRef::new(commands::STOP_WATCHING));
     settle(&mut h);
 
+    // A model with a problem: its message is built from the catalog's wording, with the block's
+    // name in it, and the page around it is the interface's.
+    h.state_mut()
+        .execute(
+            "block.add",
+            serde_json::json!({
+                "kind": "delay",
+                "name": "Spare desk",
+                "duration": {"type": "constant", "value": 1.0},
+            }),
+        )
+        .expect("a block");
+    settle(&mut h);
+    let name = h.state().engine().model().name.clone();
+    h.get_by_label(&name).click();
+    settle(&mut h);
+    h.get_by_label_contains("has nowhere to send entities");
+    missed.extend(untranslated(&h));
+
     // An error in the status bar: a file that cannot be read. The message is the engine's own,
     // in English until the engine's strings have a catalog (see `ENGINE`); everything around it
     // is the interface's.
@@ -232,6 +252,109 @@ fn every_state_is_translated() {
     missed.extend(untranslated(&h).into_iter().filter(|l| *l != message));
 
     assert!(missed.is_empty(), "drawn without translation: {missed:#?}");
+}
+
+/// A problem found by validation shows in the interface language, built from the catalog's
+/// wording for its code with the block's name in it, in the model page's list and in the block's
+/// inspector, and the status bar says it when Run is pressed.
+#[test]
+fn a_problem_is_shown_in_the_interface_language() {
+    let mut h = pseudo();
+    let e = &EXAMPLES[0];
+    h.state_mut().open_file(e.file, e.bytes);
+    // A task nothing leaves: "Spare desk has nowhere to send entities".
+    h.state_mut()
+        .execute(
+            "block.add",
+            serde_json::json!({
+                "kind": "delay",
+                "name": "Spare desk",
+                "duration": {"type": "constant", "value": 1.0},
+            }),
+        )
+        .expect("a block");
+    settle(&mut h);
+    let name = h.state().engine().model().name.clone();
+    h.get_by_label(&name).click();
+    settle(&mut h);
+    let said = |h: &Harness<'static, App>| -> Vec<String> {
+        h.query_all(By::new())
+            .filter_map(|n| n.accesskit_node().label().map(|l| l.to_owned()))
+            .filter(|l| l.contains("has nowhere to send entities"))
+            .collect()
+    };
+    let on_the_page = said(&h);
+    assert!(!on_the_page.is_empty(), "the problem is not listed");
+    for text in &on_the_page {
+        assert!(text.contains('⟦'), "not through the catalog: {text}");
+        assert!(text.contains("Spare desk"), "no block name: {text}");
+        assert!(!text.contains("error:"), "the engine's English: {text}");
+    }
+    missed_none(&h);
+
+    // Pressing Run says it in the status bar, and the block's inspector lists it.
+    h.state_mut().run();
+    settle(&mut h);
+    let status = h.state().status().to_owned();
+    assert!(
+        status.contains('⟦') && status.contains("Spare desk"),
+        "the status bar: {status}"
+    );
+    assert!(!said(&h).is_empty(), "the block's inspector lists it");
+    missed_none(&h);
+}
+
+fn missed_none(h: &Harness<'static, App>) {
+    let missed = untranslated(h);
+    assert!(missed.is_empty(), "drawn without translation: {missed:#?}");
+}
+
+/// The window words the engine's messages as the engine does, but for the few that say "run"
+/// where the engine says "replication".
+#[test]
+fn the_windows_messages_are_the_engines_but_for_run() {
+    let different = stochcraft_ui_egui::i18n::WINDOW_TEMPLATE_KEYS;
+    for (key, template) in stochcraft_model::messages::TEMPLATES {
+        if NOT_SHOWN.contains(key) {
+            continue;
+        }
+        // Every placeholder filled with "x".
+        let names: Vec<&str> = template
+            .split('{')
+            .skip(1)
+            .filter_map(|rest| rest.split('}').next())
+            .collect();
+        let args: serde_json::Map<String, serde_json::Value> = names
+            .iter()
+            .map(|n| ((*n).to_owned(), serde_json::json!("x")))
+            .collect();
+        let filled: Vec<(&str, String)> = names.iter().map(|n| (*n, "x".to_owned())).collect();
+        let engine = stochcraft_model::messages::fill(template, &filled);
+        let d = serde_json::json!({
+            "message": "error: engine",
+            "parts": [{"key": key, "args": args}],
+        });
+        let shown = stochcraft_ui_egui::i18n::engine_message(&d);
+        if different.contains(key) {
+            assert_ne!(shown, engine, "{key} is worded alike: take it off the list");
+            assert!(
+                !shown.contains("replication"),
+                "{key} says replication in the window: {shown}"
+            );
+        } else {
+            assert_eq!(shown, engine, "{key}");
+        }
+    }
+    // A key the window does not know, or none, shows the engine's English.
+    for d in [
+        serde_json::json!({"message": "warning: Engine English.", "parts": [{"key": "new_one", "args": {}}]}),
+        serde_json::json!({"message": "warning: Engine English."}),
+    ] {
+        assert_eq!(
+            stochcraft_ui_egui::i18n::engine_message(&d),
+            "Engine English."
+        );
+    }
 }
 
 /// Every string the interface looks up has a row in every one of StochCraft's catalogs, so no
@@ -247,6 +370,17 @@ fn every_state_is_translated() {
 #[test]
 fn every_string_has_a_row_in_every_catalog() {
     let mut wanted = in_the_code();
+    // The engine's message templates, which the window fills from its catalogs (a few it words
+    // differently are in its code, found above), and the labels of fields they name.
+    for (key, template) in stochcraft_model::messages::TEMPLATES {
+        if !stochcraft_ui_egui::i18n::WINDOW_TEMPLATE_KEYS.contains(key) && !NOT_SHOWN.contains(key)
+        {
+            wanted.insert(Key::Plain((*template).to_owned()));
+        }
+    }
+    for label in stochcraft_model::messages::labels() {
+        wanted.insert(Key::Plain(label.to_owned()));
+    }
     for s in looked_up_on_screen() {
         if !is_shared(&s) && !wanted.contains(&Key::Plain(s.clone())) {
             wanted.insert(Key::Seen(s));
@@ -288,6 +422,9 @@ fn every_string_has_a_row_in_every_catalog() {
     }
     assert!(report.is_empty(), "strings without a translation:{report}");
 }
+
+/// Message templates the window never shows: the results say it in "How sure are these numbers?".
+const NOT_SHOWN: &[&str] = &["no_warmup_at", "no_warmup_late"];
 
 /// Looked-up text that is data, not words to translate: library names and licences in About.
 const NOT_TEXT: &[&str] = &[

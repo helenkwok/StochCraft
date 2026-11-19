@@ -172,7 +172,7 @@ More settings are folded under headings; open them when you need them:
 
 On a decision, each outgoing flow has a probability **p** or a condition **if**, and you can set
 a **Default flow**. A flow can be marked **Rework**, and on a task with a resource also
-**Abandoned**, **Turned away** or **Balked**.
+**Gave up**, **Turned away** or **Balked**.
 
 ### Shared resources and shifts
 
@@ -319,7 +319,7 @@ are waiting, are busy or are done.
 
 - **Play/Pause** (Space), **Step** to the next event, and a **Speed** list.
 - Type a time and click **Jump** to go straight there.
-- Select a block to see its queue over time in the inspector, under **This run**.
+- Select a block to see its waiting room over time in the inspector, under **This run**.
 - **Stop watching** returns to editing.
 
 This is one run of many: its numbers differ from the others and from the averages in

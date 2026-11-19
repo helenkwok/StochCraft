@@ -21,8 +21,6 @@
 	A caller on hold: once a unit takes it, the entity stays.	Звонящий на удержании: как только единица берёт его, сущность остаётся.
 	A client that times out: if its time runs out during service, it gives up then, and the unit finishes the job anyway (wasted work).	Клиент с тайм-аутом: если его время истекает во время обслуживания, он уходит в этот момент, а единица всё равно доделывает работу (работа впустую).
 	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	Новый файл содержит только модель: то, что StochCraft не понимает в {file}, не сохраняется.
-	Abandoned	Ушедшие
-	Abandoned on {id}	Ушедшие на {id}
 	About StochCraft	О программе StochCraft
 	About {app}	О программе {app}
 	Accent	Акцент
@@ -162,7 +160,6 @@
 	Duration	Длительность
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Каждый анализ запускает эксперимент несколько раз с одним и тем же начальным значением генератора, поэтому различия вызваны изменением, а не случайностью. Это может занять некоторое время.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Каждая сущность занимает первый из этих вариантов, который можно выполнить сейчас, целиком и сразу, и возвращает единицы, когда уходит.
-	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Каждая сущность ждёт здесь не дольше случайного времени, выбранного для неё при прибытии, а затем уходит: идёт по выходу с пометкой «Ушедшие» или покидает модель.
 	Each server (unit) is checked every so often, as a load balancer probes the servers behind it. One that fails, with too many waiting, is taken out of service for a restart, then comes back.	Каждый сервер (единица) время от времени проверяется, как балансировщик нагрузки опрашивает серверы за ним. Не прошедший проверку, у которого ждёт слишком много, выводится из работы на перезагрузку, а потом возвращается.
 	Edit	Редактирование
 	Edit themes…	Изменить темы…
@@ -412,7 +409,6 @@
 	Run	Запустить
 	Run cancelled	Запуск отменён
 	Run experiment	Запустить эксперимент
-	Play run 1 step by step and see each block's queue on the diagram	Выполнить запуск 1 по шагам и видеть очередь каждого блока на диаграмме
 	Run the experiment ({shortcut})	Запустить эксперимент ({shortcut})
 	Run the experiment again to see this result's spread.	Запустите эксперимент снова, чтобы увидеть разброс этого результата.
 	Run the experiment at each value of one parameter, and compare a result.	Запустить эксперимент при каждом значении одного параметра и сравнить результат.
@@ -433,7 +429,6 @@
 	Scrap ratio	Доля брака
 	Seed	Начальное значение генератора
 	Select All	Выделить всё
-	Select a block to see its queue over time.	Выберите блок, чтобы увидеть его очередь во времени.
 	Sender waits during transfer	Отправитель ждёт во время передачи
 	Separate the values with semicolons or spaces.	Разделяйте значения точкой с запятой или пробелами.
 	Sequential	Последовательные
@@ -497,10 +492,8 @@
 	Text	Текст
 	Text on accent	Текст на акценте
 	Text on header	Текст на верхней панели
-	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	Соединение обрывается, и клиент пробует снова: сущность сразу возвращается в начало очереди, а сделанная над ней работа идёт впустую.
 	The entity waits on its server and the job carries on with what was left once the server is back.	Сущность ждёт на своём сервере, и работа продолжается с оставшегося, как только сервер вернётся.
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more runs would narrow it.	Интервал опускается ниже целевой доли {share}, поэтому с доверием 95% не показано, что доля достигнута; больше запусков сузили бы его.
-	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	Работа сразу останавливается: сущность возвращается в начало очереди к любому серверу на смене, а сделанная над ней работа идёт впустую.
 	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	Работа сразу останавливается; сущность ждёт на своём сервере, и работа продолжается с оставшегося, как только этот сервер снова на смене.
 	The last task with a resource it finished at	Последняя задача с ресурсом, которую прошла деталь
 	The mean time to the stop condition is over the runs that met it only; the others ran to their time limit.	Среднее время до условия остановки рассчитано только по запускам, которые его достигли; остальные шли до своего предела времени.
@@ -690,7 +683,6 @@ unit	yr	г.
 	Balked on {id}	Отказавшиеся на {id}
 	Balking	Отказ от очереди
 	Count those in service	Учитывать и обслуживаемых
-	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Сущности, которые не встают в очередь, сразу идут по этому потоку (например, чтобы попробовать позже), а не теряются; здесь они считаются отказавшимися.
 	Joins with probability	Встаёт в очередь с вероятностью
 	Number waiting	Число ожидающих
 	Share balked	Доля отказавшихся
@@ -908,7 +900,6 @@ unit	yr	г.
 @plural	Finished {n} run|Finished {n} runs	Завершён {n} запуск|Завершены {n} запуска|Завершено {n} запусков
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	Открыт {file} ({n} предупреждение)|Открыт {file} ({n} предупреждения)|Открыт {file} ({n} предупреждений)
 @plural	Removed {n} block|Removed {n} blocks	Удалён {n} блок|Удалено {n} блока|Удалено {n} блоков
-@plural	Makes {n} independent run of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Выполняет {n} независимый запуск модели с начальным значением {seed}. Результаты каждого элемента включают полуширину 95% доверительного интервала.|Выполняет {n} независимых запуска модели с начальным значением {seed}. Результаты каждого элемента включают полуширину 95% доверительного интервала.|Выполняет {n} независимых запусков модели с начальным значением {seed}. Результаты каждого элемента включают полуширину 95% доверительного интервала.
 @plural	The stop condition was met in {met} of {n} run, after {time} {unit} on average.|The stop condition was met in {met} of {n} runs, after {time} {unit} on average.	Условие остановки достигнуто в {met} из {n} запуска, в среднем через {time} {unit}.|Условие остановки достигнуто в {met} из {n} запусков, в среднем через {time} {unit}.|Условие остановки достигнуто в {met} из {n} запусков, в среднем через {time} {unit}.
 @plural	{done} of {n} run finished|{done} of {n} runs finished	Завершено {done} из {n} запуска|Завершено {done} из {n} запусков|Завершено {done} из {n} запусков
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} run|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} runs	{name}: {mean}{unit}\n95% интервал от {low} до {high}{unit}\nпо {n} запуску|{name}: {mean}{unit}\n95% интервал от {low} до {high}{unit}\nпо {n} запускам|{name}: {mean}{unit}\n95% интервал от {low} до {high}{unit}\nпо {n} запускам
@@ -938,7 +929,6 @@ unit	yr	г.
 	kilometres	километры
 	inches	дюймы
 	feet	футы
-	Ticked, items queue up at the end while the rest keep moving. Unticked, the whole belt stops when the item at the end cannot leave.	Если отмечено, изделия выстраиваются в очередь в конце, пока остальные продолжают двигаться. Если не отмечено, вся лента останавливается, когда изделие в конце не может уйти.
 	A belt that carries entities from one end to the other. It has a length and a speed, and each entity takes a pitch of belt: its item length plus the gap kept free after it. So it holds at most length ÷ pitch entities and carries at most speed ÷ pitch per time unit. Accumulating: entities queue up at the end while the rest keep moving; otherwise the whole belt stops.	Лента, которая переносит сущности от одного конца к другому. У неё есть длина и скорость, а каждая сущность занимает шаг ленты: длину своего изделия плюс зазор, остающийся свободным за ним. Поэтому на ленте помещается не больше длина ÷ шаг сущностей, и она переносит не больше скорость ÷ шаг в единицу времени. Накопление: сущности выстраиваются в очередь в конце, пока остальные продолжают двигаться; иначе останавливается вся лента.
 	Station	Станция
 	Kind	Тип
@@ -992,16 +982,162 @@ unit	yr	г.
 	Time on conveyors	Время на конвейерах
 	No conveyors in this model	В этой модели нет конвейеров
 	Fills in when the run ends	Заполнится по окончании прогона
-	How long each item spends on the conveyors.	Сколько времени каждый элемент проводит на конвейерах.
-	No item has left a conveyor yet	Ни один элемент ещё не покинул конвейер
-	Share of items by time on a conveyor, in {unit}	Доля элементов по времени на конвейере, в {unit}
-	Time on conveyors: {n} items between {lo} and {hi} {unit}	Время на конвейерах: {n} элементов между {lo} и {hi} {unit}
-	{from} to {to} {unit}: {share} of items ({n})	От {from} до {to} {unit}: {share} элементов ({n})
-	Items on conveyors over time	Элементы на конвейерах во времени
-	Items in the model over time	Элементы в модели во времени
-	How many items are on the conveyors over time.	Сколько элементов находится на конвейерах во времени.
-	How many items are in the model over time.	Сколько элементов находится в модели во времени.
 	Nothing was recorded over time in these results	В этих результатах ничего не записано во времени
-	At {time} {unit}: {n} items	В момент {time} {unit}: {n} элементов
 	Run the model to fill the dashboard	Запустите модель, чтобы заполнить дашборд
 	The resource and conveyor charts show the last run until this one ends	Графики ресурсов и конвейеров показывают последний прогон, пока этот не закончится
+# Validation messages, new labels and word changes (issue #145)
+	The id “{id}” is not valid. Start an id with a letter or an underscore, then use only letters, digits, dots, hyphens and underscores.	Идентификатор «{id}» недопустим. Начинайте идентификатор с буквы или знака подчёркивания, а дальше используйте только буквы, цифры, точки, дефисы и знаки подчёркивания.
+	More than one block, flow, pool or calendar has the id “{id}”. Give each its own id.	У нескольких блоков, потоков, пулов или календарей один и тот же идентификатор «{id}». Задайте каждому свой идентификатор.
+	The flow {flow} uses a block that does not exist. Remove the flow, or connect it to a block that exists.	Поток {flow} связан с блоком, которого нет. Удалите поток или соедините его с существующим блоком.
+	The flow {flow} leads into an Arrivals block, which takes no input. Remove the flow, or send it to another block.	Поток {flow} ведёт в блок «Прибытия», у которого нет входа. Удалите поток или направьте его в другой блок.
+	The flow {flow} leaves a Departures block, which has no output. Remove the flow, or start it from another block.	Поток {flow} выходит из блока «Выходы», у которого нет выхода. Удалите поток или начните его от другого блока.
+	The flow {flow} leads from a block back to itself. Remove it, or send it to another block.	Поток {flow} ведёт от блока к нему же. Удалите его или направьте в другой блок.
+	{block} has nowhere to send entities. Add a flow from it to the next block.	Блоку {block} некуда отправлять сущности. Добавьте поток от него к следующему блоку.
+	{block} has {count} flows out, and only a Decision or a Split or join block can send entities down several. Remove the extra flows, or add a Decision block.	От блока {block} отходит потоков: {count}, а по нескольким потокам сущности могут идти только из блока «Решение» или «Разделить или объединить». Удалите лишние потоки или добавьте блок «Решение».
+	In “{field}” of {block}, set “{param}” to a finite number.	В поле «{field}» блока {block} задайте для «{param}» конечное число.
+	In “{field}” of {block}, set “{param}” to a number above 0.	В поле «{field}» блока {block} задайте для «{param}» число больше 0.
+	In “{field}” of {block}, set “{param}” to 0 or more.	В поле «{field}» блока {block} задайте для «{param}» число не меньше 0.
+	In “{field}” of {block}, set “{param}” to 1 or more.	В поле «{field}» блока {block} задайте для «{param}» число не меньше 1.
+	In “{field}” of {block}, set “{param}” to a number from 0 to 1.	В поле «{field}» блока {block} задайте для «{param}» число от 0 до 1.
+	In “{field}” of {block}, set “Minimum” below “Maximum”, and any “Most likely” value between them.	В поле «{field}» блока {block} задайте «Минимум» меньше «Максимум», а «Наиболее вероятное значение», если оно есть, между ними.
+	In “{field}” of {block}, add data points whose probabilities add up to more than 0.	В поле «{field}» блока {block} добавьте точки данных, вероятности которых в сумме больше 0.
+	{block} would never have a unit to work with. Give it at least 1 unit.	У блока {block} никогда не было бы единицы для работы. Задайте хотя бы 1 единицу.
+	{block} would make entities without end, because its “Time between arrivals” is always 0. Give it a time above 0, or set an “Arrival limit”.	Блок {block} создавал бы сущности без конца, потому что «Время между прибытиями» всегда равно 0. Задайте время больше 0 или укажите «Ограничение числа прибытий».
+	The model has no Arrivals block, so nothing will happen. Add an Arrivals block.	В модели нет блока «Прибытия», поэтому ничего не произойдёт. Добавьте блок «Прибытия».
+	The model has no Departures block, so no time in system is measured. Add a Departures block.	В модели нет блока «Выходы», поэтому время в системе не измеряется. Добавьте блок «Выходы».
+	No entity can reach {block} from an Arrivals block. Connect it to a block that entities pass through.	Ни одна сущность не может дойти до блока {block} от блока «Прибытия». Соедините его с блоком, через который проходят сущности.
+	Entities in {block} can never reach a Departures block. Connect it on towards Departures.	Сущности в блоке {block} никогда не дойдут до блока «Выходы». Соедините его дальше с блоком «Выходы».
+	Set the “{state}” power of {block} to a number of kilowatts, 0 or more.	Задайте мощность «{state}» блока {block} в киловаттах, не меньше 0.
+	Set the warm-up of the experiment to 0 or more.	Задайте разогрев эксперимента не меньше 0.
+	Set the duration of the experiment to more than 0.	Задайте длительность эксперимента больше 0.
+	Set the number of runs of the experiment to 1 or more.	Задайте число запусков эксперимента не меньше 1.
+	Set the layout scale (length units per drawing unit) to a finite number above 0.	Задайте масштаб схемы (единиц длины на единицу чертежа) конечным числом больше 0.
+	A property of {block} has no name. Give it a name, or remove it.	У одного из свойств блока {block} нет имени. Задайте имя или удалите свойство.
+	{block} sets the property “{name}” twice. Keep one of them.	Блок {block} задаёт свойство «{name}» дважды. Оставьте одно из них.
+	The property “{name}” of {block} needs shares that are not negative and add up to more than 0. Change the shares.	Для свойства «{name}» блока {block} нужны доли, которые не отрицательны и в сумме больше 0. Измените доли.
+	The property “{name}” has the type “{type2}” on {block} but “{type}” on another block. Give it one type everywhere.	Свойство «{name}» имеет тип «{type2}» у блока {block}, но тип «{type}» у другого блока. Задайте ему один тип везде.
+	The value of the property “{name}” on {block} does not fit its type, “{type}”. Change the value or the type.	Значение свойства «{name}» у блока {block} не подходит к его типу «{type}». Измените значение или тип.
+	The expression for the property “{name}” on {block} cannot be used: {error}. Correct “{expression}”.	Выражение для свойства «{name}» у блока {block} использовать нельзя: {error}. Исправьте «{expression}».
+	{block} reads the property “{name}”, which no block sets, so it would read as empty. Set it on an earlier block, or correct the name.	Блок {block} читает свойство «{name}», которое не задаёт ни один блок, поэтому оно будет пустым. Задайте его в более раннем блоке или исправьте имя.
+	The setup of {block} has times for particular changes but no property to watch. Choose a property under “Only when this property changes”.	В настройке блока {block} есть времена для отдельных изменений, но нет свойства для отслеживания. Выберите свойство в разделе «Только при изменении этого свойства».
+	{block} has times for particular values but no property to read them from. Choose a property under “Service time by property”.	У блока {block} есть времена для отдельных значений, но нет свойства, из которого их брать. Выберите свойство в разделе «Время обслуживания в зависимости от свойства».
+	{block} has two times for the value “{value}”. Keep one.	У блока {block} два времени для значения «{value}». Оставьте одно.
+	Set the time of {block} for the value “{value}” to a mean of 0 or more.	Задайте время блока {block} для значения «{value}» со средним не меньше 0.
+	The scrap at {block} counts against {other}, which is not a task with a resource. Choose a task with a resource.	Брак у блока {block} относится к блоку {other}, который не является задачей с ресурсом. Выберите задачу с ресурсом.
+	Set “Planned run time per item” of {block} to a mean above 0.	Задайте «Плановое время работы на деталь» блока {block} со средним больше 0.
+	Set “Time before giving up” of {block} to a mean of 0 or more.	Задайте «Время до ухода» блока {block} со средним не меньше 0.
+	The flow {flow} is ticked “Gave up”, but only a task with a resource and a “Time before giving up” sends entities that give up. Untick it, or set a “Time before giving up” on {block}.	Поток {flow} отмечен как «Ушли», но уходящие сущности отправляет только задача с ресурсом, у которой задано «Время до ухода». Снимите отметку или задайте «Время до ухода» у блока {block}.
+	{count} flows out of {block} are ticked “{way}”; at most one can be. Untick all but one.	У блока {block} потоков, отмеченных как «{way}»: {count}, а допустим не более одного. Снимите отметки со всех, кроме одного.
+	The flow {flow} is ticked “Turned away”, but only a task with a resource and a limited waiting room turns entities away. Untick it, or limit the waiting room of {block}.	Поток {flow} отмечен как «Отклонённые», но отклоняет сущности только задача с ресурсом и ограниченными местами ожидания. Снимите отметку или ограничьте места ожидания блока {block}.
+	The flow {flow} is ticked both “Gave up” and “Turned away”. Keep one of them.	Поток {flow} отмечен и как «Ушли», и как «Отклонённые». Оставьте одну отметку.
+	Set every chance of joining in the balking table of {block} to a number from 0 to 1.	Задайте каждую вероятность присоединения в таблице отказа от очереди блока {block} числом от 0 до 1.
+	Put the rows of the balking table of {block} in increasing order of “Number waiting”.	Расположите строки таблицы отказа от очереди блока {block} по возрастанию значения «Число ожидающих».
+	The flow {flow} is ticked “Balked”, but only a task with a resource and balking sends entities that balk. Untick it, or turn on balking for {block}.	Поток {flow} отмечен как «Отказавшиеся», но отказывающиеся сущности отправляет только задача с ресурсом и включённым отказом от очереди. Снимите отметку или включите отказ от очереди для блока {block}.
+	The flow {flow} is ticked “Balked” and also “Gave up” or “Turned away”. Keep one of them.	Поток {flow} отмечен как «Отказавшиеся», а также как «Ушли» или «Отклонённые». Оставьте одну отметку.
+	The waiting room of {block} is set by calendar or per working server, but has no number of places, so it is unlimited. Give it a number of places, or make it fixed.	Места ожидания блока {block} заданы по календарю или по числу работающих серверов, но число мест не указано, поэтому они не ограничены. Укажите число мест или сделайте их фиксированными.
+	The waiting room of {block} is set by calendar, but no calendar has a value. Add a value for a calendar, or make the waiting room fixed.	Места ожидания блока {block} заданы по календарю, но ни у одного календаря нет значения. Добавьте значение для календаря или сделайте места ожидания фиксированными.
+	Set “Fails above, waiting per working server” of {block} to a number of 0 or more.	Задайте «Не проходит выше (ожидающих на сервер в работе)» блока {block} числом не меньше 0.
+	Set “Check every” of {block} to a mean above 0.	Задайте «Проверять каждые» блока {block} со средним больше 0.
+	Set the demand of {block} to a number of parts above 0.	Задайте спрос блока {block} числом деталей больше 0.
+	The demand of {block} is per shift but names no calendar to say when the shifts are. Choose a calendar.	Спрос блока {block} задан за смену, но не указан календарь, по которому определяются смены. Выберите календарь.
+	The demand of {block} names a calendar that does not exist. Choose a calendar that exists.	Спрос блока {block} указывает на несуществующий календарь. Выберите существующий календарь.
+	The probability {value} on the flow {flow} is not from 0 to 1. Enter a probability from 0 to 1.	Вероятность {value} у потока {flow} не лежит в диапазоне от 0 до 1. Введите вероятность от 0 до 1.
+	The probabilities of the flows out of {block} add up to {sum}, not 1, so they are used in proportion. Change them to add up to 1 if that is not what you want.	Вероятности потоков из блока {block} в сумме дают {sum}, а не 1, поэтому они используются пропорционально. Если это не то, что нужно, измените их так, чтобы сумма была равна 1.
+	The condition on the flow {flow} cannot be used: {error}. Correct “{expression}”.	Условие у потока {flow} использовать нельзя: {error}. Исправьте «{expression}».
+	The condition on the flow {flow} is ignored, because only flows out of a Decision block choose a route. Remove the condition.	Условие у потока {flow} игнорируется, потому что маршрут выбирают только потоки из блока «Решение». Удалите условие.
+	The probability on the flow {flow} is ignored, because only flows out of a Decision block choose a route. Remove the probability.	Вероятность у потока {flow} игнорируется, потому что маршрут выбирают только потоки из блока «Решение». Удалите вероятность.
+	The condition on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the condition.	Условие у потока {flow} игнорируется, потому что «Решение» отправляет сущности в самую короткую очередь. Удалите условие.
+	The probability on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the probability.	Вероятность у потока {flow} игнорируется, потому что «Решение» отправляет сущности в самую короткую очередь. Удалите вероятность.
+	The default on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the default.	Отметка «по умолчанию» у потока {flow} игнорируется, потому что «Решение» отправляет сущности в самую короткую очередь. Снимите её.
+	The probability on the flow {flow} is ignored, because the Decision routes by condition. Remove the probability.	Вероятность у потока {flow} игнорируется, потому что «Решение» выбирает маршрут по условию. Удалите вероятность.
+	The default flow of {block} is not one of its own flows out. Choose one of the flows out of {block} as the default.	Поток по умолчанию блока {block} не входит в число его исходящих потоков. Выберите потоком по умолчанию один из исходящих потоков блока {block}.
+	{block} routes by condition but has no default flow, so an entity for which no condition holds leaves the model here. Choose a default flow.	Блок {block} выбирает маршрут по условию, но у него нет потока по умолчанию, поэтому сущность, для которой не выполнено ни одно условие, покидает здесь модель. Выберите поток по умолчанию.
+	{block} diverts entities but has no default flow, so an entity whose way is full has nowhere else to go. Choose a default flow.	Блок {block} перенаправляет сущности, но у него нет потока по умолчанию, поэтому сущности, у которых нужный путь занят, некуда больше идти. Выберите поток по умолчанию.
+	{block} waits for an entity on the flow {flow}, which none can reach, so it never sends one on. Remove that flow, or connect it to a block that entities reach.	Блок {block} ждёт сущность по потоку {flow}, до которого никакая сущность не доходит, поэтому он никогда не отправляет их дальше. Удалите этот поток или соедините его с блоком, до которого сущности доходят.
+	{block} has a limited waiting room and is fed through {gateway}. While it is full, {gateway} holds up every entity behind it, and they wait before it without limit. Remove the gateway before {block}, or remove the limit.	У блока {block} ограниченные места ожидания, и сущности попадают в него через {gateway}. Пока места заняты, {gateway} задерживает все сущности за собой, и они ждут перед ним без ограничения. Уберите шлюз перед блоком {block} или снимите ограничение.
+	The limited waiting rooms of {loop} feed each other in a loop, so when all of them are full the loop deadlocks. Remove the limit on one of them, or break the loop.	Ограниченные места ожидания в {loop} питают друг друга по кругу, поэтому, когда все они заняты, цикл блокируется намертво. Снимите ограничение с одного из них или разорвите цикл.
+	The pool {block} has no units. Give it at least 1 unit.	В пуле {block} нет единиц. Задайте хотя бы 1 единицу.
+	{block} names no resource it needs. Add one under “Needs”.	Блок {block} не указывает, какой ресурс ему нужен. Добавьте его в разделе «Потребности».
+	{block} needs a resource pool that does not exist. Choose a pool that exists.	Блоку {block} нужен пул ресурсов, которого нет. Выберите существующий пул.
+	{block} needs units with the roles {roles}, which no pool has. Give a pool those roles, or change what {block} needs.	Блоку {block} нужны единицы с ролями {roles}, которых нет ни в одном пуле. Задайте пулу эти роли или измените потребности блока {block}.
+	{block} needs {needed} units at once, but at most {available} exist, so this can never be met. Ask for fewer units, or add units to the pool.	Блоку {block} нужно сразу {needed} единиц, а существует не более {available}, поэтому это никогда не выполнится. Запросите меньше единиц или добавьте единицы в пул.
+	Set the priority of {block} to a finite number, not {value}.	Задайте приоритет блока {block} конечным числом, а не {value}.
+	No task uses the pool {block}. Add it to a task's needs, or remove the pool.	Ни одна задача не использует пул {block}. Добавьте его в потребности задачи или удалите пул.
+	{block} has a value for a calendar that does not exist. Choose a calendar that exists, or remove the value.	У блока {block} есть значение для несуществующего календаря. Выберите существующий календарь или удалите значение.
+	The calendar {block} has no entries, so it is never active. Add an entry.	В календаре {block} нет записей, поэтому он никогда не активен. Добавьте запись.
+	{block} allows no arrivals outside the calendars but names no calendar, so it never creates entities. Add arrivals by calendar, or allow arrivals outside calendars.	Блок {block} не допускает прибытий вне календарей, но не указывает календарь, поэтому он никогда не создаёт сущности. Добавьте прибытия по календарю или разрешите прибытия вне календарей.
+	Set the batch size of {block} to 1 or more.	Задайте размер партии блока {block} не меньше 1.
+	Set “{field}” of the conveyor {block} to a finite number above 0.	Задайте «{field}» конвейера {block} конечным числом больше 0.
+	Set “{field}” of the conveyor {block} to a finite number of 0 or more.	Задайте «{field}» конвейера {block} конечным числом не меньше 0.
+	Set “{field}” of the conveyor {block} to a finite number other than 0.	Задайте «{field}» конвейера {block} конечным числом, отличным от 0.
+	The conveyor {block} is {length} long but each entity takes {pitch} (item length plus gap), so not even one fits. Lengthen the conveyor, or shorten the item or the gap.	Длина конвейера {block} равна {length}, а каждая сущность занимает {pitch} (длина изделия плюс зазор), поэтому не помещается даже одна. Удлините конвейер или сократите изделие или зазор.
+	The drawn path of the conveyor {block} is {path_length} long, but its “Length” is {length}, so the drawing and the run disagree. Make “Length” match the path, or change the shape.	Нарисованный путь конвейера {block} имеет длину {path_length}, а его «Длина» равна {length}, поэтому чертёж и запуск расходятся. Приведите «Длина» в соответствие с путём или измените форму.
+	{block} is a transport, which StochCraft does not simulate yet. Remove it to run the model.	Блок {block} является транспортом, который StochCraft пока не моделирует. Удалите его, чтобы запустить модель.
+	The pool {pool} of the transport {block} does not exist. Choose a pool that exists.	Пула {pool} транспорта {block} не существует. Выберите существующий пул.
+	The pool {pool} of the transport {block} is not mobile. Give the pool speeds and a home.	Пул {pool} транспорта {block} не мобильный. Задайте пулу скорости и место базирования.
+	Set “{field}” of the pool {block} to a finite number above 0.	Задайте «{field}» пула {block} конечным числом больше 0.
+	The home of the pool {block} is not a block of the model. Choose a block as its home.	Место базирования пула {block} не является блоком модели. Выберите блок в качестве места базирования.
+	The transport {block} needs one block before it, where it picks up, and one after it, where it drops off, but has {inputs} before and {outputs} after. Connect it to one block on each side.	Транспорту {block} нужен один блок перед ним, где он забирает, и один после него, где он выгружает, а сейчас перед ним {inputs}, а после {outputs}. Соедините его с одним блоком с каждой стороны.
+	{other} has no place on the canvas, so the distances for {block} are not known. Place {other} on the canvas.	У блока {other} нет места на основной поверхности, поэтому расстояния для {block} неизвестны. Разместите {other} на основной поверхности.
+	The flow {flow} asks for no entities. Set its “Units” to 1 or more.	Поток {flow} не запрашивает ни одной сущности. Задайте для «Единицы» значение не меньше 1.
+	The “Units” on the flow {flow} is ignored, because only a Split or join block takes several entities from one flow. Remove it.	«Единицы» у потока {flow} игнорируются, потому что несколько сущностей из одного потока берёт только блок «Разделить или объединить». Удалите их.
+	No block makes batches, so {block} passes every entity through. Add a Batch block before it, or remove {block}.	Ни один блок не создаёт партии, поэтому {block} пропускает каждую сущность. Добавьте перед ним блок «Партия» или удалите {block}.
+	The stop condition names a block that does not exist. Choose a block that exists.	Условие остановки указывает на несуществующий блок. Выберите существующий блок.
+	Set the count of the stop condition for {block} to 1 or more.	Задайте число в условии остановки для блока {block} не меньше 1.
+	The stop condition waits for {block} to empty, but only a task can empty. Choose a task.	Условие остановки ждёт, пока блок {block} опустеет, но опустеть может только задача. Выберите задачу.
+	The stop condition at {block} can be met before the warm-up ends. A run that stops during the warm-up has no statistics after it and is left out of the results. Shorten the warm-up, or stop later.	Условие остановки у блока {block} может выполниться до конца разогрева. Запуск, остановившийся во время разогрева, не имеет статистики после него и исключается из результатов. Сократите разогрев или задайте остановку позже.
+	Every run stopped before the warm-up ended, so no metric is reported. Shorten the warm-up, or stop later.	Каждый запуск остановился до конца разогрева, поэтому ни одна метрика не выводится. Сократите разогрев или задайте остановку позже.
+	{replications} of {of} runs stopped before the warm-up ended, so their statistics are left out of every metric. Shorten the warm-up, or stop later.	Запусков, остановившихся до конца разогрева: {replications} из {of}, поэтому их статистика исключена из каждой метрики. Сократите разогрев или задайте остановку позже.
+	{block} is offered {load}% of the work its units can do, so its waiting room grows without limit and the results describe no steady state. Add units, or shorten the service.	Блоку {block} предлагается {load}% работы, которую могут выполнить его единицы, поэтому его места ожидания растут без предела, а результаты не описывают установившийся режим. Добавьте единицы или сократите обслуживание.
+	{block} is busy {utilisation}% of the time, and at the end at least {backlog} entities are still waiting against {left} that left. Work arrives faster than it is done, so the results describe no steady state. Add units, or shorten the service.	Блок {block} занят {utilisation}% времени, а в конце как минимум {backlog} сущностей всё ещё ждут при {left} покинувших. Работа поступает быстрее, чем выполняется, поэтому результаты не описывают установившийся режим. Добавьте единицы или сократите обслуживание.
+	The experiment has one run, so its results cannot be told from chance. Set the number of runs to at least 2, and usually 10 or more.	В эксперименте один запуск, поэтому его результаты нельзя отличить от случайности. Задайте не менее 2 запусков, а обычно 10 и более.
+	{block} has a three-point estimate but no time to fit it to, so the estimate is ignored. Remove the estimate.	У блока {block} есть трёхточечная оценка, но нет времени, к которому её подбирать, поэтому оценка игнорируется. Удалите оценку.
+	The three-point estimate of {block} cannot be fitted: every point must be a finite number. Correct the points.	Трёхточечную оценку блока {block} нельзя подобрать: каждая точка должна быть конечным числом. Исправьте точки.
+	The three-point estimate of {block} cannot be fitted: the points must be in order, minimum, most likely, then maximum or 95th percentile. Correct the points.	Трёхточечную оценку блока {block} нельзя подобрать: точки должны идти по порядку: минимум, наиболее вероятное значение, затем максимум или 95-й процентиль. Исправьте точки.
+	The three-point estimate of {block} cannot be fitted: log-normal and Weibull estimates have no maximum. Give a 95th percentile instead.	Трёхточечную оценку блока {block} нельзя подобрать: у логнормальной оценки и оценки Вейбулла нет максимума. Укажите вместо него 95-й процентиль.
+	The time of {block} is no longer the one fitted from its three-point estimate. Fit it again, or remove the estimate.	Время блока {block} больше не то, что было подобрано по его трёхточечной оценке. Подберите его заново или удалите оценку.
+	In “{field}” of {block}, the normal distribution draws below 0 more than 1 time in 100, and each such draw counts as 0, so the times are longer on average than its mean. Use a truncated normal with a minimum of 0, or a log-normal.	В поле «{field}» блока {block} нормальное распределение даёт значения ниже 0 чаще чем в 1 случае из 100, и каждое такое значение считается за 0, поэтому времена в среднем больше его среднего. Используйте усечённое нормальное распределение с минимумом 0 или логнормальное.
+	The entities of {block} do not add up: {came} came in or were inside at the start, but {went} left, were lost, gave up or are still inside.	Сущности блока {block} не сходятся: в начале пришли или были внутри {came}, а вышли, потеряны, ушли или остались внутри {went}.
+	The entities of the model do not add up: {came} were created or inside at the start, but {went} reached Departures, left the model elsewhere or are still inside.	Сущности модели не сходятся: в начале созданы или были внутри {came}, а дошли до блока «Выходы», покинули модель иначе или остались внутри {went}.
+	No entity left the model, of {came} created or inside at the start. Check that the routing leads to Departures and that the run is long enough for an entity to get through.	Ни одна сущность не покинула модель из {came} созданных или бывших внутри в начале. Проверьте, что маршрут ведёт в «Выходы» и что запуск достаточно длинный, чтобы сущность успела пройти.
+	Little's law does not hold at {block}: the time-average number inside was {mean}, but the entities' own times inside give {from_stays}.	Закон Литтла не выполняется у блока {block}: среднее по времени число сущностей внутри было {mean}, а собственное время сущностей внутри даёт {from_stays}.
+	The utilisation of {block} counts {busy} units busy on average, but {working} were processing or setting up: units idle, blocked, off shift, failed or restarting were counted busy.	Коэффициент использования блока {block} считает занятыми в среднем {busy} единиц, но обрабатывали или проходили переналадку {working}: простаивающие, заблокированные, вне смены, отказавшие или перезапускающиеся единицы были посчитаны занятыми.
+	The utilisation of {block} counts {busy} units busy on average, but {working} were processing or setting up: units at work were not counted busy.	Коэффициент использования блока {block} считает занятыми в среднем {busy} единиц, но обрабатывали или проходили переналадку {working}: единицы за работой не были посчитаны занятыми.
+	The shares of the time of the units of {block} in each state add up to {total}, not 1.	Доли времени единиц блока {block} в каждом состоянии в сумме дают {total}, а не 1.
+	“{metric}” of {block} is {value}, outside 0 to 1 (0% to 100%).	«{metric}» блока {block} равно {value}, это вне диапазона от 0 до 1 (от 0% до 100%).
+	This was found in {replications} of {of} runs, and the furthest off is shown.	Это обнаружено в {replications} из {of} запусков, показан наиболее отклоняющийся.
+	This points to a fault in StochCraft rather than in the model. Please report it with the model.	Это указывает на ошибку в StochCraft, а не в модели. Сообщите о ней вместе с моделью.
+	Angle	Угол
+	Failed	Отказ
+	Off shift	Вне смены
+	Processing	Обработка
+	Radius	Радиус
+	Rise	Подъём
+	Speed empty	Скорость без груза
+	Speed loaded	Скорость с грузом
+	Turns	Витки
+	Unload	Разгрузка
+	Lost	Потери
+	An entity that leaves a waiting room before a unit takes it, because it has waited as long as it was willing to.	Сущность, которая покидает места ожидания до того, как её возьмёт единица, потому что прождала столько, сколько была готова.
+	An entity that does not join a waiting room at all, because the number already waiting put it off.	Сущность, которая вообще не встаёт в места ожидания, потому что её отпугнуло число уже ожидающих.
+	An entity that finds the waiting room full and takes the flow ticked “Turned away” instead of waiting.	Сущность, которая застаёт места ожидания занятыми и идёт по потоку с отметкой «Отклонённые» вместо ожидания.
+	An entity that leaves the model without reaching Departures: it found the waiting room full with nowhere else to go, or a decision with no way out for it.	Сущность, которая покидает модель, не дойдя до блока «Выходы»: она застала места ожидания занятыми, а другого пути нет, или для неё нет выхода у решения.
+	Gave up on {id}	Ушли на {id}
+	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the flow ticked “Gave up”, or leaves the model.	Каждая сущность ждёт здесь не дольше случайного времени, выбранного для неё при прибытии, а затем уходит: идёт по потоку с отметкой «Ушли» или покидает модель.
+	Entities that do not join the waiting room take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Сущности, которые не встают в места ожидания, сразу идут по этому потоку (например, чтобы попробовать позже), а не теряются; здесь они считаются отказавшимися.
+	The job stops at once: the entity goes back to the front of the waiting room for any server on shift, and the work done on it is wasted.	Работа сразу останавливается: сущность возвращается в начало мест ожидания к любому серверу на смене, а сделанная над ней работа идёт впустую.
+	The connection drops and the client tries again: the entity goes back to the front of the waiting room at once, and the work done on it is wasted.	Соединение обрывается, и клиент пробует снова: сущность сразу возвращается в начало мест ожидания, а сделанная над ней работа идёт впустую.
+	Ticked, entities queue up at the end while the rest keep moving. Unticked, the whole belt stops when the entity at the end cannot leave.	Если отмечено, сущности выстраиваются в очередь в конце, пока остальные продолжают двигаться. Если не отмечено, вся лента останавливается, когда сущность в конце не может уйти.
+	Play run 1 step by step and see each block's waiting room on the diagram	Выполнить запуск 1 по шагам и видеть места ожидания каждого блока на диаграмме
+	Select a block to see its waiting room over time.	Выберите блок, чтобы увидеть его места ожидания во времени.
+	Entities on conveyors over time	Сущности на конвейерах во времени
+	Entities in the model over time	Сущности в модели во времени
+	How long each entity spends on the conveyors.	Сколько времени каждая сущность проводит на конвейерах.
+	No entity has left a conveyor yet	Ни одна сущность ещё не покинула конвейер
+	Share of entities by time on a conveyor, in {unit}	Доля сущностей по времени на конвейере, в {unit}
+	Time on conveyors: {n} entities between {lo} and {hi} {unit}	Время на конвейерах: {n} сущностей между {lo} и {hi} {unit}
+	{from} to {to} {unit}: {share} of entities ({n})	От {from} до {to} {unit}: {share} сущностей ({n})
+	How many entities are on the conveyors over time.	Сколько сущностей находится на конвейерах во времени.
+	How many entities are in the model over time.	Сколько сущностей находится в модели во времени.
+	At {time} {unit}: {n} entities	В момент {time} {unit}: {n} сущностей
+@plural	Makes {n} independent run of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval across them.	Выполняет {n} независимый запуск модели с начальным значением {seed}. Результаты каждого блока включают полуширину 95% доверительного интервала.|Выполняет {n} независимых запуска модели с начальным значением {seed}. Результаты каждого блока включают полуширину 95% доверительного интервала.|Выполняет {n} независимых запусков модели с начальным значением {seed}. Результаты каждого блока включают полуширину 95% доверительного интервала.

@@ -2680,9 +2680,9 @@ impl App {
             tnf(
                 u64::from(x.replications),
                 "Makes {n} independent run of the model from seed {seed}. Each \
-                 element's results come with the half-width of a 95% confidence interval.",
+                 block's results come with the half-width of a 95% confidence interval.",
                 "Makes {n} independent runs of the model from seed {seed}. Each \
-                 element's results come with the half-width of a 95% confidence interval across \
+                 block's results come with the half-width of a 95% confidence interval across \
                  them.",
                 &[("seed", &x.seed.to_string())],
             ),

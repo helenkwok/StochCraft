@@ -21,8 +21,6 @@
 	A caller on hold: once a unit takes it, the entity stays.	होल्ड पर कॉल करने वाला: एक बार कोई संसाधन इकाई उसे ले ले, तो इकाई रुकी रहती है।
 	A client that times out: if its time runs out during service, it gives up then, and the unit finishes the job anyway (wasted work).	टाइमआउट होने वाला क्लाइंट: अगर सेवा के दौरान उसका समय खत्म हो जाए, तो वह उसी समय छोड़ देता है, और संसाधन इकाई फिर भी काम पूरा करती है (व्यर्थ काम)।
 	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	नई फ़ाइल में केवल मॉडल रहता है: {file} में जो StochCraft नहीं समझता, वह छोड़ दिया जाता है।
-	Abandoned	छोड़कर गईं
-	Abandoned on {id}	{id} पर छोड़कर गईं
 	About StochCraft	StochCraft के बारे में
 	About {app}	{app} के बारे में
 	Accent	एक्सेंट रंग
@@ -162,7 +160,6 @@
 	Duration	अवधि
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	हर विश्लेषण एक ही यादृच्छिक बीज से प्रयोग को कई बार चलाता है, ताकि अंतर बदलाव से आए, संयोग से नहीं। इसमें कुछ समय लग सकता है।
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	प्रत्येक इकाई इनमें से पहला ऐसा विकल्प लेती है जिसे अभी एक साथ पूरा किया जा सके, और बाहर निकलते समय संसाधन इकाइयाँ लौटा देती है।
-	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	प्रत्येक इकाई यहाँ अधिक से अधिक उतना समय प्रतीक्षा करती है जितना उसके आने पर उसके लिए यादृच्छिक रूप से चुना जाता है, फिर छोड़ देती है: वह "छोड़कर गईं" चिह्नित बाहर जाने का रास्ता लेती है, या मॉडल से बाहर निकल जाती है।
 	Each server (unit) is checked every so often, as a load balancer probes the servers behind it. One that fails, with too many waiting, is taken out of service for a restart, then comes back.	हर सर्वर (संसाधन इकाई) की समय-समय पर जाँच होती है, जैसे लोड बैलेंसर अपने पीछे के सर्वरों को जाँचता है। जो सर्वर जाँच में विफल होता है, क्योंकि बहुत अधिक प्रतीक्षा में हैं, उसे पुनः आरंभ के लिए हटा दिया जाता है, फिर वह लौट आता है।
 	Edit	संपादित करें
 	Edit themes…	थीम संपादित करें…
@@ -412,7 +409,6 @@
 	Run	चलाएँ
 	Run cancelled	रन रद्द किया गया
 	Run experiment	प्रयोग चलाएँ
-	Play run 1 step by step and see each block's queue on the diagram	रन 1 को चरण-दर-चरण चलाएँ और आरेख पर हर ब्लॉक की कतार देखें
 	Run the experiment ({shortcut})	प्रयोग चलाएँ ({shortcut})
 	Run the experiment again to see this result's spread.	इस परिणाम का फैलाव देखने के लिए प्रयोग फिर से चलाएँ।
 	Run the experiment at each value of one parameter, and compare a result.	एक पैरामीटर के हर मान पर प्रयोग चलाएँ और एक परिणाम की तुलना करें।
@@ -433,7 +429,6 @@
 	Scrap ratio	स्क्रैप अनुपात
 	Seed	यादृच्छिक बीज
 	Select All	सभी चुनें
-	Select a block to see its queue over time.	समय के साथ किसी ब्लॉक की कतार देखने के लिए उसे चुनें।
 	Sender waits during transfer	स्थानांतरण के दौरान भेजने वाला रुका रहता है
 	Separate the values with semicolons or spaces.	मानों को अर्धविराम या रिक्त स्थान से अलग करें।
 	Sequential	क्रमिक
@@ -497,10 +492,8 @@
 	Text	पाठ
 	Text on accent	एक्सेंट रंग पर पाठ
 	Text on header	शीर्ष पट्टी पर पाठ
-	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	कनेक्शन टूट जाता है और क्लाइंट फिर कोशिश करता है: इकाई तुरंत कतार के आगे लौट जाती है, और उस पर किया गया काम व्यर्थ जाता है।
 	The entity waits on its server and the job carries on with what was left once the server is back.	इकाई अपने सर्वर पर प्रतीक्षा करती है, और सर्वर लौटते ही काम बचे हुए हिस्से से आगे चलता है।
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more runs would narrow it.	अंतराल {share} के लक्ष्य हिस्से से नीचे तक जाता है, इसलिए 95% विश्वास के साथ यह नहीं दिखता कि हिस्सा पूरा हुआ; अधिक रन इसे संकरा करेंगे।
-	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	काम तुरंत रुक जाता है: इकाई पाली में मौजूद किसी भी सर्वर के लिए कतार के आगे लौट जाती है, और उस पर किया गया काम व्यर्थ जाता है।
 	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	काम तुरंत रुक जाता है; इकाई अपने सर्वर पर प्रतीक्षा करती है, और वह सर्वर फिर पाली में आते ही काम बचे हुए हिस्से से आगे चलता है।
 	The last task with a resource it finished at	अंतिम संसाधन वाला कार्य जिससे पुर्जा गुज़रा
 	The mean time to the stop condition is over the runs that met it only; the others ran to their time limit.	रुकने की शर्त तक का औसत समय केवल उन रनों पर है जिन्होंने शर्त पूरी की; बाकी अपनी समय सीमा तक चले।
@@ -690,7 +683,6 @@ unit	yr	वर्ष
 	Balked on {id}	{id} पर कतार में नहीं लगीं
 	Balking	कतार में न लगना
 	Count those in service	सेवा में चल रही इकाइयाँ भी गिनें
-	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	जो इकाइयाँ कतार में नहीं लगतीं, वे तुरंत यह प्रवाह लेती हैं (उदाहरण के लिए, बाद में फिर कोशिश करने के लिए), खो जाने के बजाय; यहाँ उन्हें कतार में न लगने वालों में गिना जाता है।
 	Joins with probability	कतार में लगने की प्रायिकता
 	Number waiting	प्रतीक्षारत संख्या
 	Share balked	कतार में न लगने वालों का अनुपात
@@ -908,7 +900,6 @@ unit	yr	वर्ष
 @plural	Finished {n} run|Finished {n} runs	{n} रन पूरा हुआ|{n} रन पूरे हुए
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	{file} खोली गई ({n} चेतावनी)|{file} खोली गई ({n} चेतावनियाँ)
 @plural	Removed {n} block|Removed {n} blocks	{n} ब्लॉक हटाया गया|{n} ब्लॉक हटाए गए
-@plural	Makes {n} independent run of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	बीज {seed} से मॉडल का {n} स्वतंत्र रन चलाता है। प्रत्येक तत्व के परिणामों में 95% विश्वास अंतराल की आधी चौड़ाई शामिल है।|बीज {seed} से मॉडल के {n} स्वतंत्र रन चलाता है। प्रत्येक तत्व के परिणामों में 95% विश्वास अंतराल की आधी चौड़ाई शामिल है।
 @plural	The stop condition was met in {met} of {n} run, after {time} {unit} on average.|The stop condition was met in {met} of {n} runs, after {time} {unit} on average.	रुकने की शर्त {n} में से {met} रन में, औसतन {time} {unit} बाद पूरी हुई।|रुकने की शर्त {n} में से {met} रनों में, औसतन {time} {unit} बाद पूरी हुई।
 @plural	{done} of {n} run finished|{done} of {n} runs finished	{n} में से {done} रन पूरा हुआ|{n} में से {done} रन पूरे हुए
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} run|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} runs	{name}: {mean}{unit}\n95% अंतराल {low} से {high}{unit}\n{n} रन के आधार पर|{name}: {mean}{unit}\n95% अंतराल {low} से {high}{unit}\n{n} रनों के आधार पर
@@ -938,7 +929,6 @@ unit	yr	वर्ष
 	kilometres	किलोमीटर
 	inches	इंच
 	feet	फ़ुट
-	Ticked, items queue up at the end while the rest keep moving. Unticked, the whole belt stops when the item at the end cannot leave.	चुनने पर, वस्तुएँ अंत में कतार में लगती हैं जबकि बाकी चलती रहती हैं। न चुनने पर, अंत की वस्तु के बाहर न जा पाने पर पूरा बेल्ट रुक जाता है।
 	A belt that carries entities from one end to the other. It has a length and a speed, and each entity takes a pitch of belt: its item length plus the gap kept free after it. So it holds at most length ÷ pitch entities and carries at most speed ÷ pitch per time unit. Accumulating: entities queue up at the end while the rest keep moving; otherwise the whole belt stops.	एक बेल्ट जो इकाइयों को एक सिरे से दूसरे सिरे तक ले जाता है। इसकी एक लंबाई और एक गति होती है, और हर इकाई बेल्ट का एक पिच लेती है: उसकी वस्तु की लंबाई और उसके पीछे खाली छोड़ा गया अंतराल। इसलिए इस पर अधिकतम लंबाई ÷ पिच इकाइयाँ आती हैं और यह प्रति समय-इकाई अधिकतम गति ÷ पिच इकाइयाँ ले जाता है। संचयी: इकाइयाँ अंत में कतार में लगती हैं जबकि बाकी चलती रहती हैं; अन्यथा पूरा बेल्ट रुक जाता है।
 	Station	स्टेशन
 	Kind	प्रकार
@@ -992,16 +982,162 @@ unit	yr	वर्ष
 	Time on conveyors	कन्वेयर पर समय
 	No conveyors in this model	इस मॉडल में कोई कन्वेयर नहीं है
 	Fills in when the run ends	रन पूरा होने पर भरेगा
-	How long each item spends on the conveyors.	हर वस्तु कन्वेयर पर कितना समय बिताती है।
-	No item has left a conveyor yet	अभी तक कोई वस्तु कन्वेयर से बाहर नहीं निकली
-	Share of items by time on a conveyor, in {unit}	कन्वेयर पर समय के अनुसार वस्तुओं का हिस्सा, {unit} में
-	Time on conveyors: {n} items between {lo} and {hi} {unit}	कन्वेयर पर समय: {lo} और {hi} {unit} के बीच {n} वस्तुएँ
-	{from} to {to} {unit}: {share} of items ({n})	{from} से {to} {unit}: वस्तुओं का {share} ({n})
-	Items on conveyors over time	समय के साथ कन्वेयर पर वस्तुएँ
-	Items in the model over time	समय के साथ मॉडल में वस्तुएँ
-	How many items are on the conveyors over time.	समय के साथ कन्वेयर पर कितनी वस्तुएँ हैं।
-	How many items are in the model over time.	समय के साथ मॉडल में कितनी वस्तुएँ हैं।
 	Nothing was recorded over time in these results	इन परिणामों में समय के साथ कुछ भी दर्ज नहीं हुआ
-	At {time} {unit}: {n} items	{time} {unit} पर: {n} वस्तुएँ
 	Run the model to fill the dashboard	डैशबोर्ड भरने के लिए मॉडल चलाएँ
 	The resource and conveyor charts show the last run until this one ends	संसाधन और कन्वेयर के चार्ट इस रन के खत्म होने तक पिछला रन दिखाते हैं
+# Validation messages, new labels and word changes (issue #145)
+	The id “{id}” is not valid. Start an id with a letter or an underscore, then use only letters, digits, dots, hyphens and underscores.	ID “{id}” मान्य नहीं है। ID की शुरुआत अक्षर या अंडरस्कोर से करें, फिर केवल अक्षर, अंक, बिंदु, हाइफ़न और अंडरस्कोर का उपयोग करें।
+	More than one block, flow, pool or calendar has the id “{id}”. Give each its own id.	एक से अधिक ब्लॉक, प्रवाह, पूल या कैलेंडर की ID “{id}” है। हर एक को अपनी अलग ID दें।
+	The flow {flow} uses a block that does not exist. Remove the flow, or connect it to a block that exists.	प्रवाह {flow} ऐसे ब्लॉक का उपयोग करता है जो मौजूद नहीं है। प्रवाह हटाएँ, या उसे किसी मौजूदा ब्लॉक से जोड़ें।
+	The flow {flow} leads into an Arrivals block, which takes no input. Remove the flow, or send it to another block.	प्रवाह {flow} आगमन ब्लॉक में जाता है, जो कोई इनपुट नहीं लेता। प्रवाह हटाएँ, या उसे किसी अन्य ब्लॉक में भेजें।
+	The flow {flow} leaves a Departures block, which has no output. Remove the flow, or start it from another block.	प्रवाह {flow} प्रस्थान ब्लॉक से निकलता है, जिसका कोई आउटपुट नहीं होता। प्रवाह हटाएँ, या उसे किसी अन्य ब्लॉक से शुरू करें।
+	The flow {flow} leads from a block back to itself. Remove it, or send it to another block.	प्रवाह {flow} एक ब्लॉक से निकलकर उसी में लौटता है। उसे हटाएँ, या किसी अन्य ब्लॉक में भेजें।
+	{block} has nowhere to send entities. Add a flow from it to the next block.	{block} के पास इकाइयाँ भेजने की कोई जगह नहीं है। उससे अगले ब्लॉक तक एक प्रवाह जोड़ें।
+	{block} has {count} flows out, and only a Decision or a Split or join block can send entities down several. Remove the extra flows, or add a Decision block.	{block} से {count} प्रवाह बाहर जाते हैं, जबकि केवल निर्णय ब्लॉक या विभाजित या संयोजित करें ब्लॉक ही इकाइयों को कई प्रवाहों में भेज सकता है। अतिरिक्त प्रवाह हटाएँ, या निर्णय ब्लॉक जोड़ें।
+	In “{field}” of {block}, set “{param}” to a finite number.	{block} के “{field}” में “{param}” को परिमित संख्या पर सेट करें।
+	In “{field}” of {block}, set “{param}” to a number above 0.	{block} के “{field}” में “{param}” को 0 से बड़ी संख्या पर सेट करें।
+	In “{field}” of {block}, set “{param}” to 0 or more.	{block} के “{field}” में “{param}” को 0 या उससे अधिक पर सेट करें।
+	In “{field}” of {block}, set “{param}” to 1 or more.	{block} के “{field}” में “{param}” को 1 या उससे अधिक पर सेट करें।
+	In “{field}” of {block}, set “{param}” to a number from 0 to 1.	{block} के “{field}” में “{param}” को 0 से 1 के बीच की संख्या पर सेट करें।
+	In “{field}” of {block}, set “Minimum” below “Maximum”, and any “Most likely” value between them.	{block} के “{field}” में “न्यूनतम” को “अधिकतम” से कम रखें, और “सर्वाधिक संभावित” मान (यदि हो) को दोनों के बीच रखें।
+	In “{field}” of {block}, add data points whose probabilities add up to more than 0.	{block} के “{field}” में ऐसे डेटा बिंदु जोड़ें जिनकी प्रायिकताओं का योग 0 से अधिक हो।
+	{block} would never have a unit to work with. Give it at least 1 unit.	{block} के पास काम करने के लिए कभी कोई संसाधन इकाई नहीं होगी। उसे कम से कम 1 संसाधन इकाई दें।
+	{block} would make entities without end, because its “Time between arrivals” is always 0. Give it a time above 0, or set an “Arrival limit”.	{block} अंतहीन इकाइयाँ बनाएगा, क्योंकि उसका “आगमन के बीच का समय” हमेशा 0 है। 0 से अधिक समय दें, या “आगमन सीमा” सेट करें।
+	The model has no Arrivals block, so nothing will happen. Add an Arrivals block.	मॉडल में कोई आगमन ब्लॉक नहीं है, इसलिए कुछ नहीं होगा। आगमन ब्लॉक जोड़ें।
+	The model has no Departures block, so no time in system is measured. Add a Departures block.	मॉडल में कोई प्रस्थान ब्लॉक नहीं है, इसलिए सिस्टम में समय नहीं मापा जाता। प्रस्थान ब्लॉक जोड़ें।
+	No entity can reach {block} from an Arrivals block. Connect it to a block that entities pass through.	कोई इकाई आगमन ब्लॉक से {block} तक नहीं पहुँच सकती। उसे ऐसे ब्लॉक से जोड़ें जिससे होकर इकाइयाँ गुज़रती हैं।
+	Entities in {block} can never reach a Departures block. Connect it on towards Departures.	{block} में इकाइयाँ कभी प्रस्थान ब्लॉक तक नहीं पहुँच सकतीं। उसे आगे प्रस्थान तक जोड़ें।
+	Set the “{state}” power of {block} to a number of kilowatts, 0 or more.	{block} की “{state}” बिजली खपत को किलोवाट की ऐसी संख्या पर सेट करें जो 0 या अधिक हो।
+	Set the warm-up of the experiment to 0 or more.	प्रयोग का वार्म-अप 0 या उससे अधिक सेट करें।
+	Set the duration of the experiment to more than 0.	प्रयोग की अवधि 0 से अधिक सेट करें।
+	Set the number of runs of the experiment to 1 or more.	प्रयोग के रन की संख्या 1 या उससे अधिक सेट करें।
+	Set the layout scale (length units per drawing unit) to a finite number above 0.	लेआउट का पैमाना (प्रति आरेखण इकाई लंबाई की इकाइयाँ) किसी परिमित संख्या पर सेट करें जो 0 से बड़ी हो।
+	A property of {block} has no name. Give it a name, or remove it.	{block} के एक गुण का कोई नाम नहीं है। उसे नाम दें, या हटाएँ।
+	{block} sets the property “{name}” twice. Keep one of them.	{block} गुण “{name}” को दो बार सेट करता है। उनमें से एक ही रखें।
+	The property “{name}” of {block} needs shares that are not negative and add up to more than 0. Change the shares.	{block} पर गुण “{name}” के लिए ऐसे हिस्से चाहिए जो ऋणात्मक न हों और जिनका योग 0 से अधिक हो। हिस्से बदलें।
+	The property “{name}” has the type “{type2}” on {block} but “{type}” on another block. Give it one type everywhere.	गुण “{name}” का प्रकार {block} पर “{type2}” है, पर दूसरे ब्लॉक पर “{type}” है। उसे हर जगह एक ही प्रकार दें।
+	The value of the property “{name}” on {block} does not fit its type, “{type}”. Change the value or the type.	{block} पर गुण “{name}” का मान उसके प्रकार “{type}” से मेल नहीं खाता। मान या प्रकार बदलें।
+	The expression for the property “{name}” on {block} cannot be used: {error}. Correct “{expression}”.	{block} पर गुण “{name}” का व्यंजक उपयोग नहीं हो सकता: {error}। “{expression}” को सुधारें।
+	{block} reads the property “{name}”, which no block sets, so it would read as empty. Set it on an earlier block, or correct the name.	{block} गुण “{name}” पढ़ता है, जिसे कोई ब्लॉक सेट नहीं करता, इसलिए वह खाली पढ़ा जाएगा। उसे पहले के किसी ब्लॉक पर सेट करें, या नाम सुधारें।
+	The setup of {block} has times for particular changes but no property to watch. Choose a property under “Only when this property changes”.	{block} के सेटअप में विशेष बदलावों के समय हैं, पर देखने के लिए कोई गुण नहीं है। “केवल इस गुण के बदलने पर” के अंतर्गत कोई गुण चुनें।
+	{block} has times for particular values but no property to read them from. Choose a property under “Service time by property”.	{block} में विशेष मानों के समय हैं, पर उन्हें पढ़ने के लिए कोई गुण नहीं है। “गुण के अनुसार सेवा समय” के अंतर्गत कोई गुण चुनें।
+	{block} has two times for the value “{value}”. Keep one.	{block} में मान “{value}” के लिए दो समय हैं। उनमें से एक ही रखें।
+	Set the time of {block} for the value “{value}” to a mean of 0 or more.	{block} का मान “{value}” के लिए समय 0 या उससे अधिक माध्य पर सेट करें।
+	The scrap at {block} counts against {other}, which is not a task with a resource. Choose a task with a resource.	{block} का स्क्रैप {other} के विरुद्ध गिना जाता है, जो संसाधन वाला कार्य नहीं है। कोई संसाधन वाला कार्य चुनें।
+	Set “Planned run time per item” of {block} to a mean above 0.	{block} का “प्रति पुर्जा नियोजित चलन समय” 0 से अधिक माध्य पर सेट करें।
+	Set “Time before giving up” of {block} to a mean of 0 or more.	{block} का “छोड़ने से पहले का समय” 0 या उससे अधिक माध्य पर सेट करें।
+	The flow {flow} is ticked “Gave up”, but only a task with a resource and a “Time before giving up” sends entities that give up. Untick it, or set a “Time before giving up” on {block}.	प्रवाह {flow} पर “छोड़ दिया” चुना गया है, पर केवल “छोड़ने से पहले का समय” वाला संसाधन वाला कार्य ही प्रतीक्षा छोड़ने वाली इकाइयाँ भेजता है। चुनाव हटाएँ, या {block} पर “छोड़ने से पहले का समय” सेट करें।
+	{count} flows out of {block} are ticked “{way}”; at most one can be. Untick all but one.	{block} से बाहर जाने वाले {count} प्रवाहों पर “{way}” चुना गया है; अधिकतम एक पर चुना जा सकता है। एक को छोड़कर सभी का चुनाव हटाएँ।
+	The flow {flow} is ticked “Turned away”, but only a task with a resource and a limited waiting room turns entities away. Untick it, or limit the waiting room of {block}.	प्रवाह {flow} पर “लौटाई गईं” चुना गया है, पर केवल सीमित प्रतीक्षा कक्ष वाला संसाधन वाला कार्य ही इकाइयाँ लौटाता है। चुनाव हटाएँ, या {block} का प्रतीक्षा कक्ष सीमित करें।
+	The flow {flow} is ticked both “Gave up” and “Turned away”. Keep one of them.	प्रवाह {flow} पर “छोड़ दिया” और “लौटाई गईं” दोनों चुने गए हैं। उनमें से एक ही रखें।
+	Set every chance of joining in the balking table of {block} to a number from 0 to 1.	{block} की कतार में न लगने की तालिका में कतार में लगने की हर प्रायिकता को 0 से 1 के बीच की संख्या पर सेट करें।
+	Put the rows of the balking table of {block} in increasing order of “Number waiting”.	{block} की कतार में न लगने की तालिका की पंक्तियों को “प्रतीक्षारत संख्या” के बढ़ते क्रम में रखें।
+	The flow {flow} is ticked “Balked”, but only a task with a resource and balking sends entities that balk. Untick it, or turn on balking for {block}.	प्रवाह {flow} पर “कतार में नहीं लगीं” चुना गया है, पर केवल कतार में न लगने की सुविधा वाला संसाधन वाला कार्य ही ऐसी इकाइयाँ भेजता है। चुनाव हटाएँ, या {block} के लिए कतार में न लगने की सुविधा चालू करें।
+	The flow {flow} is ticked “Balked” and also “Gave up” or “Turned away”. Keep one of them.	प्रवाह {flow} पर “कतार में नहीं लगीं” के साथ “छोड़ दिया” या “लौटाई गईं” भी चुना गया है। उनमें से एक ही रखें।
+	The waiting room of {block} is set by calendar or per working server, but has no number of places, so it is unlimited. Give it a number of places, or make it fixed.	{block} का प्रतीक्षा कक्ष कैलेंडर या हर चालू सर्वर के अनुसार तय है, पर उसमें जगहों की संख्या नहीं है, इसलिए वह असीमित है। जगहों की संख्या दें, या उसे स्थिर करें।
+	The waiting room of {block} is set by calendar, but no calendar has a value. Add a value for a calendar, or make the waiting room fixed.	{block} का प्रतीक्षा कक्ष कैलेंडर के अनुसार तय है, पर किसी कैलेंडर का कोई मान नहीं है। किसी कैलेंडर के लिए मान जोड़ें, या प्रतीक्षा कक्ष को स्थिर करें।
+	Set “Fails above, waiting per working server” of {block} to a number of 0 or more.	{block} का “विफलता सीमा, चालू सर्वर प्रति प्रतीक्षारत” 0 या उससे अधिक की संख्या पर सेट करें।
+	Set “Check every” of {block} to a mean above 0.	{block} का “जाँच का अंतराल” 0 से अधिक माध्य पर सेट करें।
+	Set the demand of {block} to a number of parts above 0.	{block} की मांग 0 से अधिक पुर्जों की संख्या पर सेट करें।
+	The demand of {block} is per shift but names no calendar to say when the shifts are. Choose a calendar.	{block} की मांग प्रति पाली है, पर पालियाँ कब हैं यह बताने वाला कोई कैलेंडर नहीं दिया गया है। कोई कैलेंडर चुनें।
+	The demand of {block} names a calendar that does not exist. Choose a calendar that exists.	{block} की मांग ऐसे कैलेंडर का नाम लेती है जो मौजूद नहीं है। कोई मौजूदा कैलेंडर चुनें।
+	The probability {value} on the flow {flow} is not from 0 to 1. Enter a probability from 0 to 1.	प्रवाह {flow} पर प्रायिकता {value} 0 से 1 के बीच नहीं है। 0 से 1 के बीच की प्रायिकता दर्ज करें।
+	The probabilities of the flows out of {block} add up to {sum}, not 1, so they are used in proportion. Change them to add up to 1 if that is not what you want.	{block} से बाहर जाने वाले प्रवाहों की प्रायिकताओं का योग {sum} है, 1 नहीं, इसलिए उन्हें अनुपात में उपयोग किया जाता है। यदि आप यह नहीं चाहते, तो उन्हें बदलकर योग 1 करें।
+	The condition on the flow {flow} cannot be used: {error}. Correct “{expression}”.	प्रवाह {flow} की शर्त उपयोग नहीं हो सकती: {error}। “{expression}” को सुधारें।
+	The condition on the flow {flow} is ignored, because only flows out of a Decision block choose a route. Remove the condition.	प्रवाह {flow} की शर्त अनदेखी की जाती है, क्योंकि केवल निर्णय ब्लॉक से निकलने वाले प्रवाह ही रास्ता चुनते हैं। शर्त हटाएँ।
+	The probability on the flow {flow} is ignored, because only flows out of a Decision block choose a route. Remove the probability.	प्रवाह {flow} की प्रायिकता अनदेखी की जाती है, क्योंकि केवल निर्णय ब्लॉक से निकलने वाले प्रवाह ही रास्ता चुनते हैं। प्रायिकता हटाएँ।
+	The condition on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the condition.	प्रवाह {flow} की शर्त अनदेखी की जाती है, क्योंकि निर्णय इकाइयों को सबसे छोटी कतार में भेजता है। शर्त हटाएँ।
+	The probability on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the probability.	प्रवाह {flow} की प्रायिकता अनदेखी की जाती है, क्योंकि निर्णय इकाइयों को सबसे छोटी कतार में भेजता है। प्रायिकता हटाएँ।
+	The default on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the default.	प्रवाह {flow} का डिफ़ॉल्ट अनदेखा किया जाता है, क्योंकि निर्णय इकाइयों को सबसे छोटी कतार में भेजता है। डिफ़ॉल्ट हटाएँ।
+	The probability on the flow {flow} is ignored, because the Decision routes by condition. Remove the probability.	प्रवाह {flow} की प्रायिकता अनदेखी की जाती है, क्योंकि निर्णय शर्त के अनुसार रास्ता चुनता है। प्रायिकता हटाएँ।
+	The default flow of {block} is not one of its own flows out. Choose one of the flows out of {block} as the default.	{block} का डिफ़ॉल्ट प्रवाह उसके अपने बाहर जाने वाले प्रवाहों में से नहीं है। {block} से बाहर जाने वाले प्रवाहों में से किसी एक को डिफ़ॉल्ट चुनें।
+	{block} routes by condition but has no default flow, so an entity for which no condition holds leaves the model here. Choose a default flow.	{block} शर्त के अनुसार रास्ता चुनता है, पर उसका कोई डिफ़ॉल्ट प्रवाह नहीं है, इसलिए जिस इकाई पर कोई शर्त लागू नहीं होती वह यहीं मॉडल से बाहर चली जाती है। डिफ़ॉल्ट प्रवाह चुनें।
+	{block} diverts entities but has no default flow, so an entity whose way is full has nowhere else to go. Choose a default flow.	{block} इकाइयों को मोड़ता है, पर उसका कोई डिफ़ॉल्ट प्रवाह नहीं है, इसलिए जिस इकाई का रास्ता भरा है उसके पास जाने की कोई और जगह नहीं है। डिफ़ॉल्ट प्रवाह चुनें।
+	{block} waits for an entity on the flow {flow}, which none can reach, so it never sends one on. Remove that flow, or connect it to a block that entities reach.	{block} प्रवाह {flow} पर एक इकाई की प्रतीक्षा करता है, जिस तक कोई इकाई नहीं पहुँच सकती, इसलिए वह कभी कोई इकाई आगे नहीं भेजता। वह प्रवाह हटाएँ, या उसे ऐसे ब्लॉक से जोड़ें जहाँ इकाइयाँ पहुँचती हैं।
+	{block} has a limited waiting room and is fed through {gateway}. While it is full, {gateway} holds up every entity behind it, and they wait before it without limit. Remove the gateway before {block}, or remove the limit.	{block} का प्रतीक्षा कक्ष सीमित है और उसे {gateway} से होकर इकाइयाँ मिलती हैं। भरा होने पर {gateway} अपने पीछे की हर इकाई को रोक देता है, और वे आगे बिना सीमा के प्रतीक्षा करती हैं। {block} से पहले का गेटवे हटाएँ, या सीमा हटाएँ।
+	The limited waiting rooms of {loop} feed each other in a loop, so when all of them are full the loop deadlocks. Remove the limit on one of them, or break the loop.	{loop} के सीमित प्रतीक्षा कक्ष एक चक्र में एक-दूसरे को इकाइयाँ देते हैं, इसलिए सबके भर जाने पर चक्र अटक जाता है। किसी एक की सीमा हटाएँ, या चक्र तोड़ें।
+	The pool {block} has no units. Give it at least 1 unit.	पूल {block} में कोई संसाधन इकाई नहीं है। उसे कम से कम 1 संसाधन इकाई दें।
+	{block} names no resource it needs. Add one under “Needs”.	{block} ने अपनी ज़रूरत का कोई संसाधन नहीं बताया। “आवश्यकताएँ” के अंतर्गत एक जोड़ें।
+	{block} needs a resource pool that does not exist. Choose a pool that exists.	{block} को ऐसे संसाधन पूल की ज़रूरत है जो मौजूद नहीं है। कोई मौजूदा पूल चुनें।
+	{block} needs units with the roles {roles}, which no pool has. Give a pool those roles, or change what {block} needs.	{block} को {roles} भूमिकाओं वाली संसाधन इकाइयाँ चाहिए, जो किसी पूल में नहीं हैं। किसी पूल को वे भूमिकाएँ दें, या बदलें कि {block} को क्या चाहिए।
+	{block} needs {needed} units at once, but at most {available} exist, so this can never be met. Ask for fewer units, or add units to the pool.	{block} को एक साथ {needed} संसाधन इकाइयाँ चाहिए, पर अधिकतम {available} ही मौजूद हैं, इसलिए यह कभी पूरा नहीं हो सकता। कम इकाइयाँ माँगें, या पूल में इकाइयाँ जोड़ें।
+	Set the priority of {block} to a finite number, not {value}.	{block} की प्राथमिकता परिमित संख्या पर सेट करें, {value} पर नहीं।
+	No task uses the pool {block}. Add it to a task's needs, or remove the pool.	कोई कार्य पूल {block} का उपयोग नहीं करता। उसे किसी कार्य की आवश्यकताओं में जोड़ें, या पूल हटाएँ।
+	{block} has a value for a calendar that does not exist. Choose a calendar that exists, or remove the value.	{block} में ऐसे कैलेंडर का मान है जो मौजूद नहीं है। कोई मौजूदा कैलेंडर चुनें, या वह मान हटाएँ।
+	The calendar {block} has no entries, so it is never active. Add an entry.	कैलेंडर {block} में कोई प्रविष्टि नहीं है, इसलिए वह कभी सक्रिय नहीं होता। एक प्रविष्टि जोड़ें।
+	{block} allows no arrivals outside the calendars but names no calendar, so it never creates entities. Add arrivals by calendar, or allow arrivals outside calendars.	{block} कैलेंडरों के बाहर कोई आगमन नहीं होने देता, पर कोई कैलेंडर नहीं बताता, इसलिए वह कभी इकाइयाँ नहीं बनाता। कैलेंडर के अनुसार आगमन जोड़ें, या कैलेंडरों के बाहर आगमन की अनुमति दें।
+	Set the batch size of {block} to 1 or more.	{block} का बैच आकार 1 या उससे अधिक सेट करें।
+	Set “{field}” of the conveyor {block} to a finite number above 0.	कन्वेयर {block} का “{field}” 0 से बड़ी परिमित संख्या पर सेट करें।
+	Set “{field}” of the conveyor {block} to a finite number of 0 or more.	कन्वेयर {block} का “{field}” 0 या उससे अधिक की परिमित संख्या पर सेट करें।
+	Set “{field}” of the conveyor {block} to a finite number other than 0.	कन्वेयर {block} का “{field}” 0 के अलावा किसी परिमित संख्या पर सेट करें।
+	The conveyor {block} is {length} long but each entity takes {pitch} (item length plus gap), so not even one fits. Lengthen the conveyor, or shorten the item or the gap.	कन्वेयर {block} {length} लंबा है, पर हर इकाई {pitch} लेती है (वस्तु की लंबाई और अंतराल), इसलिए एक भी नहीं समाती। कन्वेयर को लंबा करें, या वस्तु या अंतराल को छोटा करें।
+	The drawn path of the conveyor {block} is {path_length} long, but its “Length” is {length}, so the drawing and the run disagree. Make “Length” match the path, or change the shape.	कन्वेयर {block} का खींचा गया रास्ता {path_length} लंबा है, पर उसकी “लंबाई” {length} है, इसलिए आरेखण और रन में अंतर है। “लंबाई” को रास्ते के अनुसार करें, या आकृति बदलें।
+	{block} is a transport, which StochCraft does not simulate yet. Remove it to run the model.	{block} परिवहन है, जिसे StochCraft अभी सिमुलेट नहीं करता। मॉडल चलाने के लिए उसे हटाएँ।
+	The pool {pool} of the transport {block} does not exist. Choose a pool that exists.	परिवहन {block} का पूल {pool} मौजूद नहीं है। कोई मौजूदा पूल चुनें।
+	The pool {pool} of the transport {block} is not mobile. Give the pool speeds and a home.	परिवहन {block} का पूल {pool} गतिशील नहीं है। पूल को गतियाँ और एक ठिकाना दें।
+	Set “{field}” of the pool {block} to a finite number above 0.	पूल {block} का “{field}” 0 से बड़ी परिमित संख्या पर सेट करें।
+	The home of the pool {block} is not a block of the model. Choose a block as its home.	पूल {block} का ठिकाना मॉडल का कोई ब्लॉक नहीं है। उसके ठिकाने के रूप में कोई ब्लॉक चुनें।
+	The transport {block} needs one block before it, where it picks up, and one after it, where it drops off, but has {inputs} before and {outputs} after. Connect it to one block on each side.	परिवहन {block} को अपने पहले एक ब्लॉक चाहिए, जहाँ से वह उठाता है, और बाद में एक, जहाँ वह उतारता है, पर उसके पहले {inputs} और बाद में {outputs} हैं। उसे हर ओर एक ब्लॉक से जोड़ें।
+	{other} has no place on the canvas, so the distances for {block} are not known. Place {other} on the canvas.	{other} की मुख्य सतह पर कोई जगह नहीं है, इसलिए {block} की दूरियाँ ज्ञात नहीं हैं। {other} को मुख्य सतह पर रखें।
+	The flow {flow} asks for no entities. Set its “Units” to 1 or more.	प्रवाह {flow} कोई इकाई नहीं माँगता। उसकी “मात्रा” 1 या उससे अधिक सेट करें।
+	The “Units” on the flow {flow} is ignored, because only a Split or join block takes several entities from one flow. Remove it.	प्रवाह {flow} की “मात्रा” अनदेखी की जाती है, क्योंकि केवल विभाजित या संयोजित करें ब्लॉक ही एक प्रवाह से कई इकाइयाँ लेता है। उसे हटाएँ।
+	No block makes batches, so {block} passes every entity through. Add a Batch block before it, or remove {block}.	कोई ब्लॉक बैच नहीं बनाता, इसलिए {block} हर इकाई को आगे जाने देता है। उससे पहले बैच ब्लॉक जोड़ें, या {block} हटाएँ।
+	The stop condition names a block that does not exist. Choose a block that exists.	रुकने की शर्त ऐसे ब्लॉक का नाम लेती है जो मौजूद नहीं है। कोई मौजूदा ब्लॉक चुनें।
+	Set the count of the stop condition for {block} to 1 or more.	{block} की रुकने की शर्त की गिनती 1 या उससे अधिक सेट करें।
+	The stop condition waits for {block} to empty, but only a task can empty. Choose a task.	रुकने की शर्त {block} के खाली होने की प्रतीक्षा करती है, पर केवल कार्य खाली हो सकता है। कोई कार्य चुनें।
+	The stop condition at {block} can be met before the warm-up ends. A run that stops during the warm-up has no statistics after it and is left out of the results. Shorten the warm-up, or stop later.	{block} पर रुकने की शर्त वार्म-अप खत्म होने से पहले पूरी हो सकती है। वार्म-अप के दौरान रुके रन में उसके बाद के आँकड़े नहीं होते और वह परिणामों से बाहर रहता है। वार्म-अप छोटा करें, या देर से रोकें।
+	Every run stopped before the warm-up ended, so no metric is reported. Shorten the warm-up, or stop later.	हर रन वार्म-अप खत्म होने से पहले रुक गया, इसलिए कोई मापदंड रिपोर्ट नहीं होता। वार्म-अप छोटा करें, या देर से रोकें।
+	{replications} of {of} runs stopped before the warm-up ended, so their statistics are left out of every metric. Shorten the warm-up, or stop later.	{of} में से {replications} रन वार्म-अप खत्म होने से पहले रुक गए, इसलिए उनके आँकड़े हर मापदंड से बाहर रखे गए हैं। वार्म-अप छोटा करें, या देर से रोकें।
+	{block} is offered {load}% of the work its units can do, so its waiting room grows without limit and the results describe no steady state. Add units, or shorten the service.	{block} को उसकी संसाधन इकाइयों के कर सकने वाले काम का {load}% दिया जाता है, इसलिए उसका प्रतीक्षा कक्ष बिना सीमा के बढ़ता है और परिणाम स्थिर अवस्था नहीं बताते। इकाइयाँ जोड़ें, या सेवा छोटी करें।
+	{block} is busy {utilisation}% of the time, and at the end at least {backlog} entities are still waiting against {left} that left. Work arrives faster than it is done, so the results describe no steady state. Add units, or shorten the service.	{block} {utilisation}% समय व्यस्त है, और अंत में कम से कम {backlog} इकाइयाँ अब भी प्रतीक्षा में हैं, जबकि {left} जा चुकी हैं। काम निपटने से तेज़ आता है, इसलिए परिणाम स्थिर अवस्था नहीं बताते। संसाधन इकाइयाँ जोड़ें, या सेवा छोटी करें।
+	The experiment has one run, so its results cannot be told from chance. Set the number of runs to at least 2, and usually 10 or more.	प्रयोग में एक ही रन है, इसलिए उसके परिणाम संयोग से अलग नहीं किए जा सकते। रन की संख्या कम से कम 2 सेट करें, और आमतौर पर 10 या अधिक।
+	{block} has a three-point estimate but no time to fit it to, so the estimate is ignored. Remove the estimate.	{block} में त्रि-बिंदु अनुमान है, पर उसे मिलाने के लिए कोई समय नहीं है, इसलिए अनुमान अनदेखा किया जाता है। अनुमान हटाएँ।
+	The three-point estimate of {block} cannot be fitted: every point must be a finite number. Correct the points.	{block} का त्रि-बिंदु अनुमान मिलाया नहीं जा सकता: हर बिंदु परिमित संख्या होना चाहिए। बिंदु सुधारें।
+	The three-point estimate of {block} cannot be fitted: the points must be in order, minimum, most likely, then maximum or 95th percentile. Correct the points.	{block} का त्रि-बिंदु अनुमान मिलाया नहीं जा सकता: बिंदु इस क्रम में होने चाहिए: न्यूनतम, सर्वाधिक संभावित, फिर अधिकतम या 95वाँ प्रतिशतक। बिंदु सुधारें।
+	The three-point estimate of {block} cannot be fitted: log-normal and Weibull estimates have no maximum. Give a 95th percentile instead.	{block} का त्रि-बिंदु अनुमान मिलाया नहीं जा सकता: लॉग-सामान्य और वीबुल अनुमानों का कोई अधिकतम नहीं होता। इसकी जगह 95वाँ प्रतिशतक दें।
+	The time of {block} is no longer the one fitted from its three-point estimate. Fit it again, or remove the estimate.	{block} का समय अब वह नहीं है जो उसके त्रि-बिंदु अनुमान से मिलाया गया था। उसे फिर मिलाएँ, या अनुमान हटाएँ।
+	In “{field}” of {block}, the normal distribution draws below 0 more than 1 time in 100, and each such draw counts as 0, so the times are longer on average than its mean. Use a truncated normal with a minimum of 0, or a log-normal.	{block} के “{field}” में सामान्य वितरण 100 में से 1 से अधिक बार 0 से नीचे का मान देता है, और ऐसा हर मान 0 गिना जाता है, इसलिए समय औसतन उसके माध्य से लंबे होते हैं। 0 न्यूनतम वाला छँटा हुआ सामान्य, या लॉग-सामान्य उपयोग करें।
+	The entities of {block} do not add up: {came} came in or were inside at the start, but {went} left, were lost, gave up or are still inside.	{block} की इकाइयों का हिसाब नहीं मिलता: {came} अंदर आईं या शुरू में अंदर थीं, पर {went} बाहर गईं, खो गईं, छोड़ गईं या अब भी अंदर हैं।
+	The entities of the model do not add up: {came} were created or inside at the start, but {went} reached Departures, left the model elsewhere or are still inside.	मॉडल की इकाइयों का हिसाब नहीं मिलता: {came} बनीं या शुरू में अंदर थीं, पर {went} प्रस्थान तक पहुँचीं, कहीं और मॉडल से बाहर गईं या अब भी अंदर हैं।
+	No entity left the model, of {came} created or inside at the start. Check that the routing leads to Departures and that the run is long enough for an entity to get through.	शुरू में बनी या अंदर {came} इकाइयों में से कोई भी मॉडल से बाहर नहीं गई। जाँचें कि रास्ता प्रस्थान तक जाता है और रन इतना लंबा है कि कोई इकाई गुज़र सके।
+	Little's law does not hold at {block}: the time-average number inside was {mean}, but the entities' own times inside give {from_stays}.	{block} पर लिटिल का नियम नहीं टिकता: अंदर की संख्या का समय-औसत {mean} था, पर इकाइयों के अपने अंदर बिताए समय से {from_stays} आता है।
+	The utilisation of {block} counts {busy} units busy on average, but {working} were processing or setting up: units idle, blocked, off shift, failed or restarting were counted busy.	{block} की उपयोग दर औसतन {busy} संसाधन इकाइयाँ व्यस्त गिनती है, पर {working} ही प्रसंस्करण या सेटअप कर रही थीं: खाली, अवरुद्ध, पाली से बाहर, खराब या पुनः आरंभ होती इकाइयाँ व्यस्त गिनी गईं।
+	The utilisation of {block} counts {busy} units busy on average, but {working} were processing or setting up: units at work were not counted busy.	{block} की उपयोग दर औसतन {busy} संसाधन इकाइयाँ व्यस्त गिनती है, पर {working} प्रसंस्करण या सेटअप कर रही थीं: काम कर रही इकाइयाँ व्यस्त नहीं गिनी गईं।
+	The shares of the time of the units of {block} in each state add up to {total}, not 1.	{block} की संसाधन इकाइयों के हर अवस्था में बिताए समय के हिस्सों का योग {total} है, 1 नहीं।
+	“{metric}” of {block} is {value}, outside 0 to 1 (0% to 100%).	{block} का “{metric}” {value} है, जो 0 से 1 (0% से 100%) के बाहर है।
+	This was found in {replications} of {of} runs, and the furthest off is shown.	यह {of} में से {replications} रनों में मिला, और सबसे दूर वाला दिखाया गया है।
+	This points to a fault in StochCraft rather than in the model. Please report it with the model.	यह मॉडल की नहीं, StochCraft की खराबी की ओर इशारा करता है। कृपया इसे मॉडल के साथ रिपोर्ट करें।
+	Angle	कोण
+	Failed	खराब
+	Off shift	पाली से बाहर
+	Processing	प्रसंस्करण
+	Radius	त्रिज्या
+	Rise	उठान
+	Speed empty	खाली गति
+	Speed loaded	लदी गति
+	Turns	फेरे
+	Unload	उतारने का समय
+	Lost	हानि
+	An entity that leaves a waiting room before a unit takes it, because it has waited as long as it was willing to.	वह इकाई जो किसी संसाधन इकाई के उसे लेने से पहले प्रतीक्षा कक्ष छोड़ देती है, क्योंकि वह जितनी देर प्रतीक्षा करने को तैयार थी उतनी प्रतीक्षा कर चुकी है।
+	An entity that does not join a waiting room at all, because the number already waiting put it off.	वह इकाई जो प्रतीक्षा कक्ष में बिल्कुल शामिल नहीं होती, क्योंकि पहले से प्रतीक्षारत संख्या देखकर उसका मन बदल जाता है।
+	An entity that finds the waiting room full and takes the flow ticked “Turned away” instead of waiting.	वह इकाई जो प्रतीक्षा कक्ष भरा पाती है और प्रतीक्षा करने के बजाय “लौटाई गईं” चुने गए प्रवाह को ले लेती है।
+	An entity that leaves the model without reaching Departures: it found the waiting room full with nowhere else to go, or a decision with no way out for it.	वह इकाई जो प्रस्थान तक पहुँचे बिना मॉडल से बाहर चली जाती है: उसे प्रतीक्षा कक्ष भरा मिला और कोई और रास्ता नहीं था, या ऐसा निर्णय मिला जिसमें उसके लिए कोई निकास नहीं था।
+	Gave up on {id}	{id} पर छोड़ दिया
+	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the flow ticked “Gave up”, or leaves the model.	प्रत्येक इकाई यहाँ अधिक से अधिक उतना समय प्रतीक्षा करती है जितना उसके आने पर उसके लिए यादृच्छिक रूप से चुना जाता है, फिर छोड़ देती है: वह “छोड़ दिया” चुने गए प्रवाह को लेती है, या मॉडल से बाहर निकल जाती है।
+	Entities that do not join the waiting room take this flow at once (to try again later, say), instead of being lost; they count as balked here.	जो इकाइयाँ प्रतीक्षा कक्ष में शामिल नहीं होतीं, वे तुरंत यह प्रवाह लेती हैं (उदाहरण के लिए, बाद में फिर कोशिश करने के लिए), खो जाने के बजाय; यहाँ उन्हें कतार में न लगने वालों में गिना जाता है।
+	The job stops at once: the entity goes back to the front of the waiting room for any server on shift, and the work done on it is wasted.	काम तुरंत रुक जाता है: इकाई पाली में मौजूद किसी भी सर्वर के लिए प्रतीक्षा कक्ष के आगे लौट जाती है, और उस पर किया गया काम व्यर्थ जाता है।
+	The connection drops and the client tries again: the entity goes back to the front of the waiting room at once, and the work done on it is wasted.	कनेक्शन टूट जाता है और क्लाइंट फिर कोशिश करता है: इकाई तुरंत प्रतीक्षा कक्ष के आगे लौट जाती है, और उस पर किया गया काम व्यर्थ जाता है।
+	Ticked, entities queue up at the end while the rest keep moving. Unticked, the whole belt stops when the entity at the end cannot leave.	चुनने पर, इकाइयाँ अंत में कतार में लगती हैं जबकि बाकी चलती रहती हैं। न चुनने पर, अंत की इकाई के बाहर न जा पाने पर पूरा बेल्ट रुक जाता है।
+	Play run 1 step by step and see each block's waiting room on the diagram	रन 1 को चरण-दर-चरण चलाएँ और आरेख पर हर ब्लॉक का प्रतीक्षा कक्ष देखें
+	Select a block to see its waiting room over time.	समय के साथ किसी ब्लॉक का प्रतीक्षा कक्ष देखने के लिए उसे चुनें।
+	Entities on conveyors over time	समय के साथ कन्वेयर पर इकाइयाँ
+	Entities in the model over time	समय के साथ मॉडल में इकाइयाँ
+	How long each entity spends on the conveyors.	हर इकाई कन्वेयर पर कितना समय बिताती है।
+	No entity has left a conveyor yet	अभी तक कोई इकाई कन्वेयर से बाहर नहीं निकली
+	Share of entities by time on a conveyor, in {unit}	कन्वेयर पर समय के अनुसार इकाइयों का हिस्सा, {unit} में
+	Time on conveyors: {n} entities between {lo} and {hi} {unit}	कन्वेयर पर समय: {lo} और {hi} {unit} के बीच {n} इकाइयाँ
+	{from} to {to} {unit}: {share} of entities ({n})	{from} से {to} {unit}: इकाइयों का {share} ({n})
+	How many entities are on the conveyors over time.	समय के साथ कन्वेयर पर कितनी इकाइयाँ हैं।
+	How many entities are in the model over time.	समय के साथ मॉडल में कितनी इकाइयाँ हैं।
+	At {time} {unit}: {n} entities	{time} {unit} पर: {n} इकाइयाँ
+@plural	Makes {n} independent run of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval across them.	बीज {seed} से मॉडल का {n} स्वतंत्र रन चलाता है। प्रत्येक ब्लॉक के परिणामों में 95% विश्वास अंतराल की आधी चौड़ाई शामिल है।|बीज {seed} से मॉडल के {n} स्वतंत्र रन चलाता है। प्रत्येक ब्लॉक के परिणामों में 95% विश्वास अंतराल की आधी चौड़ाई शामिल है।

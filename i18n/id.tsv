@@ -21,8 +21,6 @@
 	A caller on hold: once a unit takes it, the entity stays.	Penelepon yang ditahan: begitu sebuah unit mengambilnya, entitas tetap tinggal.
 	A client that times out: if its time runs out during service, it gives up then, and the unit finishes the job anyway (wasted work).	Klien yang kehabisan waktu (timeout): jika waktunya habis selama layanan, ia menyerah saat itu, dan unit tetap menyelesaikan pekerjaannya (pekerjaan sia-sia).
 	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	Berkas baru hanya berisi model: apa yang tidak dipahami StochCraft di {file} tidak disertakan.
-	Abandoned	Menyerah
-	Abandoned on {id}	Menyerah di {id}
 	About StochCraft	Tentang StochCraft
 	About {app}	Tentang {app}
 	Accent	Aksen
@@ -162,7 +160,6 @@
 	Duration	Durasi
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Setiap analisis menjalankan eksperimen beberapa kali dengan benih acak yang sama, sehingga perbedaan berasal dari perubahan, bukan kebetulan. Ini bisa memakan waktu.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Setiap entitas mengambil alternatif pertama di antara ini yang dapat dipenuhi sekarang, sekaligus semuanya, dan mengembalikan unitnya saat meninggalkan tugas.
-	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Setiap entitas menunggu di sini paling lama selama waktu yang diundi untuknya saat tiba, lalu menyerah: entitas mengambil jalan keluar bertanda "Menyerah", atau meninggalkan model.
 	Each server (unit) is checked every so often, as a load balancer probes the servers behind it. One that fails, with too many waiting, is taken out of service for a restart, then comes back.	Setiap server (unit) diperiksa sesekali, seperti penyeimbang beban memeriksa server di belakangnya. Server yang gagal, karena terlalu banyak yang menunggu, dikeluarkan dari operasi untuk dimulai ulang, lalu kembali.
 	Edit	Edit
 	Edit themes…	Edit tema…
@@ -412,7 +409,6 @@
 	Run	Jalankan
 	Run cancelled	Proses dibatalkan
 	Run experiment	Jalankan eksperimen
-	Play run 1 step by step and see each block's queue on the diagram	Putar eksekusi 1 langkah demi langkah dan lihat antrean tiap blok di diagram
 	Run the experiment ({shortcut})	Jalankan eksperimen ({shortcut})
 	Run the experiment again to see this result's spread.	Jalankan eksperimen lagi untuk melihat sebaran hasil ini.
 	Run the experiment at each value of one parameter, and compare a result.	Jalankan eksperimen pada setiap nilai satu parameter dan bandingkan suatu hasil.
@@ -433,7 +429,6 @@
 	Scrap ratio	Rasio skrap
 	Seed	Benih acak
 	Select All	Pilih Semua
-	Select a block to see its queue over time.	Pilih blok untuk melihat antreannya dari waktu ke waktu.
 	Sender waits during transfer	Pengirim menunggu selama perpindahan
 	Separate the values with semicolons or spaces.	Pisahkan nilai dengan titik koma atau spasi.
 	Sequential	Sekuensial
@@ -497,10 +492,8 @@
 	Text	Teks
 	Text on accent	Teks di atas aksen
 	Text on header	Teks di bilah atas
-	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	Koneksi terputus dan klien mencoba lagi: entitas langsung kembali ke depan antrean, dan pekerjaan yang sudah dilakukan padanya sia-sia.
 	The entity waits on its server and the job carries on with what was left once the server is back.	Entitas menunggu di servernya dan pekerjaan berlanjut dengan sisanya begitu server kembali.
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more runs would narrow it.	Interval mencapai di bawah bagian target {share}, jadi bagian itu tidak terbukti terpenuhi dengan keyakinan 95%; lebih banyak eksekusi akan mempersempitnya.
-	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	Pekerjaan langsung berhenti: entitas kembali ke depan antrean untuk server mana pun yang sedang dalam sif, dan pekerjaan yang sudah dilakukan padanya sia-sia.
 	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	Pekerjaan langsung berhenti; entitas menunggu di servernya dan pekerjaan berlanjut dengan sisanya begitu server itu kembali dalam sif.
 	The last task with a resource it finished at	Tugas terakhir dengan sumber daya yang dilalui komponen
 	The mean time to the stop condition is over the runs that met it only; the others ran to their time limit.	Waktu rata-rata hingga kondisi berhenti hanya atas eksekusi yang mencapainya; sisanya berjalan hingga batas waktunya.
@@ -690,7 +683,6 @@ unit	yr	thn
 	Balked on {id}	Batal mengantre di {id}
 	Balking	Batal mengantre
 	Count those in service	Hitung juga yang sedang dilayani
-	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Entitas yang tidak masuk antrean langsung mengambil alur ini (misalnya untuk mencoba lagi nanti), alih-alih hilang; di sini mereka dihitung sebagai batal mengantre.
 	Joins with probability	Masuk antrean dengan probabilitas
 	Number waiting	Jumlah menunggu
 	Share balked	Proporsi yang batal mengantre
@@ -908,7 +900,6 @@ unit	yr	thn
 @plural	Finished {n} run|Finished {n} runs	Selesai {n} eksekusi
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	{file} dibuka ({n} peringatan)
 @plural	Removed {n} block|Removed {n} blocks	{n} blok dihapus
-@plural	Makes {n} independent run of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Menjalankan {n} eksekusi model yang independen dari benih {seed}. Hasil setiap elemen mencakup setengah lebar interval kepercayaan 95%.
 @plural	The stop condition was met in {met} of {n} run, after {time} {unit} on average.|The stop condition was met in {met} of {n} runs, after {time} {unit} on average.	Kondisi berhenti tercapai pada {met} dari {n} eksekusi, rata-rata setelah {time} {unit}.
 @plural	{done} of {n} run finished|{done} of {n} runs finished	{done} dari {n} eksekusi selesai
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} run|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} runs	{name}: {mean}{unit}\nInterval 95% dari {low} hingga {high}{unit}\ndari {n} eksekusi
@@ -938,7 +929,6 @@ unit	yr	thn
 	kilometres	kilometer
 	inches	inci
 	feet	kaki
-	Ticked, items queue up at the end while the rest keep moving. Unticked, the whole belt stops when the item at the end cannot leave.	Jika dicentang, item mengantre di ujung sementara yang lain terus bergerak. Jika tidak, seluruh sabuk berhenti saat item di ujung tidak bisa keluar.
 	A belt that carries entities from one end to the other. It has a length and a speed, and each entity takes a pitch of belt: its item length plus the gap kept free after it. So it holds at most length ÷ pitch entities and carries at most speed ÷ pitch per time unit. Accumulating: entities queue up at the end while the rest keep moving; otherwise the whole belt stops.	Sabuk yang membawa entitas dari satu ujung ke ujung lain. Sabuk memiliki panjang dan kecepatan, dan setiap entitas menempati satu langkah sabuk: panjang itemnya ditambah celah yang dibiarkan kosong di belakangnya. Jadi sabuk memuat paling banyak panjang ÷ langkah entitas dan membawa paling banyak kecepatan ÷ langkah per satuan waktu. Akumulasi: entitas mengantre di ujung sementara yang lain terus bergerak; jika tidak, seluruh sabuk berhenti.
 	Station	Stasiun
 	Kind	Jenis
@@ -992,16 +982,162 @@ unit	yr	thn
 	Time on conveyors	Waktu di konveyor
 	No conveyors in this model	Tidak ada konveyor pada model ini
 	Fills in when the run ends	Terisi saat proses selesai
-	How long each item spends on the conveyors.	Berapa lama tiap item berada di konveyor.
-	No item has left a conveyor yet	Belum ada item yang meninggalkan konveyor
-	Share of items by time on a conveyor, in {unit}	Porsi item menurut waktu di konveyor, dalam {unit}
-	Time on conveyors: {n} items between {lo} and {hi} {unit}	Waktu di konveyor: {n} item antara {lo} dan {hi} {unit}
-	{from} to {to} {unit}: {share} of items ({n})	Dari {from} hingga {to} {unit}: {share} dari item ({n})
-	Items on conveyors over time	Item di konveyor dari waktu ke waktu
-	Items in the model over time	Item dalam model dari waktu ke waktu
-	How many items are on the conveyors over time.	Berapa banyak item di konveyor dari waktu ke waktu.
-	How many items are in the model over time.	Berapa banyak item dalam model dari waktu ke waktu.
 	Nothing was recorded over time in these results	Tidak ada yang dicatat dari waktu ke waktu dalam hasil ini
-	At {time} {unit}: {n} items	Pada {time} {unit}: {n} item
 	Run the model to fill the dashboard	Jalankan model untuk mengisi dasbor
 	The resource and conveyor charts show the last run until this one ends	Grafik sumber daya dan konveyor menampilkan proses terakhir sampai proses ini selesai
+# Validation messages, new labels and word changes (issue #145)
+	The id “{id}” is not valid. Start an id with a letter or an underscore, then use only letters, digits, dots, hyphens and underscores.	ID “{id}” tidak valid. Awali ID dengan huruf atau garis bawah, lalu gunakan hanya huruf, angka, titik, tanda hubung, dan garis bawah.
+	More than one block, flow, pool or calendar has the id “{id}”. Give each its own id.	Lebih dari satu blok, alur, kumpulan, atau kalender memiliki ID “{id}”. Beri masing-masing ID sendiri.
+	The flow {flow} uses a block that does not exist. Remove the flow, or connect it to a block that exists.	Alur {flow} menggunakan blok yang tidak ada. Hapus alur itu, atau hubungkan ke blok yang ada.
+	The flow {flow} leads into an Arrivals block, which takes no input. Remove the flow, or send it to another block.	Alur {flow} menuju ke blok Kedatangan, yang tidak menerima masukan. Hapus alur itu, atau arahkan ke blok lain.
+	The flow {flow} leaves a Departures block, which has no output. Remove the flow, or start it from another block.	Alur {flow} keluar dari blok Keberangkatan, yang tidak memiliki keluaran. Hapus alur itu, atau mulai dari blok lain.
+	The flow {flow} leads from a block back to itself. Remove it, or send it to another block.	Alur {flow} menuju dari sebuah blok kembali ke blok itu sendiri. Hapus alur itu, atau arahkan ke blok lain.
+	{block} has nowhere to send entities. Add a flow from it to the next block.	{block} tidak punya tujuan untuk mengirim entitas. Tambahkan alur dari blok ini ke blok berikutnya.
+	{block} has {count} flows out, and only a Decision or a Split or join block can send entities down several. Remove the extra flows, or add a Decision block.	{block} memiliki {count} alur keluar, padahal hanya blok Keputusan atau blok Pisahkan atau gabungkan yang dapat mengirim entitas ke beberapa alur. Hapus alur yang berlebih, atau tambahkan blok Keputusan.
+	In “{field}” of {block}, set “{param}” to a finite number.	Pada “{field}” di {block}, atur “{param}” ke bilangan terhingga.
+	In “{field}” of {block}, set “{param}” to a number above 0.	Pada “{field}” di {block}, atur “{param}” ke bilangan di atas 0.
+	In “{field}” of {block}, set “{param}” to 0 or more.	Pada “{field}” di {block}, atur “{param}” ke 0 atau lebih.
+	In “{field}” of {block}, set “{param}” to 1 or more.	Pada “{field}” di {block}, atur “{param}” ke 1 atau lebih.
+	In “{field}” of {block}, set “{param}” to a number from 0 to 1.	Pada “{field}” di {block}, atur “{param}” ke bilangan dari 0 sampai 1.
+	In “{field}” of {block}, set “Minimum” below “Maximum”, and any “Most likely” value between them.	Pada “{field}” di {block}, atur “Minimum” di bawah “Maksimum”, dan nilai “Paling mungkin” (jika ada) di antara keduanya.
+	In “{field}” of {block}, add data points whose probabilities add up to more than 0.	Pada “{field}” di {block}, tambahkan titik data yang probabilitasnya berjumlah lebih dari 0.
+	{block} would never have a unit to work with. Give it at least 1 unit.	{block} tidak akan pernah punya unit untuk bekerja. Beri setidaknya 1 unit.
+	{block} would make entities without end, because its “Time between arrivals” is always 0. Give it a time above 0, or set an “Arrival limit”.	{block} akan membuat entitas tanpa henti, karena “Waktu antar kedatangan” selalu 0. Beri waktu di atas 0, atau tetapkan “Batas kedatangan”.
+	The model has no Arrivals block, so nothing will happen. Add an Arrivals block.	Model tidak memiliki blok Kedatangan, sehingga tidak akan terjadi apa-apa. Tambahkan blok Kedatangan.
+	The model has no Departures block, so no time in system is measured. Add a Departures block.	Model tidak memiliki blok Keberangkatan, sehingga waktu dalam sistem tidak terukur. Tambahkan blok Keberangkatan.
+	No entity can reach {block} from an Arrivals block. Connect it to a block that entities pass through.	Tidak ada entitas dari blok Kedatangan yang dapat mencapai {block}. Hubungkan ke blok yang dilalui entitas.
+	Entities in {block} can never reach a Departures block. Connect it on towards Departures.	Entitas di {block} tidak pernah dapat mencapai blok Keberangkatan. Hubungkan lebih lanjut ke Keberangkatan.
+	Set the “{state}” power of {block} to a number of kilowatts, 0 or more.	Atur daya “{state}” pada {block} ke sejumlah kilowatt, 0 atau lebih.
+	Set the warm-up of the experiment to 0 or more.	Atur pemanasan eksperimen ke 0 atau lebih.
+	Set the duration of the experiment to more than 0.	Atur durasi eksperimen ke lebih dari 0.
+	Set the number of runs of the experiment to 1 or more.	Atur jumlah eksekusi eksperimen ke 1 atau lebih.
+	Set the layout scale (length units per drawing unit) to a finite number above 0.	Atur skala tata letak (satuan panjang per satuan gambar) ke bilangan terhingga di atas 0.
+	A property of {block} has no name. Give it a name, or remove it.	Sebuah properti pada {block} tidak bernama. Beri nama, atau hapus.
+	{block} sets the property “{name}” twice. Keep one of them.	{block} mengatur properti “{name}” dua kali. Pertahankan salah satunya.
+	The property “{name}” of {block} needs shares that are not negative and add up to more than 0. Change the shares.	Properti “{name}” pada {block} memerlukan bagian yang tidak negatif dan berjumlah lebih dari 0. Ubah bagiannya.
+	The property “{name}” has the type “{type2}” on {block} but “{type}” on another block. Give it one type everywhere.	Properti “{name}” bertipe “{type2}” pada {block} tetapi “{type}” pada blok lain. Beri satu tipe yang sama di mana-mana.
+	The value of the property “{name}” on {block} does not fit its type, “{type}”. Change the value or the type.	Nilai properti “{name}” pada {block} tidak sesuai dengan tipenya, “{type}”. Ubah nilai atau tipenya.
+	The expression for the property “{name}” on {block} cannot be used: {error}. Correct “{expression}”.	Ekspresi untuk properti “{name}” pada {block} tidak dapat digunakan: {error}. Perbaiki “{expression}”.
+	{block} reads the property “{name}”, which no block sets, so it would read as empty. Set it on an earlier block, or correct the name.	{block} membaca properti “{name}”, yang tidak diatur oleh blok mana pun, sehingga akan terbaca kosong. Atur pada blok sebelumnya, atau perbaiki namanya.
+	The setup of {block} has times for particular changes but no property to watch. Choose a property under “Only when this property changes”.	Penyiapan {block} memiliki waktu untuk perubahan tertentu tetapi tidak ada properti yang diamati. Pilih properti di bawah “Hanya saat properti ini berubah”.
+	{block} has times for particular values but no property to read them from. Choose a property under “Service time by property”.	{block} memiliki waktu untuk nilai tertentu tetapi tidak ada properti untuk membaca nilainya. Pilih properti di bawah “Waktu layanan menurut properti”.
+	{block} has two times for the value “{value}”. Keep one.	{block} memiliki dua waktu untuk nilai “{value}”. Pertahankan salah satunya.
+	Set the time of {block} for the value “{value}” to a mean of 0 or more.	Atur waktu {block} untuk nilai “{value}” ke rata-rata 0 atau lebih.
+	The scrap at {block} counts against {other}, which is not a task with a resource. Choose a task with a resource.	Skrap pada {block} dibebankan ke {other}, yang bukan tugas dengan sumber daya. Pilih tugas dengan sumber daya.
+	Set “Planned run time per item” of {block} to a mean above 0.	Atur “Waktu jalan terencana per komponen” pada {block} ke rata-rata di atas 0.
+	Set “Time before giving up” of {block} to a mean of 0 or more.	Atur “Waktu sebelum menyerah” pada {block} ke rata-rata 0 atau lebih.
+	The flow {flow} is ticked “Gave up”, but only a task with a resource and a “Time before giving up” sends entities that give up. Untick it, or set a “Time before giving up” on {block}.	Alur {flow} dicentang “Menyerah”, tetapi hanya tugas dengan sumber daya dan “Waktu sebelum menyerah” yang mengirim entitas yang menyerah. Hapus centang, atau atur “Waktu sebelum menyerah” pada {block}.
+	{count} flows out of {block} are ticked “{way}”; at most one can be. Untick all but one.	{count} alur keluar dari {block} dicentang “{way}”; paling banyak satu yang boleh. Hapus centang semuanya kecuali satu.
+	The flow {flow} is ticked “Turned away”, but only a task with a resource and a limited waiting room turns entities away. Untick it, or limit the waiting room of {block}.	Alur {flow} dicentang “Ditolak”, tetapi hanya tugas dengan sumber daya dan ruang tunggu terbatas yang menolak entitas. Hapus centang, atau batasi ruang tunggu {block}.
+	The flow {flow} is ticked both “Gave up” and “Turned away”. Keep one of them.	Alur {flow} dicentang “Menyerah” sekaligus “Ditolak”. Pertahankan salah satunya.
+	Set every chance of joining in the balking table of {block} to a number from 0 to 1.	Atur setiap peluang untuk masuk pada tabel batal mengantre di {block} ke bilangan dari 0 sampai 1.
+	Put the rows of the balking table of {block} in increasing order of “Number waiting”.	Urutkan baris tabel batal mengantre di {block} menurut “Jumlah menunggu” dari kecil ke besar.
+	The flow {flow} is ticked “Balked”, but only a task with a resource and balking sends entities that balk. Untick it, or turn on balking for {block}.	Alur {flow} dicentang “Batal mengantre”, tetapi hanya tugas dengan sumber daya dan fitur batal mengantre yang mengirim entitas yang batal mengantre. Hapus centang, atau aktifkan batal mengantre untuk {block}.
+	The flow {flow} is ticked “Balked” and also “Gave up” or “Turned away”. Keep one of them.	Alur {flow} dicentang “Batal mengantre” dan juga “Menyerah” atau “Ditolak”. Pertahankan salah satunya.
+	The waiting room of {block} is set by calendar or per working server, but has no number of places, so it is unlimited. Give it a number of places, or make it fixed.	Ruang tunggu {block} diatur menurut kalender atau per server yang beroperasi, tetapi tidak punya jumlah tempat, sehingga tidak terbatas. Beri jumlah tempat, atau jadikan tetap.
+	The waiting room of {block} is set by calendar, but no calendar has a value. Add a value for a calendar, or make the waiting room fixed.	Ruang tunggu {block} diatur menurut kalender, tetapi tidak ada kalender yang memiliki nilai. Tambahkan nilai untuk sebuah kalender, atau jadikan ruang tunggu tetap.
+	Set “Fails above, waiting per working server” of {block} to a number of 0 or more.	Atur “Gagal di atas, menunggu per server yang beroperasi” pada {block} ke bilangan 0 atau lebih.
+	Set “Check every” of {block} to a mean above 0.	Atur “Periksa setiap” pada {block} ke rata-rata di atas 0.
+	Set the demand of {block} to a number of parts above 0.	Atur permintaan {block} ke jumlah komponen di atas 0.
+	The demand of {block} is per shift but names no calendar to say when the shifts are. Choose a calendar.	Permintaan {block} dihitung per sif tetapi tidak menyebut kalender yang menentukan kapan sif berlangsung. Pilih kalender.
+	The demand of {block} names a calendar that does not exist. Choose a calendar that exists.	Permintaan {block} menyebut kalender yang tidak ada. Pilih kalender yang ada.
+	The probability {value} on the flow {flow} is not from 0 to 1. Enter a probability from 0 to 1.	Probabilitas {value} pada alur {flow} tidak berada dari 0 sampai 1. Masukkan probabilitas dari 0 sampai 1.
+	The probabilities of the flows out of {block} add up to {sum}, not 1, so they are used in proportion. Change them to add up to 1 if that is not what you want.	Probabilitas alur keluar dari {block} berjumlah {sum}, bukan 1, sehingga dipakai secara proporsional. Ubah agar berjumlah 1 jika bukan itu yang Anda inginkan.
+	The condition on the flow {flow} cannot be used: {error}. Correct “{expression}”.	Kondisi pada alur {flow} tidak dapat digunakan: {error}. Perbaiki “{expression}”.
+	The condition on the flow {flow} is ignored, because only flows out of a Decision block choose a route. Remove the condition.	Kondisi pada alur {flow} diabaikan, karena hanya alur keluar dari blok Keputusan yang memilih rute. Hapus kondisinya.
+	The probability on the flow {flow} is ignored, because only flows out of a Decision block choose a route. Remove the probability.	Probabilitas pada alur {flow} diabaikan, karena hanya alur keluar dari blok Keputusan yang memilih rute. Hapus probabilitasnya.
+	The condition on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the condition.	Kondisi pada alur {flow} diabaikan, karena Keputusan mengirim entitas ke ruang tunggu terpendek. Hapus kondisinya.
+	The probability on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the probability.	Probabilitas pada alur {flow} diabaikan, karena Keputusan mengirim entitas ke ruang tunggu terpendek. Hapus probabilitasnya.
+	The default on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the default.	Pengaturan default pada alur {flow} diabaikan, karena Keputusan mengirim entitas ke ruang tunggu terpendek. Hapus pengaturan default itu.
+	The probability on the flow {flow} is ignored, because the Decision routes by condition. Remove the probability.	Probabilitas pada alur {flow} diabaikan, karena Keputusan memilih rute menurut kondisi. Hapus probabilitasnya.
+	The default flow of {block} is not one of its own flows out. Choose one of the flows out of {block} as the default.	Alur default {block} bukan salah satu alur keluarnya sendiri. Pilih salah satu alur keluar dari {block} sebagai default.
+	{block} routes by condition but has no default flow, so an entity for which no condition holds leaves the model here. Choose a default flow.	{block} memilih rute menurut kondisi tetapi tidak punya alur default, sehingga entitas yang tidak memenuhi kondisi apa pun akan meninggalkan model di sini. Pilih alur default.
+	{block} diverts entities but has no default flow, so an entity whose way is full has nowhere else to go. Choose a default flow.	{block} mengalihkan entitas tetapi tidak punya alur default, sehingga entitas yang jalurnya penuh tidak punya tujuan lain. Pilih alur default.
+	{block} waits for an entity on the flow {flow}, which none can reach, so it never sends one on. Remove that flow, or connect it to a block that entities reach.	{block} menunggu entitas pada alur {flow}, yang tidak dapat dicapai oleh entitas mana pun, sehingga tidak pernah meneruskan satu pun. Hapus alur itu, atau hubungkan ke blok yang dicapai entitas.
+	{block} has a limited waiting room and is fed through {gateway}. While it is full, {gateway} holds up every entity behind it, and they wait before it without limit. Remove the gateway before {block}, or remove the limit.	{block} memiliki ruang tunggu terbatas dan diisi melalui {gateway}. Selama penuh, {gateway} menahan setiap entitas di belakangnya, dan mereka menunggu di depannya tanpa batas. Hapus gateway sebelum {block}, atau hapus batasnya.
+	The limited waiting rooms of {loop} feed each other in a loop, so when all of them are full the loop deadlocks. Remove the limit on one of them, or break the loop.	Ruang tunggu terbatas pada {loop} saling mengisi dalam sebuah putaran, sehingga saat semuanya penuh putaran itu macet. Hapus batas pada salah satunya, atau putuskan putarannya.
+	The pool {block} has no units. Give it at least 1 unit.	Kumpulan {block} tidak punya unit. Beri setidaknya 1 unit.
+	{block} names no resource it needs. Add one under “Needs”.	{block} tidak menyebut sumber daya yang dibutuhkannya. Tambahkan satu di bawah “Kebutuhan”.
+	{block} needs a resource pool that does not exist. Choose a pool that exists.	{block} membutuhkan kumpulan sumber daya yang tidak ada. Pilih kumpulan yang ada.
+	{block} needs units with the roles {roles}, which no pool has. Give a pool those roles, or change what {block} needs.	{block} membutuhkan unit dengan peran {roles}, yang tidak dimiliki kumpulan mana pun. Beri sebuah kumpulan peran itu, atau ubah kebutuhan {block}.
+	{block} needs {needed} units at once, but at most {available} exist, so this can never be met. Ask for fewer units, or add units to the pool.	{block} membutuhkan {needed} unit sekaligus, tetapi paling banyak hanya ada {available}, sehingga tidak akan pernah terpenuhi. Minta unit lebih sedikit, atau tambahkan unit ke kumpulan.
+	Set the priority of {block} to a finite number, not {value}.	Atur prioritas {block} ke bilangan terhingga, bukan {value}.
+	No task uses the pool {block}. Add it to a task's needs, or remove the pool.	Tidak ada tugas yang memakai kumpulan {block}. Tambahkan ke kebutuhan sebuah tugas, atau hapus kumpulan.
+	{block} has a value for a calendar that does not exist. Choose a calendar that exists, or remove the value.	{block} memiliki nilai untuk kalender yang tidak ada. Pilih kalender yang ada, atau hapus nilainya.
+	The calendar {block} has no entries, so it is never active. Add an entry.	Kalender {block} tidak punya entri, sehingga tidak pernah aktif. Tambahkan entri.
+	{block} allows no arrivals outside the calendars but names no calendar, so it never creates entities. Add arrivals by calendar, or allow arrivals outside calendars.	{block} tidak mengizinkan kedatangan di luar kalender tetapi tidak menyebut kalender, sehingga tidak pernah membuat entitas. Tambahkan kedatangan per kalender, atau izinkan kedatangan di luar kalender.
+	Set the batch size of {block} to 1 or more.	Atur ukuran batch {block} ke 1 atau lebih.
+	Set “{field}” of the conveyor {block} to a finite number above 0.	Atur “{field}” pada konveyor {block} ke bilangan terhingga di atas 0.
+	Set “{field}” of the conveyor {block} to a finite number of 0 or more.	Atur “{field}” pada konveyor {block} ke bilangan terhingga 0 atau lebih.
+	Set “{field}” of the conveyor {block} to a finite number other than 0.	Atur “{field}” pada konveyor {block} ke bilangan terhingga selain 0.
+	The conveyor {block} is {length} long but each entity takes {pitch} (item length plus gap), so not even one fits. Lengthen the conveyor, or shorten the item or the gap.	Konveyor {block} panjangnya {length} tetapi setiap entitas memakan {pitch} (panjang item ditambah celah), sehingga satu pun tidak muat. Panjangkan konveyor, atau pendekkan item atau celahnya.
+	The drawn path of the conveyor {block} is {path_length} long, but its “Length” is {length}, so the drawing and the run disagree. Make “Length” match the path, or change the shape.	Jalur gambar konveyor {block} panjangnya {path_length}, tetapi “Panjang”-nya {length}, sehingga gambar dan eksekusi tidak sesuai. Samakan “Panjang” dengan jalurnya, atau ubah bentuknya.
+	{block} is a transport, which StochCraft does not simulate yet. Remove it to run the model.	{block} adalah pengangkutan, yang belum disimulasikan StochCraft. Hapus agar model dapat dijalankan.
+	The pool {pool} of the transport {block} does not exist. Choose a pool that exists.	Kumpulan {pool} milik pengangkutan {block} tidak ada. Pilih kumpulan yang ada.
+	The pool {pool} of the transport {block} is not mobile. Give the pool speeds and a home.	Kumpulan {pool} milik pengangkutan {block} tidak bergerak. Beri kumpulan itu kecepatan dan lokasi asal.
+	Set “{field}” of the pool {block} to a finite number above 0.	Atur “{field}” pada kumpulan {block} ke bilangan terhingga di atas 0.
+	The home of the pool {block} is not a block of the model. Choose a block as its home.	Lokasi asal kumpulan {block} bukan blok dalam model. Pilih sebuah blok sebagai lokasi asalnya.
+	The transport {block} needs one block before it, where it picks up, and one after it, where it drops off, but has {inputs} before and {outputs} after. Connect it to one block on each side.	Pengangkutan {block} membutuhkan satu blok sebelumnya, tempat mengambil, dan satu blok sesudahnya, tempat menurunkan, tetapi memiliki {inputs} sebelumnya dan {outputs} sesudahnya. Hubungkan ke satu blok di tiap sisi.
+	{other} has no place on the canvas, so the distances for {block} are not known. Place {other} on the canvas.	{other} tidak punya tempat di permukaan utama, sehingga jarak untuk {block} tidak diketahui. Letakkan {other} di permukaan utama.
+	The flow {flow} asks for no entities. Set its “Units” to 1 or more.	Alur {flow} tidak meminta entitas sama sekali. Atur “Unit”-nya ke 1 atau lebih.
+	The “Units” on the flow {flow} is ignored, because only a Split or join block takes several entities from one flow. Remove it.	“Unit” pada alur {flow} diabaikan, karena hanya blok Pisahkan atau gabungkan yang mengambil beberapa entitas dari satu alur. Hapus.
+	No block makes batches, so {block} passes every entity through. Add a Batch block before it, or remove {block}.	Tidak ada blok yang membuat batch, sehingga {block} meneruskan setiap entitas begitu saja. Tambahkan blok Batch sebelumnya, atau hapus {block}.
+	The stop condition names a block that does not exist. Choose a block that exists.	Kondisi berhenti menyebut blok yang tidak ada. Pilih blok yang ada.
+	Set the count of the stop condition for {block} to 1 or more.	Atur jumlah pada kondisi berhenti untuk {block} ke 1 atau lebih.
+	The stop condition waits for {block} to empty, but only a task can empty. Choose a task.	Kondisi berhenti menunggu {block} menjadi kosong, tetapi hanya tugas yang dapat kosong. Pilih sebuah tugas.
+	The stop condition at {block} can be met before the warm-up ends. A run that stops during the warm-up has no statistics after it and is left out of the results. Shorten the warm-up, or stop later.	Kondisi berhenti pada {block} dapat terpenuhi sebelum pemanasan selesai. Eksekusi yang berhenti selama pemanasan tidak punya statistik sesudahnya dan tidak dimasukkan ke hasil. Perpendek pemanasan, atau berhenti lebih lambat.
+	Every run stopped before the warm-up ended, so no metric is reported. Shorten the warm-up, or stop later.	Setiap eksekusi berhenti sebelum pemanasan selesai, sehingga tidak ada metrik yang dilaporkan. Perpendek pemanasan, atau berhenti lebih lambat.
+	{replications} of {of} runs stopped before the warm-up ended, so their statistics are left out of every metric. Shorten the warm-up, or stop later.	{replications} dari {of} eksekusi berhenti sebelum pemanasan selesai, sehingga statistiknya tidak dimasukkan ke metrik mana pun. Perpendek pemanasan, atau berhenti lebih lambat.
+	{block} is offered {load}% of the work its units can do, so its waiting room grows without limit and the results describe no steady state. Add units, or shorten the service.	{block} ditawari {load}% dari pekerjaan yang dapat dilakukan unitnya, sehingga ruang tunggunya bertambah tanpa batas dan hasilnya tidak menggambarkan keadaan tunak. Tambahkan unit, atau perpendek layanan.
+	{block} is busy {utilisation}% of the time, and at the end at least {backlog} entities are still waiting against {left} that left. Work arrives faster than it is done, so the results describe no steady state. Add units, or shorten the service.	{block} sibuk {utilisation}% dari waktu, dan pada akhir setidaknya {backlog} entitas masih menunggu dibandingkan {left} yang telah pergi. Pekerjaan datang lebih cepat daripada diselesaikan, sehingga hasilnya tidak menggambarkan keadaan tunak. Tambahkan unit, atau perpendek layanan.
+	The experiment has one run, so its results cannot be told from chance. Set the number of runs to at least 2, and usually 10 or more.	Eksperimen hanya memiliki satu eksekusi, sehingga hasilnya tidak dapat dibedakan dari kebetulan. Atur jumlah eksekusi ke setidaknya 2, dan biasanya 10 atau lebih.
+	{block} has a three-point estimate but no time to fit it to, so the estimate is ignored. Remove the estimate.	{block} memiliki perkiraan tiga titik tetapi tidak ada waktu untuk dicocokkan, sehingga perkiraan itu diabaikan. Hapus perkiraannya.
+	The three-point estimate of {block} cannot be fitted: every point must be a finite number. Correct the points.	Perkiraan tiga titik {block} tidak dapat dicocokkan: setiap titik harus berupa bilangan terhingga. Perbaiki titiknya.
+	The three-point estimate of {block} cannot be fitted: the points must be in order, minimum, most likely, then maximum or 95th percentile. Correct the points.	Perkiraan tiga titik {block} tidak dapat dicocokkan: titik harus berurutan, minimum, paling mungkin, lalu maksimum atau persentil ke-95. Perbaiki titiknya.
+	The three-point estimate of {block} cannot be fitted: log-normal and Weibull estimates have no maximum. Give a 95th percentile instead.	Perkiraan tiga titik {block} tidak dapat dicocokkan: perkiraan log-normal dan Weibull tidak punya maksimum. Berikan persentil ke-95 sebagai gantinya.
+	The time of {block} is no longer the one fitted from its three-point estimate. Fit it again, or remove the estimate.	Waktu {block} tidak lagi sama dengan yang dicocokkan dari perkiraan tiga titiknya. Cocokkan lagi, atau hapus perkiraannya.
+	In “{field}” of {block}, the normal distribution draws below 0 more than 1 time in 100, and each such draw counts as 0, so the times are longer on average than its mean. Use a truncated normal with a minimum of 0, or a log-normal.	Pada “{field}” di {block}, distribusi normal menghasilkan nilai di bawah 0 lebih dari 1 kali dalam 100, dan setiap nilai itu dihitung sebagai 0, sehingga waktunya rata-rata lebih panjang daripada rata-ratanya. Gunakan normal terpotong dengan minimum 0, atau log-normal.
+	The entities of {block} do not add up: {came} came in or were inside at the start, but {went} left, were lost, gave up or are still inside.	Entitas di {block} tidak seimbang: {came} masuk atau sudah di dalam pada awal, tetapi {went} keluar, hilang, menyerah, atau masih di dalam.
+	The entities of the model do not add up: {came} were created or inside at the start, but {went} reached Departures, left the model elsewhere or are still inside.	Entitas dalam model tidak seimbang: {came} dibuat atau sudah di dalam pada awal, tetapi {went} mencapai Keberangkatan, keluar dari model di tempat lain, atau masih di dalam.
+	No entity left the model, of {came} created or inside at the start. Check that the routing leads to Departures and that the run is long enough for an entity to get through.	Tidak ada entitas yang keluar dari model, dari {came} yang dibuat atau sudah di dalam pada awal. Periksa bahwa perutean mengarah ke Keberangkatan dan bahwa eksekusi cukup panjang agar entitas dapat melewatinya.
+	Little's law does not hold at {block}: the time-average number inside was {mean}, but the entities' own times inside give {from_stays}.	Hukum Little tidak berlaku di {block}: rata-rata jumlah di dalam menurut waktu adalah {mean}, tetapi waktu entitas sendiri di dalam menghasilkan {from_stays}.
+	The utilisation of {block} counts {busy} units busy on average, but {working} were processing or setting up: units idle, blocked, off shift, failed or restarting were counted busy.	Tingkat pemanfaatan {block} menghitung rata-rata {busy} unit sibuk, tetapi hanya {working} yang memproses atau menyiapkan: unit yang menganggur, terblokir, di luar sif, rusak, atau sedang dimulai ulang dihitung sibuk.
+	The utilisation of {block} counts {busy} units busy on average, but {working} were processing or setting up: units at work were not counted busy.	Tingkat pemanfaatan {block} menghitung rata-rata {busy} unit sibuk, tetapi {working} memproses atau menyiapkan: unit yang sedang bekerja tidak dihitung sibuk.
+	The shares of the time of the units of {block} in each state add up to {total}, not 1.	Bagian waktu unit {block} pada tiap status berjumlah {total}, bukan 1.
+	“{metric}” of {block} is {value}, outside 0 to 1 (0% to 100%).	“{metric}” pada {block} bernilai {value}, di luar 0 sampai 1 (0% sampai 100%).
+	This was found in {replications} of {of} runs, and the furthest off is shown.	Ini ditemukan pada {replications} dari {of} eksekusi, dan yang paling menyimpang ditampilkan.
+	This points to a fault in StochCraft rather than in the model. Please report it with the model.	Ini menunjukkan kesalahan pada StochCraft, bukan pada model. Harap laporkan bersama modelnya.
+	Angle	Sudut
+	Failed	Rusak
+	Off shift	Di luar sif
+	Processing	Memproses
+	Radius	Jari-jari
+	Rise	Kenaikan
+	Speed empty	Kecepatan kosong
+	Speed loaded	Kecepatan bermuatan
+	Turns	Putaran
+	Unload	Bongkar
+	Lost	Hilang
+	An entity that leaves a waiting room before a unit takes it, because it has waited as long as it was willing to.	Entitas yang meninggalkan ruang tunggu sebelum diambil oleh sebuah unit, karena sudah menunggu selama yang bersedia ia tunggu.
+	An entity that does not join a waiting room at all, because the number already waiting put it off.	Entitas yang sama sekali tidak masuk ke ruang tunggu, karena jumlah yang sudah menunggu membuatnya urung.
+	An entity that finds the waiting room full and takes the flow ticked “Turned away” instead of waiting.	Entitas yang mendapati ruang tunggu penuh dan mengambil alur yang dicentang “Ditolak”, bukan menunggu.
+	An entity that leaves the model without reaching Departures: it found the waiting room full with nowhere else to go, or a decision with no way out for it.	Entitas yang meninggalkan model tanpa mencapai Keberangkatan: ia mendapati ruang tunggu penuh tanpa jalan lain, atau keputusan yang tidak punya jalan keluar untuknya.
+	Gave up on {id}	Menyerah di {id}
+	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the flow ticked “Gave up”, or leaves the model.	Setiap entitas menunggu di sini paling lama selama waktu yang diundi untuknya saat tiba, lalu menyerah: entitas mengambil alur yang dicentang “Menyerah”, atau meninggalkan model.
+	Entities that do not join the waiting room take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Entitas yang tidak masuk ruang tunggu langsung mengambil alur ini (misalnya untuk mencoba lagi nanti), alih-alih hilang; di sini mereka dihitung sebagai batal mengantre.
+	The job stops at once: the entity goes back to the front of the waiting room for any server on shift, and the work done on it is wasted.	Pekerjaan langsung berhenti: entitas kembali ke depan ruang tunggu untuk server mana pun yang sedang dalam sif, dan pekerjaan yang sudah dilakukan padanya sia-sia.
+	The connection drops and the client tries again: the entity goes back to the front of the waiting room at once, and the work done on it is wasted.	Koneksi terputus dan klien mencoba lagi: entitas langsung kembali ke depan ruang tunggu, dan pekerjaan yang sudah dilakukan padanya sia-sia.
+	Ticked, entities queue up at the end while the rest keep moving. Unticked, the whole belt stops when the entity at the end cannot leave.	Jika dicentang, entitas mengantre di ujung sementara yang lain terus bergerak. Jika tidak, seluruh sabuk berhenti saat entitas di ujung tidak bisa keluar.
+	Play run 1 step by step and see each block's waiting room on the diagram	Putar eksekusi 1 langkah demi langkah dan lihat ruang tunggu tiap blok di diagram
+	Select a block to see its waiting room over time.	Pilih blok untuk melihat ruang tunggunya dari waktu ke waktu.
+	Entities on conveyors over time	Entitas di konveyor dari waktu ke waktu
+	Entities in the model over time	Entitas dalam model dari waktu ke waktu
+	How long each entity spends on the conveyors.	Berapa lama tiap entitas berada di konveyor.
+	No entity has left a conveyor yet	Belum ada entitas yang meninggalkan konveyor
+	Share of entities by time on a conveyor, in {unit}	Porsi entitas menurut waktu di konveyor, dalam {unit}
+	Time on conveyors: {n} entities between {lo} and {hi} {unit}	Waktu di konveyor: {n} entitas antara {lo} dan {hi} {unit}
+	{from} to {to} {unit}: {share} of entities ({n})	Dari {from} hingga {to} {unit}: {share} dari entitas ({n})
+	How many entities are on the conveyors over time.	Berapa banyak entitas di konveyor dari waktu ke waktu.
+	How many entities are in the model over time.	Berapa banyak entitas dalam model dari waktu ke waktu.
+	At {time} {unit}: {n} entities	Pada {time} {unit}: {n} entitas
+@plural	Makes {n} independent run of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval across them.	Menjalankan {n} eksekusi model yang independen dari benih {seed}. Hasil setiap blok mencakup setengah lebar interval kepercayaan 95%.

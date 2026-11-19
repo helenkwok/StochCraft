@@ -21,8 +21,6 @@
 	A caller on hold: once a unit takes it, the entity stays.	காத்திருப்பில் உள்ள அழைப்பாளர்: ஓர் அலகு அதை எடுத்துக்கொண்டதும், உருப்படி தங்கிவிடுகிறது.
 	A client that times out: if its time runs out during service, it gives up then, and the unit finishes the job anyway (wasted work).	நேரம் கடந்துவிடும் (timeout) கிளையன்ட்: சேவையின்போது அதன் நேரம் முடிந்தால், அப்போதே கைவிடுகிறது; அலகு அந்த வேலையை எப்படியும் முடிக்கிறது (வீணான வேலை).
 	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	புதிய கோப்பில் மாதிரி மட்டுமே இருக்கும்: {file} இல் StochCraft புரிந்துகொள்ளாதவை விடப்படும்.
-	Abandoned	கைவிட்டவை
-	Abandoned on {id}	{id} இல் கைவிட்டவை
 	About StochCraft	StochCraft பற்றி
 	About {app}	{app} பற்றி
 	Accent	முனைப்பு நிறம்
@@ -162,7 +160,6 @@
 	Duration	கால அளவு
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	ஒவ்வொரு பகுப்பாய்வும் ஒரே சீரற்ற விதையுடன் சோதனையைப் பலமுறை இயக்குகிறது, எனவே வேறுபாடுகள் தற்செயலால் அல்ல, மாற்றத்தால் வருகின்றன. சிறிது நேரம் ஆகலாம்.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	ஒவ்வொரு உருப்படியும் இவற்றில், இப்போதே ஒரே நேரத்தில் முழுமையாக நிறைவேற்றக்கூடிய முதலாவதை எடுத்துக்கொள்கிறது; வெளியேறும்போது அலகுகளைத் திருப்பித் தருகிறது.
-	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	ஒவ்வொரு உருப்படியும் வந்தடையும்போது அதற்காகச் சீரற்ற முறையில் எடுக்கப்பட்ட நேரம் வரை மட்டுமே இங்கே காத்திருந்து, பின்னர் கைவிடுகிறது: "கைவிட்டவை" எனக் குறிக்கப்பட்ட வெளியேறும் வழியில் செல்கிறது, அல்லது மாதிரியை விட்டு வெளியேறுகிறது.
 	Each server (unit) is checked every so often, as a load balancer probes the servers behind it. One that fails, with too many waiting, is taken out of service for a restart, then comes back.	ஒவ்வொரு வழங்கியும் (அலகு) அவ்வப்போது சோதிக்கப்படுகிறது, சுமை சமனாக்கி தனக்குப் பின்னால் உள்ள வழங்கிகளைச் சோதிப்பது போல. அதிகம் காத்திருப்பதால் சோதனையில் தோல்வியடையும் வழங்கி மறுதொடக்கத்துக்காக நீக்கப்பட்டு, பின்னர் திரும்புகிறது.
 	Edit	திருத்து
 	Edit themes…	தீம்களைத் திருத்து…
@@ -419,7 +416,6 @@
 	Run	இயக்கு
 	Run cancelled	இயக்கம் ரத்துசெய்யப்பட்டது
 	Run experiment	சோதனையை இயக்கு
-	Play run 1 step by step and see each block's queue on the diagram	மீள் இயக்கம் 1 ஐப் படிப்படியாக இயக்கி, வரைபடத்தில் ஒவ்வொரு தொகுதியின் வரிசையையும் பார்
 	Run the experiment ({shortcut})	சோதனையை இயக்கு ({shortcut})
 	Run the experiment again to see this result's spread.	இந்த முடிவின் பரவலைக் காண சோதனையை மீண்டும் இயக்கவும்.
 	Run the experiment at each value of one parameter, and compare a result.	ஒரு அளவுருவின் ஒவ்வொரு மதிப்பிலும் சோதனையை இயக்கி ஒரு முடிவை ஒப்பிடவும்.
@@ -440,7 +436,6 @@
 	Scrap ratio	கழிவு விகிதம்
 	Seed	சீரற்ற விதை
 	Select All	அனைத்தையும் தேர்ந்தெடு
-	Select a block to see its queue over time.	நேரப்படி ஒரு தொகுதியின் வரிசையைப் பார்க்க அதைத் தேர்ந்தெடுக்கவும்.
 	Sender waits during transfer	இடமாற்றத்தின்போது அனுப்புநர் காத்திருக்கும்
 	Separate the values with semicolons or spaces.	மதிப்புகளை அரைப்புள்ளி அல்லது இடைவெளியால் பிரிக்கவும்.
 	Sequential	வரிசைமுறை
@@ -504,10 +499,8 @@
 	Text	உரை
 	Text on accent	முனைப்பு நிறத்தில் உரை
 	Text on header	தலைப்புப் பட்டையில் உரை
-	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	இணைப்பு துண்டிக்கப்பட்டு கிளையன்ட் மீண்டும் முயல்கிறது: உருப்படி உடனே வரிசையின் முன்னுக்குத் திரும்புகிறது, அதன்மேல் செய்த வேலை வீணாகிறது.
 	The entity waits on its server and the job carries on with what was left once the server is back.	உருப்படி தன் வழங்கியிலேயே காத்திருக்கிறது, வழங்கி திரும்பியதும் மீதமுள்ளதிலிருந்து வேலை தொடர்கிறது.
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more runs would narrow it.	இடைவெளி {share} இலக்கு பங்குக்குக் கீழே செல்கிறது, எனவே பங்கு அடையப்பட்டது 95% நம்பிக்கையுடன் காட்டப்படவில்லை; கூடுதல் மீள் இயக்கங்கள் அதைக் குறுக்கும்.
-	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	வேலை உடனே நிற்கிறது: உருப்படி பணிமுறையில் உள்ள எந்த வழங்கிக்காகவும் வரிசையின் முன்னுக்குத் திரும்புகிறது, அதன்மேல் செய்த வேலை வீணாகிறது.
 	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	வேலை உடனே நிற்கிறது; உருப்படி தன் வழங்கியிலேயே காத்திருக்கிறது, அந்த வழங்கி மீண்டும் பணிமுறைக்கு வந்ததும் மீதமுள்ளதிலிருந்து வேலை தொடர்கிறது.
 	The last task with a resource it finished at	பாகம் கடைசியாகக் கடந்த வளம் தேவைப்படும் பணி
 	The mean time to the stop condition is over the runs that met it only; the others ran to their time limit.	நிறுத்த நிபந்தனை வரையிலான சராசரி நேரம் அதை அடைந்த மீள் இயக்கங்கள் மீது மட்டுமே; மற்றவை அவற்றின் நேர வரம்பு வரை இயங்கின.
@@ -690,7 +683,6 @@ unit	yr	ஆண்டு
 	Balked on {id}	{id} இல் வரிசையில் சேராதவை
 	Balking	வரிசையில் சேராமை
 	Count those in service	சேவையில் உள்ளவற்றையும் எண்ணு
-	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	வரிசையில் சேராத உருப்படிகள் உடனே இந்த ஓட்டத்தில் செல்கின்றன (உதாரணமாக, பின்னர் மீண்டும் முயல), இழக்கப்படுவதற்குப் பதிலாக; இங்கு அவை வரிசையில் சேராதவையாகக் கணக்கிடப்படுகின்றன.
 	Joins with probability	வரிசையில் சேரும் நிகழ்தகவு
 	Number waiting	காத்திருப்பவற்றின் எண்ணிக்கை
 	Share balked	வரிசையில் சேராதவற்றின் விகிதம்
@@ -908,7 +900,6 @@ unit	yr	ஆண்டு
 @plural	Finished {n} run|Finished {n} runs	{n} மீள் இயக்கம் முடிந்தது|{n} மீள் இயக்கங்கள் முடிந்தன
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	{file} திறக்கப்பட்டது ({n} எச்சரிக்கை)|{file} திறக்கப்பட்டது ({n} எச்சரிக்கைகள்)
 @plural	Removed {n} block|Removed {n} blocks	{n} தொகுதி அகற்றப்பட்டது|{n} தொகுதிகள் அகற்றப்பட்டன
-@plural	Makes {n} independent run of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	{seed} என்ற சீரற்ற விதையிலிருந்து மாதிரியின் {n} தனித்த மீள் இயக்கத்தை நடத்துகிறது. ஒவ்வொரு உறுப்பின் முடிவும் 95% நம்பிக்கை இடைவெளியின் அரை அகலத்துடன் வழங்கப்படுகிறது.|{seed} என்ற சீரற்ற விதையிலிருந்து மாதிரியின் {n} தனித்த மீள் இயக்கங்களை நடத்துகிறது. ஒவ்வொரு உறுப்பின் முடிவும் அவற்றின் 95% நம்பிக்கை இடைவெளியின் அரை அகலத்துடன் வழங்கப்படுகிறது.
 @plural	The stop condition was met in {met} of {n} run, after {time} {unit} on average.|The stop condition was met in {met} of {n} runs, after {time} {unit} on average.	நிறுத்த நிபந்தனை {n} மீள் இயக்கத்தில் {met} இல், சராசரியாக {time} {unit} பிறகு அடையப்பட்டது.|நிறுத்த நிபந்தனை {n} மீள் இயக்கங்களில் {met} இல், சராசரியாக {time} {unit} பிறகு அடையப்பட்டது.
 @plural	{done} of {n} run finished|{done} of {n} runs finished	{n} இல் {done} மீள் இயக்கம் முடிந்தது|{n} இல் {done} மீள் இயக்கங்கள் முடிந்தன
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} run|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} runs	{name}: {mean}{unit}\n95% இடைவெளி {low} முதல் {high}{unit} வரை\n{n} மீள் இயக்கத்தில்|{name}: {mean}{unit}\n95% இடைவெளி {low} முதல் {high}{unit} வரை\n{n} மீள் இயக்கங்களில்
@@ -938,7 +929,6 @@ unit	yr	ஆண்டு
 	kilometres	கிலோமீட்டர்
 	inches	அங்குலம்
 	feet	அடி
-	Ticked, items queue up at the end while the rest keep moving. Unticked, the whole belt stops when the item at the end cannot leave.	தேர்ந்தால், மற்றவை நகர்ந்துகொண்டிருக்க பொருட்கள் முடிவில் வரிசையில் நிற்கும். தேர்ந்தெடுக்காவிட்டால், முடிவில் உள்ள பொருள் வெளியேற முடியாதபோது முழுப் பட்டையும் நின்றுவிடும்.
 	A belt that carries entities from one end to the other. It has a length and a speed, and each entity takes a pitch of belt: its item length plus the gap kept free after it. So it holds at most length ÷ pitch entities and carries at most speed ÷ pitch per time unit. Accumulating: entities queue up at the end while the rest keep moving; otherwise the whole belt stops.	உருப்படிகளை ஒரு முனையிலிருந்து மறு முனைக்குக் கொண்டு செல்லும் பட்டை. அதற்கு ஒரு நீளமும் வேகமும் உண்டு; ஒவ்வொரு உருப்படியும் பட்டையின் ஒரு படியை எடுத்துக்கொள்கிறது: அதன் பொருளின் நீளமும் அதன் பின்னால் காலியாக விடப்படும் இடைவெளியும். எனவே இது அதிகபட்சம் நீளம் ÷ படி உருப்படிகளைத் தாங்கும்; ஒரு நேர அலகில் அதிகபட்சம் வேகம் ÷ படி உருப்படிகளைக் கொண்டு செல்லும். சேர்ந்து நிற்கும்: மற்றவை நகர்ந்துகொண்டிருக்க உருப்படிகள் முடிவில் வரிசையில் நிற்கும்; இல்லையெனில் முழுப் பட்டையும் நின்றுவிடும்.
 	Station	நிலையம்
 	Kind	வகை
@@ -992,16 +982,162 @@ unit	yr	ஆண்டு
 	Time on conveyors	கன்வேயர்களில் நேரம்
 	No conveyors in this model	இந்த மாதிரியில் கன்வேயர்கள் இல்லை
 	Fills in when the run ends	ஓட்டம் முடிந்ததும் நிரம்பும்
-	How long each item spends on the conveyors.	ஒவ்வொரு பொருளும் கன்வேயர்களில் எவ்வளவு நேரம் இருக்கிறது.
-	No item has left a conveyor yet	இதுவரை எந்தப் பொருளும் கன்வேயரை விட்டு வெளியேறவில்லை
-	Share of items by time on a conveyor, in {unit}	கன்வேயரில் நேரத்தின்படி பொருட்களின் பங்கு, {unit} அலகில்
-	Time on conveyors: {n} items between {lo} and {hi} {unit}	கன்வேயர்களில் நேரம்: {lo} மற்றும் {hi} {unit} இடையே {n} பொருட்கள்
-	{from} to {to} {unit}: {share} of items ({n})	{from} முதல் {to} {unit}: பொருட்களில் {share} ({n})
-	Items on conveyors over time	காலப்போக்கில் கன்வேயர்களில் பொருட்கள்
-	Items in the model over time	காலப்போக்கில் மாதிரியில் பொருட்கள்
-	How many items are on the conveyors over time.	காலப்போக்கில் கன்வேயர்களில் எத்தனை பொருட்கள் உள்ளன.
-	How many items are in the model over time.	காலப்போக்கில் மாதிரியில் எத்தனை பொருட்கள் உள்ளன.
 	Nothing was recorded over time in these results	இந்த முடிவுகளில் காலப்போக்கில் எதுவும் பதிவாகவில்லை
-	At {time} {unit}: {n} items	{time} {unit} நேரத்தில்: {n} பொருட்கள்
 	Run the model to fill the dashboard	டாஷ்போர்டை நிரப்ப மாதிரியை இயக்கவும்
 	The resource and conveyor charts show the last run until this one ends	இது முடியும் வரை வளம் மற்றும் கன்வேயர் வரைபடங்கள் கடைசி ஓட்டத்தைக் காட்டும்
+# Validation messages, new labels and word changes (issue #145)
+	The id “{id}” is not valid. Start an id with a letter or an underscore, then use only letters, digits, dots, hyphens and underscores.	“{id}” என்ற ஐடி செல்லாது. ஐடியை ஓர் எழுத்து அல்லது அடிக்கோட்டில் தொடங்கி, பின்னர் எழுத்துகள், இலக்கங்கள், புள்ளிகள், இணைப்புக்குறிகள், அடிக்கோடுகளை மட்டும் பயன்படுத்தவும்.
+	More than one block, flow, pool or calendar has the id “{id}”. Give each its own id.	ஒன்றுக்கு மேற்பட்ட தொகுதி, ஓட்டம், வளத் தொகுப்பு அல்லது நாட்காட்டிக்கு “{id}” என்ற ஐடி உள்ளது. ஒவ்வொன்றுக்கும் தனி ஐடி கொடுக்கவும்.
+	The flow {flow} uses a block that does not exist. Remove the flow, or connect it to a block that exists.	ஓட்டம் {flow} இல்லாத ஒரு தொகுதியைப் பயன்படுத்துகிறது. அந்த ஓட்டத்தை நீக்கவும், அல்லது இருக்கும் ஒரு தொகுதியுடன் இணைக்கவும்.
+	The flow {flow} leads into an Arrivals block, which takes no input. Remove the flow, or send it to another block.	ஓட்டம் {flow} வருகைகள் தொகுதிக்குள் செல்கிறது; அது எந்த உள்ளீட்டையும் ஏற்காது. ஓட்டத்தை நீக்கவும், அல்லது வேறொரு தொகுதிக்கு அனுப்பவும்.
+	The flow {flow} leaves a Departures block, which has no output. Remove the flow, or start it from another block.	ஓட்டம் {flow} வெளியேற்றங்கள் தொகுதியிலிருந்து புறப்படுகிறது; அதற்கு வெளியீடு இல்லை. ஓட்டத்தை நீக்கவும், அல்லது வேறொரு தொகுதியிலிருந்து தொடங்கவும்.
+	The flow {flow} leads from a block back to itself. Remove it, or send it to another block.	ஓட்டம் {flow} ஒரு தொகுதியிலிருந்து அதே தொகுதிக்கே திரும்புகிறது. அதை நீக்கவும், அல்லது வேறொரு தொகுதிக்கு அனுப்பவும்.
+	{block} has nowhere to send entities. Add a flow from it to the next block.	{block} உருப்படிகளை அனுப்ப எந்த இடமும் இல்லாமல் உள்ளது. இதிலிருந்து அடுத்த தொகுதிக்கு ஒரு ஓட்டத்தைச் சேர்க்கவும்.
+	{block} has {count} flows out, and only a Decision or a Split or join block can send entities down several. Remove the extra flows, or add a Decision block.	{block} இலிருந்து {count} ஓட்டங்கள் வெளியேறுகின்றன; முடிவு தொகுதி அல்லது பிரி அல்லது இணை தொகுதி மட்டுமே பல ஓட்டங்களில் உருப்படிகளை அனுப்ப முடியும். கூடுதல் ஓட்டங்களை நீக்கவும், அல்லது ஒரு முடிவு தொகுதியைச் சேர்க்கவும்.
+	In “{field}” of {block}, set “{param}” to a finite number.	{block} இன் “{field}” இல் “{param}” ஐ முடிவுள்ள எண்ணாக அமைக்கவும்.
+	In “{field}” of {block}, set “{param}” to a number above 0.	{block} இன் “{field}” இல் “{param}” ஐ 0 ஐ விடப் பெரிய எண்ணாக அமைக்கவும்.
+	In “{field}” of {block}, set “{param}” to 0 or more.	{block} இன் “{field}” இல் “{param}” ஐ 0 அல்லது அதற்கு மேல் அமைக்கவும்.
+	In “{field}” of {block}, set “{param}” to 1 or more.	{block} இன் “{field}” இல் “{param}” ஐ 1 அல்லது அதற்கு மேல் அமைக்கவும்.
+	In “{field}” of {block}, set “{param}” to a number from 0 to 1.	{block} இன் “{field}” இல் “{param}” ஐ 0 முதல் 1 வரையிலான எண்ணாக அமைக்கவும்.
+	In “{field}” of {block}, set “Minimum” below “Maximum”, and any “Most likely” value between them.	{block} இன் “{field}” இல் “குறைந்தபட்சம்” ஐ “அதிகபட்சம்” ஐ விடக் குறைவாகவும், “அதிக வாய்ப்புள்ள மதிப்பு” இருந்தால் அவ்விரண்டுக்கும் இடையிலும் அமைக்கவும்.
+	In “{field}” of {block}, add data points whose probabilities add up to more than 0.	{block} இன் “{field}” இல் நிகழ்தகவுகளின் கூட்டுத்தொகை 0 ஐ விட அதிகமாக உள்ள தரவுப் புள்ளிகளைச் சேர்க்கவும்.
+	{block} would never have a unit to work with. Give it at least 1 unit.	{block} இல் வேலை செய்ய ஒரு அலகு கூட இருக்காது. குறைந்தது 1 அலகு கொடுக்கவும்.
+	{block} would make entities without end, because its “Time between arrivals” is always 0. Give it a time above 0, or set an “Arrival limit”.	{block} இன் “வருகைகளுக்கு இடையிலான நேரம்” எப்போதும் 0 என்பதால் அது முடிவில்லாமல் உருப்படிகளை உருவாக்கும். 0 ஐ விட அதிகமான நேரத்தைக் கொடுக்கவும், அல்லது “வருகை வரம்பு” அமைக்கவும்.
+	The model has no Arrivals block, so nothing will happen. Add an Arrivals block.	மாதிரியில் வருகைகள் தொகுதி இல்லை, எனவே எதுவும் நடக்காது. ஒரு வருகைகள் தொகுதியைச் சேர்க்கவும்.
+	The model has no Departures block, so no time in system is measured. Add a Departures block.	மாதிரியில் வெளியேற்றங்கள் தொகுதி இல்லை, எனவே அமைப்பில் கழித்த நேரம் அளக்கப்படாது. ஒரு வெளியேற்றங்கள் தொகுதியைச் சேர்க்கவும்.
+	No entity can reach {block} from an Arrivals block. Connect it to a block that entities pass through.	வருகைகள் தொகுதியிலிருந்து எந்த உருப்படியும் {block} ஐ அடைய முடியாது. உருப்படிகள் கடந்து செல்லும் ஒரு தொகுதியுடன் இதை இணைக்கவும்.
+	Entities in {block} can never reach a Departures block. Connect it on towards Departures.	{block} இல் உள்ள உருப்படிகள் வெளியேற்றங்கள் தொகுதியை ஒருபோதும் அடைய முடியாது. இதை வெளியேற்றங்களை நோக்கி இணைக்கவும்.
+	Set the “{state}” power of {block} to a number of kilowatts, 0 or more.	{block} இன் “{state}” மின்திறனை கிலோவாட்டில் ஓர் எண்ணாக, 0 அல்லது அதற்கு மேல் அமைக்கவும்.
+	Set the warm-up of the experiment to 0 or more.	சோதனையின் தொடக்கச் சீராக்க நேரத்தை 0 அல்லது அதற்கு மேல் அமைக்கவும்.
+	Set the duration of the experiment to more than 0.	சோதனையின் கால அளவை 0 ஐ விட அதிகமாக அமைக்கவும்.
+	Set the number of runs of the experiment to 1 or more.	சோதனையின் மீள் இயக்கங்களின் எண்ணிக்கையை 1 அல்லது அதற்கு மேல் அமைக்கவும்.
+	Set the layout scale (length units per drawing unit) to a finite number above 0.	தளவமைப்பு அளவுகோலை (ஒரு வரைபட அலகுக்கான நீள அலகுகள்) 0 ஐ விடப் பெரிய முடிவுள்ள எண்ணாக அமைக்கவும்.
+	A property of {block} has no name. Give it a name, or remove it.	{block} இன் ஒரு பண்புக்குப் பெயர் இல்லை. அதற்குப் பெயர் கொடுக்கவும், அல்லது நீக்கவும்.
+	{block} sets the property “{name}” twice. Keep one of them.	{block} “{name}” பண்பை இருமுறை அமைத்துள்ளது. ஒன்றை மட்டும் வைத்திருக்கவும்.
+	The property “{name}” of {block} needs shares that are not negative and add up to more than 0. Change the shares.	{block} இல் “{name}” பண்புக்கு எதிர்மறையற்ற, கூட்டுத்தொகை 0 ஐ விட அதிகமான பங்குகள் தேவை. பங்குகளை மாற்றவும்.
+	The property “{name}” has the type “{type2}” on {block} but “{type}” on another block. Give it one type everywhere.	“{name}” பண்பு {block} இல் “{type2}” வகையாகவும், மற்றொரு தொகுதியில் “{type}” வகையாகவும் உள்ளது. எல்லா இடங்களிலும் ஒரே வகையைக் கொடுக்கவும்.
+	The value of the property “{name}” on {block} does not fit its type, “{type}”. Change the value or the type.	{block} இல் “{name}” பண்பின் மதிப்பு அதன் வகையான “{type}” உடன் பொருந்தவில்லை. மதிப்பையோ வகையையோ மாற்றவும்.
+	The expression for the property “{name}” on {block} cannot be used: {error}. Correct “{expression}”.	{block} இல் “{name}” பண்புக்கான கோவையைப் பயன்படுத்த முடியாது: {error}. “{expression}” ஐத் திருத்தவும்.
+	{block} reads the property “{name}”, which no block sets, so it would read as empty. Set it on an earlier block, or correct the name.	{block} “{name}” பண்பைப் படிக்கிறது; அதை எந்தத் தொகுதியும் அமைக்கவில்லை, எனவே அது வெறுமையாகப் படிக்கப்படும். அதை முந்தைய தொகுதியில் அமைக்கவும், அல்லது பெயரைத் திருத்தவும்.
+	The setup of {block} has times for particular changes but no property to watch. Choose a property under “Only when this property changes”.	{block} இன் அமைவில் குறிப்பிட்ட மாற்றங்களுக்கான நேரங்கள் உள்ளன, ஆனால் கவனிக்க எந்தப் பண்பும் இல்லை. “இந்தப் பண்பு மாறும்போது மட்டும்” என்பதன் கீழ் ஒரு பண்பைத் தேர்ந்தெடுக்கவும்.
+	{block} has times for particular values but no property to read them from. Choose a property under “Service time by property”.	{block} இல் குறிப்பிட்ட மதிப்புகளுக்கான நேரங்கள் உள்ளன, ஆனால் அவற்றைப் படிக்க எந்தப் பண்பும் இல்லை. “பண்பைப் பொறுத்த சேவை நேரம்” என்பதன் கீழ் ஒரு பண்பைத் தேர்ந்தெடுக்கவும்.
+	{block} has two times for the value “{value}”. Keep one.	{block} இல் “{value}” மதிப்புக்கு இரண்டு நேரங்கள் உள்ளன. ஒன்றை மட்டும் வைத்திருக்கவும்.
+	Set the time of {block} for the value “{value}” to a mean of 0 or more.	{block} இன் “{value}” மதிப்புக்கான நேரத்தின் சராசரியை 0 அல்லது அதற்கு மேல் அமைக்கவும்.
+	The scrap at {block} counts against {other}, which is not a task with a resource. Choose a task with a resource.	{block} இன் கழிவு {other} க்கு எதிராகக் கணக்கிடப்படுகிறது; அது வளம் தேவைப்படும் பணி அல்ல. ஒரு வளம் தேவைப்படும் பணியைத் தேர்ந்தெடுக்கவும்.
+	Set “Planned run time per item” of {block} to a mean above 0.	{block} இன் “ஒரு பாகத்திற்கான திட்டமிட்ட இயக்க நேரம்” இன் சராசரியை 0 ஐ விட அதிகமாக அமைக்கவும்.
+	Set “Time before giving up” of {block} to a mean of 0 or more.	{block} இன் “கைவிடுவதற்கு முந்தைய நேரம்” இன் சராசரியை 0 அல்லது அதற்கு மேல் அமைக்கவும்.
+	The flow {flow} is ticked “Gave up”, but only a task with a resource and a “Time before giving up” sends entities that give up. Untick it, or set a “Time before giving up” on {block}.	ஓட்டம் {flow} இல் “கைவிட்டவை” தேர்ந்தெடுக்கப்பட்டுள்ளது, ஆனால் “கைவிடுவதற்கு முந்தைய நேரம்” உள்ள வளம் தேவைப்படும் பணி மட்டுமே கைவிடும் உருப்படிகளை அனுப்புகிறது. தேர்வை நீக்கவும், அல்லது {block} இல் “கைவிடுவதற்கு முந்தைய நேரம்” அமைக்கவும்.
+	{count} flows out of {block} are ticked “{way}”; at most one can be. Untick all but one.	{block} இலிருந்து வெளியேறும் {count} ஓட்டங்களில் “{way}” தேர்ந்தெடுக்கப்பட்டுள்ளது; அதிகபட்சம் ஒன்றில் மட்டுமே இருக்கலாம். ஒன்றைத் தவிர மற்றவற்றின் தேர்வை நீக்கவும்.
+	The flow {flow} is ticked “Turned away”, but only a task with a resource and a limited waiting room turns entities away. Untick it, or limit the waiting room of {block}.	ஓட்டம் {flow} இல் “திருப்பி அனுப்பப்பட்டவை” தேர்ந்தெடுக்கப்பட்டுள்ளது, ஆனால் காத்திருப்பு அறை வரம்புடைய வளம் தேவைப்படும் பணி மட்டுமே உருப்படிகளைத் திருப்பி அனுப்பும். தேர்வை நீக்கவும், அல்லது {block} இன் காத்திருப்பு அறையை வரம்பிடவும்.
+	The flow {flow} is ticked both “Gave up” and “Turned away”. Keep one of them.	ஓட்டம் {flow} இல் “கைவிட்டவை”, “திருப்பி அனுப்பப்பட்டவை” இரண்டும் தேர்ந்தெடுக்கப்பட்டுள்ளன. ஒன்றை மட்டும் வைத்திருக்கவும்.
+	Set every chance of joining in the balking table of {block} to a number from 0 to 1.	{block} இன் வரிசையில் சேராமை அட்டவணையில் உள்ள சேர்வதற்கான ஒவ்வொரு நிகழ்தகவையும் 0 முதல் 1 வரையிலான எண்ணாக அமைக்கவும்.
+	Put the rows of the balking table of {block} in increasing order of “Number waiting”.	{block} இன் வரிசையில் சேராமை அட்டவணையின் பதிவுகளை “காத்திருப்பவற்றின் எண்ணிக்கை” ஏறுவரிசையில் அமைக்கவும்.
+	The flow {flow} is ticked “Balked”, but only a task with a resource and balking sends entities that balk. Untick it, or turn on balking for {block}.	ஓட்டம் {flow} இல் “வரிசையில் சேராதவை” தேர்ந்தெடுக்கப்பட்டுள்ளது, ஆனால் வரிசையில் சேராமை உள்ள வளம் தேவைப்படும் பணி மட்டுமே வரிசையில் சேராத உருப்படிகளை அனுப்பும். தேர்வை நீக்கவும், அல்லது {block} க்கு வரிசையில் சேராமையை இயக்கவும்.
+	The flow {flow} is ticked “Balked” and also “Gave up” or “Turned away”. Keep one of them.	ஓட்டம் {flow} இல் “வரிசையில் சேராதவை” உடன் “கைவிட்டவை” அல்லது “திருப்பி அனுப்பப்பட்டவை”யும் தேர்ந்தெடுக்கப்பட்டுள்ளது. ஒன்றை மட்டும் வைத்திருக்கவும்.
+	The waiting room of {block} is set by calendar or per working server, but has no number of places, so it is unlimited. Give it a number of places, or make it fixed.	{block} இன் காத்திருப்பு அறை நாட்காட்டியின்படி அல்லது இயங்கும் வழங்கி ஒன்றுக்கு என அமைக்கப்பட்டுள்ளது, ஆனால் இடங்களின் எண்ணிக்கை இல்லை, எனவே அது வரம்பற்றது. இடங்களின் எண்ணிக்கையைக் கொடுக்கவும், அல்லது அதை நிலையானதாக அமைக்கவும்.
+	The waiting room of {block} is set by calendar, but no calendar has a value. Add a value for a calendar, or make the waiting room fixed.	{block} இன் காத்திருப்பு அறை நாட்காட்டியின்படி அமைக்கப்பட்டுள்ளது, ஆனால் எந்த நாட்காட்டிக்கும் மதிப்பு இல்லை. ஒரு நாட்காட்டிக்கு மதிப்பைச் சேர்க்கவும், அல்லது காத்திருப்பு அறையை நிலையானதாக அமைக்கவும்.
+	Set “Fails above, waiting per working server” of {block} to a number of 0 or more.	{block} இன் “தோல்வி வரம்பு, இயங்கும் வழங்கி ஒன்றுக்குக் காத்திருப்பவை” ஐ 0 அல்லது அதற்கு மேற்பட்ட எண்ணாக அமைக்கவும்.
+	Set “Check every” of {block} to a mean above 0.	{block} இன் “சோதனை இடைவெளி” இன் சராசரியை 0 ஐ விட அதிகமாக அமைக்கவும்.
+	Set the demand of {block} to a number of parts above 0.	{block} இன் தேவையை 0 ஐ விட அதிகமான பாகங்களின் எண்ணிக்கையாக அமைக்கவும்.
+	The demand of {block} is per shift but names no calendar to say when the shifts are. Choose a calendar.	{block} இன் தேவை ஒரு பணிமுறைக்கு என உள்ளது, ஆனால் பணிமுறைகள் எப்போது என்பதைக் கூற எந்த நாட்காட்டியும் குறிப்பிடப்படவில்லை. ஒரு நாட்காட்டியைத் தேர்ந்தெடுக்கவும்.
+	The demand of {block} names a calendar that does not exist. Choose a calendar that exists.	{block} இன் தேவை இல்லாத ஒரு நாட்காட்டியைக் குறிப்பிடுகிறது. இருக்கும் ஒரு நாட்காட்டியைத் தேர்ந்தெடுக்கவும்.
+	The probability {value} on the flow {flow} is not from 0 to 1. Enter a probability from 0 to 1.	ஓட்டம் {flow} இல் உள்ள நிகழ்தகவு {value} 0 முதல் 1 வரையில் இல்லை. 0 முதல் 1 வரையிலான நிகழ்தகவை உள்ளிடவும்.
+	The probabilities of the flows out of {block} add up to {sum}, not 1, so they are used in proportion. Change them to add up to 1 if that is not what you want.	{block} இலிருந்து வெளியேறும் ஓட்டங்களின் நிகழ்தகவுகளின் கூட்டுத்தொகை 1 அல்ல, {sum}; எனவே அவை விகிதத்தில் பயன்படுத்தப்படுகின்றன. அது தேவையில்லை எனில் கூட்டுத்தொகை 1 ஆகும்படி மாற்றவும்.
+	The condition on the flow {flow} cannot be used: {error}. Correct “{expression}”.	ஓட்டம் {flow} இன் நிபந்தனையைப் பயன்படுத்த முடியாது: {error}. “{expression}” ஐத் திருத்தவும்.
+	The condition on the flow {flow} is ignored, because only flows out of a Decision block choose a route. Remove the condition.	ஓட்டம் {flow} இன் நிபந்தனை புறக்கணிக்கப்படுகிறது, ஏனெனில் முடிவு தொகுதியிலிருந்து வெளியேறும் ஓட்டங்கள் மட்டுமே வழியைத் தேர்ந்தெடுக்கின்றன. நிபந்தனையை நீக்கவும்.
+	The probability on the flow {flow} is ignored, because only flows out of a Decision block choose a route. Remove the probability.	ஓட்டம் {flow} இன் நிகழ்தகவு புறக்கணிக்கப்படுகிறது, ஏனெனில் முடிவு தொகுதியிலிருந்து வெளியேறும் ஓட்டங்கள் மட்டுமே வழியைத் தேர்ந்தெடுக்கின்றன. நிகழ்தகவை நீக்கவும்.
+	The condition on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the condition.	ஓட்டம் {flow} இன் நிபந்தனை புறக்கணிக்கப்படுகிறது, ஏனெனில் முடிவு தொகுதி உருப்படிகளை மிகக் குறுகிய வரிசைக்கு அனுப்புகிறது. நிபந்தனையை நீக்கவும்.
+	The probability on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the probability.	ஓட்டம் {flow} இன் நிகழ்தகவு புறக்கணிக்கப்படுகிறது, ஏனெனில் முடிவு தொகுதி உருப்படிகளை மிகக் குறுகிய வரிசைக்கு அனுப்புகிறது. நிகழ்தகவை நீக்கவும்.
+	The default on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the default.	ஓட்டம் {flow} இன் இயல்புநிலை புறக்கணிக்கப்படுகிறது, ஏனெனில் முடிவு தொகுதி உருப்படிகளை மிகக் குறுகிய வரிசைக்கு அனுப்புகிறது. இயல்புநிலையை நீக்கவும்.
+	The probability on the flow {flow} is ignored, because the Decision routes by condition. Remove the probability.	ஓட்டம் {flow} இன் நிகழ்தகவு புறக்கணிக்கப்படுகிறது, ஏனெனில் முடிவு தொகுதி நிபந்தனையின்படி வழியைத் தேர்ந்தெடுக்கிறது. நிகழ்தகவை நீக்கவும்.
+	The default flow of {block} is not one of its own flows out. Choose one of the flows out of {block} as the default.	{block} இன் இயல்புநிலை ஓட்டம் அதன் சொந்த வெளியேறும் ஓட்டங்களில் ஒன்றல்ல. {block} இலிருந்து வெளியேறும் ஒரு ஓட்டத்தை இயல்புநிலையாகத் தேர்ந்தெடுக்கவும்.
+	{block} routes by condition but has no default flow, so an entity for which no condition holds leaves the model here. Choose a default flow.	{block} நிபந்தனையின்படி வழியைத் தேர்ந்தெடுக்கிறது, ஆனால் இயல்புநிலை ஓட்டம் இல்லை, எனவே எந்த நிபந்தனையும் பொருந்தாத உருப்படி இங்கேயே மாதிரியை விட்டு வெளியேறும். ஓர் இயல்புநிலை ஓட்டத்தைத் தேர்ந்தெடுக்கவும்.
+	{block} diverts entities but has no default flow, so an entity whose way is full has nowhere else to go. Choose a default flow.	{block} உருப்படிகளை வேறு வழிக்குத் திருப்புகிறது, ஆனால் இயல்புநிலை ஓட்டம் இல்லை, எனவே வழி நிரம்பிய உருப்படிக்குச் செல்ல வேறு இடமில்லை. ஓர் இயல்புநிலை ஓட்டத்தைத் தேர்ந்தெடுக்கவும்.
+	{block} waits for an entity on the flow {flow}, which none can reach, so it never sends one on. Remove that flow, or connect it to a block that entities reach.	{block} ஓட்டம் {flow} வழியாக ஓர் உருப்படிக்காகக் காத்திருக்கிறது, ஆனால் எதுவும் அதை அடைய முடியாது, எனவே அது எதையும் அனுப்பாது. அந்த ஓட்டத்தை நீக்கவும், அல்லது உருப்படிகள் அடையும் ஒரு தொகுதியுடன் இணைக்கவும்.
+	{block} has a limited waiting room and is fed through {gateway}. While it is full, {gateway} holds up every entity behind it, and they wait before it without limit. Remove the gateway before {block}, or remove the limit.	{block} இன் காத்திருப்பு அறை வரம்புடையது, அது {gateway} வழியாக நிரப்பப்படுகிறது. அது நிரம்பியிருக்கும்போது {gateway} தனக்குப் பின்னுள்ள ஒவ்வொரு உருப்படியையும் நிறுத்தி வைக்கிறது, அவை வரம்பின்றி அதற்கு முன் காத்திருக்கும். {block} க்கு முன்னுள்ள நுழைவாயிலை நீக்கவும், அல்லது வரம்பை நீக்கவும்.
+	The limited waiting rooms of {loop} feed each other in a loop, so when all of them are full the loop deadlocks. Remove the limit on one of them, or break the loop.	{loop} இன் வரம்புடைய காத்திருப்பு அறைகள் ஒன்றையொன்று வளையத்தில் நிரப்புகின்றன, எனவே அனைத்தும் நிரம்பினால் வளையம் முடங்கும். ஒன்றின் வரம்பை நீக்கவும், அல்லது வளையத்தை உடைக்கவும்.
+	The pool {block} has no units. Give it at least 1 unit.	வளத் தொகுப்பு {block} இல் அலகுகள் இல்லை. குறைந்தது 1 அலகு கொடுக்கவும்.
+	{block} names no resource it needs. Add one under “Needs”.	{block} தனக்குத் தேவையான எந்த வளத்தையும் குறிப்பிடவில்லை. “தேவைகள்” என்பதன் கீழ் ஒன்றைச் சேர்க்கவும்.
+	{block} needs a resource pool that does not exist. Choose a pool that exists.	{block} க்குத் தேவையான வளத் தொகுப்பு இல்லை. இருக்கும் ஒரு வளத் தொகுப்பைத் தேர்ந்தெடுக்கவும்.
+	{block} needs units with the roles {roles}, which no pool has. Give a pool those roles, or change what {block} needs.	{block} க்கு {roles} பணிப்பங்குகளுடைய அலகுகள் தேவை; அவை எந்த வளத் தொகுப்பிலும் இல்லை. ஒரு வளத் தொகுப்புக்கு அந்தப் பணிப்பங்குகளைக் கொடுக்கவும், அல்லது {block} க்குத் தேவையானதை மாற்றவும்.
+	{block} needs {needed} units at once, but at most {available} exist, so this can never be met. Ask for fewer units, or add units to the pool.	{block} க்கு ஒரே நேரத்தில் {needed} அலகுகள் தேவை, ஆனால் அதிகபட்சம் {available} மட்டுமே உள்ளன, எனவே இது ஒருபோதும் பூர்த்தியாகாது. குறைவான அலகுகளைக் கோரவும், அல்லது வளத் தொகுப்பில் அலகுகளைச் சேர்க்கவும்.
+	Set the priority of {block} to a finite number, not {value}.	{block} இன் முன்னுரிமையை முடிவுள்ள எண்ணாக அமைக்கவும், {value} அல்ல.
+	No task uses the pool {block}. Add it to a task's needs, or remove the pool.	எந்தப் பணியும் வளத் தொகுப்பு {block} ஐப் பயன்படுத்தவில்லை. அதை ஒரு பணியின் தேவைகளில் சேர்க்கவும், அல்லது வளத் தொகுப்பை நீக்கவும்.
+	{block} has a value for a calendar that does not exist. Choose a calendar that exists, or remove the value.	{block} இல்லாத ஒரு நாட்காட்டிக்கு மதிப்பு வைத்துள்ளது. இருக்கும் ஒரு நாட்காட்டியைத் தேர்ந்தெடுக்கவும், அல்லது மதிப்பை நீக்கவும்.
+	The calendar {block} has no entries, so it is never active. Add an entry.	நாட்காட்டி {block} இல் பதிவுகள் இல்லை, எனவே அது ஒருபோதும் செயலில் இருக்காது. ஒரு பதிவைச் சேர்க்கவும்.
+	{block} allows no arrivals outside the calendars but names no calendar, so it never creates entities. Add arrivals by calendar, or allow arrivals outside calendars.	{block} நாட்காட்டிகளுக்கு வெளியே வருகைகளை அனுமதிக்கவில்லை, ஆனால் எந்த நாட்காட்டியையும் குறிப்பிடவில்லை, எனவே அது ஒருபோதும் உருப்படிகளை உருவாக்காது. நாட்காட்டியின்படி வருகைகளைச் சேர்க்கவும், அல்லது நாட்காட்டிகளுக்கு வெளியே வருகைகளை அனுமதிக்கவும்.
+	Set the batch size of {block} to 1 or more.	{block} இன் தொகுப்பு அளவை 1 அல்லது அதற்கு மேல் அமைக்கவும்.
+	Set “{field}” of the conveyor {block} to a finite number above 0.	கன்வேயர் {block} இன் “{field}” ஐ 0 ஐ விடப் பெரிய முடிவுள்ள எண்ணாக அமைக்கவும்.
+	Set “{field}” of the conveyor {block} to a finite number of 0 or more.	கன்வேயர் {block} இன் “{field}” ஐ 0 அல்லது அதற்கு மேற்பட்ட முடிவுள்ள எண்ணாக அமைக்கவும்.
+	Set “{field}” of the conveyor {block} to a finite number other than 0.	கன்வேயர் {block} இன் “{field}” ஐ 0 அல்லாத முடிவுள்ள எண்ணாக அமைக்கவும்.
+	The conveyor {block} is {length} long but each entity takes {pitch} (item length plus gap), so not even one fits. Lengthen the conveyor, or shorten the item or the gap.	கன்வேயர் {block} இன் நீளம் {length}, ஆனால் ஒவ்வொரு உருப்படியும் {pitch} எடுக்கிறது (பொருளின் நீளமும் இடைவெளியும்), எனவே ஒன்று கூடப் பொருந்தாது. கன்வேயரை நீளமாக்கவும், அல்லது பொருளையோ இடைவெளியையோ குறைக்கவும்.
+	The drawn path of the conveyor {block} is {path_length} long, but its “Length” is {length}, so the drawing and the run disagree. Make “Length” match the path, or change the shape.	கன்வேயர் {block} இன் வரையப்பட்ட பாதை {path_length} நீளமுடையது, ஆனால் அதன் “நீளம்” {length}, எனவே வரைபடமும் மீள் இயக்கமும் முரண்படுகின்றன. “நீளம்” ஐப் பாதைக்குப் பொருத்தவும், அல்லது வடிவத்தை மாற்றவும்.
+	{block} is a transport, which StochCraft does not simulate yet. Remove it to run the model.	{block} ஒரு போக்குவரத்து; StochCraft அதை இன்னும் உருவகப்படுத்துவதில்லை. மாதிரியை இயக்க அதை நீக்கவும்.
+	The pool {pool} of the transport {block} does not exist. Choose a pool that exists.	போக்குவரத்து {block} இன் வளத் தொகுப்பு {pool} இல்லை. இருக்கும் ஒரு வளத் தொகுப்பைத் தேர்ந்தெடுக்கவும்.
+	The pool {pool} of the transport {block} is not mobile. Give the pool speeds and a home.	போக்குவரத்து {block} இன் வளத் தொகுப்பு {pool} நகரக்கூடியதல்ல. வளத் தொகுப்புக்கு வேகங்களையும் ஓர் இல்லிடத்தையும் கொடுக்கவும்.
+	Set “{field}” of the pool {block} to a finite number above 0.	வளத் தொகுப்பு {block} இன் “{field}” ஐ 0 ஐ விடப் பெரிய முடிவுள்ள எண்ணாக அமைக்கவும்.
+	The home of the pool {block} is not a block of the model. Choose a block as its home.	வளத் தொகுப்பு {block} இன் இல்லிடம் மாதிரியின் தொகுதி அல்ல. ஒரு தொகுதியை அதன் இல்லிடமாகத் தேர்ந்தெடுக்கவும்.
+	The transport {block} needs one block before it, where it picks up, and one after it, where it drops off, but has {inputs} before and {outputs} after. Connect it to one block on each side.	போக்குவரத்து {block} க்கு முன் எடுக்கும் இடமாக ஒரு தொகுதியும், பின் இறக்கும் இடமாக ஒரு தொகுதியும் தேவை, ஆனால் முன் {inputs}, பின் {outputs} உள்ளன. ஒவ்வொரு பக்கமும் ஒரு தொகுதியுடன் இணைக்கவும்.
+	{other} has no place on the canvas, so the distances for {block} are not known. Place {other} on the canvas.	{other} க்கு முதன்மைப் பரப்பில் இடம் இல்லை, எனவே {block} க்கான தூரங்கள் தெரியவில்லை. {other} ஐ முதன்மைப் பரப்பில் வைக்கவும்.
+	The flow {flow} asks for no entities. Set its “Units” to 1 or more.	ஓட்டம் {flow} எந்த உருப்படியையும் கேட்கவில்லை. அதன் “அலகு எண்ணிக்கை” ஐ 1 அல்லது அதற்கு மேல் அமைக்கவும்.
+	The “Units” on the flow {flow} is ignored, because only a Split or join block takes several entities from one flow. Remove it.	ஓட்டம் {flow} இன் “அலகு எண்ணிக்கை” புறக்கணிக்கப்படுகிறது, ஏனெனில் பிரி அல்லது இணை தொகுதி மட்டுமே ஒரு ஓட்டத்திலிருந்து பல உருப்படிகளை எடுக்கும். அதை நீக்கவும்.
+	No block makes batches, so {block} passes every entity through. Add a Batch block before it, or remove {block}.	எந்தத் தொகுதியும் தொகுப்புகளை உருவாக்கவில்லை, எனவே {block} ஒவ்வொரு உருப்படியையும் அப்படியே கடக்க விடுகிறது. இதற்கு முன் ஒரு தொகுப்பு தொகுதியைச் சேர்க்கவும், அல்லது {block} ஐ நீக்கவும்.
+	The stop condition names a block that does not exist. Choose a block that exists.	நிறுத்த நிபந்தனை இல்லாத ஒரு தொகுதியைக் குறிப்பிடுகிறது. இருக்கும் ஒரு தொகுதியைத் தேர்ந்தெடுக்கவும்.
+	Set the count of the stop condition for {block} to 1 or more.	{block} க்கான நிறுத்த நிபந்தனையின் எண்ணிக்கையை 1 அல்லது அதற்கு மேல் அமைக்கவும்.
+	The stop condition waits for {block} to empty, but only a task can empty. Choose a task.	நிறுத்த நிபந்தனை {block} காலியாகும் வரை காத்திருக்கிறது, ஆனால் பணி மட்டுமே காலியாக முடியும். ஒரு பணியைத் தேர்ந்தெடுக்கவும்.
+	The stop condition at {block} can be met before the warm-up ends. A run that stops during the warm-up has no statistics after it and is left out of the results. Shorten the warm-up, or stop later.	{block} இல் நிறுத்த நிபந்தனை தொடக்கச் சீராக்க நேரம் முடிவதற்கு முன்பே பூர்த்தியாகலாம். தொடக்கச் சீராக்க நேரத்தில் நிற்கும் மீள் இயக்கத்துக்குப் பின் புள்ளிவிவரங்கள் இல்லை, அது முடிவுகளிலிருந்து விடப்படும். தொடக்கச் சீராக்க நேரத்தைக் குறைக்கவும், அல்லது பின்னர் நிறுத்தவும்.
+	Every run stopped before the warm-up ended, so no metric is reported. Shorten the warm-up, or stop later.	ஒவ்வொரு மீள் இயக்கமும் தொடக்கச் சீராக்க நேரம் முடிவதற்கு முன் நின்றது, எனவே எந்த அளவீடும் தெரிவிக்கப்படவில்லை. தொடக்கச் சீராக்க நேரத்தைக் குறைக்கவும், அல்லது பின்னர் நிறுத்தவும்.
+	{replications} of {of} runs stopped before the warm-up ended, so their statistics are left out of every metric. Shorten the warm-up, or stop later.	{of} இல் {replications} மீள் இயக்கங்கள் தொடக்கச் சீராக்க நேரம் முடிவதற்கு முன் நின்றன, எனவே அவற்றின் புள்ளிவிவரங்கள் ஒவ்வொரு அளவீட்டிலிருந்தும் விடப்படுகின்றன. தொடக்கச் சீராக்க நேரத்தைக் குறைக்கவும், அல்லது பின்னர் நிறுத்தவும்.
+	{block} is offered {load}% of the work its units can do, so its waiting room grows without limit and the results describe no steady state. Add units, or shorten the service.	{block} இன் அலகுகள் செய்யக்கூடிய வேலையில் {load}% அதற்கு வழங்கப்படுகிறது, எனவே அதன் காத்திருப்பு அறை வரம்பின்றி வளர்கிறது; முடிவுகள் எந்த நிலையான நிலையையும் விவரிக்கவில்லை. அலகுகளைச் சேர்க்கவும், அல்லது சேவையைக் குறைக்கவும்.
+	{block} is busy {utilisation}% of the time, and at the end at least {backlog} entities are still waiting against {left} that left. Work arrives faster than it is done, so the results describe no steady state. Add units, or shorten the service.	{block} {utilisation}% நேரம் பணியில் உள்ளது, இறுதியில் குறைந்தது {backlog} உருப்படிகள் இன்னும் காத்திருக்கின்றன, வெளியேறியவை {left}. வேலை முடிப்பதை விட வேகமாக வருகிறது, எனவே முடிவுகள் எந்த நிலையான நிலையையும் விவரிக்கவில்லை. அலகுகளைச் சேர்க்கவும், அல்லது சேவையைக் குறைக்கவும்.
+	The experiment has one run, so its results cannot be told from chance. Set the number of runs to at least 2, and usually 10 or more.	சோதனையில் ஒரு மீள் இயக்கம் மட்டுமே உள்ளது, எனவே அதன் முடிவுகளைத் தற்செயலிலிருந்து பிரித்தறிய முடியாது. மீள் இயக்கங்களின் எண்ணிக்கையை குறைந்தது 2 ஆக, வழக்கமாக 10 அல்லது அதற்கு மேல் அமைக்கவும்.
+	{block} has a three-point estimate but no time to fit it to, so the estimate is ignored. Remove the estimate.	{block} க்கு மூன்று மதிப்பு மதிப்பீடு உள்ளது, ஆனால் அதைப் பொருத்த நேரம் இல்லை, எனவே மதிப்பீடு புறக்கணிக்கப்படுகிறது. மதிப்பீட்டை நீக்கவும்.
+	The three-point estimate of {block} cannot be fitted: every point must be a finite number. Correct the points.	{block} இன் மூன்று மதிப்பு மதிப்பீட்டைப் பொருத்த முடியாது: ஒவ்வொரு மதிப்பும் முடிவுள்ள எண்ணாக இருக்க வேண்டும். மதிப்புகளைத் திருத்தவும்.
+	The three-point estimate of {block} cannot be fitted: the points must be in order, minimum, most likely, then maximum or 95th percentile. Correct the points.	{block} இன் மூன்று மதிப்பு மதிப்பீட்டைப் பொருத்த முடியாது: மதிப்புகள் குறைந்தபட்சம், அதிக வாய்ப்புள்ள மதிப்பு, பின்னர் அதிகபட்சம் அல்லது 95-ஆம் சதமானம் என்ற வரிசையில் இருக்க வேண்டும். மதிப்புகளைத் திருத்தவும்.
+	The three-point estimate of {block} cannot be fitted: log-normal and Weibull estimates have no maximum. Give a 95th percentile instead.	{block} இன் மூன்று மதிப்பு மதிப்பீட்டைப் பொருத்த முடியாது: மடக்கை-இயல்புப் பரவல், வைபுல் மதிப்பீடுகளுக்கு அதிகபட்சம் இல்லை. அதற்குப் பதிலாக 95-ஆம் சதமானத்தைக் கொடுக்கவும்.
+	The time of {block} is no longer the one fitted from its three-point estimate. Fit it again, or remove the estimate.	{block} இன் நேரம் இனி அதன் மூன்று மதிப்பு மதிப்பீட்டிலிருந்து பொருத்தியது அல்ல. மீண்டும் பொருத்தவும், அல்லது மதிப்பீட்டை நீக்கவும்.
+	In “{field}” of {block}, the normal distribution draws below 0 more than 1 time in 100, and each such draw counts as 0, so the times are longer on average than its mean. Use a truncated normal with a minimum of 0, or a log-normal.	{block} இன் “{field}” இல் இயல்புப் பரவல் 100 முறையில் 1 முறைக்கு மேல் 0 க்குக் கீழே மதிப்பை எடுக்கிறது, அத்தகைய ஒவ்வொன்றும் 0 ஆகக் கணக்கிடப்படுகிறது, எனவே நேரங்கள் சராசரியாக அதன் சராசரியை விட நீளமாகும். குறைந்தபட்சம் 0 உள்ள வரம்பிட்ட இயல்புப் பரவலை அல்லது மடக்கை-இயல்புப் பரவலைப் பயன்படுத்தவும்.
+	The entities of {block} do not add up: {came} came in or were inside at the start, but {went} left, were lost, gave up or are still inside.	{block} இன் உருப்படிகள் கணக்கில் பொருந்தவில்லை: தொடக்கத்தில் {came} உள்ளே வந்தன அல்லது உள்ளே இருந்தன, ஆனால் {went} வெளியேறின, இழக்கப்பட்டன, கைவிட்டன அல்லது இன்னும் உள்ளே உள்ளன.
+	The entities of the model do not add up: {came} were created or inside at the start, but {went} reached Departures, left the model elsewhere or are still inside.	மாதிரியின் உருப்படிகள் கணக்கில் பொருந்தவில்லை: தொடக்கத்தில் {came} உருவாக்கப்பட்டன அல்லது உள்ளே இருந்தன, ஆனால் {went} வெளியேற்றங்களை அடைந்தன, மாதிரியை வேறிடத்தில் விட்டன அல்லது இன்னும் உள்ளே உள்ளன.
+	No entity left the model, of {came} created or inside at the start. Check that the routing leads to Departures and that the run is long enough for an entity to get through.	தொடக்கத்தில் உருவாக்கப்பட்ட அல்லது உள்ளே இருந்த {came} இல் எந்த உருப்படியும் மாதிரியை விட்டு வெளியேறவில்லை. வழி வெளியேற்றங்களுக்குச் செல்கிறதா என்பதையும், ஓர் உருப்படி கடந்து செல்லும் அளவுக்கு மீள் இயக்கம் நீளமாக உள்ளதா என்பதையும் சரிபார்க்கவும்.
+	Little's law does not hold at {block}: the time-average number inside was {mean}, but the entities' own times inside give {from_stays}.	{block} இல் லிட்டிலின் விதி பொருந்தவில்லை: உள்ளே இருந்தவற்றின் காலச் சராசரி எண்ணிக்கை {mean}, ஆனால் உருப்படிகளின் சொந்த உள்ளிருப்பு நேரங்கள் {from_stays} தருகின்றன.
+	The utilisation of {block} counts {busy} units busy on average, but {working} were processing or setting up: units idle, blocked, off shift, failed or restarting were counted busy.	{block} இன் பயன்பாட்டு விகிதம் சராசரியாக {busy} அலகுகளைப் பணியில் எனக் கணக்கிடுகிறது, ஆனால் செயலாக்கம் அல்லது அமைவில் இருந்தவை {working}: செயலற்ற, தடுக்கப்பட்ட, பணிமுறைக்கு வெளியே, பழுதடைந்த அல்லது மறுதொடக்கத்தில் உள்ள அலகுகளும் பணியில் எனக் கணக்கிடப்பட்டன.
+	The utilisation of {block} counts {busy} units busy on average, but {working} were processing or setting up: units at work were not counted busy.	{block} இன் பயன்பாட்டு விகிதம் சராசரியாக {busy} அலகுகளைப் பணியில் எனக் கணக்கிடுகிறது, ஆனால் செயலாக்கம் அல்லது அமைவில் இருந்தவை {working}: வேலை செய்யும் அலகுகள் பணியில் எனக் கணக்கிடப்படவில்லை.
+	The shares of the time of the units of {block} in each state add up to {total}, not 1.	{block} இன் அலகுகளின் ஒவ்வொரு நிலையிலும் உள்ள நேரப் பங்குகளின் கூட்டுத்தொகை 1 அல்ல, {total}.
+	“{metric}” of {block} is {value}, outside 0 to 1 (0% to 100%).	{block} இன் “{metric}” {value} ஆக உள்ளது, இது 0 முதல் 1 வரைக்கும் (0% முதல் 100%) வெளியே உள்ளது.
+	This was found in {replications} of {of} runs, and the furthest off is shown.	இது {of} இல் {replications} மீள் இயக்கங்களில் கண்டறியப்பட்டது, மிகவும் விலகியது காட்டப்படுகிறது.
+	This points to a fault in StochCraft rather than in the model. Please report it with the model.	இது மாதிரியில் அல்ல, StochCraft இல் உள்ள பிழையைக் குறிக்கிறது. மாதிரியுடன் சேர்த்து இதைத் தெரிவிக்கவும்.
+	Angle	கோணம்
+	Failed	பழுதடைந்தது
+	Off shift	பணிமுறைக்கு வெளியே
+	Processing	செயலாக்கம்
+	Radius	ஆரம்
+	Rise	உயர்வு
+	Speed empty	காலியாக இருக்கும்போது வேகம்
+	Speed loaded	ஏற்றியபோது வேகம்
+	Turns	சுற்றுகள்
+	Unload	இறக்குதல்
+	Lost	இழந்தவை
+	An entity that leaves a waiting room before a unit takes it, because it has waited as long as it was willing to.	காத்திருக்க விரும்பிய அளவுக்குக் காத்திருந்துவிட்டதால், ஓர் அலகு எடுப்பதற்கு முன்பே காத்திருப்பு அறையை விட்டு வெளியேறும் உருப்படி.
+	An entity that does not join a waiting room at all, because the number already waiting put it off.	ஏற்கெனவே காத்திருப்பவர்களின் எண்ணிக்கை தயங்கவைத்ததால், காத்திருப்பு அறையில் சேரவே சேராத உருப்படி.
+	An entity that finds the waiting room full and takes the flow ticked “Turned away” instead of waiting.	காத்திருப்பு அறை நிரம்பியிருப்பதைக் கண்டு, காத்திருக்காமல் “திருப்பி அனுப்பப்பட்டவை” எனத் தேர்ந்தெடுக்கப்பட்ட ஓட்டத்தில் செல்லும் உருப்படி.
+	An entity that leaves the model without reaching Departures: it found the waiting room full with nowhere else to go, or a decision with no way out for it.	வெளியேற்றங்களை அடையாமல் மாதிரியை விட்டு வெளியேறும் உருப்படி: காத்திருப்பு அறை நிரம்பியிருந்து வேறு வழி இல்லாதது, அல்லது அதற்கு வெளியேற வழி இல்லாத ஒரு முடிவைச் சந்தித்தது.
+	Gave up on {id}	{id} இல் கைவிட்டவை
+	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the flow ticked “Gave up”, or leaves the model.	ஒவ்வொரு உருப்படியும் வந்தடையும்போது அதற்காகச் சீரற்ற முறையில் எடுக்கப்பட்ட நேரம் வரை மட்டுமே இங்கே காத்திருந்து, பின்னர் கைவிடுகிறது: “கைவிட்டவை” எனத் தேர்ந்தெடுக்கப்பட்ட ஓட்டத்தில் செல்கிறது, அல்லது மாதிரியை விட்டு வெளியேறுகிறது.
+	Entities that do not join the waiting room take this flow at once (to try again later, say), instead of being lost; they count as balked here.	காத்திருப்பு அறையில் சேராத உருப்படிகள் உடனே இந்த ஓட்டத்தில் செல்கின்றன (உதாரணமாக, பின்னர் மீண்டும் முயல), இழக்கப்படுவதற்குப் பதிலாக; இங்கு அவை வரிசையில் சேராதவையாகக் கணக்கிடப்படுகின்றன.
+	The job stops at once: the entity goes back to the front of the waiting room for any server on shift, and the work done on it is wasted.	வேலை உடனே நிற்கிறது: உருப்படி பணிமுறையில் உள்ள எந்த வழங்கிக்காகவும் காத்திருப்பு அறையின் முன்னுக்குத் திரும்புகிறது, அதன்மேல் செய்த வேலை வீணாகிறது.
+	The connection drops and the client tries again: the entity goes back to the front of the waiting room at once, and the work done on it is wasted.	இணைப்பு துண்டிக்கப்பட்டு கிளையன்ட் மீண்டும் முயல்கிறது: உருப்படி உடனே காத்திருப்பு அறையின் முன்னுக்குத் திரும்புகிறது, அதன்மேல் செய்த வேலை வீணாகிறது.
+	Ticked, entities queue up at the end while the rest keep moving. Unticked, the whole belt stops when the entity at the end cannot leave.	தேர்ந்தால், மற்றவை நகர்ந்துகொண்டிருக்க உருப்படிகள் முடிவில் வரிசையில் நிற்கும். தேர்ந்தெடுக்காவிட்டால், முடிவில் உள்ள உருப்படி வெளியேற முடியாதபோது முழுப் பட்டையும் நின்றுவிடும்.
+	Play run 1 step by step and see each block's waiting room on the diagram	மீள் இயக்கம் 1 ஐப் படிப்படியாக இயக்கி, வரைபடத்தில் ஒவ்வொரு தொகுதியின் காத்திருப்பு அறையையும் பார்
+	Select a block to see its waiting room over time.	நேரப்படி ஒரு தொகுதியின் காத்திருப்பு அறையைப் பார்க்க அதைத் தேர்ந்தெடுக்கவும்.
+	Entities on conveyors over time	காலப்போக்கில் கன்வேயர்களில் உருப்படிகள்
+	Entities in the model over time	காலப்போக்கில் மாதிரியில் உருப்படிகள்
+	How long each entity spends on the conveyors.	ஒவ்வொரு உருப்படியும் கன்வேயர்களில் எவ்வளவு நேரம் இருக்கிறது.
+	No entity has left a conveyor yet	இதுவரை எந்த உருப்படியும் கன்வேயரை விட்டு வெளியேறவில்லை
+	Share of entities by time on a conveyor, in {unit}	கன்வேயரில் நேரத்தின்படி உருப்படிகளின் பங்கு, {unit} அலகில்
+	Time on conveyors: {n} entities between {lo} and {hi} {unit}	கன்வேயர்களில் நேரம்: {lo} மற்றும் {hi} {unit} இடையே {n} உருப்படிகள்
+	{from} to {to} {unit}: {share} of entities ({n})	{from} முதல் {to} {unit}: உருப்படிகளில் {share} ({n})
+	How many entities are on the conveyors over time.	காலப்போக்கில் கன்வேயர்களில் எத்தனை உருப்படிகள் உள்ளன.
+	How many entities are in the model over time.	காலப்போக்கில் மாதிரியில் எத்தனை உருப்படிகள் உள்ளன.
+	At {time} {unit}: {n} entities	{time} {unit} நேரத்தில்: {n} உருப்படிகள்
+@plural	Makes {n} independent run of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval across them.	{seed} என்ற சீரற்ற விதையிலிருந்து மாதிரியின் {n} தனித்த மீள் இயக்கத்தை நடத்துகிறது. ஒவ்வொரு தொகுதியின் முடிவும் 95% நம்பிக்கை இடைவெளியின் அரை அகலத்துடன் வழங்கப்படுகிறது.|{seed} என்ற சீரற்ற விதையிலிருந்து மாதிரியின் {n} தனித்த மீள் இயக்கங்களை நடத்துகிறது. ஒவ்வொரு தொகுதியின் முடிவும் அவற்றின் 95% நம்பிக்கை இடைவெளியின் அரை அகலத்துடன் வழங்கப்படுகிறது.

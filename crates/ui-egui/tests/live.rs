@@ -111,7 +111,7 @@ fn the_end_is_reported_and_the_selected_block_charted() {
     let mut h = watching();
     h.get_by_role_and_label(Role::Button, "Pause").click();
     settle(&mut h);
-    h.get_by_label("Select a block to see its queue over time.");
+    h.get_by_label("Select a block to see its waiting room over time.");
     h.get_all_by_role(Role::ListBoxOption)
         .nth(1)
         .expect("the server in the block list")

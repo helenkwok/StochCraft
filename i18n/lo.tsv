@@ -21,8 +21,6 @@
 	A caller on hold: once a unit takes it, the entity stays.	ຜູ້ໂທທີ່ຖືສາຍລໍຖ້າ: ເມື່ອໜ່ວຍໃດໜຶ່ງຮັບມັນແລ້ວ, ເອນທິຕີຈະຢູ່ຕໍ່.
 	A client that times out: if its time runs out during service, it gives up then, and the unit finishes the job anyway (wasted work).	ລູກຂ່າຍທີ່ໝົດເວລາ (timeout): ຖ້າເວລາຂອງມັນໝົດລະຫວ່າງການບໍລິການ, ມັນຈະເຊົາໃນຕອນນັ້ນ ແລະ ໜ່ວຍຍັງເຮັດວຽກນັ້ນຈົນສຳເລັດ (ວຽກທີ່ເສຍເປົ່າ).
 	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	ໄຟລ໌ໃໝ່ມີແຕ່ແບບຈຳລອງ: ສິ່ງທີ່ StochCraft ບໍ່ເຂົ້າໃຈໃນ {file} ຈະຖືກປະໄວ້.
-	Abandoned	ເຊົາລໍຖ້າ
-	Abandoned on {id}	ເຊົາລໍຖ້າທີ່ {id}
 	About StochCraft	ກ່ຽວກັບ StochCraft
 	About {app}	ກ່ຽວກັບ {app}
 	Accent	ສີເນັ້ນ
@@ -162,7 +160,6 @@
 	Duration	ໄລຍະເວລາ
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	ການວິເຄາະແຕ່ລະອັນແລ່ນການທົດລອງຫຼາຍເທື່ອດ້ວຍເມັດສຸ່ມດຽວກັນ, ຄວາມແຕກຕ່າງຈຶ່ງມາຈາກການປ່ຽນແປງ ບໍ່ແມ່ນຄວາມບັງເອີນ. ອາດໃຊ້ເວລາຈັກໜ້ອຍ.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	ແຕ່ລະເອນທິຕີຈະເອົາທາງເລືອກທຳອິດທີ່ສາມາດຈັດໃຫ້ໄດ້ຄົບທັງໝົດພ້ອມກັນໃນທັນທີ ແລະ ສົ່ງໜ່ວຍເຫຼົ່ານັ້ນຄືນເມື່ອອອກໄປ.
-	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	ແຕ່ລະເອນທິຕີຈະລໍຖ້າຢູ່ນີ້ບໍ່ເກີນເວລາທີ່ສຸ່ມໃຫ້ມັນເມື່ອມາຮອດ, ແລ້ວຈຶ່ງເຊົາລໍຖ້າ: ມັນໄປທາງອອກທີ່ໝາຍວ່າ "ເຊົາລໍຖ້າ" ຫຼື ອອກຈາກແບບຈຳລອງ.
 	Each server (unit) is checked every so often, as a load balancer probes the servers behind it. One that fails, with too many waiting, is taken out of service for a restart, then comes back.	ແມ່ຂ່າຍ (ໜ່ວຍ) ແຕ່ລະເຄື່ອງຈະຖືກກວດເປັນໄລຍະ ຄືກັບຕົວກະຈາຍໂຫຼດທີ່ກວດແມ່ຂ່າຍທີ່ຢູ່ເບື້ອງຫຼັງມັນ. ເຄື່ອງທີ່ບໍ່ຜ່ານການກວດ ເພາະມີຜູ້ລໍຖ້າຫຼາຍເກີນໄປ ຈະຖືກເອົາອອກຈາກການໃຊ້ງານເພື່ອເລີ່ມໃໝ່ ແລ້ວຈຶ່ງກັບມາ.
 	Edit	ແກ້ໄຂ
 	Edit themes…	ແກ້ໄຂຊຸດສີ…
@@ -419,7 +416,6 @@
 	Run	ປະມວນຜົນ
 	Run cancelled	ຍົກເລີກການປະມວນຜົນແລ້ວ
 	Run experiment	ປະມວນຜົນການທົດລອງ
-	Play run 1 step by step and see each block's queue on the diagram	ປະມວນຜົນຮອບຈຳລອງທີ 1 ເທື່ອລະຂັ້ນ ແລະ ເບິ່ງຄິວຂອງແຕ່ລະບລັອກໃນແຜນວາດ
 	Run the experiment ({shortcut})	ປະມວນຜົນການທົດລອງ ({shortcut})
 	Run the experiment again to see this result's spread.	ແລ່ນການທົດລອງອີກຄັ້ງເພື່ອເບິ່ງການກະຈາຍຂອງຜົນໄດ້ຮັບນີ້.
 	Run the experiment at each value of one parameter, and compare a result.	ແລ່ນການທົດລອງທີ່ແຕ່ລະຄ່າຂອງພາຣາມິເຕີໜຶ່ງ ແລ້ວປຽບທຽບຜົນໄດ້ຮັບ.
@@ -440,7 +436,6 @@
 	Scrap ratio	ສັດສ່ວນຂອງເສຍ
 	Seed	ເມັດສຸ່ມ
 	Select All	ເລືອກທັງໝົດ
-	Select a block to see its queue over time.	ເລືອກບລັອກເພື່ອເບິ່ງຄິວຂອງມັນຕາມເວລາ.
 	Sender waits during transfer	ຜູ້ສົ່ງລໍຖ້າລະຫວ່າງຂົນຍ້າຍ
 	Separate the values with semicolons or spaces.	ຂັ້ນຄ່າດ້ວຍເຄື່ອງໝາຍຈ້ຳຈຸດ ຫຼື ຍະຫວ່າງ.
 	Sequential	ແບບລຳດັບ
@@ -504,10 +499,8 @@
 	Text	ຂໍ້ຄວາມ
 	Text on accent	ຂໍ້ຄວາມເທິງສີເນັ້ນ
 	Text on header	ຂໍ້ຄວາມເທິງແຖບຫົວ
-	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	ການເຊື່ອມຕໍ່ຫຼຸດ ແລະ ລູກຂ່າຍລອງໃໝ່: ເອນທິຕີຈະກັບໄປຫົວແຖວຄອຍທັນທີ ແລະ ວຽກທີ່ເຮັດກັບມັນແລ້ວຈະເສຍເປົ່າ.
 	The entity waits on its server and the job carries on with what was left once the server is back.	ເອນທິຕີລໍຖ້າຢູ່ທີ່ແມ່ຂ່າຍຂອງມັນ ແລະ ວຽກຈະເຮັດຕໍ່ຈາກສ່ວນທີ່ເຫຼືອເມື່ອແມ່ຂ່າຍກັບມາ.
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more runs would narrow it.	ຊ່ວງນີ້ລົງຕ່ຳກວ່າສັດສ່ວນເປົ້າໝາຍ {share}, ຈຶ່ງບໍ່ໄດ້ສະແດງດ້ວຍຄວາມເຊື່ອໝັ້ນ 95% ວ່າບັນລຸສັດສ່ວນນັ້ນ; ຮອບຈຳລອງຊ້ຳຫຼາຍຂຶ້ນຈະເຮັດໃຫ້ຊ່ວງແຄບລົງ.
-	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	ວຽກຢຸດທັນທີ: ເອນທິຕີຈະກັບໄປຫົວແຖວຄອຍສຳລັບແມ່ຂ່າຍໃດກໍໄດ້ທີ່ຢູ່ໃນກະ ແລະ ວຽກທີ່ເຮັດກັບມັນແລ້ວຈະເສຍເປົ່າ.
 	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	ວຽກຢຸດທັນທີ; ເອນທິຕີລໍຖ້າຢູ່ທີ່ແມ່ຂ່າຍຂອງມັນ ແລະ ວຽກຈະເຮັດຕໍ່ຈາກສ່ວນທີ່ເຫຼືອເມື່ອແມ່ຂ່າຍນັ້ນກັບເຂົ້າກະອີກ.
 	The last task with a resource it finished at	ໜ້າວຽກສຸດທ້າຍທີ່ຕ້ອງໃຊ້ຊັບພະຍາກອນທີ່ຊິ້ນງານຜ່ານມາ
 	The mean time to the stop condition is over the runs that met it only; the others ran to their time limit.	ເວລາສະເລ່ຍຈົນຮອດເງື່ອນໄຂຢຸດ ຄິດສະເພາະຮອບຈຳລອງຊ້ຳທີ່ຮອດເງື່ອນໄຂ; ຮອບອື່ນແລ່ນຈົນຮອດຂີດຈຳກັດເວລາ.
@@ -690,7 +683,6 @@ unit	yr	ປີ
 	Balked on {id}	ບໍ່ເຂົ້າແຖວທີ່ {id}
 	Balking	ການບໍ່ເຂົ້າແຖວ
 	Count those in service	ນັບລວມທີ່ກຳລັງຮັບບໍລິການ
-	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	ເອນທິຕີທີ່ບໍ່ເຂົ້າແຖວຄອຍ ຈະໄປຕາມເສັ້ນທາງນີ້ທັນທີ (ເຊັ່ນ ເພື່ອລອງໃໝ່ພາຍຫຼັງ) ແທນທີ່ຈະສູນເສຍ; ຢູ່ນີ້ພວກມັນຖືກນັບເປັນການບໍ່ເຂົ້າແຖວ.
 	Joins with probability	ຄວາມເປັນໄປໄດ້ທີ່ເຂົ້າແຖວ
 	Number waiting	ຈຳນວນທີ່ລໍຖ້າ
 	Share balked	ສັດສ່ວນທີ່ບໍ່ເຂົ້າແຖວ
@@ -908,7 +900,6 @@ unit	yr	ປີ
 @plural	Finished {n} run|Finished {n} runs	ຈຳລອງຊ້ຳສຳເລັດ {n} ຮອບ
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	ເປີດ {file} ແລ້ວ (ຄຳເຕືອນ {n} ລາຍການ)
 @plural	Removed {n} block|Removed {n} blocks	ລຶບ {n} ບລັອກແລ້ວ
-@plural	Makes {n} independent run of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	ປະມວນຜົນແບບຈຳລອງຢ່າງອິດສະຫຼະ {n} ຮອບ ໂດຍໃຊ້ເມັດສຸ່ມ {seed}. ຜົນຂອງແຕ່ລະອົງປະກອບມີເຄິ່ງໜຶ່ງຂອງຄວາມກວ້າງຊ່ວງຄວາມເຊື່ອໝັ້ນ 95% ຈາກທຸກຮອບ.
 @plural	The stop condition was met in {met} of {n} run, after {time} {unit} on average.|The stop condition was met in {met} of {n} runs, after {time} {unit} on average.	ຮອດເງື່ອນໄຂຢຸດໃນ {met} ຈາກ {n} ຮອບຈຳລອງຊ້ຳ ຫຼັງຈາກສະເລ່ຍ {time} {unit}.
 @plural	{done} of {n} run finished|{done} of {n} runs finished	ສຳເລັດແລ້ວ {done} ຈາກ {n} ຮອບຈຳລອງຊ້ຳ
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} run|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} runs	{name}: {mean}{unit}\nຊ່ວງຄວາມເຊື່ອໝັ້ນ 95% ຈາກ {low} ຫາ {high}{unit}\nຈາກການຈຳລອງຊ້ຳ {n} ຮອບ
@@ -938,7 +929,6 @@ unit	yr	ປີ
 	kilometres	ກິໂລແມັດ
 	inches	ນິ້ວ
 	feet	ຟຸດ
-	Ticked, items queue up at the end while the rest keep moving. Unticked, the whole belt stops when the item at the end cannot leave.	ເມື່ອເລືອກ ຊິ້ນງານຈະຕໍ່ແຖວຢູ່ປາຍ ໃນຂະນະທີ່ຊິ້ນອື່ນຍັງເຄື່ອນຕໍ່ໄປ. ເມື່ອບໍ່ເລືອກ ສາຍພານທັງເສັ້ນຈະຢຸດເມື່ອຊິ້ນງານຢູ່ປາຍອອກບໍ່ໄດ້.
 	A belt that carries entities from one end to the other. It has a length and a speed, and each entity takes a pitch of belt: its item length plus the gap kept free after it. So it holds at most length ÷ pitch entities and carries at most speed ÷ pitch per time unit. Accumulating: entities queue up at the end while the rest keep moving; otherwise the whole belt stops.	ສາຍພານທີ່ພາເອນທິຕີຈາກປາຍໜຶ່ງໄປອີກປາຍໜຶ່ງ. ມີຄວາມຍາວແລະຄວາມໄວ ແລະແຕ່ລະເອນທິຕີໃຊ້ໜຶ່ງຊ່ວງຂອງສາຍພານ ຄືຄວາມຍາວຂອງຊິ້ນງານບວກຊ່ອງວ່າງທີ່ເຫຼືອໄວ້ທາງຫຼັງ. ສະນັ້ນຈຶ່ງບັນຈຸໄດ້ສູງສຸດ ຄວາມຍາວ ÷ ຊ່ວງ ເອນທິຕີ ແລະພາໄປໄດ້ສູງສຸດ ຄວາມໄວ ÷ ຊ່ວງ ຕໍ່ໜຶ່ງຫົວໜ່ວຍເວລາ. ສະສົມ: ເອນທິຕີຕໍ່ແຖວຢູ່ປາຍໃນຂະນະທີ່ຕົວອື່ນຍັງເຄື່ອນຕໍ່ໄປ; ບໍ່ດັ່ງນັ້ນສາຍພານທັງເສັ້ນຈະຢຸດ.
 	Station	ສະຖານີ
 	Kind	ປະເພດ
@@ -992,16 +982,162 @@ unit	yr	ປີ
 	Time on conveyors	ເວລາເທິງສາຍພານ
 	No conveyors in this model	ໃນແບບຈຳລອງນີ້ບໍ່ມີສາຍພານ
 	Fills in when the run ends	ຈະສະແດງເມື່ອການແລ່ນສຳເລັດ
-	How long each item spends on the conveyors.	ແຕ່ລະລາຍການຢູ່ເທິງສາຍພານດົນປານໃດ.
-	No item has left a conveyor yet	ຍັງບໍ່ມີລາຍການໃດອອກຈາກສາຍພານ
-	Share of items by time on a conveyor, in {unit}	ສັດສ່ວນຂອງລາຍການຕາມເວລາເທິງສາຍພານ ຫົວໜ່ວຍ {unit}
-	Time on conveyors: {n} items between {lo} and {hi} {unit}	ເວລາເທິງສາຍພານ: {n} ລາຍການລະຫວ່າງ {lo} ເຖິງ {hi} {unit}
-	{from} to {to} {unit}: {share} of items ({n})	{from} ເຖິງ {to} {unit}: {share} ຂອງລາຍການ ({n})
-	Items on conveyors over time	ລາຍການເທິງສາຍພານຕາມເວລາ
-	Items in the model over time	ລາຍການໃນແບບຈຳລອງຕາມເວລາ
-	How many items are on the conveyors over time.	ມີຈັກລາຍການເທິງສາຍພານຕາມເວລາ.
-	How many items are in the model over time.	ມີຈັກລາຍການໃນແບບຈຳລອງຕາມເວລາ.
 	Nothing was recorded over time in these results	ໃນຜົນນີ້ບໍ່ໄດ້ບັນທຶກຫຍັງຕາມເວລາ
-	At {time} {unit}: {n} items	ທີ່ {time} {unit}: {n} ລາຍການ
 	Run the model to fill the dashboard	ແລ່ນແບບຈຳລອງເພື່ອເຕີມແດຊບອດ
 	The resource and conveyor charts show the last run until this one ends	ແຜນພາບຊັບພະຍາກອນ ແລະ ສາຍພານສະແດງການແລ່ນຄັ້ງຫຼ້າສຸດຈົນກວ່າຄັ້ງນີ້ຈະສຳເລັດ
+# Validation messages, new labels and word changes (issue #145)
+	The id “{id}” is not valid. Start an id with a letter or an underscore, then use only letters, digits, dots, hyphens and underscores.	“{id}” ເປັນໄອດີທີ່ບໍ່ຖືກຕ້ອງ ໃຫ້ເລີ່ມໄອດີດ້ວຍຕົວອັກສອນ ຫຼື ຂີດກ້ອງ ແລ້ວໃຊ້ສະເພາະຕົວອັກສອນ, ຕົວເລກ, ຈຸດ, ຂີດກາງ ແລະ ຂີດກ້ອງ
+	More than one block, flow, pool or calendar has the id “{id}”. Give each its own id.	ມີບລັອກ, ເສັ້ນທາງ, ກຸ່ມຊັບພະຍາກອນ ຫຼື ປະຕິທິນຫຼາຍກວ່າໜຶ່ງອັນທີ່ມີໄອດີ “{id}” ໃຫ້ແຕ່ລະອັນມີໄອດີຂອງຕົນເອງ
+	The flow {flow} uses a block that does not exist. Remove the flow, or connect it to a block that exists.	ເສັ້ນທາງ {flow} ໃຊ້ບລັອກທີ່ບໍ່ມີຢູ່ ລຶບເສັ້ນທາງນັ້ນ ຫຼື ເຊື່ອມມັນກັບບລັອກທີ່ມີຢູ່
+	The flow {flow} leads into an Arrivals block, which takes no input. Remove the flow, or send it to another block.	ເສັ້ນທາງ {flow} ເຂົ້າສູ່ບລັອກ ການມາຮອດ ເຊິ່ງບໍ່ຮັບຂາເຂົ້າ ລຶບເສັ້ນທາງ ຫຼື ສົ່ງມັນໄປຍັງບລັອກອື່ນ
+	The flow {flow} leaves a Departures block, which has no output. Remove the flow, or start it from another block.	ເສັ້ນທາງ {flow} ອອກຈາກບລັອກ ການອອກ ເຊິ່ງບໍ່ມີຂາອອກ ລຶບເສັ້ນທາງ ຫຼື ເລີ່ມມັນຈາກບລັອກອື່ນ
+	The flow {flow} leads from a block back to itself. Remove it, or send it to another block.	ເສັ້ນທາງ {flow} ໄປຈາກບລັອກໜຶ່ງກັບມາຫາບລັອກນັ້ນເອງ ລຶບມັນ ຫຼື ສົ່ງມັນໄປຍັງບລັອກອື່ນ
+	{block} has nowhere to send entities. Add a flow from it to the next block.	{block} ບໍ່ມີບ່ອນສົ່ງເອນທິຕີໄປ ເພີ່ມເສັ້ນທາງຈາກມັນໄປຍັງບລັອກຖັດໄປ
+	{block} has {count} flows out, and only a Decision or a Split or join block can send entities down several. Remove the extra flows, or add a Decision block.	{block} ມີ {count} ເສັ້ນທາງອອກ ແຕ່ມີພຽງບລັອກ ການຕັດສິນໃຈ ຫຼື ບລັອກ ແຍກ ຫຼື ລວມ ເທົ່ານັ້ນທີ່ສົ່ງເອນທິຕີໄປຫຼາຍເສັ້ນທາງໄດ້ ລຶບເສັ້ນທາງທີ່ເກີນ ຫຼື ເພີ່ມບລັອກ ການຕັດສິນໃຈ
+	In “{field}” of {block}, set “{param}” to a finite number.	ໃນ “{field}” ຂອງ {block} ຕັ້ງ “{param}” ເປັນຕົວເລກທີ່ມີຄ່າຈຳກັດ
+	In “{field}” of {block}, set “{param}” to a number above 0.	ໃນ “{field}” ຂອງ {block} ຕັ້ງ “{param}” ເປັນຕົວເລກທີ່ຫຼາຍກວ່າ 0
+	In “{field}” of {block}, set “{param}” to 0 or more.	ໃນ “{field}” ຂອງ {block} ຕັ້ງ “{param}” ເປັນ 0 ຫຼືຫຼາຍກວ່ານັ້ນ
+	In “{field}” of {block}, set “{param}” to 1 or more.	ໃນ “{field}” ຂອງ {block} ຕັ້ງ “{param}” ເປັນ 1 ຫຼືຫຼາຍກວ່ານັ້ນ
+	In “{field}” of {block}, set “{param}” to a number from 0 to 1.	ໃນ “{field}” ຂອງ {block} ຕັ້ງ “{param}” ເປັນຕົວເລກຕັ້ງແຕ່ 0 ເຖິງ 1
+	In “{field}” of {block}, set “Minimum” below “Maximum”, and any “Most likely” value between them.	ໃນ “{field}” ຂອງ {block} ຕັ້ງ “ຄ່າຕ່ຳສຸດ” ໃຫ້ຕ່ຳກວ່າ “ຄ່າສູງສຸດ” ແລະ ຖ້າມີ “ຄ່າທີ່ເປັນໄປໄດ້ຫຼາຍທີ່ສຸດ” ໃຫ້ຢູ່ລະຫວ່າງສອງຄ່ານັ້ນ
+	In “{field}” of {block}, add data points whose probabilities add up to more than 0.	ໃນ “{field}” ຂອງ {block} ເພີ່ມຈຸດຂໍ້ມູນທີ່ຜົນບວກຄວາມເປັນໄປໄດ້ຫຼາຍກວ່າ 0
+	{block} would never have a unit to work with. Give it at least 1 unit.	{block} ຈະບໍ່ມີໜ່ວຍໃຫ້ເຮັດວຽກເລີຍ ໃຫ້ຢ່າງໜ້ອຍ 1 ໜ່ວຍ
+	{block} would make entities without end, because its “Time between arrivals” is always 0. Give it a time above 0, or set an “Arrival limit”.	{block} ຈະສ້າງເອນທິຕີບໍ່ຢຸດ ເພາະ “ເວລາລະຫວ່າງການມາຮອດ” ເປັນ 0 ສະເໝີ ໃຫ້ເວລາທີ່ຫຼາຍກວ່າ 0 ຫຼື ຕັ້ງ “ຂີດຈຳກັດການມາຮອດ”
+	The model has no Arrivals block, so nothing will happen. Add an Arrivals block.	ແບບຈຳລອງບໍ່ມີບລັອກ ການມາຮອດ ດັ່ງນັ້ນຈະບໍ່ມີຫຍັງເກີດຂຶ້ນ ເພີ່ມບລັອກ ການມາຮອດ
+	The model has no Departures block, so no time in system is measured. Add a Departures block.	ແບບຈຳລອງບໍ່ມີບລັອກ ການອອກ ດັ່ງນັ້ນຈຶ່ງບໍ່ວັດເວລາໃນລະບົບ ເພີ່ມບລັອກ ການອອກ
+	No entity can reach {block} from an Arrivals block. Connect it to a block that entities pass through.	ບໍ່ມີເອນທິຕີໃດຈາກບລັອກ ການມາຮອດ ໄປຮອດ {block} ໄດ້ ເຊື່ອມມັນກັບບລັອກທີ່ເອນທິຕີຜ່ານ
+	Entities in {block} can never reach a Departures block. Connect it on towards Departures.	ເອນທິຕີໃນ {block} ບໍ່ສາມາດໄປຮອດບລັອກ ການອອກ ໄດ້ ເຊື່ອມມັນຕໍ່ໄປຫາ ການອອກ
+	Set the “{state}” power of {block} to a number of kilowatts, 0 or more.	ຕັ້ງກຳລັງໄຟ “{state}” ຂອງ {block} ເປັນຕົວເລກກິໂລວັດ 0 ຫຼືຫຼາຍກວ່ານັ້ນ
+	Set the warm-up of the experiment to 0 or more.	ຕັ້ງໄລຍະອຸ່ນເຄື່ອງຂອງການທົດລອງເປັນ 0 ຫຼືຫຼາຍກວ່ານັ້ນ
+	Set the duration of the experiment to more than 0.	ຕັ້ງໄລຍະເວລາຂອງການທົດລອງໃຫ້ຫຼາຍກວ່າ 0
+	Set the number of runs of the experiment to 1 or more.	ຕັ້ງຈຳນວນຮອບຈຳລອງຊ້ຳຂອງການທົດລອງເປັນ 1 ຫຼືຫຼາຍກວ່ານັ້ນ
+	Set the layout scale (length units per drawing unit) to a finite number above 0.	ຕັ້ງມາດຕາສ່ວນຂອງແຜນຜັງ (ຫົວໜ່ວຍຄວາມຍາວຕໍ່ໜຶ່ງຫົວໜ່ວຍແຕ້ມ) ເປັນຕົວເລກທີ່ມີຄ່າຈຳກັດ ແລະ ຫຼາຍກວ່າ 0
+	A property of {block} has no name. Give it a name, or remove it.	ຄຸນສົມບັດໜຶ່ງຂອງ {block} ບໍ່ມີຊື່ ຕັ້ງຊື່ໃຫ້ມັນ ຫຼື ລຶບມັນ
+	{block} sets the property “{name}” twice. Keep one of them.	{block} ຕັ້ງຄຸນສົມບັດ “{name}” ສອງເທື່ອ ເກັບໄວ້ອັນດຽວ
+	The property “{name}” of {block} needs shares that are not negative and add up to more than 0. Change the shares.	ຄຸນສົມບັດ “{name}” ຂອງ {block} ຕ້ອງມີສັດສ່ວນທີ່ບໍ່ເປັນລົບ ແລະ ຜົນບວກຫຼາຍກວ່າ 0 ປ່ຽນສັດສ່ວນ
+	The property “{name}” has the type “{type2}” on {block} but “{type}” on another block. Give it one type everywhere.	ຄຸນສົມບັດ “{name}” ມີປະເພດ “{type2}” ທີ່ {block} ແຕ່ເປັນ “{type}” ທີ່ບລັອກອື່ນ ໃຫ້ມີປະເພດດຽວກັນທຸກບ່ອນ
+	The value of the property “{name}” on {block} does not fit its type, “{type}”. Change the value or the type.	ຄ່າຂອງຄຸນສົມບັດ “{name}” ທີ່ {block} ບໍ່ກົງກັບປະເພດຂອງມັນ ຄື “{type}” ປ່ຽນຄ່າ ຫຼື ປະເພດ
+	The expression for the property “{name}” on {block} cannot be used: {error}. Correct “{expression}”.	ນິພົດຂອງຄຸນສົມບັດ “{name}” ທີ່ {block} ໃຊ້ບໍ່ໄດ້: {error} ແກ້ “{expression}”
+	{block} reads the property “{name}”, which no block sets, so it would read as empty. Set it on an earlier block, or correct the name.	{block} ອ່ານຄຸນສົມບັດ “{name}” ເຊິ່ງບໍ່ມີບລັອກໃດຕັ້ງໄວ້ ມັນຈຶ່ງຈະອ່ານໄດ້ເປັນຄ່າວ່າງ ຕັ້ງມັນທີ່ບລັອກກ່ອນໜ້າ ຫຼື ແກ້ຊື່
+	The setup of {block} has times for particular changes but no property to watch. Choose a property under “Only when this property changes”.	ການຕັ້ງເຄື່ອງຂອງ {block} ມີເວລາສຳລັບການປ່ຽນແປງສະເພາະ ແຕ່ບໍ່ມີຄຸນສົມບັດໃຫ້ຕິດຕາມ ເລືອກຄຸນສົມບັດພາຍໃຕ້ “ສະເພາະເມື່ອຄຸນສົມບັດນີ້ປ່ຽນ”
+	{block} has times for particular values but no property to read them from. Choose a property under “Service time by property”.	{block} ມີເວລາສຳລັບຄ່າສະເພາະ ແຕ່ບໍ່ມີຄຸນສົມບັດໃຫ້ອ່ານຄ່າ ເລືອກຄຸນສົມບັດພາຍໃຕ້ “ເວລາໃຫ້ບໍລິການຕາມຄຸນສົມບັດ”
+	{block} has two times for the value “{value}”. Keep one.	{block} ມີສອງເວລາສຳລັບຄ່າ “{value}” ເກັບໄວ້ອັນດຽວ
+	Set the time of {block} for the value “{value}” to a mean of 0 or more.	ຕັ້ງເວລາຂອງ {block} ສຳລັບຄ່າ “{value}” ໃຫ້ມີຄ່າສະເລ່ຍ 0 ຫຼືຫຼາຍກວ່ານັ້ນ
+	The scrap at {block} counts against {other}, which is not a task with a resource. Choose a task with a resource.	ຂອງເສຍທີ່ {block} ນັບເປັນຂອງ {other} ເຊິ່ງບໍ່ແມ່ນໜ້າວຽກທີ່ຕ້ອງໃຊ້ຊັບພະຍາກອນ ເລືອກໜ້າວຽກທີ່ຕ້ອງໃຊ້ຊັບພະຍາກອນ
+	Set “Planned run time per item” of {block} to a mean above 0.	ຕັ້ງ “ເວລາເດີນເຄື່ອງຕາມແຜນຕໍ່ຊິ້ນ” ຂອງ {block} ໃຫ້ມີຄ່າສະເລ່ຍຫຼາຍກວ່າ 0
+	Set “Time before giving up” of {block} to a mean of 0 or more.	ຕັ້ງ “ເວລາກ່ອນເຊົາລໍຖ້າ” ຂອງ {block} ໃຫ້ມີຄ່າສະເລ່ຍ 0 ຫຼືຫຼາຍກວ່ານັ້ນ
+	The flow {flow} is ticked “Gave up”, but only a task with a resource and a “Time before giving up” sends entities that give up. Untick it, or set a “Time before giving up” on {block}.	ເສັ້ນທາງ {flow} ຖືກເລືອກ “ຈຳນວນທີ່ເຊົາລໍຖ້າ” ແຕ່ມີພຽງໜ້າວຽກທີ່ຕ້ອງໃຊ້ຊັບພະຍາກອນທີ່ມີ “ເວລາກ່ອນເຊົາລໍຖ້າ” ເທົ່ານັ້ນທີ່ສົ່ງເອນທິຕີທີ່ເຊົາລໍຖ້າ ເອົາການເລືອກອອກ ຫຼື ຕັ້ງ “ເວລາກ່ອນເຊົາລໍຖ້າ” ທີ່ {block}
+	{count} flows out of {block} are ticked “{way}”; at most one can be. Untick all but one.	ມີ {count} ເສັ້ນທາງອອກຈາກ {block} ທີ່ຖືກເລືອກ “{way}” ເລືອກໄດ້ຫຼາຍສຸດອັນດຽວ ເອົາການເລືອກອອກຈາກທຸກອັນຍົກເວັ້ນອັນດຽວ
+	The flow {flow} is ticked “Turned away”, but only a task with a resource and a limited waiting room turns entities away. Untick it, or limit the waiting room of {block}.	ເສັ້ນທາງ {flow} ຖືກເລືອກ “ຖືກປະຕິເສດ” ແຕ່ມີພຽງໜ້າວຽກທີ່ຕ້ອງໃຊ້ຊັບພະຍາກອນທີ່ມີຫ້ອງລໍຖ້າຈຳກັດເທົ່ານັ້ນທີ່ປະຕິເສດເອນທິຕີ ເອົາການເລືອກອອກ ຫຼື ຈຳກັດຫ້ອງລໍຖ້າຂອງ {block}
+	The flow {flow} is ticked both “Gave up” and “Turned away”. Keep one of them.	ເສັ້ນທາງ {flow} ຖືກເລືອກທັງ “ຈຳນວນທີ່ເຊົາລໍຖ້າ” ແລະ “ຖືກປະຕິເສດ” ເກັບໄວ້ອັນດຽວ
+	Set every chance of joining in the balking table of {block} to a number from 0 to 1.	ຕັ້ງຄວາມເປັນໄປໄດ້ໃນການເຂົ້າຮ່ວມທຸກລາຍການໃນຕາຕະລາງການບໍ່ເຂົ້າແຖວຂອງ {block} ເປັນຕົວເລກຕັ້ງແຕ່ 0 ເຖິງ 1
+	Put the rows of the balking table of {block} in increasing order of “Number waiting”.	ຈັດລາຍການໃນຕາຕະລາງການບໍ່ເຂົ້າແຖວຂອງ {block} ຕາມລຳດັບ “ຈຳນວນທີ່ລໍຖ້າ” ຈາກນ້ອຍຫາຫຼາຍ
+	The flow {flow} is ticked “Balked”, but only a task with a resource and balking sends entities that balk. Untick it, or turn on balking for {block}.	ເສັ້ນທາງ {flow} ຖືກເລືອກ “ບໍ່ເຂົ້າແຖວ” ແຕ່ມີພຽງໜ້າວຽກທີ່ຕ້ອງໃຊ້ຊັບພະຍາກອນທີ່ມີການບໍ່ເຂົ້າແຖວເທົ່ານັ້ນທີ່ສົ່ງເອນທິຕີທີ່ບໍ່ເຂົ້າແຖວ ເອົາການເລືອກອອກ ຫຼື ເປີດການບໍ່ເຂົ້າແຖວໃຫ້ {block}
+	The flow {flow} is ticked “Balked” and also “Gave up” or “Turned away”. Keep one of them.	ເສັ້ນທາງ {flow} ຖືກເລືອກ “ບໍ່ເຂົ້າແຖວ” ແລະ ພ້ອມກັນນັ້ນ “ຈຳນວນທີ່ເຊົາລໍຖ້າ” ຫຼື “ຖືກປະຕິເສດ” ເກັບໄວ້ອັນດຽວ
+	The waiting room of {block} is set by calendar or per working server, but has no number of places, so it is unlimited. Give it a number of places, or make it fixed.	ຫ້ອງລໍຖ້າຂອງ {block} ຖືກຕັ້ງຕາມປະຕິທິນ ຫຼື ຕໍ່ແມ່ຂ່າຍທີ່ໃຊ້ງານຢູ່ ແຕ່ບໍ່ມີຈຳນວນບ່ອນ ມັນຈຶ່ງບໍ່ຈຳກັດ ໃຫ້ຈຳນວນບ່ອນ ຫຼື ຕັ້ງໃຫ້ຄົງທີ່
+	The waiting room of {block} is set by calendar, but no calendar has a value. Add a value for a calendar, or make the waiting room fixed.	ຫ້ອງລໍຖ້າຂອງ {block} ຖືກຕັ້ງຕາມປະຕິທິນ ແຕ່ບໍ່ມີປະຕິທິນໃດມີຄ່າ ເພີ່ມຄ່າໃຫ້ປະຕິທິນ ຫຼື ຕັ້ງຫ້ອງລໍຖ້າໃຫ້ຄົງທີ່
+	Set “Fails above, waiting per working server” of {block} to a number of 0 or more.	ຕັ້ງ “ບໍ່ຜ່ານເມື່ອເກີນ (ຜູ້ລໍຖ້າຕໍ່ແມ່ຂ່າຍທີ່ໃຊ້ງານຢູ່)” ຂອງ {block} ເປັນຕົວເລກ 0 ຫຼືຫຼາຍກວ່ານັ້ນ
+	Set “Check every” of {block} to a mean above 0.	ຕັ້ງ “ກວດທຸກໆ” ຂອງ {block} ໃຫ້ມີຄ່າສະເລ່ຍຫຼາຍກວ່າ 0
+	Set the demand of {block} to a number of parts above 0.	ຕັ້ງຄວາມຕ້ອງການຂອງ {block} ເປັນຈຳນວນຊິ້ນທີ່ຫຼາຍກວ່າ 0
+	The demand of {block} is per shift but names no calendar to say when the shifts are. Choose a calendar.	ຄວາມຕ້ອງການຂອງ {block} ເປັນຕໍ່ກະ ແຕ່ບໍ່ໄດ້ລະບຸປະຕິທິນເພື່ອບອກວ່າກະຢູ່ເມື່ອໃດ ເລືອກປະຕິທິນ
+	The demand of {block} names a calendar that does not exist. Choose a calendar that exists.	ຄວາມຕ້ອງການຂອງ {block} ລະບຸປະຕິທິນທີ່ບໍ່ມີຢູ່ ເລືອກປະຕິທິນທີ່ມີຢູ່
+	The probability {value} on the flow {flow} is not from 0 to 1. Enter a probability from 0 to 1.	ຄວາມເປັນໄປໄດ້ {value} ທີ່ເສັ້ນທາງ {flow} ບໍ່ຢູ່ລະຫວ່າງ 0 ເຖິງ 1 ໃສ່ຄວາມເປັນໄປໄດ້ຕັ້ງແຕ່ 0 ເຖິງ 1
+	The probabilities of the flows out of {block} add up to {sum}, not 1, so they are used in proportion. Change them to add up to 1 if that is not what you want.	ຜົນບວກຄວາມເປັນໄປໄດ້ຂອງເສັ້ນທາງອອກຈາກ {block} ແມ່ນ {sum} ບໍ່ແມ່ນ 1 ມັນຈຶ່ງຖືກໃຊ້ຕາມສັດສ່ວນ ຖ້າບໍ່ຕ້ອງການແບບນັ້ນ ໃຫ້ປ່ຽນໃຫ້ຜົນບວກເປັນ 1
+	The condition on the flow {flow} cannot be used: {error}. Correct “{expression}”.	ເງື່ອນໄຂຂອງເສັ້ນທາງ {flow} ໃຊ້ບໍ່ໄດ້: {error} ແກ້ “{expression}”
+	The condition on the flow {flow} is ignored, because only flows out of a Decision block choose a route. Remove the condition.	ເງື່ອນໄຂຂອງເສັ້ນທາງ {flow} ຖືກຂ້າມ ເພາະມີພຽງເສັ້ນທາງອອກຈາກບລັອກ ການຕັດສິນໃຈ ເທົ່ານັ້ນທີ່ເລືອກທາງ ລຶບເງື່ອນໄຂ
+	The probability on the flow {flow} is ignored, because only flows out of a Decision block choose a route. Remove the probability.	ຄວາມເປັນໄປໄດ້ຂອງເສັ້ນທາງ {flow} ຖືກຂ້າມ ເພາະມີພຽງເສັ້ນທາງອອກຈາກບລັອກ ການຕັດສິນໃຈ ເທົ່ານັ້ນທີ່ເລືອກທາງ ລຶບຄວາມເປັນໄປໄດ້
+	The condition on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the condition.	ເງື່ອນໄຂຂອງເສັ້ນທາງ {flow} ຖືກຂ້າມ ເພາະ ການຕັດສິນໃຈ ສົ່ງເອນທິຕີໄປແຖວຄອຍທີ່ສັ້ນທີ່ສຸດ ລຶບເງື່ອນໄຂ
+	The probability on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the probability.	ຄວາມເປັນໄປໄດ້ຂອງເສັ້ນທາງ {flow} ຖືກຂ້າມ ເພາະ ການຕັດສິນໃຈ ສົ່ງເອນທິຕີໄປແຖວຄອຍທີ່ສັ້ນທີ່ສຸດ ລຶບຄວາມເປັນໄປໄດ້
+	The default on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the default.	ຄ່າເລີ່ມຕົ້ນຂອງເສັ້ນທາງ {flow} ຖືກຂ້າມ ເພາະ ການຕັດສິນໃຈ ສົ່ງເອນທິຕີໄປແຖວຄອຍທີ່ສັ້ນທີ່ສຸດ ລຶບຄ່າເລີ່ມຕົ້ນ
+	The probability on the flow {flow} is ignored, because the Decision routes by condition. Remove the probability.	ຄວາມເປັນໄປໄດ້ຂອງເສັ້ນທາງ {flow} ຖືກຂ້າມ ເພາະ ການຕັດສິນໃຈ ເລືອກທາງຕາມເງື່ອນໄຂ ລຶບຄວາມເປັນໄປໄດ້
+	The default flow of {block} is not one of its own flows out. Choose one of the flows out of {block} as the default.	ເສັ້ນທາງເລີ່ມຕົ້ນຂອງ {block} ບໍ່ແມ່ນໜຶ່ງໃນເສັ້ນທາງອອກຂອງມັນເອງ ເລືອກໜຶ່ງໃນເສັ້ນທາງອອກຈາກ {block} ເປັນເສັ້ນທາງເລີ່ມຕົ້ນ
+	{block} routes by condition but has no default flow, so an entity for which no condition holds leaves the model here. Choose a default flow.	{block} ເລືອກທາງຕາມເງື່ອນໄຂ ແຕ່ບໍ່ມີເສັ້ນທາງເລີ່ມຕົ້ນ ເອນທິຕີທີ່ບໍ່ມີເງື່ອນໄຂໃດເປັນຈິງຈຶ່ງອອກຈາກແບບຈຳລອງຢູ່ບ່ອນນີ້ ເລືອກເສັ້ນທາງເລີ່ມຕົ້ນ
+	{block} diverts entities but has no default flow, so an entity whose way is full has nowhere else to go. Choose a default flow.	{block} ປ່ຽນເສັ້ນທາງເອນທິຕີ ແຕ່ບໍ່ມີເສັ້ນທາງເລີ່ມຕົ້ນ ເອນທິຕີທີ່ທາງຂອງມັນເຕັມຈຶ່ງບໍ່ມີບ່ອນອື່ນໄປ ເລືອກເສັ້ນທາງເລີ່ມຕົ້ນ
+	{block} waits for an entity on the flow {flow}, which none can reach, so it never sends one on. Remove that flow, or connect it to a block that entities reach.	{block} ລໍເອນທິຕີຢູ່ເສັ້ນທາງ {flow} ເຊິ່ງບໍ່ມີອັນໃດໄປຮອດ ມັນຈຶ່ງບໍ່ສົ່ງຫຍັງຕໍ່ ລຶບເສັ້ນທາງນັ້ນ ຫຼື ເຊື່ອມມັນກັບບລັອກທີ່ເອນທິຕີໄປຮອດ
+	{block} has a limited waiting room and is fed through {gateway}. While it is full, {gateway} holds up every entity behind it, and they wait before it without limit. Remove the gateway before {block}, or remove the limit.	{block} ມີຫ້ອງລໍຖ້າຈຳກັດ ແລະ ຖືກປ້ອນຜ່ານ {gateway} ເມື່ອເຕັມ {gateway} ຈະຖ່ວງເອນທິຕີທັງໝົດທີ່ຢູ່ຫຼັງມັນ ແລະ ເອນທິຕີເຫຼົ່ານັ້ນລໍຖ້າກ່ອນມັນໂດຍບໍ່ມີຂີດຈຳກັດ ລຶບປະຕູທາງກ່ອນ {block} ຫຼື ລຶບຂີດຈຳກັດ
+	The limited waiting rooms of {loop} feed each other in a loop, so when all of them are full the loop deadlocks. Remove the limit on one of them, or break the loop.	ຫ້ອງລໍຖ້າທີ່ຈຳກັດຂອງ {loop} ປ້ອນກັນເປັນວົງ ເມື່ອເຕັມທັງໝົດ ວົງຈະຕິດຂັດ ລຶບຂີດຈຳກັດຂອງອັນໜຶ່ງ ຫຼື ທຳລາຍວົງ
+	The pool {block} has no units. Give it at least 1 unit.	ກຸ່ມຊັບພະຍາກອນ {block} ບໍ່ມີໜ່ວຍ ໃຫ້ຢ່າງໜ້ອຍ 1 ໜ່ວຍ
+	{block} names no resource it needs. Add one under “Needs”.	{block} ບໍ່ໄດ້ລະບຸຊັບພະຍາກອນທີ່ຕ້ອງໃຊ້ ເພີ່ມອັນໜຶ່ງພາຍໃຕ້ “ສິ່ງທີ່ຕ້ອງໃຊ້”
+	{block} needs a resource pool that does not exist. Choose a pool that exists.	{block} ຕ້ອງໃຊ້ກຸ່ມຊັບພະຍາກອນທີ່ບໍ່ມີຢູ່ ເລືອກກຸ່ມທີ່ມີຢູ່
+	{block} needs units with the roles {roles}, which no pool has. Give a pool those roles, or change what {block} needs.	{block} ຕ້ອງໃຊ້ໜ່ວຍທີ່ມີບົດບາດ {roles} ເຊິ່ງບໍ່ມີກຸ່ມໃດມີ ໃຫ້ບົດບາດເຫຼົ່ານັ້ນແກ່ກຸ່ມໜຶ່ງ ຫຼື ປ່ຽນສິ່ງທີ່ {block} ຕ້ອງໃຊ້
+	{block} needs {needed} units at once, but at most {available} exist, so this can never be met. Ask for fewer units, or add units to the pool.	{block} ຕ້ອງການ {needed} ໜ່ວຍພ້ອມກັນ ແຕ່ມີຫຼາຍສຸດພຽງ {available} ໜ່ວຍ ຈຶ່ງບໍ່ມີທາງຕອບສະໜອງໄດ້ ຂໍໜ່ວຍໃຫ້ໜ້ອຍລົງ ຫຼື ເພີ່ມໜ່ວຍໃຫ້ກຸ່ມ
+	Set the priority of {block} to a finite number, not {value}.	ຕັ້ງລຳດັບຄວາມສຳຄັນຂອງ {block} ເປັນຕົວເລກທີ່ມີຄ່າຈຳກັດ ບໍ່ແມ່ນ {value}
+	No task uses the pool {block}. Add it to a task's needs, or remove the pool.	ບໍ່ມີໜ້າວຽກໃດໃຊ້ກຸ່ມຊັບພະຍາກອນ {block} ເພີ່ມມັນໃສ່ສິ່ງທີ່ໜ້າວຽກຕ້ອງໃຊ້ ຫຼື ລຶບກຸ່ມ
+	{block} has a value for a calendar that does not exist. Choose a calendar that exists, or remove the value.	{block} ມີຄ່າສຳລັບປະຕິທິນທີ່ບໍ່ມີຢູ່ ເລືອກປະຕິທິນທີ່ມີຢູ່ ຫຼື ລຶບຄ່ານັ້ນ
+	The calendar {block} has no entries, so it is never active. Add an entry.	ປະຕິທິນ {block} ບໍ່ມີລາຍການ ຈຶ່ງບໍ່ເຄີຍເຮັດວຽກ ເພີ່ມລາຍການ
+	{block} allows no arrivals outside the calendars but names no calendar, so it never creates entities. Add arrivals by calendar, or allow arrivals outside calendars.	{block} ບໍ່ອະນຸຍາດການມາຮອດນອກປະຕິທິນ ແຕ່ບໍ່ໄດ້ລະບຸປະຕິທິນ ມັນຈຶ່ງບໍ່ເຄີຍສ້າງເອນທິຕີ ເພີ່ມການມາຮອດຕາມປະຕິທິນ ຫຼື ອະນຸຍາດການມາຮອດນອກປະຕິທິນ
+	Set the batch size of {block} to 1 or more.	ຕັ້ງຂະໜາດຊຸດຂອງ {block} ເປັນ 1 ຫຼືຫຼາຍກວ່ານັ້ນ
+	Set “{field}” of the conveyor {block} to a finite number above 0.	ຕັ້ງ “{field}” ຂອງສາຍພານລຳລຽງ {block} ເປັນຕົວເລກທີ່ມີຄ່າຈຳກັດ ແລະ ຫຼາຍກວ່າ 0
+	Set “{field}” of the conveyor {block} to a finite number of 0 or more.	ຕັ້ງ “{field}” ຂອງສາຍພານລຳລຽງ {block} ເປັນຕົວເລກທີ່ມີຄ່າຈຳກັດ ແລະ ເປັນ 0 ຫຼືຫຼາຍກວ່ານັ້ນ
+	Set “{field}” of the conveyor {block} to a finite number other than 0.	ຕັ້ງ “{field}” ຂອງສາຍພານລຳລຽງ {block} ເປັນຕົວເລກທີ່ມີຄ່າຈຳກັດ ທີ່ບໍ່ແມ່ນ 0
+	The conveyor {block} is {length} long but each entity takes {pitch} (item length plus gap), so not even one fits. Lengthen the conveyor, or shorten the item or the gap.	ສາຍພານລຳລຽງ {block} ຍາວ {length} ແຕ່ເອນທິຕີແຕ່ລະອັນໃຊ້ {pitch} (ຄວາມຍາວຂອງຊິ້ນງານບວກຊ່ອງວ່າງ) ຈຶ່ງວາງໄດ້ບໍ່ແມ້ແຕ່ອັນດຽວ ເພີ່ມຄວາມຍາວສາຍພານ ຫຼື ຫຍໍ້ຊິ້ນງານ ຫຼື ຊ່ອງວ່າງ
+	The drawn path of the conveyor {block} is {path_length} long, but its “Length” is {length}, so the drawing and the run disagree. Make “Length” match the path, or change the shape.	ເສັ້ນທາງທີ່ແຕ້ມຂອງສາຍພານລຳລຽງ {block} ຍາວ {path_length} ແຕ່ “ຄວາມຍາວ” ຂອງມັນແມ່ນ {length} ຮູບແຕ້ມກັບຮອບຈຳລອງຊ້ຳຈຶ່ງບໍ່ກົງກັນ ປັບ “ຄວາມຍາວ” ໃຫ້ກົງກັບເສັ້ນທາງ ຫຼື ປ່ຽນຮູບຮ່າງ
+	{block} is a transport, which StochCraft does not simulate yet. Remove it to run the model.	{block} ເປັນການຂົນສົ່ງ ເຊິ່ງ StochCraft ຍັງບໍ່ຈຳລອງ ລຶບມັນເພື່ອປະມວນຜົນແບບຈຳລອງ
+	The pool {pool} of the transport {block} does not exist. Choose a pool that exists.	ກຸ່ມຊັບພະຍາກອນ {pool} ຂອງການຂົນສົ່ງ {block} ບໍ່ມີຢູ່ ເລືອກກຸ່ມທີ່ມີຢູ່
+	The pool {pool} of the transport {block} is not mobile. Give the pool speeds and a home.	ກຸ່ມຊັບພະຍາກອນ {pool} ຂອງການຂົນສົ່ງ {block} ບໍ່ເຄື່ອນທີ່ ໃຫ້ຄວາມໄວ ແລະ ຈຸດຕັ້ງຕົ້ນແກ່ກຸ່ມ
+	Set “{field}” of the pool {block} to a finite number above 0.	ຕັ້ງ “{field}” ຂອງກຸ່ມຊັບພະຍາກອນ {block} ເປັນຕົວເລກທີ່ມີຄ່າຈຳກັດ ແລະ ຫຼາຍກວ່າ 0
+	The home of the pool {block} is not a block of the model. Choose a block as its home.	ຈຸດຕັ້ງຕົ້ນຂອງກຸ່ມຊັບພະຍາກອນ {block} ບໍ່ແມ່ນບລັອກຂອງແບບຈຳລອງ ເລືອກບລັອກເປັນຈຸດຕັ້ງຕົ້ນຂອງມັນ
+	The transport {block} needs one block before it, where it picks up, and one after it, where it drops off, but has {inputs} before and {outputs} after. Connect it to one block on each side.	ການຂົນສົ່ງ {block} ຕ້ອງມີບລັອກໜຶ່ງກ່ອນມັນ ບ່ອນທີ່ມັນຮັບ ແລະ ໜຶ່ງຫຼັງມັນ ບ່ອນທີ່ມັນສົ່ງ ແຕ່ມີ {inputs} ກ່ອນ ແລະ {outputs} ຫຼັງ ເຊື່ອມກັບບລັອກໜຶ່ງໃນແຕ່ລະດ້ານ
+	{other} has no place on the canvas, so the distances for {block} are not known. Place {other} on the canvas.	{other} ບໍ່ມີບ່ອນຢູ່ເທິງພື້ນຜິວຫຼັກ ດັ່ງນັ້ນບໍ່ຮູ້ໄລຍະທາງຂອງ {block} ວາງ {other} ເທິງພື້ນຜິວຫຼັກ
+	The flow {flow} asks for no entities. Set its “Units” to 1 or more.	ເສັ້ນທາງ {flow} ບໍ່ຂໍເອນທິຕີເລີຍ ຕັ້ງ “ຈຳນວນໜ່ວຍ” ຂອງມັນເປັນ 1 ຫຼືຫຼາຍກວ່ານັ້ນ
+	The “Units” on the flow {flow} is ignored, because only a Split or join block takes several entities from one flow. Remove it.	“ຈຳນວນໜ່ວຍ” ຂອງເສັ້ນທາງ {flow} ຖືກຂ້າມ ເພາະມີພຽງບລັອກ ແຍກ ຫຼື ລວມ ເທົ່ານັ້ນທີ່ເອົາຫຼາຍເອນທິຕີຈາກເສັ້ນທາງດຽວ ລຶບມັນ
+	No block makes batches, so {block} passes every entity through. Add a Batch block before it, or remove {block}.	ບໍ່ມີບລັອກໃດສ້າງຊຸດ {block} ຈຶ່ງປ່ອຍທຸກເອນທິຕີຜ່ານໄປ ເພີ່ມບລັອກຊຸດກ່ອນມັນ ຫຼື ລຶບ {block}
+	The stop condition names a block that does not exist. Choose a block that exists.	ເງື່ອນໄຂຢຸດລະບຸບລັອກທີ່ບໍ່ມີຢູ່ ເລືອກບລັອກທີ່ມີຢູ່
+	Set the count of the stop condition for {block} to 1 or more.	ຕັ້ງຈຳນວນຂອງເງື່ອນໄຂຢຸດສຳລັບ {block} ເປັນ 1 ຫຼືຫຼາຍກວ່ານັ້ນ
+	The stop condition waits for {block} to empty, but only a task can empty. Choose a task.	ເງື່ອນໄຂຢຸດລໍໃຫ້ {block} ວ່າງ ແຕ່ມີພຽງໜ້າວຽກທີ່ວ່າງໄດ້ ເລືອກໜ້າວຽກ
+	The stop condition at {block} can be met before the warm-up ends. A run that stops during the warm-up has no statistics after it and is left out of the results. Shorten the warm-up, or stop later.	ເງື່ອນໄຂຢຸດທີ່ {block} ອາດບັນລຸກ່ອນໄລຍະອຸ່ນເຄື່ອງສິ້ນສຸດ ຮອບຈຳລອງຊ້ຳທີ່ຢຸດໃນໄລຍະອຸ່ນເຄື່ອງຈະບໍ່ມີສະຖິຕິຫຼັງຈາກນັ້ນ ແລະ ຖືກຕັດອອກຈາກຜົນ ຫຍໍ້ໄລຍະອຸ່ນເຄື່ອງ ຫຼື ຢຸດຊ້າລົງ
+	Every run stopped before the warm-up ended, so no metric is reported. Shorten the warm-up, or stop later.	ທຸກຮອບຈຳລອງຊ້ຳຢຸດກ່ອນໄລຍະອຸ່ນເຄື່ອງສິ້ນສຸດ ຈຶ່ງບໍ່ລາຍງານຕົວຊີ້ວັດໃດ ຫຍໍ້ໄລຍະອຸ່ນເຄື່ອງ ຫຼື ຢຸດຊ້າລົງ
+	{replications} of {of} runs stopped before the warm-up ended, so their statistics are left out of every metric. Shorten the warm-up, or stop later.	{replications} ຈາກ {of} ຮອບຈຳລອງຊ້ຳຢຸດກ່ອນໄລຍະອຸ່ນເຄື່ອງສິ້ນສຸດ ສະຖິຕິຂອງພວກມັນຈຶ່ງຖືກຕັດອອກຈາກທຸກຕົວຊີ້ວັດ ຫຍໍ້ໄລຍະອຸ່ນເຄື່ອງ ຫຼື ຢຸດຊ້າລົງ
+	{block} is offered {load}% of the work its units can do, so its waiting room grows without limit and the results describe no steady state. Add units, or shorten the service.	{block} ໄດ້ຮັບ {load}% ຂອງວຽກທີ່ໜ່ວຍຂອງມັນເຮັດໄດ້ ຫ້ອງລໍຖ້າຂອງມັນຈຶ່ງໃຫຍ່ຂຶ້ນບໍ່ຈຳກັດ ແລະ ຜົນບໍ່ໄດ້ບອກສະພາວະຄົງທີ່ ເພີ່ມໜ່ວຍ ຫຼື ຫຍໍ້ການບໍລິການ
+	{block} is busy {utilisation}% of the time, and at the end at least {backlog} entities are still waiting against {left} that left. Work arrives faster than it is done, so the results describe no steady state. Add units, or shorten the service.	{block} ບໍ່ວ່າງ {utilisation}% ຂອງເວລາ ແລະ ໃນທີ່ສຸດຍັງມີຢ່າງໜ້ອຍ {backlog} ເອນທິຕີລໍຖ້າຢູ່ ໃນຂະນະທີ່ອອກໄປແລ້ວ {left} ວຽກມາໄວກວ່າທີ່ເຮັດ ຜົນຈຶ່ງບໍ່ໄດ້ບອກສະພາວະຄົງທີ່ ເພີ່ມໜ່ວຍ ຫຼື ຫຍໍ້ການບໍລິການ
+	The experiment has one run, so its results cannot be told from chance. Set the number of runs to at least 2, and usually 10 or more.	ການທົດລອງມີຮອບຈຳລອງຊ້ຳດຽວ ຜົນຂອງມັນຈຶ່ງແຍກຈາກຄວາມບັງເອີນບໍ່ໄດ້ ຕັ້ງຈຳນວນຮອບຈຳລອງຊ້ຳຢ່າງໜ້ອຍ 2 ແລະ ປົກກະຕິ 10 ຂຶ້ນໄປ
+	{block} has a three-point estimate but no time to fit it to, so the estimate is ignored. Remove the estimate.	{block} ມີການປະມານສາມຄ່າ ແຕ່ບໍ່ມີເວລາໃຫ້ເຂົ້າກັບ ການປະມານຈຶ່ງຖືກຂ້າມ ລຶບການປະມານ
+	The three-point estimate of {block} cannot be fitted: every point must be a finite number. Correct the points.	ການປະມານສາມຄ່າຂອງ {block} ເຂົ້າກັບບໍ່ໄດ້: ທຸກຄ່າຕ້ອງເປັນຕົວເລກທີ່ມີຄ່າຈຳກັດ ແກ້ຄ່າ
+	The three-point estimate of {block} cannot be fitted: the points must be in order, minimum, most likely, then maximum or 95th percentile. Correct the points.	ການປະມານສາມຄ່າຂອງ {block} ເຂົ້າກັບບໍ່ໄດ້: ຄ່າຕ້ອງຢູ່ຕາມລຳດັບ ຄ່າຕ່ຳສຸດ, ຄ່າທີ່ເປັນໄປໄດ້ຫຼາຍທີ່ສຸດ ແລ້ວຄ່າສູງສຸດ ຫຼື ເປີເຊັນໄທລ໌ທີ 95 ແກ້ຄ່າ
+	The three-point estimate of {block} cannot be fitted: log-normal and Weibull estimates have no maximum. Give a 95th percentile instead.	ການປະມານສາມຄ່າຂອງ {block} ເຂົ້າກັບບໍ່ໄດ້: ການປະມານແບບລອກ-ນໍມອນ ແລະ ໄວບູນບໍ່ມີຄ່າສູງສຸດ ໃຫ້ເປີເຊັນໄທລ໌ທີ 95 ແທນ
+	The time of {block} is no longer the one fitted from its three-point estimate. Fit it again, or remove the estimate.	ເວລາຂອງ {block} ບໍ່ແມ່ນຄ່າທີ່ເຂົ້າກັບຈາກການປະມານສາມຄ່າຂອງມັນອີກຕໍ່ໄປ ເຂົ້າກັບໃໝ່ ຫຼື ລຶບການປະມານ
+	In “{field}” of {block}, the normal distribution draws below 0 more than 1 time in 100, and each such draw counts as 0, so the times are longer on average than its mean. Use a truncated normal with a minimum of 0, or a log-normal.	ໃນ “{field}” ຂອງ {block} ການແຈກຢາຍນໍມອນສຸ່ມໄດ້ຄ່າຕ່ຳກວ່າ 0 ເກີນ 1 ຄັ້ງໃນ 100 ຄັ້ງ ແລະ ແຕ່ລະຄັ້ງນັບເປັນ 0 ເວລາຈຶ່ງຍາວກວ່າຄ່າສະເລ່ຍຂອງມັນໂດຍສະເລ່ຍ ໃຊ້ນໍມອນແບບຕັດຂອບທີ່ມີຄ່າຕ່ຳສຸດ 0 ຫຼື ລອກ-ນໍມອນ
+	The entities of {block} do not add up: {came} came in or were inside at the start, but {went} left, were lost, gave up or are still inside.	ເອນທິຕີຂອງ {block} ບໍ່ລົງຕົວ: {came} ເຂົ້າມາ ຫຼື ຢູ່ຂ້າງໃນຕອນເລີ່ມ ແຕ່ {went} ອອກໄປ, ສູນເສຍ, ເຊົາລໍຖ້າ ຫຼື ຍັງຢູ່ຂ້າງໃນ
+	The entities of the model do not add up: {came} were created or inside at the start, but {went} reached Departures, left the model elsewhere or are still inside.	ເອນທິຕີຂອງແບບຈຳລອງບໍ່ລົງຕົວ: {came} ຖືກສ້າງ ຫຼື ຢູ່ຂ້າງໃນຕອນເລີ່ມ ແຕ່ {went} ໄປຮອດ ການອອກ, ອອກຈາກແບບຈຳລອງບ່ອນອື່ນ ຫຼື ຍັງຢູ່ຂ້າງໃນ
+	No entity left the model, of {came} created or inside at the start. Check that the routing leads to Departures and that the run is long enough for an entity to get through.	ບໍ່ມີເອນທິຕີອອກຈາກແບບຈຳລອງເລີຍ ຈາກ {came} ທີ່ຖືກສ້າງ ຫຼື ຢູ່ຂ້າງໃນຕອນເລີ່ມ ກວດວ່າການນຳທາງໄປຮອດ ການອອກ ແລະ ຮອບຈຳລອງຊ້ຳຍາວພໍໃຫ້ເອນທິຕີຜ່ານໄດ້
+	Little's law does not hold at {block}: the time-average number inside was {mean}, but the entities' own times inside give {from_stays}.	ກົດຂອງລິດເທິນບໍ່ເປັນຈິງທີ່ {block}: ຄ່າສະເລ່ຍຕາມເວລາຂອງຈຳນວນຂ້າງໃນແມ່ນ {mean} ແຕ່ເວລາຢູ່ຂ້າງໃນຂອງເອນທິຕີເອງໃຫ້ {from_stays}
+	The utilisation of {block} counts {busy} units busy on average, but {working} were processing or setting up: units idle, blocked, off shift, failed or restarting were counted busy.	ອັດຕາການນຳໃຊ້ຂອງ {block} ນັບ {busy} ໜ່ວຍວ່າບໍ່ວ່າງໂດຍສະເລ່ຍ ແຕ່ {working} ກຳລັງປະມວນຜົນ ຫຼື ຕັ້ງເຄື່ອງ: ໜ່ວຍທີ່ວ່າງ, ຖືກຂັດຂວາງ, ນອກກະ, ເສຍ ຫຼື ກຳລັງເລີ່ມໃໝ່ ຖືກນັບວ່າບໍ່ວ່າງ
+	The utilisation of {block} counts {busy} units busy on average, but {working} were processing or setting up: units at work were not counted busy.	ອັດຕາການນຳໃຊ້ຂອງ {block} ນັບ {busy} ໜ່ວຍວ່າບໍ່ວ່າງໂດຍສະເລ່ຍ ແຕ່ {working} ກຳລັງປະມວນຜົນ ຫຼື ຕັ້ງເຄື່ອງ: ໜ່ວຍທີ່ກຳລັງເຮັດວຽກບໍ່ຖືກນັບວ່າບໍ່ວ່າງ
+	The shares of the time of the units of {block} in each state add up to {total}, not 1.	ຜົນບວກສັດສ່ວນເວລາຂອງໜ່ວຍຂອງ {block} ໃນແຕ່ລະສະຖານະແມ່ນ {total} ບໍ່ແມ່ນ 1
+	“{metric}” of {block} is {value}, outside 0 to 1 (0% to 100%).	“{metric}” ຂອງ {block} ແມ່ນ {value} ຢູ່ນອກ 0 ເຖິງ 1 (0% ເຖິງ 100%)
+	This was found in {replications} of {of} runs, and the furthest off is shown.	ພົບສິ່ງນີ້ໃນ {replications} ຈາກ {of} ຮອບຈຳລອງຊ້ຳ ແລະ ສະແດງອັນທີ່ຫ່າງທີ່ສຸດ
+	This points to a fault in StochCraft rather than in the model. Please report it with the model.	ສິ່ງນີ້ຊີ້ວ່າມີຂໍ້ຜິດພາດໃນ StochCraft ບໍ່ແມ່ນໃນແບບຈຳລອງ ກະລຸນາລາຍງານພ້ອມແບບຈຳລອງ
+	Angle	ມຸມ
+	Failed	ເສຍ
+	Off shift	ນອກກະ
+	Processing	ປະມວນຜົນ
+	Radius	ລັດສະໝີ
+	Rise	ຄວາມສູງທີ່ຂຶ້ນ
+	Speed empty	ຄວາມໄວເມື່ອເປົ່າ
+	Speed loaded	ຄວາມໄວເມື່ອບັນທຸກ
+	Turns	ຈຳນວນຮອບວົນ
+	Unload	ການຖ່າຍລົງ
+	Lost	ສູນເສຍ
+	An entity that leaves a waiting room before a unit takes it, because it has waited as long as it was willing to.	ເອນທິຕີທີ່ອອກຈາກຫ້ອງລໍຖ້າກ່ອນທີ່ໜ່ວຍຈະເອົາມັນໄປ ເພາະລໍຖ້າດົນເທົ່າທີ່ມັນເຕັມໃຈຈະລໍແລ້ວ
+	An entity that does not join a waiting room at all, because the number already waiting put it off.	ເອນທິຕີທີ່ບໍ່ເຂົ້າຫ້ອງລໍຖ້າເລີຍ ເພາະຈຳນວນທີ່ລໍຖ້າຢູ່ແລ້ວເຮັດໃຫ້ມັນລັງເລ
+	An entity that finds the waiting room full and takes the flow ticked “Turned away” instead of waiting.	ເອນທິຕີທີ່ພົບວ່າຫ້ອງລໍຖ້າເຕັມ ແລະ ໄປຕາມເສັ້ນທາງທີ່ຖືກເລືອກ “ຖືກປະຕິເສດ” ແທນທີ່ຈະລໍຖ້າ
+	An entity that leaves the model without reaching Departures: it found the waiting room full with nowhere else to go, or a decision with no way out for it.	ເອນທິຕີທີ່ອອກຈາກແບບຈຳລອງໂດຍບໍ່ໄປຮອດ ການອອກ: ມັນພົບຫ້ອງລໍຖ້າເຕັມ ແລະ ບໍ່ມີທາງອື່ນໄປ ຫຼື ພົບການຕັດສິນໃຈທີ່ບໍ່ມີທາງອອກສຳລັບມັນ
+	Gave up on {id}	ເຊົາລໍຖ້າທີ່ {id}
+	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the flow ticked “Gave up”, or leaves the model.	ແຕ່ລະເອນທິຕີຈະລໍຖ້າຢູ່ນີ້ບໍ່ເກີນເວລາທີ່ສຸ່ມໃຫ້ມັນເມື່ອມາຮອດ, ແລ້ວຈຶ່ງເຊົາລໍຖ້າ: ມັນໄປຕາມເສັ້ນທາງທີ່ຖືກເລືອກ “ຈຳນວນທີ່ເຊົາລໍຖ້າ” ຫຼື ອອກຈາກແບບຈຳລອງ.
+	Entities that do not join the waiting room take this flow at once (to try again later, say), instead of being lost; they count as balked here.	ເອນທິຕີທີ່ບໍ່ເຂົ້າຫ້ອງລໍຖ້າ ຈະໄປຕາມເສັ້ນທາງນີ້ທັນທີ (ເຊັ່ນ ເພື່ອລອງໃໝ່ພາຍຫຼັງ) ແທນທີ່ຈະສູນເສຍ; ຢູ່ນີ້ພວກມັນຖືກນັບເປັນການບໍ່ເຂົ້າແຖວ.
+	The job stops at once: the entity goes back to the front of the waiting room for any server on shift, and the work done on it is wasted.	ວຽກຢຸດທັນທີ: ເອນທິຕີຈະກັບໄປຫົວຫ້ອງລໍຖ້າສຳລັບແມ່ຂ່າຍໃດກໍໄດ້ທີ່ຢູ່ໃນກະ ແລະ ວຽກທີ່ເຮັດກັບມັນແລ້ວຈະເສຍເປົ່າ.
+	The connection drops and the client tries again: the entity goes back to the front of the waiting room at once, and the work done on it is wasted.	ການເຊື່ອມຕໍ່ຫຼຸດ ແລະ ລູກຂ່າຍລອງໃໝ່: ເອນທິຕີຈະກັບໄປຫົວຫ້ອງລໍຖ້າທັນທີ ແລະ ວຽກທີ່ເຮັດກັບມັນແລ້ວຈະເສຍເປົ່າ.
+	Ticked, entities queue up at the end while the rest keep moving. Unticked, the whole belt stops when the entity at the end cannot leave.	ເມື່ອເລືອກ ເອນທິຕີຈະຕໍ່ແຖວຢູ່ປາຍ ໃນຂະນະທີ່ອັນອື່ນຍັງເຄື່ອນຕໍ່ໄປ. ເມື່ອບໍ່ເລືອກ ສາຍພານທັງເສັ້ນຈະຢຸດເມື່ອເອນທິຕີຢູ່ປາຍອອກບໍ່ໄດ້.
+	Play run 1 step by step and see each block's waiting room on the diagram	ປະມວນຜົນຮອບຈຳລອງທີ 1 ເທື່ອລະຂັ້ນ ແລະ ເບິ່ງຫ້ອງລໍຖ້າຂອງແຕ່ລະບລັອກໃນແຜນວາດ
+	Select a block to see its waiting room over time.	ເລືອກບລັອກເພື່ອເບິ່ງຫ້ອງລໍຖ້າຂອງມັນຕາມເວລາ.
+	Entities on conveyors over time	ເອນທິຕີເທິງສາຍພານຕາມເວລາ
+	Entities in the model over time	ເອນທິຕີໃນແບບຈຳລອງຕາມເວລາ
+	How long each entity spends on the conveyors.	ແຕ່ລະເອນທິຕີຢູ່ເທິງສາຍພານດົນປານໃດ.
+	No entity has left a conveyor yet	ຍັງບໍ່ມີເອນທິຕີໃດອອກຈາກສາຍພານ
+	Share of entities by time on a conveyor, in {unit}	ສັດສ່ວນຂອງເອນທິຕີຕາມເວລາເທິງສາຍພານ ຫົວໜ່ວຍ {unit}
+	Time on conveyors: {n} entities between {lo} and {hi} {unit}	ເວລາເທິງສາຍພານ: {n} ເອນທິຕີລະຫວ່າງ {lo} ເຖິງ {hi} {unit}
+	{from} to {to} {unit}: {share} of entities ({n})	{from} ເຖິງ {to} {unit}: {share} ຂອງເອນທິຕີ ({n})
+	How many entities are on the conveyors over time.	ມີຈັກເອນທິຕີເທິງສາຍພານຕາມເວລາ.
+	How many entities are in the model over time.	ມີຈັກເອນທິຕີໃນແບບຈຳລອງຕາມເວລາ.
+	At {time} {unit}: {n} entities	ທີ່ {time} {unit}: {n} ເອນທິຕີ
+@plural	Makes {n} independent run of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval across them.	ປະມວນຜົນແບບຈຳລອງຢ່າງອິດສະຫຼະ {n} ຮອບ ໂດຍໃຊ້ເມັດສຸ່ມ {seed}. ຜົນຂອງແຕ່ລະບລັອກມີເຄິ່ງໜຶ່ງຂອງຄວາມກວ້າງຊ່ວງຄວາມເຊື່ອໝັ້ນ 95% ຈາກທຸກຮອບ.

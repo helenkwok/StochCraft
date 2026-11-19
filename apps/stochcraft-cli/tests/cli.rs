@@ -117,7 +117,7 @@ fn a_run_prints_what_the_behaviour_checks_find() {
         "--duration",
         "0.000001",
     ]);
-    assert!(table.contains("no entity left the model"), "{table}");
+    assert!(table.contains("No entity left the model"), "{table}");
 }
 
 #[test]
@@ -242,7 +242,7 @@ fn validate_exits_with_1_on_errors() {
     ok(&["exec", &script.to_string_lossy()]);
     let o = cli(&["validate", &broken.to_string_lossy()]);
     assert_eq!(o.status.code(), Some(1), "{}", stdout(&o));
-    assert!(stdout(&o).contains("no source"), "{}", stdout(&o));
+    assert!(stdout(&o).contains("no Arrivals block"), "{}", stdout(&o));
     let j = cli(&["validate", &broken.to_string_lossy(), "--format", "json"]);
     assert_eq!(j.status.code(), Some(1));
     assert!(json(&stdout(&j))["errors"].as_u64().is_some_and(|n| n > 0));

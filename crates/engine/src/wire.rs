@@ -2305,18 +2305,41 @@ pub fn model(m: &Model) -> Value {
     serde_json::to_value(ModelDoc::from(m)).unwrap_or(Value::Null)
 }
 
-/// Diagnostics as JSON: `severity`, `at`, a stable `code` and a `message`.
-pub fn diagnostics(ds: &[Diagnostic]) -> Value {
+/// Diagnostics of `model` as JSON: `severity`, `at`, a stable `code` and a `message` in English
+/// that starts with the severity, names the block by its name and says what to do.
+///
+/// For a client with words of its own (the window's catalogs), each also has `parts`: the
+/// message's pieces, each a template `key` and the `args` that fill it (data, and in the
+/// arguments named in [`stochcraft_model::messages::LABEL_ARGS`] labels of the window in
+/// English); and `field`, the field of the form to show, where one. A client that has no row for
+/// a key shows `message`.
+pub fn diagnostics(model: &Model, ds: &[Diagnostic]) -> Value {
     ds.iter()
         .map(|d| {
+            let m = d.describe(model);
+            let parts: Vec<Value> = m
+                .parts
+                .iter()
+                .map(|p| {
+                    let args: serde_json::Map<String, Value> = p
+                        .args
+                        .iter()
+                        .map(|(k, v)| ((*k).to_owned(), json!(v)))
+                        .collect();
+                    json!({ "key": p.key, "args": args })
+                })
+                .collect();
+            let severity = match d.severity {
+                Severity::Error => "error",
+                Severity::Warning => "warning",
+            };
             json!({
-                "severity": match d.severity {
-                    Severity::Error => "error",
-                    Severity::Warning => "warning",
-                },
+                "severity": severity,
                 "at": d.at.as_ref().map(ElementId::as_str),
                 "code": d.problem.code(),
-                "message": d.to_string(),
+                "message": format!("{severity}: {}", m.english()),
+                "parts": parts,
+                "field": m.field,
             })
         })
         .collect()
@@ -2459,6 +2482,7 @@ pub fn results(
         },
         // What the results show that the model could not: as the run record's warnings.
         "warnings": diagnostics(
+            model,
             &stochcraft_blocks::run_warnings(model, summary)
                 .into_iter()
                 .chain(checks.iter().cloned())

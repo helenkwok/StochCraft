@@ -73,7 +73,10 @@ fn run_says_how_many_problems_and_shows_the_first_instead_of_running() {
     assert_eq!(shown(&h).as_deref(), Some("serve"));
     // Its field, focused, and what is wrong in the status bar.
     assert_eq!(focused(&h).as_deref(), Some("Capacity"));
-    assert_eq!(h.state().status(), "a server needs at least 1 unit");
+    assert_eq!(
+        h.state().status(),
+        "Serve customer would never have a unit to work with. Give it at least 1 unit."
+    );
 
     // A second error: Run counts both, and shows them one after the other.
     set(
@@ -138,8 +141,11 @@ fn a_status_bar_error_shows_its_block_when_clicked() {
     h.key_press(egui::Key::Escape);
     settle(&mut h);
     assert_eq!(shown(&h), None);
-    h.get_by_role_and_label(Role::Button, "a server needs at least 1 unit")
-        .click();
+    h.get_by_role_and_label(
+        Role::Button,
+        "Serve customer would never have a unit to work with. Give it at least 1 unit.",
+    )
+    .click();
     settle(&mut h);
     assert_eq!(shown(&h).as_deref(), Some("serve"));
 }
@@ -157,10 +163,15 @@ fn the_inspector_keeps_its_place_when_a_problem_appears() {
     settle(&mut h);
     let before = name_field(&h);
     set(&mut h, json!({"id": "serve", "capacity": 0}));
-    h.get_by_label("a server needs at least 1 unit");
+    h.get_by_label("Serve customer would never have a unit to work with. Give it at least 1 unit.");
     assert_eq!(name_field(&h), before);
     set(&mut h, json!({"id": "serve", "capacity": 1}));
-    assert!(h.query_by_label("a server needs at least 1 unit").is_none());
+    assert!(
+        h.query_by_label(
+            "Serve customer would never have a unit to work with. Give it at least 1 unit."
+        )
+        .is_none()
+    );
     assert_eq!(name_field(&h), before);
 }
 

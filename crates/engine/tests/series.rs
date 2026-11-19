@@ -98,7 +98,7 @@ fn a_run_carries_its_results_over_time() {
     assert_eq!(codes(&r), vec!["no_warmup"]);
     let message = r["warnings"][0]["message"].as_str().unwrap_or("");
     assert!(
-        message.contains(&format!("set a warm-up of about {t} min")),
+        message.contains(&format!("Set a warm-up of about {t} min")),
         "{message}"
     );
     assert_eq!(r["warnings"][0]["at"], "desk");

@@ -413,7 +413,7 @@ impl Engine {
             "scenario": opened.scenario,
             "scenarios": opened.scenarios.iter().map(|(id, name)| json!({"id": id, "name": name})).collect::<Vec<_>>(),
             "notes": notes.clone(),
-            "diagnostics": wire::diagnostics(&loaded.model.validate()),
+            "diagnostics": wire::diagnostics(&loaded.model, &loaded.model.validate()),
         });
         self.new_document(loaded.model);
         self.file = Some(FileState {
@@ -482,7 +482,7 @@ impl Engine {
         let compiled = compile(&self.model).map_err(|ds| CommandError {
             code: ErrorCode::InvalidModel,
             message: "the model has errors and cannot run".into(),
-            details: Some(wire::diagnostics(&ds)),
+            details: Some(wire::diagnostics(&self.model, &ds)),
         })?;
         let x = &self.model.experiment;
         let rng = Experiment::new(u64::from(x.replications).max(1), x.seed).stream(replication);
@@ -499,7 +499,7 @@ impl Engine {
         let compiled = compile(&self.model).map_err(|ds| CommandError {
             code: ErrorCode::InvalidModel,
             message: "the model has errors and cannot run".into(),
-            details: Some(wire::diagnostics(&ds)),
+            details: Some(wire::diagnostics(&self.model, &ds)),
         })?;
         let x = &self.model.experiment;
         // Results over time, for the warm-up suggestion and charts over the run.
@@ -544,7 +544,7 @@ impl Engine {
             "duration": x.duration,
             "random_streams": "one xoshiro256** stream per replication, seeded from the experiment seed and the replication index; each element draws from its own stream",
             "uncertainty": "95% Student-t confidence interval of the mean across independent replications (half_width); std_dev is the sample standard deviation across replications",
-            "warnings": wire::diagnostics(warnings),
+            "warnings": wire::diagnostics(&self.model, warnings),
             "file_notes": file.map_or_else(Vec::new, |f| f.notes.clone()),
             "sensitivity": self.sensitivity,
         })
