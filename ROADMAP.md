@@ -2019,7 +2019,7 @@ Windows (checked by hand); macOS is unchecked.
 **Outcome:** a newcomer or a switcher from another simulation tool opens an example, sees it
 move, and gets an answer they can trust in their first session. The window explains instead of
 assuming the user already knows. It follows the UX evaluation of 2026-11-15
-([docs/gaps.md](docs/gaps.md), ranked) and its seven mock-up screens (kept privately, v2), and
+([docs/gaps.md](docs/gaps.md), ranked), and
 comes before M4, whose models need the same results over time and a second kind of diagram.
 
 **Words (settled 2026-11-15):** "run" is one pass of the model with its own random
