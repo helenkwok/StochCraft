@@ -1155,3 +1155,4 @@ unit	yr	ஆண்டு
 	x {x} m, y {y} m	x {x} m, y {y} m
 	Unplaced	இடம் ஒதுக்கப்படாதவை
 	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	தற்போது ஒவ்வொரு தொகுதியும் வரைபடத்தின் அடிப்படையில் வைக்கப்படுகிறது. வரைபடம் விட்டுவிடும் தொகுதி இங்கே பட்டியலிடப்படும், அது வரையப்படாது.
+	The charts are taller than the window: make the window taller, then export them again.	வரைபடங்கள் சாளரத்தை விட உயரமாக உள்ளன: சாளரத்தை உயரமாக்கி, பின் மீண்டும் ஏற்றுமதி செய்யவும்.

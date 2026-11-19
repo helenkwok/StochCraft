@@ -141,7 +141,7 @@ impl Desktop {
                 Request::Write { path, bytes } | Request::Download { name: path, bytes } => {
                     match craft_atomic::atomic_write(Path::new(&path), &bytes) {
                         Ok(()) => self.app.written(&path, &bytes),
-                        Err(e) => self.app.report_error(format!("{path}: {e}")),
+                        Err(e) => self.app.save_failed(format!("{path}: {e}")),
                     }
                 }
                 Request::Export { name, bytes } => {
@@ -193,6 +193,7 @@ impl Desktop {
                         }
                     }
                 }
+                (Then::Save, Answer::Unavailable(why)) => self.app.save_failed(why),
                 (_, Answer::Unavailable(why)) => self.app.report_error(why),
                 (Then::Save, _) => self.app.save_cancelled(),
                 _ => {}

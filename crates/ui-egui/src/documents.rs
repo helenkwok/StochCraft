@@ -66,12 +66,21 @@ impl App {
         self.status_at = None;
     }
 
-    /// Shows `message` as an error in the status bar (for the shell's failures).
+    /// Shows `message` as an error in the status bar (for the shell's failures). A save in
+    /// progress carries on: only [`App::save_failed`] ends it.
     pub fn report_error(&mut self, message: impl Into<String>) {
         self.status = message.into();
         self.status_error = true;
         self.status_at = None;
+    }
+
+    /// The save in progress failed (the Save dialog could not be shown, or the file could not be
+    /// written): shows `message` as an error, and drops what was to follow the save (quit, new,
+    /// open) and the agreement to a new BPMN file, so neither carries over to a later save.
+    pub fn save_failed(&mut self, message: impl Into<String>) {
+        self.report_error(message);
         self.after_save = None;
+        self.as_new = false;
     }
 
     /// Runs an engine command, showing its error in the status bar if it fails, with the block
@@ -276,7 +285,7 @@ impl App {
             _ => "bpmn",
         };
         if wanted == "xpdl" && (agreed || opened != Some("xpdl")) {
-            self.report_error(tf(
+            self.save_failed(tf(
                 "{file}: StochCraft writes a new file only as BPMN; choose a name ending in .bpmn",
                 &[("file", file_name(&path))],
             ));
@@ -302,7 +311,7 @@ impl App {
                     path: (chosen && wanted == "bpmn").then_some(path),
                 });
             }
-            Err(e) => self.report_error(e.message),
+            Err(e) => self.save_failed(e.message),
         }
     }
 
@@ -310,7 +319,7 @@ impl App {
     pub(crate) fn write_new(&mut self, path: String) {
         match self.engine.save_bytes(true) {
             Ok(bytes) => self.deliver(path, bytes),
-            Err(e) => self.report_error(e.message),
+            Err(e) => self.save_failed(e.message),
         }
     }
 
@@ -339,7 +348,7 @@ impl App {
                     self.replace_now(next);
                 }
             }
-            Err(e) => self.report_error(e.message),
+            Err(e) => self.save_failed(e.message),
         }
     }
 

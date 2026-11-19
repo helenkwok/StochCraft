@@ -1155,3 +1155,4 @@ unit	yr	v
 	x {x} m, y {y} m	x {x} m, y {y} m
 	Unplaced	Të pavendosura
 	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	Për momentin çdo bllok vendoset sipas diagramës. Një bllok që diagrama e lë jashtë listohet këtu dhe nuk vizatohet.
+	The charts are taller than the window: make the window taller, then export them again.	Grafikët janë më të lartë se dritarja: zmadhoni lartësinë e dritares, pastaj eksportojini përsëri.

@@ -756,6 +756,10 @@ fields (`“Service time”`) are named in the messages by their own rows.
   Pause; "Reset" is the usual word for returning to the start, or "back to the start" where
   the language has no short one). Not checked against any other source, and not reviewed by
   native speakers; the least certain are lo, th, ta, te, bn, ka, kk, hi, sq, et and lt.
+- The row for a chart export that does not fit ("The charts are taller than the window...")
+  was machine-drafted with Claude Code from the plain meaning of the English, with each
+  catalog's own words for chart, window and export. Not checked against any other source, and
+  not reviewed by native speakers; the least certain are lo, th, ta, te, bn, ka, kk, hi and sq.
 
 - The rows added for issue #145 (the window's validation messages, each naming a block and saying
   how to fix it; the labels "Angle", "Failed", "Lost", "Off shift", "Processing", "Radius",

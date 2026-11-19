@@ -268,14 +268,27 @@ impl App {
                 let line = self.straight_line().filter(|_| !self.results_stale);
                 self.charts_rect = charts::show(ui, &results, line.as_deref());
                 // An export asked for: scroll the charts into view, and capture them once they
-                // are all on screen (or after a few frames, if the window is too short for them).
+                // are all on screen. If they are still not after a few frames (a window too
+                // short for them), nothing is exported: a capture would hold part of them, or
+                // what is drawn over them.
                 if self.png_scroll > 0 {
                     if let Some(area) = self.charts_rect {
-                        if ui.clip_rect().contains_rect(area) || self.png_scroll == 1 {
+                        if ui.clip_rect().contains_rect(area) {
                             self.png_scroll = 0;
                             png = true;
+                        } else if self.png_scroll == 1 {
+                            self.png_scroll = 0;
+                            self.report_error(t(
+                                "The charts are taller than the window: make the window taller, then export them again.",
+                            ));
                         } else {
-                            ui.scroll_to_rect(area, Some(egui::Align::TOP));
+                            // At once, not animated, so the charts are in place by the next
+                            // frame rather than part way through a scroll.
+                            ui.scroll_to_rect_animation(
+                                area,
+                                Some(egui::Align::TOP),
+                                egui::style::ScrollAnimation::none(),
+                            );
                             self.png_scroll -= 1;
                             ui.ctx().request_repaint();
                         }
