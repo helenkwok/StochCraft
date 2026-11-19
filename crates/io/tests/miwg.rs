@@ -153,7 +153,8 @@ fn saving_a_reference_model_is_stable() {
 }
 
 /// The first line where `a` and `b` differ, both shown.
-fn first_difference(a: &str, b: &str) -> String {
+fn first_difference(a: &[u8], b: &[u8]) -> String {
+    let (a, b) = (String::from_utf8_lossy(a), String::from_utf8_lossy(b));
     let (la, lb): (Vec<&str>, Vec<&str>) = (a.lines().collect(), b.lines().collect());
     for i in 0..la.len().max(lb.len()) {
         let (x, y) = (la.get(i).copied(), lb.get(i).copied());
