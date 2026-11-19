@@ -970,3 +970,6 @@ unit	yr	r.
 	From the last run; – when there are none, or they are out of date.	Z posledního běhu; – pokud žádné nejsou nebo jsou zastaralé.
 	Show this block	Zobrazit tento blok
 	Rates and times are per {unit}.	Intenzity a časy jsou na {unit}.
+	3D	3D
+	3D view of the model	3D pohled na model
+	Drag to orbit · Scroll to zoom · Shift-drag to pan	Tažením otáčíte · Kolečkem přibližujete · Shift a tažení posouvá

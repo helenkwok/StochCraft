@@ -970,3 +970,6 @@ unit	yr	р.
 	From the last run; – when there are none, or they are out of date.	З останнього запуску; – якщо його немає або він застарів.
 	Show this block	Показати цей блок
 	Rates and times are per {unit}.	Інтенсивності й часи вказано на {unit}.
+	3D	3D
+	3D view of the model	3D-вигляд моделі
+	Drag to orbit · Scroll to zoom · Shift-drag to pan	Перетягніть, щоб обертати · Прокрутіть для масштабу · Shift і перетягування для зсуву

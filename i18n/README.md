@@ -727,6 +727,12 @@ engine's messages (validation, file notes) are English too.
   least certain are lo, th, ta, te, bn, ka, kk, hi, sq, et and lt, the use of "Service" as the
   column for the mean service time, and the word for congested in el, hu, tr and fi.
 
+- The rows for the 3D view (the tab "3D", its accessible name and the line of mouse hints) were
+  written with Claude Code from the plain meaning of the English; the tab's "3D" stays "3D" in
+  every catalog. Not reviewed by native speakers. The least certain are lo, th, ta, te, ka, kk,
+  bn, hi and sq, and in every language the words for orbit (turn the view around the model) and
+  pan (slide the view sideways).
+
 **Adding or changing a string:** add the English in the code through `i18n::t` (or `tf`, `tn`),
 then add its row to each catalog here, or leave it out to show English until it is translated.
 Right-to-left languages are not offered until the layout is mirrored.

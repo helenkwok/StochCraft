@@ -76,6 +76,7 @@ impl App {
             self.show_results = false;
             self.show_analysis = false;
             self.show_capacity = false;
+            self.show_3d = false;
             self.info(tf(
                 "Recovered {name}; save it to keep it",
                 &[("name", &name)],

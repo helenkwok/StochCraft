@@ -306,6 +306,7 @@ impl App {
         self.show_results = false;
         self.show_analysis = false;
         self.show_capacity = false;
+        self.show_3d = false;
         self.canvas.flow = None;
         self.canvas.multi.clear();
         self.selected = block;
