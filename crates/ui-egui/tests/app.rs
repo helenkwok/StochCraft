@@ -454,13 +454,6 @@ fn show_me_guides_a_first_model_on_the_canvas() {
     // Departures, connected from the task.
     h.get_by_label("Step 3 of 5");
     h.get_by_label("Add Departures, where entities leave: drag it onto the canvas.");
-    eprintln!(
-        "DIAG departures {:?} callout {:?} capacity {:?}",
-        h.get_by_role_and_label(button, "departures").rect(),
-        h.get_by_label("Add Departures, where entities leave: drag it onto the canvas.")
-            .rect(),
-        h.get_by_label("Capacity").rect()
-    );
     h.get_by_role_and_label(button, "departures").click();
     settle(&mut h);
     h.get_by_label_contains("Drag from the dot on the task to Departures");
