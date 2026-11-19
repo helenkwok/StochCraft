@@ -363,7 +363,10 @@ impl App {
                 return;
             }
             w.playing = !w.playing;
-            if !w.playing {
+            if w.playing {
+                // Playing takes over from a step still on its way, which would pause at its end.
+                w.heading = None;
+            } else {
                 w.pause_at = None;
             }
         }
@@ -429,6 +432,8 @@ impl App {
             } else {
                 w.playing = true;
                 w.pause_at = Some(to);
+                // Playing takes over from a step still on its way, which would pause at its end.
+                w.heading = None;
             }
         }
     }
@@ -873,6 +878,38 @@ fn line_chart(
 #[cfg(test)]
 mod tests {
     use super::default_speed;
+    use crate::{App, EXAMPLES, Platform};
+
+    /// The M/M/1 example, open, with its run being watched, paused, and a step still on its way
+    /// (one longer than a frame's budget).
+    fn stepping() -> App {
+        let mut app = App::new(Platform::DESKTOP);
+        let e = &EXAMPLES[0];
+        app.open_file(e.file, e.bytes);
+        app.start_watching();
+        if let Some(w) = app.watching.as_mut() {
+            w.playing = false;
+            w.heading = Some((w.run.end() / 2.0, false));
+        }
+        app
+    }
+
+    #[test]
+    fn play_and_pause_at_take_over_from_a_step_on_its_way() {
+        // A step pauses where it ends; Play or Pause at, pressed before it gets there, must not.
+        let mut app = stepping();
+        app.toggle_playing();
+        let w = app.watching.as_ref();
+        assert!(w.is_some_and(|w| w.playing && w.heading.is_none()));
+
+        let mut app = stepping();
+        let end = app.watching.as_ref().map_or(0.0, |w| w.run.end());
+        assert!(end > 0.0);
+        app.pause_at_time(end * 0.75);
+        let w = app.watching.as_ref();
+        assert!(w.is_some_and(|w| w.playing && w.heading.is_none()));
+        assert_eq!(w.and_then(|w| w.pause_at), Some(end * 0.75));
+    }
 
     #[test]
     fn a_run_takes_about_a_minute_to_watch() {
