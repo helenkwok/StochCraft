@@ -2381,13 +2381,51 @@ answers, and ships as an example model with its write-up ("Examples for teaching
      3. divert routing;
      4. the window (palette, form, canvas count, Help, all catalogs).
      The first and fourth can run alongside the second.
-2. **Operators who walk or drive** (M5.2): the moving resources and travel network below, with
-   task sequences (travel empty, load, travel loaded, unload, then return home or take the next
-   job) and the states named in the sorter's bar. Checks: one operator between two fixed points
-   with constant times has a cycle of load + distance / speed loaded + unload + distance /
-   speed empty, and each state's share of the time is its part of that cycle; the states add up
-   to 100% of the time; travel time is the shortest path's length over the speed on a network
-   worked by hand.
+2. **Operators who walk or drive** (M5.2). The design, settled before the code:
+   - **The pool.** A pool may be mobile: `Mobility { speed_empty, speed_loaded, home,
+     after_job }`, speeds in the model's length unit per time unit, `home` the element its
+     units start at, and `after_job` either stay where they put the item down or go home. Its
+     units then have a place, and the pool keeps every unit's.
+   - **Where things are.** Each element is at the centre of its shape on the canvas
+     (`Model.layout`), times a new `layout_scale` (length units per drawing unit, beside the
+     length unit). Distance is the straight line between two centres; the travel network of
+     paths with the shortest route (below) comes after, in its own PR, and replaces the straight
+     line where a model has one.
+   - **The block.** A new kind, `Transport { pool, load, unload }` (`load` and `unload`
+     distributions): an item reaching it is carried from the element before it to the element
+     after it by a unit of the pool. It waits there for a unit (its queue, unbounded at first);
+     the unit travels empty from where it is to the pickup, loads, travels loaded to the drop-off,
+     unloads, and is then free there (or walks home, as `after_job` says, free to be taken on
+     the way only at home).
+   - **Which unit.** Requests are served first come, first served; a request takes the idle
+     unit nearest its pickup (ties: the one idle longest, then the first). A unit freed takes
+     the oldest request waiting.
+   - **The unit's states**, as the sorter's bar names them: idle, travelling empty, loading,
+     travelling loaded, unloading (and off shift where the pool follows a calendar). They add up
+     to all of the time.
+   - **Results.** For the pool: each state's share of the time and the distance travelled
+     empty and loaded per unit. For the block: the mean wait for transport and the mean time
+     from pickup to drop-off.
+   - **The capacity table.** A transport's work per item is at least load + unload + the loaded
+     distance over the loaded speed (the empty trip depends on where the unit was), so its
+     pool's load is at least that; the status is unstable when even that reaches 100%, else not
+     known before a run.
+   - **Files.** A `stochcraft:transport` vendor extension on the task (its pool, load and
+     unload); the pool's mobility as a `stochcraft:mobility` extension on its resource; the
+     scale as `stochcraft:layoutScale` on the scenario.
+   - **Checks with known answers:**
+     - one operator, pickup and drop-off 10 apart, speeds 1 empty and 2 loaded, load 1, unload
+       1, staying where it puts the item down, items always waiting: each cycle is walk back 10,
+       load 1, carry 5, unload 1, so 17, the throughput 1/17, and the states 10/17, 1/17, 5/17,
+       1/17 and no idle;
+     - the same with items arriving every 40: idle 23/40 of the time, the waits 0;
+     - two operators at different places and a request between them: the nearer one goes,
+       worked by hand;
+     - going home after each job: the walk home counts as travelling empty;
+     - the states add up to all of the time in every run.
+   - **The order of PRs:** 1. the mobile pool, the block, the scale, validation, files and the
+     capacity row; 2. the runtime, results and the checks; 3. the window (pool and block forms,
+     the stacked state bar per pool); 4. the travel network with shortest routes.
 3. **The layout view, 2D then 3D** (M5.3): stations, conveyors and paths drawn at their layout
    positions to scale, with entities moving along conveyors and paths, the moving entities of
    M3.7.7 (#151) taken from the flowchart onto the layout. Then 3D, as parametric low-poly
