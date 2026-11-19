@@ -187,9 +187,10 @@ fn unbalanced(kind: &ElementKind, e: &ElementReport) -> Option<Behaviour> {
         ElementKind::Source { .. } => e.left + e.lost.unwrap_or(0),
         // A server's lost and balked arrivals never came in.
         ElementKind::Server { .. } => e.left + e.abandoned.unwrap_or(0) + inside_at_end,
-        ElementKind::SharedTask { .. } | ElementKind::Delay { .. } | ElementKind::Sink { .. } => {
-            e.left + inside_at_end
-        }
+        ElementKind::SharedTask { .. }
+        | ElementKind::Delay { .. }
+        | ElementKind::Transport { .. }
+        | ElementKind::Sink { .. } => e.left + inside_at_end,
         ElementKind::ExclusiveGateway { .. } if !shortest_queue(kind) => {
             e.left + e.lost.unwrap_or(0) + inside_at_end
         }
@@ -387,6 +388,11 @@ fn out_of_range(e: &ElementReport) -> Vec<Behaviour> {
         ("time_setup", e.time_setup),
         ("oee_availability", e.oee_availability),
         ("setup_ratio", e.setup_ratio),
+        ("time_idle", e.time_idle),
+        ("time_travel_empty", e.time_travel_empty),
+        ("time_loading", e.time_loading),
+        ("time_travel_loaded", e.time_travel_loaded),
+        ("time_unloading", e.time_unloading),
     ]
     .into_iter()
     .filter_map(|(metric, v)| {

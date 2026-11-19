@@ -39,7 +39,7 @@ pub mod checks;
 mod runtime;
 pub mod series;
 
-pub use runtime::{Live, LiveState};
+pub use runtime::{Live, LiveState, OperatorState, OperatorView};
 pub use series::{Quantity, Recording, Series, record_interval, summarise_series};
 
 use std::collections::{BTreeMap, BTreeSet};
@@ -47,13 +47,13 @@ use std::collections::{BTreeMap, BTreeSet};
 pub use stochcraft_model::calendar::{Calendar, Event, Rule};
 use stochcraft_model::expr;
 pub use stochcraft_model::{
-    BalkJoin, BalkRow, Balking, Breakdown, ByValue, Change, Demand, DemandPer, HealthCheck,
-    OnShiftEnd, OnTakeout, Patience, PatienceUntil, PlaceWhileOut, Power, ProcessingBy, QueueLimit,
-    Routing, Scrap, Setup, Transfer,
+    AfterJob, BalkJoin, BalkRow, Balking, Breakdown, ByValue, Change, Demand, DemandPer,
+    HealthCheck, Mobility, OnShiftEnd, OnTakeout, Patience, PatienceUntil, PlaceWhileOut, Power,
+    ProcessingBy, QueueLimit, Routing, Scrap, Setup, Transfer,
 };
 use stochcraft_model::{
-    Connection, Diagnostic, Element, ElementId, ElementKind, Experiment, Model, Need, Problem,
-    Property, PropertyType, PropertyValue, ResourcePool, Severity, Timed,
+    Bounds, Connection, Diagnostic, Element, ElementId, ElementKind, Experiment, Model, Need,
+    Problem, Property, PropertyType, PropertyValue, ResourcePool, Severity, Timed,
 };
 use stochcraft_random::{Dist, Rng};
 use stochcraft_stats::Summary;
@@ -321,19 +321,7 @@ fn compile_assign(p: &Property, slots: &[String], ty: PropertyType) -> Option<As
 /// Checks `model` and prepares it to run. On any error, returns every diagnostic (errors and
 /// warnings) so all of them can be fixed at once.
 pub fn compile(model: &Model) -> Result<Compiled, Vec<Diagnostic>> {
-    let mut diagnostics = model.validate();
-    // Transports can be built and saved, but there is no runtime for them yet (M5.2).
-    diagnostics.extend(
-        model
-            .elements
-            .iter()
-            .filter(|e| matches!(e.kind, ElementKind::Transport { .. }))
-            .map(|e| Diagnostic {
-                severity: Severity::Error,
-                at: Some(e.id.clone()),
-                problem: Problem::TransportNotSimulated,
-            }),
-    );
+    let diagnostics = model.validate();
     if diagnostics.iter().any(|d| d.severity == Severity::Error) {
         return Err(diagnostics);
     }
@@ -701,10 +689,32 @@ pub enum Metric {
     /// each. A replication in which none reached it has no value (never 0), so the summary is
     /// the mean of the ratios of the replications that have one, and its `n` says how many.
     SpecificEnergy,
+    /// A transport's mean time carrying an item, from the unit starting to load it at the
+    /// pickup until it has unloaded it at the drop-off (loading, the loaded trip and unloading;
+    /// not the wait for a unit or the wait for room at the drop-off).
+    MeanTimeCarried,
+    /// Mobile pools: time-average share of the units' time idle (free, waiting for a request).
+    /// With the next four, the shares of every unit's time in each state, adding up to 1.
+    TimeIdle,
+    /// Mobile pools: share of the units' time travelling empty, to a pickup or home.
+    TimeTravelEmpty,
+    /// Mobile pools: share of the units' time loading.
+    TimeLoading,
+    /// Mobile pools: share of the units' time travelling loaded.
+    TimeTravelLoaded,
+    /// Mobile pools: share of the units' time unloading, waiting for room at the drop-off
+    /// included.
+    TimeUnloading,
+    /// Mobile pools: the mean distance each unit travelled empty over the measured window, in
+    /// the model's length unit.
+    DistanceEmpty,
+    /// Mobile pools: the mean distance each unit travelled loaded over the measured window, in
+    /// the model's length unit.
+    DistanceLoaded,
 }
 
 impl Metric {
-    pub const ALL: [Metric; 44] = [
+    pub const ALL: [Metric; 52] = [
         Metric::Entered,
         Metric::Left,
         Metric::MeanQueueLength,
@@ -749,6 +759,14 @@ impl Metric {
         Metric::CycleTime,
         Metric::Energy,
         Metric::SpecificEnergy,
+        Metric::MeanTimeCarried,
+        Metric::TimeIdle,
+        Metric::TimeTravelEmpty,
+        Metric::TimeLoading,
+        Metric::TimeTravelLoaded,
+        Metric::TimeUnloading,
+        Metric::DistanceEmpty,
+        Metric::DistanceLoaded,
     ];
 
     /// The metric with this [`Metric::name`].
@@ -803,6 +821,14 @@ impl Metric {
             Metric::CycleTime => "cycle_time",
             Metric::Energy => "energy",
             Metric::SpecificEnergy => "specific_energy",
+            Metric::MeanTimeCarried => "mean_time_carried",
+            Metric::TimeIdle => "time_idle",
+            Metric::TimeTravelEmpty => "time_travel_empty",
+            Metric::TimeLoading => "time_loading",
+            Metric::TimeTravelLoaded => "time_travel_loaded",
+            Metric::TimeUnloading => "time_unloading",
+            Metric::DistanceEmpty => "distance_empty",
+            Metric::DistanceLoaded => "distance_loaded",
         }
     }
 }
@@ -913,6 +939,17 @@ pub struct ElementReport {
     /// units on shift (those finishing a job after their shift included), which their
     /// [`Metric::Utilisation`] is over.
     pub on_shift: Option<f64>,
+    /// A transport's mean time carrying an item ([`Metric::MeanTimeCarried`]).
+    pub mean_time_carried: Option<f64>,
+    /// Mobile pools: the shares of the units' time in each state and the mean distance a unit
+    /// travelled empty and loaded ([`Metric::TimeIdle`] to [`Metric::DistanceLoaded`]).
+    pub time_idle: Option<f64>,
+    pub time_travel_empty: Option<f64>,
+    pub time_loading: Option<f64>,
+    pub time_travel_loaded: Option<f64>,
+    pub time_unloading: Option<f64>,
+    pub distance_empty: Option<f64>,
+    pub distance_loaded: Option<f64>,
 }
 
 impl ElementReport {
@@ -963,6 +1000,14 @@ impl ElementReport {
             Metric::CycleTime => self.cycle_time,
             Metric::Energy => self.energy,
             Metric::SpecificEnergy => self.specific_energy,
+            Metric::MeanTimeCarried => self.mean_time_carried,
+            Metric::TimeIdle => self.time_idle,
+            Metric::TimeTravelEmpty => self.time_travel_empty,
+            Metric::TimeLoading => self.time_loading,
+            Metric::TimeTravelLoaded => self.time_travel_loaded,
+            Metric::TimeUnloading => self.time_unloading,
+            Metric::DistanceEmpty => self.distance_empty,
+            Metric::DistanceLoaded => self.distance_loaded,
         }
     }
 }
@@ -1310,6 +1355,8 @@ pub struct Builder {
     /// Shared resource pools.
     pools: Vec<ResourcePool>,
     calendars: Vec<Calendar>,
+    /// Where elements are drawn: the centre of each one's shape ([`Builder::place`]).
+    places: Vec<(BlockId, (f64, f64))>,
 }
 
 impl Builder {
@@ -1422,6 +1469,56 @@ impl Builder {
             quantity,
             roles.iter().map(|r| (*r).to_owned()).collect(),
         ));
+    }
+
+    /// Makes pool `pool` mobile: its units walk or drive at `speed_empty` carrying nothing and
+    /// `speed_loaded` carrying an item (the model's length unit per time unit), start at `home`
+    /// and, once an item is put down, do as `after_job` says ([`Mobility`]). `home` and the
+    /// transport's two ends need a place ([`Builder::place`]).
+    pub fn mobile(
+        &mut self,
+        pool: &str,
+        speed_empty: f64,
+        speed_loaded: f64,
+        home: BlockId,
+        after_job: AfterJob,
+    ) {
+        let home = self.id_of(home);
+        if let Some(p) = self.pools.iter_mut().find(|p| p.name == pool) {
+            p.mobility = Some(Mobility {
+                speed_empty,
+                speed_loaded,
+                home,
+                after_job,
+            });
+        }
+    }
+
+    /// Puts `block` at (`x`, `y`) in the model's drawing: the centre of its shape, which is
+    /// what distances are measured between (times the experiment's `layout_scale`).
+    pub fn place(&mut self, block: BlockId, x: f64, y: f64) {
+        self.places.retain(|(b, _)| *b != block);
+        self.places.push((block, (x, y)));
+    }
+
+    /// A transport: each item reaching it is carried from the block connected before it to the
+    /// block connected after it by a unit of mobile pool `pool`, which loads it for `load` and
+    /// unloads it for `unload` ([`ElementKind::Transport`]).
+    pub fn transport(&mut self, name: &str, pool: &str, load: Dist, unload: Dist) -> BlockId {
+        self.add(
+            name,
+            ElementKind::Transport {
+                pool: ElementId::new(pool).unwrap_or_else(|| ElementId::unchecked(pool)),
+                load,
+                unload,
+            },
+        )
+    }
+
+    /// The id of block `b`.
+    fn id_of(&self, b: BlockId) -> ElementId {
+        let name = self.elements.get(b.0).map_or("", |(n, _, _)| n.as_str());
+        ElementId::new(name).unwrap_or_else(|| ElementId::unchecked(name))
     }
 
     /// Makes server `block`'s units fail and be repaired.
@@ -1977,6 +2074,22 @@ impl Builder {
             resources: self.pools.clone(),
             calendars: self.calendars.clone(),
             experiment,
+            // A 10 by 10 shape centred on each place.
+            layout: self
+                .places
+                .iter()
+                .map(|(b, (x, y))| {
+                    (
+                        id(b.0),
+                        Bounds {
+                            x: x - 5.0,
+                            y: y - 5.0,
+                            width: 10.0,
+                            height: 10.0,
+                        },
+                    )
+                })
+                .collect(),
             ..Model::default()
         }
     }

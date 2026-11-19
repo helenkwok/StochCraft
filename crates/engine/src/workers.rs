@@ -156,6 +156,11 @@ struct EncodedElement {
     given_up_inside: [u64; 2],
     #[serde(default)]
     leaving: [u64; 2],
+    /// Transports and mobile pools: the mean time carried, the shares of time idle, travelling
+    /// empty, loading, travelling loaded and unloading, and the mean distances travelled empty
+    /// and loaded.
+    #[serde(default)]
+    operators: [Option<u64>; 8],
 }
 
 fn bits(x: Option<f64>) -> Option<u64> {
@@ -244,6 +249,16 @@ impl Encoded {
                     checks: [bits(e.time_inside), bits(e.on_shift)],
                     given_up_inside: e.given_up_inside,
                     leaving: e.leaving,
+                    operators: [
+                        bits(e.mean_time_carried),
+                        bits(e.time_idle),
+                        bits(e.time_travel_empty),
+                        bits(e.time_loading),
+                        bits(e.time_travel_loaded),
+                        bits(e.time_unloading),
+                        bits(e.distance_empty),
+                        bits(e.distance_loaded),
+                    ],
                 })
                 .collect(),
         }
@@ -299,6 +314,16 @@ impl Encoded {
                 let [bsh] = e.balking;
                 let [inside_at_start, inside_at_end] = e.inside;
                 let [time_inside, on_shift] = e.checks;
+                let [
+                    carried,
+                    idle,
+                    empty,
+                    loading,
+                    loaded,
+                    unloading,
+                    far_empty,
+                    far_loaded,
+                ] = e.operators;
                 Some(ElementReport {
                     id: t.id.clone(),
                     name: t.name.clone(),
@@ -359,6 +384,14 @@ impl Encoded {
                     leaving: e.leaving,
                     time_inside: float(time_inside),
                     on_shift: float(on_shift),
+                    mean_time_carried: float(carried),
+                    time_idle: float(idle),
+                    time_travel_empty: float(empty),
+                    time_loading: float(loading),
+                    time_travel_loaded: float(loaded),
+                    time_unloading: float(unloading),
+                    distance_empty: float(far_empty),
+                    distance_loaded: float(far_loaded),
                 })
             })
             .collect::<Option<Vec<_>>>()?;

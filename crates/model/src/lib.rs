@@ -335,8 +335,7 @@ pub enum ElementKind {
     /// A transport: an item reaching it is carried from the element before it (the pickup) to
     /// the element after it (the drop-off) by a unit of a mobile pool (a StochCraft vendor
     /// extension on a task, `stochcraft:transport`). The unit travels to the pickup, loads for
-    /// `load`, travels to the drop-off, and unloads for `unload`. It is not simulated yet
-    /// (ROADMAP.md, M5.2).
+    /// `load`, travels to the drop-off, and unloads for `unload` (ROADMAP.md, M5.2).
     Transport {
         /// The mobile pool whose units carry the items ([`ResourcePool::mobility`]).
         pool: ElementId,
@@ -1740,9 +1739,6 @@ pub enum Problem {
         length: f64,
         pitch: f64,
     },
-    /// Found when the model is prepared to run, not by [`Model::validate`] (a transport can be
-    /// drawn, saved and sized meanwhile): transports are not simulated yet.
-    TransportNotSimulated,
     /// A transport's pool does not exist, or is not mobile.
     TransportPool {
         pool: ElementId,
@@ -2029,7 +2025,6 @@ impl Problem {
             Problem::ZeroBatchSize => "zero_batch_size",
             Problem::BadConveyorValue { .. } => "bad_conveyor_value",
             Problem::ConveyorTooShort { .. } => "conveyor_too_short",
-            Problem::TransportNotSimulated => "transport_not_simulated",
             Problem::TransportPool { .. } => "transport_pool",
             Problem::BadMobilitySpeed { .. } => "bad_mobility_speed",
             Problem::UnknownHome { .. } => "unknown_home",
@@ -2341,7 +2336,6 @@ impl std::fmt::Display for Diagnostic {
                 f,
                 "the conveyor is {length} long but each item takes {pitch} (item length plus gap), so not even one fits; lengthen the conveyor or shorten the item or the gap"
             ),
-            Problem::TransportNotSimulated => write!(f, "transports are not simulated yet"),
             Problem::TransportPool { pool, exists } => {
                 if *exists {
                     write!(

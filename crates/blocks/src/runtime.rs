@@ -3,7 +3,7 @@
 
 use std::borrow::Cow;
 use std::cell::{Cell, RefCell};
-use std::collections::{BTreeMap, BTreeSet};
+use std::collections::{BTreeMap, BTreeSet, VecDeque};
 use std::rc::{Rc, Weak};
 
 use stochcraft_des::{
@@ -12,9 +12,9 @@ use stochcraft_des::{
 };
 use stochcraft_model::calendar::{self, Calendar, DateTime};
 use stochcraft_model::{
-    Balking, Breakdown, Demand, DemandPer, Element, ElementId, ElementKind, HealthCheck, Model,
-    Need, OnShiftEnd, OnTakeout, PatienceUntil, PlaceWhileOut, Power, QueueLimit, ResourcePool,
-    Routing, Setup, Timed,
+    AfterJob, Balking, Bounds, Breakdown, Demand, DemandPer, Element, ElementId, ElementKind,
+    HealthCheck, Mobility, Model, Need, OnShiftEnd, OnTakeout, PatienceUntil, PlaceWhileOut, Power,
+    QueueLimit, ResourcePool, Routing, Setup, Timed,
 };
 use stochcraft_random::{Dist, Rng};
 use stochcraft_stats::{Tally, TimeWeighted};
@@ -319,6 +319,28 @@ impl Compiled {
                 spawn_shifts(&mut sim, Rc::clone(&pools), p, changes);
             }
         }
+        // Each mobile pool's units, where they start and how they move (ROADMAP M5.2).
+        let centres: Vec<Option<(f64, f64)>> = elements
+            .iter()
+            .map(|e| self.model.layout.get(&e.id).map(Bounds::centre))
+            .collect();
+        let fleets: Vec<Option<Rc<Fleet>>> = self
+            .model
+            .resources
+            .iter()
+            .map(|r| {
+                let m = r.mobility.as_ref()?;
+                let home = elements.iter().position(|e| e.id == m.home)?;
+                Some(Rc::new(Fleet::new(
+                    &ctx,
+                    r.most_units(),
+                    m,
+                    home,
+                    centres.clone(),
+                    self.model.experiment.layout_scale,
+                )))
+            })
+            .collect();
         let next_id = Rc::new(RefCell::new(0u64));
         // Every stream is keyed by its element's id and its purpose, never by its position, so
         // adding, removing or reordering an element changes no other element's draws.
@@ -652,8 +674,37 @@ impl Compiled {
                     accumulating,
                     item_length + gap,
                 ),
-                // Not simulated yet (`compile` refuses a model with one): passes entities on.
-                ElementKind::Transport { .. } => spawn_unbatch(&mut sim, env),
+                ElementKind::Transport { pool, load, unload } => {
+                    let fleet = self
+                        .model
+                        .resources
+                        .iter()
+                        .position(|r| r.id == pool)
+                        .and_then(|p| fleets.get(p).cloned().flatten());
+                    // The element before it (the pickup) and the one after it (the drop-off):
+                    // validation leaves each transport exactly one of each.
+                    let pickup = self
+                        .model
+                        .connections
+                        .iter()
+                        .find(|c| c.to == element.id)
+                        .and_then(|c| elements.iter().position(|x| x.id == c.from));
+                    let dropoff = self.routes.get(i).and_then(|r| r.first()).map(|r| r.to);
+                    match (fleet, pickup, dropoff) {
+                        (Some(fleet), Some(pickup), Some(dropoff)) => {
+                            let haul = Haul {
+                                fleet,
+                                pickup,
+                                dropoff,
+                                load,
+                                unload,
+                            };
+                            spawn_transport(&mut sim, env, haul);
+                        }
+                        // Not reachable in a validated model: passes entities on.
+                        _ => spawn_unbatch(&mut sim, env),
+                    }
+                }
             }
         }
 
@@ -662,17 +713,19 @@ impl Compiled {
         // condition met) never resets: `reset_at` says whether, and when, it did.
         let reset_at = Rc::new(Cell::new((warmup <= 0.0).then_some(0.0)));
         if warmup > 0.0 {
-            let (c, st, pl, at) = (
+            let (c, st, pl, at, fl) = (
                 ctx.clone(),
                 Rc::clone(&stats),
                 Rc::clone(&pools),
                 Rc::clone(&reset_at),
+                fleets.clone(),
             );
             sim.spawn(async move {
                 c.hold(warmup).await;
                 let now = c.now();
                 st.iter().for_each(|s| s.borrow_mut().reset(now));
                 pl.reset(now);
+                fl.iter().flatten().for_each(|f| f.reset(now));
                 at.set(Some(now));
             });
         }
@@ -686,6 +739,7 @@ impl Compiled {
             sim,
             stats,
             pools,
+            fleets,
             _aways: aways,
             _balks: balks.into_iter().flatten().collect(),
             feeds_buffer,
@@ -743,6 +797,8 @@ pub struct Live<'a> {
     sim: Sim,
     stats: Rc<Vec<RefCell<BlockStats>>>,
     pools: Rc<Pools>,
+    /// For each pool, in model order, its units' movements if it is mobile.
+    fleets: Vec<Option<Rc<Fleet>>>,
     /// The ways out for entities turned away, which the finite waiting rooms hold weakly.
     _aways: Vec<Rc<Away>>,
     /// Each server's balking, which the ports into it hold weakly.
@@ -765,6 +821,76 @@ pub struct Live<'a> {
     /// The values recorded so far, when the compiled model records them
     /// ([`Compiled::record_every`]).
     recording: Option<Recording>,
+}
+
+/// What a mobile unit ([`stochcraft_model::Mobility`]) is doing: exactly one of these at every
+/// instant, as the sorter's bar names them.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum OperatorState {
+    /// Free, waiting for a request.
+    Idle,
+    /// Going to a pickup, or home, carrying nothing.
+    TravelEmpty,
+    /// Loading an item at the pickup.
+    Loading,
+    /// Carrying an item to its drop-off.
+    TravelLoaded,
+    /// Unloading, and waiting at the drop-off for room for the item, if there is none.
+    Unloading,
+}
+
+impl OperatorState {
+    /// Every state, in the order of the results (idle first).
+    pub const ALL: [OperatorState; 5] = [
+        OperatorState::Idle,
+        OperatorState::TravelEmpty,
+        OperatorState::Loading,
+        OperatorState::TravelLoaded,
+        OperatorState::Unloading,
+    ];
+
+    fn index(self) -> usize {
+        match self {
+            OperatorState::Idle => 0,
+            OperatorState::TravelEmpty => 1,
+            OperatorState::Loading => 2,
+            OperatorState::TravelLoaded => 3,
+            OperatorState::Unloading => 4,
+        }
+    }
+
+    /// A stable name for files and agents.
+    pub fn name(self) -> &'static str {
+        match self {
+            OperatorState::Idle => "idle",
+            OperatorState::TravelEmpty => "travel_empty",
+            OperatorState::Loading => "loading",
+            OperatorState::TravelLoaded => "travel_loaded",
+            OperatorState::Unloading => "unloading",
+        }
+    }
+
+    /// Whether the unit has an item with it: on its way to the drop-off or putting it down.
+    pub fn carries(self) -> bool {
+        matches!(self, OperatorState::TravelLoaded | OperatorState::Unloading)
+    }
+}
+
+/// One mobile unit at one moment of a [`Live`] run ([`Live::operators`]).
+#[derive(Debug, Clone, PartialEq)]
+pub struct OperatorView {
+    /// The pool the unit belongs to.
+    pub pool: stochcraft_model::ElementId,
+    /// Its place among the pool's units, from 0.
+    pub unit: usize,
+    pub state: OperatorState,
+    /// The element it is at, or the one it set out from on the leg it is travelling.
+    pub from: stochcraft_model::ElementId,
+    /// The element it is going to; its own when it is not travelling.
+    pub to: stochcraft_model::ElementId,
+    /// How far along the leg from `from` to `to` it is, 0 to 1 (0 when not travelling): at
+    /// that share of the straight line between the two elements' positions.
+    pub progress: f64,
 }
 
 /// A block's state at one moment of a [`Live`] run. Counts are since the warm-up ended (since
@@ -948,7 +1074,7 @@ impl Live<'_> {
 
     /// Records the state of every element and pool at time `t` (now).
     fn record(&mut self, t: f64) {
-        let pools = self.pools.states(&self.compiled.model.resources);
+        let pools = self.pool_states();
         let Some(r) = self.recording.as_mut() else {
             return;
         };
@@ -1050,7 +1176,45 @@ impl Live<'_> {
                 }
             })
             .collect();
-        out.extend(self.pools.states(&model.resources));
+        out.extend(self.pool_states());
+        out
+    }
+
+    /// Each pool's state now; a mobile pool's units are busy unless idle.
+    fn pool_states(&self) -> Vec<LiveState> {
+        let mut states = self.pools.states(&self.compiled.model.resources);
+        for (s, f) in states.iter_mut().zip(&self.fleets) {
+            if let Some(f) = f {
+                f.live(s);
+            }
+        }
+        states
+    }
+
+    /// Every unit of every mobile pool now, pool by pool and unit by unit: where it is, or
+    /// where it is going and how far along it is, for drawing it moving between the layout
+    /// positions of the elements.
+    pub fn operators(&self) -> Vec<OperatorView> {
+        let model = &self.compiled.model;
+        let now = self.now();
+        let id = |i: usize| model.elements.get(i).map(|e| e.id.clone());
+        let mut out = Vec::new();
+        for (r, f) in model.resources.iter().zip(&self.fleets) {
+            let Some(f) = f else { continue };
+            for (unit, (state, from, to, progress)) in f.snapshot(now).into_iter().enumerate() {
+                let (Some(from), Some(to)) = (id(from), id(to)) else {
+                    continue;
+                };
+                out.push(OperatorView {
+                    pool: r.id.clone(),
+                    unit,
+                    state,
+                    from,
+                    to,
+                    progress,
+                });
+            }
+        }
         out
     }
 
@@ -1129,7 +1293,13 @@ impl Live<'_> {
             }
         }
         // Then each shared pool, after the elements.
-        elements.extend(self.pools.reports(&model.resources, now));
+        let mut pools = self.pools.reports(&model.resources, now);
+        for (r, f) in pools.iter_mut().zip(&self.fleets) {
+            if let Some(f) = f {
+                f.fill(r, now);
+            }
+        }
+        elements.extend(pools);
         let after_warmup = self.reset_at.get();
         Report {
             warmup: self.warmup,
@@ -1225,6 +1395,9 @@ pub(crate) struct BlockStats {
     blocked_time: Tally,
     /// Each item's time on a conveyor, from getting on until it has left the end.
     time_on: Tally,
+    /// Each item's time carried by a transport, from the unit starting to load it until it has
+    /// unloaded it.
+    time_carried: Tally,
     /// Entities lost here. A server with a finite buffer: arrivals from sources turned away
     /// because the buffer was full (they never entered), or, with a way out for those turned
     /// away, any entity turned away (each time). A source: its own arrivals lost that
@@ -1494,6 +1667,7 @@ impl BlockStats {
             blocked: TimeWeighted::new(t, 0.0),
             blocked_time: Tally::new(),
             time_on: Tally::new(),
+            time_carried: Tally::new(),
             lost: 0,
             down: TimeWeighted::new(t, 0.0),
             transit: TimeWeighted::new(t, 0.0),
@@ -1556,6 +1730,7 @@ impl BlockStats {
         self.blocked.reset(t);
         self.blocked_time = Tally::new();
         self.time_on = Tally::new();
+        self.time_carried = Tally::new();
         self.lost = 0;
         self.down.reset(t);
         self.transit.reset(t);
@@ -1694,12 +1869,16 @@ impl BlockStats {
                 ..
             }
         );
+        // A transport queues entities for a unit, as a server does, and holds each until it has
+        // put it down.
+        let carries = matches!(kind, ElementKind::Transport { .. });
         let holds = matches!(
             kind,
             ElementKind::Server { .. }
                 | ElementKind::SharedTask { .. }
                 | ElementKind::Delay { .. }
                 | ElementKind::Conveyor { .. }
+                | ElementKind::Transport { .. }
         );
         let offered = self.lost + self.entered;
         let balky = matches!(
@@ -1770,12 +1949,16 @@ impl BlockStats {
             kind: kind.name(),
             entered: self.entered,
             left: self.left,
-            mean_queue_length: if server {
+            mean_queue_length: if server || carries {
                 self.waiting.average(end)
             } else {
                 None
             },
-            mean_wait: if server { self.mean_wait() } else { None },
+            mean_wait: if server || carries {
+                self.mean_wait()
+            } else {
+                None
+            },
             // Units working (processing or setting up) over the units there to work. A unit
             // failed or restarting part-way through a job is not busy: that time is capacity
             // lost, still in the units' time, as Law (Simulation Modeling and Analysis, 5th ed.,
@@ -1798,6 +1981,7 @@ impl BlockStats {
                 | ElementKind::SharedTask { .. }
                 | ElementKind::Delay { .. }
                 | ElementKind::Conveyor { .. }
+                | ElementKind::Transport { .. }
                 | ElementKind::Batch { .. } => self.busy.average(end),
                 _ => None,
             },
@@ -1806,6 +1990,7 @@ impl BlockStats {
                 | ElementKind::SharedTask { .. }
                 | ElementKind::Delay { .. }
                 | ElementKind::Conveyor { .. }
+                | ElementKind::Transport { .. }
                 | ElementKind::Batch { .. } => Some(self.inside()),
                 ElementKind::ParallelGateway if join => Some(self.inside()),
                 _ => None,
@@ -1815,6 +2000,7 @@ impl BlockStats {
                 | ElementKind::SharedTask { .. }
                 | ElementKind::Delay { .. }
                 | ElementKind::Conveyor { .. }
+                | ElementKind::Transport { .. }
                 | ElementKind::Batch { .. } => self.mean_inside(end),
                 ElementKind::ParallelGateway if join => self.mean_inside(end),
                 _ => None,
@@ -1978,13 +2164,26 @@ impl BlockStats {
                 ElementKind::Server { .. }
                 | ElementKind::SharedTask { .. }
                 | ElementKind::Delay { .. }
-                | ElementKind::Conveyor { .. } => Some(self.time_inside(end)),
+                | ElementKind::Conveyor { .. }
+                | ElementKind::Transport { .. } => Some(self.time_inside(end)),
                 _ => None,
             },
             on_shift: match kind {
                 ElementKind::Server { .. } if on_calendar => self.staffed.average(end),
                 _ => None,
             },
+            mean_time_carried: if carries {
+                self.time_carried.mean()
+            } else {
+                None
+            },
+            time_idle: None,
+            time_travel_empty: None,
+            time_loading: None,
+            time_travel_loaded: None,
+            time_unloading: None,
+            distance_empty: None,
+            distance_loaded: None,
         }
     }
 }
@@ -4645,6 +4844,14 @@ impl Pools {
                     leaving: [0, 0],
                     time_inside: None,
                     on_shift: None,
+                    mean_time_carried: None,
+                    time_idle: None,
+                    time_travel_empty: None,
+                    time_loading: None,
+                    time_travel_loaded: None,
+                    time_unloading: None,
+                    distance_empty: None,
+                    distance_loaded: None,
                 }
             })
             .collect()
@@ -4846,6 +5053,386 @@ fn spawn_delay(sim: &mut Sim, env: BlockEnv, duration: Rc<Times>) {
             });
         }
     });
+}
+
+/// One leg of a mobile unit's travel, from element `from` to element `to`, from time `start`
+/// to time `end`.
+struct Leg {
+    from: usize,
+    to: usize,
+    start: f64,
+    end: f64,
+}
+
+/// One unit of a mobile pool.
+struct FleetUnit {
+    /// The element it is at, or the one it set out from on its leg.
+    at: usize,
+    state: OperatorState,
+    /// When it last became idle (0 from the start), so that of equally near units the one idle
+    /// longest is taken.
+    since: f64,
+    /// While it travels, the leg it is on.
+    leg: Option<Leg>,
+}
+
+/// A request for a unit: the pickup it must come to, and where the unit given is handed over,
+/// with the time it takes to get to the pickup.
+struct Call {
+    pickup: usize,
+    grant: Store<(usize, f64)>,
+}
+
+struct FleetBook {
+    units: Vec<FleetUnit>,
+    /// Requests waiting for an idle unit, oldest first.
+    queue: VecDeque<Call>,
+    /// How many units are in each state, over time (by [`OperatorState::index`]): they add up
+    /// to the pool's units at every instant.
+    counts: [TimeWeighted; 5],
+    /// Units given to requests since the statistics started.
+    jobs: u64,
+}
+
+/// A mobile pool's units while the model runs (ROADMAP M5.2): where each is, what it is doing,
+/// and the requests waiting for one. Requests are served first come, first served; each takes
+/// the idle unit nearest its pickup (ties: the one idle longest, then the first), and a unit that
+/// becomes idle takes the oldest request waiting.
+struct Fleet {
+    ctx: Ctx,
+    speed_empty: f64,
+    speed_loaded: f64,
+    /// The element the units start at, and go back to after a job if the pool says so.
+    home: usize,
+    goes_home: bool,
+    /// The centre of each element's shape (by element index), and the drawing's scale, so that
+    /// a distance is [`stochcraft_model::Model::distance`].
+    centres: Vec<Option<(f64, f64)>>,
+    scale: f64,
+    book: RefCell<FleetBook>,
+}
+
+impl Fleet {
+    /// `units` units, idle at element `home` from time 0.
+    fn new(
+        ctx: &Ctx,
+        units: u32,
+        mobility: &Mobility,
+        home: usize,
+        centres: Vec<Option<(f64, f64)>>,
+        scale: f64,
+    ) -> Self {
+        Self {
+            ctx: ctx.clone(),
+            speed_empty: mobility.speed_empty,
+            speed_loaded: mobility.speed_loaded,
+            home,
+            goes_home: mobility.after_job == AfterJob::GoHome,
+            centres,
+            scale,
+            book: RefCell::new(FleetBook {
+                units: (0..units)
+                    .map(|_| FleetUnit {
+                        at: home,
+                        state: OperatorState::Idle,
+                        since: 0.0,
+                        leg: None,
+                    })
+                    .collect(),
+                queue: VecDeque::new(),
+                counts: std::array::from_fn(|k| {
+                    TimeWeighted::new(0.0, if k == 0 { f64::from(units) } else { 0.0 })
+                }),
+                jobs: 0,
+            }),
+        }
+    }
+
+    /// The straight-line distance between elements `a` and `b`, as the model measures it.
+    fn distance(&self, a: usize, b: usize) -> f64 {
+        let at = |i: usize| self.centres.get(i).copied().flatten();
+        match (at(a), at(b)) {
+            (Some((ax, ay)), Some((bx, by))) => (bx - ax).hypot(by - ay) * self.scale,
+            _ => 0.0,
+        }
+    }
+
+    /// Discards the statistics so far (the end of the warm-up).
+    fn reset(&self, now: f64) {
+        let mut book = self.book.borrow_mut();
+        book.counts.iter_mut().for_each(|c| c.reset(now));
+        book.jobs = 0;
+    }
+
+    /// Puts unit `unit` in `state` at element `at`, on `leg` if it is travelling, now.
+    fn move_unit(
+        book: &mut FleetBook,
+        unit: usize,
+        state: OperatorState,
+        at: usize,
+        leg: Option<Leg>,
+        now: f64,
+    ) {
+        let Some(u) = book.units.get_mut(unit) else {
+            return;
+        };
+        let from = u.state;
+        u.state = state;
+        u.at = at;
+        u.leg = leg;
+        if state == OperatorState::Idle {
+            u.since = now;
+        }
+        if from == state {
+            return;
+        }
+        for (s, delta) in [(from, -1.0), (state, 1.0)] {
+            if let Some(c) = book.counts.get_mut(s.index()) {
+                let v = c.value() + delta;
+                c.set(now, v);
+            }
+        }
+    }
+
+    fn set(&self, unit: usize, state: OperatorState, at: usize, leg: Option<Leg>) {
+        let now = self.ctx.now();
+        Self::move_unit(&mut self.book.borrow_mut(), unit, state, at, leg, now);
+    }
+
+    /// Asks for a unit to come to `pickup`: the store the unit is handed over in, as its index
+    /// and the time it takes to get there, once one is free (at once if there is, and no older
+    /// request waits).
+    fn enqueue(&self, pickup: usize) -> Store<(usize, f64)> {
+        let grant = Store::new(&self.ctx);
+        self.book.borrow_mut().queue.push_back(Call {
+            pickup,
+            grant: grant.clone(),
+        });
+        self.dispatch();
+        grant
+    }
+
+    /// Gives the oldest requests idle units, as long as there are both: each the idle unit
+    /// nearest its pickup, which sets out for it at once.
+    fn dispatch(&self) {
+        loop {
+            let now = self.ctx.now();
+            let (grant, unit, trip) = {
+                let mut guard = self.book.borrow_mut();
+                let book = &mut *guard;
+                let Some(pickup) = book.queue.front().map(|r| r.pickup) else {
+                    return;
+                };
+                let nearest = book
+                    .units
+                    .iter()
+                    .enumerate()
+                    .filter(|(_, u)| u.state == OperatorState::Idle)
+                    .min_by(|(i, a), (j, b)| {
+                        self.distance(a.at, pickup)
+                            .total_cmp(&self.distance(b.at, pickup))
+                            .then(a.since.total_cmp(&b.since))
+                            .then(i.cmp(j))
+                    })
+                    .map(|(i, u)| (i, u.at));
+                let Some((unit, at)) = nearest else {
+                    return;
+                };
+                let Some(request) = book.queue.pop_front() else {
+                    return;
+                };
+                let trip = self.distance(at, pickup) / self.speed_empty;
+                let leg = Leg {
+                    from: at,
+                    to: pickup,
+                    start: now,
+                    end: now + trip,
+                };
+                Self::move_unit(book, unit, OperatorState::TravelEmpty, at, Some(leg), now);
+                book.jobs += 1;
+                (request.grant, unit, trip)
+            };
+            grant.put((unit, trip));
+        }
+    }
+
+    /// The time to carry an item from `pickup` to `dropoff`.
+    fn loaded_trip(&self, pickup: usize, dropoff: usize) -> f64 {
+        self.distance(pickup, dropoff) / self.speed_loaded
+    }
+
+    /// Unit `unit` has put its item down at `dropoff`: it goes home first if the pool says so (a
+    /// unit on its way home is not free to be taken), then is idle, and takes the oldest request
+    /// waiting.
+    async fn finish(&self, unit: usize, dropoff: usize) {
+        let at = if self.goes_home { self.home } else { dropoff };
+        let trip = self.distance(dropoff, at) / self.speed_empty;
+        if trip > 0.0 {
+            let now = self.ctx.now();
+            let leg = Leg {
+                from: dropoff,
+                to: at,
+                start: now,
+                end: now + trip,
+            };
+            self.set(unit, OperatorState::TravelEmpty, dropoff, Some(leg));
+            self.ctx.hold(trip).await;
+        }
+        self.set(unit, OperatorState::Idle, at, None);
+        self.dispatch();
+    }
+
+    /// Each unit now: its state, where it is or sets out from, where it is going, and how far
+    /// along its leg it is.
+    fn snapshot(&self, now: f64) -> Vec<(OperatorState, usize, usize, f64)> {
+        self.book
+            .borrow()
+            .units
+            .iter()
+            .map(|u| match &u.leg {
+                Some(l) => {
+                    let span = l.end - l.start;
+                    let done = if span > 0.0 {
+                        ((now - l.start) / span).clamp(0.0, 1.0)
+                    } else {
+                        1.0
+                    };
+                    (u.state, l.from, l.to, done)
+                }
+                None => (u.state, u.at, u.at, 0.0),
+            })
+            .collect()
+    }
+
+    /// The pool's state now: its units busy unless idle.
+    fn live(&self, s: &mut LiveState) {
+        let book = self.book.borrow();
+        let busy = book
+            .units
+            .iter()
+            .filter(|u| u.state != OperatorState::Idle)
+            .count();
+        s.busy = busy as f64;
+        s.units = Some(book.units.len() as f64);
+    }
+
+    /// Fills in the pool's report: the share of the units' time in each state (adding up to 1),
+    /// the mean distance a unit travelled empty and loaded, and how many requests it served.
+    /// Distance is speed times the time spent travelling, so it is exact over the window.
+    fn fill(&self, r: &mut ElementReport, end: f64) {
+        let book = self.book.borrow();
+        let n = book.units.len() as f64;
+        if n <= 0.0 {
+            return;
+        }
+        let share = |s: OperatorState| {
+            book.counts
+                .get(s.index())
+                .and_then(|c| c.average(end))
+                .map(|x| x / n)
+        };
+        let distance = |s: OperatorState, speed: f64| {
+            book.counts
+                .get(s.index())
+                .and_then(|c| c.average(end).map(|_| c.integral(end) * speed / n))
+        };
+        r.time_idle = share(OperatorState::Idle);
+        r.time_travel_empty = share(OperatorState::TravelEmpty);
+        r.time_loading = share(OperatorState::Loading);
+        r.time_travel_loaded = share(OperatorState::TravelLoaded);
+        r.time_unloading = share(OperatorState::Unloading);
+        r.distance_empty = distance(OperatorState::TravelEmpty, self.speed_empty);
+        r.distance_loaded = distance(OperatorState::TravelLoaded, self.speed_loaded);
+        // A unit is busy unless idle.
+        r.utilisation = r.time_idle.map(|i| 1.0 - i);
+        r.mean_contents = r.utilisation.map(|u| u * n);
+        r.entered = book.jobs;
+        r.left = book.jobs;
+    }
+}
+
+/// What a transport block works with: the units to ask for and the two ends of the haul (element
+/// indices), and the times to load and unload.
+struct Haul {
+    fleet: Rc<Fleet>,
+    pickup: usize,
+    dropoff: usize,
+    load: Dist,
+    unload: Dist,
+}
+
+/// A time drawn from `d` with the block's own stream, undefined or negative ones counting as 0.
+fn draw(env: &Rc<RefCell<BlockEnv>>, d: &Dist) -> f64 {
+    let t = d.sample(&mut env.borrow_mut().rng);
+    if t.is_finite() && t > 0.0 { t } else { 0.0 }
+}
+
+/// A transport (ROADMAP M5.2): each item taken from its input asks the pool for a unit, in
+/// order, and is carried by it as a process of its own, so several units work at once; see
+/// [`carry`].
+fn spawn_transport(sim: &mut Sim, env: BlockEnv, haul: Haul) {
+    let me = tag(env.me);
+    let ctx = env.ctx.clone();
+    let env = Rc::new(RefCell::new(env));
+    let haul = Rc::new(haul);
+    sim.spawn_tagged(me, async move {
+        loop {
+            let input = env.borrow().input.clone();
+            let entity = input.get().await;
+            // Asked for here, in the order items reach the block, so that units are given out
+            // first come, first served.
+            let grant = haul.fleet.enqueue(haul.pickup);
+            let (c, env2, haul2) = (ctx.clone(), Rc::clone(&env), Rc::clone(&haul));
+            ctx.spawn(async move {
+                carry(&c, &env2, &haul2, grant, entity).await;
+            });
+        }
+    });
+}
+
+/// One item's haul: its unit travels empty to the pickup (the time it was given with the unit),
+/// loads (the wait for transport ends here), travels loaded to the drop-off, unloads, and the
+/// item goes on to the next element (waiting there for room counts as unloading); then the unit
+/// is free ([`Fleet::finish`]).
+async fn carry(
+    ctx: &Ctx,
+    env: &Rc<RefCell<BlockEnv>>,
+    haul: &Haul,
+    grant: Store<(usize, f64)>,
+    entity: Entity,
+) {
+    let fleet = &haul.fleet;
+    let (unit, to_pickup) = grant.get().await;
+    ctx.hold(to_pickup).await;
+    let started = ctx.now();
+    {
+        let e = env.borrow();
+        e.with_stats(|s| s.wait.add(started - entity.entered));
+        e.adjust(|s| &mut s.waiting, -1.0);
+        e.adjust(|s| &mut s.busy, 1.0);
+    }
+    fleet.set(unit, OperatorState::Loading, haul.pickup, None);
+    ctx.hold(draw(env, &haul.load)).await;
+    let trip = fleet.loaded_trip(haul.pickup, haul.dropoff);
+    let now = ctx.now();
+    let leg = Leg {
+        from: haul.pickup,
+        to: haul.dropoff,
+        start: now,
+        end: now + trip,
+    };
+    fleet.set(unit, OperatorState::TravelLoaded, haul.pickup, Some(leg));
+    ctx.hold(trip).await;
+    fleet.set(unit, OperatorState::Unloading, haul.dropoff, None);
+    ctx.hold(draw(env, &haul.unload)).await;
+    let now = ctx.now();
+    {
+        let e = env.borrow();
+        e.adjust(|s| &mut s.busy, -1.0);
+        e.with_stats(|s| s.time_carried.add(now - started));
+    }
+    move_on(env, ctx, entity, &|| false, None).await;
+    fleet.finish(unit, haul.dropoff).await;
 }
 
 /// A sink. With `scrap`, what reaches it is scrap, counted against the server given, or else
