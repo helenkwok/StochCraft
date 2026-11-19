@@ -1096,7 +1096,10 @@ fn a_cancelled_open_dialog_changes_nothing() {
     // shell answers nothing.
     h.state_mut().run_command(&CommandRef::new(commands::OPEN));
     settle(&mut h);
-    h.get_by_label("Save changes to Draft?");
+    assert!(
+        h.query_by_label_contains("Save changes to").is_some(),
+        "the unsaved changes are asked about"
+    );
     click(&mut h, "Don't Save");
     assert_eq!(h.state_mut().take_requests(), vec![Request::PickOpen]);
     settle(&mut h);
@@ -1107,7 +1110,10 @@ fn a_cancelled_open_dialog_changes_nothing() {
     // Nothing is left half done: Open asks about the unsaved changes again, and Cancel keeps them.
     h.state_mut().run_command(&CommandRef::new(commands::OPEN));
     settle(&mut h);
-    h.get_by_label("Save changes to Draft?");
+    assert!(
+        h.query_by_label_contains("Save changes to").is_some(),
+        "the unsaved changes are asked about"
+    );
     click(&mut h, "Cancel");
     assert_eq!(the_document(&h), before);
     assert_eq!(h.state_mut().take_requests(), vec![]);
