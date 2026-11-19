@@ -577,6 +577,7 @@ pub(crate) fn routing_element(routing: Routing) -> Option<Element> {
         Routing::ShortestQueue => {
             Some(vendor_value_element(crate::bpsim::ROUTING, "shortestQueue"))
         }
+        Routing::Divert => Some(vendor_value_element(crate::bpsim::ROUTING, "divert")),
     }
 }
 

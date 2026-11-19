@@ -158,7 +158,7 @@ fn shortest_queue(kind: &ElementKind) -> bool {
     matches!(
         kind,
         ElementKind::ExclusiveGateway {
-            routing: Routing::ShortestQueue,
+            routing: Routing::ShortestQueue | Routing::Divert,
             ..
         }
     )

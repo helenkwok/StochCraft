@@ -1804,6 +1804,18 @@ impl Builder {
         )
     }
 
+    /// Chooses a way as an exclusive gateway does, but sends an entity whose way is full down
+    /// the default way instead ([`Routing::Divert`]). Give it a default ([`Builder::default_route`]).
+    pub fn divert(&mut self, name: &str) -> BlockId {
+        self.add(
+            name,
+            ElementKind::ExclusiveGateway {
+                default: None,
+                routing: Routing::Divert,
+            },
+        )
+    }
+
     /// Copies each entity down every outgoing connection; with several incoming connections,
     /// waits for one entity on each first.
     pub fn parallel(&mut self, name: &str) -> BlockId {

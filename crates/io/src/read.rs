@@ -2153,12 +2153,13 @@ fn routing_of(scenario: Option<&Scenario>, id: &str, notes: &mut Vec<Note>) -> R
     let raw = bpsim::vendor_value(ext).unwrap_or_default();
     match raw.trim() {
         "shortestQueue" => Routing::ShortestQueue,
+        "divert" => Routing::Divert,
         "standard" => Routing::Standard,
         other => {
             notes.push(Note::error(
                 Some(id),
                 format!(
-                    "the routing rule (`{}`) must be shortestQueue or standard, not `{other}`; the gateway routes by its conditions or probabilities",
+                    "the routing rule (`{}`) must be shortestQueue, divert or standard, not `{other}`; the gateway routes by its conditions or probabilities",
                     bpsim::ROUTING
                 ),
             ));
