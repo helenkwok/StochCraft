@@ -9,19 +9,10 @@ use stochcraft_ui_egui::Workers;
 use wasm_bindgen::JsCast as _;
 use wasm_bindgen::prelude::*;
 
+use crate::schedule::{Shared, worker_count};
+
 /// What trunk names the worker's loader (index.html's `data-loader-shim`), next to the page.
 const LOADER: &str = "./stochcraft-worker_loader.js";
-/// No more workers than this, however many cores: a run rarely has more replications.
-const MAX_WORKERS: usize = 16;
-
-/// What the workers' handlers share with the pool.
-#[derive(Default)]
-struct Shared {
-    task: String,
-    next: u64,
-    total: u64,
-    answers: Vec<String>,
-}
 
 struct Running {
     worker: web_sys::Worker,
@@ -49,9 +40,8 @@ impl Pool {
     fn count(replications: u64) -> usize {
         let cores = web_sys::window()
             .map(|w| w.navigator().hardware_concurrency())
-            .unwrap_or(1.0) as usize;
-        let wanted = cores.saturating_sub(1).clamp(1, MAX_WORKERS);
-        wanted.min(usize::try_from(replications).unwrap_or(usize::MAX))
+            .unwrap_or(1.0);
+        worker_count(cores, replications)
     }
 
     fn spawn(&self) -> Result<Running, JsValue> {
@@ -62,30 +52,23 @@ impl Pool {
                 let Some(text) = e.data().as_string() else {
                     return;
                 };
-                let mut s = shared.borrow_mut();
-                if text == "ready" {
-                    let _ = me.post_message(&JsValue::from_str(&s.task));
-                } else {
-                    s.answers.push(text);
+                let reaction = shared.borrow_mut().on_message(text);
+                if let Some(task) = reaction.task {
+                    let _ = me.post_message(&JsValue::from_str(&task));
+                }
+                if reaction.repaint {
                     ctx.request_repaint();
                 }
                 // The next replication, if any is left.
-                if s.next < s.total {
-                    let _ = me.post_message(&JsValue::from_f64(s.next as f64));
-                    s.next += 1;
+                if let Some(index) = reaction.index {
+                    let _ = me.post_message(&JsValue::from_f64(index as f64));
                 }
             });
         let (shared, ctx) = (Rc::clone(&self.shared), self.ctx.clone());
         let on_error =
             Closure::<dyn FnMut(web_sys::ErrorEvent)>::new(move |e: web_sys::ErrorEvent| {
-                // A worker that failed to load or crashed: the run fails with what it said,
-                // rather than wait for answers that will not come.
-                let error = serde_json::json!({
-                    "code": "internal",
-                    "message": format!("a web worker stopped: {}", e.message()),
-                });
-                let answer = serde_json::json!({ "index": 0, "error": error });
-                shared.borrow_mut().answers.push(answer.to_string());
+                // A worker that failed to load or crashed.
+                shared.borrow_mut().worker_failed(&e.message());
                 ctx.request_repaint();
             });
         worker.set_onmessage(Some(on_message.as_ref().unchecked_ref()));
@@ -101,12 +84,7 @@ impl Pool {
 impl Workers for Pool {
     fn start(&mut self, task: &str, replications: u64) -> bool {
         self.stop();
-        *self.shared.borrow_mut() = Shared {
-            task: task.to_owned(),
-            next: 0,
-            total: replications,
-            answers: Vec::new(),
-        };
+        *self.shared.borrow_mut() = Shared::new(task, replications);
         for _ in 0..Self::count(replications) {
             match self.spawn() {
                 Ok(r) => self.running.push(r),
@@ -117,7 +95,7 @@ impl Workers for Pool {
     }
 
     fn answers(&mut self) -> Vec<String> {
-        std::mem::take(&mut self.shared.borrow_mut().answers)
+        self.shared.borrow_mut().take_answers()
     }
 
     fn stop(&mut self) {
@@ -126,8 +104,6 @@ impl Workers for Pool {
             r.worker.set_onerror(None);
             r.worker.terminate();
         }
-        let mut s = self.shared.borrow_mut();
-        s.next = s.total;
-        s.answers.clear();
+        self.shared.borrow_mut().stop();
     }
 }

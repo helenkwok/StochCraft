@@ -27,14 +27,8 @@ fn main() {
                 let index = index as u64;
                 let answer = match worker.borrow().as_ref() {
                     Some(Ok(w)) => w.run(index),
-                    Some(Err(err)) => {
-                        serde_json::json!({ "index": index, "error": err.to_json() }).to_string()
-                    }
-                    None => serde_json::json!({
-                        "index": index,
-                        "error": { "code": "internal", "message": "the worker has no run" },
-                    })
-                    .to_string(),
+                    Some(Err(err)) => error_answer(index, err.to_json()),
+                    None => no_run_answer(index),
                 };
                 let _ = reply.post_message(&JsValue::from_str(&answer));
             }
@@ -45,7 +39,47 @@ fn main() {
     let _ = scope.post_message(&JsValue::from_str("ready"));
 }
 
+/// The answer to replication `index` when the run could not be set up: `error` is the engine's.
+#[cfg(any(target_arch = "wasm32", test))]
+fn error_answer(index: u64, error: serde_json::Value) -> String {
+    serde_json::json!({ "index": index, "error": error }).to_string()
+}
+
+/// The answer to a replication asked for before any run was sent.
+#[cfg(any(target_arch = "wasm32", test))]
+fn no_run_answer(index: u64) -> String {
+    let error = serde_json::json!({ "code": "internal", "message": "the worker has no run" });
+    error_answer(index, error)
+}
+
 #[cfg(not(target_arch = "wasm32"))]
 fn main() {
     eprintln!("stochcraft-worker runs in a browser's web worker: build it with `trunk build`");
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn parsed(answer: &str) -> serde_json::Value {
+        serde_json::from_str(answer).unwrap_or(serde_json::Value::Null)
+    }
+
+    #[test]
+    fn a_replication_asked_for_before_the_run_is_answered_with_an_error() {
+        let answer = parsed(&no_run_answer(7));
+        assert_eq!(answer["index"], 7);
+        assert_eq!(answer["error"]["code"], "internal");
+        assert_eq!(answer["error"]["message"], "the worker has no run");
+    }
+
+    #[test]
+    fn a_run_that_could_not_be_set_up_answers_every_replication_with_its_error() {
+        let error = serde_json::json!({ "code": "invalid_model", "message": "no source" });
+        for index in [0, 3] {
+            let answer = parsed(&error_answer(index, error.clone()));
+            assert_eq!(answer["index"], index);
+            assert_eq!(answer["error"], error);
+        }
+    }
 }

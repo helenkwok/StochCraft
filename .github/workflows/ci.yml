@@ -112,12 +112,21 @@ jobs:
         run: sudo apt-get update -q && sudo apt-get install -y -q --no-install-recommends libxml2-utils
       - name: cargo xtask fetch-bpsim
         run: cargo xtask fetch-bpsim
+      # The BPMN MIWG reference models (CC BY 3.0) are fetched at the commit pinned in
+      # xtask/src/miwg.rs, never committed; the cache key follows that file.
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: target/miwg
+          key: miwg-${{ hashFiles('xtask/src/miwg.rs') }}
+      - name: cargo xtask fetch-miwg
+        run: cargo xtask fetch-miwg
       - name: cargo xtask ci (the affected crates, or everything)
         env:
           BASE: ${{ needs.plan.outputs.base }}
           EVERYTHING: ${{ needs.plan.outputs.everything }}
           # The reference-model tests must run here, not skip.
           STOCHCRAFT_REQUIRE_BPSIM: "1"
+          STOCHCRAFT_REQUIRE_MIWG: "1"
         run: |
           if [ -n "$BASE" ] && [ "$EVERYTHING" != "true" ]; then cargo xtask ci --affected "$BASE"; else cargo xtask ci; fi
 

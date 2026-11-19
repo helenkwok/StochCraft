@@ -32,6 +32,12 @@ application screens ("Operate" mode, the craft floor, layout, typography and col
 https://github.com/pbakaus/impeccable, commit 695cea5, Apache-2.0). No code or text from it is
 included.
 
+## Test data (fetched, never committed)
+
+| Where in StochCraft | Source | Licence |
+|---|---|---|
+| crates/io/tests/miwg.rs, `cargo xtask fetch-miwg` (xtask/src/miwg.rs) | The BPMN Model Interchange Working Group's test suite, only its `Reference/` folder (https://github.com/bpmn-miwg/bpmn-miwg-test-suite, commit ebfa3e545b9765a39ece3fc861b3cdf7b3c15bf8), fetched in CI and into `target/miwg/` by the command; no file is committed or redistributed. | CC BY 3.0 (its `LICENSE.txt`) |
+
 ## Assets
 
 | File | Author | Source | Licence |

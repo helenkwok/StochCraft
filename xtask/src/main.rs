@@ -8,6 +8,7 @@
 mod affected;
 mod bpsim;
 mod layers;
+mod miwg;
 
 use std::path::{Path, PathBuf};
 use std::process::{Command, ExitCode};
@@ -24,6 +25,8 @@ cargo xtask <command>
                   under Node's WASI (xtask/wasi-run.mjs): the pinned results must match there too
   fetch-bpsim     download the BPSim reference models and XML Schema from bpsim.org into
                   target/bpsim (checked against pinned SHA-256; never committed)
+  fetch-miwg      fetch the BPMN MIWG test suite's Reference/ folder at a pinned commit into
+                  target/miwg (CC BY 3.0; never committed)
   web-fonts       trunk's post-build hook: copy web-fonts/ (the craft-fonts faces build.rs
                   serves) into the site as fonts/, except for a pull-request preview
                   (STOCHCRAFT_PAGES_PREVIEW=1)
@@ -42,6 +45,7 @@ fn main() -> ExitCode {
         Some("wasm") => cmd_wasm(),
         Some("golden") => cmd_golden(),
         Some("fetch-bpsim") => bpsim::fetch(),
+        Some("fetch-miwg") => miwg::fetch(),
         Some("web-fonts") => cmd_web_fonts(),
         Some("ci") => match &args[1..] {
             [] => cmd_ci(None),

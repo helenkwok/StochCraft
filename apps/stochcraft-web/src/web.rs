@@ -8,7 +8,7 @@ use stochcraft_ui_egui::{App, Platform, Request};
 use wasm_bindgen::JsCast as _;
 use wasm_bindgen::prelude::*;
 
-use crate::storage;
+use crate::{schedule, storage};
 
 const CANVAS_ID: &str = "stochcraft_canvas";
 const LOADING_ID: &str = "stochcraft_loading";
@@ -173,14 +173,9 @@ fn pick(inbox: &Inbox, ctx: &egui::Context) {
 
 /// Offers `bytes` as a download named `name` (craft-platform's browser download).
 fn download(name: &str, bytes: &[u8]) -> Result<(), JsValue> {
-    let mime = match name.rsplit('.').next() {
-        Some("png") => "image/png",
-        Some("csv") => "text/csv",
-        _ => "application/xml",
-    };
     craft_platform::browser::download_bytes(
         name,
-        mime,
+        schedule::download_mime(name),
         bytes,
         craft_platform::browser::DownloadOptions::default(),
     )

@@ -6,6 +6,7 @@
 use egui_kittest::Harness;
 use egui_kittest::kittest::Queryable;
 use serde_json::json;
+use stochcraft_ui_egui::commands::{self, CommandRef};
 use stochcraft_ui_egui::{App, Autosave, Platform, Request};
 
 /// The app with English numbers (`1,234.5`), so the tests read the same in every region.
@@ -1068,4 +1069,111 @@ fn replacing_the_model_cancels_the_run_in_progress() {
         assert!(h.state().is_running(), "{replace}: {}", h.state().status());
         h.state_mut().cancel_run();
     }
+}
+
+/// What a closed Open dialog must leave as it was: the model, the file name in the title and
+/// the unsaved mark.
+fn the_document(h: &Harness<'static, App>) -> (serde_json::Value, String, bool) {
+    (
+        stochcraft_engine::wire::model(h.state().engine().model()),
+        h.state().title(),
+        h.state().has_unsaved_changes(),
+    )
+}
+
+#[test]
+fn a_cancelled_open_dialog_changes_nothing() {
+    let mut h = harness(Platform::DESKTOP);
+    menu(&mut h, &["File", "Open Example", "M/M/1 queue"]);
+    h.state_mut()
+        .execute("model.rename", json!({ "name": "Draft" }));
+    settle(&mut h);
+    let before = the_document(&h);
+    assert!(before.2, "the rename is an unsaved change");
+    let status = h.state().status().to_owned();
+
+    // Open ▸ Don't Save asks the shell for a file; the user closes the dialog without one, so the
+    // shell answers nothing.
+    h.state_mut().run_command(&CommandRef::new(commands::OPEN));
+    settle(&mut h);
+    h.get_by_label("Save changes to Draft?");
+    click(&mut h, "Don't Save");
+    assert_eq!(h.state_mut().take_requests(), vec![Request::PickOpen]);
+    settle(&mut h);
+    assert_eq!(the_document(&h), before, "model, title and unsaved mark");
+    assert_eq!(h.state().status(), status);
+    assert_eq!(h.state_mut().take_requests(), vec![]);
+
+    // Nothing is left half done: Open asks about the unsaved changes again, and Cancel keeps them.
+    h.state_mut().run_command(&CommandRef::new(commands::OPEN));
+    settle(&mut h);
+    h.get_by_label("Save changes to Draft?");
+    click(&mut h, "Cancel");
+    assert_eq!(the_document(&h), before);
+    assert_eq!(h.state_mut().take_requests(), vec![]);
+}
+
+#[test]
+fn a_cancelled_open_dialog_leaves_a_saved_model_saved() {
+    let mut h = harness(Platform::DESKTOP);
+    menu(&mut h, &["File", "Open Example", "M/M/1 queue"]);
+    let before = the_document(&h);
+    assert!(!before.2, "an example opens without unsaved changes");
+    // Nothing unsaved, so Open goes straight to the picker; closing it changes nothing.
+    h.state_mut().run_command(&CommandRef::new(commands::OPEN));
+    settle(&mut h);
+    assert_eq!(h.state_mut().take_requests(), vec![Request::PickOpen]);
+    assert_eq!(the_document(&h), before);
+    assert!(h.query_by_label_contains("Save changes to").is_none());
+}
+
+#[test]
+fn exporting_the_charts_sends_a_png_to_the_shell() {
+    let mut h = harness(Platform::DESKTOP);
+    menu(&mut h, &["File", "Open Example", "M/M/1 queue"]);
+    menu(&mut h, &["Model", "Run"]);
+    finish_run(&mut h);
+    h.get_by_role_and_label(egui::accesskit::Role::Button, "Export charts (PNG)")
+        .click();
+    // The shell's part: egui_kittest has no renderer here, so the first screenshot the app asks
+    // for (a frame or more after the click, once the charts are in view) is answered with a
+    // blank window-sized image, as the web or desktop renderer would answer with the pixels.
+    let mut asked = false;
+    for _ in 0..60 {
+        h.step();
+        let callbacks: Vec<egui::ScreenshotCallback> = h
+            .output()
+            .viewport_output
+            .values()
+            .flat_map(|v| v.commands.iter())
+            .filter_map(|c| match c {
+                egui::ViewportCommand::Screenshot(callback) => Some(callback.clone()),
+                _ => None,
+            })
+            .collect();
+        for callback in callbacks {
+            callback.complete(std::sync::Arc::new(egui::ColorImage::filled(
+                [1000, 700],
+                egui::Color32::WHITE,
+            )));
+            asked = true;
+        }
+        if asked {
+            break;
+        }
+    }
+    assert!(asked, "the app never asked for a screenshot");
+    h.run_steps(3);
+    let requests = h.state_mut().take_requests();
+    let [Request::Export { name, bytes }] = requests.as_slice() else {
+        panic!("expected one export, got {requests:?}");
+    };
+    assert_eq!(name, "mm1-charts.png");
+    assert_eq!(bytes[..8], *b"\x89PNG\r\n\x1a\n", "the PNG signature");
+    assert_eq!(bytes[12..16], *b"IHDR", "the header chunk comes first");
+    let dimension =
+        |at: usize| u32::from_be_bytes([bytes[at], bytes[at + 1], bytes[at + 2], bytes[at + 3]]);
+    assert!(dimension(16) > 0 && dimension(20) > 0, "an empty image");
+    h.state_mut().exported("/tmp/mm1-charts.png");
+    assert_eq!(h.state().status(), "Exported mm1-charts.png");
 }
