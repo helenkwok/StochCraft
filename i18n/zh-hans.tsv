@@ -1008,6 +1008,11 @@ unit	yr	年
 	Fonts	字体
 	The full list of third-party licences is in the file THIRD-PARTY-LICENSES.html, which comes with the download.	第三方许可证的完整列表在随下载附带的文件 THIRD-PARTY-LICENSES.html 中。
 	Full list of third-party licences	第三方许可证完整列表
+	Reset	重置
+	As fast as possible	尽可能快
+	Pause at	暂停于
+	Halve Speed	速度减半
+	Double Speed	速度加倍
 	Layout	布局
 	Layout of the model, to scale	按比例绘制的模型布局
 	Drag to pan · Scroll to zoom	拖动平移 · 滚动缩放

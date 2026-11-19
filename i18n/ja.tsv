@@ -1008,6 +1008,11 @@ unit	yr	年
 	Fonts	フォント
 	The full list of third-party licences is in the file THIRD-PARTY-LICENSES.html, which comes with the download.	サードパーティのライセンスの一覧は、ダウンロードに含まれるファイル THIRD-PARTY-LICENSES.html にあります。
 	Full list of third-party licences	サードパーティのライセンス一覧
+	Reset	リセット
+	As fast as possible	できるだけ速く
+	Pause at	指定時刻で一時停止
+	Halve Speed	速度を半分にする
+	Double Speed	速度を2倍にする
 	Layout	レイアウト
 	Layout of the model, to scale	縮尺どおりのモデルのレイアウト
 	Drag to pan · Scroll to zoom	ドラッグで移動 · スクロールでズーム

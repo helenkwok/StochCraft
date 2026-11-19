@@ -1008,6 +1008,11 @@ unit	yr	v
 	Fonts	Fontit
 	The full list of third-party licences is in the file THIRD-PARTY-LICENSES.html, which comes with the download.	Kolmansien osapuolten lisenssien täydellinen luettelo on tiedostossa THIRD-PARTY-LICENSES.html, joka tulee latauksen mukana.
 	Full list of third-party licences	Kolmansien osapuolten lisenssien täydellinen luettelo
+	Reset	Nollaa
+	As fast as possible	Mahdollisimman nopeasti
+	Pause at	Tauko kohdassa
+	Halve Speed	Puolita nopeus
+	Double Speed	Kaksinkertaista nopeus
 	Layout	Asettelu
 	Layout of the model, to scale	Mallin asettelu mittakaavassa
 	Drag to pan · Scroll to zoom	Vedä panoroidaksesi · Vieritä zoomataksesi

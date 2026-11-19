@@ -1008,6 +1008,11 @@ unit	yr	god.
 	Fonts	Fontovi
 	The full list of third-party licences is in the file THIRD-PARTY-LICENSES.html, which comes with the download.	Cijeli popis licenci trećih strana nalazi se u datoteci THIRD-PARTY-LICENSES.html, koja dolazi uz preuzimanje.
 	Full list of third-party licences	Cijeli popis licenci trećih strana
+	Reset	Vrati na početak
+	As fast as possible	Što brže moguće
+	Pause at	Pauza u
+	Halve Speed	Prepolovi brzinu
+	Double Speed	Udvostruči brzinu
 	Layout	Raspored
 	Layout of the model, to scale	Raspored modela, u mjerilu
 	Drag to pan · Scroll to zoom	Povucite za pomicanje · Skrolajte za zumiranje

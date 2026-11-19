@@ -1008,6 +1008,11 @@ unit	yr	년
 	Fonts	글꼴
 	The full list of third-party licences is in the file THIRD-PARTY-LICENSES.html, which comes with the download.	서드파티 라이선스 전체 목록은 다운로드에 포함된 THIRD-PARTY-LICENSES.html 파일에 있습니다.
 	Full list of third-party licences	서드파티 라이선스 전체 목록
+	Reset	초기화
+	As fast as possible	가능한 한 빠르게
+	Pause at	지정 시각에 일시 중지
+	Halve Speed	속도 절반으로 줄이기
+	Double Speed	속도 두 배로 높이기
 	Layout	배치도
 	Layout of the model, to scale	축척에 맞춘 모델 배치도
 	Drag to pan · Scroll to zoom	드래그하여 이동 · 스크롤하여 확대/축소

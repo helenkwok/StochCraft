@@ -37,6 +37,10 @@ pub const RUN: &str = "model.run";
 pub const CANCEL_RUN: &str = "model.cancel_run";
 pub const WATCH: &str = "model.watch";
 pub const STOP_WATCHING: &str = "model.stop_watching";
+pub const STEP_WATCHING: &str = "model.step";
+pub const RESET_WATCHING: &str = "model.reset";
+pub const HALVE_SPEED: &str = "model.halve_speed";
+pub const DOUBLE_SPEED: &str = "model.double_speed";
 pub const THEME: &str = "view.theme";
 pub const COLOR_THEME: &str = "view.color_theme";
 pub const EDIT_THEMES: &str = "view.edit_themes";
@@ -82,6 +86,10 @@ fn catalog() -> Vec<Bindable> {
         b(CANCEL_RUN, "Cancel Run", &["Model"], &[]),
         b(WATCH, "Watch a Run", &["Model"], &[]),
         b(STOP_WATCHING, "Stop Watching", &["Model"], &[]),
+        b(STEP_WATCHING, "Step", &["Model"], &["."]),
+        b(RESET_WATCHING, "Reset", &["Model"], &[]),
+        b(HALVE_SPEED, "Halve Speed", &["Model"], &["["]),
+        b(DOUBLE_SPEED, "Double Speed", &["Model"], &["]"]),
         b(DASHBOARD, "Dashboard", &["View"], &[]),
         b(HELP, "Help", &["Help"], &["F1"]),
         b(ABOUT, "About StochCraft", &["Help"], &[]),
@@ -312,7 +320,9 @@ impl App {
             RUN => !running && !self.engine.model().elements.is_empty(),
             CANCEL_RUN => running,
             WATCH => !running && !self.is_watching() && !self.engine.model().elements.is_empty(),
-            STOP_WATCHING => self.is_watching(),
+            STOP_WATCHING | STEP_WATCHING | RESET_WATCHING | HALVE_SPEED | DOUBLE_SPEED => {
+                self.is_watching()
+            }
             CLEAR_RECENT => !self.recent.is_empty(),
             CUT | COPY | DUPLICATE => !self.selection().is_empty(),
             DELETE => !self.selection().is_empty() || self.canvas.flow.is_some(),
@@ -380,6 +390,10 @@ impl App {
             CANCEL_RUN => self.cancel_run(),
             WATCH => self.start_watching(),
             STOP_WATCHING => self.stop_watching(),
+            STEP_WATCHING => self.step_watching(),
+            RESET_WATCHING => self.reset_watching(),
+            HALVE_SPEED => self.scale_speed(0.5),
+            DOUBLE_SPEED => self.scale_speed(2.0),
             THEME => {
                 if let Some(t) = command.params.as_str().and_then(ThemeChoice::from_key) {
                     self.theme_choice = t;

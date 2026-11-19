@@ -51,6 +51,15 @@ impl App {
         .filter_map(|(id, what)| key(id).map(|k| (k, what)))
         .collect();
         keys.push((t("Space").to_owned(), "Play or pause a watched run"));
+        for (id, what) in [
+            (commands::STEP_WATCHING, "Step"),
+            (commands::HALVE_SPEED, "Halve Speed"),
+            (commands::DOUBLE_SPEED, "Double Speed"),
+        ] {
+            if let Some(k) = key(id) {
+                keys.push((k, what));
+            }
+        }
         let action = egui::Panel::right("help")
             .resizable(true)
             .default_size(360.0)
@@ -139,8 +148,11 @@ impl App {
         // The block list from the keyboard, when no field is being edited.
         let typing = ctx.memory(|m| m.focused().is_some());
         if !typing && !self.show_results {
-            if self.is_watching() && ctx.input_mut(|i| i.consume_key(Modifiers::NONE, Key::Space)) {
-                self.toggle_playing();
+            // The run bar's Space: play or pause (or start watching), where the bar is.
+            if (self.is_watching() || self.run_bar_shown())
+                && ctx.input_mut(|i| i.consume_key(Modifiers::NONE, Key::Space))
+            {
+                self.run_or_pause();
             }
             if ctx.input_mut(|i| i.consume_key(Modifiers::NONE, Key::ArrowDown)) {
                 self.move_selection(true);

@@ -1008,6 +1008,11 @@ unit	yr	a
 	Fonts	Tipus de lletra
 	The full list of third-party licences is in the file THIRD-PARTY-LICENSES.html, which comes with the download.	La llista completa de llicències de tercers és al fitxer THIRD-PARTY-LICENSES.html, que ve amb la baixada.
 	Full list of third-party licences	Llista completa de llicències de tercers
+	Reset	Reinicia
+	As fast as possible	Tan ràpid com sigui possible
+	Pause at	Pausa a
+	Halve Speed	Redueix la velocitat a la meitat
+	Double Speed	Duplica la velocitat
 	Layout	Disposició
 	Layout of the model, to scale	Disposició del model, a escala
 	Drag to pan · Scroll to zoom	Arrossegueu per desplaçar · Desplaceu per ampliar

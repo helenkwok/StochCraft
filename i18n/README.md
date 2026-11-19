@@ -749,6 +749,12 @@ engine's messages (validation, file notes) are English too.
   everyday word for a font on a computer; "third party" is rendered as the language's
   ordinary business term. Not checked against any other source, and not reviewed by native
   speakers. The least certain are lo, th, ta, te, bn, ka, kk, hi and sq.
+- The rows added for the run bar (M5.5 U1: Reset, As fast as possible, Pause at, Halve Speed,
+  Double Speed) were machine-drafted with Claude Code from the plain meaning of the English,
+  reusing each catalog's own words for pause, speed and run ("Pause at" follows the catalog's
+  Pause; "Reset" is the usual word for returning to the start, or "back to the start" where
+  the language has no short one). Not checked against any other source, and not reviewed by
+  native speakers; the least certain are lo, th, ta, te, bn, ka, kk, hi, sq, et and lt.
 
 **Adding or changing a string:** add the English in the code through `i18n::t` (or `tf`, `tn`),
 then add its row to each catalog here, or leave it out to show English until it is translated.
