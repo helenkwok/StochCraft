@@ -74,7 +74,7 @@ How other simulation tools keep models:
 |---|---|
 | SimPy, simu-des, DESMO-J | Program code (Python, C, Rust, Java); no model file |
 | JaamSim | Its own plain-text configuration file (`.cfg`) |
-| Commercial simulation tools | Their own proprietary files |
+| Some commercial simulation tools | Their own proprietary files |
 | Stella (system dynamics) | XMILE, an OASIS standard |
 
 And the sibling Craft apps: CADCraft saves DXF natively and keeps CADCraft-only data inside it as

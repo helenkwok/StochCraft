@@ -9,16 +9,19 @@ the ranked work list is [gaps.md](gaps.md). This is about the user experience on
 results are checked against queueing theory and published papers (README, ROADMAP); no results of
 the vendor tools are compared here.
 
+Two specific commercial tools were assessed, called "the 3D-first tool" and "the flowchart-first
+tool" below. Every estimate applies to those two tools only, not to every tool of either kind.
+
 ## Headline
 
 | Number | Value | Kind |
 |---|---|---|
 | UI/UX fidelity, weighted to the first hour | **~44%** | estimated from the checklist (rule below) |
 | Fidelity of the 23 first-hour rows alone | **~55%** | estimated (7 done, 2 done (ours), 9 partial, 5 missing) |
-| A 3D-first tool's first tutorial (its first two tasks) done in StochCraft | **9.5 of 17 steps** | estimated, step by step |
-| A flowchart-first tool's first tutorial (its first four phases) done in StochCraft | **6 of 11 steps** | estimated, step by step; the steps are from public summaries, not confirmed |
-| Ready for a switcher from a 3D-first tool | **~51%** | estimated (area weights below) |
-| Ready for a switcher from a flowchart-first tool | **~54%** | estimated |
+| The 3D-first tool's first tutorial (its first two tasks) done in StochCraft | **9.5 of 17 steps** | estimated, step by step |
+| The flowchart-first tool's first tutorial (its first four phases) done in StochCraft | **6 of 11 steps** | estimated, step by step; the steps are from public summaries, not confirmed |
+| Ready for a switcher from the 3D-first tool | **~51%** | estimated (area weights below) |
+| Ready for a switcher from the flowchart-first tool | **~54%** | estimated |
 | Ready for a newcomer to simulation | **~51%** | estimated |
 | Nielsen's ten heuristics | **20 / 40** | judged; the bottom of the "acceptable" band (most real interfaces score 20–32) |
 | Cognitive-load checklist | **5 of 8 failed** | judged; critical |
@@ -27,7 +30,7 @@ the vendor tools are compared here.
 
 **Verdict.** The engine is ahead of the interface. A switcher can do a little over half of their
 usual first-hour steps, but the missing half is the visible half: the first run shows counts in
-badges where a 3D-first tool shows items moving and piling up in a queue (and a flowchart-first tool, from public
+badges where the 3D-first tool shows items moving and piling up in a queue (and the flowchart-first tool, from public
 summaries, not confirmed, animates them once the space is drawn); the library is a strip of text
 chips where the vendors have a docked panel of icons; there is nothing like their user-built
 dashboards; and Help holds only About. The visual style is calm and readable and does not look
@@ -39,8 +42,8 @@ help, and an app that works for keyboard and screen-reader users.
 
 | Audience | Ready | Work that dominates |
 |---|---|---|
-| Switcher from a 3D-first tool | ~51% | layout and animation weigh most (it is taught 3D first): moving entities ([gaps](gaps.md) #2), the library (#3), user-chosen charts and dashboards (#10); a 2D layout and 3D later |
-| Switcher from a flowchart-first tool | ~54% | flowchart users lean on parameters and experiments (from public summaries, not confirmed): what-if comparison and scenarios (#4), named parameters and outputs (#11), the library (#3), moving entities (#2) |
+| Switcher from the 3D-first tool | ~51% | layout and animation weigh most (it is taught 3D first): moving entities ([gaps](gaps.md) #2), the library (#3), user-chosen charts and dashboards (#10); a 2D layout and 3D later |
+| Switcher from the flowchart-first tool | ~54% | flowchart users lean on parameters and experiments (from public summaries, not confirmed): what-if comparison and scenarios (#4), named parameters and outputs (#11), the library (#3), moving entities (#2) |
 | Newcomer to simulation | ~51% | results that answer the question (#1), help, a guided first model and examples that show something (#5), one vocabulary (#7), field errors (#8) |
 
 Estimated remaining effort (one worker, sequential, tests included), summed from the hour ranges
@@ -159,12 +162,12 @@ agrees with eframe's web backend having no AccessKit adapter.
   commits before `6292048` (those two change the waiting-room and delay logic and seven lines of
   the inspector). The app itself was not driven for it, and no click counts were measured: step
   counts are the steps of the vendors' own first tutorials.
-- **3D-first tool**: 39 pages of its public user manual read as text; most cited pages read in full,
+- **3D-first tool**: 39 pages of its public User Manual 2026 read as text; most cited pages read in full,
   about ten only in their opening paragraphs.
 - **Flowchart-first tool**: its help pages refuse automated reading, so its rows rest on search summaries of
   the official help pages and say "from public summaries, not confirmed"; a person with a browser
   should confirm them. The vendor's features page was read directly. Rows describe its desktop
-  version unless they say otherwise.
+  version 8 unless they say otherwise.
 - **Clean room** (ROADMAP principle 6): the vendors' documentation was read as prose and is
   described here in generic terms. Nothing was copied, no vendor software was run, and no vendor
   images or example models were used. A vendor behaviour not found in the pages read is "not found
@@ -176,5 +179,5 @@ agrees with eframe's web backend having no AccessKit adapter.
   weights are written above to be argued with, so every percentage is an estimate.
 - **Changed from the review.** The review listed "findings stated in words" as done (ours); the
   code has them only for split outcomes, so the row is partial here. That moves fidelity from ~43%
-  to ~44% (the row now counts) and readiness for a switcher from a 3D-first tool from ~52% to ~51%.
+  to ~44% (the row now counts) and readiness for a switcher from the 3D-first tool from ~52% to ~51%.
 - StochCraft has no users yet; nothing here is user research.
