@@ -2320,7 +2320,8 @@ answers, and ships as an example model with its write-up ("Examples for teaching
      front, and its slot reaches p behind it.
      - It may enter only when the item before it has moved p along (so slots never overlap)
        and fewer than N = ⌊L / p⌋ items are on it; otherwise the sender waits, as for a full
-       waiting room, and waiting senders (a merge) enter in the order they asked.
+       waiting room (a source loses the arrival, as it does there), and waiting senders (a
+       merge) enter in the order they asked.
      - At L it is offered to what follows, with the hand-over a full waiting room uses today.
    - **Accumulating** (items slip on a stopped item ahead): an item that cannot leave stops at
      L; the ones behind keep moving until each stops a pitch behind the one ahead. When the
@@ -2363,8 +2364,9 @@ answers, and ships as an example model with its write-up ("Examples for teaching
    - **Checks with known answers:**
      - not accumulating and never blocked: every item's time on it is L / v;
      - accumulating, exit shut: it holds exactly N = ⌊L / p⌋ items, and the next sender waits;
-     - the most it carries is v / p items per unit of time: a source faster than that leaves
-       its sender waiting, and the capacity table marks it unstable;
+     - the most it carries is v / p items per unit of time: from a source faster than that it
+       takes one every p / v and the source loses the rest, and the capacity table marks it
+       overloaded before the run;
      - a constant-time server after it, slower than the items come: accumulating, the items
        queue a pitch apart and item i leaves at max(tᵢ + L / v, dᵢ₋₁ + p / v), worked by hand
        for the first ten items; not accumulating, the belt stops each time and every item's
