@@ -17,6 +17,7 @@
 //!   connections, waits for one entity on each before going on. Any element may have several
 //!   incoming connections (a merge).
 
+pub mod balance;
 pub mod calendar;
 pub mod capacity;
 pub mod expr;
