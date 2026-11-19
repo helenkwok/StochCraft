@@ -207,6 +207,7 @@ pub fn showcase() -> Model {
     let mut model = m.build(Experiment {
         time_unit: TimeUnit::Hours,
         length_unit: stochcraft_model::LengthUnit::Metres,
+        layout_scale: 1.0,
         warmup: 2.5,
         duration: 40.0,
         replications: 7,
@@ -2165,4 +2166,128 @@ fn a_conveyor_and_the_length_unit_write_read_and_save() {
     assert_eq!(text, Ok(false));
     let back = saved.as_deref().map(|b| read(b).map(|l| l.model));
     assert_eq!(back, Ok(Ok(delay)));
+}
+
+/// A source, a transport and a sink, one walking operator, the scale 0.5 and lengths in feet.
+fn carry_model() -> Model {
+    use stochcraft_model::{
+        AfterJob, Connection, Element, ElementId, LengthUnit, Mobility, ResourcePool,
+    };
+    let id = |s: &str| ElementId::unchecked(s);
+    let mut pool = ResourcePool::new(id("walkers"), "Walkers", 2, Vec::new());
+    pool.mobility = Some(Mobility {
+        speed_empty: 1.5,
+        speed_loaded: 1.0,
+        home: id("in"),
+        after_job: AfterJob::GoHome,
+    });
+    Model {
+        name: "Carry".into(),
+        elements: vec![
+            Element::new(
+                id("in"),
+                "in",
+                ElementKind::Source {
+                    interarrival: Dist::Constant(10.0),
+                    limit: None,
+                    timed: Vec::new(),
+                    idle_outside: false,
+                },
+            ),
+            Element::new(
+                id("carry"),
+                "carry",
+                ElementKind::Transport {
+                    pool: id("walkers"),
+                    load: Dist::Constant(1.0),
+                    unload: Dist::Exponential { mean: 2.0 },
+                },
+            ),
+            Element::new(
+                id("out"),
+                "out",
+                ElementKind::Sink {
+                    scrap: None,
+                    demand: None,
+                },
+            ),
+        ],
+        connections: vec![
+            Connection::new(id("f1"), id("in"), id("carry")),
+            Connection::new(id("f2"), id("carry"), id("out")),
+        ],
+        resources: vec![pool],
+        experiment: Experiment {
+            length_unit: LengthUnit::Feet,
+            layout_scale: 0.5,
+            ..Experiment::default()
+        },
+        ..Model::default()
+    }
+}
+
+/// A transport, its pool's mobility and the scenario's layout scale are written as StochCraft's
+/// vendor extensions, read back as they were, and saved in place when they change: the
+/// extension goes when the element stops being a transport and when the pool stops moving.
+#[test]
+fn a_transport_a_mobile_pool_and_the_layout_scale_write_read_and_save() {
+    use stochcraft_model::{AfterJob, Severity};
+    let model = laid_out(carry_model());
+    assert!(
+        model
+            .validate()
+            .iter()
+            .all(|d| d.severity != Severity::Error),
+        "{:#?}",
+        model.validate()
+    );
+    let bytes = write_new(&model);
+    let text = String::from_utf8_lossy(&bytes);
+    assert!(
+        text.contains("stochcraft:transport")
+            && text.contains("stochcraft:mobility")
+            && text.contains("stochcraft:layoutScale")
+    );
+    let Ok(loaded) = read(&bytes) else {
+        unreachable!()
+    };
+    assert!(loaded.notes.is_empty(), "{:#?}", loaded.notes);
+    assert_eq!(loaded.model, model);
+    assert_eq!(loaded.opened.save(&loaded.model), Ok(bytes.clone()));
+
+    // Another load time, a pool that stays, and another scale.
+    let mut edited = loaded.model.clone();
+    edited.experiment.layout_scale = 2.0;
+    if let Some(m) = edited.resources[0].mobility.as_mut() {
+        m.after_job = AfterJob::Stay;
+        m.speed_loaded = 3.0;
+    }
+    if let ElementKind::Transport { load, .. } = &mut edited.elements[1].kind {
+        *load = Dist::Constant(4.0);
+    }
+    let saved = loaded.opened.save(&edited);
+    let back = saved.as_deref().map(|b| read(b).map(|l| l.model));
+    assert_eq!(back, Ok(Ok(edited.clone())));
+
+    // The pool stops moving and the element stops being a transport: both extensions are gone.
+    let Ok(saved) = saved else { return };
+    let Ok(again) = read(&saved) else {
+        unreachable!()
+    };
+    let mut plain = edited;
+    plain.resources[0].mobility = None;
+    plain.elements[1].kind = ElementKind::Delay {
+        processing_by: None,
+        duration: Dist::Constant(3.0),
+    };
+    let saved = again.opened.save(&plain);
+    let text = saved.as_deref().map(String::from_utf8_lossy).map(|t| {
+        (
+            t.contains("stochcraft:transport"),
+            t.contains("stochcraft:mobility"),
+        )
+    });
+    assert_eq!(text, Ok((false, false)));
+    let back = saved.as_deref().map(|b| read(b).map(|l| l.model));
+    assert_eq!(back, Ok(Ok(plain)));
 }

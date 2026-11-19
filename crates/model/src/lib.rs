@@ -336,6 +336,19 @@ pub enum ElementKind {
         /// uses `length`.
         shape: ConveyorShape,
     },
+    /// A transport: an item reaching it is carried from the element before it (the pickup) to
+    /// the element after it (the drop-off) by a unit of a mobile pool (a StochCraft vendor
+    /// extension on a task, `stochcraft:transport`). The unit travels to the pickup, loads for
+    /// `load`, travels to the drop-off, and unloads for `unload`. It is not simulated yet
+    /// (ROADMAP.md, M5.2).
+    Transport {
+        /// The mobile pool whose units carry the items ([`ResourcePool::mobility`]).
+        pool: ElementId,
+        /// The time to load an item at the pickup.
+        load: Dist,
+        /// The time to unload an item at the drop-off.
+        unload: Dist,
+    },
 }
 
 /// How a [`ElementKind::Conveyor`] is drawn in 3D; the simulation run still uses its `length`.
@@ -946,6 +959,51 @@ pub struct ResourcePool {
     pub available: bool,
     /// Availability while a calendar is active, the first active one applying.
     pub availability: Vec<Timed<bool>>,
+    /// Whether the units move about (operators who walk or drive, [`ElementKind::Transport`]);
+    /// `None` for a pool whose units stay where they are.
+    pub mobility: Option<Mobility>,
+}
+
+/// How a mobile pool's units move. Speeds are in the experiment's length unit per its time
+/// unit. A StochCraft vendor extension on the resource (`stochcraft:mobility`).
+#[derive(Debug, Clone, PartialEq)]
+pub struct Mobility {
+    /// The speed of a unit that carries nothing; above 0.
+    pub speed_empty: f64,
+    /// The speed of a unit that carries an item; above 0.
+    pub speed_loaded: f64,
+    /// The element its units start at (their home); it needs a shape in [`Model::layout`].
+    pub home: ElementId,
+    /// What a unit does once it has put an item down.
+    pub after_job: AfterJob,
+}
+
+/// What a mobile unit does once it has put an item down.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+pub enum AfterJob {
+    /// It stays where it put the item down.
+    #[default]
+    Stay,
+    /// It goes back to its home.
+    GoHome,
+}
+
+impl AfterJob {
+    /// The name written in files (`stay` or `goHome`).
+    pub fn name(self) -> &'static str {
+        match self {
+            AfterJob::Stay => "stay",
+            AfterJob::GoHome => "goHome",
+        }
+    }
+
+    pub fn from_name(s: &str) -> Option<Self> {
+        Some(match s {
+            "stay" => AfterJob::Stay,
+            "goHome" => AfterJob::GoHome,
+            _ => return None,
+        })
+    }
 }
 
 impl ResourcePool {
@@ -959,6 +1017,7 @@ impl ResourcePool {
             shifts: Vec::new(),
             available: true,
             availability: Vec::new(),
+            mobility: None,
         }
     }
 
@@ -1001,6 +1060,7 @@ impl ElementKind {
             ElementKind::Batch { .. } => "batch",
             ElementKind::Unbatch => "unbatch",
             ElementKind::Conveyor { .. } => "conveyor",
+            ElementKind::Transport { .. } => "transport",
         }
     }
 
@@ -1095,6 +1155,7 @@ impl ElementKind {
             ElementKind::Delay { duration, .. } => std::iter::once(("duration", duration))
                 .chain(by_value_times(self.processing_by()).map(|t| ("duration", t)))
                 .collect(),
+            ElementKind::Transport { load, unload, .. } => vec![("load", load), ("unload", unload)],
             ElementKind::Sink { .. }
             | ElementKind::ExclusiveGateway { .. }
             | ElementKind::ParallelGateway
@@ -1347,6 +1408,10 @@ pub struct Experiment {
     pub time_unit: TimeUnit,
     /// The unit lengths are in (a conveyor's); metres unless the scenario says otherwise.
     pub length_unit: LengthUnit,
+    /// Length units per drawing unit of [`Model::layout`]: a distance between two elements is
+    /// the straight line between their centres on the canvas, times this ([`Model::distance`]).
+    /// 1 unless the scenario says otherwise (`stochcraft:layoutScale`).
+    pub layout_scale: f64,
     /// Simulated time before statistics are collected.
     pub warmup: f64,
     /// Simulated time over which statistics are collected, after the warm-up.
@@ -1403,6 +1468,7 @@ impl Default for Experiment {
         Self {
             time_unit: TimeUnit::Minutes,
             length_unit: LengthUnit::Metres,
+            layout_scale: 1.0,
             warmup: 0.0,
             duration: 480.0,
             replications: 10,
@@ -1461,7 +1527,8 @@ impl ElementKind {
             | ElementKind::Delay { .. }
             | ElementKind::Batch { .. }
             | ElementKind::Unbatch
-            | ElementKind::Conveyor { .. } => (100.0, 80.0),
+            | ElementKind::Conveyor { .. }
+            | ElementKind::Transport { .. } => (100.0, 80.0),
         }
     }
 }
@@ -1716,6 +1783,36 @@ pub enum Problem {
         length: f64,
         path_length: f64,
     },
+    /// Found when the model is prepared to run, not by [`Model::validate`] (a transport can be
+    /// drawn, saved and sized meanwhile): transports are not simulated yet.
+    TransportNotSimulated,
+    /// A transport's pool does not exist, or is not mobile.
+    TransportPool {
+        pool: ElementId,
+        /// Whether the pool exists (it is then not mobile).
+        exists: bool,
+    },
+    /// A mobile pool's speed (`field` is `speed empty` or `speed loaded`) is not above 0 and
+    /// finite.
+    BadMobilitySpeed {
+        field: &'static str,
+    },
+    /// A mobile pool's home is not an element of the model.
+    UnknownHome {
+        home: ElementId,
+    },
+    /// A transport has other than exactly one element before it and one after it.
+    TransportEnds {
+        inputs: usize,
+        outputs: usize,
+    },
+    /// A distance needs `element` to have a shape on the canvas (a transport's pickup or
+    /// drop-off, a mobile pool's home), and it has none.
+    NoShape {
+        element: ElementId,
+    },
+    /// The experiment's layout scale is not above 0 and finite.
+    BadLayoutScale,
     /// A bill of materials asking for no entities from a connection.
     ZeroQuantity,
     /// A quantity on a connection that does not go into a parallel gateway, where it does
@@ -1976,6 +2073,13 @@ impl Problem {
             Problem::BadConveyorValue { .. } => "bad_conveyor_value",
             Problem::ConveyorTooShort { .. } => "conveyor_too_short",
             Problem::ConveyorLengthMismatch { .. } => "conveyor_length_mismatch",
+            Problem::TransportNotSimulated => "transport_not_simulated",
+            Problem::TransportPool { .. } => "transport_pool",
+            Problem::BadMobilitySpeed { .. } => "bad_mobility_speed",
+            Problem::UnknownHome { .. } => "unknown_home",
+            Problem::TransportEnds { .. } => "transport_ends",
+            Problem::NoShape { .. } => "no_shape",
+            Problem::BadLayoutScale => "bad_layout_scale",
             Problem::ZeroQuantity => "zero_quantity",
             Problem::QuantityIgnored => "quantity_ignored",
             Problem::NothingToUnbatch => "nothing_to_unbatch",
@@ -2289,6 +2393,35 @@ impl std::fmt::Display for Diagnostic {
                 "the conveyor's drawn path length {} differs from its length {} by more than 1%, so the drawing and the run will not agree",
                 short(*path_length),
                 short(*length)
+            ),
+            Problem::TransportNotSimulated => write!(f, "transports are not simulated yet"),
+            Problem::TransportPool { pool, exists } => {
+                if *exists {
+                    write!(
+                        f,
+                        "the transport's pool `{pool}` is not mobile; give it speeds and a home"
+                    )
+                } else {
+                    write!(f, "the transport's pool `{pool}` does not exist")
+                }
+            }
+            Problem::BadMobilitySpeed { field } => {
+                write!(f, "the pool's {field} must be a finite number above 0")
+            }
+            Problem::UnknownHome { home } => {
+                write!(f, "the pool's home `{home}` is not an element of the model")
+            }
+            Problem::TransportEnds { inputs, outputs } => write!(
+                f,
+                "a transport needs exactly one element before it (where it picks up) and one after it (where it drops off), but has {inputs} before and {outputs} after"
+            ),
+            Problem::NoShape { element } => write!(
+                f,
+                "`{element}` has no place on the canvas, so distances to it are not known; place it"
+            ),
+            Problem::BadLayoutScale => write!(
+                f,
+                "the layout scale (length units per drawing unit) must be a finite number above 0"
             ),
             Problem::ZeroQuantity => {
                 write!(
@@ -2765,6 +2898,62 @@ impl Model {
                     }
                 }
             }
+            if let ElementKind::Transport { pool, .. } = &e.kind {
+                let mobility = self
+                    .resources
+                    .iter()
+                    .find(|r| &r.id == pool)
+                    .map(|r| r.mobility.as_ref());
+                if !matches!(mobility, Some(Some(_))) {
+                    out.push(Diagnostic::error(
+                        Some(&e.id),
+                        Problem::TransportPool {
+                            pool: pool.clone(),
+                            exists: mobility.is_some(),
+                        },
+                    ));
+                }
+                let before: Vec<&ElementId> = self
+                    .connections
+                    .iter()
+                    .filter(|c| c.to == e.id)
+                    .map(|c| &c.from)
+                    .collect();
+                let after: Vec<&ElementId> = self
+                    .connections
+                    .iter()
+                    .filter(|c| c.from == e.id)
+                    .map(|c| &c.to)
+                    .collect();
+                if before.len() != 1 || after.len() != 1 {
+                    out.push(Diagnostic::error(
+                        Some(&e.id),
+                        Problem::TransportEnds {
+                            inputs: before.len(),
+                            outputs: after.len(),
+                        },
+                    ));
+                } else {
+                    // The pickup, the drop-off and the pool's home need places, else the
+                    // distances between them are not known.
+                    let mut places = vec![before[0], after[0]];
+                    if let Some(Some(m)) = mobility {
+                        places.push(&m.home);
+                    }
+                    let mut seen: Vec<&ElementId> = Vec::new();
+                    for place in places {
+                        if !seen.contains(&place) && !self.layout.contains_key(place) {
+                            out.push(Diagnostic::error(
+                                Some(&e.id),
+                                Problem::NoShape {
+                                    element: place.clone(),
+                                },
+                            ));
+                        }
+                        seen.push(place);
+                    }
+                }
+            }
             if matches!(e.kind, ElementKind::Unbatch)
                 && !self
                     .elements
@@ -3057,6 +3246,15 @@ impl Model {
         out
     }
 
+    /// The straight-line distance between the centres of the shapes of elements `a` and `b` in
+    /// [`Model::layout`], times the experiment's `layout_scale`, in its length unit. `None` if
+    /// either has no shape.
+    pub fn distance(&self, a: &ElementId, b: &ElementId) -> Option<f64> {
+        let (ax, ay) = self.layout.get(a)?.centre();
+        let (bx, by) = self.layout.get(b)?.centre();
+        Some((bx - ax).hypot(by - ay) * self.experiment.layout_scale)
+    }
+
     /// Whether the model has no errors (warnings allowed).
     pub fn is_runnable(&self) -> bool {
         self.validate().iter().all(|d| d.severity < Severity::Error)
@@ -3086,10 +3284,35 @@ impl Model {
             if r.most_units() == 0 {
                 out.push(Diagnostic::error(Some(&r.id), Problem::EmptyPool));
             }
+            if let Some(m) = &r.mobility {
+                for (field, speed) in [
+                    ("speed empty", m.speed_empty),
+                    ("speed loaded", m.speed_loaded),
+                ] {
+                    if !(speed.is_finite() && speed > 0.0) {
+                        out.push(Diagnostic::error(
+                            Some(&r.id),
+                            Problem::BadMobilitySpeed { field },
+                        ));
+                    }
+                }
+                if !self.elements.iter().any(|e| e.id == m.home) {
+                    out.push(Diagnostic::error(
+                        Some(&r.id),
+                        Problem::UnknownHome {
+                            home: m.home.clone(),
+                        },
+                    ));
+                }
+            }
         }
         self.check_calendars(out);
         let mut used: BTreeSet<&ElementId> = BTreeSet::new();
         for e in &self.elements {
+            if let ElementKind::Transport { pool, .. } = &e.kind {
+                used.insert(pool);
+                continue;
+            }
             let ElementKind::SharedTask {
                 needs, priority, ..
             } = &e.kind
@@ -3535,6 +3758,9 @@ impl Model {
                 },
             ));
         }
+        if !(x.layout_scale.is_finite() && x.layout_scale > 0.0) {
+            out.push(Diagnostic::error(None, Problem::BadLayoutScale));
+        }
         if x.replications == 0 {
             out.push(Diagnostic::error(
                 None,
@@ -3559,6 +3785,7 @@ impl Model {
             // A shared task shares its pool's status: the pool is warned about, once.
             if st.status == capacity::Status::Unstable
                 && st.kind != capacity::StationKind::SharedTask
+                && st.kind != capacity::StationKind::Transport
                 && let Some(load) = st.load.value()
             {
                 out.push(Diagnostic::warning(
@@ -4594,6 +4821,88 @@ mod tests {
             ..Model::default()
         };
         assert!(problems(&lonely).iter().any(|(_, _, s)| s == "NoSource"));
+    }
+
+    #[test]
+    fn transports_and_mobile_pools_are_checked() {
+        let shape = |x: f64| Bounds {
+            x,
+            y: 0.0,
+            width: 10.0,
+            height: 10.0,
+        };
+        let mut m = mm1();
+        m.elements[1].kind = ElementKind::Transport {
+            pool: id("ops"),
+            load: Dist::Constant(1.0),
+            unload: Dist::Constant(1.0),
+        };
+        assert_eq!(m.elements[1].kind.name(), "transport");
+        let has = |m: &Model, what: &str| {
+            problems(m)
+                .iter()
+                .any(|(s, _, x)| *s == Severity::Error && x.contains(what))
+        };
+        // No such pool, and no places on the canvas.
+        assert!(has(&m, "exists: false"));
+        assert!(has(&m, "NoShape"));
+        assert_eq!(m.distance(&id("arrivals"), &id("exit")), None);
+        // A pool that is not mobile.
+        m.resources = vec![ResourcePool::new(id("ops"), "Operators", 1, Vec::new())];
+        assert!(has(&m, "exists: true"));
+        // A mobile one, with places for the pickup, the drop-off and the home.
+        m.resources[0].mobility = Some(Mobility {
+            speed_empty: 1.0,
+            speed_loaded: 2.0,
+            home: id("arrivals"),
+            after_job: AfterJob::Stay,
+        });
+        m.layout.insert(id("arrivals"), shape(0.0));
+        m.layout.insert(id("exit"), shape(30.0));
+        assert!(
+            m.validate().iter().all(|d| d.severity != Severity::Error),
+            "{:?}",
+            m.validate()
+        );
+        // The straight line between the centres, times the scale.
+        let (a, b) = (id("arrivals"), id("exit"));
+        assert_eq!(m.distance(&a, &b), Some(30.0));
+        m.experiment.layout_scale = 0.5;
+        assert_eq!(m.distance(&a, &b), Some(15.0));
+        m.experiment.layout_scale = 0.0;
+        assert!(has(&m, "BadLayoutScale"));
+        m.experiment.layout_scale = 1.0;
+        // A drop-off without a place.
+        m.layout.remove(&b);
+        assert!(has(&m, "NoShape"));
+        m.layout.insert(b, shape(30.0));
+        // Speeds above 0, and a home that is an element.
+        m.resources[0].mobility = Some(Mobility {
+            speed_empty: 0.0,
+            speed_loaded: f64::NAN,
+            home: id("nowhere"),
+            after_job: AfterJob::GoHome,
+        });
+        assert!(has(&m, "BadMobilitySpeed { field: \"speed empty\" }"));
+        assert!(has(&m, "BadMobilitySpeed { field: \"speed loaded\" }"));
+        assert!(has(&m, "UnknownHome"));
+        // Exactly one way out.
+        m.resources[0].mobility = Some(Mobility {
+            speed_empty: 1.0,
+            speed_loaded: 2.0,
+            home: id("arrivals"),
+            after_job: AfterJob::Stay,
+        });
+        let mut second = m.connections[1].clone();
+        second.id = id("out2");
+        m.connections.push(second);
+        assert!(has(&m, "TransportEnds { inputs: 1, outputs: 2 }"));
+        assert_eq!(
+            AfterJob::from_name(AfterJob::GoHome.name()),
+            Some(AfterJob::GoHome)
+        );
+        assert_eq!(AfterJob::from_name("stay"), Some(AfterJob::Stay));
+        assert_eq!(AfterJob::from_name("go"), None);
     }
 
     #[test]

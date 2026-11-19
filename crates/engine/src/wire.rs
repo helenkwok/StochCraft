@@ -10,12 +10,12 @@ use stochcraft_model::balance;
 use stochcraft_model::calendar::{Calendar, DateTime, Event, Rule};
 use stochcraft_model::capacity;
 use stochcraft_model::{
-    BalkJoin, BalkRow, Balking, Bounds, Breakdown, ByValue, Change, Connection, ConveyorShape,
-    Demand, DemandPer, Diagnostic, Dist, Element, ElementId, ElementKind, Estimate, Experiment,
-    Family, HealthCheck, LengthUnit, Model, Need, OnShiftEnd, OnTakeout, Patience, PatienceUntil,
-    PlaceWhileOut, Power, ProcessingBy, Property, PropertyType, PropertyValue, QueueLimit,
-    ResourcePool, Routing, Scrap, Setup, Severity, Stop, ThreePoint, TimeUnit, Timed, Transfer,
-    Upper,
+    AfterJob, BalkJoin, BalkRow, Balking, Bounds, Breakdown, ByValue, Change, Connection,
+    ConveyorShape, Demand, DemandPer, Diagnostic, Dist, Element, ElementId, ElementKind, Estimate,
+    Experiment, Family, HealthCheck, LengthUnit, Mobility, Model, Need, OnShiftEnd, OnTakeout,
+    Patience, PatienceUntil, PlaceWhileOut, Power, ProcessingBy, Property, PropertyType,
+    PropertyValue, QueueLimit, ResourcePool, Routing, Scrap, Setup, Severity, Stop, ThreePoint,
+    TimeUnit, Timed, Transfer, Upper,
 };
 use stochcraft_stats::split::{self, Split};
 
@@ -369,6 +369,20 @@ pub enum KindSpec {
         #[serde(default, skip_serializing_if = "ConveyorShapeSpec::is_straight")]
         shape: ConveyorShapeSpec,
     },
+    /// Carries each entity from the element before it to the element after it by a unit of a
+    /// mobile pool: the unit travels to the pickup, loads, travels to the drop-off and unloads.
+    /// Both neighbours and the pool's home need places on the canvas. Not simulated yet: a run
+    /// of a model with one is refused.
+    Transport {
+        /// The id of the mobile pool (a resource with `mobility`) whose units carry the items.
+        pool: String,
+        /// The time to load an item at the pickup.
+        #[serde(default = "constant_1")]
+        load: DistSpec,
+        /// The time to unload an item at the drop-off.
+        #[serde(default = "constant_1")]
+        unload: DistSpec,
+    },
 }
 
 /// How a conveyor is drawn in 3D; the simulation run still uses its `length`.
@@ -436,6 +450,10 @@ fn one_f64() -> f64 {
 
 fn is_zero(x: &f64) -> bool {
     *x == 0.0
+}
+
+fn is_one(x: &f64) -> bool {
+    *x == 1.0
 }
 
 /// What a task with shared resources needs for each entity: units of one pool (BPSim
@@ -508,6 +526,65 @@ pub struct ResourceDoc {
     /// Availability while a calendar is active. Left out when none.
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub availability: Vec<AvailabilityDoc>,
+    /// How the units move, for a pool that carries items between places (`transport` blocks);
+    /// left out for a pool whose units stay where they are.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub mobility: Option<MobilityDoc>,
+}
+
+/// How a mobile pool's units move. Speeds are in the experiment's length unit per its time
+/// unit.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
+pub struct MobilityDoc {
+    /// The speed of a unit that carries nothing; above 0.
+    pub speed_empty: f64,
+    /// The speed of a unit that carries an item; above 0.
+    pub speed_loaded: f64,
+    /// The id of the element its units start at; it needs a place on the canvas.
+    pub home: String,
+    /// What a unit does once it has put an item down; `stay` by default.
+    #[serde(default)]
+    pub after_job: AfterJobSpec,
+}
+
+/// What a mobile unit does once it has put an item down.
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize, Deserialize, JsonSchema)]
+#[serde(rename_all = "snake_case")]
+pub enum AfterJobSpec {
+    /// It stays where it put the item down.
+    #[default]
+    Stay,
+    /// It goes back to its home.
+    GoHome,
+}
+
+impl From<&Mobility> for MobilityDoc {
+    fn from(m: &Mobility) -> Self {
+        Self {
+            speed_empty: m.speed_empty,
+            speed_loaded: m.speed_loaded,
+            home: m.home.to_string(),
+            after_job: match m.after_job {
+                AfterJob::Stay => AfterJobSpec::Stay,
+                AfterJob::GoHome => AfterJobSpec::GoHome,
+            },
+        }
+    }
+}
+
+impl From<MobilityDoc> for Mobility {
+    fn from(m: MobilityDoc) -> Self {
+        Self {
+            speed_empty: m.speed_empty,
+            speed_loaded: m.speed_loaded,
+            home: ElementId::unchecked(&m.home),
+            after_job: match m.after_job {
+                AfterJobSpec::Stay => AfterJob::Stay,
+                AfterJobSpec::GoHome => AfterJob::GoHome,
+            },
+        }
+    }
 }
 
 fn is_false(b: &bool) -> bool {
@@ -838,6 +915,7 @@ impl From<&ResourcePool> for ResourceDoc {
                 calendar: t.calendar.to_string(),
                 available: t.value,
             }),
+            mobility: r.mobility.as_ref().map(Into::into),
         }
     }
 }
@@ -852,6 +930,7 @@ impl From<ResourceDoc> for ResourcePool {
             shifts: r.shifts.into_iter().map(Into::into).collect(),
             available: r.available,
             availability: r.availability.into_iter().map(Into::into).collect(),
+            mobility: r.mobility.map(Into::into),
         }
     }
 }
@@ -1105,6 +1184,11 @@ impl From<&ElementKind> for KindSpec {
                 gap: *gap,
                 shape: (*shape).into(),
             },
+            ElementKind::Transport { pool, load, unload } => KindSpec::Transport {
+                pool: pool.to_string(),
+                load: load.into(),
+                unload: unload.into(),
+            },
         }
     }
 }
@@ -1215,6 +1299,11 @@ impl From<KindSpec> for ElementKind {
                 item_length,
                 gap,
                 shape: shape.into(),
+            },
+            KindSpec::Transport { pool, load, unload } => ElementKind::Transport {
+                pool: ElementId::unchecked(&pool),
+                load: load.into(),
+                unload: unload.into(),
             },
         }
     }
@@ -2036,6 +2125,10 @@ pub struct ExperimentDoc {
     /// The unit lengths (a conveyor's) are in; left out when metres.
     #[serde(default, skip_serializing_if = "LengthUnitSpec::is_metres")]
     pub length_unit: LengthUnitSpec,
+    /// Length units per drawing unit of the canvas: a distance between two elements is the
+    /// straight line between their centres on the canvas, times this; left out when 1.
+    #[serde(default = "one_f64", skip_serializing_if = "is_one")]
+    pub layout_scale: f64,
     pub warmup: f64,
     pub duration: f64,
     pub replications: u32,
@@ -2060,6 +2153,7 @@ impl From<&Experiment> for ExperimentDoc {
         Self {
             time_unit: x.time_unit.into(),
             length_unit: x.length_unit.into(),
+            layout_scale: x.layout_scale,
             warmup: x.warmup,
             duration: x.duration,
             replications: x.replications,
@@ -2076,6 +2170,7 @@ impl From<ExperimentDoc> for Experiment {
         Self {
             time_unit: x.time_unit.into(),
             length_unit: x.length_unit.into(),
+            layout_scale: x.layout_scale,
             warmup: x.warmup,
             duration: x.duration,
             replications: x.replications,
