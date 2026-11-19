@@ -370,9 +370,16 @@ fn the_clock_says_warm_up_while_it_lasts() {
     settle(&mut h);
     h.get_by_role_and_label(Role::Button, "Watch a run").click();
     settle(&mut h);
-    h.get_by_label("As fast as possible").click();
-    settle(&mut h);
+    // Pause at 20 first: as fast as possible would otherwise run on to the end.
     pause_at(&mut h, "20");
+    h.get_by_label("As fast as possible").click();
+    for _ in 0..10_000 {
+        if time(&h) >= 20.0 {
+            break;
+        }
+        h.run_steps(1);
+    }
+    settle(&mut h);
     assert_eq!(time(&h), 20.0, "{}", clock(&h));
     assert!(clock(&h).contains("warm-up"), "{}", clock(&h));
     // Played on past the warm-up, the clock no longer says so.
