@@ -5,8 +5,8 @@
 //! to egui as meshes, so the same code draws in the desktop window and in the browser.
 //!
 //! The scene (every block's mesh in world space) is built once per model revision. While a run is
-//! watched, totes are placed by the number of entities inside each block; exact positions of
-//! single entities come later.
+//! watched, each item on a conveyor is a tote where the run has carried it, coloured by its
+//! product; at the other blocks, totes stand for the number of entities inside.
 //!
 //! Conventions: metres, `z` up. A shape's centre on the canvas `(x, y)` (y grows down) is
 //! `(x, -y)` times [`METRES_PER_UNIT`], so the layout keeps its handedness seen from above.
@@ -368,17 +368,46 @@ pub(crate) fn scene(model: &Model) -> Scene {
     }
 }
 
-/// The totes of a watched run: for each block, `inside(id)` entities, on a conveyor spread
-/// evenly along it, at another block stacked beside it (at most [`MOST_AT_A_BLOCK`]). With them,
-/// the numbers of those too many to draw, and where to write them.
+/// The items on a conveyor: how far along each is (0 to 1) and its product key.
+pub(crate) type BeltItems = Vec<(f32, u32)>;
+
+/// The totes of a watched run. On a conveyor, one per item of `on_belt(id)` at its place along
+/// the belt and in its product's colour; when that is `None`, `inside(id)` totes spread evenly.
+/// At another block, `inside(id)` totes stacked beside it (at most [`MOST_AT_A_BLOCK`]). With
+/// them, the numbers of those too many to draw, and where to write them.
 pub(crate) fn totes(
     scene: &Scene,
     inside: &dyn Fn(&str) -> u64,
+    on_belt: &dyn Fn(&str) -> Option<BeltItems>,
 ) -> (Vec<Tri>, Vec<(Vec3, String)>) {
     let base = tote(Tote { size: TOTE_SIZE });
     let mut tris = Vec::new();
     let mut labels = Vec::new();
     for a in &scene.anchors {
+        if let Spot::Belt {
+            start,
+            angle,
+            length,
+        } = a.spot
+            && let Some(items) = on_belt(&a.id)
+        {
+            let turned = base.rotated_z(angle);
+            let (s, c) = (libm::sinf(angle), libm::cosf(angle));
+            for &(fraction, product) in items.iter().take(MOST_ON_A_BELT) {
+                let along = fraction.clamp(0.0, 1.0) * length;
+                let at = [start[0] + c * along, start[1] + s * along, BELT_HEIGHT];
+                let paint = Paint::Tote(usize::try_from(product).unwrap_or(0));
+                push_mesh(&mut tris, &turned.translated(at), paint);
+            }
+            if items.len() > MOST_ON_A_BELT {
+                let mid = length / 2.0;
+                labels.push((
+                    [start[0] + c * mid, start[1] + s * mid, BELT_HEIGHT + 0.6],
+                    format!("+{}", items.len() - MOST_ON_A_BELT),
+                ));
+            }
+            continue;
+        }
         let n = inside(&a.id);
         if n == 0 {
             continue;
@@ -711,11 +740,22 @@ impl App {
 
         // The run being watched: its totes.
         let (live_tris, labels) = match watching {
-            Some(w) => totes(scene, &|id| {
-                w.state(id).map_or(0, |s| {
-                    s.entered.saturating_sub(s.left).saturating_sub(s.lost)
-                })
-            }),
+            Some(w) => totes(
+                scene,
+                &|id| {
+                    w.state(id).map_or(0, |s| {
+                        s.entered.saturating_sub(s.left).saturating_sub(s.lost)
+                    })
+                },
+                &|id| {
+                    Some(
+                        w.conveyor_items(id)
+                            .into_iter()
+                            .map(|(fraction, _, product)| (fraction, product))
+                            .collect(),
+                    )
+                },
+            ),
             None => (Vec::new(), Vec::new()),
         };
 
@@ -929,7 +969,7 @@ mod tests {
     #[test]
     fn totes_are_spread_along_the_conveyor() {
         let s = scene(&line_model());
-        let (tris, labels) = totes(&s, &|id| u64::from(id == "belt") * 3);
+        let (tris, labels) = totes(&s, &|id| u64::from(id == "belt") * 3, &|_| None);
         assert!(labels.is_empty());
         assert!(!tris.is_empty());
         assert!(tris.iter().all(|t| matches!(t.paint, Paint::Tote(_))));
@@ -937,6 +977,40 @@ mod tests {
             tris.iter()
                 .flat_map(|t| t.v)
                 .all(|v| v[0] > 1.0 - 0.5 && v[0] < 9.0 + 0.5)
+        );
+    }
+
+    #[test]
+    fn items_on_a_belt_are_where_the_run_has_carried_them_in_their_products_colour() {
+        let s = scene(&line_model());
+        let Some(Spot::Belt {
+            start,
+            angle,
+            length,
+        }) = s.anchors.iter().find(|a| a.id == "belt").map(|a| a.spot)
+        else {
+            panic!("the belt has no spot");
+        };
+        // One item at the start of the belt (product 0) and one three quarters along (product 2).
+        let items = vec![(0.0, 0), (0.75, 2)];
+        let (tris, labels) = totes(&s, &|_| 0, &|id| (id == "belt").then(|| items.clone()));
+        assert!(labels.is_empty());
+        let centre_x = |paint: Paint| {
+            let xs: Vec<f32> = tris
+                .iter()
+                .filter(|t| t.paint == paint)
+                .flat_map(|t| t.v)
+                .map(|v| v[0])
+                .collect();
+            assert!(!xs.is_empty(), "no tote painted {paint:?}");
+            (xs.iter().copied().fold(f32::MAX, f32::min)
+                + xs.iter().copied().fold(f32::MIN, f32::max))
+                / 2.0
+        };
+        assert!((centre_x(Paint::Tote(0)) - start[0]).abs() < 1e-3);
+        assert!(
+            (centre_x(Paint::Tote(2)) - (start[0] + libm::cosf(angle) * 0.75 * length)).abs()
+                < 1e-3
         );
     }
 }
