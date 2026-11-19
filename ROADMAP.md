@@ -2291,8 +2291,8 @@ the outer loop of parameter uncertainty around any of them (D10).
   - calibration to historical series.
 
 Already in place: arrival rates are redrawn at each rate change (M2.6), and an agent over MCP
-can open, edit and run models and drive the window (M3.6). The journal becomes an audit trail
-once it records its version and starting state (#44).
+can open, edit and run models and drive the window (M3.6). The journal records its format, version and starting
+state, so it can serve as an audit trail (#44).
 
 ---
 
@@ -3286,8 +3286,8 @@ Not scheduled yet; recorded so earlier work does not close these doors (docs/res
   exceeded and by how much ([M&S 26]).
 - **Digital twins:** starting a run from an observed state (queue contents, busy units, elapsed
   times) rather than empty; fitting input distributions from event logs; the engine's journal as
-  the audit trail of what-if decisions, once it records its version and the state it started
-  from (#44).
+  the audit trail of what-if decisions (it records its version and the state it started
+  from, #44).
 - **Industry 5.0 measures:** workers as resources with skills and shifts; energy and CO₂ per
   part and per element (BPSim cost parameters plus a vendor extension); disruption scenarios.
 - **Bulk flow:** rates, splits by fraction, tanks and batch treatment for process industries,

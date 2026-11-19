@@ -139,6 +139,50 @@ parameters) and replayed:
 stochcraft-cli exec changes.json --open queue.bpmn
 ```
 
+### The journal
+
+The engine records every command that is not a query in its journal. A new or opened document
+(`model.new`, `file.open`, and opening a file in the app) starts a new journal, so a journal is
+the history of one document. `exec --journal out.json` writes the journal of what the script did,
+also when a step failed, as a JSON object:
+
+```json
+{
+  "format": 1,
+  "stochcraft": "0.2.0",
+  "start": {
+    "kind": "file",
+    "model_digest": "sha256:...",
+    "name": "queue.bpmn",
+    "file_digest": "sha256:...",
+    "scenario": "Scenario 1"
+  },
+  "entries": [
+    {"command": "block.set", "params": {"id": "serve", "capacity": 2}},
+    {"command": "run", "params": {"replications": 20}}
+  ]
+}
+```
+
+- `format` is the version of this layout (1). A journal in a newer format is refused.
+- `stochcraft` is the version that wrote it.
+- `start` is where the journal began. `kind` is `engine` (a model the engine was given), `new`
+  (`model.new`, with the model's `name`) or `file` (with the name the file was opened under,
+  the digest of its bytes and the scenario). `model_digest` is the digest the run records carry,
+  of the model at the start. `file_digest`, `name` and `scenario` are left out when they do not
+  apply. The command that started the document is not an entry: `start` records it.
+- `entries` are the commands in order, as `{"command", "params"}`. A script for `exec` is the same
+  array on its own, and `exec` runs that in full.
+
+Replaying a journal (`exec journal.json`) first checks that the model is the one it started from
+(`--open` the same file; a journal that began with `model.new` starts its own model) and refuses
+with a `conflict` error if not, unless `--force`. It then re-applies the edits, undo and redo, and
+skips the saves, runs and experiments (`file.save`, `run`, `run.start`, `run.status`,
+`run.cancel`, `experiment.sweep`, `experiment.sensitivity`, `experiment.design`,
+`experiment.size`), printing `"skipped": true` for each; `--all` carries them out too. In Rust,
+`Engine::journal_document` gives the journal and `Engine::replay_journal` replays it
+(`ReplayMode::EditsOnly` or `All`); `Engine::replay` still runs a plain list of steps in full.
+
 ## Using it from an AI agent
 
 `stochcraft-cli mcp` serves the engine's commands over the Model Context Protocol, so an agent

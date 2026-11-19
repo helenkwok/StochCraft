@@ -68,11 +68,16 @@ fn catalogue_is_complete_and_its_examples_run_in_order() {
         }
         ok(&mut e, c.name, params);
     }
-    // Queries are not journalled; everything else is.
-    let journalled = COMMANDS
-        .iter()
-        .filter(|c| c.kind != CommandKind::Query)
-        .count();
+    // Queries are not journalled; everything else is, since the last command that started a
+    // document (`file.open` and `model.new` start a new journal and are its start record).
+    let mut journalled = 0;
+    for c in COMMANDS {
+        if matches!(c.name, "file.open" | "model.new") {
+            journalled = 0;
+        } else if c.kind != CommandKind::Query {
+            journalled += 1;
+        }
+    }
     assert_eq!(e.journal().len(), journalled);
 }
 
