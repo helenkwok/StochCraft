@@ -1016,8 +1016,8 @@ fn a_setup_and_a_changeover_are_set_in_the_inspector() {
         element(&h, "serve")["setup"]["by_change"],
         json!([{"from": "A", "to": "B", "time": {"type": "exponential", "mean": 1.0}}])
     );
-    // No element sets `type` yet: the model says so.
-    h.get_by_label_contains("reads property `type`, which no element sets");
+    // No block sets `type` yet: the model says so.
+    h.get_by_label_contains("reads the property “type”, which no block sets");
     // Removing the setup is one step.
     click(&mut h, Role::CheckBox, "Setup");
     assert!(element(&h, "serve").get("setup").is_none());
@@ -1050,8 +1050,8 @@ fn processing_times_by_property_are_set_in_the_inspector() {
     // A row's time is a service time, not a setup's.
     assert!(h.query_by_label("Setup time").is_none());
     assert!(h.get_all_by_label("Service time").count() >= 2);
-    // No element sets `type` yet: the model says so.
-    h.get_by_label_contains("reads property `type`, which no element sets");
+    // No block sets `type` yet: the model says so.
+    h.get_by_label_contains("reads the property “type”, which no block sets");
     // Removing them is one step.
     click(&mut h, Role::CheckBox, "Service time by property");
     assert!(element(&h, "serve").get("processing_by").is_none());
