@@ -2546,7 +2546,7 @@ speeds and positions.
   extension (length, speed, accumulating, item length and gap, the points along it where
   diverts and merges sit); positions and paths on the layout, with their heights, in a
   `stochcraft:layout` extension beside BPMN DI (which is a 2D diagram, not a floor plan), as
-  for the other StochCraft-only data (D1). Look-only scenery goes in a sidecar instead (M5.5,
+  for the other StochCraft-only data (D1). Look-only scenery goes in a `stochcraft:scene` extension in the same file (M5.5,
   D24).
 - **Later:** free-space pathfinding; vehicles that block each other on a path; power-and-free
   and overhead conveyors.
@@ -2757,16 +2757,20 @@ layout. The flagship example is a parcel super hub.
 
 #### Where layout data lives
 
-- **If the run reads it, it is in the BPMN file;** if only the picture reads it, it may be in a
-  sidecar (D24). Sim data: `stochcraft:path` on a conveyor (segment children; the old `shape`
+- **Everything is in the BPMN file, as `stochcraft:` extensions (D24).** No file of our own.
+  Sim data: `stochcraft:path` on a conveyor (segment children; the old `shape`
   attribute still read), `stochcraft:place` on a block (x, y, z, heading, or a path id and `s`),
   walkways and junctions in `stochcraft:layout` on the definitions.
-- **Scenery** (walls, floors, doors, racks that are not resources, parking, furniture) goes in
-  `model.scene.toml` beside the model, named from the BPMN by `stochcraft:scene`. It would be the
-  one file format of StochCraft's own, which is why D24 asks for it explicitly. It is written
-  for diffs: objects sorted by id, fields in schema order, only non-default values, floats rounded
-  to 0.1 mm or 0.01°, a `schema = 1` version so a changed default is a migration. A scenario may
-  carry override tables for it, as for inherited scenarios (#117).
+- **Scenery** (walls, floors, doors, racks that are not resources, parking, furniture) goes in a
+  `stochcraft:scene` extension on the definitions: one element per object with its kind and only
+  its non-default parameters. A TOML or JSON sidecar was weighed and dropped: the syntax would be
+  standard, but its vocabulary would be ours, a new format in all but name. The extension is
+  written for diffs: objects sorted by id, attributes in schema order, floats rounded to 0.1 mm
+  or 0.01°, a schema version so a changed default is a migration. A scenario may carry
+  overrides for it, as for inherited scenarios (#117). The run never reads scenery.
+- **Exchange is glTF 2.0** (the Khronos standard): the scene exports as glTF with each node's
+  kind, parameters and element id in `extras`, so any 3D tool shows it and StochCraft can read
+  its own objects back. Import of plain glTF meshes as scenery comes later.
 - `Model.layout` (the BPMN diagram bounds) stays the flowchart's layout and nothing else.
 
 #### The Layout view and the 3D view
@@ -2987,7 +2991,7 @@ marked "series" are several PRs of that size, each with its own visible step.
 | # | PR | Needs | Size | What the user sees |
 |---|---|---|---|---|
 | L1 | `Path` in `model` (segments, `length`, `point_at`; `ConveyorShape` folded in, degrees everywhere) and the read-only Layout view: grid, scale bar, paths and places to scale, the unplaced list | – | M | a 2D plan |
-| L2 | Files: `stochcraft:path` and `stochcraft:place`, the scene sidecar, sim and look tags in the baseline; length from the path with the flagged override (D23, D24, D28) | L1 | M | the override warning |
+| L2 | Files: `stochcraft:path` and `stochcraft:place`, `stochcraft:scene`, glTF export, sim and look tags in the baseline; length from the path with the flagged override (D23, D24, D28) | L1 | M | the override warning |
 | L3 | 3D fed from the Layout; #210's inference removed once the sorter is drawn | L1, L2 | M | the sorter as drawn |
 | L4 | Editing the layout: draw and drag paths, then snap and ports, then the background by two points | L1, U1, U2 | series of 3 × M | drawing a layout |
 | L5 | Splitting at points, junctions, divert at `s`; then recirculation and the exception lane; then shortest-path routing | L2 | series of 3 × M | the loop that recirculates |
@@ -3345,7 +3349,7 @@ and the Pages preview of an M3 pull request shows the blocks already merged.
 | D21 | What comes after the capacity table, and where the sorter sits | Recommended: the sorter (M5.1 conveyors, M5.2 operators, M5.3 the layout view in 2D then 3D, M5.4 its dashboard) first, built alongside M3.7 because it changes `model`, `blocks` and the engine while M3.7 changes `ui-egui`; M5.3 follows #151's moving entities so it reuses them. Then M7.1 line balancing (small, needs no run, reuses takt and the capacity table), M7.2 the from-to chart (reuses the capacity table's rates and M5's layout scale), M7.3 inventory, M7.4 sharing. M4 waits until the sorter's first two steps are in. M5.5's layout layer then comes before M7.2, which draws on it |
 | D22 | Moving the apps from eframe's glow backend to wgpu | **Recommended, at M5.3:** the 3D view reuses the Craft apps' shared viewport from SolidCraft (camera, picking, shading, a headless rasterizer, a browser build already working), which runs on wgpu. The alternative, a renderer of our own through an `egui_glow` paint callback, keeps today's backend but rewrites all of that. The move is its own PR before M5.3, with the browser build checked on WebGPU and WebGL2. Since then the 3D view shipped on a CPU renderer (`view3d.rs`); see D27 |
 | D23 | Conveyor length: typed or from its path (M5.5) | **Recommended: from the path.** The path's exact length is the length the run uses; a typed length stays as an override, shown beside the drawn length with a warning. An existing file whose `length` differs from its path reads that `length` as the override, so no validated result moves |
-| D24 | Where layout data lives (M5.5) | **Recommended:** what the run reads (paths, places, walkways, junctions) as `stochcraft:` extensions in the BPMN file; look-only scenery (walls, floors, furniture, parking) in a sidecar `model.scene.toml`, sorted by id and written for small diffs. **This is a file format of our own**, against principle 1 and "Model files: no new format" ("nothing else is StochCraft's own"); the case for it is that scenery has no simulation meaning, no standard covers it, and the run never reads it, so a model without its sidecar still runs identically. Confirm knowingly. The fallback, keeping one file and the principle, is the scenery as a `stochcraft:scene` extension in the BPMN file, at the cost of noisier diffs that other BPMN tools carry blindly |
+| D24 | Where layout data lives (M5.5) | **Recommended:** all of it in the BPMN file as `stochcraft:` extensions (what the run reads, and scenery in `stochcraft:scene`), with glTF 2.0 as the exchange format. No sidecar: a TOML or JSON file would use a standard syntax but a vocabulary of our own, against principle 1. Cost: larger BPMN files and noisier diffs that other BPMN tools carry blindly |
 | D25 | A divert: a point on a conveyor, or a gateway block linked to one (M5.5) | **Recommended: both, one per layer.** The logic stays an exclusive gateway (M5.1's divert routing, conditions, DMN), so BPMN tools still read it; the gateway is placed at a divert point at `s` on a section, which gives it its position and lane. A divert point without a gateway is not allowed |
 | D26 | The whole-screen redesign: before or after the layout work (M5.5) | **Recommended: interleaved.** U1 (run bar) and U2 (properties of the selection) first, since layout editing leans on them; the library and model tree with the Layout view; the experiment editor, spreadsheet view, live card and statistics table as their own PRs alongside L4 to L12 |
 | D27 | The 3D renderer (M5.5) | **Recommended:** keep `view3d.rs`'s CPU renderer, fed from the Layout, with levels of detail and a triangle budget; D22's move to the shared wgpu viewport waits until the CPU renderer is measured too slow (for example 5,000 moving totes in the browser) |
