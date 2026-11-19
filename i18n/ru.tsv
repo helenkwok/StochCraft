@@ -1005,3 +1005,12 @@ unit	yr	г.
 	At {time} {unit}: {n} items	В момент {time} {unit}: {n} элементов
 	Run the model to fill the dashboard	Запустите модель, чтобы заполнить дашборд
 	The resource and conveyor charts show the last run until this one ends	Графики ресурсов и конвейеров показывают последний прогон, пока этот не закончится
+	Layout	Планировка
+	Layout of the model, to scale	Планировка модели в масштабе
+	Drag to pan · Scroll to zoom	Перетащите для сдвига · Прокрутите для масштаба
+	Positions from the diagram	Позиции из диаграммы
+	Scale bar: {length} m	Масштабная линейка: {length} м
+	{length} m	{length} м
+	x {x} m, y {y} m	x {x} м, y {y} м
+	Unplaced	Не размещены
+	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	Пока каждый блок размещается по диаграмме. Блок, которого нет на диаграмме, указан здесь и не рисуется.

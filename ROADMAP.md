@@ -2597,7 +2597,7 @@ layout. The flagship example is a parcel super hub.
 - A `Path` is a list of segments in metres: `Line { length, rise }`, `Arc { radius, angle,
   rise }` (degrees, positive turns left) and `Helix { radius, rise, turns }` (`rise` is always the segment's total rise, for a helix over
   all its turns), each continuing from
-  the end frame of the one before, from a start frame (x, y, z, heading). `length` is measured
+  the end frame of the one before, from a start frame (x, y, z, heading). A `Line`'s `length` is its run on the plan; the path's `length()` is measured
   along the slope, so an incline is a line with a rise and a spiral is a helix. A clothoid
   segment can come later.
 - `length()` and `point_at(s)` (position and heading at distance `s` from the start) are exact,

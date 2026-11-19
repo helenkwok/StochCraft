@@ -1005,3 +1005,12 @@ unit	yr	v
 	At {time} {unit}: {n} items	Hetkellä {time} {unit}: {n} kappaletta
 	Run the model to fill the dashboard	Aja malli täyttääksesi koontinäytön
 	The resource and conveyor charts show the last run until this one ends	Resurssi- ja kuljetinkaaviot näyttävät viimeisen ajon, kunnes tämä päättyy
+	Layout	Asettelu
+	Layout of the model, to scale	Mallin asettelu mittakaavassa
+	Drag to pan · Scroll to zoom	Vedä panoroidaksesi · Vieritä zoomataksesi
+	Positions from the diagram	Sijainnit kaaviosta
+	Scale bar: {length} m	Mittakaavajana: {length} m
+	{length} m	{length} m
+	x {x} m, y {y} m	x {x} m, y {y} m
+	Unplaced	Sijoittamatta
+	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	Toistaiseksi jokainen lohko sijoitetaan kaavion perusteella. Lohko, jonka kaavio jättää pois, luetellaan tässä, eikä sitä piirretä.

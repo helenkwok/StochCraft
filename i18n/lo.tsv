@@ -1005,3 +1005,12 @@ unit	yr	ປີ
 	At {time} {unit}: {n} items	ທີ່ {time} {unit}: {n} ລາຍການ
 	Run the model to fill the dashboard	ແລ່ນແບບຈຳລອງເພື່ອເຕີມແດຊບອດ
 	The resource and conveyor charts show the last run until this one ends	ແຜນພາບຊັບພະຍາກອນ ແລະ ສາຍພານສະແດງການແລ່ນຄັ້ງຫຼ້າສຸດຈົນກວ່າຄັ້ງນີ້ຈະສຳເລັດ
+	Layout	ແຜນຜັງ
+	Layout of the model, to scale	ແຜນຜັງຂອງແບບຈຳລອງ ຕາມມາດຕາສ່ວນ
+	Drag to pan · Scroll to zoom	ລາກເພື່ອຍ້າຍ · ເລື່ອນເພື່ອຊູມ
+	Positions from the diagram	ຕຳແໜ່ງຈາກແຜນພາບ
+	Scale bar: {length} m	ແຖບມາດຕາສ່ວນ: {length} m
+	{length} m	{length} m
+	x {x} m, y {y} m	x {x} m, y {y} m
+	Unplaced	ຍັງບໍ່ໄດ້ວາງ
+	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	ດຽວນີ້ທຸກບລັອກຖືກວາງຕາມແຜນພາບ. ບລັອກທີ່ແຜນພາບບໍ່ມີຈະຖືກລະບຸໄວ້ບ່ອນນີ້ ແລະ ບໍ່ຖືກແຕ້ມ.

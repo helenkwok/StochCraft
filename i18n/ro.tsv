@@ -1005,3 +1005,12 @@ unit	yr	a
 	At {time} {unit}: {n} items	La {time} {unit}: {n} articole
 	Run the model to fill the dashboard	Rulați modelul pentru a completa tabloul de bord
 	The resource and conveyor charts show the last run until this one ends	Graficele resurselor și benzilor arată ultima rulare până se încheie aceasta
+	Layout	Amplasare
+	Layout of the model, to scale	Amplasarea modelului, la scară
+	Drag to pan · Scroll to zoom	Trageți pentru deplasare · Derulați pentru zoom
+	Positions from the diagram	Poziții din diagramă
+	Scale bar: {length} m	Bară de scară: {length} m
+	{length} m	{length} m
+	x {x} m, y {y} m	x {x} m, y {y} m
+	Unplaced	Neamplasate
+	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	Deocamdată, fiecare bloc este amplasat pe baza diagramei. Un bloc pe care diagrama îl omite este listat aici și nu este desenat.

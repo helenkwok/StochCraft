@@ -29,6 +29,7 @@ pub mod form;
 mod guide;
 mod help;
 pub mod i18n;
+mod layout_view;
 mod live;
 mod pools;
 mod results;
@@ -602,6 +603,8 @@ pub struct App {
     show_3d: bool,
     /// The 3D view's camera and the scene of the model's revision.
     view3d: view3d::View3d,
+    /// The Layout view (M5.5), shown on the 3D tab's flag when `layout_view.on`.
+    layout_view: layout_view::LayoutView,
     /// The Capacity view's target and its table for the model's revision.
     capacity: capacity::State,
     /// The M2.8 screens' choices and last answers.
@@ -711,6 +714,7 @@ impl App {
             show_capacity: false,
             show_3d: false,
             view3d: view3d::View3d::default(),
+            layout_view: layout_view::LayoutView::default(),
             capacity: capacity::State::default(),
             decide: decide::Decide::default(),
             help: help::Help::default(),
@@ -1254,6 +1258,7 @@ impl App {
         self.selected = None;
         self.canvas = canvas::Canvas::default();
         self.view3d = view3d::View3d::default();
+        self.layout_view = layout_view::LayoutView::default();
         self.watching = None;
         self.drafts.clear();
         self.show_results = false;
@@ -1853,7 +1858,11 @@ impl App {
                 } else if self.show_analysis && has_model && !self.show_results {
                     self.analysis_view(ui);
                 } else if self.show_3d && has_model && !self.show_results {
-                    self.view3d_view(ui);
+                    if self.layout_view.on {
+                        self.layout_view(ui);
+                    } else {
+                        self.view3d_view(ui);
+                    }
                 } else if self.show_capacity && has_model && !self.show_results {
                     self.capacity_view(ui);
                 } else if has_model && !(self.show_results && self.running.is_some()) {
@@ -2284,7 +2293,7 @@ impl App {
             } else if self.show_analysis {
                 2
             } else if self.show_3d {
-                4
+                if self.layout_view.on { 5 } else { 4 }
             } else if self.show_capacity {
                 3
             } else {
@@ -2296,6 +2305,7 @@ impl App {
                 (t("Analysis"), 2),
                 (t("Capacity"), 3),
                 (t("3D"), 4),
+                (t("Layout"), 5),
             ] {
                 let on = current == view;
                 let width = ui.fonts_mut(|f| {
@@ -2338,7 +2348,8 @@ impl App {
                     self.show_results = view == 1;
                     self.show_analysis = view == 2;
                     self.show_capacity = view == 3;
-                    self.show_3d = view == 4;
+                    self.show_3d = view == 4 || view == 5;
+                    self.layout_view.on = view == 5;
                 }
             }
             ui.toggle_value(&mut self.show_dashboard, t("Dashboard"));

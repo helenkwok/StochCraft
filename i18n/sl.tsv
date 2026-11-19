@@ -1005,3 +1005,12 @@ unit	yr	l.
 	At {time} {unit}: {n} items	Ob {time} {unit}: {n} predmetov
 	Run the model to fill the dashboard	Zaženite model, da se nadzorna plošča zapolni
 	The resource and conveyor charts show the last run until this one ends	Grafi virov in tekočih trakov kažejo zadnji tek, dokler se ta ne konča
+	Layout	Razpored
+	Layout of the model, to scale	Razpored modela v merilu
+	Drag to pan · Scroll to zoom	Povlecite za premik · Drsite za povečavo
+	Positions from the diagram	Položaji iz diagrama
+	Scale bar: {length} m	Merilna črta: {length} m
+	{length} m	{length} m
+	x {x} m, y {y} m	x {x} m, y {y} m
+	Unplaced	Nepostavljeno
+	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	Za zdaj je vsak blok postavljen glede na diagram. Blok, ki ga diagram izpušča, je naveden tukaj in ni narisan.

@@ -1005,3 +1005,12 @@ unit	yr	j
 	At {time} {unit}: {n} items	Op {time} {unit}: {n} items
 	Run the model to fill the dashboard	Voer het model uit om het dashboard te vullen
 	The resource and conveyor charts show the last run until this one ends	De grafieken van middelen en transportbanden tonen de laatste run totdat deze eindigt
+	Layout	Layout
+	Layout of the model, to scale	Layout van het model, op schaal
+	Drag to pan · Scroll to zoom	Sleep om te verschuiven · Scroll om te zoomen
+	Positions from the diagram	Posities uit het diagram
+	Scale bar: {length} m	Schaalbalk: {length} m
+	{length} m	{length} m
+	x {x} m, y {y} m	x {x} m, y {y} m
+	Unplaced	Niet geplaatst
+	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	Voorlopig wordt elk blok geplaatst op basis van het diagram. Een blok dat het diagram weglaat, staat hier en wordt niet getekend.

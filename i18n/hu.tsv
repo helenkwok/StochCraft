@@ -1005,3 +1005,12 @@ unit	yr	év
 	At {time} {unit}: {n} items	{time} {unit} időpontban: {n} elem
 	Run the model to fill the dashboard	Futtassa a modellt az irányítópult kitöltéséhez
 	The resource and conveyor charts show the last run until this one ends	Az erőforrás- és szalagdiagramok az utolsó futtatást mutatják, amíg ez véget nem ér
+	Layout	Elrendezés
+	Layout of the model, to scale	A modell elrendezése, méretarányosan
+	Drag to pan · Scroll to zoom	Húzás: eltolás · Görgetés: nagyítás
+	Positions from the diagram	Pozíciók a diagramból
+	Scale bar: {length} m	Léptékvonal: {length} m
+	{length} m	{length} m
+	x {x} m, y {y} m	x {x} m, y {y} m
+	Unplaced	Nem elhelyezett
+	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	Egyelőre minden blokk a diagram alapján van elhelyezve. A diagram által kihagyott blokk itt szerepel, és nincs megrajzolva.

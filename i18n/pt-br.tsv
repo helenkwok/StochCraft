@@ -1005,3 +1005,12 @@ unit	yr	a
 	At {time} {unit}: {n} items	Em {time} {unit}: {n} itens
 	Run the model to fill the dashboard	Execute o modelo para preencher o painel
 	The resource and conveyor charts show the last run until this one ends	Os gráficos de recursos e esteiras mostram a última execução até esta terminar
+	Layout	Layout
+	Layout of the model, to scale	Layout do modelo, em escala
+	Drag to pan · Scroll to zoom	Arraste para deslocar · Role para ampliar
+	Positions from the diagram	Posições do diagrama
+	Scale bar: {length} m	Barra de escala: {length} m
+	{length} m	{length} m
+	x {x} m, y {y} m	x {x} m, y {y} m
+	Unplaced	Não posicionados
+	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	Por enquanto, cada bloco é posicionado a partir do diagrama. Um bloco que o diagrama deixa de fora é listado aqui e não é desenhado.
