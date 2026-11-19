@@ -46,6 +46,8 @@ const LOOP_WIDTH: (f32, f32) = (0.8, 1.2);
 const LOOP_CUT: f32 = 0.3;
 /// The shortest and longest a loop of belt is drawn, in metres.
 const LOOP_LENGTH: (f32, f32) = (3.0, 60.0);
+/// The widest a long loop flares out to, in metres.
+const LOOP_FLARE: f32 = 8.0;
 /// A tote's size.
 const TOTE_SIZE: [f32; 3] = [0.5, 0.4, 0.3];
 /// The most totes drawn beside a block; more are counted by a number.
@@ -426,6 +428,27 @@ fn loop_path(centre: [f32; 2], half: f32, toward: [f32; 2], total: f32) -> Vec<[
         ]
     };
     let h = width / 2.0;
+    // A long loop flares out at 45 degrees to a ring a quarter as wide as it is long (at most
+    // LOOP_FLARE wide), so it reads as a loop rather than a hairpin; its ends stay at the block.
+    let wide = (total / 4.0).min(LOOP_FLARE);
+    let flare = wide / 2.0 - h;
+    let straight = 0.6;
+    let diagonal = core::f32::consts::SQRT_2 * flare;
+    let far = (total - wide - 2.0 * straight - 2.0 * diagonal) / 2.0;
+    if total >= 12.0 && flare > 0.0 && far > 0.0 {
+        let w = wide / 2.0;
+        let (near, top) = (straight + flare, straight + flare + far);
+        return vec![
+            at(-h, 0.0),
+            at(-h, straight),
+            at(-w, near),
+            at(-w, top),
+            at(w, top),
+            at(w, near),
+            at(h, straight),
+            at(h, 0.0),
+        ];
+    }
     vec![
         at(-h, 0.0),
         at(-h, depth - cut),
@@ -1294,6 +1317,27 @@ mod tests {
         assert!(points.iter().all(|p| p[0] >= 1.0 - 1e-4));
         assert!((far - 4.7257).abs() < 1e-3, "{far}");
         assert!(s.tris.iter().any(|t| t.paint == Paint::Belt));
+    }
+
+    #[test]
+    fn a_long_loop_flares_out_to_a_ring_as_long_as_the_conveyor() {
+        // 30 m: a ring 30 / 4 = 7.5 m wide whose path is still 30 m long, both ends on the
+        // gateway's face (0.5 m from its centre, 0.9 m apart).
+        let s = scene(&loop_model(30.0));
+        let (points, length) = path_of(&s, "loop");
+        let arc: f32 = points
+            .windows(2)
+            .map(|w| ((w[1][0] - w[0][0]).powi(2) + (w[1][1] - w[0][1]).powi(2)).sqrt())
+            .sum();
+        assert!((arc - 30.0).abs() < 1e-3, "{arc}");
+        assert!((length - 30.0).abs() < 1e-3, "{length}");
+        let ys: Vec<f32> = points.iter().map(|p| p[1]).collect();
+        let span = ys.iter().copied().fold(f32::MIN, f32::max)
+            - ys.iter().copied().fold(f32::MAX, f32::min);
+        assert!((span - 7.5).abs() < 1e-3, "{span}");
+        let (first, last) = (points[0], points[points.len() - 1]);
+        let gap = ((first[0] - last[0]).powi(2) + (first[1] - last[1]).powi(2)).sqrt();
+        assert!((gap - 0.9).abs() < 1e-3, "{gap}");
     }
 
     #[test]
