@@ -7,11 +7,12 @@
 use std::collections::{BTreeMap, BTreeSet};
 
 use stochcraft_model::{
-    BalkJoin, BalkRow, Balking, Bounds, Breakdown, ByValue, Calendar, Change, Connection, DateTime,
-    Demand, DemandPer, Dist, Element as ModelElement, ElementId, ElementKind, Estimate, Experiment,
-    Family, HealthCheck, Model, Need, OnShiftEnd, OnTakeout, Patience, PatienceUntil,
-    PlaceWhileOut, Power, ProcessingBy, Property, PropertyType, PropertyValue, QueueLimit,
-    ResourcePool, Routing, Scrap, Setup, Stop, ThreePoint, TimeUnit, Timed, Transfer, Upper,
+    BalkJoin, BalkRow, Balking, Bounds, Breakdown, ByValue, Calendar, Change, Connection,
+    ConveyorShape, DateTime, Demand, DemandPer, Dist, Element as ModelElement, ElementId,
+    ElementKind, Estimate, Experiment, Family, HealthCheck, Model, Need, OnShiftEnd, OnTakeout,
+    Patience, PatienceUntil, PlaceWhileOut, Power, ProcessingBy, Property, PropertyType,
+    PropertyValue, QueueLimit, ResourcePool, Routing, Scrap, Setup, Stop, ThreePoint, TimeUnit,
+    Timed, Transfer, Upper,
 };
 
 use crate::bpsim::{self, NSS, Scenario, Value};
@@ -1638,24 +1639,54 @@ fn conveyor_of(
             "false" | "0" => Some(false),
             _ => None,
         });
+    let raw_shape = body.and_then(|b| b.attr("shape"));
+    let mut bad_shape_kind = false;
+    let shape = match raw_shape.as_deref().map(str::trim) {
+        None | Some("straight") => Some(ConveyorShape::Straight),
+        Some("curve") => match (number("radius"), number("angle")) {
+            (Some(radius), Some(angle)) => Some(ConveyorShape::Curve { radius, angle }),
+            _ => None,
+        },
+        Some("spiral") => match (number("radius"), number("rise"), number("turns")) {
+            (Some(radius), Some(rise), Some(turns)) => Some(ConveyorShape::Spiral {
+                radius,
+                rise,
+                turns,
+            }),
+            _ => None,
+        },
+        Some(_) => {
+            bad_shape_kind = true;
+            None
+        }
+    };
     if accumulating.is_none() {
         bad.push("accumulating");
     }
-    match (length, speed, item_length, gap, accumulating) {
-        (Some(length), Some(speed), Some(item_length), Some(gap), Some(accumulating)) => {
-            Some(ElementKind::Conveyor {
-                length,
-                speed,
-                accumulating,
-                item_length,
-                gap,
-            })
-        }
+    if bad_shape_kind {
+        bad.push("shape");
+    }
+    match (length, speed, item_length, gap, accumulating, shape) {
+        (
+            Some(length),
+            Some(speed),
+            Some(item_length),
+            Some(gap),
+            Some(accumulating),
+            Some(shape),
+        ) => Some(ElementKind::Conveyor {
+            length,
+            speed,
+            accumulating,
+            item_length,
+            gap,
+            shape,
+        }),
         _ => {
             notes.push(Note::error(
                 Some(id),
                 format!(
-                    "the conveyor (`{}`) needs `length`, `speed`, `accumulating`, `itemLength` and `gap`; {} missing or not valid, so it is ignored",
+                    "the conveyor (`{}`) needs `length`, `speed`, `accumulating`, `itemLength` and `gap` (plus `radius` and `angle` for `shape=\"curve\"`, or `radius`, `rise` and `turns` for `shape=\"spiral\"`); {} missing or not valid, so it is ignored",
                     bpsim::CONVEYOR,
                     bad.join(", ")
                 ),

@@ -10,11 +10,12 @@ use stochcraft_model::balance;
 use stochcraft_model::calendar::{Calendar, DateTime, Event, Rule};
 use stochcraft_model::capacity;
 use stochcraft_model::{
-    BalkJoin, BalkRow, Balking, Bounds, Breakdown, ByValue, Change, Connection, Demand, DemandPer,
-    Diagnostic, Dist, Element, ElementId, ElementKind, Estimate, Experiment, Family, HealthCheck,
-    LengthUnit, Model, Need, OnShiftEnd, OnTakeout, Patience, PatienceUntil, PlaceWhileOut, Power,
-    ProcessingBy, Property, PropertyType, PropertyValue, QueueLimit, ResourcePool, Routing, Scrap,
-    Setup, Severity, Stop, ThreePoint, TimeUnit, Timed, Transfer, Upper,
+    BalkJoin, BalkRow, Balking, Bounds, Breakdown, ByValue, Change, Connection, ConveyorShape,
+    Demand, DemandPer, Diagnostic, Dist, Element, ElementId, ElementKind, Estimate, Experiment,
+    Family, HealthCheck, LengthUnit, Model, Need, OnShiftEnd, OnTakeout, Patience, PatienceUntil,
+    PlaceWhileOut, Power, ProcessingBy, Property, PropertyType, PropertyValue, QueueLimit,
+    ResourcePool, Routing, Scrap, Setup, Severity, Stop, ThreePoint, TimeUnit, Timed, Transfer,
+    Upper,
 };
 use stochcraft_stats::split::{self, Split};
 
@@ -340,10 +341,10 @@ pub enum KindSpec {
     },
     /// Splits each batch back into its entities; anything else passes through.
     Unbatch,
-    /// A straight conveyor an entity rides from one end to the other. Lengths are in the
+    /// A conveyor that an entity rides from one end to the other. Lengths are in the
     /// experiment's `length_unit`; every entity takes a slot of pitch `item_length + gap`. At
     /// most ⌊`length` / pitch⌋ are on it at once, and it carries at most `speed` / pitch entities
-    /// per time unit. Not simulated yet: a run of a model with one is refused.
+    /// per time unit. `shape` is used for drawing only; the simulation run still uses `length`.
     Conveyor {
         /// The conveyor's length, above 0.
         #[serde(default = "ten")]
@@ -363,7 +364,66 @@ pub enum KindSpec {
         /// The least free belt between one entity and the next, 0 or more; left out when 0.
         #[serde(default, skip_serializing_if = "is_zero")]
         gap: f64,
+        /// How the conveyor is shaped when drawn (`straight`, `curve`, or `spiral`); left out
+        /// when `straight`.
+        #[serde(default, skip_serializing_if = "ConveyorShapeSpec::is_straight")]
+        shape: ConveyorShapeSpec,
     },
+}
+
+/// How a conveyor is drawn in 3D; the simulation run still uses its `length`.
+#[derive(Debug, Clone, Copy, Default, PartialEq, Serialize, Deserialize, JsonSchema)]
+#[serde(tag = "type", rename_all = "snake_case", deny_unknown_fields)]
+pub enum ConveyorShapeSpec {
+    /// A straight run of the conveyor's `length`.
+    #[default]
+    Straight,
+    /// A horizontal arc of `radius` sweeping `angle` degrees (positive turns left).
+    Curve { radius: f64, angle: f64 },
+    /// A helical ramp of `radius`, climbing `rise` per turn for `turns` revolutions.
+    Spiral { radius: f64, rise: f64, turns: f64 },
+}
+
+impl ConveyorShapeSpec {
+    fn is_straight(&self) -> bool {
+        *self == ConveyorShapeSpec::Straight
+    }
+}
+
+impl From<ConveyorShape> for ConveyorShapeSpec {
+    fn from(s: ConveyorShape) -> Self {
+        match s {
+            ConveyorShape::Straight => ConveyorShapeSpec::Straight,
+            ConveyorShape::Curve { radius, angle } => ConveyorShapeSpec::Curve { radius, angle },
+            ConveyorShape::Spiral {
+                radius,
+                rise,
+                turns,
+            } => ConveyorShapeSpec::Spiral {
+                radius,
+                rise,
+                turns,
+            },
+        }
+    }
+}
+
+impl From<ConveyorShapeSpec> for ConveyorShape {
+    fn from(s: ConveyorShapeSpec) -> Self {
+        match s {
+            ConveyorShapeSpec::Straight => ConveyorShape::Straight,
+            ConveyorShapeSpec::Curve { radius, angle } => ConveyorShape::Curve { radius, angle },
+            ConveyorShapeSpec::Spiral {
+                radius,
+                rise,
+                turns,
+            } => ConveyorShape::Spiral {
+                radius,
+                rise,
+                turns,
+            },
+        }
+    }
 }
 
 fn ten() -> f64 {
@@ -1036,12 +1096,14 @@ impl From<&ElementKind> for KindSpec {
                 accumulating,
                 item_length,
                 gap,
+                shape,
             } => KindSpec::Conveyor {
                 length: *length,
                 speed: *speed,
                 accumulating: *accumulating,
                 item_length: *item_length,
                 gap: *gap,
+                shape: (*shape).into(),
             },
         }
     }
@@ -1145,12 +1207,14 @@ impl From<KindSpec> for ElementKind {
                 accumulating,
                 item_length,
                 gap,
+                shape,
             } => ElementKind::Conveyor {
                 length,
                 speed,
                 accumulating,
                 item_length,
                 gap,
+                shape: shape.into(),
             },
         }
     }

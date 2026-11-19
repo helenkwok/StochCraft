@@ -225,11 +225,12 @@
       <stochcraft:power processing="12.5" idle="2" failed="0.5" offShift="0"/>
     </bpsim:VendorExtension>
 
-  stochcraft:conveyor, on a task's ElementParameters: the task is a straight conveyor. length,
-  speed (the length travelled per base time unit), itemLength (above 0) and gap (0 or more) are
-  in the scenario's length unit; every item takes a slot of itemLength + gap. accumulating says
-  whether items stop behind a stopped one ahead (true) or the whole belt stops (false). Other
-  tools see a plain task.
+  stochcraft:conveyor, on a task's ElementParameters: the task is a conveyor. length, speed
+  (the length travelled per base time unit), itemLength (above 0) and gap (0 or more) are in
+  the scenario's length unit; every item takes a slot of itemLength + gap. accumulating says
+  whether items stop behind a stopped one ahead (true) or the whole belt stops (false). shape is
+  straight (the default), curve (with radius and angle in degrees) or spiral (with radius, rise
+  per turn, and turns), for drawing only. Other tools see a plain task.
 
     <bpsim:VendorExtension name="stochcraft:conveyor" xmlns:stochcraft="…">
       <stochcraft:conveyor length="12.5" speed="0.5" accumulating="true" itemLength="0.8" gap="0.2"/>
@@ -441,6 +442,19 @@
       <xs:attribute name="accumulating" type="xs:boolean" use="required"/>
       <xs:attribute name="itemLength" type="xs:double" use="required"/>
       <xs:attribute name="gap" type="xs:double" use="required"/>
+      <xs:attribute name="shape" default="straight">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="straight"/>
+            <xs:enumeration value="curve"/>
+            <xs:enumeration value="spiral"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="radius" type="xs:double"/>
+      <xs:attribute name="angle" type="xs:double"/>
+      <xs:attribute name="rise" type="xs:double"/>
+      <xs:attribute name="turns" type="xs:double"/>
     </xs:complexType>
   </xs:element>
   <xs:element name="estimate">

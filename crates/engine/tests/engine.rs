@@ -3859,3 +3859,57 @@ fn line_balance_is_a_query_matching_groover_and_refusing_loops() {
         assert_eq!(err(&mut e, "line.balance", bad), ErrorCode::InvalidParams);
     }
 }
+
+#[test]
+fn conveyor_shape_defaults_to_straight_and_sets_via_block_set() {
+    let mut e = Engine::new();
+    ok(&mut e, "block.add", json!({ "kind": "source", "id": "in" }));
+    ok(
+        &mut e,
+        "block.add",
+        json!({ "kind": "conveyor", "id": "belt", "length": 10.0 }),
+    );
+    ok(&mut e, "block.add", json!({ "kind": "sink", "id": "out" }));
+    ok(&mut e, "connect", json!({ "from": "in", "to": "belt" }));
+    ok(&mut e, "connect", json!({ "from": "belt", "to": "out" }));
+
+    let belt_of = |engine: &mut Engine| {
+        ok(engine, "model.get", json!({}))["elements"]
+            .as_array()
+            .and_then(|es| es.iter().find(|x| x["id"] == "belt"))
+            .cloned()
+            .unwrap_or_default()
+    };
+    // Straight is the default and left out of the wire JSON.
+    assert!(belt_of(&mut e).get("shape").is_none());
+
+    ok(
+        &mut e,
+        "block.set",
+        json!({ "id": "belt", "shape": { "type": "curve", "radius": 2.0, "angle": 90.0 } }),
+    );
+    assert_eq!(
+        belt_of(&mut e)["shape"],
+        json!({ "type": "curve", "radius": 2.0, "angle": 90.0 })
+    );
+
+    ok(
+        &mut e,
+        "block.set",
+        json!({
+            "id": "belt",
+            "shape": { "type": "spiral", "radius": 1.2, "rise": 1.5, "turns": 2.0 },
+        }),
+    );
+    assert_eq!(
+        belt_of(&mut e)["shape"],
+        json!({ "type": "spiral", "radius": 1.2, "rise": 1.5, "turns": 2.0 })
+    );
+
+    ok(
+        &mut e,
+        "block.set",
+        json!({ "id": "belt", "shape": { "type": "straight" } }),
+    );
+    assert!(belt_of(&mut e).get("shape").is_none());
+}

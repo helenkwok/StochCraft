@@ -121,8 +121,9 @@ pub const UNBATCH: &str = "stochcraft:unbatch";
 
 /// A conveyor: a `stochcraft:conveyor` element on a task's `ElementParameters` with attributes
 /// `length`, `speed` (in the scenario's length unit per its base time unit), `accumulating`
-/// (`true` or `false`), `itemLength` and `gap`. A task carrying it reads as a conveyor; other
-/// tools see a plain task.
+/// (`true` or `false`), `itemLength` and `gap`, plus optional `shape` (`straight`, `curve` with
+/// `radius` and `angle`, or `spiral` with `radius`, `rise` and `turns`). A task carrying it reads
+/// as a conveyor; other tools see a plain task.
 pub const CONVEYOR: &str = "stochcraft:conveyor";
 
 /// The unit lengths are in (`mm`, `cm`, `m`, `km`, `in` or `ft`; metres without it):

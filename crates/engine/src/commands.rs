@@ -13,11 +13,11 @@ use stochcraft_model::{
 use crate::edit::Op;
 use crate::run::RunMode;
 use crate::wire::{
-    self, AvailabilityDoc, BalkingSpec, BreakdownSpec, DemandSpec, DistSpec, EstimateDoc, EventDoc,
-    FamilySpec, HealthCheckSpec, KindSpec, LengthUnitSpec, ModelDoc, NeedSpec, OnShiftEndSpec,
-    PatienceSpec, PowerSpec, ProcessingBySpec, PropertyDoc, PropertyTypeSpec, PropertyValueSpec,
-    QueueShiftDoc, RoutingSpec, ScrapSpec, SetupSpec, ShiftDoc, Stamp, StopSpec, TimeUnitSpec,
-    TimedDist,
+    self, AvailabilityDoc, BalkingSpec, BreakdownSpec, ConveyorShapeSpec, DemandSpec, DistSpec,
+    EstimateDoc, EventDoc, FamilySpec, HealthCheckSpec, KindSpec, LengthUnitSpec, ModelDoc,
+    NeedSpec, OnShiftEndSpec, PatienceSpec, PowerSpec, ProcessingBySpec, PropertyDoc,
+    PropertyTypeSpec, PropertyValueSpec, QueueShiftDoc, RoutingSpec, ScrapSpec, SetupSpec,
+    ShiftDoc, Stamp, StopSpec, TimeUnitSpec, TimedDist,
 };
 use crate::{CommandError, Engine, ErrorCode, HistoryEntry};
 
@@ -128,7 +128,14 @@ fn check_keys(v: &Value, extra: &[&str]) -> Result<(), CommandError> {
         Some("delay") => &["duration", "processing_by"],
         Some("exclusive_gateway") => &["default", "routing"],
         Some("batch") => &["size"],
-        Some("conveyor") => &["length", "speed", "accumulating", "item_length", "gap"],
+        Some("conveyor") => &[
+            "length",
+            "speed",
+            "accumulating",
+            "item_length",
+            "gap",
+            "shape",
+        ],
         _ => &[],
     };
     for k in obj.keys() {
@@ -487,6 +494,9 @@ pub struct BlockSet {
     /// Conveyors: the least free belt between one entity and the next; 0 or more.
     #[serde(default)]
     pub gap: Option<f64>,
+    /// Conveyors: the drawn shape (`straight`, `curve`, or `spiral`).
+    #[serde(default)]
+    pub shape: Option<ConveyorShapeSpec>,
 }
 
 /// A new shared resource pool.
@@ -1322,6 +1332,7 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         ("accumulating", p.accumulating.is_some()),
         ("item_length", p.item_length.is_some()),
         ("gap", p.gap.is_some()),
+        ("shape", p.shape.is_some()),
     ];
     let applies: &[&str] = match kind {
         ElementKind::Source { .. } => &["interarrival", "limit", "timed", "idle_outside"],
@@ -1351,7 +1362,14 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         ElementKind::ExclusiveGateway { .. } => &["default", "routing"],
         ElementKind::Batch { .. } => &["size"],
         ElementKind::Sink { .. } => &["scrap", "demand"],
-        ElementKind::Conveyor { .. } => &["length", "speed", "accumulating", "item_length", "gap"],
+        ElementKind::Conveyor { .. } => &[
+            "length",
+            "speed",
+            "accumulating",
+            "item_length",
+            "gap",
+            "shape",
+        ],
         ElementKind::ParallelGateway | ElementKind::Unbatch => &[],
     };
     if let Some((name, _)) = given.iter().find(|(n, g)| *g && !applies.contains(n)) {
@@ -1542,6 +1560,7 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
             accumulating,
             item_length,
             gap,
+            shape,
         } => {
             if let Some(x) = p.length {
                 *length = x;
@@ -1557,6 +1576,9 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
             }
             if let Some(x) = p.gap {
                 *gap = x;
+            }
+            if let Some(x) = p.shape {
+                *shape = x.into();
             }
         }
         ElementKind::ParallelGateway | ElementKind::Unbatch => {}

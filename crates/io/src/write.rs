@@ -7,10 +7,10 @@
 use std::collections::{BTreeMap, BTreeSet};
 
 use stochcraft_model::{
-    BalkJoin, Balking, Bounds, Breakdown, Calendar, DateTime, Demand, Dist, ElementKind, Estimate,
-    HealthCheck, LengthUnit, Model, Need, OnShiftEnd, OnTakeout, Patience, PatienceUntil,
-    PlaceWhileOut, Power, ProcessingBy, Property, PropertyType, PropertyValue, QueueLimit,
-    ResourcePool, Routing, Scrap, Setup, Stop, Timed, Transfer,
+    BalkJoin, Balking, Bounds, Breakdown, Calendar, ConveyorShape, DateTime, Demand, Dist,
+    ElementKind, Estimate, HealthCheck, LengthUnit, Model, Need, OnShiftEnd, OnTakeout, Patience,
+    PatienceUntil, PlaceWhileOut, Power, ProcessingBy, Property, PropertyType, PropertyValue,
+    QueueLimit, ResourcePool, Routing, Scrap, Setup, Stop, Timed, Transfer,
 };
 
 use crate::bpsim::NS2;
@@ -314,17 +314,38 @@ pub(crate) fn conveyor_element(kind: &ElementKind) -> Option<Element> {
         accumulating,
         item_length,
         gap,
+        shape,
     } = kind
     else {
         return None;
     };
     let ns = crate::bpsim::STOCHCRAFT_NS;
-    let body = Element::new("stochcraft:conveyor", Some(ns))
+    let mut body = Element::new("stochcraft:conveyor", Some(ns))
         .with_attr("length", &num(*length))
         .with_attr("speed", &num(*speed))
         .with_attr("accumulating", if *accumulating { "true" } else { "false" })
         .with_attr("itemLength", &num(*item_length))
         .with_attr("gap", &num(*gap));
+    match shape {
+        ConveyorShape::Straight => {}
+        ConveyorShape::Curve { radius, angle } => {
+            body = body
+                .with_attr("shape", "curve")
+                .with_attr("radius", &num(*radius))
+                .with_attr("angle", &num(*angle));
+        }
+        ConveyorShape::Spiral {
+            radius,
+            rise,
+            turns,
+        } => {
+            body = body
+                .with_attr("shape", "spiral")
+                .with_attr("radius", &num(*radius))
+                .with_attr("rise", &num(*rise))
+                .with_attr("turns", &num(*turns));
+        }
+    }
     Some(
         s("VendorExtension")
             .with_attr("name", crate::bpsim::CONVEYOR)

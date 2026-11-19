@@ -644,6 +644,7 @@ impl Compiled {
                     accumulating,
                     item_length,
                     gap,
+                    ..
                 } => spawn_conveyor(
                     &mut sim,
                     env,
