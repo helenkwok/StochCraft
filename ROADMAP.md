@@ -1,10 +1,12 @@
 # StochCraft roadmap
 
-Where StochCraft is going next and in what order. Six milestones: **M1** model files, the
+Where StochCraft is going next and in what order. Seven milestones: **M1** model files, the
 engine and a command line; **M2** the flow logic a factory or logistics model needs; **M3** the
 desktop app (and the browser app built from it); **M4** Monte Carlo, system dynamics, agents and
-hybrid models; **M5** transport and layout; **M6** Python and plugins. M1 and M3.1–M3.6 are done; M3.7, a redesign that
-makes results answer the question, comes next. M2.1–M2.8 are done, and so is M2.10 (abandonment and balking)
+hybrid models; **M5** transport and layout, led by a reference model, the sorter; **M6** Python
+and plugins; **M7** industrial engineering (line balancing, material flow on the layout,
+inventory, sharing a model). M1 and M3.1–M3.6 are done; M3.7, a redesign that
+makes results answer the question, comes next, and M5's sorter is built alongside it (D21). M2.1–M2.8 are done, and so is M2.10 (abandonment and balking)
 apart from the gaps listed in it. M2.11 (changeovers and lean measures) has its changeovers,
 product-type times, takt and cycle times, state times and most of OEE done; M2.9 (output analysis) has its
 recorder of results over time, MSER-5's warm-up suggestion, its warnings and streams by element id done. M4 and M5 are being planned. Each milestone is a series of pull requests small enough to
@@ -2003,8 +2005,9 @@ replications other than the first.
   the desktop app on a virtual display, driven by `stochcraft-cli mcp --connect`, opened the
   tandem line and showed its results.
 
-**Later:** 2D layout with entities moving between stations; 3D (the `render` crate, wgpu);
-FlexSim-style factory layouts via the shared `craft-factory` data from CADCraft.
+**Later:** 2D layout with entities moving between stations, and 3D (the `render` crate):
+now step 3 of M5's sorter (M5.3); factory layouts via the shared `craft-factory` data from
+CADCraft.
 
 **M3 size:** about six PRs; M3.1–M3.3 make a usable app, M3.4–M3.5 make it a modelling tool.
 **M3.1–M3.6 are complete.** CI builds and tests on Linux only (#45); the full test suite also passes on
@@ -2297,6 +2300,85 @@ once it records its version and starting state (#44).
 **Outcome:** operators, forklifts and AGVs or AMRs that carry items between places on the
 layout, with travel times from distances and speeds, and results that show where the time goes.
 
+**Reference model: the sorter.** What people ask a factory-simulation tool to show first, and
+what StochCraft cannot show today: products of several colours enter on a main loop conveyor
+(with a spiral that climbs to a second level), are diverted by colour onto roller-conveyor
+lanes, and two operators walk to the lane ends, pick the products up and carry them away. Beside
+the layout, four charts: products sorted per hour; each operator's time as a stacked bar
+(travel empty, travel loaded, loading, unloading, idle, with percentages); a histogram of each
+product's time on the conveyors; and the number of products on the conveyors over time. The
+sorter is built in four steps, each a series of pull requests with checks that have known
+answers, and ships as an example model with its write-up ("Examples for teaching").
+
+1. **Conveyors** (M5.1): a conveyor block with a length and a speed, accumulating (items queue
+   at the end, each taking its length plus a gap) or not (the whole belt stops while the item at
+   the end cannot leave); merges, and diverts by property or condition (the gateways that exist
+   today, at a point along the conveyor); a loop on which an item that cannot be diverted goes
+   round again. A spiral is a conveyor whose path climbs: only its length matters to the run.
+   Checks:
+   - a non-accumulating conveyor never blocked: every item's time on it is length / speed;
+   - an accumulating conveyor whose exit is shut holds ⌊length / (item length + gap)⌋ items;
+   - the most it carries is speed / (item length + gap) items per unit of time, so a source
+     faster than that fills it (an `overloaded` row in the capacity table);
+   - a non-accumulating conveyor behind a constant-time station that holds each item for d
+     more than the belt brings them: each item's time on the belt grows by a known amount,
+     worked by hand;
+   - diverts by probability give their shares, and a lane always full sends each item round
+     the loop a number of times known from the loop's length and speed.
+2. **Operators who walk or drive** (M5.2): the moving resources and travel network below, with
+   task sequences (travel empty, load, travel loaded, unload, then return home or take the next
+   job) and the states named in the sorter's bar. Checks: one operator between two fixed points
+   with constant times has a cycle of load + distance / speed loaded + unload + distance /
+   speed empty, and each state's share of the time is its part of that cycle; the states add up
+   to 100% of the time; travel time is the shortest path's length over the speed on a network
+   worked by hand.
+3. **The layout view, 2D then 3D** (M5.3): stations, conveyors and paths drawn at their layout
+   positions to scale, with entities moving along conveyors and paths, the moving entities of
+   M3.7.7 (#151) taken from the flowchart onto the layout. Then 3D, as parametric low-poly
+   models generated by code (Helen, 2026-11-19):
+   - **Every 3D object is a low-poly mesh generated in Rust from its parameters; there are no
+     asset files.** A straight belt or roller section from its length, width and height; a
+     curve from its radius and angle; a spiral from its radius, rise and number of turns; side
+     guards and legs at a set spacing; roller lanes; a machine or station as a box with a few
+     details; racks and shelves from their bays and levels; a pallet, tote or box for each
+     entity, coloured by product; an operator (a capsule body and a head); a forklift and an
+     AGV; walls and a floor grid.
+   - **Parameters come from the model.** The length and path a conveyor has in the run are the
+     numbers that shape its mesh, so the 3D view cannot drift from the model.
+   - **Mesh generation** is pure, testable and independent of any renderer: plain vertex and
+     index buffers, in a module or crate of its own (in the `render` layer, L5). Checks: vertex
+     and face counts, and bounding boxes, match the parameters; normals face outward; meshes
+     are closed where they should be.
+   - **Rendering:** both apps run eframe on its glow backend (OpenGL on the desktop, WebGL2 in
+     the browser; `apps/*/Cargo.toml`), so the 3D view is drawn through an `egui_glow` paint
+     callback with one flat-shaded shader and instancing for many entities. That works on the
+     desktop and in the browser as they are. Moving the apps to wgpu is a separate, later
+     decision (D22), not needed for 3D.
+   - **Clean room:** shapes come from real-world dimensions only, never traced or copied from
+     any commercial tool's models.
+   - **Shared code (to check):** whether another Craft app (CADCraft's `craft-factory` data)
+     already has parametric mesh code to share; those repositories are not on this PC.
+
+   Checks for the view: an entity's drawn position at time t is its entry point plus
+   speed × (t − entry time) along the conveyor's path, read from a live run in a test; the 2D
+   and 3D views place every entity at the same layout point.
+4. **The sorter's dashboard** (M5.4): the four charts, mostly from what exists today:
+   - products sorted per hour: departures over the time run (exists);
+   - the operators' stacked state bars: the state times every server reports today (exists)
+     plus the new travel and handling states of step 2;
+   - the products on the conveyors over time: M2.9's recorder of each element's number inside
+     (exists), summed over a chosen group of elements (missing: groups of elements);
+   - the histogram of each product's time on the conveyors (missing: today `results.distribution`
+     is over replications' values; a histogram over every entity's time on a group of elements,
+     with its bins merged across replications, is new).
+
+   Checks: the throughput tile equals the departures count over the duration; each operator's
+   bar adds up to 100%; the histogram's mean equals the mean time on the conveyors that the
+   results report, and on step 1's never-blocked conveyor all of it sits in the bin holding
+   length / speed.
+
+The work below is what the four steps need, in more detail.
+
 A milestone of its own rather than an M2 part. Today's resources stay where they are: a unit is
 taken, held and given back, with no place and no travel (M2.5). Moving resources need a place
 for every station, a network to travel on, and new `des` and `blocks` behaviour, and they lean on
@@ -2328,7 +2410,13 @@ speeds and positions.
   - machine repair with travel (the M/M/R//N case of M2.5 with a repairman who travels): a
     known result to find (to verify).
 
-**Later:** the 2D view of entities moving between stations and 3D (M3's "Later").
+- **Files for the sorter:** a conveyor is a BPMN task with a `stochcraft:conveyor` vendor
+  extension (length, speed, accumulating, item length and gap, the points along it where
+  diverts and merges sit); positions and paths on the layout, with their heights, in a
+  `stochcraft:layout` extension beside BPMN DI (which is a 2D diagram, not a floor plan), as
+  for the other StochCraft-only data (D1).
+- **Later:** free-space pathfinding; vehicles that block each other on a path; power-and-free
+  and overhead conveyors.
 
 ## M6: Python and plugins
 
@@ -2399,6 +2487,96 @@ Custom behaviour inside a run, the logic SimPy users write by hand:
 - **Speed:** `wasmi` interprets; a hook is called once per event, so the cost is measured on the
   benchmark models before this ships, and a compiled runtime is considered only if it is too slow
   and still deterministic.
+
+## M7: industrial engineering
+
+**Outcome:** what industrial engineers and students ask a free factory-simulation tool for
+(the request that prompted this was to replace commercial factory-simulation and
+layout-planning tools for coursework and an engineering portfolio) can be done in StochCraft,
+in the browser as well as on the desktop.
+
+Where each part of that request sits:
+
+- **Process simulation:** M2, done (servers, pools, routing, batches, buffers, breakdowns,
+  calendars, changeovers, lean measures), with the capacity table before a run (M2.9).
+- **Layout and material flow:** M5, led by the sorter; the from-to chart below adds flows and
+  distances on the layout.
+- **Watching a model run:** M3.7.7 (#151) on the flowchart, then M5.3's layout view, 2D and 3D.
+- **Line balancing and supply chains:** new, below.
+- **Learning and a portfolio:** free and open, in the browser at
+  [helenkwok.github.io/StochCraft](https://helenkwok.github.io/StochCraft/); course-ready models
+  ("Examples for teaching"); sharing a model and its results, below.
+
+### M7.1 Line balancing
+
+- **Outcome:** given the work elements of an assembly, their times and which must come before
+  which, the fewest stations for a cycle time, the elements assigned to each, and the line built
+  as a model to run with variability.
+- **Input:** a precedence graph of work elements with times; the cycle time is the takt of the
+  line's demand (M2.11's `stochcraft:demand` and `takt`, done) or a number given.
+- **Heuristics:** the largest candidate rule, Kilbridge and Wester's column method and Helgeson
+  and Birnie's ranked positional weights (Groover, *Automation, Production Systems, and
+  Computer-Integrated Manufacturing*, 4th ed., 2015, the chapter on manual assembly lines (to
+  verify); Kilbridge and Wester, *Journal of Industrial Engineering* 12(4), 1961, and Helgeson
+  and Birnie, *Journal of Industrial Engineering* 12(6), 1961 (both to verify)). Exact methods
+  (Scholl, *Balancing and Sequencing of Assembly Lines*, 2nd ed., 1999 (to verify)) later.
+- **Measures:** the theoretical least number of stations (the total work content over the cycle
+  time, rounded up), balance efficiency, balance delay, and the smoothness index (the square
+  root of the sum of squared differences between the longest station time and each station's).
+- **Then simulate it:** "Build the line" writes the balanced stations as servers in series
+  (with buffers if asked), so the capacity table and a run show what the averages hide:
+  blocking and starving when element times vary.
+- **Where it lives:** a `balance` module in `model` (no run needed), an engine command
+  `line.balance`, `stochcraft-cli balance`, and a view in the window; the precedence graph is a
+  `stochcraft:workElements` vendor extension on the line's tasks.
+- **Checks:** a textbook example worked by hand gives the same stations and measures for each
+  heuristic; the stations never break precedence and never exceed the cycle time; the theoretical
+  minimum is never beaten.
+
+### M7.2 Material flow on the layout
+
+- **Outcome:** how much moves between which stations, how far, and what that costs, drawn on the
+  layout, so that layouts can be compared.
+- **From-to chart:** the flow from each station to each other, from the routing rates the
+  capacity table already works out (before a run) or from a run's counts; distances between
+  stations from M5's layout positions and scale (straight line, rectilinear, or along the travel
+  network); flow × distance per pair and in total.
+- **On the canvas:** a flow diagram drawn on the layout, line width by flow.
+- **Later:** the activity relationship chart of Systematic Layout Planning (Muther, *Systematic
+  Layout Planning*, 1961; 2nd ed. 1973 (to verify)); Tompkins, White, Bozer and Tanchoco,
+  *Facilities Planning*, 4th ed., 2010 (to verify), for the measures.
+- **Checks:** a three-station example worked by hand (flows, rectilinear distances, total
+  flow × distance); the before-a-run chart and a long run's counts agree within the run's
+  intervals.
+
+### M7.3 Inventory and the supply chain
+
+- **Outcome:** stock points that order from a supplier or an upstream stock point by a policy,
+  with lead times, so that a model can reach from the factory through the supply chain.
+- **Policies:** base stock, (s, S) and (R, Q) (reorder point and order quantity), reviewed
+  continuously or every period; unmet demand backordered or lost.
+- **Results:** fill rate, service level (cycles without a stockout), mean stock on hand,
+  backorders, orders placed.
+- **Where it lives:** a new block kind, the stock point, with a `stochcraft:inventory` vendor
+  extension (BPMN has no stock), and its demand from a source or from downstream orders.
+  Multi-echelon chains later.
+- **Checks:** base stock with Poisson demand and a fixed lead time: the fill rate is the
+  probability that lead-time demand is below the base-stock level (Hopp and Spearman, *Factory
+  Physics*, 3rd ed., 2008, §2.4.2, the base stock model; its notation to verify); (R, Q) with
+  Poisson demand against the same book's §2.4.3 (to verify).
+
+### M7.4 Sharing a model
+
+- **Outcome:** a student or an engineer sends one link that opens a model, and its results if
+  saved with it, in the browser app, and prints a one-page report of the question, the model and
+  the findings.
+- **Scope:** small: a model (and optionally its results) passed in the link or as a file the
+  link points to; the report from M3.7's findings. Nothing is stored on a server of ours.
+
+### Order
+
+See D21: the sorter (M5) first, alongside M3.7; then line balancing (M7.1), the from-to chart
+(M7.2, which needs M5's layout scale), inventory (M7.3) and sharing (M7.4).
 
 ---
 
@@ -2472,6 +2650,12 @@ M1.1 model ─ M1.2 compile ─ M1.3 io ─ M1.4 engine ─ M1.5 cli ─ M1.6 de
                                          │
                      ┌───────────────────┴───────────────────┐
               M4 Monte Carlo, SD, agents, hybrid      M5 transport and layout
+                                                      (the sorter: M5.1 conveyors ─ M5.2 operators
+                                                       ─ M5.3 layout view, 2D then 3D ─ M5.4 dashboard;
+                                                       started alongside M3.7, D21)
+                                                              │
+                                                      M7.1 line balancing ─ M7.2 from-to chart
+                                                      ─ M7.3 inventory ─ M7.4 sharing
 
 M6.1 the Python package: any time after M1.4 (it wraps the engine)
 M6.2 command plugins: after M3.7     M6.3 logic plugins: with or after M4.3
@@ -2509,3 +2693,5 @@ and the Pages preview of an M3 pull request shows the blocks already merged.
 | D18 | Agent scheduling and random streams (M4.3) | Settled (Helen, 2026-11-15). Agents run event-driven on the `des` event list; a stepped mode only for models written that way, activating agents in a set or a random order each step. Events at the same time run by time, then priority, then an order the experiment sets openly: first scheduled first (the default, as today, so validated results do not change), last scheduled first, or random from a stream of its own, so a model can be checked for depending on the order. Initial events, step activations and broadcasts are scheduled in population, then agent order. Each `des` event delivered to an agent is one SCXML external event, handled by a complete zero-time macrostep; `<raise>` and `#_internal` events stay inside the agent; delayed and zero-delay `<send>`s become `des` events, and `<cancel>` marks them stale; a limit on microsteps per macrostep stops a run that loops. Each agent has its own random stream, derived from the replication's seed, its population and its serial number, with a stream per purpose, so adding an agent never changes another's numbers |
 | D19 | Python (M6.1) | Settled (Helen, 2026-11-16): a native package, `pip install stochcraft`, the engine built into a Python module with PyO3 and maturin; Python drives models from outside, and logic inside a run is M6.3's, not Python's |
 | D20 | Plugins (M6.2, M6.3) | Settled (Helen, 2026-11-16): sandboxed WebAssembly plugins in `wasmi`, as the other Craft apps have; command plugins first (through the engine's commands, one undo step, permissions in a manifest), then logic plugins called during a run with the engine's random streams, an instruction budget and a memory cap |
+| D21 | What comes after the capacity table, and where the sorter sits | Recommended: the sorter (M5.1 conveyors, M5.2 operators, M5.3 the layout view in 2D then 3D, M5.4 its dashboard) first, built alongside M3.7 because it changes `model`, `blocks` and the engine while M3.7 changes `ui-egui`; M5.3 follows #151's moving entities so it reuses them. Then M7.1 line balancing (small, needs no run, reuses takt and the capacity table), M7.2 the from-to chart (reuses the capacity table's rates and M5's layout scale), M7.3 inventory, M7.4 sharing. M4 waits until the sorter's first two steps are in |
+| D22 | Moving the apps from eframe's glow backend to wgpu | Open, later: not needed for M5.3's 3D view, which draws through an `egui_glow` paint callback on OpenGL and WebGL2 as the apps are today. Worth it only if a later need (compute shaders, WebGPU-only features) outweighs re-checking the browser build on every target |
