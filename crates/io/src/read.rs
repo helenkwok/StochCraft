@@ -7,11 +7,12 @@
 use std::collections::{BTreeMap, BTreeSet};
 
 use stochcraft_model::{
-    BalkJoin, BalkRow, Balking, Bounds, Breakdown, ByValue, Calendar, Change, Connection, DateTime,
-    Demand, DemandPer, Dist, Element as ModelElement, ElementId, ElementKind, Estimate, Experiment,
-    Family, HealthCheck, Model, Need, OnShiftEnd, OnTakeout, Patience, PatienceUntil,
-    PlaceWhileOut, Power, ProcessingBy, Property, PropertyType, PropertyValue, QueueLimit,
-    ResourcePool, Routing, Scrap, Setup, Stop, ThreePoint, TimeUnit, Timed, Transfer, Upper,
+    AfterJob, BalkJoin, BalkRow, Balking, Bounds, Breakdown, ByValue, Calendar, Change, Connection,
+    DateTime, Demand, DemandPer, Dist, Element as ModelElement, ElementId, ElementKind, Estimate,
+    Experiment, Family, HealthCheck, Mobility, Model, Need, OnShiftEnd, OnTakeout, Patience,
+    PatienceUntil, PlaceWhileOut, Power, ProcessingBy, Property, PropertyType, PropertyValue,
+    QueueLimit, ResourcePool, Routing, Scrap, Setup, Stop, ThreePoint, TimeUnit, Timed, Transfer,
+    Upper,
 };
 
 use crate::bpsim::{self, NSS, Scenario, Value};
@@ -720,7 +721,108 @@ fn pool_of(
     let mut pool = ResourcePool::new(ElementId::unchecked(r), name, 1, roles);
     (pool.quantity, pool.shifts) = units_by_shift(r, scenario, notes);
     (pool.available, pool.availability) = availability_of(r, scenario, notes);
+    pool.mobility = mobility_of(scenario, r, notes);
     pool
+}
+
+/// The mobility StochCraft's vendor extension ([`bpsim::MOBILITY`]) gives pool `id`, if any.
+/// Both speeds and the home are needed; one that is missing or not valid is an error note and
+/// the pool is then read as one whose units stay where they are. Whether the numbers make a
+/// usable pool is for the model's validation.
+fn mobility_of(scenario: Option<&Scenario>, id: &str, notes: &mut Vec<Note>) -> Option<Mobility> {
+    let ext = scenario?.param(id, &format!("VendorExtension/{}", bpsim::MOBILITY))?;
+    let body = ext.elements().find(|e| e.local() == "mobility");
+    let mut bad = Vec::new();
+    let mut number = |name: &'static str| {
+        let x = body
+            .and_then(|b| b.attr(name))
+            .and_then(|raw| raw.trim().parse::<f64>().ok());
+        if x.is_none() {
+            bad.push(name);
+        }
+        x
+    };
+    let (speed_empty, speed_loaded) = (number("speedEmpty"), number("speedLoaded"));
+    let home = body
+        .and_then(|b| b.attr("home"))
+        .map(|h| h.trim().to_owned())
+        .filter(|h| !h.is_empty());
+    if home.is_none() {
+        bad.push("home");
+    }
+    let after_job = match body
+        .and_then(|b| b.attr("afterJob"))
+        .as_deref()
+        .map(str::trim)
+    {
+        None => Some(AfterJob::Stay),
+        Some(raw) => AfterJob::from_name(raw),
+    };
+    if after_job.is_none() {
+        bad.push("afterJob");
+    }
+    match (speed_empty, speed_loaded, home, after_job) {
+        (Some(speed_empty), Some(speed_loaded), Some(home), Some(after_job)) => Some(Mobility {
+            speed_empty,
+            speed_loaded,
+            home: ElementId::unchecked(&home),
+            after_job,
+        }),
+        _ => {
+            notes.push(Note::error(
+                Some(id),
+                format!(
+                    "the mobility (`{}`) needs `speedEmpty`, `speedLoaded`, `home` and (stay or goHome) `afterJob`; {} missing or not valid, so the units stay where they are",
+                    bpsim::MOBILITY,
+                    bad.join(", ")
+                ),
+            ));
+            None
+        }
+    }
+}
+
+/// The transport StochCraft's vendor extension ([`bpsim::TRANSPORT`]) makes task `id`, if any.
+/// The pool and the load and unload times are all needed; one that is missing or not valid is
+/// an error note, and the task is then read as the plain task it is to other tools.
+fn transport_of(
+    scenario: Option<&Scenario>,
+    id: &str,
+    unit: TimeUnit,
+    notes: &mut Vec<Note>,
+) -> Option<ElementKind> {
+    let ext = scenario?.param(id, &format!("VendorExtension/{}", bpsim::TRANSPORT))?;
+    let body = ext.elements().find(|e| e.local() == "transport");
+    let pool = body
+        .and_then(|b| b.attr("pool"))
+        .map(|p| p.trim().to_owned())
+        .filter(|p| !p.is_empty());
+    let part = |local: &str, notes: &mut Vec<Note>| {
+        let p = body?.elements().find(|e| e.local() == local)?;
+        dist_of(
+            bpsim::default_value(p, unit, notes, Some(id)),
+            &format!("the transport's {local}"),
+            id,
+            notes,
+        )
+    };
+    match (pool, part("load", notes), part("unload", notes)) {
+        (Some(pool), Some(load), Some(unload)) => Some(ElementKind::Transport {
+            pool: ElementId::unchecked(&pool),
+            load,
+            unload,
+        }),
+        _ => {
+            notes.push(Note::error(
+                Some(id),
+                format!(
+                    "the transport (`{}`) needs a `pool` and `load` and `unload` distributions; one is missing or not valid, so it is ignored",
+                    bpsim::TRANSPORT
+                ),
+            ));
+            None
+        }
+    }
 }
 
 /// Resource `r`'s units outside its shifts (BPSim `quantity`, default 1; 0 when it has only
@@ -970,8 +1072,9 @@ fn to_model(p: Process, scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> M
                     }
                     None => None,
                 };
-                let batching =
-                    batching_of(scenario, id, notes).or_else(|| conveyor_of(scenario, id, notes));
+                let batching = batching_of(scenario, id, notes)
+                    .or_else(|| conveyor_of(scenario, id, notes))
+                    .or_else(|| transport_of(scenario, id, unit, notes));
                 match (batching, shared.get(id), task_resource.get(id)) {
                     (Some(kind), shared, own) => {
                         let mut ignored = Vec::new();
@@ -988,7 +1091,7 @@ fn to_model(p: Process, scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> M
                             notes.push(Note::warning(
                                 Some(id),
                                 format!(
-                                    "a batch, a split or a conveyor takes no time and no resource of its own; {} is ignored",
+                                    "a batch, a split, a conveyor or a transport takes no time and no resource of its own; {} is ignored",
                                     ignored.join(" and ")
                                 ),
                             ));
@@ -1396,6 +1499,7 @@ fn queue_capacity(scenario: Option<&Scenario>, id: &str, notes: &mut Vec<Note>) 
             bpsim::BATCH_SIZE,
             bpsim::UNBATCH,
             bpsim::CONVEYOR,
+            bpsim::TRANSPORT,
             bpsim::QUANTITY,
             bpsim::STOP_COUNT,
             bpsim::STOP_WHEN_EMPTY,
@@ -2263,6 +2367,7 @@ fn experiment(scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> Experiment 
     Experiment {
         time_unit: unit,
         length_unit: s.length_unit,
+        layout_scale: s.layout_scale.unwrap_or(1.0),
         warmup,
         duration,
         replications: s.replication.unwrap_or(1),

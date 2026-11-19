@@ -652,6 +652,8 @@ impl Compiled {
                     accumulating,
                     item_length + gap,
                 ),
+                // Not simulated yet (`compile` refuses a model with one): passes entities on.
+                ElementKind::Transport { .. } => spawn_unbatch(&mut sim, env),
             }
         }
 

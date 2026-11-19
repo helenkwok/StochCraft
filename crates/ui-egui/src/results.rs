@@ -127,6 +127,7 @@ pub(crate) fn kind_label(kind: &str) -> &str {
         "batch" => t("Batch"),
         "unbatch" => t("Split batches"),
         "conveyor" => t("Conveyor"),
+        "transport" => t("transport"),
         other => other,
     }
 }
