@@ -973,7 +973,7 @@ unit	yr	年
 	Dashboard	ダッシュボード
 	Throughput	スループット
 	{n} per hour	1時間あたり {n}
-	95% interval {low} to {high} per hour	95%区間: 1時間あたり {low} から {high}
+	95% interval {low} to {high} per hour	95% 信頼区間: 1時間あたり {low} から {high}
 	So far in the run being watched	ここまでの観察中の実行
 	No sink in this model	このモデルには出口がありません
 	Nothing left the model in this run	この実行ではモデルから出たものはありません

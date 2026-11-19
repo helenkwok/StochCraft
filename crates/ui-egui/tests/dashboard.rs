@@ -31,8 +31,13 @@ fn menu(h: &mut Harness<'static, App>, path: &[&str]) {
     let item = egui::accesskit::Role::MenuItem;
     h.get_by_role_and_label(item, path[0]).click();
     settle(h);
+    // A toggle in the menu (the dashboard) is a check item, not a plain one.
+    let check = egui::accesskit::Role::MenuItemCheckBox;
     for label in &path[1..] {
-        h.get_by_role_and_label(item, label).click();
+        match h.query_by_role_and_label(item, label) {
+            Some(node) => node.click(),
+            None => h.get_by_role_and_label(check, label).click(),
+        }
         settle(h);
     }
 }
