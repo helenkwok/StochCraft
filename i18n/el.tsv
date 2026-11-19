@@ -1005,6 +1005,11 @@ unit	yr	έτ
 	At {time} {unit}: {n} items	Τη στιγμή {time} {unit}: {n} αντικείμενα
 	Run the model to fill the dashboard	Εκτελέστε το μοντέλο για να γεμίσει ο πίνακας ελέγχου
 	The resource and conveyor charts show the last run until this one ends	Τα γραφήματα πόρων και ιμάντων δείχνουν την τελευταία εκτέλεση μέχρι να τελειώσει αυτή
+	Reset	Επαναφορά
+	As fast as possible	Όσο πιο γρήγορα γίνεται
+	Pause at	Παύση στο
+	Halve Speed	Μείωση της ταχύτητας στο μισό
+	Double Speed	Διπλασιασμός της ταχύτητας
 	Layout	Διάταξη
 	Layout of the model, to scale	Διάταξη του μοντέλου, υπό κλίμακα
 	Drag to pan · Scroll to zoom	Σύρετε για μετακίνηση · Κύλιση για ζουμ

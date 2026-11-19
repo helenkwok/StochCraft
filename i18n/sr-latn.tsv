@@ -1005,6 +1005,11 @@ unit	yr	god.
 	At {time} {unit}: {n} items	U {time} {unit}: {n} stavki
 	Run the model to fill the dashboard	Pokrenite model da se kontrolna tabla popuni
 	The resource and conveyor charts show the last run until this one ends	Grafikoni resursa i transportnih traka prikazuju poslednje izvršavanje dok ovo ne završi
+	Reset	Vrati na početak
+	As fast as possible	Što brže moguće
+	Pause at	Pauza u
+	Halve Speed	Prepolovi brzinu
+	Double Speed	Udvostruči brzinu
 	Layout	Raspored
 	Layout of the model, to scale	Raspored modela, u razmeri
 	Drag to pan · Scroll to zoom	Prevucite za pomeranje · Skrolujte za zumiranje

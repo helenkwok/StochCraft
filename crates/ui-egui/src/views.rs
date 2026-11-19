@@ -86,7 +86,6 @@ impl App {
             self.editor(ui, p);
         });
         self.problems_chip(ui, p);
-        self.watch_bar(ui, p);
         self.canvas(ui, p);
     }
 

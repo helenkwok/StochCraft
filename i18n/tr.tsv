@@ -1005,6 +1005,11 @@ unit	yr	yıl
 	At {time} {unit}: {n} items	{time} {unit} anında: {n} öğe
 	Run the model to fill the dashboard	Panoyu doldurmak için modeli çalıştırın
 	The resource and conveyor charts show the last run until this one ends	Kaynak ve konveyör grafikleri, bu bitene kadar son çalıştırmayı gösterir
+	Reset	Sıfırla
+	As fast as possible	Olabildiğince hızlı
+	Pause at	Şurada duraklat
+	Halve Speed	Hızı yarıya indir
+	Double Speed	Hızı ikiye katla
 	Layout	Yerleşim
 	Layout of the model, to scale	Modelin yerleşimi, ölçekli
 	Drag to pan · Scroll to zoom	Kaydırmak için sürükleyin · Yakınlaştırmak için kaydırın

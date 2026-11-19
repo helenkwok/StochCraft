@@ -1005,6 +1005,11 @@ unit	yr	år
 	At {time} {unit}: {n} items	Ved {time} {unit}: {n} enheter
 	Run the model to fill the dashboard	Kjør modellen for å fylle dashbordet
 	The resource and conveyor charts show the last run until this one ends	Diagrammene for ressurser og transportbånd viser den siste kjøringen til denne er ferdig
+	Reset	Nullstill
+	As fast as possible	Så fort som mulig
+	Pause at	Pause ved
+	Halve Speed	Halver hastigheten
+	Double Speed	Doble hastigheten
 	Layout	Layout
 	Layout of the model, to scale	Modellens layout i målestokk
 	Drag to pan · Scroll to zoom	Dra for å panorere · Rull for å zoome
