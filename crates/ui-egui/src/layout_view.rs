@@ -223,9 +223,12 @@ impl Vw {
     }
 }
 
+/// Grid lines across one axis: each line's screen position, and whether it is a strong one.
+type Lines = Vec<(f32, bool)>;
+
 /// The screen `x` of every vertical grid line and the screen `y` of every horizontal one in
 /// `rect`, a metre apart or wider when that would crowd them.
-fn grid_lines(vw: &Vw, rect: Rect) -> (Vec<(f32, bool)>, Vec<(f32, bool)>) {
+fn grid_lines(vw: &Vw, rect: Rect) -> (Lines, Lines) {
     let step = nice_step(vw.scale, MIN_GRID_PX, MIN_GRID_M);
     // A stronger line every 5 steps (every 2 for 5, 50 …, which makes 10, 100 …).
     let every: i64 = if [5.0, 50.0, 500.0, 5000.0].contains(&step) {
