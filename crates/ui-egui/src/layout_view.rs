@@ -12,8 +12,7 @@
 //! the drawing has focus.
 
 use egui::{
-    Align2, Color32, FontId, Key, Pos2, Rect, RichText, Sense, Shape, Stroke, StrokeKind, Vec2,
-    pos2, vec2,
+    Align2, FontId, Key, Pos2, Rect, RichText, Sense, Shape, Stroke, StrokeKind, Vec2, pos2, vec2,
 };
 use stochcraft_model::{ElementId, ElementKind, Frame, Model, Segment};
 use stochcraft_render::StraightConveyor;
@@ -218,7 +217,7 @@ impl Vw {
 
     /// Where the point `w` (metres) falls on the canvas `rect`; `y` grows up in metres and down
     /// on the screen.
-    fn to_screen(&self, rect: Rect, w: [f32; 2]) -> Pos2 {
+    fn on_screen(&self, rect: Rect, w: [f32; 2]) -> Pos2 {
         let c = rect.center();
         pos2(
             c.x + (w[0] - self.centre[0]) * self.scale,
@@ -227,7 +226,7 @@ impl Vw {
     }
 
     /// The point in metres under the screen position `p`.
-    fn to_world(&self, rect: Rect, p: Pos2) -> [f32; 2] {
+    fn in_metres(&self, rect: Rect, p: Pos2) -> [f32; 2] {
         let c = rect.center();
         [
             self.centre[0] + (p.x - c.x) / self.scale,
@@ -237,7 +236,7 @@ impl Vw {
 
     /// Zooms by `factor` (above 1 to see more closely) keeping the point under `at` where it is.
     fn zoom_at(&mut self, rect: Rect, at: Pos2, factor: f32) {
-        let w = self.to_world(rect, at);
+        let w = self.in_metres(rect, at);
         self.scale = (self.scale * factor).clamp(MIN_SCALE, MAX_SCALE);
         let c = rect.center();
         self.centre = [
@@ -257,8 +256,8 @@ impl Vw {
 /// `rect`, a metre apart or wider when that would crowd them.
 fn grid_lines(vw: &Vw, rect: Rect) -> (Vec<f32>, Vec<f32>) {
     let step = nice_step(vw.scale, MIN_GRID_PX);
-    let low = vw.to_world(rect, rect.left_bottom());
-    let high = vw.to_world(rect, rect.right_top());
+    let low = vw.in_metres(rect, rect.left_bottom());
+    let high = vw.in_metres(rect, rect.right_top());
     let lines = |a: f32, b: f32, at: &dyn Fn(f32) -> f32| -> Vec<f32> {
         let first = (f64::from(a) / step).ceil() as i64;
         let last = (f64::from(b) / step).floor() as i64;
@@ -268,8 +267,8 @@ fn grid_lines(vw: &Vw, rect: Rect) -> (Vec<f32>, Vec<f32>) {
             .collect()
     };
     (
-        lines(low[0], high[0], &|x| vw.to_screen(rect, [x, 0.0]).x),
-        lines(low[1], high[1], &|y| vw.to_screen(rect, [0.0, y]).y),
+        lines(low[0], high[0], &|x| vw.on_screen(rect, [x, 0.0]).x),
+        lines(low[1], high[1], &|y| vw.on_screen(rect, [0.0, y]).y),
     )
 }
 
@@ -391,12 +390,12 @@ impl App {
         }
         let belt = Stroke::new((belt_width() * vw.scale).max(2.0), p.chart);
         for b in &plan.belts {
-            let points = b.points.iter().map(|q| vw.to_screen(rect, *q)).collect();
+            let points = b.points.iter().map(|q| vw.on_screen(rect, *q)).collect();
             painter.add(Shape::line(points, belt));
         }
         let outline = Stroke::new(1.5, p.control_border);
         for pl in &plan.places {
-            let c = vw.to_screen(rect, pl.centre);
+            let c = vw.on_screen(rect, pl.centre);
             let reach = pl.outline.reach() * vw.scale;
             match pl.outline {
                 Outline::Square(_) => {
@@ -450,16 +449,16 @@ impl App {
         }
         // The names, as labels over the drawing.
         for pl in &plan.places {
-            name_label(ui, rect, vw.to_screen(rect, pl.centre), &pl.name, &p);
+            name_label(ui, rect, vw.on_screen(rect, pl.centre), &pl.name, &p);
         }
         for b in &plan.belts {
-            name_label(ui, rect, vw.to_screen(rect, b.middle), &b.name, &p);
+            name_label(ui, rect, vw.on_screen(rect, b.middle), &b.name, &p);
         }
 
         ui.horizontal(|ui| {
             ui.label(tf("Scale bar: {length} m", &[("length", &bar_metres)]));
             if let Some(at) = resp.hover_pos() {
-                let w = vw.to_world(rect, at);
+                let w = vw.in_metres(rect, at);
                 let (x, y) = (format!("{:.2}", w[0]), format!("{:.2}", w[1]));
                 ui.label(tf("x {x} m, y {y} m", &[("x", &x), ("y", &y)]));
             }
@@ -616,24 +615,24 @@ mod tests {
         // 400 - 80 = 320 px for 20 m is 16 px a metre; 300 - 80 = 220 px for 10 m is 22.
         assert!((vw.scale - 16.0).abs() < 1e-4);
         assert_eq!(vw.centre, [10.0, 5.0]);
-        let corner = vw.to_screen(r, [0.0, 0.0]);
+        let corner = vw.on_screen(r, [0.0, 0.0]);
         assert!((corner.x - (r.center().x - 160.0)).abs() < 1e-3);
         assert!(
             corner.y > r.center().y,
             "y grows up in metres, down on screen"
         );
         let at = pos2(r.left() + 100.0, r.top() + 50.0);
-        let before = vw.to_world(r, at);
+        let before = vw.in_metres(r, at);
         let mut zoomed = vw;
         zoomed.zoom_at(r, at, 2.0);
         assert!((zoomed.scale - 32.0).abs() < 1e-4);
-        let after = zoomed.to_world(r, at);
+        let after = zoomed.in_metres(r, at);
         assert!((before[0] - after[0]).abs() < 1e-4 && (before[1] - after[1]).abs() < 1e-4);
         // Panning by a drag moves the drawing with the pointer.
         let mut panned = vw;
-        let was = panned.to_screen(r, [3.0, 4.0]);
+        let was = panned.on_screen(r, [3.0, 4.0]);
         panned.pan(vec2(25.0, -10.0));
-        let now = panned.to_screen(r, [3.0, 4.0]);
+        let now = panned.on_screen(r, [3.0, 4.0]);
         assert!((now.x - was.x - 25.0).abs() < 1e-3 && (now.y - was.y + 10.0).abs() < 1e-3);
     }
 
