@@ -27,7 +27,7 @@ The window's UX parity and its gaps: [docs/target-app-parity.md](docs/target-app
 | `random` | L0 | xoshiro256** streams; BPSim's distributions; `Dist`; fits to three-point estimates (`estimate`) |
 | `stats` | L0 | `Tally`, `TimeWeighted`, Student-t 95% intervals, `Summary`; percentiles, empirical distributions with DKW bands, Wilson intervals (`spread`); paired and Welch differences between two runs (`difference`) |
 | `des` | L1 | Event queue; async processes with `hold`, `spawn`, interrupts; priority and preemptive `Resource`; bounded and priority `Store`; waits with deadlines; `Signal`, `Gate`; runs that can be cancelled within a replication and stop when time stops moving (`run_watched`) |
-| `model` | L1 | The model in memory: elements, connections with probabilities, conditions and quantities, finite buffers, shared resource pools, calendars, breakdowns, batches, stop conditions, three-point estimates, layout, entity properties, experiment, validation; BPSim's XPath expressions (`expr`) |
+| `model` | L1 | The model in memory: elements, connections with probabilities, conditions and quantities, finite buffers, shared resource pools, calendars, breakdowns, batches, stop conditions, three-point estimates, layout, entity properties, experiment, validation; BPSim's XPath expressions (`expr`); the capacity table (`capacity`); line balancing (`balance`: M7.1's core, the three heuristics, measures and theoretical minimum) |
 | `blocks` | L2 | Compiles a model: source, server, shared task, delay, sink, exclusive and parallel gateways, merges, batch and unbatch, assembly; finite buffers with blocking after service and loss; shared pools with roles, alternatives, priorities and shifts; breakdowns; calendars; stop conditions; work left inside at the end; entities carry typed properties; per-element statistics; warm-up; one replication stepped and read as it runs (`Live`) |
 | `experiment` | L3 | Parallel replications with reproducible streams, progress and cancellation |
 | `io` | L3 | BPSim on BPMN and XPDL: read (gateways, routing, embedded sub-processes in line, calendars, diagram layout, `stochcraft:` vendor extensions), write new, save edits into opened files |
@@ -2526,6 +2526,11 @@ Where each part of that request sits:
 
 ### M7.1 Line balancing
 
+- **Status:** the core is done in `model::balance`: the three heuristics, the measures, the
+  theoretical minimum, validation and the ranked positional weights, with hand-worked and
+  randomised checks. Not yet: the Groover example checks (they need Table 15.4's element times
+  and precedences), the engine command `line.balance`, `stochcraft-cli balance`, the window view,
+  and "Build the line".
 - **Outcome:** given the work elements of an assembly, their times and which must come before
   which, a station assignment for a cycle time from each heuristic below, with the theoretical
   minimum beside it so any gap shows (the heuristics do not promise the fewest stations: times
