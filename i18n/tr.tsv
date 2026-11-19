@@ -975,3 +975,33 @@ unit	yr	yıl
 	3D view of the model	Modelin 3B görünümü
 	Drag to orbit · Scroll to zoom · Shift-drag to pan	Döndürmek için sürükleyin · Yakınlaştırmak için kaydırın · Kaydırmak için Shift ile sürükleyin
 	Parcel sorter	Koli ayırıcı
+	Dashboard	Pano
+	Throughput	Verim
+	{n} per hour	saatte {n}
+	95% interval {low} to {high} per hour	%95 aralığı: saatte {low} ile {high} arası
+	So far in the run being watched	Şimdiye kadar izlenen çalıştırmada
+	No sink in this model	Bu modelde çıkış yok
+	Nothing left the model in this run	Bu çalıştırmada modelden hiçbir şey çıkmadı
+	Everything that left the model through its sinks, per hour.	Modelden çıkışları üzerinden ayrılan her şey, saat başına.
+	Utilisation by resource	Kaynağa göre kullanım
+	{name}: {busy} busy	{name}: {busy} meşgul
+	Idle	Boşta
+	and {n} more	ve {n} tane daha
+	How each resource spends its time, and its busy share.	Her kaynağın zamanını nasıl geçirdiği ve meşgul payı.
+	No resource reports how it spends its time	Hiçbir kaynak zamanını nasıl geçirdiğini bildirmiyor
+	Time on conveyors	Konveyörlerde geçen süre
+	No conveyors in this model	Bu modelde konveyör yok
+	Fills in when the run ends	Çalıştırma bitince dolar
+	How long each item spends on the conveyors.	Her öğenin konveyörlerde ne kadar kaldığı.
+	No item has left a conveyor yet	Henüz hiçbir öğe konveyörden ayrılmadı
+	Share of items by time on a conveyor, in {unit}	Bir konveyörde geçen süreye göre öğelerin payı, {unit} cinsinden
+	Time on conveyors: {n} items between {lo} and {hi} {unit}	Konveyörlerde geçen süre: {lo} ile {hi} {unit} arasında {n} öğe
+	{from} to {to} {unit}: {share} of items ({n})	{from} - {to} {unit}: öğelerin {share} kadarı ({n})
+	Items on conveyors over time	Konveyörlerdeki öğeler zamanla
+	Items in the model over time	Modeldeki öğeler zamanla
+	How many items are on the conveyors over time.	Konveyörlerde zamanla kaç öğe olduğu.
+	How many items are in the model over time.	Modelde zamanla kaç öğe olduğu.
+	Nothing was recorded over time in these results	Bu sonuçlarda zamanla hiçbir şey kaydedilmedi
+	At {time} {unit}: {n} items	{time} {unit} anında: {n} öğe
+	Run the model to fill the dashboard	Panoyu doldurmak için modeli çalıştırın
+	The resource and conveyor charts show the last run until this one ends	Kaynak ve konveyör grafikleri, bu bitene kadar son çalıştırmayı gösterir

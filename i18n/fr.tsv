@@ -975,3 +975,33 @@ unit	yr	an
 	3D view of the model	Vue 3D du modèle
 	Drag to orbit · Scroll to zoom · Shift-drag to pan	Glisser pour orbiter · Défiler pour zoomer · Maj et glisser pour déplacer
 	Parcel sorter	Trieur de colis
+	Dashboard	Tableau de bord
+	Throughput	Débit
+	{n} per hour	{n} par heure
+	95% interval {low} to {high} per hour	Intervalle à 95 % : de {low} à {high} par heure
+	So far in the run being watched	Jusqu'ici dans l'exécution suivie
+	No sink in this model	Aucune sortie dans ce modèle
+	Nothing left the model in this run	Rien n'a quitté le modèle dans cette exécution
+	Everything that left the model through its sinks, per hour.	Tout ce qui a quitté le modèle par ses sorties, par heure.
+	Utilisation by resource	Utilisation par ressource
+	{name}: {busy} busy	{name} : {busy} occupé
+	Idle	Inactif
+	and {n} more	et {n} de plus
+	How each resource spends its time, and its busy share.	Comment chaque ressource passe son temps, et sa part d'occupation.
+	No resource reports how it spends its time	Aucune ressource ne signale comment elle passe son temps
+	Time on conveyors	Temps sur les convoyeurs
+	No conveyors in this model	Aucun convoyeur dans ce modèle
+	Fills in when the run ends	Se remplit à la fin de l'exécution
+	How long each item spends on the conveyors.	Combien de temps chaque article passe sur les convoyeurs.
+	No item has left a conveyor yet	Aucun article n'a encore quitté un convoyeur
+	Share of items by time on a conveyor, in {unit}	Part des articles selon le temps sur un convoyeur, en {unit}
+	Time on conveyors: {n} items between {lo} and {hi} {unit}	Temps sur les convoyeurs : {n} articles entre {lo} et {hi} {unit}
+	{from} to {to} {unit}: {share} of items ({n})	De {from} à {to} {unit} : {share} des articles ({n})
+	Items on conveyors over time	Articles sur les convoyeurs au fil du temps
+	Items in the model over time	Articles dans le modèle au fil du temps
+	How many items are on the conveyors over time.	Combien d'articles sont sur les convoyeurs au fil du temps.
+	How many items are in the model over time.	Combien d'articles sont dans le modèle au fil du temps.
+	Nothing was recorded over time in these results	Rien n'a été enregistré au fil du temps dans ces résultats
+	At {time} {unit}: {n} items	À {time} {unit} : {n} articles
+	Run the model to fill the dashboard	Exécutez le modèle pour remplir le tableau de bord
+	The resource and conveyor charts show the last run until this one ends	Les graphiques des ressources et des convoyeurs montrent la dernière exécution jusqu'à la fin de celle-ci

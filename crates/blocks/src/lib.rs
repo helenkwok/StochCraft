@@ -807,6 +807,90 @@ impl Metric {
     }
 }
 
+/// The most bins a [`Histogram`] has.
+pub const HISTOGRAM_BINS: usize = 20;
+
+/// Values within this share of the largest of them count as equal when binning: float noise in
+/// a time measured as a difference of two clock readings must not spread one value over bins.
+const HISTOGRAM_TOLERANCE: f64 = 1e-9;
+
+/// Counts of values in equal bins: bin `i` holds the values from `start + i * width` up to (not
+/// including, except the last bin) `start + (i + 1) * width`.
+#[derive(Debug, Clone, PartialEq)]
+pub struct Histogram {
+    pub start: f64,
+    /// The bins' width: 0 when all the values are equal (one bin).
+    pub width: f64,
+    pub counts: Vec<u64>,
+}
+
+impl Histogram {
+    /// `HISTOGRAM_BINS` equal bins from the smallest to the largest of `values` (one bin when
+    /// they are all equal); `None` when there are none.
+    pub fn of(values: &[f64]) -> Option<Self> {
+        let lo = values.iter().copied().fold(f64::INFINITY, f64::min);
+        let hi = values.iter().copied().fold(f64::NEG_INFINITY, f64::max);
+        if values.is_empty() || !lo.is_finite() || !hi.is_finite() {
+            return None;
+        }
+        Some(Self::binned(
+            lo,
+            hi,
+            values.iter().map(|v| (*v, 1)),
+            values.len() as u64,
+        ))
+    }
+
+    /// The histogram of `items` (value, count) between `lo` and `hi`.
+    #[allow(clippy::cast_possible_truncation, clippy::cast_sign_loss)]
+    fn binned(lo: f64, hi: f64, items: impl Iterator<Item = (f64, u64)>, total: u64) -> Self {
+        if hi - lo <= HISTOGRAM_TOLERANCE * hi.abs().max(lo.abs()).max(1e-300) {
+            return Self {
+                start: lo,
+                width: 0.0,
+                counts: vec![total],
+            };
+        }
+        let width = (hi - lo) / HISTOGRAM_BINS as f64;
+        let mut counts = vec![0u64; HISTOGRAM_BINS];
+        for (v, n) in items {
+            let i = (((v - lo) / width) as usize).min(HISTOGRAM_BINS - 1);
+            counts[i] += n;
+        }
+        Self {
+            start: lo,
+            width,
+            counts,
+        }
+    }
+
+    /// The number of values.
+    pub fn total(&self) -> u64 {
+        self.counts.iter().sum()
+    }
+
+    /// The histograms added together on common bins, each of another's counts placed by the
+    /// middle of its bin; `None` when there are none.
+    pub fn merge(parts: &[Histogram]) -> Option<Self> {
+        let lo = parts.iter().map(|h| h.start).fold(f64::INFINITY, f64::min);
+        let hi = parts
+            .iter()
+            .map(|h| h.start + h.width * h.counts.len() as f64)
+            .fold(f64::NEG_INFINITY, f64::max);
+        if parts.is_empty() || !lo.is_finite() || !hi.is_finite() {
+            return None;
+        }
+        let total = parts.iter().map(Histogram::total).sum();
+        let items = parts.iter().flat_map(|h| {
+            h.counts
+                .iter()
+                .enumerate()
+                .map(move |(i, n)| (h.start + h.width * (i as f64 + 0.5), *n))
+        });
+        Some(Self::binned(lo, hi, items, total))
+    }
+}
+
 /// Statistics for one element over the reporting period of one replication.
 #[derive(Debug, Clone, PartialEq)]
 pub struct ElementReport {
@@ -833,6 +917,8 @@ pub struct ElementReport {
     pub mean_blocked_time: Option<f64>,
     /// A conveyor's mean time on it ([`Metric::MeanTimeOn`]).
     pub mean_time_on: Option<f64>,
+    /// A conveyor's items' times on it, in [`HISTOGRAM_BINS`] equal bins (the dashboard's).
+    pub time_on_histogram: Option<Histogram>,
     pub blocking_probability: Option<f64>,
     /// Servers whose units fail: [`Metric::Availability`].
     pub availability: Option<f64>,
@@ -1011,6 +1097,9 @@ pub struct ElementSummary {
     /// Each metric's value in every replication, in replication order (`None` where a
     /// replication had none), in the order of `metrics`: the distribution behind the summary.
     pub samples: Vec<(Metric, Vec<Option<f64>>)>,
+    /// A conveyor's items' times on it, over the replications that are used, merged onto common
+    /// bins ([`Histogram::merge`]); `None` for other elements and conveyors no item left.
+    pub time_on_histogram: Option<Histogram>,
 }
 
 impl ElementSummary {
@@ -1126,6 +1215,11 @@ pub fn summarise(reports: &[Report]) -> ExperimentSummary {
                         Summary::of(&values).map(|s| (name.clone(), s))
                     })
                     .collect();
+                let histograms: Vec<Histogram> = reports
+                    .iter()
+                    .filter(|r| r.after_warmup)
+                    .filter_map(|r| r.elements.get(i)?.time_on_histogram.clone())
+                    .collect();
                 ElementSummary {
                     id: e.id.clone(),
                     name: e.name.clone(),
@@ -1133,6 +1227,7 @@ pub fn summarise(reports: &[Report]) -> ExperimentSummary {
                     metrics,
                     properties,
                     samples,
+                    time_on_histogram: Histogram::merge(&histograms),
                 }
             })
             .collect()

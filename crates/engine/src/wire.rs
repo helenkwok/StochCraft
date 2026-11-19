@@ -2393,6 +2393,13 @@ pub fn results(
                 .collect();
             let mut v =
                 json!({ "id": e.id.as_str(), "name": e.name, "kind": e.kind, "metrics": metrics });
+            // A conveyor's histogram of its items' times on it, merged over the replications:
+            // `start`, `width` (0 when all are equal) and `counts`; left out for any other
+            // element and where no item left.
+            if let Some(h) = &e.time_on_histogram {
+                v["time_on_histogram"] =
+                    json!({ "start": h.start, "width": h.width, "counts": h.counts });
+            }
             // The mean value the element assigned to each property; left out when it assigns
             // none, so results of models without properties are as before.
             if !e.properties.is_empty() {
@@ -2835,6 +2842,7 @@ mod tests {
                     split.iter().copied().map(Some).chain([None]).collect(),
                 ),
             ],
+            time_on_histogram: None,
         };
         let s = ExperimentSummary {
             replications: 13,

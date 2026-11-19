@@ -975,3 +975,33 @@ unit	yr	ປີ
 	3D view of the model	ມຸມມອງ 3D ຂອງແບບຈຳລອງ
 	Drag to orbit · Scroll to zoom · Shift-drag to pan	ລາກເພື່ອຫມຸນ · ເລື່ອນເພື່ອຊູມ · Shift ແລະລາກເພື່ອເລື່ອນ
 	Parcel sorter	ເຄື່ອງຄັດແຍກພັດສະດຸ
+	Dashboard	ແດຊບອດ
+	Throughput	ປະລິມານທີ່ຜ່ານ
+	{n} per hour	{n} ຕໍ່ຊົ່ວໂມງ
+	95% interval {low} to {high} per hour	ຊ່ວງ 95%: {low} ເຖິງ {high} ຕໍ່ຊົ່ວໂມງ
+	So far in the run being watched	ມາຮອດຕອນນີ້ໃນການແລ່ນທີ່ກຳລັງເບິ່ງ
+	No sink in this model	ໃນແບບຈຳລອງນີ້ບໍ່ມີທາງອອກ
+	Nothing left the model in this run	ໃນການແລ່ນນີ້ບໍ່ມີຫຍັງອອກຈາກແບບຈຳລອງ
+	Everything that left the model through its sinks, per hour.	ທຸກຢ່າງທີ່ອອກຈາກແບບຈຳລອງຜ່ານທາງອອກ ຕໍ່ຊົ່ວໂມງ.
+	Utilisation by resource	ການນຳໃຊ້ຕາມຊັບພະຍາກອນ
+	{name}: {busy} busy	{name}: {busy} ບໍ່ວ່າງ
+	Idle	ວ່າງ
+	and {n} more	ແລະອີກ {n}
+	How each resource spends its time, and its busy share.	ແຕ່ລະຊັບພະຍາກອນໃຊ້ເວລາແນວໃດ ແລະ ສ່ວນທີ່ບໍ່ວ່າງ.
+	No resource reports how it spends its time	ບໍ່ມີຊັບພະຍາກອນໃດລາຍງານວ່າໃຊ້ເວລາແນວໃດ
+	Time on conveyors	ເວລາເທິງສາຍພານ
+	No conveyors in this model	ໃນແບບຈຳລອງນີ້ບໍ່ມີສາຍພານ
+	Fills in when the run ends	ຈະສະແດງເມື່ອການແລ່ນສຳເລັດ
+	How long each item spends on the conveyors.	ແຕ່ລະລາຍການຢູ່ເທິງສາຍພານດົນປານໃດ.
+	No item has left a conveyor yet	ຍັງບໍ່ມີລາຍການໃດອອກຈາກສາຍພານ
+	Share of items by time on a conveyor, in {unit}	ສັດສ່ວນຂອງລາຍການຕາມເວລາເທິງສາຍພານ ຫົວໜ່ວຍ {unit}
+	Time on conveyors: {n} items between {lo} and {hi} {unit}	ເວລາເທິງສາຍພານ: {n} ລາຍການລະຫວ່າງ {lo} ເຖິງ {hi} {unit}
+	{from} to {to} {unit}: {share} of items ({n})	{from} ເຖິງ {to} {unit}: {share} ຂອງລາຍການ ({n})
+	Items on conveyors over time	ລາຍການເທິງສາຍພານຕາມເວລາ
+	Items in the model over time	ລາຍການໃນແບບຈຳລອງຕາມເວລາ
+	How many items are on the conveyors over time.	ມີຈັກລາຍການເທິງສາຍພານຕາມເວລາ.
+	How many items are in the model over time.	ມີຈັກລາຍການໃນແບບຈຳລອງຕາມເວລາ.
+	Nothing was recorded over time in these results	ໃນຜົນນີ້ບໍ່ໄດ້ບັນທຶກຫຍັງຕາມເວລາ
+	At {time} {unit}: {n} items	ທີ່ {time} {unit}: {n} ລາຍການ
+	Run the model to fill the dashboard	ແລ່ນແບບຈຳລອງເພື່ອເຕີມແດຊບອດ
+	The resource and conveyor charts show the last run until this one ends	ແຜນພາບຊັບພະຍາກອນ ແລະ ສາຍພານສະແດງການແລ່ນຄັ້ງຫຼ້າສຸດຈົນກວ່າຄັ້ງນີ້ຈະສຳເລັດ

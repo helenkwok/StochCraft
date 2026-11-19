@@ -975,3 +975,33 @@ unit	yr	r.
 	3D view of the model	Widok 3D modelu
 	Drag to orbit · Scroll to zoom · Shift-drag to pan	Przeciągnij, aby obracać · Przewiń, aby powiększać · Shift i przeciągnięcie przesuwa
 	Parcel sorter	Sorter paczek
+	Dashboard	Pulpit
+	Throughput	Przepustowość
+	{n} per hour	{n} na godzinę
+	95% interval {low} to {high} per hour	Przedział 95%: od {low} do {high} na godzinę
+	So far in the run being watched	Dotąd w obserwowanym przebiegu
+	No sink in this model	Brak wyjścia w tym modelu
+	Nothing left the model in this run	W tym przebiegu nic nie opuściło modelu
+	Everything that left the model through its sinks, per hour.	Wszystko, co opuściło model przez jego wyjścia, na godzinę.
+	Utilisation by resource	Wykorzystanie według zasobu
+	{name}: {busy} busy	{name}: {busy} zajęty
+	Idle	Bezczynny
+	and {n} more	i {n} więcej
+	How each resource spends its time, and its busy share.	Jak każdy zasób spędza czas oraz jego udział zajętości.
+	No resource reports how it spends its time	Żaden zasób nie podaje, jak spędza czas
+	Time on conveyors	Czas na przenośnikach
+	No conveyors in this model	Brak przenośników w tym modelu
+	Fills in when the run ends	Wypełni się po zakończeniu przebiegu
+	How long each item spends on the conveyors.	Jak długo każdy element jest na przenośnikach.
+	No item has left a conveyor yet	Żaden element nie opuścił jeszcze przenośnika
+	Share of items by time on a conveyor, in {unit}	Udział elementów według czasu na przenośniku, w {unit}
+	Time on conveyors: {n} items between {lo} and {hi} {unit}	Czas na przenośnikach: {n} elementów między {lo} a {hi} {unit}
+	{from} to {to} {unit}: {share} of items ({n})	Od {from} do {to} {unit}: {share} elementów ({n})
+	Items on conveyors over time	Elementy na przenośnikach w czasie
+	Items in the model over time	Elementy w modelu w czasie
+	How many items are on the conveyors over time.	Ile elementów jest na przenośnikach w czasie.
+	How many items are in the model over time.	Ile elementów jest w modelu w czasie.
+	Nothing was recorded over time in these results	W tych wynikach nic nie zapisano w czasie
+	At {time} {unit}: {n} items	W chwili {time} {unit}: {n} elementów
+	Run the model to fill the dashboard	Uruchom model, aby wypełnić pulpit
+	The resource and conveyor charts show the last run until this one ends	Wykresy zasobów i przenośników pokazują ostatni przebieg, dopóki ten się nie zakończy
