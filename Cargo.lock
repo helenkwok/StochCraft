@@ -3551,12 +3551,14 @@ dependencies = [
  "craft-window",
  "egui",
  "egui_kittest",
+ "libm",
  "png",
  "serde",
  "serde_json",
  "stochcraft-engine",
  "stochcraft-model",
  "stochcraft-random",
+ "stochcraft-render",
  "web-time",
 ]
 

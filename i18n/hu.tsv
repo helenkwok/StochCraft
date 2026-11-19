@@ -971,3 +971,6 @@ unit	yr	év
 	From the last run; – when there are none, or they are out of date.	Az utolsó futtatásból; – ha nincs, vagy elavult.
 	Show this block	Blokk megjelenítése
 	Rates and times are per {unit}.	A ráták és az idők {unit} szerint értendők.
+	3D	3D
+	3D view of the model	A modell 3D-s nézete
+	Drag to orbit · Scroll to zoom · Shift-drag to pan	Húzás: forgatás · Görgetés: nagyítás · Shift és húzás: eltolás

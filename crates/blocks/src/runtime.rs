@@ -3,7 +3,7 @@
 
 use std::borrow::Cow;
 use std::cell::{Cell, RefCell};
-use std::collections::{BTreeMap, BTreeSet};
+use std::collections::{BTreeMap, BTreeSet, VecDeque};
 use std::rc::{Rc, Weak};
 
 use stochcraft_des::{
@@ -13,8 +13,8 @@ use stochcraft_des::{
 use stochcraft_model::calendar::{self, Calendar, DateTime};
 use stochcraft_model::{
     Balking, Breakdown, Demand, DemandPer, Element, ElementId, ElementKind, HealthCheck, Model,
-    Need, OnShiftEnd, OnTakeout, PatienceUntil, PlaceWhileOut, Power, QueueLimit, ResourcePool,
-    Routing, Setup, Timed,
+    Need, OnShiftEnd, OnTakeout, PatienceUntil, PlaceWhileOut, Power, PropertyType, PropertyValue,
+    QueueLimit, ResourcePool, Routing, Setup, Timed,
 };
 use stochcraft_random::{Dist, Rng};
 use stochcraft_stats::{Tally, TimeWeighted};
@@ -483,6 +483,9 @@ impl Compiled {
         // Each finite waiting room's way out for those turned away, if it has one. Kept here
         // (the rooms hold them weakly, since a way can lead back to its own room).
         let mut aways: Vec<Rc<Away>> = Vec::new();
+        // What colours the items on a conveyor, and a view of each conveyor's items.
+        let product = Product::of(&self.model, &self.slots).map(Rc::new);
+        let mut belts: Vec<Option<Rc<BeltView>>> = vec![None; elements.len()];
         for ((i, element), rng) in elements.iter().enumerate().zip(streams) {
             let routed = |r: &Route| {
                 let mut port = plain_port(r)?;
@@ -645,14 +648,20 @@ impl Compiled {
                     item_length,
                     gap,
                     ..
-                } => spawn_conveyor(
-                    &mut sim,
-                    env,
-                    length,
-                    speed,
-                    accumulating,
-                    item_length + gap,
-                ),
+                } => {
+                    let view = spawn_conveyor(
+                        &mut sim,
+                        env,
+                        length,
+                        speed,
+                        accumulating,
+                        item_length + gap,
+                        product.clone(),
+                    );
+                    if let Some(slot) = belts.get_mut(i) {
+                        *slot = Some(view);
+                    }
+                }
                 // Not simulated yet (`compile` refuses a model with one): passes entities on.
                 ElementKind::Transport { .. } => spawn_unbatch(&mut sim, env),
             }
@@ -689,6 +698,7 @@ impl Compiled {
             pools,
             _aways: aways,
             _balks: balks.into_iter().flatten().collect(),
+            belts,
             feeds_buffer,
             feeds_transfer,
             warmup,
@@ -748,6 +758,8 @@ pub struct Live<'a> {
     _aways: Vec<Rc<Away>>,
     /// Each server's balking, which the ports into it hold weakly.
     _balks: Vec<Rc<Balk>>,
+    /// For each element, a view of the items on it when it is a conveyor.
+    belts: Vec<Option<Rc<BeltView>>>,
     feeds_buffer: Vec<bool>,
     feeds_transfer: Vec<bool>,
     warmup: f64,
@@ -1053,6 +1065,27 @@ impl Live<'_> {
             .collect();
         out.extend(self.pools.states(&model.resources));
         out
+    }
+
+    /// Every item on conveyor `element` now, front first: how far along it is (a fraction of the
+    /// belt's length, 0 to 1), the item's entity id, and its product key (the index of its value
+    /// of the model's first text property among that property's values; 0 without one, or when
+    /// the entity has no value). Empty for an element that is not a conveyor. This is the
+    /// function a 3D view calls to draw items moving along a belt.
+    ///
+    /// Positions follow the conveyor's rule. Accumulating, an item moves at the belt's speed from
+    /// when it got on, but never closer than one pitch behind the item ahead, and never past the
+    /// end. Not accumulating, it is the belt's time since it got on (which stands still while the
+    /// front item waits to leave) times the speed, up to the length.
+    pub fn conveyor_items(&self, element: &str) -> Vec<(f32, u64, u32)> {
+        self.compiled
+            .model
+            .elements
+            .iter()
+            .position(|e| e.id.as_str() == element)
+            .and_then(|i| self.belts.get(i))
+            .and_then(Option::as_ref)
+            .map_or_else(Vec::new, |b| b.positions(self.sim.now()))
     }
 
     /// The statistics so far, as a [`Report`] up to now (the full one once the run is done).
@@ -4753,7 +4786,8 @@ fn spawn_conveyor(
     speed: f64,
     accumulating: bool,
     pitch: f64,
-) {
+    product: Option<Rc<Product>>,
+) -> Rc<BeltView> {
     let me = tag(env.me);
     let ctx = env.ctx.clone();
     let places = env.places.clone();
@@ -4762,15 +4796,25 @@ fn spawn_conveyor(
         since: Cell::new(None),
         resumed: Signal::new(&ctx),
     });
+    let view = Rc::new(BeltView {
+        clock: Rc::clone(&clock),
+        length,
+        speed,
+        pitch,
+        accumulating,
+        items: RefCell::new(VecDeque::new()),
+        last_left: Cell::new(None),
+    });
     // Each item on the belt, in order: the entity, when it got on, and the belt's time then.
     let riding: Store<(Entity, f64, f64)> = Store::new(&ctx);
     let env = Rc::new(RefCell::new(env));
     {
-        let (env, ctx, clock, riding) = (
+        let (env, ctx, clock, riding, view) = (
             Rc::clone(&env),
             ctx.clone(),
             Rc::clone(&clock),
             riding.clone(),
+            Rc::clone(&view),
         );
         sim.spawn_tagged(me, async move {
             loop {
@@ -4783,6 +4827,12 @@ fn spawn_conveyor(
                     e.adjust(|s| &mut s.busy, 1.0);
                 }
                 let at = clock.time(now);
+                view.items.borrow_mut().push_back(OnBelt {
+                    entity: entity.id,
+                    got_on: now,
+                    at,
+                    key: product.as_ref().map_or(0, |p| p.key(&entity)),
+                });
                 riding.put((entity, now, at));
                 let (c, k, p) = (ctx.clone(), Rc::clone(&clock), places.clone());
                 ctx.spawn(async move {
@@ -4794,6 +4844,7 @@ fn spawn_conveyor(
             }
         });
     }
+    let seen = Rc::clone(&view);
     sim.spawn_tagged(me, async move {
         let mut last_left = f64::NEG_INFINITY;
         loop {
@@ -4816,8 +4867,135 @@ fn spawn_conveyor(
             }
             env.borrow().with_stats(|s| s.time_on.add(now - got_on));
             last_left = now;
+            // It stays in the view until it has left, even while it waits at the end.
+            seen.items.borrow_mut().pop_front();
+            seen.last_left.set(Some(now));
         }
     });
+    view
+}
+
+/// An item on a conveyor, as its view keeps it.
+struct OnBelt {
+    entity: u64,
+    /// When it got on.
+    got_on: f64,
+    /// The belt's own time then.
+    at: f64,
+    /// Its product key ([`Product::key`]).
+    key: u32,
+}
+
+/// What a watcher can see of a conveyor: the items on it, front first, and what it takes to place
+/// them at any moment from what is kept.
+struct BeltView {
+    clock: Rc<BeltClock>,
+    length: f64,
+    speed: f64,
+    pitch: f64,
+    accumulating: bool,
+    items: RefCell<VecDeque<OnBelt>>,
+    /// When the last item left the end.
+    last_left: Cell<Option<f64>>,
+}
+
+impl BeltView {
+    /// Each item's fraction of the length along the belt at `now`, its entity and its key.
+    ///
+    /// Accumulating, an item has moved at the speed since it got on, but is never less than a
+    /// pitch behind the item ahead (for the front one, the item that left last, which went on
+    /// moving at the speed), and never past the end: the same rule as the times the conveyor's
+    /// processes work out. Not accumulating, it has moved the belt's time since it got on times
+    /// the speed, up to the end.
+    fn positions(&self, now: f64) -> Vec<(f32, u64, u32)> {
+        let belt_now = self.clock.time(now);
+        let mut ahead: Option<f64> = None;
+        self.items
+            .borrow()
+            .iter()
+            .map(|item| {
+                let along = if self.accumulating {
+                    let moved = (now - item.got_on) * self.speed;
+                    let room = match (ahead, self.last_left.get()) {
+                        (Some(a), _) => a - self.pitch,
+                        (None, Some(d)) => self.length - self.pitch + (now - d) * self.speed,
+                        (None, None) => f64::INFINITY,
+                    };
+                    moved.min(room)
+                } else {
+                    (belt_now - item.at) * self.speed
+                };
+                let x = if along.is_nan() {
+                    0.0
+                } else {
+                    along.min(self.length).max(0.0)
+                };
+                ahead = Some(x);
+                let fraction = if self.length > 0.0 {
+                    (x / self.length).clamp(0.0, 1.0)
+                } else {
+                    1.0
+                };
+                (fraction as f32, item.entity, item.key)
+            })
+            .collect()
+    }
+}
+
+/// What colours the items on a conveyor: the model's first text property, and its values in the
+/// order the model gives them.
+struct Product {
+    slot: usize,
+    values: Vec<String>,
+}
+
+impl Product {
+    /// The first property (in the order elements and their properties are declared) that is text,
+    /// if the model has one. Its values are those of every assignment of it that gives text: a
+    /// mix's values in order, and fixed text.
+    fn of(model: &Model, slots: &[String]) -> Option<Self> {
+        let types = model.property_types();
+        let name = model
+            .elements
+            .iter()
+            .flat_map(|e| &e.properties)
+            .map(|p| &p.name)
+            .find(|n| matches!(types.get(*n), Some(PropertyType::String)))?;
+        let mut values: Vec<String> = Vec::new();
+        for p in model
+            .elements
+            .iter()
+            .flat_map(|e| &e.properties)
+            .filter(|p| p.name == *name)
+        {
+            let texts: Vec<&String> = match &p.value {
+                PropertyValue::Choice(v) => v.iter().map(|(_, s)| s).collect(),
+                PropertyValue::Text(s) => vec![s],
+                _ => Vec::new(),
+            };
+            for s in texts {
+                if !values.contains(s) {
+                    values.push(s.clone());
+                }
+            }
+        }
+        Some(Self {
+            slot: slots.binary_search(name).ok()?,
+            values,
+        })
+    }
+
+    /// The index of `e`'s value among the property's values; 0 when it has none.
+    fn key(&self, e: &Entity) -> u32 {
+        let Some(Some(Held::Text(s))) = e.properties.get(self.slot) else {
+            return 0;
+        };
+        self.values
+            .iter()
+            .position(|v| v == s)
+            .and_then(|i| u32::try_from(i).ok())
+            .unwrap_or(0)
+    }
 }
 
 fn spawn_delay(sim: &mut Sim, env: BlockEnv, duration: Rc<Times>) {
