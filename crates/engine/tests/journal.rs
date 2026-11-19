@@ -281,7 +281,9 @@ fn a_journal_that_began_with_a_new_model_replays_from_nothing() {
     ok(&mut e, "connect", json!({"from": "in", "to": "out"}));
     // Through JSON, as a file.
     let text = serde_json::to_string(&e.journal_document()).unwrap_or_default();
-    let journal: Journal = serde_json::from_str(&text).unwrap_or_else(|err| panic!("{err}"));
+    let parsed: Result<Journal, _> = serde_json::from_str(&text);
+    assert!(parsed.is_ok(), "{parsed:?}");
+    let Ok(journal) = parsed else { return };
 
     let mut again = Engine::new();
     ok(
