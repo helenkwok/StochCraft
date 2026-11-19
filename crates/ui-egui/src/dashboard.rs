@@ -91,18 +91,22 @@ impl App {
 
         // 1. Throughput.
         tile(ui, p, t("Throughput"), |ui| {
-            throughput(ui, results, glimpse.as_ref(), per_hour, model);
+            throughput(ui, results, glimpse.as_ref(), per_hour, model)
         });
         // 2. Utilisation by resource.
         tile(ui, p, t("Utilisation by resource"), |ui| {
             utilisation(ui, p, results, width);
+            String::new()
         });
         // 3. Time on conveyors.
         tile(ui, p, t("Time on conveyors"), |ui| {
-            if !conveyors {
-                ui.label(t("No conveyors in this model"));
-            } else {
+            if conveyors {
                 time_on(ui, p, results, glimpse.is_some(), &unit, width);
+                String::new()
+            } else {
+                let none = t("No conveyors in this model");
+                ui.label(none);
+                none.to_owned()
             }
         });
         // 4. Items on conveyors over time.
@@ -122,6 +126,7 @@ impl App {
                 &unit,
                 width,
             );
+            String::new()
         });
     }
 }
@@ -139,7 +144,14 @@ fn per_hour(unit: TimeUnit) -> f64 {
 }
 
 /// A tile: a framed block with a title, labelled as a group for screen readers.
-fn tile(ui: &mut egui::Ui, p: &theme::Palette, title: &str, body: impl FnOnce(&mut egui::Ui)) {
+/// A tile: `title` above what `body` draws. `body` returns what its text says (or nothing), which
+/// screen readers hear with the title, as the text inside a tile is not exposed on its own.
+fn tile(
+    ui: &mut egui::Ui,
+    p: &theme::Palette,
+    title: &str,
+    body: impl FnOnce(&mut egui::Ui) -> String,
+) {
     let r = egui::Frame::new()
         .fill(p.canvas)
         .stroke(Stroke::new(1.0, p.border))
@@ -149,10 +161,15 @@ fn tile(ui: &mut egui::Ui, p: &theme::Palette, title: &str, body: impl FnOnce(&m
             ui.set_width(ui.available_width());
             ui.label(theme::strong(title).size(13.0));
             ui.add_space(4.0);
-            body(ui);
+            body(ui)
         });
+    let said = if r.inner.is_empty() {
+        title.to_owned()
+    } else {
+        format!("{title}: {}", r.inner)
+    };
     r.response
-        .widget_info(|| egui::WidgetInfo::labeled(egui::Role::Group, true, title));
+        .widget_info(|| egui::WidgetInfo::labeled(egui::Role::Group, true, &said));
     ui.add_space(8.0);
 }
 
@@ -189,14 +206,15 @@ fn throughput(
     glimpse: Option<&Glimpse>,
     per_hour: f64,
     model: &stochcraft_model::Model,
-) {
+) -> String {
     if !model
         .elements
         .iter()
         .any(|e| matches!(e.kind, ElementKind::Sink { .. }))
     {
-        ui.label(t("No sink in this model"));
-        return;
+        let none = t("No sink in this model");
+        ui.label(none);
+        return none.to_owned();
     }
     // While a run is watched, the value so far; else the results'.
     if let Some(g) = glimpse {
@@ -205,16 +223,16 @@ fn throughput(
         } else {
             0.0
         };
-        ui.label(theme::strong(tf("{n} per hour", &[("n", &three(rate))])).size(26.0));
-        ui.label(theme::weak(ui, t("So far in the run being watched")));
-        return;
+        let rate = tf("{n} per hour", &[("n", &three(rate))]);
+        ui.label(theme::strong(&rate).size(26.0));
+        let note = t("So far in the run being watched");
+        ui.label(theme::weak(ui, note));
+        return format!("{rate}. {note}");
     }
     let Some(r) = results else {
-        ui.label(theme::weak(
-            ui,
-            t("Everything that left the model through its sinks, per hour."),
-        ));
-        return;
+        let about = t("Everything that left the model through its sinks, per hour.");
+        ui.label(theme::weak(ui, about));
+        return about.to_owned();
     };
     let measured = match &r["measured"] {
         m if m.is_object() => m["mean_duration"].as_f64(),
@@ -235,27 +253,29 @@ fn throughput(
         }
     }
     let (Some(d), true) = (measured, any) else {
-        ui.label(theme::weak(ui, t("Nothing left the model in this run")));
-        return;
+        let none = t("Nothing left the model in this run");
+        ui.label(theme::weak(ui, none));
+        return none.to_owned();
     };
     let scale = per_hour / d;
     let (mean, half) = (mean * scale, half * scale);
     let runs = r["record"]["replications"].as_u64().unwrap_or(1);
     if runs > 1 && half > 0.0 {
-        let text = rounded(mean, half).0;
-        ui.label(theme::strong(tf("{n} per hour", &[("n", &text)])).size(26.0));
-        ui.label(theme::weak(
-            ui,
-            tf(
-                "95% interval {low} to {high} per hour",
-                &[
-                    ("low", &rounded(mean - half, half).0),
-                    ("high", &rounded(mean + half, half).0),
-                ],
-            ),
-        ));
+        let rate = tf("{n} per hour", &[("n", &rounded(mean, half).0)]);
+        ui.label(theme::strong(&rate).size(26.0));
+        let interval = tf(
+            "95% interval {low} to {high} per hour",
+            &[
+                ("low", &rounded(mean - half, half).0),
+                ("high", &rounded(mean + half, half).0),
+            ],
+        );
+        ui.label(theme::weak(ui, &interval));
+        format!("{rate}. {interval}")
     } else {
-        ui.label(theme::strong(tf("{n} per hour", &[("n", &three(mean))])).size(26.0));
+        let rate = tf("{n} per hour", &[("n", &three(mean))]);
+        ui.label(theme::strong(&rate).size(26.0));
+        rate
     }
 }
 

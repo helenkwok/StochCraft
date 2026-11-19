@@ -72,7 +72,7 @@ fn a_run_fills_the_throughput_and_utilisation_tiles_and_a_model_without_conveyor
     menu(&mut h, &["Model", "Run"]);
     finish_run(&mut h);
     assert!(h.state().results().is_some());
-    // Throughput: a number per hour.
+    // Throughput: a number per hour, heard with the tile's title.
     let per_hour: Vec<String> = h
         .query_all_by_label_contains("per hour")
         .filter_map(|n| n.accesskit_node().label())
@@ -80,7 +80,7 @@ fn a_run_fills_the_throughput_and_utilisation_tiles_and_a_model_without_conveyor
     assert!(
         per_hour
             .iter()
-            .any(|l| l.chars().next().is_some_and(|c| c.is_ascii_digit())),
+            .any(|l| l.starts_with("Throughput: ") && l.chars().any(|c| c.is_ascii_digit())),
         "{per_hour:?}; every label: {:?}",
         h.query_all_by_label_contains("")
             .filter_map(|n| n.accesskit_node().label())
