@@ -2531,25 +2531,35 @@ Where each part of that request sits:
   line's demand (M2.11's `stochcraft:demand` and `takt`, done) or a number given.
 - **Heuristics:** the largest candidate rule, Kilbridge and Wester's column method and Helgeson
   and Birnie's ranked positional weights (Groover, *Automation, Production Systems, and
-  Computer-Integrated Manufacturing*, 4th ed., Pearson, 2015, ch. 15 "Manual Assembly Lines",
-  §15.3 "Line Balancing Algorithms"; M. D. Kilbridge and L. Wester, "A heuristic method of
-  assembly line balancing", *Journal of Industrial Engineering* 12(4):292–298, 1961; W. B.
+  Computer-Integrated Manufacturing*, 4th ed., Pearson, 2015, ISBN 978-0-13-349961-2, ch. 15
+  "Manual Assembly Lines", §15.3 "Line Balancing Algorithms", pp. 403–411; M. D. Kilbridge and
+  L. Wester, "A heuristic method of assembly line balancing", *Journal of Industrial
+  Engineering* 12(4):292–298, 1961 (Groover's reference list gives No. 6, other listings No. 4;
+  the pages fit No. 4); W. B.
   Helgeson and D. P. Birnie, "Assembly line balancing using the ranked positional weight
   technique", *Journal of Industrial Engineering* 12(6):394–398, 1961). Exact methods (A. Scholl,
   *Balancing and Sequencing of Assembly Lines*, 2nd rev. ed., Physica-Verlag, 1999, ISBN
   978-3-7908-1180-3) later.
 - **Measures:** the theoretical least number of stations (the total work content over the cycle
-  time, rounded up), balance efficiency, balance delay, and the smoothness index (the square
-  root of the sum of squared differences between the longest station time and each station's).
+  time, rounded up; Groover eq. 15.7), balance efficiency (the work content over the number of
+  stations times the longest station time, eq. 15.14), balance delay (its complement, eq.
+  15.15), and the smoothness index (the square root of the sum of squared differences between
+  the longest station time and each station's; not in Groover, used as in Bhattacharjee et al.'s
+  comparison, *Journal of Modelling in Management*, 2018, doi 10.1108/JM2-03-2017-0027).
 - **Then simulate it:** "Build the line" writes the balanced stations as servers in series
   (with buffers if asked), so the capacity table and a run show what the averages hide:
   blocking and starving when element times vary.
 - **Where it lives:** a `balance` module in `model` (no run needed), an engine command
   `line.balance`, `stochcraft-cli balance`, and a view in the window; the precedence graph is a
   `stochcraft:workElements` vendor extension on the line's tasks.
-- **Checks:** a textbook example worked by hand gives the same stations and measures for each
-  heuristic; the stations never break precedence and never exceed the cycle time; the theoretical
-  minimum is never beaten.
+- **Checks:** Groover's Example 15.1 (Table 15.4: twelve elements, 4.0 min of work, a service
+  time of 1.00 min): the theoretical minimum is 4 stations; the largest candidate rule
+  (Example 15.2, Table 15.6) gives 5 stations with times 1.0, 0.81, 0.98, 0.59 and 0.62 min and
+  a balance efficiency of 0.80; Kilbridge and Wester (Example 15.3) gives 5 stations at 0.80;
+  ranked positional weights (Example 15.4, Tables 15.9 and 15.10) gives the weights listed
+  there (element 1: 3.30 … element 12: 0.12) and 5 stations with times 0.90, 0.91, 0.92, 0.65
+  and 0.62 min, 0.87 at the longest station's 0.92 min. Always: the stations never break
+  precedence and never exceed the service time, and the theoretical minimum is never beaten.
 
 ### M7.2 Material flow on the layout
 
