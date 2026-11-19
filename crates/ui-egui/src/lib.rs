@@ -2235,7 +2235,8 @@ impl App {
     fn tabs(&mut self, ui: &mut egui::Ui, p: &theme::Palette) {
         // craft-ui's Tab: an accessible tab (role, keyboard focus) the app lays out and paints.
         let font = egui::FontId::new(14.0, egui::FontFamily::Name(theme::STRONG.into()));
-        ui.horizontal(|ui| {
+        // Wrapped: four tabs and the results note must not widen the work area past the window.
+        ui.horizontal_wrapped(|ui| {
             // 0: the model, 1: the results, 2: the Analysis view, 3: the Capacity view.
             let current = if self.show_results {
                 1
