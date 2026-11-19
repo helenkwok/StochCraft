@@ -924,6 +924,21 @@ unit	yr	yıl
 @plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	İkisi de {seed} rastgelelik tohumunu ve aynı {n} çalıştırmayı kullandı; böylece her çalıştırma eşiyle aynı rastgele sayıları alır: farklar şans çekilişlerinden değil, değişiklikten gelir.|İkisi de {seed} rastgelelik tohumunu ve aynı {n} çalıştırmayı kullandı; böylece her çalıştırma eşiyle aynı rastgele sayıları alır: farklar şans çekilişlerinden değil, değişiklikten gelir.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	Diğer {n} temel ölçüt, şansın yapabileceğinden fazla değişmedi.|Diğer {n} temel ölçüt, şansın yapabileceğinden fazla değişmedi.
 @plural	and {n} more change|and {n} more changes	ve {n} değişiklik daha|ve {n} değişiklik daha
+	Conveyor	Konveyör
+	Mean time on the conveyor	Konveyörde ortalama süre
+	Length	Uzunluk
+	Accumulating	Biriktirmeli
+	Item length	Parça uzunluğu
+	Gap	Boşluk
+	Length unit	Uzunluk birimi
+	millimetres	milimetre
+	centimetres	santimetre
+	metres	metre
+	kilometres	kilometre
+	inches	inç
+	feet	fit
+	Ticked, items queue up at the end while the rest keep moving. Unticked, the whole belt stops when the item at the end cannot leave.	İşaretliyse parçalar uçta kuyruk olur, diğerleri hareket etmeye devam eder. İşaretli değilse uçtaki parça çıkamayınca bütün bant durur.
+	A belt that carries entities from one end to the other. It has a length and a speed, and each entity takes a pitch of belt: its item length plus the gap kept free after it. So it holds at most length ÷ pitch entities and carries at most speed ÷ pitch per time unit. Accumulating: entities queue up at the end while the rest keep moving; otherwise the whole belt stops.	Varlıkları bir uçtan diğerine taşıyan bir bant. Bir uzunluğu ve bir hızı vardır, her varlık bandın bir adımını kaplar: parçasının uzunluğu artı arkasında boş bırakılan boşluk. Bu yüzden en fazla uzunluk ÷ adım varlık alır ve zaman biriminde en fazla hız ÷ adım varlık taşır. Biriktirmeli: varlıklar uçta kuyruk olur, diğerleri hareket etmeye devam eder; aksi halde bütün bant durur.
 	Station	İstasyon
 	Kind	Tür
 	Service	Hizmet

@@ -924,6 +924,21 @@ unit	yr	năm
 @plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Cả hai dùng hạt giống ngẫu nhiên {seed} và cùng {n} lần chạy, nên mỗi lần chạy nhận cùng các số ngẫu nhiên như lần chạy cặp với nó: khác biệt đến từ thay đổi, không phải từ các lần rút ngẫu nhiên.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	{n} chỉ số chính khác thay đổi không quá mức ngẫu nhiên có thể gây ra.
 @plural	and {n} more change|and {n} more changes	và {n} thay đổi khác
+	Conveyor	Băng tải
+	Mean time on the conveyor	Thời gian trung bình trên băng tải
+	Length	Chiều dài
+	Accumulating	Tích lũy
+	Item length	Chiều dài mục
+	Gap	Khoảng hở
+	Length unit	Đơn vị chiều dài
+	millimetres	milimét
+	centimetres	xentimét
+	metres	mét
+	kilometres	kilômét
+	inches	inch
+	feet	foot
+	Ticked, items queue up at the end while the rest keep moving. Unticked, the whole belt stops when the item at the end cannot leave.	Khi được chọn, các mục xếp hàng ở cuối trong khi những mục còn lại tiếp tục chạy. Khi bỏ chọn, cả băng tải dừng khi mục ở cuối không thể rời đi.
+	A belt that carries entities from one end to the other. It has a length and a speed, and each entity takes a pitch of belt: its item length plus the gap kept free after it. So it holds at most length ÷ pitch entities and carries at most speed ÷ pitch per time unit. Accumulating: entities queue up at the end while the rest keep moving; otherwise the whole belt stops.	Một băng tải chở các thực thể từ đầu này sang đầu kia. Nó có chiều dài và tốc độ, và mỗi thực thể chiếm một bước băng tải: chiều dài mục của nó cộng với khoảng hở để trống phía sau. Vì vậy băng tải chứa tối đa chiều dài ÷ bước thực thể và chở tối đa tốc độ ÷ bước mỗi đơn vị thời gian. Tích lũy: các thực thể xếp hàng ở cuối trong khi những thực thể còn lại tiếp tục chạy; nếu không, cả băng tải dừng.
 	Station	Trạm
 	Kind	Loại
 	Service	Phục vụ

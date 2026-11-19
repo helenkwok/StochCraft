@@ -68,6 +68,9 @@ pub(crate) fn metric<'a>(name: &'a str, kind: &str) -> (&'a str, Unit) {
         "mean_work_in_progress" => (t("Mean work in progress"), Unit::Items),
         "mean_time_in_system" => (t("Mean time in system"), Unit::Time),
         "mean_blocked_time" => (t("Mean time blocked"), Unit::Time),
+        "mean_time_on" => (t("Mean time on the conveyor"), Unit::Time),
+        // A conveyor has no units: the share of time its front item waits at the end.
+        "blocking_probability" if kind == "conveyor" => (t("Time blocked"), Unit::Share),
         "blocking_probability" => (t("Share of units blocked"), Unit::Share),
         "lost" if kind == "exclusive_gateway" => (t("Lost (no way out)"), Unit::Count),
         "lost" => (t("Lost (waiting room full)"), Unit::Count),
@@ -123,6 +126,7 @@ pub(crate) fn kind_label(kind: &str) -> &str {
         "parallel_gateway" => t("Split or join"),
         "batch" => t("Batch"),
         "unbatch" => t("Split batches"),
+        "conveyor" => t("Conveyor"),
         other => other,
     }
 }
@@ -649,6 +653,12 @@ fn key_candidates(kind: &str) -> &'static [(&'static str, bool)] {
         "delay" | "batch" | "unbatch" => {
             &[("mean_contents", true), ("left", true), ("lost", false)]
         }
+        "conveyor" => &[
+            ("mean_time_on", true),
+            ("mean_contents", true),
+            ("blocking_probability", true),
+            ("left", true),
+        ],
         "sink" => &[
             ("entered", true),
             ("mean_time_in_system", true),

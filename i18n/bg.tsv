@@ -924,6 +924,21 @@ unit	yr	г.
 @plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	И двете използваха начална стойност {seed} и същото {n} изпълнение, така че всяко изпълнение получава същите случайни числа като своята двойка: разликите идват от промяната, а не от случайни тегления.|И двете използваха начална стойност {seed} и същите {n} изпълнения, така че всяко изпълнение получава същите случайни числа като своята двойка: разликите идват от промяната, а не от случайни тегления.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	Още {n} основен показател не се промени повече, отколкото би могла случайността.|Още {n} основни показателя не се промениха повече, отколкото би могла случайността.
 @plural	and {n} more change|and {n} more changes	и още {n} промяна|и още {n} промени
+	Conveyor	Конвейер
+	Mean time on the conveyor	Средно време върху конвейера
+	Length	Дължина
+	Accumulating	Натрупване
+	Item length	Дължина на единица
+	Gap	Разстояние
+	Length unit	Мерна единица за дължина
+	millimetres	милиметри
+	centimetres	сантиметри
+	metres	метри
+	kilometres	километри
+	inches	инчове
+	feet	фута
+	Ticked, items queue up at the end while the rest keep moving. Unticked, the whole belt stops when the item at the end cannot leave.	Когато е отметнато, единиците се нареждат на опашка в края, докато останалите продължават да се движат. Когато не е, цялата лента спира, щом единицата в края не може да излезе.
+	A belt that carries entities from one end to the other. It has a length and a speed, and each entity takes a pitch of belt: its item length plus the gap kept free after it. So it holds at most length ÷ pitch entities and carries at most speed ÷ pitch per time unit. Accumulating: entities queue up at the end while the rest keep moving; otherwise the whole belt stops.	Лента, която пренася същности от единия край до другия. Има дължина и скорост, а всяка същност заема стъпка от лентата: дължината си плюс свободното разстояние след нея. Така лентата побира най-много дължина ÷ стъпка същности и пренася най-много скорост ÷ стъпка за единица време. Натрупване: същностите се нареждат на опашка в края, докато останалите продължават да се движат; иначе цялата лента спира.
 	Station	Станция
 	Kind	Вид
 	Service	Обслужване

@@ -924,6 +924,21 @@ unit	yr	г.
 @plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Оба использовали начальное значение генератора {seed} и тот же {n} запуск, поэтому каждый запуск получает те же случайные числа, что и его пара: различия вызваны изменением, а не случайными выборками.|Оба использовали начальное значение генератора {seed} и те же {n} запуска, поэтому каждый запуск получает те же случайные числа, что и его пара: различия вызваны изменением, а не случайными выборками.|Оба использовали начальное значение генератора {seed} и те же {n} запусков, поэтому каждый запуск получает те же случайные числа, что и его пара: различия вызваны изменением, а не случайными выборками.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	Ещё {n} основной показатель изменился не больше, чем могла бы случайность.|Ещё {n} основных показателя изменились не больше, чем могла бы случайность.|Ещё {n} основных показателей изменились не больше, чем могла бы случайность.
 @plural	and {n} more change|and {n} more changes	и ещё {n} изменение|и ещё {n} изменения|и ещё {n} изменений
+	Conveyor	Конвейер
+	Mean time on the conveyor	Среднее время на конвейере
+	Length	Длина
+	Accumulating	Накопление
+	Item length	Длина изделия
+	Gap	Зазор
+	Length unit	Единица длины
+	millimetres	миллиметры
+	centimetres	сантиметры
+	metres	метры
+	kilometres	километры
+	inches	дюймы
+	feet	футы
+	Ticked, items queue up at the end while the rest keep moving. Unticked, the whole belt stops when the item at the end cannot leave.	Если отмечено, изделия выстраиваются в очередь в конце, пока остальные продолжают двигаться. Если не отмечено, вся лента останавливается, когда изделие в конце не может уйти.
+	A belt that carries entities from one end to the other. It has a length and a speed, and each entity takes a pitch of belt: its item length plus the gap kept free after it. So it holds at most length ÷ pitch entities and carries at most speed ÷ pitch per time unit. Accumulating: entities queue up at the end while the rest keep moving; otherwise the whole belt stops.	Лента, которая переносит сущности от одного конца к другому. У неё есть длина и скорость, а каждая сущность занимает шаг ленты: длину своего изделия плюс зазор, остающийся свободным за ним. Поэтому на ленте помещается не больше длина ÷ шаг сущностей, и она переносит не больше скорость ÷ шаг в единицу времени. Накопление: сущности выстраиваются в очередь в конце, пока остальные продолжают двигаться; иначе останавливается вся лента.
 	Station	Станция
 	Kind	Тип
 	Service	Обслуживание

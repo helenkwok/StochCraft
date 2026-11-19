@@ -20,6 +20,7 @@ pub const KINDS: &[(&str, &str)] = &[
     ("parallel_gateway", "Split or join (all ways)"),
     ("batch", "Batch (collect, then send together)"),
     ("unbatch", "Split batches"),
+    ("conveyor", "Conveyor"),
     ("sink", "Departures"),
 ];
 
@@ -41,6 +42,15 @@ pub fn new_block(kind: &str) -> Value {
         "parallel_gateway" => json!({"kind": "parallel_gateway"}),
         "batch" => json!({"kind": "batch", "size": 2}),
         "unbatch" => json!({"kind": "unbatch"}),
+        // Ten long, one length unit a time unit, items one long with no gap.
+        "conveyor" => json!({
+            "kind": "conveyor",
+            "length": 10.0,
+            "speed": 1.0,
+            "accumulating": true,
+            "item_length": 1.0,
+            "gap": 0.0
+        }),
         _ => json!({"kind": "sink"}),
     }
 }
@@ -84,6 +94,7 @@ fn parameters(kind: &str) -> &'static [&'static str] {
         "shared_task" => &["service", "priority"],
         "delay" => &["duration"],
         "batch" => &["size"],
+        "conveyor" => &["length", "speed", "accumulating", "item_length", "gap"],
         _ => &[],
     }
 }
@@ -516,6 +527,11 @@ impl App {
         crate::time_unit(&self.engine)
     }
 
+    /// The model's length unit as written after a number ("m", "ft").
+    pub(crate) fn length_unit_label(&self) -> String {
+        crate::length_unit(&self.engine)
+    }
+
     fn overview(
         &mut self,
         ui: &mut egui::Ui,
@@ -545,6 +561,7 @@ impl App {
             ("warmup", true),
             ("duration", true),
             ("time_unit", false),
+            ("length_unit", false),
         ] {
             let mut cx = form::Cx {
                 time_unit: &unit,
@@ -552,13 +569,19 @@ impl App {
                 drafts: &mut self.drafts,
                 calendars: &[],
             };
+            // The file leaves the length unit out when it is metres.
+            let current = if f == "length_unit" && x[f].is_null() {
+                json!("m")
+            } else {
+                x[f].clone()
+            };
             if let Some(v) = form::field(
                 ui,
                 &mut cx,
                 Schema::new(&schema),
                 &format!("x/{f}"),
                 f,
-                &x[f],
+                &current,
                 time,
             ) {
                 self.execute("experiment.set", json!({ f: v }));
@@ -693,7 +716,21 @@ impl App {
             schema["properties"]["capacity"]["minimum"] = json!(1);
         }
         schema["properties"]["size"]["minimum"] = json!(1);
+        // A conveyor's numbers: lengths and speed above 0, a gap of 0 or more. The accumulating
+        // box has the words below; the others are plain from their labels and units.
+        for f in ["length", "speed", "item_length"] {
+            schema["properties"][f]["exclusiveMinimum"] = json!(0.0);
+            schema["properties"][f]["description"] = Value::Null;
+        }
+        schema["properties"]["gap"]["minimum"] = json!(0.0);
+        schema["properties"]["gap"]["description"] = Value::Null;
+        schema["properties"]["accumulating"]["description"] = json!(t(
+            "Ticked, items queue up at the end while the rest keep moving. Unticked, the whole belt stops when the item at the end cannot leave."
+        ));
         let unit = self.time_unit_label();
+        // A conveyor's lengths are in the length unit, its speed in that per the time unit.
+        let length_unit = self.length_unit_label();
+        let speed_unit = format!("{length_unit}/{unit}");
         let calendars = form::calendars(model);
         for f in fields {
             // Whether the sender waits applies only to a transfer.
@@ -706,8 +743,15 @@ impl App {
                 ("idle_outside", Value::Null) => json!(false),
                 (_, v) => v.clone(),
             };
+            // The unit a number is shown in: a conveyor's lengths and speed in their own (the
+            // form's "time" fields are those with a unit after them).
+            let shown_unit = match *f {
+                "length" | "item_length" | "gap" => &length_unit,
+                "speed" => &speed_unit,
+                _ => &unit,
+            };
             let mut cx = form::Cx {
-                time_unit: &unit,
+                time_unit: shown_unit,
                 numbers: &self.numbers,
                 drafts: &mut self.drafts,
                 calendars: &calendars,
@@ -715,7 +759,15 @@ impl App {
             let key = format!("{id}/{f}");
             let time = matches!(
                 *f,
-                "interarrival" | "service" | "duration" | "transfer" | "planned_run_time"
+                "interarrival"
+                    | "service"
+                    | "duration"
+                    | "transfer"
+                    | "planned_run_time"
+                    | "length"
+                    | "speed"
+                    | "item_length"
+                    | "gap"
             );
             // The basics' "?", on the task's own fields (not a time by value, say).
             form::explain(&key, explanation(f).filter(|_| el["kind"] != "delay"));

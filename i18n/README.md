@@ -704,6 +704,16 @@ engine's messages (validation, file notes) are English too.
   adjective (de "mittlere", fr "moyen", ja "平均", hi "माध्य"). Not checked against any other
   source, and not reviewed by native speakers. The least certain are lo, th, ta, te, bn, ka and
   kk as before, and ko 평균 길이, which keeps the catalog's 길이 for Duration.
+- The rows for the conveyor in the window (M5.1, PR 4: Conveyor, Mean time on the conveyor, Length,
+  Accumulating, Item length, Gap, Length unit, the six length units, the hover on Accumulating and
+  the glossary entry) were machine-drafted with Claude Code from the plain meaning of the English
+  and each catalog's own rows for conveyor (its word, capitalised), Speed, Entity and Time
+  blocked. "Pitch" (the item length plus the gap) is the language's word for a step or spacing
+  along a belt, and "Accumulating" its word for building up or queuing; both are guesses, as no
+  standard term was checked. The unit names are the languages' usual words for millimetre to foot;
+  Serbian rows are Ekavian. Not checked against any other source, and not reviewed by native
+  speakers. The least certain are lo, th, ta, te, ka, kk, bn, hi and sq, and in every language
+  the words for pitch and Accumulating.
 
 - The rows for the Capacity view (thirty-one strings: the column headings Station, Kind, Service, Load,
   Status and the two simulated ones, the target field and its error, the four status words, the

@@ -924,6 +924,21 @@ unit	yr	年
 @plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	どちらも乱数シード {seed} と同じ {n} 回の実行を使ったため、各実行は対になる実行と同じ乱数を受け取ります。差は偶然の抽出ではなく、変更から生じています。
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	ほかの主な指標 {n} 個は、偶然の範囲を超えて動いていません。
 @plural	and {n} more change|and {n} more changes	ほか {n} 件の変更
+	Conveyor	コンベヤー
+	Mean time on the conveyor	コンベヤー上の平均時間
+	Length	長さ
+	Accumulating	蓄積
+	Item length	品目の長さ
+	Gap	間隔
+	Length unit	長さの単位
+	millimetres	ミリメートル
+	centimetres	センチメートル
+	metres	メートル
+	kilometres	キロメートル
+	inches	インチ
+	feet	フィート
+	Ticked, items queue up at the end while the rest keep moving. Unticked, the whole belt stops when the item at the end cannot leave.	オンにすると、先頭の品目が出られない間は端で順番待ちになり、残りは動き続けます。オフにすると、端の品目が出られないときにベルト全体が止まります。
+	A belt that carries entities from one end to the other. It has a length and a speed, and each entity takes a pitch of belt: its item length plus the gap kept free after it. So it holds at most length ÷ pitch entities and carries at most speed ÷ pitch per time unit. Accumulating: entities queue up at the end while the rest keep moving; otherwise the whole belt stops.	エンティティを一方の端からもう一方の端へ運ぶベルトです。長さと速度があり、各エンティティはベルトのピッチを占めます。ピッチとは、品目の長さと、その後ろに空けておく間隔の合計です。そのため、載せられるのは最大で長さ ÷ ピッチ個、単位時間あたりに運べるのは最大で速度 ÷ ピッチ個です。蓄積: エンティティは端で順番待ちになり、残りは動き続けます。オフの場合はベルト全体が止まります。
 	Station	ステーション
 	Kind	種類
 	Service	サービス

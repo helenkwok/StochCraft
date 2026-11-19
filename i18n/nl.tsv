@@ -924,6 +924,21 @@ unit	yr	j
 @plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Beide gebruikten startwaarde {seed} en dezelfde {n} uitvoering, dus elke uitvoering krijgt dezelfde willekeurige getallen als haar tegenhanger: de verschillen komen van de wijziging, niet van toevallige trekkingen.|Beide gebruikten startwaarde {seed} en dezelfde {n} uitvoeringen, dus elke uitvoering krijgt dezelfde willekeurige getallen als haar tegenhanger: de verschillen komen van de wijziging, niet van toevallige trekkingen.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	{n} andere belangrijke metriek bewoog niet meer dan toeval zou kunnen.|{n} andere belangrijke metrieken bewogen niet meer dan toeval zou kunnen.
 @plural	and {n} more change|and {n} more changes	en nog {n} wijziging|en nog {n} wijzigingen
+	Conveyor	Transportband
+	Mean time on the conveyor	Gemiddelde tijd op de band
+	Length	Lengte
+	Accumulating	Ophopend
+	Item length	Lengte van het item
+	Gap	Tussenruimte
+	Length unit	Lengte-eenheid
+	millimetres	millimeter
+	centimetres	centimeter
+	metres	meter
+	kilometres	kilometer
+	inches	inch
+	feet	voet
+	Ticked, items queue up at the end while the rest keep moving. Unticked, the whole belt stops when the item at the end cannot leave.	Aangevinkt: items vormen een rij aan het einde terwijl de rest doorrijdt. Niet aangevinkt: de hele band stopt als het item aan het einde niet weg kan.
+	A belt that carries entities from one end to the other. It has a length and a speed, and each entity takes a pitch of belt: its item length plus the gap kept free after it. So it holds at most length ÷ pitch entities and carries at most speed ÷ pitch per time unit. Accumulating: entities queue up at the end while the rest keep moving; otherwise the whole belt stops.	Een band die entiteiten van het ene uiteinde naar het andere brengt. Hij heeft een lengte en een snelheid, en elke entiteit neemt een steek van de band in: de lengte van haar item plus de tussenruimte die erachter vrij blijft. Er passen dus hooguit lengte ÷ steek entiteiten op en er gaan hooguit snelheid ÷ steek per tijdseenheid over. Ophopend: entiteiten vormen een rij aan het einde terwijl de rest doorrijdt; anders stopt de hele band.
 	Station	Station
 	Kind	Soort
 	Service	Bediening

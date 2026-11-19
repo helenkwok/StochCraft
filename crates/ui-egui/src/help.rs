@@ -68,6 +68,10 @@ pub const GLOSSARY: &[(&str, &str)] = &[
         "A step that borrows units from a pool that several tasks share, such as a team of nurses.",
     ),
     (
+        "Conveyor",
+        "A belt that carries entities from one end to the other. It has a length and a speed, and each entity takes a pitch of belt: its item length plus the gap kept free after it. So it holds at most length ÷ pitch entities and carries at most speed ÷ pitch per time unit. Accumulating: entities queue up at the end while the rest keep moving; otherwise the whole belt stops.",
+    ),
+    (
         "Departures",
         "The block where entities leave the model; it counts them and their time in the system.",
     ),

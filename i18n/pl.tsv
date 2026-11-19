@@ -924,6 +924,21 @@ unit	yr	r.
 @plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Oba użyły ziarna {seed} i tego samego {n} uruchomienia, więc każde uruchomienie dostaje te same liczby losowe co jego para: różnice wynikają ze zmiany, a nie z przypadkowych losowań.|Oba użyły ziarna {seed} i tych samych {n} uruchomień, więc każde uruchomienie dostaje te same liczby losowe co jego para: różnice wynikają ze zmiany, a nie z przypadkowych losowań.|Oba użyły ziarna {seed} i tych samych {n} uruchomień, więc każde uruchomienie dostaje te same liczby losowe co jego para: różnice wynikają ze zmiany, a nie z przypadkowych losowań.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	Jeszcze {n} najważniejsza miara nie zmieniła się bardziej, niż mógłby przypadek.|Jeszcze {n} najważniejsze miary nie zmieniły się bardziej, niż mógłby przypadek.|Jeszcze {n} najważniejszych miar nie zmieniło się bardziej, niż mógłby przypadek.
 @plural	and {n} more change|and {n} more changes	i jeszcze {n} zmiana|i jeszcze {n} zmiany|i jeszcze {n} zmian
+	Conveyor	Przenośnik
+	Mean time on the conveyor	Średni czas na przenośniku
+	Length	Długość
+	Accumulating	Akumulacja
+	Item length	Długość elementu
+	Gap	Odstęp
+	Length unit	Jednostka długości
+	millimetres	milimetry
+	centimetres	centymetry
+	metres	metry
+	kilometres	kilometry
+	inches	cale
+	feet	stopy
+	Ticked, items queue up at the end while the rest keep moving. Unticked, the whole belt stops when the item at the end cannot leave.	Zaznaczone: elementy ustawiają się w kolejce na końcu, a pozostałe jadą dalej. Niezaznaczone: cały pas zatrzymuje się, gdy element na końcu nie może zejść.
+	A belt that carries entities from one end to the other. It has a length and a speed, and each entity takes a pitch of belt: its item length plus the gap kept free after it. So it holds at most length ÷ pitch entities and carries at most speed ÷ pitch per time unit. Accumulating: entities queue up at the end while the rest keep moving; otherwise the whole belt stops.	Pas, który niesie jednostki z jednego końca na drugi. Ma długość i szybkość, a każda jednostka zajmuje podziałkę pasa: długość swojego elementu plus odstęp pozostawiony wolny za nią. Mieści więc co najwyżej długość ÷ podziałka jednostek i przenosi co najwyżej szybkość ÷ podziałka na jednostkę czasu. Akumulacja: jednostki ustawiają się w kolejce na końcu, a pozostałe jadą dalej; w przeciwnym razie zatrzymuje się cały pas.
 	Station	Stanowisko
 	Kind	Rodzaj
 	Service	Obsługa

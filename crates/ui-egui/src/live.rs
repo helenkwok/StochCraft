@@ -483,7 +483,7 @@ impl App {
                         false,
                     );
                 }
-                ElementKind::Delay { .. } => pill(
+                ElementKind::Delay { .. } | ElementKind::Conveyor { .. } => pill(
                     tf("{n} inside", &[("n", &count(s.busy))]),
                     above,
                     Align2::CENTER_BOTTOM,
@@ -533,7 +533,10 @@ impl App {
         ));
         if !matches!(
             e.kind,
-            ElementKind::Server { .. } | ElementKind::SharedTask { .. } | ElementKind::Delay { .. }
+            ElementKind::Server { .. }
+                | ElementKind::SharedTask { .. }
+                | ElementKind::Delay { .. }
+                | ElementKind::Conveyor { .. }
         ) {
             return;
         }

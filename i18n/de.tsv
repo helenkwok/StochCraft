@@ -924,6 +924,21 @@ unit	yr	J.
 @plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Beide verwendeten Startwert {seed} und denselben {n} Lauf, sodass jeder Lauf dieselben Zufallszahlen erhält wie sein Gegenstück: Die Unterschiede kommen von der Änderung, nicht von zufälligen Ziehungen.|Beide verwendeten Startwert {seed} und dieselben {n} Läufe, sodass jeder Lauf dieselben Zufallszahlen erhält wie sein Gegenstück: Die Unterschiede kommen von der Änderung, nicht von zufälligen Ziehungen.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	{n} weitere wichtige Kennzahl hat sich nicht stärker bewegt, als der Zufall es könnte.|{n} weitere wichtige Kennzahlen haben sich nicht stärker bewegt, als der Zufall es könnte.
 @plural	and {n} more change|and {n} more changes	und {n} weitere Änderung|und {n} weitere Änderungen
+	Conveyor	Förderband
+	Mean time on the conveyor	Mittlere Zeit auf dem Förderband
+	Length	Länge
+	Accumulating	Akkumulierend
+	Item length	Länge des Teils
+	Gap	Abstand
+	Length unit	Längeneinheit
+	millimetres	Millimeter
+	centimetres	Zentimeter
+	metres	Meter
+	kilometres	Kilometer
+	inches	Zoll
+	feet	Fuß
+	Ticked, items queue up at the end while the rest keep moving. Unticked, the whole belt stops when the item at the end cannot leave.	Angehakt: Teile stauen sich am Ende, während die übrigen weiterfahren. Nicht angehakt: Das ganze Band hält an, wenn das Teil am Ende nicht abgehen kann.
+	A belt that carries entities from one end to the other. It has a length and a speed, and each entity takes a pitch of belt: its item length plus the gap kept free after it. So it holds at most length ÷ pitch entities and carries at most speed ÷ pitch per time unit. Accumulating: entities queue up at the end while the rest keep moving; otherwise the whole belt stops.	Ein Band, das Entitäten von einem Ende zum anderen trägt. Es hat eine Länge und eine Geschwindigkeit, und jede Entität belegt einen Teilungsabstand: die Länge ihres Teils plus den Abstand, der hinter ihr frei bleibt. Es fasst daher höchstens Länge ÷ Teilung Entitäten und befördert höchstens Geschwindigkeit ÷ Teilung je Zeiteinheit. Akkumulierend: Entitäten stauen sich am Ende, während die übrigen weiterfahren; sonst hält das ganze Band an.
 	Station	Station
 	Kind	Art
 	Service	Bedienzeit

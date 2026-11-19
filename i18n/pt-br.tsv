@@ -924,6 +924,21 @@ unit	yr	a
 @plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Ambas usaram a semente {seed} e a mesma {n} execução, então cada execução recebe os mesmos números aleatórios que seu par: as diferenças vêm da mudança, não de sorteios ao acaso.|Ambas usaram a semente {seed} e as mesmas {n} execuções, então cada execução recebe os mesmos números aleatórios que seu par: as diferenças vêm da mudança, não de sorteios ao acaso.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	{n} outra métrica principal não mudou mais do que o acaso poderia.|{n} outras métricas principais não mudaram mais do que o acaso poderia.
 @plural	and {n} more change|and {n} more changes	e mais {n} alteração|e mais {n} alterações
+	Conveyor	Esteira transportadora
+	Mean time on the conveyor	Tempo médio na esteira
+	Length	Comprimento
+	Accumulating	Acumulação
+	Item length	Comprimento do item
+	Gap	Folga
+	Length unit	Unidade de comprimento
+	millimetres	milímetros
+	centimetres	centímetros
+	metres	metros
+	kilometres	quilômetros
+	inches	polegadas
+	feet	pés
+	Ticked, items queue up at the end while the rest keep moving. Unticked, the whole belt stops when the item at the end cannot leave.	Marcada, os itens formam fila no fim enquanto os demais continuam andando. Desmarcada, a esteira inteira para quando o item do fim não consegue sair.
+	A belt that carries entities from one end to the other. It has a length and a speed, and each entity takes a pitch of belt: its item length plus the gap kept free after it. So it holds at most length ÷ pitch entities and carries at most speed ÷ pitch per time unit. Accumulating: entities queue up at the end while the rest keep moving; otherwise the whole belt stops.	Uma esteira que leva entidades de uma ponta à outra. Tem um comprimento e uma velocidade, e cada entidade ocupa um passo da esteira: o comprimento do seu item mais a folga mantida livre depois dele. Por isso comporta no máximo comprimento ÷ passo entidades e transporta no máximo velocidade ÷ passo por unidade de tempo. Acumulação: as entidades formam fila no fim enquanto as demais continuam andando; caso contrário, a esteira inteira para.
 	Station	Estação
 	Kind	Tipo
 	Service	Atendimento

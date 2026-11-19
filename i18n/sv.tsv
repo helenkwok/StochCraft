@@ -924,6 +924,21 @@ unit	yr	år
 @plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Båda använde slumpfrö {seed} och samma {n} körning, så varje körning får samma slumptal som sin partner: skillnaderna kommer från ändringen, inte från slumpmässiga dragningar.|Båda använde slumpfrö {seed} och samma {n} körningar, så varje körning får samma slumptal som sin partner: skillnaderna kommer från ändringen, inte från slumpmässiga dragningar.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	{n} annat viktigt mått rörde sig inte mer än slumpen kunde.|{n} andra viktiga mått rörde sig inte mer än slumpen kunde.
 @plural	and {n} more change|and {n} more changes	och {n} ändring till|och {n} ändringar till
+	Conveyor	Transportband
+	Mean time on the conveyor	Genomsnittlig tid på bandet
+	Length	Längd
+	Accumulating	Ackumulerande
+	Item length	Föremålets längd
+	Gap	Mellanrum
+	Length unit	Längdenhet
+	millimetres	millimeter
+	centimetres	centimeter
+	metres	meter
+	kilometres	kilometer
+	inches	tum
+	feet	fot
+	Ticked, items queue up at the end while the rest keep moving. Unticked, the whole belt stops when the item at the end cannot leave.	Ibockad: föremålen köar i änden medan de andra fortsätter. Inte ibockad: hela bandet stannar när föremålet i änden inte kan lämna det.
+	A belt that carries entities from one end to the other. It has a length and a speed, and each entity takes a pitch of belt: its item length plus the gap kept free after it. So it holds at most length ÷ pitch entities and carries at most speed ÷ pitch per time unit. Accumulating: entities queue up at the end while the rest keep moving; otherwise the whole belt stops.	Ett band som bär entiteter från ena änden till den andra. Det har en längd och en hastighet, och varje entitet tar en delning av bandet: föremålets längd plus mellanrummet som hålls fritt efter det. Det rymmer därför högst längd ÷ delning entiteter och bär högst hastighet ÷ delning per tidsenhet. Ackumulerande: entiteterna köar i änden medan de andra fortsätter; annars stannar hela bandet.
 	Station	Station
 	Kind	Typ
 	Service	Betjäning

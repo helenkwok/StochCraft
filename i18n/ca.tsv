@@ -924,6 +924,21 @@ unit	yr	a
 @plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Totes dues van usar la llavor {seed} i la mateixa {n} execució, de manera que cada execució rep els mateixos nombres aleatoris que la seva parella: les diferències vénen del canvi, no de tirades a l'atzar.|Totes dues van usar la llavor {seed} i les mateixes {n} execucions, de manera que cada execució rep els mateixos nombres aleatoris que la seva parella: les diferències vénen del canvi, no de tirades a l'atzar.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	{n} altra mètrica clau no s'ha mogut més del que podria l'atzar.|{n} altres mètriques clau no s'han mogut més del que podria l'atzar.
 @plural	and {n} more change|and {n} more changes	i {n} canvi més|i {n} canvis més
+	Conveyor	Cinta transportadora
+	Mean time on the conveyor	Temps mitjà a la cinta
+	Length	Longitud
+	Accumulating	Acumulació
+	Item length	Longitud de l'element
+	Gap	Separació
+	Length unit	Unitat de longitud
+	millimetres	mil·límetres
+	centimetres	centímetres
+	metres	metres
+	kilometres	quilòmetres
+	inches	polzades
+	feet	peus
+	Ticked, items queue up at the end while the rest keep moving. Unticked, the whole belt stops when the item at the end cannot leave.	Marcat, els elements fan cua al final mentre els altres continuen avançant. Desmarcat, tota la cinta s'atura quan l'element del final no pot sortir.
+	A belt that carries entities from one end to the other. It has a length and a speed, and each entity takes a pitch of belt: its item length plus the gap kept free after it. So it holds at most length ÷ pitch entities and carries at most speed ÷ pitch per time unit. Accumulating: entities queue up at the end while the rest keep moving; otherwise the whole belt stops.	Una cinta que porta entitats d'un extrem a l'altre. Té una longitud i una velocitat, i cada entitat ocupa un pas de cinta: la longitud del seu element més la separació que es deixa lliure darrere seu. Per tant, hi caben com a màxim longitud ÷ pas entitats i en transporta com a màxim velocitat ÷ pas per unitat de temps. Acumulació: les entitats fan cua al final mentre les altres continuen avançant; si no, s'atura tota la cinta.
 	Station	Estació
 	Kind	Tipus
 	Service	Servei
