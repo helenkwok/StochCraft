@@ -2006,8 +2006,7 @@ replications other than the first.
   tandem line and showed its results.
 
 **Later:** 2D layout with entities moving between stations, and 3D (the `render` crate):
-now step 3 of M5's sorter (M5.3); factory layouts via the shared `craft-factory` data from
-CADCraft.
+now step 3 of M5's sorter (M5.3).
 
 **M3 size:** about six PRs; M3.1–M3.3 make a usable app, M3.4–M3.5 make it a modelling tool.
 **M3.1–M3.6 are complete.** CI builds and tests on Linux only (#45); the full test suite also passes on
@@ -2356,8 +2355,10 @@ answers, and ships as an example model with its write-up ("Examples for teaching
      decision (D22), not needed for 3D.
    - **Clean room:** shapes come from real-world dimensions only, never traced or copied from
      any commercial tool's models.
-   - **Shared code (to check):** whether another Craft app (CADCraft's `craft-factory` data)
-     already has parametric mesh code to share; those repositories are not on this PC.
+   - **Shared code:** none to reuse. CADCraft is 2D drafting (its `render` crate draws lines,
+     hatches, text and dimensions, with no meshes), and no `craft-factory` exists in any Craft
+     repository (checked 2026-11-19). The mesh module is written here and can move to
+     `craft-libs` once a second app needs it.
 
    Checks for the view: an entity's drawn position at time t is its entry point plus
    speed × (t − entry time) along the conveyor's path, read from a live run in a test; the 2D
@@ -2516,10 +2517,13 @@ Where each part of that request sits:
   line's demand (M2.11's `stochcraft:demand` and `takt`, done) or a number given.
 - **Heuristics:** the largest candidate rule, Kilbridge and Wester's column method and Helgeson
   and Birnie's ranked positional weights (Groover, *Automation, Production Systems, and
-  Computer-Integrated Manufacturing*, 4th ed., 2015, the chapter on manual assembly lines (to
-  verify); Kilbridge and Wester, *Journal of Industrial Engineering* 12(4), 1961, and Helgeson
-  and Birnie, *Journal of Industrial Engineering* 12(6), 1961 (both to verify)). Exact methods
-  (Scholl, *Balancing and Sequencing of Assembly Lines*, 2nd ed., 1999 (to verify)) later.
+  Computer-Integrated Manufacturing*, 4th ed., Pearson, 2015, ch. 15 "Manual Assembly Lines",
+  §15.3 "Line Balancing Algorithms"; M. D. Kilbridge and L. Wester, "A heuristic method of
+  assembly line balancing", *Journal of Industrial Engineering* 12(4):292–298, 1961; W. B.
+  Helgeson and D. P. Birnie, "Assembly line balancing using the ranked positional weight
+  technique", *Journal of Industrial Engineering* 12(6):394–398, 1961). Exact methods (A. Scholl,
+  *Balancing and Sequencing of Assembly Lines*, 2nd rev. ed., Physica-Verlag, 1999, ISBN
+  978-3-7908-1180-3) later.
 - **Measures:** the theoretical least number of stations (the total work content over the cycle
   time, rounded up), balance efficiency, balance delay, and the smoothness index (the square
   root of the sum of squared differences between the longest station time and each station's).
@@ -2543,8 +2547,9 @@ Where each part of that request sits:
   network); flow × distance per pair and in total.
 - **On the canvas:** a flow diagram drawn on the layout, line width by flow.
 - **Later:** the activity relationship chart of Systematic Layout Planning (Muther, *Systematic
-  Layout Planning*, 1961; 2nd ed. 1973 (to verify)); Tompkins, White, Bozer and Tanchoco,
-  *Facilities Planning*, 4th ed., 2010 (to verify), for the measures.
+  Layout Planning*, Industrial Education Institute, 1961; 2nd ed., Cahners Books, 1973);
+  Tompkins, White, Bozer and Tanchoco, *Facilities Planning*, 4th ed., Wiley, 2010, ISBN
+  978-0-470-44404-7, for the measures.
 - **Checks:** a three-station example worked by hand (flows, rectilinear distances, total
   flow × distance); the before-a-run chart and a long run's counts agree within the run's
   intervals.
@@ -2560,10 +2565,11 @@ Where each part of that request sits:
 - **Where it lives:** a new block kind, the stock point, with a `stochcraft:inventory` vendor
   extension (BPMN has no stock), and its demand from a source or from downstream orders.
   Multi-echelon chains later.
-- **Checks:** base stock with Poisson demand and a fixed lead time: the fill rate is the
-  probability that lead-time demand is below the base-stock level (Hopp and Spearman, *Factory
-  Physics*, 3rd ed., 2008, §2.4.2, the base stock model; its notation to verify); (R, Q) with
-  Poisson demand against the same book's §2.4.3 (to verify).
+- **Checks:** base stock with Poisson demand of single units and a fixed lead time: an order
+  is filled at once when lead-time demand is at most the base-stock level less one, so the fill
+  rate is that Poisson probability (Hopp and Spearman, *Factory Physics*, 3rd ed., 2008, §2.4.2
+  "The Base Stock Model"); (Q, r) with Poisson demand against the same book's §2.4.3 "The (Q, r)
+  Model".
 
 ### M7.4 Sharing a model
 
