@@ -161,9 +161,7 @@ fn every_screen_is_translated() {
 }
 
 /// The states the screens above don't reach: the offer to recover unsaved changes, a run in
-/// progress, a watched run and an error in the status bar. (Not yet the Analysis view: four of
-/// its parameter labels, "{block}: mean service time" and the like, have no row in any catalog,
-/// and drawing it here would add them to what `every_string_has_a_row_in_every_catalog` checks.)
+/// progress, a watched run, the Analysis view and an error in the status bar.
 #[test]
 fn every_state_is_translated() {
     let mut missed = BTreeSet::new();
@@ -220,6 +218,14 @@ fn every_state_is_translated() {
     missed.extend(untranslated(&h));
     h.state_mut()
         .run_command(&CommandRef::new(commands::STOP_WATCHING));
+    settle(&mut h);
+
+    // The Analysis view: its sweep, sensitivity and sizing sections, with their parameters.
+    h.get_by_role_and_label(Role::Tab, "⟦Analysis⟧").click();
+    settle(&mut h);
+    h.get_by_label("⟦Sweep a parameter⟧");
+    missed.extend(untranslated(&h));
+    h.get_by_role_and_label(Role::Tab, "⟦Model⟧").click();
     settle(&mut h);
 
     // An error in the status bar: a file that cannot be read. The message is the engine's own,
