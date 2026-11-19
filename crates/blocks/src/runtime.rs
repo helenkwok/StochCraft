@@ -3,7 +3,7 @@
 
 use std::borrow::Cow;
 use std::cell::{Cell, RefCell};
-use std::collections::BTreeMap;
+use std::collections::{BTreeMap, BTreeSet};
 use std::rc::{Rc, Weak};
 
 use stochcraft_des::{
@@ -204,6 +204,20 @@ impl Compiled {
                         away: RefCell::new(Weak::new()),
                     }))
                 }
+                // A conveyor's entrance: as many places as pitches fit along it.
+                ElementKind::Conveyor { .. } => e.kind.conveyor_places().map(|n| {
+                    Rc::new(Places {
+                        room: Room::Belt(Belt {
+                            places: n,
+                            on: RefCell::new(BTreeSet::new()),
+                            free: Cell::new(true),
+                            changed: Signal::new(&ctx),
+                        }),
+                        held: RefCell::new(BTreeMap::new()),
+                        watchers: RefCell::new(Vec::new()),
+                        away: RefCell::new(Weak::new()),
+                    })
+                }),
                 _ => None,
             })
             .collect();
@@ -602,8 +616,20 @@ impl Compiled {
                 }
                 ElementKind::Batch { size } => spawn_batch(&mut sim, env, size),
                 ElementKind::Unbatch => spawn_unbatch(&mut sim, env),
-                // Not simulated yet (`compile` refuses a model with one): passes entities on.
-                ElementKind::Conveyor { .. } => spawn_unbatch(&mut sim, env),
+                ElementKind::Conveyor {
+                    length,
+                    speed,
+                    accumulating,
+                    item_length,
+                    gap,
+                } => spawn_conveyor(
+                    &mut sim,
+                    env,
+                    length,
+                    speed,
+                    accumulating,
+                    item_length + gap,
+                ),
             }
         }
 
@@ -1173,6 +1199,8 @@ pub(crate) struct BlockStats {
     blocked: TimeWeighted,
     /// Time each entity that left waited for room in the next buffer (blocking after service).
     blocked_time: Tally,
+    /// Each item's time on a conveyor, from getting on until it has left the end.
+    time_on: Tally,
     /// Entities lost here. A server with a finite buffer: arrivals from sources turned away
     /// because the buffer was full (they never entered), or, with a way out for those turned
     /// away, any entity turned away (each time). A source: its own arrivals lost that
@@ -1441,6 +1469,7 @@ impl BlockStats {
             properties: (0..properties).map(|_| Tally::new()).collect(),
             blocked: TimeWeighted::new(t, 0.0),
             blocked_time: Tally::new(),
+            time_on: Tally::new(),
             lost: 0,
             down: TimeWeighted::new(t, 0.0),
             transit: TimeWeighted::new(t, 0.0),
@@ -1502,6 +1531,7 @@ impl BlockStats {
         self.properties.iter_mut().for_each(|p| *p = Tally::new());
         self.blocked.reset(t);
         self.blocked_time = Tally::new();
+        self.time_on = Tally::new();
         self.lost = 0;
         self.down.reset(t);
         self.transit.reset(t);
@@ -1642,7 +1672,10 @@ impl BlockStats {
         );
         let holds = matches!(
             kind,
-            ElementKind::Server { .. } | ElementKind::SharedTask { .. } | ElementKind::Delay { .. }
+            ElementKind::Server { .. }
+                | ElementKind::SharedTask { .. }
+                | ElementKind::Delay { .. }
+                | ElementKind::Conveyor { .. }
         );
         let offered = self.lost + self.entered;
         let balky = matches!(
@@ -1740,6 +1773,7 @@ impl BlockStats {
                 ElementKind::Server { .. }
                 | ElementKind::SharedTask { .. }
                 | ElementKind::Delay { .. }
+                | ElementKind::Conveyor { .. }
                 | ElementKind::Batch { .. } => self.busy.average(end),
                 _ => None,
             },
@@ -1747,6 +1781,7 @@ impl BlockStats {
                 ElementKind::Server { .. }
                 | ElementKind::SharedTask { .. }
                 | ElementKind::Delay { .. }
+                | ElementKind::Conveyor { .. }
                 | ElementKind::Batch { .. } => Some(self.inside()),
                 ElementKind::ParallelGateway if join => Some(self.inside()),
                 _ => None,
@@ -1755,6 +1790,7 @@ impl BlockStats {
                 ElementKind::Server { .. }
                 | ElementKind::SharedTask { .. }
                 | ElementKind::Delay { .. }
+                | ElementKind::Conveyor { .. }
                 | ElementKind::Batch { .. } => self.mean_inside(end),
                 ElementKind::ParallelGateway if join => self.mean_inside(end),
                 _ => None,
@@ -1769,6 +1805,11 @@ impl BlockStats {
             } else {
                 None
             },
+            mean_time_on: if matches!(kind, ElementKind::Conveyor { .. }) {
+                self.time_on.mean()
+            } else {
+                None
+            },
             // Units held after their job: waiting for room in the next buffer, or through a
             // transfer to the next element.
             blocking_probability: match kind {
@@ -1780,6 +1821,8 @@ impl BlockStats {
                 ElementKind::Server { .. } if blocks => {
                     self.blocked.average(end).map(|b| b / units)
                 }
+                // The share of time the front item waits at the end (only it can).
+                ElementKind::Conveyor { .. } => self.blocked.average(end),
                 _ => None,
             },
             availability: match kind {
@@ -1910,7 +1953,8 @@ impl BlockStats {
             time_inside: match kind {
                 ElementKind::Server { .. }
                 | ElementKind::SharedTask { .. }
-                | ElementKind::Delay { .. } => Some(self.time_inside(end)),
+                | ElementKind::Delay { .. }
+                | ElementKind::Conveyor { .. } => Some(self.time_inside(end)),
                 _ => None,
             },
             on_shift: match kind {
@@ -2048,6 +2092,33 @@ enum Room {
     Fixed(Resource),
     /// A limit on the number waiting that changes over time.
     Limit(Limit),
+    /// A conveyor's entrance.
+    Belt(Belt),
+}
+
+/// A conveyor's entrance (ROADMAP M5.1): an item gets on when fewer than `places` items are on
+/// the belt and the item before it has moved a pitch along, so their slots never overlap.
+struct Belt {
+    /// How many pitches fit along the conveyor.
+    places: u64,
+    /// The entities on it, from getting on until they leave its end.
+    on: RefCell<BTreeSet<u64>>,
+    /// Whether the last item to get on has moved a pitch along.
+    free: Cell<bool>,
+    /// Woken whenever an item gets off or the entrance frees.
+    changed: Signal,
+}
+
+impl Belt {
+    fn admits(&self) -> bool {
+        self.free.get() && (self.on.borrow().len() as u64) < self.places
+    }
+
+    /// Entity `id` gets on: it counts, and the entrance is taken until it has moved a pitch.
+    fn take(&self, id: u64) {
+        self.on.borrow_mut().insert(id);
+        self.free.set(false);
+    }
 }
 
 /// A limit on the entities waiting at a server ([`QueueLimit::ByShift`] and
@@ -2147,6 +2218,12 @@ impl Places {
                     l.changed.wait().await;
                 }
             }
+            Room::Belt(b) => {
+                while !b.admits() {
+                    b.changed.wait().await;
+                }
+                b.take(id);
+            }
         }
     }
 
@@ -2162,6 +2239,13 @@ impl Places {
                 Err(_) => false,
             },
             Room::Limit(l) => l.admits(),
+            Room::Belt(b) => {
+                let admits = b.admits();
+                if admits {
+                    b.take(id);
+                }
+                admits
+            }
         }
     }
 
@@ -2170,7 +2254,7 @@ impl Places {
     fn reserve(&self) -> Option<ResourceGuard> {
         match &self.room {
             Room::Fixed(pool) => pool.try_acquire(),
-            Room::Limit(_) => None,
+            Room::Limit(_) | Room::Belt(_) => None,
         }
     }
 
@@ -2184,12 +2268,22 @@ impl Places {
     /// With a limit on those waiting: the room may have room again, so whoever waits for it
     /// looks again. Places tell their waiters themselves.
     fn notify(&self) {
-        if let Room::Limit(l) = &self.room {
-            l.changed.notify_all();
-            for w in self.watchers.borrow().iter() {
-                w.notify_all();
-            }
+        match &self.room {
+            Room::Fixed(_) => return,
+            Room::Limit(l) => l.changed.notify_all(),
+            Room::Belt(b) => b.changed.notify_all(),
+        };
+        for w in self.watchers.borrow().iter() {
+            w.notify_all();
         }
+    }
+
+    /// A conveyor's last item has moved a pitch along: the entrance is free again.
+    fn open_entrance(&self) {
+        if let Room::Belt(b) = &self.room {
+            b.free.set(true);
+        }
+        self.notify();
     }
 
     /// The way out for entities turned away, if there is one.
@@ -2215,6 +2309,9 @@ impl Places {
 
     /// Gives back the place entity `id` holds, as it leaves.
     fn leave(&self, id: u64) {
+        if let Room::Belt(b) = &self.room {
+            b.on.borrow_mut().remove(&id);
+        }
         let guard = self.held.borrow_mut().remove(&id);
         if guard.is_some() {
             drop(guard);
@@ -2231,6 +2328,7 @@ impl Places {
         match &self.room {
             Room::Fixed(pool) => pool.in_use() < pool.capacity(),
             Room::Limit(l) => l.admits(),
+            Room::Belt(b) => b.admits(),
         }
     }
 
@@ -4422,6 +4520,7 @@ impl Pools {
                     mean_work_in_progress: None,
                     mean_time_in_system: None,
                     mean_blocked_time: None,
+                    mean_time_on: None,
                     blocking_probability: None,
                     availability: None,
                     time_off_shift: None,
@@ -4508,6 +4607,130 @@ fn spawn_shared(
                 move_on(&env2, &c, entity, &|| false, None).await;
                 pl.release(taken);
             });
+        }
+    });
+}
+
+/// A conveyor's own clock: the time its belt has run. An accumulating conveyor's never stops;
+/// a belt that is not accumulating stops while its front item waits to leave.
+struct BeltClock {
+    /// The time it has stood still, before any stop now.
+    stopped: Cell<f64>,
+    /// When it stopped, while it stands.
+    since: Cell<Option<f64>>,
+    /// Woken when it runs again.
+    resumed: Signal,
+}
+
+impl BeltClock {
+    fn time(&self, now: f64) -> f64 {
+        self.since.get().unwrap_or(now) - self.stopped.get()
+    }
+
+    fn stop(&self, now: f64) {
+        self.since.set(Some(now));
+    }
+
+    fn start(&self, now: f64) {
+        if let Some(s) = self.since.take() {
+            self.stopped.set(self.stopped.get() + (now - s));
+        }
+        self.resumed.notify_all();
+    }
+
+    /// Waits until the belt has run to `target`.
+    async fn until(&self, ctx: &Ctx, target: f64) {
+        loop {
+            if self.since.get().is_some() {
+                self.resumed.wait().await;
+                continue;
+            }
+            let left = target - self.time(ctx.now());
+            // Rounding must not leave a wait too short to move the clock.
+            if left <= 1e-9 * target.abs().max(1.0) {
+                return;
+            }
+            ctx.hold(left).await;
+        }
+    }
+}
+
+/// A conveyor (ROADMAP M5.1): items ride it in order at `speed`, each a `pitch` behind the one
+/// before, and leave its end into what follows. The entrance ([`Belt`]) frees again once the
+/// last item has moved a pitch along. All times are worked out, not stepped: accumulating, item
+/// i reaches the end at max(tᵢ + L/v, dᵢ₋₁ + p/v), tᵢ when it got on and dᵢ₋₁ when the one
+/// before left; not accumulating, the same in the belt's own time, which stands still while the
+/// front item waits to leave.
+fn spawn_conveyor(
+    sim: &mut Sim,
+    env: BlockEnv,
+    length: f64,
+    speed: f64,
+    accumulating: bool,
+    pitch: f64,
+) {
+    let me = tag(env.me);
+    let ctx = env.ctx.clone();
+    let places = env.places.clone();
+    let clock = Rc::new(BeltClock {
+        stopped: Cell::new(0.0),
+        since: Cell::new(None),
+        resumed: Signal::new(&ctx),
+    });
+    // Each item on the belt, in order: the entity, when it got on, and the belt's time then.
+    let riding: Store<(Entity, f64, f64)> = Store::new(&ctx);
+    let env = Rc::new(RefCell::new(env));
+    {
+        let (env, ctx, clock, riding) = (
+            Rc::clone(&env),
+            ctx.clone(),
+            Rc::clone(&clock),
+            riding.clone(),
+        );
+        sim.spawn_tagged(me, async move {
+            loop {
+                let input = env.borrow().input.clone();
+                let entity = input.get().await;
+                let now = ctx.now();
+                {
+                    let e = env.borrow();
+                    e.adjust(|s| &mut s.waiting, -1.0);
+                    e.adjust(|s| &mut s.busy, 1.0);
+                }
+                let at = clock.time(now);
+                riding.put((entity, now, at));
+                let (c, k, p) = (ctx.clone(), Rc::clone(&clock), places.clone());
+                ctx.spawn(async move {
+                    k.until(&c, at + pitch / speed).await;
+                    if let Some(p) = p {
+                        p.open_entrance();
+                    }
+                });
+            }
+        });
+    }
+    sim.spawn_tagged(me, async move {
+        let mut last_left = f64::NEG_INFINITY;
+        loop {
+            let (entity, got_on, at) = riding.get().await;
+            clock.until(&ctx, at + length / speed).await;
+            if accumulating {
+                let behind = last_left + pitch / speed - ctx.now();
+                if behind > 0.0 {
+                    ctx.hold(behind).await;
+                }
+            }
+            env.borrow().adjust(|s| &mut s.busy, -1.0);
+            if !accumulating {
+                clock.stop(ctx.now());
+            }
+            move_on(&env, &ctx, entity, &|| false, None).await;
+            let now = ctx.now();
+            if !accumulating {
+                clock.start(now);
+            }
+            env.borrow().with_stats(|s| s.time_on.add(now - got_on));
+            last_left = now;
         }
     });
 }
