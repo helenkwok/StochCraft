@@ -285,11 +285,14 @@ fn throughput(
 fn rows(results: &Value) -> Vec<Row> {
     elements(results)
         .iter()
-        .filter(|e| STATES.iter().any(|s| e["metrics"][s]["mean"].is_number()))
+        .filter(|e| {
+            let m = &e["metrics"];
+            m["utilisation"]["mean"].is_number() || STATES.iter().any(|s| m[s]["mean"].is_number())
+        })
         .map(|e| {
             let m = &e["metrics"];
             let share = |k: &str| m[k]["mean"].as_f64().unwrap_or(0.0).clamp(0.0, 1.0);
-            let shares = [
+            let mut shares = [
                 share(STATES[0]),
                 share(STATES[1]),
                 share(STATES[2]),
@@ -297,6 +300,10 @@ fn rows(results: &Value) -> Vec<Row> {
                 share(STATES[4]),
                 share(STATES[5]),
             ];
+            // A resource pool reports only its utilisation: its busy time is all processing.
+            if !STATES.iter().any(|s| m[s]["mean"].is_number()) {
+                shares[0] = share("utilisation");
+            }
             let busy_value = m["utilisation"]["mean"]
                 .as_f64()
                 .unwrap_or(shares[0] + shares[1]);

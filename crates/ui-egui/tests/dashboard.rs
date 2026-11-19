@@ -98,3 +98,27 @@ fn a_run_fills_the_throughput_and_utilisation_tiles_and_a_model_without_conveyor
             >= 1
     );
 }
+
+#[test]
+fn a_resource_pool_gets_a_busy_bar_from_its_utilisation() {
+    // The triage example's nurses are a pool, which reports only its utilisation (about 60%).
+    let mut h = mm1();
+    let e = EXAMPLES
+        .iter()
+        .find(|e| e.file == "triage.bpmn")
+        .unwrap_or_else(|| panic!("no triage example"));
+    h.state_mut().open_file(e.file, e.bytes);
+    settle(&mut h);
+    menu(&mut h, &["View", "Dashboard"]);
+    menu(&mut h, &["Model", "Run"]);
+    finish_run(&mut h);
+    assert!(
+        h.query_all_by_label_contains("Nurses: ").count() >= 1,
+        "no bar for the nurses"
+    );
+    assert_eq!(
+        h.query_all_by_label_contains("No resource reports how it spends its time")
+            .count(),
+        0
+    );
+}
