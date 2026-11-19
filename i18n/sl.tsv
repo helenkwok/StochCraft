@@ -971,6 +971,9 @@ unit	yr	l.
 	From the last run; – when there are none, or they are out of date.	Iz zadnjega zagona; – če ga ni ali je zastarel.
 	Show this block	Pokaži ta blok
 	Rates and times are per {unit}.	Stopnje in časi so na {unit}.
+	3D	3D
+	3D view of the model	3D-pogled modela
+	Drag to orbit · Scroll to zoom · Shift-drag to pan	Povlecite za vrtenje · Drsite za povečavo · Shift in vlečenje za premik
 	Dashboard	Nadzorna plošča
 	Throughput	Prepustnost
 	{n} per hour	{n} na uro

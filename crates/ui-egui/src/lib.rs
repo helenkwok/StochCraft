@@ -35,6 +35,7 @@ mod results;
 mod start;
 pub mod theme;
 mod theme_editor;
+mod view3d;
 
 use std::cell::RefCell;
 use std::rc::Rc;
@@ -576,6 +577,10 @@ pub struct App {
     show_analysis: bool,
     /// The work area shows the Capacity view (the table worked out from the model, no run).
     show_capacity: bool,
+    /// The work area shows the 3D view of the model (M5.3).
+    show_3d: bool,
+    /// The 3D view's camera and the scene of the model's revision.
+    view3d: view3d::View3d,
     /// The Capacity view's target and its table for the model's revision.
     capacity: capacity::State,
     /// The M2.8 screens' choices and last answers.
@@ -683,6 +688,8 @@ impl App {
             show_dashboard: false,
             show_analysis: false,
             show_capacity: false,
+            show_3d: false,
+            view3d: view3d::View3d::default(),
             capacity: capacity::State::default(),
             decide: decide::Decide::default(),
             help: help::Help::default(),
@@ -1225,11 +1232,13 @@ impl App {
         self.help.read_results = false;
         self.selected = None;
         self.canvas = canvas::Canvas::default();
+        self.view3d = view3d::View3d::default();
         self.watching = None;
         self.drafts.clear();
         self.show_results = false;
         self.show_analysis = false;
         self.show_capacity = false;
+        self.show_3d = false;
     }
 
     /// Runs an engine command for an agent (the MCP server, through the desktop app's control
@@ -1822,6 +1831,8 @@ impl App {
                     self.results_view(ui);
                 } else if self.show_analysis && has_model && !self.show_results {
                     self.analysis_view(ui);
+                } else if self.show_3d && has_model && !self.show_results {
+                    self.view3d_view(ui);
                 } else if self.show_capacity && has_model && !self.show_results {
                     self.capacity_view(ui);
                 } else if has_model && !(self.show_results && self.running.is_some()) {
@@ -1885,11 +1896,13 @@ impl App {
                     self.show_results = false;
                     self.show_analysis = false;
                     self.show_capacity = false;
+                    self.show_3d = false;
                 }
                 Some(guide::Target::Chip(_)) => {
                     self.show_results = false;
                     self.show_analysis = false;
                     self.show_capacity = false;
+                    self.show_3d = false;
                 }
                 _ => {}
             }
@@ -2244,11 +2257,13 @@ impl App {
         let font = egui::FontId::new(14.0, egui::FontFamily::Name(theme::STRONG.into()));
         // Wrapped: four tabs and the results note must not widen the work area past the window.
         ui.horizontal_wrapped(|ui| {
-            // 0: the model, 1: the results, 2: the Analysis view, 3: the Capacity view.
+            // 0: the model, 1: the results, 2: the Analysis view, 3: the Capacity view, 4: the 3D view.
             let current = if self.show_results {
                 1
             } else if self.show_analysis {
                 2
+            } else if self.show_3d {
+                4
             } else if self.show_capacity {
                 3
             } else {
@@ -2259,6 +2274,7 @@ impl App {
                 (t("Results"), 1),
                 (t("Analysis"), 2),
                 (t("Capacity"), 3),
+                (t("3D"), 4),
             ] {
                 let on = current == view;
                 let width = ui.fonts_mut(|f| {
@@ -2301,6 +2317,7 @@ impl App {
                     self.show_results = view == 1;
                     self.show_analysis = view == 2;
                     self.show_capacity = view == 3;
+                    self.show_3d = view == 4;
                 }
             }
             ui.toggle_value(&mut self.show_dashboard, t("Dashboard"));
@@ -2513,6 +2530,7 @@ impl App {
                                 self.show_results = false;
                                 self.show_analysis = false;
                                 self.show_capacity = false;
+                                self.show_3d = false;
                             }
                         }
                     },
@@ -2573,6 +2591,7 @@ impl App {
             self.show_results = false;
             self.show_analysis = false;
             self.show_capacity = false;
+            self.show_3d = false;
         }
         let model = self.engine.model();
         ui.with_layout(egui::Layout::bottom_up(egui::Align::Min), |ui| {

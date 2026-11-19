@@ -971,6 +971,9 @@ unit	yr	m.
 	From the last run; – when there are none, or they are out of date.	Iš paskutinio paleidimo; – jei jų nėra arba jie pasenę.
 	Show this block	Rodyti šį bloką
 	Rates and times are per {unit}.	Intensyvumai ir laikai nurodyti per {unit}.
+	3D	3D
+	3D view of the model	Modelio 3D vaizdas
+	Drag to orbit · Scroll to zoom · Shift-drag to pan	Vilkite sukti · Slinkite didinti · Shift ir vilkimas perkelia
 	Dashboard	Skydelis
 	Throughput	Pralaidumas
 	{n} per hour	{n} per valandą

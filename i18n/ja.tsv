@@ -15,7 +15,7 @@
 	% down and up	% ずつ上下
 	% of runs	% の実行
 	+ Add block	+ ブロックを追加
-	95% interval of the share meeting the target: {lo} to {hi}	目標を達成した割合の 95% 区間: {lo}〜{hi}
+	95% interval of the share meeting the target: {lo} to {hi}	目標を達成した割合の 95% 信頼区間: {lo}〜{hi}
 	95th percentile	95 パーセンタイル
 	95th percentile {value}	95 パーセンタイル {value}
 	A caller on hold: once a unit takes it, the entity stays.	保留中の発信者: いったんユニットが受け付けると、エンティティは離脱しません。
@@ -499,7 +499,7 @@
 	Text on header	ヘッダー上のテキスト
 	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	接続が切れてクライアントが再試行します。エンティティはすぐに待ち行列の先頭に戻り、それまでの作業は無駄になります。
 	The entity waits on its server and the job carries on with what was left once the server is back.	エンティティは自分のサーバで待ち、サーバが戻ると残りの作業から続けます。
-	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more runs would narrow it.	区間が目標割合 {share} を下回るため、割合が達成されたことは 95% の信頼度では示されていません。実行回数を増やすと区間は狭まります。
+	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more runs would narrow it.	信頼区間が目標割合 {share} を下回るため、割合が達成されたことは 95% の信頼度では示されていません。実行回数を増やすと信頼区間は狭まります。
 	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	作業はすぐに止まります。エンティティはシフト中のいずれかのサーバを待つ待ち行列の先頭に戻り、それまでの作業は無駄になります。
 	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	作業はすぐに止まります。エンティティは自分のサーバで待ち、そのサーバが再びシフト中になると残りの作業から続けます。
 	The last task with a resource it finished at	部品が最後に通ったリソースを使うタスク
@@ -602,7 +602,7 @@
 	a model	モデル
 	arrivals	到着
 	batch	バッチ
-	conveyor	コンベヤー
+	conveyor	コンベヤ
 	days	日
 	decision: one way	分岐：1 つの経路
 	departures	退出
@@ -616,7 +616,7 @@
 	maximum {value}	最大値 {value}
 	milliseconds	ミリ秒
 	minutes	分
-	n = k of N: only k of the N runs had a value for that result, and its mean and interval are over those k.	n = N 回中 k 回: この結果に値があったのは N 回の実行のうち k 回だけで、その平均と区間はこの k 回によるものです。
+	n = k of N: only k of the N runs had a value for that result, and its mean and interval are over those k.	n = N 回中 k 回: この結果に値があったのは N 回の実行のうち k 回だけで、その平均と信頼区間はこの k 回によるものです。
 	n = {k} of {n}	n = {n} 回中 {k} 回
 	nothing yet	まだありません
 	per day	1 日あたり
@@ -656,7 +656,7 @@
 	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8: tell them apart only with labels.	{first} と {second} の差は、赤緑色覚異常では {de} です。8 以上が必要です。ラベルだけで区別してください。
 	{first} and {second} differ in lightness by {step}, needs 0.06.	{first} と {second} の明度の差は {step} です。0.06 以上が必要です。
 	{kind} {name}	{kind} {name}
-	{met} of {of} runs met the target: {p} (95% interval {lo} to {hi})	{of} 回中 {met} 回が目標を達成: {p}（95% 区間 {lo}〜{hi}）
+	{met} of {of} runs met the target: {p} (95% interval {lo} to {hi})	{of} 回中 {met} 回が目標を達成: {p}（95% 信頼区間 {lo}〜{hi}）
 	{name} — edited	{name} — 編集済み
 	{n} created	生成 {n}
 	{n} done	完了 {n}
@@ -699,7 +699,7 @@ unit	yr	年
 	Up to 4 per block, rounded to what the interval supports	ブロックごとに最大 4 つ、信頼区間に合わせて四捨五入した値
 	All measures ({n} more)	すべての指標（ほか {n} 件）
 	How sure are these numbers?	これらの数値はどれくらい確かですか？
-	One run gives no interval, so these numbers cannot be told from chance.	実行が 1 回では区間が得られないため、これらの数値を偶然と区別できません。
+	One run gives no interval, so these numbers cannot be told from chance.	実行が 1 回では信頼区間が得られないため、これらの数値を偶然と区別できません。
 	{measure} ({block}) is known only to {value} after {n} runs.	{measure} ({block}) は {n} 回の実行後も {value} までしかわかっていません。
 	Other key measures wider than ± 10% (± 2 points for a share): {k}.	± 10% (割合では ± 2 ポイント) より広いほかの指標: {k}。
 	The model starts empty and no warm-up is set, so the start pulls the means away from the long run.	モデルは空の状態から始まり、ウォームアップが設定されていないため、開始時の影響で平均が長期的な値からずれます。
@@ -732,7 +732,7 @@ unit	yr	年
 	No change	変化なし
 	Too few runs to tell	判断するには実行回数が不足
 	{value} points	{value} ポイント
-	The baseline used seed {seed_a} and {n_a} runs, this run seed {seed_b} and {n_b} runs, so they are compared as independent runs and the intervals are wider. The same seed and number of runs gives a paired comparison.	ベースラインは乱数シード {seed_a} で {n_a} 回、この実行は乱数シード {seed_b} で {n_b} 回の実行だったため、独立した実行として比較され、区間は広くなります。乱数シードと実行回数を揃えると、対応のある比較になります。
+	The baseline used seed {seed_a} and {n_a} runs, this run seed {seed_b} and {n_b} runs, so they are compared as independent runs and the intervals are wider. The same seed and number of runs gives a paired comparison.	ベースラインは乱数シード {seed_a} で {n_a} 回、この実行は乱数シード {seed_b} で {n_b} 回の実行だったため、独立した実行として比較され、信頼区間は広くなります。乱数シードと実行回数を揃えると、対応のある比較になります。
 	The baseline measured time in {a} and this run in {b}, so times are not compared.	ベースラインは時間を {a} で、この実行は {b} で測定したため、時間は比較しません。
 	{measure} ({block}) fell from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) は {before} から {after} へ {change} 低下しました。偶然では説明できない大きさです。
 	{measure} ({block}) rose from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) は {before} から {after} へ {change} 上昇しました。偶然では説明できない大きさです。
@@ -747,7 +747,7 @@ unit	yr	年
 	Change from baseline	ベースラインからの変化
 	Verdict	判定
 	{block}: {measure}	{block}: {measure}
-	A verdict is real when the difference's 95% interval leaves out zero. Each row is judged on its own.	差の 95% 区間がゼロを含まないとき、判定は「実際」になります。各行は個別に判定されます。
+	A verdict is real when the difference's 95% interval leaves out zero. Each row is judged on its own.	差の 95% 信頼区間がゼロを含まないとき、判定は「実際」になります。各行は個別に判定されます。
 	This run is the baseline.	この実行がベースラインです。
 	Change the model and run it again to compare.	モデルを変更して再実行すると比較できます。
 	Compared with the baseline:	ベースラインとの比較:
@@ -799,7 +799,7 @@ unit	yr	年
 	Settled	安定
 	A result known well enough to act on: to ± 5% of its mean, or ± 1 percentage point for a share.	行動の判断に使えるほど十分にわかっている結果。平均の ± 5% 以内、割合では ± 1 ポイント以内です。
 	Results kept to compare a later run with, to see what a change to the model did.	後の実行と比較するために残しておく結果。モデルへの変更が何をもたらしたかを確認できます。
-	A difference whose 95% interval takes in zero: the runs cannot tell it from random variation.	95% 区間がゼロを含む差。実行からは、ランダムなばらつきと区別できません。
+	A difference whose 95% interval takes in zero: the runs cannot tell it from random variation.	95% 信頼区間がゼロを含む差。実行からは、ランダムなばらつきと区別できません。
 	Add Arrivals	到着を追加
 	Add a task and connect Arrivals to it	タスクを追加し、到着をそこに接続
 	Add Departures and connect the task to it	退出を追加し、タスクをそこに接続
@@ -911,7 +911,7 @@ unit	yr	年
 @plural	Makes {n} independent run of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	シード {seed} からモデルを {n} 回独立に実行します。各要素の結果には、95% 信頼区間の半幅が示されます。
 @plural	The stop condition was met in {met} of {n} run, after {time} {unit} on average.|The stop condition was met in {met} of {n} runs, after {time} {unit} on average.	停止条件は {n} 回中 {met} 回の実行で、平均 {time} {unit} 後に達しました。
 @plural	{done} of {n} run finished|{done} of {n} runs finished	{n} 回中 {done} 回の実行が完了
-@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} run|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} runs	{name}：{mean}{unit}\n95% 区間 {low} ～ {high}{unit}\n{n} 回の実行に基づく
+@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} run|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} runs	{name}：{mean}{unit}\n95% 信頼区間 {low} ～ {high}{unit}\n{n} 回の実行に基づく
 @plural	{n} block selected|{n} blocks selected	{n} 個のブロックを選択中
 @plural	{n} run at each step · seed {seed}|{n} runs at each step · seed {seed}	各ステップ {n} 回の実行 · シード {seed}
 @plural	{n} run · mean {mean} · from {min} to {max}|{n} runs · mean {mean} · from {min} to {max}	{n} 回の実行 · 平均 {mean} · {min}〜{max}
@@ -925,8 +925,8 @@ unit	yr	年
 @plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	どちらも乱数シード {seed} と同じ {n} 回の実行を使ったため、各実行は対になる実行と同じ乱数を受け取ります。差は偶然の抽出ではなく、変更から生じています。
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	ほかの主な指標 {n} 個は、偶然の範囲を超えて動いていません。
 @plural	and {n} more change|and {n} more changes	ほか {n} 件の変更
-	Conveyor	コンベヤー
-	Mean time on the conveyor	コンベヤー上の平均時間
+	Conveyor	コンベヤ
+	Mean time on the conveyor	コンベヤ上の平均時間
 	Length	長さ
 	Accumulating	蓄積
 	Item length	品目の長さ
@@ -971,6 +971,9 @@ unit	yr	年
 	From the last run; – when there are none, or they are out of date.	直近の実行より。ない場合や古い場合は –
 	Show this block	このブロックを表示
 	Rates and times are per {unit}.	率と時間は {unit} あたりです。
+	3D	3D
+	3D view of the model	モデルの3Dビュー
+	Drag to orbit · Scroll to zoom · Shift-drag to pan	ドラッグで回転 · スクロールでズーム · Shift+ドラッグで移動
 	Dashboard	ダッシュボード
 	Throughput	スループット
 	{n} per hour	1時間あたり {n}

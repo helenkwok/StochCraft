@@ -16,6 +16,9 @@ workspace = true
 stochcraft-engine = { workspace = true }
 stochcraft-model.workspace = true
 stochcraft-random = { workspace = true }
+stochcraft-render = { workspace = true }
+# Sine, cosine and square roots in the 3D view's camera, as in the render crate.
+libm = "0.2"
 egui = { workspace = true }
 serde_json = "1"
 serde = { version = "1", features = ["derive"] }
