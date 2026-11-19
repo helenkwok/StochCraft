@@ -328,7 +328,11 @@ pub fn compile(model: &Model) -> Result<Compiled, Vec<Diagnostic>> {
             .elements
             .iter()
             .filter(|e| matches!(e.kind, ElementKind::Conveyor { .. }))
-            .map(|e| Diagnostic::error(Some(&e.id), Problem::ConveyorNotSimulated)),
+            .map(|e| Diagnostic {
+                severity: Severity::Error,
+                at: Some(e.id.clone()),
+                problem: Problem::ConveyorNotSimulated,
+            }),
     );
     if diagnostics.iter().any(|d| d.severity == Severity::Error) {
         return Err(diagnostics);
