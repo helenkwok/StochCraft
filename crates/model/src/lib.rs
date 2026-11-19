@@ -929,7 +929,7 @@ pub struct ResourcePool {
 
 /// How a mobile pool's units move. Speeds are in the experiment's length unit per its time
 /// unit. A StochCraft vendor extension on the resource (`stochcraft:mobility`).
-#[derive(Debug, Clone, Copy, PartialEq)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct Mobility {
     /// The speed of a unit that carries nothing; above 0.
     pub speed_empty: f64,
