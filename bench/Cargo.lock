@@ -144,7 +144,7 @@ dependencies = [
 
 [[package]]
 name = "stochcraft-blocks"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "stochcraft-des",
  "stochcraft-model",
@@ -154,11 +154,11 @@ dependencies = [
 
 [[package]]
 name = "stochcraft-des"
-version = "0.1.0"
+version = "0.2.0"
 
 [[package]]
 name = "stochcraft-experiment"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "stochcraft-random",
  "stochcraft-stats",
@@ -166,21 +166,21 @@ dependencies = [
 
 [[package]]
 name = "stochcraft-model"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "stochcraft-random",
 ]
 
 [[package]]
 name = "stochcraft-random"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "libm",
 ]
 
 [[package]]
 name = "stochcraft-stats"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "libm",
 ]
