@@ -602,6 +602,7 @@
 	a model	egy modell
 	arrivals	érkezések
 	batch	köteg
+	conveyor	szállítószalag
 	days	nap
 	decision: one way	döntés: egy út
 	departures	távozások

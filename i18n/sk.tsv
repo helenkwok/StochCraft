@@ -602,6 +602,7 @@
 	a model	model
 	arrivals	príchody
 	batch	dávka
+	conveyor	dopravník
 	days	dni
 	decision: one way	rozhodnutie: jedna cesta
 	departures	odchody

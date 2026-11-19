@@ -1166,3 +1166,94 @@ fn a_station_of_uncertain_capacity_on_its_own_loop_is_judged_on_what_it_is_offer
             .any(|d| matches!(d.problem, crate::Problem::Overloaded { .. }))
     );
 }
+
+fn conveyor(i: &str, length: f64, speed: f64, item_length: f64, gap: f64) -> Element {
+    el(
+        i,
+        ElementKind::Conveyor {
+            length,
+            speed,
+            accumulating: true,
+            item_length,
+            gap,
+        },
+    )
+}
+
+/// Source → conveyor of 10 long at 0.5 per time unit with 1 per item → server → sink.
+fn belt_line(arrival_rate: f64) -> Model {
+    model(
+        vec![
+            source("in", Dist::exponential_rate(arrival_rate)),
+            conveyor("belt", 10.0, 0.5, 1.0, 0.0),
+            server("s", 1, Dist::Constant(0.1)),
+            sink("out"),
+        ],
+        vec![link("in", "belt"), link("belt", "s"), link("s", "out")],
+    )
+}
+
+#[test]
+fn a_conveyor_carries_speed_over_pitch_and_its_time_is_length_over_speed() {
+    let c = belt_line(0.4).capacity(DEFAULT_TARGET);
+    let b = row(&c, "belt");
+    assert_eq!(b.kind, StationKind::Conveyor);
+    assert_eq!(b.units, Some(1));
+    // Pitch 1 over speed 0.5: 2 per item, so at most 0.5 items per time unit.
+    assert_eq!(b.mean_service.exact_value(), Some(2.0));
+    assert_eq!(
+        b.arrival_rate.exact_value().map(|r| near(r, 0.4)),
+        Some(true)
+    );
+    assert_eq!(b.load.exact_value().map(|l| near(l, 0.8)), Some(true));
+    assert_eq!(b.utilisation, b.load);
+    assert_eq!(b.status, Status::Fine);
+    // Nothing after it can hold it up: 10 / 0.5 exactly, and no queueing formula.
+    assert_eq!(b.time_on, Some(Value::exact(20.0)));
+    assert_eq!(reason(b), &Why::ConveyorTime);
+    assert_eq!(b.units_for_target, None);
+    assert!(
+        belt_line(0.4)
+            .validate()
+            .iter()
+            .all(|d| !matches!(d.problem, crate::Problem::Overloaded { .. }))
+    );
+}
+
+#[test]
+fn a_conveyor_fed_faster_than_it_carries_is_unstable_and_bounds_what_follows() {
+    let m = belt_line(0.6);
+    let c = m.capacity(DEFAULT_TARGET);
+    let b = row(&c, "belt");
+    assert_eq!(b.load.exact_value().map(|l| near(l, 1.2)), Some(true));
+    assert_eq!(b.status, Status::Unstable);
+    assert_eq!(c.bottleneck, Some(id("belt")));
+    match row(&c, "s").arrival_rate {
+        Value::Known {
+            value,
+            bound: Bound::AtMost,
+        } => assert!(value <= 0.5 + 1e-12, "{value}"),
+        ref other => panic!("not at most 0.5: {other:?}"),
+    }
+    assert!(
+        m.validate()
+            .iter()
+            .any(|d| matches!(d.problem, crate::Problem::Overloaded { .. }))
+    );
+}
+
+#[test]
+fn a_conveyors_time_is_at_least_its_length_over_its_speed_when_what_follows_can_hold_it_up() {
+    let mut m = belt_line(0.4);
+    if let ElementKind::Server { queue_capacity, .. } = &mut m.elements[2].kind {
+        *queue_capacity = Some(2);
+    }
+    let c = m.capacity(DEFAULT_TARGET);
+    assert_eq!(
+        row(&c, "belt").time_on,
+        Some(Value::Known {
+            value: 20.0,
+            bound: Bound::AtLeast
+        })
+    );
+}

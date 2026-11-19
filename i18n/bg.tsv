@@ -602,6 +602,7 @@
 	a model	модел
 	arrivals	пристигания
 	batch	партида
+	conveyor	конвейер
 	days	дни
 	decision: one way	решение: един път
 	departures	напускания

@@ -602,6 +602,7 @@
 	a model	モデル
 	arrivals	到着
 	batch	バッチ
+	conveyor	コンベヤー
 	days	日
 	decision: one way	分岐：1 つの経路
 	departures	退出

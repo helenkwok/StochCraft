@@ -64,9 +64,9 @@ impl Quantity {
         match kind {
             ElementKind::Server { .. } => &[QueueLength, WorkInProgress, Busy, Entered, Left],
             ElementKind::SharedTask { .. } => &[QueueLength, WorkInProgress, Entered, Left],
-            ElementKind::Delay { .. } | ElementKind::Batch { .. } => {
-                &[WorkInProgress, Entered, Left]
-            }
+            ElementKind::Delay { .. }
+            | ElementKind::Batch { .. }
+            | ElementKind::Conveyor { .. } => &[WorkInProgress, Entered, Left],
             // Splits each batch at once, holding nothing.
             ElementKind::Unbatch => &[Entered, Left],
             ElementKind::Source { .. } => &[Entered, Left],

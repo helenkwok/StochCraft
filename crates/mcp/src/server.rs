@@ -30,7 +30,7 @@ and take service at servers (or shared tasks that need units from pools), take t
 routed by exclusive gateways (probability or condition) and parallel gateways, and leave at sinks. A \
 model is BPMN or XPDL with BPSim data. A typical session: `open` a .bpmn or .xpdl file, or build a \
 model with `execute`/`batch` (block.add {kind, id, ...}, connect {from, to}, flow.set, resource.add, \
-calendar.add, experiment.set {time_unit, warmup, duration, replications, seed}; list_commands shows \
+calendar.add, experiment.set {time_unit, length_unit, warmup, duration, replications, seed}; list_commands shows \
 each command's parameters and an example); `check_model`; `run` for the results, each a mean across \
 replications with its 95% confidence interval; to compare, change a parameter, `run` again and \
 `execute` results.compare (the last run against the one before: each difference with its 95% \

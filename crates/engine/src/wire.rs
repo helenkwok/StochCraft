@@ -12,7 +12,7 @@ use stochcraft_model::capacity;
 use stochcraft_model::{
     BalkJoin, BalkRow, Balking, Bounds, Breakdown, ByValue, Change, Connection, Demand, DemandPer,
     Diagnostic, Dist, Element, ElementId, ElementKind, Estimate, Experiment, Family, HealthCheck,
-    Model, Need, OnShiftEnd, OnTakeout, Patience, PatienceUntil, PlaceWhileOut, Power,
+    LengthUnit, Model, Need, OnShiftEnd, OnTakeout, Patience, PatienceUntil, PlaceWhileOut, Power,
     ProcessingBy, Property, PropertyType, PropertyValue, QueueLimit, ResourcePool, Routing, Scrap,
     Setup, Severity, Stop, ThreePoint, TimeUnit, Timed, Transfer, Upper,
 };
@@ -340,6 +340,38 @@ pub enum KindSpec {
     },
     /// Splits each batch back into its entities; anything else passes through.
     Unbatch,
+    /// A straight conveyor an entity rides from one end to the other. Lengths are in the
+    /// experiment's `length_unit`; every entity takes a slot of pitch `item_length + gap`. At
+    /// most ⌊`length` / pitch⌋ are on it at once, and it carries at most `speed` / pitch entities
+    /// per time unit. Not simulated yet: a run of a model with one is refused.
+    Conveyor {
+        /// The conveyor's length, above 0.
+        #[serde(default = "ten")]
+        length: f64,
+        /// The distance an entity travels in one model time unit (the length unit per the time
+        /// unit), above 0.
+        #[serde(default = "one_f64")]
+        speed: f64,
+        /// Whether entities slip on a stopped one ahead, stopping a pitch behind it while the
+        /// belt keeps moving (true), or the whole belt stops when the front entity cannot leave
+        /// (false).
+        #[serde(default = "yes")]
+        accumulating: bool,
+        /// The length of belt an entity takes, above 0.
+        #[serde(default = "one_f64")]
+        item_length: f64,
+        /// The least free belt between one entity and the next, 0 or more; left out when 0.
+        #[serde(default, skip_serializing_if = "is_zero")]
+        gap: f64,
+    },
+}
+
+fn ten() -> f64 {
+    10.0
+}
+
+fn one_f64() -> f64 {
+    1.0
 }
 
 fn is_zero(x: &f64) -> bool {
@@ -993,6 +1025,19 @@ impl From<&ElementKind> for KindSpec {
             ElementKind::ParallelGateway => KindSpec::ParallelGateway,
             ElementKind::Batch { size } => KindSpec::Batch { size: *size },
             ElementKind::Unbatch => KindSpec::Unbatch,
+            ElementKind::Conveyor {
+                length,
+                speed,
+                accumulating,
+                item_length,
+                gap,
+            } => KindSpec::Conveyor {
+                length: *length,
+                speed: *speed,
+                accumulating: *accumulating,
+                item_length: *item_length,
+                gap: *gap,
+            },
         }
     }
 }
@@ -1089,6 +1134,19 @@ impl From<KindSpec> for ElementKind {
             KindSpec::ParallelGateway => ElementKind::ParallelGateway,
             KindSpec::Batch { size } => ElementKind::Batch { size },
             KindSpec::Unbatch => ElementKind::Unbatch,
+            KindSpec::Conveyor {
+                length,
+                speed,
+                accumulating,
+                item_length,
+                gap,
+            } => ElementKind::Conveyor {
+                length,
+                speed,
+                accumulating,
+                item_length,
+                gap,
+            },
         }
     }
 }
@@ -1264,6 +1322,56 @@ impl From<TimeUnit> for TimeUnitSpec {
             TimeUnit::Hours => TimeUnitSpec::Hours,
             TimeUnit::Days => TimeUnitSpec::Days,
             TimeUnit::Years => TimeUnitSpec::Years,
+        }
+    }
+}
+
+/// The units lengths are in.
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize, Deserialize, JsonSchema)]
+pub enum LengthUnitSpec {
+    #[serde(rename = "mm")]
+    Millimetres,
+    #[serde(rename = "cm")]
+    Centimetres,
+    #[default]
+    #[serde(rename = "m")]
+    Metres,
+    #[serde(rename = "km")]
+    Kilometres,
+    #[serde(rename = "in")]
+    Inches,
+    #[serde(rename = "ft")]
+    Feet,
+}
+
+impl LengthUnitSpec {
+    fn is_metres(&self) -> bool {
+        *self == LengthUnitSpec::Metres
+    }
+}
+
+impl From<LengthUnit> for LengthUnitSpec {
+    fn from(t: LengthUnit) -> Self {
+        match t {
+            LengthUnit::Millimetres => LengthUnitSpec::Millimetres,
+            LengthUnit::Centimetres => LengthUnitSpec::Centimetres,
+            LengthUnit::Metres => LengthUnitSpec::Metres,
+            LengthUnit::Kilometres => LengthUnitSpec::Kilometres,
+            LengthUnit::Inches => LengthUnitSpec::Inches,
+            LengthUnit::Feet => LengthUnitSpec::Feet,
+        }
+    }
+}
+
+impl From<LengthUnitSpec> for LengthUnit {
+    fn from(t: LengthUnitSpec) -> Self {
+        match t {
+            LengthUnitSpec::Millimetres => LengthUnit::Millimetres,
+            LengthUnitSpec::Centimetres => LengthUnit::Centimetres,
+            LengthUnitSpec::Metres => LengthUnit::Metres,
+            LengthUnitSpec::Kilometres => LengthUnit::Kilometres,
+            LengthUnitSpec::Inches => LengthUnit::Inches,
+            LengthUnitSpec::Feet => LengthUnit::Feet,
         }
     }
 }
@@ -1856,6 +1964,9 @@ pub struct ScrapSpec {
 #[serde(deny_unknown_fields)]
 pub struct ExperimentDoc {
     pub time_unit: TimeUnitSpec,
+    /// The unit lengths (a conveyor's) are in; left out when metres.
+    #[serde(default, skip_serializing_if = "LengthUnitSpec::is_metres")]
+    pub length_unit: LengthUnitSpec,
     pub warmup: f64,
     pub duration: f64,
     pub replications: u32,
@@ -1879,6 +1990,7 @@ impl From<&Experiment> for ExperimentDoc {
     fn from(x: &Experiment) -> Self {
         Self {
             time_unit: x.time_unit.into(),
+            length_unit: x.length_unit.into(),
             warmup: x.warmup,
             duration: x.duration,
             replications: x.replications,
@@ -1894,6 +2006,7 @@ impl From<ExperimentDoc> for Experiment {
     fn from(x: ExperimentDoc) -> Self {
         Self {
             time_unit: x.time_unit.into(),
+            length_unit: x.length_unit.into(),
             warmup: x.warmup,
             duration: x.duration,
             replications: x.replications,
@@ -2157,6 +2270,7 @@ pub fn results(
         "replications": replications,
         "seed": seed,
         "time_unit": TimeUnitSpec::from(x.time_unit),
+        "length_unit": LengthUnitSpec::from(x.length_unit),
         "warmup": x.warmup,
         "duration": x.duration,
         "metrics": Metric::ALL.iter().map(|m| m.name()).collect::<Vec<_>>(),
@@ -2424,6 +2538,8 @@ pub fn capacity(model: &Model, table: &capacity::Capacity) -> Value {
                 "load": value(&s.load),
                 "status": s.status.name(),
                 "units_for_target": s.units_for_target,
+                // A conveyor's time on it (length over speed); `null` for any other row.
+                "time_on": s.time_on.as_ref().map(value),
                 "formula": s.formula.as_ref().ok().map(|f| json!({
                     "name": f.name,
                     "mean_wait": f.mean_wait,

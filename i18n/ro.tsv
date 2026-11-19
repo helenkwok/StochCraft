@@ -602,6 +602,7 @@
 	a model	un model
 	arrivals	sosiri
 	batch	lot
+	conveyor	transportor
 	days	zile
 	decision: one way	decizie: o singură cale
 	departures	plecări

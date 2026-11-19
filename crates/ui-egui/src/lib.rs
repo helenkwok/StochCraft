@@ -3043,6 +3043,7 @@ pub(crate) fn kind_text(kind: &str) -> &str {
         "parallel_gateway" => t("split or join: all ways"),
         "batch" => t("batch"),
         "unbatch" => t("split batches"),
+        "conveyor" => t("conveyor"),
         other => other,
     }
 }

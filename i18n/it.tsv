@@ -602,6 +602,7 @@
 	a model	un modello
 	arrivals	arrivi
 	batch	lotto
+	conveyor	nastro trasportatore
 	days	giorni
 	decision: one way	decisione: una sola via
 	departures	partenze

@@ -970,7 +970,8 @@ fn to_model(p: Process, scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> M
                     }
                     None => None,
                 };
-                let batching = batching_of(scenario, id, notes);
+                let batching =
+                    batching_of(scenario, id, notes).or_else(|| conveyor_of(scenario, id, notes));
                 match (batching, shared.get(id), task_resource.get(id)) {
                     (Some(kind), shared, own) => {
                         let mut ignored = Vec::new();
@@ -987,7 +988,7 @@ fn to_model(p: Process, scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> M
                             notes.push(Note::warning(
                                 Some(id),
                                 format!(
-                                    "a batch or a split takes no time and no resource; {} is ignored",
+                                    "a batch, a split or a conveyor takes no time and no resource of its own; {} is ignored",
                                     ignored.join(" and ")
                                 ),
                             ));
@@ -1394,6 +1395,7 @@ fn queue_capacity(scenario: Option<&Scenario>, id: &str, notes: &mut Vec<Note>) 
             bpsim::REWORK,
             bpsim::BATCH_SIZE,
             bpsim::UNBATCH,
+            bpsim::CONVEYOR,
             bpsim::QUANTITY,
             bpsim::STOP_COUNT,
             bpsim::STOP_WHEN_EMPTY,
@@ -1599,6 +1601,67 @@ fn batching_of(
             Some(b)
         }
         (b, u) => b.or(u),
+    }
+}
+
+/// The conveyor StochCraft's vendor extension ([`bpsim::CONVEYOR`]) makes task `id`, if any.
+/// Every number is needed; one that is missing or not a number is an error note, and the task
+/// is then read as the plain task it is to other tools. Whether the numbers make a usable
+/// conveyor is for the model's validation.
+fn conveyor_of(
+    scenario: Option<&Scenario>,
+    id: &str,
+    notes: &mut Vec<Note>,
+) -> Option<ElementKind> {
+    let ext = scenario?.param(id, &format!("VendorExtension/{}", bpsim::CONVEYOR))?;
+    let body = ext.elements().find(|e| e.local() == "conveyor");
+    let mut bad = Vec::new();
+    let mut number = |name: &'static str| {
+        let x = body
+            .and_then(|b| b.attr(name))
+            .and_then(|raw| raw.trim().parse::<f64>().ok());
+        if x.is_none() {
+            bad.push(name);
+        }
+        x
+    };
+    let (length, speed, item_length, gap) = (
+        number("length"),
+        number("speed"),
+        number("itemLength"),
+        number("gap"),
+    );
+    let accumulating = body
+        .and_then(|b| b.attr("accumulating"))
+        .and_then(|raw| match raw.trim() {
+            "true" | "1" => Some(true),
+            "false" | "0" => Some(false),
+            _ => None,
+        });
+    if accumulating.is_none() {
+        bad.push("accumulating");
+    }
+    match (length, speed, item_length, gap, accumulating) {
+        (Some(length), Some(speed), Some(item_length), Some(gap), Some(accumulating)) => {
+            Some(ElementKind::Conveyor {
+                length,
+                speed,
+                accumulating,
+                item_length,
+                gap,
+            })
+        }
+        _ => {
+            notes.push(Note::error(
+                Some(id),
+                format!(
+                    "the conveyor (`{}`) needs `length`, `speed`, `accumulating`, `itemLength` and `gap`; {} missing or not valid, so it is ignored",
+                    bpsim::CONVEYOR,
+                    bad.join(", ")
+                ),
+            ));
+            None
+        }
     }
 }
 
@@ -2198,6 +2261,7 @@ fn experiment(scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> Experiment 
     });
     Experiment {
         time_unit: unit,
+        length_unit: s.length_unit,
         warmup,
         duration,
         replications: s.replication.unwrap_or(1),

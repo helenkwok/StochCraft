@@ -602,6 +602,7 @@
 	a model	一個模型
 	arrivals	到達
 	batch	批次
+	conveyor	輸送帶
 	days	天
 	decision: one way	決策：單一路徑
 	departures	離開

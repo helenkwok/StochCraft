@@ -602,6 +602,7 @@
 	a model	un model
 	arrivals	arribades
 	batch	lot
+	conveyor	cinta transportadora
 	days	dies
 	decision: one way	decisió: un sol camí
 	departures	sortides

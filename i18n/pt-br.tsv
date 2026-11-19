@@ -602,6 +602,7 @@
 	a model	um modelo
 	arrivals	chegadas
 	batch	lote
+	conveyor	esteira transportadora
 	days	dias
 	decision: one way	decisão: um caminho
 	departures	saídas

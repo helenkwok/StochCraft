@@ -6,7 +6,7 @@
 
 use std::collections::BTreeMap;
 
-use stochcraft_model::{Dist, TimeUnit};
+use stochcraft_model::{Dist, LengthUnit, TimeUnit};
 
 use crate::Note;
 use crate::duration;
@@ -119,6 +119,16 @@ pub const BATCH_SIZE: &str = "stochcraft:batchSize";
 /// each batch's entities on one by one.
 pub const UNBATCH: &str = "stochcraft:unbatch";
 
+/// A conveyor: a `stochcraft:conveyor` element on a task's `ElementParameters` with attributes
+/// `length`, `speed` (in the scenario's length unit per its base time unit), `accumulating`
+/// (`true` or `false`), `itemLength` and `gap`. A task carrying it reads as a conveyor; other
+/// tools see a plain task.
+pub const CONVEYOR: &str = "stochcraft:conveyor";
+
+/// The unit lengths are in (`mm`, `cm`, `m`, `km`, `in` or `ft`; metres without it):
+/// `stochcraft:lengthUnit` on the scenario's `ScenarioParameters`.
+pub const LENGTH_UNIT: &str = "stochcraft:lengthUnit";
+
 /// A bill of materials: `stochcraft:quantity` on the `ElementParameters` of a sequence flow
 /// into a parallel gateway, the number of entities from it in each one the join sends on.
 pub const QUANTITY: &str = "stochcraft:quantity";
@@ -207,6 +217,8 @@ pub struct ScenarioSettings {
     pub start: Option<String>,
     /// `baseResultFrequency`, an `xs:duration`, in seconds.
     pub result_frequency: Option<f64>,
+    /// The unit lengths are in ([`LENGTH_UNIT`]); metres unless given.
+    pub length_unit: LengthUnit,
 }
 
 /// A BPSim `Calendar` as the file has it: id, name and iCalendar text.
@@ -423,6 +435,19 @@ fn read_settings(p: &Element, s: &mut ScenarioSettings, notes: &mut Vec<Note>) {
         .and_then(|u| parse_unit(&u, notes, None))
     {
         s.base_time_unit = u;
+    }
+    for ext in p
+        .children_named(&NSS, "VendorExtension")
+        .filter(|x| x.attr("name").as_deref() == Some(LENGTH_UNIT))
+    {
+        let raw = vendor_value(ext).unwrap_or_default();
+        match LengthUnit::from_name(raw.trim()) {
+            Some(u) => s.length_unit = u,
+            None => notes.push(Note::warning(
+                None,
+                format!("length unit `{raw}` is not mm, cm, m, km, in or ft and is ignored"),
+            )),
+        }
     }
     let unit = s.base_time_unit;
     for (name, slot) in [("Duration", &mut s.duration), ("Warmup", &mut s.warmup)] {

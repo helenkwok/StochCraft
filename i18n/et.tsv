@@ -602,6 +602,7 @@
 	a model	mudel
 	arrivals	saabumised
 	batch	partii
+	conveyor	konveier
 	days	päevad
 	decision: one way	otsus: üks tee
 	departures	lahkumised

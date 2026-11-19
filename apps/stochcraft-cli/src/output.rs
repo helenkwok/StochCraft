@@ -237,7 +237,7 @@ pub fn capacity(file: &Path, t: &Value) -> String {
         );
     } else if stations
         .iter()
-        .any(|st| st["kind"] == "server" || st["kind"] == "pool")
+        .any(|st| matches!(s(&st["kind"]), "server" | "pool" | "conveyor"))
     {
         out.push_str(
             "

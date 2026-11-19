@@ -446,7 +446,8 @@ fn edits() -> Vec<Edit> {
                         | ElementKind::ExclusiveGateway { .. }
                         | ElementKind::ParallelGateway
                         | ElementKind::Batch { .. }
-                        | ElementKind::Unbatch => {}
+                        | ElementKind::Unbatch
+                        | ElementKind::Conveyor { .. } => {}
                     }
                 }
             }),
@@ -958,6 +959,7 @@ fn showcase() -> Model {
     m.default_route(triage, other);
     m.build(Experiment {
         time_unit: TimeUnit::Hours,
+        length_unit: stochcraft_model::LengthUnit::Metres,
         warmup: 2.5,
         duration: 40.0,
         replications: 7,

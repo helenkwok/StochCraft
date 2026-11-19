@@ -602,6 +602,7 @@
 	a model	แบบจำลอง
 	arrivals	ขาเข้า
 	batch	ชุด
+	conveyor	สายพานลำเลียง
 	days	วัน
 	decision: one way	การตัดสินใจ: เลือกทางเดียว
 	departures	ขาออก

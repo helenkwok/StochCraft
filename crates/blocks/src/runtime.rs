@@ -602,6 +602,8 @@ impl Compiled {
                 }
                 ElementKind::Batch { size } => spawn_batch(&mut sim, env, size),
                 ElementKind::Unbatch => spawn_unbatch(&mut sim, env),
+                // Not simulated yet (`compile` refuses a model with one): passes entities on.
+                ElementKind::Conveyor { .. } => spawn_unbatch(&mut sim, env),
             }
         }
 

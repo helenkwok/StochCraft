@@ -602,6 +602,7 @@
 	a model	en model
 	arrivals	ankomster
 	batch	parti
+	conveyor	transportbånd
 	days	dage
 	decision: one way	beslutning: én vej
 	departures	afgange

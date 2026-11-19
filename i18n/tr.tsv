@@ -602,6 +602,7 @@
 	a model	bir model
 	arrivals	gelişler
 	batch	parti
+	conveyor	konveyör
 	days	gün
 	decision: one way	karar: tek yol
 	departures	çıkışlar
