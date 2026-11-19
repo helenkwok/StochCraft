@@ -52,7 +52,11 @@ fn the_layout_tab_shows_the_scale_bar_and_the_blocks() {
             .is_empty()
     );
     // A block's name, written over its footprint.
-    assert!(has(&h, "Infeed"));
+    assert!(
+        !h.query_all_by_label_contains("Infeed")
+            .collect::<Vec<_>>()
+            .is_empty()
+    );
     h.get_by_role_and_label(Role::Button, "Fit").click();
     settle(&mut h);
     assert!(has(&h, VIEW));

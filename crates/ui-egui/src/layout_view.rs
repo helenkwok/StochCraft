@@ -1,11 +1,12 @@
 //! The Layout view (M5.5, L1): the model's plan in metres, to scale, read-only. A grid, a scale
-//! bar, every conveyor as its [`Path`] with its width, every other block as its footprint with
+//! bar, every conveyor as a belt with its width, every other block as its footprint with
 //! its name, and the list of blocks that are not placed.
 //!
 //! There are no layout files yet, so every model is "without a layout": positions come from the
 //! flow diagram, as in the 3D view (block centres on the canvas, [`view3d::centre_metres`]), and
-//! the view says so. A conveyor starts at the edge of the block before it and runs along its own
-//! path, in the direction of the block after it, for its own length.
+//! the view says so. A conveyor is drawn exactly as the 3D view builds it (edge to edge between the
+//! footprints, a ring when it returns to its block), so its drawn length can differ from its own,
+//! which its label gives.
 //!
 //! Conventions: metres, `x` right and `y` up, like the 3D view's floor. Drag to pan, scroll to
 //! zoom about the pointer, Fit to see everything; the arrow keys and plus and minus work while
@@ -14,29 +15,30 @@
 use egui::{
     Align2, FontId, Key, Pos2, Rect, RichText, Sense, Shape, Stroke, StrokeKind, Vec2, pos2, vec2,
 };
-use stochcraft_model::{ElementId, ElementKind, Frame, Model, Segment};
+use stochcraft_model::{ElementId, ElementKind, Model};
 use stochcraft_render::StraightConveyor;
 
 use crate::App;
 use crate::i18n::{t, tf};
 use crate::results::number;
 use crate::theme;
-use crate::view3d::{Outline, block_outline, centre_metres, neighbour, outline_of, unit_metres};
+use crate::view3d::{
+    Outline, along_path, belt_points, block_outline, centre_metres, path_length, unit_metres,
+};
 
 /// The least and most pixels a metre may take.
 const MIN_SCALE: f32 = 0.05;
 const MAX_SCALE: f32 = 2000.0;
 /// The closest the grid lines may be, in pixels; the grid coarsens beyond it.
 const MIN_GRID_PX: f32 = 12.0;
+/// The finest the grid may be, in metres.
+const MIN_GRID_M: f64 = 1.0;
 /// About how long the scale bar is, in pixels, at least.
 const BAR_PX: f32 = 80.0;
 /// The most grid lines drawn each way.
 const MOST_LINES: usize = 400;
 /// The space round the drawing when it is fitted, in pixels.
 const FIT_PAD: f32 = 40.0;
-/// How far a curved path is cut for drawing: about this many metres between points (the
-/// geometry itself stays exact, the points only draw it).
-const DRAW_STEP: f64 = 0.1;
 
 /// The distances a grid or a scale bar may take, in metres.
 const NICE: [f64; 18] = [
@@ -44,10 +46,11 @@ const NICE: [f64; 18] = [
     2000.0, 5000.0,
 ];
 
-/// The first of [`NICE`] that takes at least `least_px` pixels at `scale` pixels a metre.
-fn nice_step(scale: f32, least_px: f32) -> f64 {
+/// The first of [`NICE`] of at least `least_m` metres that takes at least `least_px` pixels at
+/// `scale` pixels a metre.
+fn nice_step(scale: f32, least_px: f32, least_m: f64) -> f64 {
     NICE.into_iter()
-        .find(|s| s * f64::from(scale) >= f64::from(least_px))
+        .find(|s| *s >= least_m && s * f64::from(scale) >= f64::from(least_px))
         .unwrap_or(10_000.0)
 }
 
@@ -104,7 +107,7 @@ fn build_plan(model: &Model) -> Plan {
             unplaced.push(name);
             continue;
         };
-        let ElementKind::Conveyor { length, shape, .. } = &e.kind else {
+        let ElementKind::Conveyor { length, .. } = &e.kind else {
             places.push(Place {
                 name,
                 centre: c,
@@ -112,49 +115,17 @@ fn build_plan(model: &Model) -> Plan {
             });
             continue;
         };
-        // From the edge of the block before, towards the block after; with a neighbour on one
-        // side only, or none, from the conveyor's own centre along `+x`.
-        let before = neighbour(model, &e.id, true).and_then(|f| Some((f, centre_of(f)?)));
-        let after = neighbour(model, &e.id, false).and_then(centre_of);
-        let (start, heading) = match (before, after) {
-            (Some((from, a)), Some(b)) if libm::hypotf(b[0] - a[0], b[1] - a[1]) > 1e-6 => {
-                let (dx, dy) = (b[0] - a[0], b[1] - a[1]);
-                let d = libm::hypotf(dx, dy);
-                let unit = [dx / d, dy / d];
-                let out = outline_of(model, from).leave(a, a, unit);
-                (
-                    [a[0] + unit[0] * out, a[1] + unit[1] * out],
-                    libm::atan2f(dy, dx).to_degrees(),
-                )
-            }
-            _ => (c, 0.0),
+        // Drawn exactly as the 3D view builds it, from the diagram's positions, so its drawn
+        // length may differ from its own; the label gives the own length.
+        let Some(points) = belt_points(model, e, &centre_of) else {
+            continue;
         };
-        let mut path = shape.path(*length).scaled(f64::from(metres));
-        path.start = Frame::new(
-            f64::from(start[0]),
-            f64::from(start[1]),
-            0.0,
-            f64::from(heading),
-        );
-        let total = path.length();
-        let curved = path
-            .segments
-            .iter()
-            .any(|s| !matches!(s, Segment::Line { .. }));
-        let n = if curved && total.is_finite() && total > 0.0 {
-            ((total / DRAW_STEP).ceil() as usize).clamp(2, 400)
-        } else {
-            2
-        };
-        let at = |s: f64| {
-            let f = path.point_at(s);
-            [f.x as f32, f.y as f32]
-        };
-        let points = (0..=n).map(|i| at(total * i as f64 / n as f64)).collect();
+        let middle = along_path(&points, path_length(&points) / 2.0).0;
+        let own = number(*length * f64::from(metres));
         belts.push(Belt {
-            name,
+            name: format!("{name} · {}", tf("{length} m", &[("length", &own)])),
             points,
-            middle: at(total / 2.0),
+            middle,
         });
     }
     let mut low = [f32::INFINITY; 2];
@@ -254,16 +225,22 @@ impl Vw {
 
 /// The screen `x` of every vertical grid line and the screen `y` of every horizontal one in
 /// `rect`, a metre apart or wider when that would crowd them.
-fn grid_lines(vw: &Vw, rect: Rect) -> (Vec<f32>, Vec<f32>) {
-    let step = nice_step(vw.scale, MIN_GRID_PX);
+fn grid_lines(vw: &Vw, rect: Rect) -> (Vec<(f32, bool)>, Vec<(f32, bool)>) {
+    let step = nice_step(vw.scale, MIN_GRID_PX, MIN_GRID_M);
+    // A stronger line every 5 steps (every 2 for 5, 50 …, which makes 10, 100 …).
+    let every: i64 = if [5.0, 50.0, 500.0, 5000.0].contains(&step) {
+        2
+    } else {
+        5
+    };
     let low = vw.in_metres(rect, rect.left_bottom());
     let high = vw.in_metres(rect, rect.right_top());
-    let lines = |a: f32, b: f32, at: &dyn Fn(f32) -> f32| -> Vec<f32> {
+    let lines = |a: f32, b: f32, at: &dyn Fn(f32) -> f32| -> Vec<(f32, bool)> {
         let first = (f64::from(a) / step).ceil() as i64;
         let last = (f64::from(b) / step).floor() as i64;
         (first..=last)
             .take(MOST_LINES)
-            .map(|k| at((k as f64 * step) as f32))
+            .map(|k| (at((k as f64 * step) as f32), k.rem_euclid(every) == 0))
             .collect()
     };
     (
@@ -285,21 +262,34 @@ pub(crate) struct LayoutView {
 
 /// Writes `text` centred at `at` over the drawing as a label (so a screen reader reads it), on a
 /// faint patch of the canvas colour, if it fits inside `canvas`.
-fn name_label(ui: &mut egui::Ui, canvas: Rect, at: Pos2, text: &str, p: &theme::Palette) {
+fn name_label(
+    ui: &mut egui::Ui,
+    canvas: Rect,
+    at: Pos2,
+    text: &str,
+    p: &theme::Palette,
+    drawn: &mut Vec<Rect>,
+) {
     let font = FontId::proportional(12.0);
     let size = ui
         .painter()
         .layout_no_wrap(text.to_owned(), font.clone(), p.text)
         .size();
     let r = Rect::from_center_size(at, size);
-    if !canvas.contains_rect(r) {
-        return;
-    }
-    let back = p.canvas.gamma_multiply(0.75);
-    ui.painter().rect_filled(r.expand(2.0), 2.0, back);
+    // A name that would sit on another, or off the drawing, is not painted; it stays in the
+    // accessibility tree, as transparent text.
+    let shown = canvas.contains_rect(r) && !drawn.iter().any(|d| d.intersects(r.expand(2.0)));
+    let colour = if shown {
+        let back = p.canvas.gamma_multiply(0.75);
+        ui.painter().rect_filled(r.expand(2.0), 2.0, back);
+        drawn.push(r);
+        p.text
+    } else {
+        egui::Color32::TRANSPARENT
+    };
     let mut child = ui.new_child(egui::UiBuilder::new().max_rect(r));
     child.add(
-        egui::Label::new(RichText::new(text).font(font).color(p.text))
+        egui::Label::new(RichText::new(text).font(font).color(colour))
             .extend()
             .selectable(false),
     );
@@ -381,12 +371,15 @@ impl App {
         let painter = ui.painter_at(rect);
         painter.rect_filled(rect, 4.0, p.canvas);
         let (xs, ys) = grid_lines(&vw, rect);
-        let grid = Stroke::new(1.0, p.border);
-        for x in xs {
-            painter.line_segment([pos2(x, rect.top()), pos2(x, rect.bottom())], grid);
+        let minor = Stroke::new(1.0, p.border);
+        let major = Stroke::new(1.5, p.text_weak.gamma_multiply(0.45));
+        for (x, strong) in xs {
+            let stroke = if strong { major } else { minor };
+            painter.line_segment([pos2(x, rect.top()), pos2(x, rect.bottom())], stroke);
         }
-        for y in ys {
-            painter.line_segment([pos2(rect.left(), y), pos2(rect.right(), y)], grid);
+        for (y, strong) in ys {
+            let stroke = if strong { major } else { minor };
+            painter.line_segment([pos2(rect.left(), y), pos2(rect.right(), y)], stroke);
         }
         let belt = Stroke::new((belt_width() * vw.scale).max(2.0), p.chart);
         for b in &plan.belts {
@@ -415,7 +408,7 @@ impl App {
             }
         }
         // The scale bar, bottom left: its length in metres written over it.
-        let bar = nice_step(vw.scale, BAR_PX);
+        let bar = nice_step(vw.scale, BAR_PX, 0.01);
         let bar_px = (bar * f64::from(vw.scale)) as f32;
         let from = rect.left_bottom() + vec2(16.0, -16.0);
         let to = from + vec2(bar_px, 0.0);
@@ -447,12 +440,27 @@ impl App {
                 StrokeKind::Inside,
             );
         }
-        // The names, as labels over the drawing.
+        // The names, as labels over the drawing: blocks first, then conveyors, none on another.
+        let mut drawn = Vec::new();
         for pl in &plan.places {
-            name_label(ui, rect, vw.on_screen(rect, pl.centre), &pl.name, &p);
+            name_label(
+                ui,
+                rect,
+                vw.on_screen(rect, pl.centre),
+                &pl.name,
+                &p,
+                &mut drawn,
+            );
         }
         for b in &plan.belts {
-            name_label(ui, rect, vw.on_screen(rect, b.middle), &b.name, &p);
+            name_label(
+                ui,
+                rect,
+                vw.on_screen(rect, b.middle),
+                &b.name,
+                &p,
+                &mut drawn,
+            );
         }
 
         ui.horizontal(|ui| {
@@ -478,7 +486,7 @@ mod tests {
     #![allow(clippy::panic, clippy::expect_used, clippy::unwrap_used)]
 
     use super::*;
-    use stochcraft_model::{Bounds, Connection, ConveyorShape, Dist, Element, LengthUnit};
+    use stochcraft_model::{Bounds, Connection, ConveyorShape, Dist, Element, LengthUnit, Routing};
 
     fn id(s: &str) -> ElementId {
         ElementId::unchecked(s)
@@ -553,46 +561,71 @@ mod tests {
     }
 
     #[test]
-    fn a_straight_conveyor_runs_its_own_length_from_the_edge_of_the_block_before() {
-        // The source is at (1, -0.8) m with a half-side of 0.45 m, so the belt starts at 1.45 m
-        // and, 10 m long, ends at 11.45 m, though the sink is nearer: the length is the model's.
+    fn a_conveyor_runs_edge_to_edge_as_in_the_3d_view_and_is_labelled_with_its_own_length() {
+        // The source is at (1, -0.8) m and the sink at (9, -0.8) m, both with a half-side of
+        // 0.45 m, so the belt runs from 1.45 m to 8.55 m: 7.1 m drawn, 4.0 m + 1.45 = 5 m at
+        // the middle. Its own length, 10 m, is only in its label.
         let p = build_plan(&line_with(ConveyorShape::Straight, 10.0));
         let belt = &p.belts[0];
         let (first, last) = (belt.points[0], belt.points[belt.points.len() - 1]);
         assert!((first[0] - 1.45).abs() < 1e-3 && (first[1] + 0.8).abs() < 1e-3);
-        assert!((last[0] - 11.45).abs() < 1e-3 && (last[1] + 0.8).abs() < 1e-3);
-        assert!((polyline_length(&belt.points) - 10.0).abs() < 1e-3);
-        assert!((belt.middle[0] - 6.45).abs() < 1e-3);
+        assert!((last[0] - 8.55).abs() < 1e-3 && (last[1] + 0.8).abs() < 1e-3);
+        assert!((polyline_length(&belt.points) - 7.1).abs() < 1e-3);
+        assert!((belt.middle[0] - 5.0).abs() < 1e-3);
+        assert_eq!(belt.name, "Belt · 10 m");
         assert_eq!(p.places.len(), 2);
         assert!(p.unplaced.is_empty());
     }
 
     #[test]
-    fn a_curved_conveyor_is_drawn_to_its_arc_length() {
-        // A left quarter turn of radius 4 m: 2 pi = 6.283 m. It leaves along +x and ends 4 m on
-        // and 4 m to the left, that is up on the floor.
-        let shape = ConveyorShape::Curve {
-            radius: 4.0,
-            angle: 90.0,
-        };
-        let p = build_plan(&line_with(shape, 1.0));
+    fn a_conveyor_back_to_its_own_block_is_a_ring_as_long_as_its_own_length() {
+        // A gateway with a 30 m conveyor leaving and returning: the 3D view's ring, 30 m round
+        // and 7.5 m across (a quarter of the length).
+        let mut m = Model::default();
+        m.experiment.length_unit = LengthUnit::Metres;
+        m.elements.push(Element::new(
+            id("g"),
+            "G",
+            ElementKind::ExclusiveGateway {
+                default: None,
+                routing: Routing::Standard,
+            },
+        ));
+        m.elements.push(Element::new(
+            id("loop"),
+            "Loop",
+            ElementKind::Conveyor {
+                length: 30.0,
+                speed: 1.0,
+                accumulating: false,
+                item_length: 0.5,
+                gap: 0.1,
+                shape: ConveyorShape::Straight,
+            },
+        ));
+        for (a, b) in [("g", "loop"), ("loop", "g")] {
+            m.connections
+                .push(Connection::new(id(&format!("{a}-{b}")), id(a), id(b)));
+        }
+        put(&mut m, "g", 0.0, 0.0);
+        put(&mut m, "loop", 200.0, 0.0);
+        let p = build_plan(&m);
         let belt = &p.belts[0];
-        assert!((polyline_length(&belt.points) - 2.0 * std::f32::consts::PI).abs() < 0.01);
-        let last = belt.points[belt.points.len() - 1];
-        assert!(
-            (last[0] - 5.45).abs() < 1e-3 && (last[1] - 3.2).abs() < 1e-3,
-            "{last:?}"
-        );
+        assert!((polyline_length(&belt.points) - 30.0).abs() < 1e-3);
+        let ys: Vec<f32> = belt.points.iter().map(|q| q[1]).collect();
+        let span = ys.iter().copied().fold(f32::MIN, f32::max)
+            - ys.iter().copied().fold(f32::MAX, f32::min);
+        assert!((span - 7.5).abs() < 1e-3, "{span}");
+        assert_eq!(belt.name, "Loop · 30 m");
     }
 
     #[test]
-    fn a_conveyor_in_another_unit_is_drawn_in_metres() {
+    fn a_conveyor_in_another_unit_is_labelled_in_metres() {
         let mut m = line_with(ConveyorShape::Straight, 1000.0);
         m.experiment.length_unit = LengthUnit::Millimetres;
         let p = build_plan(&m);
-        assert!((polyline_length(&p.belts[0].points) - 1.0).abs() < 1e-3);
+        assert_eq!(p.belts[0].name, "Belt · 1 m");
     }
-
     #[test]
     fn a_model_with_no_diagram_places_every_block() {
         let mut m = line_with(ConveyorShape::Straight, 10.0);
@@ -637,32 +670,42 @@ mod tests {
     }
 
     #[test]
-    fn the_grid_is_a_metre_apart_and_coarsens_when_zoomed_out() {
+    fn the_grid_is_a_metre_apart_at_the_finest_and_coarsens_when_zoomed_out() {
         let r = rect();
-        // 20 px a metre: every metre.
+        // 20 px a metre: every metre, and every fifth line stronger.
         let near = Vw {
             centre: [0.0, 0.0],
             scale: 20.0,
         };
         let (xs, _) = grid_lines(&near, r);
-        assert!((xs[1] - xs[0] - 20.0).abs() < 1e-3, "{xs:?}");
+        assert!((xs[1].0 - xs[0].0 - 20.0).abs() < 1e-3, "{xs:?}");
+        let strong: Vec<usize> = (0..xs.len()).filter(|i| xs[*i].1).collect();
+        assert!(strong.windows(2).all(|w| w[1] - w[0] == 5), "{strong:?}");
+        assert!(!strong.is_empty());
+        // 200 px a metre: still a metre (0.1 m would be 20 px), 200 px apart.
+        let close = Vw {
+            centre: [0.0, 0.0],
+            scale: 200.0,
+        };
+        let (xs, _) = grid_lines(&close, r);
+        assert!((xs[1].0 - xs[0].0 - 200.0).abs() < 1e-3, "{xs:?}");
         // 1 px a metre: a line every 20 m (the first of the steps that is 12 px or more).
         let far = Vw {
             centre: [0.0, 0.0],
             scale: 1.0,
         };
         let (xs, ys) = grid_lines(&far, r);
-        assert!((xs[1] - xs[0] - 20.0).abs() < 1e-3, "{xs:?}");
+        assert!((xs[1].0 - xs[0].0 - 20.0).abs() < 1e-3, "{xs:?}");
         assert!(!ys.is_empty() && xs.len() <= MOST_LINES);
     }
 
     #[test]
     fn the_scale_bar_is_a_round_number_of_metres_of_at_least_80_pixels() {
         // 20 px a metre: 5 m is 100 px (2 m would be 40).
-        assert_eq!(nice_step(20.0, BAR_PX), 5.0);
+        assert_eq!(nice_step(20.0, BAR_PX, 0.01), 5.0);
         // 1 px a metre: 100 m.
-        assert_eq!(nice_step(1.0, BAR_PX), 100.0);
+        assert_eq!(nice_step(1.0, BAR_PX, 0.01), 100.0);
         // 400 px a metre: 0.2 m is 80 px.
-        assert_eq!(nice_step(400.0, BAR_PX), 0.2);
+        assert_eq!(nice_step(400.0, BAR_PX, 0.01), 0.2);
     }
 }

@@ -16,7 +16,7 @@ use core::f32::consts::{FRAC_PI_2, FRAC_PI_4};
 use egui::{
     Align2, Color32, FontId, Key, Pos2, Rect, Sense, Shape, Stroke, StrokeKind, pos2, vec2,
 };
-use stochcraft_model::{Bounds, ElementId, ElementKind, LengthUnit, Model};
+use stochcraft_model::{Bounds, Element, ElementId, ElementKind, LengthUnit, Model};
 use stochcraft_render::{
     Machine, Mesh, StraightConveyor, Tote, box_mesh, machine, straight_conveyor, tote,
 };
@@ -410,7 +410,7 @@ fn dist(a: [f32; 2], b: [f32; 2]) -> f32 {
 }
 
 /// The length of the polyline through `points`.
-fn path_length(points: &[[f32; 2]]) -> f32 {
+pub(crate) fn path_length(points: &[[f32; 2]]) -> f32 {
     points
         .windows(2)
         .map(|w| match w {
@@ -422,7 +422,7 @@ fn path_length(points: &[[f32; 2]]) -> f32 {
 
 /// Where `distance` metres along `points` is (clamped to the ends), and the heading of the
 /// segment there.
-fn along_path(points: &[[f32; 2]], distance: f32) -> ([f32; 2], f32) {
+pub(crate) fn along_path(points: &[[f32; 2]], distance: f32) -> ([f32; 2], f32) {
     let mut left = distance.max(0.0);
     let mut at = points.first().copied().unwrap_or([0.0, 0.0]);
     let mut angle = 0.0;
@@ -598,6 +598,78 @@ fn loop_path(
     ring_points
 }
 
+/// The points of conveyor `e` on the floor, in metres: from the edge of the shape before it to the
+/// edge of the shape after it (lanes that leave or enter one block side by side start at different
+/// points of its edge); a loop beside the block it leaves and returns to, as long as its own length
+/// (within limits); and with a neighbour on one side only, or none, its own length along `+x` from
+/// its own centre. `centre_of` gives an element's centre; `None` when `e` is not a conveyor or has none.
+pub(crate) fn belt_points(
+    model: &Model,
+    e: &Element,
+    centre_of: &dyn Fn(&ElementId) -> Option<[f32; 2]>,
+) -> Option<Vec<[f32; 2]>> {
+    let ElementKind::Conveyor { length: len, .. } = &e.kind else {
+        return None;
+    };
+    let c = centre_of(&e.id)?;
+    let metres = unit_metres(model.experiment.length_unit);
+    let before = neighbour(model, &e.id, true).and_then(|f| Some((f, centre_of(f)?)));
+    let after = neighbour(model, &e.id, false).and_then(|t| Some((t, centre_of(t)?)));
+    // Half the footprint of a block; a neighbouring conveyor has none, the belts meet
+    // at its middle.
+    let half_of = |id: &ElementId| {
+        model.element(id).map_or(0.0, |n| {
+            if matches!(n.kind, ElementKind::Conveyor { .. }) {
+                0.0
+            } else {
+                block_shape(&n.kind).2
+            }
+        })
+    };
+    // The outline of a block, likewise a point for a conveyor.
+    let outline_of = |id: &ElementId| outline_of(model, id);
+    // The sideways shift of this lane among the conveyors that leave `block` (or, when
+    // `upstream` is false, enter it), which has the outline `outline`. The lanes are
+    // `LANE_PITCH` apart, or closer when that would take them past `LANE_SPREAD` of the
+    // outline's half-width either side of the middle: spread evenly, they never share a
+    // point.
+    let lane = |block: &ElementId, upstream: bool, outline: Outline| {
+        let mates: Vec<&ElementId> = model
+            .elements
+            .iter()
+            .filter(|m| matches!(m.kind, ElementKind::Conveyor { .. }))
+            .filter(|m| neighbour(model, &m.id, upstream) == Some(block))
+            .map(|m| &m.id)
+            .collect();
+        let at = mates.iter().position(|m| **m == e.id).unwrap_or(0);
+        let gaps = mates.len().saturating_sub(1) as f32;
+        let pitch = if gaps > 0.0 {
+            LANE_PITCH.min(2.0 * LANE_SPREAD * outline.reach() / gaps)
+        } else {
+            0.0
+        };
+        (at as f32 - gaps / 2.0) * pitch
+    };
+    let own_end = [c[0] + *len as f32 * metres, c[1]];
+    let points: Vec<[f32; 2]> = match (before, after) {
+        (Some((f, a)), Some((t, b))) if f == t || dist(a, b) <= 0.05 => {
+            let want = *len as f32 * metres;
+            let total = if want.is_finite() {
+                want.clamp(LOOP_LENGTH.0, LOOP_LENGTH.1)
+            } else {
+                LOOP_LENGTH.0
+            };
+            loop_path(a, outline_of(f), half_of(f), c, total)
+        }
+        (Some((f, a)), Some((t, b))) => {
+            let (oa, ob) = (outline_of(f), outline_of(t));
+            edge_to_edge((a, oa, lane(f, true, oa)), (b, ob, lane(t, false, ob))).to_vec()
+        }
+        _ => vec![c, own_end],
+    };
+    Some(points)
+}
+
 /// The model in world space: each block's shape at its layout position, a conveyor as a belt
 /// from the edge of the shape before it to the edge of the shape after it (lanes that leave or
 /// enter one block side by side start at different points of its edge), and a line on the floor
@@ -608,7 +680,6 @@ fn loop_path(
 pub(crate) fn scene(model: &Model) -> Scene {
     let placed = model.placed();
     let centre_of = |id: &ElementId| placed.get(id).map(centre_metres);
-    let metres = unit_metres(model.experiment.length_unit);
     let is_conveyor = |id: &ElementId| {
         model
             .element(id)
@@ -619,61 +690,8 @@ pub(crate) fn scene(model: &Model) -> Scene {
     for (order, e) in model.elements.iter().enumerate() {
         let Some(c) = centre_of(&e.id) else { continue };
         let id = e.id.as_str().to_owned();
-        if let ElementKind::Conveyor { length: len, .. } = &e.kind {
-            let before = neighbour(model, &e.id, true).and_then(|f| Some((f, centre_of(f)?)));
-            let after = neighbour(model, &e.id, false).and_then(|t| Some((t, centre_of(t)?)));
-            // Half the footprint of a block; a neighbouring conveyor has none, the belts meet
-            // at its middle.
-            let half_of = |id: &ElementId| {
-                model.element(id).map_or(0.0, |n| {
-                    if matches!(n.kind, ElementKind::Conveyor { .. }) {
-                        0.0
-                    } else {
-                        block_shape(&n.kind).2
-                    }
-                })
-            };
-            // The outline of a block, likewise a point for a conveyor.
-            let outline_of = |id: &ElementId| outline_of(model, id);
-            // The sideways shift of this lane among the conveyors that leave `block` (or, when
-            // `upstream` is false, enter it), which has the outline `outline`. The lanes are
-            // `LANE_PITCH` apart, or closer when that would take them past `LANE_SPREAD` of the
-            // outline's half-width either side of the middle: spread evenly, they never share a
-            // point.
-            let lane = |block: &ElementId, upstream: bool, outline: Outline| {
-                let mates: Vec<&ElementId> = model
-                    .elements
-                    .iter()
-                    .filter(|m| matches!(m.kind, ElementKind::Conveyor { .. }))
-                    .filter(|m| neighbour(model, &m.id, upstream) == Some(block))
-                    .map(|m| &m.id)
-                    .collect();
-                let at = mates.iter().position(|m| **m == e.id).unwrap_or(0);
-                let gaps = mates.len().saturating_sub(1) as f32;
-                let pitch = if gaps > 0.0 {
-                    LANE_PITCH.min(2.0 * LANE_SPREAD * outline.reach() / gaps)
-                } else {
-                    0.0
-                };
-                (at as f32 - gaps / 2.0) * pitch
-            };
-            let own_end = [c[0] + *len as f32 * metres, c[1]];
-            let points: Vec<[f32; 2]> = match (before, after) {
-                (Some((f, a)), Some((t, b))) if f == t || dist(a, b) <= 0.05 => {
-                    let want = *len as f32 * metres;
-                    let total = if want.is_finite() {
-                        want.clamp(LOOP_LENGTH.0, LOOP_LENGTH.1)
-                    } else {
-                        LOOP_LENGTH.0
-                    };
-                    loop_path(a, outline_of(f), half_of(f), c, total)
-                }
-                (Some((f, a)), Some((t, b))) => {
-                    let (oa, ob) = (outline_of(f), outline_of(t));
-                    edge_to_edge((a, oa, lane(f, true, oa)), (b, ob, lane(t, false, ob))).to_vec()
-                }
-                _ => vec![c, own_end],
-            };
+        if matches!(e.kind, ElementKind::Conveyor { .. }) {
+            let points = belt_points(model, e, &centre_of).unwrap_or_default();
             let belt_length = path_length(&points);
             push_path(&mut tris, &points);
             anchors.push(Anchor {
