@@ -1005,6 +1005,9 @@ unit	yr	έτ
 	At {time} {unit}: {n} items	Τη στιγμή {time} {unit}: {n} αντικείμενα
 	Run the model to fill the dashboard	Εκτελέστε το μοντέλο για να γεμίσει ο πίνακας ελέγχου
 	The resource and conveyor charts show the last run until this one ends	Τα γραφήματα πόρων και ιμάντων δείχνουν την τελευταία εκτέλεση μέχρι να τελειώσει αυτή
+	Fonts	Γραμματοσειρές
+	The full list of third-party licences is in the file THIRD-PARTY-LICENSES.html, which comes with the download.	Ο πλήρης κατάλογος των αδειών τρίτων βρίσκεται στο αρχείο THIRD-PARTY-LICENSES.html, που περιλαμβάνεται στη λήψη.
+	Full list of third-party licences	Πλήρης κατάλογος αδειών τρίτων
 	Reset	Επαναφορά
 	As fast as possible	Όσο πιο γρήγορα γίνεται
 	Pause at	Παύση στο

@@ -1005,6 +1005,9 @@ unit	yr	år
 	At {time} {unit}: {n} items	Ved {time} {unit}: {n} enheder
 	Run the model to fill the dashboard	Kør modellen for at fylde dashboardet
 	The resource and conveyor charts show the last run until this one ends	Diagrammerne for ressourcer og transportbånd viser den seneste kørsel, indtil denne slutter
+	Fonts	Skrifttyper
+	The full list of third-party licences is in the file THIRD-PARTY-LICENSES.html, which comes with the download.	Den fulde liste over tredjepartslicenser findes i filen THIRD-PARTY-LICENSES.html, som følger med downloaden.
+	Full list of third-party licences	Fuld liste over tredjepartslicenser
 	Reset	Nulstil
 	As fast as possible	Så hurtigt som muligt
 	Pause at	Pause ved

@@ -1005,6 +1005,9 @@ unit	yr	年
 	At {time} {unit}: {n} items	在 {time} {unit}：{n} 個物品
 	Run the model to fill the dashboard	執行模型以填入儀表板
 	The resource and conveyor charts show the last run until this one ends	資源和輸送帶圖表顯示上一次執行，直到本次結束
+	Fonts	字型
+	The full list of third-party licences is in the file THIRD-PARTY-LICENSES.html, which comes with the download.	第三方授權的完整清單在隨下載附帶的檔案 THIRD-PARTY-LICENSES.html 中。
+	Full list of third-party licences	第三方授權完整清單
 	Reset	重設
 	As fast as possible	盡可能快
 	Pause at	暫停於

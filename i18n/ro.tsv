@@ -1005,6 +1005,9 @@ unit	yr	a
 	At {time} {unit}: {n} items	La {time} {unit}: {n} articole
 	Run the model to fill the dashboard	Rulați modelul pentru a completa tabloul de bord
 	The resource and conveyor charts show the last run until this one ends	Graficele resurselor și benzilor arată ultima rulare până se încheie aceasta
+	Fonts	Fonturi
+	The full list of third-party licences is in the file THIRD-PARTY-LICENSES.html, which comes with the download.	Lista completă a licențelor terților se află în fișierul THIRD-PARTY-LICENSES.html, inclus în descărcare.
+	Full list of third-party licences	Lista completă a licențelor terților
 	Reset	Resetează
 	As fast as possible	Cât mai repede posibil
 	Pause at	Pauză la

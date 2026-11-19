@@ -1005,6 +1005,9 @@ unit	yr	v
 	At {time} {unit}: {n} items	Në {time} {unit}: {n} artikuj
 	Run the model to fill the dashboard	Ekzekutoni modelin për të plotësuar panelin
 	The resource and conveyor charts show the last run until this one ends	Grafikët e burimeve dhe rripave tregojnë ekzekutimin e fundit derisa ky të përfundojë
+	Fonts	Shkronjat
+	The full list of third-party licences is in the file THIRD-PARTY-LICENSES.html, which comes with the download.	Lista e plotë e licencave të palëve të treta është në skedarin THIRD-PARTY-LICENSES.html, që vjen me shkarkimin.
+	Full list of third-party licences	Lista e plotë e licencave të palëve të treta
 	Reset	Rivendos
 	As fast as possible	Sa më shpejt të jetë e mundur
 	Pause at	Pauzë në

@@ -1005,6 +1005,9 @@ unit	yr	ປີ
 	At {time} {unit}: {n} items	ທີ່ {time} {unit}: {n} ລາຍການ
 	Run the model to fill the dashboard	ແລ່ນແບບຈຳລອງເພື່ອເຕີມແດຊບອດ
 	The resource and conveyor charts show the last run until this one ends	ແຜນພາບຊັບພະຍາກອນ ແລະ ສາຍພານສະແດງການແລ່ນຄັ້ງຫຼ້າສຸດຈົນກວ່າຄັ້ງນີ້ຈະສຳເລັດ
+	Fonts	ຟອນ
+	The full list of third-party licences is in the file THIRD-PARTY-LICENSES.html, which comes with the download.	ລາຍຊື່ໃບອະນຸຍາດຂອງພາກສ່ວນທີສາມທັງໝົດຢູ່ໃນໄຟລ໌ THIRD-PARTY-LICENSES.html ທີ່ມາພ້ອມກັບການດາວໂຫຼດ.
+	Full list of third-party licences	ລາຍຊື່ໃບອະນຸຍາດຂອງພາກສ່ວນທີສາມທັງໝົດ
 	Reset	ຣີເຊັດ
 	As fast as possible	ໄວທີ່ສຸດເທົ່າທີ່ເປັນໄປໄດ້
 	Pause at	ຢຸດຊົ່ວຄາວທີ່

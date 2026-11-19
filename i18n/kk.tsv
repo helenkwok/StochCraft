@@ -1005,6 +1005,9 @@ unit	yr	ж.
 	At {time} {unit}: {n} items	{time} {unit} сәтінде: {n} элемент
 	Run the model to fill the dashboard	Бақылау тақтасын толтыру үшін модельді жүгіртіңіз
 	The resource and conveyor charts show the last run until this one ends	Ресурстар мен конвейерлер диаграммалары бұл аяқталғанша соңғы жүгіруді көрсетеді
+	Fonts	Қаріптер
+	The full list of third-party licences is in the file THIRD-PARTY-LICENSES.html, which comes with the download.	Үшінші тарап лицензияларының толық тізімі жүктеп алумен бірге келетін THIRD-PARTY-LICENSES.html файлында.
+	Full list of third-party licences	Үшінші тарап лицензияларының толық тізімі
 	Reset	Қайта бастау
 	As fast as possible	Мүмкіндігінше жылдам
 	Pause at	Осы уақытта кідірту

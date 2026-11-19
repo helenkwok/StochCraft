@@ -1005,6 +1005,9 @@ unit	yr	év
 	At {time} {unit}: {n} items	{time} {unit} időpontban: {n} elem
 	Run the model to fill the dashboard	Futtassa a modellt az irányítópult kitöltéséhez
 	The resource and conveyor charts show the last run until this one ends	Az erőforrás- és szalagdiagramok az utolsó futtatást mutatják, amíg ez véget nem ér
+	Fonts	Betűtípusok
+	The full list of third-party licences is in the file THIRD-PARTY-LICENSES.html, which comes with the download.	A harmadik felek licenceinek teljes listája az THIRD-PARTY-LICENSES.html fájlban található, amely a letöltéssel érkezik.
+	Full list of third-party licences	A harmadik felek licenceinek teljes listája
 	Reset	Visszaállítás
 	As fast as possible	A lehető leggyorsabban
 	Pause at	Szünet ekkor

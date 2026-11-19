@@ -1005,6 +1005,9 @@ unit	yr	ปี
 	At {time} {unit}: {n} items	ที่ {time} {unit}: {n} รายการ
 	Run the model to fill the dashboard	รันโมเดลเพื่อเติมแดชบอร์ด
 	The resource and conveyor charts show the last run until this one ends	แผนภูมิทรัพยากรและสายพานแสดงการรันครั้งล่าสุดจนกว่าครั้งนี้จะสิ้นสุด
+	Fonts	แบบอักษร
+	The full list of third-party licences is in the file THIRD-PARTY-LICENSES.html, which comes with the download.	รายการสัญญาอนุญาตของบุคคลที่สามทั้งหมดอยู่ในไฟล์ THIRD-PARTY-LICENSES.html ซึ่งมาพร้อมกับการดาวน์โหลด
+	Full list of third-party licences	รายการสัญญาอนุญาตของบุคคลที่สามทั้งหมด
 	Reset	รีเซ็ต
 	As fast as possible	เร็วที่สุดเท่าที่เป็นไปได้
 	Pause at	หยุดชั่วคราวที่

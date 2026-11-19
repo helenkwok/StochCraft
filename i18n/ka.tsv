@@ -1005,6 +1005,9 @@ unit	yr	წელი
 	At {time} {unit}: {n} items	{time} {unit}-ზე: {n} ელემენტი
 	Run the model to fill the dashboard	დაფის შესავსებად გაუშვით მოდელი
 	The resource and conveyor charts show the last run until this one ends	რესურსებისა და ლენტების დიაგრამები აჩვენებს ბოლო გაშვებას, ამის დასრულებამდე
+	Fonts	შრიფტები
+	The full list of third-party licences is in the file THIRD-PARTY-LICENSES.html, which comes with the download.	მესამე მხარის ლიცენზიების სრული სია არის ფაილში THIRD-PARTY-LICENSES.html, რომელიც ჩამოტვირთვას თან ახლავს.
+	Full list of third-party licences	მესამე მხარის ლიცენზიების სრული სია
 	Reset	საწყისზე დაბრუნება
 	As fast as possible	რაც შეიძლება სწრაფად
 	Pause at	პაუზა მომენტში

@@ -1005,6 +1005,9 @@ unit	yr	a
 	At {time} {unit}: {n} items	En {time} {unit}: {n} pezas
 	Run the model to fill the dashboard	Executa o modelo para encher o panel
 	The resource and conveyor charts show the last run until this one ends	Os gráficos de recursos e cintas amosan a última execución ata que esta remate
+	Fonts	Tipos de letra
+	The full list of third-party licences is in the file THIRD-PARTY-LICENSES.html, which comes with the download.	A lista completa de licenzas de terceiros está no ficheiro THIRD-PARTY-LICENSES.html, que vai incluído na descarga.
+	Full list of third-party licences	Lista completa de licenzas de terceiros
 	Reset	Reiniciar
 	As fast as possible	O máis rápido posible
 	Pause at	Pausa en

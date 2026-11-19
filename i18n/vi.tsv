@@ -1005,6 +1005,9 @@ unit	yr	năm
 	At {time} {unit}: {n} items	Tại {time} {unit}: {n} mục
 	Run the model to fill the dashboard	Chạy mô hình để điền vào bảng điều khiển
 	The resource and conveyor charts show the last run until this one ends	Biểu đồ tài nguyên và băng tải hiển thị lần chạy gần nhất cho đến khi lần này kết thúc
+	Fonts	Phông chữ
+	The full list of third-party licences is in the file THIRD-PARTY-LICENSES.html, which comes with the download.	Danh sách đầy đủ giấy phép của bên thứ ba nằm trong tệp THIRD-PARTY-LICENSES.html, đi kèm bản tải xuống.
+	Full list of third-party licences	Danh sách đầy đủ giấy phép của bên thứ ba
 	Reset	Đặt lại
 	As fast as possible	Nhanh nhất có thể
 	Pause at	Tạm dừng tại

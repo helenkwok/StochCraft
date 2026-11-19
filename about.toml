@@ -1,0 +1,31 @@
+# cargo-about's settings for THIRD-PARTY-LICENSES.html, the list of every Rust crate in the
+# shipped programs and the web app, with the licence texts (about.hbs is its template).
+# CI makes the file with `cargo about generate` (pinned version, see .github/workflows/release.yml
+# and pages.yml). Keep `accepted` in step with the allowed licences in deny.toml: cargo-about
+# fails when a crate's licence is not accepted here.
+#
+# Where a crate offers a choice (MIT OR Apache-2.0), the first match in this list is the one
+# listed, so MIT comes first: its text carries the authors' copyright lines.
+accepted = [
+    "MIT",
+    "Apache-2.0",
+    "Apache-2.0 WITH LLVM-exception",
+    "BSD-2-Clause",
+    "BSD-3-Clause",
+    "ISC",
+    "Zlib",
+    "Unicode-3.0",
+]
+
+# StochCraft's own crates are not third-party.
+private = { ignore = true }
+# Test-only crates are not in the shipped files. Build-time crates stay in the list.
+ignore-dev-dependencies = true
+
+# Crate-specific licences, the same exceptions as deny.toml's [[licenses.exceptions]].
+# egui's default fonts (Ubuntu, Hack, Noto Emoji) are bundled unmodified.
+[epaint_default_fonts]
+accepted = ["OFL-1.1", "Ubuntu-font-1.0"]
+# A file-level licence; used unmodified from crates.io.
+[option-ext]
+accepted = ["MPL-2.0"]

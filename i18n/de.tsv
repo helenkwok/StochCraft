@@ -1005,6 +1005,9 @@ unit	yr	J.
 	At {time} {unit}: {n} items	Bei {time} {unit}: {n} Teile
 	Run the model to fill the dashboard	Das Modell ausführen, um das Dashboard zu füllen
 	The resource and conveyor charts show the last run until this one ends	Die Ressourcen- und Förderband-Diagramme zeigen den letzten Lauf, bis dieser endet
+	Fonts	Schriftarten
+	The full list of third-party licences is in the file THIRD-PARTY-LICENSES.html, which comes with the download.	Die vollständige Liste der Lizenzen von Drittanbietern steht in der Datei THIRD-PARTY-LICENSES.html, die dem Download beiliegt.
+	Full list of third-party licences	Vollständige Liste der Lizenzen von Drittanbietern
 	Reset	Zurücksetzen
 	As fast as possible	So schnell wie möglich
 	Pause at	Pause bei

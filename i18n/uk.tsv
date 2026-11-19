@@ -1005,6 +1005,9 @@ unit	yr	р.
 	At {time} {unit}: {n} items	У момент {time} {unit}: {n} елементів
 	Run the model to fill the dashboard	Запустіть модель, щоб заповнити панель
 	The resource and conveyor charts show the last run until this one ends	Графіки ресурсів і конвеєрів показують останній прогін, доки цей не завершиться
+	Fonts	Шрифти
+	The full list of third-party licences is in the file THIRD-PARTY-LICENSES.html, which comes with the download.	Повний список ліцензій сторонніх компонентів міститься у файлі THIRD-PARTY-LICENSES.html, що входить до завантаження.
+	Full list of third-party licences	Повний список ліцензій сторонніх компонентів
 	Reset	Скинути
 	As fast as possible	Якнайшвидше
 	Pause at	Пауза на

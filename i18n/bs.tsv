@@ -1005,6 +1005,9 @@ unit	yr	god.
 	At {time} {unit}: {n} items	U {time} {unit}: {n} stavki
 	Run the model to fill the dashboard	Pokrenite model da se nadzorna ploča popuni
 	The resource and conveyor charts show the last run until this one ends	Grafikoni resursa i transportnih traka prikazuju zadnje izvođenje dok ovo ne završi
+	Fonts	Fontovi
+	The full list of third-party licences is in the file THIRD-PARTY-LICENSES.html, which comes with the download.	Cijeli popis licenci trećih strana nalazi se u datoteci THIRD-PARTY-LICENSES.html, koja dolazi uz preuzimanje.
+	Full list of third-party licences	Cijeli popis licenci trećih strana
 	Reset	Vrati na početak
 	As fast as possible	Što brže moguće
 	Pause at	Pauza u
