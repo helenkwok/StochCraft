@@ -1019,3 +1019,4 @@ unit	yr	ж.
 	x {x} m, y {y} m	x {x} м, y {y} м
 	Unplaced	Орналастырылмаған
 	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	Әзірге әр блок диаграмма бойынша орналастырылады. Диаграмма қалдырып кеткен блок осында тізімделеді және сызылмайды.
+	The charts are taller than the window: make the window taller, then export them again.	Диаграммалар терезеден биік: терезені биіктетіп, оларды қайта экспорттаңыз.

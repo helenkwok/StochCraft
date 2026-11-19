@@ -1019,3 +1019,4 @@ unit	yr	a
 	x {x} m, y {y} m	x {x} m, y {y} m
 	Unplaced	Sen colocar
 	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	Por agora, cada bloque colócase a partir do diagrama. Un bloque que o diagrama deixa fóra aparece aquí e non se debuxa.
+	The charts are taller than the window: make the window taller, then export them again.	Os gráficos son máis altos ca a xanela: faga a xanela máis alta e volva exportalos.

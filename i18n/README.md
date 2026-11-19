@@ -748,6 +748,10 @@ engine's messages (validation, file notes) are English too.
   Pause; "Reset" is the usual word for returning to the start, or "back to the start" where
   the language has no short one). Not checked against any other source, and not reviewed by
   native speakers; the least certain are lo, th, ta, te, bn, ka, kk, hi, sq, et and lt.
+- The row for a chart export that does not fit ("The charts are taller than the window...")
+  was machine-drafted with Claude Code from the plain meaning of the English, with each
+  catalog's own words for chart, window and export. Not checked against any other source, and
+  not reviewed by native speakers; the least certain are lo, th, ta, te, bn, ka, kk, hi and sq.
 
 **Adding or changing a string:** add the English in the code through `i18n::t` (or `tf`, `tn`),
 then add its row to each catalog here, or leave it out to show English until it is translated.
