@@ -924,3 +924,34 @@ unit	yr	l.
 @plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Oba sta uporabila seme {seed} in isti {n} zagon, zato vsak zagon dobi enaka naključna števila kot njegov par: razlike izhajajo iz spremembe, ne iz naključnih izborov.|Oba sta uporabila seme {seed} in ista {n} zagona, zato vsak zagon dobi enaka naključna števila kot njegov par: razlike izhajajo iz spremembe, ne iz naključnih izborov.|Oba sta uporabila seme {seed} in iste {n} zagone, zato vsak zagon dobi enaka naključna števila kot njegov par: razlike izhajajo iz spremembe, ne iz naključnih izborov.|Oba sta uporabila seme {seed} in istih {n} zagonov, zato vsak zagon dobi enaka naključna števila kot njegov par: razlike izhajajo iz spremembe, ne iz naključnih izborov.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	Še {n} ključni kazalnik se ni premaknil bolj, kot bi lahko naključje.|Še {n} ključna kazalnika se nista premaknila bolj, kot bi lahko naključje.|Še {n} ključni kazalniki se niso premaknili bolj, kot bi lahko naključje.|Še {n} ključnih kazalnikov se ni premaknilo bolj, kot bi lahko naključje.
 @plural	and {n} more change|and {n} more changes	in še {n} sprememba|in še {n} spremembi|in še {n} spremembe|in še {n} sprememb
+	Station	Postaja
+	Kind	Vrsta
+	Service	Strežba
+	Load	Obremenitev
+	Status	Stanje
+	Units for {target}%	Enote za {target} %
+	Formula	Formula
+	Simulated utilisation	Simulirana izkoriščenost
+	Simulated mean wait	Simulirana povprečna čakalna doba
+	Target utilisation	Ciljna izkoriščenost
+	Must be above 0% and below 100%	Mora biti nad 0 % in pod 100 %
+	The utilisation above which a station counts as congested	Izkoriščenost, nad katero se postaja šteje za preobremenjeno
+	Fine	V redu
+	Congested	Preobremenjena
+	Unstable	Nestabilna
+	Unknown	Neznano
+	up to {n}	do {n}
+	Bottleneck: {name} (load {load}).	Ozko grlo: {name} (obremenitev {load}).
+	Bottleneck: not known before a run (a load not known, or only bounded, could be the highest).	Ozko grlo: pred zagonom ni znano (neznana ali le omejena obremenitev je lahko najvišja).
+	Not known before a run:	Pred zagonom ni znano:
+	No exact formula for the wait:	Za čakanje ni natančne formule:
+	Utilisation is arrivals × service ÷ units, as the results count it; the load is that over the units' availability. A run adds what variability and blocking cost.	Izkoriščenost je prihodi × strežba ÷ enote, kot jo štejejo rezultati; obremenitev je ta vrednost glede na razpoložljivost enot. Zagon doda, kar stanejo spremenljivost in blokiranje.
+	No servers, shared tasks, delays or pools.	Ni strežnikov, skupnih opravil, zamud ali skladov.
+	arrival rate	stopnja prihodov
+	service time	čas strežbe
+	utilisation	izkoriščenost
+	{station}: {what}: {message}.	{station}: {what}: {message}.
+	{station}: {message}.	{station}: {message}.
+	From the last run; – when there are none, or they are out of date.	Iz zadnjega zagona; – če ga ni ali je zastarel.
+	Show this block	Pokaži ta blok
+	Rates and times are per {unit}.	Stopnje in časi so na {unit}.

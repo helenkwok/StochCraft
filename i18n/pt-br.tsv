@@ -924,3 +924,34 @@ unit	yr	a
 @plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Ambas usaram a semente {seed} e a mesma {n} execução, então cada execução recebe os mesmos números aleatórios que seu par: as diferenças vêm da mudança, não de sorteios ao acaso.|Ambas usaram a semente {seed} e as mesmas {n} execuções, então cada execução recebe os mesmos números aleatórios que seu par: as diferenças vêm da mudança, não de sorteios ao acaso.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	{n} outra métrica principal não mudou mais do que o acaso poderia.|{n} outras métricas principais não mudaram mais do que o acaso poderia.
 @plural	and {n} more change|and {n} more changes	e mais {n} alteração|e mais {n} alterações
+	Station	Estação
+	Kind	Tipo
+	Service	Atendimento
+	Load	Carga
+	Status	Situação
+	Units for {target}%	Unidades para {target}%
+	Formula	Fórmula
+	Simulated utilisation	Utilização simulada
+	Simulated mean wait	Espera média simulada
+	Target utilisation	Utilização-alvo
+	Must be above 0% and below 100%	Deve ser maior que 0% e menor que 100%
+	The utilisation above which a station counts as congested	A utilização a partir da qual uma estação é considerada congestionada
+	Fine	Boa
+	Congested	Congestionada
+	Unstable	Instável
+	Unknown	Desconhecida
+	up to {n}	até {n}
+	Bottleneck: {name} (load {load}).	Gargalo: {name} (carga {load}).
+	Bottleneck: not known before a run (a load not known, or only bounded, could be the highest).	Gargalo: desconhecido antes de uma simulação (uma carga desconhecida, ou apenas limitada, pode ser a mais alta).
+	Not known before a run:	Desconhecido antes de uma simulação:
+	No exact formula for the wait:	Sem fórmula exata para a espera:
+	Utilisation is arrivals × service ÷ units, as the results count it; the load is that over the units' availability. A run adds what variability and blocking cost.	A utilização é chegadas × atendimento ÷ unidades, como os resultados contam; a carga é esse valor sobre a disponibilidade das unidades. Uma simulação acrescenta o que a variabilidade e o bloqueio custam.
+	No servers, shared tasks, delays or pools.	Nenhum servidor, tarefa compartilhada, atraso ou pool.
+	arrival rate	taxa de chegada
+	service time	tempo de atendimento
+	utilisation	utilização
+	{station}: {what}: {message}.	{station}: {what}: {message}.
+	{station}: {message}.	{station}: {message}.
+	From the last run; – when there are none, or they are out of date.	Da última simulação; – se não houver ou estiverem desatualizados.
+	Show this block	Mostrar este bloco
+	Rates and times are per {unit}.	Taxas e tempos são por {unit}.

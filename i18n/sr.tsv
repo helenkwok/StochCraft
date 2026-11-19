@@ -924,3 +924,34 @@ unit	yr	год.
 @plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Оба су користила семе {seed} и исто {n} покретање, па свако покретање добија исте случајне бројеве као његов пар: разлике долазе од промене, а не од случајних извлачења.|Оба су користила семе {seed} и иста {n} покретања, па свако покретање добија исте случајне бројеве као његов пар: разлике долазе од промене, а не од случајних извлачења.|Оба су користила семе {seed} и истих {n} покретања, па свако покретање добија исте случајне бројеве као његов пар: разлике долазе од промене, а не од случајних извлачења.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	Још {n} кључна метрика се није померила више него што би могао случај.|Још {n} кључне метрике се нису помериле више него што би могао случај.|Још {n} кључних метрика се није померило више него што би могао случај.
 @plural	and {n} more change|and {n} more changes	и још {n} промена|и још {n} промене|и још {n} промена
+	Station	Станица
+	Kind	Врста
+	Service	Опслуживање
+	Load	Оптерећење
+	Status	Стање
+	Units for {target}%	Јединице за {target} %
+	Formula	Формула
+	Simulated utilisation	Симулирана искоришћеност
+	Simulated mean wait	Симулирано просечно чекање
+	Target utilisation	Циљна искоришћеност
+	Must be above 0% and below 100%	Мора бити изнад 0 % и испод 100 %
+	The utilisation above which a station counts as congested	Искоришћеност изнад које се станица сматра преоптерећеном
+	Fine	У реду
+	Congested	Преоптерећена
+	Unstable	Нестабилна
+	Unknown	Непознато
+	up to {n}	до {n}
+	Bottleneck: {name} (load {load}).	Уско грло: {name} (оптерећење {load}).
+	Bottleneck: not known before a run (a load not known, or only bounded, could be the highest).	Уско грло: непознато пре покретања (непознато или само ограничено оптерећење може бити највеће).
+	Not known before a run:	Непознато пре покретања:
+	No exact formula for the wait:	Нема тачне формуле за чекање:
+	Utilisation is arrivals × service ÷ units, as the results count it; the load is that over the units' availability. A run adds what variability and blocking cost.	Искоришћеност је доласци × опслуживање ÷ јединице, како је броје резултати; оптерећење је та вредност у односу на доступност јединица. Покретање додаје оно што коштају променљивост и блокирање.
+	No servers, shared tasks, delays or pools.	Нема сервера, заједничких задатака, кашњења ни скупова.
+	arrival rate	интензитет долазака
+	service time	време опслуживања
+	utilisation	искоришћеност
+	{station}: {what}: {message}.	{station}: {what}: {message}.
+	{station}: {message}.	{station}: {message}.
+	From the last run; – when there are none, or they are out of date.	Из последњег покретања; – ако га нема или је застарело.
+	Show this block	Прикажи овај блок
+	Rates and times are per {unit}.	Интензитети и времена су по {unit}.

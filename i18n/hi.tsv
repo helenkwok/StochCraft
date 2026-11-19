@@ -924,3 +924,34 @@ unit	yr	वर्ष
 @plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	दोनों ने यादृच्छिक बीज {seed} और वही {n} रन इस्तेमाल किया, इसलिए हर रन को अपने जोड़ीदार जैसी ही यादृच्छिक संख्याएँ मिलती हैं: अंतर बदलाव से आते हैं, संयोग से निकली संख्याओं से नहीं।|दोनों ने यादृच्छिक बीज {seed} और वही {n} रन इस्तेमाल किए, इसलिए हर रन को अपने जोड़ीदार जैसी ही यादृच्छिक संख्याएँ मिलती हैं: अंतर बदलाव से आते हैं, संयोग से निकली संख्याओं से नहीं।
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	{n} अन्य मुख्य मापदंड संयोग की सीमा से अधिक नहीं बदला।|{n} अन्य मुख्य मापदंड संयोग की सीमा से अधिक नहीं बदले।
 @plural	and {n} more change|and {n} more changes	और {n} अन्य बदलाव|और {n} अन्य बदलाव
+	Station	स्टेशन
+	Kind	प्रकार
+	Service	सेवा
+	Load	भार
+	Status	स्थिति
+	Units for {target}%	{target}% के लिए इकाइयाँ
+	Formula	सूत्र
+	Simulated utilisation	सिम्युलेटेड उपयोग
+	Simulated mean wait	सिम्युलेटेड औसत प्रतीक्षा
+	Target utilisation	लक्ष्य उपयोग
+	Must be above 0% and below 100%	0% से ऊपर और 100% से नीचे होना चाहिए
+	The utilisation above which a station counts as congested	वह उपयोग जिससे ऊपर स्टेशन को भीड़भाड़ वाला माना जाता है
+	Fine	ठीक
+	Congested	भीड़भाड़ वाला
+	Unstable	अस्थिर
+	Unknown	अज्ञात
+	up to {n}	अधिकतम {n}
+	Bottleneck: {name} (load {load}).	अड़चन: {name} (भार {load})।
+	Bottleneck: not known before a run (a load not known, or only bounded, could be the highest).	अड़चन: रन से पहले ज्ञात नहीं (कोई अज्ञात, या केवल सीमित, भार सबसे अधिक हो सकता है)।
+	Not known before a run:	रन से पहले ज्ञात नहीं:
+	No exact formula for the wait:	प्रतीक्षा के लिए कोई सटीक सूत्र नहीं:
+	Utilisation is arrivals × service ÷ units, as the results count it; the load is that over the units' availability. A run adds what variability and blocking cost.	उपयोग = आगमन × सेवा ÷ इकाइयाँ, जैसा परिणाम गिनते हैं; भार वही है इकाइयों की उपलब्धता के सापेक्ष। एक रन वह भी जोड़ता है जो परिवर्तनशीलता और अवरोध की कीमत है।
+	No servers, shared tasks, delays or pools.	कोई सर्वर, साझा कार्य, विलंब या पूल नहीं।
+	arrival rate	आगमन दर
+	service time	सेवा समय
+	utilisation	उपयोग
+	{station}: {what}: {message}.	{station}: {what}: {message}.
+	{station}: {message}.	{station}: {message}.
+	From the last run; – when there are none, or they are out of date.	पिछले रन से; – यदि कोई नहीं है या वे पुराने हैं।
+	Show this block	यह ब्लॉक दिखाएँ
+	Rates and times are per {unit}.	दरें और समय प्रति {unit} हैं।

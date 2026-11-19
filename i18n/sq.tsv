@@ -924,3 +924,34 @@ unit	yr	v
 @plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Të dy përdorën farën {seed} dhe të njëjtin {n} ekzekutim, kështu që çdo ekzekutim merr të njëjtët numra të rastësishëm si çifti i tij: dallimet vijnë nga ndryshimi, jo nga tërheqjet e rastësishme.|Të dy përdorën farën {seed} dhe të njëjtat {n} ekzekutime, kështu që çdo ekzekutim merr të njëjtët numra të rastësishëm si çifti i tij: dallimet vijnë nga ndryshimi, jo nga tërheqjet e rastësishme.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	{n} tregues tjetër kryesor nuk lëvizi më shumë se sa mund të bënte rastësia.|{n} tregues të tjerë kryesorë nuk lëvizën më shumë se sa mund të bënte rastësia.
 @plural	and {n} more change|and {n} more changes	dhe {n} ndryshim tjetër|dhe {n} ndryshime të tjera
+	Station	Stacioni
+	Kind	Lloji
+	Service	Shërbimi
+	Load	Ngarkesa
+	Status	Gjendja
+	Units for {target}%	Njësi për {target}%
+	Formula	Formula
+	Simulated utilisation	Shfrytëzimi i simuluar
+	Simulated mean wait	Pritja mesatare e simuluar
+	Target utilisation	Shfrytëzimi i synuar
+	Must be above 0% and below 100%	Duhet të jetë mbi 0% dhe nën 100%
+	The utilisation above which a station counts as congested	Shfrytëzimi mbi të cilin një stacion konsiderohet i ngarkuar
+	Fine	Mirë
+	Congested	I ngarkuar
+	Unstable	I paqëndrueshëm
+	Unknown	I panjohur
+	up to {n}	deri në {n}
+	Bottleneck: {name} (load {load}).	Pika e ngushtë: {name} (ngarkesa {load}).
+	Bottleneck: not known before a run (a load not known, or only bounded, could be the highest).	Pika e ngushtë: e panjohur para një ekzekutimi (një ngarkesë e panjohur, ose vetëm e kufizuar, mund të jetë më e larta).
+	Not known before a run:	E panjohur para një ekzekutimi:
+	No exact formula for the wait:	Nuk ka formulë të saktë për pritjen:
+	Utilisation is arrivals × service ÷ units, as the results count it; the load is that over the units' availability. A run adds what variability and blocking cost.	Shfrytëzimi është mbërritje × shërbim ÷ njësi, ashtu siç e numërojnë rezultatet; ngarkesa është ai në raport me disponueshmërinë e njësive. Një ekzekutim shton atë që kushtojnë ndryshueshmëria dhe bllokimi.
+	No servers, shared tasks, delays or pools.	Asnjë server, detyrë e përbashkët, vonesë ose grup.
+	arrival rate	shpejtësia e mbërritjeve
+	service time	koha e shërbimit
+	utilisation	shfrytëzimi
+	{station}: {what}: {message}.	{station}: {what}: {message}.
+	{station}: {message}.	{station}: {message}.
+	From the last run; – when there are none, or they are out of date.	Nga ekzekutimi i fundit; – nëse nuk ka ose janë të vjetruar.
+	Show this block	Shfaq këtë bllok
+	Rates and times are per {unit}.	Shpejtësitë dhe kohët janë për {unit}.

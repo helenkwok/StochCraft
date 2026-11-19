@@ -924,3 +924,34 @@ unit	yr	år
 @plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Begge brukte tilfeldighetsfrø {seed} og den samme {n} kjøringen, så hver kjøring får de samme tilfeldige tallene som sin partner: forskjellene kommer fra endringen, ikke fra tilfeldige trekk.|Begge brukte tilfeldighetsfrø {seed} og de samme {n} kjøringene, så hver kjøring får de samme tilfeldige tallene som sin partner: forskjellene kommer fra endringen, ikke fra tilfeldige trekk.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	{n} annet viktig måltall endret seg ikke mer enn tilfeldigheter kunne.|{n} andre viktige måltall endret seg ikke mer enn tilfeldigheter kunne.
 @plural	and {n} more change|and {n} more changes	og {n} endring til|og {n} endringer til
+	Station	Stasjon
+	Kind	Type
+	Service	Betjening
+	Load	Belastning
+	Status	Status
+	Units for {target}%	Enheter for {target} %
+	Formula	Formel
+	Simulated utilisation	Simulert utnyttelse
+	Simulated mean wait	Simulert gjennomsnittlig ventetid
+	Target utilisation	Mål for utnyttelse
+	Must be above 0% and below 100%	Må være over 0 % og under 100 %
+	The utilisation above which a station counts as congested	Utnyttelsen over hvilken en stasjon regnes som overbelastet
+	Fine	God
+	Congested	Overbelastet
+	Unstable	Ustabil
+	Unknown	Ukjent
+	up to {n}	opptil {n}
+	Bottleneck: {name} (load {load}).	Flaskehals: {name} (belastning {load}).
+	Bottleneck: not known before a run (a load not known, or only bounded, could be the highest).	Flaskehals: ukjent før en kjøring (en ukjent, eller bare begrenset, belastning kan være den høyeste).
+	Not known before a run:	Ukjent før en kjøring:
+	No exact formula for the wait:	Ingen nøyaktig formel for ventetiden:
+	Utilisation is arrivals × service ÷ units, as the results count it; the load is that over the units' availability. A run adds what variability and blocking cost.	Utnyttelsen er ankomster × betjening ÷ enheter, slik resultatene teller den; belastningen er den i forhold til enhetenes tilgjengelighet. En kjøring legger til det variasjon og blokkering koster.
+	No servers, shared tasks, delays or pools.	Ingen servere, delte oppgaver, forsinkelser eller puljer.
+	arrival rate	ankomstrate
+	service time	betjeningstid
+	utilisation	utnyttelse
+	{station}: {what}: {message}.	{station}: {what}: {message}.
+	{station}: {message}.	{station}: {message}.
+	From the last run; – when there are none, or they are out of date.	Fra siste kjøring; – hvis det ikke finnes noen, eller de er utdaterte.
+	Show this block	Vis denne blokken
+	Rates and times are per {unit}.	Rater og tider er per {unit}.

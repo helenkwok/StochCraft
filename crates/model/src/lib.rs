@@ -1701,6 +1701,9 @@ pub enum Problem {
         left: f64,
         utilisation: f64,
     },
+    /// Found when the model is prepared to run, not by [`Model::validate`] (a conveyor can be
+    /// drawn, saved and sized meanwhile): conveyors are not simulated yet.
+    ConveyorNotSimulated,
     /// Found from a run's results, not by [`Model::validate`]: the run had one replication, so
     /// its results have no confidence interval and cannot be told from chance.
     OneReplication,

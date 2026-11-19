@@ -924,3 +924,34 @@ unit	yr	år
 @plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Båda använde slumpfrö {seed} och samma {n} körning, så varje körning får samma slumptal som sin partner: skillnaderna kommer från ändringen, inte från slumpmässiga dragningar.|Båda använde slumpfrö {seed} och samma {n} körningar, så varje körning får samma slumptal som sin partner: skillnaderna kommer från ändringen, inte från slumpmässiga dragningar.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	{n} annat viktigt mått rörde sig inte mer än slumpen kunde.|{n} andra viktiga mått rörde sig inte mer än slumpen kunde.
 @plural	and {n} more change|and {n} more changes	och {n} ändring till|och {n} ändringar till
+	Station	Station
+	Kind	Typ
+	Service	Betjäning
+	Load	Belastning
+	Status	Status
+	Units for {target}%	Enheter för {target} %
+	Formula	Formel
+	Simulated utilisation	Simulerad utnyttjandegrad
+	Simulated mean wait	Simulerad genomsnittlig väntetid
+	Target utilisation	Mål för utnyttjandegrad
+	Must be above 0% and below 100%	Måste vara över 0 % och under 100 %
+	The utilisation above which a station counts as congested	Den utnyttjandegrad över vilken en station räknas som överbelastad
+	Fine	Bra
+	Congested	Överbelastad
+	Unstable	Instabil
+	Unknown	Okänd
+	up to {n}	upp till {n}
+	Bottleneck: {name} (load {load}).	Flaskhals: {name} (belastning {load}).
+	Bottleneck: not known before a run (a load not known, or only bounded, could be the highest).	Flaskhals: okänd före en körning (en okänd, eller bara begränsad, belastning kan vara den högsta).
+	Not known before a run:	Okänt före en körning:
+	No exact formula for the wait:	Ingen exakt formel för väntetiden:
+	Utilisation is arrivals × service ÷ units, as the results count it; the load is that over the units' availability. A run adds what variability and blocking cost.	Utnyttjandegraden är ankomster × betjäning ÷ enheter, så som resultaten räknar den; belastningen är den i förhållande till enheternas tillgänglighet. En körning lägger till vad variation och blockering kostar.
+	No servers, shared tasks, delays or pools.	Inga servrar, delade uppgifter, fördröjningar eller pooler.
+	arrival rate	ankomstintensitet
+	service time	betjäningstid
+	utilisation	utnyttjandegrad
+	{station}: {what}: {message}.	{station}: {what}: {message}.
+	{station}: {message}.	{station}: {message}.
+	From the last run; – when there are none, or they are out of date.	Från den senaste körningen; – om det saknas eller är inaktuellt.
+	Show this block	Visa det här blocket
+	Rates and times are per {unit}.	Intensiteter och tider anges per {unit}.

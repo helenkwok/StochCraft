@@ -924,3 +924,34 @@ unit	yr	г.
 @plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	И двете използваха начална стойност {seed} и същото {n} изпълнение, така че всяко изпълнение получава същите случайни числа като своята двойка: разликите идват от промяната, а не от случайни тегления.|И двете използваха начална стойност {seed} и същите {n} изпълнения, така че всяко изпълнение получава същите случайни числа като своята двойка: разликите идват от промяната, а не от случайни тегления.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	Още {n} основен показател не се промени повече, отколкото би могла случайността.|Още {n} основни показателя не се промениха повече, отколкото би могла случайността.
 @plural	and {n} more change|and {n} more changes	и още {n} промяна|и още {n} промени
+	Station	Станция
+	Kind	Вид
+	Service	Обслужване
+	Load	Натоварване
+	Status	Състояние
+	Units for {target}%	Единици за {target} %
+	Formula	Формула
+	Simulated utilisation	Симулирано използване
+	Simulated mean wait	Симулирано средно чакане
+	Target utilisation	Целево използване
+	Must be above 0% and below 100%	Трябва да е над 0 % и под 100 %
+	The utilisation above which a station counts as congested	Използването, над което станцията се смята за претоварена
+	Fine	Добре
+	Congested	Претоварена
+	Unstable	Нестабилна
+	Unknown	Неизвестно
+	up to {n}	до {n}
+	Bottleneck: {name} (load {load}).	Тесно място: {name} (натоварване {load}).
+	Bottleneck: not known before a run (a load not known, or only bounded, could be the highest).	Тесно място: неизвестно преди пускане (неизвестно или само ограничено натоварване може да е най-голямото).
+	Not known before a run:	Неизвестно преди пускане:
+	No exact formula for the wait:	Няма точна формула за чакането:
+	Utilisation is arrivals × service ÷ units, as the results count it; the load is that over the units' availability. A run adds what variability and blocking cost.	Използването е пристигания × обслужване ÷ единици, както го броят резултатите; натоварването е то спрямо наличността на единиците. Пускането добавя това, което струват променливостта и блокирането.
+	No servers, shared tasks, delays or pools.	Няма сървъри, споделени задачи, забавяния или пулове.
+	arrival rate	интензивност на пристиганията
+	service time	време за обслужване
+	utilisation	използване
+	{station}: {what}: {message}.	{station}: {what}: {message}.
+	{station}: {message}.	{station}: {message}.
+	From the last run; – when there are none, or they are out of date.	От последното пускане; – ако няма или са остарели.
+	Show this block	Покажи този блок
+	Rates and times are per {unit}.	Интензивностите и времената са за {unit}.

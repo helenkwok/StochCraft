@@ -924,3 +924,34 @@ unit	yr	ປີ
 @plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	ທັງສອງໃຊ້ເມັດສຸ່ມ {seed} ແລະ {n} ຮອບດຽວກັນ, ແຕ່ລະຮອບຈຶ່ງໄດ້ຕົວເລກສຸ່ມຊຸດດຽວກັນກັບຄູ່ຂອງມັນ: ຄວາມແຕກຕ່າງມາຈາກການປ່ຽນແປງ ບໍ່ແມ່ນຈາກການສຸ່ມໂດຍບັງເອີນ.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	ຕົວຊີ້ວັດຫຼັກອື່ນອີກ {n} ອັນປ່ຽນໄປບໍ່ເກີນທີ່ຄວາມບັງເອີນຈະເຮັດໄດ້.
 @plural	and {n} more change|and {n} more changes	ແລະ ການປ່ຽນແປງອື່ນອີກ {n} ລາຍການ
+	Station	ສະຖານີ
+	Kind	ປະເພດ
+	Service	ການບໍລິການ
+	Load	ພາລະ
+	Status	ສະຖານະ
+	Units for {target}%	ຈຳນວນຫົວໜ່ວຍສຳລັບ {target}%
+	Formula	ສູດ
+	Simulated utilisation	ການນຳໃຊ້ທີ່ຈຳລອງ
+	Simulated mean wait	ເວລາລໍຖ້າສະເລ່ຍທີ່ຈຳລອງ
+	Target utilisation	ການນຳໃຊ້ເປົ້າໝາຍ
+	Must be above 0% and below 100%	ຕ້ອງຫຼາຍກວ່າ 0% ແລະ ໜ້ອຍກວ່າ 100%
+	The utilisation above which a station counts as congested	ການນຳໃຊ້ທີ່ເກີນນີ້ຖືວ່າສະຖານີແອອັດ
+	Fine	ດີ
+	Congested	ແອອັດ
+	Unstable	ບໍ່ສະຖຽນ
+	Unknown	ບໍ່ຮູ້
+	up to {n}	ສູງສຸດ {n}
+	Bottleneck: {name} (load {load}).	ຄໍຂວດ: {name} (ພາລະ {load})
+	Bottleneck: not known before a run (a load not known, or only bounded, could be the highest).	ຄໍຂວດ: ບໍ່ຮູ້ກ່ອນການແລ່ນ (ພາລະທີ່ບໍ່ຮູ້ ຫຼື ມີແຕ່ຂອບເຂດ ອາດສູງສຸດ)
+	Not known before a run:	ບໍ່ຮູ້ກ່ອນການແລ່ນ:
+	No exact formula for the wait:	ບໍ່ມີສູດທີ່ແນ່ນອນສຳລັບເວລາລໍຖ້າ:
+	Utilisation is arrivals × service ÷ units, as the results count it; the load is that over the units' availability. A run adds what variability and blocking cost.	ການນຳໃຊ້ແມ່ນການມາເຖິງ × ການບໍລິການ ÷ ຫົວໜ່ວຍ ຕາມທີ່ຜົນລັບນັບ ສ່ວນພາລະແມ່ນຄ່ານັ້ນທຽບກັບຄວາມພ້ອມຂອງຫົວໜ່ວຍ ການແລ່ນຈະເພີ່ມຕົ້ນທຶນຈາກຄວາມຜັນແປ ແລະ ການຕິດຂັດ
+	No servers, shared tasks, delays or pools.	ບໍ່ມີເຊີເວີ ວຽກທີ່ໃຊ້ຮ່ວມກັນ ການຊັກຊ້າ ຫຼື ພູນ
+	arrival rate	ອັດຕາການມາເຖິງ
+	service time	ເວລາບໍລິການ
+	utilisation	ການນຳໃຊ້
+	{station}: {what}: {message}.	{station}: {what}: {message}.
+	{station}: {message}.	{station}: {message}.
+	From the last run; – when there are none, or they are out of date.	ຈາກການແລ່ນຄັ້ງຫຼ້າສຸດ; – ຖ້າບໍ່ມີ ຫຼື ລ້າສະໄໝ
+	Show this block	ສະແດງບລັອກນີ້
+	Rates and times are per {unit}.	ອັດຕາ ແລະ ເວລາຕໍ່ {unit}

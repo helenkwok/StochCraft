@@ -924,3 +924,34 @@ unit	yr	a
 @plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Ambele au folosit sămânța {seed} și aceeași {n} rulare, deci fiecare rulare primește aceleași numere aleatoare ca perechea sa: diferențele vin din modificare, nu din extrageri întâmplătoare.|Ambele au folosit sămânța {seed} și aceleași {n} rulări, deci fiecare rulare primește aceleași numere aleatoare ca perechea sa: diferențele vin din modificare, nu din extrageri întâmplătoare.|Ambele au folosit sămânța {seed} și aceleași {n} de rulări, deci fiecare rulare primește aceleași numere aleatoare ca perechea sa: diferențele vin din modificare, nu din extrageri întâmplătoare.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	Încă {n} indicator principal nu s-a mișcat mai mult decât ar putea întâmplarea.|Încă {n} indicatori principali nu s-au mișcat mai mult decât ar putea întâmplarea.|Încă {n} de indicatori principali nu s-au mișcat mai mult decât ar putea întâmplarea.
 @plural	and {n} more change|and {n} more changes	și încă {n} modificare|și încă {n} modificări|și încă {n} de modificări
+	Station	Stație
+	Kind	Tip
+	Service	Servire
+	Load	Încărcare
+	Status	Stare
+	Units for {target}%	Unități pentru {target}%
+	Formula	Formulă
+	Simulated utilisation	Utilizare simulată
+	Simulated mean wait	Așteptare medie simulată
+	Target utilisation	Utilizare țintă
+	Must be above 0% and below 100%	Trebuie să fie peste 0% și sub 100%
+	The utilisation above which a station counts as congested	Utilizarea peste care o stație este considerată aglomerată
+	Fine	În regulă
+	Congested	Aglomerată
+	Unstable	Instabilă
+	Unknown	Necunoscut
+	up to {n}	până la {n}
+	Bottleneck: {name} (load {load}).	Blocaj: {name} (încărcare {load}).
+	Bottleneck: not known before a run (a load not known, or only bounded, could be the highest).	Blocaj: necunoscut înainte de o simulare (o încărcare necunoscută sau doar mărginită ar putea fi cea mai mare).
+	Not known before a run:	Necunoscut înainte de o simulare:
+	No exact formula for the wait:	Nu există formulă exactă pentru așteptare:
+	Utilisation is arrivals × service ÷ units, as the results count it; the load is that over the units' availability. A run adds what variability and blocking cost.	Utilizarea este sosiri × servire ÷ unități, așa cum o numără rezultatele; încărcarea este această valoare raportată la disponibilitatea unităților. O simulare adaugă ce costă variabilitatea și blocarea.
+	No servers, shared tasks, delays or pools.	Niciun server, sarcină partajată, întârziere sau grup.
+	arrival rate	rata de sosire
+	service time	timp de servire
+	utilisation	utilizare
+	{station}: {what}: {message}.	{station}: {what}: {message}.
+	{station}: {message}.	{station}: {message}.
+	From the last run; – when there are none, or they are out of date.	Din ultima simulare; – dacă nu există sau sunt depășite.
+	Show this block	Arată acest bloc
+	Rates and times are per {unit}.	Ratele și duratele sunt pe {unit}.

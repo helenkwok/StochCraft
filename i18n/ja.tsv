@@ -924,3 +924,34 @@ unit	yr	年
 @plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	どちらも乱数シード {seed} と同じ {n} 回の実行を使ったため、各実行は対になる実行と同じ乱数を受け取ります。差は偶然の抽出ではなく、変更から生じています。
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	ほかの主な指標 {n} 個は、偶然の範囲を超えて動いていません。
 @plural	and {n} more change|and {n} more changes	ほか {n} 件の変更
+	Station	ステーション
+	Kind	種類
+	Service	サービス
+	Load	負荷
+	Status	状態
+	Units for {target}%	{target}% に必要な台数
+	Formula	式
+	Simulated utilisation	シミュレーションの稼働率
+	Simulated mean wait	シミュレーションの平均待ち時間
+	Target utilisation	目標稼働率
+	Must be above 0% and below 100%	0% より大きく 100% より小さくしてください
+	The utilisation above which a station counts as congested	これを超えるとステーションが混雑とみなされる稼働率
+	Fine	良好
+	Congested	混雑
+	Unstable	不安定
+	Unknown	不明
+	up to {n}	最大 {n}
+	Bottleneck: {name} (load {load}).	ボトルネック：{name}（負荷 {load}）。
+	Bottleneck: not known before a run (a load not known, or only bounded, could be the highest).	ボトルネック：実行前は不明（不明または上限・下限だけの負荷が最大かもしれません）。
+	Not known before a run:	実行前は不明：
+	No exact formula for the wait:	待ち時間の厳密な式なし：
+	Utilisation is arrivals × service ÷ units, as the results count it; the load is that over the units' availability. A run adds what variability and blocking cost.	稼働率は到着 × サービス ÷ 台数で、結果の数え方と同じです。負荷はこれを台数の可用性で割ったものです。実行では、ばらつきとブロッキングによるコストが加わります。
+	No servers, shared tasks, delays or pools.	サーバー、共有タスク、遅延、プールはありません。
+	arrival rate	到着率
+	service time	サービス時間
+	utilisation	稼働率
+	{station}: {what}: {message}.	{station}：{what}：{message}。
+	{station}: {message}.	{station}：{message}。
+	From the last run; – when there are none, or they are out of date.	直近の実行より。ない場合や古い場合は –
+	Show this block	このブロックを表示
+	Rates and times are per {unit}.	率と時間は {unit} あたりです。

@@ -924,3 +924,34 @@ unit	yr	বছর
 @plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	দুটিই যদৃচ্ছ বীজ {seed} এবং একই {n}টি পুনরাবৃত্তি ব্যবহার করেছে, তাই প্রতিটি পুনরাবৃত্তি তার জোড়ার মতো একই যদৃচ্ছ সংখ্যা পায়: পার্থক্য আসে পরিবর্তন থেকে, দৈবক্রমের টানা থেকে নয়।|দুটিই যদৃচ্ছ বীজ {seed} এবং একই {n}টি পুনরাবৃত্তি ব্যবহার করেছে, তাই প্রতিটি পুনরাবৃত্তি তার জোড়ার মতো একই যদৃচ্ছ সংখ্যা পায়: পার্থক্য আসে পরিবর্তন থেকে, দৈবক্রমের টানা থেকে নয়।
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	আরও {n}টি প্রধান পরিমাপক দৈবক্রমের সীমার চেয়ে বেশি নড়েনি।|আরও {n}টি প্রধান পরিমাপক দৈবক্রমের সীমার চেয়ে বেশি নড়েনি।
 @plural	and {n} more change|and {n} more changes	এবং আরও {n}টি পরিবর্তন|এবং আরও {n}টি পরিবর্তন
+	Station	স্টেশন
+	Kind	ধরন
+	Service	সেবা
+	Load	লোড
+	Status	অবস্থা
+	Units for {target}%	{target}%-এর জন্য ইউনিট
+	Formula	সূত্র
+	Simulated utilisation	সিমুলেট করা ব্যবহার
+	Simulated mean wait	সিমুলেট করা গড় অপেক্ষা
+	Target utilisation	লক্ষ্য ব্যবহার
+	Must be above 0% and below 100%	০%-এর বেশি এবং ১০০%-এর কম হতে হবে
+	The utilisation above which a station counts as congested	যে ব্যবহারের ওপরে স্টেশনকে ভিড়যুক্ত ধরা হয়
+	Fine	ঠিক আছে
+	Congested	ভিড়যুক্ত
+	Unstable	অস্থির
+	Unknown	অজানা
+	up to {n}	সর্বোচ্চ {n}
+	Bottleneck: {name} (load {load}).	বাধা: {name} (লোড {load})।
+	Bottleneck: not known before a run (a load not known, or only bounded, could be the highest).	বাধা: রানের আগে জানা নেই (অজানা বা শুধু সীমাবদ্ধ লোড সবচেয়ে বেশি হতে পারে)।
+	Not known before a run:	রানের আগে জানা নেই:
+	No exact formula for the wait:	অপেক্ষার জন্য সঠিক সূত্র নেই:
+	Utilisation is arrivals × service ÷ units, as the results count it; the load is that over the units' availability. A run adds what variability and blocking cost.	ব্যবহার হলো আগমন × সেবা ÷ ইউনিট, ফলাফল যেভাবে গোনে; লোড হলো ইউনিটের প্রাপ্যতার তুলনায় তা। একটি রান পরিবর্তনশীলতা ও অবরোধের খরচ যোগ করে।
+	No servers, shared tasks, delays or pools.	কোনো সার্ভার, ভাগ করা কাজ, বিলম্ব বা পুল নেই।
+	arrival rate	আগমনের হার
+	service time	সেবার সময়
+	utilisation	ব্যবহার
+	{station}: {what}: {message}.	{station}: {what}: {message}.
+	{station}: {message}.	{station}: {message}.
+	From the last run; – when there are none, or they are out of date.	শেষ রান থেকে; – না থাকলে বা পুরোনো হলে।
+	Show this block	এই ব্লকটি দেখান
+	Rates and times are per {unit}.	হার ও সময় প্রতি {unit}।
