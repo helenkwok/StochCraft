@@ -123,6 +123,14 @@ fn every_screen_is_translated() {
     settle(&mut h);
     missed.extend(untranslated(&h));
 
+    // The 3D view, then back to the model.
+    h.get_by_role_and_label(Role::Tab, "⟦3D⟧").click();
+    settle(&mut h);
+    h.get_by_label("⟦3D view of the model⟧");
+    missed.extend(untranslated(&h));
+    h.get_by_role_and_label(Role::Tab, "⟦Model⟧").click();
+    settle(&mut h);
+
     // Results.
     h.state_mut().run();
     for _ in 0..5000 {

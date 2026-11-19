@@ -971,3 +971,7 @@ unit	yr	år
 	From the last run; – when there are none, or they are out of date.	Fra siste kjøring; – hvis det ikke finnes noen, eller de er utdaterte.
 	Show this block	Vis denne blokken
 	Rates and times are per {unit}.	Rater og tider er per {unit}.
+	3D	3D
+	3D view of the model	3D-visning av modellen
+	Drag to orbit · Scroll to zoom · Shift-drag to pan	Dra for å rotere · Rull for å zoome · Shift og dra for å panorere
+	Parcel sorter	Pakkesorterer

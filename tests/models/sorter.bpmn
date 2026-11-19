@@ -1,0 +1,406 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- A parcel sorter: parcels arrive on an infeed conveyor, a divert gateway sends each one to the
+     lane for its product, and a parcel whose lane is full goes round the loop and tries again.
+     Each lane ends in a packing station with no waiting room. Written for StochCraft (MIT OR
+     Apache-2.0). Time is in seconds, lengths in metres. -->
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:bpsim="http://www.bpsim.org/schemas/2.0" id="definitions" name="Parcel sorter" targetNamespace="https://github.com/helenkwok/StochCraft/model" exporter="StochCraft" exporterVersion="0.1.0">
+  <bpmn:resource id="pack_red_resource" name="Packer red"/>
+  <bpmn:resource id="pack_blue_resource" name="Packer blue"/>
+  <bpmn:resource id="pack_green_resource" name="Packer green"/>
+  <bpmn:resource id="pack_yellow_resource" name="Packer yellow"/>
+  <bpmn:process id="process" name="Parcel sorter" isExecutable="false">
+    <bpmn:startEvent id="parcels" name="Parcels arrive">
+      <bpmn:outgoing>flow-1</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:task id="infeed" name="Infeed">
+      <bpmn:incoming>flow-1</bpmn:incoming>
+      <bpmn:outgoing>flow-2</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:exclusiveGateway id="sorter" name="Divert by product" default="flow-3">
+      <bpmn:incoming>flow-2</bpmn:incoming>
+      <bpmn:incoming>flow-4</bpmn:incoming>
+      <bpmn:outgoing>flow-3</bpmn:outgoing>
+      <bpmn:outgoing>flow-5</bpmn:outgoing>
+      <bpmn:outgoing>flow-6</bpmn:outgoing>
+      <bpmn:outgoing>flow-7</bpmn:outgoing>
+      <bpmn:outgoing>flow-8</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:task id="loop" name="Loop">
+      <bpmn:incoming>flow-3</bpmn:incoming>
+      <bpmn:outgoing>flow-4</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="lane_red" name="Lane red">
+      <bpmn:incoming>flow-5</bpmn:incoming>
+      <bpmn:outgoing>flow-9</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="lane_blue" name="Lane blue">
+      <bpmn:incoming>flow-6</bpmn:incoming>
+      <bpmn:outgoing>flow-10</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="lane_green" name="Lane green">
+      <bpmn:incoming>flow-7</bpmn:incoming>
+      <bpmn:outgoing>flow-11</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="lane_yellow" name="Lane yellow">
+      <bpmn:incoming>flow-8</bpmn:incoming>
+      <bpmn:outgoing>flow-12</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="pack_red" name="Pack red">
+      <bpmn:incoming>flow-9</bpmn:incoming>
+      <bpmn:outgoing>flow-13</bpmn:outgoing>
+      <bpmn:performer>
+        <bpmn:resourceRef>pack_red_resource</bpmn:resourceRef>
+      </bpmn:performer>
+    </bpmn:task>
+    <bpmn:task id="pack_blue" name="Pack blue">
+      <bpmn:incoming>flow-10</bpmn:incoming>
+      <bpmn:outgoing>flow-14</bpmn:outgoing>
+      <bpmn:performer>
+        <bpmn:resourceRef>pack_blue_resource</bpmn:resourceRef>
+      </bpmn:performer>
+    </bpmn:task>
+    <bpmn:task id="pack_green" name="Pack green">
+      <bpmn:incoming>flow-11</bpmn:incoming>
+      <bpmn:outgoing>flow-15</bpmn:outgoing>
+      <bpmn:performer>
+        <bpmn:resourceRef>pack_green_resource</bpmn:resourceRef>
+      </bpmn:performer>
+    </bpmn:task>
+    <bpmn:task id="pack_yellow" name="Pack yellow">
+      <bpmn:incoming>flow-12</bpmn:incoming>
+      <bpmn:outgoing>flow-16</bpmn:outgoing>
+      <bpmn:performer>
+        <bpmn:resourceRef>pack_yellow_resource</bpmn:resourceRef>
+      </bpmn:performer>
+    </bpmn:task>
+    <bpmn:endEvent id="shipped" name="Shipped">
+      <bpmn:incoming>flow-13</bpmn:incoming>
+      <bpmn:incoming>flow-14</bpmn:incoming>
+      <bpmn:incoming>flow-15</bpmn:incoming>
+      <bpmn:incoming>flow-16</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="flow-1" sourceRef="parcels" targetRef="infeed"/>
+    <bpmn:sequenceFlow id="flow-2" sourceRef="infeed" targetRef="sorter"/>
+    <bpmn:sequenceFlow id="flow-3" sourceRef="sorter" targetRef="loop"/>
+    <bpmn:sequenceFlow id="flow-4" sourceRef="loop" targetRef="sorter"/>
+    <bpmn:sequenceFlow id="flow-5" sourceRef="sorter" targetRef="lane_red"/>
+    <bpmn:sequenceFlow id="flow-6" sourceRef="sorter" targetRef="lane_blue"/>
+    <bpmn:sequenceFlow id="flow-7" sourceRef="sorter" targetRef="lane_green"/>
+    <bpmn:sequenceFlow id="flow-8" sourceRef="sorter" targetRef="lane_yellow"/>
+    <bpmn:sequenceFlow id="flow-9" sourceRef="lane_red" targetRef="pack_red"/>
+    <bpmn:sequenceFlow id="flow-10" sourceRef="lane_blue" targetRef="pack_blue"/>
+    <bpmn:sequenceFlow id="flow-11" sourceRef="lane_green" targetRef="pack_green"/>
+    <bpmn:sequenceFlow id="flow-12" sourceRef="lane_yellow" targetRef="pack_yellow"/>
+    <bpmn:sequenceFlow id="flow-13" sourceRef="pack_red" targetRef="shipped"/>
+    <bpmn:sequenceFlow id="flow-14" sourceRef="pack_blue" targetRef="shipped"/>
+    <bpmn:sequenceFlow id="flow-15" sourceRef="pack_green" targetRef="shipped"/>
+    <bpmn:sequenceFlow id="flow-16" sourceRef="pack_yellow" targetRef="shipped"/>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="diagram">
+    <bpmndi:BPMNPlane id="plane" bpmnElement="process">
+      <bpmndi:BPMNShape id="parcels_di" bpmnElement="parcels">
+        <dc:Bounds x="40" y="282" width="36" height="36"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="infeed_di" bpmnElement="infeed">
+        <dc:Bounds x="110" y="270" width="140" height="60"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sorter_di" bpmnElement="sorter">
+        <dc:Bounds x="290" y="275" width="50" height="50"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="loop_di" bpmnElement="loop">
+        <dc:Bounds x="255" y="580" width="120" height="60"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="lane_red_di" bpmnElement="lane_red">
+        <dc:Bounds x="420" y="90" width="200" height="60"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="lane_blue_di" bpmnElement="lane_blue">
+        <dc:Bounds x="420" y="210" width="200" height="60"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="lane_green_di" bpmnElement="lane_green">
+        <dc:Bounds x="420" y="330" width="200" height="60"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="lane_yellow_di" bpmnElement="lane_yellow">
+        <dc:Bounds x="420" y="450" width="200" height="60"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="pack_red_di" bpmnElement="pack_red">
+        <dc:Bounds x="680" y="80" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="pack_blue_di" bpmnElement="pack_blue">
+        <dc:Bounds x="680" y="200" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="pack_green_di" bpmnElement="pack_green">
+        <dc:Bounds x="680" y="320" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="pack_yellow_di" bpmnElement="pack_yellow">
+        <dc:Bounds x="680" y="440" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shipped_di" bpmnElement="shipped">
+        <dc:Bounds x="862" y="282" width="36" height="36"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="flow-1_di" bpmnElement="flow-1">
+        <di:waypoint x="76" y="300"/>
+        <di:waypoint x="110" y="300"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow-2_di" bpmnElement="flow-2">
+        <di:waypoint x="250" y="300"/>
+        <di:waypoint x="290" y="300"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow-3_di" bpmnElement="flow-3">
+        <di:waypoint x="305" y="325"/>
+        <di:waypoint x="305" y="580"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow-4_di" bpmnElement="flow-4">
+        <di:waypoint x="325" y="580"/>
+        <di:waypoint x="325" y="325"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow-5_di" bpmnElement="flow-5">
+        <di:waypoint x="340" y="300"/>
+        <di:waypoint x="380" y="300"/>
+        <di:waypoint x="380" y="120"/>
+        <di:waypoint x="420" y="120"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow-6_di" bpmnElement="flow-6">
+        <di:waypoint x="340" y="300"/>
+        <di:waypoint x="380" y="300"/>
+        <di:waypoint x="380" y="240"/>
+        <di:waypoint x="420" y="240"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow-7_di" bpmnElement="flow-7">
+        <di:waypoint x="340" y="300"/>
+        <di:waypoint x="380" y="300"/>
+        <di:waypoint x="380" y="360"/>
+        <di:waypoint x="420" y="360"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow-8_di" bpmnElement="flow-8">
+        <di:waypoint x="340" y="300"/>
+        <di:waypoint x="380" y="300"/>
+        <di:waypoint x="380" y="480"/>
+        <di:waypoint x="420" y="480"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow-9_di" bpmnElement="flow-9">
+        <di:waypoint x="620" y="120"/>
+        <di:waypoint x="680" y="120"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow-10_di" bpmnElement="flow-10">
+        <di:waypoint x="620" y="240"/>
+        <di:waypoint x="680" y="240"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow-11_di" bpmnElement="flow-11">
+        <di:waypoint x="620" y="360"/>
+        <di:waypoint x="680" y="360"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow-12_di" bpmnElement="flow-12">
+        <di:waypoint x="620" y="480"/>
+        <di:waypoint x="680" y="480"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow-13_di" bpmnElement="flow-13">
+        <di:waypoint x="780" y="120"/>
+        <di:waypoint x="820" y="120"/>
+        <di:waypoint x="820" y="300"/>
+        <di:waypoint x="862" y="300"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow-14_di" bpmnElement="flow-14">
+        <di:waypoint x="780" y="240"/>
+        <di:waypoint x="820" y="240"/>
+        <di:waypoint x="820" y="300"/>
+        <di:waypoint x="862" y="300"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow-15_di" bpmnElement="flow-15">
+        <di:waypoint x="780" y="360"/>
+        <di:waypoint x="820" y="360"/>
+        <di:waypoint x="820" y="300"/>
+        <di:waypoint x="862" y="300"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow-16_di" bpmnElement="flow-16">
+        <di:waypoint x="780" y="480"/>
+        <di:waypoint x="820" y="480"/>
+        <di:waypoint x="820" y="300"/>
+        <di:waypoint x="862" y="300"/>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+  <bpmn:relationship type="BPSimData">
+    <bpmn:extensionElements>
+      <bpsim:BPSimData>
+        <bpsim:Scenario id="scenario" name="Parcel sorter" vendor="StochCraft" version="0.1.0">
+          <bpsim:ScenarioParameters replication="5" seed="1" baseTimeUnit="s">
+            <bpsim:Duration>
+              <bpsim:FloatingParameter value="3600"/>
+            </bpsim:Duration>
+            <bpsim:Warmup>
+              <bpsim:FloatingParameter value="600"/>
+            </bpsim:Warmup>
+          </bpsim:ScenarioParameters>
+          <bpsim:ElementParameters elementRef="parcels">
+            <bpsim:ControlParameters>
+              <bpsim:InterTriggerTimer>
+                <bpsim:NegativeExponentialDistribution mean="4"/>
+              </bpsim:InterTriggerTimer>
+            </bpsim:ControlParameters>
+            <bpsim:PropertyParameters>
+              <bpsim:Property name="product">
+                <bpsim:UserDistribution discrete="true">
+                  <bpsim:UserDistributionDataPoint probability="0.25">
+                    <bpsim:StringParameter value="red"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.25">
+                    <bpsim:StringParameter value="blue"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.25">
+                    <bpsim:StringParameter value="green"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.25">
+                    <bpsim:StringParameter value="yellow"/>
+                  </bpsim:UserDistributionDataPoint>
+                </bpsim:UserDistribution>
+              </bpsim:Property>
+            </bpsim:PropertyParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="infeed">
+            <bpsim:VendorExtension name="stochcraft:conveyor" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1">
+              <stochcraft:conveyor length="12" speed="0.5" accumulating="true" itemLength="0.4" gap="0.2"/>
+            </bpsim:VendorExtension>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="sorter">
+            <bpsim:VendorExtension name="stochcraft:routing" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1" stochcraft:value="divert"/>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="loop">
+            <bpsim:VendorExtension name="stochcraft:conveyor" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1">
+              <stochcraft:conveyor length="30" speed="0.5" accumulating="false" itemLength="0.4" gap="0.2"/>
+            </bpsim:VendorExtension>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="lane_red">
+            <bpsim:VendorExtension name="stochcraft:conveyor" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1">
+              <stochcraft:conveyor length="4" speed="0.3" accumulating="true" itemLength="0.4" gap="0.2"/>
+            </bpsim:VendorExtension>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="lane_blue">
+            <bpsim:VendorExtension name="stochcraft:conveyor" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1">
+              <stochcraft:conveyor length="4" speed="0.3" accumulating="true" itemLength="0.4" gap="0.2"/>
+            </bpsim:VendorExtension>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="lane_green">
+            <bpsim:VendorExtension name="stochcraft:conveyor" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1">
+              <stochcraft:conveyor length="4" speed="0.3" accumulating="true" itemLength="0.4" gap="0.2"/>
+            </bpsim:VendorExtension>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="lane_yellow">
+            <bpsim:VendorExtension name="stochcraft:conveyor" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1">
+              <stochcraft:conveyor length="4" speed="0.3" accumulating="true" itemLength="0.4" gap="0.2"/>
+            </bpsim:VendorExtension>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="pack_red">
+            <bpsim:TimeParameters>
+              <bpsim:ProcessingTime>
+                <bpsim:UniformDistribution min="10" max="20"/>
+              </bpsim:ProcessingTime>
+            </bpsim:TimeParameters>
+            <bpsim:ResourceParameters>
+              <bpsim:Selection>
+                <bpsim:ExpressionParameter value="getResource('pack_red_resource', 1)"/>
+              </bpsim:Selection>
+            </bpsim:ResourceParameters>
+            <bpsim:VendorExtension name="stochcraft:queueCapacity" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1" stochcraft:value="0"/>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="pack_blue">
+            <bpsim:TimeParameters>
+              <bpsim:ProcessingTime>
+                <bpsim:UniformDistribution min="10" max="20"/>
+              </bpsim:ProcessingTime>
+            </bpsim:TimeParameters>
+            <bpsim:ResourceParameters>
+              <bpsim:Selection>
+                <bpsim:ExpressionParameter value="getResource('pack_blue_resource', 1)"/>
+              </bpsim:Selection>
+            </bpsim:ResourceParameters>
+            <bpsim:VendorExtension name="stochcraft:queueCapacity" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1" stochcraft:value="0"/>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="pack_green">
+            <bpsim:TimeParameters>
+              <bpsim:ProcessingTime>
+                <bpsim:UniformDistribution min="10" max="20"/>
+              </bpsim:ProcessingTime>
+            </bpsim:TimeParameters>
+            <bpsim:ResourceParameters>
+              <bpsim:Selection>
+                <bpsim:ExpressionParameter value="getResource('pack_green_resource', 1)"/>
+              </bpsim:Selection>
+            </bpsim:ResourceParameters>
+            <bpsim:VendorExtension name="stochcraft:queueCapacity" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1" stochcraft:value="0"/>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="pack_yellow">
+            <bpsim:TimeParameters>
+              <bpsim:ProcessingTime>
+                <bpsim:UniformDistribution min="10" max="20"/>
+              </bpsim:ProcessingTime>
+            </bpsim:TimeParameters>
+            <bpsim:ResourceParameters>
+              <bpsim:Selection>
+                <bpsim:ExpressionParameter value="getResource('pack_yellow_resource', 1)"/>
+              </bpsim:Selection>
+            </bpsim:ResourceParameters>
+            <bpsim:VendorExtension name="stochcraft:queueCapacity" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1" stochcraft:value="0"/>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="flow-5">
+            <bpsim:ControlParameters>
+              <bpsim:Condition>
+                <bpsim:ExpressionParameter value="getProperty('product') = 'red'"/>
+              </bpsim:Condition>
+            </bpsim:ControlParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="flow-6">
+            <bpsim:ControlParameters>
+              <bpsim:Condition>
+                <bpsim:ExpressionParameter value="getProperty('product') = 'blue'"/>
+              </bpsim:Condition>
+            </bpsim:ControlParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="flow-7">
+            <bpsim:ControlParameters>
+              <bpsim:Condition>
+                <bpsim:ExpressionParameter value="getProperty('product') = 'green'"/>
+              </bpsim:Condition>
+            </bpsim:ControlParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="flow-8">
+            <bpsim:ControlParameters>
+              <bpsim:Condition>
+                <bpsim:ExpressionParameter value="getProperty('product') = 'yellow'"/>
+              </bpsim:Condition>
+            </bpsim:ControlParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="pack_red_resource">
+            <bpsim:ResourceParameters>
+              <bpsim:Quantity>
+                <bpsim:NumericParameter value="1"/>
+              </bpsim:Quantity>
+            </bpsim:ResourceParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="pack_blue_resource">
+            <bpsim:ResourceParameters>
+              <bpsim:Quantity>
+                <bpsim:NumericParameter value="1"/>
+              </bpsim:Quantity>
+            </bpsim:ResourceParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="pack_green_resource">
+            <bpsim:ResourceParameters>
+              <bpsim:Quantity>
+                <bpsim:NumericParameter value="1"/>
+              </bpsim:Quantity>
+            </bpsim:ResourceParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="pack_yellow_resource">
+            <bpsim:ResourceParameters>
+              <bpsim:Quantity>
+                <bpsim:NumericParameter value="1"/>
+              </bpsim:Quantity>
+            </bpsim:ResourceParameters>
+          </bpsim:ElementParameters>
+        </bpsim:Scenario>
+      </bpsim:BPSimData>
+    </bpmn:extensionElements>
+    <bpmn:source>definitions</bpmn:source>
+    <bpmn:target>definitions</bpmn:target>
+  </bpmn:relationship>
+</bpmn:definitions>

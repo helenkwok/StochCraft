@@ -47,9 +47,9 @@ use std::collections::{BTreeMap, BTreeSet};
 pub use stochcraft_model::calendar::{Calendar, Event, Rule};
 use stochcraft_model::expr;
 pub use stochcraft_model::{
-    AfterJob, BalkJoin, BalkRow, Balking, Breakdown, ByValue, Change, Demand, DemandPer,
-    HealthCheck, Mobility, OnShiftEnd, OnTakeout, Patience, PatienceUntil, PlaceWhileOut, Power,
-    ProcessingBy, QueueLimit, Routing, Scrap, Setup, Transfer,
+    AfterJob, BalkJoin, BalkRow, Balking, Breakdown, ByValue, Change, ConveyorShape, Demand,
+    DemandPer, HealthCheck, Mobility, OnShiftEnd, OnTakeout, Patience, PatienceUntil,
+    PlaceWhileOut, Power, ProcessingBy, QueueLimit, Routing, Scrap, Setup, Transfer,
 };
 use stochcraft_model::{
     Bounds, Connection, Diagnostic, Element, ElementId, ElementKind, Experiment, Model, Need,
@@ -1859,6 +1859,7 @@ impl Builder {
                 accumulating,
                 item_length,
                 gap,
+                shape: ConveyorShape::Straight,
             },
         )
     }
