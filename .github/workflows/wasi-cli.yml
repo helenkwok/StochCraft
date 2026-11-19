@@ -1,0 +1,95 @@
+name: CLI on WASI
+
+# Builds stochcraft-cli for wasm32-wasip1 and runs the M/M/1 model with it under Node's built-in
+# WASI (the same way `cargo xtask golden` runs the golden results), then keeps the .wasm as a
+# workflow artifact. Purpose: a server-side function (a Forge app's Node function) can run a model
+# by loading this one file, with no worker threads and no native code. Nothing is published.
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [forge-wasi-cli-2]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: wasi-cli-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  wasi-cli:
+    name: Build and run stochcraft-cli on WASI
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: dtolnay/rust-toolchain@683b588c487a69d01f6c6ddf40f036ff682cc2c8 # master
+        with:
+          toolchain: stable
+          targets: wasm32-wasip1
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2.9.3
+        with:
+          key: wasi-cli
+      - name: Build stochcraft-cli for wasm32-wasip1
+        run: cargo build --release --locked -p stochcraft-cli --target wasm32-wasip1
+      - uses: actions/setup-node@v7
+        with:
+          node-version: lts/*
+      - name: Run the M/M/1 model under Node's WASI
+        run: |
+          set -euo pipefail
+          wasm=target/wasm32-wasip1/release/stochcraft-cli.wasm
+          ls -l "$wasm"
+          cat >run-wasi.mjs <<'EOF'
+          // Usage: node run-wasi.mjs program.wasm <model dir> args...  (the model dir is /work in the program)
+          import { readFile } from "node:fs/promises";
+          import { WASI } from "node:wasi";
+          import { argv, exit, versions } from "node:process";
+          import { setFlagsFromString } from "node:v8";
+          if (Number(versions.node.split(".")[0]) < 24) setFlagsFromString("--no-turbo-fast-api-calls");
+          const [program, dir, ...args] = argv.slice(2);
+          const wasi = new WASI({ version: "preview1", args: ["stochcraft-cli", ...args], preopens: { "/work": dir }, returnOnExit: true });
+          const module = await WebAssembly.compile(await readFile(program));
+          const instance = await WebAssembly.instantiate(module, wasi.getImportObject());
+          exit(wasi.start(instance));
+          EOF
+          time node --no-warnings run-wasi.mjs "$wasm" tests/models run /work/mm1.bpmn --reps 16 --seed 2026 --threads 1 --format json > wasi-result.json
+          head -c 600 wasi-result.json; echo
+          node -e 'const r=JSON.parse(require("fs").readFileSync("wasi-result.json","utf8"));console.log("keys:",Object.keys(r).join(","))'
+      - name: The capacity table and line balancing run under WASI too
+        run: |
+          set -euo pipefail
+          wasm=target/wasm32-wasip1/release/stochcraft-cli.wasm
+          printf 'id,time,after\nA,2,\nB,3,A\nC,4,A\nD,2,B;C\n' > tests/models/wasi-balance.csv
+          node --no-warnings run-wasi.mjs "$wasm" tests/models explain /work/mm1.bpmn | tee wasi-explain.txt
+          node --no-warnings run-wasi.mjs "$wasm" tests/models balance /work/wasi-balance.csv --cycle 5 --format json | tee wasi-balance.json | head -c 600; echo
+      - name: The native build gives the same results
+        # Informative: fields that are not results (timings, ordering) may differ; read the log.
+        continue-on-error: true
+        run: |
+          set -euo pipefail
+          cargo run --release --locked -q -p stochcraft-cli -- run tests/models/mm1.bpmn --reps 16 --seed 2026 --threads 1 --format json > native-result.json
+          node -e '
+            const fs=require("fs");
+            const strip=(o)=>JSON.stringify(o,(k,v)=>/^(elapsed|seconds|duration_ms|started|finished|wall)/i.test(k)?undefined:v);
+            const a=strip(JSON.parse(fs.readFileSync("wasi-result.json","utf8")));
+            const b=strip(JSON.parse(fs.readFileSync("native-result.json","utf8")));
+            console.log("identical:",a===b);
+            if(a!==b){console.log("wasi  :",a.slice(0,400));console.log("native:",b.slice(0,400));process.exit(1)}'
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: always()
+        with:
+          name: stochcraft-cli-wasip1
+          path: |
+            target/wasm32-wasip1/release/stochcraft-cli.wasm
+            wasi-result.json
+            wasi-explain.txt
+            wasi-balance.json
+            run-wasi.mjs
+          if-no-files-found: warn
