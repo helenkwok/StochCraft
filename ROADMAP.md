@@ -2662,7 +2662,7 @@ layout. The flagship example is a parcel super hub.
 - **Lane full, stay on the loop.** Built in: when the chosen lane cannot take the item, it stays
   on the loop and is offered again next time round. Each item counts its rounds; after a set
   number it goes to an exception lane. Results report the recirculation count per divert and
-  per item. In the public documentation we read, this is built by the user from a photo-eye on
+  per item. In general-purpose tools this is usually built by the user from a photo-eye on
   the lane and a condition at the divert; built in, a sorter needs no scripting.
 - **Default routing is the shortest path** over the section graph to the item's destination
   (a place id carried as an entity property). Explicit sequences and "avoid" lists come later.
@@ -2889,7 +2889,7 @@ you build it.*
 
 #### Decision models for sorting and classifying
 
-- **DMN decision tables** (settled, Helen, 2026-11-19; D30). DMN (OMG Decision Model and Notation,
+- **DMN decision tables** (settled 2026-11-19; D30). DMN (OMG Decision Model and Notation,
   1.6, adopted 2026) is BPMN's sibling standard for decisions, so it fits "no new format": a `.dmn` file
   is read beside the BPMN, and other tools can open it.
   - A BPMN `businessRuleTask`, an exclusive gateway or a divert names a decision in the `.dmn`
@@ -3355,5 +3355,5 @@ and the Pages preview of an M3 pull request shows the blocks already merged.
 | D27 | The 3D renderer (M5.5) | **Recommended:** keep `view3d.rs`'s CPU renderer, fed from the Layout, with levels of detail and a triangle budget; D22's move to the shared wgpu viewport waits until the CPU renderer is measured too slow (for example 5,000 moving totes in the browser) |
 | D28 | Which layout data marks results out of date; the fate of `layout_scale` (M5.5) | **Recommended:** every field is tagged sim or look; sim fields (paths, places that transports use, chute capacities, walkways) enter the results baseline and look fields never do. `layout_scale` stays only for models without a layout, where distances fall back to the diagram's centres, flagged in the view |
 | D29 | Recirculation on a sorter loop (M5.5) | **Recommended:** built in at every divert: a full lane sends the item round again; after a set number of rounds (default 3) it goes to an exception lane; counts per divert and per item are reported |
-| D30 | Decision rules for routing and classification (M5.5) | **Settled (Helen, 2026-11-19):** DMN decision tables, read from a `.dmn` file beside the BPMN, named from a business rule task, gateway or divert by a `stochcraft:` extension; first the hit policies UNIQUE, FIRST, PRIORITY and COLLECT and a small FEEL subset for input entries |
+| D30 | Decision rules for routing and classification (M5.5) | **Settled (2026-11-19):** DMN decision tables, read from a `.dmn` file beside the BPMN, named from a business rule task, gateway or divert by a `stochcraft:` extension; first the hit policies UNIQUE, FIRST, PRIORITY and COLLECT and a small FEEL subset for input entries |
 | D31 | The parcel hub example's scope (M5.5) | **Recommended:** S's outbound segment first (its checks are the stronger), then B's inbound side; whole-hub figures only as labelled scale context, never as a check |
