@@ -180,7 +180,7 @@ fn push_split(out: &mut Vec<Tri>, v: [Vec3; 3], normal: Vec3, paint: Paint, dept
 
 /// Adds a mesh's triangles to `out`.
 fn push_mesh(out: &mut Vec<Tri>, mesh: &Mesh, paint: Paint) {
-    for tri in mesh.indices.chunks_exact(3) {
+    for tri in mesh.indices.as_chunks::<3>().0 {
         let at = |k: usize| mesh.positions.get(tri[k] as usize).copied();
         let (Some(a), Some(b), Some(c)) = (at(0), at(1), at(2)) else {
             continue;
@@ -539,7 +539,7 @@ pub(crate) struct View {
 
 impl View {
     /// `p` in the camera's frame: right, up and distance along the view direction.
-    fn to_view(&self, p: Vec3) -> Vec3 {
+    fn in_camera(&self, p: Vec3) -> Vec3 {
         let v = sub(p, self.basis.eye);
         [
             dot(v, self.basis.right),
@@ -548,7 +548,7 @@ impl View {
         ]
     }
 
-    fn to_screen(&self, v: Vec3) -> Pos2 {
+    fn on_screen(&self, v: Vec3) -> Pos2 {
         pos2(
             self.centre.x + v[0] / v[2] * self.focal,
             self.centre.y - v[1] / v[2] * self.focal,
@@ -557,13 +557,13 @@ impl View {
 
     /// Where the point is on screen; none when it is behind the near plane.
     pub(crate) fn project(&self, p: Vec3) -> Option<Pos2> {
-        let v = self.to_view(p);
-        (v[2] >= NEAR).then(|| self.to_screen(v))
+        let v = self.in_camera(p);
+        (v[2] >= NEAR).then(|| self.on_screen(v))
     }
 
     /// The part of the segment in front of the near plane, on screen.
     pub(crate) fn segment(&self, a: Vec3, b: Vec3) -> Option<[Pos2; 2]> {
-        let (mut va, mut vb) = (self.to_view(a), self.to_view(b));
+        let (mut va, mut vb) = (self.in_camera(a), self.in_camera(b));
         if va[2] < NEAR && vb[2] < NEAR {
             return None;
         }
@@ -580,7 +580,7 @@ impl View {
         } else if vb[2] < NEAR {
             vb = cut(vb, va);
         }
-        Some([self.to_screen(va), self.to_screen(vb)])
+        Some([self.on_screen(va), self.on_screen(vb)])
     }
 
     /// The triangles of `parts` that face the camera and lie in front of it, shaded, far to
@@ -592,12 +592,12 @@ impl View {
             if dot(tri.normal, sub(self.basis.eye, tri.v[0])) <= 0.0 {
                 continue;
             }
-            let corners = tri.v.map(|p| self.to_view(p));
+            let corners = tri.v.map(|p| self.in_camera(p));
             if corners.iter().any(|c| c[2] < NEAR) {
                 continue;
             }
             out.push(Face {
-                pts: corners.map(|c| self.to_screen(c)),
+                pts: corners.map(|c| self.on_screen(c)),
                 depth: (corners[0][2] + corners[1][2] + corners[2][2]) / 3.0,
                 shade: 0.35 + 0.65 * dot(tri.normal, light).max(0.0),
                 paint: tri.paint,
