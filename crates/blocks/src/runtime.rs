@@ -661,6 +661,8 @@ impl Compiled {
                         *slot = Some(view);
                     }
                 }
+                // Not simulated yet (`compile` refuses a model with one): passes entities on.
+                ElementKind::Transport { .. } => spawn_unbatch(&mut sim, env),
             }
         }
 
