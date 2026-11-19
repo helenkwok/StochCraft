@@ -15,6 +15,7 @@ use egui::{Align2, FontId, Pos2, Rect, Stroke, Vec2};
 use stochcraft_engine::{Live, LiveState, RunError};
 use stochcraft_model::{ElementKind, Model};
 
+use crate::chart_palette::series_color;
 use crate::i18n::{t, tf};
 use crate::results::grouped;
 use crate::{App, theme};
@@ -135,6 +136,11 @@ impl Watching {
 
     pub(crate) fn state(&self, id: &str) -> Option<&LiveState> {
         self.states.get(id)
+    }
+
+    /// The items on conveyor `id` now: how far along (0 to 1), entity, product key.
+    pub(crate) fn conveyor_items(&self, id: &str) -> Vec<(f32, u64, u32)> {
+        self.run.conveyor_items(id)
     }
 }
 
@@ -483,12 +489,30 @@ impl App {
                         false,
                     );
                 }
-                ElementKind::Delay { .. } | ElementKind::Conveyor { .. } => pill(
+                ElementKind::Delay { .. } => pill(
                     tf("{n} inside", &[("n", &count(s.busy))]),
                     above,
                     Align2::CENTER_BOTTOM,
                     false,
                 ),
+                ElementKind::Conveyor { .. } => {
+                    pill(
+                        tf("{n} inside", &[("n", &count(s.busy))]),
+                        above,
+                        Align2::CENTER_BOTTOM,
+                        false,
+                    );
+                    // Each item as a small dot along the belt, coloured by its product.
+                    let inner = r.shrink(4.0 * zoom);
+                    let radius = (2.5 * zoom).clamp(1.5, 4.0);
+                    for (fraction, _, key) in w.conveyor_items(id) {
+                        let at =
+                            Pos2::new(inner.left() + inner.width() * fraction, inner.center().y);
+                        let colour = series_color(painter.ctx(), key as usize);
+                        painter.circle_filled(at, radius, colour);
+                        painter.circle_stroke(at, radius, Stroke::new(0.75, p.raised));
+                    }
+                }
                 _ => {}
             }
         }

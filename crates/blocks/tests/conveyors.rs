@@ -3,7 +3,7 @@
 #![allow(clippy::panic)]
 
 use stochcraft_blocks::{Builder, Report, compile};
-use stochcraft_model::{Dist, Experiment};
+use stochcraft_model::{Dist, Experiment, PropertyValue};
 use stochcraft_random::Rng;
 
 fn run(m: &Builder, duration: f64) -> Report {
@@ -169,4 +169,87 @@ fn a_divert_needs_a_default_way() {
     let model = m.build(Experiment::default());
     let codes: Vec<&str> = model.validate().iter().map(|d| d.problem.code()).collect();
     assert!(codes.contains(&"divert_no_default"), "{codes:?}");
+}
+
+/// A live run of `m` for `duration`, advanced to `t`; the items on `belt` then.
+fn items_at(m: &Builder, duration: f64, t: f64, belt: &str) -> Vec<(f32, u64, u32)> {
+    let model = m.build(Experiment {
+        warmup: 0.0,
+        duration,
+        ..Experiment::default()
+    });
+    let compiled = compile(&model).unwrap_or_else(|e| panic!("{e:?}"));
+    let mut live = compiled.live(Rng::new(1));
+    live.advance_to(t).unwrap_or_else(|e| panic!("{e}"));
+    live.conveyor_items(belt)
+}
+
+#[test]
+fn items_on_a_belt_that_is_not_accumulating_are_where_the_belt_has_carried_them() {
+    // One every 5 onto 10 at speed 1 and never blocked: the first gets on at 5, the second at 10.
+    // At 12 they have been on 7 and 2: at 0.7 and 0.2 of the length, front first.
+    for accumulating in [false, true] {
+        let mut m = Builder::new();
+        let src = m.source("in", Dist::Constant(5.0), Some(20));
+        let belt = m.conveyor("belt", 10.0, 1.0, accumulating, 0.5, 0.5);
+        let out = m.sink("out");
+        m.connect(src, belt);
+        m.connect(belt, out);
+        let items = items_at(&m, 1_000.0, 12.0, "belt");
+        assert_eq!(items.len(), 2, "{items:?}");
+        assert!((items[0].0 - 0.7).abs() < 1e-6, "{items:?}");
+        assert!((items[1].0 - 0.2).abs() < 1e-6, "{items:?}");
+        assert!(items[0].1 < items[1].1, "{items:?}");
+        // Another element, and a time before any item is on it, hold nothing.
+        assert!(items_at(&m, 1_000.0, 12.0, "out").is_empty());
+        assert!(items_at(&m, 1_000.0, 4.0, "belt").is_empty());
+    }
+}
+
+#[test]
+fn items_queue_a_pitch_apart_at_the_end_of_an_accumulating_belt_with_its_exit_shut() {
+    // As the exit-shut test: 10 long, pitch 2, the exit shut once the first item is in the
+    // machine. Five wait on the belt, a pitch (0.2 of the length) apart, the front at the end.
+    let mut m = Builder::new();
+    let src = m.source("in", Dist::Constant(3.0), None);
+    let belt = m.conveyor("belt", 10.0, 1.0, true, 1.5, 0.5);
+    let machine = m.buffered_server("machine", 1, Dist::Constant(1e9), 0);
+    let out = m.sink("out");
+    m.connect(src, belt);
+    m.connect(belt, machine);
+    m.connect(machine, out);
+    let items = items_at(&m, 1_000.0, 100.0, "belt");
+    assert_eq!(items.len(), 5, "{items:?}");
+    for (k, (x, ..)) in items.iter().enumerate() {
+        let want = 1.0 - 0.2 * k as f32;
+        assert!((x - want).abs() < 1e-6, "{k}: {items:?}");
+    }
+}
+
+#[test]
+fn an_item_has_the_index_of_its_product_among_the_values() {
+    // A property `product` of two values, drawn for each item at the source: keys 0 and 1, both
+    // seen among forty items on a long belt. Without such a property every key is 0.
+    let build = |with_product: bool| {
+        let mut m = Builder::new();
+        let src = m.source("in", Dist::Constant(2.0), Some(40));
+        if with_product {
+            m.property(
+                src,
+                "product",
+                None,
+                PropertyValue::Choice(vec![(1.0, "A".into()), (1.0, "B".into())]),
+            );
+        }
+        let belt = m.conveyor("belt", 100.0, 1.0, false, 0.5, 0.5);
+        let out = m.sink("out");
+        m.connect(src, belt);
+        m.connect(belt, out);
+        items_at(&m, 1_000.0, 81.0, "belt")
+    };
+    let keys: Vec<u32> = build(true).iter().map(|i| i.2).collect();
+    assert_eq!(keys.len(), 40);
+    assert!(keys.iter().all(|k| *k < 2), "{keys:?}");
+    assert!(keys.contains(&0) && keys.contains(&1), "{keys:?}");
+    assert!(build(false).iter().all(|i| i.2 == 0));
 }
