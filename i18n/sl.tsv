@@ -939,3 +939,34 @@ unit	yr	l.
 	feet	čevlji
 	Ticked, items queue up at the end while the rest keep moving. Unticked, the whole belt stops when the item at the end cannot leave.	Označeno: predmeti se na koncu postavijo v vrsto, medtem ko se drugi premikajo naprej. Neoznačeno: celoten trak se ustavi, ko predmet na koncu ne more oditi.
 	A belt that carries entities from one end to the other. It has a length and a speed, and each entity takes a pitch of belt: its item length plus the gap kept free after it. So it holds at most length ÷ pitch entities and carries at most speed ÷ pitch per time unit. Accumulating: entities queue up at the end while the rest keep moving; otherwise the whole belt stops.	Trak, ki nosi entitete z enega konca na drugega. Ima dolžino in hitrost, vsaka entiteta pa zavzame korak traku: dolžino svojega predmeta plus razmik, ki ostane prost za njo. Tako sprejme največ dolžina ÷ korak entitet in prenese največ hitrost ÷ korak na časovno enoto. Kopičenje: entitete se na koncu postavijo v vrsto, medtem ko se druge premikajo naprej; sicer se ustavi celoten trak.
+	Station	Postaja
+	Kind	Vrsta
+	Service	Strežba
+	Load	Obremenitev
+	Status	Stanje
+	Units for {target}%	Enote za {target} %
+	Formula	Formula
+	Simulated utilisation	Simulirana izkoriščenost
+	Simulated mean wait	Simulirana povprečna čakalna doba
+	Target utilisation	Ciljna izkoriščenost
+	Must be above 0% and below 100%	Mora biti nad 0 % in pod 100 %
+	The utilisation above which a station counts as congested	Izkoriščenost, nad katero se postaja šteje za preobremenjeno
+	Fine	V redu
+	Congested	Preobremenjena
+	Unstable	Nestabilna
+	Unknown	Neznano
+	up to {n}	do {n}
+	Bottleneck: {name} (load {load}).	Ozko grlo: {name} (obremenitev {load}).
+	Bottleneck: not known before a run (a load not known, or only bounded, could be the highest).	Ozko grlo: pred zagonom ni znano (neznana ali le omejena obremenitev je lahko najvišja).
+	Not known before a run:	Pred zagonom ni znano:
+	No exact formula for the wait:	Za čakanje ni natančne formule:
+	Utilisation is arrivals × service ÷ units, as the results count it; the load is that over the units' availability. A run adds what variability and blocking cost.	Izkoriščenost je prihodi × strežba ÷ enote, kot jo štejejo rezultati; obremenitev je ta vrednost glede na razpoložljivost enot. Zagon doda, kar stanejo spremenljivost in blokiranje.
+	No servers, shared tasks, delays or pools.	Ni strežnikov, skupnih opravil, zamud ali skladov.
+	arrival rate	stopnja prihodov
+	service time	čas strežbe
+	utilisation	izkoriščenost
+	{station}: {what}: {message}.	{station}: {what}: {message}.
+	{station}: {message}.	{station}: {message}.
+	From the last run; – when there are none, or they are out of date.	Iz zadnjega zagona; – če ga ni ali je zastarel.
+	Show this block	Pokaži ta blok
+	Rates and times are per {unit}.	Stopnje in časi so na {unit}.

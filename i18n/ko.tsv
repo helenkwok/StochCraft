@@ -939,3 +939,34 @@ unit	yr	년
 	feet	피트
 	Ticked, items queue up at the end while the rest keep moving. Unticked, the whole belt stops when the item at the end cannot leave.	선택하면 끝에서 품목이 줄을 서고 나머지는 계속 움직입니다. 선택하지 않으면 끝의 품목이 나가지 못할 때 벨트 전체가 멈춥니다.
 	A belt that carries entities from one end to the other. It has a length and a speed, and each entity takes a pitch of belt: its item length plus the gap kept free after it. So it holds at most length ÷ pitch entities and carries at most speed ÷ pitch per time unit. Accumulating: entities queue up at the end while the rest keep moving; otherwise the whole belt stops.	엔터티를 한쪽 끝에서 다른 쪽 끝으로 나르는 벨트입니다. 길이와 속도가 있으며, 각 엔터티는 벨트의 피치를 차지합니다. 피치는 품목 길이에 그 뒤에 비워 두는 간격을 더한 값입니다. 따라서 최대 길이 ÷ 피치 개의 엔터티를 담고, 단위 시간당 최대 속도 ÷ 피치 개를 나릅니다. 누적: 엔터티가 끝에서 줄을 서고 나머지는 계속 움직입니다. 그렇지 않으면 벨트 전체가 멈춥니다.
+	Station	스테이션
+	Kind	종류
+	Service	서비스
+	Load	부하
+	Status	상태
+	Units for {target}%	{target}%에 필요한 단위 수
+	Formula	공식
+	Simulated utilisation	시뮬레이션 이용률
+	Simulated mean wait	시뮬레이션 평균 대기
+	Target utilisation	목표 이용률
+	Must be above 0% and below 100%	0%보다 크고 100%보다 작아야 합니다
+	The utilisation above which a station counts as congested	이 값을 넘으면 스테이션이 혼잡하다고 보는 이용률
+	Fine	양호
+	Congested	혼잡
+	Unstable	불안정
+	Unknown	알 수 없음
+	up to {n}	최대 {n}
+	Bottleneck: {name} (load {load}).	병목: {name} (부하 {load}).
+	Bottleneck: not known before a run (a load not known, or only bounded, could be the highest).	병목: 실행 전에는 알 수 없음 (알 수 없거나 한계만 있는 부하가 가장 높을 수 있습니다).
+	Not known before a run:	실행 전에는 알 수 없음:
+	No exact formula for the wait:	대기에 대한 정확한 공식 없음:
+	Utilisation is arrivals × service ÷ units, as the results count it; the load is that over the units' availability. A run adds what variability and blocking cost.	이용률은 도착 × 서비스 ÷ 단위 수이며 결과가 세는 방식과 같습니다. 부하는 이를 단위의 가용성으로 나눈 값입니다. 실행은 변동성과 막힘이 드는 비용을 더합니다.
+	No servers, shared tasks, delays or pools.	서버, 공유 작업, 지연, 풀이 없습니다.
+	arrival rate	도착률
+	service time	서비스 시간
+	utilisation	이용률
+	{station}: {what}: {message}.	{station}: {what}: {message}.
+	{station}: {message}.	{station}: {message}.
+	From the last run; – when there are none, or they are out of date.	마지막 실행에서; 없거나 오래된 경우 –
+	Show this block	이 블록 보기
+	Rates and times are per {unit}.	비율과 시간은 {unit} 단위입니다.

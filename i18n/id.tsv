@@ -939,3 +939,34 @@ unit	yr	thn
 	feet	kaki
 	Ticked, items queue up at the end while the rest keep moving. Unticked, the whole belt stops when the item at the end cannot leave.	Jika dicentang, item mengantre di ujung sementara yang lain terus bergerak. Jika tidak, seluruh sabuk berhenti saat item di ujung tidak bisa keluar.
 	A belt that carries entities from one end to the other. It has a length and a speed, and each entity takes a pitch of belt: its item length plus the gap kept free after it. So it holds at most length ÷ pitch entities and carries at most speed ÷ pitch per time unit. Accumulating: entities queue up at the end while the rest keep moving; otherwise the whole belt stops.	Sabuk yang membawa entitas dari satu ujung ke ujung lain. Sabuk memiliki panjang dan kecepatan, dan setiap entitas menempati satu langkah sabuk: panjang itemnya ditambah celah yang dibiarkan kosong di belakangnya. Jadi sabuk memuat paling banyak panjang ÷ langkah entitas dan membawa paling banyak kecepatan ÷ langkah per satuan waktu. Akumulasi: entitas mengantre di ujung sementara yang lain terus bergerak; jika tidak, seluruh sabuk berhenti.
+	Station	Stasiun
+	Kind	Jenis
+	Service	Layanan
+	Load	Beban
+	Status	Status
+	Units for {target}%	Unit untuk {target}%
+	Formula	Rumus
+	Simulated utilisation	Utilisasi simulasi
+	Simulated mean wait	Rata-rata tunggu simulasi
+	Target utilisation	Utilisasi target
+	Must be above 0% and below 100%	Harus di atas 0% dan di bawah 100%
+	The utilisation above which a station counts as congested	Utilisasi di atas mana sebuah stasiun dianggap padat
+	Fine	Baik
+	Congested	Padat
+	Unstable	Tidak stabil
+	Unknown	Tidak diketahui
+	up to {n}	hingga {n}
+	Bottleneck: {name} (load {load}).	Hambatan: {name} (beban {load}).
+	Bottleneck: not known before a run (a load not known, or only bounded, could be the highest).	Hambatan: belum diketahui sebelum dijalankan (beban yang tidak diketahui, atau hanya terbatas, bisa menjadi yang tertinggi).
+	Not known before a run:	Belum diketahui sebelum dijalankan:
+	No exact formula for the wait:	Tidak ada rumus pasti untuk waktu tunggu:
+	Utilisation is arrivals × service ÷ units, as the results count it; the load is that over the units' availability. A run adds what variability and blocking cost.	Utilisasi adalah kedatangan × layanan ÷ unit, seperti dihitung hasil; beban adalah nilai itu terhadap ketersediaan unit. Satu proses menambahkan biaya variabilitas dan penyumbatan.
+	No servers, shared tasks, delays or pools.	Tidak ada server, tugas bersama, tunda, atau kumpulan.
+	arrival rate	laju kedatangan
+	service time	waktu layanan
+	utilisation	utilisasi
+	{station}: {what}: {message}.	{station}: {what}: {message}.
+	{station}: {message}.	{station}: {message}.
+	From the last run; – when there are none, or they are out of date.	Dari proses terakhir; – jika tidak ada atau sudah usang.
+	Show this block	Tampilkan blok ini
+	Rates and times are per {unit}.	Laju dan waktu dihitung per {unit}.

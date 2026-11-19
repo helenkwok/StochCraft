@@ -939,3 +939,34 @@ unit	yr	år
 	feet	fod
 	Ticked, items queue up at the end while the rest keep moving. Unticked, the whole belt stops when the item at the end cannot leave.	Markeret: emnerne står i kø for enden, mens de øvrige fortsætter. Ikke markeret: hele båndet stopper, når emnet for enden ikke kan komme videre.
 	A belt that carries entities from one end to the other. It has a length and a speed, and each entity takes a pitch of belt: its item length plus the gap kept free after it. So it holds at most length ÷ pitch entities and carries at most speed ÷ pitch per time unit. Accumulating: entities queue up at the end while the rest keep moving; otherwise the whole belt stops.	Et bånd, der bærer enheder fra den ene ende til den anden. Det har en længde og en hastighed, og hver enhed optager en deling af båndet: sit emnes længde plus mellemrummet, der holdes frit efter det. Det rummer derfor højst længde ÷ deling enheder og bærer højst hastighed ÷ deling pr. tidsenhed. Akkumulerende: enhederne står i kø for enden, mens de øvrige fortsætter; ellers stopper hele båndet.
+	Station	Station
+	Kind	Type
+	Service	Betjening
+	Load	Belastning
+	Status	Status
+	Units for {target}%	Enheder til {target} %
+	Formula	Formel
+	Simulated utilisation	Simuleret udnyttelse
+	Simulated mean wait	Simuleret gennemsnitlig ventetid
+	Target utilisation	Mål for udnyttelse
+	Must be above 0% and below 100%	Skal være over 0 % og under 100 %
+	The utilisation above which a station counts as congested	Den udnyttelse, over hvilken en station regnes som overbelastet
+	Fine	God
+	Congested	Overbelastet
+	Unstable	Ustabil
+	Unknown	Ukendt
+	up to {n}	op til {n}
+	Bottleneck: {name} (load {load}).	Flaskehals: {name} (belastning {load}).
+	Bottleneck: not known before a run (a load not known, or only bounded, could be the highest).	Flaskehals: ukendt før en kørsel (en ukendt, eller kun begrænset, belastning kan være den højeste).
+	Not known before a run:	Ukendt før en kørsel:
+	No exact formula for the wait:	Ingen præcis formel for ventetiden:
+	Utilisation is arrivals × service ÷ units, as the results count it; the load is that over the units' availability. A run adds what variability and blocking cost.	Udnyttelsen er ankomster × betjening ÷ enheder, som resultaterne tæller den; belastningen er den i forhold til enhedernes tilgængelighed. En kørsel tilføjer, hvad variation og blokering koster.
+	No servers, shared tasks, delays or pools.	Ingen servere, delte opgaver, forsinkelser eller puljer.
+	arrival rate	ankomstrate
+	service time	betjeningstid
+	utilisation	udnyttelse
+	{station}: {what}: {message}.	{station}: {what}: {message}.
+	{station}: {message}.	{station}: {message}.
+	From the last run; – when there are none, or they are out of date.	Fra den seneste kørsel; – hvis der ingen er, eller de er forældede.
+	Show this block	Vis denne blok
+	Rates and times are per {unit}.	Rater og tider er pr. {unit}.

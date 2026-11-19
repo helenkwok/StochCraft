@@ -939,3 +939,34 @@ unit	yr	J.
 	feet	Fuß
 	Ticked, items queue up at the end while the rest keep moving. Unticked, the whole belt stops when the item at the end cannot leave.	Angehakt: Teile stauen sich am Ende, während die übrigen weiterfahren. Nicht angehakt: Das ganze Band hält an, wenn das Teil am Ende nicht abgehen kann.
 	A belt that carries entities from one end to the other. It has a length and a speed, and each entity takes a pitch of belt: its item length plus the gap kept free after it. So it holds at most length ÷ pitch entities and carries at most speed ÷ pitch per time unit. Accumulating: entities queue up at the end while the rest keep moving; otherwise the whole belt stops.	Ein Band, das Entitäten von einem Ende zum anderen trägt. Es hat eine Länge und eine Geschwindigkeit, und jede Entität belegt einen Teilungsabstand: die Länge ihres Teils plus den Abstand, der hinter ihr frei bleibt. Es fasst daher höchstens Länge ÷ Teilung Entitäten und befördert höchstens Geschwindigkeit ÷ Teilung je Zeiteinheit. Akkumulierend: Entitäten stauen sich am Ende, während die übrigen weiterfahren; sonst hält das ganze Band an.
+	Station	Station
+	Kind	Art
+	Service	Bedienzeit
+	Load	Last
+	Status	Status
+	Units for {target}%	Einheiten für {target} %
+	Formula	Formel
+	Simulated utilisation	Simulierte Auslastung
+	Simulated mean wait	Simulierte mittlere Wartezeit
+	Target utilisation	Ziel-Auslastung
+	Must be above 0% and below 100%	Muss über 0 % und unter 100 % liegen
+	The utilisation above which a station counts as congested	Die Auslastung, ab der eine Station als überlastet gilt
+	Fine	In Ordnung
+	Congested	Überlastet
+	Unstable	Instabil
+	Unknown	Unbekannt
+	up to {n}	bis zu {n}
+	Bottleneck: {name} (load {load}).	Engpass: {name} (Last {load}).
+	Bottleneck: not known before a run (a load not known, or only bounded, could be the highest).	Engpass: vor einem Lauf nicht bekannt (eine unbekannte oder nur begrenzte Last könnte die höchste sein).
+	Not known before a run:	Vor einem Lauf nicht bekannt:
+	No exact formula for the wait:	Keine exakte Formel für die Wartezeit:
+	Utilisation is arrivals × service ÷ units, as the results count it; the load is that over the units' availability. A run adds what variability and blocking cost.	Die Auslastung ist Ankünfte × Bedienzeit ÷ Einheiten, wie die Ergebnisse sie zählen; die Last ist sie bezogen auf die Verfügbarkeit der Einheiten. Ein Lauf berücksichtigt zusätzlich die Kosten von Streuung und Blockierung.
+	No servers, shared tasks, delays or pools.	Keine Server, gemeinsamen Aufgaben, Verzögerungen oder Pools.
+	arrival rate	Ankunftsrate
+	service time	Bedienzeit
+	utilisation	Auslastung
+	{station}: {what}: {message}.	{station}: {what}: {message}.
+	{station}: {message}.	{station}: {message}.
+	From the last run; – when there are none, or they are out of date.	Vom letzten Lauf; – wenn es keine gibt oder sie veraltet sind.
+	Show this block	Diesen Block anzeigen
+	Rates and times are per {unit}.	Raten und Zeiten gelten pro {unit}.

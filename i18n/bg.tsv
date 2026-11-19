@@ -939,3 +939,34 @@ unit	yr	г.
 	feet	фута
 	Ticked, items queue up at the end while the rest keep moving. Unticked, the whole belt stops when the item at the end cannot leave.	Когато е отметнато, единиците се нареждат на опашка в края, докато останалите продължават да се движат. Когато не е, цялата лента спира, щом единицата в края не може да излезе.
 	A belt that carries entities from one end to the other. It has a length and a speed, and each entity takes a pitch of belt: its item length plus the gap kept free after it. So it holds at most length ÷ pitch entities and carries at most speed ÷ pitch per time unit. Accumulating: entities queue up at the end while the rest keep moving; otherwise the whole belt stops.	Лента, която пренася същности от единия край до другия. Има дължина и скорост, а всяка същност заема стъпка от лентата: дължината си плюс свободното разстояние след нея. Така лентата побира най-много дължина ÷ стъпка същности и пренася най-много скорост ÷ стъпка за единица време. Натрупване: същностите се нареждат на опашка в края, докато останалите продължават да се движат; иначе цялата лента спира.
+	Station	Станция
+	Kind	Вид
+	Service	Обслужване
+	Load	Натоварване
+	Status	Състояние
+	Units for {target}%	Единици за {target} %
+	Formula	Формула
+	Simulated utilisation	Симулирано използване
+	Simulated mean wait	Симулирано средно чакане
+	Target utilisation	Целево използване
+	Must be above 0% and below 100%	Трябва да е над 0 % и под 100 %
+	The utilisation above which a station counts as congested	Използването, над което станцията се смята за претоварена
+	Fine	Добре
+	Congested	Претоварена
+	Unstable	Нестабилна
+	Unknown	Неизвестно
+	up to {n}	до {n}
+	Bottleneck: {name} (load {load}).	Тесно място: {name} (натоварване {load}).
+	Bottleneck: not known before a run (a load not known, or only bounded, could be the highest).	Тесно място: неизвестно преди пускане (неизвестно или само ограничено натоварване може да е най-голямото).
+	Not known before a run:	Неизвестно преди пускане:
+	No exact formula for the wait:	Няма точна формула за чакането:
+	Utilisation is arrivals × service ÷ units, as the results count it; the load is that over the units' availability. A run adds what variability and blocking cost.	Използването е пристигания × обслужване ÷ единици, както го броят резултатите; натоварването е то спрямо наличността на единиците. Пускането добавя това, което струват променливостта и блокирането.
+	No servers, shared tasks, delays or pools.	Няма сървъри, споделени задачи, забавяния или пулове.
+	arrival rate	интензивност на пристиганията
+	service time	време за обслужване
+	utilisation	използване
+	{station}: {what}: {message}.	{station}: {what}: {message}.
+	{station}: {message}.	{station}: {message}.
+	From the last run; – when there are none, or they are out of date.	От последното пускане; – ако няма или са остарели.
+	Show this block	Покажи този блок
+	Rates and times are per {unit}.	Интензивностите и времената са за {unit}.

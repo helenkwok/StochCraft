@@ -939,3 +939,34 @@ unit	yr	v
 	feet	jalkaa
 	Ticked, items queue up at the end while the rest keep moving. Unticked, the whole belt stops when the item at the end cannot leave.	Valittuna kappaleet jonottavat päässä, kun muut jatkavat liikettä. Ilman valintaa koko kuljetin pysähtyy, kun päässä oleva kappale ei pääse pois.
 	A belt that carries entities from one end to the other. It has a length and a speed, and each entity takes a pitch of belt: its item length plus the gap kept free after it. So it holds at most length ÷ pitch entities and carries at most speed ÷ pitch per time unit. Accumulating: entities queue up at the end while the rest keep moving; otherwise the whole belt stops.	Kuljetin, joka kantaa entiteettejä päästä päähän. Sillä on pituus ja nopeus, ja jokainen entiteetti vie kuljettimelta jaon: kappaleensa pituuden ja sen perään vapaaksi jätettävän välin. Kuljettimelle mahtuu siis enintään pituus ÷ jako entiteettiä, ja se kuljettaa aikayksikössä enintään nopeus ÷ jako. Kasautuva: entiteetit jonottavat päässä, kun muut jatkavat liikettä; muuten koko kuljetin pysähtyy.
+	Station	Asema
+	Kind	Tyyppi
+	Service	Palvelu
+	Load	Kuorma
+	Status	Tila
+	Units for {target}%	Yksiköt tavoitteelle {target} %
+	Formula	Kaava
+	Simulated utilisation	Simuloitu käyttöaste
+	Simulated mean wait	Simuloitu keskimääräinen odotusaika
+	Target utilisation	Tavoitekäyttöaste
+	Must be above 0% and below 100%	Täytyy olla yli 0 % ja alle 100 %
+	The utilisation above which a station counts as congested	Käyttöaste, jonka yli asema katsotaan ruuhkautuneeksi
+	Fine	Hyvä
+	Congested	Ruuhkautunut
+	Unstable	Epävakaa
+	Unknown	Tuntematon
+	up to {n}	enintään {n}
+	Bottleneck: {name} (load {load}).	Pullonkaula: {name} (kuorma {load}).
+	Bottleneck: not known before a run (a load not known, or only bounded, could be the highest).	Pullonkaula: ei tiedossa ennen ajoa (tuntematon tai vain rajattu kuorma voi olla suurin).
+	Not known before a run:	Ei tiedossa ennen ajoa:
+	No exact formula for the wait:	Odotusajalle ei ole tarkkaa kaavaa:
+	Utilisation is arrivals × service ÷ units, as the results count it; the load is that over the units' availability. A run adds what variability and blocking cost.	Käyttöaste on saapumiset × palvelu ÷ yksiköt, kuten tulokset sen laskevat; kuorma on se suhteessa yksiköiden saatavuuteen. Ajo lisää sen, mitä vaihtelu ja tukkeutuminen maksavat.
+	No servers, shared tasks, delays or pools.	Ei palvelimia, jaettuja tehtäviä, viiveitä tai varantoja.
+	arrival rate	saapumisnopeus
+	service time	palveluaika
+	utilisation	käyttöaste
+	{station}: {what}: {message}.	{station}: {what}: {message}.
+	{station}: {message}.	{station}: {message}.
+	From the last run; – when there are none, or they are out of date.	Viimeisestä ajosta; – jos tuloksia ei ole tai ne ovat vanhentuneet.
+	Show this block	Näytä tämä lohko
+	Rates and times are per {unit}.	Nopeudet ja ajat ovat yksikössä {unit}.

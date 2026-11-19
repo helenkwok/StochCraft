@@ -715,6 +715,18 @@ engine's messages (validation, file notes) are English too.
   speakers. The least certain are lo, th, ta, te, ka, kk, bn, hi and sq, and in every language
   the words for pitch and Accumulating.
 
+- The rows for the Capacity view (thirty-one strings: the column headings Station, Kind, Service, Load,
+  Status and the two simulated ones, the target field and its error, the four status words, the
+  bottleneck line, the "not known before a run" and "no exact formula" headings, the note on how
+  utilisation is counted, and the hover and link texts) were drafted from the plain meaning of the
+  English, reusing each catalog's own words for utilisation, arrivals, units, mean wait, service
+  time and queue where it has them. "Load" (utilisation over availability) is kept apart from
+  "Utilisation" in every language. "Status" words (fine, congested, unstable, unknown) and
+  "Bottleneck" are new words in every catalog. The engine's reasons shown under the table are the
+  engine's English for now. Not checked against a source, and not reviewed by native speakers; the
+  least certain are lo, th, ta, te, bn, ka, kk, hi, sq, et and lt, the use of "Service" as the
+  column for the mean service time, and the word for congested in el, hu, tr and fi.
+
 **Adding or changing a string:** add the English in the code through `i18n::t` (or `tf`, `tn`),
 then add its row to each catalog here, or leave it out to show English until it is translated.
 Right-to-left languages are not offered until the layout is mirrored.

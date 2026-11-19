@@ -6,6 +6,7 @@ use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 use serde_json::{Value, json};
 use stochcraft_blocks::{ExperimentSummary, Metric};
+use stochcraft_model::balance;
 use stochcraft_model::calendar::{Calendar, DateTime, Event, Rule};
 use stochcraft_model::capacity;
 use stochcraft_model::{
@@ -2559,6 +2560,43 @@ pub fn capacity(model: &Model, table: &capacity::Capacity) -> Value {
         "target": table.target,
         "bottleneck": table.bottleneck.as_ref().map(ElementId::as_str),
         "stations": stations,
+    })
+}
+
+/// A line balance ([`stochcraft_model::balance::Comparison`]) as JSON: the cycle time, total
+/// work content, theoretical minimum number of stations and each heuristic's station assignment
+/// and measures.
+pub fn line_balance(c: &balance::Comparison) -> Value {
+    let balances: Vec<Value> = c
+        .balances
+        .iter()
+        .map(|b| {
+            let stations: Vec<Value> = b
+                .stations
+                .iter()
+                .map(|s| {
+                    let elements: Vec<&str> = s.elements.iter().map(ElementId::as_str).collect();
+                    json!({
+                        "elements": elements,
+                        "time": s.time,
+                    })
+                })
+                .collect();
+            json!({
+                "heuristic": b.heuristic.name(),
+                "stations": stations,
+                "longest": b.longest,
+                "efficiency": b.efficiency,
+                "delay": b.delay,
+                "smoothness": b.smoothness,
+            })
+        })
+        .collect();
+    json!({
+        "cycle": c.cycle,
+        "work_content": c.work_content,
+        "theoretical_min": u64::try_from(c.theoretical_min).unwrap_or(u64::MAX),
+        "balances": balances,
     })
 }
 

@@ -939,3 +939,34 @@ unit	yr	年
 	feet	フィート
 	Ticked, items queue up at the end while the rest keep moving. Unticked, the whole belt stops when the item at the end cannot leave.	オンにすると、先頭の品目が出られない間は端で順番待ちになり、残りは動き続けます。オフにすると、端の品目が出られないときにベルト全体が止まります。
 	A belt that carries entities from one end to the other. It has a length and a speed, and each entity takes a pitch of belt: its item length plus the gap kept free after it. So it holds at most length ÷ pitch entities and carries at most speed ÷ pitch per time unit. Accumulating: entities queue up at the end while the rest keep moving; otherwise the whole belt stops.	エンティティを一方の端からもう一方の端へ運ぶベルトです。長さと速度があり、各エンティティはベルトのピッチを占めます。ピッチとは、品目の長さと、その後ろに空けておく間隔の合計です。そのため、載せられるのは最大で長さ ÷ ピッチ個、単位時間あたりに運べるのは最大で速度 ÷ ピッチ個です。蓄積: エンティティは端で順番待ちになり、残りは動き続けます。オフの場合はベルト全体が止まります。
+	Station	ステーション
+	Kind	種類
+	Service	サービス
+	Load	負荷
+	Status	状態
+	Units for {target}%	{target}% に必要な台数
+	Formula	式
+	Simulated utilisation	シミュレーションの稼働率
+	Simulated mean wait	シミュレーションの平均待ち時間
+	Target utilisation	目標稼働率
+	Must be above 0% and below 100%	0% より大きく 100% より小さくしてください
+	The utilisation above which a station counts as congested	これを超えるとステーションが混雑とみなされる稼働率
+	Fine	良好
+	Congested	混雑
+	Unstable	不安定
+	Unknown	不明
+	up to {n}	最大 {n}
+	Bottleneck: {name} (load {load}).	ボトルネック：{name}（負荷 {load}）。
+	Bottleneck: not known before a run (a load not known, or only bounded, could be the highest).	ボトルネック：実行前は不明（不明または上限・下限だけの負荷が最大かもしれません）。
+	Not known before a run:	実行前は不明：
+	No exact formula for the wait:	待ち時間の厳密な式なし：
+	Utilisation is arrivals × service ÷ units, as the results count it; the load is that over the units' availability. A run adds what variability and blocking cost.	稼働率は到着 × サービス ÷ 台数で、結果の数え方と同じです。負荷はこれを台数の可用性で割ったものです。実行では、ばらつきとブロッキングによるコストが加わります。
+	No servers, shared tasks, delays or pools.	サーバー、共有タスク、遅延、プールはありません。
+	arrival rate	到着率
+	service time	サービス時間
+	utilisation	稼働率
+	{station}: {what}: {message}.	{station}：{what}：{message}。
+	{station}: {message}.	{station}：{message}。
+	From the last run; – when there are none, or they are out of date.	直近の実行より。ない場合や古い場合は –
+	Show this block	このブロックを表示
+	Rates and times are per {unit}.	率と時間は {unit} あたりです。

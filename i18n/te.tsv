@@ -939,3 +939,34 @@ unit	yr	సం.
 	feet	అడుగులు
 	Ticked, items queue up at the end while the rest keep moving. Unticked, the whole belt stops when the item at the end cannot leave.	ఎంచుకుంటే, మిగతావి కదులుతూ ఉండగా వస్తువులు చివర వరుసలో నిలుస్తాయి. ఎంచుకోకపోతే, చివరన ఉన్న వస్తువు బయటకు వెళ్లలేనప్పుడు మొత్తం బెల్ట్ ఆగిపోతుంది.
 	A belt that carries entities from one end to the other. It has a length and a speed, and each entity takes a pitch of belt: its item length plus the gap kept free after it. So it holds at most length ÷ pitch entities and carries at most speed ÷ pitch per time unit. Accumulating: entities queue up at the end while the rest keep moving; otherwise the whole belt stops.	ఎంటిటీలను ఒక చివర నుండి మరో చివరకు తీసుకెళ్లే బెల్ట్. దానికి పొడవు, వేగం ఉంటాయి; ప్రతి ఎంటిటీ బెల్ట్‌లో ఒక పిచ్ తీసుకుంటుంది: దాని వస్తువు పొడవు, దాని వెనుక ఖాళీగా ఉంచే ఖాళీ కలిపి. కాబట్టి ఇందులో గరిష్ఠంగా పొడవు ÷ పిచ్ ఎంటిటీలు పడతాయి, ప్రతి సమయ యూనిట్‌కు గరిష్ఠంగా వేగం ÷ పిచ్ మోస్తుంది. పోగుపడే: మిగతావి కదులుతూ ఉండగా ఎంటిటీలు చివర వరుసలో నిలుస్తాయి; లేకపోతే మొత్తం బెల్ట్ ఆగిపోతుంది.
+	Station	స్టేషన్
+	Kind	రకం
+	Service	సేవ
+	Load	భారం
+	Status	స్థితి
+	Units for {target}%	{target}% కోసం యూనిట్లు
+	Formula	సూత్రం
+	Simulated utilisation	అనుకరించిన వినియోగం
+	Simulated mean wait	అనుకరించిన సగటు నిరీక్షణ
+	Target utilisation	లక్ష్య వినియోగం
+	Must be above 0% and below 100%	0% కంటే ఎక్కువ, 100% కంటే తక్కువ ఉండాలి
+	The utilisation above which a station counts as congested	ఈ వినియోగం దాటితే స్టేషన్ రద్దీగా పరిగణించబడుతుంది
+	Fine	బాగుంది
+	Congested	రద్దీ
+	Unstable	అస్థిరం
+	Unknown	తెలియదు
+	up to {n}	గరిష్ఠంగా {n}
+	Bottleneck: {name} (load {load}).	అడ్డంకి: {name} (భారం {load}).
+	Bottleneck: not known before a run (a load not known, or only bounded, could be the highest).	అడ్డంకి: రన్‌కు ముందు తెలియదు (తెలియని లేదా పరిమితమైన భారం అత్యధికం కావచ్చు).
+	Not known before a run:	రన్‌కు ముందు తెలియనివి:
+	No exact formula for the wait:	నిరీక్షణకు ఖచ్చితమైన సూత్రం లేదు:
+	Utilisation is arrivals × service ÷ units, as the results count it; the load is that over the units' availability. A run adds what variability and blocking cost.	వినియోగం = రాకలు × సేవ ÷ యూనిట్లు, ఫలితాలు లెక్కించే విధంగా; భారం అంటే యూనిట్ల లభ్యతతో పోల్చిన అదే విలువ. రన్ వైవిధ్యం, అడ్డంకి ఖర్చును కూడా కలుపుతుంది.
+	No servers, shared tasks, delays or pools.	సర్వర్లు, భాగస్వామ్య పనులు, ఆలస్యాలు లేదా పూల్స్ లేవు.
+	arrival rate	రాక రేటు
+	service time	సేవ సమయం
+	utilisation	వినియోగం
+	{station}: {what}: {message}.	{station}: {what}: {message}.
+	{station}: {message}.	{station}: {message}.
+	From the last run; – when there are none, or they are out of date.	చివరి రన్ నుండి; – లేకపోతే లేదా పాతబడితే.
+	Show this block	ఈ బ్లాక్‌ను చూపండి
+	Rates and times are per {unit}.	రేట్లు, సమయాలు ప్రతి {unit}కు.

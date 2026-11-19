@@ -939,3 +939,34 @@ unit	yr	a
 	feet	picioare
 	Ticked, items queue up at the end while the rest keep moving. Unticked, the whole belt stops when the item at the end cannot leave.	Bifat, articolele fac coadă la capăt, în timp ce celelalte continuă să se miște. Nebifat, toată banda se oprește când articolul de la capăt nu poate pleca.
 	A belt that carries entities from one end to the other. It has a length and a speed, and each entity takes a pitch of belt: its item length plus the gap kept free after it. So it holds at most length ÷ pitch entities and carries at most speed ÷ pitch per time unit. Accumulating: entities queue up at the end while the rest keep moving; otherwise the whole belt stops.	O bandă care duce entități de la un capăt la altul. Are o lungime și o viteză, iar fiecare entitate ocupă un pas de bandă: lungimea articolului ei plus spațiul lăsat liber în urma lui. Astfel, banda cuprinde cel mult lungime ÷ pas entități și transportă cel mult viteză ÷ pas pe unitatea de timp. Acumulare: entitățile fac coadă la capăt, în timp ce celelalte continuă să se miște; altfel, se oprește toată banda.
+	Station	Stație
+	Kind	Tip
+	Service	Servire
+	Load	Încărcare
+	Status	Stare
+	Units for {target}%	Unități pentru {target}%
+	Formula	Formulă
+	Simulated utilisation	Utilizare simulată
+	Simulated mean wait	Așteptare medie simulată
+	Target utilisation	Utilizare țintă
+	Must be above 0% and below 100%	Trebuie să fie peste 0% și sub 100%
+	The utilisation above which a station counts as congested	Utilizarea peste care o stație este considerată aglomerată
+	Fine	În regulă
+	Congested	Aglomerată
+	Unstable	Instabilă
+	Unknown	Necunoscut
+	up to {n}	până la {n}
+	Bottleneck: {name} (load {load}).	Blocaj: {name} (încărcare {load}).
+	Bottleneck: not known before a run (a load not known, or only bounded, could be the highest).	Blocaj: necunoscut înainte de o simulare (o încărcare necunoscută sau doar mărginită ar putea fi cea mai mare).
+	Not known before a run:	Necunoscut înainte de o simulare:
+	No exact formula for the wait:	Nu există formulă exactă pentru așteptare:
+	Utilisation is arrivals × service ÷ units, as the results count it; the load is that over the units' availability. A run adds what variability and blocking cost.	Utilizarea este sosiri × servire ÷ unități, așa cum o numără rezultatele; încărcarea este această valoare raportată la disponibilitatea unităților. O simulare adaugă ce costă variabilitatea și blocarea.
+	No servers, shared tasks, delays or pools.	Niciun server, sarcină partajată, întârziere sau grup.
+	arrival rate	rata de sosire
+	service time	timp de servire
+	utilisation	utilizare
+	{station}: {what}: {message}.	{station}: {what}: {message}.
+	{station}: {message}.	{station}: {message}.
+	From the last run; – when there are none, or they are out of date.	Din ultima simulare; – dacă nu există sau sunt depășite.
+	Show this block	Arată acest bloc
+	Rates and times are per {unit}.	Ratele și duratele sunt pe {unit}.

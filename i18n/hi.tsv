@@ -939,3 +939,34 @@ unit	yr	वर्ष
 	feet	फ़ुट
 	Ticked, items queue up at the end while the rest keep moving. Unticked, the whole belt stops when the item at the end cannot leave.	चुनने पर, वस्तुएँ अंत में कतार में लगती हैं जबकि बाकी चलती रहती हैं। न चुनने पर, अंत की वस्तु के बाहर न जा पाने पर पूरा बेल्ट रुक जाता है।
 	A belt that carries entities from one end to the other. It has a length and a speed, and each entity takes a pitch of belt: its item length plus the gap kept free after it. So it holds at most length ÷ pitch entities and carries at most speed ÷ pitch per time unit. Accumulating: entities queue up at the end while the rest keep moving; otherwise the whole belt stops.	एक बेल्ट जो इकाइयों को एक सिरे से दूसरे सिरे तक ले जाता है। इसकी एक लंबाई और एक गति होती है, और हर इकाई बेल्ट का एक पिच लेती है: उसकी वस्तु की लंबाई और उसके पीछे खाली छोड़ा गया अंतराल। इसलिए इस पर अधिकतम लंबाई ÷ पिच इकाइयाँ आती हैं और यह प्रति समय-इकाई अधिकतम गति ÷ पिच इकाइयाँ ले जाता है। संचयी: इकाइयाँ अंत में कतार में लगती हैं जबकि बाकी चलती रहती हैं; अन्यथा पूरा बेल्ट रुक जाता है।
+	Station	स्टेशन
+	Kind	प्रकार
+	Service	सेवा
+	Load	भार
+	Status	स्थिति
+	Units for {target}%	{target}% के लिए इकाइयाँ
+	Formula	सूत्र
+	Simulated utilisation	सिम्युलेटेड उपयोग
+	Simulated mean wait	सिम्युलेटेड औसत प्रतीक्षा
+	Target utilisation	लक्ष्य उपयोग
+	Must be above 0% and below 100%	0% से ऊपर और 100% से नीचे होना चाहिए
+	The utilisation above which a station counts as congested	वह उपयोग जिससे ऊपर स्टेशन को भीड़भाड़ वाला माना जाता है
+	Fine	ठीक
+	Congested	भीड़भाड़ वाला
+	Unstable	अस्थिर
+	Unknown	अज्ञात
+	up to {n}	अधिकतम {n}
+	Bottleneck: {name} (load {load}).	अड़चन: {name} (भार {load})।
+	Bottleneck: not known before a run (a load not known, or only bounded, could be the highest).	अड़चन: रन से पहले ज्ञात नहीं (कोई अज्ञात, या केवल सीमित, भार सबसे अधिक हो सकता है)।
+	Not known before a run:	रन से पहले ज्ञात नहीं:
+	No exact formula for the wait:	प्रतीक्षा के लिए कोई सटीक सूत्र नहीं:
+	Utilisation is arrivals × service ÷ units, as the results count it; the load is that over the units' availability. A run adds what variability and blocking cost.	उपयोग = आगमन × सेवा ÷ इकाइयाँ, जैसा परिणाम गिनते हैं; भार वही है इकाइयों की उपलब्धता के सापेक्ष। एक रन वह भी जोड़ता है जो परिवर्तनशीलता और अवरोध की कीमत है।
+	No servers, shared tasks, delays or pools.	कोई सर्वर, साझा कार्य, विलंब या पूल नहीं।
+	arrival rate	आगमन दर
+	service time	सेवा समय
+	utilisation	उपयोग
+	{station}: {what}: {message}.	{station}: {what}: {message}.
+	{station}: {message}.	{station}: {message}.
+	From the last run; – when there are none, or they are out of date.	पिछले रन से; – यदि कोई नहीं है या वे पुराने हैं।
+	Show this block	यह ब्लॉक दिखाएँ
+	Rates and times are per {unit}.	दरें और समय प्रति {unit} हैं।

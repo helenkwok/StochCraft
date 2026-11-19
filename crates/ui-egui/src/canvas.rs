@@ -313,8 +313,11 @@ impl App {
                             if shown.is_positive() {
                                 self.guide.targets.chips.push((*kind, shown));
                             }
-                            if self.guide.fresh
-                                && self.guide.last == Some(crate::guide::Target::Chip(kind))
+                            // Until the chip it points at is wholly in view (the strip can be
+                            // narrower than the chips, and one scroll may land short while the
+                            // strip is still being laid out).
+                            if self.guide.last == Some(crate::guide::Target::Chip(kind))
+                                && (self.guide.fresh || shown != r.rect)
                             {
                                 r.scroll_to_me(None);
                             }

@@ -939,3 +939,34 @@ unit	yr	j
 	feet	voet
 	Ticked, items queue up at the end while the rest keep moving. Unticked, the whole belt stops when the item at the end cannot leave.	Aangevinkt: items vormen een rij aan het einde terwijl de rest doorrijdt. Niet aangevinkt: de hele band stopt als het item aan het einde niet weg kan.
 	A belt that carries entities from one end to the other. It has a length and a speed, and each entity takes a pitch of belt: its item length plus the gap kept free after it. So it holds at most length ÷ pitch entities and carries at most speed ÷ pitch per time unit. Accumulating: entities queue up at the end while the rest keep moving; otherwise the whole belt stops.	Een band die entiteiten van het ene uiteinde naar het andere brengt. Hij heeft een lengte en een snelheid, en elke entiteit neemt een steek van de band in: de lengte van haar item plus de tussenruimte die erachter vrij blijft. Er passen dus hooguit lengte ÷ steek entiteiten op en er gaan hooguit snelheid ÷ steek per tijdseenheid over. Ophopend: entiteiten vormen een rij aan het einde terwijl de rest doorrijdt; anders stopt de hele band.
+	Station	Station
+	Kind	Soort
+	Service	Bediening
+	Load	Belasting
+	Status	Status
+	Units for {target}%	Eenheden voor {target}%
+	Formula	Formule
+	Simulated utilisation	Gesimuleerde bezetting
+	Simulated mean wait	Gesimuleerde gemiddelde wachttijd
+	Target utilisation	Doelbezetting
+	Must be above 0% and below 100%	Moet boven 0% en onder 100% liggen
+	The utilisation above which a station counts as congested	De bezetting waarboven een station als overbelast geldt
+	Fine	Goed
+	Congested	Overbelast
+	Unstable	Onstabiel
+	Unknown	Onbekend
+	up to {n}	tot {n}
+	Bottleneck: {name} (load {load}).	Knelpunt: {name} (belasting {load}).
+	Bottleneck: not known before a run (a load not known, or only bounded, could be the highest).	Knelpunt: niet bekend vóór een run (een onbekende, of alleen begrensde, belasting kan de hoogste zijn).
+	Not known before a run:	Niet bekend vóór een run:
+	No exact formula for the wait:	Geen exacte formule voor de wachttijd:
+	Utilisation is arrivals × service ÷ units, as the results count it; the load is that over the units' availability. A run adds what variability and blocking cost.	De bezetting is aankomsten × bediening ÷ eenheden, zoals de resultaten haar tellen; de belasting is dat ten opzichte van de beschikbaarheid van de eenheden. Een run voegt toe wat variabiliteit en blokkade kosten.
+	No servers, shared tasks, delays or pools.	Geen servers, gedeelde taken, vertragingen of pools.
+	arrival rate	aankomstsnelheid
+	service time	bedieningstijd
+	utilisation	bezetting
+	{station}: {what}: {message}.	{station}: {what}: {message}.
+	{station}: {message}.	{station}: {message}.
+	From the last run; – when there are none, or they are out of date.	Van de laatste run; – als er geen zijn of ze verouderd zijn.
+	Show this block	Dit blok tonen
+	Rates and times are per {unit}.	Snelheden en tijden zijn per {unit}.

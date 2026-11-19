@@ -939,3 +939,34 @@ unit	yr	বছর
 	feet	ফুট
 	Ticked, items queue up at the end while the rest keep moving. Unticked, the whole belt stops when the item at the end cannot leave.	টিক দিলে, শেষ প্রান্তে আইটেমগুলো সারি বাঁধে আর বাকিগুলো চলতে থাকে। টিক না দিলে, শেষ প্রান্তের আইটেম বেরোতে না পারলে পুরো বেল্ট থেমে যায়।
 	A belt that carries entities from one end to the other. It has a length and a speed, and each entity takes a pitch of belt: its item length plus the gap kept free after it. So it holds at most length ÷ pitch entities and carries at most speed ÷ pitch per time unit. Accumulating: entities queue up at the end while the rest keep moving; otherwise the whole belt stops.	একটি বেল্ট, যা সত্তাদের এক প্রান্ত থেকে অন্য প্রান্তে নিয়ে যায়। এর একটি দৈর্ঘ্য ও একটি গতি আছে, আর প্রতিটি সত্তা বেল্টের একটি পিচ নেয়: তার আইটেমের দৈর্ঘ্য এবং তার পরে খালি রাখা ফাঁক। তাই এতে সর্বোচ্চ দৈর্ঘ্য ÷ পিচ সংখ্যক সত্তা ধরে এবং প্রতি সময়-একক সর্বোচ্চ গতি ÷ পিচ সংখ্যক সত্তা বহন করে। জমা হওয়া: সত্তারা শেষ প্রান্তে সারি বাঁধে আর বাকিরা চলতে থাকে; না হলে পুরো বেল্ট থেমে যায়।
+	Station	স্টেশন
+	Kind	ধরন
+	Service	সেবা
+	Load	লোড
+	Status	অবস্থা
+	Units for {target}%	{target}%-এর জন্য ইউনিট
+	Formula	সূত্র
+	Simulated utilisation	সিমুলেট করা ব্যবহার
+	Simulated mean wait	সিমুলেট করা গড় অপেক্ষা
+	Target utilisation	লক্ষ্য ব্যবহার
+	Must be above 0% and below 100%	০%-এর বেশি এবং ১০০%-এর কম হতে হবে
+	The utilisation above which a station counts as congested	যে ব্যবহারের ওপরে স্টেশনকে ভিড়যুক্ত ধরা হয়
+	Fine	ঠিক আছে
+	Congested	ভিড়যুক্ত
+	Unstable	অস্থির
+	Unknown	অজানা
+	up to {n}	সর্বোচ্চ {n}
+	Bottleneck: {name} (load {load}).	বাধা: {name} (লোড {load})।
+	Bottleneck: not known before a run (a load not known, or only bounded, could be the highest).	বাধা: রানের আগে জানা নেই (অজানা বা শুধু সীমাবদ্ধ লোড সবচেয়ে বেশি হতে পারে)।
+	Not known before a run:	রানের আগে জানা নেই:
+	No exact formula for the wait:	অপেক্ষার জন্য সঠিক সূত্র নেই:
+	Utilisation is arrivals × service ÷ units, as the results count it; the load is that over the units' availability. A run adds what variability and blocking cost.	ব্যবহার হলো আগমন × সেবা ÷ ইউনিট, ফলাফল যেভাবে গোনে; লোড হলো ইউনিটের প্রাপ্যতার তুলনায় তা। একটি রান পরিবর্তনশীলতা ও অবরোধের খরচ যোগ করে।
+	No servers, shared tasks, delays or pools.	কোনো সার্ভার, ভাগ করা কাজ, বিলম্ব বা পুল নেই।
+	arrival rate	আগমনের হার
+	service time	সেবার সময়
+	utilisation	ব্যবহার
+	{station}: {what}: {message}.	{station}: {what}: {message}.
+	{station}: {message}.	{station}: {message}.
+	From the last run; – when there are none, or they are out of date.	শেষ রান থেকে; – না থাকলে বা পুরোনো হলে।
+	Show this block	এই ব্লকটি দেখান
+	Rates and times are per {unit}.	হার ও সময় প্রতি {unit}।

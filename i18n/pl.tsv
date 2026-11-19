@@ -939,3 +939,34 @@ unit	yr	r.
 	feet	stopy
 	Ticked, items queue up at the end while the rest keep moving. Unticked, the whole belt stops when the item at the end cannot leave.	Zaznaczone: elementy ustawiają się w kolejce na końcu, a pozostałe jadą dalej. Niezaznaczone: cały pas zatrzymuje się, gdy element na końcu nie może zejść.
 	A belt that carries entities from one end to the other. It has a length and a speed, and each entity takes a pitch of belt: its item length plus the gap kept free after it. So it holds at most length ÷ pitch entities and carries at most speed ÷ pitch per time unit. Accumulating: entities queue up at the end while the rest keep moving; otherwise the whole belt stops.	Pas, który niesie jednostki z jednego końca na drugi. Ma długość i szybkość, a każda jednostka zajmuje podziałkę pasa: długość swojego elementu plus odstęp pozostawiony wolny za nią. Mieści więc co najwyżej długość ÷ podziałka jednostek i przenosi co najwyżej szybkość ÷ podziałka na jednostkę czasu. Akumulacja: jednostki ustawiają się w kolejce na końcu, a pozostałe jadą dalej; w przeciwnym razie zatrzymuje się cały pas.
+	Station	Stanowisko
+	Kind	Rodzaj
+	Service	Obsługa
+	Load	Obciążenie
+	Status	Stan
+	Units for {target}%	Jednostki dla {target}%
+	Formula	Wzór
+	Simulated utilisation	Symulowane wykorzystanie
+	Simulated mean wait	Symulowane średnie oczekiwanie
+	Target utilisation	Docelowe wykorzystanie
+	Must be above 0% and below 100%	Musi być większe niż 0% i mniejsze niż 100%
+	The utilisation above which a station counts as congested	Wykorzystanie, powyżej którego stanowisko uznaje się za przeciążone
+	Fine	Dobrze
+	Congested	Przeciążone
+	Unstable	Niestabilne
+	Unknown	Nieznane
+	up to {n}	do {n}
+	Bottleneck: {name} (load {load}).	Wąskie gardło: {name} (obciążenie {load}).
+	Bottleneck: not known before a run (a load not known, or only bounded, could be the highest).	Wąskie gardło: nieznane przed uruchomieniem (nieznane lub tylko ograniczone obciążenie może być najwyższe).
+	Not known before a run:	Nieznane przed uruchomieniem:
+	No exact formula for the wait:	Brak dokładnego wzoru na oczekiwanie:
+	Utilisation is arrivals × service ÷ units, as the results count it; the load is that over the units' availability. A run adds what variability and blocking cost.	Wykorzystanie to przybycia × obsługa ÷ jednostki, tak jak liczą je wyniki; obciążenie to ta wartość względem dostępności jednostek. Uruchomienie dodaje to, co kosztują zmienność i blokowanie.
+	No servers, shared tasks, delays or pools.	Brak serwerów, zadań współdzielonych, opóźnień i pul.
+	arrival rate	intensywność przybyć
+	service time	czas obsługi
+	utilisation	wykorzystanie
+	{station}: {what}: {message}.	{station}: {what}: {message}.
+	{station}: {message}.	{station}: {message}.
+	From the last run; – when there are none, or they are out of date.	Z ostatniego uruchomienia; – gdy go nie ma lub jest nieaktualne.
+	Show this block	Pokaż ten blok
+	Rates and times are per {unit}.	Intensywności i czasy podano na {unit}.

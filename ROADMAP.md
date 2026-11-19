@@ -2410,9 +2410,12 @@ answers, and ships as an example model with its write-up ("Examples for teaching
      apps share: `viewport` (orbit camera, projection, picking rays, the scene of meshes and
      lines, surface shading, and a CPU rasterizer that draws a scene to a PNG without a GPU),
      `viewport-gpu` (its pipelines on wgpu) and `viewport-egui` (drawn in egui-wgpu paint
-     callbacks); its browser app runs the same viewport. StochCraft builds a `Scene` from its
-     generated meshes each frame and draws it there, rather than writing a renderer of its own.
-     The CPU rasterizer also gives tests a picture to check and the report a 3D image.
+     callbacks); its browser app runs the same viewport. The live view is its `Frame`,
+     `GpuScene` and `Renderer` (`viewport-gpu/src/view.rs`), with each entity's mesh drawn once
+     per placement through `InstancedMesh`; `Scene` is the description of a still picture (the
+     headless GPU capture and the CPU rasterizer), which also gives tests a picture to check and
+     the report a 3D image. StochCraft hands it the meshes it generates rather than writing a
+     renderer of its own.
    - **Clean room:** shapes come from real-world dimensions only, never traced or copied from
      any commercial tool's models.
    - **Shared code** (checked 2026-11-19): the viewport above. The parametric meshes are
@@ -2428,8 +2431,17 @@ answers, and ships as an example model with its write-up ("Examples for teaching
      - the viewport's mesh type lives in `solidcore-record`, part of SolidCraft's vendored
        kernel: what it pulls in is to measure before depending on it, and a small mesh crate
        split out of it is the fallback;
-     - the scene has no instancing: each entity is a mesh of its own. That holds for hundreds
-       of totes; for thousands, instancing is added to the shared viewport upstream.
+     - many moving entities: `InstancedMesh` keeps one copy of a mesh on the GPU and re-sends
+       only the placements each frame; 100 and 5,000 moving totes are measured on WebGL2 and
+       an integrated GPU before M5.3 depends on it;
+     - the egui-wgpu changes SolidCraft's viewport relies on (the drawable acquired before the
+       paint callbacks are prepared, the multisampling clamp) go into the shared egui fork;
+     - its mesh type lives in `solidcore-tess`, which compiles SolidCraft's B-rep kernel: the
+       mesh type is asked to move into a small crate of its own, and meanwhile the cost is
+       measured;
+     - picking meshes is ours to write (the camera gives the ray).
+     The spike of 2026-11-19 found the apps' move to wgpu small (one eframe feature and one
+     function signature in each app), with egui 0.37.0 and wgpu 30.0.1 on both sides.
 
    Checks for the view, read from a live run in a test: an entity moving freely is drawn at its
    entry point plus speed × (time moving) along the conveyor's path; one stopped (its exit

@@ -620,3 +620,73 @@ fn explain_refuses_a_model_with_errors() {
     assert!(stderr(&o).contains("cannot be explained"), "{}", stderr(&o));
     assert!(stdout(&o).is_empty(), "{}", stdout(&o));
 }
+
+#[test]
+fn balance_solves_groover_csv_and_reports_bad_rows() {
+    let csv = "\
+id,time,after
+1,0.2,
+2,0.4,
+3,0.7,1
+4,0.1,1;2
+5,0.3,2
+6,0.11,3
+7,0.32,3
+8,0.6,3;4
+9,0.27,6;7;8
+10,0.38,5;8
+11,0.5,9;10
+12,0.12,11
+";
+    let path = scratch("groover-15-1.csv");
+    let _ = std::fs::write(&path, csv);
+    let p = path.to_string_lossy();
+
+    let table = ok(&["balance", &p, "--cycle", "1"]);
+    assert!(table.contains("theoretical minimum 4"), "{table}");
+    assert!(table.contains("Largest candidate rule"), "{table}");
+    assert!(table.contains("0.80"), "{table}");
+
+    let j = json(&ok(&[
+        "balance",
+        &p,
+        "--cycle",
+        "1",
+        "--heuristic",
+        "largest_candidate",
+        "--format",
+        "json",
+    ]));
+    assert_eq!(j["theoretical_min"], 4);
+    assert_eq!(j["balances"].as_array().map(Vec::len), Some(1));
+    assert_eq!(j["balances"][0]["heuristic"], "largest_candidate");
+    assert_eq!(
+        j["balances"][0]["stations"].as_array().map(Vec::len),
+        Some(5)
+    );
+
+    // Blank lines are ignored and fields trimmed, while a bad row exits with 2 and names the line.
+    let bad = scratch("bad-balance.csv");
+    let _ = std::fs::write(&bad, "id, time, after\n\n1 , 0.2 , \n2, nope, 1\n");
+    let bad_p = bad.to_string_lossy();
+    let o = cli(&["balance", &bad_p, "--cycle", "1"]);
+    assert_eq!(o.status.code(), Some(2), "{}", stderr(&o));
+    assert!(stderr(&o).contains("line 4"), "{}", stderr(&o));
+    assert!(stdout(&o).is_empty(), "{}", stdout(&o));
+
+    // Missing column and precedence loop also exit with 2.
+    let short = scratch("short-balance.csv");
+    let _ = std::fs::write(&short, "id,time,after\n1,0.2\n");
+    let o = cli(&["balance", &short.to_string_lossy(), "--cycle", "1"]);
+    assert_eq!(o.status.code(), Some(2), "{}", stderr(&o));
+    assert!(stderr(&o).contains("line 2"), "{}", stderr(&o));
+
+    let cyc = scratch("loop-balance.csv");
+    let _ = std::fs::write(&cyc, "id,time,after\nA,0.5,B\nB,0.5,A\n");
+    let o = cli(&["balance", &cyc.to_string_lossy(), "--cycle", "1"]);
+    assert_eq!(o.status.code(), Some(2), "{}", stderr(&o));
+    assert!(stderr(&o).contains('A'), "{}", stderr(&o));
+
+    let o = cli(&["balance", &p, "--cycle", "0"]);
+    assert_eq!(o.status.code(), Some(2), "{}", stderr(&o));
+}

@@ -7,7 +7,7 @@ use serde::{Deserialize, Deserializer};
 use serde_json::{Value, json};
 use stochcraft_model::{
     Bounds, Connection, Element, ElementId, ElementKind, Model, Need, Property, QueueLimit,
-    ResourcePool, Transfer, calendar::Calendar, capacity,
+    ResourcePool, Transfer, balance, calendar::Calendar, capacity,
 };
 
 use crate::edit::Op;
@@ -201,6 +201,50 @@ pub struct CapacityParams {
     /// The utilisation above which a station is congested, between 0 and 1 (default 0.85).
     #[serde(default)]
     pub target: Option<f64>,
+}
+
+/// One work element of an assembly line: its time and the elements that must come before it.
+#[derive(Debug, Deserialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
+pub struct WorkElementSpec {
+    pub id: String,
+    /// The time to do the element, in the same unit as the cycle time. Positive and finite.
+    pub time: f64,
+    /// The elements that must be done before this one.
+    #[serde(default)]
+    pub after: Vec<String>,
+}
+
+/// One of the three line-balancing heuristics.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Deserialize, JsonSchema)]
+#[serde(rename_all = "snake_case")]
+pub enum HeuristicSpec {
+    LargestCandidate,
+    KilbridgeWester,
+    RankedPositionalWeight,
+}
+
+impl From<HeuristicSpec> for balance::Heuristic {
+    fn from(h: HeuristicSpec) -> Self {
+        match h {
+            HeuristicSpec::LargestCandidate => balance::Heuristic::LargestCandidate,
+            HeuristicSpec::KilbridgeWester => balance::Heuristic::KilbridgeWester,
+            HeuristicSpec::RankedPositionalWeight => balance::Heuristic::RankedPositionalWeight,
+        }
+    }
+}
+
+/// Parameters for `line.balance`.
+#[derive(Debug, Deserialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
+pub struct BalanceParams {
+    pub elements: Vec<WorkElementSpec>,
+    /// The cycle time (the longest any station may take), in the same unit as the element times.
+    pub cycle: f64,
+    /// One heuristic (`largest_candidate`, `kilbridge_wester` or `ranked_positional_weight`);
+    /// when left out, all three are run and compared.
+    #[serde(default)]
+    pub heuristic: Option<HeuristicSpec>,
 }
 
 #[derive(Debug, Deserialize, JsonSchema)]
@@ -745,6 +789,31 @@ fn model_capacity(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         ));
     }
     Ok(wire::capacity(e.model(), &e.model().capacity(target)))
+}
+
+fn line_balance(_: &mut Engine, p: Value) -> Result<Value, CommandError> {
+    let p: BalanceParams = parse(p)?;
+    let mut elements = Vec::with_capacity(p.elements.len());
+    for e in p.elements {
+        if e.id.trim().is_empty() {
+            return Err(CommandError::new(
+                ErrorCode::InvalidParams,
+                "a work element's `id` must not be empty",
+            ));
+        }
+        elements.push(balance::WorkElement {
+            id: ElementId::unchecked(&e.id),
+            time: e.time,
+            predecessors: e.after.iter().map(|a| ElementId::unchecked(a)).collect(),
+        });
+    }
+    let mut result = balance::compare(&elements, p.cycle)
+        .map_err(|err| CommandError::new(ErrorCode::InvalidParams, err.to_string()))?;
+    if let Some(h) = p.heuristic {
+        let wanted: balance::Heuristic = h.into();
+        result.balances.retain(|b| b.heuristic == wanted);
+    }
+    Ok(wire::line_balance(&result))
 }
 
 fn model_new(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
@@ -2036,11 +2105,28 @@ pub static COMMANDS: &[Command] = &[
     },
     Command {
         name: "model.capacity",
-        summary: "The capacity table, without running: each server's, shared task's, delay's and                   pool's arrival rate, mean service time, units, utilisation and load (marked                   fine, congested above `target`, default 0.85, or unstable at 100%), the units                   that would bring it under the target, and its mean wait where a queueing                   formula holds exactly (M/M/c, M/M/c/K, Erlang A, balking, M/G/1), or why not;                   rates that depend on the run are not guessed. Rates and times in the model's                   time unit.",
+        summary: "The capacity table, without running: each server's, shared task's, delay's and pool's arrival rate, mean service time, units, utilisation and load (marked fine, congested above `target`, default 0.85, or unstable at 100%), the units that would bring it under the target, and its mean wait where a queueing formula holds exactly (M/M/c, M/M/c/K, Erlang A, balking, M/G/1), or why not; rates that depend on the run are not guessed. Rates and times in the model's time unit.",
         kind: CommandKind::Query,
         schema: schema::<CapacityParams>,
         example: || json!({ "target": 0.85 }),
         run: model_capacity,
+    },
+    Command {
+        name: "line.balance",
+        summary: "Balance assembly work elements across stations for a cycle time without opening a model, using the largest candidate rule, Kilbridge and Wester, and ranked positional weights (or one chosen heuristic), with the theoretical minimum, station times, balance efficiency, delay and smoothness.",
+        kind: CommandKind::Query,
+        schema: schema::<BalanceParams>,
+        example: || {
+            json!({
+                "elements": [
+                    { "id": "A", "time": 4.0 },
+                    { "id": "B", "time": 4.0, "after": ["A"] },
+                    { "id": "C", "time": 5.0 }
+                ],
+                "cycle": 10.0
+            })
+        },
+        run: line_balance,
     },
     Command {
         name: "model.rename",

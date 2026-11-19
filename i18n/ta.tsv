@@ -939,3 +939,34 @@ unit	yr	ஆண்டு
 	feet	அடி
 	Ticked, items queue up at the end while the rest keep moving. Unticked, the whole belt stops when the item at the end cannot leave.	தேர்ந்தால், மற்றவை நகர்ந்துகொண்டிருக்க பொருட்கள் முடிவில் வரிசையில் நிற்கும். தேர்ந்தெடுக்காவிட்டால், முடிவில் உள்ள பொருள் வெளியேற முடியாதபோது முழுப் பட்டையும் நின்றுவிடும்.
 	A belt that carries entities from one end to the other. It has a length and a speed, and each entity takes a pitch of belt: its item length plus the gap kept free after it. So it holds at most length ÷ pitch entities and carries at most speed ÷ pitch per time unit. Accumulating: entities queue up at the end while the rest keep moving; otherwise the whole belt stops.	உருப்படிகளை ஒரு முனையிலிருந்து மறு முனைக்குக் கொண்டு செல்லும் பட்டை. அதற்கு ஒரு நீளமும் வேகமும் உண்டு; ஒவ்வொரு உருப்படியும் பட்டையின் ஒரு படியை எடுத்துக்கொள்கிறது: அதன் பொருளின் நீளமும் அதன் பின்னால் காலியாக விடப்படும் இடைவெளியும். எனவே இது அதிகபட்சம் நீளம் ÷ படி உருப்படிகளைத் தாங்கும்; ஒரு நேர அலகில் அதிகபட்சம் வேகம் ÷ படி உருப்படிகளைக் கொண்டு செல்லும். சேர்ந்து நிற்கும்: மற்றவை நகர்ந்துகொண்டிருக்க உருப்படிகள் முடிவில் வரிசையில் நிற்கும்; இல்லையெனில் முழுப் பட்டையும் நின்றுவிடும்.
+	Station	நிலையம்
+	Kind	வகை
+	Service	சேவை
+	Load	சுமை
+	Status	நிலை
+	Units for {target}%	{target}%-க்கான அலகுகள்
+	Formula	சூத்திரம்
+	Simulated utilisation	உருவகப்படுத்திய பயன்பாடு
+	Simulated mean wait	உருவகப்படுத்திய சராசரி காத்திருப்பு
+	Target utilisation	இலக்கு பயன்பாடு
+	Must be above 0% and below 100%	0%-க்கு மேலும் 100%-க்குக் கீழும் இருக்க வேண்டும்
+	The utilisation above which a station counts as congested	இதற்கு மேல் ஒரு நிலையம் நெரிசலாகக் கருதப்படும் பயன்பாடு
+	Fine	நன்று
+	Congested	நெரிசல்
+	Unstable	நிலையற்றது
+	Unknown	தெரியவில்லை
+	up to {n}	அதிகபட்சம் {n}
+	Bottleneck: {name} (load {load}).	தடைப்புள்ளி: {name} (சுமை {load}).
+	Bottleneck: not known before a run (a load not known, or only bounded, could be the highest).	தடைப்புள்ளி: ஓட்டத்திற்கு முன் தெரியாது (தெரியாத அல்லது வரம்புக்குட்பட்ட சுமை அதிகமாக இருக்கலாம்).
+	Not known before a run:	ஓட்டத்திற்கு முன் தெரியாதவை:
+	No exact formula for the wait:	காத்திருப்புக்குத் துல்லியமான சூத்திரம் இல்லை:
+	Utilisation is arrivals × service ÷ units, as the results count it; the load is that over the units' availability. A run adds what variability and blocking cost.	பயன்பாடு = வருகைகள் × சேவை ÷ அலகுகள், முடிவுகள் எண்ணுவது போல; சுமை என்பது அலகுகளின் கிடைப்புடன் ஒப்பிட்ட அதே மதிப்பு. ஓட்டம் மாறுபாடும் தடையும் ஏற்படுத்தும் செலவையும் சேர்க்கும்.
+	No servers, shared tasks, delays or pools.	சேவையகங்கள், பகிர்ந்த பணிகள், தாமதங்கள் அல்லது தொகுப்புகள் இல்லை.
+	arrival rate	வருகை வீதம்
+	service time	சேவை நேரம்
+	utilisation	பயன்பாடு
+	{station}: {what}: {message}.	{station}: {what}: {message}.
+	{station}: {message}.	{station}: {message}.
+	From the last run; – when there are none, or they are out of date.	கடைசி ஓட்டத்திலிருந்து; – இல்லையெனில் அல்லது காலாவதியானால்.
+	Show this block	இந்தத் தொகுதியைக் காட்டு
+	Rates and times are per {unit}.	வீதங்களும் நேரங்களும் ஒவ்வொரு {unit}-க்கும்.

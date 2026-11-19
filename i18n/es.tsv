@@ -939,3 +939,34 @@ unit	yr	a
 	feet	pies
 	Ticked, items queue up at the end while the rest keep moving. Unticked, the whole belt stops when the item at the end cannot leave.	Marcada, los elementos hacen cola al final mientras los demás siguen avanzando. Desmarcada, toda la cinta se detiene cuando el elemento del final no puede salir.
 	A belt that carries entities from one end to the other. It has a length and a speed, and each entity takes a pitch of belt: its item length plus the gap kept free after it. So it holds at most length ÷ pitch entities and carries at most speed ÷ pitch per time unit. Accumulating: entities queue up at the end while the rest keep moving; otherwise the whole belt stops.	Una cinta que lleva entidades de un extremo al otro. Tiene una longitud y una velocidad, y cada entidad ocupa un paso de cinta: la longitud de su elemento más la separación que queda libre tras él. Por eso admite como máximo longitud ÷ paso entidades y transporta como máximo velocidad ÷ paso por unidad de tiempo. Acumulación: las entidades hacen cola al final mientras las demás siguen avanzando; si no, se detiene toda la cinta.
+	Station	Estación
+	Kind	Tipo
+	Service	Servicio
+	Load	Carga
+	Status	Estado
+	Units for {target}%	Unidades para {target} %
+	Formula	Fórmula
+	Simulated utilisation	Utilización simulada
+	Simulated mean wait	Espera media simulada
+	Target utilisation	Utilización objetivo
+	Must be above 0% and below 100%	Debe ser mayor que 0 % y menor que 100 %
+	The utilisation above which a station counts as congested	La utilización a partir de la cual una estación se considera congestionada
+	Fine	Bien
+	Congested	Congestionada
+	Unstable	Inestable
+	Unknown	Desconocido
+	up to {n}	hasta {n}
+	Bottleneck: {name} (load {load}).	Cuello de botella: {name} (carga {load}).
+	Bottleneck: not known before a run (a load not known, or only bounded, could be the highest).	Cuello de botella: no se conoce antes de una simulación (una carga desconocida, o solo acotada, podría ser la más alta).
+	Not known before a run:	No se conoce antes de una simulación:
+	No exact formula for the wait:	Sin fórmula exacta para la espera:
+	Utilisation is arrivals × service ÷ units, as the results count it; the load is that over the units' availability. A run adds what variability and blocking cost.	La utilización es llegadas × servicio ÷ unidades, como la cuentan los resultados; la carga es esa cifra sobre la disponibilidad de las unidades. Una simulación añade lo que cuestan la variabilidad y el bloqueo.
+	No servers, shared tasks, delays or pools.	No hay servidores, tareas compartidas, retrasos ni grupos.
+	arrival rate	tasa de llegadas
+	service time	tiempo de servicio
+	utilisation	utilización
+	{station}: {what}: {message}.	{station}: {what}: {message}.
+	{station}: {message}.	{station}: {message}.
+	From the last run; – when there are none, or they are out of date.	De la última simulación; – si no hay o están desactualizados.
+	Show this block	Mostrar este bloque
+	Rates and times are per {unit}.	Las tasas y los tiempos son por {unit}.
