@@ -1005,3 +1005,12 @@ unit	yr	r.
 	At {time} {unit}: {n} items	V čase {time} {unit}: {n} položek
 	Run the model to fill the dashboard	Spusťte model, aby se přehled naplnil
 	The resource and conveyor charts show the last run until this one ends	Grafy zdrojů a dopravníků ukazují poslední běh, dokud tento neskončí
+	Layout	Rozvržení
+	Layout of the model, to scale	Rozvržení modelu v měřítku
+	Drag to pan · Scroll to zoom	Tažením posouváte · Kolečkem přibližujete
+	Positions from the diagram	Pozice z diagramu
+	Scale bar: {length} m	Úsečka měřítka: {length} m
+	{length} m	{length} m
+	x {x} m, y {y} m	x {x} m, y {y} m
+	Unplaced	Neumístěné
+	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	Zatím je každý blok umístěn podle diagramu. Blok, který diagram vynechává, je uveden zde a nekreslí se.

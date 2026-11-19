@@ -2019,7 +2019,7 @@ Windows (checked by hand); macOS is unchecked.
 **Outcome:** a newcomer or a switcher from another simulation tool opens an example, sees it
 move, and gets an answer they can trust in their first session. The window explains instead of
 assuming the user already knows. It follows the UX evaluation of 2026-11-15
-([docs/gaps.md](docs/gaps.md), ranked) and its seven mock-up screens (kept privately, v2), and
+([docs/gaps.md](docs/gaps.md), ranked), and
 comes before M4, whose models need the same results over time and a second kind of diagram.
 
 **Words (settled 2026-11-15):** "run" is one pass of the model with its own random
@@ -2597,7 +2597,7 @@ layout. The flagship example is a parcel super hub.
 - A `Path` is a list of segments in metres: `Line { length, rise }`, `Arc { radius, angle,
   rise }` (degrees, positive turns left) and `Helix { radius, rise, turns }` (`rise` is always the segment's total rise, for a helix over
   all its turns), each continuing from
-  the end frame of the one before, from a start frame (x, y, z, heading). `length` is measured
+  the end frame of the one before, from a start frame (x, y, z, heading). A `Line`'s `length` is its run on the plan; the path's `length()` is measured
   along the slope, so an incline is a line with a rise and a spiral is a helix. A clothoid
   segment can come later.
 - `length()` and `point_at(s)` (position and heading at distance `s` from the start) are exact,

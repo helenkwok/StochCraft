@@ -1005,3 +1005,12 @@ unit	yr	a
 	At {time} {unit}: {n} items	A {time} {unit}: {n} peces
 	Run the model to fill the dashboard	Executeu el model per omplir el tauler
 	The resource and conveyor charts show the last run until this one ends	Els gràfics de recursos i cintes mostren l'última execució fins que aquesta acabi
+	Layout	Disposició
+	Layout of the model, to scale	Disposició del model, a escala
+	Drag to pan · Scroll to zoom	Arrossegueu per desplaçar · Desplaceu per ampliar
+	Positions from the diagram	Posicions del diagrama
+	Scale bar: {length} m	Barra d'escala: {length} m
+	{length} m	{length} m
+	x {x} m, y {y} m	x {x} m, y {y} m
+	Unplaced	Sense col·locar
+	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	De moment, cada bloc es col·loca a partir del diagrama. Un bloc que el diagrama deixa fora es mostra aquí i no es dibuixa.
