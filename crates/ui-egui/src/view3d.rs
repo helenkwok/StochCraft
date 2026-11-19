@@ -1214,14 +1214,14 @@ mod tests {
 
     #[test]
     fn a_slanting_conveyor_starts_and_ends_on_the_edges_of_both_footprints() {
-        // The sink is 200 units (4 m) lower: the centres are (1, -0.8) and (7, -4.8) m, 6 m
+        // The sink is 200 units (4 m) lower: the centres are (1, -0.8) and (9, -4.8) m, 8 m
         // across and 4 m down. A ray along that line leaves the source's 0.45 m half-side at
-        // 0.45 / 6 = 0.075 of the way: (1.45, -1.10); it enters the sink's at the same fraction
-        // from the other end: (6.55, -4.50).
+        // 0.45 / 8 = 0.05625 of the way: (1.45, -1.025); it enters the sink's at the same
+        // fraction from the other end: (8.55, -4.575).
         let s = scene(&two_blocks(200.0));
         let (points, length) = path_of(&s, "belt");
         let (start, end) = (points[0], points[points.len() - 1]);
-        let (from, to) = ([1.0, -0.8], [7.0, -4.8]);
+        let (from, to) = ([1.0, -0.8], [9.0, -4.8]);
         assert!(
             reach(start, from) >= 0.45 - 1e-4,
             "{start:?} is inside the source"
@@ -1232,10 +1232,10 @@ mod tests {
             "{start:?} is off the source"
         );
         assert!(reach(end, to) <= 0.45 + 1e-4, "{end:?} is off the sink");
-        assert!((start[0] - 1.45).abs() < 1e-3 && (start[1] + 1.10).abs() < 1e-3);
-        assert!((end[0] - 6.55).abs() < 1e-3 && (end[1] + 4.50).abs() < 1e-3);
-        // 0.85 of the 2 * sqrt(13) = 7.211 m between the centres: 6.130 m.
-        assert!((length - 0.85 * 52.0_f32.sqrt()).abs() < 1e-3, "{length}");
+        assert!((start[0] - 1.45).abs() < 1e-3 && (start[1] + 1.025).abs() < 1e-3);
+        assert!((end[0] - 8.55).abs() < 1e-3 && (end[1] + 4.575).abs() < 1e-3);
+        // 1 - 2 * 0.05625 = 0.8875 of the sqrt(80) = 8.944 m between the centres: 7.938 m.
+        assert!((length - 0.8875 * 80.0_f32.sqrt()).abs() < 1e-3, "{length}");
     }
 
     #[test]
@@ -1368,7 +1368,8 @@ mod tests {
     fn totes_without_positions_spread_evenly_round_a_loop() {
         // Two totes, at a quarter (2 m: 2 m along the first arm, at (3.0, -0.95)) and three
         // quarters (6 m: 1.4257 m along the way back, at (3.0, -0.05)) of the 8 m. A tote is
-        // 0.5 m long and 0.4 m across and lies along the arms.
+        // 0.5 m long and 0.4 m across and lies along the arms: x from 2.75 to 3.25, and y from
+        // -0.95 - 0.2 = -1.15 to -0.05 + 0.2 = 0.15.
         let s = scene(&loop_model(8.0));
         let (tris, labels) = totes(&s, &|id| u64::from(id == "loop") * 2, &|_| None);
         assert!(labels.is_empty());
@@ -1385,7 +1386,7 @@ mod tests {
             "{x:?}"
         );
         assert!(
-            (y.0 + 1.15).abs() < 1e-3 && (y.1 + 0.25).abs() < 1e-3,
+            (y.0 + 1.15).abs() < 1e-3 && (y.1 - 0.15).abs() < 1e-3,
             "{y:?}"
         );
     }
