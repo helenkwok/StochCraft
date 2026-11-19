@@ -1257,3 +1257,85 @@ fn a_conveyors_time_is_at_least_its_length_over_its_speed_when_what_follows_can_
         })
     );
 }
+
+/// Source → transport → sink, one operator walking at 1 empty and 2 loaded, the pickup (the
+/// source) and the drop-off (the sink) 10 apart on the canvas, load 1 and unload 1.
+fn carry_line(arrival_rate: f64) -> Model {
+    let shape = |x| crate::Bounds {
+        x,
+        y: 0.0,
+        width: 10.0,
+        height: 10.0,
+    };
+    let mut m = model(
+        vec![
+            source("in", Dist::exponential_rate(arrival_rate)),
+            el(
+                "carry",
+                ElementKind::Transport {
+                    pool: id("walker"),
+                    load: Dist::Constant(1.0),
+                    unload: Dist::Constant(1.0),
+                },
+            ),
+            sink("out"),
+        ],
+        vec![link("in", "carry"), link("carry", "out")],
+    );
+    let mut pool = ResourcePool::new(id("walker"), "Walker", 1, Vec::new());
+    pool.mobility = Some(crate::Mobility {
+        speed_empty: 1.0,
+        speed_loaded: 2.0,
+        home: id("in"),
+        after_job: crate::AfterJob::Stay,
+    });
+    m.resources = vec![pool];
+    m.layout.insert(id("in"), shape(0.0));
+    m.layout.insert(id("out"), shape(10.0));
+    m
+}
+
+#[test]
+fn a_transports_work_is_at_least_load_unload_and_the_loaded_trip() {
+    // 1 + 1 + 10 / 2 = 7 per item at 0.2 items per time unit: at least 1.4, so unstable.
+    let m = carry_line(0.2);
+    assert_eq!(m.distance(&id("in"), &id("out")), Some(10.0));
+    let c = m.capacity(DEFAULT_TARGET);
+    let t = row(&c, "carry");
+    assert_eq!(t.kind, StationKind::Transport);
+    assert_eq!(
+        t.mean_service,
+        Value::Known {
+            value: 7.0,
+            bound: Bound::AtLeast
+        }
+    );
+    assert_eq!(reason(t), &Why::TransportTrips);
+    let p = row(&c, "walker");
+    assert_eq!(p.kind, StationKind::Pool);
+    match p.load {
+        Value::Known {
+            value,
+            bound: Bound::AtLeast,
+        } => assert!(near(value, 1.4), "{value}"),
+        ref other => panic!("not at least 1.4: {other:?}"),
+    }
+    assert_eq!(p.status, Status::Unstable);
+    assert_eq!(t.status, Status::Unstable);
+}
+
+#[test]
+fn a_transport_below_100_percent_is_not_known_before_a_run() {
+    // At 0.05 items per time unit the load is at least 0.35; the empty trips could add more.
+    let c = carry_line(0.05).capacity(DEFAULT_TARGET);
+    let p = row(&c, "walker");
+    match p.load {
+        Value::Known {
+            value,
+            bound: Bound::AtLeast,
+        } => assert!(near(value, 0.35), "{value}"),
+        ref other => panic!("not at least 0.35: {other:?}"),
+    }
+    assert_eq!(p.status, Status::Unknown);
+    assert_eq!(row(&c, "carry").status, Status::Unknown);
+}
