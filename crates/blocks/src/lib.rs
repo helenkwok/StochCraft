@@ -321,19 +321,7 @@ fn compile_assign(p: &Property, slots: &[String], ty: PropertyType) -> Option<As
 /// Checks `model` and prepares it to run. On any error, returns every diagnostic (errors and
 /// warnings) so all of them can be fixed at once.
 pub fn compile(model: &Model) -> Result<Compiled, Vec<Diagnostic>> {
-    let mut diagnostics = model.validate();
-    // Conveyors can be built and saved, but there is no runtime for them yet (M5.1).
-    diagnostics.extend(
-        model
-            .elements
-            .iter()
-            .filter(|e| matches!(e.kind, ElementKind::Conveyor { .. }))
-            .map(|e| Diagnostic {
-                severity: Severity::Error,
-                at: Some(e.id.clone()),
-                problem: Problem::ConveyorNotSimulated,
-            }),
-    );
+    let diagnostics = model.validate();
     if diagnostics.iter().any(|d| d.severity == Severity::Error) {
         return Err(diagnostics);
     }
