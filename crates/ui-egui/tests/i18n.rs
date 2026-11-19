@@ -255,8 +255,8 @@ fn every_state_is_translated() {
 }
 
 /// A problem found by validation shows in the interface language, built from the catalog's
-/// wording for its code with the block's name in it, in the model page's list and in the block's
-/// inspector, and the status bar says it when Run is pressed.
+/// wording for its code with the block's name in it: the model page's chip names the block and
+/// leads to its inspector, which lists the problem, and the status bar says it when Run is pressed.
 #[test]
 fn a_problem_is_shown_in_the_interface_language() {
     let mut h = pseudo();
@@ -274,17 +274,27 @@ fn a_problem_is_shown_in_the_interface_language() {
         )
         .expect("a block");
     settle(&mut h);
-    let name = h.state().engine().model().name.clone();
-    h.get_by_label(&name).click();
-    settle(&mut h);
     let said = |h: &Harness<'static, App>| -> Vec<String> {
         h.query_all(By::new())
             .filter_map(|n| n.accesskit_node().label().map(|l| l.to_owned()))
             .filter(|l| l.contains("has nowhere to send entities"))
             .collect()
     };
+    // The model page's chip names the block, in the interface language; it leads to the block,
+    // whose inspector gives the whole message.
+    let chip: Vec<String> = h
+        .query_all(By::new())
+        .filter_map(|n| n.accesskit_node().label().map(|l| l.to_owned()))
+        .filter(|l| l.contains("Spare desk") && l.contains('⟦'))
+        .collect();
+    assert!(!chip.is_empty(), "the problems chip names the block");
+    h.get_by_label(&chip[0]).click();
+    settle(&mut h);
     let on_the_page = said(&h);
-    assert!(!on_the_page.is_empty(), "the problem is not listed");
+    assert!(
+        !on_the_page.is_empty(),
+        "the block's inspector lists the problem"
+    );
     for text in &on_the_page {
         assert!(text.contains('⟦'), "not through the catalog: {text}");
         assert!(text.contains("Spare desk"), "no block name: {text}");
