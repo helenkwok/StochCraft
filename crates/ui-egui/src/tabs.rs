@@ -11,13 +11,14 @@ impl App {
         let font = egui::FontId::new(14.0, egui::FontFamily::Name(theme::STRONG.into()));
         // Wrapped: four tabs and the results note must not widen the work area past the window.
         ui.horizontal_wrapped(|ui| {
-            // 0: the model, 1: the results, 2: the Analysis view, 3: the Capacity view, 4: the 3D view.
+            // 0: the model, 1: the results, 2: the Analysis view, 3: the Capacity view, 4: the 3D view,
+            // 5: the Layout view.
             let current = if self.show_results {
                 1
             } else if self.show_analysis {
                 2
             } else if self.show_3d {
-                4
+                if self.layout_view.on { 5 } else { 4 }
             } else if self.show_capacity {
                 3
             } else {
@@ -29,6 +30,7 @@ impl App {
                 (t("Analysis"), 2),
                 (t("Capacity"), 3),
                 (t("3D"), 4),
+                (t("Layout"), 5),
             ] {
                 let on = current == view;
                 let width = ui.fonts_mut(|f| {
@@ -71,7 +73,8 @@ impl App {
                     self.show_results = view == 1;
                     self.show_analysis = view == 2;
                     self.show_capacity = view == 3;
-                    self.show_3d = view == 4;
+                    self.show_3d = view == 4 || view == 5;
+                    self.layout_view.on = view == 5;
                 }
             }
             ui.toggle_value(&mut self.show_dashboard, t("Dashboard"));
@@ -104,7 +107,11 @@ impl App {
         } else if self.show_analysis && has_model && !self.show_results {
             self.analysis_view(ui);
         } else if self.show_3d && has_model && !self.show_results {
-            self.view3d_view(ui);
+            if self.layout_view.on {
+                self.layout_view(ui);
+            } else {
+                self.view3d_view(ui);
+            }
         } else if self.show_capacity && has_model && !self.show_results {
             self.capacity_view(ui);
         } else if has_model && !(self.show_results && self.running.is_some()) {

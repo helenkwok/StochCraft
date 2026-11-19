@@ -1141,3 +1141,12 @@ unit	yr	έτ
 	How many entities are in the model over time.	Πόσες οντότητες βρίσκονται στο μοντέλο στον χρόνο.
 	At {time} {unit}: {n} entities	Τη στιγμή {time} {unit}: {n} οντότητες
 @plural	Makes {n} independent run of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval across them.	Κάνει {n} ανεξάρτητη εκτέλεση του μοντέλου με σπόρο {seed}. Τα αποτελέσματα κάθε μπλοκ περιλαμβάνουν το ημιπλάτος διαστήματος εμπιστοσύνης 95%.|Κάνει {n} ανεξάρτητες εκτελέσεις του μοντέλου με σπόρο {seed}. Τα αποτελέσματα κάθε μπλοκ περιλαμβάνουν το ημιπλάτος διαστήματος εμπιστοσύνης 95%.
+	Layout	Διάταξη
+	Layout of the model, to scale	Διάταξη του μοντέλου, υπό κλίμακα
+	Drag to pan · Scroll to zoom	Σύρετε για μετακίνηση · Κύλιση για ζουμ
+	Positions from the diagram	Θέσεις από το διάγραμμα
+	Scale bar: {length} m	Γραμμή κλίμακας: {length} m
+	{length} m	{length} m
+	x {x} m, y {y} m	x {x} m, y {y} m
+	Unplaced	Χωρίς θέση
+	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	Προς το παρόν κάθε μπλοκ τοποθετείται με βάση το διάγραμμα. Ένα μπλοκ που το διάγραμμα παραλείπει αναφέρεται εδώ και δεν σχεδιάζεται.

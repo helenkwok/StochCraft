@@ -693,3 +693,51 @@ id,time,after
     let o = cli(&["balance", &p, "--cycle", "0"]);
     assert_eq!(o.status.code(), Some(2), "{}", stderr(&o));
 }
+
+#[test]
+fn exec_writes_the_journal_of_what_it_did_and_replays_it_safely() {
+    let script = scratch("journal-edit.json");
+    let journal = scratch("journal-out.json");
+    let _ = std::fs::write(
+        &script,
+        r#"[{"command": "block.set", "params": {"id": "serve", "capacity": 2}},
+            {"command": "run", "params": {"replications": 2}}]"#,
+    );
+    let mm1 = model("mm1.bpmn");
+    ok(&[
+        "exec",
+        &script.to_string_lossy(),
+        "--open",
+        &mm1,
+        "--journal",
+        &journal.to_string_lossy(),
+    ]);
+    // The journal records its version and where it started, then the steps.
+    let written = json(&std::fs::read_to_string(&journal).unwrap_or_default());
+    assert_eq!(written["format"], 1);
+    assert_eq!(written["stochcraft"], env!("CARGO_PKG_VERSION"));
+    assert_eq!(written["start"]["kind"], "file");
+    assert!(
+        written["start"]["file_digest"]
+            .as_str()
+            .is_some_and(|d| d.starts_with("sha256:"))
+    );
+    assert_eq!(written["entries"].as_array().map(Vec::len), Some(2));
+    assert_eq!(written["entries"][0]["command"], "block.set");
+
+    // Replayed on the same file: the edit is applied, the run is skipped.
+    let out = ok(&["exec", &journal.to_string_lossy(), "--open", &mm1]);
+    let steps: Vec<Value> = out.lines().map(json).collect();
+    assert_eq!(steps.len(), 2);
+    assert!(steps[0]["result"].is_object());
+    assert_eq!(steps[1]["skipped"], true);
+    // With --all the run is carried out too.
+    let out = ok(&["exec", &journal.to_string_lossy(), "--open", &mm1, "--all"]);
+    let steps: Vec<Value> = out.lines().map(json).collect();
+    assert_eq!(steps[1]["result"]["replications"], 2);
+    // Without the file it started from, it is refused, and nothing is run.
+    let o = cli(&["exec", &journal.to_string_lossy()]);
+    assert_eq!(o.status.code(), Some(1));
+    assert!(stderr(&o).contains("starts from"), "{}", stderr(&o));
+    assert_eq!(stdout(&o), "");
+}

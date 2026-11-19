@@ -19,7 +19,7 @@ use crate::wire::{
     PropertyTypeSpec, PropertyValueSpec, QueueShiftDoc, RoutingSpec, ScrapSpec, SetupSpec,
     ShiftDoc, Stamp, StopSpec, TimeUnitSpec, TimedDist,
 };
-use crate::{CommandError, Engine, ErrorCode, HistoryEntry};
+use crate::{CommandError, Engine, ErrorCode, HistoryEntry, JournalStart, StartKind};
 
 /// What a command does, which decides whether it is undoable and journalled.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -850,10 +850,14 @@ fn line_balance(_: &mut Engine, p: Value) -> Result<Value, CommandError> {
 
 fn model_new(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
     let p: ModelNew = parse(p)?;
-    e.new_document(Model {
-        name: p.name,
-        ..Model::default()
-    });
+    let start = JournalStart::new(StartKind::New, Some(p.name.clone()));
+    e.new_document(
+        Model {
+            name: p.name,
+            ..Model::default()
+        },
+        start,
+    );
     Ok(json!({}))
 }
 
@@ -2124,7 +2128,7 @@ fn file_save(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
     // leaves the old file whole rather than half written.
     craft_atomic::atomic_write(std::path::Path::new(&path), &bytes)
         .map_err(|err| CommandError::new(ErrorCode::Io, format!("{path}: {err}")))?;
-    e.saved_to(&path, &bytes)
+    e.record_saved(&path, &bytes)
 }
 
 fn example_model() -> Value {
@@ -2504,7 +2508,7 @@ pub static COMMANDS: &[Command] = &[
     },
     Command {
         name: "file.open",
-        summary: "Open a BPMN or XPDL file with BPSim data, replacing the model and clearing the history.",
+        summary: "Open a BPMN or XPDL file with BPSim data, replacing the model, clearing the history and starting a new journal.",
         kind: CommandKind::Action,
         schema: schema::<FileOpen>,
         example: || json!({ "path": "help-desk.bpmn" }),
@@ -2512,7 +2516,7 @@ pub static COMMANDS: &[Command] = &[
     },
     Command {
         name: "model.new",
-        summary: "Start a new, empty model, clearing the history.",
+        summary: "Start a new, empty model, clearing the history and starting a new journal.",
         kind: CommandKind::Action,
         schema: schema::<ModelNew>,
         example: || json!({ "name": "Warehouse" }),

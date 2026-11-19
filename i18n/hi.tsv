@@ -1141,3 +1141,12 @@ unit	yr	वर्ष
 	How many entities are in the model over time.	समय के साथ मॉडल में कितनी इकाइयाँ हैं।
 	At {time} {unit}: {n} entities	{time} {unit} पर: {n} इकाइयाँ
 @plural	Makes {n} independent run of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval across them.	बीज {seed} से मॉडल का {n} स्वतंत्र रन चलाता है। प्रत्येक ब्लॉक के परिणामों में 95% विश्वास अंतराल की आधी चौड़ाई शामिल है।|बीज {seed} से मॉडल के {n} स्वतंत्र रन चलाता है। प्रत्येक ब्लॉक के परिणामों में 95% विश्वास अंतराल की आधी चौड़ाई शामिल है।
+	Layout	लेआउट
+	Layout of the model, to scale	मॉडल का लेआउट, पैमाने के अनुसार
+	Drag to pan · Scroll to zoom	खिसकाने के लिए खींचें · ज़ूम के लिए स्क्रॉल करें
+	Positions from the diagram	आरेख से ली गई स्थितियाँ
+	Scale bar: {length} m	पैमाना पट्टी: {length} m
+	{length} m	{length} m
+	x {x} m, y {y} m	x {x} m, y {y} m
+	Unplaced	बिना स्थान के
+	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	फ़िलहाल हर ब्लॉक आरेख के आधार पर रखा गया है। जो ब्लॉक आरेख में नहीं है, वह यहाँ सूचीबद्ध है और बनाया नहीं जाता।

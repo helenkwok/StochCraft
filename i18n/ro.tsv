@@ -1141,3 +1141,12 @@ unit	yr	a
 	How many entities are in the model over time.	Câte entități sunt în model în timp.
 	At {time} {unit}: {n} entities	La {time} {unit}: {n} entități
 @plural	Makes {n} independent run of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval across them.	Efectuează {n} rulare independentă a modelului de la sămânța {seed}. Rezultatele fiecărui bloc includ semilățimea unui interval de încredere de 95%.|Efectuează {n} rulări independente ale modelului de la sămânța {seed}. Rezultatele fiecărui bloc includ semilățimea unui interval de încredere de 95%.|Efectuează {n} de rulări independente ale modelului de la sămânța {seed}. Rezultatele fiecărui bloc includ semilățimea unui interval de încredere de 95%.
+	Layout	Amplasare
+	Layout of the model, to scale	Amplasarea modelului, la scară
+	Drag to pan · Scroll to zoom	Trageți pentru deplasare · Derulați pentru zoom
+	Positions from the diagram	Poziții din diagramă
+	Scale bar: {length} m	Bară de scară: {length} m
+	{length} m	{length} m
+	x {x} m, y {y} m	x {x} m, y {y} m
+	Unplaced	Neamplasate
+	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	Deocamdată, fiecare bloc este amplasat pe baza diagramei. Un bloc pe care diagrama îl omite este listat aici și nu este desenat.

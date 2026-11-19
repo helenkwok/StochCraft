@@ -1141,3 +1141,12 @@ unit	yr	年
 	How many entities are in the model over time.	模型中有多少实体随时间变化。
 	At {time} {unit}: {n} entities	在 {time} {unit}：{n} 个实体
 @plural	Makes {n} independent run of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval across them.	从随机种子 {seed} 开始，对模型进行 {n} 次独立运行。每个区块的结果都包含 95% 置信区间的半宽。
+	Layout	布局
+	Layout of the model, to scale	按比例绘制的模型布局
+	Drag to pan · Scroll to zoom	拖动平移 · 滚动缩放
+	Positions from the diagram	位置取自流程图
+	Scale bar: {length} m	比例尺: {length} m
+	{length} m	{length} m
+	x {x} m, y {y} m	x {x} m, y {y} m
+	Unplaced	未放置
+	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	目前所有模块都按流程图放置。流程图中没有的模块会列在此处，不会绘制。

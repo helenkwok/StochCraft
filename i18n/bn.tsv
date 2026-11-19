@@ -1141,3 +1141,12 @@ unit	yr	বছর
 	How many entities are in the model over time.	সময়ের সঙ্গে মডেলে কতগুলো সত্তা আছে।
 	At {time} {unit}: {n} entities	{time} {unit} সময়ে: {n}টি সত্তা
 @plural	Makes {n} independent run of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval across them.	বীজ {seed} থেকে মডেলের {n}টি স্বাধীন পুনরাবৃত্তি চালায়। প্রতিটি ব্লকের ফলে 95% আস্থা ব্যবধানের অর্ধপ্রস্থ দেওয়া হয়।|বীজ {seed} থেকে মডেলের {n}টি স্বাধীন পুনরাবৃত্তি চালায়। প্রতিটি ব্লকের ফলে 95% আস্থা ব্যবধানের অর্ধপ্রস্থ দেওয়া হয়।
+	Layout	লেআউট
+	Layout of the model, to scale	মডেলের লেআউট, স্কেল অনুযায়ী
+	Drag to pan · Scroll to zoom	সরাতে টানুন · জুম করতে স্ক্রল করুন
+	Positions from the diagram	ডায়াগ্রাম থেকে নেওয়া অবস্থান
+	Scale bar: {length} m	স্কেল বার: {length} m
+	{length} m	{length} m
+	x {x} m, y {y} m	x {x} m, y {y} m
+	Unplaced	অবস্থান নির্ধারিত নয়
+	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	আপাতত প্রতিটি ব্লক ডায়াগ্রাম থেকে স্থাপন করা হয়েছে। ডায়াগ্রামে যে ব্লক নেই তা এখানে তালিকাভুক্ত হয় এবং আঁকা হয় না।

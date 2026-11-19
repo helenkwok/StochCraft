@@ -1141,3 +1141,12 @@ unit	yr	ж.
 	How many entities are in the model over time.	Модельде уақыт бойынша қанша нысан бар.
 	At {time} {unit}: {n} entities	{time} {unit} сәтінде: {n} нысан
 @plural	Makes {n} independent run of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval across them.	Модельдің {n} тәуелсіз іске қосуын {seed} тұқымынан орындайды. Әр блок нәтижесінде 95% сенімділік аралығының жарты ені беріледі.|Модельдің {n} тәуелсіз іске қосуын {seed} тұқымынан орындайды. Әр блок нәтижесінде 95% сенімділік аралығының жарты ені беріледі.
+	Layout	Орналасу
+	Layout of the model, to scale	Модельдің орналасуы, масштабпен
+	Drag to pan · Scroll to zoom	Жылжыту үшін сүйреңіз · Масштабтау үшін айналдырыңыз
+	Positions from the diagram	Орындар диаграммадан
+	Scale bar: {length} m	Масштаб сызғышы: {length} м
+	{length} m	{length} м
+	x {x} m, y {y} m	x {x} м, y {y} м
+	Unplaced	Орналастырылмаған
+	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	Әзірге әр блок диаграмма бойынша орналастырылады. Диаграмма қалдырып кеткен блок осында тізімделеді және сызылмайды.

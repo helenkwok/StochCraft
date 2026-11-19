@@ -1141,3 +1141,12 @@ unit	yr	god.
 	How many entities are in the model over time.	Koliko je entiteta u modelu kroz vrijeme.
 	At {time} {unit}: {n} entities	U {time} {unit}: {n} entiteta
 @plural	Makes {n} independent run of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval across them.	Izvodi {n} neovisno pokretanje modela od sjemena {seed}. Rezultati svakog bloka uključuju poluširinu 95% intervala pouzdanosti.|Izvodi {n} neovisna pokretanja modela od sjemena {seed}. Rezultati svakog bloka uključuju poluširinu 95% intervala pouzdanosti.|Izvodi {n} neovisnih pokretanja modela od sjemena {seed}. Rezultati svakog bloka uključuju poluširinu 95% intervala pouzdanosti.
+	Layout	Raspored
+	Layout of the model, to scale	Raspored modela, u mjerilu
+	Drag to pan · Scroll to zoom	Povucite za pomicanje · Kotačić za zumiranje
+	Positions from the diagram	Položaji iz dijagrama
+	Scale bar: {length} m	Traka mjerila: {length} m
+	{length} m	{length} m
+	x {x} m, y {y} m	x {x} m, y {y} m
+	Unplaced	Nepostavljeno
+	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	Za sada je svaki blok postavljen prema dijagramu. Blok koji dijagram izostavlja navodi se ovdje i ne crta se.

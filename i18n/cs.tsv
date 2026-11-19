@@ -1141,3 +1141,12 @@ unit	yr	r.
 	How many entities are in the model over time.	Kolik entit je v modelu v čase.
 	At {time} {unit}: {n} entities	V čase {time} {unit}: {n} entit
 @plural	Makes {n} independent run of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval across them.	Spustí {n} nezávislý běh modelu z počáteční hodnoty {seed}. Výsledky každého bloku zahrnují poloviční šířku 95% intervalu spolehlivosti.|Spustí {n} nezávislé běhy modelu z počáteční hodnoty {seed}. Výsledky každého bloku zahrnují poloviční šířku 95% intervalu spolehlivosti.|Spustí {n} nezávislých běhů modelu z počáteční hodnoty {seed}. Výsledky každého bloku zahrnují poloviční šířku 95% intervalu spolehlivosti.
+	Layout	Rozvržení
+	Layout of the model, to scale	Rozvržení modelu v měřítku
+	Drag to pan · Scroll to zoom	Tažením posouváte · Kolečkem přibližujete
+	Positions from the diagram	Pozice z diagramu
+	Scale bar: {length} m	Úsečka měřítka: {length} m
+	{length} m	{length} m
+	x {x} m, y {y} m	x {x} m, y {y} m
+	Unplaced	Neumístěné
+	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	Zatím je každý blok umístěn podle diagramu. Blok, který diagram vynechává, je uveden zde a nekreslí se.

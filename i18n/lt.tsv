@@ -1141,3 +1141,12 @@ unit	yr	m.
 	How many entities are in the model over time.	Kiek objektų yra modelyje laikui bėgant.
 	At {time} {unit}: {n} entities	Momentu {time} {unit}: {n} objektų
 @plural	Makes {n} independent run of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval across them.	Atlieka {n} nepriklausomą modelio vykdymą su sėkla {seed}. Kiekvieno bloko rezultatuose pateikiamas 95% pasikliautinojo intervalo pusplotis.|Atlieka {n} nepriklausomus modelio vykdymus su sėkla {seed}. Kiekvieno bloko rezultatuose pateikiamas 95% pasikliautinojo intervalo pusplotis.|Atlieka {n} nepriklausomų modelio vykdymų su sėkla {seed}. Kiekvieno bloko rezultatuose pateikiamas 95% pasikliautinojo intervalo pusplotis.
+	Layout	Išdėstymas
+	Layout of the model, to scale	Modelio išdėstymas, mastelio
+	Drag to pan · Scroll to zoom	Vilkite perkelti · Slinkite didinti
+	Positions from the diagram	Pozicijos iš diagramos
+	Scale bar: {length} m	Mastelio juosta: {length} m
+	{length} m	{length} m
+	x {x} m, y {y} m	x {x} m, y {y} m
+	Unplaced	Neišdėstyta
+	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	Kol kas kiekvienas blokas išdėstomas pagal diagramą. Blokas, kurio diagrama nenurodo, išvardytas čia ir nebraižomas.

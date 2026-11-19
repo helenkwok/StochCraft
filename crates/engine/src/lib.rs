@@ -29,7 +29,10 @@
 //!   example: what the CLI's `schema` command and the MCP tool list are built from.
 //! - Edits are undone and redone through their exact inverses ([`CommandKind::Edit`]).
 //! - Every command that is not a query is recorded in the [`Engine::journal`], which
-//!   [`Engine::replay`] runs again as a script.
+//!   [`Engine::replay`] runs again as a script. A new or opened document starts a new journal,
+//!   and [`Engine::journal_document`] gives it with its format version, the StochCraft version
+//!   and the state it started from ([`Journal`]). [`Engine::replay_journal`] checks that state
+//!   and by default re-applies only the edits, leaving out saves, runs and experiments.
 //! - `run` runs an experiment at once; `run.start`, `run.status` and `run.cancel` run one in the
 //!   background with progress and cancellation (worker threads natively; in the browser, the
 //!   page's web workers, see [`Worker`], or slices of [`SLICE_EVENTS`] events between frames).
@@ -172,18 +175,130 @@ pub struct JournalEntry {
     pub params: Value,
 }
 
-/// A script step that failed during [`Engine::replay`].
+/// The version of the journal format this engine writes and reads (see [`Journal`]).
+pub const JOURNAL_FORMAT: u32 = 1;
+
+/// How the document a journal belongs to began.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum StartKind {
+    /// The engine was made with a model ([`Engine::new`], [`Engine::with_model`]) and no
+    /// command started a document since.
+    Engine,
+    /// `model.new` started a new, empty model.
+    New,
+    /// A file was opened (`file.open`, or [`Engine::open_bytes`]).
+    File,
+}
+
+/// The state a journal started from, so a replay can tell whether it starts from the same place.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct JournalStart {
+    pub kind: StartKind,
+    /// [`model_digest`] of the model at the start.
+    pub model_digest: String,
+    /// For [`StartKind::New`] the model's name; for [`StartKind::File`] the name the file was
+    /// opened under.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// For [`StartKind::File`], the digest (`sha256:` and hex) of the file's bytes.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub file_digest: Option<String>,
+    /// For [`StartKind::File`], the scenario that was opened, if the file has scenarios.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub scenario: Option<String>,
+}
+
+impl JournalStart {
+    /// A start of `kind`; the model's digest is filled in by the engine when the document begins.
+    fn new(kind: StartKind, name: Option<String>) -> Self {
+        Self {
+            kind,
+            model_digest: String::new(),
+            name,
+            file_digest: None,
+            scenario: None,
+        }
+    }
+}
+
+/// A journal as it is written to a file: what it started from, then its commands. A new or
+/// opened document starts a new journal, so it is one document's history.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct Journal {
+    /// The journal format ([`JOURNAL_FORMAT`]).
+    pub format: u32,
+    /// The StochCraft version that wrote it.
+    pub stochcraft: String,
+    pub start: JournalStart,
+    pub entries: Vec<JournalEntry>,
+}
+
+/// Which steps of a journal a replay carries out.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+pub enum ReplayMode {
+    /// Re-applies the edits (and undo, redo and starting a document). Saving a file, runs and
+    /// experiments are skipped: they write files or take time, and change nothing in the model.
+    #[default]
+    EditsOnly,
+    /// Carries out every step, as [`Engine::replay`] does.
+    All,
+}
+
+/// The commands [`ReplayMode::EditsOnly`] skips.
+const SKIPPED_BY_DEFAULT: [&str; 8] = [
+    "file.save",
+    "run",
+    "run.start",
+    "run.cancel",
+    "experiment.sweep",
+    "experiment.sensitivity",
+    "experiment.design",
+    "experiment.size",
+];
+
+impl ReplayMode {
+    /// Whether a replay in this mode carries out `command`.
+    pub fn applies(self, command: &str) -> bool {
+        self == ReplayMode::All || !SKIPPED_BY_DEFAULT.contains(&command)
+    }
+}
+
+/// How [`Engine::replay_journal`] replays.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+pub struct ReplayOptions {
+    pub mode: ReplayMode,
+    /// Replays although the model is not the one the journal started from.
+    pub force: bool,
+}
+
+/// What a replay did with one step.
+#[derive(Debug, Clone, PartialEq)]
+pub enum ReplayStep {
+    /// The command ran, with this result.
+    Applied(Value),
+    /// The mode left the command out.
+    Skipped,
+}
+
+/// A script step that failed during [`Engine::replay`], or the reason a journal was refused.
 #[derive(Debug, Clone, PartialEq)]
 pub struct ReplayError {
     /// The position of the step in the script.
     pub index: usize,
+    /// The step's command; empty when the journal itself was refused (its format, or a
+    /// starting state that is not the model's).
     pub command: String,
     pub error: CommandError,
 }
 
 impl std::fmt::Display for ReplayError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "step {} ({}): {}", self.index, self.command, self.error)
+        if self.command.is_empty() {
+            write!(f, "{}", self.error)
+        } else {
+            write!(f, "step {} ({}): {}", self.index, self.command, self.error)
+        }
     }
 }
 
@@ -210,6 +325,11 @@ pub struct Engine {
     undo: Vec<HistoryEntry>,
     redo: Vec<HistoryEntry>,
     journal: Vec<JournalEntry>,
+    /// What the journal started from.
+    journal_start: JournalStart,
+    /// Counts the documents started (a new or opened model), so `execute` can tell that a
+    /// command started one and left the journal to its start record.
+    documents: u64,
     file: Option<FileState>,
     /// The model as last opened or saved, to tell whether there are unsaved changes.
     saved: Model,
@@ -243,12 +363,16 @@ impl Engine {
 
     /// An engine for `model`, as if it had just been saved.
     pub fn with_model(model: Model) -> Self {
+        let mut journal_start = JournalStart::new(StartKind::Engine, None);
+        journal_start.model_digest = model_digest(&model);
         Self {
             saved: model.clone(),
             model,
             undo: Vec::new(),
             redo: Vec::new(),
             journal: Vec::new(),
+            journal_start,
+            documents: 0,
             file: None,
             job: None,
             job_kept: false,
@@ -271,19 +395,21 @@ impl Engine {
     }
 
     /// Runs `command` with JSON `params` (`null` counts as `{}`). Every command that is not a
-    /// query, and succeeds, is added to the journal.
+    /// query, and succeeds, is added to the journal, except `model.new` and `file.open`: they
+    /// start a new journal, whose [`JournalStart`] records them.
     pub fn execute(&mut self, command: &str, params: Value) -> Result<Value, CommandError> {
         let params = if params.is_null() { json!({}) } else { params };
         let c = COMMANDS.iter().find(|c| c.name == command).ok_or_else(|| {
             CommandError::new(ErrorCode::UnknownCommand, format!("no command `{command}`"))
         })?;
+        let documents = self.documents;
         let result = (c.run)(self, params.clone())?;
         // Keep the last two results, for questions about their distributions and to compare
         // them (a background run's are kept as it finishes, in `poll_run`).
         if command == "run" {
             self.keep_results(result.clone());
         }
-        if c.kind != CommandKind::Query {
+        if c.kind != CommandKind::Query && self.documents == documents {
             self.journal.push(JournalEntry {
                 command: command.to_owned(),
                 params,
@@ -292,12 +418,31 @@ impl Engine {
         Ok(result)
     }
 
-    /// Every command executed so far that was not a query, in order.
+    /// Every command executed since the document was started that was not a query, in order.
+    /// A new or opened document starts a new journal (see [`Engine::journal_start`]).
     pub fn journal(&self) -> &[JournalEntry] {
         &self.journal
     }
 
-    /// Executes each step of `script` in turn, stopping at the first that fails.
+    /// What the journal started from: the engine's own model, a new model or an opened file.
+    pub fn journal_start(&self) -> &JournalStart {
+        &self.journal_start
+    }
+
+    /// The journal with its format version, the StochCraft version and its starting state: what
+    /// is written to a file and replayed with [`Engine::replay_journal`].
+    pub fn journal_document(&self) -> Journal {
+        Journal {
+            format: JOURNAL_FORMAT,
+            stochcraft: env!("CARGO_PKG_VERSION").to_owned(),
+            start: self.journal_start.clone(),
+            entries: self.journal.clone(),
+        }
+    }
+
+    /// Executes each step of `script` in turn, stopping at the first that fails. Every step is
+    /// carried out, saves and runs included, and nothing is checked about the starting state:
+    /// see [`Engine::replay_journal`] for a journal.
     pub fn replay(&mut self, script: &[JournalEntry]) -> Result<Vec<Value>, ReplayError> {
         script
             .iter()
@@ -311,6 +456,86 @@ impl Engine {
                     })
             })
             .collect()
+    }
+
+    /// Like [`Engine::replay`], but leaves out the steps `mode` skips and says which.
+    pub fn replay_with(
+        &mut self,
+        script: &[JournalEntry],
+        mode: ReplayMode,
+    ) -> Result<Vec<ReplayStep>, ReplayError> {
+        script
+            .iter()
+            .enumerate()
+            .map(|(index, step)| {
+                if !mode.applies(&step.command) {
+                    return Ok(ReplayStep::Skipped);
+                }
+                self.execute(&step.command, step.params.clone())
+                    .map(ReplayStep::Applied)
+                    .map_err(|error| ReplayError {
+                        index,
+                        command: step.command.clone(),
+                        error,
+                    })
+            })
+            .collect()
+    }
+
+    /// Gets the engine ready to replay `journal`: refuses a format newer than this engine reads,
+    /// starts a new model for a journal that began with `model.new`, and refuses (with
+    /// [`ErrorCode::Conflict`]) a model that is not the one the journal started from, unless
+    /// `force`. The steps are then run with [`Engine::replay_with`].
+    pub fn begin_replay(&mut self, journal: &Journal, force: bool) -> Result<(), ReplayError> {
+        let refuse = |error: CommandError| ReplayError {
+            index: 0,
+            command: String::new(),
+            error,
+        };
+        if journal.format > JOURNAL_FORMAT {
+            return Err(refuse(CommandError::new(
+                ErrorCode::Unsupported,
+                format!(
+                    "the journal is format {}, newer than the format {JOURNAL_FORMAT} this StochCraft reads",
+                    journal.format
+                ),
+            )));
+        }
+        let start = &journal.start;
+        if start.kind == StartKind::New {
+            let name = start.name.clone().unwrap_or_default();
+            self.execute("model.new", json!({ "name": name }))
+                .map_err(refuse)?;
+        }
+        let found = model_digest(&self.model);
+        if found != start.model_digest && !force {
+            let from = match (start.kind, &start.name) {
+                (StartKind::File, Some(name)) => format!("the file `{name}`"),
+                (StartKind::New, _) => "a new model".to_owned(),
+                _ => "the model the session began with".to_owned(),
+            };
+            return Err(refuse(CommandError {
+                code: ErrorCode::Conflict,
+                message: format!(
+                    "the journal starts from {from} (model {}), but the model here is {found}; open the same file first, or force the replay",
+                    start.model_digest
+                ),
+                details: Some(json!({ "expected": start.model_digest, "found": found })),
+            }));
+        }
+        Ok(())
+    }
+
+    /// Replays a journal that was written by [`Engine::journal_document`]: checks where it
+    /// started ([`Engine::begin_replay`]), then runs its steps as `options.mode` says. By
+    /// default only the edits are re-applied.
+    pub fn replay_journal(
+        &mut self,
+        journal: &Journal,
+        options: ReplayOptions,
+    ) -> Result<Vec<ReplayStep>, ReplayError> {
+        self.begin_replay(journal, options.force)?;
+        self.replay_with(&journal.entries, options.mode)
     }
 
     /// Whether the model differs from the one last opened or saved.
@@ -380,9 +605,14 @@ impl Engine {
     }
 
     /// Replaces the document: a new model with no history, no file, no background run and no
-    /// sweeps in its record. The last results are kept, so `results.compare` can still compare
-    /// them with the new model's.
-    fn new_document(&mut self, model: Model) {
+    /// sweeps in its record, and a new journal that starts from it (`start` says how it began; its
+    /// digest is filled in here). The last results are kept, so `results.compare` can still
+    /// compare them with the new model's.
+    fn new_document(&mut self, model: Model, mut start: JournalStart) {
+        start.model_digest = model_digest(&model);
+        self.journal_start = start;
+        self.journal.clear();
+        self.documents += 1;
         self.saved = model.clone();
         self.revision += 1;
         self.model = model;
@@ -396,7 +626,7 @@ impl Engine {
     }
 
     /// Opens a model file from its bytes (`name` is reported back and used by `file.save`),
-    /// replacing the model and clearing the history.
+    /// replacing the model, clearing the history and starting a new journal.
     pub fn open_bytes(
         &mut self,
         name: &str,
@@ -415,7 +645,10 @@ impl Engine {
             "notes": notes.clone(),
             "diagnostics": wire::diagnostics(&loaded.model, &loaded.model.validate()),
         });
-        self.new_document(loaded.model);
+        let mut start = JournalStart::new(StartKind::File, Some(name.to_owned()));
+        start.file_digest = Some(bytes_digest(bytes));
+        start.scenario = opened.scenario.clone();
+        self.new_document(loaded.model, start);
         self.file = Some(FileState {
             path: Some(name.to_owned()),
             opened,
@@ -450,8 +683,19 @@ impl Engine {
         self.file.as_ref().map(|f| format_name(f.opened.format))
     }
 
-    /// Records that the model was saved as `bytes` at `path`.
+    /// Records that the model was saved as `bytes` at `path`, as the app does once its shell has
+    /// written the file. Journalled as a `file.save` step, as saving with the command is.
     pub fn saved_to(&mut self, path: &str, bytes: &[u8]) -> Result<Value, CommandError> {
+        let result = self.record_saved(path, bytes)?;
+        self.journal.push(JournalEntry {
+            command: "file.save".to_owned(),
+            params: json!({ "path": path }),
+        });
+        Ok(result)
+    }
+
+    /// What [`Engine::saved_to`] does besides journalling, which `file.save` leaves to `execute`.
+    fn record_saved(&mut self, path: &str, bytes: &[u8]) -> Result<Value, CommandError> {
         // Read back what was written, so the next unchanged save gives the same bytes again, in
         // the scenario that was opened (not the file's first one, which later saves would then
         // write into).
@@ -611,9 +855,14 @@ impl Engine {
 /// A digest of the model as the engine holds it (its JSON form), so results can be matched to
 /// the exact model they came from.
 pub fn model_digest(model: &Model) -> String {
-    use sha2::{Digest, Sha256};
     let text = serde_json::to_string(&wire::ModelDoc::from(model)).unwrap_or_default();
-    let hash = Sha256::digest(text.as_bytes());
+    bytes_digest(text.as_bytes())
+}
+
+/// The digest of some bytes, written `sha256:` and hex, as [`model_digest`] writes it.
+fn bytes_digest(bytes: &[u8]) -> String {
+    use sha2::{Digest, Sha256};
+    let hash = Sha256::digest(bytes);
     let hex: String = hash.iter().map(|b| format!("{b:02x}")).collect();
     format!("sha256:{hex}")
 }

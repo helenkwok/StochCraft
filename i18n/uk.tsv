@@ -1141,3 +1141,12 @@ unit	yr	р.
 	How many entities are in the model over time.	Скільки сутностей у моделі в часі.
 	At {time} {unit}: {n} entities	У момент {time} {unit}: {n} сутностей
 @plural	Makes {n} independent run of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval across them.	Виконує {n} незалежний запуск моделі з початковим значенням {seed}. Результати кожного блока містять півширину 95% довірчого інтервалу.|Виконує {n} незалежні запуски моделі з початковим значенням {seed}. Результати кожного блока містять півширину 95% довірчого інтервалу.|Виконує {n} незалежних запусків моделі з початковим значенням {seed}. Результати кожного блока містять півширину 95% довірчого інтервалу.
+	Layout	Планування
+	Layout of the model, to scale	Планування моделі в масштабі
+	Drag to pan · Scroll to zoom	Перетягніть для зсуву · Прокрутіть для масштабу
+	Positions from the diagram	Позиції з діаграми
+	Scale bar: {length} m	Масштабна лінійка: {length} м
+	{length} m	{length} м
+	x {x} m, y {y} m	x {x} м, y {y} м
+	Unplaced	Не розміщені
+	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	Поки що кожен блок розміщується за діаграмою. Блок, якого немає на діаграмі, наведено тут і не малюється.

@@ -1141,3 +1141,12 @@ unit	yr	a
 	How many entities are in the model over time.	Quantes entitats hi ha al model al llarg del temps.
 	At {time} {unit}: {n} entities	A {time} {unit}: {n} entitats
 @plural	Makes {n} independent run of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval across them.	Fa {n} execució independent del model a partir de la llavor {seed}. Els resultats de cada bloc inclouen la semiamplada d'un interval de confiança del 95%.|Fa {n} execucions independents del model a partir de la llavor {seed}. Els resultats de cada bloc inclouen la semiamplada d'un interval de confiança del 95%.
+	Layout	Disposició
+	Layout of the model, to scale	Disposició del model, a escala
+	Drag to pan · Scroll to zoom	Arrossegueu per desplaçar · Desplaceu per ampliar
+	Positions from the diagram	Posicions del diagrama
+	Scale bar: {length} m	Barra d'escala: {length} m
+	{length} m	{length} m
+	x {x} m, y {y} m	x {x} m, y {y} m
+	Unplaced	Sense col·locar
+	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	De moment, cada bloc es col·loca a partir del diagrama. Un bloc que el diagrama deixa fora es mostra aquí i no es dibuixa.
