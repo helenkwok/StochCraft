@@ -122,6 +122,7 @@ fn the_xml_of_every_reference_model_survives_writing() {
 #[test]
 fn saving_a_reference_model_is_stable() {
     let Some(paths) = models() else { return };
+    let mut unstable = Vec::new();
     for p in &paths {
         let b = bytes(p);
         let Ok(l) = read(&b) else { continue };
@@ -135,11 +136,35 @@ fn saving_a_reference_model_is_stable() {
         // As a new file: what is written reads back, and writing that again changes nothing.
         let first = write_new(&l.model);
         let again = read(&first).unwrap_or_else(|e| panic!("{}: written file: {e}", name(p)));
-        assert_eq!(
-            write_new(&again.model),
-            first,
-            "{}: writing, reading and writing again gave a different file",
-            name(p)
-        );
+        let second = write_new(&again.model);
+        if second != first {
+            unstable.push(format!(
+                "{}: {}",
+                name(p),
+                first_difference(&first, &second)
+            ));
+        }
     }
+    assert!(
+        unstable.is_empty(),
+        "writing, reading and writing again gave a different file:\n{}",
+        unstable.join("\n")
+    );
+}
+
+/// The first line where `a` and `b` differ, both shown.
+fn first_difference(a: &str, b: &str) -> String {
+    let (la, lb): (Vec<&str>, Vec<&str>) = (a.lines().collect(), b.lines().collect());
+    for i in 0..la.len().max(lb.len()) {
+        let (x, y) = (la.get(i).copied(), lb.get(i).copied());
+        if x != y {
+            return format!(
+                "line {}: {:?} then {:?}",
+                i + 1,
+                x.unwrap_or("<end>"),
+                y.unwrap_or("<end>")
+            );
+        }
+    }
+    String::from("same lines, different line endings")
 }
