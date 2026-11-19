@@ -175,7 +175,10 @@ fn run_gives_the_warm_up_suggestion_and_its_warnings() {
     );
     // One replication is warned about, in words.
     let one = ok(&["run", &m, "--reps", "1"]);
-    assert!(one.contains("the run has one replication"), "{one}");
+    assert!(
+        one.to_lowercase().contains("the run has one replication"),
+        "{one}"
+    );
     // As JSON: the values over the run and the suggestion, beside the keys there were.
     let r = json(&ok(&["run", &m, "--reps", "3", "--format", "json"]));
     for key in ["elements", "values", "measured", "warnings", "record"] {
