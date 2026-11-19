@@ -1008,3 +1008,12 @@ unit	yr	г.
 	Fonts	Шрифтове
 	The full list of third-party licences is in the file THIRD-PARTY-LICENSES.html, which comes with the download.	Пълният списък с лицензите на външните компоненти е във файла THIRD-PARTY-LICENSES.html, който е в изтеглената програма.
 	Full list of third-party licences	Пълен списък с лицензите на външните компоненти
+	Layout	Планировка
+	Layout of the model, to scale	Планировка на модела в мащаб
+	Drag to pan · Scroll to zoom	Плъзнете за преместване · Превъртете за мащаб
+	Positions from the diagram	Позиции от диаграмата
+	Scale bar: {length} m	Мащабна линия: {length} м
+	{length} m	{length} м
+	x {x} m, y {y} m	x {x} м, y {y} м
+	Unplaced	Неразположени
+	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	Засега всеки блок е разположен според диаграмата. Блок, който диаграмата пропуска, е посочен тук и не се чертае.

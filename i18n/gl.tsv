@@ -1008,3 +1008,12 @@ unit	yr	a
 	Fonts	Tipos de letra
 	The full list of third-party licences is in the file THIRD-PARTY-LICENSES.html, which comes with the download.	A lista completa de licenzas de terceiros está no ficheiro THIRD-PARTY-LICENSES.html, que vai incluído na descarga.
 	Full list of third-party licences	Lista completa de licenzas de terceiros
+	Layout	Distribución
+	Layout of the model, to scale	Distribución do modelo, a escala
+	Drag to pan · Scroll to zoom	Arrastra para mover · Despraza para ampliar
+	Positions from the diagram	Posicións do diagrama
+	Scale bar: {length} m	Barra de escala: {length} m
+	{length} m	{length} m
+	x {x} m, y {y} m	x {x} m, y {y} m
+	Unplaced	Sen colocar
+	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	Por agora, cada bloque colócase a partir do diagrama. Un bloque que o diagrama deixa fóra aparece aquí e non se debuxa.

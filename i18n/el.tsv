@@ -1008,3 +1008,12 @@ unit	yr	έτ
 	Fonts	Γραμματοσειρές
 	The full list of third-party licences is in the file THIRD-PARTY-LICENSES.html, which comes with the download.	Ο πλήρης κατάλογος των αδειών τρίτων βρίσκεται στο αρχείο THIRD-PARTY-LICENSES.html, που περιλαμβάνεται στη λήψη.
 	Full list of third-party licences	Πλήρης κατάλογος αδειών τρίτων
+	Layout	Διάταξη
+	Layout of the model, to scale	Διάταξη του μοντέλου, υπό κλίμακα
+	Drag to pan · Scroll to zoom	Σύρετε για μετακίνηση · Κύλιση για ζουμ
+	Positions from the diagram	Θέσεις από το διάγραμμα
+	Scale bar: {length} m	Γραμμή κλίμακας: {length} m
+	{length} m	{length} m
+	x {x} m, y {y} m	x {x} m, y {y} m
+	Unplaced	Χωρίς θέση
+	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	Προς το παρόν κάθε μπλοκ τοποθετείται με βάση το διάγραμμα. Ένα μπλοκ που το διάγραμμα παραλείπει αναφέρεται εδώ και δεν σχεδιάζεται.

@@ -1008,3 +1008,12 @@ unit	yr	సం.
 	Fonts	ఫాంట్లు
 	The full list of third-party licences is in the file THIRD-PARTY-LICENSES.html, which comes with the download.	థర్డ్-పార్టీ లైసెన్స్‌ల పూర్తి జాబితా THIRD-PARTY-LICENSES.html ఫైల్‌లో ఉంది, ఇది డౌన్‌లోడ్‌తో వస్తుంది.
 	Full list of third-party licences	థర్డ్-పార్టీ లైసెన్స్‌ల పూర్తి జాబితా
+	Layout	లేఅవుట్
+	Layout of the model, to scale	మోడల్ లేఅవుట్, స్కేలు ప్రకారం
+	Drag to pan · Scroll to zoom	జరపడానికి లాగండి · జూమ్ చేయడానికి స్క్రోల్ చేయండి
+	Positions from the diagram	రేఖాచిత్రం నుండి స్థానాలు
+	Scale bar: {length} m	స్కేలు బార్: {length} m
+	{length} m	{length} m
+	x {x} m, y {y} m	x {x} m, y {y} m
+	Unplaced	ఉంచనివి
+	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	ప్రస్తుతానికి ప్రతి బ్లాక్ రేఖాచిత్రం ఆధారంగా ఉంచబడుతుంది. రేఖాచిత్రం వదిలేసిన బ్లాక్ ఇక్కడ జాబితా చేయబడుతుంది, అది గీయబడదు.

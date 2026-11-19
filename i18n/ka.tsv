@@ -1008,3 +1008,12 @@ unit	yr	წელი
 	Fonts	შრიფტები
 	The full list of third-party licences is in the file THIRD-PARTY-LICENSES.html, which comes with the download.	მესამე მხარის ლიცენზიების სრული სია არის ფაილში THIRD-PARTY-LICENSES.html, რომელიც ჩამოტვირთვას თან ახლავს.
 	Full list of third-party licences	მესამე მხარის ლიცენზიების სრული სია
+	Layout	განლაგება
+	Layout of the model, to scale	მოდელის განლაგება, მასშტაბით
+	Drag to pan · Scroll to zoom	გადაათრიეთ გადასაადგილებლად · გადაახვიეთ გასადიდებლად
+	Positions from the diagram	პოზიციები დიაგრამიდან
+	Scale bar: {length} m	მასშტაბის ზოლი: {length} m
+	{length} m	{length} m
+	x {x} m, y {y} m	x {x} m, y {y} m
+	Unplaced	განუთავსებელი
+	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	ამჟამად ყველა ბლოკი დიაგრამის მიხედვით თავსდება. ბლოკი, რომელსაც დიაგრამა გამოტოვებს, აქ არის ჩამოთვლილი და არ იხატება.

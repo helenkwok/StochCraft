@@ -21,8 +21,10 @@ pub mod balance;
 pub mod calendar;
 pub mod capacity;
 pub mod expr;
+pub mod path;
 
 pub use calendar::{Calendar, DateTime, Timed};
+pub use path::{Frame, Path, Segment};
 
 use std::collections::{BTreeMap, BTreeSet, VecDeque};
 
@@ -366,6 +368,35 @@ pub enum ConveyorShape {
 }
 
 impl ConveyorShape {
+    /// This shape as a one-segment [`Path`] from the origin, heading along `+x`, in the same
+    /// unit as the shape's own numbers: a straight run of `straight_length`, an arc, or a helix
+    /// (a spiral's `rise` is per turn, the helix's over all its turns). The shape stays the
+    /// stored form (the file format is unchanged), and the rest of the code reads geometry
+    /// through this.
+    pub fn path(&self, straight_length: f64) -> Path {
+        let segment = match *self {
+            ConveyorShape::Straight => Segment::Line {
+                length: straight_length,
+                rise: 0.0,
+            },
+            ConveyorShape::Curve { radius, angle } => Segment::Arc {
+                radius,
+                angle_deg: angle,
+                rise: 0.0,
+            },
+            ConveyorShape::Spiral {
+                radius,
+                rise,
+                turns,
+            } => Segment::Helix {
+                radius,
+                rise: rise * turns,
+                turns,
+            },
+        };
+        Path::new(Frame::default(), vec![segment])
+    }
+
     /// The drawn path length of this shape in the experiment's [`LengthUnit`], returning
     /// `straight_length` for [`ConveyorShape::Straight`].
     pub fn path_length(&self, straight_length: f64) -> f64 {
@@ -5110,6 +5141,29 @@ mod tests {
         let circumference = 2.4 * std::f64::consts::PI;
         let expected_spiral = 2.0 * (circumference * circumference + 1.5 * 1.5).sqrt();
         assert!((spiral.path_length(10.0) - expected_spiral).abs() < 1e-12);
+    }
+
+    #[test]
+    fn conveyor_shapes_as_paths_have_the_shapes_path_length() {
+        let spiral = ConveyorShape::Spiral {
+            radius: 1.2,
+            rise: 1.5,
+            turns: 2.0,
+        };
+        let curve = ConveyorShape::Curve {
+            radius: 2.0,
+            angle: -90.0,
+        };
+        for shape in [ConveyorShape::Straight, curve, spiral] {
+            let path = shape.path(7.5);
+            assert_eq!(path.segments.len(), 1);
+            assert!((path.length() - shape.path_length(7.5)).abs() < 1e-12);
+        }
+        // A spiral of 1.5 m a turn for two turns climbs 3 m.
+        assert!((spiral.path(0.0).end().z - 3.0).abs() < 1e-12);
+        // A right curve ends to the right.
+        let end = curve.path(0.0).end();
+        assert!((end.x - 2.0).abs() < 1e-12 && (end.y + 2.0).abs() < 1e-12);
     }
 
     #[test]

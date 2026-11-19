@@ -1008,3 +1008,12 @@ unit	yr	ஆண்டு
 	Fonts	எழுத்துருக்கள்
 	The full list of third-party licences is in the file THIRD-PARTY-LICENSES.html, which comes with the download.	மூன்றாம் தரப்பு உரிமங்களின் முழுப் பட்டியல் THIRD-PARTY-LICENSES.html கோப்பில் உள்ளது; அது பதிவிறக்கத்துடன் வருகிறது.
 	Full list of third-party licences	மூன்றாம் தரப்பு உரிமங்களின் முழுப் பட்டியல்
+	Layout	லேஅவுட்
+	Layout of the model, to scale	மாதிரியின் லேஅவுட், அளவுக்கேற்ப
+	Drag to pan · Scroll to zoom	நகர்த்த இழுக்கவும் · பெரிதாக்க உருட்டவும்
+	Positions from the diagram	வரைபடத்திலிருந்து நிலைகள்
+	Scale bar: {length} m	அளவுகோல் கோடு: {length} m
+	{length} m	{length} m
+	x {x} m, y {y} m	x {x} m, y {y} m
+	Unplaced	இடம் ஒதுக்கப்படாதவை
+	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	தற்போது ஒவ்வொரு தொகுதியும் வரைபடத்தின் அடிப்படையில் வைக்கப்படுகிறது. வரைபடம் விட்டுவிடும் தொகுதி இங்கே பட்டியலிடப்படும், அது வரையப்படாது.

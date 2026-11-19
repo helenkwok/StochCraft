@@ -7,7 +7,7 @@ use stochcraft_engine::{CommandError, ErrorCode};
 use crate::i18n::{t, td, tf, tn, tnf};
 use crate::{
     App, EXAMPLES, NewFile, RECENT_FILES, Replace, Request, canvas, change_label, charts,
-    comparable, extension, file_name, help, view3d,
+    comparable, extension, file_name, help, layout_view, view3d,
 };
 
 impl App {
@@ -144,6 +144,7 @@ impl App {
         self.selected = None;
         self.canvas = canvas::Canvas::default();
         self.view3d = view3d::View3d::default();
+        self.layout_view = layout_view::LayoutView::default();
         self.watching = None;
         self.drafts.clear();
         self.show_results = false;

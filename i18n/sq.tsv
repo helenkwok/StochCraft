@@ -1008,3 +1008,12 @@ unit	yr	v
 	Fonts	Shkronjat
 	The full list of third-party licences is in the file THIRD-PARTY-LICENSES.html, which comes with the download.	Lista e plotë e licencave të palëve të treta është në skedarin THIRD-PARTY-LICENSES.html, që vjen me shkarkimin.
 	Full list of third-party licences	Lista e plotë e licencave të palëve të treta
+	Layout	Planimetria
+	Layout of the model, to scale	Planimetria e modelit, në shkallë
+	Drag to pan · Scroll to zoom	Tërhiqni për zhvendosje · Rrotulloni për zmadhim
+	Positions from the diagram	Pozicionet nga diagrama
+	Scale bar: {length} m	Shiriti i shkallës: {length} m
+	{length} m	{length} m
+	x {x} m, y {y} m	x {x} m, y {y} m
+	Unplaced	Të pavendosura
+	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	Për momentin çdo bllok vendoset sipas diagramës. Një bllok që diagrama e lë jashtë listohet këtu dhe nuk vizatohet.

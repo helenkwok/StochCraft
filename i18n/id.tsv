@@ -1008,3 +1008,12 @@ unit	yr	thn
 	Fonts	Font
 	The full list of third-party licences is in the file THIRD-PARTY-LICENSES.html, which comes with the download.	Daftar lengkap lisensi pihak ketiga ada di berkas THIRD-PARTY-LICENSES.html, yang disertakan dalam unduhan.
 	Full list of third-party licences	Daftar lengkap lisensi pihak ketiga
+	Layout	Tata letak
+	Layout of the model, to scale	Tata letak model, sesuai skala
+	Drag to pan · Scroll to zoom	Seret untuk menggeser · Gulir untuk memperbesar
+	Positions from the diagram	Posisi dari diagram
+	Scale bar: {length} m	Bilah skala: {length} m
+	{length} m	{length} m
+	x {x} m, y {y} m	x {x} m, y {y} m
+	Unplaced	Belum ditempatkan
+	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	Untuk saat ini, setiap blok ditempatkan berdasarkan diagram. Blok yang tidak ada di diagram dicantumkan di sini dan tidak digambar.

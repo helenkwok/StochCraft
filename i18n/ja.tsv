@@ -1008,3 +1008,12 @@ unit	yr	年
 	Fonts	フォント
 	The full list of third-party licences is in the file THIRD-PARTY-LICENSES.html, which comes with the download.	サードパーティのライセンスの一覧は、ダウンロードに含まれるファイル THIRD-PARTY-LICENSES.html にあります。
 	Full list of third-party licences	サードパーティのライセンス一覧
+	Layout	レイアウト
+	Layout of the model, to scale	縮尺どおりのモデルのレイアウト
+	Drag to pan · Scroll to zoom	ドラッグで移動 · スクロールでズーム
+	Positions from the diagram	図からの位置
+	Scale bar: {length} m	スケールバー: {length} m
+	{length} m	{length} m
+	x {x} m, y {y} m	x {x} m, y {y} m
+	Unplaced	未配置
+	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	現時点では、すべてのブロックを図から配置しています。図に含まれないブロックはここに一覧され、描画されません。

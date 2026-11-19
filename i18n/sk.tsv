@@ -1008,3 +1008,12 @@ unit	yr	r.
 	Fonts	Písma
 	The full list of third-party licences is in the file THIRD-PARTY-LICENSES.html, which comes with the download.	Úplný zoznam licencií tretích strán je v súbore THIRD-PARTY-LICENSES.html, ktorý je súčasťou stiahnutej verzie.
 	Full list of third-party licences	Úplný zoznam licencií tretích strán
+	Layout	Rozloženie
+	Layout of the model, to scale	Rozloženie modelu v mierke
+	Drag to pan · Scroll to zoom	Ťahaním posúvate · Kolieskom približujete
+	Positions from the diagram	Pozície z diagramu
+	Scale bar: {length} m	Úsečka mierky: {length} m
+	{length} m	{length} m
+	x {x} m, y {y} m	x {x} m, y {y} m
+	Unplaced	Neumiestnené
+	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	Zatiaľ je každý blok umiestnený podľa diagramu. Blok, ktorý diagram vynecháva, je uvedený tu a nekreslí sa.

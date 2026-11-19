@@ -1008,3 +1008,12 @@ unit	yr	năm
 	Fonts	Phông chữ
 	The full list of third-party licences is in the file THIRD-PARTY-LICENSES.html, which comes with the download.	Danh sách đầy đủ giấy phép của bên thứ ba nằm trong tệp THIRD-PARTY-LICENSES.html, đi kèm bản tải xuống.
 	Full list of third-party licences	Danh sách đầy đủ giấy phép của bên thứ ba
+	Layout	Mặt bằng
+	Layout of the model, to scale	Mặt bằng của mô hình, theo tỷ lệ
+	Drag to pan · Scroll to zoom	Kéo để dịch chuyển · Cuộn để thu phóng
+	Positions from the diagram	Vị trí từ sơ đồ
+	Scale bar: {length} m	Thanh tỷ lệ: {length} m
+	{length} m	{length} m
+	x {x} m, y {y} m	x {x} m, y {y} m
+	Unplaced	Chưa đặt
+	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	Hiện tại mọi khối được đặt theo sơ đồ. Khối mà sơ đồ bỏ sót được liệt kê ở đây và không được vẽ.

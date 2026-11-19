@@ -1008,3 +1008,12 @@ unit	yr	yıl
 	Fonts	Yazı tipleri
 	The full list of third-party licences is in the file THIRD-PARTY-LICENSES.html, which comes with the download.	Üçüncü taraf lisanslarının tam listesi, indirmeyle birlikte gelen THIRD-PARTY-LICENSES.html dosyasındadır.
 	Full list of third-party licences	Üçüncü taraf lisanslarının tam listesi
+	Layout	Yerleşim
+	Layout of the model, to scale	Modelin yerleşimi, ölçekli
+	Drag to pan · Scroll to zoom	Kaydırmak için sürükleyin · Yakınlaştırmak için kaydırın
+	Positions from the diagram	Diyagramdan konumlar
+	Scale bar: {length} m	Ölçek çubuğu: {length} m
+	{length} m	{length} m
+	x {x} m, y {y} m	x {x} m, y {y} m
+	Unplaced	Yerleştirilmemiş
+	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	Şimdilik her blok diyagrama göre yerleştirilir. Diyagramın dışarıda bıraktığı bir blok burada listelenir ve çizilmez.
