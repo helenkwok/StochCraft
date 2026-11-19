@@ -264,6 +264,65 @@ Bottleneck: not known before a run (a load not known, or only bounded, could be 
     out
 }
 
+fn heuristic_title(name: &str) -> &str {
+    match name {
+        "largest_candidate" => "Largest candidate rule",
+        "kilbridge_wester" => "Kilbridge and Wester",
+        "ranked_positional_weight" => "Ranked positional weight",
+        other => other,
+    }
+}
+
+/// Line balance (`line.balance`) as text: the cycle time, work content and theoretical minimum,
+/// then for each heuristic its stations (number, elements and time) and its efficiency, delay and
+/// smoothness.
+pub fn balance(file: &Path, r: &Value) -> String {
+    let mut out = String::new();
+    let _ = writeln!(
+        out,
+        "Line balance of {} (cycle {}, work content {}, theoretical minimum {} station{})",
+        file.display(),
+        f(&r["cycle"]),
+        f(&r["work_content"]),
+        r["theoretical_min"],
+        if r["theoretical_min"].as_u64() == Some(1) {
+            ""
+        } else {
+            "s"
+        }
+    );
+    for b in r["balances"].as_array().into_iter().flatten() {
+        let stations = b["stations"].as_array().map_or(&[][..], Vec::as_slice);
+        let _ = writeln!(
+            out,
+            "\n{} ({} station{}, longest {}):",
+            heuristic_title(s(&b["heuristic"])),
+            stations.len(),
+            if stations.len() == 1 { "" } else { "s" },
+            f(&b["longest"])
+        );
+        let mut rows = vec![["Station".to_owned(), "Elements".into(), "Time".into()]];
+        for (i, st) in stations.iter().enumerate() {
+            let elements: Vec<&str> = st["elements"]
+                .as_array()
+                .into_iter()
+                .flatten()
+                .filter_map(Value::as_str)
+                .collect();
+            rows.push([(i + 1).to_string(), elements.join(", "), f(&st["time"])]);
+        }
+        aligned(&rows, &[false, true, false], &mut out);
+        let _ = writeln!(
+            out,
+            "  efficiency {:.2}, delay {:.2}, smoothness {:.3}",
+            b["efficiency"].as_f64().unwrap_or(0.0),
+            b["delay"].as_f64().unwrap_or(0.0),
+            b["smoothness"].as_f64().unwrap_or(0.0)
+        );
+    }
+    out
+}
+
 /// A factor or parameter `{id, field}` as `id.field`.
 fn label(v: &Value) -> String {
     format!("{}.{}", s(&v["id"]), s(&v["field"]))
