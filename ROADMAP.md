@@ -2532,7 +2532,8 @@ Where each part of that request sits:
 - **Heuristics:** the largest candidate rule, Kilbridge and Wester's column method and Helgeson
   and Birnie's ranked positional weights (Groover, *Automation, Production Systems, and
   Computer-Integrated Manufacturing*, 4th ed., Pearson, 2015, ISBN 978-0-13-349961-2, ch. 15
-  "Manual Assembly Lines", §15.3 "Line Balancing Algorithms", pp. 403–411; M. D. Kilbridge and
+  "Manual Assembly Lines": Example 15.1 and the measures in §15.2, pp. 403–405, the methods in
+  §15.3 "Line Balancing Algorithms", pp. 405–411; M. D. Kilbridge and
   L. Wester, "A heuristic method of assembly line balancing", *Journal of Industrial
   Engineering* 12(4):292–298, 1961 (Groover's reference list gives No. 6, other listings No. 4;
   the pages fit No. 4); W. B.
