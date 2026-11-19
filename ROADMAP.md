@@ -2581,7 +2581,10 @@ layout. The flagship example is a parcel super hub.
   refers to layout objects by id: a conveyor to its path, a server to its place, a transport
   pool to its walkway network and home. Appearance refers to layout objects the same way.
 - **An unplaced block** is listed as "not placed" in the Layout view and drawn nowhere in 3D. It
-  still runs; it just has no position. Nothing is guessed.
+  still runs; it just has no position. Nothing is guessed. So a transport cannot reach it: in a
+  model with walkways, a transport that serves an unplaced block is a model problem ("place this
+  block or stop serving it with a transport"), and the run does not start until it is fixed.
+  Without walkways the straight-line fallback needs positions too, so the same rule holds.
 - **Motion that takes no simulated time is never animated as travel.** A sequence flow is a
   hand-over at one instant, so an entity crossing it jumps. Only a path with a length and a speed
   shows movement.
@@ -2616,12 +2619,13 @@ layout. The flagship example is a parcel super hub.
 - **A section** is one `Conveyor` block with one path, one speed and one kind. A line, a loop or
   a sorter is a graph of sections joined at junctions; the BPMN sequence flows between the blocks
   stay the logic links.
-- **Splitting at points.** M5.1's formulas hold for a stretch that items enter at 0 and leave at
-  its end, with one pitch. So the compiler cuts a drawn section at every divert, merge and
-  station `s` into run stretches joined end to end, and the run uses M5.1's runtime on each.
-  Stretches of one non-accumulating belt share one drive, so the belt still stops as a whole.
-  The user sees one conveyor; the cuts are internal. Mixed item lengths change M5.1's pitch
-  per item (rule 2 below), with their own checks.
+- **Points along a section, not cuts.** A divert, a merge or a station at `s` is an event point
+  on its section, not a cut: items keep one position along the whole section and may span a
+  point, so a 1 m item passes a station 0.5 m from the entrance exactly as on the plain
+  conveyor. M5.1's runtime is extended so that an item's front reaching a point is an event
+  (offer to the divert, start the station's work), and capacity and spacing are counted over
+  the whole section. One non-accumulating belt still stops as a whole. Mixed item lengths change
+  M5.1's pitch per item (rule 2 below), with their own checks.
 - **Section kinds:**
   - *accumulating roller:* items stop one gap behind the item ahead (M5.1);
   - *non-accumulating belt:* the whole section stops when the front item cannot leave (M5.1);
@@ -2668,10 +2672,10 @@ layout. The flagship example is a parcel super hub.
   (a place id carried as an entity property). Explicit sequences and "avoid" lists come later.
 - **What stays and what changes:**
   - stays: the `Conveyor` block and its five fields; divert routing (#197); the exact
-    event-time runtime (#194, #195) on each run stretch; `Live::conveyor_items` (#203), which
+    event-time runtime (#194, #195), extended with event points; `Live::conveyor_items` (#203), which
     gives each item's fraction of the belt and becomes `s` = fraction × path length;
-  - changes: length from the path; a drawn section is cut into run stretches at its points, with
-    a shared drive for belts; sections join at junctions with transfer times; diverts and merges
+  - changes: length from the path; points along a section (items may span them);
+    one drive per belt section; sections join at junctions with transfer times; diverts and merges
     sit at `s`; mixed item lengths; fixed-cell is a new kind; recirculation counts and the
     exception lane are new; routing by destination is new;
   - the operators runtime (branch `operators-runtime`, M5.2 PR 2, not yet merged) adds
@@ -2968,7 +2972,8 @@ our choice, to be stated in the example's write-up (STRESS-DES).
 
 #### Checks with known answers
 
-- **Paths:** an arc's length is r × θ (θ in radians); a helix's is turns × √((2πr)² + rise²); a
+- **Paths:** an arc's length is √((r × θ)² + rise²) (θ in radians; r × θ when flat), and
+  `point_at` measures distance along that slope; a helix's is turns × √((2πr)² + rise²); a
   line with a rise is √(run² + rise²); `point_at(length())` is the end frame, worked by hand for a
   line, a quarter arc and two helix turns.
 - **Split stretches:** a drawn belt cut at a divert gives the same item times as M5.1's single
@@ -3181,8 +3186,8 @@ Where each part of that request sits:
   layout, so that layouts can be compared.
 - **From-to chart:** the flow from each station to each other, from the routing rates the
   capacity table already works out (before a run) or from a run's counts; distances between
-  stations from M5's layout positions and scale (straight line, rectilinear, or along the travel
-  network); flow × distance per pair and in total.
+  stations from M5.5's layout (straight line, rectilinear, or along the walkways and paths), or,
+  for a model with no layout, from the diagram's centres times `layout_scale` (flagged); flow × distance per pair and in total.
 - **On the canvas:** a flow diagram drawn on the layout, line width by flow. M5.5's Layout view
   draws it (flows before and after a run, variants against a baseline); M7.2 adds the chart and
   its measures.
@@ -3222,6 +3227,10 @@ Where each part of that request sits:
   the findings.
 - **Scope:** small: a model (and optionally its results) passed in the link or as a file the
   link points to; the report from M3.7's findings. Nothing is stored on a server of ours.
+- **Every file the model needs travels with it.** A model that names decisions in a `.dmn` file
+  (M5.5) is shared as a bundle of the BPMN and each `.dmn` it references. If a referenced file
+  cannot be found, sharing stops with a message naming the missing file and the task, gateway or
+  divert that uses it, rather than sending a model that cannot run.
 
 ### Order
 
@@ -3346,7 +3355,7 @@ and the Pages preview of an M3 pull request shows the blocks already merged.
 | D18 | Agent scheduling and random streams (M4.3) | Settled (Helen, 2026-11-15). Agents run event-driven on the `des` event list; a stepped mode only for models written that way, activating agents in a set or a random order each step. Events at the same time run by time, then priority, then an order the experiment sets openly: first scheduled first (the default, as today, so validated results do not change), last scheduled first, or random from a stream of its own, so a model can be checked for depending on the order. Initial events, step activations and broadcasts are scheduled in population, then agent order. Each `des` event delivered to an agent is one SCXML external event, handled by a complete zero-time macrostep; `<raise>` and `#_internal` events stay inside the agent; delayed and zero-delay `<send>`s become `des` events, and `<cancel>` marks them stale; a limit on microsteps per macrostep stops a run that loops. Each agent has its own random stream, derived from the replication's seed, its population and its serial number, with a stream per purpose, so adding an agent never changes another's numbers |
 | D19 | Python (M6.1) | Settled (Helen, 2026-11-16): a native package, `pip install stochcraft`, the engine built into a Python module with PyO3 and maturin; Python drives models from outside, and logic inside a run is M6.3's, not Python's |
 | D20 | Plugins (M6.2, M6.3) | Settled (Helen, 2026-11-16): sandboxed WebAssembly plugins in `wasmi`, as the other Craft apps have; command plugins first (through the engine's commands, one undo step, permissions in a manifest), then logic plugins called during a run with the engine's random streams, an instruction budget and a memory cap |
-| D21 | What comes after the capacity table, and where the sorter sits | Recommended: the sorter (M5.1 conveyors, M5.2 operators, M5.3 the layout view in 2D then 3D, M5.4 its dashboard) first, built alongside M3.7 because it changes `model`, `blocks` and the engine while M3.7 changes `ui-egui`; M5.3 follows #151's moving entities so it reuses them. Then M7.1 line balancing (small, needs no run, reuses takt and the capacity table), M7.2 the from-to chart (reuses the capacity table's rates and M5's layout scale), M7.3 inventory, M7.4 sharing. M4 waits until the sorter's first two steps are in. M5.5's layout layer then comes before M7.2, which draws on it |
+| D21 | What comes after the capacity table, and where the sorter sits | Recommended: the sorter (M5.1 conveyors, M5.2 operators, M5.3 the layout view in 2D then 3D, M5.4 its dashboard) first, built alongside M3.7 because it changes `model`, `blocks` and the engine while M3.7 changes `ui-egui`; M5.3 follows #151's moving entities so it reuses them. Then M7.1 line balancing (small, needs no run, reuses takt and the capacity table), M7.2 the from-to chart (reuses the capacity table's rates, and M5.5's layout distances; `layout_scale` only for a model with no layout), M7.3 inventory, M7.4 sharing. M4 waits until the sorter's first two steps are in. M5.5's layout layer then comes before M7.2, which draws on it |
 | D22 | Moving the apps from eframe's glow backend to wgpu | **Recommended, at M5.3:** the 3D view reuses the Craft apps' shared viewport from SolidCraft (camera, picking, shading, a headless rasterizer, a browser build already working), which runs on wgpu. The alternative, a renderer of our own through an `egui_glow` paint callback, keeps today's backend but rewrites all of that. The move is its own PR before M5.3, with the browser build checked on WebGPU and WebGL2. Since then the 3D view shipped on a CPU renderer (`view3d.rs`); see D27 |
 | D23 | Conveyor length: typed or from its path (M5.5) | **Recommended: from the path.** The path's exact length is the length the run uses; a typed length stays as an override, shown beside the drawn length with a warning. An existing file whose `length` differs from its path reads that `length` as the override, so no validated result moves |
 | D24 | Where layout data lives (M5.5) | **Recommended:** all of it in the BPMN file as `stochcraft:` extensions (what the run reads, and scenery in `stochcraft:scene`), with glTF 2.0 as the exchange format. No sidecar: a TOML or JSON file would use a standard syntax but a vocabulary of our own, against principle 1. Cost: larger BPMN files and noisier diffs that other BPMN tools carry blindly |
