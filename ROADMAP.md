@@ -27,7 +27,7 @@ The window's UX parity and its gaps: [docs/target-app-parity.md](docs/target-app
 | `random` | L0 | xoshiro256** streams; BPSim's distributions; `Dist`; fits to three-point estimates (`estimate`) |
 | `stats` | L0 | `Tally`, `TimeWeighted`, Student-t 95% intervals, `Summary`; percentiles, empirical distributions with DKW bands, Wilson intervals (`spread`); paired and Welch differences between two runs (`difference`) |
 | `des` | L1 | Event queue; async processes with `hold`, `spawn`, interrupts; priority and preemptive `Resource`; bounded and priority `Store`; waits with deadlines; `Signal`, `Gate`; runs that can be cancelled within a replication and stop when time stops moving (`run_watched`) |
-| `model` | L1 | The model in memory: elements, connections with probabilities, conditions and quantities, finite buffers, shared resource pools, calendars, breakdowns, batches, stop conditions, three-point estimates, layout, entity properties, experiment, validation; BPSim's XPath expressions (`expr`) |
+| `model` | L1 | The model in memory: elements, connections with probabilities, conditions and quantities, finite buffers, shared resource pools, calendars, breakdowns, batches, stop conditions, three-point estimates, layout, entity properties, experiment, validation; BPSim's XPath expressions (`expr`); the capacity table (`capacity`); line balancing (`balance`: M7.1's core, the three heuristics, measures and theoretical minimum) |
 | `blocks` | L2 | Compiles a model: source, server, shared task, delay, sink, exclusive and parallel gateways, merges, batch and unbatch, assembly; finite buffers with blocking after service and loss; shared pools with roles, alternatives, priorities and shifts; breakdowns; calendars; stop conditions; work left inside at the end; entities carry typed properties; per-element statistics; warm-up; one replication stepped and read as it runs (`Live`) |
 | `experiment` | L3 | Parallel replications with reproducible streams, progress and cancellation |
 | `io` | L3 | BPSim on BPMN and XPDL: read (gateways, routing, embedded sub-processes in line, calendars, diagram layout, `stochcraft:` vendor extensions), write new, save edits into opened files |
@@ -2309,21 +2309,76 @@ product's time on the conveyors; and the number of products on the conveyors ove
 sorter is built in four steps, each a series of pull requests with checks that have known
 answers, and ships as an example model with its write-up ("Examples for teaching").
 
-1. **Conveyors** (M5.1): a conveyor block with a length and a speed, accumulating (items queue
-   at the end, each taking its length plus a gap) or not (the whole belt stops while the item at
-   the end cannot leave); merges, and diverts by property or condition (the gateways that exist
-   today, at a point along the conveyor); a loop on which an item that cannot be diverted goes
-   round again. A spiral is a conveyor whose path climbs: only its length matters to the run.
-   Checks:
-   - a non-accumulating conveyor never blocked: every item's time on it is length / speed;
-   - an accumulating conveyor whose exit is shut holds ⌊length / (item length + gap)⌋ items;
-   - the most it carries is speed / (item length + gap) items per unit of time, so a source
-     faster than that fills it (an `overloaded` row in the capacity table);
-   - a non-accumulating conveyor behind a constant-time station that holds each item for d
-     more than the belt brings them: each item's time on the belt grows by a known amount,
-     worked by hand;
-   - diverts by probability give their shares, and a lane always full sends each item round
-     the loop a number of times known from the loop's length and speed.
+1. **Conveyors** (M5.1). The design, settled before the code:
+   - **The block.** A new kind, `Conveyor { length, speed, accumulating, item_length, gap }`:
+     length in the model's length unit (a new `length_unit`, metres by default, beside
+     `time_unit`), speed in that length per model time unit, and every item taking a slot of
+     pitch p = item length + gap. One conveyor is one straight run as far as the run is
+     concerned: curves and spirals are drawn from the same length (M5.3), and a line of several
+     sections is several conveyors joined by connections. Items of different sizes come later.
+   - **Positions.** An item enters at 0 and leaves at the length L; its position is that of its
+     front, and its slot reaches p behind it.
+     - It may enter only when the item before it has moved p along (so slots never overlap)
+       and fewer than N = ⌊L / p⌋ items are on it; otherwise the sender waits, as for a full
+       waiting room, and waiting senders (a merge) enter in the order they asked.
+     - At L it is offered to what follows, with the hand-over a full waiting room uses today.
+   - **Accumulating** (items slip on a stopped item ahead): an item that cannot leave stops at
+     L; the ones behind keep moving until each stops a pitch behind the one ahead. When the
+     front item leaves, the next moves on at once. So item i reaches the end at
+     max(tᵢ + L / v, dᵢ₋₁ + p / v), where tᵢ is when it entered and dᵢ₋₁ when the one ahead left
+     the end, and it may enter when fewer than N are on it and p / v has passed since the last
+     entry (both hold exactly because all items move at one speed).
+   - **Not accumulating** (one belt): while the front item cannot leave, the whole belt stops,
+     so items keep their spacing. The runtime keeps the distance the belt has moved, s(t); an
+     item that entered when the belt had moved s₀ is at s(t) − s₀, leaves at s₀ + L, and the
+     next may enter when s(t) has moved p since the last entry.
+   - **The runtime** (`blocks`): one process per conveyor holding its items in order with
+     their entry times (and, not accumulating, the belt's distance), with the next event the
+     earliest of the front item reaching L and the entrance freeing. No time steps: each event
+     is computed from the formulas above, so a run is exact and as fast as a delay's.
+   - **Diverts and loops.** A divert is an exclusive gateway after a conveyor, and a loop is
+     conveyors and a gateway joined in a cycle. A new routing,
+     `stochcraft:routing="divert"`: the gateway chooses a way as it does today (a condition
+     such as the product, or probabilities); if that way cannot take the item now, the item
+     takes the default way instead (round the loop), and only if the default cannot take it
+     either does the conveyor stop. The conveyor itself routes through the gateway at its end,
+     as senders do with shortest-queue routing today, so the item never leaves the belt before
+     a way has room.
+   - **Merges** need nothing new: two conveyors into one compete for its entrance, first asked,
+     first in.
+   - **Results.** Time on the conveyor (mean, and every item's time for the histogram of
+     M5.4), items on it over time (the recorder's work in progress), throughput, and the share
+     of time blocked (accumulating: the front item waiting at the end; not accumulating: the
+     belt stopped).
+   - **The capacity table.** A conveyor is a station of a new kind: it carries at most v / p
+     items per unit of time, so its load is λ p / v and it is marked as servers are. Its time
+     on is L / v exactly when nothing after it can hold it up (as `held_up_by` judges), at
+     least L / v otherwise. What follows it is bounded when the load may reach 1, as for any
+     station.
+   - **Files.** A BPMN task with a `stochcraft:conveyor` vendor extension (`length`, `speed`,
+     `accumulating`, `itemLength`, `gap`); the length unit as `stochcraft:lengthUnit` on the
+     scenario. A task carrying it reads as a conveyor; other tools see a plain task.
+   - **The window.** A Conveyor in the block palette with its five fields; the canvas shows how
+     many items are on it during a run; Help explains accumulating.
+   - **Checks with known answers:**
+     - not accumulating and never blocked: every item's time on it is L / v;
+     - accumulating, exit shut: it holds exactly N = ⌊L / p⌋ items, and the next sender waits;
+     - the most it carries is v / p items per unit of time: a source faster than that leaves
+       its sender waiting, and the capacity table marks it unstable;
+     - a constant-time server after it, slower than the items come: accumulating, the items
+       queue a pitch apart and item i leaves at max(tᵢ + L / v, dᵢ₋₁ + p / v), worked by hand
+       for the first ten items; not accumulating, the belt stops each time and every item's
+       time on it grows by the server's excess, worked by hand;
+     - two conveyors merging into one: the shares follow the order of asking, worked by hand
+       with constant arrivals;
+     - divert by product into lanes, one lane always full: its items go round the loop, and
+       each round adds the loop's length over the speed to their time.
+   - **The order of PRs:**
+     1. the block in `model` and `io` with validation and the capacity row;
+     2. the runtime, results and the checks above (`blocks`);
+     3. divert routing;
+     4. the window (palette, form, canvas count, Help, all catalogs).
+     The first and fourth can run alongside the second.
 2. **Operators who walk or drive** (M5.2): the moving resources and travel network below, with
    task sequences (travel empty, load, travel loaded, unload, then return home or take the next
    job) and the states named in the sorter's bar. Checks: one operator between two fixed points
@@ -2538,6 +2593,11 @@ Where each part of that request sits:
 
 ### M7.1 Line balancing
 
+- **Status:** the core is done in `model::balance`: the three heuristics, the measures, the
+  theoretical minimum, validation and the ranked positional weights, with hand-worked and
+  randomised checks. Not yet: the Groover example checks (they need Table 15.4's element times
+  and precedences), the engine command `line.balance`, `stochcraft-cli balance`, the window view,
+  and "Build the line".
 - **Outcome:** given the work elements of an assembly, their times and which must come before
   which, a station assignment for a cycle time from each heuristic below, with the theoretical
   minimum beside it so any gap shows (the heuristics do not promise the fewest stations: times
