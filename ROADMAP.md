@@ -2348,17 +2348,31 @@ answers, and ships as an example model with its write-up ("Examples for teaching
      index buffers, in a module or crate of its own (in the `render` layer, L5). Checks: vertex
      and face counts, and bounding boxes, match the parameters; normals face outward; meshes
      are closed where they should be.
-   - **Rendering:** both apps run eframe on its glow backend (OpenGL on the desktop, WebGL2 in
-     the browser; `apps/*/Cargo.toml`), so the 3D view is drawn through an `egui_glow` paint
-     callback with one flat-shaded shader and instancing for many entities. That works on the
-     desktop and in the browser as they are. Moving the apps to wgpu is a separate, later
-     decision (D22), not needed for 3D.
+   - **Rendering: the Craft apps' shared viewport, from SolidCraft** (decision D22). SolidCraft
+     (`tangency-labs/solidcraft`, MIT OR Apache-2.0 like StochCraft) has the viewport the Craft
+     apps share: `viewport` (orbit camera, projection, picking rays, the scene of meshes and
+     lines, surface shading, and a CPU rasterizer that draws a scene to a PNG without a GPU),
+     `viewport-gpu` (its pipelines on wgpu) and `viewport-egui` (drawn in egui-wgpu paint
+     callbacks); its browser app runs the same viewport. StochCraft builds a `Scene` from its
+     generated meshes each frame and draws it there, rather than writing a renderer of its own.
+     The CPU rasterizer also gives tests a picture to check and the report a 3D image.
    - **Clean room:** shapes come from real-world dimensions only, never traced or copied from
      any commercial tool's models.
-   - **Shared code:** none to reuse. CADCraft is 2D drafting (its `render` crate draws lines,
-     hatches, text and dimensions, with no meshes), and no `craft-factory` exists in any Craft
-     repository (checked 2026-11-19). The mesh module is written here and can move to
-     `craft-libs` once a second app needs it.
+   - **Shared code** (checked 2026-11-19): the viewport above. The parametric meshes are
+     StochCraft's own (SolidCraft models solids with a B-rep kernel, which a conveyor does not
+     need), built as the viewport's mesh type. CADCraft is 2D drafting with no meshes, and no
+     `craft-factory` exists in any Craft repository.
+   - **What reuse costs, to settle first:**
+     - the apps move from eframe's glow backend to wgpu, as SolidCraft runs (D22), and the
+       browser build is checked again on WebGPU and on wgpu's WebGL2 fallback;
+     - both apps must build the same egui: StochCraft pins the storytold fork at a revision,
+       SolidCraft vendors its own copy, so the viewport crates come in at a matching revision
+       (or move to `craft-libs` first);
+     - the viewport's mesh type lives in `solidcore-record`, part of SolidCraft's vendored
+       kernel: what it pulls in is to measure before depending on it, and a small mesh crate
+       split out of it is the fallback;
+     - the scene has no instancing: each entity is a mesh of its own. That holds for hundreds
+       of totes; for thousands, instancing is added to the shared viewport upstream.
 
    Checks for the view: an entity's drawn position at time t is its entry point plus
    speed × (t − entry time) along the conveyor's path, read from a live run in a test; the 2D
@@ -2700,4 +2714,4 @@ and the Pages preview of an M3 pull request shows the blocks already merged.
 | D19 | Python (M6.1) | Settled (Helen, 2026-11-16): a native package, `pip install stochcraft`, the engine built into a Python module with PyO3 and maturin; Python drives models from outside, and logic inside a run is M6.3's, not Python's |
 | D20 | Plugins (M6.2, M6.3) | Settled (Helen, 2026-11-16): sandboxed WebAssembly plugins in `wasmi`, as the other Craft apps have; command plugins first (through the engine's commands, one undo step, permissions in a manifest), then logic plugins called during a run with the engine's random streams, an instruction budget and a memory cap |
 | D21 | What comes after the capacity table, and where the sorter sits | Recommended: the sorter (M5.1 conveyors, M5.2 operators, M5.3 the layout view in 2D then 3D, M5.4 its dashboard) first, built alongside M3.7 because it changes `model`, `blocks` and the engine while M3.7 changes `ui-egui`; M5.3 follows #151's moving entities so it reuses them. Then M7.1 line balancing (small, needs no run, reuses takt and the capacity table), M7.2 the from-to chart (reuses the capacity table's rates and M5's layout scale), M7.3 inventory, M7.4 sharing. M4 waits until the sorter's first two steps are in |
-| D22 | Moving the apps from eframe's glow backend to wgpu | Open, later: not needed for M5.3's 3D view, which draws through an `egui_glow` paint callback on OpenGL and WebGL2 as the apps are today. Worth it only if a later need (compute shaders, WebGPU-only features) outweighs re-checking the browser build on every target |
+| D22 | Moving the apps from eframe's glow backend to wgpu | **Recommended, at M5.3:** the 3D view reuses the Craft apps' shared viewport from SolidCraft (camera, picking, shading, a headless rasterizer, a browser build already working), which runs on wgpu. The alternative, a renderer of our own through an `egui_glow` paint callback, keeps today's backend but rewrites all of that. The move is its own PR before M5.3, with the browser build checked on WebGPU and WebGL2 |
