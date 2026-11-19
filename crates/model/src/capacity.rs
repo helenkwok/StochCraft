@@ -127,6 +127,8 @@ pub enum Why {
     ByCondition(ElementId),
     /// This gateway sends each entity to the shortest queue.
     ShortestQueue(ElementId),
+    /// This gateway diverts an entity to its default way when the one chosen is full.
+    Divert(ElementId),
     /// Entities reach it by a way taken by those giving up, balking or turned away at this
     /// server, which depends on how congested it is.
     MarkedWay(ElementId),
@@ -199,6 +201,7 @@ impl Why {
         match self {
             Why::ByCondition(_) => "by_condition",
             Why::ShortestQueue(_) => "shortest_queue",
+            Why::Divert(_) => "divert",
             Why::MarkedWay(_) => "marked_way",
             Why::UnbatchSize(_) => "unbatch_size",
             Why::NoArrivalRate(_) => "no_arrival_rate",
@@ -236,6 +239,7 @@ impl Why {
         match self {
             Why::ByCondition(id)
             | Why::ShortestQueue(id)
+            | Why::Divert(id)
             | Why::MarkedWay(id)
             | Why::UnbatchSize(id)
             | Why::NoArrivalRate(id)
@@ -253,6 +257,7 @@ impl Why {
         match self {
             Why::ByCondition(id) => format!("depends on the conditions at {}", name(id)),
             Why::ShortestQueue(id) => format!("depends on the queues {} chooses between", name(id)),
+            Why::Divert(id) => format!("depends on which ways have room at {}", name(id)),
             Why::MarkedWay(id) => format!(
                 "depends on how many give up, balk or are turned away at {}",
                 name(id)
@@ -622,6 +627,10 @@ impl<'a> Net<'a> {
                     routing: Routing::ShortestQueue,
                     ..
                 } => Some(Why::ShortestQueue(e.id.clone())),
+                ElementKind::ExclusiveGateway {
+                    routing: Routing::Divert,
+                    ..
+                } => Some(Why::Divert(e.id.clone())),
                 ElementKind::ExclusiveGateway { .. }
                     if self.outs[i]
                         .iter()

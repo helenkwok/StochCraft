@@ -243,14 +243,14 @@ impl Compiled {
                 });
             }
         }
-        // Shortest-queue gateways: an element sending into one routes through it itself, so
-        // what it sends to is the gateway's ways.
+        // Shortest-queue and divert gateways: an element sending into one routes through it
+        // itself, so what it sends to is the gateway's ways.
         let routes_itself = |i: usize| {
             elements.get(i).is_some_and(|e| {
                 matches!(
                     e.kind,
                     ElementKind::ExclusiveGateway {
-                        routing: Routing::ShortestQueue,
+                        routing: Routing::ShortestQueue | Routing::Divert,
                         ..
                     }
                 )
@@ -447,14 +447,36 @@ impl Compiled {
         let routers: Vec<Option<Rc<Router>>> = (0..elements.len())
             .map(|g| {
                 routes_itself(g).then(|| {
-                    let ways: Vec<Port> = self
-                        .routes
-                        .get(g)
-                        .into_iter()
-                        .flatten()
-                        .filter_map(&plain_port)
-                        .collect();
-                    Rc::new(Router::new(&ctx, g, ways))
+                    let routes: Vec<&Route> = self.routes.get(g).into_iter().flatten().collect();
+                    let ways: Vec<Port> = routes.iter().filter_map(|r| plain_port(r)).collect();
+                    let divert = elements.get(g).is_some_and(|e| {
+                        matches!(
+                            e.kind,
+                            ElementKind::ExclusiveGateway {
+                                routing: Routing::Divert,
+                                ..
+                            }
+                        )
+                    });
+                    let rule = if divert {
+                        Rule::Divert(Divert {
+                            outs: routes
+                                .iter()
+                                .zip(&ways)
+                                .map(|(r, p)| Out {
+                                    port: p.clone(),
+                                    weight: r.weight,
+                                    condition: r.condition.clone(),
+                                    default: r.default,
+                                })
+                                .collect(),
+                            assigner: Rc::clone(&assigner),
+                            rng: RefCell::new(stream("divert", g)),
+                        })
+                    } else {
+                        Rule::ShortestQueue
+                    };
+                    Rc::new(Router::new(&ctx, g, ways, rule))
                 })
             })
             .collect();
@@ -2592,6 +2614,8 @@ impl Patient {
 struct Router {
     /// The gateway (its statistics).
     index: usize,
+    /// How it chooses a way.
+    rule: Rule,
     /// Its ways, as plain ports.
     ways: Vec<Port>,
     /// When each way was last taken, as a count of the choices made (0: never).
@@ -2601,8 +2625,34 @@ struct Router {
     freed: Signal,
 }
 
+/// How a gateway that its senders route through chooses a way.
+enum Rule {
+    /// [`stochcraft_model::Routing::ShortestQueue`].
+    ShortestQueue,
+    /// [`stochcraft_model::Routing::Divert`].
+    Divert(Divert),
+}
+
+/// A divert gateway's ways, with what the standard choice needs.
+struct Divert {
+    outs: Vec<Out>,
+    assigner: Rc<Assigner>,
+    rng: RefCell<Rng>,
+}
+
+impl Divert {
+    /// The way the standard rule chooses for `e` (drawn once per entity).
+    fn first(&self, e: &Entity) -> Option<usize> {
+        choose(&self.outs, e, &self.assigner, &mut self.rng.borrow_mut())
+    }
+
+    fn default(&self) -> Option<usize> {
+        self.outs.iter().position(|o| o.default)
+    }
+}
+
 impl Router {
-    fn new(ctx: &Ctx, index: usize, ways: Vec<Port>) -> Self {
+    fn new(ctx: &Ctx, index: usize, ways: Vec<Port>, rule: Rule) -> Self {
         let freed = Signal::new(ctx);
         for w in &ways {
             if let Some(p) = &w.places {
@@ -2611,6 +2661,7 @@ impl Router {
         }
         Self {
             index,
+            rule,
             taken: RefCell::new(vec![0; ways.len()]),
             ways,
             choices: Cell::new(0),
@@ -2652,9 +2703,10 @@ impl Router {
 
     /// Waits until some way has room, takes a place there for `e`, and returns that way.
     async fn route(&self, e: &Entity) -> Port {
+        let first = self.first(e);
         loop {
             // Nothing waits between looking for room and taking it, nor before starting to wait.
-            if let Some(way) = self.route_now(e).await {
+            if let Some(way) = self.route_with(e, first).await {
                 return way;
             }
             self.freed.wait().await;
@@ -2663,7 +2715,37 @@ impl Router {
 
     /// Takes a place for `e` on the way to take now and returns it; `None` if no way has room.
     async fn route_now(&self, e: &Entity) -> Option<Port> {
-        let way = self.choose()?.clone();
+        let first = self.first(e);
+        self.route_with(e, first).await
+    }
+
+    /// A divert's choice for `e`, made once; none for a shortest-queue gateway.
+    fn first(&self, e: &Entity) -> Option<usize> {
+        match &self.rule {
+            Rule::ShortestQueue => None,
+            Rule::Divert(d) => d.first(e),
+        }
+    }
+
+    /// The way to take now: a shortest-queue gateway's [`Router::choose`]; a divert's first
+    /// choice if it has room, else its default if that has.
+    fn take(&self, first: Option<usize>) -> Option<&Port> {
+        match &self.rule {
+            Rule::ShortestQueue => self.choose(),
+            Rule::Divert(d) => {
+                let room = |i: &usize| {
+                    self.ways
+                        .get(*i)
+                        .is_some_and(|w| w.places.as_ref().is_none_or(|p| p.has_room()))
+                };
+                let i = first.filter(room).or_else(|| d.default().filter(room))?;
+                self.ways.get(i)
+            }
+        }
+    }
+
+    async fn route_with(&self, e: &Entity, first: Option<usize>) -> Option<Port> {
+        let way = self.take(first)?.clone();
         if let Some(p) = &way.places {
             // `choose` found room, which a request takes at once.
             p.wait_room(e.id).await;

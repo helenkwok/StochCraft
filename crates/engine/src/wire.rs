@@ -474,6 +474,9 @@ pub enum RoutingSpec {
     /// tie goes to the way taken longest ago. With no room on any way, the element sending
     /// into the gateway waits (a server blocked after its job), or a source loses its arrival.
     ShortestQueue,
+    /// As standard, but an entity whose way is full takes the default way instead (round a
+    /// sorting loop); the sender waits only when the default is full too. Needs a default.
+    Divert,
 }
 
 impl RoutingSpec {
@@ -487,6 +490,7 @@ impl From<Routing> for RoutingSpec {
         match r {
             Routing::Standard => RoutingSpec::Standard,
             Routing::ShortestQueue => RoutingSpec::ShortestQueue,
+            Routing::Divert => RoutingSpec::Divert,
         }
     }
 }
@@ -496,6 +500,7 @@ impl From<RoutingSpec> for Routing {
         match r {
             RoutingSpec::Standard => Routing::Standard,
             RoutingSpec::ShortestQueue => Routing::ShortestQueue,
+            RoutingSpec::Divert => Routing::Divert,
         }
     }
 }

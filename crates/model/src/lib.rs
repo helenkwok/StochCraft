@@ -844,6 +844,15 @@ pub enum Routing {
     /// A plain waiter for the same buffer (another sender with only that way) gets a freed
     /// place before an entity routed here.
     ShortestQueue,
+    /// A divert, as on a sorting conveyor (a StochCraft vendor extension,
+    /// `stochcraft:routing="divert"`): the way is chosen as [`Routing::Standard`] chooses it (a
+    /// condition, else the default; or a draw by the probabilities), but if that way has no room
+    /// now the entity takes the default way instead (round a loop), and only if the default has
+    /// none either does the element sending into the gateway wait, holding it. As with
+    /// [`Routing::ShortestQueue`], the sender routes through the gateway itself, so an entity
+    /// never leaves it before a way has room; the way first chosen stays chosen while it waits.
+    /// It needs a default way.
+    Divert,
 }
 
 /// How a server's units fail: each unit independently, in elapsed time (busy or idle), after a
@@ -1602,6 +1611,8 @@ pub enum Problem {
     },
     /// An exclusive gateway routes by condition and has no default connection.
     NoDefault,
+    /// A divert gateway has no default connection, the way taken when the one chosen is full.
+    DivertNoDefault,
     /// A join waits on an incoming connection that no entity can reach.
     JoinNeverCompletes {
         connection: ElementId,
@@ -1904,6 +1915,7 @@ impl Problem {
             Problem::RoutingIgnored { .. } => "routing_ignored",
             Problem::BadDefault { .. } => "bad_default",
             Problem::NoDefault => "no_default",
+            Problem::DivertNoDefault => "divert_no_default",
             Problem::JoinNeverCompletes { .. } => "join_never_completes",
             Problem::BufferBehindGateway { .. } => "buffer_behind_gateway",
             Problem::BlockingCycle { .. } => "blocking_cycle",
@@ -2154,6 +2166,10 @@ impl std::fmt::Display for Diagnostic {
             Problem::BadDefault { connection } => write!(
                 f,
                 "the default connection `{connection}` is not one of this gateway's outgoing connections"
+            ),
+            Problem::DivertNoDefault => write!(
+                f,
+                "diverts with no default connection: an entity whose way is full has nowhere else to go"
             ),
             Problem::NoDefault => write!(
                 f,
@@ -3347,6 +3363,9 @@ impl Model {
             let ElementKind::ExclusiveGateway { default, routing } = &e.kind else {
                 continue;
             };
+            if *routing == Routing::Divert && default.is_none() {
+                out.push(Diagnostic::error(Some(&e.id), Problem::DivertNoDefault));
+            }
             if let Some(d) = default
                 && !outs.iter().any(|c| &c.id == d)
             {
