@@ -692,7 +692,7 @@ pub enum Metric {
 }
 
 impl Metric {
-    pub const ALL: [Metric; 43] = [
+    pub const ALL: [Metric; 44] = [
         Metric::Entered,
         Metric::Left,
         Metric::MeanQueueLength,

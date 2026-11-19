@@ -620,11 +620,16 @@ impl Compiled {
                     length,
                     speed,
                     accumulating,
-                    ..
-                } => {
-                    let pitch = e.kind.conveyor_pitch().unwrap_or(length);
-                    spawn_conveyor(&mut sim, env, length, speed, accumulating, pitch);
-                }
+                    item_length,
+                    gap,
+                } => spawn_conveyor(
+                    &mut sim,
+                    env,
+                    length,
+                    speed,
+                    accumulating,
+                    item_length + gap,
+                ),
             }
         }
 
