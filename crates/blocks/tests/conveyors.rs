@@ -126,13 +126,14 @@ fn a_conveyor_carries_at_most_its_speed_over_its_pitch() {
 
 #[test]
 fn a_divert_sends_an_item_whose_lane_is_full_round_the_default_way() {
-    // One a unit of time onto a belt of 2 at 1 (pitch 1), then a divert choosing the lane for
+    // One a unit of time onto a belt of 2 at 1 (pitch 0.5, so the entrance is always free again
+    // before the next arrival, never at the same instant), then a divert choosing the lane for
     // every item (probability 1); the lane is a machine of 2.5 with no waiting room. Items reach
     // the divert a unit apart: the lane takes one, the next two find it busy and go round (the
     // default way), and so on: of nine, three take the lane and six go round.
     let mut m = Builder::new();
     let src = m.source("in", Dist::Constant(1.0), Some(9));
-    let belt = m.conveyor("belt", 2.0, 1.0, true, 1.0, 0.0);
+    let belt = m.conveyor("belt", 2.0, 1.0, true, 0.5, 0.0);
     let divert = m.divert("divert");
     let lane = m.buffered_server("lane", 1, Dist::Constant(2.5), 0);
     let packed = m.sink("packed");
@@ -145,6 +146,7 @@ fn a_divert_sends_an_item_whose_lane_is_full_round_the_default_way() {
     m.connect(lane, packed);
     let r = run(&m, 100.0);
     let left = |id: &str| r.element(id).map(|e| e.entered);
+    assert_eq!(left("belt"), Some(9));
     assert_eq!(left("packed"), Some(3));
     assert_eq!(left("round"), Some(6));
     // The belt never waits: a full lane sends the item round at once.
