@@ -348,6 +348,7 @@ impl App {
     /// A dialog is open: menu commands wait.
     pub(crate) fn modal_open(&self) -> bool {
         self.confirm.is_some()
+            || self.new_file.is_some()
             || self.shortcuts_dialog.is_some()
             || self.recovery.is_some()
             || self.themes.is_some()

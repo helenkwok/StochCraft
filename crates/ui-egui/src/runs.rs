@@ -66,14 +66,15 @@ impl App {
 
     /// The baseline, the results on show and their comparison, when there is a baseline and the
     /// results are not it. The comparison is the engine's (`results.compare`), worked out once
-    /// for each pair of results.
+    /// for each pair of results and again when the interface language changes, as the list of
+    /// changes is in its words.
     pub(crate) fn compared(&mut self) -> Option<(Value, Value, Value, Vec<String>)> {
         let b = self.baseline.as_ref()?;
         let now = self.results.as_deref()?;
         if b.serial == self.results_serial {
             return None;
         }
-        let key = (b.serial, self.results_serial);
+        let key = (b.serial, self.results_serial, self.lang);
         if self.comparison.as_ref().map(|c| c.0) != Some(key) {
             let wanted = baseline::wanted(&b.results, now);
             let params = if wanted.is_empty() {

@@ -1019,3 +1019,4 @@ unit	yr	år
 	x {x} m, y {y} m	x {x} m, y {y} m
 	Unplaced	Ikke plassert
 	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	Foreløpig plasseres hver blokk ut fra diagrammet. En blokk som diagrammet utelater, vises her og tegnes ikke.
+	The charts are taller than the window: make the window taller, then export them again.	Diagrammene er høyere enn vinduet: gjør vinduet høyere, og eksporter dem på nytt.

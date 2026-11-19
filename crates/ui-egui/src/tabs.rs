@@ -100,6 +100,14 @@ impl App {
         let has_model = self.has_model();
         if self.show_results && self.results.is_some() && self.running.is_none() {
             View::Results
+        } else if self.show_results
+            && self.running.is_none()
+            && !self.is_watching()
+            && !self.engine.model().elements.is_empty()
+        {
+            // The Results tab before the first run: "No results yet", with its Run button. A run
+            // being watched stays on the canvas, where it plays.
+            View::Other
         } else if self.show_analysis && has_model && !self.show_results {
             View::Analysis
         } else if self.show_3d && has_model && !self.show_results && self.layout_view.on {
@@ -123,6 +131,9 @@ impl App {
     /// The work area: the tabs, the run bar over the views that show the model, then the view
     /// the tabs select (or the start page, or a run's progress).
     pub(crate) fn work_area(&mut self, ui: &mut egui::Ui, p: &theme::Palette) {
+        // Here rather than at the top of the frame: the header's menus and the outline, drawn
+        // before the work area, can change the model (Edit ▸ Undo, + Add block).
+        self.mark_stale_results();
         let has_model = self.has_model();
         if !has_model && self.results.is_none() && self.running.is_none() {
             self.start_page(ui);
@@ -171,6 +182,6 @@ enum View {
     Layout,
     Capacity,
     Model,
-    /// A run's progress, the "ready" page or the start page.
+    /// A run's progress, the "ready" page (the Results tab with no results) or the start page.
     Other,
 }

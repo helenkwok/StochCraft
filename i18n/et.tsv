@@ -1019,3 +1019,4 @@ unit	yr	a
 	x {x} m, y {y} m	x {x} m, y {y} m
 	Unplaced	Paigutamata
 	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	Praegu paigutatakse iga plokk skeemi järgi. Plokk, mille skeem välja jätab, on siin loetletud ja seda ei joonistata.
+	The charts are taller than the window: make the window taller, then export them again.	Graafikud on aknast kõrgemad: tehke aken kõrgemaks ja eksportige need uuesti.

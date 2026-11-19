@@ -1019,3 +1019,4 @@ unit	yr	an
 	x {x} m, y {y} m	x {x} m, y {y} m
 	Unplaced	Non placés
 	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	Pour l'instant, chaque bloc est placé d'après le diagramme. Un bloc que le diagramme omet est listé ici et n'est pas dessiné.
+	The charts are taller than the window: make the window taller, then export them again.	Les graphiques sont plus hauts que la fenêtre : agrandissez la fenêtre en hauteur, puis exportez-les à nouveau.
