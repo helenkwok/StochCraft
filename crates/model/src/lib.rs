@@ -312,11 +312,12 @@ pub enum ElementKind {
     /// StochCraft vendor extension on a task, `stochcraft:unbatch`). An entity that is not a
     /// batch passes through as it is.
     Unbatch,
-    /// A straight conveyor that an entity rides from one end to the other (a StochCraft vendor
-    /// extension on a task, `stochcraft:conveyor`). An entity enters at 0 and leaves at the
-    /// `length`; every entity takes a slot of pitch `item_length + gap`. At most
-    /// ⌊`length` / pitch⌋ are on it at once, and it carries at most `speed` / pitch entities per
-    /// unit of time; how it moves them is in ROADMAP.md, M5.1.
+    /// A conveyor that an entity rides from one end to the other (a StochCraft vendor extension on
+    /// a task, `stochcraft:conveyor`). An entity enters at 0 and leaves at the `length`; every
+    /// entity takes a slot of pitch `item_length + gap`. At most ⌊`length` / pitch⌋ are on it at
+    /// once, and it carries at most `speed` / pitch entities per unit of time; how it moves them
+    /// is in ROADMAP.md, M5.1. `shape` is used for drawing only; the simulation run still uses
+    /// `length`.
     Conveyor {
         /// The conveyor's length, in the experiment's [`LengthUnit`]; above 0.
         length: f64,
@@ -331,6 +332,9 @@ pub enum ElementKind {
         item_length: f64,
         /// The least free belt between one entity and the next, in the length unit; 0 or more.
         gap: f64,
+        /// How the conveyor is drawn (straight, curved, or spiral); the simulation run still
+        /// uses `length`.
+        shape: ConveyorShape,
     },
     /// A transport: an item reaching it is carried from the element before it (the pickup) to
     /// the element after it (the drop-off) by a unit of a mobile pool (a StochCraft vendor
@@ -345,6 +349,39 @@ pub enum ElementKind {
         /// The time to unload an item at the drop-off.
         unload: Dist,
     },
+}
+
+/// How a [`ElementKind::Conveyor`] is drawn in 3D; the simulation run still uses its `length`.
+#[derive(Debug, Clone, Copy, PartialEq, Default)]
+pub enum ConveyorShape {
+    /// A straight run of the conveyor's `length`.
+    #[default]
+    Straight,
+    /// A horizontal arc of `radius` (in the length unit) sweeping `angle` degrees (positive
+    /// turns left, negative turns right; nonzero).
+    Curve { radius: f64, angle: f64 },
+    /// A helical ramp of `radius` (in the length unit), climbing `rise` per turn for `turns`
+    /// revolutions (all above 0).
+    Spiral { radius: f64, rise: f64, turns: f64 },
+}
+
+impl ConveyorShape {
+    /// The drawn path length of this shape in the experiment's [`LengthUnit`], returning
+    /// `straight_length` for [`ConveyorShape::Straight`].
+    pub fn path_length(&self, straight_length: f64) -> f64 {
+        match *self {
+            ConveyorShape::Straight => straight_length,
+            ConveyorShape::Curve { radius, angle } => radius * angle.abs().to_radians(),
+            ConveyorShape::Spiral {
+                radius,
+                rise,
+                turns,
+            } => {
+                let circumference = 2.0 * std::f64::consts::PI * radius;
+                turns * (circumference * circumference + rise * rise).sqrt()
+            }
+        }
+    }
 }
 
 impl ElementKind {
@@ -1729,8 +1766,8 @@ pub enum Problem {
     TimedIgnored,
     /// A batch of no entities.
     ZeroBatchSize,
-    /// A conveyor's `field` (length, speed or item length) is not above 0 and finite, or its
-    /// gap is not 0 or more and finite.
+    /// A conveyor's `field` (length, speed, item length, radius, rise or turns) is not above 0
+    /// and finite, its gap is not 0 or more and finite, or its curve angle is 0 or not finite.
     BadConveyorValue {
         field: &'static str,
     },
@@ -1739,6 +1776,12 @@ pub enum Problem {
     ConveyorTooShort {
         length: f64,
         pitch: f64,
+    },
+    /// A curved or spiral conveyor's drawn path length differs from its `length` by more than
+    /// 1%, so the drawing and the run would not agree.
+    ConveyorLengthMismatch {
+        length: f64,
+        path_length: f64,
     },
     /// Found when the model is prepared to run, not by [`Model::validate`] (a transport can be
     /// drawn, saved and sized meanwhile): transports are not simulated yet.
@@ -2029,6 +2072,7 @@ impl Problem {
             Problem::ZeroBatchSize => "zero_batch_size",
             Problem::BadConveyorValue { .. } => "bad_conveyor_value",
             Problem::ConveyorTooShort { .. } => "conveyor_too_short",
+            Problem::ConveyorLengthMismatch { .. } => "conveyor_length_mismatch",
             Problem::TransportNotSimulated => "transport_not_simulated",
             Problem::TransportPool { .. } => "transport_pool",
             Problem::BadMobilitySpeed { .. } => "bad_mobility_speed",
@@ -2330,16 +2374,25 @@ impl std::fmt::Display for Diagnostic {
             ),
             Problem::ZeroBatchSize => write!(f, "a batch needs at least 1 entity"),
             Problem::BadConveyorValue { field } => {
-                let need = if *field == "gap" {
-                    "0 or more"
-                } else {
-                    "above 0"
+                let need = match *field {
+                    "gap" => "0 or more",
+                    "angle" => "nonzero",
+                    _ => "above 0",
                 };
                 write!(f, "the conveyor's {field} must be a finite number, {need}")
             }
             Problem::ConveyorTooShort { length, pitch } => write!(
                 f,
                 "the conveyor is {length} long but each item takes {pitch} (item length plus gap), so not even one fits; lengthen the conveyor or shorten the item or the gap"
+            ),
+            Problem::ConveyorLengthMismatch {
+                length,
+                path_length,
+            } => write!(
+                f,
+                "the conveyor's drawn path length {} differs from its length {} by more than 1%, so the drawing and the run will not agree",
+                short(*path_length),
+                short(*length)
             ),
             Problem::TransportNotSimulated => write!(f, "transports are not simulated yet"),
             Problem::TransportPool { pool, exists } => {
@@ -2777,6 +2830,7 @@ impl Model {
                 speed,
                 item_length,
                 gap,
+                shape,
                 ..
             } = e.kind
             {
@@ -2796,6 +2850,32 @@ impl Model {
                         ));
                     }
                 }
+                let mut bad_shape = false;
+                let shape_checks: &[(&'static str, bool)] = match shape {
+                    ConveyorShape::Straight => &[],
+                    ConveyorShape::Curve { radius, angle } => &[
+                        ("radius", above_zero(radius)),
+                        ("angle", angle.is_finite() && angle != 0.0),
+                    ],
+                    ConveyorShape::Spiral {
+                        radius,
+                        rise,
+                        turns,
+                    } => &[
+                        ("radius", above_zero(radius)),
+                        ("rise", above_zero(rise)),
+                        ("turns", above_zero(turns)),
+                    ],
+                };
+                for &(field, ok) in shape_checks {
+                    if !ok {
+                        bad_shape = true;
+                        out.push(Diagnostic::error(
+                            Some(&e.id),
+                            Problem::BadConveyorValue { field },
+                        ));
+                    }
+                }
                 if !bad && e.kind.conveyor_places() == Some(0) {
                     out.push(Diagnostic::error(
                         Some(&e.id),
@@ -2804,6 +2884,18 @@ impl Model {
                             pitch: item_length + gap,
                         },
                     ));
+                }
+                if !bad && !bad_shape {
+                    let path_length = shape.path_length(length);
+                    if path_length.is_finite() && (path_length - length).abs() > 0.01 * length {
+                        out.push(Diagnostic::warning(
+                            Some(&e.id),
+                            Problem::ConveyorLengthMismatch {
+                                length,
+                                path_length,
+                            },
+                        ));
+                    }
                 }
             }
             if let ElementKind::Transport { pool, .. } = &e.kind {
@@ -4837,6 +4929,15 @@ mod tests {
             accumulating: true,
             item_length,
             gap,
+            shape: ConveyorShape::Straight,
+        };
+        let shaped = |length, shape| ElementKind::Conveyor {
+            length,
+            speed: 1.0,
+            accumulating: true,
+            item_length: 0.5,
+            gap: 0.0,
+            shape,
         };
         let mut m = mm1();
         m.elements[1].kind = belt(10.0, 5.0, 0.8, 0.2);
@@ -4846,13 +4947,76 @@ mod tests {
             "{:?}",
             m.validate()
         );
-        // Each number: not above 0, or not finite; the gap may be 0.
+        // Each number: not above 0, or not finite; the gap may be 0; angle must be nonzero.
         for (kind, field) in [
             (belt(0.0, 0.5, 0.8, 0.2), "length"),
             (belt(10.0, -1.0, 0.8, 0.2), "speed"),
             (belt(10.0, 5.0, f64::NAN, 0.2), "item length"),
             (belt(10.0, 5.0, 0.8, -0.1), "gap"),
             (belt(f64::INFINITY, 5.0, 0.8, 0.2), "length"),
+            (
+                shaped(
+                    5.0,
+                    ConveyorShape::Curve {
+                        radius: 0.0,
+                        angle: 90.0,
+                    },
+                ),
+                "radius",
+            ),
+            (
+                shaped(
+                    5.0,
+                    ConveyorShape::Curve {
+                        radius: 2.0,
+                        angle: 0.0,
+                    },
+                ),
+                "angle",
+            ),
+            (
+                shaped(
+                    5.0,
+                    ConveyorShape::Curve {
+                        radius: 2.0,
+                        angle: f64::NAN,
+                    },
+                ),
+                "angle",
+            ),
+            (
+                shaped(
+                    5.0,
+                    ConveyorShape::Spiral {
+                        radius: -1.0,
+                        rise: 1.5,
+                        turns: 2.0,
+                    },
+                ),
+                "radius",
+            ),
+            (
+                shaped(
+                    5.0,
+                    ConveyorShape::Spiral {
+                        radius: 1.2,
+                        rise: 0.0,
+                        turns: 2.0,
+                    },
+                ),
+                "rise",
+            ),
+            (
+                shaped(
+                    5.0,
+                    ConveyorShape::Spiral {
+                        radius: 1.2,
+                        rise: 1.5,
+                        turns: f64::INFINITY,
+                    },
+                ),
+                "turns",
+            ),
         ] {
             m.elements[1].kind = kind;
             let p = problems(&m);
@@ -4891,6 +5055,80 @@ mod tests {
             "{:?}",
             problems(&m)
         );
+    }
+
+    #[test]
+    fn conveyor_shape_path_length_matches_geometry() {
+        assert!((ConveyorShape::Straight.path_length(7.5) - 7.5).abs() < 1e-12);
+        let curve = ConveyorShape::Curve {
+            radius: 2.0,
+            angle: 90.0,
+        };
+        assert!((curve.path_length(10.0) - std::f64::consts::PI).abs() < 1e-12);
+        let right_curve = ConveyorShape::Curve {
+            radius: 2.0,
+            angle: -90.0,
+        };
+        assert!((right_curve.path_length(10.0) - std::f64::consts::PI).abs() < 1e-12);
+        let spiral = ConveyorShape::Spiral {
+            radius: 1.2,
+            rise: 1.5,
+            turns: 2.0,
+        };
+        let circumference = 2.4 * std::f64::consts::PI;
+        let expected_spiral = 2.0 * (circumference * circumference + 1.5 * 1.5).sqrt();
+        assert!((spiral.path_length(10.0) - expected_spiral).abs() < 1e-12);
+    }
+
+    #[test]
+    fn conveyor_whose_shape_path_differs_from_length_warns() {
+        let mut m = mm1();
+        let shape = ConveyorShape::Curve {
+            radius: 2.0,
+            angle: 90.0,
+        };
+        let path_length = shape.path_length(0.0);
+        // Matching path length (and within 1%): no mismatch warning.
+        m.elements[1].kind = ElementKind::Conveyor {
+            length: path_length,
+            speed: 1.0,
+            accumulating: true,
+            item_length: 0.5,
+            gap: 0.0,
+            shape,
+        };
+        assert!(
+            !problems(&m)
+                .iter()
+                .any(|(_, _, x)| x.starts_with("ConveyorLengthMismatch")),
+            "{:?}",
+            problems(&m)
+        );
+        // 5% longer than drawn path: warns, naming both lengths.
+        let length = path_length * 1.05;
+        m.elements[1].kind = ElementKind::Conveyor {
+            length,
+            speed: 1.0,
+            accumulating: true,
+            item_length: 0.5,
+            gap: 0.0,
+            shape,
+        };
+        let ds = m.validate();
+        let warn = ds
+            .iter()
+            .find(|d| d.problem.code() == "conveyor_length_mismatch");
+        assert!(
+            warn.is_some_and(|d| d.severity == Severity::Warning),
+            "{ds:?}"
+        );
+        if let Some(d) = warn {
+            let msg = d.to_string();
+            assert!(
+                msg.contains(&short(path_length)) && msg.contains(&short(length)),
+                "{msg}"
+            );
+        }
     }
 
     #[test]

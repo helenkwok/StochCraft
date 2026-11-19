@@ -647,6 +647,7 @@ impl Compiled {
                     accumulating,
                     item_length,
                     gap,
+                    ..
                 } => {
                     let view = spawn_conveyor(
                         &mut sim,

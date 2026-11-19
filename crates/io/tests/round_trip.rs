@@ -3,9 +3,9 @@
 use stochcraft_blocks::{BlockId, Builder, Event, Rule};
 use stochcraft_io::{Format, read, write_new};
 use stochcraft_model::{
-    BalkJoin, BalkRow, Balking, DateTime, Dist, ElementKind, Experiment, HealthCheck, Model, Need,
-    OnShiftEnd, OnTakeout, Patience, PatienceUntil, PlaceWhileOut, Property, PropertyType,
-    PropertyValue, QueueLimit, Routing, TimeUnit,
+    BalkJoin, BalkRow, Balking, ConveyorShape, DateTime, Dist, ElementKind, Experiment,
+    HealthCheck, Model, Need, OnShiftEnd, OnTakeout, Patience, PatienceUntil, PlaceWhileOut,
+    Property, PropertyType, PropertyValue, QueueLimit, Routing, TimeUnit,
 };
 
 /// A model using every element kind and every distribution.
@@ -2010,6 +2010,7 @@ fn belt_model() -> Model {
                     accumulating: true,
                     item_length: 1.5,
                     gap: 0.5,
+                    shape: ConveyorShape::Straight,
                 },
             ),
             Element::new(
@@ -2058,30 +2059,101 @@ fn a_conveyor_and_the_length_unit_write_read_and_save() {
     assert_eq!(loaded.model, laid_out(model));
     assert_eq!(loaded.opened.save(&loaded.model), Ok(bytes.clone()));
 
-    // Another speed, a belt that does not accumulate, and metres.
-    let mut edited = loaded.model.clone();
-    edited.experiment.length_unit = LengthUnit::Metres;
-    for e in &mut edited.elements {
-        if let ElementKind::Conveyor {
-            speed,
-            accumulating,
-            ..
-        } = &mut e.kind
-        {
-            *speed = 0.25;
-            *accumulating = false;
+    // Another speed, a belt that does not accumulate, a curve, a spiral, and metres.
+    let set_belt = |model: &mut Model, new_speed: f64, new_acc: bool, new_shape: ConveyorShape| {
+        for e in &mut model.elements {
+            if let ElementKind::Conveyor {
+                speed,
+                accumulating,
+                shape,
+                ..
+            } = &mut e.kind
+            {
+                *speed = new_speed;
+                *accumulating = new_acc;
+                *shape = new_shape;
+            }
         }
-    }
-    let saved = loaded.opened.save(&edited);
+    };
+    let mut curved = loaded.model.clone();
+    curved.experiment.length_unit = LengthUnit::Metres;
+    set_belt(
+        &mut curved,
+        0.25,
+        false,
+        ConveyorShape::Curve {
+            radius: 2.0,
+            angle: 90.0,
+        },
+    );
+    let saved = loaded.opened.save(&curved);
+    assert_eq!(
+        saved.as_deref().map(String::from_utf8_lossy).map(|t| {
+            t.contains("shape=\"curve\"")
+                && t.contains("radius=\"2\"")
+                && t.contains("angle=\"90\"")
+        }),
+        Ok(true)
+    );
     let back = saved.as_deref().map(|b| read(b).map(|l| l.model));
-    assert_eq!(back, Ok(Ok(edited.clone())));
+    assert_eq!(back, Ok(Ok(curved.clone())));
+
+    // Save in place again as a spiral, then write fresh curve & spiral models and read back.
+    let Ok(saved) = saved else { return };
+    let Ok(middle) = read(&saved) else {
+        unreachable!()
+    };
+    let mut spiraled = curved.clone();
+    set_belt(
+        &mut spiraled,
+        0.25,
+        false,
+        ConveyorShape::Spiral {
+            radius: 1.2,
+            rise: 1.5,
+            turns: 2.0,
+        },
+    );
+    let saved = middle.opened.save(&spiraled);
+    assert_eq!(
+        saved.as_deref().map(String::from_utf8_lossy).map(|t| {
+            t.contains("shape=\"spiral\"")
+                && t.contains("radius=\"1.2\"")
+                && t.contains("rise=\"1.5\"")
+                && t.contains("turns=\"2\"")
+        }),
+        Ok(true)
+    );
+    let back = saved.as_deref().map(|b| read(b).map(|l| l.model));
+    assert_eq!(back, Ok(Ok(spiraled.clone())));
+
+    for shape in [
+        ConveyorShape::Curve {
+            radius: 2.0,
+            angle: -45.0,
+        },
+        ConveyorShape::Spiral {
+            radius: 1.2,
+            rise: 1.5,
+            turns: 2.0,
+        },
+    ] {
+        let mut fresh_model = belt_model();
+        set_belt(&mut fresh_model, 4.0, true, shape);
+        let fresh_bytes = write_new(&fresh_model);
+        let Ok(fresh_loaded) = read(&fresh_bytes) else {
+            unreachable!()
+        };
+        assert!(fresh_loaded.notes.is_empty(), "{:#?}", fresh_loaded.notes);
+        assert_eq!(fresh_loaded.model, laid_out(fresh_model));
+    }
 
     // It stops being a conveyor: the extension is gone from the file.
     let Ok(saved) = saved else { return };
     let Ok(again) = read(&saved) else {
         unreachable!()
     };
-    let mut delay = edited;
+    let mut delay = spiraled;
     delay.elements[1].kind = ElementKind::Delay {
         processing_by: None,
         duration: Dist::Constant(3.0),
