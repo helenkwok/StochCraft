@@ -96,7 +96,7 @@ jobs:
         with:
           key: release-licences
       - name: Install cargo-about
-        run: cargo install cargo-about --version "$CARGO_ABOUT_VERSION" --locked
+        run: cargo install cargo-about --version "$CARGO_ABOUT_VERSION" --features cli --locked
       - name: THIRD-PARTY-LICENSES.html
         run: |
           cargo about generate --locked --workspace --fail --config about.toml \
