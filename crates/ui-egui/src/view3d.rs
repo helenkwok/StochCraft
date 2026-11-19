@@ -38,8 +38,12 @@ const BELT_HEIGHT: f32 = 0.85;
 /// The least length of belt between two blocks; closer than that, the belt runs between their
 /// centres instead.
 const LEAST_BELT: f32 = 0.2;
-/// How far apart lanes that leave (or enter) one block are, sideways.
+/// How far apart lanes that leave (or enter) one block are, sideways, when there is room.
 const LANE_PITCH: f32 = 0.4;
+/// The share of a block's half-width its lanes spread across at most, either side of the middle.
+const LANE_SPREAD: f32 = 0.6;
+/// The side of a gateway's box, which is turned 45 degrees.
+const GATEWAY_SIDE: f32 = 0.7;
 /// The narrowest and widest a loop of belt is (the gap between its two arms' centre lines).
 const LOOP_WIDTH: (f32, f32) = (0.8, 1.2);
 /// How much a loop's corners are cut off, along each arm.
@@ -251,9 +255,9 @@ fn block_shape(kind: &ElementKind) -> (Mesh, Paint, f32) {
             0.6,
         ),
         ElementKind::ExclusiveGateway { .. } | ElementKind::ParallelGateway => (
-            box_mesh([0.7, 0.7, 0.7])
+            box_mesh([GATEWAY_SIDE; 3])
                 .rotated_z(FRAC_PI_4)
-                .translated([0.0, 0.0, 0.35]),
+                .translated([0.0, 0.0, GATEWAY_SIDE / 2.0]),
             Paint::Gateway,
             0.5,
         ),
@@ -262,6 +266,57 @@ fn block_shape(kind: &ElementKind) -> (Mesh, Paint, f32) {
             Paint::Batch,
             0.45,
         ),
+    }
+}
+
+/// The outline of a block's footprint on the floor, which belts attach to.
+#[derive(Clone, Copy, Debug, PartialEq)]
+enum Outline {
+    /// An axis-aligned square of this half-side.
+    Square(f32),
+    /// A square turned 45 degrees: the points within this distance of the centre by `|x| + |y|`.
+    Diamond(f32),
+}
+
+impl Outline {
+    /// How far the outline reaches from the centre along an axis: the half-side of the square, the
+    /// half-diagonal of the diamond.
+    fn reach(self) -> f32 {
+        match self {
+            Self::Square(half) | Self::Diamond(half) => half,
+        }
+    }
+
+    /// How far a ray from `p` along the unit vector `d` goes before it leaves the outline around
+    /// `centre` (0 when `p` is outside it on that side).
+    fn leave(self, centre: [f32; 2], p: [f32; 2], d: [f32; 2]) -> f32 {
+        match self {
+            Self::Square(half) => leave_square(centre, half, p, d),
+            Self::Diamond(r) => {
+                let q = [p[0] - centre[0], p[1] - centre[1]];
+                // The four faces are `sx * x + sy * y = r`; the ray meets the ones it heads
+                // towards, and leaves at the nearest.
+                let mut t = f32::INFINITY;
+                for (sx, sy) in [(1.0_f32, 1.0_f32), (1.0, -1.0), (-1.0, 1.0), (-1.0, -1.0)] {
+                    let slope = sx * d[0] + sy * d[1];
+                    if slope > 1e-9 {
+                        t = t.min(((r - (sx * q[0] + sy * q[1])) / slope).max(0.0));
+                    }
+                }
+                if t.is_finite() { t } else { 0.0 }
+            }
+        }
+    }
+}
+
+/// The outline of a block's footprint: a gateway's diamond, otherwise the square of its half-side.
+fn block_outline(kind: &ElementKind) -> Outline {
+    match kind {
+        ElementKind::ExclusiveGateway { .. } | ElementKind::ParallelGateway => {
+            // Half the diagonal of the box `block_shape` turns.
+            Outline::Diamond(GATEWAY_SIDE * core::f32::consts::FRAC_1_SQRT_2)
+        }
+        _ => Outline::Square(block_shape(kind).2),
     }
 }
 
@@ -398,13 +453,13 @@ fn leave_square(centre: [f32; 2], half: f32, p: [f32; 2], d: [f32; 2]) -> f32 {
     if t.is_finite() { t } else { 0.0 }
 }
 
-/// The two ends of a straight conveyor from the block at `a` (half-side `half_a`) to the one at
+/// The two ends of a straight conveyor from the block at `a` (outline `out_a`) to the one at
 /// `b`: where the line between the centres, shifted sideways by `side_a` at `a` and `side_b` at
-/// `b`, leaves the first footprint and enters the second. When the footprints leave less than
+/// `b`, leaves the first outline and enters the second. When the outlines leave less than
 /// [`LEAST_BELT`] between them, the centres themselves.
 fn edge_to_edge(
-    (a, half_a, side_a): ([f32; 2], f32, f32),
-    (b, half_b, side_b): ([f32; 2], f32, f32),
+    (a, out_a, side_a): ([f32; 2], Outline, f32),
+    (b, out_b, side_b): ([f32; 2], Outline, f32),
 ) -> [[f32; 2]; 2] {
     let apart = dist(a, b);
     if apart <= 1e-6 {
@@ -420,8 +475,8 @@ fn edge_to_edge(
     } else {
         d
     };
-    let out = leave_square(a, half_a, pa, dir);
-    let back = leave_square(b, half_b, pb, [-dir[0], -dir[1]]);
+    let out = out_a.leave(a, pa, dir);
+    let back = out_b.leave(b, pb, [-dir[0], -dir[1]]);
     if span - out - back < LEAST_BELT {
         return [a, b];
     }
@@ -431,10 +486,19 @@ fn edge_to_edge(
     ]
 }
 
-/// A loop of belt of `total` metres that leaves the block at `centre` (half-side `half`) on the
-/// side that `toward` lies on, goes out, round two chamfered corners and back to the same face a
-/// belt's width or so along: five straight pieces beside the block, which closes the ring.
-fn loop_path(centre: [f32; 2], half: f32, toward: [f32; 2], total: f32) -> Vec<[f32; 2]> {
+/// A loop of belt of `total` metres that leaves the block at `centre` (outline `outline`, ring
+/// placed from `half` out) on the side that `toward` lies on, goes out, round two chamfered
+/// corners and back to the same face a belt's width or so along: five straight pieces beside the
+/// block, which closes the ring. Where the outline at the arms' offset lies inside `half` (a
+/// gateway's diamond), a short straight stub joins each end of the ring to the outline, and the
+/// ring is that much shorter, so the whole path is still `total` long.
+fn loop_path(
+    centre: [f32; 2],
+    outline: Outline,
+    half: f32,
+    toward: [f32; 2],
+    total: f32,
+) -> Vec<[f32; 2]> {
     let (dx, dy) = (toward[0] - centre[0], toward[1] - centre[1]);
     let out = if dx.abs() >= dy.abs() {
         [if dx >= 0.0 { 1.0 } else { -1.0 }, 0.0]
@@ -444,44 +508,71 @@ fn loop_path(centre: [f32; 2], half: f32, toward: [f32; 2], total: f32) -> Vec<[
     let side = [-out[1], out[0]];
     let width = (2.0 * half * 0.9).clamp(LOOP_WIDTH.0, LOOP_WIDTH.1);
     let cut = LOOP_CUT;
+    let h = width / 2.0;
+    // How far out the outline is at each arm's offset, and so how long each stub is.
+    let depth_at = |across: f32| {
+        if across.abs() < outline.reach() {
+            let p = [centre[0] + side[0] * across, centre[1] + side[1] * across];
+            outline.leave(centre, p, out).min(half)
+        } else {
+            half
+        }
+    };
+    let stub = half - depth_at(h);
+    let ring = total - 2.0 * stub;
     // Two sides of `depth` and the width between them, less 2 * (2 - sqrt 2) * cut for the corners.
-    let depth = (total - width + 2.0 * (2.0 - core::f32::consts::SQRT_2) * cut) / 2.0;
+    let depth = (ring - width + 2.0 * (2.0 - core::f32::consts::SQRT_2) * cut) / 2.0;
     let at = |across: f32, up: f32| {
         [
             centre[0] + out[0] * (half + up) + side[0] * across,
             centre[1] + out[1] * (half + up) + side[1] * across,
         ]
     };
-    let h = width / 2.0;
-    // A long loop flares out at 45 degrees to a ring a quarter as wide as it is long (at most
-    // LOOP_FLARE wide), so it reads as a loop rather than a hairpin; its ends stay at the block.
-    let wide = (total / 4.0).min(LOOP_FLARE);
-    let flare = wide / 2.0 - h;
-    let straight = 0.6;
-    let diagonal = core::f32::consts::SQRT_2 * flare;
-    let far = (total - wide - 2.0 * straight - 2.0 * diagonal) / 2.0;
-    if total >= 12.0 && flare > 0.0 && far > 0.0 {
-        let w = wide / 2.0;
-        let (near, top) = (straight + flare, straight + flare + far);
-        return vec![
-            at(-h, 0.0),
-            at(-h, straight),
-            at(-w, near),
-            at(-w, top),
-            at(w, top),
-            at(w, near),
-            at(h, straight),
-            at(h, 0.0),
-        ];
+    // The ends of the path: on the outline, `stub` short of the ring's own ends.
+    let on_outline = |across: f32| {
+        let reach = half - stub;
+        [
+            centre[0] + out[0] * reach + side[0] * across,
+            centre[1] + out[1] * reach + side[1] * across,
+        ]
+    };
+    let mut ring_points = {
+        // A long loop flares out at 45 degrees to a ring a quarter as wide as it is long (at most
+        // LOOP_FLARE wide), so it reads as a loop rather than a hairpin; its ends stay at the block.
+        let wide = (total / 4.0).min(LOOP_FLARE);
+        let flare = wide / 2.0 - h;
+        let straight = 0.6;
+        let diagonal = core::f32::consts::SQRT_2 * flare;
+        let far = (ring - wide - 2.0 * straight - 2.0 * diagonal) / 2.0;
+        if total >= 12.0 && flare > 0.0 && far > 0.0 {
+            let w = wide / 2.0;
+            let (near, top) = (straight + flare, straight + flare + far);
+            vec![
+                at(-h, 0.0),
+                at(-h, straight),
+                at(-w, near),
+                at(-w, top),
+                at(w, top),
+                at(w, near),
+                at(h, straight),
+                at(h, 0.0),
+            ]
+        } else {
+            vec![
+                at(-h, 0.0),
+                at(-h, depth - cut),
+                at(-h + cut, depth),
+                at(h - cut, depth),
+                at(h, depth - cut),
+                at(h, 0.0),
+            ]
+        }
+    };
+    if stub > 1e-4 {
+        ring_points.insert(0, on_outline(-h));
+        ring_points.push(on_outline(h));
     }
-    vec![
-        at(-h, 0.0),
-        at(-h, depth - cut),
-        at(-h + cut, depth),
-        at(h - cut, depth),
-        at(h, depth - cut),
-        at(h, 0.0),
-    ]
+    ring_points
 }
 
 /// The model in world space: each block's shape at its layout position, a conveyor as a belt
@@ -524,9 +615,22 @@ pub(crate) fn scene(model: &Model) -> Scene {
                     }
                 })
             };
+            // The outline of a block, likewise a point for a conveyor.
+            let outline_of = |id: &ElementId| {
+                model.element(id).map_or(Outline::Square(0.0), |n| {
+                    if matches!(n.kind, ElementKind::Conveyor { .. }) {
+                        Outline::Square(0.0)
+                    } else {
+                        block_outline(&n.kind)
+                    }
+                })
+            };
             // The sideways shift of this lane among the conveyors that leave `block` (or, when
-            // `upstream` is false, enter it).
-            let lane = |block: &ElementId, upstream: bool| {
+            // `upstream` is false, enter it), which has the outline `outline`. The lanes are
+            // `LANE_PITCH` apart, or closer when that would take them past `LANE_SPREAD` of the
+            // outline's half-width either side of the middle: spread evenly, they never share a
+            // point.
+            let lane = |block: &ElementId, upstream: bool, outline: Outline| {
                 let mates: Vec<&ElementId> = model
                     .elements
                     .iter()
@@ -535,7 +639,13 @@ pub(crate) fn scene(model: &Model) -> Scene {
                     .map(|m| &m.id)
                     .collect();
                 let at = mates.iter().position(|m| **m == e.id).unwrap_or(0);
-                (at as f32 - (mates.len() as f32 - 1.0) / 2.0) * LANE_PITCH
+                let gaps = mates.len().saturating_sub(1) as f32;
+                let pitch = if gaps > 0.0 {
+                    LANE_PITCH.min(2.0 * LANE_SPREAD * outline.reach() / gaps)
+                } else {
+                    0.0
+                };
+                (at as f32 - gaps / 2.0) * pitch
             };
             let own_end = [c[0] + *len as f32 * metres, c[1]];
             let points: Vec<[f32; 2]> = match (before, after) {
@@ -546,16 +656,11 @@ pub(crate) fn scene(model: &Model) -> Scene {
                     } else {
                         LOOP_LENGTH.0
                     };
-                    loop_path(a, half_of(f), c, total)
+                    loop_path(a, outline_of(f), half_of(f), c, total)
                 }
                 (Some((f, a)), Some((t, b))) => {
-                    let (ha, hb) = (half_of(f), half_of(t));
-                    let side = |h: f32, s: f32| s.clamp(-0.6 * h, 0.6 * h);
-                    edge_to_edge(
-                        (a, ha, side(ha, lane(f, true))),
-                        (b, hb, side(hb, lane(t, false))),
-                    )
-                    .to_vec()
+                    let (oa, ob) = (outline_of(f), outline_of(t));
+                    edge_to_edge((a, oa, lane(f, true, oa)), (b, ob, lane(t, false, ob))).to_vec()
                 }
                 _ => vec![c, own_end],
             };
@@ -1301,10 +1406,11 @@ mod tests {
 
     #[test]
     fn lanes_that_leave_one_shape_start_at_different_points_of_its_edge() {
-        // A gateway (half-side 0.5 m) at (0.5, -0.5) and a sink (half-side 0.45 m) at (8, -0.5),
-        // joined by two conveyors. They are shifted 0.2 m either side of the line between the
-        // centres, so they start at (1.0, -0.7) and (1.0, -0.3) and end at (7.55, -0.7) and
-        // (7.55, -0.3): 0.4 m apart at both ends.
+        // A gateway (a diamond of half-diagonal 0.35 * sqrt 2 = 0.495 m) at (0.5, -0.5) and a
+        // sink (half-side 0.45 m) at (8, -0.5), joined by two conveyors. They are shifted 0.2 m
+        // either side of the line between the centres, so they start where that level line
+        // leaves the diamond, 0.495 - 0.2 = 0.295 m out: (0.795, -0.7) and (0.795, -0.3), and end
+        // at (7.55, -0.7) and (7.55, -0.3): 0.4 m apart at both ends.
         let mut m = Model::default();
         m.experiment.length_unit = LengthUnit::Metres;
         m.elements.push(gateway("g"));
@@ -1323,7 +1429,8 @@ mod tests {
         let (b, _) = path_of(&s, "b");
         let first = |p: &[[f32; 2]]| p[0];
         let last = |p: &[[f32; 2]]| p[p.len() - 1];
-        assert!((first(&a)[0] - 1.0).abs() < 1e-3 && (first(&b)[0] - 1.0).abs() < 1e-3);
+        assert!((first(&a)[0] - 0.795).abs() < 1e-3 && (first(&b)[0] - 0.795).abs() < 1e-3);
+        assert!(on_diamond(first(&a), [0.5, -0.5]) && on_diamond(first(&b), [0.5, -0.5]));
         assert!((first(&a)[1] + 0.7).abs() < 1e-3, "{:?}", first(&a));
         assert!((first(&b)[1] + 0.3).abs() < 1e-3, "{:?}", first(&b));
         assert!((last(&a)[0] - 7.55).abs() < 1e-3 && (last(&b)[0] - 7.55).abs() < 1e-3);
@@ -1331,35 +1438,87 @@ mod tests {
         assert!((last(&b)[1] + 0.3).abs() < 1e-3, "{:?}", last(&b));
     }
 
+    /// Whether `p` is on the outline of a gateway's diamond (half-diagonal 0.35 * sqrt 2) around
+    /// `centre`: `|x| + |y|` from the centre is that half-diagonal.
+    fn on_diamond(p: [f32; 2], centre: [f32; 2]) -> bool {
+        let r = 0.35 * core::f32::consts::SQRT_2;
+        ((p[0] - centre[0]).abs() + (p[1] - centre[1]).abs() - r).abs() < 1e-3
+    }
+
     #[test]
     fn a_conveyor_back_to_the_block_it_leaves_is_a_loop_beside_it() {
-        // The gateway's centre is (0.5, -0.5) m with half-side 0.5; the conveyor's own centre
-        // (5, -0.8) is to its right, so the loop leaves the right face (x = 1.0). The arms are
-        // 2 * 0.5 * 0.9 = 0.9 m apart, so it starts at (1.0, -0.95) and ends at (1.0, -0.05).
-        // With the 0.3 m corner cuts the arms are (8 - 0.9 + 2 * (2 - sqrt 2) * 0.3) / 2 = 3.7257
-        // m deep.
+        // The gateway's centre is (0.5, -0.5) m, a diamond of half-diagonal 0.495 m; the
+        // conveyor's own centre (5, -0.8) is to its right, so the loop leaves to the right. The
+        // arms are 2 * 0.5 * 0.9 = 0.9 m apart, 0.45 m either side of the middle, where the
+        // diamond reaches 0.495 - 0.45 = 0.045 m out. So the path starts on the diamond at
+        // (0.545, -0.95) and ends at (0.545, -0.05), and a straight stub of 0.5 - 0.045 = 0.455 m
+        // each side runs to the ring, which starts at x = 1.0. The ring is 8 - 2 * 0.455 = 7.09 m
+        // long; with the 0.3 m corner cuts its arms are (7.09 - 0.9 + 2 * (2 - sqrt 2) * 0.3) / 2
+        // = 3.2707 m deep.
         let s = scene(&loop_model(8.0));
         let (points, length) = path_of(&s, "loop");
         let centre = [0.5, -0.5];
         assert!(points.len() >= 4, "{points:?}");
         let (start, end) = (points[0], points[points.len() - 1]);
-        assert!((reach(start, centre) - 0.5).abs() < 1e-4, "{start:?}");
-        assert!((reach(end, centre) - 0.5).abs() < 1e-4, "{end:?}");
+        assert!(on_diamond(start, centre), "{start:?}");
+        assert!(on_diamond(end, centre), "{end:?}");
+        assert!((start[0] - 0.545).abs() < 1e-3 && (end[0] - 0.545).abs() < 1e-3);
         assert!((start[1] + 0.95).abs() < 1e-3 && (end[1] + 0.05).abs() < 1e-3);
-        // 2 * 3.4257 along the arms, 2 * 0.3 * sqrt 2 round the corners and 0.3 across: 8 m.
+        // 0.455 + 2.9707 + 0.4243 + 0.15 = 4 m to the middle: 8 m in all, stubs included.
         assert!((length - 8.0).abs() < 1e-3, "{length}");
         assert!((path_length(&points) - 8.0).abs() < 1e-3);
-        // All of it lies to the right of the gateway's face, out to 1.0 + 3.7257.
+        // All of it lies to the right of the diamond's ends, out to 1.0 + 3.2707.
         let far = points.iter().map(|p| p[0]).fold(f32::MIN, f32::max);
-        assert!(points.iter().all(|p| p[0] >= 1.0 - 1e-4));
-        assert!((far - 4.7257).abs() < 1e-3, "{far}");
+        assert!(points.iter().all(|p| p[0] >= 0.545 - 1e-3));
+        assert!((far - 4.2707).abs() < 1e-3, "{far}");
         assert!(s.tris.iter().any(|t| t.paint == Paint::Belt));
+    }
+
+    #[test]
+    fn five_lanes_between_a_gateway_and_a_sink_are_distinct_in_order_and_on_the_outlines() {
+        // The gateway is at (0.5, -0.5) m and the sink (half-side 0.45) at (8, -0.5). Lanes
+        // spread over 2 * 0.6 of the half-width, in 4 gaps: the gateway's 1.2 * 0.495 / 4 =
+        // 0.1485 m, the sink's 1.2 * 0.45 / 4 = 0.135 m (both under the 0.4 m pitch). So they
+        // start at y = -0.5 + {-0.297, -0.1485, 0, 0.1485, 0.297} and end at y = -0.5 + {-0.27,
+        // -0.135, 0, 0.135, 0.27}: the gateway's at x = 0.5 + 0.495 - |offset|, the sink's at
+        // 7.55.
+        let mut m = Model::default();
+        m.experiment.length_unit = LengthUnit::Metres;
+        m.elements.push(gateway("g"));
+        m.elements.push(sink("s"));
+        let names = ["a", "b", "c", "d", "e"];
+        for lane in names {
+            m.elements.push(conveyor(lane, 5.0));
+            connect(&mut m, "g", lane);
+            connect(&mut m, lane, "s");
+            place(&mut m, lane, (200.0, 100.0, 100.0, 80.0));
+        }
+        place(&mut m, "g", (0.0, 0.0, 50.0, 50.0));
+        place(&mut m, "s", (375.0, 0.0, 50.0, 50.0));
+        let s = scene(&m);
+        let paths: Vec<Vec<[f32; 2]>> = names.iter().map(|n| path_of(&s, n).0).collect();
+        let starts: Vec<[f32; 2]> = paths.iter().map(|p| p[0]).collect();
+        let ends: Vec<[f32; 2]> = paths.iter().map(|p| p[p.len() - 1]).collect();
+        for (start, end) in starts.iter().zip(&ends) {
+            assert!(on_diamond(*start, [0.5, -0.5]), "{start:?}");
+            assert!((reach(*end, [8.0, -0.5]) - 0.45).abs() < 1e-3, "{end:?}");
+        }
+        // In order and at least 0.13 m apart, so no two share a point.
+        for w in starts.windows(2) {
+            assert!(w[1][1] - w[0][1] > 0.13, "{starts:?}");
+        }
+        for w in ends.windows(2) {
+            assert!(w[1][1] - w[0][1] > 0.13, "{ends:?}");
+        }
+        assert!((starts[0][1] + 0.797).abs() < 1e-2 && (starts[4][1] + 0.203).abs() < 1e-2);
+        assert!((ends[0][1] + 0.77).abs() < 1e-2 && (ends[4][1] + 0.23).abs() < 1e-2);
     }
 
     #[test]
     fn a_long_loop_flares_out_to_a_ring_as_long_as_the_conveyor() {
         // 30 m: a ring 30 / 4 = 7.5 m wide whose path is still 30 m long, both ends on the
-        // gateway's face (0.5 m from its centre, 0.9 m apart).
+        // gateway's diamond (0.9 m apart, after stubs of 0.455 m to the ring). The ring itself
+        // is 30 - 2 * 0.455 = 29.09 m, still flared to 7.5 m wide.
         let s = scene(&loop_model(30.0));
         let (points, length) = path_of(&s, "loop");
         let arc: f32 = points
@@ -1443,25 +1602,25 @@ mod tests {
 
     #[test]
     fn an_item_half_way_round_a_loop_is_at_the_half_way_point_of_its_path() {
-        // The loop is 8 m long: 4 m in is 3.4257 m along the first arm and 0.4243 m round the
-        // first corner (3.85 m), then 0.15 m into the 0.3 m across: (4.7257, -0.5), the point
-        // furthest from the gateway's centre, which is (0.5, -0.5).
+        // The loop is 8 m long: 4 m in is the 0.455 m stub and 2.9707 m along the first arm and
+        // 0.4243 m round the first corner (3.85 m), then 0.15 m into the 0.3 m across:
+        // (4.2707, -0.5), the point furthest from the gateway's centre, which is (0.5, -0.5).
         let s = scene(&loop_model(8.0));
         let items = vec![(0.5, 1)];
         let (tris, _) = totes(&s, &|_| 0, &|id| (id == "loop").then(|| items.clone()));
         let at = tote_centre(&tris, Paint::Tote(1));
         assert!(
-            (at[0] - 4.7257).abs() < 1e-3 && (at[1] + 0.5).abs() < 1e-3,
+            (at[0] - 4.2707).abs() < 1e-3 && (at[1] + 0.5).abs() < 1e-3,
             "{at:?}"
         );
     }
 
     #[test]
     fn totes_without_positions_spread_evenly_round_a_loop() {
-        // Two totes, at a quarter (2 m: 2 m along the first arm, at (3.0, -0.95)) and three
-        // quarters (6 m: 1.4257 m along the way back, at (3.0, -0.05)) of the 8 m. A tote is
-        // 0.5 m long and 0.4 m across and lies along the arms: x from 2.75 to 3.25, and y from
-        // -0.95 - 0.2 = -1.15 to -0.05 + 0.2 = 0.15.
+        // Two totes, at a quarter (2 m: 0.455 m of stub and 1.545 m along the first arm, at
+        // (2.545, -0.95)) and three quarters (6 m: the same distance from the other end, at
+        // (2.545, -0.05)) of the 8 m. A tote is 0.5 m long and 0.4 m across and lies along the
+        // arms: x from 2.295 to 2.795, and y from -0.95 - 0.2 = -1.15 to -0.05 + 0.2 = 0.15.
         let s = scene(&loop_model(8.0));
         let (tris, labels) = totes(&s, &|id| u64::from(id == "loop") * 2, &|_| None);
         assert!(labels.is_empty());
@@ -1474,7 +1633,7 @@ mod tests {
         };
         let (x, y) = (range(0), range(1));
         assert!(
-            (x.0 - 2.75).abs() < 1e-3 && (x.1 - 3.25).abs() < 1e-3,
+            (x.0 - 2.295).abs() < 1e-3 && (x.1 - 2.795).abs() < 1e-3,
             "{x:?}"
         );
         assert!(
