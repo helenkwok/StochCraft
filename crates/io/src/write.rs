@@ -261,7 +261,8 @@ pub(crate) fn bpmn_local(kind: &ElementKind) -> &'static str {
         | ElementKind::Delay { .. }
         | ElementKind::Batch { .. }
         | ElementKind::Unbatch
-        | ElementKind::Conveyor { .. } => "task",
+        | ElementKind::Conveyor { .. }
+        | ElementKind::Transport { .. } => "task",
         ElementKind::ExclusiveGateway { .. } => "exclusiveGateway",
         ElementKind::ParallelGateway => "parallelGateway",
     }
@@ -338,6 +339,52 @@ pub(crate) fn conveyor_element(kind: &ElementKind) -> Option<Element> {
 pub(crate) fn length_unit_element(unit: LengthUnit) -> Option<Element> {
     (unit != LengthUnit::default())
         .then(|| vendor_value_element(crate::bpsim::LENGTH_UNIT, unit.name()))
+}
+
+/// The scenario's layout scale as StochCraft's vendor extension ([`crate::bpsim::LAYOUT_SCALE`]),
+/// unless it is the default, 1.
+pub(crate) fn layout_scale_element(scale: f64) -> Option<Element> {
+    ((scale - 1.0).abs() > f64::EPSILON)
+        .then(|| vendor_value_element(crate::bpsim::LAYOUT_SCALE, &num(scale)))
+}
+
+/// A transport as StochCraft's vendor extension ([`crate::bpsim::TRANSPORT`]), if `kind` is one.
+pub(crate) fn transport_element(kind: &ElementKind) -> Option<Element> {
+    let ElementKind::Transport { pool, load, unload } = kind else {
+        return None;
+    };
+    let ns = crate::bpsim::STOCHCRAFT_NS;
+    let part = |local: &str, d: &Dist| {
+        Element::new(&format!("stochcraft:{local}"), Some(ns)).with_child(dist_element(d))
+    };
+    let body = Element::new("stochcraft:transport", Some(ns))
+        .with_attr("pool", pool.as_str())
+        .with_child(part("load", load))
+        .with_child(part("unload", unload));
+    Some(
+        s("VendorExtension")
+            .with_attr("name", crate::bpsim::TRANSPORT)
+            .with_attr("xmlns:stochcraft", ns)
+            .with_child(body),
+    )
+}
+
+/// A pool's mobility as StochCraft's vendor extension ([`crate::bpsim::MOBILITY`]), if it is
+/// mobile.
+pub(crate) fn mobility_element(pool: &ResourcePool) -> Option<Element> {
+    let m = pool.mobility.as_ref()?;
+    let ns = crate::bpsim::STOCHCRAFT_NS;
+    let body = Element::new("stochcraft:mobility", Some(ns))
+        .with_attr("speedEmpty", &num(m.speed_empty))
+        .with_attr("speedLoaded", &num(m.speed_loaded))
+        .with_attr("home", m.home.as_str())
+        .with_attr("afterJob", m.after_job.name());
+    Some(
+        s("VendorExtension")
+            .with_attr("name", crate::bpsim::MOBILITY)
+            .with_attr("xmlns:stochcraft", ns)
+            .with_child(body),
+    )
 }
 
 /// A connection's bill-of-materials quantity as a vendor extension.
@@ -816,6 +863,9 @@ pub fn write_new(model: &Model) -> Vec<u8> {
     if let Some(u) = length_unit_element(x.length_unit) {
         sp.push(u);
     }
+    if let Some(u) = layout_scale_element(x.layout_scale) {
+        sp.push(u);
+    }
     let mut scenario = s("Scenario")
         .with_attr("id", &ids.fresh("scenario"))
         .with_attr(
@@ -897,7 +947,8 @@ pub fn write_new(model: &Model) -> Vec<u8> {
             | ElementKind::ParallelGateway
             | ElementKind::Batch { .. }
             | ElementKind::Unbatch
-            | ElementKind::Conveyor { .. } => {}
+            | ElementKind::Conveyor { .. }
+            | ElementKind::Transport { .. } => {}
         }
         if !e.properties.is_empty() {
             let mut pp = s("PropertyParameters");
@@ -986,6 +1037,9 @@ pub fn write_new(model: &Model) -> Vec<u8> {
             ep.push(x);
         }
         if let Some(x) = conveyor_element(&e.kind) {
+            ep.push(x);
+        }
+        if let Some(x) = transport_element(&e.kind) {
             ep.push(x);
         }
         if let Some(stop) = model
@@ -1078,12 +1132,14 @@ pub fn write_new(model: &Model) -> Vec<u8> {
         for role in &r.roles {
             rp.push(param("Role", s("StringParameter").with_attr("value", role)));
         }
-        scenario.push(
-            s("ElementParameters")
-                .with_attr("elementRef", r.id.as_str())
-                .with_child(rp)
-                .with_child(vendor_value_element(crate::bpsim::POOL, "true")),
-        );
+        let mut ep = s("ElementParameters")
+            .with_attr("elementRef", r.id.as_str())
+            .with_child(rp)
+            .with_child(vendor_value_element(crate::bpsim::POOL, "true"));
+        if let Some(x) = mobility_element(r) {
+            ep.push(x);
+        }
+        scenario.push(ep);
     }
     for c in &model.calendars {
         scenario.push(calendar_element(c));
