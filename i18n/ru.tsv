@@ -1022,3 +1022,4 @@ unit	yr	г.
 	x {x} m, y {y} m	x {x} м, y {y} м
 	Unplaced	Не размещены
 	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	Пока каждый блок размещается по диаграмме. Блок, которого нет на диаграмме, указан здесь и не рисуется.
+	The charts are taller than the window: make the window taller, then export them again.	Диаграммы выше окна: увеличьте высоту окна и экспортируйте их снова.

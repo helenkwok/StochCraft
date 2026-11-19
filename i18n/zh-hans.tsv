@@ -1022,3 +1022,4 @@ unit	yr	年
 	x {x} m, y {y} m	x {x} m, y {y} m
 	Unplaced	未放置
 	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	目前所有模块都按流程图放置。流程图中没有的模块会列在此处，不会绘制。
+	The charts are taller than the window: make the window taller, then export them again.	图表比窗口高：请把窗口调高，然后重新导出。

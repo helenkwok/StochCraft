@@ -1022,3 +1022,4 @@ unit	yr	р.
 	x {x} m, y {y} m	x {x} м, y {y} м
 	Unplaced	Не розміщені
 	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	Поки що кожен блок розміщується за діаграмою. Блок, якого немає на діаграмі, наведено тут і не малюється.
+	The charts are taller than the window: make the window taller, then export them again.	Діаграми вищі за вікно: збільште висоту вікна й експортуйте їх знову.

@@ -1022,3 +1022,4 @@ unit	yr	l.
 	x {x} m, y {y} m	x {x} m, y {y} m
 	Unplaced	Nepostavljeno
 	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	Za zdaj je vsak blok postavljen glede na diagram. Blok, ki ga diagram izpušča, je naveden tukaj in ni narisan.
+	The charts are taller than the window: make the window taller, then export them again.	Grafi so višji od okna: povečajte višino okna in jih nato znova izvozite.

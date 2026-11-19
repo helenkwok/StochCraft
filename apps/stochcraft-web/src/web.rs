@@ -88,7 +88,7 @@ impl eframe::App for Web {
                 // the file or cancelled, so the model is not marked saved.
                 Request::Download { name, bytes } => match download(&name, &bytes) {
                     Ok(()) => self.app.downloaded(&name),
-                    Err(e) => self.app.report_error(format!("{name}: {e:?}")),
+                    Err(e) => self.app.save_failed(format!("{name}: {e:?}")),
                 },
                 Request::Export { name, bytes } => match download(&name, &bytes) {
                     Ok(()) => self.app.exported(&name),

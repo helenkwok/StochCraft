@@ -1022,3 +1022,4 @@ unit	yr	年
 	x {x} m, y {y} m	x {x} m, y {y} m
 	Unplaced	未配置
 	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	現時点では、すべてのブロックを図から配置しています。図に含まれないブロックはここに一覧され、描画されません。
+	The charts are taller than the window: make the window taller, then export them again.	グラフがウィンドウより高すぎます。ウィンドウを縦に広げてから、もう一度エクスポートしてください。
