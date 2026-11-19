@@ -1005,3 +1005,12 @@ unit	yr	বছর
 	At {time} {unit}: {n} items	{time} {unit} সময়ে: {n}টি আইটেম
 	Run the model to fill the dashboard	ড্যাশবোর্ড ভরতে মডেল চালান
 	The resource and conveyor charts show the last run until this one ends	রিসোর্স ও কনভেয়ারের চার্ট এই রান শেষ না হওয়া পর্যন্ত আগের রান দেখায়
+	Layout	লেআউট
+	Layout of the model, to scale	মডেলের লেআউট, স্কেল অনুযায়ী
+	Drag to pan · Scroll to zoom	সরাতে টানুন · জুম করতে স্ক্রল করুন
+	Positions from the diagram	ডায়াগ্রাম থেকে নেওয়া অবস্থান
+	Scale bar: {length} m	স্কেল বার: {length} m
+	{length} m	{length} m
+	x {x} m, y {y} m	x {x} m, y {y} m
+	Unplaced	অবস্থান নির্ধারিত নয়
+	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	আপাতত প্রতিটি ব্লক ডায়াগ্রাম থেকে স্থাপন করা হয়েছে। ডায়াগ্রামে যে ব্লক নেই তা এখানে তালিকাভুক্ত হয় এবং আঁকা হয় না।

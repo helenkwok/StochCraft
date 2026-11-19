@@ -12,7 +12,7 @@ use std::process::ExitCode;
 
 use clap::{Parser, Subcommand, ValueEnum};
 use serde_json::{Value, json};
-use stochcraft_engine::{COMMANDS, CommandError, Engine, JournalEntry};
+use stochcraft_engine::{COMMANDS, CommandError, Engine, Journal, JournalEntry, ReplayMode};
 
 use templates::TEMPLATES;
 
@@ -162,13 +162,25 @@ enum Command {
         #[arg(long, value_enum, default_value_t = Format::Table)]
         format: Format,
     },
-    /// Replay engine commands from a JSON script: an array of {"command", "params"}, as an
-    /// engine journal is written. Prints each step's result as a line of JSON.
+    /// Replay engine commands from a JSON script (an array of {"command", "params"}) or from a
+    /// journal written by `--journal` (an object with its version and starting state). Prints
+    /// each step's result as a line of JSON. A script runs in full; a journal re-applies its
+    /// edits and skips saves, runs and experiments unless `--all`, and is refused if the model
+    /// is not the one it started from (`--open` the same file) unless `--force`.
     Exec {
         script: PathBuf,
         /// Open this model file before the first step.
         #[arg(long)]
         open: Option<PathBuf>,
+        /// Write the journal of what was done to this file, as JSON that `exec` replays.
+        #[arg(long)]
+        journal: Option<PathBuf>,
+        /// Replaying a journal: carry out its saves, runs and experiments too.
+        #[arg(long)]
+        all: bool,
+        /// Replaying a journal: go ahead although the model is not the one it started from.
+        #[arg(long)]
+        force: bool,
     },
     /// Print the engine's commands with the JSON schema of their parameters.
     Schema {
@@ -673,20 +685,75 @@ fn design(a: &DesignArgs) -> Result<u8, Failure> {
     Ok(0)
 }
 
-fn exec(script: &Path, open_file: Option<&Path>) -> Result<u8, Failure> {
+/// What `exec` replays: a bare script, or a journal with the state it started from.
+enum Script {
+    Steps(Vec<JournalEntry>),
+    Journal(Box<Journal>),
+}
+
+fn exec(
+    script: &Path,
+    open_file: Option<&Path>,
+    journal_out: Option<&Path>,
+    all: bool,
+    force: bool,
+) -> Result<u8, Failure> {
     let text = std::fs::read_to_string(script)
         .map_err(|e| Failure(format!("cannot read {}: {e}", script.display())))?;
-    let steps: Vec<JournalEntry> = serde_json::from_str(&text).map_err(|e| {
+    let not_a_script = |e: serde_json::Error| {
         Failure(format!(
-            "{}: not a script (a JSON array of {{\"command\", \"params\"}}): {e}",
+            "{}: not a script (a JSON array of {{\"command\", \"params\"}}) or a journal (an object with `start` and `entries`): {e}",
             script.display()
         ))
-    })?;
+    };
+    let value: Value = serde_json::from_str(&text).map_err(not_a_script)?;
+    let script = if value.is_array() {
+        Script::Steps(serde_json::from_value(value).map_err(not_a_script)?)
+    } else {
+        Script::Journal(Box::new(
+            serde_json::from_value(value).map_err(not_a_script)?,
+        ))
+    };
     let mut engine = Engine::new();
     if let Some(f) = open_file {
         open(&mut engine, f, None)?;
     }
+    let ran = exec_steps(&mut engine, &script, all, force);
+    // The journal of what was done is written even when a step failed: it says how far it got.
+    let written = journal_out.map(|out| {
+        let text = serde_json::to_string_pretty(&engine.journal_document()).unwrap_or_default();
+        std::fs::write(out, text + "\n")
+            .map_err(|e| Failure(format!("cannot write {}: {e}", out.display())))
+    });
+    let code = ran?;
+    written.transpose()?;
+    Ok(code)
+}
+
+fn exec_steps(engine: &mut Engine, script: &Script, all: bool, force: bool) -> Result<u8, Failure> {
+    // A bare script runs in full; a journal re-applies its edits unless `--all`.
+    let (steps, mode) = match script {
+        Script::Steps(steps) => (steps.as_slice(), ReplayMode::All),
+        Script::Journal(journal) => {
+            engine
+                .begin_replay(journal, force)
+                .map_err(|e| Failure(e.to_string()))?;
+            let mode = if all {
+                ReplayMode::All
+            } else {
+                ReplayMode::EditsOnly
+            };
+            (journal.entries.as_slice(), mode)
+        }
+    };
     for (i, step) in steps.iter().enumerate() {
+        if !mode.applies(&step.command) {
+            println!(
+                "{}",
+                json!({ "step": i, "command": step.command, "skipped": true })
+            );
+            continue;
+        }
         match engine.execute(&step.command, step.params.clone()) {
             Ok(result) => println!(
                 "{}",
@@ -825,7 +892,13 @@ fn main() -> ExitCode {
             min_count,
             format,
         }),
-        Command::Exec { script, open } => exec(&script, open.as_deref()),
+        Command::Exec {
+            script,
+            open,
+            journal,
+            all,
+            force,
+        } => exec(&script, open.as_deref(), journal.as_deref(), all, force),
         Command::Schema { command } => schema(command.as_deref()),
         Command::Mcp {
             connect,

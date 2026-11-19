@@ -1005,3 +1005,12 @@ unit	yr	р.
 	At {time} {unit}: {n} items	У момент {time} {unit}: {n} елементів
 	Run the model to fill the dashboard	Запустіть модель, щоб заповнити панель
 	The resource and conveyor charts show the last run until this one ends	Графіки ресурсів і конвеєрів показують останній прогін, доки цей не завершиться
+	Layout	Планування
+	Layout of the model, to scale	Планування моделі в масштабі
+	Drag to pan · Scroll to zoom	Перетягніть для зсуву · Прокрутіть для масштабу
+	Positions from the diagram	Позиції з діаграми
+	Scale bar: {length} m	Масштабна лінійка: {length} м
+	{length} m	{length} м
+	x {x} m, y {y} m	x {x} м, y {y} м
+	Unplaced	Не розміщені
+	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	Поки що кожен блок розміщується за діаграмою. Блок, якого немає на діаграмі, наведено тут і не малюється.

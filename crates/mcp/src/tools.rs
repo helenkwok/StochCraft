@@ -121,7 +121,7 @@ pub fn tool_definitions() -> Vec<Value> {
             "open",
             "Open a model",
             "Open a BPMN (.bpmn) or XPDL (.xpdl) file with BPSim data (file.open), replacing the \
-             model and clearing the history. The reply lists the file's scenarios, what \
+             model, clearing the history and starting a new journal. The reply lists the file's scenarios, what \
              StochCraft noted reading it, and the model's problems.",
             obj(
                 json!({

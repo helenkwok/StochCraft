@@ -1005,3 +1005,12 @@ unit	yr	ж.
 	At {time} {unit}: {n} items	{time} {unit} сәтінде: {n} элемент
 	Run the model to fill the dashboard	Бақылау тақтасын толтыру үшін модельді жүгіртіңіз
 	The resource and conveyor charts show the last run until this one ends	Ресурстар мен конвейерлер диаграммалары бұл аяқталғанша соңғы жүгіруді көрсетеді
+	Layout	Орналасу
+	Layout of the model, to scale	Модельдің орналасуы, масштабпен
+	Drag to pan · Scroll to zoom	Жылжыту үшін сүйреңіз · Масштабтау үшін айналдырыңыз
+	Positions from the diagram	Орындар диаграммадан
+	Scale bar: {length} m	Масштаб сызғышы: {length} м
+	{length} m	{length} м
+	x {x} m, y {y} m	x {x} м, y {y} м
+	Unplaced	Орналастырылмаған
+	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	Әзірге әр блок диаграмма бойынша орналастырылады. Диаграмма қалдырып кеткен блок осында тізімделеді және сызылмайды.

@@ -1005,3 +1005,12 @@ unit	yr	年
 	At {time} {unit}: {n} items	在 {time} {unit}：{n} 個物品
 	Run the model to fill the dashboard	執行模型以填入儀表板
 	The resource and conveyor charts show the last run until this one ends	資源和輸送帶圖表顯示上一次執行，直到本次結束
+	Layout	佈局
+	Layout of the model, to scale	依比例繪製的模型佈局
+	Drag to pan · Scroll to zoom	拖曳平移 · 捲動縮放
+	Positions from the diagram	位置取自流程圖
+	Scale bar: {length} m	比例尺: {length} m
+	{length} m	{length} m
+	x {x} m, y {y} m	x {x} m, y {y} m
+	Unplaced	未放置
+	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	目前所有區塊皆依流程圖放置。流程圖中沒有的區塊會列在此處，不會繪製。

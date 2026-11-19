@@ -1005,3 +1005,12 @@ unit	yr	v
 	At {time} {unit}: {n} items	Në {time} {unit}: {n} artikuj
 	Run the model to fill the dashboard	Ekzekutoni modelin për të plotësuar panelin
 	The resource and conveyor charts show the last run until this one ends	Grafikët e burimeve dhe rripave tregojnë ekzekutimin e fundit derisa ky të përfundojë
+	Layout	Planimetria
+	Layout of the model, to scale	Planimetria e modelit, në shkallë
+	Drag to pan · Scroll to zoom	Tërhiqni për zhvendosje · Rrotulloni për zmadhim
+	Positions from the diagram	Pozicionet nga diagrama
+	Scale bar: {length} m	Shiriti i shkallës: {length} m
+	{length} m	{length} m
+	x {x} m, y {y} m	x {x} m, y {y} m
+	Unplaced	Të pavendosura
+	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	Për momentin çdo bllok vendoset sipas diagramës. Një bllok që diagrama e lë jashtë listohet këtu dhe nuk vizatohet.
