@@ -109,6 +109,8 @@ pub(crate) enum Paint {
     Belt,
     /// A tote, by the order of the block it is at.
     Tote(usize),
+    /// A tote of a product named after a colour ("red", "Blue parcel"), in that colour.
+    Named([u8; 3]),
 }
 
 /// A triangle in world space with the normal of its face.
@@ -149,6 +151,29 @@ pub(crate) struct Scene {
     pub anchors: Vec<Anchor>,
     /// The corners of the box around everything.
     pub bounds: (Vec3, Vec3),
+    /// For each product key, the colour its name says, if it names one.
+    pub product_colours: Vec<Option<[u8; 3]>>,
+}
+
+/// The colour a product's name says, as the first colour word in it: "red", "Lane blue".
+fn named_colour(name: &str) -> Option<[u8; 3]> {
+    const NAMED: [(&str, [u8; 3]); 11] = [
+        ("red", [214, 48, 49]),
+        ("blue", [41, 109, 204]),
+        ("green", [46, 158, 76]),
+        ("yellow", [242, 196, 33]),
+        ("orange", [240, 135, 30]),
+        ("purple", [136, 84, 208]),
+        ("pink", [232, 106, 166]),
+        ("brown", [140, 90, 50]),
+        ("black", [45, 45, 48]),
+        ("white", [236, 236, 232]),
+        ("grey", [140, 140, 145]),
+    ];
+    let lower = name.to_lowercase().replace("gray", "grey");
+    lower
+        .split(|c: char| !c.is_alphanumeric())
+        .find_map(|w| NAMED.iter().find(|(n, _)| *n == w).map(|(_, c)| *c))
 }
 
 /// Metres in one of `unit`.
@@ -567,12 +592,17 @@ pub(crate) fn scene(model: &Model) -> Scene {
         })
         .collect();
     let bounds = bounds_of(&tris, &links);
+    let product_colours = model
+        .product_values()
+        .map(|(_, values)| values.iter().map(|v| named_colour(v)).collect())
+        .unwrap_or_default();
     Scene {
         grid: floor_grid(bounds),
         tris,
         links,
         anchors,
         bounds,
+        product_colours,
     }
 }
 
@@ -597,7 +627,13 @@ pub(crate) fn totes(
         {
             for &(fraction, product) in items.iter().take(MOST_ON_A_BELT) {
                 let (at, angle) = along_path(points, fraction.clamp(0.0, 1.0) * length);
-                let paint = Paint::Tote(usize::try_from(product).unwrap_or(0));
+                let key = usize::try_from(product).unwrap_or(0);
+                let paint = scene
+                    .product_colours
+                    .get(key)
+                    .copied()
+                    .flatten()
+                    .map_or(Paint::Tote(key), Paint::Named);
                 let placed = base
                     .rotated_z(angle)
                     .translated([at[0], at[1], BELT_HEIGHT]);
@@ -862,6 +898,7 @@ fn paint_colour(ctx: &egui::Context, p: &theme::Palette, paint: Paint) -> Color3
         Paint::Batch => p.chart_hover,
         Paint::Belt => p.text_weak,
         Paint::Tote(i) => chart_palette::series_color(ctx, i),
+        Paint::Named([r, g, b]) => Color32::from_rgb(r, g, b),
     }
 }
 
@@ -1338,6 +1375,16 @@ mod tests {
         let (first, last) = (points[0], points[points.len() - 1]);
         let gap = ((first[0] - last[0]).powi(2) + (first[1] - last[1]).powi(2)).sqrt();
         assert!((gap - 0.9).abs() < 1e-3, "{gap}");
+    }
+
+    #[test]
+    fn a_product_named_after_a_colour_is_drawn_in_it() {
+        assert_eq!(named_colour("red"), Some([214, 48, 49]));
+        assert_eq!(named_colour("Lane Blue"), Some([41, 109, 204]));
+        assert_eq!(named_colour("dark-gray box"), Some([140, 140, 145]));
+        // A word that only contains a colour is not one.
+        assert_eq!(named_colour("bored"), None);
+        assert_eq!(named_colour("A"), None);
     }
 
     #[test]

@@ -3452,6 +3452,38 @@ impl Model {
         }
     }
 
+    /// The product of an entity, for drawing it: the first property (in the order elements and
+    /// their properties are declared) that is text, with its values, those of every assignment
+    /// of it that gives text (a mix's values in order, and fixed text). `None` without one.
+    pub fn product_values(&self) -> Option<(String, Vec<String>)> {
+        let types = self.property_types();
+        let name = self
+            .elements
+            .iter()
+            .flat_map(|e| &e.properties)
+            .map(|p| &p.name)
+            .find(|n| matches!(types.get(*n), Some(PropertyType::String)))?;
+        let mut values: Vec<String> = Vec::new();
+        for p in self
+            .elements
+            .iter()
+            .flat_map(|e| &e.properties)
+            .filter(|p| p.name == *name)
+        {
+            let texts: Vec<&String> = match &p.value {
+                PropertyValue::Choice(v) => v.iter().map(|(_, s)| s).collect(),
+                PropertyValue::Text(s) => vec![s],
+                _ => Vec::new(),
+            };
+            for s in texts {
+                if !values.contains(s) {
+                    values.push(s.clone());
+                }
+            }
+        }
+        Some((name.clone(), values))
+    }
+
     /// The type of every property the model sets, by name: its declared type, else the type of
     /// its first value in model order (a number or a distribution is a double, an expression the
     /// kind of value it gives).
