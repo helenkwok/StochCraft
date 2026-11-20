@@ -8,7 +8,7 @@
 
 use egui::accesskit::Role;
 use egui_kittest::Harness;
-use egui_kittest::kittest::{NodeT, Queryable};
+use egui_kittest::kittest::Queryable;
 use stochcraft_ui_egui::{App, Platform, Request};
 
 /// The app with English numbers and words, so the tests read the same in every region.
