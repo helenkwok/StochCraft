@@ -243,6 +243,12 @@ With nothing selected, the **Experiment** section of the inspector sets how the 
 - **Length unit:** the unit for conveyor lengths (metres unless set).
 - **Ends early:** stop each run when enough entities have left a block, or when a task
   empties, instead of after its duration.
+- **How many runs:** **Exactly that many**, or **More until precise enough**: the runs set above
+  come first, then more follow in batches until every key measure that varies is within its
+  target (± 5% of its mean, ± 1 point for a share such as utilisation, by default), or the most
+  runs (200 by default) is reached. A result that is the same in every run, such as a count the
+  model fixes, is never counted as settled, but it does not hold back the others. A run that
+  stops at 40 gives exactly the results of 40 runs set by hand.
 
 The left rail's summary shows the current settings, for example "10 runs · seed 7".
 
@@ -277,7 +283,13 @@ The **Results** tab shows, from the top:
 3. **How sure are these numbers?** The key measure known least well, with a button to **Use N
    runs** that brings it to about ± 5%, a button to **Set a warm-up** when the start from empty
    pulls the means away, and how many key measures are already settled. A time or a count is
-   settled at ± 5% of its mean; a share, such as utilisation, at ± 1 percentage point.
+   settled at ± 5% of its mean; a share, such as utilisation, at ± 1 percentage point. After
+   **More until precise enough**, it says why the runs stopped and after how many, offers
+   **Allow up to N runs** when the most was reached first, names the key measures not yet within
+   the run's targets (it judges them by its own targets, not the ± 5% above), and any result that was the
+   same in every run, with how often something none of the runs met could still happen (about
+   3 in N runs at most). The ± is then called the estimated precision: the number of runs was
+   chosen from the results, so the interval may cover the true mean less often than 95%.
 4. **Key measures:** up to four per block (for a task: utilisation, mean wait, mean queue length,
    and time failed when it fails). Every mean is rounded to what its interval supports: "38 ± 12"
    rather than "38.42 ± 12.31".

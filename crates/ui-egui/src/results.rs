@@ -205,6 +205,139 @@ pub enum Fix {
     Runs(u64),
     /// Set the warm-up, in the model's time unit.
     Warmup(f64),
+    /// Let a sequential run go on to this many runs at most (its settings otherwise kept, as
+    /// the results give them).
+    Max(u64),
+}
+
+/// The block and result names of the watched results a sequential run lists under `status` in
+/// its summary (`no_spread`, `mean_near_zero`): "Mean wait (Desk), Entered (Exit)".
+fn listed(results: &Value, status: &str) -> String {
+    named(
+        results,
+        results["sequential"][status]
+            .as_array()
+            .into_iter()
+            .flatten(),
+    )
+}
+
+/// The block and result names of `watched` (each `{element, metric}`), joined by commas.
+fn named<'a>(results: &Value, watched: impl Iterator<Item = &'a Value>) -> String {
+    let elements = results["elements"]
+        .as_array()
+        .map_or(&[][..], Vec::as_slice);
+    watched
+        .map(|w| {
+            let id = w["element"].as_str().unwrap_or("");
+            let key = w["metric"].as_str().unwrap_or("");
+            let e = elements.iter().find(|e| e["id"] == id);
+            let kind = e.and_then(|e| e["kind"].as_str()).unwrap_or("");
+            let block = e
+                .and_then(|e| e["name"].as_str())
+                .filter(|n| !n.is_empty())
+                .unwrap_or(id);
+            format!("{} ({block})", metric(key, kind).0)
+        })
+        .collect::<Vec<_>>()
+        .join(", ")
+}
+
+/// "How sure are these numbers?"'s rows for a sequential run (`results["sequential"]`): why it
+/// stopped after how many runs, with a fix (more runs allowed) when the most was reached first,
+/// the results not yet within its own targets, and those it could not settle by their spread or
+/// their mean. Judged by the run's targets (`measures`, as the run judged them), not the fixed
+/// ± 5% of a fixed run. Draws nothing for a fixed run. Returns the fix clicked, if any.
+fn sequential_rows(ui: &mut egui::Ui, p: &theme::Palette, results: &Value) -> Option<Fix> {
+    let q = &results["sequential"];
+    let n = q["replications"].as_u64()?;
+    let count = n.to_string();
+    let measures = q["measures"].as_array().map_or(&[][..], Vec::as_slice);
+    // The widest score against the run's own target, among those not within it.
+    let widest = measures
+        .iter()
+        .filter(|m| m["status"] != "settled")
+        .filter_map(|m| m["score"].as_f64())
+        .fold(None, |w: Option<f64>, s| Some(w.map_or(s, |w| w.max(s))));
+    // A run watching one named result (set from a file, the command line or an agent) speaks of
+    // that result, not of every key measure.
+    let one = q["settings"]["measure"]
+        .is_object()
+        .then(|| named(results, std::iter::once(&q["settings"]["measure"])));
+    let mut fix = None;
+    if q["reason"] == "target_met" {
+        let text = match &one {
+            Some(r) => tnf(
+                n,
+                "Stopped after {n} run: {result} is within its target.",
+                "Stopped after {n} runs: {result} is within its target.",
+                &[("result", r)],
+            ),
+            None => tnf(
+                n,
+                "Stopped after {n} run: every key measure that varies is within its target.",
+                "Stopped after {n} runs: every key measure that varies is within its target.",
+                &[],
+            ),
+        };
+        trust_row(ui, p, true, &text, None);
+    } else if q["reason"] == "max_reached" {
+        let text = match &one {
+            Some(r) => tnf(
+                n,
+                "Stopped at the most allowed, {n} run, before {result} was within its target.",
+                "Stopped at the most allowed, {n} runs, before {result} was within its target.",
+                &[("result", r)],
+            ),
+            None => tnf(
+                n,
+                "Stopped at the most allowed, {n} run, before every key measure was within its target.",
+                "Stopped at the most allowed, {n} runs, before every key measure was within its target.",
+                &[],
+            ),
+        };
+        let needed = runs_needed(n, widest.filter(|s| *s > 1.0).unwrap_or(2.0));
+        let label = tnf(needed, "Allow up to {n} run", "Allow up to {n} runs", &[]);
+        if trust_row(ui, p, false, &text, Some(&label)) {
+            fix = Some(Fix::Max(needed));
+        }
+    }
+    let wide = named(
+        results,
+        measures.iter().filter(|m| {
+            matches!(
+                m["status"].as_str(),
+                Some("wide" | "no_interval" | "no_value")
+            )
+        }),
+    );
+    if !wide.is_empty() {
+        let text = tf(
+            "Not yet within its target: {results}.",
+            &[("results", &wide)],
+        );
+        trust_row(ui, p, false, &text, None);
+    }
+    let same = listed(results, "no_spread");
+    if !same.is_empty() {
+        let rate = q["unseen_rate"]
+            .as_f64()
+            .map_or_else(String::new, |r| format!("{}%", grouped(up_to(r * 100.0))));
+        let text = tf(
+            "{results}: the same in all {n} runs, so not counted as settled. Something none of the runs met could still happen in up to {rate} of runs.",
+            &[("results", &same), ("n", &count), ("rate", &rate)],
+        );
+        trust_row(ui, p, false, &text, None);
+    }
+    let zero = listed(results, "mean_near_zero");
+    if !zero.is_empty() {
+        let text = tf(
+            "{results}: the mean is at or near zero, so it cannot be known to a share of itself.",
+            &[("results", &zero)],
+        );
+        trust_row(ui, p, false, &text, None);
+    }
+    fix
 }
 
 /// The score above which a key measure gets a warning: ± 10% of its mean, ± 2 points for a share.
@@ -309,10 +442,18 @@ pub fn trust(ui: &mut egui::Ui, results: &Value) -> Option<Fix> {
         ui.set_width(ui.available_width());
         ui.label(theme::strong(t("How sure are these numbers?")));
         ui.add_space(4.0);
+        // A sequential run chose its count itself: more runs come from allowing more, not from
+        // setting the first ones.
+        let sequential = results["sequential"].is_object();
+        if sequential {
+            fix = sequential_rows(ui, &p, results);
+        }
         if n < 2 {
             let label = tnf(10, "Use {n} run", "Use {n} runs", &[]);
             let text = t("One run gives no interval, so these numbers cannot be told from chance.");
-            if trust_row(ui, &p, false, text, Some(&label)) {
+            // A sequential run's fix is in its own row above.
+            let button = (!sequential).then_some(label.as_str());
+            if trust_row(ui, &p, false, text, button) {
                 fix = Some(Fix::Runs(10));
             }
         } else if let Some((e, key, score)) = widest.filter(|(_, _, s)| *s > WIDE) {
@@ -352,7 +493,9 @@ pub fn trust(ui: &mut egui::Ui, results: &Value) -> Option<Fix> {
                 "Use {n} runs (about ± 5%)",
                 &[],
             );
-            if trust_row(ui, &p, false, &text, Some(&label)) {
+            // A sequential run's fix is in its own row above.
+            let button = (!sequential).then_some(label.as_str());
+            if trust_row(ui, &p, false, &text, button) {
                 fix = Some(Fix::Runs(needed));
             }
         }
@@ -377,7 +520,8 @@ pub fn trust(ui: &mut egui::Ui, results: &Value) -> Option<Fix> {
                 }
             }
         }
-        if settled > 0 {
+        // A sequential run judged its key measures by its own targets, in its own rows above.
+        if settled > 0 && !sequential {
             let text = tf(
                 "{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.",
                 &[("k", &settled.to_string()), ("m", &judged.to_string())],
@@ -586,13 +730,17 @@ pub fn show(ui: &mut egui::Ui, results: &Value) {
                 t("Entities still inside at the end of a run are left out of the mean wait and the mean time in system."),
             ));
         }
-        ui.label(theme::weak(
-            ui,
+        // A sequential run chose its count from the results, so its interval is an estimate of
+        // precision whose coverage is not guaranteed.
+        let interval = if results["sequential"].is_object() {
+            t("± is the estimated precision: the half-width of a 95% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than 95%.")
+        } else {
             t(
                 "± is the half-width of a 95% Student-t confidence interval of the mean across \
                runs.",
-            ),
-        ));
+            )
+        };
+        ui.label(theme::weak(ui, interval));
         ui.label(
             theme::weak(
                 ui,
@@ -783,6 +931,19 @@ pub(crate) fn round_sig(v: f64, figures: i32) -> f64 {
 }
 
 /// `v` rounded to `places` decimal places (to tens, hundreds… where `places` is negative).
+/// An upper bound as a person would read it: rounded up, never down, to one decimal at 1 or
+/// more and to two significant figures below (25.86 → 25.9, 0.02995 → 0.03), so a bound above
+/// zero never shows as 0.
+fn up_to(v: f64) -> f64 {
+    if !(v.is_finite() && v > 0.0) {
+        return v;
+    }
+    let places = if v >= 1.0 { 1 } else { 1 - magnitude(v) };
+    let f = pow10(places);
+    // Less a hair, so a product just above a whole number (259.000…01) does not round up past it.
+    (v * f - 1e-9).ceil() / f
+}
+
 fn round_to(v: f64, places: i32) -> f64 {
     let f = pow10(places);
     (v * f).round() / f
@@ -1332,6 +1493,11 @@ mod tests {
         assert_eq!(runs_needed(25, 1.002), 30);
         assert_eq!(runs_needed(30, 1.002), 40);
         assert_eq!(super::round_warmup(437.2), 440.0);
+        // An upper bound rounds up, and a small one keeps two figures rather than showing 0.
+        assert_eq!(super::up_to(25.89), 25.9);
+        assert_eq!(super::up_to(25.9), 25.9);
+        assert_eq!(super::up_to(0.02995), 0.03);
+        assert_eq!(super::up_to(0.0011), 0.0011);
         assert_eq!(super::round_warmup(0.0234), 0.023);
     }
 
@@ -1418,6 +1584,82 @@ mod tests {
         let mut one = unsure();
         one["record"]["replications"] = 1.into();
         assert_eq!(trust_with(one, Some("Use 10 runs")), Some(Fix::Runs(10)));
+    }
+
+    /// `unsure` as a sequential run that reached its most, 10 runs, with a count that was the
+    /// same in every run.
+    fn sequential(reason: &str) -> serde_json::Value {
+        let mut r = unsure();
+        r["sequential"] = serde_json::json!({
+            "replications": 10,
+            "stages": [10],
+            "reason": reason,
+            "met": reason == "target_met",
+            "no_spread": [{ "element": "paint", "metric": "left" }],
+            "mean_near_zero": [],
+            "unseen_rate": 0.2589,
+            // As the run judged them, against its own targets: the wait at 6.4 times its target.
+            "measures": [
+                { "element": "paint", "metric": "utilisation", "status": "settled", "score": 0.8 },
+                { "element": "paint", "metric": "mean_wait", "status": "wide", "score": 6.4 },
+                { "element": "paint", "metric": "left", "status": "no_spread", "score": null },
+            ],
+        });
+        r
+    }
+
+    /// A sequential run that reached its most offers more runs allowed, not more first runs,
+    /// and names the result that was the same in every run with how often something unseen may
+    /// still happen.
+    #[test]
+    fn a_sequential_run_says_why_it_stopped() {
+        use super::Fix;
+        use egui_kittest::kittest::Queryable;
+        // From the run's own score: 10 × 6.4² = 409.6, as the most allowed.
+        assert_eq!(
+            trust_with(sequential("max_reached"), Some("Allow up to 410 runs")),
+            Some(Fix::Max(410))
+        );
+        let results = sequential("max_reached");
+        let mut fonts = false;
+        let mut h = egui_kittest::Harness::new_ui(move |ui| {
+            if !fonts {
+                crate::theme::install_fonts(ui.ctx(), "en");
+                crate::theme::install(ui.ctx(), &crate::theme::default_theme());
+                fonts = true;
+                ui.ctx().request_repaint();
+                return;
+            }
+            super::trust(ui, &results);
+        });
+        h.run();
+        assert!(h.query_by_label("Use 410 runs (about ± 5%)").is_none());
+        h.get_by_label(
+            "Stopped at the most allowed, 10 runs, before every key measure was within its target.",
+        );
+        h.get_by_label("Not yet within its target: Mean wait (Paint).");
+        // Judged by the run's targets only: no "settled at ± 5%" row beside it.
+        assert!(
+            h.query_by_label_contains("key measures are settled")
+                .is_none()
+        );
+        h.get_by_label("Left (Paint): the same in all 10 runs, so not counted as settled. Something none of the runs met could still happen in up to 25.9% of runs.");
+        // Stopped with the target met: said with a check mark, nothing to click for it.
+        assert_eq!(
+            trust_with(sequential("target_met"), Some("Set a 57 min warm-up")),
+            Some(Fix::Warmup(57.0))
+        );
+        // A run watching one named result speaks of that result, not of every key measure.
+        let mut one = sequential("target_met");
+        one["sequential"]["settings"] =
+            serde_json::json!({ "measure": { "element": "paint", "metric": "mean_wait" } });
+        assert_eq!(
+            trust_with(
+                one,
+                Some("Stopped after 10 runs: Mean wait (Paint) is within its target.")
+            ),
+            None
+        );
     }
 
     #[test]

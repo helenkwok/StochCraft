@@ -1160,3 +1160,20 @@ unit	yr	v
 	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	Për momentin çdo bllok vendoset sipas diagramës. Një bllok që diagrama e lë jashtë listohet këtu dhe nuk vizatohet.
 	The charts are taller than the window: make the window taller, then export them again.	Grafikët janë më të lartë se dritarja: zmadhoni lartësinë e dritares, pastaj eksportojini përsëri.
 	The model changed while choosing where to save it, so it was not saved. Save again.	Modeli ndryshoi ndërsa zgjidhej ku të ruhej, ndaj nuk u ruajt. Ruajeni sërish.
+	Exactly that many	Pikërisht aq
+	More until precise enough	Më shumë, deri sa të jenë mjaftueshëm të sakta
+	How many runs	Sa ekzekutime
+	Within ± % of the mean	Brenda ± % të mesatares
+	Shares within ± points	Pjesë brenda ± pikë përqindjeje
+	At most, runs	Më së shumti, ekzekutime
+	The runs above come first; more follow in batches until every key measure that varies is within its target, or the most is reached.	Ekzekutimet e mësipërme vijnë të parat; pastaj shtohen të tjera në grupe, derisa çdo tregues kryesor që ndryshon të jetë brenda objektivit të vet, ose të arrihet maksimumi.
+@plural	Stopped after {n} run: every key measure that varies is within its target.|Stopped after {n} runs: every key measure that varies is within its target.	Ndaloi pas {n} ekzekutimi: çdo tregues kryesor që ndryshon është brenda objektivit të vet.|Ndaloi pas {n} ekzekutimeve: çdo tregues kryesor që ndryshon është brenda objektivit të vet.
+@plural	Stopped at the most allowed, {n} run, before every key measure was within its target.|Stopped at the most allowed, {n} runs, before every key measure was within its target.	Ndaloi te maksimumi i lejuar, {n} ekzekutim, përpara se çdo tregues kryesor të ishte brenda objektivit të vet.|Ndaloi te maksimumi i lejuar, {n} ekzekutime, përpara se çdo tregues kryesor të ishte brenda objektivit të vet.
+@plural	Allow up to {n} run|Allow up to {n} runs	Lejo deri në {n} ekzekutim|Lejo deri në {n} ekzekutime
+	{results}: the same in all {n} runs, so not counted as settled. Something none of the runs met could still happen in up to {rate} of runs.	{results}: njësoj në të gjitha {n} ekzekutimet, prandaj nuk llogaritet si i qëndrueshëm. Diçka që asnjë ekzekutim nuk e ka hasur mund të ndodhë prapë në deri në {rate} të ekzekutimeve.
+	{results}: the mean is at or near zero, so it cannot be known to a share of itself.	{results}: mesatarja është zero ose afër zeros, prandaj nuk mund të njihet me një saktësi të shprehur si pjesë e vetvetes.
+	± is the estimated precision: the half-width of a 95% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than 95%.	± është saktësia e vlerësuar: gjysma e gjerësisë së një intervali besimi Student-t prej 95% për mesataren e ekzekutimeve. Numri i ekzekutimeve u zgjodh nga rezultatet, ndaj intervali mund ta mbulojë mesataren e vërtetë më rrallë se 95%.
+	Not yet within its target: {results}.	Ende jo brenda objektivit: {results}.
+	then more until precise enough, at most {max}	pastaj më shumë, derisa të jenë mjaftueshëm të sakta, më së shumti {max}
+@plural	Stopped after {n} run: {result} is within its target.|Stopped after {n} runs: {result} is within its target.	Ndaloi pas {n} ekzekutimi: {result} është brenda objektivit të vet.|Ndaloi pas {n} ekzekutimeve: {result} është brenda objektivit të vet.
+@plural	Stopped at the most allowed, {n} run, before {result} was within its target.|Stopped at the most allowed, {n} runs, before {result} was within its target.	Ndaloi te maksimumi i lejuar, {n} ekzekutim, përpara se {result} të ishte brenda objektivit të vet.|Ndaloi te maksimumi i lejuar, {n} ekzekutime, përpara se {result} të ishte brenda objektivit të vet.

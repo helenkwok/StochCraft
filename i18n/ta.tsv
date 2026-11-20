@@ -1160,3 +1160,20 @@ unit	yr	ஆண்டு
 	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	தற்போது ஒவ்வொரு தொகுதியும் வரைபடத்தின் அடிப்படையில் வைக்கப்படுகிறது. வரைபடம் விட்டுவிடும் தொகுதி இங்கே பட்டியலிடப்படும், அது வரையப்படாது.
 	The charts are taller than the window: make the window taller, then export them again.	வரைபடங்கள் சாளரத்தை விட உயரமாக உள்ளன: சாளரத்தை உயரமாக்கி, பின் மீண்டும் ஏற்றுமதி செய்யவும்.
 	The model changed while choosing where to save it, so it was not saved. Save again.	சேமிக்கும் இடத்தைத் தேர்ந்தெடுக்கும்போது மாதிரி மாறியது, எனவே அது சேமிக்கப்படவில்லை. மீண்டும் சேமிக்கவும்.
+	Exactly that many	சரியாக அவ்வளவு
+	More until precise enough	போதுமான துல்லியம் வரும் வரை மேலும்
+	How many runs	எத்தனை மீள் இயக்கங்கள்
+	Within ± % of the mean	சராசரியின் ± % க்குள்
+	Shares within ± points	± சதவீதப் புள்ளிக்குள் பங்குகள்
+	At most, runs	அதிகபட்சம், மீள் இயக்கங்கள்
+	The runs above come first; more follow in batches until every key measure that varies is within its target, or the most is reached.	மேலே உள்ள மீள் இயக்கங்கள் முதலில் நடக்கும்; அதன் பின், மாறும் ஒவ்வொரு முக்கிய அளவீடும் தன் இலக்குக்குள் வரும் வரை அல்லது அதிகபட்ச எண்ணிக்கை எட்டும் வரை மேலும் தொகுதி தொகுதியாக நடக்கும்.
+@plural	Stopped after {n} run: every key measure that varies is within its target.|Stopped after {n} runs: every key measure that varies is within its target.	{n} மீள் இயக்கத்திற்குப் பிறகு நிறுத்தப்பட்டது: மாறும் ஒவ்வொரு முக்கிய அளவீடும் தன் இலக்குக்குள் உள்ளது.|{n} மீள் இயக்கங்களுக்குப் பிறகு நிறுத்தப்பட்டது: மாறும் ஒவ்வொரு முக்கிய அளவீடும் தன் இலக்குக்குள் உள்ளது.
+@plural	Stopped at the most allowed, {n} run, before every key measure was within its target.|Stopped at the most allowed, {n} runs, before every key measure was within its target.	மாறும் ஒவ்வொரு முக்கிய அளவீடும் தன் இலக்குக்குள் வருவதற்கு முன், அனுமதிக்கப்பட்ட அதிகபட்சமான {n} மீள் இயக்கத்தில் நிறுத்தப்பட்டது.|மாறும் ஒவ்வொரு முக்கிய அளவீடும் தன் இலக்குக்குள் வருவதற்கு முன், அனுமதிக்கப்பட்ட அதிகபட்சமான {n} மீள் இயக்கங்களில் நிறுத்தப்பட்டது.
+@plural	Allow up to {n} run|Allow up to {n} runs	அதிகபட்சம் {n} மீள் இயக்கத்தை அனுமதி|அதிகபட்சம் {n} மீள் இயக்கங்களை அனுமதி
+	{results}: the same in all {n} runs, so not counted as settled. Something none of the runs met could still happen in up to {rate} of runs.	{results}: {n} மீள் இயக்கங்கள் அனைத்திலும் ஒரே மாதிரி, எனவே நிலைபெற்றதாகக் கணக்கிடப்படவில்லை. எந்த மீள் இயக்கமும் சந்திக்காத ஒன்று, மீள் இயக்கங்களில் அதிகபட்சம் {rate} இல் இன்னும் நிகழலாம்.
+	{results}: the mean is at or near zero, so it cannot be known to a share of itself.	{results}: சராசரி பூஜ்யம் அல்லது பூஜ்யத்திற்கு அருகில் உள்ளது, எனவே அதைத் தன்னுடைய ஒரு பங்காகத் துல்லியமாக அறிய முடியாது.
+	± is the estimated precision: the half-width of a 95% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than 95%.	± என்பது மதிப்பிடப்பட்ட துல்லியம்: மீள் இயக்கங்களின் சராசரிக்கான 95% Student-t நம்பிக்கை இடைவெளியின் அகலத்தில் பாதி. மீள் இயக்கங்களின் எண்ணிக்கை முடிவுகளைப் பார்த்துத் தேர்ந்தெடுக்கப்பட்டதால், இடைவெளி உண்மையான சராசரியை 95%-ஐ விடக் குறைவாகவே உள்ளடக்கக்கூடும்.
+	Not yet within its target: {results}.	இன்னும் இலக்குக்குள் வரவில்லை: {results}.
+	then more until precise enough, at most {max}	பிறகு போதுமான துல்லியம் வரும் வரை மேலும், அதிகபட்சம் {max}
+@plural	Stopped after {n} run: {result} is within its target.|Stopped after {n} runs: {result} is within its target.	{n} மீள் இயக்கத்திற்குப் பிறகு நிறுத்தப்பட்டது: {result} தன் இலக்குக்குள் உள்ளது.|{n} மீள் இயக்கங்களுக்குப் பிறகு நிறுத்தப்பட்டது: {result} தன் இலக்குக்குள் உள்ளது.
+@plural	Stopped at the most allowed, {n} run, before {result} was within its target.|Stopped at the most allowed, {n} runs, before {result} was within its target.	{result} தன் இலக்குக்குள் வருவதற்கு முன், அனுமதிக்கப்பட்ட அதிகபட்சமான {n} மீள் இயக்கத்தில் நிறுத்தப்பட்டது.|{result} தன் இலக்குக்குள் வருவதற்கு முன், அனுமதிக்கப்பட்ட அதிகபட்சமான {n} மீள் இயக்கங்களில் நிறுத்தப்பட்டது.

@@ -1160,3 +1160,20 @@ unit	yr	సం.
 	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	ప్రస్తుతానికి ప్రతి బ్లాక్ రేఖాచిత్రం ఆధారంగా ఉంచబడుతుంది. రేఖాచిత్రం వదిలేసిన బ్లాక్ ఇక్కడ జాబితా చేయబడుతుంది, అది గీయబడదు.
 	The charts are taller than the window: make the window taller, then export them again.	చార్ట్‌లు విండో కంటే పొడవుగా ఉన్నాయి: విండోను పొడవుగా చేసి, మళ్లీ ఎగుమతి చేయండి.
 	The model changed while choosing where to save it, so it was not saved. Save again.	సేవ్ చేసే స్థలాన్ని ఎంచుకుంటున్నప్పుడు నమూనా మారింది, కాబట్టి అది సేవ్ కాలేదు. మళ్లీ సేవ్ చేయండి.
+	Exactly that many	సరిగ్గా అన్ని
+	More until precise enough	తగినంత కచ్చితత్వం వచ్చే వరకు ఇంకా
+	How many runs	ఎన్ని అమలులు
+	Within ± % of the mean	సగటులో ± % లోపల
+	Shares within ± points	± శాతం పాయింట్ల లోపల వాటాలు
+	At most, runs	గరిష్ఠంగా, అమలులు
+	The runs above come first; more follow in batches until every key measure that varies is within its target, or the most is reached.	పైన ఉన్న అమలులు మొదట జరుగుతాయి; ఆ తర్వాత మారుతూ ఉండే ప్రతి ముఖ్య కొలమానం తన లక్ష్యం లోపలికి వచ్చే వరకు లేదా గరిష్ఠ సంఖ్య చేరే వరకు మరిన్ని బ్యాచ్‌లుగా జరుగుతాయి.
+@plural	Stopped after {n} run: every key measure that varies is within its target.|Stopped after {n} runs: every key measure that varies is within its target.	{n} అమలు తర్వాత ఆగింది: మారుతూ ఉండే ప్రతి ముఖ్య కొలమానం తన లక్ష్యం లోపల ఉంది.|{n} అమలుల తర్వాత ఆగింది: మారుతూ ఉండే ప్రతి ముఖ్య కొలమానం తన లక్ష్యం లోపల ఉంది.
+@plural	Stopped at the most allowed, {n} run, before every key measure was within its target.|Stopped at the most allowed, {n} runs, before every key measure was within its target.	మారుతూ ఉండే ప్రతి ముఖ్య కొలమానం తన లక్ష్యం లోపలికి రాకముందే, అనుమతించిన గరిష్ఠం {n} అమలు వద్ద ఆగింది.|మారుతూ ఉండే ప్రతి ముఖ్య కొలమానం తన లక్ష్యం లోపలికి రాకముందే, అనుమతించిన గరిష్ఠం {n} అమలుల వద్ద ఆగింది.
+@plural	Allow up to {n} run|Allow up to {n} runs	గరిష్ఠంగా {n} అమలును అనుమతించు|గరిష్ఠంగా {n} అమలులను అనుమతించు
+	{results}: the same in all {n} runs, so not counted as settled. Something none of the runs met could still happen in up to {rate} of runs.	{results}: మొత్తం {n} అమలులలో ఒకేలా ఉంది, కాబట్టి స్థిరపడినదిగా లెక్కించలేదు. ఏ అమలులోనూ ఎదురుకాని దేనికైనా, అమలులలో గరిష్ఠంగా {rate}లో ఇంకా జరగవచ్చు.
+	{results}: the mean is at or near zero, so it cannot be known to a share of itself.	{results}: సగటు సున్నా లేదా సున్నాకు దగ్గరగా ఉంది, కాబట్టి దాని సొంత వాటాగా కచ్చితత్వాన్ని తెలుసుకోలేము.
+	± is the estimated precision: the half-width of a 95% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than 95%.	± అనేది అంచనా వేసిన కచ్చితత్వం: అమలుల సగటుకు సంబంధించిన 95% Student-t విశ్వసనీయత అంతరం వెడల్పులో సగం. అమలుల సంఖ్యను ఫలితాల ఆధారంగా ఎంచుకున్నందున, అంతరం నిజమైన సగటును 95% కంటే తక్కువసార్లు కవర్ చేయవచ్చు.
+	Not yet within its target: {results}.	ఇంకా లక్ష్యం లోపలికి రాలేదు: {results}.
+	then more until precise enough, at most {max}	ఆ తర్వాత తగినంత కచ్చితత్వం వచ్చే వరకు ఇంకా, గరిష్ఠంగా {max}
+@plural	Stopped after {n} run: {result} is within its target.|Stopped after {n} runs: {result} is within its target.	{n} అమలు తర్వాత ఆగింది: {result} తన లక్ష్యం లోపల ఉంది.|{n} అమలుల తర్వాత ఆగింది: {result} తన లక్ష్యం లోపల ఉంది.
+@plural	Stopped at the most allowed, {n} run, before {result} was within its target.|Stopped at the most allowed, {n} runs, before {result} was within its target.	{result} తన లక్ష్యం లోపలికి రాకముందే, అనుమతించిన గరిష్ఠం {n} అమలు వద్ద ఆగింది.|{result} తన లక్ష్యం లోపలికి రాకముందే, అనుమతించిన గరిష్ఠం {n} అమలుల వద్ద ఆగింది.

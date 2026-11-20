@@ -1160,3 +1160,20 @@ unit	yr	år
 	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	Foreløpig plasseres hver blokk ut fra diagrammet. En blokk som diagrammet utelater, vises her og tegnes ikke.
 	The charts are taller than the window: make the window taller, then export them again.	Diagrammene er høyere enn vinduet: gjør vinduet høyere, og eksporter dem på nytt.
 	The model changed while choosing where to save it, so it was not saved. Save again.	Modellen ble endret mens det ble valgt hvor den skulle lagres, så den ble ikke lagret. Lagre på nytt.
+	Exactly that many	Akkurat så mange
+	More until precise enough	Flere til de er presise nok
+	How many runs	Hvor mange kjøringer
+	Within ± % of the mean	Innenfor ± % av gjennomsnittet
+	Shares within ± points	Andeler innenfor ± prosentpoeng
+	At most, runs	Høyst, kjøringer
+	The runs above come first; more follow in batches until every key measure that varies is within its target, or the most is reached.	Kjøringene over kommer først; deretter følger flere i omganger til hvert viktige måltall som varierer, er innenfor målet sitt, eller maksimum er nådd.
+@plural	Stopped after {n} run: every key measure that varies is within its target.|Stopped after {n} runs: every key measure that varies is within its target.	Stoppet etter {n} kjøring: hvert viktige måltall som varierer, er innenfor målet sitt.|Stoppet etter {n} kjøringer: hvert viktige måltall som varierer, er innenfor målet sitt.
+@plural	Stopped at the most allowed, {n} run, before every key measure was within its target.|Stopped at the most allowed, {n} runs, before every key measure was within its target.	Stoppet ved høyeste tillatte, {n} kjøring, før hvert viktige måltall var innenfor målet sitt.|Stoppet ved høyeste tillatte, {n} kjøringer, før hvert viktige måltall var innenfor målet sitt.
+@plural	Allow up to {n} run|Allow up to {n} runs	Tillat opptil {n} kjøring|Tillat opptil {n} kjøringer
+	{results}: the same in all {n} runs, so not counted as settled. Something none of the runs met could still happen in up to {rate} of runs.	{results}: lik i alle {n} kjøringer, så det regnes ikke som stabilt. Noe ingen av kjøringene har støtt på, kan likevel skje i opptil {rate} av kjøringene.
+	{results}: the mean is at or near zero, so it cannot be known to a share of itself.	{results}: gjennomsnittet er null eller nær null, så det kan ikke kjennes med en presisjon uttrykt som en andel av seg selv.
+	± is the estimated precision: the half-width of a 95% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than 95%.	± er den estimerte presisjonen: halve bredden av et 95% Student-t-konfidensintervall for gjennomsnittet på tvers av kjøringer. Antall kjøringer ble valgt ut fra resultatene, så intervallet kan dekke det sanne gjennomsnittet sjeldnere enn 95%.
+	Not yet within its target: {results}.	Ennå ikke innenfor målet: {results}.
+	then more until precise enough, at most {max}	deretter flere til de er presise nok, høyst {max}
+@plural	Stopped after {n} run: {result} is within its target.|Stopped after {n} runs: {result} is within its target.	Stoppet etter {n} kjøring: {result} er innenfor målet sitt.|Stoppet etter {n} kjøringer: {result} er innenfor målet sitt.
+@plural	Stopped at the most allowed, {n} run, before {result} was within its target.|Stopped at the most allowed, {n} runs, before {result} was within its target.	Stoppet ved høyeste tillatte, {n} kjøring, før {result} var innenfor målet sitt.|Stoppet ved høyeste tillatte, {n} kjøringer, før {result} var innenfor målet sitt.

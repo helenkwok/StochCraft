@@ -573,6 +573,7 @@ impl App {
             t("Changing the time unit does not convert the times already in the model."),
         ));
         self.stop_row(ui, model);
+        self.sequential_row(ui, model);
 
         section(ui, t("Connections"));
         self.connections_table(ui, p, model);

@@ -1320,9 +1320,14 @@ ch. 10 §10.4, in Brailsford, Churilov and Dangerfield, eds., 2014). Related and
     file's frequency, threads, slices and workers alike).
 - **Choosing the number of replications.** The default is 10.
   - **Done:** the `one_replication` warning for a run with one replication.
-  - Not yet (#224): a sequential mode that adds replications until the 95% half-width is within a
-    target share of the mean, using the t-table already in `stats` (automated methods: Hoad,
-    Robinson and Davies, 2011).
+  - **Done (#224):** sequential replications. A run adds replications in batches until every
+    key measure that varies has a 95% half-width within its target (a share of its mean, or
+    percentage points for a share), or a maximum is reached, after Hoad, Robinson and Davies
+    (2010). Zero spread never settles a result; a mean at or near zero never meets a share of
+    itself; the run says why it stopped, and calls its intervals estimated precision. In the
+    engine, the file (`stochcraft:sequential`), the command line (`--until`, `--max`, `--fixed`)
+    and the window (**How many runs** in the model overview). Sweeps, designs, sensitivity and
+    sizing still run a fixed number.
 - **Streams by element id:** done (#152). Each block's streams are keyed by its id and their
   purpose, derived from the seed and the replication, not its place in the model, so that a
   variant that adds, removes or reorders an element keeps common random numbers for the others,

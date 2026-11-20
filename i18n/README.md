@@ -787,6 +787,15 @@ fields (`“Service time”`) are named in the messages by their own rows.
   catalog's own words for model and save (its rows for "Save" and "Save Model"). Not checked
   against any other source, and not reviewed by native speakers; the least certain are lo, th,
   ta, te, bn, ka, kk, hi and sq.
+- The rows for sequential runs (issue #224: How many runs, its targets and most runs, why the runs
+  stopped, also for a run watching one named result, the results not yet within the target,
+  results the same in every run, the left
+  rail's "then more until precise enough", and the ± as estimated precision) were machine-drafted
+  with Claude Code from the plain meaning of the English, with each catalog's own words for run,
+  key measure, settled, target and mean, and its own wording of the 95% interval note. Not
+  checked against any other source, and not reviewed by native speakers; the least certain are
+  lo, ka, ta and te, the case endings in sl, uk and pl, and the particle after a name in ko. "Cannot be known to a share of
+  itself" is reworded in each language as a precision given as a share of the mean.
 
 **Adding or changing a string:** add the English in the code through `i18n::t` (or `tf`, `tn`),
 then add its row to each catalog here, or leave it out to show English until it is translated.

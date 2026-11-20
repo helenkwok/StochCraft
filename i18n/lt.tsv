@@ -1160,3 +1160,20 @@ unit	yr	m.
 	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	Kol kas kiekvienas blokas išdėstomas pagal diagramą. Blokas, kurio diagrama nenurodo, išvardytas čia ir nebraižomas.
 	The charts are taller than the window: make the window taller, then export them again.	Diagramos aukštesnės už langą: padidinkite lango aukštį ir eksportuokite jas iš naujo.
 	The model changed while choosing where to save it, so it was not saved. Save again.	Modelis pasikeitė renkantis, kur jį įrašyti, todėl jis neįrašytas. Įrašykite dar kartą.
+	Exactly that many	Lygiai tiek
+	More until precise enough	Daugiau, kol bus pakankamai tikslūs
+	How many runs	Kiek vykdymų
+	Within ± % of the mean	± % vidurkio ribose
+	Shares within ± points	Dalys ± procentinių punktų ribose
+	At most, runs	Daugiausia vykdymų
+	The runs above come first; more follow in batches until every key measure that varies is within its target, or the most is reached.	Pirmiausia atliekami aukščiau nurodyti vykdymai, o toliau dar vykdoma partijomis, kol kiekvienas kintantis pagrindinis rodiklis patenka į savo tikslą arba pasiekiamas maksimumas.
+@plural	Stopped after {n} run: every key measure that varies is within its target.|Stopped after {n} runs: every key measure that varies is within its target.	Sustabdyta po {n} vykdymo: kiekvienas kintantis pagrindinis rodiklis yra savo tikslo ribose.|Sustabdyta po {n} vykdymų: kiekvienas kintantis pagrindinis rodiklis yra savo tikslo ribose.|Sustabdyta po {n} vykdymų: kiekvienas kintantis pagrindinis rodiklis yra savo tikslo ribose.
+@plural	Stopped at the most allowed, {n} run, before every key measure was within its target.|Stopped at the most allowed, {n} runs, before every key measure was within its target.	Sustabdyta ties leistinu maksimumu, {n} vykdymu, kol dar ne kiekvienas pagrindinis rodiklis buvo savo tikslo ribose.|Sustabdyta ties leistinu maksimumu, {n} vykdymais, kol dar ne kiekvienas pagrindinis rodiklis buvo savo tikslo ribose.|Sustabdyta ties leistinu maksimumu, {n} vykdymų, kol dar ne kiekvienas pagrindinis rodiklis buvo savo tikslo ribose.
+@plural	Allow up to {n} run|Allow up to {n} runs	Leisti iki {n} vykdymo|Leisti iki {n} vykdymų|Leisti iki {n} vykdymų
+	{results}: the same in all {n} runs, so not counted as settled. Something none of the runs met could still happen in up to {rate} of runs.	{results}: tas pats visuose {n} vykdymuose, todėl nelaikoma nusistovėjusiu. Tai, ko nepatyrė joks vykdymas, vis tiek gali nutikti iki {rate} vykdymų.
+	{results}: the mean is at or near zero, so it cannot be known to a share of itself.	{results}: vidurkis lygus nuliui arba artimas nuliui, todėl jo tikslumo negalima išreikšti jo paties dalimi.
+	± is the estimated precision: the half-width of a 95% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than 95%.	± yra numatomas tikslumas: 95% Student-t pasikliautinojo intervalo, apskaičiuoto vidurkiui tarp vykdymų, pusplotis. Vykdymų skaičius parinktas pagal rezultatus, todėl intervalas tikrąjį vidurkį gali dengti rečiau nei 95%.
+	Not yet within its target: {results}.	Dar ne tikslo ribose: {results}.
+	then more until precise enough, at most {max}	tada daugiau, kol bus pakankamai tikslūs, daugiausia {max}
+@plural	Stopped after {n} run: {result} is within its target.|Stopped after {n} runs: {result} is within its target.	Sustabdyta po {n} vykdymo: {result} yra savo tikslo ribose.|Sustabdyta po {n} vykdymų: {result} yra savo tikslo ribose.|Sustabdyta po {n} vykdymų: {result} yra savo tikslo ribose.
+@plural	Stopped at the most allowed, {n} run, before {result} was within its target.|Stopped at the most allowed, {n} runs, before {result} was within its target.	Sustabdyta ties leistinu maksimumu, {n} vykdymu, kol {result} dar nebuvo savo tikslo ribose.|Sustabdyta ties leistinu maksimumu, {n} vykdymais, kol {result} dar nebuvo savo tikslo ribose.|Sustabdyta ties leistinu maksimumu, {n} vykdymų, kol {result} dar nebuvo savo tikslo ribose.

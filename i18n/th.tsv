@@ -1160,3 +1160,20 @@ unit	yr	ปี
 	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	ขณะนี้ทุกบล็อกถูกวางตามแผนภาพ บล็อกที่แผนภาพไม่มีจะแสดงรายการไว้ที่นี่และไม่ถูกวาด
 	The charts are taller than the window: make the window taller, then export them again.	แผนภูมิสูงกว่าหน้าต่าง: ขยายหน้าต่างให้สูงขึ้น แล้วส่งออกอีกครั้ง
 	The model changed while choosing where to save it, so it was not saved. Save again.	แบบจำลองเปลี่ยนไประหว่างที่เลือกตำแหน่งบันทึก จึงไม่ได้บันทึก บันทึกอีกครั้ง
+	Exactly that many	ตรงตามจำนวนนั้นพอดี
+	More until precise enough	รันเพิ่มจนแม่นยำพอ
+	How many runs	รันกี่รอบ
+	Within ± % of the mean	ภายใน ± % ของค่าเฉลี่ย
+	Shares within ± points	สัดส่วนภายใน ± จุดร้อยละ
+	At most, runs	สูงสุด (รอบ)
+	The runs above come first; more follow in batches until every key measure that varies is within its target, or the most is reached.	รันตามจำนวนข้างต้นก่อน จากนั้นรันเพิ่มเป็นชุด ๆ จนกว่าตัวชี้วัดหลักทุกตัวที่ผันแปรจะอยู่ในเป้าหมายของตัวเอง หรือถึงจำนวนสูงสุด
+@plural	Stopped after {n} run: every key measure that varies is within its target.|Stopped after {n} runs: every key measure that varies is within its target.	หยุดหลังรัน {n} รอบ: ตัวชี้วัดหลักทุกตัวที่ผันแปรอยู่ในเป้าหมายของตัวเองแล้ว
+@plural	Stopped at the most allowed, {n} run, before every key measure was within its target.|Stopped at the most allowed, {n} runs, before every key measure was within its target.	หยุดที่จำนวนสูงสุดที่อนุญาต คือ {n} รอบ ก่อนที่ตัวชี้วัดหลักทุกตัวจะอยู่ในเป้าหมายของตัวเอง
+@plural	Allow up to {n} run|Allow up to {n} runs	อนุญาตสูงสุด {n} รอบ
+	{results}: the same in all {n} runs, so not counted as settled. Something none of the runs met could still happen in up to {rate} of runs.	{results}: เหมือนกันในทั้ง {n} รอบ จึงไม่นับว่าคงที่ สิ่งที่ไม่มีรอบใดเจอ ก็ยังอาจเกิดขึ้นได้ในสูงสุด {rate} ของรอบทั้งหมด
+	{results}: the mean is at or near zero, so it cannot be known to a share of itself.	{results}: ค่าเฉลี่ยเป็นศูนย์หรือใกล้ศูนย์ จึงรู้ความแม่นยำเป็นสัดส่วนของตัวเองไม่ได้
+	± is the estimated precision: the half-width of a 95% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than 95%.	± คือความแม่นยำโดยประมาณ: ครึ่งหนึ่งของความกว้างของช่วงความเชื่อมั่น Student-t 95% สำหรับค่าเฉลี่ยจากการรันทุกรอบ จำนวนรอบถูกเลือกจากผลลัพธ์ ช่วงนี้จึงอาจครอบคลุมค่าเฉลี่ยจริงได้น้อยกว่า 95%
+	Not yet within its target: {results}.	ยังไม่อยู่ในเป้าหมาย: {results}
+	then more until precise enough, at most {max}	จากนั้นรันเพิ่มจนแม่นยำพอ สูงสุด {max}
+@plural	Stopped after {n} run: {result} is within its target.|Stopped after {n} runs: {result} is within its target.	หยุดหลังรัน {n} รอบ: {result} อยู่ในเป้าหมายของตัวเองแล้ว
+@plural	Stopped at the most allowed, {n} run, before {result} was within its target.|Stopped at the most allowed, {n} runs, before {result} was within its target.	หยุดที่จำนวนสูงสุดที่อนุญาต คือ {n} รอบ ก่อนที่ {result} จะอยู่ในเป้าหมายของตัวเอง

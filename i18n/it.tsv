@@ -1160,3 +1160,20 @@ unit	yr	a
 	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	Per ora ogni blocco è posizionato in base al diagramma. Un blocco che il diagramma omette è elencato qui e non viene disegnato.
 	The charts are taller than the window: make the window taller, then export them again.	I grafici sono più alti della finestra: aumentare l'altezza della finestra, poi esportarli di nuovo.
 	The model changed while choosing where to save it, so it was not saved. Save again.	Il modello è cambiato mentre si sceglieva dove salvarlo, quindi non è stato salvato. Salvalo di nuovo.
+	Exactly that many	Esattamente quelle
+	More until precise enough	Altre finché non sono abbastanza precisi
+	How many runs	Quante esecuzioni
+	Within ± % of the mean	Entro ± % della media
+	Shares within ± points	Quote entro ± punti
+	At most, runs	Al massimo, esecuzioni
+	The runs above come first; more follow in batches until every key measure that varies is within its target, or the most is reached.	Prima vengono le esecuzioni indicate sopra; ne seguono altre a gruppi finché ogni metrica principale che varia rientra nel proprio obiettivo, oppure si raggiunge il massimo.
+@plural	Stopped after {n} run: every key measure that varies is within its target.|Stopped after {n} runs: every key measure that varies is within its target.	Fermato dopo {n} esecuzione: ogni metrica principale che varia rientra nel proprio obiettivo.|Fermato dopo {n} esecuzioni: ogni metrica principale che varia rientra nel proprio obiettivo.
+@plural	Stopped at the most allowed, {n} run, before every key measure was within its target.|Stopped at the most allowed, {n} runs, before every key measure was within its target.	Fermato al massimo consentito, {n} esecuzione, prima che ogni metrica principale rientrasse nel proprio obiettivo.|Fermato al massimo consentito, {n} esecuzioni, prima che ogni metrica principale rientrasse nel proprio obiettivo.
+@plural	Allow up to {n} run|Allow up to {n} runs	Consenti fino a {n} esecuzione|Consenti fino a {n} esecuzioni
+	{results}: the same in all {n} runs, so not counted as settled. Something none of the runs met could still happen in up to {rate} of runs.	{results}: uguale in tutte le {n} esecuzioni, quindi non conteggiato come stabile. Qualcosa che nessuna esecuzione ha incontrato può comunque accadere in fino a {rate} delle esecuzioni.
+	{results}: the mean is at or near zero, so it cannot be known to a share of itself.	{results}: la media è zero o quasi, quindi non può essere nota con una precisione espressa come quota di se stessa.
+	± is the estimated precision: the half-width of a 95% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than 95%.	± è la precisione stimata: la semiampiezza di un intervallo di confidenza Student-t al 95% della media tra le esecuzioni. Il numero di esecuzioni è stato scelto in base ai risultati, quindi l'intervallo può coprire la vera media meno spesso del 95%.
+	Not yet within its target: {results}.	Non ancora entro l'obiettivo: {results}.
+	then more until precise enough, at most {max}	poi altre finché non sono abbastanza precisi, al massimo {max}
+@plural	Stopped after {n} run: {result} is within its target.|Stopped after {n} runs: {result} is within its target.	Fermato dopo {n} esecuzione: {result} rientra nel proprio obiettivo.|Fermato dopo {n} esecuzioni: {result} rientra nel proprio obiettivo.
+@plural	Stopped at the most allowed, {n} run, before {result} was within its target.|Stopped at the most allowed, {n} runs, before {result} was within its target.	Fermato al massimo consentito, {n} esecuzione, prima che {result} rientrasse nel proprio obiettivo.|Fermato al massimo consentito, {n} esecuzioni, prima che {result} rientrasse nel proprio obiettivo.

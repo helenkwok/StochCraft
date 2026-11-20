@@ -1160,3 +1160,20 @@ unit	yr	J.
 	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	Vorerst wird jeder Block anhand des Diagramms platziert. Ein Block, den das Diagramm auslässt, steht hier und wird nicht gezeichnet.
 	The charts are taller than the window: make the window taller, then export them again.	Die Diagramme sind höher als das Fenster: Fenster höher ziehen, dann erneut exportieren.
 	The model changed while choosing where to save it, so it was not saved. Save again.	Das Modell wurde geändert, während der Speicherort gewählt wurde, daher wurde es nicht gespeichert. Speichern Sie erneut.
+	Exactly that many	Genau so viele
+	More until precise enough	Mehr, bis sie genau genug sind
+	How many runs	Wie viele Läufe
+	Within ± % of the mean	Innerhalb von ± % des Mittelwerts
+	Shares within ± points	Anteile innerhalb von ± Prozentpunkten
+	At most, runs	Höchstens, Läufe
+	The runs above come first; more follow in batches until every key measure that varies is within its target, or the most is reached.	Die Läufe oben kommen zuerst; danach folgen weitere in Stapeln, bis jede wichtige Kennzahl, die schwankt, innerhalb ihres Ziels liegt oder das Maximum erreicht ist.
+@plural	Stopped after {n} run: every key measure that varies is within its target.|Stopped after {n} runs: every key measure that varies is within its target.	Nach {n} Lauf gestoppt: Jede wichtige Kennzahl, die schwankt, liegt innerhalb ihres Ziels.|Nach {n} Läufen gestoppt: Jede wichtige Kennzahl, die schwankt, liegt innerhalb ihres Ziels.
+@plural	Stopped at the most allowed, {n} run, before every key measure was within its target.|Stopped at the most allowed, {n} runs, before every key measure was within its target.	Beim erlaubten Höchstwert von {n} Lauf gestoppt, bevor jede wichtige Kennzahl innerhalb ihres Ziels lag.|Beim erlaubten Höchstwert von {n} Läufen gestoppt, bevor jede wichtige Kennzahl innerhalb ihres Ziels lag.
+@plural	Allow up to {n} run|Allow up to {n} runs	Bis zu {n} Lauf erlauben|Bis zu {n} Läufe erlauben
+	{results}: the same in all {n} runs, so not counted as settled. Something none of the runs met could still happen in up to {rate} of runs.	{results}: in allen {n} Läufen gleich, daher nicht als stabil gezählt. Etwas, das in keinem Lauf eintrat, kann trotzdem in bis zu {rate} der Läufe vorkommen.
+	{results}: the mean is at or near zero, so it cannot be known to a share of itself.	{results}: Der Mittelwert ist null oder nahe null, daher lässt er sich nicht auf einen Anteil seiner selbst genau bestimmen.
+	± is the estimated precision: the half-width of a 95% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than 95%.	± ist die geschätzte Genauigkeit: die halbe Breite eines 95-%-Konfidenzintervalls (Student-t) für den Mittelwert über die Läufe. Die Zahl der Läufe wurde anhand der Ergebnisse gewählt, daher kann das Intervall den wahren Mittelwert seltener als zu 95 % abdecken.
+	Not yet within its target: {results}.	Noch nicht innerhalb des Ziels: {results}.
+	then more until precise enough, at most {max}	danach mehr, bis sie genau genug sind, höchstens {max}
+@plural	Stopped after {n} run: {result} is within its target.|Stopped after {n} runs: {result} is within its target.	Nach {n} Lauf gestoppt: {result} liegt innerhalb des Ziels.|Nach {n} Läufen gestoppt: {result} liegt innerhalb des Ziels.
+@plural	Stopped at the most allowed, {n} run, before {result} was within its target.|Stopped at the most allowed, {n} runs, before {result} was within its target.	Beim erlaubten Höchstwert von {n} Lauf gestoppt, bevor {result} innerhalb des Ziels lag.|Beim erlaubten Höchstwert von {n} Läufen gestoppt, bevor {result} innerhalb des Ziels lag.

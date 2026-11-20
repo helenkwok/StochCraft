@@ -1160,3 +1160,20 @@ unit	yr	年
 	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	目前所有區塊皆依流程圖放置。流程圖中沒有的區塊會列在此處，不會繪製。
 	The charts are taller than the window: make the window taller, then export them again.	圖表比視窗高：請把視窗拉高，然後重新匯出。
 	The model changed while choosing where to save it, so it was not saved. Save again.	選擇儲存位置期間模型已變更，因此未儲存。請重新儲存。
+	Exactly that many	恰好這麼多次
+	More until precise enough	繼續執行直到足夠精確
+	How many runs	執行多少次
+	Within ± % of the mean	平均值的 ± % 以內
+	Shares within ± points	比例在 ± 個百分點以內
+	At most, runs	最多執行次數
+	The runs above come first; more follow in batches until every key measure that varies is within its target, or the most is reached.	先執行上面設定的次數；之後分批繼續執行，直到每個有變動的關鍵指標都落在各自目標內，或達到上限。
+@plural	Stopped after {n} run: every key measure that varies is within its target.|Stopped after {n} runs: every key measure that varies is within its target.	執行 {n} 次後停止：每個有變動的關鍵指標都在各自目標內。
+@plural	Stopped at the most allowed, {n} run, before every key measure was within its target.|Stopped at the most allowed, {n} runs, before every key measure was within its target.	在每個關鍵指標都進入各自目標之前，已在允許的上限 {n} 次執行處停止。
+@plural	Allow up to {n} run|Allow up to {n} runs	最多允許 {n} 次執行
+	{results}: the same in all {n} runs, so not counted as settled. Something none of the runs met could still happen in up to {rate} of runs.	{results}：{n} 次執行中全部相同，因此不算已穩定。任何一次執行都沒遇到的情況，仍可能在最多 {rate} 的執行中出現。
+	{results}: the mean is at or near zero, so it cannot be known to a share of itself.	{results}：平均值為零或接近零，因此無法按其自身的百分比來確定精度。
+	± is the estimated precision: the half-width of a 95% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than 95%.	± 表示估計精度：各次執行平均值的 95% Student-t 信賴區間的半寬。執行次數是根據結果選定的，因此該區間涵蓋真實平均值的頻率可能低於 95%。
+	Not yet within its target: {results}.	尚未進入目標範圍：{results}。
+	then more until precise enough, at most {max}	之後繼續，直到足夠精確，最多 {max}
+@plural	Stopped after {n} run: {result} is within its target.|Stopped after {n} runs: {result} is within its target.	執行 {n} 次後停止：{result} 在其目標內。
+@plural	Stopped at the most allowed, {n} run, before {result} was within its target.|Stopped at the most allowed, {n} runs, before {result} was within its target.	在 {result} 進入其目標之前，已在允許的上限 {n} 次執行處停止。

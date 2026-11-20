@@ -1160,3 +1160,20 @@ unit	yr	an
 	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	Pour l'instant, chaque bloc est placé d'après le diagramme. Un bloc que le diagramme omet est listé ici et n'est pas dessiné.
 	The charts are taller than the window: make the window taller, then export them again.	Les graphiques sont plus hauts que la fenêtre : agrandissez la fenêtre en hauteur, puis exportez-les à nouveau.
 	The model changed while choosing where to save it, so it was not saved. Save again.	Le modèle a changé pendant le choix de l'emplacement d'enregistrement, il n'a donc pas été enregistré. Enregistrez-le de nouveau.
+	Exactly that many	Exactement ce nombre
+	More until precise enough	Davantage, jusqu'à être assez précis
+	How many runs	Combien d'exécutions
+	Within ± % of the mean	À ± % de la moyenne
+	Shares within ± points	Parts à ± points
+	At most, runs	Au plus, exécutions
+	The runs above come first; more follow in batches until every key measure that varies is within its target, or the most is reached.	Les exécutions ci-dessus viennent d'abord ; d'autres suivent par lots jusqu'à ce que chaque indicateur clé qui varie soit dans sa cible, ou que le maximum soit atteint.
+@plural	Stopped after {n} run: every key measure that varies is within its target.|Stopped after {n} runs: every key measure that varies is within its target.	Arrêt après {n} exécution : chaque indicateur clé qui varie est dans sa cible.|Arrêt après {n} exécutions : chaque indicateur clé qui varie est dans sa cible.
+@plural	Stopped at the most allowed, {n} run, before every key measure was within its target.|Stopped at the most allowed, {n} runs, before every key measure was within its target.	Arrêt au maximum autorisé, {n} exécution, avant que chaque indicateur clé soit dans sa cible.|Arrêt au maximum autorisé, {n} exécutions, avant que chaque indicateur clé soit dans sa cible.
+@plural	Allow up to {n} run|Allow up to {n} runs	Autoriser jusqu'à {n} exécution|Autoriser jusqu'à {n} exécutions
+	{results}: the same in all {n} runs, so not counted as settled. Something none of the runs met could still happen in up to {rate} of runs.	{results} : identique dans les {n} exécutions, donc non compté comme stable. Ce qu'aucune exécution n'a rencontré peut tout de même se produire dans jusqu'à {rate} des exécutions.
+	{results}: the mean is at or near zero, so it cannot be known to a share of itself.	{results} : la moyenne est nulle ou proche de zéro, donc on ne peut pas la connaître à une fraction près d'elle-même.
+	± is the estimated precision: the half-width of a 95% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than 95%.	± est la précision estimée : la demi-largeur d'un intervalle de confiance Student-t à 95 % de la moyenne sur les exécutions. Le nombre d'exécutions a été choisi d'après les résultats, donc l'intervalle peut couvrir la vraie moyenne moins souvent que 95 %.
+	Not yet within its target: {results}.	Pas encore dans sa cible : {results}.
+	then more until precise enough, at most {max}	puis davantage, jusqu'à être assez précis, au plus {max}
+@plural	Stopped after {n} run: {result} is within its target.|Stopped after {n} runs: {result} is within its target.	Arrêt après {n} exécution : {result} est dans sa cible.|Arrêt après {n} exécutions : {result} est dans sa cible.
+@plural	Stopped at the most allowed, {n} run, before {result} was within its target.|Stopped at the most allowed, {n} runs, before {result} was within its target.	Arrêt au maximum autorisé, {n} exécution, avant que {result} soit dans sa cible.|Arrêt au maximum autorisé, {n} exécutions, avant que {result} soit dans sa cible.

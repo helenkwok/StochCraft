@@ -41,7 +41,7 @@ build it from source; see the [installation guide](docs/installation.md).
 | Draw the flow: arrivals, tasks, decisions, splits and joins, batches, departures | Open and save BPMN and XPDL files with BPSim data, the open standards other process tools use |
 | Times as distributions, with a three-point estimate when you only know a minimum, a likely value and a maximum | A [command line](docs/developers.md#the-command-line) for scripted and batch runs, with CSV and JSON output |
 | Capacity, waiting-room limits, shared resource pools, breakdowns, shifts and setups | An [MCP server](docs/mcp.md), so an AI agent can build, run and compare models |
-| Many runs in parallel, each result with its 95% confidence interval | Checked against queueing theory and published results ([details](docs/developers.md#how-it-is-checked)) |
+| Many runs in parallel, each result with its 95% confidence interval, or as many runs as the results need to be precise enough | Checked against queueing theory and published results ([details](docs/developers.md#how-it-is-checked)) |
 | Watch one run move through the model, step by step | Undo and redo for every change |
 | Sweep a parameter, rank parameters by sensitivity, size capacity to a target | The interface in English and 44 other languages |
 | Lean measures: OEE, takt and cycle time, time in each state | Light, dark and custom themes |
