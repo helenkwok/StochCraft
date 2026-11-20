@@ -59,7 +59,7 @@ Releases are on the [releases page](https://github.com/helenkwok/StochCraft/rele
 Each app download also holds a `README.md`, the licence files (`LICENSE-APACHE`, `LICENSE-MIT`
 and `NOTICE`), `THIRD-PARTY-LICENSES.html`, which lists every open-source Rust library in the
 programs with its version and licence text, and `OFL-IBM-Plex.txt`, the licence of the interface
-font. On macOS the files are inside the app (right-click StochCraft, then **Show Package
+font. On macOS the app holds all of them but the `README.md` (right-click StochCraft, then **Show Package
 Contents**, then `Contents/Resources`); the macOS command-line archive holds the licence files,
 `THIRD-PARTY-LICENSES.html` and the `README.md`. The browser app serves the same list as
 `THIRD-PARTY-LICENSES.html` beside the app, and the About box links to it.

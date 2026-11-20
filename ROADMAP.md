@@ -3294,7 +3294,8 @@ are.
 - **Candidates from the common textbooks** (Banks et al., Law, Robinson) join only once their
   parameters are taken from the books themselves.
 - Done in `bench/` (#183), as the program there rather than a `cargo xtask bench` command:
-  **a speed benchmark** (`cargo xtask bench`, extending `bench/`): events per second
+  **a speed benchmark** (`cargo run --release --manifest-path bench/Cargo.toml`, see
+  [bench/README.md](bench/README.md)): events per second
   on M/M/1, tandem lines of 5 to 200 stations, and the DEVStone models LI, HI and HO at set
   widths and depths (Wainer, Glinsky and Gutierrez-Alcaraz, Simulation 87(7), 2011; Cárdenas
   et al., ACM TOMACS 2022), whose event counts are known in closed form and so also check the
