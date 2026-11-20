@@ -861,3 +861,74 @@ fn run_until_a_target_half_width() {
     // `--fixed` cannot be given with them.
     assert!(!cli(&["run", &m, "--fixed", "--max", "20"]).status.success());
 }
+
+/// A Monte Carlo model, written through an engine script: `run` finds it is one and runs its
+/// trials, `validate` checks it, and `inputs` prints and reads its input table.
+#[test]
+fn a_monte_carlo_model_runs_from_the_command_line() {
+    let file = scratch("cost.bpmn");
+    let f = file.to_string_lossy().into_owned();
+    let script = scratch("make-cost.json");
+    let _ = std::fs::write(
+        &script,
+        format!(
+            r#"[{{"command": "model.new", "params": {{"name": "Project cost"}}}},
+               {{"command": "mc.input.set", "params": {{"name": "labour", "distribution": {{"type": "triangular", "min": 80, "mode": 100, "max": 150}}, "unit": "h"}}}},
+               {{"command": "mc.input.set", "params": {{"name": "rate", "distribution": {{"type": "constant", "value": 45}}}}}},
+               {{"command": "mc.output.set", "params": {{"name": "cost", "expression": "$labour * $rate", "unit": "USD", "at_most": 5000}}}},
+               {{"command": "file.save", "params": {{"path": {f:?}}}}}]"#
+        ),
+    );
+    ok(&["exec", &script.to_string_lossy()]);
+    let v = ok(&["validate", &f]);
+    assert!(v.contains("0 errors"), "{v}");
+
+    let r = json(&ok(&[
+        "run", &f, "--reps", "4000", "--seed", "2", "--format", "json",
+    ]));
+    assert_eq!(r["kind"], "monte_carlo");
+    assert_eq!(r["trials"], 4000);
+    assert_eq!(r["record"]["file"], f.as_str());
+    // E[labour] × 45 = 110 × 45.
+    let mean = r["outputs"][0]["mean"].as_f64().unwrap_or(f64::NAN);
+    let hw = r["outputs"][0]["half_width"].as_f64().unwrap_or(f64::NAN);
+    assert!((mean - 4_950.0).abs() < 2.6 * hw, "{mean} ± {hw}");
+
+    let table = ok(&["run", &f, "--reps", "4000", "--seed", "2"]);
+    assert!(
+        table.contains("Monte Carlo: 4000 trials, seed 2"),
+        "{table}"
+    );
+    assert!(table.contains("cost is at most 5000 USD in"), "{table}");
+    let csv = ok(&[
+        "run", &f, "--reps", "4000", "--seed", "2", "--format", "csv",
+    ]);
+    assert!(csv.starts_with("output,unit,trials,"), "{csv}");
+    assert!(csv.contains("\ncost,USD,4000,4000,"), "{csv}");
+    // Sequential: until the mean is within ±0.5%.
+    let s = json(&ok(&[
+        "run", &f, "--reps", "1000", "--until", "0.5%", "--format", "json",
+    ]));
+    assert_eq!(s["stop"]["reason"], "target_met", "{}", s["stop"]);
+    // A process run's options that mean nothing here are refused.
+    assert!(!cli(&["run", &f, "--warmup", "10"]).status.success());
+
+    // The input table out, changed, and back in.
+    let inputs = ok(&["inputs", &f]);
+    assert!(
+        inputs.contains("labour,triangular,min=80;mode=100;max=150,h"),
+        "{inputs}"
+    );
+    let table_file = scratch("cost-inputs.csv");
+    let _ = std::fs::write(
+        &table_file,
+        "name,distribution,parameters,unit\nrate,uniform,min=40;max=50,USD/h\n",
+    );
+    ok(&["inputs", &f, "--import", &table_file.to_string_lossy()]);
+    let after = ok(&["inputs", &f]);
+    assert!(
+        after.contains("rate,uniform,min=40;max=50,USD/h"),
+        "{after}"
+    );
+    assert!(after.contains("labour,triangular"), "{after}");
+}

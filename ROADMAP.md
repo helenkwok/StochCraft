@@ -10,7 +10,8 @@ answer the question, has steps 1–5 done, and M5's sorter is built alongside it
 are done, and so is M2.10 (abandonment and balking) apart from the gaps listed in it. M2.11
 (changeovers and lean measures) has its changeovers, product-type times, takt and cycle times,
 state times and most of OEE done; M2.9 (output analysis) has its recorder of results over time,
-MSER-5's warm-up suggestion, its warnings and streams by element id done. M4 is being planned.
+MSER-5's warm-up suggestion, its warnings and streams by element id done. M4 is being planned,
+and M4.1 (Monte Carlo) has its engine, files and command line done (part 1).
 M5 has its conveyors (M5.1), the operators in the model and files (M5.2, PR 1), a first 3D view
 (M5.3), the dashboard (M5.4) and the sorter example in; M5.5, which reworks M5's geometry so the
 physical layout is a model layer of its own, from which the plan and the 3D view are drawn, has
@@ -2125,9 +2126,19 @@ over time, a second kind of diagram on the canvas). Then M4.1, the smallest and 
 reuses most of what exists; then M4.2 and M4.3 (agents in flows first); then M4.4. Agents in
 space are built with M5, which needs the same layout and travel.
 
-Not started. D15–D18 are settled; D10–D13 (#71 has them) are to settle first.
+M4.1 part 1 is done (below); the rest is not started. D15–D18 are settled; D10–D13 (#71 has
+them) are to settle first.
 
 ### M4.1 Monte Carlo
+
+**Status:** part 1 done: the `mc` crate (inputs as distributions, outputs as BPSim expressions
+extended with `min`, `max`, `sum`, `abs`, `sqrt`, `exp`, `log`, `pow` and `if`, and `$name` for
+inputs), plain random and Latin hypercube sampling, rank correlation by Iman and Conover, results
+(mean with its interval, percentiles, minimum and maximum, a target's probability with Wilson's
+interval, histogram and cumulative curve) and a sequential stop on the means; files as D15 says,
+with CSV import and export of the input table; the `mc.*` engine commands with undo; `run` and
+`inputs` on the command line; checks against the exact answers below but Sobol's. The window,
+the tornado chart, rank correlations of inputs with outputs and Sobol indices come later.
 
 **What it is:** a model of a calculation, not a process. Inputs are distributions (a cost, a
 duration, a demand), outputs are expressions over them (a total cost, a finish date, a profit),

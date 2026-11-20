@@ -175,6 +175,13 @@ intervals, and a Latin hypercube's `correlations` give each factor's rank (Spear
 with each result. A design of more than 10,000 runs (points × replications) is refused with the
 number it would take, so an agent can drop levels, points or replications and try again.
 
+A Monte Carlo model (a calculation with no process) is built and run through `execute`:
+`mc.input.set` and `mc.output.set` add inputs (distributions) and outputs (expressions over
+them, with `$name`), `mc.correlation.set` correlates two inputs, `mc.set` picks Latin hypercube
+sampling or a sequential stop, and `mc.run` gives each output's mean with its interval,
+percentiles and the chance of meeting its target. `mc.inputs.export` and `mc.inputs.import` move
+the input table as CSV text; they read and write no files.
+
 `crates/mcp/tests/session.rs` covers four areas:
 - a session like this one, checked only through MCP;
 - malformed messages, oversized lines and batches, and arguments that do not match the schema;

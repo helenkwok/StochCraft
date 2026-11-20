@@ -95,6 +95,7 @@ fn model(elements: Vec<Element>, connections: Vec<Connection>) -> Model {
         experiment: Experiment::default(),
         layout: BTreeMap::new(),
         estimates: BTreeMap::new(),
+        monte_carlo: None,
     }
 }
 

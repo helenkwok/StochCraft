@@ -50,6 +50,9 @@ draw only with fonts the visitor's own system has.
   times by product type, finite buffers (fixed, by timetable or per working server, with a way
   out for those turned away), shifts, breakdowns and stop conditions, and reports per-element
   statistics.
+- `stochcraft-mc` runs Monte Carlo models: inputs that are distributions, outputs that are
+  expressions over them, plain or Latin hypercube sampling, rank correlations between inputs
+  (Iman and Conover), and each output's mean, percentiles and chance of meeting a target.
 - `stochcraft-io` reads and writes models as BPSim on BPMN or XPDL.
 - `stochcraft-engine` makes every change and run a command with a JSON schema, undo and redo,
   and a replayable journal, and adds sweeps, sensitivity analysis, designed experiments and
@@ -165,6 +168,68 @@ stochcraft-cli fit service-times.csv --column minutes
 and families that need values above 0 are left out, with the reason, when a value is 0 or less.
 The best fit's distribution is printed as `block.set` takes it.
 
+### Monte Carlo models
+
+A Monte Carlo model is a calculation rather than a process: inputs are distributions (a cost, a
+duration, a demand) and outputs are expressions over them (a total cost, a finish, a profit).
+Each trial draws every input once and evaluates every output in order; there is no clock and no
+queue. It is built with the engine's `mc.*` commands and saved as a BPMN file with no process: the
+inputs are the BPSim scenario's own properties (`ScenarioParameters/PropertyParameters`, each a
+BPSim distribution), the rest is the `stochcraft:monteCarlo` extension on the scenario, and the
+scenario's `replication` is the number of trials.
+
+```bash
+stochcraft-cli exec cost.json
+```
+
+with `cost.json`:
+
+```json
+[
+  {"command": "model.new", "params": {"name": "Project cost"}},
+  {"command": "mc.input.set", "params": {"name": "labour", "unit": "h",
+    "distribution": {"type": "triangular", "min": 80, "mode": 100, "max": 150}}},
+  {"command": "mc.input.set", "params": {"name": "rate", "unit": "USD/h",
+    "distribution": {"type": "uniform", "min": 40, "max": 50}}},
+  {"command": "mc.output.set", "params": {"name": "cost", "unit": "USD",
+    "expression": "$labour * $rate", "at_most": 5000}},
+  {"command": "mc.correlation.set", "params": {"a": "labour", "b": "rate", "rank": 0.3}},
+  {"command": "file.save", "params": {"path": "cost.bpmn"}}
+]
+```
+
+`run` finds that the file is a Monte Carlo model and runs its trials (`--reps` is the number of
+trials, 10,000 for a new model):
+
+```bash
+stochcraft-cli run cost.bpmn --reps 100000
+```
+
+Each output gets its mean with a 95% interval, standard deviation, P5, P50, P95, minimum and
+maximum, and, with a target (`at_most` or `at_least`), the share of trials meeting it with
+Wilson's 95% interval; `--format json` adds a histogram, the cumulative curve and the percentiles
+P10 and P90. `--until 1% --max 1000000` adds trials until every output's mean is within ±1% of
+itself. Outputs are BPSim expressions with the inputs (and earlier outputs) as `$name`, the
+arithmetic of XPath and `min`, `max`, `sum`, `abs`, `sqrt`, `exp`, `log`, `pow`, `round` and
+`if(condition, then, else)`; a condition such as `$cost > 6000` gives 1 or 0 in each trial, so its
+mean is a probability. A trial whose output is not a number (a division by zero) is counted apart.
+
+`mc.set` chooses Latin hypercube sampling (`"sampling": "latin_hypercube"`): within each batch of
+1,000 trials, each input's range is cut into 1,000 equally likely strata and each is drawn once.
+`mc.correlation.set` gives two inputs a rank correlation, induced by the method of Iman and
+Conover (1982); correlations that cannot all hold together are refused. Trials come in batches
+of 1,000, each with its own random streams keyed by the seed, the batch and the input's name, so
+results are the same on any number of threads and adding an input leaves the others' draws as
+they were. The input table goes out and back in as CSV:
+
+```bash
+stochcraft-cli inputs cost.bpmn --out inputs.csv
+stochcraft-cli inputs cost.bpmn --import inputs.csv
+```
+
+The table's header is `name,distribution,parameters,unit`, with the parameters as
+`min=80;mode=100;max=150`.
+
 Changes can be scripted as engine commands (`stochcraft-cli schema` lists them with their
 parameters) and replayed:
 
@@ -213,7 +278,7 @@ journal that began with `model.new` starts its own model) and refuses
 with a `conflict` error if not, unless `--force`. If the file has no scenario of that name, `exec`
 stops with the error from opening it; with `--force` it replays onto the file's first scenario.
 It then re-applies the edits, undo and redo, and
-skips the saves, runs and experiments (`file.save`, `run`, `run.start`,
+skips the saves, runs and experiments (`file.save`, `run`, `mc.run`, `run.start`,
 `run.cancel`, `experiment.sweep`, `experiment.sensitivity`, `experiment.design`,
 `experiment.size`), printing `"skipped": true` for each; `--all` carries them out too. In Rust,
 `Engine::journal_document` gives the journal and `Engine::replay_journal` replays it
@@ -235,7 +300,10 @@ agent work in the window. [mcp.md](mcp.md) has the tools and options.
 
 Results are checked against queueing theory and exact results: M/M/1, M/M/c (Erlang C), M/M/1/K,
 priority queues, machine repair, a Jackson network, a two-machine line with a finite buffer,
-E₄/M/1 batches, assembly, arrivals by time of day, breakdowns and activity networks. They are
+E₄/M/1 batches, assembly, arrivals by time of day, breakdowns and activity networks. Monte Carlo
+models are checked against exact answers: the sum of independent normals, the product of
+log-normals, a PERT schedule's finish on a single path, rank correlations induced against their
+targets, and Latin hypercube strata holding one value each. They are
 also checked against another BPSim simulator's published results for the BPSim car repair model. StochCraft runs
 about 54× faster than SimPy on an M/M/1 benchmark ([bench/](../bench/README.md)).
 

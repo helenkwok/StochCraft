@@ -50,6 +50,8 @@ pub const TABLE: &[(&str, Class)] = &[
     ("blocks", Class::Layer(2)),
     ("agents", Class::Layer(2)),
     ("sd", Class::Layer(2)),
+    // Monte Carlo models: a calculation, not a process (ROADMAP M4.1).
+    ("mc", Class::Layer(2)),
     // L3: running models and moving data.
     ("experiment", Class::Layer(3)),
     ("io", Class::Layer(3)),

@@ -82,7 +82,9 @@ enum Command {
         #[arg(long, value_enum, default_value_t = CheckFormat::Table)]
         format: CheckFormat,
     },
-    /// Run a model's experiment and print the results with their run record.
+    /// Run a model's experiment and print the results with their run record. A Monte Carlo model
+    /// (a calculation with no process) runs its trials instead: `--reps` is the number of
+    /// trials, and `--until` and `--max` run until every output's mean is that precise.
     Run {
         file: PathBuf,
         /// The BPSim scenario to run (default: the first).
@@ -158,6 +160,22 @@ enum Command {
         format: Format,
         /// Write the output to this file instead of the terminal.
         #[arg(long, short)]
+        out: Option<PathBuf>,
+    },
+    /// A Monte Carlo model's input table as CSV (`name,distribution,parameters,unit`): printed,
+    /// or with `--import`, read from a CSV file into the model, which is saved.
+    Inputs {
+        /// The Monte Carlo model file (`.bpmn`).
+        file: PathBuf,
+        /// A CSV table whose inputs replace those of the same name (with `--replace`, all of
+        /// them); the file is then saved.
+        #[arg(long)]
+        import: Option<PathBuf>,
+        /// With `--import`: replace every input with the table's.
+        #[arg(long, requires = "import")]
+        replace: bool,
+        /// Write the table to this file instead of the terminal.
+        #[arg(long, short, conflicts_with = "import")]
         out: Option<PathBuf>,
     },
     /// Fit measured values to distributions (the engine's `estimate.fit`): each family by
@@ -655,7 +673,15 @@ fn run(
     out: Option<&Path>,
 ) -> Result<u8, Failure> {
     let mut engine = Engine::new();
-    open(&mut engine, file, scenario)?;
+    let opened = open(&mut engine, file, scenario)?;
+    if opened["kind"] == "monte_carlo" {
+        if warmup.is_some() || duration.is_some() || until.points.is_some() {
+            return Err(Failure(
+                "a Monte Carlo model has no warm-up, duration or shares in points: use --reps (trials), --until and --max".into(),
+            ));
+        }
+        return run_monte_carlo(&mut engine, reps, seed, threads, until, format, out);
+    }
     let mut set = json!({});
     if let Some(w) = warmup {
         set["warmup"] = json!(w);
@@ -689,6 +715,88 @@ fn run(
         Format::Table => output::table(&engine.model().name, &results),
     };
     emit(&text, out)?;
+    Ok(0)
+}
+
+/// `run` on a Monte Carlo model: its trials (`--reps`), seed, threads and stop.
+fn run_monte_carlo(
+    engine: &mut Engine,
+    trials: Option<u32>,
+    seed: Option<u64>,
+    threads: Option<u32>,
+    until: &Until,
+    format: Format,
+    out: Option<&Path>,
+) -> Result<u8, Failure> {
+    let mut params = json!({});
+    if let Some(t) = trials {
+        params["trials"] = json!(t);
+    }
+    if let Some(s) = seed {
+        params["seed"] = json!(s);
+    }
+    if let Some(t) = threads {
+        params["threads"] = json!(t);
+    }
+    if until.fixed {
+        params["stop"] = Value::Null;
+    } else if until.relative.is_some() || until.max.is_some() {
+        let own = engine
+            .model()
+            .monte_carlo
+            .as_ref()
+            .and_then(|m| m.stop)
+            .unwrap_or_default();
+        params["stop"] = json!({
+            "relative": until.relative.unwrap_or(own.relative),
+            "max": until.max.unwrap_or(own.max),
+        });
+    }
+    let results = engine.execute("mc.run", params)?;
+    let text = match format {
+        Format::Json => format!(
+            "{}
+",
+            serde_json::to_string_pretty(&results).unwrap_or_default()
+        ),
+        Format::Csv => output::mc_csv(&results),
+        Format::Table => output::mc_table(&engine.model().name, &results),
+    };
+    emit(&text, out)?;
+    Ok(0)
+}
+
+/// `inputs`: a Monte Carlo model's input table, printed or imported.
+fn inputs(
+    file: &Path,
+    import: Option<&Path>,
+    replace: bool,
+    out: Option<&Path>,
+) -> Result<u8, Failure> {
+    let mut engine = Engine::new();
+    let opened = open(&mut engine, file, None)?;
+    match import {
+        None => {
+            if opened["kind"] != "monte_carlo" {
+                return Err(Failure(format!(
+                    "{} is not a Monte Carlo model: it has no inputs",
+                    file.display()
+                )));
+            }
+            let table = engine.execute("mc.inputs.export", json!({}))?;
+            emit(table["csv"].as_str().unwrap_or(""), out)?;
+        }
+        Some(csv) => {
+            let text = std::fs::read_to_string(csv)
+                .map_err(|e| Failure(format!("cannot read {}: {e}", csv.display())))?;
+            let r = engine.execute(
+                "mc.inputs.import",
+                json!({ "csv": text, "replace": replace }),
+            )?;
+            engine.execute("file.save", json!({ "path": path_str(file) }))?;
+            eprintln!("{} inputs read into {}", r["inputs"], file.display());
+        }
+    }
     Ok(0)
 }
 
@@ -989,6 +1097,12 @@ fn main() -> ExitCode {
             format,
             out: out.as_deref(),
         }),
+        Command::Inputs {
+            file,
+            import,
+            replace,
+            out,
+        } => inputs(&file, import.as_deref(), replace, out.as_deref()),
         Command::Fit {
             file,
             column,

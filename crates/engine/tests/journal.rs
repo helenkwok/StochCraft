@@ -182,6 +182,7 @@ fn skipped_commands_are_catalogue_commands_that_are_not_queries() {
     let skipped = [
         "file.save",
         "run",
+        "mc.run",
         "run.start",
         "run.cancel",
         "experiment.sweep",

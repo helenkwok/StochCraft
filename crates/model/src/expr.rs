@@ -7,7 +7,16 @@
 //! - arithmetic `+ - * div mod` and unary minus; comparisons `= != < <= > >=`; `and`, `or`;
 //! - the functions `getProperty('name')` (also written `bpsim:getProperty`), `true()`,
 //!   `false()`, `not()`, `boolean()`, `number()`, `string()`, `floor()`, `ceiling()`, `round()`,
-//!   `concat()`, `contains()`, `starts-with()` and `string-length()`.
+//!   `concat()`, `contains()`, `starts-with()` and `string-length()`;
+//! - beyond XPath 1.0, what a cost or schedule model needs (ROADMAP M4.1): `min()`, `max()` and
+//!   `sum()` of any number of values, `abs()` and `sqrt()` (XPath 2.0's `fn:abs`, and the others
+//!   as in XPath 3.0's `fn:` and `math:` functions, with the optional prefix), `exp()`, `log()`
+//!   (natural) and `pow()`, and `if(condition, then, else)`, which evaluates only the branch it
+//!   takes.
+//!
+//! [`parse_with_variables`] also reads XPath variables, `$name`, as the value named `name` (what
+//! a Monte Carlo model's outputs use for its inputs). Its names are letters, digits and `_`, so
+//! `$a-1` is `$a` minus 1.
 //!
 //! Anything else (paths, variables, unions, other functions) is a parse error with its position,
 //! so a model that uses it gets a diagnostic, never a wrong result. BPSim's resource functions
@@ -123,6 +132,15 @@ pub enum Func {
     Contains,
     StartsWith,
     StringLength,
+    Min,
+    Max,
+    Sum,
+    Abs,
+    Sqrt,
+    Exp,
+    Log,
+    Pow,
+    If,
 }
 
 impl Func {
@@ -142,6 +160,15 @@ impl Func {
             "contains" => (Func::Contains, 2, Some(2)),
             "starts-with" => (Func::StartsWith, 2, Some(2)),
             "string-length" => (Func::StringLength, 1, Some(1)),
+            "min" => (Func::Min, 1, None),
+            "max" => (Func::Max, 1, None),
+            "sum" => (Func::Sum, 1, None),
+            "abs" => (Func::Abs, 1, Some(1)),
+            "sqrt" => (Func::Sqrt, 1, Some(1)),
+            "exp" => (Func::Exp, 1, Some(1)),
+            "log" => (Func::Log, 1, Some(1)),
+            "pow" => (Func::Pow, 2, Some(2)),
+            "if" => (Func::If, 3, Some(3)),
             _ => return None,
         })
     }
@@ -154,6 +181,8 @@ pub enum Expr {
     Text(String),
     /// `getProperty('name')`.
     Property(String),
+    /// `$name`, read as the value named `name` (only from [`parse_with_variables`]).
+    Variable(String),
     Neg(Box<Expr>),
     Binary(BinOp, Box<Expr>, Box<Expr>),
     Call(Func, Vec<Expr>),
@@ -195,6 +224,7 @@ enum Tok {
     LParen,
     RParen,
     Comma,
+    Var(String),
 }
 
 fn err(position: usize, message: impl Into<String>) -> ExprError {
@@ -204,7 +234,7 @@ fn err(position: usize, message: impl Into<String>) -> ExprError {
     }
 }
 
-fn tokenize(src: &str) -> Result<Vec<(usize, Tok)>, ExprError> {
+fn tokenize(src: &str, variables: bool) -> Result<Vec<(usize, Tok)>, ExprError> {
     let chars: Vec<char> = src.chars().collect();
     let mut out: Vec<(usize, Tok)> = Vec::new();
     let mut i = 0;
@@ -213,7 +243,7 @@ fn tokenize(src: &str) -> Result<Vec<(usize, Tok)>, ExprError> {
     let after_operand = |out: &Vec<(usize, Tok)>| {
         matches!(
             out.last().map(|(_, t)| t),
-            Some(Tok::Num(_) | Tok::Lit(_) | Tok::RParen)
+            Some(Tok::Num(_) | Tok::Lit(_) | Tok::RParen | Tok::Var(_))
         )
     };
     while let Some(&c) = chars.get(i) {
@@ -335,6 +365,20 @@ fn tokenize(src: &str) -> Result<Vec<(usize, Tok)>, ExprError> {
                 }
                 i = j;
             }
+            '$' if variables => {
+                let mut j = i + 1;
+                if !chars.get(j).is_some_and(|&d| d.is_alphabetic() || d == '_') {
+                    return Err(err(start, "`$` must be followed by a name, such as $cost"));
+                }
+                while chars
+                    .get(j)
+                    .is_some_and(|&d| d.is_alphanumeric() || d == '_')
+                {
+                    j += 1;
+                }
+                out.push((start, Tok::Var(chars[i + 1..j].iter().collect())));
+                i = j;
+            }
             '$' => return Err(err(start, "variables are not supported")),
             '/' | '[' | ']' | '@' => {
                 return Err(err(
@@ -410,6 +454,7 @@ impl Parser {
         match self.bump() {
             Some(Tok::Num(n)) => Ok(Expr::Number(n)),
             Some(Tok::Lit(s)) => Ok(Expr::Text(s)),
+            Some(Tok::Var(name)) => Ok(Expr::Variable(name)),
             Some(Tok::LParen) => {
                 let e = self.binary(0)?;
                 self.expect_close()?;
@@ -459,6 +504,7 @@ fn call(pos: usize, name: &str, args: Vec<Expr>) -> Result<Expr, ExprError> {
     let local = name
         .strip_prefix("bpsim:")
         .or_else(|| name.strip_prefix("fn:"))
+        .or_else(|| name.strip_prefix("math:"))
         .unwrap_or(name);
     if local == "getProperty" {
         return match args.as_slice() {
@@ -497,7 +543,17 @@ fn call(pos: usize, name: &str, args: Vec<Expr>) -> Result<Expr, ExprError> {
 
 /// Parses an expression.
 pub fn parse(src: &str) -> Result<Expr, ExprError> {
-    let toks = tokenize(src)?;
+    parse_as(src, false)
+}
+
+/// Parses an expression in which `$name` reads the value named `name` (as `getProperty`
+/// does): how a Monte Carlo model's outputs name its inputs and earlier outputs.
+pub fn parse_with_variables(src: &str) -> Result<Expr, ExprError> {
+    parse_as(src, true)
+}
+
+fn parse_as(src: &str, variables: bool) -> Result<Expr, ExprError> {
+    let toks = tokenize(src, variables)?;
     if toks.is_empty() {
         return Err(err(0, "the expression is empty"));
     }
@@ -520,7 +576,9 @@ impl Expr {
         match self {
             Expr::Number(n) => Value::Number(*n),
             Expr::Text(s) => Value::Text(s.clone()),
-            Expr::Property(name) => property(name).unwrap_or(Value::Text(String::new())),
+            Expr::Property(name) | Expr::Variable(name) => {
+                property(name).unwrap_or(Value::Text(String::new()))
+            }
             Expr::Neg(e) => Value::Number(-e.eval(property).number()),
             Expr::Binary(op, a, b) => binary(*op, a, b, property),
             Expr::Call(f, args) => {
@@ -544,9 +602,43 @@ impl Expr {
                     Func::Contains => Value::Boolean(arg(0).text().contains(&arg(1).text())),
                     Func::StartsWith => Value::Boolean(arg(0).text().starts_with(&arg(1).text())),
                     Func::StringLength => Value::Number(arg(0).text().chars().count() as f64),
+                    Func::Min | Func::Max => {
+                        let xs: Vec<f64> = args.iter().map(|a| a.eval(property).number()).collect();
+                        Value::Number(extreme(&xs, *f == Func::Max))
+                    }
+                    Func::Sum => {
+                        Value::Number(args.iter().map(|a| a.eval(property).number()).sum())
+                    }
+                    Func::Abs => Value::Number(arg(0).number().abs()),
+                    Func::Sqrt => Value::Number(arg(0).number().sqrt()),
+                    Func::Exp => Value::Number(stochcraft_random::math::exp(arg(0).number())),
+                    Func::Log => Value::Number(stochcraft_random::math::ln(arg(0).number())),
+                    Func::Pow => Value::Number(stochcraft_random::math::powf(
+                        arg(0).number(),
+                        arg(1).number(),
+                    )),
+                    // Only the branch taken is evaluated.
+                    Func::If => {
+                        if arg(0).boolean() {
+                            arg(1)
+                        } else {
+                            arg(2)
+                        }
+                    }
                 }
             }
         }
+    }
+
+    /// Every name the expression reads, as a property or a variable, in order, with repeats.
+    pub fn references(&self) -> Vec<&str> {
+        let mut out = Vec::new();
+        self.visit(&mut |e| {
+            if let Expr::Property(p) | Expr::Variable(p) = e {
+                out.push(p.as_str());
+            }
+        });
+        out
     }
 
     /// Every property the expression reads, in order, with repeats.
@@ -569,7 +661,7 @@ impl Expr {
                 b.visit(f);
             }
             Expr::Call(_, args) => args.iter().for_each(|a| a.visit(f)),
-            Expr::Number(_) | Expr::Text(_) | Expr::Property(_) => {}
+            Expr::Number(_) | Expr::Text(_) | Expr::Property(_) | Expr::Variable(_) => {}
         }
     }
 
@@ -578,11 +670,16 @@ impl Expr {
         match self {
             Expr::Number(_) | Expr::Neg(_) => Kind::Number,
             Expr::Text(_) => Kind::Text,
-            Expr::Property(_) => Kind::Property,
+            Expr::Property(_) | Expr::Variable(_) => Kind::Property,
             Expr::Binary(op, _, _) => match op {
                 BinOp::Add | BinOp::Sub | BinOp::Mul | BinOp::Div | BinOp::Mod => Kind::Number,
                 _ => Kind::Boolean,
             },
+            Expr::Call(Func::If, args) => {
+                let then = args.get(1).map_or(Kind::Property, Expr::kind);
+                let other = args.get(2).map_or(Kind::Property, Expr::kind);
+                if then == other { then } else { Kind::Property }
+            }
             Expr::Call(f, _) => match f {
                 Func::True
                 | Func::False
@@ -590,13 +687,37 @@ impl Expr {
                 | Func::Boolean
                 | Func::Contains
                 | Func::StartsWith => Kind::Boolean,
-                Func::Number | Func::Floor | Func::Ceiling | Func::Round | Func::StringLength => {
-                    Kind::Number
-                }
+                Func::Number
+                | Func::Floor
+                | Func::Ceiling
+                | Func::Round
+                | Func::StringLength
+                | Func::Min
+                | Func::Max
+                | Func::Sum
+                | Func::Abs
+                | Func::Sqrt
+                | Func::Exp
+                | Func::Log
+                | Func::Pow => Kind::Number,
                 Func::String | Func::Concat => Kind::Text,
+                // Handled above, with its branches.
+                Func::If => Kind::Property,
             },
         }
     }
+}
+
+/// The least (or with `most`, the greatest) of `xs`; NaN if any is NaN, as XPath 2.0's
+/// `fn:min` and `fn:max` give for a NaN among numbers.
+fn extreme(xs: &[f64], most: bool) -> f64 {
+    if xs.iter().any(|x| x.is_nan()) {
+        return f64::NAN;
+    }
+    xs.iter()
+        .copied()
+        .reduce(|a, b| if most { a.max(b) } else { a.min(b) })
+        .unwrap_or(f64::NAN)
 }
 
 /// XPath's `round()`: to the nearest whole number, halves towards positive infinity.
@@ -761,6 +882,60 @@ mod tests {
                 Err(e) => assert_eq!(e.position, at, "`{src}`: {e}"),
             }
         }
+    }
+
+    #[test]
+    fn functions_for_cost_models() {
+        assert_eq!(num("min(3, 1, 2)"), 1.0);
+        assert_eq!(num("max(3, 1, 2)"), 3.0);
+        assert_eq!(num("sum(1, 2, 3.5)"), 6.5);
+        assert!(num("max(1, getProperty('nothing'))").is_nan());
+        assert_eq!(num("abs(-2.5)"), 2.5);
+        assert_eq!(num("sqrt(16)"), 4.0);
+        assert_eq!(num("pow(2, 10)"), 1024.0);
+        assert_eq!(num("math:pow(2, 3)"), 8.0);
+        assert_eq!(num("exp(0)"), 1.0);
+        assert_eq!(num("log(1)"), 0.0);
+        assert_eq!(num("if(getProperty('n') > 2, 10, 20)"), 10.0);
+        assert_eq!(num("if(getProperty('n') > 5, 10, 20)"), 20.0);
+        // Only the branch taken is evaluated: the other may not even have a value.
+        assert_eq!(num("if(true(), 1, getProperty('nothing'))"), 1.0);
+        assert_eq!(
+            parse("if(true(), 1, 2)").map(|e| e.kind()),
+            Ok(Kind::Number)
+        );
+        assert_eq!(
+            parse("if(true(), 1, 'a')").map(|e| e.kind()),
+            Ok(Kind::Property)
+        );
+        assert!(parse("if(1, 2)").is_err());
+        assert!(parse("pow(2)").is_err());
+    }
+
+    #[test]
+    fn variables_only_where_asked_for() {
+        let read = |name: &str| match name {
+            "cost" => Some(Value::Number(5.0)),
+            "a" => Some(Value::Number(2.0)),
+            _ => None,
+        };
+        let value =
+            |src: &str| parse_with_variables(src).map_or(f64::NAN, |e| e.eval(&read).number());
+        assert_eq!(value("$cost * 2 + getProperty('a')"), 12.0);
+        assert_eq!(value("$a-1"), 1.0, "a name stops at `-`");
+        assert_eq!(value("max($a, $cost)"), 5.0);
+        assert!(value("$nothing + 1").is_nan());
+        let e = parse_with_variables("$cost + getProperty('a') * $cost");
+        assert_eq!(
+            e.as_ref().map(|e| e.references()),
+            Ok(vec!["cost", "a", "cost"])
+        );
+        assert_eq!(e.map(|e| e.kind()), Ok(Kind::Number));
+        assert!(parse_with_variables("$ + 1").is_err());
+        assert!(
+            parse("$cost").is_err(),
+            "a process model's expressions have no variables"
+        );
     }
 
     #[test]
