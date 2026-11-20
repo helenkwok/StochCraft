@@ -17,8 +17,8 @@ desktop browser.
 
 ## On the desktop
 
-There is no downloadable release yet. Until there is, build the desktop app from source. It takes
-a few minutes the first time.
+Download a release (below), or build the desktop app from source. Building takes a few minutes
+the first time.
 
 1. Install Rust 1.95 or newer from [rustup.rs](https://rustup.rs).
 2. Get the source:
@@ -41,18 +41,25 @@ The command line, for scripted and batch runs, installs with
 `cargo install --path apps/stochcraft-cli`; see the
 [developers guide](developers.md#the-command-line).
 
-### When releases come
+### Download a release
 
-Releases will be on the [releases page](https://github.com/helenkwok/StochCraft/releases), with:
+Releases are on the [releases page](https://github.com/helenkwok/StochCraft/releases), with:
 
-- **Windows (x64):** a zip with `stochcraft.exe` and `stochcraft-cli.exe`. There is no
-  installer: unzip it anywhere and run `stochcraft.exe`. The programs are not code-signed, so
-  Windows may warn you the first time: click **More info**, then **Run anyway**.
-- **macOS (Apple silicon and Intel):** a disk image; drag StochCraft to Applications.
-- **Linux (x86-64 and ARM64):** a `.tar.gz` with both programs.
+- **Windows (x64):** `stochcraft-<version>-windows-x64-portable.zip`, with `stochcraft.exe`
+  and `stochcraft-cli.exe`. There is no installer: unzip it anywhere and run `stochcraft.exe`.
+  The programs are not code-signed, so Windows may warn you the first time: click
+  **More info**, then **Run anyway**.
+- **macOS (Apple silicon and Intel):** `stochcraft-<version>-macos-universal.dmg`, a disk image;
+  drag StochCraft to Applications. The command line comes in its own archive,
+  `stochcraft-cli-<version>-macos-universal.tar.gz`.
+- **Linux (x86-64 and ARM64):** `stochcraft-<version>-linux-x86_64.tar.gz` or
+  `-linux-aarch64.tar.gz`, with both programs.
+- **`SHA256SUMS.txt`:** the SHA-256 checksum of every file, in `sha256sum` format.
 
-Each download also holds the licence files (`LICENSE-APACHE`, `LICENSE-MIT` and `NOTICE`) and
-`THIRD-PARTY-LICENSES.html`, which lists every open-source Rust library in the programs with its
-version and licence text, and `OFL-IBM-Plex.txt`, the licence of the interface font. On macOS the files are inside the app (right-click StochCraft, then
-**Show Package Contents**, then `Contents/Resources`). The browser app serves the same list as
+Each app download also holds a `README.md`, the licence files (`LICENSE-APACHE`, `LICENSE-MIT`
+and `NOTICE`), `THIRD-PARTY-LICENSES.html`, which lists every open-source Rust library in the
+programs with its version and licence text, and `OFL-IBM-Plex.txt`, the licence of the interface
+font. On macOS the files are inside the app (right-click StochCraft, then **Show Package
+Contents**, then `Contents/Resources`); the macOS command-line archive holds the licence files,
+`THIRD-PARTY-LICENSES.html` and the `README.md`. The browser app serves the same list as
 `THIRD-PARTY-LICENSES.html` beside the app, and the About box links to it.

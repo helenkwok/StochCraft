@@ -1,6 +1,6 @@
 # StochCraft parity with established tools
 
-> **Last reviewed:** 2026-11-15 · **Last updated:** 2026-11-15 · **Target:** what users of established commercial simulation tools see and do (from their public documentation),
+> **Last reviewed:** 2026-11-15 · **Last updated:** 2026-11-20 · **Target:** what users of established commercial simulation tools see and do (from their public documentation),
 > from the start screen to the report
 
 How close StochCraft's window is to what a user of an established tool expects, and to what a
@@ -97,7 +97,8 @@ Checked in the code (`crates/ui-egui/src`) or the ROADMAP:
   band and the probability of meeting a target, with no set-up.
 - **Sensitivity and sizing with no set-up**: rank every parameter by its effect on a result; add
   units at the busiest task or pool until a share of replications meets a target.
-- **Jump to a time** while watching a run (not found in the vendor pages read).
+- **Pause at a time** while watching a run: play on to a typed time, then pause (not found in the
+  vendor pages read).
 - **Validation as you edit**, with no build step; each edit is one named undo step.
 - **Three-point estimates**: fit a time to a minimum, a most likely value and a maximum or 95th
   percentile, and keep the estimate as the time's pedigree.
@@ -108,9 +109,11 @@ Checked in the code (`crates/ui-egui/src`) or the ROADMAP:
 
 A switcher meets most of these only after the first impression has formed.
 
-Not ahead, although it may look so: findings in words exist only where replications split into two
-outcomes (#129). There is no general finding yet, such as the busiest block, a warm-up that is too
-short or an interval too wide to act on ([gaps](gaps.md) #1).
+At the review, findings in words existed only where replications split into two outcomes (#129).
+Since then the Results tab states general findings too, such as which block limits the flow and
+where the time goes (#165), and "How sure are these numbers?" flags an interval too wide to act on
+and a start from empty that needs a warm-up (#164; [gaps](gaps.md) #1). The row stays graded as
+the review found it.
 
 ## Nielsen's heuristics
 
@@ -149,6 +152,32 @@ reader still sees one canvas, not the controls in it (that needs a DOM mirror, [
 Limits: the desktop app was not tested with a screen reader; the contrast ratios were computed
 with the WCAG formula by the reviewer and not re-checked; the empty accessibility tree on the web
 agrees with eframe's web backend having no AccessKit adapter.
+
+## Since the review (2026-11-20)
+
+The numbers on this page, the verdict and the Nielsen scores are those of the review and were not
+re-graded. Since then:
+
+- **Help (area 11; heuristic 10):** Help beside the work with Getting started, a glossary,
+  shortcuts and the user guide (#169), and a guided first model on the real canvas (#172). Help
+  no longer holds only About.
+- **Start screen (area 1):** a start page that asks what you want to find out (#170), and eleven
+  examples, five of them checked against exact answers (#171) and a parcel sorter (#207).
+- **Results (area 10; heuristics 1 and 8):** findings in words, how sure the numbers are, four key
+  measures per block and two default charts (#163, #164, #165); results stay, marked out of date,
+  after an edit, and compare with a kept baseline (#166, #167, #168); a dashboard panel with four
+  fixed tiles (#209).
+- **Errors (heuristics 5 and 9):** Run with problems goes to the next problem's block and field
+  instead of running, and number fields refuse what the model would (#146); every problem's
+  message names the block, uses the window's word for the field and says how to fix it (#221).
+- **Words (heuristic 2):** one vocabulary across the window, the results and the engine's
+  messages, which go through the catalogs (#139, #221).
+- **Layout and animation (area 6):** a 3D view (#205, #208, #210, #213) and a read-only Layout
+  view to scale (#216), both placed from the diagram; entities moving on the flowchart are still
+  missing (#151).
+- **Run controls (area 7):** a run bar with Play/Pause on Space, Reset, Step, a speed with keys to
+  halve or double it, As fast as possible, Pause at a time and a clock (#218).
+- **Release:** v0.2.0 downloads for Windows, macOS and Linux (#214).
 
 ## How it was measured, and its limits
 

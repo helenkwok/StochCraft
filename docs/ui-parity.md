@@ -1,6 +1,6 @@
 # UI and interaction parity
 
-> **Last reviewed:** 2026-11-15 · **Last updated:** 2026-11-15 · **Target:** what users of
+> **Last reviewed:** 2026-11-15 · **Last updated:** 2026-11-20 · **Target:** what users of
 > established commercial simulation tools see and do (from their public documentation) in a
 > session, from the start screen to the report
 
@@ -26,6 +26,34 @@ driven for this checklist.
 **Summary (estimated):** 91 rows: 27 done, 10 done (ours), 26 partial, 28 missing. UI/UX fidelity
 ~44%, the 23 first-hour rows ~55%. Weakest: layout and animation (6), results and charts (10), help
 (11), and the library (2), where the first impression is made.
+
+**Since the review (2026-11-20).** The rows below are graded as the review found them, apart from
+the run-control rows of area 7, updated with the run bar (#218), and the summary above was not
+re-graded. Since then:
+
+- **Start screen (area 1):** a start page that asks "What do you want to find out?", with examples
+  by question and industry (#170), a "Start from a blank model" link, and a guided first model
+  on the real canvas (#172). The examples went from three to eleven: five with checked answers
+  (#171) and a parcel sorter (#207). Models have a length unit beside the time unit (#198).
+- **Library (area 2):** ten kinds in the palette, with the Conveyor (#198). The library is still
+  a strip of chips; its redesign is M5.5's U3.
+- **Distributions (area 5):** fitting measured data by maximum likelihood, ranked by
+  Anderson–Darling, in the engine and the command line (`stochcraft-cli fit`, #182); none in the
+  window yet.
+- **Layout, 2D/3D and animation (area 6):** a 3D view of the model with parametric low-poly
+  shapes and totes on the conveyors of a watched run (#205, #208, #210, #213), and a read-only
+  Layout view to scale (#216), both placed from the diagram for now. The Transport block and
+  mobile pools are in the model and its files (#202), without a runtime yet. Entities moving on
+  the flowchart are still missing (#151).
+- **Statistics while running (area 8):** "This run" shows the selected block's waiting room over
+  time.
+- **Results (area 10):** what the run found in two to four sentences (#165), "How sure are these
+  numbers?" with one-click fixes (#164), up to four key measures per block with the rest folded
+  (#163), and two default charts with the rest under More charts (#165). A dashboard panel beside
+  the model holds four fixed tiles (#209); charts and layout are not yet chosen by the user.
+- **Help (area 11):** Help beside the work, with Getting started, a glossary, shortcuts and links
+  to the user guide (#169); the Help menu leads to each. The "?" beside Capacity, Service time and
+  Waiting room opens its explanation from the keyboard (#146).
 
 ## 1 Start screen, new model, examples
 

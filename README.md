@@ -24,8 +24,9 @@ server; your models stay on your computer.
 Open [helenkwok.github.io/StochCraft](https://helenkwok.github.io/StochCraft/) and pick an
 example. The browser app works offline once loaded, and your browser can install it like an app.
 
-To run it on your desktop, see the [installation guide](docs/installation.md). There is no
-downloadable release yet, so for now the desktop app is built from source.
+To run it on your desktop, download it from the
+[releases page](https://github.com/helenkwok/StochCraft/releases) (Windows, macOS and Linux), or
+build it from source; see the [installation guide](docs/installation.md).
 
 ## How it works
 
@@ -44,6 +45,8 @@ downloadable release yet, so for now the desktop app is built from source.
 | Watch one run move through the model, step by step | Undo and redo for every change |
 | Sweep a parameter, rank parameters by sensitivity, size capacity to a target | The interface in English and 44 other languages |
 | Lean measures: OEE, takt and cycle time, time in each state | Light, dark and custom themes |
+| Conveyors with a length and a speed, accumulating or not | A capacity table before any run: each station's load and status, the bottleneck, and the mean wait where a queueing formula holds |
+| A 3D view and a to-scale Layout view of the model, and a dashboard beside it | |
 | Export the results table as CSV and the charts as PNG | |
 
 ## Documentation

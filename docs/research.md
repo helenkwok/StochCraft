@@ -28,7 +28,7 @@ failure, and a way for users to report unusual results.
 | Requirement | StochCraft |
 |---|---|
 | [M&S 24] inputs and their pedigree | Each parameter can record where it came from (data set, expert elicitation, assumption), as a `stochcraft:` BPSim vendor extension |
-| [M&S 25], 4.3.2 b, f: set-up, software version, versions of results | Every result carries a run record: StochCraft version, model digest, scenario, seed, replications, the journal of commands (M1.5) |
+| [M&S 25], 4.3.2 b, f: set-up, software version, versions of results | Every result carries a run record: StochCraft version, model digest, scenario, seed, replications, warm-up and duration; the journal of commands is written separately (`stochcraft-cli exec --journal`) and records its version and starting state |
 | [M&S 27], [M&S 32]: warnings and errors | Diagnostics and file notes travel with the results |
 | [M&S 26]: use outside the validated domain | A model can declare validated ranges for its parameters; results from outside them are placarded |
 | [M&S 30], [M&S 33], [M&S 34]: sensitivity, uncertainty and its method | Sweeps record their sensitivity results; results state their interval method |
@@ -105,8 +105,8 @@ as the interface to the shop floor, and game and physics engines. Digital twins 
 three levels (supervisory, interactive, predictive); DES provides the predictive "what-if" level.
 An audit trail should justify automated decisions.
 
-**For StochCraft.** The engine's journal becomes an audit trail once it records its version and
-the state it started from (#44); agents over MCP (M3.6) can explain
+**For StochCraft.** The engine's journal records its format, version and the state it started
+from (#44), so it can serve as an audit trail; agents over MCP (M3.6) can explain
 results ("the oven is the bottleneck at 94% utilisation"); the renderer can use a game engine
 (Bevy). For digital twins, a run must be able to start from an observed state (After M3).
 

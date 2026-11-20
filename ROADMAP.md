@@ -5,13 +5,18 @@ engine and a command line; **M2** the flow logic a factory or logistics model ne
 desktop app (and the browser app built from it); **M4** Monte Carlo, system dynamics, agents and
 hybrid models; **M5** transport and layout, led by a reference model, the sorter; **M6** Python
 and plugins; **M7** industrial engineering (line balancing, material flow on the layout,
-inventory, sharing a model). M1 and M3.1–M3.6 are done; M3.7, a redesign that
-makes results answer the question, comes next, and M5's sorter is built alongside it (D21). M2.1–M2.8 are done, and so is M2.10 (abandonment and balking)
-apart from the gaps listed in it. M2.11 (changeovers and lean measures) has its changeovers,
-product-type times, takt and cycle times, state times and most of OEE done; M2.9 (output analysis) has its
-recorder of results over time, MSER-5's warm-up suggestion, its warnings and streams by element id done. M4 and M5 are being planned; M5.5 reworks M5's geometry so the
-physical layout is a model layer of its own, from which the plan and the 3D view are drawn. Each milestone is a series of pull requests small enough to
-review in one sitting; every one keeps `cargo xtask ci` green.
+inventory, sharing a model). M1 and M3.1–M3.6 are done; M3.7, a redesign that makes results
+answer the question, has steps 1–5 done, and M5's sorter is built alongside it (D21). M2.1–M2.8
+are done, and so is M2.10 (abandonment and balking) apart from the gaps listed in it. M2.11
+(changeovers and lean measures) has its changeovers, product-type times, takt and cycle times,
+state times and most of OEE done; M2.9 (output analysis) has its recorder of results over time,
+MSER-5's warm-up suggestion, its warnings and streams by element id done. M4 is being planned.
+M5 has its conveyors (M5.1), the operators in the model and files (M5.2, PR 1), a first 3D view
+(M5.3), the dashboard (M5.4) and the sorter example in; M5.5, which reworks M5's geometry so the
+physical layout is a model layer of its own, from which the plan and the 3D view are drawn, has
+begun (L1, U1). M7.1's line balancing core, engine command and CLI are done. Each milestone is a
+series of pull requests small enough to review in one sitting; every one keeps `cargo xtask ci`
+green.
 
 Decisions still open are marked **Decision** with a recommendation; the rest follows the
 patterns of the sibling Craft apps (FieldCraft, CADCraft, SolidCraft). The published work behind
@@ -28,16 +33,17 @@ The window's UX parity and its gaps: [docs/target-app-parity.md](docs/target-app
 | `random` | L0 | xoshiro256** streams; BPSim's distributions; `Dist`; fits to three-point estimates (`estimate`) |
 | `stats` | L0 | `Tally`, `TimeWeighted`, Student-t 95% intervals, `Summary`; percentiles, empirical distributions with DKW bands, Wilson intervals (`spread`); paired and Welch differences between two runs (`difference`) |
 | `des` | L1 | Event queue; async processes with `hold`, `spawn`, interrupts; priority and preemptive `Resource`; bounded and priority `Store`; waits with deadlines; `Signal`, `Gate`; runs that can be cancelled within a replication and stop when time stops moving (`run_watched`) |
-| `model` | L1 | The model in memory: elements, connections with probabilities, conditions and quantities, finite buffers, shared resource pools, calendars, breakdowns, batches, stop conditions, three-point estimates, layout, entity properties, experiment, validation; BPSim's XPath expressions (`expr`); the capacity table (`capacity`); line balancing (`balance`: M7.1's core, the three heuristics, measures and theoretical minimum) |
-| `blocks` | L2 | Compiles a model: source, server, shared task, delay, sink, exclusive and parallel gateways, merges, batch and unbatch, assembly; finite buffers with blocking after service and loss; shared pools with roles, alternatives, priorities and shifts; breakdowns; calendars; stop conditions; work left inside at the end; entities carry typed properties; per-element statistics; warm-up; one replication stepped and read as it runs (`Live`) |
+| `model` | L1 | The model in memory: elements, connections with probabilities, conditions and quantities, finite buffers, shared resource pools, calendars, breakdowns, batches, stop conditions, three-point estimates, layout, entity properties, conveyors, the Transport block and mobile pools, `Path` (geometry with exact lengths), experiment, validation; BPSim's XPath expressions (`expr`); the capacity table (`capacity`); line balancing (`balance`: M7.1's core, the three heuristics, measures and theoretical minimum) |
+| `blocks` | L2 | Compiles a model: source, server, shared task, delay, conveyor (accumulating or not, with divert routing), sink, exclusive and parallel gateways, merges, batch and unbatch, assembly (the Transport block has no runtime yet); finite buffers with blocking after service and loss; shared pools with roles, alternatives, priorities and shifts; breakdowns; calendars; stop conditions; work left inside at the end; entities carry typed properties; per-element statistics; warm-up; one replication stepped and read as it runs (`Live`) |
 | `experiment` | L3 | Parallel replications with reproducible streams, progress and cancellation |
 | `io` | L3 | BPSim on BPMN and XPDL: read (gateways, routing, embedded sub-processes in line, calendars, diagram layout, `stochcraft:` vendor extensions), write new, save edits into opened files |
-| `engine` | L4 | Commands with JSON schemas, undo and redo, journal; runs on threads, on the page's workers or in slices; editing commands for blocks, flows, pools, calendars, properties, estimates and layout, and `batch` for several as one step; sweeps, sensitivity, designed experiments and sizing; `results.distribution` and `results.compare`; live runs |
-| `stochcraft-cli` | app | `new`, `validate`, `run` with a run record, `design`, `exec`, `schema`, `mcp` |
-| `ui-egui` | L5 | The app's window: menus and shortcuts; the flowchart canvas and inspector; runs with results, charts and the spread across replications; the Analysis view; watching a run; autosave; 44 languages |
+| `engine` | L4 | Commands with JSON schemas, undo and redo, a journal with its format, version and starting state; runs on threads, on the page's workers or in slices; editing commands for blocks, flows, pools, calendars, properties, estimates and layout, and `batch` for several as one step; sweeps, sensitivity, designed experiments and sizing; `results.distribution` and `results.compare`; `model.capacity`, `estimate.fit` and `line.balance`; live runs |
+| `stochcraft-cli` | app | `new`, `validate`, `explain`, `balance`, `run` with a run record, `design`, `fit`, `exec` (with `--journal`, `--all`, `--force`), `schema`, `mcp` |
+| `render` | L5 | Parametric low-poly meshes (machines, straight, curved and spiral conveyors, racks, totes, operators, forklifts, AGVs) as plain vertex and index buffers |
+| `ui-egui` | L5 | The app's window: menus and shortcuts; the flowchart canvas and inspector; runs with results, charts and the spread across replications; the Analysis and Capacity views; the 3D view and a read-only Layout view; the dashboard; watching a run from the run bar; autosave; 44 languages besides English |
 | `mcp` | L5 | The MCP server: the engine's commands as tools for agents, headless (with optional read and write roots) or driving the app through its control channel |
 | `stochcraft`, `stochcraft-web` | apps | The desktop shell (native file dialogs, `--control` for agents) and the browser shell, published on GitHub Pages |
-| `bench/` | outside | M/M/1 against simu-des and SimPy (54× SimPy) |
+| `bench/` | outside | M/M/1 against simu-des and SimPy (54× SimPy); tandem lines, the hold model and DEVStone LI, HI and HO |
 
 Models are saved and opened as BPSim files, changed through engine commands, and run from the
 command line or in a window, natively or in the browser
@@ -268,8 +274,9 @@ against L-SIM needs gateways, which all three reference models use, so it moves 
   model (car repair, home loan, technical support) as both BPMN and XPDL, in BPSim 1.0 and 2.0,
   so both host formats and the 1.0 upgrade are tested from the start. Its Visio drawings and
   images are not needed. The BPMN MIWG test suite's `Reference/` models (BPMN interchange tests,
-  with no simulation data) are to join the reading, round-trip and diagnostics tests the same
-  way: fetched at a pinned commit, never committed (D14).
+  with no simulation data) have joined the reading and round-trip tests the same way
+  (`io/tests/miwg.rs`, in CI): fetched at a pinned commit by `cargo xtask fetch-miwg`, never
+  committed (D14).
 - **Cross-check against another simulator:** the bundle includes result scenarios
   (`*_results.bpsim`) produced by Lanner's L-SIM for the three BPSim 2.0 models, with
   per-replication values (for example 151 car repair arrivals in each of three replications,
@@ -371,7 +378,8 @@ Done. Every subcommand goes through the engine's commands, as the app and agents
     the model's diagnostics; exit code 1 if any is an error
   - `run <file> [--scenario S] [--reps N] [--seed S] [--threads T] [--warmup W] [--duration D] [--format table|json|csv] [--out file]`
   - `exec <script.json> [--open file]`: replay engine commands (a journal), one line of JSON
-    per step; exit code 1 at the first step that fails
+    per step; exit code 1 at the first step that fails (since #217: `--journal out.json`,
+    `--all` and `--force`; see docs/developers.md)
   - `schema [command]`: print command schemas
 - The table output reads like a textbook result: block, metric, mean, ±half-width, n.
 - **A run record with every result** (NASA-STD-7009B [M&S 24], [M&S 25], [M&S 27], [M&S 34];
@@ -1048,7 +1056,11 @@ From DES practice at NASA, NNSA and the Aerospace Corporation (docs/research.md)
   percentile) as elicited from experts (triangular, PERT as a scaled beta, lognormal, Weibull),
   written as a standard BPSim distribution; the triad and its source are kept as the parameter's
   pedigree (a `stochcraft:` vendor extension).
-- Not yet: **fitting a distribution to measured data.** A column of measured times (CSV, or
+- Partly done (#182): **fitting a distribution to measured data**, in the engine
+  (`estimate.fit`) and the CLI (`stochcraft-cli fit`), by maximum likelihood, ranked by
+  Anderson–Darling with the Kolmogorov–Smirnov distance beside it, with a minimum sample size.
+  Not yet: the window's view, bounds for censored or clipped data, and the fit kept as the
+  parameter's pedigree. The design: a column of measured times (CSV, or
   pasted) fitted to each candidate family by maximum likelihood, ranked by a goodness-of-fit
   measure (Anderson–Darling, with the Kolmogorov–Smirnov distance beside it), with bounds for
   censored or clipped data and a minimum sample size below which no fit is offered. The best
@@ -1272,7 +1284,8 @@ experiments: the window's form and a heatmap of a two-factor grid; fitting a res
 ### M2.9 Output analysis
 
 Help with the choices that decide whether results mean anything: how long a warm-up, how many
-replications, and whether variants are compared on the same random numbers (#70). The book
+replications, and whether variants are compared on the same random numbers (#70, now split into
+#224, #225 and #226). The book
 treats these as standard practice (Robinson, ch. 2; Morecroft and Robinson, ch. 9 §9.5; Elder,
 ch. 10 §10.4, in Brailsford, Churilov and Dangerfield, eds., 2014). Related and already done:
 `overloaded` and `no_steady_state` (M2.8, #68, #75) and `ended_in_warmup` (#67).
@@ -1917,7 +1930,9 @@ and jump to a time.
 - **Watching in the window** (`ui-egui/src/live.rs`), from the bar above the canvas or
   Model ▸ Watch a Run:
   - Play and Pause (also Space), Step to the next event, a speed in simulated time per second
-    (about a minute for the whole run by default), and Jump to a time.
+    (about a minute for the whole run by default), and Jump to a time. Since M5.5's U1 (#218),
+    the run bar has Play/Pause on Space, Reset, Step on `.`, a speed as ×N halved and doubled
+    with `[` and `]`, As fast as possible, and Pause at a time in place of Jump.
   - A clock bar shows where the run is, and when it is in its warm-up.
   - On the canvas:
     - each task shows the entities waiting and its units busy, with a bar for busy units;
@@ -2011,8 +2026,9 @@ replications other than the first.
 now step 3 of M5's sorter (M5.3).
 
 **M3 size:** about six PRs; M3.1–M3.3 make a usable app, M3.4–M3.5 make it a modelling tool.
-**M3.1–M3.6 are complete.** CI builds and tests on Linux only (#45); the full test suite also passes on
-Windows (checked by hand); macOS is unchecked.
+**M3.1–M3.6 are complete.** CI runs the full suite on Linux; on Windows it lints and tests the
+desktop app, the MCP server and the reference models, and on macOS it lints the desktop app
+(#45). The full test suite also passes on Windows (checked by hand).
 
 ### M3.7 Redesign: results that answer
 
@@ -2033,11 +2049,11 @@ The steps, in the order of gaps.md, each a series of pull requests:
 1. **Words and messages** (gaps 7). One vocabulary in the window, the results and the engine's
    messages, which name the block and say how to fix the problem; engine messages through the
    catalogs. Every rewritten string is a row in each language's catalog, translated from
-   dictionaries, Wikipedia, IATE or the literature only.
+   dictionaries, Wikipedia, IATE or the literature only. **Done** (#139, #221; issue #145).
 2. **Problems where they are** (gaps 8). Limits on fields; "Run (1 problem)" that selects the
    block and field; a problems chip and clickable status-bar errors; a fixed place for problems
    so the inspector never jumps; Basics first in the inspector (name, capacity, times), the rest
-   folded into rows that show a summary when set.
+   folded into rows that show a summary when set. **Done** (issue #146).
 3. **Results that answer** (gaps 1, screen 1a). In this order: two to four finding sentences,
    each linked to its evidence; "How sure are these numbers?" with one-click fixes ("Use 40
    runs", "Set a 1 h warm-up") and what is already settled; four key measures per block, the
@@ -2046,25 +2062,29 @@ The steps, in the order of gaps.md, each a series of pull requests:
    same place. The chart of a measure over the run needs values recorded at fixed times, the
    recorder that M2.9's warm-up plot and M4's results over time also need: built with M2.9's
    warm-up (`series` and `warmup_suggestion` in the results), so here only its charts remain.
+   **Done** (#163, #164, #165; issue #147); the findings link to the key measures, not yet to
+   the model.
 4. **Baseline and now** (gaps 4, screen 1b). Results stay visible and marked out of date after an
    edit; "Keep as baseline"; then baseline, now, the paired difference with its interval (the
    engine's `results.compare`, on the same seeds), and a verdict in words and an icon ("Real:
-   lower", "Could be chance"). The scenario table follows later.
+   lower", "Could be chance"). The scenario table follows later. **Done** (#166, #167, #168;
+   issue #148), apart from the scenario table.
 5. **The first hour** (gaps 5, screens 4a and 4b). A start page that asks "What do you want to
    find out?", with examples by question and industry, each with its question, what it teaches,
    and a proof tag where one applies; doors for newcomers (a guided 5-step first model on the real
    canvas), for people coming from another tool, and for opening a file. Help as a side panel:
    Getting started, a glossary, keyboard shortcuts and the user guide; a term's definition on
    hover and on keyboard focus. New examples join only with a checked answer, as "Examples for
-   teaching" requires.
+   teaching" requires. **Done** (#169, #170, #171, #172; issue #149), apart from a term's
+   definition on hover where the word appears in the window.
 6. **The library** (gaps 3, screen 2a). A Library | Outline switch in the rail; the library
    grouped (flow in and out, work, routing, batching), searchable, each kind with an original
    BPMN-style glyph, its name and a one-line hint; click or drag to place, and a quick add at the
-   pointer. Larger blocks with their names inside.
+   pointer. Larger blocks with their names inside. Moved into M5.5's U3 (issue #150, closed).
 7. **The look of a simulation** (gaps 2, screens 2b and 3). Results laid over the model after a
    run (busy, waiting, time in the line, or off), with the bottleneck named; while watching,
    entities move along the flows and stack in front of tasks, unit slots show busy, idle and
-   down, and badges pair a shape with words; reduced motion starts a run paused.
+   down, and badges pair a shape with words; reduced motion starts a run paused. Open (#151).
 
 **Design rules** for every step: the existing look (`ui-egui/src/theme.rs`: the ink header, one
 accent, IBM Plex) with the proposed tokens for control borders and soft error and warning
@@ -2310,6 +2330,12 @@ the layout, four charts: products sorted per hour; each operator's time as a sta
 product's time on the conveyors; and the number of products on the conveyors over time. The
 sorter is built in four steps, each a series of pull requests with checks that have known
 answers, and ships as an example model with its write-up ("Examples for teaching").
+
+**Status:** step 1, the conveyors, is done (#194, #195, #197, #198); step 2 has its first PR, the
+mobile pool, the Transport block and the scale in the model and files (#202), with the runtime
+not yet merged (branch `operators-runtime`); step 3 has parametric meshes (#191) and a first 3D
+view from the diagram's positions (#205, #208, #210, #213), to be reworked by M5.5; step 4's
+dashboard is in with four tiles (#209); the sorter example is in (#207), without operators yet.
 
 1. **Conveyors** (M5.1). The design, settled before the code:
    - **The block.** A new kind, `Conveyor { length, speed, accumulating, item_length, gap }`:
@@ -3021,6 +3047,12 @@ connecting on the canvas (M); U5 the experiment editor and scenario grid (M, per
 spreadsheet view (M); U7 the live card and pins (S); U8 the statistics table and the scenario
 plot (M). U1 and U2 come before L4, since layout editing leans on them; the rest interleave.
 
+**Status:** L1 is done (#216): `model::Path` with exact `length` and `point_at`, and the read-only
+Layout view with its grid, scale bar, conveyors and footprints to scale, and the unplaced list.
+A conveyor still stores its `ConveyorShape`, which gives its `Path`; folding the shape into the
+path waits for L2's file format, and until then the Layout view places blocks from the diagram,
+as the 3D view does. U1, the run bar, is done (#218).
+
 #### Sources
 
 - S: H. Steinkellner, D. Kaever, C. Rockenschaub, "Enhancing Social Sustainability in Parcel Hubs
@@ -3143,9 +3175,9 @@ Where each part of that request sits:
 
 - **Status:** the core is done in `model::balance`: the three heuristics, the measures, the
   theoretical minimum, validation and the ranked positional weights, with hand-worked and
-  randomised checks. Not yet: the Groover example checks (they need Table 15.4's element times
-  and precedences), the engine command `line.balance`, `stochcraft-cli balance`, the window view,
-  and "Build the line".
+  randomised checks; Groover's Examples 15.1, 15.2 and 15.4 checked
+  (`model/src/balance/tests.rs`); the engine command `line.balance` and `stochcraft-cli balance`
+  (#192). Not yet: the window view and "Build the line".
 - **Outcome:** given the work elements of an assembly, their times and which must come before
   which, a station assignment for a cycle time from each heuristic below, with the theoretical
   minimum beside it so any gap shows (the heuristics do not promise the fewest stations: times
@@ -3261,7 +3293,8 @@ are.
     2019, doi 10.1080/17477778.2018.1442155.
 - **Candidates from the common textbooks** (Banks et al., Law, Robinson) join only once their
   parameters are taken from the books themselves.
-- Not yet: **a speed benchmark** (`cargo xtask bench`, extending `bench/`): events per second
+- Done in `bench/` (#183), as the program there rather than a `cargo xtask bench` command:
+  **a speed benchmark** (`cargo xtask bench`, extending `bench/`): events per second
   on M/M/1, tandem lines of 5 to 200 stations, and the DEVStone models LI, HI and HO at set
   widths and depths (Wainer, Glinsky and Gutierrez-Alcaraz, Simulation 87(7), 2011; Cárdenas
   et al., ACM TOMACS 2022), whose event counts are known in closed form and so also check the
