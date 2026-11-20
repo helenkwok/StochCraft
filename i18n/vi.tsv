@@ -1175,3 +1175,5 @@ unit	yr	năm
 	± is the estimated precision: the half-width of a 95% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than 95%.	± là độ chính xác ước tính: một nửa độ rộng của khoảng tin cậy Student-t 95% cho giá trị trung bình qua các lần chạy. Số lần chạy được chọn dựa trên kết quả, nên khoảng này có thể bao phủ giá trị trung bình thật ít hơn 95% số lần.
 	Not yet within its target: {results}.	Chưa nằm trong mục tiêu: {results}.
 	then more until precise enough, at most {max}	sau đó thêm cho đến khi đủ chính xác, tối đa {max}
+@plural	Stopped after {n} run: {result} is within its target.|Stopped after {n} runs: {result} is within its target.	Đã dừng sau {n} lần chạy: {result} nằm trong mục tiêu của nó.
+@plural	Stopped at the most allowed, {n} run, before {result} was within its target.|Stopped at the most allowed, {n} runs, before {result} was within its target.	Đã dừng ở mức tối đa cho phép, {n} lần chạy, trước khi {result} nằm trong mục tiêu của nó.

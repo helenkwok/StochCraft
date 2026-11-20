@@ -259,22 +259,43 @@ fn sequential_rows(ui: &mut egui::Ui, p: &theme::Palette, results: &Value) -> Op
         .filter(|m| m["status"] != "settled")
         .filter_map(|m| m["score"].as_f64())
         .fold(None, |w: Option<f64>, s| Some(w.map_or(s, |w| w.max(s))));
+    // A run watching one named result (set from a file, the command line or an agent) speaks of
+    // that result, not of every key measure.
+    let one = q["settings"]["measure"]
+        .is_object()
+        .then(|| named(results, std::iter::once(&q["settings"]["measure"])));
     let mut fix = None;
     if q["reason"] == "target_met" {
-        let text = tnf(
-            n,
-            "Stopped after {n} run: every key measure that varies is within its target.",
-            "Stopped after {n} runs: every key measure that varies is within its target.",
-            &[],
-        );
+        let text = match &one {
+            Some(r) => tnf(
+                n,
+                "Stopped after {n} run: {result} is within its target.",
+                "Stopped after {n} runs: {result} is within its target.",
+                &[("result", r)],
+            ),
+            None => tnf(
+                n,
+                "Stopped after {n} run: every key measure that varies is within its target.",
+                "Stopped after {n} runs: every key measure that varies is within its target.",
+                &[],
+            ),
+        };
         trust_row(ui, p, true, &text, None);
     } else if q["reason"] == "max_reached" {
-        let text = tnf(
-            n,
-            "Stopped at the most allowed, {n} run, before every key measure was within its target.",
-            "Stopped at the most allowed, {n} runs, before every key measure was within its target.",
-            &[],
-        );
+        let text = match &one {
+            Some(r) => tnf(
+                n,
+                "Stopped at the most allowed, {n} run, before {result} was within its target.",
+                "Stopped at the most allowed, {n} runs, before {result} was within its target.",
+                &[("result", r)],
+            ),
+            None => tnf(
+                n,
+                "Stopped at the most allowed, {n} run, before every key measure was within its target.",
+                "Stopped at the most allowed, {n} runs, before every key measure was within its target.",
+                &[],
+            ),
+        };
         let needed = runs_needed(n, widest.filter(|s| *s > 1.0).unwrap_or(2.0));
         let label = tnf(needed, "Allow up to {n} run", "Allow up to {n} runs", &[]);
         if trust_row(ui, p, false, &text, Some(&label)) {
@@ -299,9 +320,9 @@ fn sequential_rows(ui: &mut egui::Ui, p: &theme::Palette, results: &Value) -> Op
     }
     let same = listed(results, "no_spread");
     if !same.is_empty() {
-        let rate = q["unseen_rate"].as_f64().map_or_else(String::new, |r| {
-            format!("{}%", grouped((r * 1000.0).round() / 10.0))
-        });
+        let rate = q["unseen_rate"]
+            .as_f64()
+            .map_or_else(String::new, |r| format!("{}%", grouped(up_to(r * 100.0))));
         let text = tf(
             "{results}: the same in all {n} runs, so not counted as settled. Something none of the runs met could still happen in up to {rate} of runs.",
             &[("results", &same), ("n", &count), ("rate", &rate)],
@@ -430,7 +451,9 @@ pub fn trust(ui: &mut egui::Ui, results: &Value) -> Option<Fix> {
         if n < 2 {
             let label = tnf(10, "Use {n} run", "Use {n} runs", &[]);
             let text = t("One run gives no interval, so these numbers cannot be told from chance.");
-            if trust_row(ui, &p, false, text, Some(&label)) {
+            // A sequential run's fix is in its own row above.
+            let button = (!sequential).then_some(label.as_str());
+            if trust_row(ui, &p, false, text, button) {
                 fix = Some(Fix::Runs(10));
             }
         } else if let Some((e, key, score)) = widest.filter(|(_, _, s)| *s > WIDE) {
@@ -908,6 +931,19 @@ pub(crate) fn round_sig(v: f64, figures: i32) -> f64 {
 }
 
 /// `v` rounded to `places` decimal places (to tens, hundreds… where `places` is negative).
+/// An upper bound as a person would read it: rounded up, never down, to one decimal at 1 or
+/// more and to two significant figures below (25.86 → 25.9, 0.02995 → 0.03), so a bound above
+/// zero never shows as 0.
+fn up_to(v: f64) -> f64 {
+    if !(v.is_finite() && v > 0.0) {
+        return v;
+    }
+    let places = if v >= 1.0 { 1 } else { 1 - magnitude(v) };
+    let f = pow10(places);
+    // Less a hair, so a product just above a whole number (259.000…01) does not round up past it.
+    (v * f - 1e-9).ceil() / f
+}
+
 fn round_to(v: f64, places: i32) -> f64 {
     let f = pow10(places);
     (v * f).round() / f
@@ -1457,6 +1493,11 @@ mod tests {
         assert_eq!(runs_needed(25, 1.002), 30);
         assert_eq!(runs_needed(30, 1.002), 40);
         assert_eq!(super::round_warmup(437.2), 440.0);
+        // An upper bound rounds up, and a small one keeps two figures rather than showing 0.
+        assert_eq!(super::up_to(25.89), 25.9);
+        assert_eq!(super::up_to(25.9), 25.9);
+        assert_eq!(super::up_to(0.02995), 0.03);
+        assert_eq!(super::up_to(0.0011), 0.0011);
         assert_eq!(super::round_warmup(0.0234), 0.023);
     }
 
@@ -1607,6 +1648,17 @@ mod tests {
         assert_eq!(
             trust_with(sequential("target_met"), Some("Set a 57 min warm-up")),
             Some(Fix::Warmup(57.0))
+        );
+        // A run watching one named result speaks of that result, not of every key measure.
+        let mut one = sequential("target_met");
+        one["sequential"]["settings"] =
+            serde_json::json!({ "measure": { "element": "paint", "metric": "mean_wait" } });
+        assert_eq!(
+            trust_with(
+                one,
+                Some("Stopped after 10 runs: Mean wait (Paint) is within its target.")
+            ),
+            None
         );
     }
 

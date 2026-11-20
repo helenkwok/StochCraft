@@ -1175,3 +1175,5 @@ unit	yr	ປີ
 	± is the estimated precision: the half-width of a 95% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than 95%.	± ແມ່ນຄວາມແມ່ນຍຳທີ່ຄາດຄະເນ: ເຄິ່ງໜຶ່ງຂອງຄວາມກວ້າງຂອງຊ່ວງຄວາມເຊື່ອໝັ້ນ Student-t 95% ສຳລັບຄ່າສະເລ່ຍຈາກການເຮັດຊ້ຳ. ຈຳນວນຮອບຖືກເລືອກຈາກຜົນລັບ ຊ່ວງຈຶ່ງອາດຄອບຄຸມຄ່າສະເລ່ຍຈິງໄດ້ໜ້ອຍກວ່າ 95%.
 	Not yet within its target: {results}.	ຍັງບໍ່ຢູ່ພາຍໃນເປົ້າໝາຍ: {results}.
 	then more until precise enough, at most {max}	ຈາກນັ້ນເພີ່ມອີກຈົນແມ່ນຍຳພໍ, ສູງສຸດ {max}
+@plural	Stopped after {n} run: {result} is within its target.|Stopped after {n} runs: {result} is within its target.	ຢຸດຫຼັງຈາກຈຳລອງຊ້ຳ {n} ຮອບ: {result} ຢູ່ພາຍໃນເປົ້າໝາຍຂອງມັນ.
+@plural	Stopped at the most allowed, {n} run, before {result} was within its target.|Stopped at the most allowed, {n} runs, before {result} was within its target.	ຢຸດທີ່ຈຳນວນສູງສຸດທີ່ອະນຸຍາດ, {n} ຮອບ, ກ່ອນທີ່ {result} ຈະຢູ່ພາຍໃນເປົ້າໝາຍຂອງມັນ.

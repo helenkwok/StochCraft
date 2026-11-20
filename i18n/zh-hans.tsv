@@ -1175,3 +1175,5 @@ unit	yr	年
 	± is the estimated precision: the half-width of a 95% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than 95%.	± 表示估计精度：各次运行均值的 95% Student-t 置信区间的半宽。运行次数是根据结果选定的，因此该区间覆盖真实均值的频率可能低于 95%。
 	Not yet within its target: {results}.	尚未进入目标范围：{results}。
 	then more until precise enough, at most {max}	之后继续，直到足够精确，最多 {max}
+@plural	Stopped after {n} run: {result} is within its target.|Stopped after {n} runs: {result} is within its target.	运行 {n} 次后停止：{result} 在其目标内。
+@plural	Stopped at the most allowed, {n} run, before {result} was within its target.|Stopped at the most allowed, {n} runs, before {result} was within its target.	在 {result} 进入其目标之前，已在允许的上限 {n} 次运行处停止。

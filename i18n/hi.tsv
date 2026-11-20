@@ -1175,3 +1175,5 @@ unit	yr	वर्ष
 	± is the estimated precision: the half-width of a 95% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than 95%.	± अनुमानित सटीकता है: रनों में प्राप्त माध्य के 95% Student-t विश्वास अंतराल की आधी चौड़ाई। रनों की संख्या परिणामों के आधार पर चुनी गई थी, इसलिए अंतराल वास्तविक माध्य को 95% से कम बार समेट सकता है।
 	Not yet within its target: {results}.	अभी तक लक्ष्य के भीतर नहीं: {results}।
 	then more until precise enough, at most {max}	फिर पर्याप्त सटीक होने तक और, अधिकतम {max}
+@plural	Stopped after {n} run: {result} is within its target.|Stopped after {n} runs: {result} is within its target.	{n} रन के बाद रुका: {result} अपने लक्ष्य के भीतर है।|{n} रन के बाद रुका: {result} अपने लक्ष्य के भीतर है।
+@plural	Stopped at the most allowed, {n} run, before {result} was within its target.|Stopped at the most allowed, {n} runs, before {result} was within its target.	{result} के अपने लक्ष्य के भीतर आने से पहले, अनुमत अधिकतम {n} रन पर रुका।|{result} के अपने लक्ष्य के भीतर आने से पहले, अनुमत अधिकतम {n} रन पर रुका।

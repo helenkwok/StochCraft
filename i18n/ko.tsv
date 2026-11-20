@@ -1175,3 +1175,5 @@ unit	yr	년
 	± is the estimated precision: the half-width of a 95% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than 95%.	±는 추정 정밀도로, 실행 간 평균에 대한 95% Student-t 신뢰 구간 너비의 절반입니다. 실행 횟수를 결과를 보고 정했으므로, 구간이 실제 평균을 포함하는 빈도는 95%보다 낮을 수 있습니다.
 	Not yet within its target: {results}.	아직 목표 이내에 들지 않음: {results}.
 	then more until precise enough, at most {max}	이후 충분히 정밀해질 때까지 추가, 최대 {max}
+@plural	Stopped after {n} run: {result} is within its target.|Stopped after {n} runs: {result} is within its target.	실행 {n}회 후 중단됨: {result}이(가) 목표 이내입니다.
+@plural	Stopped at the most allowed, {n} run, before {result} was within its target.|Stopped at the most allowed, {n} runs, before {result} was within its target.	{result}이(가) 목표 이내에 들기 전에 허용된 최대치인 실행 {n}회에서 중단됨.

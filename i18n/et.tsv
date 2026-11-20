@@ -1175,3 +1175,5 @@ unit	yr	a
 	± is the estimated precision: the half-width of a 95% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than 95%.	± on hinnanguline täpsus: käivitamiste keskmise 95% Student-t usaldusvahemiku poollaius. Käivitamiste arv valiti tulemuste põhjal, mistõttu võib vahemik katta tegelikku keskmist harvem kui 95%.
 	Not yet within its target: {results}.	Pole veel sihi piires: {results}.
 	then more until precise enough, at most {max}	seejärel rohkem, kuni piisavalt täpsed, kuni {max}
+@plural	Stopped after {n} run: {result} is within its target.|Stopped after {n} runs: {result} is within its target.	Peatatud pärast {n} käivitamist: {result} on oma sihi piires.|Peatatud pärast {n} käivitamist: {result} on oma sihi piires.
+@plural	Stopped at the most allowed, {n} run, before {result} was within its target.|Stopped at the most allowed, {n} runs, before {result} was within its target.	Peatatud lubatud maksimumil, {n} käivitamisel, enne kui {result} oli oma sihi piires.|Peatatud lubatud maksimumil, {n} käivitamisel, enne kui {result} oli oma sihi piires.

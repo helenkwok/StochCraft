@@ -1175,3 +1175,5 @@ unit	yr	thn
 	± is the estimated precision: the half-width of a 95% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than 95%.	± adalah presisi perkiraan: setengah lebar interval kepercayaan Student-t 95% untuk rata-rata di seluruh eksekusi. Jumlah eksekusi dipilih berdasarkan hasil, sehingga interval bisa menutupi rata-rata sebenarnya lebih jarang dari 95%.
 	Not yet within its target: {results}.	Belum dalam target: {results}.
 	then more until precise enough, at most {max}	lalu lebih banyak sampai cukup presisi, paling banyak {max}
+@plural	Stopped after {n} run: {result} is within its target.|Stopped after {n} runs: {result} is within its target.	Berhenti setelah {n} eksekusi: {result} berada dalam targetnya.
+@plural	Stopped at the most allowed, {n} run, before {result} was within its target.|Stopped at the most allowed, {n} runs, before {result} was within its target.	Berhenti pada batas maksimum yang diizinkan, {n} eksekusi, sebelum {result} berada dalam targetnya.

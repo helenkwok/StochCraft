@@ -1175,3 +1175,5 @@ unit	yr	ปี
 	± is the estimated precision: the half-width of a 95% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than 95%.	± คือความแม่นยำโดยประมาณ: ครึ่งหนึ่งของความกว้างของช่วงความเชื่อมั่น Student-t 95% สำหรับค่าเฉลี่ยจากการรันทุกรอบ จำนวนรอบถูกเลือกจากผลลัพธ์ ช่วงนี้จึงอาจครอบคลุมค่าเฉลี่ยจริงได้น้อยกว่า 95%
 	Not yet within its target: {results}.	ยังไม่อยู่ในเป้าหมาย: {results}
 	then more until precise enough, at most {max}	จากนั้นรันเพิ่มจนแม่นยำพอ สูงสุด {max}
+@plural	Stopped after {n} run: {result} is within its target.|Stopped after {n} runs: {result} is within its target.	หยุดหลังรัน {n} รอบ: {result} อยู่ในเป้าหมายของตัวเองแล้ว
+@plural	Stopped at the most allowed, {n} run, before {result} was within its target.|Stopped at the most allowed, {n} runs, before {result} was within its target.	หยุดที่จำนวนสูงสุดที่อนุญาต คือ {n} รอบ ก่อนที่ {result} จะอยู่ในเป้าหมายของตัวเอง

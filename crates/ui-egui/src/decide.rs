@@ -515,11 +515,18 @@ impl App {
             t("The runs above come first; more follow in batches until every key measure that varies is within its target, or the most is reached."),
         ));
         if (relative, points, max) != before {
+            // Only the field changed, kept within what the engine takes (above 0, a share below
+            // 100%, at least one run); the others stay exactly as they were.
             let mut spec = x.clone();
-            // Kept within what the engine takes: above 0, a share below 100%, at least one run.
-            spec["relative"] = json!((relative / 100.0).clamp(0.0001, 0.99));
-            spec["points"] = json!(points.max(0.01));
-            spec["max"] = json!(max.round().clamp(1.0, f64::from(u32::MAX)) as u64);
+            if relative != before.0 {
+                spec["relative"] = json!((relative / 100.0).clamp(0.0001, 0.99));
+            }
+            if points != before.1 {
+                spec["points"] = json!(points.max(0.01));
+            }
+            if max != before.2 {
+                spec["max"] = json!(max.round().clamp(1.0, f64::from(u32::MAX)) as u64);
+            }
             self.execute("experiment.set", json!({ "sequential": spec }));
         }
     }
