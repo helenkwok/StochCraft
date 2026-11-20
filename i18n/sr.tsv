@@ -1159,3 +1159,4 @@ unit	yr	год.
 	Unplaced	Непостављено
 	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	За сада је сваки блок постављен према дијаграму. Блок који дијаграм изоставља наводи се овде и не црта се.
 	The charts are taller than the window: make the window taller, then export them again.	Графикони су виши од прозора: повећајте висину прозора, па их поново извезите.
+	The model changed while choosing where to save it, so it was not saved. Save again.	Модел се променио док се бирало где да се сачува, па није сачуван. Сачувајте поново.

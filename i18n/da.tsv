@@ -1159,3 +1159,4 @@ unit	yr	år
 	Unplaced	Ikke placeret
 	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	Indtil videre er hver blok placeret ud fra diagrammet. En blok, som diagrammet udelader, vises her og tegnes ikke.
 	The charts are taller than the window: make the window taller, then export them again.	Diagrammerne er højere end vinduet: gør vinduet højere, og eksportér dem så igen.
+	The model changed while choosing where to save it, so it was not saved. Save again.	Modellen blev ændret, mens det blev valgt, hvor den skulle gemmes, så den blev ikke gemt. Gem igen.

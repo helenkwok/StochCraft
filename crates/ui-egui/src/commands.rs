@@ -345,10 +345,12 @@ impl App {
         craft_menu::layout(&bar, target, &options)
     }
 
-    /// A dialog is open: menu commands wait.
+    /// A dialog is open: menu commands wait. The shell's Save dialog counts, so the model it
+    /// was opened for is not replaced from the menus before it is answered.
     pub(crate) fn modal_open(&self) -> bool {
         self.confirm.is_some()
             || self.new_file.is_some()
+            || self.pick_for.is_some()
             || self.shortcuts_dialog.is_some()
             || self.recovery.is_some()
             || self.themes.is_some()

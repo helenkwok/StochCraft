@@ -6,8 +6,8 @@ use stochcraft_engine::{CommandError, ErrorCode};
 
 use crate::i18n::{t, td, tf, tn, tnf};
 use crate::{
-    App, EXAMPLES, NewFile, RECENT_FILES, Replace, Request, canvas, change_label, charts,
-    comparable, extension, file_name, help, layout_view, view3d,
+    App, EXAMPLES, NewFile, PendingPng, RECENT_FILES, Replace, Request, canvas, change_label,
+    charts, comparable, extension, file_name, help, layout_view, view3d,
 };
 
 impl App {
@@ -81,6 +81,7 @@ impl App {
         self.report_error(message);
         self.after_save = None;
         self.as_new = false;
+        self.pick_for = None;
     }
 
     /// Runs an engine command, showing its error in the status bar if it fails, with the block
@@ -138,8 +139,10 @@ impl App {
 
     /// What the window shows of a model that has been replaced: results, selection, the
     /// canvas's view, a watched run and half-typed fields. A run in progress is cancelled, so
-    /// its results cannot turn up later over the new model.
+    /// its results cannot turn up later over the new model. It is another document, so an
+    /// answer asked for the last one (the Save dialog's) is not applied to it.
     fn forget_view(&mut self) {
+        self.doc_gen += 1;
         if self.running.is_some() {
             self.stop_workers();
             let _ = self.engine.execute("run.cancel", json!({}));
@@ -224,7 +227,13 @@ impl App {
         if self.pending_png.is_some() {
             return;
         }
-        self.pending_png = Some((area, ctx.pixels_per_point()));
+        self.pending_png = Some(PendingPng {
+            area,
+            pixels_per_point: ctx.pixels_per_point(),
+            results: self.results_serial,
+            covered: self.charts_covered(ctx),
+            spoiled: false,
+        });
         let slot = std::sync::Arc::clone(&self.screenshot);
         let wake = ctx.clone();
         ctx.send_viewport_cmd(egui::ViewportCommand::Screenshot(
@@ -242,8 +251,13 @@ impl App {
         let Some(image) = self.screenshot.lock().ok().and_then(|mut s| s.take()) else {
             return;
         };
-        if let Some((area, ppp)) = self.pending_png.take() {
-            match charts::png(&image, area, ppp) {
+        if let Some(pending) = self.pending_png.take() {
+            let png = if pending.spoiled {
+                None
+            } else {
+                charts::png(&image, pending.area, pending.pixels_per_point)
+            };
+            match png {
                 Some(bytes) => {
                     let name = format!("{}-charts.png", self.export_stem());
                     self.requests.push(Request::Export { name, bytes });
@@ -251,6 +265,29 @@ impl App {
                 None => self.report_error(t("the charts could not be captured")),
             }
         }
+    }
+
+    /// Checks a charts export waiting for its screenshot against this frame, once it is laid
+    /// out: if the charts are not where they were, at the same scale, with the same results, or
+    /// a menu or dialog has opened over the window since, the export is spoiled, as the web's
+    /// screenshot (of a frame after the one that asked) would not hold them.
+    pub(crate) fn check_pending_png(&mut self, ctx: &egui::Context) {
+        let covered = self.charts_covered(ctx);
+        let (area, results) = (self.charts_rect, self.results_serial);
+        let pixels_per_point = ctx.pixels_per_point();
+        if let Some(pending) = &mut self.pending_png
+            && (area != Some(pending.area)
+                || pixels_per_point != pending.pixels_per_point
+                || results != pending.results
+                || (covered && !pending.covered))
+        {
+            pending.spoiled = true;
+        }
+    }
+
+    /// Whether a menu, popup or dialog is open over the window.
+    fn charts_covered(&self, ctx: &egui::Context) -> bool {
+        self.modal_open() || self.about || egui::Popup::is_any_open(ctx)
     }
 
     /// The start of an export's file name: the model's file name without its extension.
@@ -262,7 +299,22 @@ impl App {
 
     /// Saves to `path`, chosen by the user for Save As, in the format its extension names
     /// (`.bpmn`, `.xpdl`; otherwise the opened file's).
+    ///
+    /// If the model was replaced while the Save dialog was open (an example opened, a file
+    /// dropped, an agent's command), `path` was chosen for the model that is gone: nothing is
+    /// written, and what was to follow the save (quit, new, open) is dropped.
     pub fn save_to(&mut self, path: &str) {
+        if self
+            .pick_for
+            .take()
+            .is_some_and(|asked| asked != self.doc_gen)
+        {
+            self.new_file = None;
+            self.save_failed(t(
+                "The model changed while choosing where to save it, so it was not saved. Save again.",
+            ));
+            return;
+        }
         let agreed = std::mem::take(&mut self.as_new);
         self.save_file(path.to_owned(), true, agreed);
     }
@@ -336,6 +388,7 @@ impl App {
     pub fn save_cancelled(&mut self) {
         self.after_save = None;
         self.as_new = false;
+        self.pick_for = None;
     }
 
     /// The shell wrote `bytes` to `path`: the model is saved there.
@@ -382,10 +435,21 @@ impl App {
         if self.platform.file_system {
             let name = self.suggested_name();
             let xpdl = self.engine.format() == Some("xpdl");
-            self.requests.push(Request::PickSave { name, xpdl });
+            self.pick_save(name, xpdl);
         } else {
             self.download(None);
         }
+    }
+
+    /// Asks the shell where to save ([`Request::PickSave`]), for the model open now. While a
+    /// Save dialog is open already, nothing more is asked: its answer saves the model it was
+    /// opened for, or nothing if that model has been replaced.
+    pub(crate) fn pick_save(&mut self, name: String, xpdl: bool) {
+        if self.pick_for.is_some() {
+            return;
+        }
+        self.pick_for = Some(self.doc_gen);
+        self.requests.push(Request::PickSave { name, xpdl });
     }
 
     fn suggested_name(&self) -> String {

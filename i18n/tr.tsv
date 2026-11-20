@@ -1159,3 +1159,4 @@ unit	yr	yıl
 	Unplaced	Yerleştirilmemiş
 	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	Şimdilik her blok diyagrama göre yerleştirilir. Diyagramın dışarıda bıraktığı bir blok burada listelenir ve çizilmez.
 	The charts are taller than the window: make the window taller, then export them again.	Grafikler pencereden daha uzun: pencereyi uzatın, ardından yeniden dışa aktarın.
+	The model changed while choosing where to save it, so it was not saved. Save again.	Kaydedilecek yer seçilirken model değişti, bu yüzden kaydedilmedi. Yeniden kaydedin.

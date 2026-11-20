@@ -262,6 +262,8 @@ impl App {
         self.chart_colours_window(&ctx);
         self.recovery_dialog(&ctx);
         self.guide_overlay(&ctx);
+        // Once everything of this frame is laid out, including what is drawn over the charts.
+        self.check_pending_png(&ctx);
     }
 
     /// The header: menus on the shell colour, the document's name, and Run.
@@ -527,10 +529,7 @@ impl App {
                     Some(path) => self.write_new(path),
                     None if self.platform.file_system => {
                         self.as_new = true;
-                        self.requests.push(Request::PickSave {
-                            name: bpmn,
-                            xpdl: false,
-                        });
+                        self.pick_save(bpmn, false);
                     }
                     None => self.write_new(bpmn),
                 }

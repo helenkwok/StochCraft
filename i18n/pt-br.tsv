@@ -1159,3 +1159,4 @@ unit	yr	a
 	Unplaced	Não posicionados
 	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	Por enquanto, cada bloco é posicionado a partir do diagrama. Um bloco que o diagrama deixa de fora é listado aqui e não é desenhado.
 	The charts are taller than the window: make the window taller, then export them again.	Os gráficos são mais altos que a janela: aumente a altura da janela e exporte-os de novo.
+	The model changed while choosing where to save it, so it was not saved. Save again.	O modelo mudou enquanto se escolhia onde salvá-lo, por isso não foi salvo. Salve novamente.
