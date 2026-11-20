@@ -34,6 +34,10 @@ use crate::i18n::{t, tf, tn, tnf};
 use crate::results::{grouped, round_sig, rounded};
 use crate::{App, Request, Running, commands, comparable, theme};
 
+/// An edit to one output made while drawing the table: the output's name, the fields to set,
+/// and, when the engine refused it, the field and the reason to show in place.
+type OutputEdit = (String, Value, Option<(String, String)>);
+
 /// The time a frame spends making trials before it draws.
 const FRAME_BUDGET: std::time::Duration = std::time::Duration::from_millis(8);
 
@@ -817,7 +821,7 @@ impl App {
         );
         ui.add_space(4.0);
         let outputs = mc["outputs"].as_array().cloned().unwrap_or_default();
-        let mut edits: Vec<(String, Value, Option<(String, String)>)> = Vec::new();
+        let mut edits: Vec<OutputEdit> = Vec::new();
         let mut remove = None;
         for o in &outputs {
             let name = o["name"].as_str().unwrap_or("").to_owned();
