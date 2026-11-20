@@ -206,8 +206,8 @@ stochcraft-cli run cost.bpmn --reps 100000
 ```
 
 Each output gets its mean with a 95% interval, standard deviation, P5, P50, P95, minimum and
-maximum, and, with a target (`at_most` or `at_least`), the share of trials meeting it with
-Wilson's 95% interval; `--format json` adds a histogram, the cumulative curve and the percentiles
+maximum, and, with a target (`at_most` or `at_least`), the share of trials meeting it with its
+95% interval; `--format json` adds a histogram, the cumulative curve and the percentiles
 P10 and P90. `--until 1% --max 1000000` adds trials until every output's mean is within ±1% of
 itself. Outputs are BPSim expressions with the inputs (and earlier outputs) as `$name`, the
 arithmetic of XPath and `min`, `max`, `sum`, `abs`, `sqrt`, `exp`, `log`, `pow`, `round` and
@@ -220,7 +220,24 @@ mean is a probability. A trial whose output is not a number (a division by zero)
 Conover (1982); correlations that cannot all hold together are refused. Trials come in batches
 of 1,000, each with its own random streams keyed by the seed, the batch and the input's name, so
 results are the same on any number of threads and adding an input leaves the others' draws as
-they were. The input table goes out and back in as CSV:
+they were.
+
+How the intervals are worked out depends on whether the trials are independent. With plain
+random sampling and no correlations they are: the mean's interval is Student-t across the trials
+and a target's share has Wilson's score interval. Latin hypercube sampling and correlations make
+the trials within a batch dependent (a batch of 1,000 Latin hypercube draws of a uniform holds
+exactly 500 below its median), so there each batch counts as one independent replicate
+(replicated Latin hypercube sampling: Owen, 1992; Glasserman, *Monte Carlo Methods in Financial
+Engineering*, 2003, §4.4): the mean's interval is Student-t on the batch means, and a target's
+share's is Student-t on the batch shares, clamped to 0 and 1, with one degree of freedom fewer
+than there are batches. Such runs are whole batches, so the trials asked for are rounded up to a
+multiple of 1,000 (the results and the run record give both numbers), a run of one batch has no
+interval, and a sequential run judges its outputs on the intervals across batches. The run
+record's `interval` says which, for example `Student-t across 12 independent Latin hypercube
+batches of 1000 trials`. The standard deviation is always across trials: it describes the
+output, not the precision of its mean.
+
+The input table goes out and back in as CSV:
 
 ```bash
 stochcraft-cli inputs cost.bpmn --out inputs.csv

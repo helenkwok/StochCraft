@@ -13,7 +13,7 @@ use serde::{Deserialize, Serialize};
 use serde_json::{Value, json};
 use stochcraft_experiment::{Control, Experiment};
 use stochcraft_mc::{
-    BATCH, BlockJob, MAX_TRIALS, McResults, OutputResult, Problem, RunOptions, table,
+    BATCH, BlockJob, IntervalBasis, MAX_TRIALS, McResults, OutputResult, Problem, RunOptions, table,
 };
 use stochcraft_model::montecarlo::DEFAULT_TRIALS;
 use stochcraft_model::{
@@ -755,14 +755,42 @@ impl Engine {
             "unsaved_changes": file.is_some() && self.is_dirty(),
             "seed": r.seed,
             "trials": r.trials,
+            "trials_requested": r.requested_trials,
             "sampling": SamplingSpec::from(r.sampling).name(),
+            "interval": interval_text(r),
             "batch": BATCH,
             "stop": m.stop.map(StopDoc::from),
             "random_streams": "trials in batches of 1,000; each input's draws in batch b from the stream keyed mc/<b>/input/<name> under the seed, and the pairing of correlated inputs from mc/<b>/correlation, so results do not depend on the number of threads",
             "correlation": "rank correlations induced by Iman and Conover's method (1982) in each batch, on van der Waerden scores with Pearson correlation 2 sin(πρ/6) for a rank correlation ρ",
-            "uncertainty": "mean with the 95% Student-t interval across trials (half_width); percentiles by Hyndman and Fan's definition 7; a target's probability with Wilson's 95% score interval",
+            "uncertainty": uncertainty_text(r),
             "file_notes": file.map_or_else(Vec::new, |f| f.notes.clone()),
         })
+    }
+}
+
+/// What the intervals are across, in words: `Student-t across 12 independent Latin hypercube
+/// batches of 1000 trials`, or across trials.
+pub fn interval_text(r: &McResults) -> String {
+    match r.interval {
+        IntervalBasis::Trials => format!("Student-t across {} independent trials", r.trials),
+        IntervalBasis::Batches { batches, size } => {
+            let kind = match r.sampling {
+                Sampling::LatinHypercube => "Latin hypercube batches",
+                Sampling::Random => "batches",
+            };
+            format!("Student-t across {batches} independent {kind} of {size} trials")
+        }
+    }
+}
+
+fn uncertainty_text(r: &McResults) -> &'static str {
+    match r.interval {
+        IntervalBasis::Trials => {
+            "plain random sampling with no correlations: the trials are independent, so the mean has the 95% Student-t interval across trials (half_width) and a target's probability Wilson's 95% score interval; percentiles by Hyndman and Fan's definition 7"
+        }
+        IntervalBasis::Batches { .. } => {
+            "Latin hypercube sampling or correlated inputs make the trials within a batch dependent, so each batch is one independent replicate (replicated Latin hypercube sampling; Owen, 1992; Glasserman, 2003, section 4.4): the mean has the 95% Student-t interval on the batch means and a target's probability the 95% Student-t interval on the batch proportions, clamped to [0, 1], with batches - 1 degrees of freedom, and none with fewer than two batches; runs are whole batches; std_dev is across trials; percentiles by Hyndman and Fan's definition 7"
+        }
     }
 }
 
@@ -807,6 +835,8 @@ pub fn results_json(r: &McResults) -> Value {
     let mut v = json!({
         "kind": "monte_carlo",
         "trials": r.trials,
+        "trials_requested": r.requested_trials,
+        "interval": interval_text(r),
         "outputs": r.outputs.iter().map(output_json).collect::<Vec<_>>(),
         "inputs": r.inputs.iter().map(|i| json!({
             "name": i.name,

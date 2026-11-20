@@ -99,6 +99,11 @@ fn a_monte_carlo_model_is_built_run_and_undone_by_commands() {
     let record = &r["record"];
     assert_eq!(record["seed"], 3);
     assert_eq!(record["sampling"], "random");
+    // A correlation makes the trials in a batch dependent: the intervals are across batches.
+    assert_eq!(
+        record["interval"],
+        "Student-t across 20 independent batches of 1000 trials"
+    );
     assert!(
         record["model_digest"]
             .as_str()

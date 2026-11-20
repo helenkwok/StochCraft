@@ -2134,8 +2134,11 @@ them) are to settle first.
 **Status:** part 1 done: the `mc` crate (inputs as distributions, outputs as BPSim expressions
 extended with `min`, `max`, `sum`, `abs`, `sqrt`, `exp`, `log`, `pow` and `if`, and `$name` for
 inputs), plain random and Latin hypercube sampling, rank correlation by Iman and Conover, results
-(mean with its interval, percentiles, minimum and maximum, a target's probability with Wilson's
-interval, histogram and cumulative curve) and a sequential stop on the means; files as D15 says,
+(mean with its interval, percentiles, minimum and maximum, a target's probability with its
+interval, histogram and cumulative curve; the intervals across trials for plain random
+sampling, and across independent batches of 1,000 for Latin hypercube sampling or correlated
+inputs, which make trials within a batch dependent: replicated Latin hypercube sampling, Owen
+1992, Glasserman 2003 §4.4) and a sequential stop on the means; files as D15 says,
 with CSV import and export of the input table; the `mc.*` engine commands with undo; `run` and
 `inputs` on the command line; checks against the exact answers below but Sobol's. The window,
 the tornado chart, rank correlations of inputs with outputs and Sobol indices come later.

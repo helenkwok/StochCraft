@@ -4,8 +4,8 @@
 //! implementation fails about once in 1.7 million runs; the seeds are fixed anyway.
 
 use stochcraft_mc::{
-    BATCH, Block, BlockJob, Dist, McCorrelation, McInput, McOutput, McResults, McStop, McTarget,
-    MonteCarlo, RunOptions, Sampling, compile, rank_correlation,
+    BATCH, Block, BlockJob, Dist, IntervalBasis, McCorrelation, McInput, McOutput, McResults,
+    McStop, McTarget, MonteCarlo, RunOptions, Sampling, compile, rank_correlation,
 };
 use stochcraft_random::math::{exp, ln};
 use stochcraft_random::{Family, ThreePoint, Upper};
@@ -90,12 +90,26 @@ fn the_sum_of_independent_normals() {
             (got - sd).abs() < 5.0 * sd / (2.0 * n as f64).sqrt(),
             "{sampling:?}: {got}"
         );
-        // The 95% interval of the mean is the textbook one, 1.96 sd / √n.
+        // With independent trials the 95% interval of the mean is the textbook one,
+        // 1.96 sd / √n. (A Latin hypercube's comes from its batches, below.)
         let hw = get(total.half_width);
-        assert!(
-            (hw / (1.96 * got / (n as f64).sqrt()) - 1.0).abs() < 0.01,
-            "{hw}"
-        );
+        if sampling == Sampling::Random {
+            assert_eq!(r.interval, IntervalBasis::Trials);
+            assert!(
+                (hw / (1.96 * got / (n as f64).sqrt()) - 1.0).abs() < 0.01,
+                "{hw}"
+            );
+        } else {
+            assert_eq!(
+                r.interval,
+                IntervalBasis::Batches {
+                    batches: 100,
+                    size: BATCH
+                }
+            );
+            // A sum is what Latin hypercube sampling estimates best: far narrower.
+            assert!(hw < 0.1 * 1.96 * got / (n as f64).sqrt(), "{hw}");
+        }
         // P95 of N(25, 14): 25 + 1.645 √14.
         let p95 = total
             .percentiles
@@ -374,7 +388,8 @@ fn results_do_not_depend_on_threads() {
         })
     };
     assert_eq!(c.run_with(&options, &mut threads), Ok(serial.clone()));
-    assert_eq!(serial.trials, 7_500);
+    // Latin hypercube runs are whole batches.
+    assert_eq!((serial.trials, serial.requested_trials), (8_000, 7_500));
     // Another seed gives other numbers.
     let other = compile(&mc, 22).map(|c| c.run(&options));
     assert_ne!(
@@ -444,4 +459,120 @@ fn rank_correlation_is_spearmans() {
     assert!(rank_correlation(&x, &y).is_some_and(|r| (r - 1.0).abs() < 1e-12));
     let z = [5.0, 4.0, 3.0, 2.0, 1.0];
     assert!(rank_correlation(&x, &z).is_some_and(|r| (r + 1.0).abs() < 1e-12));
+}
+
+fn uniform(name: &str, min: f64, max: f64) -> McInput {
+    input(name, Dist::Uniform { min, max })
+}
+
+/// A regression: under Latin hypercube sampling every batch of 1,000 draws of a uniform holds
+/// exactly 500 at or below its median, so the share is known exactly and its interval, taken
+/// across batches, has no width. (Wilson's interval across the trials, as if they were
+/// independent, would say 47% to 53%.)
+#[test]
+fn a_latin_hypercube_share_is_judged_across_batches() {
+    let mut x = output("x", "$u");
+    x.target = Some(McTarget::AtMost(0.5));
+    let mc = MonteCarlo {
+        inputs: vec![uniform("u", 0.0, 1.0)],
+        outputs: vec![x],
+        sampling: Sampling::LatinHypercube,
+        ..MonteCarlo::default()
+    };
+    let r = run(&mc, 1, 3_000);
+    assert_eq!(
+        r.interval,
+        IntervalBasis::Batches {
+            batches: 3,
+            size: BATCH
+        }
+    );
+    let t = r.outputs[0].target.unwrap_or_else(|| unreachable!());
+    assert_eq!(t.probability, Some(0.5));
+    assert_eq!(t.interval, Some((0.5, 0.5)));
+    // Its mean's interval is across the three batch means too: narrow, but not none.
+    let hw = get(r.outputs[0].half_width);
+    assert!(hw > 0.0 && hw < 0.001, "{hw}");
+}
+
+/// Replicated Latin hypercube: the interval across batches covers the exact mean about as often
+/// as it says. x y + z with x ~ U(0, 2), y ~ U(1, 3), z ~ U(-1, 1) has mean 1 × 2 + 0 = 2 and is
+/// not additive, so Latin hypercube sampling does not remove all its variance. With four
+/// batches the 95% interval should hold the mean in about 95 of 100 seeds; 88 is more than
+/// three standard deviations of a binomial(100, 0.95) below that.
+#[test]
+fn latin_hypercube_intervals_cover_the_mean_at_their_rate() {
+    let mc = MonteCarlo {
+        inputs: vec![
+            uniform("x", 0.0, 2.0),
+            uniform("y", 1.0, 3.0),
+            uniform("z", -1.0, 1.0),
+        ],
+        outputs: vec![output("s", "$x * $y + $z")],
+        sampling: Sampling::LatinHypercube,
+        ..MonteCarlo::default()
+    };
+    let covered = (1..=100_u64)
+        .filter(|seed| {
+            let r = run(&mc, *seed, 4 * BATCH);
+            let o = &r.outputs[0];
+            (get(o.mean) - 2.0).abs() <= get(o.half_width)
+        })
+        .count();
+    assert!(covered >= 88, "{covered} of 100");
+}
+
+/// Correlated inputs reorder the trials within a batch, so plain random sampling with a
+/// correlation is judged across batches too, and runs whole batches.
+#[test]
+fn correlated_random_sampling_is_judged_across_batches() {
+    let r = run(&correlated(Sampling::Random, &[("a", "b", 0.5)]), 6, 2_500);
+    assert_eq!((r.trials, r.requested_trials), (3_000, 2_500));
+    assert_eq!(
+        r.interval,
+        IntervalBasis::Batches {
+            batches: 3,
+            size: BATCH
+        }
+    );
+    assert!(r.outputs[0].half_width.is_some());
+}
+
+/// With fewer than two batches there is nothing to judge the batches' spread by: no interval.
+#[test]
+fn one_batch_gives_no_interval() {
+    let mut x = output("x", "$u * 2");
+    x.target = Some(McTarget::AtLeast(1.0));
+    let mc = MonteCarlo {
+        inputs: vec![uniform("u", 0.0, 1.0)],
+        outputs: vec![x],
+        sampling: Sampling::LatinHypercube,
+        ..MonteCarlo::default()
+    };
+    let r = run(&mc, 1, 400);
+    assert_eq!((r.trials, r.requested_trials), (1_000, 400));
+    let o = &r.outputs[0];
+    assert!(o.mean.is_some());
+    assert_eq!(o.half_width, None);
+    let t = o.target.unwrap_or_else(|| unreachable!());
+    assert!(t.probability.is_some());
+    assert_eq!(t.interval, None);
+}
+
+/// Plain random sampling with no correlations keeps its trials independent: the interval is
+/// across trials, Wilson's for a share, and any number of trials runs as asked.
+#[test]
+fn independent_trials_keep_per_trial_intervals() {
+    let mut x = output("x", "$u");
+    x.target = Some(McTarget::AtMost(0.5));
+    let mc = MonteCarlo {
+        inputs: vec![uniform("u", 0.0, 1.0)],
+        outputs: vec![x],
+        ..MonteCarlo::default()
+    };
+    let r = run(&mc, 1, 2_500);
+    assert_eq!((r.trials, r.interval), (2_500, IntervalBasis::Trials));
+    let t = r.outputs[0].target.unwrap_or_else(|| unreachable!());
+    let wilson = stochcraft_stats::Proportion::new(t.met, t.of).wilson(0.95);
+    assert_eq!(t.interval, wilson);
 }

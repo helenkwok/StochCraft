@@ -900,6 +900,48 @@ fn a_monte_carlo_model_runs_from_the_command_line() {
         "{table}"
     );
     assert!(table.contains("cost is at most 5000 USD in"), "{table}");
+    assert!(
+        table.contains("intervals: Student-t across 4000 independent trials"),
+        "{table}"
+    );
+    // A Latin hypercube run is whole batches, judged across them, and says so.
+    let lhs = ok(&["exec", &{
+        let script = scratch("make-cost-lhs.json");
+        let _ = std::fs::write(
+            &script,
+            format!(
+                r#"[{{"command": "file.open", "params": {{"path": {f:?}}}}},
+                       {{"command": "mc.set", "params": {{"sampling": "latin_hypercube"}}}},
+                       {{"command": "file.save", "params": {{}}}}]"#
+            ),
+        );
+        script.to_string_lossy().into_owned()
+    }]);
+    assert!(!lhs.is_empty());
+    let table = ok(&["run", &f, "--reps", "2500", "--seed", "2"]);
+    assert!(table.contains("Monte Carlo: 3000 trials"), "{table}");
+    assert!(
+        table.contains("2500 trials asked for, rounded up to whole batches of 1000"),
+        "{table}"
+    );
+    assert!(
+        table.contains(
+            "intervals: Student-t across 3 independent Latin hypercube batches of 1000 trials"
+        ),
+        "{table}"
+    );
+    ok(&["exec", &{
+        let script = scratch("make-cost-random.json");
+        let _ = std::fs::write(
+            &script,
+            format!(
+                r#"[{{"command": "file.open", "params": {{"path": {f:?}}}}},
+                       {{"command": "mc.set", "params": {{"sampling": "random"}}}},
+                       {{"command": "file.save", "params": {{}}}}]"#
+            ),
+        );
+        script.to_string_lossy().into_owned()
+    }]);
     let csv = ok(&[
         "run", &f, "--reps", "4000", "--seed", "2", "--format", "csv",
     ]);

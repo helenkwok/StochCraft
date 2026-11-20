@@ -923,6 +923,16 @@ pub fn mc_table(name: &str, r: &Value) -> String {
         "Monte Carlo: {} trials, seed {}, {sampling}",
         r["trials"], rec["seed"]
     );
+    if let (Some(run), Some(asked)) = (r["trials"].as_u64(), rec["trials_requested"].as_u64())
+        && r.get("stop").is_none()
+        && run != asked
+    {
+        let _ = writeln!(
+            out,
+            "{asked} trials asked for, rounded up to whole batches of 1000"
+        );
+    }
+    let _ = writeln!(out, "intervals: {}", s(&rec["interval"]));
     let _ = writeln!(
         out,
         "StochCraft {}, model {}",

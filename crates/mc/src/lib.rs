@@ -22,15 +22,30 @@
 //! **Correlation.** Rank correlations between inputs are induced by the method of Iman and
 //! Conover (1982) within each batch ([`correlate`]).
 //!
-//! **Results** ([`McResults`]): for each output its mean with a 95% Student-t interval, standard
+//! **Results** ([`McResults`]): for each output its mean with a 95% interval, standard
 //! deviation, percentiles (Hyndman and Fan's definition 7), minimum and maximum, the probability
-//! of meeting its target with Wilson's interval, and a histogram and cumulative curve for
-//! charts. A trial whose output is not a finite number (a division by zero, a missing value) is
-//! counted apart and left out of them.
+//! of meeting its target with its 95% interval, and a histogram and cumulative curve for charts.
+//! A trial whose output is not a finite number (a division by zero, a missing value) is counted
+//! apart and left out of them.
+//!
+//! **Intervals** ([`IntervalBasis`]). With plain random sampling and no correlations the trials
+//! are independent, so the mean's interval is Student-t across trials and the target's is
+//! Wilson's score interval. Latin hypercube sampling and Iman–Conover's reordering make the
+//! trials within a batch dependent (a batch of 1,000 Latin hypercube draws of a uniform holds
+//! exactly 500 below its median), so a per-trial interval would measure the wrong design. Each
+//! batch, though, is an independently randomised design with streams of its own, so the batches
+//! are independent and identically distributed: replicated Latin hypercube sampling (Owen, "A
+//! central limit theorem for Latin hypercube sampling", *JRSS B* 54(2), 1992; Glasserman,
+//! *Monte Carlo Methods in Financial Engineering*, Springer, 2003, §4.4). In those modes the
+//! mean's interval is Student-t on the batch means (b − 1 degrees of freedom) and the target's
+//! is Student-t on the batch proportions, clamped to [0, 1]; runs are whole batches (the trials
+//! asked for are rounded up to a multiple of [`BATCH`]); with fewer than two batches there is
+//! no interval. Point estimates are the same either way.
 //!
 //! **Sequential runs.** With a stop ([`McStop`]), batches are added until every output's mean
 //! has a 95% half-width within the share of itself asked for, by the rule of
-//! `stochcraft_stats::precision` (Hoad, Robinson and Davies, 2010).
+//! `stochcraft_stats::precision` (Hoad, Robinson and Davies, 2010), judged on the same interval
+//! the results report (across batches in the modes above, which needs two batches at least).
 
 use std::collections::BTreeMap;
 
@@ -41,7 +56,7 @@ pub use stochcraft_model::{
 use stochcraft_random::Rng;
 use stochcraft_stats::precision::{self, Reason, Scale, Step};
 use stochcraft_stats::spread::quantile as sorted_quantile;
-use stochcraft_stats::{Proportion, Summary};
+use stochcraft_stats::{Proportion, Summary, t_critical_95};
 
 pub mod correlate;
 pub mod quantile;
@@ -454,6 +469,23 @@ impl Compiled {
         self.seed
     }
 
+    /// Whether trials within a batch are dependent (Latin hypercube sampling, or correlations
+    /// that reorder them), so that intervals come from batch means and runs are whole batches.
+    pub fn batched(&self) -> bool {
+        self.sampling == Sampling::LatinHypercube || self.correlated.len() >= 2
+    }
+
+    /// The trials a run of `trials` makes: whole batches where [`Compiled::batched`], at most
+    /// [`MAX_TRIALS`] (itself whole batches).
+    pub fn trials_for(&self, trials: u64) -> u64 {
+        let t = trials.clamp(1, MAX_TRIALS);
+        if self.batched() {
+            t.div_ceil(BATCH).saturating_mul(BATCH).min(MAX_TRIALS)
+        } else {
+            t
+        }
+    }
+
     pub fn sampling(&self) -> Sampling {
         self.sampling
     }
@@ -546,11 +578,17 @@ impl Compiled {
         make: &mut MakeBlocks<'_, E>,
     ) -> Result<McResults, E> {
         let Some(stop) = options.stop else {
-            let trials = options.trials.min(MAX_TRIALS);
+            let trials = self.trials_for(options.trials);
             let blocks = make(&jobs(0, trials))?;
-            return Ok(self.summarise(&blocks, &options.percentiles));
+            let mut results = self.summarise(&blocks, &options.percentiles);
+            results.requested_trials = options.trials;
+            return Ok(results);
         };
-        let max = u64::from(stop.max).clamp(1, MAX_TRIALS);
+        let mut max = u64::from(stop.max).clamp(1, MAX_TRIALS);
+        if self.batched() {
+            // Every batch full, so the batches are alike.
+            max = (max / BATCH).max(1) * BATCH;
+        }
         let mut n = options
             .trials
             .max(1)
@@ -562,8 +600,13 @@ impl Compiled {
         let reason = loop {
             let verdicts: Vec<precision::Verdict> = (0..self.outputs.len())
                 .map(|o| {
-                    let values = finite(&blocks, o);
-                    let s = Summary::of(&values);
+                    // Judged on the interval the results report: across trials, or across
+                    // batches (whose count, not the trials', says whether there is one).
+                    let s = if self.batched() {
+                        Summary::of(&batch_means(&blocks, o))
+                    } else {
+                        Summary::of(&finite(&blocks, o))
+                    };
                     precision::verdict(
                         s.map_or(0, |s| s.n),
                         s.map(|s| s.mean),
@@ -584,6 +627,7 @@ impl Compiled {
             }
         };
         let mut results = self.summarise(&blocks, &options.percentiles);
+        results.requested_trials = options.trials;
         results.stop = Some(StopReport {
             relative: stop.relative,
             max,
@@ -612,11 +656,25 @@ impl Compiled {
                     .map_or(0, |c| c.len() as u64)
             })
             .sum();
+        let basis = if self.batched() {
+            IntervalBasis::Batches {
+                batches: blocks.len() as u64,
+                size: BATCH,
+            }
+        } else {
+            IntervalBasis::Trials
+        };
         let outputs = self
             .outputs
             .iter()
             .enumerate()
-            .map(|(o, (out, _))| describe_output(out, &column(blocks, o, false), &ps))
+            .map(|(o, (out, _))| {
+                let mut r = describe_output(out, &column(blocks, o, false), &ps);
+                if self.batched() {
+                    by_batches(&mut r, out, blocks, o);
+                }
+                r
+            })
             .collect();
         let inputs: Vec<Vec<f64>> = (0..self.inputs.len())
             .map(|i| column(blocks, i, true))
@@ -656,6 +714,8 @@ impl Compiled {
             .collect();
         McResults {
             trials,
+            requested_trials: trials,
+            interval: basis,
             seed: self.seed,
             sampling: self.sampling,
             inputs: input_results,
@@ -682,6 +742,59 @@ fn column(blocks: &[Block], k: usize, input: bool) -> Vec<f64> {
         .collect()
 }
 
+/// Output `o`'s finite values in each block.
+fn per_block(blocks: &[Block], o: usize) -> Vec<Vec<f64>> {
+    blocks
+        .iter()
+        .map(|b| {
+            b.outputs
+                .get(o)
+                .map(|c| c.iter().copied().filter(|v| v.is_finite()).collect())
+                .unwrap_or_default()
+        })
+        .collect()
+}
+
+/// Output `o`'s mean in each block (over its valid trials; a block with none is left out).
+fn batch_means(blocks: &[Block], o: usize) -> Vec<f64> {
+    per_block(blocks, o)
+        .iter()
+        .filter(|v| !v.is_empty())
+        .map(|v| v.iter().sum::<f64>() / v.len() as f64)
+        .collect()
+}
+
+/// The half-width of the 95% Student-t interval of the mean of `xs` (independent values), or
+/// `None` with fewer than two.
+fn t_half_width(xs: &[f64]) -> Option<f64> {
+    let s = Summary::of(xs)?;
+    let t = t_critical_95(s.n.checked_sub(1)?)?;
+    Some(t * s.std_dev / (s.n as f64).sqrt()).filter(|h| h.is_finite())
+}
+
+/// Replaces an output's intervals by those across batches: the mean's from the batch means, the
+/// target's from the batch proportions (clamped to [0, 1]); none with fewer than two batches.
+fn by_batches(r: &mut OutputResult, out: &McOutput, blocks: &[Block], o: usize) {
+    let each = per_block(blocks, o);
+    let means: Vec<f64> = each
+        .iter()
+        .filter(|v| !v.is_empty())
+        .map(|v| v.iter().sum::<f64>() / v.len() as f64)
+        .collect();
+    r.half_width = t_half_width(&means);
+    if let (Some(t), Some(result)) = (out.target, r.target.as_mut()) {
+        let shares: Vec<f64> = each
+            .iter()
+            .filter(|v| !v.is_empty())
+            .map(|v| v.iter().filter(|x| t.met(**x)).count() as f64 / v.len() as f64)
+            .collect();
+        result.interval = result
+            .probability
+            .zip(t_half_width(&shares))
+            .map(|(p, h)| ((p - h).max(0.0), (p + h).min(1.0)));
+    }
+}
+
 /// Output `o`'s finite values across `blocks`.
 fn finite(blocks: &[Block], o: usize) -> Vec<f64> {
     blocks
@@ -696,7 +809,13 @@ fn finite(blocks: &[Block], o: usize) -> Vec<f64> {
 /// A run's results.
 #[derive(Debug, Clone, PartialEq)]
 pub struct McResults {
+    /// The trials run: whole batches where the intervals are across batches.
     pub trials: u64,
+    /// The trials asked for (fewer than `trials` when rounded up to whole batches, or for a
+    /// sequential run its first look).
+    pub requested_trials: u64,
+    /// What the intervals are across.
+    pub interval: IntervalBasis,
     pub seed: u64,
     pub sampling: Sampling,
     pub inputs: Vec<InputResult>,
@@ -705,6 +824,18 @@ pub struct McResults {
     pub correlations: Vec<CorrelationResult>,
     /// How a sequential run went; `None` for a fixed one.
     pub stop: Option<StopReport>,
+}
+
+/// What a run's intervals are across.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum IntervalBasis {
+    /// Independent trials (plain random sampling, no correlations): Student-t for the mean,
+    /// Wilson's score interval for a target's probability.
+    Trials,
+    /// Independent batches of `size` trials (Latin hypercube sampling or correlations, which
+    /// make the trials within a batch dependent): Student-t on the batch means and on the batch
+    /// proportions, with `batches` − 1 degrees of freedom.
+    Batches { batches: u64, size: u64 },
 }
 
 /// What an input's draws were, to check them against its distribution.
@@ -730,7 +861,8 @@ pub struct OutputResult {
     /// Trials whose value is not (left out of everything below).
     pub invalid: u64,
     pub mean: Option<f64>,
-    /// Half-width of the 95% Student-t interval of the mean.
+    /// Half-width of the 95% Student-t interval of the mean, across trials or across batches
+    /// ([`IntervalBasis`]); `None` without two of them.
     pub half_width: Option<f64>,
     pub std_dev: Option<f64>,
     pub min: Option<f64>,
@@ -751,7 +883,8 @@ pub struct TargetResult {
     pub met: u64,
     pub of: u64,
     pub probability: Option<f64>,
-    /// Wilson's 95% score interval.
+    /// The 95% interval: Wilson's score interval across trials, or Student-t on the batch
+    /// proportions ([`IntervalBasis`]).
     pub interval: Option<(f64, f64)>,
 }
 
