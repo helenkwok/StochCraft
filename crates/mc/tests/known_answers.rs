@@ -441,7 +441,7 @@ fn a_sequential_run_stops_when_the_mean_is_precise_enough() {
 fn rank_correlation_is_spearmans() {
     let x = [1.0, 2.0, 3.0, 4.0, 5.0];
     let y = [1.0, 4.0, 9.0, 16.0, 100.0];
-    assert_eq!(rank_correlation(&x, &y), Some(1.0));
+    assert!(rank_correlation(&x, &y).is_some_and(|r| (r - 1.0).abs() < 1e-12));
     let z = [5.0, 4.0, 3.0, 2.0, 1.0];
     assert!(rank_correlation(&x, &z).is_some_and(|r| (r + 1.0).abs() < 1e-12));
 }
