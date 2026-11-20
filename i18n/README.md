@@ -796,6 +796,20 @@ fields (`“Service time”`) are named in the messages by their own rows.
   checked against any other source, and not reviewed by native speakers; the least certain are
   lo, ka, ta and te, the case endings in sl, uk and pl, and the particle after a name in ko. "Cannot be known to a share of
   itself" is reworded in each language as a precision given as a share of the mean.
+- The rows for six more examples (a bank with an ATM, hospital beds, a machine repair crew,
+  inspection with rework, a project's finish date and "Same mean, different spread": their
+  titles, one-line descriptions, questions and what they teach) and the "Projects" industry were
+  machine-drafted with Claude Code from the plain meaning of the English, with each catalog's own
+  words from the earlier example cards (queue, wait, busy for a share of the time, parts turned
+  away, Rework, Breakdowns, spread) and its own handling of "%" and punctuation. The book title
+  and the authors' names stay in English and Latin script; the ATM is each language's everyday
+  word for it. Not checked against any other source, and not reviewed by native speakers; the
+  least certain are lo, ta, te, th, bn, ka, kk, sq, gl, ca, lt and et, and in every language the
+  long rows on rework ("far more than in proportion") and on the project. For patients turned
+  away, some catalogs use a different verb from the one for rejected parts (pl, bg, el, ru, uk).
+  The row for "Checked against probability theory" (the project card's proof) follows each
+  catalog's "Checked against queueing theory" row with its word for probability theory in place
+  of queueing theory; the same caveats apply.
 
 **Adding or changing a string:** add the English in the code through `i18n::t` (or `tf`, `tn`),
 then add its row to each catalog here, or leave it out to show English until it is translated.

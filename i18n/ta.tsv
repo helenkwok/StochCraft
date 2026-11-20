@@ -826,6 +826,7 @@ unit	yr	ஆண்டு
 	IT operations	தகவல் தொழில்நுட்பச் செயல்பாடுகள்
 	Reference	குறிப்பு மாதிரிகள்
 	Checked against queueing theory	வரிசைக் கோட்பாட்டுடன் சரிபார்க்கப்பட்டது
+	Checked against probability theory	நிகழ்தகவுக் கோட்பாட்டுடன் சரிபார்க்கப்பட்டது
 	Matches a published study	வெளியிடப்பட்ட ஆய்வுடன் பொருந்துகிறது
 	What do you want to find out?	நீங்கள் எதைக் கண்டறிய விரும்புகிறீர்கள்?
 	Simulate a process, compare what-ifs, and see which differences are real. Each example asks one question and shows how the answer was found.	ஒரு செயல்முறையை உருவகப்படுத்துங்கள், “இப்படி இருந்தால்” மாற்றுகளை ஒப்பிடுங்கள், எந்த வேறுபாடுகள் உண்மையானவை என்று பாருங்கள். ஒவ்வொரு எடுத்துக்காட்டும் ஒரு கேள்வி கேட்டு, விடை எப்படிக் கண்டறியப்பட்டது என்பதைக் காட்டுகிறது.
@@ -882,6 +883,31 @@ unit	yr	ஆண்டு
 	Callers who give up: the share lost and the wait of those who stay.	கைவிடும் அழைப்பாளர்கள்: இழந்த விகிதமும் தங்குபவர்களின் காத்திருப்பும்.
 	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	தடுப்பு, சிறிய காத்திருப்பு அறைகள், பழுதுகள்: வரிசையின் தொடக்கத்தில் திருப்பி அனுப்பப்பட்ட பாகங்கள்.
 	Health checks that take busy servers out send their requests back to the queue.	வேலையாக உள்ள வழங்கிகளை நீக்கும் நிலைச் சோதனைகள் அவற்றின் கோரிக்கைகளை மீண்டும் வரிசைக்கு அனுப்புகின்றன.
+	Projects	திட்டங்கள்
+	Same mean, different spread	ஒரே சராசரி, வேறுபட்ட பரவல்
+	Three desks with the same mean service time of 1 minute: fixed, random and very uneven.	1 நிமிட ஒரே சராசரி சேவை நேரம் கொண்ட மூன்று மேசைகள்: நிலையானது, சீரற்றது, மிகவும் சமமற்றது.
+	Does it matter how much service times vary when the average is the same?	சராசரி ஒன்றாக இருக்கும்போது, சேவை நேரங்கள் எவ்வளவு மாறுகின்றன என்பது முக்கியமா?
+	Variability makes queues: the same average time gives waits of 2, 4 and 10 minutes.	மாறுபாடு வரிசைகளை உருவாக்குகிறது: ஒரே சராசரி நேரம் 2, 4, 10 நிமிடக் காத்திருப்புகளைத் தருகிறது.
+	Bank with an ATM and cashiers	ஏடிஎம் மற்றும் காசாளர்கள் உள்ள வங்கி
+	Half the customers use the ATM first; five cashiers share one queue (Borshchev and Grigoryev, The Big Book of Simulation Modeling, Example 2.2).	வாடிக்கையாளர்களில் பாதி பேர் முதலில் ஏடிஎம்மைப் பயன்படுத்துகின்றனர்; ஐந்து காசாளர்கள் ஒரு வரிசையைப் பகிர்ந்துகொள்கின்றனர் (Borshchev மற்றும் Grigoryev, The Big Book of Simulation Modeling, எடுத்துக்காட்டு 2.2).
+	Are five cashiers enough when half the customers use the ATM first?	வாடிக்கையாளர்களில் பாதி பேர் முதலில் ஏடிஎம்மைப் பயன்படுத்தும்போது ஐந்து காசாளர்கள் போதுமா?
+	Routing by chance and a shared queue: cashiers busy 91% of the time, and what a sixth would do.	நிகழ்தகவின்படி வழிச்செலுத்தலும் பகிரப்பட்ட வரிசையும்: 91% நேரம் வேலையாக இருக்கும் காசாளர்கள், ஆறாமவர் என்ன மாற்றுவார்.
+	Hospital beds	மருத்துவமனைப் படுக்கைகள்
+	Patients who find every bed taken are turned away; stays vary widely around five days.	எல்லாப் படுக்கைகளும் நிரம்பியிருப்பதைக் காணும் நோயாளிகள் திருப்பி அனுப்பப்படுகின்றனர்; தங்கும் காலம் ஐந்து நாட்களைச் சுற்றி பெரிதும் மாறுகிறது.
+	How many beds so that fewer than 1 in 50 patients are turned away?	50 நோயாளிகளில் 1 பேருக்கும் குறைவானவர்களே திருப்பி அனுப்பப்பட எத்தனை படுக்கைகள் தேவை?
+	Beds turn patients away rather than queue them, and only the average stay matters.	படுக்கைகள் நோயாளிகளை வரிசையில் வைக்காமல் திருப்பி அனுப்புகின்றன, சராசரி தங்கும் காலம் மட்டுமே முக்கியம்.
+	Machine repair crew	இயந்திரப் பழுதுநீக்கக் குழு
+	Six machines that break down now and then, and the fitters who repair them.	அவ்வப்போது பழுதாகும் ஆறு இயந்திரங்கள், அவற்றைச் சரிசெய்யும் மெக்கானிக்குகள்.
+	How many fitters keep six machines running?	ஆறு இயந்திரங்களை இயங்க வைக்க எத்தனை மெக்கானிக்குகள் தேவை?
+	A closed loop: a machine waiting for repair cannot break down again, so the queue stays short.	ஒரு மூடிய சுழற்சி: பழுதுநீக்கத்துக்குக் காத்திருக்கும் இயந்திரம் மீண்டும் பழுதாக முடியாது, எனவே வரிசை குறுகியதாகவே இருக்கும்.
+	Inspection with rework	மறுவேலையுடன் ஆய்வு
+	Half the parts fail inspection, are reworked and are inspected again.	பாதி பாகங்கள் ஆய்வில் தோல்வியடைந்து, மறுவேலை செய்யப்பட்டு, மீண்டும் ஆய்வு செய்யப்படுகின்றன.
+	How much longer do parts take when half of them need rework?	பாதி பாகங்களுக்கு மறுவேலை தேவைப்படும்போது பாகங்களுக்கு எவ்வளவு கூடுதல் நேரம் ஆகிறது?
+	A loop back: rework doubles the load on inspection, and less rework cuts the time far more than in proportion.	ஒரு திரும்பும் சுழற்சி: மறுவேலை ஆய்வின் சுமையை இரட்டிப்பாக்குகிறது, குறைவான மறுவேலை நேரத்தை விகிதத்தைவிட மிக அதிகமாகக் குறைக்கிறது.
+	Project finish date	திட்டம் முடியும் தேதி
+	Three activities in parallel, each ten days on average; the project ends when all three are done.	இணையாக மூன்று செயல்பாடுகள், ஒவ்வொன்றும் சராசரியாகப் பத்து நாட்கள்; மூன்றும் முடிந்ததும் திட்டம் முடிகிறது.
+	When will the project finish?	திட்டம் எப்போது முடியும்?
+	Why three ten-day activities in parallel take more than 18 days on average.	இணையாக நடக்கும் பத்து நாள் செயல்பாடுகள் மூன்று ஏன் சராசரியாக 18 நாட்களுக்கு மேல் எடுக்கின்றன.
 	Show me	எனக்குக் காட்டு
 	Point at where to do this step	இந்தப் படியை எங்கே செய்வது என்று சுட்டிக்காட்டு
 	Step {k} of {n}	படி {k}, மொத்தம் {n}

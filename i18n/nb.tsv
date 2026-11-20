@@ -826,6 +826,7 @@ unit	yr	år
 	IT operations	IT-drift
 	Reference	Referansemodeller
 	Checked against queueing theory	Kontrollert mot køteori
+	Checked against probability theory	Kontrollert mot sannsynlighetsteori
 	Matches a published study	Stemmer med en publisert studie
 	What do you want to find out?	Hva vil du finne ut?
 	Simulate a process, compare what-ifs, and see which differences are real. Each example asks one question and shows how the answer was found.	Simuler en prosess, sammenlign hva-om-varianter og se hvilke forskjeller som er reelle. Hvert eksempel stiller ett spørsmål og viser hvordan svaret ble funnet.
@@ -882,6 +883,31 @@ unit	yr	år
 	Callers who give up: the share lost and the wait of those who stay.	Innringere som gir opp: andelen som går tapt og ventetiden for dem som blir.
 	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	Blokkering, små venterom og feil: deler som avvises i starten av linjen.
 	Health checks that take busy servers out send their requests back to the queue.	Helsesjekk som tar travle servere ut av drift, sender forespørslene deres tilbake i køen.
+	Projects	Prosjekter
+	Same mean, different spread	Samme gjennomsnitt, ulik spredning
+	Three desks with the same mean service time of 1 minute: fixed, random and very uneven.	Tre skranker med samme gjennomsnittlige servicetid på 1 minutt: fast, tilfeldig og svært ujevn.
+	Does it matter how much service times vary when the average is the same?	Har det noe å si hvor mye servicetidene varierer når gjennomsnittet er det samme?
+	Variability makes queues: the same average time gives waits of 2, 4 and 10 minutes.	Variasjon skaper køer: samme gjennomsnittstid gir ventetider på 2, 4 og 10 minutter.
+	Bank with an ATM and cashiers	Bank med minibank og kasserere
+	Half the customers use the ATM first; five cashiers share one queue (Borshchev and Grigoryev, The Big Book of Simulation Modeling, Example 2.2).	Halvparten av kundene bruker minibanken først; fem kasserere deler én kø (Borshchev og Grigoryev, The Big Book of Simulation Modeling, eksempel 2.2).
+	Are five cashiers enough when half the customers use the ATM first?	Er fem kasserere nok når halvparten av kundene bruker minibanken først?
+	Routing by chance and a shared queue: cashiers busy 91% of the time, and what a sixth would do.	Tilfeldig ruting og en felles kø: kasserere opptatt 91% av tiden, og hva en sjette ville gjøre.
+	Hospital beds	Sykehussenger
+	Patients who find every bed taken are turned away; stays vary widely around five days.	Pasienter som finner alle senger opptatt, avvises; liggetiden varierer mye rundt fem dager.
+	How many beds so that fewer than 1 in 50 patients are turned away?	Hvor mange senger for at færre enn 1 av 50 pasienter skal avvises?
+	Beds turn patients away rather than queue them, and only the average stay matters.	Sengene avviser pasienter i stedet for å sette dem i kø, og bare gjennomsnittlig liggetid betyr noe.
+	Machine repair crew	Reparasjonslag for maskiner
+	Six machines that break down now and then, and the fitters who repair them.	Seks maskiner som svikter nå og da, og mekanikerne som reparerer dem.
+	How many fitters keep six machines running?	Hvor mange mekanikere holder seks maskiner i gang?
+	A closed loop: a machine waiting for repair cannot break down again, so the queue stays short.	En lukket sløyfe: en maskin som venter på reparasjon, kan ikke svikte igjen, så køen holder seg kort.
+	Inspection with rework	Inspeksjon med omarbeid
+	Half the parts fail inspection, are reworked and are inspected again.	Halvparten av delene stryker i inspeksjonen, omarbeides og inspiseres på nytt.
+	How much longer do parts take when half of them need rework?	Hvor mye lenger tar delene når halvparten må omarbeides?
+	A loop back: rework doubles the load on inspection, and less rework cuts the time far more than in proportion.	En sløyfe tilbake: omarbeid dobler belastningen på inspeksjonen, og mindre omarbeid kutter tiden langt mer enn forholdsmessig.
+	Project finish date	Prosjektets sluttdato
+	Three activities in parallel, each ten days on average; the project ends when all three are done.	Tre aktiviteter parallelt, hver på ti dager i gjennomsnitt; prosjektet slutter når alle tre er ferdige.
+	When will the project finish?	Når blir prosjektet ferdig?
+	Why three ten-day activities in parallel take more than 18 days on average.	Hvorfor tre parallelle aktiviteter på ti dager i gjennomsnitt tar mer enn 18 dager.
 	Show me	Vis meg
 	Point at where to do this step	Pek på hvor du gjør dette trinnet
 	Step {k} of {n}	Trinn {k} av {n}

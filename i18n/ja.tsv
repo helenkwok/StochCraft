@@ -826,6 +826,7 @@ unit	yr	年
 	IT operations	IT 運用
 	Reference	リファレンスモデル
 	Checked against queueing theory	待ち行列理論で検証済み
+	Checked against probability theory	確率論で検証済み
 	Matches a published study	公表された研究と一致
 	What do you want to find out?	何を調べたいですか？
 	Simulate a process, compare what-ifs, and see which differences are real. Each example asks one question and shows how the answer was found.	プロセスをシミュレーションし、「もしも」の案を比較し、どの差が本物かを確かめます。各サンプルは 1 つの問いを立て、答えがどう見つかったかを示します。
@@ -882,6 +883,31 @@ unit	yr	年
 	Callers who give up: the share lost and the wait of those who stay.	待ちきれずにあきらめる発信者。失われる割合と、残った人の待ち時間。
 	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	ブロック状態、小さな待機場所、故障。ラインの入口で受け入れられない部品。
 	Health checks that take busy servers out send their requests back to the queue.	混んでいるサーバを切り離すヘルスチェックは、そのリクエストを待ち行列に戻す。
+	Projects	プロジェクト
+	Same mean, different spread	平均は同じ、ばらつきは違う
+	Three desks with the same mean service time of 1 minute: fixed, random and very uneven.	平均サービス時間がどれも 1 分の窓口 3 つ。一定、ランダム、大きくばらつく。
+	Does it matter how much service times vary when the average is the same?	平均が同じなら、サービス時間のばらつきの大きさは関係あるか？
+	Variability makes queues: the same average time gives waits of 2, 4 and 10 minutes.	ばらつきが行列を生む。同じ平均時間でも、待ち時間は 2 分、4 分、10 分になる。
+	Bank with an ATM and cashiers	ATM と窓口係のいる銀行
+	Half the customers use the ATM first; five cashiers share one queue (Borshchev and Grigoryev, The Big Book of Simulation Modeling, Example 2.2).	客の半数はまず ATM を使い、窓口係 5 人が 1 つの待ち行列を共有します (Borshchev と Grigoryev、The Big Book of Simulation Modeling、例 2.2)。
+	Are five cashiers enough when half the customers use the ATM first?	客の半数がまず ATM を使うとき、窓口係は 5 人で足りるか？
+	Routing by chance and a shared queue: cashiers busy 91% of the time, and what a sixth would do.	確率による振り分けと共有の待ち行列。時間の 91% がふさがっている窓口係と、6 人目がいたらどうなるか。
+	Hospital beds	病院のベッド
+	Patients who find every bed taken are turned away; stays vary widely around five days.	ベッドがすべて埋まっていると、患者は受け入れられません。入院日数は 5 日前後で大きくばらつきます。
+	How many beds so that fewer than 1 in 50 patients are turned away?	受け入れられない患者を 50 人に 1 人未満にするには、ベッドはいくつ必要か？
+	Beds turn patients away rather than queue them, and only the average stay matters.	ベッドは患者を待たせずに断る。効くのは平均入院日数だけ。
+	Machine repair crew	機械の修理班
+	Six machines that break down now and then, and the fitters who repair them.	ときどき故障する 6 台の機械と、それを修理する整備士。
+	How many fitters keep six machines running?	6 台の機械を動かし続けるには、整備士が何人必要か？
+	A closed loop: a machine waiting for repair cannot break down again, so the queue stays short.	閉じたループ。修理待ちの機械はもう故障しないので、待ち行列は短いままになる。
+	Inspection with rework	手直しのある検査
+	Half the parts fail inspection, are reworked and are inspected again.	部品の半数が検査で不合格になり、手直しされて再び検査されます。
+	How much longer do parts take when half of them need rework?	半数の部品に手直しが必要なとき、部品の所要時間はどれだけ延びるか？
+	A loop back: rework doubles the load on inspection, and less rework cuts the time far more than in proportion.	戻りのループ。手直しで検査の負荷は 2 倍になり、手直しを減らすと時間は比例よりはるかに大きく縮む。
+	Project finish date	プロジェクトの完了日
+	Three activities in parallel, each ten days on average; the project ends when all three are done.	並行する 3 つの作業。それぞれ平均 10 日で、3 つすべてが終わるとプロジェクトが終わります。
+	When will the project finish?	プロジェクトはいつ終わるか？
+	Why three ten-day activities in parallel take more than 18 days on average.	平均 10 日の作業 3 つを並行して進めると、平均で 18 日を超える理由。
 	Show me	案内を見る
 	Point at where to do this step	この手順を行う場所を指し示します
 	Step {k} of {n}	ステップ {k} / {n}

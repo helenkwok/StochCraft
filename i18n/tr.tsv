@@ -826,6 +826,7 @@ unit	yr	yıl
 	IT operations	BT operasyonları
 	Reference	Referans modeller
 	Checked against queueing theory	Kuyruk teorisiyle doğrulandı
+	Checked against probability theory	Olasılık teorisiyle doğrulandı
 	Matches a published study	Yayımlanmış bir çalışmayla örtüşüyor
 	What do you want to find out?	Neyi öğrenmek istiyorsunuz?
 	Simulate a process, compare what-ifs, and see which differences are real. Each example asks one question and shows how the answer was found.	Bir süreci simüle edin, ya şöyle olsaydı senaryolarını karşılaştırın ve hangi farkların gerçek olduğunu görün. Her örnek bir soru sorar ve cevabın nasıl bulunduğunu gösterir.
@@ -882,6 +883,31 @@ unit	yr	yıl
 	Callers who give up: the share lost and the wait of those who stay.	Vazgeçen arayanlar: kaybedilen oran ve kalanların beklemesi.
 	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	Engellenme, küçük bekleme alanları ve arızalar: hattın başında geri çevrilen parçalar.
 	Health checks that take busy servers out send their requests back to the queue.	Meşgul sunucuları hizmetten çıkaran durum denetimleri, onların isteklerini kuyruğa geri gönderir.
+	Projects	Projeler
+	Same mean, different spread	Aynı ortalama, farklı yayılım
+	Three desks with the same mean service time of 1 minute: fixed, random and very uneven.	Ortalama hizmet süresi aynı, 1 dakika olan üç gişe: sabit, rastgele ve çok düzensiz.
+	Does it matter how much service times vary when the average is the same?	Ortalama aynıyken hizmet sürelerinin ne kadar değiştiği önemli mi?
+	Variability makes queues: the same average time gives waits of 2, 4 and 10 minutes.	Değişkenlik kuyruk yaratır: aynı ortalama süre 2, 4 ve 10 dakikalık beklemeler verir.
+	Bank with an ATM and cashiers	ATM ve veznedarlı banka
+	Half the customers use the ATM first; five cashiers share one queue (Borshchev and Grigoryev, The Big Book of Simulation Modeling, Example 2.2).	Müşterilerin yarısı önce ATM'yi kullanır; beş veznedar tek bir kuyruğu paylaşır (Borshchev ve Grigoryev, The Big Book of Simulation Modeling, Örnek 2.2).
+	Are five cashiers enough when half the customers use the ATM first?	Müşterilerin yarısı önce ATM'yi kullanırken beş veznedar yeterli mi?
+	Routing by chance and a shared queue: cashiers busy 91% of the time, and what a sixth would do.	Rastgele yönlendirme ve ortak kuyruk: zamanın 91%'inde meşgul veznedarlar ve altıncısının ne değiştireceği.
+	Hospital beds	Hastane yatakları
+	Patients who find every bed taken are turned away; stays vary widely around five days.	Tüm yatakları dolu bulan hastalar geri çevrilir; yatış süreleri beş gün civarında çok değişir.
+	How many beds so that fewer than 1 in 50 patients are turned away?	Hastaların 50'de 1'inden azının geri çevrilmesi için kaç yatak gerekir?
+	Beds turn patients away rather than queue them, and only the average stay matters.	Yataklar hastaları kuyruğa almak yerine geri çevirir ve yalnızca ortalama yatış süresi önemlidir.
+	Machine repair crew	Makine onarım ekibi
+	Six machines that break down now and then, and the fitters who repair them.	Ara sıra arızalanan altı makine ve onları onaran tamirciler.
+	How many fitters keep six machines running?	Altı makineyi kaç tamirci çalışır durumda tutar?
+	A closed loop: a machine waiting for repair cannot break down again, so the queue stays short.	Kapalı bir sistem: onarım bekleyen bir makine yeniden arızalanamaz, bu yüzden kuyruk kısa kalır.
+	Inspection with rework	Yeniden işlemeli muayene
+	Half the parts fail inspection, are reworked and are inspected again.	Parçaların yarısı muayeneden geçemez, yeniden işlenir ve tekrar muayene edilir.
+	How much longer do parts take when half of them need rework?	Parçaların yarısı yeniden işleme gerektirdiğinde parçalar ne kadar daha uzun sürer?
+	A loop back: rework doubles the load on inspection, and less rework cuts the time far more than in proportion.	Geri dönen bir döngü: yeniden işleme muayenedeki yükü ikiye katlar ve daha az yeniden işleme süreyi orantılı olandan çok daha fazla kısaltır.
+	Project finish date	Proje bitiş tarihi
+	Three activities in parallel, each ten days on average; the project ends when all three are done.	Her biri ortalama on gün süren üç paralel faaliyet; proje üçü de bitince sona erer.
+	When will the project finish?	Proje ne zaman biter?
+	Why three ten-day activities in parallel take more than 18 days on average.	On günlük üç paralel faaliyet neden ortalama 18 günden uzun sürer.
 	Show me	Bana göster
 	Point at where to do this step	Bu adımın nerede yapılacağını göster
 	Step {k} of {n}	Adım {k} / {n}
