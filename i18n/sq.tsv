@@ -908,6 +908,23 @@ unit	yr	v
 	Three activities in parallel, each ten days on average; the project ends when all three are done.	Tri aktivitete paralele, secili mesatarisht dhjetë ditë; projekti përfundon kur janë kryer të tria.
 	When will the project finish?	Kur do të përfundojë projekti?
 	Why three ten-day activities in parallel take more than 18 days on average.	Pse tri aktivitete paralele dhjetëditore zgjasin mesatarisht më shumë se 18 ditë.
+	Public services	Shërbimet publike
+	Polling place	Qendra e votimit
+	Voters arrive all day and wait for a free voting machine, with a long or a short ballot (Allen, Introduction to Discrete Event Simulation and Agent-based Modeling, ch. 6 and 7).	Votuesit mbërrijnë gjithë ditën dhe presin për një makinë votimi të lirë, me fletëvotim të gjatë ose të shkurtër (Allen, Introduction to Discrete Event Simulation and Agent-based Modeling, kre. 6 dhe 7).
+	How many voting machines does a polling place need?	Sa makina votimi i duhen një qendre votimi?
+	Machines in proportion to voters and ballot length: 16 instead of 18 makes the wait six times longer. The election-day runs show the direction only.	Makina në përpjesëtim me votuesit dhe gjatësinë e fletëvotimit: 16 në vend të 18 e bën pritjen gjashtë herë më të gjatë. Ekzekutimet e ditës së zgjedhjeve tregojnë vetëm drejtimin.
+	Mass vaccination hub	Qendra e vaksinimit masiv
+	Entrance, registration, assessment and vaccination, with each dose prepared alongside, then about 20 minutes in an observation seat (Hanly et al., BMC Health Services Research, 2022).	Hyrja, regjistrimi, vlerësimi dhe vaksinimi, me çdo dozë të përgatitur anash, pastaj rreth 20 minuta në një ndenjëse vëzhgimi (Hanly et al., BMC Health Services Research, 2022).
+	How many doses a day can a vaccination hub give?	Sa doza në ditë mund të japë një qendër vaksinimi?
+	Each station's staff are as busy as the flow of patients says: all under 80%, and about 470 doses in an 8-hour day with 21 staff. The time inside is not checked.	Stafi i secilës stacion është aq i zënë sa thotë rrjedha e pacientëve: të gjithë nën 80%, dhe rreth 470 doza në një ditë 8-orëshe me 21 punonjës. Koha brenda nuk kontrollohet.
+	Penny Fab	Penny Fab
+	Four machines in a line, 2 hours a job each, with a fixed number of jobs going round (Hopp and Spearman, Factory Physics).	Katër makina në linjë, nga 2 orë për punë secila, me një numër fiks punësh në qarkullim (Hopp dhe Spearman, Factory Physics).
+	How much work in process does a line need?	Sa punë në proces i duhet një linje?
+	Little's law and the critical work in process: 4 jobs give 0.29 jobs an hour with random times and 0.5 with fixed ones.	Ligji i Little dhe puna kritike në proces: 4 punë japin 0.29 punë në orë me kohë të rastësishme dhe 0.5 me kohë fikse.
+	Prison population	Popullsia e burgjeve
+	Petty and serious offenders serve their sentences, and some offend again and come back; the numbers scaled down 100 times (Brailsford, Churilov and Dangerfield, ch. 8).	Shkelësit e lehtë dhe të rëndë i vuajnë dënimet, dhe disa e përsërisin veprën dhe kthehen; numrat janë zvogëluar 100 herë (Brailsford, Churilov dhe Dangerfield, kre. 8).
+	How many prison places are needed?	Sa vende burgu nevojiten?
+	Places are arrivals times the length of stay, whatever the sentences: 500 petty and 260 serious offenders inside, and what fewer reoffending would do.	Vendet janë mbërritjet shumëzuar me kohëzgjatjen e qëndrimit, çfarëdo dënimesh: brenda 500 shkelës të lehtë dhe 260 të rëndë, dhe çfarë do të bënte më pak përsëritje e veprave.
 	Show me	Më trego
 	Point at where to do this step	Tregoni ku bëhet ky hap
 	Step {k} of {n}	Hapi {k} nga {n}

@@ -908,6 +908,23 @@ unit	yr	god.
 	Three activities in parallel, each ten days on average; the project ends when all three are done.	Tri paralelne aktivnosti, svaka u prosjeku deset dana; projekt završava kad su sve tri gotove.
 	When will the project finish?	Kada će projekt biti završen?
 	Why three ten-day activities in parallel take more than 18 days on average.	Zašto tri paralelne desetodnevne aktivnosti u prosjeku traju dulje od 18 dana.
+	Public services	Javne usluge
+	Polling place	Biračko mjesto
+	Voters arrive all day and wait for a free voting machine, with a long or a short ballot (Allen, Introduction to Discrete Event Simulation and Agent-based Modeling, ch. 6 and 7).	Birači dolaze cijeli dan i čekaju slobodan glasački uređaj, uz dug ili kratak glasački listić (Allen, Introduction to Discrete Event Simulation and Agent-based Modeling, pogl. 6 i 7).
+	How many voting machines does a polling place need?	Koliko glasačkih uređaja treba biračkom mjestu?
+	Machines in proportion to voters and ballot length: 16 instead of 18 makes the wait six times longer. The election-day runs show the direction only.	Uređaji moraju pratiti broj birača i duljinu listića: 16 umjesto 18 produljuje čekanje šest puta. Pokretanja za dan izbora pokazuju samo smjer.
+	Mass vaccination hub	Centar za masovno cijepljenje
+	Entrance, registration, assessment and vaccination, with each dose prepared alongside, then about 20 minutes in an observation seat (Hanly et al., BMC Health Services Research, 2022).	Ulaz, registracija, procjena i cijepljenje, uz dozu pripremljenu usporedno, zatim oko 20 minuta na mjestu za promatranje (Hanly et al., BMC Health Services Research, 2022).
+	How many doses a day can a vaccination hub give?	Koliko doza dnevno može dati centar za cijepljenje?
+	Each station's staff are as busy as the flow of patients says: all under 80%, and about 470 doses in an 8-hour day with 21 staff. The time inside is not checked.	Osoblje svake postaje zauzeto je koliko kaže protok pacijenata: sve ispod 80 %, i oko 470 doza u osmosatnom danu s 21 djelatnikom. Vrijeme provedeno unutra nije provjereno.
+	Penny Fab	Penny Fab
+	Four machines in a line, 2 hours a job each, with a fixed number of jobs going round (Hopp and Spearman, Factory Physics).	Četiri stroja u nizu, po 2 sata za svaki posao, uz stalan broj poslova koji kruže (Hopp i Spearman, Factory Physics).
+	How much work in process does a line need?	Koliko nedovršene proizvodnje treba jednoj liniji?
+	Little's law and the critical work in process: 4 jobs give 0.29 jobs an hour with random times and 0.5 with fixed ones.	Littleov zakon i kritična nedovršena proizvodnja: 4 posla daju 0.29 posla na sat sa slučajnim vremenima i 0.5 s fiksnima.
+	Prison population	Zatvorska populacija
+	Petty and serious offenders serve their sentences, and some offend again and come back; the numbers scaled down 100 times (Brailsford, Churilov and Dangerfield, ch. 8).	Počinitelji lakših i teških kaznenih djela izdržavaju kazne, a neki ponovno počine djelo i vrate se; brojke smanjene 100 puta (Brailsford, Churilov i Dangerfield, pogl. 8).
+	How many prison places are needed?	Koliko je zatvorskih mjesta potrebno?
+	Places are arrivals times the length of stay, whatever the sentences: 500 petty and 260 serious offenders inside, and what fewer reoffending would do.	Mjesta su dolasci puta duljina boravka, bez obzira na kazne: unutra 500 počinitelja lakših i 260 teških djela, i što bi učinilo manje ponovnih kaznenih djela.
 	Show me	Pokaži mi
 	Point at where to do this step	Pokaži gdje obaviti ovaj korak
 	Step {k} of {n}	Korak {k} od {n}

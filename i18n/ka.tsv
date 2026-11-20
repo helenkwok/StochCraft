@@ -908,6 +908,23 @@ unit	yr	წელი
 	Three activities in parallel, each ten days on average; the project ends when all three are done.	სამი პარალელური სამუშაო, თითოეული საშუალოდ ათი დღე; პროექტი მთავრდება, როცა სამივე დასრულდება.
 	When will the project finish?	როდის დასრულდება პროექტი?
 	Why three ten-day activities in parallel take more than 18 days on average.	რატომ სჭირდება სამ პარალელურ ათდღიან სამუშაოს საშუალოდ 18 დღეზე მეტი.
+	Public services	საჯარო სერვისები
+	Polling place	საარჩევნო უბანი
+	Voters arrive all day and wait for a free voting machine, with a long or a short ballot (Allen, Introduction to Discrete Event Simulation and Agent-based Modeling, ch. 6 and 7).	ამომრჩევლები მთელი დღე მოდიან და თავისუფალ საარჩევნო აპარატს ელოდებიან, გრძელი ან მოკლე ბიულეტენით (Allen, Introduction to Discrete Event Simulation and Agent-based Modeling, თავი 6 და 7).
+	How many voting machines does a polling place need?	რამდენი საარჩევნო აპარატია საჭირო საარჩევნო უბანზე?
+	Machines in proportion to voters and ballot length: 16 instead of 18 makes the wait six times longer. The election-day runs show the direction only.	აპარატები ამომრჩევლების რაოდენობისა და ბიულეტენის სიგრძის პროპორციული უნდა იყოს: 18-ის ნაცვლად 16 ლოდინს ექვსჯერ ზრდის. არჩევნების დღის გაშვებები მხოლოდ მიმართულებას აჩვენებს.
+	Mass vaccination hub	მასობრივი ვაქცინაციის ცენტრი
+	Entrance, registration, assessment and vaccination, with each dose prepared alongside, then about 20 minutes in an observation seat (Hanly et al., BMC Health Services Research, 2022).	შესასვლელი, რეგისტრაცია, შეფასება და ვაქცინაცია, თითოეული დოზა გვერდით მზადდება, შემდეგ დაახლოებით 20 წუთი დაკვირვების სკამზე (Hanly et al., BMC Health Services Research, 2022).
+	How many doses a day can a vaccination hub give?	რამდენი დოზის გაკეთება შეუძლია ვაქცინაციის ცენტრს დღეში?
+	Each station's staff are as busy as the flow of patients says: all under 80%, and about 470 doses in an 8-hour day with 21 staff. The time inside is not checked.	თითოეული სადგურის პერსონალი იმდენად დაკავებულია, რამდენსაც პაციენტთა ნაკადი განსაზღვრავს: ყველა 80%-ზე დაბლა, და დაახლოებით 470 დოზა 8-საათიან დღეში 21 თანამშრომლით. შიგნით გატარებული დრო არ შემოწმებულა.
+	Penny Fab	Penny Fab
+	Four machines in a line, 2 hours a job each, with a fixed number of jobs going round (Hopp and Spearman, Factory Physics).	ოთხი მანქანა ერთ ხაზზე, თითოეული 2 საათს ამუშავებს თითო დავალებას, დავალებების ფიქსირებული რაოდენობით, რომლებიც წრეზე ტრიალებს (Hopp და Spearman, Factory Physics).
+	How much work in process does a line need?	რამდენი დაუმთავრებელი წარმოება სჭირდება ხაზს?
+	Little's law and the critical work in process: 4 jobs give 0.29 jobs an hour with random times and 0.5 with fixed ones.	ლიტლის კანონი და კრიტიკული დაუმთავრებელი წარმოება: 4 დავალება შემთხვევითი დროებით საათში 0.29 დავალებას იძლევა, ფიქსირებულით კი 0.5-ს.
+	Prison population	ციხის მოსახლეობა
+	Petty and serious offenders serve their sentences, and some offend again and come back; the numbers scaled down 100 times (Brailsford, Churilov and Dangerfield, ch. 8).	მცირე და მძიმე დანაშაულის ჩამდენები სასჯელს იხდიან, ზოგი კი ისევ ჩაიდენს დანაშაულს და ბრუნდება; რიცხვები 100-ჯერ შემცირებულია (Brailsford, Churilov და Dangerfield, თავი 8).
+	How many prison places are needed?	რამდენი ადგილია საჭირო ციხეში?
+	Places are arrivals times the length of stay, whatever the sentences: 500 petty and 260 serious offenders inside, and what fewer reoffending would do.	ადგილები არის შემოსვლები გამრავლებული ყოფნის ხანგრძლივობაზე, სასჯელების მიუხედავად: შიგნით 500 მცირე და 260 მძიმე დანაშაულის ჩამდენი, და რას შეცვლიდა განმეორებითი დანაშაულის შემცირება.
 	Show me	მაჩვენეთ
 	Point at where to do this step	მიუთითეთ, სად შესრულდეს ეს ნაბიჯი
 	Step {k} of {n}	ნაბიჯი {k} / {n}

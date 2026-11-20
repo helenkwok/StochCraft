@@ -908,6 +908,23 @@ unit	yr	సం.
 	Three activities in parallel, each ten days on average; the project ends when all three are done.	సమాంతరంగా మూడు కార్యకలాపాలు, ఒక్కొక్కటి సగటున పది రోజులు; మూడూ పూర్తయినప్పుడు ప్రాజెక్టు ముగుస్తుంది.
 	When will the project finish?	ప్రాజెక్టు ఎప్పుడు పూర్తవుతుంది?
 	Why three ten-day activities in parallel take more than 18 days on average.	సమాంతరంగా పది రోజుల మూడు కార్యకలాపాలు సగటున 18 రోజులకు మించి ఎందుకు పడతాయి.
+	Public services	ప్రజా సేవలు
+	Polling place	పోలింగ్ కేంద్రం
+	Voters arrive all day and wait for a free voting machine, with a long or a short ballot (Allen, Introduction to Discrete Event Simulation and Agent-based Modeling, ch. 6 and 7).	ఓటర్లు రోజంతా వస్తారు, పొడవైన లేదా చిన్న బ్యాలెట్‌తో ఖాళీ ఓటింగ్ యంత్రం కోసం వేచి ఉంటారు (Allen, Introduction to Discrete Event Simulation and Agent-based Modeling, అధ్యా. 6 మరియు 7).
+	How many voting machines does a polling place need?	ఒక పోలింగ్ కేంద్రానికి ఎన్ని ఓటింగ్ యంత్రాలు కావాలి?
+	Machines in proportion to voters and ballot length: 16 instead of 18 makes the wait six times longer. The election-day runs show the direction only.	యంత్రాలు ఓటర్ల సంఖ్యకు, బ్యాలెట్ పొడవుకు అనుపాతంలో ఉంటాయి: 18కి బదులు 16 ఉంటే వేచి ఉండే సమయం ఆరు రెట్లు పెరుగుతుంది. ఎన్నికల రోజు అమలులు దిశను మాత్రమే చూపుతాయి.
+	Mass vaccination hub	సామూహిక టీకా కేంద్రం
+	Entrance, registration, assessment and vaccination, with each dose prepared alongside, then about 20 minutes in an observation seat (Hanly et al., BMC Health Services Research, 2022).	ప్రవేశం, నమోదు, మూల్యాంకనం మరియు టీకా; ప్రతి డోసు పక్కనే సిద్ధం చేయబడుతుంది, ఆ తర్వాత పరిశీలన సీటులో సుమారు 20 నిమిషాలు (Hanly et al., BMC Health Services Research, 2022).
+	How many doses a day can a vaccination hub give?	ఒక టీకా కేంద్రం రోజుకు ఎన్ని డోసులు ఇవ్వగలదు?
+	Each station's staff are as busy as the flow of patients says: all under 80%, and about 470 doses in an 8-hour day with 21 staff. The time inside is not checked.	ప్రతి స్టేషన్ సిబ్బంది రోగుల ప్రవాహం చెప్పినంత బిజీగా ఉంటారు: అందరూ 80% కంటే తక్కువ, 21 మంది సిబ్బందితో 8 గంటల రోజులో సుమారు 470 డోసులు. లోపల గడిపే సమయం తనిఖీ చేయలేదు.
+	Penny Fab	Penny Fab
+	Four machines in a line, 2 hours a job each, with a fixed number of jobs going round (Hopp and Spearman, Factory Physics).	వరుసలో నాలుగు యంత్రాలు, ఒక్కొక్కటికి ఒక జాబ్‌కు 2 గంటలు, స్థిర సంఖ్యలో జాబ్‌లు తిరుగుతూ ఉంటాయి (Hopp మరియు Spearman, Factory Physics).
+	How much work in process does a line need?	ఒక లైన్‌కు ఎంత ప్రక్రియలో ఉన్న పని (WIP) కావాలి?
+	Little's law and the critical work in process: 4 jobs give 0.29 jobs an hour with random times and 0.5 with fixed ones.	లిటిల్ నియమం మరియు కీలకమైన ప్రక్రియలో ఉన్న పని: 4 జాబ్‌లు యాదృచ్ఛిక సమయాలతో గంటకు 0.29 జాబ్‌లను, స్థిర సమయాలతో 0.5 జాబ్‌లను ఇస్తాయి.
+	Prison population	జైలు జనాభా
+	Petty and serious offenders serve their sentences, and some offend again and come back; the numbers scaled down 100 times (Brailsford, Churilov and Dangerfield, ch. 8).	చిన్న మరియు తీవ్రమైన నేరస్థులు తమ శిక్షలు అనుభవిస్తారు, కొందరు మళ్లీ నేరం చేసి తిరిగి వస్తారు; సంఖ్యలు 100 రెట్లు తగ్గించబడ్డాయి (Brailsford, Churilov మరియు Dangerfield, అధ్యా. 8).
+	How many prison places are needed?	ఎన్ని జైలు స్థలాలు అవసరం?
+	Places are arrivals times the length of stay, whatever the sentences: 500 petty and 260 serious offenders inside, and what fewer reoffending would do.	స్థలాలు అంటే రాకలు × బస కాలం, శిక్షలు ఏవైనా: లోపల 500 చిన్న మరియు 260 తీవ్రమైన నేరస్థులు, మళ్లీ నేరాలు తగ్గితే ఏమవుతుందో కూడా.
 	Show me	నాకు చూపించు
 	Point at where to do this step	ఈ దశను ఎక్కడ చేయాలో సూచించు
 	Step {k} of {n}	{n} దశల్లో {k}వ దశ

@@ -12,11 +12,18 @@
 //! - the machine repair crew against the finite-source chain M/M/R//6;
 //! - inspection with rework against the product form of its Jackson network;
 //! - the project's finish against the maximum of its activities' exponential durations;
-//! - three desks with the same mean service time against Pollaczek–Khinchine.
+//! - three desks with the same mean service time against Pollaczek–Khinchine;
+//! - the polling place against Erlang C, with its machines allocated by Allen's (2011) rule;
+//! - the mass vaccination hub of Hanly et al. (2022) against flow balance at every station;
+//! - the prison population of Brailsford, Churilov and Dangerfield (2014, ch. 8) against the
+//!   mean numbers inside its network of infinite-server stations;
+//! - Penny Fab (Hopp and Spearman, Factory Physics) against the practical worst case, exact for a
+//!   balanced closed line with exponential times, and the best case for fixed times.
 //!
 //! The first five files were written by `stochcraft-cli new -t <name>`; the others were built with
 //! the same engine commands and saved, with their comparison scenarios (each inheriting the first)
-//! added by hand, as in `mm1.bpmn`.
+//! added by hand, as in `mm1.bpmn`. The starting contents of the prison and of Penny Fab were
+//! added by hand too.
 //!
 //! Each check allows √2 times the 95% half-width, since several checks read the same runs (as in
 //! `crates/blocks/tests/queueing_cases.rs`).
@@ -27,6 +34,7 @@ use std::path::Path;
 
 use serde_json::{Value, json};
 use stochcraft_engine::Engine;
+use stochcraft_model::{ElementId, ElementKind, Model};
 
 fn ok(e: &mut Engine, command: &str, params: Value) -> Value {
     let r = e.execute(command, params.clone());
@@ -39,11 +47,65 @@ fn open(file: &str, experiment: Value) -> Engine {
     open_scenario(file, None, experiment)
 }
 
+/// The path of example `file` in `tests/models`.
+fn model_path(file: &str) -> std::path::PathBuf {
+    Path::new(env!("CARGO_MANIFEST_DIR"))
+        .join("../../tests/models")
+        .join(file)
+}
+
+/// The model of example `file` with its BPSim `scenario` (the first without one), as read from
+/// the file.
+fn model_of(file: &str, scenario: Option<&str>) -> Model {
+    let path = model_path(file);
+    let bytes = std::fs::read(&path).unwrap_or_else(|e| panic!("{}: {e}", path.display()));
+    stochcraft_io::read_scenario(&bytes, scenario)
+        .unwrap_or_else(|e| panic!("{file} {scenario:?}: {e}"))
+        .model
+}
+
+/// The mean service time and the units of server `id` in model `m`.
+fn server(m: &Model, id: &str) -> (f64, u32) {
+    match m.element(&ElementId::unchecked(id)).map(|e| &e.kind) {
+        Some(ElementKind::Server {
+            capacity, service, ..
+        }) => (
+            service
+                .mean()
+                .unwrap_or_else(|| panic!("{id}: no mean service time")),
+            *capacity,
+        ),
+        _ => panic!("{id} is not a server"),
+    }
+}
+
+/// The mean time between arrivals at source `id` in model `m`.
+fn interarrival(m: &Model, id: &str) -> f64 {
+    match m.element(&ElementId::unchecked(id)).map(|e| &e.kind) {
+        Some(ElementKind::Source { interarrival, .. }) => interarrival
+            .mean()
+            .unwrap_or_else(|| panic!("{id}: no mean time between arrivals")),
+        _ => panic!("{id} is not a source"),
+    }
+}
+
+/// The warnings of the behaviour checks in run results `r`.
+fn behaviour_warnings(r: &Value) -> Vec<&Value> {
+    r["warnings"]
+        .as_array()
+        .into_iter()
+        .flatten()
+        .filter(|w| {
+            w["parts"][0]["key"]
+                .as_str()
+                .is_some_and(|k| k.starts_with("behaviour_"))
+        })
+        .collect()
+}
+
 /// As [`open`], reading the file's BPSim `scenario` (the first without one).
 fn open_scenario(file: &str, scenario: Option<&str>, experiment: Value) -> Engine {
-    let path = Path::new(env!("CARGO_MANIFEST_DIR"))
-        .join("../../tests/models")
-        .join(file);
+    let path = model_path(file);
     let mut e = Engine::new();
     let mut params = json!({ "path": path.to_string_lossy() });
     if let Some(s) = scenario {
@@ -584,4 +646,231 @@ fn the_same_mean_with_more_spread_waits_longer_by_pollaczek_khinchine() {
             pollaczek_khinchine(lambda, 1.0, second),
         );
     }
+}
+
+/// A polling place from T. T. Allen, *Introduction to Discrete Event Simulation and Agent-based
+/// Modeling*, Springer 2011: ballots of 19 initiatives take 12.5 minutes on average and of 8
+/// initiatives 6.5 (§7.3.3), over a 13-hour day (§7.3.4). The arrival rate is deduced, not
+/// printed: about half a million voters at 532 locations (§7.3.1) is about 72 an hour. The
+/// voting times are exponential, as Erlang C and the Kolesar–Green rule of §6.2 assume (the
+/// study itself used truncated normal ones), so each scenario is M/M/c: Wq = C(c, a) S / (c − a).
+/// The machines follow the book's utilisation-based rule (§7.3.5): roundup(ballot minutes ×
+/// voters / (ρ₀ × 13 h × 60)) with its starting ρ₀ of 0.85 gives 18 for the long ballot and 10
+/// for the short; 16 machines is the comparison.
+#[test]
+fn the_polling_place_matches_erlang_c() {
+    let lambda = 72.0 / 60.0;
+    let voters = 72.0 * 13.0;
+    let allocate = |ballot: f64| (ballot * voters / (0.85 * 13.0 * 60.0)).ceil();
+    assert!(
+        (allocate(12.5) - 18.0).abs() < 1e-9 && (allocate(6.5) - 10.0).abs() < 1e-9,
+        "{} {}",
+        allocate(12.5),
+        allocate(6.5)
+    );
+    let experiment = json!({ "replications": 20, "warmup": 1_000.0, "duration": 50_000.0 });
+    for (scenario, ballot, c) in [
+        (None, 12.5, 18),
+        (Some("16-machines"), 12.5, 16),
+        (Some("short-ballot"), 6.5, 10),
+    ] {
+        let a = lambda * ballot;
+        let wait = erlang_c(c, a) * ballot / (f64::from(c) - a);
+        let mut e = open_scenario("polling.bpmn", scenario, experiment.clone());
+        let r = ok(&mut e, "run", json!({}));
+        covers(&r, "machines", "utilisation", a / f64::from(c));
+        covers(&r, "machines", "mean_wait", wait);
+        covers(&r, "machines", "mean_queue_length", lambda * wait);
+    }
+}
+
+/// The polling place's election day: 936 voters (72 an hour for 13 hours), the run stopping when
+/// the last has voted. There is no exact answer here, only the direction: allocating by voters
+/// alone (14 machines, half of 28 shared by two places of the same size) leaves the long-ballot
+/// place's voters waiting far longer, and its last voter later, than the 18 the rule gives.
+#[test]
+fn the_polling_place_on_election_day_shows_the_direction() {
+    let day = |scenario: &str| {
+        let mut e = open_scenario(
+            "polling.bpmn",
+            Some(scenario),
+            json!({ "replications": 200 }),
+        );
+        let r = ok(&mut e, "run", json!({}));
+        let stop = &r["stop"];
+        assert_eq!(stop["met"], json!(200), "{scenario}: {stop}");
+        let Some(end) = stop["time"]["mean"].as_f64() else {
+            panic!("{scenario}: no end time: {stop}")
+        };
+        (end, result(&r, "machines", "mean_wait").0)
+    };
+    let (end_18, wait_18) = day("election-day");
+    let (end_14, wait_14) = day("election-day-14-machines");
+    eprintln!(
+        "18 machines: done at {end_18}, wait {wait_18}; 14: done at {end_14}, wait {wait_14}"
+    );
+    assert!(end_14 > end_18, "{end_14} vs {end_18}");
+    assert!(wait_14 > 5.0 * wait_18, "{wait_14} vs {wait_18}");
+}
+
+/// The mass vaccination hub of Hanly, Churches, Fitzgerald, Caterson, MacIntyre and Jorm,
+/// "Modelling vaccination capacity at mass vaccination hubs and general practice clinics: a
+/// simulation study", BMC Health Services Research 22, 1059 (2022): Table 1's times (a minimum
+/// plus an exponential, written as tables of their quantiles), Table 3's staff (low: 2, 4, 6, 4 and 5,
+/// with 25 observation seats; high: three times as many), Table 2's 60 or 180 bookings an hour
+/// and 2% who do not come. The paper's arrival noise and walking times are not published in it,
+/// so arrivals here are Poisson and its times in the hub are not checked. What holds whatever
+/// the queueing is flow balance: each station is busy λ E[S] / c of the time, from the means of
+/// the times as the file gives them, which are within 0.2% of Table 1's; and the hub lets out
+/// λ patients a unit of time, 470.4 in an 8-hour day for the small hub (the paper: about 500)
+/// and 1,411.2 for the large (about 1,400).
+#[test]
+fn the_vaccination_hub_matches_flow_balance() {
+    let stations = [
+        "preparation",
+        "entrance",
+        "registration",
+        "assessment",
+        "vaccination",
+        "observation",
+    ];
+    let table_1 = [
+        1.0 + 1.0 / 3.0,
+        2.0 + 1.0,
+        3.0 + 1.0 / 0.7,
+        2.0 + 1.0,
+        3.0 + 1.0,
+        0.98 * 20.0 + 0.02 * (20.0 + 10.0),
+    ];
+    let base = model_of("vaccination-hub.bpmn", None);
+    for (id, paper) in stations.iter().zip(table_1) {
+        let (mean, _) = server(&base, id);
+        assert!(
+            (mean - paper).abs() < 2e-3 * paper,
+            "{id}: {mean} vs {paper}"
+        );
+    }
+    // The large hub has three times the arrivals, so a shorter run.
+    for (scenario, checked, per_day, duration) in [
+        (None, &stations[..], 470.4, 20_000.0),
+        (Some("large-hub"), &stations[..], 1_411.2, 6_000.0),
+        (Some("ten-more"), &stations[4..], 548.8, 20_000.0),
+    ] {
+        let m = model_of("vaccination-hub.bpmn", scenario);
+        let gap = interarrival(&m, "patients");
+        assert!(
+            (8.0 * 60.0 / gap - per_day).abs() < 1e-6,
+            "{scenario:?}: {}",
+            8.0 * 60.0 / gap
+        );
+        let mut e = open_scenario(
+            "vaccination-hub.bpmn",
+            scenario,
+            json!({ "replications": 20, "warmup": 600.0, "duration": duration }),
+        );
+        let r = ok(&mut e, "run", json!({}));
+        for id in checked {
+            let (mean, units) = server(&m, id);
+            covers(&r, id, "utilisation", mean / gap / f64::from(units));
+        }
+        covers(&r, "leave", "entered", duration / gap);
+    }
+}
+
+/// The prison population of Brailsford, Churilov and Dangerfield, *Discrete-Event Simulation and
+/// System Dynamics for Management Decision Making*, Wiley 2014, ch. 8 §8.3.1: 3,000 petty and
+/// 650 serious first offenders a year, sentences of 5 and 20 years on average, and those who
+/// reoffend back after 2 years on average; 50,000 petty and 26,000 serious offenders inside. The
+/// share who reoffend is not given; if the stated numbers are the equilibrium, it is 0.70 for
+/// petty and 0.50 for serious offenders (a deduction). Everything scaled down 100 times: 30 and
+/// 6.5 a year. Each stay is a station without a queue, so the number inside is Poisson with mean
+/// (arrivals including returns) × mean stay, whatever the stays' distribution: 500 petty and 260
+/// serious offenders inside, 140 and 13 out before returning. The stays are exponential and the
+/// run starts with those numbers inside, so the mean stays there from time 0 and no warm-up is
+/// needed. With 60% of petty offenders reoffending, 375 and 90, reached after a warm-up.
+#[test]
+fn the_prison_population_matches_its_infinite_server_network() {
+    let (petty, serious) = (30.0, 6.5);
+    for (scenario, reoffend, warmup) in [(None, 0.7, 0.0), (Some("fewer-reoffend"), 0.6, 100.0)] {
+        let mut e = open_scenario(
+            "prison.bpmn",
+            scenario,
+            json!({ "replications": 20, "warmup": warmup, "duration": 200.0 }),
+        );
+        let r = ok(&mut e, "run", json!({}));
+        let into_petty = petty / (1.0 - reoffend);
+        let into_serious = serious / (1.0 - 0.5);
+        covers(&r, "petty_prison", "mean_contents", into_petty * 5.0);
+        covers(
+            &r,
+            "petty_outside",
+            "mean_contents",
+            into_petty * reoffend * 2.0,
+        );
+        // The serious offenders are the same in both scenarios: checked once.
+        if scenario.is_none() {
+            covers(&r, "serious_prison", "mean_contents", into_serious * 20.0);
+            covers(
+                &r,
+                "serious_outside",
+                "mean_contents",
+                into_serious * 0.5 * 2.0,
+            );
+        }
+    }
+    // At full scale the deduced shares give the stated numbers inside.
+    let inside = |first: f64, reoffend: f64, sentence: f64| first / (1.0 - reoffend) * sentence;
+    assert!((inside(3_000.0, 0.7, 5.0) - 50_000.0).abs() < 1e-6);
+    assert!((inside(650.0, 0.5, 20.0) - 26_000.0).abs() < 1e-6);
+}
+
+/// Penny Fab, from W. J. Hopp and M. L. Spearman, *Factory Physics*: four stations in a line, one
+/// machine each, 2 hours a job, so the bottleneck rate is r_b = 0.5 a hour, the raw process time
+/// T₀ = 8 hours and the critical work in process W₀ = r_b T₀ = 4. The w jobs start at the first
+/// station and go round for ever (starting contents and a closed loop). With exponential times
+/// the line is the practical worst case, whose throughput r_b w / (W₀ + w − 1) is exact for a
+/// balanced closed line of exponential stations; each station is busy that × 2 hours, the cycle
+/// time is T₀ + (w − 1) / r_b (Little's law), and by symmetry each station's wait is a quarter of
+/// the cycle time beyond T₀. With fixed times the line is the best case: at w = W₀ each station
+/// is always busy and 0.5 jobs an hour come out.
+#[test]
+fn penny_fab_matches_the_practical_worst_case_and_the_best_case() {
+    let (rb, t0, w0) = (0.5, 8.0, 4.0);
+    let duration = 50_000.0;
+    for (scenario, w) in [
+        (Some("1-job"), 1.0),
+        (None, 4.0),
+        (Some("8-jobs"), 8.0),
+        (Some("16-jobs"), 16.0),
+    ] {
+        let mut e = open_scenario(
+            "penny-fab.bpmn",
+            scenario,
+            json!({ "replications": 20, "warmup": 500.0, "duration": duration }),
+        );
+        let checked = ok(&mut e, "model.validate", json!({}));
+        assert_eq!(checked["diagnostics"], json!([]), "{scenario:?}: {checked}");
+        let r = ok(&mut e, "run", json!({}));
+        let behaviour = behaviour_warnings(&r);
+        assert!(behaviour.is_empty(), "{scenario:?}: {behaviour:?}");
+        let throughput = rb * w / (w0 + w - 1.0);
+        let cycle = t0 + (w - 1.0) / rb;
+        assert!((w / throughput - cycle).abs() < 1e-9, "{w}");
+        covers(&r, "deburr", "utilisation", throughput * 2.0);
+        covers(&r, "rim", "mean_wait", (cycle - t0) / 4.0);
+        covers(&r, "deburr", "entered", throughput * duration);
+    }
+    let duration = 10_000.0;
+    let mut e = open_scenario(
+        "penny-fab.bpmn",
+        Some("fixed-times"),
+        json!({ "replications": 4, "warmup": 500.0, "duration": duration }),
+    );
+    let r = ok(&mut e, "run", json!({}));
+    for id in ["head", "tail", "rim", "deburr"] {
+        let (busy, _) = result(&r, id, "utilisation");
+        assert!((busy - 1.0).abs() < 1e-6, "{id}: {busy}");
+    }
+    let (out, _) = result(&r, "deburr", "entered");
+    assert!((out - rb * duration).abs() <= 2.0, "{out}");
 }

@@ -908,6 +908,23 @@ unit	yr	a
 	Three activities in parallel, each ten days on average; the project ends when all three are done.	Trei activități în paralel, fiecare de zece zile în medie; proiectul se încheie când toate trei sunt gata.
 	When will the project finish?	Când se va termina proiectul?
 	Why three ten-day activities in parallel take more than 18 days on average.	De ce trei activități de zece zile în paralel durează în medie mai mult de 18 zile.
+	Public services	Servicii publice
+	Polling place	Secție de votare
+	Voters arrive all day and wait for a free voting machine, with a long or a short ballot (Allen, Introduction to Discrete Event Simulation and Agent-based Modeling, ch. 6 and 7).	Alegătorii sosesc toată ziua și așteaptă o mașină de vot liberă, cu un buletin de vot lung sau scurt (Allen, Introduction to Discrete Event Simulation and Agent-based Modeling, cap. 6 și 7).
+	How many voting machines does a polling place need?	De câte mașini de vot are nevoie o secție de votare?
+	Machines in proportion to voters and ballot length: 16 instead of 18 makes the wait six times longer. The election-day runs show the direction only.	Mașini proporțional cu numărul de alegători și lungimea buletinului: 16 în loc de 18 face așteptarea de șase ori mai lungă. Rulările pentru ziua alegerilor arată doar direcția.
+	Mass vaccination hub	Centru de vaccinare în masă
+	Entrance, registration, assessment and vaccination, with each dose prepared alongside, then about 20 minutes in an observation seat (Hanly et al., BMC Health Services Research, 2022).	Intrare, înregistrare, evaluare și vaccinare, fiecare doză fiind pregătită alături, apoi circa 20 de minute pe un loc de observație (Hanly et al., BMC Health Services Research, 2022).
+	How many doses a day can a vaccination hub give?	Câte doze pe zi poate administra un centru de vaccinare?
+	Each station's staff are as busy as the flow of patients says: all under 80%, and about 470 doses in an 8-hour day with 21 staff. The time inside is not checked.	Personalul fiecărei stații este ocupat cât arată fluxul de pacienți: toți sub 80% și aproximativ 470 de doze într-o zi de 8 ore cu 21 de angajați. Timpul petrecut înăuntru nu este verificat.
+	Penny Fab	Penny Fab
+	Four machines in a line, 2 hours a job each, with a fixed number of jobs going round (Hopp and Spearman, Factory Physics).	Patru mașini în linie, câte 2 ore pe lucrare fiecare, cu un număr fix de lucrări în circulație (Hopp și Spearman, Factory Physics).
+	How much work in process does a line need?	De cât lucru în curs de execuție are nevoie o linie?
+	Little's law and the critical work in process: 4 jobs give 0.29 jobs an hour with random times and 0.5 with fixed ones.	Legea lui Little și lucrul critic în curs de execuție: 4 lucrări dau 0.29 lucrări pe oră cu timpi aleatorii și 0.5 cu timpi fixi.
+	Prison population	Populația penitenciarelor
+	Petty and serious offenders serve their sentences, and some offend again and come back; the numbers scaled down 100 times (Brailsford, Churilov and Dangerfield, ch. 8).	Infractorii cu fapte minore și cei cu fapte grave își execută pedepsele, iar unii recidivează și se întorc; numerele sunt reduse de 100 de ori (Brailsford, Churilov și Dangerfield, cap. 8).
+	How many prison places are needed?	Câte locuri de detenție sunt necesare?
+	Places are arrivals times the length of stay, whatever the sentences: 500 petty and 260 serious offenders inside, and what fewer reoffending would do.	Locurile sunt sosirile înmulțite cu durata șederii, oricare ar fi pedepsele: 500 de infractori cu fapte minore și 260 cu fapte grave înăuntru, și ce efect ar avea mai puține recidive.
 	Show me	Arătați-mi
 	Point at where to do this step	Indicați unde se face acest pas
 	Step {k} of {n}	Pasul {k} din {n}

@@ -908,6 +908,23 @@ unit	yr	г.
 	Three activities in parallel, each ten days on average; the project ends when all three are done.	Три параллельные работы, в среднем по десять дней каждая; проект завершается, когда выполнены все три.
 	When will the project finish?	Когда завершится проект?
 	Why three ten-day activities in parallel take more than 18 days on average.	Почему три параллельные десятидневные работы занимают в среднем больше 18 дней.
+	Public services	Государственные услуги
+	Polling place	Избирательный участок
+	Voters arrive all day and wait for a free voting machine, with a long or a short ballot (Allen, Introduction to Discrete Event Simulation and Agent-based Modeling, ch. 6 and 7).	Избиратели приходят весь день и ждут свободную машину для голосования, при длинном или коротком бюллетене (Allen, Introduction to Discrete Event Simulation and Agent-based Modeling, гл. 6 и 7).
+	How many voting machines does a polling place need?	Сколько машин для голосования нужно избирательному участку?
+	Machines in proportion to voters and ballot length: 16 instead of 18 makes the wait six times longer. The election-day runs show the direction only.	Число машин пропорционально числу избирателей и длине бюллетеня: 16 вместо 18 увеличивает ожидание в шесть раз. Запуски для дня выборов показывают только направление.
+	Mass vaccination hub	Центр массовой вакцинации
+	Entrance, registration, assessment and vaccination, with each dose prepared alongside, then about 20 minutes in an observation seat (Hanly et al., BMC Health Services Research, 2022).	Вход, регистрация, осмотр и вакцинация, при этом каждая доза готовится рядом, затем около 20 минут на месте наблюдения (Hanly et al., BMC Health Services Research, 2022).
+	How many doses a day can a vaccination hub give?	Сколько доз в день может ввести центр вакцинации?
+	Each station's staff are as busy as the flow of patients says: all under 80%, and about 470 doses in an 8-hour day with 21 staff. The time inside is not checked.	Персонал каждой станции занят настолько, насколько говорит поток пациентов: везде меньше 80% и около 470 доз за 8-часовой день при 21 сотруднике. Время внутри не проверяется.
+	Penny Fab	Penny Fab
+	Four machines in a line, 2 hours a job each, with a fixed number of jobs going round (Hopp and Spearman, Factory Physics).	Четыре станка в линии, по 2 часа на задание каждый, с фиксированным числом заданий в обороте (Hopp и Spearman, Factory Physics).
+	How much work in process does a line need?	Сколько незавершённого производства нужно линии?
+	Little's law and the critical work in process: 4 jobs give 0.29 jobs an hour with random times and 0.5 with fixed ones.	Закон Литтла и критический объём незавершённого производства: 4 задания дают 0.29 задания в час при случайных временах и 0.5 при фиксированных.
+	Prison population	Тюремное население
+	Petty and serious offenders serve their sentences, and some offend again and come back; the numbers scaled down 100 times (Brailsford, Churilov and Dangerfield, ch. 8).	Осуждённые за мелкие и за тяжкие преступления отбывают наказание, а некоторые совершают преступления снова и возвращаются; числа уменьшены в 100 раз (Brailsford, Churilov и Dangerfield, гл. 8).
+	How many prison places are needed?	Сколько нужно мест в тюрьмах?
+	Places are arrivals times the length of stay, whatever the sentences: 500 petty and 260 serious offenders inside, and what fewer reoffending would do.	Число мест равно потоку прибытия, умноженному на срок пребывания, каким бы ни были приговоры: внутри 500 осуждённых за мелкие и 260 за тяжкие преступления, и что изменило бы сокращение рецидивов.
 	Show me	Покажите мне
 	Point at where to do this step	Указать, где выполнить этот шаг
 	Step {k} of {n}	Шаг {k} из {n}

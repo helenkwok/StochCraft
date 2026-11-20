@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:bpsim="http://www.bpsim.org/schemas/2.0" id="definitions" name="Prison population" targetNamespace="https://github.com/helenkwok/StochCraft/model" exporter="StochCraft" exporterVersion="0.2.0">
+  <bpmn:process id="process" name="Prison population" isExecutable="false">
+    <bpmn:startEvent id="petty_offenders" name="First petty offences">
+      <bpmn:outgoing>flow-1</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:task id="petty_prison" name="Petty offenders in prison">
+      <bpmn:incoming>flow-1</bpmn:incoming>
+      <bpmn:incoming>flow-5</bpmn:incoming>
+      <bpmn:outgoing>flow-2</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:exclusiveGateway id="petty_release" name="Reoffend?">
+      <bpmn:incoming>flow-2</bpmn:incoming>
+      <bpmn:outgoing>flow-3</bpmn:outgoing>
+      <bpmn:outgoing>flow-4</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:task id="petty_outside" name="Out before reoffending">
+      <bpmn:incoming>flow-3</bpmn:incoming>
+      <bpmn:outgoing>flow-5</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:endEvent id="petty_rehabilitated" name="Rehabilitated">
+      <bpmn:incoming>flow-4</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:startEvent id="serious_offenders" name="First serious offences">
+      <bpmn:outgoing>flow-6</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:task id="serious_prison" name="Serious offenders in prison">
+      <bpmn:incoming>flow-6</bpmn:incoming>
+      <bpmn:incoming>flow-10</bpmn:incoming>
+      <bpmn:outgoing>flow-7</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:exclusiveGateway id="serious_release" name="Reoffend?">
+      <bpmn:incoming>flow-7</bpmn:incoming>
+      <bpmn:outgoing>flow-8</bpmn:outgoing>
+      <bpmn:outgoing>flow-9</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:task id="serious_outside" name="Out before reoffending">
+      <bpmn:incoming>flow-8</bpmn:incoming>
+      <bpmn:outgoing>flow-10</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:endEvent id="serious_rehabilitated" name="Rehabilitated">
+      <bpmn:incoming>flow-9</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="flow-1" sourceRef="petty_offenders" targetRef="petty_prison"/>
+    <bpmn:sequenceFlow id="flow-2" sourceRef="petty_prison" targetRef="petty_release"/>
+    <bpmn:sequenceFlow id="flow-3" sourceRef="petty_release" targetRef="petty_outside"/>
+    <bpmn:sequenceFlow id="flow-4" sourceRef="petty_release" targetRef="petty_rehabilitated"/>
+    <bpmn:sequenceFlow id="flow-5" sourceRef="petty_outside" targetRef="petty_prison"/>
+    <bpmn:sequenceFlow id="flow-6" sourceRef="serious_offenders" targetRef="serious_prison"/>
+    <bpmn:sequenceFlow id="flow-7" sourceRef="serious_prison" targetRef="serious_release"/>
+    <bpmn:sequenceFlow id="flow-8" sourceRef="serious_release" targetRef="serious_outside"/>
+    <bpmn:sequenceFlow id="flow-9" sourceRef="serious_release" targetRef="serious_rehabilitated"/>
+    <bpmn:sequenceFlow id="flow-10" sourceRef="serious_outside" targetRef="serious_prison"/>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="diagram">
+    <bpmndi:BPMNPlane id="plane" bpmnElement="process">
+      <bpmndi:BPMNShape id="petty_offenders_di" bpmnElement="petty_offenders">
+        <dc:Bounds x="82" y="82" width="36" height="36"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="petty_prison_di" bpmnElement="petty_prison">
+        <dc:Bounds x="180" y="60" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="petty_release_di" bpmnElement="petty_release">
+        <dc:Bounds x="345" y="75" width="50" height="50"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="petty_outside_di" bpmnElement="petty_outside">
+        <dc:Bounds x="320" y="180" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="petty_rehabilitated_di" bpmnElement="petty_rehabilitated">
+        <dc:Bounds x="482" y="82" width="36" height="36"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="serious_offenders_di" bpmnElement="serious_offenders">
+        <dc:Bounds x="82" y="342" width="36" height="36"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="serious_prison_di" bpmnElement="serious_prison">
+        <dc:Bounds x="180" y="320" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="serious_release_di" bpmnElement="serious_release">
+        <dc:Bounds x="345" y="335" width="50" height="50"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="serious_outside_di" bpmnElement="serious_outside">
+        <dc:Bounds x="320" y="440" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="serious_rehabilitated_di" bpmnElement="serious_rehabilitated">
+        <dc:Bounds x="482" y="342" width="36" height="36"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="flow-1_di" bpmnElement="flow-1">
+        <di:waypoint x="118" y="100"/>
+        <di:waypoint x="180" y="100"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow-2_di" bpmnElement="flow-2">
+        <di:waypoint x="280" y="100"/>
+        <di:waypoint x="345" y="100"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow-3_di" bpmnElement="flow-3">
+        <di:waypoint x="370" y="125"/>
+        <di:waypoint x="370" y="180"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow-4_di" bpmnElement="flow-4">
+        <di:waypoint x="395" y="100"/>
+        <di:waypoint x="482" y="100"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow-5_di" bpmnElement="flow-5">
+        <di:waypoint x="320" y="220"/>
+        <di:waypoint x="230" y="220"/>
+        <di:waypoint x="230" y="140"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow-6_di" bpmnElement="flow-6">
+        <di:waypoint x="118" y="360"/>
+        <di:waypoint x="180" y="360"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow-7_di" bpmnElement="flow-7">
+        <di:waypoint x="280" y="360"/>
+        <di:waypoint x="345" y="360"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow-8_di" bpmnElement="flow-8">
+        <di:waypoint x="370" y="385"/>
+        <di:waypoint x="370" y="440"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow-9_di" bpmnElement="flow-9">
+        <di:waypoint x="395" y="360"/>
+        <di:waypoint x="482" y="360"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow-10_di" bpmnElement="flow-10">
+        <di:waypoint x="320" y="480"/>
+        <di:waypoint x="230" y="480"/>
+        <di:waypoint x="230" y="400"/>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+  <bpmn:relationship type="BPSimData">
+    <bpmn:extensionElements>
+      <bpsim:BPSimData>
+        <bpsim:Scenario id="scenario" name="At equilibrium" vendor="StochCraft" version="0.2.0">
+          <bpsim:ScenarioParameters replication="10" seed="1" baseTimeUnit="year">
+            <bpsim:Duration>
+              <bpsim:FloatingParameter value="100"/>
+            </bpsim:Duration>
+          </bpsim:ScenarioParameters>
+          <bpsim:ElementParameters elementRef="petty_offenders">
+            <bpsim:ControlParameters>
+              <bpsim:InterTriggerTimer>
+                <bpsim:NegativeExponentialDistribution mean="0.03333333333333333"/>
+              </bpsim:InterTriggerTimer>
+            </bpsim:ControlParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="petty_prison">
+            <bpsim:TimeParameters>
+              <bpsim:ProcessingTime>
+                <bpsim:NegativeExponentialDistribution mean="5"/>
+              </bpsim:ProcessingTime>
+            </bpsim:TimeParameters>
+            <bpsim:VendorExtension name="stochcraft:startingContents" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1" stochcraft:value="500"/>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="petty_outside">
+            <bpsim:TimeParameters>
+              <bpsim:ProcessingTime>
+                <bpsim:NegativeExponentialDistribution mean="2"/>
+              </bpsim:ProcessingTime>
+            </bpsim:TimeParameters>
+            <bpsim:VendorExtension name="stochcraft:startingContents" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1" stochcraft:value="140"/>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="serious_offenders">
+            <bpsim:ControlParameters>
+              <bpsim:InterTriggerTimer>
+                <bpsim:NegativeExponentialDistribution mean="0.15384615384615383"/>
+              </bpsim:InterTriggerTimer>
+            </bpsim:ControlParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="serious_prison">
+            <bpsim:TimeParameters>
+              <bpsim:ProcessingTime>
+                <bpsim:NegativeExponentialDistribution mean="20"/>
+              </bpsim:ProcessingTime>
+            </bpsim:TimeParameters>
+            <bpsim:VendorExtension name="stochcraft:startingContents" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1" stochcraft:value="260"/>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="serious_outside">
+            <bpsim:TimeParameters>
+              <bpsim:ProcessingTime>
+                <bpsim:NegativeExponentialDistribution mean="2"/>
+              </bpsim:ProcessingTime>
+            </bpsim:TimeParameters>
+            <bpsim:VendorExtension name="stochcraft:startingContents" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1" stochcraft:value="13"/>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="flow-3">
+            <bpsim:ControlParameters>
+              <bpsim:Probability>
+                <bpsim:FloatingParameter value="0.7"/>
+              </bpsim:Probability>
+            </bpsim:ControlParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="flow-4">
+            <bpsim:ControlParameters>
+              <bpsim:Probability>
+                <bpsim:FloatingParameter value="0.3"/>
+              </bpsim:Probability>
+            </bpsim:ControlParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="flow-8">
+            <bpsim:ControlParameters>
+              <bpsim:Probability>
+                <bpsim:FloatingParameter value="0.5"/>
+              </bpsim:Probability>
+            </bpsim:ControlParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="flow-9">
+            <bpsim:ControlParameters>
+              <bpsim:Probability>
+                <bpsim:FloatingParameter value="0.5"/>
+              </bpsim:Probability>
+            </bpsim:ControlParameters>
+          </bpsim:ElementParameters>
+        </bpsim:Scenario>
+        <bpsim:Scenario id="fewer-reoffend" name="Fewer petty offenders reoffend (60%)" inherits="scenario">
+          <bpsim:ElementParameters elementRef="flow-3">
+            <bpsim:ControlParameters>
+              <bpsim:Probability>
+                <bpsim:FloatingParameter value="0.6"/>
+              </bpsim:Probability>
+            </bpsim:ControlParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="flow-4">
+            <bpsim:ControlParameters>
+              <bpsim:Probability>
+                <bpsim:FloatingParameter value="0.4"/>
+              </bpsim:Probability>
+            </bpsim:ControlParameters>
+          </bpsim:ElementParameters>
+        </bpsim:Scenario>
+      </bpsim:BPSimData>
+    </bpmn:extensionElements>
+    <bpmn:source>definitions</bpmn:source>
+    <bpmn:target>definitions</bpmn:target>
+  </bpmn:relationship>
+</bpmn:definitions>

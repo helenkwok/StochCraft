@@ -908,6 +908,23 @@ unit	yr	वर्ष
 	Three activities in parallel, each ten days on average; the project ends when all three are done.	समानांतर में तीन गतिविधियाँ, प्रत्येक औसतन दस दिन की; परियोजना तब समाप्त होती है जब तीनों पूरी हो जाती हैं।
 	When will the project finish?	परियोजना कब पूरी होगी?
 	Why three ten-day activities in parallel take more than 18 days on average.	समानांतर में दस-दस दिन की तीन गतिविधियाँ औसतन 18 दिनों से अधिक क्यों लेती हैं।
+	Public services	सार्वजनिक सेवाएँ
+	Polling place	मतदान केंद्र
+	Voters arrive all day and wait for a free voting machine, with a long or a short ballot (Allen, Introduction to Discrete Event Simulation and Agent-based Modeling, ch. 6 and 7).	मतदाता दिन भर आते हैं और खाली वोटिंग मशीन का इंतज़ार करते हैं, लंबे या छोटे मतपत्र के साथ (Allen, Introduction to Discrete Event Simulation and Agent-based Modeling, अध्याय 6 और 7)।
+	How many voting machines does a polling place need?	एक मतदान केंद्र को कितनी वोटिंग मशीनें चाहिए?
+	Machines in proportion to voters and ballot length: 16 instead of 18 makes the wait six times longer. The election-day runs show the direction only.	मशीनें मतदाताओं की संख्या और मतपत्र की लंबाई के अनुपात में होनी चाहिए: 18 की जगह 16 होने से इंतज़ार छह गुना लंबा हो जाता है। मतदान-दिवस के रन केवल दिशा दिखाते हैं।
+	Mass vaccination hub	सामूहिक टीकाकरण केंद्र
+	Entrance, registration, assessment and vaccination, with each dose prepared alongside, then about 20 minutes in an observation seat (Hanly et al., BMC Health Services Research, 2022).	प्रवेश, पंजीकरण, जाँच और टीकाकरण, हर खुराक साथ-साथ तैयार होती है, फिर निगरानी की सीट पर लगभग 20 मिनट (Hanly et al., BMC Health Services Research, 2022)।
+	How many doses a day can a vaccination hub give?	एक टीकाकरण केंद्र एक दिन में कितनी खुराकें दे सकता है?
+	Each station's staff are as busy as the flow of patients says: all under 80%, and about 470 doses in an 8-hour day with 21 staff. The time inside is not checked.	हर स्टेशन का स्टाफ उतना ही व्यस्त है जितना मरीज़ों का प्रवाह तय करता है: सभी 80% से कम, और 21 कर्मचारियों के साथ 8 घंटे के दिन में लगभग 470 खुराकें। अंदर बिताया समय जाँचा नहीं गया है।
+	Penny Fab	Penny Fab
+	Four machines in a line, 2 hours a job each, with a fixed number of jobs going round (Hopp and Spearman, Factory Physics).	एक पंक्ति में चार मशीनें, हर काम में प्रति मशीन 2 घंटे, और घूमते रहने वाले कामों की निश्चित संख्या (Hopp और Spearman, Factory Physics)।
+	How much work in process does a line need?	एक लाइन को कितना अर्ध-निर्मित माल (प्रगति में काम) चाहिए?
+	Little's law and the critical work in process: 4 jobs give 0.29 jobs an hour with random times and 0.5 with fixed ones.	लिटिल का नियम और क्रांतिक अर्ध-निर्मित माल: 4 कामों से यादृच्छिक समय पर 0.29 काम प्रति घंटा मिलते हैं और निश्चित समय पर 0.5।
+	Prison population	जेल की आबादी
+	Petty and serious offenders serve their sentences, and some offend again and come back; the numbers scaled down 100 times (Brailsford, Churilov and Dangerfield, ch. 8).	कम गंभीर और गंभीर अपराधी अपनी सज़ा काटते हैं, और कुछ फिर अपराध करके लौट आते हैं; संख्याएँ 100 गुना घटाई गई हैं (Brailsford, Churilov और Dangerfield, अध्याय 8)।
+	How many prison places are needed?	जेल में कितनी जगहें चाहिए?
+	Places are arrivals times the length of stay, whatever the sentences: 500 petty and 260 serious offenders inside, and what fewer reoffending would do.	जगहें आगमन गुणा रहने की अवधि के बराबर हैं, सज़ाएँ चाहे जो हों: अंदर 500 कम गंभीर और 260 गंभीर अपराधी, और अपराध की पुनरावृत्ति घटने पर क्या होगा।
 	Show me	मुझे दिखाएँ
 	Point at where to do this step	बताएँ कि यह चरण कहाँ करना है
 	Step {k} of {n}	{n} में से चरण {k}

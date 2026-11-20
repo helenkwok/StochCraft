@@ -908,6 +908,23 @@ unit	yr	ж.
 	Three activities in parallel, each ten days on average; the project ends when all three are done.	Әрқайсысы орта есеппен он күндік үш параллель жұмыс; жоба үшеуі де аяқталғанда бітеді.
 	When will the project finish?	Жоба қашан аяқталады?
 	Why three ten-day activities in parallel take more than 18 days on average.	Неліктен он күндік үш параллель жұмыс орта есеппен 18 күннен көп уақыт алады.
+	Public services	Мемлекеттік қызметтер
+	Polling place	Сайлау учаскесі
+	Voters arrive all day and wait for a free voting machine, with a long or a short ballot (Allen, Introduction to Discrete Event Simulation and Agent-based Modeling, ch. 6 and 7).	Сайлаушылар күні бойы келіп, бос дауыс беру машинасын күтеді, бюллетень ұзын немесе қысқа (Allen, Introduction to Discrete Event Simulation and Agent-based Modeling, 6 және 7-тарау).
+	How many voting machines does a polling place need?	Бір сайлау учаскесіне қанша дауыс беру машинасы керек?
+	Machines in proportion to voters and ballot length: 16 instead of 18 makes the wait six times longer. The election-day runs show the direction only.	Машиналар саны сайлаушылар санына және бюллетень ұзындығына сәйкес болуы керек: 18 орнына 16 болса, күту алты есе ұзарады. Сайлау күніндегі іске қосулар тек бағытты көрсетеді.
+	Mass vaccination hub	Жаппай вакцинациялау орталығы
+	Entrance, registration, assessment and vaccination, with each dose prepared alongside, then about 20 minutes in an observation seat (Hanly et al., BMC Health Services Research, 2022).	Кіреберіс, тіркеу, бағалау және вакцинациялау, әр доза қасында дайындалады, одан кейін бақылау орындығында шамамен 20 минут (Hanly et al., BMC Health Services Research, 2022).
+	How many doses a day can a vaccination hub give?	Вакцинациялау орталығы күніне қанша доза жасай алады?
+	Each station's staff are as busy as the flow of patients says: all under 80%, and about 470 doses in an 8-hour day with 21 staff. The time inside is not checked.	Әр бекеттің қызметкерлері науқастар ағыны көрсеткендей бос емес: бәрі 80%-дан төмен, ал 21 қызметкермен 8 сағаттық күнде шамамен 470 доза. Ішінде өткізген уақыт тексерілмеген.
+	Penny Fab	Penny Fab
+	Four machines in a line, 2 hours a job each, with a fixed number of jobs going round (Hopp and Spearman, Factory Physics).	Бір қатарда төрт машина, әрқайсысында бір жұмысқа 2 сағаттан, айналып жүретін жұмыстардың тұрақты саны бар (Hopp және Spearman, Factory Physics).
+	How much work in process does a line need?	Бір желіге қанша аяқталмаған өндіріс керек?
+	Little's law and the critical work in process: 4 jobs give 0.29 jobs an hour with random times and 0.5 with fixed ones.	Литтл заңы және аяқталмаған өндірістің сыни мөлшері: 4 жұмыс кездейсоқ уақытпен сағатына 0.29 жұмыс, ал тұрақты уақытпен 0.5 береді.
+	Prison population	Түрме тұрғындары
+	Petty and serious offenders serve their sentences, and some offend again and come back; the numbers scaled down 100 times (Brailsford, Churilov and Dangerfield, ch. 8).	Жеңіл және ауыр қылмыскерлер жазасын өтейді, ал кейбірі қайта қылмыс жасап, қайтып келеді; сандар 100 есе кішірейтілген (Brailsford, Churilov және Dangerfield, 8-тарау).
+	How many prison places are needed?	Қанша түрме орны керек?
+	Places are arrivals times the length of stay, whatever the sentences: 500 petty and 260 serious offenders inside, and what fewer reoffending would do.	Орындар — келгендер санын болу ұзақтығына көбейткенге тең, жазаларға қарамастан: ішінде 500 жеңіл және 260 ауыр қылмыскер, ал қайта қылмыс азайса не болар еді.
 	Show me	Көрсетіңіз
 	Point at where to do this step	Бұл қадамды қайда орындау керегін көрсетіңіз
 	Step {k} of {n}	{k}-қадам / {n}

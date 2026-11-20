@@ -908,6 +908,23 @@ unit	yr	m.
 	Three activities in parallel, each ten days on average; the project ends when all three are done.	Trys lygiagrečios veiklos, kiekviena vidutiniškai dešimt dienų; projektas baigiasi, kai visos trys atliktos.
 	When will the project finish?	Kada projektas bus baigtas?
 	Why three ten-day activities in parallel take more than 18 days on average.	Kodėl trys lygiagrečios dešimties dienų veiklos vidutiniškai užtrunka ilgiau nei 18 dienų.
+	Public services	Viešosios paslaugos
+	Polling place	Balsavimo apylinkė
+	Voters arrive all day and wait for a free voting machine, with a long or a short ballot (Allen, Introduction to Discrete Event Simulation and Agent-based Modeling, ch. 6 and 7).	Rinkėjai atvyksta visą dieną ir laukia laisvos balsavimo mašinos; biuletenis ilgas arba trumpas (Allen, Introduction to Discrete Event Simulation and Agent-based Modeling, sk. 6 ir 7).
+	How many voting machines does a polling place need?	Kiek balsavimo mašinų reikia balsavimo apylinkei?
+	Machines in proportion to voters and ballot length: 16 instead of 18 makes the wait six times longer. The election-day runs show the direction only.	Mašinų skaičius proporcingas rinkėjų skaičiui ir biuletenio ilgiui: 16 vietoj 18 laukimą pailgina šešis kartus. Rinkimų dienos vykdymai rodo tik kryptį.
+	Mass vaccination hub	Masinio skiepijimo centras
+	Entrance, registration, assessment and vaccination, with each dose prepared alongside, then about 20 minutes in an observation seat (Hanly et al., BMC Health Services Research, 2022).	Įėjimas, registracija, įvertinimas ir skiepijimas, kiekviena dozė paruošiama šalia, tada apie 20 minučių stebėjimo vietoje (Hanly et al., BMC Health Services Research, 2022).
+	How many doses a day can a vaccination hub give?	Kiek dozių per dieną gali suleisti skiepijimo centras?
+	Each station's staff are as busy as the flow of patients says: all under 80%, and about 470 doses in an 8-hour day with 21 staff. The time inside is not checked.	Kiekvienos stoties darbuotojai užimti tiek, kiek rodo pacientų srautas: visi mažiau nei 80%, ir apie 470 dozių per 8 valandų dieną su 21 darbuotoju. Laikas viduje netikrinamas.
+	Penny Fab	Penny Fab
+	Four machines in a line, 2 hours a job each, with a fixed number of jobs going round (Hopp and Spearman, Factory Physics).	Keturios mašinos eilėje, kiekvienai užduočiai po 2 valandas, o apyvartoje – fiksuotas užduočių skaičius (Hopp ir Spearman, Factory Physics).
+	How much work in process does a line need?	Kiek nebaigtos gamybos reikia linijai?
+	Little's law and the critical work in process: 4 jobs give 0.29 jobs an hour with random times and 0.5 with fixed ones.	Little dėsnis ir kritinis nebaigtos gamybos kiekis: 4 užduotys duoda 0.29 užduoties per valandą su atsitiktiniais laikais ir 0.5 su pastoviais.
+	Prison population	Kalinių skaičius
+	Petty and serious offenders serve their sentences, and some offend again and come back; the numbers scaled down 100 times (Brailsford, Churilov and Dangerfield, ch. 8).	Nesunkių ir sunkių nusikaltimų kaltininkai atlieka bausmes, o dalis nusikalsta pakartotinai ir grįžta; skaičiai sumažinti 100 kartų (Brailsford, Churilov ir Dangerfield, sk. 8).
+	How many prison places are needed?	Kiek reikia kalėjimo vietų?
+	Places are arrivals times the length of stay, whatever the sentences: 500 petty and 260 serious offenders inside, and what fewer reoffending would do.	Vietų skaičius lygus atvykstančiųjų skaičiaus ir buvimo trukmės sandaugai, kad ir kokios būtų bausmės: viduje 500 nesunkių ir 260 sunkių nusikaltimų kaltininkų, ir ką pakeistų mažesnis recidyvas.
 	Show me	Parodykite man
 	Point at where to do this step	Parodyti, kur atlikti šį žingsnį
 	Step {k} of {n}	{k} žingsnis iš {n}

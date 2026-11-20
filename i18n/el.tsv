@@ -908,6 +908,23 @@ unit	yr	έτ
 	Three activities in parallel, each ten days on average; the project ends when all three are done.	Τρεις δραστηριότητες παράλληλα, η καθεμία δέκα ημέρες κατά μέσο όρο· το έργο τελειώνει όταν ολοκληρωθούν και οι τρεις.
 	When will the project finish?	Πότε θα ολοκληρωθεί το έργο;
 	Why three ten-day activities in parallel take more than 18 days on average.	Γιατί τρεις παράλληλες δεκαήμερες δραστηριότητες διαρκούν κατά μέσο όρο πάνω από 18 ημέρες.
+	Public services	Δημόσιες υπηρεσίες
+	Polling place	Εκλογικό κέντρο
+	Voters arrive all day and wait for a free voting machine, with a long or a short ballot (Allen, Introduction to Discrete Event Simulation and Agent-based Modeling, ch. 6 and 7).	Οι ψηφοφόροι φτάνουν όλη μέρα και περιμένουν μια ελεύθερη μηχανή ψηφοφορίας, με μακρύ ή σύντομο ψηφοδέλτιο (Allen, Introduction to Discrete Event Simulation and Agent-based Modeling, κεφ. 6 και 7).
+	How many voting machines does a polling place need?	Πόσες μηχανές ψηφοφορίας χρειάζεται ένα εκλογικό κέντρο;
+	Machines in proportion to voters and ballot length: 16 instead of 18 makes the wait six times longer. The election-day runs show the direction only.	Μηχανές ανάλογα με τους ψηφοφόρους και το μήκος του ψηφοδελτίου: 16 αντί για 18 κάνει την αναμονή έξι φορές μεγαλύτερη. Οι εκτελέσεις για την ημέρα των εκλογών δείχνουν μόνο την κατεύθυνση.
+	Mass vaccination hub	Κέντρο μαζικού εμβολιασμού
+	Entrance, registration, assessment and vaccination, with each dose prepared alongside, then about 20 minutes in an observation seat (Hanly et al., BMC Health Services Research, 2022).	Είσοδος, εγγραφή, αξιολόγηση και εμβολιασμός, με κάθε δόση να ετοιμάζεται παράλληλα, και μετά περίπου 20 λεπτά σε θέση παρακολούθησης (Hanly et al., BMC Health Services Research, 2022).
+	How many doses a day can a vaccination hub give?	Πόσες δόσεις την ημέρα μπορεί να χορηγήσει ένα κέντρο εμβολιασμού;
+	Each station's staff are as busy as the flow of patients says: all under 80%, and about 470 doses in an 8-hour day with 21 staff. The time inside is not checked.	Το προσωπικό κάθε σταθμού είναι τόσο απασχολημένο όσο δείχνει η ροή των ασθενών: όλοι κάτω από 80% και περίπου 470 δόσεις σε μια 8ωρη ημέρα με 21 άτομα προσωπικό. Ο χρόνος μέσα δεν ελέγχεται.
+	Penny Fab	Penny Fab
+	Four machines in a line, 2 hours a job each, with a fixed number of jobs going round (Hopp and Spearman, Factory Physics).	Τέσσερις μηχανές στη σειρά, 2 ώρες ανά εργασία η καθεμία, με σταθερό αριθμό εργασιών σε κυκλοφορία (Hopp και Spearman, Factory Physics).
+	How much work in process does a line need?	Πόσα προϊόντα υπό επεξεργασία (WIP) χρειάζεται μια γραμμή;
+	Little's law and the critical work in process: 4 jobs give 0.29 jobs an hour with random times and 0.5 with fixed ones.	Ο νόμος του Little και τα κρίσιμα προϊόντα υπό επεξεργασία: 4 εργασίες δίνουν 0.29 εργασίες την ώρα με τυχαίους χρόνους και 0.5 με σταθερούς.
+	Prison population	Πληθυσμός φυλακών
+	Petty and serious offenders serve their sentences, and some offend again and come back; the numbers scaled down 100 times (Brailsford, Churilov and Dangerfield, ch. 8).	Δράστες ελαφρών και σοβαρών αδικημάτων εκτίουν τις ποινές τους, και κάποιοι ξαναδιαπράττουν αδικήματα και επιστρέφουν· οι αριθμοί μειωμένοι 100 φορές (Brailsford, Churilov και Dangerfield, κεφ. 8).
+	How many prison places are needed?	Πόσες θέσεις φυλακής χρειάζονται;
+	Places are arrivals times the length of stay, whatever the sentences: 500 petty and 260 serious offenders inside, and what fewer reoffending would do.	Οι θέσεις είναι οι αφίξεις επί τη διάρκεια παραμονής, ανεξάρτητα από τις ποινές: 500 δράστες ελαφρών και 260 σοβαρών αδικημάτων μέσα, και τι θα έκανε η μείωση της υποτροπής.
 	Show me	Δείξτε μου
 	Point at where to do this step	Δείξτε πού γίνεται αυτό το βήμα
 	Step {k} of {n}	Βήμα {k} από {n}

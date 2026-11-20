@@ -908,6 +908,23 @@ unit	yr	thn
 	Three activities in parallel, each ten days on average; the project ends when all three are done.	Tiga aktivitas paralel, masing-masing rata-rata sepuluh hari; proyek selesai ketika ketiganya rampung.
 	When will the project finish?	Kapan proyek akan selesai?
 	Why three ten-day activities in parallel take more than 18 days on average.	Mengapa tiga aktivitas paralel sepuluh hari rata-rata memakan waktu lebih dari 18 hari.
+	Public services	Layanan publik
+	Polling place	Tempat pemungutan suara
+	Voters arrive all day and wait for a free voting machine, with a long or a short ballot (Allen, Introduction to Discrete Event Simulation and Agent-based Modeling, ch. 6 and 7).	Pemilih datang sepanjang hari dan menunggu mesin pemungutan suara yang kosong, dengan surat suara panjang atau pendek (Allen, Introduction to Discrete Event Simulation and Agent-based Modeling, bab 6 dan 7).
+	How many voting machines does a polling place need?	Berapa mesin pemungutan suara yang dibutuhkan satu tempat pemungutan suara?
+	Machines in proportion to voters and ballot length: 16 instead of 18 makes the wait six times longer. The election-day runs show the direction only.	Jumlah mesin harus sebanding dengan pemilih dan panjang surat suara: 16 alih-alih 18 membuat waktu tunggu enam kali lebih lama. Eksekusi hari pemilihan hanya menunjukkan arahnya.
+	Mass vaccination hub	Pusat vaksinasi massal
+	Entrance, registration, assessment and vaccination, with each dose prepared alongside, then about 20 minutes in an observation seat (Hanly et al., BMC Health Services Research, 2022).	Pintu masuk, pendaftaran, pemeriksaan, dan vaksinasi, dengan setiap dosis disiapkan di sampingnya, lalu sekitar 20 menit di kursi observasi (Hanly et al., BMC Health Services Research, 2022).
+	How many doses a day can a vaccination hub give?	Berapa dosis per hari yang dapat diberikan sebuah pusat vaksinasi?
+	Each station's staff are as busy as the flow of patients says: all under 80%, and about 470 doses in an 8-hour day with 21 staff. The time inside is not checked.	Staf setiap pos sesibuk yang ditentukan arus pasien: semuanya di bawah 80%, dan sekitar 470 dosis dalam sehari 8 jam dengan 21 staf. Waktu di dalam tidak diperiksa.
+	Penny Fab	Penny Fab
+	Four machines in a line, 2 hours a job each, with a fixed number of jobs going round (Hopp and Spearman, Factory Physics).	Empat mesin berurutan, 2 jam per pekerjaan di tiap mesin, dengan jumlah pekerjaan tetap yang berputar (Hopp dan Spearman, Factory Physics).
+	How much work in process does a line need?	Berapa banyak barang dalam proses yang dibutuhkan satu lini?
+	Little's law and the critical work in process: 4 jobs give 0.29 jobs an hour with random times and 0.5 with fixed ones.	Hukum Little dan barang dalam proses kritis: 4 pekerjaan menghasilkan 0.29 pekerjaan per jam dengan waktu acak dan 0.5 dengan waktu tetap.
+	Prison population	Populasi penjara
+	Petty and serious offenders serve their sentences, and some offend again and come back; the numbers scaled down 100 times (Brailsford, Churilov and Dangerfield, ch. 8).	Pelaku kejahatan ringan dan berat menjalani hukumannya, dan sebagian mengulangi kejahatan lalu kembali; jumlahnya diperkecil 100 kali (Brailsford, Churilov dan Dangerfield, bab 8).
+	How many prison places are needed?	Berapa banyak tempat di penjara yang dibutuhkan?
+	Places are arrivals times the length of stay, whatever the sentences: 500 petty and 260 serious offenders inside, and what fewer reoffending would do.	Jumlah tempat adalah kedatangan dikali lama tinggal, apa pun hukumannya: 500 pelaku kejahatan ringan dan 260 pelaku kejahatan berat di dalam, dan dampak jika residivisme berkurang.
 	Show me	Tunjukkan
 	Point at where to do this step	Tunjukkan tempat melakukan langkah ini
 	Step {k} of {n}	Langkah {k} dari {n}

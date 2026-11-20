@@ -908,6 +908,23 @@ unit	yr	年
 	Three activities in parallel, each ten days on average; the project ends when all three are done.	並行する 3 つの作業。それぞれ平均 10 日で、3 つすべてが終わるとプロジェクトが終わります。
 	When will the project finish?	プロジェクトはいつ終わるか？
 	Why three ten-day activities in parallel take more than 18 days on average.	平均 10 日の作業 3 つを並行して進めると、平均で 18 日を超える理由。
+	Public services	公共サービス
+	Polling place	投票所
+	Voters arrive all day and wait for a free voting machine, with a long or a short ballot (Allen, Introduction to Discrete Event Simulation and Agent-based Modeling, ch. 6 and 7).	有権者は一日中やって来て、空いている投票機を待ちます。投票用紙は長い場合と短い場合があります (Allen、Introduction to Discrete Event Simulation and Agent-based Modeling、第 6 章と第 7 章)。
+	How many voting machines does a polling place need?	投票所には投票機が何台必要か？
+	Machines in proportion to voters and ballot length: 16 instead of 18 makes the wait six times longer. The election-day runs show the direction only.	投票機は有権者数と投票用紙の長さに比例して必要です。18 台ではなく 16 台だと待ち時間は 6 倍になります。投票日の実行結果は方向性を示すだけです。
+	Mass vaccination hub	集団接種会場
+	Entrance, registration, assessment and vaccination, with each dose prepared alongside, then about 20 minutes in an observation seat (Hanly et al., BMC Health Services Research, 2022).	入口、受付、問診、接種の順で、各回分は並行して準備され、その後約 20 分間、経過観察用の席に座ります (Hanly et al.、BMC Health Services Research、2022)。
+	How many doses a day can a vaccination hub give?	接種会場は 1 日に何回分を接種できるか？
+	Each station's staff are as busy as the flow of patients says: all under 80%, and about 470 doses in an 8-hour day with 21 staff. The time inside is not checked.	各ステーションのスタッフは、患者の流れどおりに忙しくなります。すべて 80% 未満で、21 人のスタッフで 8 時間の 1 日に約 470 回分です。中にいる時間は確認していません。
+	Penny Fab	Penny Fab
+	Four machines in a line, 2 hours a job each, with a fixed number of jobs going round (Hopp and Spearman, Factory Physics).	4 台の機械が一列に並び、各機械で 1 件あたり 2 時間かかり、一定数の仕事が循環します (Hopp と Spearman、Factory Physics)。
+	How much work in process does a line need?	ラインにはどれだけの仕掛品が必要か？
+	Little's law and the critical work in process: 4 jobs give 0.29 jobs an hour with random times and 0.5 with fixed ones.	リトルの法則と臨界仕掛品: 仕事が 4 件だと、所要時間がランダムなら 1 時間あたり 0.29 件、固定なら 0.5 件になります。
+	Prison population	刑務所の収容者数
+	Petty and serious offenders serve their sentences, and some offend again and come back; the numbers scaled down 100 times (Brailsford, Churilov and Dangerfield, ch. 8).	軽い罪と重い罪の受刑者が刑期を務め、一部は再び罪を犯して戻ってきます。人数は 100 分の 1 に縮小しています (Brailsford、Churilov と Dangerfield、第 8 章)。
+	How many prison places are needed?	刑務所には何人分の収容枠が必要か？
+	Places are arrivals times the length of stay, whatever the sentences: 500 petty and 260 serious offenders inside, and what fewer reoffending would do.	収容枠は、刑の長さにかかわらず、入所者数に在所期間を掛けた数です。中には軽い罪の受刑者 500 人と重い罪の受刑者 260 人がいて、再犯が減るとどうなるかも示します。
 	Show me	案内を見る
 	Point at where to do this step	この手順を行う場所を指し示します
 	Step {k} of {n}	ステップ {k} / {n}

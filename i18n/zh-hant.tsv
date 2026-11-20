@@ -908,6 +908,23 @@ unit	yr	年
 	Three activities in parallel, each ten days on average; the project ends when all three are done.	三項平行活動，每項平均十天；三項全部完成時專案結束。
 	When will the project finish?	專案何時完成？
 	Why three ten-day activities in parallel take more than 18 days on average.	為什麼三項平均十天的平行活動，平均要超過 18 天。
+	Public services	公共服務
+	Polling place	投票所
+	Voters arrive all day and wait for a free voting machine, with a long or a short ballot (Allen, Introduction to Discrete Event Simulation and Agent-based Modeling, ch. 6 and 7).	選民全天陸續到來，等待空閒的投票機，選票有長有短（Allen, Introduction to Discrete Event Simulation and Agent-based Modeling，第 6 章和第 7 章）。
+	How many voting machines does a polling place need?	一個投票所需要多少台投票機？
+	Machines in proportion to voters and ballot length: 16 instead of 18 makes the wait six times longer. The election-day runs show the direction only.	機器數量與選民人數和選票長度成比例：用 16 台而不是 18 台，等待時間會變為六倍。選舉日的執行結果只顯示趨勢。
+	Mass vaccination hub	大規模疫苗接種中心
+	Entrance, registration, assessment and vaccination, with each dose prepared alongside, then about 20 minutes in an observation seat (Hanly et al., BMC Health Services Research, 2022).	入口、登記、評估和接種，每劑疫苗在一旁同步準備，然後在觀察座位上停留約 20 分鐘（Hanly 等，BMC Health Services Research, 2022）。
+	How many doses a day can a vaccination hub give?	一個接種中心每天能接種多少劑？
+	Each station's staff are as busy as the flow of patients says: all under 80%, and about 470 doses in an 8-hour day with 21 staff. The time inside is not checked.	各工作站的工作人員忙碌程度正如病患流量所決定：全部低於 80%，21 名工作人員在 8 小時內約可接種 470 劑。未檢查在內停留的時間。
+	Penny Fab	Penny Fab
+	Four machines in a line, 2 hours a job each, with a fixed number of jobs going round (Hopp and Spearman, Factory Physics).	四台機器排成一條線，每台每個作業 2 小時，固定數量的作業循環流動（Hopp 和 Spearman，Factory Physics）。
+	How much work in process does a line need?	一條產線需要多少在製品？
+	Little's law and the critical work in process: 4 jobs give 0.29 jobs an hour with random times and 0.5 with fixed ones.	利特爾法則與臨界在製品：4 個作業在隨機時間下每小時完成 0.29 個，在固定時間下為 0.5 個。
+	Prison population	監獄人口
+	Petty and serious offenders serve their sentences, and some offend again and come back; the numbers scaled down 100 times (Brailsford, Churilov and Dangerfield, ch. 8).	輕罪和重罪罪犯服刑，一些人再次犯罪並回來；數量縮小為原來的百分之一（Brailsford、Churilov 和 Dangerfield，第 8 章）。
+	How many prison places are needed?	需要多少個監獄名額？
+	Places are arrivals times the length of stay, whatever the sentences: 500 petty and 260 serious offenders inside, and what fewer reoffending would do.	名額數等於抵達人數乘以停留時間，無論刑期如何：裡面有 500 名輕罪和 260 名重罪罪犯，以及再犯減少會帶來什麼。
 	Show me	帶我看看
 	Point at where to do this step	指出這一步在哪裡操作
 	Step {k} of {n}	第 {k} 步，共 {n} 步
