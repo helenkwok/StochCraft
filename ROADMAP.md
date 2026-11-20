@@ -1307,16 +1307,16 @@ ch. 10 §10.4, in Brailsford, Churilov and Dangerfield, eds., 2014). Related and
     file's frequency, threads, slices and workers alike).
 - **Choosing the number of replications.** The default is 10.
   - **Done:** the `one_replication` warning for a run with one replication.
-  - Not yet: a sequential mode that adds replications until the 95% half-width is within a target share
-    of the mean, using the t-table already in `stats` (automated methods: Hoad, Robinson and
-    Davies, 2011).
+  - Not yet (#224): a sequential mode that adds replications until the 95% half-width is within a
+    target share of the mean, using the t-table already in `stats` (automated methods: Hoad,
+    Robinson and Davies, 2011).
 - **Streams by element id:** done (#152). Each block's streams are keyed by its id and their
   purpose, derived from the seed and the replication, not its place in the model, so that a
   variant that adds, removes or reorders an element keeps common random numbers for the others,
   and an unrelated edit no longer changes results with the same seed. The golden digests changed
   once, with the reason in the commit.
-- **Validation against observed data.** Compare a run's results with held-out real data (black-box
-  validation, ch. 6 §6.5.5 and ch. 10 §10.4.1).
+- **Validation against observed data** (#226). Compare a run's results with held-out real data
+  (black-box validation, ch. 6 §6.5.5 and ch. 10 §10.4.1).
   - Not yet: **checks that pass or fail.** An experiment can carry checks on its results: a
     bound ("mean wait under 2 min", "throughput at least 400 a day", with the 95% interval
     deciding, not the mean alone), a comparison of two scenarios with common random numbers
@@ -1412,7 +1412,7 @@ ch. 10 §10.4, in Brailsford, Churilov and Dangerfield, eds., 2014). Related and
       routing, delays, joins or shared pools. Arrivals from a source with a limit or a
       calendar are at most a rate, and give no warning.
 
-Starting a run with entities already inside, the other answer to a warm-up, stays with
+Starting a run with entities already inside (#225), the other answer to a warm-up, stays with
 "starting a run from an observed state" under digital twins (After M3).
 
 ### M2.10 Abandonment
@@ -3015,7 +3015,8 @@ marked "series" are several PRs of that size, each with its own visible step.
 | L12 | The parcel hub example, outbound (S), then inbound (B), each with its write-up | L5–L7, L10 | series of 2 × M | the flagship |
 
 The whole screen goes alongside as its own series (D26), each one PR: U1 the run bar (M); U2
-properties of the selection, with bold and reset (M); U3 the library and model tree (M); U4
+properties of the selection, with bold and reset (M); U3 the library and model tree (M; with #150: a Library | Outline switch, the library grouped,
+searchable and with glyphs, add by click, Enter or drag, and larger blocks); U4
 connecting on the canvas (M); U5 the experiment editor and scenario grid (M, perhaps two); U6 the
 spreadsheet view (M); U7 the live card and pins (S); U8 the statistics table and the scenario
 plot (M). U1 and U2 come before L4, since layout editing leans on them; the rest interleave.
