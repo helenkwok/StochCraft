@@ -195,3 +195,88 @@ fn starting_contents_leave_every_other_blocks_draws_as_they_were() {
         assert_ne!(plain.element("desk-a"), started.element("desk-a"));
     }
 }
+
+/// A task with 3 units outside the calendar `early` (from the experiment's start, the first
+/// hour) and 1 unit while it is active, so 1 unit on shift at time 0.
+fn early_task(b: &mut Builder) -> stochcraft_blocks::BlockId {
+    let at = |h: u32| {
+        stochcraft_model::DateTime::new(2016, 1, 1, h, 0, 0)
+            .unwrap_or(stochcraft_model::DateTime(0))
+    };
+    b.calendar(
+        "early",
+        vec![stochcraft_blocks::Event {
+            start: at(0),
+            end: at(1),
+            rule: None,
+        }],
+    );
+    let src = b.source("arrivals", Dist::Constant(0.5), None);
+    let desk = b.server("desk", 3, Dist::Constant(2.0));
+    let out = b.sink("out");
+    b.connect(src, desk);
+    b.connect(desk, out);
+    b.server_shifts(
+        desk,
+        3,
+        &[("early", 1)],
+        stochcraft_blocks::OnShiftEnd::Finish,
+    );
+    desk
+}
+
+fn shifted(b: &Builder, n: u32) -> Model {
+    let mut m = b.build(Experiment {
+        start: Some(
+            stochcraft_model::DateTime::new(2016, 1, 1, 0, 0, 0)
+                .unwrap_or(stochcraft_model::DateTime(0)),
+        ),
+        ..experiment(0.0, 1.9, None)
+    });
+    start(&mut m, "desk", n);
+    m
+}
+
+fn too_many(m: &Model) -> Option<(u32, u32)> {
+    m.validate().into_iter().find_map(|d| match d.problem {
+        stochcraft_model::Problem::BadStarting {
+            reason: stochcraft_model::StartingFault::TooMany { count, most },
+        } => Some((count, most)),
+        _ => None,
+    })
+}
+
+#[test]
+fn a_waiting_room_per_working_unit_takes_what_it_would_let_in_at_time_0() {
+    // 2 waiting per working unit, and 1 unit on shift at time 0 (not the 3 outside the
+    // calendar): an arrival at time 0 gets in while those waiting, less the idle unit, are
+    // fewer than 2, so 1 + 2 = 3 get in.
+    let mut b = Builder::new();
+    let desk = early_task(&mut b);
+    b.queue_per_working_server(desk, 2);
+    assert_eq!(too_many(&shifted(&b, 4)), Some((4, 3)));
+    let m = shifted(&b, 3);
+    assert_eq!(too_many(&m), None);
+    // Full at the start: the arrivals at 0.5, 1 and 1.5 find no room (the one unit is busy
+    // until 2, and 2 wait).
+    let r = run(&m, 1);
+    let d = r.element("desk").unwrap_or_else(|| panic!("no desk"));
+    assert_eq!((d.started, d.lost), (Some(3), Some(3)));
+    assert_eq!(check_report(&m, &r), vec![]);
+}
+
+#[test]
+fn a_waiting_room_by_timetable_takes_what_it_would_let_in_at_time_0() {
+    // At most 5 waiting outside `early`, 1 while it is active (at time 0), with 1 unit on shift
+    // then: 1 + 1 = 2 get in at the start.
+    let mut b = Builder::new();
+    let desk = early_task(&mut b);
+    b.queue_by_shift(desk, 5, &[("early", 1)]);
+    assert_eq!(too_many(&shifted(&b, 3)), Some((3, 2)));
+    let m = shifted(&b, 2);
+    assert_eq!(too_many(&m), None);
+    let r = run(&m, 1);
+    let d = r.element("desk").unwrap_or_else(|| panic!("no desk"));
+    assert_eq!((d.started, d.lost), (Some(2), Some(3)));
+    assert_eq!(check_report(&m, &r), vec![]);
+}

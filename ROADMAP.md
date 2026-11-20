@@ -1436,7 +1436,10 @@ ch. 10 §10.4, in Brailsford, Churilov and Dangerfield, eds., 2014). Related and
   `stochcraft:startingContents` extension in a scenario's element parameters, inherited like
   any other; `block.set`'s `starting`; **Inside at the start** under the inspector's More
   settings). At time 0 they join the block's queue in order, as arrivals would (its properties
-  assigned, a place taken in a finite waiting room, which the model check keeps them within):
+  assigned, a place taken in a finite waiting room): the model check refuses more than an
+  arrival at time 0 would find room for, the places of a fixed room, or for a limit by
+  timetable or per working unit the units on shift at time 0 plus that limit at time 0. Then
+  they start:
   as many as there are free units start a fresh service drawn from the block's own stream, and
   the rest wait. Tools that offer a start that is not empty do it the same way: entities put
   into a queue or a block at time 0 by start-up logic, or queues filled before the run. They

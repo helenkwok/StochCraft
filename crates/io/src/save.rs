@@ -70,6 +70,7 @@ pub fn save_edited(
         unit: indent_unit(&doc.root),
         pool_quantity: Vec::new(),
         model_ids: mine,
+        created_scenario: None,
     };
     ed.apply(&mut doc.root, scenario, before, after, &resources)?;
     let unit = ed.unit.clone();
@@ -661,6 +662,9 @@ struct Editor {
     pool_quantity: Vec<ResourcePool>,
     /// The ids of the saved model's elements, connections and pools.
     model_ids: BTreeSet<String>,
+    /// The scenario this save added, when the file had none to write to, so that every later
+    /// write of the same save goes to it rather than to another new one.
+    created_scenario: Option<String>,
 }
 
 /// Where new elements of a namespace go: the prefix the file already uses for it, or a new one
@@ -2727,17 +2731,45 @@ impl Editor {
                 .copied()
                 .filter(|n| *n > 0 && m.element(id).is_some_and(|e| e.kind.holds_at_start()))
         };
+        // A block that became able to hold entities, or no longer can (a conveyor made a delay
+        // in place, say), may carry a value the file kept while it was ignored: it is visited
+        // too, so the file says what the model now does.
+        let eligibility_changed = |id: &ElementId| {
+            let holds = |m: &Model| m.element(id).map(|e| e.kind.holds_at_start());
+            holds(before) != holds(after)
+        };
         let ids: BTreeSet<&ElementId> = before
             .starting
             .keys()
             .chain(after.starting.keys())
+            .chain(
+                after
+                    .elements
+                    .iter()
+                    .filter(|e| eligibility_changed(&e.id))
+                    .map(|e| &e.id),
+            )
             .collect();
+        // Whether a scenario this one inherits from gives block `id` entities at the start (the
+        // nearest that says): starting it empty here must then say 0, or the inherited count
+        // comes back on reading.
+        let parents = ancestors(root, scenario);
+        let inherited = |id: &ElementId| {
+            parents
+                .iter()
+                .find_map(|a| vendor_value_in(a, id.as_str(), STARTING_CONTENTS))
+                .is_some_and(|v| v.trim().parse::<u32>().is_ok_and(|n| n > 0))
+        };
         for id in ids {
             let (was, now) = (count(before, id), count(after, id));
-            if was == now && !replaced.contains(id.as_str()) {
+            if was == now && !replaced.contains(id.as_str()) && !eligibility_changed(id) {
                 continue;
             }
-            let v = now.filter(|_| exists(id)).map(starting_element);
+            let v = match now.filter(|_| exists(id)) {
+                Some(n) => Some(starting_element(n)),
+                None if exists(id) && inherited(id) => Some(starting_element(0)),
+                None => None,
+            };
             writes.push((id.to_string(), STARTING_CONTENTS, v));
         }
         if writes.iter().all(|(_, _, v)| v.is_none()) {
@@ -2777,8 +2809,15 @@ impl Editor {
         root: &'a mut Element,
         scenario: Option<&str>,
     ) -> Result<&'a mut Element, SaveError> {
+        // One added earlier in this save.
+        if scenario.is_none()
+            && let Some(id) = self.created_scenario.clone()
+        {
+            return scenario_mut(root, Some(&id)).ok_or_else(|| fail("could not add a scenario"));
+        }
         if crate::bpsim::find_data(root).is_none() {
             let id = self.fresh("scenario");
+            self.created_scenario = Some(id.clone());
             let bpsim = Ns::of(root, NS2, "bpsim");
             let data = bpsim.el("BPSimData").with_child(
                 Element::new(&qname(&bpsim.prefix, "Scenario"), Some(NS2))
@@ -2807,6 +2846,7 @@ impl Editor {
         }
         if scenario.is_none() {
             let id = self.fresh("scenario");
+            self.created_scenario = Some(id.clone());
             let data = data_mut(root).ok_or_else(|| fail("no BPSim data"))?;
             let ns = data.ns.clone().unwrap_or_else(|| NS2.to_owned());
             let sc = Element::new(&qname(data.prefix(), "Scenario"), Some(&ns))
@@ -3287,6 +3327,16 @@ fn sets_vendor(s: &Element, element: &str, name: &str) -> bool {
         .filter(|ep| ep.attr("elementRef").as_deref() == Some(element))
         .flat_map(|ep| ep.elements())
         .any(|v| v.is_any(&NSS, "VendorExtension") && v.attr("name").as_deref() == Some(name))
+}
+
+/// The value scenario `s` gives StochCraft's vendor extension `name` on `element`, if it has
+/// one.
+fn vendor_value_in(s: &Element, element: &str, name: &str) -> Option<String> {
+    s.children_named(&NSS, "ElementParameters")
+        .filter(|ep| ep.attr("elementRef").as_deref() == Some(element))
+        .flat_map(|ep| ep.elements())
+        .find(|v| v.is_any(&NSS, "VendorExtension") && v.attr("name").as_deref() == Some(name))
+        .and_then(crate::bpsim::vendor_value)
 }
 
 /// The unit a value is written in: the scenario's base unit, or one it names.

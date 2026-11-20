@@ -1109,21 +1109,6 @@ impl ElementKind {
         )
     }
 
-    /// The most entities this block can hold as a run starts: a server with a fixed finite
-    /// waiting room holds one per unit (every unit it ever has on shift) plus the waiting room,
-    /// the places its room has. `None`: no limit (no waiting room limit, or one by timetable or
-    /// per working server, which limits those waiting rather than holding places).
-    pub fn most_at_start(&self) -> Option<u32> {
-        match self {
-            ElementKind::Server {
-                queue_capacity: Some(q),
-                queue_limit: QueueLimit::Fixed,
-                ..
-            } => Some(self.most_units().unwrap_or(0).saturating_add(*q)),
-            _ => None,
-        }
-    }
-
     /// A server's units in all: the most its timetable ever puts on shift (its `capacity`, or
     /// a shift's units if more). `None` for other elements.
     pub fn most_units(&self) -> Option<u32> {
@@ -2175,7 +2160,7 @@ pub enum StartingFault {
     NoSuchBlock,
     /// The block cannot hold entities at the start ([`ElementKind::holds_at_start`]).
     CannotHold,
-    /// More than the block's places ([`ElementKind::most_at_start`]): `most`.
+    /// More than the block takes in at time 0 ([`Model::most_at_start`]): `most`.
     TooMany { count: u32, most: u32 },
 }
 
@@ -3680,8 +3665,8 @@ impl Model {
             let reason = match self.element(id).map(|e| &e.kind) {
                 None => Some(StartingFault::NoSuchBlock),
                 Some(kind) if !kind.holds_at_start() => Some(StartingFault::CannotHold),
-                Some(kind) => kind
-                    .most_at_start()
+                Some(kind) => self
+                    .most_at_start(kind)
                     .filter(|most| count > *most)
                     .map(|most| StartingFault::TooMany { count, most }),
             };
@@ -3689,6 +3674,82 @@ impl Model {
                 out.push(Diagnostic::error(Some(id), Problem::BadStarting { reason }));
             }
         }
+    }
+
+    /// The most entities a block of kind `kind` can take in as a run starts, as arrivals at
+    /// time 0 would be let in; `None`: no limit (no finite waiting room).
+    ///
+    /// - A fixed waiting room has a place for every unit the server ever has on shift plus the
+    ///   room: the places it starts with.
+    /// - A limit by timetable or per working server lets an entity in while those waiting, less
+    ///   the idle working units, are fewer than the limit. At time 0 every unit on shift is idle
+    ///   and working, so it lets in the units on shift then (by the server's timetable and
+    ///   availability) plus the limit then: the timetable's value at time 0, or the number per
+    ///   working unit times those units.
+    pub fn most_at_start(&self, kind: &ElementKind) -> Option<u32> {
+        let ElementKind::Server {
+            capacity,
+            queue_capacity: Some(q),
+            queue_limit,
+            shifts,
+            available,
+            availability,
+            ..
+        } = kind
+        else {
+            return None;
+        };
+        if queue_limit.is_fixed() {
+            return Some(kind.most_units().unwrap_or(0).saturating_add(*q));
+        }
+        let units = self
+            .timed_at_start(shifts)
+            .and_then(|i| shifts.get(i))
+            .map_or(*capacity, |s| s.value);
+        let on = self
+            .timed_at_start(availability)
+            .and_then(|i| availability.get(i))
+            .map_or(*available, |a| a.value);
+        let working = if on { units } else { 0 };
+        let limit = match queue_limit {
+            QueueLimit::ByShift(timed) => self
+                .timed_at_start(timed)
+                .and_then(|i| timed.get(i))
+                .map_or(*q, |t| t.value),
+            QueueLimit::PerWorkingServer => q.saturating_mul(working),
+            QueueLimit::Fixed => *q,
+        };
+        Some(working.saturating_add(limit))
+    }
+
+    /// Which of `timed`'s values applies at time 0 (the first whose calendar is active then), as
+    /// a run reads them: calendars from the experiment's start, or else from midnight of the
+    /// earliest calendar event. `None`: none applies (the value outside them does).
+    fn timed_at_start<T>(&self, timed: &[Timed<T>]) -> Option<usize> {
+        if timed.is_empty() {
+            return None;
+        }
+        let x = &self.experiment;
+        let origin = x
+            .start
+            .or_else(|| Calendar::default_origin(&self.calendars))
+            .unwrap_or(DateTime(0));
+        let end = x.warmup + x.duration;
+        let end = if end.is_finite() && end > 0.0 {
+            end
+        } else {
+            0.0
+        };
+        let periods = |c: &ElementId| -> Vec<(f64, f64)> {
+            self.calendars
+                .iter()
+                .find(|k| &k.id == c)
+                .map(|k| k.periods(origin, x.time_unit, end))
+                .unwrap_or_default()
+        };
+        calendar::timeline(timed, &periods, end)
+            .first()
+            .and_then(|(_, i)| *i)
     }
 
     /// The blocks with entities inside as a run starts ([`Model::starting`]), in model order.

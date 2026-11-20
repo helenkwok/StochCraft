@@ -672,8 +672,10 @@ impl Compiled {
         // the way an arrival from the block before it would (its block's properties assigned,
         // counted as entering, no transfer), before any process has run: the block's free units
         // take them first, in order, each with a fresh service time from the block's own stream,
-        // and the rest wait. In a finite waiting room each takes a place, as an arrival does;
-        // the model check keeps them within the places. Nothing else is drawn here, so a model
+        // and the rest wait. In a fixed finite waiting room each takes a place, as an arrival
+        // does; a limit by timetable or per working unit holds no places. The model check keeps
+        // them within what an arrival at time 0 would find room for (`Model::most_at_start`).
+        // Nothing else is drawn here, so a model
         // without starting contents runs exactly as before, and no other block's draws move.
         for (i, _, count) in self.model.started_blocks() {
             let Some(port) = plain_port(&Route {
