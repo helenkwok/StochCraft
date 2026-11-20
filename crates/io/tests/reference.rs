@@ -268,8 +268,9 @@ fn result_scenarios_from_another_simulator_parse() {
             .count();
         assert!(values > 0, "{}: no per-replication values", name(p));
     }
-    // The car repair arrivals: PT24M over PT60H is 150 intervals, and L-SIM counts 151 in every
-    // replication, so it fires the start event at time 0 as well (ROADMAP.md, open question).
+    // The car repair arrivals: PT24M over PT60H is 150 intervals, and the reference simulator
+    // counts 151 in every replication, so it fires the start event at time 0 as well
+    // (ROADMAP.md, open question).
     let car = results
         .iter()
         .find(|p| name(p).starts_with("Car Repair"))

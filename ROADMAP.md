@@ -87,7 +87,7 @@ How other simulation tools keep models:
 And the sibling Craft apps: CADCraft saves DXF natively and keeps CADCraft-only data inside it as
 extension data; SolidCraft has its own `.sc` only because parametric history has no standard
 form, and still reads and writes STEP, IGES and 3MF; FieldCraft has `.fieldcraft` but writes
-Abaqus, Nastran and LS-DYNA input decks.
+the input decks of the common finite-element solvers.
 
 Open standards exist for exactly what StochCraft models:
 
@@ -235,9 +235,9 @@ Two PRs. **Part 1** (done): reading BPMN and XPDL with BPSim 2.0 and 1.0, writin
 BPMN with BPSim 2.0, saving unchanged opened files byte for byte, and StochCraft's own test
 models. Saving *edits* into an opened file came with the engine (M1.4, part 2). **Part 2**
 (done): `cargo xtask fetch-bpsim`, the reference corpus in CI (every model and scenario reads,
-unchanged saves are byte-identical, BPMN and XPDL versions give the same model, the L-SIM result
+unchanged saves are byte-identical, BPMN and XPDL versions give the same model, the reference result
 files parse) and XSD validation of everything StochCraft writes. The statistical cross-check
-against L-SIM needs gateways, which all three reference models use, so it moves to M2.3.
+against the reference simulator needs gateways, which all three reference models use, so it moves to M2.3.
 
 - Read BPSim 2.0 (and 1.0, upgraded on read) embedded in BPMN 2.0 or XPDL 2.2, or standalone;
   write BPMN 2.0 with embedded BPSim 2.0 for new models and the original format for opened ones.
@@ -278,14 +278,14 @@ against L-SIM needs gateways, which all three reference models use, so it moves 
   (`io/tests/miwg.rs`, in CI): fetched at a pinned commit by `cargo xtask fetch-miwg`, never
   committed (D14).
 - **Cross-check against another simulator:** the bundle includes result scenarios
-  (`*_results.bpsim`) produced by Lanner's L-SIM for the three BPSim 2.0 models, with
+  (`*_results.bpsim`) produced by another BPSim simulator for the three BPSim 2.0 models, with
   per-replication values (for example 151 car repair arrivals in each of three replications,
   and 107, 96 and 100 customers leaving). StochCraft's results for the same scenarios must agree
   with them statistically: deterministic quantities exactly, random ones within confidence
   intervals, since the random number generators differ. They are also the reference for how
   StochCraft writes its own result scenarios (`result`, `instance` per replication,
   `resultTimeStamp`). All three models use gateways, so the comparison runs from M2.3.
-  It already raises one question (decision D8): L-SIM counts 151 arrivals for an inter-trigger
+  It already raises one question (decision D8): the reference simulator counts 151 arrivals for an inter-trigger
   time of 24 minutes over 60 hours, that is 150 intervals plus an arrival at time 0, while the
   specification describes the event as occurring "after the specified time interval".
 - **Lenient reading, strict writing.** The BPSim 2.0 XML Schema (XSD, bpsim.org) fixes the order
@@ -519,15 +519,15 @@ unrolled line in `stochcraft-blocks`.
   against 2). Two merged Poisson streams give M/M/1 with λ = 0.75 (W = 4.09 ± 0.13 against 4).
 - **Exact cases:** the condition loop, a fork and join, routing with no default, and the even
   share of unset probabilities.
-- **Car repair against L-SIM's published results for scenario S1**, from 400 replications of
-  StochCraft's against L-SIM's three:
-  - **Arrivals:** 150 by default, 151 with the first arrival at time 0, as L-SIM counts in every
+- **Car repair against another BPSim simulator's published results for scenario S1**, from 400 replications of
+  StochCraft's against the reference simulator's three:
+  - **Arrivals:** 150 by default, 151 with the first arrival at time 0, as the reference simulator counts in every
     replication.
   - **Rejected estimates, repairs started, completed and customers leaving:** within 0.15
     standard errors (0.01 with the first arrival at 0).
-  - **Issues repaired:** 345 against L-SIM's 306 (−1.2 standard errors), within the check. The
+  - **Issues repaired:** 345 against the reference simulator's 306 (−1.2 standard errors), within the check. The
     model's `noOfIssues` is `int`, a truncated normal; StochCraft rounds it to the nearest whole
-    number, and L-SIM's three replications cannot tell whether it does the same.
+    number, and the reference simulator's three replications cannot tell whether it does the same.
 - **Home loan:** its two exclusive and two parallel gateways now read, but it also needs
   intermediate message events and a boundary timer, so its cross-check waits for event support.
 
@@ -3382,7 +3382,7 @@ and the Pages preview of an M3 pull request shows the blocks already merged.
 | D5 | Browser build | Settled: from M3.1 on, published on GitHub Pages with a preview per pull request; wasm32 first, wasm64 when its toolchain is verified |
 | D6 | Conditions and logic | Settled by BPSim: its XPath 1.0 expressions, the subset models use first |
 | D7 | Reference models as test files | Settled: WfMC's examples and the XSD are downloaded from bpsim.org by `cargo xtask fetch-bpsim` (pinned SHA-256, cached in CI), never committed, because they carry no licence of their own |
-| D8 | First arrival of a start event | Open: at time 0 (as L-SIM does, giving 151 car repair arrivals) or after the first interval (the specification's wording, and StochCraft today, giving 150). Evidence from M2.3's cross-check: with the first arrival at 0, the car repair counts match L-SIM's exactly for arrivals and within 0.01 standard errors for the others; after the first interval they are one arrival short and within 0.15. Both pass |
+| D8 | First arrival of a start event | Open: at time 0 (as the reference simulator does, giving 151 car repair arrivals) or after the first interval (the specification's wording, and StochCraft today, giving 150). Evidence from M2.3's cross-check: with the first arrival at 0, the car repair counts match the reference simulator's exactly for arrivals and within 0.01 standard errors for the others; after the first interval they are one arrival short and within 0.15. Both pass |
 | D9 | Where credibility data live (parameter pedigree, validated ranges) | In the model file, as `stochcraft:` BPSim vendor extensions, so they travel with the model and other tools keep them |
 | D10 | Replications in hybrid models (M4) | Each replication has its own SD state; uncertainty about parameters is an outer sample around the inner replications, never mixed into them |
 | D11 | The shared clock, and where coupling lives (M4) | SD steps are recurring events on the `des` event list; coupling lives in an L3 crate or an `sd` → `blocks` order in `xtask/src/layers.rs`; which goes first when an SD step and a DES event fall at the same time is a fixed rule, to confirm |

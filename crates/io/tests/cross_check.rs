@@ -1,4 +1,4 @@
-//! The car repair model against another BPSim simulator's published results (L-SIM, in the
+//! The car repair model against another BPSim simulator's published results (in the
 //! BPSim Implementer's Guide's `Car Repair Process v2.0.0_results.bpsim`).
 //!
 //! The reference files are downloaded by `cargo xtask fetch-bpsim`, never committed; without
@@ -6,12 +6,13 @@
 //!
 //! The model routes by probability (whether the estimate is accepted; whether an inspection finds
 //! a new issue) and by condition (repair while `noOfIssues > 0`), with its repair loop inside a
-//! sub-process that is simulated in line. Its tasks take no time. L-SIM reports three
-//! replications of scenario S1, so its counts are compared with the spread StochCraft's own
-//! replications give for a mean of three.
+//! sub-process that is simulated in line. Its tasks take no time. The reference simulator reports
+//! three replications of scenario S1, so its counts are compared with the spread StochCraft's
+//! own replications give for a mean of three.
 //!
 //! It also gathers the evidence for decision D8 (ROADMAP.md): the first arrival at time 0, as
-//! L-SIM does, or after the first interval, as the specification reads and StochCraft does.
+//! the reference simulator does, or after the first interval, as the specification reads and
+//! StochCraft does.
 
 #![allow(clippy::panic)] // A reference file that cannot be read fails the test.
 
@@ -62,8 +63,8 @@ fn examples() -> Option<PathBuf> {
     found
 }
 
-/// L-SIM's per-replication counts for `element` in result scenario `scenario`.
-fn lsim(results: &[u8], scenario: &str, element: &str) -> Vec<f64> {
+/// The reference simulator's per-replication counts for `element` in result scenario `scenario`.
+fn reference_counts(results: &[u8], scenario: &str, element: &str) -> Vec<f64> {
     let doc = xml::parse(results).unwrap_or_else(|e| panic!("{e}"));
     doc.root
         .descendants()
@@ -92,7 +93,7 @@ fn entered(r: &Report, id: &str) -> f64 {
 }
 
 #[test]
-fn car_repair_matches_lsim() {
+fn car_repair_matches_the_reference_results() {
     let Some(dir) = examples() else { return };
     let model =
         std::fs::read(dir.join("Car Repair Process v2.0.0.bpmn")).unwrap_or_else(|e| panic!("{e}"));
@@ -123,15 +124,16 @@ fn car_repair_matches_lsim() {
             ("customers leave", LEAVES),
         ] {
             let ours: Vec<f64> = reports.iter().map(|r| entered(r, id)).collect();
-            let theirs = lsim(&results, "S1_results", id);
+            let theirs = reference_counts(&results, "S1_results", id);
             assert_eq!(theirs.len(), 3, "{label}: {theirs:?}");
-            // L-SIM's mean of three against the spread of a mean of three of ours: within
-            // three standard errors of both (a two-sample check that rarely fails by chance).
+            // The reference simulator's mean of three against the spread of a mean of three of
+            // ours: within three standard errors of both (a two-sample check that rarely fails
+            // by chance).
             let (s1, s2) = (sd(&ours), sd(&theirs));
             let se = (s1 * s1 / 3.0 + s2 * s2 / 3.0).sqrt();
             let gap = mean(&theirs) - mean(&ours);
             eprintln!(
-                "  {label:>22}: StochCraft {:8.2} (sd {:6.2}), L-SIM {:8.2} {theirs:?}, gap {:6.2} = {:5.2} se",
+                "  {label:>22}: StochCraft {:8.2} (sd {:6.2}), theirs {:8.2} {theirs:?}, gap {:6.2} = {:5.2} se",
                 mean(&ours),
                 sd(&ours),
                 mean(&theirs),
@@ -146,7 +148,7 @@ fn car_repair_matches_lsim() {
             }
             assert!(
                 gap.abs() <= 3.0 * se,
-                "{label} (first arrival at 0: {at_zero}): ours {} vs L-SIM {}",
+                "{label} (first arrival at 0: {at_zero}): ours {} vs theirs {}",
                 mean(&ours),
                 mean(&theirs)
             );

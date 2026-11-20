@@ -207,7 +207,7 @@ agent work in the window. [mcp.md](mcp.md) has the tools and options.
 Results are checked against queueing theory and exact results: M/M/1, M/M/c (Erlang C), M/M/1/K,
 priority queues, machine repair, a Jackson network, a two-machine line with a finite buffer,
 E₄/M/1 batches, assembly, arrivals by time of day, breakdowns and activity networks. They are
-also checked against L-SIM's published results for the BPSim car repair model. StochCraft runs
+also checked against another BPSim simulator's published results for the BPSim car repair model. StochCraft runs
 about 54× faster than SimPy on an M/M/1 benchmark ([bench/](../bench/README.md)).
 
 ## Contributing
