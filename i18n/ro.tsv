@@ -1173,3 +1173,5 @@ unit	yr	a
 	{results}: the same in all {n} runs, so not counted as settled. Something none of the runs met could still happen in up to {rate} of runs.	{results}: la fel în toate cele {n} rulări, deci nu se numără ca stabil. Ceva ce nicio rulare nu a întâlnit se poate totuși întâmpla în până la {rate} dintre rulări.
 	{results}: the mean is at or near zero, so it cannot be known to a share of itself.	{results}: media este zero sau aproape de zero, deci nu poate fi cunoscută cu o precizie exprimată ca pondere din ea însăși.
 	± is the estimated precision: the half-width of a 95% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than 95%.	± este precizia estimată: jumătate din lățimea unui interval de încredere Student-t de 95% pentru media dintre rulări. Numărul de rulări a fost ales pe baza rezultatelor, deci intervalul poate acoperi media reală mai rar de 95%.
+	Not yet within its target: {results}.	Încă nu este în limita țintei: {results}.
+	then more until precise enough, at most {max}	apoi altele, până sunt suficient de precise, cel mult {max}

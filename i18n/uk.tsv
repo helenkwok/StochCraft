@@ -1173,3 +1173,5 @@ unit	yr	р.
 	{results}: the same in all {n} runs, so not counted as settled. Something none of the runs met could still happen in up to {rate} of runs.	{results}: однаково в усіх {n} запусках, тому не вважається усталеним. Те, чого не зустрів жоден запуск, усе ж може статися максимум у {rate} запусків.
 	{results}: the mean is at or near zero, so it cannot be known to a share of itself.	{results}: середнє дорівнює нулю або близьке до нуля, тому його точність не можна виразити як частку від нього самого.
 	± is the estimated precision: the half-width of a 95% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than 95%.	± — оцінна точність: половина ширини 95% довірчого інтервалу Student-t для середнього значення за запусками. Кількість запусків обрано за результатами, тому інтервал може накривати істинне середнє рідше, ніж у 95% випадків.
+	Not yet within its target: {results}.	Ще не в межах цілі: {results}.
+	then more until precise enough, at most {max}	потім більше, поки не стануть достатньо точними, не більше {max}

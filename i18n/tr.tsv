@@ -1173,3 +1173,5 @@ unit	yr	yıl
 	{results}: the same in all {n} runs, so not counted as settled. Something none of the runs met could still happen in up to {rate} of runs.	{results}: {n} çalıştırmanın hepsinde aynı, bu yüzden oturmuş sayılmaz. Hiçbir çalıştırmada görülmeyen bir şey yine de çalıştırmaların en fazla {rate} kadarında olabilir.
 	{results}: the mean is at or near zero, so it cannot be known to a share of itself.	{results}: ortalama sıfır ya da sıfıra yakın, bu yüzden kendisinin bir oranı olarak kesinliği bilinemez.
 	± is the estimated precision: the half-width of a 95% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than 95%.	±, tahmini kesinliktir: çalıştırmalar arasındaki ortalama için %95'lik Student-t güven aralığının yarı genişliği. Çalıştırma sayısı sonuçlara bakılarak seçildi, bu yüzden aralık gerçek ortalamayı %95'ten daha seyrek kapsayabilir.
+	Not yet within its target: {results}.	Henüz hedefinin içinde değil: {results}.
+	then more until precise enough, at most {max}	ardından yeterince kesinleşene kadar daha fazla, en çok {max}

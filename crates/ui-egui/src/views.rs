@@ -534,6 +534,16 @@ impl App {
                     ],
                 ),
             ));
+            // Laid out from the bottom: this line shows under the runs.
+            if let Some(q) = &x.sequential {
+                ui.label(theme::weak(
+                    ui,
+                    tf(
+                        "then more until precise enough, at most {max}",
+                        &[("max", &q.max.to_string())],
+                    ),
+                ));
+            }
             ui.label(tnf(
                 u64::from(x.replications),
                 "{n} run · seed {seed}",

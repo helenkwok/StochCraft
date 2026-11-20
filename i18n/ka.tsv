@@ -1173,3 +1173,5 @@ unit	yr	წელი
 	{results}: the same in all {n} runs, so not counted as settled. Something none of the runs met could still happen in up to {rate} of runs.	{results}: ყველა {n} გაშვებაში ერთნაირია, ამიტომ სტაბილურად არ ითვლება. რაც არც ერთ გაშვებაში არ მომხდარა, მაინც შეიძლება მოხდეს გაშვებების არაუმეტეს {rate}-ში.
 	{results}: the mean is at or near zero, so it cannot be known to a share of itself.	{results}: საშუალო ნულია ან ნულთან ახლოსაა, ამიტომ მისი სიზუსტე საკუთარი წილის სახით ვერ განისაზღვრება.
 	± is the estimated precision: the half-width of a 95% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than 95%.	± არის სავარაუდო სიზუსტე: გაშვებებს შორის საშუალო მნიშვნელობის 95% Student-t ნდობის ინტერვალის ნახევარსიგანე. გაშვებების რაოდენობა შედეგების მიხედვით შეირჩა, ამიტომ ინტერვალმა ჭეშმარიტი საშუალო შეიძლება 95%-ზე იშვიათად მოიცვას.
+	Not yet within its target: {results}.	ჯერ არ არის სამიზნეში: {results}.
+	then more until precise enough, at most {max}	შემდეგ მეტი, სანამ საკმარისად ზუსტი არ გახდება, მაქსიმუმ {max}

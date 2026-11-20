@@ -1173,3 +1173,5 @@ unit	yr	m.
 	{results}: the same in all {n} runs, so not counted as settled. Something none of the runs met could still happen in up to {rate} of runs.	{results}: tas pats visuose {n} vykdymuose, todėl nelaikoma nusistovėjusiu. Tai, ko nepatyrė joks vykdymas, vis tiek gali nutikti iki {rate} vykdymų.
 	{results}: the mean is at or near zero, so it cannot be known to a share of itself.	{results}: vidurkis lygus nuliui arba artimas nuliui, todėl jo tikslumo negalima išreikšti jo paties dalimi.
 	± is the estimated precision: the half-width of a 95% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than 95%.	± yra numatomas tikslumas: 95% Student-t pasikliautinojo intervalo, apskaičiuoto vidurkiui tarp vykdymų, pusplotis. Vykdymų skaičius parinktas pagal rezultatus, todėl intervalas tikrąjį vidurkį gali dengti rečiau nei 95%.
+	Not yet within its target: {results}.	Dar ne tikslo ribose: {results}.
+	then more until precise enough, at most {max}	tada daugiau, kol bus pakankamai tikslūs, daugiausia {max}

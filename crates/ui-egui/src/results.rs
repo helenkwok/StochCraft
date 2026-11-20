@@ -213,13 +213,21 @@ pub enum Fix {
 /// The block and result names of the watched results a sequential run lists under `status` in
 /// its summary (`no_spread`, `mean_near_zero`): "Mean wait (Desk), Entered (Exit)".
 fn listed(results: &Value, status: &str) -> String {
+    named(
+        results,
+        results["sequential"][status]
+            .as_array()
+            .into_iter()
+            .flatten(),
+    )
+}
+
+/// The block and result names of `watched` (each `{element, metric}`), joined by commas.
+fn named<'a>(results: &Value, watched: impl Iterator<Item = &'a Value>) -> String {
     let elements = results["elements"]
         .as_array()
         .map_or(&[][..], Vec::as_slice);
-    results["sequential"][status]
-        .as_array()
-        .into_iter()
-        .flatten()
+    watched
         .map(|w| {
             let id = w["element"].as_str().unwrap_or("");
             let key = w["metric"].as_str().unwrap_or("");
@@ -237,17 +245,20 @@ fn listed(results: &Value, status: &str) -> String {
 
 /// "How sure are these numbers?"'s rows for a sequential run (`results["sequential"]`): why it
 /// stopped after how many runs, with a fix (more runs allowed) when the most was reached first,
-/// and the results it could not settle by their spread or their mean. Draws nothing for a fixed
-/// run. Returns the fix clicked, if any.
-fn sequential_rows(
-    ui: &mut egui::Ui,
-    p: &theme::Palette,
-    results: &Value,
-    widest: Option<f64>,
-) -> Option<Fix> {
+/// the results not yet within its own targets, and those it could not settle by their spread or
+/// their mean. Judged by the run's targets (`measures`, as the run judged them), not the fixed
+/// ± 5% of a fixed run. Draws nothing for a fixed run. Returns the fix clicked, if any.
+fn sequential_rows(ui: &mut egui::Ui, p: &theme::Palette, results: &Value) -> Option<Fix> {
     let q = &results["sequential"];
     let n = q["replications"].as_u64()?;
     let count = n.to_string();
+    let measures = q["measures"].as_array().map_or(&[][..], Vec::as_slice);
+    // The widest score against the run's own target, among those not within it.
+    let widest = measures
+        .iter()
+        .filter(|m| m["status"] != "settled")
+        .filter_map(|m| m["score"].as_f64())
+        .fold(None, |w: Option<f64>, s| Some(w.map_or(s, |w| w.max(s))));
     let mut fix = None;
     if q["reason"] == "target_met" {
         let text = tnf(
@@ -269,6 +280,22 @@ fn sequential_rows(
         if trust_row(ui, p, false, &text, Some(&label)) {
             fix = Some(Fix::Max(needed));
         }
+    }
+    let wide = named(
+        results,
+        measures.iter().filter(|m| {
+            matches!(
+                m["status"].as_str(),
+                Some("wide" | "no_interval" | "no_value")
+            )
+        }),
+    );
+    if !wide.is_empty() {
+        let text = tf(
+            "Not yet within its target: {results}.",
+            &[("results", &wide)],
+        );
+        trust_row(ui, p, false, &text, None);
     }
     let same = listed(results, "no_spread");
     if !same.is_empty() {
@@ -398,7 +425,7 @@ pub fn trust(ui: &mut egui::Ui, results: &Value) -> Option<Fix> {
         // setting the first ones.
         let sequential = results["sequential"].is_object();
         if sequential {
-            fix = sequential_rows(ui, &p, results, widest.map(|w| w.2));
+            fix = sequential_rows(ui, &p, results);
         }
         if n < 2 {
             let label = tnf(10, "Use {n} run", "Use {n} runs", &[]);
@@ -470,7 +497,8 @@ pub fn trust(ui: &mut egui::Ui, results: &Value) -> Option<Fix> {
                 }
             }
         }
-        if settled > 0 {
+        // A sequential run judged its key measures by its own targets, in its own rows above.
+        if settled > 0 && !sequential {
             let text = tf(
                 "{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.",
                 &[("k", &settled.to_string()), ("m", &judged.to_string())],
@@ -1529,6 +1557,12 @@ mod tests {
             "no_spread": [{ "element": "paint", "metric": "left" }],
             "mean_near_zero": [],
             "unseen_rate": 0.2589,
+            // As the run judged them, against its own targets: the wait at 6.4 times its target.
+            "measures": [
+                { "element": "paint", "metric": "utilisation", "status": "settled", "score": 0.8 },
+                { "element": "paint", "metric": "mean_wait", "status": "wide", "score": 6.4 },
+                { "element": "paint", "metric": "left", "status": "no_spread", "score": null },
+            ],
         });
         r
     }
@@ -1540,7 +1574,7 @@ mod tests {
     fn a_sequential_run_says_why_it_stopped() {
         use super::Fix;
         use egui_kittest::kittest::Queryable;
-        // 10 × (32 / 5)² = 409.6, as for a fixed run, but as the most allowed.
+        // From the run's own score: 10 × 6.4² = 409.6, as the most allowed.
         assert_eq!(
             trust_with(sequential("max_reached"), Some("Allow up to 410 runs")),
             Some(Fix::Max(410))
@@ -1561,6 +1595,12 @@ mod tests {
         assert!(h.query_by_label("Use 410 runs (about ± 5%)").is_none());
         h.get_by_label(
             "Stopped at the most allowed, 10 runs, before every key measure was within its target.",
+        );
+        h.get_by_label("Not yet within its target: Mean wait (Paint).");
+        // Judged by the run's targets only: no "settled at ± 5%" row beside it.
+        assert!(
+            h.query_by_label_contains("key measures are settled")
+                .is_none()
         );
         h.get_by_label("Left (Paint): the same in all 10 runs, so not counted as settled. Something none of the runs met could still happen in up to 25.9% of runs.");
         // Stopped with the target met: said with a check mark, nothing to click for it.

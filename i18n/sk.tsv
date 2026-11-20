@@ -1173,3 +1173,5 @@ unit	yr	r.
 	{results}: the same in all {n} runs, so not counted as settled. Something none of the runs met could still happen in up to {rate} of runs.	{results}: rovnaké vo všetkých {n} behoch, preto sa nepočíta ako ustálené. Niečo, čo nenastalo v žiadnom behu, sa môže stať až v {rate} behov.
 	{results}: the mean is at or near zero, so it cannot be known to a share of itself.	{results}: priemer je nulový alebo blízky nule, takže ho nemožno poznať s presnosťou vyjadrenou ako podiel jeho samého.
 	± is the estimated precision: the half-width of a 95% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than 95%.	± je odhadovaná presnosť: polovica šírky 95% Student-t intervalu spoľahlivosti priemeru naprieč behmi. Počet behov sa zvolil podľa výsledkov, takže interval môže pokryť skutočný priemer menej často než 95%.
+	Not yet within its target: {results}.	Zatiaľ nie je v rámci cieľa: {results}.
+	then more until precise enough, at most {max}	potom ďalšie, kým nie sú dostatočne presné, najviac {max}

@@ -1173,3 +1173,5 @@ unit	yr	år
 	{results}: the same in all {n} runs, so not counted as settled. Something none of the runs met could still happen in up to {rate} of runs.	{results}: lik i alle {n} kjøringer, så det regnes ikke som stabilt. Noe ingen av kjøringene har støtt på, kan likevel skje i opptil {rate} av kjøringene.
 	{results}: the mean is at or near zero, so it cannot be known to a share of itself.	{results}: gjennomsnittet er null eller nær null, så det kan ikke kjennes med en presisjon uttrykt som en andel av seg selv.
 	± is the estimated precision: the half-width of a 95% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than 95%.	± er den estimerte presisjonen: halve bredden av et 95% Student-t-konfidensintervall for gjennomsnittet på tvers av kjøringer. Antall kjøringer ble valgt ut fra resultatene, så intervallet kan dekke det sanne gjennomsnittet sjeldnere enn 95%.
+	Not yet within its target: {results}.	Ennå ikke innenfor målet: {results}.
+	then more until precise enough, at most {max}	deretter flere til de er presise nok, høyst {max}

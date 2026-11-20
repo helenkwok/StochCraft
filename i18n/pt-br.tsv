@@ -1173,3 +1173,5 @@ unit	yr	a
 	{results}: the same in all {n} runs, so not counted as settled. Something none of the runs met could still happen in up to {rate} of runs.	{results}: igual nas {n} execuções, então não conta como estável. Algo que nenhuma execução encontrou ainda pode ocorrer em até {rate} das execuções.
 	{results}: the mean is at or near zero, so it cannot be known to a share of itself.	{results}: a média é zero ou quase zero, então não pode ser conhecida com uma precisão expressa como parcela de si mesma.
 	± is the estimated precision: the half-width of a 95% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than 95%.	± é a precisão estimada: a metade da largura de um intervalo de confiança Student-t de 95% para a média entre as execuções. O número de execuções foi escolhido a partir dos resultados, então o intervalo pode cobrir a média verdadeira menos vezes que 95%.
+	Not yet within its target: {results}.	Ainda não está dentro da meta: {results}.
+	then more until precise enough, at most {max}	depois mais, até ficarem precisos o bastante, no máximo {max}

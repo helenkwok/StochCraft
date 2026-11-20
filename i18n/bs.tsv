@@ -1173,3 +1173,5 @@ unit	yr	god.
 	{results}: the same in all {n} runs, so not counted as settled. Something none of the runs met could still happen in up to {rate} of runs.	{results}: isto u svih {n} pokretanja, pa se ne računa kao ustaljeno. Nešto što nijedno pokretanje nije doživjelo i dalje se može dogoditi u do {rate} pokretanja.
 	{results}: the mean is at or near zero, so it cannot be known to a share of itself.	{results}: srednja vrijednost je nula ili blizu nule, pa se ne može znati s preciznošću izraženom kao udio nje same.
 	± is the estimated precision: the half-width of a 95% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than 95%.	± je procijenjena preciznost: polovina širine 95% Student-t intervala pouzdanosti za srednju vrijednost kroz pokretanja. Broj pokretanja odabran je prema rezultatima, pa interval može rjeđe od 95% obuhvatiti pravu srednju vrijednost.
+	Not yet within its target: {results}.	Još nije unutar cilja: {results}.
+	then more until precise enough, at most {max}	zatim još, dok ne postanu dovoljno precizni, najviše {max}

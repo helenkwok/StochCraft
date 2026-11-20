@@ -1173,3 +1173,5 @@ unit	yr	a
 	{results}: the same in all {n} runs, so not counted as settled. Something none of the runs met could still happen in up to {rate} of runs.	{results}: kõigis {n} käivitamises sama, seega ei loeta stabiilseks. Midagi, mida ükski käivitamine ei kohanud, võib siiski juhtuda kuni {rate} käivitamises.
 	{results}: the mean is at or near zero, so it cannot be known to a share of itself.	{results}: keskmine on null või nulli lähedal, seega seda ei saa teada enda osakaalu täpsusega.
 	± is the estimated precision: the half-width of a 95% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than 95%.	± on hinnanguline täpsus: käivitamiste keskmise 95% Student-t usaldusvahemiku poollaius. Käivitamiste arv valiti tulemuste põhjal, mistõttu võib vahemik katta tegelikku keskmist harvem kui 95%.
+	Not yet within its target: {results}.	Pole veel sihi piires: {results}.
+	then more until precise enough, at most {max}	seejärel rohkem, kuni piisavalt täpsed, kuni {max}

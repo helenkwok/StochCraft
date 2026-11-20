@@ -1173,3 +1173,5 @@ unit	yr	năm
 	{results}: the same in all {n} runs, so not counted as settled. Something none of the runs met could still happen in up to {rate} of runs.	{results}: giống nhau trong cả {n} lần chạy, nên không được tính là ổn định. Điều mà không lần chạy nào gặp vẫn có thể xảy ra trong tối đa {rate} số lần chạy.
 	{results}: the mean is at or near zero, so it cannot be known to a share of itself.	{results}: giá trị trung bình bằng không hoặc gần bằng không, nên không thể biết độ chính xác dưới dạng một tỷ lệ của chính nó.
 	± is the estimated precision: the half-width of a 95% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than 95%.	± là độ chính xác ước tính: một nửa độ rộng của khoảng tin cậy Student-t 95% cho giá trị trung bình qua các lần chạy. Số lần chạy được chọn dựa trên kết quả, nên khoảng này có thể bao phủ giá trị trung bình thật ít hơn 95% số lần.
+	Not yet within its target: {results}.	Chưa nằm trong mục tiêu: {results}.
+	then more until precise enough, at most {max}	sau đó thêm cho đến khi đủ chính xác, tối đa {max}

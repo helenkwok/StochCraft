@@ -788,7 +788,8 @@ fields (`“Service time”`) are named in the messages by their own rows.
   against any other source, and not reviewed by native speakers; the least certain are lo, th,
   ta, te, bn, ka, kk, hi and sq.
 - The rows for sequential runs (issue #224: How many runs, its targets and most runs, why the runs
-  stopped, results the same in every run, and the ± as estimated precision) were machine-drafted
+  stopped, the results not yet within the target, results the same in every run, the left
+  rail's "then more until precise enough", and the ± as estimated precision) were machine-drafted
   with Claude Code from the plain meaning of the English, with each catalog's own words for run,
   key measure, settled, target and mean, and its own wording of the 95% interval note. Not
   checked against any other source, and not reviewed by native speakers; the least certain are

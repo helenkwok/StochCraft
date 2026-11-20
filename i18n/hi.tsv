@@ -1173,3 +1173,5 @@ unit	yr	वर्ष
 	{results}: the same in all {n} runs, so not counted as settled. Something none of the runs met could still happen in up to {rate} of runs.	{results}: सभी {n} रन में समान, इसलिए स्थिर नहीं गिना गया। जो किसी भी रन में नहीं हुआ, वह अब भी अधिकतम {rate} रन में हो सकता है।
 	{results}: the mean is at or near zero, so it cannot be known to a share of itself.	{results}: माध्य शून्य या शून्य के करीब है, इसलिए उसे अपने ही किसी अंश की सटीकता से नहीं जाना जा सकता।
 	± is the estimated precision: the half-width of a 95% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than 95%.	± अनुमानित सटीकता है: रनों में प्राप्त माध्य के 95% Student-t विश्वास अंतराल की आधी चौड़ाई। रनों की संख्या परिणामों के आधार पर चुनी गई थी, इसलिए अंतराल वास्तविक माध्य को 95% से कम बार समेट सकता है।
+	Not yet within its target: {results}.	अभी तक लक्ष्य के भीतर नहीं: {results}।
+	then more until precise enough, at most {max}	फिर पर्याप्त सटीक होने तक और, अधिकतम {max}

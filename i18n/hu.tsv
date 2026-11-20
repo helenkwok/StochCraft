@@ -1173,3 +1173,5 @@ unit	yr	év
 	{results}: the same in all {n} runs, so not counted as settled. Something none of the runs met could still happen in up to {rate} of runs.	{results}: {n} futásból mindegyikben azonos, ezért nem számít stabilnak. Ami egyik futásban sem fordult elő, az még megtörténhet a futások legfeljebb {rate} részében.
 	{results}: the mean is at or near zero, so it cannot be known to a share of itself.	{results}: az átlag nulla vagy közel nulla, ezért nem ismerhető önmaga hányadában kifejezett pontossággal.
 	± is the estimated precision: the half-width of a 95% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than 95%.	A ± a becsült pontosság: a futások átlagára számított 95%-os Student-t-konfidenciaintervallum fél szélessége. A futások számát az eredmények alapján választottuk, ezért az intervallum ritkábban fedheti le a valódi átlagot, mint 95%-ban.
+	Not yet within its target: {results}.	Még nincs a célján belül: {results}.
+	then more until precise enough, at most {max}	utána több, amíg elég pontosak nem lesznek, legfeljebb {max}

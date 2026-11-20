@@ -1173,3 +1173,5 @@ unit	yr	ປີ
 	{results}: the same in all {n} runs, so not counted as settled. Something none of the runs met could still happen in up to {rate} of runs.	{results}: ຄືກັນໃນທຸກ {n} ຮອບ ຈຶ່ງບໍ່ນັບວ່າຄົງທີ່. ສິ່ງທີ່ບໍ່ມີຮອບໃດພົບ ກໍຍັງອາດເກີດຂຶ້ນໄດ້ໃນສູງສຸດ {rate} ຂອງຮອບທັງໝົດ.
 	{results}: the mean is at or near zero, so it cannot be known to a share of itself.	{results}: ຄ່າສະເລ່ຍເປັນສູນ ຫຼື ໃກ້ສູນ ຈຶ່ງບໍ່ສາມາດຮູ້ຄວາມແມ່ນຍຳເປັນສັດສ່ວນຂອງຕົວມັນເອງໄດ້.
 	± is the estimated precision: the half-width of a 95% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than 95%.	± ແມ່ນຄວາມແມ່ນຍຳທີ່ຄາດຄະເນ: ເຄິ່ງໜຶ່ງຂອງຄວາມກວ້າງຂອງຊ່ວງຄວາມເຊື່ອໝັ້ນ Student-t 95% ສຳລັບຄ່າສະເລ່ຍຈາກການເຮັດຊ້ຳ. ຈຳນວນຮອບຖືກເລືອກຈາກຜົນລັບ ຊ່ວງຈຶ່ງອາດຄອບຄຸມຄ່າສະເລ່ຍຈິງໄດ້ໜ້ອຍກວ່າ 95%.
+	Not yet within its target: {results}.	ຍັງບໍ່ຢູ່ພາຍໃນເປົ້າໝາຍ: {results}.
+	then more until precise enough, at most {max}	ຈາກນັ້ນເພີ່ມອີກຈົນແມ່ນຍຳພໍ, ສູງສຸດ {max}

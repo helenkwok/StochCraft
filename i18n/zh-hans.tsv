@@ -1173,3 +1173,5 @@ unit	yr	年
 	{results}: the same in all {n} runs, so not counted as settled. Something none of the runs met could still happen in up to {rate} of runs.	{results}：{n} 次运行中全部相同，因此不算已稳定。任何一次运行都没遇到的情况，仍可能在最多 {rate} 的运行中出现。
 	{results}: the mean is at or near zero, so it cannot be known to a share of itself.	{results}：均值为零或接近零，因此无法按其自身的百分比来确定精度。
 	± is the estimated precision: the half-width of a 95% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than 95%.	± 表示估计精度：各次运行均值的 95% Student-t 置信区间的半宽。运行次数是根据结果选定的，因此该区间覆盖真实均值的频率可能低于 95%。
+	Not yet within its target: {results}.	尚未进入目标范围：{results}。
+	then more until precise enough, at most {max}	之后继续，直到足够精确，最多 {max}

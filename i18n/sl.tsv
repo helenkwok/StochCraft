@@ -1173,3 +1173,5 @@ unit	yr	l.
 	{results}: the same in all {n} runs, so not counted as settled. Something none of the runs met could still happen in up to {rate} of runs.	{results}: enako v vseh {n} zagonih, zato ni štet za ustaljeno. Nekaj, česar ni doživel noben zagon, se lahko še vedno zgodi v do {rate} zagonov.
 	{results}: the mean is at or near zero, so it cannot be known to a share of itself.	{results}: povprečje je nič ali blizu nič, zato ga ni mogoče poznati z natančnostjo, izraženo kot delež njega samega.
 	± is the estimated precision: the half-width of a 95% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than 95%.	± je ocenjena natančnost: polovica širine 95% Student-t intervala zaupanja za povprečje med zagoni. Število zagonov je bilo izbrano glede na rezultate, zato interval pravo povprečje morda pokrije redkeje kot v 95%.
+	Not yet within its target: {results}.	Še ni znotraj cilja: {results}.
+	then more until precise enough, at most {max}	nato več, dokler niso dovolj natančni, največ {max}

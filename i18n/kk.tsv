@@ -1173,3 +1173,5 @@ unit	yr	ж.
 	{results}: the same in all {n} runs, so not counted as settled. Something none of the runs met could still happen in up to {rate} of runs.	{results}: барлық {n} іске қосуда бірдей, сондықтан тұрақты деп саналмайды. Ешбір іске қосуда болмаған жағдай да іске қосулардың {rate} дейінгі бөлігінде орын алуы мүмкін.
 	{results}: the mean is at or near zero, so it cannot be known to a share of itself.	{results}: орташа нөлге тең немесе нөлге жақын, сондықтан оны өзінің үлесі ретінде дәлдікпен білу мүмкін емес.
 	± is the estimated precision: the half-width of a 95% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than 95%.	± — бағалық дәлдік: іске қосулар арасындағы орташа мәннің 95% Student-t сенімділік аралығының жарты ені. Іске қосулар саны нәтижелерге қарап таңдалды, сондықтан аралық нақты орташаны 95%-дан сирегірек қамтуы мүмкін.
+	Not yet within its target: {results}.	Әлі мақсат шегінде емес: {results}.
+	then more until precise enough, at most {max}	содан кейін жеткілікті дәл болғанша көбірек, ең көбі {max}

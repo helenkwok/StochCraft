@@ -285,7 +285,8 @@ The **Results** tab shows, from the top:
    pulls the means away, and how many key measures are already settled. A time or a count is
    settled at ± 5% of its mean; a share, such as utilisation, at ± 1 percentage point. After
    **More until precise enough**, it says why the runs stopped and after how many, offers
-   **Allow up to N runs** when the most was reached first, and names any result that was the
+   **Allow up to N runs** when the most was reached first, names the key measures not yet within
+   the run's targets (it judges them by its own targets, not the ± 5% above), and any result that was the
    same in every run, with how often something none of the runs met could still happen (about
    3 in N runs at most). The ± is then called the estimated precision: the number of runs was
    chosen from the results, so the interval may cover the true mean less often than 95%.

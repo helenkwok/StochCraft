@@ -1173,3 +1173,5 @@ unit	yr	年
 	{results}: the same in all {n} runs, so not counted as settled. Something none of the runs met could still happen in up to {rate} of runs.	{results}: {n} 回すべての実行で同じなので、安定とは数えません。どの実行でも起きなかったことが、実行のうち最大 {rate} で起こる可能性は残ります。
 	{results}: the mean is at or near zero, so it cannot be known to a share of itself.	{results}: 平均がゼロまたはゼロに近いため、平均に対する割合では精度を知ることができません。
 	± is the estimated precision: the half-width of a 95% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than 95%.	± は推定精度で、実行間の平均値に対する 95% Student-t 信頼区間の半幅です。実行回数は結果に基づいて決めたため、区間が真の平均を含む頻度は 95% より低くなることがあります。
+	Not yet within its target: {results}.	まだ目標内に収まっていません: {results}。
+	then more until precise enough, at most {max}	その後、十分な精度になるまで追加、最大 {max}

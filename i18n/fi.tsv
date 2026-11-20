@@ -1173,3 +1173,5 @@ unit	yr	v
 	{results}: the same in all {n} runs, so not counted as settled. Something none of the runs met could still happen in up to {rate} of runs.	{results}: sama kaikissa {n} ajossa, joten ei lasketa vakiintuneeksi. Jotain, mitä yksikään ajo ei kohdannut, voi silti tapahtua enintään {rate} ajoista.
 	{results}: the mean is at or near zero, so it cannot be known to a share of itself.	{results}: keskiarvo on nolla tai lähellä nollaa, joten sitä ei voi tuntea osuuden tarkkuudella itsestään.
 	± is the estimated precision: the half-width of a 95% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than 95%.	± on arvioitu tarkkuus: ajojen yli lasketun keskiarvon 95 %:n Student-t-luottamusvälin puolileveys. Ajojen määrä valittiin tulosten perusteella, joten väli voi kattaa todellisen keskiarvon harvemmin kuin 95 %:ssa tapauksista.
+	Not yet within its target: {results}.	Ei vielä tavoitteensa sisällä: {results}.
+	then more until precise enough, at most {max}	sitten lisää, kunnes riittävän tarkat, enintään {max}

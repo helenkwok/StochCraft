@@ -1173,3 +1173,5 @@ unit	yr	বছর
 	{results}: the same in all {n} runs, so not counted as settled. Something none of the runs met could still happen in up to {rate} of runs.	{results}: সব {n}টি পুনরাবৃত্তিতেই একই, তাই স্থির বলে গণ্য করা হয়নি। কোনো পুনরাবৃত্তিতে যা ঘটেনি তা-ও সর্বোচ্চ {rate} পুনরাবৃত্তিতে ঘটতে পারে।
 	{results}: the mean is at or near zero, so it cannot be known to a share of itself.	{results}: গড় শূন্য বা তার কাছাকাছি, তাই নিজের একটি অংশ হিসেবে এর নির্ভুলতা জানা যায় না।
 	± is the estimated precision: the half-width of a 95% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than 95%.	± হলো আনুমানিক নির্ভুলতা: পুনরাবৃত্তিগুলো জুড়ে গড়ের 95% Student-t আস্থা ব্যবধানের অর্ধ-প্রস্থ। পুনরাবৃত্তির সংখ্যা ফলাফল দেখে বেছে নেওয়া হয়েছে, তাই ব্যবধানটি প্রকৃত গড়কে 95%-এর চেয়ে কম বার ধরতে পারে।
+	Not yet within its target: {results}.	এখনও লক্ষ্যের মধ্যে আসেনি: {results}।
+	then more until precise enough, at most {max}	তারপর যথেষ্ট নির্ভুল না হওয়া পর্যন্ত আরও, সর্বোচ্চ {max}

@@ -1173,3 +1173,5 @@ unit	yr	సం.
 	{results}: the same in all {n} runs, so not counted as settled. Something none of the runs met could still happen in up to {rate} of runs.	{results}: మొత్తం {n} అమలులలో ఒకేలా ఉంది, కాబట్టి స్థిరపడినదిగా లెక్కించలేదు. ఏ అమలులోనూ ఎదురుకాని దేనికైనా, అమలులలో గరిష్ఠంగా {rate}లో ఇంకా జరగవచ్చు.
 	{results}: the mean is at or near zero, so it cannot be known to a share of itself.	{results}: సగటు సున్నా లేదా సున్నాకు దగ్గరగా ఉంది, కాబట్టి దాని సొంత వాటాగా కచ్చితత్వాన్ని తెలుసుకోలేము.
 	± is the estimated precision: the half-width of a 95% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than 95%.	± అనేది అంచనా వేసిన కచ్చితత్వం: అమలుల సగటుకు సంబంధించిన 95% Student-t విశ్వసనీయత అంతరం వెడల్పులో సగం. అమలుల సంఖ్యను ఫలితాల ఆధారంగా ఎంచుకున్నందున, అంతరం నిజమైన సగటును 95% కంటే తక్కువసార్లు కవర్ చేయవచ్చు.
+	Not yet within its target: {results}.	ఇంకా లక్ష్యం లోపలికి రాలేదు: {results}.
+	then more until precise enough, at most {max}	ఆ తర్వాత తగినంత కచ్చితత్వం వచ్చే వరకు ఇంకా, గరిష్ఠంగా {max}

@@ -1173,3 +1173,5 @@ unit	yr	г.
 	{results}: the same in all {n} runs, so not counted as settled. Something none of the runs met could still happen in up to {rate} of runs.	{results}: одинаково во всех {n} запусках, поэтому не считается установившимся. То, чего не встретил ни один запуск, всё же может произойти не более чем в {rate} запусков.
 	{results}: the mean is at or near zero, so it cannot be known to a share of itself.	{results}: среднее равно нулю или близко к нулю, поэтому его точность нельзя выразить как долю от него самого.
 	± is the estimated precision: the half-width of a 95% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than 95%.	± — оценочная точность: половина ширины 95% доверительного интервала Student-t для среднего значения по запускам. Число запусков выбрано по результатам, поэтому интервал может накрывать истинное среднее реже, чем в 95% случаев.
+	Not yet within its target: {results}.	Пока не в пределах цели: {results}.
+	then more until precise enough, at most {max}	затем больше, пока не станут достаточно точными, не более {max}

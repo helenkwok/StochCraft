@@ -1173,3 +1173,5 @@ unit	yr	ปี
 	{results}: the same in all {n} runs, so not counted as settled. Something none of the runs met could still happen in up to {rate} of runs.	{results}: เหมือนกันในทั้ง {n} รอบ จึงไม่นับว่าคงที่ สิ่งที่ไม่มีรอบใดเจอ ก็ยังอาจเกิดขึ้นได้ในสูงสุด {rate} ของรอบทั้งหมด
 	{results}: the mean is at or near zero, so it cannot be known to a share of itself.	{results}: ค่าเฉลี่ยเป็นศูนย์หรือใกล้ศูนย์ จึงรู้ความแม่นยำเป็นสัดส่วนของตัวเองไม่ได้
 	± is the estimated precision: the half-width of a 95% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than 95%.	± คือความแม่นยำโดยประมาณ: ครึ่งหนึ่งของความกว้างของช่วงความเชื่อมั่น Student-t 95% สำหรับค่าเฉลี่ยจากการรันทุกรอบ จำนวนรอบถูกเลือกจากผลลัพธ์ ช่วงนี้จึงอาจครอบคลุมค่าเฉลี่ยจริงได้น้อยกว่า 95%
+	Not yet within its target: {results}.	ยังไม่อยู่ในเป้าหมาย: {results}
+	then more until precise enough, at most {max}	จากนั้นรันเพิ่มจนแม่นยำพอ สูงสุด {max}
