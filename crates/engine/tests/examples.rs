@@ -835,7 +835,7 @@ fn the_prison_population_matches_its_infinite_server_network() {
 /// is always busy and 0.5 jobs an hour come out.
 #[test]
 fn penny_fab_matches_the_practical_worst_case_and_the_best_case() {
-    let (rb, t0, w0) = (0.5, 8.0, 4.0);
+    let (rb, t0, w0): (f64, f64, f64) = (0.5, 8.0, 4.0);
     let duration = 50_000.0;
     for (scenario, w) in [
         (Some("1-job"), 1.0),
