@@ -64,6 +64,12 @@ pub mod table;
 
 pub use correlate::rank_correlation;
 
+/// Values sorted per step when the results are worked out a piece at a time.
+const SORT_CHUNK: usize = 1 << 18;
+
+/// Elements moved per merge step of that sort.
+const MERGE_BUDGET: usize = 1 << 19;
+
 /// Trials per batch: the unit of Latin hypercube strata, of correlation and of parallel work.
 pub const BATCH: u64 = 1_000;
 
@@ -694,6 +700,122 @@ struct Summing {
     correlations: Vec<CorrelationResult>,
     /// How a sequential run went, for the results.
     stop: Option<StopReport>,
+    /// The output being worked out: its finite values being sorted, and how many trials gave a
+    /// value of any kind.
+    sorting: Option<(Sorter, usize)>,
+    /// Values sorted per chunk, and elements moved per merge step ([`Sorter`]).
+    chunk: usize,
+    budget: usize,
+}
+
+/// Values sorted in fixed-size chunks, one chunk per step, and then merged in bottom-up passes
+/// of at most `budget` elements per step into a second buffer, which becomes the first at the
+/// end of each pass. The order is `f64::total_cmp`'s, so the result is that of
+/// `sort_by(f64::total_cmp)` (values that compare equal are the same bits), however the work is
+/// cut into steps.
+#[derive(Debug, Clone)]
+struct Sorter {
+    /// The values: sorted runs of `width` (the last may be shorter) once the chunks are done.
+    a: Vec<f64>,
+    /// The merge's output buffer.
+    b: Vec<f64>,
+    chunk: usize,
+    budget: usize,
+    /// Chunks sorted so far.
+    chunks: usize,
+    /// The length of the runs being merged; 0 while chunks are still being sorted.
+    width: usize,
+    /// The merge of the pair of runs from `lo`: next of the left run (`i`), of the right (`j`),
+    /// and the next place in `b` (`k`).
+    lo: usize,
+    i: usize,
+    j: usize,
+    k: usize,
+}
+
+impl Sorter {
+    fn new(values: Vec<f64>, chunk: usize, budget: usize) -> Self {
+        Self {
+            a: values,
+            b: Vec::new(),
+            chunk: chunk.max(1),
+            budget: budget.max(1),
+            chunks: 0,
+            width: 0,
+            lo: 0,
+            i: 0,
+            j: 0,
+            k: 0,
+        }
+    }
+
+    fn is_done(&self) -> bool {
+        self.width != 0 && self.width >= self.a.len()
+    }
+
+    /// The sorted values; only once [`Sorter::is_done`].
+    fn into_sorted(self) -> Vec<f64> {
+        self.a
+    }
+
+    /// Does the next piece of work: sorts a chunk, or moves up to `budget` elements in a merge.
+    fn step(&mut self) {
+        let n = self.a.len();
+        if self.width == 0 {
+            let start = self.chunks * self.chunk;
+            if start < n {
+                let end = (start + self.chunk).min(n);
+                if let Some(part) = self.a.get_mut(start..end) {
+                    part.sort_by(f64::total_cmp);
+                }
+                self.chunks += 1;
+            }
+            if self.chunks * self.chunk >= n {
+                self.width = self.chunk;
+                self.b = vec![0.0; n];
+                self.start_pair(0);
+            }
+            return;
+        }
+        let mut moved = 0;
+        while moved < self.budget && self.width < n {
+            let mid = (self.lo + self.width).min(n);
+            let hi = (self.lo + 2 * self.width).min(n);
+            if self.k < hi {
+                let left = match (self.a.get(self.i), self.a.get(self.j)) {
+                    (Some(l), Some(r)) if self.i < mid && self.j < hi => {
+                        l.total_cmp(r) != std::cmp::Ordering::Greater
+                    }
+                    _ => self.i < mid,
+                };
+                let at = if left { self.i } else { self.j };
+                if let (Some(v), Some(slot)) = (self.a.get(at).copied(), self.b.get_mut(self.k)) {
+                    *slot = v;
+                }
+                if left {
+                    self.i += 1;
+                } else {
+                    self.j += 1;
+                }
+                self.k += 1;
+                moved += 1;
+            } else if hi >= n {
+                // A pass is done: its output is the input of the next, with runs twice as long.
+                std::mem::swap(&mut self.a, &mut self.b);
+                self.width = self.width.saturating_mul(2);
+                self.start_pair(0);
+            } else {
+                self.start_pair(hi);
+            }
+        }
+    }
+
+    fn start_pair(&mut self, lo: usize) {
+        self.lo = lo;
+        self.i = lo;
+        self.j = (lo + self.width).min(self.a.len());
+        self.k = lo;
+    }
 }
 
 impl Summing {
@@ -713,6 +835,9 @@ impl Summing {
             inputs: Vec::new(),
             correlations: Vec::new(),
             stop,
+            sorting: None,
+            chunk: SORT_CHUNK,
+            budget: MERGE_BUDGET,
         }
     }
 
@@ -720,11 +845,30 @@ impl Summing {
     fn step(&mut self, c: &Compiled, blocks: &[Block]) -> bool {
         if let Some((out, _)) = c.outputs.get(self.outputs.len()) {
             let o = self.outputs.len();
-            let mut r = describe_output(out, &column(blocks, o, false), &self.ps);
-            if c.batched() {
-                by_batches(&mut r, out, blocks, o);
+            match self.sorting.take() {
+                // First the values are copied; then they are sorted a piece at a time; then the
+                // output is described from them.
+                None => {
+                    let total = blocks
+                        .iter()
+                        .filter_map(|b| b.outputs.get(o))
+                        .map(Vec::len)
+                        .sum();
+                    let sorter = Sorter::new(finite(blocks, o), self.chunk, self.budget);
+                    self.sorting = Some((sorter, total));
+                }
+                Some((mut sorter, total)) if !sorter.is_done() => {
+                    sorter.step();
+                    self.sorting = Some((sorter, total));
+                }
+                Some((sorter, total)) => {
+                    let mut r = describe_output(out, &sorter.into_sorted(), total, &self.ps);
+                    if c.batched() {
+                        by_batches(&mut r, out, blocks, o);
+                    }
+                    self.outputs.push(r);
+                }
             }
-            self.outputs.push(r);
         } else if let Some(input) = c.inputs.get(self.inputs.len()) {
             let values = column(blocks, self.inputs.len(), true);
             let s = Summary::of(&values);
@@ -1118,11 +1262,10 @@ impl Stepper {
     }
 }
 
-fn describe_output(out: &McOutput, all: &[f64], ps: &[f64]) -> OutputResult {
-    let mut sorted: Vec<f64> = all.iter().copied().filter(|v| v.is_finite()).collect();
-    sorted.sort_by(f64::total_cmp);
+/// An output's results from its finite values `sorted` (ascending) among `total` trials.
+fn describe_output(out: &McOutput, sorted: &[f64], total: usize, ps: &[f64]) -> OutputResult {
     let valid = sorted.len() as u64;
-    let s = Summary::of(&sorted);
+    let s = Summary::of(sorted);
     let target = out.target.map(|t| {
         let met = sorted.iter().filter(|v| t.met(**v)).count() as u64;
         let prop = Proportion::new(met, valid);
@@ -1138,7 +1281,7 @@ fn describe_output(out: &McOutput, all: &[f64], ps: &[f64]) -> OutputResult {
         name: out.name.clone(),
         unit: out.unit.clone(),
         valid,
-        invalid: all.len() as u64 - valid,
+        invalid: (total as u64).saturating_sub(valid),
         mean: s.map(|s| s.mean),
         half_width: s.map(|s| s.half_width).filter(|h| h.is_finite()),
         interval_count: valid,
@@ -1147,14 +1290,14 @@ fn describe_output(out: &McOutput, all: &[f64], ps: &[f64]) -> OutputResult {
         max: sorted.last().copied(),
         percentiles: ps
             .iter()
-            .filter_map(|p| Some((*p, sorted_quantile(&sorted, p / 100.0)?)))
+            .filter_map(|p| Some((*p, sorted_quantile(sorted, p / 100.0)?)))
             .collect(),
         target,
-        histogram: histogram(&sorted),
+        histogram: histogram(sorted),
         cdf: (0..=100)
             .filter_map(|i| {
                 let p = f64::from(i) / 100.0;
-                Some((sorted_quantile(&sorted, p)?, p))
+                Some((sorted_quantile(sorted, p)?, p))
             })
             .collect(),
     }
@@ -1463,8 +1606,9 @@ mod tests {
                 }
                 steps += 1;
             }
-            // Two inputs and one output.
-            assert_eq!(pieces, 3, "{stop:?}");
+            // Two inputs, and for the output a step to copy its values, one to sort them (all
+            // in one chunk here) and one to describe them.
+            assert_eq!(pieces, 5, "{stop:?}");
             assert_eq!(stepper.take_results(), Some(at_once), "{stop:?}");
             assert!(stepper.is_done());
         }
@@ -1548,5 +1692,80 @@ mod tests {
         assert_eq!(r.outputs[0].valid, 0);
         assert_eq!(r.outputs[0].interval_count, 0);
         assert_eq!(r.outputs[1].interval_count, 100);
+    }
+
+    /// Values in a spread of lengths, with the odd ones (infinities, both zeros, not a number),
+    /// sorted a chunk and a merge budget at a time, come out as `sort_by(total_cmp)` has them.
+    #[test]
+    fn a_sort_made_in_pieces_is_the_whole_sort() {
+        let mut seed = 12345_u64;
+        let mut next = move || {
+            seed = seed
+                .wrapping_mul(6_364_136_223_846_793_005)
+                .wrapping_add(1_442_695_040_888_963_407);
+            (seed >> 11) as f64 / (1_u64 << 53) as f64
+        };
+        for n in [0, 1, 2, 63, 64, 65, 127, 129, 1_000, 1_003] {
+            let mut values: Vec<f64> = (0..n).map(|_| next() * 200.0 - 100.0).collect();
+            if n > 8 {
+                values[1] = f64::INFINITY;
+                values[2] = f64::NEG_INFINITY;
+                values[3] = 0.0;
+                values[4] = -0.0;
+                values[5] = f64::NAN;
+                values[6] = 7.0;
+                values[7] = 7.0;
+            }
+            let mut want = values.clone();
+            want.sort_by(f64::total_cmp);
+            for (chunk, budget) in [(64, 50), (1, 1), (7, 1_000), (100_000, 100_000)] {
+                let mut sorter = Sorter::new(values.clone(), chunk, budget);
+                let mut steps = 0;
+                while !sorter.is_done() {
+                    sorter.step();
+                    steps += 1;
+                    assert!(steps < 1_000_000, "n {n}, chunk {chunk}");
+                }
+                let got: Vec<u64> = sorter.into_sorted().iter().map(|v| v.to_bits()).collect();
+                let want: Vec<u64> = want.iter().map(|v| v.to_bits()).collect();
+                assert_eq!(got, want, "n {n}, chunk {chunk}, budget {budget}");
+            }
+        }
+    }
+
+    /// Results worked out with a small chunk and merge budget (so many pieces) are the results
+    /// worked out with the usual sizes, whatever the columns hold.
+    #[test]
+    fn results_in_small_pieces_are_the_same_results() {
+        let mc = MonteCarlo {
+            inputs: vec![input("x", Dist::Uniform { min: 0.0, max: 1.0 })],
+            outputs: vec![
+                McOutput {
+                    target: Some(McTarget::AtMost(2.0)),
+                    ..output("y", "$x * 3")
+                },
+                output("gap", "1 / ($x - $x)"),
+                output("some", "if($x > 0.5, $x, 1 / ($x - $x))"),
+            ],
+            correlations: vec![],
+            sampling: Sampling::LatinHypercube,
+            stop: None,
+        };
+        let c = compile(&mc, 9).unwrap_or_else(|p| unreachable!("{p:?}"));
+        let blocks: Vec<Block> = jobs(0, 2_500).iter().map(|j| c.block(*j)).collect();
+        let whole = c.summarise(&blocks, &[1.0, 99.0]);
+        let mut small = Summing::new(&[1.0, 99.0], None);
+        small.chunk = 100;
+        small.budget = 37;
+        let mut steps = 0;
+        while !small.step(&c, &blocks) {
+            steps += 1;
+        }
+        assert!(steps > 100, "{steps} pieces");
+        let mut got = small.finish(&c, &blocks);
+        got.requested_trials = got.trials;
+        assert_eq!(got, whole);
+        assert!(whole.outputs[2].invalid > 0 && whole.outputs[2].valid > 0);
+        assert_eq!(whole.outputs[1].valid, 0);
     }
 }

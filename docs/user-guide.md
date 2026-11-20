@@ -436,7 +436,9 @@ On the **Model** tab:
   trials** can be **More until precise enough**: trials are added until every output's mean is
   within the share you set, or until the most you allow has run; in that case the results say
   the target was not met. With Latin hypercube sampling or correlated inputs the trials run in
-  whole batches of 1,000, so the most must be at least 1,000.
+  whole batches of 1,000, so the most must be at least 1,000, and a most that is not a whole
+  number of batches is rounded down: a most of 1,500 stops at 1,000 trials, a most of 2,500 at
+  2,000. With plain random sampling the most is used as it is.
 
 Every change is one step you can undo. **Run** (F5) makes the trials a few batches at a time,
 so the window stays responsive, also in the browser.
