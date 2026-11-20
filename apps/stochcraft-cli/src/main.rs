@@ -716,7 +716,13 @@ fn exec(
     };
     let mut engine = Engine::new();
     if let Some(f) = open_file {
-        open(&mut engine, f, None)?;
+        // A journal opens the scenario it was recorded from, so its starting model (and its
+        // digest) is the one the journal began with; a bare script reads the first scenario.
+        let scenario = match &script {
+            Script::Journal(journal) => journal.start.scenario.as_deref(),
+            Script::Steps(_) => None,
+        };
+        open(&mut engine, f, scenario)?;
     }
     let ran = exec_steps(&mut engine, &script, all, force);
     // The journal of what was done is written even when a step failed: it says how far it got.

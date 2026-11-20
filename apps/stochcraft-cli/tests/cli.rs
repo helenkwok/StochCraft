@@ -695,6 +695,36 @@ id,time,after
 }
 
 #[test]
+fn a_journal_replays_from_the_scenario_it_was_recorded_from() {
+    // mm1's second scenario has two clerks, so its model (and digest) differs from the first's.
+    let mm1 = model("mm1.bpmn");
+    let script = scratch("journal-scenario.json");
+    let journal = scratch("journal-scenario-out.json");
+    let open_second = serde_json::json!([
+        {"command": "file.open", "params": {"path": mm1, "scenario": "two-clerks"}},
+        {"command": "block.set", "params": {"id": "serve", "capacity": 3}},
+    ]);
+    let _ = std::fs::write(&script, open_second.to_string());
+    ok(&[
+        "exec",
+        &script.to_string_lossy(),
+        "--journal",
+        &journal.to_string_lossy(),
+    ]);
+    let written = json(&std::fs::read_to_string(&journal).unwrap_or_default());
+    assert_eq!(written["start"]["scenario"], "two-clerks", "{written}");
+
+    // Replayed with --open on the same file: the recorded scenario is opened, so the digest
+    // matches and the edit is applied.
+    let out = ok(&["exec", &journal.to_string_lossy(), "--open", &mm1]);
+    let steps: Vec<Value> = out.lines().map(json).collect();
+    assert!(
+        steps.last().is_some_and(|s| s["result"].is_object()),
+        "{out}"
+    );
+}
+
+#[test]
 fn exec_writes_the_journal_of_what_it_did_and_replays_it_safely() {
     let script = scratch("journal-edit.json");
     let journal = scratch("journal-out.json");

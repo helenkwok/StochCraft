@@ -175,7 +175,8 @@ also when a step failed, as a JSON object:
   array on its own, and `exec` runs that in full.
 
 Replaying a journal (`exec journal.json`) first checks that the model is the one it started from
-(`--open` the same file; a journal that began with `model.new` starts its own model) and refuses
+(`--open` the same file, which opens the scenario the journal records in `start.scenario`; a
+journal that began with `model.new` starts its own model) and refuses
 with a `conflict` error if not, unless `--force`. It then re-applies the edits, undo and redo, and
 skips the saves, runs and experiments (`file.save`, `run`, `run.start`,
 `run.cancel`, `experiment.sweep`, `experiment.sensitivity`, `experiment.design`,
