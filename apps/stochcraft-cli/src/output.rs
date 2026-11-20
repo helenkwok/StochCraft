@@ -866,175 +866,6 @@ pub fn validation(file: &Path, opened: &Value, errors: usize) -> String {
     out
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn runs_that_split_get_a_block_per_group_and_csv_columns() {
-        let m = |mean: f64, low: f64, high: f64, group: u64| {
-            serde_json::json!({
-                "mean": mean, "half_width": 0.6, "std_dev": 3.4, "n": 128,
-                "split": {
-                    "cut": 5.8,
-                    "low": { "n": 99, "mean": low },
-                    "high": { "n": 29, "mean": high },
-                    "group": group,
-                },
-            })
-        };
-        let results = serde_json::json!({
-            "replications": 128,
-            "metrics": ["entered", "left", "mean_queue_length", "mean_wait", "mean_in_service"],
-            "elements": [{
-                "id": "desk", "name": "Desk", "kind": "server",
-                "metrics": {
-                    "entered": { "mean": 500.0, "half_width": 3.0, "std_dev": 9.0, "n": 128 },
-                    "left": m(400.0, 380.0, 470.0, 2),
-                    "mean_queue_length": m(40.0, 1.5, 164.0, 1),
-                    "mean_wait": m(12.0, 0.2, 29.7, 1),
-                    "mean_in_service": m(3.8, 1.7, 9.9, 1),
-                },
-            }],
-            "splits": [
-                {
-                    "id": 1, "n": 128, "sizes": [99, 29],
-                    "results": [
-                        ["desk", "mean_queue_length"],
-                        ["desk", "mean_wait"],
-                        ["desk", "mean_in_service"],
-                    ],
-                },
-                { "id": 2, "n": 128, "sizes": [99, 29], "results": [["desk", "left"]] },
-            ],
-        });
-        let text = table("m", &results);
-        let expected = "runs split into two outcomes: 99 of 128 in one, 29 in the other; \
-                        3 results split the same way:\n  \
-                        desk mean_queue_length: low ≈ 1.5, high ≈ 164; \
-                        desk mean_wait: low ≈ 0.2, high ≈ 29.7;\n  \
-                        desk mean_in_service: low ≈ 1.7, high ≈ 9.9\n\
-                        runs split into two outcomes: 99 of 128 in one, 29 in the other; \
-                        1 result:\n  \
-                        desk left: low ≈ 380, high ≈ 470\n";
-        assert!(text.contains(expected), "{text}");
-        assert_eq!(text.matches("runs split").count(), 2, "{text}");
-        let csv = csv(&results);
-        let lines: Vec<&str> = csv.lines().collect();
-        assert_eq!(lines[1], "desk,Desk,server,entered,500.0,3.0,9.0,128,,,,,,");
-        assert_eq!(
-            lines[5],
-            "desk,Desk,server,mean_in_service,3.8,0.6,3.4,128,5.8,99,1.7,29,9.9,1"
-        );
-    }
-
-    #[test]
-    fn csv_has_the_rows_the_app_exports() {
-        let m = serde_json::json!({ "mean": 2.0, "half_width": 0.5, "std_dev": 1.0, "n": 4 });
-        let results = serde_json::json!({
-            "metrics": ["entered", "custom,metric"],
-            "elements": [{
-                "id": "desk", "name": "Desk", "kind": "server",
-                "metrics": { "entered": m, "custom,metric": m },
-                "properties": { "size": m },
-            }],
-        });
-        let text = csv(&results);
-        let lines: Vec<&str> = text.lines().collect();
-        assert_eq!(lines[1], "desk,Desk,server,entered,2.0,0.5,1.0,4,,,,,,");
-        assert_eq!(
-            lines[2],
-            "desk,Desk,server,\"custom,metric\",2.0,0.5,1.0,4,,,,,,"
-        );
-        assert_eq!(
-            lines[3],
-            "desk,Desk,server,property:size,2.0,0.5,1.0,4,,,,,,"
-        );
-        assert_eq!(text, stochcraft_engine::wire::results_csv(&results));
-    }
-
-    #[test]
-    fn numbers_read_well() {
-        assert_eq!(number(4.0), "4");
-        assert_eq!(number(3.98767), "3.9877");
-        assert_eq!(number(0.74996), "0.74996");
-        assert_eq!(number(1234.5678), "1234.6");
-        assert_eq!(number(20000.0), "20000");
-        assert_eq!(number(0.0001234), "1.2340e-4");
-        assert_eq!(number(-2.5), "-2.5");
-        assert_eq!(csv_field("a, b"), "\"a, b\"");
-    }
-
-    #[test]
-    fn the_table_says_how_many_replications_a_result_is_over() {
-        let m = |mean: f64, n: u64| serde_json::json!({ "mean": mean, "half_width": 0.5, "n": n });
-        let mut results = serde_json::json!({
-            "replications": 10,
-            "time_unit": "min",
-            "record": { "replications": 10, "time_unit": "min" },
-            "metrics": ["entered", "mean_wait", "work_in_progress"],
-            "elements": [{ "id": "desk", "metrics": {
-                "entered": m(12.0, 10), "mean_wait": m(3.0, 4), "work_in_progress": m(0.4, 10),
-            } }],
-            "stop": { "when": "empty", "element": "desk", "met": 7, "time": m(50.0, 7) },
-        });
-        let out = table("q", &results);
-        assert!(out.contains("4 of 10"), "{out}");
-        assert!(!out.contains("10 of 10"), "{out}");
-        assert!(
-            out.contains("leave out entities still inside at the end"),
-            "{out}"
-        );
-        assert!(
-            out.contains("in 7 of 10 replications, at 50 ± 0.5 min (over those that met it only)"),
-            "{out}"
-        );
-        results["elements"][0]["metrics"]["work_in_progress"]["mean"] = 0.0.into();
-        results["stop"]["met"] = 10.into();
-        let out = table("q", &results);
-        assert!(!out.contains("still inside"), "{out}");
-        assert!(!out.contains("over those that met it"), "{out}");
-    }
-
-    #[test]
-    fn a_sequential_run_says_how_many_runs_and_why_it_stopped() {
-        let m = serde_json::json!({ "mean": 1.0, "half_width": 0.0, "std_dev": 0.0, "n": 200 });
-        let mut results = serde_json::json!({
-            "replications": 200,
-            "time_unit": "min",
-            "record": { "replications": 200, "time_unit": "min" },
-            "metrics": ["entered"],
-            "elements": [{ "id": "exit", "metrics": { "entered": m } }],
-            "sequential": {
-                "replications": 200,
-                "stages": [10, 20, 40, 80, 160, 200],
-                "reason": "no_spread",
-                "measures": [{ "element": "exit", "metric": "entered", "status": "no_spread" }],
-            },
-        });
-        let out = table("q", &results);
-        assert!(
-            out.contains("estimated precision after adaptive stopping"),
-            "{out}"
-        );
-        assert!(!out.contains("± is the half-width of a 95%"), "{out}");
-        assert!(
-            out.contains("sequential: 200 replications (looked at 10, 20, 40, 80, 160, 200)"),
-            "{out}"
-        );
-        assert!(out.contains("no spread in the runs made"), "{out}");
-        assert!(
-            out.contains("not settled: exit.entered (no spread in the runs made)"),
-            "{out}"
-        );
-        // A fixed run says neither.
-        results["sequential"] = Value::Null;
-        let out = table("q", &results);
-        assert!(!out.contains("sequential:"), "{out}");
-        assert!(out.contains("± is the half-width of a 95%"), "{out}");
-    }
-}
-
 /// A percentile of a Monte Carlo output's results (`percentiles` keyed by `5`, `50`…).
 fn percentile(o: &Value, p: &str) -> String {
     f(&o["percentiles"][p])
@@ -1231,4 +1062,173 @@ pub fn mc_csv(r: &Value) -> String {
         out.push('\n');
     }
     out
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn runs_that_split_get_a_block_per_group_and_csv_columns() {
+        let m = |mean: f64, low: f64, high: f64, group: u64| {
+            serde_json::json!({
+                "mean": mean, "half_width": 0.6, "std_dev": 3.4, "n": 128,
+                "split": {
+                    "cut": 5.8,
+                    "low": { "n": 99, "mean": low },
+                    "high": { "n": 29, "mean": high },
+                    "group": group,
+                },
+            })
+        };
+        let results = serde_json::json!({
+            "replications": 128,
+            "metrics": ["entered", "left", "mean_queue_length", "mean_wait", "mean_in_service"],
+            "elements": [{
+                "id": "desk", "name": "Desk", "kind": "server",
+                "metrics": {
+                    "entered": { "mean": 500.0, "half_width": 3.0, "std_dev": 9.0, "n": 128 },
+                    "left": m(400.0, 380.0, 470.0, 2),
+                    "mean_queue_length": m(40.0, 1.5, 164.0, 1),
+                    "mean_wait": m(12.0, 0.2, 29.7, 1),
+                    "mean_in_service": m(3.8, 1.7, 9.9, 1),
+                },
+            }],
+            "splits": [
+                {
+                    "id": 1, "n": 128, "sizes": [99, 29],
+                    "results": [
+                        ["desk", "mean_queue_length"],
+                        ["desk", "mean_wait"],
+                        ["desk", "mean_in_service"],
+                    ],
+                },
+                { "id": 2, "n": 128, "sizes": [99, 29], "results": [["desk", "left"]] },
+            ],
+        });
+        let text = table("m", &results);
+        let expected = "runs split into two outcomes: 99 of 128 in one, 29 in the other; \
+                        3 results split the same way:\n  \
+                        desk mean_queue_length: low ≈ 1.5, high ≈ 164; \
+                        desk mean_wait: low ≈ 0.2, high ≈ 29.7;\n  \
+                        desk mean_in_service: low ≈ 1.7, high ≈ 9.9\n\
+                        runs split into two outcomes: 99 of 128 in one, 29 in the other; \
+                        1 result:\n  \
+                        desk left: low ≈ 380, high ≈ 470\n";
+        assert!(text.contains(expected), "{text}");
+        assert_eq!(text.matches("runs split").count(), 2, "{text}");
+        let csv = csv(&results);
+        let lines: Vec<&str> = csv.lines().collect();
+        assert_eq!(lines[1], "desk,Desk,server,entered,500.0,3.0,9.0,128,,,,,,");
+        assert_eq!(
+            lines[5],
+            "desk,Desk,server,mean_in_service,3.8,0.6,3.4,128,5.8,99,1.7,29,9.9,1"
+        );
+    }
+
+    #[test]
+    fn csv_has_the_rows_the_app_exports() {
+        let m = serde_json::json!({ "mean": 2.0, "half_width": 0.5, "std_dev": 1.0, "n": 4 });
+        let results = serde_json::json!({
+            "metrics": ["entered", "custom,metric"],
+            "elements": [{
+                "id": "desk", "name": "Desk", "kind": "server",
+                "metrics": { "entered": m, "custom,metric": m },
+                "properties": { "size": m },
+            }],
+        });
+        let text = csv(&results);
+        let lines: Vec<&str> = text.lines().collect();
+        assert_eq!(lines[1], "desk,Desk,server,entered,2.0,0.5,1.0,4,,,,,,");
+        assert_eq!(
+            lines[2],
+            "desk,Desk,server,\"custom,metric\",2.0,0.5,1.0,4,,,,,,"
+        );
+        assert_eq!(
+            lines[3],
+            "desk,Desk,server,property:size,2.0,0.5,1.0,4,,,,,,"
+        );
+        assert_eq!(text, stochcraft_engine::wire::results_csv(&results));
+    }
+
+    #[test]
+    fn numbers_read_well() {
+        assert_eq!(number(4.0), "4");
+        assert_eq!(number(3.98767), "3.9877");
+        assert_eq!(number(0.74996), "0.74996");
+        assert_eq!(number(1234.5678), "1234.6");
+        assert_eq!(number(20000.0), "20000");
+        assert_eq!(number(0.0001234), "1.2340e-4");
+        assert_eq!(number(-2.5), "-2.5");
+        assert_eq!(csv_field("a, b"), "\"a, b\"");
+    }
+
+    #[test]
+    fn the_table_says_how_many_replications_a_result_is_over() {
+        let m = |mean: f64, n: u64| serde_json::json!({ "mean": mean, "half_width": 0.5, "n": n });
+        let mut results = serde_json::json!({
+            "replications": 10,
+            "time_unit": "min",
+            "record": { "replications": 10, "time_unit": "min" },
+            "metrics": ["entered", "mean_wait", "work_in_progress"],
+            "elements": [{ "id": "desk", "metrics": {
+                "entered": m(12.0, 10), "mean_wait": m(3.0, 4), "work_in_progress": m(0.4, 10),
+            } }],
+            "stop": { "when": "empty", "element": "desk", "met": 7, "time": m(50.0, 7) },
+        });
+        let out = table("q", &results);
+        assert!(out.contains("4 of 10"), "{out}");
+        assert!(!out.contains("10 of 10"), "{out}");
+        assert!(
+            out.contains("leave out entities still inside at the end"),
+            "{out}"
+        );
+        assert!(
+            out.contains("in 7 of 10 replications, at 50 ± 0.5 min (over those that met it only)"),
+            "{out}"
+        );
+        results["elements"][0]["metrics"]["work_in_progress"]["mean"] = 0.0.into();
+        results["stop"]["met"] = 10.into();
+        let out = table("q", &results);
+        assert!(!out.contains("still inside"), "{out}");
+        assert!(!out.contains("over those that met it"), "{out}");
+    }
+
+    #[test]
+    fn a_sequential_run_says_how_many_runs_and_why_it_stopped() {
+        let m = serde_json::json!({ "mean": 1.0, "half_width": 0.0, "std_dev": 0.0, "n": 200 });
+        let mut results = serde_json::json!({
+            "replications": 200,
+            "time_unit": "min",
+            "record": { "replications": 200, "time_unit": "min" },
+            "metrics": ["entered"],
+            "elements": [{ "id": "exit", "metrics": { "entered": m } }],
+            "sequential": {
+                "replications": 200,
+                "stages": [10, 20, 40, 80, 160, 200],
+                "reason": "no_spread",
+                "measures": [{ "element": "exit", "metric": "entered", "status": "no_spread" }],
+            },
+        });
+        let out = table("q", &results);
+        assert!(
+            out.contains("estimated precision after adaptive stopping"),
+            "{out}"
+        );
+        assert!(!out.contains("± is the half-width of a 95%"), "{out}");
+        assert!(
+            out.contains("sequential: 200 replications (looked at 10, 20, 40, 80, 160, 200)"),
+            "{out}"
+        );
+        assert!(out.contains("no spread in the runs made"), "{out}");
+        assert!(
+            out.contains("not settled: exit.entered (no spread in the runs made)"),
+            "{out}"
+        );
+        // A fixed run says neither.
+        results["sequential"] = Value::Null;
+        let out = table("q", &results);
+        assert!(!out.contains("sequential:"), "{out}");
+        assert!(out.contains("± is the half-width of a 95%"), "{out}");
+    }
 }
