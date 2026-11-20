@@ -1237,7 +1237,7 @@ unit	yr	年
 	Inputs as a table	以表格顯示輸入
 	Latin hypercube	拉丁超立方
 	Latin hypercube sampling	拉丁超立方抽樣
-	Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000.	Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000.
+	Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000.	拉丁超立方抽樣將每個輸入的取值範圍分成同等機率的層，並從每層各抽取一次，通常能使結果更精確。使用它或存在相關輸入時，試驗以每批 1,000 次的完整批次進行。
 	Monte Carlo model	蒙地卡羅模型
 	New Monte Carlo Model	新增蒙地卡羅模型
 	New Monte Carlo model	新增蒙地卡羅模型
@@ -1246,10 +1246,10 @@ unit	yr	年
 	New output	新增輸出
 	No inputs yet: add one below, or paste a table of them.	尚無輸入：在下方新增一個，或貼上輸入表格。
 	No interval: too few batches of trials for one.	無區間：試驗批次太少，無法得出區間。
-	No interval: every batch gave the same share, so their spread gives none.	No interval: every batch gave the same share, so their spread gives none.
-	There is already an input or an output called {name}.	There is already an input or an output called {name}.
-	{name}: the ± is across {n} of the {of} batches, the rest had no trial with a number.	{name}: the ± is across {n} of the {of} batches, the rest had no trial with a number.
-	{name}: the ± is across {n} of the {of} trials, the rest gave no number.	{name}: the ± is across {n} of the {of} trials, the rest gave no number.
+	No interval: every batch gave the same share, so their spread gives none.	無區間：所有批次給出的占比相同，其離散程度無法得出區間。
+	There is already an input or an output called {name}.	已有名為 {name} 的輸入或輸出。
+	{name}: the ± is across {n} of the {of} batches, the rest had no trial with a number.	{name}：± 由 {of} 個批次中的 {n} 個得出；其餘批次沒有得出數值的試驗。
+	{name}: the ± is across {n} of the {of} trials, the rest gave no number.	{name}：± 由 {of} 次試驗中的 {n} 次得出；其餘試驗沒有得出數值。
 	No outputs yet: add one below.	尚無輸出：在下方新增一個。
 	None yet	尚無
 	One input per line, as name, distribution, parameters and unit, copied from a spreadsheet or written as CSV: for example labour,triangular,min=80;mode=100;max=150,h.	每列一個輸入，依序為名稱、分布、參數和單位，可從試算表複製或以 CSV 書寫：例如 labour,triangular,min=80;mode=100;max=150,h。

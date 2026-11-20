@@ -1237,7 +1237,7 @@ unit	yr	ஆண்டு
 	Inputs as a table	அட்டவணையாக உள்ளீடுகள்
 	Latin hypercube	லத்தீன் மீக்கனசதுரம்
 	Latin hypercube sampling	லத்தீன் மீக்கனசதுரக் கூறெடுப்பு
-	Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000.	Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000.
+	Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000.	லத்தீன் மீக்கனசதுரக் கூறெடுப்பு ஒவ்வொரு உள்ளீட்டின் வரம்பையும் சம வாய்ப்புள்ள அடுக்குகளாகப் பிரித்து, ஒவ்வொன்றிலிருந்தும் ஒருமுறை எடுக்கிறது; இதனால் முடிவுகள் பொதுவாக மேலும் துல்லியமாகின்றன. இதனுடன் அல்லது ஒட்டுறவுள்ள உள்ளீடுகளுடன், முயற்சிகள் 1,000 கொண்ட முழுத் தொகுதிகளாக நடக்கும்.
 	Monte Carlo model	மான்டே கார்லோ மாதிரி
 	New Monte Carlo Model	புதிய மான்டே கார்லோ மாதிரி
 	New Monte Carlo model	புதிய மான்டே கார்லோ மாதிரி
@@ -1246,10 +1246,10 @@ unit	yr	ஆண்டு
 	New output	புதிய வெளியீடு
 	No inputs yet: add one below, or paste a table of them.	இன்னும் உள்ளீடுகள் இல்லை: கீழே ஒன்றைச் சேர்க்கவும், அல்லது அவற்றின் அட்டவணையை ஒட்டவும்.
 	No interval: too few batches of trials for one.	இடைவெளி இல்லை: அதற்குப் போதுமான முயற்சித் தொகுதிகள் இல்லை.
-	No interval: every batch gave the same share, so their spread gives none.	No interval: every batch gave the same share, so their spread gives none.
-	There is already an input or an output called {name}.	There is already an input or an output called {name}.
-	{name}: the ± is across {n} of the {of} batches, the rest had no trial with a number.	{name}: the ± is across {n} of the {of} batches, the rest had no trial with a number.
-	{name}: the ± is across {n} of the {of} trials, the rest gave no number.	{name}: the ± is across {n} of the {of} trials, the rest gave no number.
+	No interval: every batch gave the same share, so their spread gives none.	இடைவெளி இல்லை: எல்லாத் தொகுதிகளும் ஒரே பங்கைத் தந்தன, எனவே அவற்றின் பரவலிலிருந்து இடைவெளி கிடைக்காது.
+	There is already an input or an output called {name}.	{name} என்ற பெயரில் உள்ளீடு அல்லது வெளியீடு ஏற்கெனவே உள்ளது.
+	{name}: the ± is across {n} of the {of} batches, the rest had no trial with a number.	{name}: ± என்பது {of} தொகுதிகளில் {n} தொகுதிகளிலிருந்து கணக்கிடப்பட்டது; மற்றவற்றில் எண் தந்த முயற்சி எதுவும் இல்லை.
+	{name}: the ± is across {n} of the {of} trials, the rest gave no number.	{name}: ± என்பது {of} முயற்சிகளில் {n} முயற்சிகளிலிருந்து கணக்கிடப்பட்டது; மற்றவை எண் தரவில்லை.
 	No outputs yet: add one below.	இன்னும் வெளியீடுகள் இல்லை: கீழே ஒன்றைச் சேர்க்கவும்.
 	None yet	இன்னும் ஏதுமில்லை
 	One input per line, as name, distribution, parameters and unit, copied from a spreadsheet or written as CSV: for example labour,triangular,min=80;mode=100;max=150,h.	ஒரு வரிக்கு ஓர் உள்ளீடு, பெயர், பரவல், அளவுருக்கள், அலகு என, விரிதாளிலிருந்து நகலெடுத்து அல்லது CSV ஆக எழுதி: எடுத்துக்காட்டாக labour,triangular,min=80;mode=100;max=150,h.

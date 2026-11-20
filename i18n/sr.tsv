@@ -1237,7 +1237,7 @@ unit	yr	год.
 	Inputs as a table	Улазне величине као табела
 	Latin hypercube	Латинска хиперкоцка
 	Latin hypercube sampling	Узорковање латинском хиперкоцком
-	Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000.	Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000.
+	Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000.	Узорковање латинском хиперкоцком дели опсег сваке улазне величине на подједнако вероватне слојеве и извлачи по једну вредност из сваког, што обично чини резултате прецизнијим. Уз њега или уз корелисане улазне величине покушаји се изводе у целим серијама од 1.000.
 	Monte Carlo model	Монте Карло модел
 	New Monte Carlo Model	Нови Монте Карло модел
 	New Monte Carlo model	Нови Монте Карло модел
@@ -1246,10 +1246,10 @@ unit	yr	год.
 	New output	Нова излазна величина
 	No inputs yet: add one below, or paste a table of them.	Још нема улазних величина: додајте једну испод или налепите њихову табелу.
 	No interval: too few batches of trials for one.	Нема интервала: премало серија покушаја за њега.
-	No interval: every batch gave the same share, so their spread gives none.	No interval: every batch gave the same share, so their spread gives none.
-	There is already an input or an output called {name}.	There is already an input or an output called {name}.
-	{name}: the ± is across {n} of the {of} batches, the rest had no trial with a number.	{name}: the ± is across {n} of the {of} batches, the rest had no trial with a number.
-	{name}: the ± is across {n} of the {of} trials, the rest gave no number.	{name}: the ± is across {n} of the {of} trials, the rest gave no number.
+	No interval: every batch gave the same share, so their spread gives none.	Нема интервала: све серије су дале исти удео, па њихово расипање не даје интервал.
+	There is already an input or an output called {name}.	Улазна или излазна величина са називом {name} већ постоји.
+	{name}: the ± is across {n} of the {of} batches, the rest had no trial with a number.	{name}: ± се рачуна из {n} од {of} серија; остале нису имале покушај са бројем.
+	{name}: the ± is across {n} of the {of} trials, the rest gave no number.	{name}: ± се рачуна из {n} од {of} покушаја; остали нису дали број.
 	No outputs yet: add one below.	Још нема излазних величина: додајте једну испод.
 	None yet	Још ниједна
 	One input per line, as name, distribution, parameters and unit, copied from a spreadsheet or written as CSV: for example labour,triangular,min=80;mode=100;max=150,h.	Једна улазна величина по реду, као име, дистрибуција, параметри и јединица, копирана из табеле или написана као CSV: на пример labour,triangular,min=80;mode=100;max=150,h.

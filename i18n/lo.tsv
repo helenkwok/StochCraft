@@ -1237,7 +1237,7 @@ unit	yr	ປີ
 	Inputs as a table	ຄ່າປ້ອນເຂົ້າເປັນຕາຕະລາງ
 	Latin hypercube	ໄຮເປີຄິວບ໌ລາຕິນ
 	Latin hypercube sampling	ການສຸ່ມຕົວຢ່າງແບບໄຮເປີຄິວບ໌ລາຕິນ
-	Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000.	Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000.
+	Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000.	ການສຸ່ມຕົວຢ່າງແບບໄຮເປີຄິວບ໌ລາຕິນແບ່ງຊ່ວງຂອງແຕ່ລະຄ່າປ້ອນເຂົ້າເປັນຊັ້ນທີ່ມີໂອກາດເທົ່າກັນ ແລ້ວສຸ່ມຈາກແຕ່ລະຊັ້ນຄັ້ງໜຶ່ງ ເຊິ່ງໂດຍທົ່ວໄປເຮັດໃຫ້ຜົນແມ່ນຍຳຂຶ້ນ. ເມື່ອໃຊ້ມັນ ຫຼື ມີຄ່າປ້ອນເຂົ້າທີ່ສຳພັນກັນ, ຄັ້ງທົດລອງຈະເຮັດເປັນຊຸດເຕັມ ຊຸດລະ 1,000.
 	Monte Carlo model	ແບບຈຳລອງມອນຕີຄາໂລ
 	New Monte Carlo Model	ແບບຈຳລອງມອນຕີຄາໂລໃໝ່
 	New Monte Carlo model	ແບບຈຳລອງມອນຕີຄາໂລໃໝ່
@@ -1246,10 +1246,10 @@ unit	yr	ປີ
 	New output	ຄ່າຜົນອອກໃໝ່
 	No inputs yet: add one below, or paste a table of them.	ຍັງບໍ່ມີຄ່າປ້ອນເຂົ້າ: ເພີ່ມໜຶ່ງຕົວຂ້າງລຸ່ມ ຫຼື ວາງຕາຕະລາງຂອງພວກມັນ.
 	No interval: too few batches of trials for one.	ບໍ່ມີຊ່ວງ: ຊຸດຂອງຄັ້ງທົດລອງໜ້ອຍເກີນໄປ.
-	No interval: every batch gave the same share, so their spread gives none.	No interval: every batch gave the same share, so their spread gives none.
-	There is already an input or an output called {name}.	There is already an input or an output called {name}.
-	{name}: the ± is across {n} of the {of} batches, the rest had no trial with a number.	{name}: the ± is across {n} of the {of} batches, the rest had no trial with a number.
-	{name}: the ± is across {n} of the {of} trials, the rest gave no number.	{name}: the ± is across {n} of the {of} trials, the rest gave no number.
+	No interval: every batch gave the same share, so their spread gives none.	ບໍ່ມີຊ່ວງ: ທຸກຊຸດໃຫ້ສັດສ່ວນດຽວກັນ ຄວາມກະຈາຍຂອງມັນຈຶ່ງບໍ່ໃຫ້ຊ່ວງ.
+	There is already an input or an output called {name}.	ມີຄ່າປ້ອນເຂົ້າ ຫຼື ຄ່າຜົນອອກຊື່ {name} ຢູ່ແລ້ວ.
+	{name}: the ± is across {n} of the {of} batches, the rest had no trial with a number.	{name}: ± ຄິດຈາກ {n} ໃນ {of} ຊຸດ; ທີ່ເຫຼືອບໍ່ມີຄັ້ງທົດລອງທີ່ໄດ້ຕົວເລກ.
+	{name}: the ± is across {n} of the {of} trials, the rest gave no number.	{name}: ± ຄິດຈາກ {n} ໃນ {of} ຄັ້ງທົດລອງ; ທີ່ເຫຼືອບໍ່ໄດ້ຕົວເລກ.
 	No outputs yet: add one below.	ຍັງບໍ່ມີຄ່າຜົນອອກ: ເພີ່ມໜຶ່ງຕົວຂ້າງລຸ່ມ.
 	None yet	ຍັງບໍ່ມີ
 	One input per line, as name, distribution, parameters and unit, copied from a spreadsheet or written as CSV: for example labour,triangular,min=80;mode=100;max=150,h.	ໜຶ່ງຄ່າປ້ອນເຂົ້າຕໍ່ແຖວ ເປັນຊື່, ການແຈກຢາຍ, ພາລາມິເຕີ ແລະ ໜ່ວຍ, ສຳເນົາຈາກຕາຕະລາງຄຳນວນ ຫຼື ຂຽນເປັນ CSV: ຕົວຢ່າງ labour,triangular,min=80;mode=100;max=150,h.

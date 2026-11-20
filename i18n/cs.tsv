@@ -1237,7 +1237,7 @@ unit	yr	r.
 	Inputs as a table	Vstupy jako tabulka
 	Latin hypercube	Latinská hyperkrychle
 	Latin hypercube sampling	Vzorkování latinskou hyperkrychlí
-	Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000.	Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000.
+	Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000.	Vzorkování latinskou hyperkrychlí rozdělí rozsah každého vstupu na stejně pravděpodobné vrstvy a z každé losuje jednou, čímž se výsledky obvykle zpřesní. S ním nebo s korelovanými vstupy probíhají pokusy v celých dávkách po 1 000.
 	Monte Carlo model	Model Monte Carlo
 	New Monte Carlo Model	Nový model Monte Carlo
 	New Monte Carlo model	Nový model Monte Carlo
@@ -1246,10 +1246,10 @@ unit	yr	r.
 	New output	Nový výstup
 	No inputs yet: add one below, or paste a table of them.	Zatím žádné vstupy: přidejte jeden níže nebo vložte jejich tabulku.
 	No interval: too few batches of trials for one.	Žádný interval: příliš málo dávek pokusů.
-	No interval: every batch gave the same share, so their spread gives none.	No interval: every batch gave the same share, so their spread gives none.
-	There is already an input or an output called {name}.	There is already an input or an output called {name}.
-	{name}: the ± is across {n} of the {of} batches, the rest had no trial with a number.	{name}: the ± is across {n} of the {of} batches, the rest had no trial with a number.
-	{name}: the ± is across {n} of the {of} trials, the rest gave no number.	{name}: the ± is across {n} of the {of} trials, the rest gave no number.
+	No interval: every batch gave the same share, so their spread gives none.	Žádný interval: všechny dávky daly stejný podíl, takže jejich rozptyl žádný interval nedává.
+	There is already an input or an output called {name}.	Vstup nebo výstup s názvem {name} už existuje.
+	{name}: the ± is across {n} of the {of} batches, the rest had no trial with a number.	{name}: ± vychází z {n} z {of} dávek; ostatní neměly žádný pokus s číslem.
+	{name}: the ± is across {n} of the {of} trials, the rest gave no number.	{name}: ± vychází z {n} z {of} pokusů; ostatní nedaly žádné číslo.
 	No outputs yet: add one below.	Zatím žádné výstupy: přidejte jeden níže.
 	None yet	Zatím žádné
 	One input per line, as name, distribution, parameters and unit, copied from a spreadsheet or written as CSV: for example labour,triangular,min=80;mode=100;max=150,h.	Jeden vstup na řádek jako název, rozdělení, parametry a jednotka, zkopírovaný z tabulkového procesoru nebo zapsaný jako CSV: například labour,triangular,min=80;mode=100;max=150,h.

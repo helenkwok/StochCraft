@@ -1237,7 +1237,7 @@ unit	yr	年
 	Inputs as a table	表形式の入力
 	Latin hypercube	ラテン超方格
 	Latin hypercube sampling	ラテン超方格サンプリング
-	Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000.	Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000.
+	Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000.	ラテン超方格サンプリングでは、各入力の範囲を同じ確率の層に分け、各層から 1 回ずつ値を抽出するため、結果は通常より精密になります。これを使う場合や入力に相関がある場合、試行は 1,000 回ずつのバッチ単位で行われます。
 	Monte Carlo model	モンテカルロモデル
 	New Monte Carlo Model	新しいモンテカルロモデル
 	New Monte Carlo model	新しいモンテカルロモデル
@@ -1246,10 +1246,10 @@ unit	yr	年
 	New output	新しい出力
 	No inputs yet: add one below, or paste a table of them.	入力はまだありません。下で追加するか、表から貼り付けてください。
 	No interval: too few batches of trials for one.	区間なし: 区間を求めるには試行のバッチが少なすぎます。
-	No interval: every batch gave the same share, so their spread gives none.	No interval: every batch gave the same share, so their spread gives none.
-	There is already an input or an output called {name}.	There is already an input or an output called {name}.
-	{name}: the ± is across {n} of the {of} batches, the rest had no trial with a number.	{name}: the ± is across {n} of the {of} batches, the rest had no trial with a number.
-	{name}: the ± is across {n} of the {of} trials, the rest gave no number.	{name}: the ± is across {n} of the {of} trials, the rest gave no number.
+	No interval: every batch gave the same share, so their spread gives none.	区間なし: すべてのバッチが同じ割合だったため、そのばらつきからは区間が得られません。
+	There is already an input or an output called {name}.	{name} という名前の入力または出力がすでにあります。
+	{name}: the ± is across {n} of the {of} batches, the rest had no trial with a number.	{name}: ± は {of} 個のバッチのうち {n} 個から求めています。残りには数値が得られた試行がありませんでした。
+	{name}: the ± is across {n} of the {of} trials, the rest gave no number.	{name}: ± は {of} 回の試行のうち {n} 回から求めています。残りは数値が得られませんでした。
 	No outputs yet: add one below.	出力はまだありません。下で追加してください。
 	None yet	まだありません
 	One input per line, as name, distribution, parameters and unit, copied from a spreadsheet or written as CSV: for example labour,triangular,min=80;mode=100;max=150,h.	1 行に 1 つの入力を、名前、分布、パラメーター、単位の順に記述します。スプレッドシートからコピーするか CSV で記述してください。例: labour,triangular,min=80;mode=100;max=150,h。

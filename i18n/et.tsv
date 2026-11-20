@@ -1237,7 +1237,7 @@ unit	yr	a
 	Inputs as a table	Sisendid tabelina
 	Latin hypercube	Ladina hüperkuup
 	Latin hypercube sampling	Ladina hüperkuubi valimimeetod
-	Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000.	Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000.
+	Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000.	Ladina hüperkuubi valimimeetod jagab iga sisendi vahemiku võrdselt tõenäolisteks kihtideks ja loosib igast ühe korra, mis teeb tulemused tavaliselt täpsemaks. Sellega või korreleeritud sisenditega tehakse katseid tervete 1000-liste partiidena.
 	Monte Carlo model	Monte Carlo mudel
 	New Monte Carlo Model	Uus Monte Carlo mudel
 	New Monte Carlo model	Uus Monte Carlo mudel
@@ -1246,10 +1246,10 @@ unit	yr	a
 	New output	Uus väljund
 	No inputs yet: add one below, or paste a table of them.	Sisendeid veel pole: lisage üks allpool või kleepige nende tabel.
 	No interval: too few batches of trials for one.	Vahemikku pole: selleks on liiga vähe katsete partiisid.
-	No interval: every batch gave the same share, so their spread gives none.	No interval: every batch gave the same share, so their spread gives none.
-	There is already an input or an output called {name}.	There is already an input or an output called {name}.
-	{name}: the ± is across {n} of the {of} batches, the rest had no trial with a number.	{name}: the ± is across {n} of the {of} batches, the rest had no trial with a number.
-	{name}: the ± is across {n} of the {of} trials, the rest gave no number.	{name}: the ± is across {n} of the {of} trials, the rest gave no number.
+	No interval: every batch gave the same share, so their spread gives none.	Vahemikku pole: kõik partiid andsid sama osakaalu, seega nende hajuvus vahemikku ei anna.
+	There is already an input or an output called {name}.	Sisend või väljund nimega {name} on juba olemas.
+	{name}: the ± is across {n} of the {of} batches, the rest had no trial with a number.	{name}: ± põhineb {n} partiil {of}-st; ülejäänutel polnud ühtegi katset arvuga.
+	{name}: the ± is across {n} of the {of} trials, the rest gave no number.	{name}: ± põhineb {n} katsel {of}-st; ülejäänud ei andnud arvu.
 	No outputs yet: add one below.	Väljundeid veel pole: lisage üks allpool.
 	None yet	Veel pole
 	One input per line, as name, distribution, parameters and unit, copied from a spreadsheet or written as CSV: for example labour,triangular,min=80;mode=100;max=150,h.	Üks sisend real, kujul nimi, jaotus, parameetrid ja ühik, kopeeritud arvutustabelist või kirjutatud CSV-na: näiteks labour,triangular,min=80;mode=100;max=150,h.

@@ -1237,7 +1237,7 @@ unit	yr	m.
 	Inputs as a table	Įvestys kaip lentelė
 	Latin hypercube	Lotyniškasis hiperkubas
 	Latin hypercube sampling	Lotyniškojo hiperkubo atranka
-	Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000.	Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000.
+	Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000.	Lotyniškojo hiperkubo atranka kiekvienos įvesties intervalą padalija į vienodai tikėtinus sluoksnius ir iš kiekvieno ištraukia po vieną reikšmę, todėl rezultatai paprastai būna tikslesni. Su ja arba su koreliuotomis įvestimis iteracijos vykdomos visomis 1000 dydžio partijomis.
 	Monte Carlo model	Monte Karlo modelis
 	New Monte Carlo Model	Naujas Monte Karlo modelis
 	New Monte Carlo model	Naujas Monte Karlo modelis
@@ -1246,10 +1246,10 @@ unit	yr	m.
 	New output	Nauja išvestis
 	No inputs yet: add one below, or paste a table of them.	Įvesčių dar nėra: pridėkite vieną žemiau arba įklijuokite jų lentelę.
 	No interval: too few batches of trials for one.	Intervalo nėra: tam per mažai iteracijų partijų.
-	No interval: every batch gave the same share, so their spread gives none.	No interval: every batch gave the same share, so their spread gives none.
-	There is already an input or an output called {name}.	There is already an input or an output called {name}.
-	{name}: the ± is across {n} of the {of} batches, the rest had no trial with a number.	{name}: the ± is across {n} of the {of} batches, the rest had no trial with a number.
-	{name}: the ± is across {n} of the {of} trials, the rest gave no number.	{name}: the ± is across {n} of the {of} trials, the rest gave no number.
+	No interval: every batch gave the same share, so their spread gives none.	Intervalo nėra: visos partijos davė tą pačią dalį, todėl jų sklaida intervalo neduoda.
+	There is already an input or an output called {name}.	Įvestis arba išvestis pavadinimu {name} jau yra.
+	{name}: the ± is across {n} of the {of} batches, the rest had no trial with a number.	{name}: ± apskaičiuota pagal {n} iš {of} partijų; likusiose nebuvo iteracijos su skaičiumi.
+	{name}: the ± is across {n} of the {of} trials, the rest gave no number.	{name}: ± apskaičiuota pagal {n} iš {of} iteracijų; likusios skaičiaus nedavė.
 	No outputs yet: add one below.	Išvesčių dar nėra: pridėkite vieną žemiau.
 	None yet	Dar nėra
 	One input per line, as name, distribution, parameters and unit, copied from a spreadsheet or written as CSV: for example labour,triangular,min=80;mode=100;max=150,h.	Viena įvestis eilutėje: pavadinimas, skirstinys, parametrai ir vienetas, nukopijuoti iš skaičiuoklės arba užrašyti kaip CSV: pavyzdžiui, labour,triangular,min=80;mode=100;max=150,h.

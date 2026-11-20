@@ -1237,7 +1237,7 @@ unit	yr	ปี
 	Inputs as a table	อินพุตในรูปตาราง
 	Latin hypercube	ไฮเปอร์คิวบ์ละติน
 	Latin hypercube sampling	การสุ่มตัวอย่างแบบไฮเปอร์คิวบ์ละติน
-	Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000.	Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000.
+	Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000.	การสุ่มตัวอย่างแบบไฮเปอร์คิวบ์ละตินแบ่งช่วงของอินพุตแต่ละตัวเป็นชั้นที่มีโอกาสเท่ากัน แล้วสุ่มจากแต่ละชั้นครั้งเดียว ซึ่งมักทำให้ผลลัพธ์แม่นยำขึ้น เมื่อใช้วิธีนี้หรือมีอินพุตที่สัมพันธ์กัน การทดลองจะทำเป็นชุดเต็ม ชุดละ 1,000 ครั้ง
 	Monte Carlo model	แบบจำลองมอนเตการ์โล
 	New Monte Carlo Model	แบบจำลองมอนเตการ์โลใหม่
 	New Monte Carlo model	แบบจำลองมอนเตการ์โลใหม่
@@ -1246,10 +1246,10 @@ unit	yr	ปี
 	New output	เอาต์พุตใหม่
 	No inputs yet: add one below, or paste a table of them.	ยังไม่มีอินพุต: เพิ่มที่ด้านล่าง หรือวางตารางของอินพุต
 	No interval: too few batches of trials for one.	ไม่มีช่วง: ชุดการทดลองน้อยเกินไปที่จะคำนวณช่วงได้
-	No interval: every batch gave the same share, so their spread gives none.	No interval: every batch gave the same share, so their spread gives none.
-	There is already an input or an output called {name}.	There is already an input or an output called {name}.
-	{name}: the ± is across {n} of the {of} batches, the rest had no trial with a number.	{name}: the ± is across {n} of the {of} batches, the rest had no trial with a number.
-	{name}: the ± is across {n} of the {of} trials, the rest gave no number.	{name}: the ± is across {n} of the {of} trials, the rest gave no number.
+	No interval: every batch gave the same share, so their spread gives none.	ไม่มีช่วง: ทุกชุดให้สัดส่วนเท่ากัน ความกระจายของชุดจึงไม่ให้ช่วง
+	There is already an input or an output called {name}.	มีอินพุตหรือเอาต์พุตชื่อ {name} อยู่แล้ว
+	{name}: the ± is across {n} of the {of} batches, the rest had no trial with a number.	{name}: ± คำนวณจาก {n} จาก {of} ชุด ส่วนที่เหลือไม่มีครั้งทดลองที่ได้ตัวเลข
+	{name}: the ± is across {n} of the {of} trials, the rest gave no number.	{name}: ± คำนวณจาก {n} จาก {of} ครั้งทดลอง ส่วนที่เหลือไม่ได้ตัวเลข
 	No outputs yet: add one below.	ยังไม่มีเอาต์พุต: เพิ่มที่ด้านล่าง
 	None yet	ยังไม่มี
 	One input per line, as name, distribution, parameters and unit, copied from a spreadsheet or written as CSV: for example labour,triangular,min=80;mode=100;max=150,h.	อินพุตหนึ่งตัวต่อบรรทัด ในรูปชื่อ การแจกแจง พารามิเตอร์ และหน่วย คัดลอกจากสเปรดชีตหรือเขียนเป็น CSV เช่น labour,triangular,min=80;mode=100;max=150,h

@@ -1237,7 +1237,7 @@ unit	yr	a
 	Inputs as a table	Intrările ca tabel
 	Latin hypercube	Hipercub latin
 	Latin hypercube sampling	Eșantionare prin hipercub latin
-	Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000.	Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000.
+	Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000.	Eșantionarea prin hipercub latin împarte intervalul fiecărei intrări în straturi la fel de probabile și extrage câte o valoare din fiecare, ceea ce de obicei face rezultatele mai precise. Cu ea, sau cu intrări corelate, iterațiile rulează în loturi întregi de 1.000.
 	Monte Carlo model	Model Monte Carlo
 	New Monte Carlo Model	Model Monte Carlo nou
 	New Monte Carlo model	Model Monte Carlo nou
@@ -1246,10 +1246,10 @@ unit	yr	a
 	New output	Ieșire nouă
 	No inputs yet: add one below, or paste a table of them.	Încă nicio intrare: adăugați una mai jos sau lipiți un tabel cu ele.
 	No interval: too few batches of trials for one.	Niciun interval: prea puține loturi de iterații pentru unul.
-	No interval: every batch gave the same share, so their spread gives none.	No interval: every batch gave the same share, so their spread gives none.
-	There is already an input or an output called {name}.	There is already an input or an output called {name}.
-	{name}: the ± is across {n} of the {of} batches, the rest had no trial with a number.	{name}: the ± is across {n} of the {of} batches, the rest had no trial with a number.
-	{name}: the ± is across {n} of the {of} trials, the rest gave no number.	{name}: the ± is across {n} of the {of} trials, the rest gave no number.
+	No interval: every batch gave the same share, so their spread gives none.	Niciun interval: toate loturile au dat aceeași pondere, deci dispersia lor nu dă niciun interval.
+	There is already an input or an output called {name}.	Există deja o intrare sau o ieșire numită {name}.
+	{name}: the ± is across {n} of the {of} batches, the rest had no trial with a number.	{name}: ± se bazează pe {n} din {of} loturi; celelalte nu aveau nicio iterație cu un număr.
+	{name}: the ± is across {n} of the {of} trials, the rest gave no number.	{name}: ± se bazează pe {n} din {of} iterații; celelalte nu au dat niciun număr.
 	No outputs yet: add one below.	Încă nicio ieșire: adăugați una mai jos.
 	None yet	Încă niciunul
 	One input per line, as name, distribution, parameters and unit, copied from a spreadsheet or written as CSV: for example labour,triangular,min=80;mode=100;max=150,h.	O intrare pe linie, ca nume, distribuție, parametri și unitate, copiată dintr-o foaie de calcul sau scrisă ca CSV: de exemplu labour,triangular,min=80;mode=100;max=150,h.

@@ -1237,7 +1237,7 @@ unit	yr	yıl
 	Inputs as a table	Tablo olarak girdiler
 	Latin hypercube	Latin hiperküp
 	Latin hypercube sampling	Latin hiperküp örneklemesi
-	Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000.	Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000.
+	Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000.	Latin hiperküp örneklemesi her girdinin aralığını eşit olasılıklı katmanlara böler ve her birinden bir kez çeker; bu da sonuçları genellikle daha kesin yapar. Bununla veya korelasyonlu girdilerle denemeler 1.000'lik tam partiler halinde çalışır.
 	Monte Carlo model	Monte Carlo modeli
 	New Monte Carlo Model	Yeni Monte Carlo modeli
 	New Monte Carlo model	Yeni Monte Carlo modeli
@@ -1246,10 +1246,10 @@ unit	yr	yıl
 	New output	Yeni çıktı
 	No inputs yet: add one below, or paste a table of them.	Henüz girdi yok: aşağıdan bir tane ekleyin veya girdilerin bir tablosunu yapıştırın.
 	No interval: too few batches of trials for one.	Aralık yok: bunun için deneme partisi çok az.
-	No interval: every batch gave the same share, so their spread gives none.	No interval: every batch gave the same share, so their spread gives none.
-	There is already an input or an output called {name}.	There is already an input or an output called {name}.
-	{name}: the ± is across {n} of the {of} batches, the rest had no trial with a number.	{name}: the ± is across {n} of the {of} batches, the rest had no trial with a number.
-	{name}: the ± is across {n} of the {of} trials, the rest gave no number.	{name}: the ± is across {n} of the {of} trials, the rest gave no number.
+	No interval: every batch gave the same share, so their spread gives none.	Aralık yok: tüm partiler aynı payı verdi, bu yüzden dağılımları bir aralık vermez.
+	There is already an input or an output called {name}.	{name} adında bir girdi veya çıktı zaten var.
+	{name}: the ± is across {n} of the {of} batches, the rest had no trial with a number.	{name}: ± {of} partiden {n} tanesine dayanır; geri kalanında sayı veren deneme yoktu.
+	{name}: the ± is across {n} of the {of} trials, the rest gave no number.	{name}: ± {of} denemeden {n} tanesine dayanır; geri kalanı sayı vermedi.
 	No outputs yet: add one below.	Henüz çıktı yok: aşağıdan bir tane ekleyin.
 	None yet	Henüz yok
 	One input per line, as name, distribution, parameters and unit, copied from a spreadsheet or written as CSV: for example labour,triangular,min=80;mode=100;max=150,h.	Her satırda bir girdi; ad, dağılım, parametreler ve birim olarak, bir elektronik tablodan kopyalanmış veya CSV olarak yazılmış: örneğin labour,triangular,min=80;mode=100;max=150,h.

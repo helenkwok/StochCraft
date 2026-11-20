@@ -1237,7 +1237,7 @@ unit	yr	năm
 	Inputs as a table	Đầu vào dạng bảng
 	Latin hypercube	Siêu khối Latinh
 	Latin hypercube sampling	Lấy mẫu siêu khối Latinh
-	Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000.	Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000.
+	Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000.	Lấy mẫu siêu khối Latinh chia khoảng giá trị của mỗi đầu vào thành các tầng có xác suất bằng nhau và rút một lần từ mỗi tầng, nhờ đó kết quả thường chính xác hơn. Khi dùng nó, hoặc khi có đầu vào tương quan, các lần thử chạy theo từng đợt trọn vẹn 1.000 lần.
 	Monte Carlo model	Mô hình Monte Carlo
 	New Monte Carlo Model	Mô hình Monte Carlo mới
 	New Monte Carlo model	Mô hình Monte Carlo mới
@@ -1246,10 +1246,10 @@ unit	yr	năm
 	New output	Đầu ra mới
 	No inputs yet: add one below, or paste a table of them.	Chưa có đầu vào: thêm một đầu vào bên dưới, hoặc dán một bảng các đầu vào.
 	No interval: too few batches of trials for one.	Không có khoảng: quá ít đợt lần thử để tính.
-	No interval: every batch gave the same share, so their spread gives none.	No interval: every batch gave the same share, so their spread gives none.
-	There is already an input or an output called {name}.	There is already an input or an output called {name}.
-	{name}: the ± is across {n} of the {of} batches, the rest had no trial with a number.	{name}: the ± is across {n} of the {of} batches, the rest had no trial with a number.
-	{name}: the ± is across {n} of the {of} trials, the rest gave no number.	{name}: the ± is across {n} of the {of} trials, the rest gave no number.
+	No interval: every batch gave the same share, so their spread gives none.	Không có khoảng: mọi đợt đều cho cùng một tỷ lệ, nên độ phân tán của chúng không cho ra khoảng.
+	There is already an input or an output called {name}.	Đã có đầu vào hoặc đầu ra tên {name}.
+	{name}: the ± is across {n} of the {of} batches, the rest had no trial with a number.	{name}: ± được tính từ {n} trong {of} đợt; số còn lại không có lần thử nào cho ra số.
+	{name}: the ± is across {n} of the {of} trials, the rest gave no number.	{name}: ± được tính từ {n} trong {of} lần thử; số còn lại không cho ra số.
 	No outputs yet: add one below.	Chưa có đầu ra: thêm một đầu ra bên dưới.
 	None yet	Chưa có
 	One input per line, as name, distribution, parameters and unit, copied from a spreadsheet or written as CSV: for example labour,triangular,min=80;mode=100;max=150,h.	Mỗi dòng một đầu vào, gồm tên, phân phối, tham số và đơn vị, sao chép từ bảng tính hoặc viết dưới dạng CSV: ví dụ labour,triangular,min=80;mode=100;max=150,h.

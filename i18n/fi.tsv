@@ -1237,7 +1237,7 @@ unit	yr	v
 	Inputs as a table	Syötteet taulukkona
 	Latin hypercube	Latinalainen hyperkuutio
 	Latin hypercube sampling	Latinalainen hyperkuutio -otanta
-	Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000.	Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000.
+	Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000.	Latinalainen hyperkuutio -otanta jakaa kunkin syötteen vaihteluvälin yhtä todennäköisiin kerroksiin ja arpoo kustakin kerran, mikä yleensä tekee tuloksista tarkempia. Sen tai korreloitujen syötteiden kanssa iteraatiot ajetaan kokonaisina 1 000 iteraation erinä.
 	Monte Carlo model	Monte Carlo -malli
 	New Monte Carlo Model	Uusi Monte Carlo -malli
 	New Monte Carlo model	Uusi Monte Carlo -malli
@@ -1246,10 +1246,10 @@ unit	yr	v
 	New output	Uusi tuloste
 	No inputs yet: add one below, or paste a table of them.	Ei vielä syötteitä: lisää yksi alla tai liitä niistä taulukko.
 	No interval: too few batches of trials for one.	Ei väliä: liian vähän iteraatioeriä sen laskemiseen.
-	No interval: every batch gave the same share, so their spread gives none.	No interval: every batch gave the same share, so their spread gives none.
-	There is already an input or an output called {name}.	There is already an input or an output called {name}.
-	{name}: the ± is across {n} of the {of} batches, the rest had no trial with a number.	{name}: the ± is across {n} of the {of} batches, the rest had no trial with a number.
-	{name}: the ± is across {n} of the {of} trials, the rest gave no number.	{name}: the ± is across {n} of the {of} trials, the rest gave no number.
+	No interval: every batch gave the same share, so their spread gives none.	Ei väliä: kaikki erät antoivat saman osuuden, joten niiden hajonta ei anna väliä.
+	There is already an input or an output called {name}.	Syöte tai tuloste nimeltä {name} on jo olemassa.
+	{name}: the ± is across {n} of the {of} batches, the rest had no trial with a number.	{name}: ± perustuu {n} erään {of}:sta; muissa ei ollut yhtään iteraatiota, jolla on luku.
+	{name}: the ± is across {n} of the {of} trials, the rest gave no number.	{name}: ± perustuu {n} iteraatioon {of}:sta; muut eivät antaneet lukua.
 	No outputs yet: add one below.	Ei vielä tulosteita: lisää yksi alla.
 	None yet	Ei vielä yhtään
 	One input per line, as name, distribution, parameters and unit, copied from a spreadsheet or written as CSV: for example labour,triangular,min=80;mode=100;max=150,h.	Yksi syöte riviä kohden muodossa nimi, jakauma, parametrit ja yksikkö, kopioituna taulukkolaskentaohjelmasta tai kirjoitettuna CSV-muodossa: esimerkiksi labour,triangular,min=80;mode=100;max=150,h.

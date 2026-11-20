@@ -1237,7 +1237,7 @@ unit	yr	år
 	Inputs as a table	Inndata som tabell
 	Latin hypercube	Latinsk hyperkube
 	Latin hypercube sampling	Latinsk hyperkube-utvalg
-	Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000.	Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000.
+	Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000.	Latinsk hyperkube-utvalg deler verdiområdet til hver inndata i like sannsynlige lag og trekker én gang fra hvert, noe som som regel gir mer presise resultater. Med det, eller med korrelerte inndata, kjøres iterasjonene i hele omganger på 1 000.
 	Monte Carlo model	Monte Carlo-modell
 	New Monte Carlo Model	Ny Monte Carlo-modell
 	New Monte Carlo model	Ny Monte Carlo-modell
@@ -1246,10 +1246,10 @@ unit	yr	år
 	New output	Nye utdata
 	No inputs yet: add one below, or paste a table of them.	Ingen inndata ennå: legg til én nedenfor, eller lim inn en tabell med dem.
 	No interval: too few batches of trials for one.	Intet intervall: for få omganger med iterasjoner til det.
-	No interval: every batch gave the same share, so their spread gives none.	No interval: every batch gave the same share, so their spread gives none.
-	There is already an input or an output called {name}.	There is already an input or an output called {name}.
-	{name}: the ± is across {n} of the {of} batches, the rest had no trial with a number.	{name}: the ± is across {n} of the {of} batches, the rest had no trial with a number.
-	{name}: the ± is across {n} of the {of} trials, the rest gave no number.	{name}: the ± is across {n} of the {of} trials, the rest gave no number.
+	No interval: every batch gave the same share, so their spread gives none.	Intet intervall: alle omgangene ga samme andel, så spredningen deres gir ikke noe intervall.
+	There is already an input or an output called {name}.	Det finnes allerede en inndata eller utdata med navnet {name}.
+	{name}: the ± is across {n} of the {of} batches, the rest had no trial with a number.	{name}: ± bygger på {n} av {of} omganger; resten hadde ingen iterasjon med et tall.
+	{name}: the ± is across {n} of the {of} trials, the rest gave no number.	{name}: ± bygger på {n} av {of} iterasjoner; resten ga ikke noe tall.
 	No outputs yet: add one below.	Ingen utdata ennå: legg til én nedenfor.
 	None yet	Ingen ennå
 	One input per line, as name, distribution, parameters and unit, copied from a spreadsheet or written as CSV: for example labour,triangular,min=80;mode=100;max=150,h.	Én inndata per linje, som navn, fordeling, parametere og enhet, kopiert fra et regneark eller skrevet som CSV: for eksempel labour,triangular,min=80;mode=100;max=150,h.

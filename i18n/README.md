@@ -839,11 +839,15 @@ fields (`“Service time”`) are named in the messages by their own rows.
   closed loop…") in zh-hans, zh-hant, ja, ko, th, vi, lo, hi, bn, ta, te, ka, kk, tr and id
   only. Not checked against any other source, and not reviewed by native speakers; the least
   certain are lo, th, ta, te, bn, ka, kk, hi and sq.
-- Not yet translated: the rows added after review of the Monte Carlo window (the reason an
-  interval is withheld when every batch gave the same share, the name-already-taken message, and
-  the line saying how many trials or batches a ± is across) and the reworded Latin hypercube
-  help text hold the English in every catalog, which is what a missing row shows. They need
-  translating, with the other Monte Carlo rows.
+- The rows added after review of the Monte Carlo window (why an interval is withheld when every
+  batch gave the same share, the name-already-taken message, the line saying how many trials or
+  batches a ± is across) and the reworded Latin hypercube help text were machine-drafted with
+  Claude Code from the plain meaning of the English, reusing each catalog's own words for
+  interval, batch, trial, input, output and Latin hypercube sampling (from its "No interval: too
+  few batches of trials for one." and "New input" rows, and the help text's earlier translation
+  for the batch sentence). "Equally likely strata" is the least certain term. Not checked against
+  any other source, and not reviewed by native speakers; the least certain are lo, th, ta, te,
+  bn, ka, kk, hi and sq.
 
 **Adding or changing a string:** add the English in the code through `i18n::t` (or `tf`, `tn`),
 then add its row to each catalog here, or leave it out to show English until it is translated.

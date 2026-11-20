@@ -1237,7 +1237,7 @@ unit	yr	년
 	Inputs as a table	표 형식의 입력
 	Latin hypercube	라틴 하이퍼큐브
 	Latin hypercube sampling	라틴 하이퍼큐브 샘플링
-	Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000.	Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000.
+	Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000.	라틴 하이퍼큐브 샘플링은 각 입력의 범위를 확률이 같은 층으로 나누고 각 층에서 한 번씩 값을 뽑으므로, 결과가 대개 더 정밀해집니다. 이 방법을 쓰거나 입력에 상관이 있으면 시행은 1,000회씩 온전한 배치 단위로 진행됩니다.
 	Monte Carlo model	몬테카를로 모델
 	New Monte Carlo Model	새 몬테카를로 모델
 	New Monte Carlo model	새 몬테카를로 모델
@@ -1246,10 +1246,10 @@ unit	yr	년
 	New output	새 출력
 	No inputs yet: add one below, or paste a table of them.	아직 입력이 없습니다. 아래에서 추가하거나 입력 표를 붙여넣으세요.
 	No interval: too few batches of trials for one.	구간 없음: 구간을 구하기에는 시행 배치가 너무 적습니다.
-	No interval: every batch gave the same share, so their spread gives none.	No interval: every batch gave the same share, so their spread gives none.
-	There is already an input or an output called {name}.	There is already an input or an output called {name}.
-	{name}: the ± is across {n} of the {of} batches, the rest had no trial with a number.	{name}: the ± is across {n} of the {of} batches, the rest had no trial with a number.
-	{name}: the ± is across {n} of the {of} trials, the rest gave no number.	{name}: the ± is across {n} of the {of} trials, the rest gave no number.
+	No interval: every batch gave the same share, so their spread gives none.	구간 없음: 모든 배치가 같은 비율을 보였으므로, 배치 간 편차로는 구간을 구할 수 없습니다.
+	There is already an input or an output called {name}.	{name}(이)라는 입력 또는 출력이 이미 있습니다.
+	{name}: the ± is across {n} of the {of} batches, the rest had no trial with a number.	{name}: ±는 배치 {of}개 중 {n}개로 구했으며, 나머지에는 수치가 나온 시행이 없었습니다.
+	{name}: the ± is across {n} of the {of} trials, the rest gave no number.	{name}: ±는 시행 {of}회 중 {n}회로 구했으며, 나머지는 수치가 나오지 않았습니다.
 	No outputs yet: add one below.	아직 출력이 없습니다. 아래에서 추가하세요.
 	None yet	아직 없음
 	One input per line, as name, distribution, parameters and unit, copied from a spreadsheet or written as CSV: for example labour,triangular,min=80;mode=100;max=150,h.	한 줄에 입력 하나를 이름, 분포, 매개변수, 단위 순으로 적습니다. 스프레드시트에서 복사하거나 CSV로 작성하세요. 예: labour,triangular,min=80;mode=100;max=150,h.

@@ -1237,7 +1237,7 @@ unit	yr	a
 	Inputs as a table	Entradas como tabla
 	Latin hypercube	Hipercubo latino
 	Latin hypercube sampling	Muestreo por hipercubo latino
-	Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000.	Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000.
+	Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000.	El muestreo por hipercubo latino divide el rango de cada entrada en estratos igualmente probables y extrae un valor de cada uno, lo que suele hacer los resultados más precisos. Con él, o con entradas correlacionadas, los ensayos se ejecutan en lotes completos de 1000.
 	Monte Carlo model	Modelo de Monte Carlo
 	New Monte Carlo Model	Nuevo modelo de Monte Carlo
 	New Monte Carlo model	Nuevo modelo de Monte Carlo
@@ -1246,10 +1246,10 @@ unit	yr	a
 	New output	Nueva salida
 	No inputs yet: add one below, or paste a table of them.	Aún no hay entradas: añada una abajo o pegue una tabla con ellas.
 	No interval: too few batches of trials for one.	Sin intervalo: hay muy pocos lotes de ensayos para calcularlo.
-	No interval: every batch gave the same share, so their spread gives none.	No interval: every batch gave the same share, so their spread gives none.
-	There is already an input or an output called {name}.	There is already an input or an output called {name}.
-	{name}: the ± is across {n} of the {of} batches, the rest had no trial with a number.	{name}: the ± is across {n} of the {of} batches, the rest had no trial with a number.
-	{name}: the ± is across {n} of the {of} trials, the rest gave no number.	{name}: the ± is across {n} of the {of} trials, the rest gave no number.
+	No interval: every batch gave the same share, so their spread gives none.	Sin intervalo: todos los lotes dieron la misma proporción, así que su dispersión no da ninguno.
+	There is already an input or an output called {name}.	Ya hay una entrada o una salida llamada {name}.
+	{name}: the ± is across {n} of the {of} batches, the rest had no trial with a number.	{name}: el ± se calcula con {n} de {of} lotes; el resto no tenía ningún ensayo con un número.
+	{name}: the ± is across {n} of the {of} trials, the rest gave no number.	{name}: el ± se calcula con {n} de {of} ensayos; el resto no dio ningún número.
 	No outputs yet: add one below.	Aún no hay salidas: añada una abajo.
 	None yet	Ninguno todavía
 	One input per line, as name, distribution, parameters and unit, copied from a spreadsheet or written as CSV: for example labour,triangular,min=80;mode=100;max=150,h.	Una entrada por línea, como nombre, distribución, parámetros y unidad, copiada de una hoja de cálculo o escrita como CSV: por ejemplo labour,triangular,min=80;mode=100;max=150,h.
