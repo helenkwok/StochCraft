@@ -12,8 +12,8 @@
 use std::collections::{BTreeMap, BTreeSet};
 
 use stochcraft_model::{
-    Bounds, Connection, Dist, Element as ModelElement, ElementId, ElementKind, Model, OnShiftEnd,
-    PropertyValue, ResourcePool, Routing, Stop, TimeUnit,
+    Bounds, Connection, Dist, Element as ModelElement, ElementId, ElementKind, Experiment, Model,
+    OnShiftEnd, PropertyValue, ResourcePool, Routing, Stop, TimeUnit,
 };
 
 use crate::bpsim::{NS2, NSS, STOCHCRAFT_NS};
@@ -26,9 +26,10 @@ use crate::write::{
     health_check_element, interruptible_param, mobility_element, numeric, on_shift_end_element,
     own_marker, patience_element, planned_element, power_element, probability_element,
     processing_by_element, property_element, quantity_element, quantity_param,
-    queue_capacity_element, rework_element, routing_element, scrap_element, sequential_element,
-    sequential_off_element, size, start_param, starting_element, stop_element, timer_param,
-    transfer_element, transport_element, turned_away_element, units_param, vendor_value_element,
+    queue_capacity_element, rework_element, routing_element, scenario_parameters, scrap_element,
+    sequential_element, sequential_off_element, size, start_param, starting_element, stop_element,
+    timer_param, transfer_element, transport_element, turned_away_element, units_param,
+    vendor_value_element,
 };
 use crate::xml::{self, Element, Node};
 use crate::{Format, SaveError};
@@ -71,6 +72,7 @@ pub fn save_edited(
         pool_quantity: Vec::new(),
         model_ids: mine,
         created_scenario: None,
+        experiment: after.experiment.clone(),
     };
     ed.apply(&mut doc.root, scenario, before, after, &resources)?;
     let unit = ed.unit.clone();
@@ -665,6 +667,9 @@ struct Editor {
     /// The scenario this save added, when the file had none to write to, so that every later
     /// write of the same save goes to it rather than to another new one.
     created_scenario: Option<String>,
+    /// The saved model's experiment, written whole into a scenario this save adds, so that it
+    /// reads back as the model rather than with BPSim's defaults for what it leaves out.
+    experiment: Experiment,
 }
 
 /// Where new elements of a namespace go: the prefix the file already uses for it, or a new one
@@ -2819,10 +2824,13 @@ impl Editor {
             let id = self.fresh("scenario");
             self.created_scenario = Some(id.clone());
             let bpsim = Ns::of(root, NS2, "bpsim");
+            let mut sp = scenario_parameters(&self.experiment);
+            rename(&mut sp, &bpsim.prefix, NS2);
             let data = bpsim.el("BPSimData").with_child(
                 Element::new(&qname(&bpsim.prefix, "Scenario"), Some(NS2))
                     .with_attr("id", &id)
-                    .with_attr("name", "Scenario"),
+                    .with_attr("name", "Scenario")
+                    .with_child(sp),
             );
             match self.format {
                 Format::Bpmn => {
@@ -2849,9 +2857,12 @@ impl Editor {
             self.created_scenario = Some(id.clone());
             let data = data_mut(root).ok_or_else(|| fail("no BPSim data"))?;
             let ns = data.ns.clone().unwrap_or_else(|| NS2.to_owned());
+            let mut sp = scenario_parameters(&self.experiment);
+            rename(&mut sp, data.prefix(), &ns);
             let sc = Element::new(&qname(data.prefix(), "Scenario"), Some(&ns))
                 .with_attr("id", &id)
-                .with_attr("name", "Scenario");
+                .with_attr("name", "Scenario")
+                .with_child(sp);
             let at = end_of(data);
             data.children.insert(at, Node::Element(sc));
             return scenario_mut(root, Some(&id)).ok_or_else(|| fail("could not add a scenario"));
