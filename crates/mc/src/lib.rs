@@ -363,6 +363,9 @@ pub struct Compiled {
     pub warnings: Vec<Problem>,
 }
 
+/// What makes a set of batches for [`Compiled::run_with`]: in the order asked, or why not.
+pub type MakeBlocks<'a, E> = dyn FnMut(&[BlockJob]) -> Result<Vec<Block>, E> + 'a;
+
 /// One batch to make: its index and its number of trials.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct BlockJob {
@@ -540,7 +543,7 @@ impl Compiled {
     pub fn run_with<E>(
         &self,
         options: &RunOptions,
-        make: &mut dyn FnMut(&[BlockJob]) -> Result<Vec<Block>, E>,
+        make: &mut MakeBlocks<'_, E>,
     ) -> Result<McResults, E> {
         let Some(stop) = options.stop else {
             let trials = options.trials.min(MAX_TRIALS);
