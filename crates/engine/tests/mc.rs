@@ -313,3 +313,40 @@ fn a_monte_carlo_file_saves_opens_and_runs_the_same() {
     );
     assert_eq!(third.model(), other.model());
 }
+
+/// The window's run, made a batch at a time between frames, gives `mc.run`'s results: with Latin
+/// hypercube sampling and a correlation (whole batches), and with a sequential stop.
+#[test]
+fn a_run_made_a_batch_at_a_time_gives_mc_runs_results() {
+    let mut e = cost_model();
+    ok(&mut e, "mc.set", json!({ "sampling": "latin_hypercube" }));
+    for params in [
+        json!({ "trials": 4_500, "seed": 5 }),
+        json!({ "trials": 1_000, "stop": { "relative": 0.002, "max": 30_000 } }),
+    ] {
+        let at_once = ok(&mut e, "mc.run", params.clone());
+        let job = e.mc_start(params.clone());
+        assert!(job.is_ok(), "{params}");
+        let Ok(mut job) = job else { return };
+        let mut steps = 0;
+        while job.step(1).ok() == Some(false) && steps < 1_000 {
+            let (made, asked) = job.progress();
+            assert!(made <= asked && made > 0, "{made} of {asked}");
+            steps += 1;
+        }
+        assert!(steps > 1, "{params}: in more than one step");
+        let stepped = e.mc_results(&mut job).unwrap_or_default();
+        assert_eq!(stepped["outputs"], at_once["outputs"], "{params}");
+        assert_eq!(stepped["trials"], at_once["trials"]);
+        assert_eq!(stepped["stop"], at_once["stop"]);
+        assert_eq!(stepped["seed"], at_once["record"]["seed"]);
+        assert_eq!(stepped["interval_basis"]["across"], "batches");
+    }
+    // A model with errors does not start.
+    ok(
+        &mut e,
+        "mc.output.set",
+        json!({ "name": "broken", "expression": "$nobody" }),
+    );
+    assert!(e.mc_start(json!({})).is_err());
+}

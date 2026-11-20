@@ -1208,3 +1208,80 @@ unit	yr	m.
 	Entities inside at the start are given for a block that does not exist. Remove them.	Objektai viduje pradžioje nurodyti blokui, kurio nėra. Pašalinkite juos.
 	{block} cannot have entities inside at the start: only a task or a batch can. Remove its “Inside at the start”.	Blokas {block} negali turėti objektų viduje pradžioje: gali tik užduotis arba partija. Pašalinkite jo „Viduje pradžioje“.
 	{block} has {count} entities inside at the start, but it holds at most {most}, its units and its waiting room. Set “Inside at the start” to {most} or fewer, or make the waiting room larger.	Blokas {block} pradžioje turi viduje {count} objektų, bet talpina daugiausia {most}, savo vienetus ir laukiamąjį. Nustatykite „Viduje pradžioje“ į {most} ar mažiau arba padidinkite laukiamąjį.
+# Monte Carlo models in the window (ROADMAP M4.1, part 2)
+	95% interval of the chance: {lo} to {hi}.	Tikimybės 95 % intervalas: nuo {lo} iki {hi}.
+	A Monte Carlo model: uncertain durations, day rate and materials, and the chance the cost or the duration runs over.	Monte Karlo modelis: neapibrėžtos trukmės, dienos įkainis ir medžiagos bei tikimybė, kad kaina ar trukmė bus viršyta.
+	A calculation with uncertain inputs, not a process: each trial draws every input once and works out every output from them.	Skaičiavimas su neapibrėžtomis įvestimis, o ne procesas: kiekviena iteracija vieną kartą ištraukia kiekvieną įvestį ir iš jų apskaičiuoja kiekvieną išvestį.
+	A rank correlation between two inputs, from -1 to 1: above 0 they tend to be high together, below 0 one tends to be high when the other is low. Inputs not paired here are independent; 0 removes a pair.	Dviejų įvesčių rangų koreliacija, nuo -1 iki 1: virš 0 jos dažniausiai būna didelės kartu, žemiau 0 viena dažniausiai būna didelė, kai kita maža. Čia nesuporuotos įvestys yra nepriklausomos; 0 pašalina porą.
+	A {percent} chance that {output} is less than {value}.	{percent} tikimybė, kad reikšmė {output} mažesnė už {value}.
+	A {percent} chance that {output} is more than {value}.	{percent} tikimybė, kad reikšmė {output} didesnė už {value}.
+	About a 1 in {odds} chance that {output} is less than {value} ({percent}).	Maždaug 1 iš {odds} tikimybė, kad reikšmė {output} mažesnė už {value} ({percent}).
+	About a 1 in {odds} chance that {output} is more than {value} ({percent}).	Maždaug 1 iš {odds} tikimybė, kad reikšmė {output} didesnė už {value} ({percent}).
+	Add correlation	Pridėti koreliaciją
+	Add input	Pridėti įvestį
+	Add output	Pridėti išvestį
+	At most, trials	Daugiausia iteracijų
+	Correlations	Koreliacijos
+	Download inputs (CSV)	Atsisiųsti įvestis (CSV)
+	Each input is a distribution: every trial draws one value from it.	Kiekviena įvestis yra skirstinys: kiekviena iteracija iš jo ištraukia vieną reikšmę.
+	Each output is worked out in every trial from the inputs and the outputs above it, each named as $name: for example $labour * $rate + $materials. Give it a target to see the chance of meeting it.	Kiekviena išvestis kiekvienoje iteracijoje apskaičiuojama iš įvesčių ir aukščiau esančių išvesčių, kurių kiekviena vadinama $name: pavyzdžiui, $labour * $rate + $materials. Nurodykite jai tikslą, kad matytumėte tikimybę jį pasiekti.
+	Export inputs (CSV)	Eksportuoti įvestis (CSV)
+	First input	Pirmoji įvestis
+	How many trials	Kiek iteracijų
+	How many trials gave each value	Kiek iteracijų davė kiekvieną reikšmę
+	Import inputs	Importuoti įvestis
+	In 9 trials out of 10, {output} is between {low} and {high}; the mean is {mean} ± {half_width}.	9 iteracijose iš 10 reikšmė {output} yra tarp {low} ir {high}; vidurkis {mean} ± {half_width}.
+	In 9 trials out of 10, {output} is between {low} and {high}; the mean is {mean}.	9 iteracijose iš 10 reikšmė {output} yra tarp {low} ir {high}; vidurkis {mean}.
+	Inputs	Įvestys
+	Inputs as a table	Įvestys kaip lentelė
+	Latin hypercube	Lotyniškasis hiperkubas
+	Latin hypercube sampling	Lotyniškojo hiperkubo atranka
+	Latin hypercube sampling spreads each input's draws evenly over its range, so the results settle with fewer trials. With it, or with correlated inputs, trials run in whole batches of 1,000.	Lotyniškojo hiperkubo atranka tolygiai paskirsto kiekvienos įvesties ištrauktas reikšmes per visą jos intervalą, todėl rezultatai nusistovi per mažiau iteracijų. Su ja arba su koreliuotomis įvestimis iteracijos vykdomos visomis 1000 dydžio partijomis.
+	Monte Carlo model	Monte Karlo modelis
+	New Monte Carlo Model	Naujas Monte Karlo modelis
+	New Monte Carlo model	Naujas Monte Karlo modelis
+	New correlation	Nauja koreliacija
+	New input	Nauja įvestis
+	New output	Nauja išvestis
+	No inputs yet: add one below, or paste a table of them.	Įvesčių dar nėra: pridėkite vieną žemiau arba įklijuokite jų lentelę.
+	No interval: too few batches of trials for one.	Intervalo nėra: tam per mažai iteracijų partijų.
+	No outputs yet: add one below.	Išvesčių dar nėra: pridėkite vieną žemiau.
+	None yet	Dar nėra
+	One input per line, as name, distribution, parameters and unit, copied from a spreadsheet or written as CSV: for example labour,triangular,min=80;mode=100;max=150,h.	Viena įvestis eilutėje: pavadinimas, skirstinys, parametrai ir vienetas, nukopijuoti iš skaičiuoklės arba užrašyti kaip CSV: pavyzdžiui, labour,triangular,min=80;mode=100;max=150,h.
+	Outputs	Išvestys
+	Paste inputs from a table	Įklijuoti įvestis iš lentelės
+	Project budget	Projekto biudžetas
+	Rank correlation	Rangų koreliacija
+	Remove the correlation of {a} and {b}	Pašalinti {a} ir {b} koreliaciją
+	Remove the input {name}	Pašalinti įvestį {name}
+	Remove the output {name}	Pašalinti išvestį {name}
+	Replace every input	Pakeisti visas įvestis
+	Sampling	Atranka
+	Second input	Antroji įvestis
+	Share of trials at or below each value	Iteracijų dalis ties kiekviena reikšme arba žemiau jos
+	Target {value}	Tikslas {value}
+	The chance is under {hi}, with 95% confidence.	Tikimybė mažesnė už {hi}, su 95 % pasikliovimu.
+	The model: its inputs, outputs and trials	Modelis: jo įvestys, išvestys ir iteracijos
+	The number of trials was chosen from the results, so an interval may cover the true value less often than 95% of the time.	Iteracijų skaičius parinktas pagal rezultatus, todėl intervalas tikrąją reikšmę gali dengti rečiau nei 95 % atvejų.
+	The trials above come first; more follow in batches until every output's mean is within that share of itself, or the most is reached.	Pirmiausia atliekamos aukščiau nurodytos iteracijos, o toliau jos vykdomos partijomis, kol kiekvienos išvesties vidurkis patenka į tą savo dalį arba pasiekiamas maksimumas.
+	Trials and sampling	Iteracijos ir atranka
+	Uncertain inputs instead of single guesses: the chance of an overrun, not one total.	Neapibrėžtos įvestys vietoj pavienių spėjimų: viršijimo tikimybė, o ne viena suma.
+	Will the project come in under budget?	Ar projektas tilps į biudžetą?
+	a name, such as cost	pavadinimas, pavyzdžiui, kaina
+	a name, such as labour	pavadinimas, pavyzdžiui, darbas
+	random sampling	atsitiktinė atranka
+	{asked} trials were asked for; with Latin hypercube sampling or correlated inputs a run is whole batches of {size}, so {n} ran.	Paprašyta {asked} iteracijų; naudojant lotyniškojo hiperkubo atranką arba koreliuotas įvestis vykdymą sudaro visos {size} dydžio partijos, todėl atlikta {n}.
+	{a} and {b}: {achieved} in the trials, {target} asked for	{a} ir {b}: iteracijose {achieved}, prašyta {target}
+	{output} was less than {value} in none of the {n} trials.	Nė vienoje iš {n} iteracijų reikšmė {output} nebuvo mažesnė už {value}.
+	{output} was more than {value} in none of the {n} trials.	Nė vienoje iš {n} iteracijų reikšmė {output} nebuvo didesnė už {value}.
+@plural	Each ± is the half-width of the 95% interval of the mean across {n} independent batch of {size} trials. Latin hypercube sampling and correlated inputs make the trials within a batch depend on each other, so each batch counts as one.|Each ± is the half-width of the 95% interval of the mean across {n} independent batches of {size} trials. Latin hypercube sampling and correlated inputs make the trials within a batch depend on each other, so each batch counts as one.	Kiekvienas ± yra vidurkio 95 % intervalo pusplotis, apskaičiuotas pagal {n} nepriklausomą {size} iteracijų partiją. Lotyniškojo hiperkubo atranka ir koreliuotos įvestys daro partijos iteracijas priklausomas viena nuo kitos, todėl kiekviena partija skaičiuojama kaip viena.|Kiekvienas ± yra vidurkio 95 % intervalo pusplotis, apskaičiuotas pagal {n} nepriklausomas {size} iteracijų partijas. Lotyniškojo hiperkubo atranka ir koreliuotos įvestys daro partijos iteracijas priklausomas viena nuo kitos, todėl kiekviena partija skaičiuojama kaip viena.|Kiekvienas ± yra vidurkio 95 % intervalo pusplotis, apskaičiuotas pagal {n} nepriklausomų {size} iteracijų partijų. Lotyniškojo hiperkubo atranka ir koreliuotos įvestys daro partijos iteracijas priklausomas viena nuo kitos, todėl kiekviena partija skaičiuojama kaip viena.
+@plural	Each ± is the half-width of the 95% interval of the mean across {n} independent trial.|Each ± is the half-width of the 95% interval of the mean across {n} independent trials.	Kiekvienas ± yra vidurkio 95 % intervalo pusplotis, apskaičiuotas pagal {n} nepriklausomą iteraciją.|Kiekvienas ± yra vidurkio 95 % intervalo pusplotis, apskaičiuotas pagal {n} nepriklausomas iteracijas.|Kiekvienas ± yra vidurkio 95 % intervalo pusplotis, apskaičiuotas pagal {n} nepriklausomų iteracijų.
+@plural	Finished {n} trial|Finished {n} trials	Baigta {n} iteracija|Baigtos {n} iteracijos|Baigta {n} iteracijų
+@plural	Imported {n} input|Imported {n} inputs	Importuota {n} įvestis|Importuotos {n} įvestys|Importuota {n} įvesčių
+@plural	Makes {n} trial from seed {seed}: each draws every input once and works out every output.|Makes {n} trials from seed {seed}: each draws every input once and works out every output.	Atlieka {n} iteraciją su sėkla {seed}: kiekviena vieną kartą ištraukia kiekvieną įvestį ir apskaičiuoja kiekvieną išvestį.|Atlieka {n} iteracijas su sėkla {seed}: kiekviena vieną kartą ištraukia kiekvieną įvestį ir apskaičiuoja kiekvieną išvestį.|Atlieka {n} iteracijų su sėkla {seed}: kiekviena vieną kartą ištraukia kiekvieną įvestį ir apskaičiuoja kiekvieną išvestį.
+@plural	Stopped after {n} trial: every output's mean is within ±{share} of itself.|Stopped after {n} trials: every output's mean is within ±{share} of itself.	Sustabdyta po {n} iteracijos: kiekvienos išvesties vidurkis yra ±{share} savo reikšmės ribose.|Sustabdyta po {n} iteracijų: kiekvienos išvesties vidurkis yra ±{share} savo reikšmės ribose.|Sustabdyta po {n} iteracijų: kiekvienos išvesties vidurkis yra ±{share} savo reikšmės ribose.
+@plural	Stopped at the most allowed, {n} trial, before every output's mean was within ±{share} of itself.|Stopped at the most allowed, {n} trials, before every output's mean was within ±{share} of itself.	Sustabdyta pasiekus leistiną maksimumą, {n} iteraciją, kol kiekvienos išvesties vidurkis dar nebuvo ±{share} savo reikšmės ribose.|Sustabdyta pasiekus leistiną maksimumą, {n} iteracijas, kol kiekvienos išvesties vidurkis dar nebuvo ±{share} savo reikšmės ribose.|Sustabdyta pasiekus leistiną maksimumą, {n} iteracijų, kol kiekvienos išvesties vidurkis dar nebuvo ±{share} savo reikšmės ribose.
+@plural	{done} of {n} trial made|{done} of {n} trials made	Atlikta {done} iš {n} iteracijos|Atlikta {done} iš {n} iteracijų|Atlikta {done} iš {n} iteracijų
+@plural	{n} trial gave no number (a division by zero, say) and is left out.|{n} trials gave no number (a division by zero, say) and are left out.	{n} iteracija nedavė skaičiaus (pavyzdžiui, dėl dalybos iš nulio) ir yra praleista.|{n} iteracijos nedavė skaičiaus (pavyzdžiui, dėl dalybos iš nulio) ir yra praleistos.|{n} iteracijų nedavė skaičiaus (pavyzdžiui, dėl dalybos iš nulio) ir yra praleista.
+@plural	{n} trial · seed {seed} · {sampling}|{n} trials · seed {seed} · {sampling}	{n} iteracija · sėkla {seed} · {sampling}|{n} iteracijos · sėkla {seed} · {sampling}|{n} iteracijų · sėkla {seed} · {sampling}
+@plural	{n} trial · seed {seed}|{n} trials · seed {seed}	{n} iteracija · sėkla {seed}|{n} iteracijos · sėkla {seed}|{n} iteracijų · sėkla {seed}

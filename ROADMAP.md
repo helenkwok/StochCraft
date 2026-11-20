@@ -11,7 +11,8 @@ are done, and so is M2.10 (abandonment and balking) apart from the gaps listed i
 (changeovers and lean measures) has its changeovers, product-type times, takt and cycle times,
 state times and most of OEE done; M2.9 (output analysis) has its recorder of results over time,
 MSER-5's warm-up suggestion, its warnings, streams by element id and starting contents done. M4
-is being planned, and M4.1 (Monte Carlo) has its engine, files and command line done (part 1).
+is being planned, and M4.1 (Monte Carlo) has its engine, files and command line (part 1) and its
+window (part 2) done.
 M5 has its conveyors (M5.1), the operators in the model and files (M5.2, PR 1), a first 3D view
 (M5.3), the dashboard (M5.4) and the sorter example in; M5.5, which reworks M5's geometry so the
 physical layout is a model layer of its own, from which the plan and the 3D view are drawn, has
@@ -2144,7 +2145,7 @@ over time, a second kind of diagram on the canvas). Then M4.1, the smallest and 
 reuses most of what exists; then M4.2 and M4.3 (agents in flows first); then M4.4. Agents in
 space are built with M5, which needs the same layout and travel.
 
-M4.1 part 1 is done (below); the rest is not started. D15–D18 are settled; D10–D13 (#71 has
+M4.1 parts 1 and 2 are done (below); the rest is not started. D15–D18 are settled; D10–D13 (#71 has
 them) are to settle first.
 
 ### M4.1 Monte Carlo
@@ -2158,8 +2159,19 @@ sampling, and across independent batches of 1,000 for Latin hypercube sampling o
 inputs, which make trials within a batch dependent: replicated Latin hypercube sampling, Owen
 1992, Glasserman 2003 §4.4) and a sequential stop on the means; files as D15 says,
 with CSV import and export of the input table; the `mc.*` engine commands with undo; `run` and
-`inputs` on the command line; checks against the exact answers below but Sobol's. The window,
-the tornado chart, rank correlations of inputs with outputs and Sobol indices come later.
+`inputs` on the command line; checks against the exact answers below but Sobol's. Part 2, the
+window, is done too: a Monte Carlo model is its own kind of document (File ▸ New Monte Carlo
+Model, or a file with no process), with a Model tab (inputs with the distribution editor tasks
+use, correlations, outputs with targets, trials, seed, sampling and a sequential stop; a table of
+inputs pasted from a spreadsheet or exported as CSV; each edit one undo step, a refused one
+explained in place) and a Results tab that answers first (the chance of missing each target in
+words, "about a 1 in 5 chance that cost is more than 46,000 USD (21%)", with its interval; where 9
+trials in 10 fall otherwise), then each output's mean with its interval, percentiles, histogram
+and cumulative curve with the target on both, and how the run went. Runs are made a few batches a
+frame (`stochcraft_mc::Stepper`), so the browser's page stays responsive; there the batches run
+one after another on the page, not on its workers. The gallery has a project budget example,
+checked against its exact means. Part 3, which inputs matter (the tornado chart from
+one-at-a-time swings, rank correlations of inputs with outputs, Sobol indices), comes next.
 
 **What it is:** a model of a calculation, not a process. Inputs are distributions (a cost, a
 duration, a demand), outputs are expressions over them (a total cost, a finish date, a profit),

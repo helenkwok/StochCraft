@@ -1208,3 +1208,80 @@ unit	yr	r.
 	Entities inside at the start are given for a block that does not exist. Remove them.	Jednostki wewnątrz na początku podano dla bloku, który nie istnieje. Usuń je.
 	{block} cannot have entities inside at the start: only a task or a batch can. Remove its “Inside at the start”.	Blok {block} nie może mieć jednostek wewnątrz na początku: może to tylko zadanie lub partia. Usuń jego „Wewnątrz na początku”.
 	{block} has {count} entities inside at the start, but it holds at most {most}, its units and its waiting room. Set “Inside at the start” to {most} or fewer, or make the waiting room larger.	Blok {block} ma na początku wewnątrz {count} jednostek, ale mieści najwyżej {most}, swoje zasoby i poczekalnię. Ustaw „Wewnątrz na początku” na {most} lub mniej albo powiększ poczekalnię.
+# Monte Carlo models in the window (ROADMAP M4.1, part 2)
+	95% interval of the chance: {lo} to {hi}.	Przedział 95% szansy: od {lo} do {hi}.
+	A Monte Carlo model: uncertain durations, day rate and materials, and the chance the cost or the duration runs over.	Model Monte Carlo: niepewne czasy trwania, stawka dzienna i materiały oraz szansa, że koszt lub czas trwania zostanie przekroczony.
+	A calculation with uncertain inputs, not a process: each trial draws every input once and works out every output from them.	Obliczenie z niepewnymi wejściami, nie proces: każda iteracja losuje raz każde wejście i wylicza z nich każde wyjście.
+	A rank correlation between two inputs, from -1 to 1: above 0 they tend to be high together, below 0 one tends to be high when the other is low. Inputs not paired here are independent; 0 removes a pair.	Korelacja rang między dwoma wejściami, od -1 do 1: powyżej 0 zwykle są jednocześnie wysokie, poniżej 0 jedno jest zwykle wysokie, gdy drugie jest niskie. Wejścia, które nie są tu sparowane, są niezależne; 0 usuwa parę.
+	A {percent} chance that {output} is less than {value}.	Szansa {percent}, że wartość {output} jest mniejsza niż {value}.
+	A {percent} chance that {output} is more than {value}.	Szansa {percent}, że wartość {output} jest większa niż {value}.
+	About a 1 in {odds} chance that {output} is less than {value} ({percent}).	Szansa około 1 na {odds}, że wartość {output} jest mniejsza niż {value} ({percent}).
+	About a 1 in {odds} chance that {output} is more than {value} ({percent}).	Szansa około 1 na {odds}, że wartość {output} jest większa niż {value} ({percent}).
+	Add correlation	Dodaj korelację
+	Add input	Dodaj wejście
+	Add output	Dodaj wyjście
+	At most, trials	Najwyżej, iteracji
+	Correlations	Korelacje
+	Download inputs (CSV)	Pobierz wejścia (CSV)
+	Each input is a distribution: every trial draws one value from it.	Każde wejście jest rozkładem: każda iteracja losuje z niego jedną wartość.
+	Each output is worked out in every trial from the inputs and the outputs above it, each named as $name: for example $labour * $rate + $materials. Give it a target to see the chance of meeting it.	Każde wyjście jest wyliczane w każdej iteracji z wejść i wyjść powyżej niego, a każde z nich jest nazywane $name: na przykład $labour * $rate + $materials. Nadaj mu cel, aby zobaczyć szansę jego osiągnięcia.
+	Export inputs (CSV)	Eksportuj wejścia (CSV)
+	First input	Pierwsze wejście
+	How many trials	Ile iteracji
+	How many trials gave each value	Ile iteracji dało każdą wartość
+	Import inputs	Importuj wejścia
+	In 9 trials out of 10, {output} is between {low} and {high}; the mean is {mean} ± {half_width}.	W 9 iteracjach na 10 {output} jest między {low} a {high}; średnia wynosi {mean} ± {half_width}.
+	In 9 trials out of 10, {output} is between {low} and {high}; the mean is {mean}.	W 9 iteracjach na 10 {output} jest między {low} a {high}; średnia wynosi {mean}.
+	Inputs	Wejścia
+	Inputs as a table	Wejścia jako tabela
+	Latin hypercube	Łacińska hiperkostka
+	Latin hypercube sampling	Próbkowanie metodą łacińskiej hiperkostki
+	Latin hypercube sampling spreads each input's draws evenly over its range, so the results settle with fewer trials. With it, or with correlated inputs, trials run in whole batches of 1,000.	Próbkowanie metodą łacińskiej hiperkostki rozkłada losowania każdego wejścia równomiernie na jego zakresie, więc wyniki stabilizują się po mniejszej liczbie iteracji. Z nim lub ze skorelowanymi wejściami iteracje wykonują się w pełnych partiach po 1000.
+	Monte Carlo model	Model Monte Carlo
+	New Monte Carlo Model	Nowy model Monte Carlo
+	New Monte Carlo model	Nowy model Monte Carlo
+	New correlation	Nowa korelacja
+	New input	Nowe wejście
+	New output	Nowe wyjście
+	No inputs yet: add one below, or paste a table of them.	Brak jeszcze wejść: dodaj jedno poniżej albo wklej ich tabelę.
+	No interval: too few batches of trials for one.	Brak przedziału: za mało partii iteracji, by go wyznaczyć.
+	No outputs yet: add one below.	Brak jeszcze wyjść: dodaj jedno poniżej.
+	None yet	Jeszcze brak
+	One input per line, as name, distribution, parameters and unit, copied from a spreadsheet or written as CSV: for example labour,triangular,min=80;mode=100;max=150,h.	Jedno wejście w wierszu, jako nazwa, rozkład, parametry i jednostka, skopiowane z arkusza kalkulacyjnego lub zapisane jako CSV: na przykład labour,triangular,min=80;mode=100;max=150,h.
+	Outputs	Wyjścia
+	Paste inputs from a table	Wklej wejścia z tabeli
+	Project budget	Budżet projektu
+	Rank correlation	Korelacja rang
+	Remove the correlation of {a} and {b}	Usuń korelację {a} i {b}
+	Remove the input {name}	Usuń wejście {name}
+	Remove the output {name}	Usuń wyjście {name}
+	Replace every input	Zastąp wszystkie wejścia
+	Sampling	Próbkowanie
+	Second input	Drugie wejście
+	Share of trials at or below each value	Udział iteracji z wynikiem nie większym od danej wartości
+	Target {value}	Cel {value}
+	The chance is under {hi}, with 95% confidence.	Szansa jest mniejsza niż {hi}, z ufnością 95%.
+	The model: its inputs, outputs and trials	Model: jego wejścia, wyjścia i iteracje
+	The number of trials was chosen from the results, so an interval may cover the true value less often than 95% of the time.	Liczbę iteracji wybrano na podstawie wyników, więc przedział może pokrywać prawdziwą wartość rzadziej niż w 95% przypadków.
+	The trials above come first; more follow in batches until every output's mean is within that share of itself, or the most is reached.	Najpierw wykonują się iteracje podane wyżej; potem dochodzą kolejne w partiach, aż średnia każdego wyjścia znajdzie się w tym udziale samej siebie albo zostanie osiągnięte maksimum.
+	Trials and sampling	Iteracje i próbkowanie
+	Uncertain inputs instead of single guesses: the chance of an overrun, not one total.	Niepewne wejścia zamiast pojedynczych szacunków: szansa przekroczenia, a nie jedna suma.
+	Will the project come in under budget?	Czy projekt zmieści się w budżecie?
+	a name, such as cost	nazwa, na przykład koszt
+	a name, such as labour	nazwa, na przykład praca
+	random sampling	próbkowanie losowe
+	{asked} trials were asked for; with Latin hypercube sampling or correlated inputs a run is whole batches of {size}, so {n} ran.	Zażądano {asked} iteracji; przy próbkowaniu metodą łacińskiej hiperkostki lub skorelowanych wejściach uruchomienie składa się z pełnych partii po {size}, więc wykonano {n}.
+	{a} and {b}: {achieved} in the trials, {target} asked for	{a} i {b}: {achieved} w iteracjach, żądane {target}
+	{output} was less than {value} in none of the {n} trials.	W żadnej z {n} iteracji wartość {output} nie była mniejsza niż {value}.
+	{output} was more than {value} in none of the {n} trials.	W żadnej z {n} iteracji wartość {output} nie była większa niż {value}.
+@plural	Each ± is the half-width of the 95% interval of the mean across {n} independent batch of {size} trials. Latin hypercube sampling and correlated inputs make the trials within a batch depend on each other, so each batch counts as one.|Each ± is the half-width of the 95% interval of the mean across {n} independent batches of {size} trials. Latin hypercube sampling and correlated inputs make the trials within a batch depend on each other, so each batch counts as one.	Każde ± to połowa szerokości przedziału 95% dla średniej z {n} niezależnej partii po {size} iteracji. Próbkowanie metodą łacińskiej hiperkostki i skorelowane wejścia sprawiają, że iteracje w partii zależą od siebie, więc każda partia liczy się jako jedna.|Każde ± to połowa szerokości przedziału 95% dla średniej z {n} niezależnych partii po {size} iteracji. Próbkowanie metodą łacińskiej hiperkostki i skorelowane wejścia sprawiają, że iteracje w partii zależą od siebie, więc każda partia liczy się jako jedna.|Każde ± to połowa szerokości przedziału 95% dla średniej z {n} niezależnych partii po {size} iteracji. Próbkowanie metodą łacińskiej hiperkostki i skorelowane wejścia sprawiają, że iteracje w partii zależą od siebie, więc każda partia liczy się jako jedna.
+@plural	Each ± is the half-width of the 95% interval of the mean across {n} independent trial.|Each ± is the half-width of the 95% interval of the mean across {n} independent trials.	Każde ± to połowa szerokości przedziału 95% dla średniej z {n} niezależnej iteracji.|Każde ± to połowa szerokości przedziału 95% dla średniej z {n} niezależnych iteracji.|Każde ± to połowa szerokości przedziału 95% dla średniej z {n} niezależnych iteracji.
+@plural	Finished {n} trial|Finished {n} trials	Zakończono {n} iterację|Zakończono {n} iteracje|Zakończono {n} iteracji
+@plural	Imported {n} input|Imported {n} inputs	Zaimportowano {n} wejście|Zaimportowano {n} wejścia|Zaimportowano {n} wejść
+@plural	Makes {n} trial from seed {seed}: each draws every input once and works out every output.|Makes {n} trials from seed {seed}: each draws every input once and works out every output.	Wykonuje {n} iterację od ziarna {seed}: każda losuje raz każde wejście i wylicza każde wyjście.|Wykonuje {n} iteracje od ziarna {seed}: każda losuje raz każde wejście i wylicza każde wyjście.|Wykonuje {n} iteracji od ziarna {seed}: każda losuje raz każde wejście i wylicza każde wyjście.
+@plural	Stopped after {n} trial: every output's mean is within ±{share} of itself.|Stopped after {n} trials: every output's mean is within ±{share} of itself.	Zatrzymano po {n} iteracji: średnia każdego wyjścia mieści się w ±{share} samej siebie.|Zatrzymano po {n} iteracjach: średnia każdego wyjścia mieści się w ±{share} samej siebie.|Zatrzymano po {n} iteracjach: średnia każdego wyjścia mieści się w ±{share} samej siebie.
+@plural	Stopped at the most allowed, {n} trial, before every output's mean was within ±{share} of itself.|Stopped at the most allowed, {n} trials, before every output's mean was within ±{share} of itself.	Zatrzymano na dozwolonym maksimum, {n} iteracja, zanim średnia każdego wyjścia zmieściła się w ±{share} samej siebie.|Zatrzymano na dozwolonym maksimum, {n} iteracje, zanim średnia każdego wyjścia zmieściła się w ±{share} samej siebie.|Zatrzymano na dozwolonym maksimum, {n} iteracji, zanim średnia każdego wyjścia zmieściła się w ±{share} samej siebie.
+@plural	{done} of {n} trial made|{done} of {n} trials made	Wykonano {done} z {n} iteracji|Wykonano {done} z {n} iteracji|Wykonano {done} z {n} iteracji
+@plural	{n} trial gave no number (a division by zero, say) and is left out.|{n} trials gave no number (a division by zero, say) and are left out.	{n} iteracja nie dała liczby (na przykład przez dzielenie przez zero) i została pominięta.|{n} iteracje nie dały liczby (na przykład przez dzielenie przez zero) i zostały pominięte.|{n} iteracji nie dało liczby (na przykład przez dzielenie przez zero) i zostało pominiętych.
+@plural	{n} trial · seed {seed} · {sampling}|{n} trials · seed {seed} · {sampling}	{n} iteracja · ziarno {seed} · {sampling}|{n} iteracje · ziarno {seed} · {sampling}|{n} iteracji · ziarno {seed} · {sampling}
+@plural	{n} trial · seed {seed}|{n} trials · seed {seed}	{n} iteracja · ziarno {seed}|{n} iteracje · ziarno {seed}|{n} iteracji · ziarno {seed}

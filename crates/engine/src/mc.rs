@@ -13,7 +13,8 @@ use serde::{Deserialize, Serialize};
 use serde_json::{Value, json};
 use stochcraft_experiment::{Control, Experiment};
 use stochcraft_mc::{
-    BATCH, BlockJob, IntervalBasis, MAX_TRIALS, McResults, OutputResult, Problem, RunOptions, table,
+    BATCH, Block, BlockJob, Compiled, IntervalBasis, MAX_TRIALS, McResults, OutputResult, Problem,
+    RunOptions, Stepper, table,
 };
 use stochcraft_model::montecarlo::DEFAULT_TRIALS;
 use stochcraft_model::{
@@ -677,41 +678,64 @@ pub struct Run {
 }
 
 pub(crate) fn run(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
-    let p: Run = parse(p)?;
-    let mut m = e.model.monte_carlo.clone().ok_or_else(|| {
-        not_found(
-            "the model is not a Monte Carlo model: add inputs and outputs with mc.input.set and mc.output.set",
-        )
-    })?;
-    if let Some(s) = p.sampling {
-        m.sampling = s.into();
-    }
-    if let Some(stop) = p.stop {
-        m.stop = stop.map(Into::into);
-    }
-    let x = &e.model.experiment;
-    let seed = p.seed.unwrap_or(x.seed);
-    let trials = p.trials.unwrap_or(u64::from(x.replications));
-    if trials == 0 || trials > MAX_TRIALS {
-        return Err(invalid(format!("`trials` must be from 1 to {MAX_TRIALS}")));
-    }
-    let percentiles = p.percentiles.unwrap_or_default();
-    if let Some(bad) = percentiles.iter().find(|q| !(0.0..=100.0).contains(*q)) {
-        return Err(invalid(format!("percentile {bad} is not from 0 to 100")));
-    }
-    let compiled = stochcraft_mc::compile(&m, seed).map_err(|ps| CommandError {
-        code: ErrorCode::InvalidModel,
-        message: "the Monte Carlo model has errors and cannot run".into(),
-        details: Some(problems(&ps)),
-    })?;
-    let threads = p.threads;
-    let mut make = |jobs: &[BlockJob]| {
-        let count = jobs.len() as u64;
-        let mut runner = Experiment::new(count, seed);
-        if let Some(t) = threads {
-            runner = runner.threads(t as usize);
+    let mut job = e.mc_start(p)?;
+    while !job.step(usize::MAX)? {}
+    e.mc_results(&mut job)
+        .ok_or_else(|| CommandError::new(ErrorCode::Internal, "the run ended without results"))
+}
+
+/// A Monte Carlo run made a few batches at a time ([`Engine::mc_start`]), so the window can draw
+/// between them and a long run never holds up the page: each [`McJob::step`] makes some of the
+/// batches the run wants next, and [`Engine::mc_results`] gives the results once it has them.
+/// `mc.run` is the same run with every batch it wants made at once, so the results are the
+/// same, however the batches are spread over frames or threads.
+pub struct McJob {
+    compiled: Compiled,
+    stepper: Stepper,
+    /// The model as run (with the run's own sampling and stop), for the run record.
+    model: MonteCarlo,
+    threads: Option<u32>,
+}
+
+impl McJob {
+    /// Makes up to `batches` (at least one) of the batches the run wants next, on worker threads
+    /// where there are several (none on wasm32). True once the run has its results.
+    pub fn step(&mut self, batches: usize) -> Result<bool, CommandError> {
+        if self.stepper.is_done() {
+            return Ok(true);
         }
-        runner.run_range(
+        let wanted: Vec<BlockJob> = self
+            .stepper
+            .wanted()
+            .iter()
+            .take(batches.max(1))
+            .copied()
+            .collect();
+        let blocks = make_blocks(&self.compiled, &wanted, self.threads)?;
+        self.stepper.deliver(&self.compiled, blocks);
+        Ok(self.stepper.is_done())
+    }
+
+    /// The trials made so far, and those asked for so far (a sequential run asks for more after
+    /// each look).
+    pub fn progress(&self) -> (u64, u64) {
+        (self.stepper.made(), self.stepper.asked())
+    }
+}
+
+/// Makes `jobs` with `compiled`, on worker threads (`threads`, or all available), in order.
+fn make_blocks(
+    compiled: &Compiled,
+    jobs: &[BlockJob],
+    threads: Option<u32>,
+) -> Result<Vec<Block>, CommandError> {
+    let count = jobs.len() as u64;
+    let mut runner = Experiment::new(count, compiled.seed());
+    if let Some(t) = threads {
+        runner = runner.threads(t as usize);
+    }
+    runner
+        .run_range(
             0..count,
             |rep| {
                 let job = usize::try_from(rep.index)
@@ -726,19 +750,63 @@ pub(crate) fn run(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
             },
             &Control::new(),
         )
-    };
-    let options = RunOptions {
-        trials,
-        stop: m.stop,
-        percentiles,
-    };
-    let results = compiled
-        .run_with(&options, &mut make)
-        .map_err(|err| CommandError::new(ErrorCode::Internal, err.to_string()))?;
-    let mut v = results_json(&results);
-    v["warnings"] = problems(&compiled.warnings);
-    v["record"] = e.mc_record(&results, &m);
-    Ok(v)
+        .map_err(|err| CommandError::new(ErrorCode::Internal, err.to_string()))
+}
+
+impl Engine {
+    /// Gets a Monte Carlo run ready, with `mc.run`'s parameters, without making any trials yet:
+    /// the window makes it a few batches a frame with [`McJob::step`].
+    pub fn mc_start(&self, params: Value) -> Result<McJob, CommandError> {
+        let p: Run = parse(params)?;
+        let mut m = self.model.monte_carlo.clone().ok_or_else(|| {
+            not_found(
+                "the model is not a Monte Carlo model: add inputs and outputs with mc.input.set and mc.output.set",
+            )
+        })?;
+        if let Some(s) = p.sampling {
+            m.sampling = s.into();
+        }
+        if let Some(stop) = p.stop {
+            m.stop = stop.map(Into::into);
+        }
+        let x = &self.model.experiment;
+        let seed = p.seed.unwrap_or(x.seed);
+        let trials = p.trials.unwrap_or(u64::from(x.replications));
+        if trials == 0 || trials > MAX_TRIALS {
+            return Err(invalid(format!("`trials` must be from 1 to {MAX_TRIALS}")));
+        }
+        let percentiles = p.percentiles.unwrap_or_default();
+        if let Some(bad) = percentiles.iter().find(|q| !(0.0..=100.0).contains(*q)) {
+            return Err(invalid(format!("percentile {bad} is not from 0 to 100")));
+        }
+        let compiled = stochcraft_mc::compile(&m, seed).map_err(|ps| CommandError {
+            code: ErrorCode::InvalidModel,
+            message: "the Monte Carlo model has errors and cannot run".into(),
+            details: Some(problems(&ps)),
+        })?;
+        let options = RunOptions {
+            trials,
+            stop: m.stop,
+            percentiles,
+        };
+        let stepper = compiled.stepper(&options);
+        Ok(McJob {
+            compiled,
+            stepper,
+            model: m,
+            threads: p.threads,
+        })
+    }
+
+    /// A finished run's results, as `mc.run` gives them, with its warnings and run record; `None`
+    /// before the run has them (and after they were taken).
+    pub fn mc_results(&self, job: &mut McJob) -> Option<Value> {
+        let results = job.stepper.take_results()?;
+        let mut v = results_json(&results);
+        v["warnings"] = problems(&job.compiled.warnings);
+        v["record"] = self.mc_record(&results, &job.model);
+        Some(v)
+    }
 }
 
 impl Engine {
@@ -832,11 +900,20 @@ fn output_json(o: &OutputResult) -> Value {
 
 /// A run's results as JSON.
 pub fn results_json(r: &McResults) -> Value {
+    let basis = match r.interval {
+        IntervalBasis::Trials => json!({ "across": "trials", "count": r.trials }),
+        IntervalBasis::Batches { batches, size } => {
+            json!({ "across": "batches", "count": batches, "size": size })
+        }
+    };
     let mut v = json!({
         "kind": "monte_carlo",
         "trials": r.trials,
         "trials_requested": r.requested_trials,
+        "seed": r.seed,
+        "sampling": SamplingSpec::from(r.sampling).name(),
         "interval": interval_text(r),
+        "interval_basis": basis,
         "outputs": r.outputs.iter().map(output_json).collect::<Vec<_>>(),
         "inputs": r.inputs.iter().map(|i| json!({
             "name": i.name,
@@ -854,7 +931,7 @@ pub fn results_json(r: &McResults) -> Value {
             "achieved": c.achieved,
         })).collect::<Vec<_>>(),
     });
-    if let Some(s) = &r.stop {
+    if let Some(s) = r.stop.as_ref() {
         v["stop"] = json!({
             "relative": s.relative,
             "max": s.max,
@@ -864,6 +941,51 @@ pub fn results_json(r: &McResults) -> Value {
         });
     }
     v
+}
+
+/// A Monte Carlo run's results (as [`results_json`] gives them) as CSV, a row per output, as the
+/// window's Export table (CSV) and `stochcraft-cli run --format csv` write them.
+pub fn results_csv(r: &Value) -> String {
+    let s = |v: &Value| v.as_str().unwrap_or("").to_owned();
+    let mut out = String::from(
+        "output,unit,trials,valid,mean,half_width,std_dev,min,p5,p10,p50,p90,p95,max,\
+         target,target_value,probability,probability_low,probability_high\n",
+    );
+    let num = |v: &Value| v.as_f64().map(|x| x.to_string()).unwrap_or_default();
+    for o in r["outputs"].as_array().into_iter().flatten() {
+        let t = &o["target"];
+        let (kind, value) = if let Some(x) = t["at_most"].as_f64() {
+            ("at_most", x.to_string())
+        } else if let Some(x) = t["at_least"].as_f64() {
+            ("at_least", x.to_string())
+        } else {
+            ("", String::new())
+        };
+        let row = [
+            crate::wire::csv_field(&s(&o["name"])),
+            crate::wire::csv_field(&s(&o["unit"])),
+            r["trials"].to_string(),
+            o["valid"].to_string(),
+            num(&o["mean"]),
+            num(&o["half_width"]),
+            num(&o["std_dev"]),
+            num(&o["min"]),
+            num(&o["percentiles"]["5"]),
+            num(&o["percentiles"]["10"]),
+            num(&o["percentiles"]["50"]),
+            num(&o["percentiles"]["90"]),
+            num(&o["percentiles"]["95"]),
+            num(&o["max"]),
+            kind.to_owned(),
+            value,
+            num(&t["probability"]),
+            num(&t["interval"][0]),
+            num(&t["interval"][1]),
+        ];
+        out.push_str(&row.join(","));
+        out.push('\n');
+    }
+    out
 }
 
 #[cfg(test)]

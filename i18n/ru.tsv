@@ -1208,3 +1208,80 @@ unit	yr	г.
 	Entities inside at the start are given for a block that does not exist. Remove them.	Сущности внутри в начале заданы для блока, которого не существует. Удалите их.
 	{block} cannot have entities inside at the start: only a task or a batch can. Remove its “Inside at the start”.	В блоке {block} не может быть сущностей внутри в начале: это возможно только в задаче или партии. Удалите его «Внутри в начале».
 	{block} has {count} entities inside at the start, but it holds at most {most}, its units and its waiting room. Set “Inside at the start” to {most} or fewer, or make the waiting room larger.	В блоке {block} внутри в начале {count} сущностей, но помещается не больше {most}: его единицы и места ожидания. Задайте «Внутри в начале» не больше {most} или увеличьте места ожидания.
+# Monte Carlo models in the window (ROADMAP M4.1, part 2)
+	95% interval of the chance: {lo} to {hi}.	95% интервал вероятности: от {lo} до {hi}.
+	A Monte Carlo model: uncertain durations, day rate and materials, and the chance the cost or the duration runs over.	Модель Монте-Карло: неопределённые длительности, дневная ставка и материалы, и вероятность того, что стоимость или срок будут превышены.
+	A calculation with uncertain inputs, not a process: each trial draws every input once and works out every output from them.	Расчёт с неопределёнными входными величинами, а не процесс: каждое испытание один раз выбирает значение каждой входной величины и вычисляет по ним каждую выходную.
+	A rank correlation between two inputs, from -1 to 1: above 0 they tend to be high together, below 0 one tends to be high when the other is low. Inputs not paired here are independent; 0 removes a pair.	Ранговая корреляция между двумя входными величинами, от -1 до 1: выше 0 они обычно велики одновременно, ниже 0 одна обычно велика, когда другая мала. Входные величины без пары здесь независимы; 0 удаляет пару.
+	A {percent} chance that {output} is less than {value}.	Вероятность {percent}, что {output} меньше {value}.
+	A {percent} chance that {output} is more than {value}.	Вероятность {percent}, что {output} больше {value}.
+	About a 1 in {odds} chance that {output} is less than {value} ({percent}).	Примерно 1 шанс из {odds}, что {output} меньше {value} ({percent}).
+	About a 1 in {odds} chance that {output} is more than {value} ({percent}).	Примерно 1 шанс из {odds}, что {output} больше {value} ({percent}).
+	Add correlation	Добавить корреляцию
+	Add input	Добавить входную величину
+	Add output	Добавить выходную величину
+	At most, trials	Не более, испытаний
+	Correlations	Корреляции
+	Download inputs (CSV)	Скачать входные величины (CSV)
+	Each input is a distribution: every trial draws one value from it.	Каждая входная величина — это распределение: каждое испытание выбирает из него одно значение.
+	Each output is worked out in every trial from the inputs and the outputs above it, each named as $name: for example $labour * $rate + $materials. Give it a target to see the chance of meeting it.	Каждая выходная величина вычисляется в каждом испытании из входных величин и выходных величин выше неё, каждая называется как $name: например, $labour * $rate + $materials. Задайте ей цель, чтобы увидеть вероятность её достижения.
+	Export inputs (CSV)	Экспортировать входные величины (CSV)
+	First input	Первая входная величина
+	How many trials	Сколько испытаний
+	How many trials gave each value	Сколько испытаний дали каждое значение
+	Import inputs	Импортировать входные величины
+	In 9 trials out of 10, {output} is between {low} and {high}; the mean is {mean} ± {half_width}.	В 9 испытаниях из 10 {output} находится между {low} и {high}; среднее — {mean} ± {half_width}.
+	In 9 trials out of 10, {output} is between {low} and {high}; the mean is {mean}.	В 9 испытаниях из 10 {output} находится между {low} и {high}; среднее — {mean}.
+	Inputs	Входные величины
+	Inputs as a table	Входные величины в виде таблицы
+	Latin hypercube	Латинский гиперкуб
+	Latin hypercube sampling	Выборка методом латинского гиперкуба
+	Latin hypercube sampling spreads each input's draws evenly over its range, so the results settle with fewer trials. With it, or with correlated inputs, trials run in whole batches of 1,000.	Выборка методом латинского гиперкуба равномерно распределяет значения каждой входной величины по её диапазону, поэтому результаты устанавливаются за меньшее число испытаний. С ней, а также с коррелированными входными величинами, испытания выполняются целыми партиями по 1000.
+	Monte Carlo model	Модель Монте-Карло
+	New Monte Carlo Model	Новая модель Монте-Карло
+	New Monte Carlo model	Новая модель Монте-Карло
+	New correlation	Новая корреляция
+	New input	Новая входная величина
+	New output	Новая выходная величина
+	No inputs yet: add one below, or paste a table of them.	Входных величин пока нет: добавьте одну ниже или вставьте их таблицу.
+	No interval: too few batches of trials for one.	Нет интервала: для него слишком мало партий испытаний.
+	No outputs yet: add one below.	Выходных величин пока нет: добавьте одну ниже.
+	None yet	Пока нет
+	One input per line, as name, distribution, parameters and unit, copied from a spreadsheet or written as CSV: for example labour,triangular,min=80;mode=100;max=150,h.	Одна входная величина на строку: имя, распределение, параметры и единица измерения, скопированные из электронной таблицы или записанные как CSV: например, labour,triangular,min=80;mode=100;max=150,h.
+	Outputs	Выходные величины
+	Paste inputs from a table	Вставить входные величины из таблицы
+	Project budget	Бюджет проекта
+	Rank correlation	Ранговая корреляция
+	Remove the correlation of {a} and {b}	Удалить корреляцию {a} и {b}
+	Remove the input {name}	Удалить входную величину {name}
+	Remove the output {name}	Удалить выходную величину {name}
+	Replace every input	Заменить все входные величины
+	Sampling	Выборка
+	Second input	Вторая входная величина
+	Share of trials at or below each value	Доля испытаний со значением не выше каждого
+	Target {value}	Цель {value}
+	The chance is under {hi}, with 95% confidence.	Вероятность ниже {hi} с доверием 95%.
+	The model: its inputs, outputs and trials	Модель: её входные и выходные величины и испытания
+	The number of trials was chosen from the results, so an interval may cover the true value less often than 95% of the time.	Число испытаний выбрано по результатам, поэтому интервал может накрывать истинное значение реже, чем в 95% случаев.
+	The trials above come first; more follow in batches until every output's mean is within that share of itself, or the most is reached.	Сначала выполняются испытания, указанные выше; затем добавляются новые партиями, пока среднее каждой выходной величины не окажется в пределах этой доли от себя самого или не будет достигнут максимум.
+	Trials and sampling	Испытания и выборка
+	Uncertain inputs instead of single guesses: the chance of an overrun, not one total.	Неопределённые входные величины вместо единичных догадок: вероятность перерасхода, а не одна сумма.
+	Will the project come in under budget?	Уложится ли проект в бюджет?
+	a name, such as cost	имя, например стоимость
+	a name, such as labour	имя, например труд
+	random sampling	простая случайная выборка
+	{asked} trials were asked for; with Latin hypercube sampling or correlated inputs a run is whole batches of {size}, so {n} ran.	Запрошено испытаний: {asked}; при выборке методом латинского гиперкуба или коррелированных входных величинах запуск состоит из целых партий по {size}, поэтому выполнено {n}.
+	{a} and {b}: {achieved} in the trials, {target} asked for	{a} и {b}: {achieved} в испытаниях, запрошено {target}
+	{output} was less than {value} in none of the {n} trials.	Ни в одном из {n} испытаний значение {output} не было меньше {value}.
+	{output} was more than {value} in none of the {n} trials.	Ни в одном из {n} испытаний значение {output} не было больше {value}.
+@plural	Each ± is the half-width of the 95% interval of the mean across {n} independent batch of {size} trials. Latin hypercube sampling and correlated inputs make the trials within a batch depend on each other, so each batch counts as one.|Each ± is the half-width of the 95% interval of the mean across {n} independent batches of {size} trials. Latin hypercube sampling and correlated inputs make the trials within a batch depend on each other, so each batch counts as one.	Каждое ± — это половина ширины 95% интервала среднего по {n} независимой партии из {size} испытаний. Выборка методом латинского гиперкуба и коррелированные входные величины делают испытания внутри партии зависимыми друг от друга, поэтому каждая партия считается за одно.|Каждое ± — это половина ширины 95% интервала среднего по {n} независимым партиям из {size} испытаний. Выборка методом латинского гиперкуба и коррелированные входные величины делают испытания внутри партии зависимыми друг от друга, поэтому каждая партия считается за одно.|Каждое ± — это половина ширины 95% интервала среднего по {n} независимым партиям из {size} испытаний. Выборка методом латинского гиперкуба и коррелированные входные величины делают испытания внутри партии зависимыми друг от друга, поэтому каждая партия считается за одно.
+@plural	Each ± is the half-width of the 95% interval of the mean across {n} independent trial.|Each ± is the half-width of the 95% interval of the mean across {n} independent trials.	Каждое ± — это половина ширины 95% интервала среднего по {n} независимому испытанию.|Каждое ± — это половина ширины 95% интервала среднего по {n} независимым испытаниям.|Каждое ± — это половина ширины 95% интервала среднего по {n} независимым испытаниям.
+@plural	Finished {n} trial|Finished {n} trials	Завершено {n} испытание|Завершено {n} испытания|Завершено {n} испытаний
+@plural	Imported {n} input|Imported {n} inputs	Импортирована {n} входная величина|Импортированы {n} входные величины|Импортировано {n} входных величин
+@plural	Makes {n} trial from seed {seed}: each draws every input once and works out every output.|Makes {n} trials from seed {seed}: each draws every input once and works out every output.	Выполняет {n} испытание с начальным значением {seed}: каждое один раз выбирает значение каждой входной величины и вычисляет каждую выходную.|Выполняет {n} испытания с начальным значением {seed}: каждое один раз выбирает значение каждой входной величины и вычисляет каждую выходную.|Выполняет {n} испытаний с начальным значением {seed}: каждое один раз выбирает значение каждой входной величины и вычисляет каждую выходную.
+@plural	Stopped after {n} trial: every output's mean is within ±{share} of itself.|Stopped after {n} trials: every output's mean is within ±{share} of itself.	Остановлено после {n} испытания: среднее каждой выходной величины в пределах ±{share} от себя самого.|Остановлено после {n} испытаний: среднее каждой выходной величины в пределах ±{share} от себя самого.|Остановлено после {n} испытаний: среднее каждой выходной величины в пределах ±{share} от себя самого.
+@plural	Stopped at the most allowed, {n} trial, before every output's mean was within ±{share} of itself.|Stopped at the most allowed, {n} trials, before every output's mean was within ±{share} of itself.	Остановлено на допустимом максимуме, {n} испытание, прежде чем среднее каждой выходной величины оказалось в пределах ±{share} от себя самого.|Остановлено на допустимом максимуме, {n} испытания, прежде чем среднее каждой выходной величины оказалось в пределах ±{share} от себя самого.|Остановлено на допустимом максимуме, {n} испытаний, прежде чем среднее каждой выходной величины оказалось в пределах ±{share} от себя самого.
+@plural	{done} of {n} trial made|{done} of {n} trials made	Выполнено {done} из {n} испытания|Выполнено {done} из {n} испытаний|Выполнено {done} из {n} испытаний
+@plural	{n} trial gave no number (a division by zero, say) and is left out.|{n} trials gave no number (a division by zero, say) and are left out.	{n} испытание не дало числа (например, из-за деления на ноль) и исключено.|{n} испытания не дали числа (например, из-за деления на ноль) и исключены.|{n} испытаний не дали числа (например, из-за деления на ноль) и исключены.
+@plural	{n} trial · seed {seed} · {sampling}|{n} trials · seed {seed} · {sampling}	{n} испытание · начальное значение {seed} · {sampling}|{n} испытания · начальное значение {seed} · {sampling}|{n} испытаний · начальное значение {seed} · {sampling}
+@plural	{n} trial · seed {seed}|{n} trials · seed {seed}	{n} испытание · начальное значение {seed}|{n} испытания · начальное значение {seed}|{n} испытаний · начальное значение {seed}

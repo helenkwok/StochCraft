@@ -1208,3 +1208,80 @@ unit	yr	år
 	Entities inside at the start are given for a block that does not exist. Remove them.	Der er angivet enheder indeni ved starten for en blok, der ikke findes. Fjern dem.
 	{block} cannot have entities inside at the start: only a task or a batch can. Remove its “Inside at the start”.	{block} kan ikke have enheder indeni ved starten: det kan kun en opgave eller et parti. Fjern dens »Indeni ved starten«.
 	{block} has {count} entities inside at the start, but it holds at most {most}, its units and its waiting room. Set “Inside at the start” to {most} or fewer, or make the waiting room larger.	{block} har {count} enheder indeni ved starten, men rummer højst {most}, dens ressourceenheder og venteværelse. Sæt »Indeni ved starten« til {most} eller færre, eller gør venteværelset større.
+# Monte Carlo models in the window (ROADMAP M4.1, part 2)
+	95% interval of the chance: {lo} to {hi}.	95 %-interval for sandsynligheden: {lo} til {hi}.
+	A Monte Carlo model: uncertain durations, day rate and materials, and the chance the cost or the duration runs over.	En Monte Carlo-model: usikre varigheder, dagspris og materialer samt sandsynligheden for, at omkostningen eller varigheden overskrides.
+	A calculation with uncertain inputs, not a process: each trial draws every input once and works out every output from them.	En beregning med usikre input, ikke en proces: hver iteration trækker hvert input én gang og beregner hvert output ud fra dem.
+	A rank correlation between two inputs, from -1 to 1: above 0 they tend to be high together, below 0 one tends to be high when the other is low. Inputs not paired here are independent; 0 removes a pair.	En rangkorrelation mellem to input, fra -1 til 1: over 0 har de tendens til at være høje samtidig, under 0 har det ene tendens til at være højt, når det andet er lavt. Input, der ikke er parret her, er uafhængige; 0 fjerner et par.
+	A {percent} chance that {output} is less than {value}.	En sandsynlighed på {percent} for, at {output} er mindre end {value}.
+	A {percent} chance that {output} is more than {value}.	En sandsynlighed på {percent} for, at {output} er større end {value}.
+	About a 1 in {odds} chance that {output} is less than {value} ({percent}).	Omtrent 1 chance ud af {odds} for, at {output} er mindre end {value} ({percent}).
+	About a 1 in {odds} chance that {output} is more than {value} ({percent}).	Omtrent 1 chance ud af {odds} for, at {output} er større end {value} ({percent}).
+	Add correlation	Tilføj korrelation
+	Add input	Tilføj input
+	Add output	Tilføj output
+	At most, trials	Højst, iterationer
+	Correlations	Korrelationer
+	Download inputs (CSV)	Download input (CSV)
+	Each input is a distribution: every trial draws one value from it.	Hvert input er en fordeling: hver iteration trækker én værdi fra den.
+	Each output is worked out in every trial from the inputs and the outputs above it, each named as $name: for example $labour * $rate + $materials. Give it a target to see the chance of meeting it.	Hvert output beregnes i hver iteration ud fra inputtene og de output, der står over det, hver navngivet som $name: for eksempel $labour * $rate + $materials. Giv det et mål for at se sandsynligheden for at nå det.
+	Export inputs (CSV)	Eksportér input (CSV)
+	First input	Første input
+	How many trials	Hvor mange iterationer
+	How many trials gave each value	Hvor mange iterationer der gav hver værdi
+	Import inputs	Importér input
+	In 9 trials out of 10, {output} is between {low} and {high}; the mean is {mean} ± {half_width}.	I 9 iterationer ud af 10 ligger {output} mellem {low} og {high}; gennemsnittet er {mean} ± {half_width}.
+	In 9 trials out of 10, {output} is between {low} and {high}; the mean is {mean}.	I 9 iterationer ud af 10 ligger {output} mellem {low} og {high}; gennemsnittet er {mean}.
+	Inputs	Input
+	Inputs as a table	Input som tabel
+	Latin hypercube	Latinsk hyperkubus
+	Latin hypercube sampling	Latinsk hyperkubus-stikprøveudtagning
+	Latin hypercube sampling spreads each input's draws evenly over its range, so the results settle with fewer trials. With it, or with correlated inputs, trials run in whole batches of 1,000.	Latinsk hyperkubus-stikprøveudtagning fordeler hvert inputs trækninger jævnt over dets område, så resultaterne falder til ro med færre iterationer. Med den, eller med korrelerede input, kører iterationerne i hele grupper på 1.000.
+	Monte Carlo model	Monte Carlo-model
+	New Monte Carlo Model	Ny Monte Carlo-model
+	New Monte Carlo model	Ny Monte Carlo-model
+	New correlation	Ny korrelation
+	New input	Nyt input
+	New output	Nyt output
+	No inputs yet: add one below, or paste a table of them.	Ingen input endnu: tilføj et nedenfor, eller indsæt en tabel med dem.
+	No interval: too few batches of trials for one.	Intet interval: for få grupper af iterationer til et.
+	No outputs yet: add one below.	Ingen output endnu: tilføj et nedenfor.
+	None yet	Ingen endnu
+	One input per line, as name, distribution, parameters and unit, copied from a spreadsheet or written as CSV: for example labour,triangular,min=80;mode=100;max=150,h.	Ét input pr. linje, som navn, fordeling, parametre og enhed, kopieret fra et regneark eller skrevet som CSV: for eksempel labour,triangular,min=80;mode=100;max=150,h.
+	Outputs	Output
+	Paste inputs from a table	Indsæt input fra en tabel
+	Project budget	Projektbudget
+	Rank correlation	Rangkorrelation
+	Remove the correlation of {a} and {b}	Fjern korrelationen mellem {a} og {b}
+	Remove the input {name}	Fjern inputtet {name}
+	Remove the output {name}	Fjern outputtet {name}
+	Replace every input	Erstat alle input
+	Sampling	Stikprøveudtagning
+	Second input	Andet input
+	Share of trials at or below each value	Andel af iterationer på eller under hver værdi
+	Target {value}	Mål {value}
+	The chance is under {hi}, with 95% confidence.	Sandsynligheden er under {hi} med 95 % konfidens.
+	The model: its inputs, outputs and trials	Modellen: dens input, output og iterationer
+	The number of trials was chosen from the results, so an interval may cover the true value less often than 95% of the time.	Antallet af iterationer blev valgt ud fra resultaterne, så et interval kan dække den sande værdi sjældnere end 95 % af gangene.
+	The trials above come first; more follow in batches until every output's mean is within that share of itself, or the most is reached.	Iterationerne ovenfor kommer først; flere følger i grupper, indtil hvert outputs gennemsnit er inden for den andel af sig selv, eller det højeste antal er nået.
+	Trials and sampling	Iterationer og stikprøveudtagning
+	Uncertain inputs instead of single guesses: the chance of an overrun, not one total.	Usikre input i stedet for enkelte gæt: sandsynligheden for en overskridelse, ikke én total.
+	Will the project come in under budget?	Holder projektet sig inden for budgettet?
+	a name, such as cost	et navn, f.eks. omkostning
+	a name, such as labour	et navn, f.eks. arbejde
+	random sampling	tilfældig stikprøveudtagning
+	{asked} trials were asked for; with Latin hypercube sampling or correlated inputs a run is whole batches of {size}, so {n} ran.	Der blev bedt om {asked} iterationer; med latinsk hyperkubus-stikprøveudtagning eller korrelerede input består en kørsel af hele grupper på {size}, så {n} blev kørt.
+	{a} and {b}: {achieved} in the trials, {target} asked for	{a} og {b}: {achieved} i iterationerne, {target} ønsket
+	{output} was less than {value} in none of the {n} trials.	{output} var ikke mindre end {value} i nogen af de {n} iterationer.
+	{output} was more than {value} in none of the {n} trials.	{output} var ikke større end {value} i nogen af de {n} iterationer.
+@plural	Each ± is the half-width of the 95% interval of the mean across {n} independent batch of {size} trials. Latin hypercube sampling and correlated inputs make the trials within a batch depend on each other, so each batch counts as one.|Each ± is the half-width of the 95% interval of the mean across {n} independent batches of {size} trials. Latin hypercube sampling and correlated inputs make the trials within a batch depend on each other, so each batch counts as one.	Hvert ± er den halve bredde af 95 %-intervallet for gennemsnittet over {n} uafhængig gruppe på {size} iterationer. Latinsk hyperkubus-stikprøveudtagning og korrelerede input gør iterationerne i en gruppe afhængige af hinanden, så hver gruppe tæller som én.|Hvert ± er den halve bredde af 95 %-intervallet for gennemsnittet over {n} uafhængige grupper på {size} iterationer. Latinsk hyperkubus-stikprøveudtagning og korrelerede input gør iterationerne i en gruppe afhængige af hinanden, så hver gruppe tæller som én.
+@plural	Each ± is the half-width of the 95% interval of the mean across {n} independent trial.|Each ± is the half-width of the 95% interval of the mean across {n} independent trials.	Hvert ± er den halve bredde af 95 %-intervallet for gennemsnittet over {n} uafhængig iteration.|Hvert ± er den halve bredde af 95 %-intervallet for gennemsnittet over {n} uafhængige iterationer.
+@plural	Finished {n} trial|Finished {n} trials	{n} iteration fuldført|{n} iterationer fuldført
+@plural	Imported {n} input|Imported {n} inputs	{n} input importeret|{n} input importeret
+@plural	Makes {n} trial from seed {seed}: each draws every input once and works out every output.|Makes {n} trials from seed {seed}: each draws every input once and works out every output.	Laver {n} iteration ud fra frø {seed}: den trækker hvert input én gang og beregner hvert output.|Laver {n} iterationer ud fra frø {seed}: hver trækker hvert input én gang og beregner hvert output.
+@plural	Stopped after {n} trial: every output's mean is within ±{share} of itself.|Stopped after {n} trials: every output's mean is within ±{share} of itself.	Stoppede efter {n} iteration: hvert outputs gennemsnit er inden for ±{share} af sig selv.|Stoppede efter {n} iterationer: hvert outputs gennemsnit er inden for ±{share} af sig selv.
+@plural	Stopped at the most allowed, {n} trial, before every output's mean was within ±{share} of itself.|Stopped at the most allowed, {n} trials, before every output's mean was within ±{share} of itself.	Stoppede ved det højest tilladte, {n} iteration, før hvert outputs gennemsnit var inden for ±{share} af sig selv.|Stoppede ved det højest tilladte, {n} iterationer, før hvert outputs gennemsnit var inden for ±{share} af sig selv.
+@plural	{done} of {n} trial made|{done} of {n} trials made	{done} af {n} iteration lavet|{done} af {n} iterationer lavet
+@plural	{n} trial gave no number (a division by zero, say) and is left out.|{n} trials gave no number (a division by zero, say) and are left out.	{n} iteration gav intet tal (f.eks. en division med nul) og er udeladt.|{n} iterationer gav intet tal (f.eks. en division med nul) og er udeladt.
+@plural	{n} trial · seed {seed} · {sampling}|{n} trials · seed {seed} · {sampling}	{n} iteration · frø {seed} · {sampling}|{n} iterationer · frø {seed} · {sampling}
+@plural	{n} trial · seed {seed}|{n} trials · seed {seed}	{n} iteration · frø {seed}|{n} iterationer · frø {seed}

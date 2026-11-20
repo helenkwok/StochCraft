@@ -1208,3 +1208,80 @@ unit	yr	v
 	Entities inside at the start are given for a block that does not exist. Remove them.	Alussa sisällä olevia entiteettejä on annettu lohkolle, jota ei ole olemassa. Poista ne.
 	{block} cannot have entities inside at the start: only a task or a batch can. Remove its “Inside at the start”.	Lohkossa {block} ei voi olla entiteettejä sisällä alussa: vain tehtävässä tai erässä voi. Poista sen ”Sisällä alussa”.
 	{block} has {count} entities inside at the start, but it holds at most {most}, its units and its waiting room. Set “Inside at the start” to {most} or fewer, or make the waiting room larger.	Lohkossa {block} on alussa sisällä {count} entiteettiä, mutta siihen mahtuu enintään {most}, sen yksiköt ja odotustila. Aseta ”Sisällä alussa” arvoon {most} tai pienemmäksi, tai suurenna odotustilaa.
+# Monte Carlo models in the window (ROADMAP M4.1, part 2)
+	95% interval of the chance: {lo} to {hi}.	Todennäköisyyden 95 %:n väli: {lo}–{hi}.
+	A Monte Carlo model: uncertain durations, day rate and materials, and the chance the cost or the duration runs over.	Monte Carlo -malli: epävarmat kestot, päivähinta ja materiaalit sekä todennäköisyys, että kustannus tai kesto ylittyy.
+	A calculation with uncertain inputs, not a process: each trial draws every input once and works out every output from them.	Laskelma epävarmoilla syötteillä, ei prosessi: jokainen iteraatio arpoo jokaisen syötteen kerran ja laskee niistä jokaisen tulosteen.
+	A rank correlation between two inputs, from -1 to 1: above 0 they tend to be high together, below 0 one tends to be high when the other is low. Inputs not paired here are independent; 0 removes a pair.	Kahden syötteen välinen järjestyskorrelaatio väliltä -1–1: yli 0 ne ovat yleensä suuria yhtä aikaa, alle 0 toinen on yleensä suuri, kun toinen on pieni. Syötteet, joita ei ole tässä paritettu, ovat riippumattomia; 0 poistaa parin.
+	A {percent} chance that {output} is less than {value}.	Todennäköisyys {percent}, että {output} on pienempi kuin {value}.
+	A {percent} chance that {output} is more than {value}.	Todennäköisyys {percent}, että {output} on suurempi kuin {value}.
+	About a 1 in {odds} chance that {output} is less than {value} ({percent}).	Noin 1 mahdollisuus {odds}:stä, että {output} on pienempi kuin {value} ({percent}).
+	About a 1 in {odds} chance that {output} is more than {value} ({percent}).	Noin 1 mahdollisuus {odds}:stä, että {output} on suurempi kuin {value} ({percent}).
+	Add correlation	Lisää korrelaatio
+	Add input	Lisää syöte
+	Add output	Lisää tuloste
+	At most, trials	Enintään, iteraatioita
+	Correlations	Korrelaatiot
+	Download inputs (CSV)	Lataa syötteet (CSV)
+	Each input is a distribution: every trial draws one value from it.	Jokainen syöte on jakauma: jokainen iteraatio arpoo siitä yhden arvon.
+	Each output is worked out in every trial from the inputs and the outputs above it, each named as $name: for example $labour * $rate + $materials. Give it a target to see the chance of meeting it.	Jokainen tuloste lasketaan jokaisessa iteraatiossa syötteistä ja sen yläpuolella olevista tulosteista, joista kukin nimetään muodossa $name: esimerkiksi $labour * $rate + $materials. Anna sille tavoite nähdäksesi todennäköisyyden sen saavuttamiselle.
+	Export inputs (CSV)	Vie syötteet (CSV)
+	First input	Ensimmäinen syöte
+	How many trials	Kuinka monta iteraatiota
+	How many trials gave each value	Kuinka moni iteraatio antoi kunkin arvon
+	Import inputs	Tuo syötteet
+	In 9 trials out of 10, {output} is between {low} and {high}; the mean is {mean} ± {half_width}.	9 iteraatiossa 10:stä {output} on välillä {low}–{high}; keskiarvo on {mean} ± {half_width}.
+	In 9 trials out of 10, {output} is between {low} and {high}; the mean is {mean}.	9 iteraatiossa 10:stä {output} on välillä {low}–{high}; keskiarvo on {mean}.
+	Inputs	Syötteet
+	Inputs as a table	Syötteet taulukkona
+	Latin hypercube	Latinalainen hyperkuutio
+	Latin hypercube sampling	Latinalainen hyperkuutio -otanta
+	Latin hypercube sampling spreads each input's draws evenly over its range, so the results settle with fewer trials. With it, or with correlated inputs, trials run in whole batches of 1,000.	Latinalainen hyperkuutio -otanta levittää kunkin syötteen arvonnat tasaisesti sen vaihteluvälille, joten tulokset vakiintuvat pienemmällä määrällä iteraatioita. Sen tai korreloitujen syötteiden kanssa iteraatiot ajetaan kokonaisina 1 000 iteraation erinä.
+	Monte Carlo model	Monte Carlo -malli
+	New Monte Carlo Model	Uusi Monte Carlo -malli
+	New Monte Carlo model	Uusi Monte Carlo -malli
+	New correlation	Uusi korrelaatio
+	New input	Uusi syöte
+	New output	Uusi tuloste
+	No inputs yet: add one below, or paste a table of them.	Ei vielä syötteitä: lisää yksi alla tai liitä niistä taulukko.
+	No interval: too few batches of trials for one.	Ei väliä: liian vähän iteraatioeriä sen laskemiseen.
+	No outputs yet: add one below.	Ei vielä tulosteita: lisää yksi alla.
+	None yet	Ei vielä yhtään
+	One input per line, as name, distribution, parameters and unit, copied from a spreadsheet or written as CSV: for example labour,triangular,min=80;mode=100;max=150,h.	Yksi syöte riviä kohden muodossa nimi, jakauma, parametrit ja yksikkö, kopioituna taulukkolaskentaohjelmasta tai kirjoitettuna CSV-muodossa: esimerkiksi labour,triangular,min=80;mode=100;max=150,h.
+	Outputs	Tulosteet
+	Paste inputs from a table	Liitä syötteet taulukosta
+	Project budget	Projektin budjetti
+	Rank correlation	Järjestyskorrelaatio
+	Remove the correlation of {a} and {b}	Poista syötteiden {a} ja {b} korrelaatio
+	Remove the input {name}	Poista syöte {name}
+	Remove the output {name}	Poista tuloste {name}
+	Replace every input	Korvaa kaikki syötteet
+	Sampling	Otanta
+	Second input	Toinen syöte
+	Share of trials at or below each value	Niiden iteraatioiden osuus, jotka ovat kunkin arvon suuruisia tai pienempiä
+	Target {value}	Tavoite {value}
+	The chance is under {hi}, with 95% confidence.	Todennäköisyys on alle {hi} 95 %:n luottamuksella.
+	The model: its inputs, outputs and trials	Malli: sen syötteet, tulosteet ja iteraatiot
+	The number of trials was chosen from the results, so an interval may cover the true value less often than 95% of the time.	Iteraatioiden määrä valittiin tulosten perusteella, joten väli voi kattaa todellisen arvon harvemmin kuin 95 %:ssa tapauksista.
+	The trials above come first; more follow in batches until every output's mean is within that share of itself, or the most is reached.	Yllä olevat iteraatiot tehdään ensin; lisää seuraa erinä, kunnes jokaisen tulosteen keskiarvo on tämän osuuden sisällä itsestään tai enimmäismäärä saavutetaan.
+	Trials and sampling	Iteraatiot ja otanta
+	Uncertain inputs instead of single guesses: the chance of an overrun, not one total.	Epävarmat syötteet yksittäisten arvausten sijaan: ylityksen todennäköisyys, ei yksi kokonaissumma.
+	Will the project come in under budget?	Pysyykö projekti budjetissa?
+	a name, such as cost	nimi, esimerkiksi kustannus
+	a name, such as labour	nimi, esimerkiksi työ
+	random sampling	satunnaisotanta
+	{asked} trials were asked for; with Latin hypercube sampling or correlated inputs a run is whole batches of {size}, so {n} ran.	Pyydettiin {asked} iteraatiota; latinalaisella hyperkuutio-otannalla tai korreloiduilla syötteillä ajo koostuu kokonaisista {size} iteraation eristä, joten tehtiin {n}.
+	{a} and {b}: {achieved} in the trials, {target} asked for	{a} ja {b}: iteraatioissa {achieved}, pyydetty {target}
+	{output} was less than {value} in none of the {n} trials.	{output} ei ollut pienempi kuin {value} yhdessäkään {n} iteraatiosta.
+	{output} was more than {value} in none of the {n} trials.	{output} ei ollut suurempi kuin {value} yhdessäkään {n} iteraatiosta.
+@plural	Each ± is the half-width of the 95% interval of the mean across {n} independent batch of {size} trials. Latin hypercube sampling and correlated inputs make the trials within a batch depend on each other, so each batch counts as one.|Each ± is the half-width of the 95% interval of the mean across {n} independent batches of {size} trials. Latin hypercube sampling and correlated inputs make the trials within a batch depend on each other, so each batch counts as one.	Jokainen ± on keskiarvon 95 %:n välin puolileveys {n} riippumattoman {size} iteraation erän yli. Latinalainen hyperkuutio -otanta ja korreloidut syötteet tekevät erän iteraatioista toisistaan riippuvia, joten kukin erä lasketaan yhdeksi.|Jokainen ± on keskiarvon 95 %:n välin puolileveys {n} riippumattoman {size} iteraation erän yli. Latinalainen hyperkuutio -otanta ja korreloidut syötteet tekevät erän iteraatioista toisistaan riippuvia, joten kukin erä lasketaan yhdeksi.
+@plural	Each ± is the half-width of the 95% interval of the mean across {n} independent trial.|Each ± is the half-width of the 95% interval of the mean across {n} independent trials.	Jokainen ± on keskiarvon 95 %:n välin puolileveys {n} riippumattoman iteraation yli.|Jokainen ± on keskiarvon 95 %:n välin puolileveys {n} riippumattoman iteraation yli.
+@plural	Finished {n} trial|Finished {n} trials	{n} iteraatio valmistui|{n} iteraatiota valmistui
+@plural	Imported {n} input|Imported {n} inputs	{n} syöte tuotu|{n} syötettä tuotu
+@plural	Makes {n} trial from seed {seed}: each draws every input once and works out every output.|Makes {n} trials from seed {seed}: each draws every input once and works out every output.	Tekee {n} iteraation siemenestä {seed}: se arpoo jokaisen syötteen kerran ja laskee jokaisen tulosteen.|Tekee {n} iteraatiota siemenestä {seed}: kukin arpoo jokaisen syötteen kerran ja laskee jokaisen tulosteen.
+@plural	Stopped after {n} trial: every output's mean is within ±{share} of itself.|Stopped after {n} trials: every output's mean is within ±{share} of itself.	Pysäytetty {n} iteraation jälkeen: jokaisen tulosteen keskiarvo on ±{share} sisällä itsestään.|Pysäytetty {n} iteraation jälkeen: jokaisen tulosteen keskiarvo on ±{share} sisällä itsestään.
+@plural	Stopped at the most allowed, {n} trial, before every output's mean was within ±{share} of itself.|Stopped at the most allowed, {n} trials, before every output's mean was within ±{share} of itself.	Pysäytetty sallittuun enimmäismäärään, {n} iteraatioon, ennen kuin jokaisen tulosteen keskiarvo oli ±{share} sisällä itsestään.|Pysäytetty sallittuun enimmäismäärään, {n} iteraatioon, ennen kuin jokaisen tulosteen keskiarvo oli ±{share} sisällä itsestään.
+@plural	{done} of {n} trial made|{done} of {n} trials made	{done}/{n} iteraatio tehty|{done}/{n} iteraatiota tehty
+@plural	{n} trial gave no number (a division by zero, say) and is left out.|{n} trials gave no number (a division by zero, say) and are left out.	{n} iteraatio ei antanut lukua (esimerkiksi nollalla jakaminen), ja se jätetään pois.|{n} iteraatiota ei antanut lukua (esimerkiksi nollalla jakaminen), ja ne jätetään pois.
+@plural	{n} trial · seed {seed} · {sampling}|{n} trials · seed {seed} · {sampling}	{n} iteraatio · siemen {seed} · {sampling}|{n} iteraatiota · siemen {seed} · {sampling}
+@plural	{n} trial · seed {seed}|{n} trials · seed {seed}	{n} iteraatio · siemen {seed}|{n} iteraatiota · siemen {seed}

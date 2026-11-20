@@ -1208,3 +1208,80 @@ unit	yr	a
 	Entities inside at the start are given for a block that does not exist. Remove them.	Sunt indicate entități în interior la început pentru un bloc care nu există. Eliminați-le.
 	{block} cannot have entities inside at the start: only a task or a batch can. Remove its “Inside at the start”.	Blocul {block} nu poate avea entități în interior la început: poate doar o sarcină sau un lot. Eliminați-i „În interior la început”.
 	{block} has {count} entities inside at the start, but it holds at most {most}, its units and its waiting room. Set “Inside at the start” to {most} or fewer, or make the waiting room larger.	Blocul {block} are {count} entități în interior la început, dar încape cel mult {most}, unitățile și sala sa de așteptare. Setați „În interior la început” la {most} sau mai puțin ori măriți sala de așteptare.
+# Monte Carlo models in the window (ROADMAP M4.1, part 2)
+	95% interval of the chance: {lo} to {hi}.	Interval de 95% al șansei: de la {lo} la {hi}.
+	A Monte Carlo model: uncertain durations, day rate and materials, and the chance the cost or the duration runs over.	Un model Monte Carlo: durate incerte, tarif zilnic și materiale, și șansa ca costul sau durata să fie depășite.
+	A calculation with uncertain inputs, not a process: each trial draws every input once and works out every output from them.	Un calcul cu intrări incerte, nu un proces: fiecare iterație extrage fiecare intrare o dată și calculează din ele fiecare ieșire.
+	A rank correlation between two inputs, from -1 to 1: above 0 they tend to be high together, below 0 one tends to be high when the other is low. Inputs not paired here are independent; 0 removes a pair.	O corelație a rangurilor între două intrări, de la -1 la 1: peste 0 tind să fie mari împreună, sub 0 una tinde să fie mare când cealaltă e mică. Intrările care nu sunt împerecheate aici sunt independente; 0 elimină o pereche.
+	A {percent} chance that {output} is less than {value}.	O șansă de {percent} ca {output} să fie mai mic decât {value}.
+	A {percent} chance that {output} is more than {value}.	O șansă de {percent} ca {output} să fie mai mare decât {value}.
+	About a 1 in {odds} chance that {output} is less than {value} ({percent}).	Cam 1 șansă din {odds} ca {output} să fie mai mic decât {value} ({percent}).
+	About a 1 in {odds} chance that {output} is more than {value} ({percent}).	Cam 1 șansă din {odds} ca {output} să fie mai mare decât {value} ({percent}).
+	Add correlation	Adaugă corelație
+	Add input	Adaugă intrare
+	Add output	Adaugă ieșire
+	At most, trials	Cel mult, iterații
+	Correlations	Corelații
+	Download inputs (CSV)	Descarcă intrările (CSV)
+	Each input is a distribution: every trial draws one value from it.	Fiecare intrare este o distribuție: fiecare iterație extrage o valoare din ea.
+	Each output is worked out in every trial from the inputs and the outputs above it, each named as $name: for example $labour * $rate + $materials. Give it a target to see the chance of meeting it.	Fiecare ieșire se calculează în fiecare iterație din intrări și din ieșirile de deasupra ei, fiecare numită $name: de exemplu $labour * $rate + $materials. Dați-i o țintă pentru a vedea șansa de a o atinge.
+	Export inputs (CSV)	Exportă intrările (CSV)
+	First input	Prima intrare
+	How many trials	Câte iterații
+	How many trials gave each value	Câte iterații au dat fiecare valoare
+	Import inputs	Importă intrări
+	In 9 trials out of 10, {output} is between {low} and {high}; the mean is {mean} ± {half_width}.	În 9 iterații din 10, {output} este între {low} și {high}; media este {mean} ± {half_width}.
+	In 9 trials out of 10, {output} is between {low} and {high}; the mean is {mean}.	În 9 iterații din 10, {output} este între {low} și {high}; media este {mean}.
+	Inputs	Intrări
+	Inputs as a table	Intrările ca tabel
+	Latin hypercube	Hipercub latin
+	Latin hypercube sampling	Eșantionare prin hipercub latin
+	Latin hypercube sampling spreads each input's draws evenly over its range, so the results settle with fewer trials. With it, or with correlated inputs, trials run in whole batches of 1,000.	Eșantionarea prin hipercub latin repartizează uniform extragerile fiecărei intrări pe intervalul ei, astfel încât rezultatele se stabilizează cu mai puține iterații. Cu ea, sau cu intrări corelate, iterațiile rulează în loturi întregi de 1.000.
+	Monte Carlo model	Model Monte Carlo
+	New Monte Carlo Model	Model Monte Carlo nou
+	New Monte Carlo model	Model Monte Carlo nou
+	New correlation	Corelație nouă
+	New input	Intrare nouă
+	New output	Ieșire nouă
+	No inputs yet: add one below, or paste a table of them.	Încă nicio intrare: adăugați una mai jos sau lipiți un tabel cu ele.
+	No interval: too few batches of trials for one.	Niciun interval: prea puține loturi de iterații pentru unul.
+	No outputs yet: add one below.	Încă nicio ieșire: adăugați una mai jos.
+	None yet	Încă niciunul
+	One input per line, as name, distribution, parameters and unit, copied from a spreadsheet or written as CSV: for example labour,triangular,min=80;mode=100;max=150,h.	O intrare pe linie, ca nume, distribuție, parametri și unitate, copiată dintr-o foaie de calcul sau scrisă ca CSV: de exemplu labour,triangular,min=80;mode=100;max=150,h.
+	Outputs	Ieșiri
+	Paste inputs from a table	Lipește intrări dintr-un tabel
+	Project budget	Bugetul proiectului
+	Rank correlation	Corelație a rangurilor
+	Remove the correlation of {a} and {b}	Elimină corelația dintre {a} și {b}
+	Remove the input {name}	Elimină intrarea {name}
+	Remove the output {name}	Elimină ieșirea {name}
+	Replace every input	Înlocuiește toate intrările
+	Sampling	Eșantionare
+	Second input	A doua intrare
+	Share of trials at or below each value	Ponderea iterațiilor la sau sub fiecare valoare
+	Target {value}	Țintă {value}
+	The chance is under {hi}, with 95% confidence.	Șansa este sub {hi}, cu 95% încredere.
+	The model: its inputs, outputs and trials	Modelul: intrările, ieșirile și iterațiile sale
+	The number of trials was chosen from the results, so an interval may cover the true value less often than 95% of the time.	Numărul de iterații a fost ales pe baza rezultatelor, deci un interval poate acoperi valoarea reală mai rar decât în 95% din cazuri.
+	The trials above come first; more follow in batches until every output's mean is within that share of itself, or the most is reached.	Iterațiile de mai sus se fac primele; apoi urmează altele în loturi, până când media fiecărei ieșiri ajunge în limita acelei ponderi din ea însăși sau se atinge maximul.
+	Trials and sampling	Iterații și eșantionare
+	Uncertain inputs instead of single guesses: the chance of an overrun, not one total.	Intrări incerte în loc de estimări unice: șansa unei depășiri, nu un singur total.
+	Will the project come in under budget?	Se va încadra proiectul în buget?
+	a name, such as cost	un nume, de exemplu cost
+	a name, such as labour	un nume, de exemplu manoperă
+	random sampling	eșantionare aleatoare
+	{asked} trials were asked for; with Latin hypercube sampling or correlated inputs a run is whole batches of {size}, so {n} ran.	S-au cerut {asked} iterații; cu eșantionare prin hipercub latin sau intrări corelate, o rulare constă din loturi întregi de {size}, așa că s-au efectuat {n}.
+	{a} and {b}: {achieved} in the trials, {target} asked for	{a} și {b}: {achieved} în iterații, {target} cerut
+	{output} was less than {value} in none of the {n} trials.	{output} nu a fost mai mic decât {value} în niciuna dintre cele {n} iterații.
+	{output} was more than {value} in none of the {n} trials.	{output} nu a fost mai mare decât {value} în niciuna dintre cele {n} iterații.
+@plural	Each ± is the half-width of the 95% interval of the mean across {n} independent batch of {size} trials. Latin hypercube sampling and correlated inputs make the trials within a batch depend on each other, so each batch counts as one.|Each ± is the half-width of the 95% interval of the mean across {n} independent batches of {size} trials. Latin hypercube sampling and correlated inputs make the trials within a batch depend on each other, so each batch counts as one.	Fiecare ± este semilățimea intervalului de 95% al mediei pe {n} lot independent de {size} iterații. Eșantionarea prin hipercub latin și intrările corelate fac iterațiile dintr-un lot dependente unele de altele, deci fiecare lot contează ca unul.|Fiecare ± este semilățimea intervalului de 95% al mediei pe {n} loturi independente de {size} iterații. Eșantionarea prin hipercub latin și intrările corelate fac iterațiile dintr-un lot dependente unele de altele, deci fiecare lot contează ca unul.|Fiecare ± este semilățimea intervalului de 95% al mediei pe {n} de loturi independente de {size} iterații. Eșantionarea prin hipercub latin și intrările corelate fac iterațiile dintr-un lot dependente unele de altele, deci fiecare lot contează ca unul.
+@plural	Each ± is the half-width of the 95% interval of the mean across {n} independent trial.|Each ± is the half-width of the 95% interval of the mean across {n} independent trials.	Fiecare ± este semilățimea intervalului de 95% al mediei pe {n} iterație independentă.|Fiecare ± este semilățimea intervalului de 95% al mediei pe {n} iterații independente.|Fiecare ± este semilățimea intervalului de 95% al mediei pe {n} de iterații independente.
+@plural	Finished {n} trial|Finished {n} trials	S-a încheiat {n} iterație|S-au încheiat {n} iterații|S-au încheiat {n} de iterații
+@plural	Imported {n} input|Imported {n} inputs	S-a importat {n} intrare|S-au importat {n} intrări|S-au importat {n} de intrări
+@plural	Makes {n} trial from seed {seed}: each draws every input once and works out every output.|Makes {n} trials from seed {seed}: each draws every input once and works out every output.	Efectuează {n} iterație de la sămânța {seed}: fiecare extrage fiecare intrare o dată și calculează fiecare ieșire.|Efectuează {n} iterații de la sămânța {seed}: fiecare extrage fiecare intrare o dată și calculează fiecare ieșire.|Efectuează {n} de iterații de la sămânța {seed}: fiecare extrage fiecare intrare o dată și calculează fiecare ieșire.
+@plural	Stopped after {n} trial: every output's mean is within ±{share} of itself.|Stopped after {n} trials: every output's mean is within ±{share} of itself.	Oprit după {n} iterație: media fiecărei ieșiri este în limita a ±{share} din ea însăși.|Oprit după {n} iterații: media fiecărei ieșiri este în limita a ±{share} din ea însăși.|Oprit după {n} de iterații: media fiecărei ieșiri este în limita a ±{share} din ea însăși.
+@plural	Stopped at the most allowed, {n} trial, before every output's mean was within ±{share} of itself.|Stopped at the most allowed, {n} trials, before every output's mean was within ±{share} of itself.	Oprit la maximul permis, {n} iterație, înainte ca media fiecărei ieșiri să fie în limita a ±{share} din ea însăși.|Oprit la maximul permis, {n} iterații, înainte ca media fiecărei ieșiri să fie în limita a ±{share} din ea însăși.|Oprit la maximul permis, {n} de iterații, înainte ca media fiecărei ieșiri să fie în limita a ±{share} din ea însăși.
+@plural	{done} of {n} trial made|{done} of {n} trials made	{done} din {n} iterație efectuată|{done} din {n} iterații efectuate|{done} din {n} de iterații efectuate
+@plural	{n} trial gave no number (a division by zero, say) and is left out.|{n} trials gave no number (a division by zero, say) and are left out.	{n} iterație nu a dat niciun număr (o împărțire la zero, de exemplu) și este omisă.|{n} iterații nu au dat niciun număr (o împărțire la zero, de exemplu) și sunt omise.|{n} de iterații nu au dat niciun număr (o împărțire la zero, de exemplu) și sunt omise.
+@plural	{n} trial · seed {seed} · {sampling}|{n} trials · seed {seed} · {sampling}	{n} iterație · sămânță {seed} · {sampling}|{n} iterații · sămânță {seed} · {sampling}|{n} de iterații · sămânță {seed} · {sampling}
+@plural	{n} trial · seed {seed}|{n} trials · seed {seed}	{n} iterație · sămânță {seed}|{n} iterații · sămânță {seed}|{n} de iterații · sămânță {seed}

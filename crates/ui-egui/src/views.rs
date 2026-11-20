@@ -347,7 +347,7 @@ impl App {
 
     /// The line over results whose model has changed since their run: they stay on show, marked,
     /// with Run again. Returns whether Run again was clicked.
-    fn out_of_date_line(&self, ui: &mut egui::Ui) -> bool {
+    pub(crate) fn out_of_date_line(&self, ui: &mut egui::Ui) -> bool {
         let p = theme::palette(ui.ctx());
         let mut again = false;
         egui::Frame::new()
@@ -425,6 +425,10 @@ impl App {
     /// The model as its process: each element as its BPMN shape on one line from arrival to
     /// departure, then the experiment it runs.
     pub(crate) fn outline(&mut self, ui: &mut egui::Ui, p: &theme::Palette) {
+        if self.is_monte_carlo() {
+            self.mc_outline(ui, p);
+            return;
+        }
         let problems = self.problems();
         let model = self.engine.model();
         let name = if model.name.is_empty() {
@@ -627,15 +631,22 @@ impl App {
                 .fill(theme::palette(ui.ctx()).accent),
         );
         ui.add_space(6.0);
-        ui.label(theme::weak(
-            ui,
+        let progress = if self.is_monte_carlo() {
+            tnf(
+                total,
+                "{done} of {n} trial made",
+                "{done} of {n} trials made",
+                &[("done", &results::grouped(done as f64))],
+            )
+        } else {
             tnf(
                 total,
                 "{done} of {n} run finished",
                 "{done} of {n} runs finished",
                 &[("done", &done.to_string())],
-            ),
-        ));
+            )
+        };
+        ui.label(theme::weak(ui, progress));
         ui.add_space(12.0);
         if ui
             .add(theme::secondary(ui, t("Cancel run")))

@@ -1208,3 +1208,80 @@ unit	yr	বছর
 	Entities inside at the start are given for a block that does not exist. Remove them.	শুরুতে ভেতরে থাকা সত্তা এমন একটি ব্লকের জন্য দেওয়া হয়েছে যা নেই। সেগুলো সরান।
 	{block} cannot have entities inside at the start: only a task or a batch can. Remove its “Inside at the start”.	{block}-এ শুরুতে ভেতরে সত্তা থাকতে পারে না: কেবল কাজ বা ব্যাচে পারে। এর “শুরুতে ভেতরে” সরান।
 	{block} has {count} entities inside at the start, but it holds at most {most}, its units and its waiting room. Set “Inside at the start” to {most} or fewer, or make the waiting room larger.	{block}-এ শুরুতে ভেতরে {count}টি সত্তা আছে, কিন্তু এটি সর্বোচ্চ {most}টি ধরে, এর একক ও অপেক্ষার ঘর মিলিয়ে। “শুরুতে ভেতরে” {most} বা তার কম করুন, অথবা অপেক্ষার ঘর বড় করুন।
+# Monte Carlo models in the window (ROADMAP M4.1, part 2)
+	95% interval of the chance: {lo} to {hi}.	সম্ভাবনার ৯৫% ব্যবধান: {lo} থেকে {hi}।
+	A Monte Carlo model: uncertain durations, day rate and materials, and the chance the cost or the duration runs over.	একটি মন্টে কার্লো মডেল: অনিশ্চিত সময়কাল, দৈনিক হার ও উপকরণ, এবং খরচ বা সময়কাল ছাড়িয়ে যাওয়ার সম্ভাবনা।
+	A calculation with uncertain inputs, not a process: each trial draws every input once and works out every output from them.	অনিশ্চিত ইনপুটসহ একটি হিসাব, কোনো প্রক্রিয়া নয়: প্রতিটি পরীক্ষণ প্রতিটি ইনপুট একবার করে টানে এবং সেগুলো থেকে প্রতিটি আউটপুট হিসাব করে।
+	A rank correlation between two inputs, from -1 to 1: above 0 they tend to be high together, below 0 one tends to be high when the other is low. Inputs not paired here are independent; 0 removes a pair.	দুটি ইনপুটের মধ্যে একটি ক্রম সহসম্পর্ক, -১ থেকে ১ পর্যন্ত: ০-এর উপরে হলে দুটি একসঙ্গে বেশি হওয়ার প্রবণতা থাকে, ০-এর নিচে হলে একটি বেশি হলে অন্যটি কম হওয়ার প্রবণতা থাকে। এখানে জোড়া না বাঁধা ইনপুটগুলো স্বাধীন; ০ একটি জোড়া সরিয়ে দেয়।
+	A {percent} chance that {output} is less than {value}.	{output} {value}-এর কম হওয়ার সম্ভাবনা {percent}।
+	A {percent} chance that {output} is more than {value}.	{output} {value}-এর বেশি হওয়ার সম্ভাবনা {percent}।
+	About a 1 in {odds} chance that {output} is less than {value} ({percent}).	{output} {value}-এর কম হওয়ার সম্ভাবনা মোটামুটি {odds}-এ ১ ({percent})।
+	About a 1 in {odds} chance that {output} is more than {value} ({percent}).	{output} {value}-এর বেশি হওয়ার সম্ভাবনা মোটামুটি {odds}-এ ১ ({percent})।
+	Add correlation	সহসম্পর্ক যোগ করুন
+	Add input	ইনপুট যোগ করুন
+	Add output	আউটপুট যোগ করুন
+	At most, trials	সর্বোচ্চ পরীক্ষণ
+	Correlations	সহসম্পর্ক
+	Download inputs (CSV)	ইনপুট ডাউনলোড করুন (CSV)
+	Each input is a distribution: every trial draws one value from it.	প্রতিটি ইনপুট একটি বণ্টন: প্রতিটি পরীক্ষণ এটি থেকে একটি মান টানে।
+	Each output is worked out in every trial from the inputs and the outputs above it, each named as $name: for example $labour * $rate + $materials. Give it a target to see the chance of meeting it.	প্রতিটি আউটপুট প্রতিটি পরীক্ষণে ইনপুটগুলো এবং এর উপরের আউটপুটগুলো থেকে হিসাব করা হয়, প্রতিটির নাম $name হিসেবে লেখা হয়: যেমন $labour * $rate + $materials। এটি পূরণ হওয়ার সম্ভাবনা দেখতে একটি লক্ষ্য দিন।
+	Export inputs (CSV)	ইনপুট রপ্তানি করুন (CSV)
+	First input	প্রথম ইনপুট
+	How many trials	কতটি পরীক্ষণ
+	How many trials gave each value	কতটি পরীক্ষণে প্রতিটি মান এসেছে
+	Import inputs	ইনপুট আমদানি করুন
+	In 9 trials out of 10, {output} is between {low} and {high}; the mean is {mean} ± {half_width}.	১০টির মধ্যে ৯টি পরীক্ষণে {output} {low} থেকে {high}-এর মধ্যে থাকে; গড় {mean} ± {half_width}।
+	In 9 trials out of 10, {output} is between {low} and {high}; the mean is {mean}.	১০টির মধ্যে ৯টি পরীক্ষণে {output} {low} থেকে {high}-এর মধ্যে থাকে; গড় {mean}।
+	Inputs	ইনপুট
+	Inputs as a table	সারণি হিসেবে ইনপুট
+	Latin hypercube	ল্যাটিন হাইপারকিউব
+	Latin hypercube sampling	ল্যাটিন হাইপারকিউব নমুনায়ন
+	Latin hypercube sampling spreads each input's draws evenly over its range, so the results settle with fewer trials. With it, or with correlated inputs, trials run in whole batches of 1,000.	ল্যাটিন হাইপারকিউব নমুনায়ন প্রতিটি ইনপুটের টানা মানগুলো তার পরিসর জুড়ে সমানভাবে ছড়িয়ে দেয়, তাই কম পরীক্ষণেই ফলাফল স্থির হয়। এটি ব্যবহার করলে, বা ইনপুটগুলো সহসম্পর্কিত হলে, পরীক্ষণগুলো ১,০০০টির পূর্ণ ব্যাচে চলে।
+	Monte Carlo model	মন্টে কার্লো মডেল
+	New Monte Carlo Model	নতুন মন্টে কার্লো মডেল
+	New Monte Carlo model	নতুন মন্টে কার্লো মডেল
+	New correlation	নতুন সহসম্পর্ক
+	New input	নতুন ইনপুট
+	New output	নতুন আউটপুট
+	No inputs yet: add one below, or paste a table of them.	এখনও কোনো ইনপুট নেই: নিচে একটি যোগ করুন, বা সেগুলোর একটি সারণি পেস্ট করুন।
+	No interval: too few batches of trials for one.	কোনো ব্যবধান নেই: এর জন্য পরীক্ষণের ব্যাচ খুব কম।
+	No outputs yet: add one below.	এখনও কোনো আউটপুট নেই: নিচে একটি যোগ করুন।
+	None yet	এখনও কিছু নেই
+	One input per line, as name, distribution, parameters and unit, copied from a spreadsheet or written as CSV: for example labour,triangular,min=80;mode=100;max=150,h.	প্রতি লাইনে একটি ইনপুট, নাম, বণ্টন, প্যারামিটার ও একক হিসেবে, স্প্রেডশিট থেকে কপি করা বা CSV হিসেবে লেখা: যেমন labour,triangular,min=80;mode=100;max=150,h।
+	Outputs	আউটপুট
+	Paste inputs from a table	সারণি থেকে ইনপুট পেস্ট করুন
+	Project budget	প্রকল্পের বাজেট
+	Rank correlation	ক্রম সহসম্পর্ক
+	Remove the correlation of {a} and {b}	{a} ও {b}-এর সহসম্পর্ক সরান
+	Remove the input {name}	ইনপুট {name} সরান
+	Remove the output {name}	আউটপুট {name} সরান
+	Replace every input	সব ইনপুট প্রতিস্থাপন করুন
+	Sampling	নমুনায়ন
+	Second input	দ্বিতীয় ইনপুট
+	Share of trials at or below each value	প্রতিটি মান বা তার কম পাওয়া পরীক্ষণের অংশ
+	Target {value}	লক্ষ্য {value}
+	The chance is under {hi}, with 95% confidence.	৯৫% আস্থায় সম্ভাবনা {hi}-এর কম।
+	The model: its inputs, outputs and trials	মডেল: এর ইনপুট, আউটপুট ও পরীক্ষণ
+	The number of trials was chosen from the results, so an interval may cover the true value less often than 95% of the time.	পরীক্ষণের সংখ্যা ফলাফল দেখে বেছে নেওয়া হয়েছে, তাই একটি ব্যবধান প্রকৃত মানকে ৯৫% ক্ষেত্রের চেয়ে কম বার ধারণ করতে পারে।
+	The trials above come first; more follow in batches until every output's mean is within that share of itself, or the most is reached.	উপরের পরীক্ষণগুলো আগে হয়; তারপর ব্যাচে ব্যাচে আরও হয়, যতক্ষণ না প্রতিটি আউটপুটের গড় নিজের সেই অংশের মধ্যে আসে, বা সর্বোচ্চ সংখ্যায় পৌঁছায়।
+	Trials and sampling	পরীক্ষণ ও নমুনায়ন
+	Uncertain inputs instead of single guesses: the chance of an overrun, not one total.	একক অনুমানের বদলে অনিশ্চিত ইনপুট: একটি মোট নয়, বরং ছাড়িয়ে যাওয়ার সম্ভাবনা।
+	Will the project come in under budget?	প্রকল্পটি কি বাজেটের মধ্যে শেষ হবে?
+	a name, such as cost	একটি নাম, যেমন খরচ
+	a name, such as labour	একটি নাম, যেমন শ্রম
+	random sampling	দৈব নমুনায়ন
+	{asked} trials were asked for; with Latin hypercube sampling or correlated inputs a run is whole batches of {size}, so {n} ran.	{asked}টি পরীক্ষণ চাওয়া হয়েছিল; ল্যাটিন হাইপারকিউব নমুনায়ন বা সহসম্পর্কিত ইনপুটে একটি চালনা {size}টির পূর্ণ ব্যাচ নিয়ে হয়, তাই {n}টি চলেছে।
+	{a} and {b}: {achieved} in the trials, {target} asked for	{a} ও {b}: পরীক্ষণে {achieved}, চাওয়া হয়েছিল {target}
+	{output} was less than {value} in none of the {n} trials.	{n}টি পরীক্ষণের কোনোটিতেই {output} {value}-এর কম হয়নি।
+	{output} was more than {value} in none of the {n} trials.	{n}টি পরীক্ষণের কোনোটিতেই {output} {value}-এর বেশি হয়নি।
+@plural	Each ± is the half-width of the 95% interval of the mean across {n} independent batch of {size} trials. Latin hypercube sampling and correlated inputs make the trials within a batch depend on each other, so each batch counts as one.|Each ± is the half-width of the 95% interval of the mean across {n} independent batches of {size} trials. Latin hypercube sampling and correlated inputs make the trials within a batch depend on each other, so each batch counts as one.	প্রতিটি ± হলো {size}টি পরীক্ষণের {n}টি স্বাধীন ব্যাচ জুড়ে গড়ের ৯৫% ব্যবধানের অর্ধ-প্রস্থ। ল্যাটিন হাইপারকিউব নমুনায়ন ও সহসম্পর্কিত ইনপুট একটি ব্যাচের পরীক্ষণগুলোকে পরস্পরের উপর নির্ভরশীল করে, তাই প্রতিটি ব্যাচ একটি হিসেবে গণ্য হয়।|প্রতিটি ± হলো {size}টি পরীক্ষণের {n}টি স্বাধীন ব্যাচ জুড়ে গড়ের ৯৫% ব্যবধানের অর্ধ-প্রস্থ। ল্যাটিন হাইপারকিউব নমুনায়ন ও সহসম্পর্কিত ইনপুট একটি ব্যাচের পরীক্ষণগুলোকে পরস্পরের উপর নির্ভরশীল করে, তাই প্রতিটি ব্যাচ একটি হিসেবে গণ্য হয়।
+@plural	Each ± is the half-width of the 95% interval of the mean across {n} independent trial.|Each ± is the half-width of the 95% interval of the mean across {n} independent trials.	প্রতিটি ± হলো {n}টি স্বাধীন পরীক্ষণ জুড়ে গড়ের ৯৫% ব্যবধানের অর্ধ-প্রস্থ।|প্রতিটি ± হলো {n}টি স্বাধীন পরীক্ষণ জুড়ে গড়ের ৯৫% ব্যবধানের অর্ধ-প্রস্থ।
+@plural	Finished {n} trial|Finished {n} trials	{n}টি পরীক্ষণ সম্পন্ন হয়েছে|{n}টি পরীক্ষণ সম্পন্ন হয়েছে
+@plural	Imported {n} input|Imported {n} inputs	{n}টি ইনপুট আমদানি করা হয়েছে|{n}টি ইনপুট আমদানি করা হয়েছে
+@plural	Makes {n} trial from seed {seed}: each draws every input once and works out every output.|Makes {n} trials from seed {seed}: each draws every input once and works out every output.	বীজ {seed} থেকে {n}টি পরীক্ষণ তৈরি করে: প্রতিটি প্রতিটি ইনপুট একবার টানে এবং প্রতিটি আউটপুট হিসাব করে।|বীজ {seed} থেকে {n}টি পরীক্ষণ তৈরি করে: প্রতিটি প্রতিটি ইনপুট একবার টানে এবং প্রতিটি আউটপুট হিসাব করে।
+@plural	Stopped after {n} trial: every output's mean is within ±{share} of itself.|Stopped after {n} trials: every output's mean is within ±{share} of itself.	{n}টি পরীক্ষণের পর থেমেছে: প্রতিটি আউটপুটের গড় নিজের ±{share}-এর মধ্যে।|{n}টি পরীক্ষণের পর থেমেছে: প্রতিটি আউটপুটের গড় নিজের ±{share}-এর মধ্যে।
+@plural	Stopped at the most allowed, {n} trial, before every output's mean was within ±{share} of itself.|Stopped at the most allowed, {n} trials, before every output's mean was within ±{share} of itself.	অনুমোদিত সর্বোচ্চ {n}টি পরীক্ষণে থেমেছে, প্রতিটি আউটপুটের গড় নিজের ±{share}-এর মধ্যে আসার আগেই।|অনুমোদিত সর্বোচ্চ {n}টি পরীক্ষণে থেমেছে, প্রতিটি আউটপুটের গড় নিজের ±{share}-এর মধ্যে আসার আগেই।
+@plural	{done} of {n} trial made|{done} of {n} trials made	{n}টির মধ্যে {done}টি পরীক্ষণ হয়েছে|{n}টির মধ্যে {done}টি পরীক্ষণ হয়েছে
+@plural	{n} trial gave no number (a division by zero, say) and is left out.|{n} trials gave no number (a division by zero, say) and are left out.	{n}টি পরীক্ষণ কোনো সংখ্যা দেয়নি (যেমন শূন্য দিয়ে ভাগ) এবং বাদ দেওয়া হয়েছে।|{n}টি পরীক্ষণ কোনো সংখ্যা দেয়নি (যেমন শূন্য দিয়ে ভাগ) এবং বাদ দেওয়া হয়েছে।
+@plural	{n} trial · seed {seed} · {sampling}|{n} trials · seed {seed} · {sampling}	{n}টি পরীক্ষণ · বীজ {seed} · {sampling}|{n}টি পরীক্ষণ · বীজ {seed} · {sampling}
+@plural	{n} trial · seed {seed}|{n} trials · seed {seed}	{n}টি পরীক্ষণ · বীজ {seed}|{n}টি পরীক্ষণ · বীজ {seed}

@@ -12,7 +12,9 @@
 //! - the machine repair crew against the finite-source chain M/M/R//6;
 //! - inspection with rework against the product form of its Jackson network;
 //! - the project's finish against the maximum of its activities' exponential durations;
-//! - three desks with the same mean service time against Pollaczek–Khinchine.
+//! - three desks with the same mean service time against Pollaczek–Khinchine;
+//! - the project budget, a Monte Carlo model, against the exact mean and spread of a sum of
+//!   independent triangular durations and the exact mean of its cost.
 //!
 //! The first five files were written by `stochcraft-cli new -t <name>`; the others were built with
 //! the same engine commands and saved, with their comparison scenarios (each inheriting the first)
@@ -569,4 +571,64 @@ fn the_same_mean_with_more_spread_waits_longer_by_pollaczek_khinchine() {
             pollaczek_khinchine(lambda, 1.0, second),
         );
     }
+}
+
+/// The project budget, a Monte Carlo model: the duration is the sum of two independent
+/// triangular durations, so its mean (8 + 10 + 16)/3 + (15 + 20 + 32)/3 = 101/3 days and its
+/// variance, each triangular's (a² + b² + c² − ab − ac − bc)/18, are exact; the cost is duration
+/// × day rate + materials with the rate independent of the durations (it is correlated with the
+/// materials only), so its mean is exact too: 101/3 × 900 + 12,000 = 42,300 USD.
+#[test]
+fn the_project_budget_matches_its_exact_means() {
+    let path = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../tests/models/budget.bpmn");
+    let mut e = Engine::new();
+    let opened = ok(
+        &mut e,
+        "file.open",
+        json!({ "path": path.to_string_lossy() }),
+    );
+    assert_eq!(opened["notes"], json!([]), "{opened}");
+    assert_eq!(opened["kind"], "monte_carlo", "{opened}");
+    assert_eq!(opened["diagnostics"], json!([]), "{opened}");
+    let r = ok(&mut e, "mc.run", json!({}));
+    assert_eq!(r["trials"], 10_000);
+    let output = |name: &str| {
+        r["outputs"]
+            .as_array()
+            .into_iter()
+            .flatten()
+            .find(|o| o["name"] == name)
+            .cloned()
+            .unwrap_or_else(|| panic!("no output {name}: {r}"))
+    };
+    let variance = |a: f64, c: f64, b: f64| (a * a + b * b + c * c - a * b - a * c - b * c) / 18.0;
+    for (name, theory) in [
+        ("duration", 101.0 / 3.0),
+        ("cost", 101.0 / 3.0 * 900.0 + 12_000.0),
+    ] {
+        let o = output(name);
+        let (Some(mean), Some(hw)) = (o["mean"].as_f64(), o["half_width"].as_f64()) else {
+            panic!("no mean: {o}")
+        };
+        eprintln!("{name}: {mean} ± {hw}, theory {theory}");
+        assert!(
+            (mean - theory).abs() <= SQRT_2 * hw,
+            "{name}: {mean} ± {hw}, theory {theory}"
+        );
+        // A target, with its chance and interval.
+        assert!(o["target"]["probability"].as_f64().is_some(), "{o}");
+    }
+    // The duration's spread: the sample standard deviation of 10,000 independent trials is
+    // within about 2% of the true one (its relative standard error is about 1/√(2n) = 0.7%).
+    let sd = output("duration")["std_dev"].as_f64().unwrap_or(f64::NAN);
+    let theory = (variance(8.0, 10.0, 16.0) + variance(15.0, 20.0, 32.0)).sqrt();
+    assert!(
+        (sd - theory).abs() <= 0.02 * theory,
+        "standard deviation {sd}, theory {theory}"
+    );
+    // The correlation asked for is the one the trials have, near enough.
+    let achieved = r["correlations"][0]["achieved"]
+        .as_f64()
+        .unwrap_or(f64::NAN);
+    assert!((achieved - 0.4).abs() < 0.05, "{achieved}");
 }

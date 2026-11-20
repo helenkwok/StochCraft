@@ -1208,3 +1208,80 @@ unit	yr	god.
 	Entities inside at the start are given for a block that does not exist. Remove them.	Entiteti unutra na početku zadati su za blok koji ne postoji. Uklonite ih.
 	{block} cannot have entities inside at the start: only a task or a batch can. Remove its “Inside at the start”.	Blok {block} ne može da ima entitete unutra na početku: to može samo zadatak ili serija. Uklonite njegovo „Unutra na početku”.
 	{block} has {count} entities inside at the start, but it holds at most {most}, its units and its waiting room. Set “Inside at the start” to {most} or fewer, or make the waiting room larger.	Blok {block} ima {count} entiteta unutra na početku, ali prima najviše {most}, svoje jedinice i čekaonicu. Postavite „Unutra na početku” na {most} ili manje, ili povećajte čekaonicu.
+# Monte Carlo models in the window (ROADMAP M4.1, part 2)
+	95% interval of the chance: {lo} to {hi}.	Interval od 95% za verovatnoću: od {lo} do {hi}.
+	A Monte Carlo model: uncertain durations, day rate and materials, and the chance the cost or the duration runs over.	Monte Karlo model: neizvesna trajanja, dnevna tarifa i materijal, i verovatnoća da troškovi ili trajanje premaše plan.
+	A calculation with uncertain inputs, not a process: each trial draws every input once and works out every output from them.	Proračun sa neizvesnim ulaznim veličinama, a ne proces: svaki pokušaj jednom izvlači svaku ulaznu veličinu i iz njih izračunava sve izlazne.
+	A rank correlation between two inputs, from -1 to 1: above 0 they tend to be high together, below 0 one tends to be high when the other is low. Inputs not paired here are independent; 0 removes a pair.	Korelacija rangova između dve ulazne veličine, od -1 do 1: iznad 0 obe teže da budu visoke zajedno, ispod 0 jedna teži da bude visoka kada je druga niska. Ulazne veličine koje ovde nisu uparene su nezavisne; 0 uklanja par.
+	A {percent} chance that {output} is less than {value}.	Verovatnoća od {percent} da je {output} manje od {value}.
+	A {percent} chance that {output} is more than {value}.	Verovatnoća od {percent} da je {output} veće od {value}.
+	About a 1 in {odds} chance that {output} is less than {value} ({percent}).	Šansa od otprilike 1 prema {odds} da je {output} manje od {value} ({percent}).
+	About a 1 in {odds} chance that {output} is more than {value} ({percent}).	Šansa od otprilike 1 prema {odds} da je {output} veće od {value} ({percent}).
+	Add correlation	Dodaj korelaciju
+	Add input	Dodaj ulaznu veličinu
+	Add output	Dodaj izlaznu veličinu
+	At most, trials	Najviše pokušaja
+	Correlations	Korelacije
+	Download inputs (CSV)	Preuzmi ulazne veličine (CSV)
+	Each input is a distribution: every trial draws one value from it.	Svaka ulazna veličina je distribucija: svaki pokušaj iz nje izvlači jednu vrednost.
+	Each output is worked out in every trial from the inputs and the outputs above it, each named as $name: for example $labour * $rate + $materials. Give it a target to see the chance of meeting it.	Svaka izlazna veličina izračunava se u svakom pokušaju iz ulaznih veličina i izlaznih veličina iznad nje, a svaka se imenuje kao $name: na primer $labour * $rate + $materials. Zadajte joj cilj da vidite verovatnoću da se on dostigne.
+	Export inputs (CSV)	Izvezi ulazne veličine (CSV)
+	First input	Prva ulazna veličina
+	How many trials	Koliko pokušaja
+	How many trials gave each value	Koliko je pokušaja dalo svaku vrednost
+	Import inputs	Uvezi ulazne veličine
+	In 9 trials out of 10, {output} is between {low} and {high}; the mean is {mean} ± {half_width}.	U 9 od 10 pokušaja {output} je između {low} i {high}; srednja vrednost je {mean} ± {half_width}.
+	In 9 trials out of 10, {output} is between {low} and {high}; the mean is {mean}.	U 9 od 10 pokušaja {output} je između {low} i {high}; srednja vrednost je {mean}.
+	Inputs	Ulazne veličine
+	Inputs as a table	Ulazne veličine kao tabela
+	Latin hypercube	Latinska hiperkocka
+	Latin hypercube sampling	Uzorkovanje latinskom hiperkockom
+	Latin hypercube sampling spreads each input's draws evenly over its range, so the results settle with fewer trials. With it, or with correlated inputs, trials run in whole batches of 1,000.	Uzorkovanje latinskom hiperkockom raspoređuje izvlačenja svake ulazne veličine ravnomerno po njenom opsegu, pa se rezultati ustale uz manje pokušaja. Uz njega ili uz korelisane ulazne veličine pokušaji se izvode u celim serijama od 1.000.
+	Monte Carlo model	Monte Karlo model
+	New Monte Carlo Model	Novi Monte Karlo model
+	New Monte Carlo model	Novi Monte Karlo model
+	New correlation	Nova korelacija
+	New input	Nova ulazna veličina
+	New output	Nova izlazna veličina
+	No inputs yet: add one below, or paste a table of them.	Još nema ulaznih veličina: dodajte jednu ispod ili nalepite njihovu tabelu.
+	No interval: too few batches of trials for one.	Nema intervala: premalo serija pokušaja za njega.
+	No outputs yet: add one below.	Još nema izlaznih veličina: dodajte jednu ispod.
+	None yet	Još nijedna
+	One input per line, as name, distribution, parameters and unit, copied from a spreadsheet or written as CSV: for example labour,triangular,min=80;mode=100;max=150,h.	Jedna ulazna veličina po redu, kao ime, distribucija, parametri i jedinica, kopirana iz tabele ili napisana kao CSV: na primer labour,triangular,min=80;mode=100;max=150,h.
+	Outputs	Izlazne veličine
+	Paste inputs from a table	Nalepi ulazne veličine iz tabele
+	Project budget	Budžet projekta
+	Rank correlation	Korelacija rangova
+	Remove the correlation of {a} and {b}	Ukloni korelaciju između {a} i {b}
+	Remove the input {name}	Ukloni ulaznu veličinu {name}
+	Remove the output {name}	Ukloni izlaznu veličinu {name}
+	Replace every input	Zameni sve ulazne veličine
+	Sampling	Uzorkovanje
+	Second input	Druga ulazna veličina
+	Share of trials at or below each value	Udeo pokušaja na svakoj vrednosti ili ispod nje
+	Target {value}	Cilj {value}
+	The chance is under {hi}, with 95% confidence.	Verovatnoća je manja od {hi}, sa 95% pouzdanosti.
+	The model: its inputs, outputs and trials	Model: njegove ulazne i izlazne veličine i pokušaji
+	The number of trials was chosen from the results, so an interval may cover the true value less often than 95% of the time.	Broj pokušaja izabran je prema rezultatima, pa interval može obuhvatiti pravu vrednost ređe nego u 95% slučajeva.
+	The trials above come first; more follow in batches until every output's mean is within that share of itself, or the most is reached.	Prvo idu gore navedeni pokušaji; zatim sledi još u serijama dok srednja vrednost svake izlazne veličine ne bude unutar tog udela same sebe ili se ne dostigne maksimum.
+	Trials and sampling	Pokušaji i uzorkovanje
+	Uncertain inputs instead of single guesses: the chance of an overrun, not one total.	Neizvesne ulazne veličine umesto pojedinačnih procena: verovatnoća prekoračenja, a ne jedan zbir.
+	Will the project come in under budget?	Da li će projekat ostati u okviru budžeta?
+	a name, such as cost	ime, na primer troškovi
+	a name, such as labour	ime, na primer rad
+	random sampling	slučajno uzorkovanje
+	{asked} trials were asked for; with Latin hypercube sampling or correlated inputs a run is whole batches of {size}, so {n} ran.	Traženo je pokušaja: {asked}; uz uzorkovanje latinskom hiperkockom ili korelisane ulazne veličine pokretanje se sastoji od celih serija od {size}, pa je izvedeno {n}.
+	{a} and {b}: {achieved} in the trials, {target} asked for	{a} i {b}: {achieved} u pokušajima, traženo {target}
+	{output} was less than {value} in none of the {n} trials.	{output} nije bilo manje od {value} ni u jednom od {n} pokušaja.
+	{output} was more than {value} in none of the {n} trials.	{output} nije bilo veće od {value} ni u jednom od {n} pokušaja.
+@plural	Each ± is the half-width of the 95% interval of the mean across {n} independent batch of {size} trials. Latin hypercube sampling and correlated inputs make the trials within a batch depend on each other, so each batch counts as one.|Each ± is the half-width of the 95% interval of the mean across {n} independent batches of {size} trials. Latin hypercube sampling and correlated inputs make the trials within a batch depend on each other, so each batch counts as one.	Svaki ± je polovina širine intervala od 95% za srednju vrednost kroz {n} nezavisnu seriju od {size} pokušaja. Uzorkovanje latinskom hiperkockom i korelisane ulazne veličine čine pokušaje unutar serije međusobno zavisnim, pa se svaka serija računa kao jedna.|Svaki ± je polovina širine intervala od 95% za srednju vrednost kroz {n} nezavisne serije od {size} pokušaja. Uzorkovanje latinskom hiperkockom i korelisane ulazne veličine čine pokušaje unutar serije međusobno zavisnim, pa se svaka serija računa kao jedna.|Svaki ± je polovina širine intervala od 95% za srednju vrednost kroz {n} nezavisnih serija od {size} pokušaja. Uzorkovanje latinskom hiperkockom i korelisane ulazne veličine čine pokušaje unutar serije međusobno zavisnim, pa se svaka serija računa kao jedna.
+@plural	Each ± is the half-width of the 95% interval of the mean across {n} independent trial.|Each ± is the half-width of the 95% interval of the mean across {n} independent trials.	Svaki ± je polovina širine intervala od 95% za srednju vrednost kroz {n} nezavisan pokušaj.|Svaki ± je polovina širine intervala od 95% za srednju vrednost kroz {n} nezavisna pokušaja.|Svaki ± je polovina širine intervala od 95% za srednju vrednost kroz {n} nezavisnih pokušaja.
+@plural	Finished {n} trial|Finished {n} trials	Završen je {n} pokušaj|Završena su {n} pokušaja|Završeno je {n} pokušaja
+@plural	Imported {n} input|Imported {n} inputs	Uvezena je {n} ulazna veličina|Uvezene su {n} ulazne veličine|Uvezeno je {n} ulaznih veličina
+@plural	Makes {n} trial from seed {seed}: each draws every input once and works out every output.|Makes {n} trials from seed {seed}: each draws every input once and works out every output.	Izvodi {n} pokušaj iz semena {seed}: on jednom izvlači svaku ulaznu veličinu i izračunava sve izlazne.|Izvodi {n} pokušaja iz semena {seed}: svaki jednom izvlači svaku ulaznu veličinu i izračunava sve izlazne.|Izvodi {n} pokušaja iz semena {seed}: svaki jednom izvlači svaku ulaznu veličinu i izračunava sve izlazne.
+@plural	Stopped after {n} trial: every output's mean is within ±{share} of itself.|Stopped after {n} trials: every output's mean is within ±{share} of itself.	Zaustavljeno nakon {n} pokušaja: srednja vrednost svake izlazne veličine je unutar ±{share} same sebe.|Zaustavljeno nakon {n} pokušaja: srednja vrednost svake izlazne veličine je unutar ±{share} same sebe.|Zaustavljeno nakon {n} pokušaja: srednja vrednost svake izlazne veličine je unutar ±{share} same sebe.
+@plural	Stopped at the most allowed, {n} trial, before every output's mean was within ±{share} of itself.|Stopped at the most allowed, {n} trials, before every output's mean was within ±{share} of itself.	Zaustavljeno na najvećem dozvoljenom broju, {n} pokušaj, pre nego što je srednja vrednost svake izlazne veličine bila unutar ±{share} same sebe.|Zaustavljeno na najvećem dozvoljenom broju, {n} pokušaja, pre nego što je srednja vrednost svake izlazne veličine bila unutar ±{share} same sebe.|Zaustavljeno na najvećem dozvoljenom broju, {n} pokušaja, pre nego što je srednja vrednost svake izlazne veličine bila unutar ±{share} same sebe.
+@plural	{done} of {n} trial made|{done} of {n} trials made	Izvedeno {done} od {n} pokušaja|Izvedeno {done} od {n} pokušaja|Izvedeno {done} od {n} pokušaja
+@plural	{n} trial gave no number (a division by zero, say) and is left out.|{n} trials gave no number (a division by zero, say) and are left out.	{n} pokušaj nije dao broj (na primer, deljenje nulom) i izostavljen je.|{n} pokušaja nisu dala broj (na primer, deljenje nulom) i izostavljena su.|{n} pokušaja nije dalo broj (na primer, deljenje nulom) i izostavljeno je.
+@plural	{n} trial · seed {seed} · {sampling}|{n} trials · seed {seed} · {sampling}	{n} pokušaj · seme {seed} · {sampling}|{n} pokušaja · seme {seed} · {sampling}|{n} pokušaja · seme {seed} · {sampling}
+@plural	{n} trial · seed {seed}|{n} trials · seed {seed}	{n} pokušaj · seme {seed}|{n} pokušaja · seme {seed}|{n} pokušaja · seme {seed}

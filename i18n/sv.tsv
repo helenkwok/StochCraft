@@ -1208,3 +1208,80 @@ unit	yr	år
 	Entities inside at the start are given for a block that does not exist. Remove them.	Entiteter inuti vid starten anges för ett block som inte finns. Ta bort dem.
 	{block} cannot have entities inside at the start: only a task or a batch can. Remove its “Inside at the start”.	{block} kan inte ha entiteter inuti vid starten: bara en uppgift eller ett parti kan det. Ta bort dess ”Inuti vid starten”.
 	{block} has {count} entities inside at the start, but it holds at most {most}, its units and its waiting room. Set “Inside at the start” to {most} or fewer, or make the waiting room larger.	{block} har {count} entiteter inuti vid starten men rymmer högst {most}, sina enheter och sitt väntrum. Sätt ”Inuti vid starten” till {most} eller färre, eller gör väntrummet större.
+# Monte Carlo models in the window (ROADMAP M4.1, part 2)
+	95% interval of the chance: {lo} to {hi}.	95 %-intervall för sannolikheten: {lo} till {hi}.
+	A Monte Carlo model: uncertain durations, day rate and materials, and the chance the cost or the duration runs over.	En Monte Carlo-modell: osäkra varaktigheter, dagspris och material, och sannolikheten att kostnaden eller varaktigheten överskrids.
+	A calculation with uncertain inputs, not a process: each trial draws every input once and works out every output from them.	En beräkning med osäkra indata, inte en process: varje försök drar varje indata en gång och beräknar all utdata utifrån dem.
+	A rank correlation between two inputs, from -1 to 1: above 0 they tend to be high together, below 0 one tends to be high when the other is low. Inputs not paired here are independent; 0 removes a pair.	En rangkorrelation mellan två indata, från -1 till 1: över 0 tenderar de att vara höga samtidigt, under 0 tenderar den ena att vara hög när den andra är låg. Indata som inte paras ihop här är oberoende; 0 tar bort ett par.
+	A {percent} chance that {output} is less than {value}.	{percent} sannolikhet att {output} är mindre än {value}.
+	A {percent} chance that {output} is more than {value}.	{percent} sannolikhet att {output} är mer än {value}.
+	About a 1 in {odds} chance that {output} is less than {value} ({percent}).	Ungefär 1 chans på {odds} att {output} är mindre än {value} ({percent}).
+	About a 1 in {odds} chance that {output} is more than {value} ({percent}).	Ungefär 1 chans på {odds} att {output} är mer än {value} ({percent}).
+	Add correlation	Lägg till korrelation
+	Add input	Lägg till indata
+	Add output	Lägg till utdata
+	At most, trials	Högst, försök
+	Correlations	Korrelationer
+	Download inputs (CSV)	Ladda ner indata (CSV)
+	Each input is a distribution: every trial draws one value from it.	Varje indata är en fördelning: varje försök drar ett värde ur den.
+	Each output is worked out in every trial from the inputs and the outputs above it, each named as $name: for example $labour * $rate + $materials. Give it a target to see the chance of meeting it.	Varje utdata beräknas i varje försök från indata och utdata ovanför, var och en namngiven som $name: till exempel $labour * $rate + $materials. Ange ett mål för att se sannolikheten att nå det.
+	Export inputs (CSV)	Exportera indata (CSV)
+	First input	Första indata
+	How many trials	Hur många försök
+	How many trials gave each value	Hur många försök som gav varje värde
+	Import inputs	Importera indata
+	In 9 trials out of 10, {output} is between {low} and {high}; the mean is {mean} ± {half_width}.	I 9 försök av 10 ligger {output} mellan {low} och {high}; medelvärdet är {mean} ± {half_width}.
+	In 9 trials out of 10, {output} is between {low} and {high}; the mean is {mean}.	I 9 försök av 10 ligger {output} mellan {low} och {high}; medelvärdet är {mean}.
+	Inputs	Indata
+	Inputs as a table	Indata som tabell
+	Latin hypercube	Latinsk hyperkub
+	Latin hypercube sampling	Latinsk hyperkubsampling
+	Latin hypercube sampling spreads each input's draws evenly over its range, so the results settle with fewer trials. With it, or with correlated inputs, trials run in whole batches of 1,000.	Latinsk hyperkubsampling sprider varje indatas dragningar jämnt över dess intervall, så att resultaten stabiliseras med färre försök. Med den, eller med korrelerade indata, görs försöken i hela omgångar om 1 000.
+	Monte Carlo model	Monte Carlo-modell
+	New Monte Carlo Model	Ny Monte Carlo-modell
+	New Monte Carlo model	Ny Monte Carlo-modell
+	New correlation	Ny korrelation
+	New input	Ny indata
+	New output	Ny utdata
+	No inputs yet: add one below, or paste a table of them.	Inga indata ännu: lägg till en nedan, eller klistra in en tabell med dem.
+	No interval: too few batches of trials for one.	Inget intervall: för få omgångar av försök för att ge ett.
+	No outputs yet: add one below.	Inga utdata ännu: lägg till en nedan.
+	None yet	Inga ännu
+	One input per line, as name, distribution, parameters and unit, copied from a spreadsheet or written as CSV: for example labour,triangular,min=80;mode=100;max=150,h.	En indata per rad, som namn, fördelning, parametrar och enhet, kopierad från ett kalkylblad eller skriven som CSV: till exempel labour,triangular,min=80;mode=100;max=150,h.
+	Outputs	Utdata
+	Paste inputs from a table	Klistra in indata från en tabell
+	Project budget	Projektbudget
+	Rank correlation	Rangkorrelation
+	Remove the correlation of {a} and {b}	Ta bort korrelationen mellan {a} och {b}
+	Remove the input {name}	Ta bort indata {name}
+	Remove the output {name}	Ta bort utdata {name}
+	Replace every input	Ersätt all indata
+	Sampling	Sampling
+	Second input	Andra indata
+	Share of trials at or below each value	Andel försök vid eller under varje värde
+	Target {value}	Mål {value}
+	The chance is under {hi}, with 95% confidence.	Sannolikheten är under {hi}, med 95 % konfidens.
+	The model: its inputs, outputs and trials	Modellen: dess indata, utdata och försök
+	The number of trials was chosen from the results, so an interval may cover the true value less often than 95% of the time.	Antalet försök valdes utifrån resultaten, så ett intervall kan täcka det sanna värdet mer sällan än 95 % av gångerna.
+	The trials above come first; more follow in batches until every output's mean is within that share of itself, or the most is reached.	Försöken ovan görs först; därefter följer fler i omgångar tills varje utdatas medelvärde ligger inom den andelen av sig självt, eller maxgränsen nås.
+	Trials and sampling	Försök och sampling
+	Uncertain inputs instead of single guesses: the chance of an overrun, not one total.	Osäkra indata i stället för enskilda gissningar: sannolikheten för en överskridning, inte en enda summa.
+	Will the project come in under budget?	Kommer projektet att hålla budgeten?
+	a name, such as cost	ett namn, till exempel kostnad
+	a name, such as labour	ett namn, till exempel arbete
+	random sampling	slumpmässig sampling
+	{asked} trials were asked for; with Latin hypercube sampling or correlated inputs a run is whole batches of {size}, so {n} ran.	{asked} försök begärdes; med latinsk hyperkubsampling eller korrelerade indata består en körning av hela omgångar om {size}, så {n} gjordes.
+	{a} and {b}: {achieved} in the trials, {target} asked for	{a} och {b}: {achieved} i försöken, {target} begärt
+	{output} was less than {value} in none of the {n} trials.	{output} var mindre än {value} i inget av de {n} försöken.
+	{output} was more than {value} in none of the {n} trials.	{output} var mer än {value} i inget av de {n} försöken.
+@plural	Each ± is the half-width of the 95% interval of the mean across {n} independent batch of {size} trials. Latin hypercube sampling and correlated inputs make the trials within a batch depend on each other, so each batch counts as one.|Each ± is the half-width of the 95% interval of the mean across {n} independent batches of {size} trials. Latin hypercube sampling and correlated inputs make the trials within a batch depend on each other, so each batch counts as one.	Varje ± är halva bredden av 95 %-intervallet för medelvärdet över {n} oberoende omgång om {size} försök. Latinsk hyperkubsampling och korrelerade indata gör försöken inom en omgång beroende av varandra, så varje omgång räknas som en.|Varje ± är halva bredden av 95 %-intervallet för medelvärdet över {n} oberoende omgångar om {size} försök. Latinsk hyperkubsampling och korrelerade indata gör försöken inom en omgång beroende av varandra, så varje omgång räknas som en.
+@plural	Each ± is the half-width of the 95% interval of the mean across {n} independent trial.|Each ± is the half-width of the 95% interval of the mean across {n} independent trials.	Varje ± är halva bredden av 95 %-intervallet för medelvärdet över {n} oberoende försök.|Varje ± är halva bredden av 95 %-intervallet för medelvärdet över {n} oberoende försök.
+@plural	Finished {n} trial|Finished {n} trials	{n} försök klart|{n} försök klara
+@plural	Imported {n} input|Imported {n} inputs	Importerade {n} indata|Importerade {n} indata
+@plural	Makes {n} trial from seed {seed}: each draws every input once and works out every output.|Makes {n} trials from seed {seed}: each draws every input once and works out every output.	Gör {n} försök från slumpfrö {seed}: det drar varje indata en gång och beräknar all utdata.|Gör {n} försök från slumpfrö {seed}: vart och ett drar varje indata en gång och beräknar all utdata.
+@plural	Stopped after {n} trial: every output's mean is within ±{share} of itself.|Stopped after {n} trials: every output's mean is within ±{share} of itself.	Stoppad efter {n} försök: varje utdatas medelvärde ligger inom ±{share} av sig självt.|Stoppad efter {n} försök: varje utdatas medelvärde ligger inom ±{share} av sig självt.
+@plural	Stopped at the most allowed, {n} trial, before every output's mean was within ±{share} of itself.|Stopped at the most allowed, {n} trials, before every output's mean was within ±{share} of itself.	Stoppad vid högsta tillåtna, {n} försök, innan varje utdatas medelvärde låg inom ±{share} av sig självt.|Stoppad vid högsta tillåtna, {n} försök, innan varje utdatas medelvärde låg inom ±{share} av sig självt.
+@plural	{done} of {n} trial made|{done} of {n} trials made	{done} av {n} försök gjort|{done} av {n} försök gjorda
+@plural	{n} trial gave no number (a division by zero, say) and is left out.|{n} trials gave no number (a division by zero, say) and are left out.	{n} försök gav inget tal (till exempel en division med noll) och utelämnas.|{n} försök gav inget tal (till exempel en division med noll) och utelämnas.
+@plural	{n} trial · seed {seed} · {sampling}|{n} trials · seed {seed} · {sampling}	{n} försök · slumpfrö {seed} · {sampling}|{n} försök · slumpfrö {seed} · {sampling}
+@plural	{n} trial · seed {seed}|{n} trials · seed {seed}	{n} försök · slumpfrö {seed}|{n} försök · slumpfrö {seed}

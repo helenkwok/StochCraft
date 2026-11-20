@@ -247,6 +247,16 @@ stochcraft-cli inputs cost.bpmn --import inputs.csv
 The table's header is `name,distribution,parameters,unit`, with the parameters as
 `min=80;mode=100;max=150`.
 
+`mc.run`'s results give `seed`, `sampling` and `interval_basis` (`{"across": "trials", "count":
+n}` or `{"across": "batches", "count": b, "size": 1000}`) beside the run record, and
+`stochcraft_engine::mc::results_csv` writes them as the CSV the app and `run --format csv` share.
+The app does not call `mc.run`, which makes every trial before it returns: it starts the same run
+with `Engine::mc_start` and makes a few batches a frame with `McJob::step` (on every core natively,
+one batch at a time in the browser, where the page has no threads), then takes the results with
+`Engine::mc_results`. Both are `stochcraft_mc::Stepper`, which asks for batches, takes them in
+order and looks at the results only once every batch it asked for is in, so a sequential run looks
+at the same numbers of trials and the results are the same however the batches are spread.
+
 Changes can be scripted as engine commands (`stochcraft-cli schema` lists them with their
 parameters) and replayed:
 

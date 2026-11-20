@@ -16,6 +16,7 @@ differ, it says so. To get the app, see the [installation guide](installation.md
 - [Watch a run](#watch-a-run)
 - [Other views of the model](#other-views-of-the-model)
 - [Ask what-if questions: the Analysis view](#ask-what-if-questions-the-analysis-view)
+- [Monte Carlo models](#monte-carlo-models)
 - [Save, open and export](#save-open-and-export)
 - [Change how it looks and which keys do what](#change-how-it-looks-and-which-keys-do-what)
 - [Keyboard shortcuts](#keyboard-shortcuts)
@@ -402,6 +403,57 @@ come from your change, not from chance. Each analysis can take a while.
 - **Size the resources:** adds a unit at the busiest task or pool until enough runs meet a
   target, such as "mean wait at most 5 minutes in 70% of runs". **Use these units in the
   model** applies the answer as one change you can undo.
+
+## Monte Carlo models
+
+A Monte Carlo model is a calculation, not a process: a project's cost, a budget, a capacity
+check. Its **inputs** are uncertain numbers, each a distribution (a duration between 8 and 16
+days, most likely 10); its **outputs** are worked out from them (the cost is the duration times
+the day rate, plus materials). Each **trial** draws every input once and works out every output;
+thousands of trials show how the outputs spread, and how likely each is to miss its target.
+
+Open the example **Will the project come in under budget?** from the start page, or start one
+with **File ▸ New Monte Carlo Model**. A Monte Carlo model has two tabs, **Model** and
+**Results**, and no canvas.
+
+On the **Model** tab:
+
+- **Inputs:** each has a unit and a distribution, edited the same way as a task's time. Type a
+  name under the inputs and click **Add input** for another. **Paste inputs from a table** takes
+  lines of name, distribution, parameters and unit, copied from a spreadsheet or written as CSV
+  (`labour,triangular,min=80;mode=100;max=150,h`); **Export inputs (CSV)** saves the same table.
+- **Correlations:** two inputs that tend to move together (a busy market raises both the day
+  rate and the price of materials) get a rank correlation from -1 to 1. Correlations that cannot
+  all hold together are refused, with the reason under them.
+- **Outputs:** each is an expression over the inputs and the outputs above it, each named as
+  `$name`: `$duration * $day_rate + $materials`. An expression that cannot be read stays in its
+  field with the reason under it. Give an output a **Target**, **At most** or **At least** a
+  value, to see the chance of missing it.
+- **Trials and sampling:** the number of trials (10,000 for a new model), the seed, and the
+  sampling. **Latin hypercube** spreads each input's draws evenly over its range, so the results
+  settle with fewer trials. **How many trials** can be **More until precise enough**: trials
+  are added until every output's mean is within the share you set.
+
+Every change is one step you can undo. **Run** (F5) makes the trials a few batches at a time,
+so the window stays responsive, also in the browser.
+
+The **Results** tab answers the question first:
+
+- **What the run found:** for an output with a target, the chance of missing it in words, such as
+  "About a 1 in 5 chance that cost is more than 46,000 USD (21%)", with the 95% interval of that
+  chance. For an output without one, where 9 trials in 10 fall and its mean.
+- For each output: the mean ± the half-width of its 95% interval, the standard deviation, the
+  minimum and maximum, the 5th, 10th, 50th, 90th and 95th percentiles, a histogram (how many
+  trials gave each value) and the cumulative curve (the share of trials at or below each value),
+  with the target drawn on both.
+- **How sure are these numbers?** says what each ± is across. With plain random sampling and no
+  correlations it is across the trials. Latin hypercube sampling and correlations make the trials
+  within a batch of 1,000 depend on each other, so there it is across batches, and the trials run
+  in whole batches: 2,500 trials asked for run as 3,000, and the results say so.
+- The line under **Results** gives the trials, the seed and the sampling, and how a run with
+  **More until precise enough** stopped. **Export table (CSV)** saves a row per output.
+- Which inputs matter most (a tornado chart, rank correlations of inputs with each output, and
+  variance-based indices) is not in the window yet.
 
 ## Save, open and export
 

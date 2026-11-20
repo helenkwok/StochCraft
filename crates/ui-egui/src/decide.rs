@@ -32,7 +32,7 @@ pub(crate) enum Bound {
 }
 
 impl Bound {
-    fn key(self) -> Option<&'static str> {
+    pub(crate) fn key(self) -> Option<&'static str> {
         match self {
             Bound::None => None,
             Bound::AtLeast => Some("at_least"),
@@ -40,7 +40,7 @@ impl Bound {
         }
     }
 
-    fn label(self) -> &'static str {
+    pub(crate) fn label(self) -> &'static str {
         match self {
             Bound::None => t("No target"),
             Bound::AtLeast => t("At least"),
@@ -231,7 +231,7 @@ fn parameters(model: &Value) -> Vec<(String, String)> {
 }
 
 /// A choice from `options` (key, label), naming itself `label` for assistive technology.
-fn choose(
+pub(crate) fn choose(
     ui: &mut egui::Ui,
     salt: &str,
     label: &str,
@@ -260,7 +260,13 @@ fn choose(
         .widget_info(|| egui::WidgetInfo::labeled(egui::Role::ComboBox, true, label));
 }
 
-fn bound_choice(ui: &mut egui::Ui, salt: &str, label: &str, value: &mut Bound, with_none: bool) {
+pub(crate) fn bound_choice(
+    ui: &mut egui::Ui,
+    salt: &str,
+    label: &str,
+    value: &mut Bound,
+    with_none: bool,
+) {
     let options: &[Bound] = if with_none {
         &[Bound::None, Bound::AtLeast, Bound::AtMost]
     } else {
@@ -281,7 +287,7 @@ fn bound_choice(ui: &mut egui::Ui, salt: &str, label: &str, value: &mut Bound, w
 }
 
 /// A number field named `label`.
-fn number(
+pub(crate) fn number(
     ui: &mut egui::Ui,
     numbers: &craft_ui::localized::LocaleNumbers,
     salt: &str,
@@ -299,12 +305,12 @@ fn number(
     r
 }
 
-fn row_label(ui: &mut egui::Ui, text: &str) {
+pub(crate) fn row_label(ui: &mut egui::Ui, text: &str) {
     crate::form::label_cell(ui, text, 26.0);
 }
 
 /// A percentage, as the results write shares.
-fn percent(p: f64) -> String {
+pub(crate) fn percent(p: f64) -> String {
     format!("{}%", grouped((p * 1000.0).round() / 10.0))
 }
 
@@ -334,7 +340,7 @@ fn units_text(model: &Value, units: &Value) -> String {
         .join(", ")
 }
 
-fn grid(ui: &mut egui::Ui, id: &str, columns: usize, add: impl FnOnce(&mut egui::Ui)) {
+pub(crate) fn grid(ui: &mut egui::Ui, id: &str, columns: usize, add: impl FnOnce(&mut egui::Ui)) {
     egui::Grid::new(id)
         .num_columns(columns)
         .striped(true)

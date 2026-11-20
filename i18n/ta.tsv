@@ -1208,3 +1208,80 @@ unit	yr	ஆண்டு
 	Entities inside at the start are given for a block that does not exist. Remove them.	தொடக்கத்தில் உள்ளே உள்ள உருப்படிகள் இல்லாத ஒரு தொகுதிக்குக் கொடுக்கப்பட்டுள்ளன. அவற்றை நீக்கவும்.
 	{block} cannot have entities inside at the start: only a task or a batch can. Remove its “Inside at the start”.	{block} இல் தொடக்கத்தில் உருப்படிகள் இருக்க முடியாது: பணி அல்லது தொகுப்பில் மட்டுமே முடியும். அதன் “தொடக்கத்தில் உள்ளே உள்ளவை” ஐ நீக்கவும்.
 	{block} has {count} entities inside at the start, but it holds at most {most}, its units and its waiting room. Set “Inside at the start” to {most} or fewer, or make the waiting room larger.	{block} இல் தொடக்கத்தில் {count} உருப்படிகள் உள்ளன, ஆனால் அதன் அலகுகளும் காத்திருப்பு அறையும் சேர்த்து அதிகபட்சம் {most} மட்டுமே கொள்ளும். “தொடக்கத்தில் உள்ளே உள்ளவை” ஐ {most} அல்லது குறைவாக அமைக்கவும், அல்லது காத்திருப்பு அறையைப் பெரிதாக்கவும்.
+# Monte Carlo models in the window (ROADMAP M4.1, part 2)
+	95% interval of the chance: {lo} to {hi}.	நிகழ்தகவின் 95% இடைவெளி: {lo} முதல் {hi} வரை.
+	A Monte Carlo model: uncertain durations, day rate and materials, and the chance the cost or the duration runs over.	ஒரு மான்டே கார்லோ மாதிரி: நிச்சயமற்ற கால அளவுகள், நாள் கூலி, பொருட்கள், மற்றும் செலவு அல்லது கால அளவு மீறும் நிகழ்தகவு.
+	A calculation with uncertain inputs, not a process: each trial draws every input once and works out every output from them.	நிச்சயமற்ற உள்ளீடுகளுடன் ஒரு கணக்கீடு, ஒரு செயல்முறை அல்ல: ஒவ்வொரு முயற்சியும் ஒவ்வொரு உள்ளீட்டையும் ஒருமுறை எடுத்து, அவற்றிலிருந்து ஒவ்வொரு வெளியீட்டையும் கணக்கிடுகிறது.
+	A rank correlation between two inputs, from -1 to 1: above 0 they tend to be high together, below 0 one tends to be high when the other is low. Inputs not paired here are independent; 0 removes a pair.	இரண்டு உள்ளீடுகளுக்கு இடையிலான தரவரிசை ஒட்டுறவு, -1 முதல் 1 வரை: 0 க்கு மேல் இருந்தால் இரண்டும் சேர்ந்து அதிகமாக இருக்கும் போக்கு உண்டு; 0 க்குக் கீழ் இருந்தால் மற்றொன்று குறைவாக இருக்கும்போது ஒன்று அதிகமாக இருக்கும் போக்கு உண்டு. இங்கே இணைக்கப்படாத உள்ளீடுகள் சார்பற்றவை; 0 ஓர் இணையை அகற்றும்.
+	A {percent} chance that {output} is less than {value}.	{output} {value} ஐ விடக் குறைவாக இருக்க {percent} நிகழ்தகவு.
+	A {percent} chance that {output} is more than {value}.	{output} {value} ஐ விட அதிகமாக இருக்க {percent} நிகழ்தகவு.
+	About a 1 in {odds} chance that {output} is less than {value} ({percent}).	{output} {value} ஐ விடக் குறைவாக இருக்க ஏறத்தாழ {odds} இல் 1 வாய்ப்பு ({percent}).
+	About a 1 in {odds} chance that {output} is more than {value} ({percent}).	{output} {value} ஐ விட அதிகமாக இருக்க ஏறத்தாழ {odds} இல் 1 வாய்ப்பு ({percent}).
+	Add correlation	ஒட்டுறவைச் சேர்
+	Add input	உள்ளீட்டைச் சேர்
+	Add output	வெளியீட்டைச் சேர்
+	At most, trials	அதிகபட்சம், முயற்சிகள்
+	Correlations	ஒட்டுறவுகள்
+	Download inputs (CSV)	உள்ளீடுகளைப் பதிவிறக்கு (CSV)
+	Each input is a distribution: every trial draws one value from it.	ஒவ்வொரு உள்ளீடும் ஒரு பரவல்: ஒவ்வொரு முயற்சியும் அதிலிருந்து ஒரு மதிப்பை எடுக்கிறது.
+	Each output is worked out in every trial from the inputs and the outputs above it, each named as $name: for example $labour * $rate + $materials. Give it a target to see the chance of meeting it.	ஒவ்வொரு வெளியீடும் ஒவ்வொரு முயற்சியிலும் உள்ளீடுகளிலிருந்தும் அதற்கு மேலே உள்ள வெளியீடுகளிலிருந்தும் கணக்கிடப்படுகிறது; ஒவ்வொன்றும் $name எனப் பெயரிடப்படும்: எடுத்துக்காட்டாக $labour * $rate + $materials. அதை அடையும் நிகழ்தகவைக் காண அதற்கு ஓர் இலக்கைக் கொடுங்கள்.
+	Export inputs (CSV)	உள்ளீடுகளை ஏற்றுமதி செய் (CSV)
+	First input	முதல் உள்ளீடு
+	How many trials	எத்தனை முயற்சிகள்
+	How many trials gave each value	ஒவ்வொரு மதிப்பையும் எத்தனை முயற்சிகள் தந்தன
+	Import inputs	உள்ளீடுகளை இறக்குமதி செய்
+	In 9 trials out of 10, {output} is between {low} and {high}; the mean is {mean} ± {half_width}.	10 முயற்சிகளில் 9 இல், {output} {low} க்கும் {high} க்கும் இடையில் உள்ளது; சராசரி {mean} ± {half_width}.
+	In 9 trials out of 10, {output} is between {low} and {high}; the mean is {mean}.	10 முயற்சிகளில் 9 இல், {output} {low} க்கும் {high} க்கும் இடையில் உள்ளது; சராசரி {mean}.
+	Inputs	உள்ளீடுகள்
+	Inputs as a table	அட்டவணையாக உள்ளீடுகள்
+	Latin hypercube	லத்தீன் மீக்கனசதுரம்
+	Latin hypercube sampling	லத்தீன் மீக்கனசதுரக் கூறெடுப்பு
+	Latin hypercube sampling spreads each input's draws evenly over its range, so the results settle with fewer trials. With it, or with correlated inputs, trials run in whole batches of 1,000.	லத்தீன் மீக்கனசதுரக் கூறெடுப்பு ஒவ்வொரு உள்ளீட்டின் எடுப்புகளையும் அதன் வரம்பு முழுவதும் சீராகப் பரப்புகிறது, எனவே குறைவான முயற்சிகளிலேயே முடிவுகள் நிலைபெறுகின்றன. இதனுடன் அல்லது ஒட்டுறவுள்ள உள்ளீடுகளுடன், முயற்சிகள் 1,000 கொண்ட முழுத் தொகுதிகளாக நடக்கும்.
+	Monte Carlo model	மான்டே கார்லோ மாதிரி
+	New Monte Carlo Model	புதிய மான்டே கார்லோ மாதிரி
+	New Monte Carlo model	புதிய மான்டே கார்லோ மாதிரி
+	New correlation	புதிய ஒட்டுறவு
+	New input	புதிய உள்ளீடு
+	New output	புதிய வெளியீடு
+	No inputs yet: add one below, or paste a table of them.	இன்னும் உள்ளீடுகள் இல்லை: கீழே ஒன்றைச் சேர்க்கவும், அல்லது அவற்றின் அட்டவணையை ஒட்டவும்.
+	No interval: too few batches of trials for one.	இடைவெளி இல்லை: அதற்குப் போதுமான முயற்சித் தொகுதிகள் இல்லை.
+	No outputs yet: add one below.	இன்னும் வெளியீடுகள் இல்லை: கீழே ஒன்றைச் சேர்க்கவும்.
+	None yet	இன்னும் ஏதுமில்லை
+	One input per line, as name, distribution, parameters and unit, copied from a spreadsheet or written as CSV: for example labour,triangular,min=80;mode=100;max=150,h.	ஒரு வரிக்கு ஓர் உள்ளீடு, பெயர், பரவல், அளவுருக்கள், அலகு என, விரிதாளிலிருந்து நகலெடுத்து அல்லது CSV ஆக எழுதி: எடுத்துக்காட்டாக labour,triangular,min=80;mode=100;max=150,h.
+	Outputs	வெளியீடுகள்
+	Paste inputs from a table	அட்டவணையிலிருந்து உள்ளீடுகளை ஒட்டு
+	Project budget	திட்ட வரவுசெலவு
+	Rank correlation	தரவரிசை ஒட்டுறவு
+	Remove the correlation of {a} and {b}	{a}, {b} இடையிலான ஒட்டுறவை அகற்று
+	Remove the input {name}	உள்ளீடு {name} ஐ அகற்று
+	Remove the output {name}	வெளியீடு {name} ஐ அகற்று
+	Replace every input	எல்லா உள்ளீடுகளையும் மாற்றியமை
+	Sampling	கூறெடுப்பு
+	Second input	இரண்டாம் உள்ளீடு
+	Share of trials at or below each value	ஒவ்வொரு மதிப்புக்கும் சமமான அல்லது குறைவான முயற்சிகளின் பங்கு
+	Target {value}	இலக்கு {value}
+	The chance is under {hi}, with 95% confidence.	நிகழ்தகவு {hi} க்குக் குறைவு, 95% நம்பிக்கையுடன்.
+	The model: its inputs, outputs and trials	மாதிரி: அதன் உள்ளீடுகள், வெளியீடுகள், முயற்சிகள்
+	The number of trials was chosen from the results, so an interval may cover the true value less often than 95% of the time.	முயற்சிகளின் எண்ணிக்கை முடிவுகளைக் கொண்டு தேர்ந்தெடுக்கப்பட்டது, எனவே ஓர் இடைவெளி உண்மையான மதிப்பை 95% க்கும் குறைவான முறை உள்ளடக்கக்கூடும்.
+	The trials above come first; more follow in batches until every output's mean is within that share of itself, or the most is reached.	மேலே உள்ள முயற்சிகள் முதலில் நடக்கும்; அதன் பின், ஒவ்வொரு வெளியீட்டின் சராசரியும் தன்னுடைய அந்தப் பங்குக்குள் வரும் வரை அல்லது அதிகபட்ச எண்ணிக்கை அடையும் வரை மேலும் முயற்சிகள் தொகுதிகளாக நடக்கும்.
+	Trials and sampling	முயற்சிகளும் கூறெடுப்பும்
+	Uncertain inputs instead of single guesses: the chance of an overrun, not one total.	ஒற்றை ஊகங்களுக்குப் பதிலாக நிச்சயமற்ற உள்ளீடுகள்: ஒரே மொத்தம் அல்ல, மீறலின் நிகழ்தகவு.
+	Will the project come in under budget?	திட்டம் வரவுசெலவுக்குள் முடியுமா?
+	a name, such as cost	ஒரு பெயர், எடுத்துக்காட்டாக செலவு
+	a name, such as labour	ஒரு பெயர், எடுத்துக்காட்டாக உழைப்பு
+	random sampling	சீரற்ற கூறெடுப்பு
+	{asked} trials were asked for; with Latin hypercube sampling or correlated inputs a run is whole batches of {size}, so {n} ran.	{asked} முயற்சிகள் கேட்கப்பட்டன; லத்தீன் மீக்கனசதுரக் கூறெடுப்பு அல்லது ஒட்டுறவுள்ள உள்ளீடுகளுடன் ஓர் இயக்கம் {size} கொண்ட முழுத் தொகுதிகளாக இருக்கும், எனவே {n} நடந்தன.
+	{a} and {b}: {achieved} in the trials, {target} asked for	{a}, {b}: முயற்சிகளில் {achieved}, கேட்கப்பட்டது {target}
+	{output} was less than {value} in none of the {n} trials.	{n} முயற்சிகளில் எதிலும் {output} {value} ஐ விடக் குறைவாக இல்லை.
+	{output} was more than {value} in none of the {n} trials.	{n} முயற்சிகளில் எதிலும் {output} {value} ஐ விட அதிகமாக இல்லை.
+@plural	Each ± is the half-width of the 95% interval of the mean across {n} independent batch of {size} trials. Latin hypercube sampling and correlated inputs make the trials within a batch depend on each other, so each batch counts as one.|Each ± is the half-width of the 95% interval of the mean across {n} independent batches of {size} trials. Latin hypercube sampling and correlated inputs make the trials within a batch depend on each other, so each batch counts as one.	ஒவ்வொரு ± உம் {size} முயற்சிகள் கொண்ட {n} சார்பற்ற தொகுதியின் சராசரிக்கான 95% இடைவெளியின் அகலத்தில் பாதி. லத்தீன் மீக்கனசதுரக் கூறெடுப்பும் ஒட்டுறவுள்ள உள்ளீடுகளும் ஒரு தொகுதிக்குள் உள்ள முயற்சிகளை ஒன்றையொன்று சார்ந்தவையாக ஆக்குகின்றன, எனவே ஒவ்வொரு தொகுதியும் ஒன்றாகக் கணக்கிடப்படும்.|ஒவ்வொரு ± உம் {size} முயற்சிகள் கொண்ட {n} சார்பற்ற தொகுதிகளின் சராசரிக்கான 95% இடைவெளியின் அகலத்தில் பாதி. லத்தீன் மீக்கனசதுரக் கூறெடுப்பும் ஒட்டுறவுள்ள உள்ளீடுகளும் ஒரு தொகுதிக்குள் உள்ள முயற்சிகளை ஒன்றையொன்று சார்ந்தவையாக ஆக்குகின்றன, எனவே ஒவ்வொரு தொகுதியும் ஒன்றாகக் கணக்கிடப்படும்.
+@plural	Each ± is the half-width of the 95% interval of the mean across {n} independent trial.|Each ± is the half-width of the 95% interval of the mean across {n} independent trials.	ஒவ்வொரு ± உம் {n} சார்பற்ற முயற்சியின் சராசரிக்கான 95% இடைவெளியின் அகலத்தில் பாதி.|ஒவ்வொரு ± உம் {n} சார்பற்ற முயற்சிகளின் சராசரிக்கான 95% இடைவெளியின் அகலத்தில் பாதி.
+@plural	Finished {n} trial|Finished {n} trials	{n} முயற்சி முடிந்தது|{n} முயற்சிகள் முடிந்தன
+@plural	Imported {n} input|Imported {n} inputs	{n} உள்ளீடு இறக்குமதி செய்யப்பட்டது|{n} உள்ளீடுகள் இறக்குமதி செய்யப்பட்டன
+@plural	Makes {n} trial from seed {seed}: each draws every input once and works out every output.|Makes {n} trials from seed {seed}: each draws every input once and works out every output.	சீரற்ற விதை {seed} இலிருந்து {n} முயற்சியைச் செய்கிறது: அது ஒவ்வொரு உள்ளீட்டையும் ஒருமுறை எடுத்து ஒவ்வொரு வெளியீட்டையும் கணக்கிடுகிறது.|சீரற்ற விதை {seed} இலிருந்து {n} முயற்சிகளைச் செய்கிறது: ஒவ்வொன்றும் ஒவ்வொரு உள்ளீட்டையும் ஒருமுறை எடுத்து ஒவ்வொரு வெளியீட்டையும் கணக்கிடுகிறது.
+@plural	Stopped after {n} trial: every output's mean is within ±{share} of itself.|Stopped after {n} trials: every output's mean is within ±{share} of itself.	{n} முயற்சிக்குப் பிறகு நிறுத்தப்பட்டது: ஒவ்வொரு வெளியீட்டின் சராசரியும் தன்னுடைய ±{share} க்குள் உள்ளது.|{n} முயற்சிகளுக்குப் பிறகு நிறுத்தப்பட்டது: ஒவ்வொரு வெளியீட்டின் சராசரியும் தன்னுடைய ±{share} க்குள் உள்ளது.
+@plural	Stopped at the most allowed, {n} trial, before every output's mean was within ±{share} of itself.|Stopped at the most allowed, {n} trials, before every output's mean was within ±{share} of itself.	அனுமதிக்கப்பட்ட அதிகபட்சமான {n} முயற்சியில், ஒவ்வொரு வெளியீட்டின் சராசரியும் தன்னுடைய ±{share} க்குள் வருவதற்கு முன் நிறுத்தப்பட்டது.|அனுமதிக்கப்பட்ட அதிகபட்சமான {n} முயற்சிகளில், ஒவ்வொரு வெளியீட்டின் சராசரியும் தன்னுடைய ±{share} க்குள் வருவதற்கு முன் நிறுத்தப்பட்டது.
+@plural	{done} of {n} trial made|{done} of {n} trials made	{n} முயற்சியில் {done} செய்யப்பட்டது|{n} முயற்சிகளில் {done} செய்யப்பட்டன
+@plural	{n} trial gave no number (a division by zero, say) and is left out.|{n} trials gave no number (a division by zero, say) and are left out.	{n} முயற்சி எண்ணைத் தரவில்லை (எ.கா. பூஜ்ஜியத்தால் வகுத்தல்), அது விலக்கப்பட்டது.|{n} முயற்சிகள் எண்ணைத் தரவில்லை (எ.கா. பூஜ்ஜியத்தால் வகுத்தல்), அவை விலக்கப்பட்டன.
+@plural	{n} trial · seed {seed} · {sampling}|{n} trials · seed {seed} · {sampling}	{n} முயற்சி · விதை {seed} · {sampling}|{n} முயற்சிகள் · விதை {seed} · {sampling}
+@plural	{n} trial · seed {seed}|{n} trials · seed {seed}	{n} முயற்சி · விதை {seed}|{n} முயற்சிகள் · விதை {seed}

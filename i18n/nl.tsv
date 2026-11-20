@@ -1208,3 +1208,80 @@ unit	yr	j
 	Entities inside at the start are given for a block that does not exist. Remove them.	Er zijn entiteiten binnen bij de start opgegeven voor een blok dat niet bestaat. Verwijder ze.
 	{block} cannot have entities inside at the start: only a task or a batch can. Remove its “Inside at the start”.	{block} kan bij de start geen entiteiten binnen hebben: alleen een taak of een batch kan dat. Verwijder de ‘Binnen bij de start’ ervan.
 	{block} has {count} entities inside at the start, but it holds at most {most}, its units and its waiting room. Set “Inside at the start” to {most} or fewer, or make the waiting room larger.	{block} heeft bij de start {count} entiteiten binnen, maar kan er hoogstens {most} bevatten, zijn eenheden en zijn wachtruimte. Zet ‘Binnen bij de start’ op {most} of minder, of maak de wachtruimte groter.
+# Monte Carlo models in the window (ROADMAP M4.1, part 2)
+	95% interval of the chance: {lo} to {hi}.	95%-interval van de kans: {lo} tot {hi}.
+	A Monte Carlo model: uncertain durations, day rate and materials, and the chance the cost or the duration runs over.	Een Monte-Carlomodel: onzekere doorlooptijden, dagtarief en materialen, en de kans dat de kosten of de doorlooptijd uitlopen.
+	A calculation with uncertain inputs, not a process: each trial draws every input once and works out every output from them.	Een berekening met onzekere invoer, geen proces: elke iteratie trekt elke invoer één keer en berekent daaruit elke uitvoer.
+	A rank correlation between two inputs, from -1 to 1: above 0 they tend to be high together, below 0 one tends to be high when the other is low. Inputs not paired here are independent; 0 removes a pair.	Een rangcorrelatie tussen twee invoeren, van -1 tot 1: boven 0 zijn ze vaak samen hoog, onder 0 is de ene vaak hoog als de andere laag is. Invoeren die hier niet gekoppeld zijn, zijn onafhankelijk; 0 verwijdert een paar.
+	A {percent} chance that {output} is less than {value}.	Een kans van {percent} dat {output} kleiner is dan {value}.
+	A {percent} chance that {output} is more than {value}.	Een kans van {percent} dat {output} groter is dan {value}.
+	About a 1 in {odds} chance that {output} is less than {value} ({percent}).	Ongeveer 1 kans op {odds} dat {output} kleiner is dan {value} ({percent}).
+	About a 1 in {odds} chance that {output} is more than {value} ({percent}).	Ongeveer 1 kans op {odds} dat {output} groter is dan {value} ({percent}).
+	Add correlation	Correlatie toevoegen
+	Add input	Invoer toevoegen
+	Add output	Uitvoer toevoegen
+	At most, trials	Hoogstens, iteraties
+	Correlations	Correlaties
+	Download inputs (CSV)	Invoer downloaden (CSV)
+	Each input is a distribution: every trial draws one value from it.	Elke invoer is een verdeling: elke iteratie trekt er één waarde uit.
+	Each output is worked out in every trial from the inputs and the outputs above it, each named as $name: for example $labour * $rate + $materials. Give it a target to see the chance of meeting it.	Elke uitvoer wordt in elke iteratie berekend uit de invoer en de uitvoer erboven, elk aangeduid als $name: bijvoorbeeld $labour * $rate + $materials. Geef een doel op om de kans te zien dat het wordt gehaald.
+	Export inputs (CSV)	Invoer exporteren (CSV)
+	First input	Eerste invoer
+	How many trials	Hoeveel iteraties
+	How many trials gave each value	Hoeveel iteraties elke waarde gaven
+	Import inputs	Invoer importeren
+	In 9 trials out of 10, {output} is between {low} and {high}; the mean is {mean} ± {half_width}.	In 9 van de 10 iteraties ligt {output} tussen {low} en {high}; het gemiddelde is {mean} ± {half_width}.
+	In 9 trials out of 10, {output} is between {low} and {high}; the mean is {mean}.	In 9 van de 10 iteraties ligt {output} tussen {low} en {high}; het gemiddelde is {mean}.
+	Inputs	Invoer
+	Inputs as a table	Invoer als tabel
+	Latin hypercube	Latijnse hyperkubus
+	Latin hypercube sampling	Latijnse-hyperkubussteekproef
+	Latin hypercube sampling spreads each input's draws evenly over its range, so the results settle with fewer trials. With it, or with correlated inputs, trials run in whole batches of 1,000.	Latijnse-hyperkubussteekproef spreidt de trekkingen van elke invoer gelijkmatig over het bereik, zodat de resultaten met minder iteraties stabiliseren. Daarmee, of met gecorreleerde invoer, lopen de iteraties in hele groepen van 1.000.
+	Monte Carlo model	Monte-Carlomodel
+	New Monte Carlo Model	Nieuw Monte-Carlomodel
+	New Monte Carlo model	Nieuw Monte-Carlomodel
+	New correlation	Nieuwe correlatie
+	New input	Nieuwe invoer
+	New output	Nieuwe uitvoer
+	No inputs yet: add one below, or paste a table of them.	Nog geen invoer: voeg er hieronder een toe, of plak er een tabel van.
+	No interval: too few batches of trials for one.	Geen interval: te weinig groepen iteraties daarvoor.
+	No outputs yet: add one below.	Nog geen uitvoer: voeg er hieronder een toe.
+	None yet	Nog geen
+	One input per line, as name, distribution, parameters and unit, copied from a spreadsheet or written as CSV: for example labour,triangular,min=80;mode=100;max=150,h.	Eén invoer per regel, als naam, verdeling, parameters en eenheid, gekopieerd uit een spreadsheet of geschreven als CSV: bijvoorbeeld labour,triangular,min=80;mode=100;max=150,h.
+	Outputs	Uitvoer
+	Paste inputs from a table	Invoer plakken uit een tabel
+	Project budget	Projectbudget
+	Rank correlation	Rangcorrelatie
+	Remove the correlation of {a} and {b}	Correlatie van {a} en {b} verwijderen
+	Remove the input {name}	Invoer {name} verwijderen
+	Remove the output {name}	Uitvoer {name} verwijderen
+	Replace every input	Alle invoer vervangen
+	Sampling	Steekproeftrekking
+	Second input	Tweede invoer
+	Share of trials at or below each value	Aandeel iteraties op of onder elke waarde
+	Target {value}	Doel {value}
+	The chance is under {hi}, with 95% confidence.	De kans is kleiner dan {hi}, met 95% betrouwbaarheid.
+	The model: its inputs, outputs and trials	Het model: invoer, uitvoer en iteraties
+	The number of trials was chosen from the results, so an interval may cover the true value less often than 95% of the time.	Het aantal iteraties is gekozen op basis van de resultaten, dus een interval kan de ware waarde minder vaak dekken dan in 95% van de gevallen.
+	The trials above come first; more follow in batches until every output's mean is within that share of itself, or the most is reached.	De iteraties hierboven komen eerst; daarna volgen er meer in groepen tot het gemiddelde van elke uitvoer binnen dat aandeel van zichzelf ligt, of het maximum is bereikt.
+	Trials and sampling	Iteraties en steekproeftrekking
+	Uncertain inputs instead of single guesses: the chance of an overrun, not one total.	Onzekere invoer in plaats van losse schattingen: de kans op een overschrijding, niet één totaal.
+	Will the project come in under budget?	Blijft het project binnen het budget?
+	a name, such as cost	een naam, zoals kosten
+	a name, such as labour	een naam, zoals arbeid
+	random sampling	willekeurige steekproeftrekking
+	{asked} trials were asked for; with Latin hypercube sampling or correlated inputs a run is whole batches of {size}, so {n} ran.	Er werden {asked} iteraties gevraagd; met Latijnse-hyperkubussteekproef of gecorreleerde invoer bestaat een uitvoering uit hele groepen van {size}, dus er zijn er {n} uitgevoerd.
+	{a} and {b}: {achieved} in the trials, {target} asked for	{a} en {b}: {achieved} in de iteraties, {target} gevraagd
+	{output} was less than {value} in none of the {n} trials.	{output} was in geen van de {n} iteraties kleiner dan {value}.
+	{output} was more than {value} in none of the {n} trials.	{output} was in geen van de {n} iteraties groter dan {value}.
+@plural	Each ± is the half-width of the 95% interval of the mean across {n} independent batch of {size} trials. Latin hypercube sampling and correlated inputs make the trials within a batch depend on each other, so each batch counts as one.|Each ± is the half-width of the 95% interval of the mean across {n} independent batches of {size} trials. Latin hypercube sampling and correlated inputs make the trials within a batch depend on each other, so each batch counts as one.	Elke ± is de halve breedte van het 95%-interval van het gemiddelde over {n} onafhankelijke groep van {size} iteraties. Latijnse-hyperkubussteekproef en gecorreleerde invoer maken de iteraties binnen een groep van elkaar afhankelijk, dus elke groep telt als één.|Elke ± is de halve breedte van het 95%-interval van het gemiddelde over {n} onafhankelijke groepen van {size} iteraties. Latijnse-hyperkubussteekproef en gecorreleerde invoer maken de iteraties binnen een groep van elkaar afhankelijk, dus elke groep telt als één.
+@plural	Each ± is the half-width of the 95% interval of the mean across {n} independent trial.|Each ± is the half-width of the 95% interval of the mean across {n} independent trials.	Elke ± is de halve breedte van het 95%-interval van het gemiddelde over {n} onafhankelijke iteratie.|Elke ± is de halve breedte van het 95%-interval van het gemiddelde over {n} onafhankelijke iteraties.
+@plural	Finished {n} trial|Finished {n} trials	{n} iteratie voltooid|{n} iteraties voltooid
+@plural	Imported {n} input|Imported {n} inputs	{n} invoer geïmporteerd|{n} invoeren geïmporteerd
+@plural	Makes {n} trial from seed {seed}: each draws every input once and works out every output.|Makes {n} trials from seed {seed}: each draws every input once and works out every output.	Maakt {n} iteratie met startwaarde {seed}: elke iteratie trekt elke invoer één keer en berekent elke uitvoer.|Maakt {n} iteraties met startwaarde {seed}: elke iteratie trekt elke invoer één keer en berekent elke uitvoer.
+@plural	Stopped after {n} trial: every output's mean is within ±{share} of itself.|Stopped after {n} trials: every output's mean is within ±{share} of itself.	Gestopt na {n} iteratie: het gemiddelde van elke uitvoer ligt binnen ±{share} van zichzelf.|Gestopt na {n} iteraties: het gemiddelde van elke uitvoer ligt binnen ±{share} van zichzelf.
+@plural	Stopped at the most allowed, {n} trial, before every output's mean was within ±{share} of itself.|Stopped at the most allowed, {n} trials, before every output's mean was within ±{share} of itself.	Gestopt bij het toegestane maximum, {n} iteratie, voordat het gemiddelde van elke uitvoer binnen ±{share} van zichzelf lag.|Gestopt bij het toegestane maximum, {n} iteraties, voordat het gemiddelde van elke uitvoer binnen ±{share} van zichzelf lag.
+@plural	{done} of {n} trial made|{done} of {n} trials made	{done} van {n} iteratie gemaakt|{done} van {n} iteraties gemaakt
+@plural	{n} trial gave no number (a division by zero, say) and is left out.|{n} trials gave no number (a division by zero, say) and are left out.	{n} iteratie gaf geen getal (bijvoorbeeld door delen door nul) en is weggelaten.|{n} iteraties gaven geen getal (bijvoorbeeld door delen door nul) en zijn weggelaten.
+@plural	{n} trial · seed {seed} · {sampling}|{n} trials · seed {seed} · {sampling}	{n} iteratie · startwaarde {seed} · {sampling}|{n} iteraties · startwaarde {seed} · {sampling}
+@plural	{n} trial · seed {seed}|{n} trials · seed {seed}	{n} iteratie · startwaarde {seed}|{n} iteraties · startwaarde {seed}

@@ -114,6 +114,10 @@ impl App {
     /// Model ▸ Run: starts the experiment in the background. A model with errors doesn't run:
     /// its next error is shown instead (warnings alone don't stop it).
     pub fn run(&mut self) {
+        if self.is_monte_carlo() {
+            self.mc_run();
+            return;
+        }
         if self.running.is_some() || self.go_to_problem() {
             return;
         }
@@ -159,6 +163,8 @@ impl App {
     /// Stops the run in progress.
     pub fn cancel_run(&mut self) {
         if self.running.is_some() {
+            // A Monte Carlo run is the window's own: dropping it stops it.
+            self.mc.job = None;
             self.stop_workers();
             let status = self.execute("run.cancel", json!({}));
             self.running = None;
@@ -172,6 +178,9 @@ impl App {
     pub fn poll(&mut self) -> bool {
         if self.running.is_none() {
             return false;
+        }
+        if self.mc.job.is_some() {
+            return self.mc_poll();
         }
         // Answers from the shell's workers; otherwise, in the browser, a run advances a slice of
         // events per frame (a long replication over several frames), so the page stays

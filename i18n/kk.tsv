@@ -1208,3 +1208,80 @@ unit	yr	ж.
 	Entities inside at the start are given for a block that does not exist. Remove them.	Басында ішіндегі нысандар жоқ блокқа берілген. Оларды жойыңыз.
 	{block} cannot have entities inside at the start: only a task or a batch can. Remove its “Inside at the start”.	{block} блогында басында нысандар бола алмайды: бұл тек тапсырмада немесе топтамада болады. Оның «Басында ішінде» мәнін жойыңыз.
 	{block} has {count} entities inside at the start, but it holds at most {most}, its units and its waiting room. Set “Inside at the start” to {most} or fewer, or make the waiting room larger.	{block} блогында басында {count} нысан бар, бірақ оған ең көбі {most} сыяды, бірліктері мен күту орны. «Басында ішінде» мәнін {most} немесе одан аз етіңіз, не күту орнын үлкейтіңіз.
+# Monte Carlo models in the window (ROADMAP M4.1, part 2)
+	95% interval of the chance: {lo} to {hi}.	Ықтималдықтың 95% аралығы: {lo} мен {hi} арасы.
+	A Monte Carlo model: uncertain durations, day rate and materials, and the chance the cost or the duration runs over.	Монте-Карло моделі: белгісіз ұзақтықтар, күндік мөлшерлеме мен материалдар, және құнның не ұзақтықтың жоспардан асып кету ықтималдығы.
+	A calculation with uncertain inputs, not a process: each trial draws every input once and works out every output from them.	Процесс емес, белгісіз кіріс шамалары бар есептеу: әр сынақ әр кіріс шамадан бір рет мән алады және солардан әр шығыс шаманы есептейді.
+	A rank correlation between two inputs, from -1 to 1: above 0 they tend to be high together, below 0 one tends to be high when the other is low. Inputs not paired here are independent; 0 removes a pair.	Екі кіріс шама арасындағы рангтік корреляция, -1-ден 1-ге дейін: 0-ден жоғары болса, олар бірге жоғары болуға бейім, 0-ден төмен болса, біреуі жоғары болғанда екіншісі төмен болуға бейім. Мұнда жұпталмаған кіріс шамалар тәуелсіз; 0 жұпты жояды.
+	A {percent} chance that {output} is less than {value}.	{output} мәнінің {value} мәнінен аз болу ықтималдығы {percent}.
+	A {percent} chance that {output} is more than {value}.	{output} мәнінің {value} мәнінен көп болу ықтималдығы {percent}.
+	About a 1 in {odds} chance that {output} is less than {value} ({percent}).	{output} мәнінің {value} мәнінен аз болу мүмкіндігі шамамен {odds} жағдайдың 1-і ({percent}).
+	About a 1 in {odds} chance that {output} is more than {value} ({percent}).	{output} мәнінің {value} мәнінен көп болу мүмкіндігі шамамен {odds} жағдайдың 1-і ({percent}).
+	Add correlation	Корреляция қосу
+	Add input	Кіріс шама қосу
+	Add output	Шығыс шама қосу
+	At most, trials	Ең көбі, сынақ
+	Correlations	Корреляциялар
+	Download inputs (CSV)	Кіріс шамаларды жүктеп алу (CSV)
+	Each input is a distribution: every trial draws one value from it.	Әр кіріс шама — үлестірім: әр сынақ одан бір мән алады.
+	Each output is worked out in every trial from the inputs and the outputs above it, each named as $name: for example $labour * $rate + $materials. Give it a target to see the chance of meeting it.	Әр шығыс шама әр сынақта кіріс шамалардан және өзінен жоғарыдағы шығыс шамалардан есептеледі, әрқайсысы $name түрінде аталады: мысалы, $labour * $rate + $materials. Оған мақсат беріңіз, сонда оның орындалу ықтималдығын көресіз.
+	Export inputs (CSV)	Кіріс шамаларды экспорттау (CSV)
+	First input	Бірінші кіріс шама
+	How many trials	Неше сынақ
+	How many trials gave each value	Әр мәнді неше сынақ берді
+	Import inputs	Кіріс шамаларды импорттау
+	In 9 trials out of 10, {output} is between {low} and {high}; the mean is {mean} ± {half_width}.	10 сынақтың 9-ында {output} {low} мен {high} арасында; орташа мәні {mean} ± {half_width}.
+	In 9 trials out of 10, {output} is between {low} and {high}; the mean is {mean}.	10 сынақтың 9-ында {output} {low} мен {high} арасында; орташа мәні {mean}.
+	Inputs	Кіріс шамалар
+	Inputs as a table	Кіріс шамалар кесте түрінде
+	Latin hypercube	Латын гиперкубы
+	Latin hypercube sampling	Латын гиперкубы бойынша іріктеу
+	Latin hypercube sampling spreads each input's draws evenly over its range, so the results settle with fewer trials. With it, or with correlated inputs, trials run in whole batches of 1,000.	Латын гиперкубы бойынша іріктеу әр кіріс шамадан алынған мәндерді оның ауқымына біркелкі таратады, сондықтан нәтижелер азырақ сынақпен тұрақталады. Онымен немесе корреляцияланған кіріс шамалармен сынақтар 1000-нан тұратын толық топтамалармен жүргізіледі.
+	Monte Carlo model	Монте-Карло моделі
+	New Monte Carlo Model	Жаңа Монте-Карло моделі
+	New Monte Carlo model	Жаңа Монте-Карло моделі
+	New correlation	Жаңа корреляция
+	New input	Жаңа кіріс шама
+	New output	Жаңа шығыс шама
+	No inputs yet: add one below, or paste a table of them.	Әзірге кіріс шама жоқ: төменнен біреуін қосыңыз немесе олардың кестесін қойыңыз.
+	No interval: too few batches of trials for one.	Аралық жоқ: оған сынақ топтамалары тым аз.
+	No outputs yet: add one below.	Әзірге шығыс шама жоқ: төменнен біреуін қосыңыз.
+	None yet	Әзірге жоқ
+	One input per line, as name, distribution, parameters and unit, copied from a spreadsheet or written as CSV: for example labour,triangular,min=80;mode=100;max=150,h.	Әр жолда бір кіріс шама: аты, үлестірімі, параметрлері және бірлігі, электрондық кестеден көшірілген немесе CSV түрінде жазылған: мысалы, labour,triangular,min=80;mode=100;max=150,h.
+	Outputs	Шығыс шамалар
+	Paste inputs from a table	Кіріс шамаларды кестеден қою
+	Project budget	Жоба бюджеті
+	Rank correlation	Рангтік корреляция
+	Remove the correlation of {a} and {b}	{a} мен {b} корреляциясын жою
+	Remove the input {name}	{name} кіріс шамасын жою
+	Remove the output {name}	{name} шығыс шамасын жою
+	Replace every input	Барлық кіріс шамаларды ауыстыру
+	Sampling	Іріктеу
+	Second input	Екінші кіріс шама
+	Share of trials at or below each value	Әр мәнге тең немесе одан төмен сынақтар үлесі
+	Target {value}	Мақсат {value}
+	The chance is under {hi}, with 95% confidence.	Ықтималдық 95% сенімділікпен {hi} мәнінен аз.
+	The model: its inputs, outputs and trials	Модель: оның кіріс шамалары, шығыс шамалары және сынақтары
+	The number of trials was chosen from the results, so an interval may cover the true value less often than 95% of the time.	Сынақтар саны нәтижелерге қарап таңдалды, сондықтан аралық шын мәнді уақыттың 95%-ынан сирек қамтуы мүмкін.
+	The trials above come first; more follow in batches until every output's mean is within that share of itself, or the most is reached.	Алдымен жоғарыдағы сынақтар жүргізіледі; содан кейін әр шығыс шаманың орташа мәні өзінің сол үлесі шегіне енгенше немесе ең көп мәнге жеткенше, қосымша сынақтар топтамалармен жүргізіледі.
+	Trials and sampling	Сынақтар және іріктеу
+	Uncertain inputs instead of single guesses: the chance of an overrun, not one total.	Жалғыз болжамның орнына белгісіз кіріс шамалар: бір жиынтық емес, асып кету ықтималдығы.
+	Will the project come in under budget?	Жоба бюджетке сыя ма?
+	a name, such as cost	атау, мысалы құн
+	a name, such as labour	атау, мысалы еңбек
+	random sampling	кездейсоқ іріктеу
+	{asked} trials were asked for; with Latin hypercube sampling or correlated inputs a run is whole batches of {size}, so {n} ran.	{asked} сынақ сұралды; латын гиперкубы бойынша іріктеуде немесе корреляцияланған кіріс шамаларда сынақтар {size} сынақтан тұратын толық топтамалармен жүргізіледі, сондықтан {n} сынақ жүргізілді.
+	{a} and {b}: {achieved} in the trials, {target} asked for	{a} мен {b}: сынақтарда {achieved}, сұралғаны {target}
+	{output} was less than {value} in none of the {n} trials.	{n} сынақтың ешқайсысында {output} {value} мәнінен аз болған жоқ.
+	{output} was more than {value} in none of the {n} trials.	{n} сынақтың ешқайсысында {output} {value} мәнінен көп болған жоқ.
+@plural	Each ± is the half-width of the 95% interval of the mean across {n} independent batch of {size} trials. Latin hypercube sampling and correlated inputs make the trials within a batch depend on each other, so each batch counts as one.|Each ± is the half-width of the 95% interval of the mean across {n} independent batches of {size} trials. Latin hypercube sampling and correlated inputs make the trials within a batch depend on each other, so each batch counts as one.	Әр ± — әрқайсысы {size} сынақтан тұратын {n} тәуелсіз топтама бойынша орташа мәннің 95% аралығының жарты ені. Латын гиперкубы бойынша іріктеу мен корреляцияланған кіріс шамалар бір топтамадағы сынақтарды бір-біріне тәуелді етеді, сондықтан әр топтама бір деп саналады.|Әр ± — әрқайсысы {size} сынақтан тұратын {n} тәуелсіз топтама бойынша орташа мәннің 95% аралығының жарты ені. Латын гиперкубы бойынша іріктеу мен корреляцияланған кіріс шамалар бір топтамадағы сынақтарды бір-біріне тәуелді етеді, сондықтан әр топтама бір деп саналады.
+@plural	Each ± is the half-width of the 95% interval of the mean across {n} independent trial.|Each ± is the half-width of the 95% interval of the mean across {n} independent trials.	Әр ± — {n} тәуелсіз сынақ бойынша орташа мәннің 95% аралығының жарты ені.|Әр ± — {n} тәуелсіз сынақ бойынша орташа мәннің 95% аралығының жарты ені.
+@plural	Finished {n} trial|Finished {n} trials	{n} сынақ аяқталды|{n} сынақ аяқталды
+@plural	Imported {n} input|Imported {n} inputs	{n} кіріс шама импортталды|{n} кіріс шама импортталды
+@plural	Makes {n} trial from seed {seed}: each draws every input once and works out every output.|Makes {n} trials from seed {seed}: each draws every input once and works out every output.	{seed} тұқымынан {n} сынақ жасайды: әрқайсысы әр кіріс шамадан бір рет мән алады және әр шығыс шаманы есептейді.|{seed} тұқымынан {n} сынақ жасайды: әрқайсысы әр кіріс шамадан бір рет мән алады және әр шығыс шаманы есептейді.
+@plural	Stopped after {n} trial: every output's mean is within ±{share} of itself.|Stopped after {n} trials: every output's mean is within ±{share} of itself.	{n} сынақтан кейін тоқтады: әр шығыс шаманың орташа мәні өзінің ±{share} шегінде.|{n} сынақтан кейін тоқтады: әр шығыс шаманың орташа мәні өзінің ±{share} шегінде.
+@plural	Stopped at the most allowed, {n} trial, before every output's mean was within ±{share} of itself.|Stopped at the most allowed, {n} trials, before every output's mean was within ±{share} of itself.	Рұқсат етілген ең көп мәнде, {n} сынақта, әр шығыс шаманың орташа мәні өзінің ±{share} шегіне енбей тұрып тоқтады.|Рұқсат етілген ең көп мәнде, {n} сынақта, әр шығыс шаманың орташа мәні өзінің ±{share} шегіне енбей тұрып тоқтады.
+@plural	{done} of {n} trial made|{done} of {n} trials made	{n} сынақтың {done} жасалды|{n} сынақтың {done} жасалды
+@plural	{n} trial gave no number (a division by zero, say) and is left out.|{n} trials gave no number (a division by zero, say) and are left out.	{n} сынақ сан бермеді (мысалы, нөлге бөлу) және есептен шығарылды.|{n} сынақ сан бермеді (мысалы, нөлге бөлу) және есептен шығарылды.
+@plural	{n} trial · seed {seed} · {sampling}|{n} trials · seed {seed} · {sampling}	{n} сынақ · тұқым {seed} · {sampling}|{n} сынақ · тұқым {seed} · {sampling}
+@plural	{n} trial · seed {seed}|{n} trials · seed {seed}	{n} сынақ · тұқым {seed}|{n} сынақ · тұқым {seed}

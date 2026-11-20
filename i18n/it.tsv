@@ -1208,3 +1208,80 @@ unit	yr	a
 	Entities inside at the start are given for a block that does not exist. Remove them.	Sono indicate entità all'interno all'inizio per un blocco che non esiste. Rimuovile.
 	{block} cannot have entities inside at the start: only a task or a batch can. Remove its “Inside at the start”.	{block} non può avere entità all'interno all'inizio: possono solo un'attività o un lotto. Rimuovi il suo «All'interno all'inizio».
 	{block} has {count} entities inside at the start, but it holds at most {most}, its units and its waiting room. Set “Inside at the start” to {most} or fewer, or make the waiting room larger.	{block} ha {count} entità all'interno all'inizio, ma ne contiene al massimo {most}, le sue unità e la sua sala d'attesa. Imposta «All'interno all'inizio» a {most} o meno, oppure ingrandisci la sala d'attesa.
+# Monte Carlo models in the window (ROADMAP M4.1, part 2)
+	95% interval of the chance: {lo} to {hi}.	Intervallo al 95% della probabilità: da {lo} a {hi}.
+	A Monte Carlo model: uncertain durations, day rate and materials, and the chance the cost or the duration runs over.	Un modello Monte Carlo: durate incerte, tariffa giornaliera e materiali, e la probabilità che il costo o la durata vengano superati.
+	A calculation with uncertain inputs, not a process: each trial draws every input once and works out every output from them.	Un calcolo con input incerti, non un processo: ogni prova estrae una volta ogni input e ne ricava ogni output.
+	A rank correlation between two inputs, from -1 to 1: above 0 they tend to be high together, below 0 one tends to be high when the other is low. Inputs not paired here are independent; 0 removes a pair.	Una correlazione di rango tra due input, da -1 a 1: sopra 0 tendono a essere alti insieme, sotto 0 uno tende a essere alto quando l'altro è basso. Gli input non accoppiati qui sono indipendenti; 0 rimuove una coppia.
+	A {percent} chance that {output} is less than {value}.	Una probabilità del {percent} che {output} sia minore di {value}.
+	A {percent} chance that {output} is more than {value}.	Una probabilità del {percent} che {output} sia maggiore di {value}.
+	About a 1 in {odds} chance that {output} is less than {value} ({percent}).	Circa 1 probabilità su {odds} che {output} sia minore di {value} ({percent}).
+	About a 1 in {odds} chance that {output} is more than {value} ({percent}).	Circa 1 probabilità su {odds} che {output} sia maggiore di {value} ({percent}).
+	Add correlation	Aggiungi correlazione
+	Add input	Aggiungi input
+	Add output	Aggiungi output
+	At most, trials	Al massimo, prove
+	Correlations	Correlazioni
+	Download inputs (CSV)	Scarica input (CSV)
+	Each input is a distribution: every trial draws one value from it.	Ogni input è una distribuzione: ogni prova ne estrae un valore.
+	Each output is worked out in every trial from the inputs and the outputs above it, each named as $name: for example $labour * $rate + $materials. Give it a target to see the chance of meeting it.	Ogni output viene calcolato in ogni prova dagli input e dagli output sopra di esso, ciascuno indicato come $name: per esempio $labour * $rate + $materials. Assegnagli un obiettivo per vedere la probabilità di raggiungerlo.
+	Export inputs (CSV)	Esporta input (CSV)
+	First input	Primo input
+	How many trials	Quante prove
+	How many trials gave each value	Quante prove hanno dato ciascun valore
+	Import inputs	Importa input
+	In 9 trials out of 10, {output} is between {low} and {high}; the mean is {mean} ± {half_width}.	In 9 prove su 10, {output} è tra {low} e {high}; la media è {mean} ± {half_width}.
+	In 9 trials out of 10, {output} is between {low} and {high}; the mean is {mean}.	In 9 prove su 10, {output} è tra {low} e {high}; la media è {mean}.
+	Inputs	Input
+	Inputs as a table	Input come tabella
+	Latin hypercube	Ipercubo latino
+	Latin hypercube sampling	Campionamento da ipercubo latino
+	Latin hypercube sampling spreads each input's draws evenly over its range, so the results settle with fewer trials. With it, or with correlated inputs, trials run in whole batches of 1,000.	Il campionamento da ipercubo latino distribuisce in modo uniforme le estrazioni di ogni input sul suo intervallo, così i risultati si stabilizzano con meno prove. Con esso, o con input correlati, le prove procedono in lotti interi da 1.000.
+	Monte Carlo model	Modello Monte Carlo
+	New Monte Carlo Model	Nuovo modello Monte Carlo
+	New Monte Carlo model	Nuovo modello Monte Carlo
+	New correlation	Nuova correlazione
+	New input	Nuovo input
+	New output	Nuovo output
+	No inputs yet: add one below, or paste a table of them.	Ancora nessun input: aggiungine uno qui sotto o incolla una tabella di input.
+	No interval: too few batches of trials for one.	Nessun intervallo: troppo pochi lotti di prove per calcolarne uno.
+	No outputs yet: add one below.	Ancora nessun output: aggiungine uno qui sotto.
+	None yet	Ancora nessuno
+	One input per line, as name, distribution, parameters and unit, copied from a spreadsheet or written as CSV: for example labour,triangular,min=80;mode=100;max=150,h.	Un input per riga, come nome, distribuzione, parametri e unità, copiato da un foglio di calcolo o scritto come CSV: per esempio labour,triangular,min=80;mode=100;max=150,h.
+	Outputs	Output
+	Paste inputs from a table	Incolla input da una tabella
+	Project budget	Budget del progetto
+	Rank correlation	Correlazione di rango
+	Remove the correlation of {a} and {b}	Rimuovi la correlazione tra {a} e {b}
+	Remove the input {name}	Rimuovi l'input {name}
+	Remove the output {name}	Rimuovi l'output {name}
+	Replace every input	Sostituisci tutti gli input
+	Sampling	Campionamento
+	Second input	Secondo input
+	Share of trials at or below each value	Quota di prove pari o inferiori a ogni valore
+	Target {value}	Obiettivo {value}
+	The chance is under {hi}, with 95% confidence.	La probabilità è inferiore a {hi}, con una confidenza del 95%.
+	The model: its inputs, outputs and trials	Il modello: input, output e prove
+	The number of trials was chosen from the results, so an interval may cover the true value less often than 95% of the time.	Il numero di prove è stato scelto in base ai risultati, quindi un intervallo può contenere il valore vero meno spesso del 95% delle volte.
+	The trials above come first; more follow in batches until every output's mean is within that share of itself, or the most is reached.	Prima si eseguono le prove indicate sopra; poi ne seguono altre a lotti finché la media di ogni output non rientra in quella quota di sé stessa, o non si raggiunge il massimo.
+	Trials and sampling	Prove e campionamento
+	Uncertain inputs instead of single guesses: the chance of an overrun, not one total.	Input incerti invece di stime singole: la probabilità di uno sforamento, non un unico totale.
+	Will the project come in under budget?	Il progetto resterà nel budget?
+	a name, such as cost	un nome, per esempio costo
+	a name, such as labour	un nome, per esempio manodopera
+	random sampling	campionamento casuale
+	{asked} trials were asked for; with Latin hypercube sampling or correlated inputs a run is whole batches of {size}, so {n} ran.	Richieste {asked} prove; con il campionamento da ipercubo latino o input correlati le prove procedono in lotti interi da {size}, quindi ne sono state fatte {n}.
+	{a} and {b}: {achieved} in the trials, {target} asked for	{a} e {b}: {achieved} nelle prove, {target} richiesto
+	{output} was less than {value} in none of the {n} trials.	{output} non è stato minore di {value} in nessuna delle {n} prove.
+	{output} was more than {value} in none of the {n} trials.	{output} non è stato maggiore di {value} in nessuna delle {n} prove.
+@plural	Each ± is the half-width of the 95% interval of the mean across {n} independent batch of {size} trials. Latin hypercube sampling and correlated inputs make the trials within a batch depend on each other, so each batch counts as one.|Each ± is the half-width of the 95% interval of the mean across {n} independent batches of {size} trials. Latin hypercube sampling and correlated inputs make the trials within a batch depend on each other, so each batch counts as one.	Ogni ± è la semiampiezza dell'intervallo al 95% della media su {n} lotto indipendente da {size} prove. Il campionamento da ipercubo latino e gli input correlati rendono dipendenti tra loro le prove di uno stesso lotto, quindi ogni lotto conta come uno.|Ogni ± è la semiampiezza dell'intervallo al 95% della media su {n} lotti indipendenti da {size} prove. Il campionamento da ipercubo latino e gli input correlati rendono dipendenti tra loro le prove di uno stesso lotto, quindi ogni lotto conta come uno.
+@plural	Each ± is the half-width of the 95% interval of the mean across {n} independent trial.|Each ± is the half-width of the 95% interval of the mean across {n} independent trials.	Ogni ± è la semiampiezza dell'intervallo al 95% della media su {n} prova indipendente.|Ogni ± è la semiampiezza dell'intervallo al 95% della media su {n} prove indipendenti.
+@plural	Finished {n} trial|Finished {n} trials	Completata {n} prova|Completate {n} prove
+@plural	Imported {n} input|Imported {n} inputs	Importato {n} input|Importati {n} input
+@plural	Makes {n} trial from seed {seed}: each draws every input once and works out every output.|Makes {n} trials from seed {seed}: each draws every input once and works out every output.	Esegue {n} prova dal seme {seed}: estrae una volta ogni input e calcola ogni output.|Esegue {n} prove dal seme {seed}: ciascuna estrae una volta ogni input e calcola ogni output.
+@plural	Stopped after {n} trial: every output's mean is within ±{share} of itself.|Stopped after {n} trials: every output's mean is within ±{share} of itself.	Fermato dopo {n} prova: la media di ogni output è entro ±{share} di sé stessa.|Fermato dopo {n} prove: la media di ogni output è entro ±{share} di sé stessa.
+@plural	Stopped at the most allowed, {n} trial, before every output's mean was within ±{share} of itself.|Stopped at the most allowed, {n} trials, before every output's mean was within ±{share} of itself.	Fermato al massimo consentito, {n} prova, prima che la media di ogni output fosse entro ±{share} di sé stessa.|Fermato al massimo consentito, {n} prove, prima che la media di ogni output fosse entro ±{share} di sé stessa.
+@plural	{done} of {n} trial made|{done} of {n} trials made	{done} di {n} prova eseguite|{done} di {n} prove eseguite
+@plural	{n} trial gave no number (a division by zero, say) and is left out.|{n} trials gave no number (a division by zero, say) and are left out.	{n} prova non ha dato alcun numero (per esempio una divisione per zero) ed è esclusa.|{n} prove non hanno dato alcun numero (per esempio una divisione per zero) e sono escluse.
+@plural	{n} trial · seed {seed} · {sampling}|{n} trials · seed {seed} · {sampling}	{n} prova · seme {seed} · {sampling}|{n} prove · seme {seed} · {sampling}
+@plural	{n} trial · seed {seed}|{n} trials · seed {seed}	{n} prova · seme {seed}|{n} prove · seme {seed}

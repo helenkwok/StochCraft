@@ -818,6 +818,19 @@ fields (`“Service time”`) are named in the messages by their own rows.
   The row for "Checked against probability theory" (the project card's proof) follows each
   catalog's "Checked against queueing theory" row with its word for probability theory in place
   of queueing theory; the same caveats apply.
+- The rows for Monte Carlo models in the window (ROADMAP M4.1, part 2: the Model and Results tabs
+  of a Monte Carlo model, its inputs, correlations, outputs, targets, trials and sampling, the
+  findings in words, File ▸ New Monte Carlo Model and the project budget example) were
+  machine-drafted with Claude Code from the plain meaning of the English, reusing each catalog's
+  own words for run, seed, mean, target, interval, percentile, share and distribution. "Trial" is
+  a word other than the catalog's "run" (most catalogs build it from their existing "Trials" row;
+  de, da, fi, nl, nb, pl, pt-br, ro, sk, sl, lt and bs say "iteration"); "Latin hypercube
+  sampling" and "rank correlation" are the statistics terms as remembered or rendered literally,
+  not checked against Wikipedia or IATE; "Monte Carlo" is kept as a name (蒙特卡洛 in zh-hans,
+  蒙地卡羅 in zh-hant). Not checked against any other source, and not reviewed by native speakers.
+  The least certain are lo, ta, te, th, bn, ka, kk, sq and hu (its odds wording), da's literal
+  "Latin hypercube" term, the input and output words of ru, sv, nb, ka and kk, and in sr and
+  sr-latn the new rows are Ekavian beside older rows that are partly Ijekavian.
 
 **Adding or changing a string:** add the English in the code through `i18n::t` (or `tf`, `tn`),
 then add its row to each catalog here, or leave it out to show English until it is translated.

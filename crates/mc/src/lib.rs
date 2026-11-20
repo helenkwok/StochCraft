@@ -571,70 +571,84 @@ impl Compiled {
     }
 
     /// Runs, with `make` making each set of batches asked for (in parallel, say); it must
-    /// return them in the order asked.
+    /// return them in the order asked. This is [`Compiled::stepper`] with every batch it wants
+    /// made at once.
     pub fn run_with<E>(
         &self,
         options: &RunOptions,
         make: &mut MakeBlocks<'_, E>,
     ) -> Result<McResults, E> {
-        let Some(stop) = options.stop else {
-            let trials = self.trials_for(options.trials);
-            let blocks = make(&jobs(0, trials))?;
-            let mut results = self.summarise(&blocks, &options.percentiles);
-            results.requested_trials = options.trials;
-            return Ok(results);
-        };
-        let mut max = u64::from(stop.max).clamp(1, MAX_TRIALS);
-        if self.batched() {
-            // Every batch full, so the batches are alike.
-            max = (max / BATCH).max(1) * BATCH;
+        let mut stepper = self.stepper(options);
+        loop {
+            if let Some(results) = stepper.take_results() {
+                return Ok(results);
+            }
+            let wanted = stepper.wanted().to_vec();
+            let blocks = make(&wanted)?;
+            stepper.deliver(self, blocks);
         }
-        let mut n = options
-            .trials
-            .max(1)
-            .div_ceil(BATCH)
-            .saturating_mul(BATCH)
-            .min(max);
-        let mut blocks = make(&jobs(0, n))?;
-        let mut looks = vec![n];
-        let reason = loop {
-            let verdicts: Vec<precision::Verdict> = (0..self.outputs.len())
-                .map(|o| {
-                    // Judged on the interval the results report: across trials, or across
-                    // batches (whose count, not the trials', says whether there is one).
-                    let s = if self.batched() {
-                        Summary::of(&batch_means(&blocks, o))
-                    } else {
-                        Summary::of(&finite(&blocks, o))
-                    };
-                    precision::verdict(
-                        s.map_or(0, |s| s.n),
-                        s.map(|s| s.mean),
-                        s.map(|s| s.half_width),
-                        s.map(|s| s.std_dev),
-                        Scale::Relative(stop.relative),
-                    )
-                })
-                .collect();
-            match precision::next_count(n, max, &verdicts) {
-                Step::Stop(reason) => break reason,
-                Step::Continue(next) => {
-                    let next = next.div_ceil(BATCH).saturating_mul(BATCH).min(max);
-                    blocks.extend(make(&jobs(n, next))?);
-                    n = next;
-                    looks.push(n);
+    }
+
+    /// A run made a few batches at a time: see [`Stepper`].
+    pub fn stepper(&self, options: &RunOptions) -> Stepper {
+        let (asked, max) = match options.stop {
+            None => (self.trials_for(options.trials), None),
+            Some(stop) => {
+                let mut max = u64::from(stop.max).clamp(1, MAX_TRIALS);
+                if self.batched() {
+                    // Every batch full, so the batches are alike.
+                    max = (max / BATCH).max(1) * BATCH;
                 }
+                let n = options
+                    .trials
+                    .max(1)
+                    .div_ceil(BATCH)
+                    .saturating_mul(BATCH)
+                    .min(max);
+                (n, Some(max))
             }
         };
-        let mut results = self.summarise(&blocks, &options.percentiles);
-        results.requested_trials = options.trials;
-        results.stop = Some(StopReport {
-            relative: stop.relative,
+        Stepper {
+            options: options.clone(),
             max,
-            reason,
-            looks,
-        });
-        Ok(results)
+            asked,
+            made: 0,
+            blocks: Vec::new(),
+            wanted: jobs(0, asked),
+            next: 0,
+            looks: vec![asked],
+            results: None,
+            done: false,
+        }
+    }
+
+    /// Whether a sequential run stops after `n` trials, or how many it goes on to (whole
+    /// batches, at most `max`), judged on `blocks`.
+    fn next_look(&self, blocks: &[Block], stop: McStop, n: u64, max: u64) -> Step {
+        let verdicts: Vec<precision::Verdict> = (0..self.outputs.len())
+            .map(|o| {
+                // Judged on the interval the results report: across trials, or across batches
+                // (whose count, not the trials', says whether there is one).
+                let s = if self.batched() {
+                    Summary::of(&batch_means(blocks, o))
+                } else {
+                    Summary::of(&finite(blocks, o))
+                };
+                precision::verdict(
+                    s.map_or(0, |s| s.n),
+                    s.map(|s| s.mean),
+                    s.map(|s| s.half_width),
+                    s.map(|s| s.std_dev),
+                    Scale::Relative(stop.relative),
+                )
+            })
+            .collect();
+        match precision::next_count(n, max, &verdicts) {
+            Step::Continue(next) => {
+                Step::Continue(next.div_ceil(BATCH).saturating_mul(BATCH).min(max))
+            }
+            stop => stop,
+        }
     }
 
     /// The results of `blocks` (in index order).
@@ -913,6 +927,116 @@ pub struct StopReport {
     pub reason: Reason,
     /// The trials after each look.
     pub looks: Vec<u64>,
+}
+
+/// A run made a few batches at a time ([`Compiled::stepper`]), so a window can draw between
+/// them: it says which batches it wants ([`Stepper::wanted`]), takes them as they are made
+/// ([`Stepper::deliver`]), and once every batch it asked for is in, it looks at the results:
+/// a fixed run, or a sequential one that has stopped, has its results
+/// ([`Stepper::take_results`]); a sequential one that goes on wants more. The looks fall at the
+/// same numbers of trials however the batches are handed over, so the results are those of
+/// [`Compiled::run_with`].
+#[derive(Debug, Clone)]
+pub struct Stepper {
+    options: RunOptions,
+    /// A sequential run's most trials; `None` for a fixed run.
+    max: Option<u64>,
+    /// The trials asked for so far.
+    asked: u64,
+    /// The trials made so far.
+    made: u64,
+    blocks: Vec<Block>,
+    /// The batches asked for, the first `next` of them made.
+    wanted: Vec<BlockJob>,
+    next: usize,
+    /// The trials at each look so far.
+    looks: Vec<u64>,
+    results: Option<McResults>,
+    /// The run has its results (taken or not).
+    done: bool,
+}
+
+impl Stepper {
+    /// The batches wanted next, in order: those asked for and not yet made.
+    pub fn wanted(&self) -> &[BlockJob] {
+        self.wanted.get(self.next..).unwrap_or(&[])
+    }
+
+    /// The trials made so far.
+    pub fn made(&self) -> u64 {
+        self.made
+    }
+
+    /// The trials asked for so far: a sequential run asks for more after a look.
+    pub fn asked(&self) -> u64 {
+        self.asked
+    }
+
+    /// The run has its results (they may have been taken).
+    pub fn is_done(&self) -> bool {
+        self.done
+    }
+
+    /// The results, once the run has them (the first call takes them).
+    pub fn take_results(&mut self) -> Option<McResults> {
+        self.results.take()
+    }
+
+    /// Takes batches made by `compiled` from the front of [`Stepper::wanted`], in its order (one
+    /// that is not the next wanted is left out). Once every batch asked for is in, looks at the
+    /// results.
+    pub fn deliver(&mut self, compiled: &Compiled, blocks: Vec<Block>) {
+        for b in blocks {
+            if let Some(job) = self.wanted.get(self.next)
+                && job.index == b.index
+            {
+                self.made += job.trials;
+                self.next += 1;
+                self.blocks.push(b);
+            }
+        }
+        if self.next >= self.wanted.len() && !self.done {
+            self.look(compiled);
+        }
+    }
+
+    /// Every batch asked for is in: the results, or more batches for a sequential run.
+    fn look(&mut self, compiled: &Compiled) {
+        let step = match (self.options.stop, self.max) {
+            (Some(stop), Some(max)) => Some((
+                stop,
+                max,
+                compiled.next_look(&self.blocks, stop, self.asked, max),
+            )),
+            _ => None,
+        };
+        let mut results = match step {
+            Some((_, _, Step::Continue(next))) if next > self.asked => {
+                self.wanted = jobs(self.asked, next);
+                self.next = 0;
+                self.asked = next;
+                self.looks.push(next);
+                return;
+            }
+            _ => compiled.summarise(&self.blocks, &self.options.percentiles),
+        };
+        results.requested_trials = self.options.trials;
+        if let Some((stop, max, step)) = step {
+            let reason = match step {
+                Step::Stop(reason) => reason,
+                // Not expected: no more trials to go on to.
+                Step::Continue(_) => Reason::MaxReached,
+            };
+            results.stop = Some(StopReport {
+                relative: stop.relative,
+                max,
+                reason,
+                looks: self.looks.clone(),
+            });
+        }
+        self.results = Some(results);
+        self.done = true;
+    }
 }
 
 fn describe_output(out: &McOutput, all: &[f64], ps: &[f64]) -> OutputResult {
@@ -1206,5 +1330,53 @@ mod tests {
         );
         assert_eq!(jobs(2_000, 3_000).first().map(|j| j.index), Some(2));
         assert!(jobs(5, 5).is_empty());
+    }
+
+    /// A run made one batch at a time, as the window makes it between frames, has the results
+    /// of one made at once: fixed, and sequential with its looks at the same trials.
+    #[test]
+    fn a_run_made_a_batch_at_a_time_is_the_same_run() {
+        let mc = MonteCarlo {
+            inputs: vec![
+                input(
+                    "x",
+                    Dist::Normal {
+                        mean: 10.0,
+                        std_dev: 3.0,
+                    },
+                ),
+                input("y", Dist::Exponential { mean: 2.0 }),
+            ],
+            outputs: vec![output("s", "$x + $y")],
+            correlations: vec![],
+            sampling: Sampling::Random,
+            stop: None,
+        };
+        let c = compile(&mc, 11).unwrap_or_else(|p| unreachable!("{p:?}"));
+        for stop in [
+            None,
+            Some(McStop {
+                relative: 0.002,
+                max: 40_000,
+            }),
+        ] {
+            let options = RunOptions {
+                trials: 2_500,
+                stop,
+                percentiles: vec![],
+            };
+            let at_once = c.run(&options);
+            let mut stepper = c.stepper(&options);
+            let mut steps = 0;
+            while !stepper.is_done() && steps < 1_000 {
+                let next: Vec<BlockJob> = stepper.wanted().iter().take(1).copied().collect();
+                let blocks = next.iter().map(|j| c.block(*j)).collect();
+                stepper.deliver(&c, blocks);
+                assert!(stepper.made() <= stepper.asked());
+                steps += 1;
+            }
+            assert_eq!(stepper.take_results(), Some(at_once), "{stop:?}");
+            assert!(stepper.is_done());
+        }
     }
 }

@@ -1208,3 +1208,80 @@ unit	yr	a
 	Entities inside at the start are given for a block that does not exist. Remove them.	Alguses sees olevad olemid on antud plokile, mida pole olemas. Eemalda need.
 	{block} cannot have entities inside at the start: only a task or a batch can. Remove its “Inside at the start”.	Plokis {block} ei saa alguses olemeid sees olla: see saab olla ainult ülesandes või partiis. Eemalda selle „Alguses sees”.
 	{block} has {count} entities inside at the start, but it holds at most {most}, its units and its waiting room. Set “Inside at the start” to {most} or fewer, or make the waiting room larger.	Plokis {block} on alguses sees {count} olemit, kuid sinna mahub kõige rohkem {most}, selle ühikud ja ooteruum. Sea „Alguses sees” väärtuseks {most} või vähem või suurenda ooteruumi.
+# Monte Carlo models in the window (ROADMAP M4.1, part 2)
+	95% interval of the chance: {lo} to {hi}.	Tõenäosuse 95% vahemik: {lo} kuni {hi}.
+	A Monte Carlo model: uncertain durations, day rate and materials, and the chance the cost or the duration runs over.	Monte Carlo mudel: ebakindlad kestused, päevatasu ja materjalid ning tõenäosus, et kulu või kestus ületatakse.
+	A calculation with uncertain inputs, not a process: each trial draws every input once and works out every output from them.	Arvutus ebakindlate sisenditega, mitte protsess: iga katse loosib iga sisendi korra ja arvutab neist iga väljundi.
+	A rank correlation between two inputs, from -1 to 1: above 0 they tend to be high together, below 0 one tends to be high when the other is low. Inputs not paired here are independent; 0 removes a pair.	Astakkorrelatsioon kahe sisendi vahel, -1 kuni 1: üle 0 kipuvad nad olema korraga suured, alla 0 kipub üks olema suur, kui teine on väike. Siin paaritamata sisendid on sõltumatud; 0 eemaldab paari.
+	A {percent} chance that {output} is less than {value}.	Tõenäosus {percent}, et {output} on väiksem kui {value}.
+	A {percent} chance that {output} is more than {value}.	Tõenäosus {percent}, et {output} on suurem kui {value}.
+	About a 1 in {odds} chance that {output} is less than {value} ({percent}).	Umbes 1 võimalus {odds}-st, et {output} on väiksem kui {value} ({percent}).
+	About a 1 in {odds} chance that {output} is more than {value} ({percent}).	Umbes 1 võimalus {odds}-st, et {output} on suurem kui {value} ({percent}).
+	Add correlation	Lisa korrelatsioon
+	Add input	Lisa sisend
+	Add output	Lisa väljund
+	At most, trials	Kõige rohkem katseid
+	Correlations	Korrelatsioonid
+	Download inputs (CSV)	Laadi sisendid alla (CSV)
+	Each input is a distribution: every trial draws one value from it.	Iga sisend on jaotus: iga katse loosib sellest ühe väärtuse.
+	Each output is worked out in every trial from the inputs and the outputs above it, each named as $name: for example $labour * $rate + $materials. Give it a target to see the chance of meeting it.	Iga väljund arvutatakse igas katses sisenditest ja sellest ülalpool olevatest väljunditest, igaüks nimega $name: näiteks $labour * $rate + $materials. Andke sellele eesmärk, et näha selle saavutamise tõenäosust.
+	Export inputs (CSV)	Ekspordi sisendid (CSV)
+	First input	Esimene sisend
+	How many trials	Mitu katset
+	How many trials gave each value	Mitu katset andis iga väärtuse
+	Import inputs	Impordi sisendid
+	In 9 trials out of 10, {output} is between {low} and {high}; the mean is {mean} ± {half_width}.	9 katses 10-st on {output} vahemikus {low} kuni {high}; keskmine on {mean} ± {half_width}.
+	In 9 trials out of 10, {output} is between {low} and {high}; the mean is {mean}.	9 katses 10-st on {output} vahemikus {low} kuni {high}; keskmine on {mean}.
+	Inputs	Sisendid
+	Inputs as a table	Sisendid tabelina
+	Latin hypercube	Ladina hüperkuup
+	Latin hypercube sampling	Ladina hüperkuubi valimimeetod
+	Latin hypercube sampling spreads each input's draws evenly over its range, so the results settle with fewer trials. With it, or with correlated inputs, trials run in whole batches of 1,000.	Ladina hüperkuubi valimimeetod jaotab iga sisendi loosimised ühtlaselt üle selle vahemiku, nii et tulemused stabiliseeruvad väiksema arvu katsetega. Sellega või korreleeritud sisenditega tehakse katseid tervete 1000-liste partiidena.
+	Monte Carlo model	Monte Carlo mudel
+	New Monte Carlo Model	Uus Monte Carlo mudel
+	New Monte Carlo model	Uus Monte Carlo mudel
+	New correlation	Uus korrelatsioon
+	New input	Uus sisend
+	New output	Uus väljund
+	No inputs yet: add one below, or paste a table of them.	Sisendeid veel pole: lisage üks allpool või kleepige nende tabel.
+	No interval: too few batches of trials for one.	Vahemikku pole: selleks on liiga vähe katsete partiisid.
+	No outputs yet: add one below.	Väljundeid veel pole: lisage üks allpool.
+	None yet	Veel pole
+	One input per line, as name, distribution, parameters and unit, copied from a spreadsheet or written as CSV: for example labour,triangular,min=80;mode=100;max=150,h.	Üks sisend real, kujul nimi, jaotus, parameetrid ja ühik, kopeeritud arvutustabelist või kirjutatud CSV-na: näiteks labour,triangular,min=80;mode=100;max=150,h.
+	Outputs	Väljundid
+	Paste inputs from a table	Kleebi sisendid tabelist
+	Project budget	Projekti eelarve
+	Rank correlation	Astakkorrelatsioon
+	Remove the correlation of {a} and {b}	Eemalda {a} ja {b} korrelatsioon
+	Remove the input {name}	Eemalda sisend {name}
+	Remove the output {name}	Eemalda väljund {name}
+	Replace every input	Asenda kõik sisendid
+	Sampling	Valimi võtmine
+	Second input	Teine sisend
+	Share of trials at or below each value	Katsete osakaal iga väärtuse juures või sellest allpool
+	Target {value}	Eesmärk {value}
+	The chance is under {hi}, with 95% confidence.	Tõenäosus on 95% usaldusega alla {hi}.
+	The model: its inputs, outputs and trials	Mudel: selle sisendid, väljundid ja katsed
+	The number of trials was chosen from the results, so an interval may cover the true value less often than 95% of the time.	Katsete arv valiti tulemuste põhjal, seega võib vahemik katta tegelikku väärtust harvem kui 95% juhtudest.
+	The trials above come first; more follow in batches until every output's mean is within that share of itself, or the most is reached.	Kõigepealt tehakse ülaltoodud katsed; edasi tuleb neid partiidena juurde, kuni iga väljundi keskmine on selle osakaalu piires iseendast või kuni saavutatakse suurim arv.
+	Trials and sampling	Katsed ja valimi võtmine
+	Uncertain inputs instead of single guesses: the chance of an overrun, not one total.	Ebakindlad sisendid üksikute oletuste asemel: ületamise tõenäosus, mitte üks kogusumma.
+	Will the project come in under budget?	Kas projekt jääb eelarve piiresse?
+	a name, such as cost	nimi, näiteks kulu
+	a name, such as labour	nimi, näiteks töö
+	random sampling	juhuslik valim
+	{asked} trials were asked for; with Latin hypercube sampling or correlated inputs a run is whole batches of {size}, so {n} ran.	Küsiti {asked} katset; ladina hüperkuubi valimimeetodi või korreleeritud sisendite korral koosneb käivitamine tervetest {size}-listest partiidest, seega tehti {n}.
+	{a} and {b}: {achieved} in the trials, {target} asked for	{a} ja {b}: katsetes {achieved}, küsitud {target}
+	{output} was less than {value} in none of the {n} trials.	{output} ei olnud üheski {n} katsest väiksem kui {value}.
+	{output} was more than {value} in none of the {n} trials.	{output} ei olnud üheski {n} katsest suurem kui {value}.
+@plural	Each ± is the half-width of the 95% interval of the mean across {n} independent batch of {size} trials. Latin hypercube sampling and correlated inputs make the trials within a batch depend on each other, so each batch counts as one.|Each ± is the half-width of the 95% interval of the mean across {n} independent batches of {size} trials. Latin hypercube sampling and correlated inputs make the trials within a batch depend on each other, so each batch counts as one.	Iga ± on keskmise 95% vahemiku poollaius üle {n} sõltumatu partii, milles on {size} katset. Ladina hüperkuubi valimimeetod ja korreleeritud sisendid muudavad partii katsed üksteisest sõltuvaks, seega loetakse iga partii üheks.|Iga ± on keskmise 95% vahemiku poollaius üle {n} sõltumatu partii, igas {size} katset. Ladina hüperkuubi valimimeetod ja korreleeritud sisendid muudavad partii katsed üksteisest sõltuvaks, seega loetakse iga partii üheks.
+@plural	Each ± is the half-width of the 95% interval of the mean across {n} independent trial.|Each ± is the half-width of the 95% interval of the mean across {n} independent trials.	Iga ± on keskmise 95% vahemiku poollaius üle {n} sõltumatu katse.|Iga ± on keskmise 95% vahemiku poollaius üle {n} sõltumatu katse.
+@plural	Finished {n} trial|Finished {n} trials	{n} katse lõpetatud|{n} katset lõpetatud
+@plural	Imported {n} input|Imported {n} inputs	{n} sisend imporditud|{n} sisendit imporditud
+@plural	Makes {n} trial from seed {seed}: each draws every input once and works out every output.|Makes {n} trials from seed {seed}: each draws every input once and works out every output.	Teeb seemnest {seed} {n} katse: see loosib iga sisendi korra ja arvutab iga väljundi.|Teeb seemnest {seed} {n} katset: igaüks loosib iga sisendi korra ja arvutab iga väljundi.
+@plural	Stopped after {n} trial: every output's mean is within ±{share} of itself.|Stopped after {n} trials: every output's mean is within ±{share} of itself.	Peatati pärast {n} katset: iga väljundi keskmine on ±{share} piires iseendast.|Peatati pärast {n} katset: iga väljundi keskmine on ±{share} piires iseendast.
+@plural	Stopped at the most allowed, {n} trial, before every output's mean was within ±{share} of itself.|Stopped at the most allowed, {n} trials, before every output's mean was within ±{share} of itself.	Peatati suurimal lubatud arvul, {n} katse juures, enne kui iga väljundi keskmine oli ±{share} piires iseendast.|Peatati suurimal lubatud arvul, {n} katse juures, enne kui iga väljundi keskmine oli ±{share} piires iseendast.
+@plural	{done} of {n} trial made|{done} of {n} trials made	{done} katset {n}-st tehtud|{done} katset {n}-st tehtud
+@plural	{n} trial gave no number (a division by zero, say) and is left out.|{n} trials gave no number (a division by zero, say) and are left out.	{n} katse ei andnud arvu (näiteks nulliga jagamine) ja see jäetakse välja.|{n} katset ei andnud arvu (näiteks nulliga jagamine) ja need jäetakse välja.
+@plural	{n} trial · seed {seed} · {sampling}|{n} trials · seed {seed} · {sampling}	{n} katse · seeme {seed} · {sampling}|{n} katset · seeme {seed} · {sampling}
+@plural	{n} trial · seed {seed}|{n} trials · seed {seed}	{n} katse · seeme {seed}|{n} katset · seeme {seed}

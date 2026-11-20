@@ -545,7 +545,9 @@ fn number(
     node: &Value,
     unit: Option<&str>,
 ) -> Option<Value> {
-    let unit = unit.map(|u| Unit::new(&format!("{{n}} {u}")));
+    let unit = unit
+        .filter(|u| !u.is_empty())
+        .map(|u| Unit::new(&format!("{{n}} {u}")));
     let limits = Limits::of(node, integer);
     let decimals = if integer { 0..=0 } else { 0..=6 };
     // The model's value, and the refused one the field holds instead (in `drafts` under the
@@ -867,8 +869,10 @@ fn tagged(
             for f in fields {
                 let k = format!("{key}/{f}");
                 // The model's limits on the field, and none below 0 for a time (a property's
-                // random value, under `…/random`, is not a time).
-                let time = is_time(&now, f) && !key.ends_with("/random");
+                // random value, under `…/random`, is not a time, and a Monte Carlo input's, under
+                // `mc/`, may be below 0: a rebate). The input's values are shown in its own unit
+                // ([`Cx::time_unit`]).
+                let time = is_time(&now, f) && !key.ends_with("/random") && !key.starts_with("mc/");
                 let fnode = with_limits(
                     schema.resolve(&v["properties"][f]),
                     &now,

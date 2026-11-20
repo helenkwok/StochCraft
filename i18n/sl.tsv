@@ -1208,3 +1208,80 @@ unit	yr	l.
 	Entities inside at the start are given for a block that does not exist. Remove them.	Entitete znotraj ob začetku so podane za blok, ki ne obstaja. Odstranite jih.
 	{block} cannot have entities inside at the start: only a task or a batch can. Remove its “Inside at the start”.	{block} ob začetku ne more imeti entitet znotraj: to lahko le naloga ali serija. Odstranite njegovo »Znotraj ob začetku«.
 	{block} has {count} entities inside at the start, but it holds at most {most}, its units and its waiting room. Set “Inside at the start” to {most} or fewer, or make the waiting room larger.	{block} ima ob začetku znotraj {count} entitet, vendar sprejme največ {most}, svoje enote in čakalnico. Nastavite »Znotraj ob začetku« na {most} ali manj ali povečajte čakalnico.
+# Monte Carlo models in the window (ROADMAP M4.1, part 2)
+	95% interval of the chance: {lo} to {hi}.	95-odstotni interval verjetnosti: od {lo} do {hi}.
+	A Monte Carlo model: uncertain durations, day rate and materials, and the chance the cost or the duration runs over.	Model Monte Carlo: negotova trajanja, dnevna postavka in material ter verjetnost, da bodo stroški ali trajanje preseženi.
+	A calculation with uncertain inputs, not a process: each trial draws every input once and works out every output from them.	Izračun z negotovimi vhodi, ne proces: vsaka iteracija enkrat izžreba vsak vhod in iz njih izračuna vsak izhod.
+	A rank correlation between two inputs, from -1 to 1: above 0 they tend to be high together, below 0 one tends to be high when the other is low. Inputs not paired here are independent; 0 removes a pair.	Korelacija rangov med dvema vhodoma, od -1 do 1: nad 0 sta navadno hkrati visoka, pod 0 je eden navadno visok, ko je drugi nizek. Vhodi, ki tu niso v paru, so neodvisni; 0 odstrani par.
+	A {percent} chance that {output} is less than {value}.	Verjetnost {percent}, da je vrednost {output} manjša od {value}.
+	A {percent} chance that {output} is more than {value}.	Verjetnost {percent}, da je vrednost {output} večja od {value}.
+	About a 1 in {odds} chance that {output} is less than {value} ({percent}).	Približno 1 možnost od {odds}, da je vrednost {output} manjša od {value} ({percent}).
+	About a 1 in {odds} chance that {output} is more than {value} ({percent}).	Približno 1 možnost od {odds}, da je vrednost {output} večja od {value} ({percent}).
+	Add correlation	Dodaj korelacijo
+	Add input	Dodaj vhod
+	Add output	Dodaj izhod
+	At most, trials	Največ, iteracij
+	Correlations	Korelacije
+	Download inputs (CSV)	Prenesi vhode (CSV)
+	Each input is a distribution: every trial draws one value from it.	Vsak vhod je porazdelitev: vsaka iteracija iz nje izžreba eno vrednost.
+	Each output is worked out in every trial from the inputs and the outputs above it, each named as $name: for example $labour * $rate + $materials. Give it a target to see the chance of meeting it.	Vsak izhod se v vsaki iteraciji izračuna iz vhodov in izhodov nad njim, vsak poimenovan kot $name: na primer $labour * $rate + $materials. Določite mu cilj, da vidite verjetnost, da bo dosežen.
+	Export inputs (CSV)	Izvozi vhode (CSV)
+	First input	Prvi vhod
+	How many trials	Koliko iteracij
+	How many trials gave each value	Koliko iteracij je dalo posamezno vrednost
+	Import inputs	Uvozi vhode
+	In 9 trials out of 10, {output} is between {low} and {high}; the mean is {mean} ± {half_width}.	V 9 iteracijah od 10 je vrednost {output} med {low} in {high}; povprečje je {mean} ± {half_width}.
+	In 9 trials out of 10, {output} is between {low} and {high}; the mean is {mean}.	V 9 iteracijah od 10 je vrednost {output} med {low} in {high}; povprečje je {mean}.
+	Inputs	Vhodi
+	Inputs as a table	Vhodi kot tabela
+	Latin hypercube	Latinska hiperkocka
+	Latin hypercube sampling	Vzorčenje z latinsko hiperkocko
+	Latin hypercube sampling spreads each input's draws evenly over its range, so the results settle with fewer trials. With it, or with correlated inputs, trials run in whole batches of 1,000.	Vzorčenje z latinsko hiperkocko enakomerno razporedi izžrebane vrednosti vsakega vhoda po njegovem razponu, zato se rezultati ustalijo z manj iteracijami. Z njim ali s koreliranimi vhodi iteracije tečejo v celih serijah po 1000.
+	Monte Carlo model	Model Monte Carlo
+	New Monte Carlo Model	Nov model Monte Carlo
+	New Monte Carlo model	Nov model Monte Carlo
+	New correlation	Nova korelacija
+	New input	Nov vhod
+	New output	Nov izhod
+	No inputs yet: add one below, or paste a table of them.	Še ni vhodov: dodajte enega spodaj ali prilepite njihovo tabelo.
+	No interval: too few batches of trials for one.	Ni intervala: za to je premalo serij iteracij.
+	No outputs yet: add one below.	Še ni izhodov: dodajte enega spodaj.
+	None yet	Še nič
+	One input per line, as name, distribution, parameters and unit, copied from a spreadsheet or written as CSV: for example labour,triangular,min=80;mode=100;max=150,h.	En vhod na vrstico, kot ime, porazdelitev, parametri in enota, kopirano iz preglednice ali zapisano kot CSV: na primer labour,triangular,min=80;mode=100;max=150,h.
+	Outputs	Izhodi
+	Paste inputs from a table	Prilepi vhode iz tabele
+	Project budget	Proračun projekta
+	Rank correlation	Korelacija rangov
+	Remove the correlation of {a} and {b}	Odstrani korelacijo med {a} in {b}
+	Remove the input {name}	Odstrani vhod {name}
+	Remove the output {name}	Odstrani izhod {name}
+	Replace every input	Zamenjaj vse vhode
+	Sampling	Vzorčenje
+	Second input	Drugi vhod
+	Share of trials at or below each value	Delež iteracij pri posamezni vrednosti ali pod njo
+	Target {value}	Cilj {value}
+	The chance is under {hi}, with 95% confidence.	Verjetnost je pod {hi}, s 95-odstotno zanesljivostjo.
+	The model: its inputs, outputs and trials	Model: njegovi vhodi, izhodi in iteracije
+	The number of trials was chosen from the results, so an interval may cover the true value less often than 95% of the time.	Število iteracij je bilo izbrano glede na rezultate, zato interval pravo vrednost morda pokrije redkeje kot v 95 % primerov.
+	The trials above come first; more follow in batches until every output's mean is within that share of itself, or the most is reached.	Najprej se izvedejo iteracije zgoraj; nato sledi še več v serijah, dokler povprečje vsakega izhoda ni znotraj tega deleža samega sebe ali dokler ni dosežena zgornja meja.
+	Trials and sampling	Iteracije in vzorčenje
+	Uncertain inputs instead of single guesses: the chance of an overrun, not one total.	Negotovi vhodi namesto posameznih ugibanj: verjetnost prekoračitve, ne en sam seštevek.
+	Will the project come in under budget?	Ali bo projekt ostal v okviru proračuna?
+	a name, such as cost	ime, na primer stroški
+	a name, such as labour	ime, na primer delo
+	random sampling	naključno vzorčenje
+	{asked} trials were asked for; with Latin hypercube sampling or correlated inputs a run is whole batches of {size}, so {n} ran.	Zahtevanih je bilo {asked} iteracij; z vzorčenjem z latinsko hiperkocko ali s koreliranimi vhodi zagon sestavljajo cele serije po {size}, zato se jih je izvedlo {n}.
+	{a} and {b}: {achieved} in the trials, {target} asked for	{a} in {b}: {achieved} v iteracijah, zahtevano {target}
+	{output} was less than {value} in none of the {n} trials.	V nobeni od {n} iteracij vrednost {output} ni bila manjša od {value}.
+	{output} was more than {value} in none of the {n} trials.	V nobeni od {n} iteracij vrednost {output} ni bila večja od {value}.
+@plural	Each ± is the half-width of the 95% interval of the mean across {n} independent batch of {size} trials. Latin hypercube sampling and correlated inputs make the trials within a batch depend on each other, so each batch counts as one.|Each ± is the half-width of the 95% interval of the mean across {n} independent batches of {size} trials. Latin hypercube sampling and correlated inputs make the trials within a batch depend on each other, so each batch counts as one.	Vsak ± je polovica širine 95-odstotnega intervala povprečja prek {n} neodvisne serije velikosti {size}. Vzorčenje z latinsko hiperkocko in korelirani vhodi naredijo iteracije znotraj serije odvisne druga od druge, zato vsaka serija šteje kot ena.|Vsak ± je polovica širine 95-odstotnega intervala povprečja prek {n} neodvisnih serij velikosti {size}. Vzorčenje z latinsko hiperkocko in korelirani vhodi naredijo iteracije znotraj serije odvisne druga od druge, zato vsaka serija šteje kot ena.|Vsak ± je polovica širine 95-odstotnega intervala povprečja prek {n} neodvisnih serij velikosti {size}. Vzorčenje z latinsko hiperkocko in korelirani vhodi naredijo iteracije znotraj serije odvisne druga od druge, zato vsaka serija šteje kot ena.|Vsak ± je polovica širine 95-odstotnega intervala povprečja prek {n} neodvisnih serij velikosti {size}. Vzorčenje z latinsko hiperkocko in korelirani vhodi naredijo iteracije znotraj serije odvisne druga od druge, zato vsaka serija šteje kot ena.
+@plural	Each ± is the half-width of the 95% interval of the mean across {n} independent trial.|Each ± is the half-width of the 95% interval of the mean across {n} independent trials.	Vsak ± je polovica širine 95-odstotnega intervala povprečja prek {n} neodvisne iteracije.|Vsak ± je polovica širine 95-odstotnega intervala povprečja prek {n} neodvisnih iteracij.|Vsak ± je polovica širine 95-odstotnega intervala povprečja prek {n} neodvisnih iteracij.|Vsak ± je polovica širine 95-odstotnega intervala povprečja prek {n} neodvisnih iteracij.
+@plural	Finished {n} trial|Finished {n} trials	Končana je {n} iteracija|Končani sta {n} iteraciji|Končane so {n} iteracije|Končanih je {n} iteracij
+@plural	Imported {n} input|Imported {n} inputs	Uvožen je {n} vhod|Uvožena sta {n} vhoda|Uvoženi so {n} vhodi|Uvoženih je {n} vhodov
+@plural	Makes {n} trial from seed {seed}: each draws every input once and works out every output.|Makes {n} trials from seed {seed}: each draws every input once and works out every output.	Izvede {n} iteracijo s semenom {seed}: vsaka enkrat izžreba vsak vhod in izračuna vsak izhod.|Izvede {n} iteraciji s semenom {seed}: vsaka enkrat izžreba vsak vhod in izračuna vsak izhod.|Izvede {n} iteracije s semenom {seed}: vsaka enkrat izžreba vsak vhod in izračuna vsak izhod.|Izvede {n} iteracij s semenom {seed}: vsaka enkrat izžreba vsak vhod in izračuna vsak izhod.
+@plural	Stopped after {n} trial: every output's mean is within ±{share} of itself.|Stopped after {n} trials: every output's mean is within ±{share} of itself.	Ustavljeno po {n} iteraciji: povprečje vsakega izhoda je znotraj ±{share} samega sebe.|Ustavljeno po {n} iteracijah: povprečje vsakega izhoda je znotraj ±{share} samega sebe.|Ustavljeno po {n} iteracijah: povprečje vsakega izhoda je znotraj ±{share} samega sebe.|Ustavljeno po {n} iteracijah: povprečje vsakega izhoda je znotraj ±{share} samega sebe.
+@plural	Stopped at the most allowed, {n} trial, before every output's mean was within ±{share} of itself.|Stopped at the most allowed, {n} trials, before every output's mean was within ±{share} of itself.	Ustavljeno pri največjem dovoljenem številu, {n} iteracija, preden je bilo povprečje vsakega izhoda znotraj ±{share} samega sebe.|Ustavljeno pri največjem dovoljenem številu, {n} iteraciji, preden je bilo povprečje vsakega izhoda znotraj ±{share} samega sebe.|Ustavljeno pri največjem dovoljenem številu, {n} iteracije, preden je bilo povprečje vsakega izhoda znotraj ±{share} samega sebe.|Ustavljeno pri največjem dovoljenem številu, {n} iteracij, preden je bilo povprečje vsakega izhoda znotraj ±{share} samega sebe.
+@plural	{done} of {n} trial made|{done} of {n} trials made	Opravljeno {done} od {n} iteracije|Opravljeno {done} od {n} iteracij|Opravljeno {done} od {n} iteracij|Opravljeno {done} od {n} iteracij
+@plural	{n} trial gave no number (a division by zero, say) and is left out.|{n} trials gave no number (a division by zero, say) and are left out.	{n} iteracija ni dala števila (na primer zaradi deljenja z nič) in je izpuščena.|{n} iteraciji nista dali števila (na primer zaradi deljenja z nič) in sta izpuščeni.|{n} iteracije niso dale števila (na primer zaradi deljenja z nič) in so izpuščene.|{n} iteracij ni dalo števila (na primer zaradi deljenja z nič), zato so izpuščene.
+@plural	{n} trial · seed {seed} · {sampling}|{n} trials · seed {seed} · {sampling}	{n} iteracija · seme {seed} · {sampling}|{n} iteraciji · seme {seed} · {sampling}|{n} iteracije · seme {seed} · {sampling}|{n} iteracij · seme {seed} · {sampling}
+@plural	{n} trial · seed {seed}|{n} trials · seed {seed}	{n} iteracija · seme {seed}|{n} iteraciji · seme {seed}|{n} iteracije · seme {seed}|{n} iteracij · seme {seed}

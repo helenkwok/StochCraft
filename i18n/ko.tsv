@@ -1208,3 +1208,80 @@ unit	yr	년
 	Entities inside at the start are given for a block that does not exist. Remove them.	시작 시 내부 엔터티가 존재하지 않는 블록에 지정되어 있습니다. 제거하세요.
 	{block} cannot have entities inside at the start: only a task or a batch can. Remove its “Inside at the start”.	{block}에는 시작 시 엔터티를 둘 수 없습니다. 작업이나 배치만 가능합니다. “시작 시 내부 개수”를 제거하세요.
 	{block} has {count} entities inside at the start, but it holds at most {most}, its units and its waiting room. Set “Inside at the start” to {most} or fewer, or make the waiting room larger.	{block}의 시작 시 내부 엔터티는 {count}개이지만, 자원 단위와 대기실을 합쳐 최대 {most}개만 들어갑니다. “시작 시 내부 개수”를 {most} 이하로 설정하거나 대기실을 늘리세요.
+# Monte Carlo models in the window (ROADMAP M4.1, part 2)
+	95% interval of the chance: {lo} to {hi}.	확률의 95% 구간: {lo}~{hi}.
+	A Monte Carlo model: uncertain durations, day rate and materials, and the chance the cost or the duration runs over.	몬테카를로 모델: 불확실한 소요 기간, 일당과 자재비, 그리고 비용이나 기간이 초과될 확률.
+	A calculation with uncertain inputs, not a process: each trial draws every input once and works out every output from them.	프로세스가 아닌, 불확실한 입력으로 하는 계산입니다. 각 시행은 모든 입력에서 값을 한 번씩 뽑고 그 값으로 모든 출력을 계산합니다.
+	A rank correlation between two inputs, from -1 to 1: above 0 they tend to be high together, below 0 one tends to be high when the other is low. Inputs not paired here are independent; 0 removes a pair.	두 입력 사이의 순위 상관(-1~1)입니다. 0보다 크면 둘이 함께 높아지는 경향이 있고, 0보다 작으면 한쪽이 높을 때 다른 쪽이 낮은 경향이 있습니다. 여기서 짝짓지 않은 입력은 서로 독립입니다. 0으로 하면 짝이 제거됩니다.
+	A {percent} chance that {output} is less than {value}.	{output}이(가) {value}보다 작을 확률은 {percent}입니다.
+	A {percent} chance that {output} is more than {value}.	{output}이(가) {value}보다 클 확률은 {percent}입니다.
+	About a 1 in {odds} chance that {output} is less than {value} ({percent}).	{output}이(가) {value}보다 작을 확률은 약 {odds}분의 1입니다({percent}).
+	About a 1 in {odds} chance that {output} is more than {value} ({percent}).	{output}이(가) {value}보다 클 확률은 약 {odds}분의 1입니다({percent}).
+	Add correlation	상관 추가
+	Add input	입력 추가
+	Add output	출력 추가
+	At most, trials	최대 시행 횟수
+	Correlations	상관
+	Download inputs (CSV)	입력 다운로드 (CSV)
+	Each input is a distribution: every trial draws one value from it.	각 입력은 분포입니다. 각 시행은 여기서 값 하나를 뽑습니다.
+	Each output is worked out in every trial from the inputs and the outputs above it, each named as $name: for example $labour * $rate + $materials. Give it a target to see the chance of meeting it.	각 출력은 각 시행에서 입력과 그 위의 출력으로 계산되며, 각각을 $name 형식으로 부릅니다. 예: $labour * $rate + $materials. 목표를 주면 목표를 충족할 확률을 볼 수 있습니다.
+	Export inputs (CSV)	입력 내보내기 (CSV)
+	First input	첫 번째 입력
+	How many trials	시행 횟수
+	How many trials gave each value	각 값이 나온 시행 수
+	Import inputs	입력 가져오기
+	In 9 trials out of 10, {output} is between {low} and {high}; the mean is {mean} ± {half_width}.	시행 10번 중 9번은 {output}이(가) {low}에서 {high} 사이입니다. 평균은 {mean} ± {half_width}입니다.
+	In 9 trials out of 10, {output} is between {low} and {high}; the mean is {mean}.	시행 10번 중 9번은 {output}이(가) {low}에서 {high} 사이입니다. 평균은 {mean}입니다.
+	Inputs	입력
+	Inputs as a table	표 형식의 입력
+	Latin hypercube	라틴 하이퍼큐브
+	Latin hypercube sampling	라틴 하이퍼큐브 샘플링
+	Latin hypercube sampling spreads each input's draws evenly over its range, so the results settle with fewer trials. With it, or with correlated inputs, trials run in whole batches of 1,000.	라틴 하이퍼큐브 샘플링은 각 입력에서 뽑는 값을 그 범위 전체에 고르게 퍼뜨리므로, 더 적은 시행으로 결과가 안정됩니다. 이 방법을 쓰거나 입력에 상관이 있으면 시행은 1,000회씩 온전한 배치 단위로 진행됩니다.
+	Monte Carlo model	몬테카를로 모델
+	New Monte Carlo Model	새 몬테카를로 모델
+	New Monte Carlo model	새 몬테카를로 모델
+	New correlation	새 상관
+	New input	새 입력
+	New output	새 출력
+	No inputs yet: add one below, or paste a table of them.	아직 입력이 없습니다. 아래에서 추가하거나 입력 표를 붙여넣으세요.
+	No interval: too few batches of trials for one.	구간 없음: 구간을 구하기에는 시행 배치가 너무 적습니다.
+	No outputs yet: add one below.	아직 출력이 없습니다. 아래에서 추가하세요.
+	None yet	아직 없음
+	One input per line, as name, distribution, parameters and unit, copied from a spreadsheet or written as CSV: for example labour,triangular,min=80;mode=100;max=150,h.	한 줄에 입력 하나를 이름, 분포, 매개변수, 단위 순으로 적습니다. 스프레드시트에서 복사하거나 CSV로 작성하세요. 예: labour,triangular,min=80;mode=100;max=150,h.
+	Outputs	출력
+	Paste inputs from a table	표에서 입력 붙여넣기
+	Project budget	프로젝트 예산
+	Rank correlation	순위 상관
+	Remove the correlation of {a} and {b}	{a}와(과) {b}의 상관 제거
+	Remove the input {name}	입력 {name} 제거
+	Remove the output {name}	출력 {name} 제거
+	Replace every input	모든 입력 바꾸기
+	Sampling	샘플링
+	Second input	두 번째 입력
+	Share of trials at or below each value	각 값 이하인 시행의 비율
+	Target {value}	목표 {value}
+	The chance is under {hi}, with 95% confidence.	95% 신뢰도로 확률은 {hi} 미만입니다.
+	The model: its inputs, outputs and trials	모델: 입력, 출력, 시행
+	The number of trials was chosen from the results, so an interval may cover the true value less often than 95% of the time.	시행 횟수를 결과를 보고 정했으므로, 구간이 참값을 포함하는 경우가 95%보다 적을 수 있습니다.
+	The trials above come first; more follow in batches until every output's mean is within that share of itself, or the most is reached.	위의 시행을 먼저 하고, 모든 출력의 평균이 자신의 그 비율 이내에 들거나 최대에 이를 때까지 배치 단위로 시행을 더 합니다.
+	Trials and sampling	시행과 샘플링
+	Uncertain inputs instead of single guesses: the chance of an overrun, not one total.	하나의 추정치 대신 불확실한 입력으로: 합계 하나가 아니라 초과될 확률을 봅니다.
+	Will the project come in under budget?	프로젝트가 예산 안에서 끝날까요?
+	a name, such as cost	이름 (예: 비용)
+	a name, such as labour	이름 (예: 인건비)
+	random sampling	무작위 샘플링
+	{asked} trials were asked for; with Latin hypercube sampling or correlated inputs a run is whole batches of {size}, so {n} ran.	{asked}회의 시행을 요청했지만, 라틴 하이퍼큐브 샘플링이나 상관된 입력에서는 시행이 {size}회씩 온전한 배치 단위로 진행되므로 {n}회를 실행했습니다.
+	{a} and {b}: {achieved} in the trials, {target} asked for	{a}와(과) {b}: 시행에서 {achieved}, 요청 {target}
+	{output} was less than {value} in none of the {n} trials.	{n}회 시행 중 {output}이(가) {value}보다 작았던 적이 없습니다.
+	{output} was more than {value} in none of the {n} trials.	{n}회 시행 중 {output}이(가) {value}보다 컸던 적이 없습니다.
+@plural	Each ± is the half-width of the 95% interval of the mean across {n} independent batch of {size} trials. Latin hypercube sampling and correlated inputs make the trials within a batch depend on each other, so each batch counts as one.|Each ± is the half-width of the 95% interval of the mean across {n} independent batches of {size} trials. Latin hypercube sampling and correlated inputs make the trials within a batch depend on each other, so each batch counts as one.	각 ±는 {size}회 시행으로 된 독립 배치 {n}개에 걸친 평균의 95% 구간 너비의 절반입니다. 라틴 하이퍼큐브 샘플링과 상관된 입력은 배치 안의 시행들을 서로 의존하게 만들므로, 각 배치를 하나로 셉니다.
+@plural	Each ± is the half-width of the 95% interval of the mean across {n} independent trial.|Each ± is the half-width of the 95% interval of the mean across {n} independent trials.	각 ±는 독립 시행 {n}회에 걸친 평균의 95% 구간 너비의 절반입니다.
+@plural	Finished {n} trial|Finished {n} trials	시행 {n}회 완료
+@plural	Imported {n} input|Imported {n} inputs	입력 {n}개를 가져왔습니다
+@plural	Makes {n} trial from seed {seed}: each draws every input once and works out every output.|Makes {n} trials from seed {seed}: each draws every input once and works out every output.	시드 {seed}로 시행 {n}회를 합니다. 각 시행은 모든 입력에서 값을 한 번씩 뽑고 모든 출력을 계산합니다.
+@plural	Stopped after {n} trial: every output's mean is within ±{share} of itself.|Stopped after {n} trials: every output's mean is within ±{share} of itself.	시행 {n}회 후 멈췄습니다. 모든 출력의 평균이 자신의 ±{share} 이내입니다.
+@plural	Stopped at the most allowed, {n} trial, before every output's mean was within ±{share} of itself.|Stopped at the most allowed, {n} trials, before every output's mean was within ±{share} of itself.	허용된 최대인 시행 {n}회에서, 모든 출력의 평균이 자신의 ±{share} 이내에 들기 전에 멈췄습니다.
+@plural	{done} of {n} trial made|{done} of {n} trials made	시행 {n}회 중 {done}회 완료
+@plural	{n} trial gave no number (a division by zero, say) and is left out.|{n} trials gave no number (a division by zero, say) and are left out.	시행 {n}회가 숫자를 내지 못해(예: 0으로 나누기) 제외되었습니다.
+@plural	{n} trial · seed {seed} · {sampling}|{n} trials · seed {seed} · {sampling}	시행 {n}회 · 시드 {seed} · {sampling}
+@plural	{n} trial · seed {seed}|{n} trials · seed {seed}	시행 {n}회 · 시드 {seed}

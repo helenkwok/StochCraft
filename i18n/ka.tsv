@@ -1208,3 +1208,80 @@ unit	yr	წელი
 	Entities inside at the start are given for a block that does not exist. Remove them.	დასაწყისში შიგნით მყოფი ერთეულები მითითებულია ბლოკისთვის, რომელიც არ არსებობს. წაშალეთ ისინი.
 	{block} cannot have entities inside at the start: only a task or a batch can. Remove its “Inside at the start”.	{block}-ში დასაწყისში ერთეულები ვერ იქნება: ეს შეუძლია მხოლოდ დავალებას ან პარტიას. წაშალეთ მისი „დასაწყისში შიგნით“.
 	{block} has {count} entities inside at the start, but it holds at most {most}, its units and its waiting room. Set “Inside at the start” to {most} or fewer, or make the waiting room larger.	{block}-ში დასაწყისში შიგნით {count} ერთეულია, მაგრამ მასში ეტევა მაქსიმუმ {most}, მისი რესურსის ერთეულები და მოსაცდელი სივრცე. დააყენეთ „დასაწყისში შიგნით“ {most}-ზე ან ნაკლებზე, ან გაზარდეთ მოსაცდელი სივრცე.
+# Monte Carlo models in the window (ROADMAP M4.1, part 2)
+	95% interval of the chance: {lo} to {hi}.	ალბათობის 95%-იანი ინტერვალი: {lo}-დან {hi}-მდე.
+	A Monte Carlo model: uncertain durations, day rate and materials, and the chance the cost or the duration runs over.	მონტე-კარლოს მოდელი: გაურკვეველი ხანგრძლივობები, დღიური განაკვეთი და მასალები, და ალბათობა, რომ ღირებულება ან ხანგრძლივობა გადააჭარბებს გეგმას.
+	A calculation with uncertain inputs, not a process: each trial draws every input once and works out every output from them.	გამოთვლა გაურკვეველი შემავალი სიდიდეებით და არა პროცესი: ყოველი ცდა თითოეული შემავალი სიდიდიდან ერთხელ იღებს მნიშვნელობას და მათგან ითვლის ყველა გამომავალ სიდიდეს.
+	A rank correlation between two inputs, from -1 to 1: above 0 they tend to be high together, below 0 one tends to be high when the other is low. Inputs not paired here are independent; 0 removes a pair.	რანგობრივი კორელაცია ორ შემავალ სიდიდეს შორის, -1-დან 1-მდე: 0-ზე მეტისას ისინი ერთად მაღალი ყოფნისკენ არიან მიდრეკილნი, 0-ზე ნაკლებისას ერთი მაღალია, როცა მეორე დაბალია. აქ დაუწყვილებელი შემავალი სიდიდეები დამოუკიდებელია; 0 წყვილს შლის.
+	A {percent} chance that {output} is less than {value}.	{percent} ალბათობა, რომ {output} ნაკლებია {value}-ზე.
+	A {percent} chance that {output} is more than {value}.	{percent} ალბათობა, რომ {output} მეტია {value}-ზე.
+	About a 1 in {odds} chance that {output} is less than {value} ({percent}).	დაახლოებით 1 შანსი {odds}-დან, რომ {output} ნაკლებია {value}-ზე ({percent}).
+	About a 1 in {odds} chance that {output} is more than {value} ({percent}).	დაახლოებით 1 შანსი {odds}-დან, რომ {output} მეტია {value}-ზე ({percent}).
+	Add correlation	კორელაციის დამატება
+	Add input	შემავალი სიდიდის დამატება
+	Add output	გამომავალი სიდიდის დამატება
+	At most, trials	მაქსიმუმი, ცდა
+	Correlations	კორელაციები
+	Download inputs (CSV)	შემავალი სიდიდეების ჩამოტვირთვა (CSV)
+	Each input is a distribution: every trial draws one value from it.	ყოველი შემავალი სიდიდე განაწილებაა: ყოველი ცდა მისგან ერთ მნიშვნელობას იღებს.
+	Each output is worked out in every trial from the inputs and the outputs above it, each named as $name: for example $labour * $rate + $materials. Give it a target to see the chance of meeting it.	ყოველი გამომავალი სიდიდე ყოველ ცდაში გამოითვლება შემავალი სიდიდეებიდან და მის ზემოთ მყოფი გამომავალი სიდიდეებიდან, თითოეული მოიხსენიება როგორც $name: მაგალითად $labour * $rate + $materials. მიეცით მას მიზანი, რომ ნახოთ მისი მიღწევის ალბათობა.
+	Export inputs (CSV)	შემავალი სიდიდეების ექსპორტი (CSV)
+	First input	პირველი შემავალი სიდიდე
+	How many trials	რამდენი ცდა
+	How many trials gave each value	რამდენმა ცდამ მისცა თითოეული მნიშვნელობა
+	Import inputs	შემავალი სიდიდეების იმპორტი
+	In 9 trials out of 10, {output} is between {low} and {high}; the mean is {mean} ± {half_width}.	10 ცდიდან 9-ში {output} არის {low}-სა და {high}-ს შორის; საშუალო არის {mean} ± {half_width}.
+	In 9 trials out of 10, {output} is between {low} and {high}; the mean is {mean}.	10 ცდიდან 9-ში {output} არის {low}-სა და {high}-ს შორის; საშუალო არის {mean}.
+	Inputs	შემავალი სიდიდეები
+	Inputs as a table	შემავალი სიდიდეები ცხრილის სახით
+	Latin hypercube	ლათინური ჰიპერკუბი
+	Latin hypercube sampling	ლათინური ჰიპერკუბის შერჩევა
+	Latin hypercube sampling spreads each input's draws evenly over its range, so the results settle with fewer trials. With it, or with correlated inputs, trials run in whole batches of 1,000.	ლათინური ჰიპერკუბის შერჩევა თითოეული შემავალი სიდიდის მნიშვნელობებს თანაბრად ანაწილებს მის დიაპაზონზე, ამიტომ შედეგები ნაკლები ცდით სტაბილიზდება. მასთან ერთად, ან კორელირებული შემავალი სიდიდეებით, ცდები სრულ პარტიებად სრულდება, თითოში 1000.
+	Monte Carlo model	მონტე-კარლოს მოდელი
+	New Monte Carlo Model	ახალი მონტე-კარლოს მოდელი
+	New Monte Carlo model	ახალი მონტე-კარლოს მოდელი
+	New correlation	ახალი კორელაცია
+	New input	ახალი შემავალი სიდიდე
+	New output	ახალი გამომავალი სიდიდე
+	No inputs yet: add one below, or paste a table of them.	შემავალი სიდიდეები ჯერ არ არის: დაამატეთ ქვემოთ, ან ჩასვით მათი ცხრილი.
+	No interval: too few batches of trials for one.	ინტერვალი არ არის: ცდების პარტიები ძალიან ცოტაა მისთვის.
+	No outputs yet: add one below.	გამომავალი სიდიდეები ჯერ არ არის: დაამატეთ ქვემოთ.
+	None yet	ჯერ არცერთი
+	One input per line, as name, distribution, parameters and unit, copied from a spreadsheet or written as CSV: for example labour,triangular,min=80;mode=100;max=150,h.	ერთი შემავალი სიდიდე თითო სტრიქონზე, როგორც სახელი, განაწილება, პარამეტრები და ერთეული, ელცხრილიდან დაკოპირებული ან CSV-ის სახით დაწერილი: მაგალითად labour,triangular,min=80;mode=100;max=150,h.
+	Outputs	გამომავალი სიდიდეები
+	Paste inputs from a table	შემავალი სიდიდეების ჩასმა ცხრილიდან
+	Project budget	პროექტის ბიუჯეტი
+	Rank correlation	რანგობრივი კორელაცია
+	Remove the correlation of {a} and {b}	{a}-სა და {b}-ს კორელაციის წაშლა
+	Remove the input {name}	შემავალი სიდიდის {name} წაშლა
+	Remove the output {name}	გამომავალი სიდიდის {name} წაშლა
+	Replace every input	ყველა შემავალი სიდიდის ჩანაცვლება
+	Sampling	შერჩევა
+	Second input	მეორე შემავალი სიდიდე
+	Share of trials at or below each value	ცდების წილი, რომლებიც თითოეულ მნიშვნელობაზე ნაკლები ან ტოლია
+	Target {value}	მიზანი {value}
+	The chance is under {hi}, with 95% confidence.	ალბათობა {hi}-ზე ნაკლებია, 95%-იანი სანდოობით.
+	The model: its inputs, outputs and trials	მოდელი: მისი შემავალი სიდიდეები, გამომავალი სიდიდეები და ცდები
+	The number of trials was chosen from the results, so an interval may cover the true value less often than 95% of the time.	ცდების რაოდენობა შედეგების მიხედვით შეირჩა, ამიტომ ინტერვალმა შეიძლება ნამდვილი მნიშვნელობა შემთხვევების 95%-ზე ნაკლებში მოიცვას.
+	The trials above come first; more follow in batches until every output's mean is within that share of itself, or the most is reached.	ჯერ სრულდება ზემოთ მითითებული ცდები; შემდეგ პარტიებად მოჰყვება კიდევ, სანამ ყველა გამომავალი სიდიდის საშუალო საკუთარი თავის ამ წილის ფარგლებში არ მოხვდება, ან მაქსიმუმს არ მიაღწევს.
+	Trials and sampling	ცდები და შერჩევა
+	Uncertain inputs instead of single guesses: the chance of an overrun, not one total.	გაურკვეველი შემავალი სიდიდეები ერთი შეფასების ნაცვლად: გადაჭარბების ალბათობა და არა ერთი ჯამი.
+	Will the project come in under budget?	ჩაეტევა პროექტი ბიუჯეტში?
+	a name, such as cost	სახელი, მაგალითად ღირებულება
+	a name, such as labour	სახელი, მაგალითად შრომა
+	random sampling	შემთხვევითი შერჩევა
+	{asked} trials were asked for; with Latin hypercube sampling or correlated inputs a run is whole batches of {size}, so {n} ran.	მოთხოვნილი იყო {asked} ცდა; ლათინური ჰიპერკუბის შერჩევით ან კორელირებული შემავალი სიდიდეებით ცდები {size}-იან სრულ პარტიებად სრულდება, ამიტომ შესრულდა {n}.
+	{a} and {b}: {achieved} in the trials, {target} asked for	{a} და {b}: ცდებში {achieved}, მოთხოვნილი {target}
+	{output} was less than {value} in none of the {n} trials.	{n} ცდიდან არცერთში {output} არ ყოფილა {value}-ზე ნაკლები.
+	{output} was more than {value} in none of the {n} trials.	{n} ცდიდან არცერთში {output} არ ყოფილა {value}-ზე მეტი.
+@plural	Each ± is the half-width of the 95% interval of the mean across {n} independent batch of {size} trials. Latin hypercube sampling and correlated inputs make the trials within a batch depend on each other, so each batch counts as one.|Each ± is the half-width of the 95% interval of the mean across {n} independent batches of {size} trials. Latin hypercube sampling and correlated inputs make the trials within a batch depend on each other, so each batch counts as one.	თითოეული ± არის საშუალოს 95%-იანი ინტერვალის ნახევარსიგანე {n} დამოუკიდებელი პარტიის მიხედვით, თითოში {size} ცდა. ლათინური ჰიპერკუბის შერჩევა და კორელირებული შემავალი სიდიდეები ერთი პარტიის ცდებს ერთმანეთზე დამოკიდებულს ხდის, ამიტომ ყოველი პარტია ერთად ითვლება.|თითოეული ± არის საშუალოს 95%-იანი ინტერვალის ნახევარსიგანე {n} დამოუკიდებელი პარტიის მიხედვით, თითოში {size} ცდა. ლათინური ჰიპერკუბის შერჩევა და კორელირებული შემავალი სიდიდეები ერთი პარტიის ცდებს ერთმანეთზე დამოკიდებულს ხდის, ამიტომ ყოველი პარტია ერთად ითვლება.
+@plural	Each ± is the half-width of the 95% interval of the mean across {n} independent trial.|Each ± is the half-width of the 95% interval of the mean across {n} independent trials.	თითოეული ± არის საშუალოს 95%-იანი ინტერვალის ნახევარსიგანე {n} დამოუკიდებელი ცდის მიხედვით.|თითოეული ± არის საშუალოს 95%-იანი ინტერვალის ნახევარსიგანე {n} დამოუკიდებელი ცდის მიხედვით.
+@plural	Finished {n} trial|Finished {n} trials	დასრულდა {n} ცდა|დასრულდა {n} ცდა
+@plural	Imported {n} input|Imported {n} inputs	იმპორტირდა {n} შემავალი სიდიდე|იმპორტირდა {n} შემავალი სიდიდე
+@plural	Makes {n} trial from seed {seed}: each draws every input once and works out every output.|Makes {n} trials from seed {seed}: each draws every input once and works out every output.	ატარებს {n} ცდას საწყისი მნიშვნელობით {seed}: თითოეული ყველა შემავალი სიდიდიდან ერთხელ იღებს მნიშვნელობას და ითვლის ყველა გამომავალ სიდიდეს.|ატარებს {n} ცდას საწყისი მნიშვნელობით {seed}: თითოეული ყველა შემავალი სიდიდიდან ერთხელ იღებს მნიშვნელობას და ითვლის ყველა გამომავალ სიდიდეს.
+@plural	Stopped after {n} trial: every output's mean is within ±{share} of itself.|Stopped after {n} trials: every output's mean is within ±{share} of itself.	შეჩერდა {n} ცდის შემდეგ: ყველა გამომავალი სიდიდის საშუალო საკუთარი თავის ±{share}-ის ფარგლებშია.|შეჩერდა {n} ცდის შემდეგ: ყველა გამომავალი სიდიდის საშუალო საკუთარი თავის ±{share}-ის ფარგლებშია.
+@plural	Stopped at the most allowed, {n} trial, before every output's mean was within ±{share} of itself.|Stopped at the most allowed, {n} trials, before every output's mean was within ±{share} of itself.	შეჩერდა დაშვებულ მაქსიმუმზე, {n} ცდაზე, სანამ ყველა გამომავალი სიდიდის საშუალო საკუთარი თავის ±{share}-ის ფარგლებში მოხვდებოდა.|შეჩერდა დაშვებულ მაქსიმუმზე, {n} ცდაზე, სანამ ყველა გამომავალი სიდიდის საშუალო საკუთარი თავის ±{share}-ის ფარგლებში მოხვდებოდა.
+@plural	{done} of {n} trial made|{done} of {n} trials made	{n} ცდიდან შესრულდა {done}|{n} ცდიდან შესრულდა {done}
+@plural	{n} trial gave no number (a division by zero, say) and is left out.|{n} trials gave no number (a division by zero, say) and are left out.	{n} ცდამ რიცხვი არ მოგვცა (მაგალითად, ნულზე გაყოფა) და გამოტოვებულია.|{n} ცდამ რიცხვი არ მოგვცა (მაგალითად, ნულზე გაყოფა) და გამოტოვებულია.
+@plural	{n} trial · seed {seed} · {sampling}|{n} trials · seed {seed} · {sampling}	{n} ცდა · საწყისი მნიშვნელობა {seed} · {sampling}|{n} ცდა · საწყისი მნიშვნელობა {seed} · {sampling}
+@plural	{n} trial · seed {seed}|{n} trials · seed {seed}	{n} ცდა · საწყისი მნიშვნელობა {seed}|{n} ცდა · საწყისი მნიშვნელობა {seed}

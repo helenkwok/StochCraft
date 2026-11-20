@@ -1208,3 +1208,80 @@ unit	yr	r.
 	Entities inside at the start are given for a block that does not exist. Remove them.	Entity vnútri na začiatku sú zadané pre blok, ktorý neexistuje. Odstráňte ich.
 	{block} cannot have entities inside at the start: only a task or a batch can. Remove its “Inside at the start”.	{block} nemôže mať na začiatku vnútri entity: môže iba úloha alebo dávka. Odstráňte jeho „Vnútri na začiatku“.
 	{block} has {count} entities inside at the start, but it holds at most {most}, its units and its waiting room. Set “Inside at the start” to {most} or fewer, or make the waiting room larger.	{block} má na začiatku vnútri {count} entít, ale pojme najviac {most}, svoje jednotky a čakáreň. Nastavte „Vnútri na začiatku“ na {most} alebo menej, alebo zväčšite čakáreň.
+# Monte Carlo models in the window (ROADMAP M4.1, part 2)
+	95% interval of the chance: {lo} to {hi}.	95 % interval pravdepodobnosti: {lo} až {hi}.
+	A Monte Carlo model: uncertain durations, day rate and materials, and the chance the cost or the duration runs over.	Model Monte Carlo: neisté trvania, denná sadzba a materiál a pravdepodobnosť, že náklady alebo trvanie budú prekročené.
+	A calculation with uncertain inputs, not a process: each trial draws every input once and works out every output from them.	Výpočet s neistými vstupmi, nie proces: každá iterácia vyžrebuje každý vstup raz a vypočíta z nich každý výstup.
+	A rank correlation between two inputs, from -1 to 1: above 0 they tend to be high together, below 0 one tends to be high when the other is low. Inputs not paired here are independent; 0 removes a pair.	Poradová korelácia medzi dvoma vstupmi, od -1 do 1: nad 0 bývajú vysoké spolu, pod 0 býva jeden vysoký, keď je druhý nízky. Vstupy, ktoré tu nie sú spárované, sú nezávislé; 0 odstráni pár.
+	A {percent} chance that {output} is less than {value}.	Pravdepodobnosť {percent}, že hodnota {output} je menšia ako {value}.
+	A {percent} chance that {output} is more than {value}.	Pravdepodobnosť {percent}, že hodnota {output} je väčšia ako {value}.
+	About a 1 in {odds} chance that {output} is less than {value} ({percent}).	Asi 1 šanca z {odds}, že hodnota {output} je menšia ako {value} ({percent}).
+	About a 1 in {odds} chance that {output} is more than {value} ({percent}).	Asi 1 šanca z {odds}, že hodnota {output} je väčšia ako {value} ({percent}).
+	Add correlation	Pridať koreláciu
+	Add input	Pridať vstup
+	Add output	Pridať výstup
+	At most, trials	Najviac, iterácií
+	Correlations	Korelácie
+	Download inputs (CSV)	Stiahnuť vstupy (CSV)
+	Each input is a distribution: every trial draws one value from it.	Každý vstup je rozdelenie: každá iterácia z neho vyžrebuje jednu hodnotu.
+	Each output is worked out in every trial from the inputs and the outputs above it, each named as $name: for example $labour * $rate + $materials. Give it a target to see the chance of meeting it.	Každý výstup sa v každej iterácii vypočíta zo vstupov a z výstupov nad ním, pričom každý sa označuje ako $name: napríklad $labour * $rate + $materials. Zadajte mu cieľ, aby ste videli pravdepodobnosť jeho splnenia.
+	Export inputs (CSV)	Exportovať vstupy (CSV)
+	First input	Prvý vstup
+	How many trials	Koľko iterácií
+	How many trials gave each value	Koľko iterácií dalo každú hodnotu
+	Import inputs	Importovať vstupy
+	In 9 trials out of 10, {output} is between {low} and {high}; the mean is {mean} ± {half_width}.	V 9 iteráciách z 10 je {output} medzi {low} a {high}; priemer je {mean} ± {half_width}.
+	In 9 trials out of 10, {output} is between {low} and {high}; the mean is {mean}.	V 9 iteráciách z 10 je {output} medzi {low} a {high}; priemer je {mean}.
+	Inputs	Vstupy
+	Inputs as a table	Vstupy ako tabuľka
+	Latin hypercube	Latinská hyperkocka
+	Latin hypercube sampling	Vzorkovanie latinskou hyperkockou
+	Latin hypercube sampling spreads each input's draws evenly over its range, so the results settle with fewer trials. With it, or with correlated inputs, trials run in whole batches of 1,000.	Vzorkovanie latinskou hyperkockou rozloží žrebovania každého vstupu rovnomerne po jeho rozsahu, takže sa výsledky ustália s menším počtom iterácií. S ním alebo s korelovanými vstupmi prebiehajú iterácie v celých dávkach po 1 000.
+	Monte Carlo model	Model Monte Carlo
+	New Monte Carlo Model	Nový model Monte Carlo
+	New Monte Carlo model	Nový model Monte Carlo
+	New correlation	Nová korelácia
+	New input	Nový vstup
+	New output	Nový výstup
+	No inputs yet: add one below, or paste a table of them.	Zatiaľ žiadne vstupy: pridajte jeden nižšie alebo vložte ich tabuľku.
+	No interval: too few batches of trials for one.	Žiadny interval: na jeho určenie je príliš málo dávok iterácií.
+	No outputs yet: add one below.	Zatiaľ žiadne výstupy: pridajte jeden nižšie.
+	None yet	Zatiaľ žiadne
+	One input per line, as name, distribution, parameters and unit, copied from a spreadsheet or written as CSV: for example labour,triangular,min=80;mode=100;max=150,h.	Jeden vstup na riadok, ako názov, rozdelenie, parametre a jednotka, skopírovaný z tabuľkového procesora alebo zapísaný ako CSV: napríklad labour,triangular,min=80;mode=100;max=150,h.
+	Outputs	Výstupy
+	Paste inputs from a table	Vložiť vstupy z tabuľky
+	Project budget	Rozpočet projektu
+	Rank correlation	Poradová korelácia
+	Remove the correlation of {a} and {b}	Odstrániť koreláciu {a} a {b}
+	Remove the input {name}	Odstrániť vstup {name}
+	Remove the output {name}	Odstrániť výstup {name}
+	Replace every input	Nahradiť všetky vstupy
+	Sampling	Vzorkovanie
+	Second input	Druhý vstup
+	Share of trials at or below each value	Podiel iterácií s hodnotou najviac rovnou danej hodnote
+	Target {value}	Cieľ {value}
+	The chance is under {hi}, with 95% confidence.	Pravdepodobnosť je pod {hi} s 95 % spoľahlivosťou.
+	The model: its inputs, outputs and trials	Model: jeho vstupy, výstupy a iterácie
+	The number of trials was chosen from the results, so an interval may cover the true value less often than 95% of the time.	Počet iterácií sa zvolil podľa výsledkov, takže interval môže pokryť skutočnú hodnotu menej často než v 95 % prípadov.
+	The trials above come first; more follow in batches until every output's mean is within that share of itself, or the most is reached.	Najprv sa vykonajú iterácie uvedené vyššie; potom sa pridávajú ďalšie v dávkach, kým priemer každého výstupu nie je v rámci tohto podielu seba samého alebo sa nedosiahne maximum.
+	Trials and sampling	Iterácie a vzorkovanie
+	Uncertain inputs instead of single guesses: the chance of an overrun, not one total.	Neisté vstupy namiesto jednotlivých odhadov: pravdepodobnosť prekročenia, nie jeden súčet.
+	Will the project come in under budget?	Zmestí sa projekt do rozpočtu?
+	a name, such as cost	názov, napríklad náklady
+	a name, such as labour	názov, napríklad práca
+	random sampling	náhodné vzorkovanie
+	{asked} trials were asked for; with Latin hypercube sampling or correlated inputs a run is whole batches of {size}, so {n} ran.	Požadovalo sa {asked} iterácií; pri vzorkovaní latinskou hyperkockou alebo korelovaných vstupoch tvoria beh celé dávky po {size}, takže prebehlo {n}.
+	{a} and {b}: {achieved} in the trials, {target} asked for	{a} a {b}: {achieved} v iteráciách, požadované {target}
+	{output} was less than {value} in none of the {n} trials.	V žiadnej z {n} iterácií nebola hodnota {output} menšia ako {value}.
+	{output} was more than {value} in none of the {n} trials.	V žiadnej z {n} iterácií nebola hodnota {output} väčšia ako {value}.
+@plural	Each ± is the half-width of the 95% interval of the mean across {n} independent batch of {size} trials. Latin hypercube sampling and correlated inputs make the trials within a batch depend on each other, so each batch counts as one.|Each ± is the half-width of the 95% interval of the mean across {n} independent batches of {size} trials. Latin hypercube sampling and correlated inputs make the trials within a batch depend on each other, so each batch counts as one.	Každé ± je polovičná šírka 95 % intervalu priemeru naprieč {n} nezávislou dávkou po {size} iterácií. Vzorkovanie latinskou hyperkockou a korelované vstupy robia iterácie v rámci dávky navzájom závislými, preto sa každá dávka počíta ako jedna.|Každé ± je polovičná šírka 95 % intervalu priemeru naprieč {n} nezávislými dávkami po {size} iterácií. Vzorkovanie latinskou hyperkockou a korelované vstupy robia iterácie v rámci dávky navzájom závislými, preto sa každá dávka počíta ako jedna.|Každé ± je polovičná šírka 95 % intervalu priemeru naprieč {n} nezávislými dávkami po {size} iterácií. Vzorkovanie latinskou hyperkockou a korelované vstupy robia iterácie v rámci dávky navzájom závislými, preto sa každá dávka počíta ako jedna.
+@plural	Each ± is the half-width of the 95% interval of the mean across {n} independent trial.|Each ± is the half-width of the 95% interval of the mean across {n} independent trials.	Každé ± je polovičná šírka 95 % intervalu priemeru naprieč {n} nezávislou iteráciou.|Každé ± je polovičná šírka 95 % intervalu priemeru naprieč {n} nezávislými iteráciami.|Každé ± je polovičná šírka 95 % intervalu priemeru naprieč {n} nezávislými iteráciami.
+@plural	Finished {n} trial|Finished {n} trials	Dokončená {n} iterácia|Dokončené {n} iterácie|Dokončených {n} iterácií
+@plural	Imported {n} input|Imported {n} inputs	Importovaný {n} vstup|Importované {n} vstupy|Importovaných {n} vstupov
+@plural	Makes {n} trial from seed {seed}: each draws every input once and works out every output.|Makes {n} trials from seed {seed}: each draws every input once and works out every output.	Vykoná {n} iteráciu od počiatočnej hodnoty {seed}: každá raz vyžrebuje každý vstup a vypočíta každý výstup.|Vykoná {n} iterácie od počiatočnej hodnoty {seed}: každá raz vyžrebuje každý vstup a vypočíta každý výstup.|Vykoná {n} iterácií od počiatočnej hodnoty {seed}: každá raz vyžrebuje každý vstup a vypočíta každý výstup.
+@plural	Stopped after {n} trial: every output's mean is within ±{share} of itself.|Stopped after {n} trials: every output's mean is within ±{share} of itself.	Zastavené po {n} iterácii: priemer každého výstupu je v rozmedzí ±{share} seba samého.|Zastavené po {n} iteráciách: priemer každého výstupu je v rozmedzí ±{share} seba samého.|Zastavené po {n} iteráciách: priemer každého výstupu je v rozmedzí ±{share} seba samého.
+@plural	Stopped at the most allowed, {n} trial, before every output's mean was within ±{share} of itself.|Stopped at the most allowed, {n} trials, before every output's mean was within ±{share} of itself.	Zastavené na povolenom maxime, {n} iterácii, skôr než bol priemer každého výstupu v rozmedzí ±{share} seba samého.|Zastavené na povolenom maxime, {n} iteráciách, skôr než bol priemer každého výstupu v rozmedzí ±{share} seba samého.|Zastavené na povolenom maxime, {n} iteráciách, skôr než bol priemer každého výstupu v rozmedzí ±{share} seba samého.
+@plural	{done} of {n} trial made|{done} of {n} trials made	Hotovo {done} z {n} iterácie|Hotovo {done} z {n} iterácií|Hotovo {done} z {n} iterácií
+@plural	{n} trial gave no number (a division by zero, say) and is left out.|{n} trials gave no number (a division by zero, say) and are left out.	{n} iterácia nedala žiadne číslo (napríklad delenie nulou) a je vynechaná.|{n} iterácie nedali žiadne číslo (napríklad delenie nulou) a sú vynechané.|{n} iterácií nedalo žiadne číslo (napríklad delenie nulou) a sú vynechané.
+@plural	{n} trial · seed {seed} · {sampling}|{n} trials · seed {seed} · {sampling}	{n} iterácia · počiatočná hodnota {seed} · {sampling}|{n} iterácie · počiatočná hodnota {seed} · {sampling}|{n} iterácií · počiatočná hodnota {seed} · {sampling}
+@plural	{n} trial · seed {seed}|{n} trials · seed {seed}	{n} iterácia · počiatočná hodnota {seed}|{n} iterácie · počiatočná hodnota {seed}|{n} iterácií · počiatočná hodnota {seed}

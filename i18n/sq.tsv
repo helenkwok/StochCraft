@@ -1208,3 +1208,80 @@ unit	yr	v
 	Entities inside at the start are given for a block that does not exist. Remove them.	Janë dhënë entitete brenda në fillim për një bllok që nuk ekziston. Hiqini ato.
 	{block} cannot have entities inside at the start: only a task or a batch can. Remove its “Inside at the start”.	Blloku {block} nuk mund të ketë entitete brenda në fillim: këtë mund ta ketë vetëm një detyrë ose një grup. Hiqni „Brenda në fillim” të tij.
 	{block} has {count} entities inside at the start, but it holds at most {most}, its units and its waiting room. Set “Inside at the start” to {most} or fewer, or make the waiting room larger.	Blloku {block} ka {count} entitete brenda në fillim, por mban më së shumti {most}, njësitë dhe dhomën e tij të pritjes. Vendoseni „Brenda në fillim” në {most} ose më pak, ose zmadhoni dhomën e pritjes.
+# Monte Carlo models in the window (ROADMAP M4.1, part 2)
+	95% interval of the chance: {lo} to {hi}.	Intervali 95% i mundësisë: nga {lo} në {hi}.
+	A Monte Carlo model: uncertain durations, day rate and materials, and the chance the cost or the duration runs over.	Një model Monte Carlo: kohëzgjatje të pasigurta, tarifë ditore dhe materiale, dhe mundësia që kostoja ose kohëzgjatja të tejkalohen.
+	A calculation with uncertain inputs, not a process: each trial draws every input once and works out every output from them.	Një llogaritje me hyrje të pasigurta, jo një proces: çdo provë tërheq çdo hyrje një herë dhe prej tyre llogarit çdo dalje.
+	A rank correlation between two inputs, from -1 to 1: above 0 they tend to be high together, below 0 one tends to be high when the other is low. Inputs not paired here are independent; 0 removes a pair.	Një korrelacion i rangut midis dy hyrjeve, nga -1 në 1: mbi 0 ato priren të jenë të larta së bashku, nën 0 njëra priret të jetë e lartë kur tjetra është e ulët. Hyrjet që nuk janë çiftuar këtu janë të pavarura; 0 heq një çift.
+	A {percent} chance that {output} is less than {value}.	Një mundësi prej {percent} që {output} të jetë më pak se {value}.
+	A {percent} chance that {output} is more than {value}.	Një mundësi prej {percent} që {output} të jetë më shumë se {value}.
+	About a 1 in {odds} chance that {output} is less than {value} ({percent}).	Rreth 1 mundësi në {odds} që {output} të jetë më pak se {value} ({percent}).
+	About a 1 in {odds} chance that {output} is more than {value} ({percent}).	Rreth 1 mundësi në {odds} që {output} të jetë më shumë se {value} ({percent}).
+	Add correlation	Shto korrelacion
+	Add input	Shto hyrje
+	Add output	Shto dalje
+	At most, trials	Më së shumti, prova
+	Correlations	Korrelacionet
+	Download inputs (CSV)	Shkarko hyrjet (CSV)
+	Each input is a distribution: every trial draws one value from it.	Çdo hyrje është një shpërndarje: çdo provë tërheq një vlerë prej saj.
+	Each output is worked out in every trial from the inputs and the outputs above it, each named as $name: for example $labour * $rate + $materials. Give it a target to see the chance of meeting it.	Çdo dalje llogaritet në çdo provë nga hyrjet dhe daljet mbi të, secila e emërtuar si $name: për shembull $labour * $rate + $materials. Jepini një objektiv për të parë mundësinë e arritjes së tij.
+	Export inputs (CSV)	Eksporto hyrjet (CSV)
+	First input	Hyrja e parë
+	How many trials	Sa prova
+	How many trials gave each value	Sa prova dhanë secilën vlerë
+	Import inputs	Importo hyrjet
+	In 9 trials out of 10, {output} is between {low} and {high}; the mean is {mean} ± {half_width}.	Në 9 prova nga 10, {output} është midis {low} dhe {high}; mesatarja është {mean} ± {half_width}.
+	In 9 trials out of 10, {output} is between {low} and {high}; the mean is {mean}.	Në 9 prova nga 10, {output} është midis {low} dhe {high}; mesatarja është {mean}.
+	Inputs	Hyrjet
+	Inputs as a table	Hyrjet si tabelë
+	Latin hypercube	Hiperkub latin
+	Latin hypercube sampling	Kampionim me hiperkub latin
+	Latin hypercube sampling spreads each input's draws evenly over its range, so the results settle with fewer trials. With it, or with correlated inputs, trials run in whole batches of 1,000.	Kampionimi me hiperkub latin i shpërndan tërheqjet e çdo hyrjeje në mënyrë të njëtrajtshme në gjithë intervalin e saj, kështu që rezultatet stabilizohen me më pak prova. Me të, ose me hyrje të korreluara, provat ekzekutohen në grupe të plota prej 1000.
+	Monte Carlo model	Model Monte Carlo
+	New Monte Carlo Model	Model i ri Monte Carlo
+	New Monte Carlo model	Model i ri Monte Carlo
+	New correlation	Korrelacion i ri
+	New input	Hyrje e re
+	New output	Dalje e re
+	No inputs yet: add one below, or paste a table of them.	Ende asnjë hyrje: shtoni një më poshtë, ose ngjitni një tabelë me to.
+	No interval: too few batches of trials for one.	Asnjë interval: shumë pak grupe provash për të.
+	No outputs yet: add one below.	Ende asnjë dalje: shtoni një më poshtë.
+	None yet	Ende asnjë
+	One input per line, as name, distribution, parameters and unit, copied from a spreadsheet or written as CSV: for example labour,triangular,min=80;mode=100;max=150,h.	Një hyrje për rresht, si emër, shpërndarje, parametra dhe njësi, e kopjuar nga një fletëllogaritëse ose e shkruar si CSV: për shembull labour,triangular,min=80;mode=100;max=150,h.
+	Outputs	Daljet
+	Paste inputs from a table	Ngjit hyrjet nga një tabelë
+	Project budget	Buxheti i projektit
+	Rank correlation	Korrelacion i rangut
+	Remove the correlation of {a} and {b}	Hiq korrelacionin e {a} dhe {b}
+	Remove the input {name}	Hiq hyrjen {name}
+	Remove the output {name}	Hiq daljen {name}
+	Replace every input	Zëvendëso të gjitha hyrjet
+	Sampling	Kampionimi
+	Second input	Hyrja e dytë
+	Share of trials at or below each value	Pjesa e provave në ose nën secilën vlerë
+	Target {value}	Objektivi {value}
+	The chance is under {hi}, with 95% confidence.	Mundësia është nën {hi}, me besim 95%.
+	The model: its inputs, outputs and trials	Modeli: hyrjet, daljet dhe provat e tij
+	The number of trials was chosen from the results, so an interval may cover the true value less often than 95% of the time.	Numri i provave u zgjodh nga rezultatet, ndaj një interval mund ta mbulojë vlerën e vërtetë më rrallë se në 95% të rasteve.
+	The trials above come first; more follow in batches until every output's mean is within that share of itself, or the most is reached.	Provat e mësipërme vijnë të parat; pastaj shtohen të tjera në grupe, derisa mesatarja e çdo daljeje të jetë brenda asaj pjese të vetvetes, ose të arrihet maksimumi.
+	Trials and sampling	Provat dhe kampionimi
+	Uncertain inputs instead of single guesses: the chance of an overrun, not one total.	Hyrje të pasigurta në vend të hamendjeve të vetme: mundësia e një tejkalimi, jo një shumë e vetme.
+	Will the project come in under budget?	A do të mbetet projekti brenda buxhetit?
+	a name, such as cost	një emër, si kosto
+	a name, such as labour	një emër, si punë
+	random sampling	kampionim i rastësishëm
+	{asked} trials were asked for; with Latin hypercube sampling or correlated inputs a run is whole batches of {size}, so {n} ran.	U kërkuan {asked} prova; me kampionim me hiperkub latin ose hyrje të korreluara, një ekzekutim përbëhet nga grupe të plota prej {size}, ndaj u ekzekutuan {n}.
+	{a} and {b}: {achieved} in the trials, {target} asked for	{a} dhe {b}: {achieved} në prova, {target} e kërkuar
+	{output} was less than {value} in none of the {n} trials.	{output} nuk ishte më pak se {value} në asnjë nga {n} provat.
+	{output} was more than {value} in none of the {n} trials.	{output} nuk ishte më shumë se {value} në asnjë nga {n} provat.
+@plural	Each ± is the half-width of the 95% interval of the mean across {n} independent batch of {size} trials. Latin hypercube sampling and correlated inputs make the trials within a batch depend on each other, so each batch counts as one.|Each ± is the half-width of the 95% interval of the mean across {n} independent batches of {size} trials. Latin hypercube sampling and correlated inputs make the trials within a batch depend on each other, so each batch counts as one.	Çdo ± është gjysma e gjerësisë së intervalit 95% të mesatares mbi {n} grup të pavarur prej {size} provash. Kampionimi me hiperkub latin dhe hyrjet e korreluara i bëjnë provat brenda një grupi të varura nga njëra-tjetra, ndaj çdo grup llogaritet si një.|Çdo ± është gjysma e gjerësisë së intervalit 95% të mesatares mbi {n} grupe të pavarura prej {size} provash. Kampionimi me hiperkub latin dhe hyrjet e korreluara i bëjnë provat brenda një grupi të varura nga njëra-tjetra, ndaj çdo grup llogaritet si një.
+@plural	Each ± is the half-width of the 95% interval of the mean across {n} independent trial.|Each ± is the half-width of the 95% interval of the mean across {n} independent trials.	Çdo ± është gjysma e gjerësisë së intervalit 95% të mesatares mbi {n} provë të pavarur.|Çdo ± është gjysma e gjerësisë së intervalit 95% të mesatares mbi {n} prova të pavarura.
+@plural	Finished {n} trial|Finished {n} trials	Përfundoi {n} provë|Përfunduan {n} prova
+@plural	Imported {n} input|Imported {n} inputs	U importua {n} hyrje|U importuan {n} hyrje
+@plural	Makes {n} trial from seed {seed}: each draws every input once and works out every output.|Makes {n} trials from seed {seed}: each draws every input once and works out every output.	Bën {n} provë nga fara {seed}: secila tërheq çdo hyrje një herë dhe llogarit çdo dalje.|Bën {n} prova nga fara {seed}: secila tërheq çdo hyrje një herë dhe llogarit çdo dalje.
+@plural	Stopped after {n} trial: every output's mean is within ±{share} of itself.|Stopped after {n} trials: every output's mean is within ±{share} of itself.	U ndal pas {n} prove: mesatarja e çdo daljeje është brenda ±{share} të vetvetes.|U ndal pas {n} provash: mesatarja e çdo daljeje është brenda ±{share} të vetvetes.
+@plural	Stopped at the most allowed, {n} trial, before every output's mean was within ±{share} of itself.|Stopped at the most allowed, {n} trials, before every output's mean was within ±{share} of itself.	U ndal në maksimumin e lejuar, {n} provë, para se mesatarja e çdo daljeje të ishte brenda ±{share} të vetvetes.|U ndal në maksimumin e lejuar, {n} prova, para se mesatarja e çdo daljeje të ishte brenda ±{share} të vetvetes.
+@plural	{done} of {n} trial made|{done} of {n} trials made	Bërë {done} nga {n} provë|Bërë {done} nga {n} prova
+@plural	{n} trial gave no number (a division by zero, say) and is left out.|{n} trials gave no number (a division by zero, say) and are left out.	{n} provë nuk dha numër (p.sh. një pjesëtim me zero) dhe lihet jashtë.|{n} prova nuk dhanë numër (p.sh. një pjesëtim me zero) dhe lihen jashtë.
+@plural	{n} trial · seed {seed} · {sampling}|{n} trials · seed {seed} · {sampling}	{n} provë · fara {seed} · {sampling}|{n} prova · fara {seed} · {sampling}
+@plural	{n} trial · seed {seed}|{n} trials · seed {seed}	{n} provë · fara {seed}|{n} prova · fara {seed}

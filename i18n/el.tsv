@@ -1208,3 +1208,80 @@ unit	yr	έτ
 	Entities inside at the start are given for a block that does not exist. Remove them.	Ορίστηκαν οντότητες εντός στην αρχή για ένα μπλοκ που δεν υπάρχει. Αφαιρέστε τις.
 	{block} cannot have entities inside at the start: only a task or a batch can. Remove its “Inside at the start”.	Το μπλοκ {block} δεν μπορεί να έχει οντότητες εντός στην αρχή: μόνο μια εργασία ή μια παρτίδα μπορεί. Αφαιρέστε το «Εντός στην αρχή» του.
 	{block} has {count} entities inside at the start, but it holds at most {most}, its units and its waiting room. Set “Inside at the start” to {most} or fewer, or make the waiting room larger.	Το μπλοκ {block} έχει {count} οντότητες εντός στην αρχή, αλλά χωράει το πολύ {most}, τις μονάδες του και τον χώρο αναμονής του. Ορίστε το «Εντός στην αρχή» σε {most} ή λιγότερες, ή μεγαλώστε τον χώρο αναμονής.
+# Monte Carlo models in the window (ROADMAP M4.1, part 2)
+	95% interval of the chance: {lo} to {hi}.	Διάστημα 95% της πιθανότητας: από {lo} έως {hi}.
+	A Monte Carlo model: uncertain durations, day rate and materials, and the chance the cost or the duration runs over.	Ένα μοντέλο Monte Carlo: αβέβαιες διάρκειες, ημερήσια αμοιβή και υλικά, και η πιθανότητα να ξεπεραστεί το κόστος ή η διάρκεια.
+	A calculation with uncertain inputs, not a process: each trial draws every input once and works out every output from them.	Ένας υπολογισμός με αβέβαιες εισόδους, όχι μια διαδικασία: κάθε δοκιμή κληρώνει μία φορά κάθε είσοδο και υπολογίζει από αυτές κάθε έξοδο.
+	A rank correlation between two inputs, from -1 to 1: above 0 they tend to be high together, below 0 one tends to be high when the other is low. Inputs not paired here are independent; 0 removes a pair.	Μια συσχέτιση τάξεων μεταξύ δύο εισόδων, από -1 έως 1: πάνω από 0 τείνουν να είναι υψηλές μαζί, κάτω από 0 η μία τείνει να είναι υψηλή όταν η άλλη είναι χαμηλή. Οι είσοδοι που δεν έχουν ζευγαρωθεί εδώ είναι ανεξάρτητες· το 0 αφαιρεί ένα ζεύγος.
+	A {percent} chance that {output} is less than {value}.	Πιθανότητα {percent} το {output} να είναι μικρότερο από {value}.
+	A {percent} chance that {output} is more than {value}.	Πιθανότητα {percent} το {output} να είναι μεγαλύτερο από {value}.
+	About a 1 in {odds} chance that {output} is less than {value} ({percent}).	Περίπου 1 στις {odds} πιθανότητα το {output} να είναι μικρότερο από {value} ({percent}).
+	About a 1 in {odds} chance that {output} is more than {value} ({percent}).	Περίπου 1 στις {odds} πιθανότητα το {output} να είναι μεγαλύτερο από {value} ({percent}).
+	Add correlation	Προσθήκη συσχέτισης
+	Add input	Προσθήκη εισόδου
+	Add output	Προσθήκη εξόδου
+	At most, trials	Το πολύ, δοκιμές
+	Correlations	Συσχετίσεις
+	Download inputs (CSV)	Λήψη εισόδων (CSV)
+	Each input is a distribution: every trial draws one value from it.	Κάθε είσοδος είναι μια κατανομή: κάθε δοκιμή κληρώνει από αυτήν μία τιμή.
+	Each output is worked out in every trial from the inputs and the outputs above it, each named as $name: for example $labour * $rate + $materials. Give it a target to see the chance of meeting it.	Κάθε έξοδος υπολογίζεται σε κάθε δοκιμή από τις εισόδους και τις εξόδους πάνω από αυτήν, καθεμία με όνομα $name: για παράδειγμα $labour * $rate + $materials. Ορίστε της στόχο για να δείτε την πιθανότητα να επιτευχθεί.
+	Export inputs (CSV)	Εξαγωγή εισόδων (CSV)
+	First input	Πρώτη είσοδος
+	How many trials	Πόσες δοκιμές
+	How many trials gave each value	Πόσες δοκιμές έδωσαν κάθε τιμή
+	Import inputs	Εισαγωγή εισόδων
+	In 9 trials out of 10, {output} is between {low} and {high}; the mean is {mean} ± {half_width}.	Σε 9 δοκιμές στις 10, το {output} είναι μεταξύ {low} και {high}· η μέση τιμή είναι {mean} ± {half_width}.
+	In 9 trials out of 10, {output} is between {low} and {high}; the mean is {mean}.	Σε 9 δοκιμές στις 10, το {output} είναι μεταξύ {low} και {high}· η μέση τιμή είναι {mean}.
+	Inputs	Είσοδοι
+	Inputs as a table	Είσοδοι ως πίνακας
+	Latin hypercube	Λατινικός υπερκύβος
+	Latin hypercube sampling	Δειγματοληψία λατινικού υπερκύβου
+	Latin hypercube sampling spreads each input's draws evenly over its range, so the results settle with fewer trials. With it, or with correlated inputs, trials run in whole batches of 1,000.	Η δειγματοληψία λατινικού υπερκύβου απλώνει ομοιόμορφα τις κληρώσεις κάθε εισόδου σε όλο το εύρος της, ώστε τα αποτελέσματα να σταθεροποιούνται με λιγότερες δοκιμές. Με αυτήν, ή με συσχετισμένες εισόδους, οι δοκιμές εκτελούνται σε ολόκληρες παρτίδες των 1.000.
+	Monte Carlo model	Μοντέλο Monte Carlo
+	New Monte Carlo Model	Νέο μοντέλο Monte Carlo
+	New Monte Carlo model	Νέο μοντέλο Monte Carlo
+	New correlation	Νέα συσχέτιση
+	New input	Νέα είσοδος
+	New output	Νέα έξοδος
+	No inputs yet: add one below, or paste a table of them.	Δεν υπάρχουν ακόμη είσοδοι: προσθέστε μία παρακάτω ή επικολλήστε έναν πίνακα με αυτές.
+	No interval: too few batches of trials for one.	Χωρίς διάστημα: πολύ λίγες παρτίδες δοκιμών για να υπολογιστεί.
+	No outputs yet: add one below.	Δεν υπάρχουν ακόμη έξοδοι: προσθέστε μία παρακάτω.
+	None yet	Κανένα ακόμη
+	One input per line, as name, distribution, parameters and unit, copied from a spreadsheet or written as CSV: for example labour,triangular,min=80;mode=100;max=150,h.	Μία είσοδος ανά γραμμή, ως όνομα, κατανομή, παράμετροι και μονάδα, αντιγραμμένη από υπολογιστικό φύλλο ή γραμμένη ως CSV: για παράδειγμα labour,triangular,min=80;mode=100;max=150,h.
+	Outputs	Έξοδοι
+	Paste inputs from a table	Επικόλληση εισόδων από πίνακα
+	Project budget	Προϋπολογισμός έργου
+	Rank correlation	Συσχέτιση τάξεων
+	Remove the correlation of {a} and {b}	Αφαίρεση της συσχέτισης των {a} και {b}
+	Remove the input {name}	Αφαίρεση της εισόδου {name}
+	Remove the output {name}	Αφαίρεση της εξόδου {name}
+	Replace every input	Αντικατάσταση όλων των εισόδων
+	Sampling	Δειγματοληψία
+	Second input	Δεύτερη είσοδος
+	Share of trials at or below each value	Ποσοστό δοκιμών έως και κάθε τιμή
+	Target {value}	Στόχος {value}
+	The chance is under {hi}, with 95% confidence.	Η πιθανότητα είναι κάτω από {hi}, με εμπιστοσύνη 95%.
+	The model: its inputs, outputs and trials	Το μοντέλο: οι είσοδοι, οι έξοδοι και οι δοκιμές του
+	The number of trials was chosen from the results, so an interval may cover the true value less often than 95% of the time.	Ο αριθμός των δοκιμών επιλέχθηκε με βάση τα αποτελέσματα, οπότε ένα διάστημα μπορεί να καλύπτει την πραγματική τιμή λιγότερο συχνά από το 95% των περιπτώσεων.
+	The trials above come first; more follow in batches until every output's mean is within that share of itself, or the most is reached.	Πρώτα γίνονται οι παραπάνω δοκιμές· ακολουθούν κι άλλες σε παρτίδες μέχρι η μέση τιμή κάθε εξόδου να βρίσκεται εντός αυτού του ποσοστού του εαυτού της ή να φτάσει το μέγιστο.
+	Trials and sampling	Δοκιμές και δειγματοληψία
+	Uncertain inputs instead of single guesses: the chance of an overrun, not one total.	Αβέβαιες είσοδοι αντί για μεμονωμένες εκτιμήσεις: η πιθανότητα υπέρβασης, όχι ένα μόνο σύνολο.
+	Will the project come in under budget?	Θα μείνει το έργο εντός προϋπολογισμού;
+	a name, such as cost	ένα όνομα, όπως κόστος
+	a name, such as labour	ένα όνομα, όπως εργασία
+	random sampling	τυχαία δειγματοληψία
+	{asked} trials were asked for; with Latin hypercube sampling or correlated inputs a run is whole batches of {size}, so {n} ran.	Ζητήθηκαν {asked} δοκιμές· με δειγματοληψία λατινικού υπερκύβου ή συσχετισμένες εισόδους μια εκτέλεση αποτελείται από ολόκληρες παρτίδες των {size}, οπότε εκτελέστηκαν {n}.
+	{a} and {b}: {achieved} in the trials, {target} asked for	{a} και {b}: {achieved} στις δοκιμές, ζητήθηκε {target}
+	{output} was less than {value} in none of the {n} trials.	Το {output} δεν ήταν μικρότερο από {value} σε καμία από τις {n} δοκιμές.
+	{output} was more than {value} in none of the {n} trials.	Το {output} δεν ήταν μεγαλύτερο από {value} σε καμία από τις {n} δοκιμές.
+@plural	Each ± is the half-width of the 95% interval of the mean across {n} independent batch of {size} trials. Latin hypercube sampling and correlated inputs make the trials within a batch depend on each other, so each batch counts as one.|Each ± is the half-width of the 95% interval of the mean across {n} independent batches of {size} trials. Latin hypercube sampling and correlated inputs make the trials within a batch depend on each other, so each batch counts as one.	Κάθε ± είναι το μισό πλάτος του διαστήματος 95% της μέσης τιμής σε {n} ανεξάρτητη παρτίδα {size} δοκιμών. Η δειγματοληψία λατινικού υπερκύβου και οι συσχετισμένες είσοδοι κάνουν τις δοκιμές μιας παρτίδας να εξαρτώνται μεταξύ τους, οπότε κάθε παρτίδα μετρά ως μία.|Κάθε ± είναι το μισό πλάτος του διαστήματος 95% της μέσης τιμής σε {n} ανεξάρτητες παρτίδες των {size} δοκιμών. Η δειγματοληψία λατινικού υπερκύβου και οι συσχετισμένες είσοδοι κάνουν τις δοκιμές μιας παρτίδας να εξαρτώνται μεταξύ τους, οπότε κάθε παρτίδα μετρά ως μία.
+@plural	Each ± is the half-width of the 95% interval of the mean across {n} independent trial.|Each ± is the half-width of the 95% interval of the mean across {n} independent trials.	Κάθε ± είναι το μισό πλάτος του διαστήματος 95% της μέσης τιμής σε {n} ανεξάρτητη δοκιμή.|Κάθε ± είναι το μισό πλάτος του διαστήματος 95% της μέσης τιμής σε {n} ανεξάρτητες δοκιμές.
+@plural	Finished {n} trial|Finished {n} trials	Ολοκληρώθηκε {n} δοκιμή|Ολοκληρώθηκαν {n} δοκιμές
+@plural	Imported {n} input|Imported {n} inputs	Εισήχθη {n} είσοδος|Εισήχθησαν {n} είσοδοι
+@plural	Makes {n} trial from seed {seed}: each draws every input once and works out every output.|Makes {n} trials from seed {seed}: each draws every input once and works out every output.	Κάνει {n} δοκιμή από τον σπόρο {seed}: κληρώνει μία φορά κάθε είσοδο και υπολογίζει κάθε έξοδο.|Κάνει {n} δοκιμές από τον σπόρο {seed}: καθεμία κληρώνει μία φορά κάθε είσοδο και υπολογίζει κάθε έξοδο.
+@plural	Stopped after {n} trial: every output's mean is within ±{share} of itself.|Stopped after {n} trials: every output's mean is within ±{share} of itself.	Διακόπηκε μετά από {n} δοκιμή: η μέση τιμή κάθε εξόδου είναι εντός ±{share} του εαυτού της.|Διακόπηκε μετά από {n} δοκιμές: η μέση τιμή κάθε εξόδου είναι εντός ±{share} του εαυτού της.
+@plural	Stopped at the most allowed, {n} trial, before every output's mean was within ±{share} of itself.|Stopped at the most allowed, {n} trials, before every output's mean was within ±{share} of itself.	Διακόπηκε στο μέγιστο επιτρεπτό, {n} δοκιμή, πριν η μέση τιμή κάθε εξόδου βρεθεί εντός ±{share} του εαυτού της.|Διακόπηκε στο μέγιστο επιτρεπτό, {n} δοκιμές, πριν η μέση τιμή κάθε εξόδου βρεθεί εντός ±{share} του εαυτού της.
+@plural	{done} of {n} trial made|{done} of {n} trials made	Έγινε {done} από {n} δοκιμή|Έγιναν {done} από {n} δοκιμές
+@plural	{n} trial gave no number (a division by zero, say) and is left out.|{n} trials gave no number (a division by zero, say) and are left out.	{n} δοκιμή δεν έδωσε αριθμό (π.χ. διαίρεση με το μηδέν) και παραλείπεται.|{n} δοκιμές δεν έδωσαν αριθμό (π.χ. διαίρεση με το μηδέν) και παραλείπονται.
+@plural	{n} trial · seed {seed} · {sampling}|{n} trials · seed {seed} · {sampling}	{n} δοκιμή · σπόρος {seed} · {sampling}|{n} δοκιμές · σπόρος {seed} · {sampling}
+@plural	{n} trial · seed {seed}|{n} trials · seed {seed}	{n} δοκιμή · σπόρος {seed}|{n} δοκιμές · σπόρος {seed}

@@ -1208,3 +1208,80 @@ unit	yr	సం.
 	Entities inside at the start are given for a block that does not exist. Remove them.	ప్రారంభంలో లోపల ఉన్న ఎంటిటీలు లేని బ్లాక్‌కు ఇవ్వబడ్డాయి. వాటిని తొలగించండి.
 	{block} cannot have entities inside at the start: only a task or a batch can. Remove its “Inside at the start”.	{block} లో ప్రారంభంలో ఎంటిటీలు ఉండకూడదు: పని లేదా బ్యాచ్‌లో మాత్రమే ఉండవచ్చు. దాని “ప్రారంభంలో లోపల ఉన్నవి” ను తొలగించండి.
 	{block} has {count} entities inside at the start, but it holds at most {most}, its units and its waiting room. Set “Inside at the start” to {most} or fewer, or make the waiting room larger.	{block} లో ప్రారంభంలో {count} ఎంటిటీలు ఉన్నాయి, కానీ దాని యూనిట్లు, వేచి ఉండే గది కలిపి గరిష్ఠంగా {most} మాత్రమే పడతాయి. “ప్రారంభంలో లోపల ఉన్నవి” ను {most} లేదా తక్కువకు సెట్ చేయండి, లేదా వేచి ఉండే గదిని పెద్దది చేయండి.
+# Monte Carlo models in the window (ROADMAP M4.1, part 2)
+	95% interval of the chance: {lo} to {hi}.	సంభావ్యత యొక్క 95% అంతరం: {lo} నుండి {hi}.
+	A Monte Carlo model: uncertain durations, day rate and materials, and the chance the cost or the duration runs over.	ఒక మాంటె కార్లో మోడల్: అనిశ్చిత వ్యవధులు, రోజువారీ రేటు, సామగ్రి, మరియు ఖర్చు లేదా వ్యవధి మించిపోయే సంభావ్యత.
+	A calculation with uncertain inputs, not a process: each trial draws every input once and works out every output from them.	అనిశ్చిత ఇన్‌పుట్‌లతో కూడిన గణన, ప్రక్రియ కాదు: ప్రతి ప్రయత్నం ప్రతి ఇన్‌పుట్‌ను ఒకసారి తీసుకుని, వాటి నుండి ప్రతి అవుట్‌పుట్‌ను లెక్కిస్తుంది.
+	A rank correlation between two inputs, from -1 to 1: above 0 they tend to be high together, below 0 one tends to be high when the other is low. Inputs not paired here are independent; 0 removes a pair.	రెండు ఇన్‌పుట్‌ల మధ్య ర్యాంక్ సహసంబంధం, -1 నుండి 1 వరకు: 0 కంటే ఎక్కువైతే అవి కలిసి ఎక్కువగా ఉండే ధోరణి ఉంటుంది, 0 కంటే తక్కువైతే మరొకటి తక్కువగా ఉన్నప్పుడు ఒకటి ఎక్కువగా ఉండే ధోరణి ఉంటుంది. ఇక్కడ జత చేయని ఇన్‌పుట్‌లు స్వతంత్రమైనవి; 0 ఒక జతను తొలగిస్తుంది.
+	A {percent} chance that {output} is less than {value}.	{output} {value} కంటే తక్కువగా ఉండే సంభావ్యత {percent}.
+	A {percent} chance that {output} is more than {value}.	{output} {value} కంటే ఎక్కువగా ఉండే సంభావ్యత {percent}.
+	About a 1 in {odds} chance that {output} is less than {value} ({percent}).	{output} {value} కంటే తక్కువగా ఉండే అవకాశం సుమారు {odds}లో 1 ({percent}).
+	About a 1 in {odds} chance that {output} is more than {value} ({percent}).	{output} {value} కంటే ఎక్కువగా ఉండే అవకాశం సుమారు {odds}లో 1 ({percent}).
+	Add correlation	సహసంబంధాన్ని జోడించు
+	Add input	ఇన్‌పుట్‌ను జోడించు
+	Add output	అవుట్‌పుట్‌ను జోడించు
+	At most, trials	గరిష్ఠంగా, ప్రయత్నాలు
+	Correlations	సహసంబంధాలు
+	Download inputs (CSV)	ఇన్‌పుట్‌లను డౌన్‌లోడ్ చేయి (CSV)
+	Each input is a distribution: every trial draws one value from it.	ప్రతి ఇన్‌పుట్ ఒక పంపిణీ: ప్రతి ప్రయత్నం దాని నుండి ఒక విలువను తీసుకుంటుంది.
+	Each output is worked out in every trial from the inputs and the outputs above it, each named as $name: for example $labour * $rate + $materials. Give it a target to see the chance of meeting it.	ప్రతి అవుట్‌పుట్ ప్రతి ప్రయత్నంలో ఇన్‌పుట్‌ల నుండి మరియు దాని పైన ఉన్న అవుట్‌పుట్‌ల నుండి లెక్కించబడుతుంది, ప్రతిదాన్నీ $name అని సూచిస్తారు: ఉదాహరణకు $labour * $rate + $materials. దాన్ని చేరుకునే సంభావ్యతను చూడటానికి దానికి ఒక లక్ష్యం ఇవ్వండి.
+	Export inputs (CSV)	ఇన్‌పుట్‌లను ఎగుమతి చేయి (CSV)
+	First input	మొదటి ఇన్‌పుట్
+	How many trials	ఎన్ని ప్రయత్నాలు
+	How many trials gave each value	ప్రతి విలువను ఎన్ని ప్రయత్నాలు ఇచ్చాయి
+	Import inputs	ఇన్‌పుట్‌లను దిగుమతి చేయి
+	In 9 trials out of 10, {output} is between {low} and {high}; the mean is {mean} ± {half_width}.	10 ప్రయత్నాలలో 9 సార్లు {output} {low} మరియు {high} మధ్య ఉంటుంది; సగటు {mean} ± {half_width}.
+	In 9 trials out of 10, {output} is between {low} and {high}; the mean is {mean}.	10 ప్రయత్నాలలో 9 సార్లు {output} {low} మరియు {high} మధ్య ఉంటుంది; సగటు {mean}.
+	Inputs	ఇన్‌పుట్‌లు
+	Inputs as a table	పట్టికగా ఇన్‌పుట్‌లు
+	Latin hypercube	లాటిన్ హైపర్‌క్యూబ్
+	Latin hypercube sampling	లాటిన్ హైపర్‌క్యూబ్ శాంప్లింగ్
+	Latin hypercube sampling spreads each input's draws evenly over its range, so the results settle with fewer trials. With it, or with correlated inputs, trials run in whole batches of 1,000.	లాటిన్ హైపర్‌క్యూబ్ శాంప్లింగ్ ప్రతి ఇన్‌పుట్ విలువలను దాని పరిధి అంతటా సమానంగా విస్తరిస్తుంది, కాబట్టి తక్కువ ప్రయత్నాలతోనే ఫలితాలు స్థిరపడతాయి. దీనితో గానీ సహసంబంధం ఉన్న ఇన్‌పుట్‌లతో గానీ, ప్రయత్నాలు 1,000 చొప్పున పూర్తి బ్యాచ్‌లుగా జరుగుతాయి.
+	Monte Carlo model	మాంటె కార్లో మోడల్
+	New Monte Carlo Model	కొత్త మాంటె కార్లో మోడల్
+	New Monte Carlo model	కొత్త మాంటె కార్లో మోడల్
+	New correlation	కొత్త సహసంబంధం
+	New input	కొత్త ఇన్‌పుట్
+	New output	కొత్త అవుట్‌పుట్
+	No inputs yet: add one below, or paste a table of them.	ఇంకా ఇన్‌పుట్‌లు లేవు: క్రింద ఒకటి జోడించండి, లేదా వాటి పట్టికను అతికించండి.
+	No interval: too few batches of trials for one.	అంతరం లేదు: దానికి సరిపడా ప్రయత్నాల బ్యాచ్‌లు లేవు.
+	No outputs yet: add one below.	ఇంకా అవుట్‌పుట్‌లు లేవు: క్రింద ఒకటి జోడించండి.
+	None yet	ఇంకా ఏదీ లేదు
+	One input per line, as name, distribution, parameters and unit, copied from a spreadsheet or written as CSV: for example labour,triangular,min=80;mode=100;max=150,h.	ఒక్కో పంక్తికి ఒక ఇన్‌పుట్, పేరు, పంపిణీ, పరామితులు, ప్రమాణం రూపంలో, స్ప్రెడ్‌షీట్ నుండి కాపీ చేసినది లేదా CSVగా రాసినది: ఉదాహరణకు labour,triangular,min=80;mode=100;max=150,h.
+	Outputs	అవుట్‌పుట్‌లు
+	Paste inputs from a table	పట్టిక నుండి ఇన్‌పుట్‌లను అతికించు
+	Project budget	ప్రాజెక్ట్ బడ్జెట్
+	Rank correlation	ర్యాంక్ సహసంబంధం
+	Remove the correlation of {a} and {b}	{a} మరియు {b} మధ్య సహసంబంధాన్ని తొలగించు
+	Remove the input {name}	ఇన్‌పుట్ {name}ను తొలగించు
+	Remove the output {name}	అవుట్‌పుట్ {name}ను తొలగించు
+	Replace every input	అన్ని ఇన్‌పుట్‌లను భర్తీ చేయి
+	Sampling	శాంప్లింగ్
+	Second input	రెండవ ఇన్‌పుట్
+	Share of trials at or below each value	ప్రతి విలువకు సమానమైన లేదా తక్కువైన ప్రయత్నాల వాటా
+	Target {value}	లక్ష్యం {value}
+	The chance is under {hi}, with 95% confidence.	సంభావ్యత {hi} కంటే తక్కువ, 95% విశ్వాసంతో.
+	The model: its inputs, outputs and trials	మోడల్: దాని ఇన్‌పుట్‌లు, అవుట్‌పుట్‌లు, ప్రయత్నాలు
+	The number of trials was chosen from the results, so an interval may cover the true value less often than 95% of the time.	ప్రయత్నాల సంఖ్యను ఫలితాల ఆధారంగా ఎంచుకున్నారు, కాబట్టి అంతరం నిజమైన విలువను 95% కంటే తక్కువ సార్లు కవర్ చేయవచ్చు.
+	The trials above come first; more follow in batches until every output's mean is within that share of itself, or the most is reached.	పైన ఉన్న ప్రయత్నాలు మొదట జరుగుతాయి; ఆ తర్వాత ప్రతి అవుట్‌పుట్ సగటు తనలో ఆ వాటా లోపలికి వచ్చే వరకు లేదా గరిష్ఠ సంఖ్య చేరే వరకు మరిన్ని ప్రయత్నాలు బ్యాచ్‌లుగా జరుగుతాయి.
+	Trials and sampling	ప్రయత్నాలు మరియు శాంప్లింగ్
+	Uncertain inputs instead of single guesses: the chance of an overrun, not one total.	ఒకే అంచనాలకు బదులు అనిశ్చిత ఇన్‌పుట్‌లు: ఒకే మొత్తం కాదు, మించిపోయే సంభావ్యత.
+	Will the project come in under budget?	ప్రాజెక్ట్ బడ్జెట్‌లోపు పూర్తవుతుందా?
+	a name, such as cost	ఒక పేరు, ఉదాహరణకు ఖర్చు
+	a name, such as labour	ఒక పేరు, ఉదాహరణకు శ్రమ
+	random sampling	యాదృచ్ఛిక శాంప్లింగ్
+	{asked} trials were asked for; with Latin hypercube sampling or correlated inputs a run is whole batches of {size}, so {n} ran.	{asked} ప్రయత్నాలు అడిగారు; లాటిన్ హైపర్‌క్యూబ్ శాంప్లింగ్ లేదా సహసంబంధం ఉన్న ఇన్‌పుట్‌లతో ఒక అమలు {size} చొప్పున పూర్తి బ్యాచ్‌లుగా ఉంటుంది, కాబట్టి {n} జరిగాయి.
+	{a} and {b}: {achieved} in the trials, {target} asked for	{a} మరియు {b}: ప్రయత్నాలలో {achieved}, అడిగినది {target}
+	{output} was less than {value} in none of the {n} trials.	{n} ప్రయత్నాలలో దేనిలోనూ {output} {value} కంటే తక్కువగా లేదు.
+	{output} was more than {value} in none of the {n} trials.	{n} ప్రయత్నాలలో దేనిలోనూ {output} {value} కంటే ఎక్కువగా లేదు.
+@plural	Each ± is the half-width of the 95% interval of the mean across {n} independent batch of {size} trials. Latin hypercube sampling and correlated inputs make the trials within a batch depend on each other, so each batch counts as one.|Each ± is the half-width of the 95% interval of the mean across {n} independent batches of {size} trials. Latin hypercube sampling and correlated inputs make the trials within a batch depend on each other, so each batch counts as one.	ప్రతి ± అనేది {size} ప్రయత్నాల {n} స్వతంత్ర బ్యాచ్‌లో సగటుకు 95% అంతరం వెడల్పులో సగం. లాటిన్ హైపర్‌క్యూబ్ శాంప్లింగ్ మరియు సహసంబంధం ఉన్న ఇన్‌పుట్‌లు ఒక బ్యాచ్‌లోని ప్రయత్నాలను ఒకదానిపై ఒకటి ఆధారపడేలా చేస్తాయి, కాబట్టి ప్రతి బ్యాచ్ ఒకటిగా లెక్కించబడుతుంది.|ప్రతి ± అనేది {size} ప్రయత్నాల {n} స్వతంత్ర బ్యాచ్‌లలో సగటుకు 95% అంతరం వెడల్పులో సగం. లాటిన్ హైపర్‌క్యూబ్ శాంప్లింగ్ మరియు సహసంబంధం ఉన్న ఇన్‌పుట్‌లు ఒక బ్యాచ్‌లోని ప్రయత్నాలను ఒకదానిపై ఒకటి ఆధారపడేలా చేస్తాయి, కాబట్టి ప్రతి బ్యాచ్ ఒకటిగా లెక్కించబడుతుంది.
+@plural	Each ± is the half-width of the 95% interval of the mean across {n} independent trial.|Each ± is the half-width of the 95% interval of the mean across {n} independent trials.	ప్రతి ± అనేది {n} స్వతంత్ర ప్రయత్నంలో సగటుకు 95% అంతరం వెడల్పులో సగం.|ప్రతి ± అనేది {n} స్వతంత్ర ప్రయత్నాలలో సగటుకు 95% అంతరం వెడల్పులో సగం.
+@plural	Finished {n} trial|Finished {n} trials	{n} ప్రయత్నం పూర్తయింది|{n} ప్రయత్నాలు పూర్తయ్యాయి
+@plural	Imported {n} input|Imported {n} inputs	{n} ఇన్‌పుట్ దిగుమతి అయింది|{n} ఇన్‌పుట్‌లు దిగుమతి అయ్యాయి
+@plural	Makes {n} trial from seed {seed}: each draws every input once and works out every output.|Makes {n} trials from seed {seed}: each draws every input once and works out every output.	యాదృచ్ఛిక బీజం {seed} నుండి {n} ప్రయత్నం చేస్తుంది: అది ప్రతి ఇన్‌పుట్‌ను ఒకసారి తీసుకుని ప్రతి అవుట్‌పుట్‌ను లెక్కిస్తుంది.|యాదృచ్ఛిక బీజం {seed} నుండి {n} ప్రయత్నాలు చేస్తుంది: ప్రతి ప్రయత్నం ప్రతి ఇన్‌పుట్‌ను ఒకసారి తీసుకుని ప్రతి అవుట్‌పుట్‌ను లెక్కిస్తుంది.
+@plural	Stopped after {n} trial: every output's mean is within ±{share} of itself.|Stopped after {n} trials: every output's mean is within ±{share} of itself.	{n} ప్రయత్నం తర్వాత ఆగింది: ప్రతి అవుట్‌పుట్ సగటు తనలో ±{share} లోపల ఉంది.|{n} ప్రయత్నాల తర్వాత ఆగింది: ప్రతి అవుట్‌పుట్ సగటు తనలో ±{share} లోపల ఉంది.
+@plural	Stopped at the most allowed, {n} trial, before every output's mean was within ±{share} of itself.|Stopped at the most allowed, {n} trials, before every output's mean was within ±{share} of itself.	అనుమతించిన గరిష్ఠం, {n} ప్రయత్నం వద్ద, ప్రతి అవుట్‌పుట్ సగటు తనలో ±{share} లోపలికి రాకముందే ఆగింది.|అనుమతించిన గరిష్ఠం, {n} ప్రయత్నాల వద్ద, ప్రతి అవుట్‌పుట్ సగటు తనలో ±{share} లోపలికి రాకముందే ఆగింది.
+@plural	{done} of {n} trial made|{done} of {n} trials made	{n} ప్రయత్నంలో {done} పూర్తయింది|{n} ప్రయత్నాలలో {done} పూర్తయ్యాయి
+@plural	{n} trial gave no number (a division by zero, say) and is left out.|{n} trials gave no number (a division by zero, say) and are left out.	{n} ప్రయత్నం సంఖ్యను ఇవ్వలేదు (ఉదాహరణకు సున్నాతో భాగహారం), అది వదిలివేయబడింది.|{n} ప్రయత్నాలు సంఖ్యను ఇవ్వలేదు (ఉదాహరణకు సున్నాతో భాగహారం), అవి వదిలివేయబడ్డాయి.
+@plural	{n} trial · seed {seed} · {sampling}|{n} trials · seed {seed} · {sampling}	{n} ప్రయత్నం · బీజం {seed} · {sampling}|{n} ప్రయత్నాలు · బీజం {seed} · {sampling}
+@plural	{n} trial · seed {seed}|{n} trials · seed {seed}	{n} ప్రయత్నం · బీజం {seed}|{n} ప్రయత్నాలు · బీజం {seed}

@@ -1208,3 +1208,80 @@ unit	yr	г.
 	Entities inside at the start are given for a block that does not exist. Remove them.	Същности вътре в началото са зададени за блок, който не съществува. Премахнете ги.
 	{block} cannot have entities inside at the start: only a task or a batch can. Remove its “Inside at the start”.	Блокът {block} не може да има същности вътре в началото: това може само задача или партида. Премахнете неговото „Вътре в началото“.
 	{block} has {count} entities inside at the start, but it holds at most {most}, its units and its waiting room. Set “Inside at the start” to {most} or fewer, or make the waiting room larger.	Блокът {block} има {count} същности вътре в началото, но побира най-много {most}: единиците си и чакалнята си. Задайте „Вътре в началото“ на {most} или по-малко, или увеличете чакалнята.
+# Monte Carlo models in the window (ROADMAP M4.1, part 2)
+	95% interval of the chance: {lo} to {hi}.	95% интервал на вероятността: от {lo} до {hi}.
+	A Monte Carlo model: uncertain durations, day rate and materials, and the chance the cost or the duration runs over.	Модел Монте Карло: несигурни продължителности, дневна ставка и материали и вероятността разходите или продължителността да бъдат превишени.
+	A calculation with uncertain inputs, not a process: each trial draws every input once and works out every output from them.	Изчисление с несигурни входове, а не процес: всеки опит изтегля всеки вход веднъж и изчислява от тях всеки изход.
+	A rank correlation between two inputs, from -1 to 1: above 0 they tend to be high together, below 0 one tends to be high when the other is low. Inputs not paired here are independent; 0 removes a pair.	Рангова корелация между два входа, от -1 до 1: над 0 те обикновено са високи заедно, под 0 единият обикновено е висок, когато другият е нисък. Входовете, които не са сдвоени тук, са независими; 0 премахва двойка.
+	A {percent} chance that {output} is less than {value}.	Вероятност {percent} {output} да е по-малко от {value}.
+	A {percent} chance that {output} is more than {value}.	Вероятност {percent} {output} да е повече от {value}.
+	About a 1 in {odds} chance that {output} is less than {value} ({percent}).	Приблизително 1 шанс от {odds} {output} да е по-малко от {value} ({percent}).
+	About a 1 in {odds} chance that {output} is more than {value} ({percent}).	Приблизително 1 шанс от {odds} {output} да е повече от {value} ({percent}).
+	Add correlation	Добавяне на корелация
+	Add input	Добавяне на вход
+	Add output	Добавяне на изход
+	At most, trials	Най-много опити
+	Correlations	Корелации
+	Download inputs (CSV)	Изтегляне на входовете (CSV)
+	Each input is a distribution: every trial draws one value from it.	Всеки вход е разпределение: всеки опит изтегля от него една стойност.
+	Each output is worked out in every trial from the inputs and the outputs above it, each named as $name: for example $labour * $rate + $materials. Give it a target to see the chance of meeting it.	Всеки изход се изчислява във всеки опит от входовете и от изходите над него, като всеки се назовава $name: например $labour * $rate + $materials. Задайте му цел, за да видите вероятността тя да бъде постигната.
+	Export inputs (CSV)	Експортиране на входовете (CSV)
+	First input	Първи вход
+	How many trials	Колко опита
+	How many trials gave each value	Колко опита са дали всяка стойност
+	Import inputs	Импортиране на входове
+	In 9 trials out of 10, {output} is between {low} and {high}; the mean is {mean} ± {half_width}.	В 9 опита от 10 {output} е между {low} и {high}; средната стойност е {mean} ± {half_width}.
+	In 9 trials out of 10, {output} is between {low} and {high}; the mean is {mean}.	В 9 опита от 10 {output} е между {low} и {high}; средната стойност е {mean}.
+	Inputs	Входове
+	Inputs as a table	Входовете като таблица
+	Latin hypercube	Латински хиперкуб
+	Latin hypercube sampling	Извадка с латински хиперкуб
+	Latin hypercube sampling spreads each input's draws evenly over its range, so the results settle with fewer trials. With it, or with correlated inputs, trials run in whole batches of 1,000.	Извадката с латински хиперкуб разпределя тегленията на всеки вход равномерно в неговия диапазон, така че резултатите се установяват с по-малко опити. С нея или с корелирани входове опитите се изпълняват в цели партиди от 1000.
+	Monte Carlo model	Модел Монте Карло
+	New Monte Carlo Model	Нов модел Монте Карло
+	New Monte Carlo model	Нов модел Монте Карло
+	New correlation	Нова корелация
+	New input	Нов вход
+	New output	Нов изход
+	No inputs yet: add one below, or paste a table of them.	Все още няма входове: добавете един по-долу или поставете таблица с тях.
+	No interval: too few batches of trials for one.	Няма интервал: твърде малко партиди опити за него.
+	No outputs yet: add one below.	Все още няма изходи: добавете един по-долу.
+	None yet	Все още няма
+	One input per line, as name, distribution, parameters and unit, copied from a spreadsheet or written as CSV: for example labour,triangular,min=80;mode=100;max=150,h.	По един вход на ред, като име, разпределение, параметри и единица, копиран от електронна таблица или написан като CSV: например labour,triangular,min=80;mode=100;max=150,h.
+	Outputs	Изходи
+	Paste inputs from a table	Поставяне на входове от таблица
+	Project budget	Бюджет на проекта
+	Rank correlation	Рангова корелация
+	Remove the correlation of {a} and {b}	Премахване на корелацията между {a} и {b}
+	Remove the input {name}	Премахване на входа {name}
+	Remove the output {name}	Премахване на изхода {name}
+	Replace every input	Замяна на всички входове
+	Sampling	Формиране на извадка
+	Second input	Втори вход
+	Share of trials at or below each value	Дял на опитите при или под всяка стойност
+	Target {value}	Цел {value}
+	The chance is under {hi}, with 95% confidence.	Вероятността е под {hi} с 95% доверителност.
+	The model: its inputs, outputs and trials	Моделът: неговите входове, изходи и опити
+	The number of trials was chosen from the results, so an interval may cover the true value less often than 95% of the time.	Броят на опитите е избран според резултатите, затова интервалът може да обхваща истинската стойност по-рядко от 95% от случаите.
+	The trials above come first; more follow in batches until every output's mean is within that share of itself, or the most is reached.	Първо са опитите по-горе; следват още на партиди, докато средната стойност на всеки изход не е в рамките на този дял от самата себе си или не се достигне максимумът.
+	Trials and sampling	Опити и извадка
+	Uncertain inputs instead of single guesses: the chance of an overrun, not one total.	Несигурни входове вместо единични предположения: вероятността от превишаване, а не една обща сума.
+	Will the project come in under budget?	Ще се вмести ли проектът в бюджета?
+	a name, such as cost	име, например разходи
+	a name, such as labour	име, например труд
+	random sampling	случайна извадка
+	{asked} trials were asked for; with Latin hypercube sampling or correlated inputs a run is whole batches of {size}, so {n} ran.	Поискани бяха {asked} опита; с извадка с латински хиперкуб или корелирани входове изпълнението се състои от цели партиди по {size}, затова бяха изпълнени {n}.
+	{a} and {b}: {achieved} in the trials, {target} asked for	{a} и {b}: {achieved} в опитите, поискано {target}
+	{output} was less than {value} in none of the {n} trials.	{output} не е било по-малко от {value} в нито един от {n} опита.
+	{output} was more than {value} in none of the {n} trials.	{output} не е било повече от {value} в нито един от {n} опита.
+@plural	Each ± is the half-width of the 95% interval of the mean across {n} independent batch of {size} trials. Latin hypercube sampling and correlated inputs make the trials within a batch depend on each other, so each batch counts as one.|Each ± is the half-width of the 95% interval of the mean across {n} independent batches of {size} trials. Latin hypercube sampling and correlated inputs make the trials within a batch depend on each other, so each batch counts as one.	Всяко ± е половината от ширината на 95% интервал на средната стойност по {n} независима партида от {size} опита. Извадката с латински хиперкуб и корелираните входове правят опитите в една партида зависими помежду си, затова всяка партида се брои за една.|Всяко ± е половината от ширината на 95% интервал на средната стойност по {n} независими партиди от {size} опита. Извадката с латински хиперкуб и корелираните входове правят опитите в една партида зависими помежду си, затова всяка партида се брои за една.
+@plural	Each ± is the half-width of the 95% interval of the mean across {n} independent trial.|Each ± is the half-width of the 95% interval of the mean across {n} independent trials.	Всяко ± е половината от ширината на 95% интервал на средната стойност по {n} независим опит.|Всяко ± е половината от ширината на 95% интервал на средната стойност по {n} независими опита.
+@plural	Finished {n} trial|Finished {n} trials	Завършен е {n} опит|Завършени са {n} опита
+@plural	Imported {n} input|Imported {n} inputs	Импортиран е {n} вход|Импортирани са {n} входа
+@plural	Makes {n} trial from seed {seed}: each draws every input once and works out every output.|Makes {n} trials from seed {seed}: each draws every input once and works out every output.	Прави {n} опит от начална стойност {seed}: той изтегля всеки вход веднъж и изчислява всеки изход.|Прави {n} опита от начална стойност {seed}: всеки изтегля всеки вход веднъж и изчислява всеки изход.
+@plural	Stopped after {n} trial: every output's mean is within ±{share} of itself.|Stopped after {n} trials: every output's mean is within ±{share} of itself.	Спряно след {n} опит: средната стойност на всеки изход е в рамките на ±{share} от самата нея.|Спряно след {n} опита: средната стойност на всеки изход е в рамките на ±{share} от самата нея.
+@plural	Stopped at the most allowed, {n} trial, before every output's mean was within ±{share} of itself.|Stopped at the most allowed, {n} trials, before every output's mean was within ±{share} of itself.	Спряно при максимално допустимия брой, {n} опит, преди средната стойност на всеки изход да е в рамките на ±{share} от самата нея.|Спряно при максимално допустимия брой, {n} опита, преди средната стойност на всеки изход да е в рамките на ±{share} от самата нея.
+@plural	{done} of {n} trial made|{done} of {n} trials made	Направени {done} от {n} опит|Направени {done} от {n} опита
+@plural	{n} trial gave no number (a division by zero, say) and is left out.|{n} trials gave no number (a division by zero, say) and are left out.	{n} опит не даде число (например деление на нула) и е изключен.|{n} опита не дадоха число (например деление на нула) и са изключени.
+@plural	{n} trial · seed {seed} · {sampling}|{n} trials · seed {seed} · {sampling}	{n} опит · начална стойност {seed} · {sampling}|{n} опита · начална стойност {seed} · {sampling}
+@plural	{n} trial · seed {seed}|{n} trials · seed {seed}	{n} опит · начална стойност {seed}|{n} опита · начална стойност {seed}
