@@ -330,7 +330,7 @@ pub const EXAMPLES: &[Example] = &[
                 start::Glyph::Task,
                 start::Glyph::Resource,
             ],
-            featured: false,
+            featured: true,
         },
     },
     Example {

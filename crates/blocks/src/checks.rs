@@ -3,15 +3,17 @@
 //!
 //! Each holds two things the results say that must agree whatever the model, so a failure means
 //! the results cannot be right. They find faults in the simulation (a count or a time recorded
-//! in one place and not another), and, for [`Behaviour::NothingOut`], a model whose entities
-//! never get through. Pernas-Álvarez and Crespo-Pereira (arXiv 2611.10602, 2026) found that
-//! checks like these caught about half of the "silent" errors in models agents built, the most
-//! common being a break counted as busy time.
+//! in one place and not another), and, for [`Behaviour::NothingOut`] and
+//! [`Behaviour::NothingMoved`], a model whose entities never get through. Pernas-Álvarez and
+//! Crespo-Pereira (arXiv 2611.10602, 2026) found that checks like these caught about half of the
+//! "silent" errors in models agents built, the most common being a break counted as busy time.
 //!
 //! - Every element's entities add up ([`Behaviour::Unbalanced`]), and the model's
 //!   ([`Behaviour::Unaccounted`]): what came in (or was inside as the statistics started) left,
 //!   was lost, gave up or is still inside.
-//! - Some entity leaves the model, at an exit or by any other way out ([`Behaviour::NothingOut`]).
+//! - Some entity leaves the model, at an exit or by any other way out ([`Behaviour::NothingOut`]);
+//!   in a closed model, whose entities go round and never leave ([`Model::is_closed`]), the
+//!   entities keep moving instead ([`Behaviour::NothingMoved`]).
 //! - Little's law holds at every server, task with shared resources and delay
 //!   ([`Behaviour::LittlesLaw`]).
 //! - A server counts busy exactly the units processing or setting up: none idle, blocked, off
@@ -317,9 +319,35 @@ fn unaccounted(model: &Model, report: &Report) -> Option<Behaviour> {
 /// included). An entity that leaves by any
 /// way has got through the model, as at any exit; a gateway with no way for some is warned
 /// about as the model is checked ([`stochcraft_model::Problem::NoDefault`]).
+///
+/// A closed model ([`Model::is_closed`]) has no way out, so none leaving is what it should do:
+/// there the entities must keep moving instead ([`nothing_moved`]).
 fn nothing_out(model: &Model, report: &Report) -> Option<Behaviour> {
     let f = flows(model, report);
-    (f.present > 0 && f.out == 0).then_some(Behaviour::NothingOut { came: f.present })
+    if f.present == 0 {
+        return None;
+    }
+    if model.is_closed() {
+        return nothing_moved(report).then_some(Behaviour::NothingMoved { came: f.present });
+    }
+    (f.out == 0).then_some(Behaviour::NothingOut { came: f.present })
+}
+
+/// In a closed model, whether its entities are stuck: some block holds entities at the end,
+/// and none of those blocks finished any in the measured window. In a closed network at work
+/// (Gordon and Newell's), every block entities wait at keeps finishing them, so the blocks
+/// holding them at the end finished some on the way; a block that holds entities and never
+/// finished one (a resource that never serves, a time longer than the run) has stopped the
+/// loop. Counting only the blocks holding entities at the end, rather than any block, catches
+/// a loop that jams after each entity's first pass through the blocks before the jam. Sources
+/// hold nothing and are not counted.
+fn nothing_moved(report: &Report) -> bool {
+    let mut holders = report
+        .elements
+        .iter()
+        .filter(|e| e.kind != "resource" && e.kind != "source" && inside(e).1 > 0)
+        .peekable();
+    holders.peek().is_some() && holders.all(|e| e.left == 0)
 }
 
 /// Little's law, over the run's own window: the time-average number inside times the window is

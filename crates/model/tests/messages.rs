@@ -529,6 +529,7 @@ fn samples() -> Vec<Diagnostic> {
         behaviour(task, Behaviour::Unbalanced { came: 10, went: 9 }, 1, 1),
         behaviour(None, Behaviour::Unaccounted { came: 10, went: 9 }, 2, 5),
         behaviour(None, Behaviour::NothingOut { came: 10 }, 1, 1),
+        behaviour(None, Behaviour::NothingMoved { came: 6 }, 1, 1),
         behaviour(
             task,
             Behaviour::LittlesLaw {
@@ -580,6 +581,7 @@ const NO_BLOCK_NAME: &[&str] = &[
     "no_sink",
     "behaviour_unaccounted",
     "behaviour_nothing_out",
+    "behaviour_nothing_moved",
 ];
 const USER_WORDS: &[&str] = &["bad_expression", "bad_condition"];
 
