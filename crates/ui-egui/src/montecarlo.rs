@@ -34,8 +34,8 @@ use crate::i18n::{t, tf, tn, tnf};
 use crate::results::{grouped, round_sig, rounded};
 use crate::{App, Request, Running, commands, comparable, theme};
 
-/// An edit to one output made while drawing the table: the output's name, the fields to set,
-/// and, when the engine refused it, the field and the reason to show in place.
+/// An edit to one output made while drawing the table: its row's key, the `mc.output.set`
+/// parameters, and for a typed expression its field and text, kept there if the engine refuses it.
 type OutputEdit = (String, Value, Option<(String, String)>);
 
 /// The time a frame spends making trials before it draws.
