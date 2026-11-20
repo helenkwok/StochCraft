@@ -184,6 +184,7 @@ mod tests {
     use super::*;
 
     #[test]
+    #[allow(clippy::needless_range_loop)] // Matrix products read most plainly by index.
     fn cholesky_and_its_inverse() {
         let a = vec![
             vec![4.0, 2.0, 0.4],
