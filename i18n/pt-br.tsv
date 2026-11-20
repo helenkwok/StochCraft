@@ -826,6 +826,7 @@ unit	yr	a
 	IT operations	Operações de TI
 	Reference	Modelos de referência
 	Checked against queueing theory	Verificado pela teoria das filas
+	Checked against probability theory	Verificado pela teoria da probabilidade
 	Matches a published study	Confere com um estudo publicado
 	What do you want to find out?	O que você quer descobrir?
 	Simulate a process, compare what-ifs, and see which differences are real. Each example asks one question and shows how the answer was found.	Simule um processo, compare hipóteses e veja quais diferenças são reais. Cada exemplo faz uma pergunta e mostra como a resposta foi encontrada.
@@ -882,6 +883,31 @@ unit	yr	a
 	Callers who give up: the share lost and the wait of those who stay.	Chamadores que desistem: a proporção perdida e a espera dos que ficam.
 	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	Bloqueio, salas de espera pequenas e falhas: peças recusadas no início da linha.
 	Health checks that take busy servers out send their requests back to the queue.	Verificações de estado que retiram servidores ocupados devolvem as requisições deles à fila.
+	Projects	Projetos
+	Same mean, different spread	Mesma média, dispersão diferente
+	Three desks with the same mean service time of 1 minute: fixed, random and very uneven.	Três guichês com o mesmo tempo médio de serviço de 1 minuto: fixo, aleatório e muito irregular.
+	Does it matter how much service times vary when the average is the same?	Importa quanto os tempos de serviço variam quando a média é a mesma?
+	Variability makes queues: the same average time gives waits of 2, 4 and 10 minutes.	A variabilidade cria filas: o mesmo tempo médio dá esperas de 2, 4 e 10 minutos.
+	Bank with an ATM and cashiers	Banco com caixa eletrônico e caixas
+	Half the customers use the ATM first; five cashiers share one queue (Borshchev and Grigoryev, The Big Book of Simulation Modeling, Example 2.2).	Metade dos clientes usa primeiro o caixa eletrônico; cinco caixas dividem uma única fila (Borshchev e Grigoryev, The Big Book of Simulation Modeling, exemplo 2.2).
+	Are five cashiers enough when half the customers use the ATM first?	Cinco caixas bastam quando metade dos clientes usa primeiro o caixa eletrônico?
+	Routing by chance and a shared queue: cashiers busy 91% of the time, and what a sixth would do.	Roteamento ao acaso e uma fila compartilhada: caixas ocupados 91% do tempo, e o que um sexto faria.
+	Hospital beds	Leitos hospitalares
+	Patients who find every bed taken are turned away; stays vary widely around five days.	Pacientes que encontram todos os leitos ocupados são recusados; as internações variam muito em torno de cinco dias.
+	How many beds so that fewer than 1 in 50 patients are turned away?	Quantos leitos para que menos de 1 em cada 50 pacientes seja recusado?
+	Beds turn patients away rather than queue them, and only the average stay matters.	Os leitos recusam pacientes em vez de colocá-los na fila, e só a internação média importa.
+	Machine repair crew	Equipe de manutenção de máquinas
+	Six machines that break down now and then, and the fitters who repair them.	Seis máquinas que falham de vez em quando, e os mecânicos que as consertam.
+	How many fitters keep six machines running?	Quantos mecânicos mantêm seis máquinas funcionando?
+	A closed loop: a machine waiting for repair cannot break down again, so the queue stays short.	Um circuito fechado: uma máquina esperando reparo não pode falhar de novo, então a fila continua curta.
+	Inspection with rework	Inspeção com retrabalho
+	Half the parts fail inspection, are reworked and are inspected again.	Metade das peças é reprovada na inspeção, é retrabalhada e inspecionada de novo.
+	How much longer do parts take when half of them need rework?	Quanto tempo a mais as peças levam quando metade delas precisa de retrabalho?
+	A loop back: rework doubles the load on inspection, and less rework cuts the time far more than in proportion.	Um laço de retorno: o retrabalho dobra a carga da inspeção, e menos retrabalho reduz o tempo muito mais do que proporcionalmente.
+	Project finish date	Data de término do projeto
+	Three activities in parallel, each ten days on average; the project ends when all three are done.	Três atividades em paralelo, cada uma com dez dias em média; o projeto termina quando as três estão concluídas.
+	When will the project finish?	Quando o projeto vai terminar?
+	Why three ten-day activities in parallel take more than 18 days on average.	Por que três atividades de dez dias em paralelo levam mais de 18 dias em média.
 	Show me	Mostre-me
 	Point at where to do this step	Aponte onde fazer este passo
 	Step {k} of {n}	Passo {k} de {n}

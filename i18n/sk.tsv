@@ -826,6 +826,7 @@ unit	yr	r.
 	IT operations	Prevádzka IT
 	Reference	Referenčné modely
 	Checked against queueing theory	Overené teóriou hromadnej obsluhy
+	Checked against probability theory	Overené teóriou pravdepodobnosti
 	Matches a published study	Zodpovedá publikovanej štúdii
 	What do you want to find out?	Čo chcete zistiť?
 	Simulate a process, compare what-ifs, and see which differences are real. Each example asks one question and shows how the answer was found.	Simulujte proces, porovnajte varianty „čo ak“ a zistite, ktoré rozdiely sú skutočné. Každý príklad kladie jednu otázku a ukazuje, ako sa našla odpoveď.
@@ -882,6 +883,31 @@ unit	yr	r.
 	Callers who give up: the share lost and the wait of those who stay.	Volajúci, ktorí to vzdajú: stratený podiel a čakanie tých, ktorí zostanú.
 	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	Blokovanie, malé čakárne a poruchy: diely odmietnuté na začiatku linky.
 	Health checks that take busy servers out send their requests back to the queue.	Kontroly stavu, ktoré vyraďujú vyťažené servery, vracajú ich požiadavky späť do radu.
+	Projects	Projekty
+	Same mean, different spread	Rovnaký priemer, rôzna variabilita
+	Three desks with the same mean service time of 1 minute: fixed, random and very uneven.	Tri priehradky s rovnakým priemerným časom obsluhy 1 minúta: pevným, náhodným a veľmi nerovnomerným.
+	Does it matter how much service times vary when the average is the same?	Záleží na tom, ako veľmi časy obsluhy kolíšu, keď je priemer rovnaký?
+	Variability makes queues: the same average time gives waits of 2, 4 and 10 minutes.	Variabilita vytvára rady: rovnaký priemerný čas dáva čakanie 2, 4 a 10 minút.
+	Bank with an ATM and cashiers	Banka s bankomatom a pokladníkmi
+	Half the customers use the ATM first; five cashiers share one queue (Borshchev and Grigoryev, The Big Book of Simulation Modeling, Example 2.2).	Polovica zákazníkov ide najprv k bankomatu; päť pokladníkov zdieľa jeden rad (Borshchev a Grigoryev, The Big Book of Simulation Modeling, príklad 2.2).
+	Are five cashiers enough when half the customers use the ATM first?	Stačí päť pokladníkov, keď polovica zákazníkov ide najprv k bankomatu?
+	Routing by chance and a shared queue: cashiers busy 91% of the time, and what a sixth would do.	Náhodné smerovanie a spoločný rad: pokladníci vyťažení na 91% a čo by zmenil šiesty.
+	Hospital beds	Nemocničné lôžka
+	Patients who find every bed taken are turned away; stays vary widely around five days.	Pacienti, ktorí nájdu všetky lôžka obsadené, sú odmietnutí; dĺžka hospitalizácie silno kolíše okolo piatich dní.
+	How many beds so that fewer than 1 in 50 patients are turned away?	Koľko lôžok treba, aby bol odmietnutý menej ako 1 pacient z 50?
+	Beds turn patients away rather than queue them, and only the average stay matters.	Lôžka pacientov odmietajú, namiesto aby ich nechali čakať v rade, a záleží len na priemernej dĺžke pobytu.
+	Machine repair crew	Opravárska čata strojov
+	Six machines that break down now and then, and the fitters who repair them.	Šesť strojov, ktoré sa občas pokazia, a opravári, ktorí ich opravujú.
+	How many fitters keep six machines running?	Koľko opravárov udrží šesť strojov v chode?
+	A closed loop: a machine waiting for repair cannot break down again, so the queue stays short.	Uzavretá slučka: stroj čakajúci na opravu sa nemôže znova pokaziť, takže rad zostáva krátky.
+	Inspection with rework	Kontrola s prepracovaním
+	Half the parts fail inspection, are reworked and are inspected again.	Polovica dielov neprejde kontrolou, je prepracovaná a znova skontrolovaná.
+	How much longer do parts take when half of them need rework?	O koľko dlhšie trvá prechod dielov, keď polovica z nich potrebuje prepracovanie?
+	A loop back: rework doubles the load on inspection, and less rework cuts the time far more than in proportion.	Slučka späť: prepracovanie zdvojnásobuje záťaž kontroly a menej prepracovania skracuje čas oveľa viac než úmerne.
+	Project finish date	Dátum dokončenia projektu
+	Three activities in parallel, each ten days on average; the project ends when all three are done.	Tri súbežné činnosti, každá v priemere desať dní; projekt končí, keď sú hotové všetky tri.
+	When will the project finish?	Kedy bude projekt dokončený?
+	Why three ten-day activities in parallel take more than 18 days on average.	Prečo tri súbežné desaťdňové činnosti trvajú v priemere viac ako 18 dní.
 	Show me	Ukážte mi
 	Point at where to do this step	Ukážte, kde urobiť tento krok
 	Step {k} of {n}	Krok {k} z {n}

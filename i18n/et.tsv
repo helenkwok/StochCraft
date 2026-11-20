@@ -826,6 +826,7 @@ unit	yr	a
 	IT operations	IT-teenused
 	Reference	Võrdlusmudelid
 	Checked against queueing theory	Kontrollitud järjekorrateooriaga
+	Checked against probability theory	Kontrollitud tõenäosusteooriaga
 	Matches a published study	Vastab avaldatud uuringule
 	What do you want to find out?	Mida soovite teada saada?
 	Simulate a process, compare what-ifs, and see which differences are real. Each example asks one question and shows how the answer was found.	Simuleerige protsessi, võrrelge mis-kui-variante ja vaadake, millised erinevused on tegelikud. Iga näide esitab ühe küsimuse ja näitab, kuidas vastus leiti.
@@ -882,6 +883,31 @@ unit	yr	a
 	Callers who give up: the share lost and the wait of those who stay.	Loobuvad helistajad: kaotatud osakaal ja jääjate ootamine.
 	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	Blokeerimine, väikesed ooteruumid ja rikked: liini alguses tagasi lükatud detailid.
 	Health checks that take busy servers out send their requests back to the queue.	Tervisekontrollid, mis hõivatud serverid kasutusest välja võtavad, saadavad nende päringud järjekorda tagasi.
+	Projects	Projektid
+	Same mean, different spread	Sama keskmine, erinev hajuvus
+	Three desks with the same mean service time of 1 minute: fixed, random and very uneven.	Kolm teeninduspunkti sama keskmise teenindusajaga 1 minut: püsiv, juhuslik ja väga ebaühtlane.
+	Does it matter how much service times vary when the average is the same?	Kas on oluline, kui palju teenindusajad kõiguvad, kui keskmine on sama?
+	Variability makes queues: the same average time gives waits of 2, 4 and 10 minutes.	Varieeruvus tekitab järjekordi: sama keskmine aeg annab 2, 4 ja 10 minuti pikkuse ootamise.
+	Bank with an ATM and cashiers	Pank pangaautomaadi ja kassiiridega
+	Half the customers use the ATM first; five cashiers share one queue (Borshchev and Grigoryev, The Big Book of Simulation Modeling, Example 2.2).	Pooled kliendid kasutavad kõigepealt pangaautomaati; viis kassiiri jagavad ühte järjekorda (Borshchev ja Grigoryev, The Big Book of Simulation Modeling, näide 2.2).
+	Are five cashiers enough when half the customers use the ATM first?	Kas viiest kassiirist piisab, kui pooled kliendid kasutavad kõigepealt pangaautomaati?
+	Routing by chance and a shared queue: cashiers busy 91% of the time, and what a sixth would do.	Juhuslik suunamine ja ühine järjekord: kassiirid hõivatud 91% ajast, ja mida kuues muudaks.
+	Hospital beds	Haiglavoodid
+	Patients who find every bed taken are turned away; stays vary widely around five days.	Patsiendid, kes leiavad kõik voodid hõivatuna, lükatakse tagasi; haiglas viibimise aeg kõigub laialt viie päeva ümber.
+	How many beds so that fewer than 1 in 50 patients are turned away?	Mitu voodit on vaja, et tagasi lükataks vähem kui 1 patsient 50-st?
+	Beds turn patients away rather than queue them, and only the average stay matters.	Voodid lükkavad patsiendid tagasi, mitte ei pane neid järjekorda, ja loeb ainult keskmine viibimisaeg.
+	Machine repair crew	Masinate remondibrigaad
+	Six machines that break down now and then, and the fitters who repair them.	Kuus masinat, mis aeg-ajalt rikki lähevad, ja mehaanikud, kes neid remondivad.
+	How many fitters keep six machines running?	Mitu mehaanikut hoiab kuus masinat töös?
+	A closed loop: a machine waiting for repair cannot break down again, so the queue stays short.	Suletud ring: remonti ootav masin ei saa uuesti rikki minna, seega jääb järjekord lühikeseks.
+	Inspection with rework	Kontroll ja ümbertöötlus
+	Half the parts fail inspection, are reworked and are inspected again.	Pooled detailid ei läbi kontrolli, need töödeldakse ümber ja kontrollitakse uuesti.
+	How much longer do parts take when half of them need rework?	Kui palju kauem võtab detailide läbimine aega, kui pooled neist vajavad ümbertöötlust?
+	A loop back: rework doubles the load on inspection, and less rework cuts the time far more than in proportion.	Tagasisilmus: ümbertöötlus kahekordistab kontrolli koormuse ja väiksem ümbertöötlus lühendab aega palju rohkem kui proportsionaalselt.
+	Project finish date	Projekti valmimise kuupäev
+	Three activities in parallel, each ten days on average; the project ends when all three are done.	Kolm paralleelset tegevust, igaüks keskmiselt kümme päeva; projekt lõpeb, kui kõik kolm on tehtud.
+	When will the project finish?	Millal projekt valmib?
+	Why three ten-day activities in parallel take more than 18 days on average.	Miks kolm paralleelset kümnepäevast tegevust võtavad keskmiselt üle 18 päeva.
 	Show me	Näita mulle
 	Point at where to do this step	Osuta, kus seda sammu teha
 	Step {k} of {n}	Samm {k} / {n}

@@ -826,6 +826,7 @@ unit	yr	ж.
 	IT operations	IT операциялары
 	Reference	Эталондық модельдер
 	Checked against queueing theory	Кезек теориясымен тексерілген
+	Checked against probability theory	Ықтималдықтар теориясымен тексерілген
 	Matches a published study	Жарияланған зерттеуге сәйкес келеді
 	What do you want to find out?	Нені анықтағыңыз келеді?
 	Simulate a process, compare what-ifs, and see which differences are real. Each example asks one question and shows how the answer was found.	Процесті модельдеңіз, «егер былай болса» нұсқаларын салыстырыңыз және қай айырмашылықтар шынайы екенін көріңіз. Әр мысал бір сұрақ қояды және жауаптың қалай табылғанын көрсетеді.
@@ -882,6 +883,31 @@ unit	yr	ж.
 	Callers who give up: the share lost and the wait of those who stay.	Бас тартқан қоңырау шалушылар: жоғалған үлес және қалғандардың күтуі.
 	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	Бұғаттау, шағын күту орындары және ақаулар: желінің басында қабылданбаған бөлшектер.
 	Health checks that take busy servers out send their requests back to the queue.	Бос емес серверлерді жұмыстан шығаратын күйді тексерулер олардың сұрауларын кезекке қайтарады.
+	Projects	Жобалар
+	Same mean, different spread	Орташа бірдей, таралуы әртүрлі
+	Three desks with the same mean service time of 1 minute: fixed, random and very uneven.	Қызмет көрсетудің орташа уақыты бірдей, 1 минут болатын үш терезе: тұрақты, кездейсоқ және өте біркелкі емес.
+	Does it matter how much service times vary when the average is the same?	Орташа бірдей болғанда қызмет көрсету уақытының қаншалықты өзгеретіні маңызды ма?
+	Variability makes queues: the same average time gives waits of 2, 4 and 10 minutes.	Өзгергіштік кезек тудырады: бірдей орташа уақыт 2, 4 және 10 минуттық күтуге әкеледі.
+	Bank with an ATM and cashiers	Банкоматы мен кассирлері бар банк
+	Half the customers use the ATM first; five cashiers share one queue (Borshchev and Grigoryev, The Big Book of Simulation Modeling, Example 2.2).	Клиенттердің жартысы алдымен банкоматты пайдаланады; бес кассир бір ортақ кезекке қызмет көрсетеді (Borshchev және Grigoryev, The Big Book of Simulation Modeling, 2.2-мысал).
+	Are five cashiers enough when half the customers use the ATM first?	Клиенттердің жартысы алдымен банкоматты пайдаланғанда бес кассир жеткілікті ме?
+	Routing by chance and a shared queue: cashiers busy 91% of the time, and what a sixth would do.	Кездейсоқ бағыттау және ортақ кезек: уақыттың 91% бос емес кассирлер және алтыншысы не өзгертер еді.
+	Hospital beds	Аурухана төсектері
+	Patients who find every bed taken are turned away; stays vary widely around five days.	Барлық төсек бос емес болса, науқастар қабылданбайды; жату ұзақтығы бес күн төңірегінде қатты өзгеріп отырады.
+	How many beds so that fewer than 1 in 50 patients are turned away?	Науқастардың 50-ден 1-інен азы қабылданбауы үшін қанша төсек керек?
+	Beds turn patients away rather than queue them, and only the average stay matters.	Төсектер науқастарды кезекке қоймай, қабылдамайды және тек орташа жату ұзақтығы маңызды.
+	Machine repair crew	Машиналарды жөндеу бригадасы
+	Six machines that break down now and then, and the fitters who repair them.	Анда-санда бұзылатын алты машина және оларды жөндейтін слесарьлар.
+	How many fitters keep six machines running?	Алты машинаның жұмысын қанша слесарь қамтамасыз етеді?
+	A closed loop: a machine waiting for repair cannot break down again, so the queue stays short.	Тұйық жүйе: жөндеуді күтіп тұрған машина қайта бұзыла алмайды, сондықтан кезек қысқа болып қалады.
+	Inspection with rework	Қайта өңдеуі бар бақылау
+	Half the parts fail inspection, are reworked and are inspected again.	Бөлшектердің жартысы бақылаудан өтпей, қайта өңделеді және қайта тексеріледі.
+	How much longer do parts take when half of them need rework?	Бөлшектердің жартысы қайта өңдеуді қажет еткенде, олар қаншалықты ұзағырақ өтеді?
+	A loop back: rework doubles the load on inspection, and less rework cuts the time far more than in proportion.	Кері цикл: қайта өңдеу бақылауға түсетін жүктемені екі есе арттырады, ал қайта өңдеуді азайту уақытты пропорционалдыдан әлдеқайда көп қысқартады.
+	Project finish date	Жобаның аяқталу күні
+	Three activities in parallel, each ten days on average; the project ends when all three are done.	Әрқайсысы орта есеппен он күндік үш параллель жұмыс; жоба үшеуі де аяқталғанда бітеді.
+	When will the project finish?	Жоба қашан аяқталады?
+	Why three ten-day activities in parallel take more than 18 days on average.	Неліктен он күндік үш параллель жұмыс орта есеппен 18 күннен көп уақыт алады.
 	Show me	Көрсетіңіз
 	Point at where to do this step	Бұл қадамды қайда орындау керегін көрсетіңіз
 	Step {k} of {n}	{k}-қадам / {n}

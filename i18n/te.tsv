@@ -826,6 +826,7 @@ unit	yr	సం.
 	IT operations	ఐటీ కార్యకలాపాలు
 	Reference	సూచన నమూనాలు
 	Checked against queueing theory	క్యూ సిద్ధాంతంతో ధృవీకరించబడింది
+	Checked against probability theory	సంభావ్యత సిద్ధాంతంతో ధృవీకరించబడింది
 	Matches a published study	ప్రచురించిన అధ్యయనంతో సరిపోలుతుంది
 	What do you want to find out?	మీరు ఏమి తెలుసుకోవాలనుకుంటున్నారు?
 	Simulate a process, compare what-ifs, and see which differences are real. Each example asks one question and shows how the answer was found.	ఒక ప్రక్రియను అనుకరించండి, “ఇలా అయితే” ప్రత్యామ్నాయాలను పోల్చండి, ఏ తేడాలు నిజమైనవో చూడండి. ప్రతి ఉదాహరణ ఒక ప్రశ్న అడిగి, జవాబు ఎలా కనుగొనబడిందో చూపిస్తుంది.
@@ -882,6 +883,31 @@ unit	yr	సం.
 	Callers who give up: the share lost and the wait of those who stay.	వదిలేసే కాలర్‌లు: కోల్పోయిన వాటా, ఉండిపోయినవారి నిరీక్షణ.
 	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	నిరోధం, చిన్న వేచి ఉండే గదులు, లోపాలు: లైన్ ప్రారంభంలో తిరస్కరించిన భాగాలు.
 	Health checks that take busy servers out send their requests back to the queue.	బిజీ సర్వర్‌లను తొలగించే స్థితి తనిఖీలు వాటి అభ్యర్థనలను తిరిగి క్యూకు పంపుతాయి.
+	Projects	ప్రాజెక్టులు
+	Same mean, different spread	ఒకే సగటు, వేర్వేరు వ్యాప్తి
+	Three desks with the same mean service time of 1 minute: fixed, random and very uneven.	1 నిమిషం ఒకే సగటు సేవా సమయం ఉన్న మూడు డెస్క్‌లు: స్థిరం, యాదృచ్ఛికం, చాలా అసమానం.
+	Does it matter how much service times vary when the average is the same?	సగటు ఒకటే అయినప్పుడు సేవా సమయాలు ఎంత మారుతాయనేది ముఖ్యమా?
+	Variability makes queues: the same average time gives waits of 2, 4 and 10 minutes.	వైవిధ్యం క్యూలను సృష్టిస్తుంది: ఒకే సగటు సమయం 2, 4, 10 నిమిషాల నిరీక్షణను ఇస్తుంది.
+	Bank with an ATM and cashiers	ఏటీఎం, క్యాషియర్లు ఉన్న బ్యాంకు
+	Half the customers use the ATM first; five cashiers share one queue (Borshchev and Grigoryev, The Big Book of Simulation Modeling, Example 2.2).	సగం మంది కస్టమర్లు ముందుగా ఏటీఎం వాడతారు; ఐదుగురు క్యాషియర్లు ఒకే క్యూను పంచుకుంటారు (Borshchev మరియు Grigoryev, The Big Book of Simulation Modeling, ఉదాహరణ 2.2).
+	Are five cashiers enough when half the customers use the ATM first?	సగం మంది కస్టమర్లు ముందుగా ఏటీఎం వాడినప్పుడు ఐదుగురు క్యాషియర్లు సరిపోతారా?
+	Routing by chance and a shared queue: cashiers busy 91% of the time, and what a sixth would do.	సంభావ్యత ఆధారంగా మార్గనిర్దేశం, పంచుకునే క్యూ: 91% సమయం బిజీగా ఉండే క్యాషియర్లు, ఆరో వ్యక్తి ఏమి మారుస్తారు.
+	Hospital beds	ఆసుపత్రి పడకలు
+	Patients who find every bed taken are turned away; stays vary widely around five days.	అన్ని పడకలు నిండి ఉన్నట్లు చూసే రోగులను తిప్పి పంపుతారు; బస సమయం ఐదు రోజుల చుట్టూ బాగా మారుతుంది.
+	How many beds so that fewer than 1 in 50 patients are turned away?	50 మంది రోగుల్లో 1 కంటే తక్కువ మందిని తిప్పి పంపాలంటే ఎన్ని పడకలు కావాలి?
+	Beds turn patients away rather than queue them, and only the average stay matters.	పడకలు రోగులను క్యూలో ఉంచకుండా తిప్పి పంపుతాయి, సగటు బస సమయం మాత్రమే ముఖ్యం.
+	Machine repair crew	యంత్రాల మరమ్మతు బృందం
+	Six machines that break down now and then, and the fitters who repair them.	అప్పుడప్పుడు పాడయ్యే ఆరు యంత్రాలు, వాటిని బాగుచేసే మెకానిక్‌లు.
+	How many fitters keep six machines running?	ఆరు యంత్రాలను నడుపుతూ ఉంచడానికి ఎంతమంది మెకానిక్‌లు కావాలి?
+	A closed loop: a machine waiting for repair cannot break down again, so the queue stays short.	మూసిన చక్రం: మరమ్మతు కోసం వేచి ఉన్న యంత్రం మళ్లీ పాడవదు, కాబట్టి క్యూ చిన్నగానే ఉంటుంది.
+	Inspection with rework	పునఃపనితో తనిఖీ
+	Half the parts fail inspection, are reworked and are inspected again.	సగం భాగాలు తనిఖీలో విఫలమై, పునఃపని చేయబడి, మళ్లీ తనిఖీ చేయబడతాయి.
+	How much longer do parts take when half of them need rework?	సగం భాగాలకు పునఃపని అవసరమైనప్పుడు భాగాలకు ఎంత ఎక్కువ సమయం పడుతుంది?
+	A loop back: rework doubles the load on inspection, and less rework cuts the time far more than in proportion.	వెనక్కి తిరిగే చక్రం: పునఃపని తనిఖీపై భారాన్ని రెట్టింపు చేస్తుంది, తక్కువ పునఃపని సమయాన్ని నిష్పత్తి కంటే చాలా ఎక్కువగా తగ్గిస్తుంది.
+	Project finish date	ప్రాజెక్టు ముగింపు తేదీ
+	Three activities in parallel, each ten days on average; the project ends when all three are done.	సమాంతరంగా మూడు కార్యకలాపాలు, ఒక్కొక్కటి సగటున పది రోజులు; మూడూ పూర్తయినప్పుడు ప్రాజెక్టు ముగుస్తుంది.
+	When will the project finish?	ప్రాజెక్టు ఎప్పుడు పూర్తవుతుంది?
+	Why three ten-day activities in parallel take more than 18 days on average.	సమాంతరంగా పది రోజుల మూడు కార్యకలాపాలు సగటున 18 రోజులకు మించి ఎందుకు పడతాయి.
 	Show me	నాకు చూపించు
 	Point at where to do this step	ఈ దశను ఎక్కడ చేయాలో సూచించు
 	Step {k} of {n}	{n} దశల్లో {k}వ దశ

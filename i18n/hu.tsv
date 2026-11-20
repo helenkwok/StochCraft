@@ -826,6 +826,7 @@ unit	yr	év
 	IT operations	IT-üzemeltetés
 	Reference	Referenciamodellek
 	Checked against queueing theory	Sorbanállási elmélettel ellenőrizve
+	Checked against probability theory	Valószínűségszámítással ellenőrizve
 	Matches a published study	Egyezik egy publikált tanulmánnyal
 	What do you want to find out?	Mit szeretne megtudni?
 	Simulate a process, compare what-ifs, and see which differences are real. Each example asks one question and shows how the answer was found.	Szimuláljon egy folyamatot, hasonlítson össze „mi lenne, ha” változatokat, és lássa, mely különbségek valódiak. Minden példa egy kérdést tesz fel, és megmutatja, hogyan született a válasz.
@@ -882,6 +883,31 @@ unit	yr	év
 	Callers who give up: the share lost and the wait of those who stay.	Feladó hívók: az elvesztett arány és a maradók várakozása.
 	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	Blokkolás, kis várakozóhelyek és meghibásodások: a sor elején visszautasított darabok.
 	Health checks that take busy servers out send their requests back to the queue.	A foglalt szervereket kivonó állapot-ellenőrzések visszaküldik azok kéréseit a sorba.
+	Projects	Projektek
+	Same mean, different spread	Azonos átlag, eltérő szóródás
+	Three desks with the same mean service time of 1 minute: fixed, random and very uneven.	Három ügyfélablak azonos, 1 perces átlagos kiszolgálási idővel: állandó, véletlen és nagyon egyenetlen.
+	Does it matter how much service times vary when the average is the same?	Számít-e, mennyire ingadozik a kiszolgálási idő, ha az átlag ugyanaz?
+	Variability makes queues: the same average time gives waits of 2, 4 and 10 minutes.	Az ingadozás sorokat szül: ugyanaz az átlagos idő 2, 4 és 10 perces várakozást ad.
+	Bank with an ATM and cashiers	Bank bankautomatával és pénztárosokkal
+	Half the customers use the ATM first; five cashiers share one queue (Borshchev and Grigoryev, The Big Book of Simulation Modeling, Example 2.2).	Az ügyfelek fele először a bankautomatát használja; öt pénztáros osztozik egy közös soron (Borshchev és Grigoryev, The Big Book of Simulation Modeling, 2.2. példa).
+	Are five cashiers enough when half the customers use the ATM first?	Elég-e öt pénztáros, ha az ügyfelek fele először a bankautomatát használja?
+	Routing by chance and a shared queue: cashiers busy 91% of the time, and what a sixth would do.	Véletlenszerű irányítás és közös sor: az idő 91%-ában foglalt pénztárosok, és mit tenne egy hatodik.
+	Hospital beds	Kórházi ágyak
+	Patients who find every bed taken are turned away; stays vary widely around five days.	Azokat a betegeket, akik minden ágyat foglaltnak találnak, visszautasítják; az ápolási idő öt nap körül erősen ingadozik.
+	How many beds so that fewer than 1 in 50 patients are turned away?	Hány ágy kell ahhoz, hogy 50 betegből kevesebb mint 1-et utasítsanak vissza?
+	Beds turn patients away rather than queue them, and only the average stay matters.	Az ágyak sorba állítás helyett visszautasítják a betegeket, és csak az átlagos ápolási idő számít.
+	Machine repair crew	Gépjavító csapat
+	Six machines that break down now and then, and the fitters who repair them.	Hat gép, amely időnként meghibásodik, és a szerelők, akik javítják őket.
+	How many fitters keep six machines running?	Hány szerelő tart üzemben hat gépet?
+	A closed loop: a machine waiting for repair cannot break down again, so the queue stays short.	Zárt rendszer: a javításra váró gép nem hibásodhat meg újra, ezért a sor rövid marad.
+	Inspection with rework	Ellenőrzés újramunkálással
+	Half the parts fail inspection, are reworked and are inspected again.	A darabok fele nem megy át az ellenőrzésen, újramunkálják, majd újra ellenőrzik.
+	How much longer do parts take when half of them need rework?	Mennyivel tovább tart a darabok útja, ha felüknek újramunkálás kell?
+	A loop back: rework doubles the load on inspection, and less rework cuts the time far more than in proportion.	Visszacsatoló hurok: az újramunkálás megduplázza az ellenőrzés terhelését, a kevesebb újramunkálás pedig az aránynál jóval jobban csökkenti az időt.
+	Project finish date	A projekt befejezési dátuma
+	Three activities in parallel, each ten days on average; the project ends when all three are done.	Három párhuzamos tevékenység, egyenként átlagosan tíz nap; a projekt akkor ér véget, amikor mindhárom kész.
+	When will the project finish?	Mikor fejeződik be a projekt?
+	Why three ten-day activities in parallel take more than 18 days on average.	Miért tart három párhuzamos, tíznapos tevékenység átlagosan több mint 18 napig.
 	Show me	Mutassa meg
 	Point at where to do this step	Mutassa, hol végezhető el ez a lépés
 	Step {k} of {n}	{k}. lépés / {n}

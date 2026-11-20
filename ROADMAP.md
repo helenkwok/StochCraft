@@ -3298,6 +3298,41 @@ are.
     2019, doi 10.1080/17477778.2018.1442155.
 - **Candidates from the common textbooks** (Banks et al., Law, Robinson) join only once their
   parameters are taken from the books themselves.
+- **Examples:** six more on the start page, each a file in `tests/models/` whose answer
+  `crates/engine/tests/examples.rs` checks within √2 times its 95% half-width, with comparison
+  scenarios inheriting the first. No STRESS-DES write-ups yet.
+  - **Bank with an ATM and cashiers** (`bank.bpmn`): the parameters of Borshchev and Grigoryev,
+    *The Big Book of Simulation Modeling*, ch. 2, Example 2.2: 45 customers an hour, half to the
+    ATM (triangular 1, 2, 4 minutes), 30% of those then to the cashiers, the other half straight
+    to five cashiers with one queue (triangular 3, 5, 20). The book says "an ATM", so the model
+    has one. By flow balance the cashiers are busy 0.91 (0.758 with a sixth, a scenario) and the
+    ATM 0.875; the ATM, M/G/1, waits 8.75 minutes by Pollaczek–Khinchine, with 3.28 waiting. The
+    cashiers' wait (M/G/5) has no closed form and is not checked.
+  - **Hospital beds** (`beds.bpmn`): Erlang B, exact for M/G/c/c whatever the length of stay.
+    Four admissions a day and stays of 5 days on average (log-normal, standard deviation 4), no
+    waiting room: 24 beds turn away 6.61%, the same with exponential stays of that mean (a
+    scenario), and 28 beds 1.88% (a scenario), the fewest under 1 in 50.
+  - **Machine repair crew** (`machine-repair.bpmn`): M2.5's M/M/2//6 (λ = 0.25, μ = 1; fitters
+    busy 0.57642, 4.61138 machines running), with one fitter (0.88284, 3.53135) and three
+    (0.39814, 4.77763) as scenarios.
+    Its closed loop raises `no_sink` and `nothing_out` until the checks recognise closed loops.
+  - **Inspection with rework** (`rework.bpmn`): M2.3's Jackson network (λ = 1, μ = 4 at
+    inspection and 2 at rework, half fed back: 2 minutes in the system), and a quarter fed back
+    as a scenario (0.7 minutes).
+  - **Project finish date** (`project.bpmn`): three exponential activities of mean 10 days in
+    parallel, a terminating run (M2.8); the finish is their maximum: 18.33 days on average, by
+    day 30 with chance 0.858. Its card says "Checked against probability theory".
+  - **Same mean, different spread** (`spread.bpmn`): three M/G/1 desks at ρ = 0.8 with a mean
+    service time of 1 minute, fixed, exponential and gamma (shape 0.25): Pollaczek–Khinchine's
+    waits of 2, 4 and 10 minutes. It is the featured lesson on variability; "Every distribution"
+    stays as a reference model.
+- **Printed answers are checked, not copied.** T. T. Allen, *Introduction to Discrete Event
+  Simulation and Agent-based Modeling*, Springer 2011: §13.6 answers §6.6's problems 5
+  (λ = 0.7, μ = 0.1, c = 8) and 7 (λ = 0.8, μ = 0.1, c = 9) with a chance of waiting of 0.875
+  and 0.889, which is ρ, and waits of 38.1 and 39.2 minutes, six times Erlang C's 6.35 and 6.53
+  (the chance of waiting is 0.635 and 0.653). The worked example of §6.4 (λ = 0.5, μ = 0.1,
+  c = 6) also gives ρ, 0.83333, as the chance of waiting, against Erlang C's 0.5875; its queue
+  length and wait (2.93 and 5.9 minutes) are right.
 - Done in `bench/` (#183), as the program there rather than a `cargo xtask bench` command:
   **a speed benchmark** (`cargo run --release --manifest-path bench/Cargo.toml`, see
   [bench/README.md](bench/README.md)): events per second

@@ -826,6 +826,7 @@ unit	yr	г.
 	IT operations	ИТ операции
 	Reference	Еталонни модели
 	Checked against queueing theory	Проверено с теорията на опашките
+	Checked against probability theory	Проверено с теорията на вероятностите
 	Matches a published study	Съвпада с публикувано изследване
 	What do you want to find out?	Какво искате да разберете?
 	Simulate a process, compare what-ifs, and see which differences are real. Each example asks one question and shows how the answer was found.	Симулирайте процес, сравнете варианти „какво ако“ и вижте кои разлики са реални. Всеки пример задава един въпрос и показва как е намерен отговорът.
@@ -882,6 +883,31 @@ unit	yr	г.
 	Callers who give up: the share lost and the wait of those who stay.	Обаждащи се, които се отказват: загубеният дял и чакането на останалите.
 	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	Блокиране, малки чакални и повреди: части, отхвърлени в началото на линията.
 	Health checks that take busy servers out send their requests back to the queue.	Проверките на състоянието, които извеждат натоварени сървъри от работа, връщат заявките им в опашката.
+	Projects	Проекти
+	Same mean, different spread	Еднаква средна стойност, различно разсейване
+	Three desks with the same mean service time of 1 minute: fixed, random and very uneven.	Три гишета с еднакво средно време за обслужване от 1 минута: постоянно, случайно и много неравномерно.
+	Does it matter how much service times vary when the average is the same?	Има ли значение колко варират времената за обслужване, когато средното е същото?
+	Variability makes queues: the same average time gives waits of 2, 4 and 10 minutes.	Променливостта създава опашки: едно и също средно време дава чакане от 2, 4 и 10 минути.
+	Bank with an ATM and cashiers	Банка с банкомат и касиери
+	Half the customers use the ATM first; five cashiers share one queue (Borshchev and Grigoryev, The Big Book of Simulation Modeling, Example 2.2).	Половината клиенти първо използват банкомата; петима касиери си поделят една опашка (Borshchev и Grigoryev, The Big Book of Simulation Modeling, пример 2.2).
+	Are five cashiers enough when half the customers use the ATM first?	Достатъчни ли са петима касиери, когато половината клиенти първо използват банкомата?
+	Routing by chance and a shared queue: cashiers busy 91% of the time, and what a sixth would do.	Случайно насочване и обща опашка: касиери, заети 91% от времето, и какво би направил шести.
+	Hospital beds	Болнични легла
+	Patients who find every bed taken are turned away; stays vary widely around five days.	Пациентите, които намират всички легла заети, биват отпратени; престоят варира силно около пет дни.
+	How many beds so that fewer than 1 in 50 patients are turned away?	Колко легла, така че по-малко от 1 на 50 пациенти да бъдат отпратени?
+	Beds turn patients away rather than queue them, and only the average stay matters.	Леглата отпращат пациентите, вместо да ги нареждат на опашка, и има значение само средният престой.
+	Machine repair crew	Ремонтна бригада за машини
+	Six machines that break down now and then, and the fitters who repair them.	Шест машини, които от време на време се повреждат, и монтьорите, които ги ремонтират.
+	How many fitters keep six machines running?	Колко монтьори поддържат шест машини в работа?
+	A closed loop: a machine waiting for repair cannot break down again, so the queue stays short.	Затворена система: машина, която чака ремонт, не може да се повреди отново, затова опашката остава кратка.
+	Inspection with rework	Контрол с преработка
+	Half the parts fail inspection, are reworked and are inspected again.	Половината части не минават контрола, преработват се и се проверяват отново.
+	How much longer do parts take when half of them need rework?	С колко по-дълго се бавят частите, когато половината от тях се нуждаят от преработка?
+	A loop back: rework doubles the load on inspection, and less rework cuts the time far more than in proportion.	Връщане назад: преработката удвоява натоварването на контрола, а по-малко преработка съкращава времето много повече от пропорционално.
+	Project finish date	Дата на завършване на проекта
+	Three activities in parallel, each ten days on average; the project ends when all three are done.	Три паралелни дейности, всяка средно по десет дни; проектът приключва, когато и трите са готови.
+	When will the project finish?	Кога ще приключи проектът?
+	Why three ten-day activities in parallel take more than 18 days on average.	Защо три паралелни десетдневни дейности отнемат средно повече от 18 дни.
 	Show me	Покажи ми
 	Point at where to do this step	Посочете къде се прави тази стъпка
 	Step {k} of {n}	Стъпка {k} от {n}

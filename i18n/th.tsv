@@ -826,6 +826,7 @@ unit	yr	ปี
 	IT operations	การปฏิบัติการไอที
 	Reference	แบบจำลองอ้างอิง
 	Checked against queueing theory	ตรวจสอบเทียบกับทฤษฎีแถวคอย
+	Checked against probability theory	ตรวจสอบเทียบกับทฤษฎีความน่าจะเป็น
 	Matches a published study	ตรงกับงานวิจัยที่ตีพิมพ์
 	What do you want to find out?	คุณต้องการค้นหาคำตอบเรื่องอะไร?
 	Simulate a process, compare what-ifs, and see which differences are real. Each example asks one question and shows how the answer was found.	จำลองกระบวนการ เปรียบเทียบสถานการณ์สมมติ และดูว่าความแตกต่างใดเป็นของจริง แต่ละตัวอย่างตั้งคำถามหนึ่งข้อและแสดงว่าหาคำตอบได้อย่างไร
@@ -882,6 +883,31 @@ unit	yr	ปี
 	Callers who give up: the share lost and the wait of those who stay.	ผู้โทรที่ล้มเลิก: สัดส่วนที่สูญเสียและเวลารอของผู้ที่ยังอยู่
 	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	การบล็อก พื้นที่รอขนาดเล็ก และการขัดข้อง: ชิ้นงานที่ถูกปฏิเสธที่ต้นสายการผลิต
 	Health checks that take busy servers out send their requests back to the queue.	การตรวจสถานะที่นำเซิร์ฟเวอร์ที่ไม่ว่างออกจากการใช้งานจะส่งคำขอของเซิร์ฟเวอร์นั้นกลับเข้าคิว
+	Projects	โครงการ
+	Same mean, different spread	ค่าเฉลี่ยเท่ากัน การกระจายต่างกัน
+	Three desks with the same mean service time of 1 minute: fixed, random and very uneven.	สามเคาน์เตอร์ที่มีเวลาให้บริการเฉลี่ย 1 นาทีเท่ากัน: คงที่ สุ่ม และไม่สม่ำเสมออย่างมาก
+	Does it matter how much service times vary when the average is the same?	เมื่อค่าเฉลี่ยเท่ากัน เวลาให้บริการที่แปรผันมากหรือน้อยมีผลหรือไม่?
+	Variability makes queues: the same average time gives waits of 2, 4 and 10 minutes.	ความแปรผันทำให้เกิดคิว: เวลาเฉลี่ยเท่ากันแต่ให้เวลารอ 2, 4 และ 10 นาที
+	Bank with an ATM and cashiers	ธนาคารที่มีตู้ ATM และพนักงานแคชเชียร์
+	Half the customers use the ATM first; five cashiers share one queue (Borshchev and Grigoryev, The Big Book of Simulation Modeling, Example 2.2).	ลูกค้าครึ่งหนึ่งใช้ตู้ ATM ก่อน พนักงานแคชเชียร์ห้าคนใช้คิวเดียวกัน (Borshchev และ Grigoryev, The Big Book of Simulation Modeling, ตัวอย่าง 2.2)
+	Are five cashiers enough when half the customers use the ATM first?	พนักงานแคชเชียร์ห้าคนพอหรือไม่ เมื่อลูกค้าครึ่งหนึ่งใช้ตู้ ATM ก่อน?
+	Routing by chance and a shared queue: cashiers busy 91% of the time, and what a sixth would do.	การส่งต่อแบบสุ่มตามความน่าจะเป็นและคิวที่ใช้ร่วมกัน: พนักงานแคชเชียร์ไม่ว่าง 91% ของเวลา และคนที่หกจะช่วยได้แค่ไหน
+	Hospital beds	เตียงโรงพยาบาล
+	Patients who find every bed taken are turned away; stays vary widely around five days.	ผู้ป่วยที่พบว่าเตียงเต็มทุกเตียงจะถูกปฏิเสธ ระยะเวลานอนโรงพยาบาลแปรผันมากรอบห้าวัน
+	How many beds so that fewer than 1 in 50 patients are turned away?	ต้องมีกี่เตียงจึงจะปฏิเสธผู้ป่วยน้อยกว่า 1 ใน 50?
+	Beds turn patients away rather than queue them, and only the average stay matters.	เตียงปฏิเสธผู้ป่วยแทนที่จะให้เข้าคิว และมีเพียงระยะเวลานอนโรงพยาบาลเฉลี่ยที่มีผล
+	Machine repair crew	ทีมซ่อมเครื่องจักร
+	Six machines that break down now and then, and the fitters who repair them.	เครื่องจักรหกเครื่องที่ขัดข้องเป็นครั้งคราว และช่างซ่อมที่ซ่อมเครื่องเหล่านั้น
+	How many fitters keep six machines running?	ต้องใช้ช่างซ่อมกี่คนจึงจะให้เครื่องจักรหกเครื่องทำงานต่อไปได้?
+	A closed loop: a machine waiting for repair cannot break down again, so the queue stays short.	ระบบวงปิด: เครื่องจักรที่รอซ่อมไม่สามารถขัดข้องซ้ำได้ คิวจึงสั้นอยู่เสมอ
+	Inspection with rework	การตรวจสอบพร้อมงานแก้ไข
+	Half the parts fail inspection, are reworked and are inspected again.	ชิ้นงานครึ่งหนึ่งไม่ผ่านการตรวจสอบ ถูกนำไปแก้ไข และถูกตรวจสอบอีกครั้ง
+	How much longer do parts take when half of them need rework?	ชิ้นงานใช้เวลานานขึ้นเท่าไรเมื่อครึ่งหนึ่งต้องแก้ไข?
+	A loop back: rework doubles the load on inspection, and less rework cuts the time far more than in proportion.	วงย้อนกลับ: งานแก้ไขทำให้ภาระที่จุดตรวจสอบเพิ่มเป็นสองเท่า และการลดงานแก้ไขลดเวลาลงได้มากกว่าสัดส่วนอย่างมาก
+	Project finish date	วันที่โครงการแล้วเสร็จ
+	Three activities in parallel, each ten days on average; the project ends when all three are done.	สามกิจกรรมที่ทำแบบขนาน แต่ละกิจกรรมเฉลี่ยสิบวัน โครงการจบเมื่อทั้งสามกิจกรรมเสร็จ
+	When will the project finish?	โครงการจะเสร็จเมื่อไร?
+	Why three ten-day activities in parallel take more than 18 days on average.	ทำไมสามกิจกรรมแบบขนานที่ใช้เวลากิจกรรมละสิบวันจึงใช้เวลาเฉลี่ยมากกว่า 18 วัน
 	Show me	แสดงให้ดู
 	Point at where to do this step	ชี้ไปยังจุดที่ทำขั้นตอนนี้
 	Step {k} of {n}	ขั้นที่ {k} จาก {n}

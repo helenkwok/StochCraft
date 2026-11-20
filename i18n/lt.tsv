@@ -826,6 +826,7 @@ unit	yr	m.
 	IT operations	IT operacijos
 	Reference	Etaloniniai modeliai
 	Checked against queueing theory	Patikrinta pagal eilių teoriją
+	Checked against probability theory	Patikrinta pagal tikimybių teoriją
 	Matches a published study	Atitinka paskelbtą tyrimą
 	What do you want to find out?	Ką norite sužinoti?
 	Simulate a process, compare what-ifs, and see which differences are real. Each example asks one question and shows how the answer was found.	Imituokite procesą, palyginkite „kas būtų, jei“ variantus ir pamatykite, kurie skirtumai yra tikri. Kiekvienas pavyzdys užduoda vieną klausimą ir parodo, kaip buvo rastas atsakymas.
@@ -882,6 +883,31 @@ unit	yr	m.
 	Callers who give up: the share lost and the wait of those who stay.	Pasitraukiantys skambinantieji: prarasta dalis ir likusiųjų laukimas.
 	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	Blokavimas, maži laukiamieji ir gedimai: linijos pradžioje atmestos detalės.
 	Health checks that take busy servers out send their requests back to the queue.	Būklės patikros, išimančios užimtus serverius iš naudojimo, grąžina jų užklausas į eilę.
+	Projects	Projektai
+	Same mean, different spread	Tas pats vidurkis, skirtinga sklaida
+	Three desks with the same mean service time of 1 minute: fixed, random and very uneven.	Trys langeliai su tuo pačiu vidutiniu 1 minutės aptarnavimo laiku: pastoviu, atsitiktiniu ir labai netolygiu.
+	Does it matter how much service times vary when the average is the same?	Ar svarbu, kiek svyruoja aptarnavimo laikai, kai vidurkis tas pats?
+	Variability makes queues: the same average time gives waits of 2, 4 and 10 minutes.	Kintamumas sukuria eiles: tas pats vidutinis laikas duoda 2, 4 ir 10 minučių laukimą.
+	Bank with an ATM and cashiers	Bankas su bankomatu ir kasininkais
+	Half the customers use the ATM first; five cashiers share one queue (Borshchev and Grigoryev, The Big Book of Simulation Modeling, Example 2.2).	Pusė klientų pirmiausia naudojasi bankomatu; penki kasininkai dalijasi viena eile (Borshchev ir Grigoryev, The Big Book of Simulation Modeling, 2.2 pavyzdys).
+	Are five cashiers enough when half the customers use the ATM first?	Ar pakanka penkių kasininkų, kai pusė klientų pirmiausia naudojasi bankomatu?
+	Routing by chance and a shared queue: cashiers busy 91% of the time, and what a sixth would do.	Atsitiktinis nukreipimas ir bendra eilė: kasininkai užimti 91% laiko, ir ką pakeistų šeštas.
+	Hospital beds	Ligoninės lovos
+	Patients who find every bed taken are turned away; stays vary widely around five days.	Pacientai, radę visas lovas užimtas, atmetami; gulėjimo trukmė labai svyruoja apie penkias dienas.
+	How many beds so that fewer than 1 in 50 patients are turned away?	Kiek reikia lovų, kad būtų atmesta mažiau nei 1 iš 50 pacientų?
+	Beds turn patients away rather than queue them, and only the average stay matters.	Lovos pacientus atmeta, o ne stato į eilę, ir svarbi tik vidutinė gulėjimo trukmė.
+	Machine repair crew	Mašinų remonto brigada
+	Six machines that break down now and then, and the fitters who repair them.	Šešios mašinos, kurios kartkartėmis sugenda, ir mechanikai, kurie jas taiso.
+	How many fitters keep six machines running?	Kiek mechanikų reikia, kad veiktų šešios mašinos?
+	A closed loop: a machine waiting for repair cannot break down again, so the queue stays short.	Uždaras ciklas: remonto laukianti mašina negali vėl sugesti, todėl eilė lieka trumpa.
+	Inspection with rework	Kontrolė su perdirbimu
+	Half the parts fail inspection, are reworked and are inspected again.	Pusė detalių neišlaiko kontrolės, yra perdirbamos ir tikrinamos dar kartą.
+	How much longer do parts take when half of them need rework?	Kiek ilgiau trunka detalių kelias, kai pusei jų reikia perdirbimo?
+	A loop back: rework doubles the load on inspection, and less rework cuts the time far more than in proportion.	Grįžtamasis ciklas: perdirbimas padvigubina kontrolės apkrovą, o mažiau perdirbimo sutrumpina laiką kur kas daugiau nei proporcingai.
+	Project finish date	Projekto pabaigos data
+	Three activities in parallel, each ten days on average; the project ends when all three are done.	Trys lygiagrečios veiklos, kiekviena vidutiniškai dešimt dienų; projektas baigiasi, kai visos trys atliktos.
+	When will the project finish?	Kada projektas bus baigtas?
+	Why three ten-day activities in parallel take more than 18 days on average.	Kodėl trys lygiagrečios dešimties dienų veiklos vidutiniškai užtrunka ilgiau nei 18 dienų.
 	Show me	Parodykite man
 	Point at where to do this step	Parodyti, kur atlikti šį žingsnį
 	Step {k} of {n}	{k} žingsnis iš {n}

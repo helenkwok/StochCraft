@@ -826,6 +826,7 @@ unit	yr	år
 	IT operations	IT-drift
 	Reference	Referensmodeller
 	Checked against queueing theory	Kontrollerad mot köteori
+	Checked against probability theory	Kontrollerad mot sannolikhetsteori
 	Matches a published study	Stämmer med en publicerad studie
 	What do you want to find out?	Vad vill du ta reda på?
 	Simulate a process, compare what-ifs, and see which differences are real. Each example asks one question and shows how the answer was found.	Simulera en process, jämför tänk-om-varianter och se vilka skillnader som är verkliga. Varje exempel ställer en fråga och visar hur svaret hittades.
@@ -882,6 +883,31 @@ unit	yr	år
 	Callers who give up: the share lost and the wait of those who stay.	Uppringare som ger upp: andelen som förloras och väntan för dem som stannar.
 	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	Blockering, små väntrum och haverier: detaljer som avvisas i början av linjen.
 	Health checks that take busy servers out send their requests back to the queue.	Hälsokontroller som tar upptagna servrar ur drift skickar deras förfrågningar tillbaka till kön.
+	Projects	Projekt
+	Same mean, different spread	Samma medelvärde, olika spridning
+	Three desks with the same mean service time of 1 minute: fixed, random and very uneven.	Tre diskar med samma genomsnittliga servicetid på 1 minut: fast, slumpmässig och mycket ojämn.
+	Does it matter how much service times vary when the average is the same?	Spelar det någon roll hur mycket servicetiderna varierar när medelvärdet är detsamma?
+	Variability makes queues: the same average time gives waits of 2, 4 and 10 minutes.	Variation skapar köer: samma genomsnittliga tid ger väntetider på 2, 4 och 10 minuter.
+	Bank with an ATM and cashiers	Bank med uttagsautomat och kassörer
+	Half the customers use the ATM first; five cashiers share one queue (Borshchev and Grigoryev, The Big Book of Simulation Modeling, Example 2.2).	Hälften av kunderna använder uttagsautomaten först; fem kassörer delar på en kö (Borshchev och Grigoryev, The Big Book of Simulation Modeling, exempel 2.2).
+	Are five cashiers enough when half the customers use the ATM first?	Räcker fem kassörer när hälften av kunderna använder uttagsautomaten först?
+	Routing by chance and a shared queue: cashiers busy 91% of the time, and what a sixth would do.	Slumpmässig styrning och en gemensam kö: kassörer upptagna 91% av tiden, och vad en sjätte skulle göra.
+	Hospital beds	Sjukhussängar
+	Patients who find every bed taken are turned away; stays vary widely around five days.	Patienter som finner alla sängar upptagna avvisas; vårdtiderna varierar kraftigt kring fem dagar.
+	How many beds so that fewer than 1 in 50 patients are turned away?	Hur många sängar för att färre än 1 av 50 patienter ska avvisas?
+	Beds turn patients away rather than queue them, and only the average stay matters.	Sängarna avvisar patienter i stället för att låta dem köa, och bara den genomsnittliga vårdtiden spelar roll.
+	Machine repair crew	Reparationslag för maskiner
+	Six machines that break down now and then, and the fitters who repair them.	Sex maskiner som havererar då och då, och reparatörerna som lagar dem.
+	How many fitters keep six machines running?	Hur många reparatörer håller sex maskiner i gång?
+	A closed loop: a machine waiting for repair cannot break down again, so the queue stays short.	En sluten slinga: en maskin som väntar på reparation kan inte haverera igen, så kön förblir kort.
+	Inspection with rework	Kontroll med omarbetning
+	Half the parts fail inspection, are reworked and are inspected again.	Hälften av detaljerna underkänns vid kontrollen, omarbetas och kontrolleras igen.
+	How much longer do parts take when half of them need rework?	Hur mycket längre tid tar detaljerna när hälften behöver omarbetas?
+	A loop back: rework doubles the load on inspection, and less rework cuts the time far more than in proportion.	En återkoppling: omarbetning fördubblar belastningen på kontrollen, och mindre omarbetning kortar tiden långt mer än proportionellt.
+	Project finish date	Projektets slutdatum
+	Three activities in parallel, each ten days on average; the project ends when all three are done.	Tre aktiviteter parallellt, var och en tio dagar i genomsnitt; projektet är klart när alla tre är färdiga.
+	When will the project finish?	När blir projektet klart?
+	Why three ten-day activities in parallel take more than 18 days on average.	Varför tre parallella aktiviteter på tio dagar i genomsnitt tar mer än 18 dagar.
 	Show me	Visa mig
 	Point at where to do this step	Peka ut var du gör det här steget
 	Step {k} of {n}	Steg {k} av {n}

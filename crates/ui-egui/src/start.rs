@@ -42,17 +42,20 @@ pub enum Industry {
     Healthcare,
     ContactCentre,
     ItOperations,
+    /// Projects and their schedules.
+    Projects,
     /// Not an industry: models for learning the tool itself.
     Reference,
 }
 
 impl Industry {
-    pub const ALL: [Industry; 6] = [
+    pub const ALL: [Industry; 7] = [
         Industry::Services,
         Industry::Manufacturing,
         Industry::Healthcare,
         Industry::ContactCentre,
         Industry::ItOperations,
+        Industry::Projects,
         Industry::Reference,
     ];
 
@@ -63,6 +66,7 @@ impl Industry {
             Industry::Healthcare => t("Healthcare"),
             Industry::ContactCentre => t("Contact centre"),
             Industry::ItOperations => t("IT operations"),
+            Industry::Projects => t("Projects"),
             Industry::Reference => t("Reference"),
         }
     }
@@ -73,6 +77,8 @@ impl Industry {
 pub enum Proof {
     /// Against an exact formula from queueing theory.
     Theory,
+    /// Against an exact result of probability theory (not a queue).
+    Probability,
     /// Against the figures of a published study.
     Published,
 }
@@ -81,6 +87,7 @@ impl Proof {
     fn label(self) -> &'static str {
         match self {
             Proof::Theory => t("Checked against queueing theory"),
+            Proof::Probability => t("Checked against probability theory"),
             Proof::Published => t("Matches a published study"),
         }
     }

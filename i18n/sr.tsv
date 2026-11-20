@@ -826,6 +826,7 @@ unit	yr	год.
 	IT operations	ИТ операције
 	Reference	Референтни модели
 	Checked against queueing theory	Проверено теоријом редова чекања
+	Checked against probability theory	Проверено теоријом вероватноће
 	Matches a published study	Поклапа се са објављеном студијом
 	What do you want to find out?	Шта желите да сазнате?
 	Simulate a process, compare what-ifs, and see which differences are real. Each example asks one question and shows how the answer was found.	Симулирајте процес, упоредите варијанте „шта ако” и погледајте које су разлике стварне. Сваки пример поставља једно питање и показује како је одговор пронађен.
@@ -882,6 +883,31 @@ unit	yr	год.
 	Callers who give up: the share lost and the wait of those who stay.	Позиваоци који одустану: изгубљени удео и чекање оних који остану.
 	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	Блокирање, мале чекаонице и кварови: делови одбијени на почетку линије.
 	Health checks that take busy servers out send their requests back to the queue.	Провере стања које избацују заузете сервере из рада враћају њихове захтеве у ред.
+	Projects	Пројекти
+	Same mean, different spread	Иста средња вредност, различита распршеност
+	Three desks with the same mean service time of 1 minute: fixed, random and very uneven.	Три шалтера са истим просечним временом послуживања од 1 минута: сталним, случајним и веома неуједначеним.
+	Does it matter how much service times vary when the average is the same?	Да ли је важно колико времена послуживања варирају кад је просек исти?
+	Variability makes queues: the same average time gives waits of 2, 4 and 10 minutes.	Варијабилност ствара редове: исто просечно време даје чекања од 2, 4 и 10 минута.
+	Bank with an ATM and cashiers	Банка са банкоматом и благајницима
+	Half the customers use the ATM first; five cashiers share one queue (Borshchev and Grigoryev, The Big Book of Simulation Modeling, Example 2.2).	Половина клијената прво користи банкомат; пет благајника дели један ред (Borshchev и Grigoryev, The Big Book of Simulation Modeling, пример 2.2).
+	Are five cashiers enough when half the customers use the ATM first?	Да ли је пет благајника довољно кад половина клијената прво користи банкомат?
+	Routing by chance and a shared queue: cashiers busy 91% of the time, and what a sixth would do.	Случајно усмеравање и заједнички ред: благајници заузети 91% времена и шта би променио шести.
+	Hospital beds	Болнички кревети
+	Patients who find every bed taken are turned away; stays vary widely around five days.	Пацијенти који затекну све кревете заузете бивају одбијени; боравци јако варирају око пет дана.
+	How many beds so that fewer than 1 in 50 patients are turned away?	Колико је кревета потребно да мање од 1 на 50 пацијената буде одбијено?
+	Beds turn patients away rather than queue them, and only the average stay matters.	Кревети одбијају пацијенте уместо да их ставе у ред, и важан је само просечан боравак.
+	Machine repair crew	Екипа за поправку машина
+	Six machines that break down now and then, and the fitters who repair them.	Шест машина које се повремено покваре и механичари који их поправљају.
+	How many fitters keep six machines running?	Колико механичара држи шест машина у раду?
+	A closed loop: a machine waiting for repair cannot break down again, so the queue stays short.	Затворена петља: машина која чека поправку не може поново да се поквари, па ред остаје кратак.
+	Inspection with rework	Контрола са дорадом
+	Half the parts fail inspection, are reworked and are inspected again.	Половина делова не прође контролу, дорађује се и поново контролише.
+	How much longer do parts take when half of them need rework?	Колико дуже траје пролаз делова кад половини треба дорада?
+	A loop back: rework doubles the load on inspection, and less rework cuts the time far more than in proportion.	Повратна петља: дорада удвостручује оптерећење контроле, а мање дораде скраћује време далеко више него сразмерно.
+	Project finish date	Датум завршетка пројекта
+	Three activities in parallel, each ten days on average; the project ends when all three are done.	Три паралелне активности, свака у просеку десет дана; пројекат се завршава кад су све три готове.
+	When will the project finish?	Када ће пројекат бити завршен?
+	Why three ten-day activities in parallel take more than 18 days on average.	Зашто три паралелне десетодневне активности у просеку трају дуже од 18 дана.
 	Show me	Покажите ми
 	Point at where to do this step	Покажите где се ради овај корак
 	Step {k} of {n}	Корак {k} од {n}

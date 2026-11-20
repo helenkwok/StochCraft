@@ -826,6 +826,7 @@ unit	yr	년
 	IT operations	IT 운영
 	Reference	참조 모델
 	Checked against queueing theory	대기열 이론으로 검증됨
+	Checked against probability theory	확률론으로 검증됨
 	Matches a published study	발표된 연구와 일치
 	What do you want to find out?	무엇을 알아보고 싶으세요?
 	Simulate a process, compare what-ifs, and see which differences are real. Each example asks one question and shows how the answer was found.	프로세스를 시뮬레이션하고, 가정 시나리오를 비교하고, 어떤 차이가 실제인지 확인하세요. 각 예제는 질문 하나를 던지고 답을 어떻게 찾았는지 보여 줍니다.
@@ -882,6 +883,31 @@ unit	yr	년
 	Callers who give up: the share lost and the wait of those who stay.	포기하는 발신자: 잃는 비율과 남은 사람의 대기 시간.
 	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	차단, 작은 대기실, 고장: 라인 입구에서 받아들여지지 않는 부품.
 	Health checks that take busy servers out send their requests back to the queue.	바쁜 서버를 제외하는 상태 검사는 그 요청을 대기열로 되돌려 보냄.
+	Projects	프로젝트
+	Same mean, different spread	평균은 같고 변동은 다름
+	Three desks with the same mean service time of 1 minute: fixed, random and very uneven.	평균 서비스 시간이 모두 1분인 창구 세 곳: 고정, 무작위, 매우 불규칙.
+	Does it matter how much service times vary when the average is the same?	평균이 같다면 서비스 시간의 변동 폭이 중요할까?
+	Variability makes queues: the same average time gives waits of 2, 4 and 10 minutes.	변동이 대기열을 만듦: 평균 시간이 같아도 대기 시간은 2분, 4분, 10분.
+	Bank with an ATM and cashiers	ATM과 창구 직원이 있는 은행
+	Half the customers use the ATM first; five cashiers share one queue (Borshchev and Grigoryev, The Big Book of Simulation Modeling, Example 2.2).	고객 절반은 먼저 ATM을 이용하고, 창구 직원 다섯 명이 대기열 하나를 함께 씀 (Borshchev와 Grigoryev, The Big Book of Simulation Modeling, 예제 2.2).
+	Are five cashiers enough when half the customers use the ATM first?	고객 절반이 먼저 ATM을 이용할 때 창구 직원 다섯 명이면 충분할까?
+	Routing by chance and a shared queue: cashiers busy 91% of the time, and what a sixth would do.	확률에 따른 경로 배정과 공유 대기열: 시간의 91%가 바쁜 창구 직원과, 여섯 번째 직원을 두면 달라지는 점.
+	Hospital beds	병원 병상
+	Patients who find every bed taken are turned away; stays vary widely around five days.	병상이 모두 차 있으면 환자는 받아들여지지 않고, 입원 기간은 5일 안팎에서 크게 달라짐.
+	How many beds so that fewer than 1 in 50 patients are turned away?	받아들여지지 않는 환자를 50명 중 1명 미만으로 하려면 병상이 몇 개 필요할까?
+	Beds turn patients away rather than queue them, and only the average stay matters.	병상은 환자를 대기시키지 않고 돌려보내며, 평균 입원 기간만 영향을 줌.
+	Machine repair crew	기계 수리반
+	Six machines that break down now and then, and the fitters who repair them.	가끔 고장 나는 기계 6대와 이를 수리하는 정비공.
+	How many fitters keep six machines running?	정비공 몇 명이면 기계 6대를 계속 돌릴 수 있을까?
+	A closed loop: a machine waiting for repair cannot break down again, so the queue stays short.	닫힌 루프: 수리를 기다리는 기계는 다시 고장 날 수 없어서 대기열이 짧게 유지됨.
+	Inspection with rework	재작업이 있는 검사
+	Half the parts fail inspection, are reworked and are inspected again.	부품 절반이 검사에 불합격하여 재작업된 뒤 다시 검사받음.
+	How much longer do parts take when half of them need rework?	부품 절반에 재작업이 필요하면 부품의 소요 시간은 얼마나 늘어날까?
+	A loop back: rework doubles the load on inspection, and less rework cuts the time far more than in proportion.	되돌아가는 루프: 재작업은 검사 부하를 두 배로 늘리고, 재작업을 줄이면 시간은 비례보다 훨씬 크게 줄어듦.
+	Project finish date	프로젝트 완료일
+	Three activities in parallel, each ten days on average; the project ends when all three are done.	각각 평균 10일인 병렬 활동 세 개, 세 활동이 모두 끝나야 프로젝트가 끝남.
+	When will the project finish?	프로젝트는 언제 끝날까?
+	Why three ten-day activities in parallel take more than 18 days on average.	평균 10일짜리 병렬 활동 세 개가 평균 18일 넘게 걸리는 이유.
 	Show me	보여 주세요
 	Point at where to do this step	이 단계를 어디서 하는지 가리킵니다
 	Step {k} of {n}	{n}단계 중 {k}단계
