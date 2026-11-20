@@ -428,7 +428,6 @@ fn explain(
     Ok(0)
 }
 
-/// A positive, finite number (for `--cycle`).
 /// A half-width as a share of the mean: `5%`, or a fraction such as `0.05`.
 fn share_of_mean(s: &str) -> Result<f64, String> {
     let bad = || format!("give the share of the mean as `5%` or `0.05`, not `{s}`");
@@ -453,6 +452,7 @@ fn points(s: &str) -> Result<f64, String> {
     }
 }
 
+/// A positive, finite number (for `--cycle`).
 fn positive_finite(s: &str) -> Result<f64, String> {
     let v: f64 = s.parse().map_err(|e| format!("{e}"))?;
     if v.is_finite() && v > 0.0 {
