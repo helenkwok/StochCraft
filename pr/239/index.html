@@ -7,8 +7,8 @@
   <meta name="description" content="Discrete-event simulation in the browser: open a BPMN or XPDL model with BPSim data, run it and read the results.">
   
 <script type="module">
-import init, * as bindings from './stochcraft-web-12ce44e37245c751.js';
-const wasm = await init({ module_or_path: './stochcraft-web-12ce44e37245c751_bg.wasm' });
+import init, * as bindings from './stochcraft-web-db2c79b98936e25b.js';
+const wasm = await init({ module_or_path: './stochcraft-web-db2c79b98936e25b_bg.wasm' });
 
 
 window.wasmBindings = bindings;
@@ -43,7 +43,7 @@ dispatchEvent(new CustomEvent("TrunkApplicationStarted", {detail: {wasm}}));
     .visually-hidden { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden;
       clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; border: 0; }
   </style>
-<link rel="modulepreload" href="./stochcraft-web-12ce44e37245c751.js" crossorigin="anonymous" integrity="sha384-CZfeB2S2oC2x41wBeS+FM2RdDPd4u4IOIojl3j9pXfsAPAmBTy4OUJmGVt5fItX1"><link rel="modulepreload" href="./snippets/eframe-d31a8450ea12dfc1/inline0.js" crossorigin="anonymous" integrity="sha384-uPZQ72BwgZ4v7Km6+UIFbkDDlt7ShGEsAVEHVN/+wZSGFhItJZB83iKMFQXauTSs"><link rel="preload" href="./stochcraft-web-12ce44e37245c751_bg.wasm" crossorigin="anonymous" integrity="sha384-D3622Bv3vyOitC4OMxElnd55bqxKiz4T/wEwQ++Kcsf/LPx0Hh26zLfiPg+vLz/S" as="fetch" type="application/wasm"></head>
+<link rel="modulepreload" href="./stochcraft-web-db2c79b98936e25b.js" crossorigin="anonymous" integrity="sha384-CZfeB2S2oC2x41wBeS+FM2RdDPd4u4IOIojl3j9pXfsAPAmBTy4OUJmGVt5fItX1"><link rel="modulepreload" href="./snippets/eframe-d31a8450ea12dfc1/inline0.js" crossorigin="anonymous" integrity="sha384-uPZQ72BwgZ4v7Km6+UIFbkDDlt7ShGEsAVEHVN/+wZSGFhItJZB83iKMFQXauTSs"><link rel="preload" href="./stochcraft-web-db2c79b98936e25b_bg.wasm" crossorigin="anonymous" integrity="sha384-ksT11tJp0G++tmRX3XfQ0O+Wo+kRBolRUm25gb+QEiJcpUCiAd35Heu9QnRKQcqZ" as="fetch" type="application/wasm"></head>
 <body>
   <!-- The app draws everything on the canvas, so a screen reader gets only its name and the
        status messages below; the desktop app has the full accessibility tree. -->
