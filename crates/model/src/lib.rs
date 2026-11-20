@@ -21,6 +21,7 @@ pub mod balance;
 pub mod calendar;
 pub mod capacity;
 pub mod expr;
+pub mod messages;
 pub mod path;
 
 pub use calendar::{Calendar, DateTime, Timed};
@@ -1612,8 +1613,7 @@ pub enum Problem {
     Unreachable,
     NoPathToSink,
     BadExperiment {
-        field: &'static str,
-        requirement: &'static str,
+        field: ExperimentField,
     },
     /// A server's power in a state that is negative or not a number.
     BadPower {
@@ -1622,7 +1622,7 @@ pub enum Problem {
     /// A property with no name, or one an element assigns twice.
     BadProperty {
         name: String,
-        reason: &'static str,
+        reason: PropertyFault,
     },
     /// Two declarations of a property with different types.
     PropertyTypeConflict {
@@ -1737,8 +1737,8 @@ pub enum Problem {
     },
     /// A probability, condition or default where it has no effect, and why.
     RoutingIgnored {
-        what: &'static str,
-        reason: &'static str,
+        what: IgnoredWhat,
+        reason: IgnoredWhy,
     },
     /// An exclusive gateway's default connection is not one of its outgoing connections.
     BadDefault {
@@ -1797,8 +1797,9 @@ pub enum Problem {
     TimedIgnored,
     /// A batch of no entities.
     ZeroBatchSize,
-    /// A conveyor's `field` (length, speed, item length, radius, rise or turns) is not above 0
-    /// and finite, its gap is not 0 or more and finite, or its curve angle is 0 or not finite.
+    /// A conveyor's `field` (`length`, `speed`, `item_length`, `radius`, `rise` or `turns`) is
+    /// not above 0 and finite, its `gap` is not 0 or more and finite, or its curve `angle` is 0
+    /// or not finite.
     BadConveyorValue {
         field: &'static str,
     },
@@ -1823,7 +1824,7 @@ pub enum Problem {
         /// Whether the pool exists (it is then not mobile).
         exists: bool,
     },
-    /// A mobile pool's speed (`field` is `speed empty` or `speed loaded`) is not above 0 and
+    /// A mobile pool's speed (`field` is `speed_empty` or `speed_loaded`) is not above 0 and
     /// finite.
     BadMobilitySpeed {
         field: &'static str,
@@ -1853,7 +1854,7 @@ pub enum Problem {
     NothingToUnbatch,
     /// The experiment's stop condition cannot be used, and why.
     BadStop {
-        reason: &'static str,
+        reason: StopFault,
     },
     /// The experiment has both a stop condition and a warm-up: a replication whose stop comes
     /// before the warm-up ends has no statistics after the warm-up, and is left out of the
@@ -2030,6 +2031,58 @@ impl std::fmt::Display for Behaviour {
 /// than this many standard deviations ([`Problem::NormalOftenNegative`]).
 pub const NORMAL_1_PERCENT: f64 = 2.326_347_874_040_840_8;
 
+/// The experiment's setting a problem is about ([`Problem::BadExperiment`]).
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum ExperimentField {
+    /// The warm-up is not 0 or more.
+    Warmup,
+    /// The duration is not above 0.
+    Duration,
+    /// There are no replications.
+    Replications,
+}
+
+/// What is wrong with a property ([`Problem::BadProperty`]).
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum PropertyFault {
+    /// It has no name.
+    NoName,
+    /// An element sets it twice.
+    SetTwice,
+    /// Its shares are negative or add up to 0.
+    BadShares,
+}
+
+/// What a routing setting that has no effect is ([`Problem::RoutingIgnored`]).
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum IgnoredWhat {
+    Condition,
+    Probability,
+    Default,
+}
+
+/// Why a routing setting has no effect ([`Problem::RoutingIgnored`]).
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum IgnoredWhy {
+    /// The connection is not out of an exclusive gateway.
+    NotDecision,
+    /// The gateway routes to the shortest queue.
+    ShortestQueue,
+    /// The gateway routes by condition.
+    ByCondition,
+}
+
+/// Why a stop condition cannot be used ([`Problem::BadStop`]).
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum StopFault {
+    /// No element has the id it names.
+    NoSuchBlock,
+    /// Its count is 0.
+    ZeroCount,
+    /// It waits for an element that is not a task to empty.
+    NotATask,
+}
+
 impl Problem {
     /// A stable snake_case name for files, the command line and agents.
     pub fn code(&self) -> &'static str {
@@ -2158,396 +2211,9 @@ impl Diagnostic {
 }
 
 impl std::fmt::Display for Diagnostic {
+    /// The diagnostic in English, naming blocks by id (see [`Diagnostic::plain`]).
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        let level = match self.severity {
-            Severity::Error => "error",
-            Severity::Warning => "warning",
-        };
-        write!(f, "{level}")?;
-        if let Some(at) = &self.at {
-            write!(f, " at `{at}`")?;
-        }
-        write!(f, ": ")?;
-        match &self.problem {
-            Problem::InvalidId { id } => write!(
-                f,
-                "`{id}` is not a valid id (a letter or _ first, then letters, digits, . - _)"
-            ),
-            Problem::DuplicateId { id } => write!(f, "the id `{id}` is used more than once"),
-            Problem::UnknownElement { missing, .. } => {
-                write!(f, "connects to `{missing}`, which does not exist")
-            }
-            Problem::IntoSource { .. } => write!(f, "connects into a source, which takes no input"),
-            Problem::OutOfSink { .. } => write!(f, "leaves a sink, which has no output"),
-            Problem::SelfLoop { .. } => write!(f, "connects an element to itself"),
-            Problem::NoOutput => write!(f, "has nowhere to send entities"),
-            Problem::SeveralOutputs { count } => {
-                write!(
-                    f,
-                    "has {count} outgoing connections; choosing between them needs a gateway"
-                )
-            }
-            Problem::BadDistribution { parameter, error } => write!(f, "{parameter}: {error}"),
-            Problem::ZeroCapacity => write!(f, "a server needs at least 1 unit"),
-            Problem::NoTimeBetweenArrivals => write!(
-                f,
-                "the time between arrivals is always 0, so the run would never end; give it a positive value or limit the arrivals"
-            ),
-            Problem::NoSource => write!(f, "the model has no source, so nothing will happen"),
-            Problem::NoSink => write!(f, "the model has no sink, so no time in system is measured"),
-            Problem::Unreachable => write!(f, "no entity can reach this element from a source"),
-            Problem::NoPathToSink => write!(f, "entities here can never reach a sink"),
-            Problem::BadPower { state } => write!(
-                f,
-                "the power while {state} must be a number of kilowatts of at least 0"
-            ),
-            Problem::BadExperiment { field, requirement } => {
-                write!(f, "experiment {field} must be {requirement}")
-            }
-            Problem::BadProperty { name, reason } => write!(f, "property `{name}` {reason}"),
-            Problem::PropertyTypeConflict {
-                name,
-                first,
-                second,
-            } => write!(
-                f,
-                "property `{name}` is declared as {} here and as {} elsewhere",
-                second.bpsim_name(),
-                first.bpsim_name()
-            ),
-            Problem::PropertyValueType { name, ty, value } => write!(
-                f,
-                "property `{name}` is a {}, which cannot hold {value}",
-                ty.bpsim_name()
-            ),
-            Problem::BadExpression {
-                name,
-                expression,
-                error,
-            } => write!(f, "property `{name}`: `{expression}`: {error}"),
-            Problem::UnknownProperty { name } => write!(
-                f,
-                "reads property `{name}`, which no element sets (it would read as empty)"
-            ),
-            Problem::ChangesWithoutProperty => write!(
-                f,
-                "its setup has times for changes from one value to another but no property to watch"
-            ),
-            Problem::TimesByValueWithoutProperty => write!(
-                f,
-                "it has processing times for particular values but no property to read them from"
-            ),
-            Problem::DuplicateTimeByValue { value } => write!(
-                f,
-                "it has two processing times for the value `{value}`; give each value one"
-            ),
-            Problem::TimeByValueNegative { value } => write!(
-                f,
-                "its processing time for the value `{value}` must have a mean of 0 or more"
-            ),
-            Problem::ScrapNotAgainstServer { id } => write!(
-                f,
-                "its scrap counts against `{id}`, which is not a task with a resource of its own"
-            ),
-            Problem::DemandNotPositive => {
-                write!(f, "its demand must be a number of parts above 0")
-            }
-            Problem::ShiftWithoutCalendar => write!(
-                f,
-                "its demand is per shift but names no calendar to say when the shifts are"
-            ),
-            Problem::DemandCalendarUnknown { id } => {
-                write!(
-                    f,
-                    "its demand names the calendar `{id}`, which does not exist"
-                )
-            }
-            Problem::PlannedRunTimeNotPositive => {
-                write!(f, "its planned run time per item must have a mean above 0")
-            }
-            Problem::PatienceNegative => {
-                write!(f, "its patience must have a mean of 0 or more")
-            }
-            Problem::AbandonedWithoutPatience { connection } => write!(
-                f,
-                "connection `{connection}` is the way for entities that give up, but they come \
-                 only from a task with a resource of its own and a patience"
-            ),
-            Problem::SeveralAbandonedWays { count } => write!(
-                f,
-                "{count} of its ways out are for entities that give up; at most one can be"
-            ),
-            Problem::TurnedAwayWithoutRoom { connection } => write!(
-                f,
-                "connection `{connection}` is the way for entities turned away, but they come \
-                 only from a task with a resource of its own and a finite waiting room"
-            ),
-            Problem::SeveralTurnedAwayWays { count } => write!(
-                f,
-                "{count} of its ways out are for entities turned away; at most one can be"
-            ),
-            Problem::TurnedAwayAndAbandoned { connection } => write!(
-                f,
-                "connection `{connection}` is marked both for entities that give up and for \
-                 those turned away; it can be one of them"
-            ),
-            Problem::BalkingProbability => write!(
-                f,
-                "each chance of joining in its balking table must be from 0 to 1"
-            ),
-            Problem::BalkingRowsOrder => write!(
-                f,
-                "the rows of its balking table must be in increasing order of the number found"
-            ),
-            Problem::BalkedWithoutBalking { connection } => write!(
-                f,
-                "connection `{connection}` is the way for entities that balk, but they come only \
-                 from a task with a resource of its own and balking"
-            ),
-            Problem::SeveralBalkedWays { count } => write!(
-                f,
-                "{count} of its ways out are for entities that balk; at most one can be"
-            ),
-            Problem::BalkedAndOtherWay { connection } => write!(
-                f,
-                "connection `{connection}` is marked both for entities that balk and for those \
-                 that give up or are turned away; it can be one of them"
-            ),
-            Problem::QueueLimitWithoutRoom => write!(
-                f,
-                "its waiting room is set by timetable or per working server, but has no number \
-                 of places: it is unlimited"
-            ),
-            Problem::QueueByShiftEmpty => write!(
-                f,
-                "its waiting room is set by timetable, but no calendar has a value: give one, or \
-                 make the room fixed"
-            ),
-            Problem::HealthCheckLimitNotValid => write!(
-                f,
-                "its health check's limit (entities waiting per working unit) must be a number of 0 or more"
-            ),
-            Problem::HealthCheckIntervalNotPositive => write!(
-                f,
-                "its health check's time between checks must have a mean above 0"
-            ),
-            Problem::BadProbability { value } => {
-                write!(f, "probability {value} must be between 0 and 1")
-            }
-            Problem::ProbabilitySum { sum } => write!(
-                f,
-                "the outgoing probabilities add up to {sum}, not 1; they are used in proportion"
-            ),
-            Problem::BadCondition { expression, error } => {
-                write!(f, "condition `{expression}`: {error}")
-            }
-            Problem::RoutingIgnored { what, reason } => write!(f, "{what} is ignored: {reason}"),
-            Problem::BadDefault { connection } => write!(
-                f,
-                "the default connection `{connection}` is not one of this gateway's outgoing connections"
-            ),
-            Problem::DivertNoDefault => write!(
-                f,
-                "diverts with no default connection: an entity whose way is full has nowhere else to go"
-            ),
-            Problem::NoDefault => write!(
-                f,
-                "routes by condition with no default connection: an entity for which no condition holds leaves the model here"
-            ),
-            Problem::JoinNeverCompletes { connection } => write!(
-                f,
-                "waits for an entity on `{connection}`, which none can reach, so it never sends one on"
-            ),
-            Problem::BufferBehindGateway { gateway } => write!(
-                f,
-                "has a finite buffer fed through gateway `{gateway}`: while the buffer is full the gateway waits and every entity behind it queues before the gateway, without limit"
-            ),
-            Problem::BlockingCycle { through } => {
-                let names: Vec<String> = through.iter().map(|i| format!("`{i}`")).collect();
-                write!(
-                    f,
-                    "finite buffers feed each other in a loop ({}); when all of them are full the loop deadlocks",
-                    names.join(" → ")
-                )
-            }
-            Problem::EmptyPool => write!(f, "a resource pool needs at least 1 unit"),
-            Problem::NoNeeds => write!(f, "names no resource it needs"),
-            Problem::UnknownResource { id } => {
-                write!(f, "needs the resource `{id}`, which does not exist")
-            }
-            Problem::NoPoolWithRoles { roles } => {
-                write!(
-                    f,
-                    "needs a resource with the roles {}, which no pool has",
-                    roles.join(", ")
-                )
-            }
-            Problem::NeedNeverMet { needed, available } => write!(
-                f,
-                "needs {needed} units at once where at most {available} exist, so this can never be met"
-            ),
-            Problem::BadPriority { value } => {
-                write!(f, "priority must be a finite number, not {value}")
-            }
-            Problem::UnusedPool => write!(f, "no task uses this resource pool"),
-            Problem::UnknownCalendar { id } => {
-                write!(
-                    f,
-                    "has a value for the calendar `{id}`, which does not exist"
-                )
-            }
-            Problem::EmptyCalendar => {
-                write!(f, "the calendar has no events, so it is never active")
-            }
-            Problem::TimedIgnored => write!(
-                f,
-                "there are no arrivals outside the calendars, but none is given, so this start event never fires"
-            ),
-            Problem::ZeroBatchSize => write!(f, "a batch needs at least 1 entity"),
-            Problem::BadConveyorValue { field } => {
-                let need = match *field {
-                    "gap" => "0 or more",
-                    "angle" => "nonzero",
-                    _ => "above 0",
-                };
-                write!(f, "the conveyor's {field} must be a finite number, {need}")
-            }
-            Problem::ConveyorTooShort { length, pitch } => write!(
-                f,
-                "the conveyor is {length} long but each item takes {pitch} (item length plus gap), so not even one fits; lengthen the conveyor or shorten the item or the gap"
-            ),
-            Problem::ConveyorLengthMismatch {
-                length,
-                path_length,
-            } => write!(
-                f,
-                "the conveyor's drawn path length {} differs from its length {} by more than 1%, so the drawing and the run will not agree",
-                short(*path_length),
-                short(*length)
-            ),
-            Problem::TransportNotSimulated => write!(f, "transports are not simulated yet"),
-            Problem::TransportPool { pool, exists } => {
-                if *exists {
-                    write!(
-                        f,
-                        "the transport's pool `{pool}` is not mobile; give it speeds and a home"
-                    )
-                } else {
-                    write!(f, "the transport's pool `{pool}` does not exist")
-                }
-            }
-            Problem::BadMobilitySpeed { field } => {
-                write!(f, "the pool's {field} must be a finite number above 0")
-            }
-            Problem::UnknownHome { home } => {
-                write!(f, "the pool's home `{home}` is not an element of the model")
-            }
-            Problem::TransportEnds { inputs, outputs } => write!(
-                f,
-                "a transport needs exactly one element before it (where it picks up) and one after it (where it drops off), but has {inputs} before and {outputs} after"
-            ),
-            Problem::NoShape { element } => write!(
-                f,
-                "`{element}` has no place on the canvas, so distances to it are not known; place it"
-            ),
-            Problem::BadLayoutScale => write!(
-                f,
-                "the layout scale (length units per drawing unit) must be a finite number above 0"
-            ),
-            Problem::ZeroQuantity => {
-                write!(
-                    f,
-                    "a bill of materials needs at least 1 entity from each connection"
-                )
-            }
-            Problem::QuantityIgnored => write!(
-                f,
-                "this quantity is ignored: only a parallel gateway takes several entities from one connection"
-            ),
-            Problem::NothingToUnbatch => write!(
-                f,
-                "no element makes batches, so this one passes every entity through"
-            ),
-            Problem::BadStop { reason } => write!(f, "the run cannot stop here: {reason}"),
-            Problem::StopWithWarmup => write!(
-                f,
-                "the run stops here, which can happen before the warm-up ends: a replication that stops during the warm-up has no statistics after it and is left out of the results (its stop time still counts)"
-            ),
-            Problem::EndedInWarmup { replications, of } if replications == of => write!(
-                f,
-                "every replication stopped before the warm-up ended, so none has statistics after it and no metric is reported (the stop times still are); shorten the warm-up or stop later"
-            ),
-            Problem::Overloaded { load } => write!(
-                f,
-                "its arrivals bring {:.0}% of the work its units can do (arrival rate × mean service time ÷ units, over the time they are up), so its queue grows without limit and the results describe no steady state; add units or shorten the service (stochcraft-cli explain shows the capacity table)",
-                load * 100.0
-            ),
-            Problem::NoSteadyState {
-                backlog,
-                left,
-                utilisation,
-            } => write!(
-                f,
-                "busy {:.1}% of the time and, on average, at least {backlog:.0} entities still waiting at the end against {left:.0} that left: work arrives faster than it is done, so the queue grows with the run length and its means describe no steady state (or the run ends with a backlog it could not clear)",
-                utilisation * 100.0
-            ),
-            Problem::OneReplication => write!(
-                f,
-                "the run has one replication, so its results have no confidence interval (no ± half-width) and cannot be told from chance; run at least 2, and usually 10 or more"
-            ),
-            Problem::NoWarmup {
-                warmup: Some(w),
-                shift,
-                unit,
-            } => write!(
-                f,
-                "the run has no warm-up, and the number inside settles only after about {} {unit} (MSER-5 on its mean across replications): the start from empty {} its mean by {}; set a warm-up of about {} {unit}",
-                short(*w),
-                if *shift < 0.0 { "lowers" } else { "raises" },
-                short(shift.abs()),
-                short(*w)
-            ),
-            Problem::NoWarmup {
-                warmup: None,
-                shift,
-                unit: _,
-            } => write!(
-                f,
-                "the run has no warm-up, and the number inside is still settling halfway through the run (MSER-5 on its mean across replications): the start from empty {} its mean by {}; lengthen the run and set a warm-up",
-                if *shift < 0.0 { "lowers" } else { "raises" },
-                short(shift.abs())
-            ),
-            Problem::EndedInWarmup { replications, of } => write!(
-                f,
-                "{replications} of {of} replications stopped before the warm-up ended; their statistics, all from the warm-up, are left out of every metric (their stop times still count)"
-            ),
-            Problem::EstimateIgnored => write!(
-                f,
-                "has a three-point estimate but no time distribution to fit it to; it is ignored"
-            ),
-            Problem::BadEstimate { error } => write!(f, "three-point estimate: {error}"),
-            Problem::EstimateMismatch => write!(
-                f,
-                "the time distribution is no longer the one fitted from its three-point estimate"
-            ),
-            Problem::NormalOftenNegative { parameter } => write!(
-                f,
-                "{parameter}: this normal distribution draws below 0 more than 1 time in 100 (its mean is less than 2.33 standard deviations), and each such time counts as 0, so the times are longer on average than its mean; use a truncated normal with min 0, or a log-normal"
-            ),
-            Problem::Behaviour {
-                found,
-                replications,
-                of,
-            } => {
-                if *of > 1 {
-                    write!(
-                        f,
-                        "in {replications} of {of} replications (the furthest off shown), "
-                    )?;
-                }
-                write!(f, "{found}")
-            }
-        }
+        f.write_str(&self.plain())
     }
 }
 
@@ -2870,7 +2536,7 @@ impl Model {
                 for (field, ok) in [
                     ("length", above_zero(length)),
                     ("speed", above_zero(speed)),
-                    ("item length", above_zero(item_length)),
+                    ("item_length", above_zero(item_length)),
                     ("gap", gap.is_finite() && gap >= 0.0),
                 ] {
                     if !ok {
@@ -3317,8 +2983,8 @@ impl Model {
             }
             if let Some(m) = &r.mobility {
                 for (field, speed) in [
-                    ("speed empty", m.speed_empty),
-                    ("speed loaded", m.speed_loaded),
+                    ("speed_empty", m.speed_empty),
+                    ("speed_loaded", m.speed_loaded),
                 ] {
                     if !(speed.is_finite() && speed > 0.0) {
                         out.push(Diagnostic::error(
@@ -3558,7 +3224,7 @@ impl Model {
                         at,
                         Problem::BadProperty {
                             name,
-                            reason: "needs a name",
+                            reason: PropertyFault::NoName,
                         },
                     ));
                     continue;
@@ -3568,7 +3234,7 @@ impl Model {
                         at,
                         Problem::BadProperty {
                             name,
-                            reason: "is set twice by this element",
+                            reason: PropertyFault::SetTwice,
                         },
                     ));
                     continue;
@@ -3639,7 +3305,7 @@ impl Model {
                                 at,
                                 Problem::BadProperty {
                                     name: name.clone(),
-                                    reason: "needs shares that are not negative and add up to more than 0",
+                                    reason: PropertyFault::BadShares,
                                 },
                             ));
                         }
@@ -3725,15 +3391,15 @@ impl Model {
                 }
                 if !exclusive && (c.probability.is_some() || c.condition.is_some()) {
                     let what = if c.condition.is_some() {
-                        "this condition"
+                        IgnoredWhat::Condition
                     } else {
-                        "this probability"
+                        IgnoredWhat::Probability
                     };
                     out.push(Diagnostic::warning(
                         at,
                         Problem::RoutingIgnored {
                             what,
-                            reason: "only connections out of an exclusive gateway choose a route",
+                            reason: IgnoredWhy::NotDecision,
                         },
                     ));
                 }
@@ -3755,20 +3421,22 @@ impl Model {
                 ));
             }
             if *routing == Routing::ShortestQueue {
-                let reason = "the gateway routes to the shortest queue";
                 for c in &outs {
                     let what = if c.condition.is_some() {
-                        "this condition"
+                        IgnoredWhat::Condition
                     } else if c.probability.is_some() {
-                        "this probability"
+                        IgnoredWhat::Probability
                     } else if default.as_ref() == Some(&c.id) {
-                        "this default"
+                        IgnoredWhat::Default
                     } else {
                         continue;
                     };
                     out.push(Diagnostic::warning(
                         Some(&c.id),
-                        Problem::RoutingIgnored { what, reason },
+                        Problem::RoutingIgnored {
+                            what,
+                            reason: IgnoredWhy::ShortestQueue,
+                        },
                     ));
                 }
             } else if outs.iter().any(|c| c.condition.is_some()) {
@@ -3779,8 +3447,8 @@ impl Model {
                     out.push(Diagnostic::warning(
                         Some(&c.id),
                         Problem::RoutingIgnored {
-                            what: "this probability",
-                            reason: "the gateway routes by condition",
+                            what: IgnoredWhat::Probability,
+                            reason: IgnoredWhy::ByCondition,
                         },
                     ));
                 }
@@ -3807,8 +3475,7 @@ impl Model {
             out.push(Diagnostic::error(
                 None,
                 Problem::BadExperiment {
-                    field: "warm-up",
-                    requirement: "0 or more",
+                    field: ExperimentField::Warmup,
                 },
             ));
         }
@@ -3816,8 +3483,7 @@ impl Model {
             out.push(Diagnostic::error(
                 None,
                 Problem::BadExperiment {
-                    field: "duration",
-                    requirement: "greater than 0",
+                    field: ExperimentField::Duration,
                 },
             ));
         }
@@ -3828,8 +3494,7 @@ impl Model {
             out.push(Diagnostic::error(
                 None,
                 Problem::BadExperiment {
-                    field: "replications",
-                    requirement: "1 or more",
+                    field: ExperimentField::Replications,
                 },
             ));
         }
@@ -3866,8 +3531,8 @@ impl Model {
         };
         let id = stop.element();
         let reason = match (stop, self.element(id).map(|e| &e.kind)) {
-            (_, None) => Some("no element has this id"),
-            (Stop::Count { count: 0, .. }, _) => Some("the count must be 1 or more"),
+            (_, None) => Some(StopFault::NoSuchBlock),
+            (Stop::Count { count: 0, .. }, _) => Some(StopFault::ZeroCount),
             (Stop::Count { .. }, Some(_)) => None,
             (
                 Stop::Empty { .. },
@@ -3877,7 +3542,7 @@ impl Model {
                     | ElementKind::Delay { .. },
                 ),
             ) => None,
-            (Stop::Empty { .. }, Some(_)) => Some("only a task can empty"),
+            (Stop::Empty { .. }, Some(_)) => Some(StopFault::NotATask),
         };
         if let Some(reason) = reason {
             out.push(Diagnostic::error(Some(id), Problem::BadStop { reason }));
@@ -4230,7 +3895,7 @@ mod tests {
         let text: Vec<String> = m.validate().iter().map(ToString::to_string).collect();
         assert!(
             text.iter().any(|t| t
-                == "error at `machine`: property `late`: `getProperty('missing') +`: the expression ends too early (at character 25)"),
+                == "error: The expression for the property “late” on machine cannot be used: the expression ends too early (at character 25). Correct “getProperty('missing') +”."),
             "{text:#?}"
         );
     }
@@ -4506,7 +4171,7 @@ mod tests {
         assert_eq!(ds[0].problem.code(), "buffer_behind_gateway");
         assert_eq!(ds[0].severity, Severity::Warning);
         assert_eq!(ds[0].at.as_ref().map(ElementId::as_str), Some("machine"));
-        assert!(ds[0].to_string().contains("`pick`"), "{}", ds[0]);
+        assert!(ds[0].to_string().contains("through pick"), "{}", ds[0]);
     }
 
     #[test]
@@ -4562,7 +4227,7 @@ mod tests {
             .filter(|d| d.problem.code() == "blocking_cycle")
             .collect();
         assert_eq!(cycle.len(), 1, "{ds:?}");
-        assert!(cycle[0].to_string().contains("`a` → `b`"), "{}", cycle[0]);
+        assert!(cycle[0].to_string().contains("a → b"), "{}", cycle[0]);
     }
 
     #[test]
@@ -4609,7 +4274,7 @@ mod tests {
         m.connections.push(link("f5", "b", "a"));
         let found = cycles(&m);
         assert_eq!(found.len(), 1, "{found:?}");
-        assert!(found[0].contains("`a` → `b`"), "{found:?}");
+        assert!(found[0].contains("a → b"), "{found:?}");
         // A way into another gateway: that one takes entities in without limit and waits
         // itself, so a → pick → again → b → a holds nothing up in a loop.
         m.elements.push(el("again", shortest()));
@@ -4857,7 +4522,7 @@ mod tests {
             *service = normal(1.0, 1.0);
         }
         let message = m.validate()[0].to_string();
-        assert!(message.contains("service"), "{message}");
+        assert!(message.contains("Service time"), "{message}");
         assert!(message.contains("truncated normal"), "{message}");
         assert!(message.contains("log-normal"), "{message}");
     }
@@ -4946,8 +4611,8 @@ mod tests {
             home: id("nowhere"),
             after_job: AfterJob::GoHome,
         });
-        assert!(has(&m, "BadMobilitySpeed { field: \"speed empty\" }"));
-        assert!(has(&m, "BadMobilitySpeed { field: \"speed loaded\" }"));
+        assert!(has(&m, "BadMobilitySpeed { field: \"speed_empty\" }"));
+        assert!(has(&m, "BadMobilitySpeed { field: \"speed_loaded\" }"));
         assert!(has(&m, "UnknownHome"));
         // Exactly one way out.
         m.resources[0].mobility = Some(Mobility {
@@ -5014,7 +4679,7 @@ mod tests {
         for (kind, field) in [
             (belt(0.0, 0.5, 0.8, 0.2), "length"),
             (belt(10.0, -1.0, 0.8, 0.2), "speed"),
-            (belt(10.0, 5.0, f64::NAN, 0.2), "item length"),
+            (belt(10.0, 5.0, f64::NAN, 0.2), "item_length"),
             (belt(10.0, 5.0, 0.8, -0.1), "gap"),
             (belt(f64::INFINITY, 5.0, 0.8, 0.2), "length"),
             (
@@ -5245,7 +4910,10 @@ mod tests {
         m.connections.retain(|c| c.id.as_str() != "f2");
         let text: Vec<String> = m.validate().iter().map(ToString::to_string).collect();
         assert!(
-            text.contains(&"error at `machine`: has nowhere to send entities".to_string()),
+            text.contains(
+                &"error: machine has nowhere to send entities. Add a flow from it to the next block."
+                    .to_string()
+            ),
             "{text:#?}"
         );
     }

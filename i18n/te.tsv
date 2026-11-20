@@ -21,8 +21,6 @@
 	A caller on hold: once a unit takes it, the entity stays.	హోల్డ్‌లో ఉన్న కాలర్: ఒక యూనిట్ దాన్ని తీసుకున్న తర్వాత, ఎంటిటీ ఉండిపోతుంది.
 	A client that times out: if its time runs out during service, it gives up then, and the unit finishes the job anyway (wasted work).	టైమ్‌అవుట్ అయ్యే క్లయింట్: సేవ జరుగుతుండగా దాని సమయం అయిపోతే, అప్పుడే వదిలి వెళ్తుంది, అయినా యూనిట్ ఆ పనిని పూర్తి చేస్తుంది (వృథా అయిన పని).
 	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	కొత్త ఫైల్ లో నమూనా మాత్రమే ఉంటుంది: {file} లో StochCraft అర్థం చేసుకోనివి వదిలివేయబడతాయి.
-	Abandoned	వదిలి వెళ్లినవి
-	Abandoned on {id}	{id} వద్ద వదిలి వెళ్లినవి
 	About StochCraft	StochCraft గురించి
 	About {app}	{app} గురించి
 	Accent	యాక్సెంట్ రంగు
@@ -162,7 +160,6 @@
 	Duration	వ్యవధి
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	ప్రతి విశ్లేషణ ఒకే యాదృచ్ఛిక బీజంతో ప్రయోగాన్ని చాలాసార్లు అమలు చేస్తుంది, కాబట్టి తేడాలు యాదృచ్ఛికత నుండి కాక మార్పు నుండి వస్తాయి. కొంత సమయం పట్టవచ్చు.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	ప్రతి ఎంటిటీ వీటిలో ఇప్పుడే ఒకేసారి పూర్తిగా తీర్చగలిగే మొదటిదాన్ని తీసుకుంటుంది, బయటకు వెళ్లేటప్పుడు యూనిట్‌లను తిరిగి ఇస్తుంది.
-	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	ప్రతి ఎంటిటీ వచ్చినప్పుడు దానికోసం యాదృచ్ఛికంగా తీసిన సమయం వరకు మాత్రమే ఇక్కడ వేచి ఉంటుంది, తర్వాత వదిలి వెళ్తుంది: "వదిలి వెళ్లినవి" అని గుర్తించిన బయటికి దారిలో వెళ్తుంది, లేదా నమూనా నుండి బయటకు వెళ్తుంది.
 	Each server (unit) is checked every so often, as a load balancer probes the servers behind it. One that fails, with too many waiting, is taken out of service for a restart, then comes back.	ప్రతి సర్వర్ (యూనిట్) అప్పుడప్పుడు తనిఖీ చేయబడుతుంది, లోడ్ బ్యాలెన్సర్ తన వెనుక ఉన్న సర్వర్‌లను పరిశీలించినట్లుగా. చాలా ఎక్కువ వేచి ఉన్నందున తనిఖీలో విఫలమైన సర్వర్‌ను పునఃప్రారంభం కోసం తొలగిస్తారు, తర్వాత అది తిరిగి వస్తుంది.
 	Edit	సవరణ
 	Edit themes…	థీమ్‌లను సవరించు…
@@ -412,7 +409,6 @@
 	Run	అమలు చేయి
 	Run cancelled	అమలు రద్దు చేయబడింది
 	Run experiment	ప్రయోగాన్ని అమలు చేయి
-	Play run 1 step by step and see each block's queue on the diagram	అమలు 1 ను దశలవారీగా నడిపి రేఖాచిత్రంలో ప్రతి బ్లాక్ వరుసను చూడు
 	Run the experiment ({shortcut})	ప్రయోగాన్ని అమలు చేయి ({shortcut})
 	Run the experiment again to see this result's spread.	ఈ ఫలితం యొక్క విస్తరణను చూడటానికి ప్రయోగాన్ని మళ్లీ అమలు చేయండి.
 	Run the experiment at each value of one parameter, and compare a result.	ఒక పరామితి యొక్క ప్రతి విలువ వద్ద ప్రయోగాన్ని అమలు చేసి ఒక ఫలితాన్ని పోల్చండి.
@@ -433,7 +429,6 @@
 	Scrap ratio	స్క్రాప్ నిష్పత్తి
 	Seed	యాదృచ్ఛిక బీజం
 	Select All	అన్నీ ఎంచుకో
-	Select a block to see its queue over time.	కాలక్రమంలో ఒక బ్లాక్ వరుసను చూడటానికి దాన్ని ఎంచుకోండి.
 	Sender waits during transfer	బదిలీ సమయంలో పంపే యంత్రం వేచి ఉంటుంది
 	Separate the values with semicolons or spaces.	విలువలను సెమీకోలన్ లేదా ఖాళీతో వేరు చేయండి.
 	Sequential	క్రమానుగత
@@ -497,10 +492,8 @@
 	Text	టెక్స్ట్
 	Text on accent	యాక్సెంట్ రంగుపై టెక్స్ట్
 	Text on header	హెడర్ బార్‌పై టెక్స్ట్
-	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	కనెక్షన్ తెగిపోతుంది, క్లయింట్ మళ్లీ ప్రయత్నిస్తుంది: ఎంటిటీ వెంటనే క్యూ ముందుకు తిరిగి వెళ్తుంది, దానిపై చేసిన పని వృథా అవుతుంది.
 	The entity waits on its server and the job carries on with what was left once the server is back.	ఎంటిటీ తన సర్వర్ వద్దే వేచి ఉంటుంది, సర్వర్ తిరిగి రాగానే మిగిలిన దానితో పని కొనసాగుతుంది.
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more runs would narrow it.	అంతరం {share} లక్ష్య వాటా కంటే కిందకు వెళ్తుంది, కాబట్టి వాటా చేరినట్లు 95% విశ్వాసంతో చూపబడలేదు; మరిన్ని అమలులు దానిని సన్నగా చేస్తాయి.
-	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	పని వెంటనే ఆగిపోతుంది: ఎంటిటీ షిఫ్ట్‌లో ఉన్న ఏ సర్వర్ కోసమైనా క్యూ ముందుకు తిరిగి వెళ్తుంది, దానిపై చేసిన పని వృథా అవుతుంది.
 	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	పని వెంటనే ఆగిపోతుంది; ఎంటిటీ తన సర్వర్ వద్దే వేచి ఉంటుంది, ఆ సర్వర్ మళ్లీ షిఫ్ట్‌లోకి రాగానే మిగిలిన దానితో పని కొనసాగుతుంది.
 	The last task with a resource it finished at	భాగం చివరిగా దాటిన వనరు అవసరమైన పని
 	The mean time to the stop condition is over the runs that met it only; the others ran to their time limit.	ఆపే షరతు వరకు సగటు సమయం దానిని చేరిన అమలులపై మాత్రమే; మిగిలినవి వాటి సమయ పరిమితి వరకు నడిచాయి.
@@ -690,7 +683,6 @@ unit	yr	సం.
 	Balked on {id}	{id} వద్ద క్యూలో చేరనివి
 	Balking	క్యూలో చేరకపోవడం
 	Count those in service	సేవలో ఉన్నవాటినీ లెక్కించు
-	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	క్యూలో చేరని ఎంటిటీలు వెంటనే ఈ ప్రవాహంలో వెళ్తాయి (ఉదాహరణకు, తర్వాత మళ్ళీ ప్రయత్నించడానికి), కోల్పోవడం బదులు; ఇక్కడ అవి క్యూలో చేరనివిగా లెక్కించబడతాయి.
 	Joins with probability	క్యూలో చేరే సంభావ్యత
 	Number waiting	వేచి ఉన్నవాటి సంఖ్య
 	Share balked	క్యూలో చేరనివాటి వాటా
@@ -908,7 +900,6 @@ unit	yr	సం.
 @plural	Finished {n} run|Finished {n} runs	{n} అమలు పూర్తయింది|{n} అమలులు పూర్తయ్యాయి
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	{file} తెరవబడింది ({n} హెచ్చరిక)|{file} తెరవబడింది ({n} హెచ్చరికలు)
 @plural	Removed {n} block|Removed {n} blocks	{n} బ్లాక్ తొలగించబడింది|{n} బ్లాక్‌లు తొలగించబడ్డాయి
-@plural	Makes {n} independent run of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	{seed} బీజంతో నమూనాను {n} స్వతంత్ర అమలుగా నడుపుతుంది. ప్రతి అంశం ఫలితానికి 95% విశ్వసనీయత అంతరం సగం వెడల్పు ఇవ్వబడుతుంది.|{seed} బీజంతో నమూనాను {n} స్వతంత్ర అమలులుగా నడుపుతుంది. అన్ని అమలుల నుంచి ప్రతి అంశం ఫలితానికి 95% విశ్వసనీయత అంతరం సగం వెడల్పు ఇవ్వబడుతుంది.
 @plural	The stop condition was met in {met} of {n} run, after {time} {unit} on average.|The stop condition was met in {met} of {n} runs, after {time} {unit} on average.	ఆపే షరతు {n} అమలులో {met}లో, సగటున {time} {unit} తర్వాత చేరింది.|ఆపే షరతు {n} అమలులలో {met}లో, సగటున {time} {unit} తర్వాత చేరింది.
 @plural	{done} of {n} run finished|{done} of {n} runs finished	{n} లో {done} అమలు పూర్తయింది|{n} లో {done} అమలులు పూర్తయ్యాయి
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} run|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} runs	{name}: {mean}{unit}\n95% అంతరం {low} నుంచి {high}{unit} వరకు\n{n} అమలులో|{name}: {mean}{unit}\n95% అంతరం {low} నుంచి {high}{unit} వరకు\n{n} అమలులలో
@@ -938,7 +929,6 @@ unit	yr	సం.
 	kilometres	కిలోమీటర్లు
 	inches	అంగుళాలు
 	feet	అడుగులు
-	Ticked, items queue up at the end while the rest keep moving. Unticked, the whole belt stops when the item at the end cannot leave.	ఎంచుకుంటే, మిగతావి కదులుతూ ఉండగా వస్తువులు చివర వరుసలో నిలుస్తాయి. ఎంచుకోకపోతే, చివరన ఉన్న వస్తువు బయటకు వెళ్లలేనప్పుడు మొత్తం బెల్ట్ ఆగిపోతుంది.
 	A belt that carries entities from one end to the other. It has a length and a speed, and each entity takes a pitch of belt: its item length plus the gap kept free after it. So it holds at most length ÷ pitch entities and carries at most speed ÷ pitch per time unit. Accumulating: entities queue up at the end while the rest keep moving; otherwise the whole belt stops.	ఎంటిటీలను ఒక చివర నుండి మరో చివరకు తీసుకెళ్లే బెల్ట్. దానికి పొడవు, వేగం ఉంటాయి; ప్రతి ఎంటిటీ బెల్ట్‌లో ఒక పిచ్ తీసుకుంటుంది: దాని వస్తువు పొడవు, దాని వెనుక ఖాళీగా ఉంచే ఖాళీ కలిపి. కాబట్టి ఇందులో గరిష్ఠంగా పొడవు ÷ పిచ్ ఎంటిటీలు పడతాయి, ప్రతి సమయ యూనిట్‌కు గరిష్ఠంగా వేగం ÷ పిచ్ మోస్తుంది. పోగుపడే: మిగతావి కదులుతూ ఉండగా ఎంటిటీలు చివర వరుసలో నిలుస్తాయి; లేకపోతే మొత్తం బెల్ట్ ఆగిపోతుంది.
 	Station	స్టేషన్
 	Kind	రకం
@@ -992,19 +982,165 @@ unit	yr	సం.
 	Time on conveyors	కన్వేయర్లపై సమయం
 	No conveyors in this model	ఈ మోడల్‌లో కన్వేయర్లు లేవు
 	Fills in when the run ends	రన్ ముగిసినప్పుడు నిండుతుంది
-	How long each item spends on the conveyors.	ప్రతి వస్తువు కన్వేయర్లపై ఎంత సమయం గడుపుతుంది.
-	No item has left a conveyor yet	ఇంకా ఏ వస్తువూ కన్వేయర్‌ను వదలలేదు
-	Share of items by time on a conveyor, in {unit}	కన్వేయర్‌పై సమయం ప్రకారం వస్తువుల వాటా, {unit}లో
-	Time on conveyors: {n} items between {lo} and {hi} {unit}	కన్వేయర్లపై సమయం: {lo} మరియు {hi} {unit} మధ్య {n} వస్తువులు
-	{from} to {to} {unit}: {share} of items ({n})	{from} నుండి {to} {unit}: వస్తువులలో {share} ({n})
-	Items on conveyors over time	కాలక్రమేణా కన్వేయర్లపై వస్తువులు
-	Items in the model over time	కాలక్రమేణా మోడల్‌లో వస్తువులు
-	How many items are on the conveyors over time.	కాలక్రమేణా కన్వేయర్లపై ఎన్ని వస్తువులు ఉన్నాయి.
-	How many items are in the model over time.	కాలక్రమేణా మోడల్‌లో ఎన్ని వస్తువులు ఉన్నాయి.
 	Nothing was recorded over time in these results	ఈ ఫలితాలలో కాలక్రమేణా ఏదీ నమోదు కాలేదు
-	At {time} {unit}: {n} items	{time} {unit} వద్ద: {n} వస్తువులు
 	Run the model to fill the dashboard	డాష్‌బోర్డ్ నింపడానికి మోడల్‌ను రన్ చేయండి
 	The resource and conveyor charts show the last run until this one ends	ఇది ముగిసే వరకు వనరు, కన్వేయర్ చార్టులు చివరి రన్‌ను చూపిస్తాయి
+# Validation messages, new labels and word changes (issue #145)
+	The id “{id}” is not valid. Start an id with a letter or an underscore, then use only letters, digits, dots, hyphens and underscores.	“{id}” ఐడి చెల్లదు. ఐడిని ఒక అక్షరం లేదా అండర్‌స్కోర్‌తో మొదలుపెట్టి, ఆపై అక్షరాలు, అంకెలు, చుక్కలు, హైఫన్‌లు, అండర్‌స్కోర్‌లు మాత్రమే వాడండి.
+	More than one block, flow, pool or calendar has the id “{id}”. Give each its own id.	ఒకటి కంటే ఎక్కువ బ్లాక్, ప్రవాహం, వనరుల పూల్ లేదా క్యాలెండర్‌కు “{id}” అనే ఐడి ఉంది. ప్రతిదానికీ దాని సొంత ఐడి ఇవ్వండి.
+	The flow {flow} uses a block that does not exist. Remove the flow, or connect it to a block that exists.	ప్రవాహం {flow} లేని బ్లాక్‌ను ఉపయోగిస్తోంది. ఆ ప్రవాహాన్ని తొలగించండి, లేదా ఉన్న బ్లాక్‌కు కలపండి.
+	The flow {flow} leads into an Arrivals block, which takes no input. Remove the flow, or send it to another block.	ప్రవాహం {flow} రాకలు బ్లాక్‌లోకి వెళ్తోంది; దానికి ఇన్‌పుట్ ఉండదు. ప్రవాహాన్ని తొలగించండి, లేదా మరో బ్లాక్‌కు పంపండి.
+	The flow {flow} leaves a Departures block, which has no output. Remove the flow, or start it from another block.	ప్రవాహం {flow} నిష్క్రమణలు బ్లాక్ నుండి బయలుదేరుతోంది; దానికి అవుట్‌పుట్ లేదు. ప్రవాహాన్ని తొలగించండి, లేదా మరో బ్లాక్ నుండి మొదలుపెట్టండి.
+	The flow {flow} leads from a block back to itself. Remove it, or send it to another block.	ప్రవాహం {flow} ఒక బ్లాక్ నుండి అదే బ్లాక్‌కు తిరిగి వస్తోంది. దాన్ని తొలగించండి, లేదా మరో బ్లాక్‌కు పంపండి.
+	{block} has nowhere to send entities. Add a flow from it to the next block.	{block} నుండి ఎంటిటీలను పంపడానికి ఎక్కడికీ ప్రవాహం లేదు. దాని నుండి తర్వాతి బ్లాక్‌కు ఒక ప్రవాహాన్ని జోడించండి.
+	{block} has {count} flows out, and only a Decision or a Split or join block can send entities down several. Remove the extra flows, or add a Decision block.	{block} నుండి {count} ప్రవాహాలు బయటకు వెళ్తున్నాయి; నిర్ణయం బ్లాక్ లేదా విభజించు లేదా కలుపు బ్లాక్ మాత్రమే ఎంటిటీలను అనేక ప్రవాహాల్లోకి పంపగలవు. అదనపు ప్రవాహాలను తొలగించండి, లేదా నిర్ణయం బ్లాక్‌ను జోడించండి.
+	In “{field}” of {block}, set “{param}” to a finite number.	{block} యొక్క “{field}” లో “{param}” ను పరిమిత సంఖ్యగా సెట్ చేయండి.
+	In “{field}” of {block}, set “{param}” to a number above 0.	{block} యొక్క “{field}” లో “{param}” ను 0 కంటే ఎక్కువ సంఖ్యగా సెట్ చేయండి.
+	In “{field}” of {block}, set “{param}” to 0 or more.	{block} యొక్క “{field}” లో “{param}” ను 0 లేదా అంతకంటే ఎక్కువగా సెట్ చేయండి.
+	In “{field}” of {block}, set “{param}” to 1 or more.	{block} యొక్క “{field}” లో “{param}” ను 1 లేదా అంతకంటే ఎక్కువగా సెట్ చేయండి.
+	In “{field}” of {block}, set “{param}” to a number from 0 to 1.	{block} యొక్క “{field}” లో “{param}” ను 0 నుండి 1 మధ్య సంఖ్యగా సెట్ చేయండి.
+	In “{field}” of {block}, set “Minimum” below “Maximum”, and any “Most likely” value between them.	{block} యొక్క “{field}” లో “కనిష్ఠం” ను “గరిష్ఠం” కంటే తక్కువగా, “అత్యంత సంభావ్య విలువ” ఉంటే వాటి మధ్య సెట్ చేయండి.
+	In “{field}” of {block}, add data points whose probabilities add up to more than 0.	{block} యొక్క “{field}” లో సంభావ్యతల మొత్తం 0 కంటే ఎక్కువ ఉండే డేటా బిందువులను జోడించండి.
+	{block} would never have a unit to work with. Give it at least 1 unit.	{block} కు పని చేయడానికి ఒక్క యూనిట్ కూడా ఉండదు. కనీసం 1 యూనిట్ ఇవ్వండి.
+	{block} would make entities without end, because its “Time between arrivals” is always 0. Give it a time above 0, or set an “Arrival limit”.	{block} యొక్క “రాకల మధ్య సమయం” ఎల్లప్పుడూ 0 కాబట్టి అది అంతులేకుండా ఎంటిటీలను సృష్టిస్తుంది. 0 కంటే ఎక్కువ సమయం ఇవ్వండి, లేదా “రాకల పరిమితి” సెట్ చేయండి.
+	The model has no Arrivals block, so nothing will happen. Add an Arrivals block.	నమూనాలో రాకలు బ్లాక్ లేదు, కాబట్టి ఏమీ జరగదు. ఒక రాకలు బ్లాక్‌ను జోడించండి.
+	The model has no Departures block, so no time in system is measured. Add a Departures block.	నమూనాలో నిష్క్రమణలు బ్లాక్ లేదు, కాబట్టి వ్యవస్థలో గడిపిన సమయం కొలవబడదు. ఒక నిష్క్రమణలు బ్లాక్‌ను జోడించండి.
+	No entity can reach {block} from an Arrivals block. Connect it to a block that entities pass through.	రాకలు బ్లాక్ నుండి ఏ ఎంటిటీ {block} ను చేరలేదు. ఎంటిటీలు దాటి వెళ్లే బ్లాక్‌కు దీన్ని కలపండి.
+	Entities in {block} can never reach a Departures block. Connect it on towards Departures.	{block} లోని ఎంటిటీలు నిష్క్రమణలు బ్లాక్‌ను ఎప్పటికీ చేరలేవు. దీన్ని నిష్క్రమణల వైపు కలపండి.
+	Set the “{state}” power of {block} to a number of kilowatts, 0 or more.	{block} యొక్క “{state}” పవర్‌ను కిలోవాట్లలో 0 లేదా అంతకంటే ఎక్కువ సంఖ్యగా సెట్ చేయండి.
+	Set the warm-up of the experiment to 0 or more.	ప్రయోగం యొక్క ప్రారంభ సర్దుబాటు సమయాన్ని 0 లేదా అంతకంటే ఎక్కువగా సెట్ చేయండి.
+	Set the duration of the experiment to more than 0.	ప్రయోగం యొక్క వ్యవధిని 0 కంటే ఎక్కువగా సెట్ చేయండి.
+	Set the number of runs of the experiment to 1 or more.	ప్రయోగం యొక్క అమలుల సంఖ్యను 1 లేదా అంతకంటే ఎక్కువగా సెట్ చేయండి.
+	Set the layout scale (length units per drawing unit) to a finite number above 0.	లేఅవుట్ స్కేల్‌ను (ఒక డ్రాయింగ్ యూనిట్‌కు పొడవు యూనిట్లు) 0 కంటే ఎక్కువ పరిమిత సంఖ్యగా సెట్ చేయండి.
+	A property of {block} has no name. Give it a name, or remove it.	{block} యొక్క ఒక లక్షణానికి పేరు లేదు. దానికి పేరు ఇవ్వండి, లేదా తొలగించండి.
+	{block} sets the property “{name}” twice. Keep one of them.	{block} “{name}” లక్షణాన్ని రెండుసార్లు సెట్ చేసింది. ఒకదాన్ని ఉంచండి.
+	The property “{name}” of {block} needs shares that are not negative and add up to more than 0. Change the shares.	{block} లో “{name}” లక్షణానికి రుణాత్మకం కాని, మొత్తం 0 కంటే ఎక్కువ ఉండే వాటాలు కావాలి. వాటాలను మార్చండి.
+	The property “{name}” has the type “{type2}” on {block} but “{type}” on another block. Give it one type everywhere.	“{name}” లక్షణం {block} లో “{type2}” రకంగా, మరో బ్లాక్‌లో “{type}” రకంగా ఉంది. అన్నిచోట్లా ఒకే రకం ఇవ్వండి.
+	The value of the property “{name}” on {block} does not fit its type, “{type}”. Change the value or the type.	{block} లో “{name}” లక్షణం విలువ దాని రకం “{type}” కు సరిపోలదు. విలువను లేదా రకాన్ని మార్చండి.
+	The expression for the property “{name}” on {block} cannot be used: {error}. Correct “{expression}”.	{block} లో “{name}” లక్షణం వ్యక్తీకరణను ఉపయోగించలేము: {error}. “{expression}” ను సరిదిద్దండి.
+	{block} reads the property “{name}”, which no block sets, so it would read as empty. Set it on an earlier block, or correct the name.	{block} “{name}” లక్షణాన్ని చదువుతోంది; దాన్ని ఏ బ్లాక్ సెట్ చేయదు, కాబట్టి అది ఖాళీగా చదవబడుతుంది. దాన్ని ముందున్న బ్లాక్‌లో సెట్ చేయండి, లేదా పేరును సరిదిద్దండి.
+	The setup of {block} has times for particular changes but no property to watch. Choose a property under “Only when this property changes”.	{block} యొక్క సెటప్‌లో నిర్దిష్ట మార్పులకు సమయాలు ఉన్నాయి, కానీ గమనించడానికి లక్షణం లేదు. “ఈ లక్షణం మారినప్పుడు మాత్రమే” కింద ఒక లక్షణాన్ని ఎంచుకోండి.
+	{block} has times for particular values but no property to read them from. Choose a property under “Service time by property”.	{block} లో నిర్దిష్ట విలువలకు సమయాలు ఉన్నాయి, కానీ వాటిని చదవడానికి లక్షణం లేదు. “లక్షణాన్ని బట్టి సేవా సమయం” కింద ఒక లక్షణాన్ని ఎంచుకోండి.
+	{block} has two times for the value “{value}”. Keep one.	{block} లో “{value}” విలువకు రెండు సమయాలు ఉన్నాయి. ఒకదాన్ని ఉంచండి.
+	Set the time of {block} for the value “{value}” to a mean of 0 or more.	{block} యొక్క “{value}” విలువ సమయాన్ని 0 లేదా అంతకంటే ఎక్కువ సగటుగా సెట్ చేయండి.
+	The scrap at {block} counts against {other}, which is not a task with a resource. Choose a task with a resource.	{block} వద్ద స్క్రాప్ {other} కు వ్యతిరేకంగా లెక్కించబడుతుంది, అది వనరు అవసరమైన పని కాదు. వనరు అవసరమైన పనిని ఎంచుకోండి.
+	Set “Planned run time per item” of {block} to a mean above 0.	{block} యొక్క “ఒక్కో భాగానికి ప్రణాళిక చేసిన రన్ సమయం” ను 0 కంటే ఎక్కువ సగటుగా సెట్ చేయండి.
+	Set “Time before giving up” of {block} to a mean of 0 or more.	{block} యొక్క “వదిలి వెళ్లే ముందు సమయం” ను 0 లేదా అంతకంటే ఎక్కువ సగటుగా సెట్ చేయండి.
+	The flow {flow} is ticked “Gave up”, but only a task with a resource and a “Time before giving up” sends entities that give up. Untick it, or set a “Time before giving up” on {block}.	ప్రవాహం {flow} పై “వదిలి వెళ్లినవి” ఎంచుకోబడింది, కానీ “వదిలి వెళ్లే ముందు సమయం” ఉన్న వనరు అవసరమైన పని మాత్రమే వదిలి వెళ్లే ఎంటిటీలను పంపుతుంది. ఎంపికను తీసివేయండి, లేదా {block} పై “వదిలి వెళ్లే ముందు సమయం” సెట్ చేయండి.
+	{count} flows out of {block} are ticked “{way}”; at most one can be. Untick all but one.	{block} నుండి బయటకు వెళ్లే {count} ప్రవాహాలపై “{way}” ఎంచుకోబడింది; గరిష్ఠంగా ఒకదానిపై మాత్రమే ఉండవచ్చు. ఒకటి తప్ప మిగిలిన వాటి ఎంపికను తీసివేయండి.
+	The flow {flow} is ticked “Turned away”, but only a task with a resource and a limited waiting room turns entities away. Untick it, or limit the waiting room of {block}.	ప్రవాహం {flow} పై “తిప్పి పంపినవి” ఎంచుకోబడింది, కానీ వేచి ఉండే గది పరిమితమైన వనరు అవసరమైన పని మాత్రమే ఎంటిటీలను తిప్పి పంపుతుంది. ఎంపికను తీసివేయండి, లేదా {block} యొక్క వేచి ఉండే గదిని పరిమితం చేయండి.
+	The flow {flow} is ticked both “Gave up” and “Turned away”. Keep one of them.	ప్రవాహం {flow} పై “వదిలి వెళ్లినవి”, “తిప్పి పంపినవి” రెండూ ఎంచుకోబడ్డాయి. ఒకదాన్ని ఉంచండి.
+	Set every chance of joining in the balking table of {block} to a number from 0 to 1.	{block} యొక్క క్యూలో చేరకపోవడం పట్టికలో చేరే ప్రతి సంభావ్యతను 0 నుండి 1 మధ్య సంఖ్యగా సెట్ చేయండి.
+	Put the rows of the balking table of {block} in increasing order of “Number waiting”.	{block} యొక్క క్యూలో చేరకపోవడం పట్టిక ఎంట్రీలను “వేచి ఉన్నవాటి సంఖ్య” ఆరోహణ క్రమంలో ఉంచండి.
+	The flow {flow} is ticked “Balked”, but only a task with a resource and balking sends entities that balk. Untick it, or turn on balking for {block}.	ప్రవాహం {flow} పై “క్యూలో చేరనివి” ఎంచుకోబడింది, కానీ క్యూలో చేరకపోవడం ఉన్న వనరు అవసరమైన పని మాత్రమే క్యూలో చేరని ఎంటిటీలను పంపుతుంది. ఎంపికను తీసివేయండి, లేదా {block} కు క్యూలో చేరకపోవడాన్ని ఆన్ చేయండి.
+	The flow {flow} is ticked “Balked” and also “Gave up” or “Turned away”. Keep one of them.	ప్రవాహం {flow} పై “క్యూలో చేరనివి” తో పాటు “వదిలి వెళ్లినవి” లేదా “తిప్పి పంపినవి” కూడా ఎంచుకోబడ్డాయి. ఒకదాన్ని ఉంచండి.
+	The waiting room of {block} is set by calendar or per working server, but has no number of places, so it is unlimited. Give it a number of places, or make it fixed.	{block} యొక్క వేచి ఉండే గది క్యాలెండర్ ప్రకారం లేదా పనిచేస్తున్న ఒక్కో సర్వర్‌కు అని సెట్ చేయబడింది, కానీ స్థానాల సంఖ్య లేదు, కాబట్టి అది పరిమితి లేనిది. స్థానాల సంఖ్య ఇవ్వండి, లేదా దాన్ని స్థిరంగా చేయండి.
+	The waiting room of {block} is set by calendar, but no calendar has a value. Add a value for a calendar, or make the waiting room fixed.	{block} యొక్క వేచి ఉండే గది క్యాలెండర్ ప్రకారం సెట్ చేయబడింది, కానీ ఏ క్యాలెండర్‌కూ విలువ లేదు. ఒక క్యాలెండర్‌కు విలువ జోడించండి, లేదా వేచి ఉండే గదిని స్థిరంగా చేయండి.
+	Set “Fails above, waiting per working server” of {block} to a number of 0 or more.	{block} యొక్క “వైఫల్య పరిమితి, పనిచేస్తున్న ఒక్కో సర్వర్‌కు వేచి ఉన్నవి” ను 0 లేదా అంతకంటే ఎక్కువ సంఖ్యగా సెట్ చేయండి.
+	Set “Check every” of {block} to a mean above 0.	{block} యొక్క “తనిఖీ వ్యవధి” ను 0 కంటే ఎక్కువ సగటుగా సెట్ చేయండి.
+	Set the demand of {block} to a number of parts above 0.	{block} యొక్క డిమాండ్‌ను 0 కంటే ఎక్కువ భాగాల సంఖ్యగా సెట్ చేయండి.
+	The demand of {block} is per shift but names no calendar to say when the shifts are. Choose a calendar.	{block} యొక్క డిమాండ్ షిఫ్ట్‌కు అని ఉంది, కానీ షిఫ్ట్‌లు ఎప్పుడో చెప్పే క్యాలెండర్ ఏదీ పేర్కొనలేదు. ఒక క్యాలెండర్‌ను ఎంచుకోండి.
+	The demand of {block} names a calendar that does not exist. Choose a calendar that exists.	{block} యొక్క డిమాండ్ లేని క్యాలెండర్‌ను పేర్కొంటోంది. ఉన్న క్యాలెండర్‌ను ఎంచుకోండి.
+	The probability {value} on the flow {flow} is not from 0 to 1. Enter a probability from 0 to 1.	ప్రవాహం {flow} పై సంభావ్యత {value} 0 నుండి 1 మధ్య లేదు. 0 నుండి 1 మధ్య సంభావ్యతను నమోదు చేయండి.
+	The probabilities of the flows out of {block} add up to {sum}, not 1, so they are used in proportion. Change them to add up to 1 if that is not what you want.	{block} నుండి బయటకు వెళ్లే ప్రవాహాల సంభావ్యతల మొత్తం 1 కాదు, {sum}; కాబట్టి అవి నిష్పత్తి ప్రకారం వాడబడతాయి. అది మీకు అక్కర్లేకపోతే మొత్తం 1 అయ్యేలా మార్చండి.
+	The condition on the flow {flow} cannot be used: {error}. Correct “{expression}”.	ప్రవాహం {flow} పై షరతును ఉపయోగించలేము: {error}. “{expression}” ను సరిదిద్దండి.
+	The condition on the flow {flow} is ignored, because only flows out of a Decision block choose a route. Remove the condition.	ప్రవాహం {flow} పై షరతు విస్మరించబడుతోంది, ఎందుకంటే నిర్ణయం బ్లాక్ నుండి బయటకు వెళ్లే ప్రవాహాలు మాత్రమే మార్గాన్ని ఎంచుకుంటాయి. షరతును తొలగించండి.
+	The probability on the flow {flow} is ignored, because only flows out of a Decision block choose a route. Remove the probability.	ప్రవాహం {flow} పై సంభావ్యత విస్మరించబడుతోంది, ఎందుకంటే నిర్ణయం బ్లాక్ నుండి బయటకు వెళ్లే ప్రవాహాలు మాత్రమే మార్గాన్ని ఎంచుకుంటాయి. సంభావ్యతను తొలగించండి.
+	The condition on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the condition.	ప్రవాహం {flow} పై షరతు విస్మరించబడుతోంది, ఎందుకంటే నిర్ణయం ఎంటిటీలను అతి చిన్న క్యూకు పంపుతుంది. షరతును తొలగించండి.
+	The probability on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the probability.	ప్రవాహం {flow} పై సంభావ్యత విస్మరించబడుతోంది, ఎందుకంటే నిర్ణయం ఎంటిటీలను అతి చిన్న క్యూకు పంపుతుంది. సంభావ్యతను తొలగించండి.
+	The default on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the default.	ప్రవాహం {flow} పై డిఫాల్ట్ విస్మరించబడుతోంది, ఎందుకంటే నిర్ణయం ఎంటిటీలను అతి చిన్న క్యూకు పంపుతుంది. డిఫాల్ట్‌ను తొలగించండి.
+	The probability on the flow {flow} is ignored, because the Decision routes by condition. Remove the probability.	ప్రవాహం {flow} పై సంభావ్యత విస్మరించబడుతోంది, ఎందుకంటే నిర్ణయం షరతు ప్రకారం మార్గాన్ని ఎంచుకుంటుంది. సంభావ్యతను తొలగించండి.
+	The default flow of {block} is not one of its own flows out. Choose one of the flows out of {block} as the default.	{block} యొక్క డిఫాల్ట్ ప్రవాహం దాని స్వంత బయటకు వెళ్లే ప్రవాహాల్లో ఒకటి కాదు. {block} నుండి బయటకు వెళ్లే ప్రవాహాల్లో ఒకదాన్ని డిఫాల్ట్‌గా ఎంచుకోండి.
+	{block} routes by condition but has no default flow, so an entity for which no condition holds leaves the model here. Choose a default flow.	{block} షరతు ప్రకారం మార్గాన్ని ఎంచుకుంటుంది, కానీ డిఫాల్ట్ ప్రవాహం లేదు, కాబట్టి ఏ షరతూ నిజం కాని ఎంటిటీ ఇక్కడే నమూనా నుండి వెళ్లిపోతుంది. డిఫాల్ట్ ప్రవాహాన్ని ఎంచుకోండి.
+	{block} diverts entities but has no default flow, so an entity whose way is full has nowhere else to go. Choose a default flow.	{block} ఎంటిటీలను మళ్లిస్తుంది, కానీ డిఫాల్ట్ ప్రవాహం లేదు, కాబట్టి దాని మార్గం నిండిన ఎంటిటీకి వెళ్లడానికి వేరే చోటు లేదు. డిఫాల్ట్ ప్రవాహాన్ని ఎంచుకోండి.
+	{block} waits for an entity on the flow {flow}, which none can reach, so it never sends one on. Remove that flow, or connect it to a block that entities reach.	{block} ప్రవాహం {flow} పై ఒక ఎంటిటీ కోసం వేచి ఉంది, దాన్ని ఏదీ చేరలేదు, కాబట్టి అది దేన్నీ ముందుకు పంపదు. ఆ ప్రవాహాన్ని తొలగించండి, లేదా ఎంటిటీలు చేరే బ్లాక్‌కు కలపండి.
+	{block} has a limited waiting room and is fed through {gateway}. While it is full, {gateway} holds up every entity behind it, and they wait before it without limit. Remove the gateway before {block}, or remove the limit.	{block} యొక్క వేచి ఉండే గది పరిమితమైనది మరియు అది {gateway} ద్వారా నింపబడుతుంది. అది నిండినప్పుడు {gateway} దాని వెనుక ఉన్న ప్రతి ఎంటిటీని ఆపేస్తుంది, అవి పరిమితి లేకుండా దాని ముందు వేచి ఉంటాయి. {block} కు ముందున్న గేట్‌వేను తొలగించండి, లేదా పరిమితిని తొలగించండి.
+	The limited waiting rooms of {loop} feed each other in a loop, so when all of them are full the loop deadlocks. Remove the limit on one of them, or break the loop.	{loop} యొక్క పరిమిత వేచి ఉండే గదులు ఒక లూప్‌లో ఒకదానికొకటి నింపుకుంటాయి, కాబట్టి అన్నీ నిండినప్పుడు లూప్ స్తంభించిపోతుంది. ఒకదాని పరిమితిని తొలగించండి, లేదా లూప్‌ను విడగొట్టండి.
+	The pool {block} has no units. Give it at least 1 unit.	{block} పూల్‌లో యూనిట్లు లేవు. కనీసం 1 యూనిట్ ఇవ్వండి.
+	{block} names no resource it needs. Add one under “Needs”.	{block} తనకు అవసరమైన వనరును పేర్కొనలేదు. “అవసరాలు” కింద ఒకదాన్ని జోడించండి.
+	{block} needs a resource pool that does not exist. Choose a pool that exists.	{block} కు అవసరమైన వనరుల పూల్ లేదు. ఉన్న పూల్‌ను ఎంచుకోండి.
+	{block} needs units with the roles {roles}, which no pool has. Give a pool those roles, or change what {block} needs.	{block} కు {roles} పాత్రలున్న యూనిట్లు అవసరం, అవి ఏ పూల్‌లోనూ లేవు. ఒక పూల్‌కు ఆ పాత్రలను ఇవ్వండి, లేదా {block} కు అవసరమైనదాన్ని మార్చండి.
+	{block} needs {needed} units at once, but at most {available} exist, so this can never be met. Ask for fewer units, or add units to the pool.	{block} కు ఒకేసారి {needed} యూనిట్లు కావాలి, కానీ గరిష్ఠంగా {available} మాత్రమే ఉన్నాయి, కాబట్టి ఇది ఎప్పటికీ తీరదు. తక్కువ యూనిట్లు అడగండి, లేదా పూల్‌కు యూనిట్లు జోడించండి.
+	Set the priority of {block} to a finite number, not {value}.	{block} యొక్క ప్రాధాన్యతను పరిమిత సంఖ్యగా సెట్ చేయండి, {value} కాదు.
+	No task uses the pool {block}. Add it to a task's needs, or remove the pool.	ఏ పనీ {block} పూల్‌ను ఉపయోగించదు. దాన్ని ఒక పని అవసరాలకు జోడించండి, లేదా పూల్‌ను తొలగించండి.
+	{block} has a value for a calendar that does not exist. Choose a calendar that exists, or remove the value.	{block} లో లేని క్యాలెండర్‌కు విలువ ఉంది. ఉన్న క్యాలెండర్‌ను ఎంచుకోండి, లేదా విలువను తొలగించండి.
+	The calendar {block} has no entries, so it is never active. Add an entry.	క్యాలెండర్ {block} లో ఎంట్రీలు లేవు, కాబట్టి అది ఎప్పుడూ క్రియాశీలంగా ఉండదు. ఒక ఎంట్రీని జోడించండి.
+	{block} allows no arrivals outside the calendars but names no calendar, so it never creates entities. Add arrivals by calendar, or allow arrivals outside calendars.	{block} క్యాలెండర్ల వెలుపల రాకలను అనుమతించదు, కానీ ఏ క్యాలెండర్‌నూ పేర్కొనలేదు, కాబట్టి అది ఎప్పుడూ ఎంటిటీలను సృష్టించదు. క్యాలెండర్ ప్రకారం రాకలను జోడించండి, లేదా క్యాలెండర్ల వెలుపల రాకలను అనుమతించండి.
+	Set the batch size of {block} to 1 or more.	{block} యొక్క బ్యాచ్ పరిమాణాన్ని 1 లేదా అంతకంటే ఎక్కువగా సెట్ చేయండి.
+	Set “{field}” of the conveyor {block} to a finite number above 0.	కన్వేయర్ {block} యొక్క “{field}” ను 0 కంటే ఎక్కువ పరిమిత సంఖ్యగా సెట్ చేయండి.
+	Set “{field}” of the conveyor {block} to a finite number of 0 or more.	కన్వేయర్ {block} యొక్క “{field}” ను 0 లేదా అంతకంటే ఎక్కువ పరిమిత సంఖ్యగా సెట్ చేయండి.
+	Set “{field}” of the conveyor {block} to a finite number other than 0.	కన్వేయర్ {block} యొక్క “{field}” ను 0 కాని పరిమిత సంఖ్యగా సెట్ చేయండి.
+	The conveyor {block} is {length} long but each entity takes {pitch} (item length plus gap), so not even one fits. Lengthen the conveyor, or shorten the item or the gap.	కన్వేయర్ {block} పొడవు {length}, కానీ ప్రతి ఎంటిటీ {pitch} తీసుకుంటుంది (వస్తువు పొడవు మరియు ఖాళీ), కాబట్టి ఒక్కటి కూడా పట్టదు. కన్వేయర్‌ను పొడవు చేయండి, లేదా వస్తువును లేదా ఖాళీని తగ్గించండి.
+	The drawn path of the conveyor {block} is {path_length} long, but its “Length” is {length}, so the drawing and the run disagree. Make “Length” match the path, or change the shape.	కన్వేయర్ {block} యొక్క గీసిన మార్గం {path_length} పొడవు, కానీ దాని “పొడవు” {length}, కాబట్టి డ్రాయింగ్ మరియు అమలు సరిపోలడం లేదు. “పొడవు” ను మార్గానికి సరిపోల్చండి, లేదా ఆకారాన్ని మార్చండి.
+	{block} is a transport, which StochCraft does not simulate yet. Remove it to run the model.	{block} ఒక రవాణా, దాన్ని StochCraft ఇంకా అనుకరించదు. నమూనాను నడపడానికి దాన్ని తొలగించండి.
+	The pool {pool} of the transport {block} does not exist. Choose a pool that exists.	రవాణా {block} యొక్క పూల్ {pool} లేదు. ఉన్న పూల్‌ను ఎంచుకోండి.
+	The pool {pool} of the transport {block} is not mobile. Give the pool speeds and a home.	రవాణా {block} యొక్క పూల్ {pool} కదిలేది కాదు. పూల్‌కు వేగాలను, ఒక హోమ్‌ను ఇవ్వండి.
+	Set “{field}” of the pool {block} to a finite number above 0.	{block} పూల్ యొక్క “{field}” ను 0 కంటే ఎక్కువ పరిమిత సంఖ్యగా సెట్ చేయండి.
+	The home of the pool {block} is not a block of the model. Choose a block as its home.	{block} పూల్ యొక్క హోమ్ నమూనాలోని బ్లాక్ కాదు. ఒక బ్లాక్‌ను దాని హోమ్‌గా ఎంచుకోండి.
+	The transport {block} needs one block before it, where it picks up, and one after it, where it drops off, but has {inputs} before and {outputs} after. Connect it to one block on each side.	రవాణా {block} కు దానికి ముందు ఒక బ్లాక్ (ఎక్కడ ఎత్తుకుంటుందో), దాని తర్వాత ఒక బ్లాక్ (ఎక్కడ దించుతుందో) కావాలి, కానీ ముందు {inputs}, తర్వాత {outputs} ఉన్నాయి. ప్రతి వైపు ఒక బ్లాక్‌కు కలపండి.
+	{other} has no place on the canvas, so the distances for {block} are not known. Place {other} on the canvas.	{other} కు ప్రధాన ఉపరితలంపై స్థానం లేదు, కాబట్టి {block} కు దూరాలు తెలియవు. {other} ను ప్రధాన ఉపరితలంపై ఉంచండి.
+	The flow {flow} asks for no entities. Set its “Units” to 1 or more.	ప్రవాహం {flow} ఏ ఎంటిటీనీ అడగడం లేదు. దాని “యూనిట్‌లు” ను 1 లేదా అంతకంటే ఎక్కువగా సెట్ చేయండి.
+	The “Units” on the flow {flow} is ignored, because only a Split or join block takes several entities from one flow. Remove it.	ప్రవాహం {flow} పై “యూనిట్‌లు” విస్మరించబడుతోంది, ఎందుకంటే విభజించు లేదా కలుపు బ్లాక్ మాత్రమే ఒక ప్రవాహం నుండి అనేక ఎంటిటీలను తీసుకుంటుంది. దాన్ని తొలగించండి.
+	No block makes batches, so {block} passes every entity through. Add a Batch block before it, or remove {block}.	ఏ బ్లాక్ బ్యాచ్‌లను చేయదు, కాబట్టి {block} ప్రతి ఎంటిటీని అలాగే దాటనిస్తుంది. దానికి ముందు ఒక బ్యాచ్ బ్లాక్‌ను జోడించండి, లేదా {block} ను తొలగించండి.
+	The stop condition names a block that does not exist. Choose a block that exists.	ఆపే షరతు లేని బ్లాక్‌ను పేర్కొంటోంది. ఉన్న బ్లాక్‌ను ఎంచుకోండి.
+	Set the count of the stop condition for {block} to 1 or more.	{block} కు ఆపే షరతు యొక్క సంఖ్యను 1 లేదా అంతకంటే ఎక్కువగా సెట్ చేయండి.
+	The stop condition waits for {block} to empty, but only a task can empty. Choose a task.	ఆపే షరతు {block} ఖాళీ అయ్యే వరకు వేచి ఉంటుంది, కానీ పని మాత్రమే ఖాళీ కాగలదు. ఒక పనిని ఎంచుకోండి.
+	The stop condition at {block} can be met before the warm-up ends. A run that stops during the warm-up has no statistics after it and is left out of the results. Shorten the warm-up, or stop later.	{block} వద్ద ఆపే షరతు ప్రారంభ సర్దుబాటు సమయం ముగియకముందే తీరవచ్చు. ప్రారంభ సర్దుబాటు సమయంలో ఆగిపోయిన అమలుకు ఆ తర్వాత గణాంకాలు ఉండవు, అది ఫలితాల నుండి వదిలివేయబడుతుంది. ప్రారంభ సర్దుబాటు సమయాన్ని తగ్గించండి, లేదా తర్వాత ఆపండి.
+	Every run stopped before the warm-up ended, so no metric is reported. Shorten the warm-up, or stop later.	ప్రతి అమలు ప్రారంభ సర్దుబాటు సమయం ముగియకముందే ఆగింది, కాబట్టి ఏ కొలమానమూ నివేదించబడలేదు. ప్రారంభ సర్దుబాటు సమయాన్ని తగ్గించండి, లేదా తర్వాత ఆపండి.
+	{replications} of {of} runs stopped before the warm-up ended, so their statistics are left out of every metric. Shorten the warm-up, or stop later.	{of} అమలుల్లో {replications} ప్రారంభ సర్దుబాటు సమయం ముగియకముందే ఆగాయి, కాబట్టి వాటి గణాంకాలు ప్రతి కొలమానం నుండి వదిలివేయబడ్డాయి. ప్రారంభ సర్దుబాటు సమయాన్ని తగ్గించండి, లేదా తర్వాత ఆపండి.
+	{block} is offered {load}% of the work its units can do, so its waiting room grows without limit and the results describe no steady state. Add units, or shorten the service.	{block} యూనిట్లు చేయగల పనిలో {load}% దానికి అందిస్తున్నారు, కాబట్టి దాని వేచి ఉండే గది పరిమితి లేకుండా పెరుగుతుంది, ఫలితాలు ఏ స్థిర స్థితినీ వివరించవు. యూనిట్లను జోడించండి, లేదా సేవను తగ్గించండి.
+	{block} is busy {utilisation}% of the time, and at the end at least {backlog} entities are still waiting against {left} that left. Work arrives faster than it is done, so the results describe no steady state. Add units, or shorten the service.	{block} {utilisation}% సమయం పనిలో ఉంది, చివరికి కనీసం {backlog} ఎంటిటీలు ఇంకా వేచి ఉన్నాయి, వెళ్లినవి {left}. పని చేయడం కంటే వేగంగా వస్తోంది, కాబట్టి ఫలితాలు ఏ స్థిర స్థితినీ వివరించవు. యూనిట్లను జోడించండి, లేదా సేవను తగ్గించండి.
+	The experiment has one run, so its results cannot be told from chance. Set the number of runs to at least 2, and usually 10 or more.	ప్రయోగంలో ఒక్క అమలు మాత్రమే ఉంది, కాబట్టి దాని ఫలితాలను యాదృచ్ఛికత నుండి వేరు చేయలేము. అమలుల సంఖ్యను కనీసం 2 గా, సాధారణంగా 10 లేదా అంతకంటే ఎక్కువగా సెట్ చేయండి.
+	{block} has a three-point estimate but no time to fit it to, so the estimate is ignored. Remove the estimate.	{block} కు మూడు విలువల అంచనా ఉంది, కానీ దాన్ని సరిపోల్చడానికి సమయం లేదు, కాబట్టి అంచనా విస్మరించబడుతోంది. అంచనాను తొలగించండి.
+	The three-point estimate of {block} cannot be fitted: every point must be a finite number. Correct the points.	{block} యొక్క మూడు విలువల అంచనాను సరిపోల్చలేము: ప్రతి విలువ పరిమిత సంఖ్య అయి ఉండాలి. విలువలను సరిదిద్దండి.
+	The three-point estimate of {block} cannot be fitted: the points must be in order, minimum, most likely, then maximum or 95th percentile. Correct the points.	{block} యొక్క మూడు విలువల అంచనాను సరిపోల్చలేము: విలువలు క్రమంలో ఉండాలి: కనిష్ఠం, అత్యంత సంభావ్య విలువ, ఆపై గరిష్ఠం లేదా 95వ శతాంశం. విలువలను సరిదిద్దండి.
+	The three-point estimate of {block} cannot be fitted: log-normal and Weibull estimates have no maximum. Give a 95th percentile instead.	{block} యొక్క మూడు విలువల అంచనాను సరిపోల్చలేము: లాగ్-నార్మల్, వైబుల్ అంచనాలకు గరిష్ఠం ఉండదు. బదులుగా 95వ శతాంశం ఇవ్వండి.
+	The time of {block} is no longer the one fitted from its three-point estimate. Fit it again, or remove the estimate.	{block} యొక్క సమయం ఇకపై దాని మూడు విలువల అంచనా నుండి సరిపోల్చినది కాదు. మళ్లీ సరిపోల్చండి, లేదా అంచనాను తొలగించండి.
+	In “{field}” of {block}, the normal distribution draws below 0 more than 1 time in 100, and each such draw counts as 0, so the times are longer on average than its mean. Use a truncated normal with a minimum of 0, or a log-normal.	{block} యొక్క “{field}” లో సాధారణ పంపిణీ 100 లో 1 సారి కంటే ఎక్కువ 0 కంటే తక్కువ విలువ తీసుకుంటుంది, అలాంటి ప్రతి విలువ 0 గా లెక్కించబడుతుంది, కాబట్టి సమయాలు సగటున దాని సగటు కంటే ఎక్కువ ఉంటాయి. కనిష్ఠం 0 తో కత్తిరించిన సాధారణ పంపిణీని, లేదా లాగ్-నార్మల్‌ను ఉపయోగించండి.
+	The entities of {block} do not add up: {came} came in or were inside at the start, but {went} left, were lost, gave up or are still inside.	{block} యొక్క ఎంటిటీలు లెక్కకు సరిపోలడం లేదు: ప్రారంభంలో {came} లోపలికి వచ్చాయి లేదా లోపల ఉన్నాయి, కానీ {went} వెళ్లిపోయాయి, కోల్పోయాయి, వదిలి వెళ్లాయి లేదా ఇంకా లోపలే ఉన్నాయి.
+	The entities of the model do not add up: {came} were created or inside at the start, but {went} reached Departures, left the model elsewhere or are still inside.	నమూనాలోని ఎంటిటీలు లెక్కకు సరిపోలడం లేదు: ప్రారంభంలో {came} సృష్టించబడ్డాయి లేదా లోపల ఉన్నాయి, కానీ {went} నిష్క్రమణలను చేరాయి, నమూనాను మరెక్కడో విడిచాయి లేదా ఇంకా లోపలే ఉన్నాయి.
+	No entity left the model, of {came} created or inside at the start. Check that the routing leads to Departures and that the run is long enough for an entity to get through.	ప్రారంభంలో సృష్టించబడిన లేదా లోపల ఉన్న {came} లో ఏ ఎంటిటీ నమూనాను విడిచిపెట్టలేదు. మార్గం నిష్క్రమణలకు దారితీస్తోందో, ఒక ఎంటిటీ దాటడానికి అమలు తగినంత పొడవుగా ఉందో తనిఖీ చేయండి.
+	Little's law does not hold at {block}: the time-average number inside was {mean}, but the entities' own times inside give {from_stays}.	{block} వద్ద లిటిల్ నియమం నిలబడటం లేదు: లోపల ఉన్న సంఖ్య కాల-సగటు {mean}, కానీ ఎంటిటీల స్వంత లోపలి సమయాలు {from_stays} ఇస్తున్నాయి.
+	The utilisation of {block} counts {busy} units busy on average, but {working} were processing or setting up: units idle, blocked, off shift, failed or restarting were counted busy.	{block} యొక్క వినియోగ శాతం సగటున {busy} యూనిట్లను పనిలో ఉన్నట్లు లెక్కిస్తుంది, కానీ ప్రాసెసింగ్ లేదా సెటప్‌లో ఉన్నవి {working}: ఖాళీగా ఉన్న, నిరోధిత, షిఫ్ట్ వెలుపల ఉన్న, లోపం ఉన్న లేదా పునఃప్రారంభమవుతున్న యూనిట్లు కూడా పనిలో ఉన్నట్లు లెక్కించబడ్డాయి.
+	The utilisation of {block} counts {busy} units busy on average, but {working} were processing or setting up: units at work were not counted busy.	{block} యొక్క వినియోగ శాతం సగటున {busy} యూనిట్లను పనిలో ఉన్నట్లు లెక్కిస్తుంది, కానీ ప్రాసెసింగ్ లేదా సెటప్‌లో ఉన్నవి {working}: పనిచేస్తున్న యూనిట్లు పనిలో ఉన్నట్లు లెక్కించబడలేదు.
+	The shares of the time of the units of {block} in each state add up to {total}, not 1.	{block} యూనిట్ల ప్రతి స్థితిలోని సమయ వాటాల మొత్తం {total}, 1 కాదు.
+	“{metric}” of {block} is {value}, outside 0 to 1 (0% to 100%).	{block} యొక్క “{metric}” {value}, ఇది 0 నుండి 1 (0% నుండి 100%) వెలుపల ఉంది.
+	This was found in {replications} of {of} runs, and the furthest off is shown.	ఇది {of} అమలుల్లో {replications} లో కనుగొనబడింది, అత్యంత దూరంగా ఉన్నది చూపబడింది.
+	This points to a fault in StochCraft rather than in the model. Please report it with the model.	ఇది నమూనాలో కాదు, StochCraft లోని తప్పును సూచిస్తుంది. దయచేసి నమూనాతో పాటు నివేదించండి.
+	Angle	కోణం
+	Failed	లోపం ఉన్నప్పుడు
+	Off shift	షిఫ్ట్ వెలుపల
+	Processing	ప్రాసెసింగ్
+	Radius	వ్యాసార్థం
+	Rise	ఎత్తు పెరుగుదల
+	Speed empty	ఖాళీగా ఉన్నప్పుడు వేగం
+	Speed loaded	నింపినప్పుడు వేగం
+	Turns	చుట్లు
+	Unload	దించడం
+	Lost	కోల్పోయినవి
+	An entity that leaves a waiting room before a unit takes it, because it has waited as long as it was willing to.	ఒక యూనిట్ తీసుకోకముందే, తాను వేచి ఉండడానికి సిద్ధపడినంత సేపు వేచి ఉండడంతో వేచి ఉండే గదిని విడిచి వెళ్లే ఎంటిటీ.
+	An entity that does not join a waiting room at all, because the number already waiting put it off.	అప్పటికే వేచి ఉన్నవాటి సంఖ్య వెనక్కి తగ్గేలా చేయడంతో వేచి ఉండే గదిలో అస్సలు చేరని ఎంటిటీ.
+	An entity that finds the waiting room full and takes the flow ticked “Turned away” instead of waiting.	వేచి ఉండే గది నిండి ఉండడం చూసి, వేచి ఉండకుండా “తిప్పి పంపినవి” అని ఎంచుకున్న ప్రవాహంలో వెళ్లే ఎంటిటీ.
+	An entity that leaves the model without reaching Departures: it found the waiting room full with nowhere else to go, or a decision with no way out for it.	నిష్క్రమణలను చేరకుండా నమూనాను విడిచే ఎంటిటీ: అది వేచి ఉండే గది నిండి ఉండగా మరో దారి లేకపోవడం వల్ల, లేదా దానికి బయటకు దారి లేని నిర్ణయాన్ని ఎదుర్కొనడం వల్ల.
+	Gave up on {id}	{id} వద్ద వదిలి వెళ్లినవి
+	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the flow ticked “Gave up”, or leaves the model.	ప్రతి ఎంటిటీ వచ్చినప్పుడు దానికోసం యాదృచ్ఛికంగా తీసిన సమయం వరకు మాత్రమే ఇక్కడ వేచి ఉంటుంది, తర్వాత వదిలి వెళ్తుంది: “వదిలి వెళ్లినవి” అని ఎంచుకున్న ప్రవాహంలో వెళ్తుంది, లేదా నమూనా నుండి బయటకు వెళ్తుంది.
+	Entities that do not join the waiting room take this flow at once (to try again later, say), instead of being lost; they count as balked here.	వేచి ఉండే గదిలో చేరని ఎంటిటీలు వెంటనే ఈ ప్రవాహంలో వెళ్తాయి (ఉదాహరణకు, తర్వాత మళ్ళీ ప్రయత్నించడానికి), కోల్పోవడం బదులు; ఇక్కడ అవి క్యూలో చేరనివిగా లెక్కించబడతాయి.
+	The job stops at once: the entity goes back to the front of the waiting room for any server on shift, and the work done on it is wasted.	పని వెంటనే ఆగిపోతుంది: ఎంటిటీ షిఫ్ట్‌లో ఉన్న ఏ సర్వర్ కోసమైనా వేచి ఉండే గది ముందుకు తిరిగి వెళ్తుంది, దానిపై చేసిన పని వృథా అవుతుంది.
+	The connection drops and the client tries again: the entity goes back to the front of the waiting room at once, and the work done on it is wasted.	కనెక్షన్ తెగిపోతుంది, క్లయింట్ మళ్లీ ప్రయత్నిస్తుంది: ఎంటిటీ వెంటనే వేచి ఉండే గది ముందుకు తిరిగి వెళ్తుంది, దానిపై చేసిన పని వృథా అవుతుంది.
+	Ticked, entities queue up at the end while the rest keep moving. Unticked, the whole belt stops when the entity at the end cannot leave.	ఎంచుకుంటే, మిగతావి కదులుతూ ఉండగా ఎంటిటీలు చివర వరుసలో నిలుస్తాయి. ఎంచుకోకపోతే, చివరన ఉన్న ఎంటిటీ బయటకు వెళ్లలేనప్పుడు మొత్తం బెల్ట్ ఆగిపోతుంది.
+	Play run 1 step by step and see each block's waiting room on the diagram	అమలు 1 ను దశలవారీగా నడిపి రేఖాచిత్రంలో ప్రతి బ్లాక్ వేచి ఉండే గదిని చూడు
+	Select a block to see its waiting room over time.	కాలక్రమంలో ఒక బ్లాక్ వేచి ఉండే గదిని చూడటానికి దాన్ని ఎంచుకోండి.
+	Entities on conveyors over time	కాలక్రమేణా కన్వేయర్లపై ఎంటిటీలు
+	Entities in the model over time	కాలక్రమేణా మోడల్‌లో ఎంటిటీలు
+	How long each entity spends on the conveyors.	ప్రతి ఎంటిటీ కన్వేయర్లపై ఎంత సమయం గడుపుతుంది.
+	No entity has left a conveyor yet	ఇంకా ఏ ఎంటిటీ కన్వేయర్‌ను వదలలేదు
+	Share of entities by time on a conveyor, in {unit}	కన్వేయర్‌పై సమయం ప్రకారం ఎంటిటీల వాటా, {unit}లో
+	Time on conveyors: {n} entities between {lo} and {hi} {unit}	కన్వేయర్లపై సమయం: {lo} మరియు {hi} {unit} మధ్య {n} ఎంటిటీలు
+	{from} to {to} {unit}: {share} of entities ({n})	{from} నుండి {to} {unit}: ఎంటిటీలలో {share} ({n})
+	How many entities are on the conveyors over time.	కాలక్రమేణా కన్వేయర్లపై ఎన్ని ఎంటిటీలు ఉన్నాయి.
+	How many entities are in the model over time.	కాలక్రమేణా మోడల్‌లో ఎన్ని ఎంటిటీలు ఉన్నాయి.
+	At {time} {unit}: {n} entities	{time} {unit} వద్ద: {n} ఎంటిటీలు
+@plural	Makes {n} independent run of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval across them.	{seed} బీజంతో నమూనాను {n} స్వతంత్ర అమలుగా నడుపుతుంది. ప్రతి బ్లాక్ ఫలితానికి 95% విశ్వసనీయత అంతరం సగం వెడల్పు ఇవ్వబడుతుంది.|{seed} బీజంతో నమూనాను {n} స్వతంత్ర అమలులుగా నడుపుతుంది. అన్ని అమలుల నుంచి ప్రతి బ్లాక్ ఫలితానికి 95% విశ్వసనీయత అంతరం సగం వెడల్పు ఇవ్వబడుతుంది.
 	Fonts	ఫాంట్లు
 	The full list of third-party licences is in the file THIRD-PARTY-LICENSES.html, which comes with the download.	థర్డ్-పార్టీ లైసెన్స్‌ల పూర్తి జాబితా THIRD-PARTY-LICENSES.html ఫైల్‌లో ఉంది, ఇది డౌన్‌లోడ్‌తో వస్తుంది.
 	Full list of third-party licences	థర్డ్-పార్టీ లైసెన్స్‌ల పూర్తి జాబితా

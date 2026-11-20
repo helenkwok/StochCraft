@@ -16,7 +16,15 @@ Not covered here: the keyboard-shortcuts dialog draws its own words (craft-keyma
 `ui::STRINGS`), which belong in craft-i18n's shared `common.tsv`. That catalog is embedded only
 when `CRAFT_I18N_DIR` is set at build time (not in CI or the published web app), and upstream it
 has only some of those words for some languages, so the dialog is mostly English for now. The
-engine's messages (validation, file notes) are English too.
+engine's file notes (what StochCraft does not understand in a file) are English too. Its
+validation messages are not: the engine stays English (the command line and agents read English)
+but sends each message as parts, a template key and the data that fills it, and the window builds
+the message from the catalog's row for the key (`i18n::engine_message`). A key the window has no
+row for, or a diagnostic without parts, shows the engine's English. The templates are
+`stochcraft_model::messages::TEMPLATES`; the few the window words differently ("run" where the
+engine says "replication") are in `crates/ui-egui/src/i18n.rs`. The rows are keyed by the English
+template, with `{block}`, `{flow}` and the like as placeholders, and the labels of the window's
+fields (`“Service time”`) are named in the messages by their own rows.
 
 **Where they come from:**
 - Written with ChatGPT from the plain meaning of the English, then cleaned with Claude Code.
@@ -759,6 +767,20 @@ engine's messages (validation, file notes) are English too.
   was machine-drafted with Claude Code from the plain meaning of the English, with each
   catalog's own words for chart, window and export. Not checked against any other source, and
   not reviewed by native speakers; the least certain are lo, th, ta, te, bn, ka, kk, hi and sq.
+
+- The rows added for issue #145 (the window's validation messages, each naming a block and saying
+  how to fix it; the labels "Angle", "Failed", "Lost", "Off shift", "Processing", "Radius",
+  "Rise", "Speed empty", "Speed loaded", "Turns" and "Unload"; four glossary definitions, for
+  "Gave up", "Balked", "Turned away" and "Lost") were machine-drafted with Claude Code, in groups
+  of languages, from the plain meaning of the English and each catalog's own existing words for
+  block, flow, waiting room, entity, run and the labels the messages quote, which are the
+  catalog's rows for those labels. The rows whose English changed, so that one word names one idea
+  ("Gave up" where the flow tick said "Abandoned"; "entities" where the dashboard said "items";
+  "waiting room" where a hint said "queue"; "block" where a hint said "element"), had their
+  existing translations adapted. Not checked against any other source, and not reviewed by native
+  speakers; the least certain are lo, th, ta, te, bn, ka, kk, hi, sq, et and lt, and the
+  messages' sentences generally, which are long and were drafted to read as instructions in each
+  language.
 
 **Adding or changing a string:** add the English in the code through `i18n::t` (or `tf`, `tn`),
 then add its row to each catalog here, or leave it out to show English until it is translated.

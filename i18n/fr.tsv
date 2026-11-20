@@ -21,8 +21,6 @@
 	A caller on hold: once a unit takes it, the entity stays.	Un appelant en attente : dès qu'une unité le prend en charge, l'entité reste.
 	A client that times out: if its time runs out during service, it gives up then, and the unit finishes the job anyway (wasted work).	Un client qui expire (timeout) : si son temps s'écoule pendant le service, il abandonne à ce moment-là, et l'unité termine quand même le travail (travail perdu).
 	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	Le nouveau fichier ne contient que le modèle : ce que StochCraft ne comprend pas dans {file} est omis.
-	Abandoned	Abandons
-	Abandoned on {id}	Abandons sur {id}
 	About StochCraft	À propos de StochCraft
 	About {app}	À propos de {app}
 	Accent	Accent
@@ -162,7 +160,6 @@
 	Duration	Durée
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Chaque analyse exécute l'expérience plusieurs fois avec la même graine, de sorte que les écarts viennent du changement, pas du hasard. Cela peut prendre un moment.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Chaque entité prend en une seule fois la première de ces alternatives qui peut être satisfaite immédiatement, et rend les unités à sa sortie.
-	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Chaque entité attend ici au plus un temps tiré au hasard pour elle à son arrivée, puis abandonne : elle prend la sortie marquée « Abandons » ou quitte le modèle.
 	Each server (unit) is checked every so often, as a load balancer probes the servers behind it. One that fails, with too many waiting, is taken out of service for a restart, then comes back.	Chaque serveur (unité) est contrôlé de temps en temps, comme un répartiteur de charge sonde les serveurs derrière lui. Celui qui échoue, avec trop d'entités en attente, est mis hors service pour un redémarrage, puis revient.
 	Edit	Édition
 	Edit themes…	Modifier les thèmes…
@@ -412,7 +409,6 @@
 	Run	Exécuter
 	Run cancelled	Exécution annulée
 	Run experiment	Exécuter l'expérience
-	Play run 1 step by step and see each block's queue on the diagram	Lire l'exécution 1 pas à pas et voir la file de chaque bloc sur le diagramme
 	Run the experiment ({shortcut})	Exécuter l'expérience ({shortcut})
 	Run the experiment again to see this result's spread.	Relancez l'expérience pour voir la dispersion de ce résultat.
 	Run the experiment at each value of one parameter, and compare a result.	Exécuter l'expérience pour chaque valeur d'un paramètre et comparer un résultat.
@@ -433,7 +429,6 @@
 	Scrap ratio	Taux de rebut
 	Seed	Graine
 	Select All	Tout sélectionner
-	Select a block to see its queue over time.	Sélectionnez un bloc pour voir sa file au fil du temps.
 	Sender waits during transfer	L'expéditeur attend pendant le transfert
 	Separate the values with semicolons or spaces.	Séparez les valeurs par des points-virgules ou des espaces.
 	Sequential	Séquentielles
@@ -497,10 +492,8 @@
 	Text	Texte
 	Text on accent	Texte sur l'accent
 	Text on header	Texte de l'en-tête
-	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	La connexion tombe et le client réessaie : l'entité revient aussitôt en tête de la file, et le travail déjà fait sur elle est perdu.
 	The entity waits on its server and the job carries on with what was left once the server is back.	L'entité attend sur son serveur et le travail reprend avec ce qui restait une fois le serveur revenu.
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more runs would narrow it.	L'intervalle descend sous la part cible de {share} : il n'est donc pas établi avec 95 % de confiance que la part est atteinte ; davantage d'exécutions le resserreraient.
-	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	Le travail s'arrête aussitôt : l'entité revient en tête de la file pour tout serveur en poste, et le travail déjà fait sur elle est perdu.
 	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	Le travail s'arrête aussitôt ; l'entité attend sur son serveur et le travail reprend avec ce qui restait une fois ce serveur de nouveau en poste.
 	The last task with a resource it finished at	La dernière tâche avec ressource par laquelle la pièce est passée
 	The mean time to the stop condition is over the runs that met it only; the others ran to their time limit.	Le temps moyen jusqu'à la condition d'arrêt ne porte que sur les exécutions qui l'ont atteinte ; les autres ont duré jusqu'à leur limite de temps.
@@ -690,7 +683,6 @@ unit	yr	an
 	Balked on {id}	Dérobades sur {id}
 	Balking	Dérobade
 	Count those in service	Compter aussi celles en service
-	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Les entités qui ne rejoignent pas la file prennent aussitôt ce flux (pour réessayer plus tard, par exemple), au lieu d'être perdues ; elles comptent ici comme dérobades.
 	Joins with probability	Rejoint la file avec la probabilité
 	Number waiting	Nombre en attente
 	Share balked	Part des dérobades
@@ -908,7 +900,6 @@ unit	yr	an
 @plural	Finished {n} run|Finished {n} runs	{n} exécution terminée|{n} exécutions terminées
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	{file} ouvert ({n} avertissement)|{file} ouvert ({n} avertissements)
 @plural	Removed {n} block|Removed {n} blocks	{n} bloc supprimé|{n} blocs supprimés
-@plural	Makes {n} independent run of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Effectue {n} exécution indépendante du modèle à partir de la graine {seed}. Les résultats de chaque élément incluent la demi-largeur d'un intervalle de confiance à 95 %.|Effectue {n} exécutions indépendantes du modèle à partir de la graine {seed}. Les résultats de chaque élément incluent la demi-largeur d'un intervalle de confiance à 95 %.
 @plural	The stop condition was met in {met} of {n} run, after {time} {unit} on average.|The stop condition was met in {met} of {n} runs, after {time} {unit} on average.	La condition d'arrêt a été atteinte dans {met} exécution sur {n}, après {time} {unit} en moyenne.|La condition d'arrêt a été atteinte dans {met} exécutions sur {n}, après {time} {unit} en moyenne.
 @plural	{done} of {n} run finished|{done} of {n} runs finished	{done} exécution terminée sur {n}|{done} exécutions terminées sur {n}
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} run|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} runs	{name} : {mean}{unit}\nIntervalle à 95 % de {low} à {high}{unit}\nsur {n} exécution|{name} : {mean}{unit}\nIntervalle à 95 % de {low} à {high}{unit}\nsur {n} exécutions
@@ -938,7 +929,6 @@ unit	yr	an
 	kilometres	kilomètres
 	inches	pouces
 	feet	pieds
-	Ticked, items queue up at the end while the rest keep moving. Unticked, the whole belt stops when the item at the end cannot leave.	Cochée, les articles font la queue au bout pendant que les autres continuent d'avancer. Décochée, tout le convoyeur s'arrête quand l'article du bout ne peut pas sortir.
 	A belt that carries entities from one end to the other. It has a length and a speed, and each entity takes a pitch of belt: its item length plus the gap kept free after it. So it holds at most length ÷ pitch entities and carries at most speed ÷ pitch per time unit. Accumulating: entities queue up at the end while the rest keep moving; otherwise the whole belt stops.	Un convoyeur qui porte des entités d'une extrémité à l'autre. Il a une longueur et une vitesse, et chaque entité occupe un pas de convoyeur : la longueur de son article plus l'espacement laissé libre derrière lui. Il contient donc au plus longueur ÷ pas entités et transporte au plus vitesse ÷ pas par unité de temps. Accumulation : les entités font la queue au bout pendant que les autres continuent d'avancer ; sinon, tout le convoyeur s'arrête.
 	Station	Poste
 	Kind	Type
@@ -992,19 +982,165 @@ unit	yr	an
 	Time on conveyors	Temps sur les convoyeurs
 	No conveyors in this model	Aucun convoyeur dans ce modèle
 	Fills in when the run ends	Se remplit à la fin de l'exécution
-	How long each item spends on the conveyors.	Combien de temps chaque article passe sur les convoyeurs.
-	No item has left a conveyor yet	Aucun article n'a encore quitté un convoyeur
-	Share of items by time on a conveyor, in {unit}	Part des articles selon le temps sur un convoyeur, en {unit}
-	Time on conveyors: {n} items between {lo} and {hi} {unit}	Temps sur les convoyeurs : {n} articles entre {lo} et {hi} {unit}
-	{from} to {to} {unit}: {share} of items ({n})	De {from} à {to} {unit} : {share} des articles ({n})
-	Items on conveyors over time	Articles sur les convoyeurs au fil du temps
-	Items in the model over time	Articles dans le modèle au fil du temps
-	How many items are on the conveyors over time.	Combien d'articles sont sur les convoyeurs au fil du temps.
-	How many items are in the model over time.	Combien d'articles sont dans le modèle au fil du temps.
 	Nothing was recorded over time in these results	Rien n'a été enregistré au fil du temps dans ces résultats
-	At {time} {unit}: {n} items	À {time} {unit} : {n} articles
 	Run the model to fill the dashboard	Exécutez le modèle pour remplir le tableau de bord
 	The resource and conveyor charts show the last run until this one ends	Les graphiques des ressources et des convoyeurs montrent la dernière exécution jusqu'à la fin de celle-ci
+# Validation messages, new labels and word changes (issue #145)
+	The id “{id}” is not valid. Start an id with a letter or an underscore, then use only letters, digits, dots, hyphens and underscores.	L'identifiant « {id} » n'est pas valide. Commencez un identifiant par une lettre ou un trait de soulignement, puis n'utilisez que des lettres, des chiffres, des points, des traits d'union et des traits de soulignement.
+	More than one block, flow, pool or calendar has the id “{id}”. Give each its own id.	Plusieurs blocs, flux, pools ou calendriers portent l'identifiant « {id} ». Donnez à chacun son propre identifiant.
+	The flow {flow} uses a block that does not exist. Remove the flow, or connect it to a block that exists.	Le flux {flow} utilise un bloc qui n'existe pas. Supprimez le flux ou reliez-le à un bloc existant.
+	The flow {flow} leads into an Arrivals block, which takes no input. Remove the flow, or send it to another block.	Le flux {flow} mène à un bloc Arrivées, qui n'accepte aucune entrée. Supprimez le flux ou envoyez-le vers un autre bloc.
+	The flow {flow} leaves a Departures block, which has no output. Remove the flow, or start it from another block.	Le flux {flow} part d'un bloc Départs, qui n'a aucune sortie. Supprimez le flux ou faites-le partir d'un autre bloc.
+	The flow {flow} leads from a block back to itself. Remove it, or send it to another block.	Le flux {flow} va d'un bloc vers lui-même. Supprimez-le ou envoyez-le vers un autre bloc.
+	{block} has nowhere to send entities. Add a flow from it to the next block.	{block} n'a nulle part où envoyer les entités. Ajoutez un flux de ce bloc vers le bloc suivant.
+	{block} has {count} flows out, and only a Decision or a Split or join block can send entities down several. Remove the extra flows, or add a Decision block.	{block} a {count} flux sortants, mais seul un bloc Décision ou Diviser ou joindre peut envoyer des entités sur plusieurs flux. Supprimez les flux en trop ou ajoutez un bloc Décision.
+	In “{field}” of {block}, set “{param}” to a finite number.	Dans « {field} » du bloc {block}, réglez « {param} » sur un nombre fini.
+	In “{field}” of {block}, set “{param}” to a number above 0.	Dans « {field} » du bloc {block}, réglez « {param} » sur un nombre supérieur à 0.
+	In “{field}” of {block}, set “{param}” to 0 or more.	Dans « {field} » du bloc {block}, réglez « {param} » sur 0 ou plus.
+	In “{field}” of {block}, set “{param}” to 1 or more.	Dans « {field} » du bloc {block}, réglez « {param} » sur 1 ou plus.
+	In “{field}” of {block}, set “{param}” to a number from 0 to 1.	Dans « {field} » du bloc {block}, réglez « {param} » sur un nombre de 0 à 1.
+	In “{field}” of {block}, set “Minimum” below “Maximum”, and any “Most likely” value between them.	Dans « {field} » du bloc {block}, réglez « Minimum » en dessous de « Maximum », et toute valeur « Valeur la plus probable » entre les deux.
+	In “{field}” of {block}, add data points whose probabilities add up to more than 0.	Dans « {field} » du bloc {block}, ajoutez des points de données dont les probabilités totalisent plus de 0.
+	{block} would never have a unit to work with. Give it at least 1 unit.	{block} n'aurait jamais d'unité pour travailler. Donnez-lui au moins 1 unité.
+	{block} would make entities without end, because its “Time between arrivals” is always 0. Give it a time above 0, or set an “Arrival limit”.	{block} créerait des entités sans fin, car son « Temps entre arrivées » est toujours 0. Donnez-lui un temps supérieur à 0 ou définissez une « Limite des arrivées ».
+	The model has no Arrivals block, so nothing will happen. Add an Arrivals block.	Le modèle n'a aucun bloc Arrivées, donc rien ne se passera. Ajoutez un bloc Arrivées.
+	The model has no Departures block, so no time in system is measured. Add a Departures block.	Le modèle n'a aucun bloc Départs, donc aucun temps dans le système n'est mesuré. Ajoutez un bloc Départs.
+	No entity can reach {block} from an Arrivals block. Connect it to a block that entities pass through.	Aucune entité ne peut atteindre {block} depuis un bloc Arrivées. Reliez-le à un bloc que les entités traversent.
+	Entities in {block} can never reach a Departures block. Connect it on towards Departures.	Les entités dans {block} ne peuvent jamais atteindre un bloc Départs. Reliez-le, de bloc en bloc, jusqu'à Départs.
+	Set the “{state}” power of {block} to a number of kilowatts, 0 or more.	Pour {block}, réglez la puissance « {state} » sur un nombre de kilowatts égal à 0 ou plus.
+	Set the warm-up of the experiment to 0 or more.	Réglez le préchauffage de l'expérience sur 0 ou plus.
+	Set the duration of the experiment to more than 0.	Réglez la durée de l'expérience sur une valeur supérieure à 0.
+	Set the number of runs of the experiment to 1 or more.	Réglez le nombre d'exécutions de l'expérience sur 1 ou plus.
+	Set the layout scale (length units per drawing unit) to a finite number above 0.	Réglez l'échelle de la disposition (unités de longueur par unité de dessin) sur un nombre fini supérieur à 0.
+	A property of {block} has no name. Give it a name, or remove it.	Une propriété du bloc {block} n'a pas de nom. Donnez-lui un nom ou supprimez-la.
+	{block} sets the property “{name}” twice. Keep one of them.	{block} définit deux fois la propriété « {name} ». N'en gardez qu'une.
+	The property “{name}” of {block} needs shares that are not negative and add up to more than 0. Change the shares.	La propriété « {name} » du bloc {block} exige des parts non négatives dont le total dépasse 0. Modifiez les parts.
+	The property “{name}” has the type “{type2}” on {block} but “{type}” on another block. Give it one type everywhere.	La propriété « {name} » a le type « {type2} » sur {block} mais « {type} » sur un autre bloc. Donnez-lui un seul type partout.
+	The value of the property “{name}” on {block} does not fit its type, “{type}”. Change the value or the type.	La valeur de la propriété « {name} » sur {block} ne correspond pas à son type, « {type} ». Modifiez la valeur ou le type.
+	The expression for the property “{name}” on {block} cannot be used: {error}. Correct “{expression}”.	L'expression de la propriété « {name} » sur {block} est inutilisable : {error}. Corrigez « {expression} ».
+	{block} reads the property “{name}”, which no block sets, so it would read as empty. Set it on an earlier block, or correct the name.	{block} lit la propriété « {name} », qu'aucun bloc ne définit, donc elle serait lue comme vide. Définissez-la sur un bloc situé avant, ou corrigez le nom.
+	The setup of {block} has times for particular changes but no property to watch. Choose a property under “Only when this property changes”.	Le réglage du bloc {block} a des temps pour des changements précis mais aucune propriété à surveiller. Choisissez une propriété sous « Seulement quand cette propriété change ».
+	{block} has times for particular values but no property to read them from. Choose a property under “Service time by property”.	{block} a des temps pour des valeurs précises mais aucune propriété où les lire. Choisissez une propriété sous « Temps de service selon une propriété ».
+	{block} has two times for the value “{value}”. Keep one.	{block} a deux temps pour la valeur « {value} ». N'en gardez qu'un.
+	Set the time of {block} for the value “{value}” to a mean of 0 or more.	Pour {block}, réglez le temps de la valeur « {value} » sur une moyenne de 0 ou plus.
+	The scrap at {block} counts against {other}, which is not a task with a resource. Choose a task with a resource.	Le rebut sur {block} est imputé à {other}, qui n'est pas une tâche avec ressource. Choisissez une tâche avec ressource.
+	Set “Planned run time per item” of {block} to a mean above 0.	Pour {block}, réglez « Temps d'exécution prévu par pièce » sur une moyenne supérieure à 0.
+	Set “Time before giving up” of {block} to a mean of 0 or more.	Pour {block}, réglez « Temps avant abandon » sur une moyenne de 0 ou plus.
+	The flow {flow} is ticked “Gave up”, but only a task with a resource and a “Time before giving up” sends entities that give up. Untick it, or set a “Time before giving up” on {block}.	Le flux {flow} est coché « Ont abandonné », mais seule une tâche avec ressource ayant un « Temps avant abandon » envoie des entités qui abandonnent. Décochez-le ou définissez un « Temps avant abandon » pour {block}.
+	{count} flows out of {block} are ticked “{way}”; at most one can be. Untick all but one.	{count} flux sortant du bloc {block} sont cochés « {way} » ; un seul peut l'être. Décochez-les tous sauf un.
+	The flow {flow} is ticked “Turned away”, but only a task with a resource and a limited waiting room turns entities away. Untick it, or limit the waiting room of {block}.	Le flux {flow} est coché « Refus », mais seule une tâche avec ressource dotée d'une salle d'attente limitée refuse des entités. Décochez-le ou limitez la salle d'attente du bloc {block}.
+	The flow {flow} is ticked both “Gave up” and “Turned away”. Keep one of them.	Le flux {flow} est coché à la fois « Ont abandonné » et « Refus ». N'en gardez qu'un.
+	Set every chance of joining in the balking table of {block} to a number from 0 to 1.	Dans le tableau des dérobades du bloc {block}, réglez chaque probabilité de rejoindre la salle d'attente sur un nombre de 0 à 1.
+	Put the rows of the balking table of {block} in increasing order of “Number waiting”.	Dans le tableau des dérobades du bloc {block}, classez les lignes par « Nombre en attente » croissant.
+	The flow {flow} is ticked “Balked”, but only a task with a resource and balking sends entities that balk. Untick it, or turn on balking for {block}.	Le flux {flow} est coché « Dérobades », mais seule une tâche avec ressource avec dérobade envoie des entités qui se dérobent. Décochez-le ou activez la dérobade pour {block}.
+	The flow {flow} is ticked “Balked” and also “Gave up” or “Turned away”. Keep one of them.	Le flux {flow} est coché « Dérobades » et aussi « Ont abandonné » ou « Refus ». N'en gardez qu'un.
+	The waiting room of {block} is set by calendar or per working server, but has no number of places, so it is unlimited. Give it a number of places, or make it fixed.	La salle d'attente du bloc {block} est définie par calendrier ou par serveur en service, mais elle n'a pas de nombre de places : elle est donc illimitée. Donnez-lui un nombre de places ou rendez-la fixe.
+	The waiting room of {block} is set by calendar, but no calendar has a value. Add a value for a calendar, or make the waiting room fixed.	La salle d'attente du bloc {block} est définie par calendrier, mais aucun calendrier n'a de valeur. Ajoutez une valeur pour un calendrier ou rendez la salle d'attente fixe.
+	Set “Fails above, waiting per working server” of {block} to a number of 0 or more.	Réglez « Échec au-delà de (en attente par serveur en service) » du bloc {block} sur un nombre de 0 ou plus.
+	Set “Check every” of {block} to a mean above 0.	Réglez « Contrôler toutes les » du bloc {block} sur une moyenne supérieure à 0.
+	Set the demand of {block} to a number of parts above 0.	Réglez la demande du bloc {block} sur un nombre de pièces supérieur à 0.
+	The demand of {block} is per shift but names no calendar to say when the shifts are. Choose a calendar.	La demande du bloc {block} est par poste, mais elle n'indique aucun calendrier pour dire quand sont les postes. Choisissez un calendrier.
+	The demand of {block} names a calendar that does not exist. Choose a calendar that exists.	La demande du bloc {block} désigne un calendrier qui n'existe pas. Choisissez un calendrier existant.
+	The probability {value} on the flow {flow} is not from 0 to 1. Enter a probability from 0 to 1.	La probabilité {value} sur le flux {flow} n'est pas comprise entre 0 et 1. Saisissez une probabilité de 0 à 1.
+	The probabilities of the flows out of {block} add up to {sum}, not 1, so they are used in proportion. Change them to add up to 1 if that is not what you want.	Les probabilités des flux sortant du bloc {block} totalisent {sum} et non 1 ; elles sont donc utilisées proportionnellement. Modifiez-les pour qu'elles totalisent 1 si ce n'est pas ce que vous voulez.
+	The condition on the flow {flow} cannot be used: {error}. Correct “{expression}”.	La condition du flux {flow} est inutilisable : {error}. Corrigez « {expression} ».
+	The condition on the flow {flow} is ignored, because only flows out of a Decision block choose a route. Remove the condition.	La condition du flux {flow} est ignorée, car seuls les flux sortant d'un bloc Décision choisissent un itinéraire. Supprimez la condition.
+	The probability on the flow {flow} is ignored, because only flows out of a Decision block choose a route. Remove the probability.	La probabilité du flux {flow} est ignorée, car seuls les flux sortant d'un bloc Décision choisissent un itinéraire. Supprimez la probabilité.
+	The condition on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the condition.	La condition du flux {flow} est ignorée, car la Décision envoie les entités vers la file la plus courte. Supprimez la condition.
+	The probability on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the probability.	La probabilité du flux {flow} est ignorée, car la Décision envoie les entités vers la file la plus courte. Supprimez la probabilité.
+	The default on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the default.	Le réglage par défaut du flux {flow} est ignoré, car la Décision envoie les entités vers la file la plus courte. Supprimez le réglage par défaut.
+	The probability on the flow {flow} is ignored, because the Decision routes by condition. Remove the probability.	La probabilité du flux {flow} est ignorée, car la Décision choisit l'itinéraire selon une condition. Supprimez la probabilité.
+	The default flow of {block} is not one of its own flows out. Choose one of the flows out of {block} as the default.	Le flux par défaut du bloc {block} n'est pas l'un de ses propres flux sortants. Choisissez l'un des flux sortant du bloc {block} comme flux par défaut.
+	{block} routes by condition but has no default flow, so an entity for which no condition holds leaves the model here. Choose a default flow.	{block} choisit l'itinéraire selon une condition mais n'a pas de flux par défaut : une entité pour laquelle aucune condition n'est remplie quitte donc le modèle ici. Choisissez un flux par défaut.
+	{block} diverts entities but has no default flow, so an entity whose way is full has nowhere else to go. Choose a default flow.	{block} détourne des entités mais n'a pas de flux par défaut : une entité dont la voie est pleine n'a donc nulle part où aller. Choisissez un flux par défaut.
+	{block} waits for an entity on the flow {flow}, which none can reach, so it never sends one on. Remove that flow, or connect it to a block that entities reach.	{block} attend une entité sur le flux {flow}, qu'aucune ne peut atteindre, donc il n'en transmet jamais. Supprimez ce flux ou reliez-le à un bloc que les entités atteignent.
+	{block} has a limited waiting room and is fed through {gateway}. While it is full, {gateway} holds up every entity behind it, and they wait before it without limit. Remove the gateway before {block}, or remove the limit.	{block} a une salle d'attente limitée et est alimenté par {gateway}. Tant qu'elle est pleine, {gateway} retient chaque entité située derrière, et ces entités attendent en amont sans limite. Retirez le bloc de routage placé avant {block}, ou supprimez la limite.
+	The limited waiting rooms of {loop} feed each other in a loop, so when all of them are full the loop deadlocks. Remove the limit on one of them, or break the loop.	Les salles d'attente limitées des blocs {loop} s'alimentent en boucle : quand elles sont toutes pleines, la boucle se bloque. Supprimez la limite de l'une d'elles ou rompez la boucle.
+	The pool {block} has no units. Give it at least 1 unit.	Le pool {block} n'a aucune unité. Donnez-lui au moins 1 unité.
+	{block} names no resource it needs. Add one under “Needs”.	{block} ne désigne aucune ressource dont il a besoin. Ajoutez-en une sous « Besoins ».
+	{block} needs a resource pool that does not exist. Choose a pool that exists.	{block} a besoin d'un pool de ressources qui n'existe pas. Choisissez un pool existant.
+	{block} needs units with the roles {roles}, which no pool has. Give a pool those roles, or change what {block} needs.	{block} a besoin d'unités ayant les rôles {roles}, qu'aucun pool n'a. Donnez ces rôles à un pool ou modifiez ce dont {block} a besoin.
+	{block} needs {needed} units at once, but at most {available} exist, so this can never be met. Ask for fewer units, or add units to the pool.	{block} a besoin de {needed} unités à la fois, mais il n'en existe que {available} au plus, donc ce besoin ne pourra jamais être satisfait. Demandez moins d'unités ou ajoutez des unités au pool.
+	Set the priority of {block} to a finite number, not {value}.	Réglez la priorité du bloc {block} sur un nombre fini, et non sur {value}.
+	No task uses the pool {block}. Add it to a task's needs, or remove the pool.	Aucune tâche n'utilise le pool {block}. Ajoutez-le aux besoins d'une tâche ou supprimez le pool.
+	{block} has a value for a calendar that does not exist. Choose a calendar that exists, or remove the value.	{block} a une valeur pour un calendrier qui n'existe pas. Choisissez un calendrier existant ou supprimez la valeur.
+	The calendar {block} has no entries, so it is never active. Add an entry.	Le calendrier {block} n'a aucune entrée, donc il n'est jamais actif. Ajoutez une entrée.
+	{block} allows no arrivals outside the calendars but names no calendar, so it never creates entities. Add arrivals by calendar, or allow arrivals outside calendars.	{block} n'autorise aucune arrivée hors des calendriers mais ne désigne aucun calendrier, donc il ne crée jamais d'entités. Ajoutez des arrivées par calendrier ou autorisez les arrivées hors des calendriers.
+	Set the batch size of {block} to 1 or more.	Réglez la taille de lot du bloc {block} sur 1 ou plus.
+	Set “{field}” of the conveyor {block} to a finite number above 0.	Réglez « {field} » du convoyeur {block} sur un nombre fini supérieur à 0.
+	Set “{field}” of the conveyor {block} to a finite number of 0 or more.	Réglez « {field} » du convoyeur {block} sur un nombre fini égal à 0 ou plus.
+	Set “{field}” of the conveyor {block} to a finite number other than 0.	Réglez « {field} » du convoyeur {block} sur un nombre fini différent de 0.
+	The conveyor {block} is {length} long but each entity takes {pitch} (item length plus gap), so not even one fits. Lengthen the conveyor, or shorten the item or the gap.	Le convoyeur {block} mesure {length} de long, mais chaque entité occupe {pitch} (longueur de l'article plus espacement), donc pas même une seule n'y tient. Allongez le convoyeur ou raccourcissez l'article ou l'espacement.
+	The drawn path of the conveyor {block} is {path_length} long, but its “Length” is {length}, so the drawing and the run disagree. Make “Length” match the path, or change the shape.	Le tracé dessiné du convoyeur {block} mesure {path_length}, mais sa « Longueur » est {length} : le dessin et l'exécution ne concordent pas. Faites correspondre « Longueur » au tracé ou modifiez la forme.
+	{block} is a transport, which StochCraft does not simulate yet. Remove it to run the model.	{block} est un transport, que StochCraft ne simule pas encore. Supprimez-le pour exécuter le modèle.
+	The pool {pool} of the transport {block} does not exist. Choose a pool that exists.	Le pool {pool} du transport {block} n'existe pas. Choisissez un pool existant.
+	The pool {pool} of the transport {block} is not mobile. Give the pool speeds and a home.	Le pool {pool} du transport {block} n'est pas mobile. Donnez au pool des vitesses et une base.
+	Set “{field}” of the pool {block} to a finite number above 0.	Réglez « {field} » du pool {block} sur un nombre fini supérieur à 0.
+	The home of the pool {block} is not a block of the model. Choose a block as its home.	La base du pool {block} n'est pas un bloc du modèle. Choisissez un bloc comme base.
+	The transport {block} needs one block before it, where it picks up, and one after it, where it drops off, but has {inputs} before and {outputs} after. Connect it to one block on each side.	Le transport {block} a besoin d'un bloc avant lui, où il charge, et d'un bloc après lui, où il décharge, mais il en a {inputs} avant et {outputs} après. Reliez-le à un bloc de chaque côté.
+	{other} has no place on the canvas, so the distances for {block} are not known. Place {other} on the canvas.	{other} n'a pas de place sur la surface principale, donc les distances pour {block} sont inconnues. Placez {other} sur la surface principale.
+	The flow {flow} asks for no entities. Set its “Units” to 1 or more.	Le flux {flow} ne demande aucune entité. Réglez ses « Unités » sur 1 ou plus.
+	The “Units” on the flow {flow} is ignored, because only a Split or join block takes several entities from one flow. Remove it.	Les « Unités » du flux {flow} sont ignorées, car seul un bloc Diviser ou joindre prend plusieurs entités d'un même flux. Supprimez-les.
+	No block makes batches, so {block} passes every entity through. Add a Batch block before it, or remove {block}.	Aucun bloc ne fait de lots, donc {block} laisse passer chaque entité. Ajoutez un bloc Lot avant lui ou supprimez {block}.
+	The stop condition names a block that does not exist. Choose a block that exists.	La condition d'arrêt désigne un bloc qui n'existe pas. Choisissez un bloc existant.
+	Set the count of the stop condition for {block} to 1 or more.	Réglez le nombre de la condition d'arrêt pour {block} sur 1 ou plus.
+	The stop condition waits for {block} to empty, but only a task can empty. Choose a task.	La condition d'arrêt attend que {block} se vide, mais seule une tâche peut se vider. Choisissez une tâche.
+	The stop condition at {block} can be met before the warm-up ends. A run that stops during the warm-up has no statistics after it and is left out of the results. Shorten the warm-up, or stop later.	La condition d'arrêt pour {block} peut être remplie avant la fin du préchauffage. Une exécution qui s'arrête pendant le préchauffage n'a aucune statistique après celui-ci et est exclue des résultats. Raccourcissez le préchauffage ou arrêtez plus tard.
+	Every run stopped before the warm-up ended, so no metric is reported. Shorten the warm-up, or stop later.	Toutes les exécutions se sont arrêtées avant la fin du préchauffage, donc aucun indicateur n'est rapporté. Raccourcissez le préchauffage ou arrêtez plus tard.
+	{replications} of {of} runs stopped before the warm-up ended, so their statistics are left out of every metric. Shorten the warm-up, or stop later.	{replications} exécutions sur {of} se sont arrêtées avant la fin du préchauffage ; leurs statistiques sont exclues de chaque indicateur. Raccourcissez le préchauffage ou arrêtez plus tard.
+	{block} is offered {load}% of the work its units can do, so its waiting room grows without limit and the results describe no steady state. Add units, or shorten the service.	{block} se voit offrir {load} % du travail que ses unités peuvent faire, donc sa salle d'attente grandit sans limite et les résultats ne décrivent aucun régime stationnaire. Ajoutez des unités ou raccourcissez le service.
+	{block} is busy {utilisation}% of the time, and at the end at least {backlog} entities are still waiting against {left} that left. Work arrives faster than it is done, so the results describe no steady state. Add units, or shorten the service.	{block} est occupé {utilisation} % du temps et, à la fin, au moins {backlog} entités attendent encore contre {left} sorties. Le travail arrive plus vite qu'il n'est fait, donc les résultats ne décrivent aucun régime stationnaire. Ajoutez des unités ou raccourcissez le service.
+	The experiment has one run, so its results cannot be told from chance. Set the number of runs to at least 2, and usually 10 or more.	L'expérience n'a qu'une exécution, donc ses résultats ne se distinguent pas du hasard. Réglez le nombre d'exécutions sur au moins 2, et en général sur 10 ou plus.
+	{block} has a three-point estimate but no time to fit it to, so the estimate is ignored. Remove the estimate.	{block} a une estimation à trois points mais aucun temps auquel l'ajuster, donc l'estimation est ignorée. Supprimez l'estimation.
+	The three-point estimate of {block} cannot be fitted: every point must be a finite number. Correct the points.	L'estimation à trois points du bloc {block} ne peut pas être ajustée : chaque point doit être un nombre fini. Corrigez les points.
+	The three-point estimate of {block} cannot be fitted: the points must be in order, minimum, most likely, then maximum or 95th percentile. Correct the points.	L'estimation à trois points du bloc {block} ne peut pas être ajustée : les points doivent être dans l'ordre, minimum, valeur la plus probable, puis maximum ou 95e centile. Corrigez les points.
+	The three-point estimate of {block} cannot be fitted: log-normal and Weibull estimates have no maximum. Give a 95th percentile instead.	L'estimation à trois points du bloc {block} ne peut pas être ajustée : les estimations log-normales et de Weibull n'ont pas de maximum. Donnez plutôt un 95e centile.
+	The time of {block} is no longer the one fitted from its three-point estimate. Fit it again, or remove the estimate.	Le temps du bloc {block} n'est plus celui ajusté à partir de son estimation à trois points. Ajustez-le de nouveau ou supprimez l'estimation.
+	In “{field}” of {block}, the normal distribution draws below 0 more than 1 time in 100, and each such draw counts as 0, so the times are longer on average than its mean. Use a truncated normal with a minimum of 0, or a log-normal.	Dans « {field} » du bloc {block}, la distribution normale donne une valeur inférieure à 0 plus d'une fois sur 100, et chaque tirage de ce genre compte pour 0, donc les temps sont en moyenne plus longs que sa moyenne. Utilisez une normale tronquée avec un minimum de 0, ou une log-normale.
+	The entities of {block} do not add up: {came} came in or were inside at the start, but {went} left, were lost, gave up or are still inside.	Le compte des entités du bloc {block} ne tombe pas juste : {came} sont entrées ou étaient à l'intérieur au départ, mais {went} sont sorties, ont été perdues, ont abandonné ou sont encore à l'intérieur.
+	The entities of the model do not add up: {came} were created or inside at the start, but {went} reached Departures, left the model elsewhere or are still inside.	Le compte des entités du modèle ne tombe pas juste : {came} ont été créées ou étaient à l'intérieur au départ, mais {went} ont atteint Départs, ont quitté le modèle ailleurs ou sont encore à l'intérieur.
+	No entity left the model, of {came} created or inside at the start. Check that the routing leads to Departures and that the run is long enough for an entity to get through.	Aucune entité n'a quitté le modèle, sur {came} créées ou à l'intérieur au départ. Vérifiez que le routage mène à Départs et que l'exécution est assez longue pour qu'une entité aille jusqu'au bout.
+	Little's law does not hold at {block}: the time-average number inside was {mean}, but the entities' own times inside give {from_stays}.	La loi de Little n'est pas vérifiée au bloc {block} : le nombre moyen dans le temps à l'intérieur était {mean}, mais les temps passés à l'intérieur par les entités elles-mêmes donnent {from_stays}.
+	The utilisation of {block} counts {busy} units busy on average, but {working} were processing or setting up: units idle, blocked, off shift, failed or restarting were counted busy.	Le taux d'utilisation du bloc {block} compte {busy} unités occupées en moyenne, mais {working} étaient en traitement ou en réglage : des unités inactives, bloquées, hors poste, en panne ou en redémarrage ont été comptées comme occupées.
+	The utilisation of {block} counts {busy} units busy on average, but {working} were processing or setting up: units at work were not counted busy.	Le taux d'utilisation du bloc {block} compte {busy} unités occupées en moyenne, mais {working} étaient en traitement ou en réglage : des unités au travail n'ont pas été comptées comme occupées.
+	The shares of the time of the units of {block} in each state add up to {total}, not 1.	Les parts du temps des unités du bloc {block} dans chaque état totalisent {total} et non 1.
+	“{metric}” of {block} is {value}, outside 0 to 1 (0% to 100%).	« {metric} » du bloc {block} vaut {value}, en dehors de 0 à 1 (0 % à 100 %).
+	This was found in {replications} of {of} runs, and the furthest off is shown.	Cela a été constaté dans {replications} exécutions sur {of} ; la plus éloignée est affichée.
+	This points to a fault in StochCraft rather than in the model. Please report it with the model.	Cela indique un défaut de StochCraft plutôt que du modèle. Merci de le signaler avec le modèle.
+	Angle	Angle
+	Failed	En panne
+	Off shift	Hors poste
+	Processing	En traitement
+	Radius	Rayon
+	Rise	Montée
+	Speed empty	Vitesse à vide
+	Speed loaded	Vitesse en charge
+	Turns	Tours
+	Unload	Déchargement
+	Lost	Perdus
+	An entity that leaves a waiting room before a unit takes it, because it has waited as long as it was willing to.	Une entité qui quitte une salle d'attente avant qu'une unité la prenne, parce qu'elle a attendu aussi longtemps qu'elle le voulait bien.
+	An entity that does not join a waiting room at all, because the number already waiting put it off.	Une entité qui ne rejoint pas du tout une salle d'attente, parce que le nombre d'entités déjà en attente l'en a dissuadée.
+	An entity that finds the waiting room full and takes the flow ticked “Turned away” instead of waiting.	Une entité qui trouve la salle d'attente pleine et prend le flux coché « Refus » au lieu d'attendre.
+	An entity that leaves the model without reaching Departures: it found the waiting room full with nowhere else to go, or a decision with no way out for it.	Une entité qui quitte le modèle sans atteindre Départs : elle a trouvé la salle d'attente pleine sans autre issue, ou une décision sans sortie pour elle.
+	Gave up on {id}	Ont abandonné sur {id}
+	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the flow ticked “Gave up”, or leaves the model.	Chaque entité attend ici au plus un temps tiré au hasard pour elle à son arrivée, puis abandonne : elle prend le flux coché « Ont abandonné » ou quitte le modèle.
+	Entities that do not join the waiting room take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Les entités qui ne rejoignent pas la salle d'attente prennent aussitôt ce flux (pour réessayer plus tard, par exemple), au lieu d'être perdues ; elles comptent ici comme dérobades.
+	The job stops at once: the entity goes back to the front of the waiting room for any server on shift, and the work done on it is wasted.	Le travail s'arrête aussitôt : l'entité revient en tête de la salle d'attente pour tout serveur en poste, et le travail déjà fait sur elle est perdu.
+	The connection drops and the client tries again: the entity goes back to the front of the waiting room at once, and the work done on it is wasted.	La connexion tombe et le client réessaie : l'entité revient aussitôt en tête de la salle d'attente, et le travail déjà fait sur elle est perdu.
+	Ticked, entities queue up at the end while the rest keep moving. Unticked, the whole belt stops when the entity at the end cannot leave.	Cochée, les entités font la queue au bout pendant que les autres continuent d'avancer. Décochée, tout le convoyeur s'arrête quand l'entité du bout ne peut pas sortir.
+	Play run 1 step by step and see each block's waiting room on the diagram	Lire l'exécution 1 pas à pas et voir la salle d'attente de chaque bloc sur le diagramme
+	Select a block to see its waiting room over time.	Sélectionnez un bloc pour voir sa salle d'attente au fil du temps.
+	Entities on conveyors over time	Entités sur les convoyeurs au fil du temps
+	Entities in the model over time	Entités dans le modèle au fil du temps
+	How long each entity spends on the conveyors.	Combien de temps chaque entité passe sur les convoyeurs.
+	No entity has left a conveyor yet	Aucune entité n'a encore quitté un convoyeur
+	Share of entities by time on a conveyor, in {unit}	Part des entités selon le temps sur un convoyeur, en {unit}
+	Time on conveyors: {n} entities between {lo} and {hi} {unit}	Temps sur les convoyeurs : {n} entités entre {lo} et {hi} {unit}
+	{from} to {to} {unit}: {share} of entities ({n})	De {from} à {to} {unit} : {share} des entités ({n})
+	How many entities are on the conveyors over time.	Combien d'entités sont sur les convoyeurs au fil du temps.
+	How many entities are in the model over time.	Combien d'entités sont dans le modèle au fil du temps.
+	At {time} {unit}: {n} entities	À {time} {unit} : {n} entités
+@plural	Makes {n} independent run of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval across them.	Effectue {n} exécution indépendante du modèle à partir de la graine {seed}. Les résultats de chaque bloc incluent la demi-largeur d'un intervalle de confiance à 95 %.|Effectue {n} exécutions indépendantes du modèle à partir de la graine {seed}. Les résultats de chaque bloc incluent la demi-largeur d'un intervalle de confiance à 95 %.
 	Fonts	Polices
 	The full list of third-party licences is in the file THIRD-PARTY-LICENSES.html, which comes with the download.	La liste complète des licences tierces se trouve dans le fichier THIRD-PARTY-LICENSES.html, fourni avec le téléchargement.
 	Full list of third-party licences	Liste complète des licences tierces

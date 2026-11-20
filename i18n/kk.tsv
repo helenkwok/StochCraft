@@ -21,8 +21,6 @@
 	A caller on hold: once a unit takes it, the entity stays.	Күтудегі қоңырау шалушы: бірлік оны қабылдаған соң, нысан қалады.
 	A client that times out: if its time runs out during service, it gives up then, and the unit finishes the job anyway (wasted work).	Уақыты бітетін клиент (timeout): уақыты қызмет көрсету кезінде бітсе, сол сәтте бас тартады, ал бірлік жұмысты бәрібір аяқтайды (босқа кеткен жұмыс).
 	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	Жаңа файлда тек модель болады: {file} ішіндегі StochCraft түсінбейтін нәрселер қалдырылады.
-	Abandoned	Бас тартқандар
-	Abandoned on {id}	{id} ағынында бас тартқандар
 	About StochCraft	StochCraft туралы
 	About {app}	{app} туралы
 	Accent	Екпін түсі
@@ -162,7 +160,6 @@
 	Duration	Ұзақтығы
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Әр талдау экспериментті бір кездейсоқ тұқыммен бірнеше рет орындайды, сондықтан айырмашылықтар кездейсоқтықтан емес, өзгерістен шығады. Біраз уақыт алуы мүмкін.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Әрбір нысан осылардың ішінен дәл қазір орындауға болатын біріншісін бірден толық алады да, шыққанда бірліктерді қайтарады.
-	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Әрбір нысан мұнда келген кезде оған кездейсоқ таңдалған уақыттан аспайтын уақыт күтеді, содан кейін бас тартады: «Бас тартқандар» деп белгіленген шығатын жолмен кетеді немесе модельден шығады.
 	Each server (unit) is checked every so often, as a load balancer probes the servers behind it. One that fails, with too many waiting, is taken out of service for a restart, then comes back.	Әр сервер (бірлік) жүктемені теңгеруші өзінің артындағы серверлерді тексеретіні сияқты, анда-санда тексеріледі. Күтетіндері тым көп болып, тексеруден өтпеген сервер қайта іске қосу үшін жұмыстан шығарылады, содан кейін қайтып келеді.
 	Edit	Түзету
 	Edit themes…	Тақырыптарды түзету…
@@ -412,7 +409,6 @@
 	Run	Іске қосу
 	Run cancelled	Іске қосу тоқтатылды
 	Run experiment	Экспериментті іске қосу
-	Play run 1 step by step and see each block's queue on the diagram	1-іске қосуды қадаммен орындап, диаграммада әр блоктың кезегін көру
 	Run the experiment ({shortcut})	Экспериментті іске қосу ({shortcut})
 	Run the experiment again to see this result's spread.	Бұл нәтиженің шашырауын көру үшін экспериментті қайта орындаңыз.
 	Run the experiment at each value of one parameter, and compare a result.	Экспериментті бір параметрдің әр мәнінде орындап, нәтижені салыстыру.
@@ -433,7 +429,6 @@
 	Scrap ratio	Ақау үлесі
 	Seed	Кездейсоқ тұқым
 	Select All	Барлығын таңдау
-	Select a block to see its queue over time.	Кезегін уақыт бойынша көру үшін блокты таңдаңыз.
 	Sender waits during transfer	Тасымалдау кезінде жіберуші күтеді
 	Separate the values with semicolons or spaces.	Мәндерді нүктелі үтірмен немесе бос орынмен бөліңіз.
 	Sequential	Реттік
@@ -497,10 +492,8 @@
 	Text	Мәтін
 	Text on accent	Екпін түсіндегі мәтін
 	Text on header	Жоғарғы жолақтағы мәтін
-	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	Байланыс үзіліп, клиент қайта әрекет етеді: нысан бірден кезектің басына оралады, ал оған жасалған жұмыс босқа кетеді.
 	The entity waits on its server and the job carries on with what was left once the server is back.	Нысан өз серверінде күтеді, ал сервер қайтып келгенде жұмыс қалған бөлігімен жалғасады.
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more runs would narrow it.	Аралық {share} мақсатты үлесінен төмен түседі, сондықтан үлестің орындалғаны 95% сенімділікпен көрсетілмеген; көбірек іске қосу оны тарылтады.
-	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	Жұмыс бірден тоқтайды: нысан ауысымдағы кез келген сервер үшін кезектің басына оралады, ал оған жасалған жұмыс босқа кетеді.
 	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	Жұмыс бірден тоқтайды; нысан өз серверінде күтеді, ал сол сервер қайта ауысымға шыққанда жұмыс қалған бөлігімен жалғасады.
 	The last task with a resource it finished at	Бөлшек өткен соңғы ресурсы бар тапсырма
 	The mean time to the stop condition is over the runs that met it only; the others ran to their time limit.	Тоқтату шартына дейінгі орташа уақыт тек оған жеткен іске қосулар бойынша; қалғандары уақыт шегіне дейін жүрді.
@@ -690,7 +683,6 @@ unit	yr	ж.
 	Balked on {id}	{id} ағынында кезекке тұрмағандар
 	Balking	Кезекке тұрмау
 	Count those in service	Қызмет көрсетілетіндерді де санау
-	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Кезекке тұрмайтын нысандар бірден осы ағынмен жүреді (мысалы, кейінірек қайта көру үшін), жоғалудың орнына; мұнда олар кезекке тұрмаған деп саналады.
 	Joins with probability	Кезекке тұру ықтималдығы
 	Number waiting	Күтушілер саны
 	Share balked	Кезекке тұрмағандар үлесі
@@ -908,7 +900,6 @@ unit	yr	ж.
 @plural	Finished {n} run|Finished {n} runs	{n} іске қосу аяқталды|{n} іске қосу аяқталды
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	{file} ашылды ({n} ескерту)|{file} ашылды ({n} ескерту)
 @plural	Removed {n} block|Removed {n} blocks	{n} блок жойылды|{n} блок жойылды
-@plural	Makes {n} independent run of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Модельдің {n} тәуелсіз іске қосуын {seed} тұқымынан орындайды. Әр элемент нәтижесінде 95% сенімділік аралығының жарты ені беріледі.|Модельдің {n} тәуелсіз іске қосуын {seed} тұқымынан орындайды. Әр элемент нәтижесінде 95% сенімділік аралығының жарты ені беріледі.
 @plural	The stop condition was met in {met} of {n} run, after {time} {unit} on average.|The stop condition was met in {met} of {n} runs, after {time} {unit} on average.	Тоқтату шарты {n} іске қосудың {met} ішінде, орта есеппен {time} {unit} кейін орындалды.|Тоқтату шарты {n} іске қосудың {met} ішінде, орта есеппен {time} {unit} кейін орындалды.
 @plural	{done} of {n} run finished|{done} of {n} runs finished	{n} іске қосудың {done} аяқталды|{n} іске қосудың {done} аяқталды
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} run|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} runs	{name}: {mean}{unit}\n95% аралық {low} пен {high}{unit} арасында\n{n} іске қосу бойынша|{name}: {mean}{unit}\n95% аралық {low} пен {high}{unit} арасында\n{n} іске қосу бойынша
@@ -938,7 +929,6 @@ unit	yr	ж.
 	kilometres	километр
 	inches	дюйм
 	feet	фут
-	Ticked, items queue up at the end while the rest keep moving. Unticked, the whole belt stops when the item at the end cannot leave.	Белгіленсе, бұйымдар соңында кезекке тұрады, ал қалғандары жылжи береді. Белгіленбесе, соңындағы бұйым кете алмаған кезде бүкіл лента тоқтайды.
 	A belt that carries entities from one end to the other. It has a length and a speed, and each entity takes a pitch of belt: its item length plus the gap kept free after it. So it holds at most length ÷ pitch entities and carries at most speed ÷ pitch per time unit. Accumulating: entities queue up at the end while the rest keep moving; otherwise the whole belt stops.	Нысандарды бір шетінен екінші шетіне тасымалдайтын лента. Оның ұзындығы мен жылдамдығы бар, ал әр нысан лентаның бір қадамын алады: өз бұйымының ұзындығы мен оның артында бос қалдырылатын аралық. Сондықтан онда ең көбі ұзындық ÷ қадам нысан сияды және бір уақыт бірлігінде ең көбі жылдамдық ÷ қадам нысан тасымалданады. Жинақтаушы: нысандар соңында кезекке тұрады, ал қалғандары жылжи береді; әйтпесе бүкіл лента тоқтайды.
 	Station	Станция
 	Kind	Түрі
@@ -992,19 +982,165 @@ unit	yr	ж.
 	Time on conveyors	Конвейерлердегі уақыт
 	No conveyors in this model	Бұл модельде конвейер жоқ
 	Fills in when the run ends	Жүгіру аяқталғанда толады
-	How long each item spends on the conveyors.	Әр элемент конвейерлерде қанша уақыт болады.
-	No item has left a conveyor yet	Әзірге ешбір элемент конвейерден шыққан жоқ
-	Share of items by time on a conveyor, in {unit}	Конвейердегі уақыт бойынша элементтер үлесі, {unit}
-	Time on conveyors: {n} items between {lo} and {hi} {unit}	Конвейерлердегі уақыт: {lo} мен {hi} {unit} арасында {n} элемент
-	{from} to {to} {unit}: {share} of items ({n})	{from} мен {to} {unit} арасы: элементтердің {share} ({n})
-	Items on conveyors over time	Конвейерлердегі элементтер уақыт бойынша
-	Items in the model over time	Модельдегі элементтер уақыт бойынша
-	How many items are on the conveyors over time.	Конвейерлерде уақыт бойынша қанша элемент бар.
-	How many items are in the model over time.	Модельде уақыт бойынша қанша элемент бар.
 	Nothing was recorded over time in these results	Бұл нәтижелерде уақыт бойынша ештеңе жазылмаған
-	At {time} {unit}: {n} items	{time} {unit} сәтінде: {n} элемент
 	Run the model to fill the dashboard	Бақылау тақтасын толтыру үшін модельді жүгіртіңіз
 	The resource and conveyor charts show the last run until this one ends	Ресурстар мен конвейерлер диаграммалары бұл аяқталғанша соңғы жүгіруді көрсетеді
+# Validation messages, new labels and word changes (issue #145)
+	The id “{id}” is not valid. Start an id with a letter or an underscore, then use only letters, digits, dots, hyphens and underscores.	«{id}» идентификаторы жарамсыз. Идентификаторды әріппен немесе астын сызумен бастаңыз, сосын тек әріптерді, цифрларды, нүктелерді, дефистер мен астын сызуларды қолданыңыз.
+	More than one block, flow, pool or calendar has the id “{id}”. Give each its own id.	Бірнеше блок, ағын, қор немесе күнтізбе «{id}» идентификаторын пайдаланады. Әрқайсысына жеке идентификатор беріңіз.
+	The flow {flow} uses a block that does not exist. Remove the flow, or connect it to a block that exists.	{flow} ағыны жоқ блокты пайдаланады. Ағынды жойыңыз немесе бар блокқа жалғаңыз.
+	The flow {flow} leads into an Arrivals block, which takes no input. Remove the flow, or send it to another block.	{flow} ағыны кірісі жоқ «Келулер» блогына кіреді. Ағынды жойыңыз немесе басқа блокқа бағыттаңыз.
+	The flow {flow} leaves a Departures block, which has no output. Remove the flow, or start it from another block.	{flow} ағыны шығысы жоқ «Кетулер» блогынан шығады. Ағынды жойыңыз немесе басқа блоктан бастаңыз.
+	The flow {flow} leads from a block back to itself. Remove it, or send it to another block.	{flow} ағыны блоктан қайтадан сол блокқа апарады. Оны жойыңыз немесе басқа блокқа бағыттаңыз.
+	{block} has nowhere to send entities. Add a flow from it to the next block.	{block} блогының нысандарды жіберетін жері жоқ. Одан келесі блокқа ағын қосыңыз.
+	{block} has {count} flows out, and only a Decision or a Split or join block can send entities down several. Remove the extra flows, or add a Decision block.	{block} блогынан {count} ағын шығады, ал нысандарды бірнеше ағынға тек «Шешім» немесе «Бөлу немесе біріктіру» блогы жібере алады. Артық ағындарды жойыңыз немесе «Шешім» блогын қосыңыз.
+	In “{field}” of {block}, set “{param}” to a finite number.	{block} блогының «{field}» өрісінде «{param}» мәнін ақырлы санға қойыңыз.
+	In “{field}” of {block}, set “{param}” to a number above 0.	{block} блогының «{field}» өрісінде «{param}» мәнін 0-ден үлкен санға қойыңыз.
+	In “{field}” of {block}, set “{param}” to 0 or more.	{block} блогының «{field}» өрісінде «{param}» мәнін 0 немесе одан үлкен санға қойыңыз.
+	In “{field}” of {block}, set “{param}” to 1 or more.	{block} блогының «{field}» өрісінде «{param}» мәнін 1 немесе одан үлкен санға қойыңыз.
+	In “{field}” of {block}, set “{param}” to a number from 0 to 1.	{block} блогының «{field}» өрісінде «{param}» мәнін 0-ден 1-ге дейінгі санға қойыңыз.
+	In “{field}” of {block}, set “Minimum” below “Maximum”, and any “Most likely” value between them.	{block} блогының «{field}» өрісінде «Минимум» мәнін «Максимум» мәнінен кіші, ал «Ең ықтимал» мәнін (болса) олардың арасында қойыңыз.
+	In “{field}” of {block}, add data points whose probabilities add up to more than 0.	{block} блогының «{field}» өрісіне ықтималдықтарының қосындысы 0-ден үлкен деректер нүктелерін қосыңыз.
+	{block} would never have a unit to work with. Give it at least 1 unit.	{block} блогында жұмыс істейтін бірлік ешқашан болмас еді. Кемінде 1 бірлік беріңіз.
+	{block} would make entities without end, because its “Time between arrivals” is always 0. Give it a time above 0, or set an “Arrival limit”.	{block} блогы нысандарды тоқтаусыз жасар еді, өйткені оның «Келулер арасындағы уақыт» мәні әрқашан 0. 0-ден үлкен уақыт беріңіз немесе «Келу шегі» орнатыңыз.
+	The model has no Arrivals block, so nothing will happen. Add an Arrivals block.	Модельде «Келулер» блогы жоқ, сондықтан ештеңе болмайды. «Келулер» блогын қосыңыз.
+	The model has no Departures block, so no time in system is measured. Add a Departures block.	Модельде «Кетулер» блогы жоқ, сондықтан жүйедегі уақыт өлшенбейді. «Кетулер» блогын қосыңыз.
+	No entity can reach {block} from an Arrivals block. Connect it to a block that entities pass through.	«Келулер» блогынан ешбір нысан {block} блогына жете алмайды. Оны нысандар өтетін блокқа жалғаңыз.
+	Entities in {block} can never reach a Departures block. Connect it on towards Departures.	{block} блогындағы нысандар «Кетулер» блогына ешқашан жете алмайды. Оны «Кетулер» блогына қарай жалғастырыңыз.
+	Set the “{state}” power of {block} to a number of kilowatts, 0 or more.	{block} блогының «{state}» қуатын киловатт санына, 0 немесе одан үлкен етіп қойыңыз.
+	Set the warm-up of the experiment to 0 or more.	Эксперименттің қыздыру кезеңін 0 немесе одан үлкен етіп қойыңыз.
+	Set the duration of the experiment to more than 0.	Эксперименттің ұзақтығын 0-ден үлкен етіп қойыңыз.
+	Set the number of runs of the experiment to 1 or more.	Эксперименттегі іске қосулар санын 1 немесе одан көп етіп қойыңыз.
+	Set the layout scale (length units per drawing unit) to a finite number above 0.	Орналасу масштабын (сурет бірлігіне келетін ұзындық бірлігі) 0-ден үлкен ақырлы санға қойыңыз.
+	A property of {block} has no name. Give it a name, or remove it.	{block} блогының бір қасиетінің аты жоқ. Ат беріңіз немесе жойыңыз.
+	{block} sets the property “{name}” twice. Keep one of them.	{block} блогы «{name}» қасиетін екі рет орнатады. Біреуін қалдырыңыз.
+	The property “{name}” of {block} needs shares that are not negative and add up to more than 0. Change the shares.	{block} блогындағы «{name}» қасиетіне теріс емес және қосындысы 0-ден үлкен үлестер қажет. Үлестерді өзгертіңіз.
+	The property “{name}” has the type “{type2}” on {block} but “{type}” on another block. Give it one type everywhere.	«{name}» қасиетінің {block} блогында түрі «{type2}», ал басқа блокта «{type}». Барлық жерде бір түр беріңіз.
+	The value of the property “{name}” on {block} does not fit its type, “{type}”. Change the value or the type.	{block} блогындағы «{name}» қасиетінің мәні оның түріне, «{type}», сәйкес келмейді. Мәнді немесе түрді өзгертіңіз.
+	The expression for the property “{name}” on {block} cannot be used: {error}. Correct “{expression}”.	{block} блогындағы «{name}» қасиетінің өрнегін пайдалану мүмкін емес: {error}. «{expression}» өрнегін түзетіңіз.
+	{block} reads the property “{name}”, which no block sets, so it would read as empty. Set it on an earlier block, or correct the name.	{block} блогы «{name}» қасиетін оқиды, бірақ оны ешбір блок орнатпайды, сондықтан ол бос оқылады. Оны алдыңғы блокта орнатыңыз немесе атауын түзетіңіз.
+	The setup of {block} has times for particular changes but no property to watch. Choose a property under “Only when this property changes”.	{block} блогының дайындығында белгілі бір өзгерістерге арналған уақыттар бар, бірақ бақыланатын қасиет жоқ. «Тек осы қасиет өзгергенде» астынан қасиетті таңдаңыз.
+	{block} has times for particular values but no property to read them from. Choose a property under “Service time by property”.	{block} блогында белгілі бір мәндерге арналған уақыттар бар, бірақ оларды оқитын қасиет жоқ. «Қасиетке қарай қызмет көрсету уақыты» астынан қасиетті таңдаңыз.
+	{block} has two times for the value “{value}”. Keep one.	{block} блогында «{value}» мәніне екі уақыт бар. Біреуін қалдырыңыз.
+	Set the time of {block} for the value “{value}” to a mean of 0 or more.	{block} блогының «{value}» мәніне арналған уақытын 0 немесе одан үлкен орташа мәнге қойыңыз.
+	The scrap at {block} counts against {other}, which is not a task with a resource. Choose a task with a resource.	{block} блогындағы ақау ресурсы бар тапсырма болып табылмайтын {other} блогына жатқызылады. Ресурсы бар тапсырманы таңдаңыз.
+	Set “Planned run time per item” of {block} to a mean above 0.	{block} блогының «Бір бөлшекке жоспарланған жұмыс уақыты» мәнін 0-ден үлкен орташа мәнге қойыңыз.
+	Set “Time before giving up” of {block} to a mean of 0 or more.	{block} блогының «Бас тартқанға дейінгі уақыт» мәнін 0 немесе одан үлкен орташа мәнге қойыңыз.
+	The flow {flow} is ticked “Gave up”, but only a task with a resource and a “Time before giving up” sends entities that give up. Untick it, or set a “Time before giving up” on {block}.	{flow} ағынында «Бас тартқандар» белгіленген, бірақ бас тартатын нысандарды тек «Бас тартқанға дейінгі уақыты» бар, ресурсы бар тапсырма жібереді. Белгіні алыңыз немесе {block} блогына «Бас тартқанға дейінгі уақыт» орнатыңыз.
+	{count} flows out of {block} are ticked “{way}”; at most one can be. Untick all but one.	{block} блогынан шығатын {count} ағында «{way}» белгіленген; ең көбі біреуінде болуы мүмкін. Біреуінен басқасының белгісін алыңыз.
+	The flow {flow} is ticked “Turned away”, but only a task with a resource and a limited waiting room turns entities away. Untick it, or limit the waiting room of {block}.	{flow} ағынында «Қабылданбағандар» белгіленген, бірақ нысандарды тек ресурсы бар және күту орны шектеулі тапсырма қабылдамайды. Белгіні алыңыз немесе {block} блогының күту орнын шектеңіз.
+	The flow {flow} is ticked both “Gave up” and “Turned away”. Keep one of them.	{flow} ағынында «Бас тартқандар» да, «Қабылданбағандар» да белгіленген. Біреуін қалдырыңыз.
+	Set every chance of joining in the balking table of {block} to a number from 0 to 1.	{block} блогының кезекке тұрмау кестесіндегі қосылу мүмкіндігінің барлығын 0-ден 1-ге дейінгі санға қойыңыз.
+	Put the rows of the balking table of {block} in increasing order of “Number waiting”.	{block} блогының кезекке тұрмау кестесінің жолдарын «Күтушілер саны» бойынша өсу ретімен орналастырыңыз.
+	The flow {flow} is ticked “Balked”, but only a task with a resource and balking sends entities that balk. Untick it, or turn on balking for {block}.	{flow} ағынында «Кезекке тұрмағандар» белгіленген, бірақ кезекке тұрмайтын нысандарды тек ресурсы бар және кезекке тұрмау қосылған тапсырма жібереді. Белгіні алыңыз немесе {block} блогына кезекке тұрмауды қосыңыз.
+	The flow {flow} is ticked “Balked” and also “Gave up” or “Turned away”. Keep one of them.	{flow} ағынында «Кезекке тұрмағандар» және сонымен бірге «Бас тартқандар» немесе «Қабылданбағандар» белгіленген. Біреуін қалдырыңыз.
+	The waiting room of {block} is set by calendar or per working server, but has no number of places, so it is unlimited. Give it a number of places, or make it fixed.	{block} блогының күту орны күнтізбе бойынша немесе жұмыстағы әр серверге орнатылған, бірақ орын саны жоқ, сондықтан шектеусіз. Орын санын беріңіз немесе тұрақты етіңіз.
+	The waiting room of {block} is set by calendar, but no calendar has a value. Add a value for a calendar, or make the waiting room fixed.	{block} блогының күту орны күнтізбе бойынша орнатылған, бірақ ешбір күнтізбенің мәні жоқ. Күнтізбеге мән қосыңыз немесе күту орнын тұрақты етіңіз.
+	Set “Fails above, waiting per working server” of {block} to a number of 0 or more.	{block} блогының «Сәтсіздік шегі, жұмыстағы әр серверге күтетіндер» мәнін 0 немесе одан үлкен санға қойыңыз.
+	Set “Check every” of {block} to a mean above 0.	{block} блогының «Тексеру аралығы» мәнін 0-ден үлкен орташа мәнге қойыңыз.
+	Set the demand of {block} to a number of parts above 0.	{block} блогының сұранысын 0-ден үлкен бөлшектер санына қойыңыз.
+	The demand of {block} is per shift but names no calendar to say when the shifts are. Choose a calendar.	{block} блогының сұранысы ауысым бойынша берілген, бірақ ауысымдардың қашан екенін көрсететін күнтізбе аталмаған. Күнтізбені таңдаңыз.
+	The demand of {block} names a calendar that does not exist. Choose a calendar that exists.	{block} блогының сұранысы жоқ күнтізбені атайды. Бар күнтізбені таңдаңыз.
+	The probability {value} on the flow {flow} is not from 0 to 1. Enter a probability from 0 to 1.	{flow} ағынындағы {value} ықтималдығы 0-ден 1-ге дейін емес. 0-ден 1-ге дейінгі ықтималдықты енгізіңіз.
+	The probabilities of the flows out of {block} add up to {sum}, not 1, so they are used in proportion. Change them to add up to 1 if that is not what you want.	{block} блогынан шығатын ағындардың ықтималдықтарының қосындысы 1 емес, {sum}, сондықтан олар пропорциямен қолданылады. Егер бұл қажет болмаса, қосындысы 1 болатындай өзгертіңіз.
+	The condition on the flow {flow} cannot be used: {error}. Correct “{expression}”.	{flow} ағынындағы шартты пайдалану мүмкін емес: {error}. «{expression}» өрнегін түзетіңіз.
+	The condition on the flow {flow} is ignored, because only flows out of a Decision block choose a route. Remove the condition.	{flow} ағынындағы шарт еленбейді, өйткені бағытты тек «Шешім» блогынан шығатын ағындар таңдайды. Шартты жойыңыз.
+	The probability on the flow {flow} is ignored, because only flows out of a Decision block choose a route. Remove the probability.	{flow} ағынындағы ықтималдық еленбейді, өйткені бағытты тек «Шешім» блогынан шығатын ағындар таңдайды. Ықтималдықты жойыңыз.
+	The condition on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the condition.	{flow} ағынындағы шарт еленбейді, өйткені шешім нысандарды ең қысқа кезекке жібереді. Шартты жойыңыз.
+	The probability on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the probability.	{flow} ағынындағы ықтималдық еленбейді, өйткені шешім нысандарды ең қысқа кезекке жібереді. Ықтималдықты жойыңыз.
+	The default on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the default.	{flow} ағынындағы әдепкі белгі еленбейді, өйткені шешім нысандарды ең қысқа кезекке жібереді. Әдепкі белгіні алыңыз.
+	The probability on the flow {flow} is ignored, because the Decision routes by condition. Remove the probability.	{flow} ағынындағы ықтималдық еленбейді, өйткені шешім бағытты шарт бойынша таңдайды. Ықтималдықты жойыңыз.
+	The default flow of {block} is not one of its own flows out. Choose one of the flows out of {block} as the default.	{block} блогының әдепкі ағыны өзінің шығатын ағындарының бірі емес. {block} блогынан шығатын ағындардың бірін әдепкі етіп таңдаңыз.
+	{block} routes by condition but has no default flow, so an entity for which no condition holds leaves the model here. Choose a default flow.	{block} блогы бағытты шарт бойынша таңдайды, бірақ әдепкі ағыны жоқ, сондықтан бірде-бір шартты қанағаттандырмайтын нысан модельден осы жерде шығып кетеді. Әдепкі ағынды таңдаңыз.
+	{block} diverts entities but has no default flow, so an entity whose way is full has nowhere else to go. Choose a default flow.	{block} блогы нысандарды басқа жаққа бұрады, бірақ әдепкі ағыны жоқ, сондықтан жолы толы нысанның баратын басқа жері жоқ. Әдепкі ағынды таңдаңыз.
+	{block} waits for an entity on the flow {flow}, which none can reach, so it never sends one on. Remove that flow, or connect it to a block that entities reach.	{block} блогы {flow} ағынындағы нысанды күтеді, оған ешбір нысан жете алмайды, сондықтан ол ешқашан нысанды әрі қарай жібермейді. Ол ағынды жойыңыз немесе нысандар жететін блокқа жалғаңыз.
+	{block} has a limited waiting room and is fed through {gateway}. While it is full, {gateway} holds up every entity behind it, and they wait before it without limit. Remove the gateway before {block}, or remove the limit.	{block} блогының күту орны шектеулі және ол {gateway} арқылы қоректенеді. Толы кезде {gateway} өзінің артындағы барлық нысанды ұстап тұрады, олар оның алдында шексіз күтеді. {block} алдындағы қақпаны алып тастаңыз немесе шектеуді алыңыз.
+	The limited waiting rooms of {loop} feed each other in a loop, so when all of them are full the loop deadlocks. Remove the limit on one of them, or break the loop.	{loop} тізбегіндегі шектеулі күту орындары бір-бірін айналмалы түрде қоректендіреді, сондықтан бәрі толғанда цикл тығырыққа тіреледі. Біреуінің шектеуін алыңыз немесе циклді үзіңіз.
+	The pool {block} has no units. Give it at least 1 unit.	{block} қорында бірлік жоқ. Кемінде 1 бірлік беріңіз.
+	{block} names no resource it needs. Add one under “Needs”.	{block} блогы өзіне қажетті ресурсты атамайды. «Қажеттіліктер» астына біреуін қосыңыз.
+	{block} needs a resource pool that does not exist. Choose a pool that exists.	{block} блогына жоқ ресурс қоры қажет. Бар қорды таңдаңыз.
+	{block} needs units with the roles {roles}, which no pool has. Give a pool those roles, or change what {block} needs.	{block} блогына {roles} рөлдері бар бірліктер қажет, оларды ешбір қор ұсынбайды. Қорға осы рөлдерді беріңіз немесе {block} блогының қажеттіліктерін өзгертіңіз.
+	{block} needs {needed} units at once, but at most {available} exist, so this can never be met. Ask for fewer units, or add units to the pool.	{block} блогына бір мезгілде {needed} бірлік қажет, бірақ ең көбі {available} бар, сондықтан бұл ешқашан орындалмайды. Аз бірлік сұраңыз немесе қорға бірлік қосыңыз.
+	Set the priority of {block} to a finite number, not {value}.	{block} блогының басымдығын {value} емес, ақырлы санға қойыңыз.
+	No task uses the pool {block}. Add it to a task's needs, or remove the pool.	{block} қорын ешбір тапсырма пайдаланбайды. Оны тапсырманың қажеттіліктеріне қосыңыз немесе қорды жойыңыз.
+	{block} has a value for a calendar that does not exist. Choose a calendar that exists, or remove the value.	{block} блогында жоқ күнтізбеге арналған мән бар. Бар күнтізбені таңдаңыз немесе мәнді жойыңыз.
+	The calendar {block} has no entries, so it is never active. Add an entry.	{block} күнтізбесінде жазбалар жоқ, сондықтан ол ешқашан белсенді емес. Жазба қосыңыз.
+	{block} allows no arrivals outside the calendars but names no calendar, so it never creates entities. Add arrivals by calendar, or allow arrivals outside calendars.	{block} блогы күнтізбелерден тыс келуге рұқсат бермейді, бірақ күнтізбені атамайды, сондықтан нысанды ешқашан жасамайды. Күнтізбе бойынша келулерді қосыңыз немесе күнтізбелерден тыс келуге рұқсат беріңіз.
+	Set the batch size of {block} to 1 or more.	{block} блогының топтама өлшемін 1 немесе одан үлкен етіп қойыңыз.
+	Set “{field}” of the conveyor {block} to a finite number above 0.	{block} конвейерінің «{field}» мәнін 0-ден үлкен ақырлы санға қойыңыз.
+	Set “{field}” of the conveyor {block} to a finite number of 0 or more.	{block} конвейерінің «{field}» мәнін 0 немесе одан үлкен ақырлы санға қойыңыз.
+	Set “{field}” of the conveyor {block} to a finite number other than 0.	{block} конвейерінің «{field}» мәнін 0-ден басқа ақырлы санға қойыңыз.
+	The conveyor {block} is {length} long but each entity takes {pitch} (item length plus gap), so not even one fits. Lengthen the conveyor, or shorten the item or the gap.	{block} конвейерінің ұзындығы {length}, бірақ әр нысан {pitch} орын алады (бұйым ұзындығы мен аралық), сондықтан біреуі де сыймайды. Конвейерді ұзартыңыз немесе бұйымды не аралықты қысқартыңыз.
+	The drawn path of the conveyor {block} is {path_length} long, but its “Length” is {length}, so the drawing and the run disagree. Make “Length” match the path, or change the shape.	{block} конвейерінің сызылған жолының ұзындығы {path_length}, ал оның «Ұзындығы» {length}, сондықтан сызба мен іске қосу сәйкес емес. «Ұзындықты» жолға сәйкестендіріңіз немесе пішінді өзгертіңіз.
+	{block} is a transport, which StochCraft does not simulate yet. Remove it to run the model.	{block} тасымал болып табылады, оны StochCraft әлі модельдемейді. Модельді іске қосу үшін оны жойыңыз.
+	The pool {pool} of the transport {block} does not exist. Choose a pool that exists.	{block} тасымалының {pool} қоры жоқ. Бар қорды таңдаңыз.
+	The pool {pool} of the transport {block} is not mobile. Give the pool speeds and a home.	{block} тасымалының {pool} қоры жылжымалы емес. Қорға жылдамдықтар мен бастапқы орын беріңіз.
+	Set “{field}” of the pool {block} to a finite number above 0.	{block} қорының «{field}» мәнін 0-ден үлкен ақырлы санға қойыңыз.
+	The home of the pool {block} is not a block of the model. Choose a block as its home.	{block} қорының бастапқы орны модельдің блогы емес. Бастапқы орын ретінде блокты таңдаңыз.
+	The transport {block} needs one block before it, where it picks up, and one after it, where it drops off, but has {inputs} before and {outputs} after. Connect it to one block on each side.	{block} тасымалына оның алдында жүк алатын бір блок және одан кейін жүк түсіретін бір блок қажет, бірақ оның алдында {inputs}, кейін {outputs} бар. Оны әр жағынан бір блокқа жалғаңыз.
+	{other} has no place on the canvas, so the distances for {block} are not known. Place {other} on the canvas.	{other} блогының негізгі бетте орны жоқ, сондықтан {block} үшін қашықтықтар белгісіз. {other} блогын негізгі бетке орналастырыңыз.
+	The flow {flow} asks for no entities. Set its “Units” to 1 or more.	{flow} ағыны ешбір нысанды сұрамайды. Оның «Бірлік саны» мәнін 1 немесе одан үлкен етіп қойыңыз.
+	The “Units” on the flow {flow} is ignored, because only a Split or join block takes several entities from one flow. Remove it.	{flow} ағынындағы «Бірлік саны» еленбейді, өйткені бір ағыннан бірнеше нысанды тек «Бөлу немесе біріктіру» блогы алады. Оны жойыңыз.
+	No block makes batches, so {block} passes every entity through. Add a Batch block before it, or remove {block}.	Ешбір блок топтама жасамайды, сондықтан {block} әр нысанды өткізіп жібереді. Алдына «Топтама» блогын қосыңыз немесе {block} блогын жойыңыз.
+	The stop condition names a block that does not exist. Choose a block that exists.	Тоқтату шарты жоқ блокты атайды. Бар блокты таңдаңыз.
+	Set the count of the stop condition for {block} to 1 or more.	{block} блогының тоқтату шартындағы санды 1 немесе одан үлкен етіп қойыңыз.
+	The stop condition waits for {block} to empty, but only a task can empty. Choose a task.	Тоқтату шарты {block} блогының босауын күтеді, бірақ тек тапсырма босай алады. Тапсырманы таңдаңыз.
+	The stop condition at {block} can be met before the warm-up ends. A run that stops during the warm-up has no statistics after it and is left out of the results. Shorten the warm-up, or stop later.	{block} блогындағы тоқтату шарты қыздыру кезеңі аяқталғанға дейін орындалуы мүмкін. Қыздыру кезеңінде тоқтаған іске қосуда одан кейінгі статистика болмайды және нәтижелерге қосылмайды. Қыздыру кезеңін қысқартыңыз немесе кейінірек тоқтатыңыз.
+	Every run stopped before the warm-up ended, so no metric is reported. Shorten the warm-up, or stop later.	Барлық іске қосулар қыздыру кезеңі аяқталғанға дейін тоқтады, сондықтан ешбір көрсеткіш берілмейді. Қыздыру кезеңін қысқартыңыз немесе кейінірек тоқтатыңыз.
+	{replications} of {of} runs stopped before the warm-up ended, so their statistics are left out of every metric. Shorten the warm-up, or stop later.	{of} іске қосудың {replications} қыздыру кезеңі аяқталғанға дейін тоқтады, сондықтан олардың статистикасы барлық көрсеткіштен шығарылады. Қыздыру кезеңін қысқартыңыз немесе кейінірек тоқтатыңыз.
+	{block} is offered {load}% of the work its units can do, so its waiting room grows without limit and the results describe no steady state. Add units, or shorten the service.	{block} блогына оның бірліктері орындай алатын жұмыстың {load}% ұсынылады, сондықтан күту орны шексіз өседі және нәтижелер тұрақты күйді сипаттамайды. Бірлік қосыңыз немесе қызмет көрсету уақытын қысқартыңыз.
+	{block} is busy {utilisation}% of the time, and at the end at least {backlog} entities are still waiting against {left} that left. Work arrives faster than it is done, so the results describe no steady state. Add units, or shorten the service.	{block} блогы уақыттың {utilisation}% бос емес, ал соңында кемінде {backlog} нысан әлі күтуде, {left} нысан кетті. Жұмыс орындалуынан жылдамырақ келеді, сондықтан нәтижелер тұрақты күйді сипаттамайды. Бірлік қосыңыз немесе қызмет көрсету уақытын қысқартыңыз.
+	The experiment has one run, so its results cannot be told from chance. Set the number of runs to at least 2, and usually 10 or more.	Экспериментте бір ғана іске қосу бар, сондықтан оның нәтижелерін кездейсоқтықтан ажыратуға болмайды. Іске қосулар санын кемінде 2, әдетте 10 немесе одан көп етіп қойыңыз.
+	{block} has a three-point estimate but no time to fit it to, so the estimate is ignored. Remove the estimate.	{block} блогында үш нүктелі бағалау бар, бірақ оны сәйкестендіретін уақыт жоқ, сондықтан бағалау еленбейді. Бағалауды жойыңыз.
+	The three-point estimate of {block} cannot be fitted: every point must be a finite number. Correct the points.	{block} блогының үш нүктелі бағалауын сәйкестендіру мүмкін емес: әрбір нүкте ақырлы сан болуы керек. Нүктелерді түзетіңіз.
+	The three-point estimate of {block} cannot be fitted: the points must be in order, minimum, most likely, then maximum or 95th percentile. Correct the points.	{block} блогының үш нүктелі бағалауын сәйкестендіру мүмкін емес: нүктелер ретімен болуы керек: минимум, ең ықтимал, содан кейін максимум немесе 95-ші процентиль. Нүктелерді түзетіңіз.
+	The three-point estimate of {block} cannot be fitted: log-normal and Weibull estimates have no maximum. Give a 95th percentile instead.	{block} блогының үш нүктелі бағалауын сәйкестендіру мүмкін емес: логнормальды және Вейбулл бағалауларында максимум жоқ. Оның орнына 95-ші процентильді беріңіз.
+	The time of {block} is no longer the one fitted from its three-point estimate. Fit it again, or remove the estimate.	{block} блогының уақыты енді үш нүктелі бағалаудан сәйкестендірілген уақыт емес. Қайта сәйкестендіріңіз немесе бағалауды жойыңыз.
+	In “{field}” of {block}, the normal distribution draws below 0 more than 1 time in 100, and each such draw counts as 0, so the times are longer on average than its mean. Use a truncated normal with a minimum of 0, or a log-normal.	{block} блогының «{field}» өрісінде нормальды үлестірім 100 жағдайда 1-ден жиірек 0-ден төмен мән береді, ал әрбір мұндай мән 0 болып саналады, сондықтан уақыттар орта есеппен оның орташасынан ұзағырақ. 0-ге тең минимумы бар қиылған нормальды үлестірімді немесе логнормальды үлестірімді қолданыңыз.
+	The entities of {block} do not add up: {came} came in or were inside at the start, but {went} left, were lost, gave up or are still inside.	{block} блогындағы нысандар сәйкес келмейді: {came} кірді немесе басында ішінде болды, бірақ {went} шықты, жоғалды, бас тартты немесе әлі ішінде.
+	The entities of the model do not add up: {came} were created or inside at the start, but {went} reached Departures, left the model elsewhere or are still inside.	Модельдегі нысандар сәйкес келмейді: {came} жасалды немесе басында ішінде болды, бірақ {went} «Кетулер» блогына жетті, модельден басқа жерде шықты немесе әлі ішінде.
+	No entity left the model, of {came} created or inside at the start. Check that the routing leads to Departures and that the run is long enough for an entity to get through.	Жасалған немесе басында ішінде болған {came} нысанның ешқайсысы модельден шықпады. Бағыттаудың «Кетулер» блогына апаратынын және нысанның өтіп шығуы үшін іске қосу жеткілікті ұзақ екенін тексеріңіз.
+	Little's law does not hold at {block}: the time-average number inside was {mean}, but the entities' own times inside give {from_stays}.	{block} блогында Литтл заңы орындалмайды: ішіндегілердің уақыт бойынша орташа саны {mean} болды, ал нысандардың өз ішінде болған уақыты {from_stays} береді.
+	The utilisation of {block} counts {busy} units busy on average, but {working} were processing or setting up: units idle, blocked, off shift, failed or restarting were counted busy.	{block} блогының пайдалану деңгейі орта есеппен {busy} бірлікті бос емес деп санайды, бірақ {working} бірлік өңдеумен немесе дайындықпен айналысты: бос тұрған, бұғатталған, ауысымнан тыс, ақаулы немесе қайта іске қосылып жатқан бірліктер бос емес деп саналған.
+	The utilisation of {block} counts {busy} units busy on average, but {working} were processing or setting up: units at work were not counted busy.	{block} блогының пайдалану деңгейі орта есеппен {busy} бірлікті бос емес деп санайды, бірақ {working} бірлік өңдеумен немесе дайындықпен айналысты: жұмыс істеп тұрған бірліктер бос емес деп саналмаған.
+	The shares of the time of the units of {block} in each state add up to {total}, not 1.	{block} блогы бірліктерінің әр күйдегі уақыт үлестерінің қосындысы 1 емес, {total}.
+	“{metric}” of {block} is {value}, outside 0 to 1 (0% to 100%).	{block} блогының «{metric}» мәні {value}, ол 0-ден 1-ге дейінгі (0%-дан 100%-ға дейінгі) аралықтан тыс.
+	This was found in {replications} of {of} runs, and the furthest off is shown.	Бұл {of} іске қосудың {replications} ішінде табылды, ең алшақ мәні көрсетілген.
+	This points to a fault in StochCraft rather than in the model. Please report it with the model.	Бұл модельде емес, StochCraft-та қате бар екенін көрсетеді. Модельмен бірге хабарлаңыз.
+	Angle	Бұрыш
+	Failed	Ақаулы
+	Off shift	Ауысымнан тыс
+	Processing	Өңдеу
+	Radius	Радиус
+	Rise	Көтерілу
+	Speed empty	Бос жүргендегі жылдамдық
+	Speed loaded	Жүктелгендегі жылдамдық
+	Turns	Айналымдар
+	Unload	Түсіру
+	Lost	Жоғалғандар
+	An entity that leaves a waiting room before a unit takes it, because it has waited as long as it was willing to.	Бірлік алғанға дейін күту орнынан кететін нысан, себебі ол күтуге дайын болғанша күтті.
+	An entity that does not join a waiting room at all, because the number already waiting put it off.	Күту орнына мүлде кірмейтін нысан, себебі күтіп тұрғандардың саны оны ойынан қайтарды.
+	An entity that finds the waiting room full and takes the flow ticked “Turned away” instead of waiting.	Күту орнының толы екенін көріп, күтудің орнына «Қабылданбағандар» деп белгіленген ағынмен кететін нысан.
+	An entity that leaves the model without reaching Departures: it found the waiting room full with nowhere else to go, or a decision with no way out for it.	«Кетулер» блогына жетпей модельден шығатын нысан: ол күту орнын толы тауып, басқа жолы болмады, немесе оған шығатын жолы жоқ шешімге тап болды.
+	Gave up on {id}	{id} ағынында бас тартқандар
+	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the flow ticked “Gave up”, or leaves the model.	Әрбір нысан мұнда келген кезде оған кездейсоқ таңдалған уақыттан аспайтын уақыт күтеді, содан кейін бас тартады: «Бас тартқандар» деп белгіленген ағынмен кетеді немесе модельден шығады.
+	Entities that do not join the waiting room take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Күту орнына кірмейтін нысандар бірден осы ағынмен жүреді (мысалы, кейінірек қайта көру үшін), жоғалудың орнына; мұнда олар кезекке тұрмаған деп саналады.
+	The job stops at once: the entity goes back to the front of the waiting room for any server on shift, and the work done on it is wasted.	Жұмыс бірден тоқтайды: нысан ауысымдағы кез келген сервер үшін күту орнының басына оралады, ал оған жасалған жұмыс босқа кетеді.
+	The connection drops and the client tries again: the entity goes back to the front of the waiting room at once, and the work done on it is wasted.	Байланыс үзіліп, клиент қайта әрекет етеді: нысан бірден күту орнының басына оралады, ал оған жасалған жұмыс босқа кетеді.
+	Ticked, entities queue up at the end while the rest keep moving. Unticked, the whole belt stops when the entity at the end cannot leave.	Белгіленсе, нысандар соңында кезекке тұрады, ал қалғандары жылжи береді. Белгіленбесе, соңындағы нысан кете алмаған кезде бүкіл лента тоқтайды.
+	Play run 1 step by step and see each block's waiting room on the diagram	1-іске қосуды қадаммен орындап, диаграммада әр блоктың күту орнын көру
+	Select a block to see its waiting room over time.	Күту орнын уақыт бойынша көру үшін блокты таңдаңыз.
+	Entities on conveyors over time	Конвейерлердегі нысандар уақыт бойынша
+	Entities in the model over time	Модельдегі нысандар уақыт бойынша
+	How long each entity spends on the conveyors.	Әр нысан конвейерлерде қанша уақыт болады.
+	No entity has left a conveyor yet	Әзірге ешбір нысан конвейерден шыққан жоқ
+	Share of entities by time on a conveyor, in {unit}	Конвейердегі уақыт бойынша нысандар үлесі, {unit}
+	Time on conveyors: {n} entities between {lo} and {hi} {unit}	Конвейерлердегі уақыт: {lo} мен {hi} {unit} арасында {n} нысан
+	{from} to {to} {unit}: {share} of entities ({n})	{from} мен {to} {unit} арасы: нысандардың {share} ({n})
+	How many entities are on the conveyors over time.	Конвейерлерде уақыт бойынша қанша нысан бар.
+	How many entities are in the model over time.	Модельде уақыт бойынша қанша нысан бар.
+	At {time} {unit}: {n} entities	{time} {unit} сәтінде: {n} нысан
+@plural	Makes {n} independent run of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval across them.	Модельдің {n} тәуелсіз іске қосуын {seed} тұқымынан орындайды. Әр блок нәтижесінде 95% сенімділік аралығының жарты ені беріледі.|Модельдің {n} тәуелсіз іске қосуын {seed} тұқымынан орындайды. Әр блок нәтижесінде 95% сенімділік аралығының жарты ені беріледі.
 	Fonts	Қаріптер
 	The full list of third-party licences is in the file THIRD-PARTY-LICENSES.html, which comes with the download.	Үшінші тарап лицензияларының толық тізімі жүктеп алумен бірге келетін THIRD-PARTY-LICENSES.html файлында.
 	Full list of third-party licences	Үшінші тарап лицензияларының толық тізімі

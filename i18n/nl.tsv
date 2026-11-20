@@ -21,8 +21,6 @@
 	A caller on hold: once a unit takes it, the entity stays.	Een beller in de wacht: zodra een eenheid hem aanneemt, blijft de entiteit.
 	A client that times out: if its time runs out during service, it gives up then, and the unit finishes the job anyway (wasted work).	Een client met een time-out: als zijn tijd tijdens de service verloopt, haakt hij op dat moment af, en de eenheid maakt het werk toch af (verspild werk).
 	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	Het nieuwe bestand bevat alleen het model: wat StochCraft in {file} niet begrijpt, valt weg.
-	Abandoned	Afgehaakt
-	Abandoned on {id}	Afgehaakt op {id}
 	About StochCraft	Over StochCraft
 	About {app}	Over {app}
 	Accent	Accent
@@ -162,7 +160,6 @@
 	Duration	Duur
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Elke analyse voert het experiment meerdere keren uit met dezelfde startwaarde, zodat de verschillen van de wijziging komen, niet van toeval. Dit kan even duren.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Elke entiteit neemt in één keer het eerste van deze alternatieven waaraan nu kan worden voldaan, en geeft de eenheden terug wanneer ze vertrekt.
-	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Elke entiteit wacht hier hoogstens een tijd die bij aankomst willekeurig voor haar wordt getrokken, en haakt dan af: ze neemt de uitgang gemarkeerd als ‘Afgehaakt’ of verlaat het model.
 	Each server (unit) is checked every so often, as a load balancer probes the servers behind it. One that fails, with too many waiting, is taken out of service for a restart, then comes back.	Elke server (eenheid) wordt af en toe gecontroleerd, zoals een load balancer de servers achter zich peilt. Een server die zakt, met te veel wachtenden, wordt voor een herstart uit dienst genomen en komt daarna terug.
 	Edit	Bewerken
 	Edit themes…	Thema's bewerken…
@@ -412,7 +409,6 @@
 	Run	Uitvoeren
 	Run cancelled	Uitvoering geannuleerd
 	Run experiment	Experiment uitvoeren
-	Play run 1 step by step and see each block's queue on the diagram	Uitvoering 1 stap voor stap afspelen en de wachtrij van elk blok in het diagram zien
 	Run the experiment ({shortcut})	Het experiment uitvoeren ({shortcut})
 	Run the experiment again to see this result's spread.	Voer het experiment opnieuw uit om de spreiding van dit resultaat te zien.
 	Run the experiment at each value of one parameter, and compare a result.	Het experiment uitvoeren bij elke waarde van één parameter en een resultaat vergelijken.
@@ -433,7 +429,6 @@
 	Scrap ratio	Afkeuraandeel
 	Seed	Startwaarde
 	Select All	Alles selecteren
-	Select a block to see its queue over time.	Selecteer een blok om de wachtrij in de tijd te zien.
 	Sender waits during transfer	Afzender wacht tijdens transfer
 	Separate the values with semicolons or spaces.	Scheid de waarden met puntkomma's of spaties.
 	Sequential	Sequentieel
@@ -497,10 +492,8 @@
 	Text	Tekst
 	Text on accent	Tekst op accent
 	Text on header	Tekst op kopbalk
-	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	De verbinding valt weg en de client probeert het opnieuw: de entiteit gaat meteen terug naar de kop van de wachtrij, en het werk dat eraan gedaan is, is verspild.
 	The entity waits on its server and the job carries on with what was left once the server is back.	De entiteit wacht bij haar server en de bewerking gaat verder met wat er over was zodra de server terug is.
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more runs would narrow it.	Het interval reikt tot onder het doelaandeel van {share}, dus het is niet met 95% betrouwbaarheid aangetoond dat het aandeel wordt gehaald; meer uitvoeringen zouden het smaller maken.
-	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	De bewerking stopt meteen: de entiteit gaat terug naar de kop van de wachtrij voor een willekeurige server binnen werktijd, en het werk dat eraan gedaan is, is verspild.
 	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	De bewerking stopt meteen; de entiteit wacht bij haar server en de bewerking gaat verder met wat er over was zodra die server weer binnen werktijd is.
 	The last task with a resource it finished at	De laatste taak met een hulpbron die het onderdeel doorliep
 	The mean time to the stop condition is over the runs that met it only; the others ran to their time limit.	De gemiddelde tijd tot de stopvoorwaarde is alleen over de uitvoeringen die haar haalden; de andere liepen tot hun tijdslimiet.
@@ -690,7 +683,6 @@ unit	yr	j
 	Balked on {id}	Niet aangesloten op {id}
 	Balking	Niet aansluiten
 	Count those in service	Ook die in bediening meetellen
-	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Entiteiten die niet in de wachtrij aansluiten, nemen meteen deze stroom (om het later opnieuw te proberen, bijvoorbeeld), in plaats van verloren te gaan; ze tellen hier als niet aangesloten.
 	Joins with probability	Sluit aan met kans
 	Number waiting	Aantal wachtend
 	Share balked	Aandeel niet aangesloten
@@ -908,7 +900,6 @@ unit	yr	j
 @plural	Finished {n} run|Finished {n} runs	{n} uitvoering voltooid|{n} uitvoeringen voltooid
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	{file} geopend ({n} waarschuwing)|{file} geopend ({n} waarschuwingen)
 @plural	Removed {n} block|Removed {n} blocks	{n} blok verwijderd|{n} blokken verwijderd
-@plural	Makes {n} independent run of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Doet {n} onafhankelijke uitvoering van het model met startwaarde {seed}. De resultaten van elk element bevatten de halve breedte van een 95%-betrouwbaarheidsinterval.|Doet {n} onafhankelijke uitvoeringen van het model met startwaarde {seed}. De resultaten van elk element bevatten de halve breedte van een 95%-betrouwbaarheidsinterval.
 @plural	The stop condition was met in {met} of {n} run, after {time} {unit} on average.|The stop condition was met in {met} of {n} runs, after {time} {unit} on average.	De stopvoorwaarde werd gehaald in {met} van {n} uitvoering, na gemiddeld {time} {unit}.|De stopvoorwaarde werd gehaald in {met} van {n} uitvoeringen, na gemiddeld {time} {unit}.
 @plural	{done} of {n} run finished|{done} of {n} runs finished	{done} van {n} uitvoering voltooid|{done} van {n} uitvoeringen voltooid
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} run|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} runs	{name}: {mean}{unit}\n95%-interval van {low} tot {high}{unit}\nover {n} uitvoering|{name}: {mean}{unit}\n95%-interval van {low} tot {high}{unit}\nover {n} uitvoeringen
@@ -938,7 +929,6 @@ unit	yr	j
 	kilometres	kilometer
 	inches	inch
 	feet	voet
-	Ticked, items queue up at the end while the rest keep moving. Unticked, the whole belt stops when the item at the end cannot leave.	Aangevinkt: items vormen een rij aan het einde terwijl de rest doorrijdt. Niet aangevinkt: de hele band stopt als het item aan het einde niet weg kan.
 	A belt that carries entities from one end to the other. It has a length and a speed, and each entity takes a pitch of belt: its item length plus the gap kept free after it. So it holds at most length ÷ pitch entities and carries at most speed ÷ pitch per time unit. Accumulating: entities queue up at the end while the rest keep moving; otherwise the whole belt stops.	Een band die entiteiten van het ene uiteinde naar het andere brengt. Hij heeft een lengte en een snelheid, en elke entiteit neemt een steek van de band in: de lengte van haar item plus de tussenruimte die erachter vrij blijft. Er passen dus hooguit lengte ÷ steek entiteiten op en er gaan hooguit snelheid ÷ steek per tijdseenheid over. Ophopend: entiteiten vormen een rij aan het einde terwijl de rest doorrijdt; anders stopt de hele band.
 	Station	Station
 	Kind	Soort
@@ -992,19 +982,165 @@ unit	yr	j
 	Time on conveyors	Tijd op transportbanden
 	No conveyors in this model	Geen transportbanden in dit model
 	Fills in when the run ends	Wordt gevuld als de run eindigt
-	How long each item spends on the conveyors.	Hoe lang elk item op de transportbanden doorbrengt.
-	No item has left a conveyor yet	Nog geen item heeft een transportband verlaten
-	Share of items by time on a conveyor, in {unit}	Aandeel items naar tijd op een transportband, in {unit}
-	Time on conveyors: {n} items between {lo} and {hi} {unit}	Tijd op transportbanden: {n} items tussen {lo} en {hi} {unit}
-	{from} to {to} {unit}: {share} of items ({n})	{from} tot {to} {unit}: {share} van de items ({n})
-	Items on conveyors over time	Items op transportbanden in de tijd
-	Items in the model over time	Items in het model in de tijd
-	How many items are on the conveyors over time.	Hoeveel items er in de tijd op de transportbanden zijn.
-	How many items are in the model over time.	Hoeveel items er in de tijd in het model zijn.
 	Nothing was recorded over time in these results	In deze resultaten is niets in de tijd vastgelegd
-	At {time} {unit}: {n} items	Op {time} {unit}: {n} items
 	Run the model to fill the dashboard	Voer het model uit om het dashboard te vullen
 	The resource and conveyor charts show the last run until this one ends	De grafieken van middelen en transportbanden tonen de laatste run totdat deze eindigt
+# Validation messages, new labels and word changes (issue #145)
+	The id “{id}” is not valid. Start an id with a letter or an underscore, then use only letters, digits, dots, hyphens and underscores.	De id ‘{id}’ is niet geldig. Begin een id met een letter of een underscore en gebruik daarna alleen letters, cijfers, punten, koppeltekens en underscores.
+	More than one block, flow, pool or calendar has the id “{id}”. Give each its own id.	Meer dan één blok, stroom, pool of kalender heeft de id ‘{id}’. Geef elk een eigen id.
+	The flow {flow} uses a block that does not exist. Remove the flow, or connect it to a block that exists.	De stroom {flow} gebruikt een blok dat niet bestaat. Verwijder de stroom of verbind hem met een bestaand blok.
+	The flow {flow} leads into an Arrivals block, which takes no input. Remove the flow, or send it to another block.	De stroom {flow} loopt naar een blok Aankomsten, dat geen invoer heeft. Verwijder de stroom of stuur hem naar een ander blok.
+	The flow {flow} leaves a Departures block, which has no output. Remove the flow, or start it from another block.	De stroom {flow} komt uit een blok Vertrekken, dat geen uitvoer heeft. Verwijder de stroom of laat hem beginnen bij een ander blok.
+	The flow {flow} leads from a block back to itself. Remove it, or send it to another block.	De stroom {flow} loopt van een blok terug naar datzelfde blok. Verwijder de stroom of stuur hem naar een ander blok.
+	{block} has nowhere to send entities. Add a flow from it to the next block.	{block} kan entiteiten nergens heen sturen. Voeg een stroom toe van dit blok naar het volgende blok.
+	{block} has {count} flows out, and only a Decision or a Split or join block can send entities down several. Remove the extra flows, or add a Decision block.	{block} heeft {count} uitgaande stromen, en alleen een blok Beslissing of Splitsen of samenvoegen kan entiteiten over meerdere stromen sturen. Verwijder de extra stromen of voeg een blok Beslissing toe.
+	In “{field}” of {block}, set “{param}” to a finite number.	Stel in ‘{field}’ van {block} ‘{param}’ in op een eindig getal.
+	In “{field}” of {block}, set “{param}” to a number above 0.	Stel in ‘{field}’ van {block} ‘{param}’ in op een getal boven 0.
+	In “{field}” of {block}, set “{param}” to 0 or more.	Stel in ‘{field}’ van {block} ‘{param}’ in op 0 of meer.
+	In “{field}” of {block}, set “{param}” to 1 or more.	Stel in ‘{field}’ van {block} ‘{param}’ in op 1 of meer.
+	In “{field}” of {block}, set “{param}” to a number from 0 to 1.	Stel in ‘{field}’ van {block} ‘{param}’ in op een getal van 0 tot 1.
+	In “{field}” of {block}, set “Minimum” below “Maximum”, and any “Most likely” value between them.	Stel in ‘{field}’ van {block} ‘Minimum’ lager in dan ‘Maximum’, en een eventuele waarde bij ‘Meest waarschijnlijk’ ertussen.
+	In “{field}” of {block}, add data points whose probabilities add up to more than 0.	Voeg in ‘{field}’ van {block} datapunten toe waarvan de kansen samen meer dan 0 zijn.
+	{block} would never have a unit to work with. Give it at least 1 unit.	{block} zou nooit een eenheid hebben om mee te werken. Geef het blok minstens 1 eenheid.
+	{block} would make entities without end, because its “Time between arrivals” is always 0. Give it a time above 0, or set an “Arrival limit”.	{block} zou eindeloos entiteiten maken, omdat de ‘Tijd tussen aankomsten’ altijd 0 is. Geef een tijd boven 0 of stel een ‘Aankomstlimiet’ in.
+	The model has no Arrivals block, so nothing will happen. Add an Arrivals block.	Het model heeft geen blok Aankomsten, dus er gebeurt niets. Voeg een blok Aankomsten toe.
+	The model has no Departures block, so no time in system is measured. Add a Departures block.	Het model heeft geen blok Vertrekken, dus er wordt geen tijd in het systeem gemeten. Voeg een blok Vertrekken toe.
+	No entity can reach {block} from an Arrivals block. Connect it to a block that entities pass through.	Geen enkele entiteit kan {block} bereiken vanaf een blok Aankomsten. Verbind het blok met een blok waar entiteiten doorheen komen.
+	Entities in {block} can never reach a Departures block. Connect it on towards Departures.	Entiteiten in {block} kunnen nooit een blok Vertrekken bereiken. Verbind het blok verder richting Vertrekken.
+	Set the “{state}” power of {block} to a number of kilowatts, 0 or more.	Stel het vermogen ‘{state}’ van {block} in op een aantal kilowatt, 0 of meer.
+	Set the warm-up of the experiment to 0 or more.	Stel de opwarmperiode van het experiment in op 0 of meer.
+	Set the duration of the experiment to more than 0.	Stel de duur van het experiment in op meer dan 0.
+	Set the number of runs of the experiment to 1 or more.	Stel het aantal uitvoeringen van het experiment in op 1 of meer.
+	Set the layout scale (length units per drawing unit) to a finite number above 0.	Stel de schaal van de indeling (lengte-eenheden per tekeneenheid) in op een eindig getal boven 0.
+	A property of {block} has no name. Give it a name, or remove it.	Een eigenschap van {block} heeft geen naam. Geef haar een naam of verwijder haar.
+	{block} sets the property “{name}” twice. Keep one of them.	{block} stelt de eigenschap ‘{name}’ twee keer in. Houd er één van over.
+	The property “{name}” of {block} needs shares that are not negative and add up to more than 0. Change the shares.	De eigenschap ‘{name}’ van {block} heeft aandelen nodig die niet negatief zijn en samen meer dan 0 zijn. Wijzig de aandelen.
+	The property “{name}” has the type “{type2}” on {block} but “{type}” on another block. Give it one type everywhere.	De eigenschap ‘{name}’ heeft op {block} het type ‘{type2}’, maar op een ander blok het type ‘{type}’. Geef haar overal één type.
+	The value of the property “{name}” on {block} does not fit its type, “{type}”. Change the value or the type.	De waarde van de eigenschap ‘{name}’ op {block} past niet bij haar type, ‘{type}’. Wijzig de waarde of het type.
+	The expression for the property “{name}” on {block} cannot be used: {error}. Correct “{expression}”.	De expressie voor de eigenschap ‘{name}’ op {block} kan niet worden gebruikt: {error}. Corrigeer ‘{expression}’.
+	{block} reads the property “{name}”, which no block sets, so it would read as empty. Set it on an earlier block, or correct the name.	{block} leest de eigenschap ‘{name}’, die geen enkel blok instelt, dus ze wordt als leeg gelezen. Stel haar in op een eerder blok of corrigeer de naam.
+	The setup of {block} has times for particular changes but no property to watch. Choose a property under “Only when this property changes”.	De omstelling van {block} heeft tijden voor bepaalde wijzigingen maar geen eigenschap om te volgen. Kies een eigenschap onder ‘Alleen als deze eigenschap verandert’.
+	{block} has times for particular values but no property to read them from. Choose a property under “Service time by property”.	{block} heeft tijden voor bepaalde waarden maar geen eigenschap om ze uit te lezen. Kies een eigenschap onder ‘Servicetijd afhankelijk van een eigenschap’.
+	{block} has two times for the value “{value}”. Keep one.	{block} heeft twee tijden voor de waarde ‘{value}’. Houd er één van over.
+	Set the time of {block} for the value “{value}” to a mean of 0 or more.	Stel de tijd van {block} voor de waarde ‘{value}’ in op een gemiddelde van 0 of meer.
+	The scrap at {block} counts against {other}, which is not a task with a resource. Choose a task with a resource.	De afkeur bij {block} telt mee voor {other}, dat geen taak met een hulpbron is. Kies een taak met een hulpbron.
+	Set “Planned run time per item” of {block} to a mean above 0.	Stel ‘Geplande looptijd per onderdeel’ van {block} in op een gemiddelde boven 0.
+	Set “Time before giving up” of {block} to a mean of 0 or more.	Stel ‘Tijd tot afhaken’ van {block} in op een gemiddelde van 0 of meer.
+	The flow {flow} is ticked “Gave up”, but only a task with a resource and a “Time before giving up” sends entities that give up. Untick it, or set a “Time before giving up” on {block}.	De stroom {flow} is aangevinkt als ‘Afgehaakt’, maar alleen een taak met een hulpbron en een ‘Tijd tot afhaken’ stuurt entiteiten die afhaken. Vink het uit of stel een ‘Tijd tot afhaken’ in voor {block}.
+	{count} flows out of {block} are ticked “{way}”; at most one can be. Untick all but one.	{count} stromen uit {block} zijn aangevinkt als ‘{way}’; er mag er hooguit één zijn. Vink alle stromen op één na uit.
+	The flow {flow} is ticked “Turned away”, but only a task with a resource and a limited waiting room turns entities away. Untick it, or limit the waiting room of {block}.	De stroom {flow} is aangevinkt als ‘Afgewezen’, maar alleen een taak met een hulpbron en een beperkte wachtruimte wijst entiteiten af. Vink het uit of beperk de wachtruimte van {block}.
+	The flow {flow} is ticked both “Gave up” and “Turned away”. Keep one of them.	De stroom {flow} is aangevinkt als zowel ‘Afgehaakt’ als ‘Afgewezen’. Houd er één van over.
+	Set every chance of joining in the balking table of {block} to a number from 0 to 1.	Stel elke kans om aan te sluiten in de tabel voor niet aansluiten van {block} in op een getal van 0 tot 1.
+	Put the rows of the balking table of {block} in increasing order of “Number waiting”.	Zet de rijen van de tabel voor niet aansluiten van {block} in oplopende volgorde van ‘Aantal wachtend’.
+	The flow {flow} is ticked “Balked”, but only a task with a resource and balking sends entities that balk. Untick it, or turn on balking for {block}.	De stroom {flow} is aangevinkt als ‘Niet aangesloten’, maar alleen een taak met een hulpbron en Niet aansluiten stuurt entiteiten die niet aansluiten. Vink het uit of zet Niet aansluiten aan voor {block}.
+	The flow {flow} is ticked “Balked” and also “Gave up” or “Turned away”. Keep one of them.	De stroom {flow} is aangevinkt als ‘Niet aangesloten’ en ook als ‘Afgehaakt’ of ‘Afgewezen’. Houd er één van over.
+	The waiting room of {block} is set by calendar or per working server, but has no number of places, so it is unlimited. Give it a number of places, or make it fixed.	De wachtruimte van {block} wordt bepaald per kalender of per server in dienst, maar heeft geen aantal plaatsen en is dus onbeperkt. Geef haar een aantal plaatsen of maak haar vast.
+	The waiting room of {block} is set by calendar, but no calendar has a value. Add a value for a calendar, or make the waiting room fixed.	De wachtruimte van {block} wordt bepaald per kalender, maar geen enkele kalender heeft een waarde. Voeg een waarde voor een kalender toe of maak de wachtruimte vast.
+	Set “Fails above, waiting per working server” of {block} to a number of 0 or more.	Stel ‘Zakt boven (wachtenden per server in dienst)’ van {block} in op een getal van 0 of meer.
+	Set “Check every” of {block} to a mean above 0.	Stel ‘Controle elke’ van {block} in op een gemiddelde boven 0.
+	Set the demand of {block} to a number of parts above 0.	Stel de vraag van {block} in op een aantal onderdelen boven 0.
+	The demand of {block} is per shift but names no calendar to say when the shifts are. Choose a calendar.	De vraag van {block} geldt per ploeg, maar noemt geen kalender die aangeeft wanneer de ploegen zijn. Kies een kalender.
+	The demand of {block} names a calendar that does not exist. Choose a calendar that exists.	De vraag van {block} noemt een kalender die niet bestaat. Kies een bestaande kalender.
+	The probability {value} on the flow {flow} is not from 0 to 1. Enter a probability from 0 to 1.	De kans {value} op de stroom {flow} ligt niet tussen 0 en 1. Voer een kans van 0 tot 1 in.
+	The probabilities of the flows out of {block} add up to {sum}, not 1, so they are used in proportion. Change them to add up to 1 if that is not what you want.	De kansen van de stromen uit {block} zijn samen {sum} en niet 1, dus ze worden naar verhouding gebruikt. Wijzig ze zodat ze samen 1 zijn, als dit niet de bedoeling is.
+	The condition on the flow {flow} cannot be used: {error}. Correct “{expression}”.	De voorwaarde op de stroom {flow} kan niet worden gebruikt: {error}. Corrigeer ‘{expression}’.
+	The condition on the flow {flow} is ignored, because only flows out of a Decision block choose a route. Remove the condition.	De voorwaarde op de stroom {flow} wordt genegeerd, omdat alleen stromen uit een blok Beslissing een route kiezen. Verwijder de voorwaarde.
+	The probability on the flow {flow} is ignored, because only flows out of a Decision block choose a route. Remove the probability.	De kans op de stroom {flow} wordt genegeerd, omdat alleen stromen uit een blok Beslissing een route kiezen. Verwijder de kans.
+	The condition on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the condition.	De voorwaarde op de stroom {flow} wordt genegeerd, omdat de Beslissing entiteiten naar de kortste wachtrij stuurt. Verwijder de voorwaarde.
+	The probability on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the probability.	De kans op de stroom {flow} wordt genegeerd, omdat de Beslissing entiteiten naar de kortste wachtrij stuurt. Verwijder de kans.
+	The default on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the default.	De standaardinstelling op de stroom {flow} wordt genegeerd, omdat de Beslissing entiteiten naar de kortste wachtrij stuurt. Verwijder de standaardinstelling.
+	The probability on the flow {flow} is ignored, because the Decision routes by condition. Remove the probability.	De kans op de stroom {flow} wordt genegeerd, omdat de Beslissing op voorwaarde een route kiest. Verwijder de kans.
+	The default flow of {block} is not one of its own flows out. Choose one of the flows out of {block} as the default.	De standaardstroom van {block} is niet een van zijn eigen uitgaande stromen. Kies een van de stromen uit {block} als standaard.
+	{block} routes by condition but has no default flow, so an entity for which no condition holds leaves the model here. Choose a default flow.	{block} kiest een route op voorwaarde maar heeft geen standaardstroom, dus een entiteit waarvoor geen enkele voorwaarde geldt, verlaat hier het model. Kies een standaardstroom.
+	{block} diverts entities but has no default flow, so an entity whose way is full has nowhere else to go. Choose a default flow.	{block} leidt entiteiten om maar heeft geen standaardstroom, dus een entiteit wiens weg vol is, kan nergens anders heen. Kies een standaardstroom.
+	{block} waits for an entity on the flow {flow}, which none can reach, so it never sends one on. Remove that flow, or connect it to a block that entities reach.	{block} wacht op een entiteit via de stroom {flow}, waar geen enkele entiteit kan komen, dus er wordt nooit een entiteit doorgestuurd. Verwijder die stroom of verbind hem met een blok dat entiteiten bereiken.
+	{block} has a limited waiting room and is fed through {gateway}. While it is full, {gateway} holds up every entity behind it, and they wait before it without limit. Remove the gateway before {block}, or remove the limit.	{block} heeft een beperkte wachtruimte en wordt gevoed via het blok {gateway}. Zolang de wachtruimte vol is, houdt dat blok elke entiteit erachter op, en die wachten er onbeperkt voor. Verwijder het blok {gateway} vóór {block} of verwijder de limiet.
+	The limited waiting rooms of {loop} feed each other in a loop, so when all of them are full the loop deadlocks. Remove the limit on one of them, or break the loop.	De beperkte wachtruimtes van {loop} voeden elkaar in een lus, dus als ze allemaal vol zijn, loopt de lus vast. Verwijder de limiet bij een ervan of doorbreek de lus.
+	The pool {block} has no units. Give it at least 1 unit.	De pool {block} heeft geen eenheden. Geef haar minstens 1 eenheid.
+	{block} names no resource it needs. Add one under “Needs”.	{block} noemt geen hulpbron die het nodig heeft. Voeg er een toe onder ‘Behoeften’.
+	{block} needs a resource pool that does not exist. Choose a pool that exists.	{block} heeft een hulpbronnenpool nodig die niet bestaat. Kies een bestaande pool.
+	{block} needs units with the roles {roles}, which no pool has. Give a pool those roles, or change what {block} needs.	{block} heeft eenheden nodig met de rollen {roles}, die geen enkele pool heeft. Geef een pool die rollen of wijzig wat {block} nodig heeft.
+	{block} needs {needed} units at once, but at most {available} exist, so this can never be met. Ask for fewer units, or add units to the pool.	{block} heeft tegelijk meer eenheden nodig dan er bestaan (nodig: {needed}, aanwezig: {available}), dus dit kan nooit worden vervuld. Vraag om minder eenheden of voeg eenheden aan de pool toe.
+	Set the priority of {block} to a finite number, not {value}.	Stel de prioriteit van {block} in op een eindig getal, niet op {value}.
+	No task uses the pool {block}. Add it to a task's needs, or remove the pool.	Geen enkele taak gebruikt de pool {block}. Voeg haar toe aan de behoeften van een taak of verwijder de pool.
+	{block} has a value for a calendar that does not exist. Choose a calendar that exists, or remove the value.	{block} heeft een waarde voor een kalender die niet bestaat. Kies een bestaande kalender of verwijder de waarde.
+	The calendar {block} has no entries, so it is never active. Add an entry.	De kalender {block} heeft geen kalenderitems en is dus nooit actief. Voeg een kalenderitem toe.
+	{block} allows no arrivals outside the calendars but names no calendar, so it never creates entities. Add arrivals by calendar, or allow arrivals outside calendars.	{block} staat geen aankomsten buiten de kalenders toe maar noemt geen kalender, dus het maakt nooit entiteiten. Voeg aankomsten per kalender toe of sta aankomsten buiten kalenders toe.
+	Set the batch size of {block} to 1 or more.	Stel de batchgrootte van {block} in op 1 of meer.
+	Set “{field}” of the conveyor {block} to a finite number above 0.	Stel ‘{field}’ van de transportband {block} in op een eindig getal boven 0.
+	Set “{field}” of the conveyor {block} to a finite number of 0 or more.	Stel ‘{field}’ van de transportband {block} in op een eindig getal van 0 of meer.
+	Set “{field}” of the conveyor {block} to a finite number other than 0.	Stel ‘{field}’ van de transportband {block} in op een eindig getal anders dan 0.
+	The conveyor {block} is {length} long but each entity takes {pitch} (item length plus gap), so not even one fits. Lengthen the conveyor, or shorten the item or the gap.	De transportband {block} is {length} lang, maar elke entiteit neemt {pitch} in beslag (lengte van het item plus tussenruimte), dus er past niet eens één op. Maak de transportband langer of maak het item of de tussenruimte korter.
+	The drawn path of the conveyor {block} is {path_length} long, but its “Length” is {length}, so the drawing and the run disagree. Make “Length” match the path, or change the shape.	Het getekende pad van de transportband {block} is {path_length} lang, maar de ‘Lengte’ is {length}, dus de tekening en de uitvoering komen niet overeen. Laat de ‘Lengte’ bij het pad passen of wijzig de vorm.
+	{block} is a transport, which StochCraft does not simulate yet. Remove it to run the model.	{block} is een transport, wat StochCraft nog niet simuleert. Verwijder het blok om het model uit te voeren.
+	The pool {pool} of the transport {block} does not exist. Choose a pool that exists.	De pool {pool} van het transport {block} bestaat niet. Kies een bestaande pool.
+	The pool {pool} of the transport {block} is not mobile. Give the pool speeds and a home.	De pool {pool} van het transport {block} is niet mobiel. Geef de pool snelheden en een thuisbasis.
+	Set “{field}” of the pool {block} to a finite number above 0.	Stel ‘{field}’ van de pool {block} in op een eindig getal boven 0.
+	The home of the pool {block} is not a block of the model. Choose a block as its home.	De thuisbasis van de pool {block} is geen blok van het model. Kies een blok als thuisbasis.
+	The transport {block} needs one block before it, where it picks up, and one after it, where it drops off, but has {inputs} before and {outputs} after. Connect it to one block on each side.	Het transport {block} heeft één blok vóór zich nodig, waar het ophaalt, en één blok erna, waar het afzet. Nu zijn dat er ervoor: {inputs} en erna: {outputs}. Verbind het met één blok aan elke kant.
+	{other} has no place on the canvas, so the distances for {block} are not known. Place {other} on the canvas.	{other} heeft geen plek op het hoofdvlak, dus de afstanden voor {block} zijn niet bekend. Plaats {other} op het hoofdvlak.
+	The flow {flow} asks for no entities. Set its “Units” to 1 or more.	De stroom {flow} vraagt om geen entiteiten. Stel de ‘Eenheden’ ervan in op 1 of meer.
+	The “Units” on the flow {flow} is ignored, because only a Split or join block takes several entities from one flow. Remove it.	De ‘Eenheden’ op de stroom {flow} worden genegeerd, omdat alleen een blok Splitsen of samenvoegen meerdere entiteiten uit één stroom neemt. Verwijder ze.
+	No block makes batches, so {block} passes every entity through. Add a Batch block before it, or remove {block}.	Geen enkel blok maakt batches, dus {block} laat elke entiteit door. Voeg er een blok Batch vóór toe of verwijder {block}.
+	The stop condition names a block that does not exist. Choose a block that exists.	De stopvoorwaarde noemt een blok dat niet bestaat. Kies een bestaand blok.
+	Set the count of the stop condition for {block} to 1 or more.	Stel het aantal van de stopvoorwaarde voor {block} in op 1 of meer.
+	The stop condition waits for {block} to empty, but only a task can empty. Choose a task.	De stopvoorwaarde wacht tot {block} leeg is, maar alleen een taak kan leeg raken. Kies een taak.
+	The stop condition at {block} can be met before the warm-up ends. A run that stops during the warm-up has no statistics after it and is left out of the results. Shorten the warm-up, or stop later.	De stopvoorwaarde bij {block} kan worden gehaald vóór het einde van de opwarmperiode. Een uitvoering die tijdens de opwarmperiode stopt, heeft daarna geen statistieken en blijft buiten de resultaten. Maak de opwarmperiode korter of stop later.
+	Every run stopped before the warm-up ended, so no metric is reported. Shorten the warm-up, or stop later.	Elke uitvoering is gestopt vóór het einde van de opwarmperiode, dus er wordt geen metriek gerapporteerd. Maak de opwarmperiode korter of stop later.
+	{replications} of {of} runs stopped before the warm-up ended, so their statistics are left out of every metric. Shorten the warm-up, or stop later.	{replications} van {of} uitvoeringen zijn gestopt vóór het einde van de opwarmperiode, dus hun statistieken blijven buiten elke metriek. Maak de opwarmperiode korter of stop later.
+	{block} is offered {load}% of the work its units can do, so its waiting room grows without limit and the results describe no steady state. Add units, or shorten the service.	{block} krijgt {load}% van het werk aangeboden dat zijn eenheden aankunnen, dus de wachtruimte groeit onbeperkt en de resultaten beschrijven geen stabiele toestand. Voeg eenheden toe of verkort de service.
+	{block} is busy {utilisation}% of the time, and at the end at least {backlog} entities are still waiting against {left} that left. Work arrives faster than it is done, so the results describe no steady state. Add units, or shorten the service.	{block} is {utilisation}% van de tijd bezet, en aan het eind wachten er nog entiteiten (minstens: {backlog}) tegenover vertrokken entiteiten ({left}). Het werk komt sneller binnen dan het wordt gedaan, dus de resultaten beschrijven geen stabiele toestand. Voeg eenheden toe of verkort de service.
+	The experiment has one run, so its results cannot be told from chance. Set the number of runs to at least 2, and usually 10 or more.	Het experiment heeft één uitvoering, dus de resultaten zijn niet van toeval te onderscheiden. Stel het aantal uitvoeringen in op minstens 2, meestal 10 of meer.
+	{block} has a three-point estimate but no time to fit it to, so the estimate is ignored. Remove the estimate.	{block} heeft een driepuntsschatting maar geen tijd om die op af te stemmen, dus de schatting wordt genegeerd. Verwijder de schatting.
+	The three-point estimate of {block} cannot be fitted: every point must be a finite number. Correct the points.	De driepuntsschatting van {block} kan niet passend worden gemaakt: elk punt moet een eindig getal zijn. Corrigeer de punten.
+	The three-point estimate of {block} cannot be fitted: the points must be in order, minimum, most likely, then maximum or 95th percentile. Correct the points.	De driepuntsschatting van {block} kan niet passend worden gemaakt: de punten moeten in volgorde staan: minimum, meest waarschijnlijk, dan maximum of 95e percentiel. Corrigeer de punten.
+	The three-point estimate of {block} cannot be fitted: log-normal and Weibull estimates have no maximum. Give a 95th percentile instead.	De driepuntsschatting van {block} kan niet passend worden gemaakt: lognormale en Weibull-schattingen hebben geen maximum. Geef in plaats daarvan een 95e percentiel.
+	The time of {block} is no longer the one fitted from its three-point estimate. Fit it again, or remove the estimate.	De tijd van {block} is niet meer de tijd die uit zijn driepuntsschatting is afgeleid. Maak hem opnieuw passend of verwijder de schatting.
+	In “{field}” of {block}, the normal distribution draws below 0 more than 1 time in 100, and each such draw counts as 0, so the times are longer on average than its mean. Use a truncated normal with a minimum of 0, or a log-normal.	In ‘{field}’ van {block} geeft de normale verdeling vaker dan 1 keer op 100 een trekking onder 0, en elke zo’n trekking telt als 0, dus de tijden zijn gemiddeld langer dan haar gemiddelde. Gebruik een afgekapte normale verdeling met een minimum van 0, of een lognormale.
+	The entities of {block} do not add up: {came} came in or were inside at the start, but {went} left, were lost, gave up or are still inside.	De entiteiten van {block} sluiten niet aan. Binnengekomen of aan het begin aanwezig: {came}. Vertrokken, verloren, afgehaakt of nog aanwezig: {went}.
+	The entities of the model do not add up: {came} were created or inside at the start, but {went} reached Departures, left the model elsewhere or are still inside.	De entiteiten van het model sluiten niet aan. Gemaakt of aan het begin aanwezig: {came}. Bij Vertrekken aangekomen, elders uit het model vertrokken of nog aanwezig: {went}.
+	No entity left the model, of {came} created or inside at the start. Check that the routing leads to Departures and that the run is long enough for an entity to get through.	Geen enkele entiteit heeft het model verlaten (gemaakt of aan het begin aanwezig: {came}). Controleer of de routering naar Vertrekken leidt en of de uitvoering lang genoeg is om een entiteit erdoorheen te laten komen.
+	Little's law does not hold at {block}: the time-average number inside was {mean}, but the entities' own times inside give {from_stays}.	De wet van Little klopt niet bij {block}: het tijdgemiddelde aantal erin was {mean}, maar de eigen verblijftijden van de entiteiten geven {from_stays}.
+	The utilisation of {block} counts {busy} units busy on average, but {working} were processing or setting up: units idle, blocked, off shift, failed or restarting were counted busy.	De bezettingsgraad van {block} telt gemiddeld {busy} eenheden als bezet, maar {working} waren aan het bewerken of omstellen: eenheden die stilstonden, geblokkeerd waren, buiten werktijd waren, in storing waren of herstartten werden als bezet geteld.
+	The utilisation of {block} counts {busy} units busy on average, but {working} were processing or setting up: units at work were not counted busy.	De bezettingsgraad van {block} telt gemiddeld {busy} eenheden als bezet, maar {working} waren aan het bewerken of omstellen: eenheden aan het werk werden niet als bezet geteld.
+	The shares of the time of the units of {block} in each state add up to {total}, not 1.	De aandelen van de tijd van de eenheden van {block} in elke toestand tellen op tot {total} en niet tot 1.
+	“{metric}” of {block} is {value}, outside 0 to 1 (0% to 100%).	‘{metric}’ van {block} is {value}, buiten 0 tot 1 (0% tot 100%).
+	This was found in {replications} of {of} runs, and the furthest off is shown.	Dit is gevonden in {replications} van {of} uitvoeringen; de uitvoering met de grootste afwijking wordt getoond.
+	This points to a fault in StochCraft rather than in the model. Please report it with the model.	Dit wijst op een fout in StochCraft en niet in het model. Meld dit samen met het model.
+	Angle	Hoek
+	Failed	In storing
+	Off shift	Buiten werktijd
+	Processing	In bewerking
+	Radius	Straal
+	Rise	Stijging
+	Speed empty	Snelheid leeg
+	Speed loaded	Snelheid beladen
+	Turns	Windingen
+	Unload	Lossen
+	Lost	Verloren
+	An entity that leaves a waiting room before a unit takes it, because it has waited as long as it was willing to.	Een entiteit die een wachtruimte verlaat voordat een eenheid haar neemt, omdat ze zo lang heeft gewacht als ze bereid was.
+	An entity that does not join a waiting room at all, because the number already waiting put it off.	Een entiteit die helemaal niet in een wachtruimte aansluit, omdat het aantal dat al wacht haar afschrikte.
+	An entity that finds the waiting room full and takes the flow ticked “Turned away” instead of waiting.	Een entiteit die de wachtruimte vol aantreft en in plaats van te wachten de stroom neemt die als ‘Afgewezen’ is aangevinkt.
+	An entity that leaves the model without reaching Departures: it found the waiting room full with nowhere else to go, or a decision with no way out for it.	Een entiteit die het model verlaat zonder Vertrekken te bereiken: ze trof de wachtruimte vol aan zonder andere weg, of een beslissing zonder uitweg voor haar.
+	Gave up on {id}	Afgehaakt op {id}
+	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the flow ticked “Gave up”, or leaves the model.	Elke entiteit wacht hier hoogstens een tijd die bij aankomst willekeurig voor haar wordt getrokken, en haakt dan af: ze neemt de stroom die als ‘Afgehaakt’ is aangevinkt of verlaat het model.
+	Entities that do not join the waiting room take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Entiteiten die niet in de wachtruimte aansluiten, nemen meteen deze stroom (om het later opnieuw te proberen, bijvoorbeeld), in plaats van verloren te gaan; ze tellen hier als niet aangesloten.
+	The job stops at once: the entity goes back to the front of the waiting room for any server on shift, and the work done on it is wasted.	De bewerking stopt meteen: de entiteit gaat terug naar de kop van de wachtruimte voor een willekeurige server binnen werktijd, en het werk dat eraan gedaan is, is verspild.
+	The connection drops and the client tries again: the entity goes back to the front of the waiting room at once, and the work done on it is wasted.	De verbinding valt weg en de client probeert het opnieuw: de entiteit gaat meteen terug naar de kop van de wachtruimte, en het werk dat eraan gedaan is, is verspild.
+	Ticked, entities queue up at the end while the rest keep moving. Unticked, the whole belt stops when the entity at the end cannot leave.	Aangevinkt: entiteiten vormen een rij aan het einde terwijl de rest doorrijdt. Niet aangevinkt: de hele band stopt als de entiteit aan het einde niet weg kan.
+	Play run 1 step by step and see each block's waiting room on the diagram	Uitvoering 1 stap voor stap afspelen en de wachtruimte van elk blok in het diagram zien
+	Select a block to see its waiting room over time.	Selecteer een blok om de wachtruimte in de tijd te zien.
+	Entities on conveyors over time	Entiteiten op transportbanden in de tijd
+	Entities in the model over time	Entiteiten in het model in de tijd
+	How long each entity spends on the conveyors.	Hoe lang elke entiteit op de transportbanden doorbrengt.
+	No entity has left a conveyor yet	Nog geen entiteit heeft een transportband verlaten
+	Share of entities by time on a conveyor, in {unit}	Aandeel entiteiten naar tijd op een transportband, in {unit}
+	Time on conveyors: {n} entities between {lo} and {hi} {unit}	Tijd op transportbanden: {n} entiteiten tussen {lo} en {hi} {unit}
+	{from} to {to} {unit}: {share} of entities ({n})	{from} tot {to} {unit}: {share} van de entiteiten ({n})
+	How many entities are on the conveyors over time.	Hoeveel entiteiten er in de tijd op de transportbanden zijn.
+	How many entities are in the model over time.	Hoeveel entiteiten er in de tijd in het model zijn.
+	At {time} {unit}: {n} entities	Op {time} {unit}: {n} entiteiten
+@plural	Makes {n} independent run of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval across them.	Doet {n} onafhankelijke uitvoering van het model met startwaarde {seed}. De resultaten van elk blok bevatten de halve breedte van een 95%-betrouwbaarheidsinterval.|Doet {n} onafhankelijke uitvoeringen van het model met startwaarde {seed}. De resultaten van elk blok bevatten de halve breedte van een 95%-betrouwbaarheidsinterval.
 	Fonts	Lettertypen
 	The full list of third-party licences is in the file THIRD-PARTY-LICENSES.html, which comes with the download.	De volledige lijst met licenties van derden staat in het bestand THIRD-PARTY-LICENSES.html, dat bij de download zit.
 	Full list of third-party licences	Volledige lijst met licenties van derden

@@ -10,6 +10,7 @@ use std::cell::Cell;
 use std::sync::LazyLock;
 
 use craft_i18n::{Direction, I18n, Lang};
+use serde_json::Value;
 
 include!(concat!(env!("OUT_DIR"), "/craft_i18n.rs"));
 
@@ -78,6 +79,100 @@ pub fn tn(n: u64, one: &'static str, other: &'static str) -> String {
 /// [`tn`] with more `{name}` placeholders filled after the count.
 pub fn tnf(n: u64, one: &'static str, other: &'static str, args: &[(&str, &str)]) -> String {
     craft_i18n::fmt(&tn(n, one, other), args)
+}
+
+/// The templates the window words differently from the engine: the engine says "replication"
+/// (as the command line, JSON and files do), the window "run". [`engine_message`] has the
+/// window's English for each; every other template is the engine's
+/// ([`stochcraft_model::messages::TEMPLATES`]). (The window never shows `no_warmup_at` and
+/// `no_warmup_late`: the results say it in "How sure are these numbers?".)
+pub const WINDOW_TEMPLATE_KEYS: &[&str] = &[
+    "bad_experiment_replications",
+    "stop_with_warmup",
+    "ended_in_warmup_all",
+    "ended_in_warmup_some",
+    "one_replication",
+    "behaviour_runs",
+];
+
+/// One part of an engine message, from the catalog's wording for its `key`, filled with `args`.
+/// `None` for a key the window does not know.
+fn message_part(key: &str, args: &[(&str, &str)]) -> Option<String> {
+    Some(match key {
+        "bad_experiment_replications" => tf(
+            "Set the number of runs of the experiment to 1 or more.",
+            args,
+        ),
+        "stop_with_warmup" => tf(
+            "The stop condition at {block} can be met before the warm-up ends. A run that stops during the warm-up has no statistics after it and is left out of the results. Shorten the warm-up, or stop later.",
+            args,
+        ),
+        "ended_in_warmup_all" => tf(
+            "Every run stopped before the warm-up ended, so no metric is reported. Shorten the warm-up, or stop later.",
+            args,
+        ),
+        "ended_in_warmup_some" => tf(
+            "{replications} of {of} runs stopped before the warm-up ended, so their statistics are left out of every metric. Shorten the warm-up, or stop later.",
+            args,
+        ),
+        "one_replication" => tf(
+            "The experiment has one run, so its results cannot be told from chance. Set the number of runs to at least 2, and usually 10 or more.",
+            args,
+        ),
+        "behaviour_runs" => tf(
+            "This was found in {replications} of {of} runs, and the furthest off is shown.",
+            args,
+        ),
+        _ => tf(stochcraft_model::messages::template(key)?, args),
+    })
+}
+
+/// A diagnostic from the engine in the interface language, without its severity word (the
+/// window shows that as a label): each part of its message is built from the catalog's wording
+/// for the part's key, filled with the part's arguments (labels of the window, in the
+/// arguments named in [`stochcraft_model::messages::LABEL_ARGS`], translated first). A
+/// diagnostic without parts, or with a key the window does not know, shows the engine's English.
+pub fn engine_message(d: &Value) -> String {
+    let english = || {
+        let m = d["message"].as_str().unwrap_or("");
+        ["error: ", "warning: "]
+            .iter()
+            .find_map(|head| m.strip_prefix(head))
+            .unwrap_or(m)
+            .to_owned()
+    };
+    let Some(parts) = d["parts"].as_array().filter(|p| !p.is_empty()) else {
+        return english();
+    };
+    let mut out: Vec<String> = Vec::new();
+    for part in parts {
+        let args: Vec<(String, String)> = part["args"]
+            .as_object()
+            .into_iter()
+            .flatten()
+            .map(|(name, value)| {
+                let value = value.as_str().unwrap_or("");
+                let value = if stochcraft_model::messages::LABEL_ARGS.contains(&name.as_str()) {
+                    td(value)
+                } else {
+                    value.to_owned()
+                };
+                (name.clone(), value)
+            })
+            .collect();
+        let args: Vec<(&str, &str)> = args
+            .iter()
+            .map(|(name, value)| (name.as_str(), value.as_str()))
+            .collect();
+        match part["key"]
+            .as_str()
+            .and_then(|key| message_part(key, &args))
+        {
+            Some(text) => out.push(text),
+            None => return english(),
+        }
+    }
+    out.join(" ")
 }
 
 /// The languages to choose from, with their names in their own language, English first. Only

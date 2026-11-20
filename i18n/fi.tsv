@@ -21,8 +21,6 @@
 	A caller on hold: once a unit takes it, the entity stays.	Jonossa odottava soittaja: kun yksikkö on ottanut sen, entiteetti jää.
 	A client that times out: if its time runs out during service, it gives up then, and the unit finishes the job anyway (wasted work).	Aikakatkaisun saava asiakas: jos sen aika loppuu palvelun aikana, se luopuu silloin, ja yksikkö tekee työn silti loppuun (hukkatyö).
 	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	Uusi tiedosto sisältää vain mallin: se, mitä StochCraft ei ymmärrä tiedostossa {file}, jätetään pois.
-	Abandoned	Luopuneet
-	Abandoned on {id}	Luopuneet virrassa {id}
 	About StochCraft	Tietoja StochCraftista
 	About {app}	Tietoja: {app}
 	Accent	Korostus
@@ -162,7 +160,6 @@
 	Duration	Kesto
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Jokainen analyysi ajaa kokeen useita kertoja samalla siemenellä, joten erot johtuvat muutoksesta eivätkä sattumasta. Tämä voi kestää hetken.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Jokainen entiteetti ottaa näistä vaihtoehdoista ensimmäisen, joka voidaan täyttää heti, kaiken kerralla, ja palauttaa yksiköt poistuessaan tehtävästä.
-	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Jokainen entiteetti odottaa tässä enintään ajan, joka arvotaan sille sen saapuessa, ja luopuu sitten: se kulkee reittiä ulos, joka on merkitty ”Luopuneet”, tai poistuu mallista.
 	Each server (unit) is checked every so often, as a load balancer probes the servers behind it. One that fails, with too many waiting, is taken out of service for a restart, then comes back.	Jokainen palvelin (yksikkö) tarkistetaan aika ajoin, kuten kuormantasaaja tarkistaa takanaan olevat palvelimet. Tarkistuksessa epäonnistunut palvelin, jolla odottaa liian moni, poistetaan käytöstä uudelleenkäynnistystä varten, ja se palaa sitten.
 	Edit	Muokkaa
 	Edit themes…	Muokkaa teemoja…
@@ -412,7 +409,6 @@
 	Run	Suorita
 	Run cancelled	Suoritus peruutettu
 	Run experiment	Suorita koe
-	Play run 1 step by step and see each block's queue on the diagram	Suorita ajo 1 vaihe vaiheelta ja näe kunkin lohkon jono kaaviossa
 	Run the experiment ({shortcut})	Suorita koe ({shortcut})
 	Run the experiment again to see this result's spread.	Aja koe uudelleen nähdäksesi tämän tuloksen hajonnan.
 	Run the experiment at each value of one parameter, and compare a result.	Aja koe parametrin jokaisella arvolla ja vertaa tulosta.
@@ -433,7 +429,6 @@
 	Scrap ratio	Hylkyosuus
 	Seed	Satunnaislukusiemen
 	Select All	Valitse kaikki
-	Select a block to see its queue over time.	Valitse lohko nähdäksesi sen jonon ajan mittaan.
 	Sender waits during transfer	Lähettäjä odottaa siirron ajan
 	Separate the values with semicolons or spaces.	Erota arvot puolipisteillä tai välilyönneillä.
 	Sequential	Peräkkäiset
@@ -497,10 +492,8 @@
 	Text	Teksti
 	Text on accent	Korostuksen teksti
 	Text on header	Yläpalkin teksti
-	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	Yhteys katkeaa ja asiakas yrittää uudelleen: entiteetti palaa heti jonon kärkeen, ja siihen tehty työ hukataan.
 	The entity waits on its server and the job carries on with what was left once the server is back.	Entiteetti odottaa palvelimellaan, ja työ jatkuu jäljellä olevasta, kun palvelin on palannut.
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more runs would narrow it.	Väli ulottuu alle tavoiteosuuden {share}, joten osuuden saavuttamista ei ole osoitettu 95 %:n luottamuksella; useampi ajo kaventaisi sitä.
-	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	Työ keskeytyy heti: entiteetti palaa jonon kärkeen odottamaan mitä tahansa vuorossa olevaa palvelinta, ja siihen tehty työ hukataan.
 	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	Työ keskeytyy heti; entiteetti odottaa palvelimellaan, ja työ jatkuu jäljellä olevasta, kun tuo palvelin on taas vuorossa.
 	The last task with a resource it finished at	Viimeisin resurssia käyttävä tehtävä, jonka osa läpäisi
 	The mean time to the stop condition is over the runs that met it only; the others ran to their time limit.	Keskimääräinen aika pysäytysehtoon lasketaan vain ajoista, jotka saavuttivat sen; muut ajettiin aikarajaansa asti.
@@ -690,7 +683,6 @@ unit	yr	v
 	Balked on {id}	Eivät liittyneet jonoon virrassa {id}
 	Balking	Jonoon liittymättä jättäminen
 	Count those in service	Laske mukaan myös palveltavat
-	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Entiteetit, jotka eivät liity jonoon, kulkevat heti tätä virtaa (vaikkapa yrittääkseen myöhemmin uudelleen) sen sijaan, että ne menetettäisiin; ne lasketaan täällä jonoon liittymättömiksi.
 	Joins with probability	Liittyy jonoon todennäköisyydellä
 	Number waiting	Odottavien määrä
 	Share balked	Jonoon liittymättömien osuus
@@ -908,7 +900,6 @@ unit	yr	v
 @plural	Finished {n} run|Finished {n} runs	{n} ajo valmistui|{n} ajoa valmistui
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	Avattiin {file} ({n} varoitus)|Avattiin {file} ({n} varoitusta)
 @plural	Removed {n} block|Removed {n} blocks	Poistettiin {n} lohko|Poistettiin {n} lohkoa
-@plural	Makes {n} independent run of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Suorittaa {n} mallin riippumattoman ajon siemenellä {seed}. Kunkin elementin tulokset sisältävät 95%:n luottamusvälin puolileveyden.|Suorittaa {n} mallin riippumatonta ajoa siemenellä {seed}. Kunkin elementin tulokset sisältävät 95%:n luottamusvälin puolileveyden.
 @plural	The stop condition was met in {met} of {n} run, after {time} {unit} on average.|The stop condition was met in {met} of {n} runs, after {time} {unit} on average.	Pysäytysehto saavutettiin {met}/{n} ajossa, keskimäärin {time} {unit} jälkeen.|Pysäytysehto saavutettiin {met}/{n} ajossa, keskimäärin {time} {unit} jälkeen.
 @plural	{done} of {n} run finished|{done} of {n} runs finished	{done} / {n} ajo valmistui|{done} / {n} ajoa valmistui
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} run|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} runs	{name}: {mean}{unit}\n95%:n väli {low}–{high}{unit}\n{n} ajon perusteella|{name}: {mean}{unit}\n95%:n väli {low}–{high}{unit}\n{n} ajon perusteella
@@ -938,7 +929,6 @@ unit	yr	v
 	kilometres	kilometriä
 	inches	tuumaa
 	feet	jalkaa
-	Ticked, items queue up at the end while the rest keep moving. Unticked, the whole belt stops when the item at the end cannot leave.	Valittuna kappaleet jonottavat päässä, kun muut jatkavat liikettä. Ilman valintaa koko kuljetin pysähtyy, kun päässä oleva kappale ei pääse pois.
 	A belt that carries entities from one end to the other. It has a length and a speed, and each entity takes a pitch of belt: its item length plus the gap kept free after it. So it holds at most length ÷ pitch entities and carries at most speed ÷ pitch per time unit. Accumulating: entities queue up at the end while the rest keep moving; otherwise the whole belt stops.	Kuljetin, joka kantaa entiteettejä päästä päähän. Sillä on pituus ja nopeus, ja jokainen entiteetti vie kuljettimelta jaon: kappaleensa pituuden ja sen perään vapaaksi jätettävän välin. Kuljettimelle mahtuu siis enintään pituus ÷ jako entiteettiä, ja se kuljettaa aikayksikössä enintään nopeus ÷ jako. Kasautuva: entiteetit jonottavat päässä, kun muut jatkavat liikettä; muuten koko kuljetin pysähtyy.
 	Station	Asema
 	Kind	Tyyppi
@@ -992,19 +982,165 @@ unit	yr	v
 	Time on conveyors	Aika kuljettimilla
 	No conveyors in this model	Tässä mallissa ei ole kuljettimia
 	Fills in when the run ends	Täyttyy, kun ajo päättyy
-	How long each item spends on the conveyors.	Kuinka kauan kukin kappale on kuljettimilla.
-	No item has left a conveyor yet	Yksikään kappale ei ole vielä poistunut kuljettimelta
-	Share of items by time on a conveyor, in {unit}	Kappaleiden osuus ajan mukaan kuljettimella, yksikkö {unit}
-	Time on conveyors: {n} items between {lo} and {hi} {unit}	Aika kuljettimilla: {n} kappaletta välillä {lo}–{hi} {unit}
-	{from} to {to} {unit}: {share} of items ({n})	{from}–{to} {unit}: {share} kappaleista ({n})
-	Items on conveyors over time	Kappaleet kuljettimilla ajan mukaan
-	Items in the model over time	Kappaleet mallissa ajan mukaan
-	How many items are on the conveyors over time.	Kuinka monta kappaletta on kuljettimilla ajan mukaan.
-	How many items are in the model over time.	Kuinka monta kappaletta on mallissa ajan mukaan.
 	Nothing was recorded over time in these results	Näihin tuloksiin ei tallennettu mitään ajan mukaan
-	At {time} {unit}: {n} items	Hetkellä {time} {unit}: {n} kappaletta
 	Run the model to fill the dashboard	Aja malli täyttääksesi koontinäytön
 	The resource and conveyor charts show the last run until this one ends	Resurssi- ja kuljetinkaaviot näyttävät viimeisen ajon, kunnes tämä päättyy
+# Validation messages, new labels and word changes (issue #145)
+	The id “{id}” is not valid. Start an id with a letter or an underscore, then use only letters, digits, dots, hyphens and underscores.	Tunnus ”{id}” ei kelpaa. Aloita tunnus kirjaimella tai alaviivalla ja käytä sen jälkeen vain kirjaimia, numeroita, pisteitä, yhdysmerkkejä ja alaviivoja.
+	More than one block, flow, pool or calendar has the id “{id}”. Give each its own id.	Useammalla kuin yhdellä lohkolla, virralla, poolilla tai kalenterilla on tunnus ”{id}”. Anna kullekin oma tunnus.
+	The flow {flow} uses a block that does not exist. Remove the flow, or connect it to a block that exists.	Virta {flow} käyttää lohkoa, jota ei ole olemassa. Poista virta tai yhdistä se olemassa olevaan lohkoon.
+	The flow {flow} leads into an Arrivals block, which takes no input. Remove the flow, or send it to another block.	Virta {flow} johtaa lohkoon Saapumiset, joka ei ota vastaan syötettä. Poista virta tai ohjaa se toiseen lohkoon.
+	The flow {flow} leaves a Departures block, which has no output. Remove the flow, or start it from another block.	Virta {flow} lähtee lohkosta Poistumiset, jolla ei ole lähtöä. Poista virta tai aloita se toisesta lohkosta.
+	The flow {flow} leads from a block back to itself. Remove it, or send it to another block.	Virta {flow} johtaa lohkosta takaisin samaan lohkoon. Poista se tai ohjaa se toiseen lohkoon.
+	{block} has nowhere to send entities. Add a flow from it to the next block.	Lohko {block} ei lähetä entiteettejä minnekään. Lisää virta siitä seuraavaan lohkoon.
+	{block} has {count} flows out, and only a Decision or a Split or join block can send entities down several. Remove the extra flows, or add a Decision block.	Lohkosta {block} lähtevien virtojen määrä: {count}. Vain lohko Päätös tai Haaroita tai yhdistä voi lähettää entiteettejä usealle virralle. Poista ylimääräiset virrat tai lisää lohko Päätös.
+	In “{field}” of {block}, set “{param}” to a finite number.	Aseta lohkon {block} kentässä ”{field}” parametri ”{param}” äärelliseksi luvuksi.
+	In “{field}” of {block}, set “{param}” to a number above 0.	Aseta lohkon {block} kentässä ”{field}” parametri ”{param}” luvuksi, joka on suurempi kuin 0.
+	In “{field}” of {block}, set “{param}” to 0 or more.	Aseta lohkon {block} kentässä ”{field}” parametri ”{param}” luvuksi, joka on 0 tai suurempi.
+	In “{field}” of {block}, set “{param}” to 1 or more.	Aseta lohkon {block} kentässä ”{field}” parametri ”{param}” luvuksi, joka on 1 tai suurempi.
+	In “{field}” of {block}, set “{param}” to a number from 0 to 1.	Aseta lohkon {block} kentässä ”{field}” parametri ”{param}” luvuksi väliltä 0–1.
+	In “{field}” of {block}, set “Minimum” below “Maximum”, and any “Most likely” value between them.	Aseta lohkon {block} kentässä ”{field}” ”Minimi” pienemmäksi kuin ”Maksimi” ja mahdollinen ”Todennäköisin” arvo niiden väliin.
+	In “{field}” of {block}, add data points whose probabilities add up to more than 0.	Lisää lohkon {block} kenttään ”{field} datapisteitä, joiden todennäköisyydet summautuvat yli 0:n.
+	{block} would never have a unit to work with. Give it at least 1 unit.	Lohkolla {block} ei olisi koskaan yksikköä, jonka kanssa työskennellä. Anna sille vähintään 1 yksikkö.
+	{block} would make entities without end, because its “Time between arrivals” is always 0. Give it a time above 0, or set an “Arrival limit”.	Lohko {block} tekisi entiteettejä loputtomasti, koska sen ”Saapumisten välinen aika” on aina 0. Anna sille aika, joka on yli 0, tai aseta ”Saapumisraja”.
+	The model has no Arrivals block, so nothing will happen. Add an Arrivals block.	Mallissa ei ole lohkoa Saapumiset, joten mitään ei tapahdu. Lisää lohko Saapumiset.
+	The model has no Departures block, so no time in system is measured. Add a Departures block.	Mallissa ei ole lohkoa Poistumiset, joten järjestelmässä vietettyä aikaa ei mitata. Lisää lohko Poistumiset.
+	No entity can reach {block} from an Arrivals block. Connect it to a block that entities pass through.	Lohkoon {block} ei pääse yhtään entiteettiä lohkosta Saapumiset. Yhdistä se lohkoon, jonka kautta entiteetit kulkevat.
+	Entities in {block} can never reach a Departures block. Connect it on towards Departures.	Lohkon {block} entiteetit eivät koskaan pääse lohkoon Poistumiset. Yhdistä se eteenpäin kohti lohkoa Poistumiset.
+	Set the “{state}” power of {block} to a number of kilowatts, 0 or more.	Aseta lohkon {block} teho tilassa ”{state}” kilowatteina, 0 tai enemmän.
+	Set the warm-up of the experiment to 0 or more.	Aseta kokeen alkulämmittely arvoon 0 tai suuremmaksi.
+	Set the duration of the experiment to more than 0.	Aseta kokeen kesto suuremmaksi kuin 0.
+	Set the number of runs of the experiment to 1 or more.	Aseta kokeen ajojen määrä arvoon 1 tai suuremmaksi.
+	Set the layout scale (length units per drawing unit) to a finite number above 0.	Aseta asettelun mittakaava (pituusyksikköä piirtoyksikköä kohti) äärelliseksi luvuksi, joka on suurempi kuin 0.
+	A property of {block} has no name. Give it a name, or remove it.	Lohkon {block} ominaisuudella ei ole nimeä. Anna sille nimi tai poista se.
+	{block} sets the property “{name}” twice. Keep one of them.	Lohko {block} asettaa ominaisuuden ”{name}” kahdesti. Säilytä toinen niistä.
+	The property “{name}” of {block} needs shares that are not negative and add up to more than 0. Change the shares.	Ominaisuuden ”{name}” osuuksien lohkossa {block} on oltava ei-negatiivisia ja summattava yli 0:n. Muuta osuuksia.
+	The property “{name}” has the type “{type2}” on {block} but “{type}” on another block. Give it one type everywhere.	Ominaisuuden ”{name}” tyyppi on lohkossa {block} ”{type2}”, mutta toisessa lohkossa ”{type}”. Anna sille sama tyyppi kaikkialla.
+	The value of the property “{name}” on {block} does not fit its type, “{type}”. Change the value or the type.	Ominaisuuden ”{name}” arvo lohkossa {block} ei sovi sen tyyppiin ”{type}”. Muuta arvoa tai tyyppiä.
+	The expression for the property “{name}” on {block} cannot be used: {error}. Correct “{expression}”.	Ominaisuuden ”{name}” lauseketta lohkossa {block} ei voi käyttää: {error}. Korjaa ”{expression}”.
+	{block} reads the property “{name}”, which no block sets, so it would read as empty. Set it on an earlier block, or correct the name.	Lohko {block} lukee ominaisuuden ”{name}”, jota mikään lohko ei aseta, joten se luettaisiin tyhjänä. Aseta se aiemmassa lohkossa tai korjaa nimi.
+	The setup of {block} has times for particular changes but no property to watch. Choose a property under “Only when this property changes”.	Lohkon {block} asetuksessa on aikoja tietyille muutoksille, mutta ei seurattavaa ominaisuutta. Valitse ominaisuus kohdasta ”Vain kun tämä ominaisuus muuttuu”.
+	{block} has times for particular values but no property to read them from. Choose a property under “Service time by property”.	Lohkolla {block} on aikoja tietyille arvoille, mutta ei ominaisuutta, josta ne luetaan. Valitse ominaisuus kohdasta ”Palveluaika ominaisuuden mukaan”.
+	{block} has two times for the value “{value}”. Keep one.	Lohkolla {block} on kaksi aikaa arvolle ”{value}”. Säilytä toinen.
+	Set the time of {block} for the value “{value}” to a mean of 0 or more.	Aseta lohkon {block} aika arvolle ”{value}” keskiarvoksi, joka on 0 tai suurempi.
+	The scrap at {block} counts against {other}, which is not a task with a resource. Choose a task with a resource.	Hylky lohkossa {block} lasketaan lohkolle {other}, joka ei ole resurssia käyttävä tehtävä. Valitse resurssia käyttävä tehtävä.
+	Set “Planned run time per item” of {block} to a mean above 0.	Aseta lohkon {block} ”Suunniteltu käyntiaika osaa kohden” keskiarvoksi, joka on suurempi kuin 0.
+	Set “Time before giving up” of {block} to a mean of 0 or more.	Aseta lohkon {block} ”Aika ennen luopumista” keskiarvoksi, joka on 0 tai suurempi.
+	The flow {flow} is ticked “Gave up”, but only a task with a resource and a “Time before giving up” sends entities that give up. Untick it, or set a “Time before giving up” on {block}.	Virrassa {flow} on valittu ”Luopui”, mutta vain resurssia käyttävä tehtävä, jolla on ”Aika ennen luopumista”, lähettää luopuvia entiteettejä. Poista valinta tai aseta lohkolle {block} ”Aika ennen luopumista”.
+	{count} flows out of {block} are ticked “{way}”; at most one can be. Untick all but one.	Lohkosta {block} lähtevien virtojen määrä, joille on valittu ”{way}”: {count}; niitä voi olla enintään yksi. Poista valinta kaikista paitsi yhdestä.
+	The flow {flow} is ticked “Turned away”, but only a task with a resource and a limited waiting room turns entities away. Untick it, or limit the waiting room of {block}.	Virrassa {flow} on valittu ”Käännytetyt”, mutta vain resurssia käyttävä tehtävä, jolla on rajoitettu odotustila, käännyttää entiteettejä pois. Poista valinta tai rajoita lohkon {block} odotustilaa.
+	The flow {flow} is ticked both “Gave up” and “Turned away”. Keep one of them.	Virrassa {flow} on valittu sekä ”Luopui” että ”Käännytetyt”. Säilytä toinen niistä.
+	Set every chance of joining in the balking table of {block} to a number from 0 to 1.	Aseta lohkon {block} jonoon liittymättömyyden taulukossa jokainen liittymistodennäköisyys luvuksi väliltä 0–1.
+	Put the rows of the balking table of {block} in increasing order of “Number waiting”.	Järjestä lohkon {block} jonoon liittymättömyyden taulukon rivit kohdan ”Odottavien määrä” mukaan kasvavaan järjestykseen.
+	The flow {flow} is ticked “Balked”, but only a task with a resource and balking sends entities that balk. Untick it, or turn on balking for {block}.	Virrassa {flow} on valittu ”Eivät liittyneet jonoon”, mutta vain resurssia käyttävä tehtävä, jolla on jonoon liittymättömyys käytössä, lähettää tällaisia entiteettejä. Poista valinta tai ota jonoon liittymättömyys käyttöön lohkolle {block}.
+	The flow {flow} is ticked “Balked” and also “Gave up” or “Turned away”. Keep one of them.	Virrassa {flow} on valittu ”Eivät liittyneet jonoon” sekä ”Luopui” tai ”Käännytetyt”. Säilytä yksi niistä.
+	The waiting room of {block} is set by calendar or per working server, but has no number of places, so it is unlimited. Give it a number of places, or make it fixed.	Lohkon {block} odotustila määräytyy kalenterin tai työssä olevien palvelinten mukaan, mutta sillä ei ole paikkamäärää, joten se on rajaton. Anna sille paikkamäärä tai tee siitä kiinteä.
+	The waiting room of {block} is set by calendar, but no calendar has a value. Add a value for a calendar, or make the waiting room fixed.	Lohkon {block} odotustila määräytyy kalenterin mukaan, mutta yhdelläkään kalenterilla ei ole arvoa. Lisää kalenterille arvo tai tee odotustilasta kiinteä.
+	Set “Fails above, waiting per working server” of {block} to a number of 0 or more.	Aseta lohkon {block} ”Epäonnistuu yli, odottavia käytössä olevaa palvelinta kohti” arvoon 0 tai suuremmaksi.
+	Set “Check every” of {block} to a mean above 0.	Aseta lohkon {block} ”Tarkistusväli” keskiarvoksi, joka on suurempi kuin 0.
+	Set the demand of {block} to a number of parts above 0.	Aseta lohkon {block} kysyntä osien määräksi, joka on suurempi kuin 0.
+	The demand of {block} is per shift but names no calendar to say when the shifts are. Choose a calendar.	Lohkon {block} kysyntä on vuorokohtainen, mutta kalenteria, joka kertoisi vuorojen ajat, ei ole nimetty. Valitse kalenteri.
+	The demand of {block} names a calendar that does not exist. Choose a calendar that exists.	Lohkon {block} kysyntä viittaa kalenteriin, jota ei ole olemassa. Valitse olemassa oleva kalenteri.
+	The probability {value} on the flow {flow} is not from 0 to 1. Enter a probability from 0 to 1.	Virran {flow} todennäköisyys {value} ei ole väliltä 0–1. Anna todennäköisyys väliltä 0–1.
+	The probabilities of the flows out of {block} add up to {sum}, not 1, so they are used in proportion. Change them to add up to 1 if that is not what you want.	Lohkosta {block} lähtevien virtojen todennäköisyyksien summa on {sum}, ei 1, joten niitä käytetään suhteessa. Muuta ne summaamaan 1, jos et halua näin.
+	The condition on the flow {flow} cannot be used: {error}. Correct “{expression}”.	Virran {flow} ehtoa ei voi käyttää: {error}. Korjaa ”{expression}”.
+	The condition on the flow {flow} is ignored, because only flows out of a Decision block choose a route. Remove the condition.	Virran {flow} ehto ohitetaan, koska vain lohkosta Päätös lähtevät virrat valitsevat reitin. Poista ehto.
+	The probability on the flow {flow} is ignored, because only flows out of a Decision block choose a route. Remove the probability.	Virran {flow} todennäköisyys ohitetaan, koska vain lohkosta Päätös lähtevät virrat valitsevat reitin. Poista todennäköisyys.
+	The condition on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the condition.	Virran {flow} ehto ohitetaan, koska Päätös lähettää entiteetit lyhimpään jonoon. Poista ehto.
+	The probability on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the probability.	Virran {flow} todennäköisyys ohitetaan, koska Päätös lähettää entiteetit lyhimpään jonoon. Poista todennäköisyys.
+	The default on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the default.	Virran {flow} oletus ohitetaan, koska Päätös lähettää entiteetit lyhimpään jonoon. Poista oletus.
+	The probability on the flow {flow} is ignored, because the Decision routes by condition. Remove the probability.	Virran {flow} todennäköisyys ohitetaan, koska Päätös reitittää ehdon mukaan. Poista todennäköisyys.
+	The default flow of {block} is not one of its own flows out. Choose one of the flows out of {block} as the default.	Lohkon {block} oletusvirta ei ole yksi sen omista lähtevistä virroista. Valitse oletukseksi jokin lohkosta {block} lähtevistä virroista.
+	{block} routes by condition but has no default flow, so an entity for which no condition holds leaves the model here. Choose a default flow.	Lohko {block} reitittää ehdon mukaan, mutta sillä ei ole oletusvirtaa, joten entiteetti, jolle mikään ehto ei päde, poistuu mallista tässä. Valitse oletusvirta.
+	{block} diverts entities but has no default flow, so an entity whose way is full has nowhere else to go. Choose a default flow.	Lohko {block} ohjaa entiteettejä sivuun, mutta sillä ei ole oletusvirtaa, joten entiteetillä, jonka reitti on täynnä, ei ole muuta paikkaa minne mennä. Valitse oletusvirta.
+	{block} waits for an entity on the flow {flow}, which none can reach, so it never sends one on. Remove that flow, or connect it to a block that entities reach.	Lohko {block} odottaa entiteettiä virrassa {flow}, jonne yksikään ei pääse, joten se ei koskaan lähetä mitään eteenpäin. Poista virta tai yhdistä se lohkoon, jonne entiteetit pääsevät.
+	{block} has a limited waiting room and is fed through {gateway}. While it is full, {gateway} holds up every entity behind it, and they wait before it without limit. Remove the gateway before {block}, or remove the limit.	Lohkolla {block} on rajoitettu odotustila, ja sille syötetään portin {gateway} kautta. Kun odotustila on täynnä, portti {gateway} pysäyttää jokaisen sen takana olevan entiteetin, ja ne odottavat sen edessä rajatta. Poista portti ennen lohkoa {block} tai poista raja.
+	The limited waiting rooms of {loop} feed each other in a loop, so when all of them are full the loop deadlocks. Remove the limit on one of them, or break the loop.	Lohkojen rajoitetut odotustilat syöttävät toisiaan silmukassa ({loop}), joten kun ne kaikki ovat täynnä, silmukka lukkiutuu. Poista raja yhdeltä niistä tai katkaise silmukka.
+	The pool {block} has no units. Give it at least 1 unit.	Poolissa {block} ei ole yksiköitä. Anna sille vähintään 1 yksikkö.
+	{block} names no resource it needs. Add one under “Needs”.	Lohko {block} ei nimeä yhtään tarvitsemaansa resurssia. Lisää sellainen kohtaan ”Tarpeet”.
+	{block} needs a resource pool that does not exist. Choose a pool that exists.	Lohko {block} tarvitsee resurssipoolin, jota ei ole olemassa. Valitse olemassa oleva pooli.
+	{block} needs units with the roles {roles}, which no pool has. Give a pool those roles, or change what {block} needs.	Lohko {block} tarvitsee yksiköitä, joilla on roolit {roles}, mutta yhdelläkään poolilla ei ole niitä. Anna poolille nämä roolit tai muuta sitä, mitä lohko {block} tarvitsee.
+	{block} needs {needed} units at once, but at most {available} exist, so this can never be met. Ask for fewer units, or add units to the pool.	Lohko {block} tarvitsee kerralla yksiköitä: {needed}. Niitä on enintään {available}, joten tarvetta ei voi koskaan täyttää. Pyydä vähemmän yksiköitä tai lisää yksiköitä pooliin.
+	Set the priority of {block} to a finite number, not {value}.	Aseta lohkon {block} prioriteetti äärelliseksi luvuksi, ei arvoksi {value}.
+	No task uses the pool {block}. Add it to a task's needs, or remove the pool.	Yksikään tehtävä ei käytä poolia {block}. Lisää se tehtävän tarpeisiin tai poista pooli.
+	{block} has a value for a calendar that does not exist. Choose a calendar that exists, or remove the value.	Lohkolla {block} on arvo kalenterille, jota ei ole olemassa. Valitse olemassa oleva kalenteri tai poista arvo.
+	The calendar {block} has no entries, so it is never active. Add an entry.	Kalenterissa {block} ei ole merkintöjä, joten se ei ole koskaan aktiivinen. Lisää merkintä.
+	{block} allows no arrivals outside the calendars but names no calendar, so it never creates entities. Add arrivals by calendar, or allow arrivals outside calendars.	Lohko {block} ei salli saapumisia kalentereiden ulkopuolella mutta ei nimeä kalenteria, joten se ei koskaan luo entiteettejä. Lisää saapumiset kalenterin mukaan tai salli saapumiset kalentereiden ulkopuolella.
+	Set the batch size of {block} to 1 or more.	Aseta lohkon {block} erän koko arvoon 1 tai suuremmaksi.
+	Set “{field}” of the conveyor {block} to a finite number above 0.	Aseta kuljettimen {block} ”{field}” äärelliseksi luvuksi, joka on suurempi kuin 0.
+	Set “{field}” of the conveyor {block} to a finite number of 0 or more.	Aseta kuljettimen {block} ”{field}” äärelliseksi luvuksi, joka on 0 tai suurempi.
+	Set “{field}” of the conveyor {block} to a finite number other than 0.	Aseta kuljettimen {block} ”{field}” äärelliseksi luvuksi, joka ei ole 0.
+	The conveyor {block} is {length} long but each entity takes {pitch} (item length plus gap), so not even one fits. Lengthen the conveyor, or shorten the item or the gap.	Kuljettimen {block} pituus on {length}, mutta jokainen entiteetti vie {pitch} (kappaleen pituus plus väli), joten yksikään ei mahdu. Pidennä kuljetinta tai lyhennä kappaletta tai väliä.
+	The drawn path of the conveyor {block} is {path_length} long, but its “Length” is {length}, so the drawing and the run disagree. Make “Length” match the path, or change the shape.	Kuljettimen {block} piirretyn reitin pituus on {path_length}, mutta sen ”Pituus” on {length}, joten piirros ja ajo ovat ristiriidassa. Aseta ”Pituus” vastaamaan reittiä tai muuta muotoa.
+	{block} is a transport, which StochCraft does not simulate yet. Remove it to run the model.	Lohko {block} on kuljetus, jota StochCraft ei vielä simuloi. Poista se ajaaksesi mallin.
+	The pool {pool} of the transport {block} does not exist. Choose a pool that exists.	Kuljetuksen {block} pooli {pool} ei ole olemassa. Valitse olemassa oleva pooli.
+	The pool {pool} of the transport {block} is not mobile. Give the pool speeds and a home.	Kuljetuksen {block} pooli {pool} ei ole liikkuva. Anna poolille nopeudet ja koti.
+	Set “{field}” of the pool {block} to a finite number above 0.	Aseta poolin {block} ”{field}” äärelliseksi luvuksi, joka on suurempi kuin 0.
+	The home of the pool {block} is not a block of the model. Choose a block as its home.	Poolin {block} koti ei ole mallin lohko. Valitse koti lohkoista.
+	The transport {block} needs one block before it, where it picks up, and one after it, where it drops off, but has {inputs} before and {outputs} after. Connect it to one block on each side.	Kuljetus {block} tarvitsee yhden lohkon ennen itseään, josta se noutaa, ja yhden sen jälkeen, johon se jättää. Lohkoja ennen: {inputs}, lohkoja jälkeen: {outputs}. Yhdistä se yhteen lohkoon kummallakin puolella.
+	{other} has no place on the canvas, so the distances for {block} are not known. Place {other} on the canvas.	Lohkolla {other} ei ole paikkaa pääpinnalla, joten lohkon {block} etäisyyksiä ei tiedetä. Aseta lohko {other} pääpinnalle.
+	The flow {flow} asks for no entities. Set its “Units” to 1 or more.	Virta {flow} ei pyydä yhtään entiteettiä. Aseta sen ”Yksiköt” arvoon 1 tai suuremmaksi.
+	The “Units” on the flow {flow} is ignored, because only a Split or join block takes several entities from one flow. Remove it.	Virran {flow} ”Yksiköt” ohitetaan, koska vain lohko Haaroita tai yhdistä ottaa useita entiteettejä yhdeltä virralta. Poista se.
+	No block makes batches, so {block} passes every entity through. Add a Batch block before it, or remove {block}.	Mikään lohko ei muodosta eriä, joten lohko {block} päästää jokaisen entiteetin läpi. Lisää lohko Erä sen eteen tai poista lohko {block}.
+	The stop condition names a block that does not exist. Choose a block that exists.	Pysäytysehto viittaa lohkoon, jota ei ole olemassa. Valitse olemassa oleva lohko.
+	Set the count of the stop condition for {block} to 1 or more.	Aseta lohkon {block} pysäytysehdon lukumäärä arvoon 1 tai suuremmaksi.
+	The stop condition waits for {block} to empty, but only a task can empty. Choose a task.	Pysäytysehto odottaa lohkon {block} tyhjenemistä, mutta vain tehtävä voi tyhjentyä. Valitse tehtävä.
+	The stop condition at {block} can be met before the warm-up ends. A run that stops during the warm-up has no statistics after it and is left out of the results. Shorten the warm-up, or stop later.	Lohkon {block} pysäytysehto voi täyttyä ennen alkulämmittelyn päättymistä. Ajo, joka pysähtyy alkulämmittelyn aikana, ei jätä tilastoja sen jälkeen ja jää pois tuloksista. Lyhennä alkulämmittelyä tai pysäytä myöhemmin.
+	Every run stopped before the warm-up ended, so no metric is reported. Shorten the warm-up, or stop later.	Jokainen ajo pysähtyi ennen alkulämmittelyn päättymistä, joten mitään mittaria ei raportoida. Lyhennä alkulämmittelyä tai pysäytä myöhemmin.
+	{replications} of {of} runs stopped before the warm-up ended, so their statistics are left out of every metric. Shorten the warm-up, or stop later.	Ennen alkulämmittelyn päättymistä pysähtyneiden ajojen määrä: {replications} / {of}. Niiden tilastot jäävät pois jokaisesta mittarista. Lyhennä alkulämmittelyä tai pysäytä myöhemmin.
+	{block} is offered {load}% of the work its units can do, so its waiting room grows without limit and the results describe no steady state. Add units, or shorten the service.	Lohkolle {block} tarjotaan {load} % työstä, jonka sen yksiköt pystyvät tekemään, joten sen odotustila kasvaa rajatta eivätkä tulokset kuvaa vakaata tilaa. Lisää yksiköitä tai lyhennä palvelua.
+	{block} is busy {utilisation}% of the time, and at the end at least {backlog} entities are still waiting against {left} that left. Work arrives faster than it is done, so the results describe no steady state. Add units, or shorten the service.	Lohko {block} on varattuna {utilisation} % ajasta. Lopussa odottaa yhä vähintään {backlog} entiteettiä, ja poistuneita on {left}. Työtä tulee nopeammin kuin sitä tehdään, joten tulokset eivät kuvaa vakaata tilaa. Lisää yksiköitä tai lyhennä palvelua.
+	The experiment has one run, so its results cannot be told from chance. Set the number of runs to at least 2, and usually 10 or more.	Kokeessa on yksi ajo, joten sen tuloksia ei voi erottaa sattumasta. Aseta ajojen määräksi vähintään 2, yleensä 10 tai enemmän.
+	{block} has a three-point estimate but no time to fit it to, so the estimate is ignored. Remove the estimate.	Lohkolla {block} on kolmen pisteen arvio, mutta ei aikaa, johon se sovitettaisiin, joten arvio ohitetaan. Poista arvio.
+	The three-point estimate of {block} cannot be fitted: every point must be a finite number. Correct the points.	Lohkon {block} kolmen pisteen arviota ei voi sovittaa: jokaisen pisteen on oltava äärellinen luku. Korjaa pisteet.
+	The three-point estimate of {block} cannot be fitted: the points must be in order, minimum, most likely, then maximum or 95th percentile. Correct the points.	Lohkon {block} kolmen pisteen arviota ei voi sovittaa: pisteiden on oltava järjestyksessä: minimi, todennäköisin, sitten maksimi tai 95. persentiili. Korjaa pisteet.
+	The three-point estimate of {block} cannot be fitted: log-normal and Weibull estimates have no maximum. Give a 95th percentile instead.	Lohkon {block} kolmen pisteen arviota ei voi sovittaa: lognormaalijakauman ja Weibullin arvioilla ei ole maksimia. Anna sen sijaan 95. persentiili.
+	The time of {block} is no longer the one fitted from its three-point estimate. Fit it again, or remove the estimate.	Lohkon {block} aika ei ole enää se, joka sovitettiin sen kolmen pisteen arviosta. Sovita se uudelleen tai poista arvio.
+	In “{field}” of {block}, the normal distribution draws below 0 more than 1 time in 100, and each such draw counts as 0, so the times are longer on average than its mean. Use a truncated normal with a minimum of 0, or a log-normal.	Lohkon {block} kentässä ”{field}” normaalijakauma antaa arvon alle 0 useammin kuin kerran sadasta, ja jokainen tällainen arvo lasketaan nollaksi, joten ajat ovat keskimäärin pidempiä kuin sen keskiarvo. Käytä katkaistua normaalijakaumaa, jonka minimi on 0, tai lognormaalijakaumaa.
+	The entities of {block} do not add up: {came} came in or were inside at the start, but {went} left, were lost, gave up or are still inside.	Lohkon {block} entiteetit eivät täsmää: sisään tuli tai alussa sisällä oli {came}, mutta poistui, menetettiin, luopui tai on yhä sisällä {went}.
+	The entities of the model do not add up: {came} were created or inside at the start, but {went} reached Departures, left the model elsewhere or are still inside.	Mallin entiteetit eivät täsmää: luotuja tai alussa sisällä olleita oli {came}, mutta lohkoon Poistumiset pääsi, mallista muualla poistui tai on yhä sisällä {went}.
+	No entity left the model, of {came} created or inside at the start. Check that the routing leads to Departures and that the run is long enough for an entity to get through.	Yksikään entiteetti ei poistunut mallista, vaikka luotuja tai alussa sisällä olleita oli {came}. Tarkista, että reititys johtaa lohkoon Poistumiset ja että ajo on riittävän pitkä, jotta entiteetti ehtii läpi.
+	Little's law does not hold at {block}: the time-average number inside was {mean}, but the entities' own times inside give {from_stays}.	Littlen laki ei päde lohkossa {block}: sisällä olevien aikakeskiarvo oli {mean}, mutta entiteettien omat sisäoloajat antavat {from_stays}.
+	The utilisation of {block} counts {busy} units busy on average, but {working} were processing or setting up: units idle, blocked, off shift, failed or restarting were counted busy.	Lohkon {block} käyttöaste laskee varatuiksi keskimäärin {busy} yksikköä, mutta käsittelyssä tai asetuksessa oli {working}: joutilaat, estetyt, vuoron ulkopuoliset, vikaantuneet tai uudelleenkäynnistyvät yksiköt laskettiin varatuiksi.
+	The utilisation of {block} counts {busy} units busy on average, but {working} were processing or setting up: units at work were not counted busy.	Lohkon {block} käyttöaste laskee varatuiksi keskimäärin {busy} yksikköä, mutta käsittelyssä tai asetuksessa oli {working}: työssä olevia yksiköitä ei laskettu varatuiksi.
+	The shares of the time of the units of {block} in each state add up to {total}, not 1.	Lohkon {block} yksiköiden aikaosuudet kussakin tilassa summautuvat arvoon {total}, ei 1.
+	“{metric}” of {block} is {value}, outside 0 to 1 (0% to 100%).	Mittari ”{metric}” lohkossa {block} on {value}, välin 0–1 (0–100 %) ulkopuolella.
+	This was found in {replications} of {of} runs, and the furthest off is shown.	Tämä havaittiin ajoissa: {replications} / {of}. Kauimpana oleva näytetään.
+	This points to a fault in StochCraft rather than in the model. Please report it with the model.	Tämä viittaa StochCraftin virheeseen eikä malliin. Ilmoita siitä mallin kanssa.
+	Angle	Kulma
+	Failed	Vikaantuneena
+	Off shift	Vuoron ulkopuolella
+	Processing	Käsittelyssä
+	Radius	Säde
+	Rise	Nousu
+	Speed empty	Nopeus tyhjänä
+	Speed loaded	Nopeus kuormattuna
+	Turns	Kierrokset
+	Unload	Purku
+	Lost	Menetetyt
+	An entity that leaves a waiting room before a unit takes it, because it has waited as long as it was willing to.	Entiteetti, joka poistuu odotustilasta ennen kuin yksikkö ottaa sen, koska se on odottanut niin kauan kuin oli valmis odottamaan.
+	An entity that does not join a waiting room at all, because the number already waiting put it off.	Entiteetti, joka ei liity odotustilaan lainkaan, koska jo odottavien määrä saa sen jättämään liittymättä.
+	An entity that finds the waiting room full and takes the flow ticked “Turned away” instead of waiting.	Entiteetti, joka löytää odotustilan täynnä ja kulkee odottamisen sijaan virtaa, jossa on valittu ”Käännytetyt”.
+	An entity that leaves the model without reaching Departures: it found the waiting room full with nowhere else to go, or a decision with no way out for it.	Entiteetti, joka poistuu mallista pääsemättä lohkoon Poistumiset: se löysi odotustilan täynnä eikä sillä ollut muuta reittiä, tai päätöksellä ei ollut sille reittiä ulos.
+	Gave up on {id}	Luopui virrassa {id}
+	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the flow ticked “Gave up”, or leaves the model.	Jokainen entiteetti odottaa tässä enintään ajan, joka arvotaan sille sen saapuessa, ja luopuu sitten: se kulkee virtaa, jossa on valittu ”Luopui”, tai poistuu mallista.
+	Entities that do not join the waiting room take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Entiteetit, jotka eivät liity odotustilaan, kulkevat heti tätä virtaa (vaikkapa yrittääkseen myöhemmin uudelleen) sen sijaan, että ne menetettäisiin; ne lasketaan täällä jonoon liittymättömiksi.
+	The job stops at once: the entity goes back to the front of the waiting room for any server on shift, and the work done on it is wasted.	Työ keskeytyy heti: entiteetti palaa odotustilan kärkeen odottamaan mitä tahansa vuorossa olevaa palvelinta, ja siihen tehty työ hukataan.
+	The connection drops and the client tries again: the entity goes back to the front of the waiting room at once, and the work done on it is wasted.	Yhteys katkeaa ja asiakas yrittää uudelleen: entiteetti palaa heti odotustilan kärkeen, ja siihen tehty työ hukataan.
+	Ticked, entities queue up at the end while the rest keep moving. Unticked, the whole belt stops when the entity at the end cannot leave.	Valittuna entiteetit jonottavat päässä, kun muut jatkavat liikettä. Ilman valintaa koko kuljetin pysähtyy, kun päässä oleva entiteetti ei pääse pois.
+	Play run 1 step by step and see each block's waiting room on the diagram	Suorita ajo 1 vaihe vaiheelta ja näe kunkin lohkon odotustila kaaviossa
+	Select a block to see its waiting room over time.	Valitse lohko nähdäksesi sen odotustilan ajan mittaan.
+	Entities on conveyors over time	Entiteetit kuljettimilla ajan mukaan
+	Entities in the model over time	Entiteetit mallissa ajan mukaan
+	How long each entity spends on the conveyors.	Kuinka kauan kukin entiteetti on kuljettimilla.
+	No entity has left a conveyor yet	Yksikään entiteetti ei ole vielä poistunut kuljettimelta
+	Share of entities by time on a conveyor, in {unit}	Entiteettien osuus ajan mukaan kuljettimella, yksikkö {unit}
+	Time on conveyors: {n} entities between {lo} and {hi} {unit}	Aika kuljettimilla: {n} entiteettiä välillä {lo}–{hi} {unit}
+	{from} to {to} {unit}: {share} of entities ({n})	{from}–{to} {unit}: {share} entiteeteistä ({n})
+	How many entities are on the conveyors over time.	Kuinka monta entiteettiä on kuljettimilla ajan mukaan.
+	How many entities are in the model over time.	Kuinka monta entiteettiä on mallissa ajan mukaan.
+	At {time} {unit}: {n} entities	Hetkellä {time} {unit}: {n} entiteettiä
+@plural	Makes {n} independent run of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval across them.	Suorittaa {n} mallin riippumattoman ajon siemenellä {seed}. Kunkin lohkon tulokset sisältävät 95%:n luottamusvälin puolileveyden.|Suorittaa {n} mallin riippumatonta ajoa siemenellä {seed}. Kunkin lohkon tulokset sisältävät 95%:n luottamusvälin puolileveyden.
 	Fonts	Fontit
 	The full list of third-party licences is in the file THIRD-PARTY-LICENSES.html, which comes with the download.	Kolmansien osapuolten lisenssien täydellinen luettelo on tiedostossa THIRD-PARTY-LICENSES.html, joka tulee latauksen mukana.
 	Full list of third-party licences	Kolmansien osapuolten lisenssien täydellinen luettelo

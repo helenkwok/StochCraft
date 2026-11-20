@@ -21,8 +21,6 @@
 	A caller on hold: once a unit takes it, the entity stays.	Обаждащ се на изчакване: щом единица го поеме, същността остава.
 	A client that times out: if its time runs out during service, it gives up then, and the unit finishes the job anyway (wasted work).	Клиент с изтичащо време (тайм-аут): ако времето му изтече по време на обслужването, той се отказва тогава, а единицата все пак довършва работата (пропиляна работа).
 	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	Новият файл съдържа само модела: това, което StochCraft не разбира в {file}, се изпуска.
-	Abandoned	Отказали се
-	Abandoned on {id}	Отказали се на {id}
 	About StochCraft	За StochCraft
 	About {app}	За {app}
 	Accent	Акцент
@@ -162,7 +160,6 @@
 	Duration	Продължителност
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Всеки анализ изпълнява експеримента няколко пъти със същата начална стойност, така че разликите идват от промяната, а не от случайността. Може да отнеме време.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Всяка същност взема първата от тези възможности, която може да бъде изпълнена сега, изцяло и наведнъж, и връща единиците, когато излезе.
-	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Всяка същност чака тук най-много време, изтеглено случайно за нея при пристигането ѝ, след което се отказва: тръгва по изхода, отбелязан като „Отказали се“, или напуска модела.
 	Each server (unit) is checked every so often, as a load balancer probes the servers behind it. One that fails, with too many waiting, is taken out of service for a restart, then comes back.	Всеки сървър (единица) се проверява от време на време, както балансьор на натоварването проверява сървърите зад себе си. Този, който не издържи проверката, защото чакат твърде много, се извежда от работа за рестартиране и после се връща.
 	Edit	Редактиране
 	Edit themes…	Редактиране на темите…
@@ -412,7 +409,6 @@
 	Run	Стартиране
 	Run cancelled	Изпълнението е отменено
 	Run experiment	Стартиране на експеримент
-	Play run 1 step by step and see each block's queue on the diagram	Възпроизвеждане на изпълнение 1 стъпка по стъпка с опашката на всеки блок в диаграмата
 	Run the experiment ({shortcut})	Стартиране на експеримента ({shortcut})
 	Run the experiment again to see this result's spread.	Изпълнете експеримента отново, за да видите разсейването на този резултат.
 	Run the experiment at each value of one parameter, and compare a result.	Изпълнение на експеримента при всяка стойност на един параметър и сравнение на резултат.
@@ -433,7 +429,6 @@
 	Scrap ratio	Дял на брака
 	Seed	Начална стойност
 	Select All	Избиране на всичко
-	Select a block to see its queue over time.	Изберете блок, за да видите опашката му във времето.
 	Sender waits during transfer	Изпращачът чака по време на преноса
 	Separate the values with semicolons or spaces.	Разделете стойностите с точка и запетая или интервали.
 	Sequential	Последователни
@@ -497,10 +492,8 @@
 	Text	Текст
 	Text on accent	Текст върху акцента
 	Text on header	Текст в заглавната лента
-	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	Връзката прекъсва и клиентът опитва отново: същността веднага се връща в началото на опашката, а свършената по нея работа е пропиляна.
 	The entity waits on its server and the job carries on with what was left once the server is back.	Същността чака на своя сървър и работата продължава с остатъка, щом сървърът се върне.
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more runs would narrow it.	Интервалът стига под целевия дял от {share}, така че не е показано с 95% доверие, че делът е постигнат; повече изпълнения биха го стеснили.
-	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	Работата спира веднага: същността се връща в началото на опашката за който и да е сървър на смяна, а свършената по нея работа е пропиляна.
 	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	Работата спира веднага; същността чака на своя сървър и работата продължава с остатъка, щом този сървър отново е на смяна.
 	The last task with a resource it finished at	Последната задача с ресурс, през която е минала частта
 	The mean time to the stop condition is over the runs that met it only; the others ran to their time limit.	Средното време до условието за спиране е само върху изпълненията, които са го достигнали; останалите продължиха до времевия си лимит.
@@ -690,7 +683,6 @@ unit	yr	г.
 	Balked on {id}	Отминали на {id}
 	Balking	Отминаване
 	Count those in service	Броене и на обслужваните
-	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Същностите, които не се нареждат на опашката, веднага минават по този поток (например за да опитат отново по-късно), вместо да бъдат загубени; тук те се броят като отминали.
 	Joins with probability	Нарежда се на опашката с вероятност
 	Number waiting	Брой чакащи
 	Share balked	Дял на отминалите
@@ -908,7 +900,6 @@ unit	yr	г.
 @plural	Finished {n} run|Finished {n} runs	Завършено е {n} изпълнение|Завършени са {n} изпълнения
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	Отворен е {file} ({n} предупреждение)|Отворен е {file} ({n} предупреждения)
 @plural	Removed {n} block|Removed {n} blocks	Премахнат е {n} блок|Премахнати са {n} блока
-@plural	Makes {n} independent run of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Прави {n} независимо изпълнение на модела с начална стойност {seed}. Резултатите за всеки елемент включват половината ширина на 95% доверителен интервал.|Прави {n} независими изпълнения на модела с начална стойност {seed}. Резултатите за всеки елемент включват половината ширина на 95% доверителен интервал.
 @plural	The stop condition was met in {met} of {n} run, after {time} {unit} on average.|The stop condition was met in {met} of {n} runs, after {time} {unit} on average.	Условието за спиране е достигнато в {met} от {n} изпълнение, средно след {time} {unit}.|Условието за спиране е достигнато в {met} от {n} изпълнения, средно след {time} {unit}.
 @plural	{done} of {n} run finished|{done} of {n} runs finished	Завършено е {done} от {n} изпълнение|Завършени са {done} от {n} изпълнения
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} run|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} runs	{name}: {mean}{unit}\n95% интервал от {low} до {high}{unit}\nза {n} изпълнение|{name}: {mean}{unit}\n95% интервал от {low} до {high}{unit}\nза {n} изпълнения
@@ -938,7 +929,6 @@ unit	yr	г.
 	kilometres	километри
 	inches	инчове
 	feet	фута
-	Ticked, items queue up at the end while the rest keep moving. Unticked, the whole belt stops when the item at the end cannot leave.	Когато е отметнато, единиците се нареждат на опашка в края, докато останалите продължават да се движат. Когато не е, цялата лента спира, щом единицата в края не може да излезе.
 	A belt that carries entities from one end to the other. It has a length and a speed, and each entity takes a pitch of belt: its item length plus the gap kept free after it. So it holds at most length ÷ pitch entities and carries at most speed ÷ pitch per time unit. Accumulating: entities queue up at the end while the rest keep moving; otherwise the whole belt stops.	Лента, която пренася същности от единия край до другия. Има дължина и скорост, а всяка същност заема стъпка от лентата: дължината си плюс свободното разстояние след нея. Така лентата побира най-много дължина ÷ стъпка същности и пренася най-много скорост ÷ стъпка за единица време. Натрупване: същностите се нареждат на опашка в края, докато останалите продължават да се движат; иначе цялата лента спира.
 	Station	Станция
 	Kind	Вид
@@ -992,19 +982,165 @@ unit	yr	г.
 	Time on conveyors	Време по лентите
 	No conveyors in this model	Няма ленти в този модел
 	Fills in when the run ends	Попълва се, когато пускът приключи
-	How long each item spends on the conveyors.	Колко време всеки елемент прекарва по лентите.
-	No item has left a conveyor yet	Още никой елемент не е напуснал лента
-	Share of items by time on a conveyor, in {unit}	Дял на елементите по време на лентата, в {unit}
-	Time on conveyors: {n} items between {lo} and {hi} {unit}	Време по лентите: {n} елемента между {lo} и {hi} {unit}
-	{from} to {to} {unit}: {share} of items ({n})	От {from} до {to} {unit}: {share} от елементите ({n})
-	Items on conveyors over time	Елементи по лентите във времето
-	Items in the model over time	Елементи в модела във времето
-	How many items are on the conveyors over time.	Колко елемента има по лентите във времето.
-	How many items are in the model over time.	Колко елемента има в модела във времето.
 	Nothing was recorded over time in these results	В тези резултати нищо не е записано във времето
-	At {time} {unit}: {n} items	В {time} {unit}: {n} елемента
 	Run the model to fill the dashboard	Пуснете модела, за да се попълни таблото
 	The resource and conveyor charts show the last run until this one ends	Графиките на ресурсите и лентите показват последния пуск, докато този приключи
+# Validation messages, new labels and word changes (issue #145)
+	The id “{id}” is not valid. Start an id with a letter or an underscore, then use only letters, digits, dots, hyphens and underscores.	Идентификаторът „{id}“ не е валиден. Започнете идентификатора с буква или долна черта, след което използвайте само букви, цифри, точки, тирета и долни черти.
+	More than one block, flow, pool or calendar has the id “{id}”. Give each its own id.	Повече от един блок, поток, пул или календар имат идентификатор „{id}“. Задайте на всеки собствен идентификатор.
+	The flow {flow} uses a block that does not exist. Remove the flow, or connect it to a block that exists.	Потокът {flow} използва блок, който не съществува. Премахнете потока или го свържете със съществуващ блок.
+	The flow {flow} leads into an Arrivals block, which takes no input. Remove the flow, or send it to another block.	Потокът {flow} води към блок „Пристигания“, който не приема вход. Премахнете потока или го насочете към друг блок.
+	The flow {flow} leaves a Departures block, which has no output. Remove the flow, or start it from another block.	Потокът {flow} излиза от блок „Напускания“, който няма изход. Премахнете потока или го започнете от друг блок.
+	The flow {flow} leads from a block back to itself. Remove it, or send it to another block.	Потокът {flow} води от блок обратно към същия блок. Премахнете го или го насочете към друг блок.
+	{block} has nowhere to send entities. Add a flow from it to the next block.	Блокът {block} няма накъде да изпраща същности. Добавете поток от него към следващия блок.
+	{block} has {count} flows out, and only a Decision or a Split or join block can send entities down several. Remove the extra flows, or add a Decision block.	Блокът {block} има {count} изходящи потока, а по няколко потока могат да изпращат същности само блоковете „Решение“ и „Разделяне или обединяване“. Премахнете излишните потоци или добавете блок „Решение“.
+	In “{field}” of {block}, set “{param}” to a finite number.	В „{field}“ на блок {block} задайте „{param}“ да е крайно число.
+	In “{field}” of {block}, set “{param}” to a number above 0.	В „{field}“ на блок {block} задайте „{param}“ да е число над 0.
+	In “{field}” of {block}, set “{param}” to 0 or more.	В „{field}“ на блок {block} задайте „{param}“ да е 0 или повече.
+	In “{field}” of {block}, set “{param}” to 1 or more.	В „{field}“ на блок {block} задайте „{param}“ да е 1 или повече.
+	In “{field}” of {block}, set “{param}” to a number from 0 to 1.	В „{field}“ на блок {block} задайте „{param}“ да е число от 0 до 1.
+	In “{field}” of {block}, set “Minimum” below “Maximum”, and any “Most likely” value between them.	В „{field}“ на блок {block} задайте „Минимум“ под „Максимум“, а евентуалната „Най-вероятна стойност“ между тях.
+	In “{field}” of {block}, add data points whose probabilities add up to more than 0.	В „{field}“ на блок {block} добавете точки от данни, чиито вероятности се събират до повече от 0.
+	{block} would never have a unit to work with. Give it at least 1 unit.	Блокът {block} никога не би имал единица, с която да работи. Задайте поне 1 единица.
+	{block} would make entities without end, because its “Time between arrivals” is always 0. Give it a time above 0, or set an “Arrival limit”.	Блокът {block} би създавал същности безкрай, защото „Време между пристиганията“ винаги е 0. Задайте време над 0 или задайте „Лимит на пристиганията“.
+	The model has no Arrivals block, so nothing will happen. Add an Arrivals block.	В модела няма блок „Пристигания“, затова нищо няма да се случи. Добавете блок „Пристигания“.
+	The model has no Departures block, so no time in system is measured. Add a Departures block.	В модела няма блок „Напускания“, затова не се измерва времето в системата. Добавете блок „Напускания“.
+	No entity can reach {block} from an Arrivals block. Connect it to a block that entities pass through.	Нито една същност не може да стигне до блок {block} от блок „Пристигания“. Свържете го с блок, през който минават същности.
+	Entities in {block} can never reach a Departures block. Connect it on towards Departures.	Същностите в блок {block} никога не могат да стигнат до блок „Напускания“. Свържете го нататък към „Напускания“.
+	Set the “{state}” power of {block} to a number of kilowatts, 0 or more.	Задайте мощността „{state}“ на блок {block} в киловати, 0 или повече.
+	Set the warm-up of the experiment to 0 or more.	Задайте загряването на експеримента да е 0 или повече.
+	Set the duration of the experiment to more than 0.	Задайте продължителността на експеримента да е над 0.
+	Set the number of runs of the experiment to 1 or more.	Задайте броя на изпълненията на експеримента да е 1 или повече.
+	Set the layout scale (length units per drawing unit) to a finite number above 0.	Задайте мащаба на чертежа (единици дължина на единица чертеж) да е крайно число над 0.
+	A property of {block} has no name. Give it a name, or remove it.	Свойство на блок {block} няма име. Задайте му име или го премахнете.
+	{block} sets the property “{name}” twice. Keep one of them.	Блокът {block} задава свойството „{name}“ два пъти. Оставете едното.
+	The property “{name}” of {block} needs shares that are not negative and add up to more than 0. Change the shares.	Свойството „{name}“ на блок {block} изисква дялове, които не са отрицателни и се събират до повече от 0. Променете дяловете.
+	The property “{name}” has the type “{type2}” on {block} but “{type}” on another block. Give it one type everywhere.	Свойството „{name}“ е от тип „{type2}“ на блок {block}, но от тип „{type}“ на друг блок. Задайте му един тип навсякъде.
+	The value of the property “{name}” on {block} does not fit its type, “{type}”. Change the value or the type.	Стойността на свойството „{name}“ на блок {block} не отговаря на типа му „{type}“. Променете стойността или типа.
+	The expression for the property “{name}” on {block} cannot be used: {error}. Correct “{expression}”.	Изразът за свойството „{name}“ на блок {block} не може да се използва: {error}. Поправете „{expression}“.
+	{block} reads the property “{name}”, which no block sets, so it would read as empty. Set it on an earlier block, or correct the name.	Блокът {block} чете свойството „{name}“, което не се задава от никой блок, затова ще се прочете като празно. Задайте го на по-ранен блок или поправете името.
+	The setup of {block} has times for particular changes but no property to watch. Choose a property under “Only when this property changes”.	Настройката на блок {block} има времена за определени промени, но няма свойство за следене. Изберете свойство в „Само при промяна на това свойство“.
+	{block} has times for particular values but no property to read them from. Choose a property under “Service time by property”.	Блокът {block} има времена за определени стойности, но няма свойство, от което да ги чете. Изберете свойство в „Време за обслужване според свойство“.
+	{block} has two times for the value “{value}”. Keep one.	Блокът {block} има две времена за стойността „{value}“. Оставете едното.
+	Set the time of {block} for the value “{value}” to a mean of 0 or more.	Задайте времето на блок {block} за стойността „{value}“ да е със средна стойност 0 или повече.
+	The scrap at {block} counts against {other}, which is not a task with a resource. Choose a task with a resource.	Бракът при блок {block} се отчита спрямо {other}, който не е задача с ресурс. Изберете задача с ресурс.
+	Set “Planned run time per item” of {block} to a mean above 0.	Задайте „Планирано време за работа на част“ на блок {block} да е със средна стойност над 0.
+	Set “Time before giving up” of {block} to a mean of 0 or more.	Задайте „Време до отказване“ на блок {block} да е със средна стойност 0 или повече.
+	The flow {flow} is ticked “Gave up”, but only a task with a resource and a “Time before giving up” sends entities that give up. Untick it, or set a “Time before giving up” on {block}.	Потокът {flow} е отбелязан като „Отказали се“, но отказващи се същности изпраща само задача с ресурс със зададено „Време до отказване“. Махнете отметката или задайте „Време до отказване“ на блок {block}.
+	{count} flows out of {block} are ticked “{way}”; at most one can be. Untick all but one.	{count} потока от блок {block} са отбелязани като „{way}“, а най-много един може да бъде. Махнете отметките от всички освен един.
+	The flow {flow} is ticked “Turned away”, but only a task with a resource and a limited waiting room turns entities away. Untick it, or limit the waiting room of {block}.	Потокът {flow} е отбелязан като „Отпратени“, но същности отпраща само задача с ресурс и ограничена чакалня. Махнете отметката или ограничете чакалнята на блок {block}.
+	The flow {flow} is ticked both “Gave up” and “Turned away”. Keep one of them.	Потокът {flow} е отбелязан и като „Отказали се“, и като „Отпратени“. Оставете едното.
+	Set every chance of joining in the balking table of {block} to a number from 0 to 1.	Задайте всяка вероятност за присъединяване в таблицата за отминаване на блок {block} да е число от 0 до 1.
+	Put the rows of the balking table of {block} in increasing order of “Number waiting”.	Подредете редовете на таблицата за отминаване на блок {block} във възходящ ред на „Брой чакащи“.
+	The flow {flow} is ticked “Balked”, but only a task with a resource and balking sends entities that balk. Untick it, or turn on balking for {block}.	Потокът {flow} е отбелязан като „Отминали“, но отминаващи същности изпраща само задача с ресурс и включено отминаване. Махнете отметката или включете отминаването за блок {block}.
+	The flow {flow} is ticked “Balked” and also “Gave up” or “Turned away”. Keep one of them.	Потокът {flow} е отбелязан като „Отминали“ и също като „Отказали се“ или „Отпратени“. Оставете едното.
+	The waiting room of {block} is set by calendar or per working server, but has no number of places, so it is unlimited. Give it a number of places, or make it fixed.	Чакалнята на блок {block} е зададена по календар или по работещ сървър, но няма брой места, затова е неограничена. Задайте брой места или я направете фиксирана.
+	The waiting room of {block} is set by calendar, but no calendar has a value. Add a value for a calendar, or make the waiting room fixed.	Чакалнята на блок {block} е зададена по календар, но нито един календар няма стойност. Добавете стойност за календар или направете чакалнята фиксирана.
+	Set “Fails above, waiting per working server” of {block} to a number of 0 or more.	Задайте „Неуспех над, чакащи на сървър в работа“ на блок {block} да е число 0 или повече.
+	Set “Check every” of {block} to a mean above 0.	Задайте „Проверка на всеки“ на блок {block} да е със средна стойност над 0.
+	Set the demand of {block} to a number of parts above 0.	Задайте търсенето на блок {block} да е брой части над 0.
+	The demand of {block} is per shift but names no calendar to say when the shifts are. Choose a calendar.	Търсенето на блок {block} е за смяна, но не е посочен календар, който да каже кога са смените. Изберете календар.
+	The demand of {block} names a calendar that does not exist. Choose a calendar that exists.	Търсенето на блок {block} посочва календар, който не съществува. Изберете съществуващ календар.
+	The probability {value} on the flow {flow} is not from 0 to 1. Enter a probability from 0 to 1.	Вероятността {value} на потока {flow} не е от 0 до 1. Въведете вероятност от 0 до 1.
+	The probabilities of the flows out of {block} add up to {sum}, not 1, so they are used in proportion. Change them to add up to 1 if that is not what you want.	Вероятностите на потоците от блок {block} се събират до {sum}, а не до 1, затова се използват пропорционално. Ако не искате това, променете ги така, че сборът да е 1.
+	The condition on the flow {flow} cannot be used: {error}. Correct “{expression}”.	Условието на потока {flow} не може да се използва: {error}. Поправете „{expression}“.
+	The condition on the flow {flow} is ignored, because only flows out of a Decision block choose a route. Remove the condition.	Условието на потока {flow} се пренебрегва, защото маршрут избират само потоци от блок „Решение“. Премахнете условието.
+	The probability on the flow {flow} is ignored, because only flows out of a Decision block choose a route. Remove the probability.	Вероятността на потока {flow} се пренебрегва, защото маршрут избират само потоци от блок „Решение“. Премахнете вероятността.
+	The condition on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the condition.	Условието на потока {flow} се пренебрегва, защото „Решение“ изпраща същностите към най-късата опашка. Премахнете условието.
+	The probability on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the probability.	Вероятността на потока {flow} се пренебрегва, защото „Решение“ изпраща същностите към най-късата опашка. Премахнете вероятността.
+	The default on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the default.	Отметката „по подразбиране“ на потока {flow} се пренебрегва, защото „Решение“ изпраща същностите към най-късата опашка. Махнете я.
+	The probability on the flow {flow} is ignored, because the Decision routes by condition. Remove the probability.	Вероятността на потока {flow} се пренебрегва, защото „Решение“ избира маршрут по условие. Премахнете вероятността.
+	The default flow of {block} is not one of its own flows out. Choose one of the flows out of {block} as the default.	Потокът по подразбиране на блок {block} не е един от собствените му изходящи потоци. Изберете за поток по подразбиране един от изходящите потоци на блок {block}.
+	{block} routes by condition but has no default flow, so an entity for which no condition holds leaves the model here. Choose a default flow.	Блокът {block} избира маршрут по условие, но няма поток по подразбиране, затова същност, за която не важи никое условие, напуска модела тук. Изберете поток по подразбиране.
+	{block} diverts entities but has no default flow, so an entity whose way is full has nowhere else to go. Choose a default flow.	Блокът {block} отклонява същности, но няма поток по подразбиране, затова същност, чийто път е пълен, няма накъде другаде да върви. Изберете поток по подразбиране.
+	{block} waits for an entity on the flow {flow}, which none can reach, so it never sends one on. Remove that flow, or connect it to a block that entities reach.	Блокът {block} чака същност по потока {flow}, до който няма как да стигне такава, затова никога не изпраща нищо нататък. Премахнете този поток или го свържете с блок, до който същности стигат.
+	{block} has a limited waiting room and is fed through {gateway}. While it is full, {gateway} holds up every entity behind it, and they wait before it without limit. Remove the gateway before {block}, or remove the limit.	Блокът {block} има ограничена чакалня и се захранва през {gateway}. Докато е пълна, {gateway} задържа всяка същност зад себе си и те чакат пред него без ограничение. Махнете шлюза пред блок {block} или махнете ограничението.
+	The limited waiting rooms of {loop} feed each other in a loop, so when all of them are full the loop deadlocks. Remove the limit on one of them, or break the loop.	Ограничените чакални на {loop} се захранват една друга в цикъл, затова, когато всички са пълни, цикълът се блокира напълно. Махнете ограничението на една от тях или прекъснете цикъла.
+	The pool {block} has no units. Give it at least 1 unit.	В пула {block} няма единици. Задайте поне 1 единица.
+	{block} names no resource it needs. Add one under “Needs”.	Блокът {block} не посочва ресурс, от който се нуждае. Добавете такъв в „Изисквания“.
+	{block} needs a resource pool that does not exist. Choose a pool that exists.	Блокът {block} се нуждае от пул от ресурси, който не съществува. Изберете съществуващ пул.
+	{block} needs units with the roles {roles}, which no pool has. Give a pool those roles, or change what {block} needs.	Блокът {block} се нуждае от единици с роли {roles}, които никой пул няма. Задайте на пул тези роли или променете от какво се нуждае блок {block}.
+	{block} needs {needed} units at once, but at most {available} exist, so this can never be met. Ask for fewer units, or add units to the pool.	Блокът {block} се нуждае от {needed} единици наведнъж, а съществуват най-много {available}, затова това никога не може да бъде изпълнено. Поискайте по-малко единици или добавете единици към пула.
+	Set the priority of {block} to a finite number, not {value}.	Задайте приоритета на блок {block} да е крайно число, а не {value}.
+	No task uses the pool {block}. Add it to a task's needs, or remove the pool.	Никоя задача не използва пула {block}. Добавете го към изискванията на задача или го премахнете.
+	{block} has a value for a calendar that does not exist. Choose a calendar that exists, or remove the value.	Блокът {block} има стойност за календар, който не съществува. Изберете съществуващ календар или премахнете стойността.
+	The calendar {block} has no entries, so it is never active. Add an entry.	Календарът {block} няма записи, затова никога не е активен. Добавете запис.
+	{block} allows no arrivals outside the calendars but names no calendar, so it never creates entities. Add arrivals by calendar, or allow arrivals outside calendars.	Блокът {block} не позволява пристигания извън календарите, но не посочва календар, затова никога не създава същности. Добавете пристигания по календар или позволете пристигания извън календарите.
+	Set the batch size of {block} to 1 or more.	Задайте размера на партидата на блок {block} да е 1 или повече.
+	Set “{field}” of the conveyor {block} to a finite number above 0.	Задайте „{field}“ на конвейера {block} да е крайно число над 0.
+	Set “{field}” of the conveyor {block} to a finite number of 0 or more.	Задайте „{field}“ на конвейера {block} да е крайно число 0 или повече.
+	Set “{field}” of the conveyor {block} to a finite number other than 0.	Задайте „{field}“ на конвейера {block} да е крайно число, различно от 0.
+	The conveyor {block} is {length} long but each entity takes {pitch} (item length plus gap), so not even one fits. Lengthen the conveyor, or shorten the item or the gap.	Конвейерът {block} е дълъг {length}, а всяка същност заема {pitch} (дължина на единицата плюс разстояние), затова не се побира дори една. Удължете конвейера или скъсете единицата или разстоянието.
+	The drawn path of the conveyor {block} is {path_length} long, but its “Length” is {length}, so the drawing and the run disagree. Make “Length” match the path, or change the shape.	Начертаният път на конвейера {block} е дълъг {path_length}, а неговата „Дължина“ е {length}, затова чертежът и изпълнението не съвпадат. Задайте „Дължина“ да съответства на пътя или променете формата.
+	{block} is a transport, which StochCraft does not simulate yet. Remove it to run the model.	Блокът {block} е транспорт, който StochCraft още не симулира. Премахнете го, за да стартирате модела.
+	The pool {pool} of the transport {block} does not exist. Choose a pool that exists.	Пулът {pool} на транспорта {block} не съществува. Изберете съществуващ пул.
+	The pool {pool} of the transport {block} is not mobile. Give the pool speeds and a home.	Пулът {pool} на транспорта {block} не е мобилен. Задайте на пула скорости и начална точка.
+	Set “{field}” of the pool {block} to a finite number above 0.	Задайте „{field}“ на пула {block} да е крайно число над 0.
+	The home of the pool {block} is not a block of the model. Choose a block as its home.	Началната точка на пула {block} не е блок от модела. Изберете блок за негова начална точка.
+	The transport {block} needs one block before it, where it picks up, and one after it, where it drops off, but has {inputs} before and {outputs} after. Connect it to one block on each side.	Транспортът {block} се нуждае от един блок преди него, откъдето взема, и един след него, където оставя, но има {inputs} преди и {outputs} след него. Свържете го с по един блок от всяка страна.
+	{other} has no place on the canvas, so the distances for {block} are not known. Place {other} on the canvas.	Блокът {other} няма място на основната повърхност, затова разстоянията за {block} не са известни. Поставете {other} на основната повърхност.
+	The flow {flow} asks for no entities. Set its “Units” to 1 or more.	Потокът {flow} не иска никакви същности. Задайте неговите „Брой единици“ да са 1 или повече.
+	The “Units” on the flow {flow} is ignored, because only a Split or join block takes several entities from one flow. Remove it.	„Брой единици“ на потока {flow} се пренебрегва, защото няколко същности от един поток взема само блок „Разделяне или обединяване“. Премахнете го.
+	No block makes batches, so {block} passes every entity through. Add a Batch block before it, or remove {block}.	Никой блок не прави партиди, затова {block} пропуска всяка същност. Добавете блок „Партида“ преди него или премахнете {block}.
+	The stop condition names a block that does not exist. Choose a block that exists.	Условието за спиране посочва блок, който не съществува. Изберете съществуващ блок.
+	Set the count of the stop condition for {block} to 1 or more.	Задайте броя в условието за спиране на блок {block} да е 1 или повече.
+	The stop condition waits for {block} to empty, but only a task can empty. Choose a task.	Условието за спиране чака блок {block} да се изпразни, но само задача може да се изпразни. Изберете задача.
+	The stop condition at {block} can be met before the warm-up ends. A run that stops during the warm-up has no statistics after it and is left out of the results. Shorten the warm-up, or stop later.	Условието за спиране при блок {block} може да се изпълни преди края на загряването. Изпълнение, което спре по време на загряването, няма статистика след него и се изключва от резултатите. Съкратете загряването или спрете по-късно.
+	Every run stopped before the warm-up ended, so no metric is reported. Shorten the warm-up, or stop later.	Всяко изпълнение спря преди края на загряването, затова не се отчита нито един показател. Съкратете загряването или спрете по-късно.
+	{replications} of {of} runs stopped before the warm-up ended, so their statistics are left out of every metric. Shorten the warm-up, or stop later.	{replications} от {of} изпълнения спряха преди края на загряването, затова статистиката им е изключена от всеки показател. Съкратете загряването или спрете по-късно.
+	{block} is offered {load}% of the work its units can do, so its waiting room grows without limit and the results describe no steady state. Add units, or shorten the service.	На блок {block} се предлагат {load}% от работата, която могат да свършат единиците му, затова чакалнята му расте без предел, а резултатите не описват установен режим. Добавете единици или съкратете обслужването.
+	{block} is busy {utilisation}% of the time, and at the end at least {backlog} entities are still waiting against {left} that left. Work arrives faster than it is done, so the results describe no steady state. Add units, or shorten the service.	Блокът {block} е зает {utilisation}% от времето, а в края поне {backlog} същности още чакат срещу {left} напуснали. Работата пристига по-бързо, отколкото се върши, затова резултатите не описват установен режим. Добавете единици или съкратете обслужването.
+	The experiment has one run, so its results cannot be told from chance. Set the number of runs to at least 2, and usually 10 or more.	Експериментът има едно изпълнение, затова резултатите му не могат да се различат от случайност. Задайте поне 2 изпълнения, а обикновено 10 или повече.
+	{block} has a three-point estimate but no time to fit it to, so the estimate is ignored. Remove the estimate.	Блокът {block} има оценка в три точки, но няма време, към което да се напасне, затова оценката се пренебрегва. Премахнете оценката.
+	The three-point estimate of {block} cannot be fitted: every point must be a finite number. Correct the points.	Оценката в три точки на блок {block} не може да се напасне: всяка точка трябва да е крайно число. Поправете точките.
+	The three-point estimate of {block} cannot be fitted: the points must be in order, minimum, most likely, then maximum or 95th percentile. Correct the points.	Оценката в три точки на блок {block} не може да се напасне: точките трябва да са в ред: минимум, най-вероятна стойност, после максимум или 95-и персентил. Поправете точките.
+	The three-point estimate of {block} cannot be fitted: log-normal and Weibull estimates have no maximum. Give a 95th percentile instead.	Оценката в три точки на блок {block} не може да се напасне: логнормалните оценки и оценките на Вайбул нямат максимум. Посочете вместо него 95-и персентил.
+	The time of {block} is no longer the one fitted from its three-point estimate. Fit it again, or remove the estimate.	Времето на блок {block} вече не е онова, напасналото се по оценката му в три точки. Напасете го отново или премахнете оценката.
+	In “{field}” of {block}, the normal distribution draws below 0 more than 1 time in 100, and each such draw counts as 0, so the times are longer on average than its mean. Use a truncated normal with a minimum of 0, or a log-normal.	В „{field}“ на блок {block} нормалното разпределение дава стойности под 0 повече от 1 път на 100, а всяка такава стойност се брои за 0, затова времената са средно по-дълги от средната му стойност. Използвайте отсечено нормално с минимум 0 или логнормално.
+	The entities of {block} do not add up: {came} came in or were inside at the start, but {went} left, were lost, gave up or are still inside.	Същностите на блок {block} не се събират: в началото са влезли или били вътре {came}, а излезли, загубени, отказали се или още вътре са {went}.
+	The entities of the model do not add up: {came} were created or inside at the start, but {went} reached Departures, left the model elsewhere or are still inside.	Същностите на модела не се събират: в началото са създадени или били вътре {came}, а стигнали до „Напускания“, напуснали модела другаде или още вътре са {went}.
+	No entity left the model, of {came} created or inside at the start. Check that the routing leads to Departures and that the run is long enough for an entity to get through.	Нито една същност не напусна модела от {came} създадени или били вътре в началото. Проверете дали маршрутът води до „Напускания“ и дали изпълнението е достатъчно дълго, за да премине същност.
+	Little's law does not hold at {block}: the time-average number inside was {mean}, but the entities' own times inside give {from_stays}.	Законът на Литъл не важи при блок {block}: средното по време число вътре беше {mean}, а собствените времена на същностите вътре дават {from_stays}.
+	The utilisation of {block} counts {busy} units busy on average, but {working} were processing or setting up: units idle, blocked, off shift, failed or restarting were counted busy.	Натовареността на блок {block} брои средно {busy} заети единици, но в обработка или пренастройка са били {working}: единици в бездействие, блокирани, извън смяна, повредени или рестартиращи са били броени за заети.
+	The utilisation of {block} counts {busy} units busy on average, but {working} were processing or setting up: units at work were not counted busy.	Натовареността на блок {block} брои средно {busy} заети единици, но в обработка или пренастройка са били {working}: единици в работа не са били броени за заети.
+	The shares of the time of the units of {block} in each state add up to {total}, not 1.	Дяловете от времето на единиците на блок {block} във всяко състояние се събират до {total}, а не до 1.
+	“{metric}” of {block} is {value}, outside 0 to 1 (0% to 100%).	„{metric}“ на блок {block} е {value}, извън диапазона от 0 до 1 (от 0% до 100%).
+	This was found in {replications} of {of} runs, and the furthest off is shown.	Това е открито в {replications} от {of} изпълнения и е показано най-отклоненото.
+	This points to a fault in StochCraft rather than in the model. Please report it with the model.	Това сочи към грешка в StochCraft, а не в модела. Моля, докладвайте я заедно с модела.
+	Angle	Ъгъл
+	Failed	В повреда
+	Off shift	Извън смяна
+	Processing	В обработка
+	Radius	Радиус
+	Rise	Издигане
+	Speed empty	Скорост без товар
+	Speed loaded	Скорост с товар
+	Turns	Навивки
+	Unload	Разтоварване
+	Lost	Загубени
+	An entity that leaves a waiting room before a unit takes it, because it has waited as long as it was willing to.	Същност, която напуска чакалнята, преди да я поеме единица, защото е чакала толкова, колкото е била готова.
+	An entity that does not join a waiting room at all, because the number already waiting put it off.	Същност, която изобщо не влиза в чакалнята, защото я е отказал броят вече чакащи.
+	An entity that finds the waiting room full and takes the flow ticked “Turned away” instead of waiting.	Същност, която намира чакалнята пълна и тръгва по потока, отбелязан като „Отпратени“, вместо да чака.
+	An entity that leaves the model without reaching Departures: it found the waiting room full with nowhere else to go, or a decision with no way out for it.	Същност, която напуска модела, без да стигне до „Напускания“: намерила е чакалнята пълна без накъде другаде да върви или е стигнала решение без изход за нея.
+	Gave up on {id}	Отказали се на {id}
+	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the flow ticked “Gave up”, or leaves the model.	Всяка същност чака тук най-много време, изтеглено случайно за нея при пристигането ѝ, след което се отказва: тръгва по потока, отбелязан като „Отказали се“, или напуска модела.
+	Entities that do not join the waiting room take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Същностите, които не влизат в чакалнята, веднага минават по този поток (например за да опитат отново по-късно), вместо да бъдат загубени; тук те се броят като отминали.
+	The job stops at once: the entity goes back to the front of the waiting room for any server on shift, and the work done on it is wasted.	Работата спира веднага: същността се връща в началото на чакалнята за който и да е сървър на смяна, а свършената по нея работа е пропиляна.
+	The connection drops and the client tries again: the entity goes back to the front of the waiting room at once, and the work done on it is wasted.	Връзката прекъсва и клиентът опитва отново: същността веднага се връща в началото на чакалнята, а свършената по нея работа е пропиляна.
+	Ticked, entities queue up at the end while the rest keep moving. Unticked, the whole belt stops when the entity at the end cannot leave.	Когато е отметнато, същностите се нареждат на опашка в края, докато останалите продължават да се движат. Когато не е, цялата лента спира, щом същността в края не може да излезе.
+	Play run 1 step by step and see each block's waiting room on the diagram	Възпроизвеждане на изпълнение 1 стъпка по стъпка с чакалнята на всеки блок в диаграмата
+	Select a block to see its waiting room over time.	Изберете блок, за да видите чакалнята му във времето.
+	Entities on conveyors over time	Същности по лентите във времето
+	Entities in the model over time	Същности в модела във времето
+	How long each entity spends on the conveyors.	Колко време всяка същност прекарва по лентите.
+	No entity has left a conveyor yet	Още никоя същност не е напуснала лента
+	Share of entities by time on a conveyor, in {unit}	Дял на същностите по време на лентата, в {unit}
+	Time on conveyors: {n} entities between {lo} and {hi} {unit}	Време по лентите: {n} същности между {lo} и {hi} {unit}
+	{from} to {to} {unit}: {share} of entities ({n})	От {from} до {to} {unit}: {share} от същностите ({n})
+	How many entities are on the conveyors over time.	Колко същности има по лентите във времето.
+	How many entities are in the model over time.	Колко същности има в модела във времето.
+	At {time} {unit}: {n} entities	В {time} {unit}: {n} същности
+@plural	Makes {n} independent run of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval across them.	Прави {n} независимо изпълнение на модела с начална стойност {seed}. Резултатите за всеки блок включват половината ширина на 95% доверителен интервал.|Прави {n} независими изпълнения на модела с начална стойност {seed}. Резултатите за всеки блок включват половината ширина на 95% доверителен интервал.
 	Fonts	Шрифтове
 	The full list of third-party licences is in the file THIRD-PARTY-LICENSES.html, which comes with the download.	Пълният списък с лицензите на външните компоненти е във файла THIRD-PARTY-LICENSES.html, който е в изтеглената програма.
 	Full list of third-party licences	Пълен списък с лицензите на външните компоненти

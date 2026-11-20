@@ -21,8 +21,6 @@
 	A caller on hold: once a unit takes it, the entity stays.	Tartásban várakozó hívó: amint egy egység átveszi, az entitás marad.
 	A client that times out: if its time runs out during service, it gives up then, and the unit finishes the job anyway (wasted work).	Időtúllépéses kliens: ha az ideje a kiszolgálás közben lejár, akkor lemond, és az egység mégis befejezi a munkát (elvesztegetett munka).
 	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	Az új fájl csak a modellt tartalmazza: ami a(z) {file} fájlban a StochCraft számára érthetetlen, kimarad.
-	Abandoned	Lemondtak
-	Abandoned on {id}	Lemondtak itt: {id}
 	About StochCraft	A StochCraft névjegye
 	About {app}	{app} névjegye
 	Accent	Kiemelőszín
@@ -162,7 +160,6 @@
 	Duration	Időtartam
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Minden elemzés többször futtatja a kísérletet ugyanazzal a véletlenszám-maggal, így a különbségek a változtatásból erednek, nem a véletlenből. Ez eltarthat egy ideig.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Minden entitás ezek közül az elsőt veszi, amely most teljesíthető, egyszerre az egészet, és távozáskor visszaadja az egységeket.
-	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Minden entitás legfeljebb annyi ideig vár itt, amennyit érkezésekor véletlenszerűen sorsolnak neki, aztán lemond: a „Lemondtak” jelölésű kiutat választja, vagy elhagyja a modellt.
 	Each server (unit) is checked every so often, as a load balancer probes the servers behind it. One that fails, with too many waiting, is taken out of service for a restart, then comes back.	Minden szervert (egységet) időnként ellenőriz a rendszer, ahogy egy terheléselosztó lekérdezi a mögötte álló szervereket. Amelyik megbukik, mert túl sokan várnak, azt újraindításra kivonják az üzemből, majd visszatér.
 	Edit	Szerkesztés
 	Edit themes…	Témák szerkesztése…
@@ -412,7 +409,6 @@
 	Run	Futtatás
 	Run cancelled	Futtatás megszakítva
 	Run experiment	Kísérlet futtatása
-	Play run 1 step by step and see each block's queue on the diagram	Az 1. futás lejátszása lépésenként, minden blokk sorával a diagramon
 	Run the experiment ({shortcut})	A kísérlet futtatása ({shortcut})
 	Run the experiment again to see this result's spread.	Futtassa újra a kísérletet az eredmény szóródásának megtekintéséhez.
 	Run the experiment at each value of one parameter, and compare a result.	A kísérlet futtatása egy paraméter minden értékénél, és egy eredmény összehasonlítása.
@@ -433,7 +429,6 @@
 	Scrap ratio	Selejtarány
 	Seed	Véletlenszám-mag
 	Select All	Az összes kijelölése
-	Select a block to see its queue over time.	Válasszon egy blokkot a sorának időbeli megtekintéséhez.
 	Sender waits during transfer	A küldő vár a továbbítás alatt
 	Separate the values with semicolons or spaces.	Pontosvesszővel vagy szóközzel válassza el az értékeket.
 	Sequential	Szekvenciális
@@ -497,10 +492,8 @@
 	Text	Szöveg
 	Text on accent	Szöveg a kiemelőszínen
 	Text on header	Szöveg a fejlécen
-	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	A kapcsolat megszakad, és a kliens újrapróbálkozik: az entitás azonnal visszakerül a sor elejére, és a rajta végzett munka kárba vész (elvesztegetett munka).
 	The entity waits on its server and the job carries on with what was left once the server is back.	Az entitás a szerverénél vár, és a munka a hátralévő résszel folytatódik, amint a szerver visszatér.
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more runs would narrow it.	Az intervallum a(z) {share} célarány alá nyúlik, így 95%-os megbízhatósággal nem igazolt, hogy az arány teljesül; több futás szűkítené.
-	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	A munka azonnal leáll: az entitás visszakerül a sor elejére bármely műszakban lévő szerver számára, és a rajta végzett munka kárba vész.
 	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	A munka azonnal leáll; az entitás a szerverénél vár, és a munka a hátralévő résszel folytatódik, amint az a szerver újra műszakban van.
 	The last task with a resource it finished at	Az utolsó erőforrást használó feladat, amelyen a darab áthaladt
 	The mean time to the stop condition is over the runs that met it only; the others ran to their time limit.	A leállási feltételig eltelt átlagos idő csak azokra a futásokra vonatkozik, amelyek elérték; a többi az időkorlátjáig futott.
@@ -690,7 +683,6 @@ unit	yr	év
 	Balked on {id}	Nem álltak sorba itt: {id}
 	Balking	Sorba be nem állás
 	Count those in service	A kiszolgálás alattiak is számítanak
-	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	A sorba be nem álló entitások azonnal ezt a folyamatot követik (például hogy később újra próbálkozzanak), ahelyett hogy elvesznének; itt sorba be nem állóként számítanak.
 	Joins with probability	Beállási valószínűség
 	Number waiting	Várakozók száma
 	Share balked	Sorba be nem állók aránya
@@ -908,7 +900,6 @@ unit	yr	év
 @plural	Finished {n} run|Finished {n} runs	{n} futás befejezve|{n} futás befejezve
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	{file} megnyitva ({n} figyelmeztetés)|{file} megnyitva ({n} figyelmeztetés)
 @plural	Removed {n} block|Removed {n} blocks	{n} blokk eltávolítva|{n} blokk eltávolítva
-@plural	Makes {n} independent run of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	A modellt {n} független futásban futtatja a(z) {seed} véletlenszám-maggal. Az elemek eredményei tartalmazzák a 95%-os konfidenciaintervallum fél szélességét.|A modellt {n} független futásban futtatja a(z) {seed} véletlenszám-maggal. Az elemek eredményei tartalmazzák a 95%-os konfidenciaintervallum fél szélességét.
 @plural	The stop condition was met in {met} of {n} run, after {time} {unit} on average.|The stop condition was met in {met} of {n} runs, after {time} {unit} on average.	A leállási feltétel {n} futásból {met} esetben teljesült, átlagosan {time} {unit} után.|A leállási feltétel {n} futásból {met} esetben teljesült, átlagosan {time} {unit} után.
 @plural	{done} of {n} run finished|{done} of {n} runs finished	{done}/{n} futás befejezve|{done}/{n} futás befejezve
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} run|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} runs	{name}: {mean}{unit}\n95%-os intervallum {low} és {high}{unit} között\n{n} futás alapján|{name}: {mean}{unit}\n95%-os intervallum {low} és {high}{unit} között\n{n} futás alapján
@@ -938,7 +929,6 @@ unit	yr	év
 	kilometres	kilométer
 	inches	hüvelyk
 	feet	láb
-	Ticked, items queue up at the end while the rest keep moving. Unticked, the whole belt stops when the item at the end cannot leave.	Bejelölve a darabok sorba állnak a végén, míg a többi tovább halad. Bejelölés nélkül az egész szalag megáll, ha a végén lévő darab nem tud távozni.
 	A belt that carries entities from one end to the other. It has a length and a speed, and each entity takes a pitch of belt: its item length plus the gap kept free after it. So it holds at most length ÷ pitch entities and carries at most speed ÷ pitch per time unit. Accumulating: entities queue up at the end while the rest keep moving; otherwise the whole belt stops.	Szalag, amely entitásokat visz az egyik végétől a másikig. Hossza és sebessége van, és minden entitás egy szalaglépést foglal el: a darabja hosszát plusz a mögötte szabadon hagyott rést. Így legfeljebb hossz ÷ lépés entitás fér rá, és időegységenként legfeljebb sebesség ÷ lépés entitást szállít. Felhalmozó: az entitások sorba állnak a végén, míg a többi tovább halad; különben az egész szalag megáll.
 	Station	Állomás
 	Kind	Típus
@@ -992,19 +982,165 @@ unit	yr	év
 	Time on conveyors	Idő a szállítószalagokon
 	No conveyors in this model	Nincs szállítószalag ebben a modellben
 	Fills in when the run ends	Kitöltődik, amikor a futtatás véget ér
-	How long each item spends on the conveyors.	Mennyi időt tölt az egyes elem a szállítószalagokon.
-	No item has left a conveyor yet	Még egy elem sem hagyott el szállítószalagot
-	Share of items by time on a conveyor, in {unit}	Az elemek aránya a szalagon töltött idő szerint, {unit}
-	Time on conveyors: {n} items between {lo} and {hi} {unit}	Idő a szalagokon: {n} elem {lo} és {hi} {unit} között
-	{from} to {to} {unit}: {share} of items ({n})	{from}–{to} {unit}: az elemek {share} része ({n})
-	Items on conveyors over time	Elemek a szalagokon az idő függvényében
-	Items in the model over time	Elemek a modellben az idő függvényében
-	How many items are on the conveyors over time.	Hány elem van a szalagokon az idő függvényében.
-	How many items are in the model over time.	Hány elem van a modellben az idő függvényében.
 	Nothing was recorded over time in these results	Ezekben az eredményekben nem rögzítettek semmit az idő függvényében
-	At {time} {unit}: {n} items	{time} {unit} időpontban: {n} elem
 	Run the model to fill the dashboard	Futtassa a modellt az irányítópult kitöltéséhez
 	The resource and conveyor charts show the last run until this one ends	Az erőforrás- és szalagdiagramok az utolsó futtatást mutatják, amíg ez véget nem ér
+# Validation messages, new labels and word changes (issue #145)
+	The id “{id}” is not valid. Start an id with a letter or an underscore, then use only letters, digits, dots, hyphens and underscores.	A(z) „{id}” azonosító nem érvényes. Az azonosító betűvel vagy aláhúzással kezdődjön, utána csak betűk, számjegyek, pontok, kötőjelek és aláhúzások szerepeljenek benne.
+	More than one block, flow, pool or calendar has the id “{id}”. Give each its own id.	Egynél több blokknak, folyamatnak, készletnek vagy naptárnak van „{id}” azonosítója. Adjon mindegyiknek saját azonosítót.
+	The flow {flow} uses a block that does not exist. Remove the flow, or connect it to a block that exists.	A(z) {flow} folyamat olyan blokkot használ, amely nem létezik. Törölje a folyamatot, vagy kösse egy létező blokkhoz.
+	The flow {flow} leads into an Arrivals block, which takes no input. Remove the flow, or send it to another block.	A(z) {flow} folyamat egy Érkezések blokkba vezet, amely nem fogad bemenetet. Törölje a folyamatot, vagy irányítsa másik blokkhoz.
+	The flow {flow} leaves a Departures block, which has no output. Remove the flow, or start it from another block.	A(z) {flow} folyamat egy Távozások blokkból indul, amelynek nincs kimenete. Törölje a folyamatot, vagy indítsa másik blokkból.
+	The flow {flow} leads from a block back to itself. Remove it, or send it to another block.	A(z) {flow} folyamat egy blokkból önmagába vezet vissza. Törölje, vagy irányítsa másik blokkhoz.
+	{block} has nowhere to send entities. Add a flow from it to the next block.	A(z) {block} blokk nem küld sehová entitásokat. Adjon hozzá egy folyamatot tőle a következő blokkhoz.
+	{block} has {count} flows out, and only a Decision or a Split or join block can send entities down several. Remove the extra flows, or add a Decision block.	A(z) {block} blokkból kimenő folyamatok száma: {count}, és csak a Döntés vagy a Szétválasztás vagy egyesítés blokk küldhet entitásokat több úton. Törölje a felesleges folyamatokat, vagy adjon hozzá Döntés blokkot.
+	In “{field}” of {block}, set “{param}” to a finite number.	A(z) {block} blokk „{field}” mezőjében a(z) „{param}” legyen véges szám.
+	In “{field}” of {block}, set “{param}” to a number above 0.	A(z) {block} blokk „{field}” mezőjében a(z) „{param}” legyen 0-nál nagyobb szám.
+	In “{field}” of {block}, set “{param}” to 0 or more.	A(z) {block} blokk „{field}” mezőjében a(z) „{param}” legyen 0 vagy nagyobb szám.
+	In “{field}” of {block}, set “{param}” to 1 or more.	A(z) {block} blokk „{field}” mezőjében a(z) „{param}” legyen 1 vagy nagyobb szám.
+	In “{field}” of {block}, set “{param}” to a number from 0 to 1.	A(z) {block} blokk „{field}” mezőjében a(z) „{param}” legyen 0 és 1 közötti szám.
+	In “{field}” of {block}, set “Minimum” below “Maximum”, and any “Most likely” value between them.	A(z) {block} blokk „{field}” mezőjében a „Minimum” értéke legyen kisebb, mint a „Maximum” értéke, és az esetleges „Legvalószínűbb” érték essen közéjük.
+	In “{field}” of {block}, add data points whose probabilities add up to more than 0.	A(z) {block} blokk „{field}” mezőjében adjon meg olyan adatpontokat, amelyek valószínűségeinek összege nagyobb 0-nál.
+	{block} would never have a unit to work with. Give it at least 1 unit.	A(z) {block} blokknak soha nem lenne egysége, amellyel dolgozhatna. Adjon neki legalább 1 egységet.
+	{block} would make entities without end, because its “Time between arrivals” is always 0. Give it a time above 0, or set an “Arrival limit”.	A(z) {block} blokk véget nem érően hozna létre entitásokat, mert az „Érkezések közötti idő” mindig 0. Adjon meg 0-nál nagyobb időt, vagy adjon meg „Érkezési korlát” értéket.
+	The model has no Arrivals block, so nothing will happen. Add an Arrivals block.	A modellben nincs Érkezések blokk, ezért nem történik semmi. Adjon hozzá egy Érkezések blokkot.
+	The model has no Departures block, so no time in system is measured. Add a Departures block.	A modellben nincs Távozások blokk, ezért nem mérhető a rendszerben töltött idő. Adjon hozzá egy Távozások blokkot.
+	No entity can reach {block} from an Arrivals block. Connect it to a block that entities pass through.	A(z) {block} blokkhoz egyetlen entitás sem jut el Érkezések blokkból. Kösse olyan blokkhoz, amelyen entitások haladnak át.
+	Entities in {block} can never reach a Departures block. Connect it on towards Departures.	A(z) {block} blokkban lévő entitások soha nem érnek el Távozások blokkot. Kösse tovább a Távozások blokk felé.
+	Set the “{state}” power of {block} to a number of kilowatts, 0 or more.	A(z) {block} blokk „{state}” teljesítményét adja meg kilowattban, 0 vagy nagyobb számként.
+	Set the warm-up of the experiment to 0 or more.	A kísérlet bemelegítését állítsa 0-ra vagy többre.
+	Set the duration of the experiment to more than 0.	A kísérlet időtartamát állítsa 0-nál nagyobbra.
+	Set the number of runs of the experiment to 1 or more.	A kísérlet futásainak számát állítsa 1-re vagy többre.
+	Set the layout scale (length units per drawing unit) to a finite number above 0.	Az elrendezés léptékét (hosszegység rajzegységenként) állítsa 0-nál nagyobb, véges számra.
+	A property of {block} has no name. Give it a name, or remove it.	A(z) {block} blokk egyik tulajdonságának nincs neve. Adjon neki nevet, vagy törölje.
+	{block} sets the property “{name}” twice. Keep one of them.	A(z) {block} blokk kétszer állítja be a(z) „{name}” tulajdonságot. Egyiket tartsa meg.
+	The property “{name}” of {block} needs shares that are not negative and add up to more than 0. Change the shares.	A(z) „{name}” tulajdonság arányai a(z) {block} blokkon nem lehetnek negatívak, és összegüknek 0-nál nagyobbnak kell lennie. Módosítsa az arányokat.
+	The property “{name}” has the type “{type2}” on {block} but “{type}” on another block. Give it one type everywhere.	A(z) „{name}” tulajdonság típusa a(z) {block} blokkon „{type2}”, egy másik blokkon viszont „{type}”. Adjon neki mindenhol ugyanazt a típust.
+	The value of the property “{name}” on {block} does not fit its type, “{type}”. Change the value or the type.	A(z) „{name}” tulajdonság értéke a(z) {block} blokkon nem illik a típusához („{type}”). Módosítsa az értéket vagy a típust.
+	The expression for the property “{name}” on {block} cannot be used: {error}. Correct “{expression}”.	A(z) „{name}” tulajdonság kifejezése a(z) {block} blokkon nem használható: {error}. Javítsa ki: „{expression}”.
+	{block} reads the property “{name}”, which no block sets, so it would read as empty. Set it on an earlier block, or correct the name.	A(z) {block} blokk olvassa a(z) „{name}” tulajdonságot, amelyet egyetlen blokk sem állít be, ezért üresként olvasná. Állítsa be egy korábbi blokkon, vagy javítsa ki a nevet.
+	The setup of {block} has times for particular changes but no property to watch. Choose a property under “Only when this property changes”.	A(z) {block} blokk átállásában vannak idők bizonyos változásokra, de nincs figyelendő tulajdonság. Válasszon tulajdonságot a „Csak ha ez a tulajdonság változik” alatt.
+	{block} has times for particular values but no property to read them from. Choose a property under “Service time by property”.	A(z) {block} blokknak bizonyos értékekre vannak megadott idői, de nincs tulajdonság, amelyből ezeket olvasná. Válasszon tulajdonságot a „Kiszolgálási idő tulajdonság szerint” alatt.
+	{block} has two times for the value “{value}”. Keep one.	A(z) {block} blokknak két ideje van a(z) „{value}” értékre. Egyiket tartsa meg.
+	Set the time of {block} for the value “{value}” to a mean of 0 or more.	A(z) {block} blokk idejét a(z) „{value}” értékre állítsa 0 vagy nagyobb átlagra.
+	The scrap at {block} counts against {other}, which is not a task with a resource. Choose a task with a resource.	A(z) {block} blokk selejtje a(z) {other} blokkra számít, de az nem erőforrást használó feladat. Válasszon erőforrást használó feladatot.
+	Set “Planned run time per item” of {block} to a mean above 0.	A(z) {block} blokk „Tervezett futási idő darabonként” értékét állítsa 0-nál nagyobb átlagra.
+	Set “Time before giving up” of {block} to a mean of 0 or more.	A(z) {block} blokk „Idő a lemondásig” értékét állítsa 0 vagy nagyobb átlagra.
+	The flow {flow} is ticked “Gave up”, but only a task with a resource and a “Time before giving up” sends entities that give up. Untick it, or set a “Time before giving up” on {block}.	A(z) {flow} folyamaton be van jelölve a „Lemondtak”, de csak az az erőforrást használó feladat küld lemondó entitásokat, amelynek van „Idő a lemondásig” értéke. Szüntesse meg a jelölést, vagy állítson be „Idő a lemondásig” értéket a(z) {block} blokkon.
+	{count} flows out of {block} are ticked “{way}”; at most one can be. Untick all but one.	A(z) {block} blokkból kimenő folyamatok közül ennyin van bejelölve a(z) „{way}”: {count}; legfeljebb egyen lehet. Egy kivételével szüntesse meg a jelölést.
+	The flow {flow} is ticked “Turned away”, but only a task with a resource and a limited waiting room turns entities away. Untick it, or limit the waiting room of {block}.	A(z) {flow} folyamaton be van jelölve az „Elutasítottak”, de csak a korlátozott várakozóhelyű, erőforrást használó feladat utasít el entitásokat. Szüntesse meg a jelölést, vagy korlátozza a(z) {block} blokk várakozóhelyét.
+	The flow {flow} is ticked both “Gave up” and “Turned away”. Keep one of them.	A(z) {flow} folyamaton a „Lemondtak” és az „Elutasítottak” is be van jelölve. Egyiket tartsa meg.
+	Set every chance of joining in the balking table of {block} to a number from 0 to 1.	A(z) {block} blokk sorba nem állási táblázatában minden sorba állási esély 0 és 1 közötti szám legyen.
+	Put the rows of the balking table of {block} in increasing order of “Number waiting”.	A(z) {block} blokk sorba nem állási táblázatának sorait rendezze a „Várakozók száma” szerint növekvő sorrendbe.
+	The flow {flow} is ticked “Balked”, but only a task with a resource and balking sends entities that balk. Untick it, or turn on balking for {block}.	A(z) {flow} folyamaton be van jelölve a „Nem álltak sorba”, de csak az az erőforrást használó feladat küld sorba be nem álló entitásokat, amelyen be van kapcsolva a sorba nem állás. Szüntesse meg a jelölést, vagy kapcsolja be a sorba nem állást a(z) {block} blokkon.
+	The flow {flow} is ticked “Balked” and also “Gave up” or “Turned away”. Keep one of them.	A(z) {flow} folyamaton a „Nem álltak sorba” mellett a „Lemondtak” vagy az „Elutasítottak” is be van jelölve. Egyiket tartsa meg.
+	The waiting room of {block} is set by calendar or per working server, but has no number of places, so it is unlimited. Give it a number of places, or make it fixed.	A(z) {block} blokk várakozóhelyét naptár vagy üzemelő szerverek szabják meg, de nincs férőhelyszáma, ezért korlátlan. Adjon meg férőhelyszámot, vagy tegye rögzítetté.
+	The waiting room of {block} is set by calendar, but no calendar has a value. Add a value for a calendar, or make the waiting room fixed.	A(z) {block} blokk várakozóhelyét naptár szabja meg, de egyetlen naptárnak sincs értéke. Adjon meg értéket egy naptárhoz, vagy tegye rögzítetté a várakozóhelyet.
+	Set “Fails above, waiting per working server” of {block} to a number of 0 or more.	A(z) {block} blokk „Bukási küszöb, várakozók üzemelő szerverenként” értékét állítsa 0 vagy nagyobb számra.
+	Set “Check every” of {block} to a mean above 0.	A(z) {block} blokk „Ellenőrzési időköz” értékét állítsa 0-nál nagyobb átlagra.
+	Set the demand of {block} to a number of parts above 0.	A(z) {block} blokk igényét állítsa 0-nál nagyobb alkatrészszámra.
+	The demand of {block} is per shift but names no calendar to say when the shifts are. Choose a calendar.	A(z) {block} blokk igénye műszakonként értendő, de nincs megnevezve naptár, amely megmondaná, mikor vannak a műszakok. Válasszon naptárat.
+	The demand of {block} names a calendar that does not exist. Choose a calendar that exists.	A(z) {block} blokk igénye olyan naptárat nevez meg, amely nem létezik. Válasszon létező naptárat.
+	The probability {value} on the flow {flow} is not from 0 to 1. Enter a probability from 0 to 1.	A(z) {flow} folyamat {value} valószínűsége nincs 0 és 1 között. Adjon meg 0 és 1 közötti valószínűséget.
+	The probabilities of the flows out of {block} add up to {sum}, not 1, so they are used in proportion. Change them to add up to 1 if that is not what you want.	A(z) {block} blokkból kimenő folyamatok valószínűségeinek összege {sum}, nem 1, ezért arányosan használjuk őket. Módosítsa úgy, hogy az összeg 1 legyen, ha nem ezt szeretné.
+	The condition on the flow {flow} cannot be used: {error}. Correct “{expression}”.	A(z) {flow} folyamat feltétele nem használható: {error}. Javítsa ki: „{expression}”.
+	The condition on the flow {flow} is ignored, because only flows out of a Decision block choose a route. Remove the condition.	A(z) {flow} folyamat feltételét figyelmen kívül hagyjuk, mert csak a Döntés blokkból kimenő folyamatok választanak útvonalat. Törölje a feltételt.
+	The probability on the flow {flow} is ignored, because only flows out of a Decision block choose a route. Remove the probability.	A(z) {flow} folyamat valószínűségét figyelmen kívül hagyjuk, mert csak a Döntés blokkból kimenő folyamatok választanak útvonalat. Törölje a valószínűséget.
+	The condition on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the condition.	A(z) {flow} folyamat feltételét figyelmen kívül hagyjuk, mert a Döntés a legrövidebb sorba küldi az entitásokat. Törölje a feltételt.
+	The probability on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the probability.	A(z) {flow} folyamat valószínűségét figyelmen kívül hagyjuk, mert a Döntés a legrövidebb sorba küldi az entitásokat. Törölje a valószínűséget.
+	The default on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the default.	A(z) {flow} folyamat alapértelmezését figyelmen kívül hagyjuk, mert a Döntés a legrövidebb sorba küldi az entitásokat. Törölje az alapértelmezést.
+	The probability on the flow {flow} is ignored, because the Decision routes by condition. Remove the probability.	A(z) {flow} folyamat valószínűségét figyelmen kívül hagyjuk, mert a Döntés feltétel szerint irányít. Törölje a valószínűséget.
+	The default flow of {block} is not one of its own flows out. Choose one of the flows out of {block} as the default.	A(z) {block} blokk alapértelmezett folyamata nem tartozik a saját kimenő folyamatai közé. Válassza alapértelmezettnek a(z) {block} blokkból kimenő egyik folyamatot.
+	{block} routes by condition but has no default flow, so an entity for which no condition holds leaves the model here. Choose a default flow.	A(z) {block} blokk feltétel szerint irányít, de nincs alapértelmezett folyamata, ezért az az entitás, amelyre egyik feltétel sem igaz, itt elhagyja a modellt. Válasszon alapértelmezett folyamatot.
+	{block} diverts entities but has no default flow, so an entity whose way is full has nowhere else to go. Choose a default flow.	A(z) {block} blokk eltérít entitásokat, de nincs alapértelmezett folyamata, ezért az az entitás, amelynek útja tele van, nem tud máshová menni. Válasszon alapértelmezett folyamatot.
+	{block} waits for an entity on the flow {flow}, which none can reach, so it never sends one on. Remove that flow, or connect it to a block that entities reach.	A(z) {block} blokk entitásra vár a(z) {flow} folyamaton, amelyet egy sem érhet el, ezért soha nem küld tovább egyet sem. Törölje a folyamatot, vagy kösse olyan blokkhoz, amelyet entitások elérnek.
+	{block} has a limited waiting room and is fed through {gateway}. While it is full, {gateway} holds up every entity behind it, and they wait before it without limit. Remove the gateway before {block}, or remove the limit.	A(z) {block} blokknak korlátozott várakozóhelye van, és a(z) {gateway} kapun át kapja az entitásokat. Amíg megtelt, a(z) {gateway} kapu feltartja a mögötte lévő összes entitást, és azok korlátlanul várnak előtte. Távolítsa el a kaput a(z) {block} blokk elől, vagy szüntesse meg a korlátot.
+	The limited waiting rooms of {loop} feed each other in a loop, so when all of them are full the loop deadlocks. Remove the limit on one of them, or break the loop.	A korlátozott várakozóhelyek hurokban táplálják egymást ({loop}), ezért ha mind megtelt, a hurok holtpontra jut. Szüntesse meg valamelyik korlátját, vagy törje fel a hurkot.
+	The pool {block} has no units. Give it at least 1 unit.	A(z) {block} készletnek nincs egysége. Adjon neki legalább 1 egységet.
+	{block} names no resource it needs. Add one under “Needs”.	A(z) {block} blokk nem nevez meg szükséges erőforrást. Adjon hozzá egyet az „Igények” alatt.
+	{block} needs a resource pool that does not exist. Choose a pool that exists.	A(z) {block} blokknak olyan erőforráskészletre van szüksége, amely nem létezik. Válasszon létező készletet.
+	{block} needs units with the roles {roles}, which no pool has. Give a pool those roles, or change what {block} needs.	A(z) {block} blokknak {roles} szerepkörű egységekre van szüksége, de egyetlen készletnek sincs ilyen. Adja meg ezeket a szerepköröket egy készletnek, vagy módosítsa, amire a(z) {block} blokknak szüksége van.
+	{block} needs {needed} units at once, but at most {available} exist, so this can never be met. Ask for fewer units, or add units to the pool.	A(z) {block} blokknak egyszerre {needed} egységre van szüksége, de legfeljebb {available} létezik, ezért ez soha nem teljesülhet. Kérjen kevesebb egységet, vagy adjon egységeket a készlethez.
+	Set the priority of {block} to a finite number, not {value}.	A(z) {block} blokk prioritását állítsa véges számra, ne {value} értékre.
+	No task uses the pool {block}. Add it to a task's needs, or remove the pool.	Egyetlen feladat sem használja a(z) {block} készletet. Adja hozzá egy feladat igényeihez, vagy törölje a készletet.
+	{block} has a value for a calendar that does not exist. Choose a calendar that exists, or remove the value.	A(z) {block} blokknak olyan naptárhoz van értéke, amely nem létezik. Válasszon létező naptárat, vagy törölje az értéket.
+	The calendar {block} has no entries, so it is never active. Add an entry.	A(z) {block} naptárnak nincsenek bejegyzései, ezért soha nem aktív. Adjon hozzá bejegyzést.
+	{block} allows no arrivals outside the calendars but names no calendar, so it never creates entities. Add arrivals by calendar, or allow arrivals outside calendars.	A(z) {block} blokk nem enged érkezéseket a naptárakon kívül, de nem nevez meg naptárat, ezért soha nem hoz létre entitásokat. Adjon hozzá naptár szerinti érkezéseket, vagy engedje a naptárakon kívüli érkezéseket.
+	Set the batch size of {block} to 1 or more.	A(z) {block} blokk kötegméretét állítsa 1-re vagy többre.
+	Set “{field}” of the conveyor {block} to a finite number above 0.	A(z) {block} szállítószalag „{field}” értékét állítsa 0-nál nagyobb, véges számra.
+	Set “{field}” of the conveyor {block} to a finite number of 0 or more.	A(z) {block} szállítószalag „{field}” értékét állítsa 0 vagy nagyobb, véges számra.
+	Set “{field}” of the conveyor {block} to a finite number other than 0.	A(z) {block} szállítószalag „{field}” értékét állítsa 0-tól különböző, véges számra.
+	The conveyor {block} is {length} long but each entity takes {pitch} (item length plus gap), so not even one fits. Lengthen the conveyor, or shorten the item or the gap.	A(z) {block} szállítószalag hossza {length}, de minden entitás {pitch} hosszt foglal el (a darab hossza plusz a rés), ezért egy sem fér el. Hosszabbítsa meg a szalagot, vagy rövidítse a darabot vagy a rést.
+	The drawn path of the conveyor {block} is {path_length} long, but its “Length” is {length}, so the drawing and the run disagree. Make “Length” match the path, or change the shape.	A(z) {block} szállítószalag megrajzolt útvonala {path_length} hosszú, de a „Hossz” értéke {length}, ezért a rajz és a futás ellentmond egymásnak. Állítsa a „Hossz” értékét az útvonalhoz, vagy módosítsa az alakot.
+	{block} is a transport, which StochCraft does not simulate yet. Remove it to run the model.	A(z) {block} blokk szállítás, amelyet a StochCraft még nem szimulál. Törölje a modell futtatásához.
+	The pool {pool} of the transport {block} does not exist. Choose a pool that exists.	A(z) {block} szállítás {pool} készlete nem létezik. Válasszon létező készletet.
+	The pool {pool} of the transport {block} is not mobile. Give the pool speeds and a home.	A(z) {block} szállítás {pool} készlete nem mobil. Adjon a készletnek sebességeket és kiindulási helyet.
+	Set “{field}” of the pool {block} to a finite number above 0.	A(z) {block} készlet „{field}” értékét állítsa 0-nál nagyobb, véges számra.
+	The home of the pool {block} is not a block of the model. Choose a block as its home.	A(z) {block} készlet kiindulási helye nem a modell blokkja. Válasszon blokkot kiindulási helynek.
+	The transport {block} needs one block before it, where it picks up, and one after it, where it drops off, but has {inputs} before and {outputs} after. Connect it to one block on each side.	A(z) {block} szállításnak egy blokkra van szüksége előtte, ahol felvesz, és egyre utána, ahol lerak. Előtte lévő blokkok: {inputs}, utána lévők: {outputs}. Kösse egy-egy blokkhoz mindkét oldalon.
+	{other} has no place on the canvas, so the distances for {block} are not known. Place {other} on the canvas.	A(z) {other} blokknak nincs helye a fő felületen, ezért a(z) {block} blokk távolságai nem ismertek. Helyezze el a(z) {other} blokkot a fő felületen.
+	The flow {flow} asks for no entities. Set its “Units” to 1 or more.	A(z) {flow} folyamat nem kér entitásokat. Állítsa az „Egységek” értékét 1-re vagy többre.
+	The “Units” on the flow {flow} is ignored, because only a Split or join block takes several entities from one flow. Remove it.	A(z) {flow} folyamat „Egységek” értékét figyelmen kívül hagyjuk, mert csak a Szétválasztás vagy egyesítés blokk vesz át több entitást egy folyamatból. Törölje.
+	No block makes batches, so {block} passes every entity through. Add a Batch block before it, or remove {block}.	Egyetlen blokk sem készít kötegeket, ezért a(z) {block} blokk minden entitást átenged. Adjon hozzá Köteg blokkot elé, vagy törölje a(z) {block} blokkot.
+	The stop condition names a block that does not exist. Choose a block that exists.	A leállási feltétel olyan blokkot nevez meg, amely nem létezik. Válasszon létező blokkot.
+	Set the count of the stop condition for {block} to 1 or more.	A(z) {block} blokk leállási feltételének számát állítsa 1-re vagy többre.
+	The stop condition waits for {block} to empty, but only a task can empty. Choose a task.	A leállási feltétel arra vár, hogy a(z) {block} blokk kiürüljön, de csak feladat ürülhet ki. Válasszon feladatot.
+	The stop condition at {block} can be met before the warm-up ends. A run that stops during the warm-up has no statistics after it and is left out of the results. Shorten the warm-up, or stop later.	A(z) {block} blokk leállási feltétele teljesülhet a bemelegítés vége előtt. A bemelegítés alatt leálló futásnak utána nincs statisztikája, és kimarad az eredményekből. Rövidítse a bemelegítést, vagy később állítson le.
+	Every run stopped before the warm-up ended, so no metric is reported. Shorten the warm-up, or stop later.	Minden futás leállt a bemelegítés vége előtt, ezért egyetlen mérőszám sem jelenik meg. Rövidítse a bemelegítést, vagy később állítson le.
+	{replications} of {of} runs stopped before the warm-up ended, so their statistics are left out of every metric. Shorten the warm-up, or stop later.	A bemelegítés vége előtt leállt futások száma: {replications} / {of}; statisztikájuk kimarad minden mérőszámból. Rövidítse a bemelegítést, vagy később állítson le.
+	{block} is offered {load}% of the work its units can do, so its waiting room grows without limit and the results describe no steady state. Add units, or shorten the service.	A(z) {block} blokkot az egységei által elvégezhető munka {load} %-ával terhelik, ezért a várakozóhelye korlátlanul nő, és az eredmények nem írnak le állandósult állapotot. Adjon hozzá egységeket, vagy rövidítse a kiszolgálást.
+	{block} is busy {utilisation}% of the time, and at the end at least {backlog} entities are still waiting against {left} that left. Work arrives faster than it is done, so the results describe no steady state. Add units, or shorten the service.	A(z) {block} blokk az idő {utilisation} %-ában foglalt, és a végén legalább {backlog} entitás még vár, miközben {left} távozott. A munka gyorsabban érkezik, mint ahogy elvégzik, ezért az eredmények nem írnak le állandósult állapotot. Adjon hozzá egységeket, vagy rövidítse a kiszolgálást.
+	The experiment has one run, so its results cannot be told from chance. Set the number of runs to at least 2, and usually 10 or more.	A kísérletnek egy futása van, ezért az eredményei nem különböztethetők meg a véletlentől. Állítsa a futások számát legalább 2-re, általában 10-re vagy többre.
+	{block} has a three-point estimate but no time to fit it to, so the estimate is ignored. Remove the estimate.	A(z) {block} blokknak hárompontos becslése van, de nincs ideje, amelyre illeszteni lehetne, ezért a becslést figyelmen kívül hagyjuk. Törölje a becslést.
+	The three-point estimate of {block} cannot be fitted: every point must be a finite number. Correct the points.	A(z) {block} blokk hárompontos becslése nem illeszthető: minden pontnak véges számnak kell lennie. Javítsa ki a pontokat.
+	The three-point estimate of {block} cannot be fitted: the points must be in order, minimum, most likely, then maximum or 95th percentile. Correct the points.	A(z) {block} blokk hárompontos becslése nem illeszthető: a pontoknak sorrendben kell állniuk: minimum, legvalószínűbb, majd maximum vagy 95. percentilis. Javítsa ki a pontokat.
+	The three-point estimate of {block} cannot be fitted: log-normal and Weibull estimates have no maximum. Give a 95th percentile instead.	A(z) {block} blokk hárompontos becslése nem illeszthető: a lognormális és a Weibull becslésnek nincs maximuma. Adjon meg helyette 95. percentilist.
+	The time of {block} is no longer the one fitted from its three-point estimate. Fit it again, or remove the estimate.	A(z) {block} blokk ideje már nem az, amelyet a hárompontos becsléséből illesztettek. Illessze újra, vagy törölje a becslést.
+	In “{field}” of {block}, the normal distribution draws below 0 more than 1 time in 100, and each such draw counts as 0, so the times are longer on average than its mean. Use a truncated normal with a minimum of 0, or a log-normal.	A(z) {block} blokk „{field}” mezőjében a normális eloszlás 100 húzásból több mint egyszer ad 0 alatti értéket, és minden ilyen húzás 0-nak számít, ezért az idők átlagosan hosszabbak az átlagánál. Használjon 0 minimumú csonkolt normálist, vagy lognormálist.
+	The entities of {block} do not add up: {came} came in or were inside at the start, but {went} left, were lost, gave up or are still inside.	A(z) {block} blokk entitásai nem jönnek ki: bejött vagy az elején bent volt: {came}, de távozott, elveszett, lemondott vagy még bent van: {went}.
+	The entities of the model do not add up: {came} were created or inside at the start, but {went} reached Departures, left the model elsewhere or are still inside.	A modell entitásai nem jönnek ki: létrejött vagy az elején bent volt: {came}, de a Távozások blokkhoz jutott, máshol hagyta el a modellt vagy még bent van: {went}.
+	No entity left the model, of {came} created or inside at the start. Check that the routing leads to Departures and that the run is long enough for an entity to get through.	Egyetlen entitás sem hagyta el a modellt; létrehozott vagy az elején bent lévő entitások száma: {came}. Ellenőrizze, hogy az útvonalválasztás a Távozások blokkhoz vezet, és hogy a futás elég hosszú ahhoz, hogy egy entitás átjusson.
+	Little's law does not hold at {block}: the time-average number inside was {mean}, but the entities' own times inside give {from_stays}.	A(z) {block} blokkon nem érvényes Little törvénye: a bent lévők időátlaga {mean} volt, de az entitások saját bent töltött idejéből {from_stays} adódik.
+	The utilisation of {block} counts {busy} units busy on average, but {working} were processing or setting up: units idle, blocked, off shift, failed or restarting were counted busy.	A(z) {block} blokk kihasználtsága átlagosan {busy} egységet számol foglaltnak, de feldolgozás vagy átállás alatt {working} volt: a tétlen, blokkolt, műszakon kívüli, meghibásodott vagy újraindulás alatti egységeket is foglaltnak számolta.
+	The utilisation of {block} counts {busy} units busy on average, but {working} were processing or setting up: units at work were not counted busy.	A(z) {block} blokk kihasználtsága átlagosan {busy} egységet számol foglaltnak, de feldolgozás vagy átállás alatt {working} volt: a munkát végző egységeket nem számolta foglaltnak.
+	The shares of the time of the units of {block} in each state add up to {total}, not 1.	A(z) {block} blokk egységei idejének állapotonkénti aránya összesen {total}, nem 1.
+	“{metric}” of {block} is {value}, outside 0 to 1 (0% to 100%).	A(z) „{metric}” értéke a(z) {block} blokkon {value}, a 0–1 (0–100%) tartományon kívül van.
+	This was found in {replications} of {of} runs, and the furthest off is shown.	Ezt a futások közül ennyiben találtuk: {replications} / {of}; a legtávolabbit mutatjuk.
+	This points to a fault in StochCraft rather than in the model. Please report it with the model.	Ez a StochCraft hibájára utal, nem a modellére. Kérjük, jelentse a modellel együtt.
+	Angle	Szög
+	Failed	Meghibásodva
+	Off shift	Műszakon kívül
+	Processing	Feldolgozás
+	Radius	Sugár
+	Rise	Emelkedés
+	Speed empty	Sebesség üresen
+	Speed loaded	Sebesség megrakva
+	Turns	Fordulatok
+	Unload	Kirakodás
+	Lost	Elveszett
+	An entity that leaves a waiting room before a unit takes it, because it has waited as long as it was willing to.	Olyan entitás, amely elhagyja a várakozóhelyet, mielőtt egy egység átvenné, mert addig várt, ameddig hajlandó volt.
+	An entity that does not join a waiting room at all, because the number already waiting put it off.	Olyan entitás, amely egyáltalán nem áll be a várakozóhelyre, mert a már várakozók száma elriasztotta.
+	An entity that finds the waiting room full and takes the flow ticked “Turned away” instead of waiting.	Olyan entitás, amely a várakozóhelyet telve találja, és várakozás helyett az „Elutasítottak” jelölésű folyamatot követi.
+	An entity that leaves the model without reaching Departures: it found the waiting room full with nowhere else to go, or a decision with no way out for it.	Olyan entitás, amely anélkül hagyja el a modellt, hogy elérné a Távozások blokkot: a várakozóhelyet telve találta, és nem volt hová mennie, vagy egy döntésnek nem volt kiútja számára.
+	Gave up on {id}	Lemondtak itt: {id}
+	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the flow ticked “Gave up”, or leaves the model.	Minden entitás legfeljebb annyi ideig vár itt, amennyit érkezésekor véletlenszerűen sorsolnak neki, aztán lemond: a „Lemondtak” jelölőnégyzettel megjelölt folyamatot követi, vagy elhagyja a modellt.
+	Entities that do not join the waiting room take this flow at once (to try again later, say), instead of being lost; they count as balked here.	A várakozóhelyre be nem álló entitások azonnal ezt a folyamatot követik (például hogy később újra próbálkozzanak), ahelyett hogy elvesznének; itt sorba be nem állóként számítanak.
+	The job stops at once: the entity goes back to the front of the waiting room for any server on shift, and the work done on it is wasted.	A munka azonnal leáll: az entitás visszakerül a várakozóhely elejére bármely műszakban lévő szerver számára, és a rajta végzett munka kárba vész.
+	The connection drops and the client tries again: the entity goes back to the front of the waiting room at once, and the work done on it is wasted.	A kapcsolat megszakad, és a kliens újrapróbálkozik: az entitás azonnal visszakerül a várakozóhely elejére, és a rajta végzett munka kárba vész (elvesztegetett munka).
+	Ticked, entities queue up at the end while the rest keep moving. Unticked, the whole belt stops when the entity at the end cannot leave.	Bejelölve az entitások sorba állnak a végén, míg a többi tovább halad. Bejelölés nélkül az egész szalag megáll, ha a végén lévő entitás nem tud távozni.
+	Play run 1 step by step and see each block's waiting room on the diagram	Az 1. futás lejátszása lépésenként, minden blokk várakozóhelyével a diagramon
+	Select a block to see its waiting room over time.	Válasszon egy blokkot a várakozóhelyének időbeli megtekintéséhez.
+	Entities on conveyors over time	Entitások a szalagokon az idő függvényében
+	Entities in the model over time	Entitások a modellben az idő függvényében
+	How long each entity spends on the conveyors.	Mennyi időt tölt az egyes entitás a szállítószalagokon.
+	No entity has left a conveyor yet	Még egy entitás sem hagyott el szállítószalagot
+	Share of entities by time on a conveyor, in {unit}	Az entitások aránya a szalagon töltött idő szerint, {unit}
+	Time on conveyors: {n} entities between {lo} and {hi} {unit}	Idő a szalagokon: {n} entitás {lo} és {hi} {unit} között
+	{from} to {to} {unit}: {share} of entities ({n})	{from}–{to} {unit}: az entitások {share} része ({n})
+	How many entities are on the conveyors over time.	Hány entitás van a szalagokon az idő függvényében.
+	How many entities are in the model over time.	Hány entitás van a modellben az idő függvényében.
+	At {time} {unit}: {n} entities	{time} {unit} időpontban: {n} entitás
+@plural	Makes {n} independent run of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval across them.	A modellt {n} független futásban futtatja a(z) {seed} véletlenszám-maggal. A blokkok eredményei tartalmazzák a 95%-os konfidenciaintervallum fél szélességét.|A modellt {n} független futásban futtatja a(z) {seed} véletlenszám-maggal. A blokkok eredményei tartalmazzák a 95%-os konfidenciaintervallum fél szélességét.
 	Fonts	Betűtípusok
 	The full list of third-party licences is in the file THIRD-PARTY-LICENSES.html, which comes with the download.	A harmadik felek licenceinek teljes listája az THIRD-PARTY-LICENSES.html fájlban található, amely a letöltéssel érkezik.
 	Full list of third-party licences	A harmadik felek licenceinek teljes listája

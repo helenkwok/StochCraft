@@ -21,8 +21,6 @@
 	A caller on hold: once a unit takes it, the entity stays.	Un apelant în așteptare: odată ce o unitate îl preia, entitatea rămâne.
 	A client that times out: if its time runs out during service, it gives up then, and the unit finishes the job anyway (wasted work).	Un client care expiră (timeout): dacă timpul îi expiră în timpul servirii, renunță atunci, iar unitatea termină oricum lucrul (muncă irosită).
 	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	Fișierul nou conține doar modelul: ce nu înțelege StochCraft din {file} este omis.
-	Abandoned	Renunțări
-	Abandoned on {id}	Renunțări pe {id}
 	About StochCraft	Despre StochCraft
 	About {app}	Despre {app}
 	Accent	Accent
@@ -162,7 +160,6 @@
 	Duration	Durată
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Fiecare analiză rulează experimentul de mai multe ori cu aceeași sămânță, așa că diferențele vin din modificare, nu din întâmplare. Poate dura puțin.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Fiecare entitate ia, integral și dintr-odată, prima dintre aceste alternative care poate fi satisfăcută în acel moment și returnează unitățile când pleacă.
-	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Fiecare entitate așteaptă aici cel mult un timp extras la întâmplare pentru ea la sosire, apoi renunță: ia ieșirea marcată „Renunțări” sau părăsește modelul.
 	Each server (unit) is checked every so often, as a load balancer probes the servers behind it. One that fails, with too many waiting, is taken out of service for a restart, then comes back.	Fiecare server (unitate) este verificat din când în când, așa cum un echilibrator de sarcină sondează serverele din spatele lui. Cel care pică, cu prea multe în așteptare, este scos din funcțiune pentru o repornire, apoi revine.
 	Edit	Editare
 	Edit themes…	Editează temele…
@@ -412,7 +409,6 @@
 	Run	Rulează
 	Run cancelled	Rulare anulată
 	Run experiment	Rulează experimentul
-	Play run 1 step by step and see each block's queue on the diagram	Redă rularea 1 pas cu pas și vezi coada fiecărui bloc în diagramă
 	Run the experiment ({shortcut})	Rulează experimentul ({shortcut})
 	Run the experiment again to see this result's spread.	Rulează din nou experimentul ca să vezi împrăștierea acestui rezultat.
 	Run the experiment at each value of one parameter, and compare a result.	Rulează experimentul la fiecare valoare a unui parametru și compară un rezultat.
@@ -433,7 +429,6 @@
 	Scrap ratio	Ponderea rebutului
 	Seed	Sămânță
 	Select All	Selectează tot
-	Select a block to see its queue over time.	Selectați un bloc pentru a-i vedea coada în timp.
 	Sender waits during transfer	Expeditorul așteaptă în timpul transferului
 	Separate the values with semicolons or spaces.	Separă valorile cu punct și virgulă sau spații.
 	Sequential	Secvențiale
@@ -497,10 +492,8 @@
 	Text	Text
 	Text on accent	Text pe accent
 	Text on header	Text pe antet
-	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	Conexiunea cade și clientul încearcă din nou: entitatea revine imediat în capul cozii, iar munca făcută pe ea este irosită.
 	The entity waits on its server and the job carries on with what was left once the server is back.	Entitatea așteaptă la serverul ei, iar lucrul continuă cu ce a rămas după ce serverul revine.
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more runs would narrow it.	Intervalul coboară sub ponderea țintă de {share}, deci nu este arătat cu 95% încredere că ponderea este atinsă; mai multe rulări l-ar îngusta.
-	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	Lucrul se oprește imediat: entitatea revine în capul cozii pentru orice server aflat în tură, iar munca făcută pe ea este irosită.
 	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	Lucrul se oprește imediat; entitatea așteaptă la serverul ei, iar lucrul continuă cu ce a rămas după ce acel server revine în tură.
 	The last task with a resource it finished at	Ultima sarcină cu resursă prin care a trecut piesa
 	The mean time to the stop condition is over the runs that met it only; the others ran to their time limit.	Timpul mediu până la condiția de oprire este doar pe rulările care au atins-o; celelalte au rulat până la limita de timp.
@@ -690,7 +683,6 @@ unit	yr	a
 	Balked on {id}	Nu au intrat în coadă pe {id}
 	Balking	Neintrare în coadă
 	Count those in service	Numără și entitățile în servire
-	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Entitățile care nu intră în coadă iau imediat acest flux (pentru a încerca din nou mai târziu, de exemplu), în loc să fie pierdute; aici sunt numărate ca neintrate în coadă.
 	Joins with probability	Intră în coadă cu probabilitatea
 	Number waiting	Număr în așteptare
 	Share balked	Proporția celor care nu au intrat în coadă
@@ -908,7 +900,6 @@ unit	yr	a
 @plural	Finished {n} run|Finished {n} runs	S-a încheiat {n} rulare|S-au încheiat {n} rulări|S-au încheiat {n} de rulări
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	S-a deschis {file} ({n} avertisment)|S-a deschis {file} ({n} avertismente)|S-a deschis {file} ({n} avertismente)
 @plural	Removed {n} block|Removed {n} blocks	S-a eliminat {n} bloc|S-au eliminat {n} blocuri|S-au eliminat {n} de blocuri
-@plural	Makes {n} independent run of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Efectuează {n} rulare independentă a modelului de la sămânța {seed}. Rezultatele fiecărui element includ semilățimea unui interval de încredere de 95%.|Efectuează {n} rulări independente ale modelului de la sămânța {seed}. Rezultatele fiecărui element includ semilățimea unui interval de încredere de 95%.|Efectuează {n} de rulări independente ale modelului de la sămânța {seed}. Rezultatele fiecărui element includ semilățimea unui interval de încredere de 95%.
 @plural	The stop condition was met in {met} of {n} run, after {time} {unit} on average.|The stop condition was met in {met} of {n} runs, after {time} {unit} on average.	Condiția de oprire a fost atinsă în {met} din {n} rulare, după {time} {unit} în medie.|Condiția de oprire a fost atinsă în {met} din {n} rulări, după {time} {unit} în medie.|Condiția de oprire a fost atinsă în {met} din {n} de rulări, după {time} {unit} în medie.
 @plural	{done} of {n} run finished|{done} of {n} runs finished	S-a încheiat {done} din {n} rulare|S-au încheiat {done} din {n} rulări|S-au încheiat {done} din {n} de rulări
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} run|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} runs	{name}: {mean}{unit}\nInterval 95% de la {low} la {high}{unit}\npe {n} rulare|{name}: {mean}{unit}\nInterval 95% de la {low} la {high}{unit}\npe {n} rulări|{name}: {mean}{unit}\nInterval 95% de la {low} la {high}{unit}\npe {n} de rulări
@@ -938,7 +929,6 @@ unit	yr	a
 	kilometres	kilometri
 	inches	inci
 	feet	picioare
-	Ticked, items queue up at the end while the rest keep moving. Unticked, the whole belt stops when the item at the end cannot leave.	Bifat, articolele fac coadă la capăt, în timp ce celelalte continuă să se miște. Nebifat, toată banda se oprește când articolul de la capăt nu poate pleca.
 	A belt that carries entities from one end to the other. It has a length and a speed, and each entity takes a pitch of belt: its item length plus the gap kept free after it. So it holds at most length ÷ pitch entities and carries at most speed ÷ pitch per time unit. Accumulating: entities queue up at the end while the rest keep moving; otherwise the whole belt stops.	O bandă care duce entități de la un capăt la altul. Are o lungime și o viteză, iar fiecare entitate ocupă un pas de bandă: lungimea articolului ei plus spațiul lăsat liber în urma lui. Astfel, banda cuprinde cel mult lungime ÷ pas entități și transportă cel mult viteză ÷ pas pe unitatea de timp. Acumulare: entitățile fac coadă la capăt, în timp ce celelalte continuă să se miște; altfel, se oprește toată banda.
 	Station	Stație
 	Kind	Tip
@@ -992,19 +982,165 @@ unit	yr	a
 	Time on conveyors	Timp pe benzi transportoare
 	No conveyors in this model	Nicio bandă transportoare în acest model
 	Fills in when the run ends	Se completează la sfârșitul rulării
-	How long each item spends on the conveyors.	Cât timp petrece fiecare articol pe benzile transportoare.
-	No item has left a conveyor yet	Niciun articol nu a părăsit încă o bandă
-	Share of items by time on a conveyor, in {unit}	Ponderea articolelor după timpul pe o bandă, în {unit}
-	Time on conveyors: {n} items between {lo} and {hi} {unit}	Timp pe benzi: {n} articole între {lo} și {hi} {unit}
-	{from} to {to} {unit}: {share} of items ({n})	De la {from} la {to} {unit}: {share} din articole ({n})
-	Items on conveyors over time	Articole pe benzi în timp
-	Items in the model over time	Articole în model în timp
-	How many items are on the conveyors over time.	Câte articole sunt pe benzi în timp.
-	How many items are in the model over time.	Câte articole sunt în model în timp.
 	Nothing was recorded over time in these results	În aceste rezultate nu s-a înregistrat nimic în timp
-	At {time} {unit}: {n} items	La {time} {unit}: {n} articole
 	Run the model to fill the dashboard	Rulați modelul pentru a completa tabloul de bord
 	The resource and conveyor charts show the last run until this one ends	Graficele resurselor și benzilor arată ultima rulare până se încheie aceasta
+# Validation messages, new labels and word changes (issue #145)
+	The id “{id}” is not valid. Start an id with a letter or an underscore, then use only letters, digits, dots, hyphens and underscores.	Id-ul „{id}” nu este valid. Începeți id-ul cu o literă sau cu o liniuță de subliniere, apoi folosiți doar litere, cifre, puncte, cratime și liniuțe de subliniere.
+	More than one block, flow, pool or calendar has the id “{id}”. Give each its own id.	Mai mult de un bloc, flux, grup sau calendar are id-ul „{id}”. Dați fiecăruia propriul id.
+	The flow {flow} uses a block that does not exist. Remove the flow, or connect it to a block that exists.	Fluxul {flow} folosește un bloc care nu există. Eliminați fluxul sau conectați-l la un bloc existent.
+	The flow {flow} leads into an Arrivals block, which takes no input. Remove the flow, or send it to another block.	Fluxul {flow} duce într-un bloc Sosiri, care nu primește intrare. Eliminați fluxul sau trimiteți-l către alt bloc.
+	The flow {flow} leaves a Departures block, which has no output. Remove the flow, or start it from another block.	Fluxul {flow} pleacă dintr-un bloc Plecări, care nu are ieșire. Eliminați fluxul sau porniți-l dintr-un alt bloc.
+	The flow {flow} leads from a block back to itself. Remove it, or send it to another block.	Fluxul {flow} duce dintr-un bloc înapoi în el însuși. Eliminați-l sau trimiteți-l către alt bloc.
+	{block} has nowhere to send entities. Add a flow from it to the next block.	Blocul {block} nu are unde să trimită entități. Adăugați un flux de la el către blocul următor.
+	{block} has {count} flows out, and only a Decision or a Split or join block can send entities down several. Remove the extra flows, or add a Decision block.	Blocul {block} are {count} fluxuri de ieșire, iar doar un bloc Decizie sau Divizează sau unește poate trimite entități pe mai multe. Eliminați fluxurile în plus sau adăugați un bloc Decizie.
+	In “{field}” of {block}, set “{param}” to a finite number.	În „{field}” al blocului {block}, setați „{param}” la un număr finit.
+	In “{field}” of {block}, set “{param}” to a number above 0.	În „{field}” al blocului {block}, setați „{param}” la un număr mai mare decât 0.
+	In “{field}” of {block}, set “{param}” to 0 or more.	În „{field}” al blocului {block}, setați „{param}” la 0 sau mai mult.
+	In “{field}” of {block}, set “{param}” to 1 or more.	În „{field}” al blocului {block}, setați „{param}” la 1 sau mai mult.
+	In “{field}” of {block}, set “{param}” to a number from 0 to 1.	În „{field}” al blocului {block}, setați „{param}” la un număr de la 0 la 1.
+	In “{field}” of {block}, set “Minimum” below “Maximum”, and any “Most likely” value between them.	În „{field}” al blocului {block}, setați „Minim” sub „Maxim” și orice valoare „Cel mai probabil” între ele.
+	In “{field}” of {block}, add data points whose probabilities add up to more than 0.	În „{field}” al blocului {block}, adăugați puncte de date ale căror probabilități însumează mai mult de 0.
+	{block} would never have a unit to work with. Give it at least 1 unit.	Blocul {block} nu ar avea niciodată o unitate cu care să lucreze. Dați-i cel puțin 1 unitate.
+	{block} would make entities without end, because its “Time between arrivals” is always 0. Give it a time above 0, or set an “Arrival limit”.	Blocul {block} ar crea entități fără sfârșit, deoarece „Timp între sosiri” este mereu 0. Dați-i un timp mai mare decât 0 sau setați o „Limită de sosiri”.
+	The model has no Arrivals block, so nothing will happen. Add an Arrivals block.	Modelul nu are niciun bloc Sosiri, deci nu se va întâmpla nimic. Adăugați un bloc Sosiri.
+	The model has no Departures block, so no time in system is measured. Add a Departures block.	Modelul nu are niciun bloc Plecări, deci nu se măsoară niciun timp în sistem. Adăugați un bloc Plecări.
+	No entity can reach {block} from an Arrivals block. Connect it to a block that entities pass through.	Nicio entitate nu poate ajunge la blocul {block} dintr-un bloc Sosiri. Conectați-l la un bloc prin care trec entitățile.
+	Entities in {block} can never reach a Departures block. Connect it on towards Departures.	Entitățile din blocul {block} nu pot ajunge niciodată într-un bloc Plecări. Conectați-l mai departe către Plecări.
+	Set the “{state}” power of {block} to a number of kilowatts, 0 or more.	Setați puterea „{state}” a blocului {block} la un număr de kilowați, 0 sau mai mult.
+	Set the warm-up of the experiment to 0 or more.	Setați perioada de încălzire a experimentului la 0 sau mai mult.
+	Set the duration of the experiment to more than 0.	Setați durata experimentului la mai mult de 0.
+	Set the number of runs of the experiment to 1 or more.	Setați numărul de rulări ale experimentului la 1 sau mai mult.
+	Set the layout scale (length units per drawing unit) to a finite number above 0.	Setați scara aspectului (unități de lungime per unitate de desen) la un număr finit mai mare decât 0.
+	A property of {block} has no name. Give it a name, or remove it.	O proprietate a blocului {block} nu are nume. Dați-i un nume sau eliminați-o.
+	{block} sets the property “{name}” twice. Keep one of them.	Blocul {block} setează proprietatea „{name}” de două ori. Păstrați una dintre ele.
+	The property “{name}” of {block} needs shares that are not negative and add up to more than 0. Change the shares.	Proprietatea „{name}” a blocului {block} are nevoie de ponderi nenegative care însumează mai mult de 0. Modificați ponderile.
+	The property “{name}” has the type “{type2}” on {block} but “{type}” on another block. Give it one type everywhere.	Proprietatea „{name}” are tipul „{type2}” pe blocul {block}, dar „{type}” pe alt bloc. Dați-i un singur tip peste tot.
+	The value of the property “{name}” on {block} does not fit its type, “{type}”. Change the value or the type.	Valoarea proprietății „{name}” de pe blocul {block} nu se potrivește cu tipul ei, „{type}”. Modificați valoarea sau tipul.
+	The expression for the property “{name}” on {block} cannot be used: {error}. Correct “{expression}”.	Expresia pentru proprietatea „{name}” de pe blocul {block} nu poate fi folosită: {error}. Corectați „{expression}”.
+	{block} reads the property “{name}”, which no block sets, so it would read as empty. Set it on an earlier block, or correct the name.	Blocul {block} citește proprietatea „{name}”, pe care niciun bloc nu o setează, deci ar fi citită ca goală. Setați-o pe un bloc anterior sau corectați numele.
+	The setup of {block} has times for particular changes but no property to watch. Choose a property under “Only when this property changes”.	Pregătirea blocului {block} are timpi pentru anumite schimbări, dar nicio proprietate de urmărit. Alegeți o proprietate la „Doar când se schimbă această proprietate”.
+	{block} has times for particular values but no property to read them from. Choose a property under “Service time by property”.	Blocul {block} are timpi pentru anumite valori, dar nicio proprietate din care să le citească. Alegeți o proprietate la „Timp de servire după o proprietate”.
+	{block} has two times for the value “{value}”. Keep one.	Blocul {block} are doi timpi pentru valoarea „{value}”. Păstrați unul.
+	Set the time of {block} for the value “{value}” to a mean of 0 or more.	Setați timpul blocului {block} pentru valoarea „{value}” la o medie de 0 sau mai mult.
+	The scrap at {block} counts against {other}, which is not a task with a resource. Choose a task with a resource.	Rebutul de la blocul {block} se numără față de {other}, care nu este o sarcină cu resursă. Alegeți o sarcină cu resursă.
+	Set “Planned run time per item” of {block} to a mean above 0.	Setați „Timp de execuție planificat pe piesă” al blocului {block} la o medie mai mare decât 0.
+	Set “Time before giving up” of {block} to a mean of 0 or more.	Setați „Timp până la renunțare” al blocului {block} la o medie de 0 sau mai mult.
+	The flow {flow} is ticked “Gave up”, but only a task with a resource and a “Time before giving up” sends entities that give up. Untick it, or set a “Time before giving up” on {block}.	Fluxul {flow} este bifat „Au renunțat”, dar numai o sarcină cu resursă și cu „Timp până la renunțare” trimite entități care renunță. Debifați-l sau setați un „Timp până la renunțare” pe blocul {block}.
+	{count} flows out of {block} are ticked “{way}”; at most one can be. Untick all but one.	{count} fluxuri de ieșire din blocul {block} sunt bifate „{way}”; cel mult unul poate fi. Debifați-le pe toate în afară de unul.
+	The flow {flow} is ticked “Turned away”, but only a task with a resource and a limited waiting room turns entities away. Untick it, or limit the waiting room of {block}.	Fluxul {flow} este bifat „Respingeri”, dar numai o sarcină cu resursă și cu sală de așteptare limitată respinge entități. Debifați-l sau limitați sala de așteptare a blocului {block}.
+	The flow {flow} is ticked both “Gave up” and “Turned away”. Keep one of them.	Fluxul {flow} este bifat și „Au renunțat”, și „Respingeri”. Păstrați una dintre ele.
+	Set every chance of joining in the balking table of {block} to a number from 0 to 1.	Setați fiecare șansă de a intra din tabelul de neintrare în coadă al blocului {block} la un număr de la 0 la 1.
+	Put the rows of the balking table of {block} in increasing order of “Number waiting”.	Puneți rândurile tabelului de neintrare în coadă al blocului {block} în ordinea crescătoare a „Număr în așteptare”.
+	The flow {flow} is ticked “Balked”, but only a task with a resource and balking sends entities that balk. Untick it, or turn on balking for {block}.	Fluxul {flow} este bifat „Nu au intrat în coadă”, dar numai o sarcină cu resursă și cu neintrare în coadă trimite entități care nu intră. Debifați-l sau activați neintrarea în coadă pentru blocul {block}.
+	The flow {flow} is ticked “Balked” and also “Gave up” or “Turned away”. Keep one of them.	Fluxul {flow} este bifat „Nu au intrat în coadă” și, de asemenea, „Au renunțat” sau „Respingeri”. Păstrați una dintre ele.
+	The waiting room of {block} is set by calendar or per working server, but has no number of places, so it is unlimited. Give it a number of places, or make it fixed.	Sala de așteptare a blocului {block} este setată după calendar sau per server în funcțiune, dar nu are un număr de locuri, deci este nelimitată. Dați-i un număr de locuri sau faceți-o fixă.
+	The waiting room of {block} is set by calendar, but no calendar has a value. Add a value for a calendar, or make the waiting room fixed.	Sala de așteptare a blocului {block} este setată după calendar, dar niciun calendar nu are o valoare. Adăugați o valoare pentru un calendar sau faceți sala de așteptare fixă.
+	Set “Fails above, waiting per working server” of {block} to a number of 0 or more.	Setați „Pică peste (în așteptare per server în funcțiune)” al blocului {block} la un număr de 0 sau mai mult.
+	Set “Check every” of {block} to a mean above 0.	Setați „Verificare la fiecare” al blocului {block} la o medie mai mare decât 0.
+	Set the demand of {block} to a number of parts above 0.	Setați cererea blocului {block} la un număr de piese mai mare decât 0.
+	The demand of {block} is per shift but names no calendar to say when the shifts are. Choose a calendar.	Cererea blocului {block} este per tură, dar nu indică niciun calendar care să spună când sunt turele. Alegeți un calendar.
+	The demand of {block} names a calendar that does not exist. Choose a calendar that exists.	Cererea blocului {block} indică un calendar care nu există. Alegeți un calendar existent.
+	The probability {value} on the flow {flow} is not from 0 to 1. Enter a probability from 0 to 1.	Probabilitatea {value} de pe fluxul {flow} nu este de la 0 la 1. Introduceți o probabilitate de la 0 la 1.
+	The probabilities of the flows out of {block} add up to {sum}, not 1, so they are used in proportion. Change them to add up to 1 if that is not what you want.	Probabilitățile fluxurilor de ieșire din blocul {block} însumează {sum}, nu 1, așa că sunt folosite proporțional. Modificați-le să însumeze 1 dacă nu asta doriți.
+	The condition on the flow {flow} cannot be used: {error}. Correct “{expression}”.	Condiția de pe fluxul {flow} nu poate fi folosită: {error}. Corectați „{expression}”.
+	The condition on the flow {flow} is ignored, because only flows out of a Decision block choose a route. Remove the condition.	Condiția de pe fluxul {flow} este ignorată, deoarece doar fluxurile care pleacă dintr-un bloc Decizie aleg o rută. Eliminați condiția.
+	The probability on the flow {flow} is ignored, because only flows out of a Decision block choose a route. Remove the probability.	Probabilitatea de pe fluxul {flow} este ignorată, deoarece doar fluxurile care pleacă dintr-un bloc Decizie aleg o rută. Eliminați probabilitatea.
+	The condition on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the condition.	Condiția de pe fluxul {flow} este ignorată, deoarece Decizia trimite entitățile către cea mai scurtă coadă. Eliminați condiția.
+	The probability on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the probability.	Probabilitatea de pe fluxul {flow} este ignorată, deoarece Decizia trimite entitățile către cea mai scurtă coadă. Eliminați probabilitatea.
+	The default on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the default.	Setarea implicită de pe fluxul {flow} este ignorată, deoarece Decizia trimite entitățile către cea mai scurtă coadă. Eliminați setarea implicită.
+	The probability on the flow {flow} is ignored, because the Decision routes by condition. Remove the probability.	Probabilitatea de pe fluxul {flow} este ignorată, deoarece Decizia alege ruta după condiție. Eliminați probabilitatea.
+	The default flow of {block} is not one of its own flows out. Choose one of the flows out of {block} as the default.	Fluxul implicit al blocului {block} nu este unul dintre propriile fluxuri de ieșire. Alegeți ca implicit unul dintre fluxurile de ieșire ale blocului {block}.
+	{block} routes by condition but has no default flow, so an entity for which no condition holds leaves the model here. Choose a default flow.	Blocul {block} alege ruta după condiție, dar nu are flux implicit, deci o entitate pentru care nu se aplică nicio condiție părăsește aici modelul. Alegeți un flux implicit.
+	{block} diverts entities but has no default flow, so an entity whose way is full has nowhere else to go. Choose a default flow.	Blocul {block} deviază entități, dar nu are flux implicit, deci o entitate al cărei drum este plin nu are unde altundeva să meargă. Alegeți un flux implicit.
+	{block} waits for an entity on the flow {flow}, which none can reach, so it never sends one on. Remove that flow, or connect it to a block that entities reach.	Blocul {block} așteaptă o entitate pe fluxul {flow}, la care niciuna nu poate ajunge, deci nu trimite niciodată una mai departe. Eliminați acel flux sau conectați-l la un bloc la care ajung entitățile.
+	{block} has a limited waiting room and is fed through {gateway}. While it is full, {gateway} holds up every entity behind it, and they wait before it without limit. Remove the gateway before {block}, or remove the limit.	Blocul {block} are o sală de așteptare limitată și este alimentat prin poarta {gateway}. Cât timp este plină, poarta {gateway} oprește fiecare entitate din spatele ei, iar acestea așteaptă în fața ei fără limită. Eliminați poarta dinaintea blocului {block} sau eliminați limita.
+	The limited waiting rooms of {loop} feed each other in a loop, so when all of them are full the loop deadlocks. Remove the limit on one of them, or break the loop.	Sălile de așteptare limitate ale blocurilor {loop} se alimentează reciproc într-o buclă, deci când toate sunt pline, bucla se blochează. Eliminați limita uneia dintre ele sau întrerupeți bucla.
+	The pool {block} has no units. Give it at least 1 unit.	Grupul {block} nu are unități. Dați-i cel puțin 1 unitate.
+	{block} names no resource it needs. Add one under “Needs”.	Blocul {block} nu indică nicio resursă de care are nevoie. Adăugați una la „Necesar”.
+	{block} needs a resource pool that does not exist. Choose a pool that exists.	Blocul {block} are nevoie de un grup de resurse care nu există. Alegeți un grup existent.
+	{block} needs units with the roles {roles}, which no pool has. Give a pool those roles, or change what {block} needs.	Blocul {block} are nevoie de unități cu rolurile {roles}, pe care niciun grup nu le are. Dați unui grup acele roluri sau schimbați ce necesită blocul {block}.
+	{block} needs {needed} units at once, but at most {available} exist, so this can never be met. Ask for fewer units, or add units to the pool.	Blocul {block} are nevoie de {needed} unități simultan, dar există cel mult {available}, deci nu poate fi satisfăcut niciodată. Cereți mai puține unități sau adăugați unități în grup.
+	Set the priority of {block} to a finite number, not {value}.	Setați prioritatea blocului {block} la un număr finit, nu {value}.
+	No task uses the pool {block}. Add it to a task's needs, or remove the pool.	Nicio sarcină nu folosește grupul {block}. Adăugați-l la necesarul unei sarcini sau eliminați grupul.
+	{block} has a value for a calendar that does not exist. Choose a calendar that exists, or remove the value.	Blocul {block} are o valoare pentru un calendar care nu există. Alegeți un calendar existent sau eliminați valoarea.
+	The calendar {block} has no entries, so it is never active. Add an entry.	Calendarul {block} nu are intrări, deci nu este niciodată activ. Adăugați o intrare.
+	{block} allows no arrivals outside the calendars but names no calendar, so it never creates entities. Add arrivals by calendar, or allow arrivals outside calendars.	Blocul {block} nu permite sosiri în afara calendarelor, dar nu indică niciun calendar, deci nu creează niciodată entități. Adăugați sosiri pe calendar sau permiteți sosiri în afara calendarelor.
+	Set the batch size of {block} to 1 or more.	Setați mărimea lotului blocului {block} la 1 sau mai mult.
+	Set “{field}” of the conveyor {block} to a finite number above 0.	Setați „{field}” al transportorului {block} la un număr finit mai mare decât 0.
+	Set “{field}” of the conveyor {block} to a finite number of 0 or more.	Setați „{field}” al transportorului {block} la un număr finit de 0 sau mai mult.
+	Set “{field}” of the conveyor {block} to a finite number other than 0.	Setați „{field}” al transportorului {block} la un număr finit diferit de 0.
+	The conveyor {block} is {length} long but each entity takes {pitch} (item length plus gap), so not even one fits. Lengthen the conveyor, or shorten the item or the gap.	Transportorul {block} are lungimea {length}, dar fiecare entitate ocupă {pitch} (lungimea articolului plus spațiul), deci nu încape nici măcar una. Măriți lungimea transportorului sau micșorați articolul ori spațiul.
+	The drawn path of the conveyor {block} is {path_length} long, but its “Length” is {length}, so the drawing and the run disagree. Make “Length” match the path, or change the shape.	Traseul desenat al transportorului {block} are lungimea {path_length}, dar „Lungime” este {length}, deci desenul și rularea nu se potrivesc. Faceți „Lungime” să corespundă traseului sau schimbați forma.
+	{block} is a transport, which StochCraft does not simulate yet. Remove it to run the model.	Blocul {block} este un transport, pe care StochCraft nu îl simulează încă. Eliminați-l pentru a rula modelul.
+	The pool {pool} of the transport {block} does not exist. Choose a pool that exists.	Grupul {pool} al transportului {block} nu există. Alegeți un grup existent.
+	The pool {pool} of the transport {block} is not mobile. Give the pool speeds and a home.	Grupul {pool} al transportului {block} nu este mobil. Dați grupului viteze și o bază.
+	Set “{field}” of the pool {block} to a finite number above 0.	Setați „{field}” al grupului {block} la un număr finit mai mare decât 0.
+	The home of the pool {block} is not a block of the model. Choose a block as its home.	Baza grupului {block} nu este un bloc al modelului. Alegeți un bloc drept bază.
+	The transport {block} needs one block before it, where it picks up, and one after it, where it drops off, but has {inputs} before and {outputs} after. Connect it to one block on each side.	Transportul {block} are nevoie de un bloc înaintea lui, de unde ridică, și de unul după el, unde descarcă, dar are înainte: {inputs}, iar după: {outputs}. Conectați-l la câte un bloc de fiecare parte.
+	{other} has no place on the canvas, so the distances for {block} are not known. Place {other} on the canvas.	Blocul {other} nu are loc pe suprafața principală, deci distanțele pentru blocul {block} nu sunt cunoscute. Plasați blocul {other} pe suprafața principală.
+	The flow {flow} asks for no entities. Set its “Units” to 1 or more.	Fluxul {flow} nu cere nicio entitate. Setați „Unități” la 1 sau mai mult.
+	The “Units” on the flow {flow} is ignored, because only a Split or join block takes several entities from one flow. Remove it.	„Unități” de pe fluxul {flow} este ignorat, deoarece doar un bloc Divizează sau unește ia mai multe entități dintr-un flux. Eliminați-l.
+	No block makes batches, so {block} passes every entity through. Add a Batch block before it, or remove {block}.	Niciun bloc nu face loturi, deci blocul {block} lasă să treacă fiecare entitate. Adăugați un bloc Lot înaintea lui sau eliminați blocul {block}.
+	The stop condition names a block that does not exist. Choose a block that exists.	Condiția de oprire indică un bloc care nu există. Alegeți un bloc existent.
+	Set the count of the stop condition for {block} to 1 or more.	Setați numărul din condiția de oprire pentru blocul {block} la 1 sau mai mult.
+	The stop condition waits for {block} to empty, but only a task can empty. Choose a task.	Condiția de oprire așteaptă ca blocul {block} să se golească, dar doar o sarcină se poate goli. Alegeți o sarcină.
+	The stop condition at {block} can be met before the warm-up ends. A run that stops during the warm-up has no statistics after it and is left out of the results. Shorten the warm-up, or stop later.	Condiția de oprire de la blocul {block} poate fi îndeplinită înainte de sfârșitul perioadei de încălzire. O rulare care se oprește în perioada de încălzire nu are statistici după ea și este lăsată în afara rezultatelor. Scurtați perioada de încălzire sau opriți mai târziu.
+	Every run stopped before the warm-up ended, so no metric is reported. Shorten the warm-up, or stop later.	Fiecare rulare s-a oprit înainte de sfârșitul perioadei de încălzire, deci nu se raportează niciun indicator. Scurtați perioada de încălzire sau opriți mai târziu.
+	{replications} of {of} runs stopped before the warm-up ended, so their statistics are left out of every metric. Shorten the warm-up, or stop later.	Din {of} rulări, {replications} s-au oprit înainte de sfârșitul perioadei de încălzire, deci statisticile lor sunt lăsate în afara fiecărui indicator. Scurtați perioada de încălzire sau opriți mai târziu.
+	{block} is offered {load}% of the work its units can do, so its waiting room grows without limit and the results describe no steady state. Add units, or shorten the service.	Blocul {block} primește {load}% din munca pe care o pot face unitățile sale, deci sala lui de așteptare crește fără limită, iar rezultatele nu descriu o stare stabilă. Adăugați unități sau scurtați servirea.
+	{block} is busy {utilisation}% of the time, and at the end at least {backlog} entities are still waiting against {left} that left. Work arrives faster than it is done, so the results describe no steady state. Add units, or shorten the service.	Blocul {block} este ocupat {utilisation}% din timp, iar la final cel puțin {backlog} entități încă așteaptă, față de {left} care au plecat. Munca sosește mai repede decât este făcută, deci rezultatele nu descriu o stare stabilă. Adăugați unități sau scurtați servirea.
+	The experiment has one run, so its results cannot be told from chance. Set the number of runs to at least 2, and usually 10 or more.	Experimentul are o singură rulare, deci rezultatele lui nu pot fi deosebite de întâmplare. Setați numărul de rulări la cel puțin 2, de obicei la 10 sau mai multe.
+	{block} has a three-point estimate but no time to fit it to, so the estimate is ignored. Remove the estimate.	Blocul {block} are o estimare în trei puncte, dar niciun timp la care s-o ajusteze, deci estimarea este ignorată. Eliminați estimarea.
+	The three-point estimate of {block} cannot be fitted: every point must be a finite number. Correct the points.	Estimarea în trei puncte a blocului {block} nu poate fi ajustată: fiecare punct trebuie să fie un număr finit. Corectați punctele.
+	The three-point estimate of {block} cannot be fitted: the points must be in order, minimum, most likely, then maximum or 95th percentile. Correct the points.	Estimarea în trei puncte a blocului {block} nu poate fi ajustată: punctele trebuie să fie în ordine: minim, cel mai probabil, apoi maxim sau percentila 95. Corectați punctele.
+	The three-point estimate of {block} cannot be fitted: log-normal and Weibull estimates have no maximum. Give a 95th percentile instead.	Estimarea în trei puncte a blocului {block} nu poate fi ajustată: estimările Log-normală și Weibull nu au maxim. Dați în schimb o percentilă 95.
+	The time of {block} is no longer the one fitted from its three-point estimate. Fit it again, or remove the estimate.	Timpul blocului {block} nu mai este cel ajustat din estimarea în trei puncte. Ajustați-l din nou sau eliminați estimarea.
+	In “{field}” of {block}, the normal distribution draws below 0 more than 1 time in 100, and each such draw counts as 0, so the times are longer on average than its mean. Use a truncated normal with a minimum of 0, or a log-normal.	În „{field}” al blocului {block}, distribuția normală extrage valori sub 0 mai des de 1 dată din 100, iar fiecare asemenea extragere se numără ca 0, deci timpii sunt în medie mai lungi decât media ei. Folosiți o normală trunchiată cu minim 0 sau o log-normală.
+	The entities of {block} do not add up: {came} came in or were inside at the start, but {went} left, were lost, gave up or are still inside.	Numărul entităților blocului {block} nu se echilibrează: {came} au intrat sau erau înăuntru la început, dar {went} au plecat, s-au pierdut, au renunțat sau sunt încă înăuntru.
+	The entities of the model do not add up: {came} were created or inside at the start, but {went} reached Departures, left the model elsewhere or are still inside.	Numărul entităților din model nu se echilibrează: {came} au fost create sau erau înăuntru la început, dar {went} au ajuns la Plecări, au părăsit modelul în altă parte sau sunt încă înăuntru.
+	No entity left the model, of {came} created or inside at the start. Check that the routing leads to Departures and that the run is long enough for an entity to get through.	Nicio entitate nu a părăsit modelul, din {came} create sau aflate înăuntru la început. Verificați că rutarea duce la Plecări și că rularea este destul de lungă pentru ca o entitate să treacă.
+	Little's law does not hold at {block}: the time-average number inside was {mean}, but the entities' own times inside give {from_stays}.	Legea lui Little nu se verifică la blocul {block}: numărul mediu în timp dinăuntru a fost {mean}, dar timpii proprii ai entităților în interior dau {from_stays}.
+	The utilisation of {block} counts {busy} units busy on average, but {working} were processing or setting up: units idle, blocked, off shift, failed or restarting were counted busy.	Gradul de utilizare al blocului {block} numără {busy} unități ocupate în medie, dar {working} procesau sau se pregăteau: unitățile inactive, blocate, în afara turei, în avarie sau în repornire au fost numărate ca ocupate.
+	The utilisation of {block} counts {busy} units busy on average, but {working} were processing or setting up: units at work were not counted busy.	Gradul de utilizare al blocului {block} numără {busy} unități ocupate în medie, dar {working} procesau sau se pregăteau: unitățile aflate la lucru nu au fost numărate ca ocupate.
+	The shares of the time of the units of {block} in each state add up to {total}, not 1.	Ponderile timpului unităților blocului {block} în fiecare stare însumează {total}, nu 1.
+	“{metric}” of {block} is {value}, outside 0 to 1 (0% to 100%).	„{metric}” al blocului {block} este {value}, în afara intervalului 0 la 1 (0% la 100%).
+	This was found in {replications} of {of} runs, and the furthest off is shown.	Aceasta s-a găsit în {replications} din {of} rulări și se afișează cea mai îndepărtată valoare.
+	This points to a fault in StochCraft rather than in the model. Please report it with the model.	Aceasta indică o eroare în StochCraft, nu în model. Raportați-o împreună cu modelul.
+	Angle	Unghi
+	Failed	În avarie
+	Off shift	În afara turei
+	Processing	Procesare
+	Radius	Rază
+	Rise	Înălțime
+	Speed empty	Viteză fără încărcătură
+	Speed loaded	Viteză cu încărcătură
+	Turns	Spire
+	Unload	Descărcare
+	Lost	Pierdute
+	An entity that leaves a waiting room before a unit takes it, because it has waited as long as it was willing to.	O entitate care părăsește o sală de așteptare înainte ca o unitate s-o preia, deoarece a așteptat cât a vrut să aștepte.
+	An entity that does not join a waiting room at all, because the number already waiting put it off.	O entitate care nu intră deloc într-o sală de așteptare, deoarece numărul celor deja în așteptare a descurajat-o.
+	An entity that finds the waiting room full and takes the flow ticked “Turned away” instead of waiting.	O entitate care găsește sala de așteptare plină și ia fluxul bifat „Respingeri” în loc să aștepte.
+	An entity that leaves the model without reaching Departures: it found the waiting room full with nowhere else to go, or a decision with no way out for it.	O entitate care părăsește modelul fără să ajungă la Plecări: a găsit sala de așteptare plină fără altă cale sau o decizie fără ieșire pentru ea.
+	Gave up on {id}	Au renunțat pe {id}
+	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the flow ticked “Gave up”, or leaves the model.	Fiecare entitate așteaptă aici cel mult un timp extras la întâmplare pentru ea la sosire, apoi renunță: ia fluxul bifat „Au renunțat” sau părăsește modelul.
+	Entities that do not join the waiting room take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Entitățile care nu intră în sala de așteptare iau imediat acest flux (pentru a încerca din nou mai târziu, de exemplu), în loc să fie pierdute; aici sunt numărate ca neintrate în coadă.
+	The job stops at once: the entity goes back to the front of the waiting room for any server on shift, and the work done on it is wasted.	Lucrul se oprește imediat: entitatea revine în fruntea sălii de așteptare pentru orice server aflat în tură, iar munca făcută pe ea este irosită.
+	The connection drops and the client tries again: the entity goes back to the front of the waiting room at once, and the work done on it is wasted.	Conexiunea cade și clientul încearcă din nou: entitatea revine imediat în fruntea sălii de așteptare, iar munca făcută pe ea este irosită.
+	Ticked, entities queue up at the end while the rest keep moving. Unticked, the whole belt stops when the entity at the end cannot leave.	Bifat, entitățile fac coadă la capăt, în timp ce celelalte continuă să se miște. Nebifat, toată banda se oprește când entitatea de la capăt nu poate pleca.
+	Play run 1 step by step and see each block's waiting room on the diagram	Redă rularea 1 pas cu pas și vezi sala de așteptare a fiecărui bloc în diagramă
+	Select a block to see its waiting room over time.	Selectați un bloc pentru a-i vedea sala de așteptare în timp.
+	Entities on conveyors over time	Entități pe benzi în timp
+	Entities in the model over time	Entități în model în timp
+	How long each entity spends on the conveyors.	Cât timp petrece fiecare entitate pe benzile transportoare.
+	No entity has left a conveyor yet	Nicio entitate nu a părăsit încă o bandă
+	Share of entities by time on a conveyor, in {unit}	Ponderea entităților după timpul pe o bandă, în {unit}
+	Time on conveyors: {n} entities between {lo} and {hi} {unit}	Timp pe benzi: {n} entități între {lo} și {hi} {unit}
+	{from} to {to} {unit}: {share} of entities ({n})	De la {from} la {to} {unit}: {share} din entități ({n})
+	How many entities are on the conveyors over time.	Câte entități sunt pe benzi în timp.
+	How many entities are in the model over time.	Câte entități sunt în model în timp.
+	At {time} {unit}: {n} entities	La {time} {unit}: {n} entități
+@plural	Makes {n} independent run of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval across them.	Efectuează {n} rulare independentă a modelului de la sămânța {seed}. Rezultatele fiecărui bloc includ semilățimea unui interval de încredere de 95%.|Efectuează {n} rulări independente ale modelului de la sămânța {seed}. Rezultatele fiecărui bloc includ semilățimea unui interval de încredere de 95%.|Efectuează {n} de rulări independente ale modelului de la sămânța {seed}. Rezultatele fiecărui bloc includ semilățimea unui interval de încredere de 95%.
 	Fonts	Fonturi
 	The full list of third-party licences is in the file THIRD-PARTY-LICENSES.html, which comes with the download.	Lista completă a licențelor terților se află în fișierul THIRD-PARTY-LICENSES.html, inclus în descărcare.
 	Full list of third-party licences	Lista completă a licențelor terților

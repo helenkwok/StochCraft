@@ -449,7 +449,7 @@ impl App {
                 if ui
                     .add_enabled(can_watch, theme::secondary(ui, t("Watch a run")))
                     .on_hover_text(t(
-                        "Play run 1 step by step and see each block's queue on the diagram",
+                        "Play run 1 step by step and see each block's waiting room on the diagram",
                     ))
                     .clicked()
                 {
@@ -736,7 +736,7 @@ impl App {
         let Some(id) = self.selected.clone() else {
             ui.label(theme::weak(
                 ui,
-                t("Select a block to see its queue over time."),
+                t("Select a block to see its waiting room over time."),
             ));
             return;
         };

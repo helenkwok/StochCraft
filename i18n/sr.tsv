@@ -21,8 +21,6 @@
 	A caller on hold: once a unit takes it, the entity stays.	Позивалац на чекању: кад га јединица преузме, ентитет остаје.
 	A client that times out: if its time runs out during service, it gives up then, and the unit finishes the job anyway (wasted work).	Клијент коме истекне време: ако му време истекне током послуживања, тада одустаје, а јединица ипак заврши посао (узалудан рад).
 	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	Нови фајл садржи само модел: оно што StochCraft не разуме у {file} изоставља се.
-	Abandoned	Одустали
-	Abandoned on {id}	Одустали на {id}
 	About StochCraft	О апликацији StochCraft
 	About {app}	О апликацији {app}
 	Accent	Акценат
@@ -162,7 +160,6 @@
 	Duration	Трајање
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Свака анализа покреће експеримент више пута са истим семеном, па разлике долазе од промене, а не од случаја. То може потрајати.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Сваки ентитет узима прву од ових могућности која се сада може испунити, све одједном, и враћа јединице када изађе.
-	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Сваки ентитет овде чека највише време које му се насумично одреди при доласку, а затим одустаје: иде излазом означеним као „Одустали” или напушта модел.
 	Each server (unit) is checked every so often, as a load balancer probes the servers behind it. One that fails, with too many waiting, is taken out of service for a restart, then comes back.	Сваки сервер (јединица) проверава се с времена на време, као што балансер оптерећења проверава сервере иза себе. Онај који не прође, јер их превише чека, избацује се из рада ради поновног покретања, а затим се враћа.
 	Edit	Уреди
 	Edit themes…	Уреди теме…
@@ -412,7 +409,6 @@
 	Run	Покрени
 	Run cancelled	Извршавање отказано
 	Run experiment	Покрени експеримент
-	Play run 1 step by step and see each block's queue on the diagram	Изврши покретање 1 корак по корак и прати ред сваког блока на дијаграму
 	Run the experiment ({shortcut})	Покрени експеримент ({shortcut})
 	Run the experiment again to see this result's spread.	Поново покрените експеримент да бисте видели расипање овог резултата.
 	Run the experiment at each value of one parameter, and compare a result.	Покрени експеримент за сваку вредност једног параметра и упореди резултат.
@@ -433,7 +429,6 @@
 	Scrap ratio	Удео шкарта
 	Seed	Семе
 	Select All	Изабери све
-	Select a block to see its queue over time.	Изаберите блок да видите његов ред кроз време.
 	Sender waits during transfer	Пошиљалац чека током преноса
 	Separate the values with semicolons or spaces.	Одвојите вредности тачком и зарезом или размацима.
 	Sequential	Секвенцијалне
@@ -497,10 +492,8 @@
 	Text	Текст
 	Text on accent	Текст на акценту
 	Text on header	Текст у заглављу
-	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	Веза пукне и клијент покуша поново: ентитет се одмах враћа на чело реда, а рад обављен на њему је узалудан.
 	The entity waits on its server and the job carries on with what was left once the server is back.	Ентитет чека на свом серверу, а посао се наставља с преосталим делом када се сервер врати.
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more runs would narrow it.	Интервал сеже испод циљног удела од {share}, па није показано с поузданошћу од 95% да је удео постигнут; више покретања би га сузило.
-	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	Посао се одмах прекида: ентитет се враћа на чело реда за било који сервер у смени, а рад обављен на њему је узалудан.
 	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	Посао се одмах прекида; ентитет чека на свом серверу, а посао се наставља с преосталим делом када тај сервер поново буде у смени.
 	The last task with a resource it finished at	Последњи задатак с ресурсом кроз који је део прошао
 	The mean time to the stop condition is over the runs that met it only; the others ran to their time limit.	Просјечно време до услова заустављања односи се само на покретања која су га постигла; остала су трајала до свог временског ограничења.
@@ -690,7 +683,6 @@ unit	yr	год.
 	Balked on {id}	Нису ушли у ред на {id}
 	Balking	Неулазак у ред
 	Count those in service	Бројати и оне на услуживању
-	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Ентитети који не уђу у ред одмах иду овим током (да касније покушају поново, рецимо), уместо да буду изгубљени; овде се броје као они који нису ушли у ред.
 	Joins with probability	Улази у ред са вероватноћом
 	Number waiting	Број на чекању
 	Share balked	Удео оних који нису ушли у ред
@@ -908,7 +900,6 @@ unit	yr	год.
 @plural	Finished {n} run|Finished {n} runs	Завршено је {n} покретање|Завршена су {n} покретања|Завршено је {n} покретања
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	Отворен фајл {file} ({n} упозорење)|Отворен фајл {file} ({n} упозорења)|Отворен фајл {file} ({n} упозорења)
 @plural	Removed {n} block|Removed {n} blocks	Уклоњен је {n} блок|Уклоњена су {n} блока|Уклоњено је {n} блокова
-@plural	Makes {n} independent run of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Изводи {n} независно покретање модела од семена {seed}. Резултати сваког елемента укључују полуширину 95% интервала поузданости.|Изводи {n} независна покретања модела од семена {seed}. Резултати сваког елемента укључују полуширину 95% интервала поузданости.|Изводи {n} независних покретања модела од семена {seed}. Резултати сваког елемента укључују полуширину 95% интервала поузданости.
 @plural	The stop condition was met in {met} of {n} run, after {time} {unit} on average.|The stop condition was met in {met} of {n} runs, after {time} {unit} on average.	Услов заустављања постигнут је у {met} од {n} покретања, у просеку после {time} {unit}.|Услов заустављања постигнут је у {met} од {n} покретања, у просеку после {time} {unit}.|Услов заустављања постигнут је у {met} од {n} покретања, у просеку после {time} {unit}.
 @plural	{done} of {n} run finished|{done} of {n} runs finished	Завршено је {done} од {n} покретања|Завршено је {done} од {n} покретања|Завршено је {done} од {n} покретања
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} run|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} runs	{name}: {mean}{unit}\n95% интервал од {low} до {high}{unit}\nна основу {n} покретања|{name}: {mean}{unit}\n95% интервал од {low} до {high}{unit}\nна основу {n} покретања|{name}: {mean}{unit}\n95% интервал од {low} до {high}{unit}\nна основу {n} покретања
@@ -938,7 +929,6 @@ unit	yr	год.
 	kilometres	километри
 	inches	инчи
 	feet	стопе
-	Ticked, items queue up at the end while the rest keep moving. Unticked, the whole belt stops when the item at the end cannot leave.	Означено: предмети се ређају на крају док се остали настављају да се крећу. Неозначено: цела трака стаје када предмет на крају не може да изађе.
 	A belt that carries entities from one end to the other. It has a length and a speed, and each entity takes a pitch of belt: its item length plus the gap kept free after it. So it holds at most length ÷ pitch entities and carries at most speed ÷ pitch per time unit. Accumulating: entities queue up at the end while the rest keep moving; otherwise the whole belt stops.	Трака која носи ентитете са једног краја на други. Има дужину и брзину, а сваки ентитет заузима корак траке: дужину свог предмета плус размак који остаје слободан иза њега. Зато носи највише дужина ÷ корак ентитета и преноси највише брзина ÷ корак по јединици времена. Акумулација: ентитети се ређају на крају док се остали настављају да се крећу; иначе стаје цела трака.
 	Station	Станица
 	Kind	Врста
@@ -992,19 +982,165 @@ unit	yr	год.
 	Time on conveyors	Време на транспортним тракама
 	No conveyors in this model	У овом моделу нема транспортних трака
 	Fills in when the run ends	Попуниће се кад извршавање заврши
-	How long each item spends on the conveyors.	Колико дуго је свака ставка на транспортним тракама.
-	No item has left a conveyor yet	Ниједна ставка још није напустила транспортну траку
-	Share of items by time on a conveyor, in {unit}	Удео ставки према времену на транспортној траци, у {unit}
-	Time on conveyors: {n} items between {lo} and {hi} {unit}	Време на транспортним тракама: {n} ставки између {lo} и {hi} {unit}
-	{from} to {to} {unit}: {share} of items ({n})	Од {from} до {to} {unit}: {share} ставки ({n})
-	Items on conveyors over time	Ставке на транспортним тракама кроз време
-	Items in the model over time	Ставке у моделу кроз време
-	How many items are on the conveyors over time.	Колико је ставки на транспортним тракама кроз време.
-	How many items are in the model over time.	Колико је ставки у моделу кроз време.
 	Nothing was recorded over time in these results	У овим резултатима ништа није забележено кроз време
-	At {time} {unit}: {n} items	У {time} {unit}: {n} ставки
 	Run the model to fill the dashboard	Покрените модел да се контролна табла попуни
 	The resource and conveyor charts show the last run until this one ends	Графикони ресурса и транспортних трака приказују последње извршавање док ово не заврши
+# Validation messages, new labels and word changes (issue #145)
+	The id “{id}” is not valid. Start an id with a letter or an underscore, then use only letters, digits, dots, hyphens and underscores.	Идентификатор „{id}” није важећи. Започните идентификатор словом или доњом цртом, а затим користите само слова, цифре, тачке, цртице и доње црте.
+	More than one block, flow, pool or calendar has the id “{id}”. Give each its own id.	Више од једног блока, тока, фонда или календара има идентификатор „{id}”. Дајте сваком посебан идентификатор.
+	The flow {flow} uses a block that does not exist. Remove the flow, or connect it to a block that exists.	Ток {flow} користи блок који не постоји. Уклоните ток или га повежите са постојећим блоком.
+	The flow {flow} leads into an Arrivals block, which takes no input. Remove the flow, or send it to another block.	Ток {flow} води у блок „Доласци”, који не прима улаз. Уклоните ток или га усмерите на други блок.
+	The flow {flow} leaves a Departures block, which has no output. Remove the flow, or start it from another block.	Ток {flow} излази из блока „Одласци”, који нема излаз. Уклоните ток или га почните од другог блока.
+	The flow {flow} leads from a block back to itself. Remove it, or send it to another block.	Ток {flow} води од блока назад до њега самог. Уклоните га или га усмерите на други блок.
+	{block} has nowhere to send entities. Add a flow from it to the next block.	Блок {block} нема куда да шаље ентитете. Додајте ток од њега до следећег блока.
+	{block} has {count} flows out, and only a Decision or a Split or join block can send entities down several. Remove the extra flows, or add a Decision block.	Блок {block} има {count} излазних токова, а ентитете кроз више токова могу да шаљу само блокови „Одлука” и „Раздвоји или споји”. Уклоните вишак токова или додајте блок „Одлука”.
+	In “{field}” of {block}, set “{param}” to a finite number.	У пољу „{field}” блока {block} поставите „{param}” на коначан број.
+	In “{field}” of {block}, set “{param}” to a number above 0.	У пољу „{field}” блока {block} поставите „{param}” на број изнад 0.
+	In “{field}” of {block}, set “{param}” to 0 or more.	У пољу „{field}” блока {block} поставите „{param}” на 0 или више.
+	In “{field}” of {block}, set “{param}” to 1 or more.	У пољу „{field}” блока {block} поставите „{param}” на 1 или више.
+	In “{field}” of {block}, set “{param}” to a number from 0 to 1.	У пољу „{field}” блока {block} поставите „{param}” на број од 0 до 1.
+	In “{field}” of {block}, set “Minimum” below “Maximum”, and any “Most likely” value between them.	У пољу „{field}” блока {block} поставите „Минимум” испод „Максимум”, а евентуалну вредност „Највјеројатније” између њих.
+	In “{field}” of {block}, add data points whose probabilities add up to more than 0.	У пољу „{field}” блока {block} додајте тачке података чије се вероватноће сабирају у више од 0.
+	{block} would never have a unit to work with. Give it at least 1 unit.	Блок {block} никада не би имао јединицу за рад. Дајте му најмање 1 јединицу.
+	{block} would make entities without end, because its “Time between arrivals” is always 0. Give it a time above 0, or set an “Arrival limit”.	Блок {block} би стварао ентитете без краја, јер је „Време између долазака” увек 0. Задајте време веће од 0 или поставите „Ограничење долазака”.
+	The model has no Arrivals block, so nothing will happen. Add an Arrivals block.	Модел нема блок „Доласци”, па се ништа неће догодити. Додајте блок „Доласци”.
+	The model has no Departures block, so no time in system is measured. Add a Departures block.	Модел нема блок „Одласци”, па се не мери време у систему. Додајте блок „Одласци”.
+	No entity can reach {block} from an Arrivals block. Connect it to a block that entities pass through.	Ниједан ентитет не може да стигне до блока {block} из блока „Доласци”. Повежите га са блоком кроз који ентитети пролазе.
+	Entities in {block} can never reach a Departures block. Connect it on towards Departures.	Ентитети у блоку {block} никада не могу да стигну до блока „Одласци”. Повежите га даље ка блоку „Одласци”.
+	Set the “{state}” power of {block} to a number of kilowatts, 0 or more.	Поставите снагу „{state}” блока {block} на број киловата, 0 или више.
+	Set the warm-up of the experiment to 0 or more.	Поставите загревање експеримента на 0 или више.
+	Set the duration of the experiment to more than 0.	Поставите трајање експеримента на више од 0.
+	Set the number of runs of the experiment to 1 or more.	Поставите број покретања експеримента на 1 или више.
+	Set the layout scale (length units per drawing unit) to a finite number above 0.	Поставите размеру цртежа (јединица дужине по јединици цртежа) на коначан број изнад 0.
+	A property of {block} has no name. Give it a name, or remove it.	Једно својство блока {block} нема име. Дајте му име или га уклоните.
+	{block} sets the property “{name}” twice. Keep one of them.	Блок {block} два пута поставља својство „{name}”. Задржите једно.
+	The property “{name}” of {block} needs shares that are not negative and add up to more than 0. Change the shares.	Својство „{name}” блока {block} захтева уделе који нису негативни и сабирају се у више од 0. Промените уделе.
+	The property “{name}” has the type “{type2}” on {block} but “{type}” on another block. Give it one type everywhere.	Својство „{name}” има тип „{type2}” на блоку {block}, а тип „{type}” на другом блоку. Задајте му један тип свуда.
+	The value of the property “{name}” on {block} does not fit its type, “{type}”. Change the value or the type.	Вредност својства „{name}” на блоку {block} не одговара његовом типу „{type}”. Промените вредност или тип.
+	The expression for the property “{name}” on {block} cannot be used: {error}. Correct “{expression}”.	Израз за својство „{name}” на блоку {block} не може да се користи: {error}. Исправите „{expression}”.
+	{block} reads the property “{name}”, which no block sets, so it would read as empty. Set it on an earlier block, or correct the name.	Блок {block} чита својство „{name}” које ниједан блок не поставља, па ће бити прочитано као празно. Поставите га на ранијем блоку или исправите име.
+	The setup of {block} has times for particular changes but no property to watch. Choose a property under “Only when this property changes”.	Припрема блока {block} има времена за одређене промене, али нема својство које се прати. Изаберите својство у пољу „Само када се ово својство промени”.
+	{block} has times for particular values but no property to read them from. Choose a property under “Service time by property”.	Блок {block} има времена за одређене вредности, али нема својство из кога их чита. Изаберите својство у пољу „Време послуживања према својству”.
+	{block} has two times for the value “{value}”. Keep one.	Блок {block} има два времена за вредност „{value}”. Задржите једно.
+	Set the time of {block} for the value “{value}” to a mean of 0 or more.	Поставите време блока {block} за вредност „{value}” на средњу вредност 0 или више.
+	The scrap at {block} counts against {other}, which is not a task with a resource. Choose a task with a resource.	Шкарт код блока {block} рачуна се према блоку {other}, који није задатак с ресурсом. Изаберите задатак с ресурсом.
+	Set “Planned run time per item” of {block} to a mean above 0.	Поставите „Планирано време рада по делу” блока {block} на средњу вредност изнад 0.
+	Set “Time before giving up” of {block} to a mean of 0 or more.	Поставите „Време до одустајања” блока {block} на средњу вредност 0 или више.
+	The flow {flow} is ticked “Gave up”, but only a task with a resource and a “Time before giving up” sends entities that give up. Untick it, or set a “Time before giving up” on {block}.	Ток {flow} је означен као „Одустало”, али ентитете који одустају шаље само задатак с ресурсом са постављеним „Време до одустајања”. Уклоните ознаку или поставите „Време до одустајања” на блоку {block}.
+	{count} flows out of {block} are ticked “{way}”; at most one can be. Untick all but one.	{count} токова из блока {block} означено је као „{way}”, а највише један може бити. Уклоните ознаку са свих осим једног.
+	The flow {flow} is ticked “Turned away”, but only a task with a resource and a limited waiting room turns entities away. Untick it, or limit the waiting room of {block}.	Ток {flow} је означен као „Одбијени”, али ентитете одбија само задатак с ресурсом и ограниченом чекаоницом. Уклоните ознаку или ограничите чекаоницу блока {block}.
+	The flow {flow} is ticked both “Gave up” and “Turned away”. Keep one of them.	Ток {flow} је означен и као „Одустало”, и као „Одбијени”. Задржите једну ознаку.
+	Set every chance of joining in the balking table of {block} to a number from 0 to 1.	Поставите сваку шансу за придруживање у табели неулазака у ред блока {block} на број од 0 до 1.
+	Put the rows of the balking table of {block} in increasing order of “Number waiting”.	Поређајте редове табеле неулазака у ред блока {block} растућим редоследом „Број на чекању”.
+	The flow {flow} is ticked “Balked”, but only a task with a resource and balking sends entities that balk. Untick it, or turn on balking for {block}.	Ток {flow} је означен као „Нису ушли у ред”, али ентитете који не улазе у ред шаље само задатак с ресурсом и укљученим неуласком у ред. Уклоните ознаку или укључите неулазак у ред за блок {block}.
+	The flow {flow} is ticked “Balked” and also “Gave up” or “Turned away”. Keep one of them.	Ток {flow} је означен као „Нису ушли у ред” и такође као „Одустало” или „Одбијени”. Задржите једну ознаку.
+	The waiting room of {block} is set by calendar or per working server, but has no number of places, so it is unlimited. Give it a number of places, or make it fixed.	Чекаоница блока {block} задата је по календару или по серверима у раду, али нема број места, па је неограничена. Задајте број места или је учините сталном.
+	The waiting room of {block} is set by calendar, but no calendar has a value. Add a value for a calendar, or make the waiting room fixed.	Чекаоница блока {block} задата је по календару, али ниједан календар нема вредност. Додајте вредност за календар или учините чекаоницу сталном.
+	Set “Fails above, waiting per working server” of {block} to a number of 0 or more.	Поставите „Не пролази изнад, чекајућих по серверу у раду” блока {block} на број 0 или више.
+	Set “Check every” of {block} to a mean above 0.	Поставите „Провера сваких” блока {block} на средњу вредност изнад 0.
+	Set the demand of {block} to a number of parts above 0.	Поставите потражњу блока {block} на број делова изнад 0.
+	The demand of {block} is per shift but names no calendar to say when the shifts are. Choose a calendar.	Потражња блока {block} је по смени, али не именује календар који каже када су смене. Изаберите календар.
+	The demand of {block} names a calendar that does not exist. Choose a calendar that exists.	Потражња блока {block} именује календар који не постоји. Изаберите календар који постоји.
+	The probability {value} on the flow {flow} is not from 0 to 1. Enter a probability from 0 to 1.	Вероватноћа {value} на току {flow} није од 0 до 1. Унесите вероватноћу од 0 до 1.
+	The probabilities of the flows out of {block} add up to {sum}, not 1, so they are used in proportion. Change them to add up to 1 if that is not what you want.	Вероватноће токова из блока {block} сабирају се у {sum}, а не у 1, па се користе пропорционално. Ако то не желите, промените их тако да збир буде 1.
+	The condition on the flow {flow} cannot be used: {error}. Correct “{expression}”.	Услов на току {flow} не може да се користи: {error}. Исправите „{expression}”.
+	The condition on the flow {flow} is ignored, because only flows out of a Decision block choose a route. Remove the condition.	Услов на току {flow} се занемарује, јер руту бирају само токови из блока „Одлука”. Уклоните услов.
+	The probability on the flow {flow} is ignored, because only flows out of a Decision block choose a route. Remove the probability.	Вероватноћа на току {flow} се занемарује, јер руту бирају само токови из блока „Одлука”. Уклоните вероватноћу.
+	The condition on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the condition.	Услов на току {flow} се занемарује, јер „Одлука” шаље ентитете у најкраћи ред. Уклоните услов.
+	The probability on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the probability.	Вероватноћа на току {flow} се занемарује, јер „Одлука” шаље ентитете у најкраћи ред. Уклоните вероватноћу.
+	The default on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the default.	Ознака „подразумевани” на току {flow} се занемарује, јер „Одлука” шаље ентитете у најкраћи ред. Уклоните је.
+	The probability on the flow {flow} is ignored, because the Decision routes by condition. Remove the probability.	Вероватноћа на току {flow} се занемарује, јер „Одлука” бира руту по услову. Уклоните вероватноћу.
+	The default flow of {block} is not one of its own flows out. Choose one of the flows out of {block} as the default.	Подразумевани ток блока {block} није један од његових излазних токова. Изаберите као подразумевани један од излазних токова блока {block}.
+	{block} routes by condition but has no default flow, so an entity for which no condition holds leaves the model here. Choose a default flow.	Блок {block} бира руту по услову, али нема подразумевани ток, па ентитет за који не важи ниједан услов овде напушта модел. Изаберите подразумевани ток.
+	{block} diverts entities but has no default flow, so an entity whose way is full has nowhere else to go. Choose a default flow.	Блок {block} преусмерава ентитете, али нема подразумевани ток, па ентитет чији је пут пун нема куда другде. Изаберите подразумевани ток.
+	{block} waits for an entity on the flow {flow}, which none can reach, so it never sends one on. Remove that flow, or connect it to a block that entities reach.	Блок {block} чека ентитет на току {flow}, до кога ниједан не може да стигне, па никада ништа не шаље даље. Уклоните тај ток или га повежите са блоком до кога ентитети стижу.
+	{block} has a limited waiting room and is fed through {gateway}. While it is full, {gateway} holds up every entity behind it, and they wait before it without limit. Remove the gateway before {block}, or remove the limit.	Блок {block} има ограничену чекаоницу и напаја се преко {gateway}. Док је пуна, {gateway} задржава сваки ентитет иза себе и они чекају испред без ограничења. Уклоните капију пре блока {block} или уклоните ограничење.
+	The limited waiting rooms of {loop} feed each other in a loop, so when all of them are full the loop deadlocks. Remove the limit on one of them, or break the loop.	Ограничене чекаонице у {loop} напајају једна другу у петљи, па када су све пуне, петља запада у ћорсокак. Уклоните ограничење са једне од њих или прекините петљу.
+	The pool {block} has no units. Give it at least 1 unit.	Фонд {block} нема јединица. Дајте му најмање 1 јединицу.
+	{block} names no resource it needs. Add one under “Needs”.	Блок {block} не именује ниједан ресурс који му треба. Додајте један у пољу „Захтеви”.
+	{block} needs a resource pool that does not exist. Choose a pool that exists.	Блоку {block} треба фонд ресурса који не постоји. Изаберите фонд који постоји.
+	{block} needs units with the roles {roles}, which no pool has. Give a pool those roles, or change what {block} needs.	Блоку {block} су потребне јединице са улогама {roles}, које нема ниједан фонд. Дајте неком фонду те улоге или промените шта је потребно блоку {block}.
+	{block} needs {needed} units at once, but at most {available} exist, so this can never be met. Ask for fewer units, or add units to the pool.	Блоку {block} треба {needed} јединица одједном, а постоји највише {available}, па то никада не може да се испуни. Затражите мање јединица или додајте јединице у фонд.
+	Set the priority of {block} to a finite number, not {value}.	Поставите приоритет блока {block} на коначан број, а не на {value}.
+	No task uses the pool {block}. Add it to a task's needs, or remove the pool.	Ниједан задатак не користи фонд {block}. Додајте га у захтеве задатка или уклоните фонд.
+	{block} has a value for a calendar that does not exist. Choose a calendar that exists, or remove the value.	Блок {block} има вредност за календар који не постоји. Изаберите календар који постоји или уклоните вредност.
+	The calendar {block} has no entries, so it is never active. Add an entry.	Календар {block} нема ставки, па никада није активан. Додајте ставку.
+	{block} allows no arrivals outside the calendars but names no calendar, so it never creates entities. Add arrivals by calendar, or allow arrivals outside calendars.	Блок {block} не дозвољава доласке ван календара, али не именује календар, па никада не ствара ентитете. Додајте доласке по календару или дозволите доласке ван календара.
+	Set the batch size of {block} to 1 or more.	Поставите величину серије блока {block} на 1 или више.
+	Set “{field}” of the conveyor {block} to a finite number above 0.	Поставите „{field}” транспортера {block} на коначан број изнад 0.
+	Set “{field}” of the conveyor {block} to a finite number of 0 or more.	Поставите „{field}” транспортера {block} на коначан број 0 или више.
+	Set “{field}” of the conveyor {block} to a finite number other than 0.	Поставите „{field}” транспортера {block} на коначан број различит од 0.
+	The conveyor {block} is {length} long but each entity takes {pitch} (item length plus gap), so not even one fits. Lengthen the conveyor, or shorten the item or the gap.	Транспортер {block} је дугачак {length}, а сваки ентитет заузима {pitch} (дужина предмета плус размак), па не стаје ни један. Продужите транспортер или скратите предмет или размак.
+	The drawn path of the conveyor {block} is {path_length} long, but its “Length” is {length}, so the drawing and the run disagree. Make “Length” match the path, or change the shape.	Нацртана путања транспортера {block} дугачка је {path_length}, а његова „Дужина” је {length}, па се цртеж и покретање не слажу. Ускладите „Дужина” са путањом или промените облик.
+	{block} is a transport, which StochCraft does not simulate yet. Remove it to run the model.	Блок {block} је транспорт, који StochCraft још не симулира. Уклоните га да бисте покренули модел.
+	The pool {pool} of the transport {block} does not exist. Choose a pool that exists.	Фонд {pool} транспорта {block} не постоји. Изаберите фонд који постоји.
+	The pool {pool} of the transport {block} is not mobile. Give the pool speeds and a home.	Фонд {pool} транспорта {block} није покретан. Дајте фонду брзине и полазиште.
+	Set “{field}” of the pool {block} to a finite number above 0.	Поставите „{field}” фонда {block} на коначан број изнад 0.
+	The home of the pool {block} is not a block of the model. Choose a block as its home.	Полазиште фонда {block} није блок модела. Изаберите блок као његово полазиште.
+	The transport {block} needs one block before it, where it picks up, and one after it, where it drops off, but has {inputs} before and {outputs} after. Connect it to one block on each side.	Транспорту {block} треба један блок пре њега, одакле преузима, и један после њега, где истовара, али има {inputs} пре и {outputs} после. Повежите га са по једним блоком са сваке стране.
+	{other} has no place on the canvas, so the distances for {block} are not known. Place {other} on the canvas.	Блок {other} нема место на главној површини, па растојања за {block} нису позната. Поставите {other} на главну површину.
+	The flow {flow} asks for no entities. Set its “Units” to 1 or more.	Ток {flow} не тражи ниједан ентитет. Поставите његове „Јединице” на 1 или више.
+	The “Units” on the flow {flow} is ignored, because only a Split or join block takes several entities from one flow. Remove it.	„Јединице” на току {flow} се занемарују, јер више ентитета из једног тока узима само блок „Раздвоји или споји”. Уклоните их.
+	No block makes batches, so {block} passes every entity through. Add a Batch block before it, or remove {block}.	Ниједан блок не прави серије, па {block} пропушта сваки ентитет. Додајте блок „Серија” пре њега или уклоните {block}.
+	The stop condition names a block that does not exist. Choose a block that exists.	Услов заустављања именује блок који не постоји. Изаберите блок који постоји.
+	Set the count of the stop condition for {block} to 1 or more.	Поставите број у услову заустављања за блок {block} на 1 или више.
+	The stop condition waits for {block} to empty, but only a task can empty. Choose a task.	Услов заустављања чека да се блок {block} испразни, али може да се испразни само задатак. Изаберите задатак.
+	The stop condition at {block} can be met before the warm-up ends. A run that stops during the warm-up has no statistics after it and is left out of the results. Shorten the warm-up, or stop later.	Услов заустављања код блока {block} може бити испуњен пре краја загревања. Покретање које стане током загревања нема статистику после њега и изоставља се из резултата. Скратите загревање или станите касније.
+	Every run stopped before the warm-up ended, so no metric is reported. Shorten the warm-up, or stop later.	Свако покретање је стало пре краја загревања, па се не извештава ниједна метрика. Скратите загревање или станите касније.
+	{replications} of {of} runs stopped before the warm-up ended, so their statistics are left out of every metric. Shorten the warm-up, or stop later.	{replications} од {of} покретања стало је пре краја загревања, па је њихова статистика изостављена из сваке метрике. Скратите загревање или станите касније.
+	{block} is offered {load}% of the work its units can do, so its waiting room grows without limit and the results describe no steady state. Add units, or shorten the service.	Блоку {block} се нуди {load}% посла који његове јединице могу да обаве, па његова чекаоница расте без границе, а резултати не описују стабилно стање. Додајте јединице или скратите послуживање.
+	{block} is busy {utilisation}% of the time, and at the end at least {backlog} entities are still waiting against {left} that left. Work arrives faster than it is done, so the results describe no steady state. Add units, or shorten the service.	Блок {block} је заузет {utilisation}% времена, а на крају бар {backlog} ентитета још чека наспрам {left} који су отишли. Посао стиже брже него што се обавља, па резултати не описују стабилно стање. Додајте јединице или скратите послуживање.
+	The experiment has one run, so its results cannot be told from chance. Set the number of runs to at least 2, and usually 10 or more.	Експеримент има једно покретање, па се његови резултати не могу разликовати од случајности. Поставите број покретања на најмање 2, а обично 10 или више.
+	{block} has a three-point estimate but no time to fit it to, so the estimate is ignored. Remove the estimate.	Блок {block} има процену у три тачке, али нема време на које би се прилагодила, па се процена занемарује. Уклоните процену.
+	The three-point estimate of {block} cannot be fitted: every point must be a finite number. Correct the points.	Процена блока {block} у три тачке не може да се прилагоди: свака тачка мора бити коначан број. Исправите тачке.
+	The three-point estimate of {block} cannot be fitted: the points must be in order, minimum, most likely, then maximum or 95th percentile. Correct the points.	Процена блока {block} у три тачке не може да се прилагоди: тачке морају бити по реду, минимум, највероватнија вредност, па максимум или 95. перцентил. Исправите тачке.
+	The three-point estimate of {block} cannot be fitted: log-normal and Weibull estimates have no maximum. Give a 95th percentile instead.	Процена блока {block} у три тачке не може да се прилагоди: лог-нормалне и Вајбулове процене немају максимум. Задајте уместо њега 95. перцентил.
+	The time of {block} is no longer the one fitted from its three-point estimate. Fit it again, or remove the estimate.	Време блока {block} више није оно прилагођено из његове процене у три тачке. Прилагодите га поново или уклоните процену.
+	In “{field}” of {block}, the normal distribution draws below 0 more than 1 time in 100, and each such draw counts as 0, so the times are longer on average than its mean. Use a truncated normal with a minimum of 0, or a log-normal.	У пољу „{field}” блока {block} нормална расподела даје вредности испод 0 чешће од 1 пут у 100, а свака таква вредност се рачуна као 0, па су времена у просеку дужа од њене средње вредности. Користите одсечену нормалну расподелу са минимумом 0 или лог-нормалну.
+	The entities of {block} do not add up: {came} came in or were inside at the start, but {went} left, were lost, gave up or are still inside.	Ентитети блока {block} се не слажу: на почетку је дошло или било унутра {came}, а изашло, изгубљено, одустало или је још унутра {went}.
+	The entities of the model do not add up: {came} were created or inside at the start, but {went} reached Departures, left the model elsewhere or are still inside.	Ентитети модела се не слажу: на почетку је створено или било унутра {came}, а стигло до блока „Одласци”, напустило модел другде или је још унутра {went}.
+	No entity left the model, of {came} created or inside at the start. Check that the routing leads to Departures and that the run is long enough for an entity to get through.	Ниједан ентитет није напустио модел, од {came} створених или оних који су на почетку били унутра. Проверите да ли рута води до блока „Одласци” и да ли је покретање довољно дуго да ентитет прође.
+	Little's law does not hold at {block}: the time-average number inside was {mean}, but the entities' own times inside give {from_stays}.	Литлов закон не важи код блока {block}: просечан број унутра по времену био је {mean}, а сопствена времена ентитета унутра дају {from_stays}.
+	The utilisation of {block} counts {busy} units busy on average, but {working} were processing or setting up: units idle, blocked, off shift, failed or restarting were counted busy.	Искоришћеност блока {block} броји у просеку {busy} заузетих јединица, али их је обрађивало или се припремало {working}: јединице у мировању, блокиране, ван смене, у квару или које се поново покрећу бројане су као заузете.
+	The utilisation of {block} counts {busy} units busy on average, but {working} were processing or setting up: units at work were not counted busy.	Искоришћеност блока {block} броји у просеку {busy} заузетих јединица, али их је обрађивало или се припремало {working}: јединице на послу нису бројане као заузете.
+	The shares of the time of the units of {block} in each state add up to {total}, not 1.	Удели времена јединица блока {block} у сваком стању сабирају се у {total}, а не у 1.
+	“{metric}” of {block} is {value}, outside 0 to 1 (0% to 100%).	„{metric}” блока {block} је {value}, ван распона од 0 до 1 (од 0% до 100%).
+	This was found in {replications} of {of} runs, and the furthest off is shown.	Ово је пронађено у {replications} од {of} покретања и приказано је оно које највише одступа.
+	This points to a fault in StochCraft rather than in the model. Please report it with the model.	Ово указује на грешку у програму StochCraft, а не у моделу. Пријавите је заједно са моделом.
+	Angle	Угао
+	Failed	У квару
+	Off shift	Ван смене
+	Processing	Обрада
+	Radius	Полупречник
+	Rise	Успон
+	Speed empty	Брзина без терета
+	Speed loaded	Брзина с теретом
+	Turns	Навоји
+	Unload	Истовар
+	Lost	Изгубљено
+	An entity that leaves a waiting room before a unit takes it, because it has waited as long as it was willing to.	Ентитет који напушта чекаоницу пре него што га узме јединица, јер је чекао онолико колико је био спреман.
+	An entity that does not join a waiting room at all, because the number already waiting put it off.	Ентитет који уопште не улази у чекаоницу, јер га је одбио број оних који већ чекају.
+	An entity that finds the waiting room full and takes the flow ticked “Turned away” instead of waiting.	Ентитет који затекне чекаоницу пуну и уместо чекања иде током означеним као „Одбијени”.
+	An entity that leaves the model without reaching Departures: it found the waiting room full with nowhere else to go, or a decision with no way out for it.	Ентитет који напушта модел без доласка до блока „Одласци”: затекао је чекаоницу пуну без другог пута или одлуку без излаза за њега.
+	Gave up on {id}	Одустали на {id}
+	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the flow ticked “Gave up”, or leaves the model.	Сваки ентитет овде чека највише време које му се насумично одреди при доласку, а затим одустаје: иде током означеним као „Одустало” или напушта модел.
+	Entities that do not join the waiting room take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Ентитети који не уђу у чекаоницу одмах иду овим током (да касније покушају поново, рецимо), уместо да буду изгубљени; овде се броје као они који нису ушли у ред.
+	The job stops at once: the entity goes back to the front of the waiting room for any server on shift, and the work done on it is wasted.	Посао се одмах прекида: ентитет се враћа на чело чекаонице за било који сервер у смени, а рад обављен на њему је узалудан.
+	The connection drops and the client tries again: the entity goes back to the front of the waiting room at once, and the work done on it is wasted.	Веза пукне и клијент покуша поново: ентитет се одмах враћа на чело чекаонице, а рад обављен на њему је узалудан.
+	Ticked, entities queue up at the end while the rest keep moving. Unticked, the whole belt stops when the entity at the end cannot leave.	Означено: ентитети се ређају на крају док се остали настављају да се крећу. Неозначено: цела трака стаје када ентитет на крају не може да изађе.
+	Play run 1 step by step and see each block's waiting room on the diagram	Изврши покретање 1 корак по корак и прати чекаоницу сваког блока на дијаграму
+	Select a block to see its waiting room over time.	Изаберите блок да видите његову чекаоницу кроз време.
+	Entities on conveyors over time	Ентитети на транспортним тракама кроз време
+	Entities in the model over time	Ентитети у моделу кроз време
+	How long each entity spends on the conveyors.	Колико дуго је сваки ентитет на транспортним тракама.
+	No entity has left a conveyor yet	Ниједан ентитет још није напустио транспортну траку
+	Share of entities by time on a conveyor, in {unit}	Удео ентитета према времену на транспортној траци, у {unit}
+	Time on conveyors: {n} entities between {lo} and {hi} {unit}	Време на транспортним тракама: {n} ентитета између {lo} и {hi} {unit}
+	{from} to {to} {unit}: {share} of entities ({n})	Од {from} до {to} {unit}: {share} ентитета ({n})
+	How many entities are on the conveyors over time.	Колико је ентитета на транспортним тракама кроз време.
+	How many entities are in the model over time.	Колико је ентитета у моделу кроз време.
+	At {time} {unit}: {n} entities	У {time} {unit}: {n} ентитета
+@plural	Makes {n} independent run of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval across them.	Изводи {n} независно покретање модела од семена {seed}. Резултати сваког блока укључују полуширину 95% интервала поузданости.|Изводи {n} независна покретања модела од семена {seed}. Резултати сваког блока укључују полуширину 95% интервала поузданости.|Изводи {n} независних покретања модела од семена {seed}. Резултати сваког блока укључују полуширину 95% интервала поузданости.
 	Fonts	Фонтови
 	The full list of third-party licences is in the file THIRD-PARTY-LICENSES.html, which comes with the download.	Потпуни списак лиценци трећих страна налази се у датотеци THIRD-PARTY-LICENSES.html, која долази уз преузимање.
 	Full list of third-party licences	Потпуни списак лиценци трећих страна

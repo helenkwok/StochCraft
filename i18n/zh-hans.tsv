@@ -21,8 +21,6 @@
 	A caller on hold: once a unit takes it, the entity stays.	处于保持状态的来电者：一旦资源单元接手，实体就会留下。
 	A client that times out: if its time runs out during service, it gives up then, and the unit finishes the job anyway (wasted work).	会超时的客户端：如果其时间在服务期间用完，它就在那时放弃，而资源单元仍会完成这项作业（浪费的工作）。
 	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	新文件只包含模型：{file} 中 StochCraft 无法理解的内容将被略去。
-	Abandoned	放弃
-	Abandoned on {id}	{id} 上的放弃
 	About StochCraft	关于 StochCraft
 	About {app}	关于 {app}
 	Accent	强调色
@@ -162,7 +160,6 @@
 	Duration	持续时间
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	每项分析用同一随机种子多次运行实验，因此差异来自改动而不是偶然。可能需要一些时间。
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	每个实体会选取其中第一个当前能一次全部满足的方案，并在离开时归还这些资源单元。
-	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	每个实体在此最多等待到达时为其随机抽取的时间，然后放弃：它走标记为“放弃”的出口，或离开模型。
 	Each server (unit) is checked every so often, as a load balancer probes the servers behind it. One that fails, with too many waiting, is taken out of service for a restart, then comes back.	每台服务器（资源单元）每隔一段时间检查一次，就像负载均衡器探测其后的服务器一样。检查失败（等待者过多）的服务器会下线重新启动，然后恢复。
 	Edit	编辑
 	Edit themes…	编辑主题…
@@ -412,7 +409,6 @@
 	Run	运行
 	Run cancelled	运行已取消
 	Run experiment	运行实验
-	Play run 1 step by step and see each block's queue on the diagram	逐步执行第 1 次运行，并在图表上查看每个区块的队列
 	Run the experiment ({shortcut})	运行实验 ({shortcut})
 	Run the experiment again to see this result's spread.	请再次运行实验以查看此结果的离散情况。
 	Run the experiment at each value of one parameter, and compare a result.	在一个参数的每个取值下运行实验，并比较一个结果。
@@ -433,7 +429,6 @@
 	Scrap ratio	废品率
 	Seed	随机种子
 	Select All	全选
-	Select a block to see its queue over time.	选择一个区块以查看其队列随时间的变化。
 	Sender waits during transfer	传送期间发送方等待
 	Separate the values with semicolons or spaces.	请用分号或空格分隔各个值。
 	Sequential	顺序
@@ -497,10 +492,8 @@
 	Text	文本
 	Text on accent	强调色上的文本
 	Text on header	顶栏文本
-	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	连接断开，客户端重试：实体立即回到队列最前面，已对其完成的工作被浪费。
 	The entity waits on its server and the job carries on with what was left once the server is back.	实体在其服务器上等待，服务器恢复后作业从剩余部分继续。
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more runs would narrow it.	该区间低于目标比例 {share}，因此未能以 95% 的置信度表明达到了该比例；增加运行次数会使区间变窄。
-	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	作业立即停止：实体回到队列最前面，等待任一当班服务器，已对其完成的工作被浪费。
 	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	作业立即停止；实体在其服务器上等待，该服务器重新当班后作业从剩余部分继续。
 	The last task with a resource it finished at	最后经过的需要资源的任务
 	The mean time to the stop condition is over the runs that met it only; the others ran to their time limit.	到停止条件的平均时间只基于达到停止条件的运行；其余运行都持续到了时间上限。
@@ -690,7 +683,6 @@ unit	yr	年
 	Balked on {id}	{id} 上的止步
 	Balking	止步
 	Count those in service	计入服务中的实体
-	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	不加入队列的实体立即走此顺序流（例如稍后重试），而不是流失；此处计为止步。
 	Joins with probability	加入队列的概率
 	Number waiting	等待数量
 	Share balked	止步比例
@@ -908,7 +900,6 @@ unit	yr	年
 @plural	Finished {n} run|Finished {n} runs	已完成 {n} 次运行
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	已打开 {file}（{n} 条警告）
 @plural	Removed {n} block|Removed {n} blocks	已移除 {n} 个区块
-@plural	Makes {n} independent run of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	从随机种子 {seed} 开始，对模型进行 {n} 次独立运行。每个元素的结果都包含 95% 置信区间的半宽。
 @plural	The stop condition was met in {met} of {n} run, after {time} {unit} on average.|The stop condition was met in {met} of {n} runs, after {time} {unit} on average.	{n} 次运行中有 {met} 次达到停止条件，平均用时 {time} {unit}。
 @plural	{done} of {n} run finished|{done} of {n} runs finished	已完成 {done}/{n} 次运行
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} run|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} runs	{name}：{mean}{unit}\n95% 区间：{low} 至 {high}{unit}\n基于 {n} 次运行
@@ -938,7 +929,6 @@ unit	yr	年
 	kilometres	千米
 	inches	英寸
 	feet	英尺
-	Ticked, items queue up at the end while the rest keep moving. Unticked, the whole belt stops when the item at the end cannot leave.	勾选后，物品在末端排队，其余的继续移动。不勾选时，末端的物品无法离开，整条传送带就会停下。
 	A belt that carries entities from one end to the other. It has a length and a speed, and each entity takes a pitch of belt: its item length plus the gap kept free after it. So it holds at most length ÷ pitch entities and carries at most speed ÷ pitch per time unit. Accumulating: entities queue up at the end while the rest keep moving; otherwise the whole belt stops.	把实体从一端运到另一端的传送带。它有长度和速度，每个实体占用一个节距：物品长度加上其后留空的间隙。因此它最多容纳 长度 ÷ 节距 个实体，每个时间单位最多运送 速度 ÷ 节距 个。累积：实体在末端排队，其余的继续移动；否则整条传送带停下。
 	Station	工位
 	Kind	类型
@@ -992,19 +982,165 @@ unit	yr	年
 	Time on conveyors	在传送带上的时间
 	No conveyors in this model	此模型中没有传送带
 	Fills in when the run ends	运行结束后填充
-	How long each item spends on the conveyors.	每个物品在传送带上停留多久。
-	No item has left a conveyor yet	还没有物品离开传送带
-	Share of items by time on a conveyor, in {unit}	按在传送带上的时间划分的物品占比，单位 {unit}
-	Time on conveyors: {n} items between {lo} and {hi} {unit}	在传送带上的时间：{lo} 到 {hi} {unit} 之间有 {n} 个物品
-	{from} to {to} {unit}: {share} of items ({n})	{from} 到 {to} {unit}：占物品的 {share}（{n}）
-	Items on conveyors over time	传送带上的物品数随时间变化
-	Items in the model over time	模型中的物品数随时间变化
-	How many items are on the conveyors over time.	传送带上有多少物品随时间变化。
-	How many items are in the model over time.	模型中有多少物品随时间变化。
 	Nothing was recorded over time in these results	这些结果中没有记录随时间变化的数据
-	At {time} {unit}: {n} items	在 {time} {unit}：{n} 个物品
 	Run the model to fill the dashboard	运行模型以填充仪表板
 	The resource and conveyor charts show the last run until this one ends	资源和传送带图表显示上一次运行，直到本次结束
+# Validation messages, new labels and word changes (issue #145)
+	The id “{id}” is not valid. Start an id with a letter or an underscore, then use only letters, digits, dots, hyphens and underscores.	ID“{id}”无效。ID 须以字母或下划线开头，其后只能使用字母、数字、点、连字符和下划线。
+	More than one block, flow, pool or calendar has the id “{id}”. Give each its own id.	不止一个区块、顺序流、资源池或日历的 ID 为“{id}”。请为每个指定唯一的 ID。
+	The flow {flow} uses a block that does not exist. Remove the flow, or connect it to a block that exists.	顺序流 {flow} 使用了不存在的区块。请移除该顺序流，或将其连接到存在的区块。
+	The flow {flow} leads into an Arrivals block, which takes no input. Remove the flow, or send it to another block.	顺序流 {flow} 通向“到达”区块，而它不接收输入。请移除该顺序流，或将其指向其他区块。
+	The flow {flow} leaves a Departures block, which has no output. Remove the flow, or start it from another block.	顺序流 {flow} 从“离开”区块发出，而它没有输出。请移除该顺序流，或从其他区块开始。
+	The flow {flow} leads from a block back to itself. Remove it, or send it to another block.	顺序流 {flow} 从一个区块指回它自己。请移除它，或将其指向其他区块。
+	{block} has nowhere to send entities. Add a flow from it to the next block.	{block} 没有可发送实体的去处。请添加一条从它通向下一个区块的顺序流。
+	{block} has {count} flows out, and only a Decision or a Split or join block can send entities down several. Remove the extra flows, or add a Decision block.	{block} 有 {count} 条流出的顺序流，而只有“决策”区块或“拆分或合并”区块才能把实体送往多条顺序流。请移除多余的顺序流，或添加“决策”区块。
+	In “{field}” of {block}, set “{param}” to a finite number.	在 {block} 的“{field}”中，请将“{param}”设为有限的数。
+	In “{field}” of {block}, set “{param}” to a number above 0.	在 {block} 的“{field}”中，请将“{param}”设为大于 0 的数。
+	In “{field}” of {block}, set “{param}” to 0 or more.	在 {block} 的“{field}”中，请将“{param}”设为 0 或更大的数。
+	In “{field}” of {block}, set “{param}” to 1 or more.	在 {block} 的“{field}”中，请将“{param}”设为 1 或更大的数。
+	In “{field}” of {block}, set “{param}” to a number from 0 to 1.	在 {block} 的“{field}”中，请将“{param}”设为 0 到 1 之间的数。
+	In “{field}” of {block}, set “Minimum” below “Maximum”, and any “Most likely” value between them.	在 {block} 的“{field}”中，请将“最小值”设为小于“最大值”，并使“最可能值”（如有）介于两者之间。
+	In “{field}” of {block}, add data points whose probabilities add up to more than 0.	在 {block} 的“{field}”中，请添加概率之和大于 0 的数据点。
+	{block} would never have a unit to work with. Give it at least 1 unit.	{block} 将没有任何资源单元可用。请至少给它 1 个资源单元。
+	{block} would make entities without end, because its “Time between arrivals” is always 0. Give it a time above 0, or set an “Arrival limit”.	{block} 会无休止地产生实体，因为其“到达间隔时间”始终为 0。请设为大于 0 的时间，或设置“到达上限”。
+	The model has no Arrivals block, so nothing will happen. Add an Arrivals block.	模型中没有“到达”区块，因此什么也不会发生。请添加“到达”区块。
+	The model has no Departures block, so no time in system is measured. Add a Departures block.	模型中没有“离开”区块，因此无法测量系统内时间。请添加“离开”区块。
+	No entity can reach {block} from an Arrivals block. Connect it to a block that entities pass through.	没有实体能从“到达”区块到达 {block}。请将它连接到实体会经过的区块。
+	Entities in {block} can never reach a Departures block. Connect it on towards Departures.	{block} 中的实体永远无法到达“离开”区块。请把它继续连向“离开”。
+	Set the “{state}” power of {block} to a number of kilowatts, 0 or more.	请将 {block} 的“{state}”功率设为 0 或更大的千瓦数。
+	Set the warm-up of the experiment to 0 or more.	请将实验的预热期设为 0 或更大。
+	Set the duration of the experiment to more than 0.	请将实验的持续时间设为大于 0。
+	Set the number of runs of the experiment to 1 or more.	请将实验的运行次数设为 1 或更大。
+	Set the layout scale (length units per drawing unit) to a finite number above 0.	请将布局比例（每个绘图单位对应的长度单位）设为大于 0 的有限数。
+	A property of {block} has no name. Give it a name, or remove it.	{block} 的某个属性没有名称。请为它命名，或将其移除。
+	{block} sets the property “{name}” twice. Keep one of them.	{block} 两次设置了属性“{name}”。请保留其中一个。
+	The property “{name}” of {block} needs shares that are not negative and add up to more than 0. Change the shares.	{block} 上属性“{name}”的比例须为非负数，且之和大于 0。请修改比例。
+	The property “{name}” has the type “{type2}” on {block} but “{type}” on another block. Give it one type everywhere.	属性“{name}”在 {block} 上的类型为“{type2}”，在另一个区块上却是“{type}”。请在各处统一为同一种类型。
+	The value of the property “{name}” on {block} does not fit its type, “{type}”. Change the value or the type.	{block} 上属性“{name}”的值与其类型“{type}”不符。请修改值或类型。
+	The expression for the property “{name}” on {block} cannot be used: {error}. Correct “{expression}”.	{block} 上属性“{name}”的表达式无法使用：{error}。请修正“{expression}”。
+	{block} reads the property “{name}”, which no block sets, so it would read as empty. Set it on an earlier block, or correct the name.	{block} 读取属性“{name}”，但没有任何区块设置它，因此读到的是空值。请在前面的区块上设置它，或更正名称。
+	The setup of {block} has times for particular changes but no property to watch. Choose a property under “Only when this property changes”.	{block} 的换型设置了针对特定变化的时间，却没有要监视的属性。请在“仅当此属性变化时”下选择一个属性。
+	{block} has times for particular values but no property to read them from. Choose a property under “Service time by property”.	{block} 设置了针对特定值的时间，却没有可读取这些值的属性。请在“服务时间随属性而定”下选择一个属性。
+	{block} has two times for the value “{value}”. Keep one.	{block} 对值“{value}”有两个时间。请保留其中一个。
+	Set the time of {block} for the value “{value}” to a mean of 0 or more.	请将 {block} 在值“{value}”下的时间设为均值 0 或更大。
+	The scrap at {block} counts against {other}, which is not a task with a resource. Choose a task with a resource.	{block} 的废品计在 {other} 名下，但它不是需要资源的任务。请选择一个需要资源的任务。
+	Set “Planned run time per item” of {block} to a mean above 0.	请将 {block} 的“单件计划运行时间”设为大于 0 的均值。
+	Set “Time before giving up” of {block} to a mean of 0 or more.	请将 {block} 的“放弃前的时间”设为 0 或更大的均值。
+	The flow {flow} is ticked “Gave up”, but only a task with a resource and a “Time before giving up” sends entities that give up. Untick it, or set a “Time before giving up” on {block}.	顺序流 {flow} 勾选了“放弃”，但只有设置了“放弃前的时间”、需要资源的任务才会送出放弃的实体。请取消勾选，或在 {block} 上设置“放弃前的时间”。
+	{count} flows out of {block} are ticked “{way}”; at most one can be. Untick all but one.	{block} 流出的 {count} 条顺序流勾选了“{way}”；最多只能有一条。请只保留一条的勾选。
+	The flow {flow} is ticked “Turned away”, but only a task with a resource and a limited waiting room turns entities away. Untick it, or limit the waiting room of {block}.	顺序流 {flow} 勾选了“拒绝”，但只有等待区有限、需要资源的任务才会拒绝实体。请取消勾选，或限制 {block} 的等待区。
+	The flow {flow} is ticked both “Gave up” and “Turned away”. Keep one of them.	顺序流 {flow} 同时勾选了“放弃”和“拒绝”。请只保留其一。
+	Set every chance of joining in the balking table of {block} to a number from 0 to 1.	请将 {block} 的止步表中每个加入的概率都设为 0 到 1 之间的数。
+	Put the rows of the balking table of {block} in increasing order of “Number waiting”.	请将 {block} 的止步表中的行按“等待数量”由小到大排列。
+	The flow {flow} is ticked “Balked”, but only a task with a resource and balking sends entities that balk. Untick it, or turn on balking for {block}.	顺序流 {flow} 勾选了“止步”，但只有启用了止步、需要资源的任务才会送出止步的实体。请取消勾选，或为 {block} 启用止步。
+	The flow {flow} is ticked “Balked” and also “Gave up” or “Turned away”. Keep one of them.	顺序流 {flow} 勾选了“止步”，同时还勾选了“放弃”或“拒绝”。请只保留其一。
+	The waiting room of {block} is set by calendar or per working server, but has no number of places, so it is unlimited. Give it a number of places, or make it fixed.	{block} 的等待区按日历或按每台正在工作的服务器设定，但没有位置数量，因此不受限制。请给出位置数量，或改为固定。
+	The waiting room of {block} is set by calendar, but no calendar has a value. Add a value for a calendar, or make the waiting room fixed.	{block} 的等待区按日历设定，但没有任何日历有值。请为某个日历添加一个值，或将等待区改为固定。
+	Set “Fails above, waiting per working server” of {block} to a number of 0 or more.	请将 {block} 的“失败阈值（每台在线服务器的等待数）”设为 0 或更大的数。
+	Set “Check every” of {block} to a mean above 0.	请将 {block} 的“检查间隔”设为大于 0 的均值。
+	Set the demand of {block} to a number of parts above 0.	请将 {block} 的需求设为大于 0 的零件数。
+	The demand of {block} is per shift but names no calendar to say when the shifts are. Choose a calendar.	{block} 的需求按班次计，但没有指明说明班次时间的日历。请选择一个日历。
+	The demand of {block} names a calendar that does not exist. Choose a calendar that exists.	{block} 的需求指定了不存在的日历。请选择存在的日历。
+	The probability {value} on the flow {flow} is not from 0 to 1. Enter a probability from 0 to 1.	顺序流 {flow} 上的概率 {value} 不在 0 到 1 之间。请输入 0 到 1 之间的概率。
+	The probabilities of the flows out of {block} add up to {sum}, not 1, so they are used in proportion. Change them to add up to 1 if that is not what you want.	{block} 流出的顺序流的概率之和为 {sum}，而不是 1，因此按比例使用。如不想如此，请改为总和为 1。
+	The condition on the flow {flow} cannot be used: {error}. Correct “{expression}”.	顺序流 {flow} 上的条件无法使用：{error}。请修正“{expression}”。
+	The condition on the flow {flow} is ignored, because only flows out of a Decision block choose a route. Remove the condition.	顺序流 {flow} 上的条件被忽略，因为只有从“决策”区块流出的顺序流才选择路径。请移除该条件。
+	The probability on the flow {flow} is ignored, because only flows out of a Decision block choose a route. Remove the probability.	顺序流 {flow} 上的概率被忽略，因为只有从“决策”区块流出的顺序流才选择路径。请移除该概率。
+	The condition on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the condition.	顺序流 {flow} 上的条件被忽略，因为决策把实体送往最短的队列。请移除该条件。
+	The probability on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the probability.	顺序流 {flow} 上的概率被忽略，因为决策把实体送往最短的队列。请移除该概率。
+	The default on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the default.	顺序流 {flow} 上的默认设置被忽略，因为决策把实体送往最短的队列。请移除该默认设置。
+	The probability on the flow {flow} is ignored, because the Decision routes by condition. Remove the probability.	顺序流 {flow} 上的概率被忽略，因为决策按条件选择路径。请移除该概率。
+	The default flow of {block} is not one of its own flows out. Choose one of the flows out of {block} as the default.	{block} 的默认顺序流不是它自己流出的顺序流之一。请从 {block} 流出的顺序流中选一条作为默认。
+	{block} routes by condition but has no default flow, so an entity for which no condition holds leaves the model here. Choose a default flow.	{block} 按条件选择路径，但没有默认顺序流，因此不满足任何条件的实体会在此离开模型。请选择默认顺序流。
+	{block} diverts entities but has no default flow, so an entity whose way is full has nowhere else to go. Choose a default flow.	{block} 会分流实体，但没有默认顺序流，因此其路径已满的实体无处可去。请选择默认顺序流。
+	{block} waits for an entity on the flow {flow}, which none can reach, so it never sends one on. Remove that flow, or connect it to a block that entities reach.	{block} 在顺序流 {flow} 上等待一个实体，但没有实体能到达那里，因此它永远不会把实体送出去。请移除该顺序流，或将其连接到实体能到达的区块。
+	{block} has a limited waiting room and is fed through {gateway}. While it is full, {gateway} holds up every entity behind it, and they wait before it without limit. Remove the gateway before {block}, or remove the limit.	{block} 的等待区有限，并经由 {gateway} 供给。等待区已满时，{gateway} 会拦住其后的每个实体，使它们在其前面无限等待。请移除 {block} 之前的网关，或取消限制。
+	The limited waiting rooms of {loop} feed each other in a loop, so when all of them are full the loop deadlocks. Remove the limit on one of them, or break the loop.	{loop} 的有限等待区首尾相接成环，因此当它们全部已满时，这个环会死锁。请取消其中一个的限制，或打断这个环。
+	The pool {block} has no units. Give it at least 1 unit.	资源池 {block} 没有资源单元。请至少给它 1 个资源单元。
+	{block} names no resource it needs. Add one under “Needs”.	{block} 没有指定所需的资源。请在“所需资源”下添加。
+	{block} needs a resource pool that does not exist. Choose a pool that exists.	{block} 需要的资源池不存在。请选择存在的资源池。
+	{block} needs units with the roles {roles}, which no pool has. Give a pool those roles, or change what {block} needs.	{block} 需要角色为 {roles} 的资源单元，但没有资源池具备这些角色。请给某个资源池设置这些角色，或更改 {block} 所需的资源。
+	{block} needs {needed} units at once, but at most {available} exist, so this can never be met. Ask for fewer units, or add units to the pool.	{block} 需要同时有 {needed} 个资源单元，但最多只有 {available} 个，因此永远无法满足。请减少所需数量，或为资源池增加资源单元。
+	Set the priority of {block} to a finite number, not {value}.	请将 {block} 的优先级设为有限的数，而不是 {value}。
+	No task uses the pool {block}. Add it to a task's needs, or remove the pool.	没有任务使用资源池 {block}。请把它加入某个任务的所需资源，或移除该资源池。
+	{block} has a value for a calendar that does not exist. Choose a calendar that exists, or remove the value.	{block} 有一个值对应的日历不存在。请选择存在的日历，或移除该值。
+	The calendar {block} has no entries, so it is never active. Add an entry.	日历 {block} 没有条目，因此永远不会处于活动状态。请添加一个条目。
+	{block} allows no arrivals outside the calendars but names no calendar, so it never creates entities. Add arrivals by calendar, or allow arrivals outside calendars.	{block} 不允许日历之外的到达，却没有指定日历，因此永远不会产生实体。请添加按日历的到达，或允许日历之外的到达。
+	Set the batch size of {block} to 1 or more.	请将 {block} 的批量大小设为 1 或更大。
+	Set “{field}” of the conveyor {block} to a finite number above 0.	请将传送带 {block} 的“{field}”设为大于 0 的有限数。
+	Set “{field}” of the conveyor {block} to a finite number of 0 or more.	请将传送带 {block} 的“{field}”设为 0 或更大的有限数。
+	Set “{field}” of the conveyor {block} to a finite number other than 0.	请将传送带 {block} 的“{field}”设为不等于 0 的有限数。
+	The conveyor {block} is {length} long but each entity takes {pitch} (item length plus gap), so not even one fits. Lengthen the conveyor, or shorten the item or the gap.	传送带 {block} 长 {length}，但每个实体占 {pitch}（物品长度加间隙），连一个也放不下。请加长传送带，或缩短物品或间隙。
+	The drawn path of the conveyor {block} is {path_length} long, but its “Length” is {length}, so the drawing and the run disagree. Make “Length” match the path, or change the shape.	传送带 {block} 所画路径长 {path_length}，但其“长度”为 {length}，所以图形与运行不一致。请让“长度”与路径一致，或更改形状。
+	{block} is a transport, which StochCraft does not simulate yet. Remove it to run the model.	{block} 是运输，而 StochCraft 尚未模拟运输。请将其移除后再运行模型。
+	The pool {pool} of the transport {block} does not exist. Choose a pool that exists.	运输 {block} 的资源池 {pool} 不存在。请选择存在的资源池。
+	The pool {pool} of the transport {block} is not mobile. Give the pool speeds and a home.	运输 {block} 的资源池 {pool} 不是移动式的。请为该资源池设置速度和起点。
+	Set “{field}” of the pool {block} to a finite number above 0.	请将资源池 {block} 的“{field}”设为大于 0 的有限数。
+	The home of the pool {block} is not a block of the model. Choose a block as its home.	资源池 {block} 的起点不是模型中的区块。请选择一个区块作为其起点。
+	The transport {block} needs one block before it, where it picks up, and one after it, where it drops off, but has {inputs} before and {outputs} after. Connect it to one block on each side.	运输 {block} 前面需要一个区块（取货处），后面需要一个区块（卸货处），但前面有 {inputs} 个、后面有 {outputs} 个。请在两侧各连接一个区块。
+	{other} has no place on the canvas, so the distances for {block} are not known. Place {other} on the canvas.	{other} 没有放在画布上，因此不知道 {block} 的距离。请把 {other} 放到画布上。
+	The flow {flow} asks for no entities. Set its “Units” to 1 or more.	顺序流 {flow} 不要求任何实体。请将其“数量”设为 1 或更大。
+	The “Units” on the flow {flow} is ignored, because only a Split or join block takes several entities from one flow. Remove it.	顺序流 {flow} 上的“数量”被忽略，因为只有“拆分或合并”区块才会从一条顺序流取多个实体。请移除“数量”。
+	No block makes batches, so {block} passes every entity through. Add a Batch block before it, or remove {block}.	没有区块产生批次，因此 {block} 会让每个实体直接通过。请在它之前添加“批次”区块，或移除 {block}。
+	The stop condition names a block that does not exist. Choose a block that exists.	停止条件指定了不存在的区块。请选择存在的区块。
+	Set the count of the stop condition for {block} to 1 or more.	请将 {block} 的停止条件的次数设为 1 或更大。
+	The stop condition waits for {block} to empty, but only a task can empty. Choose a task.	停止条件等待 {block} 变空，但只有任务才会变空。请选择一个任务。
+	The stop condition at {block} can be met before the warm-up ends. A run that stops during the warm-up has no statistics after it and is left out of the results. Shorten the warm-up, or stop later.	{block} 的停止条件可能在预热期结束之前就满足。在预热期内停止的运行之后没有统计数据，会被排除在结果之外。请缩短预热期，或晚些停止。
+	Every run stopped before the warm-up ended, so no metric is reported. Shorten the warm-up, or stop later.	所有运行都在预热期结束之前停止，因此不报告任何指标。请缩短预热期，或晚些停止。
+	{replications} of {of} runs stopped before the warm-up ended, so their statistics are left out of every metric. Shorten the warm-up, or stop later.	{of} 次运行中有 {replications} 次在预热期结束之前停止，因此它们的统计数据被排除在所有指标之外。请缩短预热期，或晚些停止。
+	{block} is offered {load}% of the work its units can do, so its waiting room grows without limit and the results describe no steady state. Add units, or shorten the service.	{block} 收到的工作量是其资源单元所能完成的 {load}%，因此其等待区会无限增长，结果并不描述稳态。请增加资源单元，或缩短服务时间。
+	{block} is busy {utilisation}% of the time, and at the end at least {backlog} entities are still waiting against {left} that left. Work arrives faster than it is done, so the results describe no steady state. Add units, or shorten the service.	{block} 有 {utilisation}% 的时间处于忙碌，结束时至少仍有 {backlog} 个实体在等待，而离开的有 {left} 个。工作到达的速度快于完成的速度，因此结果并不描述稳态。请增加资源单元，或缩短服务时间。
+	The experiment has one run, so its results cannot be told from chance. Set the number of runs to at least 2, and usually 10 or more.	实验只有一次运行，因此无法把结果与偶然性区分开。请将运行次数设为至少 2，通常为 10 或更多。
+	{block} has a three-point estimate but no time to fit it to, so the estimate is ignored. Remove the estimate.	{block} 有三点估计，但没有可供拟合的时间，因此该估计被忽略。请移除该估计。
+	The three-point estimate of {block} cannot be fitted: every point must be a finite number. Correct the points.	无法拟合 {block} 的三点估计：每个点都必须是有限的数。请更正这些点。
+	The three-point estimate of {block} cannot be fitted: the points must be in order, minimum, most likely, then maximum or 95th percentile. Correct the points.	无法拟合 {block} 的三点估计：各点必须依次为最小值、最可能值，然后是最大值或第 95 百分位数。请更正这些点。
+	The three-point estimate of {block} cannot be fitted: log-normal and Weibull estimates have no maximum. Give a 95th percentile instead.	无法拟合 {block} 的三点估计：对数正态分布和威布尔分布的估计没有最大值。请改为给出第 95 百分位数。
+	The time of {block} is no longer the one fitted from its three-point estimate. Fit it again, or remove the estimate.	{block} 的时间不再是根据其三点估计拟合出的时间。请重新拟合，或移除该估计。
+	In “{field}” of {block}, the normal distribution draws below 0 more than 1 time in 100, and each such draw counts as 0, so the times are longer on average than its mean. Use a truncated normal with a minimum of 0, or a log-normal.	在 {block} 的“{field}”中，正态分布取到小于 0 的值的概率超过 1/100，而每个这样的值都按 0 计，因此时间平均比其均值更长。请使用最小值为 0 的截断正态分布，或对数正态分布。
+	The entities of {block} do not add up: {came} came in or were inside at the start, but {went} left, were lost, gave up or are still inside.	{block} 的实体数对不上：{came} 个进入或开始时就在里面，但有 {went} 个离开、流失、放弃或仍在里面。
+	The entities of the model do not add up: {came} were created or inside at the start, but {went} reached Departures, left the model elsewhere or are still inside.	模型的实体数对不上：{came} 个被创建或开始时就在里面，但有 {went} 个到达“离开”、在别处离开模型或仍在里面。
+	No entity left the model, of {came} created or inside at the start. Check that the routing leads to Departures and that the run is long enough for an entity to get through.	在创建或开始时就在里面的 {came} 个实体中，没有实体离开模型。请检查路由是否通向“离开”，以及运行时间是否足以让实体走完。
+	Little's law does not hold at {block}: the time-average number inside was {mean}, but the entities' own times inside give {from_stays}.	利特尔法则在 {block} 处不成立：内部数量的时间平均值为 {mean}，而按各实体自己在内的时间算出的是 {from_stays}。
+	The utilisation of {block} counts {busy} units busy on average, but {working} were processing or setting up: units idle, blocked, off shift, failed or restarting were counted busy.	{block} 的利用率把平均 {busy} 个资源单元计为忙碌，但正在加工或换型的只有 {working} 个：空闲、阻塞、非当班、故障或重新启动的资源单元被计为忙碌。
+	The utilisation of {block} counts {busy} units busy on average, but {working} were processing or setting up: units at work were not counted busy.	{block} 的利用率把平均 {busy} 个资源单元计为忙碌，但正在加工或换型的有 {working} 个：正在工作的资源单元没有被计为忙碌。
+	The shares of the time of the units of {block} in each state add up to {total}, not 1.	{block} 的资源单元处于各状态的时间比例之和为 {total}，而不是 1。
+	“{metric}” of {block} is {value}, outside 0 to 1 (0% to 100%).	{block} 的“{metric}”为 {value}，超出 0 到 1（0% 到 100%）的范围。
+	This was found in {replications} of {of} runs, and the furthest off is shown.	这在 {of} 次运行中有 {replications} 次发现，所示为偏差最大的一次。
+	This points to a fault in StochCraft rather than in the model. Please report it with the model.	这指向 StochCraft 本身的缺陷，而不是模型的问题。请连同模型一起报告。
+	Angle	角度
+	Failed	故障
+	Off shift	非当班
+	Processing	加工
+	Radius	半径
+	Rise	升高
+	Speed empty	空载速度
+	Speed loaded	载货速度
+	Turns	圈数
+	Unload	卸货
+	Lost	流失
+	An entity that leaves a waiting room before a unit takes it, because it has waited as long as it was willing to.	在资源单元接手之前就离开等待区的实体，因为它已等到了愿意等待的时间上限。
+	An entity that does not join a waiting room at all, because the number already waiting put it off.	完全不加入等待区的实体，因为已在等待的数量让它打消了念头。
+	An entity that finds the waiting room full and takes the flow ticked “Turned away” instead of waiting.	发现等待区已满，不等待而改走勾选了“拒绝”的顺序流的实体。
+	An entity that leaves the model without reaching Departures: it found the waiting room full with nowhere else to go, or a decision with no way out for it.	未到达“离开”就离开模型的实体：它发现等待区已满且别无去处，或决策没有为它提供出路。
+	Gave up on {id}	{id} 上的放弃
+	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the flow ticked “Gave up”, or leaves the model.	每个实体在此最多等待到达时为其随机抽取的时间，然后放弃：它走勾选了“放弃”的顺序流，或离开模型。
+	Entities that do not join the waiting room take this flow at once (to try again later, say), instead of being lost; they count as balked here.	不加入等待区的实体立即走此顺序流（例如稍后重试），而不是流失；此处计为止步。
+	The job stops at once: the entity goes back to the front of the waiting room for any server on shift, and the work done on it is wasted.	作业立即停止：实体回到等待区最前面，等待任一当班服务器，已对其完成的工作被浪费。
+	The connection drops and the client tries again: the entity goes back to the front of the waiting room at once, and the work done on it is wasted.	连接断开，客户端重试：实体立即回到等待区最前面，已对其完成的工作被浪费。
+	Ticked, entities queue up at the end while the rest keep moving. Unticked, the whole belt stops when the entity at the end cannot leave.	勾选后，实体在末端排队，其余的继续移动。不勾选时，末端的实体无法离开，整条传送带就会停下。
+	Play run 1 step by step and see each block's waiting room on the diagram	逐步执行第 1 次运行，并在图表上查看每个区块的等待区
+	Select a block to see its waiting room over time.	选择一个区块以查看其等待区随时间的变化。
+	Entities on conveyors over time	传送带上的实体数随时间变化
+	Entities in the model over time	模型中的实体数随时间变化
+	How long each entity spends on the conveyors.	每个实体在传送带上停留多久。
+	No entity has left a conveyor yet	还没有实体离开传送带
+	Share of entities by time on a conveyor, in {unit}	按在传送带上的时间划分的实体占比，单位 {unit}
+	Time on conveyors: {n} entities between {lo} and {hi} {unit}	在传送带上的时间：{lo} 到 {hi} {unit} 之间有 {n} 个实体
+	{from} to {to} {unit}: {share} of entities ({n})	{from} 到 {to} {unit}：占实体的 {share}（{n}）
+	How many entities are on the conveyors over time.	传送带上有多少实体随时间变化。
+	How many entities are in the model over time.	模型中有多少实体随时间变化。
+	At {time} {unit}: {n} entities	在 {time} {unit}：{n} 个实体
+@plural	Makes {n} independent run of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval across them.	从随机种子 {seed} 开始，对模型进行 {n} 次独立运行。每个区块的结果都包含 95% 置信区间的半宽。
 	Fonts	字体
 	The full list of third-party licences is in the file THIRD-PARTY-LICENSES.html, which comes with the download.	第三方许可证的完整列表在随下载附带的文件 THIRD-PARTY-LICENSES.html 中。
 	Full list of third-party licences	第三方许可证完整列表

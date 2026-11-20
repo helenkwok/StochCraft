@@ -61,6 +61,30 @@ pub enum Dist {
     },
 }
 
+/// The range a distribution's parameter must lie in ([`DistError::OutOfRange`]).
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum Requirement {
+    /// Greater than 0.
+    AboveZero,
+    /// 0 or more.
+    ZeroOrMore,
+    /// 1 or more.
+    OneOrMore,
+    /// Between 0 and 1.
+    UnitInterval,
+}
+
+impl std::fmt::Display for Requirement {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.write_str(match self {
+            Requirement::AboveZero => "greater than 0",
+            Requirement::ZeroOrMore => "0 or more",
+            Requirement::OneOrMore => "1 or more",
+            Requirement::UnitInterval => "between 0 and 1",
+        })
+    }
+}
+
 /// Why a distribution's parameters cannot be sampled.
 #[derive(Debug, Clone, PartialEq)]
 pub enum DistError {
@@ -69,7 +93,7 @@ pub enum DistError {
     /// A parameter is outside its range.
     OutOfRange {
         parameter: &'static str,
-        requirement: &'static str,
+        requirement: Requirement,
     },
     /// `min` is not below `max` (or the mode lies outside them).
     BadBounds,
@@ -113,7 +137,7 @@ fn positive(name: &'static str, v: f64) -> Result<(), DistError> {
     } else {
         Err(DistError::OutOfRange {
             parameter: name,
-            requirement: "greater than 0",
+            requirement: Requirement::AboveZero,
         })
     }
 }
@@ -125,7 +149,7 @@ fn non_negative(name: &'static str, v: f64) -> Result<(), DistError> {
     } else {
         Err(DistError::OutOfRange {
             parameter: name,
-            requirement: "0 or more",
+            requirement: Requirement::ZeroOrMore,
         })
     }
 }
@@ -461,7 +485,7 @@ impl Dist {
                 } else {
                     Err(DistError::OutOfRange {
                         parameter: "k",
-                        requirement: "1 or more",
+                        requirement: Requirement::OneOrMore,
                     })
                 }
             }
@@ -473,7 +497,7 @@ impl Dist {
                 } else {
                     Err(DistError::OutOfRange {
                         parameter: "probability",
-                        requirement: "between 0 and 1",
+                        requirement: Requirement::UnitInterval,
                     })
                 }
             }

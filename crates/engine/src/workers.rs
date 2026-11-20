@@ -43,11 +43,12 @@ impl Worker {
     pub fn new(task: &str) -> Result<Self, CommandError> {
         let task: Task = serde_json::from_str(task)
             .map_err(|e| CommandError::new(ErrorCode::InvalidParams, format!("task: {e}")))?;
-        let compiled = compile(&task.model.into())
+        let model: stochcraft_model::Model = task.model.into();
+        let compiled = compile(&model)
             .map_err(|ds| CommandError {
                 code: ErrorCode::InvalidModel,
                 message: "the model has errors and cannot run".into(),
-                details: Some(wire::diagnostics(&ds)),
+                details: Some(wire::diagnostics(&model, &ds)),
             })?
             .record_every(task.record);
         Ok(Self {

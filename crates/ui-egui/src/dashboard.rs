@@ -111,9 +111,9 @@ impl App {
         });
         // 4. Items on conveyors over time.
         let title = if conveyors {
-            t("Items on conveyors over time")
+            t("Entities on conveyors over time")
         } else {
-            t("Items in the model over time")
+            t("Entities in the model over time")
         };
         tile(ui, p, title, |ui| {
             over_time(
@@ -490,13 +490,13 @@ fn time_on(
             if watching {
                 t("Fills in when the run ends")
             } else {
-                t("How long each item spends on the conveyors.")
+                t("How long each entity spends on the conveyors.")
             },
         ));
         return;
     };
     let Some((start, bin, counts)) = merged_histogram(r) else {
-        ui.label(theme::weak(ui, t("No item has left a conveyor yet")));
+        ui.label(theme::weak(ui, t("No entity has left a conveyor yet")));
         return;
     };
     let total: u64 = counts.iter().sum();
@@ -505,7 +505,7 @@ fn time_on(
     ui.label(theme::weak(
         ui,
         tf(
-            "Share of items by time on a conveyor, in {unit}",
+            "Share of entities by time on a conveyor, in {unit}",
             &[("unit", unit)],
         ),
     ));
@@ -518,7 +518,7 @@ fn time_on(
             egui::Role::Image,
             true,
             tf(
-                "Time on conveyors: {n} items between {lo} and {hi} {unit}",
+                "Time on conveyors: {n} entities between {lo} and {hi} {unit}",
                 &[
                     ("n", &grouped(total as f64)),
                     ("lo", &three(start)),
@@ -589,7 +589,7 @@ fn time_on(
                 ui,
                 ("bin", i),
                 tf(
-                    "{from} to {to} {unit}: {share} of items ({n})",
+                    "{from} to {to} {unit}: {share} of entities ({n})",
                     &[
                         ("from", &three(from)),
                         ("to", &three(from + bin)),
@@ -657,9 +657,9 @@ fn over_time(
         ui.label(theme::weak(
             ui,
             if conveyors {
-                t("How many items are on the conveyors over time.")
+                t("How many entities are on the conveyors over time.")
             } else {
-                t("How many items are in the model over time.")
+                t("How many entities are in the model over time.")
             },
         ));
         return;
@@ -758,7 +758,7 @@ fn over_time(
                 ui,
                 ("line", 0),
                 tf(
-                    "At {time} {unit}: {n} items",
+                    "At {time} {unit}: {n} entities",
                     &[("time", &three(*tm)), ("unit", unit), ("n", &three(*v))],
                 ),
             );

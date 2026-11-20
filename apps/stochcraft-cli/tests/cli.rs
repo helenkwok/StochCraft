@@ -117,7 +117,7 @@ fn a_run_prints_what_the_behaviour_checks_find() {
         "--duration",
         "0.000001",
     ]);
-    assert!(table.contains("no entity left the model"), "{table}");
+    assert!(table.contains("No entity left the model"), "{table}");
 }
 
 #[test]
@@ -175,7 +175,10 @@ fn run_gives_the_warm_up_suggestion_and_its_warnings() {
     );
     // One replication is warned about, in words.
     let one = ok(&["run", &m, "--reps", "1"]);
-    assert!(one.contains("the run has one replication"), "{one}");
+    assert!(
+        one.to_lowercase().contains("the run has one replication"),
+        "{one}"
+    );
     // As JSON: the values over the run and the suggestion, beside the keys there were.
     let r = json(&ok(&["run", &m, "--reps", "3", "--format", "json"]));
     for key in ["elements", "values", "measured", "warnings", "record"] {
@@ -242,7 +245,7 @@ fn validate_exits_with_1_on_errors() {
     ok(&["exec", &script.to_string_lossy()]);
     let o = cli(&["validate", &broken.to_string_lossy()]);
     assert_eq!(o.status.code(), Some(1), "{}", stdout(&o));
-    assert!(stdout(&o).contains("no source"), "{}", stdout(&o));
+    assert!(stdout(&o).contains("no Arrivals block"), "{}", stdout(&o));
     let j = cli(&["validate", &broken.to_string_lossy(), "--format", "json"]);
     assert_eq!(j.status.code(), Some(1));
     assert!(json(&stdout(&j))["errors"].as_u64().is_some_and(|n| n > 0));

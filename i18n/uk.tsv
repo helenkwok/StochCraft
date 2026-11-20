@@ -21,8 +21,6 @@
 	A caller on hold: once a unit takes it, the entity stays.	Абонент на утриманні: щойно одиниця бере його, сутність залишається.
 	A client that times out: if its time runs out during service, it gives up then, and the unit finishes the job anyway (wasted work).	Клієнт із тайм-аутом: якщо його час спливає під час обслуговування, він іде в цю мить, а одиниця все одно доробляє роботу (марна робота).
 	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	Новий файл містить лише модель: те, чого StochCraft не розуміє в {file}, пропускається.
-	Abandoned	Пішли
-	Abandoned on {id}	Пішли на {id}
 	About StochCraft	Про програму StochCraft
 	About {app}	Про програму {app}
 	Accent	Акцент
@@ -162,7 +160,6 @@
 	Duration	Тривалість
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Кожен аналіз запускає експеримент кілька разів з тим самим початковим значенням генератора, тож відмінності спричинені зміною, а не випадковістю. Це може тривати деякий час.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Кожна сутність займає перший із цих варіантів, який можна виконати зараз, повністю й одразу, і повертає одиниці, коли виходить.
-	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Кожна сутність чекає тут не довше за випадковий час, вибраний для неї під час прибуття, а потім іде: прямує виходом із позначкою «Пішли» або залишає модель.
 	Each server (unit) is checked every so often, as a load balancer probes the servers behind it. One that fails, with too many waiting, is taken out of service for a restart, then comes back.	Кожен сервер (одиниця) час від часу перевіряється, як балансувальник навантаження опитує сервери за ним. Сервер, що не пройшов перевірку, бо на нього чекає забагато, виводиться з роботи на перезавантаження, а потім повертається.
 	Edit	Редагування
 	Edit themes…	Змінити теми…
@@ -412,7 +409,6 @@
 	Run	Запустити
 	Run cancelled	Запуск скасовано
 	Run experiment	Запустити експеримент
-	Play run 1 step by step and see each block's queue on the diagram	Виконати запуск 1 покроково й бачити чергу кожного блока на діаграмі
 	Run the experiment ({shortcut})	Запустити експеримент ({shortcut})
 	Run the experiment again to see this result's spread.	Запустіть експеримент знову, щоб побачити розкид цього результату.
 	Run the experiment at each value of one parameter, and compare a result.	Запустити експеримент за кожного значення одного параметра й порівняти результат.
@@ -433,7 +429,6 @@
 	Scrap ratio	Частка браку
 	Seed	Початкове значення генератора
 	Select All	Виділити все
-	Select a block to see its queue over time.	Виберіть блок, щоб побачити його чергу в часі.
 	Sender waits during transfer	Відправник чекає під час передачі
 	Separate the values with semicolons or spaces.	Розділяйте значення крапкою з комою або пробілами.
 	Sequential	Послідовні
@@ -497,10 +492,8 @@
 	Text	Текст
 	Text on accent	Текст на акценті
 	Text on header	Текст на верхній панелі
-	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	З'єднання обривається, і клієнт пробує знову: сутність одразу повертається на початок черги, а виконана над нею робота марна.
 	The entity waits on its server and the job carries on with what was left once the server is back.	Сутність чекає на своєму сервері, і робота триває із залишку, щойно сервер повернеться.
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more runs would narrow it.	Інтервал сягає нижче цільової частки {share}, тож з довірою 95% не показано, що частку досягнуто; більше запусків звузили б його.
-	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	Робота одразу зупиняється: сутність повертається на початок черги до будь-якого сервера на зміні, а виконана над нею робота марна.
 	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	Робота одразу зупиняється; сутність чекає на своєму сервері, і робота триває із залишку, щойно цей сервер знову на зміні.
 	The last task with a resource it finished at	Останнє завдання з ресурсом, яке пройшла деталь
 	The mean time to the stop condition is over the runs that met it only; the others ran to their time limit.	Середній час до умови зупинки обчислено лише за запусками, що її досягли; решта тривали до своєї межі часу.
@@ -690,7 +683,6 @@ unit	yr	р.
 	Balked on {id}	Відмовилися на {id}
 	Balking	Відмова від черги
 	Count those in service	Враховувати й тих, що обслуговуються
-	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Сутності, які не стають у чергу, одразу йдуть цим потоком (наприклад, щоб спробувати пізніше), а не втрачаються; тут вони рахуються як відмови.
 	Joins with probability	Стає в чергу з імовірністю
 	Number waiting	Кількість в очікуванні
 	Share balked	Частка тих, хто відмовився
@@ -908,7 +900,6 @@ unit	yr	р.
 @plural	Finished {n} run|Finished {n} runs	Завершено {n} запуск|Завершено {n} запуски|Завершено {n} запусків
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	Відкрито {file} ({n} попередження)|Відкрито {file} ({n} попередження)|Відкрито {file} ({n} попереджень)
 @plural	Removed {n} block|Removed {n} blocks	Видалено {n} блок|Видалено {n} блоки|Видалено {n} блоків
-@plural	Makes {n} independent run of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Виконує {n} незалежний запуск моделі з початковим значенням {seed}. Результати кожного елемента містять півширину 95% довірчого інтервалу.|Виконує {n} незалежні запуски моделі з початковим значенням {seed}. Результати кожного елемента містять півширину 95% довірчого інтервалу.|Виконує {n} незалежних запусків моделі з початковим значенням {seed}. Результати кожного елемента містять півширину 95% довірчого інтервалу.
 @plural	The stop condition was met in {met} of {n} run, after {time} {unit} on average.|The stop condition was met in {met} of {n} runs, after {time} {unit} on average.	Умову зупинки досягнуто в {met} з {n} запуску, у середньому через {time} {unit}.|Умову зупинки досягнуто в {met} з {n} запусків, у середньому через {time} {unit}.|Умову зупинки досягнуто в {met} з {n} запусків, у середньому через {time} {unit}.
 @plural	{done} of {n} run finished|{done} of {n} runs finished	Завершено {done} із {n} запуску|Завершено {done} із {n} запусків|Завершено {done} із {n} запусків
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} run|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} runs	{name}: {mean}{unit}\n95% інтервал від {low} до {high}{unit}\nза {n} запуском|{name}: {mean}{unit}\n95% інтервал від {low} до {high}{unit}\nза {n} запусками|{name}: {mean}{unit}\n95% інтервал від {low} до {high}{unit}\nза {n} запусками
@@ -938,7 +929,6 @@ unit	yr	р.
 	kilometres	кілометри
 	inches	дюйми
 	feet	фути
-	Ticked, items queue up at the end while the rest keep moving. Unticked, the whole belt stops when the item at the end cannot leave.	Якщо позначено, вироби вишиковуються в чергу в кінці, поки решта продовжує рухатися. Якщо ні, уся стрічка зупиняється, коли виріб у кінці не може піти.
 	A belt that carries entities from one end to the other. It has a length and a speed, and each entity takes a pitch of belt: its item length plus the gap kept free after it. So it holds at most length ÷ pitch entities and carries at most speed ÷ pitch per time unit. Accumulating: entities queue up at the end while the rest keep moving; otherwise the whole belt stops.	Стрічка, що переносить сутності від одного кінця до іншого. Вона має довжину і швидкість, а кожна сутність займає крок стрічки: довжину свого виробу плюс проміжок, що лишається вільним за нею. Тож на стрічці вміщується не більше довжина ÷ крок сутностей, і вона переносить не більше швидкість ÷ крок за одиницю часу. Накопичення: сутності вишиковуються в чергу в кінці, поки решта продовжує рухатися; інакше зупиняється вся стрічка.
 	Station	Станція
 	Kind	Тип
@@ -992,19 +982,165 @@ unit	yr	р.
 	Time on conveyors	Час на конвеєрах
 	No conveyors in this model	У цій моделі немає конвеєрів
 	Fills in when the run ends	Заповниться по завершенні прогону
-	How long each item spends on the conveyors.	Скільки часу кожен елемент проводить на конвеєрах.
-	No item has left a conveyor yet	Жоден елемент ще не залишив конвеєр
-	Share of items by time on a conveyor, in {unit}	Частка елементів за часом на конвеєрі, в {unit}
-	Time on conveyors: {n} items between {lo} and {hi} {unit}	Час на конвеєрах: {n} елементів між {lo} і {hi} {unit}
-	{from} to {to} {unit}: {share} of items ({n})	Від {from} до {to} {unit}: {share} елементів ({n})
-	Items on conveyors over time	Елементи на конвеєрах у часі
-	Items in the model over time	Елементи в моделі в часі
-	How many items are on the conveyors over time.	Скільки елементів на конвеєрах у часі.
-	How many items are in the model over time.	Скільки елементів у моделі в часі.
 	Nothing was recorded over time in these results	У цих результатах нічого не записано в часі
-	At {time} {unit}: {n} items	У момент {time} {unit}: {n} елементів
 	Run the model to fill the dashboard	Запустіть модель, щоб заповнити панель
 	The resource and conveyor charts show the last run until this one ends	Графіки ресурсів і конвеєрів показують останній прогін, доки цей не завершиться
+# Validation messages, new labels and word changes (issue #145)
+	The id “{id}” is not valid. Start an id with a letter or an underscore, then use only letters, digits, dots, hyphens and underscores.	Ідентифікатор «{id}» недопустимий. Починайте ідентифікатор з літери або підкреслення, а далі використовуйте лише літери, цифри, крапки, дефіси та підкреслення.
+	More than one block, flow, pool or calendar has the id “{id}”. Give each its own id.	У кількох блоків, потоків, пулів або календарів один і той самий ідентифікатор «{id}». Задайте кожному свій ідентифікатор.
+	The flow {flow} uses a block that does not exist. Remove the flow, or connect it to a block that exists.	Потік {flow} пов'язаний із блоком, якого немає. Видаліть потік або з'єднайте його з наявним блоком.
+	The flow {flow} leads into an Arrivals block, which takes no input. Remove the flow, or send it to another block.	Потік {flow} веде до блока «Прибуття», який не має входу. Видаліть потік або спрямуйте його до іншого блока.
+	The flow {flow} leaves a Departures block, which has no output. Remove the flow, or start it from another block.	Потік {flow} виходить із блока «Вибуття», який не має виходу. Видаліть потік або почніть його від іншого блока.
+	The flow {flow} leads from a block back to itself. Remove it, or send it to another block.	Потік {flow} веде від блока до нього самого. Видаліть його або спрямуйте до іншого блока.
+	{block} has nowhere to send entities. Add a flow from it to the next block.	Блоку {block} нікуди надсилати сутності. Додайте потік від нього до наступного блока.
+	{block} has {count} flows out, and only a Decision or a Split or join block can send entities down several. Remove the extra flows, or add a Decision block.	Від блока {block} відходить потоків: {count}, а кількома потоками сутності можуть іти лише з блока «Рішення» або «Розділити або об'єднати». Видаліть зайві потоки або додайте блок «Рішення».
+	In “{field}” of {block}, set “{param}” to a finite number.	У полі «{field}» блока {block} задайте для «{param}» скінченне число.
+	In “{field}” of {block}, set “{param}” to a number above 0.	У полі «{field}» блока {block} задайте для «{param}» число більше за 0.
+	In “{field}” of {block}, set “{param}” to 0 or more.	У полі «{field}» блока {block} задайте для «{param}» число не менше за 0.
+	In “{field}” of {block}, set “{param}” to 1 or more.	У полі «{field}» блока {block} задайте для «{param}» число не менше за 1.
+	In “{field}” of {block}, set “{param}” to a number from 0 to 1.	У полі «{field}» блока {block} задайте для «{param}» число від 0 до 1.
+	In “{field}” of {block}, set “Minimum” below “Maximum”, and any “Most likely” value between them.	У полі «{field}» блока {block} задайте «Мінімум» менше за «Максимум», а «Найімовірніше значення», якщо воно є, між ними.
+	In “{field}” of {block}, add data points whose probabilities add up to more than 0.	У полі «{field}» блока {block} додайте точки даних, імовірності яких у сумі більші за 0.
+	{block} would never have a unit to work with. Give it at least 1 unit.	У блока {block} ніколи не було б одиниці для роботи. Задайте принаймні 1 одиницю.
+	{block} would make entities without end, because its “Time between arrivals” is always 0. Give it a time above 0, or set an “Arrival limit”.	Блок {block} створював би сутності без кінця, бо «Час між прибуттями» завжди дорівнює 0. Задайте час більший за 0 або вкажіть «Обмеження кількості прибуттів».
+	The model has no Arrivals block, so nothing will happen. Add an Arrivals block.	У моделі немає блока «Прибуття», тож нічого не станеться. Додайте блок «Прибуття».
+	The model has no Departures block, so no time in system is measured. Add a Departures block.	У моделі немає блока «Вибуття», тож час у системі не вимірюється. Додайте блок «Вибуття».
+	No entity can reach {block} from an Arrivals block. Connect it to a block that entities pass through.	Жодна сутність не може дійти до блока {block} від блока «Прибуття». З'єднайте його з блоком, через який проходять сутності.
+	Entities in {block} can never reach a Departures block. Connect it on towards Departures.	Сутності в блоці {block} ніколи не дійдуть до блока «Вибуття». З'єднайте його далі з блоком «Вибуття».
+	Set the “{state}” power of {block} to a number of kilowatts, 0 or more.	Задайте потужність «{state}» блока {block} у кіловатах, не менше за 0.
+	Set the warm-up of the experiment to 0 or more.	Задайте розігрів експерименту не менше за 0.
+	Set the duration of the experiment to more than 0.	Задайте тривалість експерименту більшу за 0.
+	Set the number of runs of the experiment to 1 or more.	Задайте кількість запусків експерименту не менше за 1.
+	Set the layout scale (length units per drawing unit) to a finite number above 0.	Задайте масштаб схеми (одиниць довжини на одиницю креслення) скінченним числом більшим за 0.
+	A property of {block} has no name. Give it a name, or remove it.	У однієї з властивостей блока {block} немає імені. Задайте ім'я або видаліть властивість.
+	{block} sets the property “{name}” twice. Keep one of them.	Блок {block} двічі задає властивість «{name}». Залиште одне з них.
+	The property “{name}” of {block} needs shares that are not negative and add up to more than 0. Change the shares.	Для властивості «{name}» блока {block} потрібні частки, які не від'ємні та в сумі більші за 0. Змініть частки.
+	The property “{name}” has the type “{type2}” on {block} but “{type}” on another block. Give it one type everywhere.	Властивість «{name}» має тип «{type2}» у блока {block}, але тип «{type}» в іншого блока. Задайте їй один тип скрізь.
+	The value of the property “{name}” on {block} does not fit its type, “{type}”. Change the value or the type.	Значення властивості «{name}» у блока {block} не відповідає її типу «{type}». Змініть значення або тип.
+	The expression for the property “{name}” on {block} cannot be used: {error}. Correct “{expression}”.	Вираз для властивості «{name}» у блока {block} не можна використати: {error}. Виправте «{expression}».
+	{block} reads the property “{name}”, which no block sets, so it would read as empty. Set it on an earlier block, or correct the name.	Блок {block} читає властивість «{name}», яку не задає жоден блок, тож вона буде порожньою. Задайте її в одному з попередніх блоків або виправте ім'я.
+	The setup of {block} has times for particular changes but no property to watch. Choose a property under “Only when this property changes”.	У налаштуванні блока {block} є часи для окремих змін, але немає властивості для відстеження. Виберіть властивість у розділі «Лише коли змінюється ця властивість».
+	{block} has times for particular values but no property to read them from. Choose a property under “Service time by property”.	У блока {block} є часи для окремих значень, але немає властивості, з якої їх брати. Виберіть властивість у розділі «Час обслуговування залежно від властивості».
+	{block} has two times for the value “{value}”. Keep one.	У блока {block} час для значення «{value}» задано двічі. Залиште один.
+	Set the time of {block} for the value “{value}” to a mean of 0 or more.	Задайте час блока {block} для значення «{value}» із середнім не менше за 0.
+	The scrap at {block} counts against {other}, which is not a task with a resource. Choose a task with a resource.	Брак у блока {block} зараховується до блока {other}, який не є завданням із ресурсом. Виберіть завдання з ресурсом.
+	Set “Planned run time per item” of {block} to a mean above 0.	Задайте «Планований час роботи на деталь» блока {block} із середнім більшим за 0.
+	Set “Time before giving up” of {block} to a mean of 0 or more.	Задайте «Час до відходу» блока {block} із середнім не менше за 0.
+	The flow {flow} is ticked “Gave up”, but only a task with a resource and a “Time before giving up” sends entities that give up. Untick it, or set a “Time before giving up” on {block}.	Потік {flow} позначено як «Пішли», але сутності, що йдуть, надсилає лише завдання з ресурсом, у якого задано «Час до відходу». Зніміть позначку або задайте «Час до відходу» у блока {block}.
+	{count} flows out of {block} are ticked “{way}”; at most one can be. Untick all but one.	У блока {block} потоків, позначених як «{way}»: {count}, а допустимий щонайбільше один. Зніміть позначки з усіх, крім одного.
+	The flow {flow} is ticked “Turned away”, but only a task with a resource and a limited waiting room turns entities away. Untick it, or limit the waiting room of {block}.	Потік {flow} позначено як «Відхилені», але відхиляє сутності лише завдання з ресурсом і обмеженими місцями очікування. Зніміть позначку або обмежте місця очікування блока {block}.
+	The flow {flow} is ticked both “Gave up” and “Turned away”. Keep one of them.	Потік {flow} позначено і як «Пішли», і як «Відхилені». Залиште одну позначку.
+	Set every chance of joining in the balking table of {block} to a number from 0 to 1.	Задайте кожну імовірність приєднання в таблиці відмови від черги блока {block} числом від 0 до 1.
+	Put the rows of the balking table of {block} in increasing order of “Number waiting”.	Розташуйте рядки таблиці відмови від черги блока {block} за зростанням значення «Кількість в очікуванні».
+	The flow {flow} is ticked “Balked”, but only a task with a resource and balking sends entities that balk. Untick it, or turn on balking for {block}.	Потік {flow} позначено як «Відмовилися», але сутності, що відмовляються, надсилає лише завдання з ресурсом і ввімкненою відмовою від черги. Зніміть позначку або ввімкніть відмову від черги для блока {block}.
+	The flow {flow} is ticked “Balked” and also “Gave up” or “Turned away”. Keep one of them.	Потік {flow} позначено як «Відмовилися», а також як «Пішли» або «Відхилені». Залиште одну позначку.
+	The waiting room of {block} is set by calendar or per working server, but has no number of places, so it is unlimited. Give it a number of places, or make it fixed.	Місця очікування блока {block} задано за календарем або за кількістю працюючих серверів, але кількість місць не вказано, тож вони необмежені. Вкажіть кількість місць або зробіть їх фіксованими.
+	The waiting room of {block} is set by calendar, but no calendar has a value. Add a value for a calendar, or make the waiting room fixed.	Місця очікування блока {block} задано за календарем, але в жодного календаря немає значення. Додайте значення для календаря або зробіть місця очікування фіксованими.
+	Set “Fails above, waiting per working server” of {block} to a number of 0 or more.	Задайте «Не проходить понад (тих, що чекають, на сервер у роботі)» блока {block} числом не менше за 0.
+	Set “Check every” of {block} to a mean above 0.	Задайте «Перевіряти кожні» блока {block} із середнім більшим за 0.
+	Set the demand of {block} to a number of parts above 0.	Задайте попит блока {block} числом деталей, більшим за 0.
+	The demand of {block} is per shift but names no calendar to say when the shifts are. Choose a calendar.	Попит блока {block} задано на зміну, але не вказано календар, за яким визначаються зміни. Виберіть календар.
+	The demand of {block} names a calendar that does not exist. Choose a calendar that exists.	Попит блока {block} вказує на неіснуючий календар. Виберіть наявний календар.
+	The probability {value} on the flow {flow} is not from 0 to 1. Enter a probability from 0 to 1.	Імовірність {value} у потоку {flow} не лежить у діапазоні від 0 до 1. Введіть імовірність від 0 до 1.
+	The probabilities of the flows out of {block} add up to {sum}, not 1, so they are used in proportion. Change them to add up to 1 if that is not what you want.	Імовірності потоків із блока {block} у сумі дають {sum}, а не 1, тож їх використовують пропорційно. Якщо це не те, що потрібно, змініть їх так, щоб сума дорівнювала 1.
+	The condition on the flow {flow} cannot be used: {error}. Correct “{expression}”.	Умову в потоку {flow} не можна використати: {error}. Виправте «{expression}».
+	The condition on the flow {flow} is ignored, because only flows out of a Decision block choose a route. Remove the condition.	Умову в потоку {flow} ігноровано, бо маршрут вибирають лише потоки з блока «Рішення». Видаліть умову.
+	The probability on the flow {flow} is ignored, because only flows out of a Decision block choose a route. Remove the probability.	Імовірність у потоку {flow} ігноровано, бо маршрут вибирають лише потоки з блока «Рішення». Видаліть імовірність.
+	The condition on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the condition.	Умову в потоку {flow} ігноровано, бо «Рішення» надсилає сутності до найкоротшої черги. Видаліть умову.
+	The probability on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the probability.	Імовірність у потоку {flow} ігноровано, бо «Рішення» надсилає сутності до найкоротшої черги. Видаліть імовірність.
+	The default on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the default.	Позначку «за замовчуванням» у потоку {flow} ігноровано, бо «Рішення» надсилає сутності до найкоротшої черги. Зніміть її.
+	The probability on the flow {flow} is ignored, because the Decision routes by condition. Remove the probability.	Імовірність у потоку {flow} ігноровано, бо «Рішення» вибирає маршрут за умовою. Видаліть імовірність.
+	The default flow of {block} is not one of its own flows out. Choose one of the flows out of {block} as the default.	Потік за замовчуванням блока {block} не входить до його вихідних потоків. Виберіть потоком за замовчуванням один із вихідних потоків блока {block}.
+	{block} routes by condition but has no default flow, so an entity for which no condition holds leaves the model here. Choose a default flow.	Блок {block} вибирає маршрут за умовою, але в нього немає потоку за замовчуванням, тож сутність, для якої не виконується жодна умова, залишає тут модель. Виберіть потік за замовчуванням.
+	{block} diverts entities but has no default flow, so an entity whose way is full has nowhere else to go. Choose a default flow.	Блок {block} відводить сутності, але в нього немає потоку за замовчуванням, тож сутностям, у яких потрібний шлях зайнятий, немає куди більше йти. Виберіть потік за замовчуванням.
+	{block} waits for an entity on the flow {flow}, which none can reach, so it never sends one on. Remove that flow, or connect it to a block that entities reach.	Блок {block} чекає на сутність потоком {flow}, до якого жодна сутність не доходить, тож він ніколи не надсилає їх далі. Видаліть цей потік або з'єднайте його з блоком, до якого сутності доходять.
+	{block} has a limited waiting room and is fed through {gateway}. While it is full, {gateway} holds up every entity behind it, and they wait before it without limit. Remove the gateway before {block}, or remove the limit.	У блока {block} обмежені місця очікування, і сутності потрапляють до нього через {gateway}. Поки місця зайняті, {gateway} затримує всі сутності за собою, і вони чекають перед ним без обмеження. Приберіть шлюз перед блоком {block} або зніміть обмеження.
+	The limited waiting rooms of {loop} feed each other in a loop, so when all of them are full the loop deadlocks. Remove the limit on one of them, or break the loop.	Обмежені місця очікування в {loop} живлять одне одного по колу, тож коли всі вони зайняті, цикл блокується намертво. Зніміть обмеження з одного з них або розірвіть цикл.
+	The pool {block} has no units. Give it at least 1 unit.	У пулі {block} немає одиниць. Задайте принаймні 1 одиницю.
+	{block} names no resource it needs. Add one under “Needs”.	Блок {block} не вказує, який ресурс йому потрібен. Додайте його в розділі «Потреби».
+	{block} needs a resource pool that does not exist. Choose a pool that exists.	Блоку {block} потрібен пул ресурсів, якого немає. Виберіть наявний пул.
+	{block} needs units with the roles {roles}, which no pool has. Give a pool those roles, or change what {block} needs.	Блоку {block} потрібні одиниці з ролями {roles}, яких немає в жодному пулі. Задайте пулу ці ролі або змініть потреби блока {block}.
+	{block} needs {needed} units at once, but at most {available} exist, so this can never be met. Ask for fewer units, or add units to the pool.	Блоку {block} потрібно одразу {needed} одиниць, а існує щонайбільше {available}, тож це ніколи не виконається. Запитайте менше одиниць або додайте одиниці до пулу.
+	Set the priority of {block} to a finite number, not {value}.	Задайте пріоритет блока {block} скінченним числом, а не {value}.
+	No task uses the pool {block}. Add it to a task's needs, or remove the pool.	Жодне завдання не використовує пул {block}. Додайте його до потреб завдання або видаліть пул.
+	{block} has a value for a calendar that does not exist. Choose a calendar that exists, or remove the value.	У блока {block} є значення для неіснуючого календаря. Виберіть наявний календар або видаліть значення.
+	The calendar {block} has no entries, so it is never active. Add an entry.	У календарі {block} немає записів, тож він ніколи не активний. Додайте запис.
+	{block} allows no arrivals outside the calendars but names no calendar, so it never creates entities. Add arrivals by calendar, or allow arrivals outside calendars.	Блок {block} не допускає прибуттів поза календарями, але не вказує календар, тож він ніколи не створює сутності. Додайте прибуття за календарем або дозвольте прибуття поза календарями.
+	Set the batch size of {block} to 1 or more.	Задайте розмір партії блока {block} не менше за 1.
+	Set “{field}” of the conveyor {block} to a finite number above 0.	Задайте «{field}» конвеєра {block} скінченним числом, більшим за 0.
+	Set “{field}” of the conveyor {block} to a finite number of 0 or more.	Задайте «{field}» конвеєра {block} скінченним числом не менше за 0.
+	Set “{field}” of the conveyor {block} to a finite number other than 0.	Задайте «{field}» конвеєра {block} скінченним числом, відмінним від 0.
+	The conveyor {block} is {length} long but each entity takes {pitch} (item length plus gap), so not even one fits. Lengthen the conveyor, or shorten the item or the gap.	Довжина конвеєра {block} дорівнює {length}, а кожна сутність займає {pitch} (довжина виробу плюс проміжок), тож не вміщується навіть одна. Подовжте конвеєр або скоротіть виріб чи проміжок.
+	The drawn path of the conveyor {block} is {path_length} long, but its “Length” is {length}, so the drawing and the run disagree. Make “Length” match the path, or change the shape.	Намальований шлях конвеєра {block} має довжину {path_length}, а його «Довжина» дорівнює {length}, тож креслення і запуск розходяться. Приведіть «Довжина» у відповідність до шляху або змініть форму.
+	{block} is a transport, which StochCraft does not simulate yet. Remove it to run the model.	Блок {block} є транспортом, який StochCraft поки не моделює. Видаліть його, щоб запустити модель.
+	The pool {pool} of the transport {block} does not exist. Choose a pool that exists.	Пулу {pool} транспорту {block} не існує. Виберіть наявний пул.
+	The pool {pool} of the transport {block} is not mobile. Give the pool speeds and a home.	Пул {pool} транспорту {block} не мобільний. Задайте пулу швидкості та місце базування.
+	Set “{field}” of the pool {block} to a finite number above 0.	Задайте «{field}» пулу {block} скінченним числом, більшим за 0.
+	The home of the pool {block} is not a block of the model. Choose a block as its home.	Місце базування пулу {block} не є блоком моделі. Виберіть блок як місце базування.
+	The transport {block} needs one block before it, where it picks up, and one after it, where it drops off, but has {inputs} before and {outputs} after. Connect it to one block on each side.	Транспорту {block} потрібен один блок перед ним, де він забирає, і один після нього, де він вивантажує, а зараз перед ним {inputs}, а після {outputs}. З'єднайте його з одним блоком з кожного боку.
+	{other} has no place on the canvas, so the distances for {block} are not known. Place {other} on the canvas.	У блока {other} немає місця на основній поверхні, тож відстані для {block} невідомі. Розмістіть {other} на основній поверхні.
+	The flow {flow} asks for no entities. Set its “Units” to 1 or more.	Потік {flow} не запитує жодної сутності. Задайте для «Одиниці» значення не менше за 1.
+	The “Units” on the flow {flow} is ignored, because only a Split or join block takes several entities from one flow. Remove it.	«Одиниці» у потоку {flow} ігноруються, бо кілька сутностей з одного потоку бере лише блок «Розділити або об'єднати». Видаліть їх.
+	No block makes batches, so {block} passes every entity through. Add a Batch block before it, or remove {block}.	Жоден блок не створює партій, тож {block} пропускає кожну сутність. Додайте перед ним блок «Партія» або видаліть {block}.
+	The stop condition names a block that does not exist. Choose a block that exists.	Умова зупинки вказує на неіснуючий блок. Виберіть наявний блок.
+	Set the count of the stop condition for {block} to 1 or more.	Задайте число в умові зупинки для блока {block} не менше за 1.
+	The stop condition waits for {block} to empty, but only a task can empty. Choose a task.	Умова зупинки чекає, поки блок {block} спорожніє, але спорожніти може лише завдання. Виберіть завдання.
+	The stop condition at {block} can be met before the warm-up ends. A run that stops during the warm-up has no statistics after it and is left out of the results. Shorten the warm-up, or stop later.	Умова зупинки в блока {block} може виконатися до завершення розігріву. Запуск, що зупинився під час розігріву, не має статистики після нього й виключається з результатів. Скоротіть розігрів або задайте зупинку пізніше.
+	Every run stopped before the warm-up ended, so no metric is reported. Shorten the warm-up, or stop later.	Кожен запуск зупинився до завершення розігріву, тож жодна метрика не виводиться. Скоротіть розігрів або задайте зупинку пізніше.
+	{replications} of {of} runs stopped before the warm-up ended, so their statistics are left out of every metric. Shorten the warm-up, or stop later.	Запусків, що зупинилися до завершення розігріву: {replications} із {of}, тож їхню статистику виключено з кожної метрики. Скоротіть розігрів або задайте зупинку пізніше.
+	{block} is offered {load}% of the work its units can do, so its waiting room grows without limit and the results describe no steady state. Add units, or shorten the service.	Блоку {block} пропонується {load}% роботи, яку можуть виконати його одиниці, тож його місця очікування зростають без межі, а результати не описують усталений режим. Додайте одиниці або скоротіть обслуговування.
+	{block} is busy {utilisation}% of the time, and at the end at least {backlog} entities are still waiting against {left} that left. Work arrives faster than it is done, so the results describe no steady state. Add units, or shorten the service.	Блок {block} зайнятий {utilisation}% часу, а наприкінці щонайменше {backlog} сутностей усе ще чекають при {left} тих, що пішли. Робота надходить швидше, ніж виконується, тож результати не описують усталений режим. Додайте одиниці або скоротіть обслуговування.
+	The experiment has one run, so its results cannot be told from chance. Set the number of runs to at least 2, and usually 10 or more.	В експерименті один запуск, тож його результати не відрізнити від випадковості. Задайте щонайменше 2 запуски, а зазвичай 10 і більше.
+	{block} has a three-point estimate but no time to fit it to, so the estimate is ignored. Remove the estimate.	У блока {block} є триточкова оцінка, але немає часу, до якого її підбирати, тож оцінку ігноровано. Видаліть оцінку.
+	The three-point estimate of {block} cannot be fitted: every point must be a finite number. Correct the points.	Триточкову оцінку блока {block} не можна підібрати: кожна точка має бути скінченним числом. Виправте точки.
+	The three-point estimate of {block} cannot be fitted: the points must be in order, minimum, most likely, then maximum or 95th percentile. Correct the points.	Триточкову оцінку блока {block} не можна підібрати: точки мають іти по порядку: мінімум, найімовірніше значення, потім максимум або 95-й процентиль. Виправте точки.
+	The three-point estimate of {block} cannot be fitted: log-normal and Weibull estimates have no maximum. Give a 95th percentile instead.	Триточкову оцінку блока {block} не можна підібрати: у логнормальної оцінки та оцінки Вейбулла немає максимуму. Вкажіть замість нього 95-й процентиль.
+	The time of {block} is no longer the one fitted from its three-point estimate. Fit it again, or remove the estimate.	Час блока {block} більше не той, що був підібраний за його триточковою оцінкою. Підберіть його знову або видаліть оцінку.
+	In “{field}” of {block}, the normal distribution draws below 0 more than 1 time in 100, and each such draw counts as 0, so the times are longer on average than its mean. Use a truncated normal with a minimum of 0, or a log-normal.	У полі «{field}» блока {block} нормальний розподіл дає значення нижче за 0 частіше ніж в 1 випадку зі 100, і кожне таке значення вважається за 0, тож часи в середньому більші за його середнє. Використайте усічений нормальний розподіл із мінімумом 0 або логнормальний.
+	The entities of {block} do not add up: {came} came in or were inside at the start, but {went} left, were lost, gave up or are still inside.	Сутності блока {block} не сходяться: на початку надійшли або були всередині {came}, а вийшли, втрачені, пішли або залишилися всередині {went}.
+	The entities of the model do not add up: {came} were created or inside at the start, but {went} reached Departures, left the model elsewhere or are still inside.	Сутності моделі не сходяться: на початку створені або були всередині {came}, а дійшли до блока «Вибуття», залишили модель інакше або залишилися всередині {went}.
+	No entity left the model, of {came} created or inside at the start. Check that the routing leads to Departures and that the run is long enough for an entity to get through.	Жодна сутність не залишила модель з {came} створених або тих, що були всередині на початку. Перевірте, що маршрут веде до «Вибуття» і що запуск достатньо довгий, щоб сутність встигла пройти.
+	Little's law does not hold at {block}: the time-average number inside was {mean}, but the entities' own times inside give {from_stays}.	Закон Літтла не виконується в блоці {block}: середнє за часом число сутностей усередині було {mean}, а власний час сутностей усередині дає {from_stays}.
+	The utilisation of {block} counts {busy} units busy on average, but {working} were processing or setting up: units idle, blocked, off shift, failed or restarting were counted busy.	Коефіцієнт використання блока {block} рахує зайнятими в середньому {busy} одиниць, але обробляли або проходили переналагодження {working}: одиниці, що простоюють, заблоковані, поза зміною, відмовили або перезапускаються, були пораховані як зайняті.
+	The utilisation of {block} counts {busy} units busy on average, but {working} were processing or setting up: units at work were not counted busy.	Коефіцієнт використання блока {block} рахує зайнятими в середньому {busy} одиниць, але обробляли або проходили переналагодження {working}: одиниці за роботою не були пораховані як зайняті.
+	The shares of the time of the units of {block} in each state add up to {total}, not 1.	Частки часу одиниць блока {block} у кожному стані в сумі дають {total}, а не 1.
+	“{metric}” of {block} is {value}, outside 0 to 1 (0% to 100%).	«{metric}» блока {block} дорівнює {value}, це поза діапазоном від 0 до 1 (від 0% до 100%).
+	This was found in {replications} of {of} runs, and the furthest off is shown.	Це виявлено в {replications} із {of} запусків, показано найбільш відхилений.
+	This points to a fault in StochCraft rather than in the model. Please report it with the model.	Це вказує на помилку в StochCraft, а не в моделі. Повідомте про неї разом із моделлю.
+	Angle	Кут
+	Failed	Відмова
+	Off shift	Поза зміною
+	Processing	Обробка
+	Radius	Радіус
+	Rise	Підйом
+	Speed empty	Швидкість без вантажу
+	Speed loaded	Швидкість із вантажем
+	Turns	Витки
+	Unload	Розвантаження
+	Lost	Втрати
+	An entity that leaves a waiting room before a unit takes it, because it has waited as long as it was willing to.	Сутність, яка залишає місця очікування до того, як її візьме одиниця, бо прочекала стільки, скільки була готова.
+	An entity that does not join a waiting room at all, because the number already waiting put it off.	Сутність, яка взагалі не стає в місця очікування, бо її відлякала кількість тих, що вже чекають.
+	An entity that finds the waiting room full and takes the flow ticked “Turned away” instead of waiting.	Сутність, яка застає місця очікування зайнятими й іде потоком із позначкою «Відхилені» замість очікування.
+	An entity that leaves the model without reaching Departures: it found the waiting room full with nowhere else to go, or a decision with no way out for it.	Сутність, яка залишає модель, не дійшовши до блока «Вибуття»: вона застала місця очікування зайнятими, а іншого шляху немає, або для неї немає виходу в рішення.
+	Gave up on {id}	Пішли на {id}
+	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the flow ticked “Gave up”, or leaves the model.	Кожна сутність чекає тут не довше за випадковий час, вибраний для неї під час прибуття, а потім іде: прямує потоком із позначкою «Пішли» або залишає модель.
+	Entities that do not join the waiting room take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Сутності, які не стають у місця очікування, одразу йдуть цим потоком (наприклад, щоб спробувати пізніше), а не втрачаються; тут вони рахуються як відмови.
+	The job stops at once: the entity goes back to the front of the waiting room for any server on shift, and the work done on it is wasted.	Робота одразу зупиняється: сутність повертається на початок місць очікування до будь-якого сервера на зміні, а виконана над нею робота марна.
+	The connection drops and the client tries again: the entity goes back to the front of the waiting room at once, and the work done on it is wasted.	З'єднання обривається, і клієнт пробує знову: сутність одразу повертається на початок місць очікування, а виконана над нею робота марна.
+	Ticked, entities queue up at the end while the rest keep moving. Unticked, the whole belt stops when the entity at the end cannot leave.	Якщо позначено, сутності вишиковуються в чергу в кінці, поки решта продовжує рухатися. Якщо ні, уся стрічка зупиняється, коли сутність у кінці не може піти.
+	Play run 1 step by step and see each block's waiting room on the diagram	Виконати запуск 1 покроково й бачити місця очікування кожного блока на діаграмі
+	Select a block to see its waiting room over time.	Виберіть блок, щоб побачити його місця очікування в часі.
+	Entities on conveyors over time	Сутності на конвеєрах у часі
+	Entities in the model over time	Сутності в моделі в часі
+	How long each entity spends on the conveyors.	Скільки часу кожна сутність проводить на конвеєрах.
+	No entity has left a conveyor yet	Жодна сутність ще не залишила конвеєр
+	Share of entities by time on a conveyor, in {unit}	Частка сутностей за часом на конвеєрі, в {unit}
+	Time on conveyors: {n} entities between {lo} and {hi} {unit}	Час на конвеєрах: {n} сутностей між {lo} і {hi} {unit}
+	{from} to {to} {unit}: {share} of entities ({n})	Від {from} до {to} {unit}: {share} сутностей ({n})
+	How many entities are on the conveyors over time.	Скільки сутностей на конвеєрах у часі.
+	How many entities are in the model over time.	Скільки сутностей у моделі в часі.
+	At {time} {unit}: {n} entities	У момент {time} {unit}: {n} сутностей
+@plural	Makes {n} independent run of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval across them.	Виконує {n} незалежний запуск моделі з початковим значенням {seed}. Результати кожного блока містять півширину 95% довірчого інтервалу.|Виконує {n} незалежні запуски моделі з початковим значенням {seed}. Результати кожного блока містять півширину 95% довірчого інтервалу.|Виконує {n} незалежних запусків моделі з початковим значенням {seed}. Результати кожного блока містять півширину 95% довірчого інтервалу.
 	Fonts	Шрифти
 	The full list of third-party licences is in the file THIRD-PARTY-LICENSES.html, which comes with the download.	Повний список ліцензій сторонніх компонентів міститься у файлі THIRD-PARTY-LICENSES.html, що входить до завантаження.
 	Full list of third-party licences	Повний список ліцензій сторонніх компонентів

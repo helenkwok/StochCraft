@@ -418,7 +418,7 @@ pub fn key(ui: &mut egui::Ui, results: &Value) {
     let r = &results["record"];
     let unit = unit_label(r["time_unit"].as_str().unwrap_or(""));
     // Warnings from before the run (the record's), from its results, and the file's notes.
-    let notes: Vec<&str> = r["warnings"]
+    let notes: Vec<String> = r["warnings"]
         .as_array()
         .into_iter()
         .flatten()
@@ -427,14 +427,16 @@ pub fn key(ui: &mut egui::Ui, results: &Value) {
         .filter(|n| n["severity"] != "info")
         // "How sure are these numbers?" says this one, with its fix ([`trust`]).
         .filter(|n| n["code"] != "no_warmup")
-        .filter_map(|n| n["message"].as_str())
+        .filter(|n| n["message"].is_string())
+        // In the interface language where the engine gave the words' parts.
+        .map(crate::i18n::engine_message)
         .collect();
     ui.vertical(|ui| {
         ui.set_max_width(COLUMNS[4].1);
         for n in &notes {
             ui.horizontal_wrapped(|ui| {
                 ui.label(theme::strong(t("Warning")).color(p.warning));
-                ui.label(*n);
+                ui.label(n.as_str());
             });
         }
     });

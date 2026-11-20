@@ -21,8 +21,6 @@
 	A caller on hold: once a unit takes it, the entity stays.	En uppringare i kö: när en enhet har tagit den stannar entiteten.
 	A client that times out: if its time runs out during service, it gives up then, and the unit finishes the job anyway (wasted work).	En klient med timeout: om dess tid tar slut under servicen ger den upp då, och enheten slutför jobbet ändå (bortkastat arbete).
 	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	Den nya filen innehåller bara modellen: det StochCraft inte förstår i {file} utelämnas.
-	Abandoned	Gav upp
-	Abandoned on {id}	Gav upp på {id}
 	About StochCraft	Om StochCraft
 	About {app}	Om {app}
 	Accent	Accent
@@ -162,7 +160,6 @@
 	Duration	Varaktighet
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Varje analys kör experimentet flera gånger med samma slumpfrö, så skillnaderna kommer från ändringen, inte från slumpen. Det kan ta en stund.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Varje entitet tar det första av dessa alternativ som kan uppfyllas nu, allt på en gång, och återlämnar enheterna när den lämnar uppgiften.
-	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Varje entitet väntar här högst en tid som slumpas fram för den vid ankomsten och ger sedan upp: den tar vägen ut som är markerad ”Gav upp”, eller lämnar modellen.
 	Each server (unit) is checked every so often, as a load balancer probes the servers behind it. One that fails, with too many waiting, is taken out of service for a restart, then comes back.	Varje server (enhet) kontrolleras med jämna mellanrum, så som en lastbalanserare avsöker servrarna bakom den. En som inte klarar kontrollen, med för många väntande, tas ur drift för en omstart och kommer sedan tillbaka.
 	Edit	Redigera
 	Edit themes…	Redigera teman…
@@ -412,7 +409,6 @@
 	Run	Kör
 	Run cancelled	Körning avbruten
 	Run experiment	Kör experiment
-	Play run 1 step by step and see each block's queue on the diagram	Spela upp körning 1 steg för steg och se varje blocks kö i diagrammet
 	Run the experiment ({shortcut})	Kör experimentet ({shortcut})
 	Run the experiment again to see this result's spread.	Kör experimentet igen för att se spridningen i det här resultatet.
 	Run the experiment at each value of one parameter, and compare a result.	Kör experimentet vid varje värde av en parameter och jämför ett resultat.
@@ -433,7 +429,6 @@
 	Scrap ratio	Kassationsandel
 	Seed	Slumpfrö
 	Select All	Markera allt
-	Select a block to see its queue over time.	Välj ett block för att se dess kö över tid.
 	Sender waits during transfer	Avsändaren väntar under överföringen
 	Separate the values with semicolons or spaces.	Skilj värdena åt med semikolon eller mellanslag.
 	Sequential	Sekventiella
@@ -497,10 +492,8 @@
 	Text	Text
 	Text on accent	Text på accent
 	Text on header	Text på toppfält
-	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	Anslutningen bryts och klienten försöker igen: entiteten går genast tillbaka först i kön, och arbetet som gjorts på den är bortkastat.
 	The entity waits on its server and the job carries on with what was left once the server is back.	Entiteten väntar vid sin server och jobbet fortsätter med det som var kvar när servern är tillbaka.
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more runs would narrow it.	Intervallet når under målandelen {share}, så det är inte visat med 95 % säkerhet att andelen nås; fler körningar skulle göra det smalare.
-	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	Jobbet avbryts genast: entiteten går tillbaka först i kön för vilken server på skift som helst, och arbetet som gjorts på den är bortkastat.
 	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	Jobbet avbryts genast; entiteten väntar vid sin server och jobbet fortsätter med det som var kvar när den servern är på skift igen.
 	The last task with a resource it finished at	Den sista uppgiften med resurs som detaljen gick igenom
 	The mean time to the stop condition is over the runs that met it only; the others ran to their time limit.	Den genomsnittliga tiden till stoppvillkoret gäller bara körningarna som nådde det; de övriga körde till sin tidsgräns.
@@ -690,7 +683,6 @@ unit	yr	år
 	Balked on {id}	Ställde sig inte i kö på {id}
 	Balking	Avstå från kö
 	Count those in service	Räkna med dem som betjänas
-	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Entiteter som inte ställer sig i kön tar genast detta flöde (för att försöka igen senare, till exempel) i stället för att gå förlorade; de räknas här som att de inte ställde sig i kö.
 	Joins with probability	Ställer sig i kö med sannolikhet
 	Number waiting	Antal väntande
 	Share balked	Andel som inte ställde sig i kö
@@ -908,7 +900,6 @@ unit	yr	år
 @plural	Finished {n} run|Finished {n} runs	{n} körning klar|{n} körningar klara
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	Öppnade {file} ({n} varning)|Öppnade {file} ({n} varningar)
 @plural	Removed {n} block|Removed {n} blocks	Tog bort {n} block|Tog bort {n} block
-@plural	Makes {n} independent run of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Gör {n} oberoende körning av modellen från slumpfrö {seed}. Resultaten för varje element visar halva bredden på ett 95% konfidensintervall.|Gör {n} oberoende körningar av modellen från slumpfrö {seed}. Resultaten för varje element visar halva bredden på ett 95% konfidensintervall.
 @plural	The stop condition was met in {met} of {n} run, after {time} {unit} on average.|The stop condition was met in {met} of {n} runs, after {time} {unit} on average.	Stoppvillkoret nåddes i {met} av {n} körning, efter i medel {time} {unit}.|Stoppvillkoret nåddes i {met} av {n} körningar, efter i medel {time} {unit}.
 @plural	{done} of {n} run finished|{done} of {n} runs finished	{done} av {n} körning klar|{done} av {n} körningar klara
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} run|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} runs	{name}: {mean}{unit}\n95% intervall från {low} till {high}{unit}\növer {n} körning|{name}: {mean}{unit}\n95% intervall från {low} till {high}{unit}\növer {n} körningar
@@ -938,7 +929,6 @@ unit	yr	år
 	kilometres	kilometer
 	inches	tum
 	feet	fot
-	Ticked, items queue up at the end while the rest keep moving. Unticked, the whole belt stops when the item at the end cannot leave.	Ibockad: föremålen köar i änden medan de andra fortsätter. Inte ibockad: hela bandet stannar när föremålet i änden inte kan lämna det.
 	A belt that carries entities from one end to the other. It has a length and a speed, and each entity takes a pitch of belt: its item length plus the gap kept free after it. So it holds at most length ÷ pitch entities and carries at most speed ÷ pitch per time unit. Accumulating: entities queue up at the end while the rest keep moving; otherwise the whole belt stops.	Ett band som bär entiteter från ena änden till den andra. Det har en längd och en hastighet, och varje entitet tar en delning av bandet: föremålets längd plus mellanrummet som hålls fritt efter det. Det rymmer därför högst längd ÷ delning entiteter och bär högst hastighet ÷ delning per tidsenhet. Ackumulerande: entiteterna köar i änden medan de andra fortsätter; annars stannar hela bandet.
 	Station	Station
 	Kind	Typ
@@ -992,19 +982,165 @@ unit	yr	år
 	Time on conveyors	Tid på transportband
 	No conveyors in this model	Inga transportband i den här modellen
 	Fills in when the run ends	Fylls när körningen är klar
-	How long each item spends on the conveyors.	Hur länge varje objekt är på transportbanden.
-	No item has left a conveyor yet	Inget objekt har lämnat ett transportband än
-	Share of items by time on a conveyor, in {unit}	Andel objekt efter tid på ett transportband, i {unit}
-	Time on conveyors: {n} items between {lo} and {hi} {unit}	Tid på transportband: {n} objekt mellan {lo} och {hi} {unit}
-	{from} to {to} {unit}: {share} of items ({n})	{from} till {to} {unit}: {share} av objekten ({n})
-	Items on conveyors over time	Objekt på transportband över tid
-	Items in the model over time	Objekt i modellen över tid
-	How many items are on the conveyors over time.	Hur många objekt som finns på transportbanden över tid.
-	How many items are in the model over time.	Hur många objekt som finns i modellen över tid.
 	Nothing was recorded over time in these results	Inget registrerades över tid i de här resultaten
-	At {time} {unit}: {n} items	Vid {time} {unit}: {n} objekt
 	Run the model to fill the dashboard	Kör modellen för att fylla instrumentpanelen
 	The resource and conveyor charts show the last run until this one ends	Diagrammen för resurser och transportband visar den senaste körningen tills den här är klar
+# Validation messages, new labels and word changes (issue #145)
+	The id “{id}” is not valid. Start an id with a letter or an underscore, then use only letters, digits, dots, hyphens and underscores.	Id:t ”{id}” är inte giltigt. Börja ett id med en bokstav eller ett understreck och använd sedan bara bokstäver, siffror, punkter, bindestreck och understreck.
+	More than one block, flow, pool or calendar has the id “{id}”. Give each its own id.	Fler än ett block, flöde, pool eller en kalender har id:t ”{id}”. Ge var och en ett eget id.
+	The flow {flow} uses a block that does not exist. Remove the flow, or connect it to a block that exists.	Flödet {flow} använder ett block som inte finns. Ta bort flödet eller koppla det till ett block som finns.
+	The flow {flow} leads into an Arrivals block, which takes no input. Remove the flow, or send it to another block.	Flödet {flow} leder in i blocket Ankomster, som inte tar emot någon indata. Ta bort flödet eller skicka det till ett annat block.
+	The flow {flow} leaves a Departures block, which has no output. Remove the flow, or start it from another block.	Flödet {flow} lämnar blocket Avgångar, som inte har någon utdata. Ta bort flödet eller låt det börja från ett annat block.
+	The flow {flow} leads from a block back to itself. Remove it, or send it to another block.	Flödet {flow} leder från ett block tillbaka till samma block. Ta bort flödet eller skicka det till ett annat block.
+	{block} has nowhere to send entities. Add a flow from it to the next block.	{block} har ingenstans att skicka entiteter. Lägg till ett flöde från blocket till nästa block.
+	{block} has {count} flows out, and only a Decision or a Split or join block can send entities down several. Remove the extra flows, or add a Decision block.	{block} har {count} flöden ut, och bara ett block Beslut eller Dela eller sammanfoga kan skicka entiteter längs flera. Ta bort de extra flödena eller lägg till ett block Beslut.
+	In “{field}” of {block}, set “{param}” to a finite number.	Ställ in ”{param}” i ”{field}” för {block} på ett ändligt tal.
+	In “{field}” of {block}, set “{param}” to a number above 0.	Ställ in ”{param}” i ”{field}” för {block} på ett tal över 0.
+	In “{field}” of {block}, set “{param}” to 0 or more.	Ställ in ”{param}” i ”{field}” för {block} på 0 eller mer.
+	In “{field}” of {block}, set “{param}” to 1 or more.	Ställ in ”{param}” i ”{field}” för {block} på 1 eller mer.
+	In “{field}” of {block}, set “{param}” to a number from 0 to 1.	Ställ in ”{param}” i ”{field}” för {block} på ett tal från 0 till 1.
+	In “{field}” of {block}, set “Minimum” below “Maximum”, and any “Most likely” value between them.	Ställ in ”Minimum” under ”Maximum” i ”{field}” för {block}, och ett eventuellt värde för ”Mest sannolikt” mellan dem.
+	In “{field}” of {block}, add data points whose probabilities add up to more than 0.	Lägg till datapunkter i ”{field}” för {block} vars sannolikheter tillsammans är över 0.
+	{block} would never have a unit to work with. Give it at least 1 unit.	{block} skulle aldrig ha någon enhet att arbeta med. Ge blocket minst 1 enhet.
+	{block} would make entities without end, because its “Time between arrivals” is always 0. Give it a time above 0, or set an “Arrival limit”.	{block} skulle skapa entiteter i oändlighet, eftersom ”Tid mellan ankomster” alltid är 0. Ge den en tid över 0 eller ange en ”Gräns för ankomster”.
+	The model has no Arrivals block, so nothing will happen. Add an Arrivals block.	Modellen har inget block Ankomster, så ingenting kommer att hända. Lägg till ett block Ankomster.
+	The model has no Departures block, so no time in system is measured. Add a Departures block.	Modellen har inget block Avgångar, så ingen tid i systemet mäts. Lägg till ett block Avgångar.
+	No entity can reach {block} from an Arrivals block. Connect it to a block that entities pass through.	Ingen entitet kan nå {block} från ett block Ankomster. Koppla blocket till ett block som entiteter passerar.
+	Entities in {block} can never reach a Departures block. Connect it on towards Departures.	Entiteter i {block} kan aldrig nå ett block Avgångar. Koppla blocket vidare mot Avgångar.
+	Set the “{state}” power of {block} to a number of kilowatts, 0 or more.	Ange effekten ”{state}” för {block} som ett antal kilowatt, 0 eller mer.
+	Set the warm-up of the experiment to 0 or more.	Ange experimentets uppvärmning till 0 eller mer.
+	Set the duration of the experiment to more than 0.	Ange experimentets varaktighet till mer än 0.
+	Set the number of runs of the experiment to 1 or more.	Ange antalet körningar i experimentet till 1 eller mer.
+	Set the layout scale (length units per drawing unit) to a finite number above 0.	Ange layoutens skala (längdenheter per ritenhet) till ett ändligt tal över 0.
+	A property of {block} has no name. Give it a name, or remove it.	En egenskap hos {block} har inget namn. Ge den ett namn eller ta bort den.
+	{block} sets the property “{name}” twice. Keep one of them.	{block} anger egenskapen ”{name}” två gånger. Behåll en av dem.
+	The property “{name}” of {block} needs shares that are not negative and add up to more than 0. Change the shares.	Egenskapen ”{name}” hos {block} behöver andelar som inte är negativa och tillsammans är över 0. Ändra andelarna.
+	The property “{name}” has the type “{type2}” on {block} but “{type}” on another block. Give it one type everywhere.	Egenskapen ”{name}” har typen ”{type2}” på {block} men ”{type}” på ett annat block. Ge den en och samma typ överallt.
+	The value of the property “{name}” on {block} does not fit its type, “{type}”. Change the value or the type.	Värdet på egenskapen ”{name}” på {block} passar inte dess typ, ”{type}”. Ändra värdet eller typen.
+	The expression for the property “{name}” on {block} cannot be used: {error}. Correct “{expression}”.	Uttrycket för egenskapen ”{name}” på {block} kan inte användas: {error}. Rätta ”{expression}”.
+	{block} reads the property “{name}”, which no block sets, so it would read as empty. Set it on an earlier block, or correct the name.	{block} läser egenskapen ”{name}”, som inget block anger, så den skulle läsas som tom. Ange den på ett tidigare block eller rätta namnet.
+	The setup of {block} has times for particular changes but no property to watch. Choose a property under “Only when this property changes”.	Omställningen för {block} har tider för vissa ändringar men ingen egenskap att bevaka. Välj en egenskap under ”Bara när den här egenskapen ändras”.
+	{block} has times for particular values but no property to read them from. Choose a property under “Service time by property”.	{block} har tider för vissa värden men ingen egenskap att läsa dem från. Välj en egenskap under ”Servicetid efter egenskap”.
+	{block} has two times for the value “{value}”. Keep one.	{block} har två tider för värdet ”{value}”. Behåll en av dem.
+	Set the time of {block} for the value “{value}” to a mean of 0 or more.	Ställ in tiden för {block} för värdet ”{value}” på ett medelvärde på 0 eller mer.
+	The scrap at {block} counts against {other}, which is not a task with a resource. Choose a task with a resource.	Kassationen vid {block} räknas mot {other}, som inte är en uppgift med resurs. Välj en uppgift med resurs.
+	Set “Planned run time per item” of {block} to a mean above 0.	Ställ in ”Planerad körtid per detalj” för {block} på ett medelvärde över 0.
+	Set “Time before giving up” of {block} to a mean of 0 or more.	Ställ in ”Tid innan den ger upp” för {block} på ett medelvärde på 0 eller mer.
+	The flow {flow} is ticked “Gave up”, but only a task with a resource and a “Time before giving up” sends entities that give up. Untick it, or set a “Time before giving up” on {block}.	Flödet {flow} är ikryssat som ”Gav upp”, men bara en uppgift med resurs och en ”Tid innan den ger upp” skickar entiteter som ger upp. Ta bort kryssningen eller ange en ”Tid innan den ger upp” för {block}.
+	{count} flows out of {block} are ticked “{way}”; at most one can be. Untick all but one.	{count} flöden ut från {block} är ikryssade som ”{way}”; högst ett får vara det. Ta bort kryssen för alla utom ett.
+	The flow {flow} is ticked “Turned away”, but only a task with a resource and a limited waiting room turns entities away. Untick it, or limit the waiting room of {block}.	Flödet {flow} är ikryssat som ”Avvisade”, men bara en uppgift med resurs och ett begränsat väntrum avvisar entiteter. Ta bort kryssningen eller begränsa väntrummet för {block}.
+	The flow {flow} is ticked both “Gave up” and “Turned away”. Keep one of them.	Flödet {flow} är ikryssat som både ”Gav upp” och ”Avvisade”. Behåll en av dem.
+	Set every chance of joining in the balking table of {block} to a number from 0 to 1.	Ange varje chans att ställa sig i kö i tabellen för att avstå från kö för {block} till ett tal från 0 till 1.
+	Put the rows of the balking table of {block} in increasing order of “Number waiting”.	Ordna raderna i tabellen för att avstå från kö för {block} i stigande ordning efter ”Antal väntande”.
+	The flow {flow} is ticked “Balked”, but only a task with a resource and balking sends entities that balk. Untick it, or turn on balking for {block}.	Flödet {flow} är ikryssat som ”Ställde sig inte i kö”, men bara en uppgift med resurs och Avstå från kö skickar entiteter som avstår. Ta bort kryssningen eller slå på Avstå från kö för {block}.
+	The flow {flow} is ticked “Balked” and also “Gave up” or “Turned away”. Keep one of them.	Flödet {flow} är ikryssat som ”Ställde sig inte i kö” och även som ”Gav upp” eller ”Avvisade”. Behåll en av dem.
+	The waiting room of {block} is set by calendar or per working server, but has no number of places, so it is unlimited. Give it a number of places, or make it fixed.	Väntrummet för {block} anges per kalender eller per server i drift, men har inget antal platser och är därför obegränsat. Ge det ett antal platser eller gör det fast.
+	The waiting room of {block} is set by calendar, but no calendar has a value. Add a value for a calendar, or make the waiting room fixed.	Väntrummet för {block} anges per kalender, men ingen kalender har något värde. Lägg till ett värde för en kalender eller gör väntrummet fast.
+	Set “Fails above, waiting per working server” of {block} to a number of 0 or more.	Ställ in ”Underkänd över (väntande per server i drift)” för {block} på ett tal på 0 eller mer.
+	Set “Check every” of {block} to a mean above 0.	Ställ in ”Kontroll var” för {block} på ett medelvärde över 0.
+	Set the demand of {block} to a number of parts above 0.	Ställ in efterfrågan för {block} på ett antal detaljer över 0.
+	The demand of {block} is per shift but names no calendar to say when the shifts are. Choose a calendar.	Efterfrågan för {block} gäller per skift men anger ingen kalender som säger när skiften är. Välj en kalender.
+	The demand of {block} names a calendar that does not exist. Choose a calendar that exists.	Efterfrågan för {block} anger en kalender som inte finns. Välj en kalender som finns.
+	The probability {value} on the flow {flow} is not from 0 to 1. Enter a probability from 0 to 1.	Sannolikheten {value} på flödet {flow} är inte från 0 till 1. Ange en sannolikhet från 0 till 1.
+	The probabilities of the flows out of {block} add up to {sum}, not 1, so they are used in proportion. Change them to add up to 1 if that is not what you want.	Sannolikheterna för flödena ut från {block} summerar till {sum}, inte 1, så de används i proportion. Ändra dem så att de summerar till 1 om det inte är vad du vill.
+	The condition on the flow {flow} cannot be used: {error}. Correct “{expression}”.	Villkoret på flödet {flow} kan inte användas: {error}. Rätta ”{expression}”.
+	The condition on the flow {flow} is ignored, because only flows out of a Decision block choose a route. Remove the condition.	Villkoret på flödet {flow} ignoreras, eftersom bara flöden ut från ett block Beslut väljer väg. Ta bort villkoret.
+	The probability on the flow {flow} is ignored, because only flows out of a Decision block choose a route. Remove the probability.	Sannolikheten på flödet {flow} ignoreras, eftersom bara flöden ut från ett block Beslut väljer väg. Ta bort sannolikheten.
+	The condition on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the condition.	Villkoret på flödet {flow} ignoreras, eftersom Beslutet skickar entiteter till den kortaste kön. Ta bort villkoret.
+	The probability on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the probability.	Sannolikheten på flödet {flow} ignoreras, eftersom Beslutet skickar entiteter till den kortaste kön. Ta bort sannolikheten.
+	The default on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the default.	Standardinställningen på flödet {flow} ignoreras, eftersom Beslutet skickar entiteter till den kortaste kön. Ta bort standardinställningen.
+	The probability on the flow {flow} is ignored, because the Decision routes by condition. Remove the probability.	Sannolikheten på flödet {flow} ignoreras, eftersom Beslutet väljer väg efter villkor. Ta bort sannolikheten.
+	The default flow of {block} is not one of its own flows out. Choose one of the flows out of {block} as the default.	Standardflödet för {block} är inte ett av blockets egna flöden ut. Välj ett av flödena ut från {block} som standard.
+	{block} routes by condition but has no default flow, so an entity for which no condition holds leaves the model here. Choose a default flow.	{block} väljer väg efter villkor men har inget standardflöde, så en entitet som inget villkor gäller för lämnar modellen här. Välj ett standardflöde.
+	{block} diverts entities but has no default flow, so an entity whose way is full has nowhere else to go. Choose a default flow.	{block} leder om entiteter men har inget standardflöde, så en entitet vars väg är full har ingen annan väg att ta. Välj ett standardflöde.
+	{block} waits for an entity on the flow {flow}, which none can reach, so it never sends one on. Remove that flow, or connect it to a block that entities reach.	{block} väntar på en entitet på flödet {flow}, som ingen kan nå, så det skickar aldrig vidare någon. Ta bort det flödet eller koppla det till ett block som entiteter når.
+	{block} has a limited waiting room and is fed through {gateway}. While it is full, {gateway} holds up every entity behind it, and they wait before it without limit. Remove the gateway before {block}, or remove the limit.	{block} har ett begränsat väntrum och matas via blocket {gateway}. Medan väntrummet är fullt håller det blocket tillbaka varje entitet bakom sig, och de väntar framför det utan gräns. Ta bort blocket {gateway} före {block} eller ta bort gränsen.
+	The limited waiting rooms of {loop} feed each other in a loop, so when all of them are full the loop deadlocks. Remove the limit on one of them, or break the loop.	De begränsade väntrummen i {loop} matar varandra i en slinga, så när alla är fulla låser sig slingan. Ta bort gränsen för ett av dem eller bryt slingan.
+	The pool {block} has no units. Give it at least 1 unit.	Poolen {block} har inga enheter. Ge den minst 1 enhet.
+	{block} names no resource it needs. Add one under “Needs”.	{block} anger ingen resurs den behöver. Lägg till en under ”Behov”.
+	{block} needs a resource pool that does not exist. Choose a pool that exists.	{block} behöver en resurspool som inte finns. Välj en pool som finns.
+	{block} needs units with the roles {roles}, which no pool has. Give a pool those roles, or change what {block} needs.	{block} behöver enheter med rollerna {roles}, som ingen pool har. Ge en pool de rollerna eller ändra vad {block} behöver.
+	{block} needs {needed} units at once, but at most {available} exist, so this can never be met. Ask for fewer units, or add units to the pool.	{block} behöver fler enheter samtidigt än det finns (behövs: {needed}, finns: {available}), så det kan aldrig uppfyllas. Be om färre enheter eller lägg till enheter i poolen.
+	Set the priority of {block} to a finite number, not {value}.	Ställ in prioriteten för {block} på ett ändligt tal, inte på {value}.
+	No task uses the pool {block}. Add it to a task's needs, or remove the pool.	Ingen uppgift använder poolen {block}. Lägg till den i en uppgifts behov eller ta bort poolen.
+	{block} has a value for a calendar that does not exist. Choose a calendar that exists, or remove the value.	{block} har ett värde för en kalender som inte finns. Välj en kalender som finns eller ta bort värdet.
+	The calendar {block} has no entries, so it is never active. Add an entry.	Kalendern {block} har inga poster och är därför aldrig aktiv. Lägg till en post.
+	{block} allows no arrivals outside the calendars but names no calendar, so it never creates entities. Add arrivals by calendar, or allow arrivals outside calendars.	{block} tillåter inga ankomster utanför kalendrarna men anger ingen kalender, så det skapar aldrig entiteter. Lägg till ankomster per kalender eller tillåt ankomster utanför kalendrar.
+	Set the batch size of {block} to 1 or more.	Ställ in partistorleken för {block} på 1 eller mer.
+	Set “{field}” of the conveyor {block} to a finite number above 0.	Ställ in ”{field}” för transportbandet {block} på ett ändligt tal över 0.
+	Set “{field}” of the conveyor {block} to a finite number of 0 or more.	Ställ in ”{field}” för transportbandet {block} på ett ändligt tal på 0 eller mer.
+	Set “{field}” of the conveyor {block} to a finite number other than 0.	Ställ in ”{field}” för transportbandet {block} på ett ändligt tal som inte är 0.
+	The conveyor {block} is {length} long but each entity takes {pitch} (item length plus gap), so not even one fits. Lengthen the conveyor, or shorten the item or the gap.	Transportbandet {block} är {length} långt, men varje entitet tar {pitch} (föremålets längd plus mellanrum), så inte ens en får plats. Gör transportbandet längre eller föremålet eller mellanrummet kortare.
+	The drawn path of the conveyor {block} is {path_length} long, but its “Length” is {length}, so the drawing and the run disagree. Make “Length” match the path, or change the shape.	Den ritade banan för transportbandet {block} är {path_length} lång, men dess ”Längd” är {length}, så ritningen och körningen stämmer inte överens. Låt ”Längd” stämma med banan eller ändra formen.
+	{block} is a transport, which StochCraft does not simulate yet. Remove it to run the model.	{block} är en transport, som StochCraft inte simulerar än. Ta bort blocket för att köra modellen.
+	The pool {pool} of the transport {block} does not exist. Choose a pool that exists.	Poolen {pool} för transporten {block} finns inte. Välj en pool som finns.
+	The pool {pool} of the transport {block} is not mobile. Give the pool speeds and a home.	Poolen {pool} för transporten {block} är inte mobil. Ge poolen hastigheter och en hemplats.
+	Set “{field}” of the pool {block} to a finite number above 0.	Ställ in ”{field}” för poolen {block} på ett ändligt tal över 0.
+	The home of the pool {block} is not a block of the model. Choose a block as its home.	Hemplatsen för poolen {block} är inte ett block i modellen. Välj ett block som hemplats.
+	The transport {block} needs one block before it, where it picks up, and one after it, where it drops off, but has {inputs} before and {outputs} after. Connect it to one block on each side.	Transporten {block} behöver ett block före sig, där den hämtar, och ett efter sig, där den lämnar. Nu är antalet före: {inputs} och efter: {outputs}. Koppla den till ett block på vardera sidan.
+	{other} has no place on the canvas, so the distances for {block} are not known. Place {other} on the canvas.	{other} har ingen plats på huvudytan, så avstånden för {block} är inte kända. Placera {other} på huvudytan.
+	The flow {flow} asks for no entities. Set its “Units” to 1 or more.	Flödet {flow} efterfrågar inga entiteter. Ställ in dess ”Enheter” på 1 eller mer.
+	The “Units” on the flow {flow} is ignored, because only a Split or join block takes several entities from one flow. Remove it.	”Enheter” på flödet {flow} ignoreras, eftersom bara ett block Dela eller sammanfoga tar flera entiteter från ett flöde. Ta bort dem.
+	No block makes batches, so {block} passes every entity through. Add a Batch block before it, or remove {block}.	Inget block skapar partier, så {block} släpper igenom varje entitet. Lägg till ett block Parti före det eller ta bort {block}.
+	The stop condition names a block that does not exist. Choose a block that exists.	Stoppvillkoret anger ett block som inte finns. Välj ett block som finns.
+	Set the count of the stop condition for {block} to 1 or more.	Ställ in antalet i stoppvillkoret för {block} på 1 eller mer.
+	The stop condition waits for {block} to empty, but only a task can empty. Choose a task.	Stoppvillkoret väntar på att {block} ska bli tomt, men bara en uppgift kan bli tom. Välj en uppgift.
+	The stop condition at {block} can be met before the warm-up ends. A run that stops during the warm-up has no statistics after it and is left out of the results. Shorten the warm-up, or stop later.	Stoppvillkoret vid {block} kan uppfyllas innan uppvärmningen är slut. En körning som stoppar under uppvärmningen har ingen statistik efter den och utelämnas ur resultaten. Förkorta uppvärmningen eller stoppa senare.
+	Every run stopped before the warm-up ended, so no metric is reported. Shorten the warm-up, or stop later.	Varje körning stoppade innan uppvärmningen var slut, så inget mått redovisas. Förkorta uppvärmningen eller stoppa senare.
+	{replications} of {of} runs stopped before the warm-up ended, so their statistics are left out of every metric. Shorten the warm-up, or stop later.	{replications} av {of} körningar stoppade innan uppvärmningen var slut, så deras statistik utelämnas ur alla mått. Förkorta uppvärmningen eller stoppa senare.
+	{block} is offered {load}% of the work its units can do, so its waiting room grows without limit and the results describe no steady state. Add units, or shorten the service.	{block} erbjuds {load}% av det arbete dess enheter kan göra, så dess väntrum växer utan gräns och resultaten beskriver inget stabilt tillstånd. Lägg till enheter eller förkorta servicen.
+	{block} is busy {utilisation}% of the time, and at the end at least {backlog} entities are still waiting against {left} that left. Work arrives faster than it is done, so the results describe no steady state. Add units, or shorten the service.	{block} är upptaget {utilisation}% av tiden, och vid slutet väntar fortfarande entiteter (minst: {backlog}) mot lämnade entiteter ({left}). Arbete kommer in snabbare än det utförs, så resultaten beskriver inget stabilt tillstånd. Lägg till enheter eller förkorta servicen.
+	The experiment has one run, so its results cannot be told from chance. Set the number of runs to at least 2, and usually 10 or more.	Experimentet har en körning, så dess resultat kan inte skiljas från slumpen. Ange antalet körningar till minst 2, och oftast 10 eller fler.
+	{block} has a three-point estimate but no time to fit it to, so the estimate is ignored. Remove the estimate.	{block} har en trepunktsuppskattning men ingen tid att anpassa den till, så uppskattningen ignoreras. Ta bort uppskattningen.
+	The three-point estimate of {block} cannot be fitted: every point must be a finite number. Correct the points.	Trepunktsuppskattningen för {block} kan inte anpassas: varje punkt måste vara ett ändligt tal. Rätta punkterna.
+	The three-point estimate of {block} cannot be fitted: the points must be in order, minimum, most likely, then maximum or 95th percentile. Correct the points.	Trepunktsuppskattningen för {block} kan inte anpassas: punkterna måste vara i ordning: minimum, mest sannolikt, sedan maximum eller 95:e percentil. Rätta punkterna.
+	The three-point estimate of {block} cannot be fitted: log-normal and Weibull estimates have no maximum. Give a 95th percentile instead.	Trepunktsuppskattningen för {block} kan inte anpassas: lognormala och Weibull-uppskattningar har inget maximum. Ange i stället en 95:e percentil.
+	The time of {block} is no longer the one fitted from its three-point estimate. Fit it again, or remove the estimate.	Tiden för {block} är inte längre den som anpassats från dess trepunktsuppskattning. Anpassa den igen eller ta bort uppskattningen.
+	In “{field}” of {block}, the normal distribution draws below 0 more than 1 time in 100, and each such draw counts as 0, so the times are longer on average than its mean. Use a truncated normal with a minimum of 0, or a log-normal.	I ”{field}” för {block} drar normalfördelningen under 0 oftare än 1 gång av 100, och varje sådant drag räknas som 0, så tiderna blir längre i genomsnitt än dess medelvärde. Använd en trunkerad normal med ett minimum på 0, eller en lognormal.
+	The entities of {block} do not add up: {came} came in or were inside at the start, but {went} left, were lost, gave up or are still inside.	Entiteterna i {block} stämmer inte. Kom in eller fanns vid start: {came}. Lämnade, förlorades, gav upp eller finns kvar: {went}.
+	The entities of the model do not add up: {came} were created or inside at the start, but {went} reached Departures, left the model elsewhere or are still inside.	Entiteterna i modellen stämmer inte. Skapades eller fanns vid start: {came}. Nådde Avgångar, lämnade modellen på annat sätt eller finns kvar: {went}.
+	No entity left the model, of {came} created or inside at the start. Check that the routing leads to Departures and that the run is long enough for an entity to get through.	Ingen entitet lämnade modellen (skapades eller fanns vid start: {came}). Kontrollera att routingen leder till Avgångar och att körningen är lång nog för att en entitet ska hinna igenom.
+	Little's law does not hold at {block}: the time-average number inside was {mean}, but the entities' own times inside give {from_stays}.	Littles lag gäller inte vid {block}: tidsmedelvärdet för antalet inne var {mean}, men entiteternas egna tider inne ger {from_stays}.
+	The utilisation of {block} counts {busy} units busy on average, but {working} were processing or setting up: units idle, blocked, off shift, failed or restarting were counted busy.	Utnyttjandegraden för {block} räknar i genomsnitt {busy} enheter som upptagna, men {working} bearbetade eller ställde om: enheter som var lediga, blockerade, utanför skift, i haveri eller startade om räknades som upptagna.
+	The utilisation of {block} counts {busy} units busy on average, but {working} were processing or setting up: units at work were not counted busy.	Utnyttjandegraden för {block} räknar i genomsnitt {busy} enheter som upptagna, men {working} bearbetade eller ställde om: enheter i arbete räknades inte som upptagna.
+	The shares of the time of the units of {block} in each state add up to {total}, not 1.	Andelarna av tiden för enheterna i {block} i varje tillstånd summerar till {total}, inte 1.
+	“{metric}” of {block} is {value}, outside 0 to 1 (0% to 100%).	”{metric}” för {block} är {value}, utanför 0 till 1 (0% till 100%).
+	This was found in {replications} of {of} runs, and the furthest off is shown.	Detta hittades i {replications} av {of} körningar, och den som ligger längst ifrån visas.
+	This points to a fault in StochCraft rather than in the model. Please report it with the model.	Detta tyder på ett fel i StochCraft snarare än i modellen. Rapportera det tillsammans med modellen.
+	Angle	Vinkel
+	Failed	I haveri
+	Off shift	Utanför skift
+	Processing	Under bearbetning
+	Radius	Radie
+	Rise	Stigning
+	Speed empty	Hastighet tom
+	Speed loaded	Hastighet lastad
+	Turns	Varv
+	Unload	Lossning
+	Lost	Förlorade
+	An entity that leaves a waiting room before a unit takes it, because it has waited as long as it was willing to.	En entitet som lämnar ett väntrum innan en enhet tar den, eftersom den har väntat så länge den ville.
+	An entity that does not join a waiting room at all, because the number already waiting put it off.	En entitet som inte ställer sig i ett väntrum alls, eftersom antalet som redan väntar avskräckte den.
+	An entity that finds the waiting room full and takes the flow ticked “Turned away” instead of waiting.	En entitet som finner väntrummet fullt och tar flödet som är ikryssat som ”Avvisade” i stället för att vänta.
+	An entity that leaves the model without reaching Departures: it found the waiting room full with nowhere else to go, or a decision with no way out for it.	En entitet som lämnar modellen utan att nå Avgångar: den fann väntrummet fullt utan någon annan väg, eller ett beslut utan väg ut för den.
+	Gave up on {id}	Gav upp på {id}
+	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the flow ticked “Gave up”, or leaves the model.	Varje entitet väntar här högst en tid som slumpas fram för den vid ankomsten och ger sedan upp: den tar flödet som är ikryssat som ”Gav upp”, eller lämnar modellen.
+	Entities that do not join the waiting room take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Entiteter som inte ställer sig i väntrummet tar genast detta flöde (för att försöka igen senare, till exempel) i stället för att gå förlorade; de räknas här som att de inte ställde sig i kö.
+	The job stops at once: the entity goes back to the front of the waiting room for any server on shift, and the work done on it is wasted.	Jobbet avbryts genast: entiteten går tillbaka först i väntrummet för vilken server på skift som helst, och arbetet som gjorts på den är bortkastat.
+	The connection drops and the client tries again: the entity goes back to the front of the waiting room at once, and the work done on it is wasted.	Anslutningen bryts och klienten försöker igen: entiteten går genast tillbaka först i väntrummet, och arbetet som gjorts på den är bortkastat.
+	Ticked, entities queue up at the end while the rest keep moving. Unticked, the whole belt stops when the entity at the end cannot leave.	Ibockad: entiteterna köar i änden medan de andra fortsätter. Inte ibockad: hela bandet stannar när entiteten i änden inte kan lämna det.
+	Play run 1 step by step and see each block's waiting room on the diagram	Spela upp körning 1 steg för steg och se varje blocks väntrum i diagrammet
+	Select a block to see its waiting room over time.	Välj ett block för att se dess väntrum över tid.
+	Entities on conveyors over time	Entiteter på transportband över tid
+	Entities in the model over time	Entiteter i modellen över tid
+	How long each entity spends on the conveyors.	Hur länge varje entitet är på transportbanden.
+	No entity has left a conveyor yet	Ingen entitet har lämnat ett transportband än
+	Share of entities by time on a conveyor, in {unit}	Andel entiteter efter tid på ett transportband, i {unit}
+	Time on conveyors: {n} entities between {lo} and {hi} {unit}	Tid på transportband: {n} entiteter mellan {lo} och {hi} {unit}
+	{from} to {to} {unit}: {share} of entities ({n})	{from} till {to} {unit}: {share} av entiteterna ({n})
+	How many entities are on the conveyors over time.	Hur många entiteter som finns på transportbanden över tid.
+	How many entities are in the model over time.	Hur många entiteter som finns i modellen över tid.
+	At {time} {unit}: {n} entities	Vid {time} {unit}: {n} entiteter
+@plural	Makes {n} independent run of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval across them.	Gör {n} oberoende körning av modellen från slumpfrö {seed}. Resultaten för varje block visar halva bredden på ett 95% konfidensintervall.|Gör {n} oberoende körningar av modellen från slumpfrö {seed}. Resultaten för varje block visar halva bredden på ett 95% konfidensintervall.
 	Fonts	Typsnitt
 	The full list of third-party licences is in the file THIRD-PARTY-LICENSES.html, which comes with the download.	Den fullständiga listan över tredjepartslicenser finns i filen THIRD-PARTY-LICENSES.html, som följer med nedladdningen.
 	Full list of third-party licences	Fullständig lista över tredjepartslicenser

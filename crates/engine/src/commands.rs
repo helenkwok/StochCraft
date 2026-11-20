@@ -808,7 +808,7 @@ fn model_get(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
 
 fn model_validate(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
     parse::<NoParams>(p)?;
-    Ok(json!({ "diagnostics": wire::diagnostics(&e.model().validate()) }))
+    Ok(json!({ "diagnostics": wire::diagnostics(e.model(), &e.model().validate()) }))
 }
 
 fn model_capacity(e: &mut Engine, p: Value) -> Result<Value, CommandError> {

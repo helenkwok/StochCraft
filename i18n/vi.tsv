@@ -21,8 +21,6 @@
 	A caller on hold: once a unit takes it, the entity stays.	Người gọi đang chờ máy: khi một đơn vị đã nhận, thực thể ở lại.
 	A client that times out: if its time runs out during service, it gives up then, and the unit finishes the job anyway (wasted work).	Máy khách hết thời gian chờ (timeout): nếu hết thời gian trong lúc phục vụ, nó bỏ đi ngay lúc đó, và đơn vị vẫn làm xong công việc (công việc lãng phí).
 	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	Tệp mới chỉ chứa mô hình: những gì StochCraft không hiểu trong {file} sẽ bị bỏ qua.
-	Abandoned	Bỏ đi
-	Abandoned on {id}	Bỏ đi tại {id}
 	About StochCraft	Giới thiệu StochCraft
 	About {app}	Giới thiệu {app}
 	Accent	Màu nhấn
@@ -162,7 +160,6 @@
 	Duration	Thời lượng
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Mỗi phân tích chạy thí nghiệm nhiều lần với cùng hạt giống ngẫu nhiên, nên khác biệt đến từ thay đổi chứ không phải ngẫu nhiên. Việc này có thể mất một lúc.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Mỗi thực thể lấy phương án đầu tiên trong số này có thể đáp ứng ngay, lấy tất cả cùng lúc, và trả lại các đơn vị khi rời khỏi tác vụ.
-	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Mỗi thực thể chờ ở đây tối đa một khoảng thời gian được rút ngẫu nhiên cho nó khi đến, rồi bỏ đi: nó đi theo lối ra được đánh dấu "Bỏ đi", hoặc rời khỏi mô hình.
 	Each server (unit) is checked every so often, as a load balancer probes the servers behind it. One that fails, with too many waiting, is taken out of service for a restart, then comes back.	Mỗi máy chủ (đơn vị) được kiểm tra định kỳ, như bộ cân bằng tải thăm dò các máy chủ phía sau nó. Máy chủ nào không đạt, do có quá nhiều thực thể đang chờ, sẽ bị đưa ra khỏi hoạt động để khởi động lại, rồi quay lại.
 	Edit	Chỉnh sửa
 	Edit themes…	Chỉnh sửa chủ đề…
@@ -412,7 +409,6 @@
 	Run	Chạy
 	Run cancelled	Đã hủy chạy
 	Run experiment	Chạy thí nghiệm
-	Play run 1 step by step and see each block's queue on the diagram	Phát lần chạy 1 từng bước và xem hàng đợi của mỗi khối trên sơ đồ
 	Run the experiment ({shortcut})	Chạy thí nghiệm ({shortcut})
 	Run the experiment again to see this result's spread.	Hãy chạy lại thí nghiệm để xem độ phân tán của kết quả này.
 	Run the experiment at each value of one parameter, and compare a result.	Chạy thí nghiệm với từng giá trị của một tham số và so sánh một kết quả.
@@ -433,7 +429,6 @@
 	Scrap ratio	Tỷ lệ phế phẩm
 	Seed	Hạt giống ngẫu nhiên
 	Select All	Chọn tất cả
-	Select a block to see its queue over time.	Chọn một khối để xem hàng đợi của nó theo thời gian.
 	Sender waits during transfer	Bên gửi chờ trong khi chuyển
 	Separate the values with semicolons or spaces.	Phân tách các giá trị bằng dấu chấm phẩy hoặc dấu cách.
 	Sequential	Tuần tự
@@ -497,10 +492,8 @@
 	Text	Văn bản
 	Text on accent	Văn bản trên màu nhấn
 	Text on header	Văn bản trên thanh tiêu đề
-	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	Kết nối bị ngắt và máy khách thử lại: thực thể quay lại ngay đầu hàng đợi, và công việc đã làm cho nó bị lãng phí.
 	The entity waits on its server and the job carries on with what was left once the server is back.	Thực thể chờ tại máy chủ của nó và công việc tiếp tục với phần còn lại khi máy chủ quay lại.
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more runs would narrow it.	Khoảng này xuống dưới tỷ lệ mục tiêu {share}, nên chưa cho thấy với độ tin cậy 95% rằng tỷ lệ đạt được; thêm lần chạy sẽ thu hẹp nó.
-	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	Công việc dừng ngay: thực thể quay lại đầu hàng đợi cho bất kỳ máy chủ nào trong ca, và công việc đã làm cho nó bị lãng phí.
 	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	Công việc dừng ngay; thực thể chờ tại máy chủ của nó và công việc tiếp tục với phần còn lại khi máy chủ đó vào ca trở lại.
 	The last task with a resource it finished at	Tác vụ có tài nguyên cuối cùng mà chi tiết đã đi qua
 	The mean time to the stop condition is over the runs that met it only; the others ran to their time limit.	Thời gian trung bình đến điều kiện dừng chỉ tính trên các lần chạy đạt điều kiện đó; các lần khác chạy đến giới hạn thời gian.
@@ -690,7 +683,6 @@ unit	yr	năm
 	Balked on {id}	Không vào hàng tại {id}
 	Balking	Không vào hàng đợi
 	Count those in service	Tính cả thực thể đang được phục vụ
-	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Các thực thể không vào hàng đợi sẽ đi theo luồng này ngay (chẳng hạn để thử lại sau), thay vì bị mất; ở đây chúng được tính là không vào hàng.
 	Joins with probability	Vào hàng đợi với xác suất
 	Number waiting	Số đang chờ
 	Share balked	Tỷ lệ không vào hàng
@@ -908,7 +900,6 @@ unit	yr	năm
 @plural	Finished {n} run|Finished {n} runs	Đã hoàn thành {n} lần chạy
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	Đã mở {file} ({n} cảnh báo)
 @plural	Removed {n} block|Removed {n} blocks	Đã xóa {n} khối
-@plural	Makes {n} independent run of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Thực hiện {n} lần chạy độc lập của mô hình từ hạt giống {seed}. Kết quả của mỗi phần tử kèm nửa độ rộng khoảng tin cậy 95%.
 @plural	The stop condition was met in {met} of {n} run, after {time} {unit} on average.|The stop condition was met in {met} of {n} runs, after {time} {unit} on average.	Điều kiện dừng đạt được trong {met} trên {n} lần chạy, trung bình sau {time} {unit}.
 @plural	{done} of {n} run finished|{done} of {n} runs finished	Đã hoàn thành {done}/{n} lần chạy
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} run|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} runs	{name}: {mean}{unit}\nKhoảng 95% từ {low} đến {high}{unit}\nqua {n} lần chạy
@@ -938,7 +929,6 @@ unit	yr	năm
 	kilometres	kilômét
 	inches	inch
 	feet	foot
-	Ticked, items queue up at the end while the rest keep moving. Unticked, the whole belt stops when the item at the end cannot leave.	Khi được chọn, các mục xếp hàng ở cuối trong khi những mục còn lại tiếp tục chạy. Khi bỏ chọn, cả băng tải dừng khi mục ở cuối không thể rời đi.
 	A belt that carries entities from one end to the other. It has a length and a speed, and each entity takes a pitch of belt: its item length plus the gap kept free after it. So it holds at most length ÷ pitch entities and carries at most speed ÷ pitch per time unit. Accumulating: entities queue up at the end while the rest keep moving; otherwise the whole belt stops.	Một băng tải chở các thực thể từ đầu này sang đầu kia. Nó có chiều dài và tốc độ, và mỗi thực thể chiếm một bước băng tải: chiều dài mục của nó cộng với khoảng hở để trống phía sau. Vì vậy băng tải chứa tối đa chiều dài ÷ bước thực thể và chở tối đa tốc độ ÷ bước mỗi đơn vị thời gian. Tích lũy: các thực thể xếp hàng ở cuối trong khi những thực thể còn lại tiếp tục chạy; nếu không, cả băng tải dừng.
 	Station	Trạm
 	Kind	Loại
@@ -992,19 +982,165 @@ unit	yr	năm
 	Time on conveyors	Thời gian trên băng tải
 	No conveyors in this model	Mô hình này không có băng tải
 	Fills in when the run ends	Sẽ được điền khi lần chạy kết thúc
-	How long each item spends on the conveyors.	Mỗi mục ở trên băng tải bao lâu.
-	No item has left a conveyor yet	Chưa có mục nào rời khỏi băng tải
-	Share of items by time on a conveyor, in {unit}	Tỷ lệ các mục theo thời gian trên băng tải, tính bằng {unit}
-	Time on conveyors: {n} items between {lo} and {hi} {unit}	Thời gian trên băng tải: {n} mục trong khoảng {lo} đến {hi} {unit}
-	{from} to {to} {unit}: {share} of items ({n})	Từ {from} đến {to} {unit}: {share} số mục ({n})
-	Items on conveyors over time	Số mục trên băng tải theo thời gian
-	Items in the model over time	Số mục trong mô hình theo thời gian
-	How many items are on the conveyors over time.	Có bao nhiêu mục trên băng tải theo thời gian.
-	How many items are in the model over time.	Có bao nhiêu mục trong mô hình theo thời gian.
 	Nothing was recorded over time in these results	Không có gì được ghi theo thời gian trong các kết quả này
-	At {time} {unit}: {n} items	Tại {time} {unit}: {n} mục
 	Run the model to fill the dashboard	Chạy mô hình để điền vào bảng điều khiển
 	The resource and conveyor charts show the last run until this one ends	Biểu đồ tài nguyên và băng tải hiển thị lần chạy gần nhất cho đến khi lần này kết thúc
+# Validation messages, new labels and word changes (issue #145)
+	The id “{id}” is not valid. Start an id with a letter or an underscore, then use only letters, digits, dots, hyphens and underscores.	Mã “{id}” không hợp lệ. Bắt đầu mã bằng một chữ cái hoặc dấu gạch dưới, rồi chỉ dùng chữ cái, chữ số, dấu chấm, dấu gạch nối và dấu gạch dưới.
+	More than one block, flow, pool or calendar has the id “{id}”. Give each its own id.	Có nhiều hơn một khối, luồng, nhóm hoặc lịch dùng mã “{id}”. Hãy đặt cho mỗi mục một mã riêng.
+	The flow {flow} uses a block that does not exist. Remove the flow, or connect it to a block that exists.	Luồng {flow} dùng một khối không tồn tại. Xóa luồng này, hoặc nối nó với một khối đang có.
+	The flow {flow} leads into an Arrivals block, which takes no input. Remove the flow, or send it to another block.	Luồng {flow} dẫn vào khối Lượt đến, là khối không nhận đầu vào. Xóa luồng này, hoặc chuyển nó sang khối khác.
+	The flow {flow} leaves a Departures block, which has no output. Remove the flow, or start it from another block.	Luồng {flow} đi ra từ khối Lượt rời đi, là khối không có đầu ra. Xóa luồng này, hoặc cho nó bắt đầu từ khối khác.
+	The flow {flow} leads from a block back to itself. Remove it, or send it to another block.	Luồng {flow} dẫn từ một khối quay lại chính khối đó. Xóa luồng này, hoặc chuyển nó sang khối khác.
+	{block} has nowhere to send entities. Add a flow from it to the next block.	{block} không có nơi nào để gửi thực thể. Thêm một luồng từ khối này đến khối tiếp theo.
+	{block} has {count} flows out, and only a Decision or a Split or join block can send entities down several. Remove the extra flows, or add a Decision block.	{block} có {count} luồng đi ra, mà chỉ khối Quyết định hoặc khối Tách hoặc gộp mới có thể gửi thực thể theo nhiều luồng. Xóa bớt các luồng thừa, hoặc thêm một khối Quyết định.
+	In “{field}” of {block}, set “{param}” to a finite number.	Trong “{field}” của {block}, đặt “{param}” thành một số hữu hạn.
+	In “{field}” of {block}, set “{param}” to a number above 0.	Trong “{field}” của {block}, đặt “{param}” thành một số lớn hơn 0.
+	In “{field}” of {block}, set “{param}” to 0 or more.	Trong “{field}” của {block}, đặt “{param}” thành 0 hoặc lớn hơn.
+	In “{field}” of {block}, set “{param}” to 1 or more.	Trong “{field}” của {block}, đặt “{param}” thành 1 hoặc lớn hơn.
+	In “{field}” of {block}, set “{param}” to a number from 0 to 1.	Trong “{field}” của {block}, đặt “{param}” thành một số từ 0 đến 1.
+	In “{field}” of {block}, set “Minimum” below “Maximum”, and any “Most likely” value between them.	Trong “{field}” của {block}, đặt “Giá trị nhỏ nhất” nhỏ hơn “Giá trị lớn nhất”, và giá trị “Có khả năng nhất” (nếu có) nằm giữa hai giá trị đó.
+	In “{field}” of {block}, add data points whose probabilities add up to more than 0.	Trong “{field}” của {block}, thêm các điểm dữ liệu có tổng xác suất lớn hơn 0.
+	{block} would never have a unit to work with. Give it at least 1 unit.	{block} sẽ không bao giờ có đơn vị nào để làm việc. Hãy cho nó ít nhất 1 đơn vị.
+	{block} would make entities without end, because its “Time between arrivals” is always 0. Give it a time above 0, or set an “Arrival limit”.	{block} sẽ tạo thực thể không ngừng, vì “Thời gian giữa các lượt đến” luôn bằng 0. Hãy đặt một thời gian lớn hơn 0, hoặc đặt “Giới hạn lượt đến”.
+	The model has no Arrivals block, so nothing will happen. Add an Arrivals block.	Mô hình không có khối Lượt đến nào nên sẽ không có gì xảy ra. Thêm một khối Lượt đến.
+	The model has no Departures block, so no time in system is measured. Add a Departures block.	Mô hình không có khối Lượt rời đi nào nên không đo được thời gian trong hệ thống. Thêm một khối Lượt rời đi.
+	No entity can reach {block} from an Arrivals block. Connect it to a block that entities pass through.	Không có thực thể nào từ khối Lượt đến có thể đến được {block}. Hãy nối nó với một khối mà thực thể đi qua.
+	Entities in {block} can never reach a Departures block. Connect it on towards Departures.	Các thực thể trong {block} không bao giờ đến được khối Lượt rời đi. Hãy nối tiếp nó đến Lượt rời đi.
+	Set the “{state}” power of {block} to a number of kilowatts, 0 or more.	Đặt công suất “{state}” của {block} thành một số kilowatt, 0 hoặc lớn hơn.
+	Set the warm-up of the experiment to 0 or more.	Đặt giai đoạn khởi động của thí nghiệm thành 0 hoặc lớn hơn.
+	Set the duration of the experiment to more than 0.	Đặt thời lượng của thí nghiệm thành lớn hơn 0.
+	Set the number of runs of the experiment to 1 or more.	Đặt số lần chạy của thí nghiệm thành 1 hoặc lớn hơn.
+	Set the layout scale (length units per drawing unit) to a finite number above 0.	Đặt tỷ lệ bố cục (đơn vị chiều dài trên mỗi đơn vị bản vẽ) thành một số hữu hạn lớn hơn 0.
+	A property of {block} has no name. Give it a name, or remove it.	Một thuộc tính của {block} chưa có tên. Hãy đặt tên cho nó, hoặc xóa nó.
+	{block} sets the property “{name}” twice. Keep one of them.	{block} đặt thuộc tính “{name}” hai lần. Giữ lại một trong hai.
+	The property “{name}” of {block} needs shares that are not negative and add up to more than 0. Change the shares.	Thuộc tính “{name}” của {block} cần các tỷ lệ không âm và có tổng lớn hơn 0. Hãy đổi các tỷ lệ.
+	The property “{name}” has the type “{type2}” on {block} but “{type}” on another block. Give it one type everywhere.	Thuộc tính “{name}” có loại “{type2}” trên {block} nhưng loại “{type}” trên một khối khác. Hãy đặt cùng một loại ở mọi nơi.
+	The value of the property “{name}” on {block} does not fit its type, “{type}”. Change the value or the type.	Giá trị của thuộc tính “{name}” trên {block} không khớp với loại của nó, “{type}”. Hãy đổi giá trị hoặc đổi loại.
+	The expression for the property “{name}” on {block} cannot be used: {error}. Correct “{expression}”.	Không dùng được biểu thức cho thuộc tính “{name}” trên {block}: {error}. Hãy sửa “{expression}”.
+	{block} reads the property “{name}”, which no block sets, so it would read as empty. Set it on an earlier block, or correct the name.	{block} đọc thuộc tính “{name}” mà không khối nào đặt, nên sẽ đọc ra giá trị rỗng. Hãy đặt nó trên một khối trước đó, hoặc sửa lại tên.
+	The setup of {block} has times for particular changes but no property to watch. Choose a property under “Only when this property changes”.	Phần chuẩn bị của {block} có thời gian cho các thay đổi cụ thể nhưng không có thuộc tính để theo dõi. Chọn một thuộc tính trong “Chỉ khi thuộc tính này thay đổi”.
+	{block} has times for particular values but no property to read them from. Choose a property under “Service time by property”.	{block} có thời gian cho các giá trị cụ thể nhưng không có thuộc tính để đọc chúng. Chọn một thuộc tính trong “Thời gian phục vụ theo thuộc tính”.
+	{block} has two times for the value “{value}”. Keep one.	{block} có hai thời gian cho giá trị “{value}”. Giữ lại một.
+	Set the time of {block} for the value “{value}” to a mean of 0 or more.	Đặt thời gian của {block} cho giá trị “{value}” thành giá trị trung bình 0 hoặc lớn hơn.
+	The scrap at {block} counts against {other}, which is not a task with a resource. Choose a task with a resource.	Phế phẩm tại {block} được tính cho {other}, vốn không phải là tác vụ có tài nguyên. Hãy chọn một tác vụ có tài nguyên.
+	Set “Planned run time per item” of {block} to a mean above 0.	Đặt “Thời gian chạy dự kiến trên mỗi chi tiết” của {block} thành giá trị trung bình lớn hơn 0.
+	Set “Time before giving up” of {block} to a mean of 0 or more.	Đặt “Thời gian trước khi bỏ đi” của {block} thành giá trị trung bình 0 hoặc lớn hơn.
+	The flow {flow} is ticked “Gave up”, but only a task with a resource and a “Time before giving up” sends entities that give up. Untick it, or set a “Time before giving up” on {block}.	Luồng {flow} được chọn “Đã bỏ đi”, nhưng chỉ tác vụ có tài nguyên và có “Thời gian trước khi bỏ đi” mới gửi các thực thể bỏ đi. Bỏ chọn nó, hoặc đặt “Thời gian trước khi bỏ đi” cho {block}.
+	{count} flows out of {block} are ticked “{way}”; at most one can be. Untick all but one.	{count} luồng đi ra từ {block} được chọn “{way}”; chỉ được chọn tối đa một. Hãy bỏ chọn tất cả trừ một.
+	The flow {flow} is ticked “Turned away”, but only a task with a resource and a limited waiting room turns entities away. Untick it, or limit the waiting room of {block}.	Luồng {flow} được chọn “Bị từ chối”, nhưng chỉ tác vụ có tài nguyên và có khu vực chờ giới hạn mới từ chối thực thể. Bỏ chọn nó, hoặc giới hạn khu vực chờ của {block}.
+	The flow {flow} is ticked both “Gave up” and “Turned away”. Keep one of them.	Luồng {flow} được chọn cả “Đã bỏ đi” lẫn “Bị từ chối”. Giữ lại một trong hai.
+	Set every chance of joining in the balking table of {block} to a number from 0 to 1.	Đặt mọi xác suất vào hàng trong bảng không vào hàng của {block} thành một số từ 0 đến 1.
+	Put the rows of the balking table of {block} in increasing order of “Number waiting”.	Sắp xếp các hàng của bảng không vào hàng của {block} theo thứ tự tăng dần của “Số đang chờ”.
+	The flow {flow} is ticked “Balked”, but only a task with a resource and balking sends entities that balk. Untick it, or turn on balking for {block}.	Luồng {flow} được chọn “Không vào hàng”, nhưng chỉ tác vụ có tài nguyên và có chế độ không vào hàng mới gửi các thực thể không vào hàng. Bỏ chọn nó, hoặc bật chế độ không vào hàng cho {block}.
+	The flow {flow} is ticked “Balked” and also “Gave up” or “Turned away”. Keep one of them.	Luồng {flow} được chọn “Không vào hàng” và cả “Đã bỏ đi” hoặc “Bị từ chối”. Giữ lại một trong số đó.
+	The waiting room of {block} is set by calendar or per working server, but has no number of places, so it is unlimited. Give it a number of places, or make it fixed.	Khu vực chờ của {block} được đặt theo lịch hoặc theo từng máy chủ đang hoạt động, nhưng không có số chỗ, nên không bị giới hạn. Hãy đặt số chỗ, hoặc chuyển sang cố định.
+	The waiting room of {block} is set by calendar, but no calendar has a value. Add a value for a calendar, or make the waiting room fixed.	Khu vực chờ của {block} được đặt theo lịch, nhưng không có lịch nào có giá trị. Hãy thêm giá trị cho một lịch, hoặc chuyển khu vực chờ sang cố định.
+	Set “Fails above, waiting per working server” of {block} to a number of 0 or more.	Đặt “Không đạt khi vượt (số chờ trên mỗi máy chủ đang hoạt động)” của {block} thành một số 0 hoặc lớn hơn.
+	Set “Check every” of {block} to a mean above 0.	Đặt “Kiểm tra mỗi” của {block} thành giá trị trung bình lớn hơn 0.
+	Set the demand of {block} to a number of parts above 0.	Đặt nhu cầu của {block} thành một số chi tiết lớn hơn 0.
+	The demand of {block} is per shift but names no calendar to say when the shifts are. Choose a calendar.	Nhu cầu của {block} tính theo ca nhưng không nêu lịch cho biết khi nào là các ca. Hãy chọn một lịch.
+	The demand of {block} names a calendar that does not exist. Choose a calendar that exists.	Nhu cầu của {block} nêu một lịch không tồn tại. Hãy chọn một lịch đang có.
+	The probability {value} on the flow {flow} is not from 0 to 1. Enter a probability from 0 to 1.	Xác suất {value} trên luồng {flow} không nằm trong khoảng từ 0 đến 1. Hãy nhập xác suất từ 0 đến 1.
+	The probabilities of the flows out of {block} add up to {sum}, not 1, so they are used in proportion. Change them to add up to 1 if that is not what you want.	Tổng xác suất của các luồng đi ra từ {block} là {sum}, không phải 1, nên chúng được dùng theo tỷ lệ. Hãy đổi để tổng bằng 1 nếu đó không phải điều bạn muốn.
+	The condition on the flow {flow} cannot be used: {error}. Correct “{expression}”.	Không dùng được điều kiện trên luồng {flow}: {error}. Hãy sửa “{expression}”.
+	The condition on the flow {flow} is ignored, because only flows out of a Decision block choose a route. Remove the condition.	Điều kiện trên luồng {flow} bị bỏ qua, vì chỉ các luồng đi ra từ khối Quyết định mới chọn tuyến. Hãy xóa điều kiện.
+	The probability on the flow {flow} is ignored, because only flows out of a Decision block choose a route. Remove the probability.	Xác suất trên luồng {flow} bị bỏ qua, vì chỉ các luồng đi ra từ khối Quyết định mới chọn tuyến. Hãy xóa xác suất.
+	The condition on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the condition.	Điều kiện trên luồng {flow} bị bỏ qua, vì Quyết định gửi thực thể đến khu vực chờ ngắn nhất. Hãy xóa điều kiện.
+	The probability on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the probability.	Xác suất trên luồng {flow} bị bỏ qua, vì Quyết định gửi thực thể đến khu vực chờ ngắn nhất. Hãy xóa xác suất.
+	The default on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the default.	Mặc định trên luồng {flow} bị bỏ qua, vì Quyết định gửi thực thể đến khu vực chờ ngắn nhất. Hãy xóa mặc định.
+	The probability on the flow {flow} is ignored, because the Decision routes by condition. Remove the probability.	Xác suất trên luồng {flow} bị bỏ qua, vì Quyết định chọn tuyến theo điều kiện. Hãy xóa xác suất.
+	The default flow of {block} is not one of its own flows out. Choose one of the flows out of {block} as the default.	Luồng mặc định của {block} không phải là một trong các luồng đi ra của chính nó. Hãy chọn một trong các luồng đi ra từ {block} làm mặc định.
+	{block} routes by condition but has no default flow, so an entity for which no condition holds leaves the model here. Choose a default flow.	{block} chọn tuyến theo điều kiện nhưng không có luồng mặc định, nên thực thể không thỏa điều kiện nào sẽ rời khỏi mô hình tại đây. Hãy chọn một luồng mặc định.
+	{block} diverts entities but has no default flow, so an entity whose way is full has nowhere else to go. Choose a default flow.	{block} chuyển hướng thực thể nhưng không có luồng mặc định, nên thực thể có đường đã đầy sẽ không còn nơi nào khác để đi. Hãy chọn một luồng mặc định.
+	{block} waits for an entity on the flow {flow}, which none can reach, so it never sends one on. Remove that flow, or connect it to a block that entities reach.	{block} chờ một thực thể trên luồng {flow}, nhưng không thực thể nào đến được, nên nó không bao giờ gửi thực thể đi tiếp. Xóa luồng đó, hoặc nối nó với một khối mà thực thể đến được.
+	{block} has a limited waiting room and is fed through {gateway}. While it is full, {gateway} holds up every entity behind it, and they wait before it without limit. Remove the gateway before {block}, or remove the limit.	{block} có khu vực chờ giới hạn và được cấp qua {gateway}. Khi khu vực chờ đầy, {gateway} giữ lại mọi thực thể phía sau, và chúng chờ trước đó không giới hạn. Hãy bỏ cổng trước {block}, hoặc bỏ giới hạn.
+	The limited waiting rooms of {loop} feed each other in a loop, so when all of them are full the loop deadlocks. Remove the limit on one of them, or break the loop.	Các khu vực chờ giới hạn của {loop} cấp cho nhau theo vòng, nên khi tất cả đều đầy thì vòng bị kẹt. Hãy bỏ giới hạn của một khu vực chờ, hoặc phá vòng.
+	The pool {block} has no units. Give it at least 1 unit.	Nhóm {block} không có đơn vị nào. Hãy cho nó ít nhất 1 đơn vị.
+	{block} names no resource it needs. Add one under “Needs”.	{block} không nêu tài nguyên nào cần dùng. Hãy thêm một tài nguyên trong “Nhu cầu”.
+	{block} needs a resource pool that does not exist. Choose a pool that exists.	{block} cần một nhóm tài nguyên không tồn tại. Hãy chọn một nhóm đang có.
+	{block} needs units with the roles {roles}, which no pool has. Give a pool those roles, or change what {block} needs.	{block} cần các đơn vị có vai trò {roles}, mà không nhóm nào có. Hãy gán các vai trò đó cho một nhóm, hoặc đổi nhu cầu của {block}.
+	{block} needs {needed} units at once, but at most {available} exist, so this can never be met. Ask for fewer units, or add units to the pool.	{block} cần {needed} đơn vị cùng lúc, nhưng chỉ có tối đa {available}, nên không bao giờ đáp ứng được. Hãy yêu cầu ít đơn vị hơn, hoặc thêm đơn vị vào nhóm.
+	Set the priority of {block} to a finite number, not {value}.	Đặt mức ưu tiên của {block} thành một số hữu hạn, không phải {value}.
+	No task uses the pool {block}. Add it to a task's needs, or remove the pool.	Không có tác vụ nào dùng nhóm {block}. Hãy thêm nó vào nhu cầu của một tác vụ, hoặc xóa nhóm.
+	{block} has a value for a calendar that does not exist. Choose a calendar that exists, or remove the value.	{block} có một giá trị cho một lịch không tồn tại. Hãy chọn một lịch đang có, hoặc xóa giá trị.
+	The calendar {block} has no entries, so it is never active. Add an entry.	Lịch {block} không có mục nào nên không bao giờ hoạt động. Hãy thêm một mục.
+	{block} allows no arrivals outside the calendars but names no calendar, so it never creates entities. Add arrivals by calendar, or allow arrivals outside calendars.	{block} không cho phép lượt đến ngoài các lịch nhưng không nêu lịch nào, nên nó không bao giờ tạo thực thể. Hãy thêm lượt đến theo lịch, hoặc cho phép lượt đến ngoài các lịch.
+	Set the batch size of {block} to 1 or more.	Đặt kích thước lô của {block} thành 1 hoặc lớn hơn.
+	Set “{field}” of the conveyor {block} to a finite number above 0.	Đặt “{field}” của băng tải {block} thành một số hữu hạn lớn hơn 0.
+	Set “{field}” of the conveyor {block} to a finite number of 0 or more.	Đặt “{field}” của băng tải {block} thành một số hữu hạn 0 hoặc lớn hơn.
+	Set “{field}” of the conveyor {block} to a finite number other than 0.	Đặt “{field}” của băng tải {block} thành một số hữu hạn khác 0.
+	The conveyor {block} is {length} long but each entity takes {pitch} (item length plus gap), so not even one fits. Lengthen the conveyor, or shorten the item or the gap.	Băng tải {block} dài {length} nhưng mỗi thực thể chiếm {pitch} (chiều dài mục cộng khoảng hở), nên không vừa nổi một thực thể. Hãy kéo dài băng tải, hoặc rút ngắn mục hay khoảng hở.
+	The drawn path of the conveyor {block} is {path_length} long, but its “Length” is {length}, so the drawing and the run disagree. Make “Length” match the path, or change the shape.	Đường vẽ của băng tải {block} dài {path_length}, nhưng “Chiều dài” của nó là {length}, nên bản vẽ và lần chạy không khớp nhau. Hãy cho “Chiều dài” khớp với đường vẽ, hoặc đổi hình dạng.
+	{block} is a transport, which StochCraft does not simulate yet. Remove it to run the model.	{block} là một khâu vận chuyển, mà StochCraft chưa mô phỏng được. Hãy xóa nó để chạy mô hình.
+	The pool {pool} of the transport {block} does not exist. Choose a pool that exists.	Nhóm {pool} của khâu vận chuyển {block} không tồn tại. Hãy chọn một nhóm đang có.
+	The pool {pool} of the transport {block} is not mobile. Give the pool speeds and a home.	Nhóm {pool} của khâu vận chuyển {block} không di chuyển được. Hãy đặt tốc độ và vị trí gốc cho nhóm.
+	Set “{field}” of the pool {block} to a finite number above 0.	Đặt “{field}” của nhóm {block} thành một số hữu hạn lớn hơn 0.
+	The home of the pool {block} is not a block of the model. Choose a block as its home.	Vị trí gốc của nhóm {block} không phải là một khối của mô hình. Hãy chọn một khối làm vị trí gốc.
+	The transport {block} needs one block before it, where it picks up, and one after it, where it drops off, but has {inputs} before and {outputs} after. Connect it to one block on each side.	Khâu vận chuyển {block} cần một khối ở trước, nơi nó nhận hàng, và một khối ở sau, nơi nó trả hàng, nhưng hiện có {inputs} khối trước và {outputs} khối sau. Hãy nối nó với một khối ở mỗi bên.
+	{other} has no place on the canvas, so the distances for {block} are not known. Place {other} on the canvas.	{other} chưa có vị trí trên bề mặt chính, nên chưa biết khoảng cách cho {block}. Hãy đặt {other} lên bề mặt chính.
+	The flow {flow} asks for no entities. Set its “Units” to 1 or more.	Luồng {flow} không yêu cầu thực thể nào. Hãy đặt “Đơn vị” của nó thành 1 hoặc lớn hơn.
+	The “Units” on the flow {flow} is ignored, because only a Split or join block takes several entities from one flow. Remove it.	“Đơn vị” trên luồng {flow} bị bỏ qua, vì chỉ khối Tách hoặc gộp mới lấy nhiều thực thể từ một luồng. Hãy xóa nó.
+	No block makes batches, so {block} passes every entity through. Add a Batch block before it, or remove {block}.	Không khối nào tạo lô, nên {block} cho mọi thực thể đi qua. Hãy thêm một khối Lô vào trước nó, hoặc xóa {block}.
+	The stop condition names a block that does not exist. Choose a block that exists.	Điều kiện dừng nêu một khối không tồn tại. Hãy chọn một khối đang có.
+	Set the count of the stop condition for {block} to 1 or more.	Đặt số lượng của điều kiện dừng cho {block} thành 1 hoặc lớn hơn.
+	The stop condition waits for {block} to empty, but only a task can empty. Choose a task.	Điều kiện dừng chờ {block} trống, nhưng chỉ tác vụ mới có thể trống. Hãy chọn một tác vụ.
+	The stop condition at {block} can be met before the warm-up ends. A run that stops during the warm-up has no statistics after it and is left out of the results. Shorten the warm-up, or stop later.	Điều kiện dừng tại {block} có thể được đáp ứng trước khi giai đoạn khởi động kết thúc. Một lần chạy dừng trong giai đoạn khởi động không có thống kê sau đó và bị loại khỏi kết quả. Hãy rút ngắn giai đoạn khởi động, hoặc dừng muộn hơn.
+	Every run stopped before the warm-up ended, so no metric is reported. Shorten the warm-up, or stop later.	Mọi lần chạy đều dừng trước khi giai đoạn khởi động kết thúc, nên không có chỉ số nào được báo cáo. Hãy rút ngắn giai đoạn khởi động, hoặc dừng muộn hơn.
+	{replications} of {of} runs stopped before the warm-up ended, so their statistics are left out of every metric. Shorten the warm-up, or stop later.	{replications} trong {of} lần chạy dừng trước khi giai đoạn khởi động kết thúc, nên thống kê của chúng bị loại khỏi mọi chỉ số. Hãy rút ngắn giai đoạn khởi động, hoặc dừng muộn hơn.
+	{block} is offered {load}% of the work its units can do, so its waiting room grows without limit and the results describe no steady state. Add units, or shorten the service.	{block} nhận {load}% khối lượng công việc mà các đơn vị của nó làm được, nên khu vực chờ tăng không giới hạn và kết quả không mô tả trạng thái ổn định. Hãy thêm đơn vị, hoặc rút ngắn thời gian phục vụ.
+	{block} is busy {utilisation}% of the time, and at the end at least {backlog} entities are still waiting against {left} that left. Work arrives faster than it is done, so the results describe no steady state. Add units, or shorten the service.	{block} bận {utilisation}% thời gian, và đến cuối vẫn còn ít nhất {backlog} thực thể đang chờ so với {left} thực thể đã rời đi. Công việc đến nhanh hơn tốc độ làm xong, nên kết quả không mô tả trạng thái ổn định. Hãy thêm đơn vị, hoặc rút ngắn thời gian phục vụ.
+	The experiment has one run, so its results cannot be told from chance. Set the number of runs to at least 2, and usually 10 or more.	Thí nghiệm chỉ có một lần chạy, nên không thể phân biệt kết quả với sự ngẫu nhiên. Hãy đặt số lần chạy ít nhất là 2, và thường là 10 trở lên.
+	{block} has a three-point estimate but no time to fit it to, so the estimate is ignored. Remove the estimate.	{block} có ước lượng ba điểm nhưng không có thời gian để khớp, nên ước lượng bị bỏ qua. Hãy xóa ước lượng.
+	The three-point estimate of {block} cannot be fitted: every point must be a finite number. Correct the points.	Không khớp được ước lượng ba điểm của {block}: mọi điểm phải là một số hữu hạn. Hãy sửa các điểm.
+	The three-point estimate of {block} cannot be fitted: the points must be in order, minimum, most likely, then maximum or 95th percentile. Correct the points.	Không khớp được ước lượng ba điểm của {block}: các điểm phải theo thứ tự giá trị nhỏ nhất, có khả năng nhất, rồi giá trị lớn nhất hoặc phân vị thứ 95. Hãy sửa các điểm.
+	The three-point estimate of {block} cannot be fitted: log-normal and Weibull estimates have no maximum. Give a 95th percentile instead.	Không khớp được ước lượng ba điểm của {block}: ước lượng chuẩn logarit và Weibull không có giá trị lớn nhất. Hãy nhập phân vị thứ 95 thay vào đó.
+	The time of {block} is no longer the one fitted from its three-point estimate. Fit it again, or remove the estimate.	Thời gian của {block} không còn là thời gian đã khớp từ ước lượng ba điểm của nó. Hãy khớp lại, hoặc xóa ước lượng.
+	In “{field}” of {block}, the normal distribution draws below 0 more than 1 time in 100, and each such draw counts as 0, so the times are longer on average than its mean. Use a truncated normal with a minimum of 0, or a log-normal.	Trong “{field}” của {block}, phân phối chuẩn cho giá trị dưới 0 hơn 1 lần trong 100 lần, và mỗi giá trị như vậy được tính là 0, nên các thời gian dài hơn giá trị trung bình của nó. Hãy dùng phân phối chuẩn cắt cụt với giá trị nhỏ nhất bằng 0, hoặc chuẩn logarit.
+	The entities of {block} do not add up: {came} came in or were inside at the start, but {went} left, were lost, gave up or are still inside.	Số thực thể của {block} không cân bằng: {came} đã vào hoặc đã ở bên trong lúc đầu, nhưng {went} đã rời đi, bị mất, bỏ đi hoặc vẫn còn bên trong.
+	The entities of the model do not add up: {came} were created or inside at the start, but {went} reached Departures, left the model elsewhere or are still inside.	Số thực thể của mô hình không cân bằng: {came} được tạo hoặc đã ở bên trong lúc đầu, nhưng {went} đã đến Lượt rời đi, rời khỏi mô hình ở nơi khác hoặc vẫn còn bên trong.
+	No entity left the model, of {came} created or inside at the start. Check that the routing leads to Departures and that the run is long enough for an entity to get through.	Không có thực thể nào rời khỏi mô hình, trong số {came} được tạo hoặc đã ở bên trong lúc đầu. Hãy kiểm tra xem định tuyến có dẫn đến Lượt rời đi không và lần chạy có đủ dài để một thực thể đi hết không.
+	Little's law does not hold at {block}: the time-average number inside was {mean}, but the entities' own times inside give {from_stays}.	Định luật Little không đúng tại {block}: số lượng bên trong trung bình theo thời gian là {mean}, nhưng thời gian ở bên trong của chính các thực thể cho {from_stays}.
+	The utilisation of {block} counts {busy} units busy on average, but {working} were processing or setting up: units idle, blocked, off shift, failed or restarting were counted busy.	Mức sử dụng của {block} tính trung bình {busy} đơn vị đang bận, nhưng chỉ {working} đơn vị đang xử lý hoặc chuẩn bị máy: các đơn vị nhàn rỗi, bị chặn, ngoài ca, hỏng hoặc đang khởi động lại đã bị tính là bận.
+	The utilisation of {block} counts {busy} units busy on average, but {working} were processing or setting up: units at work were not counted busy.	Mức sử dụng của {block} tính trung bình {busy} đơn vị đang bận, nhưng {working} đơn vị đang xử lý hoặc chuẩn bị máy: các đơn vị đang làm việc không được tính là bận.
+	The shares of the time of the units of {block} in each state add up to {total}, not 1.	Tỷ lệ thời gian của các đơn vị của {block} ở mỗi trạng thái có tổng là {total}, không phải 1.
+	“{metric}” of {block} is {value}, outside 0 to 1 (0% to 100%).	“{metric}” của {block} là {value}, nằm ngoài khoảng 0 đến 1 (0% đến 100%).
+	This was found in {replications} of {of} runs, and the furthest off is shown.	Lỗi này được tìm thấy trong {replications} trên {of} lần chạy, và hiển thị trường hợp lệch xa nhất.
+	This points to a fault in StochCraft rather than in the model. Please report it with the model.	Điều này cho thấy lỗi nằm ở StochCraft chứ không phải ở mô hình. Vui lòng báo cáo kèm theo mô hình.
+	Angle	Góc
+	Failed	Hỏng
+	Off shift	Ngoài ca
+	Processing	Đang xử lý
+	Radius	Bán kính
+	Rise	Độ nâng
+	Speed empty	Tốc độ khi trống
+	Speed loaded	Tốc độ khi chở hàng
+	Turns	Số vòng
+	Unload	Dỡ hàng
+	Lost	Bị mất
+	An entity that leaves a waiting room before a unit takes it, because it has waited as long as it was willing to.	Thực thể rời khỏi khu vực chờ trước khi có đơn vị nhận, vì đã chờ lâu hết mức nó chịu chờ.
+	An entity that does not join a waiting room at all, because the number already waiting put it off.	Thực thể hoàn toàn không vào khu vực chờ, vì số thực thể đang chờ đã khiến nó nản.
+	An entity that finds the waiting room full and takes the flow ticked “Turned away” instead of waiting.	Thực thể thấy khu vực chờ đã đầy và đi theo luồng được chọn “Bị từ chối” thay vì chờ.
+	An entity that leaves the model without reaching Departures: it found the waiting room full with nowhere else to go, or a decision with no way out for it.	Thực thể rời khỏi mô hình mà không đến Lượt rời đi: nó thấy khu vực chờ đã đầy và không còn đường nào khác, hoặc gặp một quyết định không có lối ra cho nó.
+	Gave up on {id}	Đã bỏ đi tại {id}
+	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the flow ticked “Gave up”, or leaves the model.	Mỗi thực thể chờ ở đây tối đa một khoảng thời gian được rút ngẫu nhiên cho nó khi đến, rồi bỏ đi: nó đi theo luồng được chọn “Đã bỏ đi”, hoặc rời khỏi mô hình.
+	Entities that do not join the waiting room take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Các thực thể không vào khu vực chờ sẽ đi theo luồng này ngay (chẳng hạn để thử lại sau), thay vì bị mất; ở đây chúng được tính là không vào hàng.
+	The job stops at once: the entity goes back to the front of the waiting room for any server on shift, and the work done on it is wasted.	Công việc dừng ngay: thực thể quay lại đầu khu vực chờ cho bất kỳ máy chủ nào trong ca, và công việc đã làm cho nó bị lãng phí.
+	The connection drops and the client tries again: the entity goes back to the front of the waiting room at once, and the work done on it is wasted.	Kết nối bị ngắt và máy khách thử lại: thực thể quay lại ngay đầu khu vực chờ, và công việc đã làm cho nó bị lãng phí.
+	Ticked, entities queue up at the end while the rest keep moving. Unticked, the whole belt stops when the entity at the end cannot leave.	Khi được chọn, các thực thể xếp hàng ở cuối trong khi những thực thể còn lại tiếp tục chạy. Khi bỏ chọn, cả băng tải dừng khi thực thể ở cuối không thể rời đi.
+	Play run 1 step by step and see each block's waiting room on the diagram	Phát lần chạy 1 từng bước và xem khu vực chờ của mỗi khối trên sơ đồ
+	Select a block to see its waiting room over time.	Chọn một khối để xem khu vực chờ của nó theo thời gian.
+	Entities on conveyors over time	Số thực thể trên băng tải theo thời gian
+	Entities in the model over time	Số thực thể trong mô hình theo thời gian
+	How long each entity spends on the conveyors.	Mỗi thực thể ở trên băng tải bao lâu.
+	No entity has left a conveyor yet	Chưa có thực thể nào rời khỏi băng tải
+	Share of entities by time on a conveyor, in {unit}	Tỷ lệ các thực thể theo thời gian trên băng tải, tính bằng {unit}
+	Time on conveyors: {n} entities between {lo} and {hi} {unit}	Thời gian trên băng tải: {n} thực thể trong khoảng {lo} đến {hi} {unit}
+	{from} to {to} {unit}: {share} of entities ({n})	Từ {from} đến {to} {unit}: {share} số thực thể ({n})
+	How many entities are on the conveyors over time.	Có bao nhiêu thực thể trên băng tải theo thời gian.
+	How many entities are in the model over time.	Có bao nhiêu thực thể trong mô hình theo thời gian.
+	At {time} {unit}: {n} entities	Tại {time} {unit}: {n} thực thể
+@plural	Makes {n} independent run of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval across them.	Thực hiện {n} lần chạy độc lập của mô hình từ hạt giống {seed}. Kết quả của mỗi khối kèm nửa độ rộng khoảng tin cậy 95%.
 	Fonts	Phông chữ
 	The full list of third-party licences is in the file THIRD-PARTY-LICENSES.html, which comes with the download.	Danh sách đầy đủ giấy phép của bên thứ ba nằm trong tệp THIRD-PARTY-LICENSES.html, đi kèm bản tải xuống.
 	Full list of third-party licences	Danh sách đầy đủ giấy phép của bên thứ ba

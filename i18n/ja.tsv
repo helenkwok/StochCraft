@@ -21,8 +21,6 @@
 	A caller on hold: once a unit takes it, the entity stays.	保留中の発信者: いったんユニットが受け付けると、エンティティは離脱しません。
 	A client that times out: if its time runs out during service, it gives up then, and the unit finishes the job anyway (wasted work).	タイムアウトするクライアント: サービス中に時間切れになると、その時点で離脱しますが、ユニットは作業を最後まで行います（無駄な作業）。
 	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	新しいファイルにはモデルだけが入ります。{file} のうち StochCraft が理解できない内容は含まれません。
-	Abandoned	離脱
-	Abandoned on {id}	{id} の離脱
 	About StochCraft	StochCraft について
 	About {app}	{app} について
 	Accent	アクセント
@@ -162,7 +160,6 @@
 	Duration	継続時間
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	各分析は同じ乱数シードで実験を何度か実行するため、差は偶然ではなく変更によるものです。時間がかかることがあります。
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	各エンティティは、これらのうち今すぐ一度にすべて満たせる最初のものを確保し、退出するときにユニットを返却します。
-	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	各エンティティは、到着時に抽選された時間を上限としてここで待ち、その後離脱します。「離脱」と表示された出口へ進むか、モデルから出ます。
 	Each server (unit) is checked every so often, as a load balancer probes the servers behind it. One that fails, with too many waiting, is taken out of service for a restart, then comes back.	各サーバ（ユニット）は、ロードバランサが背後のサーバを調べるように、一定の間隔でチェックされます。待ちが多すぎてチェックに失敗したサーバは、再起動のために稼働から外され、その後戻ります。
 	Edit	編集
 	Edit themes…	テーマを編集…
@@ -412,7 +409,6 @@
 	Run	実行
 	Run cancelled	実行がキャンセルされました
 	Run experiment	実験を実行
-	Play run 1 step by step and see each block's queue on the diagram	実行 1 を1ステップずつ再生し、各ブロックの待ち行列をダイアグラム上で確認します
 	Run the experiment ({shortcut})	実験を実行 ({shortcut})
 	Run the experiment again to see this result's spread.	この結果のばらつきを見るには、実験をもう一度実行してください。
 	Run the experiment at each value of one parameter, and compare a result.	1 つのパラメーターの各値で実験を実行し、結果を比較します。
@@ -433,7 +429,6 @@
 	Scrap ratio	廃棄率
 	Seed	乱数シード
 	Select All	すべて選択
-	Select a block to see its queue over time.	ブロックを選択すると、その待ち行列の推移が表示されます。
 	Sender waits during transfer	搬送中は送り元が待機
 	Separate the values with semicolons or spaces.	値はセミコロンまたはスペースで区切ってください。
 	Sequential	順序型
@@ -497,10 +492,8 @@
 	Text	テキスト
 	Text on accent	アクセント上のテキスト
 	Text on header	ヘッダー上のテキスト
-	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	接続が切れてクライアントが再試行します。エンティティはすぐに待ち行列の先頭に戻り、それまでの作業は無駄になります。
 	The entity waits on its server and the job carries on with what was left once the server is back.	エンティティは自分のサーバで待ち、サーバが戻ると残りの作業から続けます。
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more runs would narrow it.	信頼区間が目標割合 {share} を下回るため、割合が達成されたことは 95% の信頼度では示されていません。実行回数を増やすと信頼区間は狭まります。
-	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	作業はすぐに止まります。エンティティはシフト中のいずれかのサーバを待つ待ち行列の先頭に戻り、それまでの作業は無駄になります。
 	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	作業はすぐに止まります。エンティティは自分のサーバで待ち、そのサーバが再びシフト中になると残りの作業から続けます。
 	The last task with a resource it finished at	部品が最後に通ったリソースを使うタスク
 	The mean time to the stop condition is over the runs that met it only; the others ran to their time limit.	停止条件までの平均時間は、停止条件に達した実行だけによるものです。それ以外の実行は時間制限まで続きました。
@@ -690,7 +683,6 @@ unit	yr	年
 	Balked on {id}	{id} の入列断念
 	Balking	入列断念
 	Count those in service	サービス中も数える
-	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	待ち行列に加わらないエンティティは、すぐにこのフローを通ります（後で再試行するなど）。失われることはありません。ここでは入列断念として数えます。
 	Joins with probability	列に加わる確率
 	Number waiting	待ち数
 	Share balked	入列断念率
@@ -908,7 +900,6 @@ unit	yr	年
 @plural	Finished {n} run|Finished {n} runs	{n} 回の実行が完了しました
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	{file} を開きました（警告 {n} 件）
 @plural	Removed {n} block|Removed {n} blocks	{n} 個のブロックを削除しました
-@plural	Makes {n} independent run of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	シード {seed} からモデルを {n} 回独立に実行します。各要素の結果には、95% 信頼区間の半幅が示されます。
 @plural	The stop condition was met in {met} of {n} run, after {time} {unit} on average.|The stop condition was met in {met} of {n} runs, after {time} {unit} on average.	停止条件は {n} 回中 {met} 回の実行で、平均 {time} {unit} 後に達しました。
 @plural	{done} of {n} run finished|{done} of {n} runs finished	{n} 回中 {done} 回の実行が完了
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} run|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} runs	{name}：{mean}{unit}\n95% 信頼区間 {low} ～ {high}{unit}\n{n} 回の実行に基づく
@@ -938,7 +929,6 @@ unit	yr	年
 	kilometres	キロメートル
 	inches	インチ
 	feet	フィート
-	Ticked, items queue up at the end while the rest keep moving. Unticked, the whole belt stops when the item at the end cannot leave.	オンにすると、先頭の品目が出られない間は端で順番待ちになり、残りは動き続けます。オフにすると、端の品目が出られないときにベルト全体が止まります。
 	A belt that carries entities from one end to the other. It has a length and a speed, and each entity takes a pitch of belt: its item length plus the gap kept free after it. So it holds at most length ÷ pitch entities and carries at most speed ÷ pitch per time unit. Accumulating: entities queue up at the end while the rest keep moving; otherwise the whole belt stops.	エンティティを一方の端からもう一方の端へ運ぶベルトです。長さと速度があり、各エンティティはベルトのピッチを占めます。ピッチとは、品目の長さと、その後ろに空けておく間隔の合計です。そのため、載せられるのは最大で長さ ÷ ピッチ個、単位時間あたりに運べるのは最大で速度 ÷ ピッチ個です。蓄積: エンティティは端で順番待ちになり、残りは動き続けます。オフの場合はベルト全体が止まります。
 	Station	ステーション
 	Kind	種類
@@ -992,19 +982,165 @@ unit	yr	年
 	Time on conveyors	コンベヤ上の時間
 	No conveyors in this model	このモデルにはコンベヤがありません
 	Fills in when the run ends	実行が終わると表示されます
-	How long each item spends on the conveyors.	各アイテムがコンベヤ上で過ごす時間。
-	No item has left a conveyor yet	まだコンベヤを出たアイテムはありません
-	Share of items by time on a conveyor, in {unit}	コンベヤ上の時間別のアイテムの割合（{unit}）
-	Time on conveyors: {n} items between {lo} and {hi} {unit}	コンベヤ上の時間: {lo} から {hi} {unit} の間に {n} 個のアイテム
-	{from} to {to} {unit}: {share} of items ({n})	{from} から {to} {unit}: アイテムの {share}（{n}）
-	Items on conveyors over time	コンベヤ上のアイテム数の推移
-	Items in the model over time	モデル内のアイテム数の推移
-	How many items are on the conveyors over time.	コンベヤ上にあるアイテム数の推移。
-	How many items are in the model over time.	モデル内にあるアイテム数の推移。
 	Nothing was recorded over time in these results	この結果には時間ごとの記録がありません
-	At {time} {unit}: {n} items	{time} {unit} 時点: アイテム {n} 個
 	Run the model to fill the dashboard	ダッシュボードを表示するにはモデルを実行してください
 	The resource and conveyor charts show the last run until this one ends	リソースとコンベヤのグラフは、この実行が終わるまで前回の実行を表示します
+# Validation messages, new labels and word changes (issue #145)
+	The id “{id}” is not valid. Start an id with a letter or an underscore, then use only letters, digits, dots, hyphens and underscores.	ID「{id}」は無効です。ID は英字またはアンダースコアで始め、使える文字は英字、数字、ドット、ハイフン、アンダースコアだけにしてください。
+	More than one block, flow, pool or calendar has the id “{id}”. Give each its own id.	ID「{id}」を持つブロック、フロー、プール、カレンダーが複数あります。それぞれに別の ID を付けてください。
+	The flow {flow} uses a block that does not exist. Remove the flow, or connect it to a block that exists.	フロー {flow} が存在しないブロックにつながっています。このフローを削除するか、存在するブロックに接続してください。
+	The flow {flow} leads into an Arrivals block, which takes no input. Remove the flow, or send it to another block.	フロー {flow} が「到着」ブロックにつながっていますが、到着ブロックは入力を受け付けません。このフローを削除するか、別のブロックにつないでください。
+	The flow {flow} leaves a Departures block, which has no output. Remove the flow, or start it from another block.	フロー {flow} が「退出」ブロックから出ていますが、退出ブロックには出力がありません。このフローを削除するか、別のブロックから始めてください。
+	The flow {flow} leads from a block back to itself. Remove it, or send it to another block.	フロー {flow} があるブロックから自分自身に戻っています。このフローを削除するか、別のブロックにつないでください。
+	{block} has nowhere to send entities. Add a flow from it to the next block.	{block} にはエンティティの送り先がありません。次のブロックへのフローを追加してください。
+	{block} has {count} flows out, and only a Decision or a Split or join block can send entities down several. Remove the extra flows, or add a Decision block.	{block} から出るフローが {count} 本あります。複数のフローにエンティティを送れるのは「分岐」ブロックと「分岐または結合」ブロックだけです。余分なフローを削除するか、「分岐」ブロックを追加してください。
+	In “{field}” of {block}, set “{param}” to a finite number.	{block} の「{field}」で、「{param}」に有限の数を設定してください。
+	In “{field}” of {block}, set “{param}” to a number above 0.	{block} の「{field}」で、「{param}」に 0 より大きい数を設定してください。
+	In “{field}” of {block}, set “{param}” to 0 or more.	{block} の「{field}」で、「{param}」に 0 以上の数を設定してください。
+	In “{field}” of {block}, set “{param}” to 1 or more.	{block} の「{field}」で、「{param}」に 1 以上の数を設定してください。
+	In “{field}” of {block}, set “{param}” to a number from 0 to 1.	{block} の「{field}」で、「{param}」に 0 から 1 までの数を設定してください。
+	In “{field}” of {block}, set “Minimum” below “Maximum”, and any “Most likely” value between them.	{block} の「{field}」で、「最小値」を「最大値」より小さくし、「最頻値」がある場合はその間の値にしてください。
+	In “{field}” of {block}, add data points whose probabilities add up to more than 0.	{block} の「{field}」に、確率の合計が 0 より大きくなるデータ点を追加してください。
+	{block} would never have a unit to work with. Give it at least 1 unit.	{block} には作業に使えるユニットが 1 つもなくなります。ユニットを 1 つ以上にしてください。
+	{block} would make entities without end, because its “Time between arrivals” is always 0. Give it a time above 0, or set an “Arrival limit”.	{block} は「到着間隔」が常に 0 のため、エンティティを際限なく作り続けます。0 より大きい時間を設定するか、「到着数の上限」を設定してください。
+	The model has no Arrivals block, so nothing will happen. Add an Arrivals block.	モデルに「到着」ブロックがないため、何も起こりません。「到着」ブロックを追加してください。
+	The model has no Departures block, so no time in system is measured. Add a Departures block.	モデルに「退出」ブロックがないため、システム内の滞在時間が測定されません。「退出」ブロックを追加してください。
+	No entity can reach {block} from an Arrivals block. Connect it to a block that entities pass through.	「到着」ブロックから {block} にエンティティが到達できません。エンティティが通るブロックに接続してください。
+	Entities in {block} can never reach a Departures block. Connect it on towards Departures.	{block} 内のエンティティは「退出」ブロックに到達できません。「退出」に向けてつないでください。
+	Set the “{state}” power of {block} to a number of kilowatts, 0 or more.	{block} の「{state}」電力を、0 以上のキロワット数で設定してください。
+	Set the warm-up of the experiment to 0 or more.	実験のウォームアップを 0 以上に設定してください。
+	Set the duration of the experiment to more than 0.	実験の継続時間を 0 より大きく設定してください。
+	Set the number of runs of the experiment to 1 or more.	実験の実行回数を 1 以上に設定してください。
+	Set the layout scale (length units per drawing unit) to a finite number above 0.	レイアウトの縮尺（描画単位あたりの長さの単位）を、0 より大きい有限の数に設定してください。
+	A property of {block} has no name. Give it a name, or remove it.	{block} のプロパティの 1 つに名前がありません。名前を付けるか、削除してください。
+	{block} sets the property “{name}” twice. Keep one of them.	{block} でプロパティ「{name}」が 2 回設定されています。どちらか一方を残してください。
+	The property “{name}” of {block} needs shares that are not negative and add up to more than 0. Change the shares.	{block} のプロパティ「{name}」には、負でなく合計が 0 より大きくなる割合が必要です。割合を変更してください。
+	The property “{name}” has the type “{type2}” on {block} but “{type}” on another block. Give it one type everywhere.	プロパティ「{name}」の種類が、{block} では「{type2}」、別のブロックでは「{type}」になっています。どのブロックでも 1 つの種類にそろえてください。
+	The value of the property “{name}” on {block} does not fit its type, “{type}”. Change the value or the type.	{block} のプロパティ「{name}」の値が、その種類「{type}」に合っていません。値か種類を変更してください。
+	The expression for the property “{name}” on {block} cannot be used: {error}. Correct “{expression}”.	{block} のプロパティ「{name}」の式が使えません: {error}。「{expression}」を修正してください。
+	{block} reads the property “{name}”, which no block sets, so it would read as empty. Set it on an earlier block, or correct the name.	{block} はプロパティ「{name}」を読み取りますが、どのブロックも設定していないため、空として読み取られます。前のブロックで設定するか、名前を修正してください。
+	The setup of {block} has times for particular changes but no property to watch. Choose a property under “Only when this property changes”.	{block} の段取りに特定の変更ごとの時間がありますが、監視するプロパティがありません。「このプロパティが変わるときのみ」でプロパティを選んでください。
+	{block} has times for particular values but no property to read them from. Choose a property under “Service time by property”.	{block} に特定の値ごとの時間がありますが、その時間を読み取るプロパティがありません。「プロパティ別のサービス時間」でプロパティを選んでください。
+	{block} has two times for the value “{value}”. Keep one.	{block} に値「{value}」の時間が 2 つあります。どちらか一方を残してください。
+	Set the time of {block} for the value “{value}” to a mean of 0 or more.	{block} の値「{value}」の時間を、平均 0 以上に設定してください。
+	The scrap at {block} counts against {other}, which is not a task with a resource. Choose a task with a resource.	{block} の廃棄は {other} を対象としていますが、これはリソースを使うタスクではありません。リソースを使うタスクを選んでください。
+	Set “Planned run time per item” of {block} to a mean above 0.	{block} の「部品あたりの計画実行時間」を、0 より大きい平均に設定してください。
+	Set “Time before giving up” of {block} to a mean of 0 or more.	{block} の「離脱までの時間」を、0 以上の平均に設定してください。
+	The flow {flow} is ticked “Gave up”, but only a task with a resource and a “Time before giving up” sends entities that give up. Untick it, or set a “Time before giving up” on {block}.	フロー {flow} は「離脱」にチェックされていますが、離脱するエンティティを送るのは、「離脱までの時間」を設定したリソースを使うタスクだけです。チェックを外すか、{block} に「離脱までの時間」を設定してください。
+	{count} flows out of {block} are ticked “{way}”; at most one can be. Untick all but one.	{block} から出るフローのうち {count} 本が「{way}」にチェックされていますが、チェックできるのは最大 1 本です。1 本を除いてチェックを外してください。
+	The flow {flow} is ticked “Turned away”, but only a task with a resource and a limited waiting room turns entities away. Untick it, or limit the waiting room of {block}.	フロー {flow} は「受入拒否」にチェックされていますが、エンティティを受け入れ拒否するのは、待機場所に上限があるリソースを使うタスクだけです。チェックを外すか、{block} の待機場所に上限を設けてください。
+	The flow {flow} is ticked both “Gave up” and “Turned away”. Keep one of them.	フロー {flow} が「離脱」と「受入拒否」の両方にチェックされています。どちらか一方だけにしてください。
+	Set every chance of joining in the balking table of {block} to a number from 0 to 1.	{block} の入列断念の表で、加わる確率をすべて 0 から 1 までの数にしてください。
+	Put the rows of the balking table of {block} in increasing order of “Number waiting”.	{block} の入列断念の表の行を、「待ち数」の小さい順に並べてください。
+	The flow {flow} is ticked “Balked”, but only a task with a resource and balking sends entities that balk. Untick it, or turn on balking for {block}.	フロー {flow} は「入列断念」にチェックされていますが、入列断念するエンティティを送るのは、入列断念を設定したリソースを使うタスクだけです。チェックを外すか、{block} の入列断念をオンにしてください。
+	The flow {flow} is ticked “Balked” and also “Gave up” or “Turned away”. Keep one of them.	フロー {flow} が「入列断念」と、「離脱」または「受入拒否」の両方にチェックされています。どれか 1 つだけにしてください。
+	The waiting room of {block} is set by calendar or per working server, but has no number of places, so it is unlimited. Give it a number of places, or make it fixed.	{block} の待機場所はカレンダーまたは稼働中のサーバ数で決まりますが、枠の数がないため無制限です。枠の数を設定するか、固定にしてください。
+	The waiting room of {block} is set by calendar, but no calendar has a value. Add a value for a calendar, or make the waiting room fixed.	{block} の待機場所はカレンダーで決まりますが、値を持つカレンダーがありません。カレンダーの値を追加するか、待機場所を固定にしてください。
+	Set “Fails above, waiting per working server” of {block} to a number of 0 or more.	{block} の「失敗の上限（稼働中のサーバ1台あたりの待ち数）」を 0 以上の数に設定してください。
+	Set “Check every” of {block} to a mean above 0.	{block} の「チェック間隔」を、0 より大きい平均に設定してください。
+	Set the demand of {block} to a number of parts above 0.	{block} の需要を、0 より大きい部品数に設定してください。
+	The demand of {block} is per shift but names no calendar to say when the shifts are. Choose a calendar.	{block} の需要は 1 シフトあたりですが、シフトがいつかを示すカレンダーが指定されていません。カレンダーを選んでください。
+	The demand of {block} names a calendar that does not exist. Choose a calendar that exists.	{block} の需要が、存在しないカレンダーを指定しています。存在するカレンダーを選んでください。
+	The probability {value} on the flow {flow} is not from 0 to 1. Enter a probability from 0 to 1.	フロー {flow} の確率 {value} が 0 から 1 までの範囲にありません。0 から 1 までの確率を入力してください。
+	The probabilities of the flows out of {block} add up to {sum}, not 1, so they are used in proportion. Change them to add up to 1 if that is not what you want.	{block} から出るフローの確率の合計は 1 ではなく {sum} なので、比率として使われます。意図と異なる場合は、合計が 1 になるように変更してください。
+	The condition on the flow {flow} cannot be used: {error}. Correct “{expression}”.	フロー {flow} の条件が使えません: {error}。「{expression}」を修正してください。
+	The condition on the flow {flow} is ignored, because only flows out of a Decision block choose a route. Remove the condition.	フロー {flow} の条件は無視されます。経路を選ぶのは「分岐」ブロックから出るフローだけです。条件を削除してください。
+	The probability on the flow {flow} is ignored, because only flows out of a Decision block choose a route. Remove the probability.	フロー {flow} の確率は無視されます。経路を選ぶのは「分岐」ブロックから出るフローだけです。確率を削除してください。
+	The condition on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the condition.	フロー {flow} の条件は無視されます。分岐がエンティティを最も短い待ち行列に送るためです。条件を削除してください。
+	The probability on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the probability.	フロー {flow} の確率は無視されます。分岐がエンティティを最も短い待ち行列に送るためです。確率を削除してください。
+	The default on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the default.	フロー {flow} の既定は無視されます。分岐がエンティティを最も短い待ち行列に送るためです。既定を削除してください。
+	The probability on the flow {flow} is ignored, because the Decision routes by condition. Remove the probability.	フロー {flow} の確率は無視されます。分岐が条件で経路を選ぶためです。確率を削除してください。
+	The default flow of {block} is not one of its own flows out. Choose one of the flows out of {block} as the default.	{block} の既定のフローが、そのブロック自身から出るフローの 1 つではありません。{block} から出るフローのいずれかを既定に選んでください。
+	{block} routes by condition but has no default flow, so an entity for which no condition holds leaves the model here. Choose a default flow.	{block} は条件で経路を選びますが既定のフローがないため、どの条件にも当てはまらないエンティティはここでモデルから出ます。既定のフローを選んでください。
+	{block} diverts entities but has no default flow, so an entity whose way is full has nowhere else to go. Choose a default flow.	{block} はエンティティを迂回させますが既定のフローがないため、経路が満員のエンティティには行き先がありません。既定のフローを選んでください。
+	{block} waits for an entity on the flow {flow}, which none can reach, so it never sends one on. Remove that flow, or connect it to a block that entities reach.	{block} はフロー {flow} からのエンティティを待っていますが、そこには到達できるエンティティがないため、先へ送ることがありません。そのフローを削除するか、エンティティが到達するブロックに接続してください。
+	{block} has a limited waiting room and is fed through {gateway}. While it is full, {gateway} holds up every entity behind it, and they wait before it without limit. Remove the gateway before {block}, or remove the limit.	{block} の待機場所には上限があり、{gateway} を通して供給されます。待機場所が満員の間、{gateway} はその後ろのエンティティをすべて足止めし、エンティティは手前で際限なく待つことになります。{block} の前のゲートウェイを取り除くか、上限を外してください。
+	The limited waiting rooms of {loop} feed each other in a loop, so when all of them are full the loop deadlocks. Remove the limit on one of them, or break the loop.	{loop} の上限付きの待機場所が互いにループ状に供給し合うため、すべてが満員になるとループがデッドロックします。そのうち 1 つの上限を外すか、ループを断ち切ってください。
+	The pool {block} has no units. Give it at least 1 unit.	プール {block} にユニットがありません。ユニットを 1 つ以上にしてください。
+	{block} names no resource it needs. Add one under “Needs”.	{block} に必要なリソースが指定されていません。「必要なリソース」で追加してください。
+	{block} needs a resource pool that does not exist. Choose a pool that exists.	{block} が必要とするリソースプールが存在しません。存在するプールを選んでください。
+	{block} needs units with the roles {roles}, which no pool has. Give a pool those roles, or change what {block} needs.	{block} は役割 {roles} を持つユニットを必要としますが、そのようなプールがありません。プールにその役割を設定するか、{block} の必要なリソースを変更してください。
+	{block} needs {needed} units at once, but at most {available} exist, so this can never be met. Ask for fewer units, or add units to the pool.	{block} は {needed} 個のユニットを同時に必要としますが、存在するのは最大 {available} 個なので、満たせません。必要なユニット数を減らすか、プールのユニットを増やしてください。
+	Set the priority of {block} to a finite number, not {value}.	{block} の優先度を、{value} ではなく有限の数に設定してください。
+	No task uses the pool {block}. Add it to a task's needs, or remove the pool.	プール {block} を使うタスクがありません。タスクの必要なリソースに追加するか、プールを削除してください。
+	{block} has a value for a calendar that does not exist. Choose a calendar that exists, or remove the value.	{block} に、存在しないカレンダーの値があります。存在するカレンダーを選ぶか、その値を削除してください。
+	The calendar {block} has no entries, so it is never active. Add an entry.	カレンダー {block} には項目がないため、有効になることがありません。項目を追加してください。
+	{block} allows no arrivals outside the calendars but names no calendar, so it never creates entities. Add arrivals by calendar, or allow arrivals outside calendars.	{block} はカレンダー外の到着を許可しておらず、カレンダーも指定していないため、エンティティを作りません。カレンダーごとの到着を追加するか、カレンダー外の到着を許可してください。
+	Set the batch size of {block} to 1 or more.	{block} のバッチサイズを 1 以上に設定してください。
+	Set “{field}” of the conveyor {block} to a finite number above 0.	コンベヤ {block} の「{field}」を、0 より大きい有限の数に設定してください。
+	Set “{field}” of the conveyor {block} to a finite number of 0 or more.	コンベヤ {block} の「{field}」を、0 以上の有限の数に設定してください。
+	Set “{field}” of the conveyor {block} to a finite number other than 0.	コンベヤ {block} の「{field}」を、0 以外の有限の数に設定してください。
+	The conveyor {block} is {length} long but each entity takes {pitch} (item length plus gap), so not even one fits. Lengthen the conveyor, or shorten the item or the gap.	コンベヤ {block} の長さは {length} ですが、各エンティティが {pitch}（品目の長さと間隔の合計）を必要とするため、1 つも載りません。コンベヤを長くするか、品目または間隔を短くしてください。
+	The drawn path of the conveyor {block} is {path_length} long, but its “Length” is {length}, so the drawing and the run disagree. Make “Length” match the path, or change the shape.	コンベヤ {block} の描かれた経路の長さは {path_length} ですが、「長さ」は {length} なので、図と実行が一致しません。「長さ」を経路に合わせるか、形を変更してください。
+	{block} is a transport, which StochCraft does not simulate yet. Remove it to run the model.	{block} は搬送ですが、StochCraft はまだ搬送をシミュレートしません。モデルを実行するには削除してください。
+	The pool {pool} of the transport {block} does not exist. Choose a pool that exists.	搬送 {block} のプール {pool} が存在しません。存在するプールを選んでください。
+	The pool {pool} of the transport {block} is not mobile. Give the pool speeds and a home.	搬送 {block} のプール {pool} は移動式ではありません。プールに速度と拠点を設定してください。
+	Set “{field}” of the pool {block} to a finite number above 0.	プール {block} の「{field}」を、0 より大きい有限の数に設定してください。
+	The home of the pool {block} is not a block of the model. Choose a block as its home.	プール {block} の拠点がモデルのブロックではありません。拠点にするブロックを選んでください。
+	The transport {block} needs one block before it, where it picks up, and one after it, where it drops off, but has {inputs} before and {outputs} after. Connect it to one block on each side.	搬送 {block} には、積み込みを行う前のブロック 1 つと、荷下ろしを行う後のブロック 1 つが必要ですが、前が {inputs} 個、後が {outputs} 個あります。前後それぞれ 1 つのブロックに接続してください。
+	{other} has no place on the canvas, so the distances for {block} are not known. Place {other} on the canvas.	{other} がキャンバス上に配置されていないため、{block} の距離がわかりません。{other} をキャンバスに配置してください。
+	The flow {flow} asks for no entities. Set its “Units” to 1 or more.	フロー {flow} はエンティティを 1 つも求めていません。「数量」を 1 以上に設定してください。
+	The “Units” on the flow {flow} is ignored, because only a Split or join block takes several entities from one flow. Remove it.	フロー {flow} の「数量」は無視されます。1 つのフローから複数のエンティティを取るのは「分岐または結合」ブロックだけです。「数量」を削除してください。
+	No block makes batches, so {block} passes every entity through. Add a Batch block before it, or remove {block}.	バッチを作るブロックがないため、{block} はすべてのエンティティをそのまま通します。前に「バッチ」ブロックを追加するか、{block} を削除してください。
+	The stop condition names a block that does not exist. Choose a block that exists.	停止条件が、存在しないブロックを指定しています。存在するブロックを選んでください。
+	Set the count of the stop condition for {block} to 1 or more.	{block} の停止条件の回数を 1 以上に設定してください。
+	The stop condition waits for {block} to empty, but only a task can empty. Choose a task.	停止条件は {block} が空になるのを待ちますが、空になれるのはタスクだけです。タスクを選んでください。
+	The stop condition at {block} can be met before the warm-up ends. A run that stops during the warm-up has no statistics after it and is left out of the results. Shorten the warm-up, or stop later.	{block} の停止条件がウォームアップの終了前に満たされることがあります。ウォームアップ中に止まった実行にはその後の統計がないため、結果から除外されます。ウォームアップを短くするか、停止を遅くしてください。
+	Every run stopped before the warm-up ended, so no metric is reported. Shorten the warm-up, or stop later.	すべての実行がウォームアップの終了前に止まったため、指標が報告されません。ウォームアップを短くするか、停止を遅くしてください。
+	{replications} of {of} runs stopped before the warm-up ended, so their statistics are left out of every metric. Shorten the warm-up, or stop later.	{of} 回の実行のうち {replications} 回がウォームアップの終了前に止まったため、それらの統計はすべての指標から除外されます。ウォームアップを短くするか、停止を遅くしてください。
+	{block} is offered {load}% of the work its units can do, so its waiting room grows without limit and the results describe no steady state. Add units, or shorten the service.	{block} には、ユニットが処理できる作業の {load}% が来ているため、待機場所が際限なく増え、結果は定常状態を表しません。ユニットを増やすか、サービスを短くしてください。
+	{block} is busy {utilisation}% of the time, and at the end at least {backlog} entities are still waiting against {left} that left. Work arrives faster than it is done, so the results describe no steady state. Add units, or shorten the service.	{block} は時間の {utilisation}% が稼働中で、終了時にも少なくとも {backlog} 個のエンティティが待っており、退出したのは {left} 個です。作業が処理より速く到着しているため、結果は定常状態を表しません。ユニットを増やすか、サービスを短くしてください。
+	The experiment has one run, so its results cannot be told from chance. Set the number of runs to at least 2, and usually 10 or more.	実験の実行が 1 回だけなので、結果が偶然と区別できません。実行回数を 2 以上、通常は 10 以上にしてください。
+	{block} has a three-point estimate but no time to fit it to, so the estimate is ignored. Remove the estimate.	{block} には三点見積もりがありますが、当てはめる時間がないため、見積もりは無視されます。見積もりを削除してください。
+	The three-point estimate of {block} cannot be fitted: every point must be a finite number. Correct the points.	{block} の三点見積もりは当てはめられません。すべての点が有限の数でなければなりません。点を修正してください。
+	The three-point estimate of {block} cannot be fitted: the points must be in order, minimum, most likely, then maximum or 95th percentile. Correct the points.	{block} の三点見積もりは当てはめられません。点は最小値、最頻値、最大値または 95 パーセンタイルの順でなければなりません。点を修正してください。
+	The three-point estimate of {block} cannot be fitted: log-normal and Weibull estimates have no maximum. Give a 95th percentile instead.	{block} の三点見積もりは当てはめられません。対数正規分布とワイブル分布の見積もりには最大値がありません。代わりに 95 パーセンタイルを指定してください。
+	The time of {block} is no longer the one fitted from its three-point estimate. Fit it again, or remove the estimate.	{block} の時間が、三点見積もりから当てはめたものではなくなっています。もう一度当てはめるか、見積もりを削除してください。
+	In “{field}” of {block}, the normal distribution draws below 0 more than 1 time in 100, and each such draw counts as 0, so the times are longer on average than its mean. Use a truncated normal with a minimum of 0, or a log-normal.	{block} の「{field}」で、正規分布が 0 を下回る値を 100 回に 1 回より多く生成し、そのたびに 0 として扱われるため、時間が平均より長くなります。最小値を 0 にした切断正規分布か、対数正規分布を使ってください。
+	The entities of {block} do not add up: {came} came in or were inside at the start, but {went} left, were lost, gave up or are still inside.	{block} のエンティティ数が合いません: {came} 個が入ったか開始時に中にいましたが、{went} 個が出た、失われた、離脱した、または今も中にいます。
+	The entities of the model do not add up: {came} were created or inside at the start, but {went} reached Departures, left the model elsewhere or are still inside.	モデルのエンティティ数が合いません: {came} 個が作られたか開始時に中にいましたが、{went} 個が「退出」に到達した、モデルの別の場所から出た、または今も中にいます。
+	No entity left the model, of {came} created or inside at the start. Check that the routing leads to Departures and that the run is long enough for an entity to get through.	作られたか開始時に中にいた {came} 個のうち、モデルから出たエンティティがありません。経路が「退出」につながっていることと、エンティティが通り抜けられるだけ実行が長いことを確認してください。
+	Little's law does not hold at {block}: the time-average number inside was {mean}, but the entities' own times inside give {from_stays}.	{block} でリトルの法則が成り立ちません: 時間平均の内部の数は {mean} でしたが、各エンティティの滞在時間からは {from_stays} になります。
+	The utilisation of {block} counts {busy} units busy on average, but {working} were processing or setting up: units idle, blocked, off shift, failed or restarting were counted busy.	{block} の稼働率は平均 {busy} 個のユニットを稼働中と数えていますが、処理中または段取り中だったのは {working} 個です。待機、ブロック状態、シフト外、故障、再起動中のユニットが稼働中として数えられています。
+	The utilisation of {block} counts {busy} units busy on average, but {working} were processing or setting up: units at work were not counted busy.	{block} の稼働率は平均 {busy} 個のユニットを稼働中と数えていますが、処理中または段取り中だったのは {working} 個です。作業中のユニットが稼働中として数えられていません。
+	The shares of the time of the units of {block} in each state add up to {total}, not 1.	{block} のユニットの各状態の時間の割合の合計が、1 ではなく {total} です。
+	“{metric}” of {block} is {value}, outside 0 to 1 (0% to 100%).	{block} の「{metric}」は {value} で、0 から 1（0% から 100%）の範囲外です。
+	This was found in {replications} of {of} runs, and the furthest off is shown.	これは {of} 回の実行のうち {replications} 回で見つかりました。最も外れているものを表示しています。
+	This points to a fault in StochCraft rather than in the model. Please report it with the model.	これはモデルではなく StochCraft の不具合を示しています。モデルを添えて報告してください。
+	Angle	角度
+	Failed	故障
+	Off shift	シフト外
+	Processing	処理中
+	Radius	半径
+	Rise	上昇量
+	Speed empty	空荷時の速度
+	Speed loaded	積載時の速度
+	Turns	巻き数
+	Unload	荷下ろし
+	Lost	損失
+	An entity that leaves a waiting room before a unit takes it, because it has waited as long as it was willing to.	待てる限度まで待ったために、ユニットに引き取られる前に待機場所を離れたエンティティ。
+	An entity that does not join a waiting room at all, because the number already waiting put it off.	すでに待っている数を見て、待機場所にまったく加わらないエンティティ。
+	An entity that finds the waiting room full and takes the flow ticked “Turned away” instead of waiting.	待機場所が満員なのを見て、待たずに「受入拒否」にチェックしたフローを通るエンティティ。
+	An entity that leaves the model without reaching Departures: it found the waiting room full with nowhere else to go, or a decision with no way out for it.	「退出」に到達せずにモデルから出たエンティティ。待機場所が満員でほかに行き先がなかったか、分岐に出口がなかったものです。
+	Gave up on {id}	{id} の離脱
+	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the flow ticked “Gave up”, or leaves the model.	各エンティティは、到着時に抽選された時間を上限としてここで待ち、その後離脱します。「離脱」にチェックしたフローへ進むか、モデルから出ます。
+	Entities that do not join the waiting room take this flow at once (to try again later, say), instead of being lost; they count as balked here.	待機場所に加わらないエンティティは、すぐにこのフローを通ります（後で再試行するなど）。失われることはありません。ここでは入列断念として数えます。
+	The job stops at once: the entity goes back to the front of the waiting room for any server on shift, and the work done on it is wasted.	作業はすぐに止まります。エンティティはシフト中のいずれかのサーバを待つ待機場所の先頭に戻り、それまでの作業は無駄になります。
+	The connection drops and the client tries again: the entity goes back to the front of the waiting room at once, and the work done on it is wasted.	接続が切れてクライアントが再試行します。エンティティはすぐに待機場所の先頭に戻り、それまでの作業は無駄になります。
+	Ticked, entities queue up at the end while the rest keep moving. Unticked, the whole belt stops when the entity at the end cannot leave.	オンにすると、端でエンティティが順番待ちになり、残りは動き続けます。オフにすると、端のエンティティが出られないときにベルト全体が止まります。
+	Play run 1 step by step and see each block's waiting room on the diagram	実行 1 を1ステップずつ再生し、各ブロックの待機場所をダイアグラム上で確認します
+	Select a block to see its waiting room over time.	ブロックを選択すると、その待機場所の推移が表示されます。
+	Entities on conveyors over time	コンベヤ上のエンティティ数の推移
+	Entities in the model over time	モデル内のエンティティ数の推移
+	How long each entity spends on the conveyors.	各エンティティがコンベヤ上で過ごす時間。
+	No entity has left a conveyor yet	まだコンベヤを出たエンティティはありません
+	Share of entities by time on a conveyor, in {unit}	コンベヤ上の時間別のエンティティの割合（{unit}）
+	Time on conveyors: {n} entities between {lo} and {hi} {unit}	コンベヤ上の時間: {lo} から {hi} {unit} の間に {n} 個のエンティティ
+	{from} to {to} {unit}: {share} of entities ({n})	{from} から {to} {unit}: エンティティの {share}（{n}）
+	How many entities are on the conveyors over time.	コンベヤ上にあるエンティティ数の推移。
+	How many entities are in the model over time.	モデル内にあるエンティティ数の推移。
+	At {time} {unit}: {n} entities	{time} {unit} 時点: エンティティ {n} 個
+@plural	Makes {n} independent run of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval across them.	シード {seed} からモデルを {n} 回独立に実行します。各ブロックの結果には、95% 信頼区間の半幅が示されます。
 	Fonts	フォント
 	The full list of third-party licences is in the file THIRD-PARTY-LICENSES.html, which comes with the download.	サードパーティのライセンスの一覧は、ダウンロードに含まれるファイル THIRD-PARTY-LICENSES.html にあります。
 	Full list of third-party licences	サードパーティのライセンス一覧

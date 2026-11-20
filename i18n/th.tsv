@@ -21,8 +21,6 @@
 	A caller on hold: once a unit takes it, the entity stays.	ผู้โทรที่ถือสายรอ: เมื่อหน่วยรับไปแล้ว เอนทิตีจะอยู่ต่อ
 	A client that times out: if its time runs out during service, it gives up then, and the unit finishes the job anyway (wasted work).	ไคลเอนต์ที่หมดเวลา (timeout): หากเวลาหมดระหว่างให้บริการ จะเลิกในตอนนั้น และหน่วยยังทำงานนั้นจนเสร็จอยู่ดี (งานที่สูญเปล่า)
 	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	ไฟล์ใหม่มีเฉพาะแบบจำลอง: สิ่งที่ StochCraft ไม่เข้าใจใน {file} จะถูกละไว้
-	Abandoned	เลิกรอ
-	Abandoned on {id}	เลิกรอที่ {id}
 	About StochCraft	เกี่ยวกับ StochCraft
 	About {app}	เกี่ยวกับ {app}
 	Accent	สีเน้น
@@ -162,7 +160,6 @@
 	Duration	ระยะเวลา
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	การวิเคราะห์แต่ละแบบรันการทดลองหลายครั้งด้วยเมล็ดสุ่มเดียวกัน ความแตกต่างจึงมาจากการเปลี่ยนแปลง ไม่ใช่ความบังเอิญ อาจใช้เวลาสักครู่
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	แต่ละเอนทิตีจะใช้ทางเลือกแรกที่จัดหาให้ได้ครบทั้งหมดพร้อมกันในทันที และคืนหน่วยเหล่านั้นเมื่อออกไป
-	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	แต่ละเอนทิตีจะรอที่นี่ไม่เกินเวลาที่สุ่มให้เมื่อมาถึง แล้วจึงเลิกรอ: เอนทิตีจะไปทางออกที่ทำเครื่องหมายว่า "เลิกรอ" หรือออกจากแบบจำลอง
 	Each server (unit) is checked every so often, as a load balancer probes the servers behind it. One that fails, with too many waiting, is taken out of service for a restart, then comes back.	เซิร์ฟเวอร์ (หน่วย) แต่ละตัวจะถูกตรวจเป็นระยะ เหมือนตัวกระจายโหลดที่ตรวจเซิร์ฟเวอร์ที่อยู่เบื้องหลัง ตัวที่ไม่ผ่านการตรวจเพราะมีผู้รอมากเกินไปจะถูกนำออกจากการใช้งานเพื่อเริ่มระบบใหม่ แล้วจึงกลับมา
 	Edit	แก้ไข
 	Edit themes…	แก้ไขธีม…
@@ -412,7 +409,6 @@
 	Run	รัน
 	Run cancelled	ยกเลิกการรันแล้ว
 	Run experiment	รันการทดลอง
-	Play run 1 step by step and see each block's queue on the diagram	เล่นการรันรอบที่ 1 ทีละขั้นและดูคิวของแต่ละบล็อกบนแผนภาพ
 	Run the experiment ({shortcut})	รันการทดลอง ({shortcut})
 	Run the experiment again to see this result's spread.	รันการทดลองอีกครั้งเพื่อดูการกระจายของผลลัพธ์นี้
 	Run the experiment at each value of one parameter, and compare a result.	รันการทดลองที่แต่ละค่าของพารามิเตอร์หนึ่งตัว แล้วเปรียบเทียบผลลัพธ์
@@ -433,7 +429,6 @@
 	Scrap ratio	สัดส่วนของเสีย
 	Seed	เมล็ดสุ่ม
 	Select All	เลือกทั้งหมด
-	Select a block to see its queue over time.	เลือกบล็อกเพื่อดูคิวตามเวลา
 	Sender waits during transfer	ผู้ส่งรอระหว่างขนย้าย
 	Separate the values with semicolons or spaces.	คั่นค่าด้วยเครื่องหมายอัฒภาคหรือช่องว่าง
 	Sequential	แบบลำดับ
@@ -497,10 +492,8 @@
 	Text	ข้อความ
 	Text on accent	ข้อความบนสีเน้น
 	Text on header	ข้อความบนแถบส่วนหัว
-	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	การเชื่อมต่อหลุดและไคลเอนต์ลองใหม่: เอนทิตีจะกลับไปหัวคิวทันที และงานที่ทำกับมันแล้วจะสูญเปล่า
 	The entity waits on its server and the job carries on with what was left once the server is back.	เอนทิตีรออยู่ที่เซิร์ฟเวอร์ของมัน และงานจะทำต่อจากส่วนที่เหลือเมื่อเซิร์ฟเวอร์กลับมา
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more runs would narrow it.	ช่วงนี้ลงต่ำกว่าสัดส่วนเป้าหมาย {share} จึงยังไม่แสดงด้วยความเชื่อมั่น 95% ว่าบรรลุสัดส่วนนั้น การรันที่มากรอบขึ้นจะทำให้ช่วงแคบลง
-	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	งานหยุดทันที: เอนทิตีจะกลับไปหัวคิวสำหรับเซิร์ฟเวอร์ใดก็ได้ที่อยู่ในกะ และงานที่ทำกับมันแล้วจะสูญเปล่า
 	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	งานหยุดทันที เอนทิตีรออยู่ที่เซิร์ฟเวอร์ของมัน และงานจะทำต่อจากส่วนที่เหลือเมื่อเซิร์ฟเวอร์นั้นกลับเข้ากะอีกครั้ง
 	The last task with a resource it finished at	งานที่ใช้ทรัพยากรงานสุดท้ายที่ชิ้นงานผ่าน
 	The mean time to the stop condition is over the runs that met it only; the others ran to their time limit.	เวลาเฉลี่ยจนถึงเงื่อนไขหยุดคิดเฉพาะการรันที่ถึงเงื่อนไข รอบอื่นรันจนถึงขีดจำกัดเวลา
@@ -690,7 +683,6 @@ unit	yr	ปี
 	Balked on {id}	ไม่เข้าคิวที่ {id}
 	Balking	การไม่เข้าคิว
 	Count those in service	นับรวมที่กำลังรับบริการ
-	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	เอนทิตีที่ไม่เข้าคิวจะไปตามโฟลว์นี้ทันที (เช่น เพื่อลองใหม่ภายหลัง) แทนที่จะสูญเสีย ที่นี่นับเป็นการไม่เข้าคิว
 	Joins with probability	ความน่าจะเป็นที่เข้าคิว
 	Number waiting	จำนวนที่รอ
 	Share balked	สัดส่วนที่ไม่เข้าคิว
@@ -908,7 +900,6 @@ unit	yr	ปี
 @plural	Finished {n} run|Finished {n} runs	การรันเสร็จสิ้น {n} รอบ
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	เปิด {file} แล้ว (คำเตือน {n} รายการ)
 @plural	Removed {n} block|Removed {n} blocks	นำ {n} บล็อกออกแล้ว
-@plural	Makes {n} independent run of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	รันแบบจำลองอย่างอิสระ {n} รอบจากเมล็ดสุ่ม {seed} ผลลัพธ์ของแต่ละองค์ประกอบแสดงครึ่งหนึ่งของความกว้างช่วงความเชื่อมั่น 95% จากทุกรอบ
 @plural	The stop condition was met in {met} of {n} run, after {time} {unit} on average.|The stop condition was met in {met} of {n} runs, after {time} {unit} on average.	ถึงเงื่อนไขหยุดในการรัน {met} จาก {n} รอบ หลังจากเฉลี่ย {time} {unit}
 @plural	{done} of {n} run finished|{done} of {n} runs finished	การรันเสร็จแล้ว {done} จาก {n} รอบ
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} run|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} runs	{name}: {mean}{unit}\nช่วงความเชื่อมั่น 95% จาก {low} ถึง {high}{unit}\nจากการรัน {n} รอบ
@@ -938,7 +929,6 @@ unit	yr	ปี
 	kilometres	กิโลเมตร
 	inches	นิ้ว
 	feet	ฟุต
-	Ticked, items queue up at the end while the rest keep moving. Unticked, the whole belt stops when the item at the end cannot leave.	เมื่อเลือก ชิ้นงานจะต่อคิวที่ปลายทางขณะที่ชิ้นอื่นเคลื่อนต่อไป เมื่อไม่เลือก สายพานทั้งเส้นจะหยุดเมื่อชิ้นงานที่ปลายออกไม่ได้
 	A belt that carries entities from one end to the other. It has a length and a speed, and each entity takes a pitch of belt: its item length plus the gap kept free after it. So it holds at most length ÷ pitch entities and carries at most speed ÷ pitch per time unit. Accumulating: entities queue up at the end while the rest keep moving; otherwise the whole belt stops.	สายพานที่พาเอนทิตีจากปลายด้านหนึ่งไปอีกด้านหนึ่ง มีความยาวและความเร็ว และเอนทิตีแต่ละตัวใช้พื้นที่หนึ่งช่วงของสายพาน คือความยาวชิ้นงานบวกช่องว่างที่เว้นไว้ด้านหลัง ดังนั้นจึงรับได้สูงสุด ความยาว ÷ ช่วง เอนทิตี และพาไปได้สูงสุด ความเร็ว ÷ ช่วง ต่อหนึ่งหน่วยเวลา สะสม: เอนทิตีต่อคิวที่ปลายขณะที่ตัวอื่นเคลื่อนต่อไป มิฉะนั้นสายพานทั้งเส้นจะหยุด
 	Station	สถานี
 	Kind	ชนิด
@@ -992,19 +982,165 @@ unit	yr	ปี
 	Time on conveyors	เวลาบนสายพาน
 	No conveyors in this model	โมเดลนี้ไม่มีสายพาน
 	Fills in when the run ends	จะแสดงเมื่อการรันสิ้นสุด
-	How long each item spends on the conveyors.	แต่ละรายการอยู่บนสายพานนานเท่าใด
-	No item has left a conveyor yet	ยังไม่มีรายการใดออกจากสายพาน
-	Share of items by time on a conveyor, in {unit}	สัดส่วนของรายการตามเวลาบนสายพาน หน่วย {unit}
-	Time on conveyors: {n} items between {lo} and {hi} {unit}	เวลาบนสายพาน: {n} รายการระหว่าง {lo} ถึง {hi} {unit}
-	{from} to {to} {unit}: {share} of items ({n})	{from} ถึง {to} {unit}: {share} ของรายการ ({n})
-	Items on conveyors over time	รายการบนสายพานตามเวลา
-	Items in the model over time	รายการในโมเดลตามเวลา
-	How many items are on the conveyors over time.	มีกี่รายการบนสายพานตามเวลา
-	How many items are in the model over time.	มีกี่รายการในโมเดลตามเวลา
 	Nothing was recorded over time in these results	ผลลัพธ์นี้ไม่ได้บันทึกอะไรตามเวลา
-	At {time} {unit}: {n} items	ที่ {time} {unit}: {n} รายการ
 	Run the model to fill the dashboard	รันโมเดลเพื่อเติมแดชบอร์ด
 	The resource and conveyor charts show the last run until this one ends	แผนภูมิทรัพยากรและสายพานแสดงการรันครั้งล่าสุดจนกว่าครั้งนี้จะสิ้นสุด
+# Validation messages, new labels and word changes (issue #145)
+	The id “{id}” is not valid. Start an id with a letter or an underscore, then use only letters, digits, dots, hyphens and underscores.	รหัส “{id}” ไม่ถูกต้อง ให้รหัสขึ้นต้นด้วยตัวอักษรหรือขีดล่าง แล้วใช้เฉพาะตัวอักษร ตัวเลข จุด ยัติภังค์ และขีดล่าง
+	More than one block, flow, pool or calendar has the id “{id}”. Give each its own id.	มีบล็อก โฟลว์ กลุ่มทรัพยากร หรือปฏิทินมากกว่าหนึ่งรายการที่ใช้รหัส “{id}” ให้แต่ละรายการมีรหัสของตัวเอง
+	The flow {flow} uses a block that does not exist. Remove the flow, or connect it to a block that exists.	โฟลว์ {flow} ใช้บล็อกที่ไม่มีอยู่ ให้ลบโฟลว์นี้ หรือเชื่อมไปยังบล็อกที่มีอยู่
+	The flow {flow} leads into an Arrivals block, which takes no input. Remove the flow, or send it to another block.	โฟลว์ {flow} ไปยังบล็อกขาเข้า ซึ่งไม่รับอินพุต ให้ลบโฟลว์นี้ หรือส่งไปยังบล็อกอื่น
+	The flow {flow} leaves a Departures block, which has no output. Remove the flow, or start it from another block.	โฟลว์ {flow} ออกจากบล็อกขาออก ซึ่งไม่มีเอาต์พุต ให้ลบโฟลว์นี้ หรือเริ่มจากบล็อกอื่น
+	The flow {flow} leads from a block back to itself. Remove it, or send it to another block.	โฟลว์ {flow} วนจากบล็อกหนึ่งกลับมาที่ตัวเอง ให้ลบโฟลว์นี้ หรือส่งไปยังบล็อกอื่น
+	{block} has nowhere to send entities. Add a flow from it to the next block.	{block} ไม่มีที่ส่งเอนทิตีต่อ ให้เพิ่มโฟลว์จากบล็อกนี้ไปยังบล็อกถัดไป
+	{block} has {count} flows out, and only a Decision or a Split or join block can send entities down several. Remove the extra flows, or add a Decision block.	{block} มีโฟลว์ออก {count} เส้น และมีเพียงบล็อกการตัดสินใจหรือบล็อกแยกหรือรวมเท่านั้นที่ส่งเอนทิตีลงหลายเส้นได้ ให้ลบโฟลว์ส่วนเกิน หรือเพิ่มบล็อกการตัดสินใจ
+	In “{field}” of {block}, set “{param}” to a finite number.	ใน “{field}” ของ {block} ให้กำหนด “{param}” เป็นตัวเลขที่มีค่าจำกัด
+	In “{field}” of {block}, set “{param}” to a number above 0.	ใน “{field}” ของ {block} ให้กำหนด “{param}” เป็นตัวเลขที่มากกว่า 0
+	In “{field}” of {block}, set “{param}” to 0 or more.	ใน “{field}” ของ {block} ให้กำหนด “{param}” เป็น 0 หรือมากกว่า
+	In “{field}” of {block}, set “{param}” to 1 or more.	ใน “{field}” ของ {block} ให้กำหนด “{param}” เป็น 1 หรือมากกว่า
+	In “{field}” of {block}, set “{param}” to a number from 0 to 1.	ใน “{field}” ของ {block} ให้กำหนด “{param}” เป็นตัวเลขตั้งแต่ 0 ถึง 1
+	In “{field}” of {block}, set “Minimum” below “Maximum”, and any “Most likely” value between them.	ใน “{field}” ของ {block} ให้กำหนด “ค่าต่ำสุด” ให้น้อยกว่า “ค่าสูงสุด” และให้ค่า “ค่าที่เป็นไปได้มากที่สุด” (ถ้ามี) อยู่ระหว่างสองค่านั้น
+	In “{field}” of {block}, add data points whose probabilities add up to more than 0.	ใน “{field}” ของ {block} ให้เพิ่มจุดข้อมูลที่มีความน่าจะเป็นรวมกันมากกว่า 0
+	{block} would never have a unit to work with. Give it at least 1 unit.	{block} จะไม่มีหน่วยให้ทำงานด้วยเลย ให้กำหนดอย่างน้อย 1 หน่วย
+	{block} would make entities without end, because its “Time between arrivals” is always 0. Give it a time above 0, or set an “Arrival limit”.	{block} จะสร้างเอนทิตีไม่หยุด เพราะ “เวลาระหว่างการมาถึง” เป็น 0 เสมอ ให้กำหนดเวลาที่มากกว่า 0 หรือกำหนด “จำนวนขาเข้าสูงสุด”
+	The model has no Arrivals block, so nothing will happen. Add an Arrivals block.	แบบจำลองไม่มีบล็อกขาเข้า จึงไม่มีอะไรเกิดขึ้น ให้เพิ่มบล็อกขาเข้า
+	The model has no Departures block, so no time in system is measured. Add a Departures block.	แบบจำลองไม่มีบล็อกขาออก จึงไม่มีการวัดเวลาในระบบ ให้เพิ่มบล็อกขาออก
+	No entity can reach {block} from an Arrivals block. Connect it to a block that entities pass through.	ไม่มีเอนทิตีใดไปถึง {block} ได้จากบล็อกขาเข้า ให้เชื่อมไปยังบล็อกที่เอนทิตีผ่าน
+	Entities in {block} can never reach a Departures block. Connect it on towards Departures.	เอนทิตีใน {block} ไปไม่ถึงบล็อกขาออกเลย ให้เชื่อมต่อต่อไปยังบล็อกขาออก
+	Set the “{state}” power of {block} to a number of kilowatts, 0 or more.	ให้กำหนดกำลังไฟ “{state}” ของ {block} เป็นจำนวนกิโลวัตต์ ตั้งแต่ 0 ขึ้นไป
+	Set the warm-up of the experiment to 0 or more.	ให้กำหนดระยะอุ่นเครื่องของการทดลองเป็น 0 หรือมากกว่า
+	Set the duration of the experiment to more than 0.	ให้กำหนดระยะเวลาของการทดลองให้มากกว่า 0
+	Set the number of runs of the experiment to 1 or more.	ให้กำหนดจำนวนการรันของการทดลองเป็น 1 หรือมากกว่า
+	Set the layout scale (length units per drawing unit) to a finite number above 0.	ให้กำหนดมาตราส่วนของผัง (หน่วยความยาวต่อหนึ่งหน่วยภาพวาด) เป็นตัวเลขที่มีค่าจำกัดและมากกว่า 0
+	A property of {block} has no name. Give it a name, or remove it.	คุณสมบัติหนึ่งของ {block} ไม่มีชื่อ ให้ตั้งชื่อ หรือลบออก
+	{block} sets the property “{name}” twice. Keep one of them.	{block} กำหนดคุณสมบัติ “{name}” สองครั้ง ให้เก็บไว้เพียงรายการเดียว
+	The property “{name}” of {block} needs shares that are not negative and add up to more than 0. Change the shares.	คุณสมบัติ “{name}” ของ {block} ต้องมีสัดส่วนที่ไม่เป็นลบและรวมกันมากกว่า 0 ให้แก้ไขสัดส่วน
+	The property “{name}” has the type “{type2}” on {block} but “{type}” on another block. Give it one type everywhere.	คุณสมบัติ “{name}” มีชนิด “{type2}” บน {block} แต่มีชนิด “{type}” บนอีกบล็อกหนึ่ง ให้ใช้ชนิดเดียวกันทุกที่
+	The value of the property “{name}” on {block} does not fit its type, “{type}”. Change the value or the type.	ค่าของคุณสมบัติ “{name}” บน {block} ไม่ตรงกับชนิด “{type}” ให้แก้ค่าหรือชนิด
+	The expression for the property “{name}” on {block} cannot be used: {error}. Correct “{expression}”.	นิพจน์ของคุณสมบัติ “{name}” บน {block} ใช้ไม่ได้: {error} ให้แก้ “{expression}”
+	{block} reads the property “{name}”, which no block sets, so it would read as empty. Set it on an earlier block, or correct the name.	{block} อ่านคุณสมบัติ “{name}” ซึ่งไม่มีบล็อกใดกำหนด จึงจะอ่านได้ค่าว่าง ให้กำหนดไว้ที่บล็อกก่อนหน้า หรือแก้ชื่อ
+	The setup of {block} has times for particular changes but no property to watch. Choose a property under “Only when this property changes”.	การตั้งเครื่องของ {block} มีเวลาสำหรับการเปลี่ยนเฉพาะอย่าง แต่ไม่มีคุณสมบัติให้เฝ้าดู ให้เลือกคุณสมบัติใต้ “เฉพาะเมื่อคุณสมบัตินี้เปลี่ยน”
+	{block} has times for particular values but no property to read them from. Choose a property under “Service time by property”.	{block} มีเวลาสำหรับค่าเฉพาะ แต่ไม่มีคุณสมบัติให้อ่านค่า ให้เลือกคุณสมบัติใต้ “เวลาให้บริการตามคุณสมบัติ”
+	{block} has two times for the value “{value}”. Keep one.	{block} มีเวลาสองค่าสำหรับค่า “{value}” ให้เก็บไว้ค่าเดียว
+	Set the time of {block} for the value “{value}” to a mean of 0 or more.	ให้กำหนดเวลาของ {block} สำหรับค่า “{value}” เป็นค่าเฉลี่ย 0 หรือมากกว่า
+	The scrap at {block} counts against {other}, which is not a task with a resource. Choose a task with a resource.	ของเสียที่ {block} นับรวมกับ {other} ซึ่งไม่ใช่งานที่ใช้ทรัพยากร ให้เลือกงานที่ใช้ทรัพยากร
+	Set “Planned run time per item” of {block} to a mean above 0.	ให้กำหนด “เวลาเดินเครื่องตามแผนต่อชิ้น” ของ {block} เป็นค่าเฉลี่ยที่มากกว่า 0
+	Set “Time before giving up” of {block} to a mean of 0 or more.	ให้กำหนด “เวลาก่อนเลิกรอ” ของ {block} เป็นค่าเฉลี่ย 0 หรือมากกว่า
+	The flow {flow} is ticked “Gave up”, but only a task with a resource and a “Time before giving up” sends entities that give up. Untick it, or set a “Time before giving up” on {block}.	โฟลว์ {flow} ถูกเลือก “จำนวนที่เลิกรอ” แต่มีเพียงงานที่ใช้ทรัพยากรซึ่งมี “เวลาก่อนเลิกรอ” เท่านั้นที่ส่งเอนทิตีที่เลิกรอ ให้ยกเลิกการเลือก หรือกำหนด “เวลาก่อนเลิกรอ” ที่ {block}
+	{count} flows out of {block} are ticked “{way}”; at most one can be. Untick all but one.	มีโฟลว์ออกจาก {block} {count} เส้นที่ถูกเลือก “{way}” แต่เลือกได้อย่างมากหนึ่งเส้น ให้ยกเลิกการเลือกทั้งหมดยกเว้นหนึ่งเส้น
+	The flow {flow} is ticked “Turned away”, but only a task with a resource and a limited waiting room turns entities away. Untick it, or limit the waiting room of {block}.	โฟลว์ {flow} ถูกเลือก “ถูกปฏิเสธ” แต่มีเพียงงานที่ใช้ทรัพยากรซึ่งมีพื้นที่รอจำกัดเท่านั้นที่ปฏิเสธเอนทิตี ให้ยกเลิกการเลือก หรือจำกัดพื้นที่รอของ {block}
+	The flow {flow} is ticked both “Gave up” and “Turned away”. Keep one of them.	โฟลว์ {flow} ถูกเลือกทั้ง “จำนวนที่เลิกรอ” และ “ถูกปฏิเสธ” ให้เก็บไว้อย่างใดอย่างหนึ่ง
+	Set every chance of joining in the balking table of {block} to a number from 0 to 1.	ให้กำหนดความน่าจะเป็นที่เข้าคิวทุกค่าในตารางไม่เข้าคิวของ {block} เป็นตัวเลขตั้งแต่ 0 ถึง 1
+	Put the rows of the balking table of {block} in increasing order of “Number waiting”.	ให้เรียงแถวในตารางไม่เข้าคิวของ {block} ตาม “จำนวนที่รอ” จากน้อยไปมาก
+	The flow {flow} is ticked “Balked”, but only a task with a resource and balking sends entities that balk. Untick it, or turn on balking for {block}.	โฟลว์ {flow} ถูกเลือก “ไม่เข้าคิว” แต่มีเพียงงานที่ใช้ทรัพยากรซึ่งเปิดการไม่เข้าคิวเท่านั้นที่ส่งเอนทิตีที่ไม่เข้าคิว ให้ยกเลิกการเลือก หรือเปิดการไม่เข้าคิวให้ {block}
+	The flow {flow} is ticked “Balked” and also “Gave up” or “Turned away”. Keep one of them.	โฟลว์ {flow} ถูกเลือกทั้ง “ไม่เข้าคิว” และ “จำนวนที่เลิกรอ” หรือ “ถูกปฏิเสธ” ให้เก็บไว้อย่างใดอย่างหนึ่ง
+	The waiting room of {block} is set by calendar or per working server, but has no number of places, so it is unlimited. Give it a number of places, or make it fixed.	พื้นที่รอของ {block} กำหนดตามปฏิทินหรือตามเซิร์ฟเวอร์ที่ใช้งานอยู่ แต่ไม่มีจำนวนที่ จึงไม่จำกัด ให้กำหนดจำนวนที่ หรือเปลี่ยนเป็นค่าคงที่
+	The waiting room of {block} is set by calendar, but no calendar has a value. Add a value for a calendar, or make the waiting room fixed.	พื้นที่รอของ {block} กำหนดตามปฏิทิน แต่ไม่มีปฏิทินใดมีค่า ให้เพิ่มค่าสำหรับปฏิทิน หรือเปลี่ยนพื้นที่รอเป็นค่าคงที่
+	Set “Fails above, waiting per working server” of {block} to a number of 0 or more.	ให้กำหนด “ไม่ผ่านเมื่อเกิน (ผู้รอต่อเซิร์ฟเวอร์ที่ใช้งานอยู่)” ของ {block} เป็นตัวเลข 0 หรือมากกว่า
+	Set “Check every” of {block} to a mean above 0.	ให้กำหนด “ตรวจทุก” ของ {block} เป็นค่าเฉลี่ยที่มากกว่า 0
+	Set the demand of {block} to a number of parts above 0.	ให้กำหนดความต้องการของ {block} เป็นจำนวนชิ้นที่มากกว่า 0
+	The demand of {block} is per shift but names no calendar to say when the shifts are. Choose a calendar.	ความต้องการของ {block} เป็นแบบต่อกะ แต่ไม่ได้ระบุปฏิทินเพื่อบอกว่ากะอยู่ช่วงไหน ให้เลือกปฏิทิน
+	The demand of {block} names a calendar that does not exist. Choose a calendar that exists.	ความต้องการของ {block} ระบุปฏิทินที่ไม่มีอยู่ ให้เลือกปฏิทินที่มีอยู่
+	The probability {value} on the flow {flow} is not from 0 to 1. Enter a probability from 0 to 1.	ความน่าจะเป็น {value} บนโฟลว์ {flow} ไม่อยู่ในช่วง 0 ถึง 1 ให้ป้อนความน่าจะเป็นตั้งแต่ 0 ถึง 1
+	The probabilities of the flows out of {block} add up to {sum}, not 1, so they are used in proportion. Change them to add up to 1 if that is not what you want.	ความน่าจะเป็นของโฟลว์ที่ออกจาก {block} รวมกันได้ {sum} ไม่ใช่ 1 จึงใช้ตามสัดส่วน ให้แก้ให้รวมเป็น 1 หากนั่นไม่ใช่สิ่งที่ต้องการ
+	The condition on the flow {flow} cannot be used: {error}. Correct “{expression}”.	เงื่อนไขบนโฟลว์ {flow} ใช้ไม่ได้: {error} ให้แก้ “{expression}”
+	The condition on the flow {flow} is ignored, because only flows out of a Decision block choose a route. Remove the condition.	เงื่อนไขบนโฟลว์ {flow} ถูกละเว้น เพราะมีเพียงโฟลว์ที่ออกจากบล็อกการตัดสินใจเท่านั้นที่เลือกเส้นทาง ให้ลบเงื่อนไข
+	The probability on the flow {flow} is ignored, because only flows out of a Decision block choose a route. Remove the probability.	ความน่าจะเป็นบนโฟลว์ {flow} ถูกละเว้น เพราะมีเพียงโฟลว์ที่ออกจากบล็อกการตัดสินใจเท่านั้นที่เลือกเส้นทาง ให้ลบความน่าจะเป็น
+	The condition on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the condition.	เงื่อนไขบนโฟลว์ {flow} ถูกละเว้น เพราะการตัดสินใจส่งเอนทิตีไปยังคิวที่สั้นที่สุด ให้ลบเงื่อนไข
+	The probability on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the probability.	ความน่าจะเป็นบนโฟลว์ {flow} ถูกละเว้น เพราะการตัดสินใจส่งเอนทิตีไปยังคิวที่สั้นที่สุด ให้ลบความน่าจะเป็น
+	The default on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the default.	ค่าเริ่มต้นบนโฟลว์ {flow} ถูกละเว้น เพราะการตัดสินใจส่งเอนทิตีไปยังคิวที่สั้นที่สุด ให้ลบค่าเริ่มต้น
+	The probability on the flow {flow} is ignored, because the Decision routes by condition. Remove the probability.	ความน่าจะเป็นบนโฟลว์ {flow} ถูกละเว้น เพราะการตัดสินใจเลือกเส้นทางตามเงื่อนไข ให้ลบความน่าจะเป็น
+	The default flow of {block} is not one of its own flows out. Choose one of the flows out of {block} as the default.	โฟลว์เริ่มต้นของ {block} ไม่ใช่หนึ่งในโฟลว์ออกของบล็อกเอง ให้เลือกโฟลว์ออกเส้นใดเส้นหนึ่งของ {block} เป็นโฟลว์เริ่มต้น
+	{block} routes by condition but has no default flow, so an entity for which no condition holds leaves the model here. Choose a default flow.	{block} เลือกเส้นทางตามเงื่อนไข แต่ไม่มีโฟลว์เริ่มต้น เอนทิตีที่ไม่ตรงกับเงื่อนไขใดเลยจึงออกจากแบบจำลองที่นี่ ให้เลือกโฟลว์เริ่มต้น
+	{block} diverts entities but has no default flow, so an entity whose way is full has nowhere else to go. Choose a default flow.	{block} เบี่ยงเอนทิตี แต่ไม่มีโฟลว์เริ่มต้น เอนทิตีที่ทางของมันเต็มจึงไม่มีที่อื่นให้ไป ให้เลือกโฟลว์เริ่มต้น
+	{block} waits for an entity on the flow {flow}, which none can reach, so it never sends one on. Remove that flow, or connect it to a block that entities reach.	{block} รอเอนทิตีบนโฟลว์ {flow} ซึ่งไม่มีเอนทิตีใดไปถึงได้ จึงไม่เคยส่งเอนทิตีต่อ ให้ลบโฟลว์นั้น หรือเชื่อมไปยังบล็อกที่เอนทิตีไปถึง
+	{block} has a limited waiting room and is fed through {gateway}. While it is full, {gateway} holds up every entity behind it, and they wait before it without limit. Remove the gateway before {block}, or remove the limit.	{block} มีพื้นที่รอจำกัดและรับเอนทิตีผ่าน {gateway} ขณะที่เต็ม {gateway} จะกั้นเอนทิตีทุกตัวที่อยู่ข้างหลัง และเอนทิตีเหล่านั้นจะรออยู่ข้างหน้าโดยไม่จำกัด ให้ลบเกตเวย์ก่อนถึง {block} หรือลบขีดจำกัด
+	The limited waiting rooms of {loop} feed each other in a loop, so when all of them are full the loop deadlocks. Remove the limit on one of them, or break the loop.	พื้นที่รอที่จำกัดของ {loop} ป้อนเอนทิตีให้กันเป็นวง เมื่อเต็มทั้งหมดวงนี้จะติดตาย ให้ลบขีดจำกัดของหนึ่งในนั้น หรือตัดวงนี้
+	The pool {block} has no units. Give it at least 1 unit.	กลุ่มทรัพยากร {block} ไม่มีหน่วย ให้กำหนดอย่างน้อย 1 หน่วย
+	{block} names no resource it needs. Add one under “Needs”.	{block} ไม่ได้ระบุทรัพยากรที่ต้องใช้ ให้เพิ่มหนึ่งรายการใต้ “สิ่งที่ต้องใช้”
+	{block} needs a resource pool that does not exist. Choose a pool that exists.	{block} ต้องใช้กลุ่มทรัพยากรที่ไม่มีอยู่ ให้เลือกกลุ่มทรัพยากรที่มีอยู่
+	{block} needs units with the roles {roles}, which no pool has. Give a pool those roles, or change what {block} needs.	{block} ต้องใช้หน่วยที่มีบทบาท {roles} ซึ่งไม่มีกลุ่มทรัพยากรใดมี ให้กำหนดบทบาทเหล่านั้นให้กลุ่มทรัพยากร หรือเปลี่ยนสิ่งที่ {block} ต้องใช้
+	{block} needs {needed} units at once, but at most {available} exist, so this can never be met. Ask for fewer units, or add units to the pool.	{block} ต้องใช้ {needed} หน่วยพร้อมกัน แต่มีอยู่มากที่สุด {available} หน่วย จึงไม่มีวันเป็นไปตามนั้นได้ ให้ขอจำนวนหน่วยให้น้อยลง หรือเพิ่มหน่วยให้กลุ่มทรัพยากร
+	Set the priority of {block} to a finite number, not {value}.	ให้กำหนดลำดับความสำคัญของ {block} เป็นตัวเลขที่มีค่าจำกัด ไม่ใช่ {value}
+	No task uses the pool {block}. Add it to a task's needs, or remove the pool.	ไม่มีงานใดใช้กลุ่มทรัพยากร {block} ให้เพิ่มไว้ใน “สิ่งที่ต้องใช้” ของงาน หรือลบกลุ่มทรัพยากร
+	{block} has a value for a calendar that does not exist. Choose a calendar that exists, or remove the value.	{block} มีค่าสำหรับปฏิทินที่ไม่มีอยู่ ให้เลือกปฏิทินที่มีอยู่ หรือลบค่านั้น
+	The calendar {block} has no entries, so it is never active. Add an entry.	ปฏิทิน {block} ไม่มีรายการ จึงไม่เคยเปิดใช้งาน ให้เพิ่มรายการ
+	{block} allows no arrivals outside the calendars but names no calendar, so it never creates entities. Add arrivals by calendar, or allow arrivals outside calendars.	{block} ไม่อนุญาตให้มีขาเข้านอกปฏิทิน แต่ไม่ได้ระบุปฏิทิน จึงไม่เคยสร้างเอนทิตี ให้เพิ่มขาเข้าตามปฏิทิน หรืออนุญาตขาเข้านอกปฏิทิน
+	Set the batch size of {block} to 1 or more.	ให้กำหนดขนาดชุดของ {block} เป็น 1 หรือมากกว่า
+	Set “{field}” of the conveyor {block} to a finite number above 0.	ให้กำหนด “{field}” ของสายพานลำเลียง {block} เป็นตัวเลขที่มีค่าจำกัดและมากกว่า 0
+	Set “{field}” of the conveyor {block} to a finite number of 0 or more.	ให้กำหนด “{field}” ของสายพานลำเลียง {block} เป็นตัวเลขที่มีค่าจำกัดและเป็น 0 หรือมากกว่า
+	Set “{field}” of the conveyor {block} to a finite number other than 0.	ให้กำหนด “{field}” ของสายพานลำเลียง {block} เป็นตัวเลขที่มีค่าจำกัดและไม่ใช่ 0
+	The conveyor {block} is {length} long but each entity takes {pitch} (item length plus gap), so not even one fits. Lengthen the conveyor, or shorten the item or the gap.	สายพานลำเลียง {block} ยาว {length} แต่เอนทิตีแต่ละตัวใช้ {pitch} (ความยาวของชิ้นงานรวมช่องว่าง) จึงใส่ได้ไม่ถึงหนึ่งตัว ให้ทำสายพานให้ยาวขึ้น หรือลดความยาวของชิ้นงานหรือช่องว่าง
+	The drawn path of the conveyor {block} is {path_length} long, but its “Length” is {length}, so the drawing and the run disagree. Make “Length” match the path, or change the shape.	เส้นทางที่วาดของสายพานลำเลียง {block} ยาว {path_length} แต่ “ความยาว” คือ {length} ภาพวาดกับการรันจึงไม่ตรงกัน ให้ทำให้ “ความยาว” ตรงกับเส้นทาง หรือเปลี่ยนรูปทรง
+	{block} is a transport, which StochCraft does not simulate yet. Remove it to run the model.	{block} เป็นการขนส่ง ซึ่ง StochCraft ยังไม่จำลอง ให้ลบออกเพื่อรันแบบจำลอง
+	The pool {pool} of the transport {block} does not exist. Choose a pool that exists.	กลุ่มทรัพยากร {pool} ของการขนส่ง {block} ไม่มีอยู่ ให้เลือกกลุ่มทรัพยากรที่มีอยู่
+	The pool {pool} of the transport {block} is not mobile. Give the pool speeds and a home.	กลุ่มทรัพยากร {pool} ของการขนส่ง {block} ไม่เคลื่อนที่ ให้กำหนดความเร็วและจุดตั้งต้นให้กลุ่มทรัพยากร
+	Set “{field}” of the pool {block} to a finite number above 0.	ให้กำหนด “{field}” ของกลุ่มทรัพยากร {block} เป็นตัวเลขที่มีค่าจำกัดและมากกว่า 0
+	The home of the pool {block} is not a block of the model. Choose a block as its home.	จุดตั้งต้นของกลุ่มทรัพยากร {block} ไม่ใช่บล็อกของแบบจำลอง ให้เลือกบล็อกเป็นจุดตั้งต้น
+	The transport {block} needs one block before it, where it picks up, and one after it, where it drops off, but has {inputs} before and {outputs} after. Connect it to one block on each side.	การขนส่ง {block} ต้องมีบล็อกก่อนหน้าหนึ่งบล็อกซึ่งเป็นจุดรับ และบล็อกถัดไปหนึ่งบล็อกซึ่งเป็นจุดส่ง แต่มีก่อนหน้า {inputs} และถัดไป {outputs} ให้เชื่อมกับหนึ่งบล็อกในแต่ละด้าน
+	{other} has no place on the canvas, so the distances for {block} are not known. Place {other} on the canvas.	{other} ไม่มีตำแหน่งบนพื้นผิวหลัก จึงไม่ทราบระยะทางของ {block} ให้วาง {other} บนพื้นผิวหลัก
+	The flow {flow} asks for no entities. Set its “Units” to 1 or more.	โฟลว์ {flow} ไม่ขอเอนทิตีใดเลย ให้กำหนด “จำนวนหน่วย” ของโฟลว์นี้เป็น 1 หรือมากกว่า
+	The “Units” on the flow {flow} is ignored, because only a Split or join block takes several entities from one flow. Remove it.	“จำนวนหน่วย” บนโฟลว์ {flow} ถูกละเว้น เพราะมีเพียงบล็อกแยกหรือรวมเท่านั้นที่รับหลายเอนทิตีจากโฟลว์เดียว ให้ลบออก
+	No block makes batches, so {block} passes every entity through. Add a Batch block before it, or remove {block}.	ไม่มีบล็อกใดสร้างชุด {block} จึงปล่อยทุกเอนทิตีผ่านไป ให้เพิ่มบล็อกชุดก่อนหน้านี้ หรือลบ {block}
+	The stop condition names a block that does not exist. Choose a block that exists.	เงื่อนไขหยุดระบุบล็อกที่ไม่มีอยู่ ให้เลือกบล็อกที่มีอยู่
+	Set the count of the stop condition for {block} to 1 or more.	ให้กำหนดจำนวนของเงื่อนไขหยุดสำหรับ {block} เป็น 1 หรือมากกว่า
+	The stop condition waits for {block} to empty, but only a task can empty. Choose a task.	เงื่อนไขหยุดรอให้ {block} ว่าง แต่มีเพียงงานเท่านั้นที่ว่างได้ ให้เลือกงาน
+	The stop condition at {block} can be met before the warm-up ends. A run that stops during the warm-up has no statistics after it and is left out of the results. Shorten the warm-up, or stop later.	เงื่อนไขหยุดที่ {block} อาจเป็นจริงก่อนระยะอุ่นเครื่องสิ้นสุด การรันที่หยุดระหว่างระยะอุ่นเครื่องจะไม่มีสถิติหลังจากนั้นและถูกตัดออกจากผลลัพธ์ ให้ลดระยะอุ่นเครื่อง หรือหยุดช้าลง
+	Every run stopped before the warm-up ended, so no metric is reported. Shorten the warm-up, or stop later.	ทุกการรันหยุดก่อนระยะอุ่นเครื่องสิ้นสุด จึงไม่มีตัวชี้วัดใดถูกรายงาน ให้ลดระยะอุ่นเครื่อง หรือหยุดช้าลง
+	{replications} of {of} runs stopped before the warm-up ended, so their statistics are left out of every metric. Shorten the warm-up, or stop later.	การรัน {replications} จาก {of} รอบหยุดก่อนระยะอุ่นเครื่องสิ้นสุด สถิติของการรันเหล่านั้นจึงถูกตัดออกจากทุกตัวชี้วัด ให้ลดระยะอุ่นเครื่อง หรือหยุดช้าลง
+	{block} is offered {load}% of the work its units can do, so its waiting room grows without limit and the results describe no steady state. Add units, or shorten the service.	{block} ได้รับงาน {load}% ของงานที่หน่วยของมันทำได้ พื้นที่รอจึงโตขึ้นไม่จำกัดและผลลัพธ์ไม่ได้อธิบายสภาวะคงตัว ให้เพิ่มหน่วย หรือลดเวลาให้บริการ
+	{block} is busy {utilisation}% of the time, and at the end at least {backlog} entities are still waiting against {left} that left. Work arrives faster than it is done, so the results describe no steady state. Add units, or shorten the service.	{block} ไม่ว่าง {utilisation}% ของเวลา และเมื่อสิ้นสุดยังมีเอนทิตีรออยู่อย่างน้อย {backlog} ตัว เทียบกับ {left} ตัวที่ออกไป งานเข้ามาเร็วกว่าที่ทำเสร็จ ผลลัพธ์จึงไม่ได้อธิบายสภาวะคงตัว ให้เพิ่มหน่วย หรือลดเวลาให้บริการ
+	The experiment has one run, so its results cannot be told from chance. Set the number of runs to at least 2, and usually 10 or more.	การทดลองมีการรันเพียงรอบเดียว จึงแยกผลลัพธ์ออกจากความบังเอิญไม่ได้ ให้กำหนดจำนวนการรันอย่างน้อย 2 และโดยปกติ 10 ขึ้นไป
+	{block} has a three-point estimate but no time to fit it to, so the estimate is ignored. Remove the estimate.	{block} มีการประมาณสามจุด แต่ไม่มีเวลาให้ปรับค่า การประมาณจึงถูกละเว้น ให้ลบการประมาณ
+	The three-point estimate of {block} cannot be fitted: every point must be a finite number. Correct the points.	ปรับการประมาณสามจุดของ {block} ไม่ได้: ทุกจุดต้องเป็นตัวเลขที่มีค่าจำกัด ให้แก้จุดเหล่านั้น
+	The three-point estimate of {block} cannot be fitted: the points must be in order, minimum, most likely, then maximum or 95th percentile. Correct the points.	ปรับการประมาณสามจุดของ {block} ไม่ได้: จุดต้องเรียงตามลำดับ คือค่าต่ำสุด ค่าที่เป็นไปได้มากที่สุด แล้วค่าสูงสุดหรือเปอร์เซ็นไทล์ที่ 95 ให้แก้จุดเหล่านั้น
+	The three-point estimate of {block} cannot be fitted: log-normal and Weibull estimates have no maximum. Give a 95th percentile instead.	ปรับการประมาณสามจุดของ {block} ไม่ได้: การประมาณแบบล็อกนอร์มอลและไวบูลล์ไม่มีค่าสูงสุด ให้ระบุเปอร์เซ็นไทล์ที่ 95 แทน
+	The time of {block} is no longer the one fitted from its three-point estimate. Fit it again, or remove the estimate.	เวลาของ {block} ไม่ใช่ค่าที่ปรับจากการประมาณสามจุดอีกต่อไป ให้ปรับใหม่ หรือลบการประมาณ
+	In “{field}” of {block}, the normal distribution draws below 0 more than 1 time in 100, and each such draw counts as 0, so the times are longer on average than its mean. Use a truncated normal with a minimum of 0, or a log-normal.	ใน “{field}” ของ {block} การแจกแจงปกติสุ่มได้ค่าต่ำกว่า 0 มากกว่า 1 ครั้งใน 100 และค่าเช่นนั้นแต่ละค่านับเป็น 0 เวลาโดยเฉลี่ยจึงยาวกว่าค่าเฉลี่ยของมัน ให้ใช้การแจกแจงปกติแบบตัดปลายที่มีค่าต่ำสุด 0 หรือล็อกนอร์มอล
+	The entities of {block} do not add up: {came} came in or were inside at the start, but {went} left, were lost, gave up or are still inside.	เอนทิตีของ {block} ไม่ลงตัว: เข้ามาหรืออยู่ข้างในตอนเริ่ม {came} ตัว แต่ออกไป สูญเสีย เลิกรอ หรือยังอยู่ข้างใน {went} ตัว
+	The entities of the model do not add up: {came} were created or inside at the start, but {went} reached Departures, left the model elsewhere or are still inside.	เอนทิตีของแบบจำลองไม่ลงตัว: ถูกสร้างหรืออยู่ข้างในตอนเริ่ม {came} ตัว แต่ถึงบล็อกขาออก ออกจากแบบจำลองที่อื่น หรือยังอยู่ข้างใน {went} ตัว
+	No entity left the model, of {came} created or inside at the start. Check that the routing leads to Departures and that the run is long enough for an entity to get through.	ไม่มีเอนทิตีใดออกจากแบบจำลอง จาก {came} ตัวที่ถูกสร้างหรืออยู่ข้างในตอนเริ่ม ให้ตรวจว่าการกำหนดเส้นทางนำไปสู่บล็อกขาออก และการรันยาวพอให้เอนทิตีผ่านไปได้
+	Little's law does not hold at {block}: the time-average number inside was {mean}, but the entities' own times inside give {from_stays}.	กฎของลิตเทิลไม่เป็นจริงที่ {block}: ค่าเฉลี่ยตามเวลาของจำนวนที่อยู่ข้างในคือ {mean} แต่เวลาที่เอนทิตีอยู่ข้างในจริงให้ {from_stays}
+	The utilisation of {block} counts {busy} units busy on average, but {working} were processing or setting up: units idle, blocked, off shift, failed or restarting were counted busy.	อัตราการใช้ประโยชน์ของ {block} นับว่ามี {busy} หน่วยไม่ว่างโดยเฉลี่ย แต่กำลังประมวลผลหรือตั้งเครื่องเพียง {working} หน่วย: หน่วยที่ว่าง ถูกบล็อก นอกกะ ขัดข้อง หรือกำลังเริ่มระบบใหม่ ถูกนับว่าไม่ว่าง
+	The utilisation of {block} counts {busy} units busy on average, but {working} were processing or setting up: units at work were not counted busy.	อัตราการใช้ประโยชน์ของ {block} นับว่ามี {busy} หน่วยไม่ว่างโดยเฉลี่ย แต่กำลังประมวลผลหรือตั้งเครื่อง {working} หน่วย: หน่วยที่กำลังทำงานไม่ถูกนับว่าไม่ว่าง
+	The shares of the time of the units of {block} in each state add up to {total}, not 1.	สัดส่วนเวลาของหน่วยของ {block} ในแต่ละสถานะรวมกันได้ {total} ไม่ใช่ 1
+	“{metric}” of {block} is {value}, outside 0 to 1 (0% to 100%).	“{metric}” ของ {block} คือ {value} อยู่นอกช่วง 0 ถึง 1 (0% ถึง 100%)
+	This was found in {replications} of {of} runs, and the furthest off is shown.	พบสิ่งนี้ใน {replications} จาก {of} รอบของการรัน และแสดงรอบที่ห่างจากปกติมากที่สุด
+	This points to a fault in StochCraft rather than in the model. Please report it with the model.	นี่ชี้ไปที่ความผิดพลาดใน StochCraft ไม่ใช่ในแบบจำลอง โปรดรายงานพร้อมแบบจำลอง
+	Angle	มุม
+	Failed	ขัดข้อง
+	Off shift	นอกกะ
+	Processing	ประมวลผล
+	Radius	รัศมี
+	Rise	ระยะยก
+	Speed empty	ความเร็วขณะว่าง
+	Speed loaded	ความเร็วขณะบรรทุก
+	Turns	จำนวนรอบ
+	Unload	เวลาขนลง
+	Lost	สูญเสีย
+	An entity that leaves a waiting room before a unit takes it, because it has waited as long as it was willing to.	เอนทิตีที่ออกจากพื้นที่รอก่อนที่หน่วยจะรับไปทำ เพราะรอมานานเท่าที่ยอมรอแล้ว
+	An entity that does not join a waiting room at all, because the number already waiting put it off.	เอนทิตีที่ไม่เข้าพื้นที่รอเลย เพราะจำนวนที่รออยู่แล้วทำให้ไม่อยากเข้า
+	An entity that finds the waiting room full and takes the flow ticked “Turned away” instead of waiting.	เอนทิตีที่พบว่าพื้นที่รอเต็ม จึงไปตามโฟลว์ที่เลือก “ถูกปฏิเสธ” แทนที่จะรอ
+	An entity that leaves the model without reaching Departures: it found the waiting room full with nowhere else to go, or a decision with no way out for it.	เอนทิตีที่ออกจากแบบจำลองโดยไม่ถึงบล็อกขาออก: พบว่าพื้นที่รอเต็มและไม่มีทางอื่นไป หรือพบการตัดสินใจที่ไม่มีทางออกให้มัน
+	Gave up on {id}	เลิกรอที่ {id}
+	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the flow ticked “Gave up”, or leaves the model.	แต่ละเอนทิตีจะรอที่นี่ไม่เกินเวลาที่สุ่มให้เมื่อมาถึง แล้วจึงเลิกรอ: เอนทิตีจะไปตามโฟลว์ที่เลือก “จำนวนที่เลิกรอ” หรือออกจากแบบจำลอง
+	Entities that do not join the waiting room take this flow at once (to try again later, say), instead of being lost; they count as balked here.	เอนทิตีที่ไม่เข้าพื้นที่รอจะไปตามโฟลว์นี้ทันที (เช่น เพื่อลองใหม่ภายหลัง) แทนที่จะสูญเสีย ที่นี่นับเป็นการไม่เข้าคิว
+	The job stops at once: the entity goes back to the front of the waiting room for any server on shift, and the work done on it is wasted.	งานหยุดทันที: เอนทิตีจะกลับไปด้านหน้าของพื้นที่รอสำหรับเซิร์ฟเวอร์ใดก็ได้ที่อยู่ในกะ และงานที่ทำกับมันแล้วจะสูญเปล่า
+	The connection drops and the client tries again: the entity goes back to the front of the waiting room at once, and the work done on it is wasted.	การเชื่อมต่อหลุดและไคลเอนต์ลองใหม่: เอนทิตีจะกลับไปด้านหน้าของพื้นที่รอทันที และงานที่ทำกับมันแล้วจะสูญเปล่า
+	Ticked, entities queue up at the end while the rest keep moving. Unticked, the whole belt stops when the entity at the end cannot leave.	เมื่อเลือก เอนทิตีจะต่อคิวที่ปลายทางขณะที่เอนทิตีอื่นเคลื่อนต่อไป เมื่อไม่เลือก สายพานทั้งเส้นจะหยุดเมื่อเอนทิตีที่ปลายออกไม่ได้
+	Play run 1 step by step and see each block's waiting room on the diagram	เล่นการรันรอบที่ 1 ทีละขั้นและดูพื้นที่รอของแต่ละบล็อกบนแผนภาพ
+	Select a block to see its waiting room over time.	เลือกบล็อกเพื่อดูพื้นที่รอตามเวลา
+	Entities on conveyors over time	เอนทิตีบนสายพานตามเวลา
+	Entities in the model over time	เอนทิตีในโมเดลตามเวลา
+	How long each entity spends on the conveyors.	แต่ละเอนทิตีอยู่บนสายพานนานเท่าใด
+	No entity has left a conveyor yet	ยังไม่มีเอนทิตีใดออกจากสายพาน
+	Share of entities by time on a conveyor, in {unit}	สัดส่วนของเอนทิตีตามเวลาบนสายพาน หน่วย {unit}
+	Time on conveyors: {n} entities between {lo} and {hi} {unit}	เวลาบนสายพาน: {n} เอนทิตีระหว่าง {lo} ถึง {hi} {unit}
+	{from} to {to} {unit}: {share} of entities ({n})	{from} ถึง {to} {unit}: {share} ของเอนทิตี ({n})
+	How many entities are on the conveyors over time.	มีกี่เอนทิตีบนสายพานตามเวลา
+	How many entities are in the model over time.	มีกี่เอนทิตีในโมเดลตามเวลา
+	At {time} {unit}: {n} entities	ที่ {time} {unit}: {n} เอนทิตี
+@plural	Makes {n} independent run of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval across them.	รันแบบจำลองอย่างอิสระ {n} รอบจากเมล็ดสุ่ม {seed} ผลลัพธ์ของแต่ละบล็อกแสดงครึ่งหนึ่งของความกว้างช่วงความเชื่อมั่น 95% จากทุกรอบ
 	Fonts	แบบอักษร
 	The full list of third-party licences is in the file THIRD-PARTY-LICENSES.html, which comes with the download.	รายการสัญญาอนุญาตของบุคคลที่สามทั้งหมดอยู่ในไฟล์ THIRD-PARTY-LICENSES.html ซึ่งมาพร้อมกับการดาวน์โหลด
 	Full list of third-party licences	รายการสัญญาอนุญาตของบุคคลที่สามทั้งหมด

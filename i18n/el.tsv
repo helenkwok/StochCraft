@@ -21,8 +21,6 @@
 	A caller on hold: once a unit takes it, the entity stays.	Μια κλήση σε αναμονή: μόλις την αναλάβει μια μονάδα, η οντότητα μένει.
 	A client that times out: if its time runs out during service, it gives up then, and the unit finishes the job anyway (wasted work).	Ένας πελάτης με χρονικό όριο (timeout): αν ο χρόνος του λήξει κατά την εξυπηρέτηση, εγκαταλείπει τότε, και η μονάδα ολοκληρώνει τη δουλειά έτσι κι αλλιώς (σπαταλημένη δουλειά).
 	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	Το νέο αρχείο περιέχει μόνο το μοντέλο: ό,τι δεν κατανοεί το StochCraft στο {file} παραλείπεται.
-	Abandoned	Εγκατάλειψη
-	Abandoned on {id}	Εγκατάλειψη στο {id}
 	About StochCraft	Σχετικά με το StochCraft
 	About {app}	Σχετικά με το {app}
 	Accent	Χρώμα έμφασης
@@ -162,7 +160,6 @@
 	Duration	Διάρκεια
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Κάθε ανάλυση εκτελεί το πείραμα πολλές φορές με τον ίδιο σπόρο, ώστε οι διαφορές να οφείλονται στην αλλαγή και όχι στην τύχη. Μπορεί να διαρκέσει λίγο.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Κάθε οντότητα παίρνει την πρώτη από αυτές που μπορεί να ικανοποιηθεί τώρα, ολόκληρη μονομιάς, και επιστρέφει τις μονάδες όταν φεύγει από την εργασία.
-	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Κάθε οντότητα περιμένει εδώ το πολύ έναν χρόνο που κληρώνεται γι' αυτήν κατά την άφιξή της και μετά εγκαταλείπει: παίρνει την έξοδο με την ένδειξη «Εγκατάλειψη» ή φεύγει από το μοντέλο.
 	Each server (unit) is checked every so often, as a load balancer probes the servers behind it. One that fails, with too many waiting, is taken out of service for a restart, then comes back.	Κάθε εξυπηρετητής (μονάδα) ελέγχεται ανά διαστήματα, όπως ένας εξισορροπητής φόρτου ελέγχει τους εξυπηρετητές πίσω του. Όποιος αποτύχει, επειδή περιμένουν υπερβολικά πολλές, τίθεται εκτός λειτουργίας για επανεκκίνηση και μετά επιστρέφει.
 	Edit	Επεξεργασία
 	Edit themes…	Επεξεργασία θεμάτων…
@@ -412,7 +409,6 @@
 	Run	Εκτέλεση
 	Run cancelled	Η εκτέλεση ακυρώθηκε
 	Run experiment	Εκτέλεση πειράματος
-	Play run 1 step by step and see each block's queue on the diagram	Αναπαραγωγή της εκτέλεσης 1 βήμα προς βήμα με την ουρά κάθε μπλοκ στο διάγραμμα
 	Run the experiment ({shortcut})	Εκτέλεση πειράματος ({shortcut})
 	Run the experiment again to see this result's spread.	Εκτελέστε ξανά το πείραμα για να δείτε τη διασπορά αυτού του αποτελέσματος.
 	Run the experiment at each value of one parameter, and compare a result.	Εκτέλεση του πειράματος σε κάθε τιμή μιας παραμέτρου και σύγκριση ενός αποτελέσματος.
@@ -433,7 +429,6 @@
 	Scrap ratio	Ποσοστό σκάρτων
 	Seed	Αρχικός σπόρος
 	Select All	Επιλογή όλων
-	Select a block to see its queue over time.	Επιλέξτε ένα μπλοκ για να δείτε την ουρά του στη διάρκεια του χρόνου.
 	Sender waits during transfer	Ο αποστολέας περιμένει κατά τη μεταφορά
 	Separate the values with semicolons or spaces.	Διαχωρίστε τις τιμές με ερωτηματικά (;) ή κενά.
 	Sequential	Διαδοχικές
@@ -497,10 +492,8 @@
 	Text	Κείμενο
 	Text on accent	Κείμενο σε χρώμα έμφασης
 	Text on header	Κείμενο στην κεφαλίδα
-	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	Η σύνδεση πέφτει και ο πελάτης προσπαθεί ξανά: η οντότητα επιστρέφει αμέσως στην κεφαλή της ουράς, και η δουλειά που έγινε σε αυτήν σπαταλιέται.
 	The entity waits on its server and the job carries on with what was left once the server is back.	Η οντότητα περιμένει στον εξυπηρετητή της και η δουλειά συνεχίζεται με ό,τι απέμενε μόλις επιστρέψει ο εξυπηρετητής.
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more runs would narrow it.	Το διάστημα φτάνει κάτω από το ποσοστό-στόχο {share}, άρα δεν φαίνεται με εμπιστοσύνη 95% ότι το ποσοστό επιτυγχάνεται· περισσότερες εκτελέσεις θα το στένευαν.
-	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	Η δουλειά σταματά αμέσως: η οντότητα επιστρέφει στην κεφαλή της ουράς για οποιονδήποτε εξυπηρετητή σε βάρδια, και η δουλειά που έγινε σε αυτήν σπαταλιέται.
 	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	Η δουλειά σταματά αμέσως· η οντότητα περιμένει στον εξυπηρετητή της και η δουλειά συνεχίζεται με ό,τι απέμενε μόλις ο εξυπηρετητής αυτός είναι ξανά σε βάρδια.
 	The last task with a resource it finished at	Η τελευταία εργασία με πόρο από την οποία πέρασε το τεμάχιο
 	The mean time to the stop condition is over the runs that met it only; the others ran to their time limit.	Ο μέσος χρόνος ως τη συνθήκη διακοπής αφορά μόνο τις εκτελέσεις που την έφτασαν· οι υπόλοιπες διήρκεσαν ως το χρονικό τους όριο.
@@ -690,7 +683,6 @@ unit	yr	έτ
 	Balked on {id}	Μη είσοδος στο {id}
 	Balking	Μη είσοδος στην ουρά
 	Count those in service	Να μετρώνται και όσες εξυπηρετούνται
-	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Οι οντότητες που δεν μπαίνουν στην ουρά ακολουθούν αμέσως αυτή τη ροή (για να ξαναδοκιμάσουν αργότερα, ας πούμε), αντί να χαθούν· εδώ μετρώνται ως μη είσοδος.
 	Joins with probability	Μπαίνει στην ουρά με πιθανότητα
 	Number waiting	Πλήθος σε αναμονή
 	Share balked	Ποσοστό μη εισόδου
@@ -908,7 +900,6 @@ unit	yr	έτ
 @plural	Finished {n} run|Finished {n} runs	Ολοκληρώθηκε {n} εκτέλεση|Ολοκληρώθηκαν {n} εκτελέσεις
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	Άνοιξε το {file} ({n} προειδοποίηση)|Άνοιξε το {file} ({n} προειδοποιήσεις)
 @plural	Removed {n} block|Removed {n} blocks	Αφαιρέθηκε {n} μπλοκ|Αφαιρέθηκαν {n} μπλοκ
-@plural	Makes {n} independent run of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Κάνει {n} ανεξάρτητη εκτέλεση του μοντέλου με σπόρο {seed}. Τα αποτελέσματα κάθε στοιχείου περιλαμβάνουν το ημιπλάτος διαστήματος εμπιστοσύνης 95%.|Κάνει {n} ανεξάρτητες εκτελέσεις του μοντέλου με σπόρο {seed}. Τα αποτελέσματα κάθε στοιχείου περιλαμβάνουν το ημιπλάτος διαστήματος εμπιστοσύνης 95%.
 @plural	The stop condition was met in {met} of {n} run, after {time} {unit} on average.|The stop condition was met in {met} of {n} runs, after {time} {unit} on average.	Η συνθήκη διακοπής επιτεύχθηκε σε {met} από {n} εκτέλεση, κατά μέσο όρο μετά από {time} {unit}.|Η συνθήκη διακοπής επιτεύχθηκε σε {met} από {n} εκτελέσεις, κατά μέσο όρο μετά από {time} {unit}.
 @plural	{done} of {n} run finished|{done} of {n} runs finished	Ολοκληρώθηκε {done} από {n} εκτέλεση|Ολοκληρώθηκαν {done} από {n} εκτελέσεις
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} run|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} runs	{name}: {mean}{unit}\nΔιάστημα 95% από {low} έως {high}{unit}\nσε {n} εκτέλεση|{name}: {mean}{unit}\nΔιάστημα 95% από {low} έως {high}{unit}\nσε {n} εκτελέσεις
@@ -938,7 +929,6 @@ unit	yr	έτ
 	kilometres	χιλιόμετρα
 	inches	ίντσες
 	feet	πόδια
-	Ticked, items queue up at the end while the rest keep moving. Unticked, the whole belt stops when the item at the end cannot leave.	Αν είναι επιλεγμένο, τα αντικείμενα σχηματίζουν ουρά στο τέλος ενώ τα υπόλοιπα συνεχίζουν να κινούνται. Αν όχι, ολόκληρη η ταινία σταματά όταν το αντικείμενο στο τέλος δεν μπορεί να φύγει.
 	A belt that carries entities from one end to the other. It has a length and a speed, and each entity takes a pitch of belt: its item length plus the gap kept free after it. So it holds at most length ÷ pitch entities and carries at most speed ÷ pitch per time unit. Accumulating: entities queue up at the end while the rest keep moving; otherwise the whole belt stops.	Μια ταινία που μεταφέρει οντότητες από το ένα άκρο στο άλλο. Έχει μήκος και ταχύτητα, και κάθε οντότητα παίρνει ένα βήμα ταινίας: το μήκος του αντικειμένου της συν το κενό που μένει ελεύθερο πίσω της. Έτσι χωρά το πολύ μήκος ÷ βήμα οντότητες και μεταφέρει το πολύ ταχύτητα ÷ βήμα ανά μονάδα χρόνου. Συσσώρευση: οι οντότητες σχηματίζουν ουρά στο τέλος ενώ οι υπόλοιπες συνεχίζουν να κινούνται· αλλιώς σταματά ολόκληρη η ταινία.
 	Station	Σταθμός
 	Kind	Είδος
@@ -992,19 +982,165 @@ unit	yr	έτ
 	Time on conveyors	Χρόνος στους μεταφορικούς ιμάντες
 	No conveyors in this model	Δεν υπάρχουν μεταφορικοί ιμάντες σε αυτό το μοντέλο
 	Fills in when the run ends	Γεμίζει όταν τελειώσει η εκτέλεση
-	How long each item spends on the conveyors.	Πόσο χρόνο περνά κάθε αντικείμενο στους μεταφορικούς ιμάντες.
-	No item has left a conveyor yet	Κανένα αντικείμενο δεν έχει βγει ακόμη από ιμάντα
-	Share of items by time on a conveyor, in {unit}	Μερίδιο αντικειμένων ανά χρόνο σε ιμάντα, σε {unit}
-	Time on conveyors: {n} items between {lo} and {hi} {unit}	Χρόνος στους ιμάντες: {n} αντικείμενα μεταξύ {lo} και {hi} {unit}
-	{from} to {to} {unit}: {share} of items ({n})	Από {from} έως {to} {unit}: {share} των αντικειμένων ({n})
-	Items on conveyors over time	Αντικείμενα στους ιμάντες στον χρόνο
-	Items in the model over time	Αντικείμενα στο μοντέλο στον χρόνο
-	How many items are on the conveyors over time.	Πόσα αντικείμενα βρίσκονται στους ιμάντες στον χρόνο.
-	How many items are in the model over time.	Πόσα αντικείμενα βρίσκονται στο μοντέλο στον χρόνο.
 	Nothing was recorded over time in these results	Σε αυτά τα αποτελέσματα δεν καταγράφηκε τίποτα στον χρόνο
-	At {time} {unit}: {n} items	Τη στιγμή {time} {unit}: {n} αντικείμενα
 	Run the model to fill the dashboard	Εκτελέστε το μοντέλο για να γεμίσει ο πίνακας ελέγχου
 	The resource and conveyor charts show the last run until this one ends	Τα γραφήματα πόρων και ιμάντων δείχνουν την τελευταία εκτέλεση μέχρι να τελειώσει αυτή
+# Validation messages, new labels and word changes (issue #145)
+	The id “{id}” is not valid. Start an id with a letter or an underscore, then use only letters, digits, dots, hyphens and underscores.	Το id «{id}» δεν είναι έγκυρο. Ξεκινήστε το id με γράμμα ή κάτω παύλα και μετά χρησιμοποιήστε μόνο γράμματα, ψηφία, τελείες, παύλες και κάτω παύλες.
+	More than one block, flow, pool or calendar has the id “{id}”. Give each its own id.	Περισσότερα από ένα μπλοκ, ροές, δεξαμενές ή ημερολόγια έχουν το id «{id}». Δώστε σε καθένα δικό του id.
+	The flow {flow} uses a block that does not exist. Remove the flow, or connect it to a block that exists.	Η ροή {flow} χρησιμοποιεί ένα μπλοκ που δεν υπάρχει. Αφαιρέστε τη ροή ή συνδέστε την με ένα μπλοκ που υπάρχει.
+	The flow {flow} leads into an Arrivals block, which takes no input. Remove the flow, or send it to another block.	Η ροή {flow} οδηγεί σε ένα μπλοκ Αφίξεις, το οποίο δεν δέχεται είσοδο. Αφαιρέστε τη ροή ή στείλτε την σε άλλο μπλοκ.
+	The flow {flow} leaves a Departures block, which has no output. Remove the flow, or start it from another block.	Η ροή {flow} φεύγει από ένα μπλοκ Αναχωρήσεις, το οποίο δεν έχει έξοδο. Αφαιρέστε τη ροή ή ξεκινήστε την από άλλο μπλοκ.
+	The flow {flow} leads from a block back to itself. Remove it, or send it to another block.	Η ροή {flow} οδηγεί από ένα μπλοκ πίσω στον εαυτό του. Αφαιρέστε την ή στείλτε την σε άλλο μπλοκ.
+	{block} has nowhere to send entities. Add a flow from it to the next block.	Το μπλοκ {block} δεν έχει πού να στείλει οντότητες. Προσθέστε μια ροή από αυτό προς το επόμενο μπλοκ.
+	{block} has {count} flows out, and only a Decision or a Split or join block can send entities down several. Remove the extra flows, or add a Decision block.	Το μπλοκ {block} έχει {count} ροές εξόδου, και μόνο ένα μπλοκ Απόφαση ή Διαχωρισμός ή ένωση μπορεί να στείλει οντότητες από περισσότερες. Αφαιρέστε τις επιπλέον ροές ή προσθέστε ένα μπλοκ Απόφαση.
+	In “{field}” of {block}, set “{param}” to a finite number.	Στο «{field}» του μπλοκ {block}, ορίστε το «{param}» σε πεπερασμένο αριθμό.
+	In “{field}” of {block}, set “{param}” to a number above 0.	Στο «{field}» του μπλοκ {block}, ορίστε το «{param}» σε αριθμό μεγαλύτερο από 0.
+	In “{field}” of {block}, set “{param}” to 0 or more.	Στο «{field}» του μπλοκ {block}, ορίστε το «{param}» σε 0 ή περισσότερο.
+	In “{field}” of {block}, set “{param}” to 1 or more.	Στο «{field}» του μπλοκ {block}, ορίστε το «{param}» σε 1 ή περισσότερο.
+	In “{field}” of {block}, set “{param}” to a number from 0 to 1.	Στο «{field}» του μπλοκ {block}, ορίστε το «{param}» σε αριθμό από 0 έως 1.
+	In “{field}” of {block}, set “Minimum” below “Maximum”, and any “Most likely” value between them.	Στο «{field}» του μπλοκ {block}, ορίστε το «Ελάχιστο» κάτω από το «Μέγιστο» και κάθε τιμή «Πιθανότερη τιμή» ανάμεσά τους.
+	In “{field}” of {block}, add data points whose probabilities add up to more than 0.	Στο «{field}» του μπλοκ {block}, προσθέστε σημεία δεδομένων με πιθανότητες που αθροίζουν σε περισσότερο από 0.
+	{block} would never have a unit to work with. Give it at least 1 unit.	Το μπλοκ {block} δεν θα είχε ποτέ μονάδα για να δουλέψει. Δώστε του τουλάχιστον 1 μονάδα.
+	{block} would make entities without end, because its “Time between arrivals” is always 0. Give it a time above 0, or set an “Arrival limit”.	Το μπλοκ {block} θα δημιουργούσε οντότητες χωρίς τέλος, επειδή ο «Χρόνος μεταξύ αφίξεων» είναι πάντα 0. Δώστε του χρόνο μεγαλύτερο από 0 ή ορίστε ένα «Όριο αφίξεων».
+	The model has no Arrivals block, so nothing will happen. Add an Arrivals block.	Το μοντέλο δεν έχει μπλοκ Αφίξεις, άρα δεν θα συμβεί τίποτα. Προσθέστε ένα μπλοκ Αφίξεις.
+	The model has no Departures block, so no time in system is measured. Add a Departures block.	Το μοντέλο δεν έχει μπλοκ Αναχωρήσεις, άρα δεν μετριέται χρόνος στο σύστημα. Προσθέστε ένα μπλοκ Αναχωρήσεις.
+	No entity can reach {block} from an Arrivals block. Connect it to a block that entities pass through.	Καμία οντότητα δεν μπορεί να φτάσει στο μπλοκ {block} από ένα μπλοκ Αφίξεις. Συνδέστε το με ένα μπλοκ από το οποίο περνούν οντότητες.
+	Entities in {block} can never reach a Departures block. Connect it on towards Departures.	Οι οντότητες στο μπλοκ {block} δεν μπορούν ποτέ να φτάσουν σε ένα μπλοκ Αναχωρήσεις. Συνδέστε το παραπέρα προς τις Αναχωρήσεις.
+	Set the “{state}” power of {block} to a number of kilowatts, 0 or more.	Ορίστε την ισχύ «{state}» του μπλοκ {block} σε αριθμό κιλοβάτ, 0 ή περισσότερο.
+	Set the warm-up of the experiment to 0 or more.	Ορίστε την προθέρμανση του πειράματος σε 0 ή περισσότερο.
+	Set the duration of the experiment to more than 0.	Ορίστε τη διάρκεια του πειράματος σε περισσότερο από 0.
+	Set the number of runs of the experiment to 1 or more.	Ορίστε το πλήθος των εκτελέσεων του πειράματος σε 1 ή περισσότερο.
+	Set the layout scale (length units per drawing unit) to a finite number above 0.	Ορίστε την κλίμακα διάταξης (μονάδες μήκους ανά μονάδα σχεδίασης) σε πεπερασμένο αριθμό μεγαλύτερο από 0.
+	A property of {block} has no name. Give it a name, or remove it.	Μια ιδιότητα του μπλοκ {block} δεν έχει όνομα. Δώστε της όνομα ή αφαιρέστε την.
+	{block} sets the property “{name}” twice. Keep one of them.	Το μπλοκ {block} ορίζει την ιδιότητα «{name}» δύο φορές. Κρατήστε τη μία.
+	The property “{name}” of {block} needs shares that are not negative and add up to more than 0. Change the shares.	Η ιδιότητα «{name}» του μπλοκ {block} χρειάζεται ποσοστά που δεν είναι αρνητικά και αθροίζουν σε περισσότερο από 0. Αλλάξτε τα ποσοστά.
+	The property “{name}” has the type “{type2}” on {block} but “{type}” on another block. Give it one type everywhere.	Η ιδιότητα «{name}» έχει τον τύπο «{type2}» στο μπλοκ {block} αλλά «{type}» σε άλλο μπλοκ. Δώστε της έναν τύπο παντού.
+	The value of the property “{name}” on {block} does not fit its type, “{type}”. Change the value or the type.	Η τιμή της ιδιότητας «{name}» στο μπλοκ {block} δεν ταιριάζει με τον τύπο της, «{type}». Αλλάξτε την τιμή ή τον τύπο.
+	The expression for the property “{name}” on {block} cannot be used: {error}. Correct “{expression}”.	Η έκφραση για την ιδιότητα «{name}» στο μπλοκ {block} δεν μπορεί να χρησιμοποιηθεί: {error}. Διορθώστε το «{expression}».
+	{block} reads the property “{name}”, which no block sets, so it would read as empty. Set it on an earlier block, or correct the name.	Το μπλοκ {block} διαβάζει την ιδιότητα «{name}», την οποία δεν ορίζει κανένα μπλοκ, οπότε θα διαβαζόταν ως κενή. Ορίστε την σε προηγούμενο μπλοκ ή διορθώστε το όνομα.
+	The setup of {block} has times for particular changes but no property to watch. Choose a property under “Only when this property changes”.	Η προετοιμασία του μπλοκ {block} έχει χρόνους για συγκεκριμένες αλλαγές αλλά καμία ιδιότητα για παρακολούθηση. Επιλέξτε μια ιδιότητα στο «Μόνο όταν αλλάζει αυτή η ιδιότητα».
+	{block} has times for particular values but no property to read them from. Choose a property under “Service time by property”.	Το μπλοκ {block} έχει χρόνους για συγκεκριμένες τιμές αλλά καμία ιδιότητα από την οποία να τους διαβάζει. Επιλέξτε μια ιδιότητα στο «Χρόνος εξυπηρέτησης βάσει ιδιότητας».
+	{block} has two times for the value “{value}”. Keep one.	Το μπλοκ {block} έχει δύο χρόνους για την τιμή «{value}». Κρατήστε τον έναν.
+	Set the time of {block} for the value “{value}” to a mean of 0 or more.	Ορίστε τον χρόνο του μπλοκ {block} για την τιμή «{value}» σε μέση τιμή 0 ή περισσότερο.
+	The scrap at {block} counts against {other}, which is not a task with a resource. Choose a task with a resource.	Τα σκάρτα στο μπλοκ {block} υπολογίζονται έναντι του {other}, το οποίο δεν είναι εργασία με πόρο. Επιλέξτε μια εργασία με πόρο.
+	Set “Planned run time per item” of {block} to a mean above 0.	Ορίστε τον «Προγραμματισμένος χρόνος λειτουργίας ανά τεμάχιο» του μπλοκ {block} σε μέση τιμή μεγαλύτερη από 0.
+	Set “Time before giving up” of {block} to a mean of 0 or more.	Ορίστε τον «Χρόνος μέχρι την εγκατάλειψη» του μπλοκ {block} σε μέση τιμή 0 ή περισσότερο.
+	The flow {flow} is ticked “Gave up”, but only a task with a resource and a “Time before giving up” sends entities that give up. Untick it, or set a “Time before giving up” on {block}.	Η ροή {flow} είναι επιλεγμένη ως «Εγκατέλειψαν», αλλά μόνο μια εργασία με πόρο και «Χρόνο μέχρι την εγκατάλειψη» στέλνει οντότητες που εγκαταλείπουν. Αποεπιλέξτε την ή ορίστε «Χρόνο μέχρι την εγκατάλειψη» στο μπλοκ {block}.
+	{count} flows out of {block} are ticked “{way}”; at most one can be. Untick all but one.	{count} ροές εξόδου του μπλοκ {block} είναι επιλεγμένες ως «{way}»· το πολύ μία μπορεί να είναι. Αποεπιλέξτε όλες εκτός από μία.
+	The flow {flow} is ticked “Turned away”, but only a task with a resource and a limited waiting room turns entities away. Untick it, or limit the waiting room of {block}.	Η ροή {flow} είναι επιλεγμένη ως «Απόρριψη», αλλά μόνο μια εργασία με πόρο και περιορισμένο χώρο αναμονής απορρίπτει οντότητες. Αποεπιλέξτε την ή περιορίστε τον χώρο αναμονής του μπλοκ {block}.
+	The flow {flow} is ticked both “Gave up” and “Turned away”. Keep one of them.	Η ροή {flow} είναι επιλεγμένη και ως «Εγκατέλειψαν» και ως «Απόρριψη». Κρατήστε το ένα.
+	Set every chance of joining in the balking table of {block} to a number from 0 to 1.	Ορίστε κάθε πιθανότητα εισόδου στον πίνακα μη εισόδου του μπλοκ {block} σε αριθμό από 0 έως 1.
+	Put the rows of the balking table of {block} in increasing order of “Number waiting”.	Βάλτε τις γραμμές του πίνακα μη εισόδου του μπλοκ {block} σε αύξουσα σειρά του «Πλήθος σε αναμονή».
+	The flow {flow} is ticked “Balked”, but only a task with a resource and balking sends entities that balk. Untick it, or turn on balking for {block}.	Η ροή {flow} είναι επιλεγμένη ως «Μη είσοδος», αλλά μόνο μια εργασία με πόρο και μη είσοδο στέλνει οντότητες που δεν μπαίνουν. Αποεπιλέξτε την ή ενεργοποιήστε τη μη είσοδο για το μπλοκ {block}.
+	The flow {flow} is ticked “Balked” and also “Gave up” or “Turned away”. Keep one of them.	Η ροή {flow} είναι επιλεγμένη ως «Μη είσοδος» και επίσης ως «Εγκατέλειψαν» ή «Απόρριψη». Κρατήστε μία από αυτές.
+	The waiting room of {block} is set by calendar or per working server, but has no number of places, so it is unlimited. Give it a number of places, or make it fixed.	Ο χώρος αναμονής του μπλοκ {block} ορίζεται βάσει ημερολογίου ή ανά εξυπηρετητή σε λειτουργία, αλλά δεν έχει αριθμό θέσεων, άρα είναι απεριόριστος. Δώστε του αριθμό θέσεων ή κάντε τον σταθερό.
+	The waiting room of {block} is set by calendar, but no calendar has a value. Add a value for a calendar, or make the waiting room fixed.	Ο χώρος αναμονής του μπλοκ {block} ορίζεται βάσει ημερολογίου, αλλά κανένα ημερολόγιο δεν έχει τιμή. Προσθέστε μια τιμή για ένα ημερολόγιο ή κάντε τον χώρο αναμονής σταθερό.
+	Set “Fails above, waiting per working server” of {block} to a number of 0 or more.	Ορίστε το «Αποτυγχάνει πάνω από, σε αναμονή ανά εξυπηρετητή σε λειτουργία» του μπλοκ {block} σε αριθμό 0 ή περισσότερο.
+	Set “Check every” of {block} to a mean above 0.	Ορίστε το «Έλεγχος κάθε» του μπλοκ {block} σε μέση τιμή μεγαλύτερη από 0.
+	Set the demand of {block} to a number of parts above 0.	Ορίστε τη ζήτηση του μπλοκ {block} σε αριθμό τεμαχίων μεγαλύτερο από 0.
+	The demand of {block} is per shift but names no calendar to say when the shifts are. Choose a calendar.	Η ζήτηση του μπλοκ {block} είναι ανά βάρδια, αλλά δεν ορίζει ημερολόγιο που να λέει πότε είναι οι βάρδιες. Επιλέξτε ένα ημερολόγιο.
+	The demand of {block} names a calendar that does not exist. Choose a calendar that exists.	Η ζήτηση του μπλοκ {block} ορίζει ένα ημερολόγιο που δεν υπάρχει. Επιλέξτε ένα ημερολόγιο που υπάρχει.
+	The probability {value} on the flow {flow} is not from 0 to 1. Enter a probability from 0 to 1.	Η πιθανότητα {value} στη ροή {flow} δεν είναι από 0 έως 1. Εισαγάγετε μια πιθανότητα από 0 έως 1.
+	The probabilities of the flows out of {block} add up to {sum}, not 1, so they are used in proportion. Change them to add up to 1 if that is not what you want.	Οι πιθανότητες των ροών εξόδου του μπλοκ {block} αθροίζουν σε {sum}, όχι 1, άρα χρησιμοποιούνται αναλογικά. Αλλάξτε τες ώστε να αθροίζουν σε 1, αν δεν θέλετε αυτό.
+	The condition on the flow {flow} cannot be used: {error}. Correct “{expression}”.	Η συνθήκη στη ροή {flow} δεν μπορεί να χρησιμοποιηθεί: {error}. Διορθώστε το «{expression}».
+	The condition on the flow {flow} is ignored, because only flows out of a Decision block choose a route. Remove the condition.	Η συνθήκη στη ροή {flow} αγνοείται, επειδή μόνο οι ροές που φεύγουν από ένα μπλοκ Απόφαση επιλέγουν διαδρομή. Αφαιρέστε τη συνθήκη.
+	The probability on the flow {flow} is ignored, because only flows out of a Decision block choose a route. Remove the probability.	Η πιθανότητα στη ροή {flow} αγνοείται, επειδή μόνο οι ροές που φεύγουν από ένα μπλοκ Απόφαση επιλέγουν διαδρομή. Αφαιρέστε την πιθανότητα.
+	The condition on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the condition.	Η συνθήκη στη ροή {flow} αγνοείται, επειδή η Απόφαση στέλνει τις οντότητες στη συντομότερη ουρά. Αφαιρέστε τη συνθήκη.
+	The probability on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the probability.	Η πιθανότητα στη ροή {flow} αγνοείται, επειδή η Απόφαση στέλνει τις οντότητες στη συντομότερη ουρά. Αφαιρέστε την πιθανότητα.
+	The default on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the default.	Η προεπιλογή στη ροή {flow} αγνοείται, επειδή η Απόφαση στέλνει τις οντότητες στη συντομότερη ουρά. Αφαιρέστε την προεπιλογή.
+	The probability on the flow {flow} is ignored, because the Decision routes by condition. Remove the probability.	Η πιθανότητα στη ροή {flow} αγνοείται, επειδή η Απόφαση επιλέγει διαδρομή βάσει συνθήκης. Αφαιρέστε την πιθανότητα.
+	The default flow of {block} is not one of its own flows out. Choose one of the flows out of {block} as the default.	Η προεπιλεγμένη ροή του μπλοκ {block} δεν είναι μία από τις δικές του ροές εξόδου. Επιλέξτε ως προεπιλογή μία από τις ροές εξόδου του μπλοκ {block}.
+	{block} routes by condition but has no default flow, so an entity for which no condition holds leaves the model here. Choose a default flow.	Το μπλοκ {block} επιλέγει διαδρομή βάσει συνθήκης αλλά δεν έχει προεπιλεγμένη ροή, άρα μια οντότητα για την οποία δεν ισχύει καμία συνθήκη φεύγει από το μοντέλο εδώ. Επιλέξτε μια προεπιλεγμένη ροή.
+	{block} diverts entities but has no default flow, so an entity whose way is full has nowhere else to go. Choose a default flow.	Το μπλοκ {block} εκτρέπει οντότητες αλλά δεν έχει προεπιλεγμένη ροή, άρα μια οντότητα της οποίας ο δρόμος είναι γεμάτος δεν έχει πουθενά αλλού να πάει. Επιλέξτε μια προεπιλεγμένη ροή.
+	{block} waits for an entity on the flow {flow}, which none can reach, so it never sends one on. Remove that flow, or connect it to a block that entities reach.	Το μπλοκ {block} περιμένει μια οντότητα στη ροή {flow}, στην οποία δεν μπορεί να φτάσει καμία, άρα δεν στέλνει ποτέ καμία παραπέρα. Αφαιρέστε αυτή τη ροή ή συνδέστε την με ένα μπλοκ στο οποίο φτάνουν οντότητες.
+	{block} has a limited waiting room and is fed through {gateway}. While it is full, {gateway} holds up every entity behind it, and they wait before it without limit. Remove the gateway before {block}, or remove the limit.	Το μπλοκ {block} έχει περιορισμένο χώρο αναμονής και τροφοδοτείται μέσω της πύλης {gateway}. Όσο είναι γεμάτος, η πύλη {gateway} κρατά πίσω κάθε οντότητα που βρίσκεται πίσω της, και αυτές περιμένουν μπροστά της χωρίς όριο. Αφαιρέστε την πύλη πριν από το μπλοκ {block} ή αφαιρέστε το όριο.
+	The limited waiting rooms of {loop} feed each other in a loop, so when all of them are full the loop deadlocks. Remove the limit on one of them, or break the loop.	Οι περιορισμένοι χώροι αναμονής των μπλοκ {loop} τροφοδοτούν ο ένας τον άλλον σε βρόχο, άρα όταν γεμίσουν όλοι ο βρόχος κολλάει. Αφαιρέστε το όριο από έναν από αυτούς ή σπάστε τον βρόχο.
+	The pool {block} has no units. Give it at least 1 unit.	Η δεξαμενή {block} δεν έχει μονάδες. Δώστε της τουλάχιστον 1 μονάδα.
+	{block} names no resource it needs. Add one under “Needs”.	Το μπλοκ {block} δεν ορίζει κανέναν πόρο που χρειάζεται. Προσθέστε έναν στις «Ανάγκες».
+	{block} needs a resource pool that does not exist. Choose a pool that exists.	Το μπλοκ {block} χρειάζεται μια δεξαμενή πόρων που δεν υπάρχει. Επιλέξτε μια δεξαμενή που υπάρχει.
+	{block} needs units with the roles {roles}, which no pool has. Give a pool those roles, or change what {block} needs.	Το μπλοκ {block} χρειάζεται μονάδες με τους ρόλους {roles}, που δεν τους έχει καμία δεξαμενή. Δώστε σε μια δεξαμενή αυτούς τους ρόλους ή αλλάξτε τι χρειάζεται το μπλοκ {block}.
+	{block} needs {needed} units at once, but at most {available} exist, so this can never be met. Ask for fewer units, or add units to the pool.	Το μπλοκ {block} χρειάζεται {needed} μονάδες ταυτόχρονα, αλλά υπάρχουν το πολύ {available}, άρα αυτό δεν μπορεί ποτέ να ικανοποιηθεί. Ζητήστε λιγότερες μονάδες ή προσθέστε μονάδες στη δεξαμενή.
+	Set the priority of {block} to a finite number, not {value}.	Ορίστε την προτεραιότητα του μπλοκ {block} σε πεπερασμένο αριθμό, όχι {value}.
+	No task uses the pool {block}. Add it to a task's needs, or remove the pool.	Καμία εργασία δεν χρησιμοποιεί τη δεξαμενή {block}. Προσθέστε την στις ανάγκες μιας εργασίας ή αφαιρέστε τη δεξαμενή.
+	{block} has a value for a calendar that does not exist. Choose a calendar that exists, or remove the value.	Το μπλοκ {block} έχει τιμή για ένα ημερολόγιο που δεν υπάρχει. Επιλέξτε ένα ημερολόγιο που υπάρχει ή αφαιρέστε την τιμή.
+	The calendar {block} has no entries, so it is never active. Add an entry.	Το ημερολόγιο {block} δεν έχει καταχωρίσεις, άρα δεν είναι ποτέ ενεργό. Προσθέστε μια καταχώριση.
+	{block} allows no arrivals outside the calendars but names no calendar, so it never creates entities. Add arrivals by calendar, or allow arrivals outside calendars.	Το μπλοκ {block} δεν επιτρέπει αφίξεις εκτός ημερολογίων αλλά δεν ορίζει ημερολόγιο, άρα δεν δημιουργεί ποτέ οντότητες. Προσθέστε αφίξεις ανά ημερολόγιο ή επιτρέψτε αφίξεις εκτός ημερολογίων.
+	Set the batch size of {block} to 1 or more.	Ορίστε το μέγεθος παρτίδας του μπλοκ {block} σε 1 ή περισσότερο.
+	Set “{field}” of the conveyor {block} to a finite number above 0.	Ορίστε το «{field}» του μεταφορέα {block} σε πεπερασμένο αριθμό μεγαλύτερο από 0.
+	Set “{field}” of the conveyor {block} to a finite number of 0 or more.	Ορίστε το «{field}» του μεταφορέα {block} σε πεπερασμένο αριθμό 0 ή περισσότερο.
+	Set “{field}” of the conveyor {block} to a finite number other than 0.	Ορίστε το «{field}» του μεταφορέα {block} σε πεπερασμένο αριθμό διαφορετικό από 0.
+	The conveyor {block} is {length} long but each entity takes {pitch} (item length plus gap), so not even one fits. Lengthen the conveyor, or shorten the item or the gap.	Ο μεταφορέας {block} έχει μήκος {length}, αλλά κάθε οντότητα παίρνει {pitch} (μήκος αντικειμένου συν κενό), άρα δεν χωράει ούτε μία. Αυξήστε το μήκος του μεταφορέα ή μειώστε το αντικείμενο ή το κενό.
+	The drawn path of the conveyor {block} is {path_length} long, but its “Length” is {length}, so the drawing and the run disagree. Make “Length” match the path, or change the shape.	Η σχεδιασμένη διαδρομή του μεταφορέα {block} έχει μήκος {path_length}, αλλά το «Μήκος» του είναι {length}, άρα το σχέδιο και η εκτέλεση διαφωνούν. Κάντε το «Μήκος» να ταιριάζει με τη διαδρομή ή αλλάξτε το σχήμα.
+	{block} is a transport, which StochCraft does not simulate yet. Remove it to run the model.	Το μπλοκ {block} είναι μεταφορά, την οποία το StochCraft δεν προσομοιώνει ακόμη. Αφαιρέστε το για να εκτελέσετε το μοντέλο.
+	The pool {pool} of the transport {block} does not exist. Choose a pool that exists.	Η δεξαμενή {pool} της μεταφοράς {block} δεν υπάρχει. Επιλέξτε μια δεξαμενή που υπάρχει.
+	The pool {pool} of the transport {block} is not mobile. Give the pool speeds and a home.	Η δεξαμενή {pool} της μεταφοράς {block} δεν είναι κινητή. Δώστε στη δεξαμενή ταχύτητες και μια έδρα.
+	Set “{field}” of the pool {block} to a finite number above 0.	Ορίστε το «{field}» της δεξαμενής {block} σε πεπερασμένο αριθμό μεγαλύτερο από 0.
+	The home of the pool {block} is not a block of the model. Choose a block as its home.	Η έδρα της δεξαμενής {block} δεν είναι μπλοκ του μοντέλου. Επιλέξτε ένα μπλοκ ως έδρα της.
+	The transport {block} needs one block before it, where it picks up, and one after it, where it drops off, but has {inputs} before and {outputs} after. Connect it to one block on each side.	Η μεταφορά {block} χρειάζεται ένα μπλοκ πριν από αυτήν, από όπου παραλαμβάνει, και ένα μετά, όπου παραδίδει, αλλά έχει πριν: {inputs} και μετά: {outputs}. Συνδέστε την με ένα μπλοκ σε κάθε πλευρά.
+	{other} has no place on the canvas, so the distances for {block} are not known. Place {other} on the canvas.	Το μπλοκ {other} δεν έχει θέση στην κύρια επιφάνεια, άρα οι αποστάσεις για το μπλοκ {block} δεν είναι γνωστές. Τοποθετήστε το μπλοκ {other} στην κύρια επιφάνεια.
+	The flow {flow} asks for no entities. Set its “Units” to 1 or more.	Η ροή {flow} δεν ζητά καμία οντότητα. Ορίστε τις «Μονάδες» της σε 1 ή περισσότερες.
+	The “Units” on the flow {flow} is ignored, because only a Split or join block takes several entities from one flow. Remove it.	Οι «Μονάδες» στη ροή {flow} αγνοούνται, επειδή μόνο ένα μπλοκ Διαχωρισμός ή ένωση παίρνει πολλές οντότητες από μία ροή. Αφαιρέστε τες.
+	No block makes batches, so {block} passes every entity through. Add a Batch block before it, or remove {block}.	Κανένα μπλοκ δεν φτιάχνει παρτίδες, άρα το μπλοκ {block} αφήνει κάθε οντότητα να περάσει. Προσθέστε ένα μπλοκ Παρτίδα πριν από αυτό ή αφαιρέστε το μπλοκ {block}.
+	The stop condition names a block that does not exist. Choose a block that exists.	Η συνθήκη διακοπής ορίζει ένα μπλοκ που δεν υπάρχει. Επιλέξτε ένα μπλοκ που υπάρχει.
+	Set the count of the stop condition for {block} to 1 or more.	Ορίστε το πλήθος της συνθήκης διακοπής για το μπλοκ {block} σε 1 ή περισσότερο.
+	The stop condition waits for {block} to empty, but only a task can empty. Choose a task.	Η συνθήκη διακοπής περιμένει το μπλοκ {block} να αδειάσει, αλλά μόνο μια εργασία μπορεί να αδειάσει. Επιλέξτε μια εργασία.
+	The stop condition at {block} can be met before the warm-up ends. A run that stops during the warm-up has no statistics after it and is left out of the results. Shorten the warm-up, or stop later.	Η συνθήκη διακοπής στο μπλοκ {block} μπορεί να ικανοποιηθεί πριν τελειώσει η προθέρμανση. Μια εκτέλεση που σταματά κατά την προθέρμανση δεν έχει στατιστικά μετά από αυτήν και αποκλείεται από τα αποτελέσματα. Συντομεύστε την προθέρμανση ή σταματήστε αργότερα.
+	Every run stopped before the warm-up ended, so no metric is reported. Shorten the warm-up, or stop later.	Κάθε εκτέλεση σταμάτησε πριν τελειώσει η προθέρμανση, άρα δεν αναφέρεται καμία μετρική. Συντομεύστε την προθέρμανση ή σταματήστε αργότερα.
+	{replications} of {of} runs stopped before the warm-up ended, so their statistics are left out of every metric. Shorten the warm-up, or stop later.	Από τις {of} εκτελέσεις, οι {replications} σταμάτησαν πριν τελειώσει η προθέρμανση, άρα τα στατιστικά τους αποκλείονται από κάθε μετρική. Συντομεύστε την προθέρμανση ή σταματήστε αργότερα.
+	{block} is offered {load}% of the work its units can do, so its waiting room grows without limit and the results describe no steady state. Add units, or shorten the service.	Το μπλοκ {block} δέχεται {load}% της δουλειάς που μπορούν να κάνουν οι μονάδες του, άρα ο χώρος αναμονής του μεγαλώνει χωρίς όριο και τα αποτελέσματα δεν περιγράφουν μόνιμη κατάσταση. Προσθέστε μονάδες ή συντομεύστε την εξυπηρέτηση.
+	{block} is busy {utilisation}% of the time, and at the end at least {backlog} entities are still waiting against {left} that left. Work arrives faster than it is done, so the results describe no steady state. Add units, or shorten the service.	Το μπλοκ {block} είναι απασχολημένο {utilisation}% του χρόνου και στο τέλος τουλάχιστον {backlog} οντότητες περιμένουν ακόμη, έναντι {left} που έφυγαν. Η δουλειά φτάνει πιο γρήγορα απ' όσο γίνεται, άρα τα αποτελέσματα δεν περιγράφουν μόνιμη κατάσταση. Προσθέστε μονάδες ή συντομεύστε την εξυπηρέτηση.
+	The experiment has one run, so its results cannot be told from chance. Set the number of runs to at least 2, and usually 10 or more.	Το πείραμα έχει μία εκτέλεση, άρα τα αποτελέσματά του δεν διακρίνονται από την τύχη. Ορίστε το πλήθος των εκτελέσεων σε τουλάχιστον 2, και συνήθως 10 ή περισσότερες.
+	{block} has a three-point estimate but no time to fit it to, so the estimate is ignored. Remove the estimate.	Το μπλοκ {block} έχει εκτίμηση τριών σημείων αλλά κανέναν χρόνο στον οποίο να προσαρμοστεί, άρα η εκτίμηση αγνοείται. Αφαιρέστε την εκτίμηση.
+	The three-point estimate of {block} cannot be fitted: every point must be a finite number. Correct the points.	Η εκτίμηση τριών σημείων του μπλοκ {block} δεν μπορεί να προσαρμοστεί: κάθε σημείο πρέπει να είναι πεπερασμένος αριθμός. Διορθώστε τα σημεία.
+	The three-point estimate of {block} cannot be fitted: the points must be in order, minimum, most likely, then maximum or 95th percentile. Correct the points.	Η εκτίμηση τριών σημείων του μπλοκ {block} δεν μπορεί να προσαρμοστεί: τα σημεία πρέπει να είναι σε σειρά, ελάχιστο, πιθανότερη τιμή και μετά μέγιστο ή 95ο εκατοστημόριο. Διορθώστε τα σημεία.
+	The three-point estimate of {block} cannot be fitted: log-normal and Weibull estimates have no maximum. Give a 95th percentile instead.	Η εκτίμηση τριών σημείων του μπλοκ {block} δεν μπορεί να προσαρμοστεί: οι εκτιμήσεις Λογαριθμοκανονική και Βάιμπουλ δεν έχουν μέγιστο. Δώστε αντί γι' αυτό 95ο εκατοστημόριο.
+	The time of {block} is no longer the one fitted from its three-point estimate. Fit it again, or remove the estimate.	Ο χρόνος του μπλοκ {block} δεν είναι πλέον αυτός που προσαρμόστηκε από την εκτίμηση τριών σημείων. Προσαρμόστε τον ξανά ή αφαιρέστε την εκτίμηση.
+	In “{field}” of {block}, the normal distribution draws below 0 more than 1 time in 100, and each such draw counts as 0, so the times are longer on average than its mean. Use a truncated normal with a minimum of 0, or a log-normal.	Στο «{field}» του μπλοκ {block}, η κανονική κατανομή δίνει τιμές κάτω από 0 πάνω από 1 φορά στις 100 και κάθε τέτοια τιμή μετράει ως 0, άρα οι χρόνοι είναι κατά μέσο όρο μεγαλύτεροι από τη μέση τιμή της. Χρησιμοποιήστε αποκομμένη κανονική με ελάχιστο 0 ή λογαριθμοκανονική.
+	The entities of {block} do not add up: {came} came in or were inside at the start, but {went} left, were lost, gave up or are still inside.	Οι οντότητες του μπλοκ {block} δεν ισοζυγούν: {came} μπήκαν ή ήταν μέσα στην αρχή, αλλά {went} έφυγαν, χάθηκαν, εγκατέλειψαν ή είναι ακόμη μέσα.
+	The entities of the model do not add up: {came} were created or inside at the start, but {went} reached Departures, left the model elsewhere or are still inside.	Οι οντότητες του μοντέλου δεν ισοζυγούν: {came} δημιουργήθηκαν ή ήταν μέσα στην αρχή, αλλά {went} έφτασαν στις Αναχωρήσεις, έφυγαν από το μοντέλο αλλού ή είναι ακόμη μέσα.
+	No entity left the model, of {came} created or inside at the start. Check that the routing leads to Departures and that the run is long enough for an entity to get through.	Καμία οντότητα δεν έφυγε από το μοντέλο, από {came} που δημιουργήθηκαν ή ήταν μέσα στην αρχή. Ελέγξτε ότι η δρομολόγηση οδηγεί στις Αναχωρήσεις και ότι η εκτέλεση είναι αρκετά μεγάλη ώστε να περάσει μια οντότητα.
+	Little's law does not hold at {block}: the time-average number inside was {mean}, but the entities' own times inside give {from_stays}.	Ο νόμος του Little δεν ισχύει στο μπλοκ {block}: ο χρονικός μέσος όρος των οντοτήτων μέσα ήταν {mean}, αλλά οι δικοί τους χρόνοι παραμονής δίνουν {from_stays}.
+	The utilisation of {block} counts {busy} units busy on average, but {working} were processing or setting up: units idle, blocked, off shift, failed or restarting were counted busy.	Ο βαθμός χρησιμοποίησης του μπλοκ {block} μετρά {busy} μονάδες απασχολημένες κατά μέσο όρο, αλλά {working} επεξεργάζονταν ή προετοιμάζονταν: μονάδες σε αδράνεια, αποκλεισμένες, εκτός βάρδιας, σε βλάβη ή σε επανεκκίνηση μετρήθηκαν ως απασχολημένες.
+	The utilisation of {block} counts {busy} units busy on average, but {working} were processing or setting up: units at work were not counted busy.	Ο βαθμός χρησιμοποίησης του μπλοκ {block} μετρά {busy} μονάδες απασχολημένες κατά μέσο όρο, αλλά {working} επεξεργάζονταν ή προετοιμάζονταν: μονάδες που δούλευαν δεν μετρήθηκαν ως απασχολημένες.
+	The shares of the time of the units of {block} in each state add up to {total}, not 1.	Τα ποσοστά του χρόνου των μονάδων του μπλοκ {block} σε κάθε κατάσταση αθροίζουν σε {total}, όχι 1.
+	“{metric}” of {block} is {value}, outside 0 to 1 (0% to 100%).	Η «{metric}» του μπλοκ {block} είναι {value}, εκτός του διαστήματος 0 έως 1 (0% έως 100%).
+	This was found in {replications} of {of} runs, and the furthest off is shown.	Αυτό βρέθηκε σε {replications} από {of} εκτελέσεις και εμφανίζεται η πιο απομακρυσμένη τιμή.
+	This points to a fault in StochCraft rather than in the model. Please report it with the model.	Αυτό δείχνει σφάλμα στο StochCraft και όχι στο μοντέλο. Αναφέρετέ το μαζί με το μοντέλο.
+	Angle	Γωνία
+	Failed	Βλάβη
+	Off shift	Εκτός βάρδιας
+	Processing	Επεξεργασία
+	Radius	Ακτίνα
+	Rise	Ανύψωση
+	Speed empty	Ταχύτητα χωρίς φορτίο
+	Speed loaded	Ταχύτητα με φορτίο
+	Turns	Στροφές
+	Unload	Εκφόρτωση
+	Lost	Απώλειες
+	An entity that leaves a waiting room before a unit takes it, because it has waited as long as it was willing to.	Μια οντότητα που φεύγει από έναν χώρο αναμονής πριν την αναλάβει μια μονάδα, επειδή περίμενε όσο ήταν διατεθειμένη.
+	An entity that does not join a waiting room at all, because the number already waiting put it off.	Μια οντότητα που δεν μπαίνει καθόλου σε έναν χώρο αναμονής, επειδή το πλήθος όσων περιμένουν ήδη την αποθάρρυνε.
+	An entity that finds the waiting room full and takes the flow ticked “Turned away” instead of waiting.	Μια οντότητα που βρίσκει τον χώρο αναμονής γεμάτο και ακολουθεί, αντί να περιμένει, τη ροή που είναι επιλεγμένη ως «Απόρριψη».
+	An entity that leaves the model without reaching Departures: it found the waiting room full with nowhere else to go, or a decision with no way out for it.	Μια οντότητα που φεύγει από το μοντέλο χωρίς να φτάσει στις Αναχωρήσεις: βρήκε τον χώρο αναμονής γεμάτο χωρίς άλλη διέξοδο ή μια απόφαση χωρίς δρόμο για αυτήν.
+	Gave up on {id}	Εγκατέλειψαν στο {id}
+	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the flow ticked “Gave up”, or leaves the model.	Κάθε οντότητα περιμένει εδώ το πολύ έναν χρόνο που κληρώνεται γι' αυτήν κατά την άφιξή της και μετά εγκαταλείπει: ακολουθεί τη ροή που είναι επιλεγμένη ως «Εγκατέλειψαν» ή φεύγει από το μοντέλο.
+	Entities that do not join the waiting room take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Οι οντότητες που δεν μπαίνουν στον χώρο αναμονής ακολουθούν αμέσως αυτή τη ροή (για να ξαναδοκιμάσουν αργότερα, ας πούμε), αντί να χαθούν· εδώ μετρώνται ως μη είσοδος.
+	The job stops at once: the entity goes back to the front of the waiting room for any server on shift, and the work done on it is wasted.	Η δουλειά σταματά αμέσως: η οντότητα επιστρέφει στην αρχή του χώρου αναμονής για οποιονδήποτε εξυπηρετητή σε βάρδια, και η δουλειά που έγινε σε αυτήν σπαταλιέται.
+	The connection drops and the client tries again: the entity goes back to the front of the waiting room at once, and the work done on it is wasted.	Η σύνδεση πέφτει και ο πελάτης προσπαθεί ξανά: η οντότητα επιστρέφει αμέσως στην αρχή του χώρου αναμονής, και η δουλειά που έγινε σε αυτήν σπαταλιέται.
+	Ticked, entities queue up at the end while the rest keep moving. Unticked, the whole belt stops when the entity at the end cannot leave.	Αν είναι επιλεγμένο, οι οντότητες σχηματίζουν ουρά στο τέλος ενώ οι υπόλοιπες συνεχίζουν να κινούνται. Αν όχι, ολόκληρη η ταινία σταματά όταν η οντότητα στο τέλος δεν μπορεί να φύγει.
+	Play run 1 step by step and see each block's waiting room on the diagram	Αναπαραγωγή της εκτέλεσης 1 βήμα προς βήμα με τον χώρο αναμονής κάθε μπλοκ στο διάγραμμα
+	Select a block to see its waiting room over time.	Επιλέξτε ένα μπλοκ για να δείτε τον χώρο αναμονής του στη διάρκεια του χρόνου.
+	Entities on conveyors over time	Οντότητες στους ιμάντες στον χρόνο
+	Entities in the model over time	Οντότητες στο μοντέλο στον χρόνο
+	How long each entity spends on the conveyors.	Πόσο χρόνο περνά κάθε οντότητα στους μεταφορικούς ιμάντες.
+	No entity has left a conveyor yet	Καμία οντότητα δεν έχει βγει ακόμη από ιμάντα
+	Share of entities by time on a conveyor, in {unit}	Μερίδιο οντοτήτων ανά χρόνο σε ιμάντα, σε {unit}
+	Time on conveyors: {n} entities between {lo} and {hi} {unit}	Χρόνος στους ιμάντες: {n} οντότητες μεταξύ {lo} και {hi} {unit}
+	{from} to {to} {unit}: {share} of entities ({n})	Από {from} έως {to} {unit}: {share} των οντοτήτων ({n})
+	How many entities are on the conveyors over time.	Πόσες οντότητες βρίσκονται στους ιμάντες στον χρόνο.
+	How many entities are in the model over time.	Πόσες οντότητες βρίσκονται στο μοντέλο στον χρόνο.
+	At {time} {unit}: {n} entities	Τη στιγμή {time} {unit}: {n} οντότητες
+@plural	Makes {n} independent run of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval across them.	Κάνει {n} ανεξάρτητη εκτέλεση του μοντέλου με σπόρο {seed}. Τα αποτελέσματα κάθε μπλοκ περιλαμβάνουν το ημιπλάτος διαστήματος εμπιστοσύνης 95%.|Κάνει {n} ανεξάρτητες εκτελέσεις του μοντέλου με σπόρο {seed}. Τα αποτελέσματα κάθε μπλοκ περιλαμβάνουν το ημιπλάτος διαστήματος εμπιστοσύνης 95%.
 	Fonts	Γραμματοσειρές
 	The full list of third-party licences is in the file THIRD-PARTY-LICENSES.html, which comes with the download.	Ο πλήρης κατάλογος των αδειών τρίτων βρίσκεται στο αρχείο THIRD-PARTY-LICENSES.html, που περιλαμβάνεται στη λήψη.
 	Full list of third-party licences	Πλήρης κατάλογος αδειών τρίτων

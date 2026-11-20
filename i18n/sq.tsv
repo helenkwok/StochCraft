@@ -21,8 +21,6 @@
 	A caller on hold: once a unit takes it, the entity stays.	Një telefonues në pritje: sapo një njësi e merr, entiteti mbetet.
 	A client that times out: if its time runs out during service, it gives up then, and the unit finishes the job anyway (wasted work).	Një klient të cilit i skadon koha (timeout): nëse koha i mbaron gjatë shërbimit, heq dorë atëherë, dhe njësia e përfundon punën gjithsesi (punë e humbur).
 	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	Skedari i ri mban vetëm modelin: ajo që StochCraft nuk e kupton në {file} lihet jashtë.
-	Abandoned	Hoqën dorë
-	Abandoned on {id}	Hoqën dorë në {id}
 	About StochCraft	Rreth StochCraft
 	About {app}	Rreth {app}
 	Accent	Theks
@@ -162,7 +160,6 @@
 	Duration	Kohëzgjatja
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Çdo analizë e ekzekuton eksperimentin disa herë me të njëjtën farë, kështu që ndryshimet vijnë nga ndryshimi, jo nga rastësia. Mund të zgjasë pak.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Çdo entitet merr njëherësh të plotë të parën nga këto alternativa që mund të plotësohet në atë çast dhe i kthen njësitë kur largohet.
-	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Çdo entitet pret këtu të shumtën një kohë të hedhur në short për të kur mbërrin, pastaj heq dorë: merr daljen e shënuar „Hoqën dorë” ose largohet nga modeli.
 	Each server (unit) is checked every so often, as a load balancer probes the servers behind it. One that fails, with too many waiting, is taken out of service for a restart, then comes back.	Çdo server (njësi) kontrollohet herë pas here, ashtu si një balancues i ngarkesës kontrollon serverët pas tij. Ai që dështon, me shumë në pritje, nxirret nga puna për një rinisje, pastaj kthehet.
 	Edit	Redakto
 	Edit themes…	Redakto temat…
@@ -412,7 +409,6 @@
 	Run	Ekzekuto
 	Run cancelled	Ekzekutimi u anulua
 	Run experiment	Ekzekuto eksperimentin
-	Play run 1 step by step and see each block's queue on the diagram	Luaj ekzekutimin 1 hap pas hapi dhe shiko radhën e çdo blloku në diagram
 	Run the experiment ({shortcut})	Ekzekuto eksperimentin ({shortcut})
 	Run the experiment again to see this result's spread.	Ekzekuto sërish eksperimentin për të parë shpërndarjen e këtij rezultati.
 	Run the experiment at each value of one parameter, and compare a result.	Ekzekuto eksperimentin në çdo vlerë të një parametri dhe krahaso një rezultat.
@@ -433,7 +429,6 @@
 	Scrap ratio	Raporti i skartos
 	Seed	Fara e rastësisë
 	Select All	Përzgjidh të gjitha
-	Select a block to see its queue over time.	Përzgjidhni një bllok për të parë radhën e tij gjatë kohës.
 	Sender waits during transfer	Dërguesi pret gjatë transferimit
 	Separate the values with semicolons or spaces.	Ndaji vlerat me pikëpresje ose hapësira.
 	Sequential	Sekuenciale
@@ -497,10 +492,8 @@
 	Text	Tekst
 	Text on accent	Tekst mbi theksin
 	Text on header	Tekst në shiritin e kokës
-	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	Lidhja bie dhe klienti provon sërish: entiteti kthehet menjëherë në krye të radhës, dhe puna e bërë mbi të humbet.
 	The entity waits on its server and the job carries on with what was left once the server is back.	Entiteti pret te serveri i tij dhe puna vazhdon me atë që kishte mbetur sapo serveri kthehet.
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more runs would narrow it.	Intervali zbret nën pjesën objektiv prej {share}, ndaj nuk tregohet me besueshmëri 95% se pjesa arrihet; më shumë ekzekutime do ta ngushtonin.
-	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	Puna ndalet menjëherë: entiteti kthehet në krye të radhës për çdo server në turn, dhe puna e bërë mbi të humbet.
 	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	Puna ndalet menjëherë; entiteti pret te serveri i tij dhe puna vazhdon me atë që kishte mbetur sapo ai server rikthehet në turn.
 	The last task with a resource it finished at	Detyra e fundit me burim nëpër të cilën kaloi pjesa
 	The mean time to the stop condition is over the runs that met it only; the others ran to their time limit.	Koha mesatare deri te kushti i ndalimit është vetëm mbi ekzekutimet që e arritën; të tjerat shkuan deri në kufirin e kohës.
@@ -690,7 +683,6 @@ unit	yr	v
 	Balked on {id}	Nuk hynë në radhë në {id}
 	Balking	Moshyrja në radhë
 	Count those in service	Numëro edhe ata në shërbim
-	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Entitetet që nuk hyjnë në radhë marrin menjëherë këtë rrjedhë (për të provuar sërish më vonë, të themi), në vend që të humbasin; këtu numërohen si moshyrje në radhë.
 	Joins with probability	Hyn në radhë me probabilitet
 	Number waiting	Numri në pritje
 	Share balked	Pjesa që nuk hyri në radhë
@@ -908,7 +900,6 @@ unit	yr	v
 @plural	Finished {n} run|Finished {n} runs	Përfundoi {n} ekzekutim|Përfunduan {n} ekzekutime
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	U hap {file} ({n} paralajmërim)|U hap {file} ({n} paralajmërime)
 @plural	Removed {n} block|Removed {n} blocks	U hoq {n} bllok|U hoqën {n} blloqe
-@plural	Makes {n} independent run of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Bën {n} ekzekutim të pavarur të modelit nga fara {seed}. Rezultatet e çdo elementi përfshijnë gjysmën e gjerësisë së intervalit të besimit 95%.|Bën {n} ekzekutime të pavarura të modelit nga fara {seed}. Rezultatet e çdo elementi përfshijnë gjysmën e gjerësisë së intervalit të besimit 95%.
 @plural	The stop condition was met in {met} of {n} run, after {time} {unit} on average.|The stop condition was met in {met} of {n} runs, after {time} {unit} on average.	Kushti i ndalimit u arrit në {met} nga {n} ekzekutim, pas {time} {unit} mesatarisht.|Kushti i ndalimit u arrit në {met} nga {n} ekzekutime, pas {time} {unit} mesatarisht.
 @plural	{done} of {n} run finished|{done} of {n} runs finished	U përfundua {done} nga {n} ekzekutim|U përfunduan {done} nga {n} ekzekutime
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} run|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} runs	{name}: {mean}{unit}\nIntervali 95% nga {low} në {high}{unit}\nmbi {n} ekzekutim|{name}: {mean}{unit}\nIntervali 95% nga {low} në {high}{unit}\nmbi {n} ekzekutime
@@ -938,7 +929,6 @@ unit	yr	v
 	kilometres	kilometra
 	inches	inç
 	feet	këmbë
-	Ticked, items queue up at the end while the rest keep moving. Unticked, the whole belt stops when the item at the end cannot leave.	Nëse është e shënuar, artikujt radhiten në fund ndërsa të tjerët vazhdojnë të lëvizin. Nëse jo, e gjithë shiriti ndalon kur artikulli në fund nuk mund të dalë.
 	A belt that carries entities from one end to the other. It has a length and a speed, and each entity takes a pitch of belt: its item length plus the gap kept free after it. So it holds at most length ÷ pitch entities and carries at most speed ÷ pitch per time unit. Accumulating: entities queue up at the end while the rest keep moving; otherwise the whole belt stops.	Një shirit që bart entitete nga njëri skaj te tjetri. Ka gjatësi dhe shpejtësi, dhe çdo entitet zë një hap të shiritit: gjatësinë e artikullit të tij plus hapësirën që mbahet e lirë pas tij. Kështu mban më së shumti gjatësia ÷ hapi entitete dhe bart më së shumti shpejtësia ÷ hapi për njësi kohe. Grumbullues: entitetet radhiten në fund ndërsa të tjerët vazhdojnë të lëvizin; përndryshe ndalon e gjithë shiriti.
 	Station	Stacioni
 	Kind	Lloji
@@ -992,19 +982,165 @@ unit	yr	v
 	Time on conveyors	Koha në rripat transportues
 	No conveyors in this model	Nuk ka rripa transportues në këtë model
 	Fills in when the run ends	Plotësohet kur përfundon ekzekutimi
-	How long each item spends on the conveyors.	Sa kohë e kalon çdo artikull në rripat transportues.
-	No item has left a conveyor yet	Asnjë artikull nuk e ka lënë ende një rrip
-	Share of items by time on a conveyor, in {unit}	Pjesa e artikujve sipas kohës në një rrip, në {unit}
-	Time on conveyors: {n} items between {lo} and {hi} {unit}	Koha në rripa: {n} artikuj mes {lo} dhe {hi} {unit}
-	{from} to {to} {unit}: {share} of items ({n})	Nga {from} në {to} {unit}: {share} e artikujve ({n})
-	Items on conveyors over time	Artikujt në rripa me kalimin e kohës
-	Items in the model over time	Artikujt në model me kalimin e kohës
-	How many items are on the conveyors over time.	Sa artikuj ka në rripa me kalimin e kohës.
-	How many items are in the model over time.	Sa artikuj ka në model me kalimin e kohës.
 	Nothing was recorded over time in these results	Në këto rezultate nuk u regjistrua asgjë me kalimin e kohës
-	At {time} {unit}: {n} items	Në {time} {unit}: {n} artikuj
 	Run the model to fill the dashboard	Ekzekutoni modelin për të plotësuar panelin
 	The resource and conveyor charts show the last run until this one ends	Grafikët e burimeve dhe rripave tregojnë ekzekutimin e fundit derisa ky të përfundojë
+# Validation messages, new labels and word changes (issue #145)
+	The id “{id}” is not valid. Start an id with a letter or an underscore, then use only letters, digits, dots, hyphens and underscores.	ID-ja „{id}” nuk është e vlefshme. Filloni ID-në me një shkronjë ose me një nënvizë, pastaj përdorni vetëm shkronja, shifra, pika, vija ndarëse dhe nënvizime.
+	More than one block, flow, pool or calendar has the id “{id}”. Give each its own id.	Më shumë se një bllok, rrjedhë, grup ose kalendar kanë ID-në „{id}”. Jepini secilit ID-në e vet.
+	The flow {flow} uses a block that does not exist. Remove the flow, or connect it to a block that exists.	Rrjedha {flow} përdor një bllok që nuk ekziston. Hiqeni rrjedhën ose lidhni me një bllok që ekziston.
+	The flow {flow} leads into an Arrivals block, which takes no input. Remove the flow, or send it to another block.	Rrjedha {flow} të çon në një bllok Mbërritjet, që nuk merr hyrje. Hiqeni rrjedhën ose dërgojeni te një bllok tjetër.
+	The flow {flow} leaves a Departures block, which has no output. Remove the flow, or start it from another block.	Rrjedha {flow} del nga një bllok Largimet, që nuk ka dalje. Hiqeni rrjedhën ose nisni nga një bllok tjetër.
+	The flow {flow} leads from a block back to itself. Remove it, or send it to another block.	Rrjedha {flow} të çon nga një bllok përsëri te vetja. Hiqeni ose dërgojeni te një bllok tjetër.
+	{block} has nowhere to send entities. Add a flow from it to the next block.	Blloku {block} nuk ka ku t'i dërgojë entitetet. Shtoni një rrjedhë prej tij te blloku tjetër.
+	{block} has {count} flows out, and only a Decision or a Split or join block can send entities down several. Remove the extra flows, or add a Decision block.	Blloku {block} ka {count} rrjedha dalëse, dhe vetëm një bllok Vendim ose Ndaj ose bashko mund t'i dërgojë entitetet nëpër disa. Hiqni rrjedhat e tepërta ose shtoni një bllok Vendim.
+	In “{field}” of {block}, set “{param}” to a finite number.	Te „{field}” i bllokut {block}, caktoni „{param}” si numër të fundëm.
+	In “{field}” of {block}, set “{param}” to a number above 0.	Te „{field}” i bllokut {block}, caktoni „{param}” si numër më të madh se 0.
+	In “{field}” of {block}, set “{param}” to 0 or more.	Te „{field}” i bllokut {block}, caktoni „{param}” si 0 ose më shumë.
+	In “{field}” of {block}, set “{param}” to 1 or more.	Te „{field}” i bllokut {block}, caktoni „{param}” si 1 ose më shumë.
+	In “{field}” of {block}, set “{param}” to a number from 0 to 1.	Te „{field}” i bllokut {block}, caktoni „{param}” si numër nga 0 deri në 1.
+	In “{field}” of {block}, set “Minimum” below “Maximum”, and any “Most likely” value between them.	Te „{field}” i bllokut {block}, caktoni „Minimumi” nën „Maksimumi” dhe çdo vlerë „Më e mundshmja” mes tyre.
+	In “{field}” of {block}, add data points whose probabilities add up to more than 0.	Te „{field}” i bllokut {block}, shtoni pika të dhënash me probabilitete që mblidhen në më shumë se 0.
+	{block} would never have a unit to work with. Give it at least 1 unit.	Blloku {block} nuk do të kishte kurrë një njësi për të punuar. Jepini të paktën 1 njësi.
+	{block} would make entities without end, because its “Time between arrivals” is always 0. Give it a time above 0, or set an “Arrival limit”.	Blloku {block} do të krijonte entitete pa fund, sepse „Koha ndërmjet mbërritjeve” është gjithmonë 0. Jepini një kohë më të madhe se 0 ose caktoni një „Kufiri i mbërritjeve”.
+	The model has no Arrivals block, so nothing will happen. Add an Arrivals block.	Modeli nuk ka asnjë bllok Mbërritjet, ndaj asgjë nuk do të ndodhë. Shtoni një bllok Mbërritjet.
+	The model has no Departures block, so no time in system is measured. Add a Departures block.	Modeli nuk ka asnjë bllok Largimet, ndaj nuk matet asnjë kohë në sistem. Shtoni një bllok Largimet.
+	No entity can reach {block} from an Arrivals block. Connect it to a block that entities pass through.	Asnjë entitet nuk mund të arrijë te blloku {block} nga një bllok Mbërritjet. Lidheni me një bllok nëpër të cilin kalojnë entitetet.
+	Entities in {block} can never reach a Departures block. Connect it on towards Departures.	Entitetet në bllokun {block} nuk mund të arrijnë kurrë te një bllok Largimet. Lidheni më tej drejt Largimeve.
+	Set the “{state}” power of {block} to a number of kilowatts, 0 or more.	Caktoni fuqinë „{state}” të bllokut {block} si numër kilovatësh, 0 ose më shumë.
+	Set the warm-up of the experiment to 0 or more.	Caktoni ngrohjen e eksperimentit si 0 ose më shumë.
+	Set the duration of the experiment to more than 0.	Caktoni kohëzgjatjen e eksperimentit si më shumë se 0.
+	Set the number of runs of the experiment to 1 or more.	Caktoni numrin e ekzekutimeve të eksperimentit si 1 ose më shumë.
+	Set the layout scale (length units per drawing unit) to a finite number above 0.	Caktoni shkallën e skemës (njësi gjatësie për njësi vizatimi) si numër të fundëm më të madh se 0.
+	A property of {block} has no name. Give it a name, or remove it.	Një veti e bllokut {block} nuk ka emër. Jepini një emër ose hiqeni.
+	{block} sets the property “{name}” twice. Keep one of them.	Blloku {block} e cakton vetinë „{name}” dy herë. Mbani njërën.
+	The property “{name}” of {block} needs shares that are not negative and add up to more than 0. Change the shares.	Vetia „{name}” e bllokut {block} kërkon pjesë jonegative që mblidhen në më shumë se 0. Ndryshoni pjesët.
+	The property “{name}” has the type “{type2}” on {block} but “{type}” on another block. Give it one type everywhere.	Vetia „{name}” ka llojin „{type2}” te blloku {block}, por „{type}” te një bllok tjetër. Jepini një lloj të vetëm kudo.
+	The value of the property “{name}” on {block} does not fit its type, “{type}”. Change the value or the type.	Vlera e vetisë „{name}” te blloku {block} nuk përputhet me llojin e saj, „{type}”. Ndryshoni vlerën ose llojin.
+	The expression for the property “{name}” on {block} cannot be used: {error}. Correct “{expression}”.	Shprehja për vetinë „{name}” te blloku {block} nuk mund të përdoret: {error}. Korrigjoni „{expression}”.
+	{block} reads the property “{name}”, which no block sets, so it would read as empty. Set it on an earlier block, or correct the name.	Blloku {block} lexon vetinë „{name}”, që nuk e cakton asnjë bllok, ndaj do të lexohej bosh. Caktojeni te një bllok më herët ose korrigjoni emrin.
+	The setup of {block} has times for particular changes but no property to watch. Choose a property under “Only when this property changes”.	Përgatitja e bllokut {block} ka kohë për ndryshime të veçanta, por asnjë veti për t'u ndjekur. Zgjidhni një veti te „Vetëm kur ndryshon kjo veti”.
+	{block} has times for particular values but no property to read them from. Choose a property under “Service time by property”.	Blloku {block} ka kohë për vlera të veçanta, por asnjë veti nga ku t'i lexojë. Zgjidhni një veti te „Koha e shërbimit sipas një vetie”.
+	{block} has two times for the value “{value}”. Keep one.	Blloku {block} ka dy kohë për vlerën „{value}”. Mbani njërën.
+	Set the time of {block} for the value “{value}” to a mean of 0 or more.	Caktoni kohën e bllokut {block} për vlerën „{value}” me një mesatare 0 ose më të madhe.
+	The scrap at {block} counts against {other}, which is not a task with a resource. Choose a task with a resource.	Skartimi te blloku {block} numërohet kundrejt {other}, që nuk është detyrë me burim. Zgjidhni një detyrë me burim.
+	Set “Planned run time per item” of {block} to a mean above 0.	Caktoni „Koha e planifikuar e punës për pjesë” të bllokut {block} me një mesatare më të madhe se 0.
+	Set “Time before giving up” of {block} to a mean of 0 or more.	Caktoni „Koha deri në heqjen dorë” të bllokut {block} me një mesatare 0 ose më të madhe.
+	The flow {flow} is ticked “Gave up”, but only a task with a resource and a “Time before giving up” sends entities that give up. Untick it, or set a “Time before giving up” on {block}.	Rrjedha {flow} është e shënuar „Hoqën dorë”, por vetëm një detyrë me burim dhe „Koha deri në heqjen dorë” dërgon entitete që heqin dorë. Hiqni shenjën ose caktoni një „Koha deri në heqjen dorë” te blloku {block}.
+	{count} flows out of {block} are ticked “{way}”; at most one can be. Untick all but one.	{count} rrjedha që dalin nga blloku {block} janë të shënuara „{way}”; vetëm njëra mund të jetë. Hiqni shenjën nga të gjitha përveç njërës.
+	The flow {flow} is ticked “Turned away”, but only a task with a resource and a limited waiting room turns entities away. Untick it, or limit the waiting room of {block}.	Rrjedha {flow} është e shënuar „U refuzuan”, por vetëm një detyrë me burim dhe dhomë pritjeje të kufizuar i refuzon entitetet. Hiqni shenjën ose kufizoni dhomën e pritjes të bllokut {block}.
+	The flow {flow} is ticked both “Gave up” and “Turned away”. Keep one of them.	Rrjedha {flow} është e shënuar si „Hoqën dorë”, ashtu edhe „U refuzuan”. Mbani njërën.
+	Set every chance of joining in the balking table of {block} to a number from 0 to 1.	Caktoni çdo gjasë për t'u bashkuar në tabelën e moshyrjes në radhë të bllokut {block} si numër nga 0 deri në 1.
+	Put the rows of the balking table of {block} in increasing order of “Number waiting”.	Vendosni rreshtat e tabelës së moshyrjes në radhë të bllokut {block} në rend rritës sipas „Numri në pritje”.
+	The flow {flow} is ticked “Balked”, but only a task with a resource and balking sends entities that balk. Untick it, or turn on balking for {block}.	Rrjedha {flow} është e shënuar „Nuk hynë në radhë”, por vetëm një detyrë me burim dhe moshyrje në radhë dërgon entitete që nuk hyjnë. Hiqni shenjën ose aktivizoni moshyrjen në radhë për bllokun {block}.
+	The flow {flow} is ticked “Balked” and also “Gave up” or “Turned away”. Keep one of them.	Rrjedha {flow} është e shënuar „Nuk hynë në radhë” dhe gjithashtu „Hoqën dorë” ose „U refuzuan”. Mbani njërën.
+	The waiting room of {block} is set by calendar or per working server, but has no number of places, so it is unlimited. Give it a number of places, or make it fixed.	Dhoma e pritjes e bllokut {block} caktohet sipas kalendarit ose për server në punë, por nuk ka numër vendesh, ndaj është e pakufizuar. Jepini një numër vendesh ose bëjeni të fiksuar.
+	The waiting room of {block} is set by calendar, but no calendar has a value. Add a value for a calendar, or make the waiting room fixed.	Dhoma e pritjes e bllokut {block} caktohet sipas kalendarit, por asnjë kalendar nuk ka vlerë. Shtoni një vlerë për një kalendar ose bëjeni dhomën e pritjes të fiksuar.
+	Set “Fails above, waiting per working server” of {block} to a number of 0 or more.	Caktoni „Dështon mbi (në pritje për server në punë)” të bllokut {block} si numër 0 ose më të madh.
+	Set “Check every” of {block} to a mean above 0.	Caktoni „Kontrollo çdo” të bllokut {block} me një mesatare më të madhe se 0.
+	Set the demand of {block} to a number of parts above 0.	Caktoni kërkesën e bllokut {block} si numër pjesësh më të madh se 0.
+	The demand of {block} is per shift but names no calendar to say when the shifts are. Choose a calendar.	Kërkesa e bllokut {block} është për turn, por nuk emërton asnjë kalendar që tregon kur janë turnet. Zgjidhni një kalendar.
+	The demand of {block} names a calendar that does not exist. Choose a calendar that exists.	Kërkesa e bllokut {block} emërton një kalendar që nuk ekziston. Zgjidhni një kalendar që ekziston.
+	The probability {value} on the flow {flow} is not from 0 to 1. Enter a probability from 0 to 1.	Probabiliteti {value} te rrjedha {flow} nuk është nga 0 deri në 1. Futni një probabilitet nga 0 deri në 1.
+	The probabilities of the flows out of {block} add up to {sum}, not 1, so they are used in proportion. Change them to add up to 1 if that is not what you want.	Probabilitetet e rrjedhave që dalin nga blloku {block} mblidhen në {sum}, jo 1, ndaj përdoren në përpjesëtim. Ndryshojini që të mblidhen në 1 nëse nuk e doni këtë.
+	The condition on the flow {flow} cannot be used: {error}. Correct “{expression}”.	Kushti te rrjedha {flow} nuk mund të përdoret: {error}. Korrigjoni „{expression}”.
+	The condition on the flow {flow} is ignored, because only flows out of a Decision block choose a route. Remove the condition.	Kushti te rrjedha {flow} shpërfillet, sepse vetëm rrjedhat që dalin nga një bllok Vendim zgjedhin rrugë. Hiqeni kushtin.
+	The probability on the flow {flow} is ignored, because only flows out of a Decision block choose a route. Remove the probability.	Probabiliteti te rrjedha {flow} shpërfillet, sepse vetëm rrjedhat që dalin nga një bllok Vendim zgjedhin rrugë. Hiqeni probabilitetin.
+	The condition on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the condition.	Kushti te rrjedha {flow} shpërfillet, sepse Vendimi i dërgon entitetet te radha më e shkurtër. Hiqeni kushtin.
+	The probability on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the probability.	Probabiliteti te rrjedha {flow} shpërfillet, sepse Vendimi i dërgon entitetet te radha më e shkurtër. Hiqeni probabilitetin.
+	The default on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the default.	Parazgjedhja te rrjedha {flow} shpërfillet, sepse Vendimi i dërgon entitetet te radha më e shkurtër. Hiqeni parazgjedhjen.
+	The probability on the flow {flow} is ignored, because the Decision routes by condition. Remove the probability.	Probabiliteti te rrjedha {flow} shpërfillet, sepse Vendimi zgjedh rrugën sipas kushtit. Hiqeni probabilitetin.
+	The default flow of {block} is not one of its own flows out. Choose one of the flows out of {block} as the default.	Rrjedha e parazgjedhur e bllokut {block} nuk është një nga rrjedhat e veta dalëse. Zgjidhni si parazgjedhje një nga rrjedhat dalëse të bllokut {block}.
+	{block} routes by condition but has no default flow, so an entity for which no condition holds leaves the model here. Choose a default flow.	Blloku {block} zgjedh rrugën sipas kushtit, por nuk ka rrjedhë të parazgjedhur, ndaj një entitet për të cilin nuk vlen asnjë kusht largohet këtu nga modeli. Zgjidhni një rrjedhë të parazgjedhur.
+	{block} diverts entities but has no default flow, so an entity whose way is full has nowhere else to go. Choose a default flow.	Blloku {block} devijon entitete, por nuk ka rrjedhë të parazgjedhur, ndaj një entitet, rruga e të cilit është plot, nuk ka ku tjetër të shkojë. Zgjidhni një rrjedhë të parazgjedhur.
+	{block} waits for an entity on the flow {flow}, which none can reach, so it never sends one on. Remove that flow, or connect it to a block that entities reach.	Blloku {block} pret një entitet në rrjedhën {flow}, te e cila nuk mund të arrijë asnjë, ndaj nuk dërgon kurrë asnjë më tej. Hiqeni atë rrjedhë ose lidheni me një bllok te i cili arrijnë entitetet.
+	{block} has a limited waiting room and is fed through {gateway}. While it is full, {gateway} holds up every entity behind it, and they wait before it without limit. Remove the gateway before {block}, or remove the limit.	Blloku {block} ka dhomë pritjeje të kufizuar dhe ushqehet përmes portës {gateway}. Sa kohë është plot, porta {gateway} ndalon çdo entitet pas saj, dhe ata presin para saj pa kufi. Hiqeni portën para bllokut {block} ose hiqeni kufirin.
+	The limited waiting rooms of {loop} feed each other in a loop, so when all of them are full the loop deadlocks. Remove the limit on one of them, or break the loop.	Dhomat e pritjes të kufizuara të {loop} ushqejnë njëra-tjetrën në një unazë, ndaj kur janë plot të gjitha, unaza bllokohet. Hiqni kufirin te njëra prej tyre ose këputeni unazën.
+	The pool {block} has no units. Give it at least 1 unit.	Grupi {block} nuk ka njësi. Jepini të paktën 1 njësi.
+	{block} names no resource it needs. Add one under “Needs”.	Blloku {block} nuk emërton asnjë burim që i duhet. Shtoni një te „Nevojat”.
+	{block} needs a resource pool that does not exist. Choose a pool that exists.	Blloku {block} ka nevojë për një grup burimesh që nuk ekziston. Zgjidhni një grup që ekziston.
+	{block} needs units with the roles {roles}, which no pool has. Give a pool those roles, or change what {block} needs.	Blloku {block} ka nevojë për njësi me rolet {roles}, që nuk i ka asnjë grup. Jepini një grupi ato role ose ndryshoni çfarë i duhet bllokut {block}.
+	{block} needs {needed} units at once, but at most {available} exist, so this can never be met. Ask for fewer units, or add units to the pool.	Blloku {block} ka nevojë për {needed} njësi njëkohësisht, por ekzistojnë më së shumti {available}, ndaj kjo nuk mund të plotësohet kurrë. Kërkoni më pak njësi ose shtoni njësi te grupi.
+	Set the priority of {block} to a finite number, not {value}.	Caktoni përparësinë e bllokut {block} si numër të fundëm, jo {value}.
+	No task uses the pool {block}. Add it to a task's needs, or remove the pool.	Asnjë detyrë nuk e përdor grupin {block}. Shtojeni te nevojat e një detyre ose hiqeni grupin.
+	{block} has a value for a calendar that does not exist. Choose a calendar that exists, or remove the value.	Blloku {block} ka vlerë për një kalendar që nuk ekziston. Zgjidhni një kalendar që ekziston ose hiqeni vlerën.
+	The calendar {block} has no entries, so it is never active. Add an entry.	Kalendari {block} nuk ka hyrje, ndaj nuk është kurrë aktiv. Shtoni një hyrje.
+	{block} allows no arrivals outside the calendars but names no calendar, so it never creates entities. Add arrivals by calendar, or allow arrivals outside calendars.	Blloku {block} nuk lejon mbërritje jashtë kalendarëve, por nuk emërton asnjë kalendar, ndaj nuk krijon kurrë entitete. Shtoni mbërritje sipas kalendarit ose lejoni mbërritje jashtë kalendarëve.
+	Set the batch size of {block} to 1 or more.	Caktoni madhësinë e grupit të bllokut {block} si 1 ose më shumë.
+	Set “{field}” of the conveyor {block} to a finite number above 0.	Caktoni „{field}” të transportierit {block} si numër të fundëm më të madh se 0.
+	Set “{field}” of the conveyor {block} to a finite number of 0 or more.	Caktoni „{field}” të transportierit {block} si numër të fundëm 0 ose më të madh.
+	Set “{field}” of the conveyor {block} to a finite number other than 0.	Caktoni „{field}” të transportierit {block} si numër të fundëm të ndryshëm nga 0.
+	The conveyor {block} is {length} long but each entity takes {pitch} (item length plus gap), so not even one fits. Lengthen the conveyor, or shorten the item or the gap.	Transportieri {block} ka gjatësi {length}, por çdo entitet zë {pitch} (gjatësia e artikullit plus hapësira), ndaj nuk futet as një. Zgjatni transportierin ose shkurtoni artikullin ose hapësirën.
+	The drawn path of the conveyor {block} is {path_length} long, but its “Length” is {length}, so the drawing and the run disagree. Make “Length” match the path, or change the shape.	Rruga e vizatuar e transportierit {block} ka gjatësi {path_length}, por „Gjatësia” e tij është {length}, ndaj vizatimi dhe ekzekutimi nuk përputhen. Bëjeni „Gjatësia” të përputhet me rrugën ose ndryshoni formën.
+	{block} is a transport, which StochCraft does not simulate yet. Remove it to run the model.	Blloku {block} është një transport, që StochCraft nuk e simulon ende. Hiqeni për të ekzekutuar modelin.
+	The pool {pool} of the transport {block} does not exist. Choose a pool that exists.	Grupi {pool} i transportit {block} nuk ekziston. Zgjidhni një grup që ekziston.
+	The pool {pool} of the transport {block} is not mobile. Give the pool speeds and a home.	Grupi {pool} i transportit {block} nuk është i lëvizshëm. Jepini grupit shpejtësi dhe një bazë.
+	Set “{field}” of the pool {block} to a finite number above 0.	Caktoni „{field}” të grupit {block} si numër të fundëm më të madh se 0.
+	The home of the pool {block} is not a block of the model. Choose a block as its home.	Baza e grupit {block} nuk është bllok i modelit. Zgjidhni një bllok si bazë të tij.
+	The transport {block} needs one block before it, where it picks up, and one after it, where it drops off, but has {inputs} before and {outputs} after. Connect it to one block on each side.	Transporti {block} ka nevojë për një bllok para tij, ku merr, dhe një pas tij, ku lëshon, por ka para: {inputs}, dhe pas: {outputs}. Lidheni me nga një bllok në secilën anë.
+	{other} has no place on the canvas, so the distances for {block} are not known. Place {other} on the canvas.	Blloku {other} nuk ka vend në sipërfaqen kryesore, ndaj distancat për bllokun {block} nuk dihen. Vendoseni bllokun {other} në sipërfaqen kryesore.
+	The flow {flow} asks for no entities. Set its “Units” to 1 or more.	Rrjedha {flow} nuk kërkon asnjë entitet. Caktoni „Njësitë” e saj si 1 ose më shumë.
+	The “Units” on the flow {flow} is ignored, because only a Split or join block takes several entities from one flow. Remove it.	„Njësitë” te rrjedha {flow} shpërfillen, sepse vetëm një bllok Ndaj ose bashko merr disa entitete nga një rrjedhë. Hiqini.
+	No block makes batches, so {block} passes every entity through. Add a Batch block before it, or remove {block}.	Asnjë bllok nuk bën grupe, ndaj blloku {block} kalon çdo entitet. Shtoni një bllok Grup para tij ose hiqeni bllokun {block}.
+	The stop condition names a block that does not exist. Choose a block that exists.	Kushti i ndalimit emërton një bllok që nuk ekziston. Zgjidhni një bllok që ekziston.
+	Set the count of the stop condition for {block} to 1 or more.	Caktoni numrin e kushtit të ndalimit për bllokun {block} si 1 ose më shumë.
+	The stop condition waits for {block} to empty, but only a task can empty. Choose a task.	Kushti i ndalimit pret që blloku {block} të zbrazet, por vetëm një detyrë mund të zbrazet. Zgjidhni një detyrë.
+	The stop condition at {block} can be met before the warm-up ends. A run that stops during the warm-up has no statistics after it and is left out of the results. Shorten the warm-up, or stop later.	Kushti i ndalimit te blloku {block} mund të plotësohet para se të mbarojë ngrohja. Një ekzekutim që ndalon gjatë ngrohjes nuk ka statistika pas saj dhe lihet jashtë rezultateve. Shkurtoni ngrohjen ose ndaloni më vonë.
+	Every run stopped before the warm-up ended, so no metric is reported. Shorten the warm-up, or stop later.	Çdo ekzekutim ndaloi para se të mbaronte ngrohja, ndaj nuk raportohet asnjë tregues. Shkurtoni ngrohjen ose ndaloni më vonë.
+	{replications} of {of} runs stopped before the warm-up ended, so their statistics are left out of every metric. Shorten the warm-up, or stop later.	Nga {of} ekzekutime, {replications} ndaluan para se të mbaronte ngrohja, ndaj statistikat e tyre lihen jashtë çdo treguesi. Shkurtoni ngrohjen ose ndaloni më vonë.
+	{block} is offered {load}% of the work its units can do, so its waiting room grows without limit and the results describe no steady state. Add units, or shorten the service.	Blloku {block} ofrohet me {load}% të punës që mund të bëjnë njësitë e tij, ndaj dhoma e tij e pritjes rritet pa kufi dhe rezultatet nuk përshkruajnë gjendje të qëndrueshme. Shtoni njësi ose shkurtoni shërbimin.
+	{block} is busy {utilisation}% of the time, and at the end at least {backlog} entities are still waiting against {left} that left. Work arrives faster than it is done, so the results describe no steady state. Add units, or shorten the service.	Blloku {block} është i zënë {utilisation}% të kohës dhe në fund të paktën {backlog} entitete ende presin, kundrejt {left} që u larguan. Puna vjen më shpejt se sa bëhet, ndaj rezultatet nuk përshkruajnë gjendje të qëndrueshme. Shtoni njësi ose shkurtoni shërbimin.
+	The experiment has one run, so its results cannot be told from chance. Set the number of runs to at least 2, and usually 10 or more.	Eksperimenti ka një ekzekutim, ndaj rezultatet e tij nuk dallohen nga rastësia. Caktoni numrin e ekzekutimeve të paktën 2, dhe zakonisht 10 ose më shumë.
+	{block} has a three-point estimate but no time to fit it to, so the estimate is ignored. Remove the estimate.	Blloku {block} ka një vlerësim me tri pika, por asnjë kohë ku ta përshtatë, ndaj vlerësimi shpërfillet. Hiqeni vlerësimin.
+	The three-point estimate of {block} cannot be fitted: every point must be a finite number. Correct the points.	Vlerësimi me tri pika i bllokut {block} nuk mund të përshtatet: çdo pikë duhet të jetë numër i fundëm. Korrigjoni pikat.
+	The three-point estimate of {block} cannot be fitted: the points must be in order, minimum, most likely, then maximum or 95th percentile. Correct the points.	Vlerësimi me tri pika i bllokut {block} nuk mund të përshtatet: pikat duhet të jenë në rend, minimum, më e mundshmja, pastaj maksimum ose përqindëshi i 95-të. Korrigjoni pikat.
+	The three-point estimate of {block} cannot be fitted: log-normal and Weibull estimates have no maximum. Give a 95th percentile instead.	Vlerësimi me tri pika i bllokut {block} nuk mund të përshtatet: vlerësimet Log-normale dhe Weibull nuk kanë maksimum. Jepni në vend të tij një përqindësh të 95-të.
+	The time of {block} is no longer the one fitted from its three-point estimate. Fit it again, or remove the estimate.	Koha e bllokut {block} nuk është më ajo e përshtatur nga vlerësimi me tri pika. Përshtatni sërish ose hiqeni vlerësimin.
+	In “{field}” of {block}, the normal distribution draws below 0 more than 1 time in 100, and each such draw counts as 0, so the times are longer on average than its mean. Use a truncated normal with a minimum of 0, or a log-normal.	Te „{field}” i bllokut {block}, shpërndarja normale nxjerr vlera nën 0 më shumë se 1 herë në 100, dhe çdo nxjerrje e tillë numërohet si 0, ndaj kohët janë mesatarisht më të gjata se mesatarja e saj. Përdorni një normale të prerë me minimum 0 ose një log-normale.
+	The entities of {block} do not add up: {came} came in or were inside at the start, but {went} left, were lost, gave up or are still inside.	Entitetet e bllokut {block} nuk bëjnë bilanc: {came} hynë ose ishin brenda në fillim, por {went} u larguan, humbën, hoqën dorë ose janë ende brenda.
+	The entities of the model do not add up: {came} were created or inside at the start, but {went} reached Departures, left the model elsewhere or are still inside.	Entitetet e modelit nuk bëjnë bilanc: {came} u krijuan ose ishin brenda në fillim, por {went} arritën te Largimet, u larguan nga modeli gjetkë ose janë ende brenda.
+	No entity left the model, of {came} created or inside at the start. Check that the routing leads to Departures and that the run is long enough for an entity to get through.	Asnjë entitet nuk e la modelin, nga {came} të krijuar ose brenda në fillim. Kontrolloni që drejtimi të çojë te Largimet dhe që ekzekutimi të jetë mjaft i gjatë që një entitet të kalojë.
+	Little's law does not hold at {block}: the time-average number inside was {mean}, but the entities' own times inside give {from_stays}.	Ligji i Little nuk vlen te blloku {block}: numri mesatar në kohë brenda ishte {mean}, por kohët e vetë entiteteve brenda japin {from_stays}.
+	The utilisation of {block} counts {busy} units busy on average, but {working} were processing or setting up: units idle, blocked, off shift, failed or restarting were counted busy.	Shfrytëzimi i bllokut {block} numëron mesatarisht {busy} njësi të zëna, por {working} po përpunonin ose po përgatiteshin: njësitë pa punë, të bllokuara, jashtë turnit, në defekt ose duke u rinisur u numëruan të zëna.
+	The utilisation of {block} counts {busy} units busy on average, but {working} were processing or setting up: units at work were not counted busy.	Shfrytëzimi i bllokut {block} numëron mesatarisht {busy} njësi të zëna, por {working} po përpunonin ose po përgatiteshin: njësitë në punë nuk u numëruan të zëna.
+	The shares of the time of the units of {block} in each state add up to {total}, not 1.	Pjesët e kohës së njësive të bllokut {block} në çdo gjendje mblidhen në {total}, jo 1.
+	“{metric}” of {block} is {value}, outside 0 to 1 (0% to 100%).	„{metric}” i bllokut {block} është {value}, jashtë intervalit 0 deri në 1 (0% deri në 100%).
+	This was found in {replications} of {of} runs, and the furthest off is shown.	Kjo u gjet në {replications} nga {of} ekzekutime dhe tregohet ajo më e largëta.
+	This points to a fault in StochCraft rather than in the model. Please report it with the model.	Kjo tregon një gabim në StochCraft dhe jo në model. Raportojeni së bashku me modelin.
+	Angle	Këndi
+	Failed	Në defekt
+	Off shift	Jashtë turnit
+	Processing	Përpunimi
+	Radius	Rrezja
+	Rise	Ngritja
+	Speed empty	Shpejtësia pa ngarkesë
+	Speed loaded	Shpejtësia me ngarkesë
+	Turns	Rrotullimet
+	Unload	Shkarkimi
+	Lost	Të humbura
+	An entity that leaves a waiting room before a unit takes it, because it has waited as long as it was willing to.	Një entitet që e lë një dhomë pritjeje para se ta marrë një njësi, sepse ka pritur sa ka qenë i gatshëm të presë.
+	An entity that does not join a waiting room at all, because the number already waiting put it off.	Një entitet që nuk hyn fare në një dhomë pritjeje, sepse numri i atyre që po presin tashmë e ka zmbrapsur.
+	An entity that finds the waiting room full and takes the flow ticked “Turned away” instead of waiting.	Një entitet që e gjen dhomën e pritjes plot dhe, në vend që të presë, merr rrjedhën e shënuar „U refuzuan”.
+	An entity that leaves the model without reaching Departures: it found the waiting room full with nowhere else to go, or a decision with no way out for it.	Një entitet që largohet nga modeli pa arritur te Largimet: e gjeti dhomën e pritjes plot pa rrugë tjetër, ose një vendim pa dalje për të.
+	Gave up on {id}	Hoqën dorë në {id}
+	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the flow ticked “Gave up”, or leaves the model.	Çdo entitet pret këtu të shumtën një kohë të hedhur në short për të kur mbërrin, pastaj heq dorë: merr rrjedhën e shënuar „Hoqën dorë” ose largohet nga modeli.
+	Entities that do not join the waiting room take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Entitetet që nuk hyjnë në dhomën e pritjes marrin menjëherë këtë rrjedhë (për të provuar sërish më vonë, të themi), në vend që të humbasin; këtu numërohen si moshyrje në radhë.
+	The job stops at once: the entity goes back to the front of the waiting room for any server on shift, and the work done on it is wasted.	Puna ndalet menjëherë: entiteti kthehet në krye të dhomës së pritjes për çdo server në turn, dhe puna e bërë mbi të humbet.
+	The connection drops and the client tries again: the entity goes back to the front of the waiting room at once, and the work done on it is wasted.	Lidhja bie dhe klienti provon sërish: entiteti kthehet menjëherë në krye të dhomës së pritjes, dhe puna e bërë mbi të humbet.
+	Ticked, entities queue up at the end while the rest keep moving. Unticked, the whole belt stops when the entity at the end cannot leave.	Nëse është e shënuar, entitetet radhiten në fund ndërsa të tjerët vazhdojnë të lëvizin. Nëse jo, e gjithë shiriti ndalon kur entiteti në fund nuk mund të dalë.
+	Play run 1 step by step and see each block's waiting room on the diagram	Luaj ekzekutimin 1 hap pas hapi dhe shiko dhomën e pritjes të çdo blloku në diagram
+	Select a block to see its waiting room over time.	Përzgjidhni një bllok për të parë dhomën e tij të pritjes gjatë kohës.
+	Entities on conveyors over time	Entitetet në rripa me kalimin e kohës
+	Entities in the model over time	Entitetet në model me kalimin e kohës
+	How long each entity spends on the conveyors.	Sa kohë e kalon çdo entitet në rripat transportues.
+	No entity has left a conveyor yet	Asnjë entitet nuk e ka lënë ende një rrip
+	Share of entities by time on a conveyor, in {unit}	Pjesa e entiteteve sipas kohës në një rrip, në {unit}
+	Time on conveyors: {n} entities between {lo} and {hi} {unit}	Koha në rripa: {n} entitete mes {lo} dhe {hi} {unit}
+	{from} to {to} {unit}: {share} of entities ({n})	Nga {from} në {to} {unit}: {share} e entiteteve ({n})
+	How many entities are on the conveyors over time.	Sa entitete ka në rripa me kalimin e kohës.
+	How many entities are in the model over time.	Sa entitete ka në model me kalimin e kohës.
+	At {time} {unit}: {n} entities	Në {time} {unit}: {n} entitete
+@plural	Makes {n} independent run of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval across them.	Bën {n} ekzekutim të pavarur të modelit nga fara {seed}. Rezultatet e çdo blloku përfshijnë gjysmën e gjerësisë së intervalit të besimit 95%.|Bën {n} ekzekutime të pavarura të modelit nga fara {seed}. Rezultatet e çdo blloku përfshijnë gjysmën e gjerësisë së intervalit të besimit 95%.
 	Fonts	Shkronjat
 	The full list of third-party licences is in the file THIRD-PARTY-LICENSES.html, which comes with the download.	Lista e plotë e licencave të palëve të treta është në skedarin THIRD-PARTY-LICENSES.html, që vjen me shkarkimin.
 	Full list of third-party licences	Lista e plotë e licencave të palëve të treta

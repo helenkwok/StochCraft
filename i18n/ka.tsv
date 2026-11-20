@@ -21,8 +21,6 @@
 	A caller on hold: once a unit takes it, the entity stays.	მოლოდინში მყოფი აბონენტი: როგორც კი რესურსის ერთეული მიიღებს, ერთეული რჩება.
 	A client that times out: if its time runs out during service, it gives up then, and the unit finishes the job anyway (wasted work).	კლიენტი, რომელსაც დრო ეწურება (timeout): თუ მისი დრო მომსახურების დროს ამოიწურება, ის მაშინვე უარს ამბობს, რესურსის ერთეული კი სამუშაოს მაინც ასრულებს (ფუჭი სამუშაო).
 	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	ახალი ფაილი მხოლოდ მოდელს შეიცავს: რაც {file}-ში StochCraft-ისთვის გაუგებარია, გამოტოვებულია.
-	Abandoned	უარი თქვეს
-	Abandoned on {id}	უარი თქვეს ნაკადზე {id}
 	About StochCraft	StochCraft-ის შესახებ
 	About {app}	{app}-ის შესახებ
 	Accent	აქცენტი
@@ -162,7 +160,6 @@
 	Duration	ხანგრძლივობა
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	ყოველი ანალიზი ექსპერიმენტს რამდენჯერმე უშვებს ერთი და იმავე საწყისი მნიშვნელობით, ამიტომ განსხვავებები ცვლილებიდან მოდის და არა შემთხვევითობიდან. ამას შეიძლება დრო დასჭირდეს.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	თითოეული ერთეული იღებს ამათგან პირველს, რომლის სრულად დაკმაყოფილებაც ახლავე, ერთდროულად არის შესაძლებელი, და გასვლისას რესურსის ერთეულებს აბრუნებს.
-	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	თითოეული ერთეული აქ ელოდება არაუმეტეს იმ დროისა, რომელიც მისთვის შემთხვევით შეირჩევა მოსვლისას, შემდეგ კი უარს ამბობს: მიდის გასასვლელით, რომელიც მონიშნულია როგორც „უარი თქვეს“, ან ტოვებს მოდელს.
 	Each server (unit) is checked every so often, as a load balancer probes the servers behind it. One that fails, with too many waiting, is taken out of service for a restart, then comes back.	ყოველი სერვერი (რესურსის ერთეული) დროდადრო მოწმდება, ისე, როგორც დატვირთვის გამანაწილებელი ამოწმებს თავის უკან მდგომ სერვერებს. ის, რომელიც ვერ გაივლის შემოწმებას, რადგან ძალიან ბევრი ელოდება, მუშაობიდან გამოჰყავთ ხელახალი გაშვებისთვის და შემდეგ ბრუნდება.
 	Edit	რედაქტირება
 	Edit themes…	თემების რედაქტირება…
@@ -412,7 +409,6 @@
 	Run	გაშვება
 	Run cancelled	გაშვება გაუქმდა
 	Run experiment	ექსპერიმენტის გაშვება
-	Play run 1 step by step and see each block's queue on the diagram	გაშვება 1-ის ნაბიჯ-ნაბიჯ გავლა და თითოეული ბლოკის რიგის ნახვა დიაგრამაზე
 	Run the experiment ({shortcut})	ექსპერიმენტის გაშვება ({shortcut})
 	Run the experiment again to see this result's spread.	ხელახლა გაუშვით ექსპერიმენტი ამ შედეგის გაბნევის სანახავად.
 	Run the experiment at each value of one parameter, and compare a result.	ექსპერიმენტის გაშვება ერთი პარამეტრის ყოველ მნიშვნელობაზე და შედეგის შედარება.
@@ -433,7 +429,6 @@
 	Scrap ratio	წუნის წილი
 	Seed	შემთხვევითი რიცხვების საწყისი მნიშვნელობა
 	Select All	ყველას მონიშვნა
-	Select a block to see its queue over time.	აირჩიეთ ბლოკი, რომ ნახოთ მისი რიგი დროის მიხედვით.
 	Sender waits during transfer	გამგზავნი ელოდება გადატანის დასრულებას
 	Separate the values with semicolons or spaces.	გამოყავით მნიშვნელობები წერტილმძიმით ან ჰარით.
 	Sequential	მიმდევრობითი
@@ -497,10 +492,8 @@
 	Text	ტექსტი
 	Text on accent	ტექსტი აქცენტზე
 	Text on header	ტექსტი სათაურის ზოლზე
-	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	კავშირი წყდება და კლიენტი ხელახლა ცდილობს: ერთეული მაშინვე ბრუნდება რიგის თავში, ხოლო მასზე შესრულებული სამუშაო ფუჭდება.
 	The entity waits on its server and the job carries on with what was left once the server is back.	ერთეული ელოდება თავის სერვერთან და სამუშაო გრძელდება დარჩენილით, როგორც კი სერვერი დაბრუნდება.
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more runs would narrow it.	ინტერვალი {share} სამიზნე წილზე დაბლა ჩადის, ამიტომ 95%-იანი სანდოობით არ არის ნაჩვენები, რომ წილი მიღწეულია; მეტი გაშვება მას შეავიწროებს.
-	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	სამუშაო მაშინვე ჩერდება: ერთეული ბრუნდება რიგის თავში ცვლაში მყოფი ნებისმიერი სერვერისთვის, ხოლო მასზე შესრულებული სამუშაო ფუჭდება.
 	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	სამუშაო მაშინვე ჩერდება; ერთეული ელოდება თავის სერვერთან და სამუშაო გრძელდება დარჩენილით, როგორც კი ეს სერვერი ისევ ცვლაში იქნება.
 	The last task with a resource it finished at	ბოლო დავალება რესურსით, რომელიც დეტალმა გაიარა
 	The mean time to the stop condition is over the runs that met it only; the others ran to their time limit.	გაჩერების პირობამდე საშუალო დრო მხოლოდ იმ გაშვებებზეა გამოთვლილი, რომლებმაც მას მიაღწიეს; დანარჩენები დროის ლიმიტამდე გაგრძელდა.
@@ -690,7 +683,6 @@ unit	yr	წელი
 	Balked on {id}	რიგში არ ჩადგნენ ნაკადზე {id}
 	Balking	რიგში არჩადგომა
 	Count those in service	მომსახურებაში მყოფებიც ჩაითვალოს
-	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	ერთეულები, რომლებიც რიგში არ დგებიან, მაშინვე ამ ნაკადით მიდიან (მაგალითად, მოგვიანებით ხელახლა საცდელად), ნაცვლად იმისა, რომ დაიკარგონ; აქ ისინი რიგში არჩამდგარად ითვლება.
 	Joins with probability	რიგში ჩადგომის ალბათობა
 	Number waiting	მომლოდინეთა რაოდენობა
 	Share balked	რიგში არჩამდგართა წილი
@@ -908,7 +900,6 @@ unit	yr	წელი
 @plural	Finished {n} run|Finished {n} runs	დასრულდა {n} გაშვება|დასრულდა {n} გაშვება
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	გახსნილია {file} ({n} გაფრთხილება)|გახსნილია {file} ({n} გაფრთხილება)
 @plural	Removed {n} block|Removed {n} blocks	წაშლილია {n} ბლოკი|წაშლილია {n} ბლოკი
-@plural	Makes {n} independent run of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	მოდელის {n} დამოუკიდებელ გაშვებას ასრულებს საწყისი მნიშვნელობით {seed}. თითოეული ელემენტის შედეგები შეიცავს 95% ნდობის ინტერვალის ნახევარსიგანეს.|მოდელის {n} დამოუკიდებელ გაშვებას ასრულებს საწყისი მნიშვნელობით {seed}. თითოეული ელემენტის შედეგები შეიცავს 95% ნდობის ინტერვალის ნახევარსიგანეს.
 @plural	The stop condition was met in {met} of {n} run, after {time} {unit} on average.|The stop condition was met in {met} of {n} runs, after {time} {unit} on average.	გაჩერების პირობა მიღწეულ იქნა {n} გაშვებიდან {met}-ში, საშუალოდ {time} {unit}-ის შემდეგ.|გაჩერების პირობა მიღწეულ იქნა {n} გაშვებიდან {met}-ში, საშუალოდ {time} {unit}-ის შემდეგ.
 @plural	{done} of {n} run finished|{done} of {n} runs finished	{n}-დან {done} გაშვება დასრულდა|{n}-დან {done} გაშვება დასრულდა
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} run|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} runs	{name}: {mean}{unit}\n95% ინტერვალი {low}-დან {high}{unit}-მდე\n{n} გაშვების მიხედვით|{name}: {mean}{unit}\n95% ინტერვალი {low}-დან {high}{unit}-მდე\n{n} გაშვების მიხედვით
@@ -938,7 +929,6 @@ unit	yr	წელი
 	kilometres	კილომეტრი
 	inches	დუიმი
 	feet	ფუტი
-	Ticked, items queue up at the end while the rest keep moving. Unticked, the whole belt stops when the item at the end cannot leave.	მონიშნულის შემთხვევაში ნივთები ბოლოში რიგში დგებიან, დანარჩენები კი გზას აგრძელებენ. მონიშვნის გარეშე მთელი ლენტი ჩერდება, როცა ბოლოში მყოფი ნივთი ვერ გადის.
 	A belt that carries entities from one end to the other. It has a length and a speed, and each entity takes a pitch of belt: its item length plus the gap kept free after it. So it holds at most length ÷ pitch entities and carries at most speed ÷ pitch per time unit. Accumulating: entities queue up at the end while the rest keep moving; otherwise the whole belt stops.	ლენტი, რომელიც ერთეულებს ერთი ბოლოდან მეორემდე გადააქვს. მას აქვს სიგრძე და სიჩქარე, ხოლო თითოეული ერთეული იკავებს ლენტის ერთ ბიჯს: თავისი ნივთის სიგრძეს და მის უკან თავისუფლად დატოვებულ დაშორებას. ამიტომ მასზე ეტევა მაქსიმუმ სიგრძე ÷ ბიჯი ერთეული და დროის ერთეულში გადააქვს მაქსიმუმ სიჩქარე ÷ ბიჯი. დაგროვებადი: ერთეულები ბოლოში რიგში დგებიან, დანარჩენები კი გზას აგრძელებენ; წინააღმდეგ შემთხვევაში მთელი ლენტი ჩერდება.
 	Station	სადგური
 	Kind	სახეობა
@@ -992,19 +982,165 @@ unit	yr	წელი
 	Time on conveyors	დრო ლენტებზე
 	No conveyors in this model	ამ მოდელში ლენტები არ არის
 	Fills in when the run ends	შეივსება გაშვების დასრულებისას
-	How long each item spends on the conveyors.	რამდენ ხანს არის თითოეული ელემენტი ლენტებზე.
-	No item has left a conveyor yet	ჯერ არც ერთი ელემენტი არ გასულა ლენტიდან
-	Share of items by time on a conveyor, in {unit}	ელემენტების წილი ლენტზე გატარებული დროის მიხედვით, {unit}-ში
-	Time on conveyors: {n} items between {lo} and {hi} {unit}	დრო ლენტებზე: {n} ელემენტი {lo}-სა და {hi} {unit}-ს შორის
-	{from} to {to} {unit}: {share} of items ({n})	{from}-დან {to} {unit}-მდე: ელემენტების {share} ({n})
-	Items on conveyors over time	ელემენტები ლენტებზე დროის განმავლობაში
-	Items in the model over time	ელემენტები მოდელში დროის განმავლობაში
-	How many items are on the conveyors over time.	რამდენი ელემენტია ლენტებზე დროის განმავლობაში.
-	How many items are in the model over time.	რამდენი ელემენტია მოდელში დროის განმავლობაში.
 	Nothing was recorded over time in these results	ამ შედეგებში დროის განმავლობაში არაფერი ჩაწერილა
-	At {time} {unit}: {n} items	{time} {unit}-ზე: {n} ელემენტი
 	Run the model to fill the dashboard	დაფის შესავსებად გაუშვით მოდელი
 	The resource and conveyor charts show the last run until this one ends	რესურსებისა და ლენტების დიაგრამები აჩვენებს ბოლო გაშვებას, ამის დასრულებამდე
+# Validation messages, new labels and word changes (issue #145)
+	The id “{id}” is not valid. Start an id with a letter or an underscore, then use only letters, digits, dots, hyphens and underscores.	ID „{id}“ არასწორია. ID დაიწყეთ ასოთი ან ქვედა ტირით, შემდეგ გამოიყენეთ მხოლოდ ასოები, ციფრები, წერტილები, დეფისები და ქვედა ტირეები.
+	More than one block, flow, pool or calendar has the id “{id}”. Give each its own id.	ერთზე მეტ ბლოკს, ნაკადს, პულს ან კალენდარს აქვს ID „{id}“. თითოეულს მიანიჭეთ საკუთარი ID.
+	The flow {flow} uses a block that does not exist. Remove the flow, or connect it to a block that exists.	ნაკადი {flow} იყენებს ბლოკს, რომელიც არ არსებობს. წაშალეთ ნაკადი ან დააკავშირეთ არსებულ ბლოკთან.
+	The flow {flow} leads into an Arrivals block, which takes no input. Remove the flow, or send it to another block.	ნაკადი {flow} შედის ბლოკში „შემოსვლები“, რომელიც შესასვლელს არ იღებს. წაშალეთ ნაკადი ან მიმართეთ სხვა ბლოკისკენ.
+	The flow {flow} leaves a Departures block, which has no output. Remove the flow, or start it from another block.	ნაკადი {flow} გამოდის ბლოკიდან „გასვლები“, რომელსაც გამოსასვლელი არ აქვს. წაშალეთ ნაკადი ან დაიწყეთ სხვა ბლოკიდან.
+	The flow {flow} leads from a block back to itself. Remove it, or send it to another block.	ნაკადი {flow} ბლოკიდან ისევ იმავე ბლოკში ბრუნდება. წაშალეთ ან მიმართეთ სხვა ბლოკისკენ.
+	{block} has nowhere to send entities. Add a flow from it to the next block.	{block}-ს არსად აქვს ერთეულების გასაგზავნი. დაამატეთ ნაკადი მისგან შემდეგ ბლოკამდე.
+	{block} has {count} flows out, and only a Decision or a Split or join block can send entities down several. Remove the extra flows, or add a Decision block.	{block}-დან გამოდის {count} ნაკადი, ხოლო ერთეულების რამდენიმე ნაკადით გაგზავნა მხოლოდ ბლოკებს „გადაწყვეტილება“ და „გაყოფა ან გაერთიანება“ შეუძლიათ. წაშალეთ ზედმეტი ნაკადები ან დაამატეთ ბლოკი „გადაწყვეტილება“.
+	In “{field}” of {block}, set “{param}” to a finite number.	{block}-ის ველში „{field}“ დააყენეთ „{param}“ სასრულ რიცხვზე.
+	In “{field}” of {block}, set “{param}” to a number above 0.	{block}-ის ველში „{field}“ დააყენეთ „{param}“ 0-ზე მეტ რიცხვზე.
+	In “{field}” of {block}, set “{param}” to 0 or more.	{block}-ის ველში „{field}“ დააყენეთ „{param}“ 0-ზე ან მეტზე.
+	In “{field}” of {block}, set “{param}” to 1 or more.	{block}-ის ველში „{field}“ დააყენეთ „{param}“ 1-ზე ან მეტზე.
+	In “{field}” of {block}, set “{param}” to a number from 0 to 1.	{block}-ის ველში „{field}“ დააყენეთ „{param}“ 0-დან 1-მდე რიცხვზე.
+	In “{field}” of {block}, set “Minimum” below “Maximum”, and any “Most likely” value between them.	{block}-ის ველში „{field}“ დააყენეთ „მინიმუმი“ „მაქსიმუმზე“ ნაკლებად, ხოლო „ყველაზე სავარაუდო“ მნიშვნელობა (თუ არის) მათ შორის.
+	In “{field}” of {block}, add data points whose probabilities add up to more than 0.	{block}-ის ველში „{field}“ დაამატეთ მონაცემთა წერტილები, რომელთა ალბათობების ჯამი 0-ზე მეტია.
+	{block} would never have a unit to work with. Give it at least 1 unit.	{block}-ს არასოდეს ექნება მუშა ერთეული. მიეცით სულ მცირე 1 ერთეული.
+	{block} would make entities without end, because its “Time between arrivals” is always 0. Give it a time above 0, or set an “Arrival limit”.	{block} ერთეულებს დაუსრულებლად შექმნიდა, რადგან მისი „შემოსვლებს შორის დრო“ ყოველთვის 0-ია. მიუთითეთ 0-ზე მეტი დრო ან დააყენეთ „შემოსვლის ლიმიტი“.
+	The model has no Arrivals block, so nothing will happen. Add an Arrivals block.	მოდელში არ არის ბლოკი „შემოსვლები“, ამიტომ არაფერი მოხდება. დაამატეთ ბლოკი „შემოსვლები“.
+	The model has no Departures block, so no time in system is measured. Add a Departures block.	მოდელში არ არის ბლოკი „გასვლები“, ამიტომ სისტემაში გატარებული დრო არ იზომება. დაამატეთ ბლოკი „გასვლები“.
+	No entity can reach {block} from an Arrivals block. Connect it to a block that entities pass through.	ბლოკ „შემოსვლებიდან“ ვერც ერთი ერთეული ვერ აღწევს {block}-ს. დააკავშირეთ ბლოკთან, რომელსაც ერთეულები გაივლიან.
+	Entities in {block} can never reach a Departures block. Connect it on towards Departures.	{block}-ში მყოფი ერთეულები ვერასოდეს აღწევენ ბლოკ „გასვლებს“. გააგრძელეთ კავშირი „გასვლებამდე“.
+	Set the “{state}” power of {block} to a number of kilowatts, 0 or more.	{block}-ის „{state}“ სიმძლავრე დააყენეთ კილოვატებში, 0 ან მეტი.
+	Set the warm-up of the experiment to 0 or more.	ექსპერიმენტის გახურების პერიოდი დააყენეთ 0-ზე ან მეტზე.
+	Set the duration of the experiment to more than 0.	ექსპერიმენტის ხანგრძლივობა დააყენეთ 0-ზე მეტზე.
+	Set the number of runs of the experiment to 1 or more.	ექსპერიმენტის გაშვებების რაოდენობა დააყენეთ 1-ზე ან მეტზე.
+	Set the layout scale (length units per drawing unit) to a finite number above 0.	განლაგების მასშტაბი (სიგრძის ერთეული ნახაზის ერთეულზე) დააყენეთ 0-ზე მეტ სასრულ რიცხვზე.
+	A property of {block} has no name. Give it a name, or remove it.	{block}-ის ერთ თვისებას სახელი არ აქვს. მიეცით სახელი ან წაშალეთ.
+	{block} sets the property “{name}” twice. Keep one of them.	{block} თვისებას „{name}“ ორჯერ ადგენს. დატოვეთ ერთ-ერთი.
+	The property “{name}” of {block} needs shares that are not negative and add up to more than 0. Change the shares.	{block}-ის თვისებას „{name}“ სჭირდება არაუარყოფითი წილები, რომელთა ჯამი 0-ზე მეტია. შეცვალეთ წილები.
+	The property “{name}” has the type “{type2}” on {block} but “{type}” on another block. Give it one type everywhere.	თვისებას „{name}“ აქვს ტიპი „{type2}“ ბლოკზე {block}, ხოლო სხვა ბლოკზე „{type}“. ყველგან ერთი ტიპი მიანიჭეთ.
+	The value of the property “{name}” on {block} does not fit its type, “{type}”. Change the value or the type.	თვისების „{name}“ მნიშვნელობა ბლოკზე {block} არ შეესაბამება მის ტიპს, „{type}“. შეცვალეთ მნიშვნელობა ან ტიპი.
+	The expression for the property “{name}” on {block} cannot be used: {error}. Correct “{expression}”.	თვისების „{name}“ გამოსახულება ბლოკზე {block} გამოუსადეგარია: {error}. შეასწორეთ „{expression}“.
+	{block} reads the property “{name}”, which no block sets, so it would read as empty. Set it on an earlier block, or correct the name.	{block} კითხულობს თვისებას „{name}“, რომელსაც არც ერთი ბლოკი არ ადგენს, ამიტომ ცარიელი წაიკითხება. დააყენეთ ის უფრო ადრეულ ბლოკზე ან შეასწორეთ სახელი.
+	The setup of {block} has times for particular changes but no property to watch. Choose a property under “Only when this property changes”.	{block}-ის მომზადებაში მითითებულია დრო გარკვეული ცვლილებებისთვის, მაგრამ არ არის თვისება დასაკვირვებლად. აირჩიეთ თვისება პუნქტში „მხოლოდ ამ თვისების შეცვლისას“.
+	{block} has times for particular values but no property to read them from. Choose a property under “Service time by property”.	{block}-ს აქვს დრო გარკვეული მნიშვნელობებისთვის, მაგრამ არ აქვს თვისება მათ წასაკითხად. აირჩიეთ თვისება პუნქტში „მომსახურების დრო თვისების მიხედვით“.
+	{block} has two times for the value “{value}”. Keep one.	{block}-ს ორი დრო აქვს მნიშვნელობისთვის „{value}“. დატოვეთ ერთი.
+	Set the time of {block} for the value “{value}” to a mean of 0 or more.	{block}-ის დრო მნიშვნელობისთვის „{value}“ დააყენეთ საშუალოზე, 0 ან მეტი.
+	The scrap at {block} counts against {other}, which is not a task with a resource. Choose a task with a resource.	წუნი ბლოკში {block} ითვლება ბლოკზე {other}, რომელიც არ არის დავალება რესურსით. აირჩიეთ დავალება რესურსით.
+	Set “Planned run time per item” of {block} to a mean above 0.	{block}-ის „დაგეგმილი მუშაობის დრო ერთ დეტალზე“ დააყენეთ 0-ზე მეტ საშუალოზე.
+	Set “Time before giving up” of {block} to a mean of 0 or more.	{block}-ის „დრო უარის თქმამდე“ დააყენეთ საშუალოზე, 0 ან მეტი.
+	The flow {flow} is ticked “Gave up”, but only a task with a resource and a “Time before giving up” sends entities that give up. Untick it, or set a “Time before giving up” on {block}.	ნაკადზე {flow} მონიშნულია „უარი თქვეს“, მაგრამ უარის მთქმელ ერთეულებს მხოლოდ დავალება რესურსით და „დრო უარის თქმამდე“ აგზავნის. მოხსენით მონიშვნა ან დააყენეთ „დრო უარის თქმამდე“ ბლოკზე {block}.
+	{count} flows out of {block} are ticked “{way}”; at most one can be. Untick all but one.	{block}-დან გამომავალი {count} ნაკადი მონიშნულია როგორც „{way}“; მხოლოდ ერთი შეიძლება იყოს. მოხსენით მონიშვნა ერთის გარდა ყველასთვის.
+	The flow {flow} is ticked “Turned away”, but only a task with a resource and a limited waiting room turns entities away. Untick it, or limit the waiting room of {block}.	ნაკადზე {flow} მონიშნულია „უარყოფილები“, მაგრამ ერთეულებს უარყოფს მხოლოდ დავალება რესურსით და შეზღუდული მოსაცდელი სივრცით. მოხსენით მონიშვნა ან შეზღუდეთ {block}-ის მოსაცდელი სივრცე.
+	The flow {flow} is ticked both “Gave up” and “Turned away”. Keep one of them.	ნაკადზე {flow} ერთდროულად მონიშნულია „უარი თქვეს“ და „უარყოფილები“. დატოვეთ ერთ-ერთი.
+	Set every chance of joining in the balking table of {block} to a number from 0 to 1.	{block}-ის რიგში არჩადგომის ცხრილში ჩადგომის ყოველი შანსი დააყენეთ 0-დან 1-მდე რიცხვზე.
+	Put the rows of the balking table of {block} in increasing order of “Number waiting”.	{block}-ის რიგში არჩადგომის ცხრილის სტრიქონები დაალაგეთ „მომლოდინეთა რაოდენობის“ ზრდის მიხედვით.
+	The flow {flow} is ticked “Balked”, but only a task with a resource and balking sends entities that balk. Untick it, or turn on balking for {block}.	ნაკადზე {flow} მონიშნულია „რიგში არ ჩადგნენ“, მაგრამ ასეთ ერთეულებს მხოლოდ დავალება რესურსით და რიგში არჩადგომით აგზავნის. მოხსენით მონიშვნა ან ჩართეთ რიგში არჩადგომა ბლოკზე {block}.
+	The flow {flow} is ticked “Balked” and also “Gave up” or “Turned away”. Keep one of them.	ნაკადზე {flow} მონიშნულია „რიგში არ ჩადგნენ“ და ასევე „უარი თქვეს“ ან „უარყოფილები“. დატოვეთ ერთ-ერთი.
+	The waiting room of {block} is set by calendar or per working server, but has no number of places, so it is unlimited. Give it a number of places, or make it fixed.	{block}-ის მოსაცდელი სივრცე კალენდრით ან მუშაობაში მყოფ სერვერზე ისაზღვრება, მაგრამ ადგილების რაოდენობა არ აქვს, ამიტომ შეუზღუდავია. მიუთითეთ ადგილების რაოდენობა ან გახადეთ ფიქსირებული.
+	The waiting room of {block} is set by calendar, but no calendar has a value. Add a value for a calendar, or make the waiting room fixed.	{block}-ის მოსაცდელი სივრცე კალენდრით ისაზღვრება, მაგრამ არც ერთ კალენდარს არ აქვს მნიშვნელობა. დაამატეთ მნიშვნელობა კალენდრისთვის ან გახადეთ მოსაცდელი სივრცე ფიქსირებული.
+	Set “Fails above, waiting per working server” of {block} to a number of 0 or more.	{block}-ის „ვერ გაივლის ზემოთ, მომლოდინე მუშაობაში მყოფ სერვერზე“ დააყენეთ 0 ან მეტ რიცხვზე.
+	Set “Check every” of {block} to a mean above 0.	{block}-ის „შემოწმების ინტერვალი“ დააყენეთ 0-ზე მეტ საშუალოზე.
+	Set the demand of {block} to a number of parts above 0.	{block}-ის მოთხოვნა დააყენეთ 0-ზე მეტ რაოდენობის დეტალზე.
+	The demand of {block} is per shift but names no calendar to say when the shifts are. Choose a calendar.	{block}-ის მოთხოვნა ცვლის მიხედვითაა, მაგრამ კალენდარი არ არის მითითებული, რომელიც ცვლებს განსაზღვრავს. აირჩიეთ კალენდარი.
+	The demand of {block} names a calendar that does not exist. Choose a calendar that exists.	{block}-ის მოთხოვნა მიუთითებს კალენდარზე, რომელიც არ არსებობს. აირჩიეთ არსებული კალენდარი.
+	The probability {value} on the flow {flow} is not from 0 to 1. Enter a probability from 0 to 1.	ალბათობა {value} ნაკადზე {flow} არ არის 0-დან 1-მდე. შეიყვანეთ ალბათობა 0-დან 1-მდე.
+	The probabilities of the flows out of {block} add up to {sum}, not 1, so they are used in proportion. Change them to add up to 1 if that is not what you want.	{block}-დან გამომავალი ნაკადების ალბათობათა ჯამია {sum}, არა 1, ამიტომ ისინი პროპორციულად გამოიყენება. თუ ეს არ გსურთ, შეცვალეთ ისე, რომ ჯამი 1 იყოს.
+	The condition on the flow {flow} cannot be used: {error}. Correct “{expression}”.	პირობა ნაკადზე {flow} გამოუსადეგარია: {error}. შეასწორეთ „{expression}“.
+	The condition on the flow {flow} is ignored, because only flows out of a Decision block choose a route. Remove the condition.	პირობა ნაკადზე {flow} იგნორირებულია, რადგან მარშრუტს მხოლოდ ბლოკ „გადაწყვეტილებიდან“ გამომავალი ნაკადები ირჩევს. წაშალეთ პირობა.
+	The probability on the flow {flow} is ignored, because only flows out of a Decision block choose a route. Remove the probability.	ალბათობა ნაკადზე {flow} იგნორირებულია, რადგან მარშრუტს მხოლოდ ბლოკ „გადაწყვეტილებიდან“ გამომავალი ნაკადები ირჩევს. წაშალეთ ალბათობა.
+	The condition on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the condition.	პირობა ნაკადზე {flow} იგნორირებულია, რადგან გადაწყვეტილება ერთეულებს უმოკლეს რიგში აგზავნის. წაშალეთ პირობა.
+	The probability on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the probability.	ალბათობა ნაკადზე {flow} იგნორირებულია, რადგან გადაწყვეტილება ერთეულებს უმოკლეს რიგში აგზავნის. წაშალეთ ალბათობა.
+	The default on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the default.	ნაგულისხმევი ნაკადის ნიშანი ნაკადზე {flow} იგნორირებულია, რადგან გადაწყვეტილება ერთეულებს უმოკლეს რიგში აგზავნის. მოხსენით ნაგულისხმევი.
+	The probability on the flow {flow} is ignored, because the Decision routes by condition. Remove the probability.	ალბათობა ნაკადზე {flow} იგნორირებულია, რადგან გადაწყვეტილება მარშრუტს პირობით ირჩევს. წაშალეთ ალბათობა.
+	The default flow of {block} is not one of its own flows out. Choose one of the flows out of {block} as the default.	{block}-ის ნაგულისხმევი ნაკადი მისი საკუთარი გამომავალი ნაკადებიდან არც ერთი არ არის. აირჩიეთ {block}-დან გამომავალი ერთ-ერთი ნაკადი ნაგულისხმევად.
+	{block} routes by condition but has no default flow, so an entity for which no condition holds leaves the model here. Choose a default flow.	{block} მარშრუტს პირობით ირჩევს, მაგრამ ნაგულისხმევი ნაკადი არ აქვს, ამიტომ ერთეული, რომელსაც არც ერთი პირობა არ აკმაყოფილებს, აქვე ტოვებს მოდელს. აირჩიეთ ნაგულისხმევი ნაკადი.
+	{block} diverts entities but has no default flow, so an entity whose way is full has nowhere else to go. Choose a default flow.	{block} ერთეულებს გადაამისამართებს, მაგრამ ნაგულისხმევი ნაკადი არ აქვს, ამიტომ ერთეულს, რომლის გზაც სავსეა, სხვა წასასვლელი არ აქვს. აირჩიეთ ნაგულისხმევი ნაკადი.
+	{block} waits for an entity on the flow {flow}, which none can reach, so it never sends one on. Remove that flow, or connect it to a block that entities reach.	{block} ელოდება ერთეულს ნაკადზე {flow}, რომელსაც ვერც ერთი ერთეული ვერ აღწევს, ამიტომ არასოდეს აგზავნის გასაგრძელებლად. წაშალეთ ეს ნაკადი ან დააკავშირეთ ბლოკთან, რომელსაც ერთეულები აღწევენ.
+	{block} has a limited waiting room and is fed through {gateway}. While it is full, {gateway} holds up every entity behind it, and they wait before it without limit. Remove the gateway before {block}, or remove the limit.	{block}-ს აქვს შეზღუდული მოსაცდელი სივრცე და მას კვებავს {gateway}. სანამ ის სავსეა, {gateway} აჭერს ყველა ერთეულს თავის უკან, და ისინი შეუზღუდავად ელოდებიან მის წინ. ამოიღეთ კარიბჭე {block}-მდე ან მოხსენით შეზღუდვა.
+	The limited waiting rooms of {loop} feed each other in a loop, so when all of them are full the loop deadlocks. Remove the limit on one of them, or break the loop.	{loop}-ის შეზღუდული მოსაცდელი სივრცეები ციკლში კვებავენ ერთმანეთს, ამიტომ როცა ყველა სავსეა, ციკლი ჩიხში შედის. მოხსენით შეზღუდვა ერთ-ერთზე ან გაწყვიტეთ ციკლი.
+	The pool {block} has no units. Give it at least 1 unit.	პულს {block} ერთეული არ აქვს. მიეცით სულ მცირე 1 ერთეული.
+	{block} names no resource it needs. Add one under “Needs”.	{block}-ს არ აქვს მითითებული საჭირო რესურსი. დაამატეთ ერთი განყოფილებაში „საჭიროებები“.
+	{block} needs a resource pool that does not exist. Choose a pool that exists.	{block}-ს სჭირდება რესურსების პული, რომელიც არ არსებობს. აირჩიეთ არსებული პული.
+	{block} needs units with the roles {roles}, which no pool has. Give a pool those roles, or change what {block} needs.	{block}-ს სჭირდება ერთეულები როლებით {roles}, რომლებიც არც ერთ პულს არ აქვს. მიანიჭეთ პულს ეს როლები ან შეცვალეთ {block}-ის საჭიროებები.
+	{block} needs {needed} units at once, but at most {available} exist, so this can never be met. Ask for fewer units, or add units to the pool.	{block}-ს ერთდროულად სჭირდება {needed} ერთეული, მაგრამ სულ მაქსიმუმ {available} არსებობს, ამიტომ ეს ვერასოდეს დაკმაყოფილდება. მოითხოვეთ ნაკლები ერთეული ან დაამატეთ ერთეულები პულში.
+	Set the priority of {block} to a finite number, not {value}.	{block}-ის პრიორიტეტი დააყენეთ სასრულ რიცხვზე და არა {value}-ზე.
+	No task uses the pool {block}. Add it to a task's needs, or remove the pool.	არც ერთი დავალება არ იყენებს პულს {block}. დაამატეთ ის დავალების საჭიროებებში ან წაშალეთ პული.
+	{block} has a value for a calendar that does not exist. Choose a calendar that exists, or remove the value.	{block}-ს აქვს მნიშვნელობა კალენდრისთვის, რომელიც არ არსებობს. აირჩიეთ არსებული კალენდარი ან წაშალეთ მნიშვნელობა.
+	The calendar {block} has no entries, so it is never active. Add an entry.	კალენდარს {block} ჩანაწერები არ აქვს, ამიტომ არასოდეს არის აქტიური. დაამატეთ ჩანაწერი.
+	{block} allows no arrivals outside the calendars but names no calendar, so it never creates entities. Add arrivals by calendar, or allow arrivals outside calendars.	{block} კალენდრების გარეთ შემოსვლებს არ უშვებს, მაგრამ კალენდარს არ ასახელებს, ამიტომ ერთეულებს არასოდეს ქმნის. დაამატეთ შემოსვლები კალენდრის მიხედვით ან დაუშვით შემოსვლები კალენდრების გარეთ.
+	Set the batch size of {block} to 1 or more.	{block}-ის პარტიის ზომა დააყენეთ 1-ზე ან მეტზე.
+	Set “{field}” of the conveyor {block} to a finite number above 0.	კონვეიერის {block} „{field}“ დააყენეთ 0-ზე მეტ სასრულ რიცხვზე.
+	Set “{field}” of the conveyor {block} to a finite number of 0 or more.	კონვეიერის {block} „{field}“ დააყენეთ 0-ზე ან მეტ სასრულ რიცხვზე.
+	Set “{field}” of the conveyor {block} to a finite number other than 0.	კონვეიერის {block} „{field}“ დააყენეთ სასრულ რიცხვზე, რომელიც 0-ისგან განსხვავებულია.
+	The conveyor {block} is {length} long but each entity takes {pitch} (item length plus gap), so not even one fits. Lengthen the conveyor, or shorten the item or the gap.	კონვეიერის {block} სიგრძეა {length}, მაგრამ თითოეული ერთეული იკავებს {pitch}-ს (ნივთის სიგრძე და დაშორება), ამიტომ ერთიც კი არ ეტევა. გაზარდეთ კონვეიერის სიგრძე ან შეამცირეთ ნივთის სიგრძე ან დაშორება.
+	The drawn path of the conveyor {block} is {path_length} long, but its “Length” is {length}, so the drawing and the run disagree. Make “Length” match the path, or change the shape.	კონვეიერის {block} დახატული გზის სიგრძეა {path_length}, მაგრამ მისი „სიგრძე“ {length}-ია, ამიტომ ნახაზი და გაშვება ერთმანეთს არ ემთხვევა. გაუტოლეთ „სიგრძე“ გზას ან შეცვალეთ ფორმა.
+	{block} is a transport, which StochCraft does not simulate yet. Remove it to run the model.	{block} ტრანსპორტია, რომელსაც StochCraft ჯერ არ ასიმულირებს. წაშალეთ, რომ მოდელი გაუშვათ.
+	The pool {pool} of the transport {block} does not exist. Choose a pool that exists.	ტრანსპორტის {block} პული {pool} არ არსებობს. აირჩიეთ არსებული პული.
+	The pool {pool} of the transport {block} is not mobile. Give the pool speeds and a home.	ტრანსპორტის {block} პული {pool} მობილური არ არის. მიეცით პულს სიჩქარეები და საწყისი ადგილი.
+	Set “{field}” of the pool {block} to a finite number above 0.	პულის {block} „{field}“ დააყენეთ 0-ზე მეტ სასრულ რიცხვზე.
+	The home of the pool {block} is not a block of the model. Choose a block as its home.	პულის {block} საწყისი ადგილი მოდელის ბლოკი არ არის. აირჩიეთ ბლოკი საწყის ადგილად.
+	The transport {block} needs one block before it, where it picks up, and one after it, where it drops off, but has {inputs} before and {outputs} after. Connect it to one block on each side.	ტრანსპორტს {block} სჭირდება ერთი ბლოკი მის წინ, სადაც იღებს, და ერთი მის შემდეგ, სადაც ტოვებს, მაგრამ მას წინ აქვს {inputs}, შემდეგ კი {outputs}. დააკავშირეთ თითო ბლოკთან თითოეულ მხარეს.
+	{other} has no place on the canvas, so the distances for {block} are not known. Place {other} on the canvas.	{other}-ს ადგილი არ აქვს მთავარ ზედაპირზე, ამიტომ მანძილები {block}-ისთვის უცნობია. განათავსეთ {other} მთავარ ზედაპირზე.
+	The flow {flow} asks for no entities. Set its “Units” to 1 or more.	ნაკადი {flow} არც ერთ ერთეულს არ ითხოვს. დააყენეთ მისი „რაოდენობა“ 1-ზე ან მეტზე.
+	The “Units” on the flow {flow} is ignored, because only a Split or join block takes several entities from one flow. Remove it.	„რაოდენობა“ ნაკადზე {flow} იგნორირებულია, რადგან რამდენიმე ერთეულს ერთი ნაკადიდან მხოლოდ ბლოკი „გაყოფა ან გაერთიანება“ იღებს. წაშალეთ.
+	No block makes batches, so {block} passes every entity through. Add a Batch block before it, or remove {block}.	არც ერთი ბლოკი არ ქმნის პარტიებს, ამიტომ {block} ყველა ერთეულს უცვლელად ატარებს. დაამატეთ ბლოკი „პარტია“ მის წინ ან წაშალეთ {block}.
+	The stop condition names a block that does not exist. Choose a block that exists.	გაჩერების პირობა ასახელებს ბლოკს, რომელიც არ არსებობს. აირჩიეთ არსებული ბლოკი.
+	Set the count of the stop condition for {block} to 1 or more.	{block}-ის გაჩერების პირობის რაოდენობა დააყენეთ 1-ზე ან მეტზე.
+	The stop condition waits for {block} to empty, but only a task can empty. Choose a task.	გაჩერების პირობა ელოდება {block}-ის დაცარიელებას, მაგრამ მხოლოდ დავალებას შეუძლია დაცარიელება. აირჩიეთ დავალება.
+	The stop condition at {block} can be met before the warm-up ends. A run that stops during the warm-up has no statistics after it and is left out of the results. Shorten the warm-up, or stop later.	გაჩერების პირობა {block}-ზე შეიძლება შესრულდეს გახურების პერიოდის დასრულებამდე. გაშვებას, რომელიც გახურების დროს ჩერდება, შემდეგ სტატისტიკა არ აქვს და შედეგებიდან ამოღებულია. შეამოკლეთ გახურების პერიოდი ან გააჩერეთ უფრო გვიან.
+	Every run stopped before the warm-up ended, so no metric is reported. Shorten the warm-up, or stop later.	ყველა გაშვება გაჩერდა გახურების პერიოდის დასრულებამდე, ამიტომ არც ერთი მაჩვენებელი არ ჩანს. შეამოკლეთ გახურების პერიოდი ან გააჩერეთ უფრო გვიან.
+	{replications} of {of} runs stopped before the warm-up ended, so their statistics are left out of every metric. Shorten the warm-up, or stop later.	{of} გაშვებიდან {replications} გაჩერდა გახურების პერიოდის დასრულებამდე, ამიტომ მათი სტატისტიკა ყველა მაჩვენებლიდან ამოღებულია. შეამოკლეთ გახურების პერიოდი ან გააჩერეთ უფრო გვიან.
+	{block} is offered {load}% of the work its units can do, so its waiting room grows without limit and the results describe no steady state. Add units, or shorten the service.	{block}-ს მიეწოდება იმ სამუშაოს {load}%, რასაც მისი რესურსის ერთეულები ასრულებენ, ამიტომ მისი მოსაცდელი სივრცე შეუზღუდავად იზრდება და შედეგები სტაბილურ რეჟიმს არ აღწერს. დაამატეთ ერთეულები ან შეამოკლეთ მომსახურების დრო.
+	{block} is busy {utilisation}% of the time, and at the end at least {backlog} entities are still waiting against {left} that left. Work arrives faster than it is done, so the results describe no steady state. Add units, or shorten the service.	{block} დაკავებულია დროის {utilisation}%-ში, ბოლოს კი კიდევ სულ მცირე {backlog} ერთეული ელოდება, წასულია {left}. სამუშაო უფრო სწრაფად მოდის, ვიდრე სრულდება, ამიტომ შედეგები სტაბილურ რეჟიმს არ აღწერს. დაამატეთ რესურსის ერთეულები ან შეამოკლეთ მომსახურების დრო.
+	The experiment has one run, so its results cannot be told from chance. Set the number of runs to at least 2, and usually 10 or more.	ექსპერიმენტს ერთი გაშვება აქვს, ამიტომ მისი შედეგები შემთხვევითობისგან ვერ გაირჩევა. გაშვებების რაოდენობა დააყენეთ სულ მცირე 2-ზე, ჩვეულებრივ კი 10-ზე ან მეტზე.
+	{block} has a three-point estimate but no time to fit it to, so the estimate is ignored. Remove the estimate.	{block}-ს აქვს სამწერტილიანი შეფასება, მაგრამ არ აქვს დრო, რომელზეც მოერგება, ამიტომ შეფასება იგნორირებულია. წაშალეთ შეფასება.
+	The three-point estimate of {block} cannot be fitted: every point must be a finite number. Correct the points.	{block}-ის სამწერტილიანი შეფასების მორგება შეუძლებელია: ყველა წერტილი სასრული რიცხვი უნდა იყოს. შეასწორეთ წერტილები.
+	The three-point estimate of {block} cannot be fitted: the points must be in order, minimum, most likely, then maximum or 95th percentile. Correct the points.	{block}-ის სამწერტილიანი შეფასების მორგება შეუძლებელია: წერტილები თანმიმდევრობით უნდა იყოს: მინიმუმი, ყველაზე სავარაუდო, შემდეგ მაქსიმუმი ან 95-ე პროცენტილი. შეასწორეთ წერტილები.
+	The three-point estimate of {block} cannot be fitted: log-normal and Weibull estimates have no maximum. Give a 95th percentile instead.	{block}-ის სამწერტილიანი შეფასების მორგება შეუძლებელია: ლოგნორმალურ და ვეიბულის შეფასებებს მაქსიმუმი არ აქვს. ამის ნაცვლად მიუთითეთ 95-ე პროცენტილი.
+	The time of {block} is no longer the one fitted from its three-point estimate. Fit it again, or remove the estimate.	{block}-ის დრო აღარ არის ის, რაც მისი სამწერტილიანი შეფასებიდან მოერგო. მოარგეთ ხელახლა ან წაშალეთ შეფასება.
+	In “{field}” of {block}, the normal distribution draws below 0 more than 1 time in 100, and each such draw counts as 0, so the times are longer on average than its mean. Use a truncated normal with a minimum of 0, or a log-normal.	{block}-ის ველში „{field}“ ნორმალური განაწილება 100-ში ერთზე მეტჯერ იძლევა 0-ზე ნაკლებს, და თითოეული ასეთი მნიშვნელობა 0-ად ითვლება, ამიტომ დროები საშუალოდ მის საშუალოზე გრძელია. გამოიყენეთ შეკვეცილი ნორმალური მინიმუმით 0 ან ლოგნორმალური.
+	The entities of {block} do not add up: {came} came in or were inside at the start, but {went} left, were lost, gave up or are still inside.	{block}-ის ერთეულები არ ჯდება: {came} შემოვიდა ან თავიდანვე შიგნით იყო, მაგრამ {went} გავიდა, დაიკარგა, უარი თქვა ან ჯერ კიდევ შიგნითაა.
+	The entities of the model do not add up: {came} were created or inside at the start, but {went} reached Departures, left the model elsewhere or are still inside.	მოდელის ერთეულები არ ჯდება: {came} შეიქმნა ან თავიდანვე შიგნით იყო, მაგრამ {went} მიაღწია „გასვლებს“, სხვაგან დატოვა მოდელი ან ჯერ კიდევ შიგნითაა.
+	No entity left the model, of {came} created or inside at the start. Check that the routing leads to Departures and that the run is long enough for an entity to get through.	არც ერთი ერთეული არ გასულა მოდელიდან, {came}-დან, რომლებიც შეიქმნა ან თავიდანვე შიგნით იყო. შეამოწმეთ, რომ მარშრუტი „გასვლებამდე“ მიდის და რომ გაშვება საკმარისად გრძელია, რათა ერთეულმა გაიაროს.
+	Little's law does not hold at {block}: the time-average number inside was {mean}, but the entities' own times inside give {from_stays}.	ლიტლის კანონი არ სრულდება {block}-ზე: შიგნით მყოფთა საშუალო დროით-შეწონილი რაოდენობა იყო {mean}, ხოლო ერთეულების საკუთარი შიგნით ყოფნის დრო იძლევა {from_stays}-ს.
+	The utilisation of {block} counts {busy} units busy on average, but {working} were processing or setting up: units idle, blocked, off shift, failed or restarting were counted busy.	{block}-ის გამოყენების დონე საშუალოდ {busy} დაკავებულ ერთეულს ითვლის, მაგრამ {working} ამუშავებდა ან ემზადებოდა: უქმე, დაბლოკილი, ცვლის გარეთ, გაუმართავი ან ხელახლა გაშვებული ერთეულები დაკავებულად ჩაითვალა.
+	The utilisation of {block} counts {busy} units busy on average, but {working} were processing or setting up: units at work were not counted busy.	{block}-ის გამოყენების დონე საშუალოდ {busy} დაკავებულ ერთეულს ითვლის, მაგრამ {working} ამუშავებდა ან ემზადებოდა: მომუშავე ერთეულები დაკავებულად არ ჩაითვალა.
+	The shares of the time of the units of {block} in each state add up to {total}, not 1.	{block}-ის ერთეულების დროის წილები თითოეულ მდგომარეობაში ჯამურად {total}-ია და არა 1.
+	“{metric}” of {block} is {value}, outside 0 to 1 (0% to 100%).	{block}-ის „{metric}“ არის {value}, 0-დან 1-ის (0%-დან 100%-ის) გარეთ.
+	This was found in {replications} of {of} runs, and the furthest off is shown.	ეს ნაპოვნია {of} გაშვებიდან {replications}-ში, ნაჩვენებია ყველაზე გადახრილი.
+	This points to a fault in StochCraft rather than in the model. Please report it with the model.	ეს მიუთითებს StochCraft-ის შეცდომაზე და არა მოდელისა. გთხოვთ, შეატყობინოთ მოდელთან ერთად.
+	Angle	კუთხე
+	Failed	გაუმართავი
+	Off shift	ცვლის გარეთ
+	Processing	დამუშავება
+	Radius	რადიუსი
+	Rise	აწევა
+	Speed empty	სიჩქარე ცარიელზე
+	Speed loaded	სიჩქარე დატვირთულზე
+	Turns	ბრუნები
+	Unload	გადმოტვირთვა
+	Lost	დაკარგული
+	An entity that leaves a waiting room before a unit takes it, because it has waited as long as it was willing to.	ერთეული, რომელიც ტოვებს მოსაცდელ სივრცეს მანამდე, სანამ რესურსის ერთეული აიყვანდეს, რადგან იმდენი ელოდა, რამდენსაც მზად იყო ლოდინისთვის.
+	An entity that does not join a waiting room at all, because the number already waiting put it off.	ერთეული, რომელიც საერთოდ არ შედის მოსაცდელ სივრცეში, რადგან უკვე მომლოდინეთა რაოდენობამ გადააფიქრებინა.
+	An entity that finds the waiting room full and takes the flow ticked “Turned away” instead of waiting.	ერთეული, რომელიც მოსაცდელ სივრცეს სავსეს ხედავს და ლოდინის ნაცვლად მიდის ნაკადით, რომელიც მონიშნულია „უარყოფილები“.
+	An entity that leaves the model without reaching Departures: it found the waiting room full with nowhere else to go, or a decision with no way out for it.	ერთეული, რომელიც ტოვებს მოდელს „გასვლებამდე“ მიუღწევლად: მოსაცდელი სივრცე სავსე დახვდა და სხვა გზა არ ჰქონდა, ან გადაწყვეტილებას, რომელსაც მისთვის გასასვლელი არ აქვს.
+	Gave up on {id}	უარი თქვეს ნაკადზე {id}
+	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the flow ticked “Gave up”, or leaves the model.	თითოეული ერთეული აქ ელოდება არაუმეტეს იმ დროისა, რომელიც მისთვის შემთხვევით შეირჩევა მოსვლისას, შემდეგ კი უარს ამბობს: მიდის ნაკადით, რომელიც მონიშნულია როგორც „უარი თქვეს“, ან ტოვებს მოდელს.
+	Entities that do not join the waiting room take this flow at once (to try again later, say), instead of being lost; they count as balked here.	ერთეულები, რომლებიც მოსაცდელ სივრცეში არ შედიან, მაშინვე ამ ნაკადით მიდიან (მაგალითად, მოგვიანებით ხელახლა საცდელად), ნაცვლად იმისა, რომ დაიკარგონ; აქ ისინი რიგში არჩამდგარად ითვლება.
+	The job stops at once: the entity goes back to the front of the waiting room for any server on shift, and the work done on it is wasted.	სამუშაო მაშინვე ჩერდება: ერთეული ბრუნდება მოსაცდელი სივრცის თავში ცვლაში მყოფი ნებისმიერი სერვერისთვის, ხოლო მასზე შესრულებული სამუშაო ფუჭდება.
+	The connection drops and the client tries again: the entity goes back to the front of the waiting room at once, and the work done on it is wasted.	კავშირი წყდება და კლიენტი ხელახლა ცდილობს: ერთეული მაშინვე ბრუნდება მოსაცდელი სივრცის თავში, ხოლო მასზე შესრულებული სამუშაო ფუჭდება.
+	Ticked, entities queue up at the end while the rest keep moving. Unticked, the whole belt stops when the entity at the end cannot leave.	მონიშნულის შემთხვევაში ერთეულები ბოლოში რიგში დგებიან, დანარჩენები კი გზას აგრძელებენ. მონიშვნის გარეშე მთელი ლენტი ჩერდება, როცა ბოლოში მყოფი ერთეული ვერ გადის.
+	Play run 1 step by step and see each block's waiting room on the diagram	გაშვება 1-ის ნაბიჯ-ნაბიჯ გავლა და თითოეული ბლოკის მოსაცდელი სივრცის ნახვა დიაგრამაზე
+	Select a block to see its waiting room over time.	აირჩიეთ ბლოკი, რომ ნახოთ მისი მოსაცდელი სივრცე დროის მიხედვით.
+	Entities on conveyors over time	ერთეულები ლენტებზე დროის განმავლობაში
+	Entities in the model over time	ერთეულები მოდელში დროის განმავლობაში
+	How long each entity spends on the conveyors.	რამდენ ხანს არის თითოეული ერთეული ლენტებზე.
+	No entity has left a conveyor yet	ჯერ არც ერთი ერთეული არ გასულა ლენტიდან
+	Share of entities by time on a conveyor, in {unit}	ერთეულების წილი ლენტზე გატარებული დროის მიხედვით, {unit}-ში
+	Time on conveyors: {n} entities between {lo} and {hi} {unit}	დრო ლენტებზე: {n} ერთეული {lo}-სა და {hi} {unit}-ს შორის
+	{from} to {to} {unit}: {share} of entities ({n})	{from}-დან {to} {unit}-მდე: ერთეულების {share} ({n})
+	How many entities are on the conveyors over time.	რამდენი ერთეულია ლენტებზე დროის განმავლობაში.
+	How many entities are in the model over time.	რამდენი ერთეულია მოდელში დროის განმავლობაში.
+	At {time} {unit}: {n} entities	{time} {unit}-ზე: {n} ერთეული
+@plural	Makes {n} independent run of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval across them.	მოდელის {n} დამოუკიდებელ გაშვებას ასრულებს საწყისი მნიშვნელობით {seed}. თითოეული ბლოკის შედეგები შეიცავს 95% ნდობის ინტერვალის ნახევარსიგანეს.|მოდელის {n} დამოუკიდებელ გაშვებას ასრულებს საწყისი მნიშვნელობით {seed}. თითოეული ბლოკის შედეგები შეიცავს 95% ნდობის ინტერვალის ნახევარსიგანეს.
 	Fonts	შრიფტები
 	The full list of third-party licences is in the file THIRD-PARTY-LICENSES.html, which comes with the download.	მესამე მხარის ლიცენზიების სრული სია არის ფაილში THIRD-PARTY-LICENSES.html, რომელიც ჩამოტვირთვას თან ახლავს.
 	Full list of third-party licences	მესამე მხარის ლიცენზიების სრული სია

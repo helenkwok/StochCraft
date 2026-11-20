@@ -21,8 +21,6 @@
 	A caller on hold: once a unit takes it, the entity stays.	হোল্ডে থাকা কলার: কোনো একক তাকে নিলে সত্তাটি থেকে যায়।
 	A client that times out: if its time runs out during service, it gives up then, and the unit finishes the job anyway (wasted work).	টাইমআউট হওয়া ক্লায়েন্ট: সেবার মধ্যে তার সময় ফুরিয়ে গেলে সে তখনই ছেড়ে দেয়, আর একক তবুও কাজটি শেষ করে (নষ্ট কাজ)।
 	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	নতুন ফাইলে শুধু মডেলটি থাকে: {file}-এর যা StochCraft বোঝে না তা বাদ পড়ে।
-	Abandoned	ছেড়ে যাওয়া
-	Abandoned on {id}	{id}-এ ছেড়ে যাওয়া
 	About StochCraft	StochCraft সম্পর্কে
 	About {app}	{app} সম্পর্কে
 	Accent	অ্যাকসেন্ট রং
@@ -162,7 +160,6 @@
 	Duration	সময়কাল
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	প্রতিটি বিশ্লেষণ একই যদৃচ্ছ বীজে পরীক্ষাটি কয়েকবার চালায়, তাই পার্থক্য আসে পরিবর্তন থেকে, দৈবক্রম থেকে নয়। কিছুটা সময় লাগতে পারে।
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	প্রতিটি সত্তা এগুলোর মধ্যে প্রথম সেটি নেয় যা এখনই একসঙ্গে পুরোপুরি পূরণ করা যায়, এবং বেরিয়ে যাওয়ার সময় এককগুলো ফেরত দেয়।
-	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	প্রতিটি সত্তা আগমনের সময় তার জন্য এলোমেলোভাবে নেওয়া একটি সময় পর্যন্ত এখানে অপেক্ষা করে, তারপর ছেড়ে দেয়: সেটি "ছেড়ে যাওয়া" চিহ্নিত বেরোনোর পথ ধরে, অথবা মডেল থেকে বেরিয়ে যায়।
 	Each server (unit) is checked every so often, as a load balancer probes the servers behind it. One that fails, with too many waiting, is taken out of service for a restart, then comes back.	প্রতিটি সার্ভার (একক) মাঝে মাঝে পরীক্ষা করা হয়, যেমন একটি লোড ব্যালান্সার তার পেছনের সার্ভারগুলো যাচাই করে। যে সার্ভার পরীক্ষায় ব্যর্থ হয়, কারণ খুব বেশি অপেক্ষায় আছে, তাকে পুনরায় চালুর জন্য সরিয়ে নেওয়া হয়, তারপর সে ফিরে আসে।
 	Edit	সম্পাদনা
 	Edit themes…	থিম সম্পাদনা…
@@ -419,7 +416,6 @@
 	Run	চালান
 	Run cancelled	চালনা বাতিল করা হয়েছে
 	Run experiment	পরীক্ষা চালান
-	Play run 1 step by step and see each block's queue on the diagram	পুনরাবৃত্তি 1 ধাপে ধাপে চালান এবং ডায়াগ্রামে প্রতিটি ব্লকের সারি দেখুন
 	Run the experiment ({shortcut})	পরীক্ষা চালান ({shortcut})
 	Run the experiment again to see this result's spread.	এই ফলাফলের বিস্তার দেখতে পরীক্ষাটি আবার চালান।
 	Run the experiment at each value of one parameter, and compare a result.	একটি প্যারামিটারের প্রতিটি মানে পরীক্ষা চালিয়ে একটি ফলাফল তুলনা করুন।
@@ -440,7 +436,6 @@
 	Scrap ratio	স্ক্র্যাপ অনুপাত
 	Seed	যদৃচ্ছ বীজ
 	Select All	সব নির্বাচন করুন
-	Select a block to see its queue over time.	সময়ের সাথে কোনো ব্লকের সারি দেখতে সেটি নির্বাচন করুন।
 	Sender waits during transfer	স্থানান্তরের সময় প্রেরক অপেক্ষা করে
 	Separate the values with semicolons or spaces.	মানগুলি সেমিকোলন বা স্পেস দিয়ে আলাদা করুন।
 	Sequential	ক্রমিক
@@ -504,10 +499,8 @@
 	Text	টেক্সট
 	Text on accent	অ্যাকসেন্ট রঙের ওপর টেক্সট
 	Text on header	শিরোনাম বারে টেক্সট
-	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	সংযোগ বিচ্ছিন্ন হয় এবং ক্লায়েন্ট আবার চেষ্টা করে: সত্তাটি সঙ্গে সঙ্গে সারির সামনে ফিরে যায়, আর তার ওপর করা কাজ নষ্ট হয়।
 	The entity waits on its server and the job carries on with what was left once the server is back.	সত্তাটি তার সার্ভারে অপেক্ষা করে, আর সার্ভার ফিরে এলে বাকি অংশ নিয়ে কাজ চলতে থাকে।
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more runs would narrow it.	ব্যবধানটি {share} লক্ষ্য অংশের নিচে নেমে যায়, তাই অংশটি ৯৫% আস্থায় পূরণ হয়েছে বলে দেখানো যায় না; আরও পুনরাবৃত্তি এটিকে সরু করবে।
-	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	কাজটি সঙ্গে সঙ্গে থেমে যায়: সত্তাটি শিফটে থাকা যেকোনো সার্ভারের জন্য সারির সামনে ফিরে যায়, আর তার ওপর করা কাজ নষ্ট হয়।
 	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	কাজটি সঙ্গে সঙ্গে থেমে যায়; সত্তাটি তার সার্ভারে অপেক্ষা করে, আর সেই সার্ভার আবার শিফটে এলে বাকি অংশ নিয়ে কাজ চলতে থাকে।
 	The last task with a resource it finished at	শেষ যে সম্পদসহ কাজ অংশটি পার হয়েছে
 	The mean time to the stop condition is over the runs that met it only; the others ran to their time limit.	থামার শর্ত পর্যন্ত গড় সময় কেবল সেই পুনরাবৃত্তিগুলোর উপর যেগুলো শর্তে পৌঁছেছে; বাকিগুলো তাদের সময়সীমা পর্যন্ত চলেছে।
@@ -690,7 +683,6 @@ unit	yr	বছর
 	Balked on {id}	{id}-এ সারিতে না দাঁড়ানো
 	Balking	সারিতে না দাঁড়ানো
 	Count those in service	পরিষেবাধীনদেরও গুনুন
-	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	যে সত্তারা সারিতে যোগ দেয় না তারা সঙ্গে সঙ্গে এই প্রবাহ ধরে যায় (যেমন পরে আবার চেষ্টা করতে), হারিয়ে যাওয়ার বদলে; এখানে তাদের সারিতে না দাঁড়ানো হিসেবে গোনা হয়।
 	Joins with probability	সারিতে যোগ দেওয়ার সম্ভাবনা
 	Number waiting	অপেক্ষমাণ সংখ্যা
 	Share balked	সারিতে না দাঁড়ানোদের অনুপাত
@@ -908,7 +900,6 @@ unit	yr	বছর
 @plural	Finished {n} run|Finished {n} runs	{n}টি পুনরাবৃত্তি সম্পন্ন হয়েছে|{n}টি পুনরাবৃত্তি সম্পন্ন হয়েছে
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	{file} খোলা হয়েছে ({n}টি সতর্কতা)|{file} খোলা হয়েছে ({n}টি সতর্কতা)
 @plural	Removed {n} block|Removed {n} blocks	{n}টি ব্লক সরানো হয়েছে|{n}টি ব্লক সরানো হয়েছে
-@plural	Makes {n} independent run of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	বীজ {seed} থেকে মডেলের {n}টি স্বাধীন পুনরাবৃত্তি চালায়। প্রতিটি উপাদানের ফলে 95% আস্থা ব্যবধানের অর্ধপ্রস্থ দেওয়া হয়।|বীজ {seed} থেকে মডেলের {n}টি স্বাধীন পুনরাবৃত্তি চালায়। প্রতিটি উপাদানের ফলে 95% আস্থা ব্যবধানের অর্ধপ্রস্থ দেওয়া হয়।
 @plural	The stop condition was met in {met} of {n} run, after {time} {unit} on average.|The stop condition was met in {met} of {n} runs, after {time} {unit} on average.	থামার শর্ত {n}টির মধ্যে {met}টি পুনরাবৃত্তিতে, গড়ে {time} {unit} পরে পূরণ হয়েছে।|থামার শর্ত {n}টির মধ্যে {met}টি পুনরাবৃত্তিতে, গড়ে {time} {unit} পরে পূরণ হয়েছে।
 @plural	{done} of {n} run finished|{done} of {n} runs finished	{n}টির মধ্যে {done}টি পুনরাবৃত্তি সম্পন্ন|{n}টির মধ্যে {done}টি পুনরাবৃত্তি সম্পন্ন
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} run|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} runs	{name}: {mean}{unit}\n95% ব্যবধান {low} থেকে {high}{unit}\n{n}টি পুনরাবৃত্তিতে|{name}: {mean}{unit}\n95% ব্যবধান {low} থেকে {high}{unit}\n{n}টি পুনরাবৃত্তিতে
@@ -938,7 +929,6 @@ unit	yr	বছর
 	kilometres	কিলোমিটার
 	inches	ইঞ্চি
 	feet	ফুট
-	Ticked, items queue up at the end while the rest keep moving. Unticked, the whole belt stops when the item at the end cannot leave.	টিক দিলে, শেষ প্রান্তে আইটেমগুলো সারি বাঁধে আর বাকিগুলো চলতে থাকে। টিক না দিলে, শেষ প্রান্তের আইটেম বেরোতে না পারলে পুরো বেল্ট থেমে যায়।
 	A belt that carries entities from one end to the other. It has a length and a speed, and each entity takes a pitch of belt: its item length plus the gap kept free after it. So it holds at most length ÷ pitch entities and carries at most speed ÷ pitch per time unit. Accumulating: entities queue up at the end while the rest keep moving; otherwise the whole belt stops.	একটি বেল্ট, যা সত্তাদের এক প্রান্ত থেকে অন্য প্রান্তে নিয়ে যায়। এর একটি দৈর্ঘ্য ও একটি গতি আছে, আর প্রতিটি সত্তা বেল্টের একটি পিচ নেয়: তার আইটেমের দৈর্ঘ্য এবং তার পরে খালি রাখা ফাঁক। তাই এতে সর্বোচ্চ দৈর্ঘ্য ÷ পিচ সংখ্যক সত্তা ধরে এবং প্রতি সময়-একক সর্বোচ্চ গতি ÷ পিচ সংখ্যক সত্তা বহন করে। জমা হওয়া: সত্তারা শেষ প্রান্তে সারি বাঁধে আর বাকিরা চলতে থাকে; না হলে পুরো বেল্ট থেমে যায়।
 	Station	স্টেশন
 	Kind	ধরন
@@ -992,19 +982,165 @@ unit	yr	বছর
 	Time on conveyors	কনভেয়ারে সময়
 	No conveyors in this model	এই মডেলে কোনো কনভেয়ার নেই
 	Fills in when the run ends	রান শেষ হলে ভরে উঠবে
-	How long each item spends on the conveyors.	প্রতিটি আইটেম কনভেয়ারে কত সময় কাটায়।
-	No item has left a conveyor yet	এখনও কোনো আইটেম কনভেয়ার ছাড়েনি
-	Share of items by time on a conveyor, in {unit}	কনভেয়ারে সময় অনুযায়ী আইটেমের অংশ, {unit} এককে
-	Time on conveyors: {n} items between {lo} and {hi} {unit}	কনভেয়ারে সময়: {lo} ও {hi} {unit}-এর মধ্যে {n}টি আইটেম
-	{from} to {to} {unit}: {share} of items ({n})	{from} থেকে {to} {unit}: আইটেমের {share} ({n})
-	Items on conveyors over time	সময়ের সঙ্গে কনভেয়ারে আইটেম
-	Items in the model over time	সময়ের সঙ্গে মডেলে আইটেম
-	How many items are on the conveyors over time.	সময়ের সঙ্গে কনভেয়ারে কতগুলো আইটেম আছে।
-	How many items are in the model over time.	সময়ের সঙ্গে মডেলে কতগুলো আইটেম আছে।
 	Nothing was recorded over time in these results	এই ফলাফলে সময়ের সঙ্গে কিছুই রেকর্ড করা হয়নি
-	At {time} {unit}: {n} items	{time} {unit} সময়ে: {n}টি আইটেম
 	Run the model to fill the dashboard	ড্যাশবোর্ড ভরতে মডেল চালান
 	The resource and conveyor charts show the last run until this one ends	রিসোর্স ও কনভেয়ারের চার্ট এই রান শেষ না হওয়া পর্যন্ত আগের রান দেখায়
+# Validation messages, new labels and word changes (issue #145)
+	The id “{id}” is not valid. Start an id with a letter or an underscore, then use only letters, digits, dots, hyphens and underscores.	“{id}” আইডিটি বৈধ নয়। আইডি একটি অক্ষর বা আন্ডারস্কোর দিয়ে শুরু করুন, তারপর কেবল অক্ষর, অঙ্ক, বিন্দু, হাইফেন ও আন্ডারস্কোর ব্যবহার করুন।
+	More than one block, flow, pool or calendar has the id “{id}”. Give each its own id.	একাধিক ব্লক, প্রবাহ, পুল বা ক্যালেন্ডারের আইডি “{id}”। প্রতিটিকে নিজস্ব আইডি দিন।
+	The flow {flow} uses a block that does not exist. Remove the flow, or connect it to a block that exists.	প্রবাহ {flow} এমন একটি ব্লক ব্যবহার করে যা নেই। প্রবাহটি সরান, অথবা এমন ব্লকের সঙ্গে যুক্ত করুন যা আছে।
+	The flow {flow} leads into an Arrivals block, which takes no input. Remove the flow, or send it to another block.	প্রবাহ {flow} একটি আগমন ব্লকে ঢুকেছে, যা কোনো ইনপুট নেয় না। প্রবাহটি সরান, অথবা অন্য ব্লকে পাঠান।
+	The flow {flow} leaves a Departures block, which has no output. Remove the flow, or start it from another block.	প্রবাহ {flow} একটি প্রস্থান ব্লক থেকে বেরিয়েছে, যার কোনো আউটপুট নেই। প্রবাহটি সরান, অথবা অন্য ব্লক থেকে শুরু করুন।
+	The flow {flow} leads from a block back to itself. Remove it, or send it to another block.	প্রবাহ {flow} একটি ব্লক থেকে সেই ব্লকেই ফিরে এসেছে। এটি সরান, অথবা অন্য ব্লকে পাঠান।
+	{block} has nowhere to send entities. Add a flow from it to the next block.	{block}-এর সত্তা পাঠানোর কোনো জায়গা নেই। এটি থেকে পরের ব্লক পর্যন্ত একটি প্রবাহ যোগ করুন।
+	{block} has {count} flows out, and only a Decision or a Split or join block can send entities down several. Remove the extra flows, or add a Decision block.	{block} থেকে {count}টি প্রবাহ বেরিয়েছে, অথচ একাধিক প্রবাহে সত্তা পাঠাতে পারে কেবল সিদ্ধান্ত ব্লক বা ভাগ বা একত্র করুন ব্লক। বাড়তি প্রবাহ সরান, অথবা একটি সিদ্ধান্ত ব্লক যোগ করুন।
+	In “{field}” of {block}, set “{param}” to a finite number.	{block}-এর “{field}”-এ “{param}”-কে একটি সসীম সংখ্যা করুন।
+	In “{field}” of {block}, set “{param}” to a number above 0.	{block}-এর “{field}”-এ “{param}”-কে 0-এর বেশি একটি সংখ্যা করুন।
+	In “{field}” of {block}, set “{param}” to 0 or more.	{block}-এর “{field}”-এ “{param}”-কে 0 বা তার বেশি করুন।
+	In “{field}” of {block}, set “{param}” to 1 or more.	{block}-এর “{field}”-এ “{param}”-কে 1 বা তার বেশি করুন।
+	In “{field}” of {block}, set “{param}” to a number from 0 to 1.	{block}-এর “{field}”-এ “{param}”-কে 0 থেকে 1-এর মধ্যে একটি সংখ্যা করুন।
+	In “{field}” of {block}, set “Minimum” below “Maximum”, and any “Most likely” value between them.	{block}-এর “{field}”-এ “সর্বনিম্ন” “সর্বাধিক”-এর কম করুন, আর “সবচেয়ে সম্ভাব্য” কোনো মান থাকলে তা এ দুটির মাঝে রাখুন।
+	In “{field}” of {block}, add data points whose probabilities add up to more than 0.	{block}-এর “{field}”-এ এমন ডেটা বিন্দু যোগ করুন যাদের সম্ভাবনার যোগফল 0-এর বেশি।
+	{block} would never have a unit to work with. Give it at least 1 unit.	{block}-এর কাজ করার মতো কোনো একক কখনো থাকবে না। কমপক্ষে 1টি একক দিন।
+	{block} would make entities without end, because its “Time between arrivals” is always 0. Give it a time above 0, or set an “Arrival limit”.	{block} অবিরাম সত্তা তৈরি করবে, কারণ এর “আগমনের মধ্যবর্তী সময়” সব সময় 0। 0-এর বেশি একটি সময় দিন, অথবা একটি “আগমনের সীমা” ঠিক করুন।
+	The model has no Arrivals block, so nothing will happen. Add an Arrivals block.	মডেলে কোনো আগমন ব্লক নেই, তাই কিছুই ঘটবে না। একটি আগমন ব্লক যোগ করুন।
+	The model has no Departures block, so no time in system is measured. Add a Departures block.	মডেলে কোনো প্রস্থান ব্লক নেই, তাই সিস্টেমে সময় মাপা হয় না। একটি প্রস্থান ব্লক যোগ করুন।
+	No entity can reach {block} from an Arrivals block. Connect it to a block that entities pass through.	কোনো আগমন ব্লক থেকে কোনো সত্তা {block}-এ পৌঁছাতে পারে না। এটিকে এমন একটি ব্লকের সঙ্গে যুক্ত করুন যার মধ্য দিয়ে সত্তারা যায়।
+	Entities in {block} can never reach a Departures block. Connect it on towards Departures.	{block}-এর সত্তারা কখনো প্রস্থান ব্লকে পৌঁছাতে পারে না। এটিকে প্রস্থানের দিকে যুক্ত করুন।
+	Set the “{state}” power of {block} to a number of kilowatts, 0 or more.	{block}-এর “{state}” পাওয়ার কিলোওয়াটে একটি সংখ্যা করুন, 0 বা তার বেশি।
+	Set the warm-up of the experiment to 0 or more.	পরীক্ষার প্রাথমিক প্রস্তুতিকাল 0 বা তার বেশি করুন।
+	Set the duration of the experiment to more than 0.	পরীক্ষার সময়কাল 0-এর বেশি করুন।
+	Set the number of runs of the experiment to 1 or more.	পরীক্ষার পুনরাবৃত্তির সংখ্যা 1 বা তার বেশি করুন।
+	Set the layout scale (length units per drawing unit) to a finite number above 0.	লেআউটের স্কেল (প্রতি অঙ্কন এককে দৈর্ঘ্যের একক) একটি সসীম সংখ্যা করুন যা 0-এর বেশি।
+	A property of {block} has no name. Give it a name, or remove it.	{block}-এর একটি বৈশিষ্ট্যের নাম নেই। এটির একটি নাম দিন, অথবা সরান।
+	{block} sets the property “{name}” twice. Keep one of them.	{block} “{name}” বৈশিষ্ট্যটি দুইবার নির্ধারণ করেছে। একটি রাখুন।
+	The property “{name}” of {block} needs shares that are not negative and add up to more than 0. Change the shares.	{block}-এর “{name}” বৈশিষ্ট্যের জন্য এমন অংশ দরকার যা ঋণাত্মক নয় এবং যোগফল 0-এর বেশি। অংশগুলো বদলান।
+	The property “{name}” has the type “{type2}” on {block} but “{type}” on another block. Give it one type everywhere.	“{name}” বৈশিষ্ট্যের টাইপ {block}-এ “{type2}”, কিন্তু অন্য ব্লকে “{type}”। সব জায়গায় একই টাইপ দিন।
+	The value of the property “{name}” on {block} does not fit its type, “{type}”. Change the value or the type.	{block}-এ “{name}” বৈশিষ্ট্যের মান এর টাইপ “{type}”-এর সঙ্গে মেলে না। মান বা টাইপ বদলান।
+	The expression for the property “{name}” on {block} cannot be used: {error}. Correct “{expression}”.	{block}-এ “{name}” বৈশিষ্ট্যের অভিব্যক্তিটি ব্যবহার করা যাচ্ছে না: {error}। “{expression}” ঠিক করুন।
+	{block} reads the property “{name}”, which no block sets, so it would read as empty. Set it on an earlier block, or correct the name.	{block} “{name}” বৈশিষ্ট্যটি পড়ে, যা কোনো ব্লক নির্ধারণ করে না, তাই সেটি ফাঁকা পড়বে। এটি আগের কোনো ব্লকে নির্ধারণ করুন, অথবা নামটি ঠিক করুন।
+	The setup of {block} has times for particular changes but no property to watch. Choose a property under “Only when this property changes”.	{block}-এর সেটআপে নির্দিষ্ট পরিবর্তনের জন্য সময় আছে, কিন্তু লক্ষ রাখার মতো কোনো বৈশিষ্ট্য নেই। “কেবল এই বৈশিষ্ট্য বদলালে”-এর অধীনে একটি বৈশিষ্ট্য বেছে নিন।
+	{block} has times for particular values but no property to read them from. Choose a property under “Service time by property”.	{block}-এ নির্দিষ্ট মানের জন্য সময় আছে, কিন্তু মান পড়ার মতো কোনো বৈশিষ্ট্য নেই। “বৈশিষ্ট্য অনুযায়ী সেবা সময়”-এর অধীনে একটি বৈশিষ্ট্য বেছে নিন।
+	{block} has two times for the value “{value}”. Keep one.	{block}-এ “{value}” মানের জন্য দুটি সময় আছে। একটি রাখুন।
+	Set the time of {block} for the value “{value}” to a mean of 0 or more.	{block}-এর “{value}” মানের সময়ের গড় 0 বা তার বেশি করুন।
+	The scrap at {block} counts against {other}, which is not a task with a resource. Choose a task with a resource.	{block}-এর স্ক্র্যাপ {other}-এর বিপরীতে গোনা হয়, যা সম্পদসহ কাজ নয়। একটি সম্পদসহ কাজ বেছে নিন।
+	Set “Planned run time per item” of {block} to a mean above 0.	{block}-এর “প্রতি অংশে পরিকল্পিত চলার সময়”-এর গড় 0-এর বেশি করুন।
+	Set “Time before giving up” of {block} to a mean of 0 or more.	{block}-এর “ছেড়ে দেওয়ার আগের সময়”-এর গড় 0 বা তার বেশি করুন।
+	The flow {flow} is ticked “Gave up”, but only a task with a resource and a “Time before giving up” sends entities that give up. Untick it, or set a “Time before giving up” on {block}.	প্রবাহ {flow}-এ “ছেড়ে দিয়েছে” টিক দেওয়া আছে, কিন্তু কেবল সম্পদসহ কাজ, যার “ছেড়ে দেওয়ার আগের সময়” আছে, ছেড়ে দেওয়া সত্তা পাঠায়। টিক তুলে দিন, অথবা {block}-এ “ছেড়ে দেওয়ার আগের সময়” দিন।
+	{count} flows out of {block} are ticked “{way}”; at most one can be. Untick all but one.	{block} থেকে বেরোনো {count}টি প্রবাহে “{way}” টিক দেওয়া আছে; সর্বোচ্চ একটিতে থাকতে পারে। একটি বাদে বাকিগুলোর টিক তুলে দিন।
+	The flow {flow} is ticked “Turned away”, but only a task with a resource and a limited waiting room turns entities away. Untick it, or limit the waiting room of {block}.	প্রবাহ {flow}-এ “ফিরিয়ে দেওয়া” টিক দেওয়া আছে, কিন্তু কেবল সম্পদসহ কাজ, যার অপেক্ষার ঘর সীমিত, সত্তা ফিরিয়ে দেয়। টিক তুলে দিন, অথবা {block}-এর অপেক্ষার ঘর সীমিত করুন।
+	The flow {flow} is ticked both “Gave up” and “Turned away”. Keep one of them.	প্রবাহ {flow}-এ “ছেড়ে দিয়েছে” ও “ফিরিয়ে দেওয়া” দুটোতেই টিক দেওয়া আছে। একটি রাখুন।
+	Set every chance of joining in the balking table of {block} to a number from 0 to 1.	{block}-এর সারিতে না দাঁড়ানোর সারণির প্রতিটি যোগ দেওয়ার সম্ভাবনা 0 থেকে 1-এর মধ্যে একটি সংখ্যা করুন।
+	Put the rows of the balking table of {block} in increasing order of “Number waiting”.	{block}-এর সারিতে না দাঁড়ানোর সারণির এন্ট্রিগুলো “অপেক্ষমাণ সংখ্যা” অনুযায়ী বাড়তি ক্রমে সাজান।
+	The flow {flow} is ticked “Balked”, but only a task with a resource and balking sends entities that balk. Untick it, or turn on balking for {block}.	প্রবাহ {flow}-এ “সারিতে না দাঁড়ানো” টিক দেওয়া আছে, কিন্তু কেবল সম্পদসহ কাজ, যেখানে সারিতে না দাঁড়ানো চালু আছে, এমন সত্তা পাঠায়। টিক তুলে দিন, অথবা {block}-এর জন্য সারিতে না দাঁড়ানো চালু করুন।
+	The flow {flow} is ticked “Balked” and also “Gave up” or “Turned away”. Keep one of them.	প্রবাহ {flow}-এ “সারিতে না দাঁড়ানো” এবং সেই সঙ্গে “ছেড়ে দিয়েছে” বা “ফিরিয়ে দেওয়া”-ও টিক দেওয়া আছে। একটি রাখুন।
+	The waiting room of {block} is set by calendar or per working server, but has no number of places, so it is unlimited. Give it a number of places, or make it fixed.	{block}-এর অপেক্ষার ঘর ক্যালেন্ডার অনুযায়ী বা চালু সার্ভার প্রতি ঠিক করা, কিন্তু জায়গার সংখ্যা নেই, তাই এটি সীমাহীন। জায়গার একটি সংখ্যা দিন, অথবা এটিকে স্থির করুন।
+	The waiting room of {block} is set by calendar, but no calendar has a value. Add a value for a calendar, or make the waiting room fixed.	{block}-এর অপেক্ষার ঘর ক্যালেন্ডার অনুযায়ী ঠিক করা, কিন্তু কোনো ক্যালেন্ডারের মান নেই। কোনো ক্যালেন্ডারের জন্য একটি মান যোগ করুন, অথবা অপেক্ষার ঘর স্থির করুন।
+	Set “Fails above, waiting per working server” of {block} to a number of 0 or more.	{block}-এর “ব্যর্থতার সীমা, চালু সার্ভার প্রতি অপেক্ষমাণ” 0 বা তার বেশি একটি সংখ্যা করুন।
+	Set “Check every” of {block} to a mean above 0.	{block}-এর “পরীক্ষার ব্যবধান”-এর গড় 0-এর বেশি করুন।
+	Set the demand of {block} to a number of parts above 0.	{block}-এর চাহিদা 0-এর বেশি অংশের একটি সংখ্যা করুন।
+	The demand of {block} is per shift but names no calendar to say when the shifts are. Choose a calendar.	{block}-এর চাহিদা প্রতি শিফটে, কিন্তু শিফট কখন তা বলার মতো কোনো ক্যালেন্ডার দেওয়া নেই। একটি ক্যালেন্ডার বেছে নিন।
+	The demand of {block} names a calendar that does not exist. Choose a calendar that exists.	{block}-এর চাহিদায় এমন একটি ক্যালেন্ডারের নাম আছে যা নেই। এমন ক্যালেন্ডার বেছে নিন যা আছে।
+	The probability {value} on the flow {flow} is not from 0 to 1. Enter a probability from 0 to 1.	প্রবাহ {flow}-এর সম্ভাবনা {value} 0 থেকে 1-এর মধ্যে নয়। 0 থেকে 1-এর মধ্যে একটি সম্ভাবনা দিন।
+	The probabilities of the flows out of {block} add up to {sum}, not 1, so they are used in proportion. Change them to add up to 1 if that is not what you want.	{block} থেকে বেরোনো প্রবাহগুলোর সম্ভাবনার যোগফল {sum}, 1 নয়, তাই সেগুলো অনুপাত ধরে ব্যবহার হয়। এটি না চাইলে যোগফল 1 করুন।
+	The condition on the flow {flow} cannot be used: {error}. Correct “{expression}”.	প্রবাহ {flow}-এর শর্তটি ব্যবহার করা যাচ্ছে না: {error}। “{expression}” ঠিক করুন।
+	The condition on the flow {flow} is ignored, because only flows out of a Decision block choose a route. Remove the condition.	প্রবাহ {flow}-এর শর্ত উপেক্ষা করা হচ্ছে, কারণ কেবল সিদ্ধান্ত ব্লক থেকে বেরোনো প্রবাহই পথ বেছে নেয়। শর্তটি সরান।
+	The probability on the flow {flow} is ignored, because only flows out of a Decision block choose a route. Remove the probability.	প্রবাহ {flow}-এর সম্ভাবনা উপেক্ষা করা হচ্ছে, কারণ কেবল সিদ্ধান্ত ব্লক থেকে বেরোনো প্রবাহই পথ বেছে নেয়। সম্ভাবনাটি সরান।
+	The condition on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the condition.	প্রবাহ {flow}-এর শর্ত উপেক্ষা করা হচ্ছে, কারণ সিদ্ধান্ত ব্লক সত্তাদের সবচেয়ে ছোট সারিতে পাঠায়। শর্তটি সরান।
+	The probability on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the probability.	প্রবাহ {flow}-এর সম্ভাবনা উপেক্ষা করা হচ্ছে, কারণ সিদ্ধান্ত ব্লক সত্তাদের সবচেয়ে ছোট সারিতে পাঠায়। সম্ভাবনাটি সরান।
+	The default on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the default.	প্রবাহ {flow}-এর ডিফল্ট উপেক্ষা করা হচ্ছে, কারণ সিদ্ধান্ত ব্লক সত্তাদের সবচেয়ে ছোট সারিতে পাঠায়। ডিফল্টটি সরান।
+	The probability on the flow {flow} is ignored, because the Decision routes by condition. Remove the probability.	প্রবাহ {flow}-এর সম্ভাবনা উপেক্ষা করা হচ্ছে, কারণ সিদ্ধান্ত ব্লক শর্ত অনুযায়ী পথ ঠিক করে। সম্ভাবনাটি সরান।
+	The default flow of {block} is not one of its own flows out. Choose one of the flows out of {block} as the default.	{block}-এর ডিফল্ট প্রবাহ এর নিজের বেরোনো প্রবাহগুলোর একটি নয়। ডিফল্ট হিসেবে {block} থেকে বেরোনো একটি প্রবাহ বেছে নিন।
+	{block} routes by condition but has no default flow, so an entity for which no condition holds leaves the model here. Choose a default flow.	{block} শর্ত অনুযায়ী পথ ঠিক করে, কিন্তু ডিফল্ট প্রবাহ নেই, তাই যে সত্তার কোনো শর্ত মেলে না সে এখানেই মডেল ছেড়ে যায়। একটি ডিফল্ট প্রবাহ বেছে নিন।
+	{block} diverts entities but has no default flow, so an entity whose way is full has nowhere else to go. Choose a default flow.	{block} সত্তাদের অন্য পথে সরায়, কিন্তু ডিফল্ট প্রবাহ নেই, তাই যে সত্তার পথ পূর্ণ তার আর যাওয়ার জায়গা নেই। একটি ডিফল্ট প্রবাহ বেছে নিন।
+	{block} waits for an entity on the flow {flow}, which none can reach, so it never sends one on. Remove that flow, or connect it to a block that entities reach.	{block} প্রবাহ {flow}-এ একটি সত্তার জন্য অপেক্ষা করে, যেখানে কেউ পৌঁছাতে পারে না, তাই এটি কখনো কিছু এগিয়ে দেয় না। ওই প্রবাহ সরান, অথবা এমন ব্লকের সঙ্গে যুক্ত করুন যেখানে সত্তারা পৌঁছায়।
+	{block} has a limited waiting room and is fed through {gateway}. While it is full, {gateway} holds up every entity behind it, and they wait before it without limit. Remove the gateway before {block}, or remove the limit.	{block}-এর অপেক্ষার ঘর সীমিত এবং এটি {gateway}-এর মধ্য দিয়ে খাওয়ানো হয়। এটি পূর্ণ থাকলে {gateway} তার পেছনের প্রতিটি সত্তাকে আটকে রাখে, আর তারা সীমাহীনভাবে এর আগে অপেক্ষা করে। {block}-এর আগের গেটওয়ে সরান, অথবা সীমাটি সরান।
+	The limited waiting rooms of {loop} feed each other in a loop, so when all of them are full the loop deadlocks. Remove the limit on one of them, or break the loop.	{loop}-এর সীমিত অপেক্ষার ঘরগুলো একটি চক্রে একে অপরকে খাওয়ায়, তাই সবগুলো পূর্ণ হলে চক্রটি অচল হয়ে যায়। একটির সীমা সরান, অথবা চক্রটি ভাঙুন।
+	The pool {block} has no units. Give it at least 1 unit.	পুল {block}-এ কোনো একক নেই। কমপক্ষে 1টি একক দিন।
+	{block} names no resource it needs. Add one under “Needs”.	{block} কোনো দরকারি সম্পদের নাম দেয়নি। “প্রয়োজন”-এর অধীনে একটি যোগ করুন।
+	{block} needs a resource pool that does not exist. Choose a pool that exists.	{block}-এর দরকারি সম্পদ পুলটি নেই। এমন পুল বেছে নিন যা আছে।
+	{block} needs units with the roles {roles}, which no pool has. Give a pool those roles, or change what {block} needs.	{block}-এর {roles} ভূমিকার একক দরকার, যা কোনো পুলে নেই। কোনো পুলকে সেই ভূমিকাগুলো দিন, অথবা {block}-এর প্রয়োজন বদলান।
+	{block} needs {needed} units at once, but at most {available} exist, so this can never be met. Ask for fewer units, or add units to the pool.	{block}-এর একসঙ্গে {needed}টি একক দরকার, কিন্তু সর্বোচ্চ {available}টি আছে, তাই এটি কখনো পূরণ হবে না। কম একক চান, অথবা পুলে একক যোগ করুন।
+	Set the priority of {block} to a finite number, not {value}.	{block}-এর অগ্রাধিকার একটি সসীম সংখ্যা করুন, {value} নয়।
+	No task uses the pool {block}. Add it to a task's needs, or remove the pool.	কোনো কাজ পুল {block} ব্যবহার করে না। এটি কোনো কাজের প্রয়োজনে যোগ করুন, অথবা পুলটি সরান।
+	{block} has a value for a calendar that does not exist. Choose a calendar that exists, or remove the value.	{block}-এর একটি ক্যালেন্ডারের জন্য মান আছে যা নেই। এমন ক্যালেন্ডার বেছে নিন যা আছে, অথবা মানটি সরান।
+	The calendar {block} has no entries, so it is never active. Add an entry.	ক্যালেন্ডার {block}-এ কোনো এন্ট্রি নেই, তাই এটি কখনো সক্রিয় হয় না। একটি এন্ট্রি যোগ করুন।
+	{block} allows no arrivals outside the calendars but names no calendar, so it never creates entities. Add arrivals by calendar, or allow arrivals outside calendars.	{block} ক্যালেন্ডারের বাইরে কোনো আগমন অনুমোদন করে না, অথচ কোনো ক্যালেন্ডারের নাম দেয়নি, তাই এটি কখনো সত্তা তৈরি করে না। ক্যালেন্ডার অনুযায়ী আগমন যোগ করুন, অথবা ক্যালেন্ডারের বাইরে আগমন অনুমোদন করুন।
+	Set the batch size of {block} to 1 or more.	{block}-এর ব্যাচের আকার 1 বা তার বেশি করুন।
+	Set “{field}” of the conveyor {block} to a finite number above 0.	কনভেয়ার {block}-এর “{field}” 0-এর বেশি একটি সসীম সংখ্যা করুন।
+	Set “{field}” of the conveyor {block} to a finite number of 0 or more.	কনভেয়ার {block}-এর “{field}” 0 বা তার বেশি একটি সসীম সংখ্যা করুন।
+	Set “{field}” of the conveyor {block} to a finite number other than 0.	কনভেয়ার {block}-এর “{field}” 0 ছাড়া অন্য একটি সসীম সংখ্যা করুন।
+	The conveyor {block} is {length} long but each entity takes {pitch} (item length plus gap), so not even one fits. Lengthen the conveyor, or shorten the item or the gap.	কনভেয়ার {block}-এর দৈর্ঘ্য {length}, কিন্তু প্রতিটি সত্তা {pitch} নেয় (আইটেমের দৈর্ঘ্য ও ফাঁক মিলিয়ে), তাই একটিও ধরে না। কনভেয়ার লম্বা করুন, অথবা আইটেম বা ফাঁক ছোট করুন।
+	The drawn path of the conveyor {block} is {path_length} long, but its “Length” is {length}, so the drawing and the run disagree. Make “Length” match the path, or change the shape.	কনভেয়ার {block}-এর আঁকা পথ {path_length} লম্বা, কিন্তু এর “দৈর্ঘ্য” {length}, তাই অঙ্কন আর পুনরাবৃত্তি মেলে না। “দৈর্ঘ্য” পথের সঙ্গে মেলান, অথবা আকার বদলান।
+	{block} is a transport, which StochCraft does not simulate yet. Remove it to run the model.	{block} একটি পরিবহন, যা StochCraft এখনো সিমুলেট করে না। মডেল চালাতে এটি সরান।
+	The pool {pool} of the transport {block} does not exist. Choose a pool that exists.	পরিবহন {block}-এর পুল {pool} নেই। এমন পুল বেছে নিন যা আছে।
+	The pool {pool} of the transport {block} is not mobile. Give the pool speeds and a home.	পরিবহন {block}-এর পুল {pool} চলমান নয়। পুলকে গতি ও একটি হোম দিন।
+	Set “{field}” of the pool {block} to a finite number above 0.	পুল {block}-এর “{field}” 0-এর বেশি একটি সসীম সংখ্যা করুন।
+	The home of the pool {block} is not a block of the model. Choose a block as its home.	পুল {block}-এর হোম মডেলের কোনো ব্লক নয়। একটি ব্লককে এর হোম করুন।
+	The transport {block} needs one block before it, where it picks up, and one after it, where it drops off, but has {inputs} before and {outputs} after. Connect it to one block on each side.	পরিবহন {block}-এর আগে একটি ব্লক দরকার, যেখান থেকে তোলে, এবং পরে একটি, যেখানে নামায়, কিন্তু আগে {inputs}টি ও পরে {outputs}টি আছে। প্রতি পাশে একটি ব্লকের সঙ্গে যুক্ত করুন।
+	{other} has no place on the canvas, so the distances for {block} are not known. Place {other} on the canvas.	{other}-এর মূল পৃষ্ঠে কোনো জায়গা নেই, তাই {block}-এর দূরত্ব জানা নেই। {other}-কে মূল পৃষ্ঠে বসান।
+	The flow {flow} asks for no entities. Set its “Units” to 1 or more.	প্রবাহ {flow} কোনো সত্তা চায় না। এর “এককের সংখ্যা” 1 বা তার বেশি করুন।
+	The “Units” on the flow {flow} is ignored, because only a Split or join block takes several entities from one flow. Remove it.	প্রবাহ {flow}-এর “এককের সংখ্যা” উপেক্ষা করা হচ্ছে, কারণ কেবল ভাগ বা একত্র করুন ব্লক একটি প্রবাহ থেকে একাধিক সত্তা নেয়। এটি সরান।
+	No block makes batches, so {block} passes every entity through. Add a Batch block before it, or remove {block}.	কোনো ব্লক ব্যাচ তৈরি করে না, তাই {block} প্রতিটি সত্তাকে এমনিই পার করে দেয়। এর আগে একটি ব্যাচ ব্লক যোগ করুন, অথবা {block} সরান।
+	The stop condition names a block that does not exist. Choose a block that exists.	থামার শর্তে এমন একটি ব্লকের নাম আছে যা নেই। এমন ব্লক বেছে নিন যা আছে।
+	Set the count of the stop condition for {block} to 1 or more.	{block}-এর থামার শর্তের গণনা 1 বা তার বেশি করুন।
+	The stop condition waits for {block} to empty, but only a task can empty. Choose a task.	থামার শর্ত {block} খালি হওয়ার জন্য অপেক্ষা করে, কিন্তু কেবল কাজ খালি হতে পারে। একটি কাজ বেছে নিন।
+	The stop condition at {block} can be met before the warm-up ends. A run that stops during the warm-up has no statistics after it and is left out of the results. Shorten the warm-up, or stop later.	{block}-এ থামার শর্ত প্রাথমিক প্রস্তুতিকাল শেষ হওয়ার আগেই পূরণ হতে পারে। প্রাথমিক প্রস্তুতিকালে থেমে যাওয়া পুনরাবৃত্তির পরে কোনো পরিসংখ্যান থাকে না, তাই ফলাফল থেকে বাদ পড়ে। প্রাথমিক প্রস্তুতিকাল ছোট করুন, অথবা পরে থামান।
+	Every run stopped before the warm-up ended, so no metric is reported. Shorten the warm-up, or stop later.	প্রতিটি পুনরাবৃত্তি প্রাথমিক প্রস্তুতিকাল শেষ হওয়ার আগে থেমে গেছে, তাই কোনো পরিমাপক জানানো হয়নি। প্রাথমিক প্রস্তুতিকাল ছোট করুন, অথবা পরে থামান।
+	{replications} of {of} runs stopped before the warm-up ended, so their statistics are left out of every metric. Shorten the warm-up, or stop later.	{of}টির মধ্যে {replications}টি পুনরাবৃত্তি প্রাথমিক প্রস্তুতিকাল শেষ হওয়ার আগে থেমে গেছে, তাই সেগুলোর পরিসংখ্যান প্রতিটি পরিমাপক থেকে বাদ পড়েছে। প্রাথমিক প্রস্তুতিকাল ছোট করুন, অথবা পরে থামান।
+	{block} is offered {load}% of the work its units can do, so its waiting room grows without limit and the results describe no steady state. Add units, or shorten the service.	{block}-কে তার এককগুলোর করতে পারা কাজের {load}% দেওয়া হচ্ছে, তাই এর অপেক্ষার ঘর সীমাহীনভাবে বাড়ছে এবং ফলাফল কোনো স্থিতিশীল অবস্থা বোঝায় না। একক যোগ করুন, অথবা সেবা ছোট করুন।
+	{block} is busy {utilisation}% of the time, and at the end at least {backlog} entities are still waiting against {left} that left. Work arrives faster than it is done, so the results describe no steady state. Add units, or shorten the service.	{block} {utilisation}% সময় ব্যস্ত, আর শেষে কমপক্ষে {backlog}টি সত্তা এখনো অপেক্ষা করছে, যেখানে {left}টি বেরিয়ে গেছে। কাজ করার চেয়ে দ্রুত কাজ আসছে, তাই ফলাফল কোনো স্থিতিশীল অবস্থা বোঝায় না। একক যোগ করুন, অথবা সেবা ছোট করুন।
+	The experiment has one run, so its results cannot be told from chance. Set the number of runs to at least 2, and usually 10 or more.	পরীক্ষায় একটি পুনরাবৃত্তি আছে, তাই এর ফলাফল দৈবক্রম থেকে আলাদা করা যায় না। পুনরাবৃত্তির সংখ্যা অন্তত 2 করুন, সাধারণত 10 বা তার বেশি।
+	{block} has a three-point estimate but no time to fit it to, so the estimate is ignored. Remove the estimate.	{block}-এর তিন মানের অনুমান আছে, কিন্তু তা মেলানোর মতো কোনো সময় নেই, তাই অনুমান উপেক্ষা করা হচ্ছে। অনুমানটি সরান।
+	The three-point estimate of {block} cannot be fitted: every point must be a finite number. Correct the points.	{block}-এর তিন মানের অনুমান মেলানো যাচ্ছে না: প্রতিটি মান একটি সসীম সংখ্যা হতে হবে। মানগুলো ঠিক করুন।
+	The three-point estimate of {block} cannot be fitted: the points must be in order, minimum, most likely, then maximum or 95th percentile. Correct the points.	{block}-এর তিন মানের অনুমান মেলানো যাচ্ছে না: মানগুলো ক্রমে থাকতে হবে, সর্বনিম্ন, সবচেয়ে সম্ভাব্য, তারপর সর্বাধিক বা ৯৫তম শতাংশক। মানগুলো ঠিক করুন।
+	The three-point estimate of {block} cannot be fitted: log-normal and Weibull estimates have no maximum. Give a 95th percentile instead.	{block}-এর তিন মানের অনুমান মেলানো যাচ্ছে না: লগ-স্বাভাবিক ও ওয়েইবুল অনুমানের কোনো সর্বাধিক নেই। এর বদলে একটি ৯৫তম শতাংশক দিন।
+	The time of {block} is no longer the one fitted from its three-point estimate. Fit it again, or remove the estimate.	{block}-এর সময় আর সেটি নয় যা এর তিন মানের অনুমান থেকে মেলানো হয়েছিল। আবার মেলান, অথবা অনুমানটি সরান।
+	In “{field}” of {block}, the normal distribution draws below 0 more than 1 time in 100, and each such draw counts as 0, so the times are longer on average than its mean. Use a truncated normal with a minimum of 0, or a log-normal.	{block}-এর “{field}”-এ স্বাভাবিক বণ্টন 100 বারের মধ্যে 1 বারের বেশি 0-এর নিচে মান নেয়, আর এমন প্রতিটি মান 0 ধরা হয়, তাই সময়গুলো গড়ে এর গড়ের চেয়ে বেশি হয়। সর্বনিম্ন 0 সহ একটি ছাঁটা স্বাভাবিক, অথবা একটি লগ-স্বাভাবিক ব্যবহার করুন।
+	The entities of {block} do not add up: {came} came in or were inside at the start, but {went} left, were lost, gave up or are still inside.	{block}-এর সত্তাদের হিসাব মেলে না: শুরুতে {came}টি এসেছে বা ভেতরে ছিল, কিন্তু {went}টি বেরিয়েছে, হারিয়েছে, ছেড়ে দিয়েছে বা এখনো ভেতরে আছে।
+	The entities of the model do not add up: {came} were created or inside at the start, but {went} reached Departures, left the model elsewhere or are still inside.	মডেলের সত্তাদের হিসাব মেলে না: শুরুতে {came}টি তৈরি হয়েছে বা ভেতরে ছিল, কিন্তু {went}টি প্রস্থানে পৌঁছেছে, অন্য কোথাও মডেল ছেড়েছে বা এখনো ভেতরে আছে।
+	No entity left the model, of {came} created or inside at the start. Check that the routing leads to Departures and that the run is long enough for an entity to get through.	শুরুতে তৈরি হওয়া বা ভেতরে থাকা {came}টির মধ্যে কোনো সত্তা মডেল ছেড়ে যায়নি। দেখুন পথ প্রস্থানে গেছে কি না, এবং একটি সত্তার পার হওয়ার জন্য পুনরাবৃত্তি যথেষ্ট লম্বা কি না।
+	Little's law does not hold at {block}: the time-average number inside was {mean}, but the entities' own times inside give {from_stays}.	{block}-এ লিটলের সূত্র খাটছে না: ভেতরে থাকা সংখ্যার সময়-গড় ছিল {mean}, কিন্তু সত্তাদের নিজেদের ভেতরে কাটানো সময় থেকে পাওয়া যায় {from_stays}।
+	The utilisation of {block} counts {busy} units busy on average, but {working} were processing or setting up: units idle, blocked, off shift, failed or restarting were counted busy.	{block}-এর ব্যবহারের হার গড়ে {busy}টি একককে ব্যস্ত গোনে, কিন্তু প্রক্রিয়াকরণ বা সেটআপ করছিল {working}টি: নিষ্ক্রিয়, অবরুদ্ধ, শিফটের বাইরে, বিকল বা পুনরায় চালু হওয়া একককেও ব্যস্ত গোনা হয়েছে।
+	The utilisation of {block} counts {busy} units busy on average, but {working} were processing or setting up: units at work were not counted busy.	{block}-এর ব্যবহারের হার গড়ে {busy}টি একককে ব্যস্ত গোনে, কিন্তু প্রক্রিয়াকরণ বা সেটআপ করছিল {working}টি: কাজ করছে এমন একককে ব্যস্ত গোনা হয়নি।
+	The shares of the time of the units of {block} in each state add up to {total}, not 1.	{block}-এর এককগুলোর প্রতিটি অবস্থায় সময়ের অংশের যোগফল {total}, 1 নয়।
+	“{metric}” of {block} is {value}, outside 0 to 1 (0% to 100%).	{block}-এর “{metric}” হলো {value}, যা 0 থেকে 1-এর (0% থেকে 100%) বাইরে।
+	This was found in {replications} of {of} runs, and the furthest off is shown.	এটি {of}টির মধ্যে {replications}টি পুনরাবৃত্তিতে পাওয়া গেছে, আর সবচেয়ে বেশি অমিলটি দেখানো হয়েছে।
+	This points to a fault in StochCraft rather than in the model. Please report it with the model.	এটি মডেলের নয়, StochCraft-এর ত্রুটি নির্দেশ করে। অনুগ্রহ করে মডেলসহ জানান।
+	Angle	কোণ
+	Failed	বিকল
+	Off shift	শিফটের বাইরে
+	Processing	প্রক্রিয়াকরণ
+	Radius	ব্যাসার্ধ
+	Rise	ওঠা
+	Speed empty	খালি অবস্থায় গতি
+	Speed loaded	বোঝাই অবস্থায় গতি
+	Turns	পাক
+	Unload	খালাস
+	Lost	হারানো
+	An entity that leaves a waiting room before a unit takes it, because it has waited as long as it was willing to.	যে সত্তা কোনো একক তাকে নেওয়ার আগেই অপেক্ষার ঘর ছেড়ে যায়, কারণ সে যতক্ষণ অপেক্ষা করতে রাজি ছিল ততক্ষণ অপেক্ষা করে ফেলেছে।
+	An entity that does not join a waiting room at all, because the number already waiting put it off.	যে সত্তা অপেক্ষার ঘরে মোটেই যোগ দেয় না, কারণ ইতিমধ্যে অপেক্ষা করা সংখ্যা তাকে নিরুৎসাহ করেছে।
+	An entity that finds the waiting room full and takes the flow ticked “Turned away” instead of waiting.	যে সত্তা অপেক্ষার ঘর পূর্ণ পায় এবং অপেক্ষা না করে “ফিরিয়ে দেওয়া” টিক দেওয়া প্রবাহ ধরে যায়।
+	An entity that leaves the model without reaching Departures: it found the waiting room full with nowhere else to go, or a decision with no way out for it.	যে সত্তা প্রস্থানে না পৌঁছে মডেল ছেড়ে যায়: সে অপেক্ষার ঘর পূর্ণ পেয়েছে আর অন্য কোথাও যাওয়ার পথ নেই, অথবা এমন এক সিদ্ধান্ত পেয়েছে যাতে তার জন্য বেরোনোর পথ নেই।
+	Gave up on {id}	{id}-এ ছেড়ে দিয়েছে
+	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the flow ticked “Gave up”, or leaves the model.	প্রতিটি সত্তা আগমনের সময় তার জন্য এলোমেলোভাবে নেওয়া একটি সময় পর্যন্ত এখানে অপেক্ষা করে, তারপর ছেড়ে দেয়: সে “ছেড়ে দিয়েছে” টিক দেওয়া প্রবাহ ধরে যায়, অথবা মডেল থেকে বেরিয়ে যায়।
+	Entities that do not join the waiting room take this flow at once (to try again later, say), instead of being lost; they count as balked here.	যে সত্তারা অপেক্ষার ঘরে যোগ দেয় না তারা সঙ্গে সঙ্গে এই প্রবাহ ধরে যায় (যেমন পরে আবার চেষ্টা করতে), হারিয়ে যাওয়ার বদলে; এখানে তাদের সারিতে না দাঁড়ানো হিসেবে গোনা হয়।
+	The job stops at once: the entity goes back to the front of the waiting room for any server on shift, and the work done on it is wasted.	কাজটি সঙ্গে সঙ্গে থেমে যায়: সত্তাটি শিফটে থাকা যেকোনো সার্ভারের জন্য অপেক্ষার ঘরের সামনে ফিরে যায়, আর তার ওপর করা কাজ নষ্ট হয়।
+	The connection drops and the client tries again: the entity goes back to the front of the waiting room at once, and the work done on it is wasted.	সংযোগ বিচ্ছিন্ন হয় এবং ক্লায়েন্ট আবার চেষ্টা করে: সত্তাটি সঙ্গে সঙ্গে অপেক্ষার ঘরের সামনে ফিরে যায়, আর তার ওপর করা কাজ নষ্ট হয়।
+	Ticked, entities queue up at the end while the rest keep moving. Unticked, the whole belt stops when the entity at the end cannot leave.	টিক দিলে, শেষ প্রান্তে সত্তাগুলো সারি বাঁধে আর বাকিগুলো চলতে থাকে। টিক না দিলে, শেষ প্রান্তের সত্তা বেরোতে না পারলে পুরো বেল্ট থেমে যায়।
+	Play run 1 step by step and see each block's waiting room on the diagram	পুনরাবৃত্তি 1 ধাপে ধাপে চালান এবং ডায়াগ্রামে প্রতিটি ব্লকের অপেক্ষার ঘর দেখুন
+	Select a block to see its waiting room over time.	সময়ের সাথে কোনো ব্লকের অপেক্ষার ঘর দেখতে সেটি নির্বাচন করুন।
+	Entities on conveyors over time	সময়ের সঙ্গে কনভেয়ারে সত্তা
+	Entities in the model over time	সময়ের সঙ্গে মডেলে সত্তা
+	How long each entity spends on the conveyors.	প্রতিটি সত্তা কনভেয়ারে কত সময় কাটায়।
+	No entity has left a conveyor yet	এখনও কোনো সত্তা কনভেয়ার ছাড়েনি
+	Share of entities by time on a conveyor, in {unit}	কনভেয়ারে সময় অনুযায়ী সত্তার অংশ, {unit} এককে
+	Time on conveyors: {n} entities between {lo} and {hi} {unit}	কনভেয়ারে সময়: {lo} ও {hi} {unit}-এর মধ্যে {n}টি সত্তা
+	{from} to {to} {unit}: {share} of entities ({n})	{from} থেকে {to} {unit}: সত্তার {share} ({n})
+	How many entities are on the conveyors over time.	সময়ের সঙ্গে কনভেয়ারে কতগুলো সত্তা আছে।
+	How many entities are in the model over time.	সময়ের সঙ্গে মডেলে কতগুলো সত্তা আছে।
+	At {time} {unit}: {n} entities	{time} {unit} সময়ে: {n}টি সত্তা
+@plural	Makes {n} independent run of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval across them.	বীজ {seed} থেকে মডেলের {n}টি স্বাধীন পুনরাবৃত্তি চালায়। প্রতিটি ব্লকের ফলে 95% আস্থা ব্যবধানের অর্ধপ্রস্থ দেওয়া হয়।|বীজ {seed} থেকে মডেলের {n}টি স্বাধীন পুনরাবৃত্তি চালায়। প্রতিটি ব্লকের ফলে 95% আস্থা ব্যবধানের অর্ধপ্রস্থ দেওয়া হয়।
 	Fonts	ফন্ট
 	The full list of third-party licences is in the file THIRD-PARTY-LICENSES.html, which comes with the download.	তৃতীয় পক্ষের লাইসেন্সের পূর্ণ তালিকা THIRD-PARTY-LICENSES.html ফাইলে আছে, যা ডাউনলোডের সঙ্গে আসে।
 	Full list of third-party licences	তৃতীয় পক্ষের লাইসেন্সের পূর্ণ তালিকা

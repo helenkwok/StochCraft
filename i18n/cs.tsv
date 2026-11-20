@@ -21,8 +21,6 @@
 	A caller on hold: once a unit takes it, the entity stays.	Volající na lince: jakmile si ho jednotka vezme, entita zůstane.
 	A client that times out: if its time runs out during service, it gives up then, and the unit finishes the job anyway (wasted work).	Klient s časovým limitem: pokud mu čas vyprší během obsluhy, vzdá to v tu chvíli a jednotka práci stejně dokončí (zbytečná práce).
 	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	Nový soubor obsahuje jen model: čemu StochCraft v {file} nerozumí, se vynechá.
-	Abandoned	Vzdané
-	Abandoned on {id}	Vzdané na {id}
 	About StochCraft	O aplikaci StochCraft
 	About {app}	O aplikaci {app}
 	Accent	Zvýraznění
@@ -162,7 +160,6 @@
 	Duration	Doba trvání
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Každá analýza spouští experiment několikrát se stejnou počáteční hodnotou generátoru, takže rozdíly pocházejí ze změny, ne z náhody. Může to chvíli trvat.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Každá entita si vezme první z těchto možností, kterou lze právě splnit, celou najednou, a při odchodu jednotky vrátí.
-	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Každá entita zde čeká nejvýše dobu, která se jí náhodně určí při příchodu, a pak to vzdá: odejde cestou označenou „Vzdané“, nebo opustí model.
 	Each server (unit) is checked every so often, as a load balancer probes the servers behind it. One that fails, with too many waiting, is taken out of service for a restart, then comes back.	Každý server (jednotka) se čas od času kontroluje, tak jako vyvažovač zátěže zkouší servery za sebou. Ten, který neprojde, protože na něj čeká příliš mnoho entit, se vyřadí z provozu na restart a pak se vrátí.
 	Edit	Úpravy
 	Edit themes…	Upravit motivy…
@@ -412,7 +409,6 @@
 	Run	Spustit
 	Run cancelled	Běh byl zrušen
 	Run experiment	Spustit experiment
-	Play run 1 step by step and see each block's queue on the diagram	Přehrát běh 1 krok za krokem a sledovat frontu každého bloku v diagramu
 	Run the experiment ({shortcut})	Spustit experiment ({shortcut})
 	Run the experiment again to see this result's spread.	Spusťte experiment znovu, abyste viděli rozptyl tohoto výsledku.
 	Run the experiment at each value of one parameter, and compare a result.	Spustit experiment pro každou hodnotu jednoho parametru a porovnat výsledek.
@@ -433,7 +429,6 @@
 	Scrap ratio	Podíl zmetků
 	Seed	Počáteční hodnota generátoru
 	Select All	Vybrat vše
-	Select a block to see its queue over time.	Vyberte blok, abyste viděli jeho frontu v čase.
 	Sender waits during transfer	Odesílatel čeká během přesunu
 	Separate the values with semicolons or spaces.	Oddělte hodnoty středníky nebo mezerami.
 	Sequential	Sekvenční
@@ -497,10 +492,8 @@
 	Text	Text
 	Text on accent	Text na zvýraznění
 	Text on header	Text v záhlaví
-	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	Spojení spadne a klient to zkusí znovu: entita se hned vrátí na začátek fronty a práce na ní odvedená je zbytečná.
 	The entity waits on its server and the job carries on with what was left once the server is back.	Entita čeká u svého serveru a práce pokračuje se zbytkem, jakmile je server zpět.
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more runs would narrow it.	Interval sahá pod cílový podíl {share}, takže splnění podílu není prokázáno s 95% spolehlivostí; více běhů by ho zúžilo.
-	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	Práce se hned zastaví: entita se vrátí na začátek fronty pro kterýkoli server na směně a práce na ní odvedená je zbytečná.
 	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	Práce se hned zastaví; entita čeká u svého serveru a práce pokračuje se zbytkem, jakmile je tento server opět na směně.
 	The last task with a resource it finished at	Poslední úloha se zdrojem, kterou díl prošel
 	The mean time to the stop condition is over the runs that met it only; the others ran to their time limit.	Průměrná doba do podmínky zastavení je jen z běhů, které ji splnily; ostatní běžely do svého časového limitu.
@@ -690,7 +683,6 @@ unit	yr	r.
 	Balked on {id}	Nezařazené na {id}
 	Balking	Nezařazení do fronty
 	Count those in service	Započítat i obsluhované
-	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Entity, které se nezařadí do fronty, jdou hned tímto tokem (například aby to zkusily později znovu), místo aby se ztratily; zde se počítají jako nezařazené.
 	Joins with probability	Zařadí se do fronty s pravděpodobností
 	Number waiting	Počet čekajících
 	Share balked	Podíl nezařazených
@@ -908,7 +900,6 @@ unit	yr	r.
 @plural	Finished {n} run|Finished {n} runs	Dokončen {n} běh|Dokončeny {n} běhy|Dokončeno {n} běhů
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	Otevřen {file} ({n} upozornění)|Otevřen {file} ({n} upozornění)|Otevřen {file} ({n} upozornění)
 @plural	Removed {n} block|Removed {n} blocks	Odebrán {n} blok|Odebrány {n} bloky|Odebráno {n} bloků
-@plural	Makes {n} independent run of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Spustí {n} nezávislý běh modelu z počáteční hodnoty {seed}. Výsledky každého prvku zahrnují poloviční šířku 95% intervalu spolehlivosti.|Spustí {n} nezávislé běhy modelu z počáteční hodnoty {seed}. Výsledky každého prvku zahrnují poloviční šířku 95% intervalu spolehlivosti.|Spustí {n} nezávislých běhů modelu z počáteční hodnoty {seed}. Výsledky každého prvku zahrnují poloviční šířku 95% intervalu spolehlivosti.
 @plural	The stop condition was met in {met} of {n} run, after {time} {unit} on average.|The stop condition was met in {met} of {n} runs, after {time} {unit} on average.	Podmínka zastavení byla splněna v {met} z {n} běhu, v průměru po {time} {unit}.|Podmínka zastavení byla splněna v {met} z {n} běhů, v průměru po {time} {unit}.|Podmínka zastavení byla splněna v {met} z {n} běhů, v průměru po {time} {unit}.
 @plural	{done} of {n} run finished|{done} of {n} runs finished	Dokončen {done} z {n} běhu|Dokončeno {done} z {n} běhů|Dokončeno {done} z {n} běhů
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} run|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} runs	{name}: {mean}{unit}\n95% interval od {low} do {high}{unit}\nz {n} běhu|{name}: {mean}{unit}\n95% interval od {low} do {high}{unit}\nz {n} běhů|{name}: {mean}{unit}\n95% interval od {low} do {high}{unit}\nz {n} běhů
@@ -938,7 +929,6 @@ unit	yr	r.
 	kilometres	kilometry
 	inches	palce
 	feet	stopy
-	Ticked, items queue up at the end while the rest keep moving. Unticked, the whole belt stops when the item at the end cannot leave.	Zaškrtnuto: položky se na konci řadí do fronty, zatímco ostatní jedou dál. Nezaškrtnuto: celý pás se zastaví, když položka na konci nemůže odejít.
 	A belt that carries entities from one end to the other. It has a length and a speed, and each entity takes a pitch of belt: its item length plus the gap kept free after it. So it holds at most length ÷ pitch entities and carries at most speed ÷ pitch per time unit. Accumulating: entities queue up at the end while the rest keep moving; otherwise the whole belt stops.	Pás, který nese entity z jednoho konce na druhý. Má délku a rychlost a každá entita zabere rozteč pásu: délku své položky plus mezeru, která za ní zůstane volná. Pojme tedy nejvýše délka ÷ rozteč entit a za jednotku času unese nejvýše rychlost ÷ rozteč. Akumulace: entity se na konci řadí do fronty, zatímco ostatní jedou dál; jinak se zastaví celý pás.
 	Station	Stanoviště
 	Kind	Druh
@@ -992,19 +982,165 @@ unit	yr	r.
 	Time on conveyors	Čas na dopravnících
 	No conveyors in this model	V tomto modelu nejsou žádné dopravníky
 	Fills in when the run ends	Naplní se po skončení běhu
-	How long each item spends on the conveyors.	Jak dlouho je každá položka na dopravnících.
-	No item has left a conveyor yet	Zatím žádná položka neopustila dopravník
-	Share of items by time on a conveyor, in {unit}	Podíl položek podle času na dopravníku, v {unit}
-	Time on conveyors: {n} items between {lo} and {hi} {unit}	Čas na dopravnících: {n} položek mezi {lo} a {hi} {unit}
-	{from} to {to} {unit}: {share} of items ({n})	Od {from} do {to} {unit}: {share} položek ({n})
-	Items on conveyors over time	Položky na dopravnících v čase
-	Items in the model over time	Položky v modelu v čase
-	How many items are on the conveyors over time.	Kolik položek je na dopravnících v čase.
-	How many items are in the model over time.	Kolik položek je v modelu v čase.
 	Nothing was recorded over time in these results	V těchto výsledcích se v čase nic nezaznamenalo
-	At {time} {unit}: {n} items	V čase {time} {unit}: {n} položek
 	Run the model to fill the dashboard	Spusťte model, aby se přehled naplnil
 	The resource and conveyor charts show the last run until this one ends	Grafy zdrojů a dopravníků ukazují poslední běh, dokud tento neskončí
+# Validation messages, new labels and word changes (issue #145)
+	The id “{id}” is not valid. Start an id with a letter or an underscore, then use only letters, digits, dots, hyphens and underscores.	Id „{id}“ není platné. Id musí začínat písmenem nebo podtržítkem, dále používejte jen písmena, číslice, tečky, spojovníky a podtržítka.
+	More than one block, flow, pool or calendar has the id “{id}”. Give each its own id.	Více než jeden blok, tok, fond nebo kalendář má id „{id}“. Každému dejte vlastní id.
+	The flow {flow} uses a block that does not exist. Remove the flow, or connect it to a block that exists.	Tok {flow} používá blok, který neexistuje. Odstraňte tok, nebo ho propojte s existujícím blokem.
+	The flow {flow} leads into an Arrivals block, which takes no input. Remove the flow, or send it to another block.	Tok {flow} vede do bloku Příchody, který nepřijímá vstup. Odstraňte tok, nebo ho veďte do jiného bloku.
+	The flow {flow} leaves a Departures block, which has no output. Remove the flow, or start it from another block.	Tok {flow} vychází z bloku Odchody, který nemá výstup. Odstraňte tok, nebo ho začněte v jiném bloku.
+	The flow {flow} leads from a block back to itself. Remove it, or send it to another block.	Tok {flow} vede z bloku zpět do něj samého. Odstraňte ho, nebo ho veďte do jiného bloku.
+	{block} has nowhere to send entities. Add a flow from it to the next block.	{block} nemá kam posílat entity. Přidejte tok od něj k dalšímu bloku.
+	{block} has {count} flows out, and only a Decision or a Split or join block can send entities down several. Remove the extra flows, or add a Decision block.	Počet výstupních toků z {block} je {count}, ale entity může posílat několika toky jen blok Rozhodnutí nebo blok „Rozdělit nebo spojit“. Odstraňte nadbytečné toky, nebo přidejte blok Rozhodnutí.
+	In “{field}” of {block}, set “{param}” to a finite number.	V poli „{field}“ bloku {block} nastavte „{param}“ na konečné číslo.
+	In “{field}” of {block}, set “{param}” to a number above 0.	V poli „{field}“ bloku {block} nastavte „{param}“ na číslo větší než 0.
+	In “{field}” of {block}, set “{param}” to 0 or more.	V poli „{field}“ bloku {block} nastavte „{param}“ na 0 nebo více.
+	In “{field}” of {block}, set “{param}” to 1 or more.	V poli „{field}“ bloku {block} nastavte „{param}“ na 1 nebo více.
+	In “{field}” of {block}, set “{param}” to a number from 0 to 1.	V poli „{field}“ bloku {block} nastavte „{param}“ na číslo od 0 do 1.
+	In “{field}” of {block}, set “Minimum” below “Maximum”, and any “Most likely” value between them.	V poli „{field}“ bloku {block} nastavte „Minimum“ pod „Maximum“ a případnou hodnotu „Nejpravděpodobnější“ mezi ně.
+	In “{field}” of {block}, add data points whose probabilities add up to more than 0.	V poli „{field}“ bloku {block} přidejte datové body, jejichž pravděpodobnosti dohromady dávají víc než 0.
+	{block} would never have a unit to work with. Give it at least 1 unit.	{block} by nikdy neměl jednotku, se kterou by pracoval. Dejte mu alespoň 1 jednotku.
+	{block} would make entities without end, because its “Time between arrivals” is always 0. Give it a time above 0, or set an “Arrival limit”.	{block} by vytvářel entity donekonečna, protože jeho „Doba mezi příchody“ je vždy 0. Zadejte dobu větší než 0, nebo nastavte „Limit příchodů“.
+	The model has no Arrivals block, so nothing will happen. Add an Arrivals block.	Model nemá blok Příchody, takže se nic nestane. Přidejte blok Příchody.
+	The model has no Departures block, so no time in system is measured. Add a Departures block.	Model nemá blok Odchody, takže se neměří doba v systému. Přidejte blok Odchody.
+	No entity can reach {block} from an Arrivals block. Connect it to a block that entities pass through.	Žádná entita se nemůže dostat do bloku {block} z bloku Příchody. Propojte ho s blokem, kterým entity procházejí.
+	Entities in {block} can never reach a Departures block. Connect it on towards Departures.	Entity v bloku {block} se nikdy nemohou dostat do bloku Odchody. Propojte ho dál směrem k Odchodům.
+	Set the “{state}” power of {block} to a number of kilowatts, 0 or more.	Příkon bloku {block} ve stavu „{state}“ nastavte na počet kilowattů, 0 nebo více.
+	Set the warm-up of the experiment to 0 or more.	Zahřívání experimentu nastavte na 0 nebo více.
+	Set the duration of the experiment to more than 0.	Dobu trvání experimentu nastavte na víc než 0.
+	Set the number of runs of the experiment to 1 or more.	Počet běhů experimentu nastavte na 1 nebo více.
+	Set the layout scale (length units per drawing unit) to a finite number above 0.	Měřítko rozložení (jednotky délky na jednotku výkresu) nastavte na konečné číslo větší než 0.
+	A property of {block} has no name. Give it a name, or remove it.	Vlastnost bloku {block} nemá název. Pojmenujte ji, nebo ji odstraňte.
+	{block} sets the property “{name}” twice. Keep one of them.	{block} nastavuje vlastnost „{name}“ dvakrát. Ponechte jednu z nich.
+	The property “{name}” of {block} needs shares that are not negative and add up to more than 0. Change the shares.	Vlastnost „{name}“ bloku {block} potřebuje podíly, které nejsou záporné a dohromady dávají víc než 0. Změňte podíly.
+	The property “{name}” has the type “{type2}” on {block} but “{type}” on another block. Give it one type everywhere.	Vlastnost „{name}“ má na bloku {block} typ „{type2}“, ale na jiném bloku typ „{type}“. Dejte jí všude stejný typ.
+	The value of the property “{name}” on {block} does not fit its type, “{type}”. Change the value or the type.	Hodnota vlastnosti „{name}“ na bloku {block} neodpovídá jejímu typu, „{type}“. Změňte hodnotu nebo typ.
+	The expression for the property “{name}” on {block} cannot be used: {error}. Correct “{expression}”.	Výraz pro vlastnost „{name}“ na bloku {block} nelze použít: {error}. Opravte „{expression}“.
+	{block} reads the property “{name}”, which no block sets, so it would read as empty. Set it on an earlier block, or correct the name.	{block} čte vlastnost „{name}“, kterou žádný blok nenastavuje, takže by se četla jako prázdná. Nastavte ji na dřívějším bloku, nebo opravte název.
+	The setup of {block} has times for particular changes but no property to watch. Choose a property under “Only when this property changes”.	Seřízení bloku {block} má doby pro určité změny, ale žádnou vlastnost ke sledování. Vyberte vlastnost v poli „Jen při změně této vlastnosti“.
+	{block} has times for particular values but no property to read them from. Choose a property under “Service time by property”.	{block} má doby pro určité hodnoty, ale žádnou vlastnost, ze které je čte. Vyberte vlastnost v poli „Doba obsluhy podle vlastnosti“.
+	{block} has two times for the value “{value}”. Keep one.	{block} má dvě doby pro hodnotu „{value}“. Ponechte jednu.
+	Set the time of {block} for the value “{value}” to a mean of 0 or more.	Dobu bloku {block} pro hodnotu „{value}“ nastavte na průměr 0 nebo více.
+	The scrap at {block} counts against {other}, which is not a task with a resource. Choose a task with a resource.	Zmetky na bloku {block} se započítávají proti bloku {other}, který není úloha se zdrojem. Vyberte úlohu se zdrojem.
+	Set “Planned run time per item” of {block} to a mean above 0.	„Plánovaná doba běhu na díl“ bloku {block} nastavte na průměr větší než 0.
+	Set “Time before giving up” of {block} to a mean of 0 or more.	„Doba do vzdání“ bloku {block} nastavte na průměr 0 nebo více.
+	The flow {flow} is ticked “Gave up”, but only a task with a resource and a “Time before giving up” sends entities that give up. Untick it, or set a “Time before giving up” on {block}.	Tok {flow} je označen „Vzdaly to“, ale entity, které to vzdají, posílá jen úloha se zdrojem a s nastavenou položkou „Doba do vzdání“. Zrušte označení, nebo nastavte „Doba do vzdání“ na bloku {block}.
+	{count} flows out of {block} are ticked “{way}”; at most one can be. Untick all but one.	Počet toků z bloku {block} označených „{way}“ je {count}; smí být nejvýše jeden. Zrušte označení u všech kromě jednoho.
+	The flow {flow} is ticked “Turned away”, but only a task with a resource and a limited waiting room turns entities away. Untick it, or limit the waiting room of {block}.	Tok {flow} je označen „Odmítnuté“, ale entity odmítá jen úloha se zdrojem a s omezenou čekárnou. Zrušte označení, nebo omezte čekárnu bloku {block}.
+	The flow {flow} is ticked both “Gave up” and “Turned away”. Keep one of them.	Tok {flow} je označen současně „Vzdaly to“ i „Odmítnuté“. Ponechte jedno.
+	Set every chance of joining in the balking table of {block} to a number from 0 to 1.	Každou pravděpodobnost zařazení do fronty v tabulce nezařazení bloku {block} nastavte na číslo od 0 do 1.
+	Put the rows of the balking table of {block} in increasing order of “Number waiting”.	Řádky tabulky nezařazení bloku {block} seřaďte vzestupně podle „Počet čekajících“.
+	The flow {flow} is ticked “Balked”, but only a task with a resource and balking sends entities that balk. Untick it, or turn on balking for {block}.	Tok {flow} je označen „Nezařazené“, ale entity, které se nezařadí, posílá jen úloha se zdrojem a s nezařazením. Zrušte označení, nebo zapněte nezařazení pro {block}.
+	The flow {flow} is ticked “Balked” and also “Gave up” or “Turned away”. Keep one of them.	Tok {flow} je označen „Nezařazené“ a také „Vzdaly to“ nebo „Odmítnuté“. Ponechte jedno.
+	The waiting room of {block} is set by calendar or per working server, but has no number of places, so it is unlimited. Give it a number of places, or make it fixed.	Čekárna bloku {block} se řídí kalendářem nebo počtem serverů v provozu, ale nemá počet míst, takže je neomezená. Zadejte počet míst, nebo nastavte čekárnu jako pevnou.
+	The waiting room of {block} is set by calendar, but no calendar has a value. Add a value for a calendar, or make the waiting room fixed.	Čekárna bloku {block} se řídí kalendářem, ale žádný kalendář nemá hodnotu. Přidejte hodnotu pro kalendář, nebo nastavte čekárnu jako pevnou.
+	Set “Fails above, waiting per working server” of {block} to a number of 0 or more.	„Neprojde nad, čekajících na server v provozu“ bloku {block} nastavte na číslo 0 nebo více.
+	Set “Check every” of {block} to a mean above 0.	„Kontrola každých“ bloku {block} nastavte na průměr větší než 0.
+	Set the demand of {block} to a number of parts above 0.	Poptávku bloku {block} nastavte na počet dílů větší než 0.
+	The demand of {block} is per shift but names no calendar to say when the shifts are. Choose a calendar.	Poptávka bloku {block} je za směnu, ale neuvádí kalendář, který říká, kdy směny jsou. Vyberte kalendář.
+	The demand of {block} names a calendar that does not exist. Choose a calendar that exists.	Poptávka bloku {block} uvádí kalendář, který neexistuje. Vyberte existující kalendář.
+	The probability {value} on the flow {flow} is not from 0 to 1. Enter a probability from 0 to 1.	Pravděpodobnost {value} na toku {flow} není od 0 do 1. Zadejte pravděpodobnost od 0 do 1.
+	The probabilities of the flows out of {block} add up to {sum}, not 1, so they are used in proportion. Change them to add up to 1 if that is not what you want.	Pravděpodobnosti toků z bloku {block} dávají dohromady {sum}, ne 1, a proto se použijí v poměru. Změňte je tak, aby dávaly 1, pokud to nechcete.
+	The condition on the flow {flow} cannot be used: {error}. Correct “{expression}”.	Podmínku na toku {flow} nelze použít: {error}. Opravte „{expression}“.
+	The condition on the flow {flow} is ignored, because only flows out of a Decision block choose a route. Remove the condition.	Podmínka na toku {flow} se ignoruje, protože trasu vybírají jen toky z bloku Rozhodnutí. Odstraňte podmínku.
+	The probability on the flow {flow} is ignored, because only flows out of a Decision block choose a route. Remove the probability.	Pravděpodobnost na toku {flow} se ignoruje, protože trasu vybírají jen toky z bloku Rozhodnutí. Odstraňte pravděpodobnost.
+	The condition on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the condition.	Podmínka na toku {flow} se ignoruje, protože Rozhodnutí posílá entity do nejkratší fronty. Odstraňte podmínku.
+	The probability on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the probability.	Pravděpodobnost na toku {flow} se ignoruje, protože Rozhodnutí posílá entity do nejkratší fronty. Odstraňte pravděpodobnost.
+	The default on the flow {flow} is ignored, because the Decision sends entities to the shortest queue. Remove the default.	Výchozí označení na toku {flow} se ignoruje, protože Rozhodnutí posílá entity do nejkratší fronty. Odstraňte výchozí označení.
+	The probability on the flow {flow} is ignored, because the Decision routes by condition. Remove the probability.	Pravděpodobnost na toku {flow} se ignoruje, protože Rozhodnutí vybírá trasu podle podmínky. Odstraňte pravděpodobnost.
+	The default flow of {block} is not one of its own flows out. Choose one of the flows out of {block} as the default.	Výchozí tok bloku {block} není jedním z jeho výstupních toků. Jako výchozí vyberte jeden z výstupních toků bloku {block}.
+	{block} routes by condition but has no default flow, so an entity for which no condition holds leaves the model here. Choose a default flow.	{block} vybírá trasu podle podmínky, ale nemá výchozí tok, takže entita, pro kterou neplatí žádná podmínka, tu model opustí. Vyberte výchozí tok.
+	{block} diverts entities but has no default flow, so an entity whose way is full has nowhere else to go. Choose a default flow.	{block} odklání entity, ale nemá výchozí tok, takže entita, jejíž cesta je plná, nemá kam jinam. Vyberte výchozí tok.
+	{block} waits for an entity on the flow {flow}, which none can reach, so it never sends one on. Remove that flow, or connect it to a block that entities reach.	{block} čeká na entitu na toku {flow}, ke které se žádná nedostane, takže žádnou nikdy nepošle dál. Odstraňte ten tok, nebo ho propojte s blokem, ke kterému se entity dostanou.
+	{block} has a limited waiting room and is fed through {gateway}. While it is full, {gateway} holds up every entity behind it, and they wait before it without limit. Remove the gateway before {block}, or remove the limit.	{block} má omezenou čekárnu a je napájen přes {gateway}. Dokud je plná, {gateway} zdržuje každou entitu za sebou a ty čekají bez omezení. Odstraňte tento blok před blokem {block}, nebo odstraňte omezení.
+	The limited waiting rooms of {loop} feed each other in a loop, so when all of them are full the loop deadlocks. Remove the limit on one of them, or break the loop.	Omezené čekárny ve smyčce ({loop}) se navzájem napájejí, takže když jsou všechny plné, smyčka se zablokuje. Odstraňte omezení u jedné z nich, nebo smyčku přerušte.
+	The pool {block} has no units. Give it at least 1 unit.	Fond {block} nemá žádné jednotky. Přidejte alespoň 1 jednotku.
+	{block} names no resource it needs. Add one under “Needs”.	{block} neuvádí žádný zdroj, který potřebuje. Přidejte jeden v poli „Požadavky“.
+	{block} needs a resource pool that does not exist. Choose a pool that exists.	{block} potřebuje fond zdrojů, který neexistuje. Vyberte existující fond.
+	{block} needs units with the roles {roles}, which no pool has. Give a pool those roles, or change what {block} needs.	{block} potřebuje jednotky s rolemi {roles}, které žádný fond nemá. Dejte některému fondu tyto role, nebo změňte, co {block} potřebuje.
+	{block} needs {needed} units at once, but at most {available} exist, so this can never be met. Ask for fewer units, or add units to the pool.	Počet jednotek, které {block} potřebuje najednou, je {needed}, ale existuje jich nejvýše {available}, takže to nelze nikdy splnit. Požadujte méně jednotek, nebo přidejte jednotky do fondu.
+	Set the priority of {block} to a finite number, not {value}.	Prioritu bloku {block} nastavte na konečné číslo, ne na {value}.
+	No task uses the pool {block}. Add it to a task's needs, or remove the pool.	Žádná úloha nepoužívá fond {block}. Přidejte ho k požadavkům nějaké úlohy, nebo fond odstraňte.
+	{block} has a value for a calendar that does not exist. Choose a calendar that exists, or remove the value.	{block} má hodnotu pro kalendář, který neexistuje. Vyberte existující kalendář, nebo hodnotu odstraňte.
+	The calendar {block} has no entries, so it is never active. Add an entry.	Kalendář {block} nemá žádné záznamy, takže není nikdy aktivní. Přidejte záznam.
+	{block} allows no arrivals outside the calendars but names no calendar, so it never creates entities. Add arrivals by calendar, or allow arrivals outside calendars.	{block} nepovoluje příchody mimo kalendáře, ale neuvádí žádný kalendář, takže nikdy nevytváří entity. Přidejte příchody podle kalendáře, nebo povolte příchody mimo kalendáře.
+	Set the batch size of {block} to 1 or more.	Velikost dávky bloku {block} nastavte na 1 nebo více.
+	Set “{field}” of the conveyor {block} to a finite number above 0.	„{field}“ dopravníku {block} nastavte na konečné číslo větší než 0.
+	Set “{field}” of the conveyor {block} to a finite number of 0 or more.	„{field}“ dopravníku {block} nastavte na konečné číslo 0 nebo více.
+	Set “{field}” of the conveyor {block} to a finite number other than 0.	„{field}“ dopravníku {block} nastavte na konečné číslo různé od 0.
+	The conveyor {block} is {length} long but each entity takes {pitch} (item length plus gap), so not even one fits. Lengthen the conveyor, or shorten the item or the gap.	Dopravník {block} je dlouhý {length}, ale každá entita zabírá {pitch} (délka položky plus mezera), takže se nevejde ani jedna. Prodlužte dopravník, nebo zkraťte položku či mezeru.
+	The drawn path of the conveyor {block} is {path_length} long, but its “Length” is {length}, so the drawing and the run disagree. Make “Length” match the path, or change the shape.	Nakreslená dráha dopravníku {block} je dlouhá {path_length}, ale jeho „Délka“ je {length}, takže se výkres a běh liší. Upravte „Délka“ podle dráhy, nebo změňte tvar.
+	{block} is a transport, which StochCraft does not simulate yet. Remove it to run the model.	{block} je doprava, kterou StochCraft zatím nesimuluje. Odstraňte ji, abyste mohli model spustit.
+	The pool {pool} of the transport {block} does not exist. Choose a pool that exists.	Fond {pool} dopravy {block} neexistuje. Vyberte existující fond.
+	The pool {pool} of the transport {block} is not mobile. Give the pool speeds and a home.	Fond {pool} dopravy {block} není mobilní. Zadejte fondu rychlosti a domovský blok.
+	Set “{field}” of the pool {block} to a finite number above 0.	„{field}“ fondu {block} nastavte na konečné číslo větší než 0.
+	The home of the pool {block} is not a block of the model. Choose a block as its home.	Domovský blok fondu {block} není blokem modelu. Vyberte blok jako jeho domov.
+	The transport {block} needs one block before it, where it picks up, and one after it, where it drops off, but has {inputs} before and {outputs} after. Connect it to one block on each side.	Doprava {block} potřebuje jeden blok před sebou, kde entity vyzvedává, a jeden za sebou, kde je odkládá. Bloků před ní je {inputs} a za ní {outputs}. Propojte ji s jedním blokem na každé straně.
+	{other} has no place on the canvas, so the distances for {block} are not known. Place {other} on the canvas.	{other} nemá místo v diagramu, takže vzdálenosti pro {block} nejsou známy. Umístěte {other} do diagramu.
+	The flow {flow} asks for no entities. Set its “Units” to 1 or more.	Tok {flow} nežádá žádné entity. Nastavte jeho „Jednotky“ na 1 nebo více.
+	The “Units” on the flow {flow} is ignored, because only a Split or join block takes several entities from one flow. Remove it.	„Jednotky“ na toku {flow} se ignorují, protože několik entit z jednoho toku bere jen blok „Rozdělit nebo spojit“. Odstraňte je.
+	No block makes batches, so {block} passes every entity through. Add a Batch block before it, or remove {block}.	Žádný blok nevytváří dávky, takže {block} propouští každou entitu. Přidejte před něj blok Dávka, nebo {block} odstraňte.
+	The stop condition names a block that does not exist. Choose a block that exists.	Podmínka zastavení uvádí blok, který neexistuje. Vyberte existující blok.
+	Set the count of the stop condition for {block} to 1 or more.	Počet v podmínce zastavení pro {block} nastavte na 1 nebo více.
+	The stop condition waits for {block} to empty, but only a task can empty. Choose a task.	Podmínka zastavení čeká, až se {block} vyprázdní, ale vyprázdnit se může jen úloha. Vyberte úlohu.
+	The stop condition at {block} can be met before the warm-up ends. A run that stops during the warm-up has no statistics after it and is left out of the results. Shorten the warm-up, or stop later.	Podmínka zastavení u bloku {block} může být splněna před koncem zahřívání. Běh, který se zastaví během zahřívání, nemá po něm žádné statistiky a ve výsledcích se vynechává. Zkraťte zahřívání, nebo zastavte později.
+	Every run stopped before the warm-up ended, so no metric is reported. Shorten the warm-up, or stop later.	Každý běh se zastavil před koncem zahřívání, takže se nehlásí žádná metrika. Zkraťte zahřívání, nebo zastavte později.
+	{replications} of {of} runs stopped before the warm-up ended, so their statistics are left out of every metric. Shorten the warm-up, or stop later.	Počet běhů, které se zastavily před koncem zahřívání, je {replications} z {of}, takže jejich statistiky jsou vynechány ze všech metrik. Zkraťte zahřívání, nebo zastavte později.
+	{block} is offered {load}% of the work its units can do, so its waiting room grows without limit and the results describe no steady state. Add units, or shorten the service.	{block} dostává {load}% práce, kterou jeho jednotky zvládnou, takže jeho čekárna roste bez omezení a výsledky nepopisují ustálený stav. Přidejte jednotky, nebo zkraťte obsluhu.
+	{block} is busy {utilisation}% of the time, and at the end at least {backlog} entities are still waiting against {left} that left. Work arrives faster than it is done, so the results describe no steady state. Add units, or shorten the service.	{block} je vytížen {utilisation}% času a na konci ještě čeká alespoň {backlog} entit, zatímco jich odešlo {left}. Práce přichází rychleji, než se vyřizuje, takže výsledky nepopisují ustálený stav. Přidejte jednotky, nebo zkraťte obsluhu.
+	The experiment has one run, so its results cannot be told from chance. Set the number of runs to at least 2, and usually 10 or more.	Experiment má jeden běh, takže jeho výsledky nelze odlišit od náhody. Nastavte počet běhů alespoň na 2, obvykle na 10 nebo více.
+	{block} has a three-point estimate but no time to fit it to, so the estimate is ignored. Remove the estimate.	{block} má tříbodový odhad, ale žádnou dobu, kterou by se podle něj upravilo, takže se odhad ignoruje. Odstraňte odhad.
+	The three-point estimate of {block} cannot be fitted: every point must be a finite number. Correct the points.	Tříbodový odhad bloku {block} nelze přizpůsobit: každý bod musí být konečné číslo. Opravte body.
+	The three-point estimate of {block} cannot be fitted: the points must be in order, minimum, most likely, then maximum or 95th percentile. Correct the points.	Tříbodový odhad bloku {block} nelze přizpůsobit: body musí být seřazeny, minimum, nejpravděpodobnější, pak maximum nebo 95. percentil. Opravte body.
+	The three-point estimate of {block} cannot be fitted: log-normal and Weibull estimates have no maximum. Give a 95th percentile instead.	Tříbodový odhad bloku {block} nelze přizpůsobit: lognormální a Weibullovy odhady nemají maximum. Zadejte místo toho 95. percentil.
+	The time of {block} is no longer the one fitted from its three-point estimate. Fit it again, or remove the estimate.	Doba bloku {block} už není ta, která byla přizpůsobena z jeho tříbodového odhadu. Přizpůsobte ji znovu, nebo odhad odstraňte.
+	In “{field}” of {block}, the normal distribution draws below 0 more than 1 time in 100, and each such draw counts as 0, so the times are longer on average than its mean. Use a truncated normal with a minimum of 0, or a log-normal.	V poli „{field}“ bloku {block} normální rozdělení losuje hodnoty pod 0 častěji než v 1 případě ze 100, každé takové losování se počítá jako 0, takže doby jsou v průměru delší než jeho průměr. Použijte oříznuté normální rozdělení s minimem 0, nebo lognormální.
+	The entities of {block} do not add up: {came} came in or were inside at the start, but {went} left, were lost, gave up or are still inside.	Entity bloku {block} nesedí: na začátku uvnitř nebo přišlo: {came}; odešlo, ztraceno, vzdalo to nebo je stále uvnitř: {went}.
+	The entities of the model do not add up: {came} were created or inside at the start, but {went} reached Departures, left the model elsewhere or are still inside.	Entity modelu nesedí: vytvořeno nebo na začátku uvnitř: {came}; dorazilo do Odchodů, opustilo model jinde nebo je stále uvnitř: {went}.
+	No entity left the model, of {came} created or inside at the start. Check that the routing leads to Departures and that the run is long enough for an entity to get through.	Žádná entita neopustila model z {came} vytvořených nebo na začátku uvnitř. Zkontrolujte, zda směrování vede do Odchodů a zda je běh dost dlouhý, aby entita prošla.
+	Little's law does not hold at {block}: the time-average number inside was {mean}, but the entities' own times inside give {from_stays}.	Littleův zákon u bloku {block} neplatí: časově průměrný počet uvnitř byl {mean}, ale vlastní doby entit uvnitř dávají {from_stays}.
+	The utilisation of {block} counts {busy} units busy on average, but {working} were processing or setting up: units idle, blocked, off shift, failed or restarting were counted busy.	Využití bloku {block} počítá v průměru {busy} obsazených jednotek, ale {working} jich zpracovávalo nebo se seřizovalo: jednotky nečinné, blokované, mimo směnu, v poruše nebo se restartující se počítaly jako obsazené.
+	The utilisation of {block} counts {busy} units busy on average, but {working} were processing or setting up: units at work were not counted busy.	Využití bloku {block} počítá v průměru {busy} obsazených jednotek, ale {working} jich zpracovávalo nebo se seřizovalo: jednotky při práci se nepočítaly jako obsazené.
+	The shares of the time of the units of {block} in each state add up to {total}, not 1.	Podíly času jednotek bloku {block} v jednotlivých stavech dávají dohromady {total}, ne 1.
+	“{metric}” of {block} is {value}, outside 0 to 1 (0% to 100%).	„{metric}“ bloku {block} je {value}, mimo rozsah od 0 do 1 (0% až 100%).
+	This was found in {replications} of {of} runs, and the furthest off is shown.	Toto bylo zjištěno v {replications} z {of} běhů a zobrazen je ten s největší odchylkou.
+	This points to a fault in StochCraft rather than in the model. Please report it with the model.	Toto ukazuje na chybu v programu StochCraft, ne v modelu. Nahlaste ji spolu s modelem.
+	Angle	Úhel
+	Failed	V poruše
+	Off shift	Mimo směnu
+	Processing	Zpracování
+	Radius	Poloměr
+	Rise	Stoupání
+	Speed empty	Rychlost bez nákladu
+	Speed loaded	Rychlost s nákladem
+	Turns	Závity
+	Unload	Vykládka
+	Lost	Ztraceno
+	An entity that leaves a waiting room before a unit takes it, because it has waited as long as it was willing to.	Entita, která opustí čekárnu dříve, než ji převezme jednotka, protože čekala tak dlouho, jak byla ochotna.
+	An entity that does not join a waiting room at all, because the number already waiting put it off.	Entita, která do čekárny vůbec nevstoupí, protože ji odradil počet již čekajících.
+	An entity that finds the waiting room full and takes the flow ticked “Turned away” instead of waiting.	Entita, která najde čekárnu plnou a místo čekání jde tokem označeným „Odmítnuté“.
+	An entity that leaves the model without reaching Departures: it found the waiting room full with nowhere else to go, or a decision with no way out for it.	Entita, která opustí model, aniž by dosáhla Odchodů: našla plnou čekárnu bez jiné cesty, nebo rozhodnutí bez cesty ven pro ni.
+	Gave up on {id}	Vzdaly to na {id}
+	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the flow ticked “Gave up”, or leaves the model.	Každá entita zde čeká nejvýše dobu, která se jí náhodně určí při příchodu, a pak to vzdá: odejde tokem označeným „Vzdaly to“, nebo opustí model.
+	Entities that do not join the waiting room take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Entity, které se nezařadí do čekárny, jdou hned tímto tokem (například aby to zkusily později znovu), místo aby se ztratily; zde se počítají jako nezařazené.
+	The job stops at once: the entity goes back to the front of the waiting room for any server on shift, and the work done on it is wasted.	Práce se hned zastaví: entita se vrátí na začátek čekárny pro kterýkoli server na směně a práce na ní odvedená je zbytečná.
+	The connection drops and the client tries again: the entity goes back to the front of the waiting room at once, and the work done on it is wasted.	Spojení spadne a klient to zkusí znovu: entita se hned vrátí na začátek čekárny a práce na ní odvedená je zbytečná.
+	Ticked, entities queue up at the end while the rest keep moving. Unticked, the whole belt stops when the entity at the end cannot leave.	Zaškrtnuto: entity se na konci řadí do fronty, zatímco ostatní jedou dál. Nezaškrtnuto: celý pás se zastaví, když entita na konci nemůže odejít.
+	Play run 1 step by step and see each block's waiting room on the diagram	Přehrát běh 1 krok za krokem a sledovat čekárnu každého bloku v diagramu
+	Select a block to see its waiting room over time.	Vyberte blok, abyste viděli jeho čekárnu v čase.
+	Entities on conveyors over time	Entity na dopravnících v čase
+	Entities in the model over time	Entity v modelu v čase
+	How long each entity spends on the conveyors.	Jak dlouho je každá entita na dopravnících.
+	No entity has left a conveyor yet	Zatím žádná entita neopustila dopravník
+	Share of entities by time on a conveyor, in {unit}	Podíl entit podle času na dopravníku, v {unit}
+	Time on conveyors: {n} entities between {lo} and {hi} {unit}	Čas na dopravnících: {n} entit mezi {lo} a {hi} {unit}
+	{from} to {to} {unit}: {share} of entities ({n})	Od {from} do {to} {unit}: {share} entit ({n})
+	How many entities are on the conveyors over time.	Kolik entit je na dopravnících v čase.
+	How many entities are in the model over time.	Kolik entit je v modelu v čase.
+	At {time} {unit}: {n} entities	V čase {time} {unit}: {n} entit
+@plural	Makes {n} independent run of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each block's results come with the half-width of a 95% confidence interval across them.	Spustí {n} nezávislý běh modelu z počáteční hodnoty {seed}. Výsledky každého bloku zahrnují poloviční šířku 95% intervalu spolehlivosti.|Spustí {n} nezávislé běhy modelu z počáteční hodnoty {seed}. Výsledky každého bloku zahrnují poloviční šířku 95% intervalu spolehlivosti.|Spustí {n} nezávislých běhů modelu z počáteční hodnoty {seed}. Výsledky každého bloku zahrnují poloviční šířku 95% intervalu spolehlivosti.
 	Fonts	Písma
 	The full list of third-party licences is in the file THIRD-PARTY-LICENSES.html, which comes with the download.	Úplný seznam licencí třetích stran je v souboru THIRD-PARTY-LICENSES.html, který je součástí stažené verze.
 	Full list of third-party licences	Úplný seznam licencí třetích stran
