@@ -8,7 +8,9 @@
 //! - the functions `getProperty('name')` (also written `bpsim:getProperty`), `true()`,
 //!   `false()`, `not()`, `boolean()`, `number()`, `string()`, `floor()`, `ceiling()`, `round()`,
 //!   `concat()`, `contains()`, `starts-with()` and `string-length()`;
-//! - beyond XPath 1.0, what a cost or schedule model needs (ROADMAP M4.1): `min()`, `max()` and
+//! - beyond XPath 1.0, and only in a Monte Carlo model ([`parse_with_variables`]; [`parse`]
+//!   refuses them, so process files stay readable by other BPSim tools), what a cost or schedule
+//!   model needs (ROADMAP M4.1): `min()`, `max()` and
 //!   `sum()` of any number of values, `abs()` and `sqrt()` (XPath 2.0's `fn:abs`, and the others
 //!   as in XPath 3.0's `fn:` and `math:` functions, with the optional prefix), `exp()`, `log()`
 //!   (natural) and `pow()`, and `if(condition, then, else)`, which evaluates only the branch it
@@ -169,6 +171,23 @@ impl Func {
             "log" => (Func::Log, 1, Some(1)),
             "pow" => (Func::Pow, 2, Some(2)),
             "if" => (Func::If, 3, Some(3)),
+            _ => return None,
+        })
+    }
+
+    /// Its name, if it is one of the functions beyond BPSim's XPath 1.0 subset (for Monte Carlo
+    /// models only).
+    fn beyond_xpath_1(self) -> Option<&'static str> {
+        Some(match self {
+            Func::Min => "min",
+            Func::Max => "max",
+            Func::Sum => "sum",
+            Func::Abs => "abs",
+            Func::Sqrt => "sqrt",
+            Func::Exp => "exp",
+            Func::Log => "log",
+            Func::Pow => "pow",
+            Func::If => "if",
             _ => return None,
         })
     }
@@ -541,9 +560,28 @@ fn call(pos: usize, name: &str, args: Vec<Expr>) -> Result<Expr, ExprError> {
     Ok(Expr::Call(f, args))
 }
 
-/// Parses an expression.
+/// Parses an expression of a process model: BPSim's XPath 1.0 subset only, so the file stays
+/// readable by other BPSim tools. The functions beyond it (`min`, `max`, `sum`, `abs`, `sqrt`,
+/// `exp`, `log`, `pow`, `if`) are for Monte Carlo models ([`parse_with_variables`]).
 pub fn parse(src: &str) -> Result<Expr, ExprError> {
-    parse_as(src, false)
+    let e = parse_as(src, false)?;
+    let mut beyond = None;
+    e.visit(&mut |x| {
+        if let Expr::Call(f, _) = x
+            && beyond.is_none()
+        {
+            beyond = f.beyond_xpath_1();
+        }
+    });
+    match beyond {
+        Some(name) => Err(err(
+            0,
+            format!(
+                "`{name}` is only for Monte Carlo models: other BPSim tools would not read it here"
+            ),
+        )),
+        None => Ok(e),
+    }
 }
 
 /// Parses an expression in which `$name` reads the value named `name` (as `getProperty`
@@ -886,30 +924,39 @@ mod tests {
 
     #[test]
     fn functions_for_cost_models() {
-        assert_eq!(num("min(3, 1, 2)"), 1.0);
-        assert_eq!(num("max(3, 1, 2)"), 3.0);
-        assert_eq!(num("sum(1, 2, 3.5)"), 6.5);
-        assert!(num("max(1, getProperty('nothing'))").is_nan());
-        assert_eq!(num("abs(-2.5)"), 2.5);
-        assert_eq!(num("sqrt(16)"), 4.0);
-        assert_eq!(num("pow(2, 10)"), 1024.0);
-        assert_eq!(num("math:pow(2, 3)"), 8.0);
-        assert_eq!(num("exp(0)"), 1.0);
-        assert_eq!(num("log(1)"), 0.0);
-        assert_eq!(num("if(getProperty('n') > 2, 10, 20)"), 10.0);
-        assert_eq!(num("if(getProperty('n') > 5, 10, 20)"), 20.0);
+        // Monte Carlo expressions only: a process model keeps to BPSim's XPath 1.0 subset.
+        assert!(parse("min(3, 1)").is_err());
+        assert!(parse("if(true(), 1, 2)").is_err());
+        let cost = |src: &str| match parse_with_variables(src) {
+            Ok(e) => e
+                .eval(&|name| (name == "n").then_some(Value::Number(3.0)))
+                .number(),
+            Err(_) => f64::NAN,
+        };
+        assert_eq!(cost("min(3, 1, 2)"), 1.0);
+        assert_eq!(cost("max(3, 1, 2)"), 3.0);
+        assert_eq!(cost("sum(1, 2, 3.5)"), 6.5);
+        assert!(cost("max(1, getProperty('nothing'))").is_nan());
+        assert_eq!(cost("abs(-2.5)"), 2.5);
+        assert_eq!(cost("sqrt(16)"), 4.0);
+        assert_eq!(cost("pow(2, 10)"), 1024.0);
+        assert_eq!(cost("math:pow(2, 3)"), 8.0);
+        assert_eq!(cost("exp(0)"), 1.0);
+        assert_eq!(cost("log(1)"), 0.0);
+        assert_eq!(cost("if(getProperty('n') > 2, 10, 20)"), 10.0);
+        assert_eq!(cost("if(getProperty('n') > 5, 10, 20)"), 20.0);
         // Only the branch taken is evaluated: the other may not even have a value.
-        assert_eq!(num("if(true(), 1, getProperty('nothing'))"), 1.0);
+        assert_eq!(cost("if(true(), 1, getProperty('nothing'))"), 1.0);
         assert_eq!(
-            parse("if(true(), 1, 2)").map(|e| e.kind()),
+            parse_with_variables("if(true(), 1, 2)").map(|e| e.kind()),
             Ok(Kind::Number)
         );
         assert_eq!(
-            parse("if(true(), 1, 'a')").map(|e| e.kind()),
+            parse_with_variables("if(true(), 1, 'a')").map(|e| e.kind()),
             Ok(Kind::Property)
         );
-        assert!(parse("if(1, 2)").is_err());
-        assert!(parse("pow(2)").is_err());
+        assert!(parse_with_variables("if(1, 2)").is_err());
+        assert!(parse_with_variables("pow(2)").is_err());
     }
 
     #[test]
