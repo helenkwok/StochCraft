@@ -2013,6 +2013,10 @@ pub enum Behaviour {
     /// Of `came` entities created or inside as the statistics started, none left the model: none
     /// reached an exit, nor gave up, balked, was turned away or found no way with nowhere to go.
     NothingOut { came: u64 },
+    /// In a closed model ([`Model::is_closed`]), whose entities go round and never leave, the
+    /// `came` entities created or inside at the start are stuck: no block holding entities at
+    /// the end finished any in the run ([`Behaviour::NothingOut`] for an open model).
+    NothingMoved { came: u64 },
     /// Little's law does not hold at an element: the time-average number inside was `mean`, but
     /// the entities' own times in it (from when each came in and went out) give `from_stays`.
     LittlesLaw { mean: f64, from_stays: f64 },
@@ -2033,6 +2037,7 @@ impl Behaviour {
             Behaviour::Unbalanced { .. } => "unbalanced",
             Behaviour::Unaccounted { .. } => "unaccounted",
             Behaviour::NothingOut { .. } => "nothing_out",
+            Behaviour::NothingMoved { .. } => "nothing_moved",
             Behaviour::LittlesLaw { .. } => "littles_law",
             Behaviour::BusyNotWorking { .. } => "busy_not_working",
             Behaviour::StatesTotal { .. } => "states_total",
@@ -2046,7 +2051,7 @@ impl Behaviour {
             Behaviour::Unbalanced { came, went } | Behaviour::Unaccounted { came, went } => {
                 came.abs_diff(*went) as f64
             }
-            Behaviour::NothingOut { came } => *came as f64,
+            Behaviour::NothingOut { came } | Behaviour::NothingMoved { came } => *came as f64,
             Behaviour::LittlesLaw { mean, from_stays } => (mean - from_stays).abs(),
             Behaviour::BusyNotWorking { busy, working } => (busy - working).abs(),
             Behaviour::StatesTotal { total } => (total - 1.0).abs(),
@@ -2057,7 +2062,8 @@ impl Behaviour {
 
 impl std::fmt::Display for Behaviour {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        // All but one can only fail through a fault in the simulation itself, not the model.
+        // All but two (nothing out, nothing moved) can only fail through a fault in the
+        // simulation itself, not the model.
         const FAULT: &str = "this points to a fault in StochCraft rather than in the model; please report it with the model";
         match self {
             Behaviour::Unbalanced { came, went } => write!(
@@ -2071,6 +2077,10 @@ impl std::fmt::Display for Behaviour {
             Behaviour::NothingOut { came } => write!(
                 f,
                 "no entity left the model, of {came} created or inside at the start: check that the routing leads to an exit and that the run is long enough for an entity to get through"
+            ),
+            Behaviour::NothingMoved { came } => write!(
+                f,
+                "the entities going round the closed model are stuck, of {came} created or inside at the start: no block where they were at the end finished any during the run; check that every block of the loop can serve them and that the run is long enough for an entity to get round"
             ),
             Behaviour::LittlesLaw { mean, from_stays } => write!(
                 f,
@@ -3776,6 +3786,60 @@ impl Model {
         })
     }
 
+    /// Whether the model is closed: a fixed number of entities go round and none leave, as in
+    /// a closed queueing network (Gordon and Newell, 1967) or a finite-source model such as
+    /// machines that fail and wait for a fitter (M/M/c//N). Such a model needs no exit.
+    ///
+    /// Closed means: entities start somewhere (a source or a block with starting contents);
+    /// every source makes a limited number; the model has no exit; no block copies, combines or
+    /// splits entities (a parallel gateway, a batch, an unbatch), so their number stays fixed;
+    /// and from every block where entities enter (those the sources send to, and those with
+    /// starting contents) every block they can reach leads back to it. A loop that drains into
+    /// another loop and never comes back, or a way that ends nowhere, is therefore not closed.
+    /// Entities that give up, balk or find no way at a gateway leave without an exit; a model
+    /// with such ways is closed only as far as its blocks and connections go.
+    pub fn is_closed(&self) -> bool {
+        let mut outgoing: BTreeMap<&ElementId, Vec<&ElementId>> = BTreeMap::new();
+        let mut incoming: BTreeMap<&ElementId, Vec<&ElementId>> = BTreeMap::new();
+        for c in &self.connections {
+            outgoing.entry(&c.from).or_default().push(&c.to);
+            incoming.entry(&c.to).or_default().push(&c.from);
+        }
+        let mut entries: Vec<&ElementId> = self.started_blocks().map(|(_, e, _)| &e.id).collect();
+        for e in &self.elements {
+            match &e.kind {
+                ElementKind::Source { limit: None, .. } | ElementKind::Sink { .. } => return false,
+                ElementKind::Source { .. } => {
+                    for &to in outgoing.get(&e.id).into_iter().flatten() {
+                        if !entries.contains(&to) {
+                            entries.push(to);
+                        }
+                    }
+                }
+                _ => {}
+            }
+        }
+        if entries.is_empty() {
+            return false;
+        }
+        entries.iter().all(|&entry| {
+            let forward = reach(&[entry], |id| outgoing.get(id).cloned().unwrap_or_default());
+            let back = reach(&[entry], |id| incoming.get(id).cloned().unwrap_or_default());
+            forward.iter().all(|id| {
+                back.contains(id)
+                    && self.element(id).is_some_and(|e| {
+                        !matches!(
+                            e.kind,
+                            ElementKind::Source { .. }
+                                | ElementKind::ParallelGateway
+                                | ElementKind::Batch { .. }
+                                | ElementKind::Unbatch
+                        )
+                    })
+            })
+        })
+    }
+
     /// The time distribution of element `id` that a three-point estimate is for: a source's time
     /// between arrivals, a task's service time, a delay's duration.
     pub fn estimated(&self, id: &ElementId) -> Option<&Dist> {
@@ -3945,7 +4009,8 @@ impl Model {
         if sources.is_empty() && !self.elements.is_empty() {
             out.push(Diagnostic::warning(None, Problem::NoSource));
         }
-        if sinks.is_empty() && !self.elements.is_empty() {
+        // A closed model's entities go round for ever and need no exit ([`Model::is_closed`]).
+        if sinks.is_empty() && !self.elements.is_empty() && !self.is_closed() {
             out.push(Diagnostic::warning(None, Problem::NoSink));
         }
         let forward = reach(&sources, |id| outgoing.get(id).cloned().unwrap_or_default());

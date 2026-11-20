@@ -1374,6 +1374,22 @@ ch. 10 §10.4, in Brailsford, Churilov and Dangerfield, eds., 2014). Related and
   - Any way out of the model is a way out for `nothing_out`, as reaching any sink is in the
     common tools; a gateway where no condition holds and there is no default is warned about
     as the model is checked (`no_default`; BPMN 2.0.2 §13.4.2 makes it an exception).
+  - **Done (#235):** closed loops. A model whose entities go round for ever, a fixed number of
+    them (a closed queueing network, Gordon and Newell 1967, or a finite-source model such as
+    the machine repair crew, M/M/c//N), needs no exit and none of its entities leaves. It is
+    closed (`Model::is_closed`) when entities start somewhere (a source or starting contents),
+    every source makes a limited number, there is no exit, no block copies, combines or splits
+    entities (parallel gateway, batch, unbatch), and from every block where entities enter,
+    every block they can reach leads back to it. A closed model is not warned for having no
+    exit (`no_sink`); a model with no exit that is not closed (a source with no limit, a block
+    passed once, a loop that drains into another and never returns) still is. In a closed
+    model `nothing_out` gives way to `nothing_moved`: the entities are stuck when some block
+    holds entities at the end and none of those blocks finished any in the measured window.
+    Only the blocks holding entities count, since each entity's first pass through the blocks
+    before a jam would otherwise hide it. Entities that give up, balk or find no way at a
+    gateway leave without an exit, so a loop with such ways is closed only as far as its
+    blocks and connections go; models that are partly open and partly closed are checked as
+    open ones.
   - Experiment designs (`experiment.sweep`, `.sensitivity`, `.design`, `.size`) check every
     run they make as a single run is checked, and give each point the warnings its run gives
     (`warnings`): each run of an experiment is an ordinary run. They record no results over
@@ -2268,6 +2284,28 @@ Chapter references are to Brailsford, Churilov and Dangerfield (eds.),
   - A command that halves the step, to check that results do not depend on it.
   - Tests: a delay's pulse response against the Erlang density, logistic growth against its
     closed form, Euler's error halving when the step halves; golden SD and hybrid models.
+- **From the book's worked models** (mostly ch. 9's fisheries, modelled both as SD and as DES):
+  - **Noise.** An SD model with a random function is replicated like any other model; D10's
+    "runs once" holds only for one without. A random function draws at its own sampling
+    interval, apart from DT, so halving DT does not double the draws (ch. 9 §9.5.1.3 and §9.8;
+    ch. 15 §15.5.2).
+  - **Bands with the median.** Results over time show the median with the bands, not only the
+    mean: runs that cycle out of phase flatten when averaged, and a mean can sit far above the
+    median (ch. 9 Figs 9.10, 9.14 and 9.15).
+  - **Stocks at zero.** An outflow is limited to what its stock holds in that step, so stocks
+    stay at or above 0 without breaking the mass balance.
+  - **Steps that are not powers of two.** An imported model runs with its own DT (0.1 day in
+    ch. 6 §6.5.4), time still computed from a counter, with a warning when DT is large against
+    the shortest time constant.
+  - **Order of updates within a step.** A discrete-time model whose equilibrium depends on one
+    flow being updated after another (ch. 9 §9.5.2.2: regrowth from the stock left after the
+    catch) needs sequential updates or an explicit intermediate stock; a test pins it.
+  - **Lint.** A lookup that changes direction is a warning, never an error (ch. 9 §9.5.1.1);
+    "no rate-to-rate links" allows delays and co-flows (ch. 3 §3.4.2), so units include
+    compound units and the dimensionless 1.
+  - **Docking.** The same linear model with first-order delays built as SD and as DES: the DES
+    mean equals the SD path at every time (ch. 8; "docking", ch. 13 Table 13.1). A test, and a
+    teaching example.
 ### M4.3 Agents
 
 **What it is:** individuals that each keep their own state and memory and decide what to do
@@ -2350,6 +2388,12 @@ the outer loop of parameter uncertainty around any of them (D10).
   - SD reads queue sizes;
   - statistics over agents;
   - discrete entities to continuous amounts and back without losing any.
+  - how often each coupling exchanges, and how DES output is reduced over that interval (a
+    count or sum, a time average, the last value, the mean over runs): ch. 13 §13.4, and both
+    ch. 14 cases exchange monthly;
+  - mean-field coupling beside per-replication coupling: both worked hybrids feed SD the mean
+    of 20 or 40 inner runs (ch. 14 Fig. 14.7 and §14.4.5); the two agree only when the coupling
+    is linear.
 - **File format** (D13): a BPMN and BPSim file names XMILE variables through a `stochcraft:`
   vendor extension.
 - **Linking runs** (ch. 3 §3.4.5, ch. 11 §11.5.2.1, ch. 13 §13.4, ch. 15 §15.6 and the ch. 14
@@ -2357,7 +2401,10 @@ the outer loop of parameter uncertainty around any of them (D10).
   - starting a run from a given state;
   - monthly input series;
   - scalars passed into SD constants;
-  - calibration to historical series.
+  - calibration to historical series, with the fit reported by Theil's inequality statistics
+    (the bias, variance and covariance shares of the mean square error; ch. 3 §3.4.4);
+  - a one-way link, one model's output as the other's input, which needs no shared clock and so
+    can come before D11 (ch. 15 §15.6, ch. 13 §13.4).
 
 Already in place: arrival rates are redrawn at each rate change (M2.6), and an agent over MCP
 can open, edit and run models and drive the window (M3.6). The journal records its format, version and starting
@@ -3359,7 +3406,6 @@ are.
   - **Machine repair crew** (`machine-repair.bpmn`): M2.5's M/M/2//6 (λ = 0.25, μ = 1; fitters
     busy 0.57642, 4.61138 machines running), with one fitter (0.88284, 3.53135) and three
     (0.39814, 4.77763) as scenarios.
-    Its closed loop raises `no_sink` and `nothing_out` until the checks recognise closed loops.
   - **Inspection with rework** (`rework.bpmn`): M2.3's Jackson network (λ = 1, μ = 4 at
     inspection and 2 at rework, half fed back: 2 minutes in the system), and a quarter fed back
     as a scenario (0.7 minutes).

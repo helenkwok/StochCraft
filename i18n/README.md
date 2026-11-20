@@ -831,6 +831,14 @@ fields (`“Service time”`) are named in the messages by their own rows.
   The least certain are lo, ta, te, th, bn, ka, kk, sq and hu (its odds wording), da's literal
   "Latin hypercube" term, the input and output words of ru, sv, nb, ka and kk, and in sr and
   sr-latn the new rows are Ekavian beside older rows that are partly Ijekavian.
+- The row for a closed model whose entities are stuck (issue #235: "The entities going round
+  the closed model are stuck…") was machine-drafted from the plain meaning of the English, with
+  each catalog's own words for entity, model and run, and its phrasing of "of {came} created or
+  inside at the start", from its "No entity left the model…" row. The words for block, closed
+  and loop were compared with the catalog's other rows (the machine repair crew's card, "A
+  closed loop…") in zh-hans, zh-hant, ja, ko, th, vi, lo, hi, bn, ta, te, ka, kk, tr and id
+  only. Not checked against any other source, and not reviewed by native speakers; the least
+  certain are lo, th, ta, te, bn, ka, kk, hi and sq.
 
 **Adding or changing a string:** add the English in the code through `i18n::t` (or `tf`, `tn`),
 then add its row to each catalog here, or leave it out to show English until it is translated.

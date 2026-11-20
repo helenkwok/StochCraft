@@ -579,6 +579,10 @@ pub const TEMPLATES: &[(&str, &str)] = &[
         "No entity left the model, of {came} created or inside at the start. Check that the routing leads to Departures and that the run is long enough for an entity to get through.",
     ),
     (
+        "behaviour_nothing_moved",
+        "The entities going round the closed model are stuck, of {came} created or inside at the start: no block where they were at the end finished any during the run. Check that every block of the loop can serve them and that the run is long enough for an entity to get round.",
+    ),
+    (
         "behaviour_littles_law",
         "Little's law does not hold at {block}: the time-average number inside was {mean}, but the entities' own times inside give {from_stays}.",
     ),
@@ -1229,6 +1233,11 @@ impl Diagnostic {
                     ),
                     Behaviour::NothingOut { came } => (
                         "behaviour_nothing_out",
+                        vec![("came", came.to_string())],
+                        false,
+                    ),
+                    Behaviour::NothingMoved { came } => (
+                        "behaviour_nothing_moved",
                         vec![("came", came.to_string())],
                         false,
                     ),
