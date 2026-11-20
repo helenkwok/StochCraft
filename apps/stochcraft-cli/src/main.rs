@@ -722,7 +722,15 @@ fn exec(
             Script::Journal(journal) => journal.start.scenario.as_deref(),
             Script::Steps(_) => None,
         };
-        open(&mut engine, f, scenario)?;
+        match open(&mut engine, f, scenario) {
+            Ok(_) => {}
+            // Forced onto a file without that scenario: replay onto its first one, as --force
+            // replays onto a model that is not the one the journal started from.
+            Err(_) if force && scenario.is_some() => {
+                open(&mut engine, f, None)?;
+            }
+            Err(e) => return Err(e),
+        }
     }
     let ran = exec_steps(&mut engine, &script, all, force);
     // The journal of what was done is written even when a step failed: it says how far it got.

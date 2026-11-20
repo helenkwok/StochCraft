@@ -722,6 +722,30 @@ fn a_journal_replays_from_the_scenario_it_was_recorded_from() {
         steps.last().is_some_and(|s| s["result"].is_object()),
         "{out}"
     );
+
+    // A file without that scenario: refused, unless forced, which replays onto its first one.
+    let other = scratch("journal-scenario-other.bpmn");
+    let text = std::fs::read_to_string(&mm1).unwrap_or_default();
+    assert!(text.contains("id=\"two-clerks\""));
+    let _ = std::fs::write(
+        &other,
+        text.replace("id=\"two-clerks\"", "id=\"three-clerks\""),
+    );
+    let other = other.to_string_lossy();
+    let o = cli(&["exec", &journal.to_string_lossy(), "--open", &other]);
+    assert_eq!(o.status.code(), Some(1), "{}", stderr(&o));
+    let out = ok(&[
+        "exec",
+        &journal.to_string_lossy(),
+        "--open",
+        &other,
+        "--force",
+    ]);
+    let steps: Vec<Value> = out.lines().map(json).collect();
+    assert!(
+        steps.last().is_some_and(|s| s["result"].is_object()),
+        "{out}"
+    );
 }
 
 #[test]
