@@ -826,6 +826,7 @@ unit	yr	বছর
 	IT operations	আইটি পরিচালনা
 	Reference	রেফারেন্স মডেল
 	Checked against queueing theory	সারি তত্ত্বের সঙ্গে যাচাই করা
+	Checked against probability theory	সম্ভাবনা তত্ত্বের সঙ্গে যাচাই করা
 	Matches a published study	একটি প্রকাশিত গবেষণার সঙ্গে মেলে
 	What do you want to find out?	আপনি কী জানতে চান?
 	Simulate a process, compare what-ifs, and see which differences are real. Each example asks one question and shows how the answer was found.	একটি প্রক্রিয়া সিমুলেট করুন, “যদি এমন হয়” বিকল্পগুলো তুলনা করুন এবং দেখুন কোন পার্থক্যগুলো বাস্তব। প্রতিটি উদাহরণ একটি প্রশ্ন করে এবং উত্তর কীভাবে পাওয়া গেল তা দেখায়।
@@ -882,6 +883,31 @@ unit	yr	বছর
 	Callers who give up: the share lost and the wait of those who stay.	হাল ছেড়ে দেওয়া কলার: হারানো অনুপাত এবং যারা থাকে তাদের অপেক্ষা।
 	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	অবরোধ, ছোট অপেক্ষার ঘর ও বিকলতা: লাইনের শুরুতে ফিরিয়ে দেওয়া অংশ।
 	Health checks that take busy servers out send their requests back to the queue.	ব্যস্ত সার্ভার সরিয়ে নেওয়া অবস্থা পরীক্ষা তাদের অনুরোধ আবার সারিতে পাঠায়।
+	Projects	প্রকল্প
+	Same mean, different spread	একই গড়, ভিন্ন বিস্তার
+	Three desks with the same mean service time of 1 minute: fixed, random and very uneven.	1 মিনিটের একই গড় সেবা-সময়ের তিনটি ডেস্ক: স্থির, এলোমেলো ও খুব অসম।
+	Does it matter how much service times vary when the average is the same?	গড় একই হলে সেবা-সময় কতটা বদলায় তাতে কি কিছু যায় আসে?
+	Variability makes queues: the same average time gives waits of 2, 4 and 10 minutes.	পরিবর্তনশীলতা সারি তৈরি করে: একই গড় সময়ে অপেক্ষা হয় 2, 4 ও 10 মিনিট।
+	Bank with an ATM and cashiers	এটিএম ও ক্যাশিয়ারসহ ব্যাংক
+	Half the customers use the ATM first; five cashiers share one queue (Borshchev and Grigoryev, The Big Book of Simulation Modeling, Example 2.2).	অর্ধেক গ্রাহক আগে এটিএম ব্যবহার করেন; পাঁচজন ক্যাশিয়ার একটি সারি ভাগ করে নেন (Borshchev ও Grigoryev, The Big Book of Simulation Modeling, উদাহরণ 2.2)।
+	Are five cashiers enough when half the customers use the ATM first?	অর্ধেক গ্রাহক আগে এটিএম ব্যবহার করলে পাঁচজন ক্যাশিয়ার কি যথেষ্ট?
+	Routing by chance and a shared queue: cashiers busy 91% of the time, and what a sixth would do.	সম্ভাবনা অনুযায়ী পাঠানো ও ভাগ করা সারি: 91% সময় ব্যস্ত ক্যাশিয়ার, এবং ষষ্ঠজন কী বদলাবে।
+	Hospital beds	হাসপাতালের শয্যা
+	Patients who find every bed taken are turned away; stays vary widely around five days.	যে রোগীরা সব শয্যা ভর্তি পান, তাঁদের ফিরিয়ে দেওয়া হয়; ভর্তি থাকার সময় পাঁচ দিনের আশপাশে অনেক বদলায়।
+	How many beds so that fewer than 1 in 50 patients are turned away?	কতগুলো শয্যা হলে প্রতি 50 জনে 1 জনেরও কম রোগী ফিরে যাবেন?
+	Beds turn patients away rather than queue them, and only the average stay matters.	শয্যা রোগীদের সারিতে না রেখে ফিরিয়ে দেয়, এবং কেবল গড় ভর্তি-সময়ই গুরুত্বপূর্ণ।
+	Machine repair crew	মেশিন মেরামত দল
+	Six machines that break down now and then, and the fitters who repair them.	মাঝে মাঝে বিকল হওয়া ছয়টি মেশিন, এবং যে মিস্ত্রিরা সেগুলো মেরামত করেন।
+	How many fitters keep six machines running?	ছয়টি মেশিন চালু রাখতে কতজন মিস্ত্রি লাগবে?
+	A closed loop: a machine waiting for repair cannot break down again, so the queue stays short.	একটি বদ্ধ চক্র: মেরামতের অপেক্ষায় থাকা মেশিন আবার বিকল হতে পারে না, তাই সারি ছোট থাকে।
+	Inspection with rework	পুনঃকাজসহ পরিদর্শন
+	Half the parts fail inspection, are reworked and are inspected again.	অর্ধেক অংশ পরিদর্শনে ব্যর্থ হয়, পুনঃকাজ করা হয় এবং আবার পরিদর্শন করা হয়।
+	How much longer do parts take when half of them need rework?	অর্ধেক অংশের পুনঃকাজ লাগলে অংশগুলোর কত বেশি সময় লাগে?
+	A loop back: rework doubles the load on inspection, and less rework cuts the time far more than in proportion.	একটি ফিরতি চক্র: পুনঃকাজ পরিদর্শনের চাপ দ্বিগুণ করে, আর কম পুনঃকাজ সময় কমায় অনুপাতের চেয়ে অনেক বেশি।
+	Project finish date	প্রকল্প শেষের তারিখ
+	Three activities in parallel, each ten days on average; the project ends when all three are done.	সমান্তরালে তিনটি কার্যক্রম, প্রতিটি গড়ে দশ দিনের; তিনটিই শেষ হলে প্রকল্প শেষ হয়।
+	When will the project finish?	প্রকল্প কবে শেষ হবে?
+	Why three ten-day activities in parallel take more than 18 days on average.	সমান্তরালে দশ দিনের তিনটি কার্যক্রমে কেন গড়ে 18 দিনের বেশি লাগে।
 	Show me	আমাকে দেখান
 	Point at where to do this step	এই ধাপটি কোথায় করতে হবে তা দেখিয়ে দিন
 	Step {k} of {n}	{n}-এর মধ্যে ধাপ {k}

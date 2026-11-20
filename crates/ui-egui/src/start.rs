@@ -42,17 +42,20 @@ pub enum Industry {
     Healthcare,
     ContactCentre,
     ItOperations,
+    /// Projects and their schedules.
+    Projects,
     /// Not an industry: models for learning the tool itself.
     Reference,
 }
 
 impl Industry {
-    pub const ALL: [Industry; 6] = [
+    pub const ALL: [Industry; 7] = [
         Industry::Services,
         Industry::Manufacturing,
         Industry::Healthcare,
         Industry::ContactCentre,
         Industry::ItOperations,
+        Industry::Projects,
         Industry::Reference,
     ];
 
@@ -63,6 +66,7 @@ impl Industry {
             Industry::Healthcare => t("Healthcare"),
             Industry::ContactCentre => t("Contact centre"),
             Industry::ItOperations => t("IT operations"),
+            Industry::Projects => t("Projects"),
             Industry::Reference => t("Reference"),
         }
     }
@@ -73,6 +77,8 @@ impl Industry {
 pub enum Proof {
     /// Against an exact formula from queueing theory.
     Theory,
+    /// Against an exact result of probability theory (not a queue).
+    Probability,
     /// Against the figures of a published study.
     Published,
 }
@@ -81,6 +87,7 @@ impl Proof {
     fn label(self) -> &'static str {
         match self {
             Proof::Theory => t("Checked against queueing theory"),
+            Proof::Probability => t("Checked against probability theory"),
             Proof::Published => t("Matches a published study"),
         }
     }
@@ -296,6 +303,27 @@ fn card(ui: &mut egui::Ui, p: &theme::Palette, c: &Card, width: f32) -> bool {
                 // A row of fixed height: in the scrolling page a right-aligned part would otherwise
                 // be centred in all the height there is.
                 let row = egui::vec2(ui.available_width(), 18.0);
+                // The proof goes at the right of the row when it fits beside the industry and
+                // time, else on a row of its own under them, so the two never overlap.
+                let proof_width = |ui: &egui::Ui, proof: Proof| {
+                    let text = ui
+                        .painter()
+                        .layout_no_wrap(
+                            proof.label().to_owned(),
+                            egui::FontId::proportional(12.0),
+                            p.text,
+                        )
+                        .size()
+                        .x;
+                    text + 14.0 + 2.0 * ui.spacing().item_spacing.x
+                };
+                let proof_row = |ui: &mut egui::Ui, proof: Proof| {
+                    ui.label(egui::RichText::new(proof.label()).size(12.0));
+                    let (rect, _) =
+                        ui.allocate_exact_size(egui::vec2(14.0, 14.0), egui::Sense::hover());
+                    theme::paint_check_mark(ui.painter(), rect.center(), 5.0, p);
+                };
+                let mut below = None;
                 ui.allocate_ui_with_layout(
                     row,
                     egui::Layout::left_to_right(egui::Align::Center),
@@ -310,20 +338,24 @@ fn card(ui: &mut egui::Ui, p: &theme::Palette, c: &Card, width: f32) -> bool {
                             .color(p.accent),
                         );
                         if let Some(proof) = c.proof {
-                            ui.with_layout(
-                                egui::Layout::right_to_left(egui::Align::Center),
-                                |ui| {
-                                    ui.label(egui::RichText::new(proof.label()).size(12.0));
-                                    let (rect, _) = ui.allocate_exact_size(
-                                        egui::vec2(14.0, 14.0),
-                                        egui::Sense::hover(),
-                                    );
-                                    theme::paint_check_mark(ui.painter(), rect.center(), 5.0, p);
-                                },
-                            );
+                            if ui.available_width() >= proof_width(ui, proof) {
+                                ui.with_layout(
+                                    egui::Layout::right_to_left(egui::Align::Center),
+                                    |ui| proof_row(ui, proof),
+                                );
+                            } else {
+                                below = Some(proof);
+                            }
                         }
                     },
                 );
+                if let Some(proof) = below {
+                    ui.allocate_ui_with_layout(
+                        row,
+                        egui::Layout::right_to_left(egui::Align::Center),
+                        |ui| proof_row(ui, proof),
+                    );
+                }
                 ui.add_space(4.0);
                 ui.add(egui::Label::new(theme::strong(t(c.question)).size(16.0)).wrap());
                 ui.add_space(8.0);

@@ -22,9 +22,11 @@ pub mod calendar;
 pub mod capacity;
 pub mod expr;
 pub mod messages;
+pub mod montecarlo;
 pub mod path;
 
 pub use calendar::{Calendar, DateTime, Timed};
+pub use montecarlo::{McCorrelation, McInput, McOutput, McStop, McTarget, MonteCarlo, Sampling};
 pub use path::{Frame, Path, Segment};
 
 use std::collections::{BTreeMap, BTreeSet, VecDeque};
@@ -1595,6 +1597,10 @@ pub struct Model {
     /// order, as arrivals would be, so as many as there are free units start a fresh service
     /// at once and the rest wait. A block left out (or 0) starts empty.
     pub starting: BTreeMap<ElementId, u32>,
+    /// The Monte Carlo inputs and outputs, for a model of a calculation rather than a process
+    /// ([`montecarlo`]): `None` for a process model. A model with one and no elements is a Monte
+    /// Carlo model, which [`Model::validate`] leaves to `stochcraft-mc` to check.
+    pub monte_carlo: Option<MonteCarlo>,
 }
 
 /// Where an element is drawn: its shape's top-left corner and size, in the diagram's units
@@ -2380,8 +2386,18 @@ impl Model {
         self.elements.iter().find(|e| &e.id == id)
     }
 
-    /// Every problem with the model, errors first, each group in model order.
+    /// Whether this is a Monte Carlo model: a calculation with no process ([`montecarlo`]).
+    pub fn is_monte_carlo(&self) -> bool {
+        self.monte_carlo.is_some() && self.elements.is_empty()
+    }
+
+    /// Every problem with the model, errors first, each group in model order. A Monte Carlo
+    /// model ([`Model::is_monte_carlo`]) has none here: it has no process, and its inputs and
+    /// outputs are checked by `stochcraft-mc`.
     pub fn validate(&self) -> Vec<Diagnostic> {
+        if self.is_monte_carlo() {
+            return Vec::new();
+        }
         let mut out = Vec::new();
         self.check_ids(&mut out);
         let elements: BTreeMap<&ElementId, &Element> =
@@ -4303,6 +4319,7 @@ mod tests {
             layout: BTreeMap::new(),
             estimates: BTreeMap::new(),
             starting: BTreeMap::new(),
+            monte_carlo: None,
             calendars: Vec::new(),
         }
     }

@@ -1,17 +1,28 @@
-//! The start page's examples (#149), run from their committed model files (written by
-//! `stochcraft-cli new -t <name>`) and checked against exact answers, as ROADMAP's "Examples for
-//! teaching" requires of every example:
+//! The start page's examples (#149), run from their committed model files and checked against
+//! exact answers, as ROADMAP's "Examples for teaching" requires of every example:
 //!
 //! - the coffee counter against the M/M/1 and M/M/2 formulas (Erlang C);
 //! - emergency triage against Cobham's non-preemptive priority waits on M/M/5;
 //! - the call centre against the birth–death chain of M/M/c+M (Erlang-A);
 //! - the weld and paint line, and the web service with health checks, against their
-//!   continuous-time Markov chains, solved here from first principles.
+//!   continuous-time Markov chains, solved here from first principles;
+//! - the bank of Borshchev and Grigoryev's Example 2.2 against flow balance and, at its one ATM,
+//!   Pollaczek–Khinchine;
+//! - hospital beds against Erlang B, which holds for any length of stay;
+//! - the machine repair crew against the finite-source chain M/M/R//6;
+//! - inspection with rework against the product form of its Jackson network;
+//! - the project's finish against the maximum of its activities' exponential durations;
+//! - three desks with the same mean service time against Pollaczek–Khinchine.
+//!
+//! The first five files were written by `stochcraft-cli new -t <name>`; the others were built with
+//! the same engine commands and saved, with their comparison scenarios (each inheriting the first)
+//! added by hand, as in `mm1.bpmn`.
 //!
 //! Each check allows √2 times the 95% half-width, since several checks read the same runs (as in
 //! `crates/blocks/tests/queueing_cases.rs`).
 #![allow(clippy::panic)]
 
+use std::f64::consts::SQRT_2;
 use std::path::Path;
 
 use serde_json::{Value, json};
@@ -25,16 +36,21 @@ fn ok(e: &mut Engine, command: &str, params: Value) -> Value {
 
 /// The engine with example `file` of `tests/models` open, with `experiment` set over its own.
 fn open(file: &str, experiment: Value) -> Engine {
+    open_scenario(file, None, experiment)
+}
+
+/// As [`open`], reading the file's BPSim `scenario` (the first without one).
+fn open_scenario(file: &str, scenario: Option<&str>, experiment: Value) -> Engine {
     let path = Path::new(env!("CARGO_MANIFEST_DIR"))
         .join("../../tests/models")
         .join(file);
     let mut e = Engine::new();
-    let opened = ok(
-        &mut e,
-        "file.open",
-        json!({ "path": path.to_string_lossy() }),
-    );
-    assert_eq!(opened["notes"], json!([]), "{file}: {opened}");
+    let mut params = json!({ "path": path.to_string_lossy() });
+    if let Some(s) = scenario {
+        params["scenario"] = json!(s);
+    }
+    let opened = ok(&mut e, "file.open", params);
+    assert_eq!(opened["notes"], json!([]), "{file} {scenario:?}: {opened}");
     ok(&mut e, "experiment.set", experiment);
     e
 }
@@ -330,4 +346,227 @@ fn the_web_service_matches_its_chain() {
     let r = ok(&mut e, "run", json!({}));
     covers(&r, "servers", "mean_queue_length", queue);
     covers(&r, "servers", "mean_in_service", in_service);
+}
+
+/// Erlang B: the chance an arrival finds all `c` servers busy with offered load `a` and no
+/// waiting room, for any service-time distribution with that mean (M/G/c/c).
+fn erlang_b(c: u32, a: f64) -> f64 {
+    let mut b = 1.0;
+    for k in 1..=c {
+        b = a * b / (f64::from(k) + a * b);
+    }
+    b
+}
+
+/// The mean and second moment of a triangular distribution from `min` to `max` peaking at `mode`.
+fn triangular(min: f64, mode: f64, max: f64) -> (f64, f64) {
+    let mean = (min + mode + max) / 3.0;
+    let variance =
+        (min * min + mode * mode + max * max - min * mode - min * max - mode * max) / 18.0;
+    (mean, variance + mean * mean)
+}
+
+/// Pollaczek–Khinchine: the mean wait in M/G/1 with arrival rate `lambda` and a service time of
+/// mean `mean` and second moment `second`.
+fn pollaczek_khinchine(lambda: f64, mean: f64, second: f64) -> f64 {
+    lambda * second / (2.0 * (1.0 - lambda * mean))
+}
+
+/// Borshchev and Grigoryev, The Big Book of Simulation Modeling, ch. 2, Example 2.2: 45
+/// customers an hour (0.75 a minute); half use the ATM (triangular 1, 2, 4 minutes), and 30% of
+/// those then go to the cashiers; the other half go straight to five cashiers with one queue
+/// (triangular 3, 5, 20). The book says "an ATM": the model has one.
+/// - By flow balance the cashiers take 0.75 (0.5 + 0.5 × 0.3) = 0.4875 customers a minute, busy
+///   0.4875 × 28/3 / 5 = 0.91 (0.758 with a sixth cashier), whatever the queueing.
+/// - The ATM is M/G/1 at 0.375 a minute, busy 0.875, with Pollaczek–Khinchine's wait of
+///   8.75 minutes and 3.28 waiting.
+#[test]
+fn the_bank_matches_flow_balance_and_pollaczek_khinchine() {
+    let lambda = 0.75;
+    let (to_atm, to_cashiers) = (lambda * 0.5, lambda * (0.5 + 0.5 * 0.3));
+    let (atm, atm_second) = triangular(1.0, 2.0, 4.0);
+    let (cashier, _) = triangular(3.0, 5.0, 20.0);
+    let wait = pollaczek_khinchine(to_atm, atm, atm_second);
+    assert!((wait - 8.75).abs() < 1e-9, "{wait}");
+    let experiment = json!({ "replications": 20, "warmup": 5_000.0, "duration": 100_000.0 });
+    let mut e = open("bank.bpmn", experiment.clone());
+    let r = ok(&mut e, "run", json!({}));
+    covers(&r, "atm", "utilisation", to_atm * atm);
+    covers(&r, "atm", "mean_wait", wait);
+    covers(&r, "atm", "mean_queue_length", to_atm * wait);
+    covers(&r, "cashiers", "utilisation", to_cashiers * cashier / 5.0);
+    let mut e = open_scenario("bank.bpmn", Some("six-cashiers"), experiment);
+    let r = ok(&mut e, "run", json!({}));
+    covers(&r, "cashiers", "utilisation", to_cashiers * cashier / 6.0);
+}
+
+/// Hospital beds as a loss system: 4 admissions a day, stays of 5 days on average (log-normal,
+/// standard deviation 4), no waiting room: an offered load of 20 beds. Erlang B gives the share
+/// turned away, 0.0661 with 24 beds, the same for exponential stays of the same mean (Erlang B
+/// depends on the stay only through its mean), and 0.0188 with 28 beds; the beds are busy
+/// a (1 − B) / c of the time.
+#[test]
+fn hospital_beds_match_erlang_b_for_any_length_of_stay() {
+    let a = 4.0 * 5.0;
+    for (scenario, beds) in [
+        (None, 24),
+        (Some("exponential-stays"), 24),
+        (Some("28-beds"), 28),
+    ] {
+        let mut e = open_scenario(
+            "beds.bpmn",
+            scenario,
+            json!({ "replications": 20, "warmup": 100.0, "duration": 20_000.0 }),
+        );
+        let r = ok(&mut e, "run", json!({}));
+        let b = erlang_b(beds, a);
+        covers(&r, "beds", "loss_probability", b);
+        covers(&r, "beds", "utilisation", a * (1.0 - b) / f64::from(beds));
+    }
+    assert!(erlang_b(28, a) < 0.02 && erlang_b(27, a) > 0.02);
+}
+
+/// The machine repair crew, M/M/R//6: six machines each run for an exponential time of mean 4
+/// hours, then wait for one of R fitters, who repair in an exponential time of mean 1 hour. The
+/// number broken is a birth–death chain on 0..=6, up at (6 − n)/4 and down at min(n, R), as in
+/// `crates/blocks/tests/resources.rs` (two fitters: busy 0.57642, 4.61138 machines running).
+#[test]
+fn the_machine_repair_crew_matches_the_finite_source_chain() {
+    let (n, lambda, mu) = (6usize, 0.25, 1.0);
+    for (scenario, r) in [
+        (Some("one-fitter"), 1usize),
+        (None, 2),
+        (Some("three-fitters"), 3),
+    ] {
+        let moves: Vec<Vec<(usize, f64)>> = (0..=n)
+            .map(|k| {
+                let mut m = Vec::new();
+                if k < n {
+                    m.push((k + 1, (n - k) as f64 * lambda));
+                }
+                if k > 0 {
+                    m.push((k - 1, k.min(r) as f64 * mu));
+                }
+                m
+            })
+            .collect();
+        let p = stationary(&moves);
+        let broken: f64 = p.iter().enumerate().map(|(k, x)| k as f64 * x).sum();
+        let busy: f64 = p.iter().enumerate().map(|(k, x)| k.min(r) as f64 * x).sum();
+        if r == 2 {
+            assert!((busy / 2.0 - 0.57642).abs() < 1e-5, "{busy}");
+            assert!((n as f64 - broken - 4.61138).abs() < 1e-5, "{broken}");
+        }
+        let mut e = open_scenario(
+            "machine-repair.bpmn",
+            scenario,
+            json!({ "replications": 20, "warmup": 500.0, "duration": 60_000.0 }),
+        );
+        let res = ok(&mut e, "run", json!({}));
+        covers(&res, "repair", "utilisation", busy / r as f64);
+        covers(&res, "running", "mean_contents", n as f64 - broken);
+        covers(&res, "repair", "mean_queue_length", broken - busy);
+    }
+}
+
+/// Inspection with rework, the Jackson network of `crates/blocks/tests/routing.rs`: parts arrive
+/// at rate 1, inspection takes a mean 0.25 minutes, half the parts fail and go to rework (mean
+/// 0.5 minutes) and back to inspection. The traffic equations give inspection 1 / (1 − p) parts a
+/// minute and rework p / (1 − p); in product form each is M/M/1, so the waits are ρ / (μ − λ) and
+/// the time in the system is the sum of ρ / (1 − ρ) over both. Half reworked: 0.25 and 0.5
+/// minutes of waiting, 2 minutes inside; a quarter reworked: 0.125, 0.1 and 0.7.
+#[test]
+fn inspection_with_rework_matches_the_jackson_network() {
+    let (mu_a, mu_b) = (4.0, 2.0);
+    for (scenario, p) in [(None, 0.5), (Some("quarter-reworked"), 0.25)] {
+        let lambda_a = 1.0 / (1.0 - p);
+        let lambda_b = p * lambda_a;
+        let (rho_a, rho_b) = (lambda_a / mu_a, lambda_b / mu_b);
+        let duration = 50_000.0;
+        let mut e = open_scenario(
+            "rework.bpmn",
+            scenario,
+            json!({ "replications": 20, "warmup": 1_000.0, "duration": duration }),
+        );
+        let r = ok(&mut e, "run", json!({}));
+        covers(&r, "inspect", "entered", lambda_a * duration);
+        covers(&r, "inspect", "utilisation", rho_a);
+        covers(&r, "rework", "utilisation", rho_b);
+        covers(&r, "inspect", "mean_wait", rho_a / (mu_a - lambda_a));
+        covers(&r, "rework", "mean_wait", rho_b / (mu_b - lambda_b));
+        covers(
+            &r,
+            "good",
+            "mean_time_in_system",
+            rho_a / (1.0 - rho_a) + rho_b / (1.0 - rho_b),
+        );
+    }
+}
+
+/// The project: three activities in parallel from day 0, each exponential with a mean of 10
+/// days, the run stopping when the project finishes. The finish is their maximum, as in
+/// `crates/blocks/tests/terminating.rs`: P(T ≤ t) = (1 − e^(−t/10))³, mean 10 (1 + 1/2 + 1/3)
+/// = 18.33 days; finished by day 30 with chance 0.858.
+#[test]
+fn the_project_finishes_at_the_maximum_of_its_activities() {
+    let n = 2_000;
+    let mut e = open("project.bpmn", json!({ "replications": n }));
+    let r = ok(&mut e, "run", json!({}));
+    let stop = &r["stop"];
+    assert_eq!(stop["met"], json!(n), "{stop}");
+    let (Some(mean), Some(hw)) = (
+        stop["time"]["mean"].as_f64(),
+        stop["time"]["half_width"].as_f64(),
+    ) else {
+        panic!("no finish time: {stop}")
+    };
+    let theory = 10.0 * (1.0 + 1.0 / 2.0 + 1.0 / 3.0);
+    eprintln!("finish: {mean} ± {hw}, theory {theory}");
+    assert!(
+        (mean - theory).abs() <= SQRT_2 * hw,
+        "{mean} ± {hw}, theory {theory}"
+    );
+    let times: Vec<f64> = stop["times"]
+        .as_array()
+        .into_iter()
+        .flatten()
+        .filter_map(Value::as_f64)
+        .collect();
+    assert_eq!(times.len(), n, "{stop}");
+    let by_30 = times.iter().filter(|t| **t <= 30.0).count() as f64 / n as f64;
+    let q = 1.0 - stochcraft_random::math::exp(-3.0);
+    let chance = q * q * q;
+    let hw = 1.96 * (chance * (1.0 - chance) / n as f64).sqrt();
+    eprintln!("finished by day 30: {by_30}, theory {chance} ± {hw}");
+    assert!(
+        (by_30 - chance).abs() <= SQRT_2 * hw,
+        "{by_30} vs {chance} ± {hw}"
+    );
+}
+
+/// Three desks, each M/G/1 at ρ = 0.8 with a mean service time of 1 minute, fed separately: a
+/// fixed time (second moment 1), an exponential one (2) and a gamma of shape 0.25 (standard
+/// deviation 2, second moment 5). Pollaczek–Khinchine's waits are λE[S²] / (2(1 − ρ)): 2, 4 and
+/// 10 minutes.
+#[test]
+fn the_same_mean_with_more_spread_waits_longer_by_pollaczek_khinchine() {
+    let lambda = 0.8;
+    let mut e = open(
+        "spread.bpmn",
+        json!({ "replications": 20, "warmup": 2_000.0, "duration": 100_000.0 }),
+    );
+    let r = ok(&mut e, "run", json!({}));
+    for (desk, second) in [
+        ("fixed", 1.0),
+        ("random", 2.0),
+        ("uneven", 1.0 + 0.25 * 4.0 * 4.0),
+    ] {
+        covers(&r, desk, "utilisation", lambda);
+        covers(
+            &r,
+            desk,
+            "mean_wait",
+            pollaczek_khinchine(lambda, 1.0, second),
+        );
+    }
 }

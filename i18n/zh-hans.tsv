@@ -826,6 +826,7 @@ unit	yr	年
 	IT operations	IT 运维
 	Reference	参考模型
 	Checked against queueing theory	已用排队论验证
+	Checked against probability theory	已用概率论验证
 	Matches a published study	与已发表的研究一致
 	What do you want to find out?	你想弄清楚什么？
 	Simulate a process, compare what-ifs, and see which differences are real. Each example asks one question and shows how the answer was found.	模拟一个流程，比较各种假设情景，看看哪些差异是真实的。每个示例提出一个问题，并展示答案是如何得出的。
@@ -882,6 +883,31 @@ unit	yr	年
 	Callers who give up: the share lost and the wait of those who stay.	放弃等待的来电者：流失比例和留下者的等待时间。
 	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	阻塞、小等待区和故障：在产线入口被拒收的零件。
 	Health checks that take busy servers out send their requests back to the queue.	将繁忙服务器下线的健康检查会把它们的请求送回队列。
+	Projects	项目
+	Same mean, different spread	均值相同，离散程度不同
+	Three desks with the same mean service time of 1 minute: fixed, random and very uneven.	三个窗口，平均服务时间都是 1 分钟：固定、随机和极不均匀。
+	Does it matter how much service times vary when the average is the same?	平均值相同时，服务时间的波动大小有影响吗？
+	Variability makes queues: the same average time gives waits of 2, 4 and 10 minutes.	波动造成排队：同样的平均时间，等待时间分别为 2、4 和 10 分钟。
+	Bank with an ATM and cashiers	有 ATM 和柜员的银行
+	Half the customers use the ATM first; five cashiers share one queue (Borshchev and Grigoryev, The Big Book of Simulation Modeling, Example 2.2).	一半顾客先使用 ATM；五名柜员共用一个队列（Borshchev 和 Grigoryev，The Big Book of Simulation Modeling，例 2.2）。
+	Are five cashiers enough when half the customers use the ATM first?	一半顾客先使用 ATM 时，五名柜员够吗？
+	Routing by chance and a shared queue: cashiers busy 91% of the time, and what a sixth would do.	按概率分流和共用队列：柜员 91% 时间在忙，以及再加第六名会怎样。
+	Hospital beds	医院病床
+	Patients who find every bed taken are turned away; stays vary widely around five days.	遇到病床全满的患者会被拒收；住院时长在五天左右大幅波动。
+	How many beds so that fewer than 1 in 50 patients are turned away?	需要多少张病床，才能让每 50 名患者中被拒收的少于 1 名？
+	Beds turn patients away rather than queue them, and only the average stay matters.	病床会拒收患者而不是让他们排队，只有平均住院时长起作用。
+	Machine repair crew	机器维修班组
+	Six machines that break down now and then, and the fitters who repair them.	六台时有故障的机器，以及负责修理的维修工。
+	How many fitters keep six machines running?	多少名维修工能让六台机器保持运转？
+	A closed loop: a machine waiting for repair cannot break down again, so the queue stays short.	闭环：等待维修的机器不会再次故障，所以队列始终很短。
+	Inspection with rework	带返工的检验
+	Half the parts fail inspection, are reworked and are inspected again.	一半零件检验不合格，返工后再次检验。
+	How much longer do parts take when half of them need rework?	一半零件需要返工时，零件要多花多少时间？
+	A loop back: rework doubles the load on inspection, and less rework cuts the time far more than in proportion.	回流环路：返工使检验负荷翻倍，而减少返工缩短的时间远超同等比例。
+	Project finish date	项目完工日期
+	Three activities in parallel, each ten days on average; the project ends when all three are done.	三项并行活动，每项平均十天；三项全部完成时项目结束。
+	When will the project finish?	项目什么时候完成？
+	Why three ten-day activities in parallel take more than 18 days on average.	为什么三项平均十天的并行活动，平均要超过 18 天。
 	Show me	带我看看
 	Point at where to do this step	指出这一步在哪里操作
 	Step {k} of {n}	第 {k} 步，共 {n} 步

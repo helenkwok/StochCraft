@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:bpsim="http://www.bpsim.org/schemas/2.0" id="definitions" name="Inspection with rework" targetNamespace="https://github.com/helenkwok/StochCraft/model" exporter="StochCraft" exporterVersion="0.2.0">
+  <bpmn:resource id="inspect_resource" name="Inspection"/>
+  <bpmn:resource id="rework_resource" name="Rework"/>
+  <bpmn:process id="process" name="Inspection with rework" isExecutable="false">
+    <bpmn:startEvent id="parts" name="Parts arrive">
+      <bpmn:outgoing>flow-1</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:task id="inspect" name="Inspection">
+      <bpmn:incoming>flow-1</bpmn:incoming>
+      <bpmn:incoming>flow-5</bpmn:incoming>
+      <bpmn:outgoing>flow-2</bpmn:outgoing>
+      <bpmn:performer>
+        <bpmn:resourceRef>inspect_resource</bpmn:resourceRef>
+      </bpmn:performer>
+    </bpmn:task>
+    <bpmn:exclusiveGateway id="passed" name="Passed?">
+      <bpmn:incoming>flow-2</bpmn:incoming>
+      <bpmn:outgoing>flow-3</bpmn:outgoing>
+      <bpmn:outgoing>flow-4</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:endEvent id="good" name="Good parts leave">
+      <bpmn:incoming>flow-3</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:task id="rework" name="Rework">
+      <bpmn:incoming>flow-4</bpmn:incoming>
+      <bpmn:outgoing>flow-5</bpmn:outgoing>
+      <bpmn:performer>
+        <bpmn:resourceRef>rework_resource</bpmn:resourceRef>
+      </bpmn:performer>
+    </bpmn:task>
+    <bpmn:sequenceFlow id="flow-1" sourceRef="parts" targetRef="inspect"/>
+    <bpmn:sequenceFlow id="flow-2" sourceRef="inspect" targetRef="passed"/>
+    <bpmn:sequenceFlow id="flow-3" sourceRef="passed" targetRef="good"/>
+    <bpmn:sequenceFlow id="flow-4" sourceRef="passed" targetRef="rework"/>
+    <bpmn:sequenceFlow id="flow-5" sourceRef="rework" targetRef="inspect"/>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="diagram">
+    <bpmndi:BPMNPlane id="plane" bpmnElement="process">
+      <bpmndi:BPMNShape id="parts_di" bpmnElement="parts">
+        <dc:Bounds x="82" y="82" width="36" height="36"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="inspect_di" bpmnElement="inspect">
+        <dc:Bounds x="200" y="60" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="passed_di" bpmnElement="passed">
+        <dc:Bounds x="380" y="75" width="50" height="50"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="good_di" bpmnElement="good">
+        <dc:Bounds x="540" y="82" width="36" height="36"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="rework_di" bpmnElement="rework">
+        <dc:Bounds x="200" y="200" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="flow-1_di" bpmnElement="flow-1">
+        <di:waypoint x="118" y="100"/>
+        <di:waypoint x="200" y="100"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow-2_di" bpmnElement="flow-2">
+        <di:waypoint x="300" y="100"/>
+        <di:waypoint x="380" y="100"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow-3_di" bpmnElement="flow-3">
+        <di:waypoint x="430" y="100"/>
+        <di:waypoint x="540" y="100"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow-4_di" bpmnElement="flow-4">
+        <di:waypoint x="380" y="100"/>
+        <di:waypoint x="300" y="240"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow-5_di" bpmnElement="flow-5">
+        <di:waypoint x="250" y="200"/>
+        <di:waypoint x="250" y="140"/>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+  <bpmn:relationship type="BPSimData">
+    <bpmn:extensionElements>
+      <bpsim:BPSimData>
+        <bpsim:Scenario id="scenario" name="Half reworked" vendor="StochCraft" version="0.2.0">
+          <bpsim:ScenarioParameters replication="10" seed="1" baseTimeUnit="min">
+            <bpsim:Duration>
+              <bpsim:FloatingParameter value="21000"/>
+            </bpsim:Duration>
+            <bpsim:Warmup>
+              <bpsim:FloatingParameter value="1000"/>
+            </bpsim:Warmup>
+          </bpsim:ScenarioParameters>
+          <bpsim:ElementParameters elementRef="parts">
+            <bpsim:ControlParameters>
+              <bpsim:InterTriggerTimer>
+                <bpsim:NegativeExponentialDistribution mean="1"/>
+              </bpsim:InterTriggerTimer>
+            </bpsim:ControlParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="inspect">
+            <bpsim:TimeParameters>
+              <bpsim:ProcessingTime>
+                <bpsim:NegativeExponentialDistribution mean="0.25"/>
+              </bpsim:ProcessingTime>
+            </bpsim:TimeParameters>
+            <bpsim:ResourceParameters>
+              <bpsim:Selection>
+                <bpsim:ExpressionParameter value="getResource('inspect_resource', 1)"/>
+              </bpsim:Selection>
+            </bpsim:ResourceParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="rework">
+            <bpsim:TimeParameters>
+              <bpsim:ProcessingTime>
+                <bpsim:NegativeExponentialDistribution mean="0.5"/>
+              </bpsim:ProcessingTime>
+            </bpsim:TimeParameters>
+            <bpsim:ResourceParameters>
+              <bpsim:Selection>
+                <bpsim:ExpressionParameter value="getResource('rework_resource', 1)"/>
+              </bpsim:Selection>
+            </bpsim:ResourceParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="flow-3">
+            <bpsim:ControlParameters>
+              <bpsim:Probability>
+                <bpsim:FloatingParameter value="0.5"/>
+              </bpsim:Probability>
+            </bpsim:ControlParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="flow-4">
+            <bpsim:ControlParameters>
+              <bpsim:Probability>
+                <bpsim:FloatingParameter value="0.5"/>
+              </bpsim:Probability>
+            </bpsim:ControlParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="inspect_resource">
+            <bpsim:ResourceParameters>
+              <bpsim:Quantity>
+                <bpsim:NumericParameter value="1"/>
+              </bpsim:Quantity>
+            </bpsim:ResourceParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="rework_resource">
+            <bpsim:ResourceParameters>
+              <bpsim:Quantity>
+                <bpsim:NumericParameter value="1"/>
+              </bpsim:Quantity>
+            </bpsim:ResourceParameters>
+          </bpsim:ElementParameters>
+        </bpsim:Scenario>
+        <bpsim:Scenario id="quarter-reworked" name="A quarter reworked" inherits="scenario">
+          <bpsim:ElementParameters elementRef="flow-3">
+            <bpsim:ControlParameters>
+              <bpsim:Probability>
+                <bpsim:FloatingParameter value="0.75"/>
+              </bpsim:Probability>
+            </bpsim:ControlParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="flow-4">
+            <bpsim:ControlParameters>
+              <bpsim:Probability>
+                <bpsim:FloatingParameter value="0.25"/>
+              </bpsim:Probability>
+            </bpsim:ControlParameters>
+          </bpsim:ElementParameters>
+        </bpsim:Scenario>
+      </bpsim:BPSimData>
+    </bpmn:extensionElements>
+    <bpmn:source>definitions</bpmn:source>
+    <bpmn:target>definitions</bpmn:target>
+  </bpmn:relationship>
+</bpmn:definitions>

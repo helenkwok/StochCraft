@@ -826,6 +826,7 @@ unit	yr	J.
 	IT operations	IT-Betrieb
 	Reference	Referenzmodelle
 	Checked against queueing theory	Mit der Warteschlangentheorie geprüft
+	Checked against probability theory	Mit der Wahrscheinlichkeitstheorie geprüft
 	Matches a published study	Stimmt mit einer veröffentlichten Studie überein
 	What do you want to find out?	Was möchten Sie herausfinden?
 	Simulate a process, compare what-ifs, and see which differences are real. Each example asks one question and shows how the answer was found.	Einen Prozess simulieren, Was-wäre-wenn-Varianten vergleichen und sehen, welche Unterschiede echt sind. Jedes Beispiel stellt eine Frage und zeigt, wie die Antwort gefunden wurde.
@@ -882,6 +883,31 @@ unit	yr	J.
 	Callers who give up: the share lost and the wait of those who stay.	Anrufer, die aufgeben: der verlorene Anteil und die Wartezeit derer, die bleiben.
 	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	Blockieren, kleine Warteräume und Ausfälle: Teile, die am Anfang der Linie abgewiesen werden.
 	Health checks that take busy servers out send their requests back to the queue.	Healthchecks, die ausgelastete Server außer Betrieb nehmen, schicken deren Anfragen zurück in die Warteschlange.
+	Projects	Projekte
+	Same mean, different spread	Gleicher Mittelwert, unterschiedliche Streuung
+	Three desks with the same mean service time of 1 minute: fixed, random and very uneven.	Drei Schalter mit derselben mittleren Bearbeitungszeit von 1 Minute: fest, zufällig und sehr ungleichmäßig.
+	Does it matter how much service times vary when the average is the same?	Spielt es eine Rolle, wie stark die Bearbeitungszeiten schwanken, wenn der Durchschnitt gleich ist?
+	Variability makes queues: the same average time gives waits of 2, 4 and 10 minutes.	Variabilität erzeugt Warteschlangen: Dieselbe durchschnittliche Zeit ergibt Wartezeiten von 2, 4 und 10 Minuten.
+	Bank with an ATM and cashiers	Bank mit Geldautomat und Kassierern
+	Half the customers use the ATM first; five cashiers share one queue (Borshchev and Grigoryev, The Big Book of Simulation Modeling, Example 2.2).	Die Hälfte der Kunden geht zuerst zum Geldautomaten; fünf Kassierer teilen sich eine Warteschlange (Borshchev und Grigoryev, The Big Book of Simulation Modeling, Beispiel 2.2).
+	Are five cashiers enough when half the customers use the ATM first?	Reichen fünf Kassierer, wenn die Hälfte der Kunden zuerst zum Geldautomaten geht?
+	Routing by chance and a shared queue: cashiers busy 91% of the time, and what a sixth would do.	Zufällige Verzweigung und eine gemeinsame Warteschlange: Kassierer zu 91% ausgelastet, und was ein sechster bewirken würde.
+	Hospital beds	Krankenhausbetten
+	Patients who find every bed taken are turned away; stays vary widely around five days.	Patienten, die alle Betten belegt vorfinden, werden abgewiesen; die Verweildauer schwankt stark um fünf Tage.
+	How many beds so that fewer than 1 in 50 patients are turned away?	Wie viele Betten, damit weniger als 1 von 50 Patienten abgewiesen wird?
+	Beds turn patients away rather than queue them, and only the average stay matters.	Betten weisen Patienten ab, statt sie warten zu lassen, und nur die mittlere Verweildauer zählt.
+	Machine repair crew	Reparaturtrupp für Maschinen
+	Six machines that break down now and then, and the fitters who repair them.	Sechs Maschinen, die ab und zu ausfallen, und die Instandhalter, die sie reparieren.
+	How many fitters keep six machines running?	Wie viele Instandhalter halten sechs Maschinen am Laufen?
+	A closed loop: a machine waiting for repair cannot break down again, so the queue stays short.	Ein geschlossener Kreislauf: Eine Maschine, die auf Reparatur wartet, kann nicht erneut ausfallen, daher bleibt die Warteschlange kurz.
+	Inspection with rework	Prüfung mit Nacharbeit
+	Half the parts fail inspection, are reworked and are inspected again.	Die Hälfte der Teile fällt bei der Prüfung durch, wird nachgearbeitet und erneut geprüft.
+	How much longer do parts take when half of them need rework?	Wie viel länger brauchen Teile, wenn die Hälfte von ihnen nachgearbeitet werden muss?
+	A loop back: rework doubles the load on inspection, and less rework cuts the time far more than in proportion.	Eine Rückführung: Nacharbeit verdoppelt die Last auf der Prüfung, und weniger Nacharbeit verkürzt die Zeit weit überproportional.
+	Project finish date	Fertigstellungstermin des Projekts
+	Three activities in parallel, each ten days on average; the project ends when all three are done.	Drei parallele Vorgänge, jeder im Mittel zehn Tage; das Projekt endet, wenn alle drei fertig sind.
+	When will the project finish?	Wann wird das Projekt fertig?
+	Why three ten-day activities in parallel take more than 18 days on average.	Warum drei parallele Vorgänge von je zehn Tagen im Mittel mehr als 18 Tage dauern.
 	Show me	Zeigen
 	Point at where to do this step	Zeigen, wo dieser Schritt auszuführen ist
 	Step {k} of {n}	Schritt {k} von {n}

@@ -826,6 +826,7 @@ unit	yr	năm
 	IT operations	Vận hành CNTT
 	Reference	Mô hình tham chiếu
 	Checked against queueing theory	Đã kiểm tra bằng lý thuyết hàng đợi
+	Checked against probability theory	Đã kiểm tra bằng lý thuyết xác suất
 	Matches a published study	Khớp với một nghiên cứu đã công bố
 	What do you want to find out?	Bạn muốn tìm hiểu điều gì?
 	Simulate a process, compare what-ifs, and see which differences are real. Each example asks one question and shows how the answer was found.	Mô phỏng một quy trình, so sánh các phương án giả định và xem khác biệt nào là thật. Mỗi ví dụ đặt một câu hỏi và cho thấy câu trả lời được tìm ra như thế nào.
@@ -882,6 +883,31 @@ unit	yr	năm
 	Callers who give up: the share lost and the wait of those who stay.	Người gọi bỏ cuộc: tỷ lệ bị mất và thời gian chờ của những người ở lại.
 	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	Tắc nghẽn, khu vực chờ nhỏ và hỏng hóc: chi tiết bị từ chối ở đầu dây chuyền.
 	Health checks that take busy servers out send their requests back to the queue.	Kiểm tra tình trạng đưa máy chủ đang bận ra khỏi hoạt động sẽ trả yêu cầu của chúng về hàng đợi.
+	Projects	Dự án
+	Same mean, different spread	Cùng trung bình, độ phân tán khác nhau
+	Three desks with the same mean service time of 1 minute: fixed, random and very uneven.	Ba quầy có cùng thời gian phục vụ trung bình 1 phút: cố định, ngẫu nhiên và rất không đều.
+	Does it matter how much service times vary when the average is the same?	Khi trung bình như nhau, thời gian phục vụ dao động nhiều hay ít có quan trọng không?
+	Variability makes queues: the same average time gives waits of 2, 4 and 10 minutes.	Sự biến động tạo ra hàng đợi: cùng thời gian trung bình nhưng thời gian chờ là 2, 4 và 10 phút.
+	Bank with an ATM and cashiers	Ngân hàng có cây ATM và giao dịch viên
+	Half the customers use the ATM first; five cashiers share one queue (Borshchev and Grigoryev, The Big Book of Simulation Modeling, Example 2.2).	Một nửa số khách dùng cây ATM trước; năm giao dịch viên dùng chung một hàng đợi (Borshchev và Grigoryev, The Big Book of Simulation Modeling, Ví dụ 2.2).
+	Are five cashiers enough when half the customers use the ATM first?	Năm giao dịch viên có đủ không khi một nửa số khách dùng cây ATM trước?
+	Routing by chance and a shared queue: cashiers busy 91% of the time, and what a sixth would do.	Định tuyến ngẫu nhiên theo xác suất và hàng đợi dùng chung: giao dịch viên bận 91% thời gian, và thêm người thứ sáu sẽ thế nào.
+	Hospital beds	Giường bệnh viện
+	Patients who find every bed taken are turned away; stays vary widely around five days.	Bệnh nhân đến khi mọi giường đều kín sẽ bị từ chối; thời gian nằm viện dao động mạnh quanh năm ngày.
+	How many beds so that fewer than 1 in 50 patients are turned away?	Cần bao nhiêu giường để ít hơn 1 trên 50 bệnh nhân bị từ chối?
+	Beds turn patients away rather than queue them, and only the average stay matters.	Giường từ chối bệnh nhân chứ không xếp họ vào hàng đợi, và chỉ thời gian nằm viện trung bình là quan trọng.
+	Machine repair crew	Tổ sửa chữa máy
+	Six machines that break down now and then, and the fitters who repair them.	Sáu máy thỉnh thoảng hỏng, và những thợ máy sửa chúng.
+	How many fitters keep six machines running?	Cần bao nhiêu thợ máy để sáu máy luôn chạy?
+	A closed loop: a machine waiting for repair cannot break down again, so the queue stays short.	Một vòng khép kín: máy đang chờ sửa không thể hỏng thêm, nên hàng đợi luôn ngắn.
+	Inspection with rework	Kiểm tra có làm lại
+	Half the parts fail inspection, are reworked and are inspected again.	Một nửa số chi tiết không đạt kiểm tra, được làm lại và được kiểm tra lần nữa.
+	How much longer do parts take when half of them need rework?	Chi tiết mất thêm bao lâu khi một nửa số chi tiết cần làm lại?
+	A loop back: rework doubles the load on inspection, and less rework cuts the time far more than in proportion.	Một vòng quay lại: làm lại khiến tải ở khâu kiểm tra tăng gấp đôi, và giảm làm lại rút ngắn thời gian nhiều hơn hẳn so với tỷ lệ.
+	Project finish date	Ngày hoàn thành dự án
+	Three activities in parallel, each ten days on average; the project ends when all three are done.	Ba công việc song song, mỗi việc trung bình mười ngày; dự án kết thúc khi cả ba xong.
+	When will the project finish?	Khi nào dự án hoàn thành?
+	Why three ten-day activities in parallel take more than 18 days on average.	Vì sao ba công việc mười ngày chạy song song trung bình mất hơn 18 ngày.
 	Show me	Cho tôi xem
 	Point at where to do this step	Chỉ vào nơi thực hiện bước này
 	Step {k} of {n}	Bước {k} / {n}

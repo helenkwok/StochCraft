@@ -9,14 +9,14 @@ crates above it, so a change near the top touches little and a change near the b
 |---|---|---|
 | L0 | `random`, `stats` (standalone: no workspace dependencies) | Random-number generators and BPSim's distributions, statistics collectors |
 | L1 | `des`, `model` | The discrete-event core (event queue, processes, resources, timeouts); the model in memory (elements with stable ids, connections, experiment, validation) |
-| L2 | `blocks`, `agents`, `sd` | Modelling libraries: flow blocks (source, server, delay, gateways, batches, conveyors…), moving agents, stock-and-flow |
+| L2 | `blocks`, `mc`, `agents`, `sd` | Modelling libraries: flow blocks (source, server, delay, gateways, batches, conveyors…), Monte Carlo models (a calculation, not a process), moving agents, stock-and-flow |
 | L3 | `experiment`, `io` | Replications, parameter sweeps and optimisation; model and result files |
 | L4 | `engine` | Commands, undo and redo, the journal and runs: the one way the CLI, the app and agents change or run a model |
 | L5 | `render`, then `ui-egui` and `mcp` | Drawing, the window, and agents over MCP. The only layer allowed UI, windowing or GPU crates |
 | — | `testkit` | Test tooling; other crates may use it only as a dev-dependency |
 | apps | `stochcraft`, `stochcraft-cli`, `stochcraft-web` | Exempt from the rules |
 
-Only `random`, `stats`, `des`, `model`, `blocks`, `experiment`, `io`, `engine`, `render`,
+Only `random`, `stats`, `des`, `model`, `blocks`, `mc`, `experiment`, `io`, `engine`, `render`,
 `ui-egui`, `mcp` and `testkit` exist so far (with the three apps); the others (`agents`, `sd`)
 are placed in advance so each crate's position is decided before it is written.
 

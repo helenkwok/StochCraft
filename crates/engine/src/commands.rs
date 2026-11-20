@@ -79,7 +79,7 @@ fn schema<T: JsonSchema>() -> Value {
     schemars::schema_for!(T).to_value()
 }
 
-fn parse<T: DeserializeOwned>(params: Value) -> Result<T, CommandError> {
+pub(crate) fn parse<T: DeserializeOwned>(params: Value) -> Result<T, CommandError> {
     serde_json::from_value(params)
         .map_err(|e| CommandError::new(ErrorCode::InvalidParams, e.to_string()))
 }
@@ -90,7 +90,9 @@ fn parse<T: DeserializeOwned>(params: Value) -> Result<T, CommandError> {
 pub struct NoParams {}
 
 /// Present-but-null vs absent, for fields that can be cleared.
-fn some<'de, D: Deserializer<'de>, T: Deserialize<'de>>(d: D) -> Result<Option<T>, D::Error> {
+pub(crate) fn some<'de, D: Deserializer<'de>, T: Deserialize<'de>>(
+    d: D,
+) -> Result<Option<T>, D::Error> {
     T::deserialize(d).map(Some)
 }
 
@@ -830,7 +832,7 @@ fn model_get(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
 
 fn model_validate(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
     parse::<NoParams>(p)?;
-    Ok(json!({ "diagnostics": wire::diagnostics(e.model(), &e.model().validate()) }))
+    Ok(json!({ "diagnostics": crate::diagnostics(e.model()) }))
 }
 
 fn model_capacity(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
@@ -2627,5 +2629,90 @@ pub static COMMANDS: &[Command] = &[
         schema: schema::<ModelNew>,
         example: || json!({ "name": "Warehouse" }),
         run: model_new,
+    },
+    Command {
+        name: "mc.input.set",
+        summary: "Monte Carlo: add an uncertain input (a distribution, with an optional unit) or change one; the first one makes the model a Monte Carlo model, a calculation with no process, with 10,000 trials.",
+        kind: CommandKind::Edit,
+        schema: schema::<crate::mc::InputSet>,
+        example: || json!({ "name": "labour", "distribution": { "type": "triangular", "min": 80.0, "mode": 100.0, "max": 150.0 }, "unit": "h" }),
+        run: crate::mc::input_set,
+    },
+    Command {
+        name: "mc.inputs.import",
+        summary: "Monte Carlo: inputs from a CSV table with the header `name,distribution,parameters,unit` (parameters as `mean=10;std_dev=2`); each replaces the input of its name, or with `replace` all of them.",
+        kind: CommandKind::Edit,
+        schema: schema::<crate::mc::InputsImport>,
+        example: || {
+            json!({ "csv": "name,distribution,parameters,unit
+rate,uniform,min=40;max=50,USD/h
+materials,normal,mean=500;std_dev=50,USD
+" })
+        },
+        run: crate::mc::inputs_import,
+    },
+    Command {
+        name: "mc.output.set",
+        summary: "Monte Carlo: add an output (a BPSim expression over the inputs and earlier outputs, named as $name, with arithmetic, min, max, sum, abs, sqrt, exp, log, pow, round and if) or change one, with an optional unit and target (`at_most` or `at_least`) whose probability is reported.",
+        kind: CommandKind::Edit,
+        schema: schema::<crate::mc::OutputSet>,
+        example: || json!({ "name": "cost", "expression": "$labour * $rate + $materials", "unit": "USD", "at_most": 6000.0 }),
+        run: crate::mc::output_set,
+    },
+    Command {
+        name: "mc.correlation.set",
+        summary: "Monte Carlo: the rank (Spearman) correlation between two inputs, strictly between -1 and 1, induced by Iman and Conover's method; 0 removes it. Correlations that cannot all hold together are refused.",
+        kind: CommandKind::Edit,
+        schema: schema::<crate::mc::CorrelationSet>,
+        example: || json!({ "a": "labour", "b": "materials", "rank": 0.5 }),
+        run: crate::mc::correlation_set,
+    },
+    Command {
+        name: "mc.set",
+        summary: "Monte Carlo: the sampling (`random` or `latin_hypercube`), the trials and seed, and a sequential stop (more trials until every output's mean is within a share of itself, such as ±1%).",
+        kind: CommandKind::Edit,
+        schema: schema::<crate::mc::Set>,
+        example: || json!({ "sampling": "latin_hypercube", "trials": 2000 }),
+        run: crate::mc::set,
+    },
+    Command {
+        name: "mc.get",
+        summary: "Monte Carlo: the model's inputs, outputs, correlations, sampling, trials and seed, and what is wrong with them.",
+        kind: CommandKind::Query,
+        schema: schema::<crate::mc::Get>,
+        example: || json!({}),
+        run: crate::mc::get,
+    },
+    Command {
+        name: "mc.inputs.export",
+        summary: "Monte Carlo: the inputs as a CSV table (`name,distribution,parameters,unit`), as mc.inputs.import reads it.",
+        kind: CommandKind::Query,
+        schema: schema::<crate::mc::Get>,
+        example: || json!({}),
+        run: crate::mc::inputs_export,
+    },
+    Command {
+        name: "mc.run",
+        summary: "Monte Carlo: run the trials now. Per output: the mean with its 95% interval, standard deviation, percentiles, minimum and maximum, the probability of meeting its target with its interval, a histogram and the cumulative curve; with the rank correlations achieved and a run record. With Latin hypercube sampling or correlated inputs the trials within a batch of 1,000 are dependent, so the run is whole batches and the intervals are across batches (`interval` says which). Results do not depend on the number of threads.",
+        kind: CommandKind::Action,
+        schema: schema::<crate::mc::Run>,
+        example: || json!({ "trials": 2000, "seed": 1 }),
+        run: crate::mc::run,
+    },
+    Command {
+        name: "mc.output.remove",
+        summary: "Monte Carlo: remove an output.",
+        kind: CommandKind::Edit,
+        schema: schema::<crate::mc::Name>,
+        example: || json!({ "name": "cost" }),
+        run: crate::mc::output_remove,
+    },
+    Command {
+        name: "mc.input.remove",
+        summary: "Monte Carlo: remove an input, with its correlations.",
+        kind: CommandKind::Edit,
+        schema: schema::<crate::mc::Name>,
+        example: || json!({ "name": "materials" }),
+        run: crate::mc::input_remove,
     },
 ];

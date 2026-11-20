@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:bpsim="http://www.bpsim.org/schemas/2.0" id="definitions" name="Bank with an ATM and cashiers" targetNamespace="https://github.com/helenkwok/StochCraft/model" exporter="StochCraft" exporterVersion="0.2.0">
+  <bpmn:resource id="atm_resource" name="ATM"/>
+  <bpmn:resource id="cashiers_resource" name="Cashiers"/>
+  <bpmn:process id="process" name="Bank with an ATM and cashiers" isExecutable="false">
+    <bpmn:startEvent id="customers" name="Customers arrive">
+      <bpmn:outgoing>flow-1</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:exclusiveGateway id="choose" name="ATM or cashier?">
+      <bpmn:incoming>flow-1</bpmn:incoming>
+      <bpmn:outgoing>flow-2</bpmn:outgoing>
+      <bpmn:outgoing>flow-3</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:task id="atm" name="ATM">
+      <bpmn:incoming>flow-2</bpmn:incoming>
+      <bpmn:outgoing>flow-4</bpmn:outgoing>
+      <bpmn:performer>
+        <bpmn:resourceRef>atm_resource</bpmn:resourceRef>
+      </bpmn:performer>
+    </bpmn:task>
+    <bpmn:exclusiveGateway id="after_atm" name="Cashier too?">
+      <bpmn:incoming>flow-4</bpmn:incoming>
+      <bpmn:outgoing>flow-5</bpmn:outgoing>
+      <bpmn:outgoing>flow-6</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:task id="cashiers" name="Cashiers">
+      <bpmn:incoming>flow-3</bpmn:incoming>
+      <bpmn:incoming>flow-5</bpmn:incoming>
+      <bpmn:outgoing>flow-7</bpmn:outgoing>
+      <bpmn:performer>
+        <bpmn:resourceRef>cashiers_resource</bpmn:resourceRef>
+      </bpmn:performer>
+    </bpmn:task>
+    <bpmn:endEvent id="leave" name="Customers leave">
+      <bpmn:incoming>flow-6</bpmn:incoming>
+      <bpmn:incoming>flow-7</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="flow-1" sourceRef="customers" targetRef="choose"/>
+    <bpmn:sequenceFlow id="flow-2" sourceRef="choose" targetRef="atm"/>
+    <bpmn:sequenceFlow id="flow-3" sourceRef="choose" targetRef="cashiers"/>
+    <bpmn:sequenceFlow id="flow-4" sourceRef="atm" targetRef="after_atm"/>
+    <bpmn:sequenceFlow id="flow-5" sourceRef="after_atm" targetRef="cashiers"/>
+    <bpmn:sequenceFlow id="flow-6" sourceRef="after_atm" targetRef="leave"/>
+    <bpmn:sequenceFlow id="flow-7" sourceRef="cashiers" targetRef="leave"/>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="diagram">
+    <bpmndi:BPMNPlane id="plane" bpmnElement="process">
+      <bpmndi:BPMNShape id="customers_di" bpmnElement="customers">
+        <dc:Bounds x="82" y="82" width="36" height="36"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="choose_di" bpmnElement="choose">
+        <dc:Bounds x="255" y="75" width="50" height="50"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="atm_di" bpmnElement="atm">
+        <dc:Bounds x="410" y="60" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="after_atm_di" bpmnElement="after_atm">
+        <dc:Bounds x="615" y="75" width="50" height="50"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="cashiers_di" bpmnElement="cashiers">
+        <dc:Bounds x="410" y="200" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="leave_di" bpmnElement="leave">
+        <dc:Bounds x="622" y="222" width="36" height="36"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="flow-1_di" bpmnElement="flow-1">
+        <di:waypoint x="118" y="100"/>
+        <di:waypoint x="255" y="100"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow-2_di" bpmnElement="flow-2">
+        <di:waypoint x="305" y="100"/>
+        <di:waypoint x="410" y="100"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow-3_di" bpmnElement="flow-3">
+        <di:waypoint x="305" y="100"/>
+        <di:waypoint x="410" y="240"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow-4_di" bpmnElement="flow-4">
+        <di:waypoint x="510" y="100"/>
+        <di:waypoint x="615" y="100"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow-5_di" bpmnElement="flow-5">
+        <di:waypoint x="615" y="100"/>
+        <di:waypoint x="510" y="240"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow-6_di" bpmnElement="flow-6">
+        <di:waypoint x="640" y="125"/>
+        <di:waypoint x="640" y="222"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow-7_di" bpmnElement="flow-7">
+        <di:waypoint x="510" y="240"/>
+        <di:waypoint x="622" y="240"/>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+  <bpmn:relationship type="BPSimData">
+    <bpmn:extensionElements>
+      <bpsim:BPSimData>
+        <bpsim:Scenario id="scenario" name="Five cashiers" vendor="StochCraft" version="0.2.0">
+          <bpsim:ScenarioParameters replication="10" seed="1" baseTimeUnit="min">
+            <bpsim:Duration>
+              <bpsim:FloatingParameter value="21000"/>
+            </bpsim:Duration>
+            <bpsim:Warmup>
+              <bpsim:FloatingParameter value="1000"/>
+            </bpsim:Warmup>
+          </bpsim:ScenarioParameters>
+          <bpsim:ElementParameters elementRef="customers">
+            <bpsim:ControlParameters>
+              <bpsim:InterTriggerTimer>
+                <bpsim:NegativeExponentialDistribution mean="1.3333333333333333"/>
+              </bpsim:InterTriggerTimer>
+            </bpsim:ControlParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="atm">
+            <bpsim:TimeParameters>
+              <bpsim:ProcessingTime>
+                <bpsim:TriangularDistribution mode="2" min="1" max="4"/>
+              </bpsim:ProcessingTime>
+            </bpsim:TimeParameters>
+            <bpsim:ResourceParameters>
+              <bpsim:Selection>
+                <bpsim:ExpressionParameter value="getResource('atm_resource', 1)"/>
+              </bpsim:Selection>
+            </bpsim:ResourceParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="cashiers">
+            <bpsim:TimeParameters>
+              <bpsim:ProcessingTime>
+                <bpsim:TriangularDistribution mode="5" min="3" max="20"/>
+              </bpsim:ProcessingTime>
+            </bpsim:TimeParameters>
+            <bpsim:ResourceParameters>
+              <bpsim:Selection>
+                <bpsim:ExpressionParameter value="getResource('cashiers_resource', 1)"/>
+              </bpsim:Selection>
+            </bpsim:ResourceParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="flow-2">
+            <bpsim:ControlParameters>
+              <bpsim:Probability>
+                <bpsim:FloatingParameter value="0.5"/>
+              </bpsim:Probability>
+            </bpsim:ControlParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="flow-3">
+            <bpsim:ControlParameters>
+              <bpsim:Probability>
+                <bpsim:FloatingParameter value="0.5"/>
+              </bpsim:Probability>
+            </bpsim:ControlParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="flow-5">
+            <bpsim:ControlParameters>
+              <bpsim:Probability>
+                <bpsim:FloatingParameter value="0.3"/>
+              </bpsim:Probability>
+            </bpsim:ControlParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="flow-6">
+            <bpsim:ControlParameters>
+              <bpsim:Probability>
+                <bpsim:FloatingParameter value="0.7"/>
+              </bpsim:Probability>
+            </bpsim:ControlParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="atm_resource">
+            <bpsim:ResourceParameters>
+              <bpsim:Quantity>
+                <bpsim:NumericParameter value="1"/>
+              </bpsim:Quantity>
+            </bpsim:ResourceParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="cashiers_resource">
+            <bpsim:ResourceParameters>
+              <bpsim:Quantity>
+                <bpsim:NumericParameter value="5"/>
+              </bpsim:Quantity>
+            </bpsim:ResourceParameters>
+          </bpsim:ElementParameters>
+        </bpsim:Scenario>
+        <bpsim:Scenario id="six-cashiers" name="Six cashiers" inherits="scenario">
+          <bpsim:ElementParameters elementRef="cashiers_resource">
+            <bpsim:ResourceParameters>
+              <bpsim:Quantity>
+                <bpsim:NumericParameter value="6"/>
+              </bpsim:Quantity>
+            </bpsim:ResourceParameters>
+          </bpsim:ElementParameters>
+        </bpsim:Scenario>
+      </bpsim:BPSimData>
+    </bpmn:extensionElements>
+    <bpmn:source>definitions</bpmn:source>
+    <bpmn:target>definitions</bpmn:target>
+  </bpmn:relationship>
+</bpmn:definitions>

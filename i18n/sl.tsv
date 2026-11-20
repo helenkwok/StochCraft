@@ -826,6 +826,7 @@ unit	yr	l.
 	IT operations	Delovanje IT
 	Reference	Referenčni modeli
 	Checked against queueing theory	Preverjeno s teorijo čakalnih vrst
+	Checked against probability theory	Preverjeno s teorijo verjetnosti
 	Matches a published study	Se ujema z objavljeno študijo
 	What do you want to find out?	Kaj želite ugotoviti?
 	Simulate a process, compare what-ifs, and see which differences are real. Each example asks one question and shows how the answer was found.	Simulirajte proces, primerjajte različice »kaj če« in poglejte, katere razlike so resnične. Vsak primer postavi eno vprašanje in pokaže, kako je bil najden odgovor.
@@ -882,6 +883,31 @@ unit	yr	l.
 	Callers who give up: the share lost and the wait of those who stay.	Klicatelji, ki odnehajo: izgubljeni delež in čakanje tistih, ki ostanejo.
 	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	Blokiranje, majhne čakalnice in okvare: kosi, zavrnjeni na začetku linije.
 	Health checks that take busy servers out send their requests back to the queue.	Preverjanja stanja, ki zasedene strežnike vzamejo iz delovanja, pošljejo njihove zahteve nazaj v čakalno vrsto.
+	Projects	Projekti
+	Same mean, different spread	Enako povprečje, različna razpršenost
+	Three desks with the same mean service time of 1 minute: fixed, random and very uneven.	Tri okenca z enakim povprečnim časom strežbe 1 minute: stalnim, naključnim in zelo neenakomernim.
+	Does it matter how much service times vary when the average is the same?	Ali je pomembno, koliko se časi strežbe spreminjajo, če je povprečje enako?
+	Variability makes queues: the same average time gives waits of 2, 4 and 10 minutes.	Variabilnost ustvarja vrste: enak povprečni čas da čakanje 2, 4 in 10 minut.
+	Bank with an ATM and cashiers	Banka z bankomatom in blagajniki
+	Half the customers use the ATM first; five cashiers share one queue (Borshchev and Grigoryev, The Big Book of Simulation Modeling, Example 2.2).	Polovica strank najprej uporabi bankomat; pet blagajnikov si deli eno vrsto (Borshchev in Grigoryev, The Big Book of Simulation Modeling, primer 2.2).
+	Are five cashiers enough when half the customers use the ATM first?	Ali je pet blagajnikov dovolj, ko polovica strank najprej uporabi bankomat?
+	Routing by chance and a shared queue: cashiers busy 91% of the time, and what a sixth would do.	Naključno usmerjanje in skupna vrsta: blagajniki zasedeni 91% časa in kaj bi naredil šesti.
+	Hospital beds	Bolnišnične postelje
+	Patients who find every bed taken are turned away; stays vary widely around five days.	Pacienti, ki najdejo vse postelje zasedene, so zavrnjeni; čas ležanja močno niha okoli petih dni.
+	How many beds so that fewer than 1 in 50 patients are turned away?	Koliko postelj je potrebnih, da je zavrnjen manj kot 1 pacient od 50?
+	Beds turn patients away rather than queue them, and only the average stay matters.	Postelje paciente zavrnejo, namesto da bi jih postavile v vrsto, in pomemben je le povprečni čas ležanja.
+	Machine repair crew	Ekipa za popravilo strojev
+	Six machines that break down now and then, and the fitters who repair them.	Šest strojev, ki se občasno pokvarijo, in mehaniki, ki jih popravljajo.
+	How many fitters keep six machines running?	Koliko mehanikov je potrebnih, da šest strojev obratuje?
+	A closed loop: a machine waiting for repair cannot break down again, so the queue stays short.	Zaprta zanka: stroj, ki čaka na popravilo, se ne more znova pokvariti, zato vrsta ostane kratka.
+	Inspection with rework	Kontrola z dodelavo
+	Half the parts fail inspection, are reworked and are inspected again.	Polovica kosov ne prestane kontrole, so dodelani in znova pregledani.
+	How much longer do parts take when half of them need rework?	Koliko dlje traja pot kosov, ko jih polovica potrebuje dodelavo?
+	A loop back: rework doubles the load on inspection, and less rework cuts the time far more than in proportion.	Povratna zanka: dodelava podvoji obremenitev kontrole, manj dodelave pa skrajša čas veliko bolj kot sorazmerno.
+	Project finish date	Datum dokončanja projekta
+	Three activities in parallel, each ten days on average; the project ends when all three are done.	Tri vzporedne aktivnosti, vsaka v povprečju deset dni; projekt se konča, ko so končane vse tri.
+	When will the project finish?	Kdaj bo projekt končan?
+	Why three ten-day activities in parallel take more than 18 days on average.	Zakaj tri vzporedne desetdnevne aktivnosti v povprečju trajajo več kot 18 dni.
 	Show me	Pokažite mi
 	Point at where to do this step	Pokažite, kje izvesti ta korak
 	Step {k} of {n}	Korak {k} od {n}

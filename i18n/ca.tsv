@@ -826,6 +826,7 @@ unit	yr	a
 	IT operations	Operacions de TI
 	Reference	Models de referència
 	Checked against queueing theory	Contrastat amb la teoria de cues
+	Checked against probability theory	Contrastat amb la teoria de la probabilitat
 	Matches a published study	Coincideix amb un estudi publicat
 	What do you want to find out?	Què voleu esbrinar?
 	Simulate a process, compare what-ifs, and see which differences are real. Each example asks one question and shows how the answer was found.	Simuleu un procés, compareu hipòtesis i vegeu quines diferències són reals. Cada exemple planteja una pregunta i mostra com s'ha trobat la resposta.
@@ -882,6 +883,31 @@ unit	yr	a
 	Callers who give up: the share lost and the wait of those who stay.	Persones que es rendeixen: la proporció perduda i l'espera de les que es queden.
 	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	Bloqueig, sales d'espera petites i avaries: peces rebutjades a l'inici de la línia.
 	Health checks that take busy servers out send their requests back to the queue.	Les comprovacions d'estat que retiren els servidors ocupats tornen les seves sol·licituds a la cua.
+	Projects	Projectes
+	Same mean, different spread	Mateixa mitjana, dispersió diferent
+	Three desks with the same mean service time of 1 minute: fixed, random and very uneven.	Tres taulells amb el mateix temps de servei mitjà d'1 minut: fix, aleatori i molt irregular.
+	Does it matter how much service times vary when the average is the same?	Importa quant varien els temps de servei quan la mitjana és la mateixa?
+	Variability makes queues: the same average time gives waits of 2, 4 and 10 minutes.	La variabilitat crea cues: el mateix temps mitjà dona esperes de 2, 4 i 10 minuts.
+	Bank with an ATM and cashiers	Banc amb caixer automàtic i caixers
+	Half the customers use the ATM first; five cashiers share one queue (Borshchev and Grigoryev, The Big Book of Simulation Modeling, Example 2.2).	La meitat dels clients fa servir primer el caixer automàtic; cinc caixers comparteixen una sola cua (Borshchev i Grigoryev, The Big Book of Simulation Modeling, exemple 2.2).
+	Are five cashiers enough when half the customers use the ATM first?	N'hi ha prou amb cinc caixers quan la meitat dels clients fa servir primer el caixer automàtic?
+	Routing by chance and a shared queue: cashiers busy 91% of the time, and what a sixth would do.	Encaminament a l'atzar i una cua compartida: caixers ocupats el 91% del temps, i què faria un sisè.
+	Hospital beds	Llits d'hospital
+	Patients who find every bed taken are turned away; stays vary widely around five days.	Els pacients que troben tots els llits ocupats són rebutjats; les estades varien molt al voltant de cinc dies.
+	How many beds so that fewer than 1 in 50 patients are turned away?	Quants llits perquè menys d'1 de cada 50 pacients sigui rebutjat?
+	Beds turn patients away rather than queue them, and only the average stay matters.	Els llits rebutgen els pacients en lloc de posar-los a la cua, i només compta l'estada mitjana.
+	Machine repair crew	Equip de reparació de màquines
+	Six machines that break down now and then, and the fitters who repair them.	Sis màquines que s'avarien de tant en tant, i els mecànics que les reparen.
+	How many fitters keep six machines running?	Quants mecànics mantenen en marxa sis màquines?
+	A closed loop: a machine waiting for repair cannot break down again, so the queue stays short.	Un circuit tancat: una màquina que espera reparació no es pot tornar a avariar, de manera que la cua es manté curta.
+	Inspection with rework	Inspecció amb retreball
+	Half the parts fail inspection, are reworked and are inspected again.	La meitat de les peces no passa la inspecció, es retreballa i es torna a inspeccionar.
+	How much longer do parts take when half of them need rework?	Quant més triguen les peces quan la meitat necessita retreball?
+	A loop back: rework doubles the load on inspection, and less rework cuts the time far more than in proportion.	Un bucle de tornada: el retreball duplica la càrrega de la inspecció, i menys retreball redueix el temps molt més que proporcionalment.
+	Project finish date	Data de finalització del projecte
+	Three activities in parallel, each ten days on average; the project ends when all three are done.	Tres activitats en paral·lel, de deu dies de mitjana cadascuna; el projecte acaba quan totes tres estan fetes.
+	When will the project finish?	Quan acabarà el projecte?
+	Why three ten-day activities in parallel take more than 18 days on average.	Per què tres activitats de deu dies en paral·lel triguen de mitjana més de 18 dies.
 	Show me	Mostra-m'ho
 	Point at where to do this step	Assenyala on fer aquest pas
 	Step {k} of {n}	Pas {k} de {n}

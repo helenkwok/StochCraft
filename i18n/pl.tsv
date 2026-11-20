@@ -826,6 +826,7 @@ unit	yr	r.
 	IT operations	Operacje IT
 	Reference	Modele referencyjne
 	Checked against queueing theory	Sprawdzone z teorią kolejek
+	Checked against probability theory	Sprawdzone z teorią prawdopodobieństwa
 	Matches a published study	Zgodne z opublikowanym badaniem
 	What do you want to find out?	Czego chcesz się dowiedzieć?
 	Simulate a process, compare what-ifs, and see which differences are real. Each example asks one question and shows how the answer was found.	Symuluj proces, porównuj warianty „co jeśli” i sprawdź, które różnice są rzeczywiste. Każdy przykład zadaje jedno pytanie i pokazuje, jak znaleziono odpowiedź.
@@ -882,6 +883,31 @@ unit	yr	r.
 	Callers who give up: the share lost and the wait of those who stay.	Dzwoniący, którzy rezygnują: utracony odsetek i czekanie tych, którzy zostają.
 	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	Blokowanie, małe poczekalnie i awarie: części odrzucane na początku linii.
 	Health checks that take busy servers out send their requests back to the queue.	Kontrole stanu, które wyłączają zajęte serwery, odsyłają ich żądania z powrotem do kolejki.
+	Projects	Projekty
+	Same mean, different spread	Ta sama średnia, inny rozrzut
+	Three desks with the same mean service time of 1 minute: fixed, random and very uneven.	Trzy okienka o tym samym średnim czasie obsługi wynoszącym 1 minutę: stałym, losowym i bardzo nierównym.
+	Does it matter how much service times vary when the average is the same?	Czy ma znaczenie, jak bardzo zmieniają się czasy obsługi, gdy średnia jest taka sama?
+	Variability makes queues: the same average time gives waits of 2, 4 and 10 minutes.	Zmienność tworzy kolejki: ten sam średni czas daje czekanie 2, 4 i 10 minut.
+	Bank with an ATM and cashiers	Bank z bankomatem i kasjerami
+	Half the customers use the ATM first; five cashiers share one queue (Borshchev and Grigoryev, The Big Book of Simulation Modeling, Example 2.2).	Połowa klientów najpierw korzysta z bankomatu; pięciu kasjerów obsługuje jedną wspólną kolejkę (Borshchev i Grigoryev, The Big Book of Simulation Modeling, przykład 2.2).
+	Are five cashiers enough when half the customers use the ATM first?	Czy pięciu kasjerów wystarczy, gdy połowa klientów najpierw korzysta z bankomatu?
+	Routing by chance and a shared queue: cashiers busy 91% of the time, and what a sixth would do.	Losowe kierowanie i wspólna kolejka: kasjerzy zajęci przez 91% czasu i co zmieniłby szósty.
+	Hospital beds	Łóżka szpitalne
+	Patients who find every bed taken are turned away; stays vary widely around five days.	Pacjenci, którzy zastają wszystkie łóżka zajęte, są odsyłani; pobyty wahają się szeroko wokół pięciu dni.
+	How many beds so that fewer than 1 in 50 patients are turned away?	Ile łóżek potrzeba, aby odsyłany był mniej niż 1 na 50 pacjentów?
+	Beds turn patients away rather than queue them, and only the average stay matters.	Łóżka odsyłają pacjentów zamiast ustawiać ich w kolejce i liczy się tylko średni czas pobytu.
+	Machine repair crew	Brygada naprawcza maszyn
+	Six machines that break down now and then, and the fitters who repair them.	Sześć maszyn, które od czasu do czasu ulegają awarii, i mechanicy, którzy je naprawiają.
+	How many fitters keep six machines running?	Ilu mechaników utrzyma w ruchu sześć maszyn?
+	A closed loop: a machine waiting for repair cannot break down again, so the queue stays short.	Zamknięta pętla: maszyna czekająca na naprawę nie może znowu ulec awarii, więc kolejka pozostaje krótka.
+	Inspection with rework	Kontrola z poprawkami
+	Half the parts fail inspection, are reworked and are inspected again.	Połowa części nie przechodzi kontroli, trafia do poprawki i jest kontrolowana ponownie.
+	How much longer do parts take when half of them need rework?	Ile dłużej trwa przejście części, gdy połowa z nich wymaga poprawek?
+	A loop back: rework doubles the load on inspection, and less rework cuts the time far more than in proportion.	Pętla zwrotna: poprawki podwajają obciążenie kontroli, a mniej poprawek skraca czas znacznie bardziej niż proporcjonalnie.
+	Project finish date	Termin zakończenia projektu
+	Three activities in parallel, each ten days on average; the project ends when all three are done.	Trzy równoległe działania, każde średnio dziesięć dni; projekt kończy się, gdy wszystkie trzy są gotowe.
+	When will the project finish?	Kiedy projekt się zakończy?
+	Why three ten-day activities in parallel take more than 18 days on average.	Dlaczego trzy równoległe dziesięciodniowe działania trwają średnio ponad 18 dni.
 	Show me	Pokaż mi
 	Point at where to do this step	Wskaż, gdzie wykonać ten krok
 	Step {k} of {n}	Krok {k} z {n}

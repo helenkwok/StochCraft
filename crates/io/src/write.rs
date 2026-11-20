@@ -8,10 +8,10 @@ use std::collections::{BTreeMap, BTreeSet};
 
 use stochcraft_model::{
     BalkJoin, Balking, Bounds, Breakdown, Calendar, ConveyorShape, DateTime, Demand, Dist,
-    ElementKind, Estimate, Experiment, HealthCheck, LengthUnit, Model, Need, OnShiftEnd, OnTakeout,
-    Patience, PatienceUntil, PlaceWhileOut, Power, ProcessingBy, Property, PropertyType,
-    PropertyValue, QueueLimit, ResourcePool, Routing, Scrap, Sequential, Setup, Stop, Timed,
-    Transfer,
+    ElementKind, Estimate, Experiment, HealthCheck, LengthUnit, Model, MonteCarlo, Need,
+    OnShiftEnd, OnTakeout, Patience, PatienceUntil, PlaceWhileOut, Power, ProcessingBy, Property,
+    PropertyType, PropertyValue, QueueLimit, ResourcePool, Routing, Scrap, Sequential, Setup, Stop,
+    Timed, Transfer,
 };
 
 use crate::bpsim::NS2;
@@ -291,7 +291,7 @@ pub(crate) fn queue_capacity_element(n: u32, limit: &QueueLimit) -> Element {
 /// The scenario parameters that say experiment `x`: runs, seed, time unit, result frequency,
 /// start, duration (the warm-up included) and warm-up, then the length unit, layout scale and
 /// sequential runs as vendor extensions.
-pub(crate) fn scenario_parameters(x: &Experiment) -> Element {
+pub(crate) fn scenario_parameters(x: &Experiment, mc: Option<&MonteCarlo>) -> Element {
     let mut sp = s("ScenarioParameters")
         .with_attr("replication", &x.replications.to_string())
         // `xs:long` is signed; the seed's 64 bits are kept and read back unchanged.
@@ -313,6 +313,11 @@ pub(crate) fn scenario_parameters(x: &Experiment) -> Element {
             "Warmup",
             s("FloatingParameter").with_attr("value", &num(x.warmup)),
         ));
+    }
+    // A Monte Carlo model's inputs: the scenario's own properties, after its times (schema
+    // order).
+    if let Some(mc) = mc {
+        sp.push(crate::mc::properties_element(mc));
     }
     // After the other parameters, as a vendor extension is.
     if let Some(u) = length_unit_element(x.length_unit) {
@@ -889,7 +894,11 @@ pub fn write_new(model: &Model) -> Vec<u8> {
                 .with_attr("targetRef", c.to.as_str()),
         );
     }
-    defs.push(process);
+    // A Monte Carlo model is a file with no process (D15), and so no diagram.
+    let monte_carlo = model.is_monte_carlo();
+    if !monte_carlo {
+        defs.push(process);
+    }
 
     // The diagram.
     let placed = model.placed();
@@ -923,14 +932,16 @@ pub fn write_new(model: &Model) -> Vec<u8> {
                 .with_child(waypoint(to)),
         );
     }
-    defs.push(
-        Element::new("bpmndi:BPMNDiagram", Some(BPMNDI))
-            .with_attr("id", &ids.fresh("diagram"))
-            .with_child(plane),
-    );
+    if !monte_carlo {
+        defs.push(
+            Element::new("bpmndi:BPMNDiagram", Some(BPMNDI))
+                .with_attr("id", &ids.fresh("diagram"))
+                .with_child(plane),
+        );
+    }
 
     // The simulation data, in BPSim schema order.
-    let sp = scenario_parameters(&model.experiment);
+    let sp = scenario_parameters(&model.experiment, model.monte_carlo.as_ref());
     let mut scenario = s("Scenario")
         .with_attr("id", &ids.fresh("scenario"))
         .with_attr(
@@ -1215,6 +1226,10 @@ pub fn write_new(model: &Model) -> Vec<u8> {
     }
     for c in &model.calendars {
         scenario.push(calendar_element(c));
+    }
+    // The rest of a Monte Carlo model, last, where BPSim puts a scenario's vendor extensions.
+    if let Some(mc) = &model.monte_carlo {
+        scenario.push(crate::mc::extension_element(mc));
     }
     let relationship = b("relationship")
         .with_attr("type", "BPSimData")

@@ -1374,6 +1374,7 @@ fn to_model(p: Process, scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> M
         layout: BTreeMap::new(),
         estimates,
         starting,
+        monte_carlo: None,
     }
 }
 
@@ -2511,6 +2512,9 @@ pub fn read_model(
     };
     let _ = NSS;
     let mut model = to_model(process, scenario.as_ref(), notes);
+    if let (Some(data), Some(s)) = (bpsim::find_data(root), scenario.as_ref()) {
+        model.monte_carlo = crate::mc::read(data, &s.settings.id, s.settings.base_time_unit, notes);
+    }
     model.layout = layout(root, format, &model);
     Ok((format, scenario, model))
 }

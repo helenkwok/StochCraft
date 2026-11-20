@@ -96,6 +96,7 @@ fn model(elements: Vec<Element>, connections: Vec<Connection>) -> Model {
         layout: BTreeMap::new(),
         estimates: BTreeMap::new(),
         starting: BTreeMap::new(),
+        monte_carlo: None,
     }
 }
 

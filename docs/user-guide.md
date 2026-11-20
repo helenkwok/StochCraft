@@ -67,6 +67,12 @@ The examples are also under **File ▸ Open Example**:
 | **Call centre** | How many callers hang up before an agent answers? Checked against the M/M/c+M (Erlang-A) chain. |
 | **Weld and paint line** | Where is the bottleneck, and what do breakdowns at paint cost? Checked against the line's exact Markov chain. |
 | **Web service with health checks** | Do health checks that restart busy servers make the queue worse? Checked against the service's exact Markov chain. |
+| **Bank with an ATM and cashiers** | Are five cashiers enough when half the customers use the ATM first? From Borshchev and Grigoryev, *The Big Book of Simulation Modeling*, Example 2.2; checked by flow balance (cashiers 91% busy) and, at the one ATM, the Pollaczek–Khinchine wait. A second scenario adds a sixth cashier. |
+| **Hospital beds** | How many beds so that fewer than 1 in 50 patients are turned away? Checked against Erlang B, with log-normal stays and, in a second scenario, exponential ones of the same mean; a third has 28 beds. |
+| **Machine repair crew** | How many fitters keep six machines running? Checked against the finite-source queue M/M/R//6, with one, two or three fitters as scenarios. |
+| **Inspection with rework** | How much longer do parts take when half of them need rework? Checked against the product form of a Jackson network; a second scenario reworks a quarter. |
+| **Project finish date** | When will the project finish? Three ten-day activities in parallel, run until the project ends; checked against the maximum of exponential durations (18.3 days on average). |
+| **Same mean, different spread** | Does it matter how much service times vary when the average is the same? Three desks with fixed, exponential and very uneven times, checked against Pollaczek–Khinchine (waits of 2, 4 and 10 minutes). |
 | **M/M/1 queue** | How long do customers wait at one busy clerk? Checked against queueing theory. |
 | **Four-machine line with weekend breaks** | What do failures and weekend breaks do to a line's output and energy per part? Schmitt et al. 2026, Case A: matches the published throughput. |
 | **Seven-machine line with two presses** | Which machine holds back a line with two presses in parallel? Schmitt et al. 2026, Case B. |

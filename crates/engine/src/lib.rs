@@ -36,6 +36,9 @@
 //! - `run` runs an experiment at once; `run.start`, `run.status` and `run.cancel` run one in the
 //!   background with progress and cancellation (worker threads natively; in the browser, the
 //!   page's web workers, see [`Worker`], or slices of [`SLICE_EVENTS`] events between frames).
+//! - A Monte Carlo model (a calculation with no process: inputs that are distributions, outputs
+//!   that are expressions over them) is edited with the `mc.*` commands and run with `mc.run`
+//!   (see [`mc`]); `run` refuses one.
 //! - Files are BPSim on BPMN or XPDL (`stochcraft-io`). `file.save` writes edits into the file
 //!   the model was opened from, keeping everything StochCraft does not understand and every line
 //!   it did not change; saved unchanged, the file comes back byte for byte. An edit that cannot
@@ -49,6 +52,7 @@ mod design;
 mod distribution;
 mod edit;
 mod fit;
+pub mod mc;
 pub mod precision;
 mod run;
 pub mod wire;
@@ -247,9 +251,10 @@ pub enum ReplayMode {
 }
 
 /// The commands [`ReplayMode::EditsOnly`] skips.
-const SKIPPED_BY_DEFAULT: [&str; 8] = [
+const SKIPPED_BY_DEFAULT: [&str; 9] = [
     "file.save",
     "run",
+    "mc.run",
     "run.start",
     "run.cancel",
     "experiment.sweep",
@@ -641,10 +646,11 @@ impl Engine {
         let result = json!({
             "path": name,
             "format": format_name(opened.format),
+            "kind": model_kind(&loaded.model),
             "scenario": opened.scenario,
             "scenarios": opened.scenarios.iter().map(|(id, name)| json!({"id": id, "name": name})).collect::<Vec<_>>(),
             "notes": notes.clone(),
-            "diagnostics": wire::diagnostics(&loaded.model, &loaded.model.validate()),
+            "diagnostics": diagnostics(&loaded.model),
         });
         let mut start = JournalStart::new(StartKind::File, Some(name.to_owned()));
         start.file_digest = Some(bytes_digest(bytes));
@@ -745,6 +751,12 @@ impl Engine {
         series: bool,
         sequential: Option<Option<stochcraft_model::Sequential>>,
     ) -> Result<Plan, CommandError> {
+        if self.model.is_monte_carlo() {
+            return Err(CommandError::new(
+                ErrorCode::Unsupported,
+                "this is a Monte Carlo model, a calculation with no process: run it with mc.run",
+            ));
+        }
         let compiled = compile(&self.model).map_err(|ds| CommandError {
             code: ErrorCode::InvalidModel,
             message: "the model has errors and cannot run".into(),
@@ -884,6 +896,24 @@ fn notes_json(notes: &[stochcraft_io::Note]) -> Vec<Value> {
             })
         })
         .collect()
+}
+
+/// `"monte_carlo"` for a Monte Carlo model, else `"process"`.
+fn model_kind(model: &Model) -> &'static str {
+    if model.is_monte_carlo() {
+        "monte_carlo"
+    } else {
+        "process"
+    }
+}
+
+/// The model's diagnostics as JSON: a process model's from its validation, a Monte Carlo
+/// model's from `stochcraft-mc` (in the same shape, without `parts`).
+pub(crate) fn diagnostics(model: &Model) -> Value {
+    match &model.monte_carlo {
+        Some(m) if model.is_monte_carlo() => mc::problems(&stochcraft_mc::check(m)),
+        _ => wire::diagnostics(model, &model.validate()),
+    }
 }
 
 fn format_name(f: Format) -> &'static str {

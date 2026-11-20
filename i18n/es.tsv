@@ -826,6 +826,7 @@ unit	yr	a
 	IT operations	Operaciones de TI
 	Reference	Modelos de referencia
 	Checked against queueing theory	Contrastado con la teoría de colas
+	Checked against probability theory	Contrastado con la teoría de la probabilidad
 	Matches a published study	Coincide con un estudio publicado
 	What do you want to find out?	¿Qué quiere averiguar?
 	Simulate a process, compare what-ifs, and see which differences are real. Each example asks one question and shows how the answer was found.	Simule un proceso, compare hipótesis y vea qué diferencias son reales. Cada ejemplo plantea una pregunta y muestra cómo se encontró la respuesta.
@@ -882,6 +883,31 @@ unit	yr	a
 	Callers who give up: the share lost and the wait of those who stay.	Llamantes que se rinden: la proporción perdida y la espera de los que se quedan.
 	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	Bloqueo, salas de espera pequeñas y averías: piezas rechazadas al inicio de la línea.
 	Health checks that take busy servers out send their requests back to the queue.	Las comprobaciones de estado que retiran los servidores ocupados devuelven sus solicitudes a la cola.
+	Projects	Proyectos
+	Same mean, different spread	Misma media, distinta dispersión
+	Three desks with the same mean service time of 1 minute: fixed, random and very uneven.	Tres ventanillas con el mismo tiempo de servicio medio de 1 minuto: fijo, aleatorio y muy irregular.
+	Does it matter how much service times vary when the average is the same?	¿Importa cuánto varían los tiempos de servicio cuando la media es la misma?
+	Variability makes queues: the same average time gives waits of 2, 4 and 10 minutes.	La variabilidad crea colas: el mismo tiempo medio da esperas de 2, 4 y 10 minutos.
+	Bank with an ATM and cashiers	Banco con cajero automático y cajeros de ventanilla
+	Half the customers use the ATM first; five cashiers share one queue (Borshchev and Grigoryev, The Big Book of Simulation Modeling, Example 2.2).	La mitad de los clientes usa primero el cajero automático; cinco cajeros comparten una sola cola (Borshchev y Grigoryev, The Big Book of Simulation Modeling, ejemplo 2.2).
+	Are five cashiers enough when half the customers use the ATM first?	¿Bastan cinco cajeros cuando la mitad de los clientes usa primero el cajero automático?
+	Routing by chance and a shared queue: cashiers busy 91% of the time, and what a sixth would do.	Encaminamiento al azar y una cola compartida: cajeros ocupados el 91% del tiempo, y lo que haría un sexto.
+	Hospital beds	Camas de hospital
+	Patients who find every bed taken are turned away; stays vary widely around five days.	Los pacientes que encuentran todas las camas ocupadas son rechazados; las estancias varían mucho en torno a cinco días.
+	How many beds so that fewer than 1 in 50 patients are turned away?	¿Cuántas camas para que menos de 1 de cada 50 pacientes sea rechazado?
+	Beds turn patients away rather than queue them, and only the average stay matters.	Las camas rechazan a los pacientes en lugar de ponerlos en cola, y solo importa la estancia media.
+	Machine repair crew	Equipo de reparación de máquinas
+	Six machines that break down now and then, and the fitters who repair them.	Seis máquinas que se averían de vez en cuando y los mecánicos que las reparan.
+	How many fitters keep six machines running?	¿Cuántos mecánicos mantienen en marcha seis máquinas?
+	A closed loop: a machine waiting for repair cannot break down again, so the queue stays short.	Un circuito cerrado: una máquina que espera reparación no puede volver a averiarse, así que la cola se mantiene corta.
+	Inspection with rework	Inspección con retrabajo
+	Half the parts fail inspection, are reworked and are inspected again.	La mitad de las piezas no pasa la inspección, se retrabaja y se vuelve a inspeccionar.
+	How much longer do parts take when half of them need rework?	¿Cuánto más tardan las piezas cuando la mitad necesita retrabajo?
+	A loop back: rework doubles the load on inspection, and less rework cuts the time far more than in proportion.	Un bucle de vuelta: el retrabajo duplica la carga de la inspección, y menos retrabajo reduce el tiempo mucho más que proporcionalmente.
+	Project finish date	Fecha de fin del proyecto
+	Three activities in parallel, each ten days on average; the project ends when all three are done.	Tres actividades en paralelo, de diez días de media cada una; el proyecto termina cuando las tres están hechas.
+	When will the project finish?	¿Cuándo terminará el proyecto?
+	Why three ten-day activities in parallel take more than 18 days on average.	Por qué tres actividades de diez días en paralelo tardan más de 18 días de media.
 	Show me	Muéstreme
 	Point at where to do this step	Señale dónde hacer este paso
 	Step {k} of {n}	Paso {k} de {n}
