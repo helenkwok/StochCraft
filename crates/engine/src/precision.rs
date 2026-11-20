@@ -7,7 +7,7 @@ use serde_json::{Value, json};
 use stochcraft_model::{Sequential, SequentialMeasure};
 use stochcraft_stats::precision::{self as rule, Reason, Scale, Verdict};
 
-pub use stochcraft_stats::precision::{SETTLED, SETTLED_POINTS, runs_needed};
+pub use stochcraft_stats::precision::{SETTLED, SETTLED_POINTS, runs_needed, unseen_rate};
 
 /// How a metric reads: `Time` takes the model's time unit, `Share` is a fraction shown as a
 /// percentage (and judged in percentage points).
@@ -229,7 +229,8 @@ pub const SEQUENTIAL_UNCERTAINTY: &str = "estimated precision after adaptive sto
 /// What the results say of a sequential run that stopped after `stages` (the replication count
 /// at each look, the last the count run) for `reason`, with the results it watched at the last
 /// look: the settings, the counts, why it stopped, each watched result's status, and the ones
-/// whose replications all gave the same value (`no_spread`).
+/// whose replications all gave the same value (`no_spread`), with how often per run an event
+/// none of them met may still happen (`unseen_rate`).
 pub fn summary(x: &Sequential, stages: &[u64], reason: Reason, watched: &[Watched]) -> Value {
     let named = |status: &str| {
         watched
@@ -247,6 +248,8 @@ pub fn summary(x: &Sequential, stages: &[u64], reason: Reason, watched: &[Watche
         "measures": watched.iter().map(Watched::to_json).collect::<Vec<_>>(),
         "no_spread": named("no_spread"),
         "mean_near_zero": named("mean_near_zero"),
+        // The most often per run an event none of the replications met may still happen (95%).
+        "unseen_rate": unseen_rate(stages.last().copied().unwrap_or(0)),
     })
 }
 

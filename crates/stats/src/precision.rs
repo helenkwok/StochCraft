@@ -8,12 +8,18 @@
 //!
 //! A sequential run ([`verdict`], [`next_count`]) adds replications in batches until every
 //! result it watches is settled or it reaches its maximum, after the fully sequential procedure
-//! of Hoad, Robinson and Davies (2011), "Automated selection of the number of replications for a
-//! discrete-event simulation", *Journal of the Operational Research Society* 62(11), with two
-//! guards: a result whose replications all gave the same value is never settled by that alone
-//! (its spread may be a rare event not yet seen), and a share of a mean at or near zero is never
-//! met. The interval after such adaptive stopping is an estimate of precision; its coverage is
-//! not guaranteed to be 95%.
+//! of Hoad, Robinson and Davies (2010), "Automated selection of the number of replications for a
+//! discrete-event simulation", *Journal of the Operational Research Society* 61(11), 1632–1644,
+//! with two guards: a result whose replications all gave the same value is never settled by
+//! that alone (its spread may be a rare event not yet seen), and a share of a mean at or near
+//! zero is never met. The interval after such adaptive stopping is an estimate of precision; its
+//! coverage is not guaranteed to be 95%.
+//!
+//! A result with no spread does not hold a run back once the results with a spread are settled
+//! (a count fixed by the model, such as arrivals on a timetable, would otherwise always run to
+//! the maximum); it is named in the results with [`unseen_rate`], the most often per run an
+//! event not seen in any replication may still happen. If every result watched has no spread,
+//! the run goes on to its maximum: there is nothing yet to stop on.
 
 /// A time's or a count's 95% half-width as a share of its mean at which it is settled.
 pub const SETTLED: f64 = 0.05;
@@ -66,6 +72,14 @@ pub fn runs_needed(n: u64, score: f64) -> u64 {
     let wanted = (n as f64 * score * score).ceil().min(1.0e6) as u64;
     let wanted = wanted.div_ceil(10) * 10;
     wanted.max(n + 1)
+}
+
+/// After `n` replications in which an event never happened, the most often per replication it
+/// may still happen, at 95% confidence: the p with (1 − p)ⁿ = 0.05, about 3/n (the "rule of
+/// three": Hanley and Lippman-Hand (1983), "If nothing goes wrong, is everything all right?",
+/// *JAMA* 249(13), 1743–1745). `None` for no replications.
+pub fn unseen_rate(n: u64) -> Option<f64> {
+    (n > 0).then(|| 1.0 - 0.05_f64.powf(1.0 / n as f64))
 }
 
 /// What a sequential run makes of one result after some replications.
@@ -181,31 +195,40 @@ pub enum Step {
 /// The next step of a sequential run after `n` replications whose watched results got
 /// `verdicts`, with at most `max` replications in all.
 ///
-/// It stops when every verdict is settled (a run watching nothing stops at once), or at `max`:
-/// then the reason is [`Reason::NoSpread`] if some result had no spread, else
+/// It stops when every verdict is settled (a run watching nothing stops at once), or when the
+/// only ones not settled had no spread and some other result is settled; or at `max`: then the
+/// reason is [`Reason::NoSpread`] if every result not settled had no spread, else
 /// [`Reason::MeanNearZero`] if some mean was at or near zero, else [`Reason::MaxReached`].
 /// Otherwise the next batch runs up to [`runs_needed`] for the widest score among the results
-/// not settled; where some result not settled has no score to estimate from (no spread, no
-/// interval, no value, a mean of zero), at least twice `n`. Always more than `n`, at most `max`.
+/// with a spread not settled; where one of them has no score to estimate from (no interval, no
+/// value, a mean of zero), or every result has no spread, at least twice `n`. Always more than
+/// `n`, at most `max`.
 pub fn next_count(n: u64, max: u64, verdicts: &[Verdict]) -> Step {
     let open: Vec<Verdict> = verdicts
         .iter()
         .copied()
         .filter(|v| !v.is_settled())
         .collect();
-    if open.is_empty() {
+    let spread: Vec<Verdict> = open
+        .iter()
+        .copied()
+        .filter(|v| *v != Verdict::NoSpread)
+        .collect();
+    let some_settled = verdicts.iter().any(|v| v.is_settled());
+    if open.is_empty() || (spread.is_empty() && some_settled) {
         return Step::Stop(Reason::TargetMet);
     }
     if n >= max {
-        let reason = if open.contains(&Verdict::NoSpread) {
+        let reason = if spread.is_empty() {
             Reason::NoSpread
-        } else if open.iter().any(|v| matches!(v, Verdict::MeanNearZero(_))) {
+        } else if spread.iter().any(|v| matches!(v, Verdict::MeanNearZero(_))) {
             Reason::MeanNearZero
         } else {
             Reason::MaxReached
         };
         return Step::Stop(reason);
     }
+    let open = if spread.is_empty() { open } else { spread };
     let widest = open
         .iter()
         .filter_map(|v| v.score())
@@ -359,10 +382,15 @@ mod tests {
     }
 
     #[test]
-    fn no_spread_outranks_a_mean_near_zero_at_the_maximum() {
+    fn the_reason_at_the_maximum_names_what_held_the_run_back() {
         let near = Verdict::MeanNearZero(Some(30.0));
+        // A result with a spread not settled outranks one with none.
         assert_eq!(
             next_count(50, 50, &[Verdict::Wide(3.0), near, Verdict::NoSpread]),
+            Step::Stop(Reason::MeanNearZero)
+        );
+        assert_eq!(
+            next_count(50, 50, &[Verdict::NoSpread, Verdict::NoSpread]),
             Step::Stop(Reason::NoSpread)
         );
         assert_eq!(
@@ -379,6 +407,41 @@ mod tests {
             Step::Stop(Reason::TargetMet)
         );
         assert_eq!(next_count(10, 50, &[]), Step::Stop(Reason::TargetMet));
+    }
+
+    /// A count fixed by the model (arrivals on a timetable) does not hold a run back once the
+    /// results with a spread are settled; while a result with a spread is still wide, the batch
+    /// is sized from it, not doubled for the one with none.
+    #[test]
+    fn a_result_with_no_spread_does_not_hold_back_settled_ones() {
+        assert_eq!(
+            next_count(10, 200, &[Verdict::Settled(0.8), Verdict::NoSpread]),
+            Step::Stop(Reason::TargetMet)
+        );
+        assert_eq!(
+            next_count(10, 200, &[Verdict::Wide(1.05), Verdict::NoSpread]),
+            Step::Continue(20)
+        );
+        assert_eq!(
+            next_count(10, 200, &[Verdict::Wide(1.2), Verdict::NoSpread]),
+            Step::Continue(20)
+        );
+        // Dot's fixture with a second, settled result: it stops, and the result with no spread
+        // is not called settled.
+        let ones = vec![1.0; 10];
+        let v = judge(&ones, Scale::Relative(SETTLED));
+        assert_eq!(v, Verdict::NoSpread);
+        assert!(!v.is_settled());
+    }
+
+    #[test]
+    fn the_rule_of_three() {
+        assert_eq!(unseen_rate(0), None);
+        assert!(unseen_rate(1).is_some_and(|p| (p - 0.95).abs() < 1e-12));
+        // About 3/n for large n: 200 runs without the event leave up to about 1.5% per run.
+        assert!(unseen_rate(200).is_some_and(|p| (p - 0.0149).abs() < 1e-4 && p < 3.0 / 200.0));
+        // (1 − p)ⁿ = 0.05.
+        assert!(unseen_rate(40).is_some_and(|p| ((1.0 - p).powi(40) - 0.05).abs() < 1e-12));
     }
 
     #[test]

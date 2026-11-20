@@ -107,7 +107,7 @@ fn sequential_lines(results: &Value, out: &mut String) {
         .map(Value::to_string)
         .collect();
     let why = match s(&q["reason"]) {
-        "target_met" => "every result watched is precise enough".to_owned(),
+        "target_met" => "every result watched that varies is precise enough".to_owned(),
         "no_spread" => format!(
             "the maximum of {} replications was reached, with results that had no spread in the \
              runs made",
@@ -148,6 +148,16 @@ fn sequential_lines(results: &Value, out: &mut String) {
         .collect();
     if !open.is_empty() {
         let _ = writeln!(out, "not settled: {}", open.join(", "));
+    }
+    let no_spread = q["no_spread"].as_array().is_some_and(|l| !l.is_empty());
+    if let (true, Some(p)) = (no_spread, q["unseen_rate"].as_f64()) {
+        let _ = writeln!(
+            out,
+            "no spread: these results were the same in all {} runs; an event none of them met \
+             could still happen in up to {:.1}% of runs (95% confidence)",
+            q["replications"],
+            p * 100.0
+        );
     }
 }
 

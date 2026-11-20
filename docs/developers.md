@@ -122,10 +122,13 @@ in percentage points instead (`--until-points`, 1 by default), since a small sha
 within 5% of itself. Each batch is sized from the widest result so far: the interval narrows
 with the square root of the replications, so about n × (half-width ÷ target)² replications are
 needed, rounded up to a multiple of ten and at most `--max`; where a result unsettled gives
-nothing to estimate from (no spread yet), the count at least doubles. A result whose replications all gave
-the same value is never taken as settled on that alone (a rare event may not have happened yet),
-and neither is a mean at or near zero against a share of itself; the run then goes on to `--max`
-and says why. Replication i is the same as in a fixed run, so a run that stops at n replications
+nothing to estimate from, the count at least doubles. A result whose replications all gave the
+same value is never taken as settled (a rare event may not have happened yet). It does not hold
+the run back once the results that vary are settled, so a count the model fixes, such as
+arrivals on a timetable, does not force `--max`; the results name it and give how often per run
+an event none of the runs met may still happen (about 3/n after n runs, at 95% confidence). If
+nothing watched varies, the run goes on to `--max`. A mean at or near zero never meets a share of
+itself either; the run then goes on to `--max` and says why. Replication i is the same as in a fixed run, so a run that stops at n replications
 gives exactly the results of `--reps n`. The run record says how many replications ran, after
 which looks and why the run stopped, and calls the interval *estimated precision after adaptive
 stopping*: choosing the count from the results means the interval's coverage is not guaranteed to

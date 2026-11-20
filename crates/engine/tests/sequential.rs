@@ -195,6 +195,41 @@ fn zero_spread_runs_to_the_maximum_and_says_so() {
     assert_eq!(entered["std_dev"], 0.0);
 }
 
+/// A count fixed by the model (arrivals on a timetable) has no spread, but does not hold the run
+/// back: once the results that vary are settled, the run stops, names the fixed count, and says
+/// how often per run an event none of its replications met may still happen.
+#[test]
+fn a_fixed_count_does_not_hold_back_results_that_vary() {
+    let mut b = stochcraft_blocks::Builder::new();
+    let src = b.source("arrivals", Dist::Constant(1.0), None);
+    let desk = b.server("desk", 1, Dist::Exponential { mean: 0.5 });
+    let out = b.sink("exit");
+    b.connect(src, desk);
+    b.connect(desk, out);
+    let mut e = Engine::with_model(b.build(Experiment {
+        duration: 1000.0,
+        replications: 10,
+        sequential: Some(Sequential {
+            relative: 0.5,
+            points: 5.0,
+            ..Sequential::default()
+        }),
+        ..Experiment::default()
+    }));
+    let r = ok(&mut e, "run", json!({}));
+    let q = &r["sequential"];
+    assert_eq!(q["reason"], "target_met", "{q}");
+    let n = q["replications"].as_u64().expect("a count");
+    assert!(n < 200, "{q}");
+    let no_spread = q["no_spread"].as_array().expect("a list");
+    assert!(
+        no_spread.contains(&json!({ "element": "arrivals", "metric": "left" })),
+        "{q}"
+    );
+    let p = q["unseen_rate"].as_f64().expect("a rate");
+    assert!(((1.0 - p).powf(n as f64) - 0.05).abs() < 1e-9, "{q}");
+}
+
 /// The setting is part of the experiment: set, shown in the model, checked, undone and removed.
 #[test]
 fn the_setting_is_set_shown_checked_and_removed() {
