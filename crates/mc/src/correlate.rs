@@ -218,9 +218,10 @@ mod tests {
     #[test]
     fn ranks_share_ties() {
         assert_eq!(ranks(&[3.0, 1.0, 3.0, 2.0]), vec![3.5, 1.0, 3.5, 2.0]);
-        assert_eq!(
-            rank_correlation(&[1.0, 2.0, 3.0], &[10.0, 20.0, 30.0]),
-            Some(1.0)
+        // Exactly 1 up to rounding.
+        assert!(
+            rank_correlation(&[1.0, 2.0, 3.0], &[10.0, 20.0, 30.0])
+                .is_some_and(|r| (r - 1.0).abs() < 1e-12)
         );
         assert_eq!(rank_correlation(&[1.0, 1.0], &[1.0, 2.0]), None);
     }
