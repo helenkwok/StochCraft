@@ -12,7 +12,7 @@ use std::process::ExitCode;
 
 use clap::{Parser, Subcommand, ValueEnum};
 use serde_json::{Value, json};
-use stochcraft_engine::{COMMANDS, CommandError, Engine, Journal, JournalEntry, ReplayMode};
+use stochcraft_engine::{COMMANDS, CommandError, Engine, Journal, JournalEntry, ReplayMode, wire};
 
 use templates::TEMPLATES;
 
@@ -104,6 +104,23 @@ enum Command {
         /// scenario's).
         #[arg(long)]
         duration: Option<f64>,
+        /// Run sequentially: after the first replications (`--reps`), add more until every key
+        /// measure's 95% half-width is within this share of its mean, such as `5%` or `0.05`
+        /// (default: the scenario's setting, else 5%). Any of `--until`, `--until-points` and
+        /// `--max` makes the run sequential.
+        #[arg(long, value_parser = share_of_mean)]
+        until: Option<f64>,
+        /// Run sequentially, with a share's (a utilisation's) half-width judged in percentage
+        /// points instead (default: the scenario's setting, else 1).
+        #[arg(long, value_parser = points)]
+        until_points: Option<f64>,
+        /// Run sequentially, with at most this many replications (default: the scenario's
+        /// setting, else 200).
+        #[arg(long, value_parser = clap::value_parser!(u32).range(1..))]
+        max: Option<u32>,
+        /// Run exactly the replications, even where the scenario runs sequentially.
+        #[arg(long, conflicts_with_all = ["until", "until_points", "max"])]
+        fixed: bool,
         #[arg(long, value_enum, default_value_t = Format::Table)]
         format: Format,
         /// Write the results to this file instead of the terminal.
@@ -411,6 +428,30 @@ fn explain(
     Ok(0)
 }
 
+/// A half-width as a share of the mean: `5%`, or a fraction such as `0.05`.
+fn share_of_mean(s: &str) -> Result<f64, String> {
+    let bad = || format!("give the share of the mean as `5%` or `0.05`, not `{s}`");
+    let v = match s.trim().strip_suffix('%') {
+        Some(p) => p.trim().parse::<f64>().map_err(|_| bad())? / 100.0,
+        None => s.trim().parse::<f64>().map_err(|_| bad())?,
+    };
+    if v.is_finite() && v > 0.0 && v < 1.0 {
+        Ok(v)
+    } else {
+        Err(bad())
+    }
+}
+
+/// A half-width in percentage points, above 0.
+fn points(s: &str) -> Result<f64, String> {
+    match s.trim().parse::<f64>() {
+        Ok(v) if v.is_finite() && v > 0.0 => Ok(v),
+        _ => Err(format!(
+            "give the half-width in percentage points as a number above 0, not `{s}`"
+        )),
+    }
+}
+
 /// A positive, finite number (for `--cycle`).
 fn positive_finite(s: &str) -> Result<f64, String> {
     let v: f64 = s.parse().map_err(|e| format!("{e}"))?;
@@ -559,6 +600,47 @@ fn balance(
     Ok(0)
 }
 
+/// `run`'s options for sequential replications.
+struct Until {
+    /// `--until`: the half-width as a share of the mean.
+    relative: Option<f64>,
+    /// `--until-points`: a share's half-width in percentage points.
+    points: Option<f64>,
+    /// `--max`: the most replications.
+    max: Option<u32>,
+    /// `--fixed`: exactly the replications, whatever the scenario says.
+    fixed: bool,
+}
+
+impl Until {
+    /// The `sequential` parameter of `run`: `null` for a fixed run, the scenario's setting
+    /// (else the defaults) with the options given, or nothing to keep the scenario's.
+    fn param(&self, engine: &Engine) -> Option<Value> {
+        if self.fixed {
+            return Some(Value::Null);
+        }
+        if self.relative.is_none() && self.points.is_none() && self.max.is_none() {
+            return None;
+        }
+        let mut q = engine
+            .model()
+            .experiment
+            .sequential
+            .as_ref()
+            .map_or_else(|| json!({}), |x| json!(wire::SequentialSpec::from(x)));
+        if let Some(r) = self.relative {
+            q["relative"] = json!(r);
+        }
+        if let Some(p) = self.points {
+            q["points"] = json!(p);
+        }
+        if let Some(m) = self.max {
+            q["max"] = json!(m);
+        }
+        Some(q)
+    }
+}
+
 #[allow(clippy::too_many_arguments)] // One per command-line option.
 fn run(
     file: &Path,
@@ -568,6 +650,7 @@ fn run(
     threads: Option<u32>,
     warmup: Option<f64>,
     duration: Option<f64>,
+    until: &Until,
     format: Format,
     out: Option<&Path>,
 ) -> Result<u8, Failure> {
@@ -592,6 +675,9 @@ fn run(
     }
     if let Some(t) = threads {
         params["threads"] = json!(t);
+    }
+    if let Some(q) = until.param(&engine) {
+        params["sequential"] = q;
     }
     let results = engine.execute("run", params)?;
     let text = match format {
@@ -857,6 +943,10 @@ fn main() -> ExitCode {
             threads,
             warmup,
             duration,
+            until,
+            until_points,
+            max,
+            fixed,
             format,
             out,
         } => run(
@@ -867,6 +957,12 @@ fn main() -> ExitCode {
             threads,
             warmup,
             duration,
+            &Until {
+                relative: until,
+                points: until_points,
+                max,
+                fixed,
+            },
             format,
             out.as_deref(),
         ),

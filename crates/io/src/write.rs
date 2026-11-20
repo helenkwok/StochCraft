@@ -10,7 +10,7 @@ use stochcraft_model::{
     BalkJoin, Balking, Bounds, Breakdown, Calendar, ConveyorShape, DateTime, Demand, Dist,
     ElementKind, Estimate, HealthCheck, LengthUnit, Model, Need, OnShiftEnd, OnTakeout, Patience,
     PatienceUntil, PlaceWhileOut, Power, ProcessingBy, Property, PropertyType, PropertyValue,
-    QueueLimit, ResourcePool, Routing, Scrap, Setup, Stop, Timed, Transfer,
+    QueueLimit, ResourcePool, Routing, Scrap, Sequential, Setup, Stop, Timed, Transfer,
 };
 
 use crate::bpsim::NS2;
@@ -367,6 +367,33 @@ pub(crate) fn length_unit_element(unit: LengthUnit) -> Option<Element> {
 pub(crate) fn layout_scale_element(scale: f64) -> Option<Element> {
     ((scale - 1.0).abs() > f64::EPSILON)
         .then(|| vendor_value_element(crate::bpsim::LAYOUT_SCALE, &num(scale)))
+}
+
+/// Sequential replications as StochCraft's vendor extension ([`crate::bpsim::SEQUENTIAL`]):
+/// every setting written, so the file reads back the same whatever the defaults become.
+pub(crate) fn sequential_element(x: &Sequential) -> Element {
+    let ns = crate::bpsim::STOCHCRAFT_NS;
+    let mut body = Element::new("stochcraft:sequential", Some(ns))
+        .with_attr("relative", &num(x.relative))
+        .with_attr("points", &num(x.points))
+        .with_attr("max", &x.max.to_string());
+    if let Some(m) = &x.measure {
+        body = body
+            .with_attr("element", m.element.as_str())
+            .with_attr("metric", &m.metric);
+        if let Some(h) = m.half_width {
+            body = body.with_attr("halfWidth", &num(h));
+        }
+    }
+    s("VendorExtension")
+        .with_attr("name", crate::bpsim::SEQUENTIAL)
+        .with_attr("xmlns:stochcraft", ns)
+        .with_child(body)
+}
+
+/// What turns off the sequential replications an inherited scenario sets.
+pub(crate) fn sequential_off_element() -> Element {
+    vendor_value_element(crate::bpsim::SEQUENTIAL, "off")
 }
 
 /// A transport as StochCraft's vendor extension ([`crate::bpsim::TRANSPORT`]), if `kind` is one.
@@ -886,6 +913,9 @@ pub fn write_new(model: &Model) -> Vec<u8> {
     }
     if let Some(u) = layout_scale_element(x.layout_scale) {
         sp.push(u);
+    }
+    if let Some(q) = &x.sequential {
+        sp.push(sequential_element(q));
     }
     let mut scenario = s("Scenario")
         .with_attr("id", &ids.fresh("scenario"))

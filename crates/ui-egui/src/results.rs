@@ -45,67 +45,68 @@ pub fn number(v: f64) -> String {
 }
 
 /// How a metric reads, and its unit: `Time` takes the model's time unit, `Share` shows as a
-/// percentage.
-pub(crate) enum Unit {
-    Count,
-    Time,
-    Share,
-    Items,
-    /// Kilowatt-hours.
-    Energy,
-}
+/// percentage. The engine's, so the window judges results as sequential runs do.
+pub(crate) use stochcraft_engine::precision::Unit;
+/// The engine's: the rule sequential runs use too.
+pub use stochcraft_engine::precision::runs_needed;
+pub(crate) use stochcraft_engine::precision::{SETTLED, hidden, key_of};
 
 /// The label and unit of metric `name` on an element of kind `kind`.
 pub(crate) fn metric<'a>(name: &'a str, kind: &str) -> (&'a str, Unit) {
+    (label(name, kind), stochcraft_engine::precision::unit(name))
+}
+
+/// The label of metric `name` on an element of kind `kind`.
+fn label<'a>(name: &'a str, kind: &str) -> &'a str {
     match name {
-        "entered" => (t("Entered"), Unit::Count),
-        "left" => (t("Left"), Unit::Count),
-        "mean_queue_length" => (t("Mean queue length"), Unit::Items),
-        "mean_wait" => (t("Mean wait"), Unit::Time),
-        "utilisation" => (t("Utilisation"), Unit::Share),
-        "mean_contents" => (t("Mean number inside"), Unit::Items),
-        "work_in_progress" => (t("Still inside at the end"), Unit::Items),
-        "mean_work_in_progress" => (t("Mean work in progress"), Unit::Items),
-        "mean_time_in_system" => (t("Mean time in system"), Unit::Time),
-        "mean_blocked_time" => (t("Mean time blocked"), Unit::Time),
-        "mean_time_on" => (t("Mean time on the conveyor"), Unit::Time),
+        "entered" => t("Entered"),
+        "left" => t("Left"),
+        "mean_queue_length" => t("Mean queue length"),
+        "mean_wait" => t("Mean wait"),
+        "utilisation" => t("Utilisation"),
+        "mean_contents" => t("Mean number inside"),
+        "work_in_progress" => t("Still inside at the end"),
+        "mean_work_in_progress" => t("Mean work in progress"),
+        "mean_time_in_system" => t("Mean time in system"),
+        "mean_blocked_time" => t("Mean time blocked"),
+        "mean_time_on" => t("Mean time on the conveyor"),
         // A conveyor has no units: the share of time its front item waits at the end.
-        "blocking_probability" if kind == "conveyor" => (t("Time blocked"), Unit::Share),
-        "blocking_probability" => (t("Share of units blocked"), Unit::Share),
-        "lost" if kind == "exclusive_gateway" => (t("Lost (no way out)"), Unit::Count),
-        "lost" => (t("Lost (waiting room full)"), Unit::Count),
-        "loss_probability" => (t("Share of arrivals lost"), Unit::Share),
-        "abandoned" => (t("Gave up"), Unit::Count),
-        "abandoned_share" => (t("Share that gave up"), Unit::Share),
-        "abandoned_wait" => (t("Mean wait before giving up"), Unit::Time),
-        "balked" => (t("Balked"), Unit::Count),
-        "balked_share" => (t("Share balked"), Unit::Share),
-        "wasted" => (t("Work wasted on jobs that did not finish"), Unit::Time),
-        "wasted_share" => (t("Share of work wasted"), Unit::Share),
-        "taken_out" => (t("Units taken out by health checks"), Unit::Count),
-        "mean_in_service" => (t("Mean units in service"), Unit::Items),
-        "availability" => (t("Availability"), Unit::Share),
-        "time_off_shift" => (t("Time off shift"), Unit::Share),
-        "time_processing" => (t("Time processing"), Unit::Share),
-        "time_starved" => (t("Time starved"), Unit::Share),
-        "time_blocked" => (t("Time blocked"), Unit::Share),
-        "time_failed" => (t("Time failed"), Unit::Share),
-        "time_restarting" => (t("Time restarting"), Unit::Share),
-        "time_setup" => (t("Time setting up"), Unit::Share),
-        "oee_availability" => (t("OEE availability"), Unit::Share),
-        "oee_effectiveness" => (t("OEE effectiveness"), Unit::Share),
-        "setup_ratio" => (t("Setup ratio"), Unit::Share),
-        "quality_ratio" => (t("Quality ratio"), Unit::Share),
-        "scrap_ratio" => (t("Scrap ratio"), Unit::Share),
-        "rework_ratio" => (t("Rework ratio"), Unit::Share),
-        "oee" => (t("OEE"), Unit::Share),
-        "takt" => (t("Takt time"), Unit::Time),
-        "demand" => (t("Demand"), Unit::Count),
-        "demand_met" => (t("Demand met"), Unit::Share),
-        "cycle_time" => (t("Cycle time"), Unit::Time),
-        "energy" => (t("Energy"), Unit::Energy),
-        "specific_energy" => (t("Energy per part"), Unit::Energy),
-        other => (other, Unit::Count),
+        "blocking_probability" if kind == "conveyor" => t("Time blocked"),
+        "blocking_probability" => t("Share of units blocked"),
+        "lost" if kind == "exclusive_gateway" => t("Lost (no way out)"),
+        "lost" => t("Lost (waiting room full)"),
+        "loss_probability" => t("Share of arrivals lost"),
+        "abandoned" => t("Gave up"),
+        "abandoned_share" => t("Share that gave up"),
+        "abandoned_wait" => t("Mean wait before giving up"),
+        "balked" => t("Balked"),
+        "balked_share" => t("Share balked"),
+        "wasted" => t("Work wasted on jobs that did not finish"),
+        "wasted_share" => t("Share of work wasted"),
+        "taken_out" => t("Units taken out by health checks"),
+        "mean_in_service" => t("Mean units in service"),
+        "availability" => t("Availability"),
+        "time_off_shift" => t("Time off shift"),
+        "time_processing" => t("Time processing"),
+        "time_starved" => t("Time starved"),
+        "time_blocked" => t("Time blocked"),
+        "time_failed" => t("Time failed"),
+        "time_restarting" => t("Time restarting"),
+        "time_setup" => t("Time setting up"),
+        "oee_availability" => t("OEE availability"),
+        "oee_effectiveness" => t("OEE effectiveness"),
+        "setup_ratio" => t("Setup ratio"),
+        "quality_ratio" => t("Quality ratio"),
+        "scrap_ratio" => t("Scrap ratio"),
+        "rework_ratio" => t("Rework ratio"),
+        "oee" => t("OEE"),
+        "takt" => t("Takt time"),
+        "demand" => t("Demand"),
+        "demand_met" => t("Demand met"),
+        "cycle_time" => t("Cycle time"),
+        "energy" => t("Energy"),
+        "specific_energy" => t("Energy per part"),
+        other => other,
     }
 }
 
@@ -206,30 +207,15 @@ pub enum Fix {
     Warmup(f64),
 }
 
-/// A key measure's 95% half-width as a share of its mean at which it is settled (a time, a
-/// count): its score is that share over this.
-const SETTLED: f64 = 0.05;
-/// A share's (utilisation, time failed, share lost) 95% half-width in percentage points at which
-/// it is settled: its score is the half-width in points over this. Against its own mean a small
-/// share always looks unsure (1.7% ± 0.6 points is ± 32% of itself), so shares are judged in
-/// points.
-const SETTLED_POINTS: f64 = 1.0;
 /// The score above which a key measure gets a warning: ± 10% of its mean, ± 2 points for a share.
 const WIDE: f64 = 2.0;
 
-/// How sure the runs are of result `m` (with `kind`, from [`metric`]): its half-width over what
-/// counts as settled ([`SETTLED`], [`SETTLED_POINTS`]), so 1 or less is settled and more than
-/// [`WIDE`] gets a warning. `None` without an interval, or for a mean of zero that is not a share.
+/// How sure the runs are of result `m` (with `kind`, from [`metric`]): the engine's
+/// [`stochcraft_engine::precision::score`], its half-width over what counts as settled, so 1 or
+/// less is settled and more than [`WIDE`] gets a warning. `None` without an interval, or for a
+/// mean of zero that is not a share.
 fn score(m: &Value, kind: &Unit) -> Option<f64> {
-    let (mean, hw) = (m["mean"].as_f64()?, m["half_width"].as_f64()?);
-    if !hw.is_finite() {
-        return None;
-    }
-    match kind {
-        Unit::Share => Some(hw * 100.0 / SETTLED_POINTS),
-        _ if mean == 0.0 => None,
-        _ => Some(hw / mean.abs() / SETTLED),
-    }
+    stochcraft_engine::precision::score(m, *kind)
 }
 
 /// How well the runs pin down each block's key measures ([`key_of`]), by [`score`]. Returns the
@@ -257,15 +243,6 @@ fn precision(results: &Value) -> (Option<(&Value, &'static str, f64)>, usize, us
         }
     }
     (widest, wide, settled, judged)
-}
-
-/// About how many runs bring a result whose [`score`] is `score` after `n` runs down to settled
-/// (a score of 1): the interval narrows with the square root of the runs. Rounded up to a
-/// multiple of ten, and always more than `n`.
-pub fn runs_needed(n: u64, score: f64) -> u64 {
-    let wanted = (n as f64 * score * score).ceil().min(1.0e6) as u64;
-    let wanted = wanted.div_ceil(10) * 10;
-    wanted.max(n + 1)
 }
 
 /// A warm-up as a person would set it: two significant figures (437.2 → 440, 0.0234 → 0.023).
@@ -630,74 +607,6 @@ pub fn show(ui: &mut egui::Ui, results: &Value) {
             .size(12.0),
         );
     });
-}
-
-/// Whether a result of element `e` is left out of the tables: OEE and its availability where no
-/// planned run time is set (without a plan to compare against, they only restate availability).
-fn hidden(e: &Value, key: &str) -> bool {
-    key.starts_with("oee") && e["metrics"]["oee_effectiveness"].is_null()
-}
-
-/// The results a block's key measures are chosen from, in order, by its kind: the first four
-/// with a value are shown. Those marked `false` are shown only when not zero (a block that
-/// never failed has no "Time failed" row among its key measures).
-fn key_candidates(kind: &str) -> &'static [(&'static str, bool)] {
-    match kind {
-        "server" | "shared_task" => &[
-            ("utilisation", true),
-            ("mean_wait", true),
-            ("mean_queue_length", true),
-            ("time_failed", false),
-            ("abandoned_share", false),
-            ("balked_share", false),
-            ("loss_probability", false),
-            ("left", true),
-        ],
-        "delay" | "batch" | "unbatch" => {
-            &[("mean_contents", true), ("left", true), ("lost", false)]
-        }
-        "conveyor" => &[
-            ("mean_time_on", true),
-            ("mean_contents", true),
-            ("blocking_probability", true),
-            ("left", true),
-        ],
-        "sink" => &[
-            ("entered", true),
-            ("mean_time_in_system", true),
-            ("cycle_time", true),
-            ("demand_met", true),
-        ],
-        "source" => &[
-            ("left", true),
-            ("balked", false),
-            ("lost", false),
-            ("loss_probability", false),
-        ],
-        "resource" => &[
-            ("utilisation", true),
-            ("mean_in_service", true),
-            ("time_failed", false),
-        ],
-        "exclusive_gateway" => &[("left", true), ("lost", false)],
-        _ => &[("left", true), ("entered", true)],
-    }
-}
-
-/// The key measures of block `e`: up to four of its results by [`key_candidates`].
-pub(crate) fn key_of(e: &Value) -> Vec<&'static str> {
-    let kind = e["kind"].as_str().unwrap_or("");
-    key_candidates(kind)
-        .iter()
-        .filter(|(k, always)| {
-            let m = &e["metrics"][*k];
-            !m.is_null()
-                && !hidden(e, k)
-                && (*always || m["mean"].as_f64().is_some_and(|v| v != 0.0))
-        })
-        .map(|(k, _)| *k)
-        .take(4)
-        .collect()
 }
 
 /// Column edges of a key-measures row: the measure, its mean with the unit, the half-width, and

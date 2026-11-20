@@ -49,6 +49,7 @@ mod design;
 mod distribution;
 mod edit;
 mod fit;
+pub mod precision;
 mod run;
 pub mod wire;
 mod workers;
@@ -733,12 +734,16 @@ impl Engine {
         Ok(compiled.live(rng))
     }
 
+    /// The plan of a run of the model's experiment, with these overrides. `sequential` overrides
+    /// the experiment's sequential replications: `Some(None)` runs a fixed number, `None` keeps
+    /// the experiment's.
     fn plan(
         &self,
         replications: Option<u32>,
         seed: Option<u64>,
         threads: Option<u32>,
         series: bool,
+        sequential: Option<Option<stochcraft_model::Sequential>>,
     ) -> Result<Plan, CommandError> {
         let compiled = compile(&self.model).map_err(|ds| CommandError {
             code: ErrorCode::InvalidModel,
@@ -764,6 +769,7 @@ impl Engine {
             compiled,
             experiment,
             record,
+            sequential: sequential.unwrap_or_else(|| x.sequential.clone()),
         })
     }
 

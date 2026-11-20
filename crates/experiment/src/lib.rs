@@ -136,10 +136,26 @@ impl Experiment {
         F: Fn(Replication) -> R + Sync,
         R: Send,
     {
-        let workers = self.worker_count();
+        self.run_range(0..self.replications, model, control)
+    }
+
+    /// As [`Self::run_controlled`], for replications `range.start` up to (not including)
+    /// `range.end` only, in index order: how a sequential run adds a batch of replications to
+    /// those it has, each exactly as a run of them all would make it.
+    pub fn run_range<R, F>(
+        &self,
+        range: std::ops::Range<u64>,
+        model: F,
+        control: &Control,
+    ) -> Result<Vec<R>, ExperimentError>
+    where
+        F: Fn(Replication) -> R + Sync,
+        R: Send,
+    {
+        let workers = self.worker_count(range.end.saturating_sub(range.start));
         if workers <= 1 {
             let mut out = Vec::new();
-            for index in 0..self.replications {
+            for index in range {
                 if control.is_cancelled() {
                     return Err(ExperimentError::Cancelled);
                 }
@@ -151,7 +167,7 @@ impl Experiment {
             }
             return Ok(out);
         }
-        self.run_parallel(&model, workers, control)
+        self.run_parallel(range, &model, workers, control)
     }
 
     /// Runs `model` (which returns one number per replication) and summarises the results.
@@ -162,18 +178,20 @@ impl Experiment {
         Ok(Summary::of(&self.run(model)?))
     }
 
-    fn worker_count(&self) -> usize {
+    /// Worker threads for `replications` replications.
+    fn worker_count(&self, replications: u64) -> usize {
         if cfg!(target_arch = "wasm32") {
             return 1;
         }
         let available = std::thread::available_parallelism().map_or(1, |n| n.get());
         let wanted = self.threads.unwrap_or(available).max(1);
-        let reps = usize::try_from(self.replications).unwrap_or(usize::MAX);
+        let reps = usize::try_from(replications).unwrap_or(usize::MAX);
         wanted.min(reps.max(1))
     }
 
     fn run_parallel<R, F>(
         &self,
+        range: std::ops::Range<u64>,
         model: &F,
         workers: usize,
         control: &Control,
@@ -182,7 +200,9 @@ impl Experiment {
         F: Fn(Replication) -> R + Sync,
         R: Send,
     {
-        let next = AtomicU64::new(0);
+        let end = range.end;
+        let count = end.saturating_sub(range.start);
+        let next = AtomicU64::new(range.start);
         // `Err(index)` records a replication that panicked; the others still run.
         let results: Mutex<Vec<(u64, Result<R, ()>)>> = Mutex::new(Vec::new());
         std::thread::scope(|scope| {
@@ -191,7 +211,7 @@ impl Experiment {
                     let mut local = Vec::new();
                     while !control.is_cancelled() {
                         let index = next.fetch_add(1, Ordering::Relaxed);
-                        if index >= self.replications {
+                        if index >= end {
                             break;
                         }
                         let rep = self.replication(index);
@@ -214,7 +234,7 @@ impl Experiment {
                 index: Some(*index),
             });
         }
-        if u64::try_from(out.len()).ok() != Some(self.replications) {
+        if u64::try_from(out.len()).ok() != Some(count) {
             return Err(if control.is_cancelled() {
                 ExperimentError::Cancelled
             } else {
@@ -244,6 +264,31 @@ mod tests {
             Experiment::new(1, 9).stream(0).next_u64(),
             Experiment::new(1, 10).stream(0).next_u64()
         );
+    }
+
+    /// A batch of replications from the middle gives exactly what a whole run gives for them, on
+    /// any number of threads: how a sequential run adds replications.
+    #[test]
+    fn a_range_of_replications_is_a_slice_of_the_whole_run() {
+        let model = |mut r: Replication| (r.index, r.rng.next_u64());
+        let whole = Experiment::new(12, 7)
+            .threads(1)
+            .run(model)
+            .unwrap_or_default();
+        for threads in [1, 3] {
+            let x = Experiment::new(12, 7).threads(threads);
+            let control = Control::new();
+            let part = x.run_range(5..9, model, &control);
+            assert_eq!(part.as_deref(), Ok(&whole[5..9]));
+            assert_eq!(control.done(), 4);
+            // Past the experiment's own count, too: only the seed and the index matter.
+            let later = Experiment::new(4, 7).threads(threads);
+            assert_eq!(
+                later.run_range(8..12, model, &Control::new()).as_deref(),
+                Ok(&whole[8..12])
+            );
+            assert_eq!(x.run_range(3..3, model, &Control::new()), Ok(vec![]));
+        }
     }
 
     #[test]

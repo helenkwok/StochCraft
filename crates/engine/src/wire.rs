@@ -14,8 +14,8 @@ use stochcraft_model::{
     ConveyorShape, Demand, DemandPer, Diagnostic, Dist, Element, ElementId, ElementKind, Estimate,
     Experiment, Family, HealthCheck, LengthUnit, Mobility, Model, Need, OnShiftEnd, OnTakeout,
     Patience, PatienceUntil, PlaceWhileOut, Power, ProcessingBy, Property, PropertyType,
-    PropertyValue, QueueLimit, ResourcePool, Routing, Scrap, Setup, Severity, Stop, ThreePoint,
-    TimeUnit, Timed, Transfer, Upper,
+    PropertyValue, QueueLimit, ResourcePool, Routing, Scrap, Sequential, SequentialMeasure, Setup,
+    Severity, Stop, ThreePoint, TimeUnit, Timed, Transfer, Upper,
 };
 use stochcraft_stats::split::{self, Split};
 
@@ -2146,6 +2146,93 @@ pub struct ExperimentDoc {
     /// out when the file gives none.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub result_frequency: Option<f64>,
+    /// Sequential replications: `replications` first, then more until the results watched are
+    /// precise enough or `max` is reached; left out for a fixed number of replications.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub sequential: Option<SequentialSpec>,
+}
+
+/// How a sequential experiment decides it has run enough replications: each result it watches
+/// must have a 95% half-width within `relative` of its mean (0.05 is ± 5%), or for a share (a
+/// utilisation, a share lost) within `points` percentage points. A mean at or near zero cannot
+/// meet a relative target, and a result whose replications all gave the same value is never
+/// taken as settled on that alone: the run then goes on to `max`. Replication i is the same as
+/// in a fixed run, so a run that stops at n replications gives exactly a fixed run's results.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
+pub struct SequentialSpec {
+    /// The one result to watch; left out to watch every block's key measures (up to four per
+    /// block, the results shown first).
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub measure: Option<SequentialMeasureSpec>,
+    /// The half-width as a share of the mean at which a result is precise enough; default
+    /// 0.05.
+    #[serde(default = "default_relative")]
+    pub relative: f64,
+    /// The half-width of a share in percentage points at which it is precise enough; default
+    /// 1.
+    #[serde(default = "default_points")]
+    pub points: f64,
+    /// The most replications, the first ones included; default 200.
+    #[serde(default = "default_max")]
+    pub max: u32,
+}
+
+/// One result for a sequential experiment to watch: an element's metric, by its name in the
+/// results.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
+pub struct SequentialMeasureSpec {
+    /// The element's id.
+    pub element: String,
+    /// Such as `mean_wait` or `utilisation`.
+    pub metric: String,
+    /// A half-width to reach in the metric's own unit (a share as a fraction: 0.01 is one
+    /// point), instead of the relative or points target; useful for a mean near zero.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub half_width: Option<f64>,
+}
+
+fn default_relative() -> f64 {
+    Sequential::default().relative
+}
+
+fn default_points() -> f64 {
+    Sequential::default().points
+}
+
+fn default_max() -> u32 {
+    Sequential::default().max
+}
+
+impl From<&Sequential> for SequentialSpec {
+    fn from(x: &Sequential) -> Self {
+        Self {
+            measure: x.measure.as_ref().map(|m| SequentialMeasureSpec {
+                element: m.element.to_string(),
+                metric: m.metric.clone(),
+                half_width: m.half_width,
+            }),
+            relative: x.relative,
+            points: x.points,
+            max: x.max,
+        }
+    }
+}
+
+impl From<SequentialSpec> for Sequential {
+    fn from(x: SequentialSpec) -> Self {
+        Self {
+            measure: x.measure.map(|m| SequentialMeasure {
+                element: ElementId::unchecked(&m.element),
+                metric: m.metric,
+                half_width: m.half_width,
+            }),
+            relative: x.relative,
+            points: x.points,
+            max: x.max,
+        }
+    }
 }
 
 impl From<&Experiment> for ExperimentDoc {
@@ -2161,6 +2248,7 @@ impl From<&Experiment> for ExperimentDoc {
             start: x.start.map(Stamp),
             stop: x.stop.as_ref().map(Into::into),
             result_frequency: x.result_frequency,
+            sequential: x.sequential.as_ref().map(Into::into),
         }
     }
 }
@@ -2178,6 +2266,7 @@ impl From<ExperimentDoc> for Experiment {
             start: x.start.map(|s| s.0),
             stop: x.stop.map(Into::into),
             result_frequency: x.result_frequency,
+            sequential: x.sequential.map(Into::into),
         }
     }
 }

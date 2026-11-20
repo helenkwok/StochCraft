@@ -26,9 +26,9 @@ use crate::write::{
     health_check_element, interruptible_param, mobility_element, numeric, on_shift_end_element,
     own_marker, patience_element, planned_element, power_element, probability_element,
     processing_by_element, property_element, quantity_element, quantity_param,
-    queue_capacity_element, rework_element, routing_element, scrap_element, size, start_param,
-    stop_element, timer_param, transfer_element, transport_element, turned_away_element,
-    units_param, vendor_value_element,
+    queue_capacity_element, rework_element, routing_element, scrap_element, sequential_element,
+    sequential_off_element, size, start_param, stop_element, timer_param, transfer_element,
+    transport_element, turned_away_element, units_param, vendor_value_element,
 };
 use crate::xml::{self, Element, Node};
 use crate::{Format, SaveError};
@@ -2814,6 +2814,18 @@ impl Editor {
                     .is_some_and(|p| p.child(&NSS, "Duration").is_some())
             });
         }
+        // Whether a scenario this one inherits from sets sequential replications, which turning
+        // them off here must then say.
+        let is_sequential = |x: &Element| {
+            x.is_any(&NSS, "VendorExtension")
+                && x.attr("name").as_deref() == Some(crate::bpsim::SEQUENTIAL)
+        };
+        let inherited_sequential = b.sequential != a.sequential
+            && a.sequential.is_none()
+            && ancestors(root, scenario).iter().any(|s| {
+                s.child(&NSS, "ScenarioParameters")
+                    .is_some_and(|p| p.elements().any(is_sequential))
+            });
         let s = self.ensure_scenario(root, scenario)?;
         let mut rescaled = Vec::new();
         if relabel {
@@ -2932,6 +2944,20 @@ impl Editor {
             rename(&mut v, &prefix, &ns);
             let at = end_of(sp);
             sp.children.insert(at, Node::Element(v));
+        }
+        if b.sequential != a.sequential {
+            remove_all(sp, &is_sequential);
+            // Turned off: said only where an inherited scenario would otherwise turn them on.
+            let written = match &a.sequential {
+                Some(q) => Some(sequential_element(q)),
+                None if inherited_sequential => Some(sequential_off_element()),
+                None => None,
+            };
+            if let Some(mut v) = written {
+                rename(&mut v, &prefix, &ns);
+                let at = end_of(sp);
+                sp.children.insert(at, Node::Element(v));
+            }
         }
         if relabel {
             self.keep_inheriting(root, scenario, b.time_unit, &rescaled, default_duration);

@@ -970,6 +970,7 @@ fn showcase() -> Model {
         stop: None,
         start: Some(day(4, 6)),
         result_frequency: Some(1_800.0),
+        sequential: None,
     })
 }
 

@@ -78,10 +78,87 @@ fn record_lines(name: &str, results: &Value, out: &mut String) {
         s(&r["stochcraft"]),
         s(&r["model_digest"])
     );
+    if results["sequential"].is_object() {
+        let _ = writeln!(
+            out,
+            "± is estimated precision after adaptive stopping: the half-width of a 95% Student-t \
+             interval across replications whose number was chosen from the results, so its \
+             coverage is not guaranteed to be 95%"
+        );
+    } else {
+        let _ = writeln!(
+            out,
+            "± is the half-width of a 95% Student-t confidence interval across replications"
+        );
+    }
+}
+
+/// A sequential run's outcome (`sequential`): how many replications it ran and after which
+/// looks, why it stopped, and the results it could not settle.
+fn sequential_lines(results: &Value, out: &mut String) {
+    let q = &results["sequential"];
+    if !q.is_object() {
+        return;
+    }
+    let stages: Vec<String> = q["stages"]
+        .as_array()
+        .into_iter()
+        .flatten()
+        .map(Value::to_string)
+        .collect();
+    let why = match s(&q["reason"]) {
+        "target_met" => "every result watched that varies is precise enough".to_owned(),
+        "no_spread" => format!(
+            "the maximum of {} replications was reached, with results that had no spread in the \
+             runs made",
+            q["replications"]
+        ),
+        "mean_near_zero" => format!(
+            "the maximum of {} replications was reached, with results whose mean is at or near \
+             zero (give the result an absolute half-width instead)",
+            q["replications"]
+        ),
+        _ => format!(
+            "the maximum of {} replications was reached before every result watched was precise \
+             enough",
+            q["replications"]
+        ),
+    };
     let _ = writeln!(
         out,
-        "± is the half-width of a 95% Student-t confidence interval across replications"
+        "\nsequential: {} replications (looked at {}); stopped because {why}",
+        q["replications"],
+        stages.join(", ")
     );
+    let open: Vec<String> = q["measures"]
+        .as_array()
+        .into_iter()
+        .flatten()
+        .filter(|m| m["status"] != "settled")
+        .map(|m| {
+            let status = match s(&m["status"]) {
+                "no_spread" => "no spread in the runs made",
+                "mean_near_zero" => "mean at or near zero",
+                "no_interval" => "no interval",
+                "no_value" => "no value",
+                _ => "wider than the target",
+            };
+            format!("{}.{} ({status})", s(&m["element"]), s(&m["metric"]))
+        })
+        .collect();
+    if !open.is_empty() {
+        let _ = writeln!(out, "not settled: {}", open.join(", "));
+    }
+    let no_spread = q["no_spread"].as_array().is_some_and(|l| !l.is_empty());
+    if let (true, Some(p)) = (no_spread, q["unseen_rate"].as_f64()) {
+        let _ = writeln!(
+            out,
+            "no spread: these results were the same in all {} runs; an event none of them met \
+             could still happen in up to {:.1}% of runs (95% confidence)",
+            q["replications"],
+            p * 100.0
+        );
+    }
 }
 
 /// `rows` as aligned columns, two spaces apart: text left where `left` says so, numbers right.
@@ -603,6 +680,7 @@ pub fn table(name: &str, results: &Value) -> String {
     }
     split_lines(results, &mut out);
     stop_lines(results, &mut out);
+    sequential_lines(results, &mut out);
     warmup_line(results, &mut out);
     let notes: Vec<&Value> = results["record"]["warnings"]
         .as_array()
@@ -916,5 +994,43 @@ mod tests {
         let out = table("q", &results);
         assert!(!out.contains("still inside"), "{out}");
         assert!(!out.contains("over those that met it"), "{out}");
+    }
+
+    #[test]
+    fn a_sequential_run_says_how_many_runs_and_why_it_stopped() {
+        let m = serde_json::json!({ "mean": 1.0, "half_width": 0.0, "std_dev": 0.0, "n": 200 });
+        let mut results = serde_json::json!({
+            "replications": 200,
+            "time_unit": "min",
+            "record": { "replications": 200, "time_unit": "min" },
+            "metrics": ["entered"],
+            "elements": [{ "id": "exit", "metrics": { "entered": m } }],
+            "sequential": {
+                "replications": 200,
+                "stages": [10, 20, 40, 80, 160, 200],
+                "reason": "no_spread",
+                "measures": [{ "element": "exit", "metric": "entered", "status": "no_spread" }],
+            },
+        });
+        let out = table("q", &results);
+        assert!(
+            out.contains("estimated precision after adaptive stopping"),
+            "{out}"
+        );
+        assert!(!out.contains("± is the half-width of a 95%"), "{out}");
+        assert!(
+            out.contains("sequential: 200 replications (looked at 10, 20, 40, 80, 160, 200)"),
+            "{out}"
+        );
+        assert!(out.contains("no spread in the runs made"), "{out}");
+        assert!(
+            out.contains("not settled: exit.entered (no spread in the runs made)"),
+            "{out}"
+        );
+        // A fixed run says neither.
+        results["sequential"] = Value::Null;
+        let out = table("q", &results);
+        assert!(!out.contains("sequential:"), "{out}");
+        assert!(out.contains("± is the half-width of a 95%"), "{out}");
     }
 }
