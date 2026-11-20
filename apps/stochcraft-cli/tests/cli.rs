@@ -741,3 +741,69 @@ fn exec_writes_the_journal_of_what_it_did_and_replays_it_safely() {
     assert!(stderr(&o).contains("starts from"), "{}", stderr(&o));
     assert_eq!(stdout(&o), "");
 }
+
+/// `--until`, `--until-points` and `--max` run sequentially: the results say how many
+/// replications ran, after which looks and why, and they are those of a fixed run of that many.
+#[test]
+fn run_until_a_target_half_width() {
+    let m = model("mm1.bpmn");
+    let base = [
+        "run",
+        m.as_str(),
+        "--reps",
+        "4",
+        "--duration",
+        "2000",
+        "--format",
+        "json",
+    ];
+    let mut args = base.to_vec();
+    args.extend(["--until", "10%", "--max", "40"]);
+    let r = json(&ok(&args));
+    let n = r["sequential"]["replications"].as_u64().unwrap_or(0);
+    assert!((4..=40).contains(&n), "{}", r["sequential"]);
+    assert_eq!(r["replications"], n);
+    assert_eq!(r["record"]["replications"], n);
+    assert_eq!(r["sequential"]["stages"][0], 4);
+    assert_eq!(r["record"]["sequential"]["relative"], 0.1);
+    assert_eq!(r["record"]["sequential"]["max"], 40);
+    let uncertainty = r["record"]["uncertainty"].as_str().unwrap_or("");
+    assert!(uncertainty.starts_with("estimated precision after adaptive stopping"));
+    // A fixed run of that many gives the same numbers.
+    let reps = n.to_string();
+    let fixed = [
+        "run",
+        m.as_str(),
+        "--reps",
+        reps.as_str(),
+        "--duration",
+        "2000",
+        "--format",
+        "json",
+    ];
+    let f = json(&ok(&fixed));
+    assert_eq!(f["elements"], r["elements"]);
+    assert!(f["sequential"].is_null());
+    // In words.
+    let table = ok(&[
+        "run",
+        &m,
+        "--reps",
+        "4",
+        "--duration",
+        "2000",
+        "--until",
+        "0.1",
+        "--max",
+        "40",
+    ]);
+    assert!(table.contains("\nsequential: "), "{table}");
+    assert!(table.contains("estimated precision"), "{table}");
+    // A share of the mean is a percentage or a fraction below 1.
+    for bad in ["5", "0%", "-3%", "x"] {
+        let o = cli(&["run", &m, "--until", bad]);
+        assert!(!o.status.success(), "--until {bad}");
+    }
+    // `--fixed` cannot be given with them.
+    assert!(!cli(&["run", &m, "--fixed", "--max", "20"]).status.success());
+}

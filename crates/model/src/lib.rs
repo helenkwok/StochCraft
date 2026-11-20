@@ -1461,6 +1461,52 @@ pub struct Experiment {
     /// seconds: an `xs:duration` in the file, so it does not depend on the time unit. `None`
     /// when the file gives none (the run then records about 100 points over its length).
     pub result_frequency: Option<f64>,
+    /// Sequential replications: start with [`Experiment::replications`], then add more until
+    /// the results it watches are precise enough, or a maximum is reached. A StochCraft vendor
+    /// extension on the scenario (`stochcraft:sequential`), since BPSim runs a fixed number.
+    /// `None` runs exactly [`Experiment::replications`].
+    pub sequential: Option<Sequential>,
+}
+
+/// How a sequential experiment decides it has run enough replications: each result it watches
+/// must have a 95% half-width within its target, a share of its mean (`relative`) or, for a
+/// share such as a utilisation, percentage points (`points`). Replication i is the same in a
+/// sequential run as in a fixed one, so one that stops at n replications gives exactly the
+/// results of a fixed run of n.
+#[derive(Debug, Clone, PartialEq)]
+pub struct Sequential {
+    /// The one result to watch; `None` watches every block's key measures (the results the
+    /// window shows first, up to four per block).
+    pub measure: Option<SequentialMeasure>,
+    /// The half-width as a share of the mean at which a result is precise enough (0.05 is
+    /// ± 5%).
+    pub relative: f64,
+    /// The half-width in percentage points at which a share is precise enough (1 is ± 1 point).
+    pub points: f64,
+    /// The most replications to run, the first ones included.
+    pub max: u32,
+}
+
+impl Default for Sequential {
+    fn default() -> Self {
+        Self {
+            measure: None,
+            relative: 0.05,
+            points: 1.0,
+            max: 200,
+        }
+    }
+}
+
+/// One result a sequential experiment watches: an element's metric (by its name in the
+/// results, such as `mean_wait`), with an absolute half-width to reach in the metric's own unit
+/// (a share as a fraction: 0.01 is one point), or, without one, the experiment's relative or
+/// points target.
+#[derive(Debug, Clone, PartialEq)]
+pub struct SequentialMeasure {
+    pub element: ElementId,
+    pub metric: String,
+    pub half_width: Option<f64>,
 }
 
 /// What ends a replication before its time limit. Checked after everything that happens at one
@@ -1508,6 +1554,7 @@ impl Default for Experiment {
             start: None,
             stop: None,
             result_frequency: None,
+            sequential: None,
         }
     }
 }

@@ -528,6 +528,10 @@ pub trait Workers {
     /// and runs the replications it is given. False if no worker could start; the app then runs
     /// the replications itself.
     fn start(&mut self, task: &str, replications: u64) -> bool;
+    /// The run now has `replications` replications in all, numbered from 0, more than before: a
+    /// sequential run that looked at its results and went on. The workers run the new ones too,
+    /// those that had run out of replications included.
+    fn extend(&mut self, replications: u64);
     /// The workers' answers that have arrived since the last call, for [`Engine::deliver`].
     fn answers(&mut self) -> Vec<String>;
     /// Stops every worker: the run finished, failed or was cancelled.

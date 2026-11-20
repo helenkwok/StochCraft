@@ -703,6 +703,11 @@ pub struct ExperimentSet {
     /// duration then being its time limit; `null` removes it.
     #[serde(default, deserialize_with = "some")]
     pub stop: Option<Option<StopSpec>>,
+    /// Sequential replications: run `replications` first, then add more until every key
+    /// measure (or the one `measure`) is precise enough, or `max` is reached; `null` runs a
+    /// fixed number again.
+    #[serde(default, deserialize_with = "some")]
+    pub sequential: Option<Option<wire::SequentialSpec>>,
 }
 
 /// A three-point estimate to fit an element's time distribution to: a source's time between
@@ -743,6 +748,11 @@ pub struct Run {
     /// result; it costs a few per cent of run time on larger models, and the results grow.
     #[serde(default)]
     pub series: Option<bool>,
+    /// Sequential replications for this run only (as `experiment.set` takes them): `null` runs
+    /// exactly `replications`; by default the experiment's own setting. A sequential run's
+    /// results say how many replications ran and why it stopped (`sequential`).
+    #[serde(default, deserialize_with = "some")]
+    pub sequential: Option<Option<wire::SequentialSpec>>,
 }
 
 #[derive(Debug, Deserialize, JsonSchema)]
@@ -755,7 +765,9 @@ pub struct RunStart {
     #[serde(default)]
     pub threads: Option<u32>,
     /// `threads` natively, `slices` in the browser by default; `workers` hands the replications
-    /// to the caller's own workers (see `Engine::worker_task`).
+    /// to the caller's own workers (see `Engine::worker_task`). A sequential run on workers
+    /// sets out to have more replications after each look: `run.status` then gives a larger
+    /// `total`, and the caller hands those out too.
     #[serde(default)]
     pub mode: Option<RunMode>,
     /// Record results over time (`series`) and suggest a warm-up from them
@@ -763,6 +775,9 @@ pub struct RunStart {
     /// result; it costs a few per cent of run time on larger models, and the results grow.
     #[serde(default)]
     pub series: Option<bool>,
+    /// Sequential replications for this run only, as for `run`.
+    #[serde(default, deserialize_with = "some")]
+    pub sequential: Option<Option<wire::SequentialSpec>>,
 }
 
 #[derive(Debug, Deserialize, JsonSchema)]
@@ -2037,7 +2052,11 @@ fn experiment_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         }
         x.stop = stop.clone().map(Into::into);
     }
+    if let Some(q) = &p.sequential {
+        x.sequential = sequential(e.model(), q.clone())?;
+    }
     let given = [
+        p.sequential.is_some(),
         p.stop.is_some(),
         p.start.is_some(),
         p.time_unit.is_some(),
@@ -2075,15 +2094,75 @@ fn history(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
     Ok(e.history_json())
 }
 
+/// Sequential replications as given to `experiment.set`, `run` or `run.start`, checked against
+/// `model`: targets above 0, at least one replication, and a watched result on an element the
+/// model has, by the name of a metric. `None` (`null`) for a fixed number of replications.
+fn sequential(
+    model: &Model,
+    spec: Option<wire::SequentialSpec>,
+) -> Result<Option<stochcraft_model::Sequential>, CommandError> {
+    let Some(spec) = spec else {
+        return Ok(None);
+    };
+    let bad = |what: String| CommandError::new(ErrorCode::InvalidParams, what);
+    for (name, v) in [("relative", spec.relative), ("points", spec.points)] {
+        if !(v.is_finite() && v > 0.0) {
+            return Err(bad(format!("sequential `{name}` must be above 0, not {v}")));
+        }
+    }
+    if spec.max == 0 {
+        return Err(bad("sequential `max` must be at least 1".into()));
+    }
+    if let Some(m) = &spec.measure {
+        existing_element(model, &m.element)?;
+        if stochcraft_blocks::Metric::from_name(&m.metric).is_none() {
+            return Err(bad(format!(
+                "sequential `metric`: no metric named `{}`",
+                m.metric
+            )));
+        }
+        if let Some(h) = m.half_width
+            && !(h.is_finite() && h > 0.0)
+        {
+            return Err(bad(format!(
+                "sequential `half_width` must be above 0, not {h}"
+            )));
+        }
+    }
+    Ok(Some(spec.into()))
+}
+
+/// The sequential override of a `run` or `run.start`: absent keeps the experiment's.
+fn sequential_override(
+    model: &Model,
+    given: Option<Option<wire::SequentialSpec>>,
+) -> Result<Option<Option<stochcraft_model::Sequential>>, CommandError> {
+    given.map(|q| sequential(model, q)).transpose()
+}
+
 fn run(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
     let p: Run = parse(p)?;
-    e.plan(p.replications, p.seed, p.threads, p.series.unwrap_or(true))?
-        .run_now()
+    let sequential = sequential_override(e.model(), p.sequential)?;
+    e.plan(
+        p.replications,
+        p.seed,
+        p.threads,
+        p.series.unwrap_or(true),
+        sequential,
+    )?
+    .run_now()
 }
 
 fn run_start(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
     let p: RunStart = parse(p)?;
-    let plan = e.plan(p.replications, p.seed, p.threads, p.series.unwrap_or(true))?;
+    let sequential = sequential_override(e.model(), p.sequential)?;
+    let plan = e.plan(
+        p.replications,
+        p.seed,
+        p.threads,
+        p.series.unwrap_or(true),
+        sequential,
+    )?;
     e.start_run(plan, p.mode.unwrap_or_else(RunMode::default_for_target))
 }
 
@@ -2337,7 +2416,7 @@ pub static COMMANDS: &[Command] = &[
     },
     Command {
         name: "experiment.set",
-        summary: "Change the experiment: time unit, warm-up, duration, replications, seed, start, and an event that ends each replication early.",
+        summary: "Change the experiment: time unit, warm-up, duration, replications, seed, start, an event that ends each replication early, and sequential replications (more until the key measures are precise enough).",
         kind: CommandKind::Edit,
         schema: schema::<ExperimentSet>,
         example: || json!({ "replications": 5, "duration": 240.0 }),

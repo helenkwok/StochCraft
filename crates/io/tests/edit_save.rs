@@ -1849,3 +1849,35 @@ fn deeply_nested_content_is_kept_up_to_the_limit() {
         r.err()
     );
 }
+
+/// Sequential replications set in a scenario reach the scenarios that inherit it, and turning
+/// them off in one of those writes `off` there, leaving the inherited scenario as it was.
+#[test]
+fn sequential_replications_are_inherited_and_turned_off() {
+    let on = stochcraft_model::Sequential {
+        max: 64,
+        ..stochcraft_model::Sequential::default()
+    };
+    let (saved, n) = edit_and_save("mm1.bpmn", Some("base"), |m| {
+        m.experiment.sequential = Some(on.clone());
+    });
+    assert!(
+        n <= 6,
+        "{n} lines changed:\n{}",
+        diff(&file("mm1.bpmn"), &saved)
+    );
+    let child = read_scenario(&saved, Some("two-clerks")).unwrap_or_else(|e| panic!("{e}"));
+    assert_eq!(child.model.experiment.sequential, Some(on.clone()));
+    let off = edit_bytes("mm1.bpmn", &saved, Some("two-clerks"), |m| {
+        m.experiment.sequential = None;
+    });
+    let text = String::from_utf8_lossy(&off);
+    assert!(text.contains(r#"stochcraft:value="off""#), "{text}");
+    let base = read_scenario(&off, Some("base")).unwrap_or_else(|e| panic!("{e}"));
+    assert_eq!(base.model.experiment.sequential, Some(on));
+    // In a scenario that inherits nothing, turning them off leaves nothing behind.
+    let removed = edit_bytes("mm1.bpmn", &saved, Some("base"), |m| {
+        m.experiment.sequential = None;
+    });
+    assert!(!String::from_utf8_lossy(&removed).contains("stochcraft:sequential"));
+}

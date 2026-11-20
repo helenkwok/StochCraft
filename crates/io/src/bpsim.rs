@@ -6,7 +6,7 @@
 
 use std::collections::BTreeMap;
 
-use stochcraft_model::{Dist, LengthUnit, TimeUnit};
+use stochcraft_model::{Dist, ElementId, LengthUnit, Sequential, SequentialMeasure, TimeUnit};
 
 use crate::Note;
 use crate::duration;
@@ -145,6 +145,15 @@ pub const LAYOUT_SCALE: &str = "stochcraft:layoutScale";
 /// `stochcraft:lengthUnit` on the scenario's `ScenarioParameters`.
 pub const LENGTH_UNIT: &str = "stochcraft:lengthUnit";
 
+/// Sequential replications: a `stochcraft:sequential` element on the scenario's
+/// `ScenarioParameters` with the attributes `relative` (the half-width as a share of the mean,
+/// 0.05 without it), `points` (the half-width of a share in percentage points, 1 without it)
+/// and `max` (the most replications, 200 without it), and, to watch one result rather than
+/// every key measure, `element` and `metric` (its name in the results) with an optional
+/// `halfWidth` in the metric's own unit. The scenario's `replication` is the number run first.
+/// The value `off` (`stochcraft:value="off"`) turns off what an inherited scenario sets.
+pub const SEQUENTIAL: &str = "stochcraft:sequential";
+
 /// A bill of materials: `stochcraft:quantity` on the `ElementParameters` of a sequence flow
 /// into a parallel gateway, the number of entities from it in each one the join sends on.
 pub const QUANTITY: &str = "stochcraft:quantity";
@@ -237,6 +246,8 @@ pub struct ScenarioSettings {
     pub length_unit: LengthUnit,
     /// Length units per drawing unit ([`LAYOUT_SCALE`]); 1 unless given.
     pub layout_scale: Option<f64>,
+    /// Sequential replications ([`SEQUENTIAL`]); `None` without them or where turned off.
+    pub sequential: Option<Sequential>,
 }
 
 /// A BPSim `Calendar` as the file has it: id, name and iCalendar text.
@@ -419,6 +430,65 @@ fn normalise_param(local: &str) -> &str {
     }
 }
 
+/// The sequential replications a [`SEQUENTIAL`] vendor extension sets: `None` for `off`. A value
+/// that cannot be read is noted and its default used.
+fn read_sequential(ext: &Element, notes: &mut Vec<Note>) -> Option<Sequential> {
+    if vendor_value(ext).is_some_and(|v| matches!(v.trim(), "off" | "false" | "0")) {
+        return None;
+    }
+    let mut x = Sequential::default();
+    let Some(body) = ext.elements().find(|e| e.local() == "sequential") else {
+        return Some(x);
+    };
+    let mut bad = |name: &str, raw: &str, what: &str| {
+        notes.push(Note::warning(
+            None,
+            format!("sequential `{name}` `{raw}` is not {what} and is ignored"),
+        ));
+    };
+    for (name, slot) in [("relative", &mut x.relative), ("points", &mut x.points)] {
+        if let Some(raw) = body.attr(name) {
+            match raw.trim().parse::<f64>() {
+                Ok(v) if v.is_finite() && v > 0.0 => *slot = v,
+                _ => bad(name, &raw, "a number above 0"),
+            }
+        }
+    }
+    if let Some(raw) = body.attr("max") {
+        match raw.trim().parse::<u32>() {
+            Ok(v) if v > 0 => x.max = v,
+            _ => bad("max", &raw, "a whole number above 0"),
+        }
+    }
+    let element = body.attr("element").map(|e| e.trim().to_owned());
+    let metric = body.attr("metric").map(|m| m.trim().to_owned());
+    if let (Some(element), Some(metric)) = (&element, &metric)
+        && !element.is_empty()
+        && !metric.is_empty()
+    {
+        let half_width = body
+            .attr("halfWidth")
+            .and_then(|raw| match raw.trim().parse::<f64>() {
+                Ok(v) if v.is_finite() && v > 0.0 => Some(v),
+                _ => {
+                    bad("halfWidth", &raw, "a number above 0");
+                    None
+                }
+            });
+        x.measure = Some(SequentialMeasure {
+            element: ElementId::unchecked(element),
+            metric: metric.clone(),
+            half_width,
+        });
+    } else if element.is_some() || metric.is_some() {
+        notes.push(Note::warning(
+            None,
+            "a sequential result needs both `element` and `metric`; every key measure is watched instead",
+        ));
+    }
+    Some(x)
+}
+
 fn read_settings(p: &Element, s: &mut ScenarioSettings, notes: &mut Vec<Note>) {
     if let Some(r) = p.attr("replication") {
         match r.trim().parse() {
@@ -479,6 +549,12 @@ fn read_settings(p: &Element, s: &mut ScenarioSettings, notes: &mut Vec<Note>) {
                 format!("layout scale `{raw}` is not a number and is ignored"),
             )),
         }
+    }
+    for ext in p
+        .children_named(&NSS, "VendorExtension")
+        .filter(|x| x.attr("name").as_deref() == Some(SEQUENTIAL))
+    {
+        s.sequential = read_sequential(ext, notes);
     }
     let unit = s.base_time_unit;
     for (name, slot) in [("Duration", &mut s.duration), ("Warmup", &mut s.warmup)] {

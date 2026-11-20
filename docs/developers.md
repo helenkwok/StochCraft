@@ -105,6 +105,32 @@ enough to reproduce the numbers. `--format json` or `--format csv` gives machine
 results, `--out` writes them to a file, and `--seed`, `--warmup` and `--duration` override the
 model's scenario for that run. Any BPMN or XPDL file with BPSim data can be run the same way.
 
+To run until the numbers are precise enough rather than a fixed number of times, give a target:
+
+```bash
+stochcraft-cli run queue.bpmn --reps 10 --until 5% --max 200
+```
+
+A sequential run makes the `--reps` replications first, then adds more in batches until every
+key measure (up to four results per block, the ones the window shows first) has a 95% half-width
+within 5% of its mean, or `--max` replications have run. A share such as a utilisation is judged
+in percentage points instead (`--until-points`, 1 by default), since a small share is never
+within 5% of itself. Each batch is sized from the widest result so far: the interval narrows
+with the square root of the replications, so about n × (half-width ÷ target)² replications are
+needed, rounded up to a multiple of ten and at most `--max`; where a result unsettled gives
+nothing to estimate from (no spread yet), the count at least doubles. A result whose replications all gave
+the same value is never taken as settled on that alone (a rare event may not have happened yet),
+and neither is a mean at or near zero against a share of itself; the run then goes on to `--max`
+and says why. Replication i is the same as in a fixed run, so a run that stops at n replications
+gives exactly the results of `--reps n`. The run record says how many replications ran, after
+which looks and why the run stopped, and calls the interval *estimated precision after adaptive
+stopping*: choosing the count from the results means the interval's coverage is not guaranteed to
+be 95%. A scenario can make its runs sequential itself (the engine's `experiment.set` with
+`sequential`, saved in the file as the `stochcraft:sequential` extension on the scenario);
+`--fixed` runs exactly `--reps` replications whatever the scenario says. The method follows Hoad,
+Robinson and Davies (2011), "Automated selection of the number of replications for a
+discrete-event simulation", *Journal of the Operational Research Society* 62(11).
+
 To vary several parameters at once, `design` runs every combination of their levels (a full
 factorial) on the same seed, and gives each result at each point, each factor's main effect and,
 for factors with two levels, their two-way interactions, each with a paired 95% interval:

@@ -44,7 +44,8 @@ impl Pool {
         worker_count(cores, replications)
     }
 
-    fn spawn(&self) -> Result<Running, JsValue> {
+    /// Starts worker number `who` (its place in `running`).
+    fn spawn(&self, who: usize) -> Result<Running, JsValue> {
         let worker = web_sys::Worker::new(LOADER)?;
         let (shared, ctx, me) = (Rc::clone(&self.shared), self.ctx.clone(), worker.clone());
         let on_message =
@@ -52,7 +53,7 @@ impl Pool {
                 let Some(text) = e.data().as_string() else {
                     return;
                 };
-                let reaction = shared.borrow_mut().on_message(text);
+                let reaction = shared.borrow_mut().on_message(who, text);
                 if let Some(task) = reaction.task {
                     let _ = me.post_message(&JsValue::from_str(&task));
                 }
@@ -86,12 +87,21 @@ impl Workers for Pool {
         self.stop();
         *self.shared.borrow_mut() = Shared::new(task, replications);
         for _ in 0..Self::count(replications) {
-            match self.spawn() {
+            match self.spawn(self.running.len()) {
                 Ok(r) => self.running.push(r),
                 Err(_) => break,
             }
         }
         !self.running.is_empty()
+    }
+
+    fn extend(&mut self, replications: u64) {
+        let handed = self.shared.borrow_mut().extend(replications);
+        for (who, index) in handed {
+            if let Some(r) = self.running.get(who) {
+                let _ = r.worker.post_message(&JsValue::from_f64(index as f64));
+            }
+        }
     }
 
     fn answers(&mut self) -> Vec<String> {

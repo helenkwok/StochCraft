@@ -28,6 +28,9 @@ pub struct Shared {
     next: u64,
     total: u64,
     answers: Vec<String>,
+    /// The workers (by their number in the pool) that had nothing left to run, waiting for a
+    /// sequential run to add replications ([`Shared::extend`]).
+    idle: Vec<usize>,
 }
 
 /// What a worker's message makes the pool do.
@@ -49,12 +52,13 @@ impl Shared {
             next: 0,
             total,
             answers: Vec::new(),
+            idle: Vec::new(),
         }
     }
 
-    /// A worker said `ready` or answered a replication with `text`; it is given the next
-    /// replication, if any is left.
-    pub fn on_message(&mut self, text: String) -> Reaction {
+    /// Worker `who` said `ready` or answered a replication with `text`; it is given the next
+    /// replication, if any is left, and otherwise waits as idle.
+    pub fn on_message(&mut self, who: usize, text: String) -> Reaction {
         let mut reaction = Reaction::default();
         if text == "ready" {
             reaction.task = Some(self.task.clone());
@@ -65,8 +69,29 @@ impl Shared {
         if self.next < self.total {
             reaction.index = Some(self.next);
             self.next += 1;
+        } else if !self.idle.contains(&who) {
+            self.idle.push(who);
         }
         reaction
+    }
+
+    /// The run now has `total` replications (a sequential run went on after a look): the idle
+    /// workers are given the new ones, each its first. Returns which worker gets which
+    /// replication; the busy workers take the rest as they answer.
+    pub fn extend(&mut self, total: u64) -> Vec<(usize, u64)> {
+        if total <= self.total {
+            return Vec::new();
+        }
+        self.total = total;
+        let mut handed = Vec::new();
+        while self.next < self.total {
+            let Some(who) = self.idle.pop() else {
+                break;
+            };
+            handed.push((who, self.next));
+            self.next += 1;
+        }
+        handed
     }
 
     /// A worker failed to load or crashed: the run fails with what it said, rather than wait
@@ -90,6 +115,7 @@ impl Shared {
     pub fn stop(&mut self) {
         self.next = self.total;
         self.answers.clear();
+        self.idle.clear();
     }
 }
 
@@ -134,7 +160,7 @@ mod tests {
     fn a_worker_that_is_ready_gets_the_run_and_a_first_replication() {
         let mut s = Shared::new("the run", 3);
         assert_eq!(
-            s.on_message("ready".into()),
+            s.on_message(0, "ready".into()),
             Reaction {
                 task: Some("the run".into()),
                 index: Some(0),
@@ -142,15 +168,15 @@ mod tests {
             }
         );
         // A second worker, ready at once, gets the next.
-        assert_eq!(s.on_message("ready".into()).index, Some(1));
+        assert_eq!(s.on_message(1, "ready".into()).index, Some(1));
         assert!(s.take_answers().is_empty());
     }
 
     #[test]
     fn an_answer_is_kept_and_the_next_replication_handed_out_until_none_are_left() {
         let mut s = Shared::new("run", 2);
-        assert_eq!(s.on_message("ready".into()).index, Some(0));
-        let r = s.on_message("answer 0".into());
+        assert_eq!(s.on_message(0, "ready".into()).index, Some(0));
+        let r = s.on_message(0, "answer 0".into());
         assert_eq!(
             r,
             Reaction {
@@ -160,7 +186,7 @@ mod tests {
             }
         );
         // All handed out: answers still come in, and nothing more is sent.
-        let r = s.on_message("answer 1".into());
+        let r = s.on_message(0, "answer 1".into());
         assert_eq!(
             r,
             Reaction {
@@ -176,15 +202,39 @@ mod tests {
     #[test]
     fn a_stopped_run_hands_out_nothing_and_drops_late_answers() {
         let mut s = Shared::new("run", 10);
-        s.on_message("ready".into());
-        s.on_message("answer 0".into());
+        s.on_message(0, "ready".into());
+        s.on_message(0, "answer 0".into());
         s.stop();
         assert!(s.take_answers().is_empty());
-        let r = s.on_message("late answer".into());
+        let r = s.on_message(0, "late answer".into());
         assert_eq!(r.index, None);
         // A new run starts afresh.
         let mut s = Shared::new("again", 1);
-        assert_eq!(s.on_message("ready".into()).index, Some(0));
+        assert_eq!(s.on_message(0, "ready".into()).index, Some(0));
+    }
+
+    /// A sequential run that goes on: the workers that ran out are handed the new replications
+    /// at once, and the busy ones take the rest as they answer.
+    #[test]
+    fn more_replications_go_to_the_idle_workers_first() {
+        let mut s = Shared::new("run", 2);
+        assert_eq!(s.on_message(0, "ready".into()).index, Some(0));
+        assert_eq!(s.on_message(1, "ready".into()).index, Some(1));
+        assert_eq!(s.on_message(2, "ready".into()).index, None, "idle at once");
+        assert_eq!(s.on_message(0, "answer 0".into()).index, None, "idle");
+        // Four more: workers 0 and 2 get one each now; worker 1 takes the next when it answers.
+        let mut handed = s.extend(6);
+        handed.sort();
+        assert_eq!(handed, vec![(0, 2), (2, 3)]);
+        assert_eq!(s.on_message(1, "answer 1".into()).index, Some(4));
+        assert_eq!(s.on_message(0, "answer 3".into()).index, Some(5));
+        assert_eq!(s.on_message(2, "answer 2".into()).index, None);
+        // Not more than before: nothing to hand out.
+        assert!(s.extend(6).is_empty());
+        assert!(s.extend(3).is_empty());
+        // A stopped run hands out nothing more.
+        s.stop();
+        assert!(s.extend(10).is_empty());
     }
 
     #[test]

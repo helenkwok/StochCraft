@@ -202,6 +202,17 @@ impl App {
                 if let Some(r) = &mut self.running {
                     r.done = status["done"].as_u64().unwrap_or(r.done);
                     r.partial = status["partial"].as_f64().unwrap_or(0.0);
+                    // A sequential run that went on after a look: more replications, which the
+                    // shell's workers are handed too.
+                    let total = status["total"].as_u64().unwrap_or(r.total);
+                    if total > r.total {
+                        r.total = total;
+                        if r.on_workers
+                            && let Some(workers) = self.workers.as_mut()
+                        {
+                            workers.extend(total);
+                        }
+                    }
                 }
                 true
             }

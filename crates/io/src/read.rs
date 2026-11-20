@@ -2416,6 +2416,7 @@ fn experiment(scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> Experiment 
         start,
         stop: None,
         result_frequency: s.result_frequency,
+        sequential: s.sequential.clone(),
     }
 }
 

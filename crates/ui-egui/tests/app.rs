@@ -1056,6 +1056,8 @@ fn a_save_dialog_that_fails_drops_the_agreement_to_a_new_file() {
 struct Pool {
     worker: Option<stochcraft_engine::Worker>,
     pending: Vec<u64>,
+    /// The replications of the run so far.
+    total: u64,
     started: usize,
     stopped: usize,
     /// Refuses to start, as a browser without web workers would.
@@ -1072,8 +1074,16 @@ impl stochcraft_ui_egui::Workers for Shared {
         }
         p.worker = stochcraft_engine::Worker::new(task).ok();
         p.pending = (0..replications).collect();
+        p.total = replications;
         p.started += 1;
         p.worker.is_some()
+    }
+
+    fn extend(&mut self, replications: u64) {
+        let mut p = self.0.borrow_mut();
+        let from = p.total.min(replications);
+        p.pending.extend(from..replications);
+        p.total = replications;
     }
 
     fn answers(&mut self) -> Vec<String> {

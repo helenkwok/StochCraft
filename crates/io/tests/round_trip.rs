@@ -215,6 +215,7 @@ pub fn showcase() -> Model {
         stop: None,
         start: Some(at(4, 6)),
         result_frequency: Some(1_800.0),
+        sequential: None,
     });
     model.name = "Showcase & <friends>".into();
     model
@@ -2290,4 +2291,105 @@ fn a_transport_a_mobile_pool_and_the_layout_scale_write_read_and_save() {
     assert_eq!(text, Ok((false, false)));
     let back = saved.as_deref().map(|b| read(b).map(|l| l.model));
     assert_eq!(back, Ok(Ok(plain)));
+}
+
+/// Sequential replications (`stochcraft:sequential` on the scenario) are written in a new file,
+/// saved into an opened one when they change, and removed, each reading back exactly.
+#[test]
+fn sequential_replications_are_written_saved_and_removed() {
+    let mut model = showcase();
+    model.experiment.sequential = Some(stochcraft_model::Sequential {
+        measure: None,
+        relative: 0.025,
+        points: 0.5,
+        max: 120,
+    });
+    let bytes = write_new(&model);
+    let text = String::from_utf8_lossy(&bytes);
+    assert!(
+        text.contains(r#"<stochcraft:sequential relative="0.025" points="0.5" max="120"/>"#),
+        "{text}"
+    );
+    let Ok(loaded) = read(&bytes) else {
+        unreachable!()
+    };
+    assert_eq!(loaded.model, laid_out(model));
+
+    // One result with an absolute half-width, saved into the opened file.
+    let mut edited = loaded.model.clone();
+    edited.experiment.sequential = Some(stochcraft_model::Sequential {
+        measure: Some(stochcraft_model::SequentialMeasure {
+            element: stochcraft_model::ElementId::unchecked("cut"),
+            metric: "mean_wait".into(),
+            half_width: Some(0.125),
+        }),
+        relative: 0.05,
+        points: 1.0,
+        max: 300,
+    });
+    let Ok(saved) = loaded.opened.save(&edited) else {
+        unreachable!()
+    };
+    let text = String::from_utf8_lossy(&saved);
+    assert!(
+        text.contains(r#"element="cut" metric="mean_wait" halfWidth="0.125""#),
+        "{text}"
+    );
+    assert_eq!(read(&saved).map(|l| l.model).ok(), Some(edited.clone()));
+
+    // Removed: nothing is left in the file, and it reads back as a fixed run.
+    edited.experiment.sequential = None;
+    let Ok(again) = read(&saved) else {
+        unreachable!()
+    };
+    let Ok(removed) = again.opened.save(&edited) else {
+        unreachable!()
+    };
+    let text = String::from_utf8_lossy(&removed);
+    assert!(!text.contains("stochcraft:sequential"), "{text}");
+    assert_eq!(read(&removed).map(|l| l.model).ok(), Some(edited));
+}
+
+/// Settings that cannot be read are noted and their defaults used; `off` turns them off.
+#[test]
+fn bad_sequential_settings_are_noted() {
+    let mut model = showcase();
+    model.experiment.sequential = Some(stochcraft_model::Sequential::default());
+    let text = String::from_utf8_lossy(&write_new(&model)).into_owned();
+    let bad = text.replace(
+        r#"relative="0.05" points="1" max="200""#,
+        r#"relative="-1" points="x" max="0" element="cut""#,
+    );
+    assert_ne!(bad, text, "the settings were found");
+    let Ok(loaded) = read(bad.as_bytes()) else {
+        unreachable!()
+    };
+    assert_eq!(
+        loaded.model.experiment.sequential,
+        Some(stochcraft_model::Sequential::default())
+    );
+    let notes: Vec<&str> = loaded.notes.iter().map(|n| n.message.as_str()).collect();
+    for expected in [
+        "sequential `relative` `-1`",
+        "sequential `points` `x`",
+        "sequential `max` `0`",
+        "a sequential result needs both `element` and `metric`",
+    ] {
+        assert!(
+            notes.iter().any(|n| n.contains(expected)),
+            "{expected}: {notes:?}"
+        );
+    }
+    let off = text.replace(
+        r#"<stochcraft:sequential relative="0.05" points="1" max="200"/>"#,
+        "",
+    );
+    let off = off.replace(
+        r#"name="stochcraft:sequential""#,
+        r#"name="stochcraft:sequential" stochcraft:value="off""#,
+    );
+    let Ok(loaded) = read(off.as_bytes()) else {
+        unreachable!()
+    };
+    assert_eq!(loaded.model.experiment.sequential, None);
 }
