@@ -702,7 +702,11 @@ struct Summing {
     stop: Option<StopReport>,
     /// The output being worked out: its finite values being sorted, and how many trials gave a
     /// value of any kind.
-    sorting: Option<(Sorter, usize)>,
+    sorting: Option<(Sorter<f64>, usize)>,
+    /// The input being ranked (its column's values in order, with their trials) and which.
+    ranking: Option<(Sorter<(f64, usize)>, usize)>,
+    /// Each correlated input's average ranks, once ranked.
+    ranks: Vec<Option<Vec<f64>>>,
     /// Values sorted per chunk, and elements moved per merge step ([`Sorter`]).
     chunk: usize,
     budget: usize,
@@ -710,15 +714,16 @@ struct Summing {
 
 /// Values sorted in fixed-size chunks, one chunk per step, and then merged in bottom-up passes
 /// of at most `budget` elements per step into a second buffer, which becomes the first at the
-/// end of each pass. The order is `f64::total_cmp`'s, so the result is that of
-/// `sort_by(f64::total_cmp)` (values that compare equal are the same bits), however the work is
+/// end of each pass. The order is `cmp`'s, a total order (`f64::total_cmp`, or that and then
+/// the trial's index for ranking), so the result is that of `sort_by(cmp)` however the work is
 /// cut into steps.
 #[derive(Debug, Clone)]
-struct Sorter {
+struct Sorter<T> {
     /// The values: sorted runs of `width` (the last may be shorter) once the chunks are done.
-    a: Vec<f64>,
+    a: Vec<T>,
     /// The merge's output buffer.
-    b: Vec<f64>,
+    b: Vec<T>,
+    cmp: fn(&T, &T) -> std::cmp::Ordering,
     chunk: usize,
     budget: usize,
     /// Chunks sorted so far.
@@ -733,11 +738,17 @@ struct Sorter {
     k: usize,
 }
 
-impl Sorter {
-    fn new(values: Vec<f64>, chunk: usize, budget: usize) -> Self {
+impl<T: Copy> Sorter<T> {
+    fn new(
+        values: Vec<T>,
+        chunk: usize,
+        budget: usize,
+        cmp: fn(&T, &T) -> std::cmp::Ordering,
+    ) -> Self {
         Self {
             a: values,
             b: Vec::new(),
+            cmp,
             chunk: chunk.max(1),
             budget: budget.max(1),
             chunks: 0,
@@ -754,7 +765,7 @@ impl Sorter {
     }
 
     /// The sorted values; only once [`Sorter::is_done`].
-    fn into_sorted(self) -> Vec<f64> {
+    fn into_sorted(self) -> Vec<T> {
         self.a
     }
 
@@ -766,13 +777,13 @@ impl Sorter {
             if start < n {
                 let end = (start + self.chunk).min(n);
                 if let Some(part) = self.a.get_mut(start..end) {
-                    part.sort_by(f64::total_cmp);
+                    part.sort_by(self.cmp);
                 }
                 self.chunks += 1;
             }
             if self.chunks * self.chunk >= n {
                 self.width = self.chunk;
-                self.b = vec![0.0; n];
+                self.b = self.a.clone();
                 self.start_pair(0);
             }
             return;
@@ -784,7 +795,7 @@ impl Sorter {
             if self.k < hi {
                 let left = match (self.a.get(self.i), self.a.get(self.j)) {
                     (Some(l), Some(r)) if self.i < mid && self.j < hi => {
-                        l.total_cmp(r) != std::cmp::Ordering::Greater
+                        (self.cmp)(l, r) != std::cmp::Ordering::Greater
                     }
                     _ => self.i < mid,
                 };
@@ -836,6 +847,8 @@ impl Summing {
             correlations: Vec::new(),
             stop,
             sorting: None,
+            ranking: None,
+            ranks: Vec::new(),
             chunk: SORT_CHUNK,
             budget: MERGE_BUDGET,
         }
@@ -854,7 +867,8 @@ impl Summing {
                         .filter_map(|b| b.outputs.get(o))
                         .map(Vec::len)
                         .sum();
-                    let sorter = Sorter::new(finite(blocks, o), self.chunk, self.budget);
+                    let sorter =
+                        Sorter::new(finite(blocks, o), self.chunk, self.budget, f64::total_cmp);
                     self.sorting = Some((sorter, total));
                 }
                 Some((mut sorter, total)) if !sorter.is_done() => {
@@ -885,22 +899,64 @@ impl Summing {
                 },
             });
             self.columns.push(values);
+        } else if let Some(k) = self.next_unranked(c) {
+            // A correlated input is ranked once, however many correlations it is in: its values
+            // are paired with their trials, sorted a piece at a time, and given average ranks.
+            match self.ranking.take() {
+                None => {
+                    let pairs: Vec<(f64, usize)> = self
+                        .columns
+                        .get(k)
+                        .map(|col| col.iter().copied().zip(0..).collect())
+                        .unwrap_or_default();
+                    let sorter = Sorter::new(pairs, self.chunk, self.budget, correlate::pair_order);
+                    self.ranking = Some((sorter, k));
+                }
+                Some((mut sorter, at)) if !sorter.is_done() => {
+                    sorter.step();
+                    self.ranking = Some((sorter, at));
+                }
+                Some((sorter, at)) => {
+                    if let Some(slot) = self.ranks.get_mut(at) {
+                        *slot = Some(correlate::assign_ranks(&sorter.into_sorted()));
+                    }
+                    // Only its ranks are needed from here on.
+                    if let Some(col) = self.columns.get_mut(at) {
+                        *col = Vec::new();
+                    }
+                }
+            }
         } else if let Some(want) = c.correlations.get(self.correlations.len()) {
             let index = |n: &str| c.inputs.iter().position(|i| i.name == n);
+            let ranked = |k: usize| self.ranks.get(k)?.as_deref();
+            let achieved = index(want.a.as_str())
+                .zip(index(want.b.as_str()))
+                .and_then(|(a, b)| correlate::correlation_of_ranks(ranked(a)?, ranked(b)?));
             self.correlations.push(CorrelationResult {
                 a: want.a.clone(),
                 b: want.b.clone(),
                 target: want.rank,
-                achieved: index(want.a.as_str())
-                    .zip(index(want.b.as_str()))
-                    .and_then(|(a, b)| {
-                        rank_correlation(self.columns.get(a)?, self.columns.get(b)?)
-                    }),
+                achieved,
             });
         }
         self.outputs.len() >= c.outputs.len()
             && self.inputs.len() >= c.inputs.len()
             && self.correlations.len() >= c.correlations.len()
+    }
+
+    /// The first input that a correlation names and that has no ranks yet, once every input's
+    /// values are in.
+    fn next_unranked(&mut self, c: &Compiled) -> Option<usize> {
+        if self.inputs.len() < c.inputs.len() {
+            return None;
+        }
+        self.ranks.resize_with(c.inputs.len(), || None);
+        c.inputs.iter().enumerate().position(|(k, input)| {
+            self.ranks.get(k).is_some_and(Option::is_none)
+                && c.correlations
+                    .iter()
+                    .any(|w| w.a == input.name || w.b == input.name)
+        })
     }
 
     /// The results, once every piece is in.
@@ -1719,7 +1775,7 @@ mod tests {
             let mut want = values.clone();
             want.sort_by(f64::total_cmp);
             for (chunk, budget) in [(64, 50), (1, 1), (7, 1_000), (100_000, 100_000)] {
-                let mut sorter = Sorter::new(values.clone(), chunk, budget);
+                let mut sorter = Sorter::new(values.clone(), chunk, budget, f64::total_cmp);
                 let mut steps = 0;
                 while !sorter.is_done() {
                     sorter.step();
@@ -1767,5 +1823,90 @@ mod tests {
         assert_eq!(got, whole);
         assert!(whole.outputs[2].invalid > 0 && whole.outputs[2].valid > 0);
         assert_eq!(whole.outputs[1].valid, 0);
+    }
+
+    /// Ranks made by sorting (value, trial) pairs in small pieces, with many ties, are those
+    /// `rank_correlation` makes whole: the same correlation to the last bit.
+    #[test]
+    fn ranks_made_in_pieces_give_rank_correlation_bit_for_bit() {
+        let mut seed = 99_u64;
+        let mut next = move || {
+            seed = seed
+                .wrapping_mul(6_364_136_223_846_793_005)
+                .wrapping_add(1_442_695_040_888_963_407);
+            (seed >> 11) as f64 / (1_u64 << 53) as f64
+        };
+        for n in [0, 1, 2, 3, 70, 1_003] {
+            // Values to one place of decimals, so that many are tied; both zeros among them.
+            let x: Vec<f64> = (0..n).map(|_| (next() * 30.0).round() / 10.0).collect();
+            let mut y: Vec<f64> = x
+                .iter()
+                .map(|v| (v * 2.0 + next() * 4.0).round() / 10.0)
+                .collect();
+            if n > 5 {
+                y[2] = 0.0;
+                y[3] = -0.0;
+            }
+            let in_pieces = |v: &[f64]| {
+                let pairs: Vec<(f64, usize)> = v.iter().copied().zip(0..).collect();
+                let mut sorter = Sorter::new(pairs, 64, 50, correlate::pair_order);
+                while !sorter.is_done() {
+                    sorter.step();
+                }
+                correlate::assign_ranks(&sorter.into_sorted())
+            };
+            let got = correlate::correlation_of_ranks(&in_pieces(&x), &in_pieces(&y));
+            let want = rank_correlation(&x, &y);
+            assert_eq!(got.map(f64::to_bits), want.map(f64::to_bits), "n {n}");
+            if n >= 70 {
+                assert!(got.is_some(), "n {n}");
+            }
+        }
+    }
+
+    /// Correlations worked out in small pieces (each input ranked once) are those of the usual
+    /// sizes, and `rank_correlation`'s on the same columns.
+    #[test]
+    fn correlations_in_small_pieces_are_the_same_correlations() {
+        let u = || Dist::Uniform { min: 0.0, max: 1.0 };
+        let mc = MonteCarlo {
+            inputs: vec![input("x", u()), input("y", u()), input("z", u())],
+            outputs: vec![output("s", "$x + $y + $z")],
+            correlations: vec![
+                McCorrelation {
+                    a: "x".into(),
+                    b: "y".into(),
+                    rank: 0.4,
+                },
+                McCorrelation {
+                    a: "y".into(),
+                    b: "z".into(),
+                    rank: 0.3,
+                },
+                McCorrelation {
+                    a: "x".into(),
+                    b: "z".into(),
+                    rank: 0.2,
+                },
+            ],
+            sampling: Sampling::Random,
+            stop: None,
+        };
+        let c = compile(&mc, 4).unwrap_or_else(|p| unreachable!("{p:?}"));
+        let blocks: Vec<Block> = jobs(0, 2_500).iter().map(|j| c.block(*j)).collect();
+        let whole = c.summarise(&blocks, &[]);
+        let mut small = Summing::new(&[], None);
+        small.chunk = 100;
+        small.budget = 37;
+        while !small.step(&c, &blocks) {}
+        let mut got = small.finish(&c, &blocks);
+        got.requested_trials = got.trials;
+        assert_eq!(got, whole);
+        let col = |k| column(&blocks, k, true);
+        for (r, (a, b)) in whole.correlations.iter().zip([(0, 1), (1, 2), (0, 2)]) {
+            let want = rank_correlation(&col(a), &col(b));
+            assert!(want.is_some());
+            assert_eq!(r.achieved.map(f64::to_bits), want.map(f64::to_bits));
+        }
     }
 }
