@@ -5,8 +5,8 @@
 //! as typed values rather than JSON, so they restore the model exactly.
 
 use stochcraft_model::{
-    Bounds, Connection, Element, ElementId, ElementKind, Estimate, Experiment, Model, Property,
-    ResourcePool, calendar::Calendar,
+    Bounds, Connection, Element, ElementId, ElementKind, Estimate, Experiment, Model, MonteCarlo,
+    Property, ResourcePool, calendar::Calendar,
 };
 
 use crate::{CommandError, ErrorCode};
@@ -56,6 +56,8 @@ pub enum Op {
     /// Record (or, with `None`, forget) the three-point estimate of an element's time
     /// distribution.
     SetEstimate(ElementId, Option<Estimate>),
+    /// Replace (or, with `None`, remove) the Monte Carlo inputs and outputs.
+    SetMonteCarlo(Option<Box<MonteCarlo>>),
 }
 
 fn not_found(what: &str, id: &ElementId) -> CommandError {
@@ -255,5 +257,8 @@ pub fn apply(model: &mut Model, op: Op) -> Result<Op, CommandError> {
             };
             Op::SetEstimate(id, was)
         }
+        Op::SetMonteCarlo(m) => Op::SetMonteCarlo(
+            std::mem::replace(&mut model.monte_carlo, m.map(|b| *b)).map(Box::new),
+        ),
     })
 }

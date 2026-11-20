@@ -154,6 +154,16 @@ pub const LENGTH_UNIT: &str = "stochcraft:lengthUnit";
 /// The value `off` (`stochcraft:value="off"`) turns off what an inherited scenario sets.
 pub const SEQUENTIAL: &str = "stochcraft:sequential";
 
+/// A Monte Carlo model (decision D15): a `stochcraft:monteCarlo` vendor extension on the
+/// scenario, holding a `stochcraft:monteCarlo` element with an optional `sampling` (`random`,
+/// the default, or `latinHypercube`) and the children `input` (`name`, `unit`: an input's unit;
+/// the inputs themselves are the scenario's `ScenarioParameters/PropertyParameters`), `output`
+/// (`name`, `expression`, optional `unit` and one of `atMost` and `atLeast`), `correlation`
+/// (`a`, `b` and `rank`, a rank correlation strictly between -1 and 1) and `stop` (`relative`
+/// and `max`: more trials until every output's mean is within that share of itself). The file
+/// has no process; the scenario's `replication` is the number of trials. See `crate::mc`.
+pub const MONTE_CARLO: &str = "stochcraft:monteCarlo";
+
 /// A bill of materials: `stochcraft:quantity` on the `ElementParameters` of a sequence flow
 /// into a parallel gateway, the number of entities from it in each one the join sends on.
 pub const QUANTITY: &str = "stochcraft:quantity";

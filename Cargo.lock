@@ -3468,6 +3468,7 @@ dependencies = [
  "stochcraft-blocks",
  "stochcraft-experiment",
  "stochcraft-io",
+ "stochcraft-mc",
  "stochcraft-model",
  "stochcraft-random",
  "stochcraft-stats",
@@ -3492,6 +3493,15 @@ dependencies = [
  "stochcraft-blocks",
  "stochcraft-model",
  "stochcraft-random",
+]
+
+[[package]]
+name = "stochcraft-mc"
+version = "0.2.0"
+dependencies = [
+ "stochcraft-model",
+ "stochcraft-random",
+ "stochcraft-stats",
 ]
 
 [[package]]

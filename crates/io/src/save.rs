@@ -72,6 +72,9 @@ pub fn save_edited(
         model_ids: mine,
     };
     ed.apply(&mut doc.root, scenario, before, after, &resources)?;
+    if before.monte_carlo != after.monte_carlo {
+        ed.save_monte_carlo(&mut doc.root, scenario, after)?;
+    }
     let unit = ed.unit.clone();
     tidy(&mut doc.root, "", &unit);
     let out = xml::write(&doc).into_bytes();
@@ -365,6 +368,12 @@ fn difference_within(
                 outs(got)
             ));
         }
+    }
+    if got.monte_carlo != want.monte_carlo {
+        return Some(format!(
+            "its Monte Carlo inputs and outputs read as {:?}",
+            got.monte_carlo
+        ));
     }
     // A stop is written on the element it watches, so one on no element is not.
     let mut want_x = want.experiment.clone();
@@ -2741,6 +2750,53 @@ impl Editor {
     }
 
     /// The scenario that was opened, created (with its `BPSimData`) if the file had none.
+    /// Writes a Monte Carlo model's inputs (the scenario's own properties) and the rest (its
+    /// `stochcraft:monteCarlo` extension) into the scenario, in place of what was there.
+    fn save_monte_carlo(
+        &mut self,
+        root: &mut Element,
+        scenario: Option<&str>,
+        after: &Model,
+    ) -> Result<(), SaveError> {
+        let s = self.ensure_scenario(root, scenario)?;
+        let ns = s.ns.clone().unwrap_or_else(|| NS2.to_owned());
+        let prefix = s.prefix().to_owned();
+        let is_extension = |x: &Element| {
+            x.is_any(&NSS, "VendorExtension")
+                && x.attr("name").as_deref() == Some(crate::bpsim::MONTE_CARLO)
+        };
+        remove_all(s, &is_extension);
+        if s.child(&NSS, "ScenarioParameters").is_none() {
+            let at = s
+                .children
+                .iter()
+                .position(|n| matches!(n, Node::Element(_)))
+                .unwrap_or_else(|| end_of(s));
+            s.children.insert(
+                at,
+                Node::Element(Element::new(
+                    &qname(&prefix, "ScenarioParameters"),
+                    Some(&ns),
+                )),
+            );
+        }
+        if let Some(sp) = s.child_mut(&NSS, "ScenarioParameters") {
+            remove_all(sp, &|x: &Element| x.is_any(&NSS, "PropertyParameters"));
+            if let Some(mc) = &after.monte_carlo {
+                let mut pp = crate::mc::properties_element(mc);
+                rename(&mut pp, &prefix, &ns);
+                insert_ordered(sp, pp, &["Start", "Duration", "Warmup"]);
+            }
+        }
+        if let Some(mc) = &after.monte_carlo {
+            let mut x = crate::mc::extension_element(mc);
+            rename(&mut x, &prefix, &ns);
+            let at = end_of(s);
+            s.children.insert(at, Node::Element(x));
+        }
+        Ok(())
+    }
+
     fn ensure_scenario<'a>(
         &mut self,
         root: &'a mut Element,

@@ -2293,6 +2293,11 @@ pub struct ModelDoc {
     pub calendars: Vec<CalendarDoc>,
     #[serde(default = "default_experiment")]
     pub experiment: ExperimentDoc,
+    /// A Monte Carlo model's inputs, outputs and sampling (a model with no elements is then a
+    /// Monte Carlo model; its trials are the experiment's `replications`); left out for a
+    /// process model.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub monte_carlo: Option<crate::mc::MonteCarloDoc>,
 }
 
 impl From<&Model> for ModelDoc {
@@ -2330,6 +2335,7 @@ impl From<&Model> for ModelDoc {
             resources: m.resources.iter().map(Into::into).collect(),
             calendars: m.calendars.iter().map(Into::into).collect(),
             experiment: (&m.experiment).into(),
+            monte_carlo: m.monte_carlo.as_ref().map(Into::into),
         }
     }
 }
@@ -2385,6 +2391,7 @@ impl From<ModelDoc> for Model {
             resources: m.resources.into_iter().map(Into::into).collect(),
             calendars: m.calendars.into_iter().map(Into::into).collect(),
             experiment: m.experiment.into(),
+            monte_carlo: m.monte_carlo.map(Into::into),
         }
     }
 }

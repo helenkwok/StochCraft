@@ -843,7 +843,11 @@ pub fn write_new(model: &Model) -> Vec<u8> {
                 .with_attr("targetRef", c.to.as_str()),
         );
     }
-    defs.push(process);
+    // A Monte Carlo model is a file with no process (D15), and so no diagram.
+    let monte_carlo = model.is_monte_carlo();
+    if !monte_carlo {
+        defs.push(process);
+    }
 
     // The diagram.
     let placed = model.placed();
@@ -877,11 +881,13 @@ pub fn write_new(model: &Model) -> Vec<u8> {
                 .with_child(waypoint(to)),
         );
     }
-    defs.push(
-        Element::new("bpmndi:BPMNDiagram", Some(BPMNDI))
-            .with_attr("id", &ids.fresh("diagram"))
-            .with_child(plane),
-    );
+    if !monte_carlo {
+        defs.push(
+            Element::new("bpmndi:BPMNDiagram", Some(BPMNDI))
+                .with_attr("id", &ids.fresh("diagram"))
+                .with_child(plane),
+        );
+    }
 
     // The simulation data, in BPSim schema order.
     let x = &model.experiment;
@@ -906,6 +912,11 @@ pub fn write_new(model: &Model) -> Vec<u8> {
             "Warmup",
             s("FloatingParameter").with_attr("value", &num(x.warmup)),
         ));
+    }
+    // A Monte Carlo model's inputs: the scenario's own properties, after its times (schema
+    // order).
+    if let Some(mc) = &model.monte_carlo {
+        sp.push(crate::mc::properties_element(mc));
     }
     // After the other parameters, as a vendor extension is.
     if let Some(u) = length_unit_element(x.length_unit) {
@@ -1194,6 +1205,10 @@ pub fn write_new(model: &Model) -> Vec<u8> {
     }
     for c in &model.calendars {
         scenario.push(calendar_element(c));
+    }
+    // The rest of a Monte Carlo model, last, where BPSim puts a scenario's vendor extensions.
+    if let Some(mc) = &model.monte_carlo {
+        scenario.push(crate::mc::extension_element(mc));
     }
     let relationship = b("relationship")
         .with_attr("type", "BPSimData")

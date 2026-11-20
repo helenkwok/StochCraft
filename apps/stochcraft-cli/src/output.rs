@@ -866,6 +866,214 @@ pub fn validation(file: &Path, opened: &Value, errors: usize) -> String {
     out
 }
 
+/// A percentile of a Monte Carlo output's results (`percentiles` keyed by `5`, `50`…).
+fn percentile(o: &Value, p: &str) -> String {
+    f(&o["percentiles"][p])
+}
+
+/// A Monte Carlo output's target and the share of trials meeting it, with its interval, in words.
+fn target_line(o: &Value) -> Option<String> {
+    let t = o.get("target")?;
+    let (word, x) = if let Some(x) = t.get("at_most") {
+        ("at most", x)
+    } else {
+        ("at least", t.get("at_least")?)
+    };
+    let pct = |v: &Value| v.as_f64().map_or_else(|| "-".into(), |p| number(p * 100.0));
+    Some(format!(
+        "{} is {word} {} {}in {}% of trials (95% interval {}% to {}%)",
+        s(&o["name"]),
+        f(x),
+        if s(&o["unit"]).is_empty() {
+            String::new()
+        } else {
+            format!("{} ", s(&o["unit"]))
+        },
+        pct(&t["probability"]),
+        pct(&t["interval"][0]),
+        pct(&t["interval"][1]),
+    ))
+}
+
+/// A Monte Carlo run's results as a table: a row per output with its mean, half-width, standard
+/// deviation and percentiles, then each target in words, the correlations achieved and the run
+/// record.
+pub fn mc_table(name: &str, r: &Value) -> String {
+    let mut out = String::new();
+    let rec = &r["record"];
+    let title = if name.is_empty() {
+        "(unnamed model)"
+    } else {
+        name
+    };
+    let _ = write!(out, "{title}");
+    if let Some(file) = rec["file"].as_str() {
+        let _ = write!(out, "  {file}");
+        if rec["unsaved_changes"] == true {
+            let _ = write!(out, " (with unsaved changes)");
+        }
+    }
+    out.push('\n');
+    let sampling = match s(&rec["sampling"]) {
+        "latin_hypercube" => "Latin hypercube sampling",
+        _ => "random sampling",
+    };
+    let _ = writeln!(
+        out,
+        "Monte Carlo: {} trials, seed {}, {sampling}",
+        r["trials"], rec["seed"]
+    );
+    if let (Some(run), Some(asked)) = (r["trials"].as_u64(), rec["trials_requested"].as_u64())
+        && r.get("stop").is_none()
+        && run != asked
+    {
+        let _ = writeln!(
+            out,
+            "{asked} trials asked for, rounded up to whole batches of 1000"
+        );
+    }
+    let _ = writeln!(out, "intervals: {}", s(&rec["interval"]));
+    let _ = writeln!(
+        out,
+        "StochCraft {}, model {}",
+        s(&rec["stochcraft"]),
+        s(&rec["model_digest"])
+    );
+    out.push('\n');
+    let mut rows: Vec<Vec<String>> = vec![
+        [
+            "output",
+            "unit",
+            "mean",
+            "± half-width",
+            "std dev",
+            "P5",
+            "P50",
+            "P95",
+            "min",
+            "max",
+        ]
+        .iter()
+        .map(|h| (*h).to_owned())
+        .collect(),
+    ];
+    for o in r["outputs"].as_array().into_iter().flatten() {
+        rows.push(vec![
+            s(&o["name"]).to_owned(),
+            s(&o["unit"]).to_owned(),
+            f(&o["mean"]),
+            f(&o["half_width"]),
+            f(&o["std_dev"]),
+            percentile(o, "5"),
+            percentile(o, "50"),
+            percentile(o, "95"),
+            f(&o["min"]),
+            f(&o["max"]),
+        ]);
+    }
+    aligned(&rows, &[true, true], &mut out);
+    for o in r["outputs"].as_array().into_iter().flatten() {
+        if let Some(line) = target_line(o) {
+            let _ = writeln!(out, "{line}");
+        }
+        if o["invalid"].as_u64().is_some_and(|n| n > 0) {
+            let _ = writeln!(
+                out,
+                "{}: {} trials gave no number (a division by zero, say) and are left out",
+                s(&o["name"]),
+                o["invalid"]
+            );
+        }
+    }
+    for c in r["correlations"].as_array().into_iter().flatten() {
+        let _ = writeln!(
+            out,
+            "rank correlation of {} and {}: {} (asked for {})",
+            s(&c["a"]),
+            s(&c["b"]),
+            f(&c["achieved"]),
+            f(&c["target"])
+        );
+    }
+    if let Some(stop) = r.get("stop") {
+        let why = match s(&stop["reason"]) {
+            "target_met" => "every output's mean is within the share asked for".to_owned(),
+            "max_reached" => format!("it reached the most trials, {}", stop["max"]),
+            other => other.replace('_', " "),
+        };
+        let _ = writeln!(
+            out,
+            "sequential: stopped after {} trials because {why} (looks at {})",
+            r["trials"],
+            stop["looks"]
+                .as_array()
+                .map(|l| l
+                    .iter()
+                    .map(Value::to_string)
+                    .collect::<Vec<_>>()
+                    .join(", "))
+                .unwrap_or_default()
+        );
+    }
+    let notes: Vec<&Value> = r["warnings"]
+        .as_array()
+        .into_iter()
+        .flatten()
+        .chain(rec["file_notes"].as_array().into_iter().flatten())
+        .filter(|n| n["severity"] != "info")
+        .collect();
+    if !notes.is_empty() {
+        out.push('\n');
+        for n in notes {
+            let _ = writeln!(out, "{}", s(&n["message"]));
+        }
+    }
+    out
+}
+
+/// A Monte Carlo run's results as CSV: a row per output.
+pub fn mc_csv(r: &Value) -> String {
+    let mut out = String::from(
+        "output,unit,trials,valid,mean,half_width,std_dev,min,p5,p10,p50,p90,p95,max,\
+         target,target_value,probability,probability_low,probability_high\n",
+    );
+    let num = |v: &Value| v.as_f64().map(|x| x.to_string()).unwrap_or_default();
+    for o in r["outputs"].as_array().into_iter().flatten() {
+        let t = &o["target"];
+        let (kind, value) = if let Some(x) = t["at_most"].as_f64() {
+            ("at_most", x.to_string())
+        } else if let Some(x) = t["at_least"].as_f64() {
+            ("at_least", x.to_string())
+        } else {
+            ("", String::new())
+        };
+        let row = [
+            csv_field(s(&o["name"])),
+            csv_field(s(&o["unit"])),
+            r["trials"].to_string(),
+            o["valid"].to_string(),
+            num(&o["mean"]),
+            num(&o["half_width"]),
+            num(&o["std_dev"]),
+            num(&o["min"]),
+            num(&o["percentiles"]["5"]),
+            num(&o["percentiles"]["10"]),
+            num(&o["percentiles"]["50"]),
+            num(&o["percentiles"]["90"]),
+            num(&o["percentiles"]["95"]),
+            num(&o["max"]),
+            kind.to_owned(),
+            value,
+            num(&t["probability"]),
+            num(&t["interval"][0]),
+            num(&t["interval"][1]),
+        ];
+        out.push_str(&row.join(","));
+        out.push('\n');
+    }
+    out
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

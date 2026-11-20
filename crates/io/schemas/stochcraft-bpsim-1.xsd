@@ -280,6 +280,27 @@
     <bpsim:VendorExtension name="stochcraft:estimate" xmlns:stochcraft="…">
       <stochcraft:estimate family="pert" min="10" mode="20" max="60" source="Delphi, round 2"/>
     </bpsim:VendorExtension>
+
+  stochcraft:monteCarlo, on a Scenario (after its ElementParameters and Calendars): the scenario
+  is a Monte Carlo model, a calculation with no process, and the file needs none. Its inputs are
+  the scenario's own properties (ScenarioParameters/PropertyParameters/Property, each a BPSim
+  distribution or a number); each trial draws every input once and evaluates every output in
+  order, and the scenario's replication is the number of trials. sampling is random (the
+  default) or latinHypercube. input gives an input's unit; output an expression (BPSim's XPath
+  subset, reading inputs and earlier outputs as $name or getProperty('name')), an optional unit
+  and an optional target, atMost or atLeast, whose probability is reported; correlation a rank
+  correlation, strictly between -1 and 1, between two inputs (induced by Iman and Conover's
+  method); stop a sequential run, more trials until every output's mean has a 95% half-width
+  within relative of itself, or max trials.
+
+    <bpsim:VendorExtension name="stochcraft:monteCarlo" xmlns:stochcraft="…">
+      <stochcraft:monteCarlo sampling="latinHypercube">
+        <stochcraft:input name="labour" unit="h"/>
+        <stochcraft:output name="cost" expression="$labour * $rate" unit="USD" atMost="7000"/>
+        <stochcraft:correlation a="labour" b="rate" rank="0.5"/>
+        <stochcraft:stop relative="0.01" max="1000000"/>
+      </stochcraft:monteCarlo>
+    </bpsim:VendorExtension>
 -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
     xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1"
@@ -523,6 +544,48 @@
       <xs:attribute name="max" type="xs:double"/>
       <xs:attribute name="p95" type="xs:double"/>
       <xs:attribute name="source" type="xs:string"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="monteCarlo">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="input" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:attribute name="name" type="xs:string" use="required"/>
+            <xs:attribute name="unit" type="xs:string"/>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="output" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:attribute name="name" type="xs:string" use="required"/>
+            <xs:attribute name="expression" type="xs:string" use="required"/>
+            <xs:attribute name="unit" type="xs:string"/>
+            <xs:attribute name="atMost" type="xs:double"/>
+            <xs:attribute name="atLeast" type="xs:double"/>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="correlation" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:attribute name="a" type="xs:string" use="required"/>
+            <xs:attribute name="b" type="xs:string" use="required"/>
+            <xs:attribute name="rank" type="xs:double" use="required"/>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="stop" minOccurs="0">
+          <xs:complexType>
+            <xs:attribute name="relative" type="xs:double" use="required"/>
+            <xs:attribute name="max" type="xs:positiveInteger" use="required"/>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+      <xs:attribute name="sampling" default="random">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="random"/>
+            <xs:enumeration value="latinHypercube"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
     </xs:complexType>
   </xs:element>
 </xs:schema>
