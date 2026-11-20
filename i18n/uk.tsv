@@ -1237,7 +1237,7 @@ unit	yr	р.
 	Inputs as a table	Вхідні величини як таблиця
 	Latin hypercube	Латинський гіперкуб
 	Latin hypercube sampling	Вибірка латинського гіперкуба
-	Latin hypercube sampling spreads each input's draws evenly over its range, so the results settle with fewer trials. With it, or with correlated inputs, trials run in whole batches of 1,000.	Вибірка латинського гіперкуба рівномірно розподіляє значення кожної вхідної величини по її діапазону, тож результати усталюються за меншої кількості випробувань. З нею або з корельованими вхідними величинами випробування виконуються цілими партіями по 1000.
+	Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000.	Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000.
 	Monte Carlo model	Модель Монте-Карло
 	New Monte Carlo Model	Нова модель Монте-Карло
 	New Monte Carlo model	Нова модель Монте-Карло
@@ -1246,6 +1246,10 @@ unit	yr	р.
 	New output	Нова вихідна величина
 	No inputs yet: add one below, or paste a table of them.	Вхідних величин ще немає: додайте одну нижче або вставте їх таблицю.
 	No interval: too few batches of trials for one.	Інтервалу немає: замало партій випробувань для нього.
+	No interval: every batch gave the same share, so their spread gives none.	No interval: every batch gave the same share, so their spread gives none.
+	There is already an input or an output called {name}.	There is already an input or an output called {name}.
+	{name}: the ± is across {n} of the {of} batches, the rest had no trial with a number.	{name}: the ± is across {n} of the {of} batches, the rest had no trial with a number.
+	{name}: the ± is across {n} of the {of} trials, the rest gave no number.	{name}: the ± is across {n} of the {of} trials, the rest gave no number.
 	No outputs yet: add one below.	Вихідних величин ще немає: додайте одну нижче.
 	None yet	Поки немає
 	One input per line, as name, distribution, parameters and unit, copied from a spreadsheet or written as CSV: for example labour,triangular,min=80;mode=100;max=150,h.	Одна вхідна величина на рядок: назва, розподіл, параметри й одиниця, скопійовані з електронної таблиці або записані як CSV, наприклад labour,triangular,min=80;mode=100;max=150,h.

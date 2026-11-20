@@ -1237,7 +1237,7 @@ unit	yr	r.
 	Inputs as a table	Vstupy ako tabuľka
 	Latin hypercube	Latinská hyperkocka
 	Latin hypercube sampling	Vzorkovanie latinskou hyperkockou
-	Latin hypercube sampling spreads each input's draws evenly over its range, so the results settle with fewer trials. With it, or with correlated inputs, trials run in whole batches of 1,000.	Vzorkovanie latinskou hyperkockou rozloží žrebovania každého vstupu rovnomerne po jeho rozsahu, takže sa výsledky ustália s menším počtom iterácií. S ním alebo s korelovanými vstupmi prebiehajú iterácie v celých dávkach po 1 000.
+	Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000.	Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000.
 	Monte Carlo model	Model Monte Carlo
 	New Monte Carlo Model	Nový model Monte Carlo
 	New Monte Carlo model	Nový model Monte Carlo
@@ -1246,6 +1246,10 @@ unit	yr	r.
 	New output	Nový výstup
 	No inputs yet: add one below, or paste a table of them.	Zatiaľ žiadne vstupy: pridajte jeden nižšie alebo vložte ich tabuľku.
 	No interval: too few batches of trials for one.	Žiadny interval: na jeho určenie je príliš málo dávok iterácií.
+	No interval: every batch gave the same share, so their spread gives none.	No interval: every batch gave the same share, so their spread gives none.
+	There is already an input or an output called {name}.	There is already an input or an output called {name}.
+	{name}: the ± is across {n} of the {of} batches, the rest had no trial with a number.	{name}: the ± is across {n} of the {of} batches, the rest had no trial with a number.
+	{name}: the ± is across {n} of the {of} trials, the rest gave no number.	{name}: the ± is across {n} of the {of} trials, the rest gave no number.
 	No outputs yet: add one below.	Zatiaľ žiadne výstupy: pridajte jeden nižšie.
 	None yet	Zatiaľ žiadne
 	One input per line, as name, distribution, parameters and unit, copied from a spreadsheet or written as CSV: for example labour,triangular,min=80;mode=100;max=150,h.	Jeden vstup na riadok, ako názov, rozdelenie, parametre a jednotka, skopírovaný z tabuľkového procesora alebo zapísaný ako CSV: napríklad labour,triangular,min=80;mode=100;max=150,h.

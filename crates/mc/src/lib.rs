@@ -345,6 +345,18 @@ fn check_all(mc: &MonteCarlo) -> (Vec<Problem>, Checked) {
             "bad_stop",
             "A sequential stop needs a share of the mean above 0 and at least one trial.",
         ));
+    } else if let Some(s) = mc.stop
+        && (mc.sampling == Sampling::LatinHypercube || k >= 2)
+        && u64::from(s.max) < BATCH
+    {
+        out.push(Problem::error(
+            None,
+            "bad_stop",
+            format!(
+                "Latin hypercube sampling and correlated inputs sample in whole batches, so the most trials of a sequential stop must be at least one batch (1,000 trials); {} is too few. Raise the most, or use random sampling with no correlations.",
+                s.max
+            ),
+        ));
     }
     out.sort_by_key(|p| !p.error);
     (
@@ -583,6 +595,10 @@ impl Compiled {
             if let Some(results) = stepper.take_results() {
                 return Ok(results);
             }
+            if stepper.is_summarising() {
+                stepper.summarise_step(self);
+                continue;
+            }
             let wanted = stepper.wanted().to_vec();
             let blocks = make(&wanted)?;
             stepper.deliver(self, blocks);
@@ -617,6 +633,7 @@ impl Compiled {
             wanted: jobs(0, asked),
             next: 0,
             looks: vec![asked],
+            summing: None,
             results: None,
             done: false,
         }
@@ -651,8 +668,36 @@ impl Compiled {
         }
     }
 
-    /// The results of `blocks` (in index order).
+    /// The results of `blocks` (in index order), every piece worked out without a pause, as
+    /// [`Stepper::summarise_step`] does one at a time.
     pub fn summarise(&self, blocks: &[Block], percentiles: &[f64]) -> McResults {
+        let mut summing = Summing::new(percentiles, None);
+        while !summing.step(self, blocks) {}
+        let mut results = summing.finish(self, blocks);
+        results.requested_trials = results.trials;
+        results
+    }
+}
+
+/// The results of a run, worked out a piece at a time: each [`Summing::step`] summarises one
+/// output (a copy of its values, sorted), or one input, or one correlation, so that a window can
+/// draw between the pieces when a run has millions of trials. [`Compiled::summarise`] does the
+/// same pieces without stopping, so the results are the same.
+#[derive(Debug, Clone)]
+struct Summing {
+    /// The percentiles to report, ascending.
+    ps: Vec<f64>,
+    outputs: Vec<OutputResult>,
+    /// Each input's values, in trial order, for the correlations.
+    columns: Vec<Vec<f64>>,
+    inputs: Vec<InputResult>,
+    correlations: Vec<CorrelationResult>,
+    /// How a sequential run went, for the results.
+    stop: Option<StopReport>,
+}
+
+impl Summing {
+    fn new(percentiles: &[f64], stop: Option<StopReport>) -> Self {
         let mut ps: Vec<f64> = PERCENTILES
             .iter()
             .chain(percentiles)
@@ -661,16 +706,71 @@ impl Compiled {
             .collect();
         ps.sort_by(f64::total_cmp);
         ps.dedup();
+        Self {
+            ps,
+            outputs: Vec::new(),
+            columns: Vec::new(),
+            inputs: Vec::new(),
+            correlations: Vec::new(),
+            stop,
+        }
+    }
+
+    /// Works out the next output, input or correlation. True once there is none left.
+    fn step(&mut self, c: &Compiled, blocks: &[Block]) -> bool {
+        if let Some((out, _)) = c.outputs.get(self.outputs.len()) {
+            let o = self.outputs.len();
+            let mut r = describe_output(out, &column(blocks, o, false), &self.ps);
+            if c.batched() {
+                by_batches(&mut r, out, blocks, o);
+            }
+            self.outputs.push(r);
+        } else if let Some(input) = c.inputs.get(self.inputs.len()) {
+            let values = column(blocks, self.inputs.len(), true);
+            let s = Summary::of(&values);
+            self.inputs.push(InputResult {
+                name: input.name.clone(),
+                unit: input.unit.clone(),
+                mean: s.map(|s| s.mean),
+                std_dev: s.map(|s| s.std_dev),
+                min: values.iter().copied().reduce(f64::min),
+                max: values.iter().copied().reduce(f64::max),
+                expected_mean: match &input.dist {
+                    Dist::Constant(v) => Some(*v),
+                    d => d.mean(),
+                },
+            });
+            self.columns.push(values);
+        } else if let Some(want) = c.correlations.get(self.correlations.len()) {
+            let index = |n: &str| c.inputs.iter().position(|i| i.name == n);
+            self.correlations.push(CorrelationResult {
+                a: want.a.clone(),
+                b: want.b.clone(),
+                target: want.rank,
+                achieved: index(want.a.as_str())
+                    .zip(index(want.b.as_str()))
+                    .and_then(|(a, b)| {
+                        rank_correlation(self.columns.get(a)?, self.columns.get(b)?)
+                    }),
+            });
+        }
+        self.outputs.len() >= c.outputs.len()
+            && self.inputs.len() >= c.inputs.len()
+            && self.correlations.len() >= c.correlations.len()
+    }
+
+    /// The results, once every piece is in.
+    fn finish(self, c: &Compiled, blocks: &[Block]) -> McResults {
         let trials: u64 = blocks
             .iter()
             .map(|b| {
                 b.outputs
                     .first()
                     .or(b.inputs.first())
-                    .map_or(0, |c| c.len() as u64)
+                    .map_or(0, |col| col.len() as u64)
             })
             .sum();
-        let basis = if self.batched() {
+        let basis = if c.batched() {
             IntervalBasis::Batches {
                 batches: blocks.len() as u64,
                 size: BATCH,
@@ -678,64 +778,16 @@ impl Compiled {
         } else {
             IntervalBasis::Trials
         };
-        let outputs = self
-            .outputs
-            .iter()
-            .enumerate()
-            .map(|(o, (out, _))| {
-                let mut r = describe_output(out, &column(blocks, o, false), &ps);
-                if self.batched() {
-                    by_batches(&mut r, out, blocks, o);
-                }
-                r
-            })
-            .collect();
-        let inputs: Vec<Vec<f64>> = (0..self.inputs.len())
-            .map(|i| column(blocks, i, true))
-            .collect();
-        let input_results = self
-            .inputs
-            .iter()
-            .zip(&inputs)
-            .map(|(input, values)| {
-                let s = Summary::of(values);
-                InputResult {
-                    name: input.name.clone(),
-                    unit: input.unit.clone(),
-                    mean: s.map(|s| s.mean),
-                    std_dev: s.map(|s| s.std_dev),
-                    min: values.iter().copied().reduce(f64::min),
-                    max: values.iter().copied().reduce(f64::max),
-                    expected_mean: match &input.dist {
-                        Dist::Constant(v) => Some(*v),
-                        d => d.mean(),
-                    },
-                }
-            })
-            .collect();
-        let index = |n: &str| self.inputs.iter().position(|i| i.name == n);
-        let correlations = self
-            .correlations
-            .iter()
-            .map(|c| CorrelationResult {
-                a: c.a.clone(),
-                b: c.b.clone(),
-                target: c.rank,
-                achieved: index(c.a.as_str())
-                    .zip(index(c.b.as_str()))
-                    .and_then(|(a, b)| rank_correlation(inputs.get(a)?, inputs.get(b)?)),
-            })
-            .collect();
         McResults {
             trials,
             requested_trials: trials,
             interval: basis,
-            seed: self.seed,
-            sampling: self.sampling,
-            inputs: input_results,
-            outputs,
-            correlations,
-            stop: None,
+            seed: c.seed,
+            sampling: c.sampling,
+            inputs: self.inputs,
+            outputs: self.outputs,
+            correlations: self.correlations,
+            stop: self.stop,
         }
     }
 }
@@ -787,7 +839,9 @@ fn t_half_width(xs: &[f64]) -> Option<f64> {
 }
 
 /// Replaces an output's intervals by those across batches: the mean's from the batch means, the
-/// target's from the batch proportions (clamped to [0, 1]); none with fewer than two batches.
+/// target's from the batch proportions (clamped to [0, 1]); none with fewer than two batches,
+/// and none for the target when every batch gave the same proportion (their spread says
+/// nothing about how far the chance may be from it, and a width of 0 would claim it is exact).
 fn by_batches(r: &mut OutputResult, out: &McOutput, blocks: &[Block], o: usize) {
     let each = per_block(blocks, o);
     let means: Vec<f64> = each
@@ -796,6 +850,7 @@ fn by_batches(r: &mut OutputResult, out: &McOutput, blocks: &[Block], o: usize) 
         .map(|v| v.iter().sum::<f64>() / v.len() as f64)
         .collect();
     r.half_width = t_half_width(&means);
+    r.interval_count = means.len() as u64;
     if let (Some(t), Some(result)) = (out.target, r.target.as_mut()) {
         let shares: Vec<f64> = each
             .iter()
@@ -804,7 +859,7 @@ fn by_batches(r: &mut OutputResult, out: &McOutput, blocks: &[Block], o: usize) 
             .collect();
         result.interval = result
             .probability
-            .zip(t_half_width(&shares))
+            .zip(t_half_width(&shares).filter(|h| *h > 0.0))
             .map(|(p, h)| ((p - h).max(0.0), (p + h).min(1.0)));
     }
 }
@@ -878,6 +933,9 @@ pub struct OutputResult {
     /// Half-width of the 95% Student-t interval of the mean, across trials or across batches
     /// ([`IntervalBasis`]); `None` without two of them.
     pub half_width: Option<f64>,
+    /// How many values the intervals are across: this output's valid trials, or the batches
+    /// that have a valid trial of it (so the run's count less those left out).
+    pub interval_count: u64,
     pub std_dev: Option<f64>,
     pub min: Option<f64>,
     pub max: Option<f64>,
@@ -951,6 +1009,8 @@ pub struct Stepper {
     next: usize,
     /// The trials at each look so far.
     looks: Vec<u64>,
+    /// The results being worked out, a piece at a time, once the run has all its batches.
+    summing: Option<Summing>,
     results: Option<McResults>,
     /// The run has its results (taken or not).
     done: bool,
@@ -977,6 +1037,30 @@ impl Stepper {
         self.done
     }
 
+    /// Every batch is in and the results are being worked out, a piece at a time
+    /// ([`Stepper::summarise_step`]), so that a window can draw between the pieces.
+    pub fn is_summarising(&self) -> bool {
+        self.summing.is_some()
+    }
+
+    /// Works out the next piece of the results (an output's, an input's or a correlation's):
+    /// the same pieces, in the same order, as [`Compiled::summarise`]. Once the last is in,
+    /// [`Stepper::is_done`] is true. Nothing to do unless [`Stepper::is_summarising`].
+    pub fn summarise_step(&mut self, compiled: &Compiled) {
+        let Some(summing) = self.summing.as_mut() else {
+            return;
+        };
+        if !summing.step(compiled, &self.blocks) {
+            return;
+        }
+        if let Some(summing) = self.summing.take() {
+            let mut results = summing.finish(compiled, &self.blocks);
+            results.requested_trials = self.options.trials;
+            self.results = Some(results);
+            self.done = true;
+        }
+    }
+
     /// The results, once the run has them (the first call takes them).
     pub fn take_results(&mut self) -> Option<McResults> {
         self.results.take()
@@ -995,12 +1079,13 @@ impl Stepper {
                 self.blocks.push(b);
             }
         }
-        if self.next >= self.wanted.len() && !self.done {
+        if self.next >= self.wanted.len() && !self.done && self.summing.is_none() {
             self.look(compiled);
         }
     }
 
-    /// Every batch asked for is in: the results, or more batches for a sequential run.
+    /// Every batch asked for is in: more batches for a sequential run, or else the results begin
+    /// to be worked out.
     fn look(&mut self, compiled: &Compiled) {
         let step = match (self.options.stop, self.max) {
             (Some(stop), Some(max)) => Some((
@@ -1010,32 +1095,26 @@ impl Stepper {
             )),
             _ => None,
         };
-        let mut results = match step {
-            Some((_, _, Step::Continue(next))) if next > self.asked => {
-                self.wanted = jobs(self.asked, next);
-                self.next = 0;
-                self.asked = next;
-                self.looks.push(next);
-                return;
-            }
-            _ => compiled.summarise(&self.blocks, &self.options.percentiles),
-        };
-        results.requested_trials = self.options.trials;
-        if let Some((stop, max, step)) = step {
-            let reason = match step {
+        if let Some((_, _, Step::Continue(next))) = step
+            && next > self.asked
+        {
+            self.wanted = jobs(self.asked, next);
+            self.next = 0;
+            self.asked = next;
+            self.looks.push(next);
+            return;
+        }
+        let stop = step.map(|(stop, max, step)| StopReport {
+            relative: stop.relative,
+            max,
+            reason: match step {
                 Step::Stop(reason) => reason,
                 // Not expected: no more trials to go on to.
                 Step::Continue(_) => Reason::MaxReached,
-            };
-            results.stop = Some(StopReport {
-                relative: stop.relative,
-                max,
-                reason,
-                looks: self.looks.clone(),
-            });
-        }
-        self.results = Some(results);
-        self.done = true;
+            },
+            looks: self.looks.clone(),
+        });
+        self.summing = Some(Summing::new(&self.options.percentiles, stop));
     }
 }
 
@@ -1062,6 +1141,7 @@ fn describe_output(out: &McOutput, all: &[f64], ps: &[f64]) -> OutputResult {
         invalid: all.len() as u64 - valid,
         mean: s.map(|s| s.mean),
         half_width: s.map(|s| s.half_width).filter(|h| h.is_finite()),
+        interval_count: valid,
         std_dev: s.map(|s| s.std_dev),
         min: sorted.first().copied(),
         max: sorted.last().copied(),
@@ -1368,15 +1448,105 @@ mod tests {
             let at_once = c.run(&options);
             let mut stepper = c.stepper(&options);
             let mut steps = 0;
+            let mut pieces = 0;
             while !stepper.is_done() && steps < 1_000 {
-                let next: Vec<BlockJob> = stepper.wanted().iter().take(1).copied().collect();
-                let blocks = next.iter().map(|j| c.block(*j)).collect();
-                stepper.deliver(&c, blocks);
-                assert!(stepper.made() <= stepper.asked());
+                if stepper.is_summarising() {
+                    // The results come one output, input or correlation at a time.
+                    assert!(stepper.take_results().is_none());
+                    stepper.summarise_step(&c);
+                    pieces += 1;
+                } else {
+                    let next: Vec<BlockJob> = stepper.wanted().iter().take(1).copied().collect();
+                    let blocks = next.iter().map(|j| c.block(*j)).collect();
+                    stepper.deliver(&c, blocks);
+                    assert!(stepper.made() <= stepper.asked());
+                }
                 steps += 1;
             }
+            // Two inputs and one output.
+            assert_eq!(pieces, 3, "{stop:?}");
             assert_eq!(stepper.take_results(), Some(at_once), "{stop:?}");
             assert!(stepper.is_done());
         }
+    }
+    fn model(sampling: Sampling, stop: Option<McStop>) -> MonteCarlo {
+        MonteCarlo {
+            inputs: vec![input("x", Dist::Uniform { min: 0.0, max: 1.0 })],
+            outputs: vec![output("y", "$x")],
+            correlations: vec![],
+            sampling,
+            stop,
+        }
+    }
+
+    /// Sequential runs of Latin hypercube sampling or correlated inputs are whole batches, so a
+    /// most below one batch is refused, not raised; random sampling can stop after 500.
+    #[test]
+    fn a_most_below_one_batch_is_refused_where_runs_are_whole_batches() {
+        let stop = Some(McStop {
+            relative: 0.01,
+            max: 500,
+        });
+        assert!(codes(&model(Sampling::LatinHypercube, stop)).contains(&"bad_stop"));
+        assert!(compile(&model(Sampling::LatinHypercube, stop), 1).is_err());
+        assert!(!codes(&model(Sampling::Random, stop)).contains(&"bad_stop"));
+        let mut mc = model(Sampling::Random, stop);
+        mc.inputs
+            .push(input("z", Dist::Uniform { min: 0.0, max: 1.0 }));
+        mc.correlations.push(McCorrelation {
+            a: "x".into(),
+            b: "z".into(),
+            rank: 0.5,
+        });
+        assert!(codes(&mc).contains(&"bad_stop"));
+        let stop = Some(McStop {
+            relative: 0.01,
+            max: 1_000,
+        });
+        assert!(!codes(&model(Sampling::LatinHypercube, stop)).contains(&"bad_stop"));
+    }
+
+    /// When every batch meets its target alike, their spread gives no interval (not a width of
+    /// 0), and the interval of the mean still says how many batches it is across.
+    #[test]
+    fn identical_batch_shares_give_no_interval() {
+        let mut mc = model(Sampling::LatinHypercube, None);
+        if let Some(o) = mc.outputs.first_mut() {
+            o.target = Some(McTarget::AtMost(2.0));
+        }
+        let c = compile(&mc, 3).unwrap_or_else(|p| unreachable!("{p:?}"));
+        let r = c.run(&RunOptions {
+            trials: 4_000,
+            stop: None,
+            percentiles: vec![],
+        });
+        let out = &r.outputs[0];
+        let Some(t) = out.target else {
+            unreachable!("the output has a target")
+        };
+        assert_eq!(t.probability, Some(1.0));
+        assert_eq!(t.interval, None);
+        assert_eq!(out.interval_count, 4);
+        assert!(out.half_width.is_some());
+    }
+
+    /// An output's interval counts the values it is across: its valid trials, or the batches
+    /// with one.
+    #[test]
+    fn an_interval_counts_what_it_is_across() {
+        let mc = MonteCarlo {
+            inputs: vec![input("x", Dist::Uniform { min: 0.0, max: 1.0 })],
+            outputs: vec![output("y", "1 / ($x - $x)"), output("z", "$x")],
+            ..MonteCarlo::default()
+        };
+        let c = compile(&mc, 5).unwrap_or_else(|p| unreachable!("{p:?}"));
+        let r = c.run(&RunOptions {
+            trials: 100,
+            stop: None,
+            percentiles: vec![],
+        });
+        assert_eq!(r.outputs[0].valid, 0);
+        assert_eq!(r.outputs[0].interval_count, 0);
+        assert_eq!(r.outputs[1].interval_count, 100);
     }
 }

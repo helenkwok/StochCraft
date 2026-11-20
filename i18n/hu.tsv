@@ -1237,7 +1237,7 @@ unit	yr	év
 	Inputs as a table	Bemenetek táblázatként
 	Latin hypercube	Latin hiperkocka
 	Latin hypercube sampling	Latin hiperkocka-mintavétel
-	Latin hypercube sampling spreads each input's draws evenly over its range, so the results settle with fewer trials. With it, or with correlated inputs, trials run in whole batches of 1,000.	A latin hiperkocka-mintavétel minden bemenet húzásait egyenletesen osztja el a tartományán, így az eredmények kevesebb próbával állapodnak meg. Ezzel vagy korrelált bemenetekkel a próbák 1000-es teljes kötegekben futnak.
+	Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000.	Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000.
 	Monte Carlo model	Monte-Carlo-modell
 	New Monte Carlo Model	Új Monte-Carlo-modell
 	New Monte Carlo model	Új Monte-Carlo-modell
@@ -1246,6 +1246,10 @@ unit	yr	év
 	New output	Új kimenet
 	No inputs yet: add one below, or paste a table of them.	Még nincs bemenet: adjon hozzá egyet lent, vagy illessze be őket táblázatból.
 	No interval: too few batches of trials for one.	Nincs intervallum: túl kevés próbaköteg van hozzá.
+	No interval: every batch gave the same share, so their spread gives none.	No interval: every batch gave the same share, so their spread gives none.
+	There is already an input or an output called {name}.	There is already an input or an output called {name}.
+	{name}: the ± is across {n} of the {of} batches, the rest had no trial with a number.	{name}: the ± is across {n} of the {of} batches, the rest had no trial with a number.
+	{name}: the ± is across {n} of the {of} trials, the rest gave no number.	{name}: the ± is across {n} of the {of} trials, the rest gave no number.
 	No outputs yet: add one below.	Még nincs kimenet: adjon hozzá egyet lent.
 	None yet	Még nincs
 	One input per line, as name, distribution, parameters and unit, copied from a spreadsheet or written as CSV: for example labour,triangular,min=80;mode=100;max=150,h.	Soronként egy bemenet, név, eloszlás, paraméterek és mértékegység formában, táblázatkezelőből másolva vagy CSV-ként írva: például labour,triangular,min=80;mode=100;max=150,h.

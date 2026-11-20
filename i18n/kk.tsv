@@ -1237,7 +1237,7 @@ unit	yr	ж.
 	Inputs as a table	Кіріс шамалар кесте түрінде
 	Latin hypercube	Латын гиперкубы
 	Latin hypercube sampling	Латын гиперкубы бойынша іріктеу
-	Latin hypercube sampling spreads each input's draws evenly over its range, so the results settle with fewer trials. With it, or with correlated inputs, trials run in whole batches of 1,000.	Латын гиперкубы бойынша іріктеу әр кіріс шамадан алынған мәндерді оның ауқымына біркелкі таратады, сондықтан нәтижелер азырақ сынақпен тұрақталады. Онымен немесе корреляцияланған кіріс шамалармен сынақтар 1000-нан тұратын толық топтамалармен жүргізіледі.
+	Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000.	Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000.
 	Monte Carlo model	Монте-Карло моделі
 	New Monte Carlo Model	Жаңа Монте-Карло моделі
 	New Monte Carlo model	Жаңа Монте-Карло моделі
@@ -1246,6 +1246,10 @@ unit	yr	ж.
 	New output	Жаңа шығыс шама
 	No inputs yet: add one below, or paste a table of them.	Әзірге кіріс шама жоқ: төменнен біреуін қосыңыз немесе олардың кестесін қойыңыз.
 	No interval: too few batches of trials for one.	Аралық жоқ: оған сынақ топтамалары тым аз.
+	No interval: every batch gave the same share, so their spread gives none.	No interval: every batch gave the same share, so their spread gives none.
+	There is already an input or an output called {name}.	There is already an input or an output called {name}.
+	{name}: the ± is across {n} of the {of} batches, the rest had no trial with a number.	{name}: the ± is across {n} of the {of} batches, the rest had no trial with a number.
+	{name}: the ± is across {n} of the {of} trials, the rest gave no number.	{name}: the ± is across {n} of the {of} trials, the rest gave no number.
 	No outputs yet: add one below.	Әзірге шығыс шама жоқ: төменнен біреуін қосыңыз.
 	None yet	Әзірге жоқ
 	One input per line, as name, distribution, parameters and unit, copied from a spreadsheet or written as CSV: for example labour,triangular,min=80;mode=100;max=150,h.	Әр жолда бір кіріс шама: аты, үлестірімі, параметрлері және бірлігі, электрондық кестеден көшірілген немесе CSV түрінде жазылған: мысалы, labour,triangular,min=80;mode=100;max=150,h.

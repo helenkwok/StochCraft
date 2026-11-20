@@ -1237,7 +1237,7 @@ unit	yr	god.
 	Inputs as a table	Ulazne veličine kao tabela
 	Latin hypercube	Latinska hiperkocka
 	Latin hypercube sampling	Uzorkovanje latinskom hiperkockom
-	Latin hypercube sampling spreads each input's draws evenly over its range, so the results settle with fewer trials. With it, or with correlated inputs, trials run in whole batches of 1,000.	Uzorkovanje latinskom hiperkockom raspoređuje izvlačenja svake ulazne veličine ravnomerno po njenom opsegu, pa se rezultati ustale uz manje pokušaja. Uz njega ili uz korelisane ulazne veličine pokušaji se izvode u celim serijama od 1.000.
+	Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000.	Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000.
 	Monte Carlo model	Monte Karlo model
 	New Monte Carlo Model	Novi Monte Karlo model
 	New Monte Carlo model	Novi Monte Karlo model
@@ -1246,6 +1246,10 @@ unit	yr	god.
 	New output	Nova izlazna veličina
 	No inputs yet: add one below, or paste a table of them.	Još nema ulaznih veličina: dodajte jednu ispod ili nalepite njihovu tabelu.
 	No interval: too few batches of trials for one.	Nema intervala: premalo serija pokušaja za njega.
+	No interval: every batch gave the same share, so their spread gives none.	No interval: every batch gave the same share, so their spread gives none.
+	There is already an input or an output called {name}.	There is already an input or an output called {name}.
+	{name}: the ± is across {n} of the {of} batches, the rest had no trial with a number.	{name}: the ± is across {n} of the {of} batches, the rest had no trial with a number.
+	{name}: the ± is across {n} of the {of} trials, the rest gave no number.	{name}: the ± is across {n} of the {of} trials, the rest gave no number.
 	No outputs yet: add one below.	Još nema izlaznih veličina: dodajte jednu ispod.
 	None yet	Još nijedna
 	One input per line, as name, distribution, parameters and unit, copied from a spreadsheet or written as CSV: for example labour,triangular,min=80;mode=100;max=150,h.	Jedna ulazna veličina po redu, kao ime, distribucija, parametri i jedinica, kopirana iz tabele ili napisana kao CSV: na primer labour,triangular,min=80;mode=100;max=150,h.

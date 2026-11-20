@@ -350,3 +350,52 @@ fn a_run_made_a_batch_at_a_time_gives_mc_runs_results() {
     );
     assert!(e.mc_start(json!({})).is_err());
 }
+
+/// The record says what the run was made from, which is the model as the run started, not as it
+/// is when the results are collected.
+#[test]
+fn the_run_record_is_of_the_model_the_run_started_on() {
+    let mut e = cost_model();
+    let at_start = ok(&mut e, "mc.run", json!({ "trials": 100 }))["record"]["model_digest"].clone();
+    let job = e.mc_start(json!({ "trials": 100 }));
+    assert!(job.is_ok());
+    let Ok(mut job) = job else { return };
+    ok(
+        &mut e,
+        "mc.output.set",
+        json!({ "name": "extra", "expression": "$cost + 1" }),
+    );
+    let mut steps = 0;
+    while job.step(usize::MAX).ok() == Some(false) && steps < 1_000 {
+        steps += 1;
+    }
+    let results = e.mc_results(&mut job).unwrap_or_default();
+    assert_eq!(results["record"]["model_digest"], at_start);
+    let now = ok(&mut e, "mc.run", json!({ "trials": 100 }))["record"]["model_digest"].clone();
+    assert_ne!(now, at_start, "the edit changed the model");
+}
+
+/// Runs of Latin hypercube sampling and of correlated inputs are whole batches, so a most below
+/// one batch is refused (not raised to 1,000); with plain sampling it stands.
+#[test]
+fn a_most_below_one_batch_is_refused_where_runs_are_whole_batches() {
+    let mut e = cost_model();
+    assert_eq!(
+        err(&mut e, "mc.set", json!({ "stop": { "max": 500 } })),
+        ErrorCode::InvalidParams
+    );
+    let started = e.mc_start(json!({ "stop": { "max": 500 } }));
+    assert!(started.is_err(), "refused before it starts");
+    ok(&mut e, "mc.set", json!({ "stop": { "max": 1_000 } }));
+    // Without the correlation the sampling is plain, and 500 is fine until it is changed.
+    ok(
+        &mut e,
+        "mc.correlation.set",
+        json!({ "a": "labour", "b": "materials", "rank": 0.0 }),
+    );
+    ok(&mut e, "mc.set", json!({ "stop": { "max": 500 } }));
+    assert_eq!(
+        err(&mut e, "mc.set", json!({ "sampling": "latin_hypercube" })),
+        ErrorCode::InvalidParams
+    );
+}

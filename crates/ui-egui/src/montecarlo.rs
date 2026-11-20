@@ -171,6 +171,11 @@ pub(crate) fn finding(o: &Value) -> Option<(String, Option<String>)> {
                 "95% interval of the chance: {lo} to {hi}.",
                 &[("lo", &chance(lo)), ("hi", &chance(hi))],
             ),
+            // Two batches or more with no interval: every batch gave the same share.
+            None if o["interval_count"].as_u64().is_some_and(|n| n >= 2) => {
+                t("No interval: every batch gave the same share, so their spread gives none.")
+                    .to_owned()
+            }
             None => t("No interval: too few batches of trials for one.").to_owned(),
         };
         return Some((sentence, Some(sure)));
@@ -302,7 +307,7 @@ pub(crate) fn table_text(pasted: &str) -> String {
         .collect();
     let headed = lines.first().is_some_and(|l| {
         l.to_ascii_lowercase()
-            .replace(' ', "")
+            .replace([' ', '"'], "")
             .starts_with("name,distribution")
     });
     if !headed {
@@ -336,6 +341,24 @@ impl App {
                 None
             }
         }
+    }
+
+    /// Whether an input or an output already has `name`; if so, the reason is shown under the
+    /// field `key`, and the new one is not made (setting it would silently replace the old).
+    fn mc_name_taken(&mut self, key: &str, name: &str) -> bool {
+        let taken = self.engine.model().monte_carlo.as_ref().is_some_and(|m| {
+            m.inputs.iter().any(|i| i.name == name) || m.outputs.iter().any(|o| o.name == name)
+        });
+        if taken {
+            self.mc.errors.insert(
+                key.to_owned(),
+                tf(
+                    "There is already an input or an output called {name}.",
+                    &[("name", name)],
+                ),
+            );
+        }
+        taken
     }
 
     /// Why the edit in `key` was refused, under it.
@@ -647,7 +670,8 @@ impl App {
             add = ui.add(theme::secondary(ui, t("Add input"))).clicked() || entered;
         });
         let name = self.mc.new_input.trim().to_owned();
-        if add && !name.is_empty() {
+        // A name that is taken is refused here: setting it would replace what has it.
+        if add && !name.is_empty() && !self.mc_name_taken("mc/new_input", &name) {
             let params = json!({ "name": name, "distribution": first_distribution() });
             if self
                 .mc_edit("mc/new_input", "mc.input.set", params)
@@ -940,7 +964,7 @@ impl App {
             add = ui.add(theme::secondary(ui, t("Add output"))).clicked() || entered;
         });
         let name = self.mc.new_output.trim().to_owned();
-        if add && !name.is_empty() {
+        if add && !name.is_empty() && !self.mc_name_taken("mc/new_output", &name) {
             // A first expression to change: the first input, or nothing yet.
             let first = mc["inputs"][0]["name"]
                 .as_str()
@@ -993,7 +1017,7 @@ impl App {
         ui.add(
             egui::Label::new(theme::weak(
                 ui,
-                t("Latin hypercube sampling spreads each input's draws evenly over its range, so the results settle with fewer trials. With it, or with correlated inputs, trials run in whole batches of 1,000."),
+                t("Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000."),
             ))
             .wrap(),
         );
@@ -1144,7 +1168,7 @@ impl App {
                     ui.add(egui::Label::new(theme::weak(ui, text)).wrap());
                 }
                 for o in &outputs {
-                    output_section(ui, o);
+                    output_section(ui, o, &r["interval_basis"]);
                 }
                 section(ui, t("How sure are these numbers?"));
                 ui.add(egui::Label::new(basis_line(&r)).wrap());
@@ -1175,7 +1199,7 @@ impl App {
 }
 
 /// One output's numbers and charts.
-fn output_section(ui: &mut egui::Ui, o: &Value) {
+fn output_section(ui: &mut egui::Ui, o: &Value, basis: &Value) {
     let name = o["name"].as_str().unwrap_or("");
     let unit = o["unit"].as_str().unwrap_or("");
     let title = if unit.is_empty() {
@@ -1239,6 +1263,26 @@ fn output_section(ui: &mut egui::Ui, o: &Value) {
             .wrap(),
         );
     }
+    // The interval is across fewer values than the run has: say how many.
+    if let (Some(n), Some(of)) = (o["interval_count"].as_u64(), basis["count"].as_u64())
+        && n != of
+        && o["half_width"].is_number()
+    {
+        let (n, of) = (grouped(n as f64), grouped(of as f64));
+        let args = [("name", name), ("n", n.as_str()), ("of", of.as_str())];
+        let text = if basis["across"] == "batches" {
+            tf(
+                "{name}: the ± is across {n} of the {of} batches, the rest had no trial with a number.",
+                &args,
+            )
+        } else {
+            tf(
+                "{name}: the ± is across {n} of the {of} trials, the rest gave no number.",
+                &args,
+            )
+        };
+        ui.add(egui::Label::new(theme::weak(ui, text)).wrap());
+    }
     ui.add_space(6.0);
     let target = o["target"]["at_most"]
         .as_f64()
@@ -1278,7 +1322,9 @@ fn x_range(o: &Value, target: Option<f64>) -> Option<(f64, f64)> {
         None => (lo, hi),
     };
     let span = if hi > lo { hi - lo } else { lo.abs().max(1.0) };
-    Some((lo - span * 0.03, hi + span * 0.03))
+    let (lo, hi) = (lo - span * 0.03, hi + span * 0.03);
+    // Values so far apart that their span overflows cannot be drawn on one axis.
+    (lo.is_finite() && hi.is_finite() && (hi - lo).is_finite() && hi > lo).then_some((lo, hi))
 }
 
 /// Round values along the x axis, labelled under the plot, and the target's line.
@@ -1515,5 +1561,46 @@ mod tests {
         );
         let csv = "name,distribution,parameters,unit\nx,normal,mean=1;std_dev=2,\n";
         assert_eq!(table_text(csv), csv);
+    }
+
+    /// A header with its names in quotes is still a header.
+    #[test]
+    fn a_quoted_header_is_kept_as_the_header() {
+        let csv = "\"name\",\"distribution\",\"parameters\",\"unit\"\nx,normal,mean=1;std_dev=2,\n";
+        assert_eq!(table_text(csv), csv);
+    }
+
+    /// Values so far apart that the axis would overflow are not drawn, and the chart's step
+    /// search ends.
+    #[test]
+    fn an_axis_that_cannot_be_drawn_has_no_range() {
+        let wide = json!({ "min": -1e308, "max": 1e308 });
+        assert_eq!(x_range(&wide, None), None);
+        assert_eq!(
+            x_range(&json!({ "min": 1.0, "max": 1e308 }), Some(-1e308)),
+            None
+        );
+        let (lo, hi) = x_range(&json!({ "min": 10.0, "max": 20.0 }), None).unwrap_or_default();
+        assert!(lo < 10.0 && hi > 20.0);
+        assert!(nice_step(f64::INFINITY, 4.0) > 0.0);
+    }
+
+    /// When every batch gave the same share the interval is withheld for that reason, not
+    /// "too few batches"; with one batch it is the few batches.
+    #[test]
+    fn the_reason_for_no_interval_is_told() {
+        let mut o = output(json!({ "at_most": 7_000.0 }), 1.0, Value::Null);
+        o["interval_count"] = json!(4);
+        let (_, sure) = finding(&o).unwrap_or_default();
+        assert_eq!(
+            sure.as_deref(),
+            Some("No interval: every batch gave the same share, so their spread gives none.")
+        );
+        o["interval_count"] = json!(1);
+        let (_, sure) = finding(&o).unwrap_or_default();
+        assert_eq!(
+            sure.as_deref(),
+            Some("No interval: too few batches of trials for one.")
+        );
     }
 }

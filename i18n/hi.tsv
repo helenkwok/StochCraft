@@ -1237,7 +1237,7 @@ unit	yr	वर्ष
 	Inputs as a table	तालिका के रूप में इनपुट
 	Latin hypercube	लैटिन हाइपरक्यूब
 	Latin hypercube sampling	लैटिन हाइपरक्यूब नमूनाकरण
-	Latin hypercube sampling spreads each input's draws evenly over its range, so the results settle with fewer trials. With it, or with correlated inputs, trials run in whole batches of 1,000.	लैटिन हाइपरक्यूब नमूनाकरण हर इनपुट से निकाले गए मानों को उसकी सीमा में बराबर फैलाता है, इसलिए परिणाम कम परीक्षणों में स्थिर हो जाते हैं। इसके साथ, या सहसंबद्ध इनपुट के साथ, परीक्षण 1,000 के पूरे बैचों में चलते हैं।
+	Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000.	Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000.
 	Monte Carlo model	मोंटे कार्लो मॉडल
 	New Monte Carlo Model	नया मोंटे कार्लो मॉडल
 	New Monte Carlo model	नया मोंटे कार्लो मॉडल
@@ -1246,6 +1246,10 @@ unit	yr	वर्ष
 	New output	नया आउटपुट
 	No inputs yet: add one below, or paste a table of them.	अभी कोई इनपुट नहीं: नीचे एक जोड़ें, या उनकी तालिका चिपकाएँ।
 	No interval: too few batches of trials for one.	कोई अंतराल नहीं: इसके लिए परीक्षणों के बैच बहुत कम हैं।
+	No interval: every batch gave the same share, so their spread gives none.	No interval: every batch gave the same share, so their spread gives none.
+	There is already an input or an output called {name}.	There is already an input or an output called {name}.
+	{name}: the ± is across {n} of the {of} batches, the rest had no trial with a number.	{name}: the ± is across {n} of the {of} batches, the rest had no trial with a number.
+	{name}: the ± is across {n} of the {of} trials, the rest gave no number.	{name}: the ± is across {n} of the {of} trials, the rest gave no number.
 	No outputs yet: add one below.	अभी कोई आउटपुट नहीं: नीचे एक जोड़ें।
 	None yet	अभी कोई नहीं
 	One input per line, as name, distribution, parameters and unit, copied from a spreadsheet or written as CSV: for example labour,triangular,min=80;mode=100;max=150,h.	हर पंक्ति में एक इनपुट, नाम, वितरण, पैरामीटर और इकाई के रूप में, स्प्रेडशीट से कॉपी किया हुआ या CSV के रूप में लिखा हुआ: उदाहरण के लिए labour,triangular,min=80;mode=100;max=150,h।

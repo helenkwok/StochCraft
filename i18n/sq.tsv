@@ -1237,7 +1237,7 @@ unit	yr	v
 	Inputs as a table	Hyrjet si tabelë
 	Latin hypercube	Hiperkub latin
 	Latin hypercube sampling	Kampionim me hiperkub latin
-	Latin hypercube sampling spreads each input's draws evenly over its range, so the results settle with fewer trials. With it, or with correlated inputs, trials run in whole batches of 1,000.	Kampionimi me hiperkub latin i shpërndan tërheqjet e çdo hyrjeje në mënyrë të njëtrajtshme në gjithë intervalin e saj, kështu që rezultatet stabilizohen me më pak prova. Me të, ose me hyrje të korreluara, provat ekzekutohen në grupe të plota prej 1000.
+	Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000.	Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000.
 	Monte Carlo model	Model Monte Carlo
 	New Monte Carlo Model	Model i ri Monte Carlo
 	New Monte Carlo model	Model i ri Monte Carlo
@@ -1246,6 +1246,10 @@ unit	yr	v
 	New output	Dalje e re
 	No inputs yet: add one below, or paste a table of them.	Ende asnjë hyrje: shtoni një më poshtë, ose ngjitni një tabelë me to.
 	No interval: too few batches of trials for one.	Asnjë interval: shumë pak grupe provash për të.
+	No interval: every batch gave the same share, so their spread gives none.	No interval: every batch gave the same share, so their spread gives none.
+	There is already an input or an output called {name}.	There is already an input or an output called {name}.
+	{name}: the ± is across {n} of the {of} batches, the rest had no trial with a number.	{name}: the ± is across {n} of the {of} batches, the rest had no trial with a number.
+	{name}: the ± is across {n} of the {of} trials, the rest gave no number.	{name}: the ± is across {n} of the {of} trials, the rest gave no number.
 	No outputs yet: add one below.	Ende asnjë dalje: shtoni një më poshtë.
 	None yet	Ende asnjë
 	One input per line, as name, distribution, parameters and unit, copied from a spreadsheet or written as CSV: for example labour,triangular,min=80;mode=100;max=150,h.	Një hyrje për rresht, si emër, shpërndarje, parametra dhe njësi, e kopjuar nga një fletëllogaritëse ose e shkruar si CSV: për shembull labour,triangular,min=80;mode=100;max=150,h.

@@ -1237,7 +1237,7 @@ unit	yr	έτ
 	Inputs as a table	Είσοδοι ως πίνακας
 	Latin hypercube	Λατινικός υπερκύβος
 	Latin hypercube sampling	Δειγματοληψία λατινικού υπερκύβου
-	Latin hypercube sampling spreads each input's draws evenly over its range, so the results settle with fewer trials. With it, or with correlated inputs, trials run in whole batches of 1,000.	Η δειγματοληψία λατινικού υπερκύβου απλώνει ομοιόμορφα τις κληρώσεις κάθε εισόδου σε όλο το εύρος της, ώστε τα αποτελέσματα να σταθεροποιούνται με λιγότερες δοκιμές. Με αυτήν, ή με συσχετισμένες εισόδους, οι δοκιμές εκτελούνται σε ολόκληρες παρτίδες των 1.000.
+	Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000.	Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000.
 	Monte Carlo model	Μοντέλο Monte Carlo
 	New Monte Carlo Model	Νέο μοντέλο Monte Carlo
 	New Monte Carlo model	Νέο μοντέλο Monte Carlo
@@ -1246,6 +1246,10 @@ unit	yr	έτ
 	New output	Νέα έξοδος
 	No inputs yet: add one below, or paste a table of them.	Δεν υπάρχουν ακόμη είσοδοι: προσθέστε μία παρακάτω ή επικολλήστε έναν πίνακα με αυτές.
 	No interval: too few batches of trials for one.	Χωρίς διάστημα: πολύ λίγες παρτίδες δοκιμών για να υπολογιστεί.
+	No interval: every batch gave the same share, so their spread gives none.	No interval: every batch gave the same share, so their spread gives none.
+	There is already an input or an output called {name}.	There is already an input or an output called {name}.
+	{name}: the ± is across {n} of the {of} batches, the rest had no trial with a number.	{name}: the ± is across {n} of the {of} batches, the rest had no trial with a number.
+	{name}: the ± is across {n} of the {of} trials, the rest gave no number.	{name}: the ± is across {n} of the {of} trials, the rest gave no number.
 	No outputs yet: add one below.	Δεν υπάρχουν ακόμη έξοδοι: προσθέστε μία παρακάτω.
 	None yet	Κανένα ακόμη
 	One input per line, as name, distribution, parameters and unit, copied from a spreadsheet or written as CSV: for example labour,triangular,min=80;mode=100;max=150,h.	Μία είσοδος ανά γραμμή, ως όνομα, κατανομή, παράμετροι και μονάδα, αντιγραμμένη από υπολογιστικό φύλλο ή γραμμένη ως CSV: για παράδειγμα labour,triangular,min=80;mode=100;max=150,h.

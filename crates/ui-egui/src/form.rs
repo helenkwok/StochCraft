@@ -924,9 +924,11 @@ fn default_variant(variant: &Value, tag: &str, current: &Value) -> Value {
         } else {
             match (f.as_str(), node["type"].as_str()) {
                 ("mean" | "value" | "mode", _) => json!(old_mean),
-                ("min", _) => json!(old_mean * 0.5),
-                ("max", _) => json!(old_mean * 1.5),
-                ("std_dev", _) => json!(old_mean * 0.25),
+                // Around the mean by half its size, whichever side of 0 it is on (a negative
+                // constant gives min < max and a spread above 0).
+                ("min", _) => json!(old_mean - 0.5 * old_mean.abs()),
+                ("max", _) => json!(old_mean + 0.5 * old_mean.abs()),
+                ("std_dev", _) => json!(0.25 * old_mean.abs()),
                 ("probability", _) => json!(0.5),
                 // A balking table's first row: half join once one waits.
                 ("join", _) => json!([{"waiting": 1, "probability": 0.5}]),
@@ -1513,5 +1515,30 @@ mod limit_tests {
             let o = with_limits(&json!({"type": "number"}), dist, f, true, false);
             assert!(o["exclusiveMinimum"].is_null(), "{dist}.{f}");
         }
+    }
+
+    /// Turning a negative constant into a spread keeps the spread above 0 and the bounds in
+    /// order, around the value: -10 gives a standard deviation of 2.5 and bounds -15 and -5.
+    #[test]
+    fn a_negative_constant_becomes_a_distribution_around_it() {
+        let variant = json!({ "properties": {
+            "type": { "const": "x" },
+            "mean": { "type": "number" },
+            "std_dev": { "type": "number" },
+            "min": { "type": "number" },
+            "max": { "type": "number" },
+        }});
+        let from =
+            |v: f64| default_variant(&variant, "x", &json!({ "type": "constant", "value": v }));
+        let got = from(-10.0);
+        assert_eq!(got["mean"], json!(-10.0));
+        assert_eq!(got["std_dev"], json!(2.5));
+        assert_eq!(got["min"], json!(-15.0));
+        assert_eq!(got["max"], json!(-5.0));
+        // Positive values are as before: half and one and a half times the mean.
+        let got = from(10.0);
+        assert_eq!(got["std_dev"], json!(2.5));
+        assert_eq!(got["min"], json!(5.0));
+        assert_eq!(got["max"], json!(15.0));
     }
 }

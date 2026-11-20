@@ -1237,7 +1237,7 @@ unit	yr	年
 	Inputs as a table	以表格显示输入
 	Latin hypercube	拉丁超立方
 	Latin hypercube sampling	拉丁超立方抽样
-	Latin hypercube sampling spreads each input's draws evenly over its range, so the results settle with fewer trials. With it, or with correlated inputs, trials run in whole batches of 1,000.	拉丁超立方抽样将每个输入的抽取值均匀分布在其取值范围内，因此用较少的试验即可使结果稳定。使用它或存在相关输入时，试验以每批 1,000 次的完整批次进行。
+	Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000.	Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000.
 	Monte Carlo model	蒙特卡洛模型
 	New Monte Carlo Model	新建蒙特卡洛模型
 	New Monte Carlo model	新建蒙特卡洛模型
@@ -1246,6 +1246,10 @@ unit	yr	年
 	New output	新建输出
 	No inputs yet: add one below, or paste a table of them.	尚无输入：在下方添加一个，或粘贴输入表格。
 	No interval: too few batches of trials for one.	无区间：试验批次太少，无法得出区间。
+	No interval: every batch gave the same share, so their spread gives none.	No interval: every batch gave the same share, so their spread gives none.
+	There is already an input or an output called {name}.	There is already an input or an output called {name}.
+	{name}: the ± is across {n} of the {of} batches, the rest had no trial with a number.	{name}: the ± is across {n} of the {of} batches, the rest had no trial with a number.
+	{name}: the ± is across {n} of the {of} trials, the rest gave no number.	{name}: the ± is across {n} of the {of} trials, the rest gave no number.
 	No outputs yet: add one below.	尚无输出：在下方添加一个。
 	None yet	尚无
 	One input per line, as name, distribution, parameters and unit, copied from a spreadsheet or written as CSV: for example labour,triangular,min=80;mode=100;max=150,h.	每行一个输入，依次为名称、分布、参数和单位，可从电子表格复制或按 CSV 书写：例如 labour,triangular,min=80;mode=100;max=150,h。

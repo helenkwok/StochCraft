@@ -1237,7 +1237,7 @@ unit	yr	a
 	Inputs as a table	Entrades com a taula
 	Latin hypercube	Hipercub llatí
 	Latin hypercube sampling	Mostreig per hipercub llatí
-	Latin hypercube sampling spreads each input's draws evenly over its range, so the results settle with fewer trials. With it, or with correlated inputs, trials run in whole batches of 1,000.	El mostreig per hipercub llatí reparteix uniformement les extraccions de cada entrada en el seu interval, de manera que els resultats s'estabilitzen amb menys assajos. Amb aquest mostreig, o amb entrades correlacionades, els assajos s'executen en lots sencers de 1.000.
+	Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000.	Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000.
 	Monte Carlo model	Model de Montecarlo
 	New Monte Carlo Model	Model de Montecarlo nou
 	New Monte Carlo model	Model de Montecarlo nou
@@ -1246,6 +1246,10 @@ unit	yr	a
 	New output	Sortida nova
 	No inputs yet: add one below, or paste a table of them.	Encara no hi ha entrades: afegiu-ne una a sota o enganxeu-ne una taula.
 	No interval: too few batches of trials for one.	Sense interval: hi ha massa pocs lots d'assajos per calcular-lo.
+	No interval: every batch gave the same share, so their spread gives none.	No interval: every batch gave the same share, so their spread gives none.
+	There is already an input or an output called {name}.	There is already an input or an output called {name}.
+	{name}: the ± is across {n} of the {of} batches, the rest had no trial with a number.	{name}: the ± is across {n} of the {of} batches, the rest had no trial with a number.
+	{name}: the ± is across {n} of the {of} trials, the rest gave no number.	{name}: the ± is across {n} of the {of} trials, the rest gave no number.
 	No outputs yet: add one below.	Encara no hi ha sortides: afegiu-ne una a sota.
 	None yet	Encara cap
 	One input per line, as name, distribution, parameters and unit, copied from a spreadsheet or written as CSV: for example labour,triangular,min=80;mode=100;max=150,h.	Una entrada per línia, com a nom, distribució, paràmetres i unitat, copiada d'un full de càlcul o escrita com a CSV: per exemple labour,triangular,min=80;mode=100;max=150,h.

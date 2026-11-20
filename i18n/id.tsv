@@ -1237,7 +1237,7 @@ unit	yr	thn
 	Inputs as a table	Masukan sebagai tabel
 	Latin hypercube	Hiperkubus Latin
 	Latin hypercube sampling	Pengambilan sampel hiperkubus Latin
-	Latin hypercube sampling spreads each input's draws evenly over its range, so the results settle with fewer trials. With it, or with correlated inputs, trials run in whole batches of 1,000.	Pengambilan sampel hiperkubus Latin menyebarkan pengambilan setiap masukan secara merata di sepanjang rentangnya, sehingga hasil menjadi stabil dengan lebih sedikit percobaan. Dengan cara ini, atau dengan masukan yang berkorelasi, percobaan dijalankan dalam batch utuh berisi 1.000.
+	Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000.	Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000.
 	Monte Carlo model	Model Monte Carlo
 	New Monte Carlo Model	Model Monte Carlo Baru
 	New Monte Carlo model	Model Monte Carlo baru
@@ -1246,6 +1246,10 @@ unit	yr	thn
 	New output	Keluaran baru
 	No inputs yet: add one below, or paste a table of them.	Belum ada masukan: tambahkan satu di bawah, atau tempel tabelnya.
 	No interval: too few batches of trials for one.	Tidak ada interval: terlalu sedikit batch percobaan untuk menghitungnya.
+	No interval: every batch gave the same share, so their spread gives none.	No interval: every batch gave the same share, so their spread gives none.
+	There is already an input or an output called {name}.	There is already an input or an output called {name}.
+	{name}: the ± is across {n} of the {of} batches, the rest had no trial with a number.	{name}: the ± is across {n} of the {of} batches, the rest had no trial with a number.
+	{name}: the ± is across {n} of the {of} trials, the rest gave no number.	{name}: the ± is across {n} of the {of} trials, the rest gave no number.
 	No outputs yet: add one below.	Belum ada keluaran: tambahkan satu di bawah.
 	None yet	Belum ada
 	One input per line, as name, distribution, parameters and unit, copied from a spreadsheet or written as CSV: for example labour,triangular,min=80;mode=100;max=150,h.	Satu masukan per baris, berupa nama, distribusi, parameter, dan satuan, disalin dari lembar kerja atau ditulis sebagai CSV: misalnya labour,triangular,min=80;mode=100;max=150,h.

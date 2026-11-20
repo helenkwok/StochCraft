@@ -984,6 +984,20 @@ pub fn mc_table(name: &str, r: &Value) -> String {
                 o["invalid"]
             );
         }
+        // An interval across fewer values than the run has (trials with no number, batches
+        // without one) says how many.
+        if let (Some(n), Some(of)) = (
+            o["interval_count"].as_u64(),
+            r["interval_basis"]["count"].as_u64(),
+        ) && n != of
+        {
+            let _ = writeln!(
+                out,
+                "{}: its interval is across {n} of the {of} {}",
+                s(&o["name"]),
+                s(&r["interval_basis"]["across"])
+            );
+        }
     }
     for c in r["correlations"].as_array().into_iter().flatten() {
         let _ = writeln!(
@@ -1202,5 +1216,25 @@ mod tests {
         let out = table("q", &results);
         assert!(!out.contains("sequential:"), "{out}");
         assert!(out.contains("± is the half-width of a 95%"), "{out}");
+    }
+
+    /// An output whose interval is across fewer values than the run has says how many.
+    #[test]
+    fn an_mc_interval_over_fewer_values_says_how_many() {
+        let r = serde_json::json!({
+            "trials": 100,
+            "interval_basis": { "across": "trials", "count": 100 },
+            "record": { "interval": "Student-t across 100 independent trials" },
+            "outputs": [
+                { "name": "a", "unit": "", "interval_count": 100, "invalid": 0 },
+                { "name": "b", "unit": "", "interval_count": 40, "invalid": 60 },
+            ],
+        });
+        let out = mc_table("m", &r);
+        assert!(
+            out.contains("b: its interval is across 40 of the 100 trials"),
+            "{out}"
+        );
+        assert!(!out.contains("a: its interval"), "{out}");
     }
 }

@@ -1237,7 +1237,7 @@ unit	yr	J.
 	Inputs as a table	Eingaben als Tabelle
 	Latin hypercube	Latin Hypercube
 	Latin hypercube sampling	Latin-Hypercube-Sampling
-	Latin hypercube sampling spreads each input's draws evenly over its range, so the results settle with fewer trials. With it, or with correlated inputs, trials run in whole batches of 1,000.	Latin-Hypercube-Sampling verteilt die Ziehungen jeder Eingabe gleichmäßig über ihren Wertebereich, sodass sich die Ergebnisse mit weniger Iterationen stabilisieren. Damit oder mit korrelierten Eingaben laufen die Iterationen in ganzen Gruppen zu je 1.000.
+	Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000.	Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000.
 	Monte Carlo model	Monte-Carlo-Modell
 	New Monte Carlo Model	Neues Monte-Carlo-Modell
 	New Monte Carlo model	Neues Monte-Carlo-Modell
@@ -1246,6 +1246,10 @@ unit	yr	J.
 	New output	Neue Ausgabe
 	No inputs yet: add one below, or paste a table of them.	Noch keine Eingaben: Fügen Sie unten eine hinzu oder fügen Sie eine Tabelle mit Eingaben ein.
 	No interval: too few batches of trials for one.	Kein Intervall: zu wenige Gruppen von Iterationen dafür.
+	No interval: every batch gave the same share, so their spread gives none.	No interval: every batch gave the same share, so their spread gives none.
+	There is already an input or an output called {name}.	There is already an input or an output called {name}.
+	{name}: the ± is across {n} of the {of} batches, the rest had no trial with a number.	{name}: the ± is across {n} of the {of} batches, the rest had no trial with a number.
+	{name}: the ± is across {n} of the {of} trials, the rest gave no number.	{name}: the ± is across {n} of the {of} trials, the rest gave no number.
 	No outputs yet: add one below.	Noch keine Ausgaben: Fügen Sie unten eine hinzu.
 	None yet	Noch keine
 	One input per line, as name, distribution, parameters and unit, copied from a spreadsheet or written as CSV: for example labour,triangular,min=80;mode=100;max=150,h.	Eine Eingabe pro Zeile, als Name, Verteilung, Parameter und Einheit, aus einer Tabellenkalkulation kopiert oder als CSV geschrieben: zum Beispiel labour,triangular,min=80;mode=100;max=150,h.

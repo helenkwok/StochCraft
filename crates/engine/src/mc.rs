@@ -350,6 +350,18 @@ pub(crate) fn set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
     if p.trials == Some(0) || p.trials.is_some_and(|t| u64::from(t) > MAX_TRIALS) {
         return Err(invalid(format!("`trials` must be from 1 to {MAX_TRIALS}")));
     }
+    // A most below one batch, where runs are whole batches, is refused, not raised.
+    if (p.sampling.is_some() || p.stop.is_some())
+        && let Some(bad) = stochcraft_mc::check(&m)
+            .into_iter()
+            .find(|x| x.code == "bad_stop")
+    {
+        return Err(CommandError {
+            code: ErrorCode::InvalidParams,
+            message: bad.message.clone(),
+            details: Some(problems(&[bad])),
+        });
+    }
     let created = e.model.monte_carlo.is_none();
     let mut ops = vec![Op::SetMonteCarlo(Some(Box::new(m)))];
     let mut x = e.model.experiment.clone();
@@ -695,6 +707,10 @@ pub struct McJob {
     /// The model as run (with the run's own sampling and stop), for the run record.
     model: MonteCarlo,
     threads: Option<u32>,
+    /// The engine's model and file as they were when the run started (digest, file, format,
+    /// scenario, unsaved changes, notes), for the run record: the model may be edited while the
+    /// batches are made.
+    context: Value,
 }
 
 impl McJob {
@@ -795,6 +811,7 @@ impl Engine {
             stepper,
             model: m,
             threads: p.threads,
+            context: self.mc_context(),
         })
     }
 
@@ -804,36 +821,47 @@ impl Engine {
         let results = job.stepper.take_results()?;
         let mut v = results_json(&results);
         v["warnings"] = problems(&job.compiled.warnings);
-        v["record"] = self.mc_record(&results, &job.model);
+        v["record"] = mc_record(&job.context, &results, &job.model);
         Some(v)
     }
-}
 
-impl Engine {
-    /// The run record of a Monte Carlo run: enough to reproduce it.
-    fn mc_record(&self, r: &McResults, m: &MonteCarlo) -> Value {
+    /// What a run's record says of the model and its file, as they are now.
+    fn mc_context(&self) -> Value {
         let file = self.file.as_ref();
         json!({
-            "stochcraft": env!("CARGO_PKG_VERSION"),
-            "kind": "monte_carlo",
             "model_digest": crate::model_digest(&self.model),
             "file": file.and_then(|f| f.path.as_deref()),
             "format": file.map(|f| crate::format_name(f.opened.format)),
             "scenario": file.and_then(|f| f.opened.scenario.as_deref()),
             "unsaved_changes": file.is_some() && self.is_dirty(),
-            "seed": r.seed,
-            "trials": r.trials,
-            "trials_requested": r.requested_trials,
-            "sampling": SamplingSpec::from(r.sampling).name(),
-            "interval": interval_text(r),
-            "batch": BATCH,
-            "stop": m.stop.map(StopDoc::from),
-            "random_streams": "trials in batches of 1,000; each input's draws in batch b from the stream keyed mc/<b>/input/<name> under the seed, and the pairing of correlated inputs from mc/<b>/correlation, so results do not depend on the number of threads",
-            "correlation": "rank correlations induced by Iman and Conover's method (1982) in each batch, on van der Waerden scores with Pearson correlation 2 sin(πρ/6) for a rank correlation ρ",
-            "uncertainty": uncertainty_text(r),
             "file_notes": file.map_or_else(Vec::new, |f| f.notes.clone()),
         })
     }
+}
+
+/// The run record of a Monte Carlo run: enough to reproduce it. `context` is the engine's
+/// ([`Engine::mc_context`]) when the run started.
+fn mc_record(context: &Value, r: &McResults, m: &MonteCarlo) -> Value {
+    json!({
+        "stochcraft": env!("CARGO_PKG_VERSION"),
+        "kind": "monte_carlo",
+        "model_digest": context["model_digest"],
+        "file": context["file"],
+        "format": context["format"],
+        "scenario": context["scenario"],
+        "unsaved_changes": context["unsaved_changes"],
+        "seed": r.seed,
+        "trials": r.trials,
+        "trials_requested": r.requested_trials,
+        "sampling": SamplingSpec::from(r.sampling).name(),
+        "interval": interval_text(r),
+        "batch": BATCH,
+        "stop": m.stop.map(StopDoc::from),
+        "random_streams": "trials in batches of 1,000; each input's draws in batch b from the stream keyed mc/<b>/input/<name> under the seed, and the pairing of correlated inputs from mc/<b>/correlation, so results do not depend on the number of threads",
+        "correlation": "rank correlations induced by Iman and Conover's method (1982) in each batch, on van der Waerden scores with Pearson correlation 2 sin(πρ/6) for a rank correlation ρ",
+        "uncertainty": uncertainty_text(r),
+        "file_notes": context["file_notes"],
+    })
 }
 
 /// What the intervals are across, in words: `Student-t across 12 independent Latin hypercube
@@ -875,6 +903,7 @@ fn output_json(o: &OutputResult) -> Value {
         "invalid": o.invalid,
         "mean": o.mean,
         "half_width": o.half_width,
+        "interval_count": o.interval_count,
         "std_dev": o.std_dev,
         "min": o.min,
         "max": o.max,
@@ -943,6 +972,16 @@ pub fn results_json(r: &McResults) -> Value {
     v
 }
 
+/// A text cell safe to open in a spreadsheet: one that starts with `=`, `+`, `-`, `@`, a tab or a
+/// carriage return would be read as a formula, so it gets a `'` in front (OWASP, "CSV Injection").
+fn text_cell(text: &str) -> String {
+    if text.starts_with(['=', '+', '-', '@', '\t', '\r']) {
+        format!("'{text}")
+    } else {
+        text.to_owned()
+    }
+}
+
 /// A Monte Carlo run's results (as [`results_json`] gives them) as CSV, a row per output, as the
 /// window's Export table (CSV) and `stochcraft-cli run --format csv` write them.
 pub fn results_csv(r: &Value) -> String {
@@ -962,8 +1001,8 @@ pub fn results_csv(r: &Value) -> String {
             ("", String::new())
         };
         let row = [
-            crate::wire::csv_field(&s(&o["name"])),
-            crate::wire::csv_field(&s(&o["unit"])),
+            crate::wire::csv_field(&text_cell(&s(&o["name"]))),
+            crate::wire::csv_field(&text_cell(&s(&o["unit"]))),
             r["trials"].to_string(),
             o["valid"].to_string(),
             num(&o["mean"]),
@@ -1019,5 +1058,33 @@ mod tests {
         assert_eq!(text["sampling"], "latin_hypercube");
         assert_eq!(text["outputs"][0]["at_least"], 3.0);
         assert!(text["outputs"][0].get("at_most").is_none());
+    }
+
+    /// A name or unit a spreadsheet would read as a formula gets a quote in front; numbers and
+    /// ordinary text are as they were.
+    #[test]
+    fn text_cells_that_look_like_formulas_are_quoted() {
+        let r = json!({
+            "trials": 10,
+            "outputs": [
+                { "name": "=1+1", "unit": "@u", "valid": 10, "mean": 1.5 },
+                { "name": "-x", "unit": "+y", "valid": 10 },
+                { "name": "\tz", "unit": "\rw", "valid": 10 },
+                { "name": "cost", "unit": "USD", "valid": 10 },
+            ],
+        });
+        let csv = results_csv(&r);
+        let rows: Vec<&str> = csv.split('\n').collect();
+        assert!(
+            rows.get(1)
+                .is_some_and(|l| l.starts_with("'=1+1,'@u,10,10,1.5,"))
+        );
+        assert!(rows.get(2).is_some_and(|l| l.starts_with("'-x,'+y,10,10,")));
+        assert!(rows.get(3).is_some_and(|l| l.starts_with("'\tz,")));
+        assert!(
+            rows.get(4)
+                .is_some_and(|l| l.starts_with("cost,USD,10,10,"))
+        );
+        assert_eq!(text_cell("a-b"), "a-b");
     }
 }

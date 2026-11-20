@@ -103,6 +103,11 @@ fn bars(results: &Value, m: &Measure) -> Vec<Bar> {
 /// A round step for about `ticks` gridlines up to `max` (1, 2 or 5 times a power of ten),
 /// found without logarithms (which differ between platforms; this only places gridlines).
 pub(crate) fn nice_step(max: f64, ticks: f64) -> f64 {
+    // Not a size a step can be found for (infinite, not a number): any, rather than a search that
+    // never ends.
+    if !(max.is_finite() && ticks.is_finite() && ticks > 0.0) {
+        return 1.0;
+    }
     let raw = (max / ticks).max(f64::MIN_POSITIVE);
     let mut p = 1.0;
     while p > raw {
@@ -931,6 +936,11 @@ mod tests {
         assert_eq!(nice_step(100.0, 4.0), 50.0);
         assert_eq!(nice_step(0.07, 4.0), 0.02);
         assert_eq!(nice_step(15000.0, 4.0), 5000.0);
+        // A size no step fits ends the search at once.
+        assert_eq!(nice_step(f64::INFINITY, 4.0), 1.0);
+        assert_eq!(nice_step(f64::NAN, 4.0), 1.0);
+        assert_eq!(nice_step(1.0, 0.0), 1.0);
+        assert!(nice_step(1e308, 4.0).is_finite());
     }
 
     #[test]

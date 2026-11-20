@@ -430,9 +430,13 @@ On the **Model** tab:
   field with the reason under it. Give an output a **Target**, **At most** or **At least** a
   value, to see the chance of missing it.
 - **Trials and sampling:** the number of trials (10,000 for a new model), the seed, and the
-  sampling. **Latin hypercube** spreads each input's draws evenly over its range, so the results
-  settle with fewer trials. **How many trials** can be **More until precise enough**: trials
-  are added until every output's mean is within the share you set.
+  sampling. **Latin hypercube** cuts each input's range into equally likely strata (the same
+  chance of a draw in each, not equally spaced values) and draws once from each, which usually
+  makes the results more precise; it does not promise fewer trials for every output. **How many
+  trials** can be **More until precise enough**: trials are added until every output's mean is
+  within the share you set, or until the most you allow has run; in that case the results say
+  the target was not met. With Latin hypercube sampling or correlated inputs the trials run in
+  whole batches of 1,000, so the most must be at least 1,000.
 
 Every change is one step you can undo. **Run** (F5) makes the trials a few batches at a time,
 so the window stays responsive, also in the browser.

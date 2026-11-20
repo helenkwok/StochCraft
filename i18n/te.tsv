@@ -1237,7 +1237,7 @@ unit	yr	సం.
 	Inputs as a table	పట్టికగా ఇన్‌పుట్‌లు
 	Latin hypercube	లాటిన్ హైపర్‌క్యూబ్
 	Latin hypercube sampling	లాటిన్ హైపర్‌క్యూబ్ శాంప్లింగ్
-	Latin hypercube sampling spreads each input's draws evenly over its range, so the results settle with fewer trials. With it, or with correlated inputs, trials run in whole batches of 1,000.	లాటిన్ హైపర్‌క్యూబ్ శాంప్లింగ్ ప్రతి ఇన్‌పుట్ విలువలను దాని పరిధి అంతటా సమానంగా విస్తరిస్తుంది, కాబట్టి తక్కువ ప్రయత్నాలతోనే ఫలితాలు స్థిరపడతాయి. దీనితో గానీ సహసంబంధం ఉన్న ఇన్‌పుట్‌లతో గానీ, ప్రయత్నాలు 1,000 చొప్పున పూర్తి బ్యాచ్‌లుగా జరుగుతాయి.
+	Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000.	Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000.
 	Monte Carlo model	మాంటె కార్లో మోడల్
 	New Monte Carlo Model	కొత్త మాంటె కార్లో మోడల్
 	New Monte Carlo model	కొత్త మాంటె కార్లో మోడల్
@@ -1246,6 +1246,10 @@ unit	yr	సం.
 	New output	కొత్త అవుట్‌పుట్
 	No inputs yet: add one below, or paste a table of them.	ఇంకా ఇన్‌పుట్‌లు లేవు: క్రింద ఒకటి జోడించండి, లేదా వాటి పట్టికను అతికించండి.
 	No interval: too few batches of trials for one.	అంతరం లేదు: దానికి సరిపడా ప్రయత్నాల బ్యాచ్‌లు లేవు.
+	No interval: every batch gave the same share, so their spread gives none.	No interval: every batch gave the same share, so their spread gives none.
+	There is already an input or an output called {name}.	There is already an input or an output called {name}.
+	{name}: the ± is across {n} of the {of} batches, the rest had no trial with a number.	{name}: the ± is across {n} of the {of} batches, the rest had no trial with a number.
+	{name}: the ± is across {n} of the {of} trials, the rest gave no number.	{name}: the ± is across {n} of the {of} trials, the rest gave no number.
 	No outputs yet: add one below.	ఇంకా అవుట్‌పుట్‌లు లేవు: క్రింద ఒకటి జోడించండి.
 	None yet	ఇంకా ఏదీ లేదు
 	One input per line, as name, distribution, parameters and unit, copied from a spreadsheet or written as CSV: for example labour,triangular,min=80;mode=100;max=150,h.	ఒక్కో పంక్తికి ఒక ఇన్‌పుట్, పేరు, పంపిణీ, పరామితులు, ప్రమాణం రూపంలో, స్ప్రెడ్‌షీట్ నుండి కాపీ చేసినది లేదా CSVగా రాసినది: ఉదాహరణకు labour,triangular,min=80;mode=100;max=150,h.
