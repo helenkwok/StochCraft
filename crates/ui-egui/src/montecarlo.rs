@@ -452,6 +452,7 @@ impl App {
         ui.label(theme::weak(ui, t("Monte Carlo model")));
         let mc = &model["monte_carlo"];
         egui::ScrollArea::vertical()
+            .id_salt("mc/outline")
             .auto_shrink([false, true])
             .max_height(ui.available_height() - 110.0)
             .show(ui, |ui| {
@@ -511,6 +512,7 @@ impl App {
         let mc = model["monte_carlo"].clone();
         let problems = self.problems();
         egui::ScrollArea::vertical()
+            .id_salt("mc/model")
             .auto_shrink([false, false])
             .show(ui, |ui| {
                 ui.set_max_width(ui.available_width().min(760.0));
@@ -1092,6 +1094,7 @@ impl App {
         let mut csv = false;
         let mut again = false;
         egui::ScrollArea::vertical()
+            .id_salt("mc/results")
             .auto_shrink([false, false])
             .show(ui, |ui| {
                 ui.set_max_width(ui.available_width().min(860.0));
