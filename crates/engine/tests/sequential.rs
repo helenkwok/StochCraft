@@ -227,7 +227,7 @@ fn a_fixed_count_does_not_hold_back_results_that_vary() {
         "{q}"
     );
     let p = q["unseen_rate"].as_f64().expect("a rate");
-    assert!(((1.0 - p).powf(n as f64) - 0.05).abs() < 1e-9, "{q}");
+    assert_eq!(Some(p), stochcraft_engine::precision::unseen_rate(n), "{q}");
 }
 
 /// The setting is part of the experiment: set, shown in the model, checked, undone and removed.

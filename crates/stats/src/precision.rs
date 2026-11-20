@@ -79,7 +79,7 @@ pub fn runs_needed(n: u64, score: f64) -> u64 {
 /// three": Hanley and Lippman-Hand (1983), "If nothing goes wrong, is everything all right?",
 /// *JAMA* 249(13), 1743–1745). `None` for no replications.
 pub fn unseen_rate(n: u64) -> Option<f64> {
-    (n > 0).then(|| 1.0 - 0.05_f64.powf(1.0 / n as f64))
+    (n > 0).then(|| 1.0 - libm::pow(0.05, 1.0 / n as f64))
 }
 
 /// What a sequential run makes of one result after some replications.
@@ -441,7 +441,7 @@ mod tests {
         // About 3/n for large n: 200 runs without the event leave up to about 1.5% per run.
         assert!(unseen_rate(200).is_some_and(|p| (p - 0.0149).abs() < 1e-4 && p < 3.0 / 200.0));
         // (1 − p)ⁿ = 0.05.
-        assert!(unseen_rate(40).is_some_and(|p| ((1.0 - p).powi(40) - 0.05).abs() < 1e-12));
+        assert!(unseen_rate(40).is_some_and(|p| (libm::pow(1.0 - p, 40.0) - 0.05).abs() < 1e-12));
     }
 
     #[test]
