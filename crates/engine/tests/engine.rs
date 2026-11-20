@@ -3918,3 +3918,106 @@ fn conveyor_shape_defaults_to_straight_and_sets_via_block_set() {
     );
     assert!(belt_of(&mut e).get("shape").is_none());
 }
+
+/// Starting contents are set with block.set, shown by model.get, run (counted as started and
+/// entered, with no behaviour warning), undone with other parameters in one step, refused
+/// where they cannot be, and go with a removed block.
+#[test]
+fn starting_contents_are_set_run_undone_and_removed() {
+    let mut e = help_desk();
+    let desk = |e: &mut Engine| -> Value {
+        let m = ok(e, "model.get", json!({}));
+        m["elements"]
+            .as_array()
+            .and_then(|v| v.iter().find(|x| x["id"] == "desk"))
+            .cloned()
+            .unwrap_or_default()
+    };
+    let metric = |r: &Value, name: &str| {
+        r["elements"]
+            .as_array()
+            .and_then(|es| es.iter().find(|x| x["id"] == "desk"))
+            .and_then(|x| x["metrics"][name]["mean"].as_f64())
+    };
+    assert!(desk(&mut e).get("starting").is_none());
+
+    // With other parameters: one step to undo.
+    ok(
+        &mut e,
+        "block.set",
+        json!({ "id": "desk", "capacity": 2, "starting": 5 }),
+    );
+    let d = desk(&mut e);
+    assert_eq!(
+        (d["capacity"].clone(), d["starting"].clone()),
+        (json!(2), json!(5))
+    );
+    ok(&mut e, "undo", json!({}));
+    let d = desk(&mut e);
+    assert_eq!(d["capacity"], json!(1));
+    assert!(d.get("starting").is_none(), "{d}");
+    assert!(e.model().starting.is_empty());
+    ok(&mut e, "redo", json!({}));
+    assert_eq!(desk(&mut e)["starting"], json!(5));
+
+    // Run without a warm-up: the five count as started and entered at the desk.
+    ok(&mut e, "experiment.set", json!({ "warmup": 0.0 }));
+    let r = ok(&mut e, "run", json!({ "replications": 2 }));
+    assert_eq!(metric(&r, "started"), Some(5.0), "{r}");
+    assert!(metric(&r, "entered").is_some_and(|n| n >= 5.0), "{r}");
+    let warnings = r["warnings"].to_string();
+    assert!(
+        !warnings.contains("unbalanced") && !warnings.contains("unaccounted"),
+        "{warnings}"
+    );
+    // With a warm-up they are inside at its end like any others, and none are started after it.
+    ok(&mut e, "experiment.set", json!({ "warmup": 60.0 }));
+    let r = ok(&mut e, "run", json!({ "replications": 2 }));
+    assert_eq!(metric(&r, "started"), None, "{r}");
+
+    // `null` and 0 both clear them, alone one step to undo.
+    ok(
+        &mut e,
+        "block.set",
+        json!({ "id": "desk", "starting": null }),
+    );
+    assert!(desk(&mut e).get("starting").is_none());
+    ok(&mut e, "undo", json!({}));
+    assert_eq!(desk(&mut e)["starting"], json!(5));
+    ok(&mut e, "block.set", json!({ "id": "desk", "starting": 0 }));
+    assert!(e.model().starting.is_empty());
+
+    // Not where they cannot be.
+    assert_eq!(
+        err(&mut e, "block.set", json!({ "id": "exit", "starting": 2 })),
+        ErrorCode::InvalidParams
+    );
+    assert_eq!(
+        err(
+            &mut e,
+            "block.set",
+            json!({ "id": "arrivals", "starting": 2 })
+        ),
+        ErrorCode::InvalidParams
+    );
+
+    // More than a finite waiting room holds is an error of the model: the desk's 2 units and 2
+    // places waiting hold 4.
+    assert_eq!(desk(&mut e)["capacity"], json!(2));
+    ok(
+        &mut e,
+        "block.set",
+        json!({ "id": "desk", "queue_capacity": 2, "starting": 5 }),
+    );
+    let v = ok(&mut e, "model.validate", json!({}));
+    assert!(v.to_string().contains("bad_starting"), "{v}");
+    ok(&mut e, "block.set", json!({ "id": "desk", "starting": 4 }));
+    let v = ok(&mut e, "model.validate", json!({}));
+    assert!(!v.to_string().contains("bad_starting"), "{v}");
+
+    // Removing the block takes its starting contents with it, and undo brings them back.
+    ok(&mut e, "block.remove", json!({ "id": "desk" }));
+    assert!(e.model().starting.is_empty());
+    ok(&mut e, "undo", json!({}));
+    assert_eq!(desk(&mut e)["starting"], json!(4));
+}

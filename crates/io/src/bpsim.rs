@@ -28,6 +28,12 @@ pub const STOCHCRAFT: &str = "stochcraft:";
 /// waiting while each calendar is active, and the value applies outside them.
 pub const QUEUE_CAPACITY: &str = "stochcraft:queueCapacity";
 
+/// A block's starting contents, the entities inside it as every replication starts:
+/// `<bpsim:VendorExtension name="stochcraft:startingContents" xmlns:stochcraft="…"
+/// stochcraft:value="4"/>` in the block's `ElementParameters` (a task, a delay or a batch).
+/// Absent, or 0, the block starts empty.
+pub const STARTING_CONTENTS: &str = "stochcraft:startingContents";
+
 /// A shared pool: `stochcraft:pool` with the value `true` on a resource's `ElementParameters`.
 /// BPMN with BPSim cannot otherwise tell a pool that one task uses, or none, from a task's own
 /// resource; a resource with this marker is always read as a pool. With the value `false`, a

@@ -295,6 +295,12 @@ pub(crate) fn vendor_value_element(name: &str, value: &str) -> Element {
         .with_attr("stochcraft:value", value)
 }
 
+/// A block's starting contents as a StochCraft vendor extension: `n` entities inside as each
+/// replication starts.
+pub(crate) fn starting_element(n: u32) -> Element {
+    vendor_value_element(crate::bpsim::STARTING_CONTENTS, &n.to_string())
+}
+
 /// The vendor extension that makes a task a batch or a split, if `kind` is one.
 pub(crate) fn batching_element(kind: &ElementKind) -> Option<Element> {
     match kind {
@@ -1103,6 +1109,13 @@ pub fn write_new(model: &Model) -> Vec<u8> {
         }
         if let Some(x) = model.estimates.get(&e.id) {
             ep.push(estimate_element(x));
+        }
+        if let Some(n) = model
+            .starting
+            .get(&e.id)
+            .filter(|n| **n > 0 && e.kind.holds_at_start())
+        {
+            ep.push(starting_element(*n));
         }
         if ep.elements().next().is_none() {
             continue;

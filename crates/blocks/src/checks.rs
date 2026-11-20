@@ -200,8 +200,8 @@ fn unbalanced(kind: &ElementKind, e: &ElementReport) -> Option<Behaviour> {
     (came != went).then_some(Behaviour::Unbalanced { came, went })
 }
 
-/// The model's entities: those created at a source or inside anywhere as the statistics started
-/// (`came`), those that left the model (`out`) and those inside anywhere at the end (`inside`);
+/// The model's entities: those created at a source, placed inside a block as the run started
+/// ([`ElementReport::started`]) or inside anywhere as the statistics started (`came`), those that left the model (`out`) and those inside anywhere at the end (`inside`);
 /// those started and ended where entities are copied, combined or split (`made`, `ended`); and
 /// whether every entity is counted in one place only, so that `came + made` must equal
 /// `out + ended + inside` ([`unaccounted`]). `present`: the entities created at a source or
@@ -255,9 +255,13 @@ fn flows(model: &Model, report: &Report) -> Flows {
             continue;
         };
         let [leaving_at_start, leaving_at_end] = e.leaving;
-        f.came += leaving_at_start;
+        // Entities placed inside as the run started came into the model here, as a source's
+        // arrivals come in at the source (they also count in the block's `entered`, which is
+        // what its own balance takes).
+        let started = e.started.unwrap_or(0);
+        f.came += leaving_at_start + started;
         f.inside += leaving_at_end;
-        f.present += leaving_at_start + inside(e).0;
+        f.present += leaving_at_start + inside(e).0 + started;
         match &element.kind {
             // What comes in ends here, and what leaves starts here: only the counts across
             // the element's edges matter, not those inside it.

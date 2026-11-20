@@ -1177,3 +1177,8 @@ unit	yr	年
 	then more until precise enough, at most {max}	その後、十分な精度になるまで追加、最大 {max}
 @plural	Stopped after {n} run: {result} is within its target.|Stopped after {n} runs: {result} is within its target.	{n} 回の実行で停止しました: {result} は目標内に収まっています。
 @plural	Stopped at the most allowed, {n} run, before {result} was within its target.|Stopped at the most allowed, {n} runs, before {result} was within its target.	{result} が目標内に収まる前に、許容される上限の {n} 回で停止しました。
+	Inside at the start	開始時に内部にある数
+	Entities already inside when each run starts, instead of an empty start: as many as there are free units start being served at once, the rest wait.	空の状態から始める代わりに、各実行の開始時にすでに内部にあるエンティティです。空いているユニットの数だけすぐにサービスを受け始め、残りは待ちます。
+	Entities inside at the start are given for a block that does not exist. Remove them.	開始時に内部にあるエンティティが、存在しないブロックに指定されています。削除してください。
+	{block} cannot have entities inside at the start: only a task or a batch can. Remove its “Inside at the start”.	{block} には開始時にエンティティを置けません。置けるのはタスクかバッチだけです。「開始時に内部にある数」を削除してください。
+	{block} has {count} entities inside at the start, but it holds at most {most}, its units and its waiting room. Set “Inside at the start” to {most} or fewer, or make the waiting room larger.	{block} の開始時に内部にあるエンティティは {count} ですが、ユニットと待機場所を合わせて最大 {most} しか入りません。「開始時に内部にある数」を {most} 以下にするか、待機場所を大きくしてください。

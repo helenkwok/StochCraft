@@ -27,8 +27,8 @@ use crate::write::{
     own_marker, patience_element, planned_element, power_element, probability_element,
     processing_by_element, property_element, quantity_element, quantity_param,
     queue_capacity_element, rework_element, routing_element, scrap_element, sequential_element,
-    sequential_off_element, size, start_param, stop_element, timer_param, transfer_element,
-    transport_element, turned_away_element, units_param, vendor_value_element,
+    sequential_off_element, size, start_param, starting_element, stop_element, timer_param,
+    transfer_element, transport_element, turned_away_element, units_param, vendor_value_element,
 };
 use crate::xml::{self, Element, Node};
 use crate::{Format, SaveError};
@@ -391,6 +391,17 @@ fn difference_within(
             "its three-point estimates read as {:?}",
             got.estimates
         ));
+    }
+    // So are starting contents, on blocks that can hold them (0 being none).
+    let started = |m: &Model| -> BTreeMap<ElementId, u32> {
+        m.starting
+            .iter()
+            .filter(|(id, n)| **n > 0 && want.element(id).is_some_and(|e| e.kind.holds_at_start()))
+            .map(|(id, n)| (id.clone(), *n))
+            .collect()
+    };
+    if started(got) != started(want) {
+        return Some(format!("its starting contents read as {:?}", got.starting));
     }
     // Shapes are kept to the precision the file writes them with.
     let near = |a: &Bounds, b: &Bounds| {
@@ -2654,9 +2665,9 @@ impl Editor {
         Ok(())
     }
 
-    /// The experiment's stop condition and the three-point estimates: StochCraft's vendor
-    /// extensions on the elements they concern, where they changed (or where the element was
-    /// replaced, taking its parameters with it).
+    /// The experiment's stop condition, the three-point estimates and the starting contents:
+    /// StochCraft's vendor extensions on the elements they concern, where they changed (or where
+    /// the element was replaced, taking its parameters with it).
     fn extensions(
         &mut self,
         root: &mut Element,
@@ -2665,7 +2676,7 @@ impl Editor {
         after: &Model,
         replaced: &BTreeSet<&str>,
     ) -> Result<(), SaveError> {
-        use crate::bpsim::{ESTIMATE, STOP_COUNT, STOP_WHEN_EMPTY};
+        use crate::bpsim::{ESTIMATE, STARTING_CONTENTS, STOP_COUNT, STOP_WHEN_EMPTY};
         let mut writes: Vec<(String, &'static str, Option<Element>)> = Vec::new();
         let exists = |id: &ElementId| after.element(id).is_some();
         let (old_stop, new_stop) = (&before.experiment.stop, &after.experiment.stop);
@@ -2708,6 +2719,26 @@ impl Editor {
                 v
             });
             writes.push((id.to_string(), ESTIMATE, v));
+        }
+        // Starting contents, 0 being none, on blocks that can hold them.
+        let count = |m: &Model, id: &ElementId| {
+            m.starting
+                .get(id)
+                .copied()
+                .filter(|n| *n > 0 && m.element(id).is_some_and(|e| e.kind.holds_at_start()))
+        };
+        let ids: BTreeSet<&ElementId> = before
+            .starting
+            .keys()
+            .chain(after.starting.keys())
+            .collect();
+        for id in ids {
+            let (was, now) = (count(before, id), count(after, id));
+            if was == now && !replaced.contains(id.as_str()) {
+                continue;
+            }
+            let v = now.filter(|_| exists(id)).map(starting_element);
+            writes.push((id.to_string(), STARTING_CONTENTS, v));
         }
         if writes.iter().all(|(_, _, v)| v.is_none()) {
             if let Some(s) = scenario_mut(root, scenario) {

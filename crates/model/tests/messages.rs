@@ -9,7 +9,7 @@ use stochcraft_model::messages::{LABEL_ARGS, TEMPLATES, fill, labels};
 use stochcraft_model::{
     Behaviour, Calendar, Connection, Diagnostic, Element, ElementId, ElementKind, ExperimentField,
     FitError, IgnoredWhat, IgnoredWhy, Model, Problem, PropertyFault, PropertyType, ResourcePool,
-    Severity, StopFault,
+    Severity, StartingFault, StopFault,
 };
 use stochcraft_random::{DistError, Requirement};
 
@@ -441,6 +441,24 @@ fn samples() -> Vec<Diagnostic> {
                 reason: StopFault::NotATask,
             },
         ),
+        found(
+            Some("ghost"),
+            Problem::BadStarting {
+                reason: StartingFault::NoSuchBlock,
+            },
+        ),
+        found(
+            Some("n1"),
+            Problem::BadStarting {
+                reason: StartingFault::CannotHold,
+            },
+        ),
+        found(
+            task,
+            Problem::BadStarting {
+                reason: StartingFault::TooMany { count: 9, most: 5 },
+            },
+        ),
         found(task, Problem::StopWithWarmup),
         found(
             None,
@@ -557,6 +575,7 @@ const NO_BLOCK_NAME: &[&str] = &[
     "invalid_id",
     "duplicate_id",
     "bad_stop_missing",
+    "bad_starting_missing",
     "no_source",
     "no_sink",
     "behaviour_unaccounted",

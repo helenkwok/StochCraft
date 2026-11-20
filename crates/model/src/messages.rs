@@ -22,7 +22,7 @@ use stochcraft_random::{DistError, Requirement};
 
 use crate::{
     Behaviour, Diagnostic, ElementId, ExperimentField, FitError, IgnoredWhat, IgnoredWhy, Model,
-    Problem, PropertyFault, PropertyType, StopFault,
+    Problem, PropertyFault, PropertyType, StartingFault, StopFault,
 };
 
 /// A piece of a message: a template and what fills it.
@@ -497,6 +497,18 @@ pub const TEMPLATES: &[(&str, &str)] = &[
     (
         "bad_stop_empty",
         "The stop condition waits for {block} to empty, but only a task can empty. Choose a task.",
+    ),
+    (
+        "bad_starting_missing",
+        "Entities inside at the start are given for a block that does not exist. Remove them.",
+    ),
+    (
+        "bad_starting_kind",
+        "{block} cannot have entities inside at the start: only a task or a batch can. Remove its “Inside at the start”.",
+    ),
+    (
+        "bad_starting_too_many",
+        "{block} has {count} entities inside at the start, but it holds at most {most}, its units and its waiting room. Set “Inside at the start” to {most} or fewer, or make the waiting room larger.",
     ),
     (
         "stop_with_warmup",
@@ -1121,6 +1133,21 @@ impl Diagnostic {
                 StopFault::NoSuchBlock => part("bad_stop_missing", vec![]),
                 StopFault::ZeroCount => part("bad_stop_count", vec![b()]),
                 StopFault::NotATask => part("bad_stop_empty", vec![b()]),
+            },
+            Problem::BadStarting { reason } => match reason {
+                StartingFault::NoSuchBlock => part("bad_starting_missing", vec![]),
+                StartingFault::CannotHold => part("bad_starting_kind", vec![b()]),
+                StartingFault::TooMany { count, most } => {
+                    field = Some("starting".to_owned());
+                    part(
+                        "bad_starting_too_many",
+                        vec![
+                            b(),
+                            ("count", count.to_string()),
+                            ("most", most.to_string()),
+                        ],
+                    )
+                }
             },
             Problem::StopWithWarmup => part("stop_with_warmup", vec![b()]),
             Problem::EndedInWarmup { replications, of } => {

@@ -1177,3 +1177,8 @@ unit	yr	년
 	then more until precise enough, at most {max}	이후 충분히 정밀해질 때까지 추가, 최대 {max}
 @plural	Stopped after {n} run: {result} is within its target.|Stopped after {n} runs: {result} is within its target.	실행 {n}회 후 중단됨: {result}이(가) 목표 이내입니다.
 @plural	Stopped at the most allowed, {n} run, before {result} was within its target.|Stopped at the most allowed, {n} runs, before {result} was within its target.	{result}이(가) 목표 이내에 들기 전에 허용된 최대치인 실행 {n}회에서 중단됨.
+	Inside at the start	시작 시 내부 개수
+	Entities already inside when each run starts, instead of an empty start: as many as there are free units start being served at once, the rest wait.	빈 상태로 시작하는 대신 각 실행이 시작될 때 이미 내부에 있는 엔터티입니다. 빈 자원 단위 수만큼 바로 서비스를 받기 시작하고, 나머지는 기다립니다.
+	Entities inside at the start are given for a block that does not exist. Remove them.	시작 시 내부 엔터티가 존재하지 않는 블록에 지정되어 있습니다. 제거하세요.
+	{block} cannot have entities inside at the start: only a task or a batch can. Remove its “Inside at the start”.	{block}에는 시작 시 엔터티를 둘 수 없습니다. 작업이나 배치만 가능합니다. “시작 시 내부 개수”를 제거하세요.
+	{block} has {count} entities inside at the start, but it holds at most {most}, its units and its waiting room. Set “Inside at the start” to {most} or fewer, or make the waiting room larger.	{block}의 시작 시 내부 엔터티는 {count}개이지만, 자원 단위와 대기실을 합쳐 최대 {most}개만 들어갑니다. “시작 시 내부 개수”를 {most} 이하로 설정하거나 대기실을 늘리세요.

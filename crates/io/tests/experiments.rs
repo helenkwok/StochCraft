@@ -1,6 +1,6 @@
-//! Terminating experiments and three-point estimates in files (M2.8): StochCraft's vendor
-//! extensions `stochcraft:stopCount`, `stochcraft:stopWhenEmpty` and `stochcraft:estimate`
-//! written, read back, edited and saved.
+//! Terminating experiments, three-point estimates (M2.8) and starting contents (M2.9) in files:
+//! StochCraft's vendor extensions `stochcraft:stopCount`, `stochcraft:stopWhenEmpty`,
+//! `stochcraft:estimate` and `stochcraft:startingContents` written, read back, edited and saved.
 
 #![allow(clippy::panic)]
 
@@ -137,5 +137,100 @@ fn bad_extensions_are_reported_and_ignored() {
     assert!(
         messages.iter().any(|m| m.contains("three-point estimate")),
         "{messages:?}"
+    );
+}
+
+/// The orders model with entities inside its task and its delay at the start.
+fn started() -> Model {
+    let mut m = model();
+    m.starting.insert(ElementId::unchecked("pack"), 3);
+    m.starting.insert(ElementId::unchecked("ship"), 2);
+    m
+}
+
+#[test]
+fn a_new_file_keeps_the_starting_contents() {
+    let m = started();
+    assert!(m.validate().is_empty(), "{:?}", m.validate());
+    let text = String::from_utf8_lossy(&write_new(&m)).into_owned();
+    assert!(
+        text.contains("name=\"stochcraft:startingContents\""),
+        "{text}"
+    );
+    let back = read(text.as_bytes()).unwrap_or_else(|e| panic!("{e}"));
+    assert!(back.notes.is_empty(), "{:#?}", back.notes);
+    assert_eq!(back.model, m);
+}
+
+#[test]
+fn starting_contents_save_into_an_opened_file() {
+    let loaded = read(&write_new(&started())).unwrap_or_else(|e| panic!("{e}"));
+    // More inside the task, none in the delay.
+    let mut edited = loaded.model.clone();
+    edited.starting.insert(ElementId::unchecked("pack"), 5);
+    edited.starting.remove(&ElementId::unchecked("ship"));
+    let saved = loaded
+        .opened
+        .save(&edited)
+        .unwrap_or_else(|e| panic!("{e}"));
+    let back = read_scenario(&saved, None).unwrap_or_else(|e| panic!("{e}"));
+    assert_eq!(back.model.starting, edited.starting);
+    // And with none left, no trace of them.
+    let mut bare = back.model.clone();
+    bare.starting.clear();
+    let saved = back.opened.save(&bare).unwrap_or_else(|e| panic!("{e}"));
+    let text = String::from_utf8_lossy(&saved);
+    assert!(!text.contains("startingContents"), "{text}");
+}
+
+#[test]
+fn a_scenario_inherits_starting_contents_and_can_empty_them() {
+    let text = String::from_utf8_lossy(&write_new(&started())).into_owned();
+    let base = text
+        .split("<bpsim:Scenario id=\"")
+        .nth(1)
+        .and_then(|rest| rest.split('"').next())
+        .unwrap_or_else(|| panic!("no scenario in {text}"))
+        .to_owned();
+    let text = text.replace(
+        "</bpsim:BPSimData>",
+        &format!(
+            r#"<bpsim:Scenario id="later" name="Later" inherits="{base}"></bpsim:Scenario>
+        <bpsim:Scenario id="emptied" name="Emptied" inherits="{base}">
+          <bpsim:ElementParameters elementRef="pack">
+            <bpsim:VendorExtension name="stochcraft:startingContents" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1" stochcraft:value="0"/>
+          </bpsim:ElementParameters>
+        </bpsim:Scenario>
+      </bpsim:BPSimData>"#
+        ),
+    );
+    let later = read_scenario(text.as_bytes(), Some("later")).unwrap_or_else(|e| panic!("{e}"));
+    assert_eq!(later.model.starting, started().starting);
+    let emptied = read_scenario(text.as_bytes(), Some("emptied")).unwrap_or_else(|e| panic!("{e}"));
+    assert!(emptied.notes.is_empty(), "{:#?}", emptied.notes);
+    let only_ship: Vec<(&str, u32)> = emptied
+        .model
+        .starting
+        .iter()
+        .map(|(id, n)| (id.as_str(), *n))
+        .collect();
+    assert_eq!(only_ship, vec![("ship", 2)]);
+}
+
+#[test]
+fn bad_starting_contents_are_reported_and_ignored() {
+    let text = String::from_utf8_lossy(&write_new(&started()))
+        .replace(
+            "name=\"stochcraft:startingContents\" xmlns:stochcraft=\"https://helenkwok.github.io/StochCraft/bpsim/1\" stochcraft:value=\"3\"",
+            "name=\"stochcraft:startingContents\" xmlns:stochcraft=\"https://helenkwok.github.io/StochCraft/bpsim/1\" stochcraft:value=\"three\"",
+        );
+    let back = read(text.as_bytes()).unwrap_or_else(|e| panic!("{e}"));
+    assert_eq!(back.model.starting.len(), 1);
+    assert!(
+        back.notes
+            .iter()
+            .any(|n| n.message.contains("starting contents")),
+        "{:#?}",
+        back.notes
     );
 }

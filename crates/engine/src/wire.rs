@@ -1716,6 +1716,11 @@ pub struct ElementDoc {
     /// there is none.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub estimate: Option<EstimateDoc>,
+    /// Tasks, delays and batches: how many entities are inside as each run starts, instead of
+    /// an empty start (as many as there are free units start a fresh service at once, the rest
+    /// wait); left out when it starts empty.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub starting: Option<u32>,
 }
 
 /// A shape's top-left corner and size, in the diagram's units (BPMN DI's, y downwards).
@@ -2309,6 +2314,7 @@ impl From<&Model> for ModelDoc {
                     properties: e.properties.iter().map(Into::into).collect(),
                     bounds: m.layout.get(&e.id).copied().map(Into::into),
                     estimate: m.estimates.get(&e.id).map(Into::into),
+                    starting: m.starting.get(&e.id).copied().filter(|n| *n > 0),
                 })
                 .collect(),
             connections: m
@@ -2352,9 +2358,15 @@ impl From<ModelDoc> for Model {
                 Some((ElementId::unchecked(&e.id), x))
             })
             .collect();
+        let starting = m
+            .elements
+            .iter()
+            .filter_map(|e| Some((ElementId::unchecked(&e.id), e.starting.filter(|n| *n > 0)?)))
+            .collect();
         Self {
             layout,
             estimates,
+            starting,
             name: m.name,
             elements: m
                 .elements

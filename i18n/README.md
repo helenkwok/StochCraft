@@ -796,6 +796,14 @@ fields (`“Service time”`) are named in the messages by their own rows.
   checked against any other source, and not reviewed by native speakers; the least certain are
   lo, ka, ta and te, the case endings in sl, uk and pl, and the particle after a name in ko. "Cannot be known to a share of
   itself" is reworded in each language as a precision given as a share of the mean.
+- The rows for starting contents (issue #225: the "Inside at the start" field and result, its
+  one-line explanation, and the three messages for starting contents on a block that does not
+  exist, cannot hold them or holds fewer) were machine-drafted with Claude Code from the plain
+  meaning of the English, with each catalog's own words for entity, run, unit, waiting room,
+  task and batch, and "inside" phrased like its "Still inside at the end" (de and pt-br "im
+  System" and "no sistema"; fr "présents"). Not checked against any other source, and not
+  reviewed by native speakers; the least certain are lo, th, ta, te, bn, ka, kk, hi and sq, and
+  the case endings in sl, lt, uk and ru.
 
 **Adding or changing a string:** add the English in the code through `i18n::t` (or `tf`, `tn`),
 then add its row to each catalog here, or leave it out to show English until it is translated.

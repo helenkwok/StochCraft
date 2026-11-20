@@ -1363,6 +1363,7 @@ fn to_model(p: Process, scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> M
     let mut experiment = experiment(scenario, notes);
     experiment.stop = stop_of(scenario, &elements, notes);
     let estimates = estimates_of(scenario, &elements, notes);
+    let starting = starting_of(scenario, &elements, notes);
     Model {
         name: p.name,
         elements,
@@ -1372,7 +1373,50 @@ fn to_model(p: Process, scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> M
         experiment,
         layout: BTreeMap::new(),
         estimates,
+        starting,
     }
+}
+
+/// The starting contents StochCraft's vendor extension gives blocks ([`bpsim::STARTING_CONTENTS`]):
+/// how many entities are inside each as a replication starts. 0 is the same as none.
+fn starting_of(
+    scenario: Option<&Scenario>,
+    elements: &[ModelElement],
+    notes: &mut Vec<Note>,
+) -> BTreeMap<ElementId, u32> {
+    let mut out = BTreeMap::new();
+    let Some(s) = scenario else {
+        return out;
+    };
+    for e in elements {
+        let id = e.id.as_str();
+        let Some(ext) = s.param(id, &format!("VendorExtension/{}", bpsim::STARTING_CONTENTS))
+        else {
+            continue;
+        };
+        let raw = bpsim::vendor_value(ext).unwrap_or_default();
+        match raw.trim().parse::<u32>() {
+            Ok(0) => {}
+            Ok(_) if !e.kind.holds_at_start() => notes.push(Note::error(
+                Some(id),
+                format!(
+                    "starting contents (`{}`) apply only to a task, a delay or a batch; they are ignored here",
+                    bpsim::STARTING_CONTENTS
+                ),
+            )),
+            Ok(n) => {
+                out.insert(e.id.clone(), n);
+            }
+            Err(_) => notes.push(Note::error(
+                Some(id),
+                format!(
+                    "starting contents (`{}`) must be a whole number of at least 0, not `{raw}`; the block starts empty",
+                    bpsim::STARTING_CONTENTS
+                ),
+            )),
+        }
+    }
+    out
 }
 
 /// The stop condition StochCraft's vendor extensions give the experiment, on the element they
@@ -1515,11 +1559,12 @@ fn queue_capacity(scenario: Option<&Scenario>, id: &str, notes: &mut Vec<Note>) 
             bpsim::STOP_COUNT,
             bpsim::STOP_WHEN_EMPTY,
             bpsim::ESTIMATE,
+            bpsim::STARTING_CONTENTS,
         ]
         .contains(&name)
         {
             // Read by `breakdown_of`, `transfer_of`, `routing_of`, `batching_of`,
-            // `vendor_count`, `stop_of` and `estimates_of`.
+            // `vendor_count`, `stop_of`, `estimates_of` and `starting_of`.
         } else if name.starts_with(bpsim::STOCHCRAFT) {
             notes.push(Note::warning(
                 Some(id),

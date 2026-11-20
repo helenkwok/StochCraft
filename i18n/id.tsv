@@ -1177,3 +1177,8 @@ unit	yr	thn
 	then more until precise enough, at most {max}	lalu lebih banyak sampai cukup presisi, paling banyak {max}
 @plural	Stopped after {n} run: {result} is within its target.|Stopped after {n} runs: {result} is within its target.	Berhenti setelah {n} eksekusi: {result} berada dalam targetnya.
 @plural	Stopped at the most allowed, {n} run, before {result} was within its target.|Stopped at the most allowed, {n} runs, before {result} was within its target.	Berhenti pada batas maksimum yang diizinkan, {n} eksekusi, sebelum {result} berada dalam targetnya.
+	Inside at the start	Di dalam saat mulai
+	Entities already inside when each run starts, instead of an empty start: as many as there are free units start being served at once, the rest wait.	Entitas yang sudah ada di dalam saat setiap eksekusi dimulai, bukan mulai kosong: sebanyak unit yang kosong langsung mulai dilayani, sisanya menunggu.
+	Entities inside at the start are given for a block that does not exist. Remove them.	Entitas di dalam saat mulai diberikan untuk blok yang tidak ada. Hapus entitas itu.
+	{block} cannot have entities inside at the start: only a task or a batch can. Remove its “Inside at the start”.	{block} tidak dapat berisi entitas di dalam saat mulai: hanya tugas atau batch yang dapat. Hapus “Di dalam saat mulai” miliknya.
+	{block} has {count} entities inside at the start, but it holds at most {most}, its units and its waiting room. Set “Inside at the start” to {most} or fewer, or make the waiting room larger.	{block} berisi {count} entitas di dalam saat mulai, tetapi hanya memuat paling banyak {most}, unitnya dan ruang tunggunya. Atur “Di dalam saat mulai” ke {most} atau kurang, atau perbesar ruang tunggu.

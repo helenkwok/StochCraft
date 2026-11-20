@@ -10,7 +10,8 @@ answer the question, has steps 1–5 done, and M5's sorter is built alongside it
 are done, and so is M2.10 (abandonment and balking) apart from the gaps listed in it. M2.11
 (changeovers and lean measures) has its changeovers, product-type times, takt and cycle times,
 state times and most of OEE done; M2.9 (output analysis) has its recorder of results over time,
-MSER-5's warm-up suggestion, its warnings and streams by element id done. M4 is being planned.
+MSER-5's warm-up suggestion, its warnings, streams by element id and starting contents done. M4
+is being planned.
 M5 has its conveyors (M5.1), the operators in the model and files (M5.2, PR 1), a first 3D view
 (M5.3), the dashboard (M5.4) and the sorter example in; M5.5, which reworks M5's geometry so the
 physical layout is a model layer of its own, from which the plan and the 3D view are drawn, has
@@ -1430,8 +1431,23 @@ ch. 10 §10.4, in Brailsford, Churilov and Dangerfield, eds., 2014). Related and
       routing, delays, joins or shared pools. Arrivals from a source with a limit or a
       calendar are at most a rate, and give no warning.
 
-Starting a run with entities already inside (#225), the other answer to a warm-up, stays with
-"starting a run from an observed state" under digital twins (After M3).
+- **Starting contents (#225).** **Done:** a run can start with entities already inside tasks,
+  delays and batches, the other answer to a warm-up: a count per block (`Model::starting`, the
+  `stochcraft:startingContents` extension in a scenario's element parameters, inherited like
+  any other; `block.set`'s `starting`; **Inside at the start** under the inspector's More
+  settings). At time 0 they join the block's queue in order, as arrivals would (its properties
+  assigned, a place taken in a finite waiting room, which the model check keeps them within):
+  as many as there are free units start a fresh service drawn from the block's own stream, and
+  the rest wait. Tools that offer a start that is not empty do it the same way: entities put
+  into a queue or a block at time 0 by start-up logic, or queues filled before the run. They
+  count as entered, and as `started` (only where some were placed); the behaviour checks count
+  them as coming into the model there, and with a warm-up those still inside at its end are
+  inside at the start like any others. A block with starting contents is where entities come
+  from, so a model needs no source.
+  - Not yet: in-service entities start a fresh service; elapsed or remaining service times, for
+    starting from an observed state, come later with digital twins (After M3). Entities placed
+    at the start carry only the properties their block assigns, not those a source would have
+    given them. The `no_warmup` warning still speaks of a start from empty.
 
 ### M2.10 Abandonment
 

@@ -1096,6 +1096,34 @@ impl ElementKind {
         }
     }
 
+    /// Whether entities can be inside this kind of block as a run starts ([`Model::starting`]):
+    /// a task (with a resource of its own or shared ones), a delay or a batch. Not sources,
+    /// sinks, gateways, splits or conveyors.
+    pub fn holds_at_start(&self) -> bool {
+        matches!(
+            self,
+            ElementKind::Server { .. }
+                | ElementKind::SharedTask { .. }
+                | ElementKind::Delay { .. }
+                | ElementKind::Batch { .. }
+        )
+    }
+
+    /// The most entities this block can hold as a run starts: a server with a fixed finite
+    /// waiting room holds one per unit (every unit it ever has on shift) plus the waiting room,
+    /// the places its room has. `None`: no limit (no waiting room limit, or one by timetable or
+    /// per working server, which limits those waiting rather than holding places).
+    pub fn most_at_start(&self) -> Option<u32> {
+        match self {
+            ElementKind::Server {
+                queue_capacity: Some(q),
+                queue_limit: QueueLimit::Fixed,
+                ..
+            } => Some(self.most_units().unwrap_or(0).saturating_add(*q)),
+            _ => None,
+        }
+    }
+
     /// A server's units in all: the most its timetable ever puts on shift (its `capacity`, or
     /// a shift's units if more). `None` for other elements.
     pub fn most_units(&self) -> Option<u32> {
@@ -1576,6 +1604,12 @@ pub struct Model {
     /// The three-point estimates elements' time distributions were fitted from (see
     /// [`Model::estimated`] for which distribution).
     pub estimates: BTreeMap<ElementId, Estimate>,
+    /// Starting contents: how many entities are inside each block as every replication starts,
+    /// instead of an empty start (tasks, delays and batches only, see
+    /// [`ElementKind::holds_at_start`]). They are put into the block's queue at time 0 in
+    /// order, as arrivals would be, so as many as there are free units start a fresh service
+    /// at once and the rest wait. A block left out (or 0) starts empty.
+    pub starting: BTreeMap<ElementId, u32>,
 }
 
 /// Where an element is drawn: its shape's top-left corner and size, in the diagram's units
@@ -1903,6 +1937,10 @@ pub enum Problem {
     BadStop {
         reason: StopFault,
     },
+    /// The starting contents of a block ([`Model::starting`]) cannot be used, and why.
+    BadStarting {
+        reason: StartingFault,
+    },
     /// The experiment has both a stop condition and a warm-up: a replication whose stop comes
     /// before the warm-up ends has no statistics after the warm-up, and is left out of the
     /// results ([`Problem::EndedInWarmup`]).
@@ -2130,6 +2168,17 @@ pub enum StopFault {
     NotATask,
 }
 
+/// Why a block's starting contents cannot be used ([`Problem::BadStarting`]).
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum StartingFault {
+    /// No element has the id they are for.
+    NoSuchBlock,
+    /// The block cannot hold entities at the start ([`ElementKind::holds_at_start`]).
+    CannotHold,
+    /// More than the block's places ([`ElementKind::most_at_start`]): `most`.
+    TooMany { count: u32, most: u32 },
+}
+
 impl Problem {
     /// A stable snake_case name for files, the command line and agents.
     pub fn code(&self) -> &'static str {
@@ -2215,6 +2264,7 @@ impl Problem {
             Problem::QuantityIgnored => "quantity_ignored",
             Problem::NothingToUnbatch => "nothing_to_unbatch",
             Problem::BadStop { .. } => "bad_stop",
+            Problem::BadStarting { .. } => "bad_starting",
             Problem::StopWithWarmup => "stop_with_warmup",
             Problem::EndedInWarmup { .. } => "ended_in_warmup",
             Problem::Overloaded { .. } => "overloaded",
@@ -2881,6 +2931,7 @@ impl Model {
         self.check_experiment(&mut out);
         self.check_stop(&mut out);
         self.check_estimates(&mut out);
+        self.check_starting(&mut out);
         self.check_properties(&mut out);
         self.check_routing(&mut out);
         self.check_reachability(&outgoing, &mut out);
@@ -3619,6 +3670,35 @@ impl Model {
         }
     }
 
+    /// Each block's starting contents are for a block that exists, can hold entities at the
+    /// start, and fit in its places. A count of 0 is the same as none.
+    fn check_starting(&self, out: &mut Vec<Diagnostic>) {
+        for (id, &count) in &self.starting {
+            if count == 0 {
+                continue;
+            }
+            let reason = match self.element(id).map(|e| &e.kind) {
+                None => Some(StartingFault::NoSuchBlock),
+                Some(kind) if !kind.holds_at_start() => Some(StartingFault::CannotHold),
+                Some(kind) => kind
+                    .most_at_start()
+                    .filter(|most| count > *most)
+                    .map(|most| StartingFault::TooMany { count, most }),
+            };
+            if let Some(reason) = reason {
+                out.push(Diagnostic::error(Some(id), Problem::BadStarting { reason }));
+            }
+        }
+    }
+
+    /// The blocks with entities inside as a run starts ([`Model::starting`]), in model order.
+    pub fn started_blocks(&self) -> impl Iterator<Item = (usize, &Element, u32)> {
+        self.elements.iter().enumerate().filter_map(|(i, e)| {
+            let n = self.starting.get(&e.id).copied().filter(|n| *n > 0)?;
+            e.kind.holds_at_start().then_some((i, e, n))
+        })
+    }
+
     /// The time distribution of element `id` that a three-point estimate is for: a source's time
     /// between arrivals, a task's service time, a delay's duration.
     pub fn estimated(&self, id: &ElementId) -> Option<&Dist> {
@@ -3771,11 +3851,13 @@ impl Model {
         outgoing: &BTreeMap<&ElementId, Vec<&ElementId>>,
         out: &mut Vec<Diagnostic>,
     ) {
+        // Where entities come from: sources, and blocks with entities inside at the start.
         let sources: Vec<&ElementId> = self
             .elements
             .iter()
             .filter(|e| matches!(e.kind, ElementKind::Source { .. }))
             .map(|e| &e.id)
+            .chain(self.started_blocks().map(|(_, e, _)| &e.id))
             .collect();
         let sinks: Vec<&ElementId> = self
             .elements
@@ -4159,6 +4241,7 @@ mod tests {
             experiment: Experiment::default(),
             layout: BTreeMap::new(),
             estimates: BTreeMap::new(),
+            starting: BTreeMap::new(),
             calendars: Vec::new(),
         }
     }
@@ -5062,5 +5145,73 @@ mod tests {
             codes(&m),
             vec![(Some("machine".into()), "bad_estimate".into())]
         );
+    }
+
+    #[test]
+    fn starting_contents_must_fit_a_block_that_holds_them() {
+        let codes = |m: &Model| -> Vec<(Option<String>, String)> {
+            m.validate()
+                .into_iter()
+                .map(|d| (d.at.map(|a| a.to_string()), d.problem.code().to_owned()))
+                .collect()
+        };
+        let mut m = mm1();
+        // Any number inside a task without a waiting-room limit; 0 is the same as none.
+        m.starting.insert(ElementId::unchecked("machine"), 40);
+        m.starting.insert(ElementId::unchecked("exit"), 0);
+        assert_eq!(codes(&m), vec![]);
+        // Not in a block that cannot hold entities, nor one that does not exist.
+        m.starting.insert(ElementId::unchecked("exit"), 2);
+        m.starting.insert(ElementId::unchecked("ghost"), 1);
+        assert_eq!(
+            codes(&m),
+            vec![
+                (Some("exit".into()), "bad_starting".into()),
+                (Some("ghost".into()), "bad_starting".into()),
+            ]
+        );
+        m.starting.remove(&ElementId::unchecked("exit"));
+        m.starting.remove(&ElementId::unchecked("ghost"));
+        // A waiting room of 3 behind 1 unit holds 4.
+        if let Some(e) = m.elements.iter_mut().find(|e| e.id.as_str() == "machine")
+            && let ElementKind::Server { queue_capacity, .. } = &mut e.kind
+        {
+            *queue_capacity = Some(3);
+        }
+        let too_many = m
+            .validate()
+            .into_iter()
+            .find(|d| d.problem.code() == "bad_starting")
+            .map(|d| d.problem);
+        assert_eq!(
+            too_many,
+            Some(Problem::BadStarting {
+                reason: StartingFault::TooMany { count: 40, most: 4 }
+            })
+        );
+        m.starting.insert(ElementId::unchecked("machine"), 4);
+        assert_eq!(codes(&m), vec![]);
+    }
+
+    #[test]
+    fn a_block_with_starting_contents_is_where_entities_come_from() {
+        // No source: entities inside the task at the start still reach the exit, so the model
+        // has somewhere entities come from and every block is reached.
+        let mut m = mm1();
+        m.elements.retain(|e| e.id.as_str() != "arrivals");
+        m.connections.retain(|c| c.id.as_str() != "f1");
+        let codes = |m: &Model| -> Vec<String> {
+            m.validate()
+                .into_iter()
+                .map(|d| d.problem.code().to_owned())
+                .collect()
+        };
+        assert!(
+            codes(&m).contains(&"no_source".to_owned()),
+            "{:?}",
+            codes(&m)
+        );
+        m.starting.insert(ElementId::unchecked("machine"), 3);
+        assert_eq!(codes(&m), Vec::<String>::new());
     }
 }
