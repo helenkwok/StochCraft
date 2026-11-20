@@ -509,6 +509,13 @@ pub struct BlockSet {
     /// Transports: the time to unload an item at the drop-off.
     #[serde(default)]
     pub unload: Option<DistSpec>,
+    /// Servers, shared tasks, delays and batches: how many entities are inside as each run
+    /// starts, instead of an empty start. They join the queue at time 0 in order: as many as
+    /// there are free units start a fresh service at once, the rest wait (with a finite waiting
+    /// room, at most the units plus the room). `null` or 0: it starts empty.
+    #[serde(default, deserialize_with = "some")]
+    #[schemars(with = "Option<u32>")]
+    pub starting: Option<Option<u32>>,
 }
 
 /// A new shared resource pool.
@@ -904,7 +911,7 @@ fn model_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         .and_then(Value::as_array)
     {
         for el in elements {
-            check_keys(el, &["id", "name", "properties"])?;
+            check_keys(el, &["id", "name", "properties", "starting"])?;
         }
     }
     let p: ModelSet = parse(p)?;
@@ -1147,10 +1154,13 @@ fn batch(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
 fn block_remove(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
     let p: Id = parse(p)?;
     let id = existing_element(e.model(), &p.id)?;
-    // Its estimate goes with it, and a stop condition watching it.
+    // Its estimate and starting contents go with it, and a stop condition watching it.
     let mut ops = Vec::new();
     if e.model().estimates.contains_key(&id) {
         ops.push(Op::SetEstimate(id.clone(), None));
+    }
+    if e.model().starting.contains_key(&id) {
+        ops.push(Op::SetStarting(id.clone(), None));
     }
     let x = &e.model().experiment;
     if x.stop.as_ref().is_some_and(|s| s.element() == &id) {
@@ -1379,6 +1389,7 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         ("pool", p.pool.is_some()),
         ("load", p.load.is_some()),
         ("unload", p.unload.is_some()),
+        ("starting", p.starting.is_some()),
     ];
     let applies: &[&str] = match kind {
         ElementKind::Source { .. } => &["interarrival", "limit", "timed", "idle_outside"],
@@ -1402,11 +1413,14 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
             "health_check",
             "shifts",
             "on_shift_end",
+            "starting",
         ],
-        ElementKind::SharedTask { .. } => &["service", "processing_by", "needs", "priority"],
-        ElementKind::Delay { .. } => &["duration", "processing_by"],
+        ElementKind::SharedTask { .. } => {
+            &["service", "processing_by", "needs", "priority", "starting"]
+        }
+        ElementKind::Delay { .. } => &["duration", "processing_by", "starting"],
         ElementKind::ExclusiveGateway { .. } => &["default", "routing"],
-        ElementKind::Batch { .. } => &["size"],
+        ElementKind::Batch { .. } => &["size", "starting"],
         ElementKind::Sink { .. } => &["scrap", "demand"],
         ElementKind::Conveyor { .. } => &[
             "length",
@@ -1641,7 +1655,20 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         }
         ElementKind::ParallelGateway | ElementKind::Unbatch => {}
     }
-    e.edit("block.set", Op::SetKind(id, kind))?;
+    // Starting contents are kept beside the element (`Model::starting`), so changing them with
+    // other parameters is two edits, undone as one.
+    let op = match p.starting {
+        None => Op::SetKind(id, kind),
+        Some(n) => {
+            let starting = Op::SetStarting(id.clone(), n.filter(|n| *n > 0));
+            if given.iter().any(|(name, g)| *g && *name != "starting") {
+                Op::Batch(vec![Op::SetKind(id, kind), starting])
+            } else {
+                starting
+            }
+        }
+    };
+    e.edit("block.set", op)?;
     Ok(json!({}))
 }
 

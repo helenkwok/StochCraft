@@ -1203,3 +1203,8 @@ unit	yr	ປີ
 	then more until precise enough, at most {max}	ຈາກນັ້ນເພີ່ມອີກຈົນແມ່ນຍຳພໍ, ສູງສຸດ {max}
 @plural	Stopped after {n} run: {result} is within its target.|Stopped after {n} runs: {result} is within its target.	ຢຸດຫຼັງຈາກຈຳລອງຊ້ຳ {n} ຮອບ: {result} ຢູ່ພາຍໃນເປົ້າໝາຍຂອງມັນ.
 @plural	Stopped at the most allowed, {n} run, before {result} was within its target.|Stopped at the most allowed, {n} runs, before {result} was within its target.	ຢຸດທີ່ຈຳນວນສູງສຸດທີ່ອະນຸຍາດ, {n} ຮອບ, ກ່ອນທີ່ {result} ຈະຢູ່ພາຍໃນເປົ້າໝາຍຂອງມັນ.
+	Inside at the start	ຢູ່ພາຍໃນເມື່ອເລີ່ມ
+	Entities already inside when each run starts, instead of an empty start: as many as there are free units start being served at once, the rest wait.	ເອນທິຕີທີ່ຢູ່ພາຍໃນແລ້ວເມື່ອແຕ່ລະຮອບຈຳລອງເລີ່ມ ແທນການເລີ່ມແບບວ່າງ: ມີໜ່ວຍວ່າງເທົ່າໃດ ກໍເລີ່ມຮັບບໍລິການທັນທີເທົ່ານັ້ນ ສ່ວນທີ່ເຫຼືອລໍຖ້າ
+	Entities inside at the start are given for a block that does not exist. Remove them.	ເອນທິຕີທີ່ຢູ່ພາຍໃນເມື່ອເລີ່ມ ຖືກກຳນົດໃຫ້ບລັອກທີ່ບໍ່ມີຢູ່ ລຶບພວກມັນອອກ
+	{block} cannot have entities inside at the start: only a task or a batch can. Remove its “Inside at the start”.	{block} ບໍ່ສາມາດມີເອນທິຕີຢູ່ພາຍໃນເມື່ອເລີ່ມ: ມີພຽງໜ້າວຽກ ຫຼື ຊຸດ ທີ່ມີໄດ້ ລຶບ “ຢູ່ພາຍໃນເມື່ອເລີ່ມ” ຂອງມັນ
+	{block} has {count} entities inside at the start, but it holds at most {most}, its units and its waiting room. Set “Inside at the start” to {most} or fewer, or make the waiting room larger.	{block} ມີເອນທິຕີ {count} ຢູ່ພາຍໃນເມື່ອເລີ່ມ ແຕ່ຮັບໄດ້ສູງສຸດ {most} ລວມໜ່ວຍ ແລະ ຫ້ອງລໍຖ້າຂອງມັນ ຕັ້ງ “ຢູ່ພາຍໃນເມື່ອເລີ່ມ” ເປັນ {most} ຫຼື ໜ້ອຍກວ່າ ຫຼື ຂະຫຍາຍຫ້ອງລໍຖ້າ

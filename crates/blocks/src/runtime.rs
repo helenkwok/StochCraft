@@ -667,6 +667,59 @@ impl Compiled {
             }
         }
 
+        // Starting contents (ROADMAP M2.9, #225): entities already inside blocks as the run
+        // starts, instead of an empty start. Each goes into its block's queue now, at time 0,
+        // the way an arrival from the block before it would (its block's properties assigned,
+        // counted as entering, no transfer), before any process has run: the block's free units
+        // take them first, in order, each with a fresh service time from the block's own stream,
+        // and the rest wait. In a fixed finite waiting room each takes a place, as an arrival
+        // does; a limit by timetable or per working unit holds no places. The model check keeps
+        // them within what an arrival at time 0 would find room for (`Model::most_at_start`).
+        // Nothing else is drawn here, so a model
+        // without starting contents runs exactly as before, and no other block's draws move.
+        for (i, _, count) in self.model.started_blocks() {
+            let Some(port) = plain_port(&Route {
+                to: i,
+                input: 0,
+                weight: 1.0,
+                condition: None,
+                default: false,
+                rework: false,
+                abandoned: false,
+                turned_away: false,
+                balked: false,
+            }) else {
+                continue;
+            };
+            for _ in 0..count {
+                let id = *next_id.borrow();
+                if let Some(Room::Fixed(pool)) = port.places.as_ref().map(|p| &p.room) {
+                    let Some(guard) = pool.try_acquire() else {
+                        break;
+                    };
+                    if let Some(p) = &port.places {
+                        p.enter(id, guard);
+                    }
+                }
+                *next_id.borrow_mut() += 1;
+                if let Some(s) = stats.get(i) {
+                    s.borrow_mut().started += 1;
+                }
+                let now = ctx.now();
+                port.send(
+                    now,
+                    Entity {
+                        id,
+                        created: now,
+                        entered: now,
+                        properties: Vec::new(),
+                        members: Vec::new(),
+                        last_server: None,
+                    },
+                );
+            }
+        }
+
         // Discard everything before the warm-up. With none, there is nothing to discard (and a
         // reset at time 0 would discard an arrival at time 0). A run that ends first (its stop
         // condition met) never resets: `reset_at` says whether, and when, it did.
@@ -1228,6 +1281,8 @@ pub(crate) struct BlockStats {
     /// Entities that entered (a source: created; a join: each entity once, see
     /// `spawn_parallel`).
     entered: u64,
+    /// Of `entered`, the entities placed inside as the run started ([`Model::starting`]).
+    started: u64,
     /// `entered` and `left` before the warm-up ended (for stop conditions, which count from 0).
     entered_before: u64,
     left_before: u64,
@@ -1516,6 +1571,7 @@ impl BlockStats {
     fn new(t: f64, properties: usize) -> Self {
         Self {
             entered: 0,
+            started: 0,
             entered_before: 0,
             left_before: 0,
             left: 0,
@@ -1581,6 +1637,8 @@ impl BlockStats {
         self.entered_before += self.entered;
         self.left_before += self.left;
         self.entered = 0;
+        // Those placed at the start and still here now count as inside at the start.
+        self.started = 0;
         self.left = 0;
         self.waiting.reset(t);
         self.busy.reset(t);
@@ -2028,6 +2086,9 @@ impl BlockStats {
                 ElementKind::Server { .. } if on_calendar => self.staffed.average(end),
                 _ => None,
             },
+            // Only where some were placed, so models without starting contents report as
+            // before.
+            started: (self.started > 0).then_some(self.started),
         }
     }
 }
@@ -4689,6 +4750,7 @@ impl Pools {
                     leaving: [0, 0],
                     time_inside: None,
                     on_shift: None,
+                    started: None,
                 }
             })
             .collect()

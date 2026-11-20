@@ -701,10 +701,16 @@ pub enum Metric {
     /// each. A replication in which none reached it has no value (never 0), so the summary is
     /// the mean of the ratios of the replications that have one, and its `n` says how many.
     SpecificEnergy,
+    /// Tasks, delays and batches with starting contents ([`stochcraft_model::Model::starting`]):
+    /// the entities placed inside as the replication started. They count in
+    /// [`Metric::Entered`] too, as entering at time 0. Reported only where some were placed in
+    /// the measured window: with a warm-up, those still inside when it ends count as inside at
+    /// its end, like any other, and none were placed after it.
+    Started,
 }
 
 impl Metric {
-    pub const ALL: [Metric; 44] = [
+    pub const ALL: [Metric; 45] = [
         Metric::Entered,
         Metric::Left,
         Metric::MeanQueueLength,
@@ -749,6 +755,7 @@ impl Metric {
         Metric::CycleTime,
         Metric::Energy,
         Metric::SpecificEnergy,
+        Metric::Started,
     ];
 
     /// The metric with this [`Metric::name`].
@@ -803,6 +810,7 @@ impl Metric {
             Metric::CycleTime => "cycle_time",
             Metric::Energy => "energy",
             Metric::SpecificEnergy => "specific_energy",
+            Metric::Started => "started",
         }
     }
 }
@@ -999,6 +1007,10 @@ pub struct ElementReport {
     /// units on shift (those finishing a job after their shift included), which their
     /// [`Metric::Utilisation`] is over.
     pub on_shift: Option<f64>,
+    /// Blocks with starting contents: [`Metric::Started`], the entities placed inside as the
+    /// replication started (`None` where none were placed in the measured window). They are
+    /// part of `entered`.
+    pub started: Option<u64>,
 }
 
 impl ElementReport {
@@ -1049,6 +1061,7 @@ impl ElementReport {
             Metric::CycleTime => self.cycle_time,
             Metric::Energy => self.energy,
             Metric::SpecificEnergy => self.specific_energy,
+            Metric::Started => self.started.map(|n| n as f64),
         }
     }
 }

@@ -12,8 +12,8 @@
 use std::collections::{BTreeMap, BTreeSet};
 
 use stochcraft_model::{
-    Bounds, Connection, Dist, Element as ModelElement, ElementId, ElementKind, Model, OnShiftEnd,
-    PropertyValue, ResourcePool, Routing, Stop, TimeUnit,
+    Bounds, Connection, Dist, Element as ModelElement, ElementId, ElementKind, Experiment, Model,
+    OnShiftEnd, PropertyValue, ResourcePool, Routing, Stop, TimeUnit,
 };
 
 use crate::bpsim::{NS2, NSS, STOCHCRAFT_NS};
@@ -26,9 +26,10 @@ use crate::write::{
     health_check_element, interruptible_param, mobility_element, numeric, on_shift_end_element,
     own_marker, patience_element, planned_element, power_element, probability_element,
     processing_by_element, property_element, quantity_element, quantity_param,
-    queue_capacity_element, rework_element, routing_element, scrap_element, sequential_element,
-    sequential_off_element, size, start_param, stop_element, timer_param, transfer_element,
-    transport_element, turned_away_element, units_param, vendor_value_element,
+    queue_capacity_element, rework_element, routing_element, scenario_parameters, scrap_element,
+    sequential_element, sequential_off_element, size, start_param, starting_element, stop_element,
+    timer_param, transfer_element, transport_element, turned_away_element, units_param,
+    vendor_value_element,
 };
 use crate::xml::{self, Element, Node};
 use crate::{Format, SaveError};
@@ -70,6 +71,8 @@ pub fn save_edited(
         unit: indent_unit(&doc.root),
         pool_quantity: Vec::new(),
         model_ids: mine,
+        created_scenario: None,
+        experiment: after.experiment.clone(),
     };
     ed.apply(&mut doc.root, scenario, before, after, &resources)?;
     if before.monte_carlo != after.monte_carlo {
@@ -401,6 +404,17 @@ fn difference_within(
             got.estimates
         ));
     }
+    // So are starting contents, on blocks that can hold them (0 being none).
+    let started = |m: &Model| -> BTreeMap<ElementId, u32> {
+        m.starting
+            .iter()
+            .filter(|(id, n)| **n > 0 && want.element(id).is_some_and(|e| e.kind.holds_at_start()))
+            .map(|(id, n)| (id.clone(), *n))
+            .collect()
+    };
+    if started(got) != started(want) {
+        return Some(format!("its starting contents read as {:?}", got.starting));
+    }
     // Shapes are kept to the precision the file writes them with.
     let near = |a: &Bounds, b: &Bounds| {
         [
@@ -659,6 +673,12 @@ struct Editor {
     pool_quantity: Vec<ResourcePool>,
     /// The ids of the saved model's elements, connections and pools.
     model_ids: BTreeSet<String>,
+    /// The scenario this save added, when the file had none to write to, so that every later
+    /// write of the same save goes to it rather than to another new one.
+    created_scenario: Option<String>,
+    /// The saved model's experiment, written whole into a scenario this save adds, so that it
+    /// reads back as the model rather than with BPSim's defaults for what it leaves out.
+    experiment: Experiment,
 }
 
 /// Where new elements of a namespace go: the prefix the file already uses for it, or a new one
@@ -2663,9 +2683,9 @@ impl Editor {
         Ok(())
     }
 
-    /// The experiment's stop condition and the three-point estimates: StochCraft's vendor
-    /// extensions on the elements they concern, where they changed (or where the element was
-    /// replaced, taking its parameters with it).
+    /// The experiment's stop condition, the three-point estimates and the starting contents:
+    /// StochCraft's vendor extensions on the elements they concern, where they changed (or where
+    /// the element was replaced, taking its parameters with it).
     fn extensions(
         &mut self,
         root: &mut Element,
@@ -2674,7 +2694,7 @@ impl Editor {
         after: &Model,
         replaced: &BTreeSet<&str>,
     ) -> Result<(), SaveError> {
-        use crate::bpsim::{ESTIMATE, STOP_COUNT, STOP_WHEN_EMPTY};
+        use crate::bpsim::{ESTIMATE, STARTING_CONTENTS, STOP_COUNT, STOP_WHEN_EMPTY};
         let mut writes: Vec<(String, &'static str, Option<Element>)> = Vec::new();
         let exists = |id: &ElementId| after.element(id).is_some();
         let (old_stop, new_stop) = (&before.experiment.stop, &after.experiment.stop);
@@ -2717,6 +2737,54 @@ impl Editor {
                 v
             });
             writes.push((id.to_string(), ESTIMATE, v));
+        }
+        // Starting contents, 0 being none, on blocks that can hold them.
+        let count = |m: &Model, id: &ElementId| {
+            m.starting
+                .get(id)
+                .copied()
+                .filter(|n| *n > 0 && m.element(id).is_some_and(|e| e.kind.holds_at_start()))
+        };
+        // A block that became able to hold entities, or no longer can (a conveyor made a delay
+        // in place, say), may carry a value the file kept while it was ignored: it is visited
+        // too, so the file says what the model now does.
+        let eligibility_changed = |id: &ElementId| {
+            let holds = |m: &Model| m.element(id).map(|e| e.kind.holds_at_start());
+            holds(before) != holds(after)
+        };
+        let ids: BTreeSet<&ElementId> = before
+            .starting
+            .keys()
+            .chain(after.starting.keys())
+            .chain(
+                after
+                    .elements
+                    .iter()
+                    .filter(|e| eligibility_changed(&e.id))
+                    .map(|e| &e.id),
+            )
+            .collect();
+        // Whether a scenario this one inherits from gives block `id` entities at the start (the
+        // nearest that says): starting it empty here must then say 0, or the inherited count
+        // comes back on reading.
+        let parents = ancestors(root, scenario);
+        let inherited = |id: &ElementId| {
+            parents
+                .iter()
+                .find_map(|a| vendor_value_in(a, id.as_str(), STARTING_CONTENTS))
+                .is_some_and(|v| v.trim().parse::<u32>().is_ok_and(|n| n > 0))
+        };
+        for id in ids {
+            let (was, now) = (count(before, id), count(after, id));
+            if was == now && !replaced.contains(id.as_str()) && !eligibility_changed(id) {
+                continue;
+            }
+            let v = match now.filter(|_| exists(id)) {
+                Some(n) => Some(starting_element(n)),
+                None if exists(id) && inherited(id) => Some(starting_element(0)),
+                None => None,
+            };
+            writes.push((id.to_string(), STARTING_CONTENTS, v));
         }
         if writes.iter().all(|(_, _, v)| v.is_none()) {
             if let Some(s) = scenario_mut(root, scenario) {
@@ -2802,13 +2870,23 @@ impl Editor {
         root: &'a mut Element,
         scenario: Option<&str>,
     ) -> Result<&'a mut Element, SaveError> {
+        // One added earlier in this save.
+        if scenario.is_none()
+            && let Some(id) = self.created_scenario.clone()
+        {
+            return scenario_mut(root, Some(&id)).ok_or_else(|| fail("could not add a scenario"));
+        }
         if crate::bpsim::find_data(root).is_none() {
             let id = self.fresh("scenario");
+            self.created_scenario = Some(id.clone());
             let bpsim = Ns::of(root, NS2, "bpsim");
+            let mut sp = scenario_parameters(&self.experiment, None);
+            rename(&mut sp, &bpsim.prefix, NS2);
             let data = bpsim.el("BPSimData").with_child(
                 Element::new(&qname(&bpsim.prefix, "Scenario"), Some(NS2))
                     .with_attr("id", &id)
-                    .with_attr("name", "Scenario"),
+                    .with_attr("name", "Scenario")
+                    .with_child(sp),
             );
             match self.format {
                 Format::Bpmn => {
@@ -2832,11 +2910,15 @@ impl Editor {
         }
         if scenario.is_none() {
             let id = self.fresh("scenario");
+            self.created_scenario = Some(id.clone());
             let data = data_mut(root).ok_or_else(|| fail("no BPSim data"))?;
             let ns = data.ns.clone().unwrap_or_else(|| NS2.to_owned());
+            let mut sp = scenario_parameters(&self.experiment, None);
+            rename(&mut sp, data.prefix(), &ns);
             let sc = Element::new(&qname(data.prefix(), "Scenario"), Some(&ns))
                 .with_attr("id", &id)
-                .with_attr("name", "Scenario");
+                .with_attr("name", "Scenario")
+                .with_child(sp);
             let at = end_of(data);
             data.children.insert(at, Node::Element(sc));
             return scenario_mut(root, Some(&id)).ok_or_else(|| fail("could not add a scenario"));
@@ -3312,6 +3394,16 @@ fn sets_vendor(s: &Element, element: &str, name: &str) -> bool {
         .filter(|ep| ep.attr("elementRef").as_deref() == Some(element))
         .flat_map(|ep| ep.elements())
         .any(|v| v.is_any(&NSS, "VendorExtension") && v.attr("name").as_deref() == Some(name))
+}
+
+/// The value scenario `s` gives StochCraft's vendor extension `name` on `element`, if it has
+/// one.
+fn vendor_value_in(s: &Element, element: &str, name: &str) -> Option<String> {
+    s.children_named(&NSS, "ElementParameters")
+        .filter(|ep| ep.attr("elementRef").as_deref() == Some(element))
+        .flat_map(|ep| ep.elements())
+        .find(|v| v.is_any(&NSS, "VendorExtension") && v.attr("name").as_deref() == Some(name))
+        .and_then(crate::bpsim::vendor_value)
 }
 
 /// The unit a value is written in: the scenario's base unit, or one it names.

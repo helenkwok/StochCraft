@@ -166,6 +166,7 @@ pub fn label(name: &str) -> String {
         "capacity" => "Capacity",
         "limit" => "Arrival limit",
         "queue_capacity" => "Waiting room",
+        "starting" => "Inside at the start",
         "size" => "Batch size",
         "priority" => "Priority",
         "quantity" => "Units",
@@ -365,10 +366,12 @@ fn edit(
                         egui::WidgetInfo::selected(egui::Role::CheckBox, true, ticked, label)
                     });
                     if r.changed() {
-                        // A first value of the field's scale: room for ten waiting, or a
-                        // thousand arrivals.
+                        // A first value of the field's scale: room for ten waiting, one
+                        // entity inside at the start, or a thousand arrivals.
                         let first = if key.ends_with("queue_capacity") {
                             10
+                        } else if key.ends_with("/starting") {
+                            1
                         } else {
                             1000
                         };
@@ -378,6 +381,9 @@ fn edit(
                         out = out.or_else(|| {
                             number(ui, cx, key, label, current, integer, n, unit.as_deref())
                         });
+                    } else if key.ends_with("/starting") {
+                        // Unticked, the block starts empty.
+                        ui.label(theme::weak(ui, t("None")));
                     } else {
                         ui.label(theme::weak(ui, t("unlimited")));
                     }

@@ -155,6 +155,11 @@ Select a block to see its settings. The most used ones come first, under **Param
   pools is under **Needs**.
 - **Task:** **Duration**.
 - **Batch:** **Batch size**.
+- **Inside at the start** (under **More settings** on a task or a batch): how many entities are
+  already inside when each run starts, instead of an empty start. They join the waiting room at
+  time 0 in order: as many as there are free units start a fresh service at once, and the rest
+  wait. With a finite **Waiting room**, at most the units plus the room. Results show them as
+  **Inside at the start**, and count them as entered.
 - **Conveyor:** **Length**, **Speed**, **Accumulating**, **Item length** and **Gap**. Lengths are
   in the experiment's **Length unit**, the speed in that unit per time unit.
 
@@ -223,10 +228,11 @@ Esc, or selecting another block, puts the model's value back in the field.
 
 A block's inspector shows its basic fields first: its name, capacity and main time (and a task's
 waiting room). The rest is folded: **More settings** (transfer, setup, times by property, planned
-run time), **Breakdowns and availability**, **Patience** and **Health check**. A folded section
-says what is set in it beside its title, for example **Breakdowns: Exponential 120 min,
-Constant 6 min**, or **None**; a section with something set starts open. The **?** beside
-**Capacity**, **Service time** and **Waiting room** opens a one-line explanation under the field;
+run time, inside at the start), **Breakdowns and availability**, **Patience** and **Health
+check**. A folded section says what is set in it beside its title, for example **Breakdowns:
+Exponential 120 min, Constant 6 min**, or **None**; a section with something set starts open.
+The **?** beside **Capacity**, **Service time**, **Waiting room** and a task's **Inside at the
+start** opens a one-line explanation under the field;
 it can be reached with Tab and opened with Enter or Space.
 
 ### Undo
@@ -242,7 +248,9 @@ With nothing selected, the **Experiment** section of the inspector sets how the 
   take longer.
 - **Seed:** the starting point of the random numbers. The same model and seed always give the same
   results.
-- **Warm-up:** time simulated before measuring starts.
+- **Warm-up:** time simulated before measuring starts. The other way to avoid results biased by
+  a start from empty is to start full: set **Inside at the start** on the busy tasks to about
+  the numbers they hold in a typical run. Their services start afresh at time 0.
 - **Duration:** how long each run is measured, after the warm-up.
 - **Time unit:** the unit for every time in the model. Changing it does not convert the times
   already in the model.
@@ -482,8 +490,8 @@ Ctrl on Windows and Linux is ⌘ on a Mac.
 - **Japanese, Chinese, Thai or other text shows as boxes in the browser:** the font is fetched
   when the language needs it; give it a moment online. Bengali, Tamil, Telugu and Lao use the
   fonts on your own system.
-- **The results look unstable from run to run:** add runs, or a warm-up if the model
-  starts empty.
+- **The results look unstable from run to run:** add runs, and a warm-up (or **Inside at the
+  start** on the busy tasks) if the model starts empty.
 
 ## Limitations
 

@@ -109,8 +109,10 @@ fn more_parameters(kind: &str) -> &'static [&'static str] {
             "setup",
             "processing_by",
             "planned_run_time",
+            "starting",
         ],
-        "shared_task" | "delay" => &["processing_by"],
+        "shared_task" | "delay" => &["processing_by", "starting"],
+        "batch" => &["starting"],
         _ => &[],
     }
 }
@@ -126,6 +128,9 @@ fn explanation(f: &str) -> Option<&'static str> {
         )),
         "queue_capacity" => Some(t(
             "How many entities may wait here for a free unit, besides those being served; unticked, any number may.",
+        )),
+        "starting" => Some(t(
+            "Entities already inside when each run starts, instead of an empty start: as many as there are free units start being served at once, the rest wait.",
         )),
         _ => None,
     }
@@ -752,7 +757,13 @@ impl App {
                     | "gap"
             );
             // The basics' "?", on the task's own fields (not a time by value, say).
-            form::explain(&key, explanation(f).filter(|_| el["kind"] != "delay"));
+            // The words for starting contents speak of units serving, so only on a task with
+            // units.
+            let shown = match *f {
+                "starting" => el["kind"] == "server" || el["kind"] == "shared_task",
+                _ => el["kind"] != "delay",
+            };
+            form::explain(&key, explanation(f).filter(|_| shown));
             let changed = form::field(ui, &mut cx, Schema::new(&schema), &key, f, &current, time);
             form::explain(&key, None);
             if let Some(v) = changed {

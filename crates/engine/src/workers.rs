@@ -160,6 +160,9 @@ struct EncodedElement {
     /// A conveyor's histogram of the times on it: start and width (as bits) and the counts.
     #[serde(default)]
     time_on_histogram: Option<(u64, u64, Vec<u64>)>,
+    /// Blocks with starting contents: the entities placed inside as the run started.
+    #[serde(default)]
+    started: Option<u64>,
 }
 
 fn bits(x: Option<f64>) -> Option<u64> {
@@ -252,6 +255,7 @@ impl Encoded {
                         .time_on_histogram
                         .as_ref()
                         .map(|h| (h.start.to_bits(), h.width.to_bits(), h.counts.clone())),
+                    started: e.started,
                 })
                 .collect(),
         }
@@ -374,6 +378,7 @@ impl Encoded {
                     leaving: e.leaving,
                     time_inside: float(time_inside),
                     on_shift: float(on_shift),
+                    started: e.started,
                 })
             })
             .collect::<Option<Vec<_>>>()?;

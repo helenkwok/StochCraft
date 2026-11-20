@@ -106,6 +106,7 @@ fn label<'a>(name: &'a str, kind: &str) -> &'a str {
         "cycle_time" => t("Cycle time"),
         "energy" => t("Energy"),
         "specific_energy" => t("Energy per part"),
+        "started" => t("Inside at the start"),
         other => other,
     }
 }

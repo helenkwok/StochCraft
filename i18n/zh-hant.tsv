@@ -1203,3 +1203,8 @@ unit	yr	年
 	then more until precise enough, at most {max}	之後繼續，直到足夠精確，最多 {max}
 @plural	Stopped after {n} run: {result} is within its target.|Stopped after {n} runs: {result} is within its target.	執行 {n} 次後停止：{result} 在其目標內。
 @plural	Stopped at the most allowed, {n} run, before {result} was within its target.|Stopped at the most allowed, {n} runs, before {result} was within its target.	在 {result} 進入其目標之前，已在允許的上限 {n} 次執行處停止。
+	Inside at the start	開始時在內部的數量
+	Entities already inside when each run starts, instead of an empty start: as many as there are free units start being served at once, the rest wait.	每次執行開始時已在內部的實體，而非空著開始：有多少空閒資源單元，就有多少實體立即開始接受服務，其餘的等待。
+	Entities inside at the start are given for a block that does not exist. Remove them.	為不存在的區塊指定了開始時在內部的實體。請移除它們。
+	{block} cannot have entities inside at the start: only a task or a batch can. Remove its “Inside at the start”.	{block} 在開始時不能有實體在內部：只有任務或批次可以。請移除它的「開始時在內部的數量」。
+	{block} has {count} entities inside at the start, but it holds at most {most}, its units and its waiting room. Set “Inside at the start” to {most} or fewer, or make the waiting room larger.	{block} 開始時在內部有 {count} 個實體，但它連同資源單元和等待區最多只能容納 {most} 個。請將「開始時在內部的數量」設為 {most} 或更少，或擴大等待區。

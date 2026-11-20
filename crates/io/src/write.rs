@@ -8,9 +8,10 @@ use std::collections::{BTreeMap, BTreeSet};
 
 use stochcraft_model::{
     BalkJoin, Balking, Bounds, Breakdown, Calendar, ConveyorShape, DateTime, Demand, Dist,
-    ElementKind, Estimate, HealthCheck, LengthUnit, Model, Need, OnShiftEnd, OnTakeout, Patience,
-    PatienceUntil, PlaceWhileOut, Power, ProcessingBy, Property, PropertyType, PropertyValue,
-    QueueLimit, ResourcePool, Routing, Scrap, Sequential, Setup, Stop, Timed, Transfer,
+    ElementKind, Estimate, Experiment, HealthCheck, LengthUnit, Model, MonteCarlo, Need,
+    OnShiftEnd, OnTakeout, Patience, PatienceUntil, PlaceWhileOut, Power, ProcessingBy, Property,
+    PropertyType, PropertyValue, QueueLimit, ResourcePool, Routing, Scrap, Sequential, Setup, Stop,
+    Timed, Transfer,
 };
 
 use crate::bpsim::NS2;
@@ -287,12 +288,62 @@ pub(crate) fn queue_capacity_element(n: u32, limit: &QueueLimit) -> Element {
     }
 }
 
+/// The scenario parameters that say experiment `x`: runs, seed, time unit, result frequency,
+/// start, duration (the warm-up included) and warm-up, then the length unit, layout scale and
+/// sequential runs as vendor extensions.
+pub(crate) fn scenario_parameters(x: &Experiment, mc: Option<&MonteCarlo>) -> Element {
+    let mut sp = s("ScenarioParameters")
+        .with_attr("replication", &x.replications.to_string())
+        // `xs:long` is signed; the seed's 64 bits are kept and read back unchanged.
+        .with_attr("seed", &(x.seed as i64).to_string())
+        .with_attr("baseTimeUnit", x.time_unit.bpsim_name());
+    if let Some(f) = x.result_frequency {
+        sp = sp.with_attr("baseResultFrequency", &crate::duration::format_seconds(f));
+    }
+    if let Some(t) = x.start {
+        sp.push(start_param(t));
+    }
+    // BPSim's duration includes the warm-up.
+    sp.push(param(
+        "Duration",
+        s("FloatingParameter").with_attr("value", &num(x.warmup + x.duration)),
+    ));
+    if x.warmup > 0.0 {
+        sp.push(param(
+            "Warmup",
+            s("FloatingParameter").with_attr("value", &num(x.warmup)),
+        ));
+    }
+    // A Monte Carlo model's inputs: the scenario's own properties, after its times (schema
+    // order).
+    if let Some(mc) = mc {
+        sp.push(crate::mc::properties_element(mc));
+    }
+    // After the other parameters, as a vendor extension is.
+    if let Some(u) = length_unit_element(x.length_unit) {
+        sp.push(u);
+    }
+    if let Some(u) = layout_scale_element(x.layout_scale) {
+        sp.push(u);
+    }
+    if let Some(q) = &x.sequential {
+        sp.push(sequential_element(q));
+    }
+    sp
+}
+
 /// A StochCraft vendor extension holding one value.
 pub(crate) fn vendor_value_element(name: &str, value: &str) -> Element {
     s("VendorExtension")
         .with_attr("name", name)
         .with_attr("xmlns:stochcraft", crate::bpsim::STOCHCRAFT_NS)
         .with_attr("stochcraft:value", value)
+}
+
+/// A block's starting contents as a StochCraft vendor extension: `n` entities inside as each
+/// replication starts.
+pub(crate) fn starting_element(n: u32) -> Element {
+    vendor_value_element(crate::bpsim::STARTING_CONTENTS, &n.to_string())
 }
 
 /// The vendor extension that makes a task a batch or a split, if `kind` is one.
@@ -890,44 +941,7 @@ pub fn write_new(model: &Model) -> Vec<u8> {
     }
 
     // The simulation data, in BPSim schema order.
-    let x = &model.experiment;
-    let mut sp = s("ScenarioParameters")
-        .with_attr("replication", &x.replications.to_string())
-        // `xs:long` is signed; the seed's 64 bits are kept and read back unchanged.
-        .with_attr("seed", &(x.seed as i64).to_string())
-        .with_attr("baseTimeUnit", x.time_unit.bpsim_name());
-    if let Some(f) = x.result_frequency {
-        sp = sp.with_attr("baseResultFrequency", &crate::duration::format_seconds(f));
-    }
-    if let Some(t) = x.start {
-        sp.push(start_param(t));
-    }
-    // BPSim's duration includes the warm-up.
-    sp.push(param(
-        "Duration",
-        s("FloatingParameter").with_attr("value", &num(x.warmup + x.duration)),
-    ));
-    if x.warmup > 0.0 {
-        sp.push(param(
-            "Warmup",
-            s("FloatingParameter").with_attr("value", &num(x.warmup)),
-        ));
-    }
-    // A Monte Carlo model's inputs: the scenario's own properties, after its times (schema
-    // order).
-    if let Some(mc) = &model.monte_carlo {
-        sp.push(crate::mc::properties_element(mc));
-    }
-    // After the other parameters, as a vendor extension is.
-    if let Some(u) = length_unit_element(x.length_unit) {
-        sp.push(u);
-    }
-    if let Some(u) = layout_scale_element(x.layout_scale) {
-        sp.push(u);
-    }
-    if let Some(q) = &x.sequential {
-        sp.push(sequential_element(q));
-    }
+    let sp = scenario_parameters(&model.experiment, model.monte_carlo.as_ref());
     let mut scenario = s("Scenario")
         .with_attr("id", &ids.fresh("scenario"))
         .with_attr(
@@ -1114,6 +1128,13 @@ pub fn write_new(model: &Model) -> Vec<u8> {
         }
         if let Some(x) = model.estimates.get(&e.id) {
             ep.push(estimate_element(x));
+        }
+        if let Some(n) = model
+            .starting
+            .get(&e.id)
+            .filter(|n| **n > 0 && e.kind.holds_at_start())
+        {
+            ep.push(starting_element(*n));
         }
         if ep.elements().next().is_none() {
             continue;

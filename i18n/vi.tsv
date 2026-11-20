@@ -1203,3 +1203,8 @@ unit	yr	năm
 	then more until precise enough, at most {max}	sau đó thêm cho đến khi đủ chính xác, tối đa {max}
 @plural	Stopped after {n} run: {result} is within its target.|Stopped after {n} runs: {result} is within its target.	Đã dừng sau {n} lần chạy: {result} nằm trong mục tiêu của nó.
 @plural	Stopped at the most allowed, {n} run, before {result} was within its target.|Stopped at the most allowed, {n} runs, before {result} was within its target.	Đã dừng ở mức tối đa cho phép, {n} lần chạy, trước khi {result} nằm trong mục tiêu của nó.
+	Inside at the start	Bên trong lúc bắt đầu
+	Entities already inside when each run starts, instead of an empty start: as many as there are free units start being served at once, the rest wait.	Các thực thể đã ở bên trong khi mỗi lần chạy bắt đầu, thay vì bắt đầu trống: có bao nhiêu đơn vị rảnh thì bấy nhiêu thực thể được phục vụ ngay, số còn lại chờ.
+	Entities inside at the start are given for a block that does not exist. Remove them.	Thực thể bên trong lúc bắt đầu được đặt cho một khối không tồn tại. Hãy xóa chúng.
+	{block} cannot have entities inside at the start: only a task or a batch can. Remove its “Inside at the start”.	{block} không thể có thực thể bên trong lúc bắt đầu: chỉ tác vụ hoặc lô mới có thể. Hãy xóa “Bên trong lúc bắt đầu” của nó.
+	{block} has {count} entities inside at the start, but it holds at most {most}, its units and its waiting room. Set “Inside at the start” to {most} or fewer, or make the waiting room larger.	{block} có {count} thực thể bên trong lúc bắt đầu, nhưng chỉ chứa được tối đa {most}, gồm các đơn vị và khu vực chờ của nó. Hãy đặt “Bên trong lúc bắt đầu” thành {most} hoặc ít hơn, hoặc mở rộng khu vực chờ.

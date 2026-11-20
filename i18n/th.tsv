@@ -1203,3 +1203,8 @@ unit	yr	ปี
 	then more until precise enough, at most {max}	จากนั้นรันเพิ่มจนแม่นยำพอ สูงสุด {max}
 @plural	Stopped after {n} run: {result} is within its target.|Stopped after {n} runs: {result} is within its target.	หยุดหลังรัน {n} รอบ: {result} อยู่ในเป้าหมายของตัวเองแล้ว
 @plural	Stopped at the most allowed, {n} run, before {result} was within its target.|Stopped at the most allowed, {n} runs, before {result} was within its target.	หยุดที่จำนวนสูงสุดที่อนุญาต คือ {n} รอบ ก่อนที่ {result} จะอยู่ในเป้าหมายของตัวเอง
+	Inside at the start	อยู่ภายในเมื่อเริ่ม
+	Entities already inside when each run starts, instead of an empty start: as many as there are free units start being served at once, the rest wait.	เอนทิตีที่อยู่ภายในแล้วเมื่อการรันแต่ละครั้งเริ่ม แทนการเริ่มแบบว่างเปล่า มีหน่วยว่างเท่าใดก็เริ่มรับบริการทันทีเท่านั้น ที่เหลือรอ
+	Entities inside at the start are given for a block that does not exist. Remove them.	มีการกำหนดเอนทิตีที่อยู่ภายในเมื่อเริ่มให้บล็อกที่ไม่มีอยู่ ให้ลบออก
+	{block} cannot have entities inside at the start: only a task or a batch can. Remove its “Inside at the start”.	{block} ไม่สามารถมีเอนทิตีอยู่ภายในเมื่อเริ่มได้ มีเพียงงานหรือชุดเท่านั้นที่มีได้ ให้ลบ “อยู่ภายในเมื่อเริ่ม” ของมัน
+	{block} has {count} entities inside at the start, but it holds at most {most}, its units and its waiting room. Set “Inside at the start” to {most} or fewer, or make the waiting room larger.	{block} มีเอนทิตีอยู่ภายในเมื่อเริ่ม {count} แต่รับได้มากที่สุด {most} รวมหน่วยและพื้นที่รอของมัน ให้ตั้ง “อยู่ภายในเมื่อเริ่ม” เป็น {most} หรือน้อยกว่า หรือขยายพื้นที่รอ
