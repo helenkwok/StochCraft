@@ -158,7 +158,7 @@ pub fn tool_definitions() -> Vec<Value> {
              the warm-up MSER-5 suggests (warmup_suggestion), warnings about the results \
              (one_replication, no_warmup, no_steady_state, …, and those of the behaviour \
              checks made on every replication: unbalanced, unaccounted, nothing_out, \
-             littles_law, busy_not_working, states_total, out_of_range), and the run record (seed, \
+             nothing_moved, littles_law, busy_not_working, states_total, out_of_range), and the run record (seed, \
              replications, warm-up, duration, model digest) that reproduces them. The values \
              over the run (series) are left out; the execute tool's run command gives them.",
             obj(

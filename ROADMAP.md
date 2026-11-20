@@ -1373,6 +1373,22 @@ ch. 10 §10.4, in Brailsford, Churilov and Dangerfield, eds., 2014). Related and
   - Any way out of the model is a way out for `nothing_out`, as reaching any sink is in the
     common tools; a gateway where no condition holds and there is no default is warned about
     as the model is checked (`no_default`; BPMN 2.0.2 §13.4.2 makes it an exception).
+  - **Done (#235):** closed loops. A model whose entities go round for ever, a fixed number of
+    them (a closed queueing network, Gordon and Newell 1967, or a finite-source model such as
+    the machine repair crew, M/M/c//N), needs no exit and none of its entities leaves. It is
+    closed (`Model::is_closed`) when entities start somewhere (a source or starting contents),
+    every source makes a limited number, there is no exit, no block copies, combines or splits
+    entities (parallel gateway, batch, unbatch), and from every block where entities enter,
+    every block they can reach leads back to it. A closed model is not warned for having no
+    exit (`no_sink`); a model with no exit that is not closed (a source with no limit, a block
+    passed once, a loop that drains into another and never returns) still is. In a closed
+    model `nothing_out` gives way to `nothing_moved`: the entities are stuck when some block
+    holds entities at the end and none of those blocks finished any in the measured window.
+    Only the blocks holding entities count, since each entity's first pass through the blocks
+    before a jam would otherwise hide it. Entities that give up, balk or find no way at a
+    gateway leave without an exit, so a loop with such ways is closed only as far as its
+    blocks and connections go; models that are partly open and partly closed are checked as
+    open ones.
   - Experiment designs (`experiment.sweep`, `.sensitivity`, `.design`, `.size`) check every
     run they make as a single run is checked, and give each point the warnings its run gives
     (`warnings`): each run of an experiment is an ordinary run. They record no results over
@@ -3347,7 +3363,6 @@ are.
   - **Machine repair crew** (`machine-repair.bpmn`): M2.5's M/M/2//6 (λ = 0.25, μ = 1; fitters
     busy 0.57642, 4.61138 machines running), with one fitter (0.88284, 3.53135) and three
     (0.39814, 4.77763) as scenarios.
-    Its closed loop raises `no_sink` and `nothing_out` until the checks recognise closed loops.
   - **Inspection with rework** (`rework.bpmn`): M2.3's Jackson network (λ = 1, μ = 4 at
     inspection and 2 at rework, half fed back: 2 minutes in the system), and a quarter fed back
     as a scenario (0.7 minutes).

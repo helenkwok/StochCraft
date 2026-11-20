@@ -85,6 +85,7 @@ fn every_template_is_written_validated_and_run() {
             "unbalanced",
             "unaccounted",
             "nothing_out",
+            "nothing_moved",
             "littles_law",
             "busy_not_working",
             "states_total",

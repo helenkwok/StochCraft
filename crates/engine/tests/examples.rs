@@ -462,7 +462,22 @@ fn the_machine_repair_crew_matches_the_finite_source_chain() {
             scenario,
             json!({ "replications": 20, "warmup": 500.0, "duration": 60_000.0 }),
         );
+        // A closed loop: no exit wanted, and the machines keep going round, so neither the
+        // model's checks nor the behaviour checks warn.
+        let checked = ok(&mut e, "model.validate", json!({}));
+        assert_eq!(checked["diagnostics"], json!([]), "{scenario:?}: {checked}");
         let res = ok(&mut e, "run", json!({}));
+        let behaviour: Vec<&Value> = res["warnings"]
+            .as_array()
+            .into_iter()
+            .flatten()
+            .filter(|w| {
+                w["parts"][0]["key"]
+                    .as_str()
+                    .is_some_and(|k| k.starts_with("behaviour_"))
+            })
+            .collect();
+        assert!(behaviour.is_empty(), "{scenario:?}: {behaviour:?}");
         covers(&res, "repair", "utilisation", busy / r as f64);
         covers(&res, "running", "mean_contents", n as f64 - broken);
         covers(&res, "repair", "mean_queue_length", broken - busy);
