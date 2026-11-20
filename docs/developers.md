@@ -43,15 +43,19 @@ draw only with fonts the visitor's own system has.
   queue.
 - `stochcraft-experiment` runs replications in parallel with reproducible random streams
   (`stochcraft-random`) and reports 95% confidence intervals (`stochcraft-stats`).
+- `stochcraft-model` is the model in memory (blocks with stable ids, connections, experiment,
+  validation), with the capacity table, line balancing and `Path`, geometry with exact lengths.
 - `stochcraft-blocks` compiles models of sources, servers, tasks sharing resource pools, delays,
-  sinks, decisions, splits and joins, batches and assemblies. It handles processing times by
-  product type, finite buffers (fixed, by timetable or per working server, with a way out for
-  those turned away), shifts, breakdowns and stop conditions, and reports per-element
+  conveyors, sinks, decisions, splits and joins, batches and assemblies. It handles processing
+  times by product type, finite buffers (fixed, by timetable or per working server, with a way
+  out for those turned away), shifts, breakdowns and stop conditions, and reports per-element
   statistics.
 - `stochcraft-io` reads and writes models as BPSim on BPMN or XPDL.
 - `stochcraft-engine` makes every change and run a command with a JSON schema, undo and redo,
   and a replayable journal, and adds sweeps, sensitivity analysis, designed experiments and
   capacity sizing.
+- `stochcraft-render` generates the parametric low-poly meshes the 3D view draws.
+- `stochcraft-mcp` serves the engine's commands to AI agents over the Model Context Protocol.
 - `stochcraft-cli` runs models from the command line; the app (`apps/stochcraft`,
   `apps/stochcraft-web`, UI in `crates/ui-egui`) runs them in a window.
 
@@ -177,7 +181,9 @@ also when a step failed, as a JSON object:
 Replaying a journal (`exec journal.json`) first checks that the model is the one it started from
 (`--open` the same file, which opens the scenario the journal records in `start.scenario`; a
 journal that began with `model.new` starts its own model) and refuses
-with a `conflict` error if not, unless `--force`. It then re-applies the edits, undo and redo, and
+with a `conflict` error if not, unless `--force`. If the file has no scenario of that name, `exec`
+stops with the error from opening it; with `--force` it replays onto the file's first scenario.
+It then re-applies the edits, undo and redo, and
 skips the saves, runs and experiments (`file.save`, `run`, `run.start`,
 `run.cancel`, `experiment.sweep`, `experiment.sensitivity`, `experiment.design`,
 `experiment.size`), printing `"skipped": true` for each; `--all` carries them out too. In Rust,
@@ -201,7 +207,7 @@ agent work in the window. [mcp.md](mcp.md) has the tools and options.
 Results are checked against queueing theory and exact results: M/M/1, M/M/c (Erlang C), M/M/1/K,
 priority queues, machine repair, a Jackson network, a two-machine line with a finite buffer,
 E₄/M/1 batches, assembly, arrivals by time of day, breakdowns and activity networks. They are
-also checked against L-SIM's published results for the BPSim car repair model. StochCraft runs
+also checked against another BPSim simulator's published results for the BPSim car repair model. StochCraft runs
 about 54× faster than SimPy on an M/M/1 benchmark ([bench/](../bench/README.md)).
 
 ## Contributing

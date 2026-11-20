@@ -14,6 +14,7 @@ differ, it says so. To get the app, see the [installation guide](installation.md
 - [Run it](#run-it)
 - [Read the results](#read-the-results)
 - [Watch a run](#watch-a-run)
+- [Other views of the model](#other-views-of-the-model)
 - [Ask what-if questions: the Analysis view](#ask-what-if-questions-the-analysis-view)
 - [Save, open and export](#save-open-and-export)
 - [Change how it looks and which keys do what](#change-how-it-looks-and-which-keys-do-what)
@@ -71,6 +72,7 @@ The examples are also under **File ▸ Open Example**:
 | **Seven-machine line with two presses** | Which machine holds back a line with two presses in parallel? Schmitt et al. 2026, Case B. |
 | **Tandem line** | Two stations in series, read from an XPDL file (a reference model). |
 | **Every distribution** | One task per BPSim distribution, to compare their spread (a reference model). |
+| **Parcel sorter** | How many parcels go round the loop because their lane is full? |
 
 To try the whole cycle, open **M/M/1 queue** and press **Run**. The results show a mean wait close
 to 3 minutes and about 75% utilisation, which is what queueing theory predicts for this model.
@@ -87,7 +89,9 @@ The window has three parts:
 - the **inspector** on the right, which shows the settings of what is selected. On a narrow
   window it moves under the canvas.
 
-The tabs above the canvas switch between **Model**, **Results** and **Analysis**.
+The tabs above the canvas switch between **Model**, **Results**, **Analysis**, **Capacity**,
+**3D** and **Layout** (see [Other views of the model](#other-views-of-the-model)). **Dashboard**,
+beside the tabs, opens a panel of charts beside the model.
 
 ![A model with a block selected: the canvas in the middle and the block's settings on the right](screenshots/model.png)
 
@@ -112,6 +116,7 @@ A new block is added after the selected block and connected from it, and gets a 
 | **Split or join (all ways)** | Sends a copy down every flow, or waits for one from each incoming flow. |
 | **Batch (collect, then send together)** | Collects a number of entities and sends them on as one. |
 | **Split batches** | Splits a batch back into its entities. |
+| **Conveyor** | A belt that carries entities from one end to the other, with a **Length**, a **Speed**, an **Item length** and a **Gap**. **Accumulating** ticked: entities queue up at the end while the rest keep moving; unticked: the whole belt stops when the entity at the end cannot leave. |
 | **Departures** | Entities leave the model here. |
 
 ### Connect blocks
@@ -144,6 +149,8 @@ Select a block to see its settings. The most used ones come first, under **Param
   pools is under **Needs**.
 - **Task:** **Duration**.
 - **Batch:** **Batch size**.
+- **Conveyor:** **Length**, **Speed**, **Accumulating**, **Item length** and **Gap**. Lengths are
+  in the experiment's **Length unit**, the speed in that unit per time unit.
 
 **Times.** Each time is a distribution: pick its type (Constant, Exponential, Uniform, Triangular,
 Normal, Log-normal, Gamma, Erlang, Weibull and others) and fill in its values. If you only know a
@@ -154,14 +161,14 @@ More settings are folded under headings; open them when you need them:
 
 - **Breakdowns and availability:** time to failure, repair time, and availability by calendar.
 - **Patience:** entities give up waiting after a time.
-- **Balking:** arriving entities may not join the queue, more often the longer it is. Choose
-  **Table** (rows of **Number waiting** and the chance it **Joins with probability** from that
-  number on; below the first row everyone joins) or **1/(n + 1)** (everyone joins an empty queue,
-  half when one waits, a third when two do, and so on). Tick **Count those in service** to count
-  the entities being served as well as those waiting. Those that balk take the flow marked
-  **Balked**, or leave the model; results show **Balked** and **Share balked** for the task. To
-  turn away everyone once a queue reaches a length, a **Waiting room** of that size with a flow
-  marked **Turned away** does the same, and needs no balking.
+- **Balking:** arriving entities may not join the waiting room, more often the more are waiting.
+  Choose **Table** (rows of **Number waiting** and the chance it **Joins with probability** from
+  that number on; below the first row everyone joins) or **1/(n + 1)** (everyone joins an empty
+  waiting room, half when one waits, a third when two do, and so on). Tick **Count those in
+  service** to count the entities being served as well as those waiting. Those that balk take the
+  flow marked **Balked**, or leave the model; results show **Balked** and **Share balked** for
+  the task. To turn away everyone once a given number are waiting, a **Waiting room** of that
+  size with a flow marked **Turned away** does the same, and needs no balking.
 - **Health check:** take servers out of service when they are overloaded, and back after a
   restart.
 - **Properties:** values set on each entity as it enters, for example a product type that
@@ -233,6 +240,7 @@ With nothing selected, the **Experiment** section of the inspector sets how the 
 - **Duration:** how long each run is measured, after the warm-up.
 - **Time unit:** the unit for every time in the model. Changing it does not convert the times
   already in the model.
+- **Length unit:** the unit for conveyor lengths (metres unless set).
 - **Ends early:** stop each run when enough entities have left a block, or when a task
   empties, instead of after its duration.
 
@@ -242,7 +250,8 @@ The left rail's summary shows the current settings, for example "10 runs · seed
 
 Press **Run** at the top right, or F5, or **Model ▸ Run**. A progress bar shows how many
 runs have finished; **Cancel run** (or Esc) stops it. The status bar then says
-"Finished 10 runs" and the **Results** tab opens.
+"Finished 10 runs" and the **Results** tab opens. Before the first run, the **Results** tab says
+**No results yet**, with a **Run** button.
 
 In the browser, the runs go in parallel on every processor core but one, up to 16.
 
@@ -314,9 +323,10 @@ Opening another model or file clears it too.
 ## Watch a run
 
 To see the model move, click **Watch a run** in the run bar above the Model and 3D views, press
-Space, or choose **Model ▸ Watch a Run**. It plays the first run on the canvas: each block shows
-how many entities were created, are waiting, are busy or are done. The run bar is for watching
-one run; **Run** in the header runs the whole experiment, fast and without animation.
+Space on either of those views, or choose **Model ▸ Watch a Run**. It plays the first run on the
+canvas: each block shows how many entities were created, are waiting, are busy or are done. The
+run bar is for watching one run; **Run** in the header runs the whole experiment, fast and
+without animation.
 
 - **Play/Pause** (Space), **Reset** (back to the start, paused), and **Step** (`.`) to the next
   event.
@@ -331,6 +341,27 @@ This is one run of many: its numbers differ from the others and from the average
 **Results**.
 
 ![Watching a run: counts on each block and the run's clock above the canvas](screenshots/watch.png)
+
+## Other views of the model
+
+- **Capacity:** what each station can carry, worked out from the model before any run: its
+  arrivals, service, units, utilisation and load, a status (**Fine**, **Congested**, **Unstable**
+  or **Unknown**) against a **Target utilisation** (85% unless changed), and the mean wait where a
+  queueing formula holds. Under the table it names the bottleneck and says what cannot be known
+  before a run. Once the model has results, the simulated utilisation and mean wait stand beside
+  the worked-out ones. `stochcraft-cli explain` prints the same table.
+- **3D:** the blocks drawn as simple 3D shapes, with conveyors as belts. Drag to orbit, scroll to
+  zoom, Shift-drag to pan, and **Fit** to see it all. While a run is watched, each entity on a
+  conveyor is drawn as a tote where the run has carried it.
+- **Layout:** a plan of the model from above, to scale in metres, with a grid and a scale bar.
+  Conveyors are drawn as their belts and blocks as their footprints. It is for looking only: drag
+  to pan, scroll to zoom, **Fit**. Positions come from the diagram for now (the view says
+  **Positions from the diagram**), and an **Unplaced** list names any block that is not drawn.
+- **Dashboard** (beside the tabs, or **View ▸ Dashboard**): a panel beside the model with tiles
+  for throughput, utilisation by resource, time on conveyors, and entities on the conveyors (or
+  in the model) over time. Run the model, or watch a run, to fill it. While a run is watched, the
+  throughput is that run's so far; the resource and conveyor charts show the last full run until
+  the watched one ends.
 
 ## Ask what-if questions: the Analysis view
 
@@ -365,6 +396,8 @@ standards that process-modelling tools share.
 - **Export results:** on the **Results** tab, **Export table (CSV)** and **Export charts (PNG)**
   (in the browser: **Download**). The CSV has one row per block and metric, with the mean, the
   half-width of its confidence interval, the standard deviation and the number of runs.
+  **Export charts (PNG)** needs every chart on screen: in a window too short for them, the status
+  bar says to make the window taller, and nothing is exported.
 
 ## Get help in the window
 
@@ -404,7 +437,9 @@ Ctrl on Windows and Linux is ⌘ on a Mac.
 | F1 | Help: open or close it beside the model |
 | F5 | Run |
 | Esc | Cancel the run; clear the selection |
-| Space | Play or pause while watching a run |
+| Space | Watch a run, or play or pause it (on the Model and 3D views) |
+| `.` | Step to the next event while watching |
+| `[`, `]` | Halve or double the speed while watching |
 | Ctrl+N | New model (desktop only; in the browser it opens a new window) |
 | Ctrl+O | Open |
 | Ctrl+S | Save (Download in the browser) |
@@ -434,7 +469,6 @@ Ctrl on Windows and Linux is ⌘ on a Mac.
 
 ## Limitations
 
-- There is no downloadable desktop release yet; see the [installation guide](installation.md).
 - A baseline compares two versions of a model, one change at a time; there is no table of named
   scenarios yet. For several values of one parameter, use the Analysis view's sweep.
 - Charts can't be configured beyond their colours.

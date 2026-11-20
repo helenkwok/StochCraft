@@ -9,16 +9,16 @@ crates above it, so a change near the top touches little and a change near the b
 |---|---|---|
 | L0 | `random`, `stats` (standalone: no workspace dependencies) | Random-number generators and BPSim's distributions, statistics collectors |
 | L1 | `des`, `model` | The discrete-event core (event queue, processes, resources, timeouts); the model in memory (elements with stable ids, connections, experiment, validation) |
-| L2 | `blocks`, `agents`, `sd` | Modelling libraries: flow blocks (source, server, delay, gateways, batches…; conveyors planned), moving agents, stock-and-flow |
+| L2 | `blocks`, `agents`, `sd` | Modelling libraries: flow blocks (source, server, delay, gateways, batches, conveyors…), moving agents, stock-and-flow |
 | L3 | `experiment`, `io` | Replications, parameter sweeps and optimisation; model and result files |
 | L4 | `engine` | Commands, undo and redo, the journal and runs: the one way the CLI, the app and agents change or run a model |
 | L5 | `render`, then `ui-egui` and `mcp` | Drawing, the window, and agents over MCP. The only layer allowed UI, windowing or GPU crates |
 | — | `testkit` | Test tooling; other crates may use it only as a dev-dependency |
 | apps | `stochcraft`, `stochcraft-cli`, `stochcraft-web` | Exempt from the rules |
 
-Only `random`, `stats`, `des`, `model`, `blocks`, `experiment`, `io`, `engine`, `ui-egui`, `mcp`
-and `testkit` exist so far (with the three apps); the others (`agents`, `sd`, `render`) are
-placed in advance so each crate's position is decided before it is written.
+Only `random`, `stats`, `des`, `model`, `blocks`, `experiment`, `io`, `engine`, `render`,
+`ui-egui`, `mcp` and `testkit` exist so far (with the three apps); the others (`agents`, `sd`)
+are placed in advance so each crate's position is decided before it is written.
 
 ## The app on craft-libs
 
@@ -70,8 +70,9 @@ it names, so the app also works offline.
 Every interface string is English source text looked up through craft-i18n (`ui-egui/src/i18n.rs`:
 `t`, `tf` for `{name}` placeholders, `tn`/`tnf` for counts). StochCraft keeps its catalogs in this
 repository, `i18n/<locale>.tsv` (i18n/README.md), in craft-i18n's format, and `ui-egui/build.rs`
-always embeds them, on the web too: 44 languages. With `CRAFT_I18N_DIR` naming a checkout of the
-craft-i18n data repository, each language's shared `common.tsv` is embedded beside its catalog,
+always embeds them, on the web too: 44 languages besides English. With `CRAFT_I18N_DIR` naming
+a checkout of the craft-i18n data repository, each language's shared `common.tsv` is embedded
+beside its catalog,
 for the words craft-libs' own dialogs use (the keyboard-shortcuts dialog); StochCraft's rows
 win where both have one. CI and the web app are built without it, so every word StochCraft's own
 window and menus show has a row in StochCraft's catalogs. Right-to-left locales
@@ -81,8 +82,9 @@ are not offered until the layout is mirrored. Numbers follow the region, not the
 string, and fails on any label drawn without a lookup that is not data (the model's names and
 ids, numbers, file names, shortcuts), and checks that every string passed to `t`, `tf`, `tc`,
 `tn` and `tnf` in the interface and the shells, and every string looked up while the screens are
-drawn, has a row in each catalog. The engine's own messages (validation, file notes) are not
-translated yet.
+drawn, has a row in each catalog. The engine's file notes are not translated yet; its validation
+messages arrive as a template key and the values that fill it, and the window builds each one
+from the catalog's row for the key (i18n/README.md).
 
 ## Determinism across targets
 
