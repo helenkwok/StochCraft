@@ -67,6 +67,9 @@ impl App {
         if self.execute("model.new", json!({})).is_none() {
             return;
         }
+        // Another document from here (even if the copy can't be set): a Save dialog's answer
+        // asked for the last one is not applied to it.
+        self.doc_gen += 1;
         if self
             .execute("model.set", json!({ "model": copy["model"] }))
             .is_some()

@@ -781,6 +781,12 @@ fields (`“Service time”`) are named in the messages by their own rows.
   speakers; the least certain are lo, th, ta, te, bn, ka, kk, hi, sq, et and lt, and the
   messages' sentences generally, which are long and were drafted to read as instructions in each
   language.
+- The row for a save refused because the model changed while the Save dialog was open ("The
+  model changed while choosing where to save it, so it was not saved. Save again.", issue #222)
+  was machine-drafted with Claude Code from the plain meaning of the English, with each
+  catalog's own words for model and save (its rows for "Save" and "Save Model"). Not checked
+  against any other source, and not reviewed by native speakers; the least certain are lo, th,
+  ta, te, bn, ka, kk, hi and sq.
 
 **Adding or changing a string:** add the English in the code through `i18n::t` (or `tf`, `tn`),
 then add its row to each catalog here, or leave it out to show English until it is translated.

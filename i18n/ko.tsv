@@ -1159,3 +1159,4 @@ unit	yr	년
 	Unplaced	미배치
 	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	현재는 모든 블록이 다이어그램을 기준으로 배치됩니다. 다이어그램에 없는 블록은 여기에 나열되며 그려지지 않습니다.
 	The charts are taller than the window: make the window taller, then export them again.	차트가 창보다 높습니다. 창을 세로로 늘린 다음 다시 내보내세요.
+	The model changed while choosing where to save it, so it was not saved. Save again.	저장할 위치를 고르는 동안 모델이 바뀌어 저장하지 않았습니다. 다시 저장하세요.

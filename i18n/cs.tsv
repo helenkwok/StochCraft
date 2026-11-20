@@ -1159,3 +1159,4 @@ unit	yr	r.
 	Unplaced	Neumístěné
 	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	Zatím je každý blok umístěn podle diagramu. Blok, který diagram vynechává, je uveden zde a nekreslí se.
 	The charts are taller than the window: make the window taller, then export them again.	Grafy jsou vyšší než okno: zvětšete výšku okna a pak je exportujte znovu.
+	The model changed while choosing where to save it, so it was not saved. Save again.	Model se změnil během výběru místa pro uložení, proto nebyl uložen. Uložte znovu.

@@ -315,7 +315,8 @@ pub enum Request {
     /// Ask where to save, suggesting `name`; answer with [`App::save_to`], with
     /// [`App::save_cancelled`] if the user closes the dialog, or with [`App::save_failed`] if it
     /// can't be shown. BPMN is offered, and with `xpdl` XPDL too: the model came from an XPDL
-    /// file, which it can be saved into.
+    /// file, which it can be saved into. The app's menus and shortcuts wait until it is answered,
+    /// and an answer that comes after the model was replaced saves nothing.
     PickSave { name: String, xpdl: bool },
     /// Write `bytes` to `path`; answer with [`App::written`] or [`App::save_failed`].
     Write { path: String, bytes: Vec<u8> },
@@ -389,6 +390,24 @@ struct NewFile {
     /// The file chosen in Save As. Without one, the user is asked where (desktop), or the
     /// download is named for a BPMN file (browser).
     path: Option<String>,
+}
+
+/// A charts export waiting for its screenshot: what the frame that asked for it showed, which
+/// the screenshot is cropped by. The web captures a later frame than the one that asked, so
+/// every frame until the image arrives is checked against it.
+#[derive(Debug, Clone, Copy, PartialEq)]
+struct PendingPng {
+    /// Where the charts were, in points.
+    area: egui::Rect,
+    /// The scale, pixels per point.
+    pixels_per_point: f32,
+    /// The results on show (their `results_serial`).
+    results: u64,
+    /// A menu or dialog was over the window.
+    covered: bool,
+    /// A frame since showed something else (another view, place, scale or results, or a menu
+    /// or dialog over the charts): the screenshot is not of the charts, so it is not exported.
+    spoiled: bool,
 }
 
 /// The appearance the user chose: the system's, or always light or dark.
@@ -564,6 +583,11 @@ pub struct App {
     new_file: Option<NewFile>,
     /// The user agreed to a new BPMN file and is choosing where it goes.
     as_new: bool,
+    /// Counts the documents the window has shown: one more each time the model is replaced
+    /// (opened, new, recovered), so an answer asked for one document is not applied to the next.
+    doc_gen: u64,
+    /// The Save dialog is open ([`Request::PickSave`]), for the document `doc_gen` counted then.
+    pick_for: Option<u64>,
     about: bool,
     /// A file dropped on the window, waiting on the unsaved-changes question.
     dropped: Option<(String, Vec<u8>)>,
@@ -630,12 +654,13 @@ pub struct App {
     /// An empty model is being built (from the start page), so the model view shows rather than
     /// the start page.
     building: bool,
-    /// Where the charts were drawn last frame, for exporting them.
+    /// Where the charts are drawn this frame (none until the work area draws them), for
+    /// exporting them.
     charts_rect: Option<egui::Rect>,
     /// A screenshot asked for to export the charts, filled in by the renderer.
     screenshot: std::sync::Arc<std::sync::Mutex<Option<std::sync::Arc<egui::ColorImage>>>>,
-    /// The charts' area and scale when the screenshot was asked for.
-    pending_png: Option<(egui::Rect, f32)>,
+    /// The charts export waiting for its screenshot.
+    pending_png: Option<PendingPng>,
     /// Frames left to bring the charts into view before exporting them: the screenshot holds
     /// only what is on screen, and the charts sit below the key measures.
     png_scroll: u8,
@@ -703,6 +728,8 @@ impl App {
             after_save: None,
             new_file: None,
             as_new: false,
+            doc_gen: 0,
+            pick_for: None,
             about: false,
             dropped: None,
             requests: Vec::new(),

@@ -131,6 +131,9 @@ impl App {
     /// The work area: the tabs, the run bar over the views that show the model, then the view
     /// the tabs select (or the start page, or a run's progress).
     pub(crate) fn work_area(&mut self, ui: &mut egui::Ui, p: &theme::Palette) {
+        // Set again only if the Results view draws the charts this frame, so a charts export
+        // never crops by where they were on a view no longer shown.
+        self.charts_rect = None;
         // Here rather than at the top of the frame: the header's menus and the outline, drawn
         // before the work area, can change the model (Edit ▸ Undo, + Add block).
         self.mark_stale_results();

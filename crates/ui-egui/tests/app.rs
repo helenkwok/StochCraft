@@ -1351,3 +1351,134 @@ fn exporting_the_charts_sends_a_png_to_the_shell() {
     h.state_mut().exported("/tmp/mm1-charts.png");
     assert_eq!(h.state().status(), "Exported mm1-charts.png");
 }
+
+/// Clicks Export charts (PNG) on the results of M/M/1 and steps until the app asks for a
+/// screenshot, whose callback it returns unanswered.
+fn export_the_charts_of_mm1() -> (Harness<'static, App>, egui::ScreenshotCallback) {
+    let mut h = harness(Platform::DESKTOP);
+    menu(&mut h, &["File", "Open Example", "M/M/1 queue"]);
+    menu(&mut h, &["Model", "Run"]);
+    finish_run(&mut h);
+    h.get_by_role_and_label(egui::accesskit::Role::Button, "Export charts (PNG)")
+        .click();
+    for _ in 0..60 {
+        h.step();
+        let asked = h
+            .output()
+            .viewport_output
+            .values()
+            .flat_map(|v| v.commands.iter())
+            .find_map(|c| match c {
+                egui::ViewportCommand::Screenshot(callback) => Some(callback.clone()),
+                _ => None,
+            });
+        if let Some(callback) = asked {
+            return (h, callback);
+        }
+    }
+    panic!("the app never asked for a screenshot");
+}
+
+/// A window-sized screenshot, as a renderer would answer with the pixels.
+fn blank_window() -> std::sync::Arc<egui::ColorImage> {
+    std::sync::Arc::new(egui::ColorImage::filled([1000, 700], egui::Color32::WHITE))
+}
+
+#[test]
+fn a_chart_export_is_dropped_if_the_view_changes_before_the_screenshot() {
+    // The web's screenshot is of a frame after the one that asked. Frames that show the same
+    // charts in the same place change nothing: the export goes ahead.
+    let (mut h, screenshot) = export_the_charts_of_mm1();
+    h.run_steps(3);
+    screenshot.complete(blank_window());
+    h.run_steps(3);
+    let requests = h.state_mut().take_requests();
+    assert!(
+        matches!(requests.as_slice(), [Request::Export { name, .. }] if name == "mm1-charts.png"),
+        "{requests:?}"
+    );
+
+    // Another tab before the screenshot arrives: it is not of the charts, so nothing is exported.
+    let (mut h, screenshot) = export_the_charts_of_mm1();
+    h.get_by_role_and_label(egui::accesskit::Role::Tab, "Model")
+        .click();
+    h.run_steps(2);
+    screenshot.complete(blank_window());
+    h.run_steps(3);
+    assert_eq!(h.state_mut().take_requests(), vec![]);
+    assert_eq!(h.state().status(), "the charts could not be captured");
+    assert!(h.state().status_announcement().starts_with("Error"));
+}
+
+#[test]
+fn a_save_dialog_answered_after_the_model_was_replaced_saves_nothing() {
+    let mut h = harness(Platform::DESKTOP);
+    h.state_mut()
+        .execute("model.rename", json!({ "name": "Draft" }));
+    settle(&mut h);
+    // New ▸ Save: the Save dialog opens for Draft, and New is to follow the save.
+    menu(&mut h, &["File", "New"]);
+    click(&mut h, "Save");
+    assert!(matches!(
+        h.state_mut().take_requests().as_slice(),
+        [Request::PickSave { .. }]
+    ));
+    // While it is open, another model replaces Draft (a file the shell opens or one dropped).
+    let e = &stochcraft_ui_egui::EXAMPLES[0];
+    h.state_mut().open_file(e.file, e.bytes);
+    settle(&mut h);
+    // The file was chosen for Draft: nothing is written there, and New does not follow.
+    h.state_mut().save_to("/tmp/Draft.bpmn");
+    settle(&mut h);
+    assert_eq!(h.state_mut().take_requests(), vec![]);
+    assert_eq!(
+        h.state().status(),
+        "The model changed while choosing where to save it, so it was not saved. Save again."
+    );
+    assert!(!h.state().engine().model().elements.is_empty(), "no New");
+    assert!(!h.state().has_open_dialog(), "the menus work again");
+
+    // Quit ▸ Save, and an agent starts a new model while the Save dialog is open: no write and
+    // no Quit.
+    h.state_mut()
+        .control("model.new", json!({}))
+        .expect("a new model");
+    h.state_mut()
+        .execute("model.rename", json!({ "name": "Again" }));
+    assert!(!h.state_mut().close_requested());
+    settle(&mut h);
+    click(&mut h, "Save");
+    assert!(matches!(
+        h.state_mut().take_requests().as_slice(),
+        [Request::PickSave { .. }]
+    ));
+    h.state_mut()
+        .control("model.new", json!({}))
+        .expect("a new model");
+    h.state_mut().save_to("/tmp/Again.bpmn");
+    settle(&mut h);
+    assert_eq!(h.state_mut().take_requests(), vec![], "no write, no Quit");
+    assert!(h.state().status().starts_with("The model changed"));
+}
+
+#[test]
+fn the_menus_wait_while_the_save_dialog_is_open() {
+    let mut h = harness(Platform::DESKTOP);
+    menu(&mut h, &["File", "Open Example", "M/M/1 queue"]);
+    menu(&mut h, &["File", "Save As…"]);
+    assert!(matches!(
+        h.state_mut().take_requests().as_slice(),
+        [Request::PickSave { .. }]
+    ));
+    assert!(h.state().has_open_dialog());
+    // File ▸ Open's shortcut waits: the model the dialog is for stays.
+    h.key_press_modifiers(egui::Modifiers::COMMAND, egui::Key::O);
+    settle(&mut h);
+    assert_eq!(h.state_mut().take_requests(), vec![]);
+    // Closed without a file: the menus work again.
+    h.state_mut().save_cancelled();
+    assert!(!h.state().has_open_dialog());
+    h.key_press_modifiers(egui::Modifiers::COMMAND, egui::Key::O);
+    settle(&mut h);
+    assert_eq!(h.state_mut().take_requests(), vec![Request::PickOpen]);
+}

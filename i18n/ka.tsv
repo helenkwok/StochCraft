@@ -1159,3 +1159,4 @@ unit	yr	წელი
 	Unplaced	განუთავსებელი
 	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	ამჟამად ყველა ბლოკი დიაგრამის მიხედვით თავსდება. ბლოკი, რომელსაც დიაგრამა გამოტოვებს, აქ არის ჩამოთვლილი და არ იხატება.
 	The charts are taller than the window: make the window taller, then export them again.	დიაგრამები ფანჯარაზე მაღალია: გაზარდეთ ფანჯრის სიმაღლე და ხელახლა გაიტანეთ.
+	The model changed while choosing where to save it, so it was not saved. Save again.	მოდელი შეიცვალა შენახვის ადგილის არჩევისას, ამიტომ არ შეინახა. შეინახეთ ხელახლა.
