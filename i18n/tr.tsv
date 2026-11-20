@@ -1160,3 +1160,16 @@ unit	yr	yıl
 	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	Şimdilik her blok diyagrama göre yerleştirilir. Diyagramın dışarıda bıraktığı bir blok burada listelenir ve çizilmez.
 	The charts are taller than the window: make the window taller, then export them again.	Grafikler pencereden daha uzun: pencereyi uzatın, ardından yeniden dışa aktarın.
 	The model changed while choosing where to save it, so it was not saved. Save again.	Kaydedilecek yer seçilirken model değişti, bu yüzden kaydedilmedi. Yeniden kaydedin.
+	Exactly that many	Tam o kadar
+	More until precise enough	Yeterince kesinleşene kadar daha fazla
+	How many runs	Kaç çalıştırma
+	Within ± % of the mean	Ortalamanın ± % içinde
+	Shares within ± points	Oranlar ± puan içinde
+	At most, runs	En çok, çalıştırma
+	The runs above come first; more follow in batches until every key measure that varies is within its target, or the most is reached.	Önce yukarıdaki çalıştırmalar yapılır; ardından, değişen her temel ölçüt hedefinin içine girene ya da üst sınıra ulaşılana kadar gruplar halinde yenileri eklenir.
+@plural	Stopped after {n} run: every key measure that varies is within its target.|Stopped after {n} runs: every key measure that varies is within its target.	{n} çalıştırmadan sonra durdu: değişen her temel ölçüt hedefinin içinde.|{n} çalıştırmadan sonra durdu: değişen her temel ölçüt hedefinin içinde.
+@plural	Stopped at the most allowed, {n} run, before every key measure was within its target.|Stopped at the most allowed, {n} runs, before every key measure was within its target.	Değişen her temel ölçüt hedefinin içine girmeden, izin verilen üst sınır olan {n} çalıştırmada durdu.|Değişen her temel ölçüt hedefinin içine girmeden, izin verilen üst sınır olan {n} çalıştırmada durdu.
+@plural	Allow up to {n} run|Allow up to {n} runs	En fazla {n} çalıştırmaya izin ver|En fazla {n} çalıştırmaya izin ver
+	{results}: the same in all {n} runs, so not counted as settled. Something none of the runs met could still happen in up to {rate} of runs.	{results}: {n} çalıştırmanın hepsinde aynı, bu yüzden oturmuş sayılmaz. Hiçbir çalıştırmada görülmeyen bir şey yine de çalıştırmaların en fazla {rate} kadarında olabilir.
+	{results}: the mean is at or near zero, so it cannot be known to a share of itself.	{results}: ortalama sıfır ya da sıfıra yakın, bu yüzden kendisinin bir oranı olarak kesinliği bilinemez.
+	± is the estimated precision: the half-width of a 95% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than 95%.	±, tahmini kesinliktir: çalıştırmalar arasındaki ortalama için %95'lik Student-t güven aralığının yarı genişliği. Çalıştırma sayısı sonuçlara bakılarak seçildi, bu yüzden aralık gerçek ortalamayı %95'ten daha seyrek kapsayabilir.

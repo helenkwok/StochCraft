@@ -452,6 +452,78 @@ impl App {
     // -----------------------------------------------------------------------------------------
     // A timed block's inspector: its time from a three-point estimate.
 
+    /// How many runs: exactly the experiment's, or those first and then more in batches until
+    /// every key measure that varies is precise enough (sequential replications), with the
+    /// targets and the most runs.
+    pub(crate) fn sequential_row(&mut self, ui: &mut egui::Ui, model: &Value) {
+        let x = &model["experiment"]["sequential"];
+        let on = x.is_object();
+        let kinds = [
+            (false, t("Exactly that many")),
+            (true, t("More until precise enough")),
+        ];
+        let mut chosen = on;
+        ui.horizontal(|ui| {
+            row_label(ui, t("How many runs"));
+            craft_ui::ComboBox::from_id_salt("x/sequential")
+                .selected_text(kinds.iter().find(|k| k.0 == on).map_or("", |k| k.1))
+                .width(240.0)
+                .show_ui(ui, |ui| {
+                    for (k, l) in kinds {
+                        if ui.selectable_label(on == k, l).clicked() {
+                            chosen = k;
+                        }
+                    }
+                })
+                .response
+                .widget_info(|| {
+                    egui::WidgetInfo::labeled(egui::Role::ComboBox, true, t("How many runs"))
+                });
+        });
+        if chosen != on {
+            let spec = if chosen { json!({}) } else { Value::Null };
+            self.execute("experiment.set", json!({ "sequential": spec }));
+            return;
+        }
+        if !on {
+            return;
+        }
+        let mut relative = x["relative"].as_f64().unwrap_or(0.05) * 100.0;
+        let mut points = x["points"].as_f64().unwrap_or(1.0);
+        let mut max = x["max"].as_f64().unwrap_or(200.0);
+        let before = (relative, points, max);
+        for (salt, label, value) in [
+            (
+                "x/sequential/relative",
+                t("Within ± % of the mean"),
+                &mut relative,
+            ),
+            (
+                "x/sequential/points",
+                t("Shares within ± points"),
+                &mut points,
+            ),
+            ("x/sequential/max", t("At most, runs"), &mut max),
+        ] {
+            ui.horizontal(|ui| {
+                row_label(ui, label);
+                number(ui, &self.numbers, salt, label, value, 70.0);
+            });
+        }
+        ui.label(theme::weak(
+            ui,
+            t("The runs above come first; more follow in batches until every key measure that varies is within its target, or the most is reached."),
+        ));
+        if (relative, points, max) != before {
+            let mut spec = x.clone();
+            // Kept within what the engine takes: above 0, a share below 100%, at least one run.
+            spec["relative"] = json!((relative / 100.0).clamp(0.0001, 0.99));
+            spec["points"] = json!(points.max(0.01));
+            spec["max"] = json!(max.round().clamp(1.0, f64::from(u32::MAX)) as u64);
+            self.execute("experiment.set", json!({ "sequential": spec }));
+        }
+    }
+
     /// The block's estimate, if it has one, and a form to fit its time to a new one.
     pub(crate) fn estimate_section(&mut self, ui: &mut egui::Ui, el: &Value) {
         let id = el["id"].as_str().unwrap_or("").to_owned();

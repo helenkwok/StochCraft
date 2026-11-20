@@ -205,6 +205,91 @@ pub enum Fix {
     Runs(u64),
     /// Set the warm-up, in the model's time unit.
     Warmup(f64),
+    /// Let a sequential run go on to this many runs at most (its settings otherwise kept, as
+    /// the results give them).
+    Max(u64),
+}
+
+/// The block and result names of the watched results a sequential run lists under `status` in
+/// its summary (`no_spread`, `mean_near_zero`): "Mean wait (Desk), Entered (Exit)".
+fn listed(results: &Value, status: &str) -> String {
+    let elements = results["elements"]
+        .as_array()
+        .map_or(&[][..], Vec::as_slice);
+    results["sequential"][status]
+        .as_array()
+        .into_iter()
+        .flatten()
+        .map(|w| {
+            let id = w["element"].as_str().unwrap_or("");
+            let key = w["metric"].as_str().unwrap_or("");
+            let e = elements.iter().find(|e| e["id"] == id);
+            let kind = e.and_then(|e| e["kind"].as_str()).unwrap_or("");
+            let block = e
+                .and_then(|e| e["name"].as_str())
+                .filter(|n| !n.is_empty())
+                .unwrap_or(id);
+            format!("{} ({block})", metric(key, kind).0)
+        })
+        .collect::<Vec<_>>()
+        .join(", ")
+}
+
+/// "How sure are these numbers?"'s rows for a sequential run (`results["sequential"]`): why it
+/// stopped after how many runs, with a fix (more runs allowed) when the most was reached first,
+/// and the results it could not settle by their spread or their mean. Draws nothing for a fixed
+/// run. Returns the fix clicked, if any.
+fn sequential_rows(
+    ui: &mut egui::Ui,
+    p: &theme::Palette,
+    results: &Value,
+    widest: Option<f64>,
+) -> Option<Fix> {
+    let q = &results["sequential"];
+    let n = q["replications"].as_u64()?;
+    let count = n.to_string();
+    let mut fix = None;
+    if q["reason"] == "target_met" {
+        let text = tnf(
+            n,
+            "Stopped after {n} run: every key measure that varies is within its target.",
+            "Stopped after {n} runs: every key measure that varies is within its target.",
+            &[],
+        );
+        trust_row(ui, p, true, &text, None);
+    } else if q["reason"] == "max_reached" {
+        let text = tnf(
+            n,
+            "Stopped at the most allowed, {n} run, before every key measure was within its target.",
+            "Stopped at the most allowed, {n} runs, before every key measure was within its target.",
+            &[],
+        );
+        let needed = runs_needed(n, widest.filter(|s| *s > 1.0).unwrap_or(2.0));
+        let label = tnf(needed, "Allow up to {n} run", "Allow up to {n} runs", &[]);
+        if trust_row(ui, p, false, &text, Some(&label)) {
+            fix = Some(Fix::Max(needed));
+        }
+    }
+    let same = listed(results, "no_spread");
+    if !same.is_empty() {
+        let rate = q["unseen_rate"].as_f64().map_or_else(String::new, |r| {
+            format!("{}%", grouped((r * 1000.0).round() / 10.0))
+        });
+        let text = tf(
+            "{results}: the same in all {n} runs, so not counted as settled. Something none of the runs met could still happen in up to {rate} of runs.",
+            &[("results", &same), ("n", &count), ("rate", &rate)],
+        );
+        trust_row(ui, p, false, &text, None);
+    }
+    let zero = listed(results, "mean_near_zero");
+    if !zero.is_empty() {
+        let text = tf(
+            "{results}: the mean is at or near zero, so it cannot be known to a share of itself.",
+            &[("results", &zero)],
+        );
+        trust_row(ui, p, false, &text, None);
+    }
+    fix
 }
 
 /// The score above which a key measure gets a warning: ± 10% of its mean, ± 2 points for a share.
@@ -309,6 +394,12 @@ pub fn trust(ui: &mut egui::Ui, results: &Value) -> Option<Fix> {
         ui.set_width(ui.available_width());
         ui.label(theme::strong(t("How sure are these numbers?")));
         ui.add_space(4.0);
+        // A sequential run chose its count itself: more runs come from allowing more, not from
+        // setting the first ones.
+        let sequential = results["sequential"].is_object();
+        if sequential {
+            fix = sequential_rows(ui, &p, results, widest.map(|w| w.2));
+        }
         if n < 2 {
             let label = tnf(10, "Use {n} run", "Use {n} runs", &[]);
             let text = t("One run gives no interval, so these numbers cannot be told from chance.");
@@ -352,7 +443,9 @@ pub fn trust(ui: &mut egui::Ui, results: &Value) -> Option<Fix> {
                 "Use {n} runs (about ± 5%)",
                 &[],
             );
-            if trust_row(ui, &p, false, &text, Some(&label)) {
+            // A sequential run's fix is in its own row above.
+            let button = (!sequential).then_some(label.as_str());
+            if trust_row(ui, &p, false, &text, button) {
                 fix = Some(Fix::Runs(needed));
             }
         }
@@ -586,13 +679,17 @@ pub fn show(ui: &mut egui::Ui, results: &Value) {
                 t("Entities still inside at the end of a run are left out of the mean wait and the mean time in system."),
             ));
         }
-        ui.label(theme::weak(
-            ui,
+        // A sequential run chose its count from the results, so its interval is an estimate of
+        // precision whose coverage is not guaranteed.
+        let interval = if results["sequential"].is_object() {
+            t("± is the estimated precision: the half-width of a 95% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than 95%.")
+        } else {
             t(
                 "± is the half-width of a 95% Student-t confidence interval of the mean across \
                runs.",
-            ),
-        ));
+            )
+        };
+        ui.label(theme::weak(ui, interval));
         ui.label(
             theme::weak(
                 ui,
@@ -1418,6 +1515,59 @@ mod tests {
         let mut one = unsure();
         one["record"]["replications"] = 1.into();
         assert_eq!(trust_with(one, Some("Use 10 runs")), Some(Fix::Runs(10)));
+    }
+
+    /// `unsure` as a sequential run that reached its most, 10 runs, with a count that was the
+    /// same in every run.
+    fn sequential(reason: &str) -> serde_json::Value {
+        let mut r = unsure();
+        r["sequential"] = serde_json::json!({
+            "replications": 10,
+            "stages": [10],
+            "reason": reason,
+            "met": reason == "target_met",
+            "no_spread": [{ "element": "paint", "metric": "left" }],
+            "mean_near_zero": [],
+            "unseen_rate": 0.2589,
+        });
+        r
+    }
+
+    /// A sequential run that reached its most offers more runs allowed, not more first runs,
+    /// and names the result that was the same in every run with how often something unseen may
+    /// still happen.
+    #[test]
+    fn a_sequential_run_says_why_it_stopped() {
+        use super::Fix;
+        use egui_kittest::kittest::Queryable;
+        // 10 × (32 / 5)² = 409.6, as for a fixed run, but as the most allowed.
+        assert_eq!(
+            trust_with(sequential("max_reached"), Some("Allow up to 410 runs")),
+            Some(Fix::Max(410))
+        );
+        let results = sequential("max_reached");
+        let mut fonts = false;
+        let mut h = egui_kittest::Harness::new_ui(move |ui| {
+            if !fonts {
+                crate::theme::install_fonts(ui.ctx(), "en");
+                crate::theme::install(ui.ctx(), &crate::theme::default_theme());
+                fonts = true;
+                ui.ctx().request_repaint();
+                return;
+            }
+            super::trust(ui, &results);
+        });
+        h.run();
+        assert!(h.query_by_label("Use 410 runs (about ± 5%)").is_none());
+        h.get_by_label(
+            "Stopped at the most allowed, 10 runs, before every key measure was within its target.",
+        );
+        h.get_by_label("Left (Paint): the same in all 10 runs, so not counted as settled. Something none of the runs met could still happen in up to 25.9% of runs.");
+        // Stopped with the target met: said with a check mark, nothing to click for it.
+        assert_eq!(
+            trust_with(sequential("target_met"), Some("Set a 57 min warm-up")),
+            Some(Fix::Warmup(57.0))
+        );
     }
 
     #[test]

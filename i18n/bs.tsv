@@ -1160,3 +1160,16 @@ unit	yr	god.
 	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	Za sada je svaki blok postavljen prema dijagramu. Blok koji dijagram izostavlja navodi se ovdje i ne crta se.
 	The charts are taller than the window: make the window taller, then export them again.	Grafikoni su viši od prozora: povećajte visinu prozora, pa ih ponovo izvezite.
 	The model changed while choosing where to save it, so it was not saved. Save again.	Model se promijenio dok se biralo gdje da se sačuva, pa nije sačuvan. Sačuvajte ponovo.
+	Exactly that many	Tačno toliko
+	More until precise enough	Više, dok ne postanu dovoljno precizni
+	How many runs	Koliko pokretanja
+	Within ± % of the mean	Unutar ± % srednje vrijednosti
+	Shares within ± points	Udjeli unutar ± procentnih poena
+	At most, runs	Najviše pokretanja
+	The runs above come first; more follow in batches until every key measure that varies is within its target, or the most is reached.	Prvo idu gore navedena pokretanja; zatim slijede još u serijama dok svaka ključna metrika koja varira ne uđe u svoj cilj ili se ne dostigne maksimum.
+@plural	Stopped after {n} run: every key measure that varies is within its target.|Stopped after {n} runs: every key measure that varies is within its target.	Zaustavljeno nakon {n} pokretanja: svaka ključna metrika koja varira je unutar svog cilja.|Zaustavljeno nakon {n} pokretanja: svaka ključna metrika koja varira je unutar svog cilja.|Zaustavljeno nakon {n} pokretanja: svaka ključna metrika koja varira je unutar svog cilja.
+@plural	Stopped at the most allowed, {n} run, before every key measure was within its target.|Stopped at the most allowed, {n} runs, before every key measure was within its target.	Zaustavljeno na dopuštenom maksimumu od {n} pokretanja, prije nego što je svaka ključna metrika ušla u svoj cilj.|Zaustavljeno na dopuštenom maksimumu od {n} pokretanja, prije nego što je svaka ključna metrika ušla u svoj cilj.|Zaustavljeno na dopuštenom maksimumu od {n} pokretanja, prije nego što je svaka ključna metrika ušla u svoj cilj.
+@plural	Allow up to {n} run|Allow up to {n} runs	Dopusti do {n} pokretanja|Dopusti do {n} pokretanja|Dopusti do {n} pokretanja
+	{results}: the same in all {n} runs, so not counted as settled. Something none of the runs met could still happen in up to {rate} of runs.	{results}: isto u svih {n} pokretanja, pa se ne računa kao ustaljeno. Nešto što nijedno pokretanje nije doživjelo i dalje se može dogoditi u do {rate} pokretanja.
+	{results}: the mean is at or near zero, so it cannot be known to a share of itself.	{results}: srednja vrijednost je nula ili blizu nule, pa se ne može znati s preciznošću izraženom kao udio nje same.
+	± is the estimated precision: the half-width of a 95% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than 95%.	± je procijenjena preciznost: polovina širine 95% Student-t intervala pouzdanosti za srednju vrijednost kroz pokretanja. Broj pokretanja odabran je prema rezultatima, pa interval može rjeđe od 95% obuhvatiti pravu srednju vrijednost.

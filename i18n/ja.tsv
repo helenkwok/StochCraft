@@ -1160,3 +1160,16 @@ unit	yr	年
 	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	現時点では、すべてのブロックを図から配置しています。図に含まれないブロックはここに一覧され、描画されません。
 	The charts are taller than the window: make the window taller, then export them again.	グラフがウィンドウより高すぎます。ウィンドウを縦に広げてから、もう一度エクスポートしてください。
 	The model changed while choosing where to save it, so it was not saved. Save again.	保存先を選んでいる間にモデルが変わったため、保存しませんでした。もう一度保存してください。
+	Exactly that many	その回数ちょうど
+	More until precise enough	十分な精度になるまで追加
+	How many runs	実行回数
+	Within ± % of the mean	平均の ± % 以内
+	Shares within ± points	割合は ± ポイント以内
+	At most, runs	上限の実行回数
+	The runs above come first; more follow in batches until every key measure that varies is within its target, or the most is reached.	上の回数をまず実行し、その後は、変動する主な指標がすべて目標内に収まるか、上限に達するまで、バッチ単位で追加実行します。
+@plural	Stopped after {n} run: every key measure that varies is within its target.|Stopped after {n} runs: every key measure that varies is within its target.	{n} 回の実行で停止しました: 変動する主な指標はすべて目標内に収まっています。
+@plural	Stopped at the most allowed, {n} run, before every key measure was within its target.|Stopped at the most allowed, {n} runs, before every key measure was within its target.	主な指標がすべて目標内に収まる前に、許容される上限の {n} 回で停止しました。
+@plural	Allow up to {n} run|Allow up to {n} runs	最大 {n} 回まで実行を許可
+	{results}: the same in all {n} runs, so not counted as settled. Something none of the runs met could still happen in up to {rate} of runs.	{results}: {n} 回すべての実行で同じなので、安定とは数えません。どの実行でも起きなかったことが、実行のうち最大 {rate} で起こる可能性は残ります。
+	{results}: the mean is at or near zero, so it cannot be known to a share of itself.	{results}: 平均がゼロまたはゼロに近いため、平均に対する割合では精度を知ることができません。
+	± is the estimated precision: the half-width of a 95% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than 95%.	± は推定精度で、実行間の平均値に対する 95% Student-t 信頼区間の半幅です。実行回数は結果に基づいて決めたため、区間が真の平均を含む頻度は 95% より低くなることがあります。

@@ -1160,3 +1160,16 @@ unit	yr	a
 	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	De moment, cada bloc es col·loca a partir del diagrama. Un bloc que el diagrama deixa fora es mostra aquí i no es dibuixa.
 	The charts are taller than the window: make the window taller, then export them again.	Els gràfics són més alts que la finestra: feu la finestra més alta i torneu-los a exportar.
 	The model changed while choosing where to save it, so it was not saved. Save again.	El model ha canviat mentre es triava on desar-lo, així que no s'ha desat. Torna a desar-lo.
+	Exactly that many	Exactament aquestes
+	More until precise enough	Més fins que siguin prou precisos
+	How many runs	Quantes execucions
+	Within ± % of the mean	Dins de ± % de la mitjana
+	Shares within ± points	Proporcions dins de ± punts
+	At most, runs	Màxim d'execucions
+	The runs above come first; more follow in batches until every key measure that varies is within its target, or the most is reached.	Primer es fan les execucions anteriors; després se'n fan més per tandes fins que cada mètrica clau que varia és dins del seu objectiu o s'arriba al màxim.
+@plural	Stopped after {n} run: every key measure that varies is within its target.|Stopped after {n} runs: every key measure that varies is within its target.	S'ha aturat després de {n} execució: cada mètrica clau que varia és dins del seu objectiu.|S'ha aturat després de {n} execucions: cada mètrica clau que varia és dins del seu objectiu.
+@plural	Stopped at the most allowed, {n} run, before every key measure was within its target.|Stopped at the most allowed, {n} runs, before every key measure was within its target.	S'ha aturat al màxim permès, {n} execució, abans que cada mètrica clau fos dins del seu objectiu.|S'ha aturat al màxim permès, {n} execucions, abans que cada mètrica clau fos dins del seu objectiu.
+@plural	Allow up to {n} run|Allow up to {n} runs	Permet fins a {n} execució|Permet fins a {n} execucions
+	{results}: the same in all {n} runs, so not counted as settled. Something none of the runs met could still happen in up to {rate} of runs.	{results}: igual en les {n} execucions, així que no es compta com a estable. Alguna cosa que cap execució ha trobat encara podria passar en fins a {rate} de les execucions.
+	{results}: the mean is at or near zero, so it cannot be known to a share of itself.	{results}: la mitjana és zero o gairebé zero, així que no es pot conèixer amb una precisió expressada com a proporció d'ella mateixa.
+	± is the estimated precision: the half-width of a 95% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than 95%.	± és la precisió estimada: la semiamplada d'un interval de confiança Student-t del 95% de la mitjana entre execucions. El nombre d'execucions s'ha triat a partir dels resultats, així que l'interval pot cobrir la mitjana real menys vegades que el 95%.

@@ -1160,3 +1160,16 @@ unit	yr	r.
 	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	Na razie każdy blok jest umieszczany na podstawie diagramu. Blok pominięty w diagramie jest wymieniony tutaj i nie jest rysowany.
 	The charts are taller than the window: make the window taller, then export them again.	Wykresy są wyższe niż okno: zwiększ wysokość okna, a potem wyeksportuj je ponownie.
 	The model changed while choosing where to save it, so it was not saved. Save again.	Model zmienił się podczas wybierania miejsca zapisu, więc nie został zapisany. Zapisz ponownie.
+	Exactly that many	Dokładnie tyle
+	More until precise enough	Więcej, aż będą dość dokładne
+	How many runs	Ile uruchomień
+	Within ± % of the mean	W granicach ± % średniej
+	Shares within ± points	Udziały w granicach ± punktów procentowych
+	At most, runs	Najwyżej, uruchomień
+	The runs above come first; more follow in batches until every key measure that varies is within its target, or the most is reached.	Najpierw wykonują się uruchomienia podane wyżej; potem dochodzą kolejne w partiach, aż każda zmienna najważniejsza miara znajdzie się w swoim celu albo zostanie osiągnięte maksimum.
+@plural	Stopped after {n} run: every key measure that varies is within its target.|Stopped after {n} runs: every key measure that varies is within its target.	Zatrzymano po {n} uruchomieniu: każda zmienna najważniejsza miara mieści się w swoim celu.|Zatrzymano po {n} uruchomieniach: każda zmienna najważniejsza miara mieści się w swoim celu.|Zatrzymano po {n} uruchomieniach: każda zmienna najważniejsza miara mieści się w swoim celu.
+@plural	Stopped at the most allowed, {n} run, before every key measure was within its target.|Stopped at the most allowed, {n} runs, before every key measure was within its target.	Zatrzymano na dozwolonym maksimum {n} uruchomienia, zanim każda najważniejsza miara znalazła się w swoim celu.|Zatrzymano na dozwolonym maksimum {n} uruchomień, zanim każda najważniejsza miara znalazła się w swoim celu.|Zatrzymano na dozwolonym maksimum {n} uruchomień, zanim każda najważniejsza miara znalazła się w swoim celu.
+@plural	Allow up to {n} run|Allow up to {n} runs	Dopuść do {n} uruchomienia|Dopuść do {n} uruchomień|Dopuść do {n} uruchomień
+	{results}: the same in all {n} runs, so not counted as settled. Something none of the runs met could still happen in up to {rate} of runs.	{results}: takie samo we wszystkich {n} uruchomieniach, więc nie liczy się jako ustalone. Coś, czego nie napotkało żadne uruchomienie, może nadal wystąpić w nawet {rate} uruchomień.
+	{results}: the mean is at or near zero, so it cannot be known to a share of itself.	{results}: średnia wynosi zero lub prawie zero, więc nie da się jej poznać z dokładnością wyrażoną jako ułamek niej samej.
+	± is the estimated precision: the half-width of a 95% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than 95%.	± to szacowana dokładność: połowa szerokości 95% przedziału ufności Student-t dla średniej z uruchomień. Liczbę uruchomień wybrano na podstawie wyników, więc przedział może pokrywać prawdziwą średnią rzadziej niż w 95%.

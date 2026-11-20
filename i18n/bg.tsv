@@ -1160,3 +1160,16 @@ unit	yr	г.
 	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	Засега всеки блок е разположен според диаграмата. Блок, който диаграмата пропуска, е посочен тук и не се чертае.
 	The charts are taller than the window: make the window taller, then export them again.	Графиките са по-високи от прозореца: увеличете височината на прозореца и ги експортирайте отново.
 	The model changed while choosing where to save it, so it was not saved. Save again.	Моделът се промени, докато се избираше къде да бъде запазен, затова не е запазен. Запазете отново.
+	Exactly that many	Точно толкова
+	More until precise enough	Още, докато станат достатъчно точни
+	How many runs	Колко изпълнения
+	Within ± % of the mean	В рамките на ± % от средната стойност
+	Shares within ± points	Дялове в рамките на ± пункта
+	At most, runs	Най-много изпълнения
+	The runs above come first; more follow in batches until every key measure that varies is within its target, or the most is reached.	Първо се провеждат изпълненията по-горе; след това се добавят още на партиди, докато всеки основен показател, който варира, не попадне в целта си или не се достигне максимумът.
+@plural	Stopped after {n} run: every key measure that varies is within its target.|Stopped after {n} runs: every key measure that varies is within its target.	Спряно след {n} изпълнение: всеки основен показател, който варира, е в рамките на целта си.|Спряно след {n} изпълнения: всеки основен показател, който варира, е в рамките на целта си.
+@plural	Stopped at the most allowed, {n} run, before every key measure was within its target.|Stopped at the most allowed, {n} runs, before every key measure was within its target.	Спряно при най-голямото позволено число, {n} изпълнение, преди всеки основен показател да попадне в целта си.|Спряно при най-голямото позволено число, {n} изпълнения, преди всеки основен показател да попадне в целта си.
+@plural	Allow up to {n} run|Allow up to {n} runs	Позволи до {n} изпълнение|Позволи до {n} изпълнения
+	{results}: the same in all {n} runs, so not counted as settled. Something none of the runs met could still happen in up to {rate} of runs.	{results}: еднакви във всичките {n} изпълнения, затова не се броят за установени. Нещо, което никое от изпълненията не е срещнало, пак може да се случи при до {rate} от изпълненията.
+	{results}: the mean is at or near zero, so it cannot be known to a share of itself.	{results}: средната стойност е нула или близо до нула, затова не може да се определи с точност, изразена като дял от нея самата.
+	± is the estimated precision: the half-width of a 95% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than 95%.	± е приблизителната точност: половината от ширината на 95% доверителен интервал по Student-t за средната стойност от изпълненията. Броят на изпълненията е избран според резултатите, затова интервалът може да покрива истинската средна стойност по-рядко от 95%.

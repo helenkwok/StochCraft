@@ -1160,3 +1160,16 @@ unit	yr	r.
 	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	Zatiaľ je každý blok umiestnený podľa diagramu. Blok, ktorý diagram vynecháva, je uvedený tu a nekreslí sa.
 	The charts are taller than the window: make the window taller, then export them again.	Grafy sú vyššie ako okno: zväčšite výšku okna a potom ich exportujte znova.
 	The model changed while choosing where to save it, so it was not saved. Save again.	Model sa zmenil počas výberu miesta na uloženie, preto nebol uložený. Uložte znova.
+	Exactly that many	Presne toľko
+	More until precise enough	Ďalšie, kým nie sú dostatočne presné
+	How many runs	Koľko behov
+	Within ± % of the mean	V rozmedzí ± % priemeru
+	Shares within ± points	Podiely v rozmedzí ± bodov
+	At most, runs	Najviac, behov
+	The runs above come first; more follow in batches until every key measure that varies is within its target, or the most is reached.	Najprv sa vykonajú behy uvedené vyššie; potom sa pridávajú ďalšie v dávkach, kým každá kolísajúca kľúčová metrika nie je v rámci svojho cieľa alebo sa nedosiahne maximum.
+@plural	Stopped after {n} run: every key measure that varies is within its target.|Stopped after {n} runs: every key measure that varies is within its target.	Zastavené po {n} behu: každá kolísajúca kľúčová metrika je v rámci svojho cieľa.|Zastavené po {n} behoch: každá kolísajúca kľúčová metrika je v rámci svojho cieľa.|Zastavené po {n} behoch: každá kolísajúca kľúčová metrika je v rámci svojho cieľa.
+@plural	Stopped at the most allowed, {n} run, before every key measure was within its target.|Stopped at the most allowed, {n} runs, before every key measure was within its target.	Zastavené na najvyššom povolenom počte, {n} beh, skôr ako bola každá kľúčová metrika v rámci svojho cieľa.|Zastavené na najvyššom povolenom počte, {n} behy, skôr ako bola každá kľúčová metrika v rámci svojho cieľa.|Zastavené na najvyššom povolenom počte, {n} behov, skôr ako bola každá kľúčová metrika v rámci svojho cieľa.
+@plural	Allow up to {n} run|Allow up to {n} runs	Povoliť až {n} beh|Povoliť až {n} behy|Povoliť až {n} behov
+	{results}: the same in all {n} runs, so not counted as settled. Something none of the runs met could still happen in up to {rate} of runs.	{results}: rovnaké vo všetkých {n} behoch, preto sa nepočíta ako ustálené. Niečo, čo nenastalo v žiadnom behu, sa môže stať až v {rate} behov.
+	{results}: the mean is at or near zero, so it cannot be known to a share of itself.	{results}: priemer je nulový alebo blízky nule, takže ho nemožno poznať s presnosťou vyjadrenou ako podiel jeho samého.
+	± is the estimated precision: the half-width of a 95% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than 95%.	± je odhadovaná presnosť: polovica šírky 95% Student-t intervalu spoľahlivosti priemeru naprieč behmi. Počet behov sa zvolil podľa výsledkov, takže interval môže pokryť skutočný priemer menej často než 95%.

@@ -1160,3 +1160,16 @@ unit	yr	r.
 	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	Zatím je každý blok umístěn podle diagramu. Blok, který diagram vynechává, je uveden zde a nekreslí se.
 	The charts are taller than the window: make the window taller, then export them again.	Grafy jsou vyšší než okno: zvětšete výšku okna a pak je exportujte znovu.
 	The model changed while choosing where to save it, so it was not saved. Save again.	Model se změnil během výběru místa pro uložení, proto nebyl uložen. Uložte znovu.
+	Exactly that many	Přesně tolik
+	More until precise enough	Další, dokud nejsou dostatečně přesné
+	How many runs	Kolik běhů
+	Within ± % of the mean	V rozmezí ± % průměru
+	Shares within ± points	Podíly v rozmezí ± bodů
+	At most, runs	Nejvýše běhů
+	The runs above come first; more follow in batches until every key measure that varies is within its target, or the most is reached.	Nejprve proběhnou běhy uvedené výše; poté další po dávkách, dokud každá klíčová metrika, která kolísá, není v rámci svého cíle, nebo dokud není dosaženo maxima.
+@plural	Stopped after {n} run: every key measure that varies is within its target.|Stopped after {n} runs: every key measure that varies is within its target.	Zastaveno po {n} běhu: každá klíčová metrika, která kolísá, je v rámci svého cíle.|Zastaveno po {n} bězích: každá klíčová metrika, která kolísá, je v rámci svého cíle.|Zastaveno po {n} bězích: každá klíčová metrika, která kolísá, je v rámci svého cíle.
+@plural	Stopped at the most allowed, {n} run, before every key measure was within its target.|Stopped at the most allowed, {n} runs, before every key measure was within its target.	Zastaveno na nejvyšším povoleném počtu, {n} běh, dříve než byla každá klíčová metrika v rámci svého cíle.|Zastaveno na nejvyšším povoleném počtu, {n} běhy, dříve než byla každá klíčová metrika v rámci svého cíle.|Zastaveno na nejvyšším povoleném počtu, {n} běhů, dříve než byla každá klíčová metrika v rámci svého cíle.
+@plural	Allow up to {n} run|Allow up to {n} runs	Povolit až {n} běh|Povolit až {n} běhy|Povolit až {n} běhů
+	{results}: the same in all {n} runs, so not counted as settled. Something none of the runs met could still happen in up to {rate} of runs.	{results}: stejné ve všech {n} bězích, proto se nepočítá jako ustálené. Něco, co nenastalo v žádném z běhů, se přesto může stát až v {rate} běhů.
+	{results}: the mean is at or near zero, so it cannot be known to a share of itself.	{results}: průměr je nulový nebo blízký nule, takže jej nelze znát s přesností vyjádřenou jako podíl jeho samého.
+	± is the estimated precision: the half-width of a 95% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than 95%.	± je odhadovaná přesnost: polovina šířky 95% Student-t intervalu spolehlivosti průměru napříč běhy. Počet běhů byl zvolen podle výsledků, takže interval může pokrýt skutečný průměr méně často než 95%.

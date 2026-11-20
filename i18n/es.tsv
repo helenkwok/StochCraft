@@ -1160,3 +1160,16 @@ unit	yr	a
 	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	Por ahora, cada bloque se coloca a partir del diagrama. Un bloque que el diagrama omite aparece aquí y no se dibuja.
 	The charts are taller than the window: make the window taller, then export them again.	Los gráficos son más altos que la ventana: haga la ventana más alta y vuelva a exportarlos.
 	The model changed while choosing where to save it, so it was not saved. Save again.	El modelo cambió mientras se elegía dónde guardarlo, así que no se guardó. Guárdalo de nuevo.
+	Exactly that many	Exactamente esas
+	More until precise enough	Más hasta que sean lo bastante precisos
+	How many runs	Cuántas ejecuciones
+	Within ± % of the mean	Dentro de ± % de la media
+	Shares within ± points	Proporciones dentro de ± puntos
+	At most, runs	Máximo de ejecuciones
+	The runs above come first; more follow in batches until every key measure that varies is within its target, or the most is reached.	Primero van las ejecuciones de arriba; después se añaden más por tandas hasta que cada métrica clave que varía esté dentro de su objetivo o se alcance el máximo.
+@plural	Stopped after {n} run: every key measure that varies is within its target.|Stopped after {n} runs: every key measure that varies is within its target.	Detenido tras {n} ejecución: cada métrica clave que varía está dentro de su objetivo.|Detenido tras {n} ejecuciones: cada métrica clave que varía está dentro de su objetivo.
+@plural	Stopped at the most allowed, {n} run, before every key measure was within its target.|Stopped at the most allowed, {n} runs, before every key measure was within its target.	Detenido en el máximo permitido, {n} ejecución, antes de que cada métrica clave estuviera dentro de su objetivo.|Detenido en el máximo permitido, {n} ejecuciones, antes de que cada métrica clave estuviera dentro de su objetivo.
+@plural	Allow up to {n} run|Allow up to {n} runs	Permitir hasta {n} ejecución|Permitir hasta {n} ejecuciones
+	{results}: the same in all {n} runs, so not counted as settled. Something none of the runs met could still happen in up to {rate} of runs.	{results}: igual en las {n} ejecuciones, así que no se cuenta como estable. Algo que ninguna ejecución vio aún puede ocurrir en hasta {rate} de las ejecuciones.
+	{results}: the mean is at or near zero, so it cannot be known to a share of itself.	{results}: la media es cero o casi cero, así que no se puede conocer con una precisión expresada como proporción de sí misma.
+	± is the estimated precision: the half-width of a 95% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than 95%.	± es la precisión estimada: la mitad de la amplitud de un intervalo de confianza Student-t del 95% de la media entre ejecuciones. El número de ejecuciones se eligió a partir de los resultados, así que el intervalo puede cubrir la media real menos veces que el 95%.

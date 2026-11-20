@@ -1160,3 +1160,16 @@ unit	yr	thn
 	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	Untuk saat ini, setiap blok ditempatkan berdasarkan diagram. Blok yang tidak ada di diagram dicantumkan di sini dan tidak digambar.
 	The charts are taller than the window: make the window taller, then export them again.	Grafik lebih tinggi daripada jendela: tinggikan jendela, lalu ekspor lagi.
 	The model changed while choosing where to save it, so it was not saved. Save again.	Model berubah saat lokasi penyimpanan sedang dipilih, jadi model tidak disimpan. Simpan lagi.
+	Exactly that many	Tepat sejumlah itu
+	More until precise enough	Lebih banyak sampai cukup presisi
+	How many runs	Berapa eksekusi
+	Within ± % of the mean	Dalam ± % dari rata-rata
+	Shares within ± points	Bagian dalam ± poin
+	At most, runs	Paling banyak, eksekusi
+	The runs above come first; more follow in batches until every key measure that varies is within its target, or the most is reached.	Eksekusi di atas dijalankan lebih dulu; sisanya menyusul bertahap sampai setiap metrik utama yang bervariasi berada dalam targetnya, atau batas maksimum tercapai.
+@plural	Stopped after {n} run: every key measure that varies is within its target.|Stopped after {n} runs: every key measure that varies is within its target.	Berhenti setelah {n} eksekusi: setiap metrik utama yang bervariasi berada dalam targetnya.
+@plural	Stopped at the most allowed, {n} run, before every key measure was within its target.|Stopped at the most allowed, {n} runs, before every key measure was within its target.	Berhenti pada batas maksimum yang diizinkan, {n} eksekusi, sebelum setiap metrik utama berada dalam targetnya.
+@plural	Allow up to {n} run|Allow up to {n} runs	Izinkan hingga {n} eksekusi
+	{results}: the same in all {n} runs, so not counted as settled. Something none of the runs met could still happen in up to {rate} of runs.	{results}: sama di seluruh {n} eksekusi, sehingga tidak dihitung sebagai stabil. Kejadian yang tidak dialami eksekusi mana pun tetap bisa terjadi pada hingga {rate} dari eksekusi.
+	{results}: the mean is at or near zero, so it cannot be known to a share of itself.	{results}: rata-rata nol atau mendekati nol, sehingga tidak dapat diketahui dengan presisi sebagai bagian dari dirinya sendiri.
+	± is the estimated precision: the half-width of a 95% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than 95%.	± adalah presisi perkiraan: setengah lebar interval kepercayaan Student-t 95% untuk rata-rata di seluruh eksekusi. Jumlah eksekusi dipilih berdasarkan hasil, sehingga interval bisa menutupi rata-rata sebenarnya lebih jarang dari 95%.

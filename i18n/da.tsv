@@ -1160,3 +1160,16 @@ unit	yr	år
 	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	Indtil videre er hver blok placeret ud fra diagrammet. En blok, som diagrammet udelader, vises her og tegnes ikke.
 	The charts are taller than the window: make the window taller, then export them again.	Diagrammerne er højere end vinduet: gør vinduet højere, og eksportér dem så igen.
 	The model changed while choosing where to save it, so it was not saved. Save again.	Modellen blev ændret, mens det blev valgt, hvor den skulle gemmes, så den blev ikke gemt. Gem igen.
+	Exactly that many	Præcis så mange
+	More until precise enough	Flere, indtil de er præcise nok
+	How many runs	Hvor mange kørsler
+	Within ± % of the mean	Inden for ± % af gennemsnittet
+	Shares within ± points	Andele inden for ± procentpoint
+	At most, runs	Højst, kørsler
+	The runs above come first; more follow in batches until every key measure that varies is within its target, or the most is reached.	Kørslerne ovenfor kommer først; derefter følger flere i omgange, indtil hvert vigtigt målepunkt, der varierer, er inden for sit mål, eller maksimum er nået.
+@plural	Stopped after {n} run: every key measure that varies is within its target.|Stopped after {n} runs: every key measure that varies is within its target.	Stoppet efter {n} kørsel: hvert vigtigt målepunkt, der varierer, er inden for sit mål.|Stoppet efter {n} kørsler: hvert vigtigt målepunkt, der varierer, er inden for sit mål.
+@plural	Stopped at the most allowed, {n} run, before every key measure was within its target.|Stopped at the most allowed, {n} runs, before every key measure was within its target.	Stoppet ved det højeste tilladte, {n} kørsel, før hvert vigtigt målepunkt var inden for sit mål.|Stoppet ved det højeste tilladte, {n} kørsler, før hvert vigtigt målepunkt var inden for sit mål.
+@plural	Allow up to {n} run|Allow up to {n} runs	Tillad op til {n} kørsel|Tillad op til {n} kørsler
+	{results}: the same in all {n} runs, so not counted as settled. Something none of the runs met could still happen in up to {rate} of runs.	{results}: ens i alle {n} kørsler, så det tælles ikke som stabilt. Noget, ingen af kørslerne har oplevet, kan stadig ske i op til {rate} af kørslerne.
+	{results}: the mean is at or near zero, so it cannot be known to a share of itself.	{results}: gennemsnittet er nul eller tæt på nul, så det kan ikke kendes med en præcision udtrykt som en andel af sig selv.
+	± is the estimated precision: the half-width of a 95% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than 95%.	± er den anslåede præcision: halvdelen af bredden af et 95% Student-t-konfidensinterval for gennemsnittet på tværs af kørsler. Antallet af kørsler blev valgt ud fra resultaterne, så intervallet kan dække det sande gennemsnit sjældnere end 95%.

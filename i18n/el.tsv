@@ -1160,3 +1160,16 @@ unit	yr	έτ
 	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	Προς το παρόν κάθε μπλοκ τοποθετείται με βάση το διάγραμμα. Ένα μπλοκ που το διάγραμμα παραλείπει αναφέρεται εδώ και δεν σχεδιάζεται.
 	The charts are taller than the window: make the window taller, then export them again.	Τα γραφήματα είναι ψηλότερα από το παράθυρο: μεγαλώστε το ύψος του παραθύρου και εξαγάγετέ τα ξανά.
 	The model changed while choosing where to save it, so it was not saved. Save again.	Το μοντέλο άλλαξε ενώ επιλεγόταν πού θα αποθηκευτεί, οπότε δεν αποθηκεύτηκε. Αποθηκεύστε ξανά.
+	Exactly that many	Ακριβώς τόσες
+	More until precise enough	Περισσότερες μέχρι να γίνουν αρκετά ακριβείς
+	How many runs	Πόσες εκτελέσεις
+	Within ± % of the mean	Εντός ± % της μέσης τιμής
+	Shares within ± points	Ποσοστά εντός ± ποσοστιαίων μονάδων
+	At most, runs	Το πολύ, εκτελέσεις
+	The runs above come first; more follow in batches until every key measure that varies is within its target, or the most is reached.	Πρώτα γίνονται οι παραπάνω εκτελέσεις· ακολουθούν κι άλλες σε παρτίδες μέχρι κάθε κύρια μετρική που μεταβάλλεται να βρεθεί εντός του στόχου της ή να συμπληρωθεί το μέγιστο.
+@plural	Stopped after {n} run: every key measure that varies is within its target.|Stopped after {n} runs: every key measure that varies is within its target.	Διακοπή μετά από {n} εκτέλεση: κάθε κύρια μετρική που μεταβάλλεται είναι εντός του στόχου της.|Διακοπή μετά από {n} εκτελέσεις: κάθε κύρια μετρική που μεταβάλλεται είναι εντός του στόχου της.
+@plural	Stopped at the most allowed, {n} run, before every key measure was within its target.|Stopped at the most allowed, {n} runs, before every key measure was within its target.	Διακοπή στο μέγιστο επιτρεπτό, {n} εκτέλεση, πριν κάθε κύρια μετρική βρεθεί εντός του στόχου της.|Διακοπή στο μέγιστο επιτρεπτό, {n} εκτελέσεις, πριν κάθε κύρια μετρική βρεθεί εντός του στόχου της.
+@plural	Allow up to {n} run|Allow up to {n} runs	Να επιτρέπεται έως {n} εκτέλεση|Να επιτρέπονται έως {n} εκτελέσεις
+	{results}: the same in all {n} runs, so not counted as settled. Something none of the runs met could still happen in up to {rate} of runs.	{results}: ίδιο και στις {n} εκτελέσεις, γι' αυτό δεν θεωρείται σταθεροποιημένο. Κάτι που καμία εκτέλεση δεν συνάντησε μπορεί να συμβεί σε έως και {rate} των εκτελέσεων.
+	{results}: the mean is at or near zero, so it cannot be known to a share of itself.	{results}: η μέση τιμή είναι μηδέν ή σχεδόν μηδέν, οπότε δεν μπορεί να είναι γνωστή με ακρίβεια εκφρασμένη ως ποσοστό του εαυτού της.
+	± is the estimated precision: the half-width of a 95% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than 95%.	Το ± είναι η εκτιμώμενη ακρίβεια: το μισό πλάτος ενός διαστήματος εμπιστοσύνης Student-t 95% για τη μέση τιμή μεταξύ των εκτελέσεων. Ο αριθμός των εκτελέσεων επιλέχθηκε με βάση τα αποτελέσματα, οπότε το διάστημα μπορεί να καλύπτει την πραγματική μέση τιμή λιγότερο συχνά από 95%.

@@ -307,6 +307,22 @@ impl App {
             let params = match fix {
                 results::Fix::Runs(n) => json!({ "replications": n }),
                 results::Fix::Warmup(w) => json!({ "warmup": w }),
+                results::Fix::Max(n) => {
+                    // The model's sequential settings with the new most; the defaults if the
+                    // model has none now.
+                    let mut q = self
+                        .engine
+                        .model()
+                        .experiment
+                        .sequential
+                        .as_ref()
+                        .map_or_else(
+                            || json!({}),
+                            |x| json!(stochcraft_engine::wire::SequentialSpec::from(x)),
+                        );
+                    q["max"] = json!(n);
+                    json!({ "sequential": q })
+                }
             };
             if self.execute("experiment.set", params).is_some() {
                 self.run();

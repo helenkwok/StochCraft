@@ -1160,3 +1160,16 @@ unit	yr	ປີ
 	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	ດຽວນີ້ທຸກບລັອກຖືກວາງຕາມແຜນພາບ. ບລັອກທີ່ແຜນພາບບໍ່ມີຈະຖືກລະບຸໄວ້ບ່ອນນີ້ ແລະ ບໍ່ຖືກແຕ້ມ.
 	The charts are taller than the window: make the window taller, then export them again.	ແຜນພູມສູງກວ່າໜ້າຕ່າງ: ເຮັດໃຫ້ໜ້າຕ່າງສູງຂຶ້ນ, ແລ້ວສົ່ງອອກອີກຄັ້ງ.
 	The model changed while choosing where to save it, so it was not saved. Save again.	ແບບຈຳລອງປ່ຽນໄປໃນຂະນະທີ່ເລືອກບ່ອນບັນທຶກ ຈຶ່ງບໍ່ໄດ້ບັນທຶກ. ບັນທຶກອີກຄັ້ງ.
+	Exactly that many	ຈຳນວນນັ້ນພໍດີ
+	More until precise enough	ເພີ່ມອີກຈົນແມ່ນຍຳພໍ
+	How many runs	ຈຳລອງຊ້ຳຈັກຮອບ
+	Within ± % of the mean	ພາຍໃນ ± % ຂອງຄ່າສະເລ່ຍ
+	Shares within ± points	ສັດສ່ວນພາຍໃນ ± ຈຸດ
+	At most, runs	ສູງສຸດ, ຮອບ
+	The runs above come first; more follow in batches until every key measure that varies is within its target, or the most is reached.	ການຈຳລອງຊ້ຳຂ້າງເທິງເຮັດກ່ອນ; ຈາກນັ້ນເພີ່ມອີກເປັນຊຸດ ຈົນກວ່າຕົວຊີ້ວັດຫຼັກທຸກຕົວທີ່ປ່ຽນແປງຢູ່ພາຍໃນເປົ້າໝາຍຂອງມັນ ຫຼື ຮອດຈຳນວນສູງສຸດ.
+@plural	Stopped after {n} run: every key measure that varies is within its target.|Stopped after {n} runs: every key measure that varies is within its target.	ຢຸດຫຼັງຈາກຈຳລອງຊ້ຳ {n} ຮອບ: ຕົວຊີ້ວັດຫຼັກທຸກຕົວທີ່ປ່ຽນແປງຢູ່ພາຍໃນເປົ້າໝາຍຂອງມັນ.
+@plural	Stopped at the most allowed, {n} run, before every key measure was within its target.|Stopped at the most allowed, {n} runs, before every key measure was within its target.	ຢຸດທີ່ຈຳນວນສູງສຸດທີ່ອະນຸຍາດ, {n} ຮອບ, ກ່ອນທີ່ຕົວຊີ້ວັດຫຼັກທຸກຕົວຈະຢູ່ພາຍໃນເປົ້າໝາຍຂອງມັນ.
+@plural	Allow up to {n} run|Allow up to {n} runs	ອະນຸຍາດສູງສຸດ {n} ຮອບ
+	{results}: the same in all {n} runs, so not counted as settled. Something none of the runs met could still happen in up to {rate} of runs.	{results}: ຄືກັນໃນທຸກ {n} ຮອບ ຈຶ່ງບໍ່ນັບວ່າຄົງທີ່. ສິ່ງທີ່ບໍ່ມີຮອບໃດພົບ ກໍຍັງອາດເກີດຂຶ້ນໄດ້ໃນສູງສຸດ {rate} ຂອງຮອບທັງໝົດ.
+	{results}: the mean is at or near zero, so it cannot be known to a share of itself.	{results}: ຄ່າສະເລ່ຍເປັນສູນ ຫຼື ໃກ້ສູນ ຈຶ່ງບໍ່ສາມາດຮູ້ຄວາມແມ່ນຍຳເປັນສັດສ່ວນຂອງຕົວມັນເອງໄດ້.
+	± is the estimated precision: the half-width of a 95% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than 95%.	± ແມ່ນຄວາມແມ່ນຍຳທີ່ຄາດຄະເນ: ເຄິ່ງໜຶ່ງຂອງຄວາມກວ້າງຂອງຊ່ວງຄວາມເຊື່ອໝັ້ນ Student-t 95% ສຳລັບຄ່າສະເລ່ຍຈາກການເຮັດຊ້ຳ. ຈຳນວນຮອບຖືກເລືອກຈາກຜົນລັບ ຊ່ວງຈຶ່ງອາດຄອບຄຸມຄ່າສະເລ່ຍຈິງໄດ້ໜ້ອຍກວ່າ 95%.

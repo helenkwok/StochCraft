@@ -1160,3 +1160,16 @@ unit	yr	j
 	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	Voorlopig wordt elk blok geplaatst op basis van het diagram. Een blok dat het diagram weglaat, staat hier en wordt niet getekend.
 	The charts are taller than the window: make the window taller, then export them again.	De grafieken zijn hoger dan het venster: maak het venster hoger en exporteer ze opnieuw.
 	The model changed while choosing where to save it, so it was not saved. Save again.	Het model is gewijzigd terwijl werd gekozen waar het moest worden opgeslagen, dus het is niet opgeslagen. Sla het opnieuw op.
+	Exactly that many	Precies zoveel
+	More until precise enough	Meer tot ze nauwkeurig genoeg zijn
+	How many runs	Hoeveel uitvoeringen
+	Within ± % of the mean	Binnen ± % van het gemiddelde
+	Shares within ± points	Aandelen binnen ± procentpunten
+	At most, runs	Hoogstens, uitvoeringen
+	The runs above come first; more follow in batches until every key measure that varies is within its target, or the most is reached.	De uitvoeringen hierboven komen eerst; daarna volgen er meer in groepen tot elke belangrijke metriek die varieert binnen zijn doel valt, of het maximum is bereikt.
+@plural	Stopped after {n} run: every key measure that varies is within its target.|Stopped after {n} runs: every key measure that varies is within its target.	Gestopt na {n} uitvoering: elke belangrijke metriek die varieert valt binnen zijn doel.|Gestopt na {n} uitvoeringen: elke belangrijke metriek die varieert valt binnen zijn doel.
+@plural	Stopped at the most allowed, {n} run, before every key measure was within its target.|Stopped at the most allowed, {n} runs, before every key measure was within its target.	Gestopt bij het toegestane maximum, {n} uitvoering, voordat elke belangrijke metriek binnen zijn doel viel.|Gestopt bij het toegestane maximum, {n} uitvoeringen, voordat elke belangrijke metriek binnen zijn doel viel.
+@plural	Allow up to {n} run|Allow up to {n} runs	Maximaal {n} uitvoering toestaan|Maximaal {n} uitvoeringen toestaan
+	{results}: the same in all {n} runs, so not counted as settled. Something none of the runs met could still happen in up to {rate} of runs.	{results}: gelijk in alle {n} uitvoeringen, dus niet als stabiel geteld. Iets wat geen enkele uitvoering heeft gezien, kan toch nog gebeuren in maximaal {rate} van de uitvoeringen.
+	{results}: the mean is at or near zero, so it cannot be known to a share of itself.	{results}: het gemiddelde is nul of bijna nul, dus het is niet te kennen met een nauwkeurigheid uitgedrukt als aandeel van zichzelf.
+	± is the estimated precision: the half-width of a 95% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than 95%.	± is de geschatte nauwkeurigheid: de halve breedte van een 95%-Student-t-betrouwbaarheidsinterval voor het gemiddelde over de uitvoeringen. Het aantal uitvoeringen is gekozen op basis van de resultaten, dus het interval kan het ware gemiddelde minder vaak dekken dan 95%.

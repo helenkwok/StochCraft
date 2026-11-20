@@ -1160,3 +1160,16 @@ unit	yr	წელი
 	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	ამჟამად ყველა ბლოკი დიაგრამის მიხედვით თავსდება. ბლოკი, რომელსაც დიაგრამა გამოტოვებს, აქ არის ჩამოთვლილი და არ იხატება.
 	The charts are taller than the window: make the window taller, then export them again.	დიაგრამები ფანჯარაზე მაღალია: გაზარდეთ ფანჯრის სიმაღლე და ხელახლა გაიტანეთ.
 	The model changed while choosing where to save it, so it was not saved. Save again.	მოდელი შეიცვალა შენახვის ადგილის არჩევისას, ამიტომ არ შეინახა. შეინახეთ ხელახლა.
+	Exactly that many	ზუსტად იმდენი
+	More until precise enough	მეტი, სანამ საკმარისად ზუსტი არ გახდება
+	How many runs	რამდენი გაშვება
+	Within ± % of the mean	საშუალოს ± %-ის ფარგლებში
+	Shares within ± points	წილები ± პროცენტული პუნქტის ფარგლებში
+	At most, runs	მაქსიმუმი, გაშვება
+	The runs above come first; more follow in batches until every key measure that varies is within its target, or the most is reached.	ზემოთ მითითებული გაშვებები სრულდება პირველად; შემდეგ კი უფრო მეტი ემატება ჯგუფებად, სანამ თითოეული ცვალებადი ძირითადი მაჩვენებელი თავის სამიზნეში არ მოექცევა ან მაქსიმუმს არ მიაღწევს.
+@plural	Stopped after {n} run: every key measure that varies is within its target.|Stopped after {n} runs: every key measure that varies is within its target.	შეჩერდა {n} გაშვების შემდეგ: თითოეული ცვალებადი ძირითადი მაჩვენებელი თავის სამიზნეშია.|შეჩერდა {n} გაშვების შემდეგ: თითოეული ცვალებადი ძირითადი მაჩვენებელი თავის სამიზნეშია.
+@plural	Stopped at the most allowed, {n} run, before every key measure was within its target.|Stopped at the most allowed, {n} runs, before every key measure was within its target.	შეჩერდა დაშვებულ მაქსიმუმზე, {n} გაშვებაზე, სანამ თითოეული ძირითადი მაჩვენებელი თავის სამიზნეში მოექცეოდა.|შეჩერდა დაშვებულ მაქსიმუმზე, {n} გაშვებაზე, სანამ თითოეული ძირითადი მაჩვენებელი თავის სამიზნეში მოექცეოდა.
+@plural	Allow up to {n} run|Allow up to {n} runs	დაშვებული იყოს არაუმეტეს {n} გაშვებისა|დაშვებული იყოს არაუმეტეს {n} გაშვებისა
+	{results}: the same in all {n} runs, so not counted as settled. Something none of the runs met could still happen in up to {rate} of runs.	{results}: ყველა {n} გაშვებაში ერთნაირია, ამიტომ სტაბილურად არ ითვლება. რაც არც ერთ გაშვებაში არ მომხდარა, მაინც შეიძლება მოხდეს გაშვებების არაუმეტეს {rate}-ში.
+	{results}: the mean is at or near zero, so it cannot be known to a share of itself.	{results}: საშუალო ნულია ან ნულთან ახლოსაა, ამიტომ მისი სიზუსტე საკუთარი წილის სახით ვერ განისაზღვრება.
+	± is the estimated precision: the half-width of a 95% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than 95%.	± არის სავარაუდო სიზუსტე: გაშვებებს შორის საშუალო მნიშვნელობის 95% Student-t ნდობის ინტერვალის ნახევარსიგანე. გაშვებების რაოდენობა შედეგების მიხედვით შეირჩა, ამიტომ ინტერვალმა ჭეშმარიტი საშუალო შეიძლება 95%-ზე იშვიათად მოიცვას.

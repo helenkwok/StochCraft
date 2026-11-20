@@ -1160,3 +1160,16 @@ unit	yr	বছর
 	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	আপাতত প্রতিটি ব্লক ডায়াগ্রাম থেকে স্থাপন করা হয়েছে। ডায়াগ্রামে যে ব্লক নেই তা এখানে তালিকাভুক্ত হয় এবং আঁকা হয় না।
 	The charts are taller than the window: make the window taller, then export them again.	চার্টগুলো উইন্ডোর চেয়ে লম্বা: উইন্ডোটি লম্বা করুন, তারপর আবার এক্সপোর্ট করুন।
 	The model changed while choosing where to save it, so it was not saved. Save again.	সংরক্ষণের স্থান বেছে নেওয়ার সময় মডেলটি বদলে গেছে, তাই এটি সংরক্ষণ করা হয়নি। আবার সংরক্ষণ করুন।
+	Exactly that many	ঠিক ততগুলো
+	More until precise enough	যথেষ্ট নির্ভুল না হওয়া পর্যন্ত আরও
+	How many runs	কতটি পুনরাবৃত্তি
+	Within ± % of the mean	গড়ের ± % এর মধ্যে
+	Shares within ± points	± শতাংশ বিন্দুর মধ্যে অংশ
+	At most, runs	সর্বোচ্চ পুনরাবৃত্তি
+	The runs above come first; more follow in batches until every key measure that varies is within its target, or the most is reached.	উপরের পুনরাবৃত্তিগুলো আগে চলে; তারপর যে প্রধান পরিমাপকগুলোর মান বদলায় তার প্রতিটি লক্ষ্যের মধ্যে না আসা পর্যন্ত, অথবা সর্বোচ্চ সংখ্যায় না পৌঁছানো পর্যন্ত, আরও পুনরাবৃত্তি ধাপে ধাপে চলে।
+@plural	Stopped after {n} run: every key measure that varies is within its target.|Stopped after {n} runs: every key measure that varies is within its target.	{n}টি পুনরাবৃত্তির পর থামানো হয়েছে: যে প্রধান পরিমাপকগুলোর মান বদলায় তার প্রতিটি লক্ষ্যের মধ্যে আছে।|{n}টি পুনরাবৃত্তির পর থামানো হয়েছে: যে প্রধান পরিমাপকগুলোর মান বদলায় তার প্রতিটি লক্ষ্যের মধ্যে আছে।
+@plural	Stopped at the most allowed, {n} run, before every key measure was within its target.|Stopped at the most allowed, {n} runs, before every key measure was within its target.	অনুমোদিত সর্বোচ্চ {n}টি পুনরাবৃত্তিতে থামানো হয়েছে, সব প্রধান পরিমাপক লক্ষ্যের মধ্যে আসার আগেই।|অনুমোদিত সর্বোচ্চ {n}টি পুনরাবৃত্তিতে থামানো হয়েছে, সব প্রধান পরিমাপক লক্ষ্যের মধ্যে আসার আগেই।
+@plural	Allow up to {n} run|Allow up to {n} runs	সর্বোচ্চ {n}টি পুনরাবৃত্তি অনুমোদন করুন|সর্বোচ্চ {n}টি পুনরাবৃত্তি অনুমোদন করুন
+	{results}: the same in all {n} runs, so not counted as settled. Something none of the runs met could still happen in up to {rate} of runs.	{results}: সব {n}টি পুনরাবৃত্তিতেই একই, তাই স্থির বলে গণ্য করা হয়নি। কোনো পুনরাবৃত্তিতে যা ঘটেনি তা-ও সর্বোচ্চ {rate} পুনরাবৃত্তিতে ঘটতে পারে।
+	{results}: the mean is at or near zero, so it cannot be known to a share of itself.	{results}: গড় শূন্য বা তার কাছাকাছি, তাই নিজের একটি অংশ হিসেবে এর নির্ভুলতা জানা যায় না।
+	± is the estimated precision: the half-width of a 95% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than 95%.	± হলো আনুমানিক নির্ভুলতা: পুনরাবৃত্তিগুলো জুড়ে গড়ের 95% Student-t আস্থা ব্যবধানের অর্ধ-প্রস্থ। পুনরাবৃত্তির সংখ্যা ফলাফল দেখে বেছে নেওয়া হয়েছে, তাই ব্যবধানটি প্রকৃত গড়কে 95%-এর চেয়ে কম বার ধরতে পারে।
