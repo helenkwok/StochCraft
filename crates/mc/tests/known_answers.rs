@@ -407,7 +407,7 @@ fn a_sequential_run_stops_when_the_mean_is_precise_enough() {
     // An exponential's half-width within 1% of its mean needs about (1.96 / 0.01)² = 38,416
     // trials.
     assert!(
-        r.trials % BATCH == 0 && r.trials > 30_000 && r.trials < 60_000,
+        r.trials.is_multiple_of(BATCH) && r.trials > 30_000 && r.trials < 60_000,
         "{}",
         r.trials
     );
