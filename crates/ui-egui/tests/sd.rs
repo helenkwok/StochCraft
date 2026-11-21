@@ -432,8 +432,12 @@ fn saving_into_a_file_that_lost_content_asks_first() {
     settle(&mut h);
     h.get_by_label("Replace the XMILE file?");
     assert!(
-        h.query_by_label_contains("only the first diagram of the model is kept")
-            .is_some()
+        // The reason, in the question (the window lists the same note on its own as well).
+        h.query_by_label_contains(
+            "Saving into two.xmile would leave out what StochCraft does not keep of it: \
+             only the first diagram of the model is kept"
+        )
+        .is_some()
     );
     assert_eq!(
         h.state_mut().take_requests(),
