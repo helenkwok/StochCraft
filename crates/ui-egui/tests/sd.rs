@@ -642,9 +642,18 @@ fn a_long_run_is_made_a_few_runs_a_frame_and_ends_with_sd_runs_numbers() {
     assert!(h.state().is_running());
     h.step();
     let (mut seen, mut frames) = (Vec::new(), 0);
+    // What the page said about the run on the first frames, to tell why if no progress is seen.
+    let mut said: Vec<String> = Vec::new();
     while h.state().is_running() && frames < 20_000 {
         h.step();
         frames += 1;
+        if frames <= 3 {
+            said.extend(
+                h.get_all_by_label_contains("run")
+                    .filter_map(|n| n.accesskit_node().label())
+                    .map(|l| format!("{frames}: {l}")),
+            );
+        }
         if let Some(n) = runs_made(&h)
             && seen.last() != Some(&n)
         {
@@ -653,7 +662,10 @@ fn a_long_run_is_made_a_few_runs_a_frame_and_ends_with_sd_runs_numbers() {
     }
     assert!(!h.state().is_running(), "the run did not finish");
     // Progress was shown over several frames, and only grew.
-    assert!(seen.len() >= 3, "progress seen: {seen:?}");
+    assert!(
+        seen.len() >= 3,
+        "progress seen: {seen:?} over {frames} frames; the page said {said:?}"
+    );
     assert!(seen.windows(2).all(|w| w[0] < w[1]), "{seen:?}");
     assert!(seen.iter().all(|n| *n < 20_000), "{seen:?}");
     settle(&mut h);
