@@ -1,0 +1,1332 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:bpsim="http://www.bpsim.org/schemas/2.0" id="definitions" name="Mass vaccination hub" targetNamespace="https://github.com/helenkwok/StochCraft/model" exporter="StochCraft" exporterVersion="0.2.0">
+  <bpmn:resource id="entrance_resource" name="Entrance"/>
+  <bpmn:resource id="registration_resource" name="Registration"/>
+  <bpmn:resource id="assessment_resource" name="Assessment"/>
+  <bpmn:resource id="preparation_resource" name="Dose preparation"/>
+  <bpmn:resource id="vaccination_resource" name="Vaccination"/>
+  <bpmn:resource id="observation_resource" name="Observation seats"/>
+  <bpmn:process id="process" name="Mass vaccination hub" isExecutable="false">
+    <bpmn:startEvent id="patients" name="Patients arrive">
+      <bpmn:outgoing>flow-1</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:parallelGateway id="split" name="Patient and dose">
+      <bpmn:incoming>flow-1</bpmn:incoming>
+      <bpmn:outgoing>flow-2</bpmn:outgoing>
+      <bpmn:outgoing>flow-3</bpmn:outgoing>
+    </bpmn:parallelGateway>
+    <bpmn:task id="entrance" name="Entrance">
+      <bpmn:incoming>flow-2</bpmn:incoming>
+      <bpmn:outgoing>flow-4</bpmn:outgoing>
+      <bpmn:performer>
+        <bpmn:resourceRef>entrance_resource</bpmn:resourceRef>
+      </bpmn:performer>
+    </bpmn:task>
+    <bpmn:task id="registration" name="Registration">
+      <bpmn:incoming>flow-4</bpmn:incoming>
+      <bpmn:outgoing>flow-5</bpmn:outgoing>
+      <bpmn:performer>
+        <bpmn:resourceRef>registration_resource</bpmn:resourceRef>
+      </bpmn:performer>
+    </bpmn:task>
+    <bpmn:task id="assessment" name="Assessment">
+      <bpmn:incoming>flow-5</bpmn:incoming>
+      <bpmn:outgoing>flow-6</bpmn:outgoing>
+      <bpmn:performer>
+        <bpmn:resourceRef>assessment_resource</bpmn:resourceRef>
+      </bpmn:performer>
+    </bpmn:task>
+    <bpmn:task id="preparation" name="Dose preparation">
+      <bpmn:incoming>flow-3</bpmn:incoming>
+      <bpmn:outgoing>flow-7</bpmn:outgoing>
+      <bpmn:performer>
+        <bpmn:resourceRef>preparation_resource</bpmn:resourceRef>
+      </bpmn:performer>
+    </bpmn:task>
+    <bpmn:parallelGateway id="join" name="Patient meets dose">
+      <bpmn:incoming>flow-6</bpmn:incoming>
+      <bpmn:incoming>flow-7</bpmn:incoming>
+      <bpmn:outgoing>flow-8</bpmn:outgoing>
+    </bpmn:parallelGateway>
+    <bpmn:task id="vaccination" name="Vaccination">
+      <bpmn:incoming>flow-8</bpmn:incoming>
+      <bpmn:outgoing>flow-9</bpmn:outgoing>
+      <bpmn:performer>
+        <bpmn:resourceRef>vaccination_resource</bpmn:resourceRef>
+      </bpmn:performer>
+    </bpmn:task>
+    <bpmn:task id="observation" name="Observation seats">
+      <bpmn:incoming>flow-9</bpmn:incoming>
+      <bpmn:outgoing>flow-10</bpmn:outgoing>
+      <bpmn:performer>
+        <bpmn:resourceRef>observation_resource</bpmn:resourceRef>
+      </bpmn:performer>
+    </bpmn:task>
+    <bpmn:endEvent id="leave" name="Patients leave">
+      <bpmn:incoming>flow-10</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="flow-1" sourceRef="patients" targetRef="split"/>
+    <bpmn:sequenceFlow id="flow-2" sourceRef="split" targetRef="entrance"/>
+    <bpmn:sequenceFlow id="flow-3" sourceRef="split" targetRef="preparation"/>
+    <bpmn:sequenceFlow id="flow-4" sourceRef="entrance" targetRef="registration"/>
+    <bpmn:sequenceFlow id="flow-5" sourceRef="registration" targetRef="assessment"/>
+    <bpmn:sequenceFlow id="flow-6" sourceRef="assessment" targetRef="join"/>
+    <bpmn:sequenceFlow id="flow-7" sourceRef="preparation" targetRef="join"/>
+    <bpmn:sequenceFlow id="flow-8" sourceRef="join" targetRef="vaccination"/>
+    <bpmn:sequenceFlow id="flow-9" sourceRef="vaccination" targetRef="observation"/>
+    <bpmn:sequenceFlow id="flow-10" sourceRef="observation" targetRef="leave"/>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="diagram">
+    <bpmndi:BPMNPlane id="plane" bpmnElement="process">
+      <bpmndi:BPMNShape id="patients_di" bpmnElement="patients">
+        <dc:Bounds x="82" y="82" width="36" height="36"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="split_di" bpmnElement="split">
+        <dc:Bounds x="185" y="75" width="50" height="50"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="entrance_di" bpmnElement="entrance">
+        <dc:Bounds x="280" y="60" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="registration_di" bpmnElement="registration">
+        <dc:Bounds x="440" y="60" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="assessment_di" bpmnElement="assessment">
+        <dc:Bounds x="600" y="60" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="preparation_di" bpmnElement="preparation">
+        <dc:Bounds x="440" y="200" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="join_di" bpmnElement="join">
+        <dc:Bounds x="765" y="75" width="50" height="50"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="vaccination_di" bpmnElement="vaccination">
+        <dc:Bounds x="860" y="60" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="observation_di" bpmnElement="observation">
+        <dc:Bounds x="1020" y="60" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="leave_di" bpmnElement="leave">
+        <dc:Bounds x="1192" y="82" width="36" height="36"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="flow-1_di" bpmnElement="flow-1">
+        <di:waypoint x="118" y="100"/>
+        <di:waypoint x="185" y="100"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow-2_di" bpmnElement="flow-2">
+        <di:waypoint x="235" y="100"/>
+        <di:waypoint x="280" y="100"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow-3_di" bpmnElement="flow-3">
+        <di:waypoint x="210" y="125"/>
+        <di:waypoint x="210" y="240"/>
+        <di:waypoint x="440" y="240"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow-4_di" bpmnElement="flow-4">
+        <di:waypoint x="380" y="100"/>
+        <di:waypoint x="440" y="100"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow-5_di" bpmnElement="flow-5">
+        <di:waypoint x="540" y="100"/>
+        <di:waypoint x="600" y="100"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow-6_di" bpmnElement="flow-6">
+        <di:waypoint x="700" y="100"/>
+        <di:waypoint x="765" y="100"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow-7_di" bpmnElement="flow-7">
+        <di:waypoint x="540" y="240"/>
+        <di:waypoint x="790" y="240"/>
+        <di:waypoint x="790" y="125"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow-8_di" bpmnElement="flow-8">
+        <di:waypoint x="815" y="100"/>
+        <di:waypoint x="860" y="100"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow-9_di" bpmnElement="flow-9">
+        <di:waypoint x="960" y="100"/>
+        <di:waypoint x="1020" y="100"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow-10_di" bpmnElement="flow-10">
+        <di:waypoint x="1120" y="100"/>
+        <di:waypoint x="1192" y="100"/>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+  <bpmn:relationship type="BPSimData">
+    <bpmn:extensionElements>
+      <bpsim:BPSimData>
+        <bpsim:Scenario id="scenario" name="Small hub: 21 staff, 60 bookings an hour" vendor="StochCraft" version="0.2.0">
+          <bpsim:ScenarioParameters replication="10" seed="1" baseTimeUnit="min">
+            <bpsim:Duration>
+              <bpsim:FloatingParameter value="10200"/>
+            </bpsim:Duration>
+            <bpsim:Warmup>
+              <bpsim:FloatingParameter value="600"/>
+            </bpsim:Warmup>
+          </bpsim:ScenarioParameters>
+          <bpsim:ElementParameters elementRef="patients">
+            <bpsim:ControlParameters>
+              <bpsim:InterTriggerTimer>
+                <bpsim:NegativeExponentialDistribution mean="1.020408163265306"/>
+              </bpsim:InterTriggerTimer>
+            </bpsim:ControlParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="entrance">
+            <bpsim:TimeParameters>
+              <bpsim:ProcessingTime>
+                <bpsim:UserDistribution discrete="false">
+                  <bpsim:UserDistributionDataPoint probability="0">
+                    <bpsim:FloatingParameter value="2"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="2.0202"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="2.0408"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="2.0619"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="2.0834"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="2.1054"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="2.1278"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="2.1508"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="2.1744"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="2.1985"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="2.2231"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="2.2485"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="2.2744"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="2.3011"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="2.3285"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="2.3567"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="2.3857"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="2.4155"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="2.4463"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="2.478"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="2.5108"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="2.5447"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="2.5798"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="2.6162"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="2.6539"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="2.6931"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="2.734"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="2.7765"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="2.821"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="2.8675"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="2.9163"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="2.9676"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="3.0217"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="3.0788"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="3.1394"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="3.204"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="3.273"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="3.3471"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="3.4271"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="3.5141"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="3.6094"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="3.7148"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="3.8326"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="3.9661"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="4.1203"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="4.3026"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="4.5257"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="4.8134"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="5.2189"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="5.912"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.01">
+                    <bpsim:FloatingParameter value="6.6052"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.005">
+                    <bpsim:FloatingParameter value="7.2983"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.004">
+                    <bpsim:FloatingParameter value="8.9078"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.0009">
+                    <bpsim:FloatingParameter value="11.2103"/>
+                  </bpsim:UserDistributionDataPoint>
+                </bpsim:UserDistribution>
+              </bpsim:ProcessingTime>
+            </bpsim:TimeParameters>
+            <bpsim:ResourceParameters>
+              <bpsim:Selection>
+                <bpsim:ExpressionParameter value="getResource('entrance_resource', 1)"/>
+              </bpsim:Selection>
+            </bpsim:ResourceParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="registration">
+            <bpsim:TimeParameters>
+              <bpsim:ProcessingTime>
+                <bpsim:UserDistribution discrete="false">
+                  <bpsim:UserDistributionDataPoint probability="0">
+                    <bpsim:FloatingParameter value="3"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="3.0289"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="3.0583"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="3.0884"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="3.1191"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="3.1505"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="3.1826"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="3.2155"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="3.2491"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="3.2835"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="3.3188"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="3.3549"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="3.3921"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="3.4302"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="3.4693"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="3.5095"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="3.5509"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="3.5936"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="3.6376"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="3.6829"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="3.7298"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="3.7782"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="3.8283"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="3.8803"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="3.9342"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="3.9902"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="4.0485"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="4.1093"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="4.1728"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="4.2393"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="4.309"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="4.3823"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="4.4595"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="4.5412"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="4.6278"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="4.72"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="4.8185"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="4.9244"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="5.0387"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="5.163"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="5.2992"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="5.4497"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="5.618"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="5.8087"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="6.0289"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="6.2894"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="6.6082"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="7.0192"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="7.5984"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="8.5886"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.01">
+                    <bpsim:FloatingParameter value="9.5788"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.005">
+                    <bpsim:FloatingParameter value="10.569"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.004">
+                    <bpsim:FloatingParameter value="12.8682"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.0009">
+                    <bpsim:FloatingParameter value="16.1576"/>
+                  </bpsim:UserDistributionDataPoint>
+                </bpsim:UserDistribution>
+              </bpsim:ProcessingTime>
+            </bpsim:TimeParameters>
+            <bpsim:ResourceParameters>
+              <bpsim:Selection>
+                <bpsim:ExpressionParameter value="getResource('registration_resource', 1)"/>
+              </bpsim:Selection>
+            </bpsim:ResourceParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="assessment">
+            <bpsim:TimeParameters>
+              <bpsim:ProcessingTime>
+                <bpsim:UserDistribution discrete="false">
+                  <bpsim:UserDistributionDataPoint probability="0">
+                    <bpsim:FloatingParameter value="2"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="2.0202"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="2.0408"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="2.0619"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="2.0834"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="2.1054"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="2.1278"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="2.1508"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="2.1744"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="2.1985"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="2.2231"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="2.2485"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="2.2744"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="2.3011"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="2.3285"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="2.3567"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="2.3857"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="2.4155"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="2.4463"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="2.478"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="2.5108"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="2.5447"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="2.5798"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="2.6162"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="2.6539"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="2.6931"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="2.734"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="2.7765"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="2.821"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="2.8675"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="2.9163"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="2.9676"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="3.0217"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="3.0788"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="3.1394"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="3.204"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="3.273"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="3.3471"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="3.4271"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="3.5141"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="3.6094"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="3.7148"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="3.8326"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="3.9661"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="4.1203"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="4.3026"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="4.5257"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="4.8134"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="5.2189"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="5.912"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.01">
+                    <bpsim:FloatingParameter value="6.6052"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.005">
+                    <bpsim:FloatingParameter value="7.2983"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.004">
+                    <bpsim:FloatingParameter value="8.9078"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.0009">
+                    <bpsim:FloatingParameter value="11.2103"/>
+                  </bpsim:UserDistributionDataPoint>
+                </bpsim:UserDistribution>
+              </bpsim:ProcessingTime>
+            </bpsim:TimeParameters>
+            <bpsim:ResourceParameters>
+              <bpsim:Selection>
+                <bpsim:ExpressionParameter value="getResource('assessment_resource', 1)"/>
+              </bpsim:Selection>
+            </bpsim:ResourceParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="preparation">
+            <bpsim:TimeParameters>
+              <bpsim:ProcessingTime>
+                <bpsim:UserDistribution discrete="false">
+                  <bpsim:UserDistributionDataPoint probability="0">
+                    <bpsim:FloatingParameter value="1"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="1.0067"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="1.0136"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="1.0206"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="1.0278"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="1.0351"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="1.0426"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="1.0503"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="1.0581"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="1.0662"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="1.0744"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="1.0828"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="1.0915"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="1.1004"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="1.1095"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="1.1189"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="1.1286"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="1.1385"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="1.1488"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="1.1593"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="1.1703"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="1.1816"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="1.1933"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="1.2054"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="1.218"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="1.231"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="1.2447"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="1.2588"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="1.2737"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="1.2892"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="1.3054"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="1.3225"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="1.3406"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="1.3596"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="1.3798"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="1.4013"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="1.4243"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="1.449"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="1.4757"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="1.5047"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="1.5365"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="1.5716"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="1.6109"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="1.6554"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="1.7068"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="1.7675"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="1.8419"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="1.9378"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="2.073"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="2.304"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.01">
+                    <bpsim:FloatingParameter value="2.5351"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.005">
+                    <bpsim:FloatingParameter value="2.7661"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.004">
+                    <bpsim:FloatingParameter value="3.3026"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.0009">
+                    <bpsim:FloatingParameter value="4.0701"/>
+                  </bpsim:UserDistributionDataPoint>
+                </bpsim:UserDistribution>
+              </bpsim:ProcessingTime>
+            </bpsim:TimeParameters>
+            <bpsim:ResourceParameters>
+              <bpsim:Selection>
+                <bpsim:ExpressionParameter value="getResource('preparation_resource', 1)"/>
+              </bpsim:Selection>
+            </bpsim:ResourceParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="vaccination">
+            <bpsim:TimeParameters>
+              <bpsim:ProcessingTime>
+                <bpsim:UserDistribution discrete="false">
+                  <bpsim:UserDistributionDataPoint probability="0">
+                    <bpsim:FloatingParameter value="3"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="3.0202"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="3.0408"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="3.0619"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="3.0834"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="3.1054"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="3.1278"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="3.1508"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="3.1744"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="3.1985"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="3.2231"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="3.2485"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="3.2744"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="3.3011"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="3.3285"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="3.3567"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="3.3857"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="3.4155"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="3.4463"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="3.478"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="3.5108"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="3.5447"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="3.5798"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="3.6162"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="3.6539"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="3.6931"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="3.734"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="3.7765"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="3.821"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="3.8675"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="3.9163"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="3.9676"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="4.0217"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="4.0788"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="4.1394"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="4.204"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="4.273"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="4.3471"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="4.4271"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="4.5141"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="4.6094"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="4.7148"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="4.8326"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="4.9661"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="5.1203"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="5.3026"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="5.5257"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="5.8134"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="6.2189"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="6.912"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.01">
+                    <bpsim:FloatingParameter value="7.6052"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.005">
+                    <bpsim:FloatingParameter value="8.2983"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.004">
+                    <bpsim:FloatingParameter value="9.9078"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.0009">
+                    <bpsim:FloatingParameter value="12.2103"/>
+                  </bpsim:UserDistributionDataPoint>
+                </bpsim:UserDistribution>
+              </bpsim:ProcessingTime>
+            </bpsim:TimeParameters>
+            <bpsim:ResourceParameters>
+              <bpsim:Selection>
+                <bpsim:ExpressionParameter value="getResource('vaccination_resource', 1)"/>
+              </bpsim:Selection>
+            </bpsim:ResourceParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="observation">
+            <bpsim:TimeParameters>
+              <bpsim:ProcessingTime>
+                <bpsim:UserDistribution discrete="false">
+                  <bpsim:UserDistributionDataPoint probability="0">
+                    <bpsim:FloatingParameter value="18.143"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="18.9773"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="19.1294"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="19.2277"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="19.3029"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="19.365"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="19.4186"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="19.4662"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="19.5094"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="19.5493"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="19.5864"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="19.6214"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="19.6547"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="19.6865"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="19.717"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="19.7466"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="19.7752"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="19.8032"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="19.8306"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="19.8574"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="19.8839"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="19.91"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="19.9359"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="19.9616"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="19.9872"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="20.0128"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="20.0383"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="20.064"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="20.0898"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="20.1158"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="20.1422"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="20.169"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="20.1963"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="20.2241"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="20.2527"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="20.2821"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="20.3126"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="20.3442"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="20.3773"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="20.4121"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="20.449"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="20.4886"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="20.5315"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="20.5786"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="20.6315"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="20.6926"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="20.7661"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="20.8612"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="21.0037"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.02">
+                    <bpsim:FloatingParameter value="21.3938"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.01">
+                    <bpsim:FloatingParameter value="26.9315"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.005">
+                    <bpsim:FloatingParameter value="33.8629"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.004">
+                    <bpsim:FloatingParameter value="49.9573"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.0009">
+                    <bpsim:FloatingParameter value="72.9832"/>
+                  </bpsim:UserDistributionDataPoint>
+                </bpsim:UserDistribution>
+              </bpsim:ProcessingTime>
+            </bpsim:TimeParameters>
+            <bpsim:ResourceParameters>
+              <bpsim:Selection>
+                <bpsim:ExpressionParameter value="getResource('observation_resource', 1)"/>
+              </bpsim:Selection>
+            </bpsim:ResourceParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="entrance_resource">
+            <bpsim:ResourceParameters>
+              <bpsim:Quantity>
+                <bpsim:NumericParameter value="4"/>
+              </bpsim:Quantity>
+            </bpsim:ResourceParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="registration_resource">
+            <bpsim:ResourceParameters>
+              <bpsim:Quantity>
+                <bpsim:NumericParameter value="6"/>
+              </bpsim:Quantity>
+            </bpsim:ResourceParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="assessment_resource">
+            <bpsim:ResourceParameters>
+              <bpsim:Quantity>
+                <bpsim:NumericParameter value="4"/>
+              </bpsim:Quantity>
+            </bpsim:ResourceParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="preparation_resource">
+            <bpsim:ResourceParameters>
+              <bpsim:Quantity>
+                <bpsim:NumericParameter value="2"/>
+              </bpsim:Quantity>
+            </bpsim:ResourceParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="vaccination_resource">
+            <bpsim:ResourceParameters>
+              <bpsim:Quantity>
+                <bpsim:NumericParameter value="5"/>
+              </bpsim:Quantity>
+            </bpsim:ResourceParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="observation_resource">
+            <bpsim:ResourceParameters>
+              <bpsim:Quantity>
+                <bpsim:NumericParameter value="25"/>
+              </bpsim:Quantity>
+            </bpsim:ResourceParameters>
+          </bpsim:ElementParameters>
+        </bpsim:Scenario>
+        <bpsim:Scenario id="large-hub" name="Large hub: 63 staff, 180 bookings an hour" inherits="scenario">
+          <bpsim:ElementParameters elementRef="patients">
+            <bpsim:ControlParameters>
+              <bpsim:InterTriggerTimer>
+                <bpsim:NegativeExponentialDistribution mean="0.3401360544217687"/>
+              </bpsim:InterTriggerTimer>
+            </bpsim:ControlParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="preparation_resource">
+            <bpsim:ResourceParameters>
+              <bpsim:Quantity>
+                <bpsim:NumericParameter value="6"/>
+              </bpsim:Quantity>
+            </bpsim:ResourceParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="entrance_resource">
+            <bpsim:ResourceParameters>
+              <bpsim:Quantity>
+                <bpsim:NumericParameter value="12"/>
+              </bpsim:Quantity>
+            </bpsim:ResourceParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="registration_resource">
+            <bpsim:ResourceParameters>
+              <bpsim:Quantity>
+                <bpsim:NumericParameter value="18"/>
+              </bpsim:Quantity>
+            </bpsim:ResourceParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="assessment_resource">
+            <bpsim:ResourceParameters>
+              <bpsim:Quantity>
+                <bpsim:NumericParameter value="12"/>
+              </bpsim:Quantity>
+            </bpsim:ResourceParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="vaccination_resource">
+            <bpsim:ResourceParameters>
+              <bpsim:Quantity>
+                <bpsim:NumericParameter value="15"/>
+              </bpsim:Quantity>
+            </bpsim:ResourceParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="observation_resource">
+            <bpsim:ResourceParameters>
+              <bpsim:Quantity>
+                <bpsim:NumericParameter value="75"/>
+              </bpsim:Quantity>
+            </bpsim:ResourceParameters>
+          </bpsim:ElementParameters>
+        </bpsim:Scenario>
+        <bpsim:Scenario id="ten-more" name="Small hub, 70 bookings an hour" inherits="scenario">
+          <bpsim:ElementParameters elementRef="patients">
+            <bpsim:ControlParameters>
+              <bpsim:InterTriggerTimer>
+                <bpsim:NegativeExponentialDistribution mean="0.8746355685131196"/>
+              </bpsim:InterTriggerTimer>
+            </bpsim:ControlParameters>
+          </bpsim:ElementParameters>
+        </bpsim:Scenario>
+      </bpsim:BPSimData>
+    </bpmn:extensionElements>
+    <bpmn:source>definitions</bpmn:source>
+    <bpmn:target>definitions</bpmn:target>
+  </bpmn:relationship>
+</bpmn:definitions>

@@ -908,6 +908,23 @@ unit	yr	r.
 	Three activities in parallel, each ten days on average; the project ends when all three are done.	Tři souběžné činnosti, každá v průměru deset dní; projekt končí, když jsou hotové všechny tři.
 	When will the project finish?	Kdy bude projekt dokončen?
 	Why three ten-day activities in parallel take more than 18 days on average.	Proč tři souběžné desetidenní činnosti trvají v průměru déle než 18 dní.
+	Public services	Veřejné služby
+	Polling place	Volební místnost
+	Voters arrive all day and wait for a free voting machine, with a long or a short ballot (Allen, Introduction to Discrete Event Simulation and Agent-based Modeling, ch. 6 and 7).	Voliči přicházejí celý den a čekají na volné hlasovací zařízení, s dlouhým nebo krátkým hlasovacím lístkem (Allen, Introduction to Discrete Event Simulation and Agent-based Modeling, kap. 6 a 7).
+	How many voting machines does a polling place need?	Kolik hlasovacích zařízení potřebuje volební místnost?
+	Machines in proportion to voters and ballot length: 16 instead of 18 makes the wait six times longer. The election-day runs show the direction only.	Zařízení v poměru k voličům a délce hlasovacího lístku: 16 místo 18 prodlouží čekání šestkrát. Běhy pro den voleb ukazují jen směr.
+	Mass vaccination hub	Hromadné očkovací centrum
+	Entrance, registration, assessment and vaccination, with each dose prepared alongside, then about 20 minutes in an observation seat (Hanly et al., BMC Health Services Research, 2022).	Vstup, registrace, posouzení a očkování, přičemž každá dávka se připravuje souběžně, poté asi 20 minut na místě k pozorování (Hanly et al., BMC Health Services Research, 2022).
+	How many doses a day can a vaccination hub give?	Kolik dávek denně může očkovací centrum podat?
+	Each station's staff are as busy as the flow of patients says: all under 80%, and about 470 doses in an 8-hour day with 21 staff. The time inside is not checked.	Personál každé stanice je vytížen tak, jak říká tok pacientů: všude pod 80% a asi 470 dávek za 8hodinový den s 21 zaměstnanci. Doba uvnitř se nekontroluje.
+	Penny Fab	Penny Fab
+	Four machines in a line, 2 hours a job each, with a fixed number of jobs going round (Hopp and Spearman, Factory Physics).	Čtyři stroje v řadě, každý 2 hodiny na zakázku, s pevným počtem zakázek v oběhu (Hopp a Spearman, Factory Physics).
+	How much work in process does a line need?	Kolik rozpracované výroby potřebuje linka?
+	Little's law and the critical work in process: 4 jobs give 0.29 jobs an hour with random times and 0.5 with fixed ones.	Littleův zákon a kritická rozpracovaná výroba: 4 zakázky dávají 0.29 zakázky za hodinu při náhodných dobách a 0.5 při pevných.
+	Prison population	Vězeňská populace
+	Petty and serious offenders serve their sentences, and some offend again and come back; the numbers scaled down 100 times (Brailsford, Churilov and Dangerfield, ch. 8).	Pachatelé lehčích i těžších trestných činů si odpykávají tresty a někteří se znovu dopustí trestné činnosti a vracejí se; počty zmenšené 100krát (Brailsford, Churilov a Dangerfield, kap. 8).
+	How many prison places are needed?	Kolik vězeňských míst je potřeba?
+	Places are arrivals times the length of stay, whatever the sentences: 500 petty and 260 serious offenders inside, and what fewer reoffending would do.	Míst je tolik, kolik činí příchody krát délka pobytu, ať jsou tresty jakékoli: uvnitř 500 pachatelů lehčích a 260 těžších trestných činů a co by přineslo méně recidivy.
 	Show me	Ukázat
 	Point at where to do this step	Ukázat, kde provést tento krok
 	Step {k} of {n}	Krok {k} z {n}

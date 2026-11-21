@@ -908,6 +908,23 @@ unit	yr	ປີ
 	Three activities in parallel, each ten days on average; the project ends when all three are done.	ສາມກິດຈະກຳທີ່ເຮັດຂະໜານກັນ, ແຕ່ລະກິດຈະກຳສະເລ່ຍສິບມື້; ໂຄງການສິ້ນສຸດເມື່ອທັງສາມກິດຈະກຳສຳເລັດ.
 	When will the project finish?	ໂຄງການຈະສຳເລັດເມື່ອໃດ?
 	Why three ten-day activities in parallel take more than 18 days on average.	ເປັນຫຍັງສາມກິດຈະກຳຂະໜານທີ່ໃຊ້ເວລາກິດຈະກຳລະສິບມື້ຈຶ່ງໃຊ້ເວລາສະເລ່ຍຫຼາຍກວ່າ 18 ມື້.
+	Public services	ການບໍລິການສາທາລະນະ
+	Polling place	ຈຸດລົງຄະແນນສຽງ
+	Voters arrive all day and wait for a free voting machine, with a long or a short ballot (Allen, Introduction to Discrete Event Simulation and Agent-based Modeling, ch. 6 and 7).	ຜູ້ມີສິດເລືອກຕັ້ງມາຕະຫຼອດມື້ ແລະ ລໍຖ້າເຄື່ອງລົງຄະແນນສຽງທີ່ຫວ່າງ, ດ້ວຍບັດລົງຄະແນນທີ່ຍາວ ຫຼື ສັ້ນ (Allen, Introduction to Discrete Event Simulation and Agent-based Modeling, ບົດ 6 ແລະ 7).
+	How many voting machines does a polling place need?	ຈຸດລົງຄະແນນສຽງຕ້ອງມີເຄື່ອງລົງຄະແນນສຽງຈັກເຄື່ອງ?
+	Machines in proportion to voters and ballot length: 16 instead of 18 makes the wait six times longer. The election-day runs show the direction only.	ຈຳນວນເຄື່ອງຕາມສັດສ່ວນຂອງຜູ້ລົງຄະແນນ ແລະ ຄວາມຍາວຂອງບັດ: 16 ແທນທີ່ຈະເປັນ 18 ເຮັດໃຫ້ການລໍຖ້າດົນຂຶ້ນຫົກເທົ່າ. ການແລ່ນສຳລັບວັນເລືອກຕັ້ງສະແດງພຽງທິດທາງເທົ່ານັ້ນ.
+	Mass vaccination hub	ສູນສັກວັກຊີນຈຳນວນຫຼາຍ
+	Entrance, registration, assessment and vaccination, with each dose prepared alongside, then about 20 minutes in an observation seat (Hanly et al., BMC Health Services Research, 2022).	ທາງເຂົ້າ, ການລົງທະບຽນ, ການປະເມີນ ແລະ ການສັກວັກຊີນ, ໂດຍແຕ່ລະໂດສຖືກກຽມໄວ້ຄຽງຂ້າງ, ແລ້ວປະມານ 20 ນາທີໃນບ່ອນນັ່ງສັງເກດອາການ (Hanly et al., BMC Health Services Research, 2022).
+	How many doses a day can a vaccination hub give?	ສູນສັກວັກຊີນສາມາດສັກໄດ້ຈັກໂດສຕໍ່ມື້?
+	Each station's staff are as busy as the flow of patients says: all under 80%, and about 470 doses in an 8-hour day with 21 staff. The time inside is not checked.	ພະນັກງານຂອງແຕ່ລະສະຖານີຫຍຸ້ງເທົ່າທີ່ການໄຫຼຂອງຄົນເຈັບບອກ: ທັງໝົດຕ່ຳກວ່າ 80%, ແລະ ປະມານ 470 ໂດສໃນມື້ 8 ຊົ່ວໂມງດ້ວຍພະນັກງານ 21 ຄົນ. ບໍ່ໄດ້ກວດເວລາທີ່ຢູ່ພາຍໃນ.
+	Penny Fab	Penny Fab
+	Four machines in a line, 2 hours a job each, with a fixed number of jobs going round (Hopp and Spearman, Factory Physics).	ເຄື່ອງຈັກສີ່ເຄື່ອງຕໍ່ເປັນສາຍ, ແຕ່ລະເຄື່ອງ 2 ຊົ່ວໂມງຕໍ່ໜຶ່ງວຽກ, ມີຈຳນວນວຽກຄົງທີ່ໝູນວຽນ (Hopp ແລະ Spearman, Factory Physics).
+	How much work in process does a line need?	ສາຍການຜະລິດຕ້ອງມີງານລະຫວ່າງການຜະລິດຫຼາຍເທົ່າໃດ?
+	Little's law and the critical work in process: 4 jobs give 0.29 jobs an hour with random times and 0.5 with fixed ones.	ກົດຂອງລິດເທິນ ແລະ ງານລະຫວ່າງການຜະລິດຂັ້ນວິກິດ: 4 ວຽກໃຫ້ 0.29 ວຽກຕໍ່ຊົ່ວໂມງເມື່ອເວລາສຸ່ມ ແລະ 0.5 ເມື່ອເວລາຄົງທີ່.
+	Prison population	ປະຊາກອນໃນຄຸກ
+	Petty and serious offenders serve their sentences, and some offend again and come back; the numbers scaled down 100 times (Brailsford, Churilov and Dangerfield, ch. 8).	ຜູ້ກະທຳຜິດເລັກນ້ອຍ ແລະ ຮ້າຍແຮງຮັບໂທດຕາມທີ່ຖືກຕັດສິນ, ແລະ ບາງຄົນກະທຳຜິດຊ້ຳ ແລະ ກັບມາ; ຈຳນວນຖືກຫຼຸດລົງ 100 ເທົ່າ (Brailsford, Churilov ແລະ Dangerfield, ບົດ 8).
+	How many prison places are needed?	ຕ້ອງມີບ່ອນໃນຄຸກຈັກບ່ອນ?
+	Places are arrivals times the length of stay, whatever the sentences: 500 petty and 260 serious offenders inside, and what fewer reoffending would do.	ຈຳນວນບ່ອນເທົ່າກັບຜູ້ເຂົ້າໃໝ່ຄູນໄລຍະຄຸມຂັງ, ບໍ່ວ່າໂທດຈະເປັນແນວໃດ: ຜູ້ກະທຳຜິດເລັກນ້ອຍ 500 ຄົນ ແລະ ຮ້າຍແຮງ 260 ຄົນຢູ່ພາຍໃນ, ແລະ ການກະທຳຜິດຊ້ຳທີ່ໜ້ອຍລົງຈະເຮັດໃຫ້ເປັນແນວໃດ.
 	Show me	ສະແດງໃຫ້ເບິ່ງ
 	Point at where to do this step	ຊີ້ໄປບ່ອນທີ່ຕ້ອງເຮັດຂັ້ນຕອນນີ້
 	Step {k} of {n}	ຂັ້ນຕອນ {k} ຈາກ {n}

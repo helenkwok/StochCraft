@@ -908,6 +908,23 @@ unit	yr	বছর
 	Three activities in parallel, each ten days on average; the project ends when all three are done.	সমান্তরালে তিনটি কার্যক্রম, প্রতিটি গড়ে দশ দিনের; তিনটিই শেষ হলে প্রকল্প শেষ হয়।
 	When will the project finish?	প্রকল্প কবে শেষ হবে?
 	Why three ten-day activities in parallel take more than 18 days on average.	সমান্তরালে দশ দিনের তিনটি কার্যক্রমে কেন গড়ে 18 দিনের বেশি লাগে।
+	Public services	জনসেবা
+	Polling place	ভোটকেন্দ্র
+	Voters arrive all day and wait for a free voting machine, with a long or a short ballot (Allen, Introduction to Discrete Event Simulation and Agent-based Modeling, ch. 6 and 7).	ভোটাররা সারাদিন আসেন এবং একটি ফাঁকা ভোটিং মেশিনের জন্য অপেক্ষা করেন, ব্যালট লম্বা বা ছোট হতে পারে (Allen, Introduction to Discrete Event Simulation and Agent-based Modeling, অধ্যায় 6 ও 7)।
+	How many voting machines does a polling place need?	একটি ভোটকেন্দ্রে কতগুলো ভোটিং মেশিন দরকার?
+	Machines in proportion to voters and ballot length: 16 instead of 18 makes the wait six times longer. The election-day runs show the direction only.	মেশিনের সংখ্যা ভোটার ও ব্যালটের দৈর্ঘ্য অনুযায়ী: 18-এর বদলে 16 হলে অপেক্ষা ছয় গুণ লম্বা হয়। নির্বাচনের দিনের পুনরাবৃত্তিগুলো শুধু দিক দেখায়।
+	Mass vaccination hub	গণটিকাদান কেন্দ্র
+	Entrance, registration, assessment and vaccination, with each dose prepared alongside, then about 20 minutes in an observation seat (Hanly et al., BMC Health Services Research, 2022).	প্রবেশ, নিবন্ধন, মূল্যায়ন ও টিকাদান, প্রতিটি ডোজ পাশাপাশি প্রস্তুত হয়, তারপর পর্যবেক্ষণ আসনে প্রায় 20 মিনিট (Hanly et al., BMC Health Services Research, 2022)।
+	How many doses a day can a vaccination hub give?	একটি টিকাদান কেন্দ্র দিনে কত ডোজ দিতে পারে?
+	Each station's staff are as busy as the flow of patients says: all under 80%, and about 470 doses in an 8-hour day with 21 staff. The time inside is not checked.	প্রতিটি স্টেশনের কর্মীরা রোগীর প্রবাহ যতটা বলে ততটাই ব্যস্ত: সবাই 80%-এর নিচে, আর 21 জন কর্মী নিয়ে 8 ঘণ্টার দিনে প্রায় 470 ডোজ। ভেতরে কাটানো সময় যাচাই করা হয়নি।
+	Penny Fab	Penny Fab
+	Four machines in a line, 2 hours a job each, with a fixed number of jobs going round (Hopp and Spearman, Factory Physics).	সারিতে চারটি মেশিন, প্রতিটি কাজে 2 ঘণ্টা করে, ঘুরতে থাকা কাজের সংখ্যা নির্দিষ্ট (Hopp ও Spearman, Factory Physics)।
+	How much work in process does a line need?	একটি লাইনে কতটা প্রক্রিয়াধীন কাজ দরকার?
+	Little's law and the critical work in process: 4 jobs give 0.29 jobs an hour with random times and 0.5 with fixed ones.	লিটলের সূত্র ও সংকট প্রক্রিয়াধীন কাজ: 4টি কাজে দৈব সময়ে ঘণ্টায় 0.29টি কাজ এবং স্থির সময়ে 0.5টি কাজ পাওয়া যায়।
+	Prison population	কারাগারের জনসংখ্যা
+	Petty and serious offenders serve their sentences, and some offend again and come back; the numbers scaled down 100 times (Brailsford, Churilov and Dangerfield, ch. 8).	লঘু ও গুরুতর অপরাধীরা সাজা খাটেন, আর কেউ কেউ আবার অপরাধ করে ফিরে আসেন; সংখ্যা 100 গুণ কমানো (Brailsford, Churilov ও Dangerfield, অধ্যায় 8)।
+	How many prison places are needed?	কতজন বন্দির জায়গা দরকার?
+	Places are arrivals times the length of stay, whatever the sentences: 500 petty and 260 serious offenders inside, and what fewer reoffending would do.	জায়গার সংখ্যা = আগমন গুণ থাকার মেয়াদ, সাজা যাই হোক: ভেতরে 500 লঘু ও 260 গুরুতর অপরাধী, আর পুনরায় অপরাধ কমলে কী হতো।
 	Show me	আমাকে দেখান
 	Point at where to do this step	এই ধাপটি কোথায় করতে হবে তা দেখিয়ে দিন
 	Step {k} of {n}	{n}-এর মধ্যে ধাপ {k}

@@ -908,6 +908,23 @@ unit	yr	a
 	Three activities in parallel, each ten days on average; the project ends when all three are done.	Tres activitats en paral·lel, de deu dies de mitjana cadascuna; el projecte acaba quan totes tres estan fetes.
 	When will the project finish?	Quan acabarà el projecte?
 	Why three ten-day activities in parallel take more than 18 days on average.	Per què tres activitats de deu dies en paral·lel triguen de mitjana més de 18 dies.
+	Public services	Serveis públics
+	Polling place	Col·legi electoral
+	Voters arrive all day and wait for a free voting machine, with a long or a short ballot (Allen, Introduction to Discrete Event Simulation and Agent-based Modeling, ch. 6 and 7).	Els votants arriben durant tot el dia i esperen una màquina de votar lliure, amb una butlleta llarga o curta (Allen, Introduction to Discrete Event Simulation and Agent-based Modeling, cap. 6 i 7).
+	How many voting machines does a polling place need?	Quantes màquines de votar necessita un col·legi electoral?
+	Machines in proportion to voters and ballot length: 16 instead of 18 makes the wait six times longer. The election-day runs show the direction only.	Màquines en proporció als votants i a la longitud de la butlleta: 16 en lloc de 18 fa l'espera sis vegades més llarga. Les execucions del dia de les eleccions només en mostren la direcció.
+	Mass vaccination hub	Centre de vacunació massiva
+	Entrance, registration, assessment and vaccination, with each dose prepared alongside, then about 20 minutes in an observation seat (Hanly et al., BMC Health Services Research, 2022).	Entrada, registre, valoració i vacunació, amb cada dosi preparada al mateix temps, i després uns 20 minuts en un seient d'observació (Hanly et al., BMC Health Services Research, 2022).
+	How many doses a day can a vaccination hub give?	Quantes dosis al dia pot administrar un centre de vacunació?
+	Each station's staff are as busy as the flow of patients says: all under 80%, and about 470 doses in an 8-hour day with 21 staff. The time inside is not checked.	El personal de cada estació està tan ocupat com diu el flux de pacients: tots per sota del 80% i unes 470 dosis en un dia de 8 hores amb 21 persones de personal. El temps a dins no es comprova.
+	Penny Fab	Penny Fab
+	Four machines in a line, 2 hours a job each, with a fixed number of jobs going round (Hopp and Spearman, Factory Physics).	Quatre màquines en línia, 2 hores per feina cadascuna, amb un nombre fix de feines en circulació (Hopp i Spearman, Factory Physics).
+	How much work in process does a line need?	Quanta producció en curs necessita una línia?
+	Little's law and the critical work in process: 4 jobs give 0.29 jobs an hour with random times and 0.5 with fixed ones.	La llei de Little i la producció en curs crítica: 4 feines donen 0.29 feines per hora amb temps aleatoris i 0.5 amb temps fixos.
+	Prison population	Població penitenciària
+	Petty and serious offenders serve their sentences, and some offend again and come back; the numbers scaled down 100 times (Brailsford, Churilov and Dangerfield, ch. 8).	Els autors de delictes menors i greus compleixen les condemnes, i alguns tornen a delinquir i tornen; les xifres, reduïdes 100 vegades (Brailsford, Churilov i Dangerfield, cap. 8).
+	How many prison places are needed?	Quantes places de presó calen?
+	Places are arrivals times the length of stay, whatever the sentences: 500 petty and 260 serious offenders inside, and what fewer reoffending would do.	Les places són les arribades per la durada de l'estada, siguin quines siguin les condemnes: 500 autors de delictes menors i 260 de greus a dins, i què faria una reincidència menor.
 	Show me	Mostra-m'ho
 	Point at where to do this step	Assenyala on fer aquest pas
 	Step {k} of {n}	Pas {k} de {n}

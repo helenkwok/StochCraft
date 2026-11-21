@@ -908,6 +908,23 @@ unit	yr	an
 	Three activities in parallel, each ten days on average; the project ends when all three are done.	Trois activités en parallèle, de dix jours chacune en moyenne ; le projet se termine quand les trois sont achevées.
 	When will the project finish?	Quand le projet se terminera-t-il ?
 	Why three ten-day activities in parallel take more than 18 days on average.	Pourquoi trois activités de dix jours en parallèle prennent plus de 18 jours en moyenne.
+	Public services	Services publics
+	Polling place	Bureau de vote
+	Voters arrive all day and wait for a free voting machine, with a long or a short ballot (Allen, Introduction to Discrete Event Simulation and Agent-based Modeling, ch. 6 and 7).	Les électeurs arrivent toute la journée et attendent une machine à voter libre, avec un bulletin long ou court (Allen, Introduction to Discrete Event Simulation and Agent-based Modeling, chap. 6 et 7).
+	How many voting machines does a polling place need?	De combien de machines à voter un bureau de vote a-t-il besoin ?
+	Machines in proportion to voters and ballot length: 16 instead of 18 makes the wait six times longer. The election-day runs show the direction only.	Les machines doivent suivre le nombre d'électeurs et la longueur du bulletin : 16 au lieu de 18 multiplie l'attente par six. Les exécutions du jour de scrutin n'indiquent que la tendance.
+	Mass vaccination hub	Centre de vaccination de masse
+	Entrance, registration, assessment and vaccination, with each dose prepared alongside, then about 20 minutes in an observation seat (Hanly et al., BMC Health Services Research, 2022).	Entrée, inscription, évaluation et vaccination, chaque dose étant préparée à côté, puis environ 20 minutes sur un siège d'observation (Hanly et al., BMC Health Services Research, 2022).
+	How many doses a day can a vaccination hub give?	Combien de doses par jour un centre de vaccination peut-il administrer ?
+	Each station's staff are as busy as the flow of patients says: all under 80%, and about 470 doses in an 8-hour day with 21 staff. The time inside is not checked.	Le personnel de chaque poste est aussi occupé que le flux de patients le dicte : tous sous 80 %, et environ 470 doses sur une journée de 8 heures avec 21 personnes. Le temps passé sur place n'est pas vérifié.
+	Penny Fab	Penny Fab
+	Four machines in a line, 2 hours a job each, with a fixed number of jobs going round (Hopp and Spearman, Factory Physics).	Quatre machines en ligne, 2 heures par travail et par machine, avec un nombre fixe de travaux qui circulent (Hopp et Spearman, Factory Physics).
+	How much work in process does a line need?	De combien d'en-cours une ligne a-t-elle besoin ?
+	Little's law and the critical work in process: 4 jobs give 0.29 jobs an hour with random times and 0.5 with fixed ones.	La loi de Little et l'en-cours critique : 4 travaux donnent 0.29 travail par heure avec des durées aléatoires et 0.5 avec des durées fixes.
+	Prison population	Population carcérale
+	Petty and serious offenders serve their sentences, and some offend again and come back; the numbers scaled down 100 times (Brailsford, Churilov and Dangerfield, ch. 8).	Les délinquants mineurs et graves purgent leur peine, et certains récidivent et reviennent ; les effectifs sont réduits 100 fois (Brailsford, Churilov et Dangerfield, chap. 8).
+	How many prison places are needed?	Combien de places de prison faut-il ?
+	Places are arrivals times the length of stay, whatever the sentences: 500 petty and 260 serious offenders inside, and what fewer reoffending would do.	Les places sont les arrivées multipliées par la durée de séjour, quelles que soient les peines : 500 délinquants mineurs et 260 graves à l'intérieur, et ce que ferait une récidive moindre.
 	Show me	Montrez-moi
 	Point at where to do this step	Montrer où effectuer cette étape
 	Step {k} of {n}	Étape {k} sur {n}
