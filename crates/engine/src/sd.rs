@@ -1,16 +1,20 @@
-//! System dynamics models through the engine (ROADMAP M4.2 part 1): the commands `sd.open`,
-//! `sd.run` and `sd.get`, and `file.open` on an XMILE file.
+//! System dynamics models through the engine (ROADMAP M4.2): the commands `sd.open`, `sd.run`
+//! and `sd.get`, and `file.open` and `file.save` on an XMILE file. The edits (`sd.new`,
+//! `sd.variable.add`, `.set` and `.remove`, `sd.specs.set` and `sd.layout.set`) are in
+//! [`crate::sd_edit`].
 //!
 //! An XMILE model is its own document, held beside the (empty) process model: opening one
 //! starts a new document and a new journal, as `file.open` on a BPMN file does, and `run`
-//! refuses it, as it refuses a Monte Carlo model, with the command to use. It cannot be edited
-//! or saved yet: the window and canvas that do come next. The runs are `stochcraft-sd`'s.
+//! refuses it, as it refuses a Monte Carlo model, with the command to use. The runs are
+//! `stochcraft-sd`'s.
 
 use schemars::JsonSchema;
 use serde::Deserialize;
 use serde_json::{Value, json};
 use stochcraft_model::Model;
-use stochcraft_sd::{ErrorKind, Program, RunOptions, SdError, SdModel, SdResults};
+use stochcraft_sd::{
+    ErrorKind, Program, RunOptions, SdError, SdModel, SdResults, VarKind, canonical, flow_ends,
+};
 
 use crate::commands::parse;
 use crate::{CommandError, Engine, ErrorCode, JournalStart, StartKind};
@@ -20,15 +24,21 @@ pub(crate) const EXAMPLE_XMILE: &str = "<xmile version=\"1.0\" xmlns=\"http://do
 
 /// The open system dynamics model, and its last run.
 pub(crate) struct SdDoc {
-    /// The name it was opened under (the path, for a file).
+    /// The name it was opened under (the path, for a file); empty for a new model.
     pub path: String,
+    /// The file it was opened from or saved to, which `file.save` writes to.
+    pub file: Option<String>,
     pub model: SdModel,
+    /// The model as last opened or saved, to tell whether there are unsaved changes.
+    pub saved: SdModel,
     pub program: Program,
     pub notes: Vec<String>,
     pub last: Option<SdResults>,
+    /// The model was edited since `last` was run.
+    pub last_stale: bool,
 }
 
-fn sd_error(e: SdError) -> CommandError {
+pub(crate) fn sd_error(e: SdError) -> CommandError {
     let code = match e.kind {
         ErrorKind::Xml => ErrorCode::BadFile,
         ErrorKind::Unsupported => ErrorCode::Unsupported,
@@ -40,14 +50,14 @@ fn sd_error(e: SdError) -> CommandError {
     c
 }
 
-fn no_model() -> CommandError {
+pub(crate) fn no_model() -> CommandError {
     CommandError::new(
         ErrorCode::NotFound,
         "no system dynamics model is open: open an XMILE file with file.open, or give sd.open its text",
     )
 }
 
-fn warnings_json(program: &Program) -> Value {
+pub(crate) fn warnings_json(program: &Program) -> Value {
     program
         .warnings
         .iter()
@@ -58,7 +68,12 @@ fn warnings_json(program: &Program) -> Value {
 impl Engine {
     /// Opens an XMILE model from its bytes, replacing the document (what `file.open` does for
     /// an XMILE file, and `sd.open` for its text).
-    pub(crate) fn open_sd(&mut self, name: &str, bytes: &[u8]) -> Result<Value, CommandError> {
+    pub(crate) fn open_sd(
+        &mut self,
+        name: &str,
+        bytes: &[u8],
+        is_file: bool,
+    ) -> Result<Value, CommandError> {
         let text = std::str::from_utf8(bytes).map_err(|_| {
             CommandError::new(ErrorCode::BadFile, format!("{name}: not UTF-8 text"))
         })?;
@@ -87,18 +102,29 @@ impl Engine {
         self.new_document(Model::default(), start);
         self.sd = Some(SdDoc {
             path: name.to_owned(),
+            file: is_file.then(|| name.to_owned()),
+            saved: file.model.clone(),
             model: file.model,
             program,
             notes: file.notes,
             last: None,
+            last_stale: false,
         });
         Ok(result)
     }
 }
 
 /// The model as JSON: its settings, and each variable with its kind, equation and units.
-fn describe(model: &SdModel, program: &Program) -> Value {
+pub(crate) fn describe(model: &SdModel, program: &Program) -> Value {
     let s = &model.specs;
+    // A variable's name as the model writes it, from its canonical one.
+    let shown = |c: &str| {
+        model
+            .vars
+            .iter()
+            .find(|v| canonical(&v.name) == c)
+            .map(|v| v.name.clone())
+    };
     let vars: Vec<Value> = model
         .vars
         .iter()
@@ -129,8 +155,31 @@ fn describe(model: &SdModel, program: &Program) -> Value {
                 o["graphical_function"] =
                     json!({ "type": g.kind.name(), "points": g.points().ok() });
             }
+            if let Some(doc) = &v.doc {
+                o["doc"] = json!(doc);
+            }
+            if let Some(shape) = model.layout.shapes.get(&canonical(&v.name)) {
+                o["x"] = json!(shape.x);
+                o["y"] = json!(shape.y);
+                if matches!(v.kind, VarKind::Flow { .. }) {
+                    o["pipe"] = json!(shape.pts.iter().map(|p| [p.0, p.1]).collect::<Vec<_>>());
+                    let (src, dst) = flow_ends(model, &v.name);
+                    o["source"] = json!(src.as_deref().and_then(&shown));
+                    o["sink"] = json!(dst.as_deref().and_then(&shown));
+                } else {
+                    let (w, h) = shape.size(&v.kind);
+                    o["width"] = json!(w);
+                    o["height"] = json!(h);
+                }
+            }
             o
         })
+        .collect();
+    let connectors: Vec<Value> = model
+        .layout
+        .connectors
+        .iter()
+        .map(|c| json!({ "from": shown(&c.from), "to": shown(&c.to), "angle": c.angle }))
         .collect();
     json!({
         "name": model.name,
@@ -142,6 +191,7 @@ fn describe(model: &SdModel, program: &Program) -> Value {
         "time_unit": s.time_units,
         "random": program.is_random(),
         "variables": vars,
+        "connectors": connectors,
     })
 }
 
@@ -158,7 +208,7 @@ pub struct Open {
 pub(crate) fn open(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
     let p: Open = parse(p)?;
     let name = p.name.unwrap_or_else(|| "model.xmile".to_owned());
-    e.open_sd(&name, p.text.as_bytes())
+    e.open_sd(&name, p.text.as_bytes(), false)
 }
 
 #[derive(Debug, Deserialize, JsonSchema)]
@@ -196,10 +246,16 @@ pub(crate) fn run(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         time_unit: p.time_unit,
     };
     let results = stochcraft_sd::run(&doc.program, &options).map_err(sd_error)?;
-    let digest = crate::bytes_digest(stochcraft_sd::write_xmile(&doc.model).as_bytes());
+    // The digest is of the model without its diagram: moving a shape does not change it.
+    let digest = crate::bytes_digest(stochcraft_sd::model_text(&doc.model).as_bytes());
     let mut json = results_json(&results, &digest, &doc.notes);
-    json["record"]["file"] = json!(doc.path);
+    json["record"]["file"] = if doc.path.is_empty() {
+        Value::Null
+    } else {
+        json!(doc.path)
+    };
     doc.last = Some(results);
+    doc.last_stale = false;
     Ok(json)
 }
 
@@ -299,6 +355,7 @@ pub(crate) fn get(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
     let mut out = describe(&doc.model, &doc.program);
     out["diagnostics"] = warnings_json(&doc.program);
     out["notes"] = json!(doc.notes);
+    out["results_stale"] = json!(doc.last.is_some() && doc.last_stale);
     if let Some(name) = p.variable {
         let want = stochcraft_sd::canonical(&name);
         if !doc
@@ -320,6 +377,7 @@ pub(crate) fn get(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
                         "time_unit": r.time_unit,
                         "times": floats(&r.times),
                         "mean": floats(&s.mean),
+                        "stale": doc.last_stale,
                     });
                     if r.replications > 1 {
                         o["median"] = floats(&s.median);

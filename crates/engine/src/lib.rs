@@ -42,7 +42,9 @@
 //! - A system dynamics model (stocks and flows over time) is an XMILE file: `file.open` or `sd.open`
 //!   opens it, `sd.run` runs it (once, or in replications when it has a random function, giving
 //!   the mean, median and 5% to 95% band of every variable over time) and `sd.get` describes it
-//!   (see [`sd`]); `run` refuses one. It cannot be edited or saved yet.
+//!   (see [`sd`]); `run` refuses one. `sd.new` starts an empty one and `sd.variable.add`, `.set`,
+//!   `.remove`, `sd.specs.set` and `sd.layout.set` edit it, on the same undo and redo as any other
+//!   edit; `file.save` writes it as an XMILE file.
 //! - Files are BPSim on BPMN or XPDL (`stochcraft-io`). `file.save` writes edits into the file
 //!   the model was opened from, keeping everything StochCraft does not understand and every line
 //!   it did not change; saved unchanged, the file comes back byte for byte. An edit that cannot
@@ -60,6 +62,7 @@ pub mod mc;
 pub mod precision;
 mod run;
 pub mod sd;
+mod sd_edit;
 pub mod wire;
 mod workers;
 
@@ -199,6 +202,9 @@ pub enum StartKind {
     New,
     /// A file was opened (`file.open`, or [`Engine::open_bytes`]).
     File,
+    /// `sd.new` started a new, empty system dynamics model; its settings are the journal
+    /// start's `params`.
+    NewSd,
 }
 
 /// The state a journal started from, so a replay can tell whether it starts from the same place.
@@ -217,6 +223,9 @@ pub struct JournalStart {
     /// For [`StartKind::File`], the scenario that was opened, if the file has scenarios.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub scenario: Option<String>,
+    /// For [`StartKind::NewSd`], the parameters `sd.new` was given.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub params: Option<Value>,
 }
 
 impl JournalStart {
@@ -228,6 +237,7 @@ impl JournalStart {
             name,
             file_digest: None,
             scenario: None,
+            params: None,
         }
     }
 }
@@ -317,10 +327,21 @@ impl std::fmt::Display for ReplayError {
 
 impl std::error::Error for ReplayError {}
 
+/// What undoes (or redoes) one edit: an operation on the process model, or the whole system
+/// dynamics model as it was (those are small, so an edit keeps a snapshot, as `Op::SetModel`
+/// does for a process model).
+// An entry was a whole `Op` before system dynamics joined the history, so `Model` keeps that size.
+#[allow(clippy::large_enum_variant)]
+#[derive(Debug, Clone)]
+enum Undo {
+    Model(Op),
+    Sd(Box<stochcraft_sd::SdModel>),
+}
+
 #[derive(Debug, Clone)]
 struct HistoryEntry {
     label: &'static str,
-    op: Op,
+    op: Undo,
 }
 
 /// The file a model belongs to.
@@ -523,11 +544,16 @@ impl Engine {
             self.execute("model.new", json!({ "name": name }))
                 .map_err(refuse)?;
         }
+        if start.kind == StartKind::NewSd {
+            self.execute("sd.new", start.params.clone().unwrap_or_else(|| json!({})))
+                .map_err(refuse)?;
+        }
         let found = model_digest(&self.model);
         if found != start.model_digest && !force {
             let from = match (start.kind, &start.name) {
                 (StartKind::File, Some(name)) => format!("the file `{name}`"),
                 (StartKind::New, _) => "a new model".to_owned(),
+                (StartKind::NewSd, _) => "a new system dynamics model".to_owned(),
                 _ => "the model the session began with".to_owned(),
             };
             return Err(refuse(CommandError {
@@ -554,22 +580,37 @@ impl Engine {
         self.replay_with(&journal.entries, options.mode)
     }
 
-    /// Whether the model differs from the one last opened or saved.
+    /// Whether the model (the process model, or the system dynamics model with its diagram)
+    /// differs from the one last opened or saved.
     pub fn is_dirty(&self) -> bool {
-        self.model != self.saved
+        self.model != self.saved || self.sd.as_ref().is_some_and(|d| d.model != d.saved)
     }
 
     /// The file the model was opened from or last saved to.
     pub fn path(&self) -> Option<&str> {
-        self.file.as_ref().and_then(|f| f.path.as_deref())
+        match &self.sd {
+            Some(d) => d.file.as_deref(),
+            None => self.file.as_ref().and_then(|f| f.path.as_deref()),
+        }
     }
 
     fn edit(&mut self, label: &'static str, op: Op) -> Result<(), CommandError> {
         self.revision += 1;
         let inverse = edit::apply(&mut self.model, op)?;
-        self.undo.push(HistoryEntry { label, op: inverse });
+        self.undo.push(HistoryEntry {
+            label,
+            op: Undo::Model(inverse),
+        });
         self.redo.clear();
         Ok(())
+    }
+
+    /// Applies one history entry and gives the entry that takes it back.
+    fn apply_history(&mut self, op: Undo) -> Result<Undo, CommandError> {
+        match op {
+            Undo::Model(op) => edit::apply(&mut self.model, op).map(Undo::Model),
+            Undo::Sd(model) => self.swap_sd_model(*model).map(|m| Undo::Sd(Box::new(m))),
+        }
     }
 
     fn undo(&mut self) -> Result<&'static str, CommandError> {
@@ -579,7 +620,7 @@ impl Engine {
             .ok_or_else(|| CommandError::new(ErrorCode::NothingToUndo, "nothing to undo"))?;
         let label = entry.label;
         self.revision += 1;
-        match edit::apply(&mut self.model, entry.op.clone()) {
+        match self.apply_history(entry.op.clone()) {
             Ok(op) => {
                 self.redo.push(HistoryEntry { label, op });
                 Ok(label)
@@ -598,7 +639,7 @@ impl Engine {
             .ok_or_else(|| CommandError::new(ErrorCode::NothingToRedo, "nothing to redo"))?;
         let label = entry.label;
         self.revision += 1;
-        match edit::apply(&mut self.model, entry.op.clone()) {
+        match self.apply_history(entry.op.clone()) {
             Ok(op) => {
                 self.undo.push(HistoryEntry { label, op });
                 Ok(label)
@@ -651,7 +692,7 @@ impl Engine {
         scenario: Option<&str>,
     ) -> Result<Value, CommandError> {
         if stochcraft_sd::looks_like_xmile(bytes) {
-            return self.open_sd(name, bytes);
+            return self.open_sd(name, bytes, true);
         }
         let loaded = stochcraft_io::read_scenario(bytes, scenario)
             .map_err(|e| CommandError::new(ErrorCode::BadFile, format!("{name}: {e}")))?;
@@ -689,6 +730,9 @@ impl Engine {
     /// the model. A change the opened file cannot take is [`ErrorCode::Unsupported`], with the
     /// reason.
     pub fn save_bytes(&self, as_new: bool) -> Result<Vec<u8>, CommandError> {
+        if let Some(d) = &self.sd {
+            return Ok(stochcraft_sd::write_xmile(&d.model).into_bytes());
+        }
         match &self.file {
             Some(f) if !as_new => f
                 .opened
@@ -701,6 +745,9 @@ impl Engine {
     /// The format of the file the model was opened from or saved to (`"bpmn"` or `"xpdl"`),
     /// which saving into it keeps; a new file is always BPMN.
     pub fn format(&self) -> Option<&'static str> {
+        if self.sd.is_some() {
+            return Some("xmile");
+        }
         self.file.as_ref().map(|f| format_name(f.opened.format))
     }
 
@@ -717,6 +764,12 @@ impl Engine {
 
     /// What [`Engine::saved_to`] does besides journalling, which `file.save` leaves to `execute`.
     fn record_saved(&mut self, path: &str, bytes: &[u8]) -> Result<Value, CommandError> {
+        if let Some(d) = self.sd.as_mut() {
+            d.saved = d.model.clone();
+            d.file = Some(path.to_owned());
+            d.path = path.to_owned();
+            return Ok(json!({ "path": path, "format": "xmile", "bytes": bytes.len() as u64 }));
+        }
         // Read back what was written, so the next unchanged save gives the same bytes again, in
         // the scenario that was opened (not the file's first one, which later saves would then
         // write into).

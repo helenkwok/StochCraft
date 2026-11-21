@@ -84,7 +84,7 @@ How other simulation tools keep models:
 | SimPy, simu-des, DESMO-J | Program code (Python, C, Rust, Java); no model file |
 | JaamSim | Its own plain-text configuration file (`.cfg`) |
 | Some commercial simulation tools | Their own proprietary files |
-| Stella (system dynamics) | XMILE, an OASIS standard |
+| System dynamics tools | XMILE, an OASIS standard |
 
 And the sibling Craft apps: CADCraft saves DXF natively and keeps CADCraft-only data inside it as
 extension data; SolidCraft has its own `.sc` only because parametric history has no standard
@@ -2316,9 +2316,21 @@ runs in replications and gives the mean, the median and the 5% to 95% band at ea
 answers check it: exponential growth (and Euler's error halving with the step), logistic growth
 by RK4, `DELAY3`'s pulse response against the Erlang density, `SMTH1`'s step response, a
 non-negative stock and the order of updates of the fisheries example, and an SIR epidemic against
-an RK4 reference at a small step. The window and the canvas come next (part 2), then the
-replication of hybrids with M4.3 and M4.4; arrays, the lint on rate-to-rate links and docking
-are not done.
+an RK4 reference at a small step. Part 2 so far: a model can be edited, undone and saved. The
+`sd` crate keeps the XMILE diagram (`views`: the position and size of each stock and auxiliary,
+each flow's valve and right-angled pipe, the information links; a cloud is the open end of a
+pipe) and gives a file with none a deterministic layout, stocks in rows along their flows and
+each auxiliary above the first variable it feeds, with no two shapes overlapping. The engine
+commands `sd.new`, `sd.variable.add`, `sd.variable.set` (including `rename`, which rewrites every
+equation and flow list that names the variable), `sd.variable.remove` (refused, naming who uses
+the variable, unless `force` clears only the stocks' flow lists), `sd.specs.set` and
+`sd.layout.set` edit the open model; each edit is compiled first and one that would not compile
+(a bad equation, an algebraic loop) is refused and changes nothing. An edit's undo entry is the
+whole model as it was, on the same undo and redo as any other edit; the last results are marked
+stale; the model is dirty while it differs from the one opened or saved, diagram included;
+`file.save` writes XMILE with the diagram; `sd.get` gives each variable's place and the links.
+The window's view and canvas, then the replication of hybrids with M4.3 and M4.4; arrays, the
+lint on rate-to-rate links and docking are not done.
 
 **What Python users already have, and so the minimum:** PySD runs models from the common
 system dynamics formats, with their stocks, flows, auxiliaries, delays, lookups and arrays, and

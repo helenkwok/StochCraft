@@ -13,9 +13,16 @@
 //! refused; RK2, RK45 and Gear run as RK4, as the specification allows, and the file says so in
 //! its notes.
 //!
-//! **Not kept, and said so in the notes:** the diagrams (`views`), styles, display settings of a
-//! variable (`range`, `scale`, `format`, `display`), another vendor's extensions (elements with
-//! a prefix), `pause`, and groups. A file written back has the model and none of those.
+//! **The diagram** (`views`, section 6.1) is kept in [`Layout`]: the first `stock_flow` view's
+//! stocks, flows (the valve's position and the `pts` of the pipe) and auxiliaries by `x` and `y`
+//! (the top left when the shape has a `width` and `height`, else the centre), and the connectors.
+//! Clouds are the ends of a flow's pipe that no stock holds. A file with no diagram gets one
+//! from [`Layout::auto`], and a file is always written with one.
+//!
+//! **Not kept, and said so in the notes:** a second view and views of another type, the
+//! colours, label places and other display attributes of a shape, aliases and other shapes of a
+//! diagram, styles, display settings of a variable (`range`, `scale`, `format`, `display`),
+//! another vendor's extensions (elements with a prefix), `pause`, and groups.
 //!
 //! **StochCraft's extension:** the interval results are saved at, `stochcraft:save_step` in
 //! `sim_specs`. Another tool ignores it, as XMILE allows for an element in another namespace.
@@ -23,7 +30,10 @@
 //! between draws: `NORMAL(mean, std_dev, seed, interval)`. `UNIFORM` is read as the
 //! specification's `RANDOM`.
 
-use crate::model::{Gf, GfKind, GfX, Method, SdModel, SimSpecs, Step, VarKind, Variable};
+use crate::layout::{AUX_SIZE, Connector, Layout, STOCK_SIZE, Shape, ends};
+use crate::model::{
+    Gf, GfKind, GfX, Method, SdModel, SimSpecs, Step, VarKind, Variable, canonical,
+};
 use crate::xml::{Element, escape, parse};
 use crate::{ErrorKind, SdError};
 
@@ -439,6 +449,7 @@ pub fn read_xmile(text: &str) -> Result<XmileFile, SdError> {
     let mut behavior = root_behavior;
     let mut specs = root_specs;
     let mut variables = None;
+    let mut views: Vec<&Element> = Vec::new();
     for c in m.elements() {
         if let Some(p) = &c.prefix {
             notes.add(format!(
@@ -449,7 +460,7 @@ pub fn read_xmile(text: &str) -> Result<XmileFile, SdError> {
         }
         match c.name.as_str() {
             "variables" => variables = Some(c),
-            "views" => notes.add("the diagrams (<views>) are not kept".to_owned()),
+            "views" => views.push(c),
             "sim_specs" => specs = Some(read_specs(c, &mut notes)?),
             "behavior" => behavior = read_behavior(c, &mut notes),
             n => {
@@ -491,10 +502,178 @@ pub fn read_xmile(text: &str) -> Result<XmileFile, SdError> {
             }
         }
     }
+    model.layout = read_views(&views, &model, &mut notes)?;
+    let mut layout = std::mem::take(&mut model.layout);
+    layout.complete(&model);
+    model.layout = layout;
     Ok(XmileFile {
         model,
         notes: notes.0,
     })
+}
+
+/// The diagram: the first `stock_flow` view.
+fn read_views(views: &[&Element], model: &SdModel, notes: &mut Notes) -> Result<Layout, SdError> {
+    let mut layout = Layout::default();
+    let mut kept = false;
+    for vs in views {
+        for c in vs.elements() {
+            if let Some(p) = &c.prefix {
+                notes.add(format!(
+                    "the extension element <{p}:{}> is not kept",
+                    c.name
+                ));
+                continue;
+            }
+            if c.name != "view" {
+                notes.add(format!("the <{}> of the diagrams is not kept", c.name));
+                continue;
+            }
+            let kind = c.attr("type").unwrap_or("stock_flow");
+            if !kind.eq_ignore_ascii_case("stock_flow") {
+                notes.add(format!("a diagram of type `{kind}` is not kept"));
+            } else if kept {
+                notes.add("only the first diagram of the model is kept".to_owned());
+            } else {
+                kept = true;
+                read_view(c, model, &mut layout, notes)?;
+            }
+        }
+    }
+    Ok(layout)
+}
+
+fn read_view(
+    view: &Element,
+    model: &SdModel,
+    layout: &mut Layout,
+    notes: &mut Notes,
+) -> Result<(), SdError> {
+    for (a, _) in &view.attrs {
+        if !matches!(a.as_str(), "type" | "name") && !a.starts_with("xmlns") {
+            notes.add(format!("the diagram setting `{a}` is not kept"));
+        }
+    }
+    let known: Vec<String> = model.vars.iter().map(|v| canonical(&v.name)).collect();
+    for c in view.elements() {
+        if let Some(p) = &c.prefix {
+            notes.add(format!(
+                "the extension element <{p}:{}> is not kept",
+                c.name
+            ));
+            continue;
+        }
+        match c.name.as_str() {
+            "stock" | "flow" | "aux" => {
+                let name = c.attr("name").unwrap_or_default();
+                let key = canonical(name);
+                if !known.contains(&key) {
+                    notes.add(format!(
+                        "the diagram has a shape for `{name}`, which the model does not have; it is not kept"
+                    ));
+                    continue;
+                }
+                if let Some(shape) = read_shape(c, &key, notes)? {
+                    layout.shapes.insert(key, shape);
+                }
+            }
+            "connector" => {
+                let text = |n: &str| c.child(n).map(Element::text).unwrap_or_default();
+                let (from, to) = (canonical(&text("from")), canonical(&text("to")));
+                if !(known.contains(&from) && known.contains(&to)) {
+                    notes.add("a link in the diagram joins something that is not a variable of the model; it is not kept".to_owned());
+                    continue;
+                }
+                let angle = match c.attr("angle") {
+                    Some(a) => Some(number(a, "a connector's angle")?),
+                    None => None,
+                };
+                if !layout
+                    .connectors
+                    .iter()
+                    .any(|k| k.from == from && k.to == to)
+                {
+                    layout.connectors.push(Connector { from, to, angle });
+                }
+            }
+            // A cloud is the end of a flow's pipe.
+            "cloud" => {}
+            "alias" => notes.add("aliases in the diagram are not kept".to_owned()),
+            n => notes.add(format!("the <{n}> of the diagram is not kept")),
+        }
+    }
+    Ok(())
+}
+
+fn read_shape(e: &Element, key: &str, notes: &mut Notes) -> Result<Option<Shape>, SdError> {
+    for (a, _) in &e.attrs {
+        if !matches!(a.as_str(), "name" | "uid" | "x" | "y" | "width" | "height") {
+            notes.add(format!(
+                "the display attribute `{a}` of a shape in the diagram is not kept"
+            ));
+        }
+    }
+    let at = |n: &str| {
+        e.attr(n)
+            .map(|v| number(v, &format!("the {n} of `{key}` in the diagram")))
+    };
+    let (Some(x), Some(y)) = (at("x").transpose()?, at("y").transpose()?) else {
+        notes.add(format!(
+            "the shape of `{key}` in the diagram has no position; it is placed again"
+        ));
+        return Ok(None);
+    };
+    let mut shape = Shape {
+        x,
+        y,
+        width: None,
+        height: None,
+        pts: Vec::new(),
+    };
+    if e.name == "flow" {
+        if let Some(p) = e.child("pts") {
+            for pt in p.children_named("pt") {
+                let px = number(pt.attr("x").unwrap_or_default(), "a point of a pipe")?;
+                let py = number(pt.attr("y").unwrap_or_default(), "a point of a pipe")?;
+                shape.pts.push((px, py));
+            }
+        }
+        for c in e.elements() {
+            if c.prefix.is_some() || c.name != "pts" {
+                notes.add(format!(
+                    "the <{}> of a flow in the diagram is not kept",
+                    c.name
+                ));
+            }
+        }
+    } else {
+        let (w, h) = (at("width").transpose()?, at("height").transpose()?);
+        let default = if e.name == "stock" {
+            STOCK_SIZE
+        } else {
+            AUX_SIZE
+        };
+        match (w, h) {
+            (Some(w), Some(h)) => {
+                // With a size, x and y are the top left corner.
+                shape.x = x + w / 2.0;
+                shape.y = y + h / 2.0;
+                shape.width = Some(w);
+                shape.height = Some(h);
+            }
+            _ => {
+                shape.width = Some(default.0);
+                shape.height = Some(default.1);
+            }
+        }
+        for c in e.elements() {
+            notes.add(format!(
+                "the <{}> of a shape in the diagram is not kept",
+                c.name
+            ));
+        }
+    }
+    Ok(Some(shape))
 }
 
 fn push_text(out: &mut String, indent: usize, tag: &str, text: &str) {
@@ -523,8 +702,91 @@ fn write_gf(out: &mut String, g: &Gf, indent: usize) {
     out.push_str(&format!("{pad}</gf>\n"));
 }
 
-/// Writes `model` as an XMILE 1.0 file.
+/// Writes `model` as an XMILE 1.0 file, with its diagram (a model with none gets one).
 pub fn write_xmile(model: &SdModel) -> String {
+    write(model, true)
+}
+
+/// The model as XMILE without its diagram: what a digest of the model is taken of, so moving a
+/// shape does not change it.
+pub fn model_text(model: &SdModel) -> String {
+    write(model, false)
+}
+
+fn write_views(o: &mut String, model: &SdModel) {
+    let mut layout = model.layout.clone();
+    layout.complete(model);
+    let name_of = |c: &str| {
+        model
+            .vars
+            .iter()
+            .find(|v| canonical(&v.name) == c)
+            .map(|v| v.name.clone())
+    };
+    o.push_str("    <views>\n      <view type=\"stock_flow\">\n");
+    let mut uid = 0u32;
+    for v in &model.vars {
+        let Some(s) = layout.shapes.get(&canonical(&v.name)) else {
+            continue;
+        };
+        let name = escape(&v.name);
+        match v.kind {
+            VarKind::Stock { .. } | VarKind::Aux => {
+                let tag = if matches!(v.kind, VarKind::Aux) {
+                    "aux"
+                } else {
+                    "stock"
+                };
+                let (w, h) = s.size(&v.kind);
+                o.push_str(&format!(
+                    "        <{tag} name=\"{name}\" x=\"{}\" y=\"{}\" width=\"{w}\" height=\"{h}\"/>\n",
+                    s.x - w / 2.0,
+                    s.y - h / 2.0
+                ));
+            }
+            VarKind::Flow { .. } => {
+                uid += 1;
+                let flow_uid = uid;
+                o.push_str(&format!(
+                    "        <flow name=\"{name}\" uid=\"{flow_uid}\" x=\"{}\" y=\"{}\">\n          <pts>\n",
+                    s.x, s.y
+                ));
+                for (x, y) in &s.pts {
+                    o.push_str(&format!("            <pt x=\"{x}\" y=\"{y}\"/>\n"));
+                }
+                o.push_str("          </pts>\n        </flow>\n");
+                let (src, dst) = ends(model, &canonical(&v.name));
+                for (stock, point) in [(src, s.pts.first()), (dst, s.pts.last())] {
+                    if stock.is_none()
+                        && let Some((x, y)) = point
+                    {
+                        uid += 1;
+                        o.push_str(&format!(
+                            "        <cloud uid=\"{uid}\" flow_uid=\"{flow_uid}\" x=\"{x}\" y=\"{y}\"/>\n"
+                        ));
+                    }
+                }
+            }
+        }
+    }
+    for c in &layout.connectors {
+        let (Some(from), Some(to)) = (name_of(&c.from), name_of(&c.to)) else {
+            continue;
+        };
+        let angle = c
+            .angle
+            .map(|a| format!(" angle=\"{a}\""))
+            .unwrap_or_default();
+        o.push_str(&format!(
+            "        <connector{angle}>\n          <from>{}</from>\n          <to>{}</to>\n        </connector>\n",
+            escape(&from),
+            escape(&to)
+        ));
+    }
+    o.push_str("      </view>\n    </views>\n");
+}
+
+fn write(model: &SdModel, diagram: bool) -> String {
     let mut o = String::new();
     o.push_str("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n");
     o.push_str(&format!(
@@ -606,6 +868,10 @@ pub fn write_xmile(model: &SdModel) -> String {
         }
         o.push_str(&format!("      </{tag}>\n"));
     }
-    o.push_str("    </variables>\n  </model>\n</xmile>\n");
+    o.push_str("    </variables>\n");
+    if diagram {
+        write_views(&mut o, model);
+    }
+    o.push_str("  </model>\n</xmile>\n");
     o
 }

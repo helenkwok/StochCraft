@@ -33,10 +33,17 @@
 //! (`UNIFORM`) runs in replications, each drawing from streams keyed by variable name under the
 //! seed, and its results give the mean, the median and the 5% to 95% band at each saved time.
 //!
+//! **Diagram.** A model keeps where each variable is drawn ([`Layout`]): read from and written to
+//! the file's `views`, and made by [`Layout::auto`] for a model that has none. [`rename_variable`]
+//! and [`remove_variable`] change a model beyond one variable, keeping the equations, flow lists
+//! and diagram consistent.
+//!
 //! **Units** are checked on both sides of each equation (compound units and the plain number
 //! `1` included) and a mismatch is a warning, not an error.
 
+mod edit;
 mod expr;
+mod layout;
 mod model;
 mod program;
 pub mod run;
@@ -44,6 +51,8 @@ mod units;
 mod xmile;
 mod xml;
 
+pub use edit::{Users, find_variable, remove_variable, rename_variable, users_of};
+pub use layout::{AUX_SIZE, Connector, Layout, STOCK_SIZE, Shape, VALVE_SIZE, flow_ends};
 pub use model::{Gf, GfKind, GfX, Method, SdModel, SimSpecs, Step, VarKind, Variable, canonical};
 pub use program::{Program, compile};
 pub use run::{
@@ -52,7 +61,8 @@ pub use run::{
 };
 pub use units::{Units, time_unit};
 pub use xmile::{
-    EXTENSION_NAMESPACE, NAMESPACE, XmileFile, looks_like_xmile, read_xmile, write_xmile,
+    EXTENSION_NAMESPACE, NAMESPACE, XmileFile, looks_like_xmile, model_text, read_xmile,
+    write_xmile,
 };
 
 /// What kind of thing is wrong.
