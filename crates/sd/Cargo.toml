@@ -1,0 +1,19 @@
+[package]
+name = "stochcraft-sd"
+description = "StochCraft's system dynamics: XMILE models (stocks, flows, auxiliaries, delays, graphical functions), run with Euler or fourth-order Runge-Kutta, with replications and bands over time."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+repository.workspace = true
+publish.workspace = true
+
+[dependencies]
+stochcraft-random = { workspace = true }
+stochcraft-stats = { workspace = true }
+# XML reading (MIT), the version stochcraft-io uses.
+quick-xml = "0.42"
+
+[lints]
+workspace = true

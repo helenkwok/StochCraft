@@ -16,9 +16,9 @@ crates above it, so a change near the top touches little and a change near the b
 | — | `testkit` | Test tooling; other crates may use it only as a dev-dependency |
 | apps | `stochcraft`, `stochcraft-cli`, `stochcraft-web` | Exempt from the rules |
 
-Only `random`, `stats`, `des`, `model`, `blocks`, `mc`, `experiment`, `io`, `engine`, `render`,
-`ui-egui`, `mcp` and `testkit` exist so far (with the three apps); the others (`agents`, `sd`)
-are placed in advance so each crate's position is decided before it is written.
+Only `random`, `stats`, `des`, `model`, `blocks`, `mc`, `sd`, `experiment`, `io`, `engine`,
+`render`, `ui-egui`, `mcp` and `testkit` exist so far (with the three apps); the other (`agents`)
+is placed in advance so each crate's position is decided before it is written.
 
 ## The app on craft-libs
 

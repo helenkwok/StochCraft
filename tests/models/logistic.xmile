@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xmile version="1.0" xmlns="http://docs.oasis-open.org/xmile/ns/XMILE/v1.0" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/xmile/1">
+  <header>
+    <name>Logistic population</name>
+    <vendor>StochCraft</vendor>
+    <product version="0.2">StochCraft</product>
+  </header>
+  <sim_specs method="RK4" time_units="Years">
+    <start>0</start>
+    <stop>20</stop>
+    <dt reciprocal="true">8</dt>
+    <stochcraft:save_step>1</stochcraft:save_step>
+  </sim_specs>
+  <model>
+    <variables>
+      <stock name="Population">
+        <doc>Fish in the pond.</doc>
+        <eqn>10</eqn>
+        <inflow>net growth</inflow>
+        <units>fish</units>
+        <non_negative/>
+      </stock>
+      <flow name="net growth">
+        <eqn>growth_rate * Population * (1 - Population / carrying_capacity)</eqn>
+        <units>fish/year</units>
+      </flow>
+      <aux name="growth rate">
+        <eqn>0.5</eqn>
+        <units>1/year</units>
+      </aux>
+      <aux name="carrying capacity">
+        <eqn>1000</eqn>
+        <units>fish</units>
+      </aux>
+    </variables>
+    <views>
+      <view name="Main"/>
+    </views>
+  </model>
+</xmile>

@@ -1246,6 +1246,137 @@ pub fn sobol_lines(r: &Value) -> String {
     out
 }
 
+/// A system dynamics run's results as a table: a row per variable with its kind, its value at
+/// the end of the run (the mean, and the 5% to 95% band, for a model run in replications), its
+/// units, then what the checks found and the halved-step check.
+pub fn sd_table(name: &str, r: &Value) -> String {
+    let mut out = String::new();
+    let title = if name.is_empty() {
+        s(&r["model"])
+    } else {
+        name
+    };
+    let title = if title.is_empty() {
+        "(unnamed model)"
+    } else {
+        title
+    };
+    let unit = s(&r["time_unit"]);
+    let _ = writeln!(
+        out,
+        "{title}  (system dynamics, {}, time step {} {unit}, {} to {} {unit})",
+        s(&r["method"]),
+        f(&r["dt"]),
+        f(&r["start"]),
+        f(&r["stop"])
+    );
+    let many = r["replications"].as_u64().unwrap_or(1) > 1;
+    if many {
+        let _ = writeln!(
+            out,
+            "{} replications, seed {}; band: the 5th and 95th percentiles across them",
+            r["replications"], r["seed"]
+        );
+    } else if r["random"] == true {
+        let _ = writeln!(out, "one run, seed {}", r["seed"]);
+    } else {
+        let _ = writeln!(out, "one run (the model has no random function)");
+    }
+    let _ = writeln!(
+        out,
+        "StochCraft {}, model {}",
+        s(&r["record"]["stochcraft"]),
+        s(&r["record"]["model_digest"])
+    );
+    out.push('\n');
+    let mut head: Vec<String> = ["variable", "kind", "at the end"]
+        .iter()
+        .map(|h| (*h).to_owned())
+        .collect();
+    if many {
+        head.push("P5".to_owned());
+        head.push("P50".to_owned());
+        head.push("P95".to_owned());
+    }
+    head.push("units".to_owned());
+    let mut rows = vec![head];
+    for v in r["variables"].as_array().into_iter().flatten() {
+        let last = |key: &str| {
+            v[key]
+                .as_array()
+                .and_then(|a| a.last())
+                .map_or_else(|| "-".to_owned(), f)
+        };
+        let mut row = vec![
+            s(&v["name"]).to_owned(),
+            s(&v["kind"]).to_owned(),
+            f(&v["final"]),
+        ];
+        if many {
+            row.push(last("p5"));
+            row.push(last("median"));
+            row.push(last("p95"));
+        }
+        row.push(s(&v["units"]).to_owned());
+        rows.push(row);
+    }
+    let mut left = vec![true, true];
+    if many {
+        left.extend([false, false, false, false]);
+    } else {
+        left.push(false);
+    }
+    left.push(true);
+    aligned(&rows, &left, &mut out);
+    if let Some(c) = r["dt_check"].as_object() {
+        let _ = writeln!(
+            out,
+            "\nhalved step: time step {} against {}",
+            f(&c["dt"]),
+            f(&c["half_dt"])
+        );
+        for st in c["stocks"].as_array().into_iter().flatten() {
+            let _ = writeln!(
+                out,
+                "  {}: largest relative difference {} (at {} {unit})",
+                s(&st["name"]),
+                share_text_exact(&st["max_relative_difference"]),
+                f(&st["at_time"])
+            );
+        }
+        let verdict = if c["within_threshold"] == true {
+            "results do not depend on the step beyond 1%"
+        } else {
+            "results depend on the step by more than 1%: use a smaller one"
+        };
+        let _ = writeln!(out, "{verdict}");
+    }
+    let notes: Vec<&str> = r["warnings"]
+        .as_array()
+        .into_iter()
+        .flatten()
+        .filter_map(Value::as_str)
+        .collect();
+    if !notes.is_empty() {
+        out.push('\n');
+        for n in notes {
+            let _ = writeln!(out, "warning: {n}");
+        }
+    }
+    out
+}
+
+/// A relative difference as a percentage to three significant digits.
+fn share_text_exact(v: &Value) -> String {
+    v.as_f64()
+        .map_or_else(|| "-".to_owned(), |x| format!("{}%", number(x * 100.0)))
+}
+
+/// A system dynamics run's results as CSV: a row per saved time.
+pub fn sd_csv(r: &Value) -> String {
+    stochcraft_engine::sd::results_csv(r)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

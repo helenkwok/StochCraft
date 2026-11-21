@@ -53,6 +53,9 @@ draw only with fonts the visitor's own system has.
 - `stochcraft-mc` runs Monte Carlo models: inputs that are distributions, outputs that are
   expressions over them, plain, Latin hypercube, antithetic or Sobol sampling, rank correlations between inputs
   (Iman and Conover), and each output's mean, percentiles and chance of meeting a target.
+- `stochcraft-sd` runs system dynamics models: stocks and flows read from XMILE 1.0, with delays,
+  smooths, graphical functions and random functions, by Euler or fourth-order Runge-Kutta, and
+  every variable over time with bands across replications.
 - `stochcraft-io` reads and writes models as BPSim on BPMN or XPDL.
 - `stochcraft-engine` makes every change and run a command with a JSON schema, undo and redo,
   and a replayable journal, and adds sweeps, sensitivity analysis, designed experiments and
@@ -302,6 +305,64 @@ parameters) and replayed:
 stochcraft-cli exec changes.json --open queue.bpmn
 ```
 
+### System dynamics models
+
+A system dynamics model is stocks (levels) and flows (rates) over time, read from an XMILE 1.0
+file (OASIS, 2015). There is no window or canvas for it yet: it is opened, run and read through
+the engine and the command line.
+
+```bash
+stochcraft-cli run tests/models/sir.xmile                     # each variable at the end of the run
+stochcraft-cli run tests/models/sir.xmile --format csv        # every variable over time
+stochcraft-cli run model.xmile --format json --dt 0.125       # another time step
+stochcraft-cli run model.xmile --dt-check                     # and again at half the step
+stochcraft-cli run noisy.xmile --reps 500 --seed 3            # a model with a random function
+```
+
+The engine commands are `sd.open` (the text of an XMILE file; `file.open` also opens one from
+disk), `sd.run` (`replications`, `seed`, `dt`, `dt_check`, `time_unit`) and `sd.get` (the model's
+variables and checks, and with `variable` its values from the last run). `run` and `file.save`
+refuse such a model, naming `sd.run`; it cannot be edited or saved yet. In Rust:
+`stochcraft_sd::{read_xmile, compile, run}`.
+
+- **Read:** the header, `sim_specs` (`start`, `stop`, `dt` and its `reciprocal`, `method` Euler or
+  RK4, `time_units`), stocks (`eqn` as the initial value, `inflow`, `outflow`, `non_negative`,
+  also as a `behavior` default), flows, auxiliaries, graphical functions (`gf`: `xscale` or
+  `xpts`, `ypts`, continuous, extrapolate or discrete), `units` and `doc`. Equations have the
+  operators of XMILE 3.3 (`^` tighter than a minus sign, `MOD`, `AND`, `OR`, `NOT`, `IF ... THEN
+  ... ELSE`) and `IF_THEN_ELSE`, `MIN`, `MAX`, `ABS`, `SQRT`, `EXP`, `LN`, `PULSE`, `STEP`,
+  `RAMP`, `TIME`, `DT`, `STARTTIME`, `STOPTIME`, `DELAY1`, `DELAY3`, `SMTH1`, `SMTH3` (and
+  `SMOOTH`, `SMOOTH3`), `NORMAL` and `RANDOM` (`UNIFORM` too), and a graphical function called by
+  its name.
+- **Refused, by name:** arrays (`dimensions`, `element`, subscripts, `uses_arrays`), modules and
+  more than one `model`, macros, conveyors and queues, MathML equations, a flow's `multiplier`,
+  `overflow` and `leak`, event posters, any other function (`SUM`, `SIN`, `INIT`...), an
+  integration method other than Euler or the Runge-Kutta family (RK2, RK45 and Gear run as RK4,
+  which XMILE allows, and the notes say so).
+- **Not kept, and said so in `notes`:** the diagrams (`views`), styles, display settings,
+  another vendor's extensions and groups.
+- **Extensions of StochCraft:** `stochcraft:save_step` in `sim_specs` (the interval results are
+  saved at, by default the step), and a random function's fourth argument, the interval between
+  draws: `NORMAL(mean, std_dev, seed, interval)` (by default one draw a time step of the file).
+
+**Numerics.** Time is `start + n * DT` from an integer counter. Variables are worked out in
+topological order of what their equations name, ties broken by name; an algebraic loop is an error
+naming the cycle. A stock that cannot go negative limits its outflows, in the order it lists them,
+to what it holds at the start of the pass, so the stock that receives a flow gets the same
+limited flow and material is conserved. `DELAYn` and `SMTHn` are hidden stocks (their time
+constant is never taken below the step), `PULSE` delivers its volume in one step under either
+method, a graphical function is clamped at its ends with a warning, and a random function holds one
+draw for its interval and takes it from a stream keyed by variable, call and draw number, so
+results do not shift when another variable is added or the step is halved. A model with no random
+function runs once; one with a random function runs `replications` times (100 by default) and
+gives the mean, the median and the 5th and 95th percentiles at each saved time. Units are checked
+on both sides of each equation (compound units, and `1`), and a flow against its stock's units per
+the model's time unit; a mismatch is a warning. `time_unit` reports times in another unit.
+
+`dt_check` runs the model again at half the step and gives, for each stock, the largest relative
+difference between the two mean paths (relative to the larger of the value and 0.1% of the
+stock's peak); within 1% is called independent of the step.
+
 ### The journal
 
 The engine records every command that is not a query in its journal. A new or opened document
@@ -343,7 +404,7 @@ journal that began with `model.new` starts its own model) and refuses
 with a `conflict` error if not, unless `--force`. If the file has no scenario of that name, `exec`
 stops with the error from opening it; with `--force` it replays onto the file's first scenario.
 It then re-applies the edits, undo and redo, and
-skips the saves, runs and experiments (`file.save`, `run`, `mc.run`, `mc.sobol`, `run.start`,
+skips the saves, runs and experiments (`file.save`, `run`, `mc.run`, `mc.sobol`, `sd.run`, `run.start`,
 `run.cancel`, `experiment.sweep`, `experiment.sensitivity`, `experiment.design`,
 `experiment.size`), printing `"skipped": true` for each; `--all` carries them out too. In Rust,
 `Engine::journal_document` gives the journal and `Engine::replay_journal` replays it

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xmile version="1.0" xmlns="http://docs.oasis-open.org/xmile/ns/XMILE/v1.0" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/xmile/1">
+  <header>
+    <name>SIR epidemic</name>
+  </header>
+  <sim_specs method="RK4" time_units="Days">
+    <start>0</start>
+    <stop>100</stop>
+    <dt>0.25</dt>
+    <stochcraft:save_step>10</stochcraft:save_step>
+  </sim_specs>
+  <model>
+    <variables>
+      <stock name="Susceptible">
+        <eqn>population - 10</eqn>
+        <outflow>infection</outflow>
+        <units>people</units>
+      </stock>
+      <stock name="Infected">
+        <eqn>10</eqn>
+        <inflow>infection</inflow>
+        <outflow>recovery</outflow>
+        <units>people</units>
+      </stock>
+      <stock name="Recovered">
+        <eqn>0</eqn>
+        <inflow>recovery</inflow>
+        <units>people</units>
+      </stock>
+      <flow name="infection">
+        <eqn>contact_rate * Susceptible * Infected / population</eqn>
+        <units>people/day</units>
+      </flow>
+      <flow name="recovery">
+        <eqn>recovery_rate * Infected</eqn>
+        <units>people/day</units>
+      </flow>
+      <aux name="contact rate">
+        <eqn>0.4</eqn>
+        <units>1/day</units>
+      </aux>
+      <aux name="recovery rate">
+        <eqn>0.1</eqn>
+        <units>1/day</units>
+      </aux>
+      <aux name="population">
+        <eqn>1000</eqn>
+        <units>people</units>
+      </aux>
+    </variables>
+  </model>
+</xmile>
