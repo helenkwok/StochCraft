@@ -269,6 +269,16 @@ With nothing selected, the **Experiment** section of the inspector sets how the 
   runs (200 by default) is reached. A result that is the same in every run, such as a count the
   model fixes, is never counted as settled, but it does not hold back the others. A run that
   stops at 40 gives exactly the results of 40 runs set by hand.
+- **Observed data:** real measurements to check the results against, from the system the model
+  stands for. Choose a result under **Add an observed value** (a block or a pool, and a result
+  such as **Mean wait** or **Utilisation**), then say what you know of it: an **Observed value**,
+  with the half-width of its own 95% interval if its data give one (**Its 95% half-width**), or
+  **At most** or **At least** a bound the result must meet, such as "the mean wait is under
+  2 min". Times are in the model's time unit and a share such as utilisation is a percentage.
+  **Remove** takes one out. The results then say whether the run agrees: see
+  [Check the results against observed data](#check-the-results-against-observed-data). An
+  observed value for a block that was later removed is listed under **Problems** (a warning, and
+  the run still goes); remove it, or choose a block that exists.
 
 The left rail's summary shows the current settings, for example "10 runs · seed 7".
 
@@ -351,6 +361,37 @@ To see what a change does, click **Keep as baseline** under the run record, chan
 
 **Keep this as the baseline** makes the new run the baseline; **Clear baseline** removes it.
 Opening another model or file clears it too.
+
+### Check the results against observed data
+
+A model is worth trusting when it gives what the real system gives. With observed data set in the
+experiment (see [Set up the experiment](#set-up-the-experiment)), the results have a **Checked
+against observed data** section above the key measures, one line for each, and a **Finding** at
+the very top for each that differs or fails. Each line gives the result, what it was checked
+against, the simulated mean with its 95% half-width, and a verdict in words:
+
+- **An observed value** **agrees** when the 95% interval of the difference (simulated mean minus
+  observed value) holds 0, and **differs** when it does not. The line gives the difference with
+  its own interval. With a half-width of its own for the observed value, the difference's
+  half-width is the square root of the sum of the two half-widths squared (the usual large-sample
+  approximation for two independent estimates); without one, the observed value is taken as
+  exact and the difference's half-width is the simulated mean's.
+- **A bound** is decided by the whole simulated 95% interval, never by the mean alone. It
+  **passes** when the whole interval meets the bound, **fails** when the whole interval violates
+  it, and otherwise says **Can't tell yet: more runs would decide**, because the interval
+  straddles the bound; more runs narrow the interval. A mean just under "at most 2" with an
+  interval reaching past 2 is therefore not a pass.
+- With fewer than 2 runs there is no interval, so nothing is decided.
+- **No result** means the run has no such result: the block is gone, or does not report that
+  result (a source has no utilisation).
+
+These checks follow the black-box validation of Law (*Simulation Modeling and Analysis*, 5th ed.,
+section 5.6.2) and Sargent (2013). An agreement is not proof the model is right: it says only
+that this run, on this result, cannot be told from the real system's at the 95% level, and a
+model can agree on one result and differ on another. The observed data are part of the
+experiment, so changing them marks the results out of date; run again to check against the new
+ones. They are saved with the experiment in the file, and the command line prints the same
+section.
 
 ## Watch a run
 

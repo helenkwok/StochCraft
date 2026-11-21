@@ -1882,6 +1882,44 @@ fn sequential_replications_are_inherited_and_turned_off() {
     assert!(!String::from_utf8_lossy(&removed).contains("stochcraft:sequential"));
 }
 
+/// Observed data set in a scenario reach the scenarios that inherit it, and clearing them in one
+/// of those writes `off` there, leaving the inherited scenario as it was.
+#[test]
+fn observed_data_are_inherited_and_cleared() {
+    let on = vec![stochcraft_model::Observation {
+        element: id("serve"),
+        metric: "mean_wait".into(),
+        target: stochcraft_model::Observed::Value {
+            value: 3.0,
+            half_width: Some(0.5),
+        },
+    }];
+    let (saved, n) = edit_and_save("mm1.bpmn", Some("base"), |m| {
+        m.experiment.observed = on.clone();
+    });
+    assert!(
+        n <= 8,
+        "{n} lines changed:\n{}",
+        diff(&file("mm1.bpmn"), &saved)
+    );
+    let child = read_scenario(&saved, Some("two-clerks")).unwrap_or_else(|e| panic!("{e}"));
+    assert_eq!(child.model.experiment.observed, on);
+    let off = edit_bytes("mm1.bpmn", &saved, Some("two-clerks"), |m| {
+        m.experiment.observed.clear();
+    });
+    let text = String::from_utf8_lossy(&off);
+    assert!(text.contains(r#"stochcraft:value="off""#), "{text}");
+    let base = read_scenario(&off, Some("base")).unwrap_or_else(|e| panic!("{e}"));
+    assert_eq!(base.model.experiment.observed, on);
+    let child = read_scenario(&off, Some("two-clerks")).unwrap_or_else(|e| panic!("{e}"));
+    assert!(child.model.experiment.observed.is_empty());
+    // In a scenario that inherits nothing, clearing them leaves nothing behind.
+    let removed = edit_bytes("mm1.bpmn", &saved, Some("base"), |m| {
+        m.experiment.observed.clear();
+    });
+    assert!(!String::from_utf8_lossy(&removed).contains("stochcraft:observed"));
+}
+
 /// Values for a calendar, a setup time and a transport's times that name their own unit are
 /// rescaled with the rest when the time unit changes, and read back within float noise: the
 /// save must not refuse them for it. 2.7 days cannot be written as a decimal in hours that reads

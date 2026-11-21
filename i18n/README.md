@@ -929,6 +929,23 @@ fields (`“Service time”`) are named in the messages by their own rows.
   "canvas" are each language's everyday computing word or calque; the least certain are bn, hi, ka,
   kk, lo, sq, ta, te, th and vi.
 
+- The rows for validation against observed data (issue #226: the Observed data section of the
+  model page and its hint, Add an observed value, Observed value, Checked as, Its 95%
+  half-width, the undo names Add, Change and Remove Observed Value, the results' Checked against
+  observed data and its sentences "{result} ({block}): observed {observed}, simulated
+  {simulated}.", "… must be at most / at least {bound} …" and "Simulated minus observed:
+  {difference}.", the verdicts Agrees, Differs, Passes, Fails, Can't tell yet: more runs would
+  decide and No result, and the validation message for observed data of a block that does not
+  exist) were machine-drafted with Claude Code from the plain meaning of the English, reusing
+  each catalog's own words for block, result, run, at most, at least and remove; "observed" is
+  the language's word for what is seen or measured in the real system (not "monitored"), and
+  "simulated" its word for what the model gives. Placeholders were checked by script against the
+  English. "Checked as" and "Its 95% half-width" are only read out by assistive technology and
+  as a field's name. Not checked against dictionaries, Wikipedia, IATE or any other source, and
+  not reviewed by native speakers. The least certain are lo, th, ta, te, bn, ka, kk and sq, and
+  the verbs for "passes" and "fails" (a bound met or violated) in the languages that have no
+  short one (fi, hu, et, lt, nb, da, sv).
+
 **Adding or changing a string:** add the English in the code through `i18n::t` (or `tf`, `tn`),
 then add its row to each catalog here, or leave it out to show English until it is translated.
 Right-to-left languages are not offered until the layout is mirrored.

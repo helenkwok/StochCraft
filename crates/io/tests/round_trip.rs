@@ -216,6 +216,7 @@ pub fn showcase() -> Model {
         start: Some(at(4, 6)),
         result_frequency: Some(1_800.0),
         sequential: None,
+        observed: Vec::new(),
     });
     model.name = "Showcase & <friends>".into();
     model
@@ -2348,6 +2349,195 @@ fn sequential_replications_are_written_saved_and_removed() {
     let text = String::from_utf8_lossy(&removed);
     assert!(!text.contains("stochcraft:sequential"), "{text}");
     assert_eq!(read(&removed).map(|l| l.model).ok(), Some(edited));
+}
+
+/// Observed data for the showcase model: an observed value with and without its own interval,
+/// and both kinds of bound.
+fn observed() -> Vec<stochcraft_model::Observation> {
+    use stochcraft_model::{ElementId, Observation, Observed};
+    let of = |metric: &str, target| Observation {
+        element: ElementId::unchecked("cut"),
+        metric: metric.to_owned(),
+        target,
+    };
+    vec![
+        of(
+            "mean_wait",
+            Observed::Value {
+                value: 3.2,
+                half_width: Some(0.4),
+            },
+        ),
+        of(
+            "mean_queue_length",
+            Observed::Value {
+                value: 2.0,
+                half_width: None,
+            },
+        ),
+        of("utilisation", Observed::AtMost(0.85)),
+        of("left", Observed::AtLeast(400.0)),
+    ]
+}
+
+/// Observed data (`stochcraft:observed` on the scenario) are written in a new file, saved into an
+/// opened one when they change, and removed, each reading back exactly; a file without any writes
+/// nothing.
+#[test]
+fn observed_data_are_written_saved_and_removed() {
+    let mut model = showcase();
+    assert!(!String::from_utf8_lossy(&write_new(&model)).contains("stochcraft:observ"));
+    model.experiment.observed = observed();
+    let bytes = write_new(&model);
+    let text = String::from_utf8_lossy(&bytes);
+    for expected in [
+        r#"name="stochcraft:observed""#,
+        r#"<stochcraft:observation element="cut" metric="mean_wait" value="3.2" halfWidth="0.4"/>"#,
+        r#"<stochcraft:observation element="cut" metric="mean_queue_length" value="2"/>"#,
+        r#"<stochcraft:observation element="cut" metric="utilisation" atMost="0.85"/>"#,
+        r#"<stochcraft:observation element="cut" metric="left" atLeast="400"/>"#,
+    ] {
+        assert!(text.contains(expected), "{expected}: {text}");
+    }
+    let Ok(loaded) = read(&bytes) else {
+        unreachable!()
+    };
+    assert_eq!(loaded.model, laid_out(model));
+
+    // One changed, one removed and one added, saved into the opened file.
+    let mut edited = loaded.model.clone();
+    edited.experiment.observed.remove(1);
+    edited.experiment.observed[0].target = stochcraft_model::Observed::Value {
+        value: 3.25,
+        half_width: None,
+    };
+    edited
+        .experiment
+        .observed
+        .push(stochcraft_model::Observation {
+            element: stochcraft_model::ElementId::unchecked("cut"),
+            metric: "time_failed".into(),
+            target: stochcraft_model::Observed::AtMost(0.05),
+        });
+    let Ok(saved) = loaded.opened.save(&edited) else {
+        unreachable!()
+    };
+    let text = String::from_utf8_lossy(&saved);
+    assert!(
+        text.contains(r#"metric="mean_wait" value="3.25"/>"#),
+        "{text}"
+    );
+    assert!(!text.contains("mean_queue_length"), "{text}");
+    assert_eq!(read(&saved).map(|l| l.model).ok(), Some(edited.clone()));
+
+    // Removed: nothing is left in the file, and it reads back without any.
+    edited.experiment.observed.clear();
+    let Ok(again) = read(&saved) else {
+        unreachable!()
+    };
+    let Ok(removed) = again.opened.save(&edited) else {
+        unreachable!()
+    };
+    let text = String::from_utf8_lossy(&removed);
+    assert!(!text.contains("stochcraft:observ"), "{text}");
+    assert_eq!(read(&removed).map(|l| l.model).ok(), Some(edited));
+}
+
+/// Only elements in StochCraft's own namespace are observed data: the same names in another
+/// namespace are left alone, and the file still reads.
+#[test]
+fn observed_data_in_another_namespace_is_ignored() {
+    let mut model = showcase();
+    model.experiment.observed = observed();
+    let text = String::from_utf8_lossy(&write_new(&model)).into_owned();
+    let other = r#"xmlns:other="https://example.com/other""#;
+    // The observations in another namespace inside our extension.
+    let foreign = text.replace(
+        "<stochcraft:observation ",
+        &format!("<other:observation {other} "),
+    );
+    assert_ne!(foreign, text, "the observations were found");
+    let Ok(loaded) = read(foreign.as_bytes()) else {
+        unreachable!()
+    };
+    assert!(loaded.model.experiment.observed.is_empty());
+    // The wrapper in another namespace, holding ours.
+    let wrapped = text
+        .replace(
+            "<stochcraft:observed>",
+            &format!("<other:observed {other}>"),
+        )
+        .replace("</stochcraft:observed>", "</other:observed>");
+    assert_ne!(wrapped, text, "the wrapper was found");
+    let Ok(loaded) = read(wrapped.as_bytes()) else {
+        unreachable!()
+    };
+    assert!(loaded.model.experiment.observed.is_empty());
+}
+
+/// An observation that cannot be read is noted and left out; the others stay; `off` clears them.
+#[test]
+fn bad_observations_are_noted() {
+    let mut model = showcase();
+    model.experiment.observed = observed();
+    let text = String::from_utf8_lossy(&write_new(&model)).into_owned();
+    let bad = text
+        .replace(r#"value="3.2" halfWidth="0.4""#, r#"value="x""#)
+        .replace(
+            r#"metric="mean_queue_length" value="2""#,
+            r#"metric="mean_queue_length" value="2" atMost="3""#,
+        )
+        .replace(
+            r#"metric="utilisation" atMost="0.85""#,
+            r#"metric="utilisation" atMost="0.85" halfWidth="-1""#,
+        )
+        .replace(
+            r#"element="cut" metric="left""#,
+            r#"element="" metric="left""#,
+        );
+    assert_ne!(bad, text, "the observations were found");
+    let Ok(loaded) = read(bad.as_bytes()) else {
+        unreachable!()
+    };
+    assert!(loaded.model.experiment.observed.is_empty());
+    let notes: Vec<&str> = loaded.notes.iter().map(|n| n.message.as_str()).collect();
+    for expected in [
+        "`value` `x` that is not a number",
+        "exactly one of `value`, `atMost` and `atLeast`",
+        "`halfWidth` below 0",
+        "needs both `element` and `metric`",
+    ] {
+        assert!(
+            notes.iter().any(|n| n.contains(expected)),
+            "{expected}: {notes:?}"
+        );
+    }
+    // A repeat of a result is noted, and the first stays.
+    let twice = text.replace(
+        r#"<stochcraft:observation element="cut" metric="left" atLeast="400"/>"#,
+        r#"<stochcraft:observation element="cut" metric="left" atLeast="400"/><stochcraft:observation element="cut" metric="left" atMost="9"/>"#,
+    );
+    let Ok(loaded) = read(twice.as_bytes()) else {
+        unreachable!()
+    };
+    assert_eq!(loaded.model.experiment.observed, observed());
+    assert!(
+        loaded
+            .notes
+            .iter()
+            .any(|n| n.message.contains("repeats the result left of `cut`")),
+        "{:?}",
+        loaded.notes
+    );
+    // `off` clears them.
+    let off = text.replace(
+        r#"name="stochcraft:observed""#,
+        r#"name="stochcraft:observed" stochcraft:value="off""#,
+    );
+    let Ok(loaded) = read(off.as_bytes()) else {
+        unreachable!()
+    };
+    assert!(loaded.model.experiment.observed.is_empty());
 }
 
 /// Settings that cannot be read are noted and their defaults used; `off` turns them off.

@@ -10,7 +10,8 @@ answer the question, has steps 1–5 done, and M5's sorter is built alongside it
 are done, and so is M2.10 (abandonment and balking) apart from the gaps listed in it. M2.11
 (changeovers and lean measures) has its changeovers, product-type times, takt and cycle times,
 state times and most of OEE done; M2.9 (output analysis) has its recorder of results over time,
-MSER-5's warm-up suggestion, its warnings, streams by element id and starting contents done. M4
+MSER-5's warm-up suggestion, its warnings, streams by element id, starting contents and
+validation against observed data (values and bounds, #226) done. M4
 is being planned, and M4.1 (Monte Carlo) has its engine, files and command line (part 1), its
 window (part 2) and which inputs matter (part 3: tornado, rank correlations and Sobol shares) done.
 M5 has its conveyors (M5.1), the operators in the model and files (M5.2, PR 1), a first 3D view
@@ -1337,15 +1338,44 @@ ch. 10 §10.4, in Brailsford, Churilov and Dangerfield, eds., 2014). Related and
   once, with the reason in the commit.
 - **Validation against observed data** (#226). Compare a run's results with held-out real data
   (black-box validation, ch. 6 §6.5.5 and ch. 10 §10.4.1).
-  - Not yet: **checks that pass or fail.** An experiment can carry checks on its results: a
-    bound ("mean wait under 2 min", "throughput at least 400 a day", with the 95% interval
-    deciding, not the mean alone), a comparison of two scenarios with common random numbers
-    ("the third packer cuts the wait"), or observed values with their spread. A run reports
-    each check as met, not met, or not decided (the interval straddles the bound), and
-    `stochcraft-cli check` exits non-zero when a check is not met, so a model can be tested in
-    CI. The checks are saved with the experiment (a `stochcraft:` vendor extension) and can
-    write a short report (Markdown) of the checks, the settings and the results. Also offered
-    by desflow (MIT, `desflow experiment`), seen 2026-11.
+  - **Done (#226):** **observed data.** An experiment carries real measurements for results the
+    run reports, at most one for each result (a block's or pool's metric, by the names the results
+    use, in the metric's own unit, a share as a fraction): an observed value, with the half-width
+    of its own 95% interval where its data give one, or a bound, at most or at least (Law,
+    *Simulation Modeling and Analysis*, 5th ed., section 5.6.2; Sargent 2013). The results check
+    each and say so in words (`observed` in the results, "Checked against observed data" in the
+    window and `run`'s table, a finding first for each that differs or fails):
+    - An observed value **agrees** when the 95% interval of (simulated mean − observed) holds 0,
+      and **differs** when it does not. Its half-width combines the simulated mean's `hs` and the
+      observed value's `ho` as `sqrt(hs² + ho²)` (the usual large-sample approximation for two
+      independent estimates, without Welch's degrees of freedom); with no `ho` it is `hs`.
+    - A bound **passes** when the whole simulated 95% interval meets it (the edge itself meets
+      it), **fails** when the whole interval violates it, and otherwise is **not yet decided**:
+      more replications would decide, never the mean alone. Fewer than 2 replications give no
+      interval, so nothing is decided; a result the run does not report is `no_result`.
+    - Saved with the experiment in the file as the `stochcraft:observed` extension on the
+      scenario (written only when there are observations; elements outside StochCraft's
+      namespace are ignored; `off` clears what an inherited scenario sets; declared in
+      `stochcraft-bpsim-1.xsd`). Engine commands `observation.add`, `.set` and `.remove`,
+      journalled and undoable like any edit; `model.get` carries them as `experiment.observed`.
+      Observed data for a block that is gone is the warning `bad_observation`, and the check says
+      `no_result`; it does not stop the run.
+    - In the window: **Observed data** in the model page (a result to add, then its kind,
+      number and half-width in the row, **Remove**), and **Checked against observed data** in
+      the results. A share is a percentage in the window. The observed data are part of the
+      experiment, so editing them marks the results out of date, like any edit.
+    - Tests: `stochcraft-stats` (the agreement rules, the root of the sum of squares, the three
+      outcomes of a bound, one replication), `io` (round trip, in-place save, inheriting and
+      clearing, foreign namespace, unreadable entries, the schema), `engine/tests/observed.rs`
+      (a run of the M/M/1 example with observed data that agree and differ, bounds, the
+      commands, the model problem), `ui-egui/tests/observed.rs` and `i18n/`.
+    - Not here: more than one observation for the same result (say a value and a bound), and a
+      way to enter observed data in the command line except through the file.
+  - Not yet: **checks that compare scenarios or fail a script.** A comparison of two scenarios
+    with common random numbers ("the third packer cuts the wait"), and `stochcraft-cli check`
+    exiting non-zero when a check is not met, so a model can be tested in CI, with a short
+    report (Markdown) of the checks, the settings and the results. Also offered by desflow (MIT,
+    `desflow experiment`), seen 2026-11.
   - **Done:** **behaviour checks after every run** (`blocks/src/checks.rs`). Checks that need
     no reference, made on each replication's results and reported as warnings, one per element
     and check, saying in how many replications it failed (in the run's `warnings`, so the CLI's
@@ -1782,8 +1812,8 @@ M4.
 
 **M2 size:** about nine PRs for M2.1–M2.8 and one or two each for M2.9, M2.10 and M2.11, each independently mergeable after M1. **M2.1–M2.8 are complete**, and so is M2.10 apart from the gaps listed in it.
 What each leaves for later is under its own "Not yet" or "Not here". The rest of M2.9 (output
-analysis: the window's Welch plot, sequential replications, validation against observed data,
-the capacity table) and the rest of M2.11 (a line cycle time, ISO's NEE index, per-product plans, current and future
+analysis: the window's Welch plot, checks that compare scenarios or fail a script, the capacity
+table) and the rest of M2.11 (a line cycle time, ISO's NEE index, per-product plans, current and future
 state) are next.
 
 ---

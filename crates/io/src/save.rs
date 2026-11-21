@@ -23,10 +23,10 @@ use crate::write::{
     abandoned_element, availability_param, balked_element, balking_element, batching_element,
     bpmn_local, breakdown_element, calendar_element, changeover_element, condition_element,
     conveyor_element, demand_element, dist_element, edge_ends, estimate_element,
-    health_check_element, interruptible_param, mobility_element, numeric, on_shift_end_element,
-    own_marker, patience_element, planned_element, power_element, probability_element,
-    processing_by_element, property_element, quantity_element, quantity_param,
-    queue_capacity_element, rework_element, routing_element, scenario_extensions,
+    health_check_element, interruptible_param, mobility_element, numeric, observed_element,
+    observed_off_element, on_shift_end_element, own_marker, patience_element, planned_element,
+    power_element, probability_element, processing_by_element, property_element, quantity_element,
+    quantity_param, queue_capacity_element, rework_element, routing_element, scenario_extensions,
     scenario_parameters, scrap_element, sequential_element, sequential_off_element, size,
     start_param, starting_element, stop_element, timer_param, transfer_element, transport_element,
     turned_away_element, units_param, vendor_value_element,
@@ -3033,6 +3033,19 @@ impl Editor {
                     || s.child(&NSS, "ScenarioParameters")
                         .is_some_and(|p| p.elements().any(is_sequential))
             });
+        // The same for observed data: clearing them must say so where an inherited scenario has
+        // some.
+        let is_observed = |x: &Element| {
+            x.is_any(&NSS, "VendorExtension")
+                && x.attr("name").as_deref() == Some(crate::bpsim::OBSERVED)
+        };
+        let inherited_observed = b.observed != a.observed
+            && a.observed.is_empty()
+            && ancestors(root, scenario).iter().any(|s| {
+                s.elements().any(is_observed)
+                    || s.child(&NSS, "ScenarioParameters")
+                        .is_some_and(|p| p.elements().any(is_observed))
+            });
         let s = self.ensure_scenario(root, scenario)?;
         let mut rescaled = Vec::new();
         if relabel {
@@ -3161,6 +3174,17 @@ impl Editor {
                 None => None,
             };
             set_scenario_extension(s, crate::bpsim::SEQUENTIAL, written, &prefix, &ns);
+        }
+        if b.observed != a.observed {
+            // Cleared: said only where an inherited scenario would otherwise bring them back.
+            let written = if !a.observed.is_empty() {
+                Some(observed_element(&a.observed))
+            } else if inherited_observed {
+                Some(observed_off_element())
+            } else {
+                None
+            };
+            set_scenario_extension(s, crate::bpsim::OBSERVED, written, &prefix, &ns);
         }
         if relabel {
             self.keep_inheriting(root, scenario, b.time_unit, &rescaled, default_duration);

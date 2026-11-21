@@ -972,6 +972,7 @@ fn showcase() -> Model {
         start: Some(day(4, 6)),
         result_frequency: Some(1_800.0),
         sequential: None,
+        observed: Vec::new(),
     })
 }
 
@@ -1243,6 +1244,43 @@ fn everything_stochcraft_writes_is_schema_valid() {
             &xsd,
         );
     }
+    // Observed data: an observed value with and without its own interval, and both bounds.
+    let mut o = Builder::new();
+    let src = o.source("calls", Dist::Exponential { mean: 1.0 }, None);
+    let desk = o.server("desk", 1, Dist::Exponential { mean: 0.5 });
+    let out = o.sink("out");
+    o.connect(src, desk);
+    o.connect(desk, out);
+    let observation = |metric: &str, target| stochcraft_model::Observation {
+        element: ElementId::unchecked("desk"),
+        metric: metric.to_owned(),
+        target,
+    };
+    validate(
+        &write_new(&o.build(Experiment {
+            observed: vec![
+                observation(
+                    "mean_wait",
+                    stochcraft_model::Observed::Value {
+                        value: 3.2,
+                        half_width: Some(0.4),
+                    },
+                ),
+                observation(
+                    "mean_queue_length",
+                    stochcraft_model::Observed::Value {
+                        value: 2.0,
+                        half_width: None,
+                    },
+                ),
+                observation("utilisation", stochcraft_model::Observed::AtMost(0.85)),
+                observation("left", stochcraft_model::Observed::AtLeast(400.0)),
+            ],
+            ..Experiment::default()
+        })),
+        "observed data",
+        &xsd,
+    );
     // Each reference model, as StochCraft reads it, written again as a new BPMN file.
     let Some(paths) = models() else { return };
     for p in &paths {

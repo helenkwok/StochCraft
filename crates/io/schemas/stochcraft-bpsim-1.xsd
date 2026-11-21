@@ -291,6 +291,22 @@
       <stochcraft:sequential relative="0.05" points="1" max="200"/>
     </bpsim:VendorExtension>
 
+  stochcraft:observed, on a Scenario (after its Calendars): real measurements the results are
+  checked against. Each observation names a result, by element (a block or pool id) and metric
+  (its name in the results), and gives either value (the observed value, with the optional
+  halfWidth of its own 95% interval) or a bound, atMost or atLeast, in the metric's own unit (a
+  share as a fraction). An observed value agrees with the simulated mean when the 95% interval of
+  their difference holds 0; a bound is decided by the simulated 95% interval. A scenario that
+  inherits another has its own observations or none: stochcraft:value="off" clears what the
+  inherited scenario sets.
+
+    <bpsim:VendorExtension name="stochcraft:observed" xmlns:stochcraft="…">
+      <stochcraft:observed>
+        <stochcraft:observation element="desk" metric="mean_wait" value="3.2" halfWidth="0.4"/>
+        <stochcraft:observation element="desk" metric="utilisation" atMost="0.85"/>
+      </stochcraft:observed>
+    </bpsim:VendorExtension>
+
   stochcraft:monteCarlo, on a Scenario (after its ElementParameters and Calendars): the scenario
   is a Monte Carlo model, a calculation with no process, and the file needs none. Its inputs are
   the scenario's own properties (ScenarioParameters/PropertyParameters/Property, each a BPSim
@@ -596,6 +612,22 @@
           </xs:restriction>
         </xs:simpleType>
       </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="observed">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="observation" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:attribute name="element" type="xs:string" use="required"/>
+            <xs:attribute name="metric" type="xs:string" use="required"/>
+            <xs:attribute name="value" type="xs:double"/>
+            <xs:attribute name="halfWidth" type="xs:double"/>
+            <xs:attribute name="atMost" type="xs:double"/>
+            <xs:attribute name="atLeast" type="xs:double"/>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="sequential">

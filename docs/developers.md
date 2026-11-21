@@ -144,6 +144,24 @@ be 95%. A scenario can make its runs sequential itself (the engine's `experiment
 Robinson and Davies (2011), "Automated selection of the number of replications for a
 discrete-event simulation", *Journal of the Operational Research Society* 62(11).
 
+A scenario can also carry real measurements to check a run against (black-box validation, Law,
+*Simulation Modeling and Analysis*, 5th ed., section 5.6.2): the engine's `observation.add`,
+`observation.set` and `observation.remove`, saved in the file as the `stochcraft:observed`
+extension on the scenario (an `observation` for each result, with its `element` and `metric` and
+one of `value` with an optional `halfWidth`, `atMost` and `atLeast`, in the metric's own unit; only
+elements in StochCraft's namespace count, and the extension's value `off` clears what an
+inherited scenario sets). `run` prints a **checked against observed data** table after the
+results: each observation, the simulated mean with its 95% half-width, the difference with its
+own interval for an observed value, and `agrees`, `differs`, `passes`, `fails` or `can't tell
+yet`, those that differ or fail first. The rules are in `stochcraft-stats` (`observed`): an
+observed value agrees when the 95% interval of (simulated mean − observed) holds 0, its
+half-width the square root of the two half-widths' squares (the usual large-sample
+approximation; the observed one counts as 0 where not given); a bound passes when the whole
+simulated interval meets it, fails when the whole interval violates it (the edge itself meets it),
+and is not yet decided otherwise, never by the mean alone; fewer than 2 replications decide
+nothing. `--format json` has the checks as `observed`. The engine adds them in `wire::results`
+(`engine/src/observed.rs`), so `run`, `run.start` and every client get them.
+
 To vary several parameters at once, `design` runs every combination of their levels (a full
 factorial) on the same seed, and gives each result at each point, each factor's main effect and,
 for factors with two levels, their two-way interactions, each with a paired 95% interval:

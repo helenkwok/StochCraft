@@ -688,6 +688,7 @@ pub fn table(name: &str, results: &Value) -> String {
             "mean_wait and mean_time_in_system leave out entities still inside at the end"
         );
     }
+    observed_lines(results, &mut out);
     split_lines(results, &mut out);
     stop_lines(results, &mut out);
     sequential_lines(results, &mut out);
@@ -712,6 +713,122 @@ pub fn table(name: &str, results: &Value) -> String {
         }
     }
     out
+}
+
+/// `v` of a result of metric `metric` as the table of observed data shows it: a share as a
+/// percentage, a time with the run's time unit.
+fn observed_number(v: f64, metric: &str, time_unit: &str) -> String {
+    use stochcraft_engine::precision::{Unit, unit};
+    match unit(metric) {
+        Unit::Share => format!("{}%", number(v * 100.0)),
+        Unit::Time => format!("{} {time_unit}", number(v)),
+        Unit::Energy => format!("{} kWh", number(v)),
+        Unit::Count | Unit::Items => number(v),
+    }
+}
+
+/// `v ± half` in the units of [`observed_number`] (the unit once, after both).
+fn observed_interval(v: &Value, half: &Value, metric: &str, time_unit: &str) -> String {
+    use stochcraft_engine::precision::{Unit, unit};
+    let (scale, suffix) = match unit(metric) {
+        Unit::Share => (100.0, "%".to_owned()),
+        Unit::Time => (1.0, format!(" {time_unit}")),
+        Unit::Energy => (1.0, " kWh".to_owned()),
+        Unit::Count | Unit::Items => (1.0, String::new()),
+    };
+    let Some(mean) = v.as_f64() else {
+        return "-".into();
+    };
+    match half.as_f64() {
+        Some(h) => format!("{} ± {}{suffix}", number(mean * scale), number(h * scale)),
+        None => format!("{}{suffix}", number(mean * scale)),
+    }
+}
+
+/// The results checked against observed data (`observed`): for each, the observed value or bound,
+/// the simulated mean with its 95% half-width, the difference of the two (with its own interval)
+/// for an observed value, and whether they agree. Those that differ or fail come first.
+fn observed_lines(results: &Value, out: &mut String) {
+    let Some(checks) = results["observed"].as_array().filter(|c| !c.is_empty()) else {
+        return;
+    };
+    let time_unit = s(&results["time_unit"]);
+    let mut rows: Vec<[String; 5]> = vec![[
+        "verdict".into(),
+        "result".into(),
+        "observed".into(),
+        "simulated".into(),
+        "difference".into(),
+    ]];
+    let mut undecided = false;
+    for c in checks {
+        let metric = s(&c["metric"]);
+        let verdict = match s(&c["verdict"]) {
+            "agrees" => "agrees",
+            "differs" => "differs",
+            "passes" => "passes",
+            "fails" => "fails",
+            "no_result" => "no result",
+            _ => {
+                undecided = true;
+                "can't tell yet"
+            }
+        };
+        let observed = match s(&c["check"]) {
+            "at_most" => format!(
+                "at most {}",
+                observed_number(c["bound"].as_f64().unwrap_or(f64::NAN), metric, time_unit)
+            ),
+            "at_least" => format!(
+                "at least {}",
+                observed_number(c["bound"].as_f64().unwrap_or(f64::NAN), metric, time_unit)
+            ),
+            _ => observed_interval(
+                &c["observed"]["value"],
+                &c["observed"]["half_width"],
+                metric,
+                time_unit,
+            ),
+        };
+        let simulated = if c["simulated"].is_object() {
+            observed_interval(
+                &c["simulated"]["mean"],
+                &c["simulated"]["half_width"],
+                metric,
+                time_unit,
+            )
+        } else {
+            "-".to_owned()
+        };
+        let difference = match c["difference"].as_f64() {
+            Some(d) => observed_interval(
+                &Value::from(d),
+                &c["difference_half_width"],
+                metric,
+                time_unit,
+            ),
+            None => String::new(),
+        };
+        rows.push([
+            verdict.to_owned(),
+            format!("{}.{metric}", s(&c["element"])),
+            observed,
+            simulated,
+            difference,
+        ]);
+    }
+    out.push_str("\nchecked against observed data:\n");
+    aligned(&rows, &[true, true, false, false, false], out);
+    if undecided {
+        out.push_str(
+            "can't tell yet: the 95% interval is too wide to decide, or there are fewer than 2 replications; more replications would decide\n",
+        );
+    }
+    if checks.iter().any(|c| s(&c["verdict"]) == "no_result") {
+        out.push_str(
+            "no result: the run has no such result (the block is gone, or does not report that metric)\n",
+        );
+    }
 }
 
 /// A block for each group of results whose replications split into two outcomes the same way
@@ -1584,6 +1701,56 @@ mod tests {
         let out = table("q", &results);
         assert!(!out.contains("sequential:"), "{out}");
         assert!(out.contains("± is the half-width of a 95%"), "{out}");
+    }
+
+    #[test]
+    fn the_results_are_checked_against_observed_data_with_differences_first() {
+        let m = |mean: f64, hw: f64| serde_json::json!({ "mean": mean, "half_width": hw, "std_dev": 1.0, "n": 10 });
+        let mut results = serde_json::json!({
+            "replications": 10,
+            "time_unit": "min",
+            "record": { "replications": 10, "time_unit": "min" },
+            "metrics": ["mean_wait", "utilisation"],
+            "elements": [{ "id": "desk", "metrics": {
+                "mean_wait": m(5.1, 0.3), "utilisation": m(0.83, 0.02) } }],
+            "observed": [
+                { "element": "desk", "metric": "mean_wait", "check": "value", "verdict": "differs",
+                  "observed": { "value": 3.2, "half_width": 0.4 },
+                  "simulated": { "mean": 5.1, "half_width": 0.3, "n": 10 },
+                  "difference": 1.9, "difference_half_width": 0.5 },
+                { "element": "desk", "metric": "utilisation", "check": "at_most", "verdict": "cant_tell",
+                  "bound": 0.85, "simulated": { "mean": 0.83, "half_width": 0.02, "n": 10 } },
+                { "element": "gone", "metric": "left", "check": "at_least", "verdict": "no_result",
+                  "bound": 5.0, "simulated": null },
+            ],
+        });
+        let out = table("q", &results);
+        let lines: Vec<&str> = out.lines().collect();
+        let at = lines
+            .iter()
+            .position(|l| *l == "checked against observed data:");
+        assert!(at.is_some(), "no section: {out}");
+        let section = lines[at.unwrap_or(0) + 1..].join("\n");
+        let differs = section.find("differs").unwrap_or(usize::MAX);
+        let tell = section.find("can't tell yet").unwrap_or(usize::MAX);
+        assert!(differs < tell, "{section}");
+        assert!(
+            section.contains("desk.mean_wait") && section.contains("3.2 ± 0.4 min"),
+            "{section}"
+        );
+        assert!(section.contains("5.1 ± 0.3 min"), "{section}");
+        // The difference with its own interval, and a share as a percentage.
+        assert!(section.contains("1.9 ± 0.5 min"), "{section}");
+        assert!(section.contains("at most 85%"), "{section}");
+        assert!(section.contains("83 ± 2%"), "{section}");
+        assert!(section.contains("no result"), "{section}");
+        assert!(
+            section.contains("more replications would decide"),
+            "{section}"
+        );
+        // Without observed data there is no section.
+        results["observed"] = Value::Null;
+        assert!(!table("q", &results).contains("observed data"));
     }
 
     /// An output whose interval is across fewer values than the run has says how many.

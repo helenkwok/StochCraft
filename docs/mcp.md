@@ -91,6 +91,25 @@ port too. Use `--connect` only where every program that can reach the port is on
 | `run` | `replications?`, `seed?` | `run`: each element's metrics as means with 95% confidence intervals, the warm-up MSER-5 suggests (`warmup_suggestion`), the warnings about the results, and the run record. The values over the run (`series`) are left out, since they multiply the reply's size; `execute` with `run` gives them. An experiment with sequential replications (`experiment.set` with `sequential`) adds replications until its key measures are precise enough, and `sequential` in the results says how many ran and why it stopped. |
 | `undo`, `redo` | — | `undo`, `redo`. |
 
+Real measurements to check a run against (black-box validation) are set with `execute`:
+`observation.add`, `observation.set` and `observation.remove`. An observation is for one result,
+a block's or pool's `element` and a `metric` such as `mean_wait`, `utilisation` or `left`, in the
+metric's own unit (a share as a fraction), and is one of three `check`s: `value` (the observed
+`value`, with the `half_width` of its own 95% interval where its data give one), `at_most` or
+`at_least` (a `bound`). One for each result: `add` fails with `conflict` if there is one,
+`set` with `not_found` if there is none. They are saved in the file (`stochcraft:observed`) and
+come back in `model.get` as `experiment.observed`. A run's results then have `observed`, one
+entry for each, those that `differ` or `fail` first, each with the `observed` value or `bound`,
+the `simulated` mean with its 95% `half_width` and `n`, for an observed value the `difference`
+(simulated minus observed) with its 95% `difference_half_width`, and the `verdict`: `agrees`,
+`differs`, `passes`, `fails`, `cant_tell` or `no_result`. An observed value agrees when the
+interval of the difference holds 0, where the difference's half-width is the square root of the
+two half-widths' squares (the usual large-sample approximation; the observed one counts as 0
+where not given). A bound passes only when the whole simulated interval meets it and fails only
+when the whole interval violates it, and is `cant_tell` where the interval straddles it (more
+replications would decide) or there are fewer than 2. Observed data for a block that is gone is
+the warning `bad_observation` in `check_model` (the run still goes, and says `no_result`).
+
 Resources: `stochcraft://model` (`model.get`) and `stochcraft://commands` (the command catalogue).
 
 Errors work as follows:
