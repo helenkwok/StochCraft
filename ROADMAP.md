@@ -2188,6 +2188,15 @@ frame (`stochcraft_mc::Stepper`), so the browser's page stays responsive; there 
 one after another on the page, not on its workers. The gallery has a project budget example,
 checked against its exact means. Part 3, which inputs matter (the tornado chart from
 one-at-a-time swings, rank correlations of inputs with outputs, Sobol indices), comes next.
+Sobol indices are in the `mc` crate (`Compiled::sobol`, `stochcraft_mc::sobol`; the window and the
+command line are to follow): Saltelli's design, two independent base samples A and B of N rows
+and the k matrices A_B^(i), so N(k + 2) model evaluations (1,000 rows and 5 inputs: 7,000;
+refused above 10 million), first-order indices by Saltelli et al. 2010 and total effects by
+Jansen 1999, percentile bootstrap intervals, in batches that can be stepped a frame at a time.
+Inputs must be independent (correlated ones are refused), constant inputs are left out, and an
+output that does not vary, or has too few finite rows, gets no indices and the reason why. The
+Ishigami function and two models with closed-form indices check it. `sin` and `cos` joined the
+Monte Carlo expression functions for that.
 
 **What it is:** a model of a calculation, not a process. Inputs are distributions (a cost, a
 duration, a demand), outputs are expressions over them (a total cost, a finish date, a profit),

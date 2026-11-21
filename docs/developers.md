@@ -210,7 +210,7 @@ maximum, and, with a target (`at_most` or `at_least`), the share of trials meeti
 95% interval; `--format json` adds a histogram, the cumulative curve and the percentiles
 P10 and P90. `--until 1% --max 1000000` adds trials until every output's mean is within ±1% of
 itself. Outputs are BPSim expressions with the inputs (and earlier outputs) as `$name`, the
-arithmetic of XPath and `min`, `max`, `sum`, `abs`, `sqrt`, `exp`, `log`, `pow`, `round` and
+arithmetic of XPath and `min`, `max`, `sum`, `abs`, `sqrt`, `exp`, `log`, `pow`, `sin`, `cos`, `round` and
 `if(condition, then, else)`; a condition such as `$cost > 6000` gives 1 or 0 in each trial, so its
 mean is a probability. A trial whose output is not a number (a division by zero) is counted apart.
 

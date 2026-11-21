@@ -2653,7 +2653,7 @@ materials,normal,mean=500;std_dev=50,USD
     },
     Command {
         name: "mc.output.set",
-        summary: "Monte Carlo: add an output (a BPSim expression over the inputs and earlier outputs, named as $name, with arithmetic, min, max, sum, abs, sqrt, exp, log, pow, round and if) or change one, with an optional unit and target (`at_most` or `at_least`) whose probability is reported.",
+        summary: "Monte Carlo: add an output (a BPSim expression over the inputs and earlier outputs, named as $name, with arithmetic, min, max, sum, abs, sqrt, exp, log, pow, round, sin, cos and if) or change one, with an optional unit and target (`at_most` or `at_least`) whose probability is reported.",
         kind: CommandKind::Edit,
         schema: schema::<crate::mc::OutputSet>,
         example: || json!({ "name": "cost", "expression": "$labour * $rate + $materials", "unit": "USD", "at_most": 6000.0 }),

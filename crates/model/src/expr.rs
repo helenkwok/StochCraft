@@ -13,7 +13,7 @@
 //!   model needs (ROADMAP M4.1): `min()`, `max()` and
 //!   `sum()` of any number of values, `abs()` and `sqrt()` (XPath 2.0's `fn:abs`, and the others
 //!   as in XPath 3.0's `fn:` and `math:` functions, with the optional prefix), `exp()`, `log()`
-//!   (natural) and `pow()`, and `if(condition, then, else)`, which evaluates only the branch it
+//!   (natural), `pow()`, `sin()` and `cos()` (radians), and `if(condition, then, else)`, which evaluates only the branch it
 //!   takes.
 //!
 //! [`parse_with_variables`] also reads XPath variables, `$name`, as the value named `name` (what
@@ -142,6 +142,8 @@ pub enum Func {
     Exp,
     Log,
     Pow,
+    Sin,
+    Cos,
     If,
 }
 
@@ -170,6 +172,8 @@ impl Func {
             "exp" => (Func::Exp, 1, Some(1)),
             "log" => (Func::Log, 1, Some(1)),
             "pow" => (Func::Pow, 2, Some(2)),
+            "sin" => (Func::Sin, 1, Some(1)),
+            "cos" => (Func::Cos, 1, Some(1)),
             "if" => (Func::If, 3, Some(3)),
             _ => return None,
         })
@@ -187,6 +191,8 @@ impl Func {
             Func::Exp => "exp",
             Func::Log => "log",
             Func::Pow => "pow",
+            Func::Sin => "sin",
+            Func::Cos => "cos",
             Func::If => "if",
             _ => return None,
         })
@@ -562,7 +568,7 @@ fn call(pos: usize, name: &str, args: Vec<Expr>) -> Result<Expr, ExprError> {
 
 /// Parses an expression of a process model: BPSim's XPath 1.0 subset only, so the file stays
 /// readable by other BPSim tools. The functions beyond it (`min`, `max`, `sum`, `abs`, `sqrt`,
-/// `exp`, `log`, `pow`, `if`) are for Monte Carlo models ([`parse_with_variables`]).
+/// `exp`, `log`, `pow`, `sin`, `cos`, `if`) are for Monte Carlo models ([`parse_with_variables`]).
 pub fn parse(src: &str) -> Result<Expr, ExprError> {
     let e = parse_as(src, false)?;
     let mut beyond = None;
@@ -655,6 +661,8 @@ impl Expr {
                         arg(0).number(),
                         arg(1).number(),
                     )),
+                    Func::Sin => Value::Number(stochcraft_random::math::sin(arg(0).number())),
+                    Func::Cos => Value::Number(stochcraft_random::math::cos(arg(0).number())),
                     // Only the branch taken is evaluated.
                     Func::If => {
                         if arg(0).boolean() {
@@ -737,7 +745,9 @@ impl Expr {
                 | Func::Sqrt
                 | Func::Exp
                 | Func::Log
-                | Func::Pow => Kind::Number,
+                | Func::Pow
+                | Func::Sin
+                | Func::Cos => Kind::Number,
                 Func::String | Func::Concat => Kind::Text,
                 // Handled above, with its branches.
                 Func::If => Kind::Property,
@@ -943,6 +953,10 @@ mod tests {
         assert_eq!(cost("math:pow(2, 3)"), 8.0);
         assert_eq!(cost("exp(0)"), 1.0);
         assert_eq!(cost("log(1)"), 0.0);
+        assert_eq!(cost("sin(0)"), 0.0);
+        assert_eq!(cost("cos(0)"), 1.0);
+        assert!((cost("sin(1.5707963267948966)") - 1.0).abs() < 1e-15);
+        assert!(parse("sin(1)").is_err());
         assert_eq!(cost("if(getProperty('n') > 2, 10, 20)"), 10.0);
         assert_eq!(cost("if(getProperty('n') > 5, 10, 20)"), 20.0);
         // Only the branch taken is evaluated: the other may not even have a value.
