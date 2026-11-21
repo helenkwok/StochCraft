@@ -1340,9 +1340,9 @@ unit	yr	ປີ
 	Stock	ສະຕັອກ
 	Flow	ການໄຫຼ
 	Auxiliary	ຕົວແປຊ່ວຍ
-	{name} ends near {median}: 9 runs in 10 end between {low} and {high}.	{name} ສິ້ນສຸດໃກ້ {median}: 9 ໃນ 10 ຮອບຈຳລອງສິ້ນສຸດລະຫວ່າງ {low} ແລະ {high}.
+	{name} ends near {median} (median); its 5th to 95th percentiles at the end are {low} and {high}.	{name} ສິ້ນສຸດໃກ້ {median} (ມັດທະຍະ); ເປີເຊັນໄທລ໌ທີ 5 ແລະ 95 ໃນຕອນທ້າຍແມ່ນ {low} ແລະ {high}.
 	{name} ends at {value}.	{name} ສິ້ນສຸດທີ່ {value}.
-	{name} at {time}: median {median}, mean {mean}, 9 runs in 10 between {low} and {high}	{name} ທີ່ {time}: ມັດທະຍະ {median}, ຄ່າສະເລ່ຍ {mean}, 9 ໃນ 10 ຮອບຈຳລອງຢູ່ລະຫວ່າງ {low} ແລະ {high}
+	{name} at {time}: median {median}, mean {mean}, 5th to 95th percentiles {low} and {high}	{name} ທີ່ {time}: ມັດທະຍະ {median}, ຄ່າສະເລ່ຍ {mean}, ເປີເຊັນໄທລ໌ທີ 5 ແລະ 95 {low} ແລະ {high}
 	{name} at {time}: {value}	{name} ທີ່ {time}: {value}
 	Time	ເວລາ
 	Time ({unit})	ເວລາ ({unit})
@@ -1350,12 +1350,11 @@ unit	yr	ປີ
 	{name} median	{name}, ມັດທະຍະ
 	{name} 5th percentile	{name}, ເປີເຊັນໄທລ໌ທີ 5
 	{name} 95th percentile	{name}, ເປີເຊັນໄທລ໌ທີ 95
-	Saving system dynamics models comes with editing.	ການບັນທຶກແບບຈຳລອງພາວະຜັນແປຂອງລະບົບຈະມາພ້ອມກັບການແກ້ໄຂ.
 	This run is too large to make in the window: shorten it, raise the time step or lower the runs, or run it from the command line.	ຮອບຈຳລອງນີ້ໃຫຍ່ເກີນໄປທີ່ຈະເຮັດໃນໜ້າຕ່າງ: ເຮັດໃຫ້ສັ້ນລົງ, ເພີ່ມຂັ້ນເວລາ ຫຼື ຫຼຸດຈຳນວນຮອບຈຳລອງ, ຫຼື ແລ່ນຈາກແຖວຄຳສັ່ງ.
 	The model: its settings and variables	ແບບຈຳລອງ: ການຕັ້ງຄ່າ ແລະ ຕົວແປຂອງມັນ
 	System dynamics model	ແບບຈຳລອງພາວະຜັນແປຂອງລະບົບ
 	Variables	ຕົວແປ
-	This is the model as its file has it. Editing comes next.	ນີ້ແມ່ນແບບຈຳລອງຕາມທີ່ຢູ່ໃນໄຟລ໌ຂອງມັນ. ການແກ້ໄຂຈະມາຕໍ່ໄປ.
+	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	ທ່ານສາມາດປ່ຽນແບບຈຳລອງນີ້ດ້ວຍຄຳສັ່ງ, ຈາກເອເຈນຜ່ານເຊີບເວີ MCP ຫຼືຈາກແຖວຄຳສັ່ງ. ການແກ້ໄຂເທິງຜ້າໃບຈະມາຕໍ່ໄປ.
 	From {start} to {stop}, in steps of {dt}, by the {method} method.	ຈາກ {start} ເຖິງ {stop}, ເປັນຂັ້ນ {dt}, ດ້ວຍວິທີ {method}.
 	Notes from the file	ໝາຍເຫດຈາກໄຟລ໌
 	Equation	ສົມຜົນ
@@ -1367,7 +1366,7 @@ unit	yr	ປີ
 	Runs: {n} · seed {seed}	ຮອບຈຳລອງ: {n} · ເມັດສຸ່ມ {seed}
 	One run	ຮອບຈຳລອງດຽວ
 	Show on the chart	ສະແດງໃນແຜນພາບ
-	Solid line: median. Dashed line: mean. Shaded band: 9 runs in 10 fell inside it (5th to 95th percentile).	ເສັ້ນຕັນ: ມັດທະຍະ. ເສັ້ນຂີດ: ຄ່າສະເລ່ຍ. ແຖບເງົາ: 9 ໃນ 10 ຮອບຈຳລອງຕົກຢູ່ພາຍໃນ (ເປີເຊັນໄທລ໌ທີ 5 ເຖິງ 95).
+	Solid line: median. Dashed line: mean. Shaded band: 5th to 95th percentile, at each saved time.	ເສັ້ນຕັນ: ມັດທະຍະ. ເສັ້ນຂີດ: ຄ່າສະເລ່ຍ. ແຖບເງົາ: ເປີເຊັນໄທລ໌ທີ 5 ເຖິງ 95, ໃນແຕ່ລະເວລາທີ່ບັນທຶກ.
 	Pick a variable to see it over time.	ເລືອກຕົວແປເພື່ອເບິ່ງຕາມເວລາ.
 	{name} over time	{name} ຕາມເວລາ
 	Checked against its exact solution	ກວດກັບຄຳຕອບທີ່ແນ່ນອນຂອງມັນແລ້ວ

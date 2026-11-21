@@ -1340,9 +1340,9 @@ unit	yr	yıl
 	Stock	Stok
 	Flow	Akış
 	Auxiliary	Yardımcı değişken
-	{name} ends near {median}: 9 runs in 10 end between {low} and {high}.	{name} yaklaşık {median} civarında biter: 10 çalıştırmadan 9'u {low} ile {high} arasında biter.
+	{name} ends near {median} (median); its 5th to 95th percentiles at the end are {low} and {high}.	{name} yaklaşık {median} civarında biter (ortanca); sondaki 5. ve 95. yüzdelikleri {low} ve {high} değerleridir.
 	{name} ends at {value}.	{name} {value} değerinde biter.
-	{name} at {time}: median {median}, mean {mean}, 9 runs in 10 between {low} and {high}	{time} anında {name}: ortanca {median}, ortalama {mean}, 10 çalıştırmadan 9'u {low} ile {high} arasında
+	{name} at {time}: median {median}, mean {mean}, 5th to 95th percentiles {low} and {high}	{time} anında {name}: ortanca {median}, ortalama {mean}, 5. ve 95. yüzdelik {low} ve {high}
 	{name} at {time}: {value}	{time} anında {name}: {value}
 	Time	Zaman
 	Time ({unit})	Zaman ({unit})
@@ -1350,12 +1350,11 @@ unit	yr	yıl
 	{name} median	{name}, ortanca
 	{name} 5th percentile	{name}, 5. yüzdelik
 	{name} 95th percentile	{name}, 95. yüzdelik
-	Saving system dynamics models comes with editing.	Sistem dinamiği modellerini kaydetme düzenlemeyle birlikte gelecek.
 	This run is too large to make in the window: shorten it, raise the time step or lower the runs, or run it from the command line.	Bu çalıştırma pencerede yapılamayacak kadar büyük: kısaltın, zaman adımını büyütün veya çalıştırma sayısını azaltın, ya da komut satırından çalıştırın.
 	The model: its settings and variables	Model: ayarları ve değişkenleri
 	System dynamics model	Sistem dinamiği modeli
 	Variables	Değişkenler
-	This is the model as its file has it. Editing comes next.	Bu, model dosyasında olduğu gibidir. Düzenleme sonra gelecek.
+	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	Bu modeli komutlarla değiştirebilirsiniz: bir ajandan MCP sunucusu üzerinden ya da komut satırından. Tuval üzerinde düzenleme sonra gelecek.
 	From {start} to {stop}, in steps of {dt}, by the {method} method.	{start} ile {stop} arasında, {dt} adımlarla, {method} yöntemiyle.
 	Notes from the file	Dosyadan notlar
 	Equation	Denklem
@@ -1367,7 +1366,7 @@ unit	yr	yıl
 	Runs: {n} · seed {seed}	Çalıştırmalar: {n} · tohum {seed}
 	One run	Tek çalıştırma
 	Show on the chart	Grafikte göster
-	Solid line: median. Dashed line: mean. Shaded band: 9 runs in 10 fell inside it (5th to 95th percentile).	Düz çizgi: ortanca. Kesikli çizgi: ortalama. Gölgeli bant: 10 çalıştırmadan 9'u bunun içine düştü (5. ile 95. yüzdelik arası).
+	Solid line: median. Dashed line: mean. Shaded band: 5th to 95th percentile, at each saved time.	Düz çizgi: ortanca. Kesikli çizgi: ortalama. Gölgeli bant: kaydedilen her anda 5. ile 95. yüzdelik arası.
 	Pick a variable to see it over time.	Zaman içinde görmek için bir değişken seçin.
 	{name} over time	{name} zaman içinde
 	Checked against its exact solution	Kesin çözümüyle denetlendi

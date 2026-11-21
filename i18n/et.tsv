@@ -1340,9 +1340,9 @@ unit	yr	a
 	Stock	Varu
 	Flow	Voog
 	Auxiliary	Abimuutuja
-	{name} ends near {median}: 9 runs in 10 end between {low} and {high}.	{name} lõpeb umbes väärtusel {median}: 9 käivitamist 10-st lõpeb vahemikus {low} kuni {high}.
+	{name} ends near {median} (median); its 5th to 95th percentiles at the end are {low} and {high}.	{name} lõpeb umbes väärtusel {median} (mediaan); selle 5. ja 95. protsentiil lõpus on {low} ja {high}.
 	{name} ends at {value}.	{name} lõpeb väärtusel {value}.
-	{name} at {time}: median {median}, mean {mean}, 9 runs in 10 between {low} and {high}	{name} ajahetkel {time}: mediaan {median}, keskmine {mean}, 9 käivitamist 10-st vahemikus {low} kuni {high}
+	{name} at {time}: median {median}, mean {mean}, 5th to 95th percentiles {low} and {high}	{name} ajahetkel {time}: mediaan {median}, keskmine {mean}, 5. ja 95. protsentiil {low} ja {high}
 	{name} at {time}: {value}	{name} ajahetkel {time}: {value}
 	Time	Aeg
 	Time ({unit})	Aeg ({unit})
@@ -1350,12 +1350,11 @@ unit	yr	a
 	{name} median	{name}, mediaan
 	{name} 5th percentile	{name}, 5. protsentiil
 	{name} 95th percentile	{name}, 95. protsentiil
-	Saving system dynamics models comes with editing.	Süsteemidünaamika mudelite salvestamine tuleb koos redigeerimisega.
 	This run is too large to make in the window: shorten it, raise the time step or lower the runs, or run it from the command line.	See käivitamine on aknas tegemiseks liiga suur: lühendage seda, suurendage ajasammu või vähendage käivitamisi, või käivitage see käsureal.
 	The model: its settings and variables	Mudel: selle sätted ja muutujad
 	System dynamics model	Süsteemidünaamika mudel
 	Variables	Muutujad
-	This is the model as its file has it. Editing comes next.	See on mudel sellisena, nagu see on oma failis. Redigeerimine tuleb järgmisena.
+	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	Seda mudelit saab muuta käskudega, agendi kaudu MCP-serveri vahendusel või käsurealt. Redigeerimine lõuendil tuleb järgmisena.
 	From {start} to {stop}, in steps of {dt}, by the {method} method.	Alates {start} kuni {stop}, sammuga {dt}, meetodil {method}.
 	Notes from the file	Faili märkused
 	Equation	Võrrand
@@ -1367,7 +1366,7 @@ unit	yr	a
 	Runs: {n} · seed {seed}	Käivitamisi: {n} · juhuarvuseeme {seed}
 	One run	Üks käivitamine
 	Show on the chart	Näita graafikul
-	Solid line: median. Dashed line: mean. Shaded band: 9 runs in 10 fell inside it (5th to 95th percentile).	Pidev joon: mediaan. Katkendjoon: keskmine. Varjutatud riba: 9 käivitamist 10-st jäi sellesse (5. kuni 95. protsentiil).
+	Solid line: median. Dashed line: mean. Shaded band: 5th to 95th percentile, at each saved time.	Pidev joon: mediaan. Katkendjoon: keskmine. Varjutatud riba: 5. kuni 95. protsentiil igal salvestatud ajahetkel.
 	Pick a variable to see it over time.	Valige muutuja, et näha seda ajas.
 	{name} over time	{name} ajas
 	Checked against its exact solution	Kontrollitud selle täpse lahenduse vastu

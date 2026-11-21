@@ -567,7 +567,8 @@ pub enum Request {
     /// Ask where to save, suggesting `name`; answer with [`App::save_to`], with
     /// [`App::save_cancelled`] if the user closes the dialog, or with [`App::save_failed`] if it
     /// can't be shown. BPMN is offered, and with `xpdl` XPDL too: the model came from an XPDL
-    /// file, which it can be saved into. The app's menus and shortcuts wait until it is answered,
+    /// file, which it can be saved into. A `name` ending in `.xmile` is a system dynamics model
+    /// (offer XMILE only). The app's menus and shortcuts wait until it is answered,
     /// and an answer that comes after the model was replaced saves nothing.
     PickSave { name: String, xpdl: bool },
     /// Write `bytes` to `path`; answer with [`App::written`] or [`App::save_failed`].

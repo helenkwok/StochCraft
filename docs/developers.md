@@ -326,9 +326,13 @@ disk), `sd.new` (an empty model: name, start, stop, `dt`, method, time unit), `s
 where each is drawn and the pipes of the flows, the information links and checks, and with
 `variable` its values from the last run, marked stale if the model was edited since). `run`
 refuses such a model, naming `sd.run`. In Rust: `stochcraft_sd::{read_xmile, compile, run}`;
-`Engine::has_system_dynamics` and `Engine::system_dynamics_path` (`crates/engine/src/sd_window.rs`)
-tell a caller that holds the engine whether the document is one. The window's run is made whole on
-the frame after Run is pressed, with the work bounded (steps times variables times runs, at most
+`Engine::has_system_dynamics`, `Engine::system_dynamics_path` and
+`Engine::system_dynamics_results_stale` (`crates/engine/src/sd_window.rs`) tell a caller that holds
+the engine whether the document is one, what it was opened under and whether its last results are
+out of date. The window saves it through `Engine::save_bytes` (XMILE) and `Engine::saved_to` like
+a process model, with a `.xmile` name; its unsaved state is `Engine::is_dirty`, and its
+recovery copy is skipped (recovery copies are process models only). The window's run is made
+whole, two frames after Run is pressed (the first paints "Running…"), with the work bounded (steps times variables times runs, at most
 20 million); a run a few replications at a time like Monte Carlo's would need `stochcraft-sd` to
 give per-replication results.
 

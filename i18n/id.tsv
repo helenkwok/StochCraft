@@ -1340,9 +1340,9 @@ unit	yr	thn
 	Stock	Stok
 	Flow	Aliran
 	Auxiliary	Variabel bantu
-	{name} ends near {median}: 9 runs in 10 end between {low} and {high}.	{name} berakhir di sekitar {median}: 9 dari 10 eksekusi berakhir antara {low} dan {high}.
+	{name} ends near {median} (median); its 5th to 95th percentiles at the end are {low} and {high}.	{name} berakhir di sekitar {median} (median); persentil ke-5 dan ke-95 di akhir adalah {low} dan {high}.
 	{name} ends at {value}.	{name} berakhir pada {value}.
-	{name} at {time}: median {median}, mean {mean}, 9 runs in 10 between {low} and {high}	{name} pada {time}: median {median}, rata-rata {mean}, 9 dari 10 eksekusi antara {low} dan {high}
+	{name} at {time}: median {median}, mean {mean}, 5th to 95th percentiles {low} and {high}	{name} pada {time}: median {median}, rata-rata {mean}, persentil ke-5 dan ke-95 {low} dan {high}
 	{name} at {time}: {value}	{name} pada {time}: {value}
 	Time	Waktu
 	Time ({unit})	Waktu ({unit})
@@ -1350,12 +1350,11 @@ unit	yr	thn
 	{name} median	{name}, median
 	{name} 5th percentile	{name}, persentil ke-5
 	{name} 95th percentile	{name}, persentil ke-95
-	Saving system dynamics models comes with editing.	Penyimpanan model dinamika sistem hadir bersama penyuntingan.
 	This run is too large to make in the window: shorten it, raise the time step or lower the runs, or run it from the command line.	Eksekusi ini terlalu besar untuk dijalankan di jendela: persingkat, perbesar langkah waktu atau kurangi jumlah eksekusi, atau jalankan dari baris perintah.
 	The model: its settings and variables	Model: pengaturan dan variabelnya
 	System dynamics model	Model dinamika sistem
 	Variables	Variabel
-	This is the model as its file has it. Editing comes next.	Ini adalah model seperti yang ada di berkasnya. Penyuntingan menyusul.
+	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	Anda dapat mengubah model ini dengan perintah, dari agen melalui server MCP atau dari baris perintah. Penyuntingan di kanvas menyusul.
 	From {start} to {stop}, in steps of {dt}, by the {method} method.	Dari {start} hingga {stop}, dengan langkah {dt}, memakai metode {method}.
 	Notes from the file	Catatan dari berkas
 	Equation	Persamaan
@@ -1367,7 +1366,7 @@ unit	yr	thn
 	Runs: {n} · seed {seed}	Eksekusi: {n} · benih {seed}
 	One run	Satu eksekusi
 	Show on the chart	Tampilkan pada grafik
-	Solid line: median. Dashed line: mean. Shaded band: 9 runs in 10 fell inside it (5th to 95th percentile).	Garis penuh: median. Garis putus-putus: rata-rata. Pita berbayang: 9 dari 10 eksekusi berada di dalamnya (persentil ke-5 sampai ke-95).
+	Solid line: median. Dashed line: mean. Shaded band: 5th to 95th percentile, at each saved time.	Garis penuh: median. Garis putus-putus: rata-rata. Pita berbayang: persentil ke-5 sampai ke-95, pada setiap waktu yang disimpan.
 	Pick a variable to see it over time.	Pilih sebuah variabel untuk melihatnya dari waktu ke waktu.
 	{name} over time	{name} dari waktu ke waktu
 	Checked against its exact solution	Diperiksa terhadap solusi eksaknya

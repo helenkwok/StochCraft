@@ -5,23 +5,27 @@
 //! model's views.
 //!
 //! It shows two tabs. **Model** reads the model as `sd.get` describes it: its settings, the
-//! checks' warnings, and a table of its variables (kind, equation, units, a stock's flows). It is
-//! read-only for now; editing, the diagram and saving come next, so Save is refused with a
-//! message rather than writing the engine's empty process model over the file. **Results** runs
-//! the model (`sd.run`) and answers first, in words: where each stock ends up, with, for a model
-//! that has a random function, the range 9 runs in 10 end in. Under it, a chart for each variable
-//! picked (stocks first, then flows, then auxiliaries) over time: the value itself for one run, or
-//! the median with the band from the 5th to the 95th percentile and the mean dashed for runs in
-//! replications; or the same values as a table, with a CSV export of the variables shown.
+//! checks' warnings, and a table of its variables (kind, equation, units, a stock's flows). The
+//! window does not edit it yet (the canvas editor comes next); the model is changed by commands,
+//! from an agent through the MCP server or from the command line, and the tab reads it again
+//! whenever the engine's revision changes. Save, Save As and the guards on closing work as for a
+//! process model, through the engine, which writes the model as XMILE. **Results** runs the model
+//! (`sd.run`) and answers first, in words: where each stock ends up, with, for a model that has a
+//! random function, the median and the 5th to 95th percentiles it ends between. Under it, a chart
+//! for each variable picked (stocks first, then flows, then auxiliaries) over time: the value
+//! itself for one run, or the median with the band from the 5th to the 95th percentile and the
+//! mean dashed for runs in replications; or the same values as a table, with a CSV export of the
+//! variables shown. Results are marked out of date once the model is changed after the run.
 //!
-//! A run is made in one piece on the frame after Run is pressed (the status bar says "Running…"
+//! A run is made in one piece, two frames after Run is pressed (the status bar says "Running…"
 //! meanwhile), not a few replications a frame as a Monte Carlo run is: `stochcraft-sd` runs
 //! whole replications and gives only the aggregates, so a stepped job would need a new interface
 //! in that crate. The window refuses a run larger than [`WORK_LIMIT`] (a guess at what finishes
 //! in about a second) with the way out, though the engine would allow it; the command line has
 //! no such limit beyond the engine's own.
 
-use std::collections::BTreeSet;
+use std::cell::RefCell;
+use std::collections::{BTreeSet, HashMap};
 use std::ops::RangeInclusive;
 use std::rc::Rc;
 
@@ -47,17 +51,36 @@ const MOST_RUNS: f64 = 100_000.0;
 const ROW_HEIGHT: f32 = 20.0;
 const COLUMN_WIDTH: f32 = 140.0;
 
+/// Where a run asked for with Run is: the status bar must be painted saying "Running…" before the
+/// run, which blocks, is made, so it waits one frame more than the frame after the request.
+#[derive(Clone, Copy, PartialEq, Eq)]
+enum Pending {
+    /// No run is waiting.
+    Idle,
+    /// Run was pressed: the next frame paints the status bar with "Running…".
+    Asked,
+    /// That frame is painted: the run is made now.
+    Shown,
+}
+
+/// The plots drawn so far, by variable name.
+type Plots = HashMap<String, Option<Rc<Plot>>>;
+
 /// What the system dynamics screens keep between frames.
 pub(crate) struct Sd {
     /// `sd.get`'s description of the model, with the engine's revision it was read at.
     info: Option<(u64, Rc<Value>)>,
     /// `sd.run`'s results on show.
     results: Option<Rc<Value>>,
+    /// The series of the results on show that have been drawn, parsed from their JSON once for
+    /// the run and not again on every repaint (`None`: the variable has none to draw). Emptied
+    /// whenever the results change.
+    plots: Rc<RefCell<Plots>>,
     /// The runs and the seed of the next run, for a model with a random function.
     runs: f64,
     seed: f64,
-    /// Run was pressed: the run is made on the next frame, after the status bar has said so.
-    pending: bool,
+    /// Run was pressed and the run is not made yet.
+    pending: Pending,
     /// The variables shown, by name; `None` until the user picks (then the stocks).
     chosen: Option<BTreeSet<String>>,
     /// The Results tab shows the table in place of the charts.
@@ -69,9 +92,10 @@ impl Default for Sd {
         Self {
             info: None,
             results: None,
+            plots: Rc::default(),
             runs: 100.0,
             seed: 1.0,
-            pending: false,
+            pending: Pending::Idle,
             chosen: None,
             table: false,
         }
@@ -207,7 +231,7 @@ fn last(v: &Value) -> Option<f64> {
 }
 
 /// Where each stock ends up, in words: its value at the stop time, and for a model run in
-/// replications the range 9 runs in 10 end in.
+/// replications its median there with the 5th and 95th percentiles of the runs' values.
 fn findings(results: &Value) -> Vec<String> {
     let many = results["replications"].as_u64().unwrap_or(1) > 1;
     results["variables"]
@@ -221,7 +245,7 @@ fn findings(results: &Value) -> Vec<String> {
             let shown = |x: f64| with_unit(value_text(x), unit);
             Some(if many {
                 tf(
-                    "{name} ends near {median}: 9 runs in 10 end between {low} and {high}.",
+                    "{name} ends near {median} (median); its 5th to 95th percentiles at the end are {low} and {high}.",
                     &[
                         ("name", name),
                         ("median", &shown(last(&v["median"])?)),
@@ -252,6 +276,43 @@ fn picks(n: usize, most: usize) -> Vec<usize> {
         v.push(n - 1);
     }
     v
+}
+
+/// The parts of a line to draw as paths of their own: the picked indices `at`, in runs that are
+/// joined. A sample is defined when it is finite in every one of `columns` (the times and the
+/// values drawn); a run ends at a pick that is not defined, and also where picks skipped a sample
+/// that is not defined (the line must not bridge a gap that thinning hid). Picks that are not
+/// defined are in no run. A run of one point is kept, to be drawn as a dot.
+fn segments(at: &[usize], columns: &[&[f64]]) -> Vec<Vec<usize>> {
+    let defined = |k: usize| {
+        columns
+            .iter()
+            .all(|c| c.get(k).is_some_and(|v| v.is_finite()))
+    };
+    let mut runs: Vec<Vec<usize>> = Vec::new();
+    let mut current: Vec<usize> = Vec::new();
+    let mut previous: Option<usize> = None;
+    for &i in at {
+        if !defined(i) {
+            if !current.is_empty() {
+                runs.push(std::mem::take(&mut current));
+            }
+            previous = None;
+            continue;
+        }
+        if let Some(p) = previous
+            && !current.is_empty()
+            && !((p + 1)..i).all(defined)
+        {
+            runs.push(std::mem::take(&mut current));
+        }
+        current.push(i);
+        previous = Some(i);
+    }
+    if !current.is_empty() {
+        runs.push(current);
+    }
+    runs
 }
 
 /// A number field for a whole number from `range`, named `label` for screen readers.
@@ -388,44 +449,56 @@ fn draw_chart(
     }
 
     let at = picks(plot.times.len(), area.width() as usize);
-    // The band, as quads between the times drawn.
+    // The band, as quads between the times drawn, where both ends and every sample between
+    // them are defined (a value the model leaves undefined breaks it).
     if let Some((low, high)) = &plot.band {
         let shade = colour.linear_multiply(0.22);
-        for pair in at.windows(2) {
-            let (i, j) = (pair[0], pair[1]);
-            let (a, b, c, d) = (high[i], high[j], low[j], low[i]);
-            if [a, b, c, d, plot.times[i], plot.times[j]]
-                .iter()
-                .all(|v| v.is_finite())
-            {
+        for run in segments(
+            &at,
+            &[plot.times.as_slice(), low.as_slice(), high.as_slice()],
+        ) {
+            for pair in run.windows(2) {
+                let (i, j) = (pair[0], pair[1]);
                 let points = vec![
-                    pos2(x(plot.times[i]), y(a)),
-                    pos2(x(plot.times[j]), y(b)),
-                    pos2(x(plot.times[j]), y(c)),
-                    pos2(x(plot.times[i]), y(d)),
+                    pos2(x(plot.times[i]), y(high[i])),
+                    pos2(x(plot.times[j]), y(high[j])),
+                    pos2(x(plot.times[j]), y(low[j])),
+                    pos2(x(plot.times[i]), y(low[i])),
                 ];
                 painter.add(egui::Shape::convex_polygon(points, shade, Stroke::NONE));
             }
         }
     }
-    let path = |values: &[f64]| -> Vec<egui::Pos2> {
-        at.iter()
-            .filter(|&&i| values[i].is_finite() && plot.times[i].is_finite())
-            .map(|&i| pos2(x(plot.times[i]), y(values[i])))
+    // Each stretch of defined values is a path of its own, so a value the model leaves undefined
+    // (a division by zero at one time) shows as a gap and not as a line across it.
+    let paths = |values: &[f64]| -> Vec<Vec<egui::Pos2>> {
+        segments(&at, &[plot.times.as_slice(), values])
+            .into_iter()
+            .map(|run| {
+                run.into_iter()
+                    .map(|i| pos2(x(plot.times[i]), y(values[i])))
+                    .collect()
+            })
             .collect()
     };
+    let mean = Stroke::new(1.5, p.text);
+    let line = Stroke::new(2.0, colour);
     if plot.band.is_some() {
-        painter.extend(egui::Shape::dashed_line(
-            &path(&plot.mean),
-            Stroke::new(1.5, p.text),
-            6.0,
-            4.0,
-        ));
+        for run in paths(&plot.mean) {
+            if run.len() > 1 {
+                painter.extend(egui::Shape::dashed_line(&run, mean, 6.0, 4.0));
+            } else if let Some(&point) = run.first() {
+                painter.circle_filled(point, 1.5, mean.color);
+            }
+        }
     }
-    painter.add(egui::Shape::line(
-        path(&plot.line),
-        Stroke::new(2.0, colour),
-    ));
+    for run in paths(&plot.line) {
+        if run.len() > 1 {
+            painter.add(egui::Shape::line(run, line));
+        } else if let Some(&point) = run.first() {
+            painter.circle_filled(point, 2.0, line.color);
+        }
+    }
 
     // A crosshair at the time nearest the pointer, with the numbers there.
     let Some(pointer) = response
@@ -458,7 +531,7 @@ fn draw_chart(
     let time = value_text(plot.times[i]);
     let tip = match &plot.band {
         Some((low, high)) => tf(
-            "{name} at {time}: median {median}, mean {mean}, 9 runs in 10 between {low} and {high}",
+            "{name} at {time}: median {median}, mean {mean}, 5th to 95th percentiles {low} and {high}",
             &[
                 ("name", name),
                 ("time", &time),
@@ -570,8 +643,8 @@ impl App {
         self.engine.has_system_dynamics()
     }
 
-    /// The document is a system dynamics model (an XMILE file), which the window shows and runs
-    /// but does not edit or save yet.
+    /// The document is a system dynamics model (an XMILE file), which the window shows, runs and
+    /// saves as XMILE; it does not edit it yet (an agent or the command line does).
     pub fn is_system_dynamics(&self) -> bool {
         self.is_sd()
     }
@@ -597,22 +670,10 @@ impl App {
         Some(low.into_iter().zip(high).collect())
     }
 
-    /// Whether closing or replacing the document would lose changes. A system dynamics document
-    /// has none: it cannot be edited, and what the engine holds beside it (an empty process
-    /// model) is never saved.
-    pub(crate) fn unsaved_changes(&self) -> bool {
-        self.engine.is_dirty() && !self.is_sd()
-    }
-
-    /// Refuses a save of a system dynamics model, which cannot be written yet: saving would
-    /// write the engine's empty process model, over the file it came from. True when refused,
-    /// with the reason in the status bar; what was to follow the save (quit, open) is dropped.
-    pub(crate) fn refuse_sd_save(&mut self) -> bool {
-        if !self.is_sd() {
-            return false;
-        }
-        self.save_failed(t("Saving system dynamics models comes with editing."));
-        true
+    /// Whether the model was changed after the run whose results are on show: the Results tab
+    /// marks them out of date (what `sd.get` gives as `results_stale`).
+    pub(crate) fn sd_results_stale(&self) -> bool {
+        self.sd.results.is_some() && self.engine.system_dynamics_results_stale()
     }
 
     /// `sd.get`'s description of the model, read again only when the engine's revision changed.
@@ -632,26 +693,42 @@ impl App {
         info
     }
 
-    /// Model ▸ Run on a system dynamics model: the run is made on the next frame ([`App::poll`]),
-    /// after the status bar has said it is running.
+    /// Model ▸ Run on a system dynamics model: the run is made two frames on ([`App::poll`]).
+    /// Run can be pressed after the status bar was drawn in its frame, so the next frame is the
+    /// one that paints "Running…", and only the one after makes the run, which blocks.
     pub(crate) fn sd_run(&mut self) {
-        if self.sd.pending {
+        if self.sd.pending != Pending::Idle {
             return;
         }
-        self.sd.pending = true;
+        self.sd.pending = Pending::Asked;
         self.show_results = true;
         self.info(t("Running…"));
     }
 
     /// Whether a run was asked for and not made yet.
     pub(crate) fn sd_pending(&self) -> bool {
-        self.sd.pending
+        self.sd.pending != Pending::Idle
+    }
+
+    /// Moves a run Run asked for one frame on: from asked to painted, then it is made.
+    pub(crate) fn sd_advance(&mut self) {
+        match self.sd.pending {
+            Pending::Idle => {}
+            Pending::Asked => self.sd.pending = Pending::Shown,
+            Pending::Shown => self.sd_run_now(),
+        }
+    }
+
+    /// Puts `results` on show in place of the last: their series are parsed afresh when drawn.
+    fn sd_show(&mut self, results: Value) {
+        self.sd.results = Some(Rc::new(results));
+        self.sd.plots.borrow_mut().clear();
     }
 
     /// Makes the run Run asked for: the model's own, or for a model with a random function the
     /// Runs and Seed fields'. One too large for the window is refused.
     pub(crate) fn sd_run_now(&mut self) {
-        self.sd.pending = false;
+        self.sd.pending = Pending::Idle;
         let info = self.sd_info();
         let random = info["random"].as_bool().unwrap_or(false);
         let runs = self.sd.runs.round().clamp(1.0, MOST_RUNS);
@@ -676,7 +753,7 @@ impl App {
         match self.engine.execute("sd.run", params) {
             Ok(results) => {
                 let n = results["replications"].as_u64().unwrap_or(1);
-                self.sd.results = Some(Rc::new(results));
+                self.sd_show(results);
                 self.info(tn(n, "Finished {n} run", "Finished {n} runs"));
             }
             Err(e) => self.report_error(e.message),
@@ -686,7 +763,7 @@ impl App {
     /// An agent's `sd.run` ran: its results are the ones on show.
     pub(crate) fn sd_ran(&mut self, results: Value) {
         let n = results["replications"].as_u64().unwrap_or(1);
-        self.sd.results = Some(Rc::new(results));
+        self.sd_show(results);
         self.info(tn(n, "Finished {n} run", "Finished {n} runs"));
     }
 
@@ -743,7 +820,7 @@ impl App {
             .map_or_else(|| self.document_name(), str::to_owned)
     }
 
-    /// The Model tab of a system dynamics model: read-only for now.
+    /// The Model tab of a system dynamics model: read-only in the window for now.
     pub(crate) fn sd_model_view(&mut self, ui: &mut egui::Ui) {
         let p = theme::palette(ui.ctx());
         let info = self.sd_info();
@@ -758,7 +835,7 @@ impl App {
                 ui.add(
                     egui::Label::new(theme::weak(
                         ui,
-                        t("This is the model as its file has it. Editing comes next."),
+                        t("You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next."),
                     ))
                     .wrap(),
                 );
@@ -874,6 +951,9 @@ impl App {
         let info = self.sd_info();
         let random = info["random"].as_bool().unwrap_or(false);
         let results = self.sd.results.clone();
+        let plots = Rc::clone(&self.sd.plots);
+        // Not while a run is on its way, which will replace them.
+        let stale = self.sd_results_stale() && !self.sd_pending();
         let mut runs = self.sd.runs;
         let mut seed = self.sd.seed;
         let mut table = self.sd.table;
@@ -931,6 +1011,10 @@ impl App {
                     return;
                 };
                 ui.add_space(8.0);
+                if stale {
+                    run |= self.out_of_date_line(ui);
+                    ui.add_space(6.0);
+                }
                 let n = results["replications"].as_u64().unwrap_or(1);
                 ui.label(theme::weak(
                     ui,
@@ -993,7 +1077,7 @@ impl App {
                     ui.add(
                         egui::Label::new(theme::weak(
                             ui,
-                            t("Solid line: median. Dashed line: mean. Shaded band: 9 runs in 10 fell inside it (5th to 95th percentile)."),
+                            t("Solid line: median. Dashed line: mean. Shaded band: 5th to 95th percentile, at each saved time."),
                         ))
                         .wrap(),
                     );
@@ -1007,7 +1091,13 @@ impl App {
                     if !shown.contains(&name) {
                         continue;
                     }
-                    let Some(plot) = plot_of(results, &name) else {
+                    // Parsed from the results' JSON once for the run, not on every repaint.
+                    let plot = plots
+                        .borrow_mut()
+                        .entry(name.clone())
+                        .or_insert_with(|| plot_of(results, &name).map(Rc::new))
+                        .clone();
+                    let Some(plot) = plot else {
                         continue;
                     };
                     let units = results["variables"]
@@ -1039,5 +1129,81 @@ impl App {
         if export {
             self.export_csv();
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::{picks, segments};
+
+    const NAN: f64 = f64::NAN;
+
+    #[test]
+    fn a_line_is_one_path_when_every_value_is_defined() {
+        let times = [0.0, 1.0, 2.0, 3.0];
+        let values = [5.0, 6.0, 7.0, 8.0];
+        let at: Vec<usize> = (0..4).collect();
+        assert_eq!(segments(&at, &[&times, &values]), vec![vec![0, 1, 2, 3]]);
+        assert!(segments(&[], &[&times, &values]).is_empty());
+    }
+
+    #[test]
+    fn an_undefined_value_breaks_the_line() {
+        // 1 / (TIME - 1) at TIME 1 is undefined: the engine writes null there.
+        let times = [0.0, 1.0, 2.0, 3.0, 4.0];
+        let values = [-1.0, NAN, 1.0, 0.5, 0.33];
+        let at: Vec<usize> = (0..5).collect();
+        assert_eq!(
+            segments(&at, &[&times, &values]),
+            vec![vec![0], vec![2, 3, 4]]
+        );
+        // A gap at the start or the end, and a time that is not defined either.
+        let values = [NAN, 1.0, 2.0, 3.0, NAN];
+        assert_eq!(segments(&at, &[&times, &values]), vec![vec![1, 2, 3]]);
+        let times = [0.0, NAN, 2.0, 3.0, 4.0];
+        let values = [1.0; 5];
+        assert_eq!(
+            segments(&at, &[&times, &values]),
+            vec![vec![0], vec![2, 3, 4]]
+        );
+        // Nothing defined: nothing to draw.
+        assert!(segments(&at, &[&[NAN; 5], &[NAN; 5]]).is_empty());
+    }
+
+    #[test]
+    fn thinning_does_not_bridge_a_gap_it_skipped() {
+        // Every other sample is drawn; the undefined one at 3 falls between picks 2 and 4.
+        let times = [0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0];
+        let values = [1.0, 1.0, 1.0, NAN, 1.0, 1.0, 1.0];
+        let at = [0, 2, 4, 6];
+        assert_eq!(
+            segments(&at, &[&times, &values]),
+            vec![vec![0, 2], vec![4, 6]]
+        );
+        // With no gap in what was skipped, the picks stay joined.
+        let values = [1.0; 7];
+        assert_eq!(segments(&at, &[&times, &values]), vec![vec![0, 2, 4, 6]]);
+    }
+
+    #[test]
+    fn several_columns_must_all_be_defined() {
+        // The band's ends: either end undefined breaks it.
+        let times = [0.0, 1.0, 2.0, 3.0];
+        let low = [0.0, 0.0, NAN, 0.0];
+        let high = [1.0, 1.0, 1.0, 1.0];
+        let at: Vec<usize> = (0..4).collect();
+        assert_eq!(
+            segments(&at, &[&times, &low, &high]),
+            vec![vec![0, 1], vec![3]]
+        );
+    }
+
+    #[test]
+    fn picks_keep_the_first_and_the_last() {
+        assert_eq!(picks(5, 10), vec![0, 1, 2, 3, 4]);
+        let p = picks(1000, 100);
+        assert_eq!(p.first(), Some(&0));
+        assert_eq!(p.last(), Some(&999));
+        assert!(p.len() <= 101);
     }
 }

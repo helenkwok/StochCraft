@@ -1340,9 +1340,9 @@ unit	yr	r.
 	Stock	Zasób
 	Flow	Przepływ
 	Auxiliary	Zmienna pomocnicza
-	{name} ends near {median}: 9 runs in 10 end between {low} and {high}.	{name} kończy w okolicach {median}: 9 na 10 uruchomień kończy między {low} a {high}.
+	{name} ends near {median} (median); its 5th to 95th percentiles at the end are {low} and {high}.	{name} kończy w okolicach {median} (mediana); jego 5. i 95. percentyl na końcu to {low} i {high}.
 	{name} ends at {value}.	{name} kończy na {value}.
-	{name} at {time}: median {median}, mean {mean}, 9 runs in 10 between {low} and {high}	{name} w chwili {time}: mediana {median}, średnia {mean}, 9 na 10 uruchomień między {low} a {high}
+	{name} at {time}: median {median}, mean {mean}, 5th to 95th percentiles {low} and {high}	{name} w chwili {time}: mediana {median}, średnia {mean}, 5. i 95. percentyl {low} i {high}
 	{name} at {time}: {value}	{name} w chwili {time}: {value}
 	Time	Czas
 	Time ({unit})	Czas ({unit})
@@ -1350,12 +1350,11 @@ unit	yr	r.
 	{name} median	{name}, mediana
 	{name} 5th percentile	{name}, 5. percentyl
 	{name} 95th percentile	{name}, 95. percentyl
-	Saving system dynamics models comes with editing.	Zapisywanie modeli dynamiki systemów pojawi się razem z edycją.
 	This run is too large to make in the window: shorten it, raise the time step or lower the runs, or run it from the command line.	To uruchomienie jest zbyt duże, by wykonać je w oknie: skróć je, zwiększ krok czasu lub zmniejsz liczbę uruchomień, albo uruchom je z wiersza poleceń.
 	The model: its settings and variables	Model: jego ustawienia i zmienne
 	System dynamics model	Model dynamiki systemów
 	Variables	Zmienne
-	This is the model as its file has it. Editing comes next.	To jest model taki, jaki jest w swoim pliku. Edycja pojawi się później.
+	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	Ten model można zmieniać poleceniami, z agenta przez serwer MCP lub z wiersza poleceń. Edycja na kanwie pojawi się później.
 	From {start} to {stop}, in steps of {dt}, by the {method} method.	Od {start} do {stop}, krokami co {dt}, metodą {method}.
 	Notes from the file	Uwagi z pliku
 	Equation	Równanie
@@ -1367,7 +1366,7 @@ unit	yr	r.
 	Runs: {n} · seed {seed}	Uruchomienia: {n} · ziarno {seed}
 	One run	Jedno uruchomienie
 	Show on the chart	Pokaż na wykresie
-	Solid line: median. Dashed line: mean. Shaded band: 9 runs in 10 fell inside it (5th to 95th percentile).	Linia ciągła: mediana. Linia przerywana: średnia. Zacieniony pas: 9 na 10 uruchomień zmieściło się w nim (od 5. do 95. percentyla).
+	Solid line: median. Dashed line: mean. Shaded band: 5th to 95th percentile, at each saved time.	Linia ciągła: mediana. Linia przerywana: średnia. Zacieniony pas: od 5. do 95. percentyla, w każdej zapisanej chwili.
 	Pick a variable to see it over time.	Wybierz zmienną, aby zobaczyć ją w czasie.
 	{name} over time	{name} w czasie
 	Checked against its exact solution	Sprawdzono z jego dokładnym rozwiązaniem

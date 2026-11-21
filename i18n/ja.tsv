@@ -1340,9 +1340,9 @@ unit	yr	年
 	Stock	ストック
 	Flow	フロー
 	Auxiliary	補助変数
-	{name} ends near {median}: 9 runs in 10 end between {low} and {high}.	{name} は {median} 付近で終わります。10 回中 9 回は {low} から {high} の間で終わります。
+	{name} ends near {median} (median); its 5th to 95th percentiles at the end are {low} and {high}.	{name} は {median} 付近 (中央値) で終わります。終了時の 5 パーセンタイルと 95 パーセンタイルは {low} と {high} です。
 	{name} ends at {value}.	{name} は {value} で終わります。
-	{name} at {time}: median {median}, mean {mean}, 9 runs in 10 between {low} and {high}	{time} での {name}: 中央値 {median}、平均 {mean}、10 回中 9 回は {low} から {high} の間
+	{name} at {time}: median {median}, mean {mean}, 5th to 95th percentiles {low} and {high}	{time} での {name}: 中央値 {median}、平均 {mean}、5 パーセンタイルと 95 パーセンタイル {low} と {high}
 	{name} at {time}: {value}	{time} での {name}: {value}
 	Time	時間
 	Time ({unit})	時間 ({unit})
@@ -1350,12 +1350,11 @@ unit	yr	年
 	{name} median	{name} の中央値
 	{name} 5th percentile	{name} の 5 パーセンタイル
 	{name} 95th percentile	{name} の 95 パーセンタイル
-	Saving system dynamics models comes with editing.	システムダイナミクスのモデルの保存は、編集機能とともに提供されます。
 	This run is too large to make in the window: shorten it, raise the time step or lower the runs, or run it from the command line.	この実行はウィンドウで行うには大きすぎます。短くするか、時間刻みを大きくするか、実行回数を減らすか、コマンドラインから実行してください。
 	The model: its settings and variables	モデル: 設定と変数
 	System dynamics model	システムダイナミクスのモデル
 	Variables	変数
-	This is the model as its file has it. Editing comes next.	ファイルにあるとおりのモデルです。編集機能は次に追加されます。
+	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	このモデルは、エージェントから MCP サーバー経由で、またはコマンドラインから、コマンドで変更できます。キャンバス上での編集は次に追加されます。
 	From {start} to {stop}, in steps of {dt}, by the {method} method.	{start} から {stop} まで、{dt} 刻み、{method} 法。
 	Notes from the file	ファイルからの注記
 	Equation	方程式
@@ -1367,7 +1366,7 @@ unit	yr	年
 	Runs: {n} · seed {seed}	実行回数: {n} · 乱数シード {seed}
 	One run	1 回の実行
 	Show on the chart	グラフに表示
-	Solid line: median. Dashed line: mean. Shaded band: 9 runs in 10 fell inside it (5th to 95th percentile).	実線: 中央値。破線: 平均。色付きの帯: 10 回中 9 回がその内側に入りました (5 から 95 パーセンタイル)。
+	Solid line: median. Dashed line: mean. Shaded band: 5th to 95th percentile, at each saved time.	実線: 中央値。破線: 平均。色付きの帯: 保存された各時刻での 5 から 95 パーセンタイル。
 	Pick a variable to see it over time.	時間変化を見る変数を選んでください。
 	{name} over time	{name} の時間変化
 	Checked against its exact solution	厳密解で確認済み

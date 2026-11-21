@@ -1340,9 +1340,9 @@ unit	yr	år
 	Stock	Lager
 	Flow	Flöde
 	Auxiliary	Hjälpvariabel
-	{name} ends near {median}: 9 runs in 10 end between {low} and {high}.	{name} slutar nära {median}: 9 av 10 körningar slutar mellan {low} och {high}.
+	{name} ends near {median} (median); its 5th to 95th percentiles at the end are {low} and {high}.	{name} slutar nära {median} (median); dess 5:e och 95:e percentil i slutet är {low} och {high}.
 	{name} ends at {value}.	{name} slutar på {value}.
-	{name} at {time}: median {median}, mean {mean}, 9 runs in 10 between {low} and {high}	{name} vid {time}: median {median}, medelvärde {mean}, 9 av 10 körningar mellan {low} och {high}
+	{name} at {time}: median {median}, mean {mean}, 5th to 95th percentiles {low} and {high}	{name} vid {time}: median {median}, medelvärde {mean}, 5:e och 95:e percentilen {low} och {high}
 	{name} at {time}: {value}	{name} vid {time}: {value}
 	Time	Tid
 	Time ({unit})	Tid ({unit})
@@ -1350,12 +1350,11 @@ unit	yr	år
 	{name} median	{name}, median
 	{name} 5th percentile	{name}, 5:e percentilen
 	{name} 95th percentile	{name}, 95:e percentilen
-	Saving system dynamics models comes with editing.	Att spara systemdynamiska modeller kommer tillsammans med redigering.
 	This run is too large to make in the window: shorten it, raise the time step or lower the runs, or run it from the command line.	Den här körningen är för stor för att göras i fönstret: korta ner den, öka tidssteget eller minska antalet körningar, eller kör den från kommandoraden.
 	The model: its settings and variables	Modellen: dess inställningar och variabler
 	System dynamics model	Systemdynamisk modell
 	Variables	Variabler
-	This is the model as its file has it. Editing comes next.	Det här är modellen så som den står i sin fil. Redigering kommer härnäst.
+	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	Du kan ändra den här modellen med kommandon, från en agent via MCP-servern eller från kommandoraden. Redigering på arbetsytan kommer härnäst.
 	From {start} to {stop}, in steps of {dt}, by the {method} method.	Från {start} till {stop}, i steg om {dt}, med {method}-metoden.
 	Notes from the file	Anteckningar från filen
 	Equation	Ekvation
@@ -1367,7 +1366,7 @@ unit	yr	år
 	Runs: {n} · seed {seed}	Körningar: {n} · frö {seed}
 	One run	En körning
 	Show on the chart	Visa i diagrammet
-	Solid line: median. Dashed line: mean. Shaded band: 9 runs in 10 fell inside it (5th to 95th percentile).	Heldragen linje: median. Streckad linje: medelvärde. Skuggat band: 9 av 10 körningar låg inom det (5:e till 95:e percentilen).
+	Solid line: median. Dashed line: mean. Shaded band: 5th to 95th percentile, at each saved time.	Heldragen linje: median. Streckad linje: medelvärde. Skuggat band: 5:e till 95:e percentilen, vid varje sparad tidpunkt.
 	Pick a variable to see it over time.	Välj en variabel för att se den över tid.
 	{name} over time	{name} över tid
 	Checked against its exact solution	Kontrollerad mot dess exakta lösning

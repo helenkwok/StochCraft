@@ -30,8 +30,10 @@ impl App {
             // Waiting for the user's answer: leave the copy alone.
             return Autosave::Keep;
         }
-        // A system dynamics model has no changes to recover: it cannot be edited yet.
-        if !self.unsaved_changes() || self.quitting {
+        // No recovery copy of a system dynamics model: the copy is the process model's JSON, and
+        // recovery copies are process models only for now. Its unsaved changes are still asked
+        // about on closing.
+        if !self.unsaved_changes() || self.is_sd() || self.quitting {
             if self.autosaved.take().is_some() || self.autosave_clear_pending {
                 self.autosave_clear_pending = false;
                 return Autosave::Clear;

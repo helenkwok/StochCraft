@@ -1340,9 +1340,9 @@ unit	yr	a
 	Stock	Stoc
 	Flow	Flux
 	Auxiliary	Variabilă auxiliară
-	{name} ends near {median}: 9 runs in 10 end between {low} and {high}.	{name} se încheie aproape de {median}: 9 din 10 rulări se încheie între {low} și {high}.
+	{name} ends near {median} (median); its 5th to 95th percentiles at the end are {low} and {high}.	{name} se încheie aproape de {median} (mediană); percentilele 5 și 95 la final sunt {low} și {high}.
 	{name} ends at {value}.	{name} se încheie la {value}.
-	{name} at {time}: median {median}, mean {mean}, 9 runs in 10 between {low} and {high}	{name} la {time}: mediană {median}, medie {mean}, 9 din 10 rulări între {low} și {high}
+	{name} at {time}: median {median}, mean {mean}, 5th to 95th percentiles {low} and {high}	{name} la {time}: mediană {median}, medie {mean}, percentilele 5 și 95 {low} și {high}
 	{name} at {time}: {value}	{name} la {time}: {value}
 	Time	Timp
 	Time ({unit})	Timp ({unit})
@@ -1350,12 +1350,11 @@ unit	yr	a
 	{name} median	{name}, mediană
 	{name} 5th percentile	{name}, percentila 5
 	{name} 95th percentile	{name}, percentila 95
-	Saving system dynamics models comes with editing.	Salvarea modelelor de dinamică a sistemelor va veni odată cu editarea.
 	This run is too large to make in the window: shorten it, raise the time step or lower the runs, or run it from the command line.	Această rulare este prea mare pentru a fi făcută în fereastră: scurtați-o, măriți pasul de timp sau reduceți rulările, ori rulați-o din linia de comandă.
 	The model: its settings and variables	Modelul: setările și variabilele sale
 	System dynamics model	Model de dinamică a sistemelor
 	Variables	Variabile
-	This is the model as its file has it. Editing comes next.	Acesta este modelul așa cum este în fișierul său. Editarea vine mai târziu.
+	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	Puteți modifica acest model cu comenzi, dintr-un agent prin serverul MCP sau din linia de comandă. Editarea pe canava vine mai târziu.
 	From {start} to {stop}, in steps of {dt}, by the {method} method.	De la {start} la {stop}, în pași de {dt}, prin metoda {method}.
 	Notes from the file	Note din fișier
 	Equation	Ecuație
@@ -1367,7 +1366,7 @@ unit	yr	a
 	Runs: {n} · seed {seed}	Rulări: {n} · sămânță {seed}
 	One run	O rulare
 	Show on the chart	Arată în grafic
-	Solid line: median. Dashed line: mean. Shaded band: 9 runs in 10 fell inside it (5th to 95th percentile).	Linie continuă: mediană. Linie întreruptă: medie. Bandă umbrită: 9 din 10 rulări au căzut în ea (de la percentila 5 la 95).
+	Solid line: median. Dashed line: mean. Shaded band: 5th to 95th percentile, at each saved time.	Linie continuă: mediană. Linie întreruptă: medie. Bandă umbrită: de la percentila 5 la 95, la fiecare moment salvat.
 	Pick a variable to see it over time.	Alegeți o variabilă ca s-o vedeți în timp.
 	{name} over time	{name} în timp
 	Checked against its exact solution	Verificat față de soluția sa exactă

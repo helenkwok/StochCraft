@@ -1,8 +1,8 @@
 //! System dynamics models in the window, as a user would use them: the example opened from the
 //! start page, its variables listed on the Model tab, a run, the chart and the table on the
-//! Results tab; a model with a random function run in replications, with the band; and Save
-//! refused, so an XMILE file is never overwritten with the engine's empty process model
-//! (egui_kittest, through the accessibility tree; nothing is rendered).
+//! Results tab; a model with a random function run in replications, with the band; a model
+//! changed by a command, which is unsaved, saves as XMILE that reopens to the change, and whose
+//! results are marked out of date (egui_kittest, through the accessibility tree; nothing is rendered).
 
 #![allow(clippy::panic, clippy::expect_used)] // A widget or value missing fails the test.
 
@@ -93,12 +93,38 @@ fn variable<'a>(results: &'a Value, name: &str) -> &'a Value {
         .unwrap_or(&NULL)
 }
 
-/// Runs the model on screen: Run is made on the frame after it is pressed.
+/// Runs the model on screen: the frame after Run is pressed paints "Running…", the one after
+/// makes the run.
 fn run(h: &mut Harness<'static, App>) {
     h.state_mut().run();
     h.step();
     h.step();
+    h.step();
     settle(h);
+}
+
+/// The equation of variable `name` in the model that the XMILE `bytes` hold.
+fn equation_in(bytes: &[u8], name: &str) -> String {
+    let mut engine = Engine::new();
+    engine
+        .open_bytes("saved.xmile", bytes, None)
+        .expect("the saved bytes open as a model");
+    let info = engine.execute("sd.get", json!({})).expect("sd.get");
+    info["variables"]
+        .as_array()
+        .and_then(|vs| vs.iter().find(|v| v["name"] == name))
+        .and_then(|v| v["equation"].as_str())
+        .unwrap_or("")
+        .to_owned()
+}
+
+/// Changes the adoption rate of the open model, as an agent's command does.
+fn change_innovation(app: &mut App) {
+    app.control(
+        "sd.variable.set",
+        json!({ "name": "innovation", "equation": "0.05" }),
+    )
+    .expect("the edit applies");
 }
 
 /// The bundled adoption model follows the exact solution of its equations: a potential customer
@@ -122,7 +148,9 @@ fn the_adoption_example_follows_its_exact_solution() {
     let customers = floats(&variable(&r, "Customers")["mean"]);
     let potential = floats(&variable(&r, "Potential customers")["mean"]);
     assert_eq!(times.len(), 49);
-    assert_eq!(times.len(), customers.len());
+    // A column that fell short would end the comparison below early, unseen.
+    assert_eq!(potential.len(), times.len());
+    assert_eq!(customers.len(), times.len());
     for ((t, a), left) in times.iter().zip(&customers).zip(&potential) {
         let decay = stochcraft_random::math::exp(-(p + q) * t);
         let exact = n * (1.0 - decay) / (1.0 + (q / p) * decay);
@@ -147,8 +175,9 @@ fn the_example_opens_runs_and_charts_its_stocks() {
     assert!(h.query_by_role_and_label(Role::Tab, "Results").is_some());
     assert!(h.query_by_role_and_label(Role::Tab, "3D").is_none());
     assert!(h.query_all_by_label("System dynamics model").count() >= 1);
-    // Read-only for now, and says so.
-    h.get_by_label_contains("Editing comes next");
+    // Not edited in the window yet: it says how the model can be changed, and what comes next.
+    h.get_by_label_contains("change this model with commands");
+    h.get_by_label_contains("Editing it on the canvas comes next");
     // Its settings, in a sentence, and its variables in a table, with a stock's flows.
     h.get_by_label_contains(
         "From 0 Years to 12 Years, in steps of 0.125 Years, by the RK4 method.",
@@ -242,10 +271,11 @@ fn a_model_with_a_random_function_runs_in_replications_with_a_band() {
     assert_eq!(results["replications"], 40);
     assert_eq!(status, "Finished 40 runs");
 
-    // The answer in words says where 9 runs in 10 end; the chart has a band and says what it is.
+    // The answer in words gives the median and the percentiles it ends between; the chart has a
+    // band and says what it is.
     h.get_by_label_contains("w ends near");
-    h.get_by_label_contains("9 runs in 10 end between");
-    h.get_by_label_contains("9 runs in 10 fell inside it");
+    h.get_by_label_contains("(median); its 5th to 95th percentiles at the end are");
+    h.get_by_label_contains("Shaded band: 5th to 95th percentile, at each saved time.");
     assert!(h.query_all_by_label("w over time").count() >= 1);
     let line = h.state().sd_plotted("w").expect("a line");
     let band = h.state().sd_plotted_band("w").expect("a band");
@@ -256,56 +286,144 @@ fn a_model_with_a_random_function_runs_in_replications_with_a_band() {
         assert!(low <= middle && middle <= high, "{low} {middle} {high}");
     }
     assert!(band.iter().skip(1).any(|(low, high)| high > low));
-    // The same seed gives the same runs.
-    let first = h.state().sd_results().cloned();
+    // Another seed gives other runs, and says which seed they are of; the first seed again gives
+    // the first runs again.
+    let first = h.state().sd_results().cloned().expect("the first results");
+    assert_eq!(first["seed"], 1);
+    type_into(&mut h, Role::TextInput, "Seed", "7");
     click(&mut h, Role::Button, "Run again");
-    assert_eq!(
-        h.state().sd_results().map(|r| &r["variables"]),
-        first.as_ref().map(|r| &r["variables"])
-    );
+    let other = h.state().sd_results().cloned().expect("results of seed 7");
+    assert_eq!(other["seed"], 7);
+    assert_ne!(other["variables"], first["variables"]);
+    type_into(&mut h, Role::TextInput, "Seed", "1");
+    click(&mut h, Role::Button, "Run again");
+    let again = h.state().sd_results().cloned().expect("results of seed 1");
+    assert_eq!(again["seed"], 1);
+    assert_eq!(again["variables"], first["variables"]);
 }
 
-/// Saving would write the engine's empty process model over the XMILE file, so every way of
-/// saving is refused with the reason, and nothing is asked of the shell.
+/// A model changed by a command is unsaved; Save writes XMILE (the engine's), which reopens to
+/// the change; once the shell has written it, nothing is unsaved. In the browser the bytes are
+/// offered as a download under the file's name, and the model stays marked unsaved, as it is
+/// not known whether the user kept the file.
 #[test]
-fn save_is_refused_and_writes_nothing() {
-    let message = "Saving system dynamics models comes with editing.";
+fn a_changed_model_saves_as_xmile_that_reopens_to_the_change() {
     for platform in [Platform::DESKTOP, Platform::BROWSER] {
+        let desktop = platform.file_system;
         let mut app = english(App::new(platform));
         let e = adoption();
         app.open_path("/models/adoption.xmile", e.bytes);
         assert!(app.is_system_dynamics());
         assert!(app.status().starts_with("Opened adoption.xmile"));
+        assert!(!app.has_unsaved_changes());
+        assert!(!app.title().contains('•'));
+
+        change_innovation(&mut app);
+        assert!(app.has_unsaved_changes());
+        assert!(app.title().contains('•'));
+        assert!(!matches!(app.autosave(), Autosave::Write(_)));
 
         app.save();
-        assert!(app.take_requests().is_empty(), "Save asked the shell");
-        assert_eq!(app.status(), message);
-        app.report_error("reset");
-        app.save_as();
-        assert!(app.take_requests().is_empty(), "Save As asked the shell");
-        assert_eq!(app.status(), message);
-        app.report_error("reset");
-        // An answer from the Save dialog, or from a write that was under way.
-        app.save_to("/models/adoption.xmile");
-        assert!(app.take_requests().is_empty());
-        assert_eq!(app.status(), message);
-        app.report_error("reset");
-        app.written("/models/adoption.xmile", b"<xmile/>");
-        assert_eq!(app.status(), message);
-        assert!(app.is_system_dynamics(), "the model is still open");
-        assert!(app.take_requests().is_empty());
+        let requests = app.take_requests();
+        let bytes = match requests.as_slice() {
+            [Request::Write { path, bytes }] if desktop => {
+                assert_eq!(path, "/models/adoption.xmile");
+                bytes
+            }
+            [Request::Download { name, bytes }] if !desktop => {
+                assert_eq!(name, "/models/adoption.xmile");
+                bytes
+            }
+            other => panic!("expected one write or download, got {other:?}"),
+        };
+        let text = String::from_utf8_lossy(bytes);
+        assert!(text.contains("<xmile"), "not XMILE: {text}");
+        assert_eq!(equation_in(bytes, "innovation"), "0.05");
+        assert_eq!(equation_in(e.bytes, "innovation"), "0.03");
 
-        // Even with the empty process model beside it changed, there is nothing to save: no
-        // unsaved-changes question when closing, and no recovery copy to keep.
-        assert!(
-            app.execute("model.rename", json!({ "name": "Renamed" }))
-                .is_some()
-        );
-        assert!(app.engine().is_dirty());
-        assert!(!app.has_unsaved_changes());
-        assert!(!matches!(app.autosave(), Autosave::Write(_)));
-        assert!(app.close_requested());
+        // Nothing is saved until the shell says so.
+        assert!(app.has_unsaved_changes());
+        if desktop {
+            app.written("/models/adoption.xmile", bytes);
+            assert_eq!(app.status(), "Saved adoption.xmile");
+            assert!(!app.has_unsaved_changes());
+            assert!(!app.title().contains('•'));
+            assert!(app.close_requested());
+        } else {
+            app.downloaded("/models/adoption.xmile");
+            assert!(app.has_unsaved_changes());
+        }
+        assert!(app.is_system_dynamics(), "the model is still open");
+
+        // Edited again, it is unsaved again.
+        app.control(
+            "sd.variable.set",
+            json!({ "name": "innovation", "equation": "0.06" }),
+        )
+        .expect("the second edit applies");
+        assert!(app.has_unsaved_changes());
     }
+}
+
+/// Save As suggests, and writes, an XMILE file's name.
+#[test]
+fn save_as_names_an_xmile_file() {
+    let mut app = english(App::new(Platform::DESKTOP));
+    let e = adoption();
+    app.open_file(e.file, e.bytes);
+    change_innovation(&mut app);
+    app.save_as();
+    let requests = app.take_requests();
+    assert!(
+        matches!(
+            requests.as_slice(),
+            [Request::PickSave { name, xpdl: false }] if name == "adoption.xmile"
+        ),
+        "{requests:?}"
+    );
+    // A name chosen without the extension, or with a process model's, becomes an XMILE file's.
+    app.save_to("/models/copy.bpmn");
+    let requests = app.take_requests();
+    let [Request::Write { path, bytes }] = requests.as_slice() else {
+        panic!("expected one write, got {requests:?}");
+    };
+    assert_eq!(path, "/models/copy.xmile");
+    assert_eq!(equation_in(bytes, "innovation"), "0.05");
+    app.written(path, bytes);
+    assert!(!app.has_unsaved_changes());
+    assert!(app.title().starts_with("copy.xmile"), "{}", app.title());
+}
+
+/// A run, then a change: the Results tab says the results are out of date, as a process model's
+/// do, until it is run again.
+#[test]
+fn results_are_marked_out_of_date_once_the_model_is_changed() {
+    let mut h = harness();
+    let e = adoption();
+    h.state_mut().open_file(e.file, e.bytes);
+    settle(&mut h);
+    click(&mut h, Role::Tab, "Results");
+    run(&mut h);
+    assert!(h.state().sd_results().is_some());
+    assert!(h.query_by_label("Out of date:").is_none());
+    assert!(h.query_by_label("· out of date").is_none());
+
+    change_innovation(h.state_mut());
+    settle(&mut h);
+    h.get_by_label("Out of date:");
+    h.get_by_label("· out of date");
+    // The old results stay on show, marked.
+    h.get_by_label_contains("Customers ends at 9,087");
+
+    click(&mut h, Role::Button, "Run again");
+    assert!(h.query_by_label("Out of date:").is_none());
+    assert!(h.query_by_label("· out of date").is_none());
+    assert!(
+        h.state()
+            .sd_results()
+            .is_some_and(|r| variable(r, "Customers")["final"].as_f64().unwrap_or(0.0) > 9_087.0),
+        "the new run is of the changed model"
+    );
 }
 
 #[test]
@@ -329,6 +447,17 @@ fn a_file_that_cannot_be_read_is_refused_with_the_engines_message() {
     app.open_file(e.file, e.bytes);
     let arrays = "<xmile version=\"1.0\"><header><options><uses_arrays/></options></header><sim_specs><start>0</start><stop>1</stop></sim_specs><model><variables/></model></xmile>";
     app.open_file("arrays.xmile", arrays.as_bytes());
-    assert!(app.status().contains("arrays"), "{}", app.status());
+    // The engine's own text, naming the file and what it cannot read.
+    assert!(
+        app.status().contains(
+            "arrays.xmile: the file uses arrays (<uses_arrays>), which are not supported in this version"
+        ),
+        "{}",
+        app.status()
+    );
+    // What was open stays: the example, by its name, with nothing changed in it.
     assert!(app.is_system_dynamics());
+    assert_eq!(app.engine().system_dynamics_path(), Some("adoption.xmile"));
+    assert!(app.title().starts_with("adoption.xmile"), "{}", app.title());
+    assert!(!app.has_unsaved_changes());
 }

@@ -1340,9 +1340,9 @@ unit	yr	J.
 	Stock	Bestand
 	Flow	Fluss
 	Auxiliary	Hilfsgröße
-	{name} ends near {median}: 9 runs in 10 end between {low} and {high}.	{name} endet bei etwa {median}: 9 von 10 Läufen enden zwischen {low} und {high}.
+	{name} ends near {median} (median); its 5th to 95th percentiles at the end are {low} and {high}.	{name} endet bei etwa {median} (Median); das 5. und das 95. Perzentil am Ende sind {low} und {high}.
 	{name} ends at {value}.	{name} endet bei {value}.
-	{name} at {time}: median {median}, mean {mean}, 9 runs in 10 between {low} and {high}	{name} bei {time}: Median {median}, Mittelwert {mean}, 9 von 10 Läufen zwischen {low} und {high}
+	{name} at {time}: median {median}, mean {mean}, 5th to 95th percentiles {low} and {high}	{name} bei {time}: Median {median}, Mittelwert {mean}, 5. und 95. Perzentil {low} und {high}
 	{name} at {time}: {value}	{name} bei {time}: {value}
 	Time	Zeit
 	Time ({unit})	Zeit ({unit})
@@ -1350,12 +1350,11 @@ unit	yr	J.
 	{name} median	{name}, Median
 	{name} 5th percentile	{name}, 5. Perzentil
 	{name} 95th percentile	{name}, 95. Perzentil
-	Saving system dynamics models comes with editing.	Das Speichern von System-Dynamics-Modellen kommt mit dem Bearbeiten.
 	This run is too large to make in the window: shorten it, raise the time step or lower the runs, or run it from the command line.	Dieser Lauf ist zu groß für das Fenster: Verkürzen Sie ihn, vergrößern Sie den Zeitschritt oder verringern Sie die Läufe, oder starten Sie ihn über die Befehlszeile.
 	The model: its settings and variables	Das Modell: seine Einstellungen und Variablen
 	System dynamics model	System-Dynamics-Modell
 	Variables	Variablen
-	This is the model as its file has it. Editing comes next.	Dies ist das Modell, wie es in seiner Datei steht. Das Bearbeiten folgt als Nächstes.
+	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	Dieses Modell lässt sich mit Befehlen ändern, von einem Agenten über den MCP-Server oder von der Befehlszeile aus. Das Bearbeiten auf der Zeichenfläche folgt als Nächstes.
 	From {start} to {stop}, in steps of {dt}, by the {method} method.	Von {start} bis {stop}, in Schritten von {dt}, mit dem Verfahren {method}.
 	Notes from the file	Hinweise aus der Datei
 	Equation	Gleichung
@@ -1367,7 +1366,7 @@ unit	yr	J.
 	Runs: {n} · seed {seed}	Läufe: {n} · Startwert {seed}
 	One run	Ein Lauf
 	Show on the chart	Im Diagramm zeigen
-	Solid line: median. Dashed line: mean. Shaded band: 9 runs in 10 fell inside it (5th to 95th percentile).	Durchgezogene Linie: Median. Gestrichelte Linie: Mittelwert. Schattiertes Band: 9 von 10 Läufen lagen darin (5. bis 95. Perzentil).
+	Solid line: median. Dashed line: mean. Shaded band: 5th to 95th percentile, at each saved time.	Durchgezogene Linie: Median. Gestrichelte Linie: Mittelwert. Schattiertes Band: 5. bis 95. Perzentil, zu jedem gespeicherten Zeitpunkt.
 	Pick a variable to see it over time.	Wählen Sie eine Variable, um sie über die Zeit zu sehen.
 	{name} over time	{name} über die Zeit
 	Checked against its exact solution	Gegen die exakte Lösung geprüft

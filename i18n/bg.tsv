@@ -1340,9 +1340,9 @@ unit	yr	г.
 	Stock	Запас
 	Flow	Поток
 	Auxiliary	Спомагателна променлива
-	{name} ends near {median}: 9 runs in 10 end between {low} and {high}.	{name} завършва около {median}: 9 от 10 изпълнения завършват между {low} и {high}.
+	{name} ends near {median} (median); its 5th to 95th percentiles at the end are {low} and {high}.	{name} завършва около {median} (медиана); 5-ият и 95-ият персентил в края са {low} и {high}.
 	{name} ends at {value}.	{name} завършва на {value}.
-	{name} at {time}: median {median}, mean {mean}, 9 runs in 10 between {low} and {high}	{name} при {time}: медиана {median}, средна стойност {mean}, 9 от 10 изпълнения между {low} и {high}
+	{name} at {time}: median {median}, mean {mean}, 5th to 95th percentiles {low} and {high}	{name} при {time}: медиана {median}, средна стойност {mean}, 5-и и 95-и персентил {low} и {high}
 	{name} at {time}: {value}	{name} при {time}: {value}
 	Time	Време
 	Time ({unit})	Време ({unit})
@@ -1350,12 +1350,11 @@ unit	yr	г.
 	{name} median	{name}, медиана
 	{name} 5th percentile	{name}, 5-и персентил
 	{name} 95th percentile	{name}, 95-и персентил
-	Saving system dynamics models comes with editing.	Запазването на модели на системната динамика ще дойде с редактирането.
 	This run is too large to make in the window: shorten it, raise the time step or lower the runs, or run it from the command line.	Това изпълнение е твърде голямо за прозореца: направете го по-кратко, увеличете стъпката във времето или намалете изпълненията, или го стартирайте от командния ред.
 	The model: its settings and variables	Моделът: настройки и променливи
 	System dynamics model	Модел на системната динамика
 	Variables	Променливи
-	This is the model as its file has it. Editing comes next.	Това е моделът така, както е във файла си. Редактирането идва следващо.
+	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	Можете да променяте този модел с команди, от агент през MCP сървъра или от командния ред. Редактирането върху платното идва следващо.
 	From {start} to {stop}, in steps of {dt}, by the {method} method.	От {start} до {stop}, със стъпки от {dt}, по метода {method}.
 	Notes from the file	Бележки от файла
 	Equation	Уравнение
@@ -1367,7 +1366,7 @@ unit	yr	г.
 	Runs: {n} · seed {seed}	Изпълнения: {n} · начална стойност {seed}
 	One run	Едно изпълнение
 	Show on the chart	Показване в графиката
-	Solid line: median. Dashed line: mean. Shaded band: 9 runs in 10 fell inside it (5th to 95th percentile).	Плътна линия: медиана. Прекъсната линия: средна стойност. Оцветена лента: 9 от 10 изпълнения попаднаха в нея (от 5-и до 95-и персентил).
+	Solid line: median. Dashed line: mean. Shaded band: 5th to 95th percentile, at each saved time.	Плътна линия: медиана. Прекъсната линия: средна стойност. Оцветена лента: от 5-и до 95-и персентил, за всяко записано време.
 	Pick a variable to see it over time.	Изберете променлива, за да я видите във времето.
 	{name} over time	{name} във времето
 	Checked against its exact solution	Проверено спрямо точното му решение

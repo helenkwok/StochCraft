@@ -1340,9 +1340,9 @@ unit	yr	év
 	Stock	Készlet
 	Flow	Folyamat
 	Auxiliary	Segédváltozó
-	{name} ends near {median}: 9 runs in 10 end between {low} and {high}.	{name} nagyjából {median} értéknél ér véget: 10 futásból 9 {low} és {high} között ér véget.
+	{name} ends near {median} (median); its 5th to 95th percentiles at the end are {low} and {high}.	{name} nagyjából {median} értéknél ér véget (medián); az 5. és a 95. percentilis a végén {low} és {high}.
 	{name} ends at {value}.	{name} a végén {value}.
-	{name} at {time}: median {median}, mean {mean}, 9 runs in 10 between {low} and {high}	{name} a(z) {time} időpontban: medián {median}, átlag {mean}, 10 futásból 9 {low} és {high} között
+	{name} at {time}: median {median}, mean {mean}, 5th to 95th percentiles {low} and {high}	{name} a(z) {time} időpontban: medián {median}, átlag {mean}, 5. és 95. percentilis {low} és {high}
 	{name} at {time}: {value}	{name} a(z) {time} időpontban: {value}
 	Time	Idő
 	Time ({unit})	Idő ({unit})
@@ -1350,12 +1350,11 @@ unit	yr	év
 	{name} median	{name}, medián
 	{name} 5th percentile	{name}, 5. percentilis
 	{name} 95th percentile	{name}, 95. percentilis
-	Saving system dynamics models comes with editing.	A rendszerdinamikai modellek mentése a szerkesztéssel érkezik.
 	This run is too large to make in the window: shorten it, raise the time step or lower the runs, or run it from the command line.	Ez a futás túl nagy az ablakban való elvégzéshez: rövidítse le, növelje az időlépést vagy csökkentse a futások számát, vagy futtassa a parancssorból.
 	The model: its settings and variables	A modell: beállításai és változói
 	System dynamics model	Rendszerdinamikai modell
 	Variables	Változók
-	This is the model as its file has it. Editing comes next.	Ez a modell úgy, ahogy a fájljában van. A szerkesztés a következő lépés.
+	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	Ezt a modellt parancsokkal módosíthatja, ügynökkel az MCP-kiszolgálón át vagy a parancssorból. A vásznon való szerkesztés a következő lépés.
 	From {start} to {stop}, in steps of {dt}, by the {method} method.	{start} és {stop} között, {dt} lépésekkel, a(z) {method} módszerrel.
 	Notes from the file	Megjegyzések a fájlból
 	Equation	Egyenlet
@@ -1367,7 +1366,7 @@ unit	yr	év
 	Runs: {n} · seed {seed}	Futások: {n} · mag {seed}
 	One run	Egy futás
 	Show on the chart	Megjelenítés a diagramon
-	Solid line: median. Dashed line: mean. Shaded band: 9 runs in 10 fell inside it (5th to 95th percentile).	Folytonos vonal: medián. Szaggatott vonal: átlag. Árnyékolt sáv: 10 futásból 9 ebbe esett (az 5. és a 95. percentilis között).
+	Solid line: median. Dashed line: mean. Shaded band: 5th to 95th percentile, at each saved time.	Folytonos vonal: medián. Szaggatott vonal: átlag. Árnyékolt sáv: az 5. és a 95. percentilis között, minden mentett időpontban.
 	Pick a variable to see it over time.	Válasszon egy változót, hogy lássa az időben.
 	{name} over time	{name} az időben
 	Checked against its exact solution	Pontos megoldásával ellenőrizve

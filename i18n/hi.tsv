@@ -1340,9 +1340,9 @@ unit	yr	वर्ष
 	Stock	स्टॉक
 	Flow	प्रवाह
 	Auxiliary	सहायक चर
-	{name} ends near {median}: 9 runs in 10 end between {low} and {high}.	{name} लगभग {median} पर समाप्त होता है: 10 में से 9 रन {low} और {high} के बीच समाप्त होते हैं।
+	{name} ends near {median} (median); its 5th to 95th percentiles at the end are {low} and {high}.	{name} लगभग {median} पर समाप्त होता है (माध्यिका); अंत में इसके 5वें और 95वें प्रतिशतक {low} और {high} हैं।
 	{name} ends at {value}.	{name} {value} पर समाप्त होता है।
-	{name} at {time}: median {median}, mean {mean}, 9 runs in 10 between {low} and {high}	{time} पर {name}: माध्यिका {median}, माध्य {mean}, 10 में से 9 रन {low} और {high} के बीच
+	{name} at {time}: median {median}, mean {mean}, 5th to 95th percentiles {low} and {high}	{time} पर {name}: माध्यिका {median}, माध्य {mean}, 5वाँ और 95वाँ प्रतिशतक {low} और {high}
 	{name} at {time}: {value}	{time} पर {name}: {value}
 	Time	समय
 	Time ({unit})	समय ({unit})
@@ -1350,12 +1350,11 @@ unit	yr	वर्ष
 	{name} median	{name}, माध्यिका
 	{name} 5th percentile	{name}, 5वाँ प्रतिशतक
 	{name} 95th percentile	{name}, 95वाँ प्रतिशतक
-	Saving system dynamics models comes with editing.	सिस्टम डायनामिक्स मॉडल सहेजना संपादन के साथ आएगा।
 	This run is too large to make in the window: shorten it, raise the time step or lower the runs, or run it from the command line.	यह रन विंडो में चलाने के लिए बहुत बड़ा है: इसे छोटा करें, समय का चरण बढ़ाएँ या रन घटाएँ, या इसे कमांड लाइन से चलाएँ।
 	The model: its settings and variables	मॉडल: इसकी सेटिंग और चर
 	System dynamics model	सिस्टम डायनामिक्स मॉडल
 	Variables	चर
-	This is the model as its file has it. Editing comes next.	यह मॉडल वैसा ही है जैसा उसकी फ़ाइल में है। संपादन आगे आएगा।
+	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	आप इस मॉडल को कमांड से बदल सकते हैं: एजेंट से MCP सर्वर के ज़रिए, या कमांड लाइन से। कैनवास पर संपादन आगे आएगा।
 	From {start} to {stop}, in steps of {dt}, by the {method} method.	{start} से {stop} तक, {dt} के चरणों में, {method} विधि से।
 	Notes from the file	फ़ाइल से टिप्पणियाँ
 	Equation	समीकरण
@@ -1367,7 +1366,7 @@ unit	yr	वर्ष
 	Runs: {n} · seed {seed}	रन: {n} · बीज {seed}
 	One run	एक रन
 	Show on the chart	चार्ट में दिखाएँ
-	Solid line: median. Dashed line: mean. Shaded band: 9 runs in 10 fell inside it (5th to 95th percentile).	ठोस रेखा: माध्यिका। बिंदीदार रेखा: माध्य। छायांकित पट्टी: 10 में से 9 रन इसके भीतर आए (5वें से 95वें प्रतिशतक तक)।
+	Solid line: median. Dashed line: mean. Shaded band: 5th to 95th percentile, at each saved time.	ठोस रेखा: माध्यिका। बिंदीदार रेखा: माध्य। छायांकित पट्टी: 5वें से 95वें प्रतिशतक तक, हर सहेजे गए समय पर।
 	Pick a variable to see it over time.	समय के साथ देखने के लिए कोई चर चुनें।
 	{name} over time	समय के साथ {name}
 	Checked against its exact solution	इसके सटीक हल से जाँचा गया

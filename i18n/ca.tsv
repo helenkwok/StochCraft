@@ -1340,9 +1340,9 @@ unit	yr	a
 	Stock	Estoc
 	Flow	Flux
 	Auxiliary	Variable auxiliar
-	{name} ends near {median}: 9 runs in 10 end between {low} and {high}.	{name} acaba prop de {median}: 9 de cada 10 execucions acaben entre {low} i {high}.
+	{name} ends near {median} (median); its 5th to 95th percentiles at the end are {low} and {high}.	{name} acaba prop de {median} (mediana); els percentils 5 i 95 al final són {low} i {high}.
 	{name} ends at {value}.	{name} acaba en {value}.
-	{name} at {time}: median {median}, mean {mean}, 9 runs in 10 between {low} and {high}	{name} a {time}: mediana {median}, mitjana {mean}, 9 de cada 10 execucions entre {low} i {high}
+	{name} at {time}: median {median}, mean {mean}, 5th to 95th percentiles {low} and {high}	{name} a {time}: mediana {median}, mitjana {mean}, percentils 5 i 95 {low} i {high}
 	{name} at {time}: {value}	{name} a {time}: {value}
 	Time	Temps
 	Time ({unit})	Temps ({unit})
@@ -1350,12 +1350,11 @@ unit	yr	a
 	{name} median	{name}, mediana
 	{name} 5th percentile	{name}, percentil 5
 	{name} 95th percentile	{name}, percentil 95
-	Saving system dynamics models comes with editing.	Desar models de dinàmica de sistemes arribarà amb l'edició.
 	This run is too large to make in the window: shorten it, raise the time step or lower the runs, or run it from the command line.	Aquesta execució és massa gran per fer-la a la finestra: escurceu-la, augmenteu el pas de temps o reduïu les execucions, o executeu-la des de la línia d'ordres.
 	The model: its settings and variables	El model: la configuració i les variables
 	System dynamics model	Model de dinàmica de sistemes
 	Variables	Variables
-	This is the model as its file has it. Editing comes next.	Aquest és el model tal com és al seu fitxer. L'edició vindrà després.
+	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	Podeu canviar aquest model amb ordres, des d'un agent mitjançant el servidor MCP o des de la línia d'ordres. L'edició al llenç vindrà després.
 	From {start} to {stop}, in steps of {dt}, by the {method} method.	Des de {start} fins a {stop}, en passos de {dt}, pel mètode {method}.
 	Notes from the file	Notes del fitxer
 	Equation	Equació
@@ -1367,7 +1366,7 @@ unit	yr	a
 	Runs: {n} · seed {seed}	Execucions: {n} · llavor {seed}
 	One run	Una execució
 	Show on the chart	Mostra al gràfic
-	Solid line: median. Dashed line: mean. Shaded band: 9 runs in 10 fell inside it (5th to 95th percentile).	Línia contínua: mediana. Línia discontínua: mitjana. Banda ombrejada: 9 de cada 10 execucions hi van caure (del percentil 5 al 95).
+	Solid line: median. Dashed line: mean. Shaded band: 5th to 95th percentile, at each saved time.	Línia contínua: mediana. Línia discontínua: mitjana. Banda ombrejada: del percentil 5 al 95, en cada instant desat.
 	Pick a variable to see it over time.	Trieu una variable per veure-la al llarg del temps.
 	{name} over time	{name} al llarg del temps
 	Checked against its exact solution	Comprovat amb la seva solució exacta

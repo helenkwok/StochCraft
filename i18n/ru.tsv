@@ -1340,9 +1340,9 @@ unit	yr	г.
 	Stock	Запас
 	Flow	Поток
 	Auxiliary	Вспомогательная переменная
-	{name} ends near {median}: 9 runs in 10 end between {low} and {high}.	{name} заканчивается около {median}: 9 запусков из 10 заканчиваются между {low} и {high}.
+	{name} ends near {median} (median); its 5th to 95th percentiles at the end are {low} and {high}.	{name} заканчивается около {median} (медиана); 5-й и 95-й процентили в конце — {low} и {high}.
 	{name} ends at {value}.	{name} заканчивается на {value}.
-	{name} at {time}: median {median}, mean {mean}, 9 runs in 10 between {low} and {high}	{name} в момент {time}: медиана {median}, среднее {mean}, 9 запусков из 10 между {low} и {high}
+	{name} at {time}: median {median}, mean {mean}, 5th to 95th percentiles {low} and {high}	{name} в момент {time}: медиана {median}, среднее {mean}, 5-й и 95-й процентили {low} и {high}
 	{name} at {time}: {value}	{name} в момент {time}: {value}
 	Time	Время
 	Time ({unit})	Время ({unit})
@@ -1350,12 +1350,11 @@ unit	yr	г.
 	{name} median	{name}, медиана
 	{name} 5th percentile	{name}, 5-й процентиль
 	{name} 95th percentile	{name}, 95-й процентиль
-	Saving system dynamics models comes with editing.	Сохранение моделей системной динамики появится вместе с редактированием.
 	This run is too large to make in the window: shorten it, raise the time step or lower the runs, or run it from the command line.	Этот запуск слишком велик для окна: сократите его, увеличьте шаг по времени или уменьшите число запусков либо запустите его из командной строки.
 	The model: its settings and variables	Модель: её настройки и переменные
 	System dynamics model	Модель системной динамики
 	Variables	Переменные
-	This is the model as its file has it. Editing comes next.	Это модель такой, какая она в своём файле. Редактирование появится позже.
+	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	Эту модель можно изменять командами: из агента через сервер MCP или из командной строки. Редактирование на холсте появится позже.
 	From {start} to {stop}, in steps of {dt}, by the {method} method.	От {start} до {stop}, шагами по {dt}, методом {method}.
 	Notes from the file	Заметки из файла
 	Equation	Уравнение
@@ -1367,7 +1366,7 @@ unit	yr	г.
 	Runs: {n} · seed {seed}	Запусков: {n} · начальное значение генератора {seed}
 	One run	Один запуск
 	Show on the chart	Показать на графике
-	Solid line: median. Dashed line: mean. Shaded band: 9 runs in 10 fell inside it (5th to 95th percentile).	Сплошная линия: медиана. Штриховая линия: среднее. Затенённая полоса: 9 запусков из 10 попали в неё (от 5-го до 95-го процентиля).
+	Solid line: median. Dashed line: mean. Shaded band: 5th to 95th percentile, at each saved time.	Сплошная линия: медиана. Штриховая линия: среднее. Затенённая полоса: от 5-го до 95-го процентиля в каждый сохранённый момент.
 	Pick a variable to see it over time.	Выберите переменную, чтобы увидеть её во времени.
 	{name} over time	{name} во времени
 	Checked against its exact solution	Проверено по его точному решению

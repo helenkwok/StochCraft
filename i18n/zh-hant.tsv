@@ -1340,9 +1340,9 @@ unit	yr	年
 	Stock	存量
 	Flow	流量
 	Auxiliary	輔助變數
-	{name} ends near {median}: 9 runs in 10 end between {low} and {high}.	{name} 最終約為 {median}：10 次執行中有 9 次最終落在 {low} 到 {high} 之間。
+	{name} ends near {median} (median); its 5th to 95th percentiles at the end are {low} and {high}.	{name} 最終約為 {median}（中位數）；其最終的第 5 和第 95 百分位數為 {low} 和 {high}。
 	{name} ends at {value}.	{name} 最終為 {value}。
-	{name} at {time}: median {median}, mean {mean}, 9 runs in 10 between {low} and {high}	{time} 時的 {name}：中位數 {median}，平均值 {mean}，10 次執行中有 9 次在 {low} 到 {high} 之間
+	{name} at {time}: median {median}, mean {mean}, 5th to 95th percentiles {low} and {high}	{time} 時的 {name}：中位數 {median}，平均值 {mean}，第 5 和第 95 百分位數為 {low} 和 {high}
 	{name} at {time}: {value}	{time} 時的 {name}：{value}
 	Time	時間
 	Time ({unit})	時間（{unit}）
@@ -1350,12 +1350,11 @@ unit	yr	年
 	{name} median	{name} 中位數
 	{name} 5th percentile	{name} 第 5 百分位數
 	{name} 95th percentile	{name} 第 95 百分位數
-	Saving system dynamics models comes with editing.	儲存系統動力學模型的功能將隨編輯功能一起提供。
 	This run is too large to make in the window: shorten it, raise the time step or lower the runs, or run it from the command line.	這次執行太大，無法在視窗中進行：請縮短它，加大時間步長或減少執行次數，或者從命令列執行。
 	The model: its settings and variables	模型：其設定和變數
 	System dynamics model	系統動力學模型
 	Variables	變數
-	This is the model as its file has it. Editing comes next.	這是檔案中原樣的模型。編輯功能將在之後提供。
+	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	你可以用命令變更此模型：透過代理程式經 MCP 伺服器，或從命令列。在畫布上編輯將在之後提供。
 	From {start} to {stop}, in steps of {dt}, by the {method} method.	從 {start} 到 {stop}，步長 {dt}，使用 {method} 方法。
 	Notes from the file	檔案中的備註
 	Equation	方程式
@@ -1367,7 +1366,7 @@ unit	yr	年
 	Runs: {n} · seed {seed}	執行次數：{n} · 隨機種子 {seed}
 	One run	一次執行
 	Show on the chart	在圖表中顯示
-	Solid line: median. Dashed line: mean. Shaded band: 9 runs in 10 fell inside it (5th to 95th percentile).	實線：中位數。虛線：平均值。陰影帶：10 次執行中有 9 次落在其中（第 5 到第 95 百分位數）。
+	Solid line: median. Dashed line: mean. Shaded band: 5th to 95th percentile, at each saved time.	實線：中位數。虛線：平均值。陰影帶：每個儲存時刻的第 5 到第 95 百分位數。
 	Pick a variable to see it over time.	選擇一個變數，查看它隨時間的變化。
 	{name} over time	{name} 隨時間的變化
 	Checked against its exact solution	已與其精確解核對

@@ -1340,9 +1340,9 @@ unit	yr	m.
 	Stock	Atsarga
 	Flow	Srautas
 	Auxiliary	Pagalbinis kintamasis
-	{name} ends near {median}: 9 runs in 10 end between {low} and {high}.	{name} baigiasi apie {median}: 9 iš 10 vykdymų baigiasi tarp {low} ir {high}.
+	{name} ends near {median} (median); its 5th to 95th percentiles at the end are {low} and {high}.	{name} baigiasi apie {median} (mediana); jo 5-asis ir 95-asis procentiliai pabaigoje yra {low} ir {high}.
 	{name} ends at {value}.	{name} baigiasi ties {value}.
-	{name} at {time}: median {median}, mean {mean}, 9 runs in 10 between {low} and {high}	{name} laiku {time}: mediana {median}, vidurkis {mean}, 9 iš 10 vykdymų tarp {low} ir {high}
+	{name} at {time}: median {median}, mean {mean}, 5th to 95th percentiles {low} and {high}	{name} laiku {time}: mediana {median}, vidurkis {mean}, 5-asis ir 95-asis procentiliai {low} ir {high}
 	{name} at {time}: {value}	{name} laiku {time}: {value}
 	Time	Laikas
 	Time ({unit})	Laikas ({unit})
@@ -1350,12 +1350,11 @@ unit	yr	m.
 	{name} median	{name}, mediana
 	{name} 5th percentile	{name}, 5-asis procentilis
 	{name} 95th percentile	{name}, 95-asis procentilis
-	Saving system dynamics models comes with editing.	Sistemų dinamikos modelių įrašymas atsiras kartu su redagavimu.
 	This run is too large to make in the window: shorten it, raise the time step or lower the runs, or run it from the command line.	Šis vykdymas per didelis, kad būtų atliktas lange: sutrumpinkite jį, padidinkite laiko žingsnį arba sumažinkite vykdymų skaičių, arba paleiskite jį iš komandų eilutės.
 	The model: its settings and variables	Modelis: jo nustatymai ir kintamieji
 	System dynamics model	Sistemų dinamikos modelis
 	Variables	Kintamieji
-	This is the model as its file has it. Editing comes next.	Tai modelis toks, koks jis yra savo faile. Redagavimas bus vėliau.
+	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	Šį modelį galite keisti komandomis – iš agento per MCP serverį arba iš komandų eilutės. Redagavimas drobėje bus vėliau.
 	From {start} to {stop}, in steps of {dt}, by the {method} method.	Nuo {start} iki {stop}, {dt} žingsniais, {method} metodu.
 	Notes from the file	Pastabos iš failo
 	Equation	Lygtis
@@ -1367,7 +1366,7 @@ unit	yr	m.
 	Runs: {n} · seed {seed}	Vykdymai: {n} · sėkla {seed}
 	One run	Vienas vykdymas
 	Show on the chart	Rodyti diagramoje
-	Solid line: median. Dashed line: mean. Shaded band: 9 runs in 10 fell inside it (5th to 95th percentile).	Ištisinė linija: mediana. Brūkšninė linija: vidurkis. Užtamsinta juosta: 9 iš 10 vykdymų pateko į ją (nuo 5-ojo iki 95-ojo procentilio).
+	Solid line: median. Dashed line: mean. Shaded band: 5th to 95th percentile, at each saved time.	Ištisinė linija: mediana. Brūkšninė linija: vidurkis. Užtamsinta juosta: nuo 5-ojo iki 95-ojo procentilio kiekvienu išsaugotu laiku.
 	Pick a variable to see it over time.	Pasirinkite kintamąjį, kad pamatytumėte jį laike.
 	{name} over time	{name} laike
 	Checked against its exact solution	Patikrinta pagal tikslų sprendinį

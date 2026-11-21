@@ -33,6 +33,13 @@ impl App {
         self.unsaved_changes()
     }
 
+    /// Whether closing or replacing the document would lose changes: the engine's own answer,
+    /// which covers a system dynamics model as well as a process model. The title, the header
+    /// and the guards on closing all read this, so they agree.
+    pub(crate) fn unsaved_changes(&self) -> bool {
+        self.engine.is_dirty()
+    }
+
     pub(crate) fn document_name(&self) -> String {
         if let Some(path) = self
             .engine
@@ -335,9 +342,6 @@ impl App {
     /// dropped, an agent's command), `path` was chosen for the model that is gone: nothing is
     /// written, and what was to follow the save (quit, new, open) is dropped.
     pub fn save_to(&mut self, path: &str) {
-        if self.refuse_sd_save() {
-            return;
-        }
         if self
             .pick_for
             .take()
@@ -359,7 +363,14 @@ impl App {
     /// `path`). `chosen`: the user chose `path` for Save As, so its extension says the format;
     /// otherwise it is the opened file's own.
     fn save_file(&mut self, path: String, chosen: bool, agreed: bool) {
-        if self.refuse_sd_save() {
+        // A system dynamics model is written as XMILE, into the file it came from or a new one;
+        // the BPMN and XPDL questions below are for process models.
+        if self.is_sd() {
+            let path = if chosen { xmile_path(path) } else { path };
+            match self.engine.save_bytes(false) {
+                Ok(bytes) => self.deliver(path, bytes),
+                Err(e) => self.save_failed(e.message),
+            }
             return;
         }
         let opened = self.engine.format();
@@ -406,9 +417,6 @@ impl App {
 
     /// Writes (or downloads) the model to `path` as a new BPMN file.
     pub(crate) fn write_new(&mut self, path: String) {
-        if self.refuse_sd_save() {
-            return;
-        }
         match self.engine.save_bytes(true) {
             Ok(bytes) => self.deliver(path, bytes),
             Err(e) => self.save_failed(e.message),
@@ -416,9 +424,6 @@ impl App {
     }
 
     fn deliver(&mut self, path: String, bytes: Vec<u8>) {
-        if self.refuse_sd_save() {
-            return;
-        }
         self.requests.push(if self.platform.file_system {
             Request::Write { path, bytes }
         } else {
@@ -436,9 +441,6 @@ impl App {
 
     /// The shell wrote `bytes` to `path`: the model is saved there.
     pub fn written(&mut self, path: &str, bytes: &[u8]) {
-        if self.refuse_sd_save() {
-            return;
-        }
         match self.engine.saved_to(path, bytes) {
             Ok(_) => {
                 self.info(tf("Saved {file}", &[("file", file_name(path))]));
@@ -466,9 +468,6 @@ impl App {
 
     /// File ▸ Save: into the file the model came from, or as a new file.
     pub fn save(&mut self) {
-        if self.refuse_sd_save() {
-            return;
-        }
         match (
             self.engine.path().map(str::to_owned),
             self.platform.file_system,
@@ -481,9 +480,6 @@ impl App {
 
     /// File ▸ Save As.
     pub fn save_as(&mut self) {
-        if self.refuse_sd_save() {
-            return;
-        }
         if self.platform.file_system {
             let name = self.suggested_name();
             let xpdl = self.engine.format() == Some("xpdl");
@@ -497,9 +493,6 @@ impl App {
     /// Save dialog is open already, nothing more is asked: its answer saves the model it was
     /// opened for, or nothing if that model has been replaced.
     pub(crate) fn pick_save(&mut self, name: String, xpdl: bool) {
-        if self.refuse_sd_save() {
-            return;
-        }
         if self.pick_for.is_some() {
             return;
         }
@@ -508,6 +501,16 @@ impl App {
     }
 
     fn suggested_name(&self) -> String {
+        if self.is_sd() {
+            // The name it came from, or the model's: always an XMILE file's.
+            let name = self.document_name();
+            let name = if name.is_empty() {
+                t("Untitled").to_owned()
+            } else {
+                name
+            };
+            return xmile_path(name);
+        }
         match self.engine.path() {
             Some(path) => file_name(path).to_owned(),
             None => format!("{}.bpmn", self.document_name()),
@@ -593,5 +596,19 @@ impl App {
             let label = change_label(r["redone"].as_str().unwrap_or(""));
             self.info(tf("Redid {action}", &[("action", &td(label))]));
         }
+    }
+}
+
+/// `path` as the name of an XMILE file: one that ends in `.xmile` stays as it is; another
+/// extension of a model file (`.bpmn`, `.xpdl`, `.xml`, `.stmx`) is replaced by it, and a name
+/// without one gets it added.
+fn xmile_path(path: String) -> String {
+    match extension(&path).as_str() {
+        "xmile" => path,
+        "bpmn" | "xpdl" | "xml" | "stmx" => match path.rsplit_once('.') {
+            Some((stem, _)) => format!("{stem}.xmile"),
+            None => format!("{path}.xmile"),
+        },
+        _ => format!("{path}.xmile"),
     }
 }

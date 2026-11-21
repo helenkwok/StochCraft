@@ -1340,9 +1340,9 @@ unit	yr	ж.
 	Stock	Қор
 	Flow	Ағын
 	Auxiliary	Көмекші айнымалы
-	{name} ends near {median}: 9 runs in 10 end between {low} and {high}.	{name} шамамен {median} мәнінде аяқталады: 10 іске қосудың 9-ы {low} мен {high} аралығында аяқталады.
+	{name} ends near {median} (median); its 5th to 95th percentiles at the end are {low} and {high}.	{name} шамамен {median} мәнінде аяқталады (медиана); соңындағы 5-ші және 95-ші процентиль — {low} және {high}.
 	{name} ends at {value}.	{name} {value} мәнінде аяқталады.
-	{name} at {time}: median {median}, mean {mean}, 9 runs in 10 between {low} and {high}	{time} уақытындағы {name}: медиана {median}, орташа {mean}, 10 іске қосудың 9-ы {low} мен {high} аралығында
+	{name} at {time}: median {median}, mean {mean}, 5th to 95th percentiles {low} and {high}	{time} уақытындағы {name}: медиана {median}, орташа {mean}, 5-ші және 95-ші процентиль {low} және {high}
 	{name} at {time}: {value}	{time} уақытындағы {name}: {value}
 	Time	Уақыт
 	Time ({unit})	Уақыт ({unit})
@@ -1350,12 +1350,11 @@ unit	yr	ж.
 	{name} median	{name}, медиана
 	{name} 5th percentile	{name}, 5-ші процентиль
 	{name} 95th percentile	{name}, 95-ші процентиль
-	Saving system dynamics models comes with editing.	Жүйелік динамика модельдерін сақтау өңдеумен бірге келеді.
 	This run is too large to make in the window: shorten it, raise the time step or lower the runs, or run it from the command line.	Бұл іске қосу терезеде орындау үшін тым үлкен: оны қысқартыңыз, уақыт қадамын үлкейтіңіз немесе іске қосу санын азайтыңыз, не пәрмен жолынан іске қосыңыз.
 	The model: its settings and variables	Модель: оның параметрлері мен айнымалылары
 	System dynamics model	Жүйелік динамика моделі
 	Variables	Айнымалылар
-	This is the model as its file has it. Editing comes next.	Бұл модель файлындағы күйінде көрсетілген. Өңдеу кейін қосылады.
+	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	Бұл модельді пәрмендермен өзгертуге болады: агент арқылы MCP серверімен немесе пәрмен жолынан. Кенепте өңдеу кейін қосылады.
 	From {start} to {stop}, in steps of {dt}, by the {method} method.	{start} бастап {stop} дейін, {dt} қадаммен, {method} әдісімен.
 	Notes from the file	Файлдағы ескертпелер
 	Equation	Теңдеу
@@ -1367,7 +1366,7 @@ unit	yr	ж.
 	Runs: {n} · seed {seed}	Іске қосулар: {n} · тұқым {seed}
 	One run	Бір іске қосу
 	Show on the chart	Графикте көрсету
-	Solid line: median. Dashed line: mean. Shaded band: 9 runs in 10 fell inside it (5th to 95th percentile).	Тұтас сызық: медиана. Үзік сызық: орташа. Көлеңкеленген жолақ: 10 іске қосудың 9-ы оның ішіне түсті (5-ші мен 95-ші процентиль аралығы).
+	Solid line: median. Dashed line: mean. Shaded band: 5th to 95th percentile, at each saved time.	Тұтас сызық: медиана. Үзік сызық: орташа. Көлеңкеленген жолақ: әр сақталған уақыттағы 5-ші мен 95-ші процентиль аралығы.
 	Pick a variable to see it over time.	Уақыт бойынша көру үшін айнымалыны таңдаңыз.
 	{name} over time	{name} уақыт бойынша
 	Checked against its exact solution	Оның нақты шешімімен тексерілген

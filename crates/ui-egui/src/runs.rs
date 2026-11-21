@@ -180,10 +180,10 @@ impl App {
 
     /// Advances and collects the background run. Called every frame; true while it runs.
     pub fn poll(&mut self) -> bool {
-        // A system dynamics run asked for on the last frame, made now that the status bar has
-        // said so.
+        // A system dynamics run asked for is made two frames on: the status bar says so in
+        // the frame between.
         if self.sd_pending() {
-            self.sd_run_now();
+            self.sd_advance();
             return true;
         }
         // The shares of a Monte Carlo output's spread, worked out beside the results on show.

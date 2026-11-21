@@ -1340,9 +1340,9 @@ unit	yr	a
 	Stock	Nivel
 	Flow	Flujo
 	Auxiliary	Variable auxiliar
-	{name} ends near {median}: 9 runs in 10 end between {low} and {high}.	{name} termina cerca de {median}: 9 de cada 10 ejecuciones terminan entre {low} y {high}.
+	{name} ends near {median} (median); its 5th to 95th percentiles at the end are {low} and {high}.	{name} termina cerca de {median} (mediana); los percentiles 5 y 95 al final son {low} y {high}.
 	{name} ends at {value}.	{name} termina en {value}.
-	{name} at {time}: median {median}, mean {mean}, 9 runs in 10 between {low} and {high}	{name} en {time}: mediana {median}, media {mean}, 9 de cada 10 ejecuciones entre {low} y {high}
+	{name} at {time}: median {median}, mean {mean}, 5th to 95th percentiles {low} and {high}	{name} en {time}: mediana {median}, media {mean}, percentiles 5 y 95 {low} y {high}
 	{name} at {time}: {value}	{name} en {time}: {value}
 	Time	Tiempo
 	Time ({unit})	Tiempo ({unit})
@@ -1350,12 +1350,11 @@ unit	yr	a
 	{name} median	{name}, mediana
 	{name} 5th percentile	{name}, percentil 5
 	{name} 95th percentile	{name}, percentil 95
-	Saving system dynamics models comes with editing.	Guardar modelos de dinámica de sistemas llegará con la edición.
 	This run is too large to make in the window: shorten it, raise the time step or lower the runs, or run it from the command line.	Esta ejecución es demasiado grande para hacerla en la ventana: acórtela, aumente el paso de tiempo o reduzca las ejecuciones, o ejecútela desde la línea de comandos.
 	The model: its settings and variables	El modelo: sus ajustes y variables
 	System dynamics model	Modelo de dinámica de sistemas
 	Variables	Variables
-	This is the model as its file has it. Editing comes next.	Este es el modelo tal como está en su archivo. La edición llegará después.
+	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	Puede cambiar este modelo con comandos, desde un agente mediante el servidor MCP o desde la línea de comandos. La edición en el lienzo llegará después.
 	From {start} to {stop}, in steps of {dt}, by the {method} method.	Desde {start} hasta {stop}, en pasos de {dt}, con el método {method}.
 	Notes from the file	Notas del archivo
 	Equation	Ecuación
@@ -1367,7 +1366,7 @@ unit	yr	a
 	Runs: {n} · seed {seed}	Ejecuciones: {n} · semilla {seed}
 	One run	Una ejecución
 	Show on the chart	Mostrar en el gráfico
-	Solid line: median. Dashed line: mean. Shaded band: 9 runs in 10 fell inside it (5th to 95th percentile).	Línea continua: mediana. Línea discontinua: media. Banda sombreada: 9 de cada 10 ejecuciones cayeron dentro de ella (del percentil 5 al 95).
+	Solid line: median. Dashed line: mean. Shaded band: 5th to 95th percentile, at each saved time.	Línea continua: mediana. Línea discontinua: media. Banda sombreada: del percentil 5 al 95, en cada instante guardado.
 	Pick a variable to see it over time.	Elija una variable para verla a lo largo del tiempo.
 	{name} over time	{name} a lo largo del tiempo
 	Checked against its exact solution	Comprobado con su solución exacta

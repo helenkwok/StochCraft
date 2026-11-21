@@ -909,8 +909,8 @@ fields (`“Service time”`) are named in the messages by their own rows.
   ta, te, th and vi, and the fit of the grammar around "{n}" in the highly inflected ones.
 - The rows for system dynamics models in the window (ROADMAP M4.2, part 2a: the Model and
   Results tabs, the kinds stock, flow and auxiliary, the sentences on where a stock ends and the
-  range 9 runs in 10 end in, the chart's caption and tooltips, the table's column heads, the
-  refusal to save, the refusal of a run too large for the window, the file dialog's filter and
+  median and percentiles it ends between, the chart's caption and tooltips, the table's column
+  heads, the line on how the model is changed, the refusal of a run too large for the window, the file dialog's filter and
   the "Product adoption" example with its card) were machine-drafted with Claude Code from the
   plain meaning of the English, reusing each catalog's own words for run, seed, mean, median,
   percentile, time and flow. "Stock" (a level that fills and drains) is each language's word for
@@ -919,6 +919,15 @@ fields (`“Service time”`) are named in the messages by their own rows.
   against any other source or reviewed by native speakers; the least certain are bn, hi, ka, kk,
   lo, sq, ta, te, th and vi, the words for stock and auxiliary in all of them, and the case of
   the numbers around "between {low} and {high}" in the highly inflected ones.
+- The rows that replaced "9 runs in 10" in those sentences (the sentence on where a stock ends,
+  the chart's tooltip and its caption: the median, "its 5th to 95th percentiles at the end are
+  {low} and {high}", "5th to 95th percentile, at each saved time") and the Model tab's line
+  on changing the model with commands from an agent or the command line (ROADMAP M4.2, saving)
+  were machine-drafted with Claude Code from the plain meaning of the English, reusing each
+  catalog's own words for median, mean, percentile, run, time and the earlier rows' wording; not
+  checked against any other source or reviewed by native speakers. "Agent", "command line" and
+  "canvas" are each language's everyday computing word or calque; the least certain are bn, hi, ka,
+  kk, lo, sq, ta, te, th and vi.
 
 **Adding or changing a string:** add the English in the code through `i18n::t` (or `tf`, `tn`),
 then add its row to each catalog here, or leave it out to show English until it is translated.

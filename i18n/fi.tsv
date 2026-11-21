@@ -1340,9 +1340,9 @@ unit	yr	v
 	Stock	Varanto
 	Flow	Virta
 	Auxiliary	Apumuuttuja
-	{name} ends near {median}: 9 runs in 10 end between {low} and {high}.	{name} päättyy lähelle arvoa {median}: 9 ajoa 10:stä päättyy välille {low}–{high}.
+	{name} ends near {median} (median); its 5th to 95th percentiles at the end are {low} and {high}.	{name} päättyy lähelle arvoa {median} (mediaani); sen 5. ja 95. persentiili lopussa ovat {low} ja {high}.
 	{name} ends at {value}.	{name} päättyy arvoon {value}.
-	{name} at {time}: median {median}, mean {mean}, 9 runs in 10 between {low} and {high}	{name} hetkellä {time}: mediaani {median}, keskiarvo {mean}, 9 ajoa 10:stä välillä {low}–{high}
+	{name} at {time}: median {median}, mean {mean}, 5th to 95th percentiles {low} and {high}	{name} hetkellä {time}: mediaani {median}, keskiarvo {mean}, 5. ja 95. persentiili {low} ja {high}
 	{name} at {time}: {value}	{name} hetkellä {time}: {value}
 	Time	Aika
 	Time ({unit})	Aika ({unit})
@@ -1350,12 +1350,11 @@ unit	yr	v
 	{name} median	{name}, mediaani
 	{name} 5th percentile	{name}, 5. persentiili
 	{name} 95th percentile	{name}, 95. persentiili
-	Saving system dynamics models comes with editing.	Systeemidynamiikan mallien tallennus tulee muokkauksen mukana.
 	This run is too large to make in the window: shorten it, raise the time step or lower the runs, or run it from the command line.	Tämä ajo on liian suuri tehtäväksi ikkunassa: lyhennä sitä, suurenna aika-askelta tai vähennä ajoja, tai aja se komentoriviltä.
 	The model: its settings and variables	Malli: sen asetukset ja muuttujat
 	System dynamics model	Systeemidynamiikan malli
 	Variables	Muuttujat
-	This is the model as its file has it. Editing comes next.	Tämä on malli sellaisena kuin se on tiedostossaan. Muokkaus tulee seuraavaksi.
+	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	Voit muuttaa tätä mallia komennoilla, agentin kautta MCP-palvelimen avulla tai komentoriviltä. Muokkaus piirtoalueella tulee seuraavaksi.
 	From {start} to {stop}, in steps of {dt}, by the {method} method.	Ajanhetkestä {start} hetkeen {stop}, {dt} askelin, menetelmällä {method}.
 	Notes from the file	Tiedoston huomautukset
 	Equation	Yhtälö
@@ -1367,7 +1366,7 @@ unit	yr	v
 	Runs: {n} · seed {seed}	Ajoja: {n} · siemen {seed}
 	One run	Yksi ajo
 	Show on the chart	Näytä kaaviossa
-	Solid line: median. Dashed line: mean. Shaded band: 9 runs in 10 fell inside it (5th to 95th percentile).	Yhtenäinen viiva: mediaani. Katkoviiva: keskiarvo. Varjostettu alue: 9 ajoa 10:stä osui sen sisään (5. – 95. persentiili).
+	Solid line: median. Dashed line: mean. Shaded band: 5th to 95th percentile, at each saved time.	Yhtenäinen viiva: mediaani. Katkoviiva: keskiarvo. Varjostettu alue: 5. – 95. persentiili jokaisella tallennetulla ajanhetkellä.
 	Pick a variable to see it over time.	Valitse muuttuja nähdäksesi sen ajan funktiona.
 	{name} over time	{name} ajan funktiona
 	Checked against its exact solution	Tarkistettu sen tarkkaa ratkaisua vasten

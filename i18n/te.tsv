@@ -1340,9 +1340,9 @@ unit	yr	సం.
 	Stock	నిల్వ
 	Flow	ప్రవాహం
 	Auxiliary	సహాయక చరరాశి
-	{name} ends near {median}: 9 runs in 10 end between {low} and {high}.	{name} సుమారు {median} వద్ద ముగుస్తుంది: 10 లో 9 అమలులు {low} నుండి {high} మధ్య ముగుస్తాయి.
+	{name} ends near {median} (median); its 5th to 95th percentiles at the end are {low} and {high}.	{name} సుమారు {median} వద్ద ముగుస్తుంది (మధ్యగతం); చివరలో దాని 5వ, 95వ శతాంశాలు {low}, {high}.
 	{name} ends at {value}.	{name} {value} వద్ద ముగుస్తుంది.
-	{name} at {time}: median {median}, mean {mean}, 9 runs in 10 between {low} and {high}	{time} వద్ద {name}: మధ్యగతం {median}, సగటు {mean}, 10 లో 9 అమలులు {low} నుండి {high} మధ్య
+	{name} at {time}: median {median}, mean {mean}, 5th to 95th percentiles {low} and {high}	{time} వద్ద {name}: మధ్యగతం {median}, సగటు {mean}, 5వ, 95వ శతాంశాలు {low}, {high}
 	{name} at {time}: {value}	{time} వద్ద {name}: {value}
 	Time	సమయం
 	Time ({unit})	సమయం ({unit})
@@ -1350,12 +1350,11 @@ unit	yr	సం.
 	{name} median	{name}, మధ్యగతం
 	{name} 5th percentile	{name}, 5వ శతాంశం
 	{name} 95th percentile	{name}, 95వ శతాంశం
-	Saving system dynamics models comes with editing.	సిస్టమ్ డైనమిక్స్ నమూనాల సేవ్ చేయడం సవరణతో పాటు వస్తుంది.
 	This run is too large to make in the window: shorten it, raise the time step or lower the runs, or run it from the command line.	ఈ అమలు విండోలో చేయడానికి చాలా పెద్దది: దీన్ని తగ్గించండి, సమయ దశను పెంచండి లేదా అమలులను తగ్గించండి, లేదా కమాండ్ లైన్ నుండి నడపండి.
 	The model: its settings and variables	నమూనా: దాని సెట్టింగ్‌లు, చరరాశులు
 	System dynamics model	సిస్టమ్ డైనమిక్స్ నమూనా
 	Variables	చరరాశులు
-	This is the model as its file has it. Editing comes next.	ఇది ఫైల్‌లో ఉన్నట్లుగానే నమూనా. సవరణ తర్వాత వస్తుంది.
+	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	ఈ నమూనాను ఆదేశాలతో మార్చవచ్చు: ఏజెంట్ నుండి MCP సర్వర్ ద్వారా, లేదా కమాండ్ లైన్ నుండి. కాన్వాస్‌పై సవరణ తర్వాత వస్తుంది.
 	From {start} to {stop}, in steps of {dt}, by the {method} method.	{start} నుండి {stop} వరకు, {dt} దశలలో, {method} పద్ధతిలో.
 	Notes from the file	ఫైల్ నుండి గమనికలు
 	Equation	సమీకరణం
@@ -1367,7 +1366,7 @@ unit	yr	సం.
 	Runs: {n} · seed {seed}	అమలులు: {n} · బీజం {seed}
 	One run	ఒక అమలు
 	Show on the chart	చార్ట్‌లో చూపించు
-	Solid line: median. Dashed line: mean. Shaded band: 9 runs in 10 fell inside it (5th to 95th percentile).	ఘన రేఖ: మధ్యగతం. చుక్కల రేఖ: సగటు. నీడ పట్టీ: 10 లో 9 అమలులు దీనిలో పడ్డాయి (5వ నుండి 95వ శతాంశం వరకు).
+	Solid line: median. Dashed line: mean. Shaded band: 5th to 95th percentile, at each saved time.	ఘన రేఖ: మధ్యగతం. చుక్కల రేఖ: సగటు. నీడ పట్టీ: సేవ్ చేసిన ప్రతి సమయంలో 5వ నుండి 95వ శతాంశం వరకు.
 	Pick a variable to see it over time.	కాలంతో పాటు చూడడానికి ఒక చరరాశిని ఎంచుకోండి.
 	{name} over time	కాలంతో పాటు {name}
 	Checked against its exact solution	దాని ఖచ్చితమైన పరిష్కారంతో సరిచూడబడింది

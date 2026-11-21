@@ -1340,9 +1340,9 @@ unit	yr	ปี
 	Stock	สต็อก
 	Flow	โฟลว์
 	Auxiliary	ตัวแปรช่วย
-	{name} ends near {median}: 9 runs in 10 end between {low} and {high}.	{name} จบที่ประมาณ {median}: 9 ใน 10 การรันจบอยู่ระหว่าง {low} ถึง {high}
+	{name} ends near {median} (median); its 5th to 95th percentiles at the end are {low} and {high}.	{name} จบที่ประมาณ {median} (มัธยฐาน) เปอร์เซ็นไทล์ที่ 5 และ 95 ตอนจบคือ {low} และ {high}
 	{name} ends at {value}.	{name} จบที่ {value}
-	{name} at {time}: median {median}, mean {mean}, 9 runs in 10 between {low} and {high}	{name} ที่เวลา {time}: มัธยฐาน {median}, ค่าเฉลี่ย {mean}, 9 ใน 10 การรันอยู่ระหว่าง {low} ถึง {high}
+	{name} at {time}: median {median}, mean {mean}, 5th to 95th percentiles {low} and {high}	{name} ที่เวลา {time}: มัธยฐาน {median}, ค่าเฉลี่ย {mean}, เปอร์เซ็นไทล์ที่ 5 และ 95 คือ {low} และ {high}
 	{name} at {time}: {value}	{name} ที่เวลา {time}: {value}
 	Time	เวลา
 	Time ({unit})	เวลา ({unit})
@@ -1350,12 +1350,11 @@ unit	yr	ปี
 	{name} median	{name} มัธยฐาน
 	{name} 5th percentile	{name} เปอร์เซ็นไทล์ที่ 5
 	{name} 95th percentile	{name} เปอร์เซ็นไทล์ที่ 95
-	Saving system dynamics models comes with editing.	การบันทึกแบบจำลองพลวัตระบบจะมาพร้อมกับการแก้ไข
 	This run is too large to make in the window: shorten it, raise the time step or lower the runs, or run it from the command line.	การรันนี้ใหญ่เกินกว่าจะทำในหน้าต่าง: ทำให้สั้นลง เพิ่มขั้นเวลา หรือลดจำนวนการรัน หรือรันจากบรรทัดคำสั่ง
 	The model: its settings and variables	แบบจำลอง: การตั้งค่าและตัวแปรของมัน
 	System dynamics model	แบบจำลองพลวัตระบบ
 	Variables	ตัวแปร
-	This is the model as its file has it. Editing comes next.	นี่คือแบบจำลองตามที่อยู่ในไฟล์ของมัน การแก้ไขจะมาในลำดับถัดไป
+	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	คุณเปลี่ยนแบบจำลองนี้ได้ด้วยคำสั่ง จากเอเจนต์ผ่านเซิร์ฟเวอร์ MCP หรือจากบรรทัดคำสั่ง การแก้ไขบนผืนผ้าใบจะมาในลำดับถัดไป
 	From {start} to {stop}, in steps of {dt}, by the {method} method.	ตั้งแต่ {start} ถึง {stop} ทีละขั้น {dt} ด้วยวิธี {method}
 	Notes from the file	บันทึกจากไฟล์
 	Equation	สมการ
@@ -1367,7 +1366,7 @@ unit	yr	ปี
 	Runs: {n} · seed {seed}	การรัน: {n} · เมล็ดสุ่ม {seed}
 	One run	การรันหนึ่งครั้ง
 	Show on the chart	แสดงบนแผนภูมิ
-	Solid line: median. Dashed line: mean. Shaded band: 9 runs in 10 fell inside it (5th to 95th percentile).	เส้นทึบ: มัธยฐาน เส้นประ: ค่าเฉลี่ย แถบแรเงา: 9 ใน 10 การรันอยู่ภายใน (เปอร์เซ็นไทล์ที่ 5 ถึง 95)
+	Solid line: median. Dashed line: mean. Shaded band: 5th to 95th percentile, at each saved time.	เส้นทึบ: มัธยฐาน เส้นประ: ค่าเฉลี่ย แถบแรเงา: เปอร์เซ็นไทล์ที่ 5 ถึง 95 ที่ทุกเวลาที่บันทึก
 	Pick a variable to see it over time.	เลือกตัวแปรเพื่อดูตามเวลา
 	{name} over time	{name} ตามเวลา
 	Checked against its exact solution	ตรวจสอบกับผลเฉลยที่แน่นอนของมันแล้ว

@@ -1340,9 +1340,9 @@ unit	yr	j
 	Stock	Voorraad
 	Flow	Stroom
 	Auxiliary	Hulpvariabele
-	{name} ends near {median}: 9 runs in 10 end between {low} and {high}.	{name} eindigt rond {median}: 9 van de 10 uitvoeringen eindigen tussen {low} en {high}.
+	{name} ends near {median} (median); its 5th to 95th percentiles at the end are {low} and {high}.	{name} eindigt rond {median} (mediaan); het 5e en 95e percentiel aan het eind zijn {low} en {high}.
 	{name} ends at {value}.	{name} eindigt op {value}.
-	{name} at {time}: median {median}, mean {mean}, 9 runs in 10 between {low} and {high}	{name} op {time}: mediaan {median}, gemiddelde {mean}, 9 van de 10 uitvoeringen tussen {low} en {high}
+	{name} at {time}: median {median}, mean {mean}, 5th to 95th percentiles {low} and {high}	{name} op {time}: mediaan {median}, gemiddelde {mean}, 5e en 95e percentiel {low} en {high}
 	{name} at {time}: {value}	{name} op {time}: {value}
 	Time	Tijd
 	Time ({unit})	Tijd ({unit})
@@ -1350,12 +1350,11 @@ unit	yr	j
 	{name} median	{name}, mediaan
 	{name} 5th percentile	{name}, 5e percentiel
 	{name} 95th percentile	{name}, 95e percentiel
-	Saving system dynamics models comes with editing.	Het opslaan van systeemdynamicamodellen komt samen met bewerken.
 	This run is too large to make in the window: shorten it, raise the time step or lower the runs, or run it from the command line.	Deze uitvoering is te groot om in het venster te doen: maak hem korter, vergroot de tijdstap of verlaag het aantal uitvoeringen, of voer hem uit vanaf de opdrachtregel.
 	The model: its settings and variables	Het model: zijn instellingen en variabelen
 	System dynamics model	Systeemdynamicamodel
 	Variables	Variabelen
-	This is the model as its file has it. Editing comes next.	Dit is het model zoals het in zijn bestand staat. Bewerken komt hierna.
+	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	Je kunt dit model wijzigen met opdrachten, vanuit een agent via de MCP-server of vanaf de opdrachtregel. Bewerken op het canvas komt hierna.
 	From {start} to {stop}, in steps of {dt}, by the {method} method.	Van {start} tot {stop}, in stappen van {dt}, met de {method}-methode.
 	Notes from the file	Notities uit het bestand
 	Equation	Vergelijking
@@ -1367,7 +1366,7 @@ unit	yr	j
 	Runs: {n} · seed {seed}	Uitvoeringen: {n} · startwaarde {seed}
 	One run	Eén uitvoering
 	Show on the chart	Tonen in de grafiek
-	Solid line: median. Dashed line: mean. Shaded band: 9 runs in 10 fell inside it (5th to 95th percentile).	Doorgetrokken lijn: mediaan. Gestippelde lijn: gemiddelde. Gearceerde band: 9 van de 10 uitvoeringen lagen erbinnen (5e tot 95e percentiel).
+	Solid line: median. Dashed line: mean. Shaded band: 5th to 95th percentile, at each saved time.	Doorgetrokken lijn: mediaan. Gestippelde lijn: gemiddelde. Gearceerde band: 5e tot 95e percentiel, op elk opgeslagen tijdstip.
 	Pick a variable to see it over time.	Kies een variabele om hem over de tijd te zien.
 	{name} over time	{name} over de tijd
 	Checked against its exact solution	Gecontroleerd met de exacte oplossing

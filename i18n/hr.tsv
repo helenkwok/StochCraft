@@ -1340,9 +1340,9 @@ unit	yr	god.
 	Stock	Zaliha
 	Flow	Tok
 	Auxiliary	Pomoćna varijabla
-	{name} ends near {median}: 9 runs in 10 end between {low} and {high}.	{name} završava blizu {median}: 9 od 10 pokretanja završava između {low} i {high}.
+	{name} ends near {median} (median); its 5th to 95th percentiles at the end are {low} and {high}.	{name} završava blizu {median} (medijan); 5. i 95. percentil na kraju su {low} i {high}.
 	{name} ends at {value}.	{name} završava na {value}.
-	{name} at {time}: median {median}, mean {mean}, 9 runs in 10 between {low} and {high}	{name} u {time}: medijan {median}, srednja vrijednost {mean}, 9 od 10 pokretanja između {low} i {high}
+	{name} at {time}: median {median}, mean {mean}, 5th to 95th percentiles {low} and {high}	{name} u {time}: medijan {median}, srednja vrijednost {mean}, 5. i 95. percentil {low} i {high}
 	{name} at {time}: {value}	{name} u {time}: {value}
 	Time	Vrijeme
 	Time ({unit})	Vrijeme ({unit})
@@ -1350,12 +1350,11 @@ unit	yr	god.
 	{name} median	{name}, medijan
 	{name} 5th percentile	{name}, 5. percentil
 	{name} 95th percentile	{name}, 95. percentil
-	Saving system dynamics models comes with editing.	Spremanje modela sistemske dinamike dolazi s uređivanjem.
 	This run is too large to make in the window: shorten it, raise the time step or lower the runs, or run it from the command line.	Ovo pokretanje je preveliko za prozor: skratite ga, povećajte vremenski korak ili smanjite broj pokretanja, ili ga pokrenite iz naredbenog retka.
 	The model: its settings and variables	Model: njegove postavke i varijable
 	System dynamics model	Model sistemske dinamike
 	Variables	Varijable
-	This is the model as its file has it. Editing comes next.	Ovo je model onakav kakav je u svojoj datoteci. Uređivanje dolazi sljedeće.
+	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	Ovaj model možete mijenjati naredbama, iz agenta preko MCP poslužitelja ili iz naredbenog retka. Uređivanje na platnu dolazi sljedeće.
 	From {start} to {stop}, in steps of {dt}, by the {method} method.	Od {start} do {stop}, u koracima od {dt}, metodom {method}.
 	Notes from the file	Bilješke iz datoteke
 	Equation	Jednadžba
@@ -1367,7 +1366,7 @@ unit	yr	god.
 	Runs: {n} · seed {seed}	Pokretanja: {n} · sjeme {seed}
 	One run	Jedno pokretanje
 	Show on the chart	Prikaži na grafikonu
-	Solid line: median. Dashed line: mean. Shaded band: 9 runs in 10 fell inside it (5th to 95th percentile).	Puna crta: medijan. Isprekidana crta: srednja vrijednost. Osjenčani pojas: 9 od 10 pokretanja palo je unutar njega (od 5. do 95. percentila).
+	Solid line: median. Dashed line: mean. Shaded band: 5th to 95th percentile, at each saved time.	Puna crta: medijan. Isprekidana crta: srednja vrijednost. Osjenčani pojas: od 5. do 95. percentila, u svakom spremljenom trenutku.
 	Pick a variable to see it over time.	Odaberite varijablu da je vidite kroz vrijeme.
 	{name} over time	{name} kroz vrijeme
 	Checked against its exact solution	Provjereno prema njegovu točnom rješenju

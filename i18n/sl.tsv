@@ -1340,9 +1340,9 @@ unit	yr	l.
 	Stock	Zaloga
 	Flow	Tok
 	Auxiliary	Pomožna spremenljivka
-	{name} ends near {median}: 9 runs in 10 end between {low} and {high}.	{name} se konča blizu {median}: 9 od 10 zagonov se konča med {low} in {high}.
+	{name} ends near {median} (median); its 5th to 95th percentiles at the end are {low} and {high}.	{name} se konča blizu {median} (mediana); 5. in 95. percentil na koncu sta {low} in {high}.
 	{name} ends at {value}.	{name} se konča pri {value}.
-	{name} at {time}: median {median}, mean {mean}, 9 runs in 10 between {low} and {high}	{name} ob {time}: mediana {median}, povprečje {mean}, 9 od 10 zagonov med {low} in {high}
+	{name} at {time}: median {median}, mean {mean}, 5th to 95th percentiles {low} and {high}	{name} ob {time}: mediana {median}, povprečje {mean}, 5. in 95. percentil {low} in {high}
 	{name} at {time}: {value}	{name} ob {time}: {value}
 	Time	Čas
 	Time ({unit})	Čas ({unit})
@@ -1350,12 +1350,11 @@ unit	yr	l.
 	{name} median	{name}, mediana
 	{name} 5th percentile	{name}, 5. percentil
 	{name} 95th percentile	{name}, 95. percentil
-	Saving system dynamics models comes with editing.	Shranjevanje modelov sistemske dinamike pride z urejanjem.
 	This run is too large to make in the window: shorten it, raise the time step or lower the runs, or run it from the command line.	Ta zagon je prevelik za izvedbo v oknu: skrajšajte ga, povečajte časovni korak ali zmanjšajte število zagonov ali ga zaženite iz ukazne vrstice.
 	The model: its settings and variables	Model: njegove nastavitve in spremenljivke
 	System dynamics model	Model sistemske dinamike
 	Variables	Spremenljivke
-	This is the model as its file has it. Editing comes next.	To je model, kakršen je v svoji datoteki. Urejanje pride naslednje.
+	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	Ta model lahko spreminjate z ukazi, iz agenta prek strežnika MCP ali iz ukazne vrstice. Urejanje na platnu pride naslednje.
 	From {start} to {stop}, in steps of {dt}, by the {method} method.	Od {start} do {stop}, v korakih po {dt}, z metodo {method}.
 	Notes from the file	Opombe iz datoteke
 	Equation	Enačba
@@ -1367,7 +1366,7 @@ unit	yr	l.
 	Runs: {n} · seed {seed}	Zagoni: {n} · seme {seed}
 	One run	En zagon
 	Show on the chart	Pokaži na grafikonu
-	Solid line: median. Dashed line: mean. Shaded band: 9 runs in 10 fell inside it (5th to 95th percentile).	Polna črta: mediana. Črtkana črta: povprečje. Osenčen pas: 9 od 10 zagonov je padlo vanj (od 5. do 95. percentila).
+	Solid line: median. Dashed line: mean. Shaded band: 5th to 95th percentile, at each saved time.	Polna črta: mediana. Črtkana črta: povprečje. Osenčen pas: od 5. do 95. percentila ob vsakem shranjenem času.
 	Pick a variable to see it over time.	Izberite spremenljivko, da jo vidite skozi čas.
 	{name} over time	{name} skozi čas
 	Checked against its exact solution	Preverjeno z njegovo natančno rešitvijo

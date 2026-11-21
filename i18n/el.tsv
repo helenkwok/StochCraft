@@ -1340,9 +1340,9 @@ unit	yr	έτ
 	Stock	Απόθεμα
 	Flow	Ροή
 	Auxiliary	Βοηθητική μεταβλητή
-	{name} ends near {median}: 9 runs in 10 end between {low} and {high}.	Το {name} καταλήγει κοντά στο {median}: 9 στις 10 εκτελέσεις καταλήγουν μεταξύ {low} και {high}.
+	{name} ends near {median} (median); its 5th to 95th percentiles at the end are {low} and {high}.	Το {name} καταλήγει κοντά στο {median} (διάμεσος)· το 5ο και το 95ο εκατοστημόριο στο τέλος είναι {low} και {high}.
 	{name} ends at {value}.	Το {name} καταλήγει στο {value}.
-	{name} at {time}: median {median}, mean {mean}, 9 runs in 10 between {low} and {high}	{name} τη χρονική στιγμή {time}: διάμεσος {median}, μέση τιμή {mean}, 9 στις 10 εκτελέσεις μεταξύ {low} και {high}
+	{name} at {time}: median {median}, mean {mean}, 5th to 95th percentiles {low} and {high}	{name} τη χρονική στιγμή {time}: διάμεσος {median}, μέση τιμή {mean}, 5ο και 95ο εκατοστημόριο {low} και {high}
 	{name} at {time}: {value}	{name} τη χρονική στιγμή {time}: {value}
 	Time	Χρόνος
 	Time ({unit})	Χρόνος ({unit})
@@ -1350,12 +1350,11 @@ unit	yr	έτ
 	{name} median	{name}, διάμεσος
 	{name} 5th percentile	{name}, 5ο εκατοστημόριο
 	{name} 95th percentile	{name}, 95ο εκατοστημόριο
-	Saving system dynamics models comes with editing.	Η αποθήκευση μοντέλων δυναμικής συστημάτων θα έρθει με την επεξεργασία.
 	This run is too large to make in the window: shorten it, raise the time step or lower the runs, or run it from the command line.	Αυτή η εκτέλεση είναι πολύ μεγάλη για το παράθυρο: συντομεύστε την, αυξήστε το χρονικό βήμα ή μειώστε τις εκτελέσεις, ή εκτελέστε την από τη γραμμή εντολών.
 	The model: its settings and variables	Το μοντέλο: οι ρυθμίσεις και οι μεταβλητές του
 	System dynamics model	Μοντέλο δυναμικής συστημάτων
 	Variables	Μεταβλητές
-	This is the model as its file has it. Editing comes next.	Αυτό είναι το μοντέλο όπως υπάρχει στο αρχείο του. Η επεξεργασία έρχεται στη συνέχεια.
+	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	Μπορείτε να αλλάξετε αυτό το μοντέλο με εντολές, από έναν πράκτορα μέσω του διακομιστή MCP ή από τη γραμμή εντολών. Η επεξεργασία στον καμβά έρχεται στη συνέχεια.
 	From {start} to {stop}, in steps of {dt}, by the {method} method.	Από {start} έως {stop}, με βήματα {dt}, με τη μέθοδο {method}.
 	Notes from the file	Σημειώσεις από το αρχείο
 	Equation	Εξίσωση
@@ -1367,7 +1366,7 @@ unit	yr	έτ
 	Runs: {n} · seed {seed}	Εκτελέσεις: {n} · σπόρος {seed}
 	One run	Μία εκτέλεση
 	Show on the chart	Εμφάνιση στο διάγραμμα
-	Solid line: median. Dashed line: mean. Shaded band: 9 runs in 10 fell inside it (5th to 95th percentile).	Συνεχής γραμμή: διάμεσος. Διακεκομμένη γραμμή: μέση τιμή. Σκιασμένη ζώνη: 9 στις 10 εκτελέσεις έπεσαν μέσα σε αυτήν (από το 5ο έως το 95ο εκατοστημόριο).
+	Solid line: median. Dashed line: mean. Shaded band: 5th to 95th percentile, at each saved time.	Συνεχής γραμμή: διάμεσος. Διακεκομμένη γραμμή: μέση τιμή. Σκιασμένη ζώνη: από το 5ο έως το 95ο εκατοστημόριο, σε κάθε αποθηκευμένη χρονική στιγμή.
 	Pick a variable to see it over time.	Διαλέξτε μια μεταβλητή για να τη δείτε στο χρόνο.
 	{name} over time	{name} στο χρόνο
 	Checked against its exact solution	Ελέγχθηκε με την ακριβή λύση του

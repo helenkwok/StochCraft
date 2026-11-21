@@ -1340,9 +1340,9 @@ unit	yr	год.
 	Stock	Залиха
 	Flow	Ток
 	Auxiliary	Помоћна променљива
-	{name} ends near {median}: 9 runs in 10 end between {low} and {high}.	{name} се завршава близу {median}: 9 од 10 покретања се завршава између {low} и {high}.
+	{name} ends near {median} (median); its 5th to 95th percentiles at the end are {low} and {high}.	{name} се завршава близу {median} (медијана); 5. и 95. перцентил на крају су {low} и {high}.
 	{name} ends at {value}.	{name} се завршава на {value}.
-	{name} at {time}: median {median}, mean {mean}, 9 runs in 10 between {low} and {high}	{name} у {time}: медијана {median}, средња вредност {mean}, 9 од 10 покретања између {low} и {high}
+	{name} at {time}: median {median}, mean {mean}, 5th to 95th percentiles {low} and {high}	{name} у {time}: медијана {median}, средња вредност {mean}, 5. и 95. перцентил {low} и {high}
 	{name} at {time}: {value}	{name} у {time}: {value}
 	Time	Време
 	Time ({unit})	Време ({unit})
@@ -1350,12 +1350,11 @@ unit	yr	год.
 	{name} median	{name}, медијана
 	{name} 5th percentile	{name}, 5. перцентил
 	{name} 95th percentile	{name}, 95. перцентил
-	Saving system dynamics models comes with editing.	Чување модела системске динамике долази са уређивањем.
 	This run is too large to make in the window: shorten it, raise the time step or lower the runs, or run it from the command line.	Ово покретање је превелико за прозор: скратите га, повећајте временски корак или смањите број покретања, или га покрените из командне линије.
 	The model: its settings and variables	Модел: његова подешавања и променљиве
 	System dynamics model	Модел системске динамике
 	Variables	Променљиве
-	This is the model as its file has it. Editing comes next.	Ово је модел онакав какав је у својој датотеци. Уређивање долази следеће.
+	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	Овај модел можете мењати наредбама, из агента преко MCP сервера или из командне линије. Уређивање на платну долази следеће.
 	From {start} to {stop}, in steps of {dt}, by the {method} method.	Од {start} до {stop}, у корацима од {dt}, методом {method}.
 	Notes from the file	Напомене из датотеке
 	Equation	Једначина
@@ -1367,7 +1366,7 @@ unit	yr	год.
 	Runs: {n} · seed {seed}	Покретања: {n} · семе {seed}
 	One run	Једно покретање
 	Show on the chart	Прикажи на графикону
-	Solid line: median. Dashed line: mean. Shaded band: 9 runs in 10 fell inside it (5th to 95th percentile).	Пуна линија: медијана. Испрекидана линија: средња вредност. Осенчена трака: 9 од 10 покретања пало је унутар ње (од 5. до 95. перцентила).
+	Solid line: median. Dashed line: mean. Shaded band: 5th to 95th percentile, at each saved time.	Пуна линија: медијана. Испрекидана линија: средња вредност. Осенчена трака: од 5. до 95. перцентила, у сваком сачуваном тренутку.
 	Pick a variable to see it over time.	Изаберите променљиву да је видите кроз време.
 	{name} over time	{name} кроз време
 	Checked against its exact solution	Проверено према његовом тачном решењу

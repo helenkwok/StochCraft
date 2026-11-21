@@ -202,7 +202,8 @@ commands, make the last results stale (`sd.get` says so), and `file.save` writes
 XMILE file with its diagram. `sd.get` gives each variable's position (and a flow's pipe) and the
 information links. The sd edits are not `batch`able. In the app, a model an agent opens with `file.open` or `sd.open`
 replaces the one shown, and the results of its `sd.run` appear on the Results tab, as for the other
-kinds of model.
+kinds of model. Its edits show on the Model tab, mark the model edited (the window's Save writes it
+as XMILE) and mark the results on show out of date until `sd.run` runs again.
 
 `crates/mcp/tests/session.rs` covers four areas:
 - a session like this one, checked only through MCP;

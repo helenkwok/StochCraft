@@ -1340,9 +1340,9 @@ unit	yr	år
 	Stock	Beholdning
 	Flow	Flow
 	Auxiliary	Hjælpevariabel
-	{name} ends near {median}: 9 runs in 10 end between {low} and {high}.	{name} ender omkring {median}: 9 af 10 kørsler ender mellem {low} og {high}.
+	{name} ends near {median} (median); its 5th to 95th percentiles at the end are {low} and {high}.	{name} ender omkring {median} (median); dens 5. og 95. percentil til sidst er {low} og {high}.
 	{name} ends at {value}.	{name} ender på {value}.
-	{name} at {time}: median {median}, mean {mean}, 9 runs in 10 between {low} and {high}	{name} ved {time}: median {median}, gennemsnit {mean}, 9 af 10 kørsler mellem {low} og {high}
+	{name} at {time}: median {median}, mean {mean}, 5th to 95th percentiles {low} and {high}	{name} ved {time}: median {median}, gennemsnit {mean}, 5. og 95. percentil {low} og {high}
 	{name} at {time}: {value}	{name} ved {time}: {value}
 	Time	Tid
 	Time ({unit})	Tid ({unit})
@@ -1350,12 +1350,11 @@ unit	yr	år
 	{name} median	{name}, median
 	{name} 5th percentile	{name}, 5. percentil
 	{name} 95th percentile	{name}, 95. percentil
-	Saving system dynamics models comes with editing.	At gemme systemdynamiske modeller kommer sammen med redigering.
 	This run is too large to make in the window: shorten it, raise the time step or lower the runs, or run it from the command line.	Denne kørsel er for stor til at lave i vinduet: gør den kortere, øg tidsskridtet eller sænk antallet af kørsler, eller kør den fra kommandolinjen.
 	The model: its settings and variables	Modellen: dens indstillinger og variabler
 	System dynamics model	Systemdynamisk model
 	Variables	Variabler
-	This is the model as its file has it. Editing comes next.	Dette er modellen, som den står i sin fil. Redigering kommer næste gang.
+	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	Du kan ændre denne model med kommandoer, fra en agent via MCP-serveren eller fra kommandolinjen. Redigering på lærredet kommer næste gang.
 	From {start} to {stop}, in steps of {dt}, by the {method} method.	Fra {start} til {stop}, i skridt på {dt}, efter {method}-metoden.
 	Notes from the file	Noter fra filen
 	Equation	Ligning
@@ -1367,7 +1366,7 @@ unit	yr	år
 	Runs: {n} · seed {seed}	Kørsler: {n} · frø {seed}
 	One run	Én kørsel
 	Show on the chart	Vis i diagrammet
-	Solid line: median. Dashed line: mean. Shaded band: 9 runs in 10 fell inside it (5th to 95th percentile).	Hel linje: median. Stiplet linje: gennemsnit. Skraveret bånd: 9 af 10 kørsler lå inden for det (5. til 95. percentil).
+	Solid line: median. Dashed line: mean. Shaded band: 5th to 95th percentile, at each saved time.	Hel linje: median. Stiplet linje: gennemsnit. Skraveret bånd: 5. til 95. percentil, ved hvert gemt tidspunkt.
 	Pick a variable to see it over time.	Vælg en variabel for at se den over tid.
 	{name} over time	{name} over tid
 	Checked against its exact solution	Kontrolleret mod dens nøjagtige løsning

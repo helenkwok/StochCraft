@@ -1340,9 +1340,9 @@ unit	yr	ஆண்டு
 	Stock	இருப்பு
 	Flow	ஓட்டம்
 	Auxiliary	துணை மாறி
-	{name} ends near {median}: 9 runs in 10 end between {low} and {high}.	{name} சுமார் {median} அருகில் முடிகிறது: 10 இல் 9 இயக்கங்கள் {low} முதல் {high} வரை முடிகின்றன.
+	{name} ends near {median} (median); its 5th to 95th percentiles at the end are {low} and {high}.	{name} சுமார் {median} அருகில் முடிகிறது (இடைநிலை); முடிவில் அதன் 5-ஆம் மற்றும் 95-ஆம் சதமானங்கள் {low} மற்றும் {high}.
 	{name} ends at {value}.	{name} {value} இல் முடிகிறது.
-	{name} at {time}: median {median}, mean {mean}, 9 runs in 10 between {low} and {high}	{time} நேரத்தில் {name}: இடைநிலை {median}, சராசரி {mean}, 10 இல் 9 இயக்கங்கள் {low} முதல் {high} வரை
+	{name} at {time}: median {median}, mean {mean}, 5th to 95th percentiles {low} and {high}	{time} நேரத்தில் {name}: இடைநிலை {median}, சராசரி {mean}, 5-ஆம் மற்றும் 95-ஆம் சதமானங்கள் {low} மற்றும் {high}
 	{name} at {time}: {value}	{time} நேரத்தில் {name}: {value}
 	Time	நேரம்
 	Time ({unit})	நேரம் ({unit})
@@ -1350,12 +1350,11 @@ unit	yr	ஆண்டு
 	{name} median	{name}, இடைநிலை
 	{name} 5th percentile	{name}, 5-ஆம் சதமானம்
 	{name} 95th percentile	{name}, 95-ஆம் சதமானம்
-	Saving system dynamics models comes with editing.	அமைப்பு இயக்கவியல் மாதிரிகளைச் சேமிப்பது திருத்துதலுடன் வரும்.
 	This run is too large to make in the window: shorten it, raise the time step or lower the runs, or run it from the command line.	இந்த இயக்கம் சாளரத்தில் செய்ய மிகப் பெரியது: அதைச் சுருக்குங்கள், நேரப் படியை உயர்த்துங்கள் அல்லது இயக்கங்களைக் குறையுங்கள், அல்லது கட்டளை வரியிலிருந்து இயக்குங்கள்.
 	The model: its settings and variables	மாதிரி: அதன் அமைப்புகளும் மாறிகளும்
 	System dynamics model	அமைப்பு இயக்கவியல் மாதிரி
 	Variables	மாறிகள்
-	This is the model as its file has it. Editing comes next.	இது கோப்பில் உள்ளவாறே மாதிரி. திருத்துதல் அடுத்து வரும்.
+	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	இந்த மாதிரியைக் கட்டளைகளால் மாற்றலாம்: முகவர் மூலம் MCP சேவையகம் வழியாக, அல்லது கட்டளை வரியிலிருந்து. கித்தானில் திருத்துதல் அடுத்து வரும்.
 	From {start} to {stop}, in steps of {dt}, by the {method} method.	{start} முதல் {stop} வரை, {dt} படிகளில், {method} முறையில்.
 	Notes from the file	கோப்பிலிருந்து குறிப்புகள்
 	Equation	சமன்பாடு
@@ -1367,7 +1366,7 @@ unit	yr	ஆண்டு
 	Runs: {n} · seed {seed}	இயக்கங்கள்: {n} · விதை {seed}
 	One run	ஒரு இயக்கம்
 	Show on the chart	வரைபடத்தில் காட்டு
-	Solid line: median. Dashed line: mean. Shaded band: 9 runs in 10 fell inside it (5th to 95th percentile).	நிரப்பிய கோடு: இடைநிலை. கோடிட்ட கோடு: சராசரி. நிழலிட்ட பட்டை: 10 இல் 9 இயக்கங்கள் இதற்குள் விழுந்தன (5-ஆம் முதல் 95-ஆம் சதமானம் வரை).
+	Solid line: median. Dashed line: mean. Shaded band: 5th to 95th percentile, at each saved time.	நிரப்பிய கோடு: இடைநிலை. கோடிட்ட கோடு: சராசரி. நிழலிட்ட பட்டை: சேமிக்கப்பட்ட ஒவ்வொரு நேரத்திலும் 5-ஆம் முதல் 95-ஆம் சதமானம் வரை.
 	Pick a variable to see it over time.	காலப்போக்கில் பார்க்க ஒரு மாறியைத் தேர்ந்தெடுங்கள்.
 	{name} over time	காலப்போக்கில் {name}
 	Checked against its exact solution	அதன் துல்லியமான தீர்வுடன் சரிபார்க்கப்பட்டது

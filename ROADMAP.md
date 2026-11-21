@@ -2316,8 +2316,10 @@ The window shows and runs them (an XMILE file opens from File ▸ Open, a drop o
 page's **Product adoption** example, checked against the exact solution of its equations): a
 Model tab with the settings, the checks' warnings and a table of the variables, and a Results tab
 with the answer in words, a chart for each variable picked (the median with the 5th to 95th
-percentiles and the mean dashed, for runs in replications), a table and CSV; Save writes XMILE.
-The window's run is made whole, not a few replications a frame, because `stochcraft-sd` gives
+percentiles and the mean dashed, for runs in replications), a table and CSV, with the results marked out of date once the model is changed; Save and Save As
+write XMILE (the engine's), and the title, the header and the question on closing follow its
+unsaved state, so a model changed by an agent's or the command line's edit is marked edited; the
+recovery copy is for process models only for now. The window's run is made whole, not a few replications a frame, because `stochcraft-sd` gives
 only aggregates (a stepped job needs per-replication results there). The canvas, then the replication of hybrids with M4.3 and M4.4; arrays, the
 lint on rate-to-rate links and docking are not done.
 

@@ -84,7 +84,7 @@ impl App {
     /// The window title: the file's name, marked when there are unsaved changes.
     pub fn title(&self) -> String {
         let name = self.document_name();
-        let dirty = if self.engine.is_dirty() { " •" } else { "" };
+        let dirty = if self.unsaved_changes() { " •" } else { "" };
         format!("{name}{dirty} — StochCraft")
     }
 
@@ -268,7 +268,7 @@ impl App {
         self.guide_overlay(&ctx);
         // Once everything of this frame is laid out, including what is drawn over the charts.
         self.check_pending_png(&ctx);
-        // A system dynamics run asked for in this frame is made in the next.
+        // A system dynamics run asked for is made two frames on; keep the frames coming.
         if self.sd_pending() {
             ctx.request_repaint();
         }
@@ -324,7 +324,7 @@ impl App {
                 self.menu_bar_ui(ui, p);
                 ui.add_space(8.0);
                 let name = self.document_name();
-                let shown = if self.engine.is_dirty() {
+                let shown = if self.unsaved_changes() {
                     tf("{name} — edited", &[("name", &name)])
                 } else {
                     name
