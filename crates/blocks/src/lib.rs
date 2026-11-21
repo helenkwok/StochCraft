@@ -528,9 +528,8 @@ impl Compiled {
 /// a split sends on each entity of a batch.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub enum Metric {
-    /// Entities that entered (for a source: created). A join counts each entity once, as it
-    /// arrives on the join's first input; what arrives on its other inputs are copies of it,
-    /// merged into it.
+    /// Entities that entered (for a source: created). A join counts every entity that arrives, on
+    /// any of its inputs, so a join of two reports twice what it sends on.
     Entered,
     /// Entities that left, sent on to the next element (for a sink: removed). A parallel
     /// gateway counts one per copy it sends out, so a split into two reports twice what entered.

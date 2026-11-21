@@ -7,14 +7,16 @@
 //! (`stochcraft_random::fit::cdf`, `stochcraft_random::estimate::beta_cdf`), kept inside a
 //! bracketing interval by bisection. Counts (Poisson, binomial, a discrete user distribution)
 //! give the smallest value whose cumulative probability exceeds u, found for a whole batch of u
-//! in one walk up their probabilities.
+//! in one walk up their probabilities (starting a few standard deviations below the mean, and
+//! from a standard deviation of 10^4 up taken from a Cornish–Fisher expansion, within 1 of the
+//! exact value, so the cost does not grow with the mean).
 //!
 //! Unlike `Dist::sample`, a constant is its value as given, negative or not: a Monte Carlo input
 //! is a quantity, not a duration.
 
 use stochcraft_model::Dist;
 use stochcraft_random::math::{exp, ln, powf};
-use stochcraft_random::{estimate, fit, ln_gamma};
+use stochcraft_random::{estimate, fit, ln_binomial_pmf, ln_gamma, ln_poisson_pmf};
 use stochcraft_stats::spread::{normal_cdf, normal_quantile};
 
 /// The smallest probability drawn through an inverse: 2⁻⁵³, so 1 − it is still below 1.
@@ -219,30 +221,55 @@ fn discrete(d: &Dist, ps: &[f64]) -> Vec<f64> {
         }
         Dist::Poisson { mean } => {
             let m = *mean;
-            let ln_pmf = |k: f64| -m + k * ln(m) - ln_gamma(k + 1.0);
-            walk(&order, ps, &mut out, m + 50.0 * m.sqrt() + 100.0, |k| {
-                if m <= 0.0 {
-                    f64::from(u8::from(k == 0.0))
-                } else {
-                    exp(ln_pmf(k))
+            let sd = m.sqrt();
+            if sd > WALK_UP_TO_SD {
+                for &i in &order {
+                    out[i] = by_expansion(ps[i], m, sd, 1.0 / sd, f64::INFINITY);
                 }
-            });
+            } else {
+                walk(
+                    &order,
+                    ps,
+                    &mut out,
+                    window_start(m, sd),
+                    m + 50.0 * sd + 100.0,
+                    |k| {
+                        if m <= 0.0 {
+                            f64::from(u8::from(k == 0.0))
+                        } else {
+                            exp(ln_poisson_pmf(k, m))
+                        }
+                    },
+                );
+            }
         }
         Dist::Binomial {
             probability,
             trials,
         } => {
             let (q, n) = (*probability, *trials as f64);
-            let ln_choose = |k: f64| ln_gamma(n + 1.0) - ln_gamma(k + 1.0) - ln_gamma(n - k + 1.0);
-            walk(&order, ps, &mut out, n, |k| {
-                if q <= 0.0 {
-                    f64::from(u8::from(k == 0.0))
-                } else if q >= 1.0 {
-                    f64::from(u8::from(k == n))
-                } else {
-                    exp(ln_choose(k) + k * ln(q) + (n - k) * ln(1.0 - q))
+            let mean = n * q;
+            let sd = (n * q * (1.0 - q)).sqrt();
+            if q <= 0.0 || q >= 1.0 {
+                // All the probability is at one end.
+                let end = if q >= 1.0 { n } else { 0.0 };
+                for &i in &order {
+                    out[i] = end;
                 }
-            });
+            } else if sd > WALK_UP_TO_SD || mean + 50.0 * sd + 100.0 >= WHOLE_STEPS {
+                for &i in &order {
+                    out[i] = by_expansion(ps[i], mean, sd, (1.0 - 2.0 * q) / sd, n);
+                }
+            } else {
+                walk(
+                    &order,
+                    ps,
+                    &mut out,
+                    window_start(mean, sd),
+                    n.min(mean + 50.0 * sd + 100.0),
+                    |k| exp(ln_binomial_pmf(k, n, q)),
+                );
+            }
         }
         _ => {
             for &i in &order {
@@ -253,11 +280,46 @@ fn discrete(d: &Dist, ps: &[f64]) -> Vec<f64> {
     out
 }
 
-/// Walks a count's values 0, 1, 2, … up to `limit` with probabilities `pmf`, giving each
-/// probability (in the ascending `order`) the first value whose cumulative probability exceeds it.
-fn walk(order: &[usize], ps: &[f64], out: &mut [f64], limit: f64, pmf: impl Fn(f64) -> f64) {
-    let mut k = 0.0;
-    let mut cumulative = pmf(0.0);
+/// A count whose standard deviation is above this is not walked value by value (a walk costs
+/// about 20 standard deviations of steps) but taken from [`by_expansion`].
+const WALK_UP_TO_SD: f64 = 1e4;
+
+/// 2^52: from here a `f64` can no longer step through the whole numbers one at a time.
+const WHOLE_STEPS: f64 = 4_503_599_627_370_496.0;
+
+/// Where a walk over a count with this mean and standard deviation starts: 12 standard
+/// deviations and 40 below the mean, under which the probability left out (a Chernoff bound of
+/// at most about 10^-17 for these counts) is below what a `f64` cumulative sum can hold. Small
+/// counts start at 0.
+fn window_start(mean: f64, sd: f64) -> f64 {
+    (mean - 12.0 * sd - 40.0).floor().max(0.0)
+}
+
+/// The value at probability `p` of a count with a large standard deviation, from the
+/// Cornish–Fisher expansion of the normal quantile to its first (skewness) term, with the
+/// continuity correction of a count: the smallest whole number above x − ½ for the continuous
+/// x = mean + sd (z + skew (z² − 1) / 6). The next terms are of order 1/sd² in z, so the result
+/// is within 1 of the exact quantile once sd is in the thousands (tested against the walk at
+/// 10^4), and the error as a share of the value falls as 1/sd².
+fn by_expansion(p: f64, mean: f64, sd: f64, skew: f64, upper: f64) -> f64 {
+    let z = z(p);
+    let x = mean + sd * (z + skew * (z * z - 1.0) / 6.0);
+    (x - 0.5).ceil().clamp(0.0, upper)
+}
+
+/// Walks a count's values from `start` (0 unless the probability below it is negligible) up to
+/// `limit` with probabilities `pmf`, giving each probability (in the ascending `order`) the first
+/// value whose cumulative probability exceeds it.
+fn walk(
+    order: &[usize],
+    ps: &[f64],
+    out: &mut [f64],
+    start: f64,
+    limit: f64,
+    pmf: impl Fn(f64) -> f64,
+) {
+    let mut k = start;
+    let mut cumulative = pmf(start);
     for &i in order {
         while ps[i] >= cumulative && k < limit {
             k += 1.0;
@@ -382,5 +444,154 @@ mod tests {
         };
         assert_eq!(quantile(&curve, 0.1), 1.0);
         assert!(close(quantile(&curve, 0.625), 2.5, 1e-12));
+    }
+
+    /// The least k with cumulative probability above `p`, by summing the probabilities from 0.
+    fn quantile_by_summing(pmf: impl Fn(f64) -> f64, p: f64) -> f64 {
+        let (mut k, mut cumulative) = (0.0, pmf(0.0));
+        while cumulative <= p {
+            k += 1.0;
+            cumulative += pmf(k);
+        }
+        k
+    }
+
+    /// A walk that starts near the mean gives what a walk from 0 gives.
+    #[test]
+    fn counts_with_large_means_agree_with_summing_from_zero() {
+        let ps = [1e-9, 0.001, 0.2, 0.5, 0.8, 0.999, 1.0 - 1e-9];
+        let poisson = Dist::Poisson { mean: 5_000.0 };
+        let got = quantiles(&poisson, &ps);
+        for (p, k) in ps.iter().zip(&got) {
+            let want = quantile_by_summing(|k| exp(ln_poisson_pmf(k, 5_000.0)), *p);
+            assert!((k - want).abs() < 0.5, "Poisson at {p}: {k} vs {want}");
+        }
+        let binomial = Dist::Binomial {
+            probability: 0.3,
+            trials: 20_000,
+        };
+        let got = quantiles(&binomial, &ps);
+        for (p, k) in ps.iter().zip(&got) {
+            let want = quantile_by_summing(|k| exp(ln_binomial_pmf(k, 20_000.0, 0.3)), *p);
+            assert!((k - want).abs() < 0.5, "Binomial at {p}: {k} vs {want}");
+        }
+    }
+
+    /// The expansion used above 10^4 standard deviations is within 1 of the walk just below it.
+    #[test]
+    fn the_expansion_is_within_one_of_the_walk() {
+        let ps = [1e-6, 0.001, 0.1, 0.5, 0.9, 0.999, 1.0 - 1e-6];
+        let cases = [
+            (
+                Dist::Poisson { mean: 9e7 },
+                9e7,
+                9e7_f64.sqrt(),
+                1.0 / 9e7_f64.sqrt(),
+                f64::INFINITY,
+            ),
+            (
+                Dist::Binomial {
+                    probability: 0.3,
+                    trials: 300_000_000,
+                },
+                9e7,
+                (300_000_000.0_f64 * 0.21).sqrt(),
+                0.4 / (300_000_000.0_f64 * 0.21).sqrt(),
+                300_000_000.0,
+            ),
+            (
+                Dist::Binomial {
+                    probability: 0.005,
+                    trials: 200_000_000,
+                },
+                1e6,
+                (200_000_000.0_f64 * 0.005 * 0.995).sqrt(),
+                0.99 / (200_000_000.0_f64 * 0.005 * 0.995).sqrt(),
+                200_000_000.0,
+            ),
+            (
+                Dist::Binomial {
+                    probability: 0.97,
+                    trials: 50_000_000,
+                },
+                48_500_000.0,
+                (50_000_000.0_f64 * 0.97 * 0.03).sqrt(),
+                -0.94 / (50_000_000.0_f64 * 0.97 * 0.03).sqrt(),
+                50_000_000.0,
+            ),
+        ];
+        for (d, mean, sd, skew, upper) in cases {
+            let walked = quantiles(&d, &ps);
+            for (p, k) in ps.iter().zip(&walked) {
+                let approx = by_expansion(*p, mean, sd, skew, upper);
+                assert!(
+                    (k - approx).abs() <= 1.0,
+                    "{d:?} at {p}: walked {k}, expansion {approx}"
+                );
+            }
+        }
+    }
+
+    /// Counts of any size are inverted at once, not by walking up to them.
+    #[test]
+    fn huge_counts_are_inverted_without_a_walk() {
+        let ps = [0.025, 0.5, 0.975];
+        for mean in [1e9, 1e12, 1e18] {
+            let sd = mean.sqrt();
+            let got = quantiles(&Dist::Poisson { mean }, &ps);
+            assert!(got.windows(2).all(|w| w[0] < w[1]), "{mean}: {got:?}");
+            assert!(
+                (got[1] - mean).abs() <= 1.0 + 0.0001 * sd,
+                "{mean}: {got:?}"
+            );
+            assert!(
+                (got[2] - (mean + 1.959_964 * sd)).abs() <= 0.001 * sd + 2.0,
+                "{got:?}"
+            );
+        }
+        let trials = u64::MAX;
+        let n = trials as f64;
+        let got = quantiles(
+            &Dist::Binomial {
+                probability: 0.3,
+                trials,
+            },
+            &ps,
+        );
+        let sd = (n * 0.21).sqrt();
+        assert!(got.windows(2).all(|w| w[0] < w[1]), "{got:?}");
+        assert!(
+            (got[1] - 0.3 * n).abs() <= 0.001 * sd + 2.0 * 4096.0,
+            "{got:?}"
+        );
+        assert!(got.iter().all(|k| (0.0..=n).contains(k)), "{got:?}");
+        // Ends of the range, and a success probability that leaves almost all at the top.
+        let near_one = quantiles(
+            &Dist::Binomial {
+                probability: 1.0 - f64::EPSILON,
+                trials,
+            },
+            &ps,
+        );
+        assert!(
+            near_one.iter().all(|k| (0.0..=n).contains(k)),
+            "{near_one:?}"
+        );
+        let all = quantiles(
+            &Dist::Binomial {
+                probability: 1.0,
+                trials,
+            },
+            &ps,
+        );
+        assert_eq!(all, vec![n; 3]);
+        let none = quantiles(
+            &Dist::Binomial {
+                probability: 0.0,
+                trials,
+            },
+            &ps,
+        );
+        assert_eq!(none, vec![0.0; 3]);
     }
 }

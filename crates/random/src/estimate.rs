@@ -298,7 +298,13 @@ fn round(v: f64) -> f64 {
     }
     let digits = 12 - (libm::floor(libm::log10(v.abs())) as i32) - 1;
     let f = powf(10.0, f64::from(digits));
-    libm::round(v * f) / f
+    if f.is_finite() {
+        return libm::round(v * f) / f;
+    }
+    // Below about 10^-297 the scale 10^digits overflows (and v · ∞ / ∞ is NaN): scale up by
+    // 10^300 first, which a number this small can take, and the rest of the scale fits.
+    let (big, rest) = (1e300, powf(10.0, f64::from(digits - 300)));
+    libm::round(v * big * rest) / rest / big
 }
 
 /// The standard normal quantile, by bisection on Φ (enough for building a table).
@@ -397,6 +403,33 @@ mod tests {
 
     fn close(a: f64, b: f64, tol: f64) -> bool {
         (a - b).abs() <= tol * b.abs().max(1.0)
+    }
+
+    #[test]
+    fn rounding_to_twelve_digits_holds_at_the_ends_of_the_range() {
+        assert_eq!(round(1234.567_890_123_45), 1234.567_890_12);
+        assert_eq!(round(-0.000_123_456_789_012_345), -0.000_123_456_789_012);
+        // Below 10^-297 the scale 10^digits is infinite: it was NaN.
+        for v in [
+            1e-297,
+            1.234_567_890_123_45e-298,
+            -9.87e-300,
+            1e-310,
+            5e-324,
+        ] {
+            let r = round(v);
+            assert!(r.is_finite(), "{v}: {r}");
+            assert!((r - v).abs() <= 1e-11 * v.abs(), "{v}: {r}");
+        }
+        // To 12 digits, within the last bit or two of the two scalings it takes there.
+        assert!((round(1.234_567_890_123_45e-300) / 1.234_567_890_12e-300 - 1.0).abs() < 1e-15);
+        assert!(round(f64::NAN).is_nan());
+        // A whole fit of tiny values is made of finite numbers.
+        let d = est(Family::Pert, 0.0, 1e-299, 1e-298, Upper::Max).fit();
+        let Ok(Dist::User { points, .. }) = d else {
+            unreachable!("{d:?}")
+        };
+        assert!(points.iter().all(|(p, v)| p.is_finite() && v.is_finite()));
     }
 
     fn est(family: Family, min: f64, mode: f64, upper: f64, upper_is: Upper) -> ThreePoint {

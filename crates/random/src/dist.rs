@@ -45,11 +45,19 @@ pub enum Dist {
     Erlang { mean: f64, k: u64 },
     /// Weibull with shape k and scale λ. Inversion.
     Weibull { shape: f64, scale: f64 },
-    /// Poisson count with this mean. Knuth's multiplication method, applied to pieces of mean at
-    /// most 30 whose sum is exact (cost grows with the mean).
+    /// Poisson count with this mean. Below a mean of 10, Knuth's multiplication method. From 10,
+    /// the transformed rejection method PTRS (Hörmann, "The transformed rejection method for
+    /// generating Poisson random variables", Insurance: Mathematics and Economics 12, 1993,
+    /// 39-45), whose cost does not grow with the mean. From a mean of 10^15, where adding 1 to
+    /// a count in a `f64` starts to fail, a rounded normal draw (the relative error of its
+    /// shape is of order 1/sqrt(mean)).
     Poisson { mean: f64 },
     /// Binomial count of successes in `trials` with success `probability`. Geometric waiting
-    /// times (cost grows with trials × probability), using symmetry above probability 0.5.
+    /// times while trials × min(probability, 1 − probability) is below 10 (cost grows with that
+    /// product), using symmetry above probability 0.5. From 10, the transformed rejection
+    /// method BTRS (Hörmann, "The generation of binomial random variates", Journal of
+    /// Statistical Computation and Simulation 46, 1993, 101-110), whose cost does not grow with
+    /// the number of trials.
     Binomial { probability: f64, trials: u64 },
     /// Data points `(probability, value)`. `discrete`: one of the values, with its probability.
     /// Continuous: the points, sorted by value, are breakpoints of a cumulative distribution
@@ -275,9 +283,18 @@ fn binomial(rng: &mut Rng, p: f64, n: u64) -> u64 {
     if p > 0.5 {
         return n - binomial(rng, 1.0 - p, n);
     }
-    // Successes are where geometric waiting times land inside the n trials.
-    let log_q = ln(1.0 - p);
+    if n as f64 * p >= TRANSFORMED_FROM {
+        return binomial_btrs(rng, p, n);
+    }
+    // Successes are where geometric waiting times land inside the n trials. (Below a success
+    // probability of 2^-52, 1 − p rounds to 1, so ln(1 − p) is taken as ln_1p(−p).)
+    let log_q = if p < f64::EPSILON {
+        libm::log1p(-p)
+    } else {
+        ln(1.0 - p)
+    };
     let mut successes = 0u64;
+    // The trials used so far, so never above n.
     let mut position = 0u64;
     loop {
         let skip = (ln(rng.uniform_open0()) / log_q).floor();
@@ -286,12 +303,166 @@ fn binomial(rng: &mut Rng, p: f64, n: u64) -> u64 {
         } else {
             n
         };
-        position = position.saturating_add(step).saturating_add(1);
-        if position > n {
+        // A success needs `step` failures and then itself; compared with what is left rather
+        // than added to the position, which would never pass n = u64::MAX.
+        if step >= n - position {
             return successes;
         }
+        position += step + 1;
         successes += 1;
     }
+}
+
+/// Binomial by transformed rejection with squeeze, BTRS (Hörmann, "The generation of binomial
+/// random variates", Journal of Statistical Computation and Simulation 46, 1993, 101-110), for
+/// p ≤ 0.5 and n · p ≥ 10. The acceptance test uses [`ln_binomial_pmf`], which stays accurate
+/// at any `n`.
+fn binomial_btrs(rng: &mut Rng, p: f64, n: u64) -> u64 {
+    let nf = n as f64;
+    let spq = (nf * p * (1.0 - p)).sqrt();
+    let b = 1.15 + 2.53 * spq;
+    let a = -0.0873 + 0.0248 * b + 0.01 * p;
+    let c = nf * p + 0.5;
+    let vr = 0.92 - 4.2 / b;
+    let alpha = (2.83 + 5.1 / b) * spq;
+    // The mode.
+    let m = ((nf + 1.0) * p).floor();
+    let ln_mode = ln_binomial_pmf(m, nf, p);
+    loop {
+        let u = rng.uniform() - 0.5;
+        let v = rng.uniform_open0();
+        let us = 0.5 - u.abs();
+        let k = ((2.0 * a / us + b) * u + c).floor();
+        // Outside 0..=n (or NaN, from us = 0) is rejected.
+        if !(0.0..=nf).contains(&k) {
+            continue;
+        }
+        if us >= 0.07 && v <= vr {
+            return (k as u64).min(n);
+        }
+        if ln(v * alpha / (a / (us * us) + b)) <= ln_binomial_pmf(k, nf, p) - ln_mode {
+            return (k as u64).min(n);
+        }
+    }
+}
+
+/// The mean from which a Poisson count is drawn by [`poisson_ptrs`], and the trials × probability
+/// (of the rarer side) from which a binomial one is drawn by [`binomial_btrs`]: the least values
+/// at which the published methods are valid. Below them the older samplers run unchanged, so
+/// their fixed-seed draws stay as they were.
+const TRANSFORMED_FROM: f64 = 10.0;
+
+/// The Poisson mean from which a rounded normal is drawn: far above 2^53, where adding 1 to a
+/// count stalls.
+const POISSON_NORMAL_FROM: f64 = 1e15;
+
+/// A Poisson count with a valid `mean`.
+fn poisson(rng: &mut Rng, mean: f64) -> f64 {
+    if mean < TRANSFORMED_FROM {
+        return poisson_knuth(rng, mean) as f64;
+    }
+    if mean >= POISSON_NORMAL_FROM {
+        return libm::round(mean + mean.sqrt() * standard_normal(rng)).max(0.0);
+    }
+    poisson_ptrs(rng, mean)
+}
+
+/// Poisson by transformed rejection with squeeze, PTRS (Hörmann, 1993, Insurance: Mathematics
+/// and Economics 12, 39-45), for a mean of at least 10. The acceptance test uses
+/// [`ln_poisson_pmf`], which stays accurate at huge means.
+fn poisson_ptrs(rng: &mut Rng, mean: f64) -> f64 {
+    let b = 0.931 + 2.53 * mean.sqrt();
+    let a = -0.059 + 0.02483 * b;
+    let ln_inv_alpha = ln(1.1239 + 1.1328 / (b - 3.4));
+    let vr = 0.9277 - 3.6224 / (b - 2.0);
+    loop {
+        let u = rng.uniform() - 0.5;
+        let v = rng.uniform_open0();
+        let us = 0.5 - u.abs();
+        let k = ((2.0 * a / us + b) * u + mean + 0.43).floor();
+        // Negative (or NaN, from us = 0) is rejected.
+        if k.is_nan() || k < 0.0 {
+            continue;
+        }
+        if us >= 0.07 && v <= vr {
+            return k;
+        }
+        if us < 0.013 && v > us {
+            continue;
+        }
+        if ln(v) + ln_inv_alpha - ln(a / (us * us) + b) <= ln_poisson_pmf(k, mean) {
+            return k;
+        }
+    }
+}
+
+/// Below this, ln k! is taken from [`ln_gamma`]; from it, from Stirling's series.
+const STIRLING_FROM: f64 = 32.0;
+
+/// The natural logarithm of the Poisson probability of `k` (a whole number) at a `mean` above 0.
+///
+/// From k = 32 by Stirling's series for ln k!, arranged so that the large terms cancel
+/// analytically (the main term is −mean · ((1 + x) ln(1 + x) − x) for x = (k − mean) / mean).
+/// That keeps it accurate to many digits at means where the direct form loses all of them.
+pub fn ln_poisson_pmf(k: f64, mean: f64) -> f64 {
+    if k < STIRLING_FROM {
+        return -mean + k * ln(mean) - ln_gamma(k + 1.0);
+    }
+    let x = (k - mean) / mean;
+    -mean * entropy_excess(x) - 0.5 * ln(2.0 * std::f64::consts::PI * k) - stirling_tail(k)
+}
+
+/// The natural logarithm of the binomial probability of `k` successes (a whole number from 0 to
+/// `n`) in `n` trials with success probability `p`, for p in (0, 1). Accurate to many digits for
+/// any `n`, by the same arrangement as [`ln_poisson_pmf`].
+pub fn ln_binomial_pmf(k: f64, n: f64, p: f64) -> f64 {
+    let failures = n - k;
+    if k < STIRLING_FROM || failures < STIRLING_FROM {
+        // ln C(n, j) for the smaller of the two, as a sum of the ratios (n − i) / (i + 1).
+        let j = k.min(failures);
+        let mut ln_choose = 0.0;
+        let mut i = 0.0;
+        while i < j {
+            ln_choose += ln((n - i) / (i + 1.0));
+            i += 1.0;
+        }
+        return ln_choose + k * ln(p) + failures * libm::log1p(-p);
+    }
+    let (np, nq) = (n * p, n * (1.0 - p));
+    let x = (k - np) / np;
+    let y = (np - k) / nq;
+    -(np * entropy_excess(x) + nq * entropy_excess(y))
+        + 0.5 * ln(n / (2.0 * std::f64::consts::PI * k * failures))
+        + stirling_tail(n)
+        - stirling_tail(k)
+        - stirling_tail(failures)
+}
+
+/// (1 + x) ln(1 + x) − x for x > −1: about x²/2 near 0, where the difference of the two terms
+/// would lose its digits, so a series stands in there.
+fn entropy_excess(x: f64) -> f64 {
+    if x.abs() < 0.01 {
+        // Σ (−1)^n xⁿ / (n (n − 1)) for n ≥ 2.
+        let c = [
+            1.0 / 2.0,
+            -1.0 / 6.0,
+            1.0 / 12.0,
+            -1.0 / 20.0,
+            1.0 / 30.0,
+            -1.0 / 42.0,
+            1.0 / 56.0,
+        ];
+        return x * x * c.iter().rev().fold(0.0, |acc, ci| ci + x * acc);
+    }
+    (1.0 + x) * libm::log1p(x) - x
+}
+
+/// ln k! − (k ln k − k + ½ ln(2πk)), by its asymptotic series, for k ≥ 32 (the next term is
+/// below 10^-17 there).
+fn stirling_tail(k: f64) -> f64 {
+    let i = 1.0 / k;
+    let i2 = i * i;
+    i * (1.0 / 12.0 - i2 * (1.0 / 360.0 - i2 * (1.0 / 1260.0 - i2 / 1680.0)))
 }
 
 /// A draw from a user distribution (0 for points [`Dist::check`] rejects). Discrete points, and
@@ -563,17 +734,7 @@ impl Dist {
                 (0..*k).map(|_| rng.exponential(each)).sum()
             }
             Dist::Weibull { shape, scale } => scale * powf(-ln(rng.uniform_open0()), 1.0 / shape),
-            Dist::Poisson { mean } => {
-                let pieces = (mean / 30.0).ceil().max(1.0);
-                let each = mean / pieces;
-                let mut total = 0u64;
-                let mut left = pieces;
-                while left > 0.0 {
-                    total += poisson_knuth(rng, each);
-                    left -= 1.0;
-                }
-                total as f64
-            }
+            Dist::Poisson { mean } => poisson(rng, *mean),
             Dist::Binomial {
                 probability,
                 trials,
@@ -697,7 +858,27 @@ impl Dist {
                 probability: p,
                 trials,
             } => *trials as f64 * p * (1.0 - p),
-            Dist::User { .. } => return None,
+            // Exact: the second moment about the mean. A continuous table is an atom at the
+            // lowest value and then uniform pieces between breakpoints, each with the second
+            // moment (a² + ab + b²) / 3 of a uniform from a to b (taken about the mean).
+            Dist::User { points, discrete } => {
+                let pts = user_points(points, *discrete)?;
+                let mean = self.mean()?;
+                let about = |v: f64| v - mean;
+                if *discrete {
+                    pts.iter().map(|(p, v)| p * about(*v) * about(*v)).sum()
+                } else {
+                    let atom = pts.first().map_or(0.0, |(p, v)| p * about(*v) * about(*v));
+                    let pieces: f64 = pts
+                        .windows(2)
+                        .map(|w| {
+                            let (a, b) = (about(w[0].1), about(w[1].1));
+                            w[1].0 * (a * a + a * b + b * b) / 3.0
+                        })
+                        .sum();
+                    atom + pieces
+                }
+            }
         })
     }
 }
@@ -1329,6 +1510,389 @@ mod tests {
         ] {
             assert_eq!(d.can_be_positive(), positive, "{d:?}");
         }
+    }
+
+    /// The Poisson sampler as it was before the transformed method was added: pieces of mean at
+    /// most 30, each by Knuth's method.
+    fn old_poisson(rng: &mut Rng, mean: f64) -> f64 {
+        let pieces = (mean / 30.0).ceil().max(1.0);
+        let each = mean / pieces;
+        let mut total = 0u64;
+        let mut left = pieces;
+        while left > 0.0 {
+            total += poisson_knuth(rng, each);
+            left -= 1.0;
+        }
+        total as f64
+    }
+
+    /// The binomial sampler as it was before the transformed method and the remaining-trials
+    /// check were added.
+    fn old_binomial(rng: &mut Rng, p: f64, n: u64) -> u64 {
+        if p <= 0.0 || n == 0 {
+            return 0;
+        }
+        if p >= 1.0 {
+            return n;
+        }
+        if p > 0.5 {
+            return n - old_binomial(rng, 1.0 - p, n);
+        }
+        let log_q = ln(1.0 - p);
+        let mut successes = 0u64;
+        let mut position = 0u64;
+        loop {
+            let skip = (ln(rng.uniform_open0()) / log_q).floor();
+            let step = if skip.is_finite() && skip < (n as f64) {
+                skip as u64
+            } else {
+                n
+            };
+            position = position.saturating_add(step).saturating_add(1);
+            if position > n {
+                return successes;
+            }
+            successes += 1;
+        }
+    }
+
+    #[test]
+    fn small_counts_keep_their_fixed_seed_draws() {
+        for mean in [0.0, 0.3, 2.0, 3.5, 9.0, 9.999_999] {
+            for seed in 0..40 {
+                let (mut a, mut b) = (Rng::new(seed), Rng::new(seed));
+                let d = Dist::Poisson { mean };
+                for _ in 0..50 {
+                    assert_eq!(d.sample(&mut a), old_poisson(&mut b, mean), "mean {mean}");
+                }
+            }
+        }
+        // Each pair has trials × min(p, 1 − p) below 10.
+        for (probability, trials) in [
+            (0.3, 20),
+            (0.9, 25),
+            (0.05, 150),
+            (0.5, 19),
+            (0.97, 300),
+            (0.2, 49),
+            (0.001, 5_000),
+            (0.4, 1),
+        ] {
+            for seed in 0..40 {
+                let (mut a, mut b) = (Rng::new(seed), Rng::new(seed));
+                let d = Dist::Binomial {
+                    probability,
+                    trials,
+                };
+                for _ in 0..50 {
+                    let new = d.sample(&mut a);
+                    let old = old_binomial(&mut b, probability, trials) as f64;
+                    assert_eq!(new, old, "p {probability}, n {trials}");
+                }
+            }
+        }
+    }
+
+    /// The sample mean and variance of `n` draws against theory, each within `sigmas` standard
+    /// errors (a Poisson's variance estimate has variance (λ + 2λ²) / n).
+    fn check_count_moments(d: &Dist, mean: f64, var: f64, fourth: f64, n: usize, seed: u64) {
+        let (m, v) = moments(d, n, seed);
+        let se_mean = (var / n as f64).sqrt();
+        assert!(
+            (m - mean).abs() <= 5.0 * se_mean + 1e-6,
+            "{d:?}: mean {m} vs {mean} (se {se_mean})"
+        );
+        // The standard error of the sample variance: sqrt((μ4 − σ⁴) / n).
+        let se_var = ((fourth - var * var) / n as f64).sqrt();
+        assert!(
+            (v - var).abs() <= 5.0 * se_var,
+            "{d:?}: variance {v} vs {var} (se {se_var})"
+        );
+    }
+
+    #[test]
+    fn poisson_means_from_50_to_10_to_the_12_have_their_moments() {
+        for (mean, seed) in [(10.0, 1u64), (50.0, 2), (1e6, 3), (1e12, 4)] {
+            let d = Dist::Poisson { mean };
+            // μ4 = λ + 3λ².
+            check_count_moments(&d, mean, mean, mean + 3.0 * mean * mean, 200_000, seed);
+        }
+    }
+
+    #[test]
+    fn poisson_draws_are_whole_and_never_negative_at_the_edges() {
+        let mut rng = Rng::new(5);
+        for mean in [9.999_999, 10.0, 10.000_001, 31.9, 32.0, 1e14] {
+            let d = Dist::Poisson { mean };
+            for _ in 0..5_000 {
+                let x = d.sample(&mut rng);
+                assert!(x >= 0.0 && x == x.trunc(), "{mean}: {x}");
+            }
+        }
+        // Above 10^15 a rounded normal, with the mean and variance of the Poisson.
+        let mean = 1e16;
+        let d = Dist::Poisson { mean };
+        let (m, v) = moments(&d, 20_000, 6);
+        assert!(
+            (m - mean).abs() <= 5.0 * mean.sqrt() / 20_000f64.sqrt(),
+            "{m}"
+        );
+        assert!((v / mean - 1.0).abs() < 0.1, "{v}");
+        // A mean so large that adding 1 to a count no longer changes it ends at once.
+        assert!(Dist::Poisson { mean: 1e300 }.sample(&mut rng) > 0.0);
+    }
+
+    #[test]
+    fn binomials_with_many_trials_have_their_moments() {
+        let n = 1e9;
+        for (p, seed) in [
+            (0.3, 11u64),
+            (0.5, 12),
+            (0.7, 13),
+            (0.999_999, 14),
+            (1e-6, 15),
+        ] {
+            let d = Dist::Binomial {
+                probability: p,
+                trials: 1_000_000_000,
+            };
+            let q = 1.0 - p;
+            let var = n * p * q;
+            // μ4 = σ⁴ (3 + (1 − 6pq) / (npq)) + ...: the fourth central moment of a binomial.
+            let fourth = var * var * 3.0 + var * (1.0 - 6.0 * p * q);
+            check_count_moments(&d, n * p, var, fourth, 200_000, seed);
+        }
+    }
+
+    #[test]
+    fn a_binomial_at_the_threshold_is_drawn_either_side_of_it() {
+        // 20 × 0.5 = 10 uses the transformed method; 19 × 0.5 = 9.5 the waiting times.
+        for (trials, seed) in [(19u64, 21u64), (20, 22), (21, 23)] {
+            let p = 0.5;
+            let d = Dist::Binomial {
+                probability: p,
+                trials,
+            };
+            let n = trials as f64;
+            let var = n * p * (1.0 - p);
+            let fourth = var * var * 3.0 + var * (1.0 - 6.0 * p * (1.0 - p));
+            check_count_moments(&d, n * p, var, fourth, 200_000, seed);
+        }
+    }
+
+    /// A chi-squared statistic and its number of cells for `draws` draws against the exact
+    /// probabilities of 0 to `top`, running neighbouring values together until a cell expects at
+    /// least 5 (what is left at the top, under 5 expected, is dropped).
+    fn chi_squared(
+        d: &Dist,
+        pmf: impl Fn(u64) -> f64,
+        top: u64,
+        draws: usize,
+        seed: u64,
+    ) -> (f64, usize) {
+        let mut rng = Rng::new(seed);
+        let mut counts = vec![0usize; top as usize + 1];
+        for _ in 0..draws {
+            if let Some(c) = counts.get_mut(d.sample(&mut rng) as usize) {
+                *c += 1;
+            }
+        }
+        let n = draws as f64;
+        let (mut chi, mut cells) = (0.0, 0usize);
+        let (mut seen, mut expected) = (0.0, 0.0);
+        for (k, count) in counts.iter().enumerate() {
+            seen += *count as f64;
+            expected += pmf(k as u64) * n;
+            if expected >= 5.0 {
+                chi += (seen - expected) * (seen - expected) / expected;
+                cells += 1;
+                (seen, expected) = (0.0, 0.0);
+            }
+        }
+        (chi, cells)
+    }
+
+    #[test]
+    fn the_transformed_methods_fit_their_distributions() {
+        let draws = 400_000;
+        let check = |name: String, (chi, cells): (f64, usize)| {
+            // Chi-squared with cells − 1 degrees of freedom: its mean plus 8 standard
+            // deviations is far beyond the 10^-9 point.
+            let df = cells as f64 - 1.0;
+            assert!(
+                chi < df + 8.0 * (2.0 * df).sqrt() + 10.0,
+                "{name}: {chi} on {df}"
+            );
+        };
+        for (mean, seed) in [(10.0, 31u64), (12.5, 32), (31.0, 33), (45.0, 34)] {
+            let d = Dist::Poisson { mean };
+            let top = (mean + 12.0 * mean.sqrt()) as u64;
+            let fit = chi_squared(
+                &d,
+                |k| exp(ln_poisson_pmf(k as f64, mean)),
+                top,
+                draws,
+                seed,
+            );
+            check(format!("Poisson({mean})"), fit);
+        }
+        for (p, n, seed) in [
+            (0.3, 40u64, 41u64),
+            (0.5, 20, 42),
+            (0.45, 100, 43),
+            (0.8, 60, 44),
+        ] {
+            let d = Dist::Binomial {
+                probability: p,
+                trials: n,
+            };
+            let pmf = |k: u64| exp(ln_binomial_pmf(k as f64, n as f64, p));
+            check(
+                format!("Binomial({n}, {p})"),
+                chi_squared(&d, pmf, n, draws, seed),
+            );
+        }
+    }
+
+    #[test]
+    fn a_binomial_of_u64_max_trials_returns() {
+        let mut rng = Rng::new(51);
+        let max = u64::MAX;
+        // Waiting times: a mean of 1.8 successes.
+        let d = Dist::Binomial {
+            probability: 1e-19,
+            trials: max,
+        };
+        let total: f64 = (0..2_000).map(|_| d.sample(&mut rng)).sum();
+        assert!(
+            (1.5..2.1).contains(&(total / 2_000.0)),
+            "{}",
+            total / 2_000.0
+        );
+        // Probability below 2^-52, where 1 − p rounds to 1, still gives its successes.
+        let tiny = Dist::Binomial {
+            probability: 1e-17,
+            trials: 100_000_000_000_000_000,
+        };
+        let total: f64 = (0..2_000).map(|_| tiny.sample(&mut rng)).sum();
+        assert!(
+            (0.8..1.2).contains(&(total / 2_000.0)),
+            "{}",
+            total / 2_000.0
+        );
+        // The transformed method, near the mean n p.
+        for p in [0.3, 0.5, 0.9] {
+            let k = Dist::Binomial {
+                probability: p,
+                trials: max,
+            }
+            .sample(&mut rng);
+            let mean = max as f64 * p;
+            assert!((k / mean - 1.0).abs() < 1e-8, "p {p}: {k}");
+        }
+        assert_eq!(
+            Dist::Binomial {
+                probability: 1.0,
+                trials: max
+            }
+            .sample(&mut rng),
+            max as f64
+        );
+        assert_eq!(binomial(&mut rng, 0.5, 0), 0);
+    }
+
+    #[test]
+    fn the_log_probabilities_agree_with_the_direct_forms_and_sum_to_one() {
+        // Against ln Γ where that is accurate.
+        for (k, mean) in [(31.0, 40.0), (32.0, 40.0), (40.0, 50.0), (500.0, 480.0)] {
+            let direct = -mean + k * ln(mean) - ln_gamma(k + 1.0);
+            assert!(
+                (ln_poisson_pmf(k, mean) - direct).abs() < 1e-10,
+                "{k} {mean}"
+            );
+        }
+        let (n, p) = (1000.0, 0.3);
+        for k in [5.0, 31.0, 32.0, 250.0, 300.0, 340.0, 968.0, 969.0, 990.0] {
+            let direct = ln_gamma(n + 1.0) - ln_gamma(k + 1.0) - ln_gamma(n - k + 1.0)
+                + k * ln(p)
+                + (n - k) * ln(1.0 - p);
+            assert!(
+                (ln_binomial_pmf(k, n, p) - direct).abs() < 1e-9 * direct.abs().max(1.0),
+                "{k}: {} vs {direct}",
+                ln_binomial_pmf(k, n, p)
+            );
+        }
+        // At scales where ln Γ fails: the probabilities over ten standard deviations add to 1.
+        let mean: f64 = 1e8;
+        let sd = mean.sqrt();
+        let lo = (mean - 10.0 * sd).floor();
+        let total: f64 = (0..(20.0 * sd) as u64)
+            .map(|i| exp(ln_poisson_pmf(lo + i as f64, mean)))
+            .sum();
+        assert!((total - 1.0).abs() < 1e-9, "{total}");
+        let (n, p): (f64, f64) = (1e9, 0.3);
+        let sd = (n * p * (1.0 - p)).sqrt();
+        let lo = (n * p - 10.0 * sd).floor();
+        let total: f64 = (0..(20.0 * sd) as u64)
+            .map(|i| exp(ln_binomial_pmf(lo + i as f64, n, p)))
+            .sum();
+        assert!((total - 1.0).abs() < 1e-9, "{total}");
+    }
+
+    #[test]
+    fn user_distribution_variances_are_exact() {
+        let close =
+            |a: Option<f64>, b: f64| a.is_some_and(|a| (a - b).abs() <= 1e-12 * b.abs().max(1.0));
+        // Discrete: E[X²] − mean² = 38.2 − 5.2².
+        let discrete = Dist::User {
+            points: vec![(0.2, 1.0), (0.5, 4.0), (0.3, 10.0)],
+            discrete: true,
+        };
+        assert!(
+            close(discrete.variance(), 38.2 - 5.2 * 5.2),
+            "{:?}",
+            discrete.variance()
+        );
+        // Weights that do not add to 1 are normalised: the same distribution.
+        let scaled = Dist::User {
+            points: vec![(2.0, 1.0), (5.0, 4.0), (3.0, 10.0)],
+            discrete: true,
+        };
+        assert!(close(scaled.variance(), 38.2 - 5.2 * 5.2));
+        // Continuous: an atom of 0.5 below, uniform on [0, 2] and on [2, 10] by halves.
+        let e2 = 0.5 * (4.0 / 3.0) + 0.5 * (1000.0 - 8.0) / 24.0;
+        let curve = Dist::User {
+            points: vec![(0.0, 0.0), (0.5, 2.0), (0.5, 10.0)],
+            discrete: false,
+        };
+        assert!(
+            close(curve.variance(), e2 - 3.5 * 3.5),
+            "{:?}",
+            curve.variance()
+        );
+        // The same points out of order of value are sorted first.
+        let shuffled = Dist::User {
+            points: vec![(0.5, 10.0), (0.0, 0.0), (0.5, 2.0)],
+            discrete: false,
+        };
+        assert!(close(shuffled.variance(), e2 - 3.5 * 3.5));
+        // An atom of 1/4 at 1 and 3/4 even over [1, 4]: E[X²] = 1/4 + 3/4 · 7, mean 2.125.
+        let atom = Dist::User {
+            points: vec![(0.25, 1.0), (0.75, 4.0)],
+            discrete: false,
+        };
+        assert!(close(atom.variance(), 0.25 + 0.75 * 7.0 - 2.125 * 2.125));
+        // One point is a constant; a table the sampler rejects has none.
+        let one = Dist::User {
+            points: vec![(1.0, 5.0)],
+            discrete: false,
+        };
+        assert!(close(one.variance(), 0.0));
+        let bad = Dist::User {
+            points: vec![(-1.0, 5.0)],
+            discrete: false,
+        };
+        assert_eq!(bad.variance(), None);
     }
 
     #[test]
