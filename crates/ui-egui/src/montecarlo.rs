@@ -165,11 +165,12 @@ fn odds(chance: f64) -> Option<u64> {
 /// An output's finding in words, and a second line on how sure it is: with a target, the chance
 /// of missing it with its 95% interval; without one, where 9 trials in 10 fall and the mean.
 /// `None` when the output has no value to speak of (no trial gave a number).
+#[cfg(test)]
 pub(crate) fn finding(o: &Value) -> Option<(String, Option<String>)> {
     finding_across(o, &Value::Null)
 }
 
-/// [`finding`] with what the run's intervals are across (`interval_basis`), so that a missing
+/// An output's finding (see `finding`, which tests use) with what the run's intervals are across (`interval_basis`), so that a missing
 /// interval is explained in batches or in pairs.
 pub(crate) fn finding_across(o: &Value, basis: &Value) -> Option<(String, Option<String>)> {
     let pairs = basis["across"] == "pairs";
