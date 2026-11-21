@@ -540,3 +540,118 @@ fn controls_are_checked() {
             .any(|p| p.code == "unknown_control" && p.at.as_deref() == Some("second"))
     );
 }
+
+/// An input whose mean is not a finite number cannot be a control, in the check and in the picker.
+#[test]
+fn an_input_with_an_infinite_mean_is_no_control() {
+    let d = Dist::Uniform {
+        min: 1e308,
+        max: 1.1e308,
+    };
+    assert!(exact_mean(&d).is_err());
+    let mc = MonteCarlo {
+        inputs: vec![input("x", d), normal("z", 0.0, 1.0)],
+        outputs: vec![output("y", "$x + $z", vec![by_input("x")])],
+        ..MonteCarlo::default()
+    };
+    assert!(
+        error_codes(&mc).contains(&"inexact_control"),
+        "{:?}",
+        check(&mc)
+    );
+}
+
+/// A control in small units is fitted beside one with a spread of millions: y = x exactly, so
+/// the controlled interval has nothing left (the coefficient of x is 1).
+#[test]
+fn a_control_is_fitted_whatever_its_units() {
+    let mc = MonteCarlo {
+        inputs: vec![uniform("w", 0.0, 1e6), uniform("x", 0.0, 1.0)],
+        outputs: vec![output("y", "$x", vec![by_input("w"), by_input("x")])],
+        ..MonteCarlo::default()
+    };
+    let r = run(&mc, 3, 4_000);
+    let c = r.outputs[0]
+        .controlled
+        .as_ref()
+        .unwrap_or_else(|| unreachable!("no controls"));
+    assert!((c.controls[1].coefficient - 1.0).abs() < 1e-3, "{c:?}");
+    let e = estimate(&r, 0);
+    assert!(e.narrowing.is_none_or(|n| n > 0.99), "{e:?}");
+    assert!((e.mean - 0.5).abs() < 1e-3, "{}", e.mean);
+}
+
+/// Trials with no number are dropped from the plain estimate, but the controls' known means are
+/// those of every trial, so there is no controlled estimate: x uniform on [-1, 1] is a control of
+/// y = x where it is above 0, and the retained x average 0.5, not 0.
+#[test]
+fn trials_with_no_number_give_no_controlled_estimate() {
+    let mc = MonteCarlo {
+        inputs: vec![uniform("x", -1.0, 1.0)],
+        outputs: vec![output("y", "if($x > 0, $x, sqrt(-1))", vec![by_input("x")])],
+        ..MonteCarlo::default()
+    };
+    let r = run(&mc, 7, 4_000);
+    let c = r.outputs[0]
+        .controlled
+        .as_ref()
+        .unwrap_or_else(|| unreachable!("no controls"));
+    assert!(c.estimate.is_none(), "{c:?}");
+    assert!(
+        c.unavailable
+            .as_deref()
+            .is_some_and(|why| why.contains("no number")),
+        "{c:?}"
+    );
+}
+
+/// The wrong stated mean of an output control is found from the units the estimate is across: for
+/// antithetic pairs the pair means barely move, so a mean that is 0.0092 off is far outside five
+/// standard errors of them, though it is inside five standard errors of the single trials.
+#[test]
+fn the_mismatch_is_judged_on_the_pairs_of_an_antithetic_run() {
+    let model = |sampling| MonteCarlo {
+        inputs: vec![uniform("x", 0.0, 1.0)],
+        outputs: vec![
+            output("c", "$x + 0.01 * ($x - 0.5) * ($x - 0.5)", vec![]),
+            output(
+                "y",
+                "$c",
+                vec![Control::Output {
+                    name: "c".into(),
+                    expected: 0.51,
+                }],
+            ),
+        ],
+        sampling,
+        ..MonteCarlo::default()
+    };
+    let flagged = |sampling| {
+        let r = run(&model(sampling), 4, 2_000);
+        r.outputs[1]
+            .controlled
+            .as_ref()
+            .is_some_and(|c| c.controls.iter().any(|u| u.mismatch))
+    };
+    assert!(flagged(Sampling::Antithetic));
+    assert!(!flagged(Sampling::Random));
+}
+
+/// An input used only as a control is used: it is not reported as unused.
+#[test]
+fn an_input_used_only_as_a_control_is_not_unused() {
+    let mc = |controls: Vec<Control>| MonteCarlo {
+        inputs: vec![normal("a", 0.0, 1.0), normal("x", 0.0, 1.0)],
+        outputs: vec![output("y", "$a", controls)],
+        ..MonteCarlo::default()
+    };
+    let unused = |m: &MonteCarlo| -> Vec<Option<String>> {
+        check(m)
+            .iter()
+            .filter(|p| p.code == "unused_input")
+            .map(|p| p.at.clone())
+            .collect()
+    };
+    assert!(unused(&mc(vec![by_input("x")])).is_empty());
+    assert_eq!(unused(&mc(vec![])), vec![Some("x".to_owned())]);
+}

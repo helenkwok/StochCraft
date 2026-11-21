@@ -441,8 +441,16 @@ On the **Model** tab:
   cost that is mostly labour is helped by labour as a control, a cost that depends on something
   else is not. The results use how closely they move together to correct each trial for how
   far the control happened to land from its known mean. The first 1,000 trials only measure
-  that relationship (for a run under 2,000 trials, the first half), so the corrected mean and
-  chance are worked out from the trials after them, which keeps them unbiased. The window says how
+  that relationship (for a random run under 2,000 trials, the first half; with antithetic
+  sampling it is rounded to whole pairs), so the corrected mean and chance are worked out from
+  the trials after them. With Latin hypercube or Sobol sampling, or with correlated inputs, the
+  trials come in batches of 1,000 and the whole first batch only measures: one batch gives no
+  corrected result, two give a corrected mean, and three give its interval. For a run of a fixed
+  number of trials that keeps the corrected mean unbiased; a run that stops when a precision
+  target is met can still be biased by the stopping rule, whether or not the first trials are
+  left out. If some trial gives no number (a square root of a negative number, say), there is no
+  corrected result, because the control's known mean does not fit the trials that remain. The
+  window says how
   much narrower the interval became ("They narrowed the interval by 63%") and then shows the
   corrected mean and chance as the headline; where the control did not help, because it hardly
   moves with the output, or made the interval wider, it says so and the plain result stays. The

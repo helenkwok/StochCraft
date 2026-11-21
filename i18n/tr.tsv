@@ -1396,3 +1396,6 @@ unit	yr	yıl
 	Replace the XMILE file?	XMILE dosyası değiştirilsin mi?
 	Save As writes a new file and keeps {file} as it is. Replacing {file} leaves out what StochCraft does not keep.	Farklı Kaydet yeni bir dosya yazar ve {file} dosyasını olduğu gibi bırakır. {file} dosyasını değiştirmek, StochCraft'ın saklamadığı şeyleri dışarıda bırakır.
 	Replace	Değiştir
+	The estimated chance that {output} is more than {value} is {percent}.	{output} değerinin {value} değerinden büyük olma olasılığı tahminen {percent}.
+	The estimated chance that {output} is less than {value} is {percent}.	{output} değerinin {value} değerinden küçük olma olasılığı tahminen {percent}.
+	Their interval has no width, which no estimate has, so the plain result stands.	Aralıklarının genişliği yok, bu hiçbir tahminde olmaz, bu yüzden sade sonuç geçerli kalır.

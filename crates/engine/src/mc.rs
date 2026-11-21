@@ -113,9 +113,9 @@ pub struct OutputDoc {
 
 /// A control variate: `{ "input": "x" }` (the input's own mean is known), or `{ "output": "y",
 /// "expected": 12.5 }` (an earlier output, with the mean you state; a wrong mean biases the
-/// controlled result).
+/// controlled result). An object with the fields of both forms is refused.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, JsonSchema)]
-#[serde(untagged)]
+#[serde(untagged, deny_unknown_fields)]
 pub enum ControlDoc {
     Input { input: String },
     Output { output: String, expected: f64 },
@@ -571,6 +571,14 @@ pub(crate) fn output_set(e: &mut Engine, p: Value) -> Result<Value, CommandError
         return Err(invalid("a target must be a finite number"));
     }
     let mut m = e.monte_carlo();
+    let control_problems = |m: &MonteCarlo| -> Vec<(Option<String>, &'static str)> {
+        stochcraft_mc::check(m)
+            .into_iter()
+            .filter(|x| x.code.contains("control"))
+            .map(|x| (x.at, x.code))
+            .collect()
+    };
+    let before = control_problems(&m);
     if m.input(&p.name).is_some() {
         return Err(CommandError::new(
             ErrorCode::Conflict,
@@ -623,11 +631,14 @@ pub(crate) fn output_set(e: &mut Engine, p: Value) -> Result<Value, CommandError
         None => at.unwrap_or(m.outputs.len()),
     };
     m.outputs.insert(place, out);
-    // Controls that cannot be used are refused, saying why.
-    if let Some(bad) = stochcraft_mc::check(&m)
-        .into_iter()
-        .find(|x| x.at.as_deref() == Some(p.name.as_str()) && x.code.contains("control"))
-    {
+    // Controls that cannot be used are refused, saying why: those of the edited output, and any
+    // the edit leaves another output with (moving an output after one that controls on it).
+    // Problems that were there before the edit do not stop an unrelated one.
+    if let Some(bad) = stochcraft_mc::check(&m).into_iter().find(|x| {
+        x.code.contains("control")
+            && (x.at.as_deref() == Some(p.name.as_str())
+                || !before.contains(&(x.at.clone(), x.code)))
+    }) {
         return Err(CommandError {
             code: ErrorCode::InvalidParams,
             message: bad.message.clone(),
@@ -752,6 +763,11 @@ pub(crate) fn inputs_import(e: &mut Engine, p: Value) -> Result<Value, CommandEr
     let names: Vec<String> = m.inputs.iter().map(|i| i.name.clone()).collect();
     m.correlations
         .retain(|c| names.contains(&c.a) && names.contains(&c.b));
+    // An input that is gone is no control any more.
+    for o in &mut m.outputs {
+        o.controls
+            .retain(|c| !matches!(c, McControl::Input { name } if !names.contains(name)));
+    }
     e.set_monte_carlo("mc.inputs.import", m)?;
     Ok(json!({ "inputs": count }))
 }
@@ -958,7 +974,7 @@ fn mc_record(context: &Value, r: &McResults, m: &MonteCarlo) -> Value {
         "random_streams": "trials in batches of 1,000; each input's draws in batch b from the stream keyed mc/<b>/input/<name> under the seed (with Sobol sampling its random digital shift, from mc/qmc/<b>/<name>, the points being the first of Joe and Kuo's Sobol sequence with one dimension per input in declaration order), and the pairing of correlated inputs from mc/<b>/correlation, so results do not depend on the number of threads",
         "correlation": "rank correlations induced by Iman and Conover's method (1982) in each batch, on van der Waerden scores with Pearson correlation 2 sin(πρ/6) for a rank correlation ρ",
         "uncertainty": uncertainty_text(r),
-        "controls": "an output with controls has a controlled estimate beside its results (controlled): the coefficients b of Y - b(C - mu) are fitted by least squares on a pilot, the first batch of 1,000 trials (the first half for a run under 2,000 trials), whose trials are left out of the estimate so it is unbiased; the controlled mean and target probability, with their 95% intervals on the run's interval basis, come from the remaining trials; variance_ratio and narrowing compare the controlled interval with the uncontrolled one on those same trials. Percentiles, histogram and extremes are not controlled; a sequential stop is judged on the uncontrolled mean",
+        "controls": "an output with controls has a controlled estimate beside its results (controlled): the coefficients b of Y - b(C - mu) are fitted by least squares on a pilot, the first batch of 1,000 trials (the first half for a run under 2,000 trials), whose trials are left out of the estimate; for a run of a fixed number of trials that makes it unbiased (a run that stops at a precision target can still be biased by the stopping rule, which judges the same trials); where trials are grouped by batch (Latin hypercube, Sobol, correlated inputs) the pilot is the whole first batch, so one batch gives no controlled estimate (two are needed, three for an interval), and antithetic runs round the pilot to whole pairs; a trial with no number in the output or a control withdraws the controlled estimate; the controlled mean and target probability, with their 95% intervals on the run's interval basis, come from the remaining trials; variance_ratio and narrowing compare the controlled interval with the uncontrolled one on those same trials. Percentiles, histogram and extremes are not controlled; a sequential stop is judged on the uncontrolled mean",
         "influence": "per output and per input that is not a constant, widest swing first. base: the output with every input at its median. low and high: the output with that input at its 10th (p10) and its 90th (p90) percentile and every other input at its median (the tornado of decision analysis, Clemen and Reilly, Making Hard Decisions, 3rd ed., 2014); swing: |high - low|, null if either is not a number. No sampling is used, so these do not vary with the seed, the trials or the sampling, and they leave out what correlated inputs do together. rank_correlation: Spearman's, between the input and the output across the run's trials where the output has a number; for a correlated input it includes the effect of the inputs it is correlated with; null if either has no spread",
         "file_notes": context["file_notes"],
     })

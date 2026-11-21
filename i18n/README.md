@@ -939,6 +939,14 @@ fields (`“Service time”`) are named in the messages by their own rows.
   checked against any other source or reviewed by native speakers. "Agent", "command line" and
   "canvas" are each language's everyday computing word or calque; the least certain are bn, hi, ka,
   kk, lo, sq, ta, te, th and vi.
+- The three rows added when a controlled chance was reworded (ROADMAP M4.1: "The estimated
+  chance that {output} is more than / less than {value} is {percent}.", used where a controlled
+  chance would otherwise read as a count of trials, and "Their interval has no width, which no
+  estimate has, so the plain result stands.") were machine-drafted with Claude Code from the
+  plain meaning of the English, reusing each catalog's own words for chance, interval and result;
+  placeholders checked by script; not checked against any other source or reviewed by native
+  speakers. The least certain are bn, hi, ka, kk, lo, sq, ta, te, th and vi, and the case of the
+  numbers around {value} and {percent} in the highly inflected languages.
 
 **Adding or changing a string:** add the English in the code through `i18n::t` (or `tf`, `tn`),
 then add its row to each catalog here, or leave it out to show English until it is translated.

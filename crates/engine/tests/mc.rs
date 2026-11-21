@@ -699,3 +699,86 @@ fn controls_narrow_the_interval_and_bad_ones_are_refused() {
         "{got}"
     );
 }
+
+/// A control object with the fields of both forms is refused, not read as the first form.
+#[test]
+fn a_control_with_the_fields_of_both_forms_is_refused() {
+    let mut e = linear_model();
+    for control in [
+        json!({ "input": "a", "output": "a", "expected": 5.0 }),
+        json!({ "input": "a", "expected": 5.0 }),
+        json!({ "output": "y", "expected": 1.5, "input": "a" }),
+    ] {
+        assert_eq!(
+            err(
+                &mut e,
+                "mc.output.set",
+                json!({ "name": "y", "controls": [control] })
+            ),
+            ErrorCode::InvalidParams
+        );
+    }
+    // The model was not changed, and both documented forms are read.
+    let got = ok(&mut e, "mc.get", json!({}));
+    assert!(got["monte_carlo"]["outputs"][0].get("controls").is_none());
+    ok(
+        &mut e,
+        "mc.output.set",
+        json!({ "name": "y", "controls": [{ "input": "a" }] }),
+    );
+}
+
+/// Moving an output after one that controls on it is refused, though the control is on the other
+/// output: it would leave a model that cannot run.
+#[test]
+fn a_reorder_that_leaves_another_outputs_control_pointing_forward_is_refused() {
+    let mut e = linear_model();
+    ok(
+        &mut e,
+        "mc.output.set",
+        json!({ "name": "z", "expression": "$y + $b", "controls": [{ "output": "y", "expected": 1.5 }] }),
+    );
+    assert_eq!(
+        err(
+            &mut e,
+            "mc.output.set",
+            json!({ "name": "y", "position": 1 })
+        ),
+        ErrorCode::InvalidParams
+    );
+    let got = ok(&mut e, "mc.get", json!({}));
+    assert_eq!(got["monte_carlo"]["outputs"][0]["name"], "y");
+    // The model still runs.
+    ok(&mut e, "mc.run", json!({ "trials": 3_000, "seed": 1 }));
+    // An edit that moves nothing is fine.
+    ok(&mut e, "mc.output.set", json!({ "name": "y", "unit": "m" }));
+}
+
+/// A replacing import that drops an input drops the controls on it, as it drops its correlations.
+#[test]
+fn a_replacing_import_removes_the_controls_of_inputs_that_are_gone() {
+    let mut e = Engine::new();
+    ok(&mut e, "model.new", json!({ "name": "Controls" }));
+    ok(
+        &mut e,
+        "mc.inputs.import",
+        json!({ "csv": "name,distribution,parameters,unit\na,uniform,min=0;max=1,\nx,uniform,min=0;max=1,\n" }),
+    );
+    ok(
+        &mut e,
+        "mc.output.set",
+        json!({ "name": "y", "expression": "$a", "controls": [{ "input": "x" }] }),
+    );
+    ok(
+        &mut e,
+        "mc.inputs.import",
+        json!({ "csv": "name,distribution,parameters,unit\na,uniform,min=0;max=1,\n", "replace": true }),
+    );
+    let got = ok(&mut e, "mc.get", json!({}));
+    assert!(
+        got["monte_carlo"]["outputs"][0].get("controls").is_none(),
+        "{got}"
+    );
+    // The model runs.
+    ok(&mut e, "mc.run", json!({ "trials": 3_000, "seed": 1 }));
+}

@@ -2232,9 +2232,14 @@ Control variates are built (Law, *Simulation Modeling and Analysis*, 5th ed., §
 2003, §4.1; Nelson 1990): an output can name controls, each an input (whose known mean is its
 distribution's exact mean, `Dist::mean`) or an earlier output with a mean the modeller types
 (`expected`). Each trial's value Y becomes Y − bᵀ(C − μ), with b the least-squares coefficients
-fitted on a pilot, the first batch of 1,000 trials (the first half for a run under 2,000 trials),
-which the controlled estimate leaves out, so that it is unbiased (fitting b on the trials it then
-averages would bias it slightly). The controlled mean and its interval come from the remaining
+fitted on a pilot, the first batch of 1,000 trials (the first half for a random run under 2,000
+trials, whole pairs for antithetic sampling; the whole first batch where trials are grouped by
+batch, so Latin hypercube, Sobol and correlated-input runs need two batches for an estimate and
+three for its interval), which the controlled estimate leaves out, so that it is unbiased for a run
+of a fixed number of trials (fitting b on the trials it then averages would bias it slightly; a
+run that stops at a precision target can still be biased by the stopping rule). A trial with no
+number withdraws the controlled estimate, and a stated mean is checked against the control's
+average across the same independent units as the interval. The controlled mean and its interval come from the remaining
 trials on the run's own interval basis (Student-t across trials, batch means or pair means of the
 controlled value), and so do the controlled chance of meeting a target and its interval (the
 indicator of meeting it is controlled with coefficients of its own). Percentiles, the histogram

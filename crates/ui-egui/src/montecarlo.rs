@@ -197,7 +197,17 @@ pub(crate) fn finding_across(o: &Value, basis: &Value) -> Option<(String, Option
             ("odds", odds_text.as_str()),
             ("n", trials.as_str()),
         ];
+        // A controlled chance is an estimate, never a count of trials: no "in none of the trials".
+        let estimated = target["controlled"] == true;
         let sentence = match (miss <= 0.0, in_odds.is_some(), at_most) {
+            (true, _, true) if estimated => tf(
+                "The estimated chance that {output} is more than {value} is {percent}.",
+                &args,
+            ),
+            (true, _, false) if estimated => tf(
+                "The estimated chance that {output} is less than {value} is {percent}.",
+                &args,
+            ),
             (true, _, true) => tf(
                 "{output} was more than {value} in none of the {n} trials.",
                 &args,
@@ -287,18 +297,28 @@ pub(crate) fn finding_across(o: &Value, basis: &Value) -> Option<(String, Option
 
 /// The output as the headline reads it: where the controls narrowed an interval by a tenth or
 /// more, the controlled mean (for an output with no target) or the controlled chance of meeting
-/// the target (with its interval) in place of the plain ones. Everything else is as it was.
+/// the target (with its interval) in place of the plain ones. Everything else is as it was. An
+/// interval with no width is no narrowing: the plain result stays. A controlled chance is marked
+/// (`controlled`), so that it is worded as an estimate, and kept within 0 and 1.
 pub(crate) fn controlled_headline(o: &Value) -> Value {
     let mut shown = o.clone();
     let e = &o["controlled"]["estimate"];
-    if e["helped"] == true && !o["target"].is_object() {
+    if e["helped"] == true
+        && !o["target"].is_object()
+        && e["half_width"].as_f64().is_some_and(|h| h > 0.0)
+    {
         shown["mean"] = e["mean"].clone();
         shown["half_width"] = e["half_width"].clone();
     }
     let t = &e["target"];
-    if o["target"].is_object() && t["helped"] == true {
-        shown["target"]["probability"] = t["probability"].clone();
+    if o["target"].is_object()
+        && t["helped"] == true
+        && t["interval"].is_array()
+        && let Some(p) = t["probability"].as_f64()
+    {
+        shown["target"]["probability"] = json!(p.clamp(0.0, 1.0));
         shown["target"]["interval"] = t["interval"].clone();
+        shown["target"]["controlled"] = json!(true);
     }
     shown
 }
@@ -326,10 +346,14 @@ pub(crate) fn control_lines(o: &Value) -> Vec<String> {
         ));
         return lines;
     }
-    let what = if o["target"].is_object() && e["target"].is_object() {
-        &e["target"]
+    let with_target = o["target"].is_object() && e["target"].is_object();
+    let what = if with_target { &e["target"] } else { e };
+    // The controlled interval has no width where the trials show no spread at all: it is no
+    // narrowing, it is no information.
+    let flat = if with_target {
+        what["interval"].is_null() && what["uncontrolled_interval"].is_array()
     } else {
-        e
+        e["half_width"].as_f64() == Some(0.0)
     };
     let verdict = match what["narrowing"].as_f64() {
         Some(n) if what["helped"] == true => tf(
@@ -340,6 +364,10 @@ pub(crate) fn control_lines(o: &Value) -> Vec<String> {
             "They made the interval {percent} wider, so the plain result stands.",
             &[("percent", &share_text(-n))],
         ),
+        None if flat => {
+            t("Their interval has no width, which no estimate has, so the plain result stands.")
+                .to_owned()
+        }
         _ => match c["correlation"].as_f64().filter(|r| *r < 0.5) {
             Some(r) => tf(
                 "They did not help: their correlation with {output} is weak ({correlation}), so the plain result stands.",
@@ -2449,6 +2477,84 @@ mod tests {
         o["controlled"]["estimate"] = Value::Null;
         o["controlled"]["unavailable"] = json!("too short");
         assert_eq!(control_lines(&o)[1], "No controlled result: too short");
+    }
+
+    /// A controlled chance is an estimate: it is never worded as a count of trials, is kept
+    /// within 0 and 1, and an interval with no width is no narrowing, so the plain result stands
+    /// and the lines say why.
+    #[test]
+    fn a_controlled_chance_is_an_estimate_and_a_flat_interval_is_no_narrowing() {
+        let controlled = |t: Value| {
+            let mut o = output(json!({ "at_most": 7_000.0 }), 0.5, json!([0.48, 0.52]));
+            o["controlled"] = json!({
+                "controls": [{ "name": "c", "kind": "output", "mean": 1.0,
+                               "coefficient": 1.0, "sample_mean": 0.5, "mean_mismatch": false }],
+                "pilot_trials": 1000, "correlation": 0.9, "unavailable": null,
+                "estimate": { "mean": 1.0, "half_width": 0.1, "narrowing": 0.0,
+                              "helped": false, "target": t },
+            });
+            o
+        };
+        // A chance of 1 that helped: worded as an estimate, not as "in none of the trials".
+        let o = controlled(
+            json!({ "probability": 1.0000001, "interval": [0.99, 1.0], "narrowing": 0.4,
+                    "helped": true, "uncontrolled_interval": [0.48, 0.52] }),
+        );
+        let shown = controlled_headline(&o);
+        assert_eq!(shown["target"]["probability"], 1.0);
+        let (sentence, _) = finding(&shown).unwrap_or_default();
+        assert_eq!(
+            sentence,
+            "The estimated chance that cost is more than 7000 USD is 0%."
+        );
+        assert!(!sentence.contains("none of the"), "{sentence}");
+        // The plain result still counts trials.
+        let (plain, _) = finding(&o).unwrap_or_default();
+        assert!(plain.contains("A 50% chance"), "{plain}");
+        let mut at_least = shown.clone();
+        at_least["target"] = json!({ "at_least": 7_000.0, "probability": 1.0, "controlled": true,
+                                      "interval": [0.99, 1.0], "of": 10_000 });
+        let (sentence, _) = finding(&at_least).unwrap_or_default();
+        assert_eq!(
+            sentence,
+            "The estimated chance that cost is less than 7000 USD is 0%."
+        );
+        // A zero-width interval: no interval, no narrowing, the plain chance stays.
+        let flat = controlled(
+            json!({ "probability": 1.0, "interval": null, "narrowing": null,
+                    "helped": false, "uncontrolled_interval": [0.48, 0.52] }),
+        );
+        assert_eq!(controlled_headline(&flat)["target"]["probability"], 0.5);
+        assert!(
+            control_lines(&flat)[1].contains("no width"),
+            "{:?}",
+            control_lines(&flat)
+        );
+        // Even where a stale result says it helped, a missing interval keeps the plain one.
+        let mut stale = flat.clone();
+        stale["controlled"]["estimate"]["target"]["helped"] = json!(true);
+        assert_eq!(controlled_headline(&stale)["target"]["probability"], 0.5);
+    }
+
+    /// A mean whose controlled half-width is zero is not shown as a narrowed one either.
+    #[test]
+    fn a_controlled_mean_with_no_width_stays_plain() {
+        let o = json!({
+            "name": "cost", "unit": "", "mean": 100.0, "half_width": 2.0,
+            "percentiles": { "5": 90.0, "95": 110.0 },
+            "controlled": {
+                "controls": [{ "name": "labour", "kind": "input", "mean": 5.0,
+                               "coefficient": 2.0, "sample_mean": 5.0, "mean_mismatch": false }],
+                "pilot_trials": 1000, "correlation": 1.0, "unavailable": null,
+                "estimate": { "mean": 101.0, "half_width": 0.0, "narrowing": null,
+                              "helped": false, "target": null },
+            },
+        });
+        assert_eq!(controlled_headline(&o)["mean"], 100.0);
+        assert!(control_lines(&o)[1].contains("no width"));
+        let mut stale = o.clone();
+        stale["controlled"]["estimate"]["helped"] = json!(true);
+        assert_eq!(controlled_headline(&stale)["mean"], 100.0);
     }
 
     /// With a target, the controlled chance of meeting it is the headline when it helped.

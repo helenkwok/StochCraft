@@ -288,24 +288,37 @@ refused with `inexact_control` or `constant_control`, as are an unknown name, an
 that is the output itself or later (`control_not_earlier`) and a repeated one. The controlled value
 is Y − bᵀ(C − μ) with b the least-squares coefficients; fitting them on the trials they are then
 applied to makes the estimate slightly biased, so they are fitted on a pilot, the first batch of
-1,000 trials (the first half of a run under 2,000), which the controlled estimate leaves out. The
-controlled mean and its interval are Student-t across the remaining trials, batch means or pair
+1,000 trials (the first half of a random run under 2,000, rounded to whole pairs for antithetic
+sampling), which the controlled estimate leaves out; where trials are grouped by batch (Latin
+hypercube, Sobol, correlated inputs) the pilot is the whole first batch, so one batch gives no
+estimate, two give a mean and three give its interval. The unbiasedness is for a run of a fixed
+number of trials: a sequential stop judges the same trials the estimate uses, so it can select on
+them and bias the result even with the pilot left out. The coefficients are fitted on columns
+divided by their pilot standard deviation (so a control in small units is not lost beside one in
+large units), and a trial with no number in the output or a control, in the pilot or after it,
+withdraws the estimate (`unavailable` says so), because the controls' known means are those of
+every trial. An input mean must be finite (`exact_mean`). The controlled mean and its interval are Student-t across the remaining trials, batch means or pair
 means, as the run's `interval_basis` says; a target's probability is controlled the same way (the
 indicator of meeting it, with coefficients of its own), kept within 0 and 1. Percentiles, the
 histogram and the extremes are not controlled, and a sequential stop is judged on the plain mean.
 It is worked out in the summarise step of each output, one linear pass over its trials after a
 fit on at most 1,000 rows, so it adds no `Stepper` phase for a caller to drive. Each result's
 `controlled` gives the `controls` (`kind`, known `mean`, `coefficient`, the controls' `sample_mean`
-over the trials used and `mean_mismatch`, set when it is more than five standard errors from the
-stated mean, which for an output control means a mistyped mean and a biased result), the
+over the trials used and `mean_mismatch`, set when the control's average over the run's independent
+units (trials, batches or antithetic pairs, as for the interval) is more than five standard errors
+of those units from the stated mean, which for an output control means a mistyped mean and a biased result), the
 `pilot_trials`, the multiple `correlation` with the output on the pilot, and an `estimate` with
 the controlled `mean` and `half_width`, the `uncontrolled_mean` and `uncontrolled_half_width` on
 the same trials, `variance_ratio` (plain over controlled variance of the estimate), `narrowing`
-(1 − controlled width / plain width; negative when the control made it wider) and `helped` (at
+(1 − controlled width / plain width; negative when the control made it wider; `null` where the
+controlled interval has no width) and `helped` (at
 least 10% narrower); its `target` has the same for the probability. With too few trials, or a
 run of one batch where intervals are across batches, `estimate` is `null` and `unavailable` says
-why. The window makes the controlled results the headline where `helped`, and says so in words
-otherwise; `stochcraft_engine::mc::control_inputs` lists the inputs that can be controls.
+why. An input named only as a control is not reported as `unused_input`, and a replacing
+`mc.inputs.import` drops the controls of inputs it removes, as it drops their correlations; a
+control object with fields of both forms is refused. The window makes the controlled results the
+headline where `helped`, words a controlled chance as an estimate (never as a count of trials),
+and says so in words otherwise; `stochcraft_engine::mc::control_inputs` lists the inputs that can be controls.
 
 The input table goes out and back in as CSV:
 

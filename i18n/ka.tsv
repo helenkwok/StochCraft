@@ -1396,3 +1396,6 @@ unit	yr	წელი
 	Replace the XMILE file?	XMILE ფაილის ჩანაცვლება?
 	Save As writes a new file and keeps {file} as it is. Replacing {file} leaves out what StochCraft does not keep.	„შენახვა როგორც“ წერს ახალ ფაილს და {file}-ს უცვლელს ტოვებს. {file}-ის ჩანაცვლება გამოტოვებს იმას, რასაც StochCraft არ ინახავს.
 	Replace	ჩანაცვლება
+	The estimated chance that {output} is more than {value} is {percent}.	{output}-ის {value}-ზე მეტი იქნება სავარაუდო ალბათობა არის {percent}.
+	The estimated chance that {output} is less than {value} is {percent}.	{output}-ის {value}-ზე ნაკლები იქნება სავარაუდო ალბათობა არის {percent}.
+	Their interval has no width, which no estimate has, so the plain result stands.	მათ ინტერვალს სიგანე არ აქვს, რაც არც ერთ შეფასებას არ აქვს, ამიტომ ჩვეულებრივი შედეგი რჩება.

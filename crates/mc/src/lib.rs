@@ -71,6 +71,11 @@
 //! estimate leaves out so that it is unbiased. The controlled mean and target probability, with
 //! intervals on the run's own basis, are in [`OutputResult::controlled`] beside the plain results,
 //! which they leave as they are; percentiles, the histogram and the extremes are not controlled.
+//! The pilot is a whole batch where trials are grouped by batch (Latin hypercube, Sobol,
+//! correlated inputs), so those runs need two batches for an estimate and three for its
+//! interval, and whole pairs for antithetic sampling. The unbiasedness holds for a fixed number
+//! of trials, not for a run that stops at a precision target; and a trial with no number
+//! withdraws the controlled estimate.
 //!
 //! **Which inputs matter** ([`Influence`], on each output). Two figures for each input that
 //! varies. The tornado is one at a time and deterministic: the output with every input at its
@@ -306,6 +311,18 @@ fn check_all(mc: &MonteCarlo) -> (Vec<Problem>, Checked) {
             ));
         }
         exprs.push(ok.then_some(parsed));
+    }
+    // An input that only some output names as a control still changes that output's controlled
+    // result, so it is used.
+    for o in &mc.outputs {
+        for c in &o.controls {
+            if let Control::Input { name } = c
+                && let Some(at) = mc.inputs.iter().position(|i| i.name == *name)
+                && let Some(u) = used.get_mut(at)
+            {
+                *u = true;
+            }
+        }
     }
     for (k, i) in mc.inputs.iter().enumerate() {
         if !mc.outputs.is_empty() && !used.get(k).copied().unwrap_or(true) {

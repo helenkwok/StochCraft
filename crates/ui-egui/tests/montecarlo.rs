@@ -470,3 +470,44 @@ fn the_table_of_shares_is_not_limited_to_the_tornados_inputs() {
     finish_shares(&mut h);
     assert_eq!(shown(&h), before + 2);
 }
+
+/// A target met exactly where a control is 1: the controlled chance leaves no spread to judge by
+/// (or a vanishing one), and what the window says about the chance is an estimate, never a count
+/// of trials, with the controls named under it.
+#[test]
+fn a_controlled_chance_is_worded_as_an_estimate_in_the_window() {
+    let mut h = harness();
+    h.state_mut()
+        .run_command(&stochcraft_ui_egui::commands::CommandRef::new(
+            stochcraft_ui_egui::commands::NEW_MONTE_CARLO,
+        ));
+    settle(&mut h);
+    h.state_mut().execute(
+        "mc.input.set",
+        serde_json::json!({
+            "name": "x",
+            "distribution": { "type": "uniform", "min": 0.0, "max": 1.0 },
+        }),
+    );
+    h.state_mut().execute(
+        "mc.output.set",
+        serde_json::json!({ "name": "c", "expression": "if($x > 0.5, 0, 1)" }),
+    );
+    h.state_mut().execute(
+        "mc.output.set",
+        serde_json::json!({
+            "name": "y",
+            "expression": "$x",
+            "at_most": 0.5,
+            "controls": [{ "output": "c", "expected": 0.5 }],
+        }),
+    );
+    settle(&mut h);
+    h.state_mut().run();
+    finish_run(&mut h);
+    let status = h.state().status().to_owned();
+    assert!(h.state().results().is_some(), "{status}");
+    h.get_by_label_contains("chance that y is more than 0.5");
+    h.get_by_label_contains("Controls for y: c.");
+    assert!(h.query_by_label_contains("in none of the").is_none());
+}

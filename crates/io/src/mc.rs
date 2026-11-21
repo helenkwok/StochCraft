@@ -139,7 +139,7 @@ fn chain<'a>(data: &'a Element, id: &str) -> Vec<&'a Element> {
 /// `expected` mean. One that is neither, or has no mean, is a warning and is ignored.
 fn controls(e: &Element, at: &str, notes: &mut Vec<Note>) -> Vec<Control> {
     let mut out = Vec::new();
-    for c in e.elements().filter(|c| c.local() == "control") {
+    for c in e.elements().filter(|c| c.is(STOCHCRAFT_NS, "control")) {
         match (c.attr("input"), c.attr("output")) {
             (Some(name), None) => out.push(Control::Input { name }),
             (None, Some(name)) => match number(c, "expected", at, notes) {
@@ -515,6 +515,38 @@ mod tests {
             "{:?}",
             loaded.notes
         );
+    }
+
+    /// A control is read only in StochCraft's namespace, under whatever prefix it is bound to.
+    #[test]
+    fn a_control_in_a_foreign_namespace_is_ignored() {
+        let text = String::from_utf8_lossy(&crate::write_new(&model())).into_owned();
+        let first_controls = |xml: &str| {
+            let loaded = crate::read(xml.as_bytes()).unwrap_or_else(|e| unreachable!("{e}"));
+            loaded
+                .model
+                .monte_carlo
+                .and_then(|mc| mc.outputs.first().map(|o| o.controls.clone()))
+                .unwrap_or_default()
+        };
+        let both = first_controls(&text);
+        assert_eq!(both.len(), 2, "{both:?}");
+        let foreign = text.replace(
+            r#"stochcraft:control input="labour""#,
+            r#"other:control xmlns:other="urn:example:foreign" input="labour""#,
+        );
+        assert_ne!(foreign, text);
+        assert_eq!(
+            first_controls(&foreign),
+            vec![Control::Input {
+                name: "materials".into()
+            }]
+        );
+        let renamed = text.replace(
+            r#"stochcraft:control input="labour""#,
+            &format!(r#"sc:control xmlns:sc="{STOCHCRAFT_NS}" input="labour""#),
+        );
+        assert_eq!(first_controls(&renamed), both);
     }
 
     #[test]

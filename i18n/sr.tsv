@@ -1396,3 +1396,6 @@ unit	yr	год.
 	Replace the XMILE file?	Заменити XMILE датотеку?
 	Save As writes a new file and keeps {file} as it is. Replacing {file} leaves out what StochCraft does not keep.	Сачувај као уписује нову датотеку и оставља {file} каква јесте. Замена датотеке {file} изоставља оно што StochCraft не задржава.
 	Replace	Замени
+	The estimated chance that {output} is more than {value} is {percent}.	Процењена вероватноћа да је {output} већи од {value} износи {percent}.
+	The estimated chance that {output} is less than {value} is {percent}.	Процењена вероватноћа да је {output} мањи од {value} износи {percent}.
+	Their interval has no width, which no estimate has, so the plain result stands.	Њихов интервал нема ширину, што ниједна процена нема, па остаје обичан резултат.

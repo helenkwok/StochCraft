@@ -1396,3 +1396,6 @@ unit	yr	r.
 	Replace the XMILE file?	Nahradit soubor XMILE?
 	Save As writes a new file and keeps {file} as it is. Replacing {file} leaves out what StochCraft does not keep.	Uložit jako zapíše nový soubor a {file} ponechá beze změny. Nahrazením {file} se vynechá to, co StochCraft nezachovává.
 	Replace	Nahradit
+	The estimated chance that {output} is more than {value} is {percent}.	Odhadovaná pravděpodobnost, že {output} bude větší než {value}, je {percent}.
+	The estimated chance that {output} is less than {value} is {percent}.	Odhadovaná pravděpodobnost, že {output} bude menší než {value}, je {percent}.
+	Their interval has no width, which no estimate has, so the plain result stands.	Jejich interval nemá žádnou šířku, což žádný odhad nemá, proto zůstává obyčejný výsledek.

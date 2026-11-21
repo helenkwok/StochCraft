@@ -15,6 +15,14 @@
 //! interval basis ([`crate::IntervalBasis`]): Student-t across trials, across batch means, or
 //! across pair means of Y_c.
 //!
+//! **Where it holds.** The unbiasedness is for a run of a fixed number of trials. A run that
+//! stops at a precision target judges the same trials that give the estimate, so the stopping
+//! rule can select on them and bias the result, whether or not the pilot is left out. A
+//! controlled estimate also needs every trial
+//! to have a number: where some trials gave none (a square root of a negative number, a division
+//! by zero), the retained trials are not a sample of the control's distribution, its known mean
+//! does not apply to them, and there is no controlled estimate.
+//!
 //! **What is controlled.** The mean and its interval, and a target's probability (the indicator
 //! of meeting the target is controlled with coefficients of its own, fitted on the same pilot).
 //! Percentiles, the histogram and the extremes are not.
@@ -63,6 +71,9 @@ pub fn exact_mean(d: &Dist) -> Result<f64, String> {
     let m = d
         .mean()
         .ok_or_else(|| "its distribution has no closed-form mean".to_owned())?;
+    if !m.is_finite() {
+        return Err("its mean is not a finite number".to_owned());
+    }
     let refuse = |sd: f64| {
         format!(
             "its standard deviation ({sd:.4e}) is above {MAX_COUNT_SD:.0e}, where the draws of a count are not exactly its distribution under every sampling"
@@ -292,7 +303,8 @@ pub struct ControlledEstimate {
     /// trials (above 1 when the controls helped); `None` if either has no spread.
     pub variance_ratio: Option<f64>,
     /// How much narrower the interval is: 1 − controlled width / uncontrolled width (negative
-    /// where the controls made it wider); `None` without both.
+    /// where the controls made it wider); `None` without both, or where the controlled interval
+    /// has no width.
     pub narrowing: Option<f64>,
     pub target: Option<ControlledTarget>,
 }
@@ -431,13 +443,38 @@ fn fit(rows: &[Vec<f64>], k: usize) -> Result<Fit, String> {
     if syy.is_nan() || syy <= 0.0 {
         return Err("the output did not vary in the pilot".to_owned());
     }
+    // Each control column is divided by its pilot standard deviation, so the solver compares
+    // pivots on one scale whatever the control's units; a column with no spread is left out
+    // (coefficient 0).
+    let sd: Vec<f64> = (0..k)
+        .map(|i| cov(2 + i, 2 + i).sqrt())
+        .map(|v| if v.is_finite() && v > 0.0 { v } else { 0.0 })
+        .collect();
+    let scale = |i: usize| sd.get(i).copied().unwrap_or(0.0);
+    let ratio_of = |v: f64, d: f64| if d > 0.0 { v / d } else { 0.0 };
     let s: Vec<Vec<f64>> = (0..k)
-        .map(|i| (0..k).map(|j| cov(2 + i, 2 + j)).collect())
+        .map(|i| {
+            (0..k)
+                .map(|j| ratio_of(cov(2 + i, 2 + j), scale(i) * scale(j)))
+                .collect()
+        })
         .collect();
     let scy: Vec<f64> = (0..k).map(|i| cov(2 + i, 0)).collect();
     let scz: Vec<f64> = (0..k).map(|i| cov(2 + i, 1)).collect();
-    let b = solve(&s, &scy);
-    let bz = solve(&s, &scz);
+    let standard = |rhs: &[f64]| -> Vec<f64> {
+        let r: Vec<f64> = rhs
+            .iter()
+            .enumerate()
+            .map(|(i, v)| ratio_of(*v, scale(i)))
+            .collect();
+        solve(&s, &r)
+            .iter()
+            .enumerate()
+            .map(|(i, v)| ratio_of(*v, scale(i)))
+            .collect()
+    };
+    let b = standard(&scy);
+    let bz = standard(&scz);
     let explained: f64 = b.iter().zip(&scy).map(|(x, y)| x * y).sum();
     Ok(Fit {
         mean: b,
@@ -465,7 +502,9 @@ fn ratio(uncontrolled: &Tally, controlled: &Tally) -> Option<f64> {
 
 fn narrowing(uncontrolled: Option<f64>, controlled: Option<f64>) -> Option<f64> {
     let (u, c) = (uncontrolled?, controlled?);
-    (u > 0.0).then(|| 1.0 - c / u)
+    // An interval with no width is not a narrow one: the trials have no spread to judge by (a
+    // control that is the output itself, say), so nothing is claimed.
+    (u > 0.0 && c > 0.0).then(|| 1.0 - c / u)
 }
 
 /// What a unit (a trial, a batch or a pair) has gathered of its usable trials.
@@ -477,22 +516,39 @@ struct Unit {
     yc: f64,
     z: f64,
     zc: f64,
+    /// The sum of each control.
+    c: Vec<f64>,
 }
 
 /// The values across units.
-#[derive(Default)]
 struct Across {
     y: Tally,
     yc: Tally,
     z: Tally,
     zc: Tally,
+    /// Each control's unit means: the basis of the mismatch check.
+    c: Vec<Tally>,
     trials: u64,
 }
 
 impl Across {
+    fn new(k: usize) -> Self {
+        Across {
+            y: Tally::new(),
+            yc: Tally::new(),
+            z: Tally::new(),
+            zc: Tally::new(),
+            c: vec![Tally::new(); k],
+            trials: 0,
+        }
+    }
+
     fn flush(&mut self, u: &Unit) {
         if u.n > 0 {
             let n = u.n as f64;
+            for (t, v) in self.c.iter_mut().zip(&u.c) {
+                t.add(v / n);
+            }
             self.y.add(u.y / n);
             self.yc.add(u.yc / n);
             self.z.add(u.z / n);
@@ -620,7 +676,8 @@ pub(crate) fn controlled(c: &Compiled, o: usize, blocks: &[Block]) -> Option<Con
     let mut rows: Vec<Vec<f64>> = Vec::new();
     let mut fitted: Option<Result<Fit, String>> = None;
     let mut unit = Unit::default();
-    let mut across = Across::default();
+    let mut across = Across::new(k);
+    let mut dropped = 0_u64;
     let mut samples: Vec<Tally> = vec![Tally::new(); k];
     each_trial(
         blocks,
@@ -629,6 +686,9 @@ pub(crate) fn controlled(c: &Compiled, o: usize, blocks: &[Block]) -> Option<Con
         o,
         &mut |index: u64, bi: usize, y: f64, cv: &[f64]| {
             let usable = y.is_finite() && cv.iter().all(|v| v.is_finite());
+            if !usable {
+                dropped += 1;
+            }
             let z = match target {
                 Some(t) if t.met(y) => 1.0,
                 _ => 0.0,
@@ -659,6 +719,7 @@ pub(crate) fn controlled(c: &Compiled, o: usize, blocks: &[Block]) -> Option<Con
                 across.flush(&unit);
                 unit = Unit {
                     key: Some(key),
+                    c: vec![0.0; k],
                     ..Unit::default()
                 };
             }
@@ -677,23 +738,43 @@ pub(crate) fn controlled(c: &Compiled, o: usize, blocks: &[Block]) -> Option<Con
             for (t, v) in samples.iter_mut().zip(cv) {
                 t.add(*v);
             }
+            for (sum, v) in unit.c.iter_mut().zip(cv) {
+                *sum += v;
+            }
         },
     );
     across.flush(&unit);
 
+    if dropped > 0 {
+        return none(
+            used,
+            format!(
+                "{dropped} trial{} gave no number in the output or a control, so the controls' known means do not apply to the trials that remain",
+                if dropped == 1 { "" } else { "s" }
+            ),
+        );
+    }
     let fit = match fitted {
         Some(Ok(f)) => f,
         Some(Err(why)) => return none(used, why),
         None => return none(used, "no trials are left after the pilot".to_owned()),
     };
-    for (u, (b, t)) in used.iter_mut().zip(fit.mean.iter().zip(&samples)) {
+    for (i, (u, (b, t))) in used
+        .iter_mut()
+        .zip(fit.mean.iter().zip(&samples))
+        .enumerate()
+    {
         u.coefficient = *b;
         u.sample_mean = t.mean();
-        u.mismatch = match (t.mean(), t.variance()) {
-            (Some(m), Some(v)) if v > 0.0 => {
-                (m - u.mean).abs() > MISMATCH_Z * (v / t.count() as f64).sqrt()
-            }
-            _ => false,
+        // The spread of the control's unit means (pairs, batches or trials), as for the estimate.
+        u.mismatch = match across.c.get(i) {
+            Some(units) => match (units.mean(), units.variance()) {
+                (Some(m), Some(v)) if v > 0.0 => {
+                    (m - u.mean).abs() > MISMATCH_Z * (v / units.count() as f64).sqrt()
+                }
+                _ => false,
+            },
+            None => false,
         };
     }
     let correlation = Some(fit.correlation);
@@ -742,4 +823,65 @@ pub(crate) fn controlled(c: &Compiled, o: usize, blocks: &[Block]) -> Option<Con
             target: target_result,
         }),
     })
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    /// Two uncorrelated controls, one with a spread of millions: the other, which predicts the
+    /// output exactly, still gets its coefficient (the pivots are compared on one scale).
+    #[test]
+    fn a_control_in_small_units_is_not_lost_beside_one_in_large_units() {
+        // Rows are [y, z, w, x] with y = x.
+        let rows: Vec<Vec<f64>> = [(0.0, 0.0), (0.0, 1.0), (1e6, 0.0), (1e6, 1.0)]
+            .iter()
+            .map(|(w, x)| vec![*x, 0.0, *w, *x])
+            .collect();
+        let f = fit(&rows, 2).unwrap_or_else(|why| unreachable!("{why}"));
+        assert!(f.mean[0].abs() < 1e-12, "{:?}", f.mean);
+        assert!((f.mean[1] - 1.0).abs() < 1e-9, "{:?}", f.mean);
+        assert!((f.correlation - 1.0).abs() < 1e-9, "{}", f.correlation);
+    }
+
+    /// A control with no spread keeps coefficient 0 and does not spoil the others.
+    #[test]
+    fn a_control_with_no_spread_gets_coefficient_zero() {
+        let rows: Vec<Vec<f64>> = (0..6)
+            .map(|i| {
+                let x = f64::from(i);
+                vec![2.0 * x + 1.0, 0.0, 7.0, x]
+            })
+            .collect();
+        let f = fit(&rows, 2).unwrap_or_else(|why| unreachable!("{why}"));
+        assert_eq!(f.mean[0], 0.0);
+        assert!((f.mean[1] - 2.0).abs() < 1e-9, "{:?}", f.mean);
+    }
+
+    /// A controlled interval of no width is not called narrow.
+    #[test]
+    fn an_interval_with_no_width_is_not_narrowing() {
+        assert_eq!(narrowing(Some(1.0), Some(0.0)), None);
+        assert_eq!(narrowing(Some(0.0), Some(0.5)), None);
+        assert!(narrowing(Some(1.0), Some(0.25)).is_some_and(|n| (n - 0.75).abs() < 1e-12));
+        assert!(narrowing(Some(1.0), Some(2.0)).is_some_and(|n| n < 0.0));
+    }
+
+    /// A mean that overflows is no known mean.
+    #[test]
+    fn a_mean_that_is_not_finite_is_refused() {
+        let d = Dist::Uniform {
+            min: 1e308,
+            max: 1.1e308,
+        };
+        assert!(
+            exact_mean(&d).is_err_and(|why| why.contains("finite")),
+            "{:?}",
+            exact_mean(&d)
+        );
+        assert!(
+            exact_mean(&Dist::Uniform { min: 1.0, max: 3.0 })
+                .is_ok_and(|m| (m - 2.0).abs() < 1e-12)
+        );
+    }
 }

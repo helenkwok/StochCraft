@@ -1396,3 +1396,6 @@ unit	yr	năm
 	Replace the XMILE file?	Thay thế tệp XMILE?
 	Save As writes a new file and keeps {file} as it is. Replacing {file} leaves out what StochCraft does not keep.	Lưu thành sẽ ghi một tệp mới và giữ nguyên {file}. Thay thế {file} sẽ bỏ đi những gì StochCraft không giữ lại.
 	Replace	Thay thế
+	The estimated chance that {output} is more than {value} is {percent}.	Xác suất ước tính để {output} lớn hơn {value} là {percent}.
+	The estimated chance that {output} is less than {value} is {percent}.	Xác suất ước tính để {output} nhỏ hơn {value} là {percent}.
+	Their interval has no width, which no estimate has, so the plain result stands.	Khoảng của chúng không có độ rộng, điều mà ước lượng nào cũng không có, nên kết quả thường được giữ nguyên.
