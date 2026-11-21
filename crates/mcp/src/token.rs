@@ -179,25 +179,31 @@ const LOCK_STALE: Duration = Duration::from_secs(10);
 /// How long to wait for another app's lock before giving up.
 const LOCK_WAIT: Duration = Duration::from_secs(2);
 
-/// A lock between processes: a file created with `create_new`, which only one can do, removed
-/// when this is dropped.
-struct Lock(PathBuf);
+/// A lock between processes: a file created with `create_new`, which only one can do, holding
+/// a mark of its own (the process and a random nonce), removed when this is dropped if it still
+/// holds that mark.
+struct Lock {
+    path: PathBuf,
+    mark: String,
+}
 
 impl Lock {
     fn take(path: &Path) -> io::Result<Self> {
         let started = Instant::now();
+        let mark = format!("{} {}", std::process::id(), generate()?);
         loop {
-            match write_private(path, &std::process::id().to_string()) {
-                Ok(()) => return Ok(Lock(path.to_owned())),
+            match write_private(path, &mark) {
+                Ok(()) => {
+                    return Ok(Lock {
+                        path: path.to_owned(),
+                        mark,
+                    });
+                }
                 Err(e) if e.kind() == io::ErrorKind::AlreadyExists => {
-                    let stale = fs::metadata(path)
-                        .and_then(|m| m.modified())
-                        .ok()
-                        .and_then(|t| t.elapsed().ok())
-                        .is_some_and(|age| age > LOCK_STALE);
-                    if stale {
-                        let _ = fs::remove_file(path);
-                    } else if started.elapsed() > LOCK_WAIT {
+                    if remove_if_stale(path)? {
+                        continue;
+                    }
+                    if started.elapsed() > LOCK_WAIT {
                         return Err(io::Error::new(
                             io::ErrorKind::TimedOut,
                             format!(
@@ -217,8 +223,44 @@ impl Lock {
 
 impl Drop for Lock {
     fn drop(&mut self) {
-        let _ = fs::remove_file(&self.0);
+        // Only if it is still this lock: one taken over as stale belongs to someone else now.
+        if fs::read_to_string(&self.path).is_ok_and(|held| held == self.mark) {
+            let _ = fs::remove_file(&self.path);
+        }
     }
+}
+
+/// Removes the lock at `path` if it is stale, and says whether it did. The age check and the
+/// removal are made while holding a second lock (`path` + `.reclaim`) that every taker of a stale
+/// lock goes through, and the age is checked again under it, so a lock another process has just
+/// made in place of a stale one is never removed. A reclaim lock left by a crash is removed once
+/// it is older than [`LOCK_STALE`] as well.
+fn remove_if_stale(path: &Path) -> io::Result<bool> {
+    let age = |p: &Path| {
+        fs::metadata(p)
+            .and_then(|m| m.modified())
+            .ok()
+            .and_then(|t| t.elapsed().ok())
+    };
+    if !age(path).is_some_and(|a| a > LOCK_STALE) {
+        return Ok(false);
+    }
+    let mut reclaim = path.as_os_str().to_owned();
+    reclaim.push(".reclaim");
+    let reclaim = PathBuf::from(reclaim);
+    match write_private(&reclaim, "") {
+        Ok(()) => {}
+        Err(e) if e.kind() == io::ErrorKind::AlreadyExists => {
+            if age(&reclaim).is_some_and(|a| a > LOCK_STALE) {
+                let _ = fs::remove_file(&reclaim);
+            }
+            return Ok(false);
+        }
+        Err(e) => return Err(e),
+    }
+    let removed = age(path).is_some_and(|a| a > LOCK_STALE) && fs::remove_file(path).is_ok();
+    let _ = fs::remove_file(&reclaim);
+    Ok(removed)
 }
 
 /// Whether something answers on `127.0.0.1:port`.

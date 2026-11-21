@@ -141,6 +141,8 @@ pub enum ConnectError {
     Unreachable(std::io::Error),
     /// A connection was made but the app's answer to the token was an error, or none.
     Refused(String),
+    /// A connection was made, so the app is there, but setting it up here failed.
+    Broken(std::io::Error),
 }
 
 impl std::fmt::Display for ConnectError {
@@ -148,6 +150,7 @@ impl std::fmt::Display for ConnectError {
         match self {
             ConnectError::Unreachable(e) => write!(f, "{e}"),
             ConnectError::Refused(m) => write!(f, "{m}"),
+            ConnectError::Broken(e) => write!(f, "{e}"),
         }
     }
 }
@@ -170,19 +173,18 @@ impl Remote {
     /// (the channel's first line). Each address the name resolves to is tried in turn:
     /// `localhost` may give `::1` first, while the app listens on `127.0.0.1` only. A channel
     /// that answers with an error (a wrong token, too many clients) or breaks the handshake is
-    /// [`ConnectError::Refused`]: the app is there, so the caller must not use another engine.
+    /// [`ConnectError::Refused`], and a failure setting up a connection that was made is
+    /// [`ConnectError::Broken`]: either way the app is there, so the caller must not use another
+    /// engine. Only [`ConnectError::Unreachable`] means no connection was made.
     pub fn connect(addr: &str, token: &str) -> Result<Self, ConnectError> {
         let stream = addr
             .to_socket_addrs()
             .and_then(first_reachable)
-            .and_then(|stream| {
-                stream.set_nodelay(true)?;
-                Ok(stream)
-            })
             .map_err(ConnectError::Unreachable)?;
+        stream.set_nodelay(true).map_err(ConnectError::Broken)?;
         let mut remote = Self {
             addr: addr.to_owned(),
-            reader: BufReader::new(stream.try_clone().map_err(ConnectError::Unreachable)?),
+            reader: BufReader::new(stream.try_clone().map_err(ConnectError::Broken)?),
             writer: stream,
             next_id: 1,
         };

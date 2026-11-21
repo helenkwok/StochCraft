@@ -92,6 +92,9 @@ pub fn backend_with_environment(
                 Err(ConnectError::Refused(e)) => {
                     Err(format!("the app at {addr} refused the connection: {e}"))
                 }
+                Err(ConnectError::Broken(e)) => Err(format!(
+                    "the connection to the app at {addr} was made but could not be set up: {e}"
+                )),
                 Err(ConnectError::Unreachable(e)) => Ok((
                     Box::new(Headless::new(options.roots)),
                     Some(format!(
