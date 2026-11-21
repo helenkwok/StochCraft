@@ -72,9 +72,10 @@ The two flags keep a headless agent to the folders you give it:
 - The roots must be existing folders; a missing one stops the server with an error.
 
 The roots cannot be combined with `--connect`: the app opens and saves files wherever its user
-asks, so an agent driving it is not confined. The app has no folders of its own to refuse paths
-outside of, and the control channel is open only to programs on the same computer, which can
-already read and write whatever the person at the window can.
+asks, so an agent driving it is not confined. The control channel listens only on this
+computer's loopback address, but that limits where a connection can come from, not who makes
+it: on a computer shared by several accounts, a program under another account can reach the
+port too. Use `--connect` only where every program that can reach the port is one you trust.
 
 ## Tools
 

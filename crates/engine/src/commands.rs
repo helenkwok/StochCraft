@@ -920,6 +920,15 @@ fn model_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
     let p: ModelSet = parse(p)?;
     for el in &p.model.elements {
         check_transfer(&el.kind)?;
+        // An estimate the model could not keep is refused, not dropped on the way in.
+        if let Some(estimate) = &el.estimate
+            && let Err(why) = estimate.to_estimate()
+        {
+            return Err(CommandError::new(
+                ErrorCode::InvalidParams,
+                format!("the estimate of `{}`: {why}", el.id),
+            ));
+        }
     }
     e.edit("model.set", Op::SetModel(Box::new(p.model.into())))?;
     Ok(json!({}))
