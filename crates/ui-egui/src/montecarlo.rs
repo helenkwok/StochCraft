@@ -1480,12 +1480,14 @@ fn influence_section(
 ) -> bool {
     let name = o["name"].as_str().unwrap_or("");
     let unit = o["unit"].as_str().unwrap_or("");
-    let inputs: Vec<&Value> = o["influence"]["inputs"]
+    // Every input the run has, widest swing first; the tornado and the rank table show the first
+    // `MOST_INPUTS`, the table of shares all of them.
+    let all: Vec<&Value> = o["influence"]["inputs"]
         .as_array()
         .into_iter()
         .flatten()
-        .take(MOST_INPUTS)
         .collect();
+    let inputs: Vec<&Value> = all.iter().take(MOST_INPUTS).copied().collect();
     let Some(top) = inputs.first() else {
         return false;
     };
@@ -1553,22 +1555,34 @@ fn influence_section(
         tornado_chart(ui, &bars, base, unit, width);
     }
     ui.add_space(4.0);
-    let rows: Vec<(String, String, Option<&Value>)> = inputs
-        .iter()
-        .map(|i| {
-            let input = i["input"].as_str().unwrap_or("");
-            let indices = mine
-                .and_then(|m| m["inputs"].as_array())
-                .and_then(|is| is.iter().find(|s| s["input"] == input));
-            (
-                input.to_owned(),
-                i["rank_correlation"]
-                    .as_f64()
-                    .map_or_else(|| "–".to_owned(), rank_text),
-                indices,
-            )
-        })
-        .collect();
+    let rank_of = |input: &str| {
+        all.iter()
+            .find(|i| i["input"] == input)
+            .and_then(|i| i["rank_correlation"].as_f64())
+            .map_or_else(|| "–".to_owned(), rank_text)
+    };
+    // With shares, a row for every input they are for (not only the tornado's), the rank
+    // correlation joined by name; without, the tornado's.
+    let rows: Vec<(String, String, Option<&Value>)> = if have {
+        // In the tornado's order (widest swing first), so the rows do not move when they arrive.
+        all.iter()
+            .map(|i| {
+                let input = i["input"].as_str().unwrap_or("");
+                let indices = mine
+                    .and_then(|m| m["inputs"].as_array())
+                    .and_then(|is| is.iter().find(|s| s["input"] == input));
+                (input.to_owned(), rank_of(input), indices)
+            })
+            .collect()
+    } else {
+        inputs
+            .iter()
+            .map(|i| {
+                let input = i["input"].as_str().unwrap_or("");
+                (input.to_owned(), rank_of(input), None)
+            })
+            .collect()
+    };
     grid(
         ui,
         &format!("mc/rank/{name}"),

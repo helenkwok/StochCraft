@@ -426,3 +426,45 @@ fn the_shares_can_be_cancelled() {
             .is_some()
     );
 }
+
+/// The table of shares has a row for every input, not only the twelve the tornado shows.
+#[test]
+fn the_table_of_shares_is_not_limited_to_the_tornados_inputs() {
+    let mut h = harness();
+    h.state_mut()
+        .run_command(&stochcraft_ui_egui::commands::CommandRef::new(
+            stochcraft_ui_egui::commands::NEW_MONTE_CARLO,
+        ));
+    settle(&mut h);
+    let mut sum = String::new();
+    for i in 0..14 {
+        h.state_mut().execute(
+            "mc.input.set",
+            serde_json::json!({
+                "name": format!("x{i}"),
+                "distribution": { "type": "uniform", "min": 0.0, "max": 1.0 },
+            }),
+        );
+        sum.push_str(&format!("{}$x{i}", if i == 0 { "" } else { " + " }));
+    }
+    h.state_mut().execute(
+        "mc.output.set",
+        serde_json::json!({ "name": "total", "expression": sum }),
+    );
+    settle(&mut h);
+    h.state_mut().run();
+    finish_run(&mut h);
+    let shown = |h: &Harness<'static, App>| {
+        (0..14)
+            .filter(|i| h.query_all_by_label(&format!("x{i}")).next().is_some())
+            .count()
+    };
+    assert_eq!(shown(&h), 12);
+    h.get_all_by_role_and_label(Role::Button, SHARES_BUTTON)
+        .next()
+        .unwrap_or_else(|| panic!("no button"))
+        .click();
+    h.step();
+    finish_shares(&mut h);
+    assert_eq!(shown(&h), 14);
+}
