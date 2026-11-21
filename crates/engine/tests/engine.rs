@@ -72,7 +72,7 @@ fn catalogue_is_complete_and_its_examples_run_in_order() {
     // document (`file.open` and `model.new` start a new journal and are its start record).
     let mut journalled = 0;
     for c in COMMANDS {
-        if matches!(c.name, "file.open" | "model.new") {
+        if matches!(c.name, "file.open" | "model.new" | "sd.open") {
             journalled = 0;
         } else if c.kind != CommandKind::Query {
             journalled += 1;

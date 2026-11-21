@@ -1,0 +1,382 @@
+//! System dynamics models through the engine (ROADMAP M4.2 part 1): the commands `sd.open`,
+//! `sd.run` and `sd.get`, and `file.open` on an XMILE file.
+//!
+//! An XMILE model is its own document, held beside the (empty) process model: opening one
+//! starts a new document and a new journal, as `file.open` on a BPMN file does, and `run`
+//! refuses it, as it refuses a Monte Carlo model, with the command to use. It cannot be edited
+//! or saved yet: the window and canvas that do come next. The runs are `stochcraft-sd`'s.
+
+use schemars::JsonSchema;
+use serde::Deserialize;
+use serde_json::{Value, json};
+use stochcraft_model::Model;
+use stochcraft_sd::{ErrorKind, Program, RunOptions, SdError, SdModel, SdResults};
+
+use crate::commands::parse;
+use crate::{CommandError, Engine, ErrorCode, JournalStart, StartKind};
+
+/// The model `sd.open`'s example opens.
+pub(crate) const EXAMPLE_XMILE: &str = "<xmile version=\"1.0\" xmlns=\"http://docs.oasis-open.org/xmile/ns/XMILE/v1.0\"><header><name>Growth</name></header><sim_specs method=\"Euler\"><start>0</start><stop>10</stop><dt>0.25</dt></sim_specs><model><variables><stock name=\"Population\"><eqn>100</eqn><inflow>growth</inflow></stock><flow name=\"growth\"><eqn>0.1 * Population</eqn></flow></variables></model></xmile>";
+
+/// The open system dynamics model, and its last run.
+pub(crate) struct SdDoc {
+    /// The name it was opened under (the path, for a file).
+    pub path: String,
+    pub model: SdModel,
+    pub program: Program,
+    pub notes: Vec<String>,
+    pub last: Option<SdResults>,
+}
+
+fn sd_error(e: SdError) -> CommandError {
+    let code = match e.kind {
+        ErrorKind::Xml => ErrorCode::BadFile,
+        ErrorKind::Unsupported => ErrorCode::Unsupported,
+        ErrorKind::Equation | ErrorKind::Loop | ErrorKind::Model => ErrorCode::InvalidModel,
+        ErrorKind::Run => ErrorCode::InvalidParams,
+    };
+    let mut c = CommandError::new(code, e.message);
+    c.details = Some(json!({ "kind": e.kind.name() }));
+    c
+}
+
+fn no_model() -> CommandError {
+    CommandError::new(
+        ErrorCode::NotFound,
+        "no system dynamics model is open: open an XMILE file with file.open, or give sd.open its text",
+    )
+}
+
+fn warnings_json(program: &Program) -> Value {
+    program
+        .warnings
+        .iter()
+        .map(|w| json!({ "severity": "warning", "code": "sd_check", "message": format!("warning: {w}") }))
+        .collect()
+}
+
+impl Engine {
+    /// Opens an XMILE model from its bytes, replacing the document (what `file.open` does for
+    /// an XMILE file, and `sd.open` for its text).
+    pub(crate) fn open_sd(&mut self, name: &str, bytes: &[u8]) -> Result<Value, CommandError> {
+        let text = std::str::from_utf8(bytes).map_err(|_| {
+            CommandError::new(ErrorCode::BadFile, format!("{name}: not UTF-8 text"))
+        })?;
+        let file = stochcraft_sd::read_xmile(text).map_err(|e| {
+            let mut c = sd_error(e);
+            c.message = format!("{name}: {}", c.message);
+            c
+        })?;
+        let program = stochcraft_sd::compile(&file.model).map_err(|e| {
+            let mut c = sd_error(e);
+            c.message = format!("{name}: {}", c.message);
+            c
+        })?;
+        let mut start = JournalStart::new(StartKind::File, Some(name.to_owned()));
+        start.file_digest = Some(crate::bytes_digest(bytes));
+        let result = json!({
+            "path": name,
+            "format": "xmile",
+            "kind": "system_dynamics",
+            "scenario": Value::Null,
+            "scenarios": [],
+            "notes": file.notes.iter().map(|n| json!({ "severity": "info", "at": Value::Null, "message": n })).collect::<Vec<_>>(),
+            "diagnostics": warnings_json(&program),
+            "model": describe(&file.model, &program),
+        });
+        self.new_document(Model::default(), start);
+        self.sd = Some(SdDoc {
+            path: name.to_owned(),
+            model: file.model,
+            program,
+            notes: file.notes,
+            last: None,
+        });
+        Ok(result)
+    }
+}
+
+/// The model as JSON: its settings, and each variable with its kind, equation and units.
+fn describe(model: &SdModel, program: &Program) -> Value {
+    let s = &model.specs;
+    let vars: Vec<Value> = model
+        .vars
+        .iter()
+        .map(|v| {
+            let (inflows, outflows, non_negative) = match &v.kind {
+                stochcraft_sd::VarKind::Stock {
+                    inflows,
+                    outflows,
+                    non_negative,
+                } => (inflows.clone(), outflows.clone(), *non_negative),
+                stochcraft_sd::VarKind::Flow { non_negative } => (vec![], vec![], *non_negative),
+                stochcraft_sd::VarKind::Aux => (vec![], vec![], false),
+            };
+            let mut o = json!({
+                "name": v.name,
+                "kind": v.kind.name(),
+                "equation": v.eqn,
+                "units": v.units,
+            });
+            if v.kind.name() == "stock" {
+                o["inflows"] = json!(inflows);
+                o["outflows"] = json!(outflows);
+            }
+            if non_negative {
+                o["non_negative"] = json!(true);
+            }
+            if let Some(g) = &v.gf {
+                o["graphical_function"] =
+                    json!({ "type": g.kind.name(), "points": g.points().ok() });
+            }
+            o
+        })
+        .collect();
+    json!({
+        "name": model.name,
+        "method": s.method.name(),
+        "start": s.start,
+        "stop": s.stop,
+        "dt": program.dt(),
+        "save_step": s.save_step.unwrap_or_else(|| program.dt()),
+        "time_unit": s.time_units,
+        "random": program.is_random(),
+        "variables": vars,
+    })
+}
+
+#[derive(Debug, Deserialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
+pub struct Open {
+    /// The text of an XMILE 1.0 file. (A file on disk is opened with `file.open`.)
+    pub text: String,
+    /// The name to report it under; by default `model.xmile`.
+    #[serde(default)]
+    pub name: Option<String>,
+}
+
+pub(crate) fn open(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
+    let p: Open = parse(p)?;
+    let name = p.name.unwrap_or_else(|| "model.xmile".to_owned());
+    e.open_sd(&name, p.text.as_bytes())
+}
+
+#[derive(Debug, Deserialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
+pub struct Run {
+    /// Replications, for a model with a random function (default 100); a model without one is
+    /// run once.
+    #[serde(default)]
+    pub replications: Option<u64>,
+    /// The seed of the random streams (default 1).
+    #[serde(default)]
+    pub seed: Option<u64>,
+    /// A time step in place of the file's, in the model's time unit.
+    #[serde(default)]
+    pub dt: Option<f64>,
+    /// Also run at half the step and report the largest relative difference of each stock.
+    #[serde(default)]
+    pub dt_check: Option<bool>,
+    /// Report times in this unit (second, minute, hour, day, week, month or year) instead of
+    /// the model's.
+    #[serde(default)]
+    pub time_unit: Option<String>,
+}
+
+pub(crate) fn run(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
+    let p: Run = parse(p)?;
+    let Some(doc) = e.sd.as_mut() else {
+        return Err(no_model());
+    };
+    let options = RunOptions {
+        replications: p.replications,
+        seed: p.seed.unwrap_or(1),
+        dt: p.dt,
+        dt_check: p.dt_check.unwrap_or(false),
+        time_unit: p.time_unit,
+    };
+    let results = stochcraft_sd::run(&doc.program, &options).map_err(sd_error)?;
+    let digest = crate::bytes_digest(stochcraft_sd::write_xmile(&doc.model).as_bytes());
+    let mut json = results_json(&results, &digest, &doc.notes);
+    json["record"]["file"] = json!(doc.path);
+    doc.last = Some(results);
+    Ok(json)
+}
+
+fn finite(v: f64) -> Value {
+    if v.is_finite() { json!(v) } else { Value::Null }
+}
+
+fn floats(v: &[f64]) -> Value {
+    Value::Array(v.iter().map(|x| finite(*x)).collect())
+}
+
+/// A run's results as JSON: the times, and each variable's mean (with, for a model that was
+/// replicated, the median and the 5th and 95th percentiles) at each of them.
+pub fn results_json(r: &SdResults, digest: &str, notes: &[String]) -> Value {
+    let variables: Vec<Value> = r
+        .series
+        .iter()
+        .map(|s| {
+            let mut o = json!({
+                "name": s.name,
+                "kind": s.kind,
+                "units": s.units,
+                "final": s.mean.last().map_or(Value::Null, |v| finite(*v)),
+                "mean": floats(&s.mean),
+            });
+            if r.replications > 1 {
+                o["median"] = floats(&s.median);
+                o["p5"] = floats(&s.low);
+                o["p95"] = floats(&s.high);
+            }
+            o
+        })
+        .collect();
+    let dt_check = r.dt_check.as_ref().map(|c| {
+        json!({
+            "dt": c.dt,
+            "half_dt": c.half_dt,
+            "stocks": c.stocks.iter().map(|s| json!({
+                "name": s.name,
+                "max_relative_difference": finite(s.max_relative_difference),
+                "at_time": s.at_time,
+            })).collect::<Vec<_>>(),
+            "max_relative_difference": finite(c.max_relative_difference),
+            "threshold": stochcraft_sd::DT_CHECK_THRESHOLD,
+            "within_threshold": c.within_threshold,
+            "method": "the model run again at half the time step, with the same seed and draws at the same times; for each stock, the largest over the saved times of the difference between the two mean paths, relative to the larger of the value at half the step and 0.1% of the stock's largest value",
+        })
+    });
+    let uncertainty = if r.replications > 1 {
+        "mean, median and the 5th and 95th percentiles across independent replications at each saved time (Hyndman and Fan's definition 7)"
+    } else {
+        "one run: a model with no random function has no spread"
+    };
+    json!({
+        "model": r.name,
+        "method": r.method,
+        "dt": r.dt,
+        "start": r.start,
+        "stop": r.stop,
+        "time_unit": r.time_unit,
+        "save_step": r.save_step,
+        "replications": r.replications,
+        "random": r.random,
+        "seed": r.seed,
+        "steps": r.steps,
+        "times": floats(&r.times),
+        "variables": variables,
+        "warnings": r.warnings,
+        "dt_check": dt_check,
+        "record": {
+            "stochcraft": env!("CARGO_PKG_VERSION"),
+            "model_digest": digest,
+            "file": Value::Null,
+            "seed": r.seed,
+            "replications": r.replications,
+            "time": "start + n * dt from an integer step counter, never added up",
+            "random_streams": "each random function draws from a stream keyed by its variable, which call in it, the seed it is given and the number of the draw, under a stream for the replication from the run's seed, so results do not shift when another variable is added or the step is halved",
+            "uncertainty": uncertainty,
+            "file_notes": notes,
+        },
+    })
+}
+
+#[derive(Debug, Deserialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
+pub struct Get {
+    /// A variable: also give its values from the last `sd.run`.
+    #[serde(default)]
+    pub variable: Option<String>,
+}
+
+pub(crate) fn get(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
+    let p: Get = parse(p)?;
+    let Some(doc) = e.sd.as_ref() else {
+        return Err(no_model());
+    };
+    let mut out = describe(&doc.model, &doc.program);
+    out["diagnostics"] = warnings_json(&doc.program);
+    out["notes"] = json!(doc.notes);
+    if let Some(name) = p.variable {
+        let want = stochcraft_sd::canonical(&name);
+        if !doc
+            .model
+            .vars
+            .iter()
+            .any(|v| stochcraft_sd::canonical(&v.name) == want)
+        {
+            return Err(CommandError::new(
+                ErrorCode::NotFound,
+                format!("no variable `{name}`"),
+            ));
+        }
+        out["values"] = match &doc.last {
+            Some(r) => match r.series(&name) {
+                Some(s) => {
+                    let mut o = json!({
+                        "name": s.name,
+                        "time_unit": r.time_unit,
+                        "times": floats(&r.times),
+                        "mean": floats(&s.mean),
+                    });
+                    if r.replications > 1 {
+                        o["median"] = floats(&s.median);
+                        o["p5"] = floats(&s.low);
+                        o["p95"] = floats(&s.high);
+                    }
+                    o
+                }
+                None => Value::Null,
+            },
+            None => Value::Null,
+        };
+    }
+    Ok(out)
+}
+
+/// A system dynamics run's results (as [`results_json`] gives them) as CSV: a row per saved time,
+/// the time and then each variable's mean, with its median and 5th and 95th percentiles after
+/// it where the model was replicated. This is what `stochcraft-cli run --format csv` writes.
+pub fn results_csv(r: &Value) -> String {
+    let vars: Vec<&Value> = r["variables"].as_array().into_iter().flatten().collect();
+    let many = r["replications"].as_u64().unwrap_or(1) > 1;
+    let name = |v: &Value| crate::wire::text_cell(v["name"].as_str().unwrap_or(""));
+    let mut header = vec![format!("time ({})", r["time_unit"].as_str().unwrap_or(""))];
+    for v in &vars {
+        let n = name(v);
+        header.push(n.clone());
+        if many {
+            header.push(format!("{n} median"));
+            header.push(format!("{n} p5"));
+            header.push(format!("{n} p95"));
+        }
+    }
+    let mut out = header
+        .iter()
+        .map(|h| crate::wire::csv_field(h))
+        .collect::<Vec<_>>()
+        .join(",");
+    out.push('\n');
+    let cell = |v: &Value, k: usize| {
+        v.get(k)
+            .and_then(Value::as_f64)
+            .map(|x| x.to_string())
+            .unwrap_or_default()
+    };
+    for (k, t) in r["times"].as_array().into_iter().flatten().enumerate() {
+        let mut row = vec![t.as_f64().map(|x| x.to_string()).unwrap_or_default()];
+        for v in &vars {
+            row.push(cell(&v["mean"], k));
+            if many {
+                row.push(cell(&v["median"], k));
+                row.push(cell(&v["p5"], k));
+                row.push(cell(&v["p95"], k));
+            }
+        }
+        out.push_str(&row.join(","));
+        out.push('\n');
+    }
+    out
+}

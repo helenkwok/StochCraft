@@ -2161,7 +2161,7 @@ over time, a second kind of diagram on the canvas). Then M4.1, the smallest and 
 reuses most of what exists; then M4.2 and M4.3 (agents in flows first); then M4.4. Agents in
 space are built with M5, which needs the same layout and travel.
 
-M4.1 parts 1, 2 and 3a are done (below); the rest is not started. D15–D18 are settled; D10–D13 (#71 has
+M4.1 parts 1, 2 and 3a are done and M4.2 part 1 is done (below); the rest is not started. D15–D18 are settled; D10–D13 (#71 has
 them) are to settle first.
 
 ### M4.1 Monte Carlo
@@ -2259,6 +2259,23 @@ function against their closed form.
 
 ### M4.2 System dynamics
 
+**Status:** part 1 done: the `sd` crate (stocks, flows, auxiliaries, graphical functions, `DELAY1`,
+`DELAY3`, `SMTH1`, `SMTH3`, `PULSE`, `STEP`, `RAMP`, `IF THEN ELSE` and the random functions
+`NORMAL` and `RANDOM` with a seed; Euler or fourth-order Runge-Kutta; time as start + n·DT from a
+counter; evaluation in topological order with ties broken by name, and an algebraic loop named as
+an error; non-negative stocks that limit their outflows so the mass balance holds; units checked
+on both sides, as warnings), reading and writing XMILE 1.0 (arrays, modules, macros and other
+constructs refused by name), the engine commands `sd.open`, `sd.run` and `sd.get` (and
+`file.open` on an XMILE file), and `stochcraft-cli run model.xmile` with a table, CSV or JSON of
+every variable over time and a halved-step check (`--dt-check`). A model with a random function
+runs in replications and gives the mean, the median and the 5% to 95% band at each time. Known
+answers check it: exponential growth (and Euler's error halving with the step), logistic growth
+by RK4, `DELAY3`'s pulse response against the Erlang density, `SMTH1`'s step response, a
+non-negative stock and the order of updates of the fisheries example, and an SIR epidemic against
+an RK4 reference at a small step. The window and the canvas come next (part 2), then the
+replication of hybrids with M4.3 and M4.4; arrays, the lint on rate-to-rate links and docking
+are not done.
+
 **What Python users already have, and so the minimum:** PySD runs models from the common
 system dynamics formats, with their stocks, flows, auxiliaries, delays, lookups and arrays, and
 returns every variable over time; runs with changed parameters are a loop away. So StochCraft
@@ -2274,8 +2291,10 @@ Chapter references are to Brailsford, Churilov and Dangerfield (eds.),
 - **One clock** (D11). `blocks`, `agents` and `sd` all sit on L2, and `INTRA_LAYER_ORDER` in
   `xtask/src/layers.rs` allows no dependency between them, so nothing owns a shared clock yet.
   - Each SD step is a recurring event on the `des` event list.
-  - A fixed rule says which goes first when an SD step and a DES event fall at the same time
-    (to confirm).
+  - A fixed rule says which goes first when an SD step and a DES event fall at the same time:
+    the SD state is advanced to that time first, then the event fires and sees the current
+    levels. This is the usual practice of integrating continuous state up to an event's time
+    (decided 2026-11-21).
   - Coupling lives either in an L3 crate or in an `sd` → `blocks` order in `layers.rs`.
   - Pidd, ch. 15 §15.5.1; Borshchev, ch. 12 §12.2.
 - **Replications** (D10). Pure SD runs once; a hybrid model has its own SD state per
@@ -3612,7 +3631,7 @@ and the Pages preview of an M3 pull request shows the blocks already merged.
 | D8 | First arrival of a start event | Open: at time 0 (as the reference simulator does, giving 151 car repair arrivals) or after the first interval (the specification's wording, and StochCraft today, giving 150). Evidence from M2.3's cross-check: with the first arrival at 0, the car repair counts match the reference simulator's exactly for arrivals and within 0.01 standard errors for the others; after the first interval they are one arrival short and within 0.15. Both pass |
 | D9 | Where credibility data live (parameter pedigree, validated ranges) | In the model file, as `stochcraft:` BPSim vendor extensions, so they travel with the model and other tools keep them |
 | D10 | Replications in hybrid models (M4) | Each replication has its own SD state; uncertainty about parameters is an outer sample around the inner replications, never mixed into them |
-| D11 | The shared clock, and where coupling lives (M4) | SD steps are recurring events on the `des` event list; coupling lives in an L3 crate or an `sd` → `blocks` order in `xtask/src/layers.rs`; which goes first when an SD step and a DES event fall at the same time is a fixed rule, to confirm |
+| D11 | The shared clock, and where coupling lives (M4) | SD steps are recurring events on the `des` event list; coupling lives in an L3 crate or an `sd` → `blocks` order in `xtask/src/layers.rs`; at a time where an SD step and a DES event coincide, the SD state is advanced to that time first, then the event fires and sees the current levels (the usual practice of integrating continuous state up to an event's time; decided 2026-11-21) |
 | D12 | Bulk flow (tanks, pipes) (M4) | Exact events: with rates constant between changes, the time a level is reached is worked out and scheduled in `des`, rather than found up to one step late by a fixed-step `sd` |
 | D13 | Hybrid model files (M4) | One BPMN and BPSim file, naming XMILE variables through a `stochcraft:` vendor extension, with the couplings declared in it |
 | D14 | The BPMN MIWG test suite (github.com/bpmn-miwg/bpmn-miwg-test-suite, CC BY 3.0 by its `LICENSE.txt`) as test files | Settled: fetched in CI at a pinned commit and never committed, as for D7, so the repository stays under one licence; bpmn.io's bpmn-js-integration (MIT) does the same, cloning its own copy of the suite into `tmp/` in its CI. Only its `Reference/` folder is used, for reading, round-trip and diagnostics tests; the other folders are exports from commercial modelling tools and are not used. If a few files are ever needed offline, only those reference models are committed, each with a row in ATTRIBUTION.md and the CC BY 3.0 notice |

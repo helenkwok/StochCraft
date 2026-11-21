@@ -975,3 +975,52 @@ fn a_monte_carlo_model_runs_from_the_command_line() {
     );
     assert!(after.contains("labour,triangular"), "{after}");
 }
+
+/// A system dynamics model (an XMILE file): `run` prints each variable's value at the end, CSV
+/// and JSON give every variable over time, and `--dt-check` reports the halved-step check.
+#[test]
+fn a_system_dynamics_model_runs_from_the_command_line() {
+    let m = model("sir.xmile");
+    let table = ok(&["run", &m]);
+    assert!(
+        table.contains("system dynamics, rk4, time step 0.25 Days"),
+        "{table}"
+    );
+    assert!(
+        table.contains("one run (the model has no random function)"),
+        "{table}"
+    );
+    assert!(table.contains("Susceptible"), "{table}");
+
+    let csv = ok(&["run", &m, "--format", "csv"]);
+    assert_eq!(csv.lines().count(), 12, "{csv}");
+    assert!(
+        csv.starts_with("time (Days),Susceptible,Infected,Recovered"),
+        "{csv}"
+    );
+
+    let r = json(&ok(&[
+        "run",
+        &m,
+        "--format",
+        "json",
+        "--dt",
+        "1",
+        "--dt-check",
+    ]));
+    assert_eq!(r["dt"], 1.0);
+    assert_eq!(r["dt_check"]["half_dt"], 0.5);
+    assert!(r["dt_check"]["stocks"].is_array());
+    let checked = ok(&["run", &m, "--dt", "1", "--dt-check"]);
+    assert!(checked.contains("halved step"), "{checked}");
+
+    // What means nothing for such a model is refused, not ignored.
+    let refused = cli(&["run", &m, "--warmup", "5"]);
+    assert!(!refused.status.success());
+    assert!(
+        stderr(&refused).contains("system dynamics"),
+        "{}",
+        stderr(&refused)
+    );
+    assert!(!cli(&["run", &m, "--dt", "0"]).status.success());
+}

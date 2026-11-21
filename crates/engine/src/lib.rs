@@ -39,6 +39,10 @@
 //! - A Monte Carlo model (a calculation with no process: inputs that are distributions, outputs
 //!   that are expressions over them) is edited with the `mc.*` commands and run with `mc.run`
 //!   (see [`mc`]); `run` refuses one. `mc.sobol` gives each input's share of an output's variance.
+//! - A system dynamics model (stocks and flows over time) is an XMILE file: `file.open` or `sd.open`
+//!   opens it, `sd.run` runs it (once, or in replications when it has a random function, giving
+//!   the mean, median and 5% to 95% band of every variable over time) and `sd.get` describes it
+//!   (see [`sd`]); `run` refuses one. It cannot be edited or saved yet.
 //! - Files are BPSim on BPMN or XPDL (`stochcraft-io`). `file.save` writes edits into the file
 //!   the model was opened from, keeping everything StochCraft does not understand and every line
 //!   it did not change; saved unchanged, the file comes back byte for byte. An edit that cannot
@@ -55,6 +59,7 @@ mod fit;
 pub mod mc;
 pub mod precision;
 mod run;
+pub mod sd;
 pub mod wire;
 mod workers;
 
@@ -251,11 +256,12 @@ pub enum ReplayMode {
 }
 
 /// The commands [`ReplayMode::EditsOnly`] skips.
-const SKIPPED_BY_DEFAULT: [&str; 10] = [
+const SKIPPED_BY_DEFAULT: [&str; 11] = [
     "file.save",
     "run",
     "mc.run",
     "mc.sobol",
+    "sd.run",
     "run.start",
     "run.cancel",
     "experiment.sweep",
@@ -338,6 +344,8 @@ pub struct Engine {
     /// command started one and left the journal to its start record.
     documents: u64,
     file: Option<FileState>,
+    /// The system dynamics model, if the document is one (see [`sd`]).
+    sd: Option<sd::SdDoc>,
     /// The model as last opened or saved, to tell whether there are unsaved changes.
     saved: Model,
     job: Option<Job>,
@@ -381,6 +389,7 @@ impl Engine {
             journal_start,
             documents: 0,
             file: None,
+            sd: None,
             job: None,
             job_kept: false,
             last_results: None,
@@ -626,6 +635,7 @@ impl Engine {
         self.undo.clear();
         self.redo.clear();
         self.file = None;
+        self.sd = None;
         self.cancel_run();
         self.job = None;
         self.job_kept = false;
@@ -640,6 +650,9 @@ impl Engine {
         bytes: &[u8],
         scenario: Option<&str>,
     ) -> Result<Value, CommandError> {
+        if stochcraft_sd::looks_like_xmile(bytes) {
+            return self.open_sd(name, bytes);
+        }
         let loaded = stochcraft_io::read_scenario(bytes, scenario)
             .map_err(|e| CommandError::new(ErrorCode::BadFile, format!("{name}: {e}")))?;
         let notes = notes_json(&loaded.notes);
@@ -756,6 +769,12 @@ impl Engine {
             return Err(CommandError::new(
                 ErrorCode::Unsupported,
                 "this is a Monte Carlo model, a calculation with no process: run it with mc.run",
+            ));
+        }
+        if self.sd.is_some() {
+            return Err(CommandError::new(
+                ErrorCode::Unsupported,
+                "this is a system dynamics model: run it with sd.run",
             ));
         }
         let compiled = compile(&self.model).map_err(|ds| CommandError {

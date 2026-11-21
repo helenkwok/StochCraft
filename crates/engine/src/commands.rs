@@ -2217,6 +2217,12 @@ fn file_open(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
 
 fn file_save(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
     let p: FileSave = parse(p)?;
+    if e.sd.is_some() {
+        return Err(CommandError::new(
+            ErrorCode::Unsupported,
+            "a system dynamics model cannot be saved yet: the window and canvas that edit it come next",
+        ));
+    }
     let path = p
         .path
         .or_else(|| e.path().map(str::to_owned))
@@ -2616,7 +2622,7 @@ pub static COMMANDS: &[Command] = &[
     },
     Command {
         name: "file.open",
-        summary: "Open a BPMN or XPDL file with BPSim data, replacing the model, clearing the history and starting a new journal.",
+        summary: "Open a BPMN or XPDL file with BPSim data, or an XMILE system dynamics model (run with sd.run), replacing the model, clearing the history and starting a new journal.",
         kind: CommandKind::Action,
         schema: schema::<FileOpen>,
         example: || json!({ "path": "help-desk.bpmn" }),
@@ -2722,5 +2728,29 @@ materials,normal,mean=500;std_dev=50,USD
         schema: schema::<crate::mc::Name>,
         example: || json!({ "name": "materials" }),
         run: crate::mc::input_remove,
+    },
+    Command {
+        name: "sd.open",
+        summary: "System dynamics: open an XMILE 1.0 model from its text (a file on disk is opened with file.open), replacing the model, clearing the history and starting a new journal. Stocks, flows, auxiliaries, graphical functions, delays and smooths are read; arrays, modules, macros and the like are refused by name. The model cannot be edited or saved yet.",
+        kind: CommandKind::Action,
+        schema: schema::<crate::sd::Open>,
+        example: || json!({ "text": crate::sd::EXAMPLE_XMILE }),
+        run: crate::sd::open,
+    },
+    Command {
+        name: "sd.run",
+        summary: "System dynamics: run the open model. Every variable over time at the save interval, as the mean (the value itself for one run), and, for a model with a random function (NORMAL, RANDOM), run in `replications` (default 100) with a `seed`, also the median and the 5th and 95th percentiles at each time. A model with no random function runs once. `dt` runs it at another time step; `dt_check` runs it again at half the step and reports each stock's largest relative difference between the two; `time_unit` reports times in another time unit. Euler or fourth-order Runge-Kutta, as the file asks.",
+        kind: CommandKind::Action,
+        schema: schema::<crate::sd::Run>,
+        example: || json!({ "dt_check": true }),
+        run: crate::sd::run,
+    },
+    Command {
+        name: "sd.get",
+        summary: "System dynamics: the open model's settings, variables (kind, equation, units, flows) and what the checks found, and with `variable` its values from the last sd.run.",
+        kind: CommandKind::Query,
+        schema: schema::<crate::sd::Get>,
+        example: || json!({ "variable": "Population" }),
+        run: crate::sd::get,
     },
 ];

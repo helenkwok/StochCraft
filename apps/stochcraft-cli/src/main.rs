@@ -86,7 +86,9 @@ enum Command {
     },
     /// Run a model's experiment and print the results with their run record. A Monte Carlo model
     /// (a calculation with no process) runs its trials instead: `--reps` is the number of
-    /// trials, and `--until` and `--max` run until every output's mean is that precise.
+    /// trials, and `--until` and `--max` run until every output's mean is that precise. A
+    /// system dynamics model (an XMILE file) prints each variable's value at the end of the run;
+    /// `--format csv` and `--format json` give every variable over time.
     Run {
         file: PathBuf,
         /// The BPSim scenario to run (default: the first).
@@ -133,6 +135,15 @@ enum Command {
         /// Rows of each base sample of `--sobol` (default 1000, at least 10).
         #[arg(long, requires = "sobol", value_parser = clap::value_parser!(u64).range(10..))]
         sobol_rows: Option<u64>,
+        /// A system dynamics model (an XMILE file): the time step to run at, in place of the
+        /// file's, in the model's time unit. `--reps` is then the replications of a model with
+        /// a random function (default 100), and `--seed` its seed (default 1).
+        #[arg(long, value_parser = time_step)]
+        dt: Option<f64>,
+        /// A system dynamics model: also run at half the time step and report each stock's largest
+        /// relative difference between the two.
+        #[arg(long)]
+        dt_check: bool,
         #[arg(long, value_enum, default_value_t = Format::Table)]
         format: Format,
         /// Write the results to this file instead of the terminal.
@@ -481,6 +492,17 @@ fn points(s: &str) -> Result<f64, String> {
 }
 
 /// A positive, finite number (for `--cycle`).
+fn time_step(s: &str) -> Result<f64, String> {
+    let v: f64 = s.parse().map_err(|e| format!("{e}"))?;
+    if v.is_finite() && v > 0.0 {
+        Ok(v)
+    } else {
+        Err(format!(
+            "the time step must be positive and finite, not {s}"
+        ))
+    }
+}
+
 fn positive_finite(s: &str) -> Result<f64, String> {
     let v: f64 = s.parse().map_err(|e| format!("{e}"))?;
     if v.is_finite() && v > 0.0 {
@@ -669,6 +691,14 @@ impl Until {
     }
 }
 
+/// `run`'s options for a system dynamics model's time step.
+struct StepOptions {
+    /// `--dt`.
+    dt: Option<f64>,
+    /// `--dt-check`.
+    check: bool,
+}
+
 /// `run`'s options for a Monte Carlo model's Sobol indices.
 struct Shares {
     /// `--sobol`: work them out.
@@ -688,11 +718,28 @@ fn run(
     duration: Option<f64>,
     until: &Until,
     shares: &Shares,
+    steps: &StepOptions,
     format: Format,
     out: Option<&Path>,
 ) -> Result<u8, Failure> {
     let mut engine = Engine::new();
     let opened = open(&mut engine, file, scenario)?;
+    if opened["kind"] == "system_dynamics" {
+        if warmup.is_some()
+            || duration.is_some()
+            || until.relative.is_some()
+            || until.points.is_some()
+            || until.max.is_some()
+            || until.fixed
+            || shares.wanted
+        {
+            return Err(Failure(
+                "a system dynamics model has no warm-up, duration, sequential stop or Sobol shares: use --reps (replications, for a model with a random function), --seed, --dt and --dt-check"
+                    .into(),
+            ));
+        }
+        return run_system_dynamics(&mut engine, reps, seed, steps, format, out);
+    }
     if opened["kind"] == "monte_carlo" {
         if warmup.is_some() || duration.is_some() || until.points.is_some() {
             return Err(Failure(
@@ -738,6 +785,42 @@ fn run(
         ),
         Format::Csv => output::csv(&results),
         Format::Table => output::table(&engine.model().name, &results),
+    };
+    emit(&text, out)?;
+    Ok(0)
+}
+
+/// `run` on a system dynamics model: every variable over time, once or in replications.
+fn run_system_dynamics(
+    engine: &mut Engine,
+    reps: Option<u32>,
+    seed: Option<u64>,
+    steps: &StepOptions,
+    format: Format,
+    out: Option<&Path>,
+) -> Result<u8, Failure> {
+    let mut params = json!({});
+    if let Some(r) = reps {
+        params["replications"] = json!(r);
+    }
+    if let Some(s) = seed {
+        params["seed"] = json!(s);
+    }
+    if let Some(d) = steps.dt {
+        params["dt"] = json!(d);
+    }
+    if steps.check {
+        params["dt_check"] = json!(true);
+    }
+    let results = engine.execute("sd.run", params)?;
+    let text = match format {
+        Format::Json => format!(
+            "{}
+",
+            serde_json::to_string_pretty(&results).unwrap_or_default()
+        ),
+        Format::Csv => output::sd_csv(&results),
+        Format::Table => output::sd_table("", &results),
     };
     emit(&text, out)?;
     Ok(0)
@@ -1133,6 +1216,8 @@ fn main() -> ExitCode {
             fixed,
             sobol,
             sobol_rows,
+            dt,
+            dt_check,
             format,
             out,
         } => run(
@@ -1152,6 +1237,10 @@ fn main() -> ExitCode {
             &Shares {
                 wanted: sobol,
                 rows: sobol_rows,
+            },
+            &StepOptions {
+                dt,
+                check: dt_check,
             },
             format,
             out.as_deref(),

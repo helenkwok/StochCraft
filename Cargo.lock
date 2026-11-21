@@ -3471,6 +3471,7 @@ dependencies = [
  "stochcraft-mc",
  "stochcraft-model",
  "stochcraft-random",
+ "stochcraft-sd",
  "stochcraft-stats",
 ]
 
@@ -3531,6 +3532,15 @@ name = "stochcraft-render"
 version = "0.2.0"
 dependencies = [
  "libm",
+]
+
+[[package]]
+name = "stochcraft-sd"
+version = "0.2.0"
+dependencies = [
+ "quick-xml 0.42.0",
+ "stochcraft-random",
+ "stochcraft-stats",
 ]
 
 [[package]]
