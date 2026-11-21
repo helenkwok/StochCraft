@@ -2161,7 +2161,7 @@ over time, a second kind of diagram on the canvas). Then M4.1, the smallest and 
 reuses most of what exists; then M4.2 and M4.3 (agents in flows first); then M4.4. Agents in
 space are built with M5, which needs the same layout and travel.
 
-M4.1 parts 1, 2, 2b and 3a are done and M4.2 part 1 is done (below); the rest is not started. D15–D18 are settled; D10–D13 (#71 has
+M4.1 parts 1, 2, 2b and 3a and its control variates are done, and M4.2 parts 1 and 2 (the `sd` crate, editing and saving, the window) are done except the canvas (below); the rest is not started. D15–D18 are settled; D10–D13 (#71 has
 them) are to settle first.
 
 ### M4.1 Monte Carlo
