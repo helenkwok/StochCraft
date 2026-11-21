@@ -1,1 +1,0 @@
-importScripts("./stochcraft-worker.js");wasm_bindgen("./stochcraft-worker_bg.wasm");
