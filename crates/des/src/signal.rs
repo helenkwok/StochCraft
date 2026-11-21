@@ -156,6 +156,18 @@ impl Future for Wait {
     }
 }
 
+impl Drop for Wait {
+    /// A wait dropped before it ends leaves the list of waiters, so nobody wakes for it.
+    fn drop(&mut self) {
+        if let Some(woken) = self.woken.take() {
+            self.waiters
+                .list
+                .borrow_mut()
+                .retain(|(_, f)| !Rc::ptr_eq(f, &woken));
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -215,5 +227,28 @@ mod tests {
         sim.run();
         assert_eq!(*log.borrow(), [("a", 8.0), ("b", 9.0), ("c", 24.0)]);
         assert!(shift.is_open());
+    }
+
+    #[test]
+    fn a_wait_dropped_before_it_ends_leaves_the_waiters() {
+        let mut sim = Sim::new();
+        let ctx = sim.ctx();
+        let signal = Signal::new(&ctx);
+        let s = signal.clone();
+        let c = ctx.clone();
+        sim.spawn(async move {
+            let mut wait = s.wait();
+            std::future::poll_fn(|cx| {
+                let _ = Pin::new(&mut wait).poll(cx);
+                Poll::Ready(())
+            })
+            .await;
+            assert_eq!(s.waiting(), 1);
+            c.hold(1.0).await;
+            drop(wait);
+            assert_eq!(s.waiting(), 0);
+        });
+        sim.run();
+        assert_eq!(signal.waiting(), 0);
     }
 }

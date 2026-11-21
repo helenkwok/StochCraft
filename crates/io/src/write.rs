@@ -289,8 +289,7 @@ pub(crate) fn queue_capacity_element(n: u32, limit: &QueueLimit) -> Element {
 }
 
 /// The scenario parameters that say experiment `x`: runs, seed, time unit, result frequency,
-/// start, duration (the warm-up included) and warm-up, then the length unit, layout scale and
-/// sequential runs as vendor extensions.
+/// start, duration (the warm-up included) and warm-up, and a Monte Carlo model's inputs.
 pub(crate) fn scenario_parameters(x: &Experiment, mc: Option<&MonteCarlo>) -> Element {
     let mut sp = s("ScenarioParameters")
         .with_attr("replication", &x.replications.to_string())
@@ -319,17 +318,24 @@ pub(crate) fn scenario_parameters(x: &Experiment, mc: Option<&MonteCarlo>) -> El
     if let Some(mc) = mc {
         sp.push(crate::mc::properties_element(mc));
     }
-    // After the other parameters, as a vendor extension is.
+    sp
+}
+
+/// The scenario's vendor extensions that say experiment `x`: the length unit and layout scale
+/// (unless the default) and sequential runs. BPSim allows vendor extensions only as children of
+/// the `Scenario`, after its calendars, never inside `ScenarioParameters`.
+pub(crate) fn scenario_extensions(x: &Experiment) -> Vec<Element> {
+    let mut out = Vec::new();
     if let Some(u) = length_unit_element(x.length_unit) {
-        sp.push(u);
+        out.push(u);
     }
     if let Some(u) = layout_scale_element(x.layout_scale) {
-        sp.push(u);
+        out.push(u);
     }
     if let Some(q) = &x.sequential {
-        sp.push(sequential_element(q));
+        out.push(sequential_element(q));
     }
-    sp
+    out
 }
 
 /// A StochCraft vendor extension holding one value.
@@ -1226,6 +1232,10 @@ pub fn write_new(model: &Model) -> Vec<u8> {
     }
     for c in &model.calendars {
         scenario.push(calendar_element(c));
+    }
+    // The scenario's vendor extensions, after its calendars (BPSim's schema order).
+    for x in scenario_extensions(&model.experiment) {
+        scenario.push(x);
     }
     // The rest of a Monte Carlo model, last, where BPSim puts a scenario's vendor extensions.
     if let Some(mc) = &model.monte_carlo {

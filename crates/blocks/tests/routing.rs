@@ -183,9 +183,9 @@ fn a_gateway_with_a_route_for_everything_loses_none() {
 }
 
 #[test]
-fn a_join_counts_each_entity_once() {
+fn a_join_counts_every_entity_that_comes_in() {
     // Ten entities, each split into two copies that the join merges back into one: the join
-    // takes in ten entities and sends on ten.
+    // takes in twenty entities (a copy on each input) and sends on ten.
     let mut m = Builder::new();
     let arrivals = m.source("arrivals", Dist::Constant(1.0), Some(10));
     let split = m.parallel("split");
@@ -203,9 +203,44 @@ fn a_join_counts_each_entity_once() {
     // A split takes in one entity and sends on a copy per connection.
     assert_eq!(entered(&r, "split"), 10);
     assert_eq!(r.element("split").map(|e| e.left), Some(20));
-    assert_eq!(entered(&r, "join"), 10);
+    assert_eq!(entered(&r, "join"), 20);
     assert_eq!(r.element("join").map(|e| e.left), Some(10));
+    assert_eq!(r.element("join").and_then(|e| e.work_in_progress), Some(0));
     assert_eq!(entered(&r, "exit"), 10);
+}
+
+/// Copies waiting at a join for the other branch are in its work in progress, so they have
+/// entered it, whichever input they came on: entered = left + waiting here, where each
+/// entity's two copies are the only ones that come in.
+#[test]
+fn a_join_counts_what_waits_on_either_input() {
+    for (first, second) in [(1.0, 100.0), (100.0, 1.0)] {
+        // Five entities, 10 apart: the fast branch's copy reaches the join at once and waits
+        // there for the slow one's, which is not in by the time the run ends at 55.
+        let mut m = Builder::new();
+        let arrivals = m.source("arrivals", Dist::Constant(10.0), Some(5));
+        let split = m.parallel("split");
+        let a = m.delay("a", Dist::Constant(first));
+        let b = m.delay("b", Dist::Constant(second));
+        let join = m.parallel("join");
+        let exit = m.sink("exit");
+        m.connect(arrivals, split);
+        m.connect(split, a);
+        m.connect(split, b);
+        m.connect(a, join);
+        m.connect(b, join);
+        m.connect(join, exit);
+        let r = once(&m, 55.0);
+        let join = r.element("join");
+        let (came, went) = (entered(&r, "join"), join.map_or(0, |e| e.left));
+        let waiting = join.and_then(|e| e.work_in_progress);
+        assert_eq!(
+            (came, went, waiting),
+            (5, 0, Some(5)),
+            "{first}/{second}: {r:?}"
+        );
+        assert!(waiting.is_some_and(|w| w <= came - went));
+    }
 }
 
 #[test]
@@ -239,7 +274,7 @@ fn a_fork_and_join_waits_for_the_slower_branch() {
     let r = once(&m, 100.0);
     assert_eq!(entered(&r, "short"), 5);
     assert_eq!(entered(&r, "long"), 5);
-    assert_eq!(entered(&r, "join"), 5);
+    assert_eq!(entered(&r, "join"), 10);
     assert_eq!(entered(&r, "exit"), 5);
     assert_eq!(
         r.element("exit").and_then(|e| e.mean_time_in_system),
@@ -323,7 +358,7 @@ fn a_join_pairs_copies_by_arrival_order_even_when_a_branch_overtakes() {
     // `spawn_parallel`): at time 3, entity 2 from a with entity 1 from b (waiting since 2);
     // at time 11, entity 1 from a with entity 2 from b. Both joined entities are mixed.
     let r = fork_and_join(10.0);
-    assert_eq!(entered(&r, "join"), 2);
+    assert_eq!(entered(&r, "join"), 4);
     assert_eq!(entered(&r, "same"), 0);
     assert_eq!(entered(&r, "mixed"), 2);
     // Each keeps branch a's entity, so its own arrival time: entity 2 from 2 to 3, entity 1

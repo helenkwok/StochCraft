@@ -101,6 +101,21 @@ fn batches_collect_and_split_exactly() {
     assert!(t.is_some_and(|t| (t - 6.0).abs() < 1e-9), "{t:?}");
 }
 
+/// A batch size from a model file can be as large as a `u32`: the batch reserves room for only
+/// a few, and the entities that do arrive wait for a batch that never fills.
+#[test]
+fn a_huge_batch_size_does_not_reserve_room_for_it() {
+    let mut b = Builder::new();
+    let src = b.source("in", Dist::Constant(1.0), None);
+    let batch = b.batch("pack", u32::MAX);
+    let out = b.sink("out");
+    b.connect(src, batch);
+    b.connect(batch, out);
+    let r = report(&b, 30.0);
+    assert_eq!(counts(&r, "pack"), (30, 0), "{r:?}");
+    assert_eq!(counts(&r, "out"), (0, 0), "{r:?}");
+}
+
 /// A bill of materials: 2 parts from A (one every 1) and 1 from B (one every 2) make each
 /// assembly. Assembly k uses A's arrivals at 2k − 1 and 2k and B's at 2k, so one is made every 2
 /// (15 in 30), each 1 after its first part arrived; every part counts as entering.

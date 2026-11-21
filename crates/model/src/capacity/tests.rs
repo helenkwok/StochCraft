@@ -183,6 +183,42 @@ fn mg1_matches_pollaczek_khinchine() {
 }
 
 #[test]
+fn a_user_distribution_service_is_mg1() {
+    // Service uniform on [0, 2] given as a table (an atom of 0 at 0, then even to 2): mean 1,
+    // variance 1/3. At λ = 0.5, Wq = λ (variance + mean²) / (2 (1 − ρ)) = 2/3.
+    let table = Dist::User {
+        points: vec![(0.0, 0.0), (1.0, 2.0)],
+        discrete: false,
+    };
+    let c = line(0.5, 1, table).capacity(DEFAULT_TARGET);
+    let f = formula(row(&c, "s"));
+    assert_eq!(f.name, "M/G/1");
+    assert!(near(f.mean_wait, 2.0 / 3.0), "{f:?}");
+}
+
+#[test]
+fn a_pert_service_is_mg1() {
+    // PERT(10, 20, 60) is a beta on [10, 60] with shapes 1.8 and 4.2: mean 25 and variance
+    // 50² · 1.8 · 4.2 / (6² · 7) = 75. At λ = 0.02 (ρ = 0.5), Wq = 0.02 · (75 + 625) / 1 = 14;
+    // the fitted table is within a few percent of that.
+    let fitted = crate::ThreePoint {
+        family: crate::Family::Pert,
+        min: 10.0,
+        mode: 20.0,
+        upper: 60.0,
+        upper_is: crate::Upper::Max,
+    }
+    .fit();
+    let Ok(pert) = fitted else {
+        panic!("a PERT fit: {fitted:?}")
+    };
+    let c = line(0.02, 1, pert).capacity(DEFAULT_TARGET);
+    let f = formula(row(&c, "s"));
+    assert_eq!(f.name, "M/G/1");
+    assert!((f.mean_wait / 14.0 - 1.0).abs() < 0.1, "{f:?}");
+}
+
+#[test]
 fn a_setup_before_every_job_is_part_of_the_service() {
     // Service 0.6 constant plus setup 0.4 constant: M/G/1 with S = 1.
     let mut m = line(0.5, 1, Dist::Constant(0.6));

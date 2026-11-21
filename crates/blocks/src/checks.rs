@@ -226,11 +226,9 @@ struct Flows {
 /// with no way out for them (through a shortest-queue gateway, counted by the gateway instead);
 /// and giving up or balking at a server with no way marked for them. A parallel gateway that
 /// copies, a batch and an unbatch end the entities that come in and start those that leave,
-/// as new ones. Not exact (the counts are of different things) at a parallel gateway that
-/// joins, whose second and later inputs are not counted as entering, nor where a
+/// as new ones (a join counts every entity that comes in, on any input). Not exact where a
 /// shortest-queue gateway sends to another, holding entities that wait for room on the way.
 fn flows(model: &Model, report: &Report) -> Flows {
-    let into = |id: &ElementId| model.connections.iter().filter(|c| &c.to == id).count();
     let target = |from: &ElementId| {
         model
             .connections
@@ -270,9 +268,6 @@ fn flows(model: &Model, report: &Report) -> Flows {
             ElementKind::Batch { .. } | ElementKind::Unbatch | ElementKind::ParallelGateway => {
                 f.ended += e.entered;
                 f.made += e.left;
-                if matches!(element.kind, ElementKind::ParallelGateway) && into(&e.id) > 1 {
-                    f.exact = false;
-                }
                 continue;
             }
             ElementKind::Source { .. } => {

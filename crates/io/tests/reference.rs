@@ -18,7 +18,8 @@ use stochcraft_io::bpsim::{self, NS2};
 use stochcraft_io::{read, read_scenario, write_new, xml};
 use stochcraft_model::{
     Connection, DateTime, Dist, Element, ElementId, ElementKind, Estimate, Experiment, Family,
-    Model, OnShiftEnd, Property, PropertyType, PropertyValue, Stop, ThreePoint, TimeUnit, Upper,
+    Model, OnShiftEnd, Property, PropertyType, PropertyValue, Sequential, SequentialMeasure, Stop,
+    ThreePoint, TimeUnit, Upper,
 };
 
 fn required() -> bool {
@@ -1210,6 +1211,38 @@ fn everything_stochcraft_writes_is_schema_valid() {
     k.balked(first, later);
     k.connect(later, first);
     validate(&write_new(&k.build(Experiment::default())), "balking", &xsd);
+    // Sequential replications, watching every key measure and watching one result.
+    for (what, measure) in [
+        ("sequential", None),
+        (
+            "sequential measure",
+            Some(SequentialMeasure {
+                element: ElementId::unchecked("first"),
+                metric: "mean_wait".to_owned(),
+                half_width: Some(0.25),
+            }),
+        ),
+    ] {
+        let mut q = Builder::new();
+        let src = q.source("calls", Dist::Exponential { mean: 1.0 }, None);
+        let out = q.sink("out");
+        q.connect(src, out);
+        validate(
+            &write_new(&q.build(Experiment {
+                sequential: Some(Sequential {
+                    measure,
+                    relative: 0.02,
+                    points: 0.5,
+                    max: 300,
+                }),
+                length_unit: stochcraft_model::LengthUnit::Millimetres,
+                layout_scale: 2.5,
+                ..Experiment::default()
+            })),
+            what,
+            &xsd,
+        );
+    }
     // Each reference model, as StochCraft reads it, written again as a new BPMN file.
     let Some(paths) = models() else { return };
     for p in &paths {
