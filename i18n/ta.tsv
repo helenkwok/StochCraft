@@ -1337,3 +1337,47 @@ unit	yr	ஆண்டு
 	{name}: the ± is across {n} of the {of} pairs, the rest had no trial with a number.	{name}: ± என்பது {of} இணைகளில் {n} இணைகளின் அடிப்படையில் உள்ளது; மீதமுள்ளவற்றில் எண் கொண்ட முயற்சி இல்லை.
 	No interval: every pair gave the same share, so their spread gives none.	இடைவெளி இல்லை: எல்லா இணைகளும் ஒரே பங்கைத் தந்தன, எனவே அவற்றின் பரவலிலிருந்து இடைவெளி கிடைக்காது.
 	No interval: too few pairs of trials for one.	இடைவெளி இல்லை: அதற்குப் போதுமான முயற்சி இணைகள் இல்லை.
+	Stock	இருப்பு
+	Flow	ஓட்டம்
+	Auxiliary	துணை மாறி
+	{name} ends near {median} (median); its 5th to 95th percentiles at the end are {low} and {high}.	{name} சுமார் {median} அருகில் முடிகிறது (இடைநிலை); முடிவில் அதன் 5-ஆம் மற்றும் 95-ஆம் சதமானங்கள் {low} மற்றும் {high}.
+	{name} ends at {value}.	{name} {value} இல் முடிகிறது.
+	{name} at {time}: median {median}, mean {mean}, 5th to 95th percentiles {low} and {high}	{time} நேரத்தில் {name}: இடைநிலை {median}, சராசரி {mean}, 5-ஆம் மற்றும் 95-ஆம் சதமானங்கள் {low} மற்றும் {high}
+	{name} at {time}: {value}	{time} நேரத்தில் {name}: {value}
+	Time	நேரம்
+	Time ({unit})	நேரம் ({unit})
+	{name} mean	{name}, சராசரி
+	{name} median	{name}, இடைநிலை
+	{name} 5th percentile	{name}, 5-ஆம் சதமானம்
+	{name} 95th percentile	{name}, 95-ஆம் சதமானம்
+	This run is too large to make in the window: shorten it, raise the time step or lower the runs, or run it from the command line.	இந்த இயக்கம் சாளரத்தில் செய்ய மிகப் பெரியது: அதைச் சுருக்குங்கள், நேரப் படியை உயர்த்துங்கள் அல்லது இயக்கங்களைக் குறையுங்கள், அல்லது கட்டளை வரியிலிருந்து இயக்குங்கள்.
+	The model: its settings and variables	மாதிரி: அதன் அமைப்புகளும் மாறிகளும்
+	System dynamics model	அமைப்பு இயக்கவியல் மாதிரி
+	Variables	மாறிகள்
+	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	இந்த மாதிரியைக் கட்டளைகளால் மாற்றலாம்: முகவர் மூலம் MCP சேவையகம் வழியாக, அல்லது கட்டளை வரியிலிருந்து. கித்தானில் திருத்துதல் அடுத்து வரும்.
+	From {start} to {stop}, in steps of {dt}, by the {method} method.	{start} முதல் {stop} வரை, {dt} படிகளில், {method} முறையில்.
+	Notes from the file	கோப்பிலிருந்து குறிப்புகள்
+	Equation	சமன்பாடு
+	starts at {value}	{value} இலிருந்து தொடங்குகிறது
+	In: {flows}	உள்: {flows}
+	Out: {flows}	வெளி: {flows}
+	This model has a random function, so every run differs: make several to see how far they spread.	இந்த மாதிரியில் சீரற்ற செயல்பாடு உள்ளது, எனவே ஒவ்வொரு இயக்கமும் வேறுபடும்: அவை எவ்வளவு பரவுகின்றன என்பதைப் பார்க்க பலவற்றை இயக்குங்கள்.
+	This model has no random function, so one run gives its answer.	இந்த மாதிரியில் சீரற்ற செயல்பாடு இல்லை, எனவே ஒரு இயக்கமே அதன் விடையைத் தருகிறது.
+	Runs: {n} · seed {seed}	இயக்கங்கள்: {n} · விதை {seed}
+	One run	ஒரு இயக்கம்
+	Show on the chart	வரைபடத்தில் காட்டு
+	Solid line: median. Dashed line: mean. Shaded band: 5th to 95th percentile, at each saved time.	நிரப்பிய கோடு: இடைநிலை. கோடிட்ட கோடு: சராசரி. நிழலிட்ட பட்டை: சேமிக்கப்பட்ட ஒவ்வொரு நேரத்திலும் 5-ஆம் முதல் 95-ஆம் சதமானம் வரை.
+	Pick a variable to see it over time.	காலப்போக்கில் பார்க்க ஒரு மாறியைத் தேர்ந்தெடுங்கள்.
+	{name} over time	காலப்போக்கில் {name}
+	Checked against its exact solution	அதன் துல்லியமான தீர்வுடன் சரிபார்க்கப்பட்டது
+	Models (BPMN, XPDL, XMILE)	மாதிரிகள் (BPMN, XPDL, XMILE)
+	Product adoption	பொருள் ஏற்பு
+	A new product spreads by word of mouth: 10,000 potential customers, some buying on their own and the rest after meeting a customer.	ஒரு புதிய பொருள் வாய்மொழியாகப் பரவுகிறது: 10,000 சாத்தியமான வாடிக்கையாளர்கள், சிலர் தாமாகவே வாங்குகிறார்கள், மற்றவர்கள் ஒரு வாடிக்கையாளரைச் சந்தித்த பிறகு.
+	How fast does a new product spread?	ஒரு புதிய பொருள் எவ்வளவு வேகமாகப் பரவுகிறது?
+	Stocks and flows: word of mouth makes sales speed up and then slow down in an S-shaped curve, which matches its exact formula.	இருப்புகளும் ஓட்டங்களும்: வாய்மொழிப் பரவல் விற்பனையை முதலில் வேகப்படுத்தி பின்னர் மெதுவாக்குகிறது, S வடிவ வளைவில், அது அதன் துல்லியமான சூத்திரத்துடன் பொருந்துகிறது.
+	Inflows and outflows	உள்ளோட்டங்களும் வெளியோட்டங்களும்
+	{file}: a system dynamics model is saved as XMILE; choose a name ending in .xmile	{file}: அமைப்பு இயக்கவியல் மாதிரி XMILE ஆகச் சேமிக்கப்படும்; .xmile என முடியும் பெயரைத் தேர்ந்தெடுக்கவும்
+	Saving into {file} would leave out what StochCraft does not keep of it: {what}.	{file} இல் சேமித்தால் StochCraft வைத்திருக்காதது விடுபடும்: {what}.
+	Replace the XMILE file?	XMILE கோப்பை மாற்றவா?
+	Save As writes a new file and keeps {file} as it is. Replacing {file} leaves out what StochCraft does not keep.	இவ்வாறு சேமி புதிய கோப்பை எழுதி {file} ஐ அப்படியே விட்டுவிடும். {file} ஐ மாற்றினால் StochCraft வைத்திருக்காதது விடுபடும்.
+	Replace	மாற்று

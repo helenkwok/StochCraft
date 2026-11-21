@@ -1337,3 +1337,47 @@ unit	yr	a
 	{name}: the ± is across {n} of the {of} pairs, the rest had no trial with a number.	{name}: el ± és sobre {n} de les {of} parelles; la resta no tenien cap assaig amb un número.
 	No interval: every pair gave the same share, so their spread gives none.	Sense interval: totes les parelles han donat la mateixa proporció, de manera que la seva dispersió no en dona cap.
 	No interval: too few pairs of trials for one.	Sense interval: hi ha massa poques parelles d'assajos per calcular-lo.
+	Stock	Estoc
+	Flow	Flux
+	Auxiliary	Variable auxiliar
+	{name} ends near {median} (median); its 5th to 95th percentiles at the end are {low} and {high}.	{name} acaba prop de {median} (mediana); els percentils 5 i 95 al final són {low} i {high}.
+	{name} ends at {value}.	{name} acaba en {value}.
+	{name} at {time}: median {median}, mean {mean}, 5th to 95th percentiles {low} and {high}	{name} a {time}: mediana {median}, mitjana {mean}, percentils 5 i 95 {low} i {high}
+	{name} at {time}: {value}	{name} a {time}: {value}
+	Time	Temps
+	Time ({unit})	Temps ({unit})
+	{name} mean	{name}, mitjana
+	{name} median	{name}, mediana
+	{name} 5th percentile	{name}, percentil 5
+	{name} 95th percentile	{name}, percentil 95
+	This run is too large to make in the window: shorten it, raise the time step or lower the runs, or run it from the command line.	Aquesta execució és massa gran per fer-la a la finestra: escurceu-la, augmenteu el pas de temps o reduïu les execucions, o executeu-la des de la línia d'ordres.
+	The model: its settings and variables	El model: la configuració i les variables
+	System dynamics model	Model de dinàmica de sistemes
+	Variables	Variables
+	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	Podeu canviar aquest model amb ordres, des d'un agent mitjançant el servidor MCP o des de la línia d'ordres. L'edició al llenç vindrà després.
+	From {start} to {stop}, in steps of {dt}, by the {method} method.	Des de {start} fins a {stop}, en passos de {dt}, pel mètode {method}.
+	Notes from the file	Notes del fitxer
+	Equation	Equació
+	starts at {value}	comença en {value}
+	In: {flows}	Entrada: {flows}
+	Out: {flows}	Sortida: {flows}
+	This model has a random function, so every run differs: make several to see how far they spread.	Aquest model té una funció aleatòria, de manera que cada execució és diferent: feu-ne diverses per veure fins on s'escampen.
+	This model has no random function, so one run gives its answer.	Aquest model no té cap funció aleatòria, de manera que una execució en dona la resposta.
+	Runs: {n} · seed {seed}	Execucions: {n} · llavor {seed}
+	One run	Una execució
+	Show on the chart	Mostra al gràfic
+	Solid line: median. Dashed line: mean. Shaded band: 5th to 95th percentile, at each saved time.	Línia contínua: mediana. Línia discontínua: mitjana. Banda ombrejada: del percentil 5 al 95, en cada instant desat.
+	Pick a variable to see it over time.	Trieu una variable per veure-la al llarg del temps.
+	{name} over time	{name} al llarg del temps
+	Checked against its exact solution	Comprovat amb la seva solució exacta
+	Models (BPMN, XPDL, XMILE)	Models (BPMN, XPDL, XMILE)
+	Product adoption	Adopció d'un producte
+	A new product spreads by word of mouth: 10,000 potential customers, some buying on their own and the rest after meeting a customer.	Un producte nou es difon de boca en boca: 10.000 clients potencials, alguns compren pel seu compte i la resta després de trobar-se amb un client.
+	How fast does a new product spread?	Amb quina rapidesa es difon un producte nou?
+	Stocks and flows: word of mouth makes sales speed up and then slow down in an S-shaped curve, which matches its exact formula.	Estocs i fluxos: el boca-orella fa que les vendes primer s'accelerin i després es frenin en una corba en forma de S, que coincideix amb la seva fórmula exacta.
+	Inflows and outflows	Fluxos d'entrada i de sortida
+	{file}: a system dynamics model is saved as XMILE; choose a name ending in .xmile	{file}: un model de dinàmica de sistemes es desa com a XMILE; trieu un nom que acabi en .xmile
+	Saving into {file} would leave out what StochCraft does not keep of it: {what}.	Desar a {file} ometria el que StochCraft no conserva: {what}.
+	Replace the XMILE file?	Voleu substituir el fitxer XMILE?
+	Save As writes a new file and keeps {file} as it is. Replacing {file} leaves out what StochCraft does not keep.	Anomena i desa escriu un fitxer nou i deixa {file} tal com és. Substituir {file} omet el que StochCraft no conserva.
+	Replace	Substitueix

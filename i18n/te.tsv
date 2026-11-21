@@ -1337,3 +1337,47 @@ unit	yr	సం.
 	{name}: the ± is across {n} of the {of} pairs, the rest had no trial with a number.	{name}: ± అనేది {of} జతలలో {n} జతల అంతటా ఉంది, మిగిలిన వాటిలో సంఖ్య ఉన్న ప్రయత్నం లేదు.
 	No interval: every pair gave the same share, so their spread gives none.	అంతరం లేదు: అన్ని జతలు ఒకే వాటాను ఇచ్చాయి, కాబట్టి వాటి విస్తరణ నుండి అంతరం రాదు.
 	No interval: too few pairs of trials for one.	అంతరం లేదు: దానికి సరిపడా ప్రయత్నాల జతలు లేవు.
+	Stock	నిల్వ
+	Flow	ప్రవాహం
+	Auxiliary	సహాయక చరరాశి
+	{name} ends near {median} (median); its 5th to 95th percentiles at the end are {low} and {high}.	{name} సుమారు {median} వద్ద ముగుస్తుంది (మధ్యగతం); చివరలో దాని 5వ, 95వ శతాంశాలు {low}, {high}.
+	{name} ends at {value}.	{name} {value} వద్ద ముగుస్తుంది.
+	{name} at {time}: median {median}, mean {mean}, 5th to 95th percentiles {low} and {high}	{time} వద్ద {name}: మధ్యగతం {median}, సగటు {mean}, 5వ, 95వ శతాంశాలు {low}, {high}
+	{name} at {time}: {value}	{time} వద్ద {name}: {value}
+	Time	సమయం
+	Time ({unit})	సమయం ({unit})
+	{name} mean	{name}, సగటు
+	{name} median	{name}, మధ్యగతం
+	{name} 5th percentile	{name}, 5వ శతాంశం
+	{name} 95th percentile	{name}, 95వ శతాంశం
+	This run is too large to make in the window: shorten it, raise the time step or lower the runs, or run it from the command line.	ఈ అమలు విండోలో చేయడానికి చాలా పెద్దది: దీన్ని తగ్గించండి, సమయ దశను పెంచండి లేదా అమలులను తగ్గించండి, లేదా కమాండ్ లైన్ నుండి నడపండి.
+	The model: its settings and variables	నమూనా: దాని సెట్టింగ్‌లు, చరరాశులు
+	System dynamics model	సిస్టమ్ డైనమిక్స్ నమూనా
+	Variables	చరరాశులు
+	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	ఈ నమూనాను ఆదేశాలతో మార్చవచ్చు: ఏజెంట్ నుండి MCP సర్వర్ ద్వారా, లేదా కమాండ్ లైన్ నుండి. కాన్వాస్‌పై సవరణ తర్వాత వస్తుంది.
+	From {start} to {stop}, in steps of {dt}, by the {method} method.	{start} నుండి {stop} వరకు, {dt} దశలలో, {method} పద్ధతిలో.
+	Notes from the file	ఫైల్ నుండి గమనికలు
+	Equation	సమీకరణం
+	starts at {value}	{value} నుండి మొదలవుతుంది
+	In: {flows}	లోపలికి: {flows}
+	Out: {flows}	బయటకు: {flows}
+	This model has a random function, so every run differs: make several to see how far they spread.	ఈ నమూనాకు యాదృచ్ఛిక ఫంక్షన్ ఉంది, కాబట్టి ప్రతి అమలు భిన్నంగా ఉంటుంది: అవి ఎంత విస్తరిస్తాయో చూడడానికి కొన్నింటిని అమలు చేయండి.
+	This model has no random function, so one run gives its answer.	ఈ నమూనాకు యాదృచ్ఛిక ఫంక్షన్ లేదు, కాబట్టి ఒక అమలే దాని జవాబును ఇస్తుంది.
+	Runs: {n} · seed {seed}	అమలులు: {n} · బీజం {seed}
+	One run	ఒక అమలు
+	Show on the chart	చార్ట్‌లో చూపించు
+	Solid line: median. Dashed line: mean. Shaded band: 5th to 95th percentile, at each saved time.	ఘన రేఖ: మధ్యగతం. చుక్కల రేఖ: సగటు. నీడ పట్టీ: సేవ్ చేసిన ప్రతి సమయంలో 5వ నుండి 95వ శతాంశం వరకు.
+	Pick a variable to see it over time.	కాలంతో పాటు చూడడానికి ఒక చరరాశిని ఎంచుకోండి.
+	{name} over time	కాలంతో పాటు {name}
+	Checked against its exact solution	దాని ఖచ్చితమైన పరిష్కారంతో సరిచూడబడింది
+	Models (BPMN, XPDL, XMILE)	నమూనాలు (BPMN, XPDL, XMILE)
+	Product adoption	ఉత్పత్తి స్వీకరణ
+	A new product spreads by word of mouth: 10,000 potential customers, some buying on their own and the rest after meeting a customer.	ఒక కొత్త ఉత్పత్తి నోటి మాట ద్వారా వ్యాపిస్తుంది: 10,000 సంభావ్య కస్టమర్లు, కొందరు తమంతట తాముగా కొంటారు, మిగిలినవారు ఒక కస్టమర్‌ను కలిసిన తర్వాత.
+	How fast does a new product spread?	ఒక కొత్త ఉత్పత్తి ఎంత వేగంగా వ్యాపిస్తుంది?
+	Stocks and flows: word of mouth makes sales speed up and then slow down in an S-shaped curve, which matches its exact formula.	నిల్వలు మరియు ప్రవాహాలు: నోటి మాట అమ్మకాలను మొదట వేగవంతం చేసి తర్వాత నెమ్మదింపజేస్తుంది, S ఆకారపు వక్రంలో, ఇది దాని ఖచ్చితమైన సూత్రంతో సరిపోతుంది.
+	Inflows and outflows	లోపలికి మరియు బయటకు ప్రవాహాలు
+	{file}: a system dynamics model is saved as XMILE; choose a name ending in .xmile	{file}: సిస్టమ్ డైనమిక్స్ మోడల్ XMILE గా సేవ్ అవుతుంది; .xmile తో ముగిసే పేరును ఎంచుకోండి
+	Saving into {file} would leave out what StochCraft does not keep of it: {what}.	{file} లో సేవ్ చేస్తే StochCraft ఉంచనిది వదిలివేయబడుతుంది: {what}.
+	Replace the XMILE file?	XMILE ఫైల్‌ను భర్తీ చేయాలా?
+	Save As writes a new file and keeps {file} as it is. Replacing {file} leaves out what StochCraft does not keep.	ఇలా సేవ్ చేయి కొత్త ఫైల్‌ను రాస్తుంది, {file} ను అలాగే ఉంచుతుంది. {file} ను భర్తీ చేస్తే StochCraft ఉంచనిది వదిలివేయబడుతుంది.
+	Replace	భర్తీ చేయి

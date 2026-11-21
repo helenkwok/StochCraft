@@ -429,6 +429,10 @@ impl App {
             self.mc_outline(ui, p);
             return;
         }
+        if self.is_sd() {
+            self.sd_outline(ui, p);
+            return;
+        }
         let problems = self.problems();
         let model = self.engine.model();
         let name = if model.name.is_empty() {

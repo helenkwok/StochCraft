@@ -150,7 +150,7 @@ fn pick(inbox: &Inbox, ctx: &egui::Context) {
         return;
     };
     input.set_type("file");
-    input.set_accept(".bpmn,.xpdl,.xml");
+    input.set_accept(".bpmn,.xpdl,.xml,.xmile,.stmx");
     let (inbox, ctx, target) = (Rc::clone(inbox), ctx.clone(), input.clone());
     let on_change = Closure::once(move |_: web_sys::Event| {
         let Some(file) = target.files().and_then(|f| f.get(0)) else {

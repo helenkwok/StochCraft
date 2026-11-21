@@ -63,6 +63,7 @@ pub mod precision;
 mod run;
 pub mod sd;
 mod sd_edit;
+mod sd_window;
 pub mod wire;
 mod workers;
 
@@ -751,6 +752,16 @@ impl Engine {
         self.file.as_ref().map(|f| format_name(f.opened.format))
     }
 
+    /// What saving a system dynamics model into the file it was opened from would leave out: what
+    /// the reader noted it does not keep (further diagrams, styles, display settings, ...). Empty
+    /// when nothing would be lost, there is no such file, or the model was written to it since.
+    pub fn save_drops(&self) -> &[String] {
+        match &self.sd {
+            Some(d) if d.drops_on_save && d.file.is_some() => &d.notes,
+            _ => &[],
+        }
+    }
+
     /// Records that the model was saved as `bytes` at `path`, as the app does once its shell has
     /// written the file. Journalled as a `file.save` step, as saving with the command is.
     pub fn saved_to(&mut self, path: &str, bytes: &[u8]) -> Result<Value, CommandError> {
@@ -768,6 +779,7 @@ impl Engine {
             d.saved = d.model.clone();
             d.file = Some(path.to_owned());
             d.path = path.to_owned();
+            d.drops_on_save = false;
             return Ok(json!({ "path": path, "format": "xmile", "bytes": bytes.len() as u64 }));
         }
         // Read back what was written, so the next unchanged save gives the same bytes again, in

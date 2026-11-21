@@ -1337,3 +1337,47 @@ unit	yr	年
 	{name}: the ± is across {n} of the {of} pairs, the rest had no trial with a number.	{name}：± 基于 {of} 对中的 {n} 对，其余的没有带数值的试验。
 	No interval: every pair gave the same share, so their spread gives none.	无区间：所有试验对给出的占比相同，其离散程度无法得出区间。
 	No interval: too few pairs of trials for one.	无区间：试验对太少，无法得出区间。
+	Stock	存量
+	Flow	流量
+	Auxiliary	辅助变量
+	{name} ends near {median} (median); its 5th to 95th percentiles at the end are {low} and {high}.	{name} 最终约为 {median}（中位数）；其最终的第 5 和第 95 百分位数为 {low} 和 {high}。
+	{name} ends at {value}.	{name} 最终为 {value}。
+	{name} at {time}: median {median}, mean {mean}, 5th to 95th percentiles {low} and {high}	{time} 时的 {name}：中位数 {median}，均值 {mean}，第 5 和第 95 百分位数为 {low} 和 {high}
+	{name} at {time}: {value}	{time} 时的 {name}：{value}
+	Time	时间
+	Time ({unit})	时间（{unit}）
+	{name} mean	{name} 均值
+	{name} median	{name} 中位数
+	{name} 5th percentile	{name} 第 5 百分位数
+	{name} 95th percentile	{name} 第 95 百分位数
+	This run is too large to make in the window: shorten it, raise the time step or lower the runs, or run it from the command line.	这次运行太大，无法在窗口中进行：请缩短它，加大时间步长或减少运行次数，或者从命令行运行。
+	The model: its settings and variables	模型：其设置和变量
+	System dynamics model	系统动力学模型
+	Variables	变量
+	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	你可以用命令更改此模型：通过智能体经 MCP 服务器，或从命令行。在画布上编辑将在之后提供。
+	From {start} to {stop}, in steps of {dt}, by the {method} method.	从 {start} 到 {stop}，步长 {dt}，使用 {method} 方法。
+	Notes from the file	文件中的备注
+	Equation	方程
+	starts at {value}	从 {value} 开始
+	In: {flows}	流入：{flows}
+	Out: {flows}	流出：{flows}
+	This model has a random function, so every run differs: make several to see how far they spread.	此模型含有随机函数，因此每次运行都不同：多运行几次，看看它们的分散程度。
+	This model has no random function, so one run gives its answer.	此模型没有随机函数，因此运行一次就能得到答案。
+	Runs: {n} · seed {seed}	运行次数：{n} · 随机种子 {seed}
+	One run	一次运行
+	Show on the chart	在图表中显示
+	Solid line: median. Dashed line: mean. Shaded band: 5th to 95th percentile, at each saved time.	实线：中位数。虚线：均值。阴影带：每个保存时刻的第 5 到第 95 百分位数。
+	Pick a variable to see it over time.	选择一个变量，查看它随时间的变化。
+	{name} over time	{name} 随时间的变化
+	Checked against its exact solution	已与其精确解核对
+	Models (BPMN, XPDL, XMILE)	模型（BPMN、XPDL、XMILE）
+	Product adoption	产品推广
+	A new product spreads by word of mouth: 10,000 potential customers, some buying on their own and the rest after meeting a customer.	新产品靠口碑传播：有 10,000 位潜在客户，有些人自己购买，其余人在遇到客户后购买。
+	How fast does a new product spread?	新产品传播得有多快？
+	Stocks and flows: word of mouth makes sales speed up and then slow down in an S-shaped curve, which matches its exact formula.	存量与流量：口碑传播先让销量加快，随后放慢，形成一条 S 形曲线，与其精确公式相符。
+	Inflows and outflows	流入与流出
+	{file}: a system dynamics model is saved as XMILE; choose a name ending in .xmile	{file}：系统动力学模型保存为 XMILE；请选择以 .xmile 结尾的名称
+	Saving into {file} would leave out what StochCraft does not keep of it: {what}.	保存到 {file} 会丢掉 StochCraft 不保留的内容：{what}。
+	Replace the XMILE file?	替换 XMILE 文件？
+	Save As writes a new file and keeps {file} as it is. Replacing {file} leaves out what StochCraft does not keep.	“另存为”会写入新文件，并保持 {file} 原样。替换 {file} 会丢掉 StochCraft 不保留的内容。
+	Replace	替换

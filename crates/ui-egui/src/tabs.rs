@@ -11,7 +11,8 @@ impl App {
         let font = egui::FontId::new(14.0, egui::FontFamily::Name(theme::STRONG.into()));
         // Wrapped: four tabs and the results note must not widen the work area past the window.
         // A Monte Carlo model has its inputs and outputs, and its results: no process views.
-        let monte_carlo = self.is_monte_carlo();
+        // A system dynamics model has them too.
+        let monte_carlo = self.is_monte_carlo() || self.is_sd();
         ui.horizontal_wrapped(|ui| {
             // 0: the model, 1: the results, 2: the Analysis view, 3: the Capacity view, 4: the 3D view,
             // 5: the Layout view.
@@ -84,7 +85,13 @@ impl App {
             if !monte_carlo {
                 ui.toggle_value(&mut self.show_dashboard, t("Dashboard"));
             }
-            if self.results.is_none() && self.running.is_none() {
+            if self.is_sd() {
+                if self.sd_results().is_none() {
+                    ui.label(theme::weak(ui, t("· no results yet")));
+                } else if self.sd_results_stale() && !self.sd_pending() {
+                    ui.label(theme::weak(ui, t("· out of date")));
+                }
+            } else if self.results.is_none() && self.running.is_none() {
                 ui.label(theme::weak(ui, t("· no results yet")));
             } else if self.results_stale && self.running.is_none() {
                 ui.label(theme::weak(ui, t("· out of date")));
@@ -98,11 +105,21 @@ impl App {
 
     /// Whether the model has anything to show: blocks, or a model being built.
     fn has_model(&self) -> bool {
-        !self.engine.model().elements.is_empty() || self.building || self.is_monte_carlo()
+        !self.engine.model().elements.is_empty()
+            || self.building
+            || self.is_monte_carlo()
+            || self.is_sd()
     }
 
     /// The view the work area draws now, in the order [`App::work_area`] dispatches.
     fn view_shown(&self) -> View {
+        if self.is_sd() {
+            return if self.show_results {
+                View::SdResults
+            } else {
+                View::SdModel
+            };
+        }
         if self.is_monte_carlo() {
             return if self.show_results && self.mc_results_shown() && self.running.is_none() {
                 View::McResults
@@ -176,6 +193,8 @@ impl App {
             View::Model => self.model_view(ui, p),
             View::McModel => self.mc_model_view(ui),
             View::McResults => self.mc_results_view(ui),
+            View::SdModel => self.sd_model_view(ui),
+            View::SdResults => self.sd_results_view(ui),
             View::Other => {
                 // A readable column, not the full width of a wide window.
                 let size = egui::vec2(ui.available_width().min(640.0), ui.available_height());
@@ -209,6 +228,10 @@ enum View {
     McModel,
     /// A Monte Carlo run's results.
     McResults,
+    /// A system dynamics model's settings and variables.
+    SdModel,
+    /// A system dynamics model's run.
+    SdResults,
     /// A run's progress, the "ready" page (the Results tab with no results) or the start page.
     Other,
 }

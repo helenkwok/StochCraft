@@ -200,7 +200,11 @@ variables not yet there afterwards. A removal is refused while another equation 
 the variable, and the error names who. Edits go on the same `undo` and `redo` as the process
 commands, make the last results stale (`sd.get` says so), and `file.save` writes the model as an
 XMILE file with its diagram. `sd.get` gives each variable's position (and a flow's pipe) and the
-information links. The sd edits are not `batch`able.
+information links. The sd edits are not `batch`able. In the app, a model an agent opens with `file.open` or `sd.open`
+replaces the one shown, and the results of its `sd.run` appear on the Results tab, as for the other
+kinds of model. Its edits show on the Model tab, mark the model edited (the window's Save writes it
+as XMILE; into a file with content StochCraft does not keep, it asks the user first, whereas
+`file.save` writes at once) and mark the results on show out of date until `sd.run` runs again.
 
 `crates/mcp/tests/session.rs` covers four areas:
 - a session like this one, checked only through MCP;

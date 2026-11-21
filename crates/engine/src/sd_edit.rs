@@ -210,6 +210,7 @@ pub(crate) fn new(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         model,
         program,
         notes: Vec::new(),
+        drops_on_save: false,
         last: None,
         last_stale: false,
     });

@@ -1337,3 +1337,47 @@ unit	yr	r.
 	{name}: the ± is across {n} of the {of} pairs, the rest had no trial with a number.	{name}: ± je napříč {n} z {of} dvojic, ostatní neměly žádný pokus s číslem.
 	No interval: every pair gave the same share, so their spread gives none.	Žádný interval: všechny dvojice daly stejný podíl, takže jejich rozptyl žádný interval nedává.
 	No interval: too few pairs of trials for one.	Žádný interval: příliš málo dvojic pokusů.
+	Stock	Zásoba
+	Flow	Tok
+	Auxiliary	Pomocná veličina
+	{name} ends near {median} (median); its 5th to 95th percentiles at the end are {low} and {high}.	{name} končí kolem {median} (medián); 5. a 95. percentil na konci jsou {low} a {high}.
+	{name} ends at {value}.	{name} končí na {value}.
+	{name} at {time}: median {median}, mean {mean}, 5th to 95th percentiles {low} and {high}	{name} v čase {time}: medián {median}, průměr {mean}, 5. a 95. percentil {low} a {high}
+	{name} at {time}: {value}	{name} v čase {time}: {value}
+	Time	Čas
+	Time ({unit})	Čas ({unit})
+	{name} mean	{name}, průměr
+	{name} median	{name}, medián
+	{name} 5th percentile	{name}, 5. percentil
+	{name} 95th percentile	{name}, 95. percentil
+	This run is too large to make in the window: shorten it, raise the time step or lower the runs, or run it from the command line.	Tento běh je pro okno příliš velký: zkraťte ho, zvětšete časový krok nebo snižte počet běhů, případně ho spusťte z příkazového řádku.
+	The model: its settings and variables	Model: jeho nastavení a proměnné
+	System dynamics model	Model systémové dynamiky
+	Variables	Proměnné
+	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	Tento model můžete měnit příkazy, z agenta přes server MCP nebo z příkazového řádku. Úpravy na plátně přijdou příště.
+	From {start} to {stop}, in steps of {dt}, by the {method} method.	Od {start} do {stop}, v krocích po {dt}, metodou {method}.
+	Notes from the file	Poznámky ze souboru
+	Equation	Rovnice
+	starts at {value}	začíná na {value}
+	In: {flows}	Přítok: {flows}
+	Out: {flows}	Odtok: {flows}
+	This model has a random function, so every run differs: make several to see how far they spread.	Tento model má náhodnou funkci, takže každý běh je jiný: spusťte jich několik a uvidíte, jak se rozptylují.
+	This model has no random function, so one run gives its answer.	Tento model nemá žádnou náhodnou funkci, takže jeho odpověď dá jeden běh.
+	Runs: {n} · seed {seed}	Běhy: {n} · počáteční hodnota generátoru {seed}
+	One run	Jeden běh
+	Show on the chart	Zobrazit v grafu
+	Solid line: median. Dashed line: mean. Shaded band: 5th to 95th percentile, at each saved time.	Plná čára: medián. Čárkovaná čára: průměr. Stínovaný pás: od 5. do 95. percentilu, v každém uloženém čase.
+	Pick a variable to see it over time.	Vyberte proměnnou, abyste ji viděli v čase.
+	{name} over time	{name} v čase
+	Checked against its exact solution	Ověřeno proti jeho přesnému řešení
+	Models (BPMN, XPDL, XMILE)	Modely (BPMN, XPDL, XMILE)
+	Product adoption	Přijetí produktu
+	A new product spreads by word of mouth: 10,000 potential customers, some buying on their own and the rest after meeting a customer.	Nový produkt se šíří ústním podáním: 10 000 potenciálních zákazníků, někteří kupují sami od sebe a ostatní po setkání se zákazníkem.
+	How fast does a new product spread?	Jak rychle se šíří nový produkt?
+	Stocks and flows: word of mouth makes sales speed up and then slow down in an S-shaped curve, which matches its exact formula.	Zásoby a toky: ústní podání nejprve zrychlí prodeje a pak je zpomalí v křivce tvaru S, která odpovídá jeho přesnému vzorci.
+	Inflows and outflows	Přítoky a odtoky
+	{file}: a system dynamics model is saved as XMILE; choose a name ending in .xmile	{file}: model systémové dynamiky se ukládá jako XMILE; zvolte název končící na .xmile
+	Saving into {file} would leave out what StochCraft does not keep of it: {what}.	Uložením do {file} by se vynechalo to, co StochCraft nezachovává: {what}.
+	Replace the XMILE file?	Nahradit soubor XMILE?
+	Save As writes a new file and keeps {file} as it is. Replacing {file} leaves out what StochCraft does not keep.	Uložit jako zapíše nový soubor a {file} ponechá beze změny. Nahrazením {file} se vynechá to, co StochCraft nezachovává.
+	Replace	Nahradit

@@ -1337,3 +1337,47 @@ unit	yr	an
 	{name}: the ± is across {n} of the {of} pairs, the rest had no trial with a number.	{name} : le ± porte sur {n} des {of} paires, les autres n'avaient aucun essai avec un nombre.
 	No interval: every pair gave the same share, so their spread gives none.	Pas d'intervalle : toutes les paires ont donné la même part, donc leur dispersion n'en donne aucun.
 	No interval: too few pairs of trials for one.	Pas d'intervalle : trop peu de paires d'essais pour en calculer un.
+	Stock	Stock
+	Flow	Flux
+	Auxiliary	Variable auxiliaire
+	{name} ends near {median} (median); its 5th to 95th percentiles at the end are {low} and {high}.	{name} finit près de {median} (médiane) ; ses 5e et 95e centiles à la fin sont {low} et {high}.
+	{name} ends at {value}.	{name} finit à {value}.
+	{name} at {time}: median {median}, mean {mean}, 5th to 95th percentiles {low} and {high}	{name} à {time} : médiane {median}, moyenne {mean}, 5e et 95e centiles {low} et {high}
+	{name} at {time}: {value}	{name} à {time} : {value}
+	Time	Temps
+	Time ({unit})	Temps ({unit})
+	{name} mean	{name}, moyenne
+	{name} median	{name}, médiane
+	{name} 5th percentile	{name}, 5e centile
+	{name} 95th percentile	{name}, 95e centile
+	This run is too large to make in the window: shorten it, raise the time step or lower the runs, or run it from the command line.	Cette exécution est trop grande pour la fenêtre : raccourcissez-la, augmentez le pas de temps ou réduisez les exécutions, ou lancez-la depuis la ligne de commande.
+	The model: its settings and variables	Le modèle : ses réglages et ses variables
+	System dynamics model	Modèle de dynamique des systèmes
+	Variables	Variables
+	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	Vous pouvez modifier ce modèle par des commandes, depuis un agent via le serveur MCP ou depuis la ligne de commande. L'édition sur le canevas viendra ensuite.
+	From {start} to {stop}, in steps of {dt}, by the {method} method.	De {start} à {stop}, par pas de {dt}, par la méthode {method}.
+	Notes from the file	Notes du fichier
+	Equation	Équation
+	starts at {value}	commence à {value}
+	In: {flows}	Entrée : {flows}
+	Out: {flows}	Sortie : {flows}
+	This model has a random function, so every run differs: make several to see how far they spread.	Ce modèle a une fonction aléatoire, donc chaque exécution diffère : faites-en plusieurs pour voir leur dispersion.
+	This model has no random function, so one run gives its answer.	Ce modèle n'a aucune fonction aléatoire, donc une seule exécution donne sa réponse.
+	Runs: {n} · seed {seed}	Exécutions : {n} · graine {seed}
+	One run	Une exécution
+	Show on the chart	Afficher sur le graphique
+	Solid line: median. Dashed line: mean. Shaded band: 5th to 95th percentile, at each saved time.	Trait plein : médiane. Trait pointillé : moyenne. Bande ombrée : du 5e au 95e centile, à chaque instant enregistré.
+	Pick a variable to see it over time.	Choisissez une variable pour la voir au fil du temps.
+	{name} over time	{name} au fil du temps
+	Checked against its exact solution	Vérifié par rapport à sa solution exacte
+	Models (BPMN, XPDL, XMILE)	Modèles (BPMN, XPDL, XMILE)
+	Product adoption	Adoption d'un produit
+	A new product spreads by word of mouth: 10,000 potential customers, some buying on their own and the rest after meeting a customer.	Un nouveau produit se répand par le bouche-à-oreille : 10 000 clients potentiels, certains achètent d'eux-mêmes et les autres après avoir rencontré un client.
+	How fast does a new product spread?	À quelle vitesse un nouveau produit se répand-il ?
+	Stocks and flows: word of mouth makes sales speed up and then slow down in an S-shaped curve, which matches its exact formula.	Stocks et flux : le bouche-à-oreille fait d'abord accélérer puis ralentir les ventes, selon une courbe en S qui correspond à sa formule exacte.
+	Inflows and outflows	Flux entrants et sortants
+	{file}: a system dynamics model is saved as XMILE; choose a name ending in .xmile	{file} : un modèle de dynamique des systèmes s'enregistre au format XMILE ; choisissez un nom se terminant par .xmile
+	Saving into {file} would leave out what StochCraft does not keep of it: {what}.	Enregistrer dans {file} omettrait ce que StochCraft ne conserve pas : {what}.
+	Replace the XMILE file?	Remplacer le fichier XMILE ?
+	Save As writes a new file and keeps {file} as it is. Replacing {file} leaves out what StochCraft does not keep.	Enregistrer sous écrit un nouveau fichier et laisse {file} tel quel. Remplacer {file} omet ce que StochCraft ne conserve pas.
+	Replace	Remplacer

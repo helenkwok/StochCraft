@@ -1337,3 +1337,47 @@ unit	yr	г.
 	{name}: the ± is across {n} of the {of} pairs, the rest had no trial with a number.	{name}: ± е по {n} от {of} двойки, останалите нямаха опит с число.
 	No interval: every pair gave the same share, so their spread gives none.	Няма интервал: всички двойки дадоха един и същ дял, така че разликите между тях не дават интервал.
 	No interval: too few pairs of trials for one.	Няма интервал: твърде малко двойки опити за него.
+	Stock	Запас
+	Flow	Поток
+	Auxiliary	Спомагателна променлива
+	{name} ends near {median} (median); its 5th to 95th percentiles at the end are {low} and {high}.	{name} завършва около {median} (медиана); 5-ият и 95-ият персентил в края са {low} и {high}.
+	{name} ends at {value}.	{name} завършва на {value}.
+	{name} at {time}: median {median}, mean {mean}, 5th to 95th percentiles {low} and {high}	{name} при {time}: медиана {median}, средна стойност {mean}, 5-и и 95-и персентил {low} и {high}
+	{name} at {time}: {value}	{name} при {time}: {value}
+	Time	Време
+	Time ({unit})	Време ({unit})
+	{name} mean	{name}, средна стойност
+	{name} median	{name}, медиана
+	{name} 5th percentile	{name}, 5-и персентил
+	{name} 95th percentile	{name}, 95-и персентил
+	This run is too large to make in the window: shorten it, raise the time step or lower the runs, or run it from the command line.	Това изпълнение е твърде голямо за прозореца: направете го по-кратко, увеличете стъпката във времето или намалете изпълненията, или го стартирайте от командния ред.
+	The model: its settings and variables	Моделът: настройки и променливи
+	System dynamics model	Модел на системната динамика
+	Variables	Променливи
+	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	Можете да променяте този модел с команди, от агент през MCP сървъра или от командния ред. Редактирането върху платното идва следващо.
+	From {start} to {stop}, in steps of {dt}, by the {method} method.	От {start} до {stop}, със стъпки от {dt}, по метода {method}.
+	Notes from the file	Бележки от файла
+	Equation	Уравнение
+	starts at {value}	започва от {value}
+	In: {flows}	Вход: {flows}
+	Out: {flows}	Изход: {flows}
+	This model has a random function, so every run differs: make several to see how far they spread.	Този модел има случайна функция, затова всяко изпълнение е различно: направете няколко, за да видите колко се разпръскват.
+	This model has no random function, so one run gives its answer.	Този модел няма случайна функция, затова едно изпълнение дава отговора му.
+	Runs: {n} · seed {seed}	Изпълнения: {n} · начална стойност {seed}
+	One run	Едно изпълнение
+	Show on the chart	Показване в графиката
+	Solid line: median. Dashed line: mean. Shaded band: 5th to 95th percentile, at each saved time.	Плътна линия: медиана. Прекъсната линия: средна стойност. Оцветена лента: от 5-и до 95-и персентил, за всяко записано време.
+	Pick a variable to see it over time.	Изберете променлива, за да я видите във времето.
+	{name} over time	{name} във времето
+	Checked against its exact solution	Проверено спрямо точното му решение
+	Models (BPMN, XPDL, XMILE)	Модели (BPMN, XPDL, XMILE)
+	Product adoption	Приемане на продукт
+	A new product spreads by word of mouth: 10,000 potential customers, some buying on their own and the rest after meeting a customer.	Нов продукт се разпространява от уста на уста: 10 000 потенциални клиенти, някои купуват сами, а останалите след среща с клиент.
+	How fast does a new product spread?	Колко бързо се разпространява нов продукт?
+	Stocks and flows: word of mouth makes sales speed up and then slow down in an S-shaped curve, which matches its exact formula.	Запаси и потоци: разпространението от уста на уста първо ускорява, а после забавя продажбите в S-образна крива, която съвпада с точната му формула.
+	Inflows and outflows	Входящи и изходящи потоци
+	{file}: a system dynamics model is saved as XMILE; choose a name ending in .xmile	{file}: моделът на системната динамика се записва като XMILE; изберете име, завършващо на .xmile
+	Saving into {file} would leave out what StochCraft does not keep of it: {what}.	Записването в {file} би пропуснало част от файла, която StochCraft не запазва: {what}.
+	Replace the XMILE file?	Да се замени ли XMILE файлът?
+	Save As writes a new file and keeps {file} as it is. Replacing {file} leaves out what StochCraft does not keep.	„Запази като“ записва нов файл и оставя {file} непроменен. Замяната на {file} пропуска онова, което StochCraft не запазва.
+	Replace	Замени
