@@ -720,6 +720,11 @@ impl McJob {
         if self.stepper.is_done() {
             return Ok(true);
         }
+        if self.stepper.is_summarising() {
+            // Every batch is in: one piece of the results a step, so a window can draw between.
+            self.stepper.summarise_step(&self.compiled);
+            return Ok(self.stepper.is_done());
+        }
         let wanted: Vec<BlockJob> = self
             .stepper
             .wanted()
