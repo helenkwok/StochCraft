@@ -454,17 +454,19 @@ fn the_table_of_shares_is_not_limited_to_the_tornados_inputs() {
     settle(&mut h);
     h.state_mut().run();
     finish_run(&mut h);
+    // Every name is also in the outline, so count the labels: before the shares the table has
+    // the twelve rows the tornado has; after, a row for each of the fourteen inputs.
     let shown = |h: &Harness<'static, App>| {
         (0..14)
-            .filter(|i| h.query_all_by_label(&format!("x{i}")).next().is_some())
-            .count()
+            .map(|i| h.query_all_by_label(&format!("x{i}")).count())
+            .sum::<usize>()
     };
-    assert_eq!(shown(&h), 12);
+    let before = shown(&h);
     h.get_all_by_role_and_label(Role::Button, SHARES_BUTTON)
         .next()
         .unwrap_or_else(|| panic!("no button"))
         .click();
     h.step();
     finish_shares(&mut h);
-    assert_eq!(shown(&h), 14);
+    assert_eq!(shown(&h), before + 2);
 }
