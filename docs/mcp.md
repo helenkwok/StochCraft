@@ -19,7 +19,8 @@ stochcraft-cli mcp --connect 127.0.0.1:7070
 
 With `--connect`, an app that cannot be reached when the server starts gives a headless session
 instead (a note goes to stderr), and so does one that is not running (no token file and no
-token given). A refused token is an error, not a headless session (see [The token](#the-token)). stdout carries only protocol messages; errors go to stderr.
+token given). An app that is reachable but refuses the connection (a wrong token, all its places taken) is an error, not a headless session (see [The token](#the-token)).
+stdout carries only protocol messages; errors go to stderr.
 
 ### Claude Code
 
@@ -129,7 +130,7 @@ therefore asks every connection for a token:
   - Linux and other Unix systems: `$XDG_RUNTIME_DIR/stochcraft/control.json`, or, where that is
     not set, `control.json` in `stochcraft` under the user's config folder (`~/.config` on Linux,
     `~/Library/Application Support` on macOS). The file is made with mode 0600, in a folder of
-    mode 0700, by writing a file of its own and renaming it over the old one.
+    mode 0700 (an existing folder with another mode is changed to 0700, and the app refuses to write the token there if it cannot), by writing a file of its own and renaming it over the old one, under a lock file beside it (`control.json.lock`) so two apps starting together cannot both take the file.
   - Windows: `%LOCALAPPDATA%\StochCraft\control.json`. The profile's default permissions already
     limit that folder to the user (and administrators), and StochCraft adds no permissions of its
     own there.
@@ -138,13 +139,17 @@ therefore asks every connection for a token:
   first one's token; close the first one.
 - Each connection's first line must be `{"token": "..."}`. The channel compares it with the
   token in constant time and answers `{"id": null, "result": {"authenticated": true}}`. A missing
-  or wrong token, or no line within 2 seconds, gets one error line with the code `unauthorized`,
+  or wrong token, or no whole line (of at most 1 KiB) within 2 seconds of connecting, gets one error line with the code `unauthorized`,
   and the connection is closed without running anything.
-- `stochcraft-cli mcp --connect` reads the token from that file by default. `--token HEX` or the
-  environment variable `STOCHCRAFT_TOKEN` give one by hand, for when the file is not reachable
-  (an app on another computer, reached by a tunnel, or under another account that shared the
-  token on purpose); they take precedence in that order. With no token anywhere, it stops with an
-  error naming the file it looked for.
+- `stochcraft-cli mcp --connect` reads the token from that file by default. The environment
+  variable `STOCHCRAFT_TOKEN` or `--token HEX` give one by hand, for when the file is not
+  reachable (an app on another computer, reached by a tunnel, or under another account that
+  shared the token on purpose); they take precedence over the file, `--token` first. On some
+  systems other local users can see a program's arguments in the process list, so prefer
+  `STOCHCRAFT_TOKEN` or the token file to `--token`. With no token given and no token file, the
+  app is taken to be not running: the session is headless, with a note on stderr naming the
+  file. An app that is there but answers the connection with an error (a wrong token, or all 8
+  places taken) is an error that stops the server, never a headless session.
 
 The token keeps other accounts out. A program running as the same user as the app can read the
 file, as it could read that user's other files.

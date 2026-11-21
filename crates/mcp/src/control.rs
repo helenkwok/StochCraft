@@ -14,13 +14,13 @@
 //! so a program under another account on this computer cannot drive the app; nothing is
 //! reachable from other computers.
 
-use std::io::{BufReader, Write};
+use std::io::{BufRead, BufReader, Write};
 use std::net::{Ipv4Addr, Shutdown, SocketAddr, TcpListener, TcpStream};
 use std::path::Path;
 use std::sync::Arc;
 use std::sync::atomic::{AtomicUsize, Ordering};
 use std::sync::mpsc::{Receiver, Sender, channel};
-use std::time::Duration;
+use std::time::{Duration, Instant};
 
 use serde_json::{Value, json};
 use stochcraft_engine::{CommandError, ErrorCode};
@@ -29,7 +29,8 @@ use crate::backend::catalogue;
 use crate::server::{MAX_LINE, read_line};
 use crate::token::{self, TokenFile, constant_time_eq};
 
-/// How long a new connection has to send its token line before it is closed.
+/// How long a new connection has, from being accepted, to send its whole token line before it is
+/// closed.
 const AUTH_TIMEOUT: Duration = Duration::from_secs(2);
 /// The longest token line read: a token is 64 digits, so anything near this is not one.
 const AUTH_MAX_LINE: usize = 1024;
@@ -108,6 +109,7 @@ fn serve_listener(
         .name("stochcraft-control".into())
         .spawn(move || {
             for stream in listener.incoming().flatten() {
+                let deadline = Instant::now() + AUTH_TIMEOUT;
                 let Some(slot) = Slot::take(&open) else {
                     // Refusals are capped too, so clients that never finish a line can't pile up
                     // threads; beyond that the connection is just closed.
@@ -116,7 +118,7 @@ fn serve_listener(
                             .name("stochcraft-control-refuse".into())
                             .spawn(move || {
                                 let _slot = slot;
-                                refuse(stream);
+                                refuse(stream, deadline);
                             });
                     }
                     continue;
@@ -126,7 +128,7 @@ fn serve_listener(
                     .name("stochcraft-control-client".into())
                     .spawn(move || {
                         let _slot = slot;
-                        serve(stream, &token, &calls, wake.as_ref());
+                        serve(stream, &token, deadline, &calls, wake.as_ref());
                     });
             }
         })?;
@@ -160,21 +162,59 @@ impl Drop for Slot {
     }
 }
 
-/// Answers a client over [`MAX_CLIENTS`]: its first line (its token line, waited for briefly,
-/// and not checked: nothing is run) gets a `conflict` error naming the limit, and the connection
-/// is closed.
-fn refuse(stream: TcpStream) {
+/// Reads one line of at most [`AUTH_MAX_LINE`] bytes, all of it by `deadline`: every read waits
+/// only for what is left of the time, and a line that grows past the limit stops the reading at
+/// once (nothing more is taken in). `None` for a line too long, a closed connection or the
+/// deadline passing.
+fn read_first_line(reader: &mut BufReader<TcpStream>, deadline: Instant) -> Option<Vec<u8>> {
+    let mut line = Vec::new();
+    loop {
+        let left = deadline
+            .checked_duration_since(Instant::now())
+            .filter(|d| !d.is_zero())?;
+        reader.get_ref().set_read_timeout(Some(left)).ok()?;
+        let (done, used) = {
+            let available = match reader.fill_buf() {
+                Ok([]) => return None,
+                Ok(bytes) => bytes,
+                Err(e) if e.kind() == std::io::ErrorKind::Interrupted => continue,
+                Err(_) => return None,
+            };
+            match available.iter().position(|b| *b == b'\n') {
+                Some(i) => {
+                    line.extend_from_slice(available.get(..i).unwrap_or(&[]));
+                    (true, i + 1)
+                }
+                None => {
+                    line.extend_from_slice(available);
+                    (false, available.len())
+                }
+            }
+        };
+        reader.consume(used);
+        if line.len() > AUTH_MAX_LINE {
+            return None;
+        }
+        if done {
+            return Some(line);
+        }
+    }
+}
+
+/// Answers a client over [`MAX_CLIENTS`]: its first line (its token line, waited for until
+/// `deadline`, and not checked: nothing is run) gets a `conflict` error naming the limit, and the
+/// connection is closed.
+fn refuse(stream: TcpStream, deadline: Instant) {
     let Ok(mut writer) = stream.try_clone() else {
         return;
     };
-    let _ = stream.set_read_timeout(Some(AUTH_TIMEOUT));
     let mut reader = BufReader::new(stream);
-    let id = match read_line(&mut reader, AUTH_MAX_LINE) {
-        Ok(Some(line)) => serde_json::from_slice::<Value>(&line)
+    let id = match read_first_line(&mut reader, deadline) {
+        Some(line) => serde_json::from_slice::<Value>(&line)
             .ok()
             .and_then(|r| r.get("id").cloned())
             .unwrap_or(Value::Null),
-        _ => Value::Null,
+        None => Value::Null,
     };
     let message = format!(
         "the app already has {MAX_CLIENTS} control connections, the most it takes; close one and \
@@ -189,17 +229,21 @@ fn failure(code: ErrorCode, message: impl Into<String>) -> Value {
 }
 
 /// Reads the client's first line and checks it is `{"token": ...}` with the right token, in
-/// constant time. A client that sends nothing in [`AUTH_TIMEOUT`], too long a line, or anything
-/// else gets one `unauthorized` error line and the connection is closed. On success the client
-/// is answered and may send requests, with no time limit.
-fn authenticate(reader: &mut BufReader<TcpStream>, writer: &mut TcpStream, token: &str) -> bool {
-    let _ = reader.get_ref().set_read_timeout(Some(AUTH_TIMEOUT));
-    let presented = match read_line(reader, AUTH_MAX_LINE) {
-        Ok(Some(line)) => serde_json::from_slice::<Value>(&line)
+/// constant time. A client that has not sent the whole line by `deadline` (however slowly it
+/// trickles), sends too long a line, or anything else gets one `unauthorized` error line and the
+/// connection is closed. On success the client is answered and may send requests, with no time
+/// limit.
+fn authenticate(
+    reader: &mut BufReader<TcpStream>,
+    writer: &mut TcpStream,
+    token: &str,
+    deadline: Instant,
+) -> bool {
+    let presented = read_first_line(reader, deadline).and_then(|line| {
+        serde_json::from_slice::<Value>(&line)
             .ok()
-            .and_then(|v| v.get("token").and_then(Value::as_str).map(str::to_owned)),
-        _ => None,
-    };
+            .and_then(|v| v.get("token").and_then(Value::as_str).map(str::to_owned))
+    });
     let accepted = presented.is_some_and(|t| constant_time_eq(t.as_bytes(), token.as_bytes()));
     if accepted {
         let _ = reader.get_ref().set_read_timeout(None);
@@ -216,12 +260,18 @@ fn authenticate(reader: &mut BufReader<TcpStream>, writer: &mut TcpStream, token
 
 /// Answers one client until it disconnects or the app has gone. Nothing is run before the
 /// client has presented the token.
-fn serve(stream: TcpStream, token: &str, calls: &Sender<Call>, wake: &(dyn Fn() + Send + Sync)) {
+fn serve(
+    stream: TcpStream,
+    token: &str,
+    deadline: Instant,
+    calls: &Sender<Call>,
+    wake: &(dyn Fn() + Send + Sync),
+) {
     let Ok(mut writer) = stream.try_clone() else {
         return;
     };
     let mut reader = BufReader::new(stream);
-    if !authenticate(&mut reader, &mut writer, token) {
+    if !authenticate(&mut reader, &mut writer, token, deadline) {
         return;
     }
     loop {

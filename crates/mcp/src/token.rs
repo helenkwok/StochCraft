@@ -11,7 +11,7 @@ use std::fs::{self, OpenOptions};
 use std::io::{self, Write};
 use std::net::{Ipv4Addr, SocketAddr, TcpStream};
 use std::path::{Path, PathBuf};
-use std::time::Duration;
+use std::time::{Duration, Instant};
 
 use serde_json::{Value, json};
 
@@ -127,12 +127,16 @@ impl TokenFile {
     /// Writes `{"port", "token"}` to `path`: first to a file of its own beside it that only the
     /// user can read (mode 0600 on Unix), then renamed over `path`, so a reader never sees half
     /// of it. If `path` names another app's port that still answers, that app owns the file and
-    /// this fails with `AddrInUse` rather than hide its token.
+    /// this fails with `AddrInUse` rather than hide its token. Looking at the file and replacing
+    /// it happen under a lock file beside it (`control.json.lock`), so two apps starting at once
+    /// cannot both decide the file is free; a lock held for more than [`LOCK_STALE`] is taken to
+    /// be left by a crash and removed, and one that stays held for [`LOCK_WAIT`] is an error.
     pub fn publish(path: &Path, port: u16, token: &str) -> io::Result<Self> {
         let folder = path
             .parent()
             .ok_or_else(|| io::Error::other("the token file has no folder"))?;
         make_folder(folder)?;
+        let _lock = Lock::take(&folder.join("control.json.lock"))?;
         if let Ok((other, _)) = read(path)
             && other != port
             && answers(other)
@@ -170,22 +174,89 @@ impl Drop for TokenFile {
     }
 }
 
+/// A lock held for longer than this was left by an app that stopped without removing it.
+const LOCK_STALE: Duration = Duration::from_secs(10);
+/// How long to wait for another app's lock before giving up.
+const LOCK_WAIT: Duration = Duration::from_secs(2);
+
+/// A lock between processes: a file created with `create_new`, which only one can do, removed
+/// when this is dropped.
+struct Lock(PathBuf);
+
+impl Lock {
+    fn take(path: &Path) -> io::Result<Self> {
+        let started = Instant::now();
+        loop {
+            match write_private(path, &std::process::id().to_string()) {
+                Ok(()) => return Ok(Lock(path.to_owned())),
+                Err(e) if e.kind() == io::ErrorKind::AlreadyExists => {
+                    let stale = fs::metadata(path)
+                        .and_then(|m| m.modified())
+                        .ok()
+                        .and_then(|t| t.elapsed().ok())
+                        .is_some_and(|age| age > LOCK_STALE);
+                    if stale {
+                        let _ = fs::remove_file(path);
+                    } else if started.elapsed() > LOCK_WAIT {
+                        return Err(io::Error::new(
+                            io::ErrorKind::TimedOut,
+                            format!(
+                                "another StochCraft app is setting up the token file ({} is held)",
+                                path.display()
+                            ),
+                        ));
+                    } else {
+                        std::thread::sleep(Duration::from_millis(20));
+                    }
+                }
+                Err(e) => return Err(e),
+            }
+        }
+    }
+}
+
+impl Drop for Lock {
+    fn drop(&mut self) {
+        let _ = fs::remove_file(&self.0);
+    }
+}
+
 /// Whether something answers on `127.0.0.1:port`.
 fn answers(port: u16) -> bool {
     let addr = SocketAddr::from((Ipv4Addr::LOCALHOST, port));
     TcpStream::connect_timeout(&addr, Duration::from_millis(300)).is_ok()
 }
 
-/// The file's folder, made if need be (mode 0700 on Unix).
+/// The file's folder, made if need be. On Unix it is made with mode 0700, and one that already
+/// exists with another mode is changed to 0700; if that cannot be done (it is not the user's),
+/// this fails rather than leave the token in a folder others can open.
 fn make_folder(folder: &Path) -> io::Result<()> {
     let mut builder = fs::DirBuilder::new();
     builder.recursive(true);
     #[cfg(unix)]
     {
-        use std::os::unix::fs::DirBuilderExt;
+        use std::os::unix::fs::{DirBuilderExt, PermissionsExt};
         builder.mode(0o700);
+        builder.create(folder)?;
+        let mode = fs::metadata(folder)?.permissions().mode() & 0o777;
+        if mode != 0o700 {
+            fs::set_permissions(folder, fs::Permissions::from_mode(0o700)).map_err(|e| {
+                io::Error::new(
+                    e.kind(),
+                    format!(
+                        "the folder {} for the token file has mode {mode:o}, not 700, and cannot \
+                         be made private: {e}",
+                        folder.display()
+                    ),
+                )
+            })?;
+        }
+        Ok(())
     }
-    builder.create(folder)
+    #[cfg(not(unix))]
+    {
+        builder.create(folder)
+    }
 }
 
 /// Creates `path` (which must not exist) readable by the user alone, and writes `text` and a
@@ -279,6 +350,92 @@ mod tests {
         assert_eq!(refused.err().unwrap().kind(), io::ErrorKind::AddrInUse);
         assert_eq!(read(&path).unwrap(), (live, "first".to_owned()));
         drop(first);
+        let _ = fs::remove_dir_all(&dir);
+    }
+
+    #[test]
+    fn two_apps_publishing_at_once_leave_one_winner() {
+        for round in 0..20 {
+            let dir = scratch(&format!("race{round}"));
+            let path = dir.join("control.json");
+            // Both ports answer (they are listening), as running apps' do.
+            let listeners: Vec<_> = (0..2)
+                .map(|_| std::net::TcpListener::bind("127.0.0.1:0").unwrap())
+                .collect();
+            let ports: Vec<u16> = listeners
+                .iter()
+                .map(|l| l.local_addr().unwrap().port())
+                .collect();
+            let barrier = std::sync::Barrier::new(2);
+            let results: Vec<io::Result<TokenFile>> = std::thread::scope(|scope| {
+                let handles: Vec<_> = ports
+                    .iter()
+                    .enumerate()
+                    .map(|(i, port)| {
+                        let (path, barrier) = (&path, &barrier);
+                        scope.spawn(move || {
+                            barrier.wait();
+                            TokenFile::publish(path, *port, &format!("token{i}"))
+                        })
+                    })
+                    .collect();
+                handles.into_iter().map(|h| h.join().unwrap()).collect()
+            });
+            let winners: Vec<usize> = (0..2).filter(|i| results[*i].is_ok()).collect();
+            assert_eq!(winners.len(), 1, "round {round}");
+            let loser = results.iter().find_map(|r| r.as_ref().err()).unwrap();
+            assert_eq!(loser.kind(), io::ErrorKind::AddrInUse, "{loser}");
+            // The file is the winner's, and the lock is gone.
+            let (port, token) = read(&path).unwrap();
+            assert_eq!(
+                (port, token),
+                (ports[winners[0]], format!("token{}", winners[0]))
+            );
+            assert!(!dir.join("control.json.lock").exists());
+            drop(results);
+            let _ = fs::remove_dir_all(&dir);
+        }
+    }
+
+    #[test]
+    fn a_lock_left_by_a_crash_is_removed_and_a_fresh_one_is_waited_for() {
+        let dir = scratch("lock");
+        let path = dir.join("control.json");
+        let lock = dir.join("control.json.lock");
+        // Left 20 seconds ago: stale.
+        fs::write(&lock, "1").unwrap();
+        let old = std::time::SystemTime::now() - Duration::from_secs(20);
+        fs::OpenOptions::new()
+            .write(true)
+            .open(&lock)
+            .unwrap()
+            .set_modified(old)
+            .unwrap();
+        let file = TokenFile::publish(&path, 7070, "abc").unwrap();
+        assert!(!lock.exists());
+        drop(file);
+        // Held just now by someone else: an error after the wait, and the lock is not theirs to
+        // remove.
+        fs::write(&lock, "1").unwrap();
+        let held = TokenFile::publish(&path, 7070, "abc");
+        assert_eq!(held.err().unwrap().kind(), io::ErrorKind::TimedOut);
+        assert!(lock.exists());
+        let _ = fs::remove_dir_all(&dir);
+    }
+
+    #[cfg(unix)]
+    #[test]
+    fn a_folder_that_exists_with_wider_permissions_is_made_private() {
+        use std::os::unix::fs::PermissionsExt;
+        let dir = scratch("widemode");
+        let folder = dir.join("stochcraft");
+        fs::create_dir(&folder).unwrap();
+        fs::set_permissions(&folder, fs::Permissions::from_mode(0o755)).unwrap();
+        let _file = TokenFile::publish(&folder.join("control.json"), 7070, "abc").unwrap();
+        assert_eq!(
+            fs::metadata(&folder).unwrap().permissions().mode() & 0o777,
+            0o700
+        );
         let _ = fs::remove_dir_all(&dir);
     }
 
