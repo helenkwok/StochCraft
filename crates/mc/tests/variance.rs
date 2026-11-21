@@ -396,12 +396,12 @@ fn sequential_runs_end_in_whole_pairs_and_batches() {
 #[test]
 fn the_intervals_of_both_modes_cover_the_mean_at_their_rate() {
     let inputs = vec![
-        uniform("x", 0.0, 2.0),
-        uniform("y", 1.0, 3.0),
-        uniform("z", -1.0, 1.0),
+        uniform("a", 0.0, 2.0),
+        uniform("b", 1.0, 3.0),
+        uniform("c", -1.0, 1.0),
     ];
     for (sampling, trials) in [(Sampling::Antithetic, 2_000), (Sampling::Sobol, 8 * BATCH)] {
-        let mc = model(inputs.clone(), "$x * $y + $z", sampling);
+        let mc = model(inputs.clone(), "$a * $b + $c", sampling);
         let covered = (1..=200_u64)
             .filter(|seed| {
                 let r = run(&mc, *seed, trials);
