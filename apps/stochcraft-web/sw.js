@@ -41,8 +41,28 @@ self.addEventListener("install", (event) => {
   );
 });
 
+// Trunk puts a 16-digit hash in the names of the page's own WebAssembly and JavaScript (and in the
+// folder of its snippets); every build has new ones, and the network-first answers kept below
+// would pile up. The worker's files (stochcraft-worker*.js/.wasm) are not renamed.
+const HASHED = /-[0-9a-f]{16}[._/]/;
+
+// Forgets kept files with a build's hash in their name that the current page no longer names.
+async function prune() {
+  const cache = await caches.open(CACHE);
+  const kept = await cache.match("./");
+  if (!kept) {
+    return;
+  }
+  const current = new Set(named(await kept.clone().text()).map((n) => new URL(n, self.registration.scope).href));
+  for (const request of await cache.keys()) {
+    if (HASHED.test(new URL(request.url).pathname) && !current.has(request.url)) {
+      await cache.delete(request);
+    }
+  }
+}
+
 self.addEventListener("activate", (event) => {
-  event.waitUntil(self.clients.claim());
+  event.waitUntil(prune().catch(() => {}).then(() => self.clients.claim()));
 });
 
 // Requests for a preview under this site's pr/ are the preview's own service worker's business.

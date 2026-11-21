@@ -2730,13 +2730,24 @@ pub fn csv_field(v: &str) -> String {
     }
 }
 
+/// A text cell safe to open in a spreadsheet: one that starts with `=`, `+`, `-`, `@`, a tab or a
+/// carriage return would be read as a formula, so it gets a `'` in front (OWASP, "CSV Injection").
+/// For names and other text only: a number is written as it is, so a negative one stays a number.
+pub(crate) fn text_cell(text: &str) -> String {
+    if text.starts_with(['=', '+', '-', '@', '\t', '\r']) {
+        format!("'{text}")
+    } else {
+        text.to_owned()
+    }
+}
+
 /// [`results`] as CSV, one row per element and metric, and per property it assigns (metric
 /// `property:<name>`), as the app's Export table (CSV) and `stochcraft-cli run --format csv` write
 /// them. Where a result's replications split into two outcomes, the last six columns give the
 /// cut, each group's count and mean, and which group of results that split the same runs it is in
 /// (empty otherwise).
 pub fn results_csv(results: &Value) -> String {
-    let text = |v: &Value| csv_field(v.as_str().unwrap_or(""));
+    let text = |v: &Value| csv_field(&text_cell(v.as_str().unwrap_or("")));
     let mut out = String::from(
         "element,name,kind,metric,mean,half_width,std_dev,n,\
          split_cut,split_low_n,split_low_mean,split_high_n,split_high_mean,split_group\n",
@@ -3140,6 +3151,32 @@ mod tests {
             "desk,\"Desk, \"\"front\"\"\",server,\"property:a,b\",2.0,0.5,1.0,4,,,,,,"
         );
         assert_eq!(csv_field("line\r\nbreak"), "\"line\r\nbreak\"");
+    }
+
+    /// An element's id or name that a spreadsheet would read as a formula gets a quote in front;
+    /// the numbers beside it, and ordinary text, are as they were.
+    #[test]
+    fn results_csv_quotes_text_that_looks_like_a_formula() {
+        let m = json!({ "mean": -2.5, "half_width": 0.5, "std_dev": 1.0, "n": 4 });
+        let results = json!({
+            "metrics": ["entered"],
+            "elements": [
+                { "id": "=a", "name": "@b", "kind": "server", "metrics": { "entered": m } },
+                { "id": "plain", "name": "-c, d", "kind": "server", "metrics": { "entered": m } },
+            ],
+        });
+        let csv = results_csv(&results);
+        let lines: Vec<&str> = csv.lines().collect();
+        assert_eq!(lines.len(), 3, "{csv}");
+        assert!(
+            lines[1].starts_with("'=a,'@b,server,entered,-2.5,"),
+            "{csv}"
+        );
+        assert!(
+            lines[2].starts_with("plain,\"'-c, d\",server,entered,-2.5,"),
+            "{csv}"
+        );
+        assert_eq!(text_cell("a-b"), "a-b");
     }
 
     #[test]
