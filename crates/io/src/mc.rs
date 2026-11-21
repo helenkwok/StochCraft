@@ -30,7 +30,8 @@
 //! names again, and the whole vendor extension of the nearest scenario that has one.
 
 use stochcraft_model::{
-    Dist, McCorrelation, McInput, McOutput, McStop, McTarget, MonteCarlo, Sampling, TimeUnit,
+    Control, Dist, McCorrelation, McInput, McOutput, McStop, McTarget, MonteCarlo, Sampling,
+    TimeUnit,
 };
 
 use crate::Note;
@@ -83,6 +84,14 @@ pub(crate) fn extension_element(m: &MonteCarlo) -> Element {
             Some(McTarget::AtLeast(x)) => e = e.with_attr("atLeast", &trim_float(x)),
             None => {}
         }
+        for c in &o.controls {
+            e.push(match c {
+                Control::Input { name } => mc("control").with_attr("input", name),
+                Control::Output { name, expected } => mc("control")
+                    .with_attr("output", name)
+                    .with_attr("expected", &trim_float(*expected)),
+            });
+        }
         body.push(e);
     }
     for c in &m.correlations {
@@ -123,6 +132,29 @@ fn chain<'a>(data: &'a Element, id: &str) -> Vec<&'a Element> {
         }
     }
     out.reverse();
+    out
+}
+
+/// The controls of an `output` element: `control` children with an `input`, or an `output` and its
+/// `expected` mean. One that is neither, or has no mean, is a warning and is ignored.
+fn controls(e: &Element, at: &str, notes: &mut Vec<Note>) -> Vec<Control> {
+    let mut out = Vec::new();
+    for c in e.elements().filter(|c| c.is(STOCHCRAFT_NS, "control")) {
+        match (c.attr("input"), c.attr("output")) {
+            (Some(name), None) => out.push(Control::Input { name }),
+            (None, Some(name)) => match number(c, "expected", at, notes) {
+                Some(expected) => out.push(Control::Output { name, expected }),
+                None => notes.push(Note::warning(
+                    Some(at),
+                    format!("the control `{name}` has no expected mean and is ignored"),
+                )),
+            },
+            _ => notes.push(Note::warning(
+                Some(at),
+                "a control names one input, or one output with its expected mean; it is ignored",
+            )),
+        }
+    }
     out
 }
 
@@ -235,10 +267,12 @@ pub(crate) fn read(
                         Some(McTarget::AtMost(x))
                     }
                 };
+                let controls = controls(e, &name, notes);
                 m.outputs.push(McOutput {
                     expression: e.attr("expression").unwrap_or_default(),
                     unit: e.attr("unit").unwrap_or_default(),
                     target,
+                    controls,
                     name,
                 });
             }
@@ -324,12 +358,24 @@ mod tests {
                         expression: "$labour * $rate + $materials + $rebate".into(),
                         unit: "USD".into(),
                         target: Some(McTarget::AtMost(5_500.0)),
+                        controls: vec![
+                            Control::Input {
+                                name: "labour".into(),
+                            },
+                            Control::Input {
+                                name: "materials".into(),
+                            },
+                        ],
                     },
                     McOutput {
                         name: "over".into(),
                         expression: "if($cost > 6000, 1, 0) & 'x' < \"y\"".into(),
                         unit: String::new(),
                         target: Some(McTarget::AtLeast(0.0)),
+                        controls: vec![Control::Output {
+                            name: "cost".into(),
+                            expected: 5_100.5,
+                        }],
                     },
                 ],
                 correlations: vec![McCorrelation {
@@ -428,6 +474,79 @@ mod tests {
             "{:?}",
             loaded.notes
         );
+    }
+
+    /// Controls are saved inside their output and read back; a file from before controls has none,
+    /// and a control that cannot be read is a note, not an error.
+    #[test]
+    fn controls_are_saved_inside_their_output_and_old_files_still_read() {
+        let m = model();
+        let text = String::from_utf8_lossy(&crate::write_new(&m)).into_owned();
+        assert!(
+            text.contains(r#"stochcraft:control input="labour""#),
+            "{text}"
+        );
+        assert!(
+            text.contains(r#"stochcraft:control output="cost" expected="5100.5""#),
+            "{text}"
+        );
+        let mut plain = m.clone();
+        if let Some(mc) = plain.monte_carlo.as_mut() {
+            for o in &mut mc.outputs {
+                o.controls.clear();
+            }
+        }
+        let bytes = crate::write_new(&plain);
+        assert!(!String::from_utf8_lossy(&bytes).contains("stochcraft:control"));
+        let loaded = crate::read(&bytes).unwrap_or_else(|e| unreachable!("{e}"));
+        assert_eq!(loaded.model, plain);
+        let broken = text.replace(r#" expected="5100.5""#, "");
+        let loaded = crate::read(broken.as_bytes()).unwrap_or_else(|e| unreachable!("{e}"));
+        let second = loaded
+            .model
+            .monte_carlo
+            .and_then(|mc| mc.outputs.get(1).map(|o| o.controls.clone()));
+        assert_eq!(second, Some(Vec::new()));
+        assert!(
+            loaded
+                .notes
+                .iter()
+                .any(|n| n.message.contains("expected mean")),
+            "{:?}",
+            loaded.notes
+        );
+    }
+
+    /// A control is read only in StochCraft's namespace, under whatever prefix it is bound to.
+    #[test]
+    fn a_control_in_a_foreign_namespace_is_ignored() {
+        let text = String::from_utf8_lossy(&crate::write_new(&model())).into_owned();
+        let first_controls = |xml: &str| {
+            let loaded = crate::read(xml.as_bytes()).unwrap_or_else(|e| unreachable!("{e}"));
+            loaded
+                .model
+                .monte_carlo
+                .and_then(|mc| mc.outputs.first().map(|o| o.controls.clone()))
+                .unwrap_or_default()
+        };
+        let both = first_controls(&text);
+        assert_eq!(both.len(), 2, "{both:?}");
+        let foreign = text.replace(
+            r#"stochcraft:control input="labour""#,
+            r#"other:control xmlns:other="urn:example:foreign" input="labour""#,
+        );
+        assert_ne!(foreign, text);
+        assert_eq!(
+            first_controls(&foreign),
+            vec![Control::Input {
+                name: "materials".into()
+            }]
+        );
+        let renamed = text.replace(
+            r#"stochcraft:control input="labour""#,
+            &format!(r#"sc:control xmlns:sc="{STOCHCRAFT_NS}" input="labour""#),
+        );
+        assert_eq!(first_controls(&renamed), both);
     }
 
     #[test]

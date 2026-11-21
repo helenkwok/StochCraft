@@ -1337,6 +1337,21 @@ unit	yr	वर्ष
 	{name}: the ± is across {n} of the {of} pairs, the rest had no trial with a number.	{name}: ± {of} में से {n} जोड़ों पर आधारित है, बाकी में किसी परीक्षण में संख्या नहीं थी।
 	No interval: every pair gave the same share, so their spread gives none.	कोई अंतराल नहीं: सभी जोड़ों ने एक ही हिस्सा दिया, इसलिए उनके फैलाव से कोई अंतराल नहीं बनता।
 	No interval: too few pairs of trials for one.	कोई अंतराल नहीं: इसके लिए परीक्षणों के जोड़े बहुत कम हैं।
+	Controls	नियंत्रक
+	Expected mean	अपेक्षित औसत
+	Remove the control {name}	नियंत्रक {name} हटाएँ
+	Add a control	नियंत्रक जोड़ें
+	{name} (an output; you give its mean)	{name} (एक आउटपुट; उसका औसत आप देते हैं)
+	No input or earlier output can be a control.	कोई इनपुट या पिछला आउटपुट नियंत्रक नहीं हो सकता।
+	A control is an input whose mean is known, or an earlier output whose mean you know. The results use how it moves with this output to narrow the interval of the output's mean and target chance.	नियंत्रक वह इनपुट है जिसका औसत ज्ञात है, या कोई पिछला आउटपुट जिसका औसत आप जानते हैं। परिणाम इस बात का उपयोग करते हैं कि वह इस आउटपुट के साथ कैसे बदलता है, ताकि आउटपुट के औसत और लक्ष्य पाने की संभावना का अंतराल संकरा हो सके।
+	Controlled mean	नियंत्रित औसत
+	Controls for {output}: {controls}.	{output} के लिए नियंत्रक: {controls}।
+	No controlled result: {reason}	कोई नियंत्रित परिणाम नहीं: {reason}
+	They narrowed the interval by {percent}; this is the result shown above.	उन्होंने अंतराल को {percent} संकरा किया; यही ऊपर दिखाया गया परिणाम है।
+	They made the interval {percent} wider, so the plain result stands.	उन्होंने अंतराल को {percent} चौड़ा कर दिया, इसलिए सामान्य परिणाम ही मान्य है।
+	They did not help: their correlation with {output} is weak ({correlation}), so the plain result stands.	उनसे मदद नहीं मिली: {output} के साथ उनका सहसंबंध कमज़ोर है ({correlation}), इसलिए सामान्य परिणाम ही मान्य है।
+	They did not help, so the plain result stands.	उनसे मदद नहीं मिली, इसलिए सामान्य परिणाम ही मान्य है।
+	The mean given for {name}, {stated}, is far from the trials' mean, {sample}: the controlled result is biased until it is corrected.	{name} के लिए दिया गया औसत {stated} परीक्षणों के औसत {sample} से बहुत दूर है: सुधारे जाने तक नियंत्रित परिणाम पक्षपाती है।
 	Stock	स्टॉक
 	Flow	प्रवाह
 	Auxiliary	सहायक चर
@@ -1381,3 +1396,6 @@ unit	yr	वर्ष
 	Replace the XMILE file?	XMILE फ़ाइल बदलें?
 	Save As writes a new file and keeps {file} as it is. Replacing {file} leaves out what StochCraft does not keep.	इस रूप में सहेजें नई फ़ाइल लिखता है और {file} को जैसा है वैसा रखता है। {file} को बदलने पर वह छूट जाता है जिसे StochCraft नहीं रखता।
 	Replace	बदलें
+	The estimated chance that {output} is more than {value} is {percent}.	{output} के {value} से अधिक होने की अनुमानित संभावना {percent} है।
+	The estimated chance that {output} is less than {value} is {percent}.	{output} के {value} से कम होने की अनुमानित संभावना {percent} है।
+	Their interval has no width, which no estimate has, so the plain result stands.	उनके अंतराल की कोई चौड़ाई नहीं है, जो किसी अनुमान की नहीं होती, इसलिए सामान्य परिणाम ही रहता है।

@@ -1337,6 +1337,21 @@ unit	yr	বছর
 	{name}: the ± is across {n} of the {of} pairs, the rest had no trial with a number.	{name}: ± হলো {of}টি জোড়ার মধ্যে {n}টি জুড়ে, বাকিগুলোতে সংখ্যাযুক্ত কোনো পরীক্ষণ ছিল না।
 	No interval: every pair gave the same share, so their spread gives none.	কোনো ব্যবধান নেই: সব জোড়া একই ভাগ দিয়েছে, তাই তাদের বিস্তার থেকে ব্যবধান পাওয়া যায় না।
 	No interval: too few pairs of trials for one.	কোনো ব্যবধান নেই: এর জন্য পরীক্ষণ-জোড়া খুব কম।
+	Controls	নিয়ন্ত্রক
+	Expected mean	প্রত্যাশিত গড়
+	Remove the control {name}	নিয়ন্ত্রক {name} সরান
+	Add a control	নিয়ন্ত্রক যোগ করুন
+	{name} (an output; you give its mean)	{name} (একটি আউটপুট; এর গড় আপনি দেন)
+	No input or earlier output can be a control.	কোনো ইনপুট বা আগের আউটপুট নিয়ন্ত্রক হতে পারে না।
+	A control is an input whose mean is known, or an earlier output whose mean you know. The results use how it moves with this output to narrow the interval of the output's mean and target chance.	নিয়ন্ত্রক হলো এমন একটি ইনপুট যার গড় জানা আছে, অথবা আগের এমন একটি আউটপুট যার গড় আপনি জানেন। ফলাফল এই আউটপুটের সঙ্গে এটি কীভাবে বদলায় তা ব্যবহার করে আউটপুটের গড় ও লক্ষ্য পূরণের সম্ভাবনার ব্যবধি সংকীর্ণ করে।
+	Controlled mean	নিয়ন্ত্রিত গড়
+	Controls for {output}: {controls}.	{output}-এর নিয়ন্ত্রক: {controls}।
+	No controlled result: {reason}	কোনো নিয়ন্ত্রিত ফলাফল নেই: {reason}
+	They narrowed the interval by {percent}; this is the result shown above.	এগুলো ব্যবধি {percent} সংকীর্ণ করেছে; এটিই উপরে দেখানো ফলাফল।
+	They made the interval {percent} wider, so the plain result stands.	এগুলো ব্যবধি {percent} চওড়া করেছে, তাই সাধারণ ফলাফলই বহাল থাকে।
+	They did not help: their correlation with {output} is weak ({correlation}), so the plain result stands.	এগুলো সাহায্য করেনি: {output}-এর সঙ্গে এদের সহসম্পর্ক দুর্বল ({correlation}), তাই সাধারণ ফলাফলই বহাল থাকে।
+	They did not help, so the plain result stands.	এগুলো সাহায্য করেনি, তাই সাধারণ ফলাফলই বহাল থাকে।
+	The mean given for {name}, {stated}, is far from the trials' mean, {sample}: the controlled result is biased until it is corrected.	{name}-এর জন্য দেওয়া গড় {stated} পরীক্ষাগুলোর গড় {sample} থেকে অনেক দূরে: সংশোধন না করা পর্যন্ত নিয়ন্ত্রিত ফলাফল পক্ষপাতদুষ্ট।
 	Stock	মজুত
 	Flow	প্রবাহ
 	Auxiliary	সহায়ক চলক
@@ -1381,3 +1396,6 @@ unit	yr	বছর
 	Replace the XMILE file?	XMILE ফাইলটি প্রতিস্থাপন করবেন?
 	Save As writes a new file and keeps {file} as it is. Replacing {file} leaves out what StochCraft does not keep.	নতুন নামে সংরক্ষণ একটি নতুন ফাইল লেখে এবং {file} যেমন আছে তেমনই রাখে। {file} প্রতিস্থাপন করলে StochCraft যা রাখে না তা বাদ পড়ে।
 	Replace	প্রতিস্থাপন
+	The estimated chance that {output} is more than {value} is {percent}.	{output} {value}-এর বেশি হওয়ার আনুমানিক সম্ভাবনা {percent}।
+	The estimated chance that {output} is less than {value} is {percent}.	{output} {value}-এর কম হওয়ার আনুমানিক সম্ভাবনা {percent}।
+	Their interval has no width, which no estimate has, so the plain result stands.	এদের ব্যবধানের কোনো প্রস্থ নেই, যা কোনো আনুমানিক মানের থাকে না, তাই সাধারণ ফলাফলই থাকছে।

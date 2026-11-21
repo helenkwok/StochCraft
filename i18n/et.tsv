@@ -1337,6 +1337,21 @@ unit	yr	a
 	{name}: the ± is across {n} of the {of} pairs, the rest had no trial with a number.	{name}: ± on üle {n} paari {of}-st, ülejäänutel polnud ühtegi arvuga katset.
 	No interval: every pair gave the same share, so their spread gives none.	Vahemikku pole: kõik paarid andsid sama osakaalu, seega nende hajuvus vahemikku ei anna.
 	No interval: too few pairs of trials for one.	Vahemikku pole: selleks on liiga vähe katsete paare.
+	Controls	Kontrollid
+	Expected mean	Oodatav keskmine
+	Remove the control {name}	Eemalda kontroll {name}
+	Add a control	Lisa kontroll
+	{name} (an output; you give its mean)	{name} (väljund; selle keskmise annate teie)
+	No input or earlier output can be a control.	Ükski sisend ega varasem väljund ei saa olla kontroll.
+	A control is an input whose mean is known, or an earlier output whose mean you know. The results use how it moves with this output to narrow the interval of the output's mean and target chance.	Kontroll on sisend, mille keskmine on teada, või varasem väljund, mille keskmist te teate. Tulemused kasutavad seda, kuidas see liigub koos selle väljundiga, et kitsendada selle keskmise ja eesmärgi saavutamise tõenäosuse vahemikku.
+	Controlled mean	Kontrollitud keskmine
+	Controls for {output}: {controls}.	Kontrollid väljundile {output}: {controls}.
+	No controlled result: {reason}	Kontrollitud tulemust pole: {reason}
+	They narrowed the interval by {percent}; this is the result shown above.	Need kitsendasid vahemikku {percent} võrra; see on ülal näidatud tulemus.
+	They made the interval {percent} wider, so the plain result stands.	Need laiendasid vahemikku {percent} võrra, seega kehtib tavaline tulemus.
+	They did not help: their correlation with {output} is weak ({correlation}), so the plain result stands.	Need ei aidanud: nende korrelatsioon väljundiga {output} on nõrk ({correlation}), seega kehtib tavaline tulemus.
+	They did not help, so the plain result stands.	Need ei aidanud, seega kehtib tavaline tulemus.
+	The mean given for {name}, {stated}, is far from the trials' mean, {sample}: the controlled result is biased until it is corrected.	Väljundile {name} antud keskmine {stated} on katsete keskmisest {sample} kaugel: kontrollitud tulemus on kallutatud, kuni see parandatakse.
 	Stock	Varu
 	Flow	Voog
 	Auxiliary	Abimuutuja
@@ -1381,3 +1396,6 @@ unit	yr	a
 	Replace the XMILE file?	Kas asendada XMILE-fail?
 	Save As writes a new file and keeps {file} as it is. Replacing {file} leaves out what StochCraft does not keep.	Salvesta nimega kirjutab uue faili ja jätab faili {file} muutmata. Faili {file} asendamisel jääb välja see, mida StochCraft ei säilita.
 	Replace	Asenda
+	The estimated chance that {output} is more than {value} is {percent}.	Hinnanguline tõenäosus, et {output} on suurem kui {value}, on {percent}.
+	The estimated chance that {output} is less than {value} is {percent}.	Hinnanguline tõenäosus, et {output} on väiksem kui {value}, on {percent}.
+	Their interval has no width, which no estimate has, so the plain result stands.	Nende vahemikul pole laiust, mida ühelgi hinnangul ei ole, seega jääb tavatulemus kehtima.

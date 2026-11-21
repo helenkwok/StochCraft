@@ -1337,6 +1337,21 @@ unit	yr	r.
 	{name}: the ± is across {n} of the {of} pairs, the rest had no trial with a number.	{name}: ± je napříč {n} z {of} dvojic, ostatní neměly žádný pokus s číslem.
 	No interval: every pair gave the same share, so their spread gives none.	Žádný interval: všechny dvojice daly stejný podíl, takže jejich rozptyl žádný interval nedává.
 	No interval: too few pairs of trials for one.	Žádný interval: příliš málo dvojic pokusů.
+	Controls	Kontroly
+	Expected mean	Očekávaný průměr
+	Remove the control {name}	Odebrat kontrolu {name}
+	Add a control	Přidat kontrolu
+	{name} (an output; you give its mean)	{name} (výstup; jeho průměr zadáte vy)
+	No input or earlier output can be a control.	Žádný vstup ani dřívější výstup nemůže být kontrolou.
+	A control is an input whose mean is known, or an earlier output whose mean you know. The results use how it moves with this output to narrow the interval of the output's mean and target chance.	Kontrola je vstup se známým průměrem nebo dřívější výstup, jehož průměr znáte. Výsledky využívají to, jak se pohybuje spolu s tímto výstupem, ke zúžení intervalu jeho průměru a šance na dosažení cíle.
+	Controlled mean	Kontrolovaný průměr
+	Controls for {output}: {controls}.	Kontroly pro {output}: {controls}.
+	No controlled result: {reason}	Žádný kontrolovaný výsledek: {reason}
+	They narrowed the interval by {percent}; this is the result shown above.	Zúžily interval o {percent}; toto je výsledek zobrazený výše.
+	They made the interval {percent} wider, so the plain result stands.	Rozšířily interval o {percent}, proto platí prostý výsledek.
+	They did not help: their correlation with {output} is weak ({correlation}), so the plain result stands.	Nepomohly: jejich korelace s {output} je slabá ({correlation}), proto platí prostý výsledek.
+	They did not help, so the plain result stands.	Nepomohly, proto platí prostý výsledek.
+	The mean given for {name}, {stated}, is far from the trials' mean, {sample}: the controlled result is biased until it is corrected.	Průměr zadaný pro {name}, {stated}, je daleko od průměru pokusů, {sample}: kontrolovaný výsledek je zkreslený, dokud se neopraví.
 	Stock	Zásoba
 	Flow	Tok
 	Auxiliary	Pomocná veličina
@@ -1381,3 +1396,6 @@ unit	yr	r.
 	Replace the XMILE file?	Nahradit soubor XMILE?
 	Save As writes a new file and keeps {file} as it is. Replacing {file} leaves out what StochCraft does not keep.	Uložit jako zapíše nový soubor a {file} ponechá beze změny. Nahrazením {file} se vynechá to, co StochCraft nezachovává.
 	Replace	Nahradit
+	The estimated chance that {output} is more than {value} is {percent}.	Odhadovaná pravděpodobnost, že {output} bude větší než {value}, je {percent}.
+	The estimated chance that {output} is less than {value} is {percent}.	Odhadovaná pravděpodobnost, že {output} bude menší než {value}, je {percent}.
+	Their interval has no width, which no estimate has, so the plain result stands.	Jejich interval nemá žádnou šířku, což žádný odhad nemá, proto zůstává obyčejný výsledek.

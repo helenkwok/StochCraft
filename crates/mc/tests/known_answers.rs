@@ -25,6 +25,7 @@ fn output(name: &str, expression: &str) -> McOutput {
         expression: expression.into(),
         unit: String::new(),
         target: None,
+        controls: Vec::new(),
     }
 }
 

@@ -1337,6 +1337,21 @@ unit	yr	J.
 	{name}: the ± is across {n} of the {of} pairs, the rest had no trial with a number.	{name}: Das ± gilt über {n} der {of} Paare, die übrigen hatten keine Iteration mit einer Zahl.
 	No interval: every pair gave the same share, so their spread gives none.	Kein Intervall: Alle Paare ergaben denselben Anteil, daher liefert ihre Streuung keines.
 	No interval: too few pairs of trials for one.	Kein Intervall: zu wenige Paare von Iterationen dafür.
+	Controls	Kontrollgrößen
+	Expected mean	Erwarteter Mittelwert
+	Remove the control {name}	Kontrollgröße {name} entfernen
+	Add a control	Kontrollgröße hinzufügen
+	{name} (an output; you give its mean)	{name} (eine Ausgabe; Sie geben ihren Mittelwert an)
+	No input or earlier output can be a control.	Keine Eingabe und keine frühere Ausgabe kann eine Kontrollgröße sein.
+	A control is an input whose mean is known, or an earlier output whose mean you know. The results use how it moves with this output to narrow the interval of the output's mean and target chance.	Eine Kontrollgröße ist eine Eingabe mit bekanntem Mittelwert oder eine frühere Ausgabe, deren Mittelwert Sie kennen. Die Ergebnisse nutzen, wie sie sich mit dieser Ausgabe bewegt, um das Intervall ihres Mittelwerts und der Zielwahrscheinlichkeit zu verengen.
+	Controlled mean	Kontrollierter Mittelwert
+	Controls for {output}: {controls}.	Kontrollgrößen für {output}: {controls}.
+	No controlled result: {reason}	Kein kontrolliertes Ergebnis: {reason}
+	They narrowed the interval by {percent}; this is the result shown above.	Sie haben das Intervall um {percent} verengt; das ist das oben gezeigte Ergebnis.
+	They made the interval {percent} wider, so the plain result stands.	Sie haben das Intervall um {percent} verbreitert, daher gilt das einfache Ergebnis.
+	They did not help: their correlation with {output} is weak ({correlation}), so the plain result stands.	Sie haben nicht geholfen: ihre Korrelation mit {output} ist schwach ({correlation}), daher gilt das einfache Ergebnis.
+	They did not help, so the plain result stands.	Sie haben nicht geholfen, daher gilt das einfache Ergebnis.
+	The mean given for {name}, {stated}, is far from the trials' mean, {sample}: the controlled result is biased until it is corrected.	Der für {name} angegebene Mittelwert {stated} liegt weit vom Mittelwert der Versuche {sample} entfernt: Das kontrollierte Ergebnis ist verzerrt, bis er korrigiert wird.
 	Stock	Bestand
 	Flow	Fluss
 	Auxiliary	Hilfsgröße
@@ -1381,3 +1396,6 @@ unit	yr	J.
 	Replace the XMILE file?	XMILE-Datei ersetzen?
 	Save As writes a new file and keeps {file} as it is. Replacing {file} leaves out what StochCraft does not keep.	„Speichern unter“ schreibt eine neue Datei und lässt {file} unverändert. Beim Ersetzen von {file} geht verloren, was StochCraft nicht übernimmt.
 	Replace	Ersetzen
+	The estimated chance that {output} is more than {value} is {percent}.	Die geschätzte Wahrscheinlichkeit, dass {output} über {value} liegt, beträgt {percent}.
+	The estimated chance that {output} is less than {value} is {percent}.	Die geschätzte Wahrscheinlichkeit, dass {output} unter {value} liegt, beträgt {percent}.
+	Their interval has no width, which no estimate has, so the plain result stands.	Ihr Intervall hat keine Breite, die keine Schätzung hat, daher bleibt das einfache Ergebnis bestehen.

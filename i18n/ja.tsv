@@ -1337,6 +1337,21 @@ unit	yr	年
 	{name}: the ± is across {n} of the {of} pairs, the rest had no trial with a number.	{name}: ± は {of} ペアのうち {n} ペアにわたるものです。残りは数値のある試行がありませんでした。
 	No interval: every pair gave the same share, so their spread gives none.	区間なし: すべてのペアが同じ割合だったため、そのばらつきからは区間が得られません。
 	No interval: too few pairs of trials for one.	区間なし: 区間を求めるには試行のペアが少なすぎます。
+	Controls	コントロール
+	Expected mean	期待平均
+	Remove the control {name}	コントロール {name} を削除
+	Add a control	コントロールを追加
+	{name} (an output; you give its mean)	{name}（出力。平均は自分で指定します）
+	No input or earlier output can be a control.	コントロールにできる入力や前の出力はありません。
+	A control is an input whose mean is known, or an earlier output whose mean you know. The results use how it moves with this output to narrow the interval of the output's mean and target chance.	コントロールとは、平均が分かっている入力、または平均を知っている前の出力のことです。結果は、それがこの出力と共にどう動くかを使って、出力の平均と目標を満たす確率の区間を狭めます。
+	Controlled mean	コントロール付きの平均
+	Controls for {output}: {controls}.	{output} のコントロール: {controls}。
+	No controlled result: {reason}	コントロール付きの結果はありません: {reason}
+	They narrowed the interval by {percent}; this is the result shown above.	区間を {percent} 狭めました。これが上に表示された結果です。
+	They made the interval {percent} wider, so the plain result stands.	区間を {percent} 広げたため、通常の結果を使います。
+	They did not help: their correlation with {output} is weak ({correlation}), so the plain result stands.	効果はありませんでした。{output} との相関が弱い ({correlation}) ため、通常の結果を使います。
+	They did not help, so the plain result stands.	効果はなかったため、通常の結果を使います。
+	The mean given for {name}, {stated}, is far from the trials' mean, {sample}: the controlled result is biased until it is corrected.	{name} に指定した平均 {stated} が試行の平均 {sample} から大きく外れています。修正するまで、コントロール付きの結果には偏りがあります。
 	Stock	ストック
 	Flow	フロー
 	Auxiliary	補助変数
@@ -1381,3 +1396,6 @@ unit	yr	年
 	Replace the XMILE file?	XMILE ファイルを置き換えますか？
 	Save As writes a new file and keeps {file} as it is. Replacing {file} leaves out what StochCraft does not keep.	「別名で保存」は新しいファイルを書き込み、{file} はそのまま残します。{file} を置き換えると、StochCraft が保持しない内容が失われます。
 	Replace	置き換える
+	The estimated chance that {output} is more than {value} is {percent}.	{output} が {value} を超える確率の推定値は {percent} です。
+	The estimated chance that {output} is less than {value} is {percent}.	{output} が {value} を下回る確率の推定値は {percent} です。
+	Their interval has no width, which no estimate has, so the plain result stands.	区間の幅がなく、これはどんな推定にもあり得ないため、通常の結果をそのまま使います。
