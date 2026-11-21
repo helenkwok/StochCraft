@@ -830,7 +830,7 @@ impl Compiled {
                 // Judged on the interval the results report: across trials, or across batches
                 // (whose count, not the trials', says whether there is one), or across pairs.
                 let s = if self.batched() || self.paired() {
-                    Summary::of(&unit_means(blocks, o, self.paired()))
+                    unit_summary(blocks, o, self.paired())
                 } else {
                     Summary::of(&finite(blocks, o))
                 };
@@ -1364,6 +1364,12 @@ fn unit_means(blocks: &[Block], o: usize, pairs: bool) -> Vec<f64> {
         .collect()
 }
 
+/// Output `o`'s summary across its independent units (each block's, or each pair's mean): the
+/// one set of means the reported mean, the interval and a sequential stop's precision all use.
+fn unit_summary(blocks: &[Block], o: usize, pairs: bool) -> Option<Summary> {
+    Summary::of(&unit_means(blocks, o, pairs))
+}
+
 /// The half-width of the 95% Student-t interval of the mean of `xs` (independent values), or
 /// `None` with fewer than two.
 fn t_half_width(xs: &[f64]) -> Option<f64> {
@@ -1377,6 +1383,13 @@ fn t_half_width(xs: &[f64]) -> Option<f64> {
 /// proportions (clamped to [0, 1]); none with fewer than two of them, and none for the target
 /// when every one gave the same proportion (their spread says nothing about how far the chance
 /// may be from it, and a width of 0 would claim it is exact).
+///
+/// With antithetic pairs the reported mean is the antithetic estimator itself, the mean of the
+/// pair means (a pair's mean is the average of its valid trials, and a pair with none is
+/// dropped; Glasserman, 2003, §4.2), so that the mean, the ± and a sequential stop's precision
+/// are of the same set of means. The two differ only where a pair has one trial with no number.
+/// Percentiles, the extremes, the histogram and the target's probability stay over all valid
+/// trials.
 fn by_units(r: &mut OutputResult, out: &McOutput, blocks: &[Block], o: usize, pairs: bool) {
     let each = per_unit(blocks, o, pairs);
     let means: Vec<f64> = each
@@ -1386,6 +1399,9 @@ fn by_units(r: &mut OutputResult, out: &McOutput, blocks: &[Block], o: usize, pa
         .collect();
     r.half_width = t_half_width(&means);
     r.interval_count = means.len() as u64;
+    if pairs && let Some(s) = unit_summary(blocks, o, true) {
+        r.mean = Some(s.mean);
+    }
     if let (Some(t), Some(result)) = (out.target, r.target.as_mut()) {
         let shares: Vec<f64> = each
             .iter()
@@ -2290,5 +2306,57 @@ mod tests {
             assert!(want.is_some());
             assert_eq!(r.achieved.map(f64::to_bits), want.map(f64::to_bits));
         }
+    }
+
+    /// With antithetic pairs where some have one trial with no number, the reported mean is the
+    /// mean of the pair means, and the ± and the sequential stop's precision are of those same
+    /// means, not of the plain average of all valid trials.
+    #[test]
+    fn paired_mean_interval_and_stop_use_the_same_pair_means() {
+        let nan = f64::NAN;
+        // Pairs: (10, 20) -> 15; (nan, 100) -> 100; (40, nan) -> 40; (nan, nan) dropped;
+        // (30, 50) -> 40. The mean of the pair means is 48.75; the plain mean of the six valid
+        // trials is 250 / 6 = 41.67.
+        let y = vec![10.0, 20.0, nan, 100.0, 40.0, nan, nan, nan, 30.0, 50.0];
+        let block = Block {
+            index: 0,
+            inputs: vec![vec![0.5; y.len()]],
+            outputs: vec![y],
+        };
+        let mut mc = model(Sampling::Antithetic, None);
+        mc.outputs = vec![output("y", "$x")];
+        let c = compile(&mc, 1).unwrap_or_else(|p| unreachable!("{p:?}"));
+        let blocks = [block];
+        let results = c.summarise(&blocks, &[]);
+        let r = &results.outputs[0];
+        let means = [15.0, 100.0, 40.0, 40.0];
+        let want = t_half_width(&means).unwrap_or(f64::NAN);
+        assert!(
+            (r.mean.unwrap_or(f64::NAN) - 48.75).abs() < 1e-12,
+            "{:?}",
+            r.mean
+        );
+        assert!((r.half_width.unwrap_or(f64::NAN) - want).abs() < 1e-12);
+        assert_eq!(r.interval_count, 4);
+        // The sequential stop judges the same means.
+        let s = unit_summary(&blocks, 0, true).unwrap_or_else(|| unreachable!("a summary"));
+        assert!((s.mean - r.mean.unwrap_or(f64::NAN)).abs() < 1e-12);
+        assert!(
+            (s.half_width - want).abs() < 1e-12,
+            "{} {want}",
+            s.half_width
+        );
+        // Everything else is over the six valid trials.
+        assert_eq!((r.valid, r.invalid), (6, 4));
+        assert_eq!((r.min, r.max), (Some(10.0), Some(100.0)));
+        // A stop far tighter than the interval goes on.
+        let stop = McStop {
+            relative: 0.001,
+            max: 1_000,
+        };
+        assert!(matches!(
+            c.next_look(&blocks, stop, 10, 1_000),
+            Step::Continue(_)
+        ));
     }
 }

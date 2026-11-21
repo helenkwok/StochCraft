@@ -439,7 +439,7 @@ On the **Model** tab:
   makes the results more precise; it does not promise fewer trials for every output.
   **Antithetic pairs** make trials two at a time, the second from the opposite end of every
   input's range from the first (where the first drew the 30th percentile, the second draws the
-  70th); for an output that rises or falls with its inputs the pair's errors tend to cancel,
+  70th), and the mean and its ± are then of the pairs' means (a pair where one trial gave no number counts as that other trial alone, and a pair with neither is left out); for an output that rises or falls with its inputs the pair's errors tend to cancel,
   so the results are usually more precise for the same trials, but for an output that peaks
   in the middle of an input's range they may not be, and they cannot be used with correlated
   inputs, which reorder the trials. **Quasi-random (Sobol)** draws spread the trials evenly
