@@ -135,13 +135,10 @@ pub struct Program {
     pub(crate) order: Vec<usize>,
     /// The variable of each stock, which is also its place in the state.
     pub(crate) stocks: Vec<usize>,
-    /// For each stock: its inflows and outflows (variable indices), and whether it is
-    /// non-negative.
+    /// For each stock: its inflows and outflows (variable indices). A non-negative stock's
+    /// limit is on its outflows' `limited_by`.
     pub(crate) inflows: Vec<Vec<usize>>,
     pub(crate) outflows: Vec<Vec<usize>>,
-    pub(crate) non_negative: Vec<bool>,
-    /// The place of each variable in the state, if it is a stock.
-    pub(crate) stock_pos: Vec<Option<usize>>,
     pub(crate) sites: Vec<Site>,
     pub(crate) hidden: usize,
     pub(crate) randoms: Vec<RandomSite>,
@@ -796,8 +793,6 @@ pub fn compile(model: &SdModel) -> Result<Program, SdError> {
         stocks,
         inflows,
         outflows,
-        non_negative,
-        stock_pos,
         sites,
         hidden,
         randoms,
