@@ -818,6 +818,19 @@ fields (`“Service time”`) are named in the messages by their own rows.
   The row for "Checked against probability theory" (the project card's proof) follows each
   catalog's "Checked against queueing theory" row with its word for probability theory in place
   of queueing theory; the same caveats apply.
+- The rows for Monte Carlo models in the window (ROADMAP M4.1, part 2: the Model and Results tabs
+  of a Monte Carlo model, its inputs, correlations, outputs, targets, trials and sampling, the
+  findings in words, File ▸ New Monte Carlo Model and the project budget example) were
+  machine-drafted with Claude Code from the plain meaning of the English, reusing each catalog's
+  own words for run, seed, mean, target, interval, percentile, share and distribution. "Trial" is
+  a word other than the catalog's "run" (most catalogs build it from their existing "Trials" row;
+  de, da, fi, nl, nb, pl, pt-br, ro, sk, sl, lt and bs say "iteration"); "Latin hypercube
+  sampling" and "rank correlation" are the statistics terms as remembered or rendered literally,
+  not checked against Wikipedia or IATE; "Monte Carlo" is kept as a name (蒙特卡洛 in zh-hans,
+  蒙地卡羅 in zh-hant). Not checked against any other source, and not reviewed by native speakers.
+  The least certain are lo, ta, te, th, bn, ka, kk, sq and hu (its odds wording), da's literal
+  "Latin hypercube" term, the input and output words of ru, sv, nb, ka and kk, and in sr and
+  sr-latn the new rows are Ekavian beside older rows that are partly Ijekavian.
 - The row for a closed model whose entities are stuck (issue #235: "The entities going round
   the closed model are stuck…") was machine-drafted from the plain meaning of the English, with
   each catalog's own words for entity, model and run, and its phrasing of "of {came} created or
@@ -826,6 +839,15 @@ fields (`“Service time”`) are named in the messages by their own rows.
   closed loop…") in zh-hans, zh-hant, ja, ko, th, vi, lo, hi, bn, ta, te, ka, kk, tr and id
   only. Not checked against any other source, and not reviewed by native speakers; the least
   certain are lo, th, ta, te, bn, ka, kk, hi and sq.
+- The rows added after review of the Monte Carlo window (why an interval is withheld when every
+  batch gave the same share, the name-already-taken message, the line saying how many trials or
+  batches a ± is across) and the reworded Latin hypercube help text were machine-drafted with
+  Claude Code from the plain meaning of the English, reusing each catalog's own words for
+  interval, batch, trial, input, output and Latin hypercube sampling (from its "No interval: too
+  few batches of trials for one." and "New input" rows, and the help text's earlier translation
+  for the batch sentence). "Equally likely strata" is the least certain term. Not checked against
+  any other source, and not reviewed by native speakers; the least certain are lo, th, ta, te,
+  bn, ka, kk, hi and sq.
 - The rows for four more examples (a polling place, a mass vaccination hub, Penny Fab and a
   prison population: their titles, one-line descriptions, questions and what they teach) and
   the "Public services" industry were machine-drafted with Claude Code from the plain meaning of

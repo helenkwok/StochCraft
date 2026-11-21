@@ -1226,3 +1226,84 @@ unit	yr	yıl
 	Entities inside at the start are given for a block that does not exist. Remove them.	Başlangıçta içerideki varlıklar var olmayan bir blok için verilmiş. Onları kaldırın.
 	{block} cannot have entities inside at the start: only a task or a batch can. Remove its “Inside at the start”.	{block} bloğunda başlangıçta varlık olamaz: yalnızca bir görev ya da parti olabilir. Bloğun "Başlangıçta içeride" değerini kaldırın.
 	{block} has {count} entities inside at the start, but it holds at most {most}, its units and its waiting room. Set “Inside at the start” to {most} or fewer, or make the waiting room larger.	{block} bloğunda başlangıçta {count} varlık var, ama en çok {most} alır, birimleri ve bekleme alanı. "Başlangıçta içeride" değerini {most} ya da daha az yapın veya bekleme alanını büyütün.
+# Monte Carlo models in the window (ROADMAP M4.1, part 2)
+	95% interval of the chance: {lo} to {hi}.	Olasılığın %95 aralığı: {lo} ile {hi} arası.
+	A Monte Carlo model: uncertain durations, day rate and materials, and the chance the cost or the duration runs over.	Bir Monte Carlo modeli: belirsiz süreler, günlük ücret ve malzemeler ile maliyetin veya sürenin aşılma olasılığı.
+	A calculation with uncertain inputs, not a process: each trial draws every input once and works out every output from them.	Süreç değil, belirsiz girdilerle bir hesaplama: her deneme her girdiden bir kez çeker ve tüm çıktıları bunlardan hesaplar.
+	A rank correlation between two inputs, from -1 to 1: above 0 they tend to be high together, below 0 one tends to be high when the other is low. Inputs not paired here are independent; 0 removes a pair.	İki girdi arasında -1 ile 1 arasında bir sıralama korelasyonu: 0'ın üzerinde ikisi birlikte yüksek olma eğilimindedir, 0'ın altında biri yüksekken diğeri düşük olma eğilimindedir. Burada eşleştirilmeyen girdiler bağımsızdır; 0 bir çifti kaldırır.
+	A {percent} chance that {output} is less than {value}.	{output} değerinin {value} değerinden küçük olma olasılığı {percent}.
+	A {percent} chance that {output} is more than {value}.	{output} değerinin {value} değerinden büyük olma olasılığı {percent}.
+	About a 1 in {odds} chance that {output} is less than {value} ({percent}).	{output} değerinin {value} değerinden küçük olma olasılığı yaklaşık 1/{odds} ({percent}).
+	About a 1 in {odds} chance that {output} is more than {value} ({percent}).	{output} değerinin {value} değerinden büyük olma olasılığı yaklaşık 1/{odds} ({percent}).
+	Add correlation	Korelasyon ekle
+	Add input	Girdi ekle
+	Add output	Çıktı ekle
+	At most, trials	En çok, deneme
+	Correlations	Korelasyonlar
+	Download inputs (CSV)	Girdileri indir (CSV)
+	Each input is a distribution: every trial draws one value from it.	Her girdi bir dağılımdır: her deneme ondan bir değer çeker.
+	Each output is worked out in every trial from the inputs and the outputs above it, each named as $name: for example $labour * $rate + $materials. Give it a target to see the chance of meeting it.	Her çıktı, her denemede girdilerden ve üstündeki çıktılardan hesaplanır; her biri $name olarak adlandırılır: örneğin $labour * $rate + $materials. Karşılanma olasılığını görmek için ona bir hedef verin.
+	Export inputs (CSV)	Girdileri dışa aktar (CSV)
+	First input	Birinci girdi
+	How many trials	Kaç deneme
+	How many trials gave each value	Her değeri kaç denemenin verdiği
+	Import inputs	Girdileri içe aktar
+	In 9 trials out of 10, {output} is between {low} and {high}; the mean is {mean} ± {half_width}.	10 denemenin 9'unda {output}, {low} ile {high} arasındadır; ortalama {mean} ± {half_width}.
+	In 9 trials out of 10, {output} is between {low} and {high}; the mean is {mean}.	10 denemenin 9'unda {output}, {low} ile {high} arasındadır; ortalama {mean}.
+	Inputs	Girdiler
+	Inputs as a table	Tablo olarak girdiler
+	Latin hypercube	Latin hiperküp
+	Latin hypercube sampling	Latin hiperküp örneklemesi
+	Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000.	Latin hiperküp örneklemesi her girdinin aralığını eşit olasılıklı katmanlara böler ve her birinden bir kez çeker; bu da sonuçları genellikle daha kesin yapar. Bununla veya korelasyonlu girdilerle denemeler 1.000'lik tam partiler halinde çalışır.
+	Monte Carlo model	Monte Carlo modeli
+	New Monte Carlo Model	Yeni Monte Carlo modeli
+	New Monte Carlo model	Yeni Monte Carlo modeli
+	New correlation	Yeni korelasyon
+	New input	Yeni girdi
+	New output	Yeni çıktı
+	No inputs yet: add one below, or paste a table of them.	Henüz girdi yok: aşağıdan bir tane ekleyin veya girdilerin bir tablosunu yapıştırın.
+	No interval: too few batches of trials for one.	Aralık yok: bunun için deneme partisi çok az.
+	No interval: every batch gave the same share, so their spread gives none.	Aralık yok: tüm partiler aynı payı verdi, bu yüzden dağılımları bir aralık vermez.
+	There is already an input or an output called {name}.	{name} adında bir girdi veya çıktı zaten var.
+	{name}: the ± is across {n} of the {of} batches, the rest had no trial with a number.	{name}: ± {of} partiden {n} tanesine dayanır; geri kalanında sayı veren deneme yoktu.
+	{name}: the ± is across {n} of the {of} trials, the rest gave no number.	{name}: ± {of} denemeden {n} tanesine dayanır; geri kalanı sayı vermedi.
+	No outputs yet: add one below.	Henüz çıktı yok: aşağıdan bir tane ekleyin.
+	None yet	Henüz yok
+	One input per line, as name, distribution, parameters and unit, copied from a spreadsheet or written as CSV: for example labour,triangular,min=80;mode=100;max=150,h.	Her satırda bir girdi; ad, dağılım, parametreler ve birim olarak, bir elektronik tablodan kopyalanmış veya CSV olarak yazılmış: örneğin labour,triangular,min=80;mode=100;max=150,h.
+	Outputs	Çıktılar
+	Paste inputs from a table	Girdileri bir tablodan yapıştır
+	Project budget	Proje bütçesi
+	Rank correlation	Sıralama korelasyonu
+	Remove the correlation of {a} and {b}	{a} ile {b} arasındaki korelasyonu kaldır
+	Remove the input {name}	{name} girdisini kaldır
+	Remove the output {name}	{name} çıktısını kaldır
+	Replace every input	Tüm girdileri değiştir
+	Sampling	Örnekleme
+	Second input	İkinci girdi
+	Share of trials at or below each value	Her değerde veya altında kalan denemelerin oranı
+	Target {value}	Hedef {value}
+	The chance is under {hi}, with 95% confidence.	Olasılık %95 güvenle {hi} değerinin altındadır.
+	The model: its inputs, outputs and trials	Model: girdileri, çıktıları ve denemeleri
+	The number of trials was chosen from the results, so an interval may cover the true value less often than 95% of the time.	Deneme sayısı sonuçlara göre seçildi, bu nedenle bir aralık gerçek değeri zamanın %95'inden daha az kapsayabilir.
+	The trials above come first; more follow in batches until every output's mean is within that share of itself, or the most is reached.	Yukarıdaki denemeler önce yapılır; ardından her çıktının ortalaması kendisinin o oranı içine girene veya en çok sayıya ulaşılana kadar partiler halinde daha fazlası gelir.
+	Trials and sampling	Denemeler ve örnekleme
+	Uncertain inputs instead of single guesses: the chance of an overrun, not one total.	Tek tahminler yerine belirsiz girdiler: tek bir toplam değil, aşım olasılığı.
+	Will the project come in under budget?	Proje bütçenin altında kalacak mı?
+	a name, such as cost	bir ad, örneğin maliyet
+	a name, such as labour	bir ad, örneğin işçilik
+	random sampling	rastgele örnekleme
+	{asked} trials were asked for; with Latin hypercube sampling or correlated inputs a run is whole batches of {size}, so {n} ran.	{asked} deneme istendi; Latin hiperküp örneklemesi veya korelasyonlu girdilerle bir çalıştırma {size} denemelik tam partilerden oluşur, bu yüzden {n} deneme yapıldı.
+	{a} and {b}: {achieved} in the trials, {target} asked for	{a} ve {b}: denemelerde {achieved}, istenen {target}
+	{output} was less than {value} in none of the {n} trials.	{output}, {n} denemenin hiçbirinde {value} değerinden küçük olmadı.
+	{output} was more than {value} in none of the {n} trials.	{output}, {n} denemenin hiçbirinde {value} değerinden büyük olmadı.
+@plural	Each ± is the half-width of the 95% interval of the mean across {n} independent batch of {size} trials. Latin hypercube sampling and correlated inputs make the trials within a batch depend on each other, so each batch counts as one.|Each ± is the half-width of the 95% interval of the mean across {n} independent batches of {size} trials. Latin hypercube sampling and correlated inputs make the trials within a batch depend on each other, so each batch counts as one.	Her ±, {size} denemelik {n} bağımsız parti üzerinden ortalamanın %95 aralığının yarı genişliğidir. Latin hiperküp örneklemesi ve korelasyonlu girdiler bir partideki denemeleri birbirine bağımlı kılar, bu yüzden her parti bir sayılır.|Her ±, {size} denemelik {n} bağımsız parti üzerinden ortalamanın %95 aralığının yarı genişliğidir. Latin hiperküp örneklemesi ve korelasyonlu girdiler bir partideki denemeleri birbirine bağımlı kılar, bu yüzden her parti bir sayılır.
+@plural	Each ± is the half-width of the 95% interval of the mean across {n} independent trial.|Each ± is the half-width of the 95% interval of the mean across {n} independent trials.	Her ±, {n} bağımsız deneme üzerinden ortalamanın %95 aralığının yarı genişliğidir.|Her ±, {n} bağımsız deneme üzerinden ortalamanın %95 aralığının yarı genişliğidir.
+@plural	Finished {n} trial|Finished {n} trials	{n} deneme tamamlandı|{n} deneme tamamlandı
+@plural	Imported {n} input|Imported {n} inputs	{n} girdi içe aktarıldı|{n} girdi içe aktarıldı
+@plural	Makes {n} trial from seed {seed}: each draws every input once and works out every output.|Makes {n} trials from seed {seed}: each draws every input once and works out every output.	{seed} rastgelelik tohumundan {n} deneme yapar: her deneme her girdiden bir kez çeker ve tüm çıktıları hesaplar.|{seed} rastgelelik tohumundan {n} deneme yapar: her deneme her girdiden bir kez çeker ve tüm çıktıları hesaplar.
+@plural	Stopped after {n} trial: every output's mean is within ±{share} of itself.|Stopped after {n} trials: every output's mean is within ±{share} of itself.	{n} denemeden sonra durduruldu: her çıktının ortalaması kendisinin ±{share} kadarı içinde.|{n} denemeden sonra durduruldu: her çıktının ortalaması kendisinin ±{share} kadarı içinde.
+@plural	Stopped at the most allowed, {n} trial, before every output's mean was within ±{share} of itself.|Stopped at the most allowed, {n} trials, before every output's mean was within ±{share} of itself.	İzin verilen en çok sayıda, {n} denemede, her çıktının ortalaması kendisinin ±{share} kadarı içine girmeden durduruldu.|İzin verilen en çok sayıda, {n} denemede, her çıktının ortalaması kendisinin ±{share} kadarı içine girmeden durduruldu.
+@plural	{done} of {n} trial made|{done} of {n} trials made	{done}/{n} deneme yapıldı|{done}/{n} deneme yapıldı
+@plural	{n} trial gave no number (a division by zero, say) and is left out.|{n} trials gave no number (a division by zero, say) and are left out.	{n} deneme sayı vermedi (örneğin sıfıra bölme) ve dışarıda bırakıldı.|{n} deneme sayı vermedi (örneğin sıfıra bölme) ve dışarıda bırakıldı.
+@plural	{n} trial · seed {seed} · {sampling}|{n} trials · seed {seed} · {sampling}	{n} deneme · tohum {seed} · {sampling}|{n} deneme · tohum {seed} · {sampling}
+@plural	{n} trial · seed {seed}|{n} trials · seed {seed}	{n} deneme · tohum {seed}|{n} deneme · tohum {seed}

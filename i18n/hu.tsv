@@ -1226,3 +1226,84 @@ unit	yr	év
 	Entities inside at the start are given for a block that does not exist. Remove them.	Az induláskor bent lévő entitások egy nem létező blokkhoz vannak megadva. Törölje őket.
 	{block} cannot have entities inside at the start: only a task or a batch can. Remove its “Inside at the start”.	A(z) {block} blokkban induláskor nem lehetnek entitások: csak feladatban vagy kötegben lehetnek. Törölje a „Bent az induláskor” értékét.
 	{block} has {count} entities inside at the start, but it holds at most {most}, its units and its waiting room. Set “Inside at the start” to {most} or fewer, or make the waiting room larger.	A(z) {block} blokkban induláskor {count} entitás van bent, de legfeljebb {most} fér el benne, az egységei és a várakozóhelye. Állítsa a „Bent az induláskor” értéket {most} vagy kevesebb értékre, vagy növelje a várakozóhelyet.
+# Monte Carlo models in the window (ROADMAP M4.1, part 2)
+	95% interval of the chance: {lo} to {hi}.	A valószínűség 95%-os intervalluma: {lo}–{hi}.
+	A Monte Carlo model: uncertain durations, day rate and materials, and the chance the cost or the duration runs over.	Monte-Carlo-modell: bizonytalan időtartamok, napidíj és anyagköltség, valamint annak valószínűsége, hogy a költség vagy az időtartam túllépi a tervezettet.
+	A calculation with uncertain inputs, not a process: each trial draws every input once and works out every output from them.	Számítás bizonytalan bemenetekkel, nem folyamat: minden próba minden bemenetből egyszer húz, és ezekből kiszámítja az összes kimenetet.
+	A rank correlation between two inputs, from -1 to 1: above 0 they tend to be high together, below 0 one tends to be high when the other is low. Inputs not paired here are independent; 0 removes a pair.	Két bemenet közötti rangkorreláció, -1 és 1 között: 0 fölött hajlamosak egyszerre magasak lenni, 0 alatt az egyik hajlamos magas lenni, amikor a másik alacsony. Az itt párba nem állított bemenetek függetlenek; a 0 eltávolít egy párt.
+	A {percent} chance that {output} is less than {value}.	{percent} a valószínűsége, hogy {output} kisebb, mint {value}.
+	A {percent} chance that {output} is more than {value}.	{percent} a valószínűsége, hogy {output} nagyobb, mint {value}.
+	About a 1 in {odds} chance that {output} is less than {value} ({percent}).	Nagyjából 1 a(z) {odds}-hoz az esélye, hogy {output} kisebb, mint {value} ({percent}).
+	About a 1 in {odds} chance that {output} is more than {value} ({percent}).	Nagyjából 1 a(z) {odds}-hoz az esélye, hogy {output} nagyobb, mint {value} ({percent}).
+	Add correlation	Korreláció hozzáadása
+	Add input	Bemenet hozzáadása
+	Add output	Kimenet hozzáadása
+	At most, trials	Legfeljebb, próba
+	Correlations	Korrelációk
+	Download inputs (CSV)	Bemenetek letöltése (CSV)
+	Each input is a distribution: every trial draws one value from it.	Minden bemenet egy eloszlás: minden próba egy értéket húz belőle.
+	Each output is worked out in every trial from the inputs and the outputs above it, each named as $name: for example $labour * $rate + $materials. Give it a target to see the chance of meeting it.	Minden kimenetet minden próbában a bemenetekből és a fölötte lévő kimenetekből számít ki, mindegyikre $name formában hivatkozva: például $labour * $rate + $materials. Adjon meg hozzá célt, hogy lássa, mekkora eséllyel teljesül.
+	Export inputs (CSV)	Bemenetek exportálása (CSV)
+	First input	Első bemenet
+	How many trials	Hány próba
+	How many trials gave each value	Hány próba adta az egyes értékeket
+	Import inputs	Bemenetek importálása
+	In 9 trials out of 10, {output} is between {low} and {high}; the mean is {mean} ± {half_width}.	10 próbából 9-ben {output} {low} és {high} között van; az átlag {mean} ± {half_width}.
+	In 9 trials out of 10, {output} is between {low} and {high}; the mean is {mean}.	10 próbából 9-ben {output} {low} és {high} között van; az átlag {mean}.
+	Inputs	Bemenetek
+	Inputs as a table	Bemenetek táblázatként
+	Latin hypercube	Latin hiperkocka
+	Latin hypercube sampling	Latin hiperkocka-mintavétel
+	Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000.	A latin hiperkocka-mintavétel minden bemenet tartományát egyformán valószínű rétegekre bontja, és mindegyikből egyszer húz, ami általában pontosabbá teszi az eredményeket. Ezzel vagy korrelált bemenetekkel a próbák 1000-es teljes kötegekben futnak.
+	Monte Carlo model	Monte-Carlo-modell
+	New Monte Carlo Model	Új Monte-Carlo-modell
+	New Monte Carlo model	Új Monte-Carlo-modell
+	New correlation	Új korreláció
+	New input	Új bemenet
+	New output	Új kimenet
+	No inputs yet: add one below, or paste a table of them.	Még nincs bemenet: adjon hozzá egyet lent, vagy illessze be őket táblázatból.
+	No interval: too few batches of trials for one.	Nincs intervallum: túl kevés próbaköteg van hozzá.
+	No interval: every batch gave the same share, so their spread gives none.	Nincs intervallum: minden köteg ugyanazt az arányt adta, így a szórásuk nem ad intervallumot.
+	There is already an input or an output called {name}.	Már van {name} nevű bemenet vagy kimenet.
+	{name}: the ± is across {n} of the {of} batches, the rest had no trial with a number.	{name}: a ± {of} kötegből {n}-en alapul; a többiben nem volt számot adó próba.
+	{name}: the ± is across {n} of the {of} trials, the rest gave no number.	{name}: a ± {of} próbából {n}-en alapul; a többi nem adott számot.
+	No outputs yet: add one below.	Még nincs kimenet: adjon hozzá egyet lent.
+	None yet	Még nincs
+	One input per line, as name, distribution, parameters and unit, copied from a spreadsheet or written as CSV: for example labour,triangular,min=80;mode=100;max=150,h.	Soronként egy bemenet, név, eloszlás, paraméterek és mértékegység formában, táblázatkezelőből másolva vagy CSV-ként írva: például labour,triangular,min=80;mode=100;max=150,h.
+	Outputs	Kimenetek
+	Paste inputs from a table	Bemenetek beillesztése táblázatból
+	Project budget	Projektköltségvetés
+	Rank correlation	Rangkorreláció
+	Remove the correlation of {a} and {b}	{a} és {b} korrelációjának eltávolítása
+	Remove the input {name}	A(z) {name} bemenet eltávolítása
+	Remove the output {name}	A(z) {name} kimenet eltávolítása
+	Replace every input	Az összes bemenet cseréje
+	Sampling	Mintavétel
+	Second input	Második bemenet
+	Share of trials at or below each value	Az egyes értékeknél nem nagyobb próbák aránya
+	Target {value}	Cél: {value}
+	The chance is under {hi}, with 95% confidence.	A valószínűség 95%-os megbízhatósággal kisebb, mint {hi}.
+	The model: its inputs, outputs and trials	A modell: bemenetei, kimenetei és próbái
+	The number of trials was chosen from the results, so an interval may cover the true value less often than 95% of the time.	A próbák számát az eredmények alapján választotta ki, így egy intervallum a 95%-nál ritkábban tartalmazhatja a valódi értéket.
+	The trials above come first; more follow in batches until every output's mean is within that share of itself, or the most is reached.	Először a fenti próbák futnak; utána továbbiak jönnek kötegekben, amíg minden kimenet átlaga saját magának ezen az arányán belül nem lesz, vagy el nem éri a legtöbbet.
+	Trials and sampling	Próbák és mintavétel
+	Uncertain inputs instead of single guesses: the chance of an overrun, not one total.	Bizonytalan bemenetek egyetlen becslés helyett: a túllépés valószínűsége, nem egyetlen végösszeg.
+	Will the project come in under budget?	Belefér a projekt a költségvetésbe?
+	a name, such as cost	egy név, például költség
+	a name, such as labour	egy név, például munkadíj
+	random sampling	véletlen mintavétel
+	{asked} trials were asked for; with Latin hypercube sampling or correlated inputs a run is whole batches of {size}, so {n} ran.	{asked} próbát kért; latin hiperkocka-mintavétellel vagy korrelált bemenetekkel a próbák {size} darabos teljes kötegekben futnak, így {n} futott le.
+	{a} and {b}: {achieved} in the trials, {target} asked for	{a} és {b}: {achieved} a próbákban, kért érték: {target}
+	{output} was less than {value} in none of the {n} trials.	{output} a(z) {n} próba egyikében sem volt kisebb, mint {value}.
+	{output} was more than {value} in none of the {n} trials.	{output} a(z) {n} próba egyikében sem volt nagyobb, mint {value}.
+@plural	Each ± is the half-width of the 95% interval of the mean across {n} independent batch of {size} trials. Latin hypercube sampling and correlated inputs make the trials within a batch depend on each other, so each batch counts as one.|Each ± is the half-width of the 95% interval of the mean across {n} independent batches of {size} trials. Latin hypercube sampling and correlated inputs make the trials within a batch depend on each other, so each batch counts as one.	Minden ± az átlag 95%-os intervallumának fél szélessége {n} független, {size} próbás köteg alapján. A latin hiperkocka-mintavétel és a korrelált bemenetek miatt egy kötegen belül a próbák függnek egymástól, ezért minden köteg egynek számít.|Minden ± az átlag 95%-os intervallumának fél szélessége {n} független, {size} próbás köteg alapján. A latin hiperkocka-mintavétel és a korrelált bemenetek miatt egy kötegen belül a próbák függnek egymástól, ezért minden köteg egynek számít.
+@plural	Each ± is the half-width of the 95% interval of the mean across {n} independent trial.|Each ± is the half-width of the 95% interval of the mean across {n} independent trials.	Minden ± az átlag 95%-os intervallumának fél szélessége {n} független próba alapján.|Minden ± az átlag 95%-os intervallumának fél szélessége {n} független próba alapján.
+@plural	Finished {n} trial|Finished {n} trials	{n} próba befejezve|{n} próba befejezve
+@plural	Imported {n} input|Imported {n} inputs	{n} bemenet importálva|{n} bemenet importálva
+@plural	Makes {n} trial from seed {seed}: each draws every input once and works out every output.|Makes {n} trials from seed {seed}: each draws every input once and works out every output.	{n} próbát végez a(z) {seed} magból: mindegyik minden bemenetből egyszer húz, és kiszámítja az összes kimenetet.|{n} próbát végez a(z) {seed} magból: mindegyik minden bemenetből egyszer húz, és kiszámítja az összes kimenetet.
+@plural	Stopped after {n} trial: every output's mean is within ±{share} of itself.|Stopped after {n} trials: every output's mean is within ±{share} of itself.	Leállt {n} próba után: minden kimenet átlaga saját maga ±{share} határán belül van.|Leállt {n} próba után: minden kimenet átlaga saját maga ±{share} határán belül van.
+@plural	Stopped at the most allowed, {n} trial, before every output's mean was within ±{share} of itself.|Stopped at the most allowed, {n} trials, before every output's mean was within ±{share} of itself.	Leállt a megengedett legtöbbnél, {n} próbánál, mielőtt minden kimenet átlaga saját maga ±{share} határán belülre került volna.|Leállt a megengedett legtöbbnél, {n} próbánál, mielőtt minden kimenet átlaga saját maga ±{share} határán belülre került volna.
+@plural	{done} of {n} trial made|{done} of {n} trials made	{done} / {n} próba kész|{done} / {n} próba kész
+@plural	{n} trial gave no number (a division by zero, say) and is left out.|{n} trials gave no number (a division by zero, say) and are left out.	{n} próba nem adott számot (például nullával való osztás miatt), ezért kimarad.|{n} próba nem adott számot (például nullával való osztás miatt), ezért kimarad.
+@plural	{n} trial · seed {seed} · {sampling}|{n} trials · seed {seed} · {sampling}	{n} próba · mag: {seed} · {sampling}|{n} próba · mag: {seed} · {sampling}
+@plural	{n} trial · seed {seed}|{n} trials · seed {seed}	{n} próba · mag: {seed}|{n} próba · mag: {seed}

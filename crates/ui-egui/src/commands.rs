@@ -18,6 +18,7 @@ use crate::i18n::{t, td, tf};
 use crate::{App, EXAMPLES, Replace, ThemeChoice};
 
 pub const NEW: &str = "file.new";
+pub const NEW_MONTE_CARLO: &str = "file.new_monte_carlo";
 pub const OPEN: &str = "file.open";
 pub const OPEN_EXAMPLE: &str = "file.open_example";
 pub const OPEN_RECENT: &str = "file.open_recent";
@@ -152,6 +153,7 @@ impl App {
             t("File"),
             vec![
                 item(NEW, "New"),
+                item(NEW_MONTE_CARLO, "New Monte Carlo Model"),
                 item(OPEN, "Open…"),
                 Node::submenu(t("Open Recent"), recent)
                     .platforms(Platforms::ALL.without(Platforms::WEB)),
@@ -317,7 +319,7 @@ impl App {
         match command.id.as_str() {
             UNDO => can_undo,
             REDO => can_redo,
-            RUN => !running && !self.engine.model().elements.is_empty(),
+            RUN => !running && (!self.engine.model().elements.is_empty() || self.is_monte_carlo()),
             CANCEL_RUN => running,
             WATCH => !running && !self.is_watching() && !self.engine.model().elements.is_empty(),
             STOP_WATCHING | STEP_WATCHING | RESET_WATCHING | HALVE_SPEED | DOUBLE_SPEED => {
@@ -366,6 +368,7 @@ impl App {
         };
         match command.id.as_str() {
             NEW => self.replace(Replace::New),
+            NEW_MONTE_CARLO => self.replace(Replace::NewMonteCarlo),
             OPEN => self.replace(Replace::Open),
             OPEN_EXAMPLE => {
                 if let Some(i) = index() {

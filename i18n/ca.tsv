@@ -1226,3 +1226,84 @@ unit	yr	a
 	Entities inside at the start are given for a block that does not exist. Remove them.	S'han indicat entitats a dins a l'inici per a un bloc que no existeix. Elimineu-les.
 	{block} cannot have entities inside at the start: only a task or a batch can. Remove its “Inside at the start”.	{block} no pot tenir entitats a dins a l'inici: només una tasca o un lot poden. Elimineu-ne «A dins a l'inici».
 	{block} has {count} entities inside at the start, but it holds at most {most}, its units and its waiting room. Set “Inside at the start” to {most} or fewer, or make the waiting room larger.	{block} té {count} entitats a dins a l'inici, però en pot contenir com a màxim {most}, les seves unitats i la sala d'espera. Poseu «A dins a l'inici» a {most} o menys, o feu més gran la sala d'espera.
+# Monte Carlo models in the window (ROADMAP M4.1, part 2)
+	95% interval of the chance: {lo} to {hi}.	Interval del 95% de la probabilitat: de {lo} a {hi}.
+	A Monte Carlo model: uncertain durations, day rate and materials, and the chance the cost or the duration runs over.	Un model de Montecarlo: durades incertes, tarifa diària i materials, i la probabilitat que el cost o la durada se superin.
+	A calculation with uncertain inputs, not a process: each trial draws every input once and works out every output from them.	Un càlcul amb entrades incertes, no un procés: cada assaig extreu un cop cada entrada i en calcula cada sortida.
+	A rank correlation between two inputs, from -1 to 1: above 0 they tend to be high together, below 0 one tends to be high when the other is low. Inputs not paired here are independent; 0 removes a pair.	Una correlació de rangs entre dues entrades, de -1 a 1: per sobre de 0 tendeixen a ser altes alhora; per sota de 0, una tendeix a ser alta quan l'altra és baixa. Les entrades no aparellades aquí són independents; 0 elimina un parell.
+	A {percent} chance that {output} is less than {value}.	Una probabilitat del {percent} que {output} sigui menor que {value}.
+	A {percent} chance that {output} is more than {value}.	Una probabilitat del {percent} que {output} sigui més gran que {value}.
+	About a 1 in {odds} chance that {output} is less than {value} ({percent}).	Aproximadament 1 probabilitat entre {odds} que {output} sigui menor que {value} ({percent}).
+	About a 1 in {odds} chance that {output} is more than {value} ({percent}).	Aproximadament 1 probabilitat entre {odds} que {output} sigui més gran que {value} ({percent}).
+	Add correlation	Afegeix una correlació
+	Add input	Afegeix una entrada
+	Add output	Afegeix una sortida
+	At most, trials	Màxim d'assajos
+	Correlations	Correlacions
+	Download inputs (CSV)	Baixa les entrades (CSV)
+	Each input is a distribution: every trial draws one value from it.	Cada entrada és una distribució: cada assaig n'extreu un valor.
+	Each output is worked out in every trial from the inputs and the outputs above it, each named as $name: for example $labour * $rate + $materials. Give it a target to see the chance of meeting it.	Cada sortida es calcula en cada assaig a partir de les entrades i de les sortides que té a sobre, cadascuna anomenada $name: per exemple $labour * $rate + $materials. Doneu-li un objectiu per veure la probabilitat de complir-lo.
+	Export inputs (CSV)	Exporta les entrades (CSV)
+	First input	Primera entrada
+	How many trials	Quants assajos
+	How many trials gave each value	Quants assajos han donat cada valor
+	Import inputs	Importa entrades
+	In 9 trials out of 10, {output} is between {low} and {high}; the mean is {mean} ± {half_width}.	En 9 de cada 10 assajos, {output} és entre {low} i {high}; la mitjana és {mean} ± {half_width}.
+	In 9 trials out of 10, {output} is between {low} and {high}; the mean is {mean}.	En 9 de cada 10 assajos, {output} és entre {low} i {high}; la mitjana és {mean}.
+	Inputs	Entrades
+	Inputs as a table	Entrades com a taula
+	Latin hypercube	Hipercub llatí
+	Latin hypercube sampling	Mostreig per hipercub llatí
+	Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000.	El mostreig per hipercub llatí talla l'interval de cada entrada en estrats igualment probables i n'extreu un valor de cadascun, cosa que sol fer els resultats més precisos. Amb aquest mostreig, o amb entrades correlacionades, els assajos s'executen en lots sencers de 1.000.
+	Monte Carlo model	Model de Montecarlo
+	New Monte Carlo Model	Model de Montecarlo nou
+	New Monte Carlo model	Model de Montecarlo nou
+	New correlation	Correlació nova
+	New input	Entrada nova
+	New output	Sortida nova
+	No inputs yet: add one below, or paste a table of them.	Encara no hi ha entrades: afegiu-ne una a sota o enganxeu-ne una taula.
+	No interval: too few batches of trials for one.	Sense interval: hi ha massa pocs lots d'assajos per calcular-lo.
+	No interval: every batch gave the same share, so their spread gives none.	Sense interval: tots els lots han donat la mateixa proporció, de manera que la seva dispersió no en dona cap.
+	There is already an input or an output called {name}.	Ja hi ha una entrada o una sortida anomenada {name}.
+	{name}: the ± is across {n} of the {of} batches, the rest had no trial with a number.	{name}: el ± es calcula a partir de {n} de {of} lots; la resta no tenien cap assaig amb un nombre.
+	{name}: the ± is across {n} of the {of} trials, the rest gave no number.	{name}: el ± es calcula a partir de {n} de {of} assajos; la resta no han donat cap nombre.
+	No outputs yet: add one below.	Encara no hi ha sortides: afegiu-ne una a sota.
+	None yet	Encara cap
+	One input per line, as name, distribution, parameters and unit, copied from a spreadsheet or written as CSV: for example labour,triangular,min=80;mode=100;max=150,h.	Una entrada per línia, com a nom, distribució, paràmetres i unitat, copiada d'un full de càlcul o escrita com a CSV: per exemple labour,triangular,min=80;mode=100;max=150,h.
+	Outputs	Sortides
+	Paste inputs from a table	Enganxa entrades des d'una taula
+	Project budget	Pressupost del projecte
+	Rank correlation	Correlació de rangs
+	Remove the correlation of {a} and {b}	Elimina la correlació de {a} i {b}
+	Remove the input {name}	Elimina l'entrada {name}
+	Remove the output {name}	Elimina la sortida {name}
+	Replace every input	Substitueix totes les entrades
+	Sampling	Mostreig
+	Second input	Segona entrada
+	Share of trials at or below each value	Proporció d'assajos iguals o inferiors a cada valor
+	Target {value}	Objectiu {value}
+	The chance is under {hi}, with 95% confidence.	La probabilitat és inferior a {hi}, amb un 95% de confiança.
+	The model: its inputs, outputs and trials	El model: les seves entrades, sortides i assajos
+	The number of trials was chosen from the results, so an interval may cover the true value less often than 95% of the time.	El nombre d'assajos s'ha triat a partir dels resultats, de manera que un interval pot cobrir el valor real menys sovint que el 95% de les vegades.
+	The trials above come first; more follow in batches until every output's mean is within that share of itself, or the most is reached.	Primer es fan els assajos indicats a dalt; després en segueixen més per lots fins que la mitjana de cada sortida és dins d'aquesta proporció d'ella mateixa, o s'arriba al màxim.
+	Trials and sampling	Assajos i mostreig
+	Uncertain inputs instead of single guesses: the chance of an overrun, not one total.	Entrades incertes en lloc d'estimacions úniques: la probabilitat d'un sobrecost, no un sol total.
+	Will the project come in under budget?	El projecte es mantindrà dins del pressupost?
+	a name, such as cost	un nom, com ara cost
+	a name, such as labour	un nom, com ara treball
+	random sampling	mostreig aleatori
+	{asked} trials were asked for; with Latin hypercube sampling or correlated inputs a run is whole batches of {size}, so {n} ran.	S'han demanat {asked} assajos; amb mostreig per hipercub llatí o entrades correlacionades, una execució consta de lots sencers de {size}, així que se n'han fet {n}.
+	{a} and {b}: {achieved} in the trials, {target} asked for	{a} i {b}: {achieved} en els assajos, {target} demanat
+	{output} was less than {value} in none of the {n} trials.	{output} no ha estat menor que {value} en cap dels {n} assajos.
+	{output} was more than {value} in none of the {n} trials.	{output} no ha estat més gran que {value} en cap dels {n} assajos.
+@plural	Each ± is the half-width of the 95% interval of the mean across {n} independent batch of {size} trials. Latin hypercube sampling and correlated inputs make the trials within a batch depend on each other, so each batch counts as one.|Each ± is the half-width of the 95% interval of the mean across {n} independent batches of {size} trials. Latin hypercube sampling and correlated inputs make the trials within a batch depend on each other, so each batch counts as one.	Cada ± és la semiamplitud de l'interval del 95% de la mitjana sobre {n} lot independent de {size} assajos. El mostreig per hipercub llatí i les entrades correlacionades fan que els assajos d'un lot depenguin entre si, de manera que cada lot compta com un.|Cada ± és la semiamplitud de l'interval del 95% de la mitjana sobre {n} lots independents de {size} assajos. El mostreig per hipercub llatí i les entrades correlacionades fan que els assajos d'un lot depenguin entre si, de manera que cada lot compta com un.
+@plural	Each ± is the half-width of the 95% interval of the mean across {n} independent trial.|Each ± is the half-width of the 95% interval of the mean across {n} independent trials.	Cada ± és la semiamplitud de l'interval del 95% de la mitjana sobre {n} assaig independent.|Cada ± és la semiamplitud de l'interval del 95% de la mitjana sobre {n} assajos independents.
+@plural	Finished {n} trial|Finished {n} trials	Acabat {n} assaig|Acabats {n} assajos
+@plural	Imported {n} input|Imported {n} inputs	Importada {n} entrada|Importades {n} entrades
+@plural	Makes {n} trial from seed {seed}: each draws every input once and works out every output.|Makes {n} trials from seed {seed}: each draws every input once and works out every output.	Fa {n} assaig a partir de la llavor {seed}: extreu un cop cada entrada i calcula cada sortida.|Fa {n} assajos a partir de la llavor {seed}: cadascun extreu un cop cada entrada i calcula cada sortida.
+@plural	Stopped after {n} trial: every output's mean is within ±{share} of itself.|Stopped after {n} trials: every output's mean is within ±{share} of itself.	Aturat després d'{n} assaig: la mitjana de cada sortida és dins de ±{share} d'ella mateixa.|Aturat després de {n} assajos: la mitjana de cada sortida és dins de ±{share} d'ella mateixa.
+@plural	Stopped at the most allowed, {n} trial, before every output's mean was within ±{share} of itself.|Stopped at the most allowed, {n} trials, before every output's mean was within ±{share} of itself.	Aturat al màxim permès, {n} assaig, abans que la mitjana de cada sortida fos dins de ±{share} d'ella mateixa.|Aturat al màxim permès, {n} assajos, abans que la mitjana de cada sortida fos dins de ±{share} d'ella mateixa.
+@plural	{done} of {n} trial made|{done} of {n} trials made	{done} de {n} assaig fets|{done} de {n} assajos fets
+@plural	{n} trial gave no number (a division by zero, say) and is left out.|{n} trials gave no number (a division by zero, say) and are left out.	{n} assaig no ha donat cap nombre (una divisió per zero, per exemple) i s'omet.|{n} assajos no han donat cap nombre (una divisió per zero, per exemple) i s'ometen.
+@plural	{n} trial · seed {seed} · {sampling}|{n} trials · seed {seed} · {sampling}	{n} assaig · llavor {seed} · {sampling}|{n} assajos · llavor {seed} · {sampling}
+@plural	{n} trial · seed {seed}|{n} trials · seed {seed}	{n} assaig · llavor {seed}|{n} assajos · llavor {seed}

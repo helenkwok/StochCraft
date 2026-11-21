@@ -595,7 +595,13 @@ impl App {
         }
     }
 
-    fn problem_row(&mut self, ui: &mut egui::Ui, p: &theme::Palette, pr: &Problem, link: bool) {
+    pub(crate) fn problem_row(
+        &mut self,
+        ui: &mut egui::Ui,
+        p: &theme::Palette,
+        pr: &Problem,
+        link: bool,
+    ) {
         ui.horizontal_wrapped(|ui| {
             let (word, color) = if pr.error {
                 (t("Error"), p.error)

@@ -1226,3 +1226,84 @@ unit	yr	năm
 	Entities inside at the start are given for a block that does not exist. Remove them.	Thực thể bên trong lúc bắt đầu được đặt cho một khối không tồn tại. Hãy xóa chúng.
 	{block} cannot have entities inside at the start: only a task or a batch can. Remove its “Inside at the start”.	{block} không thể có thực thể bên trong lúc bắt đầu: chỉ tác vụ hoặc lô mới có thể. Hãy xóa “Bên trong lúc bắt đầu” của nó.
 	{block} has {count} entities inside at the start, but it holds at most {most}, its units and its waiting room. Set “Inside at the start” to {most} or fewer, or make the waiting room larger.	{block} có {count} thực thể bên trong lúc bắt đầu, nhưng chỉ chứa được tối đa {most}, gồm các đơn vị và khu vực chờ của nó. Hãy đặt “Bên trong lúc bắt đầu” thành {most} hoặc ít hơn, hoặc mở rộng khu vực chờ.
+# Monte Carlo models in the window (ROADMAP M4.1, part 2)
+	95% interval of the chance: {lo} to {hi}.	Khoảng 95% của xác suất: từ {lo} đến {hi}.
+	A Monte Carlo model: uncertain durations, day rate and materials, and the chance the cost or the duration runs over.	Một mô hình Monte Carlo: thời lượng, đơn giá theo ngày và vật tư không chắc chắn, cùng xác suất chi phí hoặc thời lượng bị vượt.
+	A calculation with uncertain inputs, not a process: each trial draws every input once and works out every output from them.	Một phép tính với các đầu vào không chắc chắn, không phải một quy trình: mỗi lần thử rút mỗi đầu vào một lần và tính mọi đầu ra từ chúng.
+	A rank correlation between two inputs, from -1 to 1: above 0 they tend to be high together, below 0 one tends to be high when the other is low. Inputs not paired here are independent; 0 removes a pair.	Tương quan hạng giữa hai đầu vào, từ -1 đến 1: trên 0 thì chúng có xu hướng cùng cao, dưới 0 thì một đầu vào có xu hướng cao khi đầu vào kia thấp. Các đầu vào không được ghép cặp ở đây là độc lập; 0 sẽ xóa một cặp.
+	A {percent} chance that {output} is less than {value}.	Xác suất {percent} rằng {output} nhỏ hơn {value}.
+	A {percent} chance that {output} is more than {value}.	Xác suất {percent} rằng {output} lớn hơn {value}.
+	About a 1 in {odds} chance that {output} is less than {value} ({percent}).	Khả năng khoảng 1 trên {odds} rằng {output} nhỏ hơn {value} ({percent}).
+	About a 1 in {odds} chance that {output} is more than {value} ({percent}).	Khả năng khoảng 1 trên {odds} rằng {output} lớn hơn {value} ({percent}).
+	Add correlation	Thêm tương quan
+	Add input	Thêm đầu vào
+	Add output	Thêm đầu ra
+	At most, trials	Tối đa, số lần thử
+	Correlations	Các tương quan
+	Download inputs (CSV)	Tải đầu vào xuống (CSV)
+	Each input is a distribution: every trial draws one value from it.	Mỗi đầu vào là một phân phối: mỗi lần thử rút một giá trị từ nó.
+	Each output is worked out in every trial from the inputs and the outputs above it, each named as $name: for example $labour * $rate + $materials. Give it a target to see the chance of meeting it.	Mỗi đầu ra được tính trong mỗi lần thử từ các đầu vào và các đầu ra phía trên nó, mỗi cái được gọi là $name: ví dụ $labour * $rate + $materials. Đặt cho nó một mục tiêu để xem xác suất đạt được.
+	Export inputs (CSV)	Xuất đầu vào (CSV)
+	First input	Đầu vào thứ nhất
+	How many trials	Số lần thử
+	How many trials gave each value	Số lần thử cho ra mỗi giá trị
+	Import inputs	Nhập đầu vào
+	In 9 trials out of 10, {output} is between {low} and {high}; the mean is {mean} ± {half_width}.	Trong 9 trên 10 lần thử, {output} nằm giữa {low} và {high}; giá trị trung bình là {mean} ± {half_width}.
+	In 9 trials out of 10, {output} is between {low} and {high}; the mean is {mean}.	Trong 9 trên 10 lần thử, {output} nằm giữa {low} và {high}; giá trị trung bình là {mean}.
+	Inputs	Đầu vào
+	Inputs as a table	Đầu vào dạng bảng
+	Latin hypercube	Siêu khối Latinh
+	Latin hypercube sampling	Lấy mẫu siêu khối Latinh
+	Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000.	Lấy mẫu siêu khối Latinh chia khoảng giá trị của mỗi đầu vào thành các tầng có xác suất bằng nhau và rút một lần từ mỗi tầng, nhờ đó kết quả thường chính xác hơn. Khi dùng nó, hoặc khi có đầu vào tương quan, các lần thử chạy theo từng đợt trọn vẹn 1.000 lần.
+	Monte Carlo model	Mô hình Monte Carlo
+	New Monte Carlo Model	Mô hình Monte Carlo mới
+	New Monte Carlo model	Mô hình Monte Carlo mới
+	New correlation	Tương quan mới
+	New input	Đầu vào mới
+	New output	Đầu ra mới
+	No inputs yet: add one below, or paste a table of them.	Chưa có đầu vào: thêm một đầu vào bên dưới, hoặc dán một bảng các đầu vào.
+	No interval: too few batches of trials for one.	Không có khoảng: quá ít đợt lần thử để tính.
+	No interval: every batch gave the same share, so their spread gives none.	Không có khoảng: mọi đợt đều cho cùng một tỷ lệ, nên độ phân tán của chúng không cho ra khoảng.
+	There is already an input or an output called {name}.	Đã có đầu vào hoặc đầu ra tên {name}.
+	{name}: the ± is across {n} of the {of} batches, the rest had no trial with a number.	{name}: ± được tính từ {n} trong {of} đợt; số còn lại không có lần thử nào cho ra số.
+	{name}: the ± is across {n} of the {of} trials, the rest gave no number.	{name}: ± được tính từ {n} trong {of} lần thử; số còn lại không cho ra số.
+	No outputs yet: add one below.	Chưa có đầu ra: thêm một đầu ra bên dưới.
+	None yet	Chưa có
+	One input per line, as name, distribution, parameters and unit, copied from a spreadsheet or written as CSV: for example labour,triangular,min=80;mode=100;max=150,h.	Mỗi dòng một đầu vào, gồm tên, phân phối, tham số và đơn vị, sao chép từ bảng tính hoặc viết dưới dạng CSV: ví dụ labour,triangular,min=80;mode=100;max=150,h.
+	Outputs	Đầu ra
+	Paste inputs from a table	Dán đầu vào từ bảng
+	Project budget	Ngân sách dự án
+	Rank correlation	Tương quan hạng
+	Remove the correlation of {a} and {b}	Xóa tương quan giữa {a} và {b}
+	Remove the input {name}	Xóa đầu vào {name}
+	Remove the output {name}	Xóa đầu ra {name}
+	Replace every input	Thay thế mọi đầu vào
+	Sampling	Lấy mẫu
+	Second input	Đầu vào thứ hai
+	Share of trials at or below each value	Tỷ lệ lần thử bằng hoặc dưới mỗi giá trị
+	Target {value}	Mục tiêu {value}
+	The chance is under {hi}, with 95% confidence.	Xác suất dưới {hi}, với độ tin cậy 95%.
+	The model: its inputs, outputs and trials	Mô hình: đầu vào, đầu ra và các lần thử
+	The number of trials was chosen from the results, so an interval may cover the true value less often than 95% of the time.	Số lần thử được chọn dựa trên kết quả, nên một khoảng có thể bao phủ giá trị thật ít hơn 95% số lần.
+	The trials above come first; more follow in batches until every output's mean is within that share of itself, or the most is reached.	Các lần thử ở trên được thực hiện trước; sau đó thêm theo từng đợt cho đến khi giá trị trung bình của mọi đầu ra nằm trong tỷ lệ đó so với chính nó, hoặc đạt mức tối đa.
+	Trials and sampling	Lần thử và lấy mẫu
+	Uncertain inputs instead of single guesses: the chance of an overrun, not one total.	Đầu vào không chắc chắn thay vì những ước đoán đơn lẻ: xác suất vượt mức, không phải một tổng duy nhất.
+	Will the project come in under budget?	Dự án có nằm trong ngân sách không?
+	a name, such as cost	một tên, ví dụ phí
+	a name, such as labour	một tên, ví dụ công
+	random sampling	lấy mẫu ngẫu nhiên
+	{asked} trials were asked for; with Latin hypercube sampling or correlated inputs a run is whole batches of {size}, so {n} ran.	Đã yêu cầu {asked} lần thử; với lấy mẫu siêu khối Latinh hoặc đầu vào tương quan, một lần chạy gồm các đợt trọn vẹn {size} lần thử, nên đã thực hiện {n} lần.
+	{a} and {b}: {achieved} in the trials, {target} asked for	{a} và {b}: {achieved} trong các lần thử, yêu cầu {target}
+	{output} was less than {value} in none of the {n} trials.	{output} không nhỏ hơn {value} trong lần thử nào trong số {n} lần thử.
+	{output} was more than {value} in none of the {n} trials.	{output} không lớn hơn {value} trong lần thử nào trong số {n} lần thử.
+@plural	Each ± is the half-width of the 95% interval of the mean across {n} independent batch of {size} trials. Latin hypercube sampling and correlated inputs make the trials within a batch depend on each other, so each batch counts as one.|Each ± is the half-width of the 95% interval of the mean across {n} independent batches of {size} trials. Latin hypercube sampling and correlated inputs make the trials within a batch depend on each other, so each batch counts as one.	Mỗi ± là một nửa độ rộng của khoảng 95% cho giá trị trung bình qua {n} đợt độc lập, mỗi đợt {size} lần thử. Lấy mẫu siêu khối Latinh và đầu vào tương quan khiến các lần thử trong một đợt phụ thuộc lẫn nhau, nên mỗi đợt được tính là một.
+@plural	Each ± is the half-width of the 95% interval of the mean across {n} independent trial.|Each ± is the half-width of the 95% interval of the mean across {n} independent trials.	Mỗi ± là một nửa độ rộng của khoảng 95% cho giá trị trung bình qua {n} lần thử độc lập.
+@plural	Finished {n} trial|Finished {n} trials	Đã hoàn thành {n} lần thử
+@plural	Imported {n} input|Imported {n} inputs	Đã nhập {n} đầu vào
+@plural	Makes {n} trial from seed {seed}: each draws every input once and works out every output.|Makes {n} trials from seed {seed}: each draws every input once and works out every output.	Thực hiện {n} lần thử từ hạt giống ngẫu nhiên {seed}: mỗi lần rút mỗi đầu vào một lần và tính mọi đầu ra.
+@plural	Stopped after {n} trial: every output's mean is within ±{share} of itself.|Stopped after {n} trials: every output's mean is within ±{share} of itself.	Đã dừng sau {n} lần thử: giá trị trung bình của mọi đầu ra đều nằm trong ±{share} của chính nó.
+@plural	Stopped at the most allowed, {n} trial, before every output's mean was within ±{share} of itself.|Stopped at the most allowed, {n} trials, before every output's mean was within ±{share} of itself.	Đã dừng ở mức tối đa cho phép, {n} lần thử, trước khi giá trị trung bình của mọi đầu ra nằm trong ±{share} của chính nó.
+@plural	{done} of {n} trial made|{done} of {n} trials made	Đã thực hiện {done} trên {n} lần thử
+@plural	{n} trial gave no number (a division by zero, say) and is left out.|{n} trials gave no number (a division by zero, say) and are left out.	{n} lần thử không cho ra số (ví dụ do chia cho 0) và bị loại ra.
+@plural	{n} trial · seed {seed} · {sampling}|{n} trials · seed {seed} · {sampling}	{n} lần thử · hạt giống {seed} · {sampling}
+@plural	{n} trial · seed {seed}|{n} trials · seed {seed}	{n} lần thử · hạt giống {seed}

@@ -13,7 +13,8 @@ use serde::{Deserialize, Serialize};
 use serde_json::{Value, json};
 use stochcraft_experiment::{Control, Experiment};
 use stochcraft_mc::{
-    BATCH, BlockJob, IntervalBasis, MAX_TRIALS, McResults, OutputResult, Problem, RunOptions, table,
+    BATCH, Block, BlockJob, Compiled, IntervalBasis, MAX_TRIALS, McResults, OutputResult, Problem,
+    RunOptions, Stepper, table,
 };
 use stochcraft_model::montecarlo::DEFAULT_TRIALS;
 use stochcraft_model::{
@@ -349,6 +350,18 @@ pub(crate) fn set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
     if p.trials == Some(0) || p.trials.is_some_and(|t| u64::from(t) > MAX_TRIALS) {
         return Err(invalid(format!("`trials` must be from 1 to {MAX_TRIALS}")));
     }
+    // A most below one batch, where runs are whole batches, is refused, not raised.
+    if (p.sampling.is_some() || p.stop.is_some())
+        && let Some(bad) = stochcraft_mc::check(&m)
+            .into_iter()
+            .find(|x| x.code == "bad_stop")
+    {
+        return Err(CommandError {
+            code: ErrorCode::InvalidParams,
+            message: bad.message.clone(),
+            details: Some(problems(&[bad])),
+        });
+    }
     let created = e.model.monte_carlo.is_none();
     let mut ops = vec![Op::SetMonteCarlo(Some(Box::new(m)))];
     let mut x = e.model.experiment.clone();
@@ -677,41 +690,73 @@ pub struct Run {
 }
 
 pub(crate) fn run(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
-    let p: Run = parse(p)?;
-    let mut m = e.model.monte_carlo.clone().ok_or_else(|| {
-        not_found(
-            "the model is not a Monte Carlo model: add inputs and outputs with mc.input.set and mc.output.set",
-        )
-    })?;
-    if let Some(s) = p.sampling {
-        m.sampling = s.into();
-    }
-    if let Some(stop) = p.stop {
-        m.stop = stop.map(Into::into);
-    }
-    let x = &e.model.experiment;
-    let seed = p.seed.unwrap_or(x.seed);
-    let trials = p.trials.unwrap_or(u64::from(x.replications));
-    if trials == 0 || trials > MAX_TRIALS {
-        return Err(invalid(format!("`trials` must be from 1 to {MAX_TRIALS}")));
-    }
-    let percentiles = p.percentiles.unwrap_or_default();
-    if let Some(bad) = percentiles.iter().find(|q| !(0.0..=100.0).contains(*q)) {
-        return Err(invalid(format!("percentile {bad} is not from 0 to 100")));
-    }
-    let compiled = stochcraft_mc::compile(&m, seed).map_err(|ps| CommandError {
-        code: ErrorCode::InvalidModel,
-        message: "the Monte Carlo model has errors and cannot run".into(),
-        details: Some(problems(&ps)),
-    })?;
-    let threads = p.threads;
-    let mut make = |jobs: &[BlockJob]| {
-        let count = jobs.len() as u64;
-        let mut runner = Experiment::new(count, seed);
-        if let Some(t) = threads {
-            runner = runner.threads(t as usize);
+    let mut job = e.mc_start(p)?;
+    while !job.step(usize::MAX)? {}
+    e.mc_results(&mut job)
+        .ok_or_else(|| CommandError::new(ErrorCode::Internal, "the run ended without results"))
+}
+
+/// A Monte Carlo run made a few batches at a time ([`Engine::mc_start`]), so the window can draw
+/// between them and a long run never holds up the page: each [`McJob::step`] makes some of the
+/// batches the run wants next, and [`Engine::mc_results`] gives the results once it has them.
+/// `mc.run` is the same run with every batch it wants made at once, so the results are the
+/// same, however the batches are spread over frames or threads.
+pub struct McJob {
+    compiled: Compiled,
+    stepper: Stepper,
+    /// The model as run (with the run's own sampling and stop), for the run record.
+    model: MonteCarlo,
+    threads: Option<u32>,
+    /// The engine's model and file as they were when the run started (digest, file, format,
+    /// scenario, unsaved changes, notes), for the run record: the model may be edited while the
+    /// batches are made.
+    context: Value,
+}
+
+impl McJob {
+    /// Makes up to `batches` (at least one) of the batches the run wants next, on worker threads
+    /// where there are several (none on wasm32). True once the run has its results.
+    pub fn step(&mut self, batches: usize) -> Result<bool, CommandError> {
+        if self.stepper.is_done() {
+            return Ok(true);
         }
-        runner.run_range(
+        if self.stepper.is_summarising() {
+            // Every batch is in: one piece of the results a step, so a window can draw between.
+            self.stepper.summarise_step(&self.compiled);
+            return Ok(self.stepper.is_done());
+        }
+        let wanted: Vec<BlockJob> = self
+            .stepper
+            .wanted()
+            .iter()
+            .take(batches.max(1))
+            .copied()
+            .collect();
+        let blocks = make_blocks(&self.compiled, &wanted, self.threads)?;
+        self.stepper.deliver(&self.compiled, blocks);
+        Ok(self.stepper.is_done())
+    }
+
+    /// The trials made so far, and those asked for so far (a sequential run asks for more after
+    /// each look).
+    pub fn progress(&self) -> (u64, u64) {
+        (self.stepper.made(), self.stepper.asked())
+    }
+}
+
+/// Makes `jobs` with `compiled`, on worker threads (`threads`, or all available), in order.
+fn make_blocks(
+    compiled: &Compiled,
+    jobs: &[BlockJob],
+    threads: Option<u32>,
+) -> Result<Vec<Block>, CommandError> {
+    let count = jobs.len() as u64;
+    let mut runner = Experiment::new(count, compiled.seed());
+    if let Some(t) = threads {
+        runner = runner.threads(t as usize);
+    }
+    runner
+        .run_range(
             0..count,
             |rep| {
                 let job = usize::try_from(rep.index)
@@ -726,46 +771,102 @@ pub(crate) fn run(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
             },
             &Control::new(),
         )
-    };
-    let options = RunOptions {
-        trials,
-        stop: m.stop,
-        percentiles,
-    };
-    let results = compiled
-        .run_with(&options, &mut make)
-        .map_err(|err| CommandError::new(ErrorCode::Internal, err.to_string()))?;
-    let mut v = results_json(&results);
-    v["warnings"] = problems(&compiled.warnings);
-    v["record"] = e.mc_record(&results, &m);
-    Ok(v)
+        .map_err(|err| CommandError::new(ErrorCode::Internal, err.to_string()))
 }
 
 impl Engine {
-    /// The run record of a Monte Carlo run: enough to reproduce it.
-    fn mc_record(&self, r: &McResults, m: &MonteCarlo) -> Value {
+    /// Gets a Monte Carlo run ready, with `mc.run`'s parameters, without making any trials yet:
+    /// the window makes it a few batches a frame with [`McJob::step`].
+    pub fn mc_start(&self, params: Value) -> Result<McJob, CommandError> {
+        let p: Run = parse(params)?;
+        let mut m = self.model.monte_carlo.clone().ok_or_else(|| {
+            not_found(
+                "the model is not a Monte Carlo model: add inputs and outputs with mc.input.set and mc.output.set",
+            )
+        })?;
+        if let Some(s) = p.sampling {
+            m.sampling = s.into();
+        }
+        if let Some(stop) = p.stop {
+            m.stop = stop.map(Into::into);
+        }
+        let x = &self.model.experiment;
+        let seed = p.seed.unwrap_or(x.seed);
+        let trials = p.trials.unwrap_or(u64::from(x.replications));
+        if trials == 0 || trials > MAX_TRIALS {
+            return Err(invalid(format!("`trials` must be from 1 to {MAX_TRIALS}")));
+        }
+        let percentiles = p.percentiles.unwrap_or_default();
+        if let Some(bad) = percentiles.iter().find(|q| !(0.0..=100.0).contains(*q)) {
+            return Err(invalid(format!("percentile {bad} is not from 0 to 100")));
+        }
+        let compiled = stochcraft_mc::compile(&m, seed).map_err(|ps| CommandError {
+            code: ErrorCode::InvalidModel,
+            message: "the Monte Carlo model has errors and cannot run".into(),
+            details: Some(problems(&ps)),
+        })?;
+        let options = RunOptions {
+            trials,
+            stop: m.stop,
+            percentiles,
+        };
+        let stepper = compiled.stepper(&options);
+        Ok(McJob {
+            compiled,
+            stepper,
+            model: m,
+            threads: p.threads,
+            context: self.mc_context(),
+        })
+    }
+
+    /// A finished run's results, as `mc.run` gives them, with its warnings and run record; `None`
+    /// before the run has them (and after they were taken).
+    pub fn mc_results(&self, job: &mut McJob) -> Option<Value> {
+        let results = job.stepper.take_results()?;
+        let mut v = results_json(&results);
+        v["warnings"] = problems(&job.compiled.warnings);
+        v["record"] = mc_record(&job.context, &results, &job.model);
+        Some(v)
+    }
+
+    /// What a run's record says of the model and its file, as they are now.
+    fn mc_context(&self) -> Value {
         let file = self.file.as_ref();
         json!({
-            "stochcraft": env!("CARGO_PKG_VERSION"),
-            "kind": "monte_carlo",
             "model_digest": crate::model_digest(&self.model),
             "file": file.and_then(|f| f.path.as_deref()),
             "format": file.map(|f| crate::format_name(f.opened.format)),
             "scenario": file.and_then(|f| f.opened.scenario.as_deref()),
             "unsaved_changes": file.is_some() && self.is_dirty(),
-            "seed": r.seed,
-            "trials": r.trials,
-            "trials_requested": r.requested_trials,
-            "sampling": SamplingSpec::from(r.sampling).name(),
-            "interval": interval_text(r),
-            "batch": BATCH,
-            "stop": m.stop.map(StopDoc::from),
-            "random_streams": "trials in batches of 1,000; each input's draws in batch b from the stream keyed mc/<b>/input/<name> under the seed, and the pairing of correlated inputs from mc/<b>/correlation, so results do not depend on the number of threads",
-            "correlation": "rank correlations induced by Iman and Conover's method (1982) in each batch, on van der Waerden scores with Pearson correlation 2 sin(πρ/6) for a rank correlation ρ",
-            "uncertainty": uncertainty_text(r),
             "file_notes": file.map_or_else(Vec::new, |f| f.notes.clone()),
         })
     }
+}
+
+/// The run record of a Monte Carlo run: enough to reproduce it. `context` is the engine's
+/// ([`Engine::mc_context`]) when the run started.
+fn mc_record(context: &Value, r: &McResults, m: &MonteCarlo) -> Value {
+    json!({
+        "stochcraft": env!("CARGO_PKG_VERSION"),
+        "kind": "monte_carlo",
+        "model_digest": context["model_digest"],
+        "file": context["file"],
+        "format": context["format"],
+        "scenario": context["scenario"],
+        "unsaved_changes": context["unsaved_changes"],
+        "seed": r.seed,
+        "trials": r.trials,
+        "trials_requested": r.requested_trials,
+        "sampling": SamplingSpec::from(r.sampling).name(),
+        "interval": interval_text(r),
+        "batch": BATCH,
+        "stop": m.stop.map(StopDoc::from),
+        "random_streams": "trials in batches of 1,000; each input's draws in batch b from the stream keyed mc/<b>/input/<name> under the seed, and the pairing of correlated inputs from mc/<b>/correlation, so results do not depend on the number of threads",
+        "correlation": "rank correlations induced by Iman and Conover's method (1982) in each batch, on van der Waerden scores with Pearson correlation 2 sin(πρ/6) for a rank correlation ρ",
+        "uncertainty": uncertainty_text(r),
+        "file_notes": context["file_notes"],
+    })
 }
 
 /// What the intervals are across, in words: `Student-t across 12 independent Latin hypercube
@@ -807,6 +908,7 @@ fn output_json(o: &OutputResult) -> Value {
         "invalid": o.invalid,
         "mean": o.mean,
         "half_width": o.half_width,
+        "interval_count": o.interval_count,
         "std_dev": o.std_dev,
         "min": o.min,
         "max": o.max,
@@ -832,11 +934,20 @@ fn output_json(o: &OutputResult) -> Value {
 
 /// A run's results as JSON.
 pub fn results_json(r: &McResults) -> Value {
+    let basis = match r.interval {
+        IntervalBasis::Trials => json!({ "across": "trials", "count": r.trials }),
+        IntervalBasis::Batches { batches, size } => {
+            json!({ "across": "batches", "count": batches, "size": size })
+        }
+    };
     let mut v = json!({
         "kind": "monte_carlo",
         "trials": r.trials,
         "trials_requested": r.requested_trials,
+        "seed": r.seed,
+        "sampling": SamplingSpec::from(r.sampling).name(),
         "interval": interval_text(r),
+        "interval_basis": basis,
         "outputs": r.outputs.iter().map(output_json).collect::<Vec<_>>(),
         "inputs": r.inputs.iter().map(|i| json!({
             "name": i.name,
@@ -854,7 +965,7 @@ pub fn results_json(r: &McResults) -> Value {
             "achieved": c.achieved,
         })).collect::<Vec<_>>(),
     });
-    if let Some(s) = &r.stop {
+    if let Some(s) = r.stop.as_ref() {
         v["stop"] = json!({
             "relative": s.relative,
             "max": s.max,
@@ -864,6 +975,61 @@ pub fn results_json(r: &McResults) -> Value {
         });
     }
     v
+}
+
+/// A text cell safe to open in a spreadsheet: one that starts with `=`, `+`, `-`, `@`, a tab or a
+/// carriage return would be read as a formula, so it gets a `'` in front (OWASP, "CSV Injection").
+fn text_cell(text: &str) -> String {
+    if text.starts_with(['=', '+', '-', '@', '\t', '\r']) {
+        format!("'{text}")
+    } else {
+        text.to_owned()
+    }
+}
+
+/// A Monte Carlo run's results (as [`results_json`] gives them) as CSV, a row per output, as the
+/// window's Export table (CSV) and `stochcraft-cli run --format csv` write them.
+pub fn results_csv(r: &Value) -> String {
+    let s = |v: &Value| v.as_str().unwrap_or("").to_owned();
+    let mut out = String::from(
+        "output,unit,trials,valid,mean,half_width,std_dev,min,p5,p10,p50,p90,p95,max,\
+         target,target_value,probability,probability_low,probability_high\n",
+    );
+    let num = |v: &Value| v.as_f64().map(|x| x.to_string()).unwrap_or_default();
+    for o in r["outputs"].as_array().into_iter().flatten() {
+        let t = &o["target"];
+        let (kind, value) = if let Some(x) = t["at_most"].as_f64() {
+            ("at_most", x.to_string())
+        } else if let Some(x) = t["at_least"].as_f64() {
+            ("at_least", x.to_string())
+        } else {
+            ("", String::new())
+        };
+        let row = [
+            crate::wire::csv_field(&text_cell(&s(&o["name"]))),
+            crate::wire::csv_field(&text_cell(&s(&o["unit"]))),
+            r["trials"].to_string(),
+            o["valid"].to_string(),
+            num(&o["mean"]),
+            num(&o["half_width"]),
+            num(&o["std_dev"]),
+            num(&o["min"]),
+            num(&o["percentiles"]["5"]),
+            num(&o["percentiles"]["10"]),
+            num(&o["percentiles"]["50"]),
+            num(&o["percentiles"]["90"]),
+            num(&o["percentiles"]["95"]),
+            num(&o["max"]),
+            kind.to_owned(),
+            value,
+            num(&t["probability"]),
+            num(&t["interval"][0]),
+            num(&t["interval"][1]),
+        ];
+        out.push_str(&row.join(","));
+        out.push('\n');
+    }
+    out
 }
 
 #[cfg(test)]
@@ -897,5 +1063,33 @@ mod tests {
         assert_eq!(text["sampling"], "latin_hypercube");
         assert_eq!(text["outputs"][0]["at_least"], 3.0);
         assert!(text["outputs"][0].get("at_most").is_none());
+    }
+
+    /// A name or unit a spreadsheet would read as a formula gets a quote in front; numbers and
+    /// ordinary text are as they were.
+    #[test]
+    fn text_cells_that_look_like_formulas_are_quoted() {
+        let r = json!({
+            "trials": 10,
+            "outputs": [
+                { "name": "=1+1", "unit": "@u", "valid": 10, "mean": 1.5 },
+                { "name": "-x", "unit": "+y", "valid": 10 },
+                { "name": "\tz", "unit": "\rw", "valid": 10 },
+                { "name": "cost", "unit": "USD", "valid": 10 },
+            ],
+        });
+        let csv = results_csv(&r);
+        let rows: Vec<&str> = csv.split('\n').collect();
+        assert!(
+            rows.get(1)
+                .is_some_and(|l| l.starts_with("'=1+1,'@u,10,10,1.5,"))
+        );
+        assert!(rows.get(2).is_some_and(|l| l.starts_with("'-x,'+y,10,10,")));
+        assert!(rows.get(3).is_some_and(|l| l.starts_with("'\tz,")));
+        assert!(
+            rows.get(4)
+                .is_some_and(|l| l.starts_with("cost,USD,10,10,"))
+        );
+        assert_eq!(text_cell("a-b"), "a-b");
     }
 }

@@ -232,7 +232,8 @@ impl App {
         if self.help.open {
             self.help_panel(ui, &p);
         }
-        if self.show_dashboard {
+        // The dashboard reads a process model's results; a Monte Carlo model has none.
+        if self.show_dashboard && !self.is_monte_carlo() {
             self.dashboard_panel(ui, &p);
         }
         egui::Panel::left("outline")
@@ -289,7 +290,7 @@ impl App {
         v.widgets.active.bg_stroke = egui::Stroke::NONE;
         let header = ui.max_rect();
         let running = self.running.is_some();
-        let can_run = !self.engine.model().elements.is_empty();
+        let can_run = !self.engine.model().elements.is_empty() || self.is_monte_carlo();
         // With errors, Run says how many; clicking it shows them one by one rather than run.
         let errors = self.problems().iter().filter(|p| p.error).count() as u64;
         let run_label = if errors > 0 {

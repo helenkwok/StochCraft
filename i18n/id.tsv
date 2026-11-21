@@ -1226,3 +1226,84 @@ unit	yr	thn
 	Entities inside at the start are given for a block that does not exist. Remove them.	Entitas di dalam saat mulai diberikan untuk blok yang tidak ada. Hapus entitas itu.
 	{block} cannot have entities inside at the start: only a task or a batch can. Remove its “Inside at the start”.	{block} tidak dapat berisi entitas di dalam saat mulai: hanya tugas atau batch yang dapat. Hapus “Di dalam saat mulai” miliknya.
 	{block} has {count} entities inside at the start, but it holds at most {most}, its units and its waiting room. Set “Inside at the start” to {most} or fewer, or make the waiting room larger.	{block} berisi {count} entitas di dalam saat mulai, tetapi hanya memuat paling banyak {most}, unitnya dan ruang tunggunya. Atur “Di dalam saat mulai” ke {most} atau kurang, atau perbesar ruang tunggu.
+# Monte Carlo models in the window (ROADMAP M4.1, part 2)
+	95% interval of the chance: {lo} to {hi}.	Interval 95% dari probabilitas: {lo} sampai {hi}.
+	A Monte Carlo model: uncertain durations, day rate and materials, and the chance the cost or the duration runs over.	Model Monte Carlo: durasi yang tidak pasti, tarif harian dan bahan, serta probabilitas biaya atau durasi melampaui rencana.
+	A calculation with uncertain inputs, not a process: each trial draws every input once and works out every output from them.	Perhitungan dengan masukan yang tidak pasti, bukan proses: setiap percobaan mengambil setiap masukan satu kali dan menghitung setiap keluaran darinya.
+	A rank correlation between two inputs, from -1 to 1: above 0 they tend to be high together, below 0 one tends to be high when the other is low. Inputs not paired here are independent; 0 removes a pair.	Korelasi peringkat antara dua masukan, dari -1 sampai 1: di atas 0 keduanya cenderung tinggi bersamaan, di bawah 0 yang satu cenderung tinggi saat yang lain rendah. Masukan yang tidak dipasangkan di sini saling bebas; 0 menghapus sebuah pasangan.
+	A {percent} chance that {output} is less than {value}.	Probabilitas {percent} bahwa {output} kurang dari {value}.
+	A {percent} chance that {output} is more than {value}.	Probabilitas {percent} bahwa {output} lebih dari {value}.
+	About a 1 in {odds} chance that {output} is less than {value} ({percent}).	Peluang sekitar 1 banding {odds} bahwa {output} kurang dari {value} ({percent}).
+	About a 1 in {odds} chance that {output} is more than {value} ({percent}).	Peluang sekitar 1 banding {odds} bahwa {output} lebih dari {value} ({percent}).
+	Add correlation	Tambah korelasi
+	Add input	Tambah masukan
+	Add output	Tambah keluaran
+	At most, trials	Paling banyak, percobaan
+	Correlations	Korelasi
+	Download inputs (CSV)	Unduh masukan (CSV)
+	Each input is a distribution: every trial draws one value from it.	Setiap masukan adalah distribusi: setiap percobaan mengambil satu nilai darinya.
+	Each output is worked out in every trial from the inputs and the outputs above it, each named as $name: for example $labour * $rate + $materials. Give it a target to see the chance of meeting it.	Setiap keluaran dihitung di setiap percobaan dari masukan dan keluaran di atasnya, masing-masing disebut sebagai $name: misalnya $labour * $rate + $materials. Beri target untuk melihat probabilitas memenuhinya.
+	Export inputs (CSV)	Ekspor masukan (CSV)
+	First input	Masukan pertama
+	How many trials	Berapa percobaan
+	How many trials gave each value	Berapa percobaan yang menghasilkan setiap nilai
+	Import inputs	Impor masukan
+	In 9 trials out of 10, {output} is between {low} and {high}; the mean is {mean} ± {half_width}.	Dalam 9 dari 10 percobaan, {output} berada di antara {low} dan {high}; rata-ratanya {mean} ± {half_width}.
+	In 9 trials out of 10, {output} is between {low} and {high}; the mean is {mean}.	Dalam 9 dari 10 percobaan, {output} berada di antara {low} dan {high}; rata-ratanya {mean}.
+	Inputs	Masukan
+	Inputs as a table	Masukan sebagai tabel
+	Latin hypercube	Hiperkubus Latin
+	Latin hypercube sampling	Pengambilan sampel hiperkubus Latin
+	Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000.	Pengambilan sampel hiperkubus Latin membagi rentang setiap masukan menjadi lapisan yang sama probabilitasnya dan mengambil satu nilai dari tiap lapisan, yang biasanya membuat hasil lebih tepat. Dengan cara ini, atau dengan masukan yang berkorelasi, percobaan dijalankan dalam batch utuh berisi 1.000.
+	Monte Carlo model	Model Monte Carlo
+	New Monte Carlo Model	Model Monte Carlo Baru
+	New Monte Carlo model	Model Monte Carlo baru
+	New correlation	Korelasi baru
+	New input	Masukan baru
+	New output	Keluaran baru
+	No inputs yet: add one below, or paste a table of them.	Belum ada masukan: tambahkan satu di bawah, atau tempel tabelnya.
+	No interval: too few batches of trials for one.	Tidak ada interval: terlalu sedikit batch percobaan untuk menghitungnya.
+	No interval: every batch gave the same share, so their spread gives none.	Tidak ada interval: semua batch menghasilkan proporsi yang sama, sehingga sebarannya tidak memberi interval.
+	There is already an input or an output called {name}.	Masukan atau keluaran bernama {name} sudah ada.
+	{name}: the ± is across {n} of the {of} batches, the rest had no trial with a number.	{name}: ± dihitung dari {n} dari {of} batch; sisanya tidak punya percobaan yang menghasilkan angka.
+	{name}: the ± is across {n} of the {of} trials, the rest gave no number.	{name}: ± dihitung dari {n} dari {of} percobaan; sisanya tidak menghasilkan angka.
+	No outputs yet: add one below.	Belum ada keluaran: tambahkan satu di bawah.
+	None yet	Belum ada
+	One input per line, as name, distribution, parameters and unit, copied from a spreadsheet or written as CSV: for example labour,triangular,min=80;mode=100;max=150,h.	Satu masukan per baris, berupa nama, distribusi, parameter, dan satuan, disalin dari lembar kerja atau ditulis sebagai CSV: misalnya labour,triangular,min=80;mode=100;max=150,h.
+	Outputs	Keluaran
+	Paste inputs from a table	Tempel masukan dari tabel
+	Project budget	Anggaran proyek
+	Rank correlation	Korelasi peringkat
+	Remove the correlation of {a} and {b}	Hapus korelasi {a} dan {b}
+	Remove the input {name}	Hapus masukan {name}
+	Remove the output {name}	Hapus keluaran {name}
+	Replace every input	Ganti semua masukan
+	Sampling	Pengambilan sampel
+	Second input	Masukan kedua
+	Share of trials at or below each value	Bagian percobaan pada atau di bawah setiap nilai
+	Target {value}	Target {value}
+	The chance is under {hi}, with 95% confidence.	Probabilitasnya di bawah {hi}, dengan keyakinan 95%.
+	The model: its inputs, outputs and trials	Model: masukan, keluaran, dan percobaannya
+	The number of trials was chosen from the results, so an interval may cover the true value less often than 95% of the time.	Jumlah percobaan dipilih berdasarkan hasil, sehingga interval mungkin mencakup nilai sebenarnya lebih jarang dari 95% kesempatan.
+	The trials above come first; more follow in batches until every output's mean is within that share of itself, or the most is reached.	Percobaan di atas dijalankan lebih dulu; lalu lebih banyak menyusul dalam batch sampai rata-rata setiap keluaran berada dalam bagian itu dari dirinya sendiri, atau batas terbanyak tercapai.
+	Trials and sampling	Percobaan dan pengambilan sampel
+	Uncertain inputs instead of single guesses: the chance of an overrun, not one total.	Masukan yang tidak pasti, bukan tebakan tunggal: probabilitas pembengkakan, bukan satu total.
+	Will the project come in under budget?	Akankah proyek selesai di bawah anggaran?
+	a name, such as cost	nama, misalnya biaya
+	a name, such as labour	nama, misalnya upah
+	random sampling	pengambilan sampel acak
+	{asked} trials were asked for; with Latin hypercube sampling or correlated inputs a run is whole batches of {size}, so {n} ran.	{asked} percobaan diminta; dengan pengambilan sampel hiperkubus Latin atau masukan yang berkorelasi, percobaan dijalankan dalam batch utuh berisi {size}, jadi {n} dijalankan.
+	{a} and {b}: {achieved} in the trials, {target} asked for	{a} dan {b}: {achieved} dalam percobaan, {target} diminta
+	{output} was less than {value} in none of the {n} trials.	{output} tidak pernah kurang dari {value} dalam {n} percobaan.
+	{output} was more than {value} in none of the {n} trials.	{output} tidak pernah lebih dari {value} dalam {n} percobaan.
+@plural	Each ± is the half-width of the 95% interval of the mean across {n} independent batch of {size} trials. Latin hypercube sampling and correlated inputs make the trials within a batch depend on each other, so each batch counts as one.|Each ± is the half-width of the 95% interval of the mean across {n} independent batches of {size} trials. Latin hypercube sampling and correlated inputs make the trials within a batch depend on each other, so each batch counts as one.	Setiap ± adalah setengah lebar interval 95% dari rata-rata di {n} batch independen berisi {size} percobaan. Pengambilan sampel hiperkubus Latin dan masukan yang berkorelasi membuat percobaan dalam satu batch saling bergantung, jadi setiap batch dihitung sebagai satu.
+@plural	Each ± is the half-width of the 95% interval of the mean across {n} independent trial.|Each ± is the half-width of the 95% interval of the mean across {n} independent trials.	Setiap ± adalah setengah lebar interval 95% dari rata-rata di {n} percobaan independen.
+@plural	Finished {n} trial|Finished {n} trials	Selesai {n} percobaan
+@plural	Imported {n} input|Imported {n} inputs	Mengimpor {n} masukan
+@plural	Makes {n} trial from seed {seed}: each draws every input once and works out every output.|Makes {n} trials from seed {seed}: each draws every input once and works out every output.	Membuat {n} percobaan dari benih {seed}: masing-masing mengambil setiap masukan satu kali dan menghitung setiap keluaran.
+@plural	Stopped after {n} trial: every output's mean is within ±{share} of itself.|Stopped after {n} trials: every output's mean is within ±{share} of itself.	Berhenti setelah {n} percobaan: rata-rata setiap keluaran berada dalam ±{share} dari dirinya sendiri.
+@plural	Stopped at the most allowed, {n} trial, before every output's mean was within ±{share} of itself.|Stopped at the most allowed, {n} trials, before every output's mean was within ±{share} of itself.	Berhenti pada batas terbanyak yang diizinkan, {n} percobaan, sebelum rata-rata setiap keluaran berada dalam ±{share} dari dirinya sendiri.
+@plural	{done} of {n} trial made|{done} of {n} trials made	{done} dari {n} percobaan dibuat
+@plural	{n} trial gave no number (a division by zero, say) and is left out.|{n} trials gave no number (a division by zero, say) and are left out.	{n} percobaan tidak menghasilkan angka (misalnya pembagian dengan nol) dan tidak disertakan.
+@plural	{n} trial · seed {seed} · {sampling}|{n} trials · seed {seed} · {sampling}	{n} percobaan · benih {seed} · {sampling}
+@plural	{n} trial · seed {seed}|{n} trials · seed {seed}	{n} percobaan · benih {seed}

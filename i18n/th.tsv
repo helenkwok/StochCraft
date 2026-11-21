@@ -1226,3 +1226,84 @@ unit	yr	ปี
 	Entities inside at the start are given for a block that does not exist. Remove them.	มีการกำหนดเอนทิตีที่อยู่ภายในเมื่อเริ่มให้บล็อกที่ไม่มีอยู่ ให้ลบออก
 	{block} cannot have entities inside at the start: only a task or a batch can. Remove its “Inside at the start”.	{block} ไม่สามารถมีเอนทิตีอยู่ภายในเมื่อเริ่มได้ มีเพียงงานหรือชุดเท่านั้นที่มีได้ ให้ลบ “อยู่ภายในเมื่อเริ่ม” ของมัน
 	{block} has {count} entities inside at the start, but it holds at most {most}, its units and its waiting room. Set “Inside at the start” to {most} or fewer, or make the waiting room larger.	{block} มีเอนทิตีอยู่ภายในเมื่อเริ่ม {count} แต่รับได้มากที่สุด {most} รวมหน่วยและพื้นที่รอของมัน ให้ตั้ง “อยู่ภายในเมื่อเริ่ม” เป็น {most} หรือน้อยกว่า หรือขยายพื้นที่รอ
+# Monte Carlo models in the window (ROADMAP M4.1, part 2)
+	95% interval of the chance: {lo} to {hi}.	ช่วง 95% ของความน่าจะเป็น: จาก {lo} ถึง {hi}
+	A Monte Carlo model: uncertain durations, day rate and materials, and the chance the cost or the duration runs over.	แบบจำลองมอนเตการ์โล: ระยะเวลาที่ไม่แน่นอน ค่าจ้างรายวันและวัสดุ และความน่าจะเป็นที่ต้นทุนหรือระยะเวลาจะเกินกำหนด
+	A calculation with uncertain inputs, not a process: each trial draws every input once and works out every output from them.	การคำนวณที่มีอินพุตไม่แน่นอน ไม่ใช่กระบวนการ: การทดลองแต่ละครั้งสุ่มค่าของอินพุตทุกตัวหนึ่งครั้งและคำนวณเอาต์พุตทุกตัวจากค่าเหล่านั้น
+	A rank correlation between two inputs, from -1 to 1: above 0 they tend to be high together, below 0 one tends to be high when the other is low. Inputs not paired here are independent; 0 removes a pair.	สหสัมพันธ์เชิงอันดับระหว่างอินพุตสองตัว ตั้งแต่ -1 ถึง 1: มากกว่า 0 ทั้งสองมีแนวโน้มจะสูงไปด้วยกัน น้อยกว่า 0 ตัวหนึ่งมีแนวโน้มจะสูงเมื่ออีกตัวต่ำ อินพุตที่ไม่ได้จับคู่ไว้ที่นี่เป็นอิสระต่อกัน ค่า 0 จะนำคู่นั้นออก
+	A {percent} chance that {output} is less than {value}.	ความน่าจะเป็น {percent} ที่ {output} จะน้อยกว่า {value}
+	A {percent} chance that {output} is more than {value}.	ความน่าจะเป็น {percent} ที่ {output} จะมากกว่า {value}
+	About a 1 in {odds} chance that {output} is less than {value} ({percent}).	โอกาสประมาณ 1 ใน {odds} ที่ {output} จะน้อยกว่า {value} ({percent})
+	About a 1 in {odds} chance that {output} is more than {value} ({percent}).	โอกาสประมาณ 1 ใน {odds} ที่ {output} จะมากกว่า {value} ({percent})
+	Add correlation	เพิ่มสหสัมพันธ์
+	Add input	เพิ่มอินพุต
+	Add output	เพิ่มเอาต์พุต
+	At most, trials	สูงสุด (ครั้งทดลอง)
+	Correlations	สหสัมพันธ์ระหว่างอินพุต
+	Download inputs (CSV)	ดาวน์โหลดอินพุต (CSV)
+	Each input is a distribution: every trial draws one value from it.	อินพุตแต่ละตัวคือการแจกแจง: การทดลองแต่ละครั้งสุ่มค่าหนึ่งค่าจากการแจกแจงนั้น
+	Each output is worked out in every trial from the inputs and the outputs above it, each named as $name: for example $labour * $rate + $materials. Give it a target to see the chance of meeting it.	เอาต์พุตแต่ละตัวคำนวณในการทดลองทุกครั้งจากอินพุตและเอาต์พุตที่อยู่เหนือมัน โดยอ้างถึงแต่ละตัวเป็น $name เช่น $labour * $rate + $materials กำหนดเป้าหมายให้เพื่อดูความน่าจะเป็นที่จะบรรลุเป้าหมายนั้น
+	Export inputs (CSV)	ส่งออกอินพุต (CSV)
+	First input	อินพุตตัวแรก
+	How many trials	ทดลองกี่ครั้ง
+	How many trials gave each value	จำนวนครั้งทดลองที่ให้แต่ละค่า
+	Import inputs	นำเข้าอินพุต
+	In 9 trials out of 10, {output} is between {low} and {high}; the mean is {mean} ± {half_width}.	ใน 9 จาก 10 ครั้งทดลอง {output} อยู่ระหว่าง {low} ถึง {high} ค่าเฉลี่ยคือ {mean} ± {half_width}
+	In 9 trials out of 10, {output} is between {low} and {high}; the mean is {mean}.	ใน 9 จาก 10 ครั้งทดลอง {output} อยู่ระหว่าง {low} ถึง {high} ค่าเฉลี่ยคือ {mean}
+	Inputs	อินพุต
+	Inputs as a table	อินพุตในรูปตาราง
+	Latin hypercube	ไฮเปอร์คิวบ์ละติน
+	Latin hypercube sampling	การสุ่มตัวอย่างแบบไฮเปอร์คิวบ์ละติน
+	Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000.	การสุ่มตัวอย่างแบบไฮเปอร์คิวบ์ละตินแบ่งช่วงของอินพุตแต่ละตัวเป็นชั้นที่มีโอกาสเท่ากัน แล้วสุ่มจากแต่ละชั้นครั้งเดียว ซึ่งมักทำให้ผลลัพธ์แม่นยำขึ้น เมื่อใช้วิธีนี้หรือมีอินพุตที่สัมพันธ์กัน การทดลองจะทำเป็นชุดเต็ม ชุดละ 1,000 ครั้ง
+	Monte Carlo model	แบบจำลองมอนเตการ์โล
+	New Monte Carlo Model	แบบจำลองมอนเตการ์โลใหม่
+	New Monte Carlo model	แบบจำลองมอนเตการ์โลใหม่
+	New correlation	สหสัมพันธ์ใหม่
+	New input	อินพุตใหม่
+	New output	เอาต์พุตใหม่
+	No inputs yet: add one below, or paste a table of them.	ยังไม่มีอินพุต: เพิ่มที่ด้านล่าง หรือวางตารางของอินพุต
+	No interval: too few batches of trials for one.	ไม่มีช่วง: ชุดการทดลองน้อยเกินไปที่จะคำนวณช่วงได้
+	No interval: every batch gave the same share, so their spread gives none.	ไม่มีช่วง: ทุกชุดให้สัดส่วนเท่ากัน ความกระจายของชุดจึงไม่ให้ช่วง
+	There is already an input or an output called {name}.	มีอินพุตหรือเอาต์พุตชื่อ {name} อยู่แล้ว
+	{name}: the ± is across {n} of the {of} batches, the rest had no trial with a number.	{name}: ± คำนวณจาก {n} จาก {of} ชุด ส่วนที่เหลือไม่มีครั้งทดลองที่ได้ตัวเลข
+	{name}: the ± is across {n} of the {of} trials, the rest gave no number.	{name}: ± คำนวณจาก {n} จาก {of} ครั้งทดลอง ส่วนที่เหลือไม่ได้ตัวเลข
+	No outputs yet: add one below.	ยังไม่มีเอาต์พุต: เพิ่มที่ด้านล่าง
+	None yet	ยังไม่มี
+	One input per line, as name, distribution, parameters and unit, copied from a spreadsheet or written as CSV: for example labour,triangular,min=80;mode=100;max=150,h.	อินพุตหนึ่งตัวต่อบรรทัด ในรูปชื่อ การแจกแจง พารามิเตอร์ และหน่วย คัดลอกจากสเปรดชีตหรือเขียนเป็น CSV เช่น labour,triangular,min=80;mode=100;max=150,h
+	Outputs	เอาต์พุต
+	Paste inputs from a table	วางอินพุตจากตาราง
+	Project budget	งบประมาณโครงการ
+	Rank correlation	สหสัมพันธ์เชิงอันดับ
+	Remove the correlation of {a} and {b}	นำสหสัมพันธ์ระหว่าง {a} และ {b} ออก
+	Remove the input {name}	นำอินพุต {name} ออก
+	Remove the output {name}	นำเอาต์พุต {name} ออก
+	Replace every input	แทนที่อินพุตทั้งหมด
+	Sampling	การสุ่มตัวอย่าง
+	Second input	อินพุตตัวที่สอง
+	Share of trials at or below each value	สัดส่วนการทดลองที่เท่ากับหรือต่ำกว่าแต่ละค่า
+	Target {value}	เป้าหมาย {value}
+	The chance is under {hi}, with 95% confidence.	ความน่าจะเป็นต่ำกว่า {hi} ด้วยความเชื่อมั่น 95%
+	The model: its inputs, outputs and trials	แบบจำลอง: อินพุต เอาต์พุต และการทดลอง
+	The number of trials was chosen from the results, so an interval may cover the true value less often than 95% of the time.	จำนวนครั้งทดลองเลือกจากผลลัพธ์ ช่วงจึงอาจครอบคลุมค่าจริงน้อยกว่า 95% ของจำนวนครั้ง
+	The trials above come first; more follow in batches until every output's mean is within that share of itself, or the most is reached.	ทดลองตามจำนวนข้างต้นก่อน จากนั้นทดลองเพิ่มเป็นชุด ๆ จนกว่าค่าเฉลี่ยของเอาต์พุตทุกตัวจะอยู่ภายในสัดส่วนนั้นของตัวเอง หรือถึงจำนวนสูงสุด
+	Trials and sampling	การทดลองและการสุ่มตัวอย่าง
+	Uncertain inputs instead of single guesses: the chance of an overrun, not one total.	อินพุตที่ไม่แน่นอนแทนการเดาค่าเดียว: ความน่าจะเป็นที่จะเกินงบ ไม่ใช่ยอดรวมเพียงค่าเดียว
+	Will the project come in under budget?	โครงการจะอยู่ในงบประมาณหรือไม่
+	a name, such as cost	ชื่อ เช่น ต้นทุน
+	a name, such as labour	ชื่อ เช่น ค่าแรง
+	random sampling	การสุ่มตัวอย่างอย่างง่าย
+	{asked} trials were asked for; with Latin hypercube sampling or correlated inputs a run is whole batches of {size}, so {n} ran.	ขอไว้ {asked} ครั้งทดลอง เมื่อใช้การสุ่มตัวอย่างแบบไฮเปอร์คิวบ์ละตินหรือมีอินพุตที่สัมพันธ์กัน การรันหนึ่งครั้งประกอบด้วยชุดเต็ม ชุดละ {size} จึงทดลองไป {n} ครั้ง
+	{a} and {b}: {achieved} in the trials, {target} asked for	{a} และ {b}: {achieved} ในการทดลอง ขอไว้ {target}
+	{output} was less than {value} in none of the {n} trials.	{output} ไม่น้อยกว่า {value} ในการทดลองใดเลยจาก {n} ครั้ง
+	{output} was more than {value} in none of the {n} trials.	{output} ไม่มากกว่า {value} ในการทดลองใดเลยจาก {n} ครั้ง
+@plural	Each ± is the half-width of the 95% interval of the mean across {n} independent batch of {size} trials. Latin hypercube sampling and correlated inputs make the trials within a batch depend on each other, so each batch counts as one.|Each ± is the half-width of the 95% interval of the mean across {n} independent batches of {size} trials. Latin hypercube sampling and correlated inputs make the trials within a batch depend on each other, so each batch counts as one.	± แต่ละค่าคือครึ่งหนึ่งของความกว้างของช่วง 95% ของค่าเฉลี่ยจากการทดลอง {n} ชุดที่เป็นอิสระต่อกัน ชุดละ {size} ครั้ง การสุ่มตัวอย่างแบบไฮเปอร์คิวบ์ละตินและอินพุตที่สัมพันธ์กันทำให้การทดลองภายในชุดเดียวกันขึ้นต่อกัน จึงนับแต่ละชุดเป็นหนึ่ง
+@plural	Each ± is the half-width of the 95% interval of the mean across {n} independent trial.|Each ± is the half-width of the 95% interval of the mean across {n} independent trials.	± แต่ละค่าคือครึ่งหนึ่งของความกว้างของช่วง 95% ของค่าเฉลี่ยจากการทดลองที่เป็นอิสระต่อกัน {n} ครั้ง
+@plural	Finished {n} trial|Finished {n} trials	ทดลองเสร็จสิ้น {n} ครั้ง
+@plural	Imported {n} input|Imported {n} inputs	นำเข้าอินพุต {n} ตัวแล้ว
+@plural	Makes {n} trial from seed {seed}: each draws every input once and works out every output.|Makes {n} trials from seed {seed}: each draws every input once and works out every output.	ทดลอง {n} ครั้งจากเมล็ดสุ่ม {seed}: แต่ละครั้งสุ่มค่าของอินพุตทุกตัวหนึ่งครั้งและคำนวณเอาต์พุตทุกตัว
+@plural	Stopped after {n} trial: every output's mean is within ±{share} of itself.|Stopped after {n} trials: every output's mean is within ±{share} of itself.	หยุดหลังทดลอง {n} ครั้ง: ค่าเฉลี่ยของเอาต์พุตทุกตัวอยู่ภายใน ±{share} ของตัวเอง
+@plural	Stopped at the most allowed, {n} trial, before every output's mean was within ±{share} of itself.|Stopped at the most allowed, {n} trials, before every output's mean was within ±{share} of itself.	หยุดที่จำนวนสูงสุดที่อนุญาต {n} ครั้ง ก่อนที่ค่าเฉลี่ยของเอาต์พุตทุกตัวจะอยู่ภายใน ±{share} ของตัวเอง
+@plural	{done} of {n} trial made|{done} of {n} trials made	ทดลองแล้ว {done} จาก {n} ครั้ง
+@plural	{n} trial gave no number (a division by zero, say) and is left out.|{n} trials gave no number (a division by zero, say) and are left out.	การทดลอง {n} ครั้งไม่ได้ให้ตัวเลข (เช่น หารด้วยศูนย์) และถูกตัดออก
+@plural	{n} trial · seed {seed} · {sampling}|{n} trials · seed {seed} · {sampling}	{n} ครั้งทดลอง · เมล็ดสุ่ม {seed} · {sampling}
+@plural	{n} trial · seed {seed}|{n} trials · seed {seed}	{n} ครั้งทดลอง · เมล็ดสุ่ม {seed}

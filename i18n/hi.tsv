@@ -1226,3 +1226,84 @@ unit	yr	वर्ष
 	Entities inside at the start are given for a block that does not exist. Remove them.	शुरुआत में अंदर की इकाइयाँ ऐसे ब्लॉक के लिए दी गई हैं जो मौजूद नहीं है। उन्हें हटाएँ।
 	{block} cannot have entities inside at the start: only a task or a batch can. Remove its “Inside at the start”.	{block} में शुरुआत में अंदर इकाइयाँ नहीं हो सकतीं: ऐसा केवल कार्य या बैच में हो सकता है। इसका “शुरुआत में अंदर” हटाएँ।
 	{block} has {count} entities inside at the start, but it holds at most {most}, its units and its waiting room. Set “Inside at the start” to {most} or fewer, or make the waiting room larger.	{block} में शुरुआत में अंदर {count} इकाइयाँ हैं, पर इसमें अधिकतम {most} समा सकती हैं, इसकी संसाधन इकाइयाँ और प्रतीक्षा कक्ष मिलाकर। “शुरुआत में अंदर” को {most} या कम करें, या प्रतीक्षा कक्ष बड़ा करें।
+# Monte Carlo models in the window (ROADMAP M4.1, part 2)
+	95% interval of the chance: {lo} to {hi}.	प्रायिकता का 95% अंतराल: {lo} से {hi}।
+	A Monte Carlo model: uncertain durations, day rate and materials, and the chance the cost or the duration runs over.	एक मोंटे कार्लो मॉडल: अनिश्चित अवधियाँ, दैनिक दर और सामग्री, और यह प्रायिकता कि लागत या अवधि सीमा से बढ़ जाए।
+	A calculation with uncertain inputs, not a process: each trial draws every input once and works out every output from them.	अनिश्चित इनपुट वाली एक गणना, कोई प्रक्रिया नहीं: हर परीक्षण हर इनपुट से एक बार मान निकालता है और उनसे हर आउटपुट निकालता है।
+	A rank correlation between two inputs, from -1 to 1: above 0 they tend to be high together, below 0 one tends to be high when the other is low. Inputs not paired here are independent; 0 removes a pair.	दो इनपुट के बीच कोटि सहसंबंध, -1 से 1 तक: 0 से ऊपर होने पर वे साथ-साथ ऊँचे रहने की प्रवृत्ति रखते हैं, 0 से नीचे होने पर एक ऊँचा रहता है जब दूसरा नीचा हो। जो इनपुट यहाँ जोड़ी में नहीं हैं वे स्वतंत्र हैं; 0 किसी जोड़ी को हटा देता है।
+	A {percent} chance that {output} is less than {value}.	{percent} प्रायिकता कि {output} {value} से कम है।
+	A {percent} chance that {output} is more than {value}.	{percent} प्रायिकता कि {output} {value} से अधिक है।
+	About a 1 in {odds} chance that {output} is less than {value} ({percent}).	लगभग {odds} में 1 संभावना कि {output} {value} से कम है ({percent})।
+	About a 1 in {odds} chance that {output} is more than {value} ({percent}).	लगभग {odds} में 1 संभावना कि {output} {value} से अधिक है ({percent})।
+	Add correlation	सहसंबंध जोड़ें
+	Add input	इनपुट जोड़ें
+	Add output	आउटपुट जोड़ें
+	At most, trials	अधिकतम परीक्षण
+	Correlations	सहसंबंध
+	Download inputs (CSV)	इनपुट डाउनलोड करें (CSV)
+	Each input is a distribution: every trial draws one value from it.	हर इनपुट एक वितरण है: हर परीक्षण उससे एक मान निकालता है।
+	Each output is worked out in every trial from the inputs and the outputs above it, each named as $name: for example $labour * $rate + $materials. Give it a target to see the chance of meeting it.	हर आउटपुट हर परीक्षण में इनपुट और अपने ऊपर के आउटपुट से निकाला जाता है, हर एक को $name के रूप में लिखा जाता है: उदाहरण के लिए $labour * $rate + $materials। उसे एक लक्ष्य दें, ताकि लक्ष्य पूरा होने की प्रायिकता दिखे।
+	Export inputs (CSV)	इनपुट निर्यात करें (CSV)
+	First input	पहला इनपुट
+	How many trials	कितने परीक्षण
+	How many trials gave each value	कितने परीक्षणों ने हर मान दिया
+	Import inputs	इनपुट आयात करें
+	In 9 trials out of 10, {output} is between {low} and {high}; the mean is {mean} ± {half_width}.	10 में से 9 परीक्षणों में {output} {low} और {high} के बीच है; माध्य {mean} ± {half_width} है।
+	In 9 trials out of 10, {output} is between {low} and {high}; the mean is {mean}.	10 में से 9 परीक्षणों में {output} {low} और {high} के बीच है; माध्य {mean} है।
+	Inputs	इनपुट
+	Inputs as a table	तालिका के रूप में इनपुट
+	Latin hypercube	लैटिन हाइपरक्यूब
+	Latin hypercube sampling	लैटिन हाइपरक्यूब नमूनाकरण
+	Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000.	लैटिन हाइपरक्यूब नमूनाकरण हर इनपुट की सीमा को बराबर संभावना वाली परतों में बाँटता है और हर परत से एक बार मान निकालता है, जिससे परिणाम आम तौर पर अधिक सटीक होते हैं। इसके साथ, या सहसंबद्ध इनपुट के साथ, परीक्षण 1,000 के पूरे बैचों में चलते हैं।
+	Monte Carlo model	मोंटे कार्लो मॉडल
+	New Monte Carlo Model	नया मोंटे कार्लो मॉडल
+	New Monte Carlo model	नया मोंटे कार्लो मॉडल
+	New correlation	नया सहसंबंध
+	New input	नया इनपुट
+	New output	नया आउटपुट
+	No inputs yet: add one below, or paste a table of them.	अभी कोई इनपुट नहीं: नीचे एक जोड़ें, या उनकी तालिका चिपकाएँ।
+	No interval: too few batches of trials for one.	कोई अंतराल नहीं: इसके लिए परीक्षणों के बैच बहुत कम हैं।
+	No interval: every batch gave the same share, so their spread gives none.	कोई अंतराल नहीं: सभी बैचों ने एक ही हिस्सा दिया, इसलिए उनके फैलाव से कोई अंतराल नहीं बनता।
+	There is already an input or an output called {name}.	{name} नाम का इनपुट या आउटपुट पहले से मौजूद है।
+	{name}: the ± is across {n} of the {of} batches, the rest had no trial with a number.	{name}: ± {of} में से {n} बैचों पर आधारित है; बाकी में कोई ऐसा परीक्षण नहीं था जिसका संख्या में परिणाम आया हो।
+	{name}: the ± is across {n} of the {of} trials, the rest gave no number.	{name}: ± {of} में से {n} परीक्षणों पर आधारित है; बाकी ने कोई संख्या नहीं दी।
+	No outputs yet: add one below.	अभी कोई आउटपुट नहीं: नीचे एक जोड़ें।
+	None yet	अभी कोई नहीं
+	One input per line, as name, distribution, parameters and unit, copied from a spreadsheet or written as CSV: for example labour,triangular,min=80;mode=100;max=150,h.	हर पंक्ति में एक इनपुट, नाम, वितरण, पैरामीटर और इकाई के रूप में, स्प्रेडशीट से कॉपी किया हुआ या CSV के रूप में लिखा हुआ: उदाहरण के लिए labour,triangular,min=80;mode=100;max=150,h।
+	Outputs	आउटपुट
+	Paste inputs from a table	तालिका से इनपुट चिपकाएँ
+	Project budget	परियोजना बजट
+	Rank correlation	कोटि सहसंबंध
+	Remove the correlation of {a} and {b}	{a} और {b} का सहसंबंध हटाएँ
+	Remove the input {name}	इनपुट {name} हटाएँ
+	Remove the output {name}	आउटपुट {name} हटाएँ
+	Replace every input	सभी इनपुट बदलें
+	Sampling	नमूनाकरण
+	Second input	दूसरा इनपुट
+	Share of trials at or below each value	हर मान के बराबर या उससे कम परीक्षणों का हिस्सा
+	Target {value}	लक्ष्य {value}
+	The chance is under {hi}, with 95% confidence.	95% विश्वास के साथ, प्रायिकता {hi} से कम है।
+	The model: its inputs, outputs and trials	मॉडल: इसके इनपुट, आउटपुट और परीक्षण
+	The number of trials was chosen from the results, so an interval may cover the true value less often than 95% of the time.	परीक्षणों की संख्या परिणामों से चुनी गई थी, इसलिए कोई अंतराल वास्तविक मान को 95% से कम बार शामिल कर सकता है।
+	The trials above come first; more follow in batches until every output's mean is within that share of itself, or the most is reached.	ऊपर दिए गए परीक्षण पहले होते हैं; फिर और परीक्षण बैचों में होते हैं, जब तक हर आउटपुट का माध्य अपने उस हिस्से के भीतर न आ जाए, या अधिकतम सीमा न पहुँच जाए।
+	Trials and sampling	परीक्षण और नमूनाकरण
+	Uncertain inputs instead of single guesses: the chance of an overrun, not one total.	एक-एक अनुमान के बजाय अनिश्चित इनपुट: सीमा से बढ़ने की प्रायिकता, कोई एक कुल नहीं।
+	Will the project come in under budget?	क्या परियोजना बजट के भीतर पूरी होगी?
+	a name, such as cost	एक नाम, जैसे लागत
+	a name, such as labour	एक नाम, जैसे श्रम
+	random sampling	यादृच्छिक नमूनाकरण
+	{asked} trials were asked for; with Latin hypercube sampling or correlated inputs a run is whole batches of {size}, so {n} ran.	{asked} परीक्षण माँगे गए थे; लैटिन हाइपरक्यूब नमूनाकरण या सहसंबद्ध इनपुट के साथ परीक्षण {size} के पूरे बैचों में चलते हैं, इसलिए {n} चले।
+	{a} and {b}: {achieved} in the trials, {target} asked for	{a} और {b}: परीक्षणों में {achieved}, माँगा गया {target}
+	{output} was less than {value} in none of the {n} trials.	{n} परीक्षणों में से किसी में भी {output} {value} से कम नहीं था।
+	{output} was more than {value} in none of the {n} trials.	{n} परीक्षणों में से किसी में भी {output} {value} से अधिक नहीं था।
+@plural	Each ± is the half-width of the 95% interval of the mean across {n} independent batch of {size} trials. Latin hypercube sampling and correlated inputs make the trials within a batch depend on each other, so each batch counts as one.|Each ± is the half-width of the 95% interval of the mean across {n} independent batches of {size} trials. Latin hypercube sampling and correlated inputs make the trials within a batch depend on each other, so each batch counts as one.	हर ± माध्य के 95% अंतराल की आधी चौड़ाई है, {size} परीक्षणों के {n} स्वतंत्र बैच पर। लैटिन हाइपरक्यूब नमूनाकरण और सहसंबद्ध इनपुट एक बैच के भीतर के परीक्षणों को एक-दूसरे पर निर्भर बनाते हैं, इसलिए हर बैच एक गिना जाता है।|हर ± माध्य के 95% अंतराल की आधी चौड़ाई है, {size} परीक्षणों के {n} स्वतंत्र बैचों पर। लैटिन हाइपरक्यूब नमूनाकरण और सहसंबद्ध इनपुट एक बैच के भीतर के परीक्षणों को एक-दूसरे पर निर्भर बनाते हैं, इसलिए हर बैच एक गिना जाता है।
+@plural	Each ± is the half-width of the 95% interval of the mean across {n} independent trial.|Each ± is the half-width of the 95% interval of the mean across {n} independent trials.	हर ± माध्य के 95% अंतराल की आधी चौड़ाई है, {n} स्वतंत्र परीक्षण पर।|हर ± माध्य के 95% अंतराल की आधी चौड़ाई है, {n} स्वतंत्र परीक्षणों पर।
+@plural	Finished {n} trial|Finished {n} trials	{n} परीक्षण पूरा हुआ|{n} परीक्षण पूरे हुए
+@plural	Imported {n} input|Imported {n} inputs	{n} इनपुट आयात हुआ|{n} इनपुट आयात हुए
+@plural	Makes {n} trial from seed {seed}: each draws every input once and works out every output.|Makes {n} trials from seed {seed}: each draws every input once and works out every output.	बीज {seed} से {n} परीक्षण बनाता है: यह हर इनपुट से एक बार मान निकालता है और हर आउटपुट निकालता है।|बीज {seed} से {n} परीक्षण बनाता है: हर परीक्षण हर इनपुट से एक बार मान निकालता है और हर आउटपुट निकालता है।
+@plural	Stopped after {n} trial: every output's mean is within ±{share} of itself.|Stopped after {n} trials: every output's mean is within ±{share} of itself.	{n} परीक्षण के बाद रुका: हर आउटपुट का माध्य अपने ±{share} के भीतर है।|{n} परीक्षणों के बाद रुका: हर आउटपुट का माध्य अपने ±{share} के भीतर है।
+@plural	Stopped at the most allowed, {n} trial, before every output's mean was within ±{share} of itself.|Stopped at the most allowed, {n} trials, before every output's mean was within ±{share} of itself.	अनुमत अधिकतम, {n} परीक्षण, पर रुका, इससे पहले कि हर आउटपुट का माध्य अपने ±{share} के भीतर आता।|अनुमत अधिकतम, {n} परीक्षणों, पर रुका, इससे पहले कि हर आउटपुट का माध्य अपने ±{share} के भीतर आता।
+@plural	{done} of {n} trial made|{done} of {n} trials made	{n} में से {done} परीक्षण बने|{n} में से {done} परीक्षण बने
+@plural	{n} trial gave no number (a division by zero, say) and is left out.|{n} trials gave no number (a division by zero, say) and are left out.	{n} परीक्षण से कोई संख्या नहीं मिली (जैसे शून्य से भाग) और उसे छोड़ दिया गया है।|{n} परीक्षणों से कोई संख्या नहीं मिली (जैसे शून्य से भाग) और उन्हें छोड़ दिया गया है।
+@plural	{n} trial · seed {seed} · {sampling}|{n} trials · seed {seed} · {sampling}	{n} परीक्षण · बीज {seed} · {sampling}|{n} परीक्षण · बीज {seed} · {sampling}
+@plural	{n} trial · seed {seed}|{n} trials · seed {seed}	{n} परीक्षण · बीज {seed}|{n} परीक्षण · बीज {seed}

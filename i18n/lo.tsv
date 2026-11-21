@@ -1226,3 +1226,84 @@ unit	yr	ປີ
 	Entities inside at the start are given for a block that does not exist. Remove them.	ເອນທິຕີທີ່ຢູ່ພາຍໃນເມື່ອເລີ່ມ ຖືກກຳນົດໃຫ້ບລັອກທີ່ບໍ່ມີຢູ່ ລຶບພວກມັນອອກ
 	{block} cannot have entities inside at the start: only a task or a batch can. Remove its “Inside at the start”.	{block} ບໍ່ສາມາດມີເອນທິຕີຢູ່ພາຍໃນເມື່ອເລີ່ມ: ມີພຽງໜ້າວຽກ ຫຼື ຊຸດ ທີ່ມີໄດ້ ລຶບ “ຢູ່ພາຍໃນເມື່ອເລີ່ມ” ຂອງມັນ
 	{block} has {count} entities inside at the start, but it holds at most {most}, its units and its waiting room. Set “Inside at the start” to {most} or fewer, or make the waiting room larger.	{block} ມີເອນທິຕີ {count} ຢູ່ພາຍໃນເມື່ອເລີ່ມ ແຕ່ຮັບໄດ້ສູງສຸດ {most} ລວມໜ່ວຍ ແລະ ຫ້ອງລໍຖ້າຂອງມັນ ຕັ້ງ “ຢູ່ພາຍໃນເມື່ອເລີ່ມ” ເປັນ {most} ຫຼື ໜ້ອຍກວ່າ ຫຼື ຂະຫຍາຍຫ້ອງລໍຖ້າ
+# Monte Carlo models in the window (ROADMAP M4.1, part 2)
+	95% interval of the chance: {lo} to {hi}.	ຊ່ວງ 95% ຂອງໂອກາດ: ຈາກ {lo} ຫາ {hi}.
+	A Monte Carlo model: uncertain durations, day rate and materials, and the chance the cost or the duration runs over.	ແບບຈຳລອງມອນຕີຄາໂລ: ໄລຍະເວລາທີ່ບໍ່ແນ່ນອນ, ຄ່າແຮງຕໍ່ມື້ ແລະ ວັດສະດຸ, ແລະ ໂອກາດທີ່ຄ່າໃຊ້ຈ່າຍ ຫຼື ໄລຍະເວລາຈະເກີນ.
+	A calculation with uncertain inputs, not a process: each trial draws every input once and works out every output from them.	ການຄິດໄລ່ທີ່ມີຄ່າປ້ອນເຂົ້າບໍ່ແນ່ນອນ, ບໍ່ແມ່ນຂະບວນການ: ແຕ່ລະຄັ້ງທົດລອງສຸ່ມຄ່າປ້ອນເຂົ້າທຸກຕົວໜຶ່ງຄັ້ງ ແລະ ຄິດໄລ່ຄ່າຜົນອອກທຸກຕົວຈາກພວກມັນ.
+	A rank correlation between two inputs, from -1 to 1: above 0 they tend to be high together, below 0 one tends to be high when the other is low. Inputs not paired here are independent; 0 removes a pair.	ສະຫະສຳພັນແບບອັນດັບລະຫວ່າງສອງຄ່າປ້ອນເຂົ້າ, ຈາກ -1 ຫາ 1: ສູງກວ່າ 0 ພວກມັນມັກສູງພ້ອມກັນ, ຕ່ຳກວ່າ 0 ຕົວໜຶ່ງມັກສູງເມື່ອອີກຕົວຕ່ຳ. ຄ່າປ້ອນເຂົ້າທີ່ບໍ່ໄດ້ຈັບຄູ່ຢູ່ນີ້ເປັນອິດສະຫຼະຕໍ່ກັນ; 0 ຈະລຶບຄູ່ອອກ.
+	A {percent} chance that {output} is less than {value}.	ໂອກາດ {percent} ທີ່ {output} ຈະນ້ອຍກວ່າ {value}.
+	A {percent} chance that {output} is more than {value}.	ໂອກາດ {percent} ທີ່ {output} ຈະຫຼາຍກວ່າ {value}.
+	About a 1 in {odds} chance that {output} is less than {value} ({percent}).	ໂອກາດປະມານ 1 ໃນ {odds} ທີ່ {output} ຈະນ້ອຍກວ່າ {value} ({percent}).
+	About a 1 in {odds} chance that {output} is more than {value} ({percent}).	ໂອກາດປະມານ 1 ໃນ {odds} ທີ່ {output} ຈະຫຼາຍກວ່າ {value} ({percent}).
+	Add correlation	ເພີ່ມສະຫະສຳພັນ
+	Add input	ເພີ່ມຄ່າປ້ອນເຂົ້າ
+	Add output	ເພີ່ມຄ່າຜົນອອກ
+	At most, trials	ສູງສຸດ, ຄັ້ງທົດລອງ
+	Correlations	ສະຫະສຳພັນ
+	Download inputs (CSV)	ດາວໂຫຼດຄ່າປ້ອນເຂົ້າ (CSV)
+	Each input is a distribution: every trial draws one value from it.	ແຕ່ລະຄ່າປ້ອນເຂົ້າແມ່ນການແຈກຢາຍ: ແຕ່ລະຄັ້ງທົດລອງສຸ່ມໜຶ່ງຄ່າຈາກມັນ.
+	Each output is worked out in every trial from the inputs and the outputs above it, each named as $name: for example $labour * $rate + $materials. Give it a target to see the chance of meeting it.	ແຕ່ລະຄ່າຜົນອອກຖືກຄິດໄລ່ໃນທຸກຄັ້ງທົດລອງຈາກຄ່າປ້ອນເຂົ້າ ແລະ ຄ່າຜົນອອກທີ່ຢູ່ຂ້າງເທິງມັນ, ແຕ່ລະຕົວເອີ້ນເປັນ $name: ຕົວຢ່າງ $labour * $rate + $materials. ໃຫ້ເປົ້າໝາຍແກ່ມັນເພື່ອເບິ່ງໂອກາດທີ່ຈະບັນລຸ.
+	Export inputs (CSV)	ສົ່ງອອກຄ່າປ້ອນເຂົ້າ (CSV)
+	First input	ຄ່າປ້ອນເຂົ້າທຳອິດ
+	How many trials	ຈັກຄັ້ງທົດລອງ
+	How many trials gave each value	ຈຳນວນຄັ້ງທົດລອງທີ່ໃຫ້ແຕ່ລະຄ່າ
+	Import inputs	ນຳເຂົ້າຄ່າປ້ອນເຂົ້າ
+	In 9 trials out of 10, {output} is between {low} and {high}; the mean is {mean} ± {half_width}.	ໃນ 9 ຄັ້ງທົດລອງຈາກ 10, {output} ຢູ່ລະຫວ່າງ {low} ແລະ {high}; ຄ່າສະເລ່ຍແມ່ນ {mean} ± {half_width}.
+	In 9 trials out of 10, {output} is between {low} and {high}; the mean is {mean}.	ໃນ 9 ຄັ້ງທົດລອງຈາກ 10, {output} ຢູ່ລະຫວ່າງ {low} ແລະ {high}; ຄ່າສະເລ່ຍແມ່ນ {mean}.
+	Inputs	ຄ່າປ້ອນເຂົ້າ
+	Inputs as a table	ຄ່າປ້ອນເຂົ້າເປັນຕາຕະລາງ
+	Latin hypercube	ໄຮເປີຄິວບ໌ລາຕິນ
+	Latin hypercube sampling	ການສຸ່ມຕົວຢ່າງແບບໄຮເປີຄິວບ໌ລາຕິນ
+	Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000.	ການສຸ່ມຕົວຢ່າງແບບໄຮເປີຄິວບ໌ລາຕິນແບ່ງຊ່ວງຂອງແຕ່ລະຄ່າປ້ອນເຂົ້າເປັນຊັ້ນທີ່ມີໂອກາດເທົ່າກັນ ແລ້ວສຸ່ມຈາກແຕ່ລະຊັ້ນຄັ້ງໜຶ່ງ ເຊິ່ງໂດຍທົ່ວໄປເຮັດໃຫ້ຜົນແມ່ນຍຳຂຶ້ນ. ເມື່ອໃຊ້ມັນ ຫຼື ມີຄ່າປ້ອນເຂົ້າທີ່ສຳພັນກັນ, ຄັ້ງທົດລອງຈະເຮັດເປັນຊຸດເຕັມ ຊຸດລະ 1,000.
+	Monte Carlo model	ແບບຈຳລອງມອນຕີຄາໂລ
+	New Monte Carlo Model	ແບບຈຳລອງມອນຕີຄາໂລໃໝ່
+	New Monte Carlo model	ແບບຈຳລອງມອນຕີຄາໂລໃໝ່
+	New correlation	ສະຫະສຳພັນໃໝ່
+	New input	ຄ່າປ້ອນເຂົ້າໃໝ່
+	New output	ຄ່າຜົນອອກໃໝ່
+	No inputs yet: add one below, or paste a table of them.	ຍັງບໍ່ມີຄ່າປ້ອນເຂົ້າ: ເພີ່ມໜຶ່ງຕົວຂ້າງລຸ່ມ ຫຼື ວາງຕາຕະລາງຂອງພວກມັນ.
+	No interval: too few batches of trials for one.	ບໍ່ມີຊ່ວງ: ຊຸດຂອງຄັ້ງທົດລອງໜ້ອຍເກີນໄປ.
+	No interval: every batch gave the same share, so their spread gives none.	ບໍ່ມີຊ່ວງ: ທຸກຊຸດໃຫ້ສັດສ່ວນດຽວກັນ ຄວາມກະຈາຍຂອງມັນຈຶ່ງບໍ່ໃຫ້ຊ່ວງ.
+	There is already an input or an output called {name}.	ມີຄ່າປ້ອນເຂົ້າ ຫຼື ຄ່າຜົນອອກຊື່ {name} ຢູ່ແລ້ວ.
+	{name}: the ± is across {n} of the {of} batches, the rest had no trial with a number.	{name}: ± ຄິດຈາກ {n} ໃນ {of} ຊຸດ; ທີ່ເຫຼືອບໍ່ມີຄັ້ງທົດລອງທີ່ໄດ້ຕົວເລກ.
+	{name}: the ± is across {n} of the {of} trials, the rest gave no number.	{name}: ± ຄິດຈາກ {n} ໃນ {of} ຄັ້ງທົດລອງ; ທີ່ເຫຼືອບໍ່ໄດ້ຕົວເລກ.
+	No outputs yet: add one below.	ຍັງບໍ່ມີຄ່າຜົນອອກ: ເພີ່ມໜຶ່ງຕົວຂ້າງລຸ່ມ.
+	None yet	ຍັງບໍ່ມີ
+	One input per line, as name, distribution, parameters and unit, copied from a spreadsheet or written as CSV: for example labour,triangular,min=80;mode=100;max=150,h.	ໜຶ່ງຄ່າປ້ອນເຂົ້າຕໍ່ແຖວ ເປັນຊື່, ການແຈກຢາຍ, ພາລາມິເຕີ ແລະ ໜ່ວຍ, ສຳເນົາຈາກຕາຕະລາງຄຳນວນ ຫຼື ຂຽນເປັນ CSV: ຕົວຢ່າງ labour,triangular,min=80;mode=100;max=150,h.
+	Outputs	ຄ່າຜົນອອກ
+	Paste inputs from a table	ວາງຄ່າປ້ອນເຂົ້າຈາກຕາຕະລາງ
+	Project budget	ງົບປະມານໂຄງການ
+	Rank correlation	ສະຫະສຳພັນແບບອັນດັບ
+	Remove the correlation of {a} and {b}	ລຶບສະຫະສຳພັນຂອງ {a} ແລະ {b}
+	Remove the input {name}	ລຶບຄ່າປ້ອນເຂົ້າ {name}
+	Remove the output {name}	ລຶບຄ່າຜົນອອກ {name}
+	Replace every input	ແທນທີ່ຄ່າປ້ອນເຂົ້າທັງໝົດ
+	Sampling	ການສຸ່ມຕົວຢ່າງ
+	Second input	ຄ່າປ້ອນເຂົ້າທີສອງ
+	Share of trials at or below each value	ສັດສ່ວນຂອງຄັ້ງທົດລອງທີ່ເທົ່າກັບ ຫຼື ຕ່ຳກວ່າແຕ່ລະຄ່າ
+	Target {value}	ເປົ້າໝາຍ {value}
+	The chance is under {hi}, with 95% confidence.	ໂອກາດຕ່ຳກວ່າ {hi} ດ້ວຍຄວາມເຊື່ອໝັ້ນ 95%.
+	The model: its inputs, outputs and trials	ແບບຈຳລອງ: ຄ່າປ້ອນເຂົ້າ, ຄ່າຜົນອອກ ແລະ ຄັ້ງທົດລອງຂອງມັນ
+	The number of trials was chosen from the results, so an interval may cover the true value less often than 95% of the time.	ຈຳນວນຄັ້ງທົດລອງຖືກເລືອກຈາກຜົນລັບ ຊ່ວງຈຶ່ງອາດຄອບຄຸມຄ່າຈິງໄດ້ໜ້ອຍກວ່າ 95% ຂອງເວລາ.
+	The trials above come first; more follow in batches until every output's mean is within that share of itself, or the most is reached.	ຄັ້ງທົດລອງຂ້າງເທິງເຮັດກ່ອນ; ຈາກນັ້ນເພີ່ມອີກເປັນຊຸດ ຈົນກວ່າຄ່າສະເລ່ຍຂອງທຸກຄ່າຜົນອອກຢູ່ພາຍໃນສັດສ່ວນນັ້ນຂອງຕົວມັນເອງ ຫຼື ຮອດຈຳນວນສູງສຸດ.
+	Trials and sampling	ຄັ້ງທົດລອງ ແລະ ການສຸ່ມຕົວຢ່າງ
+	Uncertain inputs instead of single guesses: the chance of an overrun, not one total.	ຄ່າປ້ອນເຂົ້າທີ່ບໍ່ແນ່ນອນແທນການຄາດເດົາຄ່າດຽວ: ໂອກາດທີ່ຈະເກີນ, ບໍ່ແມ່ນຍອດລວມດຽວ.
+	Will the project come in under budget?	ໂຄງການຈະຢູ່ພາຍໃນງົບປະມານບໍ?
+	a name, such as cost	ຊື່ ເຊັ່ນ ຄ່າໃຊ້ຈ່າຍ
+	a name, such as labour	ຊື່ ເຊັ່ນ ແຮງງານ
+	random sampling	ການສຸ່ມຕົວຢ່າງແບບສຸ່ມ
+	{asked} trials were asked for; with Latin hypercube sampling or correlated inputs a run is whole batches of {size}, so {n} ran.	ຂໍ {asked} ຄັ້ງທົດລອງ; ເມື່ອໃຊ້ການສຸ່ມຕົວຢ່າງແບບໄຮເປີຄິວບ໌ລາຕິນ ຫຼື ຄ່າປ້ອນເຂົ້າທີ່ສຳພັນກັນ ການປະມວນຜົນເຮັດເປັນຊຸດເຕັມ ຊຸດລະ {size} ຈຶ່ງເຮັດໄປ {n}.
+	{a} and {b}: {achieved} in the trials, {target} asked for	{a} ແລະ {b}: {achieved} ໃນຄັ້ງທົດລອງ, ຂໍ {target}
+	{output} was less than {value} in none of the {n} trials.	{output} ບໍ່ໄດ້ນ້ອຍກວ່າ {value} ໃນຄັ້ງທົດລອງໃດເລີຍຈາກທັງໝົດ {n} ຄັ້ງ.
+	{output} was more than {value} in none of the {n} trials.	{output} ບໍ່ໄດ້ຫຼາຍກວ່າ {value} ໃນຄັ້ງທົດລອງໃດເລີຍຈາກທັງໝົດ {n} ຄັ້ງ.
+@plural	Each ± is the half-width of the 95% interval of the mean across {n} independent batch of {size} trials. Latin hypercube sampling and correlated inputs make the trials within a batch depend on each other, so each batch counts as one.|Each ± is the half-width of the 95% interval of the mean across {n} independent batches of {size} trials. Latin hypercube sampling and correlated inputs make the trials within a batch depend on each other, so each batch counts as one.	ແຕ່ລະ ± ແມ່ນເຄິ່ງໜຶ່ງຂອງຄວາມກວ້າງຂອງຊ່ວງ 95% ຂອງຄ່າສະເລ່ຍຈາກ {n} ຊຸດທີ່ເປັນອິດສະຫຼະ ຊຸດລະ {size} ຄັ້ງທົດລອງ. ການສຸ່ມຕົວຢ່າງແບບໄຮເປີຄິວບ໌ລາຕິນ ແລະ ຄ່າປ້ອນເຂົ້າທີ່ສຳພັນກັນເຮັດໃຫ້ຄັ້ງທົດລອງພາຍໃນຊຸດຂຶ້ນກັບກັນ ແຕ່ລະຊຸດຈຶ່ງນັບເປັນໜຶ່ງ.
+@plural	Each ± is the half-width of the 95% interval of the mean across {n} independent trial.|Each ± is the half-width of the 95% interval of the mean across {n} independent trials.	ແຕ່ລະ ± ແມ່ນເຄິ່ງໜຶ່ງຂອງຄວາມກວ້າງຂອງຊ່ວງ 95% ຂອງຄ່າສະເລ່ຍຈາກ {n} ຄັ້ງທົດລອງທີ່ເປັນອິດສະຫຼະ.
+@plural	Finished {n} trial|Finished {n} trials	ທົດລອງສຳເລັດ {n} ຄັ້ງ
+@plural	Imported {n} input|Imported {n} inputs	ນຳເຂົ້າ {n} ຄ່າປ້ອນເຂົ້າ
+@plural	Makes {n} trial from seed {seed}: each draws every input once and works out every output.|Makes {n} trials from seed {seed}: each draws every input once and works out every output.	ເຮັດ {n} ຄັ້ງທົດລອງໂດຍໃຊ້ເມັດສຸ່ມ {seed}: ແຕ່ລະຄັ້ງສຸ່ມຄ່າປ້ອນເຂົ້າທຸກຕົວໜຶ່ງຄັ້ງ ແລະ ຄິດໄລ່ຄ່າຜົນອອກທຸກຕົວ.
+@plural	Stopped after {n} trial: every output's mean is within ±{share} of itself.|Stopped after {n} trials: every output's mean is within ±{share} of itself.	ຢຸດຫຼັງຈາກ {n} ຄັ້ງທົດລອງ: ຄ່າສະເລ່ຍຂອງທຸກຄ່າຜົນອອກຢູ່ພາຍໃນ ±{share} ຂອງຕົວມັນເອງ.
+@plural	Stopped at the most allowed, {n} trial, before every output's mean was within ±{share} of itself.|Stopped at the most allowed, {n} trials, before every output's mean was within ±{share} of itself.	ຢຸດທີ່ຈຳນວນສູງສຸດທີ່ອະນຸຍາດ, {n} ຄັ້ງທົດລອງ, ກ່ອນທີ່ຄ່າສະເລ່ຍຂອງທຸກຄ່າຜົນອອກຈະຢູ່ພາຍໃນ ±{share} ຂອງຕົວມັນເອງ.
+@plural	{done} of {n} trial made|{done} of {n} trials made	ເຮັດແລ້ວ {done} ຈາກ {n} ຄັ້ງທົດລອງ
+@plural	{n} trial gave no number (a division by zero, say) and is left out.|{n} trials gave no number (a division by zero, say) and are left out.	{n} ຄັ້ງທົດລອງບໍ່ໄດ້ໃຫ້ຕົວເລກ (ເຊັ່ນ ການຫານດ້ວຍສູນ) ແລະ ຖືກຕັດອອກ.
+@plural	{n} trial · seed {seed} · {sampling}|{n} trials · seed {seed} · {sampling}	{n} ຄັ້ງທົດລອງ · ເມັດສຸ່ມ {seed} · {sampling}
+@plural	{n} trial · seed {seed}|{n} trials · seed {seed}	{n} ຄັ້ງທົດລອງ · ເມັດສຸ່ມ {seed}

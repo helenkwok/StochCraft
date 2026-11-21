@@ -33,6 +33,7 @@ mod help;
 pub mod i18n;
 mod layout_view;
 mod live;
+mod montecarlo;
 mod pools;
 mod prefs;
 mod results;
@@ -507,6 +508,23 @@ pub const EXAMPLES: &[Example] = &[
             featured: false,
         },
     },
+    Example {
+        title: "Project budget",
+        about: "A Monte Carlo model: uncertain durations, day rate and materials, and the chance the cost or the duration runs over.",
+        file: "budget.bpmn",
+        bytes: include_bytes!("../../../tests/models/budget.bpmn"),
+        card: start::Card {
+            question: "Will the project come in under budget?",
+            industry: start::Industry::Projects,
+            topics: &[],
+            teaches: "Uncertain inputs instead of single guesses: the chance of an overrun, not one total.",
+            minutes: 3,
+            proof: Some(start::Proof::Probability),
+            // A calculation, not a process: no blocks to show.
+            flow: &[],
+            featured: true,
+        },
+    },
 ];
 
 /// A built-in example model.
@@ -573,6 +591,8 @@ impl Platform {
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 enum Replace {
     New,
+    /// A new, empty Monte Carlo model (File ▸ New Monte Carlo Model).
+    NewMonteCarlo,
     /// A new, empty model to build on the canvas (the start page's Start from a blank model),
     /// with Getting started beside it for Build a first model.
     Build {
@@ -874,6 +894,8 @@ pub struct App {
     /// An empty model is being built (from the start page), so the model view shows rather than
     /// the start page.
     building: bool,
+    /// The Monte Carlo screens' state, and a Monte Carlo run in progress.
+    mc: montecarlo::Mc,
     /// Where the charts are drawn this frame (none until the work area draws them), for
     /// exporting them.
     charts_rect: Option<egui::Rect>,
@@ -980,6 +1002,7 @@ impl App {
             guide: guide::Guide::default(),
             start: start::Start::default(),
             building: false,
+            mc: montecarlo::Mc::default(),
             charts_rect: None,
             screenshot: std::sync::Arc::default(),
             pending_png: None,

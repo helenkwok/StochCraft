@@ -64,6 +64,12 @@ pub mod table;
 
 pub use correlate::rank_correlation;
 
+/// Values sorted per step when the results are worked out a piece at a time.
+const SORT_CHUNK: usize = 1 << 18;
+
+/// Elements moved per merge step of that sort.
+const MERGE_BUDGET: usize = 1 << 19;
+
 /// Trials per batch: the unit of Latin hypercube strata, of correlation and of parallel work.
 pub const BATCH: u64 = 1_000;
 
@@ -345,6 +351,18 @@ fn check_all(mc: &MonteCarlo) -> (Vec<Problem>, Checked) {
             "bad_stop",
             "A sequential stop needs a share of the mean above 0 and at least one trial.",
         ));
+    } else if let Some(s) = mc.stop
+        && (mc.sampling == Sampling::LatinHypercube || k >= 2)
+        && u64::from(s.max) < BATCH
+    {
+        out.push(Problem::error(
+            None,
+            "bad_stop",
+            format!(
+                "Latin hypercube sampling and correlated inputs sample in whole batches, so the most trials of a sequential stop must be at least one batch (1,000 trials); {} is too few. Raise the most, or use random sampling with no correlations.",
+                s.max
+            ),
+        ));
     }
     out.sort_by_key(|p| !p.error);
     (
@@ -571,74 +589,248 @@ impl Compiled {
     }
 
     /// Runs, with `make` making each set of batches asked for (in parallel, say); it must
-    /// return them in the order asked.
+    /// return them in the order asked. This is [`Compiled::stepper`] with every batch it wants
+    /// made at once.
     pub fn run_with<E>(
         &self,
         options: &RunOptions,
         make: &mut MakeBlocks<'_, E>,
     ) -> Result<McResults, E> {
-        let Some(stop) = options.stop else {
-            let trials = self.trials_for(options.trials);
-            let blocks = make(&jobs(0, trials))?;
-            let mut results = self.summarise(&blocks, &options.percentiles);
-            results.requested_trials = options.trials;
-            return Ok(results);
-        };
-        let mut max = u64::from(stop.max).clamp(1, MAX_TRIALS);
-        if self.batched() {
-            // Every batch full, so the batches are alike.
-            max = (max / BATCH).max(1) * BATCH;
-        }
-        let mut n = options
-            .trials
-            .max(1)
-            .div_ceil(BATCH)
-            .saturating_mul(BATCH)
-            .min(max);
-        let mut blocks = make(&jobs(0, n))?;
-        let mut looks = vec![n];
-        let reason = loop {
-            let verdicts: Vec<precision::Verdict> = (0..self.outputs.len())
-                .map(|o| {
-                    // Judged on the interval the results report: across trials, or across
-                    // batches (whose count, not the trials', says whether there is one).
-                    let s = if self.batched() {
-                        Summary::of(&batch_means(&blocks, o))
-                    } else {
-                        Summary::of(&finite(&blocks, o))
-                    };
-                    precision::verdict(
-                        s.map_or(0, |s| s.n),
-                        s.map(|s| s.mean),
-                        s.map(|s| s.half_width),
-                        s.map(|s| s.std_dev),
-                        Scale::Relative(stop.relative),
-                    )
-                })
-                .collect();
-            match precision::next_count(n, max, &verdicts) {
-                Step::Stop(reason) => break reason,
-                Step::Continue(next) => {
-                    let next = next.div_ceil(BATCH).saturating_mul(BATCH).min(max);
-                    blocks.extend(make(&jobs(n, next))?);
-                    n = next;
-                    looks.push(n);
-                }
+        let mut stepper = self.stepper(options);
+        loop {
+            if let Some(results) = stepper.take_results() {
+                return Ok(results);
             }
-        };
-        let mut results = self.summarise(&blocks, &options.percentiles);
-        results.requested_trials = options.trials;
-        results.stop = Some(StopReport {
-            relative: stop.relative,
-            max,
-            reason,
-            looks,
-        });
-        Ok(results)
+            if stepper.is_summarising() {
+                stepper.summarise_step(self);
+                continue;
+            }
+            let wanted = stepper.wanted().to_vec();
+            let blocks = make(&wanted)?;
+            stepper.deliver(self, blocks);
+        }
     }
 
-    /// The results of `blocks` (in index order).
+    /// A run made a few batches at a time: see [`Stepper`].
+    pub fn stepper(&self, options: &RunOptions) -> Stepper {
+        let (asked, max) = match options.stop {
+            None => (self.trials_for(options.trials), None),
+            Some(stop) => {
+                let mut max = u64::from(stop.max).clamp(1, MAX_TRIALS);
+                if self.batched() {
+                    // Every batch full, so the batches are alike.
+                    max = (max / BATCH).max(1) * BATCH;
+                }
+                let n = options
+                    .trials
+                    .max(1)
+                    .div_ceil(BATCH)
+                    .saturating_mul(BATCH)
+                    .min(max);
+                (n, Some(max))
+            }
+        };
+        Stepper {
+            options: options.clone(),
+            max,
+            asked,
+            made: 0,
+            blocks: Vec::new(),
+            wanted: jobs(0, asked),
+            next: 0,
+            looks: vec![asked],
+            summing: None,
+            results: None,
+            done: false,
+        }
+    }
+
+    /// Whether a sequential run stops after `n` trials, or how many it goes on to (whole
+    /// batches, at most `max`), judged on `blocks`.
+    fn next_look(&self, blocks: &[Block], stop: McStop, n: u64, max: u64) -> Step {
+        let verdicts: Vec<precision::Verdict> = (0..self.outputs.len())
+            .map(|o| {
+                // Judged on the interval the results report: across trials, or across batches
+                // (whose count, not the trials', says whether there is one).
+                let s = if self.batched() {
+                    Summary::of(&batch_means(blocks, o))
+                } else {
+                    Summary::of(&finite(blocks, o))
+                };
+                precision::verdict(
+                    s.map_or(0, |s| s.n),
+                    s.map(|s| s.mean),
+                    s.map(|s| s.half_width),
+                    s.map(|s| s.std_dev),
+                    Scale::Relative(stop.relative),
+                )
+            })
+            .collect();
+        match precision::next_count(n, max, &verdicts) {
+            Step::Continue(next) => {
+                Step::Continue(next.div_ceil(BATCH).saturating_mul(BATCH).min(max))
+            }
+            stop => stop,
+        }
+    }
+
+    /// The results of `blocks` (in index order), every piece worked out without a pause, as
+    /// [`Stepper::summarise_step`] does one at a time.
     pub fn summarise(&self, blocks: &[Block], percentiles: &[f64]) -> McResults {
+        let mut summing = Summing::new(percentiles, None);
+        while !summing.step(self, blocks) {}
+        let mut results = summing.finish(self, blocks);
+        results.requested_trials = results.trials;
+        results
+    }
+}
+
+/// The results of a run, worked out a piece at a time: each [`Summing::step`] summarises one
+/// output (a copy of its values, sorted), or one input, or one correlation, so that a window can
+/// draw between the pieces when a run has millions of trials. [`Compiled::summarise`] does the
+/// same pieces without stopping, so the results are the same.
+#[derive(Debug, Clone)]
+struct Summing {
+    /// The percentiles to report, ascending.
+    ps: Vec<f64>,
+    outputs: Vec<OutputResult>,
+    /// Each input's values, in trial order, for the correlations.
+    columns: Vec<Vec<f64>>,
+    inputs: Vec<InputResult>,
+    correlations: Vec<CorrelationResult>,
+    /// How a sequential run went, for the results.
+    stop: Option<StopReport>,
+    /// The output being worked out: its finite values being sorted, and how many trials gave a
+    /// value of any kind.
+    sorting: Option<(Sorter<f64>, usize)>,
+    /// The input being ranked (its column's values in order, with their trials) and which.
+    ranking: Option<(Sorter<(f64, usize)>, usize)>,
+    /// Each correlated input's average ranks, once ranked.
+    ranks: Vec<Option<Vec<f64>>>,
+    /// Values sorted per chunk, and elements moved per merge step ([`Sorter`]).
+    chunk: usize,
+    budget: usize,
+}
+
+/// Values sorted in fixed-size chunks, one chunk per step, and then merged in bottom-up passes
+/// of at most `budget` elements per step into a second buffer, which becomes the first at the
+/// end of each pass. The order is `cmp`'s, a total order (`f64::total_cmp`, or that and then
+/// the trial's index for ranking), so the result is that of `sort_by(cmp)` however the work is
+/// cut into steps.
+#[derive(Debug, Clone)]
+struct Sorter<T> {
+    /// The values: sorted runs of `width` (the last may be shorter) once the chunks are done.
+    a: Vec<T>,
+    /// The merge's output buffer.
+    b: Vec<T>,
+    cmp: fn(&T, &T) -> std::cmp::Ordering,
+    chunk: usize,
+    budget: usize,
+    /// Chunks sorted so far.
+    chunks: usize,
+    /// The length of the runs being merged; 0 while chunks are still being sorted.
+    width: usize,
+    /// The merge of the pair of runs from `lo`: next of the left run (`i`), of the right (`j`),
+    /// and the next place in `b` (`k`).
+    lo: usize,
+    i: usize,
+    j: usize,
+    k: usize,
+}
+
+impl<T: Copy> Sorter<T> {
+    fn new(
+        values: Vec<T>,
+        chunk: usize,
+        budget: usize,
+        cmp: fn(&T, &T) -> std::cmp::Ordering,
+    ) -> Self {
+        Self {
+            a: values,
+            b: Vec::new(),
+            cmp,
+            chunk: chunk.max(1),
+            budget: budget.max(1),
+            chunks: 0,
+            width: 0,
+            lo: 0,
+            i: 0,
+            j: 0,
+            k: 0,
+        }
+    }
+
+    fn is_done(&self) -> bool {
+        self.width != 0 && self.width >= self.a.len()
+    }
+
+    /// The sorted values; only once [`Sorter::is_done`].
+    fn into_sorted(self) -> Vec<T> {
+        self.a
+    }
+
+    /// Does the next piece of work: sorts a chunk, or moves up to `budget` elements in a merge.
+    fn step(&mut self) {
+        let n = self.a.len();
+        if self.width == 0 {
+            let start = self.chunks * self.chunk;
+            if start < n {
+                let end = (start + self.chunk).min(n);
+                if let Some(part) = self.a.get_mut(start..end) {
+                    part.sort_by(self.cmp);
+                }
+                self.chunks += 1;
+            }
+            if self.chunks * self.chunk >= n {
+                self.width = self.chunk;
+                self.b = self.a.clone();
+                self.start_pair(0);
+            }
+            return;
+        }
+        let mut moved = 0;
+        while moved < self.budget && self.width < n {
+            let mid = (self.lo + self.width).min(n);
+            let hi = (self.lo + 2 * self.width).min(n);
+            if self.k < hi {
+                let left = match (self.a.get(self.i), self.a.get(self.j)) {
+                    (Some(l), Some(r)) if self.i < mid && self.j < hi => {
+                        (self.cmp)(l, r) != std::cmp::Ordering::Greater
+                    }
+                    _ => self.i < mid,
+                };
+                let at = if left { self.i } else { self.j };
+                if let (Some(v), Some(slot)) = (self.a.get(at).copied(), self.b.get_mut(self.k)) {
+                    *slot = v;
+                }
+                if left {
+                    self.i += 1;
+                } else {
+                    self.j += 1;
+                }
+                self.k += 1;
+                moved += 1;
+            } else if hi >= n {
+                // A pass is done: its output is the input of the next, with runs twice as long.
+                std::mem::swap(&mut self.a, &mut self.b);
+                self.width = self.width.saturating_mul(2);
+                self.start_pair(0);
+            } else {
+                self.start_pair(hi);
+            }
+        }
+    }
+
+    fn start_pair(&mut self, lo: usize) {
+        self.lo = lo;
+        self.i = lo;
+        self.j = (lo + self.width).min(self.a.len());
+        self.k = lo;
+    }
+}
+
+impl Summing {
+    fn new(percentiles: &[f64], stop: Option<StopReport>) -> Self {
         let mut ps: Vec<f64> = PERCENTILES
             .iter()
             .chain(percentiles)
@@ -647,16 +839,138 @@ impl Compiled {
             .collect();
         ps.sort_by(f64::total_cmp);
         ps.dedup();
+        Self {
+            ps,
+            outputs: Vec::new(),
+            columns: Vec::new(),
+            inputs: Vec::new(),
+            correlations: Vec::new(),
+            stop,
+            sorting: None,
+            ranking: None,
+            ranks: Vec::new(),
+            chunk: SORT_CHUNK,
+            budget: MERGE_BUDGET,
+        }
+    }
+
+    /// Works out the next output, input or correlation. True once there is none left.
+    fn step(&mut self, c: &Compiled, blocks: &[Block]) -> bool {
+        if let Some((out, _)) = c.outputs.get(self.outputs.len()) {
+            let o = self.outputs.len();
+            match self.sorting.take() {
+                // First the values are copied; then they are sorted a piece at a time; then the
+                // output is described from them.
+                None => {
+                    let total = blocks
+                        .iter()
+                        .filter_map(|b| b.outputs.get(o))
+                        .map(Vec::len)
+                        .sum();
+                    let sorter =
+                        Sorter::new(finite(blocks, o), self.chunk, self.budget, f64::total_cmp);
+                    self.sorting = Some((sorter, total));
+                }
+                Some((mut sorter, total)) if !sorter.is_done() => {
+                    sorter.step();
+                    self.sorting = Some((sorter, total));
+                }
+                Some((sorter, total)) => {
+                    let mut r = describe_output(out, &sorter.into_sorted(), total, &self.ps);
+                    if c.batched() {
+                        by_batches(&mut r, out, blocks, o);
+                    }
+                    self.outputs.push(r);
+                }
+            }
+        } else if let Some(input) = c.inputs.get(self.inputs.len()) {
+            let values = column(blocks, self.inputs.len(), true);
+            let s = Summary::of(&values);
+            self.inputs.push(InputResult {
+                name: input.name.clone(),
+                unit: input.unit.clone(),
+                mean: s.map(|s| s.mean),
+                std_dev: s.map(|s| s.std_dev),
+                min: values.iter().copied().reduce(f64::min),
+                max: values.iter().copied().reduce(f64::max),
+                expected_mean: match &input.dist {
+                    Dist::Constant(v) => Some(*v),
+                    d => d.mean(),
+                },
+            });
+            self.columns.push(values);
+        } else if let Some(k) = self.next_unranked(c) {
+            // A correlated input is ranked once, however many correlations it is in: its values
+            // are paired with their trials, sorted a piece at a time, and given average ranks.
+            match self.ranking.take() {
+                None => {
+                    let pairs: Vec<(f64, usize)> = self
+                        .columns
+                        .get(k)
+                        .map(|col| col.iter().copied().zip(0..).collect())
+                        .unwrap_or_default();
+                    let sorter = Sorter::new(pairs, self.chunk, self.budget, correlate::pair_order);
+                    self.ranking = Some((sorter, k));
+                }
+                Some((mut sorter, at)) if !sorter.is_done() => {
+                    sorter.step();
+                    self.ranking = Some((sorter, at));
+                }
+                Some((sorter, at)) => {
+                    if let Some(slot) = self.ranks.get_mut(at) {
+                        *slot = Some(correlate::assign_ranks(&sorter.into_sorted()));
+                    }
+                    // Only its ranks are needed from here on.
+                    if let Some(col) = self.columns.get_mut(at) {
+                        *col = Vec::new();
+                    }
+                }
+            }
+        } else if let Some(want) = c.correlations.get(self.correlations.len()) {
+            let index = |n: &str| c.inputs.iter().position(|i| i.name == n);
+            let ranked = |k: usize| self.ranks.get(k)?.as_deref();
+            let achieved = index(want.a.as_str())
+                .zip(index(want.b.as_str()))
+                .and_then(|(a, b)| correlate::correlation_of_ranks(ranked(a)?, ranked(b)?));
+            self.correlations.push(CorrelationResult {
+                a: want.a.clone(),
+                b: want.b.clone(),
+                target: want.rank,
+                achieved,
+            });
+        }
+        self.outputs.len() >= c.outputs.len()
+            && self.inputs.len() >= c.inputs.len()
+            && self.correlations.len() >= c.correlations.len()
+    }
+
+    /// The first input that a correlation names and that has no ranks yet, once every input's
+    /// values are in.
+    fn next_unranked(&mut self, c: &Compiled) -> Option<usize> {
+        if self.inputs.len() < c.inputs.len() {
+            return None;
+        }
+        self.ranks.resize_with(c.inputs.len(), || None);
+        c.inputs.iter().enumerate().position(|(k, input)| {
+            self.ranks.get(k).is_some_and(Option::is_none)
+                && c.correlations
+                    .iter()
+                    .any(|w| w.a == input.name || w.b == input.name)
+        })
+    }
+
+    /// The results, once every piece is in.
+    fn finish(self, c: &Compiled, blocks: &[Block]) -> McResults {
         let trials: u64 = blocks
             .iter()
             .map(|b| {
                 b.outputs
                     .first()
                     .or(b.inputs.first())
-                    .map_or(0, |c| c.len() as u64)
+                    .map_or(0, |col| col.len() as u64)
             })
             .sum();
-        let basis = if self.batched() {
+        let basis = if c.batched() {
             IntervalBasis::Batches {
                 batches: blocks.len() as u64,
                 size: BATCH,
@@ -664,64 +978,16 @@ impl Compiled {
         } else {
             IntervalBasis::Trials
         };
-        let outputs = self
-            .outputs
-            .iter()
-            .enumerate()
-            .map(|(o, (out, _))| {
-                let mut r = describe_output(out, &column(blocks, o, false), &ps);
-                if self.batched() {
-                    by_batches(&mut r, out, blocks, o);
-                }
-                r
-            })
-            .collect();
-        let inputs: Vec<Vec<f64>> = (0..self.inputs.len())
-            .map(|i| column(blocks, i, true))
-            .collect();
-        let input_results = self
-            .inputs
-            .iter()
-            .zip(&inputs)
-            .map(|(input, values)| {
-                let s = Summary::of(values);
-                InputResult {
-                    name: input.name.clone(),
-                    unit: input.unit.clone(),
-                    mean: s.map(|s| s.mean),
-                    std_dev: s.map(|s| s.std_dev),
-                    min: values.iter().copied().reduce(f64::min),
-                    max: values.iter().copied().reduce(f64::max),
-                    expected_mean: match &input.dist {
-                        Dist::Constant(v) => Some(*v),
-                        d => d.mean(),
-                    },
-                }
-            })
-            .collect();
-        let index = |n: &str| self.inputs.iter().position(|i| i.name == n);
-        let correlations = self
-            .correlations
-            .iter()
-            .map(|c| CorrelationResult {
-                a: c.a.clone(),
-                b: c.b.clone(),
-                target: c.rank,
-                achieved: index(c.a.as_str())
-                    .zip(index(c.b.as_str()))
-                    .and_then(|(a, b)| rank_correlation(inputs.get(a)?, inputs.get(b)?)),
-            })
-            .collect();
         McResults {
             trials,
             requested_trials: trials,
             interval: basis,
-            seed: self.seed,
-            sampling: self.sampling,
-            inputs: input_results,
-            outputs,
-            correlations,
-            stop: None,
+            seed: c.seed,
+            sampling: c.sampling,
+            inputs: self.inputs,
+            outputs: self.outputs,
+            correlations: self.correlations,
+            stop: self.stop,
         }
     }
 }
@@ -773,7 +1039,9 @@ fn t_half_width(xs: &[f64]) -> Option<f64> {
 }
 
 /// Replaces an output's intervals by those across batches: the mean's from the batch means, the
-/// target's from the batch proportions (clamped to [0, 1]); none with fewer than two batches.
+/// target's from the batch proportions (clamped to [0, 1]); none with fewer than two batches,
+/// and none for the target when every batch gave the same proportion (their spread says
+/// nothing about how far the chance may be from it, and a width of 0 would claim it is exact).
 fn by_batches(r: &mut OutputResult, out: &McOutput, blocks: &[Block], o: usize) {
     let each = per_block(blocks, o);
     let means: Vec<f64> = each
@@ -782,6 +1050,7 @@ fn by_batches(r: &mut OutputResult, out: &McOutput, blocks: &[Block], o: usize) 
         .map(|v| v.iter().sum::<f64>() / v.len() as f64)
         .collect();
     r.half_width = t_half_width(&means);
+    r.interval_count = means.len() as u64;
     if let (Some(t), Some(result)) = (out.target, r.target.as_mut()) {
         let shares: Vec<f64> = each
             .iter()
@@ -790,7 +1059,7 @@ fn by_batches(r: &mut OutputResult, out: &McOutput, blocks: &[Block], o: usize) 
             .collect();
         result.interval = result
             .probability
-            .zip(t_half_width(&shares))
+            .zip(t_half_width(&shares).filter(|h| *h > 0.0))
             .map(|(p, h)| ((p - h).max(0.0), (p + h).min(1.0)));
     }
 }
@@ -864,6 +1133,9 @@ pub struct OutputResult {
     /// Half-width of the 95% Student-t interval of the mean, across trials or across batches
     /// ([`IntervalBasis`]); `None` without two of them.
     pub half_width: Option<f64>,
+    /// How many values the intervals are across: this output's valid trials, or the batches
+    /// that have a valid trial of it (so the run's count less those left out).
+    pub interval_count: u64,
     pub std_dev: Option<f64>,
     pub min: Option<f64>,
     pub max: Option<f64>,
@@ -915,11 +1187,141 @@ pub struct StopReport {
     pub looks: Vec<u64>,
 }
 
-fn describe_output(out: &McOutput, all: &[f64], ps: &[f64]) -> OutputResult {
-    let mut sorted: Vec<f64> = all.iter().copied().filter(|v| v.is_finite()).collect();
-    sorted.sort_by(f64::total_cmp);
+/// A run made a few batches at a time ([`Compiled::stepper`]), so a window can draw between
+/// them: it says which batches it wants ([`Stepper::wanted`]), takes them as they are made
+/// ([`Stepper::deliver`]), and once every batch it asked for is in, it looks at the results:
+/// a fixed run, or a sequential one that has stopped, has its results
+/// ([`Stepper::take_results`]); a sequential one that goes on wants more. The looks fall at the
+/// same numbers of trials however the batches are handed over, so the results are those of
+/// [`Compiled::run_with`].
+#[derive(Debug, Clone)]
+pub struct Stepper {
+    options: RunOptions,
+    /// A sequential run's most trials; `None` for a fixed run.
+    max: Option<u64>,
+    /// The trials asked for so far.
+    asked: u64,
+    /// The trials made so far.
+    made: u64,
+    blocks: Vec<Block>,
+    /// The batches asked for, the first `next` of them made.
+    wanted: Vec<BlockJob>,
+    next: usize,
+    /// The trials at each look so far.
+    looks: Vec<u64>,
+    /// The results being worked out, a piece at a time, once the run has all its batches.
+    summing: Option<Summing>,
+    results: Option<McResults>,
+    /// The run has its results (taken or not).
+    done: bool,
+}
+
+impl Stepper {
+    /// The batches wanted next, in order: those asked for and not yet made.
+    pub fn wanted(&self) -> &[BlockJob] {
+        self.wanted.get(self.next..).unwrap_or(&[])
+    }
+
+    /// The trials made so far.
+    pub fn made(&self) -> u64 {
+        self.made
+    }
+
+    /// The trials asked for so far: a sequential run asks for more after a look.
+    pub fn asked(&self) -> u64 {
+        self.asked
+    }
+
+    /// The run has its results (they may have been taken).
+    pub fn is_done(&self) -> bool {
+        self.done
+    }
+
+    /// Every batch is in and the results are being worked out, a piece at a time
+    /// ([`Stepper::summarise_step`]), so that a window can draw between the pieces.
+    pub fn is_summarising(&self) -> bool {
+        self.summing.is_some()
+    }
+
+    /// Works out the next piece of the results (an output's, an input's or a correlation's):
+    /// the same pieces, in the same order, as [`Compiled::summarise`]. Once the last is in,
+    /// [`Stepper::is_done`] is true. Nothing to do unless [`Stepper::is_summarising`].
+    pub fn summarise_step(&mut self, compiled: &Compiled) {
+        let Some(summing) = self.summing.as_mut() else {
+            return;
+        };
+        if !summing.step(compiled, &self.blocks) {
+            return;
+        }
+        if let Some(summing) = self.summing.take() {
+            let mut results = summing.finish(compiled, &self.blocks);
+            results.requested_trials = self.options.trials;
+            self.results = Some(results);
+            self.done = true;
+        }
+    }
+
+    /// The results, once the run has them (the first call takes them).
+    pub fn take_results(&mut self) -> Option<McResults> {
+        self.results.take()
+    }
+
+    /// Takes batches made by `compiled` from the front of [`Stepper::wanted`], in its order (one
+    /// that is not the next wanted is left out). Once every batch asked for is in, looks at the
+    /// results.
+    pub fn deliver(&mut self, compiled: &Compiled, blocks: Vec<Block>) {
+        for b in blocks {
+            if let Some(job) = self.wanted.get(self.next)
+                && job.index == b.index
+            {
+                self.made += job.trials;
+                self.next += 1;
+                self.blocks.push(b);
+            }
+        }
+        if self.next >= self.wanted.len() && !self.done && self.summing.is_none() {
+            self.look(compiled);
+        }
+    }
+
+    /// Every batch asked for is in: more batches for a sequential run, or else the results begin
+    /// to be worked out.
+    fn look(&mut self, compiled: &Compiled) {
+        let step = match (self.options.stop, self.max) {
+            (Some(stop), Some(max)) => Some((
+                stop,
+                max,
+                compiled.next_look(&self.blocks, stop, self.asked, max),
+            )),
+            _ => None,
+        };
+        if let Some((_, _, Step::Continue(next))) = step
+            && next > self.asked
+        {
+            self.wanted = jobs(self.asked, next);
+            self.next = 0;
+            self.asked = next;
+            self.looks.push(next);
+            return;
+        }
+        let stop = step.map(|(stop, max, step)| StopReport {
+            relative: stop.relative,
+            max,
+            reason: match step {
+                Step::Stop(reason) => reason,
+                // Not expected: no more trials to go on to.
+                Step::Continue(_) => Reason::MaxReached,
+            },
+            looks: self.looks.clone(),
+        });
+        self.summing = Some(Summing::new(&self.options.percentiles, stop));
+    }
+}
+
+/// An output's results from its finite values `sorted` (ascending) among `total` trials.
+fn describe_output(out: &McOutput, sorted: &[f64], total: usize, ps: &[f64]) -> OutputResult {
     let valid = sorted.len() as u64;
-    let s = Summary::of(&sorted);
+    let s = Summary::of(sorted);
     let target = out.target.map(|t| {
         let met = sorted.iter().filter(|v| t.met(**v)).count() as u64;
         let prop = Proportion::new(met, valid);
@@ -935,22 +1337,23 @@ fn describe_output(out: &McOutput, all: &[f64], ps: &[f64]) -> OutputResult {
         name: out.name.clone(),
         unit: out.unit.clone(),
         valid,
-        invalid: all.len() as u64 - valid,
+        invalid: (total as u64).saturating_sub(valid),
         mean: s.map(|s| s.mean),
         half_width: s.map(|s| s.half_width).filter(|h| h.is_finite()),
+        interval_count: valid,
         std_dev: s.map(|s| s.std_dev),
         min: sorted.first().copied(),
         max: sorted.last().copied(),
         percentiles: ps
             .iter()
-            .filter_map(|p| Some((*p, sorted_quantile(&sorted, p / 100.0)?)))
+            .filter_map(|p| Some((*p, sorted_quantile(sorted, p / 100.0)?)))
             .collect(),
         target,
-        histogram: histogram(&sorted),
+        histogram: histogram(sorted),
         cdf: (0..=100)
             .filter_map(|i| {
                 let p = f64::from(i) / 100.0;
-                Some((sorted_quantile(&sorted, p)?, p))
+                Some((sorted_quantile(sorted, p)?, p))
             })
             .collect(),
     }
@@ -1206,5 +1609,304 @@ mod tests {
         );
         assert_eq!(jobs(2_000, 3_000).first().map(|j| j.index), Some(2));
         assert!(jobs(5, 5).is_empty());
+    }
+
+    /// A run made one batch at a time, as the window makes it between frames, has the results
+    /// of one made at once: fixed, and sequential with its looks at the same trials.
+    #[test]
+    fn a_run_made_a_batch_at_a_time_is_the_same_run() {
+        let mc = MonteCarlo {
+            inputs: vec![
+                input(
+                    "x",
+                    Dist::Normal {
+                        mean: 10.0,
+                        std_dev: 3.0,
+                    },
+                ),
+                input("y", Dist::Exponential { mean: 2.0 }),
+            ],
+            outputs: vec![output("s", "$x + $y")],
+            correlations: vec![],
+            sampling: Sampling::Random,
+            stop: None,
+        };
+        let c = compile(&mc, 11).unwrap_or_else(|p| unreachable!("{p:?}"));
+        for stop in [
+            None,
+            Some(McStop {
+                relative: 0.002,
+                max: 40_000,
+            }),
+        ] {
+            let options = RunOptions {
+                trials: 2_500,
+                stop,
+                percentiles: vec![],
+            };
+            let at_once = c.run(&options);
+            let mut stepper = c.stepper(&options);
+            let mut steps = 0;
+            let mut pieces = 0;
+            while !stepper.is_done() && steps < 1_000 {
+                if stepper.is_summarising() {
+                    // The results come one output, input or correlation at a time.
+                    assert!(stepper.take_results().is_none());
+                    stepper.summarise_step(&c);
+                    pieces += 1;
+                } else {
+                    let next: Vec<BlockJob> = stepper.wanted().iter().take(1).copied().collect();
+                    let blocks = next.iter().map(|j| c.block(*j)).collect();
+                    stepper.deliver(&c, blocks);
+                    assert!(stepper.made() <= stepper.asked());
+                }
+                steps += 1;
+            }
+            // Two inputs, and for the output a step to copy its values, one to sort them (all
+            // in one chunk here) and one to describe them.
+            assert_eq!(pieces, 5, "{stop:?}");
+            assert_eq!(stepper.take_results(), Some(at_once), "{stop:?}");
+            assert!(stepper.is_done());
+        }
+    }
+    fn model(sampling: Sampling, stop: Option<McStop>) -> MonteCarlo {
+        MonteCarlo {
+            inputs: vec![input("x", Dist::Uniform { min: 0.0, max: 1.0 })],
+            outputs: vec![output("y", "$x")],
+            correlations: vec![],
+            sampling,
+            stop,
+        }
+    }
+
+    /// Sequential runs of Latin hypercube sampling or correlated inputs are whole batches, so a
+    /// most below one batch is refused, not raised; random sampling can stop after 500.
+    #[test]
+    fn a_most_below_one_batch_is_refused_where_runs_are_whole_batches() {
+        let stop = Some(McStop {
+            relative: 0.01,
+            max: 500,
+        });
+        assert!(codes(&model(Sampling::LatinHypercube, stop)).contains(&"bad_stop"));
+        assert!(compile(&model(Sampling::LatinHypercube, stop), 1).is_err());
+        assert!(!codes(&model(Sampling::Random, stop)).contains(&"bad_stop"));
+        let mut mc = model(Sampling::Random, stop);
+        mc.inputs
+            .push(input("z", Dist::Uniform { min: 0.0, max: 1.0 }));
+        mc.correlations.push(McCorrelation {
+            a: "x".into(),
+            b: "z".into(),
+            rank: 0.5,
+        });
+        assert!(codes(&mc).contains(&"bad_stop"));
+        let stop = Some(McStop {
+            relative: 0.01,
+            max: 1_000,
+        });
+        assert!(!codes(&model(Sampling::LatinHypercube, stop)).contains(&"bad_stop"));
+    }
+
+    /// When every batch meets its target alike, their spread gives no interval (not a width of
+    /// 0), and the interval of the mean still says how many batches it is across.
+    #[test]
+    fn identical_batch_shares_give_no_interval() {
+        let mut mc = model(Sampling::LatinHypercube, None);
+        if let Some(o) = mc.outputs.first_mut() {
+            o.target = Some(McTarget::AtMost(2.0));
+        }
+        let c = compile(&mc, 3).unwrap_or_else(|p| unreachable!("{p:?}"));
+        let r = c.run(&RunOptions {
+            trials: 4_000,
+            stop: None,
+            percentiles: vec![],
+        });
+        let out = &r.outputs[0];
+        let Some(t) = out.target else {
+            unreachable!("the output has a target")
+        };
+        assert_eq!(t.probability, Some(1.0));
+        assert_eq!(t.interval, None);
+        assert_eq!(out.interval_count, 4);
+        assert!(out.half_width.is_some());
+    }
+
+    /// An output's interval counts the values it is across: its valid trials, or the batches
+    /// with one.
+    #[test]
+    fn an_interval_counts_what_it_is_across() {
+        let mc = MonteCarlo {
+            inputs: vec![input("x", Dist::Uniform { min: 0.0, max: 1.0 })],
+            outputs: vec![output("y", "1 div ($x - $x)"), output("z", "$x")],
+            ..MonteCarlo::default()
+        };
+        let c = compile(&mc, 5).unwrap_or_else(|p| unreachable!("{p:?}"));
+        let r = c.run(&RunOptions {
+            trials: 100,
+            stop: None,
+            percentiles: vec![],
+        });
+        assert_eq!(r.outputs[0].valid, 0);
+        assert_eq!(r.outputs[0].interval_count, 0);
+        assert_eq!(r.outputs[1].interval_count, 100);
+    }
+
+    /// Values in a spread of lengths, with the odd ones (infinities, both zeros, not a number),
+    /// sorted a chunk and a merge budget at a time, come out as `sort_by(total_cmp)` has them.
+    #[test]
+    fn a_sort_made_in_pieces_is_the_whole_sort() {
+        let mut seed = 12345_u64;
+        let mut next = move || {
+            seed = seed
+                .wrapping_mul(6_364_136_223_846_793_005)
+                .wrapping_add(1_442_695_040_888_963_407);
+            (seed >> 11) as f64 / (1_u64 << 53) as f64
+        };
+        for n in [0, 1, 2, 63, 64, 65, 127, 129, 1_000, 1_003] {
+            let mut values: Vec<f64> = (0..n).map(|_| next() * 200.0 - 100.0).collect();
+            if n > 8 {
+                values[1] = f64::INFINITY;
+                values[2] = f64::NEG_INFINITY;
+                values[3] = 0.0;
+                values[4] = -0.0;
+                values[5] = f64::NAN;
+                values[6] = 7.0;
+                values[7] = 7.0;
+            }
+            let mut want = values.clone();
+            want.sort_by(f64::total_cmp);
+            for (chunk, budget) in [(64, 50), (1, 1), (7, 1_000), (100_000, 100_000)] {
+                let mut sorter = Sorter::new(values.clone(), chunk, budget, f64::total_cmp);
+                let mut steps = 0;
+                while !sorter.is_done() {
+                    sorter.step();
+                    steps += 1;
+                    assert!(steps < 1_000_000, "n {n}, chunk {chunk}");
+                }
+                let got: Vec<u64> = sorter.into_sorted().iter().map(|v| v.to_bits()).collect();
+                let want: Vec<u64> = want.iter().map(|v| v.to_bits()).collect();
+                assert_eq!(got, want, "n {n}, chunk {chunk}, budget {budget}");
+            }
+        }
+    }
+
+    /// Results worked out with a small chunk and merge budget (so many pieces) are the results
+    /// worked out with the usual sizes, whatever the columns hold.
+    #[test]
+    fn results_in_small_pieces_are_the_same_results() {
+        let mc = MonteCarlo {
+            inputs: vec![input("x", Dist::Uniform { min: 0.0, max: 1.0 })],
+            outputs: vec![
+                McOutput {
+                    target: Some(McTarget::AtMost(2.0)),
+                    ..output("y", "$x * 3")
+                },
+                output("gap", "1 div ($x - $x)"),
+                output("some", "if($x > 0.5, $x, 1 div ($x - $x))"),
+            ],
+            correlations: vec![],
+            sampling: Sampling::LatinHypercube,
+            stop: None,
+        };
+        let c = compile(&mc, 9).unwrap_or_else(|p| unreachable!("{p:?}"));
+        let blocks: Vec<Block> = jobs(0, 2_500).iter().map(|j| c.block(*j)).collect();
+        let whole = c.summarise(&blocks, &[1.0, 99.0]);
+        let mut small = Summing::new(&[1.0, 99.0], None);
+        small.chunk = 100;
+        small.budget = 37;
+        let mut steps = 0;
+        while !small.step(&c, &blocks) {
+            steps += 1;
+        }
+        assert!(steps > 100, "{steps} pieces");
+        let mut got = small.finish(&c, &blocks);
+        got.requested_trials = got.trials;
+        assert_eq!(got, whole);
+        assert!(whole.outputs[2].invalid > 0 && whole.outputs[2].valid > 0);
+        assert_eq!(whole.outputs[1].valid, 0);
+    }
+
+    /// Ranks made by sorting (value, trial) pairs in small pieces, with many ties, are those
+    /// `rank_correlation` makes whole: the same correlation to the last bit.
+    #[test]
+    fn ranks_made_in_pieces_give_rank_correlation_bit_for_bit() {
+        let mut seed = 99_u64;
+        let mut next = move || {
+            seed = seed
+                .wrapping_mul(6_364_136_223_846_793_005)
+                .wrapping_add(1_442_695_040_888_963_407);
+            (seed >> 11) as f64 / (1_u64 << 53) as f64
+        };
+        for n in [0, 1, 2, 3, 70, 1_003] {
+            // Values to one place of decimals, so that many are tied; both zeros among them.
+            let x: Vec<f64> = (0..n).map(|_| (next() * 30.0).round() / 10.0).collect();
+            let mut y: Vec<f64> = x
+                .iter()
+                .map(|v| (v * 2.0 + next() * 4.0).round() / 10.0)
+                .collect();
+            if n > 5 {
+                y[2] = 0.0;
+                y[3] = -0.0;
+            }
+            let in_pieces = |v: &[f64]| {
+                let pairs: Vec<(f64, usize)> = v.iter().copied().zip(0..).collect();
+                let mut sorter = Sorter::new(pairs, 64, 50, correlate::pair_order);
+                while !sorter.is_done() {
+                    sorter.step();
+                }
+                correlate::assign_ranks(&sorter.into_sorted())
+            };
+            let got = correlate::correlation_of_ranks(&in_pieces(&x), &in_pieces(&y));
+            let want = rank_correlation(&x, &y);
+            assert_eq!(got.map(f64::to_bits), want.map(f64::to_bits), "n {n}");
+            if n >= 70 {
+                assert!(got.is_some(), "n {n}");
+            }
+        }
+    }
+
+    /// Correlations worked out in small pieces (each input ranked once) are those of the usual
+    /// sizes, and `rank_correlation`'s on the same columns.
+    #[test]
+    fn correlations_in_small_pieces_are_the_same_correlations() {
+        let u = || Dist::Uniform { min: 0.0, max: 1.0 };
+        let mc = MonteCarlo {
+            inputs: vec![input("x", u()), input("y", u()), input("z", u())],
+            outputs: vec![output("s", "$x + $y + $z")],
+            correlations: vec![
+                McCorrelation {
+                    a: "x".into(),
+                    b: "y".into(),
+                    rank: 0.4,
+                },
+                McCorrelation {
+                    a: "y".into(),
+                    b: "z".into(),
+                    rank: 0.3,
+                },
+                McCorrelation {
+                    a: "x".into(),
+                    b: "z".into(),
+                    rank: 0.2,
+                },
+            ],
+            sampling: Sampling::Random,
+            stop: None,
+        };
+        let c = compile(&mc, 4).unwrap_or_else(|p| unreachable!("{p:?}"));
+        let blocks: Vec<Block> = jobs(0, 2_500).iter().map(|j| c.block(*j)).collect();
+        let whole = c.summarise(&blocks, &[]);
+        let mut small = Summing::new(&[], None);
+        small.chunk = 100;
+        small.budget = 37;
+        while !small.step(&c, &blocks) {}
+        let mut got = small.finish(&c, &blocks);
+        got.requested_trials = got.trials;
+        assert_eq!(got, whole);
+        let col = |k| column(&blocks, k, true);
+        for (r, (a, b)) in whole.correlations.iter().zip([(0, 1), (1, 2), (0, 2)]) {
+            let want = rank_correlation(&col(a), &col(b));
+            assert!(want.is_some());
+            assert_eq!(r.achieved.map(f64::to_bits), want.map(f64::to_bits));
+        }
     }
 }

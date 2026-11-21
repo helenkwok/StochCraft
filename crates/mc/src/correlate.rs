@@ -65,11 +65,12 @@ fn lower_inverse(l: &[Vec<f64>]) -> Vec<Vec<f64>> {
 }
 
 /// The Pearson correlation matrix of `columns` (each of the same length).
-fn correlation(columns: &[Vec<f64>]) -> Vec<Vec<f64>> {
+fn correlation<C: AsRef<[f64]>>(columns: &[C]) -> Vec<Vec<f64>> {
     let k = columns.len();
     let centred: Vec<Vec<f64>> = columns
         .iter()
         .map(|c| {
+            let c = c.as_ref();
             let mean = c.iter().sum::<f64>() / c.len().max(1) as f64;
             c.iter().map(|x| x - mean).collect()
         })
@@ -149,34 +150,54 @@ pub fn induce(columns: &mut [Vec<f64>], p: &[Vec<f64>], rng: &mut Rng) {
     }
 }
 
-/// Average ranks (1-based) of `xs`, ties sharing the mean of their ranks.
-fn ranks(xs: &[f64]) -> Vec<f64> {
-    let idx = order(xs);
-    let mut r = vec![0.0; xs.len()];
+/// The order of (value, trial index) pairs: by value (`total_cmp`), then by index.
+pub(crate) fn pair_order(a: &(f64, usize), b: &(f64, usize)) -> std::cmp::Ordering {
+    a.0.total_cmp(&b.0).then(a.1.cmp(&b.1))
+}
+
+/// Average ranks (1-based), indexed by trial, from the (value, trial index) pairs of a column in
+/// [`pair_order`]; ties share the mean of their ranks.
+pub(crate) fn assign_ranks(sorted: &[(f64, usize)]) -> Vec<f64> {
+    let mut r = vec![0.0; sorted.len()];
     let mut i = 0;
-    while i < idx.len() {
+    while i < sorted.len() {
         let mut j = i;
-        while j + 1 < idx.len() && xs[idx[j + 1]] == xs[idx[i]] {
+        while j + 1 < sorted.len() && sorted[j + 1].0 == sorted[i].0 {
             j += 1;
         }
         let rank = (i + j) as f64 / 2.0 + 1.0;
-        for &at in &idx[i..=j] {
-            r[at] = rank;
+        for &(_, at) in &sorted[i..=j] {
+            if let Some(slot) = r.get_mut(at) {
+                *slot = rank;
+            }
         }
         i = j + 1;
     }
     r
 }
 
+/// Average ranks (1-based) of `xs`, ties sharing the mean of their ranks.
+fn ranks(xs: &[f64]) -> Vec<f64> {
+    let mut pairs: Vec<(f64, usize)> = xs.iter().copied().zip(0..).collect();
+    pairs.sort_by(pair_order);
+    assign_ranks(&pairs)
+}
+
+/// Spearman's rank correlation from the average ranks of the two variables (as [`assign_ranks`]
+/// gives them); `None` with fewer than two pairs or a variable with no spread.
+pub(crate) fn correlation_of_ranks(rx: &[f64], ry: &[f64]) -> Option<f64> {
+    if rx.len() != ry.len() || rx.len() < 2 {
+        return None;
+    }
+    let t = correlation(&[rx, ry]);
+    let r = t[1][0];
+    r.is_finite().then_some(r)
+}
+
 /// Spearman's rank correlation of `x` and `y` (the Pearson correlation of their average ranks);
 /// `None` with fewer than two pairs or a variable with no spread.
 pub fn rank_correlation(x: &[f64], y: &[f64]) -> Option<f64> {
-    if x.len() != y.len() || x.len() < 2 {
-        return None;
-    }
-    let t = correlation(&[ranks(x), ranks(y)]);
-    let r = t[1][0];
-    r.is_finite().then_some(r)
+    correlation_of_ranks(&ranks(x), &ranks(y))
 }
 
 #[cfg(test)]

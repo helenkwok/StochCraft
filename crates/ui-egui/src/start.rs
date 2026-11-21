@@ -362,8 +362,11 @@ fn card(ui: &mut egui::Ui, p: &theme::Palette, c: &Card, width: f32) -> bool {
                 }
                 ui.add_space(4.0);
                 ui.add(egui::Label::new(theme::strong(t(c.question)).size(16.0)).wrap());
-                ui.add_space(8.0);
-                strip(ui, p, c.flow);
+                // A model with no blocks (a Monte Carlo model) has no flow to draw.
+                if !c.flow.is_empty() {
+                    ui.add_space(8.0);
+                    strip(ui, p, c.flow);
+                }
                 ui.add_space(8.0);
                 ui.horizontal_wrapped(|ui| {
                     ui.spacing_mut().item_spacing.x = 4.0;

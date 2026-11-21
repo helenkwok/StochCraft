@@ -1226,3 +1226,84 @@ unit	yr	J.
 	Entities inside at the start are given for a block that does not exist. Remove them.	Entitäten zu Beginn im System sind für einen Block angegeben, der nicht existiert. Entfernen Sie sie.
 	{block} cannot have entities inside at the start: only a task or a batch can. Remove its “Inside at the start”.	Block {block} kann zu Beginn keine Entitäten enthalten: Das kann nur eine Aufgabe oder eine Charge. Entfernen Sie seinen Wert „Zu Beginn im System“.
 	{block} has {count} entities inside at the start, but it holds at most {most}, its units and its waiting room. Set “Inside at the start” to {most} or fewer, or make the waiting room larger.	Block {block} hat zu Beginn {count} Entitäten im System, fasst aber höchstens {most}, seine Einheiten und seinen Warteraum. Setzen Sie „Zu Beginn im System“ auf {most} oder weniger, oder vergrößern Sie den Warteraum.
+# Monte Carlo models in the window (ROADMAP M4.1, part 2)
+	95% interval of the chance: {lo} to {hi}.	95-%-Intervall der Wahrscheinlichkeit: {lo} bis {hi}.
+	A Monte Carlo model: uncertain durations, day rate and materials, and the chance the cost or the duration runs over.	Ein Monte-Carlo-Modell: unsichere Dauern, Tagessatz und Materialkosten sowie die Wahrscheinlichkeit, dass Kosten oder Dauer überschritten werden.
+	A calculation with uncertain inputs, not a process: each trial draws every input once and works out every output from them.	Eine Berechnung mit unsicheren Eingaben, kein Prozess: Jede Iteration zieht jede Eingabe einmal und berechnet daraus jede Ausgabe.
+	A rank correlation between two inputs, from -1 to 1: above 0 they tend to be high together, below 0 one tends to be high when the other is low. Inputs not paired here are independent; 0 removes a pair.	Eine Rangkorrelation zwischen zwei Eingaben, von -1 bis 1: Über 0 sind beide tendenziell zugleich hoch, unter 0 ist die eine tendenziell hoch, wenn die andere niedrig ist. Hier nicht gepaarte Eingaben sind unabhängig; 0 entfernt ein Paar.
+	A {percent} chance that {output} is less than {value}.	Eine Wahrscheinlichkeit von {percent}, dass {output} kleiner als {value} ist.
+	A {percent} chance that {output} is more than {value}.	Eine Wahrscheinlichkeit von {percent}, dass {output} größer als {value} ist.
+	About a 1 in {odds} chance that {output} is less than {value} ({percent}).	Ungefähr in 1 von {odds} Fällen ist {output} kleiner als {value} ({percent}).
+	About a 1 in {odds} chance that {output} is more than {value} ({percent}).	Ungefähr in 1 von {odds} Fällen ist {output} größer als {value} ({percent}).
+	Add correlation	Korrelation hinzufügen
+	Add input	Eingabe hinzufügen
+	Add output	Ausgabe hinzufügen
+	At most, trials	Höchstens, Iterationen
+	Correlations	Korrelationen
+	Download inputs (CSV)	Eingaben herunterladen (CSV)
+	Each input is a distribution: every trial draws one value from it.	Jede Eingabe ist eine Verteilung: Jede Iteration zieht daraus einen Wert.
+	Each output is worked out in every trial from the inputs and the outputs above it, each named as $name: for example $labour * $rate + $materials. Give it a target to see the chance of meeting it.	Jede Ausgabe wird in jeder Iteration aus den Eingaben und den darüberstehenden Ausgaben berechnet, jeweils als $name benannt: zum Beispiel $labour * $rate + $materials. Geben Sie ein Ziel an, um die Wahrscheinlichkeit zu sehen, dass es erreicht wird.
+	Export inputs (CSV)	Eingaben exportieren (CSV)
+	First input	Erste Eingabe
+	How many trials	Wie viele Iterationen
+	How many trials gave each value	Wie viele Iterationen jeden Wert ergaben
+	Import inputs	Eingaben importieren
+	In 9 trials out of 10, {output} is between {low} and {high}; the mean is {mean} ± {half_width}.	In 9 von 10 Iterationen liegt {output} zwischen {low} und {high}; der Mittelwert ist {mean} ± {half_width}.
+	In 9 trials out of 10, {output} is between {low} and {high}; the mean is {mean}.	In 9 von 10 Iterationen liegt {output} zwischen {low} und {high}; der Mittelwert ist {mean}.
+	Inputs	Eingaben
+	Inputs as a table	Eingaben als Tabelle
+	Latin hypercube	Latin Hypercube
+	Latin hypercube sampling	Latin-Hypercube-Sampling
+	Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000.	Latin-Hypercube-Sampling teilt den Wertebereich jeder Eingabe in gleich wahrscheinliche Schichten und zieht aus jeder einmal, wodurch die Ergebnisse meist genauer werden. Damit oder mit korrelierten Eingaben laufen die Iterationen in ganzen Gruppen zu je 1.000.
+	Monte Carlo model	Monte-Carlo-Modell
+	New Monte Carlo Model	Neues Monte-Carlo-Modell
+	New Monte Carlo model	Neues Monte-Carlo-Modell
+	New correlation	Neue Korrelation
+	New input	Neue Eingabe
+	New output	Neue Ausgabe
+	No inputs yet: add one below, or paste a table of them.	Noch keine Eingaben: Fügen Sie unten eine hinzu oder fügen Sie eine Tabelle mit Eingaben ein.
+	No interval: too few batches of trials for one.	Kein Intervall: zu wenige Gruppen von Iterationen dafür.
+	No interval: every batch gave the same share, so their spread gives none.	Kein Intervall: Alle Gruppen ergaben denselben Anteil, daher liefert ihre Streuung keines.
+	There is already an input or an output called {name}.	Es gibt bereits eine Eingabe oder Ausgabe namens {name}.
+	{name}: the ± is across {n} of the {of} batches, the rest had no trial with a number.	{name}: Das ± beruht auf {n} von {of} Gruppen; die übrigen hatten keine Iteration mit einer Zahl.
+	{name}: the ± is across {n} of the {of} trials, the rest gave no number.	{name}: Das ± beruht auf {n} von {of} Iterationen; die übrigen ergaben keine Zahl.
+	No outputs yet: add one below.	Noch keine Ausgaben: Fügen Sie unten eine hinzu.
+	None yet	Noch keine
+	One input per line, as name, distribution, parameters and unit, copied from a spreadsheet or written as CSV: for example labour,triangular,min=80;mode=100;max=150,h.	Eine Eingabe pro Zeile, als Name, Verteilung, Parameter und Einheit, aus einer Tabellenkalkulation kopiert oder als CSV geschrieben: zum Beispiel labour,triangular,min=80;mode=100;max=150,h.
+	Outputs	Ausgaben
+	Paste inputs from a table	Eingaben aus einer Tabelle einfügen
+	Project budget	Projektbudget
+	Rank correlation	Rangkorrelation
+	Remove the correlation of {a} and {b}	Korrelation von {a} und {b} entfernen
+	Remove the input {name}	Eingabe {name} entfernen
+	Remove the output {name}	Ausgabe {name} entfernen
+	Replace every input	Alle Eingaben ersetzen
+	Sampling	Stichprobenverfahren
+	Second input	Zweite Eingabe
+	Share of trials at or below each value	Anteil der Iterationen bei oder unter jedem Wert
+	Target {value}	Ziel {value}
+	The chance is under {hi}, with 95% confidence.	Die Wahrscheinlichkeit liegt mit 95 % Konfidenz unter {hi}.
+	The model: its inputs, outputs and trials	Das Modell: seine Eingaben, Ausgaben und Iterationen
+	The number of trials was chosen from the results, so an interval may cover the true value less often than 95% of the time.	Die Anzahl der Iterationen wurde anhand der Ergebnisse gewählt, daher kann ein Intervall den wahren Wert seltener als zu 95 % abdecken.
+	The trials above come first; more follow in batches until every output's mean is within that share of itself, or the most is reached.	Zuerst kommen die obigen Iterationen; weitere folgen in Gruppen, bis der Mittelwert jeder Ausgabe innerhalb dieses Anteils von sich selbst liegt oder das Maximum erreicht ist.
+	Trials and sampling	Iterationen und Stichprobenverfahren
+	Uncertain inputs instead of single guesses: the chance of an overrun, not one total.	Unsichere Eingaben statt einzelner Schätzwerte: die Wahrscheinlichkeit einer Überschreitung, nicht eine einzige Summe.
+	Will the project come in under budget?	Bleibt das Projekt unter dem Budget?
+	a name, such as cost	ein Name, z. B. Kosten
+	a name, such as labour	ein Name, z. B. Arbeit
+	random sampling	Zufallsstichprobe
+	{asked} trials were asked for; with Latin hypercube sampling or correlated inputs a run is whole batches of {size}, so {n} ran.	{asked} Iterationen wurden angefordert; mit Latin-Hypercube-Sampling oder korrelierten Eingaben besteht eine Ausführung aus ganzen Gruppen zu je {size}, daher wurden {n} ausgeführt.
+	{a} and {b}: {achieved} in the trials, {target} asked for	{a} und {b}: {achieved} in den Iterationen, {target} angefordert
+	{output} was less than {value} in none of the {n} trials.	{output} war in keiner der {n} Iterationen kleiner als {value}.
+	{output} was more than {value} in none of the {n} trials.	{output} war in keiner der {n} Iterationen größer als {value}.
+@plural	Each ± is the half-width of the 95% interval of the mean across {n} independent batch of {size} trials. Latin hypercube sampling and correlated inputs make the trials within a batch depend on each other, so each batch counts as one.|Each ± is the half-width of the 95% interval of the mean across {n} independent batches of {size} trials. Latin hypercube sampling and correlated inputs make the trials within a batch depend on each other, so each batch counts as one.	Jedes ± ist die halbe Breite des 95-%-Intervalls des Mittelwerts über {n} unabhängige Gruppe von {size} Iterationen. Latin-Hypercube-Sampling und korrelierte Eingaben machen die Iterationen innerhalb einer Gruppe voneinander abhängig, daher zählt jede Gruppe als eine.|Jedes ± ist die halbe Breite des 95-%-Intervalls des Mittelwerts über {n} unabhängige Gruppen von je {size} Iterationen. Latin-Hypercube-Sampling und korrelierte Eingaben machen die Iterationen innerhalb einer Gruppe voneinander abhängig, daher zählt jede Gruppe als eine.
+@plural	Each ± is the half-width of the 95% interval of the mean across {n} independent trial.|Each ± is the half-width of the 95% interval of the mean across {n} independent trials.	Jedes ± ist die halbe Breite des 95-%-Intervalls des Mittelwerts über {n} unabhängige Iteration.|Jedes ± ist die halbe Breite des 95-%-Intervalls des Mittelwerts über {n} unabhängige Iterationen.
+@plural	Finished {n} trial|Finished {n} trials	{n} Iteration abgeschlossen|{n} Iterationen abgeschlossen
+@plural	Imported {n} input|Imported {n} inputs	{n} Eingabe importiert|{n} Eingaben importiert
+@plural	Makes {n} trial from seed {seed}: each draws every input once and works out every output.|Makes {n} trials from seed {seed}: each draws every input once and works out every output.	Erzeugt {n} Iteration aus Startwert {seed}: Sie zieht jede Eingabe einmal und berechnet jede Ausgabe.|Erzeugt {n} Iterationen aus Startwert {seed}: Jede zieht jede Eingabe einmal und berechnet jede Ausgabe.
+@plural	Stopped after {n} trial: every output's mean is within ±{share} of itself.|Stopped after {n} trials: every output's mean is within ±{share} of itself.	Nach {n} Iteration angehalten: Der Mittelwert jeder Ausgabe liegt innerhalb von ±{share} von sich selbst.|Nach {n} Iterationen angehalten: Der Mittelwert jeder Ausgabe liegt innerhalb von ±{share} von sich selbst.
+@plural	Stopped at the most allowed, {n} trial, before every output's mean was within ±{share} of itself.|Stopped at the most allowed, {n} trials, before every output's mean was within ±{share} of itself.	Beim erlaubten Maximum von {n} Iteration angehalten, bevor der Mittelwert jeder Ausgabe innerhalb von ±{share} von sich selbst lag.|Beim erlaubten Maximum von {n} Iterationen angehalten, bevor der Mittelwert jeder Ausgabe innerhalb von ±{share} von sich selbst lag.
+@plural	{done} of {n} trial made|{done} of {n} trials made	{done} von {n} Iteration erstellt|{done} von {n} Iterationen erstellt
+@plural	{n} trial gave no number (a division by zero, say) and is left out.|{n} trials gave no number (a division by zero, say) and are left out.	{n} Iteration ergab keine Zahl (etwa eine Division durch null) und wird ausgelassen.|{n} Iterationen ergaben keine Zahl (etwa eine Division durch null) und werden ausgelassen.
+@plural	{n} trial · seed {seed} · {sampling}|{n} trials · seed {seed} · {sampling}	{n} Iteration · Startwert {seed} · {sampling}|{n} Iterationen · Startwert {seed} · {sampling}
+@plural	{n} trial · seed {seed}|{n} trials · seed {seed}	{n} Iteration · Startwert {seed}|{n} Iterationen · Startwert {seed}

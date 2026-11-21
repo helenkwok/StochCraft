@@ -141,8 +141,10 @@ impl App {
     /// canvas's view, a watched run and half-typed fields. A run in progress is cancelled, so
     /// its results cannot turn up later over the new model. It is another document, so an
     /// answer asked for the last one (the Save dialog's) is not applied to it.
-    fn forget_view(&mut self) {
+    pub(crate) fn forget_view(&mut self) {
         self.doc_gen += 1;
+        // The Monte Carlo screens' state, and a Monte Carlo run in progress, which stops.
+        self.mc = crate::montecarlo::Mc::default();
         if self.running.is_some() {
             self.stop_workers();
             let _ = self.engine.execute("run.cancel", json!({}));
@@ -177,7 +179,7 @@ impl App {
                 format!("`{command}` is not available in the app: use `run`, which runs at once"),
             ));
         }
-        let before = (command == "run").then(|| comparable(self.engine.model()));
+        let before = matches!(command, "run" | "mc.run").then(|| comparable(self.engine.model()));
         let result = self.engine.execute(command, params)?;
         match command {
             "file.open" | "model.new" | "model.set" => {
@@ -191,6 +193,12 @@ impl App {
                 self.set_results(result.clone(), model);
                 let n = result["replications"].as_u64().unwrap_or(0);
                 self.info(tn(n, "Finished {n} run", "Finished {n} runs"));
+            }
+            "mc.run" => {
+                let model = before.unwrap_or_else(|| comparable(self.engine.model()));
+                self.set_results(result.clone(), model);
+                let n = result["trials"].as_u64().unwrap_or(0);
+                self.info(tn(n, "Finished {n} trial", "Finished {n} trials"));
             }
             _ => {}
         }
@@ -212,7 +220,12 @@ impl App {
     pub fn export_csv(&mut self) {
         if let Some(r) = &self.results {
             let name = format!("{}-results.csv", self.export_stem());
-            let bytes = stochcraft_engine::wire::results_csv(r).into_bytes();
+            let text = if r["kind"] == "monte_carlo" {
+                stochcraft_engine::mc::results_csv(r)
+            } else {
+                stochcraft_engine::wire::results_csv(r)
+            };
+            let bytes = text.into_bytes();
             self.requests.push(Request::Export { name, bytes });
         }
     }
@@ -481,6 +494,7 @@ impl App {
                     self.info(t("New model"));
                 }
             }
+            Replace::NewMonteCarlo => self.new_monte_carlo(),
             Replace::Build { getting_started } => {
                 if self.execute("model.new", json!({})).is_some() {
                     self.forget_view();

@@ -10,6 +10,8 @@ impl App {
         // craft-ui's Tab: an accessible tab (role, keyboard focus) the app lays out and paints.
         let font = egui::FontId::new(14.0, egui::FontFamily::Name(theme::STRONG.into()));
         // Wrapped: four tabs and the results note must not widen the work area past the window.
+        // A Monte Carlo model has its inputs and outputs, and its results: no process views.
+        let monte_carlo = self.is_monte_carlo();
         ui.horizontal_wrapped(|ui| {
             // 0: the model, 1: the results, 2: the Analysis view, 3: the Capacity view, 4: the 3D view,
             // 5: the Layout view.
@@ -24,14 +26,16 @@ impl App {
             } else {
                 0
             };
-            for (label, view) in [
+            let views = [
                 (t("Model"), 0),
                 (t("Results"), 1),
                 (t("Analysis"), 2),
                 (t("Capacity"), 3),
                 (t("3D"), 4),
                 (t("Layout"), 5),
-            ] {
+            ];
+            let shown = if monte_carlo { 2 } else { views.len() };
+            for (label, view) in views.into_iter().take(shown) {
                 let on = current == view;
                 let width = ui.fonts_mut(|f| {
                     f.layout_no_wrap(label.into(), font.clone(), p.text)
@@ -77,7 +81,9 @@ impl App {
                     self.layout_view.on = view == 5;
                 }
             }
-            ui.toggle_value(&mut self.show_dashboard, t("Dashboard"));
+            if !monte_carlo {
+                ui.toggle_value(&mut self.show_dashboard, t("Dashboard"));
+            }
             if self.results.is_none() && self.running.is_none() {
                 ui.label(theme::weak(ui, t("· no results yet")));
             } else if self.results_stale && self.running.is_none() {
@@ -92,11 +98,21 @@ impl App {
 
     /// Whether the model has anything to show: blocks, or a model being built.
     fn has_model(&self) -> bool {
-        !self.engine.model().elements.is_empty() || self.building
+        !self.engine.model().elements.is_empty() || self.building || self.is_monte_carlo()
     }
 
     /// The view the work area draws now, in the order [`App::work_area`] dispatches.
     fn view_shown(&self) -> View {
+        if self.is_monte_carlo() {
+            return if self.show_results && self.mc_results_shown() && self.running.is_none() {
+                View::McResults
+            } else if self.show_results || self.running.is_some() {
+                // A run's progress, or the Results tab before the first run.
+                View::Other
+            } else {
+                View::McModel
+            };
+        }
         let has_model = self.has_model();
         if self.show_results && self.results.is_some() && self.running.is_none() {
             View::Results
@@ -158,6 +174,8 @@ impl App {
             View::ThreeD => self.view3d_view(ui),
             View::Capacity => self.capacity_view(ui),
             View::Model => self.model_view(ui, p),
+            View::McModel => self.mc_model_view(ui),
+            View::McResults => self.mc_results_view(ui),
             View::Other => {
                 // A readable column, not the full width of a wide window.
                 let size = egui::vec2(ui.available_width().min(640.0), ui.available_height());
@@ -165,6 +183,8 @@ impl App {
                     if let Some(r) = &self.running {
                         let (done, partial, total) = (r.done, r.partial, r.total);
                         self.running_view(ui, done, partial, total);
+                    } else if self.is_monte_carlo() {
+                        self.mc_ready(ui);
                     } else if self.engine.model().elements.is_empty() {
                         self.start_page(ui);
                     } else {
@@ -185,6 +205,10 @@ enum View {
     Layout,
     Capacity,
     Model,
+    /// A Monte Carlo model's inputs, outputs and settings.
+    McModel,
+    /// A Monte Carlo run's results.
+    McResults,
     /// A run's progress, the "ready" page (the Results tab with no results) or the start page.
     Other,
 }

@@ -1226,3 +1226,84 @@ unit	yr	a
 	Entities inside at the start are given for a block that does not exist. Remove them.	Se indicaron entidades dentro al inicio para un bloque que no existe. Elimínelas.
 	{block} cannot have entities inside at the start: only a task or a batch can. Remove its “Inside at the start”.	{block} no puede tener entidades dentro al inicio: solo una tarea o un lote pueden. Elimine su «Dentro al inicio».
 	{block} has {count} entities inside at the start, but it holds at most {most}, its units and its waiting room. Set “Inside at the start” to {most} or fewer, or make the waiting room larger.	{block} tiene {count} entidades dentro al inicio, pero admite como máximo {most}, sus unidades y su sala de espera. Ponga «Dentro al inicio» en {most} o menos, o amplíe la sala de espera.
+# Monte Carlo models in the window (ROADMAP M4.1, part 2)
+	95% interval of the chance: {lo} to {hi}.	Intervalo del 95 % de la probabilidad: de {lo} a {hi}.
+	A Monte Carlo model: uncertain durations, day rate and materials, and the chance the cost or the duration runs over.	Un modelo de Monte Carlo: duraciones inciertas, tarifa diaria y materiales, y la probabilidad de que el coste o la duración se excedan.
+	A calculation with uncertain inputs, not a process: each trial draws every input once and works out every output from them.	Un cálculo con entradas inciertas, no un proceso: cada ensayo extrae una vez cada entrada y calcula a partir de ellas cada salida.
+	A rank correlation between two inputs, from -1 to 1: above 0 they tend to be high together, below 0 one tends to be high when the other is low. Inputs not paired here are independent; 0 removes a pair.	Una correlación de rangos entre dos entradas, de -1 a 1: por encima de 0 tienden a ser altas a la vez; por debajo de 0, una tiende a ser alta cuando la otra es baja. Las entradas no emparejadas aquí son independientes; 0 elimina un par.
+	A {percent} chance that {output} is less than {value}.	Una probabilidad del {percent} de que {output} sea menor que {value}.
+	A {percent} chance that {output} is more than {value}.	Una probabilidad del {percent} de que {output} sea mayor que {value}.
+	About a 1 in {odds} chance that {output} is less than {value} ({percent}).	Aproximadamente 1 probabilidad entre {odds} de que {output} sea menor que {value} ({percent}).
+	About a 1 in {odds} chance that {output} is more than {value} ({percent}).	Aproximadamente 1 probabilidad entre {odds} de que {output} sea mayor que {value} ({percent}).
+	Add correlation	Añadir correlación
+	Add input	Añadir entrada
+	Add output	Añadir salida
+	At most, trials	Máximo de ensayos
+	Correlations	Correlaciones
+	Download inputs (CSV)	Descargar entradas (CSV)
+	Each input is a distribution: every trial draws one value from it.	Cada entrada es una distribución: cada ensayo extrae de ella un valor.
+	Each output is worked out in every trial from the inputs and the outputs above it, each named as $name: for example $labour * $rate + $materials. Give it a target to see the chance of meeting it.	Cada salida se calcula en cada ensayo a partir de las entradas y de las salidas situadas encima, cada una nombrada como $name: por ejemplo $labour * $rate + $materials. Indique un objetivo para ver la probabilidad de cumplirlo.
+	Export inputs (CSV)	Exportar entradas (CSV)
+	First input	Primera entrada
+	How many trials	Cuántos ensayos
+	How many trials gave each value	Cuántos ensayos dieron cada valor
+	Import inputs	Importar entradas
+	In 9 trials out of 10, {output} is between {low} and {high}; the mean is {mean} ± {half_width}.	En 9 de cada 10 ensayos, {output} está entre {low} y {high}; la media es {mean} ± {half_width}.
+	In 9 trials out of 10, {output} is between {low} and {high}; the mean is {mean}.	En 9 de cada 10 ensayos, {output} está entre {low} y {high}; la media es {mean}.
+	Inputs	Entradas
+	Inputs as a table	Entradas como tabla
+	Latin hypercube	Hipercubo latino
+	Latin hypercube sampling	Muestreo por hipercubo latino
+	Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000.	El muestreo por hipercubo latino divide el rango de cada entrada en estratos igualmente probables y extrae un valor de cada uno, lo que suele hacer los resultados más precisos. Con él, o con entradas correlacionadas, los ensayos se ejecutan en lotes completos de 1000.
+	Monte Carlo model	Modelo de Monte Carlo
+	New Monte Carlo Model	Nuevo modelo de Monte Carlo
+	New Monte Carlo model	Nuevo modelo de Monte Carlo
+	New correlation	Nueva correlación
+	New input	Nueva entrada
+	New output	Nueva salida
+	No inputs yet: add one below, or paste a table of them.	Aún no hay entradas: añada una abajo o pegue una tabla con ellas.
+	No interval: too few batches of trials for one.	Sin intervalo: hay muy pocos lotes de ensayos para calcularlo.
+	No interval: every batch gave the same share, so their spread gives none.	Sin intervalo: todos los lotes dieron la misma proporción, así que su dispersión no da ninguno.
+	There is already an input or an output called {name}.	Ya hay una entrada o una salida llamada {name}.
+	{name}: the ± is across {n} of the {of} batches, the rest had no trial with a number.	{name}: el ± se calcula con {n} de {of} lotes; el resto no tenía ningún ensayo con un número.
+	{name}: the ± is across {n} of the {of} trials, the rest gave no number.	{name}: el ± se calcula con {n} de {of} ensayos; el resto no dio ningún número.
+	No outputs yet: add one below.	Aún no hay salidas: añada una abajo.
+	None yet	Ninguno todavía
+	One input per line, as name, distribution, parameters and unit, copied from a spreadsheet or written as CSV: for example labour,triangular,min=80;mode=100;max=150,h.	Una entrada por línea, como nombre, distribución, parámetros y unidad, copiada de una hoja de cálculo o escrita como CSV: por ejemplo labour,triangular,min=80;mode=100;max=150,h.
+	Outputs	Salidas
+	Paste inputs from a table	Pegar entradas desde una tabla
+	Project budget	Presupuesto del proyecto
+	Rank correlation	Correlación de rangos
+	Remove the correlation of {a} and {b}	Eliminar la correlación de {a} y {b}
+	Remove the input {name}	Eliminar la entrada {name}
+	Remove the output {name}	Eliminar la salida {name}
+	Replace every input	Sustituir todas las entradas
+	Sampling	Muestreo
+	Second input	Segunda entrada
+	Share of trials at or below each value	Proporción de ensayos en cada valor o por debajo
+	Target {value}	Objetivo {value}
+	The chance is under {hi}, with 95% confidence.	La probabilidad es inferior a {hi}, con un 95 % de confianza.
+	The model: its inputs, outputs and trials	El modelo: sus entradas, salidas y ensayos
+	The number of trials was chosen from the results, so an interval may cover the true value less often than 95% of the time.	El número de ensayos se eligió a partir de los resultados, por lo que un intervalo puede cubrir el valor verdadero menos del 95 % de las veces.
+	The trials above come first; more follow in batches until every output's mean is within that share of itself, or the most is reached.	Primero se hacen los ensayos indicados arriba; después siguen más en lotes hasta que la media de cada salida esté dentro de esa proporción de sí misma o se alcance el máximo.
+	Trials and sampling	Ensayos y muestreo
+	Uncertain inputs instead of single guesses: the chance of an overrun, not one total.	Entradas inciertas en lugar de estimaciones únicas: la probabilidad de un sobrecoste, no un único total.
+	Will the project come in under budget?	¿Terminará el proyecto dentro del presupuesto?
+	a name, such as cost	un nombre, como coste
+	a name, such as labour	un nombre, como trabajo
+	random sampling	muestreo aleatorio
+	{asked} trials were asked for; with Latin hypercube sampling or correlated inputs a run is whole batches of {size}, so {n} ran.	Se pidieron {asked} ensayos; con muestreo por hipercubo latino o entradas correlacionadas, una ejecución consta de lotes completos de {size}, así que se hicieron {n}.
+	{a} and {b}: {achieved} in the trials, {target} asked for	{a} y {b}: {achieved} en los ensayos, {target} pedido
+	{output} was less than {value} in none of the {n} trials.	{output} no fue menor que {value} en ninguno de los {n} ensayos.
+	{output} was more than {value} in none of the {n} trials.	{output} no fue mayor que {value} en ninguno de los {n} ensayos.
+@plural	Each ± is the half-width of the 95% interval of the mean across {n} independent batch of {size} trials. Latin hypercube sampling and correlated inputs make the trials within a batch depend on each other, so each batch counts as one.|Each ± is the half-width of the 95% interval of the mean across {n} independent batches of {size} trials. Latin hypercube sampling and correlated inputs make the trials within a batch depend on each other, so each batch counts as one.	Cada ± es la semiamplitud del intervalo del 95 % de la media sobre {n} lote independiente de {size} ensayos. El muestreo por hipercubo latino y las entradas correlacionadas hacen que los ensayos de un lote dependan entre sí, por lo que cada lote cuenta como uno.|Cada ± es la semiamplitud del intervalo del 95 % de la media sobre {n} lotes independientes de {size} ensayos. El muestreo por hipercubo latino y las entradas correlacionadas hacen que los ensayos de un lote dependan entre sí, por lo que cada lote cuenta como uno.
+@plural	Each ± is the half-width of the 95% interval of the mean across {n} independent trial.|Each ± is the half-width of the 95% interval of the mean across {n} independent trials.	Cada ± es la semiamplitud del intervalo del 95 % de la media sobre {n} ensayo independiente.|Cada ± es la semiamplitud del intervalo del 95 % de la media sobre {n} ensayos independientes.
+@plural	Finished {n} trial|Finished {n} trials	Finalizado {n} ensayo|Finalizados {n} ensayos
+@plural	Imported {n} input|Imported {n} inputs	Importada {n} entrada|Importadas {n} entradas
+@plural	Makes {n} trial from seed {seed}: each draws every input once and works out every output.|Makes {n} trials from seed {seed}: each draws every input once and works out every output.	Genera {n} ensayo a partir de la semilla {seed}: extrae una vez cada entrada y calcula cada salida.|Genera {n} ensayos a partir de la semilla {seed}: cada uno extrae una vez cada entrada y calcula cada salida.
+@plural	Stopped after {n} trial: every output's mean is within ±{share} of itself.|Stopped after {n} trials: every output's mean is within ±{share} of itself.	Detenido tras {n} ensayo: la media de cada salida está dentro de ±{share} de sí misma.|Detenido tras {n} ensayos: la media de cada salida está dentro de ±{share} de sí misma.
+@plural	Stopped at the most allowed, {n} trial, before every output's mean was within ±{share} of itself.|Stopped at the most allowed, {n} trials, before every output's mean was within ±{share} of itself.	Detenido en el máximo permitido, {n} ensayo, antes de que la media de cada salida estuviera dentro de ±{share} de sí misma.|Detenido en el máximo permitido, {n} ensayos, antes de que la media de cada salida estuviera dentro de ±{share} de sí misma.
+@plural	{done} of {n} trial made|{done} of {n} trials made	{done} de {n} ensayo hechos|{done} de {n} ensayos hechos
+@plural	{n} trial gave no number (a division by zero, say) and is left out.|{n} trials gave no number (a division by zero, say) and are left out.	{n} ensayo no dio ningún número (por ejemplo, una división por cero) y se omite.|{n} ensayos no dieron ningún número (por ejemplo, una división por cero) y se omiten.
+@plural	{n} trial · seed {seed} · {sampling}|{n} trials · seed {seed} · {sampling}	{n} ensayo · semilla {seed} · {sampling}|{n} ensayos · semilla {seed} · {sampling}
+@plural	{n} trial · seed {seed}|{n} trials · seed {seed}	{n} ensayo · semilla {seed}|{n} ensayos · semilla {seed}

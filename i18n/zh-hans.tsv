@@ -1226,3 +1226,84 @@ unit	yr	年
 	Entities inside at the start are given for a block that does not exist. Remove them.	为不存在的区块指定了开始时在内部的实体。请移除它们。
 	{block} cannot have entities inside at the start: only a task or a batch can. Remove its “Inside at the start”.	{block} 在开始时不能有实体在内部：只有任务或批次可以。请移除它的“开始时在内部的数量”。
 	{block} has {count} entities inside at the start, but it holds at most {most}, its units and its waiting room. Set “Inside at the start” to {most} or fewer, or make the waiting room larger.	{block} 开始时在内部有 {count} 个实体，但它连同资源单元和等待区最多只能容纳 {most} 个。请将“开始时在内部的数量”设为 {most} 或更少，或扩大等待区。
+# Monte Carlo models in the window (ROADMAP M4.1, part 2)
+	95% interval of the chance: {lo} to {hi}.	概率的 95% 区间：{lo} 至 {hi}。
+	A Monte Carlo model: uncertain durations, day rate and materials, and the chance the cost or the duration runs over.	一个蒙特卡洛模型：不确定的工期、日费率和材料，以及成本或工期超出的概率。
+	A calculation with uncertain inputs, not a process: each trial draws every input once and works out every output from them.	一种带有不确定输入的计算，而不是流程：每次试验对每个输入抽取一次，并据此算出每个输出。
+	A rank correlation between two inputs, from -1 to 1: above 0 they tend to be high together, below 0 one tends to be high when the other is low. Inputs not paired here are independent; 0 removes a pair.	两个输入之间的等级相关，取值 -1 到 1：大于 0 时两者倾向于同时偏高，小于 0 时一个偏高时另一个倾向于偏低。此处未配对的输入相互独立；设为 0 即移除该对。
+	A {percent} chance that {output} is less than {value}.	{output} 小于 {value} 的概率为 {percent}。
+	A {percent} chance that {output} is more than {value}.	{output} 大于 {value} 的概率为 {percent}。
+	About a 1 in {odds} chance that {output} is less than {value} ({percent}).	{output} 小于 {value} 的可能性约为 {odds} 分之 1（{percent}）。
+	About a 1 in {odds} chance that {output} is more than {value} ({percent}).	{output} 大于 {value} 的可能性约为 {odds} 分之 1（{percent}）。
+	Add correlation	添加相关
+	Add input	添加输入
+	Add output	添加输出
+	At most, trials	最多试验次数
+	Correlations	相关性
+	Download inputs (CSV)	下载输入 (CSV)
+	Each input is a distribution: every trial draws one value from it.	每个输入都是一个分布：每次试验从中抽取一个值。
+	Each output is worked out in every trial from the inputs and the outputs above it, each named as $name: for example $labour * $rate + $materials. Give it a target to see the chance of meeting it.	每个输出在每次试验中由输入及其上方的输出算出，每个都以 $name 引用：例如 $labour * $rate + $materials。为其设定目标即可查看达到目标的概率。
+	Export inputs (CSV)	导出输入 (CSV)
+	First input	第一个输入
+	How many trials	试验次数
+	How many trials gave each value	得到各个值的试验次数
+	Import inputs	导入输入
+	In 9 trials out of 10, {output} is between {low} and {high}; the mean is {mean} ± {half_width}.	在 10 次试验中有 9 次，{output} 介于 {low} 和 {high} 之间；均值为 {mean} ± {half_width}。
+	In 9 trials out of 10, {output} is between {low} and {high}; the mean is {mean}.	在 10 次试验中有 9 次，{output} 介于 {low} 和 {high} 之间；均值为 {mean}。
+	Inputs	输入
+	Inputs as a table	以表格显示输入
+	Latin hypercube	拉丁超立方
+	Latin hypercube sampling	拉丁超立方抽样
+	Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000.	拉丁超立方抽样将每个输入的取值范围分成同等概率的层，并从每层各抽取一次，通常能使结果更精确。使用它或存在相关输入时，试验以每批 1,000 次的完整批次进行。
+	Monte Carlo model	蒙特卡洛模型
+	New Monte Carlo Model	新建蒙特卡洛模型
+	New Monte Carlo model	新建蒙特卡洛模型
+	New correlation	新建相关
+	New input	新建输入
+	New output	新建输出
+	No inputs yet: add one below, or paste a table of them.	尚无输入：在下方添加一个，或粘贴输入表格。
+	No interval: too few batches of trials for one.	无区间：试验批次太少，无法得出区间。
+	No interval: every batch gave the same share, so their spread gives none.	无区间：所有批次给出的占比相同，其离散程度无法得出区间。
+	There is already an input or an output called {name}.	已有名为 {name} 的输入或输出。
+	{name}: the ± is across {n} of the {of} batches, the rest had no trial with a number.	{name}：± 由 {of} 个批次中的 {n} 个得出；其余批次没有得出数值的试验。
+	{name}: the ± is across {n} of the {of} trials, the rest gave no number.	{name}：± 由 {of} 次试验中的 {n} 次得出；其余试验没有得出数值。
+	No outputs yet: add one below.	尚无输出：在下方添加一个。
+	None yet	尚无
+	One input per line, as name, distribution, parameters and unit, copied from a spreadsheet or written as CSV: for example labour,triangular,min=80;mode=100;max=150,h.	每行一个输入，依次为名称、分布、参数和单位，可从电子表格复制或按 CSV 书写：例如 labour,triangular,min=80;mode=100;max=150,h。
+	Outputs	输出
+	Paste inputs from a table	从表格粘贴输入
+	Project budget	项目预算
+	Rank correlation	等级相关
+	Remove the correlation of {a} and {b}	移除 {a} 与 {b} 的相关
+	Remove the input {name}	移除输入 {name}
+	Remove the output {name}	移除输出 {name}
+	Replace every input	替换全部输入
+	Sampling	抽样
+	Second input	第二个输入
+	Share of trials at or below each value	小于或等于各个值的试验比例
+	Target {value}	目标 {value}
+	The chance is under {hi}, with 95% confidence.	在 95% 置信度下，该概率低于 {hi}。
+	The model: its inputs, outputs and trials	模型：输入、输出和试验
+	The number of trials was chosen from the results, so an interval may cover the true value less often than 95% of the time.	试验次数是根据结果选定的，因此区间覆盖真实值的频率可能低于 95%。
+	The trials above come first; more follow in batches until every output's mean is within that share of itself, or the most is reached.	先进行上面设定的试验；之后分批继续，直到每个输出的均值都在其自身的该比例以内，或达到上限。
+	Trials and sampling	试验与抽样
+	Uncertain inputs instead of single guesses: the chance of an overrun, not one total.	用不确定的输入代替单一估计：得到超支的概率，而不是一个总数。
+	Will the project come in under budget?	项目能否控制在预算之内？
+	a name, such as cost	名称，例如成本
+	a name, such as labour	名称，例如人工
+	random sampling	随机抽样
+	{asked} trials were asked for; with Latin hypercube sampling or correlated inputs a run is whole batches of {size}, so {n} ran.	请求了 {asked} 次试验；使用拉丁超立方抽样或相关输入时，一次运行由每批 {size} 次的完整批次组成，因此实际进行了 {n} 次。
+	{a} and {b}: {achieved} in the trials, {target} asked for	{a} 与 {b}：试验中为 {achieved}，要求为 {target}
+	{output} was less than {value} in none of the {n} trials.	在 {n} 次试验中，{output} 从未小于 {value}。
+	{output} was more than {value} in none of the {n} trials.	在 {n} 次试验中，{output} 从未大于 {value}。
+@plural	Each ± is the half-width of the 95% interval of the mean across {n} independent batch of {size} trials. Latin hypercube sampling and correlated inputs make the trials within a batch depend on each other, so each batch counts as one.|Each ± is the half-width of the 95% interval of the mean across {n} independent batches of {size} trials. Latin hypercube sampling and correlated inputs make the trials within a batch depend on each other, so each batch counts as one.	每个 ± 是基于 {n} 个独立批次（每批 {size} 次试验）的均值 95% 区间的半宽。拉丁超立方抽样和相关输入使同一批次内的试验相互依赖，因此每个批次只计为一个。
+@plural	Each ± is the half-width of the 95% interval of the mean across {n} independent trial.|Each ± is the half-width of the 95% interval of the mean across {n} independent trials.	每个 ± 是基于 {n} 次独立试验的均值 95% 区间的半宽。
+@plural	Finished {n} trial|Finished {n} trials	已完成 {n} 次试验
+@plural	Imported {n} input|Imported {n} inputs	已导入 {n} 个输入
+@plural	Makes {n} trial from seed {seed}: each draws every input once and works out every output.|Makes {n} trials from seed {seed}: each draws every input once and works out every output.	从随机种子 {seed} 进行 {n} 次试验：每次对每个输入抽取一次并算出每个输出。
+@plural	Stopped after {n} trial: every output's mean is within ±{share} of itself.|Stopped after {n} trials: every output's mean is within ±{share} of itself.	{n} 次试验后停止：每个输出的均值都在其自身的 ±{share} 以内。
+@plural	Stopped at the most allowed, {n} trial, before every output's mean was within ±{share} of itself.|Stopped at the most allowed, {n} trials, before every output's mean was within ±{share} of itself.	达到允许的上限 {n} 次试验时停止，此时并非每个输出的均值都在其自身的 ±{share} 以内。
+@plural	{done} of {n} trial made|{done} of {n} trials made	已进行 {done}/{n} 次试验
+@plural	{n} trial gave no number (a division by zero, say) and is left out.|{n} trials gave no number (a division by zero, say) and are left out.	{n} 次试验未得出数值（例如除以零），已被排除。
+@plural	{n} trial · seed {seed} · {sampling}|{n} trials · seed {seed} · {sampling}	{n} 次试验 · 随机种子 {seed} · {sampling}
+@plural	{n} trial · seed {seed}|{n} trials · seed {seed}	{n} 次试验 · 随机种子 {seed}

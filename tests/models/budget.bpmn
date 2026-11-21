@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- A project's cost and duration as a Monte Carlo model (ROADMAP M4.1), written by hand for
+     StochCraft's examples (MIT OR Apache-2.0): a BPMN file with no process, whose BPSim scenario
+     holds the inputs as its properties and the outputs in the stochcraft:monteCarlo extension.
+     Design and build take three-point (triangular) durations in days; the day rate is uniform and
+     the materials normal, rank-correlated at 0.4 (a busy market raises both). The duration is the
+     sum of the two independent durations, so its mean (101/3 = 33.67 days) and standard deviation
+     (√(281/18) = 3.951 days) are exact; the cost is duration × day rate + materials, and as the
+     rate is independent of the durations its mean is exact too: 101/3 × 900 + 12,000 = 42,300 USD
+     (crates/engine/tests/examples.rs). -->
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
+    xmlns:bpsim="http://www.bpsim.org/schemas/2.0"
+    xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1"
+    id="budget" name="Project budget" targetNamespace="https://github.com/helenkwok/StochCraft/model">
+  <bpmn:relationship type="BPSimData">
+    <bpmn:extensionElements>
+      <bpsim:BPSimData>
+        <bpsim:Scenario id="base" name="Project budget">
+          <bpsim:ScenarioParameters replication="10000" seed="1" baseTimeUnit="min">
+            <bpsim:Duration><bpsim:FloatingParameter value="480"/></bpsim:Duration>
+            <bpsim:PropertyParameters>
+              <bpsim:Property name="design" type="double">
+                <bpsim:TriangularDistribution mode="10" min="8" max="16"/>
+              </bpsim:Property>
+              <bpsim:Property name="build" type="double">
+                <bpsim:TriangularDistribution mode="20" min="15" max="32"/>
+              </bpsim:Property>
+              <bpsim:Property name="day_rate" type="double">
+                <bpsim:UniformDistribution min="800" max="1000"/>
+              </bpsim:Property>
+              <bpsim:Property name="materials" type="double">
+                <bpsim:NormalDistribution mean="12000" standardDeviation="1500"/>
+              </bpsim:Property>
+            </bpsim:PropertyParameters>
+          </bpsim:ScenarioParameters>
+          <bpsim:VendorExtension name="stochcraft:monteCarlo" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1">
+            <stochcraft:monteCarlo sampling="random">
+              <stochcraft:input name="design" unit="days"/>
+              <stochcraft:input name="build" unit="days"/>
+              <stochcraft:input name="day_rate" unit="USD/day"/>
+              <stochcraft:input name="materials" unit="USD"/>
+              <stochcraft:output name="duration" expression="$design + $build" unit="days" atMost="38"/>
+              <stochcraft:output name="cost" expression="$duration * $day_rate + $materials" unit="USD" atMost="46000"/>
+              <stochcraft:correlation a="day_rate" b="materials" rank="0.4"/>
+            </stochcraft:monteCarlo>
+          </bpsim:VendorExtension>
+        </bpsim:Scenario>
+      </bpsim:BPSimData>
+    </bpmn:extensionElements>
+    <bpmn:source>budget</bpmn:source>
+    <bpmn:target>budget</bpmn:target>
+  </bpmn:relationship>
+</bpmn:definitions>

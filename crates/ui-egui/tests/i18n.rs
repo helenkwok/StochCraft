@@ -700,9 +700,10 @@ fn looked_up_on_screen() -> BTreeSet<String> {
     h.state_mut().show_help(false);
     settle(&mut h);
     let every_block = |h: &mut Harness<'static, App>| {
-        let blocks = h.get_all_by_role(Role::ListBoxOption).count();
+        // A Monte Carlo model has no blocks.
+        let blocks = h.query_all_by_role(Role::ListBoxOption).count();
         for i in 0..blocks {
-            if let Some(b) = h.get_all_by_role(Role::ListBoxOption).nth(i) {
+            if let Some(b) = h.query_all_by_role(Role::ListBoxOption).nth(i) {
                 b.click();
             }
             settle(h);

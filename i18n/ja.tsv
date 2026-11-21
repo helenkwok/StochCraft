@@ -1226,3 +1226,84 @@ unit	yr	年
 	Entities inside at the start are given for a block that does not exist. Remove them.	開始時に内部にあるエンティティが、存在しないブロックに指定されています。削除してください。
 	{block} cannot have entities inside at the start: only a task or a batch can. Remove its “Inside at the start”.	{block} には開始時にエンティティを置けません。置けるのはタスクかバッチだけです。「開始時に内部にある数」を削除してください。
 	{block} has {count} entities inside at the start, but it holds at most {most}, its units and its waiting room. Set “Inside at the start” to {most} or fewer, or make the waiting room larger.	{block} の開始時に内部にあるエンティティは {count} ですが、ユニットと待機場所を合わせて最大 {most} しか入りません。「開始時に内部にある数」を {most} 以下にするか、待機場所を大きくしてください。
+# Monte Carlo models in the window (ROADMAP M4.1, part 2)
+	95% interval of the chance: {lo} to {hi}.	確率の 95% 区間: {lo}〜{hi}。
+	A Monte Carlo model: uncertain durations, day rate and materials, and the chance the cost or the duration runs over.	モンテカルロモデル: 不確かな所要期間、日額単価、材料費と、コストや期間が超過する確率。
+	A calculation with uncertain inputs, not a process: each trial draws every input once and works out every output from them.	プロセスではなく、不確かな入力を使う計算です。各試行ですべての入力から 1 回ずつ値を抽出し、そこからすべての出力を求めます。
+	A rank correlation between two inputs, from -1 to 1: above 0 they tend to be high together, below 0 one tends to be high when the other is low. Inputs not paired here are independent; 0 removes a pair.	2 つの入力の間の順位相関 (-1〜1)。0 より大きいと両方が同時に高くなりやすく、0 より小さいと一方が高いときにもう一方が低くなりやすくなります。ここで組にしていない入力は独立です。0 にすると組を削除します。
+	A {percent} chance that {output} is less than {value}.	{output} が {value} 未満である確率は {percent} です。
+	A {percent} chance that {output} is more than {value}.	{output} が {value} を超える確率は {percent} です。
+	About a 1 in {odds} chance that {output} is less than {value} ({percent}).	{output} が {value} 未満である確率は約 {odds} 分の 1 です ({percent})。
+	About a 1 in {odds} chance that {output} is more than {value} ({percent}).	{output} が {value} を超える確率は約 {odds} 分の 1 です ({percent})。
+	Add correlation	相関を追加
+	Add input	入力を追加
+	Add output	出力を追加
+	At most, trials	上限の試行回数
+	Correlations	相関
+	Download inputs (CSV)	入力をダウンロード (CSV)
+	Each input is a distribution: every trial draws one value from it.	各入力は分布です。各試行でそこから値を 1 つ抽出します。
+	Each output is worked out in every trial from the inputs and the outputs above it, each named as $name: for example $labour * $rate + $materials. Give it a target to see the chance of meeting it.	各出力は、各試行で入力とそれより上の出力から求められます。それぞれ $name の形で参照します。例: $labour * $rate + $materials。目標を設定すると、達成する確率がわかります。
+	Export inputs (CSV)	入力をエクスポート (CSV)
+	First input	1 つ目の入力
+	How many trials	試行回数
+	How many trials gave each value	各値が得られた試行の数
+	Import inputs	入力をインポート
+	In 9 trials out of 10, {output} is between {low} and {high}; the mean is {mean} ± {half_width}.	10 回の試行のうち 9 回で、{output} は {low}〜{high} の範囲にあります。平均は {mean} ± {half_width} です。
+	In 9 trials out of 10, {output} is between {low} and {high}; the mean is {mean}.	10 回の試行のうち 9 回で、{output} は {low}〜{high} の範囲にあります。平均は {mean} です。
+	Inputs	入力
+	Inputs as a table	表形式の入力
+	Latin hypercube	ラテン超方格
+	Latin hypercube sampling	ラテン超方格サンプリング
+	Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000.	ラテン超方格サンプリングでは、各入力の範囲を同じ確率の層に分け、各層から 1 回ずつ値を抽出するため、結果は通常より精密になります。これを使う場合や入力に相関がある場合、試行は 1,000 回ずつのバッチ単位で行われます。
+	Monte Carlo model	モンテカルロモデル
+	New Monte Carlo Model	新しいモンテカルロモデル
+	New Monte Carlo model	新しいモンテカルロモデル
+	New correlation	新しい相関
+	New input	新しい入力
+	New output	新しい出力
+	No inputs yet: add one below, or paste a table of them.	入力はまだありません。下で追加するか、表から貼り付けてください。
+	No interval: too few batches of trials for one.	区間なし: 区間を求めるには試行のバッチが少なすぎます。
+	No interval: every batch gave the same share, so their spread gives none.	区間なし: すべてのバッチが同じ割合だったため、そのばらつきからは区間が得られません。
+	There is already an input or an output called {name}.	{name} という名前の入力または出力がすでにあります。
+	{name}: the ± is across {n} of the {of} batches, the rest had no trial with a number.	{name}: ± は {of} 個のバッチのうち {n} 個から求めています。残りには数値が得られた試行がありませんでした。
+	{name}: the ± is across {n} of the {of} trials, the rest gave no number.	{name}: ± は {of} 回の試行のうち {n} 回から求めています。残りは数値が得られませんでした。
+	No outputs yet: add one below.	出力はまだありません。下で追加してください。
+	None yet	まだありません
+	One input per line, as name, distribution, parameters and unit, copied from a spreadsheet or written as CSV: for example labour,triangular,min=80;mode=100;max=150,h.	1 行に 1 つの入力を、名前、分布、パラメーター、単位の順に記述します。スプレッドシートからコピーするか CSV で記述してください。例: labour,triangular,min=80;mode=100;max=150,h。
+	Outputs	出力
+	Paste inputs from a table	表から入力を貼り付け
+	Project budget	プロジェクト予算
+	Rank correlation	順位相関
+	Remove the correlation of {a} and {b}	{a} と {b} の相関を削除
+	Remove the input {name}	入力 {name} を削除
+	Remove the output {name}	出力 {name} を削除
+	Replace every input	すべての入力を置換
+	Sampling	サンプリング
+	Second input	2 つ目の入力
+	Share of trials at or below each value	各値以下となった試行の割合
+	Target {value}	目標 {value}
+	The chance is under {hi}, with 95% confidence.	95% の信頼度で、確率は {hi} 未満です。
+	The model: its inputs, outputs and trials	モデル: 入力、出力、試行
+	The number of trials was chosen from the results, so an interval may cover the true value less often than 95% of the time.	試行回数を結果に基づいて決めたため、区間が真の値を含む割合は 95% を下回る可能性があります。
+	The trials above come first; more follow in batches until every output's mean is within that share of itself, or the most is reached.	まず上の回数の試行を行い、その後、すべての出力の平均がその割合以内に収まるか、上限に達するまでバッチ単位で試行を追加します。
+	Trials and sampling	試行とサンプリング
+	Uncertain inputs instead of single guesses: the chance of an overrun, not one total.	1 つの推定値ではなく不確かな入力を使い、合計を 1 つ出す代わりに超過の確率を示します。
+	Will the project come in under budget?	プロジェクトは予算内に収まるか?
+	a name, such as cost	名前 (例: コスト)
+	a name, such as labour	名前 (例: 人件費)
+	random sampling	ランダムサンプリング
+	{asked} trials were asked for; with Latin hypercube sampling or correlated inputs a run is whole batches of {size}, so {n} ran.	{asked} 回の試行が指定されましたが、ラテン超方格サンプリングや相関のある入力では {size} 回ずつのバッチ単位で行うため、{n} 回実行しました。
+	{a} and {b}: {achieved} in the trials, {target} asked for	{a} と {b}: 試行での値 {achieved}、指定値 {target}
+	{output} was less than {value} in none of the {n} trials.	{n} 回の試行のいずれでも、{output} は {value} 未満になりませんでした。
+	{output} was more than {value} in none of the {n} trials.	{n} 回の試行のいずれでも、{output} は {value} を超えませんでした。
+@plural	Each ± is the half-width of the 95% interval of the mean across {n} independent batch of {size} trials. Latin hypercube sampling and correlated inputs make the trials within a batch depend on each other, so each batch counts as one.|Each ± is the half-width of the 95% interval of the mean across {n} independent batches of {size} trials. Latin hypercube sampling and correlated inputs make the trials within a batch depend on each other, so each batch counts as one.	各 ± は、{size} 回の試行からなる {n} 個の独立したバッチにわたる平均の 95% 区間の半幅です。ラテン超方格サンプリングや相関のある入力ではバッチ内の試行が互いに依存するため、各バッチを 1 つとして数えます。
+@plural	Each ± is the half-width of the 95% interval of the mean across {n} independent trial.|Each ± is the half-width of the 95% interval of the mean across {n} independent trials.	各 ± は、{n} 回の独立した試行にわたる平均の 95% 区間の半幅です。
+@plural	Finished {n} trial|Finished {n} trials	{n} 回の試行が完了しました
+@plural	Imported {n} input|Imported {n} inputs	{n} 個の入力をインポートしました
+@plural	Makes {n} trial from seed {seed}: each draws every input once and works out every output.|Makes {n} trials from seed {seed}: each draws every input once and works out every output.	乱数シード {seed} から {n} 回の試行を行います。各試行ですべての入力から 1 回ずつ値を抽出し、すべての出力を求めます。
+@plural	Stopped after {n} trial: every output's mean is within ±{share} of itself.|Stopped after {n} trials: every output's mean is within ±{share} of itself.	{n} 回の試行後に停止しました。すべての出力の平均が、自身の ±{share} 以内に収まっています。
+@plural	Stopped at the most allowed, {n} trial, before every output's mean was within ±{share} of itself.|Stopped at the most allowed, {n} trials, before every output's mean was within ±{share} of itself.	上限の {n} 回の試行に達したため、すべての出力の平均が自身の ±{share} 以内に収まる前に停止しました。
+@plural	{done} of {n} trial made|{done} of {n} trials made	{n} 回中 {done} 回の試行が完了
+@plural	{n} trial gave no number (a division by zero, say) and is left out.|{n} trials gave no number (a division by zero, say) and are left out.	{n} 回の試行で数値が得られなかったため (ゼロ除算など)、除外しています。
+@plural	{n} trial · seed {seed} · {sampling}|{n} trials · seed {seed} · {sampling}	{n} 回の試行 · シード {seed} · {sampling}
+@plural	{n} trial · seed {seed}|{n} trials · seed {seed}	{n} 回の試行 · シード {seed}

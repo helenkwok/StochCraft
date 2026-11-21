@@ -313,3 +313,89 @@ fn a_monte_carlo_file_saves_opens_and_runs_the_same() {
     );
     assert_eq!(third.model(), other.model());
 }
+
+/// The window's run, made a batch at a time between frames, gives `mc.run`'s results: with Latin
+/// hypercube sampling and a correlation (whole batches), and with a sequential stop.
+#[test]
+fn a_run_made_a_batch_at_a_time_gives_mc_runs_results() {
+    let mut e = cost_model();
+    ok(&mut e, "mc.set", json!({ "sampling": "latin_hypercube" }));
+    for params in [
+        json!({ "trials": 4_500, "seed": 5 }),
+        json!({ "trials": 1_000, "stop": { "relative": 0.002, "max": 30_000 } }),
+    ] {
+        let at_once = ok(&mut e, "mc.run", params.clone());
+        let job = e.mc_start(params.clone());
+        assert!(job.is_ok(), "{params}");
+        let Ok(mut job) = job else { return };
+        let mut steps = 0;
+        while job.step(1).ok() == Some(false) && steps < 1_000 {
+            let (made, asked) = job.progress();
+            assert!(made <= asked && made > 0, "{made} of {asked}");
+            steps += 1;
+        }
+        assert!(steps > 1, "{params}: in more than one step");
+        let stepped = e.mc_results(&mut job).unwrap_or_default();
+        assert_eq!(stepped["outputs"], at_once["outputs"], "{params}");
+        assert_eq!(stepped["trials"], at_once["trials"]);
+        assert_eq!(stepped["stop"], at_once["stop"]);
+        assert_eq!(stepped["seed"], at_once["record"]["seed"]);
+        assert_eq!(stepped["interval_basis"]["across"], "batches");
+    }
+    // A model with errors does not start.
+    ok(
+        &mut e,
+        "mc.output.set",
+        json!({ "name": "broken", "expression": "$nobody" }),
+    );
+    assert!(e.mc_start(json!({})).is_err());
+}
+
+/// The record says what the run was made from, which is the model as the run started, not as it
+/// is when the results are collected.
+#[test]
+fn the_run_record_is_of_the_model_the_run_started_on() {
+    let mut e = cost_model();
+    let at_start = ok(&mut e, "mc.run", json!({ "trials": 100 }))["record"]["model_digest"].clone();
+    let job = e.mc_start(json!({ "trials": 100 }));
+    assert!(job.is_ok());
+    let Ok(mut job) = job else { return };
+    ok(
+        &mut e,
+        "mc.output.set",
+        json!({ "name": "extra", "expression": "$cost + 1" }),
+    );
+    let mut steps = 0;
+    while job.step(usize::MAX).ok() == Some(false) && steps < 1_000 {
+        steps += 1;
+    }
+    let results = e.mc_results(&mut job).unwrap_or_default();
+    assert_eq!(results["record"]["model_digest"], at_start);
+    let now = ok(&mut e, "mc.run", json!({ "trials": 100 }))["record"]["model_digest"].clone();
+    assert_ne!(now, at_start, "the edit changed the model");
+}
+
+/// Runs of Latin hypercube sampling and of correlated inputs are whole batches, so a most below
+/// one batch is refused (not raised to 1,000); with plain sampling it stands.
+#[test]
+fn a_most_below_one_batch_is_refused_where_runs_are_whole_batches() {
+    let mut e = cost_model();
+    assert_eq!(
+        err(&mut e, "mc.set", json!({ "stop": { "max": 500 } })),
+        ErrorCode::InvalidParams
+    );
+    let started = e.mc_start(json!({ "stop": { "max": 500 } }));
+    assert!(started.is_err(), "refused before it starts");
+    ok(&mut e, "mc.set", json!({ "stop": { "max": 1_000 } }));
+    // Without the correlation the sampling is plain, and 500 is fine until it is changed.
+    ok(
+        &mut e,
+        "mc.correlation.set",
+        json!({ "a": "labour", "b": "materials", "rank": 0.0 }),
+    );
+    ok(&mut e, "mc.set", json!({ "stop": { "max": 500 } }));
+    assert_eq!(
+        err(&mut e, "mc.set", json!({ "sampling": "latin_hypercube" })),
+        ErrorCode::InvalidParams
+    );
+}
