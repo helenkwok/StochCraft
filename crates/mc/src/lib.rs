@@ -1926,9 +1926,10 @@ mod tests {
                 }
                 steps += 1;
             }
-            // Two inputs, and for the output a step to copy its values, one to sort them (all
-            // in one chunk here) and one to describe them.
-            assert_eq!(pieces, 5, "{stop:?}");
+            // Two inputs; for the output a step to copy its values, one to sort them (all in one
+            // chunk here) and one to describe them; then the rank correlations of the inputs
+            // with it, ranked a piece at a time too.
+            assert!(pieces > 5, "{stop:?}: {pieces}");
             assert_eq!(stepper.take_results(), Some(at_once), "{stop:?}");
             assert!(stepper.is_done());
         }
