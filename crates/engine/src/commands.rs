@@ -19,7 +19,7 @@ use crate::wire::{
     PropertyTypeSpec, PropertyValueSpec, QueueShiftDoc, RoutingSpec, ScrapSpec, SetupSpec,
     ShiftDoc, Stamp, StopSpec, TimeUnitSpec, TimedDist,
 };
-use crate::{CommandError, Engine, ErrorCode, HistoryEntry, JournalStart, StartKind};
+use crate::{CommandError, Engine, ErrorCode, HistoryEntry, JournalStart, StartKind, Undo};
 
 /// What a command does, which decides whether it is undoable and journalled.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -1142,7 +1142,9 @@ fn batch(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
                 while e.undo.len() > start {
                     if let Some(entry) = e.undo.pop() {
                         e.revision += 1;
-                        let _ = crate::edit::apply(&mut e.model, entry.op);
+                        if let Undo::Model(op) = entry.op {
+                            let _ = crate::edit::apply(&mut e.model, op);
+                        }
                     }
                 }
                 e.redo = redo;
@@ -1153,11 +1155,19 @@ fn batch(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
             }
         }
     }
-    let ops: Vec<Op> = e.undo.drain(start..).rev().map(|h| h.op).collect();
+    let ops: Vec<Op> = e
+        .undo
+        .drain(start..)
+        .rev()
+        .filter_map(|h| match h.op {
+            Undo::Model(op) => Some(op),
+            Undo::Sd(_) => None,
+        })
+        .collect();
     if !ops.is_empty() {
         e.undo.push(HistoryEntry {
             label,
-            op: Op::Batch(ops),
+            op: Undo::Model(Op::Batch(ops)),
         });
     }
     Ok(json!({ "results": results }))
@@ -2269,12 +2279,6 @@ fn file_open(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
 
 fn file_save(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
     let p: FileSave = parse(p)?;
-    if e.sd.is_some() {
-        return Err(CommandError::new(
-            ErrorCode::Unsupported,
-            "a system dynamics model cannot be saved yet: the window and canvas that edit it come next",
-        ));
-    }
     let path = p
         .path
         .or_else(|| e.path().map(str::to_owned))
@@ -2666,7 +2670,7 @@ pub static COMMANDS: &[Command] = &[
     },
     Command {
         name: "file.save",
-        summary: "Save the model: into the file it was opened from, or as a new BPMN file with BPSim.",
+        summary: "Save the model: into the file it was opened from, or as a new BPMN file with BPSim. A system dynamics model is written as an XMILE file, with its diagram.",
         kind: CommandKind::Action,
         schema: schema::<FileSave>,
         example: || json!({ "path": "help-desk.bpmn" }),
@@ -2783,7 +2787,7 @@ materials,normal,mean=500;std_dev=50,USD
     },
     Command {
         name: "sd.open",
-        summary: "System dynamics: open an XMILE 1.0 model from its text (a file on disk is opened with file.open), replacing the model, clearing the history and starting a new journal. Stocks, flows, auxiliaries, graphical functions, delays and smooths are read; arrays, modules, macros and the like are refused by name. The model cannot be edited or saved yet.",
+        summary: "System dynamics: open an XMILE 1.0 model from its text (a file on disk is opened with file.open), replacing the model, clearing the history and starting a new journal. Stocks, flows, auxiliaries, graphical functions, delays and smooths are read; arrays, modules, macros and the like are refused by name. Edit it with the sd.variable, sd.specs and sd.layout commands, and save it with file.save.",
         kind: CommandKind::Action,
         schema: schema::<crate::sd::Open>,
         example: || json!({ "text": crate::sd::EXAMPLE_XMILE }),
@@ -2799,10 +2803,58 @@ materials,normal,mean=500;std_dev=50,USD
     },
     Command {
         name: "sd.get",
-        summary: "System dynamics: the open model's settings, variables (kind, equation, units, flows) and what the checks found, and with `variable` its values from the last sd.run.",
+        summary: "System dynamics: the open model's settings, variables (kind, equation, units, flows, where each is drawn and the pipes of the flows), the information links and what the checks found, and with `variable` its values from the last sd.run (marked stale when the model was edited since).",
         kind: CommandKind::Query,
         schema: schema::<crate::sd::Get>,
         example: || json!({ "variable": "Population" }),
         run: crate::sd::get,
+    },
+    Command {
+        name: "sd.new",
+        summary: "System dynamics: start a new, empty model (a name, the start and stop times, the time step, `euler` or `rk4`, the time unit), replacing the document, clearing the history and starting a new journal. Add variables with sd.variable.add.",
+        kind: CommandKind::Action,
+        schema: schema::<crate::sd_edit::New>,
+        example: || json!({ "name": "Growth", "stop": 10.0, "dt": 1.0, "time_units": "Years" }),
+        run: crate::sd_edit::new,
+    },
+    Command {
+        name: "sd.variable.add",
+        summary: "System dynamics: add a stock, a flow or an auxiliary to the open model: its name, its equation (a stock's is its initial value), units, a graphical function, a stock's `inflows` and `outflows`, and where to draw it (otherwise in the first free place under the diagram). A flow can be attached to a stock with `into_stock` or `from_stock`. An equation can only name variables that are already there. The edit is undone with undo; one that would not compile (an unknown name, an algebraic loop) is refused and changes nothing.",
+        kind: CommandKind::Action,
+        schema: schema::<crate::sd_edit::VariableAdd>,
+        example: || json!({ "kind": "stock", "name": "Reserve", "equation": "50", "units": "units", "position": { "x": 400.0, "y": 300.0 } }),
+        run: crate::sd_edit::variable_add,
+    },
+    Command {
+        name: "sd.variable.set",
+        summary: "System dynamics: change a variable of the open model: its equation, units, documentation, a stock's inflows and outflows, `non_negative`, its graphical function, or `rename` it (every equation and flow list that names it is rewritten, so a run gives the same numbers). Undone with undo; an edit that would not compile is refused and changes nothing.",
+        kind: CommandKind::Action,
+        schema: schema::<crate::sd_edit::VariableSet>,
+        example: || json!({ "name": "Reserve", "equation": "60", "rename": "Buffer" }),
+        run: crate::sd_edit::variable_set,
+    },
+    Command {
+        name: "sd.specs.set",
+        summary: "System dynamics: change the open model's simulation settings: start, stop, the time step `dt` (with `dt_reciprocal` true, the step is 1/dt), the method (`euler` or `rk4`), the time unit and the save step (`null` for the step itself). Undone with undo.",
+        kind: CommandKind::Action,
+        schema: schema::<crate::sd_edit::SpecsSet>,
+        example: || json!({ "stop": 20.0 }),
+        run: crate::sd_edit::specs_set,
+    },
+    Command {
+        name: "sd.layout.set",
+        summary: "System dynamics: change the diagram of the open model: move shapes (the centre `x`, `y`, a size, a flow's pipe `pts`; the pipes of flows follow a stock that moves), and add or remove information links (`from`, `to`, `angle`). Undone with undo.",
+        kind: CommandKind::Action,
+        schema: schema::<crate::sd_edit::LayoutSet>,
+        example: || json!({ "shapes": [{ "name": "Buffer", "x": 300.0, "y": 200.0 }] }),
+        run: crate::sd_edit::layout_set,
+    },
+    Command {
+        name: "sd.variable.remove",
+        summary: "System dynamics: remove a variable of the open model. It is refused, naming who uses it, while another equation names it or a stock lists it as a flow; `force` takes it out of the stocks' flow lists (never out of an equation).",
+        kind: CommandKind::Action,
+        schema: schema::<crate::sd_edit::VariableRemove>,
+        example: || json!({ "name": "Buffer" }),
+        run: crate::sd_edit::variable_remove,
     },
 ];

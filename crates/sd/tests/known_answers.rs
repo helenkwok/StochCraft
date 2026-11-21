@@ -8,8 +8,8 @@
 
 use stochcraft_random::math::{exp, powf};
 use stochcraft_sd::{
-    ErrorKind, Gf, GfKind, GfX, Method, RunOptions, SdModel, SdResults, SimSpecs, Step, VarKind,
-    Variable, compile, read_xmile, run, write_xmile,
+    ErrorKind, Gf, GfKind, GfX, Layout, Method, RunOptions, SdModel, SdResults, SimSpecs, Step,
+    VarKind, Variable, compile, read_xmile, run, write_xmile,
 };
 
 fn specs(stop: f64, dt: f64, method: Method) -> SimSpecs {
@@ -749,6 +749,8 @@ fn xmile_written_and_read_again_is_the_same_model() {
         y: vec![0.0, 1.0, 4.0],
     });
     m.vars.push(only);
+    // A model built in code has no diagram; it is written with one, and read back with it.
+    m.layout = Layout::auto(&m);
 
     let text = write_xmile(&m);
     let back = read_xmile(&text).unwrap();
@@ -773,7 +775,10 @@ fn the_logistic_file_runs_to_its_closed_form() {
     assert_eq!(f.model.specs.method, Method::Rk4);
     assert_eq!(f.model.specs.dt, Step::Reciprocal(8.0));
     assert_eq!(f.model.specs.save_step, Some(1.0));
-    assert!(f.notes.iter().any(|n| n.contains("views")), "{:?}", f.notes);
+    // The file's one (empty) view is not a loss; every variable still has a place.
+    assert!(f.notes.is_empty(), "{:?}", f.notes);
+    assert!(f.model.layout.is_complete(&f.model));
+    assert_eq!(f.model.layout.first_overlap(&f.model), None);
     let p = compile(&f.model).unwrap();
     assert!(p.warnings.is_empty(), "{:?}", p.warnings);
     let r = run(&p, &RunOptions::default()).unwrap();
@@ -883,4 +888,62 @@ fn entities_character_references_and_cdata_are_read_and_bad_files_are_errors() {
     ));
     // Well-formed, but not an equation: caught when the model is made ready.
     assert!(compile(&e.unwrap().model).is_err());
+}
+
+const DRAWN: &str = "<xmile version=\"1.0\"><sim_specs><start>0</start><stop>10</stop><dt>1</dt></sim_specs>    <model><variables>    <stock name=\"Pop\"><eqn>100</eqn><inflow>births</inflow></stock>    <flow name=\"births\"><eqn>rate * Pop</eqn></flow>    <aux name=\"rate\"><eqn>0.1</eqn></aux>    </variables><views>    <view type=\"stock_flow\" page_width=\"800\">    <stock name=\"Pop\" x=\"300\" y=\"200\" width=\"60\" height=\"40\" color=\"red\"/>    <flow name=\"births\" x=\"200\" y=\"220\"><pts><pt x=\"100\" y=\"220\"/><pt x=\"300\" y=\"220\"/></pts></flow>    <cloud uid=\"9\" flow_uid=\"3\" x=\"100\" y=\"220\"/>    <aux name=\"rate\" x=\"200\" y=\"120\"/>    <connector angle=\"45\"><from>rate</from><to>births</to></connector>    <connector><from>Pop</from><to>births</to></connector>    <connector><from>ghost</from><to>births</to></connector>    <alias uid=\"5\" x=\"1\" y=\"1\"><of>rate</of></alias>    </view>    <view type=\"stock_flow\"/><view type=\"interface\"/>    </views></model></xmile>";
+
+#[test]
+fn a_diagram_is_kept_through_a_read_and_a_write() {
+    let f = read_xmile(DRAWN).unwrap();
+    let l = &f.model.layout;
+    // With a size, x and y are the top left corner; the layout holds the centre.
+    let pop = &l.shapes["pop"];
+    assert_eq!((pop.x, pop.y), (330.0, 220.0));
+    assert_eq!((pop.width, pop.height), (Some(60.0), Some(40.0)));
+    let births = &l.shapes["births"];
+    assert_eq!((births.x, births.y), (200.0, 220.0));
+    assert_eq!(births.pts, vec![(100.0, 220.0), (300.0, 220.0)]);
+    // A shape with no size has the default size, centred where it is put.
+    let rate = &l.shapes["rate"];
+    assert_eq!((rate.x, rate.y), (200.0, 120.0));
+    assert_eq!(l.connectors.len(), 2);
+    assert_eq!(l.connectors.first().and_then(|c| c.angle), Some(45.0));
+    for want in [
+        "display attribute `color`",
+        "diagram setting `page_width`",
+        "aliases",
+        "only the first diagram",
+        "type `interface`",
+        "not a variable",
+    ] {
+        assert!(
+            f.notes.iter().any(|n| n.contains(want)),
+            "{want}: {:?}",
+            f.notes
+        );
+    }
+    // Written and read again: the same positions, pipes and links, and the same text.
+    let text = write_xmile(&f.model);
+    let back = read_xmile(&text).unwrap();
+    assert_eq!(back.model.layout, f.model.layout, "{text}");
+    assert_eq!(back.model, f.model);
+    assert!(back.notes.is_empty(), "{:?}", back.notes);
+    assert_eq!(write_xmile(&back.model), text);
+    // The cloud at the open end of the inflow is written.
+    assert!(text.contains("<cloud "), "{text}");
+}
+
+#[test]
+fn a_file_with_no_diagram_gets_one_with_nothing_overlapping() {
+    let f = read_xmile(sir_file()).unwrap();
+    let l = &f.model.layout;
+    assert!(l.is_complete(&f.model));
+    assert_eq!(l.first_overlap(&f.model), None);
+    // The three stocks are in a row, left to right along the flows.
+    let x = |n: &str| l.shapes[n].x;
+    assert!(x("susceptible") < x("infected") && x("infected") < x("recovered"));
+    // Reading again gives the same, and it is what a write-read gives.
+    assert_eq!(read_xmile(sir_file()).unwrap().model.layout, *l);
+    let back = read_xmile(&write_xmile(&f.model)).unwrap();
+    assert_eq!(back.model.layout, *l);
 }

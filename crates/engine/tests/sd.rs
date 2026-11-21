@@ -55,10 +55,12 @@ fn file_open_reads_an_xmile_file_and_sd_run_runs_it() {
         opened["model"]["variables"].as_array().map(Vec::len),
         Some(4)
     );
+    // The file's empty diagram is no loss: every variable has a place.
+    assert_eq!(opened["notes"].as_array().map(Vec::len), Some(0));
     assert!(
-        opened["notes"]
+        opened["model"]["variables"]
             .as_array()
-            .is_some_and(|n| n.iter().any(|x| x["message"].to_string().contains("views")))
+            .is_some_and(|vs| vs.iter().all(|v| v["x"].is_number() && v["y"].is_number()))
     );
 
     let r = ok(&mut e, "sd.run", json!({}));
@@ -104,10 +106,6 @@ fn a_system_dynamics_document_is_refused_by_the_process_commands() {
     );
     assert_eq!(err(&mut e, "run", json!({})), ErrorCode::Unsupported);
     assert_eq!(err(&mut e, "run.start", json!({})), ErrorCode::Unsupported);
-    assert_eq!(
-        err(&mut e, "file.save", json!({ "path": "x.xmile" })),
-        ErrorCode::Unsupported
-    );
     // Opening a process model replaces it, and then sd.run has nothing to run.
     ok(&mut e, "model.new", json!({ "name": "x" }));
     assert_eq!(err(&mut e, "sd.run", json!({})), ErrorCode::NotFound);
