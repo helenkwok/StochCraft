@@ -20,14 +20,29 @@ pub const TOKEN_BYTES: usize = 32;
 
 /// A new random token from the operating system's random source, in hexadecimal.
 pub fn generate() -> io::Result<String> {
-    let mut bytes = [0u8; TOKEN_BYTES];
-    getrandom::fill(&mut bytes)
-        .map_err(|e| io::Error::other(format!("no random numbers from the system: {e}")))?;
+    let bytes = random_bytes()?;
     let mut hex = String::with_capacity(TOKEN_BYTES * 2);
     for b in bytes {
         let _ = write!(hex, "{b:02x}");
     }
     Ok(hex)
+}
+
+#[cfg(not(target_arch = "wasm32"))]
+fn random_bytes() -> io::Result<[u8; TOKEN_BYTES]> {
+    let mut bytes = [0u8; TOKEN_BYTES];
+    getrandom::fill(&mut bytes)
+        .map_err(|e| io::Error::other(format!("no random numbers from the system: {e}")))?;
+    Ok(bytes)
+}
+
+/// The browser build has no control channel to open, and no system random source here.
+#[cfg(target_arch = "wasm32")]
+fn random_bytes() -> io::Result<[u8; TOKEN_BYTES]> {
+    Err(io::Error::new(
+        io::ErrorKind::Unsupported,
+        "the control channel is not available in the browser",
+    ))
 }
 
 /// Whether two byte strings are equal, in a time that depends on their length only and not on

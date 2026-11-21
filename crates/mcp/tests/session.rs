@@ -558,29 +558,38 @@ fn connect_finds_the_token_in_the_file_the_app_wrote() {
             .unwrap()
             .is_empty()
     );
-    // Without the file and without a token, the error names the file.
+    // Without the file and without a token the app is not running: a headless session, with a
+    // note naming the file (unless a token is given in the environment).
     std::fs::remove_file(&path).unwrap();
-    let missing = stochcraft_mcp::backend(Options {
-        connect: Some(channel.addr.to_string()),
-        token_file: Some(path.clone()),
-        ..Options::default()
-    });
-    let message = missing.err().unwrap();
-    assert!(
-        message.contains("control.json") || std::env::var("STOCHCRAFT_TOKEN").is_ok(),
-        "{message}"
-    );
+    if std::env::var("STOCHCRAFT_TOKEN").is_err() {
+        let (_, note) = stochcraft_mcp::backend(Options {
+            connect: Some(channel.addr.to_string()),
+            token_file: Some(path.clone()),
+            ..Options::default()
+        })
+        .unwrap();
+        let note = note.unwrap_or_default();
+        assert!(
+            note.contains("control.json") && note.contains("headless"),
+            "{note}"
+        );
+    }
 }
 
 #[test]
 fn the_control_channel_takes_a_limited_number_of_clients() {
     use std::io::{BufRead, BufReader, Write};
     let addr = app_with_control();
-    // A client that sends its token line, then the request; the answer to the token is read
-    // first (and is the refusal itself for a client over the limit, which has no id).
+    // A client sends its token line as soon as it connects, as a real one does (the channel waits
+    // only a short time for it); `ask` then reads the answer to the token (the refusal itself for
+    // a client over the limit, which has no id) and sends the request.
+    let connect = || {
+        let s = std::net::TcpStream::connect(addr).unwrap();
+        writeln!(&s, r#"{{"token":"{TOKEN}"}}"#).unwrap();
+        s
+    };
     let ask = |stream: &std::net::TcpStream, id: u64| -> Option<Value> {
         let mut w = stream.try_clone().unwrap();
-        writeln!(w, r#"{{"token":"{TOKEN}"}}"#).ok()?;
         let mut reader = BufReader::new(stream.try_clone().unwrap());
         let mut reply = String::new();
         reader.read_line(&mut reply).ok()?;
@@ -594,14 +603,12 @@ fn the_control_channel_takes_a_limited_number_of_clients() {
         serde_json::from_str(&reply).ok()
     };
     // Each answered, so the app has taken all of them.
-    let mut open: Vec<std::net::TcpStream> = (0..control::MAX_CLIENTS)
-        .map(|_| std::net::TcpStream::connect(addr).unwrap())
-        .collect();
+    let mut open: Vec<std::net::TcpStream> = (0..control::MAX_CLIENTS).map(|_| connect()).collect();
     for (i, s) in open.iter().enumerate() {
         assert!(ask(s, i as u64).unwrap()["result"].is_array());
     }
     // One more is told why, under its own id, and closed.
-    let extra = std::net::TcpStream::connect(addr).unwrap();
+    let extra = connect();
     let refused = ask(&extra, 99).unwrap();
     assert!(refused["id"].is_null());
     assert_eq!(refused["error"]["code"], "conflict");
@@ -621,7 +628,7 @@ fn the_control_channel_takes_a_limited_number_of_clients() {
     drop(open.pop());
     let deadline = std::time::Instant::now() + std::time::Duration::from_secs(5);
     loop {
-        let s = std::net::TcpStream::connect(addr).unwrap();
+        let s = connect();
         if ask(&s, 1).is_some_and(|r| r["result"].is_array()) {
             break;
         }
