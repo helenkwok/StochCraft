@@ -1324,3 +1324,16 @@ unit	yr	సం.
 	95% interval {low} to {high}	95% అంతరం {low} నుండి {high} వరకు
 	Alone is the share of the spread an input explains by itself. With interactions adds what it does together with the other inputs.	ఒంటరిగా అంటే ఒక ఇన్‌పుట్ తానే వివరించే వ్యాప్తి వాటా. పరస్పర చర్యలతో అంటే ఇతర ఇన్‌పుట్‌లతో కలిసి అది చేసేది కూడా కలుస్తుంది.
 	Working out the shares of the spread: {percent}	వ్యాప్తి వాటాలు లెక్కిస్తున్నాం: {percent}
+	Antithetic pairs	వ్యతిరేక జతలు
+	Quasi-random (Sobol)	క్వాసి-యాదృచ్ఛిక (Sobol)
+	Antithetic pairs make each trial's twin from the opposite end of every input's range, so their errors tend to cancel, which usually makes the results more precise for the same trials. Trials run in pairs; it cannot be used with correlated inputs.	వ్యతిరేక జతలు ప్రతి ప్రయత్నానికి జోడీని ప్రతి ఇన్‌పుట్ పరిధి యొక్క వ్యతిరేక చివర నుండి తయారు చేస్తాయి, కాబట్టి వాటి లోపాలు ఒకదానినొకటి రద్దు చేసుకునే అవకాశం ఉంది, దీనివల్ల అదే ప్రయత్నాలకు ఫలితాలు సాధారణంగా మరింత కచ్చితంగా వస్తాయి. ప్రయత్నాలు జతలుగా నడుస్తాయి; సహసంబంధం ఉన్న ఇన్‌పుట్‌లతో దీన్ని ఉపయోగించలేరు.
+	Quasi-random (Sobol) draws spread the trials evenly over the inputs' ranges, with a fresh random shift in every batch of 1,000, which usually makes the results more precise for the same trials. It has points for up to 64 inputs.	క్వాసి-యాదృచ్ఛిక (Sobol) నమూనాలు ప్రయత్నాలను ఇన్‌పుట్‌ల పరిధులలో సమంగా పంపిణీ చేస్తాయి, ప్రతి 1,000 బ్యాచ్‌లో కొత్త యాదృచ్ఛిక షిఫ్ట్‌తో, దీనివల్ల అదే ప్రయత్నాలకు ఫలితాలు సాధారణంగా మరింత కచ్చితంగా వస్తాయి. ఇది 64 ఇన్‌పుట్‌ల వరకు పాయింట్‌లను కలిగి ఉంది.
+	Each ± is the half-width of the 95% interval of the mean across independent pairs of trials (pairs: {n}). The two trials of a pair are made to oppose each other, so each pair counts as one.	ప్రతి ± అనేది స్వతంత్ర ప్రయత్నాల జతల అంతటా సగటుకు 95% అంతరం వెడల్పులో సగం (జతలు: {n}). ఒక జతలోని రెండు ప్రయత్నాలు ఒకదానికొకటి వ్యతిరేకంగా ఉండేలా చేయబడతాయి, కాబట్టి ప్రతి జత ఒకటిగా లెక్కించబడుతుంది.
+	Each ± is the half-width of the 95% interval of the mean across independent batches of {size} trials (batches: {n}). Each batch is shifted at random on its own, so each batch counts as one.	ప్రతి ± అనేది {size} ప్రయత్నాల స్వతంత్ర బ్యాచ్‌ల అంతటా సగటుకు 95% అంతరం వెడల్పులో సగం (బ్యాచ్‌లు: {n}). ప్రతి బ్యాచ్ తనంతట తానుగా యాదృచ్ఛికంగా షిఫ్ట్ చేయబడుతుంది, కాబట్టి ప్రతి బ్యాచ్ ఒకటిగా లెక్కించబడుతుంది.
+	antithetic sampling	వ్యతిరేక శాంప్లింగ్
+	quasi-random (Sobol) sampling	క్వాసి-యాదృచ్ఛిక (Sobol) శాంప్లింగ్
+	{asked} trials were asked for; antithetic sampling runs whole pairs of trials, so {n} ran.	{asked} ప్రయత్నాలు కోరబడ్డాయి; వ్యతిరేక శాంప్లింగ్ పూర్తి ప్రయత్నాల జతలను నడుపుతుంది, కాబట్టి {n} నడిచాయి.
+	{asked} trials were asked for; Sobol sampling runs whole batches of {size}, so {n} ran.	{asked} ప్రయత్నాలు కోరబడ్డాయి; Sobol శాంప్లింగ్ {size} గల పూర్తి బ్యాచ్‌లను నడుపుతుంది, కాబట్టి {n} నడిచాయి.
+	{name}: the ± is across {n} of the {of} pairs, the rest had no trial with a number.	{name}: ± అనేది {of} జతలలో {n} జతల అంతటా ఉంది, మిగిలిన వాటిలో సంఖ్య ఉన్న ప్రయత్నం లేదు.
+	No interval: every pair gave the same share, so their spread gives none.	అంతరం లేదు: అన్ని జతలు ఒకే వాటాను ఇచ్చాయి, కాబట్టి వాటి విస్తరణ నుండి అంతరం రాదు.
+	No interval: too few pairs of trials for one.	అంతరం లేదు: దానికి సరిపడా ప్రయత్నాల జతలు లేవు.

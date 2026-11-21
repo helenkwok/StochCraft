@@ -1324,3 +1324,16 @@ unit	yr	a
 	95% interval {low} to {high}	Intervalo de 95% de {low} a {high}
 	Alone is the share of the spread an input explains by itself. With interactions adds what it does together with the other inputs.	Sozinha é a parte da dispersão que uma entrada explica por si só. Com interações acrescenta o que ela faz junto com as outras entradas.
 	Working out the shares of the spread: {percent}	Calculando as partes da dispersão: {percent}
+	Antithetic pairs	Pares antitéticos
+	Quasi-random (Sobol)	Quase aleatório (Sobol)
+	Antithetic pairs make each trial's twin from the opposite end of every input's range, so their errors tend to cancel, which usually makes the results more precise for the same trials. Trials run in pairs; it cannot be used with correlated inputs.	Pares antitéticos criam o gêmeo de cada tentativa a partir da extremidade oposta da faixa de cada entrada, de modo que seus erros tendem a se cancelar, o que normalmente deixa os resultados mais precisos com as mesmas tentativas. As tentativas são executadas em pares; não pode ser usado com entradas correlacionadas.
+	Quasi-random (Sobol) draws spread the trials evenly over the inputs' ranges, with a fresh random shift in every batch of 1,000, which usually makes the results more precise for the same trials. It has points for up to 64 inputs.	Sorteios quase aleatórios (Sobol) distribuem as tentativas uniformemente pelas faixas das entradas, com um novo deslocamento aleatório a cada lote de 1.000, o que normalmente deixa os resultados mais precisos com as mesmas tentativas. Há pontos para até 64 entradas.
+	Each ± is the half-width of the 95% interval of the mean across independent pairs of trials (pairs: {n}). The two trials of a pair are made to oppose each other, so each pair counts as one.	Cada ± é a semilargura do intervalo de 95% da média entre pares independentes de tentativas (pares: {n}). As duas tentativas de um par são feitas para se opor, então cada par conta como um.
+	Each ± is the half-width of the 95% interval of the mean across independent batches of {size} trials (batches: {n}). Each batch is shifted at random on its own, so each batch counts as one.	Cada ± é a semilargura do intervalo de 95% da média entre lotes independentes de {size} tentativas (lotes: {n}). Cada lote é deslocado aleatoriamente por conta própria, então cada lote conta como um.
+	antithetic sampling	amostragem antitética
+	quasi-random (Sobol) sampling	amostragem quase aleatória (Sobol)
+	{asked} trials were asked for; antithetic sampling runs whole pairs of trials, so {n} ran.	Foram pedidas {asked} tentativas; a amostragem antitética executa pares inteiros de tentativas, então foram executadas: {n}.
+	{asked} trials were asked for; Sobol sampling runs whole batches of {size}, so {n} ran.	Foram pedidas {asked} tentativas; a amostragem de Sobol executa lotes inteiros de {size}, então foram executadas: {n}.
+	{name}: the ± is across {n} of the {of} pairs, the rest had no trial with a number.	{name}: o ± vale para {n} dos {of} pares; os demais não tinham tentativa com um número.
+	No interval: every pair gave the same share, so their spread gives none.	Sem intervalo: todos os pares deram a mesma parcela, então a dispersão deles não dá nenhum.
+	No interval: too few pairs of trials for one.	Sem intervalo: poucos pares de iterações para isso.

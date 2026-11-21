@@ -95,6 +95,11 @@ pub enum Sampling {
     /// Latin hypercube: within each batch of trials, each input's range is cut into as many
     /// equally likely strata as there are trials, and each stratum is drawn once.
     LatinHypercube,
+    /// Antithetic pairs: trials come in pairs that use each input's uniform u and 1 - u.
+    Antithetic,
+    /// Randomised quasi-Monte Carlo: within each batch of trials, Sobol points with a random
+    /// digital shift.
+    Sobol,
 }
 
 impl Sampling {
@@ -103,6 +108,8 @@ impl Sampling {
         match self {
             Sampling::Random => "random",
             Sampling::LatinHypercube => "latinHypercube",
+            Sampling::Antithetic => "antithetic",
+            Sampling::Sobol => "sobol",
         }
     }
 
@@ -110,6 +117,8 @@ impl Sampling {
         match s {
             "random" => Some(Sampling::Random),
             "latinHypercube" => Some(Sampling::LatinHypercube),
+            "antithetic" => Some(Sampling::Antithetic),
+            "sobol" => Some(Sampling::Sobol),
             _ => None,
         }
     }

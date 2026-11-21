@@ -1324,3 +1324,16 @@ unit	yr	v
 	95% interval {low} to {high}	95 %:n väli {low}–{high}
 	Alone is the share of the spread an input explains by itself. With interactions adds what it does together with the other inputs.	Yksin on osuus vaihtelusta, jonka syöte selittää itse. Yhteisvaikutuksineen lisää sen, mitä se tekee yhdessä muiden syötteiden kanssa.
 	Working out the shares of the spread: {percent}	Lasketaan vaihtelun osuuksia: {percent}
+	Antithetic pairs	Antiteettiset parit
+	Quasi-random (Sobol)	Kvasisatunnainen (Sobol)
+	Antithetic pairs make each trial's twin from the opposite end of every input's range, so their errors tend to cancel, which usually makes the results more precise for the same trials. Trials run in pairs; it cannot be used with correlated inputs.	Antiteettiset parit muodostavat jokaisen iteraation kaksosen kunkin syötteen vaihteluvälin vastakkaisesta päästä, joten niiden virheet pyrkivät kumoamaan toisensa, mikä tekee tuloksista yleensä tarkempia samalla iteraatiomäärällä. Iteraatiot ajetaan pareittain; sitä ei voi käyttää korreloitujen syötteiden kanssa.
+	Quasi-random (Sobol) draws spread the trials evenly over the inputs' ranges, with a fresh random shift in every batch of 1,000, which usually makes the results more precise for the same trials. It has points for up to 64 inputs.	Kvasisatunnainen (Sobol) poiminta jakaa iteraatiot tasaisesti syötteiden vaihteluvälille, ja jokaisessa 1,000 iteraation erässä on uusi satunnainen siirtymä, mikä tekee tuloksista yleensä tarkempia samalla iteraatiomäärällä. Siinä on pisteet enintään 64 syötteelle.
+	Each ± is the half-width of the 95% interval of the mean across independent pairs of trials (pairs: {n}). The two trials of a pair are made to oppose each other, so each pair counts as one.	Jokainen ± on keskiarvon 95 %:n välin puolileveys riippumattomien iteraatioparien yli (pareja: {n}). Parin kaksi iteraatiota on tehty vastakkaisiksi, joten kukin pari lasketaan yhdeksi.
+	Each ± is the half-width of the 95% interval of the mean across independent batches of {size} trials (batches: {n}). Each batch is shifted at random on its own, so each batch counts as one.	Jokainen ± on keskiarvon 95 %:n välin puolileveys riippumattomien {size} iteraation erien yli (eriä: {n}). Kukin erä siirretään satunnaisesti erikseen, joten kukin erä lasketaan yhdeksi.
+	antithetic sampling	antiteettinen otanta
+	quasi-random (Sobol) sampling	kvasisatunnainen (Sobol) otanta
+	{asked} trials were asked for; antithetic sampling runs whole pairs of trials, so {n} ran.	Pyydettiin {asked} iteraatiota; antiteettinen otanta ajaa kokonaisia iteraatiopareja, joten ajettiin {n}.
+	{asked} trials were asked for; Sobol sampling runs whole batches of {size}, so {n} ran.	Pyydettiin {asked} iteraatiota; Sobol-otanta ajaa kokonaisia {size} iteraation eriä, joten ajettiin {n}.
+	{name}: the ± is across {n} of the {of} pairs, the rest had no trial with a number.	{name}: ± on {of} parista {n}:n yli, loput eivät sisältäneet yhtään iteraatiota, jolla on luku.
+	No interval: every pair gave the same share, so their spread gives none.	Ei väliä: kaikki parit antoivat saman osuuden, joten niiden hajonta ei anna väliä.
+	No interval: too few pairs of trials for one.	Ei väliä: liian vähän iteraatiopareja sen laskemiseen.

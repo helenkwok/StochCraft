@@ -51,7 +51,7 @@ draw only with fonts the visitor's own system has.
   out for those turned away), shifts, breakdowns and stop conditions, and reports per-element
   statistics.
 - `stochcraft-mc` runs Monte Carlo models: inputs that are distributions, outputs that are
-  expressions over them, plain or Latin hypercube sampling, rank correlations between inputs
+  expressions over them, plain, Latin hypercube, antithetic or Sobol sampling, rank correlations between inputs
   (Iman and Conover), and each output's mean, percentiles and chance of meeting a target.
 - `stochcraft-sd` runs system dynamics models: stocks and flows read from XMILE 1.0, with delays,
   smooths, graphical functions and random functions, by Euler or fourth-order Runge-Kutta, and
@@ -236,7 +236,20 @@ al. 2010, total by Jansen 1999).
 
 `mc.set` chooses Latin hypercube sampling (`"sampling": "latin_hypercube"`): within each batch of
 1,000 trials, each input's range is cut into 1,000 equally likely strata and each is drawn once.
-`mc.correlation.set` gives two inputs a rank correlation, induced by the method of Iman and
+Two more samplings narrow the intervals of suitable models for the same trials. `"antithetic"`
+makes trials in pairs, trial 2j + 1 using 1 - u for every input where trial 2j used u, through
+the inverse distribution function (Hammersley and Morton, 1956; Glasserman, 2003, §4.2); it is
+refused with correlated inputs, whose reordering would break the pairs. `"sobol"` is randomised
+quasi-Monte Carlo (`stochcraft_mc::qmc`): each batch takes the first 1,000 points of the Sobol
+sequence with Joe and Kuo's direction numbers (2008, "new-joe-kuo-6.21201", the first 64
+dimensions; their licence is in NOTICE), one dimension per input in declaration order, and
+shifts each dimension by a random 32-bit integer keyed by the seed, the batch and the input's
+name (a random digital shift; Owen, 1995; L'Ecuyer and Lemieux, 2002); more than 64 inputs are
+refused. The file format keeps the sampling as `sampling="antithetic"` or `"sobol"` on
+`stochcraft:monteCarlo`; a reader from before them warns that it does not know the value and
+samples at random. On the command line `run --sampling random|latin-hypercube|antithetic|quasi-random`
+chooses it for one run (`sobol` is accepted for `quasi-random`; it is not `--sobol`, the shares of
+the variation), and `mc.set` and `mc.run` take `sobol`. `mc.correlation.set` gives two inputs a rank correlation, induced by the method of Iman and
 Conover (1982); correlations that cannot all hold together are refused. Trials come in batches
 of 1,000, each with its own random streams keyed by the seed, the batch and the input's name, so
 results are the same on any number of threads and adding an input leaves the others' draws as
@@ -254,7 +267,11 @@ than there are batches. Such runs are whole batches, so the trials asked for are
 multiple of 1,000 (the results and the run record give both numbers), a run of one batch has no
 interval, and a sequential run judges its outputs on the intervals across batches. The run
 record's `interval` says which, for example `Student-t across 12 independent Latin hypercube
-batches of 1000 trials`. The standard deviation is always across trials: it describes the
+batches of 1000 trials`. Sobol sampling is judged the same way (each batch's shift is
+independent, so its batch means are independent replicates; `interval_basis` is `batches`).
+Antithetic trials depend on their twin and not on the other pairs, so the interval is Student-t
+on the pair means, with one degree of freedom fewer than there are pairs (Glasserman, 2003,
+§4.2; `interval_basis` is `pairs`, and runs are whole pairs). The standard deviation is always across trials: it describes the
 output, not the precision of its mean.
 
 The input table goes out and back in as CSV:

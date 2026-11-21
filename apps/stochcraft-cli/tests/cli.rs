@@ -943,6 +943,53 @@ fn a_monte_carlo_model_runs_from_the_command_line() {
         );
         script.to_string_lossy().into_owned()
     }]);
+    // `--sampling` changes how one run draws, whatever the file says: antithetic pairs are
+    // judged across pairs, Sobol points across randomised batches.
+    let table = ok(&[
+        "run",
+        &f,
+        "--reps",
+        "4001",
+        "--seed",
+        "2",
+        "--sampling",
+        "antithetic",
+    ]);
+    assert!(
+        table.contains("Monte Carlo: 4002 trials, seed 2, antithetic sampling"),
+        "{table}"
+    );
+    assert!(
+        table.contains("intervals: Student-t across 2001 independent antithetic pairs of trials"),
+        "{table}"
+    );
+    let table = ok(&[
+        "run",
+        &f,
+        "--reps",
+        "2500",
+        "--seed",
+        "2",
+        "--sampling",
+        "quasi-random",
+    ]);
+    assert!(table.contains("Monte Carlo: 3000 trials"), "{table}");
+    assert!(
+        table.contains("intervals: Student-t across 3 independent randomised Sobol batches"),
+        "{table}"
+    );
+    // `sobol` is accepted as another name for it.
+    let alias = ok(&[
+        "run",
+        &f,
+        "--reps",
+        "2500",
+        "--seed",
+        "2",
+        "--sampling",
+        "sobol",
+    ]);
+    assert_eq!(alias, table);
     let csv = ok(&[
         "run", &f, "--reps", "4000", "--seed", "2", "--format", "csv",
     ]);

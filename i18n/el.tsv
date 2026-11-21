@@ -1324,3 +1324,16 @@ unit	yr	έτ
 	95% interval {low} to {high}	Διάστημα 95% από {low} έως {high}
 	Alone is the share of the spread an input explains by itself. With interactions adds what it does together with the other inputs.	Μόνη της είναι το μερίδιο της διασποράς που εξηγεί μια είσοδος από μόνη της. Με αλληλεπιδράσεις προσθέτει ό,τι κάνει μαζί με τις άλλες εισόδους.
 	Working out the shares of the spread: {percent}	Υπολογισμός των μεριδίων της διασποράς: {percent}
+	Antithetic pairs	Αντιθετικά ζεύγη
+	Quasi-random (Sobol)	Οιονεί τυχαία (Sobol)
+	Antithetic pairs make each trial's twin from the opposite end of every input's range, so their errors tend to cancel, which usually makes the results more precise for the same trials. Trials run in pairs; it cannot be used with correlated inputs.	Τα αντιθετικά ζεύγη φτιάχνουν το δίδυμο κάθε δοκιμής από το αντίθετο άκρο του εύρους κάθε εισόδου, ώστε τα σφάλματά τους να τείνουν να αλληλοαναιρούνται, κάτι που συνήθως κάνει τα αποτελέσματα πιο ακριβή για τον ίδιο αριθμό δοκιμών. Οι δοκιμές εκτελούνται σε ζεύγη· δεν μπορεί να χρησιμοποιηθεί με συσχετισμένες εισόδους.
+	Quasi-random (Sobol) draws spread the trials evenly over the inputs' ranges, with a fresh random shift in every batch of 1,000, which usually makes the results more precise for the same trials. It has points for up to 64 inputs.	Οι οιονεί τυχαίες (Sobol) επιλογές κατανέμουν τις δοκιμές ομοιόμορφα στα εύρη των εισόδων, με νέα τυχαία μετατόπιση σε κάθε παρτίδα των 1,000, κάτι που συνήθως κάνει τα αποτελέσματα πιο ακριβή για τον ίδιο αριθμό δοκιμών. Έχει σημεία για έως και 64 εισόδους.
+	Each ± is the half-width of the 95% interval of the mean across independent pairs of trials (pairs: {n}). The two trials of a pair are made to oppose each other, so each pair counts as one.	Κάθε ± είναι το μισό πλάτος του διαστήματος 95% της μέσης τιμής σε ανεξάρτητα ζεύγη δοκιμών (ζεύγη: {n}). Οι δύο δοκιμές ενός ζεύγους φτιάχνονται ώστε να αντιτίθενται, οπότε κάθε ζεύγος μετράει ως ένα.
+	Each ± is the half-width of the 95% interval of the mean across independent batches of {size} trials (batches: {n}). Each batch is shifted at random on its own, so each batch counts as one.	Κάθε ± είναι το μισό πλάτος του διαστήματος 95% της μέσης τιμής σε ανεξάρτητες παρτίδες των {size} δοκιμών (παρτίδες: {n}). Κάθε παρτίδα μετατοπίζεται τυχαία μόνη της, οπότε κάθε παρτίδα μετράει ως μία.
+	antithetic sampling	αντιθετική δειγματοληψία
+	quasi-random (Sobol) sampling	οιονεί τυχαία (Sobol) δειγματοληψία
+	{asked} trials were asked for; antithetic sampling runs whole pairs of trials, so {n} ran.	Ζητήθηκαν {asked} δοκιμές· η αντιθετική δειγματοληψία εκτελεί ολόκληρα ζεύγη δοκιμών, οπότε εκτελέστηκαν {n}.
+	{asked} trials were asked for; Sobol sampling runs whole batches of {size}, so {n} ran.	Ζητήθηκαν {asked} δοκιμές· η δειγματοληψία Sobol εκτελεί ολόκληρες παρτίδες των {size}, οπότε εκτελέστηκαν {n}.
+	{name}: the ± is across {n} of the {of} pairs, the rest had no trial with a number.	{name}: το ± αφορά {n} από τα {of} ζεύγη, τα υπόλοιπα δεν είχαν δοκιμή με αριθμό.
+	No interval: every pair gave the same share, so their spread gives none.	Χωρίς διάστημα: όλα τα ζεύγη έδωσαν το ίδιο ποσοστό, οπότε η διασπορά τους δεν δίνει διάστημα.
+	No interval: too few pairs of trials for one.	Χωρίς διάστημα: πολύ λίγα ζεύγη δοκιμών για να υπολογιστεί.

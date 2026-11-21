@@ -993,6 +993,8 @@ pub fn mc_table(name: &str, r: &Value) -> String {
     out.push('\n');
     let sampling = match s(&rec["sampling"]) {
         "latin_hypercube" => "Latin hypercube sampling",
+        "antithetic" => "antithetic sampling",
+        "sobol" => "Sobol (randomised quasi-Monte Carlo) sampling",
         _ => "random sampling",
     };
     let _ = writeln!(
@@ -1004,10 +1006,12 @@ pub fn mc_table(name: &str, r: &Value) -> String {
         && r.get("stop").is_none()
         && run != asked
     {
-        let _ = writeln!(
-            out,
-            "{asked} trials asked for, rounded up to whole batches of 1000"
-        );
+        let whole = if s(&rec["sampling"]) == "antithetic" {
+            "pairs"
+        } else {
+            "batches of 1000"
+        };
+        let _ = writeln!(out, "{asked} trials asked for, rounded up to whole {whole}");
     }
     let _ = writeln!(out, "intervals: {}", s(&rec["interval"]));
     let _ = writeln!(

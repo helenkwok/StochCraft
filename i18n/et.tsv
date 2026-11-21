@@ -1324,3 +1324,16 @@ unit	yr	a
 	95% interval {low} to {high}	95% usaldusvahemik {low} kuni {high}
 	Alone is the share of the spread an input explains by itself. With interactions adds what it does together with the other inputs.	Üksi on hajuvuse osa, mille sisend seletab ise. Koosmõjudega lisandub see, mida ta teeb koos teiste sisenditega.
 	Working out the shares of the spread: {percent}	Hajuvuse osade arvutamine: {percent}
+	Antithetic pairs	Antiteetilised paarid
+	Quasi-random (Sobol)	Kvaasijuhuslik (Sobol)
+	Antithetic pairs make each trial's twin from the opposite end of every input's range, so their errors tend to cancel, which usually makes the results more precise for the same trials. Trials run in pairs; it cannot be used with correlated inputs.	Antiteetilised paarid teevad iga katse kaksiku iga sisendi vahemiku vastasotsast, nii et nende vead kipuvad tühistuma, mis teeb tulemused sama katsete arvu juures tavaliselt täpsemaks. Katsed tehakse paaridena; seda ei saa kasutada korreleeritud sisenditega.
+	Quasi-random (Sobol) draws spread the trials evenly over the inputs' ranges, with a fresh random shift in every batch of 1,000, which usually makes the results more precise for the same trials. It has points for up to 64 inputs.	Kvaasijuhuslikud (Sobol) tõmbed jaotavad katsed sisendite vahemikes ühtlaselt, iga 1,000 katse partii jaoks uue juhusliku nihkega, mis teeb tulemused sama katsete arvu juures tavaliselt täpsemaks. Sellel on punktid kuni 64 sisendi jaoks.
+	Each ± is the half-width of the 95% interval of the mean across independent pairs of trials (pairs: {n}). The two trials of a pair are made to oppose each other, so each pair counts as one.	Iga ± on keskmise 95% vahemiku poollaius üle sõltumatute katsepaaride (paare: {n}). Paari kaks katset tehakse üksteisele vastandlikuks, seega loetakse iga paar üheks.
+	Each ± is the half-width of the 95% interval of the mean across independent batches of {size} trials (batches: {n}). Each batch is shifted at random on its own, so each batch counts as one.	Iga ± on keskmise 95% vahemiku poollaius üle sõltumatute partiide, igas {size} katset (partiisid: {n}). Iga partii nihutatakse eraldi juhuslikult, seega loetakse iga partii üheks.
+	antithetic sampling	antiteetiline valimimeetod
+	quasi-random (Sobol) sampling	kvaasijuhuslik (Sobol) valimimeetod
+	{asked} trials were asked for; antithetic sampling runs whole pairs of trials, so {n} ran.	Küsiti {asked} katset; antiteetiline valimimeetod teeb terved katsepaarid, seega tehti {n}.
+	{asked} trials were asked for; Sobol sampling runs whole batches of {size}, so {n} ran.	Küsiti {asked} katset; Sobol valimimeetod teeb tervelt partiisid, igas {size}, seega tehti {n}.
+	{name}: the ± is across {n} of the {of} pairs, the rest had no trial with a number.	{name}: ± on üle {n} paari {of}-st, ülejäänutel polnud ühtegi arvuga katset.
+	No interval: every pair gave the same share, so their spread gives none.	Vahemikku pole: kõik paarid andsid sama osakaalu, seega nende hajuvus vahemikku ei anna.
+	No interval: too few pairs of trials for one.	Vahemikku pole: selleks on liiga vähe katsete paare.

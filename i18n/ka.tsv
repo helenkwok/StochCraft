@@ -1324,3 +1324,16 @@ unit	yr	წელი
 	95% interval {low} to {high}	95% ინტერვალი {low}-დან {high}-მდე
 	Alone is the share of the spread an input explains by itself. With interactions adds what it does together with the other inputs.	„ცალკე“ არის გაფანტულობის ის წილი, რომელსაც შემავალი სიდიდე თავისით ხსნის. „ურთიერთქმედებებით“ ამატებს იმას, რასაც სხვა შემავალ სიდიდეებთან ერთად აკეთებს.
 	Working out the shares of the spread: {percent}	გაფანტულობის წილების გამოთვლა: {percent}
+	Antithetic pairs	ანტითეტიკური წყვილები
+	Quasi-random (Sobol)	კვაზიშემთხვევითი (Sobol)
+	Antithetic pairs make each trial's twin from the opposite end of every input's range, so their errors tend to cancel, which usually makes the results more precise for the same trials. Trials run in pairs; it cannot be used with correlated inputs.	ანტითეტიკური წყვილები თითოეული ცდის ტყუპისცალს ქმნის თითოეული შემავალი სიდიდის დიაპაზონის საპირისპირო ბოლოდან, ამიტომ მათი ცდომილებები ერთმანეთს აბათილებს, რაც, როგორც წესი, იმავე რაოდენობის ცდით შედეგებს უფრო ზუსტს ხდის. ცდები წყვილებად სრულდება; კორელირებულ შემავალ სიდიდეებთან ვერ გამოიყენება.
+	Quasi-random (Sobol) draws spread the trials evenly over the inputs' ranges, with a fresh random shift in every batch of 1,000, which usually makes the results more precise for the same trials. It has points for up to 64 inputs.	კვაზიშემთხვევითი (Sobol) შერჩევები ცდებს თანაბრად ანაწილებს შემავალი სიდიდეების დიაპაზონებზე, ყოველ 1,000-იან პარტიაში ახალი შემთხვევითი წანაცვლებით, რაც, როგორც წესი, იმავე რაოდენობის ცდით შედეგებს უფრო ზუსტს ხდის. მას აქვს წერტილები 64 შემავალ სიდიდემდე.
+	Each ± is the half-width of the 95% interval of the mean across independent pairs of trials (pairs: {n}). The two trials of a pair are made to oppose each other, so each pair counts as one.	თითოეული ± არის საშუალოს 95%-იანი ინტერვალის ნახევარსიგანე ცდების დამოუკიდებელი წყვილების მიხედვით (წყვილები: {n}). წყვილის ორი ცდა ერთმანეთის საპირისპიროდ კეთდება, ამიტომ ყოველი წყვილი ერთად ითვლება.
+	Each ± is the half-width of the 95% interval of the mean across independent batches of {size} trials (batches: {n}). Each batch is shifted at random on its own, so each batch counts as one.	თითოეული ± არის საშუალოს 95%-იანი ინტერვალის ნახევარსიგანე {size} ცდისგან შემდგარი დამოუკიდებელი პარტიების მიხედვით (პარტიები: {n}). თითოეული პარტია ცალ-ცალკე წანაცვლდება შემთხვევითად, ამიტომ ყოველი პარტია ერთად ითვლება.
+	antithetic sampling	ანტითეტიკური შერჩევა
+	quasi-random (Sobol) sampling	კვაზიშემთხვევითი (Sobol) შერჩევა
+	{asked} trials were asked for; antithetic sampling runs whole pairs of trials, so {n} ran.	მოთხოვნილი იყო {asked} ცდა; ანტითეტიკური შერჩევა ცდების მთელ წყვილებს ასრულებს, ამიტომ შესრულდა {n}.
+	{asked} trials were asked for; Sobol sampling runs whole batches of {size}, so {n} ran.	მოთხოვნილი იყო {asked} ცდა; Sobol-ის შერჩევა {size} ცდის მთელ პარტიებს ასრულებს, ამიტომ შესრულდა {n}.
+	{name}: the ± is across {n} of the {of} pairs, the rest had no trial with a number.	{name}: ± გამოთვლილია {of} წყვილიდან {n}-ის მიხედვით, დანარჩენებში არც ერთ ცდას არ ჰქონდა რიცხვი.
+	No interval: every pair gave the same share, so their spread gives none.	ინტერვალი არ არის: ყველა წყვილმა ერთი და იგივე წილი მისცა, ამიტომ მათი გაფანტულობა ინტერვალს არ იძლევა.
+	No interval: too few pairs of trials for one.	ინტერვალი არ არის: ცდების წყვილები ძალიან ცოტაა მისთვის.

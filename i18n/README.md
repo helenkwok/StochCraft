@@ -891,6 +891,22 @@ fields (`“Service time”`) are named in the messages by their own rows.
   speakers; the least certain are lo, th, ta, te, bn, ka, kk, sq, et, lt and sr, the word for
   "spread" in all of them, and the grammatical case of the input's name in the sentence in the
   Slavic, Baltic, Finnic, Georgian and Turkic ones (hu words it so that no suffix is needed).
+- The rows for the two new samplings of the Monte Carlo window (ROADMAP M4.1, part 2b: the
+  choices "Antithetic pairs" and "Quasi-random (Sobol)", the sentence under each, the
+  "antithetic sampling" and "quasi-random (Sobol) sampling" phrases of the run's line, the two
+  sentences of "How sure are these numbers?" for pairs and for Sobol batches, the two lines
+  saying a run was rounded up to whole pairs or batches, and the line for an interval across
+  fewer pairs than the run has, and the two reasons an interval across pairs is missing,
+  "every pair gave the same share" and "too few pairs of trials", made from the catalogs' own
+  rows for batches with each language's word for pair) were machine-drafted with Claude Code, one agent for each
+  quarter of the languages, from the plain meaning of the English, reusing each catalog's
+  own words for trial, input, sampling, batch, half-width, interval and "independent" (where
+  a catalog says "trials" in one row and "iterations" in another, the "Trials" row's word is
+  used). The plural forms are avoided: the count is given as "(pairs: {n})" and
+  "(batches: {n})". "Antithetic" and "quasi-random" are mostly each language's calque or
+  transliteration, and "pair" and "draw" each language's everyday word, none checked against any
+  other source or reviewed by native speakers; the least certain are bn, hi, ka, kk, ko, lo, sq,
+  ta, te, th and vi, and the fit of the grammar around "{n}" in the highly inflected ones.
 
 **Adding or changing a string:** add the English in the code through `i18n::t` (or `tf`, `tn`),
 then add its row to each catalog here, or leave it out to show English until it is translated.

@@ -2161,7 +2161,7 @@ over time, a second kind of diagram on the canvas). Then M4.1, the smallest and 
 reuses most of what exists; then M4.2 and M4.3 (agents in flows first); then M4.4. Agents in
 space are built with M5, which needs the same layout and travel.
 
-M4.1 parts 1, 2 and 3a are done and M4.2 part 1 is done (below); the rest is not started. D15–D18 are settled; D10–D13 (#71 has
+M4.1 parts 1, 2, 2b and 3a are done and M4.2 part 1 is done (below); the rest is not started. D15–D18 are settled; D10–D13 (#71 has
 them) are to settle first.
 
 ### M4.1 Monte Carlo
@@ -2210,6 +2210,29 @@ Inputs must be independent (correlated ones are refused), constant inputs are le
 output that does not vary, or has too few finite rows, gets no indices and the reason why. The
 Ishigami function and two models with closed-form indices check it. `sin` and `cos` joined the
 Monte Carlo expression functions for that.
+Part 2b, variance reduction, is done: two more samplings for the same trials, `antithetic` and
+`sobol` (the sampling dropdown's "Antithetic pairs" and "Quasi-random (Sobol)", `--sampling` on
+`run`, `mc.set`, and the file's `sampling` attribute). Antithetic pairs make trial 2j + 1 from
+1 - u where trial 2j drew u, for every input through its inverse distribution function
+(Hammersley and Morton 1956; Glasserman 2003 §4.2): for an output that rises or falls with its
+inputs the pair's errors cancel (exp(U): the interval is about a fifth as wide as random
+sampling's with the same trials). The trials of a pair depend on each other and the pairs do
+not, so the interval is Student-t across the pair means and runs are whole pairs; correlated
+inputs are refused, as their reordering breaks the pairs. Sobol sampling is randomised
+quasi-Monte Carlo (`stochcraft_mc::qmc`): each batch of 1,000 takes the first points of the
+Sobol sequence with Joe and Kuo's direction numbers (2008, "new-joe-kuo-6.21201", 64 dimensions,
+one per input in declaration order, more refused; their BSD-style licence is in NOTICE and
+ATTRIBUTION.md), shifts each dimension by a random 32-bit integer keyed by the seed, the batch and
+the input's name (a random digital shift; Owen 1995; L'Ecuyer and Lemieux 2002), so the batches are
+independent replicates and the interval is across batches of 1,000, as Latin hypercube's is.
+Both are checked against exact answers (the intervals hold the mean about 95% of the time over
+200 seeds, are much narrower on a monotone and on a smooth integrand, and the first Sobol points
+are the published ones). Control variates are not built: they need a quantity correlated with
+the output whose mean is known exactly, which the model does not say (an input's own mean works
+for a linear output but is not worth a setting), and the coefficient is estimated from the same
+trials, which makes the estimator slightly biased unless it is fitted on a pilot run. Next, if
+wanted: an output marked as a control with its known mean, the coefficient fitted on the first
+batch and used on the rest, judged across batches.
 
 **What it is:** a model of a calculation, not a process. Inputs are distributions (a cost, a
 duration, a demand), outputs are expressions over them (a total cost, a finish date, a profit),
@@ -2226,7 +2249,8 @@ of parameter uncertainty around a discrete-event or hybrid model (D10).
   (Iman and Conover, *A distribution-free approach to inducing rank correlation among input
   variables*, Communications in Statistics B 11(3), 1982);
 - plain random sampling and Latin hypercube sampling (shared with M2.8's planned Latin hypercube
-  designs);
+  designs), and antithetic pairs and randomised Sobol points for the same trials with a narrower
+  interval (part 2b);
 - many trials fast: 10⁶ trials of a small model in seconds, in parallel on every core and in
   the browser's workers;
 - results: mean with its confidence interval, percentiles (P5, P50, P95 and any other), the
@@ -2255,7 +2279,10 @@ and functions a cost model needs (min, max, if, round, sums over a list).
 **Checks with known answers:** the sum of independent normals (exact mean and variance); the
 product of log-normals (exact); a PERT schedule's finish on a single path against its
 distribution; the induced rank correlation against its target; Sobol indices of the Ishigami
-function against their closed form.
+function against their closed form; antithetic pairs on exp(U), and randomised Sobol points on
+the product of (1 + (u_i - 0.5) / i) over five inputs (exact mean 1), each with its interval
+holding the exact mean and narrower than random sampling's, and the first points of the Sobol
+sequence against the authors' published ones.
 
 ### M4.2 System dynamics
 

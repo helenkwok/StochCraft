@@ -1324,3 +1324,16 @@ unit	yr	năm
 	95% interval {low} to {high}	Khoảng 95% từ {low} đến {high}
 	Alone is the share of the spread an input explains by itself. With interactions adds what it does together with the other inputs.	Riêng là phần độ phân tán mà một đầu vào tự giải thích. Cùng tương tác cộng thêm những gì nó làm cùng các đầu vào khác.
 	Working out the shares of the spread: {percent}	Đang tính phần của độ phân tán: {percent}
+	Antithetic pairs	Cặp đối xứng
+	Quasi-random (Sobol)	Gần ngẫu nhiên (Sobol)
+	Antithetic pairs make each trial's twin from the opposite end of every input's range, so their errors tend to cancel, which usually makes the results more precise for the same trials. Trials run in pairs; it cannot be used with correlated inputs.	Cặp đối xứng tạo lần thử song sinh của mỗi lần thử từ đầu đối diện của khoảng giá trị của từng đầu vào, nên sai số của chúng có xu hướng triệt tiêu nhau, thường làm kết quả chính xác hơn với cùng số lần thử. Các lần thử chạy theo cặp; không dùng được với các đầu vào tương quan.
+	Quasi-random (Sobol) draws spread the trials evenly over the inputs' ranges, with a fresh random shift in every batch of 1,000, which usually makes the results more precise for the same trials. It has points for up to 64 inputs.	Các điểm gần ngẫu nhiên (Sobol) phân bố đều các lần thử trên khoảng giá trị của các đầu vào, với một độ dịch ngẫu nhiên mới cho mỗi đợt 1,000 lần, thường làm kết quả chính xác hơn với cùng số lần thử. Có điểm cho tối đa 64 đầu vào.
+	Each ± is the half-width of the 95% interval of the mean across independent pairs of trials (pairs: {n}). The two trials of a pair are made to oppose each other, so each pair counts as one.	Mỗi ± là một nửa độ rộng của khoảng 95% cho giá trị trung bình qua các cặp lần thử độc lập (số cặp: {n}). Hai lần thử trong một cặp được tạo để đối nghịch nhau, nên mỗi cặp được tính là một.
+	Each ± is the half-width of the 95% interval of the mean across independent batches of {size} trials (batches: {n}). Each batch is shifted at random on its own, so each batch counts as one.	Mỗi ± là một nửa độ rộng của khoảng 95% cho giá trị trung bình qua các đợt độc lập, mỗi đợt {size} lần thử (số đợt: {n}). Mỗi đợt được dịch ngẫu nhiên riêng, nên mỗi đợt được tính là một.
+	antithetic sampling	lấy mẫu đối xứng
+	quasi-random (Sobol) sampling	lấy mẫu gần ngẫu nhiên (Sobol)
+	{asked} trials were asked for; antithetic sampling runs whole pairs of trials, so {n} ran.	Đã yêu cầu {asked} lần thử; lấy mẫu đối xứng chạy trọn từng cặp lần thử, nên đã chạy {n} lần.
+	{asked} trials were asked for; Sobol sampling runs whole batches of {size}, so {n} ran.	Đã yêu cầu {asked} lần thử; lấy mẫu Sobol chạy trọn từng đợt {size} lần, nên đã chạy {n} lần.
+	{name}: the ± is across {n} of the {of} pairs, the rest had no trial with a number.	{name}: ± tính trên {n} trong số {of} cặp, các cặp còn lại không có lần thử nào có số.
+	No interval: every pair gave the same share, so their spread gives none.	Không có khoảng: mọi cặp đều cho cùng một tỷ lệ, nên độ phân tán của chúng không cho ra khoảng.
+	No interval: too few pairs of trials for one.	Không có khoảng: quá ít cặp lần thử để tính.

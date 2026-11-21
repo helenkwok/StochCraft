@@ -1324,3 +1324,16 @@ unit	yr	年
 	95% interval {low} to {high}	95% 區間 {low} 至 {high}
 	Alone is the share of the spread an input explains by itself. With interactions adds what it does together with the other inputs.	「單獨」是輸入自身解釋的離散份額。「含交互作用」再加上它與其他輸入共同產生的部分。
 	Working out the shares of the spread: {percent}	正在計算離散程度的份額：{percent}
+	Antithetic pairs	對偶配對
+	Quasi-random (Sobol)	準隨機（Sobol）
+	Antithetic pairs make each trial's twin from the opposite end of every input's range, so their errors tend to cancel, which usually makes the results more precise for the same trials. Trials run in pairs; it cannot be used with correlated inputs.	對偶配對從每個輸入範圍的相反一端產生每次試驗的孿生試驗，因此兩者的誤差往往互相抵消，通常能讓同樣次數的試驗得到更精確的結果。試驗成對執行；不能與相關輸入一起使用。
+	Quasi-random (Sobol) draws spread the trials evenly over the inputs' ranges, with a fresh random shift in every batch of 1,000, which usually makes the results more precise for the same trials. It has points for up to 64 inputs.	準隨機（Sobol）抽取把試驗均勻鋪開在各輸入的範圍內，每 1,000 次一批都會重新做一次隨機平移，通常能讓同樣次數的試驗得到更精確的結果。它支援最多 64 個輸入。
+	Each ± is the half-width of the 95% interval of the mean across independent pairs of trials (pairs: {n}). The two trials of a pair are made to oppose each other, so each pair counts as one.	每個 ± 是根據獨立試驗對的平均值 95% 區間的半寬（對數：{n}）。每對中的兩次試驗被設計為互相對立，因此每對只計為一個。
+	Each ± is the half-width of the 95% interval of the mean across independent batches of {size} trials (batches: {n}). Each batch is shifted at random on its own, so each batch counts as one.	每個 ± 是根據獨立批次（每批 {size} 次試驗）的平均值 95% 區間的半寬（批次數：{n}）。每個批次各自獨立地隨機平移，因此每個批次只計為一個。
+	antithetic sampling	對偶抽樣
+	quasi-random (Sobol) sampling	準隨機（Sobol）抽樣
+	{asked} trials were asked for; antithetic sampling runs whole pairs of trials, so {n} ran.	要求 {asked} 次試驗；對偶抽樣執行完整的試驗對，因此實際執行了 {n} 次。
+	{asked} trials were asked for; Sobol sampling runs whole batches of {size}, so {n} ran.	要求 {asked} 次試驗；Sobol 抽樣執行完整的批次（每批 {size} 次），因此實際執行了 {n} 次。
+	{name}: the ± is across {n} of the {of} pairs, the rest had no trial with a number.	{name}：± 根據 {of} 對中的 {n} 對，其餘的沒有帶數值的試驗。
+	No interval: every pair gave the same share, so their spread gives none.	無區間：所有試驗對給出的占比相同，其離散程度無法得出區間。
+	No interval: too few pairs of trials for one.	無區間：試驗對太少，無法得出區間。
