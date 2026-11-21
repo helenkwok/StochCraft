@@ -645,6 +645,8 @@ struct NewFile {
     /// The file chosen in Save As. Without one, the user is asked where (desktop), or the
     /// download is named for a BPMN file (browser).
     path: Option<String>,
+    /// The document asked about (`doc_gen` then): an answer is not applied to another one.
+    for_doc: u64,
 }
 
 /// A charts export waiting for its screenshot: what the frame that asked for it showed, which

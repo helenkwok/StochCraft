@@ -517,6 +517,17 @@ impl App {
         let Some(pending) = self.new_file.clone() else {
             return;
         };
+        // The model was replaced while the question was open (an agent's command): its answer
+        // would write the new model into the file asked about, so the question and what was to
+        // follow the save are dropped.
+        if pending.for_doc != self.doc_gen {
+            self.new_file = None;
+            self.after_save = None;
+            self.save_failed(t(
+                "The model changed while choosing where to save it, so it was not saved. Save again.",
+            ));
+            return;
+        }
         let name = self.document_name();
         let sd = self.is_sd();
         let mut choice = None;

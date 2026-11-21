@@ -491,6 +491,34 @@ fn saving_into_a_file_that_lost_content_asks_first() {
     assert_eq!(h.state_mut().take_requests(), vec![]);
     assert!(h.query_by_label("Replace the XMILE file?").is_none());
 
+    // Save As naming the opened file replaces it as well, so it is asked about too.
+    h.state_mut()
+        .open_path("/models/two.xmile", TWO_VIEWS.as_bytes());
+    h.state_mut().save_to("/models/two.xmile");
+    assert_eq!(h.state_mut().take_requests(), vec![], "asked first");
+    settle(&mut h);
+    h.get_by_label("Replace the XMILE file?");
+    click(&mut h, Role::Button, "Cancel");
+    assert_eq!(h.state_mut().take_requests(), vec![]);
+
+    // The model is replaced while the question is open (an agent opens another file): the
+    // answer would write the new model over the file asked about, so the question is dropped.
+    h.state_mut()
+        .open_path("/models/two.xmile", TWO_VIEWS.as_bytes());
+    h.state_mut().save();
+    settle(&mut h);
+    h.get_by_label("Replace the XMILE file?");
+    h.state_mut()
+        .open_path("/models/noise.xmile", NOISE.as_bytes());
+    settle(&mut h);
+    assert!(h.query_by_label("Replace the XMILE file?").is_none());
+    assert_eq!(h.state_mut().take_requests(), vec![], "nothing written");
+    assert!(
+        h.state().status().contains("The model changed"),
+        "{}",
+        h.state().status()
+    );
+
     // A file with nothing left out saves at once.
     h.state_mut()
         .open_path("/models/noise.xmile", NOISE.as_bytes());

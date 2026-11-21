@@ -369,15 +369,20 @@ impl App {
         // replace a file nobody agreed to replace): one that does not name an XMILE file is
         // refused.
         if self.is_sd() {
-            if chosen {
-                if !matches!(extension(&path).as_str(), "xmile" | "stmx") {
-                    self.save_failed(tf(
-                        "{file}: a system dynamics model is saved as XMILE; choose a name ending in .xmile",
-                        &[("file", file_name(&path))],
-                    ));
-                    return;
-                }
-            } else if self.platform.file_system && !self.engine.save_drops().is_empty() {
+            if chosen && !matches!(extension(&path).as_str(), "xmile" | "stmx") {
+                self.save_failed(tf(
+                    "{file}: a system dynamics model is saved as XMILE; choose a name ending in .xmile",
+                    &[("file", file_name(&path))],
+                ));
+                return;
+            }
+            // Into the opened file: a plain Save, or Save As naming that file.
+            let into_opened = !chosen
+                || self
+                    .engine
+                    .system_dynamics_path()
+                    .is_some_and(|opened| same_path(opened, &path));
+            if into_opened && self.platform.file_system && !self.engine.save_drops().is_empty() {
                 // The opened file has more than the model keeps: ask before replacing it.
                 let notes = self.engine.save_drops();
                 let mut lost = notes
@@ -398,6 +403,7 @@ impl App {
                 self.new_file = Some(NewFile {
                     reason: Some(reason),
                     path: Some(path),
+                    for_doc: self.doc_gen,
                 });
                 return;
             }
@@ -430,6 +436,7 @@ impl App {
                 self.new_file = Some(NewFile {
                     reason: None,
                     path: Some(path),
+                    for_doc: self.doc_gen,
                 });
             }
             return;
@@ -440,6 +447,7 @@ impl App {
                 self.new_file = Some(NewFile {
                     reason: Some(e.message),
                     path: (chosen && wanted == "bpmn").then_some(path),
+                    for_doc: self.doc_gen,
                 });
             }
             Err(e) => self.save_failed(e.message),
@@ -640,6 +648,16 @@ impl App {
 
 /// How many of the file's not-kept items the question before replacing it names.
 const SD_LOST_SHOWN: usize = 4;
+
+/// Whether `a` and `b` name the same file, as the window can tell without the file system: the
+/// same text, with either slash, and in any letter case on Windows, whose file names ignore it.
+fn same_path(a: &str, b: &str) -> bool {
+    let plain = |s: &str| {
+        let s = s.replace('\\', "/");
+        if cfg!(windows) { s.to_lowercase() } else { s }
+    };
+    plain(a) == plain(b)
+}
 
 /// `path` as the name Save As suggests for an XMILE file (never applied to a name the user
 /// chose): one that ends in `.xmile` stays as it is; another extension of a model file (`.bpmn`,

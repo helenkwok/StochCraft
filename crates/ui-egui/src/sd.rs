@@ -279,7 +279,9 @@ fn picks(values: &[f64], most: usize) -> Vec<usize> {
     let buckets = (most / 2).max(1);
     let mut v = vec![0];
     for b in 0..buckets {
-        let (start, end) = (b * n / buckets, (b + 1) * n / buckets);
+        // In u64: `(b + 1) * n` can pass usize::MAX on a 32-bit target (the web).
+        let bound = |k: usize| (k as u64 * n as u64 / buckets as u64) as usize;
+        let (start, end) = (bound(b), bound(b + 1));
         let (mut lo, mut hi): (Option<usize>, Option<usize>) = (None, None);
         for (k, x) in values.iter().enumerate().take(end).skip(start) {
             if !x.is_finite() {
