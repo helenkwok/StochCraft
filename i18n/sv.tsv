@@ -1337,6 +1337,21 @@ unit	yr	år
 	{name}: the ± is across {n} of the {of} pairs, the rest had no trial with a number.	{name}: ± gäller {n} av {of} par, resten hade inget försök med ett tal.
 	No interval: every pair gave the same share, so their spread gives none.	Inget intervall: alla par gav samma andel, så deras spridning ger inget intervall.
 	No interval: too few pairs of trials for one.	Inget intervall: för få par av försök för att ge ett.
+	Controls	Kontroller
+	Expected mean	Förväntat medelvärde
+	Remove the control {name}	Ta bort kontrollen {name}
+	Add a control	Lägg till en kontroll
+	{name} (an output; you give its mean)	{name} (en utdata; du anger dess medelvärde)
+	No input or earlier output can be a control.	Ingen indata eller tidigare utdata kan vara en kontroll.
+	A control is an input whose mean is known, or an earlier output whose mean you know. The results use how it moves with this output to narrow the interval of the output's mean and target chance.	En kontroll är en indata vars medelvärde är känt, eller en tidigare utdata vars medelvärde du känner till. Resultaten använder hur den rör sig tillsammans med denna utdata för att göra intervallet för dess medelvärde och för chansen att nå målet smalare.
+	Controlled mean	Kontrollerat medelvärde
+	Controls for {output}: {controls}.	Kontroller för {output}: {controls}.
+	No controlled result: {reason}	Inget kontrollerat resultat: {reason}
+	They narrowed the interval by {percent}; this is the result shown above.	De gjorde intervallet {percent} smalare; detta är resultatet som visas ovan.
+	They made the interval {percent} wider, so the plain result stands.	De gjorde intervallet {percent} bredare, så det vanliga resultatet gäller.
+	They did not help: their correlation with {output} is weak ({correlation}), so the plain result stands.	De hjälpte inte: deras korrelation med {output} är svag ({correlation}), så det vanliga resultatet gäller.
+	They did not help, so the plain result stands.	De hjälpte inte, så det vanliga resultatet gäller.
+	The mean given for {name}, {stated}, is far from the trials' mean, {sample}: the controlled result is biased until it is corrected.	Medelvärdet som angetts för {name}, {stated}, ligger långt från försökens medelvärde, {sample}: det kontrollerade resultatet är skevt tills det rättas.
 	Stock	Lager
 	Flow	Flöde
 	Auxiliary	Hjälpvariabel
@@ -1402,3 +1417,6 @@ unit	yr	år
 	Can't tell yet: more runs would decide	Går inte att avgöra än: fler körningar skulle avgöra det
 	No result	Inget resultat
 	Observed data is given for a block that does not exist, so there is no result to check it against. Remove it, or choose a block that exists.	Observerade data har angetts för ett block som inte finns, så det finns inget resultat att kontrollera dem mot. Ta bort dem, eller välj ett block som finns.
+	The estimated chance that {output} is more than {value} is {percent}.	Den uppskattade sannolikheten att {output} är över {value} är {percent}.
+	The estimated chance that {output} is less than {value} is {percent}.	Den uppskattade sannolikheten att {output} är under {value} är {percent}.
+	Their interval has no width, which no estimate has, so the plain result stands.	Deras intervall har ingen bredd, vilket ingen skattning har, så det vanliga resultatet står kvar.

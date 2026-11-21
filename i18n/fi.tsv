@@ -1337,6 +1337,21 @@ unit	yr	v
 	{name}: the ± is across {n} of the {of} pairs, the rest had no trial with a number.	{name}: ± on {of} parista {n}:n yli, loput eivät sisältäneet yhtään iteraatiota, jolla on luku.
 	No interval: every pair gave the same share, so their spread gives none.	Ei väliä: kaikki parit antoivat saman osuuden, joten niiden hajonta ei anna väliä.
 	No interval: too few pairs of trials for one.	Ei väliä: liian vähän iteraatiopareja sen laskemiseen.
+	Controls	Kontrollit
+	Expected mean	Odotettu keskiarvo
+	Remove the control {name}	Poista kontrolli {name}
+	Add a control	Lisää kontrolli
+	{name} (an output; you give its mean)	{name} (tulos; annat sen keskiarvon)
+	No input or earlier output can be a control.	Mikään syöte tai aiempi tulos ei voi olla kontrolli.
+	A control is an input whose mean is known, or an earlier output whose mean you know. The results use how it moves with this output to narrow the interval of the output's mean and target chance.	Kontrolli on syöte, jonka keskiarvo tunnetaan, tai aiempi tulos, jonka keskiarvon tiedät. Tulokset käyttävät sitä, miten se liikkuu tämän tuloksen mukana, kaventaakseen tuloksen keskiarvon ja tavoitteen saavuttamisen todennäköisyyden väliä.
+	Controlled mean	Kontrolloitu keskiarvo
+	Controls for {output}: {controls}.	Kontrollit tulokselle {output}: {controls}.
+	No controlled result: {reason}	Ei kontrolloitua tulosta: {reason}
+	They narrowed the interval by {percent}; this is the result shown above.	Ne kaventivat väliä {percent}; tämä on yllä näytetty tulos.
+	They made the interval {percent} wider, so the plain result stands.	Ne levensivät väliä {percent}, joten tavallinen tulos pätee.
+	They did not help: their correlation with {output} is weak ({correlation}), so the plain result stands.	Ne eivät auttaneet: niiden korrelaatio tuloksen {output} kanssa on heikko ({correlation}), joten tavallinen tulos pätee.
+	They did not help, so the plain result stands.	Ne eivät auttaneet, joten tavallinen tulos pätee.
+	The mean given for {name}, {stated}, is far from the trials' mean, {sample}: the controlled result is biased until it is corrected.	Kohteelle {name} annettu keskiarvo {stated} on kaukana kokeiden keskiarvosta {sample}: kontrolloitu tulos on vinoutunut, kunnes se korjataan.
 	Stock	Varanto
 	Flow	Virta
 	Auxiliary	Apumuuttuja
@@ -1402,3 +1417,6 @@ unit	yr	v
 	Can't tell yet: more runs would decide	Ei vielä selvää: lisäajot ratkaisisivat
 	No result	Ei tulosta
 	Observed data is given for a block that does not exist, so there is no result to check it against. Remove it, or choose a block that exists.	Havaintotiedot on annettu lohkolle, jota ei ole, joten ei ole tulosta, jota vastaan ne voisi tarkistaa. Poista ne tai valitse lohko, joka on olemassa.
+	The estimated chance that {output} is more than {value} is {percent}.	Arvioitu todennäköisyys sille, että {output} on yli {value}, on {percent}.
+	The estimated chance that {output} is less than {value} is {percent}.	Arvioitu todennäköisyys sille, että {output} on alle {value}, on {percent}.
+	Their interval has no width, which no estimate has, so the plain result stands.	Niiden välillä ei ole leveyttä, mitä millään arviolla ei ole, joten tavallinen tulos jää voimaan.

@@ -1337,6 +1337,21 @@ unit	yr	god.
 	{name}: the ± is across {n} of the {of} pairs, the rest had no trial with a number.	{name}: ± se odnosi na {n} od {of} parova, ostali nisu imali nijedan pokušaj s brojem.
 	No interval: every pair gave the same share, so their spread gives none.	Nema intervala: svi parovi dali su isti udio, pa njihovo rasipanje ne daje interval.
 	No interval: too few pairs of trials for one.	Nema intervala: premalo parova pokušaja za njega.
+	Controls	Kontrole
+	Expected mean	Očekivani prosjek
+	Remove the control {name}	Ukloni kontrolu {name}
+	Add a control	Dodaj kontrolu
+	{name} (an output; you give its mean)	{name} (izlaz; njegov prosjek navodite vi)
+	No input or earlier output can be a control.	Nijedan ulaz ni raniji izlaz ne može biti kontrola.
+	A control is an input whose mean is known, or an earlier output whose mean you know. The results use how it moves with this output to narrow the interval of the output's mean and target chance.	Kontrola je ulaz poznatog prosjeka ili raniji izlaz čiji prosjek znate. Rezultati koriste to kako se kreće zajedno s ovim izlazom kako bi suzili interval njegova prosjeka i šanse za postizanje cilja.
+	Controlled mean	Kontrolirani prosjek
+	Controls for {output}: {controls}.	Kontrole za {output}: {controls}.
+	No controlled result: {reason}	Nema kontroliranog rezultata: {reason}
+	They narrowed the interval by {percent}; this is the result shown above.	Suzile su interval za {percent}; ovo je rezultat prikazan gore.
+	They made the interval {percent} wider, so the plain result stands.	Proširile su interval za {percent}, pa vrijedi običan rezultat.
+	They did not help: their correlation with {output} is weak ({correlation}), so the plain result stands.	Nisu pomogle: njihova korelacija s {output} je slaba ({correlation}), pa vrijedi običan rezultat.
+	They did not help, so the plain result stands.	Nisu pomogle, pa vrijedi običan rezultat.
+	The mean given for {name}, {stated}, is far from the trials' mean, {sample}: the controlled result is biased until it is corrected.	Prosjek naveden za {name}, {stated}, daleko je od prosjeka pokusa, {sample}: kontrolirani rezultat je pristran dok se ne ispravi.
 	Stock	Zaliha
 	Flow	Tok
 	Auxiliary	Pomoćna varijabla
@@ -1402,3 +1417,6 @@ unit	yr	god.
 	Can't tell yet: more runs would decide	Još se ne može reći: više pokretanja bi odlučilo
 	No result	Nema rezultata
 	Observed data is given for a block that does not exist, so there is no result to check it against. Remove it, or choose a block that exists.	Opaženi podaci zadani su za blok koji ne postoji, pa nema rezultata s kojim bi se provjerili. Uklonite ih ili odaberite blok koji postoji.
+	The estimated chance that {output} is more than {value} is {percent}.	Procijenjena vjerojatnost da je {output} veći od {value} iznosi {percent}.
+	The estimated chance that {output} is less than {value} is {percent}.	Procijenjena vjerojatnost da je {output} manji od {value} iznosi {percent}.
+	Their interval has no width, which no estimate has, so the plain result stands.	Njihov interval nema širinu, što nijedna procjena nema, pa ostaje obični rezultat.

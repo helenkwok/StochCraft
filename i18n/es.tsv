@@ -1337,6 +1337,21 @@ unit	yr	a
 	{name}: the ± is across {n} of the {of} pairs, the rest had no trial with a number.	{name}: el ± es sobre {n} de los {of} pares; el resto no tenía ningún ensayo con un número.
 	No interval: every pair gave the same share, so their spread gives none.	Sin intervalo: todos los pares dieron la misma proporción, así que su dispersión no da ninguno.
 	No interval: too few pairs of trials for one.	Sin intervalo: hay muy pocos pares de ensayos para calcularlo.
+	Controls	Controles
+	Expected mean	Media esperada
+	Remove the control {name}	Quitar el control {name}
+	Add a control	Añadir un control
+	{name} (an output; you give its mean)	{name} (una salida; usted da su media)
+	No input or earlier output can be a control.	Ninguna entrada ni salida anterior puede ser un control.
+	A control is an input whose mean is known, or an earlier output whose mean you know. The results use how it moves with this output to narrow the interval of the output's mean and target chance.	Un control es una entrada cuya media se conoce, o una salida anterior cuya media usted conoce. Los resultados usan cómo se mueve junto con esta salida para estrechar el intervalo de su media y de la probabilidad de cumplir el objetivo.
+	Controlled mean	Media controlada
+	Controls for {output}: {controls}.	Controles para {output}: {controls}.
+	No controlled result: {reason}	Sin resultado controlado: {reason}
+	They narrowed the interval by {percent}; this is the result shown above.	Estrecharon el intervalo un {percent}; este es el resultado mostrado arriba.
+	They made the interval {percent} wider, so the plain result stands.	Ensancharon el intervalo un {percent}, así que se mantiene el resultado simple.
+	They did not help: their correlation with {output} is weak ({correlation}), so the plain result stands.	No ayudaron: su correlación con {output} es débil ({correlation}), así que se mantiene el resultado simple.
+	They did not help, so the plain result stands.	No ayudaron, así que se mantiene el resultado simple.
+	The mean given for {name}, {stated}, is far from the trials' mean, {sample}: the controlled result is biased until it is corrected.	La media dada para {name}, {stated}, está lejos de la media de los ensayos, {sample}: el resultado controlado está sesgado hasta que se corrija.
 	Stock	Nivel
 	Flow	Flujo
 	Auxiliary	Variable auxiliar
@@ -1402,3 +1417,6 @@ unit	yr	a
 	Can't tell yet: more runs would decide	Aún no se puede decidir: más ejecuciones lo decidirían
 	No result	Sin resultado
 	Observed data is given for a block that does not exist, so there is no result to check it against. Remove it, or choose a block that exists.	Se han dado datos observados para un bloque que no existe, así que no hay un resultado con el que comprobarlos. Elimínalos o elige un bloque que exista.
+	The estimated chance that {output} is more than {value} is {percent}.	La probabilidad estimada de que {output} sea mayor que {value} es {percent}.
+	The estimated chance that {output} is less than {value} is {percent}.	La probabilidad estimada de que {output} sea menor que {value} es {percent}.
+	Their interval has no width, which no estimate has, so the plain result stands.	Su intervalo no tiene anchura, algo que ninguna estimación tiene, así que se mantiene el resultado simple.

@@ -1337,6 +1337,21 @@ unit	yr	år
 	{name}: the ± is across {n} of the {of} pairs, the rest had no trial with a number.	{name}: ± er på tværs af {n} af de {of} par, resten havde ingen iteration med et tal.
 	No interval: every pair gave the same share, so their spread gives none.	Intet interval: alle par gav den samme andel, så deres spredning giver intet interval.
 	No interval: too few pairs of trials for one.	Intet interval: for få par af iterationer til et.
+	Controls	Kontroller
+	Expected mean	Forventet middelværdi
+	Remove the control {name}	Fjern kontrollen {name}
+	Add a control	Tilføj en kontrol
+	{name} (an output; you give its mean)	{name} (et output; du angiver dets middelværdi)
+	No input or earlier output can be a control.	Intet input eller tidligere output kan være en kontrol.
+	A control is an input whose mean is known, or an earlier output whose mean you know. The results use how it moves with this output to narrow the interval of the output's mean and target chance.	En kontrol er et input, hvis middelværdi er kendt, eller et tidligere output, hvis middelværdi du kender. Resultaterne bruger, hvordan den bevæger sig sammen med dette output, til at gøre intervallet for dets middelværdi og for chancen for at nå målet smallere.
+	Controlled mean	Kontrolleret middelværdi
+	Controls for {output}: {controls}.	Kontroller for {output}: {controls}.
+	No controlled result: {reason}	Intet kontrolleret resultat: {reason}
+	They narrowed the interval by {percent}; this is the result shown above.	De gjorde intervallet {percent} smallere; det er resultatet, der vises ovenfor.
+	They made the interval {percent} wider, so the plain result stands.	De gjorde intervallet {percent} bredere, så det almindelige resultat gælder.
+	They did not help: their correlation with {output} is weak ({correlation}), so the plain result stands.	De hjalp ikke: deres korrelation med {output} er svag ({correlation}), så det almindelige resultat gælder.
+	They did not help, so the plain result stands.	De hjalp ikke, så det almindelige resultat gælder.
+	The mean given for {name}, {stated}, is far from the trials' mean, {sample}: the controlled result is biased until it is corrected.	Middelværdien angivet for {name}, {stated}, ligger langt fra forsøgenes middelværdi, {sample}: det kontrollerede resultat er skævt, indtil den rettes.
 	Stock	Beholdning
 	Flow	Flow
 	Auxiliary	Hjælpevariabel
@@ -1402,3 +1417,6 @@ unit	yr	år
 	Can't tell yet: more runs would decide	Kan endnu ikke afgøres: flere kørsler ville afgøre det
 	No result	Intet resultat
 	Observed data is given for a block that does not exist, so there is no result to check it against. Remove it, or choose a block that exists.	Der er angivet observerede data for en blok, som ikke findes, så der er intet resultat at kontrollere dem mod. Fjern dem, eller vælg en blok, der findes.
+	The estimated chance that {output} is more than {value} is {percent}.	Den anslåede sandsynlighed for, at {output} er over {value}, er {percent}.
+	The estimated chance that {output} is less than {value} is {percent}.	Den anslåede sandsynlighed for, at {output} er under {value}, er {percent}.
+	Their interval has no width, which no estimate has, so the plain result stands.	Deres interval har ingen bredde, hvilket intet estimat har, så det almindelige resultat står ved magt.

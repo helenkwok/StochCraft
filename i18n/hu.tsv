@@ -1337,6 +1337,21 @@ unit	yr	év
 	{name}: the ± is across {n} of the {of} pairs, the rest had no trial with a number.	{name}: a ± alapjául szolgáló párok száma: {n} (összesen: {of}); a többinél egyik próbának sem volt számértéke.
 	No interval: every pair gave the same share, so their spread gives none.	Nincs intervallum: minden pár ugyanazt az arányt adta, így a szórásuk nem ad intervallumot.
 	No interval: too few pairs of trials for one.	Nincs intervallum: túl kevés próbapár van hozzá.
+	Controls	Kontrollok
+	Expected mean	Várt átlag
+	Remove the control {name}	A(z) {name} kontroll eltávolítása
+	Add a control	Kontroll hozzáadása
+	{name} (an output; you give its mean)	{name} (egy kimenet; Ön adja meg az átlagát)
+	No input or earlier output can be a control.	Egyetlen bemenet vagy korábbi kimenet sem lehet kontroll.
+	A control is an input whose mean is known, or an earlier output whose mean you know. The results use how it moves with this output to narrow the interval of the output's mean and target chance.	A kontroll olyan bemenet, amelynek ismert az átlaga, vagy olyan korábbi kimenet, amelynek ismeri az átlagát. Az eredmények azt használják, hogyan mozog együtt ezzel a kimenettel, hogy szűkítsék az átlagának és a cél elérési esélyének intervallumát.
+	Controlled mean	Kontrollált átlag
+	Controls for {output}: {controls}.	Kontrollok ehhez: {output}: {controls}.
+	No controlled result: {reason}	Nincs kontrollált eredmény: {reason}
+	They narrowed the interval by {percent}; this is the result shown above.	{percent}-kal szűkítették az intervallumot; ez a fent látható eredmény.
+	They made the interval {percent} wider, so the plain result stands.	{percent}-kal szélesítették az intervallumot, ezért az egyszerű eredmény marad érvényben.
+	They did not help: their correlation with {output} is weak ({correlation}), so the plain result stands.	Nem segítettek: a korrelációjuk a(z) {output} kimenettel gyenge ({correlation}), ezért az egyszerű eredmény marad érvényben.
+	They did not help, so the plain result stands.	Nem segítettek, ezért az egyszerű eredmény marad érvényben.
+	The mean given for {name}, {stated}, is far from the trials' mean, {sample}: the controlled result is biased until it is corrected.	A(z) {name} megadott átlaga, {stated}, messze van a próbák átlagától, {sample}: a kontrollált eredmény torz, amíg nem javítják.
 	Stock	Készlet
 	Flow	Folyamat
 	Auxiliary	Segédváltozó
@@ -1402,3 +1417,6 @@ unit	yr	év
 	Can't tell yet: more runs would decide	Még nem eldönthető: több futás eldöntené
 	No result	Nincs eredmény
 	Observed data is given for a block that does not exist, so there is no result to check it against. Remove it, or choose a block that exists.	Megfigyelt adatok vannak megadva egy nem létező blokkhoz, ezért nincs eredmény, amellyel összevethetők lennének. Távolítsa el őket, vagy válasszon egy létező blokkot.
+	The estimated chance that {output} is more than {value} is {percent}.	Annak becsült valószínűsége, hogy {output} nagyobb, mint {value}: {percent}.
+	The estimated chance that {output} is less than {value} is {percent}.	Annak becsült valószínűsége, hogy {output} kisebb, mint {value}: {percent}.
+	Their interval has no width, which no estimate has, so the plain result stands.	Az intervallumuknak nincs szélessége, ami egyetlen becslésnek sincs, ezért az egyszerű eredmény marad.

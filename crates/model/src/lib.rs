@@ -26,7 +26,9 @@ pub mod montecarlo;
 pub mod path;
 
 pub use calendar::{Calendar, DateTime, Timed};
-pub use montecarlo::{McCorrelation, McInput, McOutput, McStop, McTarget, MonteCarlo, Sampling};
+pub use montecarlo::{
+    Control, McCorrelation, McInput, McOutput, McStop, McTarget, MonteCarlo, Sampling,
+};
 pub use path::{Frame, Path, Segment};
 
 use std::collections::{BTreeMap, BTreeSet, VecDeque};

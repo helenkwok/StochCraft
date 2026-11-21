@@ -1337,6 +1337,21 @@ unit	yr	m.
 	{name}: the ± is across {n} of the {of} pairs, the rest had no trial with a number.	{name}: ± apskaičiuotas pagal poras: {n} iš {of}; likusiose nebuvo iteracijos su skaičiumi.
 	No interval: every pair gave the same share, so their spread gives none.	Intervalo nėra: visos poros davė tą pačią dalį, todėl jų sklaida intervalo neduoda.
 	No interval: too few pairs of trials for one.	Intervalo nėra: tam per mažai iteracijų porų.
+	Controls	Kontrolės
+	Expected mean	Tikėtinas vidurkis
+	Remove the control {name}	Pašalinti kontrolę {name}
+	Add a control	Pridėti kontrolę
+	{name} (an output; you give its mean)	{name} (išvestis; jos vidurkį nurodote jūs)
+	No input or earlier output can be a control.	Joks įvestis ar ankstesnė išvestis negali būti kontrolė.
+	A control is an input whose mean is known, or an earlier output whose mean you know. The results use how it moves with this output to narrow the interval of the output's mean and target chance.	Kontrolė yra įvestis, kurios vidurkis žinomas, arba ankstesnė išvestis, kurios vidurkį žinote. Rezultatai naudoja tai, kaip ji kinta kartu su šia išvestimi, kad susiaurintų jos vidurkio ir tikslo pasiekimo šanso intervalą.
+	Controlled mean	Kontroliuojamas vidurkis
+	Controls for {output}: {controls}.	Kontrolės išvesčiai {output}: {controls}.
+	No controlled result: {reason}	Kontroliuojamo rezultato nėra: {reason}
+	They narrowed the interval by {percent}; this is the result shown above.	Jos susiaurino intervalą {percent}; tai aukščiau parodytas rezultatas.
+	They made the interval {percent} wider, so the plain result stands.	Jos išplėtė intervalą {percent}, todėl galioja paprastas rezultatas.
+	They did not help: their correlation with {output} is weak ({correlation}), so the plain result stands.	Jos nepadėjo: jų koreliacija su {output} silpna ({correlation}), todėl galioja paprastas rezultatas.
+	They did not help, so the plain result stands.	Jos nepadėjo, todėl galioja paprastas rezultatas.
+	The mean given for {name}, {stated}, is far from the trials' mean, {sample}: the controlled result is biased until it is corrected.	Vidurkis, nurodytas {name}, {stated}, toli nuo bandymų vidurkio {sample}: kontroliuojamas rezultatas paklaidus, kol nepataisoma.
 	Stock	Atsarga
 	Flow	Srautas
 	Auxiliary	Pagalbinis kintamasis
@@ -1402,3 +1417,6 @@ unit	yr	m.
 	Can't tell yet: more runs would decide	Dar negalima pasakyti: daugiau vykdymų leistų nuspręsti
 	No result	Rezultato nėra
 	Observed data is given for a block that does not exist, so there is no result to check it against. Remove it, or choose a block that exists.	Stebėti duomenys nurodyti blokui, kurio nėra, todėl nėra rezultato, su kuriuo juos būtų galima palyginti. Pašalinkite juos arba pasirinkite esamą bloką.
+	The estimated chance that {output} is more than {value} is {percent}.	Numatoma tikimybė, kad {output} yra didesnis nei {value}, yra {percent}.
+	The estimated chance that {output} is less than {value} is {percent}.	Numatoma tikimybė, kad {output} yra mažesnis nei {value}, yra {percent}.
+	Their interval has no width, which no estimate has, so the plain result stands.	Jų intervalas neturi pločio, o jokio įverčio taip nebūna, todėl lieka įprastas rezultatas.

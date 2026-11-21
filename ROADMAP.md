@@ -2191,7 +2191,7 @@ over time, a second kind of diagram on the canvas). Then M4.1, the smallest and 
 reuses most of what exists; then M4.2 and M4.3 (agents in flows first); then M4.4. Agents in
 space are built with M5, which needs the same layout and travel.
 
-M4.1 parts 1, 2, 2b and 3a are done and M4.2 part 1 is done (below); the rest is not started. D15–D18 are settled; D10–D13 (#71 has
+M4.1 parts 1, 2, 2b and 3a and its control variates are done, and M4.2 parts 1 and 2 (the `sd` crate, editing and saving, the window) are done except the canvas (below); the rest is not started. D15–D18 are settled; D10–D13 (#71 has
 them) are to settle first.
 
 ### M4.1 Monte Carlo
@@ -2257,12 +2257,34 @@ the input's name (a random digital shift; Owen 1995; L'Ecuyer and Lemieux 2002),
 independent replicates and the interval is across batches of 1,000, as Latin hypercube's is.
 Both are checked against exact answers (the intervals hold the mean about 95% of the time over
 200 seeds, are much narrower on a monotone and on a smooth integrand, and the first Sobol points
-are the published ones). Control variates are not built: they need a quantity correlated with
-the output whose mean is known exactly, which the model does not say (an input's own mean works
-for a linear output but is not worth a setting), and the coefficient is estimated from the same
-trials, which makes the estimator slightly biased unless it is fitted on a pilot run. Next, if
-wanted: an output marked as a control with its known mean, the coefficient fitted on the first
-batch and used on the rest, judged across batches.
+are the published ones).
+Control variates are built (Law, *Simulation Modeling and Analysis*, 5th ed., §11.3; Glasserman
+2003, §4.1; Nelson 1990): an output can name controls, each an input (whose known mean is its
+distribution's exact mean, `Dist::mean`) or an earlier output with a mean the modeller types
+(`expected`). Each trial's value Y becomes Y − bᵀ(C − μ), with b the least-squares coefficients
+fitted on a pilot, the first batch of 1,000 trials (the first half for a random run under 2,000
+trials, whole pairs for antithetic sampling; the whole first batch where trials are grouped by
+batch, so Latin hypercube, Sobol and correlated-input runs need two batches for an estimate and
+three for its interval), which the controlled estimate leaves out, so that it is unbiased for a run
+of a fixed number of trials (fitting b on the trials it then averages would bias it slightly; a
+run that stops at a precision target can still be biased by the stopping rule). A trial with no
+number withdraws the controlled estimate, and a stated mean is checked against the control's
+average across the same independent units as the interval. The controlled mean and its interval come from the remaining
+trials on the run's own interval basis (Student-t across trials, batch means or pair means of the
+controlled value), and so do the controlled chance of meeting a target and its interval (the
+indicator of meeting it is controlled with coefficients of its own). Percentiles, the histogram
+and the extremes are not controlled, and a sequential stop is still judged on the plain mean. The
+results carry the controls, their coefficients, the controlled results and the variance
+reduction: the plain against the controlled interval on the same trials, said in the window as
+"narrowed the interval by 63%", or that the control did not help (under 10% narrower, with the
+weak correlation), or made it wider (the plain result stays the headline). An input is refused as a
+control where the sampler's mean is not exactly its stated mean (a count with a standard deviation
+above 10,000 under the stratified samplings, whose quantile function is an expansion) or where it
+is a constant; an output control must be an earlier output, and a stated mean the trials
+contradict by more than five standard errors is flagged. Checked against exact answers: for
+X + Z the controlled variance is Var(Z) / Var(X + Z) of the plain one, several controls recover
+(2, −3), an unrelated control does no harm, exp(X) is unbiased over 400 seeds, every sampling's
+controlled interval covers, and each distribution allowed as a control draws its stated mean.
 
 **What it is:** a model of a calculation, not a process. Inputs are distributions (a cost, a
 duration, a demand), outputs are expressions over them (a total cost, a finish date, a profit),

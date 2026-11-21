@@ -907,6 +907,17 @@ fields (`“Service time”`) are named in the messages by their own rows.
   transliteration, and "pair" and "draw" each language's everyday word, none checked against any
   other source or reviewed by native speakers; the least certain are bn, hi, ka, kk, ko, lo, sq,
   ta, te, th and vi, and the fit of the grammar around "{n}" in the highly inflected ones.
+- The rows for control variates in the Monte Carlo window (ROADMAP M4.1: the "Controls" row of
+  an output with its "Add a control" menu, the expected mean typed for an output control, the
+  hint, the "Controlled mean" row and the lines under a finding saying which controls an output
+  has and how much narrower they made its interval, that they did not help or made it wider, why
+  there is no controlled result, and that a stated mean is far from the trials') were
+  machine-drafted with Claude Code from the plain meaning of the English, reusing each catalog's
+  own words for input, output, mean, interval, trial and correlation. The word for the control is
+  each language's usual one for a control (check) quantity, in German and Dutch the compounds
+  Kontrollgröße and controlevariabele; none was checked against any other source or reviewed by
+  native speakers. The least certain are lo, th, ta, te, bn, hi, ka, kk, sq, et and lt, and the
+  grammar around the percentages in the highly inflected languages.
 - The rows for system dynamics models in the window (ROADMAP M4.2, part 2a: the Model and
   Results tabs, the kinds stock, flow and auxiliary, the sentences on where a stock ends and the
   median and percentiles it ends between, the chart's caption and tooltips, the table's column
@@ -928,6 +939,14 @@ fields (`“Service time”`) are named in the messages by their own rows.
   checked against any other source or reviewed by native speakers. "Agent", "command line" and
   "canvas" are each language's everyday computing word or calque; the least certain are bn, hi, ka,
   kk, lo, sq, ta, te, th and vi.
+- The three rows added when a controlled chance was reworded (ROADMAP M4.1: "The estimated
+  chance that {output} is more than / less than {value} is {percent}.", used where a controlled
+  chance would otherwise read as a count of trials, and "Their interval has no width, which no
+  estimate has, so the plain result stands.") were machine-drafted with Claude Code from the
+  plain meaning of the English, reusing each catalog's own words for chance, interval and result;
+  placeholders checked by script; not checked against any other source or reviewed by native
+  speakers. The least certain are bn, hi, ka, kk, lo, sq, ta, te, th and vi, and the case of the
+  numbers around {value} and {percent} in the highly inflected languages.
 
 - The rows for validation against observed data (issue #226: the Observed data section of the
   model page and its hint, Add an observed value, Observed value, Checked as, Its 95%

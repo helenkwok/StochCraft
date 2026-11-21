@@ -1337,6 +1337,21 @@ unit	yr	г.
 	{name}: the ± is across {n} of the {of} pairs, the rest had no trial with a number.	{name}: ± рассчитано по парам: {n} из {of}; в остальных не было испытания с числом.
 	No interval: every pair gave the same share, so their spread gives none.	Нет интервала: все пары дали одну и ту же долю, поэтому их разброс интервала не даёт.
 	No interval: too few pairs of trials for one.	Нет интервала: для него слишком мало пар испытаний.
+	Controls	Контрольные переменные
+	Expected mean	Ожидаемое среднее
+	Remove the control {name}	Удалить контрольную переменную {name}
+	Add a control	Добавить контрольную переменную
+	{name} (an output; you give its mean)	{name} (выход; его среднее задаёте вы)
+	No input or earlier output can be a control.	Ни один вход и ни один предыдущий выход не может быть контрольной переменной.
+	A control is an input whose mean is known, or an earlier output whose mean you know. The results use how it moves with this output to narrow the interval of the output's mean and target chance.	Контрольная переменная — это вход с известным средним или предыдущий выход, среднее которого вы знаете. Результаты используют то, как она изменяется вместе с этим выходом, чтобы сузить интервал его среднего и шанса достичь цели.
+	Controlled mean	Среднее с контролем
+	Controls for {output}: {controls}.	Контрольные переменные для {output}: {controls}.
+	No controlled result: {reason}	Нет результата с контролем: {reason}
+	They narrowed the interval by {percent}; this is the result shown above.	Они сузили интервал на {percent}; это результат, показанный выше.
+	They made the interval {percent} wider, so the plain result stands.	Они расширили интервал на {percent}, поэтому действует обычный результат.
+	They did not help: their correlation with {output} is weak ({correlation}), so the plain result stands.	Они не помогли: их корреляция с {output} слабая ({correlation}), поэтому действует обычный результат.
+	They did not help, so the plain result stands.	Они не помогли, поэтому действует обычный результат.
+	The mean given for {name}, {stated}, is far from the trials' mean, {sample}: the controlled result is biased until it is corrected.	Заданное для {name} среднее {stated} далеко от среднего по испытаниям {sample}: результат с контролем смещён, пока оно не исправлено.
 	Stock	Запас
 	Flow	Поток
 	Auxiliary	Вспомогательная переменная
@@ -1402,3 +1417,6 @@ unit	yr	г.
 	Can't tell yet: more runs would decide	Пока нельзя сказать: больше запусков помогли бы решить
 	No result	Нет результата
 	Observed data is given for a block that does not exist, so there is no result to check it against. Remove it, or choose a block that exists.	Наблюдаемые данные заданы для блока, которого нет, поэтому нет результата, с которым их можно сверить. Удалите их или выберите существующий блок.
+	The estimated chance that {output} is more than {value} is {percent}.	Оценочная вероятность того, что {output} больше {value}, составляет {percent}.
+	The estimated chance that {output} is less than {value} is {percent}.	Оценочная вероятность того, что {output} меньше {value}, составляет {percent}.
+	Their interval has no width, which no estimate has, so the plain result stands.	Их интервал не имеет ширины, чего не бывает у оценки, поэтому остаётся обычный результат.

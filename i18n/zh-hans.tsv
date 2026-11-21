@@ -1337,6 +1337,21 @@ unit	yr	年
 	{name}: the ± is across {n} of the {of} pairs, the rest had no trial with a number.	{name}：± 基于 {of} 对中的 {n} 对，其余的没有带数值的试验。
 	No interval: every pair gave the same share, so their spread gives none.	无区间：所有试验对给出的占比相同，其离散程度无法得出区间。
 	No interval: too few pairs of trials for one.	无区间：试验对太少，无法得出区间。
+	Controls	控制变量
+	Expected mean	预期均值
+	Remove the control {name}	移除控制变量 {name}
+	Add a control	添加控制变量
+	{name} (an output; you give its mean)	{name}（一个输出；均值由您提供）
+	No input or earlier output can be a control.	没有输入或之前的输出可以作为控制变量。
+	A control is an input whose mean is known, or an earlier output whose mean you know. The results use how it moves with this output to narrow the interval of the output's mean and target chance.	控制变量是均值已知的输入，或您知道均值的之前的输出。结果利用它与此输出一起变动的情况，缩小输出均值及达成目标概率的区间。
+	Controlled mean	控制后的均值
+	Controls for {output}: {controls}.	{output} 的控制变量：{controls}。
+	No controlled result: {reason}	没有控制后的结果：{reason}
+	They narrowed the interval by {percent}; this is the result shown above.	它们将区间缩小了 {percent}；这是上面显示的结果。
+	They made the interval {percent} wider, so the plain result stands.	它们将区间扩大了 {percent}，因此采用普通结果。
+	They did not help: their correlation with {output} is weak ({correlation}), so the plain result stands.	它们没有帮助：与 {output} 的相关性很弱（{correlation}），因此采用普通结果。
+	They did not help, so the plain result stands.	它们没有帮助，因此采用普通结果。
+	The mean given for {name}, {stated}, is far from the trials' mean, {sample}: the controlled result is biased until it is corrected.	为 {name} 给出的均值 {stated} 与试验的均值 {sample} 相差很大：在更正之前，控制后的结果是有偏的。
 	Stock	存量
 	Flow	流量
 	Auxiliary	辅助变量
@@ -1402,3 +1417,6 @@ unit	yr	年
 	Can't tell yet: more runs would decide	暂时无法判断：更多次运行才能判断
 	No result	无结果
 	Observed data is given for a block that does not exist, so there is no result to check it against. Remove it, or choose a block that exists.	为一个不存在的区块给出了观测数据，因此没有可核对的结果。请移除它，或选择一个存在的区块。
+	The estimated chance that {output} is more than {value} is {percent}.	{output} 大于 {value} 的估计概率为 {percent}。
+	The estimated chance that {output} is less than {value} is {percent}.	{output} 小于 {value} 的估计概率为 {percent}。
+	Their interval has no width, which no estimate has, so the plain result stands.	它们的区间没有宽度，而任何估计都不会如此，因此保留普通结果。

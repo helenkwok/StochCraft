@@ -1337,6 +1337,21 @@ unit	yr	г.
 	{name}: the ± is across {n} of the {of} pairs, the rest had no trial with a number.	{name}: ± е по {n} от {of} двойки, останалите нямаха опит с число.
 	No interval: every pair gave the same share, so their spread gives none.	Няма интервал: всички двойки дадоха един и същ дял, така че разликите между тях не дават интервал.
 	No interval: too few pairs of trials for one.	Няма интервал: твърде малко двойки опити за него.
+	Controls	Контроли
+	Expected mean	Очаквана средна стойност
+	Remove the control {name}	Премахване на контрола {name}
+	Add a control	Добавяне на контрола
+	{name} (an output; you give its mean)	{name} (изход; вие задавате средната му стойност)
+	No input or earlier output can be a control.	Никой вход или по-ранен изход не може да е контрола.
+	A control is an input whose mean is known, or an earlier output whose mean you know. The results use how it moves with this output to narrow the interval of the output's mean and target chance.	Контролата е вход с позната средна стойност или по-ранен изход, чиято средна стойност знаете. Резултатите използват как тя се движи заедно с този изход, за да стеснят интервала на средната му стойност и на шанса за постигане на целта.
+	Controlled mean	Контролирана средна стойност
+	Controls for {output}: {controls}.	Контроли за {output}: {controls}.
+	No controlled result: {reason}	Няма контролиран резултат: {reason}
+	They narrowed the interval by {percent}; this is the result shown above.	Те стесниха интервала с {percent}; това е резултатът, показан по-горе.
+	They made the interval {percent} wider, so the plain result stands.	Те разшириха интервала с {percent}, затова важи обикновеният резултат.
+	They did not help: their correlation with {output} is weak ({correlation}), so the plain result stands.	Не помогнаха: корелацията им с {output} е слаба ({correlation}), затова важи обикновеният резултат.
+	They did not help, so the plain result stands.	Не помогнаха, затова важи обикновеният резултат.
+	The mean given for {name}, {stated}, is far from the trials' mean, {sample}: the controlled result is biased until it is corrected.	Зададената за {name} средна стойност {stated} е далеч от средната стойност на опитите {sample}: контролираният резултат е пристрастен, докато не се поправи.
 	Stock	Запас
 	Flow	Поток
 	Auxiliary	Спомагателна променлива
@@ -1402,3 +1417,6 @@ unit	yr	г.
 	Can't tell yet: more runs would decide	Още не може да се определи: повече изпълнения биха решили
 	No result	Няма резултат
 	Observed data is given for a block that does not exist, so there is no result to check it against. Remove it, or choose a block that exists.	Зададени са наблюдавани данни за блок, който не съществува, затова няма резултат, с който да се сверят. Премахнете ги или изберете блок, който съществува.
+	The estimated chance that {output} is more than {value} is {percent}.	Прогнозната вероятност {output} да е над {value} е {percent}.
+	The estimated chance that {output} is less than {value} is {percent}.	Прогнозната вероятност {output} да е под {value} е {percent}.
+	Their interval has no width, which no estimate has, so the plain result stands.	Техният интервал няма ширина, каквато няма никоя оценка, затова остава обикновеният резултат.

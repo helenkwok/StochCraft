@@ -51,6 +51,27 @@ pub struct McOutput {
     pub unit: String,
     /// A target whose probability of being met is reported, with its interval.
     pub target: Option<McTarget>,
+    /// Control variates: quantities with a known mean whose deviation from it is used to
+    /// narrow this output's interval (Law, *Simulation Modeling and Analysis*, 5th ed., §11.3).
+    pub controls: Vec<Control>,
+}
+
+/// A control variate for an output.
+#[derive(Debug, Clone, PartialEq)]
+pub enum Control {
+    /// An input, whose known mean is its distribution's exact mean.
+    Input { name: String },
+    /// An earlier output whose mean the modeller knows and types.
+    Output { name: String, expected: f64 },
+}
+
+impl Control {
+    /// The input or output it names.
+    pub fn name(&self) -> &str {
+        match self {
+            Control::Input { name } | Control::Output { name, .. } => name,
+        }
+    }
 }
 
 /// A target for an output.
