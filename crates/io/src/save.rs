@@ -147,7 +147,7 @@ fn near_dist(a: &Dist, b: &Dist) -> bool {
 }
 
 /// StochCraft's vendor extensions that hold time distributions.
-const VENDOR_TIMES: [&str; 7] = [
+const VENDOR_TIMES: [&str; 8] = [
     crate::bpsim::BREAKDOWN,
     crate::bpsim::TRANSFER_TIME,
     crate::bpsim::CHANGEOVER,
@@ -155,17 +155,25 @@ const VENDOR_TIMES: [&str; 7] = [
     crate::bpsim::PLANNED_RUN_TIME,
     crate::bpsim::PATIENCE,
     crate::bpsim::HEALTH_CHECK,
+    crate::bpsim::TRANSPORT,
 ];
 
 /// Calls `f` on each distribution vendor extension `name` holds for an element, in order.
 fn vendor_dists(kind: &mut ElementKind, name: &str, f: &mut dyn FnMut(&mut Dist)) {
     use crate::bpsim::{
         BREAKDOWN, CHANGEOVER, HEALTH_CHECK, PATIENCE, PLANNED_RUN_TIME, PROCESSING_TIME_BY,
-        TRANSFER_TIME,
+        TRANSFER_TIME, TRANSPORT,
     };
     if name == PROCESSING_TIME_BY {
         if let Some(Some(by)) = kind.processing_by_mut() {
             by.by_value.iter_mut().for_each(|v| f(&mut v.time));
+        }
+        return;
+    }
+    if name == TRANSPORT {
+        if let ElementKind::Transport { load, unload, .. } = kind {
+            f(load);
+            f(unload);
         }
         return;
     }
@@ -259,12 +267,29 @@ fn within_noise(got: &Model, want: &Model, rescaled: &BTreeSet<(String, String)>
         match (&mut ge.kind, &we.kind) {
             (
                 ElementKind::Source {
-                    interarrival: a, ..
+                    interarrival: a,
+                    timed: ta,
+                    ..
                 },
                 ElementKind::Source {
-                    interarrival: b, ..
+                    interarrival: b,
+                    timed: tb,
+                    ..
                 },
-            ) if has("ControlParameters/InterTriggerTimer") && near_dist(a, b) => *a = b.clone(),
+            ) if has("ControlParameters/InterTriggerTimer") => {
+                // The default value and the values for calendars (`validFor`), each as a whole.
+                if near_dist(a, b) {
+                    *a = b.clone();
+                }
+                if ta.len() == tb.len()
+                    && ta
+                        .iter()
+                        .zip(tb.iter())
+                        .all(|(x, y)| x.calendar == y.calendar && near_dist(&x.value, &y.value))
+                {
+                    *ta = tb.clone();
+                }
+            }
             (ElementKind::Server { service: a, .. }, ElementKind::Server { service: b, .. })
             | (ElementKind::Delay { duration: a, .. }, ElementKind::Delay { duration: b, .. })
             | (
@@ -272,6 +297,16 @@ fn within_noise(got: &Model, want: &Model, rescaled: &BTreeSet<(String, String)>
                 ElementKind::SharedTask { service: b, .. },
             ) if has("TimeParameters/ProcessingTime") && near_dist(a, b) => *a = b.clone(),
             _ => {}
+        }
+        // BPSim's SetUpTime: a setup before every job (a changeover is a vendor extension, below).
+        if has("TimeParameters/SetUpTime")
+            && let (
+                ElementKind::Server { setup: Some(a), .. },
+                ElementKind::Server { setup: Some(b), .. },
+            ) = (&mut ge.kind, &we.kind)
+            && near_dist(&a.time, &b.time)
+        {
+            a.time = b.time.clone();
         }
         for name in VENDOR_TIMES {
             if has(&format!("VendorExtension/{name}")) {
@@ -3313,6 +3348,14 @@ fn rescaled_params(original: &Element, new: &Element) -> Vec<Rescaled> {
             .cloned()
             .collect()
     };
+    // The values for calendars (`validFor`), which can name their own unit as well (a source's
+    // arrivals by shift).
+    let by_calendar = |p: &Element| -> Vec<Element> {
+        p.elements()
+            .filter(|v| v.attr("validFor").is_some() && v.attr("result").is_none())
+            .cloned()
+            .collect()
+    };
     let mut out = Vec::new();
     for (o, n) in original.elements().zip(new.elements()) {
         if o.is_any(&NSS, "ScenarioParameters") {
@@ -3347,7 +3390,7 @@ fn rescaled_params(original: &Element, new: &Element) -> Vec<Rescaled> {
                     continue;
                 }
                 for (po, pn) in go.elements().zip(gn.elements()) {
-                    if defaults(po) == defaults(pn) {
+                    if defaults(po) == defaults(pn) && by_calendar(po) == by_calendar(pn) {
                         continue;
                     }
                     let g = go.local();

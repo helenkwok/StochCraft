@@ -72,7 +72,9 @@ The two flags keep a headless agent to the folders you give it:
 - The roots must be existing folders; a missing one stops the server with an error.
 
 The roots cannot be combined with `--connect`: the app opens and saves files wherever its user
-asks, so an agent driving it is not confined.
+asks, so an agent driving it is not confined. The app has no folders of its own to refuse paths
+outside of, and the control channel is open only to programs on the same computer, which can
+already read and write whatever the person at the window can.
 
 ## Tools
 

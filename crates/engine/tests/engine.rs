@@ -4021,3 +4021,199 @@ fn starting_contents_are_set_run_undone_and_removed() {
     ok(&mut e, "undo", json!({}));
     assert_eq!(desk(&mut e)["starting"], json!(4));
 }
+
+/// What `model.get` returns, with a drawn shape and a three-point estimate, goes back in through
+/// `model.set` and comes out the same: the two keys are accepted and applied, not dropped.
+#[test]
+fn model_get_with_bounds_and_estimate_round_trips_through_model_set() {
+    let mut e = help_desk();
+    ok(
+        &mut e,
+        "layout.set",
+        json!({ "shapes": [{ "id": "desk", "x": 300, "y": 20 }] }),
+    );
+    ok(
+        &mut e,
+        "estimate.set",
+        json!({ "id": "desk", "family": "triangular", "min": 0.5, "mode": 1.0, "max": 3.0 }),
+    );
+    let m = ok(&mut e, "model.get", json!({}));
+    let desk = m["elements"]
+        .as_array()
+        .and_then(|v| v.iter().find(|x| x["id"] == "desk"))
+        .cloned()
+        .unwrap_or_default();
+    assert!(
+        desk.get("bounds").is_some() && desk.get("estimate").is_some(),
+        "{desk}"
+    );
+
+    let mut other = Engine::new();
+    ok(&mut other, "model.set", json!({ "model": m }));
+    assert_eq!(ok(&mut other, "model.get", json!({})), m);
+    assert!(!other.model().layout.is_empty());
+    assert!(!other.model().estimates.is_empty());
+}
+
+/// Removing the flow an exclusive gateway names as its default (by `disconnect` or by removing
+/// the block at its other end) clears the default, so the file still saves in place; undo gives
+/// the default back.
+#[test]
+fn removing_a_gateways_default_flow_clears_it_and_undo_restores_it() {
+    let gateway_default = |e: &mut Engine| {
+        let m = ok(e, "model.get", json!({}));
+        m["elements"]
+            .as_array()
+            .and_then(|v| v.iter().find(|x| x["id"] == "check"))
+            .map(|x| x["default"].clone())
+            .unwrap_or_default()
+    };
+    let build = |e: &mut Engine| {
+        ok(
+            e,
+            "block.add",
+            json!({ "kind": "exclusive_gateway", "id": "check" }),
+        );
+        ok(e, "block.add", json!({ "kind": "delay", "id": "walk" }));
+        ok(e, "connect", json!({ "from": "desk", "to": "check" }));
+        ok(
+            e,
+            "connect",
+            json!({ "from": "check", "to": "exit", "id": "done" }),
+        );
+        ok(
+            e,
+            "connect",
+            json!({ "from": "check", "to": "walk", "id": "other" }),
+        );
+        ok(e, "connect", json!({ "from": "walk", "to": "exit" }));
+        ok(e, "block.set", json!({ "id": "check", "default": "done" }));
+    };
+    let dir = scratch("dangling-default");
+    let _ = std::fs::remove_dir_all(&dir);
+    let _ = std::fs::create_dir_all(&dir);
+
+    // disconnect, then save in place, then undo.
+    let mut e = help_desk();
+    ok(
+        &mut e,
+        "disconnect",
+        json!({ "from": "desk", "to": "exit" }),
+    );
+    build(&mut e);
+    let path = dir.join("a.bpmn");
+    ok(
+        &mut e,
+        "file.save",
+        json!({ "path": path.to_string_lossy() }),
+    );
+    let mut f = Engine::new();
+    ok(
+        &mut f,
+        "file.open",
+        json!({ "path": path.to_string_lossy() }),
+    );
+    assert_eq!(gateway_default(&mut f), json!("done"));
+    ok(&mut f, "disconnect", json!({ "id": "done" }));
+    assert_eq!(gateway_default(&mut f), Value::Null);
+    ok(&mut f, "file.save", json!({}));
+    ok(&mut f, "undo", json!({}));
+    assert_eq!(gateway_default(&mut f), json!("done"));
+    ok(&mut f, "redo", json!({}));
+    assert_eq!(gateway_default(&mut f), Value::Null);
+
+    // block.remove of the block the default flow leads to.
+    let mut g = help_desk();
+    ok(
+        &mut g,
+        "disconnect",
+        json!({ "from": "desk", "to": "exit" }),
+    );
+    build(&mut g);
+    let path = dir.join("b.bpmn");
+    ok(
+        &mut g,
+        "file.save",
+        json!({ "path": path.to_string_lossy() }),
+    );
+    let mut h = Engine::new();
+    ok(
+        &mut h,
+        "file.open",
+        json!({ "path": path.to_string_lossy() }),
+    );
+    ok(&mut h, "block.remove", json!({ "id": "exit" }));
+    assert_eq!(gateway_default(&mut h), Value::Null);
+    ok(&mut h, "file.save", json!({}));
+    ok(&mut h, "undo", json!({}));
+    assert_eq!(gateway_default(&mut h), json!("done"));
+}
+
+/// A pool a transport carries with cannot be removed, as one a task needs cannot.
+#[test]
+fn a_pool_a_transport_uses_cannot_be_removed() {
+    let mut e = help_desk();
+    ok(
+        &mut e,
+        "resource.add",
+        json!({"id": "carriers", "quantity": 1}),
+    );
+    let constant = json!({"type": "constant", "value": 1.0});
+    ok(
+        &mut e,
+        "block.add",
+        json!({"kind": "transport", "id": "carry", "pool": "carriers",
+               "load": constant, "unload": constant}),
+    );
+    assert_eq!(
+        err(&mut e, "resource.remove", json!({"id": "carriers"})),
+        ErrorCode::Conflict
+    );
+    ok(&mut e, "block.remove", json!({"id": "carry"}));
+    ok(&mut e, "resource.remove", json!({"id": "carriers"}));
+}
+
+/// A run an experiment makes fails as a run does: the stuck-time error says when and where,
+/// not just that it happened.
+#[test]
+fn a_sweep_run_where_time_stops_moving_reports_when_and_where() {
+    let r = within(300, || {
+        let mut e = zero_time_loop();
+        e.execute(
+            "experiment.sweep",
+            json!({
+                "parameter": { "id": "work", "field": "capacity" },
+                "values": [1, 2],
+                "results": [{ "element": "work", "metric": "mean_wait" }]
+            }),
+        )
+    });
+    assert!(r.is_some(), "the sweep did not end");
+    let error = r.and_then(Result::err).map(|e| e.to_json());
+    assert_time_stopped(&error.unwrap_or_default());
+}
+
+/// A background run that finished before `run.cancel` reached it is reported finished and its
+/// results are kept, as if it had been polled: here the second set of results `results.compare`
+/// needs.
+#[test]
+fn cancelling_a_run_that_already_finished_keeps_its_results() {
+    let mut e = help_desk();
+    ok(&mut e, "experiment.set", json!({"duration": 1.0}));
+    ok(&mut e, "run", json!({"replications": 2}));
+    assert_eq!(
+        err(&mut e, "results.compare", json!({})),
+        ErrorCode::NotFound,
+        "one set of results cannot be compared"
+    );
+    ok(
+        &mut e,
+        "run.start",
+        json!({"replications": 2, "mode": "threads", "threads": 1}),
+    );
+    // Long enough for a run this small to end, with nobody polling.
+    std::thread::sleep(std::time::Duration::from_millis(1_500));
+    let cancelled = ok(&mut e, "run.cancel", json!({}));
+    assert_eq!(cancelled["state"], "finished", "{cancelled}");
+    ok(&mut e, "results.compare", json!({}));
+}
