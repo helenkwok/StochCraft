@@ -2,6 +2,8 @@
 //! where there is one, units, and the simulation settings. Nothing here is compiled or
 //! checked; [`crate::compile`] does that.
 
+use crate::layout::Layout;
+
 /// How a model is integrated.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
 pub enum Method {
@@ -245,6 +247,9 @@ pub struct SdModel {
     pub product_version: String,
     pub specs: SimSpecs,
     pub vars: Vec<Variable>,
+    /// The diagram: where each variable is drawn. A model read from a file has one for every
+    /// variable (see [`Layout`]); one built in code may have none, and is given one when written.
+    pub layout: Layout,
 }
 
 /// The name an equation uses for a variable: lower case, with each run of spaces, underscores

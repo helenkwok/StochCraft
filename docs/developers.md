@@ -308,9 +308,9 @@ stochcraft-cli exec changes.json --open queue.bpmn
 ### System dynamics models
 
 A system dynamics model is stocks (levels) and flows (rates) over time, read from an XMILE 1.0
-file (OASIS, 2015). The window shows and runs it (the Model and Results tabs, `crates/ui-egui/src/sd.rs`,
-read-only); the canvas and editing come next. It is also opened, run and read through the engine
-and the command line.
+file (OASIS, 2015). It is opened, edited, run, saved and read through the engine and the command
+line; the window shows and runs it (the Model and Results tabs, `crates/ui-egui/src/sd.rs`), and
+the canvas comes next.
 
 ```bash
 stochcraft-cli run tests/models/sir.xmile                     # each variable at the end of the run
@@ -321,17 +321,40 @@ stochcraft-cli run noisy.xmile --reps 500 --seed 3            # a model with a r
 ```
 
 The engine commands are `sd.open` (the text of an XMILE file; `file.open` also opens one from
-disk), `sd.run` (`replications`, `seed`, `dt`, `dt_check`, `time_unit`) and `sd.get` (the model's
-variables and checks, and with `variable` its values from the last run). `run` and `file.save`
-refuse such a model, naming `sd.run`; it cannot be edited or saved yet. In Rust:
-`stochcraft_sd::{read_xmile, compile, run}`; `Engine::has_system_dynamics` and
-`Engine::system_dynamics_path` (`crates/engine/src/sd_window.rs`) tell a caller that holds the engine
-whether the document is one. The engine then holds an empty process model beside it, which
-`save_bytes` would write, so a window or shell that saves must check first (the window refuses
-every save path, and ignores the empty model's changes for the unsaved-changes question and the
-recovery copy). The window's run is made whole on the frame after Run is pressed, with the work
-bounded (steps times variables times runs, at most 20 million); a run a few replications at a time
-like Monte Carlo's would need `stochcraft-sd` to give per-replication results.
+disk), `sd.new` (an empty model: name, start, stop, `dt`, method, time unit), `sd.run`
+(`replications`, `seed`, `dt`, `dt_check`, `time_unit`) and `sd.get` (the model's variables with
+where each is drawn and the pipes of the flows, the information links and checks, and with
+`variable` its values from the last run, marked stale if the model was edited since). `run`
+refuses such a model, naming `sd.run`. In Rust: `stochcraft_sd::{read_xmile, compile, run}`;
+`Engine::has_system_dynamics` and `Engine::system_dynamics_path` (`crates/engine/src/sd_window.rs`)
+tell a caller that holds the engine whether the document is one. The window's run is made whole on
+the frame after Run is pressed, with the work bounded (steps times variables times runs, at most
+20 million); a run a few replications at a time like Monte Carlo's would need `stochcraft-sd` to
+give per-replication results.
+
+**Editing.** `sd.variable.add` (stock, flow or aux with its equation, units, a graphical function,
+a stock's flows, a position; `into_stock` and `from_stock` attach a new flow), `sd.variable.set`
+(equation, units, doc, a stock's flows, `non_negative`, graphical function, `rename`),
+`sd.variable.remove`, `sd.specs.set` and `sd.layout.set` (move or resize shapes, set a flow's
+pipe, add and remove information links). They are `Action` commands, so `batch` does not take
+them. Each works on a copy of the model and compiles it: an equation that does not read, a name
+that is not there, an algebraic loop or a duplicate name is refused with the compile error and the
+model is as it was (units mismatches stay warnings). An equation can only name variables that
+already exist, so add a flow's stock first, or add the variables with a placeholder equation and
+set the real one. A rename rewrites every equation (by canonical name, in bare or quoted form) and
+flow list that names the variable and moves its shape and links. A removal is refused while an
+equation names the variable or a stock lists it, naming who; `force` clears the stocks' lists only.
+An edit's undo entry is a snapshot of the whole `SdModel` before it (`Undo::Sd` in the engine, the
+counterpart of `Op::SetModel`), on the same stacks as process edits; undo swaps it in and compiles
+it. The model is dirty while it, diagram included, differs from the one opened or last saved.
+`file.save` writes XMILE (`format` is `xmile`); a journal that began with `sd.new` records its
+parameters in the start record and replays from it.
+
+**The diagram** is `SdModel.layout`: a shape per variable by canonical name (the centre; a stock
+and an auxiliary have a size, a flow's position is its valve on its pipe of right-angled points)
+and the information links. A link is added for each use of one variable in another's equation, and
+follows the equation when it is set. A model read from a file with no diagram, or built without
+one, gets `Layout::auto`.
 
 - **Read:** the header, `sim_specs` (`start`, `stop`, `dt` and its `reciprocal`, `method` Euler or
   RK4, `time_units`), stocks (`eqn` as the initial value, `inflow`, `outflow`, `non_negative`,
@@ -347,7 +370,11 @@ like Monte Carlo's would need `stochcraft-sd` to give per-replication results.
   `overflow` and `leak`, event posters, any other function (`SUM`, `SIN`, `INIT`...), an
   integration method other than Euler or the Runge-Kutta family (RK2, RK45 and Gear run as RK4,
   which XMILE allows, and the notes say so).
-- **Not kept, and said so in `notes`:** the diagrams (`views`), styles, display settings,
+- **Diagram:** the first `stock_flow` view: the `x`, `y` (top left when the shape has a `width`
+  and `height`, else the centre), size, a flow's `pts` and the `connector`s. A cloud is the end of a
+  flow's pipe that no stock holds. Written back with the model.
+- **Not kept, and said so in `notes`:** a second view or one of another type, the colours, label
+  places and other display attributes of a shape, aliases, styles, display settings of a variable,
   another vendor's extensions and groups.
 - **Extensions of StochCraft:** `stochcraft:save_step` in `sim_specs` (the interval results are
   saved at, by default the step), and a random function's fourth argument, the interval between
