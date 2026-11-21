@@ -330,6 +330,8 @@ impl std::error::Error for ReplayError {}
 /// What undoes (or redoes) one edit: an operation on the process model, or the whole system
 /// dynamics model as it was (those are small, so an edit keeps a snapshot, as `Op::SetModel`
 /// does for a process model).
+// An entry was a whole `Op` before system dynamics joined the history, so `Model` keeps that size.
+#[allow(clippy::large_enum_variant)]
 #[derive(Debug, Clone)]
 enum Undo {
     Model(Op),
