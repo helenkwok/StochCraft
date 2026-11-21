@@ -756,8 +756,15 @@ fn the_project_budget_says_which_inputs_matter() {
     near(&d["base"], design(0.5) + build(0.5));
     let inputs = d["inputs"].as_array().cloned().unwrap_or_default();
     let names: Vec<&str> = inputs.iter().filter_map(|i| i["input"].as_str()).collect();
-    assert_eq!(names, ["build", "design"], "{d}");
-    let [b, des] = inputs.as_slice() else {
+    // Duration does not use the day rate or the materials: they come last, with no swing.
+    assert_eq!(names.get(..2), Some(&["build", "design"][..]), "{d}");
+    let mut rest = names.get(2..).unwrap_or_default().to_vec();
+    rest.sort_unstable();
+    assert_eq!(rest, ["day_rate", "materials"], "{d}");
+    for i in inputs.get(2..).unwrap_or_default() {
+        near(&i["swing"], 0.0);
+    }
+    let [b, des, ..] = inputs.as_slice() else {
         panic!("two inputs: {d}")
     };
     near(&b["low"], design(0.5) + build(0.1));
