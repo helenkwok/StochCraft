@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<xmile version="1.0" xmlns="http://docs.oasis-open.org/xmile/ns/XMILE/v1.0" xmlns:stochcraft="https://github.com/helenkwok/StochCraft/ns/xmile">
+<xmile version="1.0" xmlns="http://docs.oasis-open.org/xmile/ns/XMILE/v1.0" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/xmile/1">
   <header>
     <name>Logistic population</name>
     <vendor>StochCraft</vendor>

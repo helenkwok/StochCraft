@@ -30,7 +30,7 @@ use crate::{ErrorKind, SdError};
 /// The XMILE 1.0 namespace.
 pub const NAMESPACE: &str = "http://docs.oasis-open.org/xmile/ns/XMILE/v1.0";
 /// The namespace of StochCraft's extensions to a file.
-pub const EXTENSION_NAMESPACE: &str = "https://github.com/helenkwok/StochCraft/ns/xmile";
+pub const EXTENSION_NAMESPACE: &str = "https://helenkwok.github.io/StochCraft/xmile/1";
 
 /// A file read.
 #[derive(Debug, Clone, PartialEq)]
