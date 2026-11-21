@@ -1881,3 +1881,59 @@ fn sequential_replications_are_inherited_and_turned_off() {
     });
     assert!(!String::from_utf8_lossy(&removed).contains("stochcraft:sequential"));
 }
+
+/// Values for a calendar, a setup time and a transport's times that name their own unit are
+/// rescaled with the rest when the time unit changes, and read back within float noise: the
+/// save must not refuse them for it. 2.7 days cannot be written as a decimal in hours that reads
+/// back as exactly the same float.
+#[test]
+fn calendar_values_setups_and_transports_with_their_own_unit_save_under_a_new_time_unit() {
+    const NS: &str = "https://helenkwok.github.io/StochCraft/bpsim/1";
+    // Arrivals by calendar.
+    let timed = text(&file("mm1.bpmn")).replace(
+        r#"<bpsim:NegativeExponentialDistribution mean="80" timeUnit="s"/>"#,
+        r#"<bpsim:NegativeExponentialDistribution mean="2.7" timeUnit="day"/>
+                <bpsim:NegativeExponentialDistribution mean="2.7" timeUnit="day" validFor="lunch"/>"#,
+    );
+    assert!(timed.contains(r#"validFor="lunch""#));
+    let loaded = read_scenario(timed.as_bytes(), None).unwrap_or_else(|e| panic!("{e}"));
+    assert!(
+        loaded.model.elements.iter().any(|e| matches!(
+            &e.kind,
+            ElementKind::Source { timed, .. } if !timed.is_empty()
+        )),
+        "the source has no values for a calendar"
+    );
+    let saved = relabel(timed.as_bytes(), TimeUnit::Hours);
+    assert!(text(&saved).contains(r#"validFor="lunch""#));
+
+    // A setup before every job.
+    let setup = text(&file("mm1.bpmn")).replace(
+        r#"<bpsim:SetupTime><bpsim:FloatingParameter value="0"/></bpsim:SetupTime>"#,
+        r#"<bpsim:SetupTime><bpsim:FloatingParameter value="2.7" timeUnit="day"/></bpsim:SetupTime>"#,
+    );
+    assert!(setup.contains(r#"value="2.7" timeUnit="day""#));
+    relabel(setup.as_bytes(), TimeUnit::Hours);
+
+    // A transport's load and unload times.
+    let transport = text(&file("mm1.bpmn")).replace(
+        r#"<bpsim:SetupTime><bpsim:FloatingParameter value="0"/></bpsim:SetupTime>
+            </bpsim:TimeParameters>"#,
+        &format!(
+            r#"<bpsim:SetupTime><bpsim:FloatingParameter value="0"/></bpsim:SetupTime>
+            </bpsim:TimeParameters>
+            <bpsim:VendorExtension name="stochcraft:transport" xmlns:stochcraft="{NS}"><stochcraft:transport pool="clerk"><stochcraft:load><bpsim:NegativeExponentialDistribution mean="2.7" timeUnit="day"/></stochcraft:load><stochcraft:unload><bpsim:FloatingParameter value="2.7" timeUnit="day"/></stochcraft:unload></stochcraft:transport></bpsim:VendorExtension>"#
+        ),
+    );
+    assert!(transport.contains("stochcraft:transport"));
+    let loaded = read_scenario(transport.as_bytes(), None).unwrap_or_else(|e| panic!("{e}"));
+    assert!(
+        loaded
+            .model
+            .elements
+            .iter()
+            .any(|e| matches!(e.kind, ElementKind::Transport { .. })),
+        "the task is not read as a transport"
+    );
+    relabel(transport.as_bytes(), TimeUnit::Hours);
+}

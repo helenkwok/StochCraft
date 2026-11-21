@@ -840,11 +840,17 @@ impl Engine {
             .job
             .as_mut()
             .map_or_else(|| json!({ "state": "idle" }), |j| j.poll(step, events));
+        self.keep_if_finished(&status);
+        status
+    }
+
+    /// Keeps the results of a finished background run, once, however the run came to be
+    /// collected (polled, or found finished by a cancel that arrived too late).
+    fn keep_if_finished(&mut self, status: &Value) {
         if status["state"] == "finished" && !self.job_kept {
             self.job_kept = true;
             self.keep_results(status["result"].clone());
         }
-        status
     }
 
     /// A finished run's results become the last, and the last the previous.
@@ -864,10 +870,16 @@ impl Engine {
         self.job.as_mut().map_or(Ok(()), |j| j.deliver(answer))
     }
 
+    /// Stops the background run. A run that had in fact completed every replication before the
+    /// cancel reached it is reported `finished`, not `cancelled`, and keeps its results as a
+    /// poll would have kept them.
     fn cancel_run(&mut self) -> Value {
-        self.job
+        let status = self
+            .job
             .as_mut()
-            .map_or_else(|| json!({ "state": "idle" }), Job::cancel)
+            .map_or_else(|| json!({ "state": "idle" }), Job::cancel);
+        self.keep_if_finished(&status);
+        status
     }
 }
 

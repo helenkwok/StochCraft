@@ -347,6 +347,19 @@ fn the_agent_is_kept_to_its_folders() {
     );
     assert!(write.join("copy.bpmn").is_file());
 
+    // Opening with no path is an error, not a reopening of the open file (which would drop
+    // its unsaved edits).
+    s.ok(
+        "execute",
+        json!({"command": "model.rename", "params": {"name": "unsaved"}}),
+    );
+    for params in [json!({}), json!({"path": 5})] {
+        let (e, error) = s.call("execute", json!({"command": "file.open", "params": params}));
+        assert!(error && e["code"] == "invalid_params", "{e}");
+    }
+    let model = s.ok("inspect_model", json!({}));
+    assert!(model.to_string().contains("unsaved"), "{model}");
+
     // Confined roots and a connection to the app do not go together.
     let refused = stochcraft_mcp::backend(Options {
         connect: Some("127.0.0.1:1".into()),

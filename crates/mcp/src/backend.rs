@@ -7,7 +7,7 @@ use std::path::Path;
 use std::time::Duration;
 
 use serde_json::{Value, json};
-use stochcraft_engine::{COMMANDS, CommandError, Engine};
+use stochcraft_engine::{COMMANDS, CommandError, Engine, ErrorCode};
 
 use crate::roots::{Access, Roots};
 
@@ -56,13 +56,27 @@ impl Headless {
         if !self.roots.is_confined() {
             return Ok(params);
         }
-        let given = params
-            .get("path")
-            .and_then(Value::as_str)
-            .map(str::to_owned);
-        let Some(path) = given.or_else(|| self.engine.path().map(str::to_owned)) else {
-            // Nowhere to save: the engine says so.
-            return Ok(params);
+        let given = match params.get("path") {
+            Some(Value::String(s)) => Some(s.clone()),
+            None | Some(Value::Null) => None,
+            // Not a path: the engine refuses it as invalid parameters, unchanged.
+            Some(_) => return Ok(params),
+        };
+        let path = match (given, access) {
+            (Some(path), _) => path,
+            // Opening names its file: never the one already open, which would silently reopen it
+            // and drop unsaved edits.
+            (None, Access::Read) => {
+                return Err(engine_error(&CommandError::new(
+                    ErrorCode::InvalidParams,
+                    "`path` is required: the file to open",
+                )));
+            }
+            // Saving without a path writes the model's own file; with none, the engine says so.
+            (None, Access::Write) => match self.engine.path() {
+                Some(path) => path.to_owned(),
+                None => return Ok(params),
+            },
         };
         let resolved = self.roots.check(Path::new(&path), access)?;
         if let Some(o) = params.as_object_mut() {

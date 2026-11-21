@@ -25,7 +25,10 @@ pub struct Replication {
 pub enum ExperimentError {
     /// A replication panicked; its index, if known.
     ReplicationPanicked { index: Option<u64> },
-    /// [`Control::cancel`] was called before every replication had run.
+    /// [`Control::cancel`] was called before every replication had been started. A cancel that
+    /// comes once the last replication has been started is too late to stop anything: the run
+    /// is complete and its results are returned (the replications running then finish as they
+    /// would have), the same on one thread as on many.
     Cancelled,
 }
 
@@ -44,7 +47,9 @@ impl Control {
         Self::default()
     }
 
-    /// Asks the experiment to stop; it returns [`ExperimentError::Cancelled`].
+    /// Asks the experiment to stop: no more replications start, and it returns
+    /// [`ExperimentError::Cancelled`], unless every replication had already been started, in
+    /// which case the experiment is complete and returns its results.
     pub fn cancel(&self) {
         self.cancelled.store(true, Ordering::Relaxed);
     }
@@ -340,6 +345,22 @@ mod tests {
             );
             assert_eq!(res, Err(ExperimentError::Cancelled));
             assert!(control.done() < 1_000, "{}", control.done());
+        }
+        // A cancel during the last replication is too late: the run is complete, on any number
+        // of threads.
+        for threads in [1, 3] {
+            let control = Control::new();
+            let res = Experiment::new(20, 1).threads(threads).run_controlled(
+                |r| {
+                    if r.index == 19 {
+                        control.cancel();
+                    }
+                    r.index
+                },
+                &control,
+            );
+            assert_eq!(res.map(|v| v.len()), Ok(20), "{threads} threads");
+            assert!(control.is_cancelled());
         }
         // One at a time gives what a whole run gives.
         let x = Experiment::new(5, 42);

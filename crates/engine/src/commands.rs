@@ -911,12 +911,24 @@ fn model_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         .and_then(Value::as_array)
     {
         for el in elements {
-            check_keys(el, &["id", "name", "properties", "starting"])?;
+            check_keys(
+                el,
+                &["id", "name", "properties", "starting", "bounds", "estimate"],
+            )?;
         }
     }
     let p: ModelSet = parse(p)?;
     for el in &p.model.elements {
         check_transfer(&el.kind)?;
+        // An estimate the model could not keep is refused, not dropped on the way in.
+        if let Some(estimate) = &el.estimate
+            && let Err(why) = estimate.to_estimate()
+        {
+            return Err(CommandError::new(
+                ErrorCode::InvalidParams,
+                format!("the estimate of `{}`: {why}", el.id),
+            ));
+        }
     }
     e.edit("model.set", Op::SetModel(Box::new(p.model.into())))?;
     Ok(json!({}))
@@ -1151,11 +1163,42 @@ fn batch(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
     Ok(json!({ "results": results }))
 }
 
+/// The edits that clear an exclusive gateway's `default` where it is one of `gone` (connections
+/// about to be removed), so no gateway keeps pointing at a flow that no longer exists; applied
+/// first, each is undone last. `keep` is a gateway that goes with them, which needs none.
+fn clear_dangling_defaults(model: &Model, gone: &[ElementId], keep: Option<&ElementId>) -> Vec<Op> {
+    model
+        .elements
+        .iter()
+        .filter(|el| Some(&el.id) != keep)
+        .filter_map(|el| match &el.kind {
+            ElementKind::ExclusiveGateway {
+                default: Some(d),
+                routing,
+            } if gone.contains(d) => Some(Op::SetKind(
+                el.id.clone(),
+                ElementKind::ExclusiveGateway {
+                    default: None,
+                    routing: *routing,
+                },
+            )),
+            _ => None,
+        })
+        .collect()
+}
+
 fn block_remove(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
     let p: Id = parse(p)?;
     let id = existing_element(e.model(), &p.id)?;
     // Its estimate and starting contents go with it, and a stop condition watching it.
-    let mut ops = Vec::new();
+    let gone: Vec<ElementId> = e
+        .model()
+        .connections
+        .iter()
+        .filter(|c| c.from == id || c.to == id)
+        .map(|c| c.id.clone())
+        .collect();
+    let mut ops = clear_dangling_defaults(e.model(), &gone, Some(&id));
     if e.model().estimates.contains_key(&id) {
         ops.push(Op::SetEstimate(id.clone(), None));
     }
@@ -1847,6 +1890,7 @@ fn resource_remove(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
             ElementKind::SharedTask { needs, .. } => needs
                 .iter()
                 .any(|n| matches!(n, Need::Resource { id, .. } if id.as_str() == p.id)),
+            ElementKind::Transport { pool, .. } => pool.as_str() == p.id,
             _ => false,
         })
         .map(|el| el.id.as_str())
@@ -2054,7 +2098,15 @@ fn disconnect(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
             ));
         }
     };
-    e.edit("disconnect", Op::Disconnect(id.clone()))?;
+    // A gateway whose default flow this is loses the default (undo gives it back).
+    let mut ops = clear_dangling_defaults(e.model(), std::slice::from_ref(&id), None);
+    ops.push(Op::Disconnect(id.clone()));
+    let op = if ops.len() == 1 {
+        ops.remove(0)
+    } else {
+        Op::Batch(ops)
+    };
+    e.edit("disconnect", op)?;
     Ok(json!({ "id": id.as_str() }))
 }
 

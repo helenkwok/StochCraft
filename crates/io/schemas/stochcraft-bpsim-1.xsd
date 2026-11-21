@@ -281,6 +281,16 @@
       <stochcraft:estimate family="pert" min="10" mode="20" max="60" source="Delphi, round 2"/>
     </bpsim:VendorExtension>
 
+  stochcraft:sequential, on the scenario's ScenarioParameters: more replications are run until
+  every watched result is precise enough, or max replications have run. relative (a share of the
+  mean), points (a share's half-width in percentage points) and max (a whole number of at
+  least 1) are the targets; element and metric, together, watch one result, with an optional
+  halfWidth in its own unit.
+
+    <bpsim:VendorExtension name="stochcraft:sequential" xmlns:stochcraft="…">
+      <stochcraft:sequential relative="0.05" points="1" max="200"/>
+    </bpsim:VendorExtension>
+
   stochcraft:monteCarlo, on a Scenario (after its ElementParameters and Calendars): the scenario
   is a Monte Carlo model, a calculation with no process, and the file needs none. Its inputs are
   the scenario's own properties (ScenarioParameters/PropertyParameters/Property, each a BPSim
@@ -586,6 +596,16 @@
           </xs:restriction>
         </xs:simpleType>
       </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="sequential">
+    <xs:complexType>
+      <xs:attribute name="relative" type="xs:double"/>
+      <xs:attribute name="points" type="xs:double"/>
+      <xs:attribute name="max" type="xs:positiveInteger"/>
+      <xs:attribute name="element" type="xs:string"/>
+      <xs:attribute name="metric" type="xs:string"/>
+      <xs:attribute name="halfWidth" type="xs:double"/>
     </xs:complexType>
   </xs:element>
 </xs:schema>
