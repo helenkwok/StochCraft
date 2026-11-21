@@ -1376,3 +1376,8 @@ unit	yr	a
 	How fast does a new product spread?	Cât de repede se răspândește un produs nou?
 	Stocks and flows: word of mouth makes sales speed up and then slow down in an S-shaped curve, which matches its exact formula.	Stocuri și fluxuri: răspândirea din gură în gură face vânzările să accelereze mai întâi și apoi să încetinească, într-o curbă în formă de S, care coincide cu formula sa exactă.
 	Inflows and outflows	Fluxuri de intrare și de ieșire
+	{file}: a system dynamics model is saved as XMILE; choose a name ending in .xmile	{file}: un model de dinamică a sistemelor se salvează ca XMILE; alegeți un nume care se termină în .xmile
+	Saving into {file} would leave out what StochCraft does not keep of it: {what}.	Salvarea în {file} ar omite ce nu păstrează StochCraft: {what}.
+	Replace the XMILE file?	Înlocuiți fișierul XMILE?
+	Save As writes a new file and keeps {file} as it is. Replacing {file} leaves out what StochCraft does not keep.	Salvează ca scrie un fișier nou și lasă {file} așa cum este. Înlocuirea fișierului {file} omite ce nu păstrează StochCraft.
+	Replace	Înlocuiește

@@ -1376,3 +1376,8 @@ unit	yr	ปี
 	How fast does a new product spread?	ผลิตภัณฑ์ใหม่แพร่กระจายเร็วแค่ไหน?
 	Stocks and flows: word of mouth makes sales speed up and then slow down in an S-shaped curve, which matches its exact formula.	สต็อกและโฟลว์: การบอกต่อทำให้ยอดขายเร่งขึ้นก่อนแล้วชะลอลงเป็นเส้นโค้งรูปตัว S ซึ่งตรงกับสูตรที่แน่นอนของมัน
 	Inflows and outflows	โฟลว์เข้าและโฟลว์ออก
+	{file}: a system dynamics model is saved as XMILE; choose a name ending in .xmile	{file}: แบบจำลองพลวัตระบบจะถูกบันทึกเป็น XMILE เลือกชื่อที่ลงท้ายด้วย .xmile
+	Saving into {file} would leave out what StochCraft does not keep of it: {what}.	การบันทึกลงใน {file} จะทำให้สิ่งที่ StochCraft ไม่เก็บไว้หายไป: {what}
+	Replace the XMILE file?	แทนที่ไฟล์ XMILE หรือไม่
+	Save As writes a new file and keeps {file} as it is. Replacing {file} leaves out what StochCraft does not keep.	บันทึกเป็น จะเขียนไฟล์ใหม่และคง {file} ไว้ตามเดิม การแทนที่ {file} จะทำให้สิ่งที่ StochCraft ไม่เก็บไว้หายไป
+	Replace	แทนที่

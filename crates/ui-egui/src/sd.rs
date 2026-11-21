@@ -263,18 +263,42 @@ fn findings(results: &Value) -> Vec<String> {
         .collect()
 }
 
-/// The indices of a column of `n` values to draw in a plot `most` points wide: all of them
-/// when they fit, else every few, always with the first and the last.
-fn picks(n: usize, most: usize) -> Vec<usize> {
+/// The indices of `values` (the line drawn) to draw in a plot `most` points wide: all of them
+/// when they fit, else the lowest and the highest of each of about `most / 2` stretches of
+/// samples, in time order, with the first and the last. A narrow peak (one sample of a `PULSE`)
+/// is therefore kept, as thinning to every few samples would lose it. Samples that are not finite
+/// are not picked as an extreme; [`segments`] still breaks the path where one was skipped. The
+/// band and the mean of replicated runs are drawn at the same indices, so they stay aligned with
+/// the line.
+fn picks(values: &[f64], most: usize) -> Vec<usize> {
+    let n = values.len();
     let most = most.max(2);
     if n <= most {
         return (0..n).collect();
     }
-    let every = n.div_ceil(most);
-    let mut v: Vec<usize> = (0..n).step_by(every).collect();
-    if v.last() != Some(&(n - 1)) {
-        v.push(n - 1);
+    let buckets = (most / 2).max(1);
+    let mut v = vec![0];
+    for b in 0..buckets {
+        let (start, end) = (b * n / buckets, (b + 1) * n / buckets);
+        let (mut lo, mut hi): (Option<usize>, Option<usize>) = (None, None);
+        for (k, x) in values.iter().enumerate().take(end).skip(start) {
+            if !x.is_finite() {
+                continue;
+            }
+            if lo.is_none_or(|j| *x < values[j]) {
+                lo = Some(k);
+            }
+            if hi.is_none_or(|j| *x > values[j]) {
+                hi = Some(k);
+            }
+        }
+        if let (Some(a), Some(z)) = (lo, hi) {
+            v.push(a.min(z));
+            v.push(a.max(z));
+        }
     }
+    v.push(n - 1);
+    v.dedup();
     v
 }
 
@@ -448,7 +472,8 @@ fn draw_chart(
         );
     }
 
-    let at = picks(plot.times.len(), area.width() as usize);
+    // The line decides which samples are drawn (its peaks), for the band and the mean too.
+    let at = picks(&plot.line, area.width() as usize);
     // The band, as quads between the times drawn, where both ends and every sample between
     // them are defined (a value the model leaves undefined breaks it).
     if let Some((low, high)) = &plot.band {
@@ -1208,10 +1233,40 @@ mod tests {
 
     #[test]
     fn picks_keep_the_first_and_the_last() {
-        assert_eq!(picks(5, 10), vec![0, 1, 2, 3, 4]);
-        let p = picks(1000, 100);
+        assert_eq!(picks(&[1.0; 5], 10), vec![0, 1, 2, 3, 4]);
+        let values: Vec<f64> = (0..1000).map(f64::from).collect();
+        let p = picks(&values, 100);
         assert_eq!(p.first(), Some(&0));
         assert_eq!(p.last(), Some(&999));
-        assert!(p.len() <= 101);
+        assert!(p.len() <= 102);
+        assert!(p.windows(2).all(|w| w[0] < w[1]));
+    }
+
+    #[test]
+    fn a_one_sample_spike_survives_thinning() {
+        let mut values = vec![0.0; 1001];
+        values[500] = 100.0;
+        let p = picks(&values, 400);
+        assert!(p.contains(&500), "the spike was thinned away: {p:?}");
+        assert_eq!(p.first(), Some(&0));
+        assert_eq!(p.last(), Some(&1000));
+        assert!(p.len() <= 402);
+        assert!(p.windows(2).all(|w| w[0] < w[1]));
+        // A dip is kept as well.
+        let mut values = vec![5.0; 1001];
+        values[731] = -3.0;
+        assert!(picks(&values, 400).contains(&731));
+    }
+
+    #[test]
+    fn an_undefined_sample_still_breaks_a_thinned_line() {
+        let times: Vec<f64> = (0..1001).map(f64::from).collect();
+        let mut values = vec![1.0; 1001];
+        values[500] = NAN;
+        let at = picks(&values, 100);
+        assert!(!at.contains(&500));
+        let runs = segments(&at, &[&times, &values]);
+        assert_eq!(runs.len(), 2, "{runs:?}");
+        assert!(runs.iter().flatten().all(|&i| i != 500));
     }
 }

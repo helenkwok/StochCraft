@@ -364,13 +364,44 @@ impl App {
     /// otherwise it is the opened file's own.
     fn save_file(&mut self, path: String, chosen: bool, agreed: bool) {
         // A system dynamics model is written as XMILE, into the file it came from or a new one;
-        // the BPMN and XPDL questions below are for process models.
+        // the BPMN and XPDL questions below are for process models. A chosen name is never
+        // rewritten (the dialog confirmed that file and no other, so a rewritten name could
+        // replace a file nobody agreed to replace): one that does not name an XMILE file is
+        // refused.
         if self.is_sd() {
-            let path = if chosen { xmile_path(path) } else { path };
-            match self.engine.save_bytes(false) {
-                Ok(bytes) => self.deliver(path, bytes),
-                Err(e) => self.save_failed(e.message),
+            if chosen {
+                if !matches!(extension(&path).as_str(), "xmile" | "stmx") {
+                    self.save_failed(tf(
+                        "{file}: a system dynamics model is saved as XMILE; choose a name ending in .xmile",
+                        &[("file", file_name(&path))],
+                    ));
+                    return;
+                }
+            } else if self.platform.file_system && !self.engine.save_drops().is_empty() {
+                // The opened file has more than the model keeps: ask before replacing it.
+                let notes = self.engine.save_drops();
+                let mut lost = notes
+                    .iter()
+                    .take(SD_LOST_SHOWN)
+                    .cloned()
+                    .collect::<Vec<_>>();
+                if notes.len() > SD_LOST_SHOWN {
+                    lost.push(tf(
+                        "and {n} more",
+                        &[("n", &(notes.len() - SD_LOST_SHOWN).to_string())],
+                    ));
+                }
+                let reason = tf(
+                    "Saving into {file} would leave out what StochCraft does not keep of it: {what}.",
+                    &[("file", file_name(&path)), ("what", &lost.join("; "))],
+                );
+                self.new_file = Some(NewFile {
+                    reason: Some(reason),
+                    path: Some(path),
+                });
+                return;
             }
+            self.write_sd(path);
             return;
         }
         let opened = self.engine.format();
@@ -411,6 +442,14 @@ impl App {
                     path: (chosen && wanted == "bpmn").then_some(path),
                 });
             }
+            Err(e) => self.save_failed(e.message),
+        }
+    }
+
+    /// Writes (or downloads) the system dynamics model to `path` as XMILE.
+    pub(crate) fn write_sd(&mut self, path: String) {
+        match self.engine.save_bytes(false) {
+            Ok(bytes) => self.deliver(path, bytes),
             Err(e) => self.save_failed(e.message),
         }
     }
@@ -500,7 +539,7 @@ impl App {
         self.requests.push(Request::PickSave { name, xpdl });
     }
 
-    fn suggested_name(&self) -> String {
+    pub(crate) fn suggested_name(&self) -> String {
         if self.is_sd() {
             // The name it came from, or the model's: always an XMILE file's.
             let name = self.document_name();
@@ -599,9 +638,12 @@ impl App {
     }
 }
 
-/// `path` as the name of an XMILE file: one that ends in `.xmile` stays as it is; another
-/// extension of a model file (`.bpmn`, `.xpdl`, `.xml`, `.stmx`) is replaced by it, and a name
-/// without one gets it added.
+/// How many of the file's not-kept items the question before replacing it names.
+const SD_LOST_SHOWN: usize = 4;
+
+/// `path` as the name Save As suggests for an XMILE file (never applied to a name the user
+/// chose): one that ends in `.xmile` stays as it is; another extension of a model file (`.bpmn`,
+/// `.xpdl`, `.xml`, `.stmx`) is replaced by it, and a name without one gets it added.
 fn xmile_path(path: String) -> String {
     match extension(&path).as_str() {
         "xmile" => path,

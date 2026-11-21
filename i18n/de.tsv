@@ -1376,3 +1376,8 @@ unit	yr	J.
 	How fast does a new product spread?	Wie schnell verbreitet sich ein neues Produkt?
 	Stocks and flows: word of mouth makes sales speed up and then slow down in an S-shaped curve, which matches its exact formula.	Bestände und Flüsse: Mundpropaganda lässt den Absatz erst anziehen und dann abflachen, in einer S-förmigen Kurve, die zu ihrer exakten Formel passt.
 	Inflows and outflows	Zu- und Abflüsse
+	{file}: a system dynamics model is saved as XMILE; choose a name ending in .xmile	{file}: Ein Systemdynamik-Modell wird als XMILE gespeichert; wählen Sie einen Namen mit der Endung .xmile
+	Saving into {file} would leave out what StochCraft does not keep of it: {what}.	Beim Speichern in {file} ginge verloren, was StochCraft nicht übernimmt: {what}.
+	Replace the XMILE file?	XMILE-Datei ersetzen?
+	Save As writes a new file and keeps {file} as it is. Replacing {file} leaves out what StochCraft does not keep.	„Speichern unter“ schreibt eine neue Datei und lässt {file} unverändert. Beim Ersetzen von {file} geht verloren, was StochCraft nicht übernimmt.
+	Replace	Ersetzen

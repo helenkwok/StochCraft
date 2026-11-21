@@ -1376,3 +1376,8 @@ unit	yr	thn
 	How fast does a new product spread?	Seberapa cepat produk baru menyebar?
 	Stocks and flows: word of mouth makes sales speed up and then slow down in an S-shaped curve, which matches its exact formula.	Stok dan aliran: promosi dari mulut ke mulut membuat penjualan mula-mula melaju lalu melambat dalam kurva berbentuk S, yang cocok dengan rumus eksaknya.
 	Inflows and outflows	Aliran masuk dan keluar
+	{file}: a system dynamics model is saved as XMILE; choose a name ending in .xmile	{file}: model dinamika sistem disimpan sebagai XMILE; pilih nama yang berakhiran .xmile
+	Saving into {file} would leave out what StochCraft does not keep of it: {what}.	Menyimpan ke {file} akan menghilangkan apa yang tidak disimpan StochCraft: {what}.
+	Replace the XMILE file?	Ganti berkas XMILE?
+	Save As writes a new file and keeps {file} as it is. Replacing {file} leaves out what StochCraft does not keep.	Simpan Sebagai menulis berkas baru dan membiarkan {file} apa adanya. Mengganti {file} menghilangkan apa yang tidak disimpan StochCraft.
+	Replace	Ganti

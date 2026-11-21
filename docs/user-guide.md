@@ -544,7 +544,13 @@ to keep the window responsive, though the engine allows more) is refused with th
 (`stochcraft-cli run model.xmile`), which has no such limit. **Save** and **Save As…** write the model as XMILE (a
 file name ending in `.xmile`), as for a process model: the title and header mark a model changed by
 commands as edited, and closing asks about it. The file is written by StochCraft's own XMILE
-writer, diagram included. Unsaved changes to these models are not kept for recovery after a
+writer, diagram included. **Save As…** writes the name you choose as it is: a name that does not
+end in `.xmile` or `.stmx` is refused, with nothing written, and the name suggested ends in
+`.xmile`. StochCraft keeps one diagram and the model's own settings: a file with a second
+diagram, styles, display settings or other content it does not keep says so when it opens, and
+**Save** into that file then asks first, naming what would be left out, and offers **Replace**
+(write the file anyway), **Save As…** (a new file; the original stays as it is) or **Cancel**.
+A file that lost nothing saves at once, and so does one that was replaced. Unsaved changes to these models are not kept for recovery after a
 crash: recovery copies are for process models only for now.
 
 ## Save, open and export
@@ -560,7 +566,8 @@ standards that process-modelling tools share.
 
 - A new model is saved as BPMN. An XPDL file can be saved back as XPDL.
 - An **XMILE** file (a system dynamics model, `.xmile` or `.stmx`) is saved as XMILE: **Save**
-  writes back to it, **Save As…** suggests a name ending in `.xmile`. See
+  writes back to it (after asking, if the file has content StochCraft does not keep),
+  **Save As…** suggests a name ending in `.xmile`. See
   [System dynamics models](#system-dynamics-models).
 - If a file you opened holds things StochCraft does not understand, saving asks before writing a
   new BPMN file, which leaves them out.

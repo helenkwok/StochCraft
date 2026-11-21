@@ -1376,3 +1376,8 @@ unit	yr	ປີ
 	How fast does a new product spread?	ຜະລິດຕະພັນໃໝ່ແຜ່ກະຈາຍໄວປານໃດ?
 	Stocks and flows: word of mouth makes sales speed up and then slow down in an S-shaped curve, which matches its exact formula.	ສະຕັອກ ແລະ ການໄຫຼ: ການບອກປາກຕໍ່ປາກເຮັດໃຫ້ຍອດຂາຍເພີ່ມໄວກ່ອນ ແລ້ວຊ້າລົງເປັນເສັ້ນໂຄ້ງຮູບຕົວ S ເຊິ່ງກົງກັບສູດທີ່ແນ່ນອນຂອງມັນ.
 	Inflows and outflows	ການໄຫຼເຂົ້າ ແລະ ການໄຫຼອອກ
+	{file}: a system dynamics model is saved as XMILE; choose a name ending in .xmile	{file}: ແບບຈໍາລອງ system dynamics ຖືກບັນທຶກເປັນ XMILE; ເລືອກຊື່ທີ່ລົງທ້າຍດ້ວຍ .xmile
+	Saving into {file} would leave out what StochCraft does not keep of it: {what}.	ການບັນທຶກໃສ່ {file} ຈະເຮັດໃຫ້ສິ່ງທີ່ StochCraft ບໍ່ເກັບໄວ້ຫາຍໄປ: {what}.
+	Replace the XMILE file?	ປ່ຽນໄຟລ໌ XMILE ບໍ?
+	Save As writes a new file and keeps {file} as it is. Replacing {file} leaves out what StochCraft does not keep.	ບັນທຶກເປັນ ຈະຂຽນໄຟລ໌ໃໝ່ ແລະ ປ່ອຍ {file} ໄວ້ຕາມເດີມ. ການປ່ຽນ {file} ຈະເຮັດໃຫ້ສິ່ງທີ່ StochCraft ບໍ່ເກັບໄວ້ຫາຍໄປ.
+	Replace	ປ່ຽນ

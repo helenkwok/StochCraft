@@ -518,10 +518,15 @@ impl App {
             return;
         };
         let name = self.document_name();
+        let sd = self.is_sd();
         let mut choice = None;
         egui::Modal::new(egui::Id::unique("new file")).show(ctx, |ui| {
             ui.set_max_width(420.0);
-            ui.heading(t("Save as a new BPMN file?"));
+            ui.heading(if sd {
+                t("Replace the XMILE file?")
+            } else {
+                t("Save as a new BPMN file?")
+            });
             ui.add_space(4.0);
             if let Some(reason) = &pending.reason {
                 ui.label(reason);
@@ -529,14 +534,28 @@ impl App {
             }
             ui.label(theme::weak(
                 ui,
-                tf(
-                    "A new file holds the model alone: what StochCraft does not understand in {file} is left out.",
-                    &[("file", &name)],
-                ),
+                if sd {
+                    tf(
+                        "Save As writes a new file and keeps {file} as it is. Replacing {file} leaves out what StochCraft does not keep.",
+                        &[("file", &name)],
+                    )
+                } else {
+                    tf(
+                        "A new file holds the model alone: what StochCraft does not understand in {file} is left out.",
+                        &[("file", &name)],
+                    )
+                },
             ));
             ui.add_space(14.0);
             ui.horizontal(|ui| {
+                if sd {
+                    // Save As keeps the original; the primary choice replaces it.
+                    if ui.add(theme::secondary(ui, t("Save As…"))).clicked() {
+                        choice = Some(Choice::Discard);
+                    }
+                }
                 let go = match (&pending.path, self.platform.file_system) {
+                    (Some(_), _) if sd => t("Replace"),
                     (Some(_), _) => t("Save"),
                     (None, true) => t("Save As…"),
                     (None, false) => t("Download"),
@@ -551,6 +570,29 @@ impl App {
                 }
             });
         });
+        // A system dynamics model's question: replace the opened file (Save), or choose a new
+        // one (Save As, answered as Discard here). Nothing is written before the answer.
+        if sd {
+            match choice {
+                Some(Choice::Save) => {
+                    self.new_file = None;
+                    if let Some(path) = pending.path {
+                        self.write_sd(path);
+                    }
+                }
+                Some(Choice::Discard) => {
+                    self.new_file = None;
+                    let name = self.suggested_name();
+                    self.pick_save(name, false);
+                }
+                Some(Choice::Cancel) => {
+                    self.new_file = None;
+                    self.after_save = None;
+                }
+                None => {}
+            }
+            return;
+        }
         match choice {
             Some(Choice::Save) => {
                 self.new_file = None;

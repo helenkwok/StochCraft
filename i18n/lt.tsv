@@ -1376,3 +1376,8 @@ unit	yr	m.
 	How fast does a new product spread?	Kaip greitai plinta naujas produktas?
 	Stocks and flows: word of mouth makes sales speed up and then slow down in an S-shaped curve, which matches its exact formula.	Atsargos ir srautai: žodinis plitimas pardavimus pirmiausia paspartina, paskui sulėtina S formos kreive, kuri atitinka tikslią jos formulę.
 	Inflows and outflows	Įtekėjimai ir ištekėjimai
+	{file}: a system dynamics model is saved as XMILE; choose a name ending in .xmile	{file}: sistemų dinamikos modelis įrašomas kaip XMILE; pasirinkite pavadinimą, kuris baigiasi .xmile
+	Saving into {file} would leave out what StochCraft does not keep of it: {what}.	Įrašius į {file}, būtų praleista tai, ko StochCraft nesaugo: {what}.
+	Replace the XMILE file?	Pakeisti XMILE failą?
+	Save As writes a new file and keeps {file} as it is. Replacing {file} leaves out what StochCraft does not keep.	Įrašyti kaip sukuria naują failą ir palieka {file} nepakeistą. Pakeitus {file}, praleidžiama tai, ko StochCraft nesaugo.
+	Replace	Pakeisti

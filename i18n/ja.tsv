@@ -1376,3 +1376,8 @@ unit	yr	年
 	How fast does a new product spread?	新製品はどれくらい速く広まりますか?
 	Stocks and flows: word of mouth makes sales speed up and then slow down in an S-shaped curve, which matches its exact formula.	ストックとフロー: 口コミにより売上はまず加速し、その後減速して S 字の曲線を描き、それは厳密な式と一致します。
 	Inflows and outflows	流入と流出
+	{file}: a system dynamics model is saved as XMILE; choose a name ending in .xmile	{file}: システムダイナミクスのモデルは XMILE として保存されます。.xmile で終わる名前を選んでください
+	Saving into {file} would leave out what StochCraft does not keep of it: {what}.	{file} に保存すると、StochCraft が保持しない次の内容が失われます: {what}。
+	Replace the XMILE file?	XMILE ファイルを置き換えますか？
+	Save As writes a new file and keeps {file} as it is. Replacing {file} leaves out what StochCraft does not keep.	「別名で保存」は新しいファイルを書き込み、{file} はそのまま残します。{file} を置き換えると、StochCraft が保持しない内容が失われます。
+	Replace	置き換える

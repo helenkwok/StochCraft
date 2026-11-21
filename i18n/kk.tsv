@@ -1376,3 +1376,8 @@ unit	yr	ж.
 	How fast does a new product spread?	Жаңа өнім қаншалықты жылдам тарайды?
 	Stocks and flows: word of mouth makes sales speed up and then slow down in an S-shaped curve, which matches its exact formula.	Қорлар мен ағындар: ауызша тарату сатылымды алдымен жылдамдатып, кейін баяулатады, бұл S тәрізді қисық және оның нақты формуласына сәйкес келеді.
 	Inflows and outflows	Кіріс және шығыс ағындары
+	{file}: a system dynamics model is saved as XMILE; choose a name ending in .xmile	{file}: жүйелік динамика моделі XMILE ретінде сақталады; .xmile деп аяқталатын атау таңдаңыз
+	Saving into {file} would leave out what StochCraft does not keep of it: {what}.	{file} ішіне сақтасаңыз, StochCraft сақтамайтын мына нәрсе түсіп қалады: {what}.
+	Replace the XMILE file?	XMILE файлын ауыстыру керек пе?
+	Save As writes a new file and keeps {file} as it is. Replacing {file} leaves out what StochCraft does not keep.	«Басқаша сақтау» жаңа файл жазады және {file} файлын өзгеріссіз қалдырады. {file} файлын ауыстырсаңыз, StochCraft сақтамайтын нәрсе түсіп қалады.
+	Replace	Ауыстыру

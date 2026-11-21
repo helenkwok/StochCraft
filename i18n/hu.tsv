@@ -1376,3 +1376,8 @@ unit	yr	év
 	How fast does a new product spread?	Milyen gyorsan terjed egy új termék?
 	Stocks and flows: word of mouth makes sales speed up and then slow down in an S-shaped curve, which matches its exact formula.	Készletek és folyamatok: a szájról szájra terjedés az eladásokat előbb gyorsítja, majd lassítja egy S alakú görbén, amely egyezik a pontos képletével.
 	Inflows and outflows	Beáramlások és kiáramlások
+	{file}: a system dynamics model is saved as XMILE; choose a name ending in .xmile	{file}: a rendszerdinamikai modellt XMILE formátumban menti a program; válasszon .xmile végű nevet
+	Saving into {file} would leave out what StochCraft does not keep of it: {what}.	A(z) {file} fájlba mentés kihagyna olyasmit, amit a StochCraft nem őriz meg: {what}.
+	Replace the XMILE file?	Lecseréli az XMILE-fájlt?
+	Save As writes a new file and keeps {file} as it is. Replacing {file} leaves out what StochCraft does not keep.	A Mentés másként új fájlt ír, és a(z) {file} fájlt változatlanul hagyja. A(z) {file} lecserélése kihagyja azt, amit a StochCraft nem őriz meg.
+	Replace	Csere

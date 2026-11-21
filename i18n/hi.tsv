@@ -1376,3 +1376,8 @@ unit	yr	वर्ष
 	How fast does a new product spread?	एक नया उत्पाद कितनी तेज़ी से फैलता है?
 	Stocks and flows: word of mouth makes sales speed up and then slow down in an S-shaped curve, which matches its exact formula.	स्टॉक और प्रवाह: मुँह-दर-मुँह प्रचार से बिक्री पहले तेज़ होती है और फिर धीमी, S आकार के वक्र में, जो इसके सटीक सूत्र से मेल खाता है।
 	Inflows and outflows	अंतर्प्रवाह और बहिर्प्रवाह
+	{file}: a system dynamics model is saved as XMILE; choose a name ending in .xmile	{file}: सिस्टम डायनामिक्स मॉडल XMILE के रूप में सहेजा जाता है; .xmile पर समाप्त होने वाला नाम चुनें
+	Saving into {file} would leave out what StochCraft does not keep of it: {what}.	{file} में सहेजने पर वह छूट जाएगा जिसे StochCraft नहीं रखता: {what}।
+	Replace the XMILE file?	XMILE फ़ाइल बदलें?
+	Save As writes a new file and keeps {file} as it is. Replacing {file} leaves out what StochCraft does not keep.	इस रूप में सहेजें नई फ़ाइल लिखता है और {file} को जैसा है वैसा रखता है। {file} को बदलने पर वह छूट जाता है जिसे StochCraft नहीं रखता।
+	Replace	बदलें

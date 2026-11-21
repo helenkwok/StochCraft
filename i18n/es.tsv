@@ -1376,3 +1376,8 @@ unit	yr	a
 	How fast does a new product spread?	¿Con qué rapidez se difunde un producto nuevo?
 	Stocks and flows: word of mouth makes sales speed up and then slow down in an S-shaped curve, which matches its exact formula.	Niveles y flujos: el boca a boca hace que las ventas primero se aceleren y luego se frenen, en una curva en forma de S que coincide con su fórmula exacta.
 	Inflows and outflows	Flujos de entrada y de salida
+	{file}: a system dynamics model is saved as XMILE; choose a name ending in .xmile	{file}: un modelo de dinámica de sistemas se guarda como XMILE; elija un nombre que termine en .xmile
+	Saving into {file} would leave out what StochCraft does not keep of it: {what}.	Guardar en {file} omitiría lo que StochCraft no conserva: {what}.
+	Replace the XMILE file?	¿Reemplazar el archivo XMILE?
+	Save As writes a new file and keeps {file} as it is. Replacing {file} leaves out what StochCraft does not keep.	Guardar como escribe un archivo nuevo y deja {file} tal como está. Reemplazar {file} omite lo que StochCraft no conserva.
+	Replace	Reemplazar

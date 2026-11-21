@@ -1376,3 +1376,8 @@ unit	yr	j
 	How fast does a new product spread?	Hoe snel verspreidt een nieuw product zich?
 	Stocks and flows: word of mouth makes sales speed up and then slow down in an S-shaped curve, which matches its exact formula.	Voorraden en stromen: mond-tot-mondreclame laat de verkoop eerst versnellen en dan vertragen in een S-vormige curve die overeenkomt met de exacte formule.
 	Inflows and outflows	Instromen en uitstromen
+	{file}: a system dynamics model is saved as XMILE; choose a name ending in .xmile	{file}: een systeemdynamicamodel wordt opgeslagen als XMILE; kies een naam die eindigt op .xmile
+	Saving into {file} would leave out what StochCraft does not keep of it: {what}.	Opslaan in {file} laat weg wat StochCraft niet bewaart: {what}.
+	Replace the XMILE file?	Het XMILE-bestand vervangen?
+	Save As writes a new file and keeps {file} as it is. Replacing {file} leaves out what StochCraft does not keep.	Opslaan als schrijft een nieuw bestand en laat {file} zoals het is. Vervangen van {file} laat weg wat StochCraft niet bewaart.
+	Replace	Vervangen

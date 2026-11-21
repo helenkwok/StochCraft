@@ -1376,3 +1376,8 @@ unit	yr	l.
 	How fast does a new product spread?	Kako hitro se širi nov izdelek?
 	Stocks and flows: word of mouth makes sales speed up and then slow down in an S-shaped curve, which matches its exact formula.	Zaloge in tokovi: širjenje od ust do ust najprej pospeši prodajo, nato jo upočasni v krivulji v obliki črke S, ki se ujema z njegovo natančno formulo.
 	Inflows and outflows	Dotoki in odtoki
+	{file}: a system dynamics model is saved as XMILE; choose a name ending in .xmile	{file}: model sistemske dinamike se shrani kot XMILE; izberite ime, ki se konča na .xmile
+	Saving into {file} would leave out what StochCraft does not keep of it: {what}.	Shranjevanje v {file} bi izpustilo to, česar StochCraft ne ohrani: {what}.
+	Replace the XMILE file?	Želite zamenjati datoteko XMILE?
+	Save As writes a new file and keeps {file} as it is. Replacing {file} leaves out what StochCraft does not keep.	Shrani kot zapiše novo datoteko in pusti {file} nespremenjeno. Zamenjava datoteke {file} izpusti to, česar StochCraft ne ohrani.
+	Replace	Zamenjaj

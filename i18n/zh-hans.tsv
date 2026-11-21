@@ -1376,3 +1376,8 @@ unit	yr	年
 	How fast does a new product spread?	新产品传播得有多快？
 	Stocks and flows: word of mouth makes sales speed up and then slow down in an S-shaped curve, which matches its exact formula.	存量与流量：口碑传播先让销量加快，随后放慢，形成一条 S 形曲线，与其精确公式相符。
 	Inflows and outflows	流入与流出
+	{file}: a system dynamics model is saved as XMILE; choose a name ending in .xmile	{file}：系统动力学模型保存为 XMILE；请选择以 .xmile 结尾的名称
+	Saving into {file} would leave out what StochCraft does not keep of it: {what}.	保存到 {file} 会丢掉 StochCraft 不保留的内容：{what}。
+	Replace the XMILE file?	替换 XMILE 文件？
+	Save As writes a new file and keeps {file} as it is. Replacing {file} leaves out what StochCraft does not keep.	“另存为”会写入新文件，并保持 {file} 原样。替换 {file} 会丢掉 StochCraft 不保留的内容。
+	Replace	替换

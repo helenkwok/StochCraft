@@ -1376,3 +1376,8 @@ unit	yr	năm
 	How fast does a new product spread?	Một sản phẩm mới lan truyền nhanh đến mức nào?
 	Stocks and flows: word of mouth makes sales speed up and then slow down in an S-shaped curve, which matches its exact formula.	Kho và dòng: truyền miệng khiến doanh số lúc đầu tăng tốc rồi chậm lại theo đường cong hình chữ S, khớp với công thức chính xác của nó.
 	Inflows and outflows	Dòng vào và dòng ra
+	{file}: a system dynamics model is saved as XMILE; choose a name ending in .xmile	{file}: mô hình động lực học hệ thống được lưu dưới dạng XMILE; hãy chọn tên kết thúc bằng .xmile
+	Saving into {file} would leave out what StochCraft does not keep of it: {what}.	Lưu vào {file} sẽ bỏ đi những gì StochCraft không giữ lại: {what}.
+	Replace the XMILE file?	Thay thế tệp XMILE?
+	Save As writes a new file and keeps {file} as it is. Replacing {file} leaves out what StochCraft does not keep.	Lưu thành sẽ ghi một tệp mới và giữ nguyên {file}. Thay thế {file} sẽ bỏ đi những gì StochCraft không giữ lại.
+	Replace	Thay thế

@@ -330,7 +330,11 @@ refuses such a model, naming `sd.run`. In Rust: `stochcraft_sd::{read_xmile, com
 `Engine::system_dynamics_results_stale` (`crates/engine/src/sd_window.rs`) tell a caller that holds
 the engine whether the document is one, what it was opened under and whether its last results are
 out of date. The window saves it through `Engine::save_bytes` (XMILE) and `Engine::saved_to` like
-a process model, with a `.xmile` name; its unsaved state is `Engine::is_dirty`, and its
+a process model, with a `.xmile` or `.stmx` name (Save As never rewrites a chosen name: any other
+is refused, nothing written); `Engine::save_drops` lists what a plain Save into the opened file
+would leave out (the reader's notes, any of which means something was not kept or was run another
+way, as the notes are free text), empty once the model has been written to it, and the window
+asks first (the `NewFile` question, with Replace, Save As and Cancel); its unsaved state is `Engine::is_dirty`, and its
 recovery copy is skipped (recovery copies are process models only). The window's run is made
 whole, two frames after Run is pressed (the first paints "Running…"), with the work bounded (steps times variables times runs, at most
 20 million); a run a few replications at a time like Monte Carlo's would need `stochcraft-sd` to

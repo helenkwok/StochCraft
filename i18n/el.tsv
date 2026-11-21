@@ -1376,3 +1376,8 @@ unit	yr	έτ
 	How fast does a new product spread?	Πόσο γρήγορα διαδίδεται ένα νέο προϊόν;
 	Stocks and flows: word of mouth makes sales speed up and then slow down in an S-shaped curve, which matches its exact formula.	Αποθέματα και ροές: η διάδοση από στόμα σε στόμα κάνει πρώτα τις πωλήσεις να επιταχύνονται και μετά να επιβραδύνονται σε καμπύλη σχήματος S, που ταιριάζει με τον ακριβή τύπο της.
 	Inflows and outflows	Εισροές και εκροές
+	{file}: a system dynamics model is saved as XMILE; choose a name ending in .xmile	{file}: ένα μοντέλο δυναμικής συστημάτων αποθηκεύεται ως XMILE· επιλέξτε όνομα που τελειώνει σε .xmile
+	Saving into {file} would leave out what StochCraft does not keep of it: {what}.	Η αποθήκευση στο {file} θα παρέλειπε ό,τι δεν διατηρεί το StochCraft: {what}.
+	Replace the XMILE file?	Αντικατάσταση του αρχείου XMILE;
+	Save As writes a new file and keeps {file} as it is. Replacing {file} leaves out what StochCraft does not keep.	Η Αποθήκευση ως γράφει νέο αρχείο και αφήνει το {file} ως έχει. Η αντικατάσταση του {file} παραλείπει ό,τι δεν διατηρεί το StochCraft.
+	Replace	Αντικατάσταση

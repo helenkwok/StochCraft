@@ -381,17 +381,120 @@ fn save_as_names_an_xmile_file() {
         ),
         "{requests:?}"
     );
-    // A name chosen without the extension, or with a process model's, becomes an XMILE file's.
-    app.save_to("/models/copy.bpmn");
+    // A name that is not an XMILE file's is refused, never rewritten: the dialog confirmed that
+    // file and no other, so writing `copy.xmile` could replace one nobody agreed to replace.
+    for name in ["/models/copy.bpmn", "/models/copy"] {
+        app.save_to(name);
+        assert_eq!(app.take_requests(), vec![], "{name}: nothing is written");
+        assert!(
+            app.status()
+                .contains("saved as XMILE; choose a name ending in .xmile"),
+            "{}",
+            app.status()
+        );
+        assert!(app.has_unsaved_changes());
+    }
+    // A name ending .xmile (or .stmx), in any case, is written as chosen.
+    app.save_to("/models/Copy.XMILE");
     let requests = app.take_requests();
     let [Request::Write { path, bytes }] = requests.as_slice() else {
         panic!("expected one write, got {requests:?}");
     };
-    assert_eq!(path, "/models/copy.xmile");
+    assert_eq!(path, "/models/Copy.XMILE");
     assert_eq!(equation_in(bytes, "innovation"), "0.05");
     app.written(path, bytes);
     assert!(!app.has_unsaved_changes());
-    assert!(app.title().starts_with("copy.xmile"), "{}", app.title());
+    assert!(app.title().starts_with("Copy.XMILE"), "{}", app.title());
+    app.save_to("/models/copy.stmx");
+    assert!(matches!(
+        app.take_requests().as_slice(),
+        [Request::Write { path, .. }] if path == "/models/copy.stmx"
+    ));
+}
+
+/// A model whose file has a second diagram, which the reader does not keep.
+const TWO_VIEWS: &str = "<xmile version=\"1.0\" xmlns=\"http://docs.oasis-open.org/xmile/ns/XMILE/v1.0\"><header><name>Two</name></header><sim_specs><start>0</start><stop>10</stop><dt>1</dt></sim_specs><model><variables><stock name=\"s\"><eqn>1</eqn><inflow>f</inflow></stock><flow name=\"f\"><eqn>0.1</eqn></flow></variables><views><view type=\"stock_flow\"><stock name=\"s\" x=\"100\" y=\"100\"/></view><view type=\"stock_flow\"><stock name=\"s\" x=\"100\" y=\"100\"/></view></views></model></xmile>";
+
+/// Save into a file that has more than the model keeps asks first, naming what would be lost,
+/// and writes nothing until it is answered; Replace writes, Save As keeps the original, Cancel
+/// writes nothing. A file that lost nothing saves at once, and so does a replaced one.
+#[test]
+fn saving_into_a_file_that_lost_content_asks_first() {
+    let mut h = harness();
+    h.state_mut()
+        .open_path("/models/two.xmile", TWO_VIEWS.as_bytes());
+    assert!(h.state().is_system_dynamics());
+    assert!(!h.state().has_unsaved_changes());
+
+    // Replace the file anyway.
+    h.state_mut().save();
+    assert_eq!(h.state_mut().take_requests(), vec![], "asked first");
+    settle(&mut h);
+    h.get_by_label("Replace the XMILE file?");
+    assert!(
+        h.query_by_label_contains("only the first diagram of the model is kept")
+            .is_some()
+    );
+    assert_eq!(
+        h.state_mut().take_requests(),
+        vec![],
+        "nothing before the answer"
+    );
+    click(&mut h, Role::Button, "Replace");
+    let requests = h.state_mut().take_requests();
+    let [Request::Write { path, bytes }] = requests.as_slice() else {
+        panic!("expected one write, got {requests:?}");
+    };
+    assert_eq!(path, "/models/two.xmile");
+    h.state_mut().written(path, bytes);
+    // What the file now holds is all there is: the next Save is not asked about.
+    h.state_mut().save();
+    assert!(matches!(
+        h.state_mut().take_requests().as_slice(),
+        [Request::Write { .. }]
+    ));
+
+    // Save As keeps the original.
+    h.state_mut()
+        .open_path("/models/two.xmile", TWO_VIEWS.as_bytes());
+    h.state_mut().save();
+    settle(&mut h);
+    click(&mut h, Role::Button, "Save As…");
+    let requests = h.state_mut().take_requests();
+    assert!(
+        matches!(
+            requests.as_slice(),
+            [Request::PickSave { name, xpdl: false }] if name.ends_with(".xmile")
+        ),
+        "{requests:?}"
+    );
+    h.state_mut().save_to("/models/copy.xmile");
+    let requests = h.state_mut().take_requests();
+    assert!(
+        matches!(
+            requests.as_slice(),
+            [Request::Write { path, .. }] if path == "/models/copy.xmile"
+        ),
+        "{requests:?}"
+    );
+
+    // Cancel writes nothing.
+    h.state_mut()
+        .open_path("/models/two.xmile", TWO_VIEWS.as_bytes());
+    h.state_mut().save();
+    settle(&mut h);
+    click(&mut h, Role::Button, "Cancel");
+    assert_eq!(h.state_mut().take_requests(), vec![]);
+    assert!(h.query_by_label("Replace the XMILE file?").is_none());
+
+    // A file with nothing left out saves at once.
+    h.state_mut()
+        .open_path("/models/noise.xmile", NOISE.as_bytes());
+    h.state_mut().save();
+    assert!(matches!(
+        h.state_mut().take_requests().as_slice(),
+        [Request::Write { path, .. }] if path == "/models/noise.xmile"
+    ));
 }
 
 /// A run, then a change: the Results tab says the results are out of date, as a process model's

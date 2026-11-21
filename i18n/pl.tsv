@@ -1376,3 +1376,8 @@ unit	yr	r.
 	How fast does a new product spread?	Jak szybko rozchodzi się nowy produkt?
 	Stocks and flows: word of mouth makes sales speed up and then slow down in an S-shaped curve, which matches its exact formula.	Zasoby i przepływy: poczta pantoflowa sprawia, że sprzedaż najpierw przyspiesza, a potem zwalnia w krzywej w kształcie litery S, która zgadza się z jej dokładnym wzorem.
 	Inflows and outflows	Dopływy i odpływy
+	{file}: a system dynamics model is saved as XMILE; choose a name ending in .xmile	{file}: model dynamiki systemowej jest zapisywany jako XMILE; wybierz nazwę kończącą się na .xmile
+	Saving into {file} would leave out what StochCraft does not keep of it: {what}.	Zapis do {file} pominąłby to, czego StochCraft nie zachowuje: {what}.
+	Replace the XMILE file?	Zastąpić plik XMILE?
+	Save As writes a new file and keeps {file} as it is. Replacing {file} leaves out what StochCraft does not keep.	Zapisz jako tworzy nowy plik i pozostawia {file} bez zmian. Zastąpienie {file} pomija to, czego StochCraft nie zachowuje.
+	Replace	Zastąp

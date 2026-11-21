@@ -1376,3 +1376,8 @@ unit	yr	v
 	How fast does a new product spread?	Sa shpejt përhapet një produkt i ri?
 	Stocks and flows: word of mouth makes sales speed up and then slow down in an S-shaped curve, which matches its exact formula.	Stoqe dhe rrjedha: përhapja gojë më gojë i bën shitjet fillimisht të shpejtohen e më pas të ngadalësohen në një kurbë në formë S, që përputhet me formulën e saktë të tij.
 	Inflows and outflows	Rrjedhat hyrëse dhe dalëse
+	{file}: a system dynamics model is saved as XMILE; choose a name ending in .xmile	{file}: një model i dinamikës së sistemeve ruhet si XMILE; zgjidhni një emër që mbaron me .xmile
+	Saving into {file} would leave out what StochCraft does not keep of it: {what}.	Ruajtja te {file} do të linte jashtë atë që StochCraft nuk e ruan: {what}.
+	Replace the XMILE file?	Të zëvendësohet skedari XMILE?
+	Save As writes a new file and keeps {file} as it is. Replacing {file} leaves out what StochCraft does not keep.	Ruaj si shkruan një skedar të ri dhe e lë {file} siç është. Zëvendësimi i {file} lë jashtë atë që StochCraft nuk e ruan.
+	Replace	Zëvendëso

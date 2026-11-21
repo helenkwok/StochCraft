@@ -1376,3 +1376,8 @@ unit	yr	yıl
 	How fast does a new product spread?	Yeni bir ürün ne kadar hızlı yayılır?
 	Stocks and flows: word of mouth makes sales speed up and then slow down in an S-shaped curve, which matches its exact formula.	Stoklar ve akışlar: ağızdan ağıza yayılma satışları önce hızlandırır, sonra yavaşlatır; bu, kesin formülüyle uyuşan S biçimli bir eğridir.
 	Inflows and outflows	Girişler ve çıkışlar
+	{file}: a system dynamics model is saved as XMILE; choose a name ending in .xmile	{file}: bir sistem dinamiği modeli XMILE olarak kaydedilir; .xmile ile biten bir ad seçin
+	Saving into {file} would leave out what StochCraft does not keep of it: {what}.	{file} dosyasına kaydetmek, StochCraft'ın saklamadığı şeyleri dışarıda bırakır: {what}.
+	Replace the XMILE file?	XMILE dosyası değiştirilsin mi?
+	Save As writes a new file and keeps {file} as it is. Replacing {file} leaves out what StochCraft does not keep.	Farklı Kaydet yeni bir dosya yazar ve {file} dosyasını olduğu gibi bırakır. {file} dosyasını değiştirmek, StochCraft'ın saklamadığı şeyleri dışarıda bırakır.
+	Replace	Değiştir

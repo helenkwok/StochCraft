@@ -1376,3 +1376,8 @@ unit	yr	år
 	How fast does a new product spread?	Hvor raskt sprer et nytt produkt seg?
 	Stocks and flows: word of mouth makes sales speed up and then slow down in an S-shaped curve, which matches its exact formula.	Beholdninger og flyt: muntlig spredning gjør at salget først tar av og så flater ut i en S-formet kurve som stemmer med den nøyaktige formelen.
 	Inflows and outflows	Innstrømmer og utstrømmer
+	{file}: a system dynamics model is saved as XMILE; choose a name ending in .xmile	{file}: en systemdynamisk modell lagres som XMILE; velg et navn som slutter på .xmile
+	Saving into {file} would leave out what StochCraft does not keep of it: {what}.	Hvis du lagrer i {file}, utelates det StochCraft ikke beholder: {what}.
+	Replace the XMILE file?	Erstatte XMILE-filen?
+	Save As writes a new file and keeps {file} as it is. Replacing {file} leaves out what StochCraft does not keep.	Lagre som skriver en ny fil og lar {file} stå som den er. Hvis du erstatter {file}, utelates det StochCraft ikke beholder.
+	Replace	Erstatt

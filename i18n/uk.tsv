@@ -1376,3 +1376,8 @@ unit	yr	р.
 	How fast does a new product spread?	Як швидко поширюється новий продукт?
 	Stocks and flows: word of mouth makes sales speed up and then slow down in an S-shaped curve, which matches its exact formula.	Запаси та потоки: чутки спершу прискорюють продажі, а потім сповільнюють їх за S-подібною кривою, що збігається з його точною формулою.
 	Inflows and outflows	Притоки й відтоки
+	{file}: a system dynamics model is saved as XMILE; choose a name ending in .xmile	{file}: модель системної динаміки зберігається як XMILE; виберіть назву, що закінчується на .xmile
+	Saving into {file} would leave out what StochCraft does not keep of it: {what}.	Збереження в {file} пропустить те, чого StochCraft не зберігає: {what}.
+	Replace the XMILE file?	Замінити файл XMILE?
+	Save As writes a new file and keeps {file} as it is. Replacing {file} leaves out what StochCraft does not keep.	«Зберегти як» записує новий файл і залишає {file} без змін. Заміна {file} пропускає те, чого StochCraft не зберігає.
+	Replace	Замінити

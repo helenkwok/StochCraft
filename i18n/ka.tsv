@@ -1376,3 +1376,8 @@ unit	yr	წელი
 	How fast does a new product spread?	რამდენად სწრაფად ვრცელდება ახალი პროდუქტი?
 	Stocks and flows: word of mouth makes sales speed up and then slow down in an S-shaped curve, which matches its exact formula.	მარაგები და ნაკადები: პირისპირ გავრცელება გაყიდვებს ჯერ აჩქარებს, შემდეგ კი ანელებს S-ის ფორმის მრუდით, რომელიც მისი ზუსტი ფორმულის შესაბამისია.
 	Inflows and outflows	შემოდინება და გადინება
+	{file}: a system dynamics model is saved as XMILE; choose a name ending in .xmile	{file}: სისტემური დინამიკის მოდელი ინახება XMILE-ად; აირჩიეთ სახელი, რომელიც მთავრდება .xmile-ით
+	Saving into {file} would leave out what StochCraft does not keep of it: {what}.	{file}-ში შენახვა გამოტოვებდა იმას, რასაც StochCraft არ ინახავს: {what}.
+	Replace the XMILE file?	XMILE ფაილის ჩანაცვლება?
+	Save As writes a new file and keeps {file} as it is. Replacing {file} leaves out what StochCraft does not keep.	„შენახვა როგორც“ წერს ახალ ფაილს და {file}-ს უცვლელს ტოვებს. {file}-ის ჩანაცვლება გამოტოვებს იმას, რასაც StochCraft არ ინახავს.
+	Replace	ჩანაცვლება
