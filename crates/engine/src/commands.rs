@@ -2711,10 +2711,10 @@ materials,normal,mean=500;std_dev=50,USD
     },
     Command {
         name: "mc.output.set",
-        summary: "Monte Carlo: add an output (a BPSim expression over the inputs and earlier outputs, named as $name, with arithmetic, min, max, sum, abs, sqrt, exp, log, pow, round, sin, cos and if) or change one, with an optional unit and target (`at_most` or `at_least`) whose probability is reported.",
+        summary: "Monte Carlo: add an output (a BPSim expression over the inputs and earlier outputs, named as $name, with arithmetic, min, max, sum, abs, sqrt, exp, log, pow, round, sin, cos and if) or change one, with an optional unit and target (`at_most` or `at_least`) whose probability is reported. `controls` names control variates that narrow the interval of the output's mean and target probability: inputs (`{ \"input\": \"x\" }`, whose own mean is known) or earlier outputs with a mean you know (`{ \"output\": \"y\", \"expected\": 12.5 }`); the coefficient is fitted on the first batch of 1,000 trials, which the controlled estimate leaves out, and the results report the controlled mean and the variance reduction beside the plain ones. Counts with a very large spread are refused as controls.",
         kind: CommandKind::Edit,
         schema: schema::<crate::mc::OutputSet>,
-        example: || json!({ "name": "cost", "expression": "$labour * $rate + $materials", "unit": "USD", "at_most": 6000.0 }),
+        example: || json!({ "name": "cost", "expression": "$labour * $rate + $materials", "unit": "USD", "at_most": 6000.0, "controls": [{ "input": "labour" }] }),
         run: crate::mc::output_set,
     },
     Command {

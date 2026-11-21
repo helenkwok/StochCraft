@@ -1337,3 +1337,18 @@ unit	yr	v
 	{name}: the ± is across {n} of the {of} pairs, the rest had no trial with a number.	{name}: ± on {of} parista {n}:n yli, loput eivät sisältäneet yhtään iteraatiota, jolla on luku.
 	No interval: every pair gave the same share, so their spread gives none.	Ei väliä: kaikki parit antoivat saman osuuden, joten niiden hajonta ei anna väliä.
 	No interval: too few pairs of trials for one.	Ei väliä: liian vähän iteraatiopareja sen laskemiseen.
+	Controls	Kontrollit
+	Expected mean	Odotettu keskiarvo
+	Remove the control {name}	Poista kontrolli {name}
+	Add a control	Lisää kontrolli
+	{name} (an output; you give its mean)	{name} (tulos; annat sen keskiarvon)
+	No input or earlier output can be a control.	Mikään syöte tai aiempi tulos ei voi olla kontrolli.
+	A control is an input whose mean is known, or an earlier output whose mean you know. The results use how it moves with this output to narrow the interval of the output's mean and target chance.	Kontrolli on syöte, jonka keskiarvo tunnetaan, tai aiempi tulos, jonka keskiarvon tiedät. Tulokset käyttävät sitä, miten se liikkuu tämän tuloksen mukana, kaventaakseen tuloksen keskiarvon ja tavoitteen saavuttamisen todennäköisyyden väliä.
+	Controlled mean	Kontrolloitu keskiarvo
+	Controls for {output}: {controls}.	Kontrollit tulokselle {output}: {controls}.
+	No controlled result: {reason}	Ei kontrolloitua tulosta: {reason}
+	They narrowed the interval by {percent}; this is the result shown above.	Ne kaventivat väliä {percent}; tämä on yllä näytetty tulos.
+	They made the interval {percent} wider, so the plain result stands.	Ne levensivät väliä {percent}, joten tavallinen tulos pätee.
+	They did not help: their correlation with {output} is weak ({correlation}), so the plain result stands.	Ne eivät auttaneet: niiden korrelaatio tuloksen {output} kanssa on heikko ({correlation}), joten tavallinen tulos pätee.
+	They did not help, so the plain result stands.	Ne eivät auttaneet, joten tavallinen tulos pätee.
+	The mean given for {name}, {stated}, is far from the trials' mean, {sample}: the controlled result is biased until it is corrected.	Kohteelle {name} annettu keskiarvo {stated} on kaukana kokeiden keskiarvosta {sample}: kontrolloitu tulos on vinoutunut, kunnes se korjataan.

@@ -594,3 +594,108 @@ fn antithetic_and_sobol_sampling_run_and_say_what_their_intervals_are_across() {
         assert_eq!(stepped["trials"], at_once["trials"]);
     }
 }
+
+/// y = 2a + b with a (uniform) as its control: the coefficient is 2, the controlled interval is
+/// narrower (a accounts for 80% of y's variance), the plain results are as without the control,
+/// a run made a batch at a time gives the same results, and bad controls are refused.
+#[test]
+fn controls_narrow_the_interval_and_bad_ones_are_refused() {
+    let mut e = linear_model();
+    let plain = ok(&mut e, "mc.run", json!({ "trials": 20_000, "seed": 4 }));
+    assert!(plain["outputs"][0].get("controlled").is_none());
+
+    ok(
+        &mut e,
+        "mc.output.set",
+        json!({ "name": "y", "controls": [{ "input": "a" }] }),
+    );
+    let got = ok(&mut e, "mc.get", json!({}));
+    assert_eq!(
+        got["monte_carlo"]["outputs"][0]["controls"],
+        json!([{ "input": "a" }])
+    );
+    let r = ok(&mut e, "mc.run", json!({ "trials": 20_000, "seed": 4 }));
+    // Everything but the controlled estimate is what it was.
+    let mut without = r["outputs"][0].clone();
+    if let Some(o) = without.as_object_mut() {
+        o.remove("controlled");
+    }
+    assert_eq!(without, plain["outputs"][0]);
+    let c = &r["outputs"][0]["controlled"];
+    assert_eq!(c["controls"][0]["name"], "a");
+    assert_eq!(c["controls"][0]["kind"], "input");
+    assert_eq!(c["controls"][0]["mean"], 0.5);
+    let b = c["controls"][0]["coefficient"].as_f64().unwrap_or(f64::NAN);
+    assert!((b - 2.0).abs() < 0.2, "coefficient {b}");
+    assert_eq!(c["pilot_trials"], 1_000);
+    let est = &c["estimate"];
+    assert_eq!(est["trials"], 19_000);
+    let mean = est["mean"].as_f64().unwrap_or(f64::NAN);
+    assert!((mean - 1.5).abs() < 0.02, "mean {mean}");
+    let narrowing = est["narrowing"].as_f64().unwrap_or(f64::NAN);
+    assert!(
+        (0.4..0.7).contains(&narrowing),
+        "narrowing {narrowing} (about 0.55 expected)"
+    );
+    assert_eq!(est["helped"], true);
+
+    // A run made a batch at a time is the same run.
+    let job = e.mc_start(json!({ "trials": 20_000, "seed": 4 }));
+    assert!(job.is_ok());
+    let Ok(mut job) = job else { return };
+    while job.step(3).ok() == Some(false) {}
+    let stepped = e.mc_results(&mut job).unwrap_or_default();
+    assert_eq!(stepped["outputs"], r["outputs"]);
+
+    // The CSV has the controlled mean.
+    let csv = stochcraft_engine::mc::results_csv(&r);
+    assert!(
+        csv.lines()
+            .next()
+            .is_some_and(|h| h.contains("controlled_mean"))
+    );
+
+    // A control that is not usable is refused, saying why.
+    assert_eq!(
+        err(
+            &mut e,
+            "mc.output.set",
+            json!({ "name": "y", "controls": [{ "input": "nobody" }] })
+        ),
+        ErrorCode::InvalidParams
+    );
+    assert_eq!(
+        err(
+            &mut e,
+            "mc.output.set",
+            json!({ "name": "y", "controls": [{ "output": "y", "expected": 1.5 }] })
+        ),
+        ErrorCode::InvalidParams
+    );
+    ok(
+        &mut e,
+        "mc.input.set",
+        json!({ "name": "k", "distribution": { "type": "constant", "value": 3.0 } }),
+    );
+    assert_eq!(
+        err(
+            &mut e,
+            "mc.output.set",
+            json!({ "name": "y", "controls": [{ "input": "k" }] })
+        ),
+        ErrorCode::InvalidParams
+    );
+    // An output with a known mean is a control of a later output.
+    ok(
+        &mut e,
+        "mc.output.set",
+        json!({ "name": "z", "expression": "$y + $b", "controls": [{ "output": "y", "expected": 1.5 }] }),
+    );
+    // Removing what a control names removes the control.
+    ok(&mut e, "mc.input.remove", json!({ "name": "a" }));
+    let got = ok(&mut e, "mc.get", json!({}));
+    assert!(
+        got["monte_carlo"]["outputs"][0].get("controls").is_none(),
+        "{got}"
+    );
+}

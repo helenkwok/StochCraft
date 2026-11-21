@@ -184,7 +184,7 @@ them, with `$name`), `mc.correlation.set` correlates two inputs, `mc.set` picks 
 (`random`, `latin_hypercube`, `antithetic` or `sobol`) or a sequential stop, and `mc.run` gives each output's mean with its interval,
 percentiles and the chance of meeting its target. `mc.inputs.export` and `mc.inputs.import` move
 the input table as CSV text; they read and write no files. `mc.sobol` gives each input's share of
-each output's variance, alone and with its interactions (it needs independent inputs).
+each output's variance, alone and with its interactions (it needs independent inputs). `mc.output.set` also takes `controls`, control variates that narrow the interval of the output's mean and target chance: `[{"input": "labour"}, {"output": "base", "expected": 5200}]` names inputs (whose own mean is known; counts with a very large spread and constants are refused) and earlier outputs with a mean you give, replacing the output's present controls (`[]` removes them). `mc.run` then adds a `controlled` object to the output: the controls with their coefficients, the controlled `mean` and `half_width` and target `probability` with their `interval`, and `narrowing` (how much narrower the controlled interval is than the plain one on the same trials; `helped` is at least 10%). The coefficients are fitted on the first 1,000 trials, which the controlled estimate leaves out; percentiles, the histogram and the extremes are not controlled.
 
 A system dynamics model (stocks and flows, an XMILE file) is opened with `file.open` or `sd.open`
 (the text of the file), run with `sd.run` (`replications` and `seed` for a model with a random

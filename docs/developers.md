@@ -274,6 +274,39 @@ on the pair means, with one degree of freedom fewer than there are pairs (Glasse
 §4.2; `interval_basis` is `pairs`, and runs are whole pairs). The standard deviation is always across trials: it describes the
 output, not the precision of its mean.
 
+**Control variates** ([`stochcraft_mc::control`](../crates/mc/src/control.rs); Law, *Simulation
+Modeling and Analysis*, 5th ed., §11.3; Glasserman, 2003, §4.1; Nelson, 1990). An output can name
+`controls` (`McOutput::controls`, in `mc.output.set` as `[{"input": "labour"}, {"output": "base",
+"expected": 5200}]`, in the file as `stochcraft:control` children of the output): an input, whose
+known mean is `Dist::mean`, or an earlier output with the mean the modeller types. The mean of an
+input is only known where the sampler draws exactly that distribution: nothing is clamped,
+resampled or truncated (a normal input can go negative), and every kind is checked to draw its
+stated mean over 200,000 trials (`crates/mc/tests/control.rs`); a constant, a distribution with no
+spread and a count with a standard deviation above 10,000 (whose quantile function, used by Latin
+hypercube, antithetic and Sobol sampling, is an expansion within 1 of the exact value) are
+refused with `inexact_control` or `constant_control`, as are an unknown name, an output control
+that is the output itself or later (`control_not_earlier`) and a repeated one. The controlled value
+is Y − bᵀ(C − μ) with b the least-squares coefficients; fitting them on the trials they are then
+applied to makes the estimate slightly biased, so they are fitted on a pilot, the first batch of
+1,000 trials (the first half of a run under 2,000), which the controlled estimate leaves out. The
+controlled mean and its interval are Student-t across the remaining trials, batch means or pair
+means, as the run's `interval_basis` says; a target's probability is controlled the same way (the
+indicator of meeting it, with coefficients of its own), kept within 0 and 1. Percentiles, the
+histogram and the extremes are not controlled, and a sequential stop is judged on the plain mean.
+It is worked out in the summarise step of each output, one linear pass over its trials after a
+fit on at most 1,000 rows, so it adds no `Stepper` phase for a caller to drive. Each result's
+`controlled` gives the `controls` (`kind`, known `mean`, `coefficient`, the controls' `sample_mean`
+over the trials used and `mean_mismatch`, set when it is more than five standard errors from the
+stated mean, which for an output control means a mistyped mean and a biased result), the
+`pilot_trials`, the multiple `correlation` with the output on the pilot, and an `estimate` with
+the controlled `mean` and `half_width`, the `uncontrolled_mean` and `uncontrolled_half_width` on
+the same trials, `variance_ratio` (plain over controlled variance of the estimate), `narrowing`
+(1 − controlled width / plain width; negative when the control made it wider) and `helped` (at
+least 10% narrower); its `target` has the same for the probability. With too few trials, or a
+run of one batch where intervals are across batches, `estimate` is `null` and `unavailable` says
+why. The window makes the controlled results the headline where `helped`, and says so in words
+otherwise; `stochcraft_engine::mc::control_inputs` lists the inputs that can be controls.
+
 The input table goes out and back in as CSV:
 
 ```bash

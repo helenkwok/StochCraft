@@ -1337,3 +1337,18 @@ unit	yr	ปี
 	{name}: the ± is across {n} of the {of} pairs, the rest had no trial with a number.	{name}: ± คำนวณจาก {n} จาก {of} คู่ ส่วนที่เหลือไม่มีการทดลองที่ได้ค่าตัวเลข
 	No interval: every pair gave the same share, so their spread gives none.	ไม่มีช่วง: ทุกคู่ให้สัดส่วนเท่ากัน ความกระจายของคู่จึงไม่ให้ช่วง
 	No interval: too few pairs of trials for one.	ไม่มีช่วง: คู่การทดลองน้อยเกินไปที่จะคำนวณช่วงได้
+	Controls	ตัวควบคุม
+	Expected mean	ค่าเฉลี่ยที่คาดไว้
+	Remove the control {name}	นำตัวควบคุม {name} ออก
+	Add a control	เพิ่มตัวควบคุม
+	{name} (an output; you give its mean)	{name} (ผลลัพธ์; คุณเป็นผู้ระบุค่าเฉลี่ยของมัน)
+	No input or earlier output can be a control.	ไม่มีอินพุตหรือผลลัพธ์ก่อนหน้าที่เป็นตัวควบคุมได้
+	A control is an input whose mean is known, or an earlier output whose mean you know. The results use how it moves with this output to narrow the interval of the output's mean and target chance.	ตัวควบคุมคืออินพุตที่ทราบค่าเฉลี่ย หรือผลลัพธ์ก่อนหน้าที่คุณทราบค่าเฉลี่ย ผลลัพธ์จะใช้การที่มันเปลี่ยนไปพร้อมกับผลลัพธ์นี้เพื่อทำให้ช่วงของค่าเฉลี่ยและโอกาสบรรลุเป้าหมายแคบลง
+	Controlled mean	ค่าเฉลี่ยที่ควบคุมแล้ว
+	Controls for {output}: {controls}.	ตัวควบคุมสำหรับ {output}: {controls}
+	No controlled result: {reason}	ไม่มีผลที่ควบคุมแล้ว: {reason}
+	They narrowed the interval by {percent}; this is the result shown above.	ช่วยทำให้ช่วงแคบลง {percent} นี่คือผลที่แสดงด้านบน
+	They made the interval {percent} wider, so the plain result stands.	ทำให้ช่วงกว้างขึ้น {percent} จึงใช้ผลแบบธรรมดา
+	They did not help: their correlation with {output} is weak ({correlation}), so the plain result stands.	ไม่ช่วย: ความสัมพันธ์กับ {output} อ่อน ({correlation}) จึงใช้ผลแบบธรรมดา
+	They did not help, so the plain result stands.	ไม่ช่วย จึงใช้ผลแบบธรรมดา
+	The mean given for {name}, {stated}, is far from the trials' mean, {sample}: the controlled result is biased until it is corrected.	ค่าเฉลี่ยที่ระบุสำหรับ {name} คือ {stated} ห่างจากค่าเฉลี่ยของการทดลองคือ {sample} มาก: ผลที่ควบคุมแล้วจะเอนเอียงจนกว่าจะแก้ไข

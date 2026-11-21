@@ -433,6 +433,22 @@ On the **Model** tab:
   `$name`: `$duration * $day_rate + $materials`. An expression that cannot be read stays in its
   field with the reason under it. Give an output a **Target**, **At most** or **At least** a
   value, to see the chance of missing it.
+- **Controls:** a way to get a narrower interval from the same trials. A control is an input whose
+  mean is known (every input says its own, so a labour time with a triangular distribution
+  qualifies), or an earlier output whose mean you know and give. Pick one in an output's
+  **Controls** row with **Add a control**. It helps when the control moves with the output: a
+  cost that is mostly labour is helped by labour as a control, a cost that depends on something
+  else is not. The results use how closely they move together to correct each trial for how
+  far the control happened to land from its known mean. The first 1,000 trials only measure
+  that relationship (for a run under 2,000 trials, the first half), so the corrected mean and
+  chance are worked out from the trials after them, which keeps them unbiased. The window says how
+  much narrower the interval became ("They narrowed the interval by 63%") and then shows the
+  corrected mean and chance as the headline; where the control did not help, because it hardly
+  moves with the output, or made the interval wider, it says so and the plain result stays. The
+  percentiles, histogram and extremes are not corrected. A constant and a count with a very large
+  spread cannot be controls, with the reason in the row. For an earlier output the mean you give
+  must be exact: the window warns when the trials are far from it, and a wrong mean biases the
+  corrected result.
 - **Trials and sampling:** the number of trials (10,000 for a new model), the seed, and the
   sampling. **Latin hypercube** cuts each input's range into equally likely strata (the same
   chance of a draw in each, not equally spaced values) and draws once from each, which usually
@@ -476,6 +492,9 @@ The **Results** tab answers the question first:
   place; with fewer than two there is no ±.
 - The line under **Results** gives the trials, the seed and the sampling, and how a run with
   **More until precise enough** stopped. **Export table (CSV)** saves a row per output.
+  With controls, the lines under an output's finding name them and say what they did, and its numbers
+  have a **Controlled mean** row; the CSV (and `run --format csv`) add the controlled mean, its
+  half-width, how much narrower it is and the controlled chance of meeting the target.
 - **Which inputs matter**, for each output, says in words which input it depends on most: "duration
   depends most on build: it goes from 29.02 to 38.58 days as build goes from its 10th to its 90th
   percentile". Under it, a tornado chart: one bar for each input, from the output with that input at

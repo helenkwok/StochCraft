@@ -1337,3 +1337,18 @@ unit	yr	έτ
 	{name}: the ± is across {n} of the {of} pairs, the rest had no trial with a number.	{name}: το ± αφορά {n} από τα {of} ζεύγη, τα υπόλοιπα δεν είχαν δοκιμή με αριθμό.
 	No interval: every pair gave the same share, so their spread gives none.	Χωρίς διάστημα: όλα τα ζεύγη έδωσαν το ίδιο ποσοστό, οπότε η διασπορά τους δεν δίνει διάστημα.
 	No interval: too few pairs of trials for one.	Χωρίς διάστημα: πολύ λίγα ζεύγη δοκιμών για να υπολογιστεί.
+	Controls	Μεταβλητές ελέγχου
+	Expected mean	Αναμενόμενος μέσος όρος
+	Remove the control {name}	Αφαίρεση της μεταβλητής ελέγχου {name}
+	Add a control	Προσθήκη μεταβλητής ελέγχου
+	{name} (an output; you give its mean)	{name} (μια έξοδος· εσείς δίνετε τον μέσο όρο της)
+	No input or earlier output can be a control.	Καμία είσοδος ή προηγούμενη έξοδος δεν μπορεί να είναι μεταβλητή ελέγχου.
+	A control is an input whose mean is known, or an earlier output whose mean you know. The results use how it moves with this output to narrow the interval of the output's mean and target chance.	Μεταβλητή ελέγχου είναι μια είσοδος με γνωστό μέσο όρο ή μια προηγούμενη έξοδος της οποίας γνωρίζετε τον μέσο όρο. Τα αποτελέσματα χρησιμοποιούν το πώς κινείται μαζί με αυτή την έξοδο για να στενέψουν το διάστημα του μέσου όρου της και της πιθανότητας επίτευξης του στόχου.
+	Controlled mean	Μέσος όρος με έλεγχο
+	Controls for {output}: {controls}.	Μεταβλητές ελέγχου για {output}: {controls}.
+	No controlled result: {reason}	Κανένα αποτέλεσμα με έλεγχο: {reason}
+	They narrowed the interval by {percent}; this is the result shown above.	Στένεψαν το διάστημα κατά {percent}· αυτό είναι το αποτέλεσμα που φαίνεται παραπάνω.
+	They made the interval {percent} wider, so the plain result stands.	Διεύρυναν το διάστημα κατά {percent}, γι' αυτό ισχύει το απλό αποτέλεσμα.
+	They did not help: their correlation with {output} is weak ({correlation}), so the plain result stands.	Δεν βοήθησαν: η συσχέτισή τους με την {output} είναι ασθενής ({correlation}), γι' αυτό ισχύει το απλό αποτέλεσμα.
+	They did not help, so the plain result stands.	Δεν βοήθησαν, γι' αυτό ισχύει το απλό αποτέλεσμα.
+	The mean given for {name}, {stated}, is far from the trials' mean, {sample}: the controlled result is biased until it is corrected.	Ο μέσος όρος που δόθηκε για το {name}, {stated}, απέχει πολύ από τον μέσο όρο των δοκιμών, {sample}: το αποτέλεσμα με έλεγχο είναι μεροληπτικό μέχρι να διορθωθεί.

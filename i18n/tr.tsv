@@ -1337,3 +1337,18 @@ unit	yr	yıl
 	{name}: the ± is across {n} of the {of} pairs, the rest had no trial with a number.	{name}: ± {of} çiftin {n} tanesi üzerindendir, kalanlarda sayı içeren deneme yoktu.
 	No interval: every pair gave the same share, so their spread gives none.	Aralık yok: tüm çiftler aynı payı verdi, bu yüzden dağılımları bir aralık vermez.
 	No interval: too few pairs of trials for one.	Aralık yok: bunun için deneme çifti çok az.
+	Controls	Kontroller
+	Expected mean	Beklenen ortalama
+	Remove the control {name}	{name} kontrolünü kaldır
+	Add a control	Kontrol ekle
+	{name} (an output; you give its mean)	{name} (bir çıktı; ortalamasını siz verirsiniz)
+	No input or earlier output can be a control.	Hiçbir girdi veya önceki çıktı kontrol olamaz.
+	A control is an input whose mean is known, or an earlier output whose mean you know. The results use how it moves with this output to narrow the interval of the output's mean and target chance.	Kontrol, ortalaması bilinen bir girdi ya da ortalamasını bildiğiniz önceki bir çıktıdır. Sonuçlar, bu çıktıyla birlikte nasıl değiştiğini kullanarak çıktının ortalamasının ve hedefe ulaşma şansının aralığını daraltır.
+	Controlled mean	Kontrollü ortalama
+	Controls for {output}: {controls}.	{output} için kontroller: {controls}.
+	No controlled result: {reason}	Kontrollü sonuç yok: {reason}
+	They narrowed the interval by {percent}; this is the result shown above.	Aralığı {percent} daralttılar; yukarıda gösterilen sonuç budur.
+	They made the interval {percent} wider, so the plain result stands.	Aralığı {percent} genişlettiler, bu yüzden düz sonuç geçerli.
+	They did not help: their correlation with {output} is weak ({correlation}), so the plain result stands.	Yardımcı olmadılar: {output} ile ilişkileri zayıf ({correlation}), bu yüzden düz sonuç geçerli.
+	They did not help, so the plain result stands.	Yardımcı olmadılar, bu yüzden düz sonuç geçerli.
+	The mean given for {name}, {stated}, is far from the trials' mean, {sample}: the controlled result is biased until it is corrected.	{name} için verilen ortalama {stated}, denemelerin ortalaması {sample} değerinden çok uzak: düzeltilene kadar kontrollü sonuç yanlıdır.

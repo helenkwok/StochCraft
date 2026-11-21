@@ -285,6 +285,86 @@ pub(crate) fn finding_across(o: &Value, basis: &Value) -> Option<(String, Option
     Some((sentence, None))
 }
 
+/// The output as the headline reads it: where the controls narrowed an interval by a tenth or
+/// more, the controlled mean (for an output with no target) or the controlled chance of meeting
+/// the target (with its interval) in place of the plain ones. Everything else is as it was.
+pub(crate) fn controlled_headline(o: &Value) -> Value {
+    let mut shown = o.clone();
+    let e = &o["controlled"]["estimate"];
+    if e["helped"] == true && !o["target"].is_object() {
+        shown["mean"] = e["mean"].clone();
+        shown["half_width"] = e["half_width"].clone();
+    }
+    let t = &e["target"];
+    if o["target"].is_object() && t["helped"] == true {
+        shown["target"]["probability"] = t["probability"].clone();
+        shown["target"]["interval"] = t["interval"].clone();
+    }
+    shown
+}
+
+/// What an output's control variates did, in lines: which they are, then how much narrower they
+/// made the interval of what the headline says (the target's chance for an output with a target,
+/// else the mean), or that they did not help or made it wider (the plain result stands), or why
+/// there is no controlled result, and a control whose stated mean the trials contradict.
+pub(crate) fn control_lines(o: &Value) -> Vec<String> {
+    let c = &o["controlled"];
+    let Some(controls) = c["controls"].as_array() else {
+        return Vec::new();
+    };
+    let name = o["name"].as_str().unwrap_or("");
+    let names: Vec<&str> = controls.iter().filter_map(|u| u["name"].as_str()).collect();
+    let mut lines = vec![tf(
+        "Controls for {output}: {controls}.",
+        &[("output", name), ("controls", &names.join(", "))],
+    )];
+    let e = &c["estimate"];
+    if e.is_null() {
+        lines.push(tf(
+            "No controlled result: {reason}",
+            &[("reason", c["unavailable"].as_str().unwrap_or(""))],
+        ));
+        return lines;
+    }
+    let what = if o["target"].is_object() && e["target"].is_object() {
+        &e["target"]
+    } else {
+        e
+    };
+    let verdict = match what["narrowing"].as_f64() {
+        Some(n) if what["helped"] == true => tf(
+            "They narrowed the interval by {percent}; this is the result shown above.",
+            &[("percent", &share_text(n))],
+        ),
+        Some(n) if n < 0.0 => tf(
+            "They made the interval {percent} wider, so the plain result stands.",
+            &[("percent", &share_text(-n))],
+        ),
+        _ => match c["correlation"].as_f64().filter(|r| *r < 0.5) {
+            Some(r) => tf(
+                "They did not help: their correlation with {output} is weak ({correlation}), so the plain result stands.",
+                &[("output", name), ("correlation", &rank_text(r))],
+            ),
+            None => t("They did not help, so the plain result stands.").to_owned(),
+        },
+    };
+    lines.push(verdict);
+    for u in controls.iter().filter(|u| u["mean_mismatch"] == true) {
+        lines.push(tf(
+            "The mean given for {name}, {stated}, is far from the trials' mean, {sample}: the controlled result is biased until it is corrected.",
+            &[
+                ("name", u["name"].as_str().unwrap_or("")),
+                ("stated", &u["mean"].as_f64().map_or_else(|| "–".to_owned(), value_text)),
+                (
+                    "sample",
+                    &u["sample_mean"].as_f64().map_or_else(|| "–".to_owned(), value_text),
+                ),
+            ],
+        ));
+    }
+    lines
+}
+
 /// A sampling's name in a phrase (`mc.set`'s `sampling`).
 fn sampling_name(sampling: &Value) -> &'static str {
     match sampling.as_str() {
@@ -1018,10 +1098,23 @@ impl App {
         let outputs = mc["outputs"].as_array().cloned().unwrap_or_default();
         let mut edits: Vec<OutputEdit> = Vec::new();
         let mut remove = None;
-        for o in &outputs {
+        // What can be a control: the inputs whose means are exact, and the outputs above.
+        let usable_inputs = self
+            .engine
+            .model()
+            .monte_carlo
+            .as_ref()
+            .map(stochcraft_engine::mc::control_inputs)
+            .unwrap_or_default();
+        for (index, o) in outputs.iter().enumerate() {
             let name = o["name"].as_str().unwrap_or("").to_owned();
             let unit = o["unit"].as_str().unwrap_or("").to_owned();
             let key = format!("mc/out/{name}");
+            let earlier: Vec<String> = outputs
+                .iter()
+                .take(index)
+                .filter_map(|x| x["name"].as_str().map(str::to_owned))
+                .collect();
             Self::mc_card(ui, p, |ui| {
                 ui.horizontal(|ui| {
                     ui.label(theme::strong(&name).size(15.0));
@@ -1098,6 +1191,98 @@ impl App {
                         None => json!({ "name": name, "at_most": null }),
                     };
                     edits.push((key.clone(), params, None));
+                }
+                // Control variates: inputs with a known mean, or earlier outputs whose mean the
+                // modeller gives; the results use them to narrow this output's interval.
+                let controls: Vec<Value> = o["controls"].as_array().cloned().unwrap_or_default();
+                let mut new_controls = controls.clone();
+                let mut changed = false;
+                ui.horizontal_wrapped(|ui| {
+                    row_label(ui, t("Controls"));
+                    if controls.is_empty() {
+                        ui.label(theme::weak(ui, t("None")));
+                    }
+                    let mut drop = None;
+                    for (n, c) in controls.iter().enumerate() {
+                        let (label, is_output) = match (c["input"].as_str(), c["output"].as_str()) {
+                            (Some(x), _) => (x, false),
+                            (None, Some(x)) => (x, true),
+                            _ => ("", false),
+                        };
+                        ui.label(label);
+                        if is_output {
+                            let mut v = c["expected"].as_f64().unwrap_or(0.0);
+                            let before = v;
+                            number(
+                                ui,
+                                &self.numbers,
+                                &format!("{key}/control/{n}"),
+                                t("Expected mean"),
+                                &mut v,
+                                90.0,
+                            );
+                            if v != before
+                                && let Some(slot) = new_controls.get_mut(n)
+                            {
+                                *slot = json!({ "output": label, "expected": v });
+                                changed = true;
+                            }
+                        }
+                        if ui
+                            .add(theme::secondary(ui, t("Remove")))
+                            .on_hover_text(tf("Remove the control {name}", &[("name", label)]))
+                            .clicked()
+                        {
+                            drop = Some(n);
+                        }
+                    }
+                    if let Some(n) = drop {
+                        new_controls.remove(n);
+                        changed = true;
+                    }
+                    let used: Vec<&str> = controls
+                        .iter()
+                        .filter_map(|c| c["input"].as_str().or_else(|| c["output"].as_str()))
+                        .collect();
+                    let menu = ui.menu_button(t("Add a control"), |ui| {
+                        let mut any = false;
+                        for x in usable_inputs.iter().filter(|x| !used.contains(&x.as_str())) {
+                            any = true;
+                            if ui.button(x).clicked() {
+                                new_controls.push(json!({ "input": x }));
+                                changed = true;
+                                ui.close();
+                            }
+                        }
+                        for x in earlier.iter().filter(|x| !used.contains(&x.as_str())) {
+                            any = true;
+                            let text = tf(
+                                "{name} (an output; you give its mean)",
+                                &[("name", x.as_str())],
+                            );
+                            if ui.button(text).clicked() {
+                                new_controls.push(json!({ "output": x, "expected": 0.0 }));
+                                changed = true;
+                                ui.close();
+                            }
+                        }
+                        if !any {
+                            ui.label(theme::weak(
+                                ui,
+                                t("No input or earlier output can be a control."),
+                            ));
+                        }
+                    });
+                    menu.response.on_hover_text(t(
+                        "A control is an input whose mean is known, or an earlier output whose mean you know. The results use how it moves with this output to narrow the interval of the output's mean and target chance.",
+                    ));
+                });
+                if changed {
+                    edits.push((
+                        key.clone(),
+                        json!({ "name": name, "controls": new_controls }),
+                        None,
+                    ));
                 }
                 self.mc_error(ui, &key);
             });
@@ -1366,10 +1551,16 @@ impl App {
                 ui.label(theme::strong(t("What the run found")));
                 ui.add_space(2.0);
                 for o in &outputs {
-                    if let Some((sentence, sure)) = finding_across(o, &r["interval_basis"]) {
+                    // Where the controls narrowed the interval, their result is the headline.
+                    if let Some((sentence, sure)) =
+                        finding_across(&controlled_headline(o), &r["interval_basis"])
+                    {
                         ui.add(egui::Label::new(sentence).wrap());
                         if let Some(sure) = sure {
                             ui.add(egui::Label::new(theme::weak(ui, sure)).wrap());
+                        }
+                        for line in control_lines(o) {
+                            ui.add(egui::Label::new(theme::weak(ui, line)).wrap());
                         }
                         ui.add_space(4.0);
                     }
@@ -1440,12 +1631,23 @@ fn output_section(
         _ => "–".to_owned(),
     };
     let shown = |v: &Value| v.as_f64().map_or_else(|| "–".to_owned(), value_text);
-    let rows = [
+    let mut rows = vec![
         (t("Mean").to_owned(), mean),
         (form::label("std_dev"), shown(&o["std_dev"])),
         (form::label("min"), shown(&o["min"])),
         (form::label("max"), shown(&o["max"])),
     ];
+    let estimate = &o["controlled"]["estimate"];
+    if let Some(m) = estimate["mean"].as_f64() {
+        let text = match estimate["half_width"].as_f64() {
+            Some(h) => {
+                let (m, h) = rounded(m, h);
+                format!("{m} ± {h}")
+            }
+            None => value_text(m),
+        };
+        rows.insert(1, (t("Controlled mean").to_owned(), text));
+    }
     grid(ui, &format!("mc/result/{name}"), 2, |ui| {
         for (label, value) in rows {
             ui.label(theme::weak(ui, label));
@@ -2205,5 +2407,65 @@ mod tests {
             sure.as_deref(),
             Some("No interval: too few batches of trials for one.")
         );
+    }
+
+    /// Where the controls narrowed the interval, their mean and target chance are the headline;
+    /// where they did not, the plain ones stay, and the lines say what happened.
+    #[test]
+    fn controls_are_the_headline_only_where_they_helped() {
+        let mut o = json!({
+            "name": "cost", "unit": "", "mean": 100.0, "half_width": 2.0,
+            "percentiles": { "5": 90.0, "95": 110.0 },
+            "controlled": {
+                "controls": [{ "name": "labour", "kind": "input", "mean": 5.0,
+                               "coefficient": 2.0, "sample_mean": 5.0, "mean_mismatch": false }],
+                "pilot_trials": 1000, "correlation": 0.9, "unavailable": null,
+                "estimate": { "mean": 101.0, "half_width": 0.7, "narrowing": 0.65,
+                              "helped": true, "target": null },
+            },
+        });
+        let shown = controlled_headline(&o);
+        assert_eq!(shown["mean"], 101.0);
+        assert_eq!(shown["half_width"], 0.7);
+        let lines = control_lines(&o);
+        assert_eq!(lines[0], "Controls for cost: labour.");
+        assert!(
+            lines[1].contains("narrowed the interval by 65%"),
+            "{lines:?}"
+        );
+        o["controlled"]["estimate"]["helped"] = json!(false);
+        o["controlled"]["estimate"]["narrowing"] = json!(0.02);
+        o["controlled"]["correlation"] = json!(0.08);
+        assert_eq!(controlled_headline(&o)["mean"], 100.0);
+        let lines = control_lines(&o);
+        assert!(
+            lines[1].contains("did not help: their correlation with cost is weak (0.08)"),
+            "{lines:?}"
+        );
+        o["controlled"]["estimate"]["narrowing"] = json!(-0.25);
+        assert!(control_lines(&o)[1].contains("25% wider"));
+        o["controlled"]["controls"][0]["mean_mismatch"] = json!(true);
+        assert!(control_lines(&o).iter().any(|l| l.contains("biased")));
+        o["controlled"]["estimate"] = Value::Null;
+        o["controlled"]["unavailable"] = json!("too short");
+        assert_eq!(control_lines(&o)[1], "No controlled result: too short");
+    }
+
+    /// With a target, the controlled chance of meeting it is the headline when it helped.
+    #[test]
+    fn a_controlled_target_chance_replaces_the_plain_one() {
+        let mut o = output(json!({ "at_most": 7_000.0 }), 0.8, json!([0.7, 0.9]));
+        o["controlled"] = json!({
+            "controls": [{ "name": "labour", "kind": "input", "mean": 5.0,
+                           "coefficient": 2.0, "sample_mean": 5.0, "mean_mismatch": false }],
+            "pilot_trials": 1000, "correlation": 0.9, "unavailable": null,
+            "estimate": { "mean": 1.0, "half_width": 0.1, "narrowing": 0.0, "helped": false,
+                          "target": { "probability": 0.85, "interval": [0.82, 0.88],
+                                      "narrowing": 0.4, "helped": true } },
+        });
+        let shown = controlled_headline(&o);
+        assert_eq!(shown["target"]["probability"], 0.85);
+        assert_eq!(shown["target"]["interval"], json!([0.82, 0.88]));
+        assert!(control_lines(&o)[1].contains("narrowed the interval by 40%"));
     }
 }

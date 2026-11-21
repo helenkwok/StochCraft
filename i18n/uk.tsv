@@ -1337,3 +1337,18 @@ unit	yr	р.
 	{name}: the ± is across {n} of the {of} pairs, the rest had no trial with a number.	{name}: ± обчислено по {n} з {of} пар, решта не мала випробування з числом.
 	No interval: every pair gave the same share, so their spread gives none.	Інтервалу немає: усі пари дали однакову частку, тож їхній розкид інтервалу не дає.
 	No interval: too few pairs of trials for one.	Інтервалу немає: замало пар випробувань для нього.
+	Controls	Контрольні змінні
+	Expected mean	Очікуване середнє
+	Remove the control {name}	Вилучити контрольну змінну {name}
+	Add a control	Додати контрольну змінну
+	{name} (an output; you give its mean)	{name} (вихід; його середнє задаєте ви)
+	No input or earlier output can be a control.	Жоден вхід чи попередній вихід не може бути контрольною змінною.
+	A control is an input whose mean is known, or an earlier output whose mean you know. The results use how it moves with this output to narrow the interval of the output's mean and target chance.	Контрольна змінна — це вхід з відомим середнім або попередній вихід, середнє якого ви знаєте. Результати використовують те, як вона змінюється разом із цим виходом, щоб звузити інтервал його середнього та шансу досягти цілі.
+	Controlled mean	Середнє з контролем
+	Controls for {output}: {controls}.	Контрольні змінні для {output}: {controls}.
+	No controlled result: {reason}	Немає результату з контролем: {reason}
+	They narrowed the interval by {percent}; this is the result shown above.	Вони звузили інтервал на {percent}; це результат, показаний вище.
+	They made the interval {percent} wider, so the plain result stands.	Вони розширили інтервал на {percent}, тому діє звичайний результат.
+	They did not help: their correlation with {output} is weak ({correlation}), so the plain result stands.	Вони не допомогли: їхня кореляція з {output} слабка ({correlation}), тому діє звичайний результат.
+	They did not help, so the plain result stands.	Вони не допомогли, тому діє звичайний результат.
+	The mean given for {name}, {stated}, is far from the trials' mean, {sample}: the controlled result is biased until it is corrected.	Задане для {name} середнє {stated} далеке від середнього за випробуваннями {sample}: результат з контролем зміщений, доки його не виправлено.

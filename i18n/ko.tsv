@@ -1337,3 +1337,18 @@ unit	yr	년
 	{name}: the ± is across {n} of the {of} pairs, the rest had no trial with a number.	{name}: ±는 {of}개 쌍 중 {n}개에 걸친 값이며, 나머지는 숫자가 있는 시행이 없었습니다.
 	No interval: every pair gave the same share, so their spread gives none.	구간 없음: 모든 쌍이 같은 비율을 보였으므로, 쌍 간 편차로는 구간을 구할 수 없습니다.
 	No interval: too few pairs of trials for one.	구간 없음: 구간을 구하기에는 시행 쌍이 너무 적습니다.
+	Controls	통제 변수
+	Expected mean	기대 평균
+	Remove the control {name}	통제 변수 {name} 제거
+	Add a control	통제 변수 추가
+	{name} (an output; you give its mean)	{name} (출력, 평균은 직접 입력)
+	No input or earlier output can be a control.	통제 변수가 될 수 있는 입력이나 이전 출력이 없습니다.
+	A control is an input whose mean is known, or an earlier output whose mean you know. The results use how it moves with this output to narrow the interval of the output's mean and target chance.	통제 변수는 평균을 아는 입력이거나 평균을 알고 있는 이전 출력입니다. 결과는 이것이 이 출력과 함께 움직이는 방식을 이용해 출력의 평균과 목표 달성 확률의 구간을 좁힙니다.
+	Controlled mean	통제된 평균
+	Controls for {output}: {controls}.	{output}의 통제 변수: {controls}.
+	No controlled result: {reason}	통제된 결과 없음: {reason}
+	They narrowed the interval by {percent}; this is the result shown above.	구간을 {percent} 좁혔습니다. 위에 표시된 결과입니다.
+	They made the interval {percent} wider, so the plain result stands.	구간을 {percent} 넓혔으므로 일반 결과를 사용합니다.
+	They did not help: their correlation with {output} is weak ({correlation}), so the plain result stands.	도움이 되지 않았습니다. {output}과의 상관이 약해({correlation}) 일반 결과를 사용합니다.
+	They did not help, so the plain result stands.	도움이 되지 않았으므로 일반 결과를 사용합니다.
+	The mean given for {name}, {stated}, is far from the trials' mean, {sample}: the controlled result is biased until it is corrected.	{name}에 입력한 평균 {stated}이(가) 시행의 평균 {sample}과(와) 크게 다릅니다. 고칠 때까지 통제된 결과는 편향됩니다.

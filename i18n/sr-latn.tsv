@@ -1337,3 +1337,18 @@ unit	yr	god.
 	{name}: the ± is across {n} of the {of} pairs, the rest had no trial with a number.	{name}: ± je kroz {n} od {of} parova, ostali nisu imali pokušaj s brojem.
 	No interval: every pair gave the same share, so their spread gives none.	Nema intervala: svi parovi su dali isti udeo, pa njihovo rasipanje ne daje interval.
 	No interval: too few pairs of trials for one.	Nema intervala: premalo parova pokušaja za njega.
+	Controls	Kontrole
+	Expected mean	Očekivani prosek
+	Remove the control {name}	Ukloni kontrolu {name}
+	Add a control	Dodaj kontrolu
+	{name} (an output; you give its mean)	{name} (izlaz; njegov prosek navodite vi)
+	No input or earlier output can be a control.	Nijedan ulaz ni raniji izlaz ne može biti kontrola.
+	A control is an input whose mean is known, or an earlier output whose mean you know. The results use how it moves with this output to narrow the interval of the output's mean and target chance.	Kontrola je ulaz poznatog proseka ili raniji izlaz čiji prosek znate. Rezultati koriste to kako se kreće zajedno sa ovim izlazom da bi suzili interval njegovog proseka i šanse za postizanje cilja.
+	Controlled mean	Kontrolisani prosek
+	Controls for {output}: {controls}.	Kontrole za {output}: {controls}.
+	No controlled result: {reason}	Nema kontrolisanog rezultata: {reason}
+	They narrowed the interval by {percent}; this is the result shown above.	Suzile su interval za {percent}; ovo je rezultat prikazan gore.
+	They made the interval {percent} wider, so the plain result stands.	Proširile su interval za {percent}, pa važi običan rezultat.
+	They did not help: their correlation with {output} is weak ({correlation}), so the plain result stands.	Nisu pomogle: njihova korelacija sa {output} je slaba ({correlation}), pa važi običan rezultat.
+	They did not help, so the plain result stands.	Nisu pomogle, pa važi običan rezultat.
+	The mean given for {name}, {stated}, is far from the trials' mean, {sample}: the controlled result is biased until it is corrected.	Prosek naveden za {name}, {stated}, daleko je od proseka pokusa, {sample}: kontrolisani rezultat je pristrasan dok se ne ispravi.

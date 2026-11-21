@@ -1337,3 +1337,18 @@ unit	yr	an
 	{name}: the ± is across {n} of the {of} pairs, the rest had no trial with a number.	{name} : le ± porte sur {n} des {of} paires, les autres n'avaient aucun essai avec un nombre.
 	No interval: every pair gave the same share, so their spread gives none.	Pas d'intervalle : toutes les paires ont donné la même part, donc leur dispersion n'en donne aucun.
 	No interval: too few pairs of trials for one.	Pas d'intervalle : trop peu de paires d'essais pour en calculer un.
+	Controls	Contrôles
+	Expected mean	Moyenne attendue
+	Remove the control {name}	Retirer le contrôle {name}
+	Add a control	Ajouter un contrôle
+	{name} (an output; you give its mean)	{name} (une sortie ; vous donnez sa moyenne)
+	No input or earlier output can be a control.	Aucune entrée ni sortie précédente ne peut servir de contrôle.
+	A control is an input whose mean is known, or an earlier output whose mean you know. The results use how it moves with this output to narrow the interval of the output's mean and target chance.	Un contrôle est une entrée dont la moyenne est connue, ou une sortie précédente dont vous connaissez la moyenne. Les résultats utilisent la façon dont il varie avec cette sortie pour resserrer l'intervalle de sa moyenne et de la chance d'atteindre l'objectif.
+	Controlled mean	Moyenne contrôlée
+	Controls for {output}: {controls}.	Contrôles pour {output} : {controls}.
+	No controlled result: {reason}	Pas de résultat contrôlé : {reason}
+	They narrowed the interval by {percent}; this is the result shown above.	Ils ont resserré l'intervalle de {percent} ; c'est le résultat montré ci-dessus.
+	They made the interval {percent} wider, so the plain result stands.	Ils ont élargi l'intervalle de {percent}, donc le résultat simple est conservé.
+	They did not help: their correlation with {output} is weak ({correlation}), so the plain result stands.	Ils n'ont pas aidé : leur corrélation avec {output} est faible ({correlation}), donc le résultat simple est conservé.
+	They did not help, so the plain result stands.	Ils n'ont pas aidé, donc le résultat simple est conservé.
+	The mean given for {name}, {stated}, is far from the trials' mean, {sample}: the controlled result is biased until it is corrected.	La moyenne donnée pour {name}, {stated}, est loin de celle des essais, {sample} : le résultat contrôlé est biaisé tant qu'elle n'est pas corrigée.

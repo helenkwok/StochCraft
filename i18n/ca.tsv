@@ -1337,3 +1337,18 @@ unit	yr	a
 	{name}: the ± is across {n} of the {of} pairs, the rest had no trial with a number.	{name}: el ± és sobre {n} de les {of} parelles; la resta no tenien cap assaig amb un número.
 	No interval: every pair gave the same share, so their spread gives none.	Sense interval: totes les parelles han donat la mateixa proporció, de manera que la seva dispersió no en dona cap.
 	No interval: too few pairs of trials for one.	Sense interval: hi ha massa poques parelles d'assajos per calcular-lo.
+	Controls	Controls
+	Expected mean	Mitjana esperada
+	Remove the control {name}	Treu el control {name}
+	Add a control	Afegeix un control
+	{name} (an output; you give its mean)	{name} (una sortida; vós en doneu la mitjana)
+	No input or earlier output can be a control.	Cap entrada ni sortida anterior pot ser un control.
+	A control is an input whose mean is known, or an earlier output whose mean you know. The results use how it moves with this output to narrow the interval of the output's mean and target chance.	Un control és una entrada de la qual es coneix la mitjana, o una sortida anterior de la qual en coneixeu la mitjana. Els resultats usen com es mou amb aquesta sortida per estrènyer l'interval de la seva mitjana i de la probabilitat d'assolir l'objectiu.
+	Controlled mean	Mitjana controlada
+	Controls for {output}: {controls}.	Controls per a {output}: {controls}.
+	No controlled result: {reason}	Sense resultat controlat: {reason}
+	They narrowed the interval by {percent}; this is the result shown above.	Han estret l'interval un {percent}; aquest és el resultat mostrat a dalt.
+	They made the interval {percent} wider, so the plain result stands.	Han eixamplat l'interval un {percent}, de manera que es manté el resultat simple.
+	They did not help: their correlation with {output} is weak ({correlation}), so the plain result stands.	No han ajudat: la seva correlació amb {output} és feble ({correlation}), de manera que es manté el resultat simple.
+	They did not help, so the plain result stands.	No han ajudat, de manera que es manté el resultat simple.
+	The mean given for {name}, {stated}, is far from the trials' mean, {sample}: the controlled result is biased until it is corrected.	La mitjana donada per a {name}, {stated}, és lluny de la mitjana dels assaigs, {sample}: el resultat controlat és esbiaixat fins que es corregeixi.

@@ -19,7 +19,8 @@ use stochcraft_mc::{
 };
 use stochcraft_model::montecarlo::DEFAULT_TRIALS;
 use stochcraft_model::{
-    Dist, McCorrelation, McInput, McOutput, McStop, McTarget, MonteCarlo, Sampling,
+    Control as McControl, Dist, McCorrelation, McInput, McOutput, McStop, McTarget, MonteCarlo,
+    Sampling,
 };
 
 use crate::commands::{parse, some};
@@ -104,6 +105,46 @@ pub struct OutputDoc {
     /// A target: the probability that the output is at least this is reported.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub at_least: Option<f64>,
+    /// Control variates that narrow this output's interval: inputs (their own means are known) or
+    /// earlier outputs with a mean you know.
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub controls: Vec<ControlDoc>,
+}
+
+/// A control variate: `{ "input": "x" }` (the input's own mean is known), or `{ "output": "y",
+/// "expected": 12.5 }` (an earlier output, with the mean you state; a wrong mean biases the
+/// controlled result).
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, JsonSchema)]
+#[serde(untagged)]
+pub enum ControlDoc {
+    Input { input: String },
+    Output { output: String, expected: f64 },
+}
+
+impl From<&McControl> for ControlDoc {
+    fn from(c: &McControl) -> Self {
+        match c {
+            McControl::Input { name } => ControlDoc::Input {
+                input: name.clone(),
+            },
+            McControl::Output { name, expected } => ControlDoc::Output {
+                output: name.clone(),
+                expected: *expected,
+            },
+        }
+    }
+}
+
+impl From<ControlDoc> for McControl {
+    fn from(c: ControlDoc) -> Self {
+        match c {
+            ControlDoc::Input { input } => McControl::Input { name: input },
+            ControlDoc::Output { output, expected } => McControl::Output {
+                name: output,
+                expected,
+            },
+        }
+    }
 }
 
 /// A rank (Spearman) correlation between two inputs.
@@ -201,6 +242,7 @@ impl From<&MonteCarlo> for MonteCarloDoc {
                         Some(McTarget::AtLeast(x)) => Some(x),
                         _ => None,
                     },
+                    controls: o.controls.iter().map(ControlDoc::from).collect(),
                 })
                 .collect(),
             correlations: m
@@ -235,6 +277,7 @@ impl From<MonteCarloDoc> for MonteCarlo {
                 .into_iter()
                 .map(|o| McOutput {
                     target: target_of(o.at_most, o.at_least),
+                    controls: o.controls.into_iter().map(McControl::from).collect(),
                     name: o.name,
                     expression: o.expression,
                     unit: o.unit,
@@ -306,6 +349,20 @@ impl Engine {
         x.replications = DEFAULT_TRIALS;
         self.edit(label, Op::Batch(vec![op, Op::SetExperiment(x)]))
     }
+}
+
+/// The inputs of `m` that can be a control variate: those that vary and whose draws have exactly the
+/// mean their distribution states (`mc.output.set` refuses the others, saying why).
+pub fn control_inputs(m: &MonteCarlo) -> Vec<String> {
+    m.inputs
+        .iter()
+        .filter(|i| {
+            i.dist.check().is_ok()
+                && !stochcraft_mc::control::is_constant(&i.dist)
+                && stochcraft_mc::control::exact_mean(&i.dist).is_ok()
+        })
+        .map(|i| i.name.clone())
+        .collect()
 }
 
 /// `mc.get`: no parameters.
@@ -464,6 +521,10 @@ pub(crate) fn input_remove(e: &mut Engine, p: Value) -> Result<Value, CommandErr
     }
     // Its correlations go with it.
     m.correlations.retain(|c| c.a != p.name && c.b != p.name);
+    // So do the controls that named it.
+    for o in &mut m.outputs {
+        o.controls.retain(|c| c.name() != p.name);
+    }
     e.set_monte_carlo("mc.input.remove", m)?;
     Ok(json!({}))
 }
@@ -487,6 +548,11 @@ pub struct OutputSet {
     #[serde(default, deserialize_with = "some")]
     #[schemars(with = "Option<f64>")]
     pub at_least: Option<Option<f64>>,
+    /// The output's control variates, replacing its present ones (`[]` removes them): inputs, as
+    /// `{ "input": "x" }` (the input's own mean is known; refused where the sampled mean is not
+    /// exactly it), or earlier outputs with a mean you know, as `{ "output": "y", "expected": 12.5 }`.
+    #[serde(default)]
+    pub controls: Option<Vec<ControlDoc>>,
     /// Where it goes among the outputs (from 0); outputs are evaluated in order, each using
     /// those before it. A new output goes last by default.
     #[serde(default)]
@@ -532,6 +598,7 @@ pub(crate) fn output_set(e: &mut Engine, p: Value) -> Result<Value, CommandError
             })?,
             unit: String::new(),
             target: None,
+            controls: Vec::new(),
         },
     };
     if let Some(x) = p.expression {
@@ -546,6 +613,9 @@ pub(crate) fn output_set(e: &mut Engine, p: Value) -> Result<Value, CommandError
         (Some(None), _) | (_, Some(None)) => out.target = None,
         (None, None) => {}
     }
+    if let Some(controls) = p.controls {
+        out.controls = controls.into_iter().map(McControl::from).collect();
+    }
     let place = match p.position {
         Some(i) => usize::try_from(i)
             .unwrap_or(usize::MAX)
@@ -553,6 +623,17 @@ pub(crate) fn output_set(e: &mut Engine, p: Value) -> Result<Value, CommandError
         None => at.unwrap_or(m.outputs.len()),
     };
     m.outputs.insert(place, out);
+    // Controls that cannot be used are refused, saying why.
+    if let Some(bad) = stochcraft_mc::check(&m)
+        .into_iter()
+        .find(|x| x.at.as_deref() == Some(p.name.as_str()) && x.code.contains("control"))
+    {
+        return Err(CommandError {
+            code: ErrorCode::InvalidParams,
+            message: bad.message.clone(),
+            details: Some(problems(&[bad])),
+        });
+    }
     e.set_monte_carlo("mc.output.set", m)?;
     Ok(json!({ "name": p.name }))
 }
@@ -564,6 +645,9 @@ pub(crate) fn output_remove(e: &mut Engine, p: Value) -> Result<Value, CommandEr
     m.outputs.retain(|o| o.name != p.name);
     if m.outputs.len() == before {
         return Err(not_found(format!("no output `{}`", p.name)));
+    }
+    for o in &mut m.outputs {
+        o.controls.retain(|c| c.name() != p.name);
     }
     e.set_monte_carlo("mc.output.remove", m)?;
     Ok(json!({}))
@@ -874,6 +958,7 @@ fn mc_record(context: &Value, r: &McResults, m: &MonteCarlo) -> Value {
         "random_streams": "trials in batches of 1,000; each input's draws in batch b from the stream keyed mc/<b>/input/<name> under the seed (with Sobol sampling its random digital shift, from mc/qmc/<b>/<name>, the points being the first of Joe and Kuo's Sobol sequence with one dimension per input in declaration order), and the pairing of correlated inputs from mc/<b>/correlation, so results do not depend on the number of threads",
         "correlation": "rank correlations induced by Iman and Conover's method (1982) in each batch, on van der Waerden scores with Pearson correlation 2 sin(πρ/6) for a rank correlation ρ",
         "uncertainty": uncertainty_text(r),
+        "controls": "an output with controls has a controlled estimate beside its results (controlled): the coefficients b of Y - b(C - mu) are fitted by least squares on a pilot, the first batch of 1,000 trials (the first half for a run under 2,000 trials), whose trials are left out of the estimate so it is unbiased; the controlled mean and target probability, with their 95% intervals on the run's interval basis, come from the remaining trials; variance_ratio and narrowing compare the controlled interval with the uncontrolled one on those same trials. Percentiles, histogram and extremes are not controlled; a sequential stop is judged on the uncontrolled mean",
         "influence": "per output and per input that is not a constant, widest swing first. base: the output with every input at its median. low and high: the output with that input at its 10th (p10) and its 90th (p90) percentile and every other input at its median (the tornado of decision analysis, Clemen and Reilly, Making Hard Decisions, 3rd ed., 2014); swing: |high - low|, null if either is not a number. No sampling is used, so these do not vary with the seed, the trials or the sampling, and they leave out what correlated inputs do together. rank_correlation: Spearman's, between the input and the output across the run's trials where the output has a number; for a correlated input it includes the effect of the inputs it is correlated with; null if either has no spread",
         "file_notes": context["file_notes"],
     })
@@ -912,6 +997,53 @@ fn uncertainty_text(r: &McResults) -> &'static str {
     }
 }
 
+/// An output's control variates and controlled estimate as JSON: the controls with their known
+/// means and coefficients, and the estimate (`null` with the reason in `unavailable` when there
+/// is none). `narrowing` is how much narrower the controlled interval is than the uncontrolled
+/// one on the same trials (negative: wider); `helped` is whether that is at least 10%.
+fn controlled_json(c: &stochcraft_mc::Controlled) -> Value {
+    let estimate = c.estimate.as_ref().map(|e| {
+        let target = e.target.as_ref().map(|t| {
+            json!({
+                "coefficients": t.coefficients,
+                "probability": t.probability,
+                "interval": t.interval.map(|(lo, hi)| [lo, hi]),
+                "uncontrolled_probability": t.uncontrolled_probability,
+                "uncontrolled_interval": t.uncontrolled_interval.map(|(lo, hi)| [lo, hi]),
+                "variance_ratio": t.variance_ratio,
+                "narrowing": t.narrowing,
+                "helped": t.helped(),
+            })
+        });
+        json!({
+            "trials": e.trials,
+            "interval_count": e.units,
+            "mean": e.mean,
+            "half_width": e.half_width,
+            "uncontrolled_mean": e.uncontrolled_mean,
+            "uncontrolled_half_width": e.uncontrolled_half_width,
+            "variance_ratio": e.variance_ratio,
+            "narrowing": e.narrowing,
+            "helped": e.helped(),
+            "target": target,
+        })
+    });
+    json!({
+        "controls": c.controls.iter().map(|u| json!({
+            "name": u.name,
+            "kind": if u.input { "input" } else { "output" },
+            "mean": u.mean,
+            "coefficient": u.coefficient,
+            "sample_mean": u.sample_mean,
+            "mean_mismatch": u.mismatch,
+        })).collect::<Vec<_>>(),
+        "pilot_trials": c.pilot_trials,
+        "correlation": c.correlation,
+        "unavailable": c.unavailable,
+        "estimate": estimate,
+    })
+}
+
 fn output_json(o: &OutputResult) -> Value {
     let percentiles: serde_json::Map<String, Value> = o
         .percentiles
@@ -945,6 +1077,9 @@ fn output_json(o: &OutputResult) -> Value {
             })).collect::<Vec<_>>(),
         },
     });
+    if let Some(c) = &o.controlled {
+        v["controlled"] = controlled_json(c);
+    }
     if let Some(t) = o.target {
         let (kind, x) = match t.target {
             McTarget::AtMost(x) => ("at_most", x),
@@ -1210,7 +1345,9 @@ pub fn results_csv(r: &Value) -> String {
     let s = |v: &Value| v.as_str().unwrap_or("").to_owned();
     let mut out = String::from(
         "output,unit,trials,valid,mean,half_width,std_dev,min,p5,p10,p50,p90,p95,max,\
-         target,target_value,probability,probability_low,probability_high\n",
+         target,target_value,probability,probability_low,probability_high,\
+         controlled_mean,controlled_half_width,interval_narrowing,controlled_probability,\
+         controlled_probability_low,controlled_probability_high\n",
     );
     let num = |v: &Value| v.as_f64().map(|x| x.to_string()).unwrap_or_default();
     for o in r["outputs"].as_array().into_iter().flatten() {
@@ -1242,6 +1379,12 @@ pub fn results_csv(r: &Value) -> String {
             num(&t["probability"]),
             num(&t["interval"][0]),
             num(&t["interval"][1]),
+            num(&o["controlled"]["estimate"]["mean"]),
+            num(&o["controlled"]["estimate"]["half_width"]),
+            num(&o["controlled"]["estimate"]["narrowing"]),
+            num(&o["controlled"]["estimate"]["target"]["probability"]),
+            num(&o["controlled"]["estimate"]["target"]["interval"][0]),
+            num(&o["controlled"]["estimate"]["target"]["interval"][1]),
         ];
         out.push_str(&row.join(","));
         out.push('\n');
@@ -1269,6 +1412,7 @@ mod tests {
                 expression: "$x * 2".into(),
                 unit: String::new(),
                 target: Some(McTarget::AtLeast(3.0)),
+                controls: vec![McControl::Input { name: "x".into() }],
             }],
             correlations: vec![],
             sampling: Sampling::LatinHypercube,
