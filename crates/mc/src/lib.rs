@@ -70,9 +70,13 @@ use stochcraft_stats::{Proportion, Summary, t_critical_95};
 
 pub mod correlate;
 pub mod quantile;
+pub mod sobol;
 pub mod table;
 
 pub use correlate::rank_correlation;
+pub use sobol::{
+    Estimate, SobolError, SobolIndex, SobolOptions, SobolOutput, SobolResults, SobolRun,
+};
 
 /// Values sorted per step when the results are worked out a piece at a time.
 const SORT_CHUNK: usize = 1 << 18;
