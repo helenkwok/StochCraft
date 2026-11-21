@@ -502,13 +502,16 @@ impl Across {
     }
 }
 
+/// What [`each_trial`] calls for each trial: its index, its block, the output and the controls.
+type TrialFn<'a> = dyn FnMut(u64, usize, f64, &[f64]) + 'a;
+
 /// Calls `f(index, block, y, controls)` for each trial of output `o` in order.
 fn each_trial(
     blocks: &[Block],
     inputs: usize,
     specs: &[ControlSpec],
     o: usize,
-    f: &mut dyn FnMut(u64, usize, f64, &[f64]),
+    f: &mut TrialFn<'_>,
 ) {
     let mut index = 0_u64;
     let mut values = vec![0.0; specs.len()];
