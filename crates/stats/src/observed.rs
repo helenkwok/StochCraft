@@ -85,7 +85,7 @@ pub fn judge(check: Check, mean: f64, half_width: f64, n: u64) -> Verdict {
             value,
             half_width: observed,
         } => {
-            let difference = (mean.is_finite() && value.is_finite()).then(|| mean - value);
+            let difference = (mean.is_finite() && value.is_finite()).then_some(mean - value);
             if !has_interval || !value.is_finite() {
                 return Verdict {
                     outcome: Outcome::CantTell,
