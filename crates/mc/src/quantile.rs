@@ -536,7 +536,7 @@ mod tests {
     #[test]
     fn huge_counts_are_inverted_without_a_walk() {
         let ps = [0.025, 0.5, 0.975];
-        for mean in [1e9, 1e12, 1e18] {
+        for mean in [1e9_f64, 1e12, 1e18] {
             let sd = mean.sqrt();
             let got = quantiles(&Dist::Poisson { mean }, &ps);
             assert!(got.windows(2).all(|w| w[0] < w[1]), "{mean}: {got:?}");

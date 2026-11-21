@@ -407,7 +407,7 @@ mod tests {
 
     #[test]
     fn rounding_to_twelve_digits_holds_at_the_ends_of_the_range() {
-        assert_eq!(round(1234.567_890_123_45), 1234.567_890_12);
+        assert_eq!(round(1_234.567_890_123_45), 1_234.567_890_12);
         assert_eq!(round(-0.000_123_456_789_012_345), -0.000_123_456_789_012);
         // Below 10^-297 the scale 10^digits is infinite: it was NaN.
         for v in [
