@@ -466,9 +466,10 @@ fn uniform(name: &str, min: f64, max: f64) -> McInput {
 }
 
 /// A regression: under Latin hypercube sampling every batch of 1,000 draws of a uniform holds
-/// exactly 500 at or below its median, so the share is known exactly and its interval, taken
-/// across batches, has no width. (Wilson's interval across the trials, as if they were
-/// independent, would say 47% to 53%.)
+/// exactly 500 at or below its median, so the share is judged across batches, not across the
+/// trials as if they were independent (Wilson's interval would say 47% to 53%). The batches all
+/// give the same share, so their spread gives no interval: none is claimed, rather than one of
+/// no width.
 #[test]
 fn a_latin_hypercube_share_is_judged_across_batches() {
     let mut x = output("x", "$u");
@@ -489,7 +490,7 @@ fn a_latin_hypercube_share_is_judged_across_batches() {
     );
     let t = r.outputs[0].target.unwrap_or_else(|| unreachable!());
     assert_eq!(t.probability, Some(0.5));
-    assert_eq!(t.interval, Some((0.5, 0.5)));
+    assert_eq!(t.interval, None);
     // Its mean's interval is across the three batch means too: narrow, but not none.
     let hw = get(r.outputs[0].half_width);
     assert!(hw > 0.0 && hw < 0.001, "{hw}");
