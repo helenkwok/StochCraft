@@ -4053,6 +4053,21 @@ fn model_get_with_bounds_and_estimate_round_trips_through_model_set() {
     assert_eq!(ok(&mut other, "model.get", json!({})), m);
     assert!(!other.model().layout.is_empty());
     assert!(!other.model().estimates.is_empty());
+
+    // An estimate the model could not keep (both `max` and `p95`) is refused, not dropped.
+    let mut both = m.clone();
+    if let Some(d) = both["elements"]
+        .as_array_mut()
+        .and_then(|v| v.iter_mut().find(|x| x["id"] == "desk"))
+    {
+        d["estimate"]["p95"] = json!(2.5);
+    }
+    let mut third = Engine::new();
+    assert_eq!(
+        err(&mut third, "model.set", json!({ "model": both })),
+        ErrorCode::InvalidParams
+    );
+    assert!(third.model().elements.is_empty());
 }
 
 /// Removing the flow an exclusive gateway names as its default (by `disconnect` or by removing
