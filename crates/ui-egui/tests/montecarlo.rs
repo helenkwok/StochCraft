@@ -140,6 +140,23 @@ fn the_budget_example_runs_and_says_the_chance_of_an_overrun() {
             .count()
             >= 2
     );
+    // Which inputs matter, for each output, in words first: building moves the duration more
+    // than designing does. The tornado and the rank correlations follow, and the model's
+    // correlated inputs bring the note on what a correlated input's figure includes.
+    assert!(h.query_all_by_label("Which inputs matter").count() >= 2);
+    h.get_by_label_contains("duration depends most on build: it goes from");
+    h.get_by_label_contains("cost depends most on build: it goes from");
+    assert!(
+        h.query_all_by_label_contains("Each input from its 10th to its 90th percentile")
+            .count()
+            >= 2
+    );
+    assert!(h.query_all_by_label("Rank correlation").count() >= 2);
+    assert!(
+        h.query_all_by_label_contains("includes the effect of the inputs it is correlated with")
+            .count()
+            >= 2
+    );
 
     // The table, as CSV.
     click(&mut h, Role::Button, "Export table (CSV)");

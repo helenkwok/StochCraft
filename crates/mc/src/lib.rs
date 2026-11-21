@@ -46,6 +46,16 @@
 //! has a 95% half-width within the share of itself asked for, by the rule of
 //! `stochcraft_stats::precision` (Hoad, Robinson and Davies, 2010), judged on the same interval
 //! the results report (across batches in the modes above, which needs two batches at least).
+//!
+//! **Which inputs matter** ([`Influence`], on each output). Two figures for each input that
+//! varies. The tornado is one at a time and deterministic: the output with every input at its
+//! median and one moved to its 10th and to its 90th percentile (Clemen and Reilly, *Making
+//! Hard Decisions*, 3rd ed., Cengage, 2014), worked out once at the end from the quantile
+//! functions ([`quantile`]); its bars say what an input does with the others held still, and
+//! leave out what inputs do together, as correlated ones do. The rank correlation of each
+//! input with each output (Spearman, from the run's own trials, ranked a piece at a time like
+//! the rest) says how closely they go together, and for a correlated input it includes the
+//! effect of the inputs it is correlated with.
 
 use std::collections::BTreeMap;
 
@@ -78,6 +88,12 @@ pub const MAX_TRIALS: u64 = 10_000_000;
 
 /// The percentiles every output reports, from 0 to 100.
 pub const PERCENTILES: [f64; 5] = [5.0, 10.0, 50.0, 90.0, 95.0];
+
+/// The probabilities of an input's low and high values in a tornado (its 10th and 90th
+/// percentiles), and of its middle, where the other inputs are held (its median).
+pub const SWING_LOW: f64 = 0.1;
+pub const SWING_MIDDLE: f64 = 0.5;
+pub const SWING_HIGH: f64 = 0.9;
 
 /// Something wrong with a Monte Carlo model.
 #[derive(Debug, Clone, PartialEq)]
@@ -552,22 +568,9 @@ impl Compiled {
             for (slot, column) in values.iter_mut().zip(&inputs) {
                 *slot = column.get(t).copied().unwrap_or(f64::NAN);
             }
-            for (o, (_, e)) in self.outputs.iter().enumerate() {
-                let v = {
-                    let read = |name: &str| {
-                        self.names
-                            .get(name)
-                            .and_then(|&at| values.get(at))
-                            .map(|v| Value::Number(*v))
-                    };
-                    e.eval(&read).number()
-                };
-                if let Some(slot) = values.get_mut(k + o) {
-                    *slot = v;
-                }
-                if let Some(column) = outputs.get_mut(o) {
-                    column.push(v);
-                }
+            self.evaluate_into(&mut values);
+            for (column, v) in outputs.iter_mut().zip(values.iter().skip(k)) {
+                column.push(*v);
             }
         }
         Block {
@@ -575,6 +578,93 @@ impl Compiled {
             inputs,
             outputs,
         }
+    }
+
+    /// Works out every output, in order, from the inputs' values (the first of `values`),
+    /// writing each into its place after them.
+    fn evaluate_into(&self, values: &mut [f64]) {
+        let k = self.inputs.len();
+        for (o, (_, e)) in self.outputs.iter().enumerate() {
+            let v = {
+                let read = |name: &str| {
+                    self.names
+                        .get(name)
+                        .and_then(|&at| values.get(at))
+                        .map(|v| Value::Number(*v))
+                };
+                e.eval(&read).number()
+            };
+            if let Some(slot) = values.get_mut(k + o) {
+                *slot = v;
+            }
+        }
+    }
+
+    /// The indices of the inputs that vary: those whose distribution is not a constant.
+    fn varying(&self) -> Vec<usize> {
+        self.inputs
+            .iter()
+            .enumerate()
+            .filter(|(_, i)| !matches!(i.dist, Dist::Constant(_)))
+            .map(|(k, _)| k)
+            .collect()
+    }
+
+    /// For each output, its value with every input at its median, and with each input that
+    /// varies, one at a time, at its 10th and at its 90th percentile and the others at their
+    /// medians: the tornado of decision analysis (Clemen and Reilly, *Making Hard Decisions*,
+    /// 3rd ed., Cengage, 2014, the swing from the 10th to the 90th percentile). The median, not
+    /// the mean, is the middle, so that a skewed input swings about the same middle either way.
+    /// No sampling is involved: 2k + 1 evaluations of the outputs for k varying inputs. Each
+    /// output's inputs are in input order, with no rank correlation yet.
+    fn tornado(&self) -> Vec<Influence> {
+        let k = self.inputs.len();
+        let medians: Vec<f64> = self
+            .inputs
+            .iter()
+            .map(|i| quantile::quantile(&i.dist, SWING_MIDDLE))
+            .collect();
+        let mut values = vec![0.0; k + self.outputs.len()];
+        let mut evaluate = |at: Option<(usize, f64)>| -> Vec<f64> {
+            for (slot, m) in values.iter_mut().zip(&medians) {
+                *slot = *m;
+            }
+            if let Some((i, x)) = at
+                && let Some(slot) = values.get_mut(i)
+            {
+                *slot = x;
+            }
+            self.evaluate_into(&mut values);
+            values.iter().skip(k).copied().collect()
+        };
+        let finite_at = |v: &[f64], o: usize| v.get(o).copied().filter(|x| x.is_finite());
+        let base = evaluate(None);
+        let mut out: Vec<Influence> = (0..self.outputs.len())
+            .map(|o| Influence {
+                base: finite_at(&base, o),
+                inputs: Vec::new(),
+            })
+            .collect();
+        for i in self.varying() {
+            let Some(input) = self.inputs.get(i) else {
+                continue;
+            };
+            let p10 = quantile::quantile(&input.dist, SWING_LOW);
+            let p90 = quantile::quantile(&input.dist, SWING_HIGH);
+            let lows = evaluate(Some((i, p10)));
+            let highs = evaluate(Some((i, p90)));
+            for (o, influence) in out.iter_mut().enumerate() {
+                influence.inputs.push(InputInfluence {
+                    input: input.name.clone(),
+                    p10,
+                    p90,
+                    low: finite_at(&lows, o),
+                    high: finite_at(&highs, o),
+                    rank_correlation: None,
+                });
+            }
+        }
+        out
     }
 
     /// Runs on this thread.
@@ -707,9 +797,33 @@ struct Summing {
     ranking: Option<(Sorter<(f64, usize)>, usize)>,
     /// Each correlated input's average ranks, once ranked.
     ranks: Vec<Option<Vec<f64>>>,
+    /// The rank correlations of the inputs with the outputs, worked out last.
+    influence: Ranking,
     /// Values sorted per chunk, and elements moved per merge step ([`Sorter`]).
     chunk: usize,
     budget: usize,
+}
+
+/// The rank correlation (Spearman's) of each input that varies with each output, worked out a
+/// piece at a time like the rest. Each output is ranked over the trials where it has a number;
+/// each input is ranked over the trials of each group of outputs that share those trials (all
+/// the trials for the outputs that have a number in every one, else the output's own), so that
+/// every correlation is of ranks within the trials it uses, with no copy of the ranks of more
+/// than one input at a time.
+#[derive(Debug, Clone, Default)]
+struct Ranking {
+    /// Each output's average ranks over its trials with a number, once ranked.
+    outputs: Vec<Vec<f64>>,
+    /// The values being ranked, an output's or an input's.
+    sorter: Option<Sorter<(f64, usize)>>,
+    /// The trials each group of outputs is ranked over, once known: `None` for every trial (the
+    /// outputs with a number in each), `Some(o)` for the trials where output `o` has a number.
+    groups: Option<Vec<Option<usize>>>,
+    /// The next input that varies, and the next group, to rank.
+    next: (usize, usize),
+    /// Each input that varies (outer) with each output (inner).
+    rho: Vec<Vec<Option<f64>>>,
+    done: bool,
 }
 
 /// Values sorted in fixed-size chunks, one chunk per step, and then merged in bottom-up passes
@@ -849,6 +963,7 @@ impl Summing {
             sorting: None,
             ranking: None,
             ranks: Vec::new(),
+            influence: Ranking::default(),
             chunk: SORT_CHUNK,
             budget: MERGE_BUDGET,
         }
@@ -920,10 +1035,6 @@ impl Summing {
                     if let Some(slot) = self.ranks.get_mut(at) {
                         *slot = Some(correlate::assign_ranks(&sorter.into_sorted()));
                     }
-                    // Only its ranks are needed from here on.
-                    if let Some(col) = self.columns.get_mut(at) {
-                        *col = Vec::new();
-                    }
                 }
             }
         } else if let Some(want) = c.correlations.get(self.correlations.len()) {
@@ -938,10 +1049,98 @@ impl Summing {
                 target: want.rank,
                 achieved,
             });
+        } else if !self.influence.done {
+            self.rank_step(c, blocks);
         }
         self.outputs.len() >= c.outputs.len()
             && self.inputs.len() >= c.inputs.len()
             && self.correlations.len() >= c.correlations.len()
+            && self.influence.done
+    }
+
+    /// Works out the next piece of the rank correlations of the inputs with the outputs: a piece
+    /// of an output's ranking, or an input's (an input's column is dropped once it has been
+    /// ranked over every group).
+    fn rank_step(&mut self, c: &Compiled, blocks: &[Block]) {
+        let (chunk, budget) = (self.chunk, self.budget);
+        let varying = c.varying();
+        let r = &mut self.influence;
+        let outputs = c.outputs.len();
+        if r.outputs.len() < outputs {
+            let o = r.outputs.len();
+            match r.sorter.take() {
+                None => {
+                    let pairs: Vec<(f64, usize)> = finite(blocks, o).into_iter().zip(0..).collect();
+                    r.sorter = Some(Sorter::new(pairs, chunk, budget, correlate::pair_order));
+                }
+                Some(mut sorter) if !sorter.is_done() => {
+                    sorter.step();
+                    r.sorter = Some(sorter);
+                }
+                Some(sorter) => r
+                    .outputs
+                    .push(correlate::assign_ranks(&sorter.into_sorted())),
+            }
+            return;
+        }
+        let Some(groups) = r.groups.clone() else {
+            let whole = |o: usize| self.outputs.get(o).is_some_and(|x| x.invalid == 0);
+            let mut groups: Vec<Option<usize>> = Vec::new();
+            if (0..outputs).any(whole) {
+                groups.push(None);
+            }
+            groups.extend((0..outputs).filter(|o| !whole(*o)).map(Some));
+            r.groups = Some(groups);
+            r.rho = vec![vec![None; outputs]; varying.len()];
+            return;
+        };
+        let Some(&input) = varying.get(r.next.0) else {
+            r.done = true;
+            return;
+        };
+        let Some(&group) = groups.get(r.next.1) else {
+            // Ranked over every group: this input is finished.
+            if let Some(col) = self.columns.get_mut(input) {
+                *col = Vec::new();
+            }
+            r.next = (r.next.0 + 1, 0);
+            return;
+        };
+        match r.sorter.take() {
+            None => {
+                let col = self.columns.get(input).map_or(&[][..], Vec::as_slice);
+                let pairs: Vec<(f64, usize)> = match group {
+                    None => col.iter().copied().zip(0..).collect(),
+                    Some(o) => col
+                        .iter()
+                        .zip(column(blocks, o, false))
+                        .filter(|(_, y)| y.is_finite())
+                        .map(|(x, _)| *x)
+                        .zip(0..)
+                        .collect(),
+                };
+                r.sorter = Some(Sorter::new(pairs, chunk, budget, correlate::pair_order));
+            }
+            Some(mut sorter) if !sorter.is_done() => {
+                sorter.step();
+                r.sorter = Some(sorter);
+            }
+            Some(sorter) => {
+                let ranks = correlate::assign_ranks(&sorter.into_sorted());
+                for (o, out_ranks) in r.outputs.iter().enumerate() {
+                    let uses = match group {
+                        None => self.outputs.get(o).is_some_and(|x| x.invalid == 0),
+                        Some(g) => g == o,
+                    };
+                    if uses
+                        && let Some(slot) = r.rho.get_mut(r.next.0).and_then(|row| row.get_mut(o))
+                    {
+                        *slot = correlate::correlation_of_ranks(&ranks, out_ranks);
+                    }
+                }
+                r.next.1 += 1;
+            }
+        }
     }
 
     /// The first input that a correlation names and that has no ranks yet, once every input's
@@ -978,6 +1177,25 @@ impl Summing {
         } else {
             IntervalBasis::Trials
         };
+        // The tornado, which takes no sampling, with the rank correlations, the widest swing
+        // first (inputs with equal swings in the order the model has them).
+        let mut outputs = self.outputs;
+        for (o, (result, mut influence)) in outputs.iter_mut().zip(c.tornado()).enumerate() {
+            for (v, entry) in influence.inputs.iter_mut().enumerate() {
+                entry.rank_correlation = self
+                    .influence
+                    .rho
+                    .get(v)
+                    .and_then(|row| row.get(o))
+                    .copied()
+                    .flatten();
+            }
+            influence.inputs.sort_by(|a, b| {
+                let width = |x: &InputInfluence| x.swing().unwrap_or(-1.0);
+                width(b).total_cmp(&width(a))
+            });
+            result.influence = influence;
+        }
         McResults {
             trials,
             requested_trials: trials,
@@ -985,7 +1203,7 @@ impl Summing {
             seed: c.seed,
             sampling: c.sampling,
             inputs: self.inputs,
-            outputs: self.outputs,
+            outputs,
             correlations: self.correlations,
             stop: self.stop,
         }
@@ -1146,6 +1364,47 @@ pub struct OutputResult {
     /// Points (x, share of trials at or below x) of the empirical cumulative distribution, at
     /// every 1% (its quantiles), for a chart.
     pub cdf: Vec<(f64, f64)>,
+    /// Which inputs it depends on.
+    pub influence: Influence,
+}
+
+/// Which inputs an output depends on, two ways. The tornado holds every input at its median and
+/// moves one at a time to its 10th and its 90th percentile ([`SWING_LOW`], [`SWING_HIGH`]; the
+/// swing of decision analysis, Clemen and Reilly, *Making Hard Decisions*, 3rd ed., Cengage,
+/// 2014): no sampling, and an input's effect with the others held still. The rank correlation
+/// (Spearman's) is of the trials' values of the input and of the output, so it is the input's
+/// effect together with that of the inputs it is correlated with. An input with a constant
+/// distribution is left out of both.
+#[derive(Debug, Clone, PartialEq, Default)]
+pub struct Influence {
+    /// The output with every input at its median; `None` if that is not a number.
+    pub base: Option<f64>,
+    /// Each input that varies, the widest swing first.
+    pub inputs: Vec<InputInfluence>,
+}
+
+/// One input's influence on an output.
+#[derive(Debug, Clone, PartialEq)]
+pub struct InputInfluence {
+    pub input: String,
+    /// The input's 10th and 90th percentiles.
+    pub p10: f64,
+    pub p90: f64,
+    /// The output with this input at its 10th and at its 90th percentile and the others at their
+    /// medians; `None` if it is not a number there.
+    pub low: Option<f64>,
+    pub high: Option<f64>,
+    /// Spearman's rank correlation of the input with the output across the trials where the
+    /// output has a number; `None` if either has no spread, or with fewer than two trials.
+    pub rank_correlation: Option<f64>,
+}
+
+impl InputInfluence {
+    /// How far the output moves from the input's 10th to its 90th percentile (always 0 or more);
+    /// `None` if either end is not a number.
+    pub fn swing(&self) -> Option<f64> {
+        Some((self.high? - self.low?).abs())
+    }
 }
 
 /// The chance of meeting an output's target.
@@ -1356,6 +1615,7 @@ fn describe_output(out: &McOutput, sorted: &[f64], total: usize, ps: &[f64]) -> 
                 Some((sorted_quantile(sorted, p)?, p))
             })
             .collect(),
+        influence: Influence::default(),
     }
 }
 

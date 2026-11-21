@@ -938,6 +938,13 @@ unit	yr	वर्ष
 	Press Run to run the model.	मॉडल चलाने के लिए चलाएँ दबाएँ।
 	Open Results to read what the run found.	चलाने पर क्या मिला, यह पढ़ने के लिए परिणाम खोलें।
 	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	यह आपका पहला मॉडल है। परिणाम की शुरुआती पंक्तियाँ बताती हैं कि चलाने पर क्या मिला; सहायता ▸ परिणामों का अर्थ हर संख्या को समझाता है।
+# Which inputs matter in the Monte Carlo results (ROADMAP M4.1, part 3a)
+	Which inputs matter	कौन-से इनपुट मायने रखते हैं
+	{output} depends most on {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile.	{output} सबसे अधिक {input} पर निर्भर करता है: जब {input} अपने 10वें से 90वें प्रतिशतक तक जाता है, तब यह {low} से {high} तक जाता है।
+	Each input from its 10th to its 90th percentile, with the others at their medians	हर इनपुट अपने 10वें से 90वें प्रतिशतक तक, बाकी अपनी माध्यिका पर
+	Base {value}	आधार मान {value}
+	A correlated input's figure includes the effect of the inputs it is correlated with.	सहसंबद्ध इनपुट के आँकड़े में उन इनपुट का प्रभाव भी शामिल है जिनसे वह सहसंबद्ध है।
+	The bars move one input at a time, so they leave out what correlated inputs do together.	पट्टियाँ एक बार में एक इनपुट बदलती हैं, इसलिए सहसंबद्ध इनपुट मिलकर जो करते हैं वह इनमें नहीं आता।
 @plural	Added {n} block|Added {n} blocks	{n} ब्लॉक जोड़ा गया|{n} ब्लॉक जोड़े गए
 @plural	Copied {n} block|Copied {n} blocks	{n} ब्लॉक कॉपी किया गया|{n} ब्लॉक कॉपी किए गए
 @plural	Finished {n} run|Finished {n} runs	{n} रन पूरा हुआ|{n} रन पूरे हुए

@@ -862,6 +862,18 @@ fields (`“Service time”`) are named in the messages by their own rows.
   checked against any other source, and not reviewed by native speakers; the least certain are
   lo, ta, te, th, bn, ka, kk, hi, el, fi and sq, the work-in-process and Little's-law terms in
   most of them, and the long rows on the hub and the prison in every language.
+- The rows for which inputs matter in the Monte Carlo results (ROADMAP M4.1, part 3a: the
+  heading, the sentence naming the input an output depends on most, the tornado chart's caption
+  and "Base {value}", and the two notes on correlated inputs) were machine-drafted with Claude
+  Code from the plain meaning of the English, reusing each catalog's own words for input,
+  output, percentile (its "95th percentile" and "Percentile" rows, with its ordinals for 10th
+  and 90th), rank correlation and correlated (from its "Inputs", "Rank correlation" and
+  "Correlations" rows). "Median" and "base value" had no row in any catalog, so they are each
+  language's own choice (the statistics term as remembered, not checked against Wikipedia or
+  IATE). Not checked against any other source, and not reviewed by native speakers; the least
+  certain are lo, th, ta, te, bn, ka, kk, hi, sq and hu (its percentile ordinals and "a(z)"
+  articles), the ordinals for 10th and 90th in ka, kk, sq and el, and the sentence "it goes
+  from … to … as … goes from its 10th to its 90th percentile" in every language.
 
 **Adding or changing a string:** add the English in the code through `i18n::t` (or `tf`, `tn`),
 then add its row to each catalog here, or leave it out to show English until it is translated.

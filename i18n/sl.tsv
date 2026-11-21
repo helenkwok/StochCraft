@@ -938,6 +938,13 @@ unit	yr	l.
 	Press Run to run the model.	Pritisnite Zaženi, da zaženete model.
 	Open Results to read what the run found.	Odprite Rezultati, da preberete, kaj je zagon ugotovil.
 	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	To je vaš prvi model. Prve vrstice v Rezultati povedo, kaj je zagon ugotovil; Pomoč ▸ Kaj pomenijo rezultati razloži vsako številko.
+# Which inputs matter in the Monte Carlo results (ROADMAP M4.1, part 3a)
+	Which inputs matter	Kateri vhodi so pomembni
+	{output} depends most on {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile.	{output} je največ odvisen od vhoda {input}: giblje se od {low} do {high}, ko se {input} premakne od svojega 10. do svojega 90. percentila.
+	Each input from its 10th to its 90th percentile, with the others at their medians	Vsak vhod od svojega 10. do svojega 90. percentila, drugi pri svojih medianah
+	Base {value}	Osnovna vrednost {value}
+	A correlated input's figure includes the effect of the inputs it is correlated with.	Podatek za korelirani vhod vključuje učinek vhodov, s katerimi je koreliran.
+	The bars move one input at a time, so they leave out what correlated inputs do together.	Stolpci premikajo po en vhod naenkrat, zato izpustijo to, kar korelirani vhodi počnejo skupaj.
 @plural	Added {n} block|Added {n} blocks	Dodan je {n} blok|Dodana sta {n} bloka|Dodani so {n} bloki|Dodanih je {n} blokov
 @plural	Copied {n} block|Copied {n} blocks	Kopiran je {n} blok|Kopirana sta {n} bloka|Kopirani so {n} bloki|Kopiranih je {n} blokov
 @plural	Finished {n} run|Finished {n} runs	Končan je {n} zagon|Končana sta {n} zagona|Končani so {n} zagoni|Končanih je {n} zagonov

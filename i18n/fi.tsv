@@ -938,6 +938,13 @@ unit	yr	v
 	Press Run to run the model.	Paina Suorita ajaaksesi mallin.
 	Open Results to read what the run found.	Avaa Tulokset lukeaksesi, mitä ajo havaitsi.
 	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	Tämä on ensimmäinen mallisi. Tulosten ensimmäiset rivit kertovat, mitä ajo havaitsi; Ohje ▸ Mitä tulokset tarkoittavat selittää jokaisen luvun.
+# Which inputs matter in the Monte Carlo results (ROADMAP M4.1, part 3a)
+	Which inputs matter	Mitkä syötteet ovat tärkeitä
+	{output} depends most on {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile.	{output} riippuu eniten syötteestä {input}: se kulkee arvosta {low} arvoon {high}, kun {input} kulkee 10. persentiilistaan 90. persentiiliinsä.
+	Each input from its 10th to its 90th percentile, with the others at their medians	Kukin syöte 10. persentiilistaan 90. persentiiliinsä, muut mediaaneillaan
+	Base {value}	Perusarvo {value}
+	A correlated input's figure includes the effect of the inputs it is correlated with.	Korreloivan syötteen luku sisältää niiden syötteiden vaikutuksen, joiden kanssa se korreloi.
+	The bars move one input at a time, so they leave out what correlated inputs do together.	Palkit siirtävät yhtä syötettä kerrallaan, joten ne jättävät pois sen, mitä korreloivat syötteet tekevät yhdessä.
 @plural	Added {n} block|Added {n} blocks	Lisättiin {n} lohko|Lisättiin {n} lohkoa
 @plural	Copied {n} block|Copied {n} blocks	Kopioitiin {n} lohko|Kopioitiin {n} lohkoa
 @plural	Finished {n} run|Finished {n} runs	{n} ajo valmistui|{n} ajoa valmistui

@@ -938,6 +938,13 @@ unit	yr	ஆண்டு
 	Press Run to run the model.	மாதிரியை இயக்க “இயக்கு” என்பதை அழுத்தவும்.
 	Open Results to read what the run found.	இயக்கம் கண்டறிந்ததைப் படிக்க “முடிவுகள்” என்பதைத் திறக்கவும்.
 	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	இதுதான் உங்கள் முதல் மாதிரி. “முடிவுகள்” பகுதியின் முதல் வரிகள் இயக்கம் கண்டறிந்ததைச் சொல்கின்றன; உதவி ▸ முடிவுகளின் பொருள் ஒவ்வொரு எண்ணையும் விளக்குகிறது.
+# Which inputs matter in the Monte Carlo results (ROADMAP M4.1, part 3a)
+	Which inputs matter	எந்த உள்ளீடுகள் முக்கியம்
+	{output} depends most on {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile.	{output} மிகவும் சார்ந்திருப்பது {input}-ஐ: {input} தனது 10-ஆம் சதமானத்திலிருந்து 90-ஆம் சதமானத்துக்குச் செல்லும்போது அது {low}-இலிருந்து {high}-க்குச் செல்கிறது.
+	Each input from its 10th to its 90th percentile, with the others at their medians	ஒவ்வொரு உள்ளீடும் தனது 10-ஆம் சதமானத்திலிருந்து 90-ஆம் சதமானம் வரை, மற்றவை அவற்றின் இடைநிலையில்
+	Base {value}	அடிப்படை மதிப்பு {value}
+	A correlated input's figure includes the effect of the inputs it is correlated with.	ஒட்டுறவுள்ள உள்ளீட்டின் எண்ணில் அது எந்த உள்ளீடுகளுடன் ஒட்டுறவு கொண்டுள்ளதோ அவற்றின் விளைவும் அடங்கும்.
+	The bars move one input at a time, so they leave out what correlated inputs do together.	பட்டைகள் ஒரு நேரத்தில் ஒரு உள்ளீட்டை நகர்த்துகின்றன, எனவே ஒட்டுறவுள்ள உள்ளீடுகள் சேர்ந்து செய்வது அவற்றில் இல்லை.
 @plural	Added {n} block|Added {n} blocks	{n} தொகுதி சேர்க்கப்பட்டது|{n} தொகுதிகள் சேர்க்கப்பட்டன
 @plural	Copied {n} block|Copied {n} blocks	{n} தொகுதி நகலெடுக்கப்பட்டது|{n} தொகுதிகள் நகலெடுக்கப்பட்டன
 @plural	Finished {n} run|Finished {n} runs	{n} மீள் இயக்கம் முடிந்தது|{n} மீள் இயக்கங்கள் முடிந்தன

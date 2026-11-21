@@ -938,6 +938,13 @@ unit	yr	a
 	Press Run to run the model.	Apăsați Rulează pentru a rula modelul.
 	Open Results to read what the run found.	Deschideți Rezultate pentru a citi ce a găsit rularea.
 	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	Acesta este primul dumneavoastră model. Primele rânduri din Rezultate spun ce a găsit rularea; Ajutor ▸ Ce înseamnă rezultatele explică fiecare număr.
+# Which inputs matter in the Monte Carlo results (ROADMAP M4.1, part 3a)
+	Which inputs matter	Ce intrări contează
+	{output} depends most on {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile.	{output} depinde cel mai mult de {input}: merge de la {low} la {high} când {input} merge de la percentila 10 la percentila 90.
+	Each input from its 10th to its 90th percentile, with the others at their medians	Fiecare intrare de la percentila 10 la percentila 90, celelalte la mediană
+	Base {value}	Valoare de bază {value}
+	A correlated input's figure includes the effect of the inputs it is correlated with.	Cifra unei intrări corelate include efectul intrărilor cu care este corelată.
+	The bars move one input at a time, so they leave out what correlated inputs do together.	Barele mută o singură intrare o dată, deci lasă deoparte ce fac împreună intrările corelate.
 @plural	Added {n} block|Added {n} blocks	S-a adăugat {n} bloc|S-au adăugat {n} blocuri|S-au adăugat {n} de blocuri
 @plural	Copied {n} block|Copied {n} blocks	S-a copiat {n} bloc|S-au copiat {n} blocuri|S-au copiat {n} de blocuri
 @plural	Finished {n} run|Finished {n} runs	S-a încheiat {n} rulare|S-au încheiat {n} rulări|S-au încheiat {n} de rulări

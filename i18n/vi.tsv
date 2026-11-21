@@ -938,6 +938,13 @@ unit	yr	năm
 	Press Run to run the model.	Nhấn “Chạy” để chạy mô hình.
 	Open Results to read what the run found.	Mở “Kết quả” để đọc những gì lần chạy đã tìm ra.
 	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	Đây là mô hình đầu tiên của bạn. Những dòng đầu của “Kết quả” cho biết lần chạy đã tìm ra gì; Trợ giúp ▸ Ý nghĩa của kết quả giải thích từng con số.
+# Which inputs matter in the Monte Carlo results (ROADMAP M4.1, part 3a)
+	Which inputs matter	Đầu vào nào quan trọng
+	{output} depends most on {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile.	{output} phụ thuộc nhiều nhất vào {input}: nó đi từ {low} đến {high} khi {input} đi từ phân vị thứ 10 đến phân vị thứ 90 của nó.
+	Each input from its 10th to its 90th percentile, with the others at their medians	Mỗi đầu vào từ phân vị thứ 10 đến phân vị thứ 90, các đầu vào khác ở trung vị
+	Base {value}	Giá trị cơ sở {value}
+	A correlated input's figure includes the effect of the inputs it is correlated with.	Số liệu của một đầu vào có tương quan bao gồm tác động của các đầu vào mà nó có tương quan với.
+	The bars move one input at a time, so they leave out what correlated inputs do together.	Các thanh di chuyển từng đầu vào một, nên bỏ qua những gì các đầu vào có tương quan làm cùng nhau.
 @plural	Added {n} block|Added {n} blocks	Đã thêm {n} khối
 @plural	Copied {n} block|Copied {n} blocks	Đã sao chép {n} khối
 @plural	Finished {n} run|Finished {n} runs	Đã hoàn thành {n} lần chạy

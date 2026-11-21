@@ -710,6 +710,100 @@ fn the_project_budget_matches_its_exact_means() {
     assert!((achieved - 0.4).abs() < 0.05, "{achieved}");
 }
 
+/// Which inputs of the project budget matter: the tornado moves one input from its 10th to its
+/// 90th percentile with the others at their medians, so its numbers are those of the inputs'
+/// exact quantiles (a triangular's inverse distribution function, the uniform's and the
+/// normal's z of 0.9, 1.2815515655446004). Building takes longer and is less certain than
+/// designing, so it moves the duration more; the cost, which also has a day rate and materials,
+/// is ordered by the same exact swings.
+#[test]
+fn the_project_budget_says_which_inputs_matter() {
+    let path = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../tests/models/budget.bpmn");
+    let mut e = Engine::new();
+    ok(
+        &mut e,
+        "file.open",
+        json!({ "path": path.to_string_lossy() }),
+    );
+    let r = ok(&mut e, "mc.run", json!({}));
+    let influence = |name: &str| {
+        r["outputs"]
+            .as_array()
+            .into_iter()
+            .flatten()
+            .find(|o| o["name"] == name)
+            .map(|o| o["influence"].clone())
+            .unwrap_or_else(|| panic!("no output {name}: {r}"))
+    };
+    let triangular = |min: f64, mode: f64, max: f64, p: f64| {
+        if p < (mode - min) / (max - min) {
+            min + (p * (max - min) * (mode - min)).sqrt()
+        } else {
+            max - ((1.0 - p) * (max - min) * (max - mode)).sqrt()
+        }
+    };
+    let design = |p: f64| triangular(8.0, 10.0, 16.0, p);
+    let build = |p: f64| triangular(15.0, 20.0, 32.0, p);
+    let near = |v: &Value, want: f64| {
+        let got = v.as_f64().unwrap_or(f64::NAN);
+        assert!(
+            (got - want).abs() < 1e-6 * want.abs().max(1.0),
+            "{got} not {want}"
+        );
+    };
+
+    let d = influence("duration");
+    near(&d["base"], design(0.5) + build(0.5));
+    let inputs = d["inputs"].as_array().cloned().unwrap_or_default();
+    let names: Vec<&str> = inputs.iter().filter_map(|i| i["input"].as_str()).collect();
+    assert_eq!(names, ["build", "design"], "{d}");
+    let [b, des] = inputs.as_slice() else {
+        panic!("two inputs: {d}")
+    };
+    near(&b["low"], design(0.5) + build(0.1));
+    near(&b["high"], design(0.5) + build(0.9));
+    near(&b["swing"], build(0.9) - build(0.1));
+    near(&des["low"], design(0.1) + build(0.5));
+    near(&des["high"], design(0.9) + build(0.5));
+    near(&des["swing"], design(0.9) - design(0.1));
+    assert!(b["swing"].as_f64() > des["swing"].as_f64());
+    // The rank correlations, from the trials, rank them alike.
+    assert!(b["rank_correlation"].as_f64() > des["rank_correlation"].as_f64());
+    assert!(des["rank_correlation"].as_f64().is_some_and(|x| x > 0.3));
+
+    // The cost is duration × day rate + materials; every input at its median is the base.
+    let c = influence("cost");
+    let days = design(0.5) + build(0.5);
+    near(&c["base"], days * 900.0 + 12_000.0);
+    let z90 = 1.281_551_565_544_600_4;
+    let mut want = [
+        ("build", (build(0.9) - build(0.1)) * 900.0),
+        ("design", (design(0.9) - design(0.1)) * 900.0),
+        ("day_rate", days * 160.0),
+        ("materials", 2.0 * z90 * 1_500.0),
+    ];
+    want.sort_by(|a, b| b.1.total_cmp(&a.1));
+    let got: Vec<(&str, f64)> = c["inputs"]
+        .as_array()
+        .into_iter()
+        .flatten()
+        .map(|i| {
+            (
+                i["input"].as_str().unwrap_or(""),
+                i["swing"].as_f64().unwrap_or(f64::NAN),
+            )
+        })
+        .collect();
+    assert_eq!(
+        got.iter().map(|g| g.0).collect::<Vec<_>>(),
+        want.iter().map(|w| w.0).collect::<Vec<_>>(),
+        "{c}"
+    );
+    for (g, w) in got.iter().zip(&want) {
+        assert!((g.1 - w.1).abs() < 1e-6 * w.1, "{g:?} not {w:?}");
+    }
+}
+
 /// A polling place from T. T. Allen, *Introduction to Discrete Event Simulation and Agent-based
 /// Modeling*, Springer 2011: ballots of 19 initiatives take 12.5 minutes on average and of 8
 /// initiatives 6.5 (§7.3.3), over a 13-hour day (§7.3.4). The arrival rate is deduced, not

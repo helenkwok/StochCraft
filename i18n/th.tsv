@@ -938,6 +938,13 @@ unit	yr	ปี
 	Press Run to run the model.	กด “รัน” เพื่อรันแบบจำลอง
 	Open Results to read what the run found.	เปิด “ผลลัพธ์” เพื่ออ่านสิ่งที่การรันพบ
 	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	นี่คือแบบจำลองแรกของคุณ บรรทัดแรกของ “ผลลัพธ์” บอกสิ่งที่การรันพบ วิธีใช้ ▸ ความหมายของผลลัพธ์ อธิบายแต่ละตัวเลข
+# Which inputs matter in the Monte Carlo results (ROADMAP M4.1, part 3a)
+	Which inputs matter	อินพุตใดมีความสำคัญ
+	{output} depends most on {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile.	{output} ขึ้นอยู่กับ {input} มากที่สุด: ค่าจะเปลี่ยนจาก {low} เป็น {high} เมื่อ {input} เปลี่ยนจากเปอร์เซ็นไทล์ที่ 10 ไปเป็นเปอร์เซ็นไทล์ที่ 90
+	Each input from its 10th to its 90th percentile, with the others at their medians	อินพุตแต่ละตัวจากเปอร์เซ็นไทล์ที่ 10 ถึงที่ 90 โดยตัวอื่นอยู่ที่ค่ามัธยฐาน
+	Base {value}	ค่าฐาน {value}
+	A correlated input's figure includes the effect of the inputs it is correlated with.	ตัวเลขของอินพุตที่มีสหสัมพันธ์รวมผลของอินพุตที่มันมีสหสัมพันธ์ด้วย
+	The bars move one input at a time, so they leave out what correlated inputs do together.	แท่งขยับอินพุตทีละตัว จึงไม่รวมสิ่งที่อินพุตที่มีสหสัมพันธ์ทำร่วมกัน
 @plural	Added {n} block|Added {n} blocks	เพิ่ม {n} บล็อกแล้ว
 @plural	Copied {n} block|Copied {n} blocks	คัดลอก {n} บล็อกแล้ว
 @plural	Finished {n} run|Finished {n} runs	การรันเสร็จสิ้น {n} รอบ

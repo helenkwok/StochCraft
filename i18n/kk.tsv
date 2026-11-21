@@ -938,6 +938,13 @@ unit	yr	ж.
 	Press Run to run the model.	Модельді іске қосу үшін «Іске қосу» түймесін басыңыз.
 	Open Results to read what the run found.	Іске қосу нені тапқанын оқу үшін «Нәтижелер» бөлімін ашыңыз.
 	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	Бұл – сіздің алғашқы модельіңіз. «Нәтижелер» бөлімінің алғашқы жолдары іске қосу нені тапқанын айтады; «Көмек» ▸ «Нәтижелер нені білдіреді» әр санды түсіндіреді.
+# Which inputs matter in the Monte Carlo results (ROADMAP M4.1, part 3a)
+	Which inputs matter	Қай кіріс шамалар маңызды
+	{output} depends most on {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile.	{output} ең көп {input} шамасына тәуелді: {input} өзінің 10-шы процентилінен 90-шы процентиліне өткенде, ол {low}-дан {high}-ге дейін өзгереді.
+	Each input from its 10th to its 90th percentile, with the others at their medians	Әр кіріс шама 10-шы процентилінен 90-шы процентиліне дейін, қалғандары медианасында
+	Base {value}	Базалық мән {value}
+	A correlated input's figure includes the effect of the inputs it is correlated with.	Корреляцияланған кіріс шаманың көрсеткіші онымен корреляцияланған кіріс шамалардың әсерін қамтиды.
+	The bars move one input at a time, so they leave out what correlated inputs do together.	Жолақтар бір уақытта бір кіріс шаманы жылжытады, сондықтан корреляцияланған кіріс шамалардың бірге істейтінін қамтымайды.
 @plural	Added {n} block|Added {n} blocks	{n} блок қосылды|{n} блок қосылды
 @plural	Copied {n} block|Copied {n} blocks	{n} блок көшірілді|{n} блок көшірілді
 @plural	Finished {n} run|Finished {n} runs	{n} іске қосу аяқталды|{n} іске қосу аяқталды

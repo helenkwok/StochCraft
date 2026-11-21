@@ -938,6 +938,13 @@ unit	yr	a
 	Press Run to run the model.	Vajutage Käivita, et mudel käivitada.
 	Open Results to read what the run found.	Avage Tulemused, et lugeda, mida käivitus leidis.
 	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	See on teie esimene mudel. Tulemuste esimesed read ütlevad, mida käivitus leidis; Abi ▸ Mida tulemused tähendavad selgitab iga numbrit.
+# Which inputs matter in the Monte Carlo results (ROADMAP M4.1, part 3a)
+	Which inputs matter	Millised sisendid loevad
+	{output} depends most on {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile.	{output} sõltub kõige rohkem sisendist {input}: see liigub vahemikus {low} kuni {high}, kui {input} liigub oma 10. protsentiililt 90. protsentiilile.
+	Each input from its 10th to its 90th percentile, with the others at their medians	Iga sisend oma 10. kuni 90. protsentiilini, teised oma mediaanidel
+	Base {value}	Baasväärtus {value}
+	A correlated input's figure includes the effect of the inputs it is correlated with.	Korreleeritud sisendi arv hõlmab nende sisendite mõju, millega see on korreleeritud.
+	The bars move one input at a time, so they leave out what correlated inputs do together.	Tulbad liigutavad korraga ühte sisendit, seega jätavad need välja selle, mida korreleeritud sisendid koos teevad.
 @plural	Added {n} block|Added {n} blocks	Lisati {n} plokk|Lisati {n} plokki
 @plural	Copied {n} block|Copied {n} blocks	Kopeeriti {n} plokk|Kopeeriti {n} plokki
 @plural	Finished {n} run|Finished {n} runs	{n} käivitamine lõpetatud|{n} käivitamist lõpetatud

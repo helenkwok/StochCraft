@@ -865,6 +865,7 @@ fn mc_record(context: &Value, r: &McResults, m: &MonteCarlo) -> Value {
         "random_streams": "trials in batches of 1,000; each input's draws in batch b from the stream keyed mc/<b>/input/<name> under the seed, and the pairing of correlated inputs from mc/<b>/correlation, so results do not depend on the number of threads",
         "correlation": "rank correlations induced by Iman and Conover's method (1982) in each batch, on van der Waerden scores with Pearson correlation 2 sin(πρ/6) for a rank correlation ρ",
         "uncertainty": uncertainty_text(r),
+        "influence": "per output and per input that is not a constant, widest swing first. base: the output with every input at its median. low and high: the output with that input at its 10th (p10) and its 90th (p90) percentile and every other input at its median (the tornado of decision analysis, Clemen and Reilly, Making Hard Decisions, 3rd ed., 2014); swing: |high - low|, null if either is not a number. No sampling is used, so these do not vary with the seed, the trials or the sampling, and they leave out what correlated inputs do together. rank_correlation: Spearman's, between the input and the output across the run's trials where the output has a number; for a correlated input it includes the effect of the inputs it is correlated with; null if either has no spread",
         "file_notes": context["file_notes"],
     })
 }
@@ -915,6 +916,18 @@ fn output_json(o: &OutputResult) -> Value {
         "percentiles": percentiles,
         "histogram": { "edges": o.histogram.edges, "counts": o.histogram.counts },
         "cdf": o.cdf.iter().map(|(x, p)| json!([x, p])).collect::<Vec<_>>(),
+        "influence": {
+            "base": o.influence.base,
+            "inputs": o.influence.inputs.iter().map(|i| json!({
+                "input": i.input,
+                "p10": i.p10,
+                "p90": i.p90,
+                "low": i.low,
+                "high": i.high,
+                "swing": i.swing(),
+                "rank_correlation": i.rank_correlation,
+            })).collect::<Vec<_>>(),
+        },
     });
     if let Some(t) = o.target {
         let (kind, x) = match t.target {

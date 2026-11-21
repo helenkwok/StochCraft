@@ -938,6 +938,13 @@ unit	yr	έτ
 	Press Run to run the model.	Πατήστε Εκτέλεση για να εκτελέσετε το μοντέλο.
 	Open Results to read what the run found.	Ανοίξτε τα Αποτελέσματα για να διαβάσετε τι διαπίστωσε η εκτέλεση.
 	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	Αυτό είναι το πρώτο σας μοντέλο. Οι πρώτες γραμμές των Αποτελεσμάτων λένε τι διαπίστωσε η εκτέλεση· Βοήθεια ▸ Τι σημαίνουν τα αποτελέσματα εξηγεί κάθε αριθμό.
+# Which inputs matter in the Monte Carlo results (ROADMAP M4.1, part 3a)
+	Which inputs matter	Ποιες είσοδοι έχουν σημασία
+	{output} depends most on {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile.	Το {output} εξαρτάται περισσότερο από την είσοδο {input}: πηγαίνει από {low} έως {high} καθώς η {input} πηγαίνει από το 10ο στο 90ό εκατοστημόριό της.
+	Each input from its 10th to its 90th percentile, with the others at their medians	Κάθε είσοδος από το 10ο έως το 90ό εκατοστημόριό της, με τις άλλες στις διάμεσους τιμές τους
+	Base {value}	Βασική τιμή {value}
+	A correlated input's figure includes the effect of the inputs it is correlated with.	Ο αριθμός μιας συσχετισμένης εισόδου περιλαμβάνει την επίδραση των εισόδων με τις οποίες συσχετίζεται.
+	The bars move one input at a time, so they leave out what correlated inputs do together.	Οι ράβδοι μετακινούν μία είσοδο τη φορά, οπότε παραλείπουν ό,τι κάνουν μαζί οι συσχετισμένες είσοδοι.
 @plural	Added {n} block|Added {n} blocks	Προστέθηκε {n} μπλοκ|Προστέθηκαν {n} μπλοκ
 @plural	Copied {n} block|Copied {n} blocks	Αντιγράφηκε {n} μπλοκ|Αντιγράφηκαν {n} μπλοκ
 @plural	Finished {n} run|Finished {n} runs	Ολοκληρώθηκε {n} εκτέλεση|Ολοκληρώθηκαν {n} εκτελέσεις

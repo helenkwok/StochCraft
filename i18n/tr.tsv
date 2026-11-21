@@ -938,6 +938,13 @@ unit	yr	yıl
 	Press Run to run the model.	Modeli çalıştırmak için Çalıştır'a basın.
 	Open Results to read what the run found.	Çalıştırmanın ne bulduğunu okumak için Sonuçlar'ı açın.
 	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	Bu sizin ilk modeliniz. Sonuçlar'ın ilk satırları çalıştırmanın ne bulduğunu söyler; Yardım ▸ Sonuçlar Ne Anlama Geliyor her sayıyı açıklar.
+# Which inputs matter in the Monte Carlo results (ROADMAP M4.1, part 3a)
+	Which inputs matter	Hangi girdiler önemli
+	{output} depends most on {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile.	{output} en çok {input} girdisine bağlıdır: {input} kendi 10. yüzdeliğinden 90. yüzdeliğine giderken {low} değerinden {high} değerine gider.
+	Each input from its 10th to its 90th percentile, with the others at their medians	Her girdi kendi 10. yüzdeliğinden 90. yüzdeliğine, diğerleri medyanlarında
+	Base {value}	Temel değer {value}
+	A correlated input's figure includes the effect of the inputs it is correlated with.	Korelasyonlu bir girdinin rakamı, korelasyonlu olduğu girdilerin etkisini de içerir.
+	The bars move one input at a time, so they leave out what correlated inputs do together.	Çubuklar her seferinde bir girdiyi oynatır, bu yüzden korelasyonlu girdilerin birlikte yaptığını içermez.
 @plural	Added {n} block|Added {n} blocks	{n} blok eklendi|{n} blok eklendi
 @plural	Copied {n} block|Copied {n} blocks	{n} blok kopyalandı|{n} blok kopyalandı
 @plural	Finished {n} run|Finished {n} runs	{n} çalıştırma tamamlandı|{n} çalıştırma tamamlandı

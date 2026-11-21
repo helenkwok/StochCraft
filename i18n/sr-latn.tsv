@@ -938,6 +938,13 @@ unit	yr	god.
 	Press Run to run the model.	Pritisnite „Pokreni” da biste pokrenuli model.
 	Open Results to read what the run found.	Otvorite „Rezultati” da biste pročitali šta je pokretanje otkrilo.
 	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	To je vaš prvi model. Prve linije u delu „Rezultati” govore šta je pokretanje otkrilo; Pomoć ▸ Šta znače rezultati objašnjava svaki broj.
+# Which inputs matter in the Monte Carlo results (ROADMAP M4.1, part 3a)
+	Which inputs matter	Koje ulazne veličine su važne
+	{output} depends most on {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile.	{output} najviše zavisi od veličine {input}: ide od {low} do {high} kako {input} ide od svog 10. do svog 90. percentila.
+	Each input from its 10th to its 90th percentile, with the others at their medians	Svaka ulazna veličina od svog 10. do svog 90. percentila, a ostale na svojim medijanama
+	Base {value}	Osnovna vrednost {value}
+	A correlated input's figure includes the effect of the inputs it is correlated with.	Broj za koreliranu ulaznu veličinu uključuje uticaj ulaznih veličina sa kojima je korelirana.
+	The bars move one input at a time, so they leave out what correlated inputs do together.	Trake pomeraju po jednu ulaznu veličinu, pa izostavljaju ono što korelirane ulazne veličine rade zajedno.
 @plural	Added {n} block|Added {n} blocks	Dodat je {n} blok|Dodata su {n} bloka|Dodato je {n} blokova
 @plural	Copied {n} block|Copied {n} blocks	Kopiran je {n} blok|Kopirana su {n} bloka|Kopirano je {n} blokova
 @plural	Finished {n} run|Finished {n} runs	Završeno je {n} pokretanje|Završena su {n} pokretanja|Završeno je {n} pokretanja

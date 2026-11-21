@@ -938,6 +938,13 @@ unit	yr	년
 	Press Run to run the model.	실행을 눌러 모델을 실행하세요.
 	Open Results to read what the run found.	결과를 열어 실행으로 알아낸 내용을 읽으세요.
 	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	첫 모델이 완성되었습니다. 결과의 첫 줄들이 실행으로 알아낸 내용을 알려 주며, 도움말 ▸ 결과의 의미에서 각 숫자를 설명합니다.
+# Which inputs matter in the Monte Carlo results (ROADMAP M4.1, part 3a)
+	Which inputs matter	중요한 입력
+	{output} depends most on {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile.	{output}은(는) {input}에 가장 크게 좌우됩니다. {input}이(가) 10번째 백분위수에서 90번째 백분위수로 움직이면 {low}에서 {high}로 바뀝니다.
+	Each input from its 10th to its 90th percentile, with the others at their medians	각 입력을 10번째에서 90번째 백분위수까지 움직이고 나머지는 중앙값에 둠
+	Base {value}	기준값 {value}
+	A correlated input's figure includes the effect of the inputs it is correlated with.	상관된 입력의 수치에는 그 입력과 상관된 입력의 영향이 포함됩니다.
+	The bars move one input at a time, so they leave out what correlated inputs do together.	막대는 입력을 한 번에 하나씩 움직이므로, 상관된 입력이 함께 하는 일은 포함하지 않습니다.
 @plural	Added {n} block|Added {n} blocks	블록 {n}개 추가됨
 @plural	Copied {n} block|Copied {n} blocks	블록 {n}개 복사됨
 @plural	Finished {n} run|Finished {n} runs	실행 {n}회 완료

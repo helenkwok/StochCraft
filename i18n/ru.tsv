@@ -938,6 +938,13 @@ unit	yr	г.
 	Press Run to run the model.	Нажмите Запустить, чтобы запустить модель.
 	Open Results to read what the run found.	Откройте Результаты, чтобы прочитать, что обнаружил запуск.
 	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	Это ваша первая модель. Первые строки раздела Результаты говорят, что обнаружил запуск; Справка ▸ Что означают результаты объясняет каждое число.
+# Which inputs matter in the Monte Carlo results (ROADMAP M4.1, part 3a)
+	Which inputs matter	Какие входные величины важны
+	{output} depends most on {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile.	{output} больше всего зависит от величины {input}: оно меняется от {low} до {high}, когда {input} меняется от своего 10-го до 90-го процентиля.
+	Each input from its 10th to its 90th percentile, with the others at their medians	Каждая входная величина от 10-го до 90-го процентиля, остальные на медианах
+	Base {value}	Базовое значение {value}
+	A correlated input's figure includes the effect of the inputs it is correlated with.	Число для коррелированной входной величины включает влияние величин, с которыми она коррелирует.
+	The bars move one input at a time, so they leave out what correlated inputs do together.	Столбцы сдвигают по одной входной величине, поэтому не учитывают то, что коррелированные величины делают вместе.
 @plural	Added {n} block|Added {n} blocks	Добавлен {n} блок|Добавлено {n} блока|Добавлено {n} блоков
 @plural	Copied {n} block|Copied {n} blocks	Скопирован {n} блок|Скопировано {n} блока|Скопировано {n} блоков
 @plural	Finished {n} run|Finished {n} runs	Завершён {n} запуск|Завершены {n} запуска|Завершено {n} запусков

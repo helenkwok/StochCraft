@@ -462,8 +462,19 @@ The **Results** tab answers the question first:
   in whole batches: 2,500 trials asked for run as 3,000, and the results say so.
 - The line under **Results** gives the trials, the seed and the sampling, and how a run with
   **More until precise enough** stopped. **Export table (CSV)** saves a row per output.
-- Which inputs matter most (a tornado chart, rank correlations of inputs with each output, and
-  variance-based indices) is not in the window yet.
+- **Which inputs matter**, for each output, says in words which input it depends on most: "duration
+  depends most on build: it goes from 29.02 to 38.58 days as build goes from its 10th to its 90th
+  percentile". Under it, a tornado chart: one bar for each input, from the output with that input at
+  its 10th percentile to the output with it at its 90th, and every other input at its median (the
+  median, not the mean, so a skewed input swings about the same middle either way; this is the
+  swing of decision analysis, Clemen and Reilly, *Making Hard Decisions*). The widest bar is first,
+  and the line is the output with every input at its median. The bars need no trials, so they
+  do not change with the seed. Then a table of each input's rank correlation with the output,
+  worked out from the trials: close to 1 or -1 means the output goes up or down with the input.
+  An input that is a constant is left out. The bars change one input at a time, so they leave out
+  what correlated inputs do together, and a correlated input's rank correlation includes the effect
+  of the inputs it is correlated with: the results say so when the model has correlated inputs.
+  Variance-based (Sobol) indices come next.
 
 ## Save, open and export
 

@@ -938,6 +938,13 @@ unit	yr	år
 	Press Run to run the model.	Tryk på Kør for at køre modellen.
 	Open Results to read what the run found.	Åbn Resultater for at læse, hvad kørslen fandt.
 	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	Det er din første model. De første linjer i Resultater fortæller, hvad kørslen fandt; Hjælp ▸ Hvad resultaterne betyder forklarer hvert tal.
+# Which inputs matter in the Monte Carlo results (ROADMAP M4.1, part 3a)
+	Which inputs matter	Hvilke input der betyder noget
+	{output} depends most on {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile.	{output} afhænger mest af {input}: den går fra {low} til {high}, når {input} går fra sin 10. til sin 90. percentil.
+	Each input from its 10th to its 90th percentile, with the others at their medians	Hvert input fra sin 10. til sin 90. percentil, med de andre ved deres medianer
+	Base {value}	Basisværdi {value}
+	A correlated input's figure includes the effect of the inputs it is correlated with.	Tallet for et korreleret input omfatter effekten af de input, det er korreleret med.
+	The bars move one input at a time, so they leave out what correlated inputs do together.	Søjlerne flytter ét input ad gangen, så de udelader det, korrelerede input gør sammen.
 @plural	Added {n} block|Added {n} blocks	Tilføjede {n} blok|Tilføjede {n} blokke
 @plural	Copied {n} block|Copied {n} blocks	Kopierede {n} blok|Kopierede {n} blokke
 @plural	Finished {n} run|Finished {n} runs	{n} kørsel fuldført|{n} kørsler fuldført

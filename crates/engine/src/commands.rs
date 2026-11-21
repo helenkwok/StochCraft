@@ -2693,7 +2693,7 @@ materials,normal,mean=500;std_dev=50,USD
     },
     Command {
         name: "mc.run",
-        summary: "Monte Carlo: run the trials now. Per output: the mean with its 95% interval, standard deviation, percentiles, minimum and maximum, the probability of meeting its target with its interval, a histogram and the cumulative curve; with the rank correlations achieved and a run record. With Latin hypercube sampling or correlated inputs the trials within a batch of 1,000 are dependent, so the run is whole batches and the intervals are across batches (`interval` says which). Results do not depend on the number of threads.",
+        summary: "Monte Carlo: run the trials now. Per output: the mean with its 95% interval, standard deviation, percentiles, minimum and maximum, the probability of meeting its target with its interval, a histogram and the cumulative curve; which inputs matter (`influence`: a tornado of swings from each input's 10th to its 90th percentile with the others at their medians, and the rank correlation of each input with the output); with the rank correlations achieved and a run record. With Latin hypercube sampling or correlated inputs the trials within a batch of 1,000 are dependent, so the run is whole batches and the intervals are across batches (`interval` says which). Results do not depend on the number of threads.",
         kind: CommandKind::Action,
         schema: schema::<crate::mc::Run>,
         example: || json!({ "trials": 2000, "seed": 1 }),
