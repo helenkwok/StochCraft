@@ -224,7 +224,7 @@ impl Lock {
 impl Drop for Lock {
     fn drop(&mut self) {
         // Only if it is still this lock: one taken over as stale belongs to someone else now.
-        if fs::read_to_string(&self.path).is_ok_and(|held| held == self.mark) {
+        if fs::read_to_string(&self.path).is_ok_and(|held| held.trim_end() == self.mark) {
             let _ = fs::remove_file(&self.path);
         }
     }
