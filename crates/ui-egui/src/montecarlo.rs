@@ -1357,8 +1357,10 @@ fn influence_section(ui: &mut egui::Ui, o: &Value, correlated: bool) {
             .wrap(),
         );
     }
+    // An input that does not move the output has no bar (it is still in the table below).
     let bars: Vec<(String, f64, f64)> = inputs
         .iter()
+        .filter(|i| i["swing"].as_f64().is_some_and(|s| s > 0.0))
         .filter_map(|i| {
             Some((
                 i["input"].as_str()?.to_owned(),
@@ -1379,7 +1381,7 @@ fn influence_section(ui: &mut egui::Ui, o: &Value, correlated: bool) {
                 i["input"].as_str().unwrap_or("").to_owned(),
                 i["rank_correlation"]
                     .as_f64()
-                    .map_or_else(|| "–".to_owned(), |x| grouped(round_sig(x, 2))),
+                    .map_or_else(|| "–".to_owned(), rank_text),
             )
         })
         .collect();
@@ -1404,6 +1406,17 @@ fn influence_section(ui: &mut egui::Ui, o: &Value, correlated: bool) {
         ] {
             ui.add(egui::Label::new(theme::weak(ui, note)).wrap());
         }
+    }
+}
+
+/// A rank correlation to two decimals, as correlations are usually given: 0.90, −0.42, and 0.00
+/// for one too small to show (never −0.00 or an exponent).
+fn rank_text(x: f64) -> String {
+    let r = (x * 100.0).round() / 100.0;
+    if r.abs() < 0.005 {
+        "0.00".to_owned()
+    } else {
+        format!("{r:.2}")
     }
 }
 
@@ -1687,6 +1700,15 @@ fn cdf_chart(ui: &mut egui::Ui, o: &Value, target: Option<f64>, unit: &str, widt
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn a_rank_correlation_has_two_decimals_and_no_exponent() {
+        assert_eq!(rank_text(0.9012), "0.90");
+        assert_eq!(rank_text(-0.416), "-0.42");
+        assert_eq!(rank_text(1.4e-5), "0.00");
+        assert_eq!(rank_text(-0.004), "0.00");
+        assert_eq!(rank_text(1.0), "1.00");
+    }
 
     fn output(target: Value, probability: f64, interval: Value) -> Value {
         let mut t = target;

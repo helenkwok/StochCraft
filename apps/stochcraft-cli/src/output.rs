@@ -34,6 +34,16 @@ fn f(v: &Value) -> String {
     v.as_f64().map_or_else(|| "-".into(), number)
 }
 
+/// A rank correlation to two decimals: 0.90, -0.42, and 0.00 for one too small to show.
+fn rank_text(x: f64) -> String {
+    let r = (x * 100.0).round() / 100.0;
+    if r.abs() < 0.005 {
+        "0.00".into()
+    } else {
+        format!("{r:.2}")
+    }
+}
+
 fn s(v: &Value) -> &str {
     v.as_str().unwrap_or("")
 }
@@ -948,7 +958,9 @@ fn influence_lines(o: &Value, correlated: bool, out: &mut String) {
             f(&i["low"]),
             f(&i["high"]),
             f(&i["swing"]),
-            f(&i["rank_correlation"]),
+            i["rank_correlation"]
+                .as_f64()
+                .map_or_else(|| "-".into(), rank_text),
         ]);
     }
     aligned(&rows, &[true], out);
@@ -1338,6 +1350,8 @@ mod tests {
             "{out}"
         );
         assert!(out.contains("design"), "{out}");
+        // Rank correlations to two decimals.
+        assert!(out.contains("0.87") && out.contains("0.49"), "{out}");
         assert!(!out.contains("correlated inputs"), "{out}");
         r["correlations"] =
             serde_json::json!([{ "a": "build", "b": "design", "achieved": 0.4, "target": 0.4 }]);
