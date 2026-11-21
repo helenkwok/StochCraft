@@ -908,6 +908,23 @@ unit	yr	năm
 	Three activities in parallel, each ten days on average; the project ends when all three are done.	Ba công việc song song, mỗi việc trung bình mười ngày; dự án kết thúc khi cả ba xong.
 	When will the project finish?	Khi nào dự án hoàn thành?
 	Why three ten-day activities in parallel take more than 18 days on average.	Vì sao ba công việc mười ngày chạy song song trung bình mất hơn 18 ngày.
+	Public services	Dịch vụ công
+	Polling place	Điểm bỏ phiếu
+	Voters arrive all day and wait for a free voting machine, with a long or a short ballot (Allen, Introduction to Discrete Event Simulation and Agent-based Modeling, ch. 6 and 7).	Cử tri đến suốt cả ngày và chờ một máy bỏ phiếu trống, với lá phiếu dài hoặc ngắn (Allen, Introduction to Discrete Event Simulation and Agent-based Modeling, chương 6 và 7).
+	How many voting machines does a polling place need?	Một điểm bỏ phiếu cần bao nhiêu máy bỏ phiếu?
+	Machines in proportion to voters and ballot length: 16 instead of 18 makes the wait six times longer. The election-day runs show the direction only.	Số máy tỷ lệ với số cử tri và độ dài lá phiếu: 16 thay vì 18 làm thời gian chờ lâu gấp sáu lần. Các lần chạy cho ngày bầu cử chỉ cho thấy xu hướng.
+	Mass vaccination hub	Trung tâm tiêm chủng hàng loạt
+	Entrance, registration, assessment and vaccination, with each dose prepared alongside, then about 20 minutes in an observation seat (Hanly et al., BMC Health Services Research, 2022).	Cửa vào, đăng ký, đánh giá và tiêm chủng, mỗi liều được chuẩn bị song song, sau đó khoảng 20 phút ở ghế theo dõi (Hanly et al., BMC Health Services Research, 2022).
+	How many doses a day can a vaccination hub give?	Một trung tâm tiêm chủng có thể tiêm bao nhiêu liều mỗi ngày?
+	Each station's staff are as busy as the flow of patients says: all under 80%, and about 470 doses in an 8-hour day with 21 staff. The time inside is not checked.	Nhân viên mỗi trạm bận đúng như dòng bệnh nhân đòi hỏi: tất cả dưới 80%, và khoảng 470 liều trong một ngày 8 giờ với 21 nhân viên. Thời gian ở bên trong không được kiểm tra.
+	Penny Fab	Penny Fab
+	Four machines in a line, 2 hours a job each, with a fixed number of jobs going round (Hopp and Spearman, Factory Physics).	Bốn máy xếp thành một dây chuyền, mỗi máy 2 giờ cho một công việc, với số công việc cố định luân chuyển (Hopp và Spearman, Factory Physics).
+	How much work in process does a line need?	Một dây chuyền cần bao nhiêu sản phẩm dở dang?
+	Little's law and the critical work in process: 4 jobs give 0.29 jobs an hour with random times and 0.5 with fixed ones.	Định luật Little và lượng sản phẩm dở dang tới hạn: 4 công việc cho 0.29 công việc mỗi giờ với thời gian ngẫu nhiên và 0.5 với thời gian cố định.
+	Prison population	Dân số nhà tù
+	Petty and serious offenders serve their sentences, and some offend again and come back; the numbers scaled down 100 times (Brailsford, Churilov and Dangerfield, ch. 8).	Phạm nhân tội nhẹ và tội nặng chấp hành án, một số tái phạm và quay lại; số lượng được thu nhỏ 100 lần (Brailsford, Churilov và Dangerfield, chương 8).
+	How many prison places are needed?	Cần bao nhiêu chỗ trong nhà tù?
+	Places are arrivals times the length of stay, whatever the sentences: 500 petty and 260 serious offenders inside, and what fewer reoffending would do.	Số chỗ bằng số lượt vào nhân với thời gian ở, bất kể mức án: 500 phạm nhân tội nhẹ và 260 tội nặng ở bên trong, và việc tái phạm ít đi sẽ tác động thế nào.
 	Show me	Cho tôi xem
 	Point at where to do this step	Chỉ vào nơi thực hiện bước này
 	Step {k} of {n}	Bước {k} / {n}

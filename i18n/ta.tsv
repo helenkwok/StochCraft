@@ -908,6 +908,23 @@ unit	yr	ஆண்டு
 	Three activities in parallel, each ten days on average; the project ends when all three are done.	இணையாக மூன்று செயல்பாடுகள், ஒவ்வொன்றும் சராசரியாகப் பத்து நாட்கள்; மூன்றும் முடிந்ததும் திட்டம் முடிகிறது.
 	When will the project finish?	திட்டம் எப்போது முடியும்?
 	Why three ten-day activities in parallel take more than 18 days on average.	இணையாக நடக்கும் பத்து நாள் செயல்பாடுகள் மூன்று ஏன் சராசரியாக 18 நாட்களுக்கு மேல் எடுக்கின்றன.
+	Public services	பொதுச் சேவைகள்
+	Polling place	வாக்குச்சாவடி
+	Voters arrive all day and wait for a free voting machine, with a long or a short ballot (Allen, Introduction to Discrete Event Simulation and Agent-based Modeling, ch. 6 and 7).	வாக்காளர்கள் நாள் முழுவதும் வருகின்றனர்; நீண்ட அல்லது குறுகிய வாக்குச்சீட்டுடன் காலியான வாக்குப்பதிவு இயந்திரத்துக்காகக் காத்திருக்கின்றனர் (Allen, Introduction to Discrete Event Simulation and Agent-based Modeling, அத். 6 மற்றும் 7).
+	How many voting machines does a polling place need?	ஒரு வாக்குச்சாவடிக்கு எத்தனை வாக்குப்பதிவு இயந்திரங்கள் தேவை?
+	Machines in proportion to voters and ballot length: 16 instead of 18 makes the wait six times longer. The election-day runs show the direction only.	இயந்திரங்கள் வாக்காளர்களின் எண்ணிக்கைக்கும் வாக்குச்சீட்டின் நீளத்துக்கும் விகிதமாக இருக்கும்: 18க்குப் பதிலாக 16 இருந்தால் காத்திருப்பு ஆறு மடங்கு நீள்கிறது. தேர்தல் நாள் இயக்கங்கள் திசையை மட்டுமே காட்டுகின்றன.
+	Mass vaccination hub	பெருமளவு தடுப்பூசி மையம்
+	Entrance, registration, assessment and vaccination, with each dose prepared alongside, then about 20 minutes in an observation seat (Hanly et al., BMC Health Services Research, 2022).	நுழைவு, பதிவு, மதிப்பீடு மற்றும் தடுப்பூசி; ஒவ்வொரு டோஸும் அருகிலேயே தயாராகிறது, பிறகு கண்காணிப்பு இருக்கையில் சுமார் 20 நிமிடங்கள் (Hanly et al., BMC Health Services Research, 2022).
+	How many doses a day can a vaccination hub give?	ஒரு தடுப்பூசி மையம் ஒரு நாளில் எத்தனை டோஸ்கள் போட முடியும்?
+	Each station's staff are as busy as the flow of patients says: all under 80%, and about 470 doses in an 8-hour day with 21 staff. The time inside is not checked.	ஒவ்வொரு நிலையத்தின் பணியாளர்களும் நோயாளிகளின் வருகை கூறும் அளவுக்கே பணிபுரிகின்றனர்: அனைவரும் 80%க்குக் கீழ், 21 பணியாளர்களுடன் 8 மணி நேர நாளில் சுமார் 470 டோஸ்கள். உள்ளே செலவிடும் நேரம் சரிபார்க்கப்படவில்லை.
+	Penny Fab	Penny Fab
+	Four machines in a line, 2 hours a job each, with a fixed number of jobs going round (Hopp and Spearman, Factory Physics).	ஒரு வரிசையில் நான்கு இயந்திரங்கள், ஒவ்வொன்றுக்கும் ஒரு வேலைக்கு 2 மணி நேரம், நிலையான எண்ணிக்கையிலான வேலைகள் சுற்றி வருகின்றன (Hopp மற்றும் Spearman, Factory Physics).
+	How much work in process does a line need?	ஒரு வரிசைக்கு எவ்வளவு செயல்பாட்டில் உள்ள பணி (WIP) தேவை?
+	Little's law and the critical work in process: 4 jobs give 0.29 jobs an hour with random times and 0.5 with fixed ones.	லிட்டிலின் விதியும் முக்கியமான செயல்பாட்டில் உள்ள பணியும்: 4 வேலைகள் சீரற்ற நேரங்களில் மணிக்கு 0.29 வேலைகளையும், நிலையான நேரங்களில் 0.5 வேலைகளையும் தருகின்றன.
+	Prison population	சிறைவாசிகள் எண்ணிக்கை
+	Petty and serious offenders serve their sentences, and some offend again and come back; the numbers scaled down 100 times (Brailsford, Churilov and Dangerfield, ch. 8).	சிறிய மற்றும் தீவிரக் குற்றவாளிகள் தங்கள் தண்டனைகளை அனுபவிக்கின்றனர்; சிலர் மீண்டும் குற்றம் செய்து திரும்பி வருகின்றனர்; எண்ணிக்கைகள் 100 மடங்கு குறைக்கப்பட்டுள்ளன (Brailsford, Churilov மற்றும் Dangerfield, அத். 8).
+	How many prison places are needed?	எத்தனை சிறை இடங்கள் தேவை?
+	Places are arrivals times the length of stay, whatever the sentences: 500 petty and 260 serious offenders inside, and what fewer reoffending would do.	இடங்கள் என்பது வருகைகளையும் தங்கும் காலத்தையும் பெருக்கிய அளவு, தண்டனைகள் எதுவாயினும்: உள்ளே 500 சிறிய மற்றும் 260 தீவிரக் குற்றவாளிகள், மீண்டும் குற்றம் செய்வது குறைந்தால் என்ன நிகழும் என்பதும்.
 	Show me	எனக்குக் காட்டு
 	Point at where to do this step	இந்தப் படியை எங்கே செய்வது என்று சுட்டிக்காட்டு
 	Step {k} of {n}	படி {k}, மொத்தம் {n}

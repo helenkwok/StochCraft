@@ -3416,6 +3416,80 @@ are.
     service time of 1 minute, fixed, exponential and gamma (shape 0.25): Pollaczek–Khinchine's
     waits of 2, 4 and 10 minutes. It is the featured lesson on variability; "Every distribution"
     stays as a reference model.
+- **Examples, second batch:** four more, checked the same way. Only exact checks are claimed;
+  what a model shows beyond them is said to be unchecked on its card.
+  - **Polling place** (`polling.bpmn`, featured, a new "Public services" industry): T. T.
+    Allen, *Introduction to Discrete Event Simulation and Agent-based Modeling*, Springer 2011,
+    ch. 6 and 7. From the book: ballots of 19 initiatives take 12.5 minutes on average and of 8
+    initiatives 6.5 (§7.3.3), the day is 13 hours (§7.3.4), and machines are allocated by its
+    utilisation rule, roundup(ballot minutes × voters / (ρ₀ × 13 h × 60)) with ρ₀ = 0.85 to
+    start (§7.3.5). Deduced, not printed: 72 voters an hour, from about half a million voters at
+    532 locations (§7.3.1; 72.3 an hour), so 936 in a day. The rule gives 18 machines for the
+    long ballot and 10 for the short. The voting times are exponential, as Erlang C and the
+    Kolesar–Green rule of §6.2 assume; the study used truncated normal times whose spread the
+    book does not give. Checked against Erlang C: 18 machines busy 0.833, a wait of 1.506
+    minutes and 1.807 waiting; 16 machines (a scenario) 0.9375, 9.126 and 10.95; the short
+    ballot with 10 (a scenario) 0.78, 1.081 and 1.298. Two scenarios run election day: 936
+    voters (a source with a limit, so the last arrives at 13 hours only on average, give or
+    take about 25 minutes) and a stop when all have voted, with 18 machines and with the 14 that
+    allocating by voters alone gives (28 shared by two places of the same size). With v0.2.0 the
+    last voter left after 822 and 885 minutes and the mean waits were 1.5 and 34.8 minutes; the
+    test asserts only that 14 machines are later and wait longer. §6.1's example says a
+    1,000-hour period but works its arrival rate (1.667 a minute) from 100 hours.
+  - **Mass vaccination hub** (`vaccination-hub.bpmn`): Hanly, Churches, Fitzgerald, Caterson,
+    MacIntyre and Jorm, *BMC Health Services Research* 22:1059 (2022), doi
+    10.1186/s12913-022-08447-8, open access; every input checked against the paper's own
+    tables. Table 1: each time a minimum plus an exponential of rate λ (preparation 1 + λ 3,
+    entrance 2 + λ 1, registration 3 + λ 0.7, assessment 2 + λ 1, vaccination 3 + λ 1), and
+    observation normal (20, 0.5) or, for the 2% with a reaction, 20 + λ 0.1. Table 2: 60
+    bookings an hour at the small hub, 180 at the large; 2% do not come (Methods, "Arrival
+    times"). Table 3: staff 2, 4, 6, 4 and 5 with 25 observation seats, and three times as many.
+    BPSim has no shifted distributions, so each time is a continuous user distribution through
+    its quantiles (every 2%, then the 99th, 99.5th, 99.9th and 99.99th percentiles, the way the
+    three-point estimates write a shifted log-normal), the observation time the mixture's; their
+    means are within 0.1% of the paper's, and the check uses them as written. Each patient's
+    dose is prepared alongside (a parallel split and join before vaccination). Checked by flow
+    balance, exact whatever the queueing: each station busy λ E[S] / c (small hub 0.654, 0.736,
+    0.724, 0.736, 0.784 and 0.792 for preparation to observation, all under the paper's 80%, the
+    same at the large hub, a scenario; with 70 bookings an hour, a scenario, vaccination 0.915),
+    and patients out at λ: 470.4 in 8 hours (the paper's "around 500", Results and Fig. 3) and
+    1,411.2 at the large hub ("1400"). Not checked: the paper's median time in the hub of 52
+    minutes (95% within 67) and its surge results (109 and 55 minutes, Fig. 4). Its arrival
+    noise around the hourly slots and its walking times between stations are not in the paper or
+    its supplement, so arrivals here are Poisson and there is no walking; with v0.2.0 the mean
+    time inside was 36.7 minutes at the small hub. Table 1's hub row for observation prints
+    percentiles (19.8 to 20.2 for the 5th to 95th) that fit a standard deviation near 0.12, not
+    its 0.5; the clinic row (19.2 to 20.8) fits 0.5, which the model uses.
+  - **Prison population** (`prison.bpmn`, "Public services"): Brailsford, Churilov and
+    Dangerfield, *Discrete-Event Simulation and System Dynamics for Management Decision Making*,
+    Wiley 2014, ch. 8 §8.3.1 (the case of Tako and Robinson after Grove, MacLeod and Godfrey
+    1998): 3,000 petty and 650 serious first offenders a year, sentences of 5 and 20 years on
+    average, reoffenders back after 2 years on average, and 50,000 petty and 26,000 serious
+    offenders inside. The share who reoffend is deliberately not given. **Deduced:** if those
+    numbers are the equilibrium, it is 0.70 for petty offenders and 0.50 for serious ones, with
+    14,000 and 1,300 out before returning. The model is scaled down 100 times (30 and 6.5 first
+    offences a year; 500, 140, 260 and 13), which keeps all four counts whole and a test run
+    short. Every stay is a delay with no limit, so in steady state each number inside is Poisson
+    with mean (arrivals including returns) × mean stay, whatever the stays' distribution. The
+    stays are exponential and the run starts with those means inside (starting contents), so the
+    expected numbers stay there from time 0 and the base scenario has no warm-up. With 60% of
+    petty offenders reoffending (a scenario), 375 inside and 90 out, reached after a 100-year
+    warm-up (the slowest time constant is then 15.9 years). From empty with a 300-year warm-up,
+    v0.2.0 gave 501.3 ± 3.6, 140.5 ± 1.3, 262.0 ± 4.8 and 13.36 ± 0.36, and 374.9 ± 3.2 and
+    90.6 ± 1.0 for the scenario. Fixed sentences would give the same long-run means but release
+    each starting cohort together, so they are left out.
+  - **Penny Fab** (`penny-fab.bpmn`): W. J. Hopp and M. L. Spearman, *Factory Physics*, ch. 7:
+    four stations in a line, one machine each, 2 hours a job, so r_b = 0.5 a hour, T₀ = 8
+    hours and W₀ = 4. The w jobs start at the first station (starting contents) and go round
+    (a closed loop, #237). With exponential times the line is the practical worst case, exact
+    for a balanced closed line of exponential stations: throughput r_b w / (W₀ + w − 1), each
+    station busy twice that, cycle time T₀ + (w − 1) / r_b and, by symmetry, a wait of
+    (w − 1) / 2 hours at each station. Checked for 1, 4, 8 and 16 jobs (0.125, 0.286, 0.364
+    and 0.421 jobs an hour), and for 4 jobs with fixed times, the best case: every station
+    always busy, 0.5 jobs an hour. A v0.2.0 run of the same line fed by a source of w jobs at
+    time 0 matched each (4 jobs: busy 0.5714 ± 0.0021 against 0.5714).
+  - Not built in this batch: **the daily peak** (arrivals rising and falling through the day,
+    with an exact mean number inside for infinite servers).
 - **Printed answers are checked, not copied.** T. T. Allen, *Introduction to Discrete Event
   Simulation and Agent-based Modeling*, Springer 2011: §13.6 answers §6.6's problems 5
   (λ = 0.7, μ = 0.1, c = 8) and 7 (λ = 0.8, μ = 0.1, c = 9) with a chance of waiting of 0.875

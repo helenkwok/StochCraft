@@ -908,6 +908,23 @@ unit	yr	j
 	Three activities in parallel, each ten days on average; the project ends when all three are done.	Drie activiteiten parallel, elk gemiddeld tien dagen; het project is klaar als alle drie af zijn.
 	When will the project finish?	Wanneer is het project klaar?
 	Why three ten-day activities in parallel take more than 18 days on average.	Waarom drie parallelle activiteiten van tien dagen gemiddeld meer dan 18 dagen duren.
+	Public services	Openbare diensten
+	Polling place	Stembureau
+	Voters arrive all day and wait for a free voting machine, with a long or a short ballot (Allen, Introduction to Discrete Event Simulation and Agent-based Modeling, ch. 6 and 7).	Kiezers komen de hele dag aan en wachten op een vrije stemmachine, met een lang of een kort stembiljet (Allen, Introduction to Discrete Event Simulation and Agent-based Modeling, hfst. 6 en 7).
+	How many voting machines does a polling place need?	Hoeveel stemmachines heeft een stembureau nodig?
+	Machines in proportion to voters and ballot length: 16 instead of 18 makes the wait six times longer. The election-day runs show the direction only.	Machines in verhouding tot het aantal kiezers en de lengte van het stembiljet: 16 in plaats van 18 maakt de wachttijd zes keer zo lang. De uitvoeringen voor de verkiezingsdag laten alleen de richting zien.
+	Mass vaccination hub	Massavaccinatiecentrum
+	Entrance, registration, assessment and vaccination, with each dose prepared alongside, then about 20 minutes in an observation seat (Hanly et al., BMC Health Services Research, 2022).	Ingang, registratie, beoordeling en vaccinatie, waarbij elke dosis ernaast wordt klaargemaakt, daarna ongeveer 20 minuten op een observatieplek (Hanly et al., BMC Health Services Research, 2022).
+	How many doses a day can a vaccination hub give?	Hoeveel doses per dag kan een vaccinatiecentrum toedienen?
+	Each station's staff are as busy as the flow of patients says: all under 80%, and about 470 doses in an 8-hour day with 21 staff. The time inside is not checked.	Het personeel bij elk station is zo druk bezig als de patiëntenstroom aangeeft: allemaal onder de 80%, en ongeveer 470 doses op een dag van 8 uur met 21 medewerkers. De tijd binnen wordt niet gecontroleerd.
+	Penny Fab	Penny Fab
+	Four machines in a line, 2 hours a job each, with a fixed number of jobs going round (Hopp and Spearman, Factory Physics).	Vier machines op een rij, elk 2 uur per opdracht, met een vast aantal opdrachten in omloop (Hopp en Spearman, Factory Physics).
+	How much work in process does a line need?	Hoeveel onderhanden werk heeft een lijn nodig?
+	Little's law and the critical work in process: 4 jobs give 0.29 jobs an hour with random times and 0.5 with fixed ones.	De wet van Little en het kritieke onderhanden werk: 4 opdrachten geven 0.29 opdrachten per uur met willekeurige tijden en 0.5 met vaste.
+	Prison population	Gevangenispopulatie
+	Petty and serious offenders serve their sentences, and some offend again and come back; the numbers scaled down 100 times (Brailsford, Churilov and Dangerfield, ch. 8).	Daders van lichte en zware misdrijven zitten hun straf uit, en sommigen plegen opnieuw een misdrijf en komen terug; de aantallen zijn 100 keer verkleind (Brailsford, Churilov en Dangerfield, hfst. 8).
+	How many prison places are needed?	Hoeveel gevangenisplaatsen zijn nodig?
+	Places are arrivals times the length of stay, whatever the sentences: 500 petty and 260 serious offenders inside, and what fewer reoffending would do.	Plaatsen zijn aankomsten maal verblijfsduur, wat de straffen ook zijn: 500 daders van lichte en 260 van zware misdrijven binnen, en wat minder recidive zou doen.
 	Show me	Laat zien
 	Point at where to do this step	Wijs aan waar u deze stap uitvoert
 	Step {k} of {n}	Stap {k} van {n}

@@ -908,6 +908,23 @@ unit	yr	år
 	Three activities in parallel, each ten days on average; the project ends when all three are done.	Tre aktiviteter parallelt, hver på ti dager i gjennomsnitt; prosjektet slutter når alle tre er ferdige.
 	When will the project finish?	Når blir prosjektet ferdig?
 	Why three ten-day activities in parallel take more than 18 days on average.	Hvorfor tre parallelle aktiviteter på ti dager i gjennomsnitt tar mer enn 18 dager.
+	Public services	Offentlige tjenester
+	Polling place	Valglokale
+	Voters arrive all day and wait for a free voting machine, with a long or a short ballot (Allen, Introduction to Discrete Event Simulation and Agent-based Modeling, ch. 6 and 7).	Velgerne kommer hele dagen og venter på en ledig stemmemaskin, med en lang eller en kort stemmeseddel (Allen, Introduction to Discrete Event Simulation and Agent-based Modeling, kap. 6 og 7).
+	How many voting machines does a polling place need?	Hvor mange stemmemaskiner trenger et valglokale?
+	Machines in proportion to voters and ballot length: 16 instead of 18 makes the wait six times longer. The election-day runs show the direction only.	Maskiner i forhold til antall velgere og stemmeseddelens lengde: 16 i stedet for 18 gjør ventetiden seks ganger lengre. Kjøringene for valgdagen viser bare retningen.
+	Mass vaccination hub	Massevaksinasjonssenter
+	Entrance, registration, assessment and vaccination, with each dose prepared alongside, then about 20 minutes in an observation seat (Hanly et al., BMC Health Services Research, 2022).	Inngang, registrering, vurdering og vaksinering, med hver dose klargjort ved siden av, deretter omtrent 20 minutter på en observasjonsplass (Hanly et al., BMC Health Services Research, 2022).
+	How many doses a day can a vaccination hub give?	Hvor mange doser om dagen kan et vaksinasjonssenter gi?
+	Each station's staff are as busy as the flow of patients says: all under 80%, and about 470 doses in an 8-hour day with 21 staff. The time inside is not checked.	De ansatte ved hver stasjon er like opptatt som pasientstrømmen tilsier: alle under 80%, og omtrent 470 doser på en dag på 8 timer med 21 ansatte. Tiden inne kontrolleres ikke.
+	Penny Fab	Penny Fab
+	Four machines in a line, 2 hours a job each, with a fixed number of jobs going round (Hopp and Spearman, Factory Physics).	Fire maskiner på rad, 2 timer per jobb på hver, med et fast antall jobber i omløp (Hopp og Spearman, Factory Physics).
+	How much work in process does a line need?	Hvor mye varer under arbeid trenger en linje?
+	Little's law and the critical work in process: 4 jobs give 0.29 jobs an hour with random times and 0.5 with fixed ones.	Littles lov og kritisk antall varer under arbeid: 4 jobber gir 0.29 jobber i timen med tilfeldige tider og 0.5 med faste.
+	Prison population	Fengselsbefolkning
+	Petty and serious offenders serve their sentences, and some offend again and come back; the numbers scaled down 100 times (Brailsford, Churilov and Dangerfield, ch. 8).	Lovbrytere med mindre og alvorlige lovbrudd soner dommene sine, og noen begår nye lovbrudd og kommer tilbake; tallene er skalert ned 100 ganger (Brailsford, Churilov og Dangerfield, kap. 8).
+	How many prison places are needed?	Hvor mange fengselsplasser trengs?
+	Places are arrivals times the length of stay, whatever the sentences: 500 petty and 260 serious offenders inside, and what fewer reoffending would do.	Plasser er ankomster ganger oppholdstid, uansett dommer: 500 med mindre og 260 med alvorlige lovbrudd innenfor, og hva mindre tilbakefall ville gjøre.
 	Show me	Vis meg
 	Point at where to do this step	Pek på hvor du gjør dette trinnet
 	Step {k} of {n}	Trinn {k} av {n}

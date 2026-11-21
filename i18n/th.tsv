@@ -908,6 +908,23 @@ unit	yr	ปี
 	Three activities in parallel, each ten days on average; the project ends when all three are done.	สามกิจกรรมที่ทำแบบขนาน แต่ละกิจกรรมเฉลี่ยสิบวัน โครงการจบเมื่อทั้งสามกิจกรรมเสร็จ
 	When will the project finish?	โครงการจะเสร็จเมื่อไร?
 	Why three ten-day activities in parallel take more than 18 days on average.	ทำไมสามกิจกรรมแบบขนานที่ใช้เวลากิจกรรมละสิบวันจึงใช้เวลาเฉลี่ยมากกว่า 18 วัน
+	Public services	บริการสาธารณะ
+	Polling place	หน่วยเลือกตั้ง
+	Voters arrive all day and wait for a free voting machine, with a long or a short ballot (Allen, Introduction to Discrete Event Simulation and Agent-based Modeling, ch. 6 and 7).	ผู้ลงคะแนนมาตลอดทั้งวันและรอเครื่องลงคะแนนที่ว่าง โดยมีบัตรลงคะแนนยาวหรือสั้น (Allen, Introduction to Discrete Event Simulation and Agent-based Modeling, บทที่ 6 และ 7)
+	How many voting machines does a polling place need?	หน่วยเลือกตั้งต้องมีเครื่องลงคะแนนกี่เครื่อง?
+	Machines in proportion to voters and ballot length: 16 instead of 18 makes the wait six times longer. The election-day runs show the direction only.	จำนวนเครื่องแปรผันตามจำนวนผู้ลงคะแนนและความยาวของบัตร: 16 เครื่องแทนที่จะเป็น 18 ทำให้รอนานขึ้นหกเท่า ผลการรันของวันเลือกตั้งแสดงเพียงทิศทางเท่านั้น
+	Mass vaccination hub	ศูนย์ฉีดวัคซีนจำนวนมาก
+	Entrance, registration, assessment and vaccination, with each dose prepared alongside, then about 20 minutes in an observation seat (Hanly et al., BMC Health Services Research, 2022).	ทางเข้า การลงทะเบียน การประเมิน และการฉีดวัคซีน โดยเตรียมวัคซีนแต่ละโดสไว้ข้างๆ จากนั้นนั่งสังเกตอาการประมาณ 20 นาที (Hanly et al., BMC Health Services Research, 2022)
+	How many doses a day can a vaccination hub give?	ศูนย์ฉีดวัคซีนฉีดได้กี่โดสต่อวัน?
+	Each station's staff are as busy as the flow of patients says: all under 80%, and about 470 doses in an 8-hour day with 21 staff. The time inside is not checked.	พนักงานแต่ละสถานีงานยุ่งตามที่ปริมาณผู้ป่วยกำหนด: ทุกสถานีต่ำกว่า 80% และประมาณ 470 โดสในวันทำงาน 8 ชั่วโมงเมื่อมีพนักงาน 21 คน ไม่ได้ตรวจสอบเวลาที่ใช้ภายใน
+	Penny Fab	Penny Fab
+	Four machines in a line, 2 hours a job each, with a fixed number of jobs going round (Hopp and Spearman, Factory Physics).	เครื่องจักรสี่เครื่องเรียงเป็นสายการผลิต เครื่องละ 2 ชั่วโมงต่องาน โดยมีจำนวนงานคงที่หมุนเวียนอยู่ (Hopp และ Spearman, Factory Physics)
+	How much work in process does a line need?	สายการผลิตต้องมีงานระหว่างทำเท่าใด?
+	Little's law and the critical work in process: 4 jobs give 0.29 jobs an hour with random times and 0.5 with fixed ones.	กฎของลิตเทิลและงานระหว่างทำวิกฤต: 4 งานให้ 0.29 งานต่อชั่วโมงเมื่อเวลาสุ่ม และ 0.5 เมื่อเวลาคงที่
+	Prison population	ประชากรเรือนจำ
+	Petty and serious offenders serve their sentences, and some offend again and come back; the numbers scaled down 100 times (Brailsford, Churilov and Dangerfield, ch. 8).	ผู้กระทำผิดเล็กน้อยและผู้กระทำผิดร้ายแรงรับโทษ และบางคนกระทำผิดซ้ำแล้วกลับเข้ามา ตัวเลขลดขนาดลง 100 เท่า (Brailsford, Churilov และ Dangerfield, บทที่ 8)
+	How many prison places are needed?	ต้องมีที่คุมขังกี่ที่?
+	Places are arrivals times the length of stay, whatever the sentences: 500 petty and 260 serious offenders inside, and what fewer reoffending would do.	จำนวนที่คุมขังเท่ากับจำนวนผู้เข้ามาคูณระยะเวลาที่อยู่ ไม่ว่าโทษจะเป็นอย่างไร: ข้างในมีผู้กระทำผิดเล็กน้อย 500 คนและร้ายแรง 260 คน และผลของการกระทำผิดซ้ำที่น้อยลง
 	Show me	แสดงให้ดู
 	Point at where to do this step	ชี้ไปยังจุดที่ทำขั้นตอนนี้
 	Step {k} of {n}	ขั้นที่ {k} จาก {n}

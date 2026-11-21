@@ -40,6 +40,8 @@ pub enum Industry {
     Services,
     Manufacturing,
     Healthcare,
+    /// Services run by or for the public, such as elections and prisons.
+    PublicServices,
     ContactCentre,
     ItOperations,
     /// Projects and their schedules.
@@ -49,10 +51,11 @@ pub enum Industry {
 }
 
 impl Industry {
-    pub const ALL: [Industry; 7] = [
+    pub const ALL: [Industry; 8] = [
         Industry::Services,
         Industry::Manufacturing,
         Industry::Healthcare,
+        Industry::PublicServices,
         Industry::ContactCentre,
         Industry::ItOperations,
         Industry::Projects,
@@ -64,6 +67,7 @@ impl Industry {
             Industry::Services => t("Services"),
             Industry::Manufacturing => t("Manufacturing"),
             Industry::Healthcare => t("Healthcare"),
+            Industry::PublicServices => t("Public services"),
             Industry::ContactCentre => t("Contact centre"),
             Industry::ItOperations => t("IT operations"),
             Industry::Projects => t("Projects"),

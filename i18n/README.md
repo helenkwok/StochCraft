@@ -848,6 +848,20 @@ fields (`“Service time”`) are named in the messages by their own rows.
   for the batch sentence). "Equally likely strata" is the least certain term. Not checked against
   any other source, and not reviewed by native speakers; the least certain are lo, th, ta, te,
   bn, ka, kk, hi and sq.
+- The rows for four more examples (a polling place, a mass vaccination hub, Penny Fab and a
+  prison population: their titles, one-line descriptions, questions and what they teach) and
+  the "Public services" industry were machine-drafted with Claude Code from the plain meaning of
+  the English, with each catalog's own words from the earlier example cards (machine, queue,
+  wait, busy, run) and its own handling of "%" and punctuation; decimals keep the point, as
+  every catalog's rows do. Book and journal titles, authors' names and "Penny Fab" (the name of
+  a textbook example) stay in English and Latin script. Little's law follows each catalog's
+  row on it ("Little's law does not hold at {block}…"). No catalog had a row for work in
+  process, chapter or offenders, so those words are each language's own choice:
+  work in process as the manufacturing term (de "Umlaufbestand", fr "en-cours", ja "仕掛品",
+  zh "在制品"), and petty and serious offenders as those of minor and serious offences. Not
+  checked against any other source, and not reviewed by native speakers; the least certain are
+  lo, ta, te, th, bn, ka, kk, hi, el, fi and sq, the work-in-process and Little's-law terms in
+  most of them, and the long rows on the hub and the prison in every language.
 
 **Adding or changing a string:** add the English in the code through `i18n::t` (or `tf`, `tn`),
 then add its row to each catalog here, or leave it out to show English until it is translated.

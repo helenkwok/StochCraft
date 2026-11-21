@@ -908,6 +908,23 @@ unit	yr	év
 	Three activities in parallel, each ten days on average; the project ends when all three are done.	Három párhuzamos tevékenység, egyenként átlagosan tíz nap; a projekt akkor ér véget, amikor mindhárom kész.
 	When will the project finish?	Mikor fejeződik be a projekt?
 	Why three ten-day activities in parallel take more than 18 days on average.	Miért tart három párhuzamos, tíznapos tevékenység átlagosan több mint 18 napig.
+	Public services	Közszolgáltatások
+	Polling place	Szavazóhelyiség
+	Voters arrive all day and wait for a free voting machine, with a long or a short ballot (Allen, Introduction to Discrete Event Simulation and Agent-based Modeling, ch. 6 and 7).	A szavazók egész nap érkeznek, és szabad szavazógépre várnak, hosszú vagy rövid szavazólappal (Allen, Introduction to Discrete Event Simulation and Agent-based Modeling, 6. és 7. fej.).
+	How many voting machines does a polling place need?	Hány szavazógép kell egy szavazóhelyiségbe?
+	Machines in proportion to voters and ballot length: 16 instead of 18 makes the wait six times longer. The election-day runs show the direction only.	A gépek száma kövesse a szavazók számát és a szavazólap hosszát: 18 helyett 16 géppel hatszor hosszabb a várakozás. A választási napi futások csak az irányt mutatják.
+	Mass vaccination hub	Tömeges oltópont
+	Entrance, registration, assessment and vaccination, with each dose prepared alongside, then about 20 minutes in an observation seat (Hanly et al., BMC Health Services Research, 2022).	Bejárat, regisztráció, felmérés és oltás, minden adag mellette készül, majd kb. 20 perc megfigyelőhelyen (Hanly et al., BMC Health Services Research, 2022).
+	How many doses a day can a vaccination hub give?	Hány adagot adhat be naponta egy oltópont?
+	Each station's staff are as busy as the flow of patients says: all under 80%, and about 470 doses in an 8-hour day with 21 staff. The time inside is not checked.	Az egyes állomások személyzete annyira elfoglalt, amennyit a betegek áramlása megkövetel: mind 80% alatt, és kb. 470 adag egy 8 órás napon 21 fővel. A bent töltött időt nem ellenőrizzük.
+	Penny Fab	Penny Fab
+	Four machines in a line, 2 hours a job each, with a fixed number of jobs going round (Hopp and Spearman, Factory Physics).	Négy gép egy sorban, gépenként 2 óra munkánként, rögzített számú munkával, amely körbejár (Hopp és Spearman, Factory Physics).
+	How much work in process does a line need?	Mennyi folyamatban lévő munka kell egy sorhoz?
+	Little's law and the critical work in process: 4 jobs give 0.29 jobs an hour with random times and 0.5 with fixed ones.	A Little-törvény és a kritikus folyamatban lévő munka: 4 munka óránként 0.29 munkát ad véletlen időkkel és 0.5-öt rögzített időkkel.
+	Prison population	Börtönnépesség
+	Petty and serious offenders serve their sentences, and some offend again and come back; the numbers scaled down 100 times (Brailsford, Churilov and Dangerfield, ch. 8).	Az enyhébb és a súlyos bűnelkövetők letöltik büntetésüket, és néhányan újra elkövetnek bűncselekményt, és visszakerülnek; a számok 100-szoros kicsinyítéssel (Brailsford, Churilov és Dangerfield, 8. fej.).
+	How many prison places are needed?	Hány börtönhely kell?
+	Places are arrivals times the length of stay, whatever the sentences: 500 petty and 260 serious offenders inside, and what fewer reoffending would do.	A helyek száma az érkezők száma szorozva a bent töltött idővel, bármilyenek is az ítéletek: 500 enyhébb és 260 súlyos bűnelkövető bent, és mit változtatna kevesebb visszaesés.
 	Show me	Mutassa meg
 	Point at where to do this step	Mutassa, hol végezhető el ez a lépés
 	Step {k} of {n}	{k}. lépés / {n}

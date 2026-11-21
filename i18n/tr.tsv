@@ -908,6 +908,23 @@ unit	yr	yıl
 	Three activities in parallel, each ten days on average; the project ends when all three are done.	Her biri ortalama on gün süren üç paralel faaliyet; proje üçü de bitince sona erer.
 	When will the project finish?	Proje ne zaman biter?
 	Why three ten-day activities in parallel take more than 18 days on average.	On günlük üç paralel faaliyet neden ortalama 18 günden uzun sürer.
+	Public services	Kamu hizmetleri
+	Polling place	Oy verme merkezi
+	Voters arrive all day and wait for a free voting machine, with a long or a short ballot (Allen, Introduction to Discrete Event Simulation and Agent-based Modeling, ch. 6 and 7).	Seçmenler gün boyu gelir ve boş bir oy verme makinesini bekler; oy pusulası uzun ya da kısadır (Allen, Introduction to Discrete Event Simulation and Agent-based Modeling, böl. 6 ve 7).
+	How many voting machines does a polling place need?	Bir oy verme merkezinin kaç oy verme makinesine ihtiyacı vardır?
+	Machines in proportion to voters and ballot length: 16 instead of 18 makes the wait six times longer. The election-day runs show the direction only.	Makineler seçmen sayısı ve oy pusulası uzunluğuyla orantılıdır: 18 yerine 16 makine beklemeyi altı kat uzatır. Seçim günü çalıştırmaları yalnızca yönü gösterir.
+	Mass vaccination hub	Toplu aşılama merkezi
+	Entrance, registration, assessment and vaccination, with each dose prepared alongside, then about 20 minutes in an observation seat (Hanly et al., BMC Health Services Research, 2022).	Giriş, kayıt, değerlendirme ve aşılama; her doz yanda hazırlanır, ardından gözlem koltuğunda yaklaşık 20 dakika (Hanly et al., BMC Health Services Research, 2022).
+	How many doses a day can a vaccination hub give?	Bir aşılama merkezi günde kaç doz yapabilir?
+	Each station's staff are as busy as the flow of patients says: all under 80%, and about 470 doses in an 8-hour day with 21 staff. The time inside is not checked.	Her istasyonun personeli hasta akışının gerektirdiği kadar meşguldür: hepsi %80'in altında ve 21 personelle 8 saatlik bir günde yaklaşık 470 doz. İçeride geçen süre kontrol edilmedi.
+	Penny Fab	Penny Fab
+	Four machines in a line, 2 hours a job each, with a fixed number of jobs going round (Hopp and Spearman, Factory Physics).	Hat halinde dört makine, her biri iş başına 2 saat, sabit sayıda iş dolaşırken (Hopp ve Spearman, Factory Physics).
+	How much work in process does a line need?	Bir hattın ne kadar yarı mamule (WIP) ihtiyacı vardır?
+	Little's law and the critical work in process: 4 jobs give 0.29 jobs an hour with random times and 0.5 with fixed ones.	Little yasası ve kritik yarı mamul: 4 iş, rastgele sürelerde saatte 0.29, sabit sürelerde 0.5 iş verir.
+	Prison population	Hapishane nüfusu
+	Petty and serious offenders serve their sentences, and some offend again and come back; the numbers scaled down 100 times (Brailsford, Churilov and Dangerfield, ch. 8).	Hafif ve ağır suçlular cezalarını çeker, bir kısmı yeniden suç işleyip geri döner; sayılar 100 kat küçültüldü (Brailsford, Churilov ve Dangerfield, böl. 8).
+	How many prison places are needed?	Kaç hapishane yerine ihtiyaç vardır?
+	Places are arrivals times the length of stay, whatever the sentences: 500 petty and 260 serious offenders inside, and what fewer reoffending would do.	Yer sayısı, cezalar ne olursa olsun varışlar çarpı kalış süresidir: içeride 500 hafif ve 260 ağır suçlu var; ayrıca daha az yeniden suç işlemenin neyi değiştireceği gösterilir.
 	Show me	Bana göster
 	Point at where to do this step	Bu adımın nerede yapılacağını göster
 	Step {k} of {n}	Adım {k} / {n}

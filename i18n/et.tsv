@@ -908,6 +908,23 @@ unit	yr	a
 	Three activities in parallel, each ten days on average; the project ends when all three are done.	Kolm paralleelset tegevust, igaüks keskmiselt kümme päeva; projekt lõpeb, kui kõik kolm on tehtud.
 	When will the project finish?	Millal projekt valmib?
 	Why three ten-day activities in parallel take more than 18 days on average.	Miks kolm paralleelset kümnepäevast tegevust võtavad keskmiselt üle 18 päeva.
+	Public services	Avalikud teenused
+	Polling place	Valimisjaoskond
+	Voters arrive all day and wait for a free voting machine, with a long or a short ballot (Allen, Introduction to Discrete Event Simulation and Agent-based Modeling, ch. 6 and 7).	Valijad saabuvad terve päeva ja ootavad vaba hääletusmasinat, pika või lühikese valimissedeliga (Allen, Introduction to Discrete Event Simulation and Agent-based Modeling, ptk 6 ja 7).
+	How many voting machines does a polling place need?	Mitu hääletusmasinat on valimisjaoskonnal vaja?
+	Machines in proportion to voters and ballot length: 16 instead of 18 makes the wait six times longer. The election-day runs show the direction only.	Masinad vastavalt valijate arvule ja valimissedeli pikkusele: 18 asemel 16 muudab ooteaja kuus korda pikemaks. Valimispäeva käivitamised näitavad ainult suunda.
+	Mass vaccination hub	Massvaktsineerimiskeskus
+	Entrance, registration, assessment and vaccination, with each dose prepared alongside, then about 20 minutes in an observation seat (Hanly et al., BMC Health Services Research, 2022).	Sissepääs, registreerimine, hindamine ja vaktsineerimine, iga doos valmistatakse samal ajal ette, seejärel umbes 20 minutit vaatlusistmel (Hanly et al., BMC Health Services Research, 2022).
+	How many doses a day can a vaccination hub give?	Mitu doosi päevas saab vaktsineerimiskeskus anda?
+	Each station's staff are as busy as the flow of patients says: all under 80%, and about 470 doses in an 8-hour day with 21 staff. The time inside is not checked.	Iga jaama töötajad on nii hõivatud, kui patsientide voog ütleb: kõik alla 80% ja umbes 470 doosi 8-tunnises päevas 21 töötajaga. Sees veedetud aega ei kontrollita.
+	Penny Fab	Penny Fab
+	Four machines in a line, 2 hours a job each, with a fixed number of jobs going round (Hopp and Spearman, Factory Physics).	Neli masinat reas, igaüks 2 tundi töö kohta, ringlemas kindel arv töid (Hopp ja Spearman, Factory Physics).
+	How much work in process does a line need?	Kui palju pooleliolevat toodangut liin vajab?
+	Little's law and the critical work in process: 4 jobs give 0.29 jobs an hour with random times and 0.5 with fixed ones.	Littlei seadus ja kriitiline pooleliolev toodang: 4 tööd annavad 0.29 tööd tunnis juhuslike aegadega ja 0.5 kindlate aegadega.
+	Prison population	Vanglaelanikkond
+	Petty and serious offenders serve their sentences, and some offend again and come back; the numbers scaled down 100 times (Brailsford, Churilov and Dangerfield, ch. 8).	Kergemate ja raskemate kuritegude toimepanijad kannavad oma karistust ning mõned panevad uuesti kuriteo toime ja tulevad tagasi; arvud vähendatud 100 korda (Brailsford, Churilov ja Dangerfield, ptk 8).
+	How many prison places are needed?	Mitu vanglakohta on vaja?
+	Places are arrivals times the length of stay, whatever the sentences: 500 petty and 260 serious offenders inside, and what fewer reoffending would do.	Kohad on saabujad korrutatud viibimise pikkusega, olenemata karistustest: sees on 500 kergema ja 260 raskema kuriteo toimepanijat ning mida annaks väiksem korduvkuritegevus.
 	Show me	Näita mulle
 	Point at where to do this step	Osuta, kus seda sammu teha
 	Step {k} of {n}	Samm {k} / {n}
