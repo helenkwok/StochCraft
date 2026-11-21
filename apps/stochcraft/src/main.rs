@@ -125,6 +125,10 @@ impl Desktop {
                 Request::PickOpen => self.dialogs.ask(
                     FileDialog::open()
                         .title(t("Open Model"))
+                        .filter(
+                            t("Models (BPMN, XPDL, XMILE)"),
+                            &["bpmn", "xpdl", "xml", "xmile", "stmx"],
+                        )
                         .filter(t("Process models with BPSim"), &["bpmn", "xpdl", "xml"]),
                     Then::Open,
                 ),

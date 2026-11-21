@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xmile version="1.0" xmlns="http://docs.oasis-open.org/xmile/ns/XMILE/v1.0" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/xmile/1">
+  <header>
+    <name>Product adoption</name>
+  </header>
+  <sim_specs method="RK4" time_units="Years">
+    <start>0</start>
+    <stop>12</stop>
+    <dt reciprocal="true">8</dt>
+    <stochcraft:save_step>0.25</stochcraft:save_step>
+  </sim_specs>
+  <model>
+    <variables>
+      <stock name="Potential customers">
+        <doc>People who have not bought yet.</doc>
+        <eqn>10000</eqn>
+        <outflow>adoption</outflow>
+        <units>customers</units>
+      </stock>
+      <stock name="Customers">
+        <doc>People who have bought.</doc>
+        <eqn>0</eqn>
+        <inflow>adoption</inflow>
+        <units>customers</units>
+      </stock>
+      <flow name="adoption">
+        <doc>Each potential customer buys on their own at a steady rate, or after meeting a customer.</doc>
+        <eqn>innovation * Potential_customers + imitation * Potential_customers * Customers / (Potential_customers + Customers)</eqn>
+        <units>customers/year</units>
+      </flow>
+      <aux name="innovation">
+        <doc>The share of potential customers who buy on their own each year.</doc>
+        <eqn>0.03</eqn>
+        <units>1/year</units>
+      </aux>
+      <aux name="imitation">
+        <doc>How strongly meeting a customer makes a potential customer buy.</doc>
+        <eqn>0.38</eqn>
+        <units>1/year</units>
+      </aux>
+    </variables>
+  </model>
+</xmile>

@@ -907,6 +907,18 @@ fields (`“Service time”`) are named in the messages by their own rows.
   transliteration, and "pair" and "draw" each language's everyday word, none checked against any
   other source or reviewed by native speakers; the least certain are bn, hi, ka, kk, ko, lo, sq,
   ta, te, th and vi, and the fit of the grammar around "{n}" in the highly inflected ones.
+- The rows for system dynamics models in the window (ROADMAP M4.2, part 2a: the Model and
+  Results tabs, the kinds stock, flow and auxiliary, the sentences on where a stock ends and the
+  range 9 runs in 10 end in, the chart's caption and tooltips, the table's column heads, the
+  refusal to save, the refusal of a run too large for the window, the file dialog's filter and
+  the "Product adoption" example with its card) were machine-drafted with Claude Code from the
+  plain meaning of the English, reusing each catalog's own words for run, seed, mean, median,
+  percentile, time and flow. "Stock" (a level that fills and drains) is each language's word for
+  a stock of goods or a reserve, and "auxiliary variable" its calque; the 5th and 95th
+  percentile follow the catalog's own wording of "95th percentile". They were not checked
+  against any other source or reviewed by native speakers; the least certain are bn, hi, ka, kk,
+  lo, sq, ta, te, th and vi, the words for stock and auxiliary in all of them, and the case of
+  the numbers around "between {low} and {high}" in the highly inflected ones.
 
 **Adding or changing a string:** add the English in the code through `i18n::t` (or `tf`, `tn`),
 then add its row to each catalog here, or leave it out to show English until it is translated.

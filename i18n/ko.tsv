@@ -1337,3 +1337,43 @@ unit	yr	년
 	{name}: the ± is across {n} of the {of} pairs, the rest had no trial with a number.	{name}: ±는 {of}개 쌍 중 {n}개에 걸친 값이며, 나머지는 숫자가 있는 시행이 없었습니다.
 	No interval: every pair gave the same share, so their spread gives none.	구간 없음: 모든 쌍이 같은 비율을 보였으므로, 쌍 간 편차로는 구간을 구할 수 없습니다.
 	No interval: too few pairs of trials for one.	구간 없음: 구간을 구하기에는 시행 쌍이 너무 적습니다.
+	Stock	재고
+	Flow	흐름
+	Auxiliary	보조 변수
+	{name} ends near {median}: 9 runs in 10 end between {low} and {high}.	{name}은(는) {median} 근처에서 끝납니다. 10회 중 9회는 {low}에서 {high} 사이에서 끝납니다.
+	{name} ends at {value}.	{name}은(는) {value}에서 끝납니다.
+	{name} at {time}: median {median}, mean {mean}, 9 runs in 10 between {low} and {high}	{time}의 {name}: 중앙값 {median}, 평균 {mean}, 10회 중 9회는 {low}에서 {high} 사이
+	{name} at {time}: {value}	{time}의 {name}: {value}
+	Time	시간
+	Time ({unit})	시간 ({unit})
+	{name} mean	{name} 평균
+	{name} median	{name} 중앙값
+	{name} 5th percentile	{name} 5번째 백분위수
+	{name} 95th percentile	{name} 95번째 백분위수
+	Saving system dynamics models comes with editing.	시스템 다이내믹스 모델 저장은 편집 기능과 함께 제공됩니다.
+	This run is too large to make in the window: shorten it, raise the time step or lower the runs, or run it from the command line.	이 실행은 창에서 하기에는 너무 큽니다. 더 짧게 하거나, 시간 간격을 늘리거나, 실행 횟수를 줄이거나, 명령줄에서 실행하세요.
+	The model: its settings and variables	모델: 설정과 변수
+	System dynamics model	시스템 다이내믹스 모델
+	Variables	변수
+	This is the model as its file has it. Editing comes next.	파일에 있는 그대로의 모델입니다. 편집 기능은 다음에 추가됩니다.
+	From {start} to {stop}, in steps of {dt}, by the {method} method.	{start}부터 {stop}까지, {dt} 간격, {method} 방식.
+	Notes from the file	파일의 메모
+	Equation	방정식
+	starts at {value}	{value}에서 시작
+	In: {flows}	유입: {flows}
+	Out: {flows}	유출: {flows}
+	This model has a random function, so every run differs: make several to see how far they spread.	이 모델에는 난수 함수가 있어 실행마다 결과가 다릅니다. 여러 번 실행해 얼마나 퍼지는지 확인하세요.
+	This model has no random function, so one run gives its answer.	이 모델에는 난수 함수가 없으므로 한 번의 실행으로 답이 나옵니다.
+	Runs: {n} · seed {seed}	실행 횟수: {n} · 난수 시드 {seed}
+	One run	1회 실행
+	Show on the chart	차트에 표시
+	Solid line: median. Dashed line: mean. Shaded band: 9 runs in 10 fell inside it (5th to 95th percentile).	실선: 중앙값. 점선: 평균. 음영 띠: 10회 중 9회가 그 안에 들어갔습니다 (5번째에서 95번째 백분위수).
+	Pick a variable to see it over time.	시간에 따른 변화를 보려면 변수를 고르세요.
+	{name} over time	시간에 따른 {name}
+	Checked against its exact solution	정확한 해와 대조해 확인함
+	Models (BPMN, XPDL, XMILE)	모델 (BPMN, XPDL, XMILE)
+	Product adoption	제품 확산
+	A new product spreads by word of mouth: 10,000 potential customers, some buying on their own and the rest after meeting a customer.	새 제품이 입소문으로 퍼집니다. 잠재 고객은 10,000명이며, 스스로 사는 사람도 있고 고객을 만난 뒤에 사는 사람도 있습니다.
+	How fast does a new product spread?	새 제품은 얼마나 빨리 퍼질까요?
+	Stocks and flows: word of mouth makes sales speed up and then slow down in an S-shaped curve, which matches its exact formula.	재고와 흐름: 입소문으로 판매는 먼저 빨라졌다가 느려지며 S자 곡선을 그리고, 이는 정확한 공식과 일치합니다.
+	Inflows and outflows	유입과 유출

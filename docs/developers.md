@@ -308,8 +308,9 @@ stochcraft-cli exec changes.json --open queue.bpmn
 ### System dynamics models
 
 A system dynamics model is stocks (levels) and flows (rates) over time, read from an XMILE 1.0
-file (OASIS, 2015). There is no window or canvas for it yet: it is opened, run and read through
-the engine and the command line.
+file (OASIS, 2015). The window shows and runs it (the Model and Results tabs, `crates/ui-egui/src/sd.rs`,
+read-only); the canvas and editing come next. It is also opened, run and read through the engine
+and the command line.
 
 ```bash
 stochcraft-cli run tests/models/sir.xmile                     # each variable at the end of the run
@@ -323,7 +324,14 @@ The engine commands are `sd.open` (the text of an XMILE file; `file.open` also o
 disk), `sd.run` (`replications`, `seed`, `dt`, `dt_check`, `time_unit`) and `sd.get` (the model's
 variables and checks, and with `variable` its values from the last run). `run` and `file.save`
 refuse such a model, naming `sd.run`; it cannot be edited or saved yet. In Rust:
-`stochcraft_sd::{read_xmile, compile, run}`.
+`stochcraft_sd::{read_xmile, compile, run}`; `Engine::has_system_dynamics` and
+`Engine::system_dynamics_path` (`crates/engine/src/sd_window.rs`) tell a caller that holds the engine
+whether the document is one. The engine then holds an empty process model beside it, which
+`save_bytes` would write, so a window or shell that saves must check first (the window refuses
+every save path, and ignores the empty model's changes for the unsaved-changes question and the
+recovery copy). The window's run is made whole on the frame after Run is pressed, with the work
+bounded (steps times variables times runs, at most 20 million); a run a few replications at a time
+like Monte Carlo's would need `stochcraft-sd` to give per-replication results.
 
 - **Read:** the header, `sim_specs` (`start`, `stop`, `dt` and its `reciprocal`, `method` Euler or
   RK4, `time_units`), stocks (`eqn` as the initial value, `inflow`, `outflow`, `non_negative`,

@@ -191,7 +191,8 @@ A system dynamics model (stocks and flows, an XMILE file) is opened with `file.o
 function, `dt`, `dt_check` to run again at half the step, `time_unit`) and read with `sd.get`. A
 run gives every variable over time: the mean, and for a replicated model the median and the 5th
 and 95th percentiles. `run` refuses such a model and names `sd.run`; it cannot be edited or saved
-yet.
+yet. In the app, a model an agent opens with `file.open` or `sd.open` replaces the one shown, and
+the results of its `sd.run` appear on the Results tab, as for the other kinds of model.
 
 `crates/mcp/tests/session.rs` covers four areas:
 - a session like this one, checked only through MCP;

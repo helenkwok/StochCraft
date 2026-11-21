@@ -14,7 +14,7 @@ impl App {
     /// Opens a model file read from `path` and lists it under File ▸ Open Recent.
     pub fn open_path(&mut self, path: &str, bytes: &[u8]) {
         self.open_file(path, bytes);
-        if self.engine.path() == Some(path) {
+        if self.engine.path() == Some(path) || self.engine.system_dynamics_path() == Some(path) {
             self.remember(path);
         }
     }
@@ -30,11 +30,15 @@ impl App {
 
     /// Whether closing now would lose changes.
     pub fn has_unsaved_changes(&self) -> bool {
-        self.engine.is_dirty()
+        self.unsaved_changes()
     }
 
     pub(crate) fn document_name(&self) -> String {
-        if let Some(path) = self.engine.path() {
+        if let Some(path) = self
+            .engine
+            .path()
+            .or_else(|| self.engine.system_dynamics_path())
+        {
             return file_name(path).to_owned();
         }
         let name = &self.engine.model().name;
@@ -145,6 +149,8 @@ impl App {
         self.doc_gen += 1;
         // The Monte Carlo screens' state, and a Monte Carlo run in progress, which stops.
         self.mc = crate::montecarlo::Mc::default();
+        // The system dynamics screens' state: its results are of the model that is gone.
+        self.sd = crate::sd::Sd::default();
         if self.running.is_some() {
             self.stop_workers();
             let _ = self.engine.execute("run.cancel", json!({}));
@@ -182,7 +188,7 @@ impl App {
         let before = matches!(command, "run" | "mc.run").then(|| comparable(self.engine.model()));
         let result = self.engine.execute(command, params)?;
         match command {
-            "file.open" | "model.new" | "model.set" => {
+            "file.open" | "model.new" | "model.set" | "sd.open" => {
                 self.forget_view();
                 if let Some(path) = result["path"].as_str() {
                     self.info(tf("Opened {file}", &[("file", file_name(path))]));
@@ -200,6 +206,8 @@ impl App {
                 let n = result["trials"].as_u64().unwrap_or(0);
                 self.info(tn(n, "Finished {n} trial", "Finished {n} trials"));
             }
+            // The results of a system dynamics run, shown on its Results tab.
+            "sd.run" => self.sd_ran(result.clone()),
             _ => {}
         }
         Ok(result)
@@ -218,6 +226,16 @@ impl App {
 
     /// Exports the results table as CSV.
     pub fn export_csv(&mut self) {
+        if self.is_sd() {
+            if let Some(text) = self.sd_table_csv() {
+                let name = format!("{}-results.csv", self.export_stem());
+                self.requests.push(Request::Export {
+                    name,
+                    bytes: text.into_bytes(),
+                });
+            }
+            return;
+        }
         if let Some(r) = &self.results {
             let name = format!("{}-results.csv", self.export_stem());
             let text = if r["kind"] == "monte_carlo" {
@@ -317,6 +335,9 @@ impl App {
     /// dropped, an agent's command), `path` was chosen for the model that is gone: nothing is
     /// written, and what was to follow the save (quit, new, open) is dropped.
     pub fn save_to(&mut self, path: &str) {
+        if self.refuse_sd_save() {
+            return;
+        }
         if self
             .pick_for
             .take()
@@ -338,6 +359,9 @@ impl App {
     /// `path`). `chosen`: the user chose `path` for Save As, so its extension says the format;
     /// otherwise it is the opened file's own.
     fn save_file(&mut self, path: String, chosen: bool, agreed: bool) {
+        if self.refuse_sd_save() {
+            return;
+        }
         let opened = self.engine.format();
         let named = match extension(&path).as_str() {
             "bpmn" => Some("bpmn"),
@@ -382,6 +406,9 @@ impl App {
 
     /// Writes (or downloads) the model to `path` as a new BPMN file.
     pub(crate) fn write_new(&mut self, path: String) {
+        if self.refuse_sd_save() {
+            return;
+        }
         match self.engine.save_bytes(true) {
             Ok(bytes) => self.deliver(path, bytes),
             Err(e) => self.save_failed(e.message),
@@ -389,6 +416,9 @@ impl App {
     }
 
     fn deliver(&mut self, path: String, bytes: Vec<u8>) {
+        if self.refuse_sd_save() {
+            return;
+        }
         self.requests.push(if self.platform.file_system {
             Request::Write { path, bytes }
         } else {
@@ -406,6 +436,9 @@ impl App {
 
     /// The shell wrote `bytes` to `path`: the model is saved there.
     pub fn written(&mut self, path: &str, bytes: &[u8]) {
+        if self.refuse_sd_save() {
+            return;
+        }
         match self.engine.saved_to(path, bytes) {
             Ok(_) => {
                 self.info(tf("Saved {file}", &[("file", file_name(path))]));
@@ -433,6 +466,9 @@ impl App {
 
     /// File ▸ Save: into the file the model came from, or as a new file.
     pub fn save(&mut self) {
+        if self.refuse_sd_save() {
+            return;
+        }
         match (
             self.engine.path().map(str::to_owned),
             self.platform.file_system,
@@ -445,6 +481,9 @@ impl App {
 
     /// File ▸ Save As.
     pub fn save_as(&mut self) {
+        if self.refuse_sd_save() {
+            return;
+        }
         if self.platform.file_system {
             let name = self.suggested_name();
             let xpdl = self.engine.format() == Some("xpdl");
@@ -458,6 +497,9 @@ impl App {
     /// Save dialog is open already, nothing more is asked: its answer saves the model it was
     /// opened for, or nothing if that model has been replaced.
     pub(crate) fn pick_save(&mut self, name: String, xpdl: bool) {
+        if self.refuse_sd_save() {
+            return;
+        }
         if self.pick_for.is_some() {
             return;
         }
@@ -479,7 +521,7 @@ impl App {
 
     /// Replaces or closes the model, first asking about unsaved changes.
     pub(crate) fn replace(&mut self, action: Replace) {
-        if self.engine.is_dirty() {
+        if self.unsaved_changes() {
             self.confirm = Some(action);
         } else {
             self.replace_now(action);
@@ -531,7 +573,7 @@ impl App {
     /// The window is closing (the user closed it): returns whether it may close now. If not, the
     /// app asks about unsaved changes and requests [`Request::Quit`] once they are dealt with.
     pub fn close_requested(&mut self) -> bool {
-        if self.engine.is_dirty() {
+        if self.unsaved_changes() {
             self.confirm = Some(Replace::Quit);
             false
         } else {

@@ -1337,3 +1337,43 @@ unit	yr	v
 	{name}: the ± is across {n} of the {of} pairs, the rest had no trial with a number.	{name}: ± on {of} parista {n}:n yli, loput eivät sisältäneet yhtään iteraatiota, jolla on luku.
 	No interval: every pair gave the same share, so their spread gives none.	Ei väliä: kaikki parit antoivat saman osuuden, joten niiden hajonta ei anna väliä.
 	No interval: too few pairs of trials for one.	Ei väliä: liian vähän iteraatiopareja sen laskemiseen.
+	Stock	Varanto
+	Flow	Virta
+	Auxiliary	Apumuuttuja
+	{name} ends near {median}: 9 runs in 10 end between {low} and {high}.	{name} päättyy lähelle arvoa {median}: 9 ajoa 10:stä päättyy välille {low}–{high}.
+	{name} ends at {value}.	{name} päättyy arvoon {value}.
+	{name} at {time}: median {median}, mean {mean}, 9 runs in 10 between {low} and {high}	{name} hetkellä {time}: mediaani {median}, keskiarvo {mean}, 9 ajoa 10:stä välillä {low}–{high}
+	{name} at {time}: {value}	{name} hetkellä {time}: {value}
+	Time	Aika
+	Time ({unit})	Aika ({unit})
+	{name} mean	{name}, keskiarvo
+	{name} median	{name}, mediaani
+	{name} 5th percentile	{name}, 5. persentiili
+	{name} 95th percentile	{name}, 95. persentiili
+	Saving system dynamics models comes with editing.	Systeemidynamiikan mallien tallennus tulee muokkauksen mukana.
+	This run is too large to make in the window: shorten it, raise the time step or lower the runs, or run it from the command line.	Tämä ajo on liian suuri tehtäväksi ikkunassa: lyhennä sitä, suurenna aika-askelta tai vähennä ajoja, tai aja se komentoriviltä.
+	The model: its settings and variables	Malli: sen asetukset ja muuttujat
+	System dynamics model	Systeemidynamiikan malli
+	Variables	Muuttujat
+	This is the model as its file has it. Editing comes next.	Tämä on malli sellaisena kuin se on tiedostossaan. Muokkaus tulee seuraavaksi.
+	From {start} to {stop}, in steps of {dt}, by the {method} method.	Ajanhetkestä {start} hetkeen {stop}, {dt} askelin, menetelmällä {method}.
+	Notes from the file	Tiedoston huomautukset
+	Equation	Yhtälö
+	starts at {value}	alkaa arvosta {value}
+	In: {flows}	Sisään: {flows}
+	Out: {flows}	Ulos: {flows}
+	This model has a random function, so every run differs: make several to see how far they spread.	Mallissa on satunnaisfunktio, joten jokainen ajo on erilainen: tee useita nähdäksesi, kuinka laajalle ne hajoavat.
+	This model has no random function, so one run gives its answer.	Mallissa ei ole satunnaisfunktiota, joten yksi ajo antaa sen vastauksen.
+	Runs: {n} · seed {seed}	Ajoja: {n} · siemen {seed}
+	One run	Yksi ajo
+	Show on the chart	Näytä kaaviossa
+	Solid line: median. Dashed line: mean. Shaded band: 9 runs in 10 fell inside it (5th to 95th percentile).	Yhtenäinen viiva: mediaani. Katkoviiva: keskiarvo. Varjostettu alue: 9 ajoa 10:stä osui sen sisään (5. – 95. persentiili).
+	Pick a variable to see it over time.	Valitse muuttuja nähdäksesi sen ajan funktiona.
+	{name} over time	{name} ajan funktiona
+	Checked against its exact solution	Tarkistettu sen tarkkaa ratkaisua vasten
+	Models (BPMN, XPDL, XMILE)	Mallit (BPMN, XPDL, XMILE)
+	Product adoption	Tuotteen käyttöönotto
+	A new product spreads by word of mouth: 10,000 potential customers, some buying on their own and the rest after meeting a customer.	Uusi tuote leviää suusta suuhun: 10 000 mahdollista asiakasta, osa ostaa omasta aloitteestaan ja loput tavattuaan asiakkaan.
+	How fast does a new product spread?	Kuinka nopeasti uusi tuote leviää?
+	Stocks and flows: word of mouth makes sales speed up and then slow down in an S-shaped curve, which matches its exact formula.	Varannot ja virrat: suusta suuhun leviäminen kiihdyttää myyntiä ensin ja hidastaa sitä sitten S-muotoisella käyrällä, joka vastaa sen tarkkaa kaavaa.
+	Inflows and outflows	Tulo- ja lähtevirrat

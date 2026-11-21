@@ -1337,3 +1337,43 @@ unit	yr	বছর
 	{name}: the ± is across {n} of the {of} pairs, the rest had no trial with a number.	{name}: ± হলো {of}টি জোড়ার মধ্যে {n}টি জুড়ে, বাকিগুলোতে সংখ্যাযুক্ত কোনো পরীক্ষণ ছিল না।
 	No interval: every pair gave the same share, so their spread gives none.	কোনো ব্যবধান নেই: সব জোড়া একই ভাগ দিয়েছে, তাই তাদের বিস্তার থেকে ব্যবধান পাওয়া যায় না।
 	No interval: too few pairs of trials for one.	কোনো ব্যবধান নেই: এর জন্য পরীক্ষণ-জোড়া খুব কম।
+	Stock	মজুত
+	Flow	প্রবাহ
+	Auxiliary	সহায়ক চলক
+	{name} ends near {median}: 9 runs in 10 end between {low} and {high}.	{name} শেষ হয় প্রায় {median}-এ: ১০টির ৯টি রান {low} ও {high}-এর মধ্যে শেষ হয়।
+	{name} ends at {value}.	{name} শেষ হয় {value}-এ।
+	{name} at {time}: median {median}, mean {mean}, 9 runs in 10 between {low} and {high}	{time}-এ {name}: মধ্যমা {median}, গড় {mean}, ১০টির ৯টি রান {low} ও {high}-এর মধ্যে
+	{name} at {time}: {value}	{time}-এ {name}: {value}
+	Time	সময়
+	Time ({unit})	সময় ({unit})
+	{name} mean	{name}-এর গড়
+	{name} median	{name}-এর মধ্যমা
+	{name} 5th percentile	{name}-এর ৫ম শতাংশক
+	{name} 95th percentile	{name}-এর ৯৫তম শতাংশক
+	Saving system dynamics models comes with editing.	সিস্টেম ডায়নামিক্স মডেল সংরক্ষণ আসবে সম্পাদনার সঙ্গে।
+	This run is too large to make in the window: shorten it, raise the time step or lower the runs, or run it from the command line.	এই রানটি উইন্ডোতে চালানোর পক্ষে অনেক বড়: এটি ছোট করুন, সময়ের ধাপ বাড়ান বা রানের সংখ্যা কমান, অথবা কমান্ড লাইন থেকে চালান।
+	The model: its settings and variables	মডেল: এর সেটিংস ও চলকসমূহ
+	System dynamics model	সিস্টেম ডায়নামিক্স মডেল
+	Variables	চলকসমূহ
+	This is the model as its file has it. Editing comes next.	মডেলটি এর ফাইলে যেমন আছে তেমনই দেখানো হচ্ছে। সম্পাদনা আসছে পরে।
+	From {start} to {stop}, in steps of {dt}, by the {method} method.	{start} থেকে {stop} পর্যন্ত, {dt} ধাপে, {method} পদ্ধতিতে।
+	Notes from the file	ফাইল থেকে নোট
+	Equation	সমীকরণ
+	starts at {value}	শুরু হয় {value} থেকে
+	In: {flows}	ভিতরে: {flows}
+	Out: {flows}	বাইরে: {flows}
+	This model has a random function, so every run differs: make several to see how far they spread.	এই মডেলে একটি যদৃচ্ছ ফাংশন আছে, তাই প্রতিটি রান আলাদা: কতটা ছড়ায় তা দেখতে কয়েকটি রান করুন।
+	This model has no random function, so one run gives its answer.	এই মডেলে কোনো যদৃচ্ছ ফাংশন নেই, তাই একটি রানই এর উত্তর দেয়।
+	Runs: {n} · seed {seed}	রান: {n} · বীজ {seed}
+	One run	একটি রান
+	Show on the chart	চার্টে দেখান
+	Solid line: median. Dashed line: mean. Shaded band: 9 runs in 10 fell inside it (5th to 95th percentile).	নিরেট রেখা: মধ্যমা। ড্যাশ রেখা: গড়। ছায়াযুক্ত ব্যান্ড: ১০টির ৯টি রান এর ভিতরে পড়েছে (৫ম থেকে ৯৫তম শতাংশক)।
+	Pick a variable to see it over time.	সময়ের সঙ্গে দেখতে একটি চলক বেছে নিন।
+	{name} over time	সময়ের সঙ্গে {name}
+	Checked against its exact solution	এর সঠিক সমাধানের সঙ্গে মিলিয়ে দেখা হয়েছে
+	Models (BPMN, XPDL, XMILE)	মডেল (BPMN, XPDL, XMILE)
+	Product adoption	পণ্য গ্রহণ
+	A new product spreads by word of mouth: 10,000 potential customers, some buying on their own and the rest after meeting a customer.	একটি নতুন পণ্য মুখে মুখে ছড়ায়: ১০,০০০ সম্ভাব্য ক্রেতা, কেউ নিজে থেকে কেনে, বাকিরা কোনো ক্রেতার সঙ্গে দেখা হওয়ার পর।
+	How fast does a new product spread?	একটি নতুন পণ্য কত দ্রুত ছড়ায়?
+	Stocks and flows: word of mouth makes sales speed up and then slow down in an S-shaped curve, which matches its exact formula.	মজুত ও প্রবাহ: মুখে মুখে প্রচার বিক্রি প্রথমে বাড়ায়, পরে কমায়, ফলে S-আকৃতির বক্ররেখা তৈরি হয়, যা এর সঠিক সূত্রের সঙ্গে মেলে।
+	Inflows and outflows	অন্তঃপ্রবাহ ও বহিঃপ্রবাহ

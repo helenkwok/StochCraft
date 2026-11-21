@@ -1337,3 +1337,43 @@ unit	yr	év
 	{name}: the ± is across {n} of the {of} pairs, the rest had no trial with a number.	{name}: a ± alapjául szolgáló párok száma: {n} (összesen: {of}); a többinél egyik próbának sem volt számértéke.
 	No interval: every pair gave the same share, so their spread gives none.	Nincs intervallum: minden pár ugyanazt az arányt adta, így a szórásuk nem ad intervallumot.
 	No interval: too few pairs of trials for one.	Nincs intervallum: túl kevés próbapár van hozzá.
+	Stock	Készlet
+	Flow	Folyamat
+	Auxiliary	Segédváltozó
+	{name} ends near {median}: 9 runs in 10 end between {low} and {high}.	{name} nagyjából {median} értéknél ér véget: 10 futásból 9 {low} és {high} között ér véget.
+	{name} ends at {value}.	{name} a végén {value}.
+	{name} at {time}: median {median}, mean {mean}, 9 runs in 10 between {low} and {high}	{name} a(z) {time} időpontban: medián {median}, átlag {mean}, 10 futásból 9 {low} és {high} között
+	{name} at {time}: {value}	{name} a(z) {time} időpontban: {value}
+	Time	Idő
+	Time ({unit})	Idő ({unit})
+	{name} mean	{name}, átlag
+	{name} median	{name}, medián
+	{name} 5th percentile	{name}, 5. percentilis
+	{name} 95th percentile	{name}, 95. percentilis
+	Saving system dynamics models comes with editing.	A rendszerdinamikai modellek mentése a szerkesztéssel érkezik.
+	This run is too large to make in the window: shorten it, raise the time step or lower the runs, or run it from the command line.	Ez a futás túl nagy az ablakban való elvégzéshez: rövidítse le, növelje az időlépést vagy csökkentse a futások számát, vagy futtassa a parancssorból.
+	The model: its settings and variables	A modell: beállításai és változói
+	System dynamics model	Rendszerdinamikai modell
+	Variables	Változók
+	This is the model as its file has it. Editing comes next.	Ez a modell úgy, ahogy a fájljában van. A szerkesztés a következő lépés.
+	From {start} to {stop}, in steps of {dt}, by the {method} method.	{start} és {stop} között, {dt} lépésekkel, a(z) {method} módszerrel.
+	Notes from the file	Megjegyzések a fájlból
+	Equation	Egyenlet
+	starts at {value}	kezdőértéke {value}
+	In: {flows}	Be: {flows}
+	Out: {flows}	Ki: {flows}
+	This model has a random function, so every run differs: make several to see how far they spread.	Ennek a modellnek van véletlen függvénye, ezért minden futás más: végezzen többet, hogy lássa, mennyire szóródnak.
+	This model has no random function, so one run gives its answer.	Ennek a modellnek nincs véletlen függvénye, ezért egy futás megadja a választ.
+	Runs: {n} · seed {seed}	Futások: {n} · mag {seed}
+	One run	Egy futás
+	Show on the chart	Megjelenítés a diagramon
+	Solid line: median. Dashed line: mean. Shaded band: 9 runs in 10 fell inside it (5th to 95th percentile).	Folytonos vonal: medián. Szaggatott vonal: átlag. Árnyékolt sáv: 10 futásból 9 ebbe esett (az 5. és a 95. percentilis között).
+	Pick a variable to see it over time.	Válasszon egy változót, hogy lássa az időben.
+	{name} over time	{name} az időben
+	Checked against its exact solution	Pontos megoldásával ellenőrizve
+	Models (BPMN, XPDL, XMILE)	Modellek (BPMN, XPDL, XMILE)
+	Product adoption	Termékelfogadás
+	A new product spreads by word of mouth: 10,000 potential customers, some buying on their own and the rest after meeting a customer.	Egy új termék szájról szájra terjed: 10 000 lehetséges vásárló, néhányan maguktól vesznek, a többiek egy vásárlóval való találkozás után.
+	How fast does a new product spread?	Milyen gyorsan terjed egy új termék?
+	Stocks and flows: word of mouth makes sales speed up and then slow down in an S-shaped curve, which matches its exact formula.	Készletek és folyamatok: a szájról szájra terjedés az eladásokat előbb gyorsítja, majd lassítja egy S alakú görbén, amely egyezik a pontos képletével.
+	Inflows and outflows	Beáramlások és kiáramlások

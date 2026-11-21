@@ -1337,3 +1337,43 @@ unit	yr	år
 	{name}: the ± is across {n} of the {of} pairs, the rest had no trial with a number.	{name}: ± gjelder {n} av {of} par; resten hadde ikke noe forsøk med et tall.
 	No interval: every pair gave the same share, so their spread gives none.	Intet intervall: alle parene ga samme andel, så spredningen deres gir ikke noe intervall.
 	No interval: too few pairs of trials for one.	Intet intervall: for få par med iterasjoner til det.
+	Stock	Beholdning
+	Flow	Flyt
+	Auxiliary	Hjelpevariabel
+	{name} ends near {median}: 9 runs in 10 end between {low} and {high}.	{name} ender nær {median}: 9 av 10 kjøringer ender mellom {low} og {high}.
+	{name} ends at {value}.	{name} ender på {value}.
+	{name} at {time}: median {median}, mean {mean}, 9 runs in 10 between {low} and {high}	{name} ved {time}: median {median}, gjennomsnitt {mean}, 9 av 10 kjøringer mellom {low} og {high}
+	{name} at {time}: {value}	{name} ved {time}: {value}
+	Time	Tid
+	Time ({unit})	Tid ({unit})
+	{name} mean	{name}, gjennomsnitt
+	{name} median	{name}, median
+	{name} 5th percentile	{name}, 5. persentil
+	{name} 95th percentile	{name}, 95. persentil
+	Saving system dynamics models comes with editing.	Lagring av systemdynamiske modeller kommer sammen med redigering.
+	This run is too large to make in the window: shorten it, raise the time step or lower the runs, or run it from the command line.	Denne kjøringen er for stor til å gjøres i vinduet: gjør den kortere, øk tidssteget eller reduser antall kjøringer, eller kjør den fra kommandolinjen.
+	The model: its settings and variables	Modellen: innstillinger og variabler
+	System dynamics model	Systemdynamisk modell
+	Variables	Variabler
+	This is the model as its file has it. Editing comes next.	Dette er modellen slik den står i filen sin. Redigering kommer neste gang.
+	From {start} to {stop}, in steps of {dt}, by the {method} method.	Fra {start} til {stop}, i steg på {dt}, med {method}-metoden.
+	Notes from the file	Merknader fra filen
+	Equation	Likning
+	starts at {value}	starter på {value}
+	In: {flows}	Inn: {flows}
+	Out: {flows}	Ut: {flows}
+	This model has a random function, so every run differs: make several to see how far they spread.	Denne modellen har en tilfeldig funksjon, så hver kjøring er forskjellig: gjør flere for å se hvor mye de sprer seg.
+	This model has no random function, so one run gives its answer.	Denne modellen har ingen tilfeldig funksjon, så én kjøring gir svaret.
+	Runs: {n} · seed {seed}	Kjøringer: {n} · frø {seed}
+	One run	Én kjøring
+	Show on the chart	Vis i diagrammet
+	Solid line: median. Dashed line: mean. Shaded band: 9 runs in 10 fell inside it (5th to 95th percentile).	Hel linje: median. Stiplet linje: gjennomsnitt. Skravert bånd: 9 av 10 kjøringer lå innenfor det (5. til 95. persentil).
+	Pick a variable to see it over time.	Velg en variabel for å se den over tid.
+	{name} over time	{name} over tid
+	Checked against its exact solution	Kontrollert mot den nøyaktige løsningen
+	Models (BPMN, XPDL, XMILE)	Modeller (BPMN, XPDL, XMILE)
+	Product adoption	Produktadopsjon
+	A new product spreads by word of mouth: 10,000 potential customers, some buying on their own and the rest after meeting a customer.	Et nytt produkt sprer seg fra munn til munn: 10 000 potensielle kunder, noen kjøper på egen hånd og resten etter å ha møtt en kunde.
+	How fast does a new product spread?	Hvor raskt sprer et nytt produkt seg?
+	Stocks and flows: word of mouth makes sales speed up and then slow down in an S-shaped curve, which matches its exact formula.	Beholdninger og flyt: muntlig spredning gjør at salget først tar av og så flater ut i en S-formet kurve som stemmer med den nøyaktige formelen.
+	Inflows and outflows	Innstrømmer og utstrømmer

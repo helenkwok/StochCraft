@@ -1337,3 +1337,43 @@ unit	yr	г.
 	{name}: the ± is across {n} of the {of} pairs, the rest had no trial with a number.	{name}: ± рассчитано по парам: {n} из {of}; в остальных не было испытания с числом.
 	No interval: every pair gave the same share, so their spread gives none.	Нет интервала: все пары дали одну и ту же долю, поэтому их разброс интервала не даёт.
 	No interval: too few pairs of trials for one.	Нет интервала: для него слишком мало пар испытаний.
+	Stock	Запас
+	Flow	Поток
+	Auxiliary	Вспомогательная переменная
+	{name} ends near {median}: 9 runs in 10 end between {low} and {high}.	{name} заканчивается около {median}: 9 запусков из 10 заканчиваются между {low} и {high}.
+	{name} ends at {value}.	{name} заканчивается на {value}.
+	{name} at {time}: median {median}, mean {mean}, 9 runs in 10 between {low} and {high}	{name} в момент {time}: медиана {median}, среднее {mean}, 9 запусков из 10 между {low} и {high}
+	{name} at {time}: {value}	{name} в момент {time}: {value}
+	Time	Время
+	Time ({unit})	Время ({unit})
+	{name} mean	{name}, среднее
+	{name} median	{name}, медиана
+	{name} 5th percentile	{name}, 5-й процентиль
+	{name} 95th percentile	{name}, 95-й процентиль
+	Saving system dynamics models comes with editing.	Сохранение моделей системной динамики появится вместе с редактированием.
+	This run is too large to make in the window: shorten it, raise the time step or lower the runs, or run it from the command line.	Этот запуск слишком велик для окна: сократите его, увеличьте шаг по времени или уменьшите число запусков либо запустите его из командной строки.
+	The model: its settings and variables	Модель: её настройки и переменные
+	System dynamics model	Модель системной динамики
+	Variables	Переменные
+	This is the model as its file has it. Editing comes next.	Это модель такой, какая она в своём файле. Редактирование появится позже.
+	From {start} to {stop}, in steps of {dt}, by the {method} method.	От {start} до {stop}, шагами по {dt}, методом {method}.
+	Notes from the file	Заметки из файла
+	Equation	Уравнение
+	starts at {value}	начинается с {value}
+	In: {flows}	Приток: {flows}
+	Out: {flows}	Отток: {flows}
+	This model has a random function, so every run differs: make several to see how far they spread.	В этой модели есть случайная функция, поэтому каждый запуск отличается: сделайте несколько, чтобы увидеть, насколько они расходятся.
+	This model has no random function, so one run gives its answer.	В этой модели нет случайной функции, поэтому ответ даёт один запуск.
+	Runs: {n} · seed {seed}	Запусков: {n} · начальное значение генератора {seed}
+	One run	Один запуск
+	Show on the chart	Показать на графике
+	Solid line: median. Dashed line: mean. Shaded band: 9 runs in 10 fell inside it (5th to 95th percentile).	Сплошная линия: медиана. Штриховая линия: среднее. Затенённая полоса: 9 запусков из 10 попали в неё (от 5-го до 95-го процентиля).
+	Pick a variable to see it over time.	Выберите переменную, чтобы увидеть её во времени.
+	{name} over time	{name} во времени
+	Checked against its exact solution	Проверено по его точному решению
+	Models (BPMN, XPDL, XMILE)	Модели (BPMN, XPDL, XMILE)
+	Product adoption	Принятие продукта
+	A new product spreads by word of mouth: 10,000 potential customers, some buying on their own and the rest after meeting a customer.	Новый продукт распространяется из уст в уста: 10 000 потенциальных клиентов, одни покупают сами, остальные после встречи с клиентом.
+	How fast does a new product spread?	Как быстро распространяется новый продукт?
+	Stocks and flows: word of mouth makes sales speed up and then slow down in an S-shaped curve, which matches its exact formula.	Запасы и потоки: молва сначала ускоряет продажи, а затем замедляет их по S-образной кривой, которая совпадает с его точной формулой.
+	Inflows and outflows	Притоки и оттоки

@@ -1337,3 +1337,43 @@ unit	yr	წელი
 	{name}: the ± is across {n} of the {of} pairs, the rest had no trial with a number.	{name}: ± გამოთვლილია {of} წყვილიდან {n}-ის მიხედვით, დანარჩენებში არც ერთ ცდას არ ჰქონდა რიცხვი.
 	No interval: every pair gave the same share, so their spread gives none.	ინტერვალი არ არის: ყველა წყვილმა ერთი და იგივე წილი მისცა, ამიტომ მათი გაფანტულობა ინტერვალს არ იძლევა.
 	No interval: too few pairs of trials for one.	ინტერვალი არ არის: ცდების წყვილები ძალიან ცოტაა მისთვის.
+	Stock	მარაგი
+	Flow	ნაკადი
+	Auxiliary	დამხმარე ცვლადი
+	{name} ends near {median}: 9 runs in 10 end between {low} and {high}.	{name} მთავრდება დაახლოებით {median}-ზე: 10 გაშვებიდან 9 მთავრდება {low}-სა და {high}-ს შორის.
+	{name} ends at {value}.	{name} მთავრდება {value}-ზე.
+	{name} at {time}: median {median}, mean {mean}, 9 runs in 10 between {low} and {high}	{name} {time}-ზე: მედიანა {median}, საშუალო {mean}, 10 გაშვებიდან 9 {low}-სა და {high}-ს შორის
+	{name} at {time}: {value}	{name} {time}-ზე: {value}
+	Time	დრო
+	Time ({unit})	დრო ({unit})
+	{name} mean	{name}, საშუალო
+	{name} median	{name}, მედიანა
+	{name} 5th percentile	{name}, მე-5 პროცენტილი
+	{name} 95th percentile	{name}, 95-ე პროცენტილი
+	Saving system dynamics models comes with editing.	სისტემური დინამიკის მოდელების შენახვა რედაქტირებასთან ერთად გამოჩნდება.
+	This run is too large to make in the window: shorten it, raise the time step or lower the runs, or run it from the command line.	ეს გაშვება ფანჯარაში შესასრულებლად ძალიან დიდია: შეამოკლეთ, გაზარდეთ დროის ბიჯი ან შეამცირეთ გაშვებების რაოდენობა, ან გაუშვით ბრძანების ხაზიდან.
+	The model: its settings and variables	მოდელი: მისი პარამეტრები და ცვლადები
+	System dynamics model	სისტემური დინამიკის მოდელი
+	Variables	ცვლადები
+	This is the model as its file has it. Editing comes next.	ეს არის მოდელი ისე, როგორც მის ფაილშია. რედაქტირება შემდეგ დაემატება.
+	From {start} to {stop}, in steps of {dt}, by the {method} method.	{start}-დან {stop}-მდე, {dt} ბიჯით, {method} მეთოდით.
+	Notes from the file	შენიშვნები ფაილიდან
+	Equation	განტოლება
+	starts at {value}	იწყება {value}-დან
+	In: {flows}	შემოდინება: {flows}
+	Out: {flows}	გადინება: {flows}
+	This model has a random function, so every run differs: make several to see how far they spread.	ამ მოდელს აქვს შემთხვევითი ფუნქცია, ამიტომ ყოველი გაშვება განსხვავებულია: გააკეთეთ რამდენიმე, რომ ნახოთ, რამდენად ვრცელდება შედეგები.
+	This model has no random function, so one run gives its answer.	ამ მოდელს არ აქვს შემთხვევითი ფუნქცია, ამიტომ პასუხს ერთი გაშვება იძლევა.
+	Runs: {n} · seed {seed}	გაშვებები: {n} · საწყისი მნიშვნელობა {seed}
+	One run	ერთი გაშვება
+	Show on the chart	გრაფიკზე ჩვენება
+	Solid line: median. Dashed line: mean. Shaded band: 9 runs in 10 fell inside it (5th to 95th percentile).	უწყვეტი ხაზი: მედიანა. წყვეტილი ხაზი: საშუალო. დაჩრდილული ზოლი: 10 გაშვებიდან 9 მასში მოხვდა (მე-5-დან 95-ე პროცენტილამდე).
+	Pick a variable to see it over time.	აირჩიეთ ცვლადი, რომ ნახოთ ის დროში.
+	{name} over time	{name} დროში
+	Checked against its exact solution	შემოწმებულია მისი ზუსტი ამონახსნის მიხედვით
+	Models (BPMN, XPDL, XMILE)	მოდელები (BPMN, XPDL, XMILE)
+	Product adoption	პროდუქტის მიღება
+	A new product spreads by word of mouth: 10,000 potential customers, some buying on their own and the rest after meeting a customer.	ახალი პროდუქტი პირიდან პირში ვრცელდება: 10 000 პოტენციური მომხმარებელი, ზოგი თავისით ყიდულობს, დანარჩენი კი მომხმარებელთან შეხვედრის შემდეგ.
+	How fast does a new product spread?	რამდენად სწრაფად ვრცელდება ახალი პროდუქტი?
+	Stocks and flows: word of mouth makes sales speed up and then slow down in an S-shaped curve, which matches its exact formula.	მარაგები და ნაკადები: პირისპირ გავრცელება გაყიდვებს ჯერ აჩქარებს, შემდეგ კი ანელებს S-ის ფორმის მრუდით, რომელიც მისი ზუსტი ფორმულის შესაბამისია.
+	Inflows and outflows	შემოდინება და გადინება

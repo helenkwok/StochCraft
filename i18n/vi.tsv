@@ -1337,3 +1337,43 @@ unit	yr	năm
 	{name}: the ± is across {n} of the {of} pairs, the rest had no trial with a number.	{name}: ± tính trên {n} trong số {of} cặp, các cặp còn lại không có lần thử nào có số.
 	No interval: every pair gave the same share, so their spread gives none.	Không có khoảng: mọi cặp đều cho cùng một tỷ lệ, nên độ phân tán của chúng không cho ra khoảng.
 	No interval: too few pairs of trials for one.	Không có khoảng: quá ít cặp lần thử để tính.
+	Stock	Kho
+	Flow	Dòng
+	Auxiliary	Biến phụ trợ
+	{name} ends near {median}: 9 runs in 10 end between {low} and {high}.	{name} kết thúc gần {median}: 9 trong 10 lần chạy kết thúc trong khoảng từ {low} đến {high}.
+	{name} ends at {value}.	{name} kết thúc ở {value}.
+	{name} at {time}: median {median}, mean {mean}, 9 runs in 10 between {low} and {high}	{name} tại {time}: trung vị {median}, trung bình {mean}, 9 trong 10 lần chạy trong khoảng từ {low} đến {high}
+	{name} at {time}: {value}	{name} tại {time}: {value}
+	Time	Thời gian
+	Time ({unit})	Thời gian ({unit})
+	{name} mean	{name}, trung bình
+	{name} median	{name}, trung vị
+	{name} 5th percentile	{name}, phân vị thứ 5
+	{name} 95th percentile	{name}, phân vị thứ 95
+	Saving system dynamics models comes with editing.	Việc lưu mô hình động lực học hệ thống sẽ đến cùng với việc chỉnh sửa.
+	This run is too large to make in the window: shorten it, raise the time step or lower the runs, or run it from the command line.	Lần chạy này quá lớn để thực hiện trong cửa sổ: hãy rút ngắn nó, tăng bước thời gian hoặc giảm số lần chạy, hoặc chạy từ dòng lệnh.
+	The model: its settings and variables	Mô hình: các thiết lập và biến của nó
+	System dynamics model	Mô hình động lực học hệ thống
+	Variables	Biến
+	This is the model as its file has it. Editing comes next.	Đây là mô hình như trong tệp của nó. Việc chỉnh sửa sẽ đến sau.
+	From {start} to {stop}, in steps of {dt}, by the {method} method.	Từ {start} đến {stop}, theo bước {dt}, bằng phương pháp {method}.
+	Notes from the file	Ghi chú từ tệp
+	Equation	Phương trình
+	starts at {value}	bắt đầu từ {value}
+	In: {flows}	Vào: {flows}
+	Out: {flows}	Ra: {flows}
+	This model has a random function, so every run differs: make several to see how far they spread.	Mô hình này có một hàm ngẫu nhiên nên mỗi lần chạy khác nhau: hãy chạy vài lần để xem chúng phân tán đến đâu.
+	This model has no random function, so one run gives its answer.	Mô hình này không có hàm ngẫu nhiên nên một lần chạy là đủ cho câu trả lời.
+	Runs: {n} · seed {seed}	Số lần chạy: {n} · hạt giống {seed}
+	One run	Một lần chạy
+	Show on the chart	Hiển thị trên biểu đồ
+	Solid line: median. Dashed line: mean. Shaded band: 9 runs in 10 fell inside it (5th to 95th percentile).	Đường liền: trung vị. Đường đứt nét: trung bình. Dải tô bóng: 9 trong 10 lần chạy nằm trong đó (từ phân vị thứ 5 đến thứ 95).
+	Pick a variable to see it over time.	Chọn một biến để xem theo thời gian.
+	{name} over time	{name} theo thời gian
+	Checked against its exact solution	Đã kiểm tra với nghiệm chính xác của nó
+	Models (BPMN, XPDL, XMILE)	Mô hình (BPMN, XPDL, XMILE)
+	Product adoption	Sự chấp nhận sản phẩm
+	A new product spreads by word of mouth: 10,000 potential customers, some buying on their own and the rest after meeting a customer.	Một sản phẩm mới lan truyền qua truyền miệng: 10.000 khách hàng tiềm năng, một số tự mua và số còn lại mua sau khi gặp một khách hàng.
+	How fast does a new product spread?	Một sản phẩm mới lan truyền nhanh đến mức nào?
+	Stocks and flows: word of mouth makes sales speed up and then slow down in an S-shaped curve, which matches its exact formula.	Kho và dòng: truyền miệng khiến doanh số lúc đầu tăng tốc rồi chậm lại theo đường cong hình chữ S, khớp với công thức chính xác của nó.
+	Inflows and outflows	Dòng vào và dòng ra

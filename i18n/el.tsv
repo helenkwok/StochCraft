@@ -1337,3 +1337,43 @@ unit	yr	έτ
 	{name}: the ± is across {n} of the {of} pairs, the rest had no trial with a number.	{name}: το ± αφορά {n} από τα {of} ζεύγη, τα υπόλοιπα δεν είχαν δοκιμή με αριθμό.
 	No interval: every pair gave the same share, so their spread gives none.	Χωρίς διάστημα: όλα τα ζεύγη έδωσαν το ίδιο ποσοστό, οπότε η διασπορά τους δεν δίνει διάστημα.
 	No interval: too few pairs of trials for one.	Χωρίς διάστημα: πολύ λίγα ζεύγη δοκιμών για να υπολογιστεί.
+	Stock	Απόθεμα
+	Flow	Ροή
+	Auxiliary	Βοηθητική μεταβλητή
+	{name} ends near {median}: 9 runs in 10 end between {low} and {high}.	Το {name} καταλήγει κοντά στο {median}: 9 στις 10 εκτελέσεις καταλήγουν μεταξύ {low} και {high}.
+	{name} ends at {value}.	Το {name} καταλήγει στο {value}.
+	{name} at {time}: median {median}, mean {mean}, 9 runs in 10 between {low} and {high}	{name} τη χρονική στιγμή {time}: διάμεσος {median}, μέση τιμή {mean}, 9 στις 10 εκτελέσεις μεταξύ {low} και {high}
+	{name} at {time}: {value}	{name} τη χρονική στιγμή {time}: {value}
+	Time	Χρόνος
+	Time ({unit})	Χρόνος ({unit})
+	{name} mean	{name}, μέση τιμή
+	{name} median	{name}, διάμεσος
+	{name} 5th percentile	{name}, 5ο εκατοστημόριο
+	{name} 95th percentile	{name}, 95ο εκατοστημόριο
+	Saving system dynamics models comes with editing.	Η αποθήκευση μοντέλων δυναμικής συστημάτων θα έρθει με την επεξεργασία.
+	This run is too large to make in the window: shorten it, raise the time step or lower the runs, or run it from the command line.	Αυτή η εκτέλεση είναι πολύ μεγάλη για το παράθυρο: συντομεύστε την, αυξήστε το χρονικό βήμα ή μειώστε τις εκτελέσεις, ή εκτελέστε την από τη γραμμή εντολών.
+	The model: its settings and variables	Το μοντέλο: οι ρυθμίσεις και οι μεταβλητές του
+	System dynamics model	Μοντέλο δυναμικής συστημάτων
+	Variables	Μεταβλητές
+	This is the model as its file has it. Editing comes next.	Αυτό είναι το μοντέλο όπως υπάρχει στο αρχείο του. Η επεξεργασία έρχεται στη συνέχεια.
+	From {start} to {stop}, in steps of {dt}, by the {method} method.	Από {start} έως {stop}, με βήματα {dt}, με τη μέθοδο {method}.
+	Notes from the file	Σημειώσεις από το αρχείο
+	Equation	Εξίσωση
+	starts at {value}	ξεκινά από {value}
+	In: {flows}	Εισροή: {flows}
+	Out: {flows}	Εκροή: {flows}
+	This model has a random function, so every run differs: make several to see how far they spread.	Αυτό το μοντέλο έχει τυχαία συνάρτηση, οπότε κάθε εκτέλεση διαφέρει: κάντε αρκετές για να δείτε πόσο απλώνονται.
+	This model has no random function, so one run gives its answer.	Αυτό το μοντέλο δεν έχει τυχαία συνάρτηση, οπότε μία εκτέλεση δίνει την απάντησή του.
+	Runs: {n} · seed {seed}	Εκτελέσεις: {n} · σπόρος {seed}
+	One run	Μία εκτέλεση
+	Show on the chart	Εμφάνιση στο διάγραμμα
+	Solid line: median. Dashed line: mean. Shaded band: 9 runs in 10 fell inside it (5th to 95th percentile).	Συνεχής γραμμή: διάμεσος. Διακεκομμένη γραμμή: μέση τιμή. Σκιασμένη ζώνη: 9 στις 10 εκτελέσεις έπεσαν μέσα σε αυτήν (από το 5ο έως το 95ο εκατοστημόριο).
+	Pick a variable to see it over time.	Διαλέξτε μια μεταβλητή για να τη δείτε στο χρόνο.
+	{name} over time	{name} στο χρόνο
+	Checked against its exact solution	Ελέγχθηκε με την ακριβή λύση του
+	Models (BPMN, XPDL, XMILE)	Μοντέλα (BPMN, XPDL, XMILE)
+	Product adoption	Υιοθέτηση προϊόντος
+	A new product spreads by word of mouth: 10,000 potential customers, some buying on their own and the rest after meeting a customer.	Ένα νέο προϊόν διαδίδεται από στόμα σε στόμα: 10.000 δυνητικοί πελάτες, ορισμένοι αγοράζουν μόνοι τους και οι υπόλοιποι αφού συναντήσουν έναν πελάτη.
+	How fast does a new product spread?	Πόσο γρήγορα διαδίδεται ένα νέο προϊόν;
+	Stocks and flows: word of mouth makes sales speed up and then slow down in an S-shaped curve, which matches its exact formula.	Αποθέματα και ροές: η διάδοση από στόμα σε στόμα κάνει πρώτα τις πωλήσεις να επιταχύνονται και μετά να επιβραδύνονται σε καμπύλη σχήματος S, που ταιριάζει με τον ακριβή τύπο της.
+	Inflows and outflows	Εισροές και εκροές

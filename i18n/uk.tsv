@@ -1337,3 +1337,43 @@ unit	yr	р.
 	{name}: the ± is across {n} of the {of} pairs, the rest had no trial with a number.	{name}: ± обчислено по {n} з {of} пар, решта не мала випробування з числом.
 	No interval: every pair gave the same share, so their spread gives none.	Інтервалу немає: усі пари дали однакову частку, тож їхній розкид інтервалу не дає.
 	No interval: too few pairs of trials for one.	Інтервалу немає: замало пар випробувань для нього.
+	Stock	Запас
+	Flow	Потік
+	Auxiliary	Допоміжна змінна
+	{name} ends near {median}: 9 runs in 10 end between {low} and {high}.	{name} закінчується близько {median}: 9 запусків із 10 закінчуються між {low} і {high}.
+	{name} ends at {value}.	{name} закінчується на {value}.
+	{name} at {time}: median {median}, mean {mean}, 9 runs in 10 between {low} and {high}	{name} у момент {time}: медіана {median}, середнє {mean}, 9 запусків із 10 між {low} і {high}
+	{name} at {time}: {value}	{name} у момент {time}: {value}
+	Time	Час
+	Time ({unit})	Час ({unit})
+	{name} mean	{name}, середнє
+	{name} median	{name}, медіана
+	{name} 5th percentile	{name}, 5-й процентиль
+	{name} 95th percentile	{name}, 95-й процентиль
+	Saving system dynamics models comes with editing.	Збереження моделей системної динаміки з'явиться разом із редагуванням.
+	This run is too large to make in the window: shorten it, raise the time step or lower the runs, or run it from the command line.	Цей запуск завеликий для вікна: скоротіть його, збільште крок за часом або зменште кількість запусків, чи запустіть його з командного рядка.
+	The model: its settings and variables	Модель: її налаштування та змінні
+	System dynamics model	Модель системної динаміки
+	Variables	Змінні
+	This is the model as its file has it. Editing comes next.	Це модель такою, якою вона є у своєму файлі. Редагування з'явиться пізніше.
+	From {start} to {stop}, in steps of {dt}, by the {method} method.	Від {start} до {stop}, кроками по {dt}, методом {method}.
+	Notes from the file	Нотатки з файлу
+	Equation	Рівняння
+	starts at {value}	починається з {value}
+	In: {flows}	Притік: {flows}
+	Out: {flows}	Відтік: {flows}
+	This model has a random function, so every run differs: make several to see how far they spread.	Ця модель має випадкову функцію, тому кожен запуск відрізняється: зробіть кілька, щоб побачити, наскільки вони розходяться.
+	This model has no random function, so one run gives its answer.	Ця модель не має випадкової функції, тому відповідь дає один запуск.
+	Runs: {n} · seed {seed}	Запусків: {n} · початкове значення генератора {seed}
+	One run	Один запуск
+	Show on the chart	Показати на графіку
+	Solid line: median. Dashed line: mean. Shaded band: 9 runs in 10 fell inside it (5th to 95th percentile).	Суцільна лінія: медіана. Штрихова лінія: середнє. Затінена смуга: 9 запусків із 10 потрапили в неї (від 5-го до 95-го процентиля).
+	Pick a variable to see it over time.	Виберіть змінну, щоб побачити її в часі.
+	{name} over time	{name} у часі
+	Checked against its exact solution	Перевірено за його точним розв'язком
+	Models (BPMN, XPDL, XMILE)	Моделі (BPMN, XPDL, XMILE)
+	Product adoption	Прийняття продукту
+	A new product spreads by word of mouth: 10,000 potential customers, some buying on their own and the rest after meeting a customer.	Новий продукт поширюється з уст в уста: 10 000 потенційних клієнтів, одні купують самі, інші після зустрічі з клієнтом.
+	How fast does a new product spread?	Як швидко поширюється новий продукт?
+	Stocks and flows: word of mouth makes sales speed up and then slow down in an S-shaped curve, which matches its exact formula.	Запаси та потоки: чутки спершу прискорюють продажі, а потім сповільнюють їх за S-подібною кривою, що збігається з його точною формулою.
+	Inflows and outflows	Притоки й відтоки

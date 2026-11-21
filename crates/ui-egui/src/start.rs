@@ -85,6 +85,8 @@ pub enum Proof {
     Probability,
     /// Against the figures of a published study.
     Published,
+    /// Against the exact solution of a model's equations (a system dynamics model).
+    Formula,
 }
 
 impl Proof {
@@ -93,6 +95,7 @@ impl Proof {
             Proof::Theory => t("Checked against queueing theory"),
             Proof::Probability => t("Checked against probability theory"),
             Proof::Published => t("Matches a published study"),
+            Proof::Formula => t("Checked against its exact solution"),
         }
     }
 }

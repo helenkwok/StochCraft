@@ -1337,3 +1337,43 @@ unit	yr	r.
 	{name}: the ± is across {n} of the {of} pairs, the rest had no trial with a number.	{name}: ± je z {n} z {of} párov; ostatné nemali pokus s číslom.
 	No interval: every pair gave the same share, so their spread gives none.	Žiadny interval: všetky páry dali rovnaký podiel, takže ich rozptyl interval nedáva.
 	No interval: too few pairs of trials for one.	Žiadny interval: na jeho určenie je príliš málo párov iterácií.
+	Stock	Zásoba
+	Flow	Tok
+	Auxiliary	Pomocná veličina
+	{name} ends near {median}: 9 runs in 10 end between {low} and {high}.	{name} končí okolo {median}: 9 z 10 behov skončí medzi {low} a {high}.
+	{name} ends at {value}.	{name} končí na {value}.
+	{name} at {time}: median {median}, mean {mean}, 9 runs in 10 between {low} and {high}	{name} v čase {time}: medián {median}, priemer {mean}, 9 z 10 behov medzi {low} a {high}
+	{name} at {time}: {value}	{name} v čase {time}: {value}
+	Time	Čas
+	Time ({unit})	Čas ({unit})
+	{name} mean	{name}, priemer
+	{name} median	{name}, medián
+	{name} 5th percentile	{name}, 5. percentil
+	{name} 95th percentile	{name}, 95. percentil
+	Saving system dynamics models comes with editing.	Ukladanie modelov systémovej dynamiky príde s úpravami.
+	This run is too large to make in the window: shorten it, raise the time step or lower the runs, or run it from the command line.	Tento beh je na okno príliš veľký: skráťte ho, zväčšite časový krok alebo znížte počet behov, prípadne ho spustite z príkazového riadka.
+	The model: its settings and variables	Model: jeho nastavenia a premenné
+	System dynamics model	Model systémovej dynamiky
+	Variables	Premenné
+	This is the model as its file has it. Editing comes next.	Toto je model taký, aký je vo svojom súbore. Úpravy prídu nabudúce.
+	From {start} to {stop}, in steps of {dt}, by the {method} method.	Od {start} do {stop}, v krokoch po {dt}, metódou {method}.
+	Notes from the file	Poznámky zo súboru
+	Equation	Rovnica
+	starts at {value}	začína na {value}
+	In: {flows}	Prítok: {flows}
+	Out: {flows}	Odtok: {flows}
+	This model has a random function, so every run differs: make several to see how far they spread.	Tento model má náhodnú funkciu, takže každý beh je iný: spustite ich niekoľko a uvidíte, ako sa rozptyľujú.
+	This model has no random function, so one run gives its answer.	Tento model nemá žiadnu náhodnú funkciu, takže jeho odpoveď dá jeden beh.
+	Runs: {n} · seed {seed}	Behy: {n} · počiatočná hodnota generátora {seed}
+	One run	Jeden beh
+	Show on the chart	Zobraziť v grafe
+	Solid line: median. Dashed line: mean. Shaded band: 9 runs in 10 fell inside it (5th to 95th percentile).	Plná čiara: medián. Čiarkovaná čiara: priemer. Tieňovaný pás: 9 z 10 behov v ňom ležalo (od 5. do 95. percentilu).
+	Pick a variable to see it over time.	Vyberte premennú, aby ste ju videli v čase.
+	{name} over time	{name} v čase
+	Checked against its exact solution	Overené voči jeho presnému riešeniu
+	Models (BPMN, XPDL, XMILE)	Modely (BPMN, XPDL, XMILE)
+	Product adoption	Prijatie produktu
+	A new product spreads by word of mouth: 10,000 potential customers, some buying on their own and the rest after meeting a customer.	Nový produkt sa šíri ústnym podaním: 10 000 potenciálnych zákazníkov, niektorí kupujú sami od seba a ostatní po stretnutí so zákazníkom.
+	How fast does a new product spread?	Ako rýchlo sa šíri nový produkt?
+	Stocks and flows: word of mouth makes sales speed up and then slow down in an S-shaped curve, which matches its exact formula.	Zásoby a toky: ústne podanie najprv zrýchli predaj a potom ho spomalí v krivke tvaru S, ktorá zodpovedá jeho presnému vzorcu.
+	Inflows and outflows	Prítoky a odtoky

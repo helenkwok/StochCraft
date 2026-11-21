@@ -30,7 +30,8 @@ impl App {
             // Waiting for the user's answer: leave the copy alone.
             return Autosave::Keep;
         }
-        if !self.engine.is_dirty() || self.quitting {
+        // A system dynamics model has no changes to recover: it cannot be edited yet.
+        if !self.unsaved_changes() || self.quitting {
             if self.autosaved.take().is_some() || self.autosave_clear_pending {
                 self.autosave_clear_pending = false;
                 return Autosave::Clear;

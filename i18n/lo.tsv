@@ -1337,3 +1337,43 @@ unit	yr	ປີ
 	{name}: the ± is across {n} of the {of} pairs, the rest had no trial with a number.	{name}: ± ມາຈາກ {n} ໃນ {of} ຄູ່; ຄູ່ທີ່ເຫຼືອບໍ່ມີຄັ້ງທົດລອງທີ່ມີຕົວເລກ.
 	No interval: every pair gave the same share, so their spread gives none.	ບໍ່ມີຊ່ວງ: ທຸກຄູ່ໃຫ້ສັດສ່ວນດຽວກັນ ຄວາມກະຈາຍຂອງມັນຈຶ່ງບໍ່ໃຫ້ຊ່ວງ.
 	No interval: too few pairs of trials for one.	ບໍ່ມີຊ່ວງ: ຄູ່ຂອງຄັ້ງທົດລອງໜ້ອຍເກີນໄປ.
+	Stock	ສະຕັອກ
+	Flow	ການໄຫຼ
+	Auxiliary	ຕົວແປຊ່ວຍ
+	{name} ends near {median}: 9 runs in 10 end between {low} and {high}.	{name} ສິ້ນສຸດໃກ້ {median}: 9 ໃນ 10 ຮອບຈຳລອງສິ້ນສຸດລະຫວ່າງ {low} ແລະ {high}.
+	{name} ends at {value}.	{name} ສິ້ນສຸດທີ່ {value}.
+	{name} at {time}: median {median}, mean {mean}, 9 runs in 10 between {low} and {high}	{name} ທີ່ {time}: ມັດທະຍະ {median}, ຄ່າສະເລ່ຍ {mean}, 9 ໃນ 10 ຮອບຈຳລອງຢູ່ລະຫວ່າງ {low} ແລະ {high}
+	{name} at {time}: {value}	{name} ທີ່ {time}: {value}
+	Time	ເວລາ
+	Time ({unit})	ເວລາ ({unit})
+	{name} mean	{name}, ຄ່າສະເລ່ຍ
+	{name} median	{name}, ມັດທະຍະ
+	{name} 5th percentile	{name}, ເປີເຊັນໄທລ໌ທີ 5
+	{name} 95th percentile	{name}, ເປີເຊັນໄທລ໌ທີ 95
+	Saving system dynamics models comes with editing.	ການບັນທຶກແບບຈຳລອງພາວະຜັນແປຂອງລະບົບຈະມາພ້ອມກັບການແກ້ໄຂ.
+	This run is too large to make in the window: shorten it, raise the time step or lower the runs, or run it from the command line.	ຮອບຈຳລອງນີ້ໃຫຍ່ເກີນໄປທີ່ຈະເຮັດໃນໜ້າຕ່າງ: ເຮັດໃຫ້ສັ້ນລົງ, ເພີ່ມຂັ້ນເວລາ ຫຼື ຫຼຸດຈຳນວນຮອບຈຳລອງ, ຫຼື ແລ່ນຈາກແຖວຄຳສັ່ງ.
+	The model: its settings and variables	ແບບຈຳລອງ: ການຕັ້ງຄ່າ ແລະ ຕົວແປຂອງມັນ
+	System dynamics model	ແບບຈຳລອງພາວະຜັນແປຂອງລະບົບ
+	Variables	ຕົວແປ
+	This is the model as its file has it. Editing comes next.	ນີ້ແມ່ນແບບຈຳລອງຕາມທີ່ຢູ່ໃນໄຟລ໌ຂອງມັນ. ການແກ້ໄຂຈະມາຕໍ່ໄປ.
+	From {start} to {stop}, in steps of {dt}, by the {method} method.	ຈາກ {start} ເຖິງ {stop}, ເປັນຂັ້ນ {dt}, ດ້ວຍວິທີ {method}.
+	Notes from the file	ໝາຍເຫດຈາກໄຟລ໌
+	Equation	ສົມຜົນ
+	starts at {value}	ເລີ່ມທີ່ {value}
+	In: {flows}	ເຂົ້າ: {flows}
+	Out: {flows}	ອອກ: {flows}
+	This model has a random function, so every run differs: make several to see how far they spread.	ແບບຈຳລອງນີ້ມີຟັງຊັນສຸ່ມ, ດັ່ງນັ້ນແຕ່ລະຮອບຈຶ່ງແຕກຕ່າງກັນ: ແລ່ນຫຼາຍຮອບເພື່ອເບິ່ງວ່າມັນກະຈາຍໄກປານໃດ.
+	This model has no random function, so one run gives its answer.	ແບບຈຳລອງນີ້ບໍ່ມີຟັງຊັນສຸ່ມ, ດັ່ງນັ້ນແລ່ນຮອບດຽວກໍໄດ້ຄຳຕອບ.
+	Runs: {n} · seed {seed}	ຮອບຈຳລອງ: {n} · ເມັດສຸ່ມ {seed}
+	One run	ຮອບຈຳລອງດຽວ
+	Show on the chart	ສະແດງໃນແຜນພາບ
+	Solid line: median. Dashed line: mean. Shaded band: 9 runs in 10 fell inside it (5th to 95th percentile).	ເສັ້ນຕັນ: ມັດທະຍະ. ເສັ້ນຂີດ: ຄ່າສະເລ່ຍ. ແຖບເງົາ: 9 ໃນ 10 ຮອບຈຳລອງຕົກຢູ່ພາຍໃນ (ເປີເຊັນໄທລ໌ທີ 5 ເຖິງ 95).
+	Pick a variable to see it over time.	ເລືອກຕົວແປເພື່ອເບິ່ງຕາມເວລາ.
+	{name} over time	{name} ຕາມເວລາ
+	Checked against its exact solution	ກວດກັບຄຳຕອບທີ່ແນ່ນອນຂອງມັນແລ້ວ
+	Models (BPMN, XPDL, XMILE)	ແບບຈຳລອງ (BPMN, XPDL, XMILE)
+	Product adoption	ການຮັບເອົາຜະລິດຕະພັນ
+	A new product spreads by word of mouth: 10,000 potential customers, some buying on their own and the rest after meeting a customer.	ຜະລິດຕະພັນໃໝ່ແຜ່ກະຈາຍດ້ວຍການບອກປາກຕໍ່ປາກ: ລູກຄ້າທີ່ອາດເປັນໄດ້ 10,000 ຄົນ, ບາງຄົນຊື້ເອງ ແລະ ຄົນທີ່ເຫຼືອຊື້ຫຼັງຈາກພົບລູກຄ້າ.
+	How fast does a new product spread?	ຜະລິດຕະພັນໃໝ່ແຜ່ກະຈາຍໄວປານໃດ?
+	Stocks and flows: word of mouth makes sales speed up and then slow down in an S-shaped curve, which matches its exact formula.	ສະຕັອກ ແລະ ການໄຫຼ: ການບອກປາກຕໍ່ປາກເຮັດໃຫ້ຍອດຂາຍເພີ່ມໄວກ່ອນ ແລ້ວຊ້າລົງເປັນເສັ້ນໂຄ້ງຮູບຕົວ S ເຊິ່ງກົງກັບສູດທີ່ແນ່ນອນຂອງມັນ.
+	Inflows and outflows	ການໄຫຼເຂົ້າ ແລະ ການໄຫຼອອກ

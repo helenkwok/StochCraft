@@ -1337,3 +1337,43 @@ unit	yr	v
 	{name}: the ± is across {n} of the {of} pairs, the rest had no trial with a number.	{name}: ± vlen për {n} nga {of} çiftet; të tjerat nuk kishin provë me një numër.
 	No interval: every pair gave the same share, so their spread gives none.	Asnjë interval: të gjitha çiftet dhanë të njëjtën pjesë, ndaj shpërndarja e tyre nuk jep interval.
 	No interval: too few pairs of trials for one.	Asnjë interval: shumë pak çifte provash për të.
+	Stock	Stoku
+	Flow	Rrjedha
+	Auxiliary	Ndryshore ndihmëse
+	{name} ends near {median}: 9 runs in 10 end between {low} and {high}.	{name} përfundon afër {median}: 9 nga 10 ekzekutime përfundojnë mes {low} dhe {high}.
+	{name} ends at {value}.	{name} përfundon në {value}.
+	{name} at {time}: median {median}, mean {mean}, 9 runs in 10 between {low} and {high}	{name} në {time}: mediana {median}, mesatarja {mean}, 9 nga 10 ekzekutime mes {low} dhe {high}
+	{name} at {time}: {value}	{name} në {time}: {value}
+	Time	Koha
+	Time ({unit})	Koha ({unit})
+	{name} mean	{name}, mesatarja
+	{name} median	{name}, mediana
+	{name} 5th percentile	{name}, përqindëshi i 5-të
+	{name} 95th percentile	{name}, përqindëshi i 95-të
+	Saving system dynamics models comes with editing.	Ruajtja e modeleve të dinamikës së sistemeve do të vijë me redaktimin.
+	This run is too large to make in the window: shorten it, raise the time step or lower the runs, or run it from the command line.	Ky ekzekutim është shumë i madh për t'u bërë në dritare: shkurtojeni, rritni hapin e kohës ose ulni ekzekutimet, ose ekzekutojeni nga rreshti i komandës.
+	The model: its settings and variables	Modeli: cilësimet dhe ndryshoret e tij
+	System dynamics model	Model i dinamikës së sistemeve
+	Variables	Ndryshoret
+	This is the model as its file has it. Editing comes next.	Ky është modeli ashtu siç është në skedarin e tij. Redaktimi vjen më pas.
+	From {start} to {stop}, in steps of {dt}, by the {method} method.	Nga {start} deri në {stop}, me hapa {dt}, me metodën {method}.
+	Notes from the file	Shënime nga skedari
+	Equation	Ekuacioni
+	starts at {value}	fillon nga {value}
+	In: {flows}	Hyrje: {flows}
+	Out: {flows}	Dalje: {flows}
+	This model has a random function, so every run differs: make several to see how far they spread.	Ky model ka një funksion të rastësishëm, ndaj çdo ekzekutim është ndryshe: bëni disa për të parë sa përhapen.
+	This model has no random function, so one run gives its answer.	Ky model nuk ka asnjë funksion të rastësishëm, ndaj një ekzekutim jep përgjigjen e tij.
+	Runs: {n} · seed {seed}	Ekzekutime: {n} · farë {seed}
+	One run	Një ekzekutim
+	Show on the chart	Shfaq në grafik
+	Solid line: median. Dashed line: mean. Shaded band: 9 runs in 10 fell inside it (5th to 95th percentile).	Vijë e plotë: mediana. Vijë e ndërprerë: mesatarja. Shirit i hijezuar: 9 nga 10 ekzekutime ranë brenda tij (nga përqindëshi i 5-të te i 95-ti).
+	Pick a variable to see it over time.	Zgjidhni një ndryshore për ta parë me kalimin e kohës.
+	{name} over time	{name} me kalimin e kohës
+	Checked against its exact solution	Kontrolluar me zgjidhjen e tij të saktë
+	Models (BPMN, XPDL, XMILE)	Modele (BPMN, XPDL, XMILE)
+	Product adoption	Pranimi i një produkti
+	A new product spreads by word of mouth: 10,000 potential customers, some buying on their own and the rest after meeting a customer.	Një produkt i ri përhapet gojë më gojë: 10.000 klientë të mundshëm, disa blejnë vetë dhe të tjerët pasi takojnë një klient.
+	How fast does a new product spread?	Sa shpejt përhapet një produkt i ri?
+	Stocks and flows: word of mouth makes sales speed up and then slow down in an S-shaped curve, which matches its exact formula.	Stoqe dhe rrjedha: përhapja gojë më gojë i bën shitjet fillimisht të shpejtohen e më pas të ngadalësohen në një kurbë në formë S, që përputhet me formulën e saktë të tij.
+	Inflows and outflows	Rrjedhat hyrëse dhe dalëse

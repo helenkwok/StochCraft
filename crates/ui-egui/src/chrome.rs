@@ -236,7 +236,7 @@ impl App {
             self.help_panel(ui, &p);
         }
         // The dashboard reads a process model's results; a Monte Carlo model has none.
-        if self.show_dashboard && !self.is_monte_carlo() {
+        if self.show_dashboard && !self.is_monte_carlo() && !self.is_sd() {
             self.dashboard_panel(ui, &p);
         }
         egui::Panel::left("outline")
@@ -268,6 +268,10 @@ impl App {
         self.guide_overlay(&ctx);
         // Once everything of this frame is laid out, including what is drawn over the charts.
         self.check_pending_png(&ctx);
+        // A system dynamics run asked for in this frame is made in the next.
+        if self.sd_pending() {
+            ctx.request_repaint();
+        }
     }
 
     /// The header: menus on the shell colour, the document's name, and Run.
@@ -293,9 +297,15 @@ impl App {
         v.widgets.active.bg_stroke = egui::Stroke::NONE;
         let header = ui.max_rect();
         let running = self.running.is_some();
-        let can_run = !self.engine.model().elements.is_empty() || self.is_monte_carlo();
+        let can_run =
+            !self.engine.model().elements.is_empty() || self.is_monte_carlo() || self.is_sd();
         // With errors, Run says how many; clicking it shows them one by one rather than run.
-        let errors = self.problems().iter().filter(|p| p.error).count() as u64;
+        // (A system dynamics model has no process model to find problems in.)
+        let errors = if self.is_sd() {
+            0
+        } else {
+            self.problems().iter().filter(|p| p.error).count() as u64
+        };
         let run_label = if errors > 0 {
             tn(errors, "Run ({n} problem)", "Run ({n} problems)")
         } else {

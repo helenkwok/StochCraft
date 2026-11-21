@@ -1337,3 +1337,43 @@ unit	yr	a
 	{name}: the ± is across {n} of the {of} pairs, the rest had no trial with a number.	{name}: el ± es sobre {n} de los {of} pares; el resto no tenía ningún ensayo con un número.
 	No interval: every pair gave the same share, so their spread gives none.	Sin intervalo: todos los pares dieron la misma proporción, así que su dispersión no da ninguno.
 	No interval: too few pairs of trials for one.	Sin intervalo: hay muy pocos pares de ensayos para calcularlo.
+	Stock	Nivel
+	Flow	Flujo
+	Auxiliary	Variable auxiliar
+	{name} ends near {median}: 9 runs in 10 end between {low} and {high}.	{name} termina cerca de {median}: 9 de cada 10 ejecuciones terminan entre {low} y {high}.
+	{name} ends at {value}.	{name} termina en {value}.
+	{name} at {time}: median {median}, mean {mean}, 9 runs in 10 between {low} and {high}	{name} en {time}: mediana {median}, media {mean}, 9 de cada 10 ejecuciones entre {low} y {high}
+	{name} at {time}: {value}	{name} en {time}: {value}
+	Time	Tiempo
+	Time ({unit})	Tiempo ({unit})
+	{name} mean	{name}, media
+	{name} median	{name}, mediana
+	{name} 5th percentile	{name}, percentil 5
+	{name} 95th percentile	{name}, percentil 95
+	Saving system dynamics models comes with editing.	Guardar modelos de dinámica de sistemas llegará con la edición.
+	This run is too large to make in the window: shorten it, raise the time step or lower the runs, or run it from the command line.	Esta ejecución es demasiado grande para hacerla en la ventana: acórtela, aumente el paso de tiempo o reduzca las ejecuciones, o ejecútela desde la línea de comandos.
+	The model: its settings and variables	El modelo: sus ajustes y variables
+	System dynamics model	Modelo de dinámica de sistemas
+	Variables	Variables
+	This is the model as its file has it. Editing comes next.	Este es el modelo tal como está en su archivo. La edición llegará después.
+	From {start} to {stop}, in steps of {dt}, by the {method} method.	Desde {start} hasta {stop}, en pasos de {dt}, con el método {method}.
+	Notes from the file	Notas del archivo
+	Equation	Ecuación
+	starts at {value}	empieza en {value}
+	In: {flows}	Entrada: {flows}
+	Out: {flows}	Salida: {flows}
+	This model has a random function, so every run differs: make several to see how far they spread.	Este modelo tiene una función aleatoria, así que cada ejecución es distinta: haga varias para ver cuánto se dispersan.
+	This model has no random function, so one run gives its answer.	Este modelo no tiene ninguna función aleatoria, así que una ejecución da su respuesta.
+	Runs: {n} · seed {seed}	Ejecuciones: {n} · semilla {seed}
+	One run	Una ejecución
+	Show on the chart	Mostrar en el gráfico
+	Solid line: median. Dashed line: mean. Shaded band: 9 runs in 10 fell inside it (5th to 95th percentile).	Línea continua: mediana. Línea discontinua: media. Banda sombreada: 9 de cada 10 ejecuciones cayeron dentro de ella (del percentil 5 al 95).
+	Pick a variable to see it over time.	Elija una variable para verla a lo largo del tiempo.
+	{name} over time	{name} a lo largo del tiempo
+	Checked against its exact solution	Comprobado con su solución exacta
+	Models (BPMN, XPDL, XMILE)	Modelos (BPMN, XPDL, XMILE)
+	Product adoption	Adopción de un producto
+	A new product spreads by word of mouth: 10,000 potential customers, some buying on their own and the rest after meeting a customer.	Un producto nuevo se difunde de boca en boca: 10.000 clientes potenciales, algunos compran por su cuenta y el resto tras conocer a un cliente.
+	How fast does a new product spread?	¿Con qué rapidez se difunde un producto nuevo?
+	Stocks and flows: word of mouth makes sales speed up and then slow down in an S-shaped curve, which matches its exact formula.	Niveles y flujos: el boca a boca hace que las ventas primero se aceleren y luego se frenen, en una curva en forma de S que coincide con su fórmula exacta.
+	Inflows and outflows	Flujos de entrada y de salida

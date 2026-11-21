@@ -316,10 +316,24 @@ impl App {
             return false;
         }
         let running = self.running.is_some();
+        // A system dynamics model has no blocks to edit.
+        if self.is_sd()
+            && matches!(
+                command.id.as_str(),
+                CUT | COPY | PASTE | DUPLICATE | DELETE | SELECT_ALL
+            )
+        {
+            return false;
+        }
         match command.id.as_str() {
             UNDO => can_undo,
             REDO => can_redo,
-            RUN => !running && (!self.engine.model().elements.is_empty() || self.is_monte_carlo()),
+            RUN => {
+                !running
+                    && (!self.engine.model().elements.is_empty()
+                        || self.is_monte_carlo()
+                        || self.is_sd())
+            }
             CANCEL_RUN => running,
             WATCH => !running && !self.is_watching() && !self.engine.model().elements.is_empty(),
             STOP_WATCHING | STEP_WATCHING | RESET_WATCHING | HALVE_SPEED | DOUBLE_SPEED => {
@@ -361,6 +375,15 @@ impl App {
 
     /// Runs a command from a menu, the macOS menu bar or a shortcut.
     pub fn run_command(&mut self, command: &CommandRef) {
+        // The same, for the shortcuts, which do not ask what is enabled.
+        if self.is_sd()
+            && matches!(
+                command.id.as_str(),
+                CUT | COPY | PASTE | DUPLICATE | DELETE | SELECT_ALL
+            )
+        {
+            return;
+        }
         let index = || {
             command.params["index"]
                 .as_u64()

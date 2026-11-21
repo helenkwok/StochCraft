@@ -1337,3 +1337,43 @@ unit	yr	ปี
 	{name}: the ± is across {n} of the {of} pairs, the rest had no trial with a number.	{name}: ± คำนวณจาก {n} จาก {of} คู่ ส่วนที่เหลือไม่มีการทดลองที่ได้ค่าตัวเลข
 	No interval: every pair gave the same share, so their spread gives none.	ไม่มีช่วง: ทุกคู่ให้สัดส่วนเท่ากัน ความกระจายของคู่จึงไม่ให้ช่วง
 	No interval: too few pairs of trials for one.	ไม่มีช่วง: คู่การทดลองน้อยเกินไปที่จะคำนวณช่วงได้
+	Stock	สต็อก
+	Flow	โฟลว์
+	Auxiliary	ตัวแปรช่วย
+	{name} ends near {median}: 9 runs in 10 end between {low} and {high}.	{name} จบที่ประมาณ {median}: 9 ใน 10 การรันจบอยู่ระหว่าง {low} ถึง {high}
+	{name} ends at {value}.	{name} จบที่ {value}
+	{name} at {time}: median {median}, mean {mean}, 9 runs in 10 between {low} and {high}	{name} ที่เวลา {time}: มัธยฐาน {median}, ค่าเฉลี่ย {mean}, 9 ใน 10 การรันอยู่ระหว่าง {low} ถึง {high}
+	{name} at {time}: {value}	{name} ที่เวลา {time}: {value}
+	Time	เวลา
+	Time ({unit})	เวลา ({unit})
+	{name} mean	{name} ค่าเฉลี่ย
+	{name} median	{name} มัธยฐาน
+	{name} 5th percentile	{name} เปอร์เซ็นไทล์ที่ 5
+	{name} 95th percentile	{name} เปอร์เซ็นไทล์ที่ 95
+	Saving system dynamics models comes with editing.	การบันทึกแบบจำลองพลวัตระบบจะมาพร้อมกับการแก้ไข
+	This run is too large to make in the window: shorten it, raise the time step or lower the runs, or run it from the command line.	การรันนี้ใหญ่เกินกว่าจะทำในหน้าต่าง: ทำให้สั้นลง เพิ่มขั้นเวลา หรือลดจำนวนการรัน หรือรันจากบรรทัดคำสั่ง
+	The model: its settings and variables	แบบจำลอง: การตั้งค่าและตัวแปรของมัน
+	System dynamics model	แบบจำลองพลวัตระบบ
+	Variables	ตัวแปร
+	This is the model as its file has it. Editing comes next.	นี่คือแบบจำลองตามที่อยู่ในไฟล์ของมัน การแก้ไขจะมาในลำดับถัดไป
+	From {start} to {stop}, in steps of {dt}, by the {method} method.	ตั้งแต่ {start} ถึง {stop} ทีละขั้น {dt} ด้วยวิธี {method}
+	Notes from the file	บันทึกจากไฟล์
+	Equation	สมการ
+	starts at {value}	เริ่มที่ {value}
+	In: {flows}	เข้า: {flows}
+	Out: {flows}	ออก: {flows}
+	This model has a random function, so every run differs: make several to see how far they spread.	แบบจำลองนี้มีฟังก์ชันสุ่ม ดังนั้นแต่ละการรันจึงต่างกัน: รันหลายครั้งเพื่อดูว่ากระจายออกไปแค่ไหน
+	This model has no random function, so one run gives its answer.	แบบจำลองนี้ไม่มีฟังก์ชันสุ่ม ดังนั้นการรันครั้งเดียวก็ให้คำตอบได้
+	Runs: {n} · seed {seed}	การรัน: {n} · เมล็ดสุ่ม {seed}
+	One run	การรันหนึ่งครั้ง
+	Show on the chart	แสดงบนแผนภูมิ
+	Solid line: median. Dashed line: mean. Shaded band: 9 runs in 10 fell inside it (5th to 95th percentile).	เส้นทึบ: มัธยฐาน เส้นประ: ค่าเฉลี่ย แถบแรเงา: 9 ใน 10 การรันอยู่ภายใน (เปอร์เซ็นไทล์ที่ 5 ถึง 95)
+	Pick a variable to see it over time.	เลือกตัวแปรเพื่อดูตามเวลา
+	{name} over time	{name} ตามเวลา
+	Checked against its exact solution	ตรวจสอบกับผลเฉลยที่แน่นอนของมันแล้ว
+	Models (BPMN, XPDL, XMILE)	แบบจำลอง (BPMN, XPDL, XMILE)
+	Product adoption	การยอมรับผลิตภัณฑ์
+	A new product spreads by word of mouth: 10,000 potential customers, some buying on their own and the rest after meeting a customer.	ผลิตภัณฑ์ใหม่แพร่กระจายแบบปากต่อปาก: ลูกค้าที่เป็นไปได้ 10,000 ราย บางรายซื้อเอง ที่เหลือซื้อหลังพบลูกค้า
+	How fast does a new product spread?	ผลิตภัณฑ์ใหม่แพร่กระจายเร็วแค่ไหน?
+	Stocks and flows: word of mouth makes sales speed up and then slow down in an S-shaped curve, which matches its exact formula.	สต็อกและโฟลว์: การบอกต่อทำให้ยอดขายเร่งขึ้นก่อนแล้วชะลอลงเป็นเส้นโค้งรูปตัว S ซึ่งตรงกับสูตรที่แน่นอนของมัน
+	Inflows and outflows	โฟลว์เข้าและโฟลว์ออก

@@ -1337,3 +1337,43 @@ unit	yr	m.
 	{name}: the ± is across {n} of the {of} pairs, the rest had no trial with a number.	{name}: ± apskaičiuotas pagal poras: {n} iš {of}; likusiose nebuvo iteracijos su skaičiumi.
 	No interval: every pair gave the same share, so their spread gives none.	Intervalo nėra: visos poros davė tą pačią dalį, todėl jų sklaida intervalo neduoda.
 	No interval: too few pairs of trials for one.	Intervalo nėra: tam per mažai iteracijų porų.
+	Stock	Atsarga
+	Flow	Srautas
+	Auxiliary	Pagalbinis kintamasis
+	{name} ends near {median}: 9 runs in 10 end between {low} and {high}.	{name} baigiasi apie {median}: 9 iš 10 vykdymų baigiasi tarp {low} ir {high}.
+	{name} ends at {value}.	{name} baigiasi ties {value}.
+	{name} at {time}: median {median}, mean {mean}, 9 runs in 10 between {low} and {high}	{name} laiku {time}: mediana {median}, vidurkis {mean}, 9 iš 10 vykdymų tarp {low} ir {high}
+	{name} at {time}: {value}	{name} laiku {time}: {value}
+	Time	Laikas
+	Time ({unit})	Laikas ({unit})
+	{name} mean	{name}, vidurkis
+	{name} median	{name}, mediana
+	{name} 5th percentile	{name}, 5-asis procentilis
+	{name} 95th percentile	{name}, 95-asis procentilis
+	Saving system dynamics models comes with editing.	Sistemų dinamikos modelių įrašymas atsiras kartu su redagavimu.
+	This run is too large to make in the window: shorten it, raise the time step or lower the runs, or run it from the command line.	Šis vykdymas per didelis, kad būtų atliktas lange: sutrumpinkite jį, padidinkite laiko žingsnį arba sumažinkite vykdymų skaičių, arba paleiskite jį iš komandų eilutės.
+	The model: its settings and variables	Modelis: jo nustatymai ir kintamieji
+	System dynamics model	Sistemų dinamikos modelis
+	Variables	Kintamieji
+	This is the model as its file has it. Editing comes next.	Tai modelis toks, koks jis yra savo faile. Redagavimas bus vėliau.
+	From {start} to {stop}, in steps of {dt}, by the {method} method.	Nuo {start} iki {stop}, {dt} žingsniais, {method} metodu.
+	Notes from the file	Pastabos iš failo
+	Equation	Lygtis
+	starts at {value}	prasideda nuo {value}
+	In: {flows}	Įtekėjimas: {flows}
+	Out: {flows}	Ištekėjimas: {flows}
+	This model has a random function, so every run differs: make several to see how far they spread.	Šis modelis turi atsitiktinę funkciją, todėl kiekvienas vykdymas skiriasi: atlikite kelis, kad pamatytumėte, kaip plačiai jie išsibarsto.
+	This model has no random function, so one run gives its answer.	Šis modelis neturi atsitiktinės funkcijos, todėl atsakymą duoda vienas vykdymas.
+	Runs: {n} · seed {seed}	Vykdymai: {n} · sėkla {seed}
+	One run	Vienas vykdymas
+	Show on the chart	Rodyti diagramoje
+	Solid line: median. Dashed line: mean. Shaded band: 9 runs in 10 fell inside it (5th to 95th percentile).	Ištisinė linija: mediana. Brūkšninė linija: vidurkis. Užtamsinta juosta: 9 iš 10 vykdymų pateko į ją (nuo 5-ojo iki 95-ojo procentilio).
+	Pick a variable to see it over time.	Pasirinkite kintamąjį, kad pamatytumėte jį laike.
+	{name} over time	{name} laike
+	Checked against its exact solution	Patikrinta pagal tikslų sprendinį
+	Models (BPMN, XPDL, XMILE)	Modeliai (BPMN, XPDL, XMILE)
+	Product adoption	Produkto pritaikymas
+	A new product spreads by word of mouth: 10,000 potential customers, some buying on their own and the rest after meeting a customer.	Naujas produktas plinta iš lūpų į lūpas: 10 000 galimų klientų, vieni perka patys, kiti – susitikę su klientu.
+	How fast does a new product spread?	Kaip greitai plinta naujas produktas?
+	Stocks and flows: word of mouth makes sales speed up and then slow down in an S-shaped curve, which matches its exact formula.	Atsargos ir srautai: žodinis plitimas pardavimus pirmiausia paspartina, paskui sulėtina S formos kreive, kuri atitinka tikslią jos formulę.
+	Inflows and outflows	Įtekėjimai ir ištekėjimai

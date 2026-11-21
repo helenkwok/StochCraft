@@ -38,6 +38,7 @@ mod pools;
 mod prefs;
 mod results;
 mod runs;
+mod sd;
 mod start;
 mod tabs;
 pub mod theme;
@@ -509,6 +510,23 @@ pub const EXAMPLES: &[Example] = &[
         },
     },
     Example {
+        title: "Product adoption",
+        about: "A new product spreads by word of mouth: 10,000 potential customers, some buying on their own and the rest after meeting a customer.",
+        file: "adoption.xmile",
+        bytes: include_bytes!("../../../tests/models/adoption.xmile"),
+        card: start::Card {
+            question: "How fast does a new product spread?",
+            industry: start::Industry::Services,
+            topics: &[start::Topic::Change],
+            teaches: "Stocks and flows: word of mouth makes sales speed up and then slow down in an S-shaped curve, which matches its exact formula.",
+            minutes: 3,
+            proof: Some(start::Proof::Formula),
+            // Stocks and flows, not a process: no blocks to show.
+            flow: &[],
+            featured: false,
+        },
+    },
+    Example {
         title: "Project budget",
         about: "A Monte Carlo model: uncertain durations, day rate and materials, and the chance the cost or the duration runs over.",
         file: "budget.bpmn",
@@ -896,6 +914,8 @@ pub struct App {
     building: bool,
     /// The Monte Carlo screens' state, and a Monte Carlo run in progress.
     mc: montecarlo::Mc,
+    /// The system dynamics screens' state (an XMILE document).
+    sd: sd::Sd,
     /// Where the charts are drawn this frame (none until the work area draws them), for
     /// exporting them.
     charts_rect: Option<egui::Rect>,
@@ -1003,6 +1023,7 @@ impl App {
             start: start::Start::default(),
             building: false,
             mc: montecarlo::Mc::default(),
+            sd: sd::Sd::default(),
             charts_rect: None,
             screenshot: std::sync::Arc::default(),
             pending_png: None,

@@ -60,6 +60,7 @@ pub mod mc;
 pub mod precision;
 mod run;
 pub mod sd;
+mod sd_window;
 pub mod wire;
 mod workers;
 

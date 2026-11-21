@@ -49,6 +49,7 @@ build it from source; see the [installation guide](docs/installation.md).
 | A 3D view and a to-scale Layout view of the model, and a dashboard beside it | |
 | Export the results table as CSV and the charts as PNG | |
 | Monte Carlo models: uncertain inputs, outputs with targets, the chance of missing each target in words, and which inputs matter (tornado, rank correlations, each input's share of the spread) | |
+| System dynamics models (XMILE files): stocks and flows over time, run once or in replications with a median and a 5% to 95% band, charted and tabulated in the window (read-only for now; editing comes next) | |
 
 ## Documentation
 
