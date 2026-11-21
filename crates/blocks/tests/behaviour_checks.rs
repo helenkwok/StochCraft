@@ -433,6 +433,76 @@ fn copies_and_batches_are_counted_as_new_entities() {
     }
 }
 
+/// A join counts every part that comes in, on any input, so the model's count holds across it,
+/// with parts waiting there as the statistics start or the run ends: a fork whose branches take
+/// different times, and a join of two sources.
+#[test]
+fn a_join_balances_with_parts_waiting_at_the_start_and_the_end() {
+    let mut b = Builder::new();
+    let parts = b.source("parts", Dist::exponential_rate(1.0), None);
+    let split = b.parallel("split");
+    let quick = b.delay("quick", Dist::Uniform { min: 0.5, max: 1.5 });
+    let slow = b.delay(
+        "slow",
+        Dist::Uniform {
+            min: 2.0,
+            max: 12.0,
+        },
+    );
+    let join = b.parallel("join");
+    let out = b.sink("out");
+    b.connect(parts, split);
+    b.connect(split, quick);
+    b.connect(split, slow);
+    b.connect(quick, join);
+    b.connect(slow, join);
+    b.connect(join, out);
+    let model = b.build(Experiment {
+        duration: 200.0,
+        ..Experiment::default()
+    });
+    for seed in 1..=20 {
+        for warmup in [0.0, 20.0, 33.3] {
+            let mut m = model.clone();
+            m.experiment.warmup = warmup;
+            assert_eq!(
+                found(&m, &run(&m, seed)),
+                vec![],
+                "seed {seed} warm-up {warmup}"
+            );
+        }
+    }
+    // A part counted too many or too few at the join is found.
+    for by in [1i64, -1] {
+        let mut r = run(&model, 3);
+        let e = element(&mut r, "join");
+        e.entered = e.entered.saturating_add_signed(by);
+        assert!(
+            found(&model, &r).contains(&(None, "unaccounted")),
+            "{by}: {:?}",
+            found(&model, &r)
+        );
+    }
+
+    // Two sources that meet at a join.
+    let mut b = Builder::new();
+    let a = b.source("a", Dist::exponential_rate(1.0), None);
+    let c = b.source("c", Dist::exponential_rate(0.8), None);
+    let join = b.parallel("join");
+    let out = b.sink("out");
+    b.connect(a, join);
+    b.connect(c, join);
+    b.connect(join, out);
+    let model = b.build(Experiment {
+        warmup: 20.0,
+        duration: 200.0,
+        ..Experiment::default()
+    });
+    for seed in 1..=20 {
+        assert_eq!(found(&model, &run(&model, seed)), vec![], "seed {seed}");
+    }
+}
+
 /// Entities that leave the model other than at an exit (here, all of them give up, with no way
 /// marked for them) have got out: no warning that nothing did.
 #[test]

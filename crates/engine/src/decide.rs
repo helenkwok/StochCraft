@@ -243,8 +243,9 @@ pub fn run(
         .run(|r| compiled.run(r.rng))
         .map_err(|e| CommandError::new(ErrorCode::Internal, e.to_string()))?
         .into_iter()
-        .collect::<Result<Vec<_>, _>>()
-        .map_err(|e| CommandError::new(ErrorCode::TimeStopped, e.to_string()))?;
+        .zip(0u64..)
+        .map(|(r, index)| r.map_err(|e| crate::run::run_failed(index, &e)))
+        .collect::<Result<Vec<_>, _>>()?;
     let summary = summarise(&reports);
     let warnings = wire::diagnostics(
         model,
@@ -630,6 +631,10 @@ pub fn deterministic(model: &Model) -> Model {
                 }
             }
             ElementKind::SharedTask { service, .. } => mean(service),
+            ElementKind::Transport { load, unload, .. } => {
+                mean(load);
+                mean(unload);
+            }
             ElementKind::Delay { duration, .. } => mean(duration),
             _ => {}
         }
@@ -811,6 +816,28 @@ mod tests {
             assert!(r.is_ok(), "{command} {params}: {r:?}");
         }
         e.model().clone()
+    }
+
+    #[test]
+    fn a_transports_load_and_unload_times_are_set_to_their_means() {
+        let mut m = busy_model();
+        m.elements.push(stochcraft_model::Element {
+            id: ElementId::unchecked("carry"),
+            name: String::new(),
+            kind: ElementKind::Transport {
+                pool: ElementId::unchecked("carriers"),
+                load: Dist::Exponential { mean: 2.0 },
+                unload: Dist::Exponential { mean: 3.0 },
+            },
+            properties: Vec::new(),
+        });
+        let fixed = deterministic(&m);
+        let carry = fixed.elements.iter().find(|e| e.id.as_str() == "carry");
+        assert!(matches!(
+            carry.map(|e| &e.kind),
+            Some(ElementKind::Transport { load: Dist::Constant(l), unload: Dist::Constant(u), .. })
+                if (*l - 2.0).abs() < 1e-12 && (*u - 3.0).abs() < 1e-12
+        ));
     }
 
     #[test]

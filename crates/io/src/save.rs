@@ -26,10 +26,10 @@ use crate::write::{
     health_check_element, interruptible_param, mobility_element, numeric, on_shift_end_element,
     own_marker, patience_element, planned_element, power_element, probability_element,
     processing_by_element, property_element, quantity_element, quantity_param,
-    queue_capacity_element, rework_element, routing_element, scenario_parameters, scrap_element,
-    sequential_element, sequential_off_element, size, start_param, starting_element, stop_element,
-    timer_param, transfer_element, transport_element, turned_away_element, units_param,
-    vendor_value_element,
+    queue_capacity_element, rework_element, routing_element, scenario_extensions,
+    scenario_parameters, scrap_element, sequential_element, sequential_off_element, size,
+    start_param, starting_element, stop_element, timer_param, transfer_element, transport_element,
+    turned_away_element, units_param, vendor_value_element,
 };
 use crate::xml::{self, Element, Node};
 use crate::{Format, SaveError};
@@ -147,7 +147,7 @@ fn near_dist(a: &Dist, b: &Dist) -> bool {
 }
 
 /// StochCraft's vendor extensions that hold time distributions.
-const VENDOR_TIMES: [&str; 7] = [
+const VENDOR_TIMES: [&str; 8] = [
     crate::bpsim::BREAKDOWN,
     crate::bpsim::TRANSFER_TIME,
     crate::bpsim::CHANGEOVER,
@@ -155,17 +155,25 @@ const VENDOR_TIMES: [&str; 7] = [
     crate::bpsim::PLANNED_RUN_TIME,
     crate::bpsim::PATIENCE,
     crate::bpsim::HEALTH_CHECK,
+    crate::bpsim::TRANSPORT,
 ];
 
 /// Calls `f` on each distribution vendor extension `name` holds for an element, in order.
 fn vendor_dists(kind: &mut ElementKind, name: &str, f: &mut dyn FnMut(&mut Dist)) {
     use crate::bpsim::{
         BREAKDOWN, CHANGEOVER, HEALTH_CHECK, PATIENCE, PLANNED_RUN_TIME, PROCESSING_TIME_BY,
-        TRANSFER_TIME,
+        TRANSFER_TIME, TRANSPORT,
     };
     if name == PROCESSING_TIME_BY {
         if let Some(Some(by)) = kind.processing_by_mut() {
             by.by_value.iter_mut().for_each(|v| f(&mut v.time));
+        }
+        return;
+    }
+    if name == TRANSPORT {
+        if let ElementKind::Transport { load, unload, .. } = kind {
+            f(load);
+            f(unload);
         }
         return;
     }
@@ -259,12 +267,29 @@ fn within_noise(got: &Model, want: &Model, rescaled: &BTreeSet<(String, String)>
         match (&mut ge.kind, &we.kind) {
             (
                 ElementKind::Source {
-                    interarrival: a, ..
+                    interarrival: a,
+                    timed: ta,
+                    ..
                 },
                 ElementKind::Source {
-                    interarrival: b, ..
+                    interarrival: b,
+                    timed: tb,
+                    ..
                 },
-            ) if has("ControlParameters/InterTriggerTimer") && near_dist(a, b) => *a = b.clone(),
+            ) if has("ControlParameters/InterTriggerTimer") => {
+                // The default value and the values for calendars (`validFor`), each as a whole.
+                if near_dist(a, b) {
+                    *a = b.clone();
+                }
+                if ta.len() == tb.len()
+                    && ta
+                        .iter()
+                        .zip(tb.iter())
+                        .all(|(x, y)| x.calendar == y.calendar && near_dist(&x.value, &y.value))
+                {
+                    *ta = tb.clone();
+                }
+            }
             (ElementKind::Server { service: a, .. }, ElementKind::Server { service: b, .. })
             | (ElementKind::Delay { duration: a, .. }, ElementKind::Delay { duration: b, .. })
             | (
@@ -272,6 +297,16 @@ fn within_noise(got: &Model, want: &Model, rescaled: &BTreeSet<(String, String)>
                 ElementKind::SharedTask { service: b, .. },
             ) if has("TimeParameters/ProcessingTime") && near_dist(a, b) => *a = b.clone(),
             _ => {}
+        }
+        // BPSim's SetUpTime: a setup before every job (a changeover is a vendor extension, below).
+        if has("TimeParameters/SetUpTime")
+            && let (
+                ElementKind::Server { setup: Some(a), .. },
+                ElementKind::Server { setup: Some(b), .. },
+            ) = (&mut ge.kind, &we.kind)
+            && near_dist(&a.time, &b.time)
+        {
+            a.time = b.time.clone();
         }
         for name in VENDOR_TIMES {
             if has(&format!("VendorExtension/{name}")) {
@@ -590,6 +625,30 @@ fn end_of(e: &Element) -> usize {
     match e.children.last() {
         Some(n) if is_ws(n) => e.children.len() - 1,
         _ => e.children.len(),
+    }
+}
+
+/// Sets StochCraft's vendor extension `name` on scenario `s` to `new` (or, with `None`, removes
+/// it). BPSim allows a scenario's vendor extensions only as children of the scenario itself, after
+/// its calendars, so that is where it goes. An older file of ours may hold it inside the
+/// scenario's parameters, where the schema does not allow it: it goes from there.
+fn set_scenario_extension(
+    s: &mut Element,
+    name: &str,
+    new: Option<Element>,
+    prefix: &str,
+    ns: &str,
+) {
+    let is_named =
+        |x: &Element| x.is_any(&NSS, "VendorExtension") && x.attr("name").as_deref() == Some(name);
+    if let Some(sp) = s.child_mut(&NSS, "ScenarioParameters") {
+        remove_all(sp, &is_named);
+    }
+    remove_all(s, &is_named);
+    if let Some(mut v) = new {
+        rename(&mut v, prefix, ns);
+        let at = end_of(s);
+        s.children.insert(at, Node::Element(v));
     }
 }
 
@@ -2882,12 +2941,15 @@ impl Editor {
             let bpsim = Ns::of(root, NS2, "bpsim");
             let mut sp = scenario_parameters(&self.experiment, None);
             rename(&mut sp, &bpsim.prefix, NS2);
-            let data = bpsim.el("BPSimData").with_child(
-                Element::new(&qname(&bpsim.prefix, "Scenario"), Some(NS2))
-                    .with_attr("id", &id)
-                    .with_attr("name", "Scenario")
-                    .with_child(sp),
-            );
+            let mut sc = Element::new(&qname(&bpsim.prefix, "Scenario"), Some(NS2))
+                .with_attr("id", &id)
+                .with_attr("name", "Scenario")
+                .with_child(sp);
+            for mut x in scenario_extensions(&self.experiment) {
+                rename(&mut x, &bpsim.prefix, NS2);
+                sc.push(x);
+            }
+            let data = bpsim.el("BPSimData").with_child(sc);
             match self.format {
                 Format::Bpmn => {
                     let b = Ns::bpmn(root);
@@ -2915,10 +2977,14 @@ impl Editor {
             let ns = data.ns.clone().unwrap_or_else(|| NS2.to_owned());
             let mut sp = scenario_parameters(&self.experiment, None);
             rename(&mut sp, data.prefix(), &ns);
-            let sc = Element::new(&qname(data.prefix(), "Scenario"), Some(&ns))
+            let mut sc = Element::new(&qname(data.prefix(), "Scenario"), Some(&ns))
                 .with_attr("id", &id)
                 .with_attr("name", "Scenario")
                 .with_child(sp);
+            for mut x in scenario_extensions(&self.experiment) {
+                rename(&mut x, data.prefix(), &ns);
+                sc.push(x);
+            }
             let at = end_of(data);
             data.children.insert(at, Node::Element(sc));
             return scenario_mut(root, Some(&id)).ok_or_else(|| fail("could not add a scenario"));
@@ -2961,8 +3027,11 @@ impl Editor {
         let inherited_sequential = b.sequential != a.sequential
             && a.sequential.is_none()
             && ancestors(root, scenario).iter().any(|s| {
-                s.child(&NSS, "ScenarioParameters")
-                    .is_some_and(|p| p.elements().any(is_sequential))
+                // On the scenario (where BPSim has its vendor extensions), or, as older files of
+                // ours have it, in its parameters.
+                s.elements().any(is_sequential)
+                    || s.child(&NSS, "ScenarioParameters")
+                        .is_some_and(|p| p.elements().any(is_sequential))
             });
         let s = self.ensure_scenario(root, scenario)?;
         let mut rescaled = Vec::new();
@@ -3060,42 +3129,38 @@ impl Editor {
         }
         if b.length_unit != a.length_unit {
             // Written even for metres, so it overrides what an inherited scenario says.
-            let is_unit = |x: &Element| {
-                x.is_any(&NSS, "VendorExtension")
-                    && x.attr("name").as_deref() == Some(crate::bpsim::LENGTH_UNIT)
-            };
-            remove_all(sp, &is_unit);
-            let mut v = vendor_value_element(crate::bpsim::LENGTH_UNIT, a.length_unit.name());
-            rename(&mut v, &prefix, &ns);
-            let at = end_of(sp);
-            sp.children.insert(at, Node::Element(v));
+            set_scenario_extension(
+                s,
+                crate::bpsim::LENGTH_UNIT,
+                Some(vendor_value_element(
+                    crate::bpsim::LENGTH_UNIT,
+                    a.length_unit.name(),
+                )),
+                &prefix,
+                &ns,
+            );
         }
         if b.layout_scale != a.layout_scale {
             // Written even for 1, so it overrides what an inherited scenario says.
-            let is_scale = |x: &Element| {
-                x.is_any(&NSS, "VendorExtension")
-                    && x.attr("name").as_deref() == Some(crate::bpsim::LAYOUT_SCALE)
-            };
-            remove_all(sp, &is_scale);
-            let mut v =
-                vendor_value_element(crate::bpsim::LAYOUT_SCALE, &trim_float(a.layout_scale));
-            rename(&mut v, &prefix, &ns);
-            let at = end_of(sp);
-            sp.children.insert(at, Node::Element(v));
+            set_scenario_extension(
+                s,
+                crate::bpsim::LAYOUT_SCALE,
+                Some(vendor_value_element(
+                    crate::bpsim::LAYOUT_SCALE,
+                    &trim_float(a.layout_scale),
+                )),
+                &prefix,
+                &ns,
+            );
         }
         if b.sequential != a.sequential {
-            remove_all(sp, &is_sequential);
             // Turned off: said only where an inherited scenario would otherwise turn them on.
             let written = match &a.sequential {
                 Some(q) => Some(sequential_element(q)),
                 None if inherited_sequential => Some(sequential_off_element()),
                 None => None,
             };
-            if let Some(mut v) = written {
-                rename(&mut v, &prefix, &ns);
-                let at = end_of(sp);
-                sp.children.insert(at, Node::Element(v));
-            }
+            set_scenario_extension(s, crate::bpsim::SEQUENTIAL, written, &prefix, &ns);
         }
         if relabel {
             self.keep_inheriting(root, scenario, b.time_unit, &rescaled, default_duration);
@@ -3313,6 +3378,14 @@ fn rescaled_params(original: &Element, new: &Element) -> Vec<Rescaled> {
             .cloned()
             .collect()
     };
+    // The values for calendars (`validFor`), which can name their own unit as well (a source's
+    // arrivals by shift).
+    let by_calendar = |p: &Element| -> Vec<Element> {
+        p.elements()
+            .filter(|v| v.attr("validFor").is_some() && v.attr("result").is_none())
+            .cloned()
+            .collect()
+    };
     let mut out = Vec::new();
     for (o, n) in original.elements().zip(new.elements()) {
         if o.is_any(&NSS, "ScenarioParameters") {
@@ -3347,7 +3420,7 @@ fn rescaled_params(original: &Element, new: &Element) -> Vec<Rescaled> {
                     continue;
                 }
                 for (po, pn) in go.elements().zip(gn.elements()) {
-                    if defaults(po) == defaults(pn) {
+                    if defaults(po) == defaults(pn) && by_calendar(po) == by_calendar(pn) {
                         continue;
                     }
                     let g = go.local();

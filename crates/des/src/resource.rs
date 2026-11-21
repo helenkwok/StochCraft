@@ -277,14 +277,17 @@ impl Future for AcquireWithin {
     fn poll(mut self: Pin<&mut Self>, _cx: &mut Context<'_>) -> Poll<Self::Output> {
         let ctx = self.res.ctx.clone();
         let now = ctx.now();
-        if let Some((grant, until)) = &self.waiting {
+        if let Some((grant, until)) = self.waiting.clone() {
             if grant.granted.get() {
+                // The unit is the guard's from here, not the future's to give back.
+                self.waiting = None;
                 return Poll::Ready(Ok(self.res.guard(grant.preempted.clone())));
             }
-            if let Some(until) = *until {
+            if let Some(until) = until {
                 if now >= until {
+                    self.waiting = None;
                     let mut st = self.res.state.borrow_mut();
-                    st.waiters.retain(|w| !Rc::ptr_eq(&w.grant, grant));
+                    st.waiters.retain(|w| !Rc::ptr_eq(&w.grant, &grant));
                     return Poll::Ready(Err(TimedOut));
                 }
                 // Woken early (cannot happen today): wait for the deadline again.
@@ -323,6 +326,22 @@ impl Future for AcquireWithin {
         }
         self.waiting = Some((grant, until));
         Poll::Pending
+    }
+}
+
+impl Drop for AcquireWithin {
+    /// A request dropped while it waits (its process gave up on it) leaves the queue; one that
+    /// was already handed a unit, which nobody took, gives it back to the next waiter.
+    fn drop(&mut self) {
+        let Some((grant, _)) = self.waiting.take() else {
+            return;
+        };
+        if grant.granted.get() {
+            drop(self.res.guard(grant.preempted.clone()));
+        } else {
+            let mut st = self.res.state.borrow_mut();
+            st.waiters.retain(|w| !Rc::ptr_eq(&w.grant, &grant));
+        }
     }
 }
 
@@ -680,5 +699,110 @@ mod tests {
             *log.borrow(),
             [("low", 5.0, true, false), ("high", 10.0, true, false)]
         );
+    }
+
+    /// Polls `f` once, from the running process, as one that then gives up on it would.
+    async fn poll_once<F: Future + Unpin>(f: &mut F) {
+        std::future::poll_fn(|cx| {
+            let _ = Pin::new(&mut *f).poll(cx);
+            Poll::Ready(())
+        })
+        .await;
+    }
+
+    #[test]
+    fn a_request_dropped_while_queued_leaves_the_queue() {
+        let mut sim = Sim::new();
+        let ctx = sim.ctx();
+        let res = Resource::new(&ctx, 1);
+        let log = log();
+        let (c, r) = (ctx.clone(), res.clone());
+        sim.spawn(async move {
+            let _unit = r.acquire().await;
+            c.hold(10.0).await;
+        });
+        let (c, r) = (ctx.clone(), res.clone());
+        sim.spawn(async move {
+            c.hold(1.0).await;
+            let mut request = r.acquire_within(100.0);
+            poll_once(&mut request).await;
+            assert_eq!(r.queue_len(), 1);
+            c.hold(1.0).await;
+            drop(request);
+            assert_eq!(r.queue_len(), 0);
+        });
+        let (c, r, l) = (ctx.clone(), res.clone(), Rc::clone(&log));
+        sim.spawn(async move {
+            c.hold(3.0).await;
+            let _unit = r.acquire().await;
+            l.borrow_mut().push(c.now());
+        });
+        sim.run();
+        assert_eq!(*log.borrow(), [10.0]);
+        assert_eq!((res.in_use(), res.queue_len()), (0, 0));
+    }
+
+    /// The unit is handed over at 5, when its holder lets go, and the request is dropped at 10
+    /// without having been polled again: the unit goes to the next in line.
+    #[test]
+    fn a_unit_handed_to_a_dropped_request_goes_to_the_next_waiter() {
+        for preemptive in [false, true] {
+            let mut sim = Sim::new();
+            let ctx = sim.ctx();
+            let res = if preemptive {
+                Resource::preemptive(&ctx, 1)
+            } else {
+                Resource::new(&ctx, 1)
+            };
+            let log = log();
+            let (c, r) = (ctx.clone(), res.clone());
+            sim.spawn(async move {
+                let _unit = r.acquire().await;
+                c.hold(5.0).await;
+            });
+            let (c, r) = (ctx.clone(), res.clone());
+            sim.spawn(async move {
+                c.hold(1.0).await;
+                let mut request = r.acquire_within(100.0);
+                poll_once(&mut request).await;
+                c.hold(9.0).await;
+                assert_eq!(r.queue_len(), 1);
+                drop(request);
+            });
+            let (c, r, l) = (ctx.clone(), res.clone(), Rc::clone(&log));
+            sim.spawn(async move {
+                c.hold(2.0).await;
+                let _unit = r.acquire().await;
+                l.borrow_mut().push(c.now());
+                c.hold(1.0).await;
+            });
+            sim.run();
+            assert_eq!(*log.borrow(), [10.0], "preemptive {preemptive}");
+            assert_eq!((res.in_use(), res.queue_len()), (0, 0));
+        }
+    }
+
+    /// A request that completes, or times out, and is dropped afterwards gives back nothing.
+    #[test]
+    fn a_finished_request_dropped_afterwards_changes_nothing() {
+        let mut sim = Sim::new();
+        let ctx = sim.ctx();
+        let res = Resource::new(&ctx, 1);
+        let (c, r) = (ctx.clone(), res.clone());
+        sim.spawn(async move {
+            let held = r.acquire().await;
+            let timed_out = r.acquire_within(2.0).await;
+            assert!(timed_out.is_err());
+            assert_eq!(r.in_use(), 1);
+            drop(held);
+            let mut request = r.acquire_within(2.0);
+            let unit = Pin::new(&mut request).await;
+            assert!(unit.is_ok());
+            drop(request);
+            assert_eq!(r.in_use(), 1);
+            c.hold(1.0).await;
+        });
+        sim.run();
+        assert_eq!((res.in_use(), res.queue_len()), (0, 0));
     }
 }

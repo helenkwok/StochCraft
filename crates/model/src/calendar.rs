@@ -611,6 +611,11 @@ impl Calendar {
     /// The periods the calendar is active in model time from 0 to `horizon`, in `unit`, with
     /// time 0 at `origin`: sorted, with overlapping and touching periods merged.
     pub fn periods(&self, origin: DateTime, unit: TimeUnit, horizon: f64) -> Vec<(f64, f64)> {
+        // `f64::min` returns the other value for a NaN, which would stand for the longest
+        // horizon, not for none.
+        if horizon.is_nan() {
+            return Vec::new();
+        }
         let per = unit.seconds();
         let to = origin.0 + (horizon * per).ceil().min(1e15) as i64 + 1;
         let mut raw = Vec::new();
@@ -751,6 +756,28 @@ mod tests {
         assert_eq!(parse(&write(&c.events)).events, c.events);
         let indented = "BEGIN:VCALENDAR\n    BEGIN:VEVENT\n    DTSTART:20160101T220000\n    DTEND:2016010\n     2T010000\n      RRULE:FREQ=DAILY\n    END:VEVENT\n  END:VCALENDAR";
         assert_eq!(parse(indented).events, c.events);
+    }
+
+    #[test]
+    fn a_horizon_that_is_not_a_number_has_no_periods() {
+        // Daily with no end: a NaN horizon taken as the longest would expand a million occurrences.
+        let c = Calendar {
+            id: ElementId::unchecked("daily"),
+            name: String::new(),
+            events: vec![Event {
+                start: dt("20160101T220000"),
+                end: dt("20160102T010000"),
+                rule: Rule::parse("FREQ=DAILY").ok(),
+            }],
+        };
+        let origin = dt("20160101T060000");
+        assert!(c.periods(origin, TimeUnit::Minutes, f64::NAN).is_empty());
+        assert!(c.periods(origin, TimeUnit::Minutes, -f64::NAN).is_empty());
+        // A real one still gives its periods.
+        assert_eq!(
+            c.periods(origin, TimeUnit::Minutes, 1440.0),
+            [(960.0, 1140.0)]
+        );
     }
 
     #[test]

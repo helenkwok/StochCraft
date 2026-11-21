@@ -773,7 +773,10 @@ fn round(n: f64) -> f64 {
     if !n.is_finite() || n.fract() == 0.0 {
         return n;
     }
-    let r = (n + 0.5).floor();
+    // Not (n + 0.5).floor(): the sum of 0.49999999999999994 and 0.5 rounds up to 1. The part of n
+    // above its floor is exact.
+    let below = n.floor();
+    let r = if n - below >= 0.5 { below + 1.0 } else { below };
     // XPath rounds -0.5 < n < 0 to negative zero.
     if r == 0.0 && n < 0.0 { -0.0 } else { r }
 }
@@ -893,6 +896,14 @@ mod tests {
         assert_eq!(num("round(2.5)"), 3.0);
         assert_eq!(num("round(-2.5)"), -2.0, "halves round up");
         assert!(num("round(-0.2)").is_sign_negative());
+        // The largest number below a half rounds down, and the smallest above one up.
+        assert_eq!(num("round(0.49999999999999994)"), 0.0);
+        assert_eq!(num("round(1.4999999999999998)"), 1.0);
+        assert_eq!(num("round(-0.5000000000000001)"), -1.0);
+        assert_eq!(num("round(0.5)"), 1.0);
+        assert_eq!(num("round(-0.5)"), 0.0);
+        assert_eq!(num("round(1.5)"), 2.0);
+        assert_eq!(num("round(-1.5)"), -1.0);
         assert_eq!(eval("concat('a', 1, true())"), Value::Text("a1true".into()));
         assert_eq!(eval("string(2.50)"), Value::Text("2.5".into()));
         assert_eq!(eval("string(1 div 0)"), Value::Text("Infinity".into()));

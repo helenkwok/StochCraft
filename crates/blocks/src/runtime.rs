@@ -401,21 +401,6 @@ impl Compiled {
                 .collect(),
         });
 
-        // Joins with a bill of materials: every part counts as entering.
-        let assembly: Vec<bool> = self
-            .quantities
-            .iter()
-            .zip(elements)
-            .map(|(q, e)| {
-                matches!(e.kind, ElementKind::ParallelGateway)
-                    && self
-                        .model
-                        .connections
-                        .iter()
-                        .any(|c| c.to == e.id && c.quantity.is_some())
-                    && !q.is_empty()
-            })
-            .collect();
         // The way into element `r.to`, as itself (not routed through, even if it is a
         // shortest-queue gateway).
         let plain_port = |r: &Route| -> Option<Port> {
@@ -427,9 +412,6 @@ impl Compiled {
                 index: r.to,
                 places: places.get(r.to).cloned().flatten(),
                 transfer: transfers.get(r.to).cloned().flatten(),
-                // A join's second and later inputs bring copies (`spawn_parallel`), unless it
-                // is an assembly, whose inputs bring parts.
-                counts: r.input == 0 || assembly.get(r.to).copied().unwrap_or(false),
                 router: None,
                 rework: r.rework,
                 patient: patients
@@ -1278,7 +1260,7 @@ fn tag(index: usize) -> u64 {
 /// Statistics a block keeps while the model runs. Every element balances: what entered either
 /// left, was lost here, or is still inside.
 pub(crate) struct BlockStats {
-    /// Entities that entered (a source: created; a join: each entity once, see
+    /// Entities that entered (a source: created; a join: those on every input, see
     /// `spawn_parallel`).
     entered: u64,
     /// Of `entered`, the entities placed inside as the run started ([`Model::starting`]).
@@ -2104,10 +2086,6 @@ struct Port {
     places: Option<Rc<Places>>,
     /// The next element's transfer time, when it has one.
     transfer: Option<Rc<Transfer>>,
-    /// Whether an entity sent here counts as entering the next element: always, except on a
-    /// join's second and later inputs, whose entities are copies merged into the one on its
-    /// first input.
-    counts: bool,
     /// When the next element is a shortest-queue gateway: its ways, which the sender routes
     /// to itself, so that it is the one waiting for room.
     router: Option<Rc<Router>>,
@@ -3032,9 +3010,7 @@ impl Port {
         self.assigner.enter(self.index, &mut e, &self.stats);
         if let Some(s) = self.stats.get(self.index) {
             let mut s = s.borrow_mut();
-            if self.counts {
-                s.entered += 1;
-            }
+            s.entered += 1;
             s.stay_starts(now);
             let n = s.transit.value() + 1.0;
             s.transit.set(now, n);
@@ -3118,9 +3094,7 @@ impl Port {
         self.assigner.enter(self.index, &mut e, &self.stats);
         if let Some(s) = self.stats.get(self.index) {
             let mut s = s.borrow_mut();
-            if self.counts {
-                s.entered += 1;
-            }
+            s.entered += 1;
             s.stay_starts(now);
             let w = s.waiting.value() + 1.0;
             s.waiting.set(now, w);
@@ -5203,15 +5177,15 @@ fn combine(mut parts: Vec<Entity>) -> Option<Entity> {
 /// made them. With several entities' copies in flight, copies of different entities can be
 /// merged with each other, if one branch overtakes another.
 ///
-/// Counting: a join's `entered` counts each entity once, as it arrives on the first input (the
-/// entities arriving on the others are its copies, merged into it); `left` counts each entity
-/// sent out, one per outgoing connection. So a 2-in/1-out join reports entered = left (less
-/// any still waiting for their copies at the end), and a 1-in/2-out split left = 2 x entered.
+/// Counting: every entity that arrives counts in `entered`, on any input, and waits (counted in
+/// the work in progress) until the join has one for each input; `left` counts each entity sent
+/// out, one per outgoing connection. So a 2-in/1-out join reports entered = 2 x left (less those
+/// still waiting at the end, which are in the work in progress), and a 1-in/2-out split
+/// left = 2 x entered. The work in progress never exceeds entered − left.
 ///
 /// An assembly (a join with a bill of materials) takes `quantities[k]` entities from input `k`
-/// for each one it sends on; the parts other than the first are used up. Every part counts as
-/// entering, so an assembly reports entered = left × the parts per assembly (less those still
-/// waiting at the end).
+/// for each one it sends on; the parts other than the first are used up, so it reports
+/// entered = left × the parts per assembly (less those still waiting at the end).
 fn spawn_parallel(
     sim: &mut Sim,
     env: BlockEnv,
@@ -5248,13 +5222,18 @@ fn spawn_parallel(
     });
 }
 
+/// The most places a batch reserves before any entity has arrived.
+const MAX_BATCH_PREALLOCATION: usize = 1024;
+
 /// A batch: entities wait here until there are `size` of them, then go on together as one, the
 /// first carrying the others ([`Entity::members`]). `entered` counts each entity, `left` each
 /// batch, and the mean contents is the number waiting for their batch to fill.
 fn spawn_batch(sim: &mut Sim, env: BlockEnv, size: u32) {
     let size = usize::try_from(size.max(1)).unwrap_or(usize::MAX);
     sim.spawn_tagged(tag(env.me), async move {
-        let mut held: Vec<Entity> = Vec::with_capacity(size);
+        // The size is the model's, so it only hints at the capacity: a huge one would otherwise
+        // allocate for entities that never arrive.
+        let mut held: Vec<Entity> = Vec::with_capacity(size.min(MAX_BATCH_PREALLOCATION));
         loop {
             let entity = env.input.get().await;
             env.adjust(|s| &mut s.waiting, -1.0);

@@ -17,9 +17,9 @@ type PriorityFn<T> = Rc<dyn Fn(&T) -> i64>;
 /// A put waiting for room in a full bounded store.
 struct Putter<T> {
     item: T,
-    /// The waiting process and the flag set when its item is in; `None` for [`Store::put`],
-    /// which does not wait.
-    waiting: Option<(u64, Rc<Cell<bool>>)>,
+    /// The flag set when its item is in, and the process to wake then (none outside the
+    /// simulation); `None` for [`Store::put`], which does not wait.
+    waiting: Option<(Option<u64>, Rc<Cell<bool>>)>,
 }
 
 struct StoreState<T> {
@@ -66,7 +66,7 @@ impl<T> StoreState<T> {
             self.insert(p.item);
             if let Some((pid, done)) = p.waiting {
                 done.set(true);
-                woken.push(pid);
+                woken.extend(pid);
             }
         }
         woken
@@ -290,10 +290,27 @@ impl<T> Future for PutWait<T> {
         self.store.state.borrow_mut().putters.push_back(Putter {
             item,
             // Outside the simulation the put still goes in line; it just cannot be woken.
-            waiting: pid.map(|p| (p, Rc::clone(&done))),
+            waiting: Some((pid, Rc::clone(&done))),
         });
         self.done = Some(done);
         Poll::Pending
+    }
+}
+
+impl<T> Drop for PutWait<T> {
+    /// A put dropped while it waits for room is withdrawn: its item does not go in later, when
+    /// nobody is waiting to put it.
+    fn drop(&mut self) {
+        if let Some(done) = self.done.take()
+            && !done.get()
+        {
+            let mut st = self.store.state.borrow_mut();
+            st.putters.retain(|p| {
+                !p.waiting
+                    .as_ref()
+                    .is_some_and(|(_, d)| Rc::ptr_eq(d, &done))
+            });
+        }
     }
 }
 
@@ -372,6 +389,24 @@ impl<T> Future for GetWithin<T> {
         }
         self.waiting = Some((slot, until));
         Poll::Pending
+    }
+}
+
+impl<T> Drop for GetWithin<T> {
+    /// A get dropped while it waits leaves the queue of getters; an item that was already
+    /// handed to it, which nobody took, goes back to the head of the line.
+    fn drop(&mut self) {
+        let Some((slot, _)) = self.waiting.take() else {
+            return;
+        };
+        let given = {
+            let mut st = self.store.state.borrow_mut();
+            st.getters.retain(|(_, s)| !Rc::ptr_eq(s, &slot));
+            slot.borrow_mut().take()
+        };
+        if let Some(item) = given {
+            self.store.put_front(item);
+        }
     }
 }
 
@@ -633,5 +668,121 @@ mod tests {
             [("impatient", Err(TimedOut), 1.0), ("patient", Ok(7), 2.0)]
         );
         assert_eq!((store.len(), store.getters_waiting()), (0, 0));
+    }
+
+    /// Polls `f` once, from the running process, as one that then gives up on it would.
+    async fn poll_once<F: Future + Unpin>(f: &mut F) {
+        std::future::poll_fn(|cx| {
+            let _ = Pin::new(&mut *f).poll(cx);
+            Poll::Ready(())
+        })
+        .await;
+    }
+
+    #[test]
+    fn a_get_dropped_while_waiting_leaves_the_queue_and_loses_no_item() {
+        let mut sim = Sim::new();
+        let ctx = sim.ctx();
+        let store: Store<u32> = Store::new(&ctx);
+        let log = log();
+        let (c, s) = (ctx.clone(), store.clone());
+        sim.spawn(async move {
+            let mut get = s.get_within(100.0);
+            poll_once(&mut get).await;
+            assert_eq!(s.getters_waiting(), 1);
+            c.hold(1.0).await;
+            drop(get);
+            assert_eq!(s.getters_waiting(), 0);
+        });
+        let (c, s) = (ctx.clone(), store.clone());
+        sim.spawn(async move {
+            c.hold(2.0).await;
+            s.put(7);
+            // Not handed to the getter that left.
+            assert_eq!(s.len(), 1);
+        });
+        let (c, s, l) = (ctx.clone(), store.clone(), Rc::clone(&log));
+        sim.spawn(async move {
+            c.hold(3.0).await;
+            let item = s.get().await;
+            l.borrow_mut().push((item, c.now()));
+        });
+        sim.run();
+        assert_eq!(*log.borrow(), [(7, 3.0)]);
+    }
+
+    /// An item put at 1 is handed to a waiting get that is dropped at 5 without being polled
+    /// again: the item goes back to the head of the line, ahead of the one put at 3.
+    #[test]
+    fn an_item_handed_to_a_dropped_get_goes_back_to_the_head() {
+        let mut sim = Sim::new();
+        let ctx = sim.ctx();
+        let store: Store<u32> = Store::new(&ctx);
+        let log = log();
+        let (c, s) = (ctx.clone(), store.clone());
+        sim.spawn(async move {
+            let mut get = s.get_within(100.0);
+            poll_once(&mut get).await;
+            c.hold(5.0).await;
+            assert_eq!(s.len(), 1);
+            drop(get);
+            assert_eq!(s.len(), 2);
+        });
+        let (c, s) = (ctx.clone(), store.clone());
+        sim.spawn(async move {
+            c.hold(1.0).await;
+            s.put(1);
+            c.hold(2.0).await;
+            s.put(2);
+        });
+        let (c, s, l) = (ctx.clone(), store.clone(), Rc::clone(&log));
+        sim.spawn(async move {
+            c.hold(6.0).await;
+            for _ in 0..2 {
+                let item = s.get().await;
+                l.borrow_mut().push((item, c.now()));
+            }
+        });
+        sim.run();
+        assert_eq!(*log.borrow(), [(1, 6.0), (2, 6.0)]);
+    }
+
+    #[test]
+    fn a_put_dropped_while_waiting_for_room_is_withdrawn() {
+        let mut sim = Sim::new();
+        let ctx = sim.ctx();
+        let store: Store<u32> = Store::bounded(&ctx, 1);
+        store.put(1);
+        let (c, s) = (ctx.clone(), store.clone());
+        sim.spawn(async move {
+            let mut put = s.put_wait(2);
+            poll_once(&mut put).await;
+            assert_eq!(s.puts_waiting(), 1);
+            c.hold(1.0).await;
+            drop(put);
+            assert_eq!(s.puts_waiting(), 0);
+        });
+        let (c, s) = (ctx.clone(), store.clone());
+        sim.spawn(async move {
+            c.hold(2.0).await;
+            assert_eq!(s.get().await, 1);
+        });
+        sim.run();
+        // The dropped put's item did not go in behind the get.
+        assert_eq!((store.len(), store.puts_waiting()), (0, 0));
+    }
+
+    /// A put polled outside any process waits in line too, and leaves it when dropped.
+    #[test]
+    fn a_put_polled_outside_the_simulation_can_be_dropped() {
+        let sim = Sim::new();
+        let ctx = sim.ctx();
+        let store: Store<u32> = Store::bounded(&ctx, 1);
+        store.put(1);
+        let mut put = store.put_wait(2);
+        let _ = Pin::new(&mut put).poll(&mut Context::from_waker(std::task::Waker::noop()));
+        assert_eq!(store.puts_waiting(), 1);
+        drop(put);
+        assert_eq!((store.len(), store.puts_waiting()), (1, 0));
     }
 }

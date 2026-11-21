@@ -153,7 +153,7 @@ pub enum Why {
     Unstable,
     /// Several units with times that are not exponential: no exact formula.
     SeveralUnitsGeneral,
-    /// The service time's variance is not known (a user distribution).
+    /// The service time's variance is not known (its parameters are invalid).
     NoVariance,
     /// Arrivals come from this source, whose times between arrivals are not exponential.
     NotPoisson(ElementId),
