@@ -8,7 +8,7 @@
 
 use egui::accesskit::Role;
 use egui_kittest::Harness;
-use egui_kittest::kittest::Queryable;
+use egui_kittest::kittest::{NodeT, Queryable};
 use serde_json::{Value, json};
 use stochcraft_engine::Engine;
 use stochcraft_ui_egui::{App, Autosave, EXAMPLES, Example, Platform, Request};
