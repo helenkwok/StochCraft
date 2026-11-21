@@ -509,5 +509,48 @@ fn a_controlled_chance_is_worded_as_an_estimate_in_the_window() {
     assert!(h.state().results().is_some(), "{status}");
     h.get_by_label_contains("chance that y is more than 0.5");
     h.get_by_label_contains("Controls for y: c.");
+    // The controlled chance was made (and judged): a flat interval is no narrowing.
+    h.get_by_label_contains("Their interval has no width");
     assert!(h.query_by_label_contains("in none of the").is_none());
+}
+
+/// A control that follows the target closely but not exactly narrows the chance's interval, and
+/// the window shows the controlled chance as the result.
+#[test]
+fn a_helpful_control_gives_the_chance_shown() {
+    let mut h = harness();
+    h.state_mut()
+        .run_command(&stochcraft_ui_egui::commands::CommandRef::new(
+            stochcraft_ui_egui::commands::NEW_MONTE_CARLO,
+        ));
+    settle(&mut h);
+    for (name, min) in [("x", 0.0), ("z", -1.0)] {
+        h.state_mut().execute(
+            "mc.input.set",
+            serde_json::json!({
+                "name": name,
+                "distribution": { "type": "uniform", "min": min, "max": 1.0 },
+            }),
+        );
+    }
+    h.state_mut().execute(
+        "mc.output.set",
+        serde_json::json!({ "name": "c", "expression": "if($x > 0.5, 0, 1)" }),
+    );
+    h.state_mut().execute(
+        "mc.output.set",
+        serde_json::json!({
+            "name": "y",
+            "expression": "$x + 0.05 * $z",
+            "at_most": 0.5,
+            "controls": [{ "output": "c", "expected": 0.5 }],
+        }),
+    );
+    settle(&mut h);
+    h.state_mut().run();
+    finish_run(&mut h);
+    let status = h.state().status().to_owned();
+    assert!(h.state().results().is_some(), "{status}");
+    h.get_by_label_contains("Controls for y: c.");
+    h.get_by_label_contains("this is the result shown above");
 }

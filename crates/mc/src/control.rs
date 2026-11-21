@@ -768,9 +768,13 @@ pub(crate) fn controlled(c: &Compiled, o: usize, blocks: &[Block]) -> Option<Con
         u.sample_mean = t.mean();
         // The spread of the control's unit means (pairs, batches or trials), as for the estimate.
         u.mismatch = match across.c.get(i) {
+            // With no spread at all (every pair or batch alike), any real discrepancy is far:
+            // only rounding is let through.
             Some(units) => match (units.mean(), units.variance()) {
-                (Some(m), Some(v)) if v > 0.0 => {
-                    (m - u.mean).abs() > MISMATCH_Z * (v / units.count() as f64).sqrt()
+                (Some(m), Some(v)) if v >= 0.0 => {
+                    let rounding = 1e-12 * m.abs().max(u.mean.abs()).max(1.0);
+                    (m - u.mean).abs()
+                        > (MISMATCH_Z * (v / units.count() as f64).sqrt()).max(rounding)
                 }
                 _ => false,
             },

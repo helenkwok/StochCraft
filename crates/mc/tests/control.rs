@@ -637,6 +637,37 @@ fn the_mismatch_is_judged_on_the_pairs_of_an_antithetic_run() {
     assert!(!flagged(Sampling::Random));
 }
 
+/// Every pair of an antithetic run alike (no spread across pairs): a wrong stated mean is still
+/// flagged, and the right one is not.
+#[test]
+fn a_wrong_mean_is_flagged_when_the_pairs_have_no_spread() {
+    let model = |expected| MonteCarlo {
+        inputs: vec![uniform("x", 0.0, 1.0)],
+        outputs: vec![
+            output("c", "if($x < 0.5, 0, 1)", vec![]),
+            output(
+                "y",
+                "$c",
+                vec![Control::Output {
+                    name: "c".into(),
+                    expected,
+                }],
+            ),
+        ],
+        sampling: Sampling::Antithetic,
+        ..MonteCarlo::default()
+    };
+    let flagged = |expected| {
+        let r = run(&model(expected), 4, 2_000);
+        r.outputs[1]
+            .controlled
+            .as_ref()
+            .is_some_and(|c| c.controls.iter().any(|u| u.mismatch))
+    };
+    assert!(flagged(0.75));
+    assert!(!flagged(0.5));
+}
+
 /// An input used only as a control is used: it is not reported as unused.
 #[test]
 fn an_input_used_only_as_a_control_is_not_unused() {
