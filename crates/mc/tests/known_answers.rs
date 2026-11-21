@@ -577,3 +577,182 @@ fn independent_trials_keep_per_trial_intervals() {
     let wilson = stochcraft_stats::Proportion::new(t.met, t.of).wilson(0.95);
     assert_eq!(t.interval, wilson);
 }
+
+fn first_influence(r: &McResults) -> &stochcraft_mc::Influence {
+    r.outputs
+        .first()
+        .map(|o| &o.influence)
+        .unwrap_or_else(|| unreachable!("no output"))
+}
+
+fn entry<'a>(i: &'a stochcraft_mc::Influence, name: &str) -> &'a stochcraft_mc::InputInfluence {
+    i.inputs
+        .iter()
+        .find(|e| e.input == name)
+        .unwrap_or_else(|| unreachable!("no input {name}"))
+}
+
+fn names(i: &stochcraft_mc::Influence) -> Vec<&str> {
+    i.inputs.iter().map(|e| e.input.as_str()).collect()
+}
+
+/// y = 2a + b + k with a uniform on 0 to 1, b on 0 to 10 and k a constant: the tornado moves one
+/// input between its 10th and 90th percentiles with the other at its median, so each swing is
+/// exactly the coefficient times the input's 10th-to-90th spread (a uniform's is 0.8 of its
+/// range): 1.6 for a and 8 for b. The constant is left out, b is first, and the base has every
+/// input at its median: 1 + 5 + 3. The rank correlations (y is mostly b) follow the same order.
+#[test]
+fn a_linear_models_swings_are_each_coefficient_times_the_spread() {
+    let a = Dist::Uniform { min: 0.0, max: 1.0 };
+    let b = Dist::Uniform {
+        min: 0.0,
+        max: 10.0,
+    };
+    let mc = MonteCarlo {
+        inputs: vec![
+            input("a", a.clone()),
+            input("b", b.clone()),
+            input("k", Dist::Constant(3.0)),
+        ],
+        outputs: vec![output("y", "2 * $a + $b + $k")],
+        ..MonteCarlo::default()
+    };
+    let r = run(&mc, 1, 5_000);
+    let inf = first_influence(&r);
+    assert_eq!(names(inf), ["b", "a"]);
+    assert!((get(inf.base) - 9.0).abs() < 1e-12, "{:?}", inf.base);
+    let spread = |d: &Dist| {
+        stochcraft_mc::quantile::quantile(d, 0.9) - stochcraft_mc::quantile::quantile(d, 0.1)
+    };
+    let (ea, eb) = (entry(inf, "a"), entry(inf, "b"));
+    assert!((get(ea.swing()) - 2.0 * spread(&a)).abs() < 1e-12);
+    assert!((get(eb.swing()) - spread(&b)).abs() < 1e-12);
+    assert!((get(ea.swing()) - 1.6).abs() < 1e-12);
+    assert!((get(eb.swing()) - 8.0).abs() < 1e-12);
+    assert!((get(ea.low) - 8.2).abs() < 1e-12 && (get(ea.high) - 9.8).abs() < 1e-12);
+    assert!((get(eb.low) - 5.0).abs() < 1e-12 && (get(eb.high) - 13.0).abs() < 1e-12);
+    assert!((ea.p10 - 0.1).abs() < 1e-12 && (eb.p90 - 9.0).abs() < 1e-12);
+    // Spearman: b carries almost all of y's variance (about 0.98); a about 0.2.
+    assert!(get(eb.rank_correlation) > 0.9, "{eb:?}");
+    assert!(
+        (0.1..0.3).contains(&get(ea.rank_correlation)),
+        "{:?}",
+        ea.rank_correlation
+    );
+}
+
+/// y = a − 2b + 0c with independent standard normals: the rank correlation of a normal output
+/// with each input is (6/π) asin(r/2) for the Pearson r, so 0.43 for a, −0.89 for b and 0 for c,
+/// with the sign and the order of the effects; the tornado agrees (b swings twice a, c none).
+#[test]
+fn rank_correlations_have_the_sign_and_order_of_the_effects() {
+    let normal = Dist::Normal {
+        mean: 0.0,
+        std_dev: 1.0,
+    };
+    let mc = MonteCarlo {
+        inputs: ["a", "b", "c"]
+            .iter()
+            .map(|n| input(n, normal.clone()))
+            .collect(),
+        outputs: vec![output("y", "$a - 2 * $b + 0 * $c")],
+        ..MonteCarlo::default()
+    };
+    let r = run(&mc, 3, 20_000);
+    let inf = first_influence(&r);
+    assert_eq!(names(inf), ["b", "a", "c"]);
+    let rho = |n: &str| get(entry(inf, n).rank_correlation);
+    assert!((0.39..0.47).contains(&rho("a")), "{}", rho("a"));
+    assert!((-0.92..-0.85).contains(&rho("b")), "{}", rho("b"));
+    assert!(rho("c").abs() < 0.05, "{}", rho("c"));
+    let swing = |n: &str| get(entry(inf, n).swing());
+    assert!((swing("b") - 2.0 * swing("a")).abs() < 1e-12);
+    assert!(swing("c").abs() < 1e-12);
+}
+
+/// The tornado is worked out from the distributions, with no sampling, so it is the same
+/// however the trials were drawn.
+#[test]
+fn the_tornado_does_not_depend_on_the_sampling() {
+    let make = |sampling| MonteCarlo {
+        inputs: vec![
+            input(
+                "a",
+                Dist::LogNormal {
+                    mean: 1.0,
+                    std_dev: 0.5,
+                },
+            ),
+            uniform("b", 0.0, 3.0),
+        ],
+        outputs: vec![output("y", "$a * $b")],
+        sampling,
+        ..MonteCarlo::default()
+    };
+    let random = run(&make(Sampling::Random), 1, 2_000);
+    let lhs = run(&make(Sampling::LatinHypercube), 9, 3_000);
+    let tornado = |r: &McResults| {
+        first_influence(r)
+            .inputs
+            .iter()
+            .map(|e| (e.input.clone(), e.low, e.high, e.p10, e.p90))
+            .collect::<Vec<_>>()
+    };
+    assert_eq!(tornado(&random), tornado(&lhs));
+    assert_eq!(first_influence(&random).base, first_influence(&lhs).base);
+}
+
+/// The rank correlation of a correlated input includes the effect of the inputs it is correlated
+/// with: b has no part in y = a, and its tornado bar is nothing, but it goes with a (rank
+/// correlation 0.8), so it goes with y too.
+#[test]
+fn a_correlated_inputs_rank_correlation_includes_its_partners() {
+    let mc = MonteCarlo {
+        inputs: vec![uniform("a", 0.0, 1.0), uniform("b", 0.0, 1.0)],
+        outputs: vec![output("y", "$a + 0 * $b")],
+        correlations: vec![McCorrelation {
+            a: "a".into(),
+            b: "b".into(),
+            rank: 0.8,
+        }],
+        ..MonteCarlo::default()
+    };
+    let r = run(&mc, 1, 5_000);
+    let inf = first_influence(&r);
+    let b = entry(inf, "b");
+    assert!(get(b.swing()).abs() < 1e-12);
+    assert!(
+        (get(b.rank_correlation) - 0.8).abs() < 0.05,
+        "{:?}",
+        b.rank_correlation
+    );
+    assert!(get(entry(inf, "a").rank_correlation) > 0.99);
+}
+
+/// An output with no number in some trials is ranked over the trials where it has one, and a
+/// swing with an end that is no number has no width and goes last: y is b where a is above
+/// −0.5, and a division by zero below, so a moved to its 10th percentile (−0.8) gives no number.
+#[test]
+fn trials_with_no_number_are_left_out_of_the_ranks() {
+    let mc = MonteCarlo {
+        inputs: vec![uniform("a", -1.0, 1.0), uniform("b", 0.0, 1.0)],
+        outputs: vec![output("y", "if($a > -0.5, $b, 1 div 0)")],
+        ..MonteCarlo::default()
+    };
+    let r = run(&mc, 2, 10_000);
+    let inf = first_influence(&r);
+    let invalid = r.outputs.first().map_or(0, |o| o.invalid);
+    assert!(invalid > 2_000 && invalid < 3_000, "{invalid}");
+    assert!((get(inf.base) - 0.5).abs() < 1e-12);
+    assert_eq!(names(inf), ["b", "a"]);
+    let a = entry(inf, "a");
+    assert_eq!((a.low, a.swing()), (None, None));
+    assert!((get(a.high) - 0.5).abs() < 1e-12);
+    // Over the trials with a number, y is b and says nothing of a.
+    assert!(get(entry(inf, "b").rank_correlation) > 0.999);
+    assert!(
+        get(a.rank_correlation).abs() < 0.06,
+        "{:?}",
+        a.rank_correlation
+    );
+}

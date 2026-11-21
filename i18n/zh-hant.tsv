@@ -938,6 +938,13 @@ unit	yr	年
 	Press Run to run the model.	按一下「執行」來執行模型。
 	Open Results to read what the run found.	開啟「結果」，查看本次執行的發現。
 	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	這就是你的第一個模型。「結果」開頭幾行說明本次執行的發現；說明 ▸ 結果的意義 解釋每個數字。
+# Which inputs matter in the Monte Carlo results (ROADMAP M4.1, part 3a)
+	Which inputs matter	哪些輸入重要
+	{output} depends most on {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile.	{output} 最取決於 {input}：當 {input} 從其第 10 百分位數變到第 90 百分位數時，它從 {low} 變到 {high}。
+	Each input from its 10th to its 90th percentile, with the others at their medians	每個輸入從其第 10 百分位數到第 90 百分位數，其餘輸入取中位數
+	Base {value}	基準值 {value}
+	A correlated input's figure includes the effect of the inputs it is correlated with.	相關輸入的數值包含了與它相關的各輸入的影響。
+	The bars move one input at a time, so they leave out what correlated inputs do together.	長條一次只移動一個輸入，因此不包含相關輸入共同產生的作用。
 @plural	Added {n} block|Added {n} blocks	已新增 {n} 個區塊
 @plural	Copied {n} block|Copied {n} blocks	已複製 {n} 個區塊
 @plural	Finished {n} run|Finished {n} runs	已完成 {n} 次執行

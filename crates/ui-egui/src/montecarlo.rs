@@ -17,7 +17,8 @@
 //! with a target, the chance of missing it in words ("about a 1 in 5 chance that cost is more than
 //! 7,000 USD") with its interval; for each without, where 9 trials in 10 fall. Then each output's
 //! mean with its interval, its percentiles, minimum and maximum, a histogram and the cumulative
-//! curve with the target drawn on both, and how the run went (trials asked for and run, the
+//! curve with the target drawn on both, which inputs matter (in words, a tornado chart and each
+//! input's rank correlation with the output), and how the run went (trials asked for and run, the
 //! sampling, the seed, and a sequential stop's outcome).
 
 use std::collections::HashMap;
@@ -1167,8 +1168,9 @@ impl App {
                     let text = crate::i18n::engine_message(w);
                     ui.add(egui::Label::new(theme::weak(ui, text)).wrap());
                 }
+                let correlated = r["correlations"].as_array().is_some_and(|c| !c.is_empty());
                 for o in &outputs {
-                    output_section(ui, o, &r["interval_basis"]);
+                    output_section(ui, o, &r["interval_basis"], correlated);
                 }
                 section(ui, t("How sure are these numbers?"));
                 ui.add(egui::Label::new(basis_line(&r)).wrap());
@@ -1198,8 +1200,8 @@ impl App {
     }
 }
 
-/// One output's numbers and charts.
-fn output_section(ui: &mut egui::Ui, o: &Value, basis: &Value) {
+/// One output's numbers and charts. `correlated`: the model has correlated inputs.
+fn output_section(ui: &mut egui::Ui, o: &Value, basis: &Value, correlated: bool) {
     let name = o["name"].as_str().unwrap_or("");
     let unit = o["unit"].as_str().unwrap_or("");
     let title = if unit.is_empty() {
@@ -1310,6 +1312,228 @@ fn output_section(ui: &mut egui::Ui, o: &Value, basis: &Value) {
         });
     } else {
         charts(ui);
+    }
+    influence_section(ui, o, correlated);
+}
+
+/// The most inputs the tornado and the table of rank correlations show.
+const MOST_INPUTS: usize = 12;
+
+/// Which inputs an output depends on: the answer in words first, then the tornado (each input
+/// moved from its 10th to its 90th percentile with the others at their medians, the swing of
+/// decision analysis in Clemen and Reilly, *Making Hard Decisions*), then each input's rank
+/// correlation with the output. `correlated`: the model has correlated inputs.
+fn influence_section(ui: &mut egui::Ui, o: &Value, correlated: bool) {
+    let name = o["name"].as_str().unwrap_or("");
+    let unit = o["unit"].as_str().unwrap_or("");
+    let inputs: Vec<&Value> = o["influence"]["inputs"]
+        .as_array()
+        .into_iter()
+        .flatten()
+        .take(MOST_INPUTS)
+        .collect();
+    let Some(top) = inputs.first() else {
+        return;
+    };
+    ui.add_space(10.0);
+    ui.label(theme::strong(t("Which inputs matter")).size(13.0));
+    if let (Some(input), Some(low), Some(high), Some(swing)) = (
+        top["input"].as_str(),
+        top["low"].as_f64(),
+        top["high"].as_f64(),
+        top["swing"].as_f64(),
+    ) && swing > 0.0
+    {
+        ui.add(
+            egui::Label::new(tf(
+                "{output} depends most on {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile.",
+                &[
+                    ("output", name),
+                    ("input", input),
+                    ("low", &with_unit(value_text(low), unit)),
+                    ("high", &with_unit(value_text(high), unit)),
+                ],
+            ))
+            .wrap(),
+        );
+    }
+    // An input that does not move the output has no bar (it is still in the table below).
+    let bars: Vec<(String, f64, f64)> = inputs
+        .iter()
+        .filter(|i| i["swing"].as_f64().is_some_and(|s| s > 0.0))
+        .filter_map(|i| {
+            Some((
+                i["input"].as_str()?.to_owned(),
+                i["low"].as_f64()?,
+                i["high"].as_f64()?,
+            ))
+        })
+        .collect();
+    if let Some(base) = o["influence"]["base"].as_f64() {
+        let width = ui.available_width().min(560.0);
+        tornado_chart(ui, &bars, base, unit, width);
+    }
+    ui.add_space(4.0);
+    let rows: Vec<(String, String)> = inputs
+        .iter()
+        .map(|i| {
+            (
+                i["input"].as_str().unwrap_or("").to_owned(),
+                i["rank_correlation"]
+                    .as_f64()
+                    .map_or_else(|| "–".to_owned(), rank_text),
+            )
+        })
+        .collect();
+    grid(ui, &format!("mc/rank/{name}"), 2, |ui| {
+        ui.label(theme::weak(ui, t("Inputs")));
+        ui.label(theme::weak(ui, t("Rank correlation")));
+        ui.end_row();
+        for (input, rho) in rows {
+            ui.label(input);
+            ui.label(rho);
+            ui.end_row();
+        }
+    });
+    if correlated {
+        for note in [
+            t(
+                "The bars move one input at a time, so they leave out what correlated inputs do together.",
+            ),
+            t(
+                "A correlated input's figure includes the effect of the inputs it is correlated with.",
+            ),
+        ] {
+            ui.add(egui::Label::new(theme::weak(ui, note)).wrap());
+        }
+    }
+}
+
+/// A rank correlation to two decimals, as correlations are usually given: 0.90, −0.42, and 0.00
+/// for one too small to show (never −0.00 or an exponent).
+fn rank_text(x: f64) -> String {
+    let r = (x * 100.0).round() / 100.0;
+    if r.abs() < 0.005 {
+        "0.00".to_owned()
+    } else {
+        format!("{r:.2}")
+    }
+}
+
+/// The tornado: a row for each input (name, bar, the output's value at each end), the widest
+/// swing first, the bars drawn around a line at `base`, the output with every input at its
+/// median. The words and numbers are in the accessibility tree as one description.
+fn tornado_chart(
+    ui: &mut egui::Ui,
+    bars: &[(String, f64, f64)],
+    base: f64,
+    unit: &str,
+    width: f32,
+) {
+    let ends: Vec<f64> = bars.iter().flat_map(|b| [b.1, b.2]).chain([base]).collect();
+    let lo = ends.iter().copied().fold(f64::INFINITY, f64::min);
+    let hi = ends.iter().copied().fold(f64::NEG_INFINITY, f64::max);
+    if bars.is_empty() || !(lo.is_finite() && hi.is_finite() && (hi - lo).is_finite()) {
+        return;
+    }
+    let span = if hi > lo { hi - lo } else { lo.abs().max(1.0) };
+    let caption =
+        t("Each input from its 10th to its 90th percentile, with the others at their medians");
+    let base_text = tf(
+        "Base {value}",
+        &[("value", &with_unit(value_text(base), unit))],
+    );
+    let described = bars
+        .iter()
+        .map(|(n, l, h)| format!("{n}: {} – {}", value_text(*l), value_text(*h)))
+        .collect::<Vec<_>>()
+        .join("; ");
+    ui.add_space(4.0);
+    ui.label(theme::strong(caption).size(13.0));
+    let p = theme::palette(ui.ctx());
+    let font = FontId::proportional(11.0);
+    let name_width = bars
+        .iter()
+        .map(|b| {
+            ui.painter()
+                .layout_no_wrap(b.0.clone(), font.clone(), p.text)
+                .size()
+                .x
+        })
+        .fold(0.0_f32, f32::max)
+        .min(width * 0.3);
+    // Room at each end of the bars for the values.
+    let margin = 56.0;
+    let row = 24.0;
+    let (rect, response) = ui.allocate_exact_size(
+        vec2(width, 20.0 + row * bars.len() as f32),
+        egui::Sense::hover(),
+    );
+    response.widget_info(|| {
+        egui::WidgetInfo::labeled(
+            egui::Role::Group,
+            true,
+            format!("{caption}. {base_text}. {described}"),
+        )
+    });
+    let plot = Rect::from_min_max(
+        pos2(rect.left() + name_width + 8.0 + margin, rect.top() + 20.0),
+        pos2(rect.right() - margin, rect.bottom()),
+    );
+    if plot.width() < 40.0 {
+        return;
+    }
+    let painter = ui.painter_at(rect.expand(2.0));
+    let x = |v: f64| plot.left() + ((v - lo) / span) as f32 * plot.width();
+    painter.line_segment(
+        [
+            pos2(x(base), plot.top() - 2.0),
+            pos2(x(base), plot.bottom()),
+        ],
+        Stroke::new(1.5, p.text_weak),
+    );
+    painter.text(
+        pos2(x(base), rect.top()),
+        Align2::CENTER_TOP,
+        base_text,
+        FontId::proportional(10.0),
+        p.text_weak,
+    );
+    for (i, (name, low, high)) in bars.iter().enumerate() {
+        let top = plot.top() + row * i as f32;
+        let middle = top + row / 2.0;
+        let (a, b) = (low.min(*high), low.max(*high));
+        let bar = Rect::from_min_max(
+            pos2(x(a), middle - 7.0),
+            pos2(x(b).max(x(a) + 1.0), middle + 7.0),
+        );
+        painter.rect_filled(bar, 2.0, p.chart);
+        painter
+            .with_clip_rect(Rect::from_min_max(
+                pos2(rect.left(), top),
+                pos2(rect.left() + name_width + 4.0, top + row),
+            ))
+            .text(
+                pos2(rect.left(), middle),
+                Align2::LEFT_CENTER,
+                name,
+                font.clone(),
+                p.text,
+            );
+        painter.text(
+            pos2(bar.left() - 4.0, middle),
+            Align2::RIGHT_CENTER,
+            value_text(a),
+            font.clone(),
+            p.text,
+        );
+        painter.text(
+            pos2(bar.right() + 4.0, middle),
+            Align2::LEFT_CENTER,
+            value_text(b),
+            font.clone(),
+            p.text,
+        );
     }
 }
 
@@ -1476,6 +1700,15 @@ fn cdf_chart(ui: &mut egui::Ui, o: &Value, target: Option<f64>, unit: &str, widt
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn a_rank_correlation_has_two_decimals_and_no_exponent() {
+        assert_eq!(rank_text(0.9012), "0.90");
+        assert_eq!(rank_text(-0.416), "-0.42");
+        assert_eq!(rank_text(1.4e-5), "0.00");
+        assert_eq!(rank_text(-0.004), "0.00");
+        assert_eq!(rank_text(1.0), "1.00");
+    }
 
     fn output(target: Value, probability: f64, interval: Value) -> Value {
         let mut t = target;

@@ -11,8 +11,8 @@ are done, and so is M2.10 (abandonment and balking) apart from the gaps listed i
 (changeovers and lean measures) has its changeovers, product-type times, takt and cycle times,
 state times and most of OEE done; M2.9 (output analysis) has its recorder of results over time,
 MSER-5's warm-up suggestion, its warnings, streams by element id and starting contents done. M4
-is being planned, and M4.1 (Monte Carlo) has its engine, files and command line (part 1) and its
-window (part 2) done.
+is being planned, and M4.1 (Monte Carlo) has its engine, files and command line (part 1), its
+window (part 2) and which inputs matter (part 3a: tornado and rank correlations) done.
 M5 has its conveyors (M5.1), the operators in the model and files (M5.2, PR 1), a first 3D view
 (M5.3), the dashboard (M5.4) and the sorter example in; M5.5, which reworks M5's geometry so the
 physical layout is a model layer of its own, from which the plan and the 3D view are drawn, has
@@ -2161,7 +2161,7 @@ over time, a second kind of diagram on the canvas). Then M4.1, the smallest and 
 reuses most of what exists; then M4.2 and M4.3 (agents in flows first); then M4.4. Agents in
 space are built with M5, which needs the same layout and travel.
 
-M4.1 parts 1 and 2 are done (below); the rest is not started. D15–D18 are settled; D10–D13 (#71 has
+M4.1 parts 1, 2 and 3a are done (below); the rest is not started. D15–D18 are settled; D10–D13 (#71 has
 them) are to settle first.
 
 ### M4.1 Monte Carlo
@@ -2186,8 +2186,15 @@ trials in 10 fall otherwise), then each output's mean with its interval, percent
 and cumulative curve with the target on both, and how the run went. Runs are made a few batches a
 frame (`stochcraft_mc::Stepper`), so the browser's page stays responsive; there the batches run
 one after another on the page, not on its workers. The gallery has a project budget example,
-checked against its exact means. Part 3, which inputs matter (the tornado chart from
-one-at-a-time swings, rank correlations of inputs with outputs, Sobol indices), comes next.
+checked against its exact means. Part 3a, which inputs matter, is done: for each output a tornado
+chart (the output with each input that varies at its 10th and its 90th percentile and the others
+at their medians, from the inputs' quantile functions with no sampling; the decision-analysis
+swing, Clemen and Reilly, *Making Hard Decisions*), the rank correlation (Spearman) of each input
+with the output from the run's own trials, ranked a piece at a time like the rest, and in words the
+input it depends on most; the results say that a correlated input's rank correlation includes the
+effect of the inputs it is correlated with, and that the bars leave out what correlated inputs do
+together. Part 3b, Sobol indices, has its calculation in the mc crate; the window and the command
+line are to follow.
 Sobol indices are in the `mc` crate (`Compiled::sobol`, `stochcraft_mc::sobol`; the window and the
 command line are to follow): Saltelli's design, two independent base samples A and B of N rows
 and the k matrices A_B^(i), so N(k + 2) model evaluations (1,000 rows and 5 inputs: 7,000;

@@ -34,6 +34,16 @@ fn f(v: &Value) -> String {
     v.as_f64().map_or_else(|| "-".into(), number)
 }
 
+/// A rank correlation to two decimals: 0.90, -0.42, and 0.00 for one too small to show.
+fn rank_text(x: f64) -> String {
+    let r = (x * 100.0).round() / 100.0;
+    if r.abs() < 0.005 {
+        "0.00".into()
+    } else {
+        format!("{r:.2}")
+    }
+}
+
 fn s(v: &Value) -> &str {
     v.as_str().unwrap_or("")
 }
@@ -895,9 +905,76 @@ fn target_line(o: &Value) -> Option<String> {
     ))
 }
 
+/// Which inputs a Monte Carlo output depends on, as the window says it: the widest swing in
+/// words, then a row for each input with the output at its 10th and its 90th percentile (the
+/// others at their medians), the swing between, and the rank correlation with the output.
+/// `correlated`: the model has correlated inputs.
+fn influence_lines(o: &Value, correlated: bool, out: &mut String) {
+    let Some(inputs) = o["influence"]["inputs"]
+        .as_array()
+        .filter(|i| !i.is_empty())
+    else {
+        return;
+    };
+    let name = s(&o["name"]);
+    let unit = match s(&o["unit"]) {
+        "" => String::new(),
+        u => format!(" {u}"),
+    };
+    let _ = writeln!(out, "\nwhich inputs matter for {name}:");
+    if let Some(top) = inputs.first()
+        && top["swing"].as_f64().is_some_and(|w| w > 0.0)
+    {
+        let _ = writeln!(
+            out,
+            "{name} depends most on {input}: it goes from {low}{unit} to {high}{unit} as {input} goes from its 10th to its 90th percentile",
+            input = s(&top["input"]),
+            low = f(&top["low"]),
+            high = f(&top["high"]),
+        );
+    }
+    if let Some(base) = o["influence"]["base"].as_f64() {
+        let _ = writeln!(
+            out,
+            "with every input at its median, {name} is {}{unit}",
+            number(base)
+        );
+    }
+    let mut rows: Vec<Vec<String>> = vec![
+        [
+            "input",
+            "at its P10",
+            "at its P90",
+            "swing",
+            "rank correlation",
+        ]
+        .iter()
+        .map(|h| (*h).to_owned())
+        .collect(),
+    ];
+    for i in inputs {
+        rows.push(vec![
+            s(&i["input"]).to_owned(),
+            f(&i["low"]),
+            f(&i["high"]),
+            f(&i["swing"]),
+            i["rank_correlation"]
+                .as_f64()
+                .map_or_else(|| "-".into(), rank_text),
+        ]);
+    }
+    aligned(&rows, &[true], out);
+    if correlated {
+        let _ = writeln!(
+            out,
+            "the swings move one input at a time, so they leave out what correlated inputs do together; a correlated input's rank correlation includes the effect of the inputs it is correlated with"
+        );
+    }
+}
+
 /// A Monte Carlo run's results as a table: a row per output with its mean, half-width, standard
-/// deviation and percentiles, then each target in words, the correlations achieved and the run
-/// record.
+/// deviation and percentiles, then each target in words, which inputs matter for each output,
+/// the correlations achieved and the run record.
 pub fn mc_table(name: &str, r: &Value) -> String {
     let mut out = String::new();
     let rec = &r["record"];
@@ -998,6 +1075,10 @@ pub fn mc_table(name: &str, r: &Value) -> String {
                 s(&r["interval_basis"]["across"])
             );
         }
+    }
+    let correlated = r["correlations"].as_array().is_some_and(|c| !c.is_empty());
+    for o in r["outputs"].as_array().into_iter().flatten() {
+        influence_lines(o, correlated, &mut out);
     }
     for c in r["correlations"].as_array().into_iter().flatten() {
         let _ = writeln!(
@@ -1236,5 +1317,46 @@ mod tests {
             "{out}"
         );
         assert!(!out.contains("a: its interval"), "{out}");
+    }
+
+    /// Which inputs matter: the widest swing in words, a row for each input, and a note on
+    /// correlated inputs only when the model has some.
+    #[test]
+    fn an_mc_table_says_which_inputs_matter() {
+        let mut r = serde_json::json!({
+            "trials": 100,
+            "interval_basis": { "across": "trials", "count": 100 },
+            "record": { "interval": "Student-t across 100 independent trials" },
+            "outputs": [{
+                "name": "duration", "unit": "days", "interval_count": 100, "invalid": 0,
+                "influence": {
+                    "base": 33.0,
+                    "inputs": [
+                        { "input": "build", "p10": 17.9, "p90": 27.5, "low": 29.0, "high": 38.6,
+                          "swing": 9.6, "rank_correlation": 0.87 },
+                        { "input": "design", "p10": 9.3, "p90": 13.8, "low": 31.0, "high": 35.5,
+                          "swing": 4.5, "rank_correlation": 0.49 },
+                    ],
+                },
+            }],
+        });
+        let out = mc_table("m", &r);
+        assert!(
+            out.contains("duration depends most on build: it goes from 29 days to 38.6 days as build goes from its 10th to its 90th percentile"),
+            "{out}"
+        );
+        assert!(
+            out.contains("with every input at its median, duration is 33 days"),
+            "{out}"
+        );
+        assert!(out.contains("design"), "{out}");
+        // Rank correlations to two decimals.
+        assert!(out.contains("0.87") && out.contains("0.49"), "{out}");
+        assert!(!out.contains("correlated inputs"), "{out}");
+        r["correlations"] =
+            serde_json::json!([{ "a": "build", "b": "design", "achieved": 0.4, "target": 0.4 }]);
+        assert!(
+            mc_table("m", &r).contains("includes the effect of the inputs it is correlated with")
+        );
     }
 }

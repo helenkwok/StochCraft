@@ -938,6 +938,13 @@ unit	yr	v
 	Press Run to run the model.	Shtypni Ekzekuto për ta ekzekutuar modelin.
 	Open Results to read what the run found.	Hapni Rezultatet për të lexuar çfarë gjeti ekzekutimi.
 	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	Ky është modeli juaj i parë. Rreshtat e parë të Rezultatet tregojnë çfarë gjeti ekzekutimi; Ndihmë ▸ Çfarë do të thonë rezultatet shpjegon çdo numër.
+# Which inputs matter in the Monte Carlo results (ROADMAP M4.1, part 3a)
+	Which inputs matter	Cilat hyrje kanë rëndësi
+	{output} depends most on {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile.	{output} varet më shumë nga {input}: shkon nga {low} në {high} kur {input} shkon nga përqindëshi i tij i 10-të te i 90-ti.
+	Each input from its 10th to its 90th percentile, with the others at their medians	Çdo hyrje nga përqindëshi i 10-të te i 90-ti, me të tjerat në medianë
+	Base {value}	Vlera bazë {value}
+	A correlated input's figure includes the effect of the inputs it is correlated with.	Shifra e një hyrjeje të korreluar përfshin efektin e hyrjeve me të cilat ajo është e korreluar.
+	The bars move one input at a time, so they leave out what correlated inputs do together.	Shiritat lëvizin një hyrje në herë, kështu që lënë jashtë atë që bëjnë së bashku hyrjet e korreluara.
 @plural	Added {n} block|Added {n} blocks	U shtua {n} bllok|U shtuan {n} blloqe
 @plural	Copied {n} block|Copied {n} blocks	U kopjua {n} bllok|U kopjuan {n} blloqe
 @plural	Finished {n} run|Finished {n} runs	Përfundoi {n} ekzekutim|Përfunduan {n} ekzekutime

@@ -938,6 +938,13 @@ unit	yr	a
 	Press Run to run the model.	Pressione Executar para executar o modelo.
 	Open Results to read what the run found.	Abra Resultados para ler o que a execução encontrou.
 	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	Esse é o seu primeiro modelo. As primeiras linhas de Resultados dizem o que a execução encontrou; Ajuda ▸ O que os resultados significam explica cada número.
+# Which inputs matter in the Monte Carlo results (ROADMAP M4.1, part 3a)
+	Which inputs matter	Quais entradas importam
+	{output} depends most on {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile.	{output} depende mais de {input}: vai de {low} a {high} quando {input} vai do seu percentil 10 ao seu percentil 90.
+	Each input from its 10th to its 90th percentile, with the others at their medians	Cada entrada do seu percentil 10 ao seu percentil 90, com as outras na mediana
+	Base {value}	Valor base {value}
+	A correlated input's figure includes the effect of the inputs it is correlated with.	O número de uma entrada correlacionada inclui o efeito das entradas com as quais ela é correlacionada.
+	The bars move one input at a time, so they leave out what correlated inputs do together.	As barras movem uma entrada por vez, então deixam de fora o que as entradas correlacionadas fazem juntas.
 @plural	Added {n} block|Added {n} blocks	{n} bloco adicionado|{n} blocos adicionados
 @plural	Copied {n} block|Copied {n} blocks	{n} bloco copiado|{n} blocos copiados
 @plural	Finished {n} run|Finished {n} runs	Concluída {n} execução|Concluídas {n} execuções

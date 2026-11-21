@@ -938,6 +938,13 @@ unit	yr	సం.
 	Press Run to run the model.	నమూనాను అమలు చేయడానికి “అమలు చేయి” నొక్కండి.
 	Open Results to read what the run found.	అమలులో కనుగొన్నదాన్ని చదవడానికి “ఫలితాలు” తెరవండి.
 	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	ఇదే మీ మొదటి నమూనా. “ఫలితాలు” విభాగంలోని మొదటి పంక్తులు అమలులో కనుగొన్నదాన్ని చెబుతాయి; సహాయం ▸ ఫలితాల అర్థం ప్రతి సంఖ్యను వివరిస్తుంది.
+# Which inputs matter in the Monte Carlo results (ROADMAP M4.1, part 3a)
+	Which inputs matter	ఏ ఇన్‌పుట్‌లు ముఖ్యం
+	{output} depends most on {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile.	{output} ఎక్కువగా {input}పై ఆధారపడుతుంది: {input} తన 10వ శతాంశం నుండి 90వ శతాంశానికి వెళ్ళినప్పుడు అది {low} నుండి {high}కి వెళ్తుంది.
+	Each input from its 10th to its 90th percentile, with the others at their medians	ప్రతి ఇన్‌పుట్ తన 10వ నుండి 90వ శతాంశం వరకు, మిగతావి వాటి మధ్యగతంలో
+	Base {value}	ఆధార విలువ {value}
+	A correlated input's figure includes the effect of the inputs it is correlated with.	సహసంబంధం ఉన్న ఇన్‌పుట్ సంఖ్యలో అది ఏ ఇన్‌పుట్‌లతో సహసంబంధం కలిగి ఉందో వాటి ప్రభావం కూడా ఉంటుంది.
+	The bars move one input at a time, so they leave out what correlated inputs do together.	బార్‌లు ఒకసారి ఒక ఇన్‌పుట్‌ను కదిలిస్తాయి, కాబట్టి సహసంబంధం ఉన్న ఇన్‌పుట్‌లు కలిసి చేసేది వాటిలో ఉండదు.
 @plural	Added {n} block|Added {n} blocks	{n} బ్లాక్ జోడించబడింది|{n} బ్లాక్‌లు జోడించబడ్డాయి
 @plural	Copied {n} block|Copied {n} blocks	{n} బ్లాక్ కాపీ చేయబడింది|{n} బ్లాక్‌లు కాపీ చేయబడ్డాయి
 @plural	Finished {n} run|Finished {n} runs	{n} అమలు పూర్తయింది|{n} అమలులు పూర్తయ్యాయి

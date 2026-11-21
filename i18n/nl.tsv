@@ -938,6 +938,13 @@ unit	yr	j
 	Press Run to run the model.	Druk op Uitvoeren om het model uit te voeren.
 	Open Results to read what the run found.	Open Resultaten om te lezen wat de uitvoering heeft gevonden.
 	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	Dat is uw eerste model. De eerste regels van Resultaten vertellen wat de uitvoering heeft gevonden; Help ▸ Wat de resultaten betekenen legt elk getal uit.
+# Which inputs matter in the Monte Carlo results (ROADMAP M4.1, part 3a)
+	Which inputs matter	Welke invoer ertoe doet
+	{output} depends most on {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile.	{output} hangt het meest af van {input}: het gaat van {low} naar {high} als {input} van zijn 10e naar zijn 90e percentiel gaat.
+	Each input from its 10th to its 90th percentile, with the others at their medians	Elke invoer van zijn 10e tot zijn 90e percentiel, de andere op hun mediaan
+	Base {value}	Basiswaarde {value}
+	A correlated input's figure includes the effect of the inputs it is correlated with.	Het cijfer van gecorreleerde invoer omvat het effect van de invoer waarmee die gecorreleerd is.
+	The bars move one input at a time, so they leave out what correlated inputs do together.	De balken verschuiven telkens één invoer, dus laten ze weg wat gecorreleerde invoer samen doet.
 @plural	Added {n} block|Added {n} blocks	{n} blok toegevoegd|{n} blokken toegevoegd
 @plural	Copied {n} block|Copied {n} blocks	{n} blok gekopieerd|{n} blokken gekopieerd
 @plural	Finished {n} run|Finished {n} runs	{n} uitvoering voltooid|{n} uitvoeringen voltooid

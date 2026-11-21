@@ -938,6 +938,13 @@ unit	yr	г.
 	Press Run to run the model.	Натиснете Стартиране, за да стартирате модела.
 	Open Results to read what the run found.	Отворете Резултати, за да прочетете какво е установило стартирането.
 	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	Това е първият ви модел. Първите редове на Резултати казват какво е установило стартирането; Помощ ▸ Какво означават резултатите обяснява всяко число.
+# Which inputs matter in the Monte Carlo results (ROADMAP M4.1, part 3a)
+	Which inputs matter	Кои входове имат значение
+	{output} depends most on {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile.	Стойността на {output} зависи най-много от {input}: тя се променя от {low} до {high}, когато {input} се променя от 10-ия до 90-ия си персентил.
+	Each input from its 10th to its 90th percentile, with the others at their medians	Всеки вход от 10-ия до 90-ия си персентил, а останалите при медианите си
+	Base {value}	Базова стойност {value}
+	A correlated input's figure includes the effect of the inputs it is correlated with.	Числото за корелиран вход включва ефекта на входовете, с които е корелиран.
+	The bars move one input at a time, so they leave out what correlated inputs do together.	Лентите променят по един вход наведнъж, затова не включват общото действие на корелираните входове.
 @plural	Added {n} block|Added {n} blocks	Добавен е {n} блок|Добавени са {n} блока
 @plural	Copied {n} block|Copied {n} blocks	Копиран е {n} блок|Копирани са {n} блока
 @plural	Finished {n} run|Finished {n} runs	Завършено е {n} изпълнение|Завършени са {n} изпълнения

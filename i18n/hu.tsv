@@ -938,6 +938,13 @@ unit	yr	év
 	Press Run to run the model.	A modell futtatásához nyomja meg a Futtatás gombot.
 	Open Results to read what the run found.	Nyissa meg az Eredmények nézetet, hogy elolvassa, mit talált a futtatás.
 	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	Ez az első modellje. Az Eredmények első sorai megmondják, mit talált a futtatás; a Súgó ▸ Mit jelentenek az eredmények minden számot elmagyaráz.
+# Which inputs matter in the Monte Carlo results (ROADMAP M4.1, part 3a)
+	Which inputs matter	Mely bemenetek számítanak
+	{output} depends most on {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile.	{output} leginkább a(z) {input} bemenettől függ: {low} és {high} között változik, ha a(z) {input} a 10. és a 90. percentilise között változik.
+	Each input from its 10th to its 90th percentile, with the others at their medians	Minden bemenet a 10. és a 90. percentilise között, a többi a mediánján
+	Base {value}	Alapérték: {value}
+	A correlated input's figure includes the effect of the inputs it is correlated with.	Egy korrelált bemenet értéke tartalmazza azon bemenetek hatását, amelyekkel korrelál.
+	The bars move one input at a time, so they leave out what correlated inputs do together.	Az oszlopok egyszerre egy bemenetet mozgatnak, így kihagyják, amit a korrelált bemenetek együtt tesznek.
 @plural	Added {n} block|Added {n} blocks	{n} blokk hozzáadva|{n} blokk hozzáadva
 @plural	Copied {n} block|Copied {n} blocks	{n} blokk másolva|{n} blokk másolva
 @plural	Finished {n} run|Finished {n} runs	{n} futás befejezve|{n} futás befejezve

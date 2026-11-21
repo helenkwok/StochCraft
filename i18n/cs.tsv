@@ -938,6 +938,13 @@ unit	yr	r.
 	Press Run to run the model.	Stisknutím Spustit model spustíte.
 	Open Results to read what the run found.	Otevřete Výsledky a přečtěte si, co běh zjistil.
 	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	To je váš první model. První řádky Výsledků říkají, co běh zjistil; Nápověda ▸ Co znamenají výsledky vysvětluje každé číslo.
+# Which inputs matter in the Monte Carlo results (ROADMAP M4.1, part 3a)
+	Which inputs matter	Které vstupy hrají roli
+	{output} depends most on {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile.	{output} závisí nejvíce na vstupu {input}: pohybuje se od {low} do {high}, když se {input} pohybuje od svého 10. do svého 90. percentilu.
+	Each input from its 10th to its 90th percentile, with the others at their medians	Každý vstup od svého 10. do svého 90. percentilu, ostatní na svých mediánech
+	Base {value}	Základní hodnota {value}
+	A correlated input's figure includes the effect of the inputs it is correlated with.	Údaj korelovaného vstupu zahrnuje vliv vstupů, se kterými koreluje.
+	The bars move one input at a time, so they leave out what correlated inputs do together.	Sloupce mění vždy jeden vstup, takže vynechávají to, co korelované vstupy dělají společně.
 @plural	Added {n} block|Added {n} blocks	Přidán {n} blok|Přidány {n} bloky|Přidáno {n} bloků
 @plural	Copied {n} block|Copied {n} blocks	Zkopírován {n} blok|Zkopírovány {n} bloky|Zkopírováno {n} bloků
 @plural	Finished {n} run|Finished {n} runs	Dokončen {n} běh|Dokončeny {n} běhy|Dokončeno {n} běhů

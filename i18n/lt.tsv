@@ -938,6 +938,13 @@ unit	yr	m.
 	Press Run to run the model.	Paspauskite Vykdyti, kad paleistumėte modelį.
 	Open Results to read what the run found.	Atidarykite Rezultatai, kad perskaitytumėte, ką rodo vykdymas.
 	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	Tai jūsų pirmasis modelis. Pirmosios Rezultatai eilutės nurodo, ką rodo vykdymas; Žinynas ▸ Ką reiškia rezultatai paaiškina kiekvieną skaičių.
+# Which inputs matter in the Monte Carlo results (ROADMAP M4.1, part 3a)
+	Which inputs matter	Kurios įvestys svarbios
+	{output} depends most on {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile.	{output} labiausiai priklauso nuo {input}: reikšmė kinta nuo {low} iki {high}, kai {input} kinta nuo savo 10-ojo iki 90-ojo procentilio.
+	Each input from its 10th to its 90th percentile, with the others at their medians	Kiekviena įvestis nuo savo 10-ojo iki 90-ojo procentilio, kitos ties savo mediana
+	Base {value}	Bazinė reikšmė {value}
+	A correlated input's figure includes the effect of the inputs it is correlated with.	Koreliuotos įvesties skaičius apima įvesčių, su kuriomis ji koreliuoja, poveikį.
+	The bars move one input at a time, so they leave out what correlated inputs do together.	Stulpeliai keičia po vieną įvestį, todėl neįtraukia to, ką koreliuotos įvestys daro kartu.
 @plural	Added {n} block|Added {n} blocks	Pridėtas {n} blokas|Pridėti {n} blokai|Pridėta {n} blokų
 @plural	Copied {n} block|Copied {n} blocks	Nukopijuotas {n} blokas|Nukopijuoti {n} blokai|Nukopijuota {n} blokų
 @plural	Finished {n} run|Finished {n} runs	Baigtas {n} vykdymas|Baigti {n} vykdymai|Baigta {n} vykdymų

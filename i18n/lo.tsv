@@ -938,6 +938,13 @@ unit	yr	ປີ
 	Press Run to run the model.	ກົດ ປະມວນຜົນ ເພື່ອແລ່ນແບບຈຳລອງ.
 	Open Results to read what the run found.	ເປີດ ຜົນໄດ້ຮັບ ເພື່ອອ່ານສິ່ງທີ່ການແລ່ນພົບ.
 	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	ນີ້ຄືແບບຈຳລອງທຳອິດຂອງທ່ານ. ບັນທັດທຳອິດຂອງ ຜົນໄດ້ຮັບ ບອກສິ່ງທີ່ການແລ່ນພົບ; ຊ່ວຍເຫຼືອ ▸ ຄວາມໝາຍຂອງຜົນລັບ ອະທິບາຍແຕ່ລະຕົວເລກ.
+# Which inputs matter in the Monte Carlo results (ROADMAP M4.1, part 3a)
+	Which inputs matter	ຄ່າປ້ອນເຂົ້າໃດສຳຄັນ
+	{output} depends most on {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile.	{output} ຂຶ້ນກັບ {input} ຫຼາຍທີ່ສຸດ: ມັນປ່ຽນຈາກ {low} ເປັນ {high} ເມື່ອ {input} ປ່ຽນຈາກເປີເຊັນໄທລ໌ທີ 10 ເປັນເປີເຊັນໄທລ໌ທີ 90 ຂອງມັນ.
+	Each input from its 10th to its 90th percentile, with the others at their medians	ແຕ່ລະຄ່າປ້ອນເຂົ້າຈາກເປີເຊັນໄທລ໌ທີ 10 ຫາທີ 90 ຂອງມັນ, ຄ່າອື່ນຢູ່ທີ່ມັດທະຍະຖານຂອງມັນ
+	Base {value}	ຄ່າຖານ {value}
+	A correlated input's figure includes the effect of the inputs it is correlated with.	ຕົວເລກຂອງຄ່າປ້ອນເຂົ້າທີ່ມີສະຫະສຳພັນລວມຜົນຂອງຄ່າປ້ອນເຂົ້າທີ່ມັນມີສະຫະສຳພັນນຳ.
+	The bars move one input at a time, so they leave out what correlated inputs do together.	ແທ່ງຍ້າຍເທື່ອລະຄ່າປ້ອນເຂົ້າ, ສະນັ້ນຈຶ່ງບໍ່ລວມສິ່ງທີ່ຄ່າປ້ອນເຂົ້າທີ່ມີສະຫະສຳພັນເຮັດນຳກັນ.
 @plural	Added {n} block|Added {n} blocks	ເພີ່ມ {n} ບລັອກແລ້ວ
 @plural	Copied {n} block|Copied {n} blocks	ສຳເນົາ {n} ບລັອກແລ້ວ
 @plural	Finished {n} run|Finished {n} runs	ຈຳລອງຊ້ຳສຳເລັດ {n} ຮອບ
