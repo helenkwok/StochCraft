@@ -1352,3 +1352,47 @@ unit	yr	年
 	They did not help: their correlation with {output} is weak ({correlation}), so the plain result stands.	効果はありませんでした。{output} との相関が弱い ({correlation}) ため、通常の結果を使います。
 	They did not help, so the plain result stands.	効果はなかったため、通常の結果を使います。
 	The mean given for {name}, {stated}, is far from the trials' mean, {sample}: the controlled result is biased until it is corrected.	{name} に指定した平均 {stated} が試行の平均 {sample} から大きく外れています。修正するまで、コントロール付きの結果には偏りがあります。
+	Stock	ストック
+	Flow	フロー
+	Auxiliary	補助変数
+	{name} ends near {median} (median); its 5th to 95th percentiles at the end are {low} and {high}.	{name} は {median} 付近 (中央値) で終わります。終了時の 5 パーセンタイルと 95 パーセンタイルは {low} と {high} です。
+	{name} ends at {value}.	{name} は {value} で終わります。
+	{name} at {time}: median {median}, mean {mean}, 5th to 95th percentiles {low} and {high}	{time} での {name}: 中央値 {median}、平均 {mean}、5 パーセンタイルと 95 パーセンタイル {low} と {high}
+	{name} at {time}: {value}	{time} での {name}: {value}
+	Time	時間
+	Time ({unit})	時間 ({unit})
+	{name} mean	{name} の平均
+	{name} median	{name} の中央値
+	{name} 5th percentile	{name} の 5 パーセンタイル
+	{name} 95th percentile	{name} の 95 パーセンタイル
+	This run is too large to make in the window: shorten it, raise the time step or lower the runs, or run it from the command line.	この実行はウィンドウで行うには大きすぎます。短くするか、時間刻みを大きくするか、実行回数を減らすか、コマンドラインから実行してください。
+	The model: its settings and variables	モデル: 設定と変数
+	System dynamics model	システムダイナミクスのモデル
+	Variables	変数
+	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	このモデルは、エージェントから MCP サーバー経由で、またはコマンドラインから、コマンドで変更できます。キャンバス上での編集は次に追加されます。
+	From {start} to {stop}, in steps of {dt}, by the {method} method.	{start} から {stop} まで、{dt} 刻み、{method} 法。
+	Notes from the file	ファイルからの注記
+	Equation	方程式
+	starts at {value}	{value} から始まる
+	In: {flows}	流入: {flows}
+	Out: {flows}	流出: {flows}
+	This model has a random function, so every run differs: make several to see how far they spread.	このモデルには乱数関数があるため、実行のたびに結果が異なります。何回か実行して、ばらつきを確認してください。
+	This model has no random function, so one run gives its answer.	このモデルには乱数関数がないため、1 回の実行で答えが出ます。
+	Runs: {n} · seed {seed}	実行回数: {n} · 乱数シード {seed}
+	One run	1 回の実行
+	Show on the chart	グラフに表示
+	Solid line: median. Dashed line: mean. Shaded band: 5th to 95th percentile, at each saved time.	実線: 中央値。破線: 平均。色付きの帯: 保存された各時刻での 5 から 95 パーセンタイル。
+	Pick a variable to see it over time.	時間変化を見る変数を選んでください。
+	{name} over time	{name} の時間変化
+	Checked against its exact solution	厳密解で確認済み
+	Models (BPMN, XPDL, XMILE)	モデル (BPMN, XPDL, XMILE)
+	Product adoption	製品の普及
+	A new product spreads by word of mouth: 10,000 potential customers, some buying on their own and the rest after meeting a customer.	新製品が口コミで広がります。見込み客は 10,000 人で、自分から買う人もいれば、顧客に会ってから買う人もいます。
+	How fast does a new product spread?	新製品はどれくらい速く広まりますか?
+	Stocks and flows: word of mouth makes sales speed up and then slow down in an S-shaped curve, which matches its exact formula.	ストックとフロー: 口コミにより売上はまず加速し、その後減速して S 字の曲線を描き、それは厳密な式と一致します。
+	Inflows and outflows	流入と流出
+	{file}: a system dynamics model is saved as XMILE; choose a name ending in .xmile	{file}: システムダイナミクスのモデルは XMILE として保存されます。.xmile で終わる名前を選んでください
+	Saving into {file} would leave out what StochCraft does not keep of it: {what}.	{file} に保存すると、StochCraft が保持しない次の内容が失われます: {what}。
+	Replace the XMILE file?	XMILE ファイルを置き換えますか？
+	Save As writes a new file and keeps {file} as it is. Replacing {file} leaves out what StochCraft does not keep.	「別名で保存」は新しいファイルを書き込み、{file} はそのまま残します。{file} を置き換えると、StochCraft が保持しない内容が失われます。
+	Replace	置き換える

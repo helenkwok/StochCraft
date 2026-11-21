@@ -1352,3 +1352,47 @@ unit	yr	år
 	They did not help: their correlation with {output} is weak ({correlation}), so the plain result stands.	De hjalp ikke: deres korrelation med {output} er svag ({correlation}), så det almindelige resultat gælder.
 	They did not help, so the plain result stands.	De hjalp ikke, så det almindelige resultat gælder.
 	The mean given for {name}, {stated}, is far from the trials' mean, {sample}: the controlled result is biased until it is corrected.	Middelværdien angivet for {name}, {stated}, ligger langt fra forsøgenes middelværdi, {sample}: det kontrollerede resultat er skævt, indtil den rettes.
+	Stock	Beholdning
+	Flow	Flow
+	Auxiliary	Hjælpevariabel
+	{name} ends near {median} (median); its 5th to 95th percentiles at the end are {low} and {high}.	{name} ender omkring {median} (median); dens 5. og 95. percentil til sidst er {low} og {high}.
+	{name} ends at {value}.	{name} ender på {value}.
+	{name} at {time}: median {median}, mean {mean}, 5th to 95th percentiles {low} and {high}	{name} ved {time}: median {median}, gennemsnit {mean}, 5. og 95. percentil {low} og {high}
+	{name} at {time}: {value}	{name} ved {time}: {value}
+	Time	Tid
+	Time ({unit})	Tid ({unit})
+	{name} mean	{name}, gennemsnit
+	{name} median	{name}, median
+	{name} 5th percentile	{name}, 5. percentil
+	{name} 95th percentile	{name}, 95. percentil
+	This run is too large to make in the window: shorten it, raise the time step or lower the runs, or run it from the command line.	Denne kørsel er for stor til at lave i vinduet: gør den kortere, øg tidsskridtet eller sænk antallet af kørsler, eller kør den fra kommandolinjen.
+	The model: its settings and variables	Modellen: dens indstillinger og variabler
+	System dynamics model	Systemdynamisk model
+	Variables	Variabler
+	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	Du kan ændre denne model med kommandoer, fra en agent via MCP-serveren eller fra kommandolinjen. Redigering på lærredet kommer næste gang.
+	From {start} to {stop}, in steps of {dt}, by the {method} method.	Fra {start} til {stop}, i skridt på {dt}, efter {method}-metoden.
+	Notes from the file	Noter fra filen
+	Equation	Ligning
+	starts at {value}	starter ved {value}
+	In: {flows}	Ind: {flows}
+	Out: {flows}	Ud: {flows}
+	This model has a random function, so every run differs: make several to see how far they spread.	Denne model har en tilfældig funktion, så hver kørsel er forskellig: lav flere for at se, hvor meget de spredes.
+	This model has no random function, so one run gives its answer.	Denne model har ingen tilfældig funktion, så én kørsel giver svaret.
+	Runs: {n} · seed {seed}	Kørsler: {n} · frø {seed}
+	One run	Én kørsel
+	Show on the chart	Vis i diagrammet
+	Solid line: median. Dashed line: mean. Shaded band: 5th to 95th percentile, at each saved time.	Hel linje: median. Stiplet linje: gennemsnit. Skraveret bånd: 5. til 95. percentil, ved hvert gemt tidspunkt.
+	Pick a variable to see it over time.	Vælg en variabel for at se den over tid.
+	{name} over time	{name} over tid
+	Checked against its exact solution	Kontrolleret mod dens nøjagtige løsning
+	Models (BPMN, XPDL, XMILE)	Modeller (BPMN, XPDL, XMILE)
+	Product adoption	Produktadoption
+	A new product spreads by word of mouth: 10,000 potential customers, some buying on their own and the rest after meeting a customer.	Et nyt produkt spreder sig fra mund til mund: 10.000 potentielle kunder, nogle køber på egen hånd og resten efter at have mødt en kunde.
+	How fast does a new product spread?	Hvor hurtigt spreder et nyt produkt sig?
+	Stocks and flows: word of mouth makes sales speed up and then slow down in an S-shaped curve, which matches its exact formula.	Beholdninger og flow: mund-til-mund får salget til først at tage fart og så aftage i en S-formet kurve, som stemmer med dens nøjagtige formel.
+	Inflows and outflows	Indgående og udgående flow
+	{file}: a system dynamics model is saved as XMILE; choose a name ending in .xmile	{file}: en systemdynamisk model gemmes som XMILE; vælg et navn, der slutter på .xmile
+	Saving into {file} would leave out what StochCraft does not keep of it: {what}.	Hvis du gemmer i {file}, udelades det, som StochCraft ikke beholder: {what}.
+	Replace the XMILE file?	Erstat XMILE-filen?
+	Save As writes a new file and keeps {file} as it is. Replacing {file} leaves out what StochCraft does not keep.	Gem som skriver en ny fil og lader {file} være, som den er. Hvis du erstatter {file}, udelades det, som StochCraft ikke beholder.
+	Replace	Erstat

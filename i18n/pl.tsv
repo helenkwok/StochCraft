@@ -1352,3 +1352,47 @@ unit	yr	r.
 	They did not help: their correlation with {output} is weak ({correlation}), so the plain result stands.	Nie pomogły: ich korelacja z {output} jest słaba ({correlation}), więc obowiązuje zwykły wynik.
 	They did not help, so the plain result stands.	Nie pomogły, więc obowiązuje zwykły wynik.
 	The mean given for {name}, {stated}, is far from the trials' mean, {sample}: the controlled result is biased until it is corrected.	Średnia podana dla {name}, {stated}, jest daleko od średniej z prób, {sample}: wynik z kontrolą jest obciążony, dopóki nie zostanie poprawiona.
+	Stock	Zasób
+	Flow	Przepływ
+	Auxiliary	Zmienna pomocnicza
+	{name} ends near {median} (median); its 5th to 95th percentiles at the end are {low} and {high}.	{name} kończy w okolicach {median} (mediana); jego 5. i 95. percentyl na końcu to {low} i {high}.
+	{name} ends at {value}.	{name} kończy na {value}.
+	{name} at {time}: median {median}, mean {mean}, 5th to 95th percentiles {low} and {high}	{name} w chwili {time}: mediana {median}, średnia {mean}, 5. i 95. percentyl {low} i {high}
+	{name} at {time}: {value}	{name} w chwili {time}: {value}
+	Time	Czas
+	Time ({unit})	Czas ({unit})
+	{name} mean	{name}, średnia
+	{name} median	{name}, mediana
+	{name} 5th percentile	{name}, 5. percentyl
+	{name} 95th percentile	{name}, 95. percentyl
+	This run is too large to make in the window: shorten it, raise the time step or lower the runs, or run it from the command line.	To uruchomienie jest zbyt duże, by wykonać je w oknie: skróć je, zwiększ krok czasu lub zmniejsz liczbę uruchomień, albo uruchom je z wiersza poleceń.
+	The model: its settings and variables	Model: jego ustawienia i zmienne
+	System dynamics model	Model dynamiki systemów
+	Variables	Zmienne
+	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	Ten model można zmieniać poleceniami, z agenta przez serwer MCP lub z wiersza poleceń. Edycja na kanwie pojawi się później.
+	From {start} to {stop}, in steps of {dt}, by the {method} method.	Od {start} do {stop}, krokami co {dt}, metodą {method}.
+	Notes from the file	Uwagi z pliku
+	Equation	Równanie
+	starts at {value}	zaczyna się od {value}
+	In: {flows}	Dopływ: {flows}
+	Out: {flows}	Odpływ: {flows}
+	This model has a random function, so every run differs: make several to see how far they spread.	Ten model ma funkcję losową, więc każde uruchomienie jest inne: wykonaj kilka, aby zobaczyć, jak bardzo się rozpraszają.
+	This model has no random function, so one run gives its answer.	Ten model nie ma funkcji losowej, więc odpowiedź daje jedno uruchomienie.
+	Runs: {n} · seed {seed}	Uruchomienia: {n} · ziarno {seed}
+	One run	Jedno uruchomienie
+	Show on the chart	Pokaż na wykresie
+	Solid line: median. Dashed line: mean. Shaded band: 5th to 95th percentile, at each saved time.	Linia ciągła: mediana. Linia przerywana: średnia. Zacieniony pas: od 5. do 95. percentyla, w każdej zapisanej chwili.
+	Pick a variable to see it over time.	Wybierz zmienną, aby zobaczyć ją w czasie.
+	{name} over time	{name} w czasie
+	Checked against its exact solution	Sprawdzono z jego dokładnym rozwiązaniem
+	Models (BPMN, XPDL, XMILE)	Modele (BPMN, XPDL, XMILE)
+	Product adoption	Przyjęcie produktu
+	A new product spreads by word of mouth: 10,000 potential customers, some buying on their own and the rest after meeting a customer.	Nowy produkt rozchodzi się pocztą pantoflową: 10 000 potencjalnych klientów, część kupuje sama, reszta po spotkaniu z klientem.
+	How fast does a new product spread?	Jak szybko rozchodzi się nowy produkt?
+	Stocks and flows: word of mouth makes sales speed up and then slow down in an S-shaped curve, which matches its exact formula.	Zasoby i przepływy: poczta pantoflowa sprawia, że sprzedaż najpierw przyspiesza, a potem zwalnia w krzywej w kształcie litery S, która zgadza się z jej dokładnym wzorem.
+	Inflows and outflows	Dopływy i odpływy
+	{file}: a system dynamics model is saved as XMILE; choose a name ending in .xmile	{file}: model dynamiki systemowej jest zapisywany jako XMILE; wybierz nazwę kończącą się na .xmile
+	Saving into {file} would leave out what StochCraft does not keep of it: {what}.	Zapis do {file} pominąłby to, czego StochCraft nie zachowuje: {what}.
+	Replace the XMILE file?	Zastąpić plik XMILE?
+	Save As writes a new file and keeps {file} as it is. Replacing {file} leaves out what StochCraft does not keep.	Zapisz jako tworzy nowy plik i pozostawia {file} bez zmian. Zastąpienie {file} pomija to, czego StochCraft nie zachowuje.
+	Replace	Zastąp

@@ -2329,7 +2329,18 @@ the variable, unless `force` clears only the stocks' flow lists), `sd.specs.set`
 whole model as it was, on the same undo and redo as any other edit; the last results are marked
 stale; the model is dirty while it differs from the one opened or saved, diagram included;
 `file.save` writes XMILE with the diagram; `sd.get` gives each variable's place and the links.
-The window's view and canvas, then the replication of hybrids with M4.3 and M4.4; arrays, the
+The window shows and runs them (an XMILE file opens from File ▸ Open, a drop or the start
+page's **Product adoption** example, checked against the exact solution of its equations): a
+Model tab with the settings, the checks' warnings and a table of the variables, and a Results tab
+with the answer in words, a chart for each variable picked (the median with the 5th to 95th
+percentiles and the mean dashed, for runs in replications; a long run is thinned to the lowest and
+highest sample of each stretch, so a one-sample pulse stays on the chart), a table and CSV, with the results marked out of date once the model is changed; Save and Save As
+write XMILE (the engine's; Save As never rewrites a chosen name, and a Save into a file that has
+content the reader does not keep, a second diagram or styles, asks first with Replace, Save As and
+Cancel), and the title, the header and the question on closing follow its
+unsaved state, so a model changed by an agent's or the command line's edit is marked edited; the
+recovery copy is for process models only for now. The window's run is made whole, not a few replications a frame, because `stochcraft-sd` gives
+only aggregates (a stepped job needs per-replication results there). The canvas, then the replication of hybrids with M4.3 and M4.4; arrays, the
 lint on rate-to-rate links and docking are not done.
 
 **What Python users already have, and so the minimum:** PySD runs models from the common
@@ -3585,6 +3596,16 @@ are.
     and 0.421 jobs an hour), and for 4 jobs with fixed times, the best case: every station
     always busy, 0.5 jobs an hour. A v0.2.0 run of the same line fed by a source of w jobs at
     time 0 matched each (4 jobs: busy 0.5714 ± 0.0021 against 0.5714).
+  - **Product adoption** (`adoption.xmile`, the first system dynamics example, "Services"): a
+    word-of-mouth model written for StochCraft (the Bass diffusion model, F. M. Bass, *Management
+    Science* 15(5), 1969; its equations only, the file is not taken from a book or another tool). 10,000
+    potential customers; each buys on their own at 0.03 a year (innovation) or, in proportion to
+    the share who already have, at 0.38 a year (imitation); RK4 at a step of 1/8 year over 12
+    years. With nobody buying at the start the customers are
+    N (1 − e^−(p+q)t) / (1 + (q/p) e^−(p+q)t): 357.6 after a year, 4,392.4 after six, 9,086.9 after
+    twelve. `crates/ui-egui/tests/sd.rs` checks every saved time within 0.01 customers (a Python
+    RK4 at the same step is within 0.00013 of the formula) and that no one is lost (potential
+    plus customers stay 10,000).
   - Not built in this batch: **the daily peak** (arrivals rising and falling through the day,
     with an exact mean number inside for infinite servers).
 - **Printed answers are checked, not copied.** T. T. Allen, *Introduction to Discrete Event

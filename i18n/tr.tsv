@@ -1352,3 +1352,47 @@ unit	yr	yıl
 	They did not help: their correlation with {output} is weak ({correlation}), so the plain result stands.	Yardımcı olmadılar: {output} ile ilişkileri zayıf ({correlation}), bu yüzden düz sonuç geçerli.
 	They did not help, so the plain result stands.	Yardımcı olmadılar, bu yüzden düz sonuç geçerli.
 	The mean given for {name}, {stated}, is far from the trials' mean, {sample}: the controlled result is biased until it is corrected.	{name} için verilen ortalama {stated}, denemelerin ortalaması {sample} değerinden çok uzak: düzeltilene kadar kontrollü sonuç yanlıdır.
+	Stock	Stok
+	Flow	Akış
+	Auxiliary	Yardımcı değişken
+	{name} ends near {median} (median); its 5th to 95th percentiles at the end are {low} and {high}.	{name} yaklaşık {median} civarında biter (ortanca); sondaki 5. ve 95. yüzdelikleri {low} ve {high} değerleridir.
+	{name} ends at {value}.	{name} {value} değerinde biter.
+	{name} at {time}: median {median}, mean {mean}, 5th to 95th percentiles {low} and {high}	{time} anında {name}: ortanca {median}, ortalama {mean}, 5. ve 95. yüzdelik {low} ve {high}
+	{name} at {time}: {value}	{time} anında {name}: {value}
+	Time	Zaman
+	Time ({unit})	Zaman ({unit})
+	{name} mean	{name}, ortalama
+	{name} median	{name}, ortanca
+	{name} 5th percentile	{name}, 5. yüzdelik
+	{name} 95th percentile	{name}, 95. yüzdelik
+	This run is too large to make in the window: shorten it, raise the time step or lower the runs, or run it from the command line.	Bu çalıştırma pencerede yapılamayacak kadar büyük: kısaltın, zaman adımını büyütün veya çalıştırma sayısını azaltın, ya da komut satırından çalıştırın.
+	The model: its settings and variables	Model: ayarları ve değişkenleri
+	System dynamics model	Sistem dinamiği modeli
+	Variables	Değişkenler
+	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	Bu modeli komutlarla değiştirebilirsiniz: bir ajandan MCP sunucusu üzerinden ya da komut satırından. Tuval üzerinde düzenleme sonra gelecek.
+	From {start} to {stop}, in steps of {dt}, by the {method} method.	{start} ile {stop} arasında, {dt} adımlarla, {method} yöntemiyle.
+	Notes from the file	Dosyadan notlar
+	Equation	Denklem
+	starts at {value}	{value} değerinden başlar
+	In: {flows}	Giriş: {flows}
+	Out: {flows}	Çıkış: {flows}
+	This model has a random function, so every run differs: make several to see how far they spread.	Bu modelin rastgele bir işlevi var, bu yüzden her çalıştırma farklıdır: ne kadar yayıldıklarını görmek için birkaç tane yapın.
+	This model has no random function, so one run gives its answer.	Bu modelin rastgele işlevi yok, bu yüzden yanıtını tek bir çalıştırma verir.
+	Runs: {n} · seed {seed}	Çalıştırmalar: {n} · tohum {seed}
+	One run	Tek çalıştırma
+	Show on the chart	Grafikte göster
+	Solid line: median. Dashed line: mean. Shaded band: 5th to 95th percentile, at each saved time.	Düz çizgi: ortanca. Kesikli çizgi: ortalama. Gölgeli bant: kaydedilen her anda 5. ile 95. yüzdelik arası.
+	Pick a variable to see it over time.	Zaman içinde görmek için bir değişken seçin.
+	{name} over time	{name} zaman içinde
+	Checked against its exact solution	Kesin çözümüyle denetlendi
+	Models (BPMN, XPDL, XMILE)	Modeller (BPMN, XPDL, XMILE)
+	Product adoption	Ürün benimsenmesi
+	A new product spreads by word of mouth: 10,000 potential customers, some buying on their own and the rest after meeting a customer.	Yeni bir ürün ağızdan ağıza yayılır: 10.000 olası müşteri, bazıları kendiliğinden alır, kalanlar bir müşteriyle karşılaştıktan sonra.
+	How fast does a new product spread?	Yeni bir ürün ne kadar hızlı yayılır?
+	Stocks and flows: word of mouth makes sales speed up and then slow down in an S-shaped curve, which matches its exact formula.	Stoklar ve akışlar: ağızdan ağıza yayılma satışları önce hızlandırır, sonra yavaşlatır; bu, kesin formülüyle uyuşan S biçimli bir eğridir.
+	Inflows and outflows	Girişler ve çıkışlar
+	{file}: a system dynamics model is saved as XMILE; choose a name ending in .xmile	{file}: bir sistem dinamiği modeli XMILE olarak kaydedilir; .xmile ile biten bir ad seçin
+	Saving into {file} would leave out what StochCraft does not keep of it: {what}.	{file} dosyasına kaydetmek, StochCraft'ın saklamadığı şeyleri dışarıda bırakır: {what}.
+	Replace the XMILE file?	XMILE dosyası değiştirilsin mi?
+	Save As writes a new file and keeps {file} as it is. Replacing {file} leaves out what StochCraft does not keep.	Farklı Kaydet yeni bir dosya yazar ve {file} dosyasını olduğu gibi bırakır. {file} dosyasını değiştirmek, StochCraft'ın saklamadığı şeyleri dışarıda bırakır.
+	Replace	Değiştir

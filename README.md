@@ -48,7 +48,8 @@ build it from source; see the [installation guide](docs/installation.md).
 | Conveyors with a length and a speed, accumulating or not | A capacity table before any run: each station's load and status, the bottleneck, and the mean wait where a queueing formula holds |
 | A 3D view and a to-scale Layout view of the model, and a dashboard beside it | |
 | Export the results table as CSV and the charts as PNG | |
-| Monte Carlo models: uncertain inputs, outputs with targets, the chance of missing each target in words, and which inputs matter (tornado, rank correlations, each input's share of the spread) | System dynamics models (stocks and flows from an XMILE file) from the [command line](docs/developers.md#system-dynamics-models) and the [MCP server](docs/mcp.md); in the window next |
+| Monte Carlo models: uncertain inputs, outputs with targets, the chance of missing each target in words, and which inputs matter (tornado, rank correlations, each input's share of the spread) | |
+| System dynamics models (XMILE files): stocks and flows over time, run once or in replications with a median and a 5% to 95% band, charted and tabulated in the window, also from the [command line](docs/developers.md#system-dynamics-models) and the [MCP server](docs/mcp.md) | |
 
 ## Documentation
 

@@ -342,7 +342,8 @@ stochcraft-cli exec changes.json --open queue.bpmn
 
 A system dynamics model is stocks (levels) and flows (rates) over time, read from an XMILE 1.0
 file (OASIS, 2015). It is opened, edited, run, saved and read through the engine and the command
-line (the window's view of it is separate).
+line; the window shows and runs it (the Model and Results tabs, `crates/ui-egui/src/sd.rs`), and
+the canvas comes next.
 
 ```bash
 stochcraft-cli run tests/models/sir.xmile                     # each variable at the end of the run
@@ -357,7 +358,20 @@ disk), `sd.new` (an empty model: name, start, stop, `dt`, method, time unit), `s
 (`replications`, `seed`, `dt`, `dt_check`, `time_unit`) and `sd.get` (the model's variables with
 where each is drawn and the pipes of the flows, the information links and checks, and with
 `variable` its values from the last run, marked stale if the model was edited since). `run`
-refuses such a model, naming `sd.run`. In Rust: `stochcraft_sd::{read_xmile, compile, run}`.
+refuses such a model, naming `sd.run`. In Rust: `stochcraft_sd::{read_xmile, compile, run}`;
+`Engine::has_system_dynamics`, `Engine::system_dynamics_path` and
+`Engine::system_dynamics_results_stale` (`crates/engine/src/sd_window.rs`) tell a caller that holds
+the engine whether the document is one, what it was opened under and whether its last results are
+out of date. The window saves it through `Engine::save_bytes` (XMILE) and `Engine::saved_to` like
+a process model, with a `.xmile` or `.stmx` name (Save As never rewrites a chosen name: any other
+is refused, nothing written); `Engine::save_drops` lists what a plain Save into the opened file
+would leave out (the reader's notes, any of which means something was not kept or was run another
+way, as the notes are free text), empty once the model has been written to it, and the window
+asks first (the `NewFile` question, with Replace, Save As and Cancel); its unsaved state is `Engine::is_dirty`, and its
+recovery copy is skipped (recovery copies are process models only). The window's run is made
+whole, two frames after Run is pressed (the first paints "Running…"), with the work bounded (steps times variables times runs, at most
+20 million); a run a few replications at a time like Monte Carlo's would need `stochcraft-sd` to
+give per-replication results.
 
 **Editing.** `sd.variable.add` (stock, flow or aux with its equation, units, a graphical function,
 a stock's flows, a position; `into_stock` and `from_stock` attach a new flow), `sd.variable.set`

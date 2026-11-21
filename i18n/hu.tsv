@@ -1352,3 +1352,47 @@ unit	yr	év
 	They did not help: their correlation with {output} is weak ({correlation}), so the plain result stands.	Nem segítettek: a korrelációjuk a(z) {output} kimenettel gyenge ({correlation}), ezért az egyszerű eredmény marad érvényben.
 	They did not help, so the plain result stands.	Nem segítettek, ezért az egyszerű eredmény marad érvényben.
 	The mean given for {name}, {stated}, is far from the trials' mean, {sample}: the controlled result is biased until it is corrected.	A(z) {name} megadott átlaga, {stated}, messze van a próbák átlagától, {sample}: a kontrollált eredmény torz, amíg nem javítják.
+	Stock	Készlet
+	Flow	Folyamat
+	Auxiliary	Segédváltozó
+	{name} ends near {median} (median); its 5th to 95th percentiles at the end are {low} and {high}.	{name} nagyjából {median} értéknél ér véget (medián); az 5. és a 95. percentilis a végén {low} és {high}.
+	{name} ends at {value}.	{name} a végén {value}.
+	{name} at {time}: median {median}, mean {mean}, 5th to 95th percentiles {low} and {high}	{name} a(z) {time} időpontban: medián {median}, átlag {mean}, 5. és 95. percentilis {low} és {high}
+	{name} at {time}: {value}	{name} a(z) {time} időpontban: {value}
+	Time	Idő
+	Time ({unit})	Idő ({unit})
+	{name} mean	{name}, átlag
+	{name} median	{name}, medián
+	{name} 5th percentile	{name}, 5. percentilis
+	{name} 95th percentile	{name}, 95. percentilis
+	This run is too large to make in the window: shorten it, raise the time step or lower the runs, or run it from the command line.	Ez a futás túl nagy az ablakban való elvégzéshez: rövidítse le, növelje az időlépést vagy csökkentse a futások számát, vagy futtassa a parancssorból.
+	The model: its settings and variables	A modell: beállításai és változói
+	System dynamics model	Rendszerdinamikai modell
+	Variables	Változók
+	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	Ezt a modellt parancsokkal módosíthatja, ügynökkel az MCP-kiszolgálón át vagy a parancssorból. A vásznon való szerkesztés a következő lépés.
+	From {start} to {stop}, in steps of {dt}, by the {method} method.	{start} és {stop} között, {dt} lépésekkel, a(z) {method} módszerrel.
+	Notes from the file	Megjegyzések a fájlból
+	Equation	Egyenlet
+	starts at {value}	kezdőértéke {value}
+	In: {flows}	Be: {flows}
+	Out: {flows}	Ki: {flows}
+	This model has a random function, so every run differs: make several to see how far they spread.	Ennek a modellnek van véletlen függvénye, ezért minden futás más: végezzen többet, hogy lássa, mennyire szóródnak.
+	This model has no random function, so one run gives its answer.	Ennek a modellnek nincs véletlen függvénye, ezért egy futás megadja a választ.
+	Runs: {n} · seed {seed}	Futások: {n} · mag {seed}
+	One run	Egy futás
+	Show on the chart	Megjelenítés a diagramon
+	Solid line: median. Dashed line: mean. Shaded band: 5th to 95th percentile, at each saved time.	Folytonos vonal: medián. Szaggatott vonal: átlag. Árnyékolt sáv: az 5. és a 95. percentilis között, minden mentett időpontban.
+	Pick a variable to see it over time.	Válasszon egy változót, hogy lássa az időben.
+	{name} over time	{name} az időben
+	Checked against its exact solution	Pontos megoldásával ellenőrizve
+	Models (BPMN, XPDL, XMILE)	Modellek (BPMN, XPDL, XMILE)
+	Product adoption	Termékelfogadás
+	A new product spreads by word of mouth: 10,000 potential customers, some buying on their own and the rest after meeting a customer.	Egy új termék szájról szájra terjed: 10 000 lehetséges vásárló, néhányan maguktól vesznek, a többiek egy vásárlóval való találkozás után.
+	How fast does a new product spread?	Milyen gyorsan terjed egy új termék?
+	Stocks and flows: word of mouth makes sales speed up and then slow down in an S-shaped curve, which matches its exact formula.	Készletek és folyamatok: a szájról szájra terjedés az eladásokat előbb gyorsítja, majd lassítja egy S alakú görbén, amely egyezik a pontos képletével.
+	Inflows and outflows	Beáramlások és kiáramlások
+	{file}: a system dynamics model is saved as XMILE; choose a name ending in .xmile	{file}: a rendszerdinamikai modellt XMILE formátumban menti a program; válasszon .xmile végű nevet
+	Saving into {file} would leave out what StochCraft does not keep of it: {what}.	A(z) {file} fájlba mentés kihagyna olyasmit, amit a StochCraft nem őriz meg: {what}.
+	Replace the XMILE file?	Lecseréli az XMILE-fájlt?
+	Save As writes a new file and keeps {file} as it is. Replacing {file} leaves out what StochCraft does not keep.	A Mentés másként új fájlt ír, és a(z) {file} fájlt változatlanul hagyja. A(z) {file} lecserélése kihagyja azt, amit a StochCraft nem őriz meg.
+	Replace	Csere

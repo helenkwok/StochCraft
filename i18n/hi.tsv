@@ -1352,3 +1352,47 @@ unit	yr	वर्ष
 	They did not help: their correlation with {output} is weak ({correlation}), so the plain result stands.	उनसे मदद नहीं मिली: {output} के साथ उनका सहसंबंध कमज़ोर है ({correlation}), इसलिए सामान्य परिणाम ही मान्य है।
 	They did not help, so the plain result stands.	उनसे मदद नहीं मिली, इसलिए सामान्य परिणाम ही मान्य है।
 	The mean given for {name}, {stated}, is far from the trials' mean, {sample}: the controlled result is biased until it is corrected.	{name} के लिए दिया गया औसत {stated} परीक्षणों के औसत {sample} से बहुत दूर है: सुधारे जाने तक नियंत्रित परिणाम पक्षपाती है।
+	Stock	स्टॉक
+	Flow	प्रवाह
+	Auxiliary	सहायक चर
+	{name} ends near {median} (median); its 5th to 95th percentiles at the end are {low} and {high}.	{name} लगभग {median} पर समाप्त होता है (माध्यिका); अंत में इसके 5वें और 95वें प्रतिशतक {low} और {high} हैं।
+	{name} ends at {value}.	{name} {value} पर समाप्त होता है।
+	{name} at {time}: median {median}, mean {mean}, 5th to 95th percentiles {low} and {high}	{time} पर {name}: माध्यिका {median}, माध्य {mean}, 5वाँ और 95वाँ प्रतिशतक {low} और {high}
+	{name} at {time}: {value}	{time} पर {name}: {value}
+	Time	समय
+	Time ({unit})	समय ({unit})
+	{name} mean	{name}, माध्य
+	{name} median	{name}, माध्यिका
+	{name} 5th percentile	{name}, 5वाँ प्रतिशतक
+	{name} 95th percentile	{name}, 95वाँ प्रतिशतक
+	This run is too large to make in the window: shorten it, raise the time step or lower the runs, or run it from the command line.	यह रन विंडो में चलाने के लिए बहुत बड़ा है: इसे छोटा करें, समय का चरण बढ़ाएँ या रन घटाएँ, या इसे कमांड लाइन से चलाएँ।
+	The model: its settings and variables	मॉडल: इसकी सेटिंग और चर
+	System dynamics model	सिस्टम डायनामिक्स मॉडल
+	Variables	चर
+	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	आप इस मॉडल को कमांड से बदल सकते हैं: एजेंट से MCP सर्वर के ज़रिए, या कमांड लाइन से। कैनवास पर संपादन आगे आएगा।
+	From {start} to {stop}, in steps of {dt}, by the {method} method.	{start} से {stop} तक, {dt} के चरणों में, {method} विधि से।
+	Notes from the file	फ़ाइल से टिप्पणियाँ
+	Equation	समीकरण
+	starts at {value}	{value} से शुरू होता है
+	In: {flows}	अंदर: {flows}
+	Out: {flows}	बाहर: {flows}
+	This model has a random function, so every run differs: make several to see how far they spread.	इस मॉडल में एक यादृच्छिक फ़ंक्शन है, इसलिए हर रन अलग होता है: कई रन करें और देखें कि वे कितने फैलते हैं।
+	This model has no random function, so one run gives its answer.	इस मॉडल में कोई यादृच्छिक फ़ंक्शन नहीं है, इसलिए एक रन ही इसका उत्तर देता है।
+	Runs: {n} · seed {seed}	रन: {n} · बीज {seed}
+	One run	एक रन
+	Show on the chart	चार्ट में दिखाएँ
+	Solid line: median. Dashed line: mean. Shaded band: 5th to 95th percentile, at each saved time.	ठोस रेखा: माध्यिका। बिंदीदार रेखा: माध्य। छायांकित पट्टी: 5वें से 95वें प्रतिशतक तक, हर सहेजे गए समय पर।
+	Pick a variable to see it over time.	समय के साथ देखने के लिए कोई चर चुनें।
+	{name} over time	समय के साथ {name}
+	Checked against its exact solution	इसके सटीक हल से जाँचा गया
+	Models (BPMN, XPDL, XMILE)	मॉडल (BPMN, XPDL, XMILE)
+	Product adoption	उत्पाद अपनाना
+	A new product spreads by word of mouth: 10,000 potential customers, some buying on their own and the rest after meeting a customer.	एक नया उत्पाद मुँह-दर-मुँह फैलता है: 10,000 संभावित ग्राहक, कुछ अपने आप खरीदते हैं और बाकी किसी ग्राहक से मिलने के बाद।
+	How fast does a new product spread?	एक नया उत्पाद कितनी तेज़ी से फैलता है?
+	Stocks and flows: word of mouth makes sales speed up and then slow down in an S-shaped curve, which matches its exact formula.	स्टॉक और प्रवाह: मुँह-दर-मुँह प्रचार से बिक्री पहले तेज़ होती है और फिर धीमी, S आकार के वक्र में, जो इसके सटीक सूत्र से मेल खाता है।
+	Inflows and outflows	अंतर्प्रवाह और बहिर्प्रवाह
+	{file}: a system dynamics model is saved as XMILE; choose a name ending in .xmile	{file}: सिस्टम डायनामिक्स मॉडल XMILE के रूप में सहेजा जाता है; .xmile पर समाप्त होने वाला नाम चुनें
+	Saving into {file} would leave out what StochCraft does not keep of it: {what}.	{file} में सहेजने पर वह छूट जाएगा जिसे StochCraft नहीं रखता: {what}।
+	Replace the XMILE file?	XMILE फ़ाइल बदलें?
+	Save As writes a new file and keeps {file} as it is. Replacing {file} leaves out what StochCraft does not keep.	इस रूप में सहेजें नई फ़ाइल लिखता है और {file} को जैसा है वैसा रखता है। {file} को बदलने पर वह छूट जाता है जिसे StochCraft नहीं रखता।
+	Replace	बदलें

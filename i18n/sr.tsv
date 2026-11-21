@@ -1352,3 +1352,47 @@ unit	yr	год.
 	They did not help: their correlation with {output} is weak ({correlation}), so the plain result stands.	Нису помогле: њихова корелација са {output} је слаба ({correlation}), па важи обичан резултат.
 	They did not help, so the plain result stands.	Нису помогле, па важи обичан резултат.
 	The mean given for {name}, {stated}, is far from the trials' mean, {sample}: the controlled result is biased until it is corrected.	Просек наведен за {name}, {stated}, далеко је од просека покуса, {sample}: контролисани резултат је пристрасан док се не исправи.
+	Stock	Залиха
+	Flow	Ток
+	Auxiliary	Помоћна променљива
+	{name} ends near {median} (median); its 5th to 95th percentiles at the end are {low} and {high}.	{name} се завршава близу {median} (медијана); 5. и 95. перцентил на крају су {low} и {high}.
+	{name} ends at {value}.	{name} се завршава на {value}.
+	{name} at {time}: median {median}, mean {mean}, 5th to 95th percentiles {low} and {high}	{name} у {time}: медијана {median}, средња вредност {mean}, 5. и 95. перцентил {low} и {high}
+	{name} at {time}: {value}	{name} у {time}: {value}
+	Time	Време
+	Time ({unit})	Време ({unit})
+	{name} mean	{name}, средња вредност
+	{name} median	{name}, медијана
+	{name} 5th percentile	{name}, 5. перцентил
+	{name} 95th percentile	{name}, 95. перцентил
+	This run is too large to make in the window: shorten it, raise the time step or lower the runs, or run it from the command line.	Ово покретање је превелико за прозор: скратите га, повећајте временски корак или смањите број покретања, или га покрените из командне линије.
+	The model: its settings and variables	Модел: његова подешавања и променљиве
+	System dynamics model	Модел системске динамике
+	Variables	Променљиве
+	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	Овај модел можете мењати наредбама, из агента преко MCP сервера или из командне линије. Уређивање на платну долази следеће.
+	From {start} to {stop}, in steps of {dt}, by the {method} method.	Од {start} до {stop}, у корацима од {dt}, методом {method}.
+	Notes from the file	Напомене из датотеке
+	Equation	Једначина
+	starts at {value}	почиње од {value}
+	In: {flows}	Улаз: {flows}
+	Out: {flows}	Излаз: {flows}
+	This model has a random function, so every run differs: make several to see how far they spread.	Овај модел има случајну функцију, па се свако покретање разликује: направите их неколико да видите колико се расипају.
+	This model has no random function, so one run gives its answer.	Овај модел нема случајну функцију, па једно покретање даје његов одговор.
+	Runs: {n} · seed {seed}	Покретања: {n} · семе {seed}
+	One run	Једно покретање
+	Show on the chart	Прикажи на графикону
+	Solid line: median. Dashed line: mean. Shaded band: 5th to 95th percentile, at each saved time.	Пуна линија: медијана. Испрекидана линија: средња вредност. Осенчена трака: од 5. до 95. перцентила, у сваком сачуваном тренутку.
+	Pick a variable to see it over time.	Изаберите променљиву да је видите кроз време.
+	{name} over time	{name} кроз време
+	Checked against its exact solution	Проверено према његовом тачном решењу
+	Models (BPMN, XPDL, XMILE)	Модели (BPMN, XPDL, XMILE)
+	Product adoption	Прихватање производа
+	A new product spreads by word of mouth: 10,000 potential customers, some buying on their own and the rest after meeting a customer.	Нови производ се шири од уста до уста: 10.000 потенцијалних купаца, неки купују сами, а остали након сусрета са купцем.
+	How fast does a new product spread?	Колико брзо се шири нови производ?
+	Stocks and flows: word of mouth makes sales speed up and then slow down in an S-shaped curve, which matches its exact formula.	Залихе и токови: ширење од уста до уста прво убрзава, а затим успорава продају у кривој у облику слова S, која се слаже са његовом тачном формулом.
+	Inflows and outflows	Приливи и одливи
+	{file}: a system dynamics model is saved as XMILE; choose a name ending in .xmile	{file}: модел системске динамике се чува као XMILE; изаберите назив који се завршава на .xmile
+	Saving into {file} would leave out what StochCraft does not keep of it: {what}.	Чување у {file} изоставило би оно што StochCraft не задржава: {what}.
+	Replace the XMILE file?	Заменити XMILE датотеку?
+	Save As writes a new file and keeps {file} as it is. Replacing {file} leaves out what StochCraft does not keep.	Сачувај као уписује нову датотеку и оставља {file} каква јесте. Замена датотеке {file} изоставља оно што StochCraft не задржава.
+	Replace	Замени

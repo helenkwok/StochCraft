@@ -114,6 +114,10 @@ impl App {
     /// Model ▸ Run: starts the experiment in the background. A model with errors doesn't run:
     /// its next error is shown instead (warnings alone don't stop it).
     pub fn run(&mut self) {
+        if self.is_sd() {
+            self.sd_run();
+            return;
+        }
         if self.is_monte_carlo() {
             self.mc_run();
             return;
@@ -176,6 +180,12 @@ impl App {
 
     /// Advances and collects the background run. Called every frame; true while it runs.
     pub fn poll(&mut self) -> bool {
+        // A system dynamics run asked for is made two frames on: the status bar says so in
+        // the frame between.
+        if self.sd_pending() {
+            self.sd_advance();
+            return true;
+        }
         // The shares of a Monte Carlo output's spread, worked out beside the results on show.
         if self.is_working_out_shares() {
             return self.sobol_poll();

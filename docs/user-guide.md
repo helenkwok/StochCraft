@@ -84,6 +84,7 @@ The examples are also under **File ▸ Open Example**:
 | **Tandem line** | Two stations in series, read from an XPDL file (a reference model). |
 | **Every distribution** | One task per BPSim distribution, to compare their spread (a reference model). |
 | **Parcel sorter** | How many parcels go round the loop because their lane is full? |
+| **Product adoption** | How fast does a new product spread? A system dynamics model (stocks and flows, from an XMILE file): 10,000 potential customers, some buying on their own and the rest after meeting a customer. Checked against the exact solution of its equations (9,087 customers after 12 years). |
 
 To try the whole cycle, open **M/M/1 queue** and press **Run**. The results show a mean wait close
 to 3 minutes and about 75% utilisation, which is what queueing theory predicts for this model.
@@ -516,6 +517,61 @@ The **Results** tab answers the question first:
   status bar; **Cancel** or Esc stops it. It needs independent inputs, so a model with correlated
   inputs has no button and the results say why. Editing the model takes the shares away.
 
+## System dynamics models
+
+A system dynamics model is **stocks** (levels, such as customers or inventory) that fill and
+drain through **flows** (rates), with **auxiliaries** (other quantities worked out from them),
+over time. It is an **XMILE** file (`.xmile` or `.stmx`): open it with **File ▸ Open…** or drop it
+on the window, or open the example **Product adoption** from the start page. A model that uses
+arrays or modules is refused, with the reason. As with a Monte Carlo model there are two tabs,
+**Model** and **Results**, and no canvas.
+
+**Model** shows the model, and for now only shows it. You change it with commands, from an agent
+through the MCP server or from the command line (`stochcraft-cli`); the tab reads the model again
+whenever it changes. Editing it on the canvas comes next.
+
+- Its name, and its settings in a sentence: from when to when, the time step and the method
+  (Euler or fourth-order Runge-Kutta).
+- **Problems:** the warnings from the checks (units that do not balance, a time step that is large
+  against a delay), or that none were found.
+- **Variables:** each one's kind (stock, flow or auxiliary), equation (for a stock, its starting
+  value), units and, for a stock, the flows into and out of it.
+
+**Results** runs the model. A model with no random function runs once, and shows at once. One with
+a random function (`NORMAL`, `RANDOM`) runs in replications: **Runs** and **Seed** choose how many
+and from where, and the same seed gives the same runs.
+
+- **The answer first:** where each stock ends up ("Customers ends at 9,087 customers."). For runs
+  in replications it gives the median and the 5th and 95th percentiles of the runs' values at the
+  end ("Customers ends near 9,100 (median); its 5th to 95th percentiles at the end are 8,900 and
+  9,300."). They are the values below which 5% and 95% of the runs end, found by interpolating
+  between runs, so with few runs they are rough.
+- **Show on the chart:** pick the variables (the stocks are shown first, then flows and
+  auxiliaries). Each gets its own chart over time, scaled to its own values. For runs in
+  replications the solid line is the median, the dashed line the mean and the shaded band the 5th to
+  95th percentile at each saved time, so a few wild runs do not hide where most went. Where the
+  model leaves a value undefined at a time (a division by zero, say), the line has a gap there.
+- **Table** shows the same values, a row for each saved time, with the median and the 5th and
+  95th percentiles beside the mean for runs in replications. **Export table (CSV)** (in the
+  browser: **Download table (CSV)**) writes the variables shown. There is no chart image export
+  for these models.
+- **Out of date:** once the model has been changed after a run, the results stay on show, marked
+  out of date (on the tab and above them), until you press **Run again**.
+
+A run too large for the window (steps times variables times runs above 20 million, a limit chosen
+to keep the window responsive, though the engine allows more) is refused with the way out: shorten it, raise the time step, lower the runs, or use the command line
+(`stochcraft-cli run model.xmile`), which has no such limit. **Save** and **Save As…** write the model as XMILE (a
+file name ending in `.xmile`), as for a process model: the title and header mark a model changed by
+commands as edited, and closing asks about it. The file is written by StochCraft's own XMILE
+writer, diagram included. **Save As…** writes the name you choose as it is: a name that does not
+end in `.xmile` or `.stmx` is refused, with nothing written, and the name suggested ends in
+`.xmile`. StochCraft keeps one diagram and the model's own settings: a file with a second
+diagram, styles, display settings or other content it does not keep says so when it opens, and
+**Save** into that file then asks first, naming what would be left out, and offers **Replace**
+(write the file anyway), **Save As…** (a new file; the original stays as it is) or **Cancel**.
+A file that lost nothing saves at once, and so does one that was replaced. Unsaved changes to these models are not kept for recovery after a
+crash: recovery copies are for process models only for now.
+
 ## Save, open and export
 
 StochCraft reads and writes **BPMN** and **XPDL** files with **BPSim** simulation data, the open
@@ -528,10 +584,14 @@ standards that process-modelling tools share.
 | Recent files | **File ▸ Open Recent** | not available |
 
 - A new model is saved as BPMN. An XPDL file can be saved back as XPDL.
+- An **XMILE** file (a system dynamics model, `.xmile` or `.stmx`) is saved as XMILE: **Save**
+  writes back to it (after asking, if the file has content StochCraft does not keep),
+  **Save As…** suggests a name ending in `.xmile`. See
+  [System dynamics models](#system-dynamics-models).
 - If a file you opened holds things StochCraft does not understand, saving asks before writing a
   new BPMN file, which leaves them out.
-- **Unsaved changes are kept.** If StochCraft closes with unsaved changes, it offers to
-  **Recover** them the next time it starts.
+- **Unsaved changes are kept** (process models). If StochCraft closes with unsaved changes, it
+  offers to **Recover** them the next time it starts.
 - **Export results:** on the **Results** tab, **Export table (CSV)** and **Export charts (PNG)**
   (in the browser: **Download**). The CSV has one row per block and metric, with the mean, the
   half-width of its confidence interval, the standard deviation and the number of runs.

@@ -14,7 +14,7 @@ impl App {
     /// Opens a model file read from `path` and lists it under File ▸ Open Recent.
     pub fn open_path(&mut self, path: &str, bytes: &[u8]) {
         self.open_file(path, bytes);
-        if self.engine.path() == Some(path) {
+        if self.engine.path() == Some(path) || self.engine.system_dynamics_path() == Some(path) {
             self.remember(path);
         }
     }
@@ -30,11 +30,22 @@ impl App {
 
     /// Whether closing now would lose changes.
     pub fn has_unsaved_changes(&self) -> bool {
+        self.unsaved_changes()
+    }
+
+    /// Whether closing or replacing the document would lose changes: the engine's own answer,
+    /// which covers a system dynamics model as well as a process model. The title, the header
+    /// and the guards on closing all read this, so they agree.
+    pub(crate) fn unsaved_changes(&self) -> bool {
         self.engine.is_dirty()
     }
 
     pub(crate) fn document_name(&self) -> String {
-        if let Some(path) = self.engine.path() {
+        if let Some(path) = self
+            .engine
+            .path()
+            .or_else(|| self.engine.system_dynamics_path())
+        {
             return file_name(path).to_owned();
         }
         let name = &self.engine.model().name;
@@ -145,6 +156,8 @@ impl App {
         self.doc_gen += 1;
         // The Monte Carlo screens' state, and a Monte Carlo run in progress, which stops.
         self.mc = crate::montecarlo::Mc::default();
+        // The system dynamics screens' state: its results are of the model that is gone.
+        self.sd = crate::sd::Sd::default();
         if self.running.is_some() {
             self.stop_workers();
             let _ = self.engine.execute("run.cancel", json!({}));
@@ -182,7 +195,7 @@ impl App {
         let before = matches!(command, "run" | "mc.run").then(|| comparable(self.engine.model()));
         let result = self.engine.execute(command, params)?;
         match command {
-            "file.open" | "model.new" | "model.set" => {
+            "file.open" | "model.new" | "model.set" | "sd.open" => {
                 self.forget_view();
                 if let Some(path) = result["path"].as_str() {
                     self.info(tf("Opened {file}", &[("file", file_name(path))]));
@@ -200,6 +213,8 @@ impl App {
                 let n = result["trials"].as_u64().unwrap_or(0);
                 self.info(tn(n, "Finished {n} trial", "Finished {n} trials"));
             }
+            // The results of a system dynamics run, shown on its Results tab.
+            "sd.run" => self.sd_ran(result.clone()),
             _ => {}
         }
         Ok(result)
@@ -218,6 +233,16 @@ impl App {
 
     /// Exports the results table as CSV.
     pub fn export_csv(&mut self) {
+        if self.is_sd() {
+            if let Some(text) = self.sd_table_csv() {
+                let name = format!("{}-results.csv", self.export_stem());
+                self.requests.push(Request::Export {
+                    name,
+                    bytes: text.into_bytes(),
+                });
+            }
+            return;
+        }
         if let Some(r) = &self.results {
             let name = format!("{}-results.csv", self.export_stem());
             let text = if r["kind"] == "monte_carlo" {
@@ -338,6 +363,53 @@ impl App {
     /// `path`). `chosen`: the user chose `path` for Save As, so its extension says the format;
     /// otherwise it is the opened file's own.
     fn save_file(&mut self, path: String, chosen: bool, agreed: bool) {
+        // A system dynamics model is written as XMILE, into the file it came from or a new one;
+        // the BPMN and XPDL questions below are for process models. A chosen name is never
+        // rewritten (the dialog confirmed that file and no other, so a rewritten name could
+        // replace a file nobody agreed to replace): one that does not name an XMILE file is
+        // refused.
+        if self.is_sd() {
+            if chosen && !matches!(extension(&path).as_str(), "xmile" | "stmx") {
+                self.save_failed(tf(
+                    "{file}: a system dynamics model is saved as XMILE; choose a name ending in .xmile",
+                    &[("file", file_name(&path))],
+                ));
+                return;
+            }
+            // Into the opened file: a plain Save, or Save As naming that file.
+            let into_opened = !chosen
+                || self
+                    .engine
+                    .system_dynamics_path()
+                    .is_some_and(|opened| same_path(opened, &path));
+            if into_opened && self.platform.file_system && !self.engine.save_drops().is_empty() {
+                // The opened file has more than the model keeps: ask before replacing it.
+                let notes = self.engine.save_drops();
+                let mut lost = notes
+                    .iter()
+                    .take(SD_LOST_SHOWN)
+                    .cloned()
+                    .collect::<Vec<_>>();
+                if notes.len() > SD_LOST_SHOWN {
+                    lost.push(tf(
+                        "and {n} more",
+                        &[("n", &(notes.len() - SD_LOST_SHOWN).to_string())],
+                    ));
+                }
+                let reason = tf(
+                    "Saving into {file} would leave out what StochCraft does not keep of it: {what}.",
+                    &[("file", file_name(&path)), ("what", &lost.join("; "))],
+                );
+                self.new_file = Some(NewFile {
+                    reason: Some(reason),
+                    path: Some(path),
+                    for_doc: self.doc_gen,
+                });
+                return;
+            }
+            self.write_sd(path);
+            return;
+        }
         let opened = self.engine.format();
         let named = match extension(&path).as_str() {
             "bpmn" => Some("bpmn"),
@@ -364,6 +436,7 @@ impl App {
                 self.new_file = Some(NewFile {
                     reason: None,
                     path: Some(path),
+                    for_doc: self.doc_gen,
                 });
             }
             return;
@@ -374,8 +447,17 @@ impl App {
                 self.new_file = Some(NewFile {
                     reason: Some(e.message),
                     path: (chosen && wanted == "bpmn").then_some(path),
+                    for_doc: self.doc_gen,
                 });
             }
+            Err(e) => self.save_failed(e.message),
+        }
+    }
+
+    /// Writes (or downloads) the system dynamics model to `path` as XMILE.
+    pub(crate) fn write_sd(&mut self, path: String) {
+        match self.engine.save_bytes(false) {
+            Ok(bytes) => self.deliver(path, bytes),
             Err(e) => self.save_failed(e.message),
         }
     }
@@ -465,7 +547,17 @@ impl App {
         self.requests.push(Request::PickSave { name, xpdl });
     }
 
-    fn suggested_name(&self) -> String {
+    pub(crate) fn suggested_name(&self) -> String {
+        if self.is_sd() {
+            // The name it came from, or the model's: always an XMILE file's.
+            let name = self.document_name();
+            let name = if name.is_empty() {
+                t("Untitled").to_owned()
+            } else {
+                name
+            };
+            return xmile_path(name);
+        }
         match self.engine.path() {
             Some(path) => file_name(path).to_owned(),
             None => format!("{}.bpmn", self.document_name()),
@@ -479,7 +571,7 @@ impl App {
 
     /// Replaces or closes the model, first asking about unsaved changes.
     pub(crate) fn replace(&mut self, action: Replace) {
-        if self.engine.is_dirty() {
+        if self.unsaved_changes() {
             self.confirm = Some(action);
         } else {
             self.replace_now(action);
@@ -531,7 +623,7 @@ impl App {
     /// The window is closing (the user closed it): returns whether it may close now. If not, the
     /// app asks about unsaved changes and requests [`Request::Quit`] once they are dealt with.
     pub fn close_requested(&mut self) -> bool {
-        if self.engine.is_dirty() {
+        if self.unsaved_changes() {
             self.confirm = Some(Replace::Quit);
             false
         } else {
@@ -551,5 +643,32 @@ impl App {
             let label = change_label(r["redone"].as_str().unwrap_or(""));
             self.info(tf("Redid {action}", &[("action", &td(label))]));
         }
+    }
+}
+
+/// How many of the file's not-kept items the question before replacing it names.
+const SD_LOST_SHOWN: usize = 4;
+
+/// Whether `a` and `b` name the same file, as the window can tell without the file system: the
+/// same text, with either slash, and in any letter case on Windows, whose file names ignore it.
+fn same_path(a: &str, b: &str) -> bool {
+    let plain = |s: &str| {
+        let s = s.replace('\\', "/");
+        if cfg!(windows) { s.to_lowercase() } else { s }
+    };
+    plain(a) == plain(b)
+}
+
+/// `path` as the name Save As suggests for an XMILE file (never applied to a name the user
+/// chose): one that ends in `.xmile` stays as it is; another extension of a model file (`.bpmn`,
+/// `.xpdl`, `.xml`, `.stmx`) is replaced by it, and a name without one gets it added.
+fn xmile_path(path: String) -> String {
+    match extension(&path).as_str() {
+        "xmile" => path,
+        "bpmn" | "xpdl" | "xml" | "stmx" => match path.rsplit_once('.') {
+            Some((stem, _)) => format!("{stem}.xmile"),
+            None => format!("{path}.xmile"),
+        },
+        _ => format!("{path}.xmile"),
     }
 }

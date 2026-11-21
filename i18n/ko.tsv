@@ -1352,3 +1352,47 @@ unit	yr	년
 	They did not help: their correlation with {output} is weak ({correlation}), so the plain result stands.	도움이 되지 않았습니다. {output}과의 상관이 약해({correlation}) 일반 결과를 사용합니다.
 	They did not help, so the plain result stands.	도움이 되지 않았으므로 일반 결과를 사용합니다.
 	The mean given for {name}, {stated}, is far from the trials' mean, {sample}: the controlled result is biased until it is corrected.	{name}에 입력한 평균 {stated}이(가) 시행의 평균 {sample}과(와) 크게 다릅니다. 고칠 때까지 통제된 결과는 편향됩니다.
+	Stock	재고
+	Flow	흐름
+	Auxiliary	보조 변수
+	{name} ends near {median} (median); its 5th to 95th percentiles at the end are {low} and {high}.	{name}은(는) {median}(중앙값) 근처에서 끝납니다. 끝에서의 5번째와 95번째 백분위수는 {low}와(과) {high}입니다.
+	{name} ends at {value}.	{name}은(는) {value}에서 끝납니다.
+	{name} at {time}: median {median}, mean {mean}, 5th to 95th percentiles {low} and {high}	{time}의 {name}: 중앙값 {median}, 평균 {mean}, 5번째와 95번째 백분위수 {low}와(과) {high}
+	{name} at {time}: {value}	{time}의 {name}: {value}
+	Time	시간
+	Time ({unit})	시간 ({unit})
+	{name} mean	{name} 평균
+	{name} median	{name} 중앙값
+	{name} 5th percentile	{name} 5번째 백분위수
+	{name} 95th percentile	{name} 95번째 백분위수
+	This run is too large to make in the window: shorten it, raise the time step or lower the runs, or run it from the command line.	이 실행은 창에서 하기에는 너무 큽니다. 더 짧게 하거나, 시간 간격을 늘리거나, 실행 횟수를 줄이거나, 명령줄에서 실행하세요.
+	The model: its settings and variables	모델: 설정과 변수
+	System dynamics model	시스템 다이내믹스 모델
+	Variables	변수
+	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	이 모델은 에이전트에서 MCP 서버를 통해, 또는 명령줄에서 명령으로 변경할 수 있습니다. 캔버스에서의 편집은 다음에 추가됩니다.
+	From {start} to {stop}, in steps of {dt}, by the {method} method.	{start}부터 {stop}까지, {dt} 간격, {method} 방식.
+	Notes from the file	파일의 메모
+	Equation	방정식
+	starts at {value}	{value}에서 시작
+	In: {flows}	유입: {flows}
+	Out: {flows}	유출: {flows}
+	This model has a random function, so every run differs: make several to see how far they spread.	이 모델에는 난수 함수가 있어 실행마다 결과가 다릅니다. 여러 번 실행해 얼마나 퍼지는지 확인하세요.
+	This model has no random function, so one run gives its answer.	이 모델에는 난수 함수가 없으므로 한 번의 실행으로 답이 나옵니다.
+	Runs: {n} · seed {seed}	실행 횟수: {n} · 난수 시드 {seed}
+	One run	1회 실행
+	Show on the chart	차트에 표시
+	Solid line: median. Dashed line: mean. Shaded band: 5th to 95th percentile, at each saved time.	실선: 중앙값. 점선: 평균. 음영 띠: 저장된 각 시각의 5번째에서 95번째 백분위수.
+	Pick a variable to see it over time.	시간에 따른 변화를 보려면 변수를 고르세요.
+	{name} over time	시간에 따른 {name}
+	Checked against its exact solution	정확한 해와 대조해 확인함
+	Models (BPMN, XPDL, XMILE)	모델 (BPMN, XPDL, XMILE)
+	Product adoption	제품 확산
+	A new product spreads by word of mouth: 10,000 potential customers, some buying on their own and the rest after meeting a customer.	새 제품이 입소문으로 퍼집니다. 잠재 고객은 10,000명이며, 스스로 사는 사람도 있고 고객을 만난 뒤에 사는 사람도 있습니다.
+	How fast does a new product spread?	새 제품은 얼마나 빨리 퍼질까요?
+	Stocks and flows: word of mouth makes sales speed up and then slow down in an S-shaped curve, which matches its exact formula.	재고와 흐름: 입소문으로 판매는 먼저 빨라졌다가 느려지며 S자 곡선을 그리고, 이는 정확한 공식과 일치합니다.
+	Inflows and outflows	유입과 유출
+	{file}: a system dynamics model is saved as XMILE; choose a name ending in .xmile	{file}: 시스템 다이내믹스 모델은 XMILE로 저장됩니다. .xmile로 끝나는 이름을 선택하세요
+	Saving into {file} would leave out what StochCraft does not keep of it: {what}.	{file}에 저장하면 StochCraft가 유지하지 않는 내용이 빠집니다: {what}.
+	Replace the XMILE file?	XMILE 파일을 바꾸시겠습니까?
+	Save As writes a new file and keeps {file} as it is. Replacing {file} leaves out what StochCraft does not keep.	다른 이름으로 저장은 새 파일을 쓰고 {file}은 그대로 둡니다. {file}을 바꾸면 StochCraft가 유지하지 않는 내용이 빠집니다.
+	Replace	바꾸기

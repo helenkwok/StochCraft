@@ -84,7 +84,7 @@ impl App {
     /// The window title: the file's name, marked when there are unsaved changes.
     pub fn title(&self) -> String {
         let name = self.document_name();
-        let dirty = if self.engine.is_dirty() { " •" } else { "" };
+        let dirty = if self.unsaved_changes() { " •" } else { "" };
         format!("{name}{dirty} — StochCraft")
     }
 
@@ -236,7 +236,7 @@ impl App {
             self.help_panel(ui, &p);
         }
         // The dashboard reads a process model's results; a Monte Carlo model has none.
-        if self.show_dashboard && !self.is_monte_carlo() {
+        if self.show_dashboard && !self.is_monte_carlo() && !self.is_sd() {
             self.dashboard_panel(ui, &p);
         }
         egui::Panel::left("outline")
@@ -268,6 +268,10 @@ impl App {
         self.guide_overlay(&ctx);
         // Once everything of this frame is laid out, including what is drawn over the charts.
         self.check_pending_png(&ctx);
+        // A system dynamics run asked for is made two frames on; keep the frames coming.
+        if self.sd_pending() {
+            ctx.request_repaint();
+        }
     }
 
     /// The header: menus on the shell colour, the document's name, and Run.
@@ -293,9 +297,15 @@ impl App {
         v.widgets.active.bg_stroke = egui::Stroke::NONE;
         let header = ui.max_rect();
         let running = self.running.is_some();
-        let can_run = !self.engine.model().elements.is_empty() || self.is_monte_carlo();
+        let can_run =
+            !self.engine.model().elements.is_empty() || self.is_monte_carlo() || self.is_sd();
         // With errors, Run says how many; clicking it shows them one by one rather than run.
-        let errors = self.problems().iter().filter(|p| p.error).count() as u64;
+        // (A system dynamics model has no process model to find problems in.)
+        let errors = if self.is_sd() {
+            0
+        } else {
+            self.problems().iter().filter(|p| p.error).count() as u64
+        };
         let run_label = if errors > 0 {
             tn(errors, "Run ({n} problem)", "Run ({n} problems)")
         } else {
@@ -314,7 +324,7 @@ impl App {
                 self.menu_bar_ui(ui, p);
                 ui.add_space(8.0);
                 let name = self.document_name();
-                let shown = if self.engine.is_dirty() {
+                let shown = if self.unsaved_changes() {
                     tf("{name} — edited", &[("name", &name)])
                 } else {
                     name
@@ -507,11 +517,27 @@ impl App {
         let Some(pending) = self.new_file.clone() else {
             return;
         };
+        // The model was replaced while the question was open (an agent's command): its answer
+        // would write the new model into the file asked about, so the question and what was to
+        // follow the save are dropped.
+        if pending.for_doc != self.doc_gen {
+            self.new_file = None;
+            self.after_save = None;
+            self.save_failed(t(
+                "The model changed while choosing where to save it, so it was not saved. Save again.",
+            ));
+            return;
+        }
         let name = self.document_name();
+        let sd = self.is_sd();
         let mut choice = None;
         egui::Modal::new(egui::Id::unique("new file")).show(ctx, |ui| {
             ui.set_max_width(420.0);
-            ui.heading(t("Save as a new BPMN file?"));
+            ui.heading(if sd {
+                t("Replace the XMILE file?")
+            } else {
+                t("Save as a new BPMN file?")
+            });
             ui.add_space(4.0);
             if let Some(reason) = &pending.reason {
                 ui.label(reason);
@@ -519,14 +545,28 @@ impl App {
             }
             ui.label(theme::weak(
                 ui,
-                tf(
-                    "A new file holds the model alone: what StochCraft does not understand in {file} is left out.",
-                    &[("file", &name)],
-                ),
+                if sd {
+                    tf(
+                        "Save As writes a new file and keeps {file} as it is. Replacing {file} leaves out what StochCraft does not keep.",
+                        &[("file", &name)],
+                    )
+                } else {
+                    tf(
+                        "A new file holds the model alone: what StochCraft does not understand in {file} is left out.",
+                        &[("file", &name)],
+                    )
+                },
             ));
             ui.add_space(14.0);
             ui.horizontal(|ui| {
+                if sd {
+                    // Save As keeps the original; the primary choice replaces it.
+                    if ui.add(theme::secondary(ui, t("Save As…"))).clicked() {
+                        choice = Some(Choice::Discard);
+                    }
+                }
                 let go = match (&pending.path, self.platform.file_system) {
+                    (Some(_), _) if sd => t("Replace"),
                     (Some(_), _) => t("Save"),
                     (None, true) => t("Save As…"),
                     (None, false) => t("Download"),
@@ -541,6 +581,29 @@ impl App {
                 }
             });
         });
+        // A system dynamics model's question: replace the opened file (Save), or choose a new
+        // one (Save As, answered as Discard here). Nothing is written before the answer.
+        if sd {
+            match choice {
+                Some(Choice::Save) => {
+                    self.new_file = None;
+                    if let Some(path) = pending.path {
+                        self.write_sd(path);
+                    }
+                }
+                Some(Choice::Discard) => {
+                    self.new_file = None;
+                    let name = self.suggested_name();
+                    self.pick_save(name, false);
+                }
+                Some(Choice::Cancel) => {
+                    self.new_file = None;
+                    self.after_save = None;
+                }
+                None => {}
+            }
+            return;
+        }
         match choice {
             Some(Choice::Save) => {
                 self.new_file = None;

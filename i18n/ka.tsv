@@ -1352,3 +1352,47 @@ unit	yr	წელი
 	They did not help: their correlation with {output} is weak ({correlation}), so the plain result stands.	არ დაეხმარნენ: მათი კორელაცია {output}-თან სუსტია ({correlation}), ამიტომ მოქმედებს ჩვეულებრივი შედეგი.
 	They did not help, so the plain result stands.	არ დაეხმარნენ, ამიტომ მოქმედებს ჩვეულებრივი შედეგი.
 	The mean given for {name}, {stated}, is far from the trials' mean, {sample}: the controlled result is biased until it is corrected.	{name}-ისთვის მითითებული საშუალო {stated} შორსაა ცდების საშუალოსგან {sample}: გასწორებამდე კონტროლირებადი შედეგი მიკერძოებულია.
+	Stock	მარაგი
+	Flow	ნაკადი
+	Auxiliary	დამხმარე ცვლადი
+	{name} ends near {median} (median); its 5th to 95th percentiles at the end are {low} and {high}.	{name} მთავრდება დაახლოებით {median}-ზე (მედიანა); მისი მე-5 და 95-ე პროცენტილი ბოლოს არის {low} და {high}.
+	{name} ends at {value}.	{name} მთავრდება {value}-ზე.
+	{name} at {time}: median {median}, mean {mean}, 5th to 95th percentiles {low} and {high}	{name} {time}-ზე: მედიანა {median}, საშუალო {mean}, მე-5 და 95-ე პროცენტილი {low} და {high}
+	{name} at {time}: {value}	{name} {time}-ზე: {value}
+	Time	დრო
+	Time ({unit})	დრო ({unit})
+	{name} mean	{name}, საშუალო
+	{name} median	{name}, მედიანა
+	{name} 5th percentile	{name}, მე-5 პროცენტილი
+	{name} 95th percentile	{name}, 95-ე პროცენტილი
+	This run is too large to make in the window: shorten it, raise the time step or lower the runs, or run it from the command line.	ეს გაშვება ფანჯარაში შესასრულებლად ძალიან დიდია: შეამოკლეთ, გაზარდეთ დროის ბიჯი ან შეამცირეთ გაშვებების რაოდენობა, ან გაუშვით ბრძანების ხაზიდან.
+	The model: its settings and variables	მოდელი: მისი პარამეტრები და ცვლადები
+	System dynamics model	სისტემური დინამიკის მოდელი
+	Variables	ცვლადები
+	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	ამ მოდელის შეცვლა შეგიძლიათ ბრძანებებით: აგენტიდან MCP სერვერის საშუალებით ან ბრძანების ხაზიდან. ტილოზე რედაქტირება შემდეგ დაემატება.
+	From {start} to {stop}, in steps of {dt}, by the {method} method.	{start}-დან {stop}-მდე, {dt} ბიჯით, {method} მეთოდით.
+	Notes from the file	შენიშვნები ფაილიდან
+	Equation	განტოლება
+	starts at {value}	იწყება {value}-დან
+	In: {flows}	შემოდინება: {flows}
+	Out: {flows}	გადინება: {flows}
+	This model has a random function, so every run differs: make several to see how far they spread.	ამ მოდელს აქვს შემთხვევითი ფუნქცია, ამიტომ ყოველი გაშვება განსხვავებულია: გააკეთეთ რამდენიმე, რომ ნახოთ, რამდენად ვრცელდება შედეგები.
+	This model has no random function, so one run gives its answer.	ამ მოდელს არ აქვს შემთხვევითი ფუნქცია, ამიტომ პასუხს ერთი გაშვება იძლევა.
+	Runs: {n} · seed {seed}	გაშვებები: {n} · საწყისი მნიშვნელობა {seed}
+	One run	ერთი გაშვება
+	Show on the chart	გრაფიკზე ჩვენება
+	Solid line: median. Dashed line: mean. Shaded band: 5th to 95th percentile, at each saved time.	უწყვეტი ხაზი: მედიანა. წყვეტილი ხაზი: საშუალო. დაჩრდილული ზოლი: მე-5-დან 95-ე პროცენტილამდე, თითოეულ შენახულ დროს.
+	Pick a variable to see it over time.	აირჩიეთ ცვლადი, რომ ნახოთ ის დროში.
+	{name} over time	{name} დროში
+	Checked against its exact solution	შემოწმებულია მისი ზუსტი ამონახსნის მიხედვით
+	Models (BPMN, XPDL, XMILE)	მოდელები (BPMN, XPDL, XMILE)
+	Product adoption	პროდუქტის მიღება
+	A new product spreads by word of mouth: 10,000 potential customers, some buying on their own and the rest after meeting a customer.	ახალი პროდუქტი პირიდან პირში ვრცელდება: 10 000 პოტენციური მომხმარებელი, ზოგი თავისით ყიდულობს, დანარჩენი კი მომხმარებელთან შეხვედრის შემდეგ.
+	How fast does a new product spread?	რამდენად სწრაფად ვრცელდება ახალი პროდუქტი?
+	Stocks and flows: word of mouth makes sales speed up and then slow down in an S-shaped curve, which matches its exact formula.	მარაგები და ნაკადები: პირისპირ გავრცელება გაყიდვებს ჯერ აჩქარებს, შემდეგ კი ანელებს S-ის ფორმის მრუდით, რომელიც მისი ზუსტი ფორმულის შესაბამისია.
+	Inflows and outflows	შემოდინება და გადინება
+	{file}: a system dynamics model is saved as XMILE; choose a name ending in .xmile	{file}: სისტემური დინამიკის მოდელი ინახება XMILE-ად; აირჩიეთ სახელი, რომელიც მთავრდება .xmile-ით
+	Saving into {file} would leave out what StochCraft does not keep of it: {what}.	{file}-ში შენახვა გამოტოვებდა იმას, რასაც StochCraft არ ინახავს: {what}.
+	Replace the XMILE file?	XMILE ფაილის ჩანაცვლება?
+	Save As writes a new file and keeps {file} as it is. Replacing {file} leaves out what StochCraft does not keep.	„შენახვა როგორც“ წერს ახალ ფაილს და {file}-ს უცვლელს ტოვებს. {file}-ის ჩანაცვლება გამოტოვებს იმას, რასაც StochCraft არ ინახავს.
+	Replace	ჩანაცვლება

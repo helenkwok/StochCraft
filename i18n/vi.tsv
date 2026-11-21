@@ -1352,3 +1352,47 @@ unit	yr	năm
 	They did not help: their correlation with {output} is weak ({correlation}), so the plain result stands.	Chúng không giúp ích: tương quan của chúng với {output} yếu ({correlation}), nên kết quả thông thường được giữ.
 	They did not help, so the plain result stands.	Chúng không giúp ích, nên kết quả thông thường được giữ.
 	The mean given for {name}, {stated}, is far from the trials' mean, {sample}: the controlled result is biased until it is corrected.	Giá trị trung bình đã cho cho {name}, {stated}, cách xa giá trị trung bình của các lần thử, {sample}: kết quả có kiểm soát bị lệch cho đến khi được sửa.
+	Stock	Kho
+	Flow	Dòng
+	Auxiliary	Biến phụ trợ
+	{name} ends near {median} (median); its 5th to 95th percentiles at the end are {low} and {high}.	{name} kết thúc gần {median} (trung vị); phân vị thứ 5 và thứ 95 ở cuối là {low} và {high}.
+	{name} ends at {value}.	{name} kết thúc ở {value}.
+	{name} at {time}: median {median}, mean {mean}, 5th to 95th percentiles {low} and {high}	{name} tại {time}: trung vị {median}, trung bình {mean}, phân vị thứ 5 và thứ 95 là {low} và {high}
+	{name} at {time}: {value}	{name} tại {time}: {value}
+	Time	Thời gian
+	Time ({unit})	Thời gian ({unit})
+	{name} mean	{name}, trung bình
+	{name} median	{name}, trung vị
+	{name} 5th percentile	{name}, phân vị thứ 5
+	{name} 95th percentile	{name}, phân vị thứ 95
+	This run is too large to make in the window: shorten it, raise the time step or lower the runs, or run it from the command line.	Lần chạy này quá lớn để thực hiện trong cửa sổ: hãy rút ngắn nó, tăng bước thời gian hoặc giảm số lần chạy, hoặc chạy từ dòng lệnh.
+	The model: its settings and variables	Mô hình: các thiết lập và biến của nó
+	System dynamics model	Mô hình động lực học hệ thống
+	Variables	Biến
+	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	Bạn có thể thay đổi mô hình này bằng lệnh, từ một tác tử qua máy chủ MCP hoặc từ dòng lệnh. Việc chỉnh sửa trên khung vẽ sẽ đến sau.
+	From {start} to {stop}, in steps of {dt}, by the {method} method.	Từ {start} đến {stop}, theo bước {dt}, bằng phương pháp {method}.
+	Notes from the file	Ghi chú từ tệp
+	Equation	Phương trình
+	starts at {value}	bắt đầu từ {value}
+	In: {flows}	Vào: {flows}
+	Out: {flows}	Ra: {flows}
+	This model has a random function, so every run differs: make several to see how far they spread.	Mô hình này có một hàm ngẫu nhiên nên mỗi lần chạy khác nhau: hãy chạy vài lần để xem chúng phân tán đến đâu.
+	This model has no random function, so one run gives its answer.	Mô hình này không có hàm ngẫu nhiên nên một lần chạy là đủ cho câu trả lời.
+	Runs: {n} · seed {seed}	Số lần chạy: {n} · hạt giống {seed}
+	One run	Một lần chạy
+	Show on the chart	Hiển thị trên biểu đồ
+	Solid line: median. Dashed line: mean. Shaded band: 5th to 95th percentile, at each saved time.	Đường liền: trung vị. Đường đứt nét: trung bình. Dải tô bóng: từ phân vị thứ 5 đến thứ 95, tại mỗi thời điểm đã lưu.
+	Pick a variable to see it over time.	Chọn một biến để xem theo thời gian.
+	{name} over time	{name} theo thời gian
+	Checked against its exact solution	Đã kiểm tra với nghiệm chính xác của nó
+	Models (BPMN, XPDL, XMILE)	Mô hình (BPMN, XPDL, XMILE)
+	Product adoption	Sự chấp nhận sản phẩm
+	A new product spreads by word of mouth: 10,000 potential customers, some buying on their own and the rest after meeting a customer.	Một sản phẩm mới lan truyền qua truyền miệng: 10.000 khách hàng tiềm năng, một số tự mua và số còn lại mua sau khi gặp một khách hàng.
+	How fast does a new product spread?	Một sản phẩm mới lan truyền nhanh đến mức nào?
+	Stocks and flows: word of mouth makes sales speed up and then slow down in an S-shaped curve, which matches its exact formula.	Kho và dòng: truyền miệng khiến doanh số lúc đầu tăng tốc rồi chậm lại theo đường cong hình chữ S, khớp với công thức chính xác của nó.
+	Inflows and outflows	Dòng vào và dòng ra
+	{file}: a system dynamics model is saved as XMILE; choose a name ending in .xmile	{file}: mô hình động lực học hệ thống được lưu dưới dạng XMILE; hãy chọn tên kết thúc bằng .xmile
+	Saving into {file} would leave out what StochCraft does not keep of it: {what}.	Lưu vào {file} sẽ bỏ đi những gì StochCraft không giữ lại: {what}.
+	Replace the XMILE file?	Thay thế tệp XMILE?
+	Save As writes a new file and keeps {file} as it is. Replacing {file} leaves out what StochCraft does not keep.	Lưu thành sẽ ghi một tệp mới và giữ nguyên {file}. Thay thế {file} sẽ bỏ đi những gì StochCraft không giữ lại.
+	Replace	Thay thế

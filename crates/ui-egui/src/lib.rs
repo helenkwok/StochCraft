@@ -38,6 +38,7 @@ mod pools;
 mod prefs;
 mod results;
 mod runs;
+mod sd;
 mod start;
 mod tabs;
 pub mod theme;
@@ -509,6 +510,23 @@ pub const EXAMPLES: &[Example] = &[
         },
     },
     Example {
+        title: "Product adoption",
+        about: "A new product spreads by word of mouth: 10,000 potential customers, some buying on their own and the rest after meeting a customer.",
+        file: "adoption.xmile",
+        bytes: include_bytes!("../../../tests/models/adoption.xmile"),
+        card: start::Card {
+            question: "How fast does a new product spread?",
+            industry: start::Industry::Services,
+            topics: &[start::Topic::Change],
+            teaches: "Stocks and flows: word of mouth makes sales speed up and then slow down in an S-shaped curve, which matches its exact formula.",
+            minutes: 3,
+            proof: Some(start::Proof::Formula),
+            // Stocks and flows, not a process: no blocks to show.
+            flow: &[],
+            featured: false,
+        },
+    },
+    Example {
         title: "Project budget",
         about: "A Monte Carlo model: uncertain durations, day rate and materials, and the chance the cost or the duration runs over.",
         file: "budget.bpmn",
@@ -549,7 +567,8 @@ pub enum Request {
     /// Ask where to save, suggesting `name`; answer with [`App::save_to`], with
     /// [`App::save_cancelled`] if the user closes the dialog, or with [`App::save_failed`] if it
     /// can't be shown. BPMN is offered, and with `xpdl` XPDL too: the model came from an XPDL
-    /// file, which it can be saved into. The app's menus and shortcuts wait until it is answered,
+    /// file, which it can be saved into. A `name` ending in `.xmile` is a system dynamics model
+    /// (offer XMILE only). The app's menus and shortcuts wait until it is answered,
     /// and an answer that comes after the model was replaced saves nothing.
     PickSave { name: String, xpdl: bool },
     /// Write `bytes` to `path`; answer with [`App::written`] or [`App::save_failed`].
@@ -626,6 +645,8 @@ struct NewFile {
     /// The file chosen in Save As. Without one, the user is asked where (desktop), or the
     /// download is named for a BPMN file (browser).
     path: Option<String>,
+    /// The document asked about (`doc_gen` then): an answer is not applied to another one.
+    for_doc: u64,
 }
 
 /// A charts export waiting for its screenshot: what the frame that asked for it showed, which
@@ -896,6 +917,8 @@ pub struct App {
     building: bool,
     /// The Monte Carlo screens' state, and a Monte Carlo run in progress.
     mc: montecarlo::Mc,
+    /// The system dynamics screens' state (an XMILE document).
+    sd: sd::Sd,
     /// Where the charts are drawn this frame (none until the work area draws them), for
     /// exporting them.
     charts_rect: Option<egui::Rect>,
@@ -1003,6 +1026,7 @@ impl App {
             start: start::Start::default(),
             building: false,
             mc: montecarlo::Mc::default(),
+            sd: sd::Sd::default(),
             charts_rect: None,
             screenshot: std::sync::Arc::default(),
             pending_png: None,

@@ -33,6 +33,9 @@ pub(crate) struct SdDoc {
     pub saved: SdModel,
     pub program: Program,
     pub notes: Vec<String>,
+    /// Saving into `file` would leave out what the reader noted it does not keep: the model was
+    /// read from that file and not written back to it since.
+    pub drops_on_save: bool,
     pub last: Option<SdResults>,
     /// The model was edited since `last` was run.
     pub last_stale: bool,
@@ -106,6 +109,7 @@ impl Engine {
             saved: file.model.clone(),
             model: file.model,
             program,
+            drops_on_save: is_file && !file.notes.is_empty(),
             notes: file.notes,
             last: None,
             last_stale: false,

@@ -125,17 +125,28 @@ impl Desktop {
                 Request::PickOpen => self.dialogs.ask(
                     FileDialog::open()
                         .title(t("Open Model"))
+                        .filter(
+                            t("Models (BPMN, XPDL, XMILE)"),
+                            &["bpmn", "xpdl", "xml", "xmile", "stmx"],
+                        )
                         .filter(t("Process models with BPSim"), &["bpmn", "xpdl", "xml"]),
                     Then::Open,
                 ),
                 Request::OpenPath { path } => open(&mut self.app, Path::new(&path)),
                 Request::PickSave { name, xpdl } => {
+                    // A system dynamics model is suggested under a `.xmile` name, and is saved as
+                    // XMILE only.
+                    let xmile = name.to_ascii_lowercase().ends_with(".xmile");
                     let mut dialog = FileDialog::save().title(t("Save Model")).file_name(name);
-                    // The opened file's format first.
-                    if xpdl {
-                        dialog = dialog.filter(t("XPDL with BPSim"), &["xpdl"]);
+                    if xmile {
+                        dialog = dialog.filter("XMILE", &["xmile"]);
+                    } else {
+                        // The opened file's format first.
+                        if xpdl {
+                            dialog = dialog.filter(t("XPDL with BPSim"), &["xpdl"]);
+                        }
+                        dialog = dialog.filter(t("BPMN with BPSim"), &["bpmn"]);
                     }
-                    let dialog = dialog.filter(t("BPMN with BPSim"), &["bpmn"]);
                     self.dialogs.ask(dialog, Then::Save);
                 }
                 Request::Write { path, bytes } | Request::Download { name: path, bytes } => {
