@@ -294,7 +294,7 @@ fn the_same_seed_gives_the_same_results_and_a_stepped_run_agrees() {
         steps += 1;
     };
     // 3 batches, then each output a step to start and as many as its bootstrap needs, and the end.
-    assert!(steps >= 3 + 1 + 1, "{steps}");
+    assert!(steps > 3 + 1, "{steps}");
     assert_eq!(Ok(stepped), a);
 }
 
