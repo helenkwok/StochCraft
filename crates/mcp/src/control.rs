@@ -7,11 +7,16 @@
 //!   a [`Call`] (the app owns the engine, on its UI thread), and answered with what the app
 //!   replies: `{"id", "result"}` or `{"id", "error": {"code", "message", "details"?}}`.
 //!
-//! Anyone on this computer who can reach the port can drive the app, as a person at its window
-//! can; nothing is reachable from other computers.
+//! Every connection first presents the channel's token ([`crate::token`]) as one line,
+//! `{"token": "..."}`; the channel answers it with `{"id": null, "result": {"authenticated":
+//! true}}`, or, if the token is missing or wrong, with one `unauthorized` error line, and closes
+//! the connection without running anything. The token is in a file only the app's user can read,
+//! so a program under another account on this computer cannot drive the app; nothing is
+//! reachable from other computers.
 
 use std::io::{BufReader, Write};
 use std::net::{Ipv4Addr, Shutdown, SocketAddr, TcpListener, TcpStream};
+use std::path::Path;
 use std::sync::Arc;
 use std::sync::atomic::{AtomicUsize, Ordering};
 use std::sync::mpsc::{Receiver, Sender, channel};
@@ -22,6 +27,12 @@ use stochcraft_engine::{CommandError, ErrorCode};
 
 use crate::backend::catalogue;
 use crate::server::{MAX_LINE, read_line};
+use crate::token::{self, TokenFile, constant_time_eq};
+
+/// How long a new connection has to send its token line before it is closed.
+const AUTH_TIMEOUT: Duration = Duration::from_secs(2);
+/// The longest token line read: a token is 64 digits, so anything near this is not one.
+const AUTH_MAX_LINE: usize = 1024;
 
 /// A command for the app to run, from a client of the control channel.
 pub struct Call {
@@ -37,16 +48,61 @@ impl Call {
     }
 }
 
-/// Listens on `127.0.0.1:port` (0 picks a free port). Calls arrive on the receiver; `wake` is
-/// called after each, so an idle window looks at them.
-pub fn listen(
+/// The open control channel: the address it listens on, the calls arriving, and the token file,
+/// which is removed when this is dropped.
+pub struct Channel {
+    pub addr: SocketAddr,
+    pub calls: Receiver<Call>,
+    _file: TokenFile,
+}
+
+/// Listens on `127.0.0.1:port` (0 picks a free port) for clients that present a new random
+/// token, and writes the port and token to [`token::default_path`] for them to find. Calls
+/// arrive on `calls`; `wake` is called after each, so an idle window looks at them. If another
+/// running app owns the token file, this fails (`AddrInUse`) rather than hide that app's token.
+pub fn listen(port: u16, wake: impl Fn() + Send + Sync + 'static) -> std::io::Result<Channel> {
+    let path = token::default_path().ok_or_else(|| {
+        std::io::Error::other("this system has no folder for the control channel's token file")
+    })?;
+    listen_at(port, &path, wake)
+}
+
+/// [`listen`], with the token file at `path`.
+pub fn listen_at(
     port: u16,
+    path: &Path,
+    wake: impl Fn() + Send + Sync + 'static,
+) -> std::io::Result<Channel> {
+    let listener = TcpListener::bind((Ipv4Addr::LOCALHOST, port))?;
+    let token = token::generate()?;
+    let file = TokenFile::publish(path, listener.local_addr()?.port(), &token)?;
+    let (addr, calls) = serve_listener(listener, token, wake)?;
+    Ok(Channel {
+        addr,
+        calls,
+        _file: file,
+    })
+}
+
+/// Listens on `127.0.0.1:port` for clients that present `token`, writing no file.
+pub fn listen_with_token(
+    port: u16,
+    token: &str,
     wake: impl Fn() + Send + Sync + 'static,
 ) -> std::io::Result<(SocketAddr, Receiver<Call>)> {
     let listener = TcpListener::bind((Ipv4Addr::LOCALHOST, port))?;
+    serve_listener(listener, token.to_owned(), wake)
+}
+
+fn serve_listener(
+    listener: TcpListener,
+    token: String,
+    wake: impl Fn() + Send + Sync + 'static,
+) -> std::io::Result<(SocketAddr, Receiver<Call>)> {
     let addr = listener.local_addr()?;
     let (calls, receiver) = channel();
     let wake: Arc<dyn Fn() + Send + Sync> = Arc::new(wake);
+    let token: Arc<str> = Arc::from(token);
     let (open, refusing) = (Arc::new(AtomicUsize::new(0)), Arc::new(AtomicUsize::new(0)));
     std::thread::Builder::new()
         .name("stochcraft-control".into())
@@ -65,12 +121,12 @@ pub fn listen(
                     }
                     continue;
                 };
-                let (calls, wake) = (calls.clone(), Arc::clone(&wake));
+                let (calls, wake, token) = (calls.clone(), Arc::clone(&wake), Arc::clone(&token));
                 let _ = std::thread::Builder::new()
                     .name("stochcraft-control-client".into())
                     .spawn(move || {
                         let _slot = slot;
-                        serve(stream, &calls, wake.as_ref());
+                        serve(stream, &token, &calls, wake.as_ref());
                     });
             }
         })?;
@@ -104,15 +160,16 @@ impl Drop for Slot {
     }
 }
 
-/// Answers a client over [`MAX_CLIENTS`]: its first request (waited for briefly) gets a
-/// `conflict` error naming the limit, and the connection is closed.
+/// Answers a client over [`MAX_CLIENTS`]: its first line (its token line, waited for briefly,
+/// and not checked: nothing is run) gets a `conflict` error naming the limit, and the connection
+/// is closed.
 fn refuse(stream: TcpStream) {
     let Ok(mut writer) = stream.try_clone() else {
         return;
     };
-    let _ = stream.set_read_timeout(Some(Duration::from_secs(2)));
+    let _ = stream.set_read_timeout(Some(AUTH_TIMEOUT));
     let mut reader = BufReader::new(stream);
-    let id = match read_line(&mut reader, MAX_LINE) {
+    let id = match read_line(&mut reader, AUTH_MAX_LINE) {
         Ok(Some(line)) => serde_json::from_slice::<Value>(&line)
             .ok()
             .and_then(|r| r.get("id").cloned())
@@ -131,12 +188,42 @@ fn failure(code: ErrorCode, message: impl Into<String>) -> Value {
     CommandError::new(code, message).to_json()
 }
 
-/// Answers one client until it disconnects or the app has gone.
-fn serve(stream: TcpStream, calls: &Sender<Call>, wake: &(dyn Fn() + Send + Sync)) {
+/// Reads the client's first line and checks it is `{"token": ...}` with the right token, in
+/// constant time. A client that sends nothing in [`AUTH_TIMEOUT`], too long a line, or anything
+/// else gets one `unauthorized` error line and the connection is closed. On success the client
+/// is answered and may send requests, with no time limit.
+fn authenticate(reader: &mut BufReader<TcpStream>, writer: &mut TcpStream, token: &str) -> bool {
+    let _ = reader.get_ref().set_read_timeout(Some(AUTH_TIMEOUT));
+    let presented = match read_line(reader, AUTH_MAX_LINE) {
+        Ok(Some(line)) => serde_json::from_slice::<Value>(&line)
+            .ok()
+            .and_then(|v| v.get("token").and_then(Value::as_str).map(str::to_owned)),
+        _ => None,
+    };
+    let accepted = presented.is_some_and(|t| constant_time_eq(t.as_bytes(), token.as_bytes()));
+    if accepted {
+        let _ = reader.get_ref().set_read_timeout(None);
+        return reply(writer, Value::Null, Ok(json!({ "authenticated": true }))).is_ok();
+    }
+    let error = json!({
+        "code": "unauthorized",
+        "message": "the first line must be {\"token\": ...} with the app's token (docs/mcp.md)",
+    });
+    let _ = reply(writer, Value::Null, Err(error));
+    let _ = writer.shutdown(Shutdown::Both);
+    false
+}
+
+/// Answers one client until it disconnects or the app has gone. Nothing is run before the
+/// client has presented the token.
+fn serve(stream: TcpStream, token: &str, calls: &Sender<Call>, wake: &(dyn Fn() + Send + Sync)) {
     let Ok(mut writer) = stream.try_clone() else {
         return;
     };
     let mut reader = BufReader::new(stream);
+    if !authenticate(&mut reader, &mut writer, token) {
+        return;
+    }
     loop {
         let (id, outcome) = match read_line(&mut reader, MAX_LINE) {
             Ok(None) => return,

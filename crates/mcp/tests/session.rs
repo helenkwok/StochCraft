@@ -364,13 +364,17 @@ fn the_agent_is_kept_to_its_folders() {
     let refused = stochcraft_mcp::backend(Options {
         connect: Some("127.0.0.1:1".into()),
         roots: Roots::new(Some(&read), None).unwrap(),
+        ..Options::default()
     });
     assert!(refused.is_err());
 }
 
-/// An app's side of the control channel: an engine on its own thread, answering calls.
+const TOKEN: &str = "0123456789abcdef";
+
+/// An app's side of the control channel: an engine on its own thread, answering calls, for
+/// clients that present [`TOKEN`].
 fn app_with_control() -> std::net::SocketAddr {
-    let (addr, calls) = control::listen(0, || {}).unwrap();
+    let (addr, calls) = control::listen_with_token(0, TOKEN, || {}).unwrap();
     std::thread::spawn(move || {
         let mut engine = Engine::new();
         for call in calls {
@@ -386,7 +390,8 @@ fn the_same_tools_drive_an_app_through_its_control_channel() {
     let addr = app_with_control().to_string();
     let (backend, note) = stochcraft_mcp::backend(Options {
         connect: Some(addr.clone()),
-        roots: Roots::default(),
+        token: Some(TOKEN.into()),
+        ..Options::default()
     })
     .unwrap();
     assert!(note.is_none(), "{note:?}");
@@ -418,7 +423,7 @@ fn the_same_tools_drive_an_app_through_its_control_channel() {
     );
 
     // The raw channel: unknown methods and junk are answered, and the connection stays usable.
-    let mut remote = Remote::connect(&addr).unwrap();
+    let mut remote = Remote::connect(&addr, TOKEN).unwrap();
     assert!(remote.execute("history", json!({})).is_ok());
     use std::io::{BufRead, BufReader, Write};
     let stream = std::net::TcpStream::connect(&addr).unwrap();
@@ -430,6 +435,10 @@ fn the_same_tools_drive_an_app_through_its_control_channel() {
         reader.read_line(&mut reply).unwrap();
         serde_json::from_str(&reply).unwrap()
     };
+    assert_eq!(
+        ask(&json!({ "token": TOKEN }).to_string())["result"]["authenticated"],
+        true
+    );
     assert_eq!(ask("junk")["error"]["code"], "invalid_params");
     assert_eq!(
         ask(r#"{"id":1,"method":"ui.nothing"}"#)["error"]["code"],
@@ -447,23 +456,141 @@ fn the_same_tools_drive_an_app_through_its_control_channel() {
     // An app that cannot be reached: headless instead, with a note.
     let (_, note) = stochcraft_mcp::backend(Options {
         connect: Some("127.0.0.1:1".into()),
-        roots: Roots::default(),
+        token: Some(TOKEN.into()),
+        ..Options::default()
     })
     .unwrap();
     assert!(note.is_some_and(|n| n.contains("running headless")));
+}
+
+/// What a connection that does not present the token gets: one `unauthorized` line, then
+/// nothing more, and the command it sent next has not run.
+fn assert_refused(first: Option<&str>, then_execute: bool) {
+    use std::io::{BufRead, BufReader, Write};
+    let (addr, calls) = control::listen_with_token(0, TOKEN, || {}).unwrap();
+    let stream = std::net::TcpStream::connect(addr).unwrap();
+    let mut w = stream.try_clone().unwrap();
+    let mut reader = BufReader::new(stream);
+    if let Some(line) = first {
+        writeln!(w, "{line}").unwrap();
+    }
+    let mut reply = String::new();
+    reader.read_line(&mut reply).unwrap();
+    let reply: Value = serde_json::from_str(&reply).unwrap();
+    assert_eq!(reply["error"]["code"], "unauthorized", "{reply}");
+    if then_execute {
+        // Sent after the refusal, to a connection that is closing: it may not even be sent.
+        let _ = writeln!(
+            w,
+            r#"{{"id":1,"method":"engine.execute","params":{{"command":"history"}}}}"#
+        );
+    }
+    // Closed: no second line, and the app was handed nothing.
+    let mut rest = String::new();
+    assert_eq!(reader.read_line(&mut rest).unwrap_or(0), 0, "{rest}");
+    assert!(calls.try_recv().is_err());
+}
+
+#[test]
+fn a_connection_without_the_token_runs_nothing_and_is_closed() {
+    // A request where the token should be.
+    assert_refused(
+        Some(r#"{"id":1,"method":"engine.execute","params":{"command":"history"}}"#),
+        true,
+    );
+    // A wrong token, one that is a prefix of the right one, and one that is not text.
+    assert_refused(Some(r#"{"token":"0123456789abcdee"}"#), true);
+    assert_refused(Some(r#"{"token":"0123456789abcde"}"#), true);
+    assert_refused(Some(r#"{"token":7}"#), true);
+    assert_refused(Some("junk"), true);
+    // Nothing sent at all: closed after the short wait for the first line.
+    assert_refused(None, false);
+}
+
+#[test]
+fn the_right_token_works_and_the_cli_side_is_told_when_it_is_wrong() {
+    let addr = app_with_control().to_string();
+    assert!(
+        Remote::connect(&addr, TOKEN)
+            .unwrap()
+            .execute("history", json!({}))
+            .is_ok()
+    );
+    let e = Remote::connect(&addr, "wrong").err().unwrap();
+    assert_eq!(e.kind(), std::io::ErrorKind::PermissionDenied);
+    // Not a reason to fall back to headless: the agent would not be in the window.
+    let refused = stochcraft_mcp::backend(Options {
+        connect: Some(addr),
+        token: Some("wrong".into()),
+        ..Options::default()
+    });
+    assert!(refused.err().unwrap().contains("refused the token"));
+}
+
+#[test]
+fn connect_finds_the_token_in_the_file_the_app_wrote() {
+    let dir = Scratch::new("tokenfile");
+    let path = dir.0.join("stochcraft").join("control.json");
+    let channel = control::listen_at(0, &path, || {}).unwrap();
+    let calls = channel.calls;
+    std::thread::spawn(move || {
+        let mut engine = Engine::new();
+        for call in calls {
+            let result = engine.execute(&call.command, call.params.clone());
+            call.answer(result);
+        }
+    });
+    let (port, token) = stochcraft_mcp::token::read(&path).unwrap();
+    assert_eq!(port, channel.addr.port());
+    assert_eq!(token.len(), 64);
+    // No token given anywhere (so, unless STOCHCRAFT_TOKEN is set, the file's): it is found.
+    let (backend, note) = stochcraft_mcp::backend(Options {
+        connect: Some(channel.addr.to_string()),
+        token_file: Some(path.clone()),
+        ..Options::default()
+    })
+    .unwrap();
+    assert!(note.is_none(), "{note:?}");
+    let mut s = Session::new(backend);
+    assert!(
+        !s.ok("list_commands", json!({}))
+            .as_array()
+            .unwrap()
+            .is_empty()
+    );
+    // Without the file and without a token, the error names the file.
+    std::fs::remove_file(&path).unwrap();
+    let missing = stochcraft_mcp::backend(Options {
+        connect: Some(channel.addr.to_string()),
+        token_file: Some(path.clone()),
+        ..Options::default()
+    });
+    let message = missing.err().unwrap();
+    assert!(
+        message.contains("control.json") || std::env::var("STOCHCRAFT_TOKEN").is_ok(),
+        "{message}"
+    );
 }
 
 #[test]
 fn the_control_channel_takes_a_limited_number_of_clients() {
     use std::io::{BufRead, BufReader, Write};
     let addr = app_with_control();
+    // A client that sends its token line, then the request; the answer to the token is read
+    // first (and is the refusal itself for a client over the limit, which has no id).
     let ask = |stream: &std::net::TcpStream, id: u64| -> Option<Value> {
         let mut w = stream.try_clone().unwrap();
-        writeln!(w, r#"{{"id":{id},"method":"engine.commands"}}"#).ok()?;
+        writeln!(w, r#"{{"token":"{TOKEN}"}}"#).ok()?;
+        let mut reader = BufReader::new(stream.try_clone().unwrap());
         let mut reply = String::new();
-        BufReader::new(stream.try_clone().unwrap())
-            .read_line(&mut reply)
-            .ok()?;
+        reader.read_line(&mut reply).ok()?;
+        let first: Value = serde_json::from_str(&reply).ok()?;
+        if first.get("error").is_some() {
+            return Some(first);
+        }
+        writeln!(w, r#"{{"id":{id},"method":"engine.commands"}}"#).ok()?;
+        reply.clear();
+        reader.read_line(&mut reply).ok()?;
         serde_json::from_str(&reply).ok()
     };
     // Each answered, so the app has taken all of them.
@@ -476,7 +603,7 @@ fn the_control_channel_takes_a_limited_number_of_clients() {
     // One more is told why, under its own id, and closed.
     let extra = std::net::TcpStream::connect(addr).unwrap();
     let refused = ask(&extra, 99).unwrap();
-    assert_eq!(refused["id"], 99);
+    assert!(refused["id"].is_null());
     assert_eq!(refused["error"]["code"], "conflict");
     assert!(
         refused["error"]["message"]

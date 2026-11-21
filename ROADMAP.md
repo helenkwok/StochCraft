@@ -2051,13 +2051,17 @@ replications other than the first.
   the agent opens and saves (links followed, whole-folder comparison, as in FieldCraft).
 - **Watching an agent:** `stochcraft --control PORT` listens on the loopback interface, and
   `stochcraft-cli mcp --connect 127.0.0.1:PORT` drives the window through it. A model the agent
-  opens replaces the one shown, its runs' results are shown, and its edits can be undone.
+  opens replaces the one shown, its runs' results are shown, and its edits can be undone. The
+  channel takes only connections that present a random 256-bit token as their first line; the
+  app writes it, with the port, to a file only its user can read (mode 0600 on Unix, the
+  profile's default permissions on Windows), and `--connect` reads it from there, or from
+  `--token` or `STOCHCRAFT_TOKEN` (#248).
 - **Tests:** `mcp/tests/session.rs` covers four areas:
   - an agent's session (open, batch build, check, run against M/M/1 theory, undo, save,
     resources);
   - hostile input;
   - the roots;
-  - the same tools through a control channel.
+  - the same tools through a control channel, which refuses a connection without the token.
 
   `ui-egui/tests/control.rs` checks that an agent's commands show in the window. Checked by hand:
   the desktop app on a virtual display, driven by `stochcraft-cli mcp --connect`, opened the

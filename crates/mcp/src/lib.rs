@@ -18,6 +18,7 @@ mod backend;
 pub mod control;
 pub mod roots;
 mod server;
+pub mod token;
 pub mod tools;
 
 pub use backend::{Backend, Headless, Remote, catalogue};
@@ -31,12 +32,17 @@ pub use server::{
 pub struct Options {
     /// The control channel of a running app (`127.0.0.1:7070`); `None` runs headless.
     pub connect: Option<String>,
+    /// The control channel's token (`--token`); else the environment variable `STOCHCRAFT_TOKEN`,
+    /// else the file the app wrote ([`token::default_path`]).
+    pub token: Option<String>,
+    /// Where to look for the token file instead of [`token::default_path`].
+    pub token_file: Option<std::path::PathBuf>,
     /// Folders file access is confined to; unconfined by default.
     pub roots: Roots,
 }
 
 /// The backend `options` ask for, and a note for stderr when the server falls back to headless
-/// because the app cannot be reached. Confined roots with `connect` are refused: the app would
+/// because the app cannot be reached; a missing or refused token is an error instead. Confined roots with `connect` are refused: the app would
 /// read and write files the roots do not cover.
 pub fn backend(options: Options) -> Result<(Box<dyn Backend>, Option<String>), String> {
     match options.connect {
@@ -44,15 +50,44 @@ pub fn backend(options: Options) -> Result<(Box<dyn Backend>, Option<String>), S
             "--connect {addr} cannot be combined with --read-root or --write-root: the app is not \
              confined by them"
         )),
-        Some(addr) => match Remote::connect(&addr) {
-            Ok(r) => Ok((Box::new(r), None)),
-            Err(e) => Ok((
-                Box::new(Headless::new(options.roots)),
-                Some(format!(
-                    "StochCraft at {addr} cannot be reached ({e}); running headless"
+        Some(addr) => {
+            let environment = std::env::var("STOCHCRAFT_TOKEN").ok();
+            let file = options.token_file.clone().or_else(token::default_path);
+            // The app writes its token file whenever its channel is open, so with no token given
+            // and no file, the app is not running: run headless, as when it cannot be reached.
+            let given = [options.token.as_deref(), environment.as_deref()]
+                .into_iter()
+                .flatten()
+                .any(|t| !t.trim().is_empty());
+            if let Some(f) = file.as_deref().filter(|f| !given && !f.exists()) {
+                return Ok((
+                    Box::new(Headless::new(options.roots)),
+                    Some(format!(
+                        "StochCraft at {addr} is not running (no token file at {}); running headless",
+                        f.display()
+                    )),
+                ));
+            }
+            let token = token::resolve(
+                options.token.as_deref(),
+                environment.as_deref(),
+                file.as_deref(),
+            )?;
+            match Remote::connect(&addr, &token) {
+                Ok(r) => Ok((Box::new(r), None)),
+                // A refused token is an error, not a reason to drive a different engine: the
+                // agent would think it was working in the window.
+                Err(e) if e.kind() == std::io::ErrorKind::PermissionDenied => {
+                    Err(format!("the app at {addr} refused the token: {e}"))
+                }
+                Err(e) => Ok((
+                    Box::new(Headless::new(options.roots)),
+                    Some(format!(
+                        "StochCraft at {addr} cannot be reached ({e}); running headless"
+                    )),
                 )),
-            )),
-        },
+            }
+        }
         None => Ok((Box::new(Headless::new(options.roots)), None)),
     }
 }

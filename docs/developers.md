@@ -463,7 +463,8 @@ claude mcp add stochcraft -- /path/to/stochcraft-cli mcp
 ```
 
 Start the app with `stochcraft --control 7070` and add `--connect 127.0.0.1:7070` to watch the
-agent work in the window. [mcp.md](mcp.md) has the tools and options.
+agent work in the window; the app writes a token to a file only its user can read, and `--connect`
+reads it from there. [mcp.md](mcp.md) has the tools, the options and how the token works.
 
 ## How it is checked
 

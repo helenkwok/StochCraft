@@ -146,18 +146,54 @@ pub struct Remote {
 }
 
 impl Remote {
-    /// Connects to the app's control channel at `addr` (`127.0.0.1:7070`). Each address the name
-    /// resolves to is tried in turn: `localhost` may give `::1` first, while the app listens on
-    /// `127.0.0.1` only.
-    pub fn connect(addr: &str) -> std::io::Result<Self> {
+    /// Connects to the app's control channel at `addr` (`127.0.0.1:7070`) and presents `token`
+    /// (the channel's first line). Each address the name resolves to is tried in turn:
+    /// `localhost` may give `::1` first, while the app listens on `127.0.0.1` only. A channel
+    /// that refuses the token is `PermissionDenied`, with its message.
+    pub fn connect(addr: &str, token: &str) -> std::io::Result<Self> {
         let stream = first_reachable(addr.to_socket_addrs()?)?;
         stream.set_nodelay(true)?;
-        Ok(Self {
+        let mut remote = Self {
             addr: addr.to_owned(),
             reader: BufReader::new(stream.try_clone()?),
             writer: stream,
             next_id: 1,
-        })
+        };
+        remote.authenticate(token)?;
+        Ok(remote)
+    }
+
+    /// Sends the token and reads the channel's answer to it.
+    fn authenticate(&mut self, token: &str) -> std::io::Result<()> {
+        self.writer
+            .set_read_timeout(Some(Duration::from_secs(10)))?;
+        writeln!(self.writer, "{}", json!({ "token": token }))?;
+        self.writer.flush()?;
+        let mut line = String::new();
+        let read = (&mut self.reader).take(MAX_REPLY).read_line(&mut line)?;
+        self.writer.set_read_timeout(None)?;
+        if read == 0 {
+            return Err(std::io::Error::new(
+                std::io::ErrorKind::ConnectionAborted,
+                "the app closed the connection",
+            ));
+        }
+        let reply: Value = serde_json::from_str(&line).map_err(|e| {
+            std::io::Error::new(
+                std::io::ErrorKind::InvalidData,
+                format!("the app's reply is not JSON: {e}"),
+            )
+        })?;
+        let Some(error) = reply.get("error") else {
+            return Ok(());
+        };
+        let message = error["message"].as_str().unwrap_or("refused").to_owned();
+        let kind = if error["code"] == "unauthorized" {
+            std::io::ErrorKind::PermissionDenied
+        } else {
+            std::io::ErrorKind::Other
+        };
+        Err(std::io::Error::new(kind, message))
     }
 
     fn call(&mut self, method: &str, params: Value) -> Result<Value, String> {
