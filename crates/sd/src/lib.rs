@@ -52,7 +52,7 @@ mod xmile;
 mod xml;
 
 pub use edit::{Users, find_variable, remove_variable, rename_variable, users_of};
-pub use layout::{AUX_SIZE, Connector, Layout, STOCK_SIZE, Shape, VALVE_SIZE};
+pub use layout::{AUX_SIZE, Connector, Layout, STOCK_SIZE, Shape, VALVE_SIZE, flow_ends};
 pub use model::{Gf, GfKind, GfX, Method, SdModel, SimSpecs, Step, VarKind, Variable, canonical};
 pub use program::{Program, compile};
 pub use run::{

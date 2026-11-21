@@ -199,7 +199,7 @@ fn project(pts: &[(f64, f64)], p: (f64, f64)) -> ((f64, f64), f64) {
             (((p.0 - a.0) * dx + (p.1 - a.1) * dy) / len2).clamp(0.0, 1.0)
         };
         let q = (a.0 + t * dx, a.1 + t * dy);
-        let d = ((p.0 - q.0).powi(2) + (p.1 - q.1).powi(2)).sqrt();
+        let d = (p.0 - q.0).hypot(p.1 - q.1);
         if d < best.1 {
             best = (q, d);
         }
@@ -207,7 +207,7 @@ fn project(pts: &[(f64, f64)], p: (f64, f64)) -> ((f64, f64), f64) {
     if pts.len() == 1
         && let Some(a) = pts.first()
     {
-        return (*a, ((p.0 - a.0).powi(2) + (p.1 - a.1).powi(2)).sqrt());
+        return (*a, (p.0 - a.0).hypot(p.1 - a.1));
     }
     best
 }
