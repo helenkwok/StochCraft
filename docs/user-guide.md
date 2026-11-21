@@ -436,13 +436,23 @@ On the **Model** tab:
 - **Trials and sampling:** the number of trials (10,000 for a new model), the seed, and the
   sampling. **Latin hypercube** cuts each input's range into equally likely strata (the same
   chance of a draw in each, not equally spaced values) and draws once from each, which usually
-  makes the results more precise; it does not promise fewer trials for every output. **How many
-  trials** can be **More until precise enough**: trials are added until every output's mean is
+  makes the results more precise; it does not promise fewer trials for every output.
+  **Antithetic pairs** make trials two at a time, the second from the opposite end of every
+  input's range from the first (where the first drew the 30th percentile, the second draws the
+  70th), and the mean and its ± are then of the pairs' means (a pair where one trial gave no number counts as that other trial alone, and a pair with neither is left out); for an output that rises or falls with its inputs the pair's errors tend to cancel,
+  so the results are usually more precise for the same trials, but for an output that peaks
+  in the middle of an input's range they may not be, and they cannot be used with correlated
+  inputs, which reorder the trials. **Quasi-random (Sobol)** draws spread the trials evenly
+  over the inputs' ranges instead of by chance, with a fresh random shift in every batch of
+  1,000 so that the batches are independent; it usually does best for a smooth output of a few
+  inputs, and has points for up to 64 inputs. On the command line, `stochcraft-cli run model.bpmn
+  --sampling antithetic` or `--sampling quasi-random` chooses it for one run. **How many trials** can be **More until precise enough**: trials are added until every output's mean is
   within the share you set, or until the most you allow has run; in that case the results say
-  the target was not met. With Latin hypercube sampling or correlated inputs the trials run in
-  whole batches of 1,000, so the most must be at least 1,000, and a most that is not a whole
-  number of batches is rounded down: a most of 1,500 stops at 1,000 trials, a most of 2,500 at
-  2,000. With plain random sampling the most is used as it is.
+  the target was not met. With Latin hypercube or Sobol sampling or correlated inputs the
+  trials run in whole batches of 1,000, so the most must be at least 1,000, and a most that is
+  not a whole number of batches is rounded down: a most of 1,500 stops at 1,000 trials, a most
+  of 2,500 at 2,000. With antithetic pairs the trials run in whole pairs, so a most is rounded
+  down to an even number. With plain random sampling the most is used as it is.
 
 Every change is one step you can undo. **Run** (F5) makes the trials a few batches at a time,
 so the window stays responsive, also in the browser.
@@ -457,9 +467,13 @@ The **Results** tab answers the question first:
   trials gave each value) and the cumulative curve (the share of trials at or below each value),
   with the target drawn on both.
 - **How sure are these numbers?** says what each ± is across. With plain random sampling and no
-  correlations it is across the trials. Latin hypercube sampling and correlations make the trials
-  within a batch of 1,000 depend on each other, so there it is across batches, and the trials run
-  in whole batches: 2,500 trials asked for run as 3,000, and the results say so.
+  correlations it is across the trials. Latin hypercube sampling, Sobol sampling and correlations
+  make the trials within a batch of 1,000 depend on each other, so there it is across batches
+  (with Sobol sampling each batch has a random shift of its own, so the batches are
+  independent), and the trials run in whole batches: 2,500 trials asked for run as 3,000, and the
+  results say so. With antithetic pairs the two trials of a pair depend on each other and the
+  pairs do not, so it is across pairs. How many batches or pairs the ± is across is in the same
+  place; with fewer than two there is no ±.
 - The line under **Results** gives the trials, the seed and the sampling, and how a run with
   **More until precise enough** stopped. **Export table (CSV)** saves a row per output.
 - **Which inputs matter**, for each output, says in words which input it depends on most: "duration

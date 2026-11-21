@@ -203,7 +203,7 @@ pub(crate) fn read(
             Some(x) => m.sampling = x,
             None => notes.push(Note::warning(
                 None,
-                format!("sampling `{raw}` is not random or latinHypercube; random is used"),
+                format!("sampling `{raw}` is not random, latinHypercube, antithetic or sobol; random is used"),
             )),
         }
     }
@@ -387,6 +387,47 @@ mod tests {
         assert_eq!(back.model, edited);
         // Saved again unchanged from there, byte for byte.
         assert_eq!(back.opened.save(&edited).as_deref(), Ok(&saved[..]));
+    }
+
+    /// Every sampling is saved under its file name and read back, and a name this reader does
+    /// not know is a warning that falls back to random sampling (what a reader from before the
+    /// antithetic and Sobol modes does with a file that has them).
+    #[test]
+    fn every_sampling_is_saved_and_read_back() {
+        for sampling in [
+            Sampling::Random,
+            Sampling::LatinHypercube,
+            Sampling::Antithetic,
+            Sampling::Sobol,
+        ] {
+            let mut m = model();
+            if let Some(mc) = m.monte_carlo.as_mut() {
+                mc.sampling = sampling;
+            }
+            let bytes = crate::write_new(&m);
+            let text = String::from_utf8_lossy(&bytes);
+            assert!(
+                text.contains(&format!(r#"sampling="{}""#, sampling.file_name())),
+                "{text}"
+            );
+            let loaded = crate::read(&bytes).unwrap_or_else(|e| unreachable!("{e}"));
+            assert_eq!(loaded.model, m, "{text}");
+        }
+        let text = String::from_utf8_lossy(&crate::write_new(&model()))
+            .replace(r#"sampling="latinHypercube""#, r#"sampling="quasiRandom""#);
+        let loaded = crate::read(text.as_bytes()).unwrap_or_else(|e| unreachable!("{e}"));
+        assert_eq!(
+            loaded.model.monte_carlo.map(|mc| mc.sampling),
+            Some(Sampling::Random)
+        );
+        assert!(
+            loaded
+                .notes
+                .iter()
+                .any(|n| n.message.contains("quasiRandom")),
+            "{:?}",
+            loaded.notes
+        );
     }
 
     #[test]

@@ -541,3 +541,56 @@ fn a_sobol_run_made_a_piece_at_a_time_gives_mc_sobols_results() {
     assert!(job.step(5));
     assert_eq!(e.sobol_evaluations(), Some(4_000));
 }
+
+/// Antithetic pairs and Sobol points: `mc.set` takes them, the run says what its intervals are
+/// across (pairs, or batches of randomised Sobol points), a run made a batch at a time gives
+/// `mc.run`'s results, and antithetic pairs are refused with correlated inputs, which reorder
+/// the trials.
+#[test]
+fn antithetic_and_sobol_sampling_run_and_say_what_their_intervals_are_across() {
+    let mut e = cost_model();
+    ok(&mut e, "mc.set", json!({ "sampling": "antithetic" }));
+    assert_eq!(
+        ok(&mut e, "mc.get", json!({}))["monte_carlo"]["sampling"],
+        "antithetic"
+    );
+    // A correlation reorders each batch, which breaks the pairs: the run does not start.
+    assert!(e.mc_start(json!({ "trials": 2_000 })).is_err());
+    ok(
+        &mut e,
+        "mc.correlation.set",
+        json!({ "a": "labour", "b": "materials", "rank": 0.0 }),
+    );
+    for (sampling, across, trials) in [("antithetic", "pairs", 4_501), ("sobol", "batches", 4_500)]
+    {
+        ok(&mut e, "mc.set", json!({ "sampling": sampling }));
+        let params = json!({ "trials": trials, "seed": 5 });
+        let at_once = ok(&mut e, "mc.run", params.clone());
+        assert_eq!(at_once["sampling"], sampling);
+        assert_eq!(at_once["interval_basis"]["across"], across, "{sampling}");
+        assert_eq!(at_once["record"]["sampling"], sampling);
+        let text = at_once["interval"].as_str().unwrap_or_default();
+        assert!(
+            text.contains(if sampling == "sobol" {
+                "Sobol"
+            } else {
+                "antithetic"
+            }),
+            "{text}"
+        );
+        // Antithetic runs are whole pairs, Sobol runs whole batches.
+        let made = at_once["trials"].as_u64().unwrap_or(0);
+        assert_eq!(made, if sampling == "sobol" { 5_000 } else { 4_502 });
+        let job = e.mc_start(params.clone());
+        assert!(job.is_ok(), "{params}");
+        let Ok(mut job) = job else { return };
+        let mut steps = 0;
+        while job.step(1).ok() == Some(false) && steps < 1_000 {
+            steps += 1;
+        }
+        assert!(steps > 1, "{sampling}: in more than one step");
+        let stepped = e.mc_results(&mut job).unwrap_or_default();
+        assert_eq!(stepped["outputs"], at_once["outputs"], "{sampling}");
+        assert_eq!(stepped["trials"], at_once["trials"]);
+    }
+}

@@ -1324,3 +1324,16 @@ unit	yr	év
 	95% interval {low} to {high}	95%-os intervallum {low} és {high} között
 	Alone is the share of the spread an input explains by itself. With interactions adds what it does together with the other inputs.	Önmagában: a szórásnak az a része, amelyet egy bemenet egyedül magyaráz. Kölcsönhatásokkal: ehhez hozzáadódik, amit a többi bemenettel együtt tesz.
 	Working out the shares of the spread: {percent}	A szórás részesedéseinek kiszámítása: {percent}
+	Antithetic pairs	Antitetikus párok
+	Quasi-random (Sobol)	Kvázi-véletlen (Sobol)
+	Antithetic pairs make each trial's twin from the opposite end of every input's range, so their errors tend to cancel, which usually makes the results more precise for the same trials. Trials run in pairs; it cannot be used with correlated inputs.	Az antitetikus párok minden próba ikerpárját az egyes bemenetek tartományának ellenkező végéről készítik, így a hibáik hajlamosak kioltani egymást, ami általában pontosabb eredményt ad ugyanannyi próbával. A próbák párokban futnak; korrelált bemenetekkel nem használható.
+	Quasi-random (Sobol) draws spread the trials evenly over the inputs' ranges, with a fresh random shift in every batch of 1,000, which usually makes the results more precise for the same trials. It has points for up to 64 inputs.	A kvázi-véletlen (Sobol) húzások egyenletesen szórják szét a próbákat a bemenetek tartományain, minden 1,000 próbás kötegben új véletlen eltolással, ami általában pontosabb eredményt ad ugyanannyi próbával. Legfeljebb 64 bemenethez tartalmaz pontokat.
+	Each ± is the half-width of the 95% interval of the mean across independent pairs of trials (pairs: {n}). The two trials of a pair are made to oppose each other, so each pair counts as one.	Minden ± az átlag 95%-os intervallumának fél szélessége független próbapárok alapján (párok: {n}). Egy pár két próbáját úgy készítjük, hogy ellentétesek legyenek, ezért minden pár egynek számít.
+	Each ± is the half-width of the 95% interval of the mean across independent batches of {size} trials (batches: {n}). Each batch is shifted at random on its own, so each batch counts as one.	Minden ± az átlag 95%-os intervallumának fél szélessége független, {size} próbás kötegek alapján (kötegek: {n}). Minden köteget külön, véletlenszerűen tolunk el, ezért minden köteg egynek számít.
+	antithetic sampling	antitetikus mintavétel
+	quasi-random (Sobol) sampling	kvázi-véletlen (Sobol) mintavétel
+	{asked} trials were asked for; antithetic sampling runs whole pairs of trials, so {n} ran.	{asked} próbát kértek; az antitetikus mintavétel egész próbapárokat futtat, ezért {n} futott le.
+	{asked} trials were asked for; Sobol sampling runs whole batches of {size}, so {n} ran.	{asked} próbát kértek; a Sobol-mintavétel egész, {size} próbás kötegeket futtat, ezért {n} futott le.
+	{name}: the ± is across {n} of the {of} pairs, the rest had no trial with a number.	{name}: a ± alapjául szolgáló párok száma: {n} (összesen: {of}); a többinél egyik próbának sem volt számértéke.
+	No interval: every pair gave the same share, so their spread gives none.	Nincs intervallum: minden pár ugyanazt az arányt adta, így a szórásuk nem ad intervallumot.
+	No interval: too few pairs of trials for one.	Nincs intervallum: túl kevés próbapár van hozzá.

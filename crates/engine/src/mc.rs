@@ -37,6 +37,12 @@ pub enum SamplingSpec {
     /// Latin hypercube: within each batch of 1,000 trials, one draw from each of as many equally
     /// likely strata of each input as there are trials.
     LatinHypercube,
+    /// Antithetic pairs: trials come in pairs that use each input's uniform u and 1 - u, so
+    /// an output that rises with the inputs has the pair's errors cancel.
+    Antithetic,
+    /// Randomised quasi-Monte Carlo: within each batch of 1,000 trials, Sobol points with a
+    /// random digital shift, one dimension per input (at most 64 inputs).
+    Sobol,
 }
 
 impl From<Sampling> for SamplingSpec {
@@ -44,6 +50,8 @@ impl From<Sampling> for SamplingSpec {
         match s {
             Sampling::Random => SamplingSpec::Random,
             Sampling::LatinHypercube => SamplingSpec::LatinHypercube,
+            Sampling::Antithetic => SamplingSpec::Antithetic,
+            Sampling::Sobol => SamplingSpec::Sobol,
         }
     }
 }
@@ -53,6 +61,8 @@ impl From<SamplingSpec> for Sampling {
         match s {
             SamplingSpec::Random => Sampling::Random,
             SamplingSpec::LatinHypercube => Sampling::LatinHypercube,
+            SamplingSpec::Antithetic => Sampling::Antithetic,
+            SamplingSpec::Sobol => Sampling::Sobol,
         }
     }
 }
@@ -62,6 +72,8 @@ impl SamplingSpec {
         match self {
             SamplingSpec::Random => "random",
             SamplingSpec::LatinHypercube => "latin_hypercube",
+            SamplingSpec::Antithetic => "antithetic",
+            SamplingSpec::Sobol => "sobol",
         }
     }
 }
@@ -859,7 +871,7 @@ fn mc_record(context: &Value, r: &McResults, m: &MonteCarlo) -> Value {
         "interval": interval_text(r),
         "batch": BATCH,
         "stop": m.stop.map(StopDoc::from),
-        "random_streams": "trials in batches of 1,000; each input's draws in batch b from the stream keyed mc/<b>/input/<name> under the seed, and the pairing of correlated inputs from mc/<b>/correlation, so results do not depend on the number of threads",
+        "random_streams": "trials in batches of 1,000; each input's draws in batch b from the stream keyed mc/<b>/input/<name> under the seed (with Sobol sampling its random digital shift, from mc/qmc/<b>/<name>, the points being the first of Joe and Kuo's Sobol sequence with one dimension per input in declaration order), and the pairing of correlated inputs from mc/<b>/correlation, so results do not depend on the number of threads",
         "correlation": "rank correlations induced by Iman and Conover's method (1982) in each batch, on van der Waerden scores with Pearson correlation 2 sin(πρ/6) for a rank correlation ρ",
         "uncertainty": uncertainty_text(r),
         "influence": "per output and per input that is not a constant, widest swing first. base: the output with every input at its median. low and high: the output with that input at its 10th (p10) and its 90th (p90) percentile and every other input at its median (the tornado of decision analysis, Clemen and Reilly, Making Hard Decisions, 3rd ed., 2014); swing: |high - low|, null if either is not a number. No sampling is used, so these do not vary with the seed, the trials or the sampling, and they leave out what correlated inputs do together. rank_correlation: Spearman's, between the input and the output across the run's trials where the output has a number; for a correlated input it includes the effect of the inputs it is correlated with; null if either has no spread",
@@ -868,16 +880,20 @@ fn mc_record(context: &Value, r: &McResults, m: &MonteCarlo) -> Value {
 }
 
 /// What the intervals are across, in words: `Student-t across 12 independent Latin hypercube
-/// batches of 1000 trials`, or across trials.
+/// batches of 1000 trials`, across independent antithetic pairs, or across trials.
 pub fn interval_text(r: &McResults) -> String {
     match r.interval {
         IntervalBasis::Trials => format!("Student-t across {} independent trials", r.trials),
         IntervalBasis::Batches { batches, size } => {
             let kind = match r.sampling {
                 Sampling::LatinHypercube => "Latin hypercube batches",
-                Sampling::Random => "batches",
+                Sampling::Sobol => "randomised Sobol batches",
+                Sampling::Random | Sampling::Antithetic => "batches",
             };
             format!("Student-t across {batches} independent {kind} of {size} trials")
+        }
+        IntervalBasis::Pairs { pairs } => {
+            format!("Student-t across {pairs} independent antithetic pairs of trials")
         }
     }
 }
@@ -888,7 +904,10 @@ fn uncertainty_text(r: &McResults) -> &'static str {
             "plain random sampling with no correlations: the trials are independent, so the mean has the 95% Student-t interval across trials (half_width) and a target's probability Wilson's 95% score interval; percentiles by Hyndman and Fan's definition 7"
         }
         IntervalBasis::Batches { .. } => {
-            "Latin hypercube sampling or correlated inputs make the trials within a batch dependent, so each batch is one independent replicate (replicated Latin hypercube sampling; Owen, 1992; Glasserman, 2003, section 4.4): the mean has the 95% Student-t interval on the batch means and a target's probability the 95% Student-t interval on the batch proportions, clamped to [0, 1], with batches - 1 degrees of freedom, and none with fewer than two batches; runs are whole batches; std_dev is across trials; percentiles by Hyndman and Fan's definition 7"
+            "Latin hypercube or Sobol sampling or correlated inputs make the trials within a batch dependent, so each batch is one independent replicate (replicated Latin hypercube sampling, Owen, 1992; Glasserman, 2003, section 4.4; Sobol sampling is randomised quasi-Monte Carlo with an independent random digital shift in each batch, Owen, 1995, and L'Ecuyer and Lemieux, 2002): the mean has the 95% Student-t interval on the batch means and a target's probability the 95% Student-t interval on the batch proportions, clamped to [0, 1], with batches - 1 degrees of freedom, and none with fewer than two batches; runs are whole batches; std_dev is across trials; percentiles by Hyndman and Fan's definition 7"
+        }
+        IntervalBasis::Pairs { .. } => {
+            "antithetic sampling makes the two trials of a pair (u and 1 - u for every input) dependent, and the pairs independent (Glasserman, 2003, section 4.2): the mean has the 95% Student-t interval on the pair means and a target's probability the 95% Student-t interval on the pair proportions, clamped to [0, 1], with pairs - 1 degrees of freedom; runs are whole pairs; std_dev is across trials, so it is not the spread the interval is made from; percentiles by Hyndman and Fan's definition 7"
         }
     }
 }
@@ -949,6 +968,7 @@ pub fn results_json(r: &McResults) -> Value {
         IntervalBasis::Batches { batches, size } => {
             json!({ "across": "batches", "count": batches, "size": size })
         }
+        IntervalBasis::Pairs { pairs } => json!({ "across": "pairs", "count": pairs, "size": 2 }),
     };
     let mut v = json!({
         "kind": "monte_carlo",

@@ -1324,3 +1324,16 @@ unit	yr	р.
 	95% interval {low} to {high}	95% інтервал від {low} до {high}
 	Alone is the share of the spread an input explains by itself. With interactions adds what it does together with the other inputs.	«Окремо» — частка розкиду, яку вхідна величина пояснює сама. «З взаємодіями» додає те, що вона робить разом з іншими вхідними величинами.
 	Working out the shares of the spread: {percent}	Обчислення часток розкиду: {percent}
+	Antithetic pairs	Антитетичні пари
+	Quasi-random (Sobol)	Квазівипадкова (Sobol)
+	Antithetic pairs make each trial's twin from the opposite end of every input's range, so their errors tend to cancel, which usually makes the results more precise for the same trials. Trials run in pairs; it cannot be used with correlated inputs.	Антитетичні пари створюють двійника кожного випробування з протилежного краю діапазону кожної вхідної величини, тож їхні похибки, як правило, взаємно гасяться, що зазвичай робить результати точнішими за тієї самої кількості випробувань. Випробування виконуються парами; з корельованими вхідними величинами це не можна використовувати.
+	Quasi-random (Sobol) draws spread the trials evenly over the inputs' ranges, with a fresh random shift in every batch of 1,000, which usually makes the results more precise for the same trials. It has points for up to 64 inputs.	Квазівипадкові (Sobol) вибірки рівномірно розподіляють випробування за діапазонами вхідних величин, зі свіжим випадковим зсувом у кожній партії по 1,000, що зазвичай робить результати точнішими за тієї самої кількості випробувань. Є точки для до 64 вхідних величин.
+	Each ± is the half-width of the 95% interval of the mean across independent pairs of trials (pairs: {n}). The two trials of a pair are made to oppose each other, so each pair counts as one.	Кожне ± — це половина ширини 95% інтервалу середнього по незалежних парах випробувань (пар: {n}). Два випробування пари створюються протилежними одне одному, тому кожна пара рахується як одна.
+	Each ± is the half-width of the 95% interval of the mean across independent batches of {size} trials (batches: {n}). Each batch is shifted at random on its own, so each batch counts as one.	Кожне ± — це половина ширини 95% інтервалу середнього по незалежних партіях по {size} випробувань (партій: {n}). Кожна партія зсувається випадково окремо, тому кожна партія рахується як одна.
+	antithetic sampling	антитетична вибірка
+	quasi-random (Sobol) sampling	квазівипадкова (Sobol) вибірка
+	{asked} trials were asked for; antithetic sampling runs whole pairs of trials, so {n} ran.	Запитано {asked} випробувань; антитетична вибірка виконує цілі пари випробувань, тож виконано {n}.
+	{asked} trials were asked for; Sobol sampling runs whole batches of {size}, so {n} ran.	Запитано {asked} випробувань; вибірка Sobol виконує цілі партії по {size}, тож виконано {n}.
+	{name}: the ± is across {n} of the {of} pairs, the rest had no trial with a number.	{name}: ± обчислено по {n} з {of} пар, решта не мала випробування з числом.
+	No interval: every pair gave the same share, so their spread gives none.	Інтервалу немає: усі пари дали однакову частку, тож їхній розкид інтервалу не дає.
+	No interval: too few pairs of trials for one.	Інтервалу немає: замало пар випробувань для нього.

@@ -1324,3 +1324,16 @@ unit	yr	г.
 	95% interval {low} to {high}	95% интервал от {low} до {high}
 	Alone is the share of the spread an input explains by itself. With interactions adds what it does together with the other inputs.	Самостоятелно е делът от вариацията, който входът обяснява сам. С взаимодействия добавя това, което прави заедно с останалите входове.
 	Working out the shares of the spread: {percent}	Изчисляване на дяловете от вариацията: {percent}
+	Antithetic pairs	Антитетични двойки
+	Quasi-random (Sobol)	Квазислучайна (Sobol)
+	Antithetic pairs make each trial's twin from the opposite end of every input's range, so their errors tend to cancel, which usually makes the results more precise for the same trials. Trials run in pairs; it cannot be used with correlated inputs.	Антитетичните двойки създават двойника на всеки опит от противоположния край на диапазона на всеки вход, така че грешките им клонят да се компенсират, което обикновено прави резултатите по-точни при същия брой опити. Опитите се изпълняват по двойки; не може да се използва с корелирани входове.
+	Quasi-random (Sobol) draws spread the trials evenly over the inputs' ranges, with a fresh random shift in every batch of 1,000, which usually makes the results more precise for the same trials. It has points for up to 64 inputs.	Квазислучайното (Sobol) теглене разпределя опитите равномерно по диапазоните на входовете, с ново случайно изместване във всяка партида от 1,000, което обикновено прави резултатите по-точни при същия брой опити. Има точки за до 64 входа.
+	Each ± is the half-width of the 95% interval of the mean across independent pairs of trials (pairs: {n}). The two trials of a pair are made to oppose each other, so each pair counts as one.	Всяко ± е половината от ширината на 95% интервал на средната стойност по независими двойки опити (двойки: {n}). Двата опита в една двойка са направени да си противоречат, затова всяка двойка се брои за една.
+	Each ± is the half-width of the 95% interval of the mean across independent batches of {size} trials (batches: {n}). Each batch is shifted at random on its own, so each batch counts as one.	Всяко ± е половината от ширината на 95% интервал на средната стойност по независими партиди от {size} опита (партиди: {n}). Всяка партида е изместена случайно сама по себе си, затова всяка партида се брои за една.
+	antithetic sampling	антитетична извадка
+	quasi-random (Sobol) sampling	квазислучайна (Sobol) извадка
+	{asked} trials were asked for; antithetic sampling runs whole pairs of trials, so {n} ran.	Поискани са {asked} опита; антитетичната извадка изпълнява цели двойки опити, затова са изпълнени {n}.
+	{asked} trials were asked for; Sobol sampling runs whole batches of {size}, so {n} ran.	Поискани са {asked} опита; извадката Sobol изпълнява цели партиди от {size}, затова са изпълнени {n}.
+	{name}: the ± is across {n} of the {of} pairs, the rest had no trial with a number.	{name}: ± е по {n} от {of} двойки, останалите нямаха опит с число.
+	No interval: every pair gave the same share, so their spread gives none.	Няма интервал: всички двойки дадоха един и същ дял, така че разликите между тях не дават интервал.
+	No interval: too few pairs of trials for one.	Няма интервал: твърде малко двойки опити за него.

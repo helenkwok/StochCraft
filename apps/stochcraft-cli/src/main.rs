@@ -133,6 +133,13 @@ enum Command {
         /// Rows of each base sample of `--sobol` (default 1000, at least 10).
         #[arg(long, requires = "sobol", value_parser = clap::value_parser!(u64).range(10..))]
         sobol_rows: Option<u64>,
+        /// A Monte Carlo model: how its inputs are drawn in this run (default: the model's own).
+        /// `antithetic` makes trials in pairs that use u and 1 - u; `quasi-random` (also
+        /// `sobol`) is randomised quasi-Monte Carlo with Sobol points (at most 64 inputs; not
+        /// the `--sobol` shares of the variation). Latin hypercube and quasi-random runs are
+        /// whole batches of 1,000 trials, antithetic whole pairs.
+        #[arg(long, value_enum)]
+        sampling: Option<SamplingChoice>,
         #[arg(long, value_enum, default_value_t = Format::Table)]
         format: Format,
         /// Write the results to this file instead of the terminal.
@@ -284,6 +291,32 @@ impl BalanceHeuristic {
             BalanceHeuristic::LargestCandidate => "largest_candidate",
             BalanceHeuristic::KilbridgeWester => "kilbridge_wester",
             BalanceHeuristic::RankedPositionalWeight => "ranked_positional_weight",
+        }
+    }
+}
+
+/// `run --sampling`: how a Monte Carlo model's inputs are drawn.
+#[derive(Clone, Copy, PartialEq, Eq, ValueEnum)]
+enum SamplingChoice {
+    /// Each draw independent.
+    Random,
+    /// Each input's range cut into as many equally likely strata as there are trials in a batch.
+    LatinHypercube,
+    /// Trials in pairs that use u and 1 - u for every input.
+    Antithetic,
+    /// Sobol points with a random digital shift in each batch.
+    #[value(name = "quasi-random", alias = "sobol")]
+    QuasiRandom,
+}
+
+impl SamplingChoice {
+    /// Its name in the engine's `mc.run` and `mc.set`.
+    fn name(self) -> &'static str {
+        match self {
+            SamplingChoice::Random => "random",
+            SamplingChoice::LatinHypercube => "latin_hypercube",
+            SamplingChoice::Antithetic => "antithetic",
+            SamplingChoice::QuasiRandom => "sobol",
         }
     }
 }
@@ -688,6 +721,7 @@ fn run(
     duration: Option<f64>,
     until: &Until,
     shares: &Shares,
+    sampling: Option<SamplingChoice>,
     format: Format,
     out: Option<&Path>,
 ) -> Result<u8, Failure> {
@@ -699,7 +733,23 @@ fn run(
                 "a Monte Carlo model has no warm-up, duration or shares in points: use --reps (trials), --until and --max".into(),
             ));
         }
-        return run_monte_carlo(&mut engine, reps, seed, threads, until, shares, format, out);
+        return run_monte_carlo(
+            &mut engine,
+            reps,
+            seed,
+            threads,
+            until,
+            shares,
+            sampling,
+            format,
+            out,
+        );
+    }
+    if sampling.is_some() {
+        return Err(Failure(
+            "--sampling is for Monte Carlo models: a process model has no inputs that are distributions"
+                .into(),
+        ));
     }
     if shares.wanted {
         return Err(Failure(
@@ -753,10 +803,14 @@ fn run_monte_carlo(
     threads: Option<u32>,
     until: &Until,
     shares: &Shares,
+    sampling: Option<SamplingChoice>,
     format: Format,
     out: Option<&Path>,
 ) -> Result<u8, Failure> {
     let mut params = json!({});
+    if let Some(s) = sampling {
+        params["sampling"] = json!(s.name());
+    }
     if let Some(t) = trials {
         params["trials"] = json!(t);
     }
@@ -1133,6 +1187,7 @@ fn main() -> ExitCode {
             fixed,
             sobol,
             sobol_rows,
+            sampling,
             format,
             out,
         } => run(
@@ -1153,6 +1208,7 @@ fn main() -> ExitCode {
                 wanted: sobol,
                 rows: sobol_rows,
             },
+            sampling,
             format,
             out.as_deref(),
         ),

@@ -1324,3 +1324,16 @@ unit	yr	년
 	95% interval {low} to {high}	95% 구간 {low}~{high}
 	Alone is the share of the spread an input explains by itself. With interactions adds what it does together with the other inputs.	단독은 입력이 혼자 설명하는 산포의 비중입니다. 상호작용 포함은 다른 입력과 함께 만드는 효과를 더한 값입니다.
 	Working out the shares of the spread: {percent}	산포의 비중 계산 중: {percent}
+	Antithetic pairs	대조 쌍
+	Quasi-random (Sobol)	준무작위 (Sobol)
+	Antithetic pairs make each trial's twin from the opposite end of every input's range, so their errors tend to cancel, which usually makes the results more precise for the same trials. Trials run in pairs; it cannot be used with correlated inputs.	대조 쌍은 각 시행의 짝을 모든 입력 범위의 반대쪽 끝에서 만들기 때문에 오차가 서로 상쇄되는 경향이 있으며, 같은 시행 횟수로도 보통 결과가 더 정밀해집니다. 시행은 쌍으로 실행되며, 상관된 입력과는 함께 사용할 수 없습니다.
+	Quasi-random (Sobol) draws spread the trials evenly over the inputs' ranges, with a fresh random shift in every batch of 1,000, which usually makes the results more precise for the same trials. It has points for up to 64 inputs.	준무작위 (Sobol) 추출은 시행을 입력 범위 전체에 고르게 퍼뜨리고 1,000개 배치마다 새로운 무작위 이동을 적용하므로, 같은 시행 횟수로도 보통 결과가 더 정밀해집니다. 최대 64개의 입력에 대한 점이 있습니다.
+	Each ± is the half-width of the 95% interval of the mean across independent pairs of trials (pairs: {n}). The two trials of a pair are made to oppose each other, so each pair counts as one.	각 ±는 독립된 시행 쌍들에 걸친 평균의 95% 구간 너비의 절반입니다(쌍 수: {n}). 한 쌍의 두 시행은 서로 반대가 되도록 만들어지므로, 각 쌍을 하나로 셉니다.
+	Each ± is the half-width of the 95% interval of the mean across independent batches of {size} trials (batches: {n}). Each batch is shifted at random on its own, so each batch counts as one.	각 ±는 {size}회 시행으로 된 독립 배치들에 걸친 평균의 95% 구간 너비의 절반입니다(배치 수: {n}). 각 배치는 개별적으로 무작위 이동되므로, 각 배치를 하나로 셉니다.
+	antithetic sampling	대조 샘플링
+	quasi-random (Sobol) sampling	준무작위 (Sobol) 샘플링
+	{asked} trials were asked for; antithetic sampling runs whole pairs of trials, so {n} ran.	시행 {asked}회가 요청되었지만, 대조 샘플링은 시행을 쌍 단위로 실행하므로 {n}회가 실행되었습니다.
+	{asked} trials were asked for; Sobol sampling runs whole batches of {size}, so {n} ran.	시행 {asked}회가 요청되었지만, Sobol 샘플링은 {size}회씩 배치 단위로 실행하므로 {n}회가 실행되었습니다.
+	{name}: the ± is across {n} of the {of} pairs, the rest had no trial with a number.	{name}: ±는 {of}개 쌍 중 {n}개에 걸친 값이며, 나머지는 숫자가 있는 시행이 없었습니다.
+	No interval: every pair gave the same share, so their spread gives none.	구간 없음: 모든 쌍이 같은 비율을 보였으므로, 쌍 간 편차로는 구간을 구할 수 없습니다.
+	No interval: too few pairs of trials for one.	구간 없음: 구간을 구하기에는 시행 쌍이 너무 적습니다.

@@ -165,7 +165,15 @@ fn odds(chance: f64) -> Option<u64> {
 /// An output's finding in words, and a second line on how sure it is: with a target, the chance
 /// of missing it with its 95% interval; without one, where 9 trials in 10 fall and the mean.
 /// `None` when the output has no value to speak of (no trial gave a number).
+#[cfg(test)]
 pub(crate) fn finding(o: &Value) -> Option<(String, Option<String>)> {
+    finding_across(o, &Value::Null)
+}
+
+/// An output's finding (see `finding`, which tests use) with what the run's intervals are across (`interval_basis`), so that a missing
+/// interval is explained in batches or in pairs.
+pub(crate) fn finding_across(o: &Value, basis: &Value) -> Option<(String, Option<String>)> {
+    let pairs = basis["across"] == "pairs";
     let name = o["name"].as_str().unwrap_or("");
     let unit = o["unit"].as_str().unwrap_or("");
     let target = &o["target"];
@@ -231,9 +239,14 @@ pub(crate) fn finding(o: &Value) -> Option<(String, Option<String>)> {
             ),
             // Two batches or more with no interval: every batch gave the same share.
             None if o["interval_count"].as_u64().is_some_and(|n| n >= 2) => {
-                t("No interval: every batch gave the same share, so their spread gives none.")
-                    .to_owned()
+                let reason = if pairs {
+                    t("No interval: every pair gave the same share, so their spread gives none.")
+                } else {
+                    t("No interval: every batch gave the same share, so their spread gives none.")
+                };
+                reason.to_owned()
             }
+            None if pairs => t("No interval: too few pairs of trials for one.").to_owned(),
             None => t("No interval: too few batches of trials for one.").to_owned(),
         };
         return Some((sentence, Some(sure)));
@@ -272,13 +285,19 @@ pub(crate) fn finding(o: &Value) -> Option<(String, Option<String>)> {
     Some((sentence, None))
 }
 
+/// A sampling's name in a phrase (`mc.set`'s `sampling`).
+fn sampling_name(sampling: &Value) -> &'static str {
+    match sampling.as_str() {
+        Some("latin_hypercube") => t("Latin hypercube sampling"),
+        Some("antithetic") => t("antithetic sampling"),
+        Some("sobol") => t("quasi-random (Sobol) sampling"),
+        _ => t("random sampling"),
+    }
+}
+
 /// The run in a line: trials, seed and sampling.
 fn record_line(r: &Value) -> String {
-    let sampling = if r["sampling"] == "latin_hypercube" {
-        t("Latin hypercube sampling")
-    } else {
-        t("random sampling")
-    };
+    let sampling = sampling_name(&r["sampling"]);
     tnf(
         r["trials"].as_u64().unwrap_or(0),
         "{n} trial · seed {seed} · {sampling}",
@@ -287,11 +306,24 @@ fn record_line(r: &Value) -> String {
     )
 }
 
-/// What the intervals are across, in words: trials, or batches (and why).
+/// What the intervals are across, in words: trials, batches or pairs (and why).
 fn basis_line(r: &Value) -> String {
     let b = &r["interval_basis"];
     let count = b["count"].as_u64().unwrap_or(0);
-    if b["across"] == "batches" {
+    if b["across"] == "pairs" {
+        tf(
+            "Each ± is the half-width of the 95% interval of the mean across independent pairs of trials (pairs: {n}). The two trials of a pair are made to oppose each other, so each pair counts as one.",
+            &[("n", &grouped(count as f64))],
+        )
+    } else if b["across"] == "batches" && r["sampling"] == "sobol" {
+        tf(
+            "Each ± is the half-width of the 95% interval of the mean across independent batches of {size} trials (batches: {n}). Each batch is shifted at random on its own, so each batch counts as one.",
+            &[
+                ("size", &grouped(b["size"].as_f64().unwrap_or(1000.0))),
+                ("n", &grouped(count as f64)),
+            ],
+        )
+    } else if b["across"] == "batches" {
         tnf(
             count,
             "Each ± is the half-width of the 95% interval of the mean across {n} independent batch of {size} trials. Latin hypercube sampling and correlated inputs make the trials within a batch depend on each other, so each batch counts as one.",
@@ -311,14 +343,29 @@ fn basis_line(r: &Value) -> String {
 fn rounding_line(r: &Value) -> Option<String> {
     let (run, asked) = (r["trials"].as_u64()?, r["trials_requested"].as_u64()?);
     (r["stop"].is_null() && run != asked).then(|| {
-        tf(
-            "{asked} trials were asked for; with Latin hypercube sampling or correlated inputs a run is whole batches of {size}, so {n} ran.",
-            &[
-                ("asked", &grouped(asked as f64)),
-                ("size", &grouped(r["interval_basis"]["size"].as_f64().unwrap_or(1000.0))),
-                ("n", &grouped(run as f64)),
-            ],
-        )
+        let args = [
+            ("asked", grouped(asked as f64)),
+            (
+                "size",
+                grouped(r["interval_basis"]["size"].as_f64().unwrap_or(1000.0)),
+            ),
+            ("n", grouped(run as f64)),
+        ];
+        let args: Vec<(&str, &str)> = args.iter().map(|(k, v)| (*k, v.as_str())).collect();
+        match r["sampling"].as_str() {
+            Some("antithetic") => tf(
+                "{asked} trials were asked for; antithetic sampling runs whole pairs of trials, so {n} ran.",
+                &args,
+            ),
+            Some("sobol") => tf(
+                "{asked} trials were asked for; Sobol sampling runs whole batches of {size}, so {n} ran.",
+                &args,
+            ),
+            _ => tf(
+                "{asked} trials were asked for; with Latin hypercube sampling or correlated inputs a run is whole batches of {size}, so {n} ran.",
+                &args,
+            ),
+        }
     })
 }
 
@@ -627,12 +674,7 @@ impl App {
             });
         let x = &model["experiment"];
         ui.with_layout(egui::Layout::bottom_up(egui::Align::Min), |ui| {
-            let sampling = if mc["sampling"] == "latin_hypercube" {
-                t("Latin hypercube sampling")
-            } else {
-                t("random sampling")
-            };
-            ui.label(theme::weak(ui, sampling));
+            ui.label(theme::weak(ui, sampling_name(&mc["sampling"])));
             if let Some(max) = mc["stop"]["max"].as_u64() {
                 ui.label(theme::weak(
                     ui,
@@ -1118,7 +1160,6 @@ impl App {
         for (f, current) in [
             ("trials", x["replications"].clone()),
             ("seed", x["seed"].clone()),
-            ("sampling", mc["sampling"].clone()),
         ] {
             let mut cx = form::Cx {
                 time_unit: "",
@@ -1141,13 +1182,47 @@ impl App {
         if let Some(params) = changed {
             self.mc_edit("mc/set", "mc.set", params);
         }
-        ui.add(
-            egui::Label::new(theme::weak(
-                ui,
-                t("Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000."),
-            ))
-            .wrap(),
-        );
+        // How the inputs are drawn, with what the chosen way does.
+        let modes = [
+            ("random", t("Random")),
+            ("latin_hypercube", t("Latin hypercube")),
+            ("antithetic", t("Antithetic pairs")),
+            ("sobol", t("Quasi-random (Sobol)")),
+        ];
+        let current = mc["sampling"].as_str().unwrap_or("random");
+        let mut picked = None;
+        ui.horizontal(|ui| {
+            row_label(ui, t("Sampling"));
+            craft_ui::ComboBox::from_id_salt("mc/sampling")
+                .selected_text(modes.iter().find(|m| m.0 == current).map_or("", |m| m.1))
+                .width(240.0)
+                .show_ui(ui, |ui| {
+                    for (name, label) in modes {
+                        if ui.selectable_label(current == name, label).clicked() {
+                            picked = Some(name);
+                        }
+                    }
+                })
+                .response
+                .widget_info(|| {
+                    egui::WidgetInfo::labeled(egui::Role::ComboBox, true, t("Sampling"))
+                });
+        });
+        if let Some(name) = picked.filter(|n| *n != current) {
+            self.mc_edit("mc/set", "mc.set", json!({ "sampling": name }));
+        }
+        let help = match current {
+            "antithetic" => t(
+                "Antithetic pairs make each trial's twin from the opposite end of every input's range, so their errors tend to cancel, which usually makes the results more precise for the same trials. Trials run in pairs; it cannot be used with correlated inputs.",
+            ),
+            "sobol" => t(
+                "Quasi-random (Sobol) draws spread the trials evenly over the inputs' ranges, with a fresh random shift in every batch of 1,000, which usually makes the results more precise for the same trials. It has points for up to 64 inputs.",
+            ),
+            _ => t(
+                "Latin hypercube sampling cuts each input's range into equally likely strata and draws once from each, which usually makes the results more precise. With it, or with correlated inputs, trials run in whole batches of 1,000.",
+            ),
+        };
+        ui.add(egui::Label::new(theme::weak(ui, help)).wrap());
         // A sequential stop, as for a process model's runs.
         let stop = &mc["stop"];
         let on = stop.is_object();
@@ -1291,7 +1366,7 @@ impl App {
                 ui.label(theme::strong(t("What the run found")));
                 ui.add_space(2.0);
                 for o in &outputs {
-                    if let Some((sentence, sure)) = finding(o) {
+                    if let Some((sentence, sure)) = finding_across(o, &r["interval_basis"]) {
                         ui.add(egui::Label::new(sentence).wrap());
                         if let Some(sure) = sure {
                             ui.add(egui::Label::new(theme::weak(ui, sure)).wrap());
@@ -1418,7 +1493,12 @@ fn output_section(
     {
         let (n, of) = (grouped(n as f64), grouped(of as f64));
         let args = [("name", name), ("n", n.as_str()), ("of", of.as_str())];
-        let text = if basis["across"] == "batches" {
+        let text = if basis["across"] == "pairs" {
+            tf(
+                "{name}: the ± is across {n} of the {of} pairs, the rest had no trial with a number.",
+                &args,
+            )
+        } else if basis["across"] == "batches" {
             tf(
                 "{name}: the ± is across {n} of the {of} batches, the rest had no trial with a number.",
                 &args,
@@ -2079,6 +2159,33 @@ mod tests {
         let (lo, hi) = x_range(&json!({ "min": 10.0, "max": 20.0 }), None).unwrap_or_default();
         assert!(lo < 10.0 && hi > 20.0);
         assert!(nice_step(f64::INFINITY, 4.0) > 0.0);
+    }
+
+    /// With an interval across pairs the same two reasons are told in pairs.
+    #[test]
+    fn the_reason_for_no_interval_names_what_it_is_across() {
+        let pairs = json!({ "across": "pairs", "count": 4, "size": 2 });
+        let batches = json!({ "across": "batches", "count": 4, "size": 1000 });
+        let mut o = output(json!({ "at_most": 7_000.0 }), 1.0, Value::Null);
+        for (basis, same, few) in [
+            (
+                &pairs,
+                "No interval: every pair gave the same share, so their spread gives none.",
+                "No interval: too few pairs of trials for one.",
+            ),
+            (
+                &batches,
+                "No interval: every batch gave the same share, so their spread gives none.",
+                "No interval: too few batches of trials for one.",
+            ),
+        ] {
+            o["interval_count"] = json!(4);
+            let (_, sure) = finding_across(&o, basis).unwrap_or_default();
+            assert_eq!(sure.as_deref(), Some(same));
+            o["interval_count"] = json!(1);
+            let (_, sure) = finding_across(&o, basis).unwrap_or_default();
+            assert_eq!(sure.as_deref(), Some(few));
+        }
     }
 
     /// When every batch gave the same share the interval is withheld for that reason, not

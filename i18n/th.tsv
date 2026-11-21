@@ -1324,3 +1324,16 @@ unit	yr	ปี
 	95% interval {low} to {high}	ช่วง 95% จาก {low} ถึง {high}
 	Alone is the share of the spread an input explains by itself. With interactions adds what it does together with the other inputs.	“เดี่ยว ๆ” คือสัดส่วนของความแปรปรวนที่อินพุตอธิบายได้เอง ส่วน “รวมอันตรกิริยา” เพิ่มสิ่งที่อินพุตนั้นทำร่วมกับอินพุตอื่น
 	Working out the shares of the spread: {percent}	กำลังคำนวณสัดส่วนของความแปรปรวน: {percent}
+	Antithetic pairs	คู่แบบตรงข้าม
+	Quasi-random (Sobol)	กึ่งสุ่ม (Sobol)
+	Antithetic pairs make each trial's twin from the opposite end of every input's range, so their errors tend to cancel, which usually makes the results more precise for the same trials. Trials run in pairs; it cannot be used with correlated inputs.	คู่แบบตรงข้ามสร้างการทดลองคู่แฝดของแต่ละครั้งจากปลายด้านตรงข้ามของช่วงอินพุตทุกตัว ทำให้ค่าคลาดเคลื่อนมักหักล้างกัน ซึ่งโดยทั่วไปทำให้ผลลัพธ์แม่นยำขึ้นเมื่อใช้จำนวนครั้งทดลองเท่าเดิม การทดลองจะรันเป็นคู่ และใช้ร่วมกับอินพุตที่สัมพันธ์กันไม่ได้
+	Quasi-random (Sobol) draws spread the trials evenly over the inputs' ranges, with a fresh random shift in every batch of 1,000, which usually makes the results more precise for the same trials. It has points for up to 64 inputs.	การสุ่มตัวอย่างแบบกึ่งสุ่ม (Sobol) กระจายการทดลองอย่างสม่ำเสมอทั่วช่วงของอินพุต โดยมีการเลื่อนแบบสุ่มใหม่ในทุกชุด 1,000 ครั้ง ซึ่งโดยทั่วไปทำให้ผลลัพธ์แม่นยำขึ้นเมื่อใช้จำนวนครั้งทดลองเท่าเดิม รองรับอินพุตได้สูงสุด 64 ตัว
+	Each ± is the half-width of the 95% interval of the mean across independent pairs of trials (pairs: {n}). The two trials of a pair are made to oppose each other, so each pair counts as one.	± แต่ละค่าคือครึ่งหนึ่งของความกว้างของช่วง 95% ของค่าเฉลี่ยจากคู่การทดลองที่เป็นอิสระต่อกัน (จำนวนคู่: {n}) การทดลองสองครั้งในหนึ่งคู่ถูกทำให้ตรงข้ามกัน จึงนับแต่ละคู่เป็นหนึ่ง
+	Each ± is the half-width of the 95% interval of the mean across independent batches of {size} trials (batches: {n}). Each batch is shifted at random on its own, so each batch counts as one.	± แต่ละค่าคือครึ่งหนึ่งของความกว้างของช่วง 95% ของค่าเฉลี่ยจากการทดลองชุดละ {size} ครั้งที่เป็นอิสระต่อกัน (จำนวนชุด: {n}) แต่ละชุดถูกเลื่อนแบบสุ่มแยกกัน จึงนับแต่ละชุดเป็นหนึ่ง
+	antithetic sampling	การสุ่มตัวอย่างแบบตรงข้าม
+	quasi-random (Sobol) sampling	การสุ่มตัวอย่างแบบกึ่งสุ่ม (Sobol)
+	{asked} trials were asked for; antithetic sampling runs whole pairs of trials, so {n} ran.	ขอ {asked} ครั้งทดลอง แต่การสุ่มตัวอย่างแบบตรงข้ามรันเป็นคู่ครบ จึงรัน {n} ครั้ง
+	{asked} trials were asked for; Sobol sampling runs whole batches of {size}, so {n} ran.	ขอ {asked} ครั้งทดลอง แต่การสุ่มตัวอย่างแบบ Sobol รันเป็นชุดละ {size} ครบทุกชุด จึงรัน {n} ครั้ง
+	{name}: the ± is across {n} of the {of} pairs, the rest had no trial with a number.	{name}: ± คำนวณจาก {n} จาก {of} คู่ ส่วนที่เหลือไม่มีการทดลองที่ได้ค่าตัวเลข
+	No interval: every pair gave the same share, so their spread gives none.	ไม่มีช่วง: ทุกคู่ให้สัดส่วนเท่ากัน ความกระจายของคู่จึงไม่ให้ช่วง
+	No interval: too few pairs of trials for one.	ไม่มีช่วง: คู่การทดลองน้อยเกินไปที่จะคำนวณช่วงได้

@@ -1324,3 +1324,16 @@ unit	yr	m.
 	95% interval {low} to {high}	95 % intervalas nuo {low} iki {high}
 	Alone is the share of the spread an input explains by itself. With interactions adds what it does together with the other inputs.	Atskirai yra sklaidos dalis, kurią įvestis paaiškina pati. Su sąveikomis pridedama tai, ką ji daro kartu su kitomis įvestimis.
 	Working out the shares of the spread: {percent}	Skaičiuojamos sklaidos dalys: {percent}
+	Antithetic pairs	Antitetinės poros
+	Quasi-random (Sobol)	Kvaziatsitiktinė (Sobol)
+	Antithetic pairs make each trial's twin from the opposite end of every input's range, so their errors tend to cancel, which usually makes the results more precise for the same trials. Trials run in pairs; it cannot be used with correlated inputs.	Antitetinės poros kiekvienos iteracijos dvynį sudaro iš priešingo kiekvienos įvesties diapazono galo, todėl jų paklaidos linkusios viena kitą panaikinti, o rezultatai su tuo pačiu iteracijų skaičiumi paprastai tampa tikslesni. Iteracijos vykdomos poromis; negalima naudoti su koreliuotomis įvestimis.
+	Quasi-random (Sobol) draws spread the trials evenly over the inputs' ranges, with a fresh random shift in every batch of 1,000, which usually makes the results more precise for the same trials. It has points for up to 64 inputs.	Kvaziatsitiktinės (Sobol) imtys tolygiai paskirsto iteracijas įvesčių diapazonuose, o kiekvienoje 1 000 iteracijų partijoje taikomas naujas atsitiktinis poslinkis, todėl rezultatai su tuo pačiu iteracijų skaičiumi paprastai tampa tikslesni. Turi taškų iki 64 įvesčių.
+	Each ± is the half-width of the 95% interval of the mean across independent pairs of trials (pairs: {n}). The two trials of a pair are made to oppose each other, so each pair counts as one.	Kiekvienas ± yra vidurkio 95 % intervalo pusplotis, apskaičiuotas pagal nepriklausomas iteracijų poras (porų: {n}). Dvi poros iteracijos sudarytos taip, kad viena kitai priešintųsi, todėl kiekviena pora skaičiuojama kaip viena.
+	Each ± is the half-width of the 95% interval of the mean across independent batches of {size} trials (batches: {n}). Each batch is shifted at random on its own, so each batch counts as one.	Kiekvienas ± yra vidurkio 95 % intervalo pusplotis, apskaičiuotas pagal nepriklausomas {size} iteracijų partijas (partijų: {n}). Kiekviena partija pastumiama atsitiktinai atskirai, todėl kiekviena partija skaičiuojama kaip viena.
+	antithetic sampling	antitetinė atranka
+	quasi-random (Sobol) sampling	kvaziatsitiktinė (Sobol) atranka
+	{asked} trials were asked for; antithetic sampling runs whole pairs of trials, so {n} ran.	Prašyta iteracijų: {asked}; antitetinė atranka vykdo ištisas iteracijų poras, todėl įvykdyta: {n}.
+	{asked} trials were asked for; Sobol sampling runs whole batches of {size}, so {n} ran.	Prašyta iteracijų: {asked}; Sobol atranka vykdo ištisas {size} iteracijų partijas, todėl įvykdyta: {n}.
+	{name}: the ± is across {n} of the {of} pairs, the rest had no trial with a number.	{name}: ± apskaičiuotas pagal poras: {n} iš {of}; likusiose nebuvo iteracijos su skaičiumi.
+	No interval: every pair gave the same share, so their spread gives none.	Intervalo nėra: visos poros davė tą pačią dalį, todėl jų sklaida intervalo neduoda.
+	No interval: too few pairs of trials for one.	Intervalo nėra: tam per mažai iteracijų porų.
