@@ -1736,7 +1736,7 @@ mod tests {
     fn an_interval_counts_what_it_is_across() {
         let mc = MonteCarlo {
             inputs: vec![input("x", Dist::Uniform { min: 0.0, max: 1.0 })],
-            outputs: vec![output("y", "1 / ($x - $x)"), output("z", "$x")],
+            outputs: vec![output("y", "1 div ($x - $x)"), output("z", "$x")],
             ..MonteCarlo::default()
         };
         let c = compile(&mc, 5).unwrap_or_else(|p| unreachable!("{p:?}"));
@@ -1800,8 +1800,8 @@ mod tests {
                     target: Some(McTarget::AtMost(2.0)),
                     ..output("y", "$x * 3")
                 },
-                output("gap", "1 / ($x - $x)"),
-                output("some", "if($x > 0.5, $x, 1 / ($x - $x))"),
+                output("gap", "1 div ($x - $x)"),
+                output("some", "if($x > 0.5, $x, 1 div ($x - $x))"),
             ],
             correlations: vec![],
             sampling: Sampling::LatinHypercube,
