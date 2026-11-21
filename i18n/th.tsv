@@ -1314,3 +1314,13 @@ unit	yr	ปี
 @plural	{n} trial gave no number (a division by zero, say) and is left out.|{n} trials gave no number (a division by zero, say) and are left out.	การทดลอง {n} ครั้งไม่ได้ให้ตัวเลข (เช่น หารด้วยศูนย์) และถูกตัดออก
 @plural	{n} trial · seed {seed} · {sampling}|{n} trials · seed {seed} · {sampling}	{n} ครั้งทดลอง · เมล็ดสุ่ม {seed} · {sampling}
 @plural	{n} trial · seed {seed}|{n} trials · seed {seed}	{n} ครั้งทดลอง · เมล็ดสุ่ม {seed}
+# Shares of the spread (Sobol indices) in the Monte Carlo results (ROADMAP M4.1, part 3c)
+	Work out each input's share of the spread	คำนวณสัดส่วนของแต่ละอินพุตในความแปรปรวน
+	{n} evaluations of the model	การประเมินแบบจำลอง {n} ครั้ง
+	The shares of the spread need independent inputs, and some of these inputs are correlated.	สัดส่วนของความแปรปรวนต้องใช้อินพุตที่เป็นอิสระต่อกัน แต่อินพุตบางตัวเหล่านี้มีสหสัมพันธ์กัน
+	Alone	เดี่ยว ๆ
+	With interactions	รวมอันตรกิริยา
+	{input} alone explains about {share} of the spread in {output}.	{input} เพียงตัวเดียวอธิบายความแปรปรวนของ {output} ได้ประมาณ {share}
+	95% interval {low} to {high}	ช่วง 95% จาก {low} ถึง {high}
+	Alone is the share of the spread an input explains by itself. With interactions adds what it does together with the other inputs.	“เดี่ยว ๆ” คือสัดส่วนของความแปรปรวนที่อินพุตอธิบายได้เอง ส่วน “รวมอันตรกิริยา” เพิ่มสิ่งที่อินพุตนั้นทำร่วมกับอินพุตอื่น
+	Working out the shares of the spread: {percent}	กำลังคำนวณสัดส่วนของความแปรปรวน: {percent}

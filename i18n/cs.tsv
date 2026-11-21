@@ -1314,3 +1314,13 @@ unit	yr	r.
 @plural	{n} trial gave no number (a division by zero, say) and is left out.|{n} trials gave no number (a division by zero, say) and are left out.	{n} pokus nedal žádné číslo (například dělení nulou) a je vynechán.|{n} pokusy nedaly žádné číslo (například dělení nulou) a jsou vynechány.|{n} pokusů nedalo žádné číslo (například dělení nulou) a jsou vynechány.
 @plural	{n} trial · seed {seed} · {sampling}|{n} trials · seed {seed} · {sampling}	{n} pokus · počáteční hodnota {seed} · {sampling}|{n} pokusy · počáteční hodnota {seed} · {sampling}|{n} pokusů · počáteční hodnota {seed} · {sampling}
 @plural	{n} trial · seed {seed}|{n} trials · seed {seed}	{n} pokus · počáteční hodnota {seed}|{n} pokusy · počáteční hodnota {seed}|{n} pokusů · počáteční hodnota {seed}
+# Shares of the spread (Sobol indices) in the Monte Carlo results (ROADMAP M4.1, part 3c)
+	Work out each input's share of the spread	Spočítat podíl každého vstupu na rozptylu
+	{n} evaluations of the model	{n} vyhodnocení modelu
+	The shares of the spread need independent inputs, and some of these inputs are correlated.	Podíly na rozptylu vyžadují nezávislé vstupy a některé z těchto vstupů jsou korelované.
+	Alone	Samostatně
+	With interactions	S interakcemi
+	{input} alone explains about {share} of the spread in {output}.	{input} samostatně vysvětluje asi {share} rozptylu veličiny {output}.
+	95% interval {low} to {high}	95% interval od {low} do {high}
+	Alone is the share of the spread an input explains by itself. With interactions adds what it does together with the other inputs.	Samostatně je podíl rozptylu, který vstup vysvětluje sám. S interakcemi přidává to, co dělá společně s ostatními vstupy.
+	Working out the shares of the spread: {percent}	Počítání podílů na rozptylu: {percent}

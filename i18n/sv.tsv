@@ -1314,3 +1314,13 @@ unit	yr	år
 @plural	{n} trial gave no number (a division by zero, say) and is left out.|{n} trials gave no number (a division by zero, say) and are left out.	{n} försök gav inget tal (till exempel en division med noll) och utelämnas.|{n} försök gav inget tal (till exempel en division med noll) och utelämnas.
 @plural	{n} trial · seed {seed} · {sampling}|{n} trials · seed {seed} · {sampling}	{n} försök · slumpfrö {seed} · {sampling}|{n} försök · slumpfrö {seed} · {sampling}
 @plural	{n} trial · seed {seed}|{n} trials · seed {seed}	{n} försök · slumpfrö {seed}|{n} försök · slumpfrö {seed}
+# Shares of the spread (Sobol indices) in the Monte Carlo results (ROADMAP M4.1, part 3c)
+	Work out each input's share of the spread	Beräkna varje indatas andel av spridningen
+	{n} evaluations of the model	{n} utvärderingar av modellen
+	The shares of the spread need independent inputs, and some of these inputs are correlated.	Andelarna av spridningen kräver oberoende indata, och några av dessa indata är korrelerade.
+	Alone	Ensam
+	With interactions	Med samspel
+	{input} alone explains about {share} of the spread in {output}.	{input} förklarar ensam ungefär {share} av spridningen i {output}.
+	95% interval {low} to {high}	95 %-intervall från {low} till {high}
+	Alone is the share of the spread an input explains by itself. With interactions adds what it does together with the other inputs.	Ensam är den andel av spridningen som en indata förklarar själv. Med samspel läggs det till vad den gör tillsammans med övriga indata.
+	Working out the shares of the spread: {percent}	Beräknar andelarna av spridningen: {percent}

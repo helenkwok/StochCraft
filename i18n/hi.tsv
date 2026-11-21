@@ -1314,3 +1314,13 @@ unit	yr	वर्ष
 @plural	{n} trial gave no number (a division by zero, say) and is left out.|{n} trials gave no number (a division by zero, say) and are left out.	{n} परीक्षण से कोई संख्या नहीं मिली (जैसे शून्य से भाग) और उसे छोड़ दिया गया है।|{n} परीक्षणों से कोई संख्या नहीं मिली (जैसे शून्य से भाग) और उन्हें छोड़ दिया गया है।
 @plural	{n} trial · seed {seed} · {sampling}|{n} trials · seed {seed} · {sampling}	{n} परीक्षण · बीज {seed} · {sampling}|{n} परीक्षण · बीज {seed} · {sampling}
 @plural	{n} trial · seed {seed}|{n} trials · seed {seed}	{n} परीक्षण · बीज {seed}|{n} परीक्षण · बीज {seed}
+# Shares of the spread (Sobol indices) in the Monte Carlo results (ROADMAP M4.1, part 3c)
+	Work out each input's share of the spread	हर इनपुट का फैलाव में हिस्सा निकालें
+	{n} evaluations of the model	मॉडल के {n} मूल्यांकन
+	The shares of the spread need independent inputs, and some of these inputs are correlated.	फैलाव के हिस्सों के लिए इनपुट स्वतंत्र होने चाहिए, और इनमें से कुछ इनपुट सहसंबद्ध हैं।
+	Alone	अकेले
+	With interactions	अंतःक्रियाओं सहित
+	{input} alone explains about {share} of the spread in {output}.	{input} अकेले {output} के फैलाव का लगभग {share} समझाता है।
+	95% interval {low} to {high}	95% अंतराल {low} से {high}
+	Alone is the share of the spread an input explains by itself. With interactions adds what it does together with the other inputs.	अकेले का अर्थ है फैलाव का वह हिस्सा जो कोई इनपुट खुद समझाता है। अंतःक्रियाओं सहित में वह भी जुड़ता है जो वह अन्य इनपुट के साथ मिलकर करता है।
+	Working out the shares of the spread: {percent}	फैलाव के हिस्से निकाले जा रहे हैं: {percent}

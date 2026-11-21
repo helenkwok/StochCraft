@@ -1314,3 +1314,13 @@ unit	yr	v
 @plural	{n} trial gave no number (a division by zero, say) and is left out.|{n} trials gave no number (a division by zero, say) and are left out.	{n} iteraatio ei antanut lukua (esimerkiksi nollalla jakaminen), ja se jätetään pois.|{n} iteraatiota ei antanut lukua (esimerkiksi nollalla jakaminen), ja ne jätetään pois.
 @plural	{n} trial · seed {seed} · {sampling}|{n} trials · seed {seed} · {sampling}	{n} iteraatio · siemen {seed} · {sampling}|{n} iteraatiota · siemen {seed} · {sampling}
 @plural	{n} trial · seed {seed}|{n} trials · seed {seed}	{n} iteraatio · siemen {seed}|{n} iteraatiota · siemen {seed}
+# Shares of the spread (Sobol indices) in the Monte Carlo results (ROADMAP M4.1, part 3c)
+	Work out each input's share of the spread	Laske kunkin syötteen osuus vaihtelusta
+	{n} evaluations of the model	{n} mallin laskentaa
+	The shares of the spread need independent inputs, and some of these inputs are correlated.	Vaihtelun osuudet edellyttävät riippumattomia syötteitä, ja jotkin näistä syötteistä ovat korreloituneita.
+	Alone	Yksin
+	With interactions	Yhteisvaikutuksineen
+	{input} alone explains about {share} of the spread in {output}.	{input} selittää yksin noin {share} suureen {output} vaihtelusta.
+	95% interval {low} to {high}	95 %:n väli {low}–{high}
+	Alone is the share of the spread an input explains by itself. With interactions adds what it does together with the other inputs.	Yksin on osuus vaihtelusta, jonka syöte selittää itse. Yhteisvaikutuksineen lisää sen, mitä se tekee yhdessä muiden syötteiden kanssa.
+	Working out the shares of the spread: {percent}	Lasketaan vaihtelun osuuksia: {percent}

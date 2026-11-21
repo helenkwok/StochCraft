@@ -1314,3 +1314,13 @@ unit	yr	a
 @plural	{n} trial gave no number (a division by zero, say) and is left out.|{n} trials gave no number (a division by zero, say) and are left out.	{n} ensaio non deu ningún número (unha división por cero, por exemplo) e queda fóra.|{n} ensaios non deron ningún número (unha división por cero, por exemplo) e quedan fóra.
 @plural	{n} trial · seed {seed} · {sampling}|{n} trials · seed {seed} · {sampling}	{n} ensaio · semente {seed} · {sampling}|{n} ensaios · semente {seed} · {sampling}
 @plural	{n} trial · seed {seed}|{n} trials · seed {seed}	{n} ensaio · semente {seed}|{n} ensaios · semente {seed}
+# Shares of the spread (Sobol indices) in the Monte Carlo results (ROADMAP M4.1, part 3c)
+	Work out each input's share of the spread	Calcular a parte da dispersión que explica cada entrada
+	{n} evaluations of the model	{n} avaliacións do modelo
+	The shares of the spread need independent inputs, and some of these inputs are correlated.	As partes da dispersión precisan entradas independentes, e algunhas destas entradas están correlacionadas.
+	Alone	Soa
+	With interactions	Con interaccións
+	{input} alone explains about {share} of the spread in {output}.	{input} soa explica arredor de {share} da dispersión de {output}.
+	95% interval {low} to {high}	Intervalo do 95% de {low} a {high}
+	Alone is the share of the spread an input explains by itself. With interactions adds what it does together with the other inputs.	Soa é a parte da dispersión que unha entrada explica por si mesma. Con interaccións engade o que fai xunto coas outras entradas.
+	Working out the shares of the spread: {percent}	Calculando as partes da dispersión: {percent}

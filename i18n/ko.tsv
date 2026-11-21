@@ -1314,3 +1314,13 @@ unit	yr	년
 @plural	{n} trial gave no number (a division by zero, say) and is left out.|{n} trials gave no number (a division by zero, say) and are left out.	시행 {n}회가 숫자를 내지 못해(예: 0으로 나누기) 제외되었습니다.
 @plural	{n} trial · seed {seed} · {sampling}|{n} trials · seed {seed} · {sampling}	시행 {n}회 · 시드 {seed} · {sampling}
 @plural	{n} trial · seed {seed}|{n} trials · seed {seed}	시행 {n}회 · 시드 {seed}
+# Shares of the spread (Sobol indices) in the Monte Carlo results (ROADMAP M4.1, part 3c)
+	Work out each input's share of the spread	각 입력이 산포에서 차지하는 비중 계산
+	{n} evaluations of the model	모델 평가 {n}회
+	The shares of the spread need independent inputs, and some of these inputs are correlated.	산포의 비중을 구하려면 입력이 서로 독립이어야 하는데, 이 입력 중 일부는 상관되어 있습니다.
+	Alone	단독
+	With interactions	상호작용 포함
+	{input} alone explains about {share} of the spread in {output}.	{input} 단독으로 {output}의 산포 중 약 {share}를 설명합니다.
+	95% interval {low} to {high}	95% 구간 {low}~{high}
+	Alone is the share of the spread an input explains by itself. With interactions adds what it does together with the other inputs.	단독은 입력이 혼자 설명하는 산포의 비중입니다. 상호작용 포함은 다른 입력과 함께 만드는 효과를 더한 값입니다.
+	Working out the shares of the spread: {percent}	산포의 비중 계산 중: {percent}

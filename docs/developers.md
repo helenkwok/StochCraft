@@ -216,6 +216,21 @@ arithmetic of XPath and `min`, `max`, `sum`, `abs`, `sqrt`, `exp`, `log`, `pow`,
 `if(condition, then, else)`; a condition such as `$cost > 6000` gives 1 or 0 in each trial, so its
 mean is a probability. A trial whose output is not a number (a division by zero) is counted apart.
 
+`--sobol` also works out each input's share of each output's variance (Sobol indices), from
+`--sobol-rows N` rows of each of two base samples (1,000 by default, at least 10), so N × (inputs
++ 2) evaluations of the model; the table gives, for each output, each input's share alone (first
+order) and with its interactions (total), as percentages with 95% bootstrap intervals, and the
+JSON has a `sobol` field. The command behind it is `mc.sobol` (`rows`, `seed`, which is the
+model's own by default, and `bootstrap`, 1,000 by default): per output its `variance`,
+`rows_used`, `rows_dropped`, `unavailable` (why it has no indices, if it has none) and for each
+input `first` and `total`, each with a `value` and an `interval`, besides `rows`, `evaluations`
+and the `constants` left out. The estimates are not clamped: a small sample can give one a little
+below 0 or above 1. The indices need independent inputs, so a model with correlated inputs is
+refused with an `invalid_model` error that says so; `run --sobol` then prints the reason (under
+`sobol.unavailable` in the JSON, on stderr for `--format csv`) and still prints the normal
+results. The calculation is `stochcraft_mc::sobol` (Saltelli's design; first order by Saltelli et
+al. 2010, total by Jansen 1999).
+
 `mc.set` chooses Latin hypercube sampling (`"sampling": "latin_hypercube"`): within each batch of
 1,000 trials, each input's range is cut into 1,000 equally likely strata and each is drawn once.
 `mc.correlation.set` gives two inputs a rank correlation, induced by the method of Iman and
@@ -258,6 +273,10 @@ one batch at a time in the browser, where the page has no threads), then takes t
 `Engine::mc_results`. Both are `stochcraft_mc::Stepper`, which asks for batches, takes them in
 order and looks at the results only once every batch it asked for is in, so a sequential run looks
 at the same numbers of trials and the results are the same however the batches are spread.
+The app's Sobol shares are made the same way: `Engine::sobol_start` gives a `SobolJob`, whose
+`step(pieces)` evaluates a batch of rows or works out one output (on the calling thread) until it
+returns true, and whose `results()` are `mc.sobol`'s; `mc.sobol` drives the same job to the end,
+so the two agree. `Engine::sobol_evaluations` says what the default rows would cost.
 
 Changes can be scripted as engine commands (`stochcraft-cli schema` lists them with their
 parameters) and replayed:
@@ -307,7 +326,7 @@ journal that began with `model.new` starts its own model) and refuses
 with a `conflict` error if not, unless `--force`. If the file has no scenario of that name, `exec`
 stops with the error from opening it; with `--force` it replays onto the file's first scenario.
 It then re-applies the edits, undo and redo, and
-skips the saves, runs and experiments (`file.save`, `run`, `mc.run`, `run.start`,
+skips the saves, runs and experiments (`file.save`, `run`, `mc.run`, `mc.sobol`, `run.start`,
 `run.cancel`, `experiment.sweep`, `experiment.sensitivity`, `experiment.design`,
 `experiment.size`), printing `"skipped": true` for each; `--all` carries them out too. In Rust,
 `Engine::journal_document` gives the journal and `Engine::replay_journal` replays it

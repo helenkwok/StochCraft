@@ -1,6 +1,6 @@
 //! Monte Carlo models through the engine (ROADMAP M4.1): the commands `mc.get`, `mc.set`,
 //! `mc.input.set`, `mc.input.remove`, `mc.output.set`, `mc.output.remove`,
-//! `mc.correlation.set`, `mc.inputs.import`, `mc.inputs.export` and `mc.run`.
+//! `mc.correlation.set`, `mc.inputs.import`, `mc.inputs.export`, `mc.run` and `mc.sobol`.
 //!
 //! A Monte Carlo model is the model's [`MonteCarlo`] section on a model with no process; its
 //! trials are the experiment's `replications` and its seed the experiment's. Each edit replaces
@@ -12,9 +12,10 @@ use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 use serde_json::{Value, json};
 use stochcraft_experiment::{Control, Experiment};
+use stochcraft_mc::sobol::{DEFAULT_BOOTSTRAP, DEFAULT_ROWS};
 use stochcraft_mc::{
-    BATCH, Block, BlockJob, Compiled, IntervalBasis, MAX_TRIALS, McResults, OutputResult, Problem,
-    RunOptions, Stepper, table,
+    BATCH, Block, BlockJob, Compiled, Estimate, IntervalBasis, MAX_TRIALS, McResults, OutputResult,
+    Problem, RunOptions, SobolError, SobolOptions, SobolResults, SobolRun, Stepper, table,
 };
 use stochcraft_model::montecarlo::DEFAULT_TRIALS;
 use stochcraft_model::{
@@ -800,11 +801,7 @@ impl Engine {
         if let Some(bad) = percentiles.iter().find(|q| !(0.0..=100.0).contains(*q)) {
             return Err(invalid(format!("percentile {bad} is not from 0 to 100")));
         }
-        let compiled = stochcraft_mc::compile(&m, seed).map_err(|ps| CommandError {
-            code: ErrorCode::InvalidModel,
-            message: "the Monte Carlo model has errors and cannot run".into(),
-            details: Some(problems(&ps)),
-        })?;
+        let compiled = compile_model(&m, seed)?;
         let options = RunOptions {
             trials,
             stop: m.stop,
@@ -988,6 +985,193 @@ pub fn results_json(r: &McResults) -> Value {
         });
     }
     v
+}
+
+/// The most bootstrap resamples `mc.sobol` makes, so that a typing error cannot hold it for hours.
+pub const MOST_BOOTSTRAP: u32 = 100_000;
+
+/// `mc.sobol`: how much of each output's variation each input accounts for.
+#[derive(Debug, Deserialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
+pub struct SobolParams {
+    /// Rows of each of the two base samples, N; the model is evaluated N × (inputs + 2) times
+    /// (inputs that vary). By default 1,000; at least 10.
+    #[serde(default)]
+    pub rows: Option<u64>,
+    /// The seed of the draws; by default the model's own.
+    #[serde(default)]
+    pub seed: Option<u64>,
+    /// Bootstrap resamples for the 95% intervals (0 for none); by default 1,000.
+    #[serde(default)]
+    pub bootstrap: Option<u32>,
+}
+
+pub(crate) fn sobol(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
+    let mut job = e.sobol_start(p)?;
+    while !job.step(usize::MAX) {}
+    job.results()
+        .ok_or_else(|| CommandError::new(ErrorCode::Internal, "the run ended without results"))
+}
+
+/// Compiles `m` for a run under `seed`, or says what is wrong with it.
+fn compile_model(m: &MonteCarlo, seed: u64) -> Result<Compiled, CommandError> {
+    stochcraft_mc::compile(m, seed).map_err(|ps| CommandError {
+        code: ErrorCode::InvalidModel,
+        message: "the Monte Carlo model has errors and cannot run".into(),
+        details: Some(problems(&ps)),
+    })
+}
+
+/// How many of `m`'s inputs vary (are not constants): those a Sobol run makes indices for.
+fn varied_inputs(m: &MonteCarlo) -> u64 {
+    m.inputs
+        .iter()
+        .filter(|i| !matches!(i.dist, Dist::Constant(_)))
+        .count() as u64
+}
+
+/// A Sobol run refused: a model whose inputs cannot have indices is an invalid model, a number
+/// asked for that cannot be used invalid parameters.
+fn sobol_error(e: &SobolError) -> CommandError {
+    let code = match e {
+        SobolError::Correlated(_) | SobolError::NoVariedInputs => ErrorCode::InvalidModel,
+        SobolError::TooFewRows | SobolError::TooMany { .. } => ErrorCode::InvalidParams,
+    };
+    CommandError::new(code, e.to_string())
+}
+
+/// A Sobol run made a few pieces at a time ([`Engine::sobol_start`]), so the window can draw
+/// between them: each [`SobolJob::step`] evaluates some batches of rows or works out an output's
+/// indices, and [`SobolJob::results`] gives the results once it is done. `mc.sobol` is the same
+/// run with every piece made at once, so the results are the same however the pieces are spread
+/// over frames. Unlike a Monte Carlo run's batches these are made on the calling thread.
+pub struct SobolJob {
+    compiled: Compiled,
+    run: SobolRun,
+    evaluations: u64,
+    /// The results, once the run has made them and until they are taken.
+    results: Option<Value>,
+    finished: bool,
+}
+
+impl SobolJob {
+    /// Makes up to `pieces` (at least one) of the pieces of work the run has left. True once the
+    /// run is done and has its results.
+    pub fn step(&mut self, pieces: usize) -> bool {
+        let mut made = 0;
+        while !self.finished && made < pieces.max(1) {
+            self.run.step(&self.compiled);
+            made += 1;
+            if self.run.is_done() {
+                self.results = self.run.take_results().map(|r| sobol_json(&r));
+                self.finished = true;
+            }
+        }
+        self.finished
+    }
+
+    /// How far along the run is, from 0 to 1.
+    pub fn progress(&self) -> f64 {
+        if self.finished {
+            1.0
+        } else {
+            self.run.progress(&self.compiled).clamp(0.0, 1.0)
+        }
+    }
+
+    /// The model evaluations the run makes in all, N × (inputs + 2).
+    pub fn evaluations(&self) -> u64 {
+        self.evaluations
+    }
+
+    /// The finished run's results, as `mc.sobol` gives them; `None` before it is done (and after
+    /// they were taken).
+    pub fn results(&mut self) -> Option<Value> {
+        self.results.take()
+    }
+}
+
+impl Engine {
+    /// Gets a Sobol run ready, with `mc.sobol`'s parameters, without evaluating the model yet:
+    /// the window makes it a few pieces a frame with [`SobolJob::step`].
+    pub fn sobol_start(&self, params: Value) -> Result<SobolJob, CommandError> {
+        let p: SobolParams = parse(params)?;
+        let m = self.model.monte_carlo.as_ref().ok_or_else(|| {
+            not_found(
+                "the model is not a Monte Carlo model: add inputs and outputs with mc.input.set and mc.output.set",
+            )
+        })?;
+        let seed = p.seed.unwrap_or(self.model.experiment.seed);
+        let rows = p.rows.unwrap_or(DEFAULT_ROWS);
+        let bootstrap = p.bootstrap.unwrap_or(DEFAULT_BOOTSTRAP);
+        if bootstrap > MOST_BOOTSTRAP {
+            return Err(invalid(format!(
+                "`bootstrap` must be from 0 to {MOST_BOOTSTRAP}"
+            )));
+        }
+        let compiled = compile_model(m, seed)?;
+        let run = compiled
+            .sobol_run(rows, seed, &SobolOptions { bootstrap })
+            .map_err(|err| sobol_error(&err))?;
+        Ok(SobolJob {
+            compiled,
+            run,
+            evaluations: rows.saturating_mul(varied_inputs(m) + 2),
+            results: None,
+            finished: false,
+        })
+    }
+
+    /// What a Sobol run with the default rows would take in model evaluations, N × (inputs + 2);
+    /// `None` when no input varies.
+    pub fn sobol_evaluations(&self) -> Option<u64> {
+        let varied = varied_inputs(self.model.monte_carlo.as_ref()?);
+        (varied > 0).then(|| DEFAULT_ROWS * (varied + 2))
+    }
+
+    /// The model has correlated inputs, so a Sobol run is refused (the indices assume
+    /// independent inputs).
+    pub fn sobol_correlated(&self) -> bool {
+        self.model
+            .monte_carlo
+            .as_ref()
+            .is_some_and(|m| !m.correlations.is_empty())
+    }
+}
+
+fn estimate_json(e: &Estimate) -> Value {
+    json!({
+        "value": e.value,
+        "interval": e.interval.map(|(lo, hi)| [lo, hi]),
+    })
+}
+
+/// A Sobol run's results as JSON: per output its variance, the rows used and dropped, why it has
+/// no indices if it has none, and per input its first-order and total index with their 95%
+/// intervals (`null` when no bootstrap was asked for).
+pub fn sobol_json(r: &SobolResults) -> Value {
+    json!({
+        "kind": "sobol",
+        "rows": r.rows,
+        "evaluations": r.evaluations,
+        "seed": r.seed,
+        "bootstrap": r.bootstrap,
+        "inputs": r.inputs,
+        "constants": r.constants,
+        "outputs": r.outputs.iter().map(|o| json!({
+            "name": o.name,
+            "variance": o.variance,
+            "rows_used": o.rows_used,
+            "rows_dropped": o.rows_dropped,
+            "unavailable": o.unavailable,
+            "inputs": o.indices.iter().map(|i| json!({
+                "input": i.input,
+                "first": estimate_json(&i.first),
+                "total": estimate_json(&i.total),
+            })).collect::<Vec<_>>(),
+        })).collect::<Vec<_>>(),
+        "method": "Sobol indices from two independent random base samples A and B of `rows` rows each and, for each input that varies, the matrix A_B with that input's column taken from B: rows × (inputs + 2) model evaluations. first: the share of the output's variance the input accounts for alone (Saltelli, Annoni, Azzini, Campolongo, Ratto and Tarantola, 2010). total: the share it accounts for with all its interactions (Jansen, 1999). Intervals are 95% percentile bootstrap intervals over the rows. An estimate from few rows can fall a little below 0 or above 1. The inputs must be independent; constant inputs are left out.",
+    })
 }
 
 /// A text cell safe to open in a spreadsheet: one that starts with `=`, `+`, `-`, `@`, a tab or a

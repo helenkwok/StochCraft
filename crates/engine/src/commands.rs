@@ -2660,6 +2660,14 @@ materials,normal,mean=500;std_dev=50,USD
         run: crate::mc::output_set,
     },
     Command {
+        name: "mc.sobol",
+        summary: "Monte Carlo: how much of each output's variation each input accounts for, by Sobol indices: `first` alone and `total` with all its interactions, each as a share of the variance with a 95% bootstrap interval, from `rows` rows of two base samples (1,000 by default; the model is evaluated rows × (inputs that vary + 2) times). Needs independent inputs: a model with correlated inputs is refused. An estimate from few rows can fall a little below 0 or above 1.",
+        kind: CommandKind::Action,
+        schema: schema::<crate::mc::SobolParams>,
+        example: || json!({ "rows": 200, "seed": 1, "bootstrap": 100 }),
+        run: crate::mc::sobol,
+    },
+    Command {
         name: "mc.correlation.set",
         summary: "Monte Carlo: the rank (Spearman) correlation between two inputs, strictly between -1 and 1, induced by Iman and Conover's method; 0 removes it. Correlations that cannot all hold together are refused.",
         kind: CommandKind::Edit,

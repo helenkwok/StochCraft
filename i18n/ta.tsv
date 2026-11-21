@@ -1314,3 +1314,13 @@ unit	yr	ஆண்டு
 @plural	{n} trial gave no number (a division by zero, say) and is left out.|{n} trials gave no number (a division by zero, say) and are left out.	{n} முயற்சி எண்ணைத் தரவில்லை (எ.கா. பூஜ்ஜியத்தால் வகுத்தல்), அது விலக்கப்பட்டது.|{n} முயற்சிகள் எண்ணைத் தரவில்லை (எ.கா. பூஜ்ஜியத்தால் வகுத்தல்), அவை விலக்கப்பட்டன.
 @plural	{n} trial · seed {seed} · {sampling}|{n} trials · seed {seed} · {sampling}	{n} முயற்சி · விதை {seed} · {sampling}|{n} முயற்சிகள் · விதை {seed} · {sampling}
 @plural	{n} trial · seed {seed}|{n} trials · seed {seed}	{n} முயற்சி · விதை {seed}|{n} முயற்சிகள் · விதை {seed}
+# Shares of the spread (Sobol indices) in the Monte Carlo results (ROADMAP M4.1, part 3c)
+	Work out each input's share of the spread	ஒவ்வொரு உள்ளீட்டின் பரவல் பங்கைக் கணக்கிடு
+	{n} evaluations of the model	மாதிரியின் {n} மதிப்பீடுகள்
+	The shares of the spread need independent inputs, and some of these inputs are correlated.	பரவலின் பங்குகளுக்கு உள்ளீடுகள் சார்பற்றவையாக இருக்க வேண்டும்; இந்த உள்ளீடுகளில் சில தொடர்புடையவை.
+	Alone	தனியாக
+	With interactions	இடைவினைகளுடன்
+	{input} alone explains about {share} of the spread in {output}.	{output} இன் பரவலில் சுமார் {share} ஐ {input} தனியாக விளக்குகிறது.
+	95% interval {low} to {high}	95% இடைவெளி {low} முதல் {high} வரை
+	Alone is the share of the spread an input explains by itself. With interactions adds what it does together with the other inputs.	தனியாக என்பது ஓர் உள்ளீடு தானாகவே விளக்கும் பரவலின் பங்கு. இடைவினைகளுடன் என்பது மற்ற உள்ளீடுகளுடன் சேர்ந்து அது செய்வதையும் சேர்க்கிறது.
+	Working out the shares of the spread: {percent}	பரவலின் பங்குகள் கணக்கிடப்படுகின்றன: {percent}

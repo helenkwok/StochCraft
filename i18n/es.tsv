@@ -1314,3 +1314,13 @@ unit	yr	a
 @plural	{n} trial gave no number (a division by zero, say) and is left out.|{n} trials gave no number (a division by zero, say) and are left out.	{n} ensayo no dio ningún número (por ejemplo, una división por cero) y se omite.|{n} ensayos no dieron ningún número (por ejemplo, una división por cero) y se omiten.
 @plural	{n} trial · seed {seed} · {sampling}|{n} trials · seed {seed} · {sampling}	{n} ensayo · semilla {seed} · {sampling}|{n} ensayos · semilla {seed} · {sampling}
 @plural	{n} trial · seed {seed}|{n} trials · seed {seed}	{n} ensayo · semilla {seed}|{n} ensayos · semilla {seed}
+# Shares of the spread (Sobol indices) in the Monte Carlo results (ROADMAP M4.1, part 3c)
+	Work out each input's share of the spread	Calcular la parte de la dispersión que explica cada entrada
+	{n} evaluations of the model	{n} evaluaciones del modelo
+	The shares of the spread need independent inputs, and some of these inputs are correlated.	Las partes de la dispersión requieren entradas independientes, y algunas de estas entradas están correlacionadas.
+	Alone	Sola
+	With interactions	Con interacciones
+	{input} alone explains about {share} of the spread in {output}.	{input} sola explica alrededor de {share} de la dispersión de {output}.
+	95% interval {low} to {high}	Intervalo del 95% de {low} a {high}
+	Alone is the share of the spread an input explains by itself. With interactions adds what it does together with the other inputs.	Sola es la parte de la dispersión que una entrada explica por sí misma. Con interacciones añade lo que hace junto con las demás entradas.
+	Working out the shares of the spread: {percent}	Calculando las partes de la dispersión: {percent}

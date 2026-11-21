@@ -1314,3 +1314,13 @@ unit	yr	წელი
 @plural	{n} trial gave no number (a division by zero, say) and is left out.|{n} trials gave no number (a division by zero, say) and are left out.	{n} ცდამ რიცხვი არ მოგვცა (მაგალითად, ნულზე გაყოფა) და გამოტოვებულია.|{n} ცდამ რიცხვი არ მოგვცა (მაგალითად, ნულზე გაყოფა) და გამოტოვებულია.
 @plural	{n} trial · seed {seed} · {sampling}|{n} trials · seed {seed} · {sampling}	{n} ცდა · საწყისი მნიშვნელობა {seed} · {sampling}|{n} ცდა · საწყისი მნიშვნელობა {seed} · {sampling}
 @plural	{n} trial · seed {seed}|{n} trials · seed {seed}	{n} ცდა · საწყისი მნიშვნელობა {seed}|{n} ცდა · საწყისი მნიშვნელობა {seed}
+# Shares of the spread (Sobol indices) in the Monte Carlo results (ROADMAP M4.1, part 3c)
+	Work out each input's share of the spread	თითოეული შემავალი სიდიდის წილის გამოთვლა გაფანტულობაში
+	{n} evaluations of the model	მოდელის {n} გამოთვლა
+	The shares of the spread need independent inputs, and some of these inputs are correlated.	გაფანტულობის წილებისთვის შემავალი სიდიდეები დამოუკიდებელი უნდა იყოს, ზოგი მათგანი კი კორელირებულია.
+	Alone	ცალკე
+	With interactions	ურთიერთქმედებებით
+	{input} alone explains about {share} of the spread in {output}.	{input} ცალკე ხსნის {output}-ის გაფანტულობის დაახლოებით {share}-ს.
+	95% interval {low} to {high}	95% ინტერვალი {low}-დან {high}-მდე
+	Alone is the share of the spread an input explains by itself. With interactions adds what it does together with the other inputs.	„ცალკე“ არის გაფანტულობის ის წილი, რომელსაც შემავალი სიდიდე თავისით ხსნის. „ურთიერთქმედებებით“ ამატებს იმას, რასაც სხვა შემავალ სიდიდეებთან ერთად აკეთებს.
+	Working out the shares of the spread: {percent}	გაფანტულობის წილების გამოთვლა: {percent}

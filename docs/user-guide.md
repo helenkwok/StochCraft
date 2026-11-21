@@ -474,7 +474,14 @@ The **Results** tab answers the question first:
   An input that is a constant is left out. The bars change one input at a time, so they leave out
   what correlated inputs do together, and a correlated input's rank correlation includes the effect
   of the inputs it is correlated with: the results say so when the model has correlated inputs.
-  Variance-based (Sobol) indices come next.
+  **Work out each input's share of the spread** adds two columns to that table (the variance-based,
+  or Sobol, indices). **Alone** is the share of the output's variation an input explains by itself;
+  **With interactions** adds what it explains together with the other inputs, so it is the larger
+  when inputs act together (in a product, say) and the same when the output is a sum. Rest the
+  pointer on a share for its 95% interval. It runs on request, because it evaluates the model
+  1,000 × (inputs + 2) times (6,000 for 4 inputs, which the button says), with its progress in the
+  status bar; **Cancel** or Esc stops it. It needs independent inputs, so a model with correlated
+  inputs has no button and the results say why. Editing the model takes the shares away.
 
 ## Save, open and export
 

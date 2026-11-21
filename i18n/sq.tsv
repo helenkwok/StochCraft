@@ -1314,3 +1314,13 @@ unit	yr	v
 @plural	{n} trial gave no number (a division by zero, say) and is left out.|{n} trials gave no number (a division by zero, say) and are left out.	{n} provë nuk dha numër (p.sh. një pjesëtim me zero) dhe lihet jashtë.|{n} prova nuk dhanë numër (p.sh. një pjesëtim me zero) dhe lihen jashtë.
 @plural	{n} trial · seed {seed} · {sampling}|{n} trials · seed {seed} · {sampling}	{n} provë · fara {seed} · {sampling}|{n} prova · fara {seed} · {sampling}
 @plural	{n} trial · seed {seed}|{n} trials · seed {seed}	{n} provë · fara {seed}|{n} prova · fara {seed}
+# Shares of the spread (Sobol indices) in the Monte Carlo results (ROADMAP M4.1, part 3c)
+	Work out each input's share of the spread	Llogarit pjesën e çdo hyrjeje në shpërndarje
+	{n} evaluations of the model	{n} vlerësime të modelit
+	The shares of the spread need independent inputs, and some of these inputs are correlated.	Pjesët e shpërndarjes kërkojnë hyrje të pavarura, ndërsa disa nga këto hyrje janë të korreluara.
+	Alone	Vetëm
+	With interactions	Me ndërveprime
+	{input} alone explains about {share} of the spread in {output}.	{input} vetëm shpjegon rreth {share} të shpërndarjes së {output}.
+	95% interval {low} to {high}	Interval 95% nga {low} deri {high}
+	Alone is the share of the spread an input explains by itself. With interactions adds what it does together with the other inputs.	Vetëm është pjesa e shpërndarjes që një hyrje e shpjegon vetë. Me ndërveprime shton atë që bën së bashku me hyrjet e tjera.
+	Working out the shares of the spread: {percent}	Po llogariten pjesët e shpërndarjes: {percent}

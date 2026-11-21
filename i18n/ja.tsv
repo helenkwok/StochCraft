@@ -1314,3 +1314,13 @@ unit	yr	年
 @plural	{n} trial gave no number (a division by zero, say) and is left out.|{n} trials gave no number (a division by zero, say) and are left out.	{n} 回の試行で数値が得られなかったため (ゼロ除算など)、除外しています。
 @plural	{n} trial · seed {seed} · {sampling}|{n} trials · seed {seed} · {sampling}	{n} 回の試行 · シード {seed} · {sampling}
 @plural	{n} trial · seed {seed}|{n} trials · seed {seed}	{n} 回の試行 · シード {seed}
+# Shares of the spread (Sobol indices) in the Monte Carlo results (ROADMAP M4.1, part 3c)
+	Work out each input's share of the spread	各入力がばらつきに占める割合を求める
+	{n} evaluations of the model	モデルの評価 {n} 回
+	The shares of the spread need independent inputs, and some of these inputs are correlated.	ばらつきへの寄与の割合を求めるには入力が互いに独立である必要がありますが、これらの入力の一部は相関しています。
+	Alone	単独
+	With interactions	交互作用を含む
+	{input} alone explains about {share} of the spread in {output}.	{input} 単独で、{output} のばらつきの約 {share} を説明します。
+	95% interval {low} to {high}	95% 区間 {low} ～ {high}
+	Alone is the share of the spread an input explains by itself. With interactions adds what it does together with the other inputs.	「単独」は、入力がそれだけで説明するばらつきの割合です。「交互作用を含む」は、他の入力と組み合わさったときの寄与も加えたものです。
+	Working out the shares of the spread: {percent}	ばらつきへの寄与を計算中: {percent}

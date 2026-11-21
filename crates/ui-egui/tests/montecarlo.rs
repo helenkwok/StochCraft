@@ -240,3 +240,233 @@ fn a_new_monte_carlo_model_is_built_in_the_window() {
     assert_eq!(inputs(&h), ["labour"]);
     assert_eq!(h.state().status(), "Undid Import Inputs");
 }
+
+/// A Monte Carlo model with independent inputs, built with commands: the duration is the design
+/// time (0 to 1 days) plus the build time (0 to 3), so the build accounts for 9 tenths of the
+/// spread by itself, with no interactions.
+fn independent_model(h: &mut Harness<'static, App>) {
+    h.state_mut()
+        .run_command(&stochcraft_ui_egui::commands::CommandRef::new(
+            stochcraft_ui_egui::commands::NEW_MONTE_CARLO,
+        ));
+    settle(h);
+    for (name, max) in [("design", 1.0), ("build", 3.0)] {
+        h.state_mut().execute(
+            "mc.input.set",
+            serde_json::json!({
+                "name": name,
+                "distribution": { "type": "uniform", "min": 0.0, "max": max },
+            }),
+        );
+    }
+    h.state_mut().execute(
+        "mc.output.set",
+        serde_json::json!({ "name": "duration", "expression": "$design + $build" }),
+    );
+    settle(h);
+    h.state_mut().run();
+    finish_run(h);
+}
+
+const SHARES_BUTTON: &str = "Work out each input's share of the spread";
+
+/// Steps until the shares of the spread are worked out.
+fn finish_shares(h: &mut Harness<'static, App>) {
+    for _ in 0..5000 {
+        if !h.state().is_working_out_shares() {
+            break;
+        }
+        h.step();
+    }
+    settle(h);
+}
+
+/// The budget example has correlated inputs, which have no Sobol shares: no button, and the
+/// reason in its place, for each output.
+#[test]
+fn correlated_inputs_have_no_shares_and_the_results_say_why() {
+    let mut h = harness();
+    click(
+        &mut h,
+        Role::Button,
+        "Will the project come in under budget?",
+    );
+    h.state_mut().run();
+    finish_run(&mut h);
+    assert!(h.state().results().is_some());
+    assert!(h.query_all_by_label("Which inputs matter").count() >= 2);
+    assert!(
+        h.query_all_by_role_and_label(Role::Button, SHARES_BUTTON)
+            .next()
+            .is_none()
+    );
+    assert!(
+        h.query_all_by_label_contains("need independent inputs")
+            .count()
+            >= 2
+    );
+}
+
+/// With independent inputs the button says what it costs, works the shares out a few pieces a
+/// frame, and the table gains "Alone" and "With interactions" with a sentence that answers first.
+/// Editing the model drops them.
+#[test]
+fn the_shares_of_the_spread_are_worked_out_on_demand() {
+    let mut h = harness();
+    independent_model(&mut h);
+    assert_eq!(h.state().engine().sobol_evaluations(), Some(4_000));
+    h.get_by_label_contains("4,000 evaluations of the model");
+    assert!(h.query_all_by_label("Alone").next().is_none());
+
+    h.get_all_by_role_and_label(Role::Button, SHARES_BUTTON)
+        .last()
+        .unwrap_or_else(|| panic!("no button"))
+        .click();
+    h.step();
+    assert!(h.state().is_working_out_shares());
+    finish_shares(&mut h);
+    assert!(!h.state().is_working_out_shares());
+
+    // The sentence first, with the build's share near its exact 90% (1,000 rows: about ±3).
+    let said = (80..=100).any(|n| {
+        h.query_all_by_label(&format!(
+            "build alone explains about {n}% of the spread in duration."
+        ))
+        .next()
+        .is_some()
+    });
+    assert!(said, "no sentence about the build's share");
+    h.get_by_label("Alone");
+    h.get_by_label("With interactions");
+    assert!(
+        h.query_all_by_role_and_label(Role::Button, SHARES_BUTTON)
+            .next()
+            .is_none()
+    );
+
+    // Edited after: the shares are of the results as they were, so they go.
+    h.state_mut().execute(
+        "mc.input.set",
+        serde_json::json!({ "name": "build", "unit": "days" }),
+    );
+    settle(&mut h);
+    assert!(h.state().results_out_of_date());
+    assert!(h.query_all_by_label("Alone").next().is_none());
+    assert!(
+        h.query_all_by_label_contains("alone explains about")
+            .next()
+            .is_none()
+    );
+}
+
+/// Esc stops the work: twelve inputs make each piece heavy enough that no frame finishes it.
+#[test]
+fn the_shares_can_be_cancelled() {
+    let mut h = harness();
+    h.state_mut()
+        .run_command(&stochcraft_ui_egui::commands::CommandRef::new(
+            stochcraft_ui_egui::commands::NEW_MONTE_CARLO,
+        ));
+    settle(&mut h);
+    let mut sum = String::new();
+    for i in 0..12 {
+        h.state_mut().execute(
+            "mc.input.set",
+            serde_json::json!({
+                "name": format!("x{i}"),
+                "distribution": { "type": "uniform", "min": 0.0, "max": 1.0 },
+            }),
+        );
+        sum.push_str(&format!("{}$x{i}", if i == 0 { "" } else { " + " }));
+    }
+    // Four outputs: a batch of rows, then each output's bootstrap a piece, then the end. A
+    // frame makes pieces for about 8 ms, so none of the first frames can finish it.
+    for (name, expression) in [
+        ("total", sum.as_str()),
+        ("half", "$total * 0.5"),
+        ("third", "$total div 3"),
+        ("twice", "$total * 2"),
+    ] {
+        h.state_mut().execute(
+            "mc.output.set",
+            serde_json::json!({ "name": name, "expression": expression }),
+        );
+    }
+    settle(&mut h);
+    h.state_mut().run();
+    finish_run(&mut h);
+    assert!(
+        h.query_all_by_label_contains("14,000 evaluations of the model")
+            .count()
+            >= 1
+    );
+
+    h.get_all_by_role_and_label(Role::Button, SHARES_BUTTON)
+        .next()
+        .unwrap_or_else(|| panic!("no button"))
+        .click();
+    h.step();
+    assert!(h.state().is_working_out_shares());
+    // The status bar says how far it is.
+    h.step();
+    assert!(h.state().is_working_out_shares());
+    assert!(
+        h.query_all_by_label_contains("Working out the shares of the spread:")
+            .count()
+            >= 1
+    );
+    h.key_press(egui::Key::Escape);
+    settle(&mut h);
+    assert!(!h.state().is_working_out_shares());
+    assert!(h.query_all_by_label("Alone").next().is_none());
+    // The button is back.
+    assert!(
+        h.query_all_by_role_and_label(Role::Button, SHARES_BUTTON)
+            .next()
+            .is_some()
+    );
+}
+
+/// The table of shares has a row for every input, not only the twelve the tornado shows.
+#[test]
+fn the_table_of_shares_is_not_limited_to_the_tornados_inputs() {
+    let mut h = harness();
+    h.state_mut()
+        .run_command(&stochcraft_ui_egui::commands::CommandRef::new(
+            stochcraft_ui_egui::commands::NEW_MONTE_CARLO,
+        ));
+    settle(&mut h);
+    let mut sum = String::new();
+    for i in 0..14 {
+        h.state_mut().execute(
+            "mc.input.set",
+            serde_json::json!({
+                "name": format!("x{i}"),
+                "distribution": { "type": "uniform", "min": 0.0, "max": 1.0 },
+            }),
+        );
+        sum.push_str(&format!("{}$x{i}", if i == 0 { "" } else { " + " }));
+    }
+    h.state_mut().execute(
+        "mc.output.set",
+        serde_json::json!({ "name": "total", "expression": sum }),
+    );
+    settle(&mut h);
+    h.state_mut().run();
+    finish_run(&mut h);
+    // Every name is also in the outline, so count the labels: before the shares the table has
+    // the twelve rows the tornado has; after, a row for each of the fourteen inputs.
+    let shown = |h: &Harness<'static, App>| {
+        (0..14)
+            .map(|i| h.query_all_by_label(&format!("x{i}")).count())
+            .sum::<usize>()
+    };
+    let before = shown(&h);
+    h.get_all_by_role_and_label(Role::Button, SHARES_BUTTON)
+        .next()
+        .unwrap_or_else(|| panic!("no button"))
+        .click();
+    h.step();
+    finish_shares(&mut h);
+    assert_eq!(shown(&h), before + 2);
+}

@@ -1314,3 +1314,13 @@ unit	yr	j
 @plural	{n} trial gave no number (a division by zero, say) and is left out.|{n} trials gave no number (a division by zero, say) and are left out.	{n} iteratie gaf geen getal (bijvoorbeeld door delen door nul) en is weggelaten.|{n} iteraties gaven geen getal (bijvoorbeeld door delen door nul) en zijn weggelaten.
 @plural	{n} trial · seed {seed} · {sampling}|{n} trials · seed {seed} · {sampling}	{n} iteratie · startwaarde {seed} · {sampling}|{n} iteraties · startwaarde {seed} · {sampling}
 @plural	{n} trial · seed {seed}|{n} trials · seed {seed}	{n} iteratie · startwaarde {seed}|{n} iteraties · startwaarde {seed}
+# Shares of the spread (Sobol indices) in the Monte Carlo results (ROADMAP M4.1, part 3c)
+	Work out each input's share of the spread	Bereken het aandeel van elke invoer in de spreiding
+	{n} evaluations of the model	{n} berekeningen van het model
+	The shares of the spread need independent inputs, and some of these inputs are correlated.	De aandelen in de spreiding vragen om onafhankelijke invoer, en een deel van deze invoer is gecorreleerd.
+	Alone	Alleen
+	With interactions	Met interacties
+	{input} alone explains about {share} of the spread in {output}.	{input} verklaart alleen ongeveer {share} van de spreiding in {output}.
+	95% interval {low} to {high}	95%-interval van {low} tot {high}
+	Alone is the share of the spread an input explains by itself. With interactions adds what it does together with the other inputs.	Alleen is het deel van de spreiding dat een invoer zelf verklaart. Met interacties komt daar bij wat de invoer samen met de andere invoer doet.
+	Working out the shares of the spread: {percent}	Aandelen in de spreiding berekenen: {percent}

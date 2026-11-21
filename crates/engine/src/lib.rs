@@ -38,7 +38,7 @@
 //!   page's web workers, see [`Worker`], or slices of [`SLICE_EVENTS`] events between frames).
 //! - A Monte Carlo model (a calculation with no process: inputs that are distributions, outputs
 //!   that are expressions over them) is edited with the `mc.*` commands and run with `mc.run`
-//!   (see [`mc`]); `run` refuses one.
+//!   (see [`mc`]); `run` refuses one. `mc.sobol` gives each input's share of an output's variance.
 //! - Files are BPSim on BPMN or XPDL (`stochcraft-io`). `file.save` writes edits into the file
 //!   the model was opened from, keeping everything StochCraft does not understand and every line
 //!   it did not change; saved unchanged, the file comes back byte for byte. An edit that cannot
@@ -251,10 +251,11 @@ pub enum ReplayMode {
 }
 
 /// The commands [`ReplayMode::EditsOnly`] skips.
-const SKIPPED_BY_DEFAULT: [&str; 9] = [
+const SKIPPED_BY_DEFAULT: [&str; 10] = [
     "file.save",
     "run",
     "mc.run",
+    "mc.sobol",
     "run.start",
     "run.cancel",
     "experiment.sweep",

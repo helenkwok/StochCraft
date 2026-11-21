@@ -1314,3 +1314,13 @@ unit	yr	a
 @plural	{n} trial gave no number (a division by zero, say) and is left out.|{n} trials gave no number (a division by zero, say) and are left out.	{n} iterație nu a dat niciun număr (o împărțire la zero, de exemplu) și este omisă.|{n} iterații nu au dat niciun număr (o împărțire la zero, de exemplu) și sunt omise.|{n} de iterații nu au dat niciun număr (o împărțire la zero, de exemplu) și sunt omise.
 @plural	{n} trial · seed {seed} · {sampling}|{n} trials · seed {seed} · {sampling}	{n} iterație · sămânță {seed} · {sampling}|{n} iterații · sămânță {seed} · {sampling}|{n} de iterații · sămânță {seed} · {sampling}
 @plural	{n} trial · seed {seed}|{n} trials · seed {seed}	{n} iterație · sămânță {seed}|{n} iterații · sămânță {seed}|{n} de iterații · sămânță {seed}
+# Shares of the spread (Sobol indices) in the Monte Carlo results (ROADMAP M4.1, part 3c)
+	Work out each input's share of the spread	Calculează partea fiecărei intrări din dispersie
+	{n} evaluations of the model	{n} evaluări ale modelului
+	The shares of the spread need independent inputs, and some of these inputs are correlated.	Părțile din dispersie cer intrări independente, iar unele dintre aceste intrări sunt corelate.
+	Alone	Singură
+	With interactions	Cu interacțiuni
+	{input} alone explains about {share} of the spread in {output}.	{input} singură explică aproximativ {share} din dispersia lui {output}.
+	95% interval {low} to {high}	Interval de 95% de la {low} la {high}
+	Alone is the share of the spread an input explains by itself. With interactions adds what it does together with the other inputs.	Singură este partea din dispersie pe care o explică o intrare prin ea însăși. Cu interacțiuni adaugă ce face împreună cu celelalte intrări.
+	Working out the shares of the spread: {percent}	Se calculează părțile din dispersie: {percent}

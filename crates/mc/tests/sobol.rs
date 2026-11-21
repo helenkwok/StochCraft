@@ -281,7 +281,7 @@ fn the_same_seed_gives_the_same_results_and_a_stepped_run_agrees() {
     assert_eq!(a, b);
     assert_ne!(a, c.sobol(2_500, 100, &options(30)));
 
-    // Stepped: 3 batches of rows, then one output.
+    // Stepped.
     let mut run = c
         .sobol_run(2_500, 99, &options(30))
         .unwrap_or_else(|e| unreachable!("{e}"));
@@ -293,7 +293,8 @@ fn the_same_seed_gives_the_same_results_and_a_stepped_run_agrees() {
         run.step(&c);
         steps += 1;
     };
-    assert_eq!(steps, 3 + 1 + 1);
+    // 3 batches, then each output a step to start and as many as its bootstrap needs, and the end.
+    assert!(steps > 3 + 1, "{steps}");
     assert_eq!(Ok(stepped), a);
 }
 
@@ -317,5 +318,41 @@ fn the_defaults_and_the_cost() {
         Err(SobolError::TooMany {
             evaluations: 15_000_000
         })
+    );
+}
+
+/// The bootstrap is made a few resamples a step, from the same keyed stream in the same order:
+/// a step of one resample at a time gives bit-identical results, and takes more steps.
+#[test]
+fn a_small_step_size_gives_the_same_results() {
+    let u = || Dist::Uniform { min: 0.0, max: 1.0 };
+    let mc = model(
+        vec![input("x1", u()), input("x2", u())],
+        vec![output("y", "$x1 * $x2 + $x1"), output("z", "$x2")],
+    );
+    let c = compiled(&mc);
+    let whole = c.sobol(1_200, 5, &options(40));
+    let drive = |ops: usize| {
+        let mut run = c
+            .sobol_run(1_200, 5, &options(40))
+            .unwrap_or_else(|e| unreachable!("{e}"))
+            .with_step_operations(ops);
+        let mut steps = 0;
+        loop {
+            if let Some(r) = run.take_results() {
+                break (r, steps);
+            }
+            run.step(&c);
+            steps += 1;
+        }
+    };
+    let (small, small_steps) = drive(1);
+    let (default, default_steps) = drive(stochcraft_mc::sobol::STEP_OPERATIONS);
+    assert_eq!(Ok(small), whole);
+    assert_eq!(Ok(default), whole);
+    // One resample a step: 40 per output instead of one step.
+    assert!(
+        small_steps >= default_steps + 2 * 39,
+        "{small_steps} {default_steps}"
     );
 }

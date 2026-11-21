@@ -1314,3 +1314,13 @@ unit	yr	సం.
 @plural	{n} trial gave no number (a division by zero, say) and is left out.|{n} trials gave no number (a division by zero, say) and are left out.	{n} ప్రయత్నం సంఖ్యను ఇవ్వలేదు (ఉదాహరణకు సున్నాతో భాగహారం), అది వదిలివేయబడింది.|{n} ప్రయత్నాలు సంఖ్యను ఇవ్వలేదు (ఉదాహరణకు సున్నాతో భాగహారం), అవి వదిలివేయబడ్డాయి.
 @plural	{n} trial · seed {seed} · {sampling}|{n} trials · seed {seed} · {sampling}	{n} ప్రయత్నం · బీజం {seed} · {sampling}|{n} ప్రయత్నాలు · బీజం {seed} · {sampling}
 @plural	{n} trial · seed {seed}|{n} trials · seed {seed}	{n} ప్రయత్నం · బీజం {seed}|{n} ప్రయత్నాలు · బీజం {seed}
+# Shares of the spread (Sobol indices) in the Monte Carlo results (ROADMAP M4.1, part 3c)
+	Work out each input's share of the spread	ప్రతి ఇన్‌పుట్ వ్యాప్తిలో వాటా లెక్కించు
+	{n} evaluations of the model	మోడల్ యొక్క {n} మూల్యాంకనాలు
+	The shares of the spread need independent inputs, and some of these inputs are correlated.	వ్యాప్తి వాటాలకు ఇన్‌పుట్‌లు స్వతంత్రంగా ఉండాలి, కానీ ఈ ఇన్‌పుట్‌లలో కొన్ని సహసంబంధం కలిగి ఉన్నాయి.
+	Alone	ఒంటరిగా
+	With interactions	పరస్పర చర్యలతో
+	{input} alone explains about {share} of the spread in {output}.	{input} ఒంటరిగా {output} వ్యాప్తిలో సుమారు {share} వివరిస్తుంది.
+	95% interval {low} to {high}	95% అంతరం {low} నుండి {high} వరకు
+	Alone is the share of the spread an input explains by itself. With interactions adds what it does together with the other inputs.	ఒంటరిగా అంటే ఒక ఇన్‌పుట్ తానే వివరించే వ్యాప్తి వాటా. పరస్పర చర్యలతో అంటే ఇతర ఇన్‌పుట్‌లతో కలిసి అది చేసేది కూడా కలుస్తుంది.
+	Working out the shares of the spread: {percent}	వ్యాప్తి వాటాలు లెక్కిస్తున్నాం: {percent}

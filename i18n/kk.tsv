@@ -1314,3 +1314,13 @@ unit	yr	ж.
 @plural	{n} trial gave no number (a division by zero, say) and is left out.|{n} trials gave no number (a division by zero, say) and are left out.	{n} сынақ сан бермеді (мысалы, нөлге бөлу) және есептен шығарылды.|{n} сынақ сан бермеді (мысалы, нөлге бөлу) және есептен шығарылды.
 @plural	{n} trial · seed {seed} · {sampling}|{n} trials · seed {seed} · {sampling}	{n} сынақ · тұқым {seed} · {sampling}|{n} сынақ · тұқым {seed} · {sampling}
 @plural	{n} trial · seed {seed}|{n} trials · seed {seed}	{n} сынақ · тұқым {seed}|{n} сынақ · тұқым {seed}
+# Shares of the spread (Sobol indices) in the Monte Carlo results (ROADMAP M4.1, part 3c)
+	Work out each input's share of the spread	Әр кіріс шаманың шашырауға қосқан үлесін есептеу
+	{n} evaluations of the model	Модельдің {n} бағалауы
+	The shares of the spread need independent inputs, and some of these inputs are correlated.	Шашырау үлестері үшін кіріс шамалар тәуелсіз болуы керек, ал бұл кіріс шамалардың кейбірі корреляцияланған.
+	Alone	Жеке
+	With interactions	Өзара әсерлермен
+	{input} alone explains about {share} of the spread in {output}.	{input} жеке {output} шашырауының шамамен {share} бөлігін түсіндіреді.
+	95% interval {low} to {high}	95% аралық {low} – {high}
+	Alone is the share of the spread an input explains by itself. With interactions adds what it does together with the other inputs.	«Жеке» — кіріс шаманың өзі түсіндіретін шашырау үлесі. «Өзара әсерлермен» оған басқа кіріс шамалармен бірге жасайтыны қосылады.
+	Working out the shares of the spread: {percent}	Шашырау үлестерін есептеу: {percent}

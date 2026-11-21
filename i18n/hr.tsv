@@ -1314,3 +1314,13 @@ unit	yr	god.
 @plural	{n} trial gave no number (a division by zero, say) and is left out.|{n} trials gave no number (a division by zero, say) and are left out.	{n} pokušaj nije dao broj (npr. dijeljenje nulom) i izostavljen je.|{n} pokušaja nisu dala broj (npr. dijeljenje nulom) i izostavljena su.|{n} pokušaja nije dalo broj (npr. dijeljenje nulom) i izostavljeno je.
 @plural	{n} trial · seed {seed} · {sampling}|{n} trials · seed {seed} · {sampling}	{n} pokušaj · sjeme {seed} · {sampling}|{n} pokušaja · sjeme {seed} · {sampling}|{n} pokušaja · sjeme {seed} · {sampling}
 @plural	{n} trial · seed {seed}|{n} trials · seed {seed}	{n} pokušaj · sjeme {seed}|{n} pokušaja · sjeme {seed}|{n} pokušaja · sjeme {seed}
+# Shares of the spread (Sobol indices) in the Monte Carlo results (ROADMAP M4.1, part 3c)
+	Work out each input's share of the spread	Izračunaj udio svakog ulaza u raspršenju
+	{n} evaluations of the model	{n} evaluacija modela
+	The shares of the spread need independent inputs, and some of these inputs are correlated.	Udjeli u raspršenju zahtijevaju neovisne ulaze, a neki od ovih ulaza su korelirani.
+	Alone	Samostalno
+	With interactions	S interakcijama
+	{input} alone explains about {share} of the spread in {output}.	{input} samostalno objašnjava otprilike {share} raspršenja veličine {output}.
+	95% interval {low} to {high}	95% interval od {low} do {high}
+	Alone is the share of the spread an input explains by itself. With interactions adds what it does together with the other inputs.	Samostalno je udio raspršenja koji ulaz objašnjava sam. S interakcijama dodaje ono što čini zajedno s ostalim ulazima.
+	Working out the shares of the spread: {percent}	Izračunavanje udjela u raspršenju: {percent}

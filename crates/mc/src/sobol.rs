@@ -55,6 +55,10 @@ pub const DEFAULT_ROWS: u64 = 1_000;
 /// The bootstrap resamples a run makes unless asked otherwise.
 pub const DEFAULT_BOOTSTRAP: u32 = 1_000;
 
+/// Row-input operations of bootstrap work one [`SobolRun::step`] does (about 2^18), so a step is
+/// short however many rows and inputs there are.
+pub const STEP_OPERATIONS: usize = 1 << 18;
+
 /// The fewest rows (of each base sample, or kept for an output) the estimators are made from.
 pub const MIN_ROWS: u64 = 10;
 
@@ -185,7 +189,27 @@ pub struct SobolRun {
     fb: Vec<Vec<f64>>,
     fab: Vec<Vec<Vec<f64>>>,
     outputs: Vec<SobolOutput>,
+    /// The output whose bootstrap is under way.
+    boot: Option<Box<Boot>>,
+    /// Bootstrap work (rows × inputs) a step does at most.
+    step_operations: usize,
     results: Option<SobolResults>,
+}
+
+/// An output's bootstrap, made a few resamples a step: everything its intervals need, with the
+/// keyed stream and the resamples collected so far, so that stopping between steps changes
+/// nothing.
+#[derive(Debug, Clone)]
+struct Boot {
+    /// The output as it is without intervals.
+    out: SobolOutput,
+    point: Point,
+    data: Data,
+    rng: Rng,
+    done: u32,
+    first: Vec<Vec<f64>>,
+    total: Vec<Vec<f64>>,
+    idx: Vec<usize>,
 }
 
 impl Compiled {
@@ -257,6 +281,8 @@ impl Compiled {
             fab: vec![vec![Vec::with_capacity(cap); varied.len()]; outs],
             varied,
             outputs: Vec::new(),
+            boot: None,
+            step_operations: STEP_OPERATIONS,
             results: None,
         })
     }
@@ -283,6 +309,14 @@ impl Compiled {
 }
 
 impl SobolRun {
+    /// Limits the bootstrap work of a step to about `operations` (rows × inputs, at least one
+    /// resample). The results do not depend on it.
+    #[must_use]
+    pub fn with_step_operations(mut self, operations: usize) -> Self {
+        self.step_operations = operations;
+        self
+    }
+
     pub fn is_done(&self) -> bool {
         self.results.is_some()
     }
@@ -310,6 +344,13 @@ impl SobolRun {
         if self.next_batch < self.batches {
             self.evaluate_batch(compiled, self.next_batch);
             self.next_batch += 1;
+        } else if let Some(mut boot) = self.boot.take() {
+            if boot.advance(self.bootstrap, self.step_operations) {
+                let out = self.finish(*boot);
+                self.outputs.push(out);
+            } else {
+                self.boot = Some(boot);
+            }
         } else if self.outputs.len() < compiled.outputs.len() {
             let o = self.outputs.len();
             let name = compiled
@@ -317,8 +358,10 @@ impl SobolRun {
                 .get(o)
                 .map(|(out, _)| out.name.clone())
                 .unwrap_or_default();
-            let done = self.summarise(o, name);
-            self.outputs.push(done);
+            match self.summarise(o, name) {
+                Summary::Done(out) => self.outputs.push(out),
+                Summary::Boot(boot) => self.boot = Some(boot),
+            }
         } else {
             self.results = Some(SobolResults {
                 rows: self.rows,
@@ -388,7 +431,7 @@ impl SobolRun {
     }
 
     /// Output `o`'s indices from the evaluations.
-    fn summarise(&self, o: usize, name: String) -> SobolOutput {
+    fn summarise(&self, o: usize, name: String) -> Summary {
         let empty = Vec::new();
         let fa = self.fa.get(o).unwrap_or(&empty);
         let fb = self.fb.get(o).unwrap_or(&empty);
@@ -414,13 +457,15 @@ impl SobolRun {
             ab: fab.iter().map(|col| pick(col.as_slice())).collect(),
         };
         let used = keep.len() as u64;
-        let none = |why: String, variance: Option<f64>| SobolOutput {
-            name: name.clone(),
-            variance,
-            rows_used: used,
-            rows_dropped: dropped,
-            indices: Vec::new(),
-            unavailable: Some(why),
+        let none = |why: String, variance: Option<f64>| {
+            Summary::Done(SobolOutput {
+                name: name.clone(),
+                variance,
+                rows_used: used,
+                rows_dropped: dropped,
+                indices: Vec::new(),
+                unavailable: Some(why),
+            })
         };
         if used < MIN_ROWS {
             return none(
@@ -446,8 +491,56 @@ impl SobolRun {
                 Some(0.0),
             );
         }
-        let intervals = self.bootstrap_intervals(&name, &data, point.centre);
-        let indices = self
+        let m = data.a.len();
+        let k = data.ab.len();
+        let out = SobolOutput {
+            name: name.clone(),
+            variance: Some(point.variance),
+            rows_used: used,
+            rows_dropped: dropped,
+            indices: Vec::new(),
+            unavailable: None,
+        };
+        let rng = Rng::keyed(self.seed, &format!("sobol/bootstrap/{name}"));
+        Summary::Boot(Box::new(Boot {
+            out,
+            point,
+            data,
+            rng,
+            done: 0,
+            first: vec![Vec::new(); k],
+            total: vec![Vec::new(); k],
+            idx: vec![0usize; m],
+        }))
+    }
+
+    /// An output whose bootstrap is made: its indices with their 95% percentile intervals (none
+    /// without a bootstrap).
+    fn finish(&self, boot: Boot) -> SobolOutput {
+        let Boot {
+            mut out,
+            point,
+            first,
+            total,
+            ..
+        } = boot;
+        let intervals = (self.bootstrap > 0).then(|| {
+            let band = |mut xs: Vec<f64>| -> Option<(f64, f64)> {
+                xs.retain(|x| x.is_finite());
+                xs.sort_by(f64::total_cmp);
+                Some((sorted_quantile(&xs, 0.025)?, sorted_quantile(&xs, 0.975)?))
+            };
+            let bands = |all: Vec<Vec<f64>>| -> Vec<(f64, f64)> {
+                all.into_iter()
+                    .map(|xs| band(xs).unwrap_or((f64::NAN, f64::NAN)))
+                    .collect()
+            };
+            Intervals {
+                first: bands(first),
+                total: bands(total),
+            }
+        });
+        out.indices = self
             .names
             .iter()
             .enumerate()
@@ -463,56 +556,41 @@ impl SobolRun {
                 },
             })
             .collect();
-        SobolOutput {
-            name,
-            variance: Some(point.variance),
-            rows_used: used,
-            rows_dropped: dropped,
-            indices,
-            unavailable: None,
-        }
+        out
     }
+}
 
-    /// 95% percentile intervals of each index, or `None` for no bootstrap.
-    fn bootstrap_intervals(&self, name: &str, data: &Data, centre: f64) -> Option<Intervals> {
-        if self.bootstrap == 0 {
-            return None;
-        }
-        let m = data.a.len();
-        let k = data.ab.len();
-        let mut rng = Rng::keyed(self.seed, &format!("sobol/bootstrap/{name}"));
-        let mut first: Vec<Vec<f64>> = vec![Vec::new(); k];
-        let mut total: Vec<Vec<f64>> = vec![Vec::new(); k];
-        let mut idx = vec![0usize; m];
-        for _ in 0..self.bootstrap {
-            for slot in idx.iter_mut() {
-                *slot = usize::try_from(rng.next_u64() % m as u64).unwrap_or(0);
+/// What working out an output's indices comes to: done, or a bootstrap still to make.
+enum Summary {
+    Done(SobolOutput),
+    Boot(Box<Boot>),
+}
+
+impl Boot {
+    /// Makes the next resamples, as many as `operations` (rows × inputs) allows and at least
+    /// one, from the output's keyed stream in order. True once all `total` are made.
+    fn advance(&mut self, total: u32, operations: usize) -> bool {
+        let m = self.data.a.len();
+        let per = (operations / (m.max(1) * (self.first.len() + 1))).max(1);
+        let mut made = 0;
+        while self.done < total && made < per {
+            for slot in self.idx.iter_mut() {
+                *slot = usize::try_from(self.rng.next_u64() % m as u64).unwrap_or(0);
             }
-            let Some(p) = data.indices_at(&idx, Some(centre)) else {
+            self.done += 1;
+            made += 1;
+            let Some(p) = self.data.indices_at(&self.idx, Some(self.point.centre)) else {
                 continue;
             };
             if !(p.variance.is_finite() && p.variance > 0.0) {
                 continue;
             }
-            for (v, (f, t)) in first.iter_mut().zip(total.iter_mut()).enumerate() {
+            for (v, (f, t)) in self.first.iter_mut().zip(self.total.iter_mut()).enumerate() {
                 f.push(p.first.get(v).copied().unwrap_or(f64::NAN));
                 t.push(p.total.get(v).copied().unwrap_or(f64::NAN));
             }
         }
-        let band = |mut xs: Vec<f64>| -> Option<(f64, f64)> {
-            xs.retain(|x| x.is_finite());
-            xs.sort_by(f64::total_cmp);
-            Some((sorted_quantile(&xs, 0.025)?, sorted_quantile(&xs, 0.975)?))
-        };
-        let bands = |all: Vec<Vec<f64>>| -> Vec<(f64, f64)> {
-            all.into_iter()
-                .map(|xs| band(xs).unwrap_or((f64::NAN, f64::NAN)))
-                .collect()
-        };
-        Some(Intervals {
-            first: bands(first),
-            total: bands(total),
-        })
+        self.done >= total
     }
 }
 
@@ -523,6 +601,7 @@ struct Intervals {
 }
 
 /// An output's kept rows: f(A), f(B) and f(A_B^i) for each varied input.
+#[derive(Debug, Clone)]
 struct Data {
     a: Vec<f64>,
     b: Vec<f64>,
@@ -530,6 +609,7 @@ struct Data {
 }
 
 /// The estimators' values on a set of rows.
+#[derive(Debug, Clone)]
 struct Point {
     variance: f64,
     /// The mean of f over A and B, which f(B) is centred on.

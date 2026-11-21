@@ -1314,3 +1314,13 @@ unit	yr	έτ
 @plural	{n} trial gave no number (a division by zero, say) and is left out.|{n} trials gave no number (a division by zero, say) and are left out.	{n} δοκιμή δεν έδωσε αριθμό (π.χ. διαίρεση με το μηδέν) και παραλείπεται.|{n} δοκιμές δεν έδωσαν αριθμό (π.χ. διαίρεση με το μηδέν) και παραλείπονται.
 @plural	{n} trial · seed {seed} · {sampling}|{n} trials · seed {seed} · {sampling}	{n} δοκιμή · σπόρος {seed} · {sampling}|{n} δοκιμές · σπόρος {seed} · {sampling}
 @plural	{n} trial · seed {seed}|{n} trials · seed {seed}	{n} δοκιμή · σπόρος {seed}|{n} δοκιμές · σπόρος {seed}
+# Shares of the spread (Sobol indices) in the Monte Carlo results (ROADMAP M4.1, part 3c)
+	Work out each input's share of the spread	Υπολογισμός του μεριδίου κάθε εισόδου στη διασπορά
+	{n} evaluations of the model	{n} αξιολογήσεις του μοντέλου
+	The shares of the spread need independent inputs, and some of these inputs are correlated.	Τα μερίδια της διασποράς απαιτούν ανεξάρτητες εισόδους, και ορισμένες από αυτές τις εισόδους είναι συσχετισμένες.
+	Alone	Μόνη της
+	With interactions	Με αλληλεπιδράσεις
+	{input} alone explains about {share} of the spread in {output}.	Η είσοδος {input} από μόνη της εξηγεί περίπου {share} της διασποράς του {output}.
+	95% interval {low} to {high}	Διάστημα 95% από {low} έως {high}
+	Alone is the share of the spread an input explains by itself. With interactions adds what it does together with the other inputs.	Μόνη της είναι το μερίδιο της διασποράς που εξηγεί μια είσοδος από μόνη της. Με αλληλεπιδράσεις προσθέτει ό,τι κάνει μαζί με τις άλλες εισόδους.
+	Working out the shares of the spread: {percent}	Υπολογισμός των μεριδίων της διασποράς: {percent}

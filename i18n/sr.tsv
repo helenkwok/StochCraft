@@ -1314,3 +1314,13 @@ unit	yr	год.
 @plural	{n} trial gave no number (a division by zero, say) and is left out.|{n} trials gave no number (a division by zero, say) and are left out.	{n} покушај није дао број (на пример, дељење нулом) и изостављен је.|{n} покушаја нису дала број (на пример, дељење нулом) и изостављена су.|{n} покушаја није дало број (на пример, дељење нулом) и изостављено је.
 @plural	{n} trial · seed {seed} · {sampling}|{n} trials · seed {seed} · {sampling}	{n} покушај · семе {seed} · {sampling}|{n} покушаја · семе {seed} · {sampling}|{n} покушаја · семе {seed} · {sampling}
 @plural	{n} trial · seed {seed}|{n} trials · seed {seed}	{n} покушај · семе {seed}|{n} покушаја · семе {seed}|{n} покушаја · семе {seed}
+# Shares of the spread (Sobol indices) in the Monte Carlo results (ROADMAP M4.1, part 3c)
+	Work out each input's share of the spread	Израчунај удео сваке улазне величине у расипању
+	{n} evaluations of the model	{n} вредновања модела
+	The shares of the spread need independent inputs, and some of these inputs are correlated.	Удели у расипању захтевају независне улазне величине, а неке од ових улазних величина су корелисане.
+	Alone	Самостално
+	With interactions	Са интеракцијама
+	{input} alone explains about {share} of the spread in {output}.	{input} самостално објашњава отприлике {share} расипања величине {output}.
+	95% interval {low} to {high}	Интервал од 95% од {low} до {high}
+	Alone is the share of the spread an input explains by itself. With interactions adds what it does together with the other inputs.	Самостално је удео расипања који улазна величина објашњава сама. Са интеракцијама додаје оно што ради заједно са осталим улазним величинама.
+	Working out the shares of the spread: {percent}	Израчунавање удела у расипању: {percent}
