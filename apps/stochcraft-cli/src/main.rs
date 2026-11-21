@@ -12,7 +12,9 @@ use std::process::ExitCode;
 
 use clap::{Parser, Subcommand, ValueEnum};
 use serde_json::{Value, json};
-use stochcraft_engine::{COMMANDS, CommandError, Engine, Journal, JournalEntry, ReplayMode, wire};
+use stochcraft_engine::{
+    COMMANDS, CommandError, Engine, ErrorCode, Journal, JournalEntry, ReplayMode, wire,
+};
 
 use templates::TEMPLATES;
 
@@ -123,6 +125,14 @@ enum Command {
         /// Run exactly the replications, even where the scenario runs sequentially.
         #[arg(long, conflicts_with_all = ["until", "until_points", "max"])]
         fixed: bool,
+        /// A Monte Carlo model: also work out how much of each output's variation each input
+        /// accounts for, alone and with its interactions (Sobol indices; needs independent
+        /// inputs, and evaluates the model rows x (inputs + 2) times).
+        #[arg(long)]
+        sobol: bool,
+        /// Rows of each base sample of `--sobol` (default 1000, at least 10).
+        #[arg(long, requires = "sobol", value_parser = clap::value_parser!(u64).range(10..))]
+        sobol_rows: Option<u64>,
         #[arg(long, value_enum, default_value_t = Format::Table)]
         format: Format,
         /// Write the results to this file instead of the terminal.
@@ -659,6 +669,14 @@ impl Until {
     }
 }
 
+/// `run`'s options for a Monte Carlo model's Sobol indices.
+struct Shares {
+    /// `--sobol`: work them out.
+    wanted: bool,
+    /// `--sobol-rows`: the rows of each base sample.
+    rows: Option<u64>,
+}
+
 #[allow(clippy::too_many_arguments)] // One per command-line option.
 fn run(
     file: &Path,
@@ -669,6 +687,7 @@ fn run(
     warmup: Option<f64>,
     duration: Option<f64>,
     until: &Until,
+    shares: &Shares,
     format: Format,
     out: Option<&Path>,
 ) -> Result<u8, Failure> {
@@ -680,7 +699,13 @@ fn run(
                 "a Monte Carlo model has no warm-up, duration or shares in points: use --reps (trials), --until and --max".into(),
             ));
         }
-        return run_monte_carlo(&mut engine, reps, seed, threads, until, format, out);
+        return run_monte_carlo(&mut engine, reps, seed, threads, until, shares, format, out);
+    }
+    if shares.wanted {
+        return Err(Failure(
+            "--sobol is for Monte Carlo models: a process model has no inputs that are distributions"
+                .into(),
+        ));
     }
     let mut set = json!({});
     if let Some(w) = warmup {
@@ -718,13 +743,16 @@ fn run(
     Ok(0)
 }
 
-/// `run` on a Monte Carlo model: its trials (`--reps`), seed, threads and stop.
+/// `run` on a Monte Carlo model: its trials (`--reps`), seed, threads and stop, and with
+/// `--sobol` the shares of each output's variation.
+#[allow(clippy::too_many_arguments)] // One per command-line option.
 fn run_monte_carlo(
     engine: &mut Engine,
     trials: Option<u32>,
     seed: Option<u64>,
     threads: Option<u32>,
     until: &Until,
+    shares: &Shares,
     format: Format,
     out: Option<&Path>,
 ) -> Result<u8, Failure> {
@@ -752,18 +780,66 @@ fn run_monte_carlo(
             "max": until.max.unwrap_or(own.max),
         });
     }
-    let results = engine.execute("mc.run", params)?;
+    let mut results = engine.execute("mc.run", params)?;
+    let shares_text = if shares.wanted {
+        Some(sobol_shares(engine, seed, shares.rows, &mut results)?)
+    } else {
+        None
+    };
     let text = match format {
         Format::Json => format!(
             "{}
 ",
             serde_json::to_string_pretty(&results).unwrap_or_default()
         ),
-        Format::Csv => output::mc_csv(&results),
-        Format::Table => output::mc_table(&engine.model().name, &results),
+        Format::Csv => {
+            // The table of outputs stays as the app exports it: the shares go to stderr.
+            if let Some(more) = &shares_text {
+                eprint!("{}", more.trim_start());
+            }
+            output::mc_csv(&results)
+        }
+        Format::Table => {
+            let mut table = output::mc_table(&engine.model().name, &results);
+            if let Some(more) = &shares_text {
+                table.push_str(more);
+            }
+            table
+        }
     };
     emit(&text, out)?;
     Ok(0)
+}
+
+/// `--sobol`: works out the Sobol indices with the run's seed, puts them in `results` as its
+/// `sobol` field, and returns their text. A model that cannot have them (correlated inputs) is
+/// not a failure: the reason is given in their place, and the run's results stand. A number that
+/// cannot be used is one.
+fn sobol_shares(
+    engine: &mut Engine,
+    seed: Option<u64>,
+    rows: Option<u64>,
+    results: &mut Value,
+) -> Result<String, Failure> {
+    let mut params = json!({});
+    if let Some(s) = seed {
+        params["seed"] = json!(s);
+    }
+    if let Some(r) = rows {
+        params["rows"] = json!(r);
+    }
+    match engine.execute("mc.sobol", params) {
+        Ok(v) => {
+            let text = output::sobol_lines(&v);
+            results["sobol"] = v;
+            Ok(text)
+        }
+        Err(e) if e.code == ErrorCode::InvalidModel => {
+            results["sobol"] = json!({ "unavailable": e.message.clone() });
+            Ok(format!("\nshares of the variation: {}\n", e.message))
+        }
+        Err(e) => Err(e.into()),
+    }
 }
 
 /// `inputs`: a Monte Carlo model's input table, printed or imported.
@@ -1055,6 +1131,8 @@ fn main() -> ExitCode {
             until_points,
             max,
             fixed,
+            sobol,
+            sobol_rows,
             format,
             out,
         } => run(
@@ -1070,6 +1148,10 @@ fn main() -> ExitCode {
                 points: until_points,
                 max,
                 fixed,
+            },
+            &Shares {
+                wanted: sobol,
+                rows: sobol_rows,
             },
             format,
             out.as_deref(),

@@ -874,6 +874,23 @@ fields (`“Service time”`) are named in the messages by their own rows.
   certain are lo, th, ta, te, bn, ka, kk, hi, sq and hu (its percentile ordinals and "a(z)"
   articles), the ordinals for 10th and 90th in ka, kk, sq and el, and the sentence "it goes
   from … to … as … goes from its 10th to its 90th percentile" in every language.
+- The rows for the shares of the spread in the Monte Carlo results (ROADMAP M4.1, part 3c: the
+  button "Work out each input's share of the spread" and its "{n} evaluations of the model", the
+  reason a model with correlated inputs has none, the columns "Alone" and "With interactions",
+  the sentence "{input} alone explains about {share} of the spread in {output}.", the interval on
+  hover, the note on the two columns, and the progress in the status bar) were machine-drafted
+  with Claude Code from the plain meaning of the English, reusing each catalog's own word for
+  inputs (from its "Inputs" and "Which inputs matter" rows). "Correlated", "independent",
+  "evaluation" and "interval" are each language's own choice, not looked up in the catalogs
+  (the 95% interval rows of other strings were not compared). "Spread" is each language's own word (the statistics term for variation or dispersion as
+  remembered, so de "Streuung", fr "dispersion", ru "разброс", ja "ばらつき", zh "离散程度"; not
+  checked against Wikipedia or IATE), and "Alone" and "With interactions" the terms for an
+  effect on its own and with interactions (de "Wechselwirkungen", fr "interactions"). "Alone"
+  agrees with the input's gender where the language has one (feminine in the Romance ones, as
+  "entrada" and "entrée" are). Not checked against any other source, and not reviewed by native
+  speakers; the least certain are lo, th, ta, te, bn, ka, kk, sq, et, lt and sr, the word for
+  "spread" in all of them, and the grammatical case of the input's name in the sentence in the
+  Slavic, Baltic, Finnic, Georgian and Turkic ones (hu words it so that no suffix is needed).
 
 **Adding or changing a string:** add the English in the code through `i18n::t` (or `tf`, `tn`),
 then add its row to each catalog here, or leave it out to show English until it is translated.

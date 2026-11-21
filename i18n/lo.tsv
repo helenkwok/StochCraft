@@ -1314,3 +1314,13 @@ unit	yr	ປີ
 @plural	{n} trial gave no number (a division by zero, say) and is left out.|{n} trials gave no number (a division by zero, say) and are left out.	{n} ຄັ້ງທົດລອງບໍ່ໄດ້ໃຫ້ຕົວເລກ (ເຊັ່ນ ການຫານດ້ວຍສູນ) ແລະ ຖືກຕັດອອກ.
 @plural	{n} trial · seed {seed} · {sampling}|{n} trials · seed {seed} · {sampling}	{n} ຄັ້ງທົດລອງ · ເມັດສຸ່ມ {seed} · {sampling}
 @plural	{n} trial · seed {seed}|{n} trials · seed {seed}	{n} ຄັ້ງທົດລອງ · ເມັດສຸ່ມ {seed}
+# Shares of the spread (Sobol indices) in the Monte Carlo results (ROADMAP M4.1, part 3c)
+	Work out each input's share of the spread	ຄິດໄລ່ສ່ວນຂອງແຕ່ລະຄ່າປ້ອນເຂົ້າໃນຄວາມແປຜັນ
+	{n} evaluations of the model	ການປະເມີນແບບຈຳລອງ {n} ຄັ້ງ
+	The shares of the spread need independent inputs, and some of these inputs are correlated.	ສ່ວນຂອງຄວາມແປຜັນຕ້ອງໃຊ້ຄ່າປ້ອນເຂົ້າທີ່ເປັນອິດສະຫຼະຕໍ່ກັນ ແຕ່ບາງຄ່າປ້ອນເຂົ້າເຫຼົ່ານີ້ມີຄວາມສຳພັນກັນ.
+	Alone	ຕົວດຽວ
+	With interactions	ລວມການປະຕິສຳພັນ
+	{input} alone explains about {share} of the spread in {output}.	{input} ຕົວດຽວອະທິບາຍປະມານ {share} ຂອງຄວາມແປຜັນຂອງ {output}.
+	95% interval {low} to {high}	ຊ່ວງ 95% ຈາກ {low} ເຖິງ {high}
+	Alone is the share of the spread an input explains by itself. With interactions adds what it does together with the other inputs.	“ຕົວດຽວ” ແມ່ນສ່ວນຂອງຄວາມແປຜັນທີ່ຄ່າປ້ອນເຂົ້າອະທິບາຍດ້ວຍຕົວເອງ. “ລວມການປະຕິສຳພັນ” ເພີ່ມສິ່ງທີ່ມັນເຮັດຮ່ວມກັບຄ່າປ້ອນເຂົ້າອື່ນ.
+	Working out the shares of the spread: {percent}	ກຳລັງຄິດໄລ່ສ່ວນຂອງຄວາມແປຜັນ: {percent}

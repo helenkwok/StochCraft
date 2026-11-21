@@ -1314,3 +1314,13 @@ unit	yr	m.
 @plural	{n} trial gave no number (a division by zero, say) and is left out.|{n} trials gave no number (a division by zero, say) and are left out.	{n} iteracija nedavė skaičiaus (pavyzdžiui, dėl dalybos iš nulio) ir yra praleista.|{n} iteracijos nedavė skaičiaus (pavyzdžiui, dėl dalybos iš nulio) ir yra praleistos.|{n} iteracijų nedavė skaičiaus (pavyzdžiui, dėl dalybos iš nulio) ir yra praleista.
 @plural	{n} trial · seed {seed} · {sampling}|{n} trials · seed {seed} · {sampling}	{n} iteracija · sėkla {seed} · {sampling}|{n} iteracijos · sėkla {seed} · {sampling}|{n} iteracijų · sėkla {seed} · {sampling}
 @plural	{n} trial · seed {seed}|{n} trials · seed {seed}	{n} iteracija · sėkla {seed}|{n} iteracijos · sėkla {seed}|{n} iteracijų · sėkla {seed}
+# Shares of the spread (Sobol indices) in the Monte Carlo results (ROADMAP M4.1, part 3c)
+	Work out each input's share of the spread	Apskaičiuoti kiekvienos įvesties dalį sklaidoje
+	{n} evaluations of the model	{n} modelio įvertinimų
+	The shares of the spread need independent inputs, and some of these inputs are correlated.	Sklaidos dalims reikia nepriklausomų įvesčių, o kai kurios iš šių įvesčių yra koreliuotos.
+	Alone	Atskirai
+	With interactions	Su sąveikomis
+	{input} alone explains about {share} of the spread in {output}.	{input} atskirai paaiškina maždaug {share} dydžio {output} sklaidos.
+	95% interval {low} to {high}	95 % intervalas nuo {low} iki {high}
+	Alone is the share of the spread an input explains by itself. With interactions adds what it does together with the other inputs.	Atskirai yra sklaidos dalis, kurią įvestis paaiškina pati. Su sąveikomis pridedama tai, ką ji daro kartu su kitomis įvestimis.
+	Working out the shares of the spread: {percent}	Skaičiuojamos sklaidos dalys: {percent}

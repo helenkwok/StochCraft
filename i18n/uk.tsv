@@ -1314,3 +1314,13 @@ unit	yr	р.
 @plural	{n} trial gave no number (a division by zero, say) and is left out.|{n} trials gave no number (a division by zero, say) and are left out.	{n} випробування не дало числа (наприклад, ділення на нуль) і не враховується.|{n} випробування не дали числа (наприклад, ділення на нуль) і не враховуються.|{n} випробувань не дали числа (наприклад, ділення на нуль) і не враховуються.
 @plural	{n} trial · seed {seed} · {sampling}|{n} trials · seed {seed} · {sampling}	{n} випробування · початкове значення {seed} · {sampling}|{n} випробування · початкове значення {seed} · {sampling}|{n} випробувань · початкове значення {seed} · {sampling}
 @plural	{n} trial · seed {seed}|{n} trials · seed {seed}	{n} випробування · початкове значення {seed}|{n} випробування · початкове значення {seed}|{n} випробувань · початкове значення {seed}
+# Shares of the spread (Sobol indices) in the Monte Carlo results (ROADMAP M4.1, part 3c)
+	Work out each input's share of the spread	Обчислити частку кожної вхідної величини в розкиді
+	{n} evaluations of the model	{n} обчислень моделі
+	The shares of the spread need independent inputs, and some of these inputs are correlated.	Частки розкиду потребують незалежних вхідних величин, а деякі з цих вхідних величин корельовані.
+	Alone	Окремо
+	With interactions	З взаємодіями
+	{input} alone explains about {share} of the spread in {output}.	{input} окремо пояснює приблизно {share} розкиду {output}.
+	95% interval {low} to {high}	95% інтервал від {low} до {high}
+	Alone is the share of the spread an input explains by itself. With interactions adds what it does together with the other inputs.	«Окремо» — частка розкиду, яку вхідна величина пояснює сама. «З взаємодіями» додає те, що вона робить разом з іншими вхідними величинами.
+	Working out the shares of the spread: {percent}	Обчислення часток розкиду: {percent}

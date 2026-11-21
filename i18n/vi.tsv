@@ -1314,3 +1314,13 @@ unit	yr	năm
 @plural	{n} trial gave no number (a division by zero, say) and is left out.|{n} trials gave no number (a division by zero, say) and are left out.	{n} lần thử không cho ra số (ví dụ do chia cho 0) và bị loại ra.
 @plural	{n} trial · seed {seed} · {sampling}|{n} trials · seed {seed} · {sampling}	{n} lần thử · hạt giống {seed} · {sampling}
 @plural	{n} trial · seed {seed}|{n} trials · seed {seed}	{n} lần thử · hạt giống {seed}
+# Shares of the spread (Sobol indices) in the Monte Carlo results (ROADMAP M4.1, part 3c)
+	Work out each input's share of the spread	Tính phần của mỗi đầu vào trong độ phân tán
+	{n} evaluations of the model	{n} lần đánh giá mô hình
+	The shares of the spread need independent inputs, and some of these inputs are correlated.	Phần của độ phân tán cần các đầu vào độc lập, mà một số đầu vào này lại tương quan với nhau.
+	Alone	Riêng
+	With interactions	Cùng tương tác
+	{input} alone explains about {share} of the spread in {output}.	Riêng {input} giải thích khoảng {share} độ phân tán của {output}.
+	95% interval {low} to {high}	Khoảng 95% từ {low} đến {high}
+	Alone is the share of the spread an input explains by itself. With interactions adds what it does together with the other inputs.	Riêng là phần độ phân tán mà một đầu vào tự giải thích. Cùng tương tác cộng thêm những gì nó làm cùng các đầu vào khác.
+	Working out the shares of the spread: {percent}	Đang tính phần của độ phân tán: {percent}

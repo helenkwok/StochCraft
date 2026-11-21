@@ -1314,3 +1314,13 @@ unit	yr	J.
 @plural	{n} trial gave no number (a division by zero, say) and is left out.|{n} trials gave no number (a division by zero, say) and are left out.	{n} Iteration ergab keine Zahl (etwa eine Division durch null) und wird ausgelassen.|{n} Iterationen ergaben keine Zahl (etwa eine Division durch null) und werden ausgelassen.
 @plural	{n} trial · seed {seed} · {sampling}|{n} trials · seed {seed} · {sampling}	{n} Iteration · Startwert {seed} · {sampling}|{n} Iterationen · Startwert {seed} · {sampling}
 @plural	{n} trial · seed {seed}|{n} trials · seed {seed}	{n} Iteration · Startwert {seed}|{n} Iterationen · Startwert {seed}
+# Shares of the spread (Sobol indices) in the Monte Carlo results (ROADMAP M4.1, part 3c)
+	Work out each input's share of the spread	Anteil jeder Eingabe an der Streuung berechnen
+	{n} evaluations of the model	{n} Auswertungen des Modells
+	The shares of the spread need independent inputs, and some of these inputs are correlated.	Die Anteile an der Streuung setzen unabhängige Eingaben voraus, und einige dieser Eingaben sind korreliert.
+	Alone	Allein
+	With interactions	Mit Wechselwirkungen
+	{input} alone explains about {share} of the spread in {output}.	{input} allein erklärt etwa {share} der Streuung von {output}.
+	95% interval {low} to {high}	95%-Intervall {low} bis {high}
+	Alone is the share of the spread an input explains by itself. With interactions adds what it does together with the other inputs.	Allein ist der Anteil an der Streuung, den eine Eingabe für sich erklärt. Mit Wechselwirkungen kommt hinzu, was sie gemeinsam mit den anderen Eingaben bewirkt.
+	Working out the shares of the spread: {percent}	Anteile an der Streuung werden berechnet: {percent}

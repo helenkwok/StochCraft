@@ -20,12 +20,19 @@
 //! curve with the target drawn on both, which inputs matter (in words, a tornado chart and each
 //! input's rank correlation with the output), and how the run went (trials asked for and run, the
 //! sampling, the seed, and a sequential stop's outcome).
+//!
+//! Under "Which inputs matter" a button works out each input's share of the output's spread
+//! (Sobol indices, `mc.sobol`), on demand because it takes N × (inputs + 2) evaluations of the
+//! model. It is made a few pieces a frame like a run ([`stochcraft_engine::mc::SobolJob`]), with
+//! its progress in the status bar, and Cancel or Esc stops it. The shares are of the results on
+//! show: they are dropped when the model is edited (and come back if the edit is undone, as the
+//! results do), and a new run drops them. A model with correlated inputs has none, and says why.
 
 use std::collections::HashMap;
 
 use egui::{Align2, FontId, Rect, Stroke, pos2, vec2};
 use serde_json::{Value, json};
-use stochcraft_engine::mc::McJob;
+use stochcraft_engine::mc::{McJob, SobolJob};
 
 use crate::charts::nice_step;
 use crate::decide::{Bound, bound_choice, choose, grid, number, percent, row_label};
@@ -52,6 +59,12 @@ fn first_distribution() -> Value {
 pub(crate) struct Mc {
     /// The run in progress, made a few batches a frame.
     pub(crate) job: Option<McJob>,
+    /// The shares of the spread being worked out, a few pieces a frame.
+    sobol_job: Option<SobolJob>,
+    /// The finished shares (`mc.sobol`'s results) and the results (their serial) they are of.
+    shares: Option<(Value, u64)>,
+    /// The serial of the results the job in progress is for.
+    shares_for: u64,
     /// Why an edit was refused, by the key of the field or row it was made in.
     errors: HashMap<String, String>,
     /// The name typed for a new input, and for a new output.
@@ -87,6 +100,50 @@ fn chance(p: f64) -> String {
     } else {
         percent(p)
     }
+}
+
+/// A share of the spread as a whole percentage, "61%", from 0% to 100%, and never with an
+/// exponent. A Sobol estimate from a small sample can fall a little below 0 or above 1 (they are
+/// estimates, and `mc.sobol` does not clamp them), which would read as an impossible share, so
+/// those show as 0% and 100%.
+pub(crate) fn share_text(x: f64) -> String {
+    if x.is_finite() {
+        // `+ 0.0` turns a negative zero into a zero, so it never reads "-0%".
+        format!("{}%", grouped((x.clamp(0.0, 1.0) * 100.0).round() + 0.0))
+    } else {
+        "–".to_owned()
+    }
+}
+
+/// An estimate's 95% interval in words, when it has one.
+fn share_interval(e: &Value) -> Option<String> {
+    let (lo, hi) = (e["interval"][0].as_f64()?, e["interval"][1].as_f64()?);
+    Some(tf(
+        "95% interval {low} to {high}",
+        &[("low", &share_text(lo)), ("high", &share_text(hi))],
+    ))
+}
+
+/// The shares of output `name`'s spread in `mc.sobol`'s results.
+fn shares_of<'a>(shares: Option<&'a Value>, name: &str) -> Option<&'a Value> {
+    shares?["outputs"]
+        .as_array()?
+        .iter()
+        .find(|o| o["name"] == name)
+}
+
+/// What the "Which inputs matter" sections show of the shares of the spread.
+struct SharesView<'a> {
+    /// `mc.sobol`'s results, once worked out for the results on show.
+    done: Option<&'a Value>,
+    /// How far along working them out is (0 to 1), while it goes.
+    busy: Option<f64>,
+    /// The model evaluations working them out takes; none when no input varies.
+    cost: Option<u64>,
+    /// The model has correlated inputs, which have no shares.
+    correlated: bool,
+    /// The results on show are of the model as it is, so shares worked out now fit them.
+    fresh: bool,
 }
 
 /// A percentile of output `o`'s results (`"5"`, `"95"`…).
@@ -389,6 +446,9 @@ impl App {
             Ok(job) => {
                 let (done, total) = job.progress();
                 self.mc.job = Some(job);
+                // The shares were of the results this run replaces.
+                self.mc.sobol_job = None;
+                self.mc.shares = None;
                 self.show_results = true;
                 self.run_model = Some(comparable(self.engine.model()));
                 self.running = Some(Running {
@@ -452,6 +512,72 @@ impl App {
                 false
             }
         }
+    }
+
+    /// The shares of the spread (Sobol indices), when they are of the results on show.
+    fn current_shares(&self) -> Option<&Value> {
+        let (shares, serial) = self.mc.shares.as_ref()?;
+        (*serial == self.results_serial && self.results().is_some()).then_some(shares)
+    }
+
+    /// How far along working out the shares of the spread is (0 to 1), while it goes.
+    pub(crate) fn shares_progress(&self) -> Option<f64> {
+        self.mc.sobol_job.as_ref().map(SobolJob::progress)
+    }
+
+    /// The shares of the spread are being worked out.
+    pub fn is_working_out_shares(&self) -> bool {
+        self.mc.sobol_job.is_some()
+    }
+
+    /// Starts working out the shares of the spread for the results on show, a few pieces a
+    /// frame. A refusal is reported in the status bar.
+    fn mc_shares_start(&mut self) {
+        if self.mc.sobol_job.is_some() || self.running.is_some() {
+            return;
+        }
+        match self.engine.sobol_start(json!({})) {
+            Ok(job) => {
+                self.mc.sobol_job = Some(job);
+                self.mc.shares = None;
+                self.mc.shares_for = self.results_serial;
+            }
+            Err(e) => self.command_failed(e),
+        }
+    }
+
+    /// Stops working out the shares.
+    pub(crate) fn cancel_shares(&mut self) {
+        if self.mc.sobol_job.take().is_some() {
+            self.info(t("Run cancelled"));
+        }
+    }
+
+    /// Works out the shares for about a frame's time; true while that goes on. They stop when
+    /// the results they are for are no longer on show as they were run: another model replaced
+    /// them, or the model was edited.
+    pub(crate) fn sobol_poll(&mut self) -> bool {
+        if self.results().is_none() || self.mc.shares_for != self.results_serial {
+            self.mc.sobol_job = None;
+            return false;
+        }
+        let Some(job) = self.mc.sobol_job.as_mut() else {
+            return false;
+        };
+        let start = web_time::Instant::now();
+        let done = loop {
+            let done = job.step(1);
+            if done || start.elapsed() >= FRAME_BUDGET {
+                break done;
+            }
+        };
+        if !done {
+            return true;
+        }
+        let shares = self.mc.sobol_job.take().and_then(|mut job| job.results());
+        let serial = self.mc.shares_for;
+        self.mc.shares = shares.map(|s| (s, serial));
+        false
     }
 
     /// The outline of a Monte Carlo model: its inputs and outputs, and how it runs.
@@ -1118,6 +1244,15 @@ impl App {
         };
         let mut csv = false;
         let mut again = false;
+        let mut shares_wanted = false;
+        let done = self.current_shares().cloned();
+        let shares = SharesView {
+            done: done.as_ref(),
+            busy: self.shares_progress(),
+            cost: self.engine.sobol_evaluations(),
+            correlated: self.engine.sobol_correlated(),
+            fresh: !self.results_stale,
+        };
         egui::ScrollArea::vertical()
             .id_salt("mc/results")
             .auto_shrink([false, false])
@@ -1170,7 +1305,8 @@ impl App {
                 }
                 let correlated = r["correlations"].as_array().is_some_and(|c| !c.is_empty());
                 for o in &outputs {
-                    output_section(ui, o, &r["interval_basis"], correlated);
+                    shares_wanted |=
+                        output_section(ui, o, &r["interval_basis"], correlated, &shares);
                 }
                 section(ui, t("How sure are these numbers?"));
                 ui.add(egui::Label::new(basis_line(&r)).wrap());
@@ -1194,14 +1330,24 @@ impl App {
         if again {
             self.run();
         }
+        if shares_wanted {
+            self.mc_shares_start();
+        }
         if csv {
             self.export_csv();
         }
     }
 }
 
-/// One output's numbers and charts. `correlated`: the model has correlated inputs.
-fn output_section(ui: &mut egui::Ui, o: &Value, basis: &Value, correlated: bool) {
+/// One output's numbers and charts. `correlated`: the run's model has correlated inputs. True
+/// when the button for the shares of the spread was clicked.
+fn output_section(
+    ui: &mut egui::Ui,
+    o: &Value,
+    basis: &Value,
+    correlated: bool,
+    shares: &SharesView<'_>,
+) -> bool {
     let name = o["name"].as_str().unwrap_or("");
     let unit = o["unit"].as_str().unwrap_or("");
     let title = if unit.is_empty() {
@@ -1313,7 +1459,7 @@ fn output_section(ui: &mut egui::Ui, o: &Value, basis: &Value, correlated: bool)
     } else {
         charts(ui);
     }
-    influence_section(ui, o, correlated);
+    influence_section(ui, o, correlated, shares)
 }
 
 /// The most inputs the tornado and the table of rank correlations show.
@@ -1322,8 +1468,16 @@ const MOST_INPUTS: usize = 12;
 /// Which inputs an output depends on: the answer in words first, then the tornado (each input
 /// moved from its 10th to its 90th percentile with the others at their medians, the swing of
 /// decision analysis in Clemen and Reilly, *Making Hard Decisions*), then each input's rank
-/// correlation with the output. `correlated`: the model has correlated inputs.
-fn influence_section(ui: &mut egui::Ui, o: &Value, correlated: bool) {
+/// correlation with the output. The table gains each input's share of the output's spread, alone
+/// and with its interactions, once they are worked out (`shares`); until then a button works them
+/// out, or the reason there are none is told. `correlated`: the run's model has correlated
+/// inputs. True when the button was clicked.
+fn influence_section(
+    ui: &mut egui::Ui,
+    o: &Value,
+    correlated: bool,
+    shares: &SharesView<'_>,
+) -> bool {
     let name = o["name"].as_str().unwrap_or("");
     let unit = o["unit"].as_str().unwrap_or("");
     let inputs: Vec<&Value> = o["influence"]["inputs"]
@@ -1333,8 +1487,10 @@ fn influence_section(ui: &mut egui::Ui, o: &Value, correlated: bool) {
         .take(MOST_INPUTS)
         .collect();
     let Some(top) = inputs.first() else {
-        return;
+        return false;
     };
+    let mine = shares_of(shares.done, name);
+    let have = mine.is_some_and(|m| m["unavailable"].is_null());
     ui.add_space(10.0);
     ui.label(theme::strong(t("Which inputs matter")).size(13.0));
     if let (Some(input), Some(low), Some(high), Some(swing)) = (
@@ -1357,6 +1513,29 @@ fn influence_section(ui: &mut egui::Ui, o: &Value, correlated: bool) {
             .wrap(),
         );
     }
+    // The input that explains most of the spread by itself, in words.
+    if have
+        && let Some((input, x)) = mine
+            .and_then(|m| m["inputs"].as_array())
+            .into_iter()
+            .flatten()
+            .filter_map(|i| Some((i["input"].as_str()?, i["first"]["value"].as_f64()?)))
+            .filter(|(_, x)| x.is_finite())
+            .max_by(|a, b| a.1.total_cmp(&b.1))
+        && x > 0.0
+    {
+        ui.add(
+            egui::Label::new(tf(
+                "{input} alone explains about {share} of the spread in {output}.",
+                &[
+                    ("input", input),
+                    ("share", &share_text(x)),
+                    ("output", name),
+                ],
+            ))
+            .wrap(),
+        );
+    }
     // An input that does not move the output has no bar (it is still in the table below).
     let bars: Vec<(String, f64, f64)> = inputs
         .iter()
@@ -1374,27 +1553,96 @@ fn influence_section(ui: &mut egui::Ui, o: &Value, correlated: bool) {
         tornado_chart(ui, &bars, base, unit, width);
     }
     ui.add_space(4.0);
-    let rows: Vec<(String, String)> = inputs
+    let rows: Vec<(String, String, Option<&Value>)> = inputs
         .iter()
         .map(|i| {
+            let input = i["input"].as_str().unwrap_or("");
+            let indices = mine
+                .and_then(|m| m["inputs"].as_array())
+                .and_then(|is| is.iter().find(|s| s["input"] == input));
             (
-                i["input"].as_str().unwrap_or("").to_owned(),
+                input.to_owned(),
                 i["rank_correlation"]
                     .as_f64()
                     .map_or_else(|| "–".to_owned(), rank_text),
+                indices,
             )
         })
         .collect();
-    grid(ui, &format!("mc/rank/{name}"), 2, |ui| {
-        ui.label(theme::weak(ui, t("Inputs")));
-        ui.label(theme::weak(ui, t("Rank correlation")));
-        ui.end_row();
-        for (input, rho) in rows {
-            ui.label(input);
-            ui.label(rho);
+    grid(
+        ui,
+        &format!("mc/rank/{name}"),
+        if have { 4 } else { 2 },
+        |ui| {
+            ui.label(theme::weak(ui, t("Inputs")));
+            ui.label(theme::weak(ui, t("Rank correlation")));
+            if have {
+                ui.label(theme::weak(ui, t("Alone")));
+                ui.label(theme::weak(ui, t("With interactions")));
+            }
             ui.end_row();
-        }
-    });
+            for (input, rho, indices) in rows {
+                ui.label(input);
+                ui.label(rho);
+                if have {
+                    for key in ["first", "total"] {
+                        let estimate = indices.map(|i| &i[key]);
+                        let text = estimate
+                            .and_then(|e| e["value"].as_f64())
+                            .map_or_else(|| "–".to_owned(), share_text);
+                        let cell = ui.label(text);
+                        if let Some(interval) = estimate.and_then(share_interval) {
+                            cell.on_hover_text(interval);
+                        }
+                    }
+                }
+                ui.end_row();
+            }
+        },
+    );
+    let mut wanted = false;
+    if have {
+        ui.add(
+            egui::Label::new(theme::weak(
+                ui,
+                t("Alone is the share of the spread an input explains by itself. With interactions adds what it does together with the other inputs."),
+            ))
+            .wrap(),
+        );
+    } else if let Some(why) = mine.and_then(|m| m["unavailable"].as_str()) {
+        ui.add(egui::Label::new(theme::weak(ui, why)).wrap());
+    } else if shares.correlated {
+        ui.add(
+            egui::Label::new(theme::weak(
+                ui,
+                t("The shares of the spread need independent inputs, and some of these inputs are correlated."),
+            ))
+            .wrap(),
+        );
+    } else if let Some(progress) = shares.busy {
+        ui.label(theme::weak(
+            ui,
+            tf(
+                "Working out the shares of the spread: {percent}",
+                &[("percent", &share_text(progress))],
+            ),
+        ));
+    } else if shares.fresh
+        && let Some(n) = shares.cost
+    {
+        ui.horizontal(|ui| {
+            wanted = ui
+                .add(theme::secondary(
+                    ui,
+                    t("Work out each input's share of the spread"),
+                ))
+                .clicked();
+            ui.label(theme::weak(
+                ui,
+                tf("{n} evaluations of the model", &[("n", &grouped(n as f64))]),
+            ));
+        });
+    }
     if correlated {
         for note in [
             t(
@@ -1407,6 +1655,7 @@ fn influence_section(ui: &mut egui::Ui, o: &Value, correlated: bool) {
             ui.add(egui::Label::new(theme::weak(ui, note)).wrap());
         }
     }
+    wanted
 }
 
 /// A rank correlation to two decimals, as correlations are usually given: 0.90, −0.42, and 0.00

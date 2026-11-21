@@ -183,6 +183,7 @@ fn skipped_commands_are_catalogue_commands_that_are_not_queries() {
         "file.save",
         "run",
         "mc.run",
+        "mc.sobol",
         "run.start",
         "run.cancel",
         "experiment.sweep",

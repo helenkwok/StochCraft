@@ -2193,10 +2193,16 @@ swing, Clemen and Reilly, *Making Hard Decisions*), the rank correlation (Spearm
 with the output from the run's own trials, ranked a piece at a time like the rest, and in words the
 input it depends on most; the results say that a correlated input's rank correlation includes the
 effect of the inputs it is correlated with, and that the bars leave out what correlated inputs do
-together. Part 3b, Sobol indices, has its calculation in the mc crate; the window and the command
-line are to follow.
-Sobol indices are in the `mc` crate (`Compiled::sobol`, `stochcraft_mc::sobol`; the window and the
-command line are to follow): Saltelli's design, two independent base samples A and B of N rows
+together. Part 3b, Sobol indices, is in the `mc` crate, and part 3c, done, brings them to the
+engine (`mc.sobol`, and `Engine::sobol_start` for a run made a few pieces a frame), the command
+line (`run --sobol`, `--sobol-rows`) and the window: under "Which inputs matter" a button works out
+each input's share of the spread on demand (it says "6,000 evaluations of the model", works beside
+the results with progress in the status bar, and Cancel or Esc stops it), and the table gains
+"Alone" and "With interactions" as whole percentages with the interval on hover, with a sentence
+that answers first ("build alone explains about 61% of the spread in duration."). A model with
+correlated inputs shows the reason in place of the button, and editing the model takes the shares
+away as it marks the results out of date.
+Sobol indices are in the `mc` crate (`Compiled::sobol`, `stochcraft_mc::sobol`): Saltelli's design, two independent base samples A and B of N rows
 and the k matrices A_B^(i), so N(k + 2) model evaluations (1,000 rows and 5 inputs: 7,000;
 refused above 10 million), first-order indices by Saltelli et al. 2010 and total effects by
 Jansen 1999, percentile bootstrap intervals, in batches that can be stepped a frame at a time.

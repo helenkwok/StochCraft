@@ -180,7 +180,8 @@ A Monte Carlo model (a calculation with no process) is built and run through `ex
 them, with `$name`), `mc.correlation.set` correlates two inputs, `mc.set` picks Latin hypercube
 sampling or a sequential stop, and `mc.run` gives each output's mean with its interval,
 percentiles and the chance of meeting its target. `mc.inputs.export` and `mc.inputs.import` move
-the input table as CSV text; they read and write no files.
+the input table as CSV text; they read and write no files. `mc.sobol` gives each input's share of
+each output's variance, alone and with its interactions (it needs independent inputs).
 
 `crates/mcp/tests/session.rs` covers four areas:
 - a session like this one, checked only through MCP;

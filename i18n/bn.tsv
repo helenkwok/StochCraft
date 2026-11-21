@@ -1314,3 +1314,13 @@ unit	yr	বছর
 @plural	{n} trial gave no number (a division by zero, say) and is left out.|{n} trials gave no number (a division by zero, say) and are left out.	{n}টি পরীক্ষণ কোনো সংখ্যা দেয়নি (যেমন শূন্য দিয়ে ভাগ) এবং বাদ দেওয়া হয়েছে।|{n}টি পরীক্ষণ কোনো সংখ্যা দেয়নি (যেমন শূন্য দিয়ে ভাগ) এবং বাদ দেওয়া হয়েছে।
 @plural	{n} trial · seed {seed} · {sampling}|{n} trials · seed {seed} · {sampling}	{n}টি পরীক্ষণ · বীজ {seed} · {sampling}|{n}টি পরীক্ষণ · বীজ {seed} · {sampling}
 @plural	{n} trial · seed {seed}|{n} trials · seed {seed}	{n}টি পরীক্ষণ · বীজ {seed}|{n}টি পরীক্ষণ · বীজ {seed}
+# Shares of the spread (Sobol indices) in the Monte Carlo results (ROADMAP M4.1, part 3c)
+	Work out each input's share of the spread	প্রতিটি ইনপুটের বিস্তারের অংশ হিসাব করুন
+	{n} evaluations of the model	মডেলের {n}টি মূল্যায়ন
+	The shares of the spread need independent inputs, and some of these inputs are correlated.	বিস্তারের অংশ নির্ণয়ের জন্য ইনপুটগুলো স্বাধীন হতে হয়, কিন্তু এই ইনপুটগুলোর কিছু পরস্পর সম্পর্কিত।
+	Alone	এককভাবে
+	With interactions	মিথস্ক্রিয়াসহ
+	{input} alone explains about {share} of the spread in {output}.	{output}-এর বিস্তারের প্রায় {share} এককভাবে {input} ব্যাখ্যা করে।
+	95% interval {low} to {high}	95% ব্যবধি {low} থেকে {high}
+	Alone is the share of the spread an input explains by itself. With interactions adds what it does together with the other inputs.	এককভাবে মানে ইনপুট নিজে বিস্তারের যে অংশ ব্যাখ্যা করে। মিথস্ক্রিয়াসহ-এ যোগ হয় অন্য ইনপুটের সঙ্গে মিলে সে যা করে।
+	Working out the shares of the spread: {percent}	বিস্তারের অংশ হিসাব করা হচ্ছে: {percent}

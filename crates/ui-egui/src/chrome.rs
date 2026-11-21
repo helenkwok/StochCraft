@@ -136,6 +136,9 @@ impl App {
         if self.running.is_some() && ctx.input(|i| i.key_pressed(Key::Escape)) {
             self.cancel_run();
         }
+        if self.shares_progress().is_some() && ctx.input(|i| i.key_pressed(Key::Escape)) {
+            self.cancel_shares();
+        }
         // Esc stops the guide first, before it would clear the selection the guide made (the
         // block whose connect dot it points at), unless a field is being typed in or a run goes.
         if self.guide.on
@@ -398,7 +401,23 @@ impl App {
 
     fn status_bar(&mut self, ui: &mut egui::Ui, p: &theme::Palette) {
         ui.horizontal(|ui| {
-            if self.status_error {
+            if let Some(progress) = self.shares_progress() {
+                // The shares of a Monte Carlo output's spread, worked out beside the results.
+                ui.label(theme::weak(
+                    ui,
+                    tf(
+                        "Working out the shares of the spread: {percent}",
+                        &[("percent", &crate::montecarlo::share_text(progress))],
+                    ),
+                ));
+                if ui
+                    .add(egui::Button::new(t("Cancel")).small())
+                    .on_hover_text("Esc")
+                    .clicked()
+                {
+                    self.cancel_shares();
+                }
+            } else if self.status_error {
                 ui.label(theme::strong(t("Error")).color(p.error));
                 let text = egui::RichText::new(&self.status).color(p.error);
                 match self.status_at.clone() {

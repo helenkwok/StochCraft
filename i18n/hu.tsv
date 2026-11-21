@@ -1314,3 +1314,13 @@ unit	yr	év
 @plural	{n} trial gave no number (a division by zero, say) and is left out.|{n} trials gave no number (a division by zero, say) and are left out.	{n} próba nem adott számot (például nullával való osztás miatt), ezért kimarad.|{n} próba nem adott számot (például nullával való osztás miatt), ezért kimarad.
 @plural	{n} trial · seed {seed} · {sampling}|{n} trials · seed {seed} · {sampling}	{n} próba · mag: {seed} · {sampling}|{n} próba · mag: {seed} · {sampling}
 @plural	{n} trial · seed {seed}|{n} trials · seed {seed}	{n} próba · mag: {seed}|{n} próba · mag: {seed}
+# Shares of the spread (Sobol indices) in the Monte Carlo results (ROADMAP M4.1, part 3c)
+	Work out each input's share of the spread	Az egyes bemenetek részesedésének kiszámítása a szórásból
+	{n} evaluations of the model	A modell {n} kiértékelése
+	The shares of the spread need independent inputs, and some of these inputs are correlated.	A szórás részesedéseihez független bemenetek kellenek, és ezek közül néhány korrelált.
+	Alone	Önmagában
+	With interactions	Kölcsönhatásokkal
+	{input} alone explains about {share} of the spread in {output}.	{output}: {input} önmagában a szórás körülbelül {share} részét magyarázza.
+	95% interval {low} to {high}	95%-os intervallum {low} és {high} között
+	Alone is the share of the spread an input explains by itself. With interactions adds what it does together with the other inputs.	Önmagában: a szórásnak az a része, amelyet egy bemenet egyedül magyaráz. Kölcsönhatásokkal: ehhez hozzáadódik, amit a többi bemenettel együtt tesz.
+	Working out the shares of the spread: {percent}	A szórás részesedéseinek kiszámítása: {percent}

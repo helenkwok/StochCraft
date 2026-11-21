@@ -1314,3 +1314,13 @@ unit	yr	a
 @plural	{n} trial gave no number (a division by zero, say) and is left out.|{n} trials gave no number (a division by zero, say) and are left out.	{n} katse ei andnud arvu (näiteks nulliga jagamine) ja see jäetakse välja.|{n} katset ei andnud arvu (näiteks nulliga jagamine) ja need jäetakse välja.
 @plural	{n} trial · seed {seed} · {sampling}|{n} trials · seed {seed} · {sampling}	{n} katse · seeme {seed} · {sampling}|{n} katset · seeme {seed} · {sampling}
 @plural	{n} trial · seed {seed}|{n} trials · seed {seed}	{n} katse · seeme {seed}|{n} katset · seeme {seed}
+# Shares of the spread (Sobol indices) in the Monte Carlo results (ROADMAP M4.1, part 3c)
+	Work out each input's share of the spread	Arvuta iga sisendi osa hajuvusest
+	{n} evaluations of the model	{n} mudeli hindamist
+	The shares of the spread need independent inputs, and some of these inputs are correlated.	Hajuvuse osad nõuavad sõltumatuid sisendeid ning mõned neist sisenditest on korreleeritud.
+	Alone	Üksi
+	With interactions	Koosmõjudega
+	{input} alone explains about {share} of the spread in {output}.	{input} üksi seletab umbes {share} suuruse {output} hajuvusest.
+	95% interval {low} to {high}	95% usaldusvahemik {low} kuni {high}
+	Alone is the share of the spread an input explains by itself. With interactions adds what it does together with the other inputs.	Üksi on hajuvuse osa, mille sisend seletab ise. Koosmõjudega lisandub see, mida ta teeb koos teiste sisenditega.
+	Working out the shares of the spread: {percent}	Hajuvuse osade arvutamine: {percent}

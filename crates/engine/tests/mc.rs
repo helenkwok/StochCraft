@@ -399,3 +399,145 @@ fn a_most_below_one_batch_is_refused_where_runs_are_whole_batches() {
         ErrorCode::InvalidParams
     );
 }
+
+/// A model whose shares are known exactly: y = 2a + b with a and b independent uniforms on (0, 1)
+/// has variance 4/12 + 1/12, so a accounts for 4/5 of it and b for 1/5, with no interactions.
+fn linear_model() -> Engine {
+    let mut e = Engine::new();
+    ok(&mut e, "model.new", json!({ "name": "Linear" }));
+    for name in ["a", "b"] {
+        ok(
+            &mut e,
+            "mc.input.set",
+            json!({ "name": name, "distribution": { "type": "uniform", "min": 0.0, "max": 1.0 } }),
+        );
+    }
+    ok(
+        &mut e,
+        "mc.output.set",
+        json!({ "name": "y", "expression": "2 * $a + $b" }),
+    );
+    e
+}
+
+/// The first and total index of `input` for output `output` in `mc.sobol`'s results.
+fn shares(r: &Value, output: &str, input: &str) -> (f64, f64) {
+    let o = r["outputs"]
+        .as_array()
+        .and_then(|os| os.iter().find(|o| o["name"] == output))
+        .cloned()
+        .unwrap_or_default();
+    let i = o["inputs"]
+        .as_array()
+        .and_then(|is| is.iter().find(|i| i["input"] == input))
+        .cloned()
+        .unwrap_or_default();
+    (
+        i["first"]["value"].as_f64().unwrap_or(f64::NAN),
+        i["total"]["value"].as_f64().unwrap_or(f64::NAN),
+    )
+}
+
+/// `mc.sobol` on a linear model gives the exact shares, within several standard errors of the
+/// estimate at 5,000 rows (about 0.01 for each), with intervals around them.
+#[test]
+fn sobol_shares_of_a_linear_model_are_exact() {
+    let mut e = linear_model();
+    let r = ok(
+        &mut e,
+        "mc.sobol",
+        json!({ "rows": 5_000, "seed": 7, "bootstrap": 100 }),
+    );
+    assert_eq!(r["rows"], 5_000);
+    assert_eq!(r["evaluations"], 20_000);
+    assert_eq!(r["seed"], 7);
+    assert_eq!(r["inputs"], json!(["a", "b"]));
+    let near = |what: &str, got: f64, want: f64| {
+        assert!(
+            (got - want).abs() < 0.06,
+            "{what}: got {got}, want {want}: {r}"
+        );
+    };
+    let (a1, at) = shares(&r, "y", "a");
+    let (b1, bt) = shares(&r, "y", "b");
+    near("a alone", a1, 0.8);
+    near("a total", at, 0.8);
+    near("b alone", b1, 0.2);
+    near("b total", bt, 0.2);
+    let low = r["outputs"][0]["inputs"][0]["first"]["interval"][0].as_f64();
+    let high = r["outputs"][0]["inputs"][0]["first"]["interval"][1].as_f64();
+    assert!(
+        matches!((low, high), (Some(l), Some(h)) if l < a1 + 0.02 && a1 - 0.02 < h && l < h),
+        "{r}"
+    );
+    assert_eq!(r["outputs"][0]["rows_dropped"], 0);
+    assert!(r["outputs"][0]["unavailable"].is_null());
+}
+
+/// Correlated inputs have no Sobol indices: the command says why. Numbers that cannot be used
+/// are refused, and so is a model that is not a Monte Carlo one.
+#[test]
+fn sobol_refuses_correlated_inputs_and_bad_numbers() {
+    let mut e = cost_model();
+    let r = e.execute("mc.sobol", json!({}));
+    let refused = r.err();
+    assert!(
+        refused
+            .as_ref()
+            .is_some_and(|x| x.code == ErrorCode::InvalidModel
+                && x.message.contains("independent inputs")
+                && x.message.contains("labour")),
+        "{refused:?}"
+    );
+    assert!(e.sobol_correlated());
+    ok(
+        &mut e,
+        "mc.correlation.set",
+        json!({ "a": "labour", "b": "materials", "rank": 0.0 }),
+    );
+    assert!(!e.sobol_correlated());
+    assert_eq!(
+        err(&mut e, "mc.sobol", json!({ "rows": 5 })),
+        ErrorCode::InvalidParams
+    );
+    assert_eq!(
+        err(&mut e, "mc.sobol", json!({ "rows": 10_000_000_000u64 })),
+        ErrorCode::InvalidParams
+    );
+    assert_eq!(
+        err(&mut e, "mc.sobol", json!({ "bootstrap": 1_000_000 })),
+        ErrorCode::InvalidParams
+    );
+    // Not a Monte Carlo model at all.
+    assert_eq!(
+        err(&mut Engine::new(), "mc.sobol", json!({})),
+        ErrorCode::NotFound
+    );
+}
+
+/// The run the window makes a piece at a time is `mc.sobol`'s: the same results however the
+/// pieces are spread, and it is done when `step` says so.
+#[test]
+fn a_sobol_run_made_a_piece_at_a_time_gives_mc_sobols_results() {
+    let mut e = linear_model();
+    let params = json!({ "rows": 2_500, "seed": 3, "bootstrap": 20 });
+    let blocking = ok(&mut e, "mc.sobol", params.clone());
+    let mut job = e
+        .sobol_start(params)
+        .unwrap_or_else(|x| unreachable!("{x:?}"));
+    assert_eq!(job.evaluations(), 10_000);
+    assert!(job.progress() < 0.01);
+    let mut steps = 0;
+    while !job.step(1) {
+        steps += 1;
+        assert!(steps < 100, "never done");
+    }
+    // 3 batches of rows, the one output, and the step that finishes: 5 pieces in all.
+    assert_eq!(steps + 1, 5);
+    assert!((job.progress() - 1.0).abs() < 1e-12);
+    assert_eq!(job.results(), Some(blocking));
+    assert_eq!(job.results(), None);
+    // Stepping a finished job changes nothing.
+    assert!(job.step(5));
+    assert_eq!(e.sobol_evaluations(), Some(4_000));
+}

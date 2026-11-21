@@ -1314,3 +1314,13 @@ unit	yr	år
 @plural	{n} trial gave no number (a division by zero, say) and is left out.|{n} trials gave no number (a division by zero, say) and are left out.	{n} iterasjon ga ikke noe tall (for eksempel deling på null) og er utelatt.|{n} iterasjoner ga ikke noe tall (for eksempel deling på null) og er utelatt.
 @plural	{n} trial · seed {seed} · {sampling}|{n} trials · seed {seed} · {sampling}	{n} iterasjon · frø {seed} · {sampling}|{n} iterasjoner · frø {seed} · {sampling}
 @plural	{n} trial · seed {seed}|{n} trials · seed {seed}	{n} iterasjon · frø {seed}|{n} iterasjoner · frø {seed}
+# Shares of the spread (Sobol indices) in the Monte Carlo results (ROADMAP M4.1, part 3c)
+	Work out each input's share of the spread	Beregn hver inndatas andel av spredningen
+	{n} evaluations of the model	{n} beregninger av modellen
+	The shares of the spread need independent inputs, and some of these inputs are correlated.	Andelene av spredningen krever uavhengige inndata, og noen av disse inndataene er korrelerte.
+	Alone	Alene
+	With interactions	Med samspill
+	{input} alone explains about {share} of the spread in {output}.	{input} forklarer alene omtrent {share} av spredningen i {output}.
+	95% interval {low} to {high}	95 %-intervall fra {low} til {high}
+	Alone is the share of the spread an input explains by itself. With interactions adds what it does together with the other inputs.	Alene er andelen av spredningen en inndata forklarer helt selv. Med samspill legges det til hva den gjør sammen med de andre inndataene.
+	Working out the shares of the spread: {percent}	Beregner andelene av spredningen: {percent}

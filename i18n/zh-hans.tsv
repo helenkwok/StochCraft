@@ -1314,3 +1314,13 @@ unit	yr	年
 @plural	{n} trial gave no number (a division by zero, say) and is left out.|{n} trials gave no number (a division by zero, say) and are left out.	{n} 次试验未得出数值（例如除以零），已被排除。
 @plural	{n} trial · seed {seed} · {sampling}|{n} trials · seed {seed} · {sampling}	{n} 次试验 · 随机种子 {seed} · {sampling}
 @plural	{n} trial · seed {seed}|{n} trials · seed {seed}	{n} 次试验 · 随机种子 {seed}
+# Shares of the spread (Sobol indices) in the Monte Carlo results (ROADMAP M4.1, part 3c)
+	Work out each input's share of the spread	计算各输入在离散程度中所占的份额
+	{n} evaluations of the model	对模型求值 {n} 次
+	The shares of the spread need independent inputs, and some of these inputs are correlated.	计算离散程度的份额需要相互独立的输入，而这些输入中有一些是相关的。
+	Alone	单独
+	With interactions	含交互作用
+	{input} alone explains about {share} of the spread in {output}.	{input} 单独解释了 {output} 离散程度的约 {share}。
+	95% interval {low} to {high}	95% 区间 {low} 至 {high}
+	Alone is the share of the spread an input explains by itself. With interactions adds what it does together with the other inputs.	“单独”是输入自身解释的离散份额。“含交互作用”再加上它与其他输入共同产生的部分。
+	Working out the shares of the spread: {percent}	正在计算离散程度的份额：{percent}

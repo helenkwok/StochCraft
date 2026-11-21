@@ -1314,3 +1314,13 @@ unit	yr	г.
 @plural	{n} trial gave no number (a division by zero, say) and is left out.|{n} trials gave no number (a division by zero, say) and are left out.	{n} опит не даде число (например деление на нула) и е изключен.|{n} опита не дадоха число (например деление на нула) и са изключени.
 @plural	{n} trial · seed {seed} · {sampling}|{n} trials · seed {seed} · {sampling}	{n} опит · начална стойност {seed} · {sampling}|{n} опита · начална стойност {seed} · {sampling}
 @plural	{n} trial · seed {seed}|{n} trials · seed {seed}	{n} опит · начална стойност {seed}|{n} опита · начална стойност {seed}
+# Shares of the spread (Sobol indices) in the Monte Carlo results (ROADMAP M4.1, part 3c)
+	Work out each input's share of the spread	Изчисляване на дела на всеки вход във вариацията
+	{n} evaluations of the model	{n} изчисления на модела
+	The shares of the spread need independent inputs, and some of these inputs are correlated.	Дяловете от вариацията изискват независими входове, а някои от тези входове са корелирани.
+	Alone	Самостоятелно
+	With interactions	С взаимодействия
+	{input} alone explains about {share} of the spread in {output}.	{input} сам обяснява около {share} от вариацията на {output}.
+	95% interval {low} to {high}	95% интервал от {low} до {high}
+	Alone is the share of the spread an input explains by itself. With interactions adds what it does together with the other inputs.	Самостоятелно е делът от вариацията, който входът обяснява сам. С взаимодействия добавя това, което прави заедно с останалите входове.
+	Working out the shares of the spread: {percent}	Изчисляване на дяловете от вариацията: {percent}

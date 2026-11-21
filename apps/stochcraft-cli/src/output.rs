@@ -1131,9 +1131,161 @@ pub fn mc_csv(r: &Value) -> String {
     stochcraft_engine::mc::results_csv(r)
 }
 
+/// A share of a variance as a whole percentage: below 0 shown as 0% and above 1 as 100%, as a
+/// small sample can overshoot, and never an exponent. `-` for no number.
+fn share_text(x: f64) -> String {
+    if x.is_finite() {
+        // `+ 0.0` turns a negative zero into a zero, so it never reads "-0%".
+        format!("{:.0}%", x.clamp(0.0, 1.0) * 100.0 + 0.0)
+    } else {
+        "-".into()
+    }
+}
+
+/// An estimate's 95% interval as `55% to 67%`, or `-` when it has none.
+fn share_interval(e: &Value) -> String {
+    match (e["interval"][0].as_f64(), e["interval"][1].as_f64()) {
+        (Some(lo), Some(hi)) => format!("{} to {}", share_text(lo), share_text(hi)),
+        _ => "-".into(),
+    }
+}
+
+/// `mc.sobol`'s results as text: for each output a table of each input's share of its variation
+/// alone and with its interactions, each with its 95% interval, and in a sentence the input that
+/// accounts for most of it alone.
+pub fn sobol_lines(r: &Value) -> String {
+    let mut out = String::new();
+    let _ = writeln!(
+        out,
+        "\nshares of the variation (Sobol indices from {} rows of each of two samples, {} model evaluations, seed {}):",
+        r["rows"], r["evaluations"], r["seed"]
+    );
+    let mut overshoot = false;
+    for o in r["outputs"].as_array().into_iter().flatten() {
+        let name = s(&o["name"]);
+        if let Some(why) = o["unavailable"].as_str() {
+            let _ = writeln!(out, "{name}: no shares: {why}");
+            continue;
+        }
+        let mut inputs: Vec<&Value> = o["inputs"].as_array().into_iter().flatten().collect();
+        inputs.sort_by(|a, b| {
+            let first = |i: &Value| i["first"]["value"].as_f64().unwrap_or(f64::NEG_INFINITY);
+            first(b).total_cmp(&first(a))
+        });
+        let _ = writeln!(out, "{name}:");
+        if let Some(top) = inputs.first()
+            && let Some(x) = top["first"]["value"].as_f64()
+            && x > 0.0
+        {
+            let _ = writeln!(
+                out,
+                "{} alone accounts for about {} of the variation in {name}",
+                s(&top["input"]),
+                share_text(x)
+            );
+        }
+        let mut rows: Vec<Vec<String>> = vec![
+            [
+                "input",
+                "alone",
+                "95% interval",
+                "with interactions",
+                "95% interval",
+            ]
+            .iter()
+            .map(|h| (*h).to_owned())
+            .collect(),
+        ];
+        for i in &inputs {
+            for e in [&i["first"], &i["total"]] {
+                overshoot |= e["value"]
+                    .as_f64()
+                    .is_some_and(|x| !(0.0..=1.0).contains(&x));
+            }
+            rows.push(vec![
+                s(&i["input"]).to_owned(),
+                i["first"]["value"]
+                    .as_f64()
+                    .map_or_else(|| "-".into(), share_text),
+                share_interval(&i["first"]),
+                i["total"]["value"]
+                    .as_f64()
+                    .map_or_else(|| "-".into(), share_text),
+                share_interval(&i["total"]),
+            ]);
+        }
+        aligned(&rows, &[true, false, true, false, true], &mut out);
+        let dropped = o["rows_dropped"].as_u64().unwrap_or(0);
+        if dropped > 0 {
+            let _ = writeln!(
+                out,
+                "{dropped} of {} rows gave no number for {name} and are left out",
+                r["rows"]
+            );
+        }
+    }
+    let constants: Vec<&str> = r["constants"]
+        .as_array()
+        .into_iter()
+        .flatten()
+        .filter_map(Value::as_str)
+        .collect();
+    if !constants.is_empty() {
+        let _ = writeln!(out, "constants, left out: {}", constants.join(", "));
+    }
+    if overshoot {
+        let _ = writeln!(
+            out,
+            "a share estimated from few rows can fall a little below 0% or above 100%: it is shown as 0% or 100%"
+        );
+    }
+    out
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn shares_read_as_percentages_with_their_intervals() {
+        let est =
+            |v: f64, lo: f64, hi: f64| serde_json::json!({ "value": v, "interval": [lo, hi] });
+        let r = serde_json::json!({
+            "rows": 1000, "evaluations": 4000, "seed": 7,
+            "constants": ["fee"],
+            "outputs": [
+                {
+                    "name": "duration", "rows_dropped": 0, "unavailable": null,
+                    "inputs": [
+                        { "input": "design", "first": est(0.2049, 0.15, 0.26), "total": est(0.2193, 0.17, 0.27) },
+                        { "input": "build", "first": est(0.6112, 0.55, 0.67), "total": est(1.03, 0.9, 1.1) },
+                        { "input": "test", "first": est(-0.02, -0.06, 0.01), "total": est(0.0, 0.0, 0.03) },
+                    ],
+                },
+                { "name": "cost", "unavailable": "it does not vary", "inputs": [] },
+            ],
+        });
+        let text = sobol_lines(&r);
+        // The columns' padding does not matter here: each line with its spaces collapsed.
+        let lines: Vec<String> = text
+            .lines()
+            .map(|l| l.split_whitespace().collect::<Vec<_>>().join(" "))
+            .collect();
+        let want = [
+            "",
+            "shares of the variation (Sobol indices from 1000 rows of each of two samples, 4000 model evaluations, seed 7):",
+            "duration:",
+            "build alone accounts for about 61% of the variation in duration",
+            "input alone 95% interval with interactions 95% interval",
+            "build 61% 55% to 67% 100% 90% to 100%",
+            "design 20% 15% to 26% 22% 17% to 27%",
+            "test 0% 0% to 1% 0% 0% to 3%",
+            "cost: no shares: it does not vary",
+            "constants, left out: fee",
+            "a share estimated from few rows can fall a little below 0% or above 100%: it is shown as 0% or 100%",
+        ];
+        assert_eq!(lines, want, "{text}");
+    }
 
     #[test]
     fn runs_that_split_get_a_block_per_group_and_csv_columns() {

@@ -1314,3 +1314,13 @@ unit	yr	a
 @plural	{n} trial gave no number (a division by zero, say) and is left out.|{n} trials gave no number (a division by zero, say) and are left out.	{n} prova non ha dato alcun numero (per esempio una divisione per zero) ed è esclusa.|{n} prove non hanno dato alcun numero (per esempio una divisione per zero) e sono escluse.
 @plural	{n} trial · seed {seed} · {sampling}|{n} trials · seed {seed} · {sampling}	{n} prova · seme {seed} · {sampling}|{n} prove · seme {seed} · {sampling}
 @plural	{n} trial · seed {seed}|{n} trials · seed {seed}	{n} prova · seme {seed}|{n} prove · seme {seed}
+# Shares of the spread (Sobol indices) in the Monte Carlo results (ROADMAP M4.1, part 3c)
+	Work out each input's share of the spread	Calcola la quota di variabilità di ciascun input
+	{n} evaluations of the model	{n} valutazioni del modello
+	The shares of the spread need independent inputs, and some of these inputs are correlated.	Le quote di variabilità richiedono input indipendenti, e alcuni di questi input sono correlati.
+	Alone	Da solo
+	With interactions	Con interazioni
+	{input} alone explains about {share} of the spread in {output}.	{input} da solo spiega circa {share} della variabilità di {output}.
+	95% interval {low} to {high}	Intervallo al 95% da {low} a {high}
+	Alone is the share of the spread an input explains by itself. With interactions adds what it does together with the other inputs.	Da solo è la quota di variabilità che un input spiega per conto proprio. Con interazioni aggiunge ciò che fa insieme agli altri input.
+	Working out the shares of the spread: {percent}	Calcolo delle quote di variabilità: {percent}

@@ -176,6 +176,10 @@ impl App {
 
     /// Advances and collects the background run. Called every frame; true while it runs.
     pub fn poll(&mut self) -> bool {
+        // The shares of a Monte Carlo output's spread, worked out beside the results on show.
+        if self.is_working_out_shares() {
+            return self.sobol_poll();
+        }
         if self.running.is_none() {
             return false;
         }
