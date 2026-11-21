@@ -84,9 +84,10 @@ fn a_model_built_by_commands_grows_exponentially() {
     let r = ok(&mut e, "sd.run", json!({}));
     let p = series(&r, "Population");
     assert_eq!(p.len(), 11);
+    let mut exact = 100.0;
     for (n, v) in p.iter().enumerate() {
-        let exact = 100.0 * 1.1_f64.powi(n as i32);
         assert!((v - exact).abs() < 1e-9, "n={n}: {v} vs {exact}");
+        exact *= 1.1;
     }
     // The diagram has a shape for each variable, and the flow's pipe ends on the stock.
     let g = ok(&mut e, "sd.get", json!({}));
