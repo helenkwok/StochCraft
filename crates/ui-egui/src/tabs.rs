@@ -88,7 +88,7 @@ impl App {
             if self.is_sd() {
                 if self.sd_results().is_none() {
                     ui.label(theme::weak(ui, t("· no results yet")));
-                } else if self.sd_results_stale() && !self.sd_pending() {
+                } else if self.sd_results_stale() && self.running.is_none() {
                     ui.label(theme::weak(ui, t("· out of date")));
                 }
             } else if self.results.is_none() && self.running.is_none() {

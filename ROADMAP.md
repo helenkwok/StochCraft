@@ -2322,8 +2322,7 @@ write XMILE (the engine's; Save As never rewrites a chosen name, and a Save into
 content the reader does not keep, a second diagram or styles, asks first with Replace, Save As and
 Cancel), and the title, the header and the question on closing follow its
 unsaved state, so a model changed by an agent's or the command line's edit is marked edited; the
-recovery copy is for process models only for now. The window's run is made whole, not a few replications a frame, because `stochcraft-sd` gives
-only aggregates (a stepped job needs per-replication results there). The canvas, then the replication of hybrids with M4.3 and M4.4; arrays, the
+recovery copy is for process models only for now. The window's run is made a few replications a frame, as Monte Carlo's is (`stochcraft_sd::SdJob`, wrapped by the engine's `SdJob` and `Engine::sd_start`, `Engine::sd_results`), with "n of N runs finished", Cancel (or Esc) and no size limit of its own beyond the engine's; changing the model while it runs, or opening another, cancels it. One replication is not interrupted, so a single very long replication still holds a frame up. The canvas, then the replication of hybrids with M4.3 and M4.4; arrays, the
 lint on rate-to-rate links and docking are not done.
 
 **What Python users already have, and so the minimum:** PySD runs models from the common

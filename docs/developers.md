@@ -335,10 +335,19 @@ is refused, nothing written); `Engine::save_drops` lists what a plain Save into 
 would leave out (the reader's notes, any of which means something was not kept or was run another
 way, as the notes are free text), empty once the model has been written to it, and the window
 asks first (the `NewFile` question, with Replace, Save As and Cancel); its unsaved state is `Engine::is_dirty`, and its
-recovery copy is skipped (recovery copies are process models only). The window's run is made
-whole, two frames after Run is pressed (the first paints "Running…"), with the work bounded (steps times variables times runs, at most
-20 million); a run a few replications at a time like Monte Carlo's would need `stochcraft-sd` to
-give per-replication results.
+recovery copy is skipped (recovery copies are process models only). The window's run is a job
+made a few replications a frame, as Monte Carlo's is: `stochcraft_sd::SdJob` (`new` checks the
+run as `run` does, `step(n)` makes up to `n` whole replications, `progress`, `finish`; `run` is
+`new` and `finish`, so there is one code path, and each replication's streams are keyed by the seed
+and its number alone, so the results are the same however the replications are spread over steps).
+The engine's `sd::SdJob` wraps it: `Engine::sd_start` takes `sd.run`'s parameters, and
+`Engine::sd_results` makes the results the model's last (as `sd.run` does, so `sd.get` and the
+stale marking behave the same) and journals an `sd.run` step; it is refused with `conflict` if the
+model was changed since the job started (`SdJob::revision`), which the window checks every frame
+and answers by cancelling the run. The window (`App::sd_poll`) steps one replication at a time for
+about the Monte Carlo frame budget (8 ms) and paints the first frame as running before the first
+replication, which may take long, is made. A replication is not interrupted, so stepping inside
+one is not offered.
 
 **Editing.** `sd.variable.add` (stock, flow or aux with its equation, units, a graphical function,
 a stock's flows, a position; `into_stock` and `from_stock` attach a new flow), `sd.variable.set`

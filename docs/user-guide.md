@@ -539,9 +539,14 @@ and from where, and the same seed gives the same runs.
 - **Out of date:** once the model has been changed after a run, the results stay on show, marked
   out of date (on the tab and above them), until you press **Run again**.
 
-A run too large for the window (steps times variables times runs above 20 million, a limit chosen
-to keep the window responsive, though the engine allows more) is refused with the way out: shorten it, raise the time step, lower the runs, or use the command line
-(`stochcraft-cli run model.xmile`), which has no such limit. **Save** and **Save As…** write the model as XMILE (a
+A run is made a few replications a frame, so the window stays responsive however many runs you ask
+for: the page shows how many are finished ("n of N runs finished") with a
+**Cancel run** button (or Esc), and the results replace the last ones when the last run is in.
+Cancelling drops the partial run and keeps the results that were on show. Changing the model by a
+command while it runs, or opening another model, cancels it too. A run is not interrupted in the
+middle, so a model run once with a very long time span (many steps) may hold the window for a
+moment before it shows its answer; the engine's own limits still apply (at most 100,000 runs, 20
+million steps a run and 100 million steps in all). **Save** and **Save As…** write the model as XMILE (a
 file name ending in `.xmile`), as for a process model: the title and header mark a model changed by
 commands as edited, and closing asks about it. The file is written by StochCraft's own XMILE
 writer, diagram included. **Save As…** writes the name you choose as it is: a name that does not
