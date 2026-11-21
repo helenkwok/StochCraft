@@ -401,7 +401,7 @@ fn a_draw_holds_for_its_interval_and_does_not_depend_on_the_step() {
         },
     );
     let x = mean(&r, "x");
-    assert_eq!(x.get(0), x.get(3));
+    assert_eq!(x.first(), x.get(3));
     assert_ne!(x.get(3), x.get(4));
     assert_eq!(x.get(4), x.get(7));
     assert_ne!(x.get(7), x.get(8));
