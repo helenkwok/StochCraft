@@ -894,6 +894,10 @@ impl App {
                 }
 
                 section(ui, t("Variables"));
+                // A grid sizes a column from what its cells took, so a wrapping label left to
+                // itself takes the narrowest width and breaks an equation into a letter column;
+                // the equations get a fixed share of the width instead.
+                let equation_width = (ui.available_width() * 0.4).clamp(220.0, 560.0);
                 crate::decide::grid(ui, "sd/variables", 5, |ui| {
                     for header in [
                         t("Name"),
@@ -917,7 +921,11 @@ impl App {
                         } else {
                             equation.to_owned()
                         };
-                        ui.add(egui::Label::new(equation).wrap());
+                        ui.scope(|ui| {
+                            ui.set_min_width(equation_width);
+                            ui.set_max_width(equation_width);
+                            ui.add(egui::Label::new(equation).wrap());
+                        });
                         ui.label(v["units"].as_str().unwrap_or(""));
                         let names = |key: &str| -> String {
                             v[key]
