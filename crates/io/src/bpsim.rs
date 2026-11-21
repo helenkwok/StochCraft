@@ -391,6 +391,13 @@ pub fn read_scenario(data: &Element, id: Option<&str>, notes: &mut Vec<Note>) ->
         if let Some(p) = s.child(&NSS, "ScenarioParameters") {
             read_settings(p, &mut sc.settings, notes);
         }
+        let exts: Vec<&Element> = s
+            .child(&NSS, "ScenarioParameters")
+            .into_iter()
+            .flat_map(|p| p.children_named(&NSS, "VendorExtension"))
+            .chain(s.children_named(&NSS, "VendorExtension"))
+            .collect();
+        read_extensions(&exts, &mut sc.settings, notes);
         for ep in s.children_named(&NSS, "ElementParameters") {
             let Some(r) = ep.attr("elementRef") else {
                 continue;
@@ -505,6 +512,41 @@ fn read_sequential(ext: &Element, notes: &mut Vec<Note>) -> Option<Sequential> {
     Some(x)
 }
 
+/// StochCraft's scenario-level vendor extensions in `exts` (the length unit, layout scale and
+/// sequential replications): the scenario's own children, where BPSim has them, and those in its
+/// parameters, where older files of ours have them.
+fn read_extensions(exts: &[&Element], s: &mut ScenarioSettings, notes: &mut Vec<Note>) {
+    for ext in exts {
+        let raw = || vendor_value(ext).unwrap_or_default();
+        match ext.attr("name").as_deref() {
+            Some(LENGTH_UNIT) => {
+                let raw = raw();
+                match LengthUnit::from_name(raw.trim()) {
+                    Some(u) => s.length_unit = u,
+                    None => notes.push(Note::warning(
+                        None,
+                        format!(
+                            "length unit `{raw}` is not mm, cm, m, km, in or ft and is ignored"
+                        ),
+                    )),
+                }
+            }
+            Some(LAYOUT_SCALE) => {
+                let raw = raw();
+                match raw.trim().parse::<f64>() {
+                    Ok(x) => s.layout_scale = Some(x),
+                    Err(_) => notes.push(Note::warning(
+                        None,
+                        format!("layout scale `{raw}` is not a number and is ignored"),
+                    )),
+                }
+            }
+            Some(SEQUENTIAL) => s.sequential = read_sequential(ext, notes),
+            _ => {}
+        }
+    }
+}
+
 fn read_settings(p: &Element, s: &mut ScenarioSettings, notes: &mut Vec<Note>) {
     if let Some(r) = p.attr("replication") {
         match r.trim().parse() {
@@ -539,38 +581,6 @@ fn read_settings(p: &Element, s: &mut ScenarioSettings, notes: &mut Vec<Note>) {
         .and_then(|u| parse_unit(&u, notes, None))
     {
         s.base_time_unit = u;
-    }
-    for ext in p
-        .children_named(&NSS, "VendorExtension")
-        .filter(|x| x.attr("name").as_deref() == Some(LENGTH_UNIT))
-    {
-        let raw = vendor_value(ext).unwrap_or_default();
-        match LengthUnit::from_name(raw.trim()) {
-            Some(u) => s.length_unit = u,
-            None => notes.push(Note::warning(
-                None,
-                format!("length unit `{raw}` is not mm, cm, m, km, in or ft and is ignored"),
-            )),
-        }
-    }
-    for ext in p
-        .children_named(&NSS, "VendorExtension")
-        .filter(|x| x.attr("name").as_deref() == Some(LAYOUT_SCALE))
-    {
-        let raw = vendor_value(ext).unwrap_or_default();
-        match raw.trim().parse::<f64>() {
-            Ok(x) => s.layout_scale = Some(x),
-            Err(_) => notes.push(Note::warning(
-                None,
-                format!("layout scale `{raw}` is not a number and is ignored"),
-            )),
-        }
-    }
-    for ext in p
-        .children_named(&NSS, "VendorExtension")
-        .filter(|x| x.attr("name").as_deref() == Some(SEQUENTIAL))
-    {
-        s.sequential = read_sequential(ext, notes);
     }
     let unit = s.base_time_unit;
     for (name, slot) in [("Duration", &mut s.duration), ("Warmup", &mut s.warmup)] {

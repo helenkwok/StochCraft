@@ -2393,3 +2393,52 @@ fn bad_sequential_settings_are_noted() {
     };
     assert_eq!(loaded.model.experiment.sequential, None);
 }
+
+/// BPSim allows a scenario's vendor extensions only as children of the scenario, after its
+/// calendars. Ours are written there, and a file that has them inside `ScenarioParameters`, as
+/// older versions wrote them, still reads the same.
+#[test]
+fn scenario_extensions_are_read_from_the_scenario_and_from_its_parameters() {
+    use stochcraft_model::{LengthUnit, Sequential};
+    let mut model = showcase();
+    model.experiment.length_unit = LengthUnit::Feet;
+    model.experiment.layout_scale = 2.5;
+    model.experiment.sequential = Some(Sequential::default());
+    let bytes = write_new(&model);
+    let text = String::from_utf8_lossy(&bytes).into_owned();
+    let Some(first) = text.find(r#"<bpsim:VendorExtension name="stochcraft:lengthUnit""#) else {
+        unreachable!("the length unit is not written: {text}")
+    };
+    // Written after the parameters, as the scenario's own children.
+    let Some(params_end) = text.find("</bpsim:ScenarioParameters>") else {
+        unreachable!("{text}")
+    };
+    assert!(first > params_end, "{text}");
+    let Ok(new) = read(&bytes) else {
+        unreachable!()
+    };
+    assert_eq!(new.model.experiment.length_unit, LengthUnit::Feet);
+    assert_eq!(new.model.experiment.layout_scale, 2.5);
+    assert_eq!(new.model.experiment.sequential, Some(Sequential::default()));
+
+    // The same three, moved inside the parameters as older files have them.
+    let Some(last) = text[first..].find("</bpsim:Scenario>") else {
+        unreachable!("{text}")
+    };
+    let block = &text[first..first + last];
+    assert_eq!(
+        block.matches("<bpsim:VendorExtension").count(),
+        3,
+        "{block}"
+    );
+    let mut old = text.replace(block, "");
+    old = old.replacen(
+        "</bpsim:ScenarioParameters>",
+        &format!("{block}</bpsim:ScenarioParameters>"),
+        1,
+    );
+    let Ok(old) = read(old.as_bytes()) else {
+        unreachable!()
+    };
+    assert_eq!(old.model, new.model);
+}

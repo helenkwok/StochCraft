@@ -1235,6 +1235,8 @@ fn everything_stochcraft_writes_is_schema_valid() {
                     points: 0.5,
                     max: 300,
                 }),
+                length_unit: stochcraft_model::LengthUnit::Millimetres,
+                layout_scale: 2.5,
                 ..Experiment::default()
             })),
             what,
