@@ -1324,3 +1324,16 @@ unit	yr	वर्ष
 	95% interval {low} to {high}	95% अंतराल {low} से {high}
 	Alone is the share of the spread an input explains by itself. With interactions adds what it does together with the other inputs.	अकेले का अर्थ है फैलाव का वह हिस्सा जो कोई इनपुट खुद समझाता है। अंतःक्रियाओं सहित में वह भी जुड़ता है जो वह अन्य इनपुट के साथ मिलकर करता है।
 	Working out the shares of the spread: {percent}	फैलाव के हिस्से निकाले जा रहे हैं: {percent}
+	Antithetic pairs	विपरीत जोड़े
+	Quasi-random (Sobol)	अर्ध-यादृच्छिक (Sobol)
+	Antithetic pairs make each trial's twin from the opposite end of every input's range, so their errors tend to cancel, which usually makes the results more precise for the same trials. Trials run in pairs; it cannot be used with correlated inputs.	विपरीत जोड़े हर परीक्षण का जुड़वाँ हर इनपुट की सीमा के विपरीत छोर से बनाते हैं, इसलिए उनकी त्रुटियाँ एक-दूसरे को काटती हैं, जिससे उतने ही परीक्षणों में परिणाम आमतौर पर अधिक सटीक होते हैं। परीक्षण जोड़ों में चलते हैं; इसे सहसंबद्ध इनपुट के साथ इस्तेमाल नहीं किया जा सकता।
+	Quasi-random (Sobol) draws spread the trials evenly over the inputs' ranges, with a fresh random shift in every batch of 1,000, which usually makes the results more precise for the same trials. It has points for up to 64 inputs.	अर्ध-यादृच्छिक (Sobol) नमूने परीक्षणों को इनपुट की सीमाओं पर समान रूप से फैलाते हैं, हर 1,000 के बैच में एक नया यादृच्छिक विस्थापन लगाकर, जिससे उतने ही परीक्षणों में परिणाम आमतौर पर अधिक सटीक होते हैं। इसमें अधिकतम 64 इनपुट के लिए बिंदु हैं।
+	Each ± is the half-width of the 95% interval of the mean across independent pairs of trials (pairs: {n}). The two trials of a pair are made to oppose each other, so each pair counts as one.	हर ± माध्य के 95% अंतराल की आधी चौड़ाई है, परीक्षणों के स्वतंत्र जोड़ों पर (जोड़े: {n})। जोड़े के दोनों परीक्षण एक-दूसरे के विपरीत बनाए जाते हैं, इसलिए हर जोड़ा एक गिना जाता है।
+	Each ± is the half-width of the 95% interval of the mean across independent batches of {size} trials (batches: {n}). Each batch is shifted at random on its own, so each batch counts as one.	हर ± माध्य के 95% अंतराल की आधी चौड़ाई है, {size} परीक्षणों के स्वतंत्र बैचों पर (बैच: {n})। हर बैच को अलग से यादृच्छिक रूप से विस्थापित किया जाता है, इसलिए हर बैच एक गिना जाता है।
+	antithetic sampling	विपरीत नमूनाकरण
+	quasi-random (Sobol) sampling	अर्ध-यादृच्छिक (Sobol) नमूनाकरण
+	{asked} trials were asked for; antithetic sampling runs whole pairs of trials, so {n} ran.	{asked} परीक्षण माँगे गए थे; विपरीत नमूनाकरण परीक्षणों के पूरे जोड़े चलाता है, इसलिए {n} चले।
+	{asked} trials were asked for; Sobol sampling runs whole batches of {size}, so {n} ran.	{asked} परीक्षण माँगे गए थे; Sobol नमूनाकरण {size} के पूरे बैच चलाता है, इसलिए {n} चले।
+	{name}: the ± is across {n} of the {of} pairs, the rest had no trial with a number.	{name}: ± {of} में से {n} जोड़ों पर आधारित है, बाकी में किसी परीक्षण में संख्या नहीं थी।
+	No interval: every pair gave the same share, so their spread gives none.	कोई अंतराल नहीं: सभी जोड़ों ने एक ही हिस्सा दिया, इसलिए उनके फैलाव से कोई अंतराल नहीं बनता।
+	No interval: too few pairs of trials for one.	कोई अंतराल नहीं: इसके लिए परीक्षणों के जोड़े बहुत कम हैं।

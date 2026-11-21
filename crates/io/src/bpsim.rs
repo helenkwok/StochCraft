@@ -162,7 +162,8 @@ pub const SEQUENTIAL: &str = "stochcraft:sequential";
 
 /// A Monte Carlo model (decision D15): a `stochcraft:monteCarlo` vendor extension on the
 /// scenario, holding a `stochcraft:monteCarlo` element with an optional `sampling` (`random`,
-/// the default, or `latinHypercube`) and the children `input` (`name`, `unit`: an input's unit;
+/// the default, `latinHypercube`, `antithetic` or `sobol`; a reader that does not know the last
+/// two warns and uses random) and the children `input` (`name`, `unit`: an input's unit;
 /// the inputs themselves are the scenario's `ScenarioParameters/PropertyParameters`), `output`
 /// (`name`, `expression`, optional `unit` and one of `atMost` and `atLeast`), `correlation`
 /// (`a`, `b` and `rank`, a rank correlation strictly between -1 and 1) and `stop` (`relative`

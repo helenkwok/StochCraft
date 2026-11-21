@@ -1324,3 +1324,16 @@ unit	yr	v
 	95% interval {low} to {high}	Interval 95% nga {low} deri {high}
 	Alone is the share of the spread an input explains by itself. With interactions adds what it does together with the other inputs.	Vetëm është pjesa e shpërndarjes që një hyrje e shpjegon vetë. Me ndërveprime shton atë që bën së bashku me hyrjet e tjera.
 	Working out the shares of the spread: {percent}	Po llogariten pjesët e shpërndarjes: {percent}
+	Antithetic pairs	Çifte antitetike
+	Quasi-random (Sobol)	Kuazi-e rastësishme (Sobol)
+	Antithetic pairs make each trial's twin from the opposite end of every input's range, so their errors tend to cancel, which usually makes the results more precise for the same trials. Trials run in pairs; it cannot be used with correlated inputs.	Çiftet antitetike e bëjnë binjakun e çdo prove nga ana e kundërt e diapazonit të çdo hyrjeje, kështu që gabimet e tyre priren të anulohen, gjë që zakonisht i bën rezultatet më të sakta me të njëjtat prova. Provat ekzekutohen në çifte; nuk mund të përdoret me hyrje të korreluara.
+	Quasi-random (Sobol) draws spread the trials evenly over the inputs' ranges, with a fresh random shift in every batch of 1,000, which usually makes the results more precise for the same trials. It has points for up to 64 inputs.	Nxjerrjet kuazi-të rastësishme (Sobol) i shpërndajnë provat në mënyrë të njëtrajtshme nëpër diapazonet e hyrjeve, me një zhvendosje të re të rastësishme në çdo grup prej 1.000, gjë që zakonisht i bën rezultatet më të sakta me të njëjtat prova. Ka pika për deri në 64 hyrje.
+	Each ± is the half-width of the 95% interval of the mean across independent pairs of trials (pairs: {n}). The two trials of a pair are made to oppose each other, so each pair counts as one.	Çdo ± është gjysma e gjerësisë së intervalit 95% të mesatares mbi çifte të pavarura provash (çifte: {n}). Dy provat e një çifti bëhen që të kundërshtojnë njëra-tjetrën, ndaj çdo çift llogaritet si një.
+	Each ± is the half-width of the 95% interval of the mean across independent batches of {size} trials (batches: {n}). Each batch is shifted at random on its own, so each batch counts as one.	Çdo ± është gjysma e gjerësisë së intervalit 95% të mesatares mbi grupe të pavarura prej {size} provash (grupe: {n}). Çdo grup zhvendoset rastësisht më vete, ndaj çdo grup llogaritet si një.
+	antithetic sampling	kampionim antitetik
+	quasi-random (Sobol) sampling	kampionim kuazi-i rastësishëm (Sobol)
+	{asked} trials were asked for; antithetic sampling runs whole pairs of trials, so {n} ran.	U kërkuan {asked} prova; kampionimi antitetik ekzekuton çifte të plota provash, ndaj u ekzekutuan: {n}.
+	{asked} trials were asked for; Sobol sampling runs whole batches of {size}, so {n} ran.	U kërkuan {asked} prova; kampionimi Sobol ekzekuton grupe të plota prej {size}, ndaj u ekzekutuan: {n}.
+	{name}: the ± is across {n} of the {of} pairs, the rest had no trial with a number.	{name}: ± vlen për {n} nga {of} çiftet; të tjerat nuk kishin provë me një numër.
+	No interval: every pair gave the same share, so their spread gives none.	Asnjë interval: të gjitha çiftet dhanë të njëjtën pjesë, ndaj shpërndarja e tyre nuk jep interval.
+	No interval: too few pairs of trials for one.	Asnjë interval: shumë pak çifte provash për të.

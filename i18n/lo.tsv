@@ -1324,3 +1324,16 @@ unit	yr	ປີ
 	95% interval {low} to {high}	ຊ່ວງ 95% ຈາກ {low} ເຖິງ {high}
 	Alone is the share of the spread an input explains by itself. With interactions adds what it does together with the other inputs.	“ຕົວດຽວ” ແມ່ນສ່ວນຂອງຄວາມແປຜັນທີ່ຄ່າປ້ອນເຂົ້າອະທິບາຍດ້ວຍຕົວເອງ. “ລວມການປະຕິສຳພັນ” ເພີ່ມສິ່ງທີ່ມັນເຮັດຮ່ວມກັບຄ່າປ້ອນເຂົ້າອື່ນ.
 	Working out the shares of the spread: {percent}	ກຳລັງຄິດໄລ່ສ່ວນຂອງຄວາມແປຜັນ: {percent}
+	Antithetic pairs	ຄູ່ກົງກັນຂ້າມ
+	Quasi-random (Sobol)	ຄວາຊີສຸ່ມ (Sobol)
+	Antithetic pairs make each trial's twin from the opposite end of every input's range, so their errors tend to cancel, which usually makes the results more precise for the same trials. Trials run in pairs; it cannot be used with correlated inputs.	ຄູ່ກົງກັນຂ້າມສ້າງຄູ່ແຝດຂອງແຕ່ລະຄັ້ງທົດລອງຈາກປາຍດ້ານກົງກັນຂ້າມຂອງຊ່ວງຄ່າປ້ອນເຂົ້າທຸກຕົວ ດັ່ງນັ້ນຄວາມຄາດເຄື່ອນຂອງມັນຈຶ່ງມີແນວໂນ້ມຫັກລ້າງກັນ ເຊິ່ງໂດຍທົ່ວໄປເຮັດໃຫ້ຜົນລັບແມ່ນຍຳຂຶ້ນດ້ວຍຈຳນວນຄັ້ງທົດລອງເທົ່າເດີມ. ຄັ້ງທົດລອງຈະດຳເນີນເປັນຄູ່; ບໍ່ສາມາດໃຊ້ກັບຄ່າປ້ອນເຂົ້າທີ່ສຳພັນກັນໄດ້.
+	Quasi-random (Sobol) draws spread the trials evenly over the inputs' ranges, with a fresh random shift in every batch of 1,000, which usually makes the results more precise for the same trials. It has points for up to 64 inputs.	ການສຸ່ມແບບຄວາຊີສຸ່ມ (Sobol) ກະຈາຍຄັ້ງທົດລອງໃຫ້ທົ່ວຊ່ວງຄ່າປ້ອນເຂົ້າຢ່າງສະເໝີກັນ ໂດຍມີການເລື່ອນແບບສຸ່ມໃໝ່ໃນທຸກຊຸດ 1,000 ຄັ້ງ ເຊິ່ງໂດຍທົ່ວໄປເຮັດໃຫ້ຜົນລັບແມ່ນຍຳຂຶ້ນດ້ວຍຈຳນວນຄັ້ງທົດລອງເທົ່າເດີມ. ມີຈຸດສຳລັບຄ່າປ້ອນເຂົ້າສູງສຸດ 64 ຕົວ.
+	Each ± is the half-width of the 95% interval of the mean across independent pairs of trials (pairs: {n}). The two trials of a pair are made to oppose each other, so each pair counts as one.	ແຕ່ລະ ± ແມ່ນເຄິ່ງໜຶ່ງຂອງຄວາມກວ້າງຂອງຊ່ວງ 95% ຂອງຄ່າສະເລ່ຍຈາກຄູ່ຄັ້ງທົດລອງທີ່ເປັນອິດສະຫຼະ (ຈຳນວນຄູ່: {n}). ສອງຄັ້ງທົດລອງໃນຄູ່ຖືກສ້າງໃຫ້ກົງກັນຂ້າມກັນ ແຕ່ລະຄູ່ຈຶ່ງນັບເປັນໜຶ່ງ.
+	Each ± is the half-width of the 95% interval of the mean across independent batches of {size} trials (batches: {n}). Each batch is shifted at random on its own, so each batch counts as one.	ແຕ່ລະ ± ແມ່ນເຄິ່ງໜຶ່ງຂອງຄວາມກວ້າງຂອງຊ່ວງ 95% ຂອງຄ່າສະເລ່ຍຈາກຊຸດທີ່ເປັນອິດສະຫຼະ ຊຸດລະ {size} ຄັ້ງທົດລອງ (ຈຳນວນຊຸດ: {n}). ແຕ່ລະຊຸດຖືກເລື່ອນແບບສຸ່ມແຍກຕ່າງຫາກ ແຕ່ລະຊຸດຈຶ່ງນັບເປັນໜຶ່ງ.
+	antithetic sampling	ການສຸ່ມຕົວຢ່າງແບບກົງກັນຂ້າມ
+	quasi-random (Sobol) sampling	ການສຸ່ມຕົວຢ່າງແບບຄວາຊີສຸ່ມ (Sobol)
+	{asked} trials were asked for; antithetic sampling runs whole pairs of trials, so {n} ran.	ຮ້ອງຂໍ {asked} ຄັ້ງທົດລອງ; ການສຸ່ມຕົວຢ່າງແບບກົງກັນຂ້າມດຳເນີນເປັນຄູ່ຄົບ ດັ່ງນັ້ນຈຳນວນທີ່ດຳເນີນ: {n}.
+	{asked} trials were asked for; Sobol sampling runs whole batches of {size}, so {n} ran.	ຮ້ອງຂໍ {asked} ຄັ້ງທົດລອງ; ການສຸ່ມຕົວຢ່າງແບບ Sobol ດຳເນີນເປັນຊຸດຄົບ ຊຸດລະ {size} ດັ່ງນັ້ນຈຳນວນທີ່ດຳເນີນ: {n}.
+	{name}: the ± is across {n} of the {of} pairs, the rest had no trial with a number.	{name}: ± ມາຈາກ {n} ໃນ {of} ຄູ່; ຄູ່ທີ່ເຫຼືອບໍ່ມີຄັ້ງທົດລອງທີ່ມີຕົວເລກ.
+	No interval: every pair gave the same share, so their spread gives none.	ບໍ່ມີຊ່ວງ: ທຸກຄູ່ໃຫ້ສັດສ່ວນດຽວກັນ ຄວາມກະຈາຍຂອງມັນຈຶ່ງບໍ່ໃຫ້ຊ່ວງ.
+	No interval: too few pairs of trials for one.	ບໍ່ມີຊ່ວງ: ຄູ່ຂອງຄັ້ງທົດລອງໜ້ອຍເກີນໄປ.

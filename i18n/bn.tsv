@@ -1324,3 +1324,16 @@ unit	yr	বছর
 	95% interval {low} to {high}	95% ব্যবধি {low} থেকে {high}
 	Alone is the share of the spread an input explains by itself. With interactions adds what it does together with the other inputs.	এককভাবে মানে ইনপুট নিজে বিস্তারের যে অংশ ব্যাখ্যা করে। মিথস্ক্রিয়াসহ-এ যোগ হয় অন্য ইনপুটের সঙ্গে মিলে সে যা করে।
 	Working out the shares of the spread: {percent}	বিস্তারের অংশ হিসাব করা হচ্ছে: {percent}
+	Antithetic pairs	বিপরীতধর্মী জোড়া
+	Quasi-random (Sobol)	প্রায়-দৈব (Sobol)
+	Antithetic pairs make each trial's twin from the opposite end of every input's range, so their errors tend to cancel, which usually makes the results more precise for the same trials. Trials run in pairs; it cannot be used with correlated inputs.	বিপরীতধর্মী জোড়া প্রতিটি পরীক্ষণের যমজ পরীক্ষণ তৈরি করে প্রতিটি ইনপুটের পরিসরের বিপরীত প্রান্ত থেকে, ফলে তাদের ত্রুটিগুলো একে অপরকে কাটাকাটি করার প্রবণতা রাখে, যা সাধারণত একই সংখ্যক পরীক্ষণে ফলাফলকে আরও নির্ভুল করে। পরীক্ষণগুলো জোড়ায় জোড়ায় চলে; সহসম্পর্কিত ইনপুটের সঙ্গে এটি ব্যবহার করা যায় না।
+	Quasi-random (Sobol) draws spread the trials evenly over the inputs' ranges, with a fresh random shift in every batch of 1,000, which usually makes the results more precise for the same trials. It has points for up to 64 inputs.	প্রায়-দৈব (Sobol) নমুনা পরীক্ষণগুলোকে ইনপুটের পরিসরে সমানভাবে ছড়িয়ে দেয়, প্রতি 1,000টির ব্যাচে নতুন দৈব স্থানান্তরসহ, যা সাধারণত একই সংখ্যক পরীক্ষণে ফলাফলকে আরও নির্ভুল করে। এতে সর্বোচ্চ 64টি ইনপুটের জন্য বিন্দু আছে।
+	Each ± is the half-width of the 95% interval of the mean across independent pairs of trials (pairs: {n}). The two trials of a pair are made to oppose each other, so each pair counts as one.	প্রতিটি ± হলো স্বাধীন পরীক্ষণ-জোড়া জুড়ে গড়ের 95% ব্যবধানের অর্ধ-প্রস্থ (জোড়া: {n})। একটি জোড়ার দুটি পরীক্ষণ পরস্পরের বিপরীতে তৈরি, তাই প্রতিটি জোড়া একটি হিসেবে গণ্য।
+	Each ± is the half-width of the 95% interval of the mean across independent batches of {size} trials (batches: {n}). Each batch is shifted at random on its own, so each batch counts as one.	প্রতিটি ± হলো {size}টি পরীক্ষণের স্বাধীন ব্যাচ জুড়ে গড়ের 95% ব্যবধানের অর্ধ-প্রস্থ (ব্যাচ: {n})। প্রতিটি ব্যাচ আলাদাভাবে দৈবভাবে স্থানান্তরিত, তাই প্রতিটি ব্যাচ একটি হিসেবে গণ্য।
+	antithetic sampling	বিপরীতধর্মী নমুনায়ন
+	quasi-random (Sobol) sampling	প্রায়-দৈব (Sobol) নমুনায়ন
+	{asked} trials were asked for; antithetic sampling runs whole pairs of trials, so {n} ran.	{asked}টি পরীক্ষণ চাওয়া হয়েছিল; বিপরীতধর্মী নমুনায়ন পুরো জোড়ায় পরীক্ষণ চালায়, তাই {n}টি চলেছে।
+	{asked} trials were asked for; Sobol sampling runs whole batches of {size}, so {n} ran.	{asked}টি পরীক্ষণ চাওয়া হয়েছিল; Sobol নমুনায়ন {size}টির পুরো ব্যাচ চালায়, তাই {n}টি চলেছে।
+	{name}: the ± is across {n} of the {of} pairs, the rest had no trial with a number.	{name}: ± হলো {of}টি জোড়ার মধ্যে {n}টি জুড়ে, বাকিগুলোতে সংখ্যাযুক্ত কোনো পরীক্ষণ ছিল না।
+	No interval: every pair gave the same share, so their spread gives none.	কোনো ব্যবধান নেই: সব জোড়া একই ভাগ দিয়েছে, তাই তাদের বিস্তার থেকে ব্যবধান পাওয়া যায় না।
+	No interval: too few pairs of trials for one.	কোনো ব্যবধান নেই: এর জন্য পরীক্ষণ-জোড়া খুব কম।

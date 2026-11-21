@@ -1324,3 +1324,16 @@ unit	yr	r.
 	95% interval {low} to {high}	Przedział 95% od {low} do {high}
 	Alone is the share of the spread an input explains by itself. With interactions adds what it does together with the other inputs.	Samodzielnie to udział w rozrzucie, który wejście wyjaśnia samo. Z interakcjami dodaje to, co robi razem z pozostałymi wejściami.
 	Working out the shares of the spread: {percent}	Obliczanie udziałów w rozrzucie: {percent}
+	Antithetic pairs	Pary antytetyczne
+	Quasi-random (Sobol)	Quasi-losowa (Sobol)
+	Antithetic pairs make each trial's twin from the opposite end of every input's range, so their errors tend to cancel, which usually makes the results more precise for the same trials. Trials run in pairs; it cannot be used with correlated inputs.	Pary antytetyczne tworzą bliźniaka każdej próby z przeciwnego końca zakresu każdego wejścia, więc ich błędy mają tendencję do wzajemnego znoszenia się, co zwykle zwiększa dokładność wyników przy tych samych próbach. Próby są wykonywane parami; nie można tego używać ze skorelowanymi wejściami.
+	Quasi-random (Sobol) draws spread the trials evenly over the inputs' ranges, with a fresh random shift in every batch of 1,000, which usually makes the results more precise for the same trials. It has points for up to 64 inputs.	Losowania quasi-losowe (Sobol) rozkładają próby równomiernie w zakresach wejść, z nowym losowym przesunięciem w każdej partii po 1000 prób, co zwykle zwiększa dokładność wyników przy tych samych próbach. Ma punkty dla maksymalnie 64 wejść.
+	Each ± is the half-width of the 95% interval of the mean across independent pairs of trials (pairs: {n}). The two trials of a pair are made to oppose each other, so each pair counts as one.	Każde ± to połowa szerokości przedziału 95% dla średniej z niezależnych par prób (liczba par: {n}). Dwie próby w parze są tworzone tak, by się przeciwstawiały, więc każda para liczy się jako jedna.
+	Each ± is the half-width of the 95% interval of the mean across independent batches of {size} trials (batches: {n}). Each batch is shifted at random on its own, so each batch counts as one.	Każde ± to połowa szerokości przedziału 95% dla średniej z niezależnych partii po {size} prób (liczba partii: {n}). Każda partia jest przesuwana losowo osobno, więc każda partia liczy się jako jedna.
+	antithetic sampling	próbkowanie antytetyczne
+	quasi-random (Sobol) sampling	próbkowanie quasi-losowe (Sobol)
+	{asked} trials were asked for; antithetic sampling runs whole pairs of trials, so {n} ran.	Zażądano prób: {asked}; próbkowanie antytetyczne wykonuje całe pary prób, więc wykonano: {n}.
+	{asked} trials were asked for; Sobol sampling runs whole batches of {size}, so {n} ran.	Zażądano prób: {asked}; próbkowanie Sobola wykonuje całe partie po {size}, więc wykonano: {n}.
+	{name}: the ± is across {n} of the {of} pairs, the rest had no trial with a number.	{name}: ± dotyczy par w liczbie {n} z {of}; pozostałe nie miały próby z liczbą.
+	No interval: every pair gave the same share, so their spread gives none.	Brak przedziału: wszystkie pary dały ten sam udział, więc ich rozrzut nie daje przedziału.
+	No interval: too few pairs of trials for one.	Brak przedziału: za mało par iteracji, by go wyznaczyć.

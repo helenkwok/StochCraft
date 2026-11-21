@@ -1324,3 +1324,16 @@ unit	yr	god.
 	95% interval {low} to {high}	Interval od 95% od {low} do {high}
 	Alone is the share of the spread an input explains by itself. With interactions adds what it does together with the other inputs.	Samostalno je udeo rasipanja koji ulazna veličina objašnjava sama. Sa interakcijama dodaje ono što radi zajedno sa ostalim ulaznim veličinama.
 	Working out the shares of the spread: {percent}	Izračunavanje udela u rasipanju: {percent}
+	Antithetic pairs	Antitetički parovi
+	Quasi-random (Sobol)	Kvazislučajno (Sobol)
+	Antithetic pairs make each trial's twin from the opposite end of every input's range, so their errors tend to cancel, which usually makes the results more precise for the same trials. Trials run in pairs; it cannot be used with correlated inputs.	Antitetički parovi prave blizanca svakog pokušaja s suprotnog kraja opsega svake ulazne veličine, pa se njihove greške obično poništavaju, što obično daje preciznije rezultate za isti broj pokušaja. Pokušaji se izvode u parovima; ne može se koristiti s korelisanim ulaznim veličinama.
+	Quasi-random (Sobol) draws spread the trials evenly over the inputs' ranges, with a fresh random shift in every batch of 1,000, which usually makes the results more precise for the same trials. It has points for up to 64 inputs.	Kvazislučajno (Sobol) izvlačenje ravnomerno raspoređuje pokušaje po opsezima ulaznih veličina, uz novi slučajan pomak u svakoj seriji od 1,000, što obično daje preciznije rezultate za isti broj pokušaja. Ima tačke za do 64 ulazne veličine.
+	Each ± is the half-width of the 95% interval of the mean across independent pairs of trials (pairs: {n}). The two trials of a pair are made to oppose each other, so each pair counts as one.	Svaki ± je polovina širine intervala od 95% za srednju vrednost kroz nezavisne parove pokušaja (parova: {n}). Dva pokušaja u paru prave se tako da se suprotstavljaju, pa se svaki par računa kao jedan.
+	Each ± is the half-width of the 95% interval of the mean across independent batches of {size} trials (batches: {n}). Each batch is shifted at random on its own, so each batch counts as one.	Svaki ± je polovina širine intervala od 95% za srednju vrednost kroz nezavisne serije od {size} pokušaja (serija: {n}). Svaka serija se pomera nasumično za sebe, pa se svaka serija računa kao jedna.
+	antithetic sampling	antitetičko uzorkovanje
+	quasi-random (Sobol) sampling	kvazislučajno (Sobol) uzorkovanje
+	{asked} trials were asked for; antithetic sampling runs whole pairs of trials, so {n} ran.	Zatraženo je {asked} pokušaja; antitetičko uzorkovanje izvodi cele parove pokušaja, pa je izvedeno {n}.
+	{asked} trials were asked for; Sobol sampling runs whole batches of {size}, so {n} ran.	Zatraženo je {asked} pokušaja; Sobol uzorkovanje izvodi cele serije od {size}, pa je izvedeno {n}.
+	{name}: the ± is across {n} of the {of} pairs, the rest had no trial with a number.	{name}: ± je kroz {n} od {of} parova, ostali nisu imali pokušaj s brojem.
+	No interval: every pair gave the same share, so their spread gives none.	Nema intervala: svi parovi su dali isti udeo, pa njihovo rasipanje ne daje interval.
+	No interval: too few pairs of trials for one.	Nema intervala: premalo parova pokušaja za njega.

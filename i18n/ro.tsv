@@ -1324,3 +1324,16 @@ unit	yr	a
 	95% interval {low} to {high}	Interval de 95% de la {low} la {high}
 	Alone is the share of the spread an input explains by itself. With interactions adds what it does together with the other inputs.	Singură este partea din dispersie pe care o explică o intrare prin ea însăși. Cu interacțiuni adaugă ce face împreună cu celelalte intrări.
 	Working out the shares of the spread: {percent}	Se calculează părțile din dispersie: {percent}
+	Antithetic pairs	Perechi antitetice
+	Quasi-random (Sobol)	Cvasialeatoriu (Sobol)
+	Antithetic pairs make each trial's twin from the opposite end of every input's range, so their errors tend to cancel, which usually makes the results more precise for the same trials. Trials run in pairs; it cannot be used with correlated inputs.	Perechile antitetice creează geamănul fiecărei încercări de la capătul opus al intervalului fiecărei intrări, astfel încât erorile lor tind să se anuleze, ceea ce de obicei face rezultatele mai precise pentru aceleași încercări. Încercările rulează în perechi; nu poate fi folosit cu intrări corelate.
+	Quasi-random (Sobol) draws spread the trials evenly over the inputs' ranges, with a fresh random shift in every batch of 1,000, which usually makes the results more precise for the same trials. It has points for up to 64 inputs.	Extragerile cvasialeatoare (Sobol) răspândesc uniform încercările pe intervalele intrărilor, cu o nouă deplasare aleatoare în fiecare lot de 1.000, ceea ce de obicei face rezultatele mai precise pentru aceleași încercări. Are puncte pentru până la 64 de intrări.
+	Each ± is the half-width of the 95% interval of the mean across independent pairs of trials (pairs: {n}). The two trials of a pair are made to oppose each other, so each pair counts as one.	Fiecare ± este semilățimea intervalului de 95% al mediei pe perechi independente de încercări (perechi: {n}). Cele două încercări ale unei perechi sunt făcute să se opună una alteia, deci fiecare pereche contează ca una.
+	Each ± is the half-width of the 95% interval of the mean across independent batches of {size} trials (batches: {n}). Each batch is shifted at random on its own, so each batch counts as one.	Fiecare ± este semilățimea intervalului de 95% al mediei pe loturi independente de {size} încercări (loturi: {n}). Fiecare lot este deplasat aleatoriu separat, deci fiecare lot contează ca unul.
+	antithetic sampling	eșantionare antitetică
+	quasi-random (Sobol) sampling	eșantionare cvasialeatoare (Sobol)
+	{asked} trials were asked for; antithetic sampling runs whole pairs of trials, so {n} ran.	Au fost cerute {asked} încercări; eșantionarea antitetică rulează perechi întregi de încercări, deci au rulat: {n}.
+	{asked} trials were asked for; Sobol sampling runs whole batches of {size}, so {n} ran.	Au fost cerute {asked} încercări; eșantionarea Sobol rulează loturi întregi de {size}, deci au rulat: {n}.
+	{name}: the ± is across {n} of the {of} pairs, the rest had no trial with a number.	{name}: ± se referă la {n} din cele {of} perechi; restul nu aveau nicio încercare cu un număr.
+	No interval: every pair gave the same share, so their spread gives none.	Niciun interval: toate perechile au dat aceeași pondere, deci dispersia lor nu dă niciun interval.
+	No interval: too few pairs of trials for one.	Niciun interval: prea puține perechi de iterații pentru unul.

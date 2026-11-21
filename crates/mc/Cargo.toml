@@ -1,6 +1,6 @@
 [package]
 name = "stochcraft-mc"
-description = "StochCraft's Monte Carlo models: inputs as distributions, outputs as expressions, plain or Latin hypercube sampling, rank correlation by Iman and Conover, and results with their intervals."
+description = "StochCraft's Monte Carlo models: inputs as distributions, outputs as expressions, plain, Latin hypercube, antithetic or randomised Sobol sampling, rank correlation by Iman and Conover, and results with their intervals."
 version.workspace = true
 edition.workspace = true
 license.workspace = true

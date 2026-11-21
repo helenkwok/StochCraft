@@ -1324,3 +1324,16 @@ unit	yr	ж.
 	95% interval {low} to {high}	95% аралық {low} – {high}
 	Alone is the share of the spread an input explains by itself. With interactions adds what it does together with the other inputs.	«Жеке» — кіріс шаманың өзі түсіндіретін шашырау үлесі. «Өзара әсерлермен» оған басқа кіріс шамалармен бірге жасайтыны қосылады.
 	Working out the shares of the spread: {percent}	Шашырау үлестерін есептеу: {percent}
+	Antithetic pairs	Антитетикалық жұптар
+	Quasi-random (Sobol)	Квазикездейсоқ (Sobol)
+	Antithetic pairs make each trial's twin from the opposite end of every input's range, so their errors tend to cancel, which usually makes the results more precise for the same trials. Trials run in pairs; it cannot be used with correlated inputs.	Антитетикалық жұптар әр сынақтың егізін әр кірістің диапазонының қарама-қарсы ұшынан жасайды, сондықтан олардың қателіктері бір-бірін жоюға бейім, бұл әдетте сол сынақ санымен нәтижелерді дәлірек етеді. Сынақтар жұппен орындалады; корреляцияланған кіріс шамалармен қолдануға болмайды.
+	Quasi-random (Sobol) draws spread the trials evenly over the inputs' ranges, with a fresh random shift in every batch of 1,000, which usually makes the results more precise for the same trials. It has points for up to 64 inputs.	Квазикездейсоқ (Sobol) таңдамалар сынақтарды кірістердің диапазондары бойынша біркелкі таратады, әр 1,000 сынақтық топтамада жаңа кездейсоқ ығысумен, бұл әдетте сол сынақ санымен нәтижелерді дәлірек етеді. Онда 64 кіріске дейінгі нүктелер бар.
+	Each ± is the half-width of the 95% interval of the mean across independent pairs of trials (pairs: {n}). The two trials of a pair are made to oppose each other, so each pair counts as one.	Әр ± — сынақтардың тәуелсіз жұптары бойынша орташа мәннің 95% аралығының жарты ені (жұптар: {n}). Жұптың екі сынағы бір-біріне қарама-қарсы жасалады, сондықтан әр жұп бір деп саналады.
+	Each ± is the half-width of the 95% interval of the mean across independent batches of {size} trials (batches: {n}). Each batch is shifted at random on its own, so each batch counts as one.	Әр ± — әрқайсысы {size} сынақтан тұратын тәуелсіз топтамалар бойынша орташа мәннің 95% аралығының жарты ені (топтамалар: {n}). Әр топтама өз алдына кездейсоқ ығыстырылады, сондықтан әр топтама бір деп саналады.
+	antithetic sampling	антитетикалық іріктеу
+	quasi-random (Sobol) sampling	квазикездейсоқ (Sobol) іріктеу
+	{asked} trials were asked for; antithetic sampling runs whole pairs of trials, so {n} ran.	{asked} сынақ сұралды; антитетикалық іріктеу сынақтардың тұтас жұптарын орындайды, сондықтан {n} орындалды.
+	{asked} trials were asked for; Sobol sampling runs whole batches of {size}, so {n} ran.	{asked} сынақ сұралды; Sobol іріктеуі {size} сынақтан тұратын тұтас топтамаларды орындайды, сондықтан {n} орындалды.
+	{name}: the ± is across {n} of the {of} pairs, the rest had no trial with a number.	{name}: ± {of} жұптың {n} жұбы бойынша алынған, қалғандарында санмен берілген сынақ болмады.
+	No interval: every pair gave the same share, so their spread gives none.	Аралық жоқ: барлық жұптар бірдей үлес берді, сондықтан олардың шашыраңқылығы аралық бермейді.
+	No interval: too few pairs of trials for one.	Аралық жоқ: оған сынақ жұптары тым аз.

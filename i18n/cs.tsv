@@ -1324,3 +1324,16 @@ unit	yr	r.
 	95% interval {low} to {high}	95% interval od {low} do {high}
 	Alone is the share of the spread an input explains by itself. With interactions adds what it does together with the other inputs.	Samostatně je podíl rozptylu, který vstup vysvětluje sám. S interakcemi přidává to, co dělá společně s ostatními vstupy.
 	Working out the shares of the spread: {percent}	Počítání podílů na rozptylu: {percent}
+	Antithetic pairs	Antitetické dvojice
+	Quasi-random (Sobol)	Kvazináhodné (Sobol)
+	Antithetic pairs make each trial's twin from the opposite end of every input's range, so their errors tend to cancel, which usually makes the results more precise for the same trials. Trials run in pairs; it cannot be used with correlated inputs.	Antitetické dvojice vytvářejí dvojče každého pokusu z opačného konce rozsahu každého vstupu, takže se jejich chyby mají tendenci vzájemně rušit, což obvykle zpřesňuje výsledky při stejném počtu pokusů. Pokusy běží po dvojicích; nelze použít s korelovanými vstupy.
+	Quasi-random (Sobol) draws spread the trials evenly over the inputs' ranges, with a fresh random shift in every batch of 1,000, which usually makes the results more precise for the same trials. It has points for up to 64 inputs.	Kvazináhodné (Sobol) losování rozloží pokusy rovnoměrně přes rozsahy vstupů, s novým náhodným posunem v každé dávce po 1,000, což obvykle zpřesňuje výsledky při stejném počtu pokusů. Má body až pro 64 vstupů.
+	Each ± is the half-width of the 95% interval of the mean across independent pairs of trials (pairs: {n}). The two trials of a pair are made to oppose each other, so each pair counts as one.	Každé ± je polovina šířky 95% intervalu průměru napříč nezávislými dvojicemi pokusů (dvojic: {n}). Dva pokusy dvojice jsou vytvořeny tak, aby si protiřečily, proto se každá dvojice počítá jako jedna.
+	Each ± is the half-width of the 95% interval of the mean across independent batches of {size} trials (batches: {n}). Each batch is shifted at random on its own, so each batch counts as one.	Každé ± je polovina šířky 95% intervalu průměru napříč nezávislými dávkami po {size} pokusech (dávek: {n}). Každá dávka je posunuta náhodně sama o sobě, proto se každá dávka počítá jako jedna.
+	antithetic sampling	antitetické vzorkování
+	quasi-random (Sobol) sampling	kvazináhodné (Sobol) vzorkování
+	{asked} trials were asked for; antithetic sampling runs whole pairs of trials, so {n} ran.	Bylo požadováno {asked} pokusů; antitetické vzorkování spouští celé dvojice pokusů, proto proběhlo {n}.
+	{asked} trials were asked for; Sobol sampling runs whole batches of {size}, so {n} ran.	Bylo požadováno {asked} pokusů; vzorkování Sobol spouští celé dávky po {size}, proto proběhlo {n}.
+	{name}: the ± is across {n} of the {of} pairs, the rest had no trial with a number.	{name}: ± je napříč {n} z {of} dvojic, ostatní neměly žádný pokus s číslem.
+	No interval: every pair gave the same share, so their spread gives none.	Žádný interval: všechny dvojice daly stejný podíl, takže jejich rozptyl žádný interval nedává.
+	No interval: too few pairs of trials for one.	Žádný interval: příliš málo dvojic pokusů.

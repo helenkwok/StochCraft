@@ -1324,3 +1324,16 @@ unit	yr	年
 	95% interval {low} to {high}	95% 区間 {low} ～ {high}
 	Alone is the share of the spread an input explains by itself. With interactions adds what it does together with the other inputs.	「単独」は、入力がそれだけで説明するばらつきの割合です。「交互作用を含む」は、他の入力と組み合わさったときの寄与も加えたものです。
 	Working out the shares of the spread: {percent}	ばらつきへの寄与を計算中: {percent}
+	Antithetic pairs	対立変量ペア
+	Quasi-random (Sobol)	準乱数 (Sobol)
+	Antithetic pairs make each trial's twin from the opposite end of every input's range, so their errors tend to cancel, which usually makes the results more precise for the same trials. Trials run in pairs; it cannot be used with correlated inputs.	対立変量ペアは、各試行の対となる試行を、各入力の範囲の反対側から作るため、誤差が打ち消し合いやすく、同じ試行回数でも結果の精度が高くなるのが一般的です。試行はペアで実行されます。相関のある入力とは併用できません。
+	Quasi-random (Sobol) draws spread the trials evenly over the inputs' ranges, with a fresh random shift in every batch of 1,000, which usually makes the results more precise for the same trials. It has points for up to 64 inputs.	準乱数 (Sobol) の抽出は、試行を入力の範囲全体に均等に散らし、1,000 回ごとのバッチで新たなランダムシフトを加えます。同じ試行回数でも結果の精度が高くなるのが一般的です。最大 64 個の入力分の点があります。
+	Each ± is the half-width of the 95% interval of the mean across independent pairs of trials (pairs: {n}). The two trials of a pair are made to oppose each other, so each pair counts as one.	各 ± は、独立した試行ペアにわたる平均の 95% 区間の半幅です (ペア数: {n})。ペアの 2 つの試行は互いに逆になるように作られるため、各ペアを 1 つとして数えます。
+	Each ± is the half-width of the 95% interval of the mean across independent batches of {size} trials (batches: {n}). Each batch is shifted at random on its own, so each batch counts as one.	各 ± は、{size} 回の試行からなる独立したバッチにわたる平均の 95% 区間の半幅です (バッチ数: {n})。各バッチは個別にランダムにシフトされるため、各バッチを 1 つとして数えます。
+	antithetic sampling	対立変量サンプリング
+	quasi-random (Sobol) sampling	準乱数 (Sobol) サンプリング
+	{asked} trials were asked for; antithetic sampling runs whole pairs of trials, so {n} ran.	{asked} 回の試行が要求されましたが、対立変量サンプリングは試行をペア単位で実行するため、{n} 回実行されました。
+	{asked} trials were asked for; Sobol sampling runs whole batches of {size}, so {n} ran.	{asked} 回の試行が要求されましたが、Sobol サンプリングは {size} 回ずつのバッチ単位で実行するため、{n} 回実行されました。
+	{name}: the ± is across {n} of the {of} pairs, the rest had no trial with a number.	{name}: ± は {of} ペアのうち {n} ペアにわたるものです。残りは数値のある試行がありませんでした。
+	No interval: every pair gave the same share, so their spread gives none.	区間なし: すべてのペアが同じ割合だったため、そのばらつきからは区間が得られません。
+	No interval: too few pairs of trials for one.	区間なし: 区間を求めるには試行のペアが少なすぎます。

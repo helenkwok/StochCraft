@@ -19,6 +19,19 @@
 //! one value from each, at a random place in it, through the inverse distribution function
 //! ([`quantile`]); the strata are paired across inputs at random.
 //!
+//! Antithetic sampling (Hammersley and Morton, 1956; Glasserman, *Monte Carlo Methods in
+//! Financial Engineering*, Springer, 2003, §4.2) makes trials in pairs: trial 2j + 1 uses 1 − u
+//! for each input where trial 2j used u, through the inverse distribution function. For an
+//! output that rises (or falls) with every input the pair's two values err in opposite
+//! directions and their mean varies less than a single trial's. Inverting a correlation by
+//! reordering would break the pairs, so antithetic sampling is refused with correlated inputs.
+//!
+//! Sobol sampling is randomised quasi-Monte Carlo ([`qmc`]): each batch takes the first n points
+//! of the Sobol sequence, one dimension per input in declaration order (at most
+//! [`qmc::MAX_DIMENSIONS`]), each dimension shifted at random, through the inverse distribution
+//! function. For a smooth output of few inputs the points cover the space more evenly than random
+//! ones and the error falls faster than 1/√n.
+//!
 //! **Correlation.** Rank correlations between inputs are induced by the method of Iman and
 //! Conover (1982) within each batch ([`correlate`]).
 //!
@@ -40,7 +53,11 @@
 //! mean's interval is Student-t on the batch means (b − 1 degrees of freedom) and the target's
 //! is Student-t on the batch proportions, clamped to [0, 1]; runs are whole batches (the trials
 //! asked for are rounded up to a multiple of [`BATCH`]); with fewer than two batches there is
-//! no interval. Point estimates are the same either way.
+//! no interval. Point estimates are the same either way. Sobol sampling is judged the same way:
+//! each batch's digital shift is independent, so the batch means are independent replicates
+//! (Owen, 1995; L'Ecuyer and Lemieux, 2002). Antithetic pairs depend on themselves and not on
+//! each other, so the interval is Student-t on the pair means (pairs − 1 degrees of freedom;
+//! Glasserman, 2003, §4.2) and the target's on the pair proportions; runs are whole pairs.
 //!
 //! **Sequential runs.** With a stop ([`McStop`]), batches are added until every output's mean
 //! has a 95% half-width within the share of itself asked for, by the rule of
@@ -69,6 +86,7 @@ use stochcraft_stats::spread::quantile as sorted_quantile;
 use stochcraft_stats::{Proportion, Summary, t_critical_95};
 
 pub mod correlate;
+pub mod qmc;
 pub mod quantile;
 pub mod sobol;
 pub mod table;
@@ -108,7 +126,8 @@ pub struct Problem {
     pub at: Option<String>,
     /// A stable code: `no_outputs`, `bad_name`, `duplicate_name`, `bad_distribution`,
     /// `bad_expression`, `unknown_name`, `not_yet_computed`, `text_output`, `bad_target`,
-    /// `bad_correlation`, `inconsistent_correlations`, `bad_stop` or `unused_input`.
+    /// `bad_correlation`, `inconsistent_correlations`, `antithetic_correlated`, `too_many_inputs`,
+    /// `bad_stop` or `unused_input`.
     pub code: &'static str,
     /// What is wrong and what to do, in English.
     pub message: String,
@@ -363,6 +382,24 @@ fn check_all(mc: &MonteCarlo) -> (Vec<Problem>, Checked) {
     } else {
         Vec::new()
     };
+    if mc.sampling == Sampling::Antithetic && k >= 2 {
+        out.push(Problem::error(
+            None,
+            "antithetic_correlated",
+            "Antithetic pairs cannot be used with correlated inputs: inducing a correlation reorders the trials of a batch and so breaks the pairs. Use Latin hypercube or Sobol sampling, or remove the correlations.",
+        ));
+    }
+    if mc.sampling == Sampling::Sobol && mc.inputs.len() > qmc::MAX_DIMENSIONS {
+        out.push(Problem::error(
+            None,
+            "too_many_inputs",
+            format!(
+                "Sobol sampling has points for at most {} inputs and this model has {}. Use another sampling, or fewer inputs.",
+                qmc::MAX_DIMENSIONS,
+                mc.inputs.len()
+            ),
+        ));
+    }
     if let Some(s) = mc.stop
         && !(s.relative.is_finite() && s.relative > 0.0 && s.max >= 1)
     {
@@ -372,16 +409,25 @@ fn check_all(mc: &MonteCarlo) -> (Vec<Problem>, Checked) {
             "A sequential stop needs a share of the mean above 0 and at least one trial.",
         ));
     } else if let Some(s) = mc.stop
-        && (mc.sampling == Sampling::LatinHypercube || k >= 2)
+        && (matches!(mc.sampling, Sampling::LatinHypercube | Sampling::Sobol) || k >= 2)
         && u64::from(s.max) < BATCH
     {
         out.push(Problem::error(
             None,
             "bad_stop",
             format!(
-                "Latin hypercube sampling and correlated inputs sample in whole batches, so the most trials of a sequential stop must be at least one batch (1,000 trials); {} is too few. Raise the most, or use random sampling with no correlations.",
+                "Latin hypercube and Sobol sampling and correlated inputs sample in whole batches, so the most trials of a sequential stop must be at least one batch (1,000 trials); {} is too few. Raise the most, or use random sampling with no correlations.",
                 s.max
             ),
+        ));
+    } else if let Some(s) = mc.stop
+        && mc.sampling == Sampling::Antithetic
+        && s.max < 2
+    {
+        out.push(Problem::error(
+            None,
+            "bad_stop",
+            "Antithetic sampling runs trials in pairs, so the most trials of a sequential stop must be at least 2.",
         ));
     }
     out.sort_by_key(|p| !p.error);
@@ -510,15 +556,25 @@ impl Compiled {
     /// Whether trials within a batch are dependent (Latin hypercube sampling, or correlations
     /// that reorder them), so that intervals come from batch means and runs are whole batches.
     pub fn batched(&self) -> bool {
-        self.sampling == Sampling::LatinHypercube || self.correlated.len() >= 2
+        matches!(self.sampling, Sampling::LatinHypercube | Sampling::Sobol)
+            || self.correlated.len() >= 2
     }
 
-    /// The trials a run of `trials` makes: whole batches where [`Compiled::batched`], at most
-    /// [`MAX_TRIALS`] (itself whole batches).
+    /// Whether trials come in antithetic pairs (the trials 2j and 2j + 1 of a batch), so that
+    /// intervals come from the pairs' means. Never with correlated inputs, which
+    /// [`check`] refuses.
+    pub fn paired(&self) -> bool {
+        self.sampling == Sampling::Antithetic
+    }
+
+    /// The trials a run of `trials` makes: whole batches where [`Compiled::batched`], whole
+    /// pairs where [`Compiled::paired`], at most [`MAX_TRIALS`] (itself whole batches).
     pub fn trials_for(&self, trials: u64) -> u64 {
         let t = trials.clamp(1, MAX_TRIALS);
         if self.batched() {
             t.div_ceil(BATCH).saturating_mul(BATCH).min(MAX_TRIALS)
+        } else if self.paired() {
+            t.div_ceil(2).saturating_mul(2).min(MAX_TRIALS)
         } else {
             t
         }
@@ -534,9 +590,15 @@ impl Compiled {
         let mut inputs: Vec<Vec<f64>> = self
             .inputs
             .iter()
-            .map(|input| {
-                let mut rng =
-                    Rng::keyed(self.seed, &format!("mc/{}/input/{}", job.index, input.name));
+            .enumerate()
+            .map(|(dim, input)| {
+                // Sobol points have streams of their own: only the digital shift is random.
+                let key = if self.sampling == Sampling::Sobol {
+                    format!("mc/qmc/{}/{}", job.index, input.name)
+                } else {
+                    format!("mc/{}/input/{}", job.index, input.name)
+                };
+                let mut rng = Rng::keyed(self.seed, &key);
                 match self.sampling {
                     Sampling::Random => (0..n).map(|_| draw(&input.dist, &mut rng)).collect(),
                     Sampling::LatinHypercube => {
@@ -547,6 +609,24 @@ impl Compiled {
                             .map(|s| (*s as f64 + rng.uniform()) / job.trials as f64)
                             .collect();
                         quantile::quantiles(&input.dist, &ps)
+                    }
+                    Sampling::Antithetic => {
+                        // Trial 2j draws u and trial 2j + 1 draws 1 - u, through the inverse
+                        // distribution function.
+                        let ps: Vec<f64> = (0..n.div_ceil(2))
+                            .flat_map(|_| {
+                                let u = rng.uniform();
+                                [u, 1.0 - u]
+                            })
+                            .take(n)
+                            .collect();
+                        quantile::quantiles(&input.dist, &ps)
+                    }
+                    Sampling::Sobol => {
+                        let shift = u32::try_from(rng.next_u64() >> 32).unwrap_or(0);
+                        qmc::shifted(dim, n, shift)
+                            .map(|ps| quantile::quantiles(&input.dist, &ps))
+                            .unwrap_or_default()
                     }
                 }
             })
@@ -714,6 +794,9 @@ impl Compiled {
                 if self.batched() {
                     // Every batch full, so the batches are alike.
                     max = (max / BATCH).max(1) * BATCH;
+                } else if self.paired() {
+                    // Every pair whole.
+                    max = (max / 2).max(1) * 2;
                 }
                 let n = options
                     .trials
@@ -745,9 +828,9 @@ impl Compiled {
         let verdicts: Vec<precision::Verdict> = (0..self.outputs.len())
             .map(|o| {
                 // Judged on the interval the results report: across trials, or across batches
-                // (whose count, not the trials', says whether there is one).
-                let s = if self.batched() {
-                    Summary::of(&batch_means(blocks, o))
+                // (whose count, not the trials', says whether there is one), or across pairs.
+                let s = if self.batched() || self.paired() {
+                    Summary::of(&unit_means(blocks, o, self.paired()))
                 } else {
                     Summary::of(&finite(blocks, o))
                 };
@@ -996,8 +1079,8 @@ impl Summing {
                 }
                 Some((sorter, total)) => {
                     let mut r = describe_output(out, &sorter.into_sorted(), total, &self.ps);
-                    if c.batched() {
-                        by_batches(&mut r, out, blocks, o);
+                    if c.batched() || c.paired() {
+                        by_units(&mut r, out, blocks, o, c.paired());
                     }
                     self.outputs.push(r);
                 }
@@ -1178,6 +1261,8 @@ impl Summing {
                 batches: blocks.len() as u64,
                 size: BATCH,
             }
+        } else if c.paired() {
+            IntervalBasis::Pairs { pairs: trials / 2 }
         } else {
             IntervalBasis::Trials
         };
@@ -1243,9 +1328,36 @@ fn per_block(blocks: &[Block], o: usize) -> Vec<Vec<f64>> {
         .collect()
 }
 
-/// Output `o`'s mean in each block (over its valid trials; a block with none is left out).
-fn batch_means(blocks: &[Block], o: usize) -> Vec<f64> {
-    per_block(blocks, o)
+/// Output `o`'s finite values in each antithetic pair (trials 2j and 2j + 1 of a block): a pair
+/// with one trial that has no number is its other trial alone, and one with neither is empty.
+fn per_pair(blocks: &[Block], o: usize) -> Vec<Vec<f64>> {
+    blocks
+        .iter()
+        .filter_map(|b| b.outputs.get(o))
+        .flat_map(|c| {
+            c.chunks(2).map(|pair| {
+                pair.iter()
+                    .copied()
+                    .filter(|v| v.is_finite())
+                    .collect::<Vec<f64>>()
+            })
+        })
+        .collect()
+}
+
+/// The independent units an interval is across: each block's finite values, or each pair's.
+fn per_unit(blocks: &[Block], o: usize, pairs: bool) -> Vec<Vec<f64>> {
+    if pairs {
+        per_pair(blocks, o)
+    } else {
+        per_block(blocks, o)
+    }
+}
+
+/// Output `o`'s mean in each block, or each pair (over its valid trials; a unit with none is
+/// left out).
+fn unit_means(blocks: &[Block], o: usize, pairs: bool) -> Vec<f64> {
+    per_unit(blocks, o, pairs)
         .iter()
         .filter(|v| !v.is_empty())
         .map(|v| v.iter().sum::<f64>() / v.len() as f64)
@@ -1260,12 +1372,13 @@ fn t_half_width(xs: &[f64]) -> Option<f64> {
     Some(t * s.std_dev / (s.n as f64).sqrt()).filter(|h| h.is_finite())
 }
 
-/// Replaces an output's intervals by those across batches: the mean's from the batch means, the
-/// target's from the batch proportions (clamped to [0, 1]); none with fewer than two batches,
-/// and none for the target when every batch gave the same proportion (their spread says
-/// nothing about how far the chance may be from it, and a width of 0 would claim it is exact).
-fn by_batches(r: &mut OutputResult, out: &McOutput, blocks: &[Block], o: usize) {
-    let each = per_block(blocks, o);
+/// Replaces an output's intervals by those across batches, or across antithetic pairs where
+/// `pairs`: the mean's from the batch (pair) means, the target's from the batch (pair)
+/// proportions (clamped to [0, 1]); none with fewer than two of them, and none for the target
+/// when every one gave the same proportion (their spread says nothing about how far the chance
+/// may be from it, and a width of 0 would claim it is exact).
+fn by_units(r: &mut OutputResult, out: &McOutput, blocks: &[Block], o: usize, pairs: bool) {
+    let each = per_unit(blocks, o, pairs);
     let means: Vec<f64> = each
         .iter()
         .filter(|v| !v.is_empty())
@@ -1327,6 +1440,10 @@ pub enum IntervalBasis {
     /// make the trials within a batch dependent): Student-t on the batch means and on the batch
     /// proportions, with `batches` − 1 degrees of freedom.
     Batches { batches: u64, size: u64 },
+    /// Independent pairs of trials (antithetic sampling): each pair's two trials use u and
+    /// 1 - u, so they depend on each other and the pairs do not; Student-t on the pair means
+    /// and on the pair proportions, with `pairs` - 1 degrees of freedom.
+    Pairs { pairs: u64 },
 }
 
 /// What an input's draws were, to check them against its distribution.

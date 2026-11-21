@@ -1324,3 +1324,16 @@ unit	yr	г.
 	95% interval {low} to {high}	95%-й интервал от {low} до {high}
 	Alone is the share of the spread an input explains by itself. With interactions adds what it does together with the other inputs.	«Отдельно» — доля разброса, которую входная величина объясняет сама. «С взаимодействиями» добавляет то, что она делает вместе с другими входными величинами.
 	Working out the shares of the spread: {percent}	Расчёт долей разброса: {percent}
+	Antithetic pairs	Антитетические пары
+	Quasi-random (Sobol)	Квазислучайное (Sobol)
+	Antithetic pairs make each trial's twin from the opposite end of every input's range, so their errors tend to cancel, which usually makes the results more precise for the same trials. Trials run in pairs; it cannot be used with correlated inputs.	Антитетические пары создают двойника каждого испытания с противоположного конца диапазона каждой входной величины, поэтому их ошибки стремятся взаимно компенсироваться, что обычно повышает точность результатов при тех же испытаниях. Испытания выполняются парами; метод нельзя использовать с коррелированными входными величинами.
+	Quasi-random (Sobol) draws spread the trials evenly over the inputs' ranges, with a fresh random shift in every batch of 1,000, which usually makes the results more precise for the same trials. It has points for up to 64 inputs.	Квазислучайные (Sobol) выборки равномерно распределяют испытания по диапазонам входных величин, с новым случайным сдвигом в каждой партии из 1 000, что обычно повышает точность результатов при тех же испытаниях. Предусмотрены точки не более чем для 64 входных величин.
+	Each ± is the half-width of the 95% interval of the mean across independent pairs of trials (pairs: {n}). The two trials of a pair are made to oppose each other, so each pair counts as one.	Каждое ± — это половина ширины 95% интервала среднего по независимым парам испытаний (пар: {n}). Два испытания пары строятся так, чтобы противодействовать друг другу, поэтому каждая пара считается за одно.
+	Each ± is the half-width of the 95% interval of the mean across independent batches of {size} trials (batches: {n}). Each batch is shifted at random on its own, so each batch counts as one.	Каждое ± — это половина ширины 95% интервала среднего по независимым партиям из {size} испытаний (партий: {n}). Каждая партия сдвигается случайно отдельно, поэтому каждая партия считается за одно.
+	antithetic sampling	антитетическая выборка
+	quasi-random (Sobol) sampling	квазислучайная (Sobol) выборка
+	{asked} trials were asked for; antithetic sampling runs whole pairs of trials, so {n} ran.	Запрошено испытаний: {asked}; при антитетической выборке выполняются только целые пары испытаний, поэтому выполнено: {n}.
+	{asked} trials were asked for; Sobol sampling runs whole batches of {size}, so {n} ran.	Запрошено испытаний: {asked}; при выборке Соболя выполняются только целые партии по {size}, поэтому выполнено: {n}.
+	{name}: the ± is across {n} of the {of} pairs, the rest had no trial with a number.	{name}: ± рассчитано по парам: {n} из {of}; в остальных не было испытания с числом.
+	No interval: every pair gave the same share, so their spread gives none.	Нет интервала: все пары дали одну и ту же долю, поэтому их разброс интервала не даёт.
+	No interval: too few pairs of trials for one.	Нет интервала: для него слишком мало пар испытаний.

@@ -1324,3 +1324,16 @@ unit	yr	år
 	95% interval {low} to {high}	95 %-intervall från {low} till {high}
 	Alone is the share of the spread an input explains by itself. With interactions adds what it does together with the other inputs.	Ensam är den andel av spridningen som en indata förklarar själv. Med samspel läggs det till vad den gör tillsammans med övriga indata.
 	Working out the shares of the spread: {percent}	Beräknar andelarna av spridningen: {percent}
+	Antithetic pairs	Antitetiska par
+	Quasi-random (Sobol)	Kvasislumpmässig (Sobol)
+	Antithetic pairs make each trial's twin from the opposite end of every input's range, so their errors tend to cancel, which usually makes the results more precise for the same trials. Trials run in pairs; it cannot be used with correlated inputs.	Antitetiska par gör varje försöks tvilling från motsatta änden av varje indatas intervall, så att deras fel tenderar att ta ut varandra, vilket oftast ger mer precisa resultat för samma antal försök. Försöken körs i par; det kan inte användas med korrelerade indata.
+	Quasi-random (Sobol) draws spread the trials evenly over the inputs' ranges, with a fresh random shift in every batch of 1,000, which usually makes the results more precise for the same trials. It has points for up to 64 inputs.	Kvasislumpmässig (Sobol) dragning sprider försöken jämnt över indatas intervall, med ett nytt slumpmässigt skift i varje omgång om 1,000, vilket oftast ger mer precisa resultat för samma antal försök. Den har punkter för upp till 64 indata.
+	Each ± is the half-width of the 95% interval of the mean across independent pairs of trials (pairs: {n}). The two trials of a pair are made to oppose each other, so each pair counts as one.	Varje ± är halva bredden av 95 %-intervallet för medelvärdet över oberoende par av försök (par: {n}). De två försöken i ett par görs så att de motverkar varandra, så varje par räknas som ett.
+	Each ± is the half-width of the 95% interval of the mean across independent batches of {size} trials (batches: {n}). Each batch is shifted at random on its own, so each batch counts as one.	Varje ± är halva bredden av 95 %-intervallet för medelvärdet över oberoende omgångar om {size} försök (omgångar: {n}). Varje omgång skiftas slumpmässigt för sig, så varje omgång räknas som en.
+	antithetic sampling	antitetisk sampling
+	quasi-random (Sobol) sampling	kvasislumpmässig (Sobol) sampling
+	{asked} trials were asked for; antithetic sampling runs whole pairs of trials, so {n} ran.	{asked} försök begärdes; antitetisk sampling kör hela par av försök, så {n} kördes.
+	{asked} trials were asked for; Sobol sampling runs whole batches of {size}, so {n} ran.	{asked} försök begärdes; Sobol-sampling kör hela omgångar om {size}, så {n} kördes.
+	{name}: the ± is across {n} of the {of} pairs, the rest had no trial with a number.	{name}: ± gäller {n} av {of} par, resten hade inget försök med ett tal.
+	No interval: every pair gave the same share, so their spread gives none.	Inget intervall: alla par gav samma andel, så deras spridning ger inget intervall.
+	No interval: too few pairs of trials for one.	Inget intervall: för få par av försök för att ge ett.
