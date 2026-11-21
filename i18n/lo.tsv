@@ -1337,6 +1337,21 @@ unit	yr	ປີ
 	{name}: the ± is across {n} of the {of} pairs, the rest had no trial with a number.	{name}: ± ມາຈາກ {n} ໃນ {of} ຄູ່; ຄູ່ທີ່ເຫຼືອບໍ່ມີຄັ້ງທົດລອງທີ່ມີຕົວເລກ.
 	No interval: every pair gave the same share, so their spread gives none.	ບໍ່ມີຊ່ວງ: ທຸກຄູ່ໃຫ້ສັດສ່ວນດຽວກັນ ຄວາມກະຈາຍຂອງມັນຈຶ່ງບໍ່ໃຫ້ຊ່ວງ.
 	No interval: too few pairs of trials for one.	ບໍ່ມີຊ່ວງ: ຄູ່ຂອງຄັ້ງທົດລອງໜ້ອຍເກີນໄປ.
+	Controls	ຕົວຄວບຄຸມ
+	Expected mean	ຄ່າສະເລ່ຍທີ່ຄາດໄວ້
+	Remove the control {name}	ລຶບຕົວຄວບຄຸມ {name}
+	Add a control	ເພີ່ມຕົວຄວບຄຸມ
+	{name} (an output; you give its mean)	{name} (ຜົນອອກ; ທ່ານເປັນຜູ້ໃສ່ຄ່າສະເລ່ຍຂອງມັນ)
+	No input or earlier output can be a control.	ບໍ່ມີຂໍ້ມູນເຂົ້າ ຫຼື ຜົນອອກກ່ອນໜ້າທີ່ເປັນຕົວຄວບຄຸມໄດ້.
+	A control is an input whose mean is known, or an earlier output whose mean you know. The results use how it moves with this output to narrow the interval of the output's mean and target chance.	ຕົວຄວບຄຸມແມ່ນຂໍ້ມູນເຂົ້າທີ່ຮູ້ຄ່າສະເລ່ຍ ຫຼື ຜົນອອກກ່ອນໜ້າທີ່ທ່ານຮູ້ຄ່າສະເລ່ຍ. ຜົນໄດ້ຮັບໃຊ້ວິທີທີ່ມັນປ່ຽນໄປພ້ອມກັບຜົນອອກນີ້ ເພື່ອເຮັດໃຫ້ຊ່ວງຂອງຄ່າສະເລ່ຍ ແລະ ໂອກາດບັນລຸເປົ້າໝາຍແຄບລົງ.
+	Controlled mean	ຄ່າສະເລ່ຍທີ່ຄວບຄຸມແລ້ວ
+	Controls for {output}: {controls}.	ຕົວຄວບຄຸມສຳລັບ {output}: {controls}.
+	No controlled result: {reason}	ບໍ່ມີຜົນທີ່ຄວບຄຸມແລ້ວ: {reason}
+	They narrowed the interval by {percent}; this is the result shown above.	ພວກມັນເຮັດໃຫ້ຊ່ວງແຄບລົງ {percent}; ນີ້ແມ່ນຜົນທີ່ສະແດງຂ້າງເທິງ.
+	They made the interval {percent} wider, so the plain result stands.	ພວກມັນເຮັດໃຫ້ຊ່ວງກວ້າງຂຶ້ນ {percent} ດັ່ງນັ້ນຈຶ່ງໃຊ້ຜົນທຳມະດາ.
+	They did not help: their correlation with {output} is weak ({correlation}), so the plain result stands.	ພວກມັນບໍ່ຊ່ວຍ: ຄວາມສຳພັນກັບ {output} ອ່ອນ ({correlation}) ດັ່ງນັ້ນຈຶ່ງໃຊ້ຜົນທຳມະດາ.
+	They did not help, so the plain result stands.	ພວກມັນບໍ່ຊ່ວຍ ດັ່ງນັ້ນຈຶ່ງໃຊ້ຜົນທຳມະດາ.
+	The mean given for {name}, {stated}, is far from the trials' mean, {sample}: the controlled result is biased until it is corrected.	ຄ່າສະເລ່ຍທີ່ໃຫ້ໄວ້ສຳລັບ {name}, {stated}, ຢູ່ຫ່າງຈາກຄ່າສະເລ່ຍຂອງການທົດລອງ, {sample}: ຜົນທີ່ຄວບຄຸມແລ້ວມີຄວາມລຳອຽງຈົນກວ່າຈະແກ້ໄຂ.
 	Stock	ສະຕັອກ
 	Flow	ການໄຫຼ
 	Auxiliary	ຕົວແປຊ່ວຍ
@@ -1381,3 +1396,6 @@ unit	yr	ປີ
 	Replace the XMILE file?	ປ່ຽນໄຟລ໌ XMILE ບໍ?
 	Save As writes a new file and keeps {file} as it is. Replacing {file} leaves out what StochCraft does not keep.	ບັນທຶກເປັນ ຈະຂຽນໄຟລ໌ໃໝ່ ແລະ ປ່ອຍ {file} ໄວ້ຕາມເດີມ. ການປ່ຽນ {file} ຈະເຮັດໃຫ້ສິ່ງທີ່ StochCraft ບໍ່ເກັບໄວ້ຫາຍໄປ.
 	Replace	ປ່ຽນ
+	The estimated chance that {output} is more than {value} is {percent}.	ຄວາມເປັນໄປໄດ້ໂດຍປະມານທີ່ {output} ຈະຫຼາຍກວ່າ {value} ແມ່ນ {percent}.
+	The estimated chance that {output} is less than {value} is {percent}.	ຄວາມເປັນໄປໄດ້ໂດຍປະມານທີ່ {output} ຈະນ້ອຍກວ່າ {value} ແມ່ນ {percent}.
+	Their interval has no width, which no estimate has, so the plain result stands.	ຊ່ວງຂອງມັນບໍ່ມີຄວາມກວ້າງ ຊຶ່ງບໍ່ມີການຄາດຄະເນໃດມີ ສະນັ້ນຜົນລັບທຳມະດາຈຶ່ງຍັງຢູ່.
