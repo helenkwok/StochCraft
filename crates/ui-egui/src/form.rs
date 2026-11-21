@@ -545,6 +545,14 @@ fn number(
     node: &Value,
     unit: Option<&str>,
 ) -> Option<Value> {
+    let unit_width = unit.filter(|u| !u.is_empty()).map_or(0.0, |u| {
+        let font = egui::TextStyle::Body.resolve(ui.style());
+        ui.fonts_mut(|f| {
+            f.layout_no_wrap(u.to_owned(), font, egui::Color32::WHITE)
+                .size()
+                .x
+        })
+    });
     let unit = unit
         .filter(|u| !u.is_empty())
         .map(|u| Unit::new(&format!("{{n}} {u}")));
@@ -575,10 +583,12 @@ fn number(
         // Without a range of its own, so what was typed reaches the limits below rather than
         // being clamped to them; an integer field rounds to whole numbers.
         let mut v = held.unwrap_or(model);
+        // The unit is drawn inside the field, so a long one ("USD/day") gets its own room and
+        // leaves the number its usual width: 1,000 must not show as "1,00".
         let mut field = NumberField::new(&mut v, cx.numbers)
             .id_salt(key)
             .decimals(decimals.clone())
-            .desired_width(110.0);
+            .desired_width(110.0 + (unit_width - 30.0).max(0.0));
         if let Some(u) = unit {
             field = field.unit(u);
         }

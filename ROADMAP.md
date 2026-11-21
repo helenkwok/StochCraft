@@ -12,7 +12,7 @@ are done, and so is M2.10 (abandonment and balking) apart from the gaps listed i
 state times and most of OEE done; M2.9 (output analysis) has its recorder of results over time,
 MSER-5's warm-up suggestion, its warnings, streams by element id and starting contents done. M4
 is being planned, and M4.1 (Monte Carlo) has its engine, files and command line (part 1), its
-window (part 2) and which inputs matter (part 3a: tornado and rank correlations) done.
+window (part 2) and which inputs matter (part 3: tornado, rank correlations and Sobol shares) done.
 M5 has its conveyors (M5.1), the operators in the model and files (M5.2, PR 1), a first 3D view
 (M5.3), the dashboard (M5.4) and the sorter example in; M5.5, which reworks M5's geometry so the
 physical layout is a model layer of its own, from which the plan and the 3D view are drawn, has
