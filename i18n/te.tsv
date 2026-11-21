@@ -1337,6 +1337,21 @@ unit	yr	సం.
 	{name}: the ± is across {n} of the {of} pairs, the rest had no trial with a number.	{name}: ± అనేది {of} జతలలో {n} జతల అంతటా ఉంది, మిగిలిన వాటిలో సంఖ్య ఉన్న ప్రయత్నం లేదు.
 	No interval: every pair gave the same share, so their spread gives none.	అంతరం లేదు: అన్ని జతలు ఒకే వాటాను ఇచ్చాయి, కాబట్టి వాటి విస్తరణ నుండి అంతరం రాదు.
 	No interval: too few pairs of trials for one.	అంతరం లేదు: దానికి సరిపడా ప్రయత్నాల జతలు లేవు.
+	Controls	నియంత్రణలు
+	Expected mean	ఆశించిన సగటు
+	Remove the control {name}	నియంత్రణ {name} ను తొలగించు
+	Add a control	నియంత్రణను జోడించు
+	{name} (an output; you give its mean)	{name} (ఒక అవుట్‌పుట్; దాని సగటును మీరు ఇస్తారు)
+	No input or earlier output can be a control.	ఏ ఇన్‌పుట్ లేదా ముందున్న అవుట్‌పుట్ నియంత్రణ కాదు.
+	A control is an input whose mean is known, or an earlier output whose mean you know. The results use how it moves with this output to narrow the interval of the output's mean and target chance.	నియంత్రణ అంటే సగటు తెలిసిన ఇన్‌పుట్, లేదా మీకు సగటు తెలిసిన ముందున్న అవుట్‌పుట్. ఈ అవుట్‌పుట్‌తో పాటు అది ఎలా మారుతుందో ఉపయోగించి, ఫలితాలు అవుట్‌పుట్ సగటు మరియు లక్ష్యం సాధించే అవకాశం యొక్క అంతరాన్ని ఇరుకు చేస్తాయి.
+	Controlled mean	నియంత్రిత సగటు
+	Controls for {output}: {controls}.	{output} కోసం నియంత్రణలు: {controls}.
+	No controlled result: {reason}	నియంత్రిత ఫలితం లేదు: {reason}
+	They narrowed the interval by {percent}; this is the result shown above.	అవి అంతరాన్ని {percent} ఇరుకు చేశాయి; ఇదే పైన చూపిన ఫలితం.
+	They made the interval {percent} wider, so the plain result stands.	అవి అంతరాన్ని {percent} వెడల్పు చేశాయి, కాబట్టి సాధారణ ఫలితమే నిలుస్తుంది.
+	They did not help: their correlation with {output} is weak ({correlation}), so the plain result stands.	అవి సహాయపడలేదు: {output} తో వాటి సహసంబంధం బలహీనం ({correlation}), కాబట్టి సాధారణ ఫలితమే నిలుస్తుంది.
+	They did not help, so the plain result stands.	అవి సహాయపడలేదు, కాబట్టి సాధారణ ఫలితమే నిలుస్తుంది.
+	The mean given for {name}, {stated}, is far from the trials' mean, {sample}: the controlled result is biased until it is corrected.	{name} కు ఇచ్చిన సగటు {stated} ప్రయోగాల సగటు {sample} కు చాలా దూరంగా ఉంది: సరిచేసే వరకు నియంత్రిత ఫలితం పక్షపాతంగా ఉంటుంది.
 	Stock	నిల్వ
 	Flow	ప్రవాహం
 	Auxiliary	సహాయక చరరాశి
@@ -1381,3 +1396,6 @@ unit	yr	సం.
 	Replace the XMILE file?	XMILE ఫైల్‌ను భర్తీ చేయాలా?
 	Save As writes a new file and keeps {file} as it is. Replacing {file} leaves out what StochCraft does not keep.	ఇలా సేవ్ చేయి కొత్త ఫైల్‌ను రాస్తుంది, {file} ను అలాగే ఉంచుతుంది. {file} ను భర్తీ చేస్తే StochCraft ఉంచనిది వదిలివేయబడుతుంది.
 	Replace	భర్తీ చేయి
+	The estimated chance that {output} is more than {value} is {percent}.	{output} {value} కంటే ఎక్కువ ఉండే అంచనా సంభావ్యత {percent}.
+	The estimated chance that {output} is less than {value} is {percent}.	{output} {value} కంటే తక్కువ ఉండే అంచనా సంభావ్యత {percent}.
+	Their interval has no width, which no estimate has, so the plain result stands.	వాటి అంతరానికి వెడల్పు లేదు, ఏ అంచనాకూ ఉండదు, కాబట్టి సాధారణ ఫలితమే ఉంటుంది.

@@ -1337,6 +1337,21 @@ unit	yr	j
 	{name}: the ± is across {n} of the {of} pairs, the rest had no trial with a number.	{name}: de ± geldt voor {n} van de {of} paren; de rest had geen proef met een getal.
 	No interval: every pair gave the same share, so their spread gives none.	Geen interval: alle paren gaven hetzelfde aandeel, dus hun spreiding geeft er geen.
 	No interval: too few pairs of trials for one.	Geen interval: te weinig paren iteraties daarvoor.
+	Controls	Controlevariabelen
+	Expected mean	Verwacht gemiddelde
+	Remove the control {name}	Controlevariabele {name} verwijderen
+	Add a control	Een controlevariabele toevoegen
+	{name} (an output; you give its mean)	{name} (een uitvoer; u geeft het gemiddelde)
+	No input or earlier output can be a control.	Geen invoer of eerdere uitvoer kan een controlevariabele zijn.
+	A control is an input whose mean is known, or an earlier output whose mean you know. The results use how it moves with this output to narrow the interval of the output's mean and target chance.	Een controlevariabele is een invoer met een bekend gemiddelde, of een eerdere uitvoer waarvan u het gemiddelde kent. De resultaten gebruiken hoe die met deze uitvoer meebeweegt om het interval van het gemiddelde en van de kans op het doel te verkleinen.
+	Controlled mean	Gecontroleerd gemiddelde
+	Controls for {output}: {controls}.	Controlevariabelen voor {output}: {controls}.
+	No controlled result: {reason}	Geen gecontroleerd resultaat: {reason}
+	They narrowed the interval by {percent}; this is the result shown above.	Ze verkleinden het interval met {percent}; dit is het resultaat hierboven.
+	They made the interval {percent} wider, so the plain result stands.	Ze vergrootten het interval met {percent}, dus het gewone resultaat blijft gelden.
+	They did not help: their correlation with {output} is weak ({correlation}), so the plain result stands.	Ze hielpen niet: hun correlatie met {output} is zwak ({correlation}), dus het gewone resultaat blijft gelden.
+	They did not help, so the plain result stands.	Ze hielpen niet, dus het gewone resultaat blijft gelden.
+	The mean given for {name}, {stated}, is far from the trials' mean, {sample}: the controlled result is biased until it is corrected.	Het opgegeven gemiddelde van {name}, {stated}, wijkt sterk af van het gemiddelde van de proeven, {sample}: het gecontroleerde resultaat is vertekend tot het is gecorrigeerd.
 	Stock	Voorraad
 	Flow	Stroom
 	Auxiliary	Hulpvariabele
@@ -1381,3 +1396,6 @@ unit	yr	j
 	Replace the XMILE file?	Het XMILE-bestand vervangen?
 	Save As writes a new file and keeps {file} as it is. Replacing {file} leaves out what StochCraft does not keep.	Opslaan als schrijft een nieuw bestand en laat {file} zoals het is. Vervangen van {file} laat weg wat StochCraft niet bewaart.
 	Replace	Vervangen
+	The estimated chance that {output} is more than {value} is {percent}.	De geschatte kans dat {output} groter is dan {value} is {percent}.
+	The estimated chance that {output} is less than {value} is {percent}.	De geschatte kans dat {output} kleiner is dan {value} is {percent}.
+	Their interval has no width, which no estimate has, so the plain result stands.	Hun interval heeft geen breedte, wat geen schatting heeft, dus het gewone resultaat blijft staan.

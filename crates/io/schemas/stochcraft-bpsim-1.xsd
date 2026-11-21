@@ -296,9 +296,11 @@
   the scenario's own properties (ScenarioParameters/PropertyParameters/Property, each a BPSim
   distribution or a number); each trial draws every input once and evaluates every output in
   order, and the scenario's replication is the number of trials. sampling is random (the
-  default) or latinHypercube. input gives an input's unit; output an expression (BPSim's XPath
+  default), latinHypercube, antithetic or sobol. input gives an input's unit; output an expression (BPSim's XPath
   subset, reading inputs and earlier outputs as $name or getProperty('name')), an optional unit
-  and an optional target, atMost or atLeast, whose probability is reported; correlation a rank
+  and an optional target, atMost or atLeast, whose probability is reported; control (inside an output) a control
+  variate: input names an input whose own mean is known, or output names an earlier output with
+  its known mean in expected; correlation a rank
   correlation, strictly between -1 and 1, between two inputs (induced by Iman and Conover's
   method); stop a sequential run, more trials until every output's mean has a 95% half-width
   within relative of itself, or max trials.
@@ -306,7 +308,9 @@
     <bpsim:VendorExtension name="stochcraft:monteCarlo" xmlns:stochcraft="…">
       <stochcraft:monteCarlo sampling="latinHypercube">
         <stochcraft:input name="labour" unit="h"/>
-        <stochcraft:output name="cost" expression="$labour * $rate" unit="USD" atMost="7000"/>
+        <stochcraft:output name="cost" expression="$labour * $rate" unit="USD" atMost="7000">
+          <stochcraft:control input="labour"/>
+        </stochcraft:output>
         <stochcraft:correlation a="labour" b="rate" rank="0.5"/>
         <stochcraft:stop relative="0.01" max="1000000"/>
       </stochcraft:monteCarlo>
@@ -567,6 +571,15 @@
         </xs:element>
         <xs:element name="output" minOccurs="0" maxOccurs="unbounded">
           <xs:complexType>
+            <xs:sequence>
+              <xs:element name="control" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:attribute name="input" type="xs:string"/>
+                  <xs:attribute name="output" type="xs:string"/>
+                  <xs:attribute name="expected" type="xs:double"/>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
             <xs:attribute name="name" type="xs:string" use="required"/>
             <xs:attribute name="expression" type="xs:string" use="required"/>
             <xs:attribute name="unit" type="xs:string"/>
@@ -593,6 +606,8 @@
           <xs:restriction base="xs:string">
             <xs:enumeration value="random"/>
             <xs:enumeration value="latinHypercube"/>
+            <xs:enumeration value="antithetic"/>
+            <xs:enumeration value="sobol"/>
           </xs:restriction>
         </xs:simpleType>
       </xs:attribute>

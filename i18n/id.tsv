@@ -1337,6 +1337,21 @@ unit	yr	thn
 	{name}: the ± is across {n} of the {of} pairs, the rest had no trial with a number.	{name}: ± dihitung dari {n} dari {of} pasangan; sisanya tidak punya percobaan yang bernilai angka.
 	No interval: every pair gave the same share, so their spread gives none.	Tidak ada interval: semua pasangan menghasilkan proporsi yang sama, sehingga sebarannya tidak memberi interval.
 	No interval: too few pairs of trials for one.	Tidak ada interval: terlalu sedikit pasangan percobaan untuk menghitungnya.
+	Controls	Kontrol
+	Expected mean	Rata-rata yang diharapkan
+	Remove the control {name}	Hapus kontrol {name}
+	Add a control	Tambah kontrol
+	{name} (an output; you give its mean)	{name} (sebuah keluaran; Anda memberikan rata-ratanya)
+	No input or earlier output can be a control.	Tidak ada masukan atau keluaran sebelumnya yang dapat menjadi kontrol.
+	A control is an input whose mean is known, or an earlier output whose mean you know. The results use how it moves with this output to narrow the interval of the output's mean and target chance.	Kontrol adalah masukan yang rata-ratanya diketahui, atau keluaran sebelumnya yang rata-ratanya Anda ketahui. Hasil memakai cara kontrol bergerak bersama keluaran ini untuk mempersempit interval rata-rata dan peluang mencapai targetnya.
+	Controlled mean	Rata-rata terkontrol
+	Controls for {output}: {controls}.	Kontrol untuk {output}: {controls}.
+	No controlled result: {reason}	Tidak ada hasil terkontrol: {reason}
+	They narrowed the interval by {percent}; this is the result shown above.	Kontrol mempersempit interval sebesar {percent}; ini hasil yang ditampilkan di atas.
+	They made the interval {percent} wider, so the plain result stands.	Kontrol memperlebar interval sebesar {percent}, jadi hasil biasa yang dipakai.
+	They did not help: their correlation with {output} is weak ({correlation}), so the plain result stands.	Kontrol tidak membantu: korelasinya dengan {output} lemah ({correlation}), jadi hasil biasa yang dipakai.
+	They did not help, so the plain result stands.	Kontrol tidak membantu, jadi hasil biasa yang dipakai.
+	The mean given for {name}, {stated}, is far from the trials' mean, {sample}: the controlled result is biased until it is corrected.	Rata-rata yang diberikan untuk {name}, {stated}, jauh dari rata-rata percobaan, {sample}: hasil terkontrol bias sampai dikoreksi.
 	Stock	Stok
 	Flow	Aliran
 	Auxiliary	Variabel bantu
@@ -1381,3 +1396,6 @@ unit	yr	thn
 	Replace the XMILE file?	Ganti berkas XMILE?
 	Save As writes a new file and keeps {file} as it is. Replacing {file} leaves out what StochCraft does not keep.	Simpan Sebagai menulis berkas baru dan membiarkan {file} apa adanya. Mengganti {file} menghilangkan apa yang tidak disimpan StochCraft.
 	Replace	Ganti
+	The estimated chance that {output} is more than {value} is {percent}.	Perkiraan peluang {output} lebih dari {value} adalah {percent}.
+	The estimated chance that {output} is less than {value} is {percent}.	Perkiraan peluang {output} kurang dari {value} adalah {percent}.
+	Their interval has no width, which no estimate has, so the plain result stands.	Interval mereka tidak punya lebar, hal yang tidak dimiliki perkiraan mana pun, sehingga hasil biasa tetap dipakai.

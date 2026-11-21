@@ -1337,6 +1337,21 @@ unit	yr	năm
 	{name}: the ± is across {n} of the {of} pairs, the rest had no trial with a number.	{name}: ± tính trên {n} trong số {of} cặp, các cặp còn lại không có lần thử nào có số.
 	No interval: every pair gave the same share, so their spread gives none.	Không có khoảng: mọi cặp đều cho cùng một tỷ lệ, nên độ phân tán của chúng không cho ra khoảng.
 	No interval: too few pairs of trials for one.	Không có khoảng: quá ít cặp lần thử để tính.
+	Controls	Biến kiểm soát
+	Expected mean	Giá trị trung bình kỳ vọng
+	Remove the control {name}	Xóa biến kiểm soát {name}
+	Add a control	Thêm biến kiểm soát
+	{name} (an output; you give its mean)	{name} (một đầu ra; bạn cung cấp giá trị trung bình của nó)
+	No input or earlier output can be a control.	Không có đầu vào hay đầu ra trước đó nào có thể làm biến kiểm soát.
+	A control is an input whose mean is known, or an earlier output whose mean you know. The results use how it moves with this output to narrow the interval of the output's mean and target chance.	Biến kiểm soát là một đầu vào đã biết giá trị trung bình, hoặc một đầu ra trước đó mà bạn biết giá trị trung bình. Kết quả dùng cách nó biến thiên cùng đầu ra này để thu hẹp khoảng của giá trị trung bình và của khả năng đạt mục tiêu.
+	Controlled mean	Trung bình có kiểm soát
+	Controls for {output}: {controls}.	Biến kiểm soát cho {output}: {controls}.
+	No controlled result: {reason}	Không có kết quả có kiểm soát: {reason}
+	They narrowed the interval by {percent}; this is the result shown above.	Chúng đã thu hẹp khoảng {percent}; đây là kết quả hiển thị ở trên.
+	They made the interval {percent} wider, so the plain result stands.	Chúng đã nới rộng khoảng {percent}, nên kết quả thông thường được giữ.
+	They did not help: their correlation with {output} is weak ({correlation}), so the plain result stands.	Chúng không giúp ích: tương quan của chúng với {output} yếu ({correlation}), nên kết quả thông thường được giữ.
+	They did not help, so the plain result stands.	Chúng không giúp ích, nên kết quả thông thường được giữ.
+	The mean given for {name}, {stated}, is far from the trials' mean, {sample}: the controlled result is biased until it is corrected.	Giá trị trung bình đã cho cho {name}, {stated}, cách xa giá trị trung bình của các lần thử, {sample}: kết quả có kiểm soát bị lệch cho đến khi được sửa.
 	Stock	Kho
 	Flow	Dòng
 	Auxiliary	Biến phụ trợ
@@ -1381,3 +1396,6 @@ unit	yr	năm
 	Replace the XMILE file?	Thay thế tệp XMILE?
 	Save As writes a new file and keeps {file} as it is. Replacing {file} leaves out what StochCraft does not keep.	Lưu thành sẽ ghi một tệp mới và giữ nguyên {file}. Thay thế {file} sẽ bỏ đi những gì StochCraft không giữ lại.
 	Replace	Thay thế
+	The estimated chance that {output} is more than {value} is {percent}.	Xác suất ước tính để {output} lớn hơn {value} là {percent}.
+	The estimated chance that {output} is less than {value} is {percent}.	Xác suất ước tính để {output} nhỏ hơn {value} là {percent}.
+	Their interval has no width, which no estimate has, so the plain result stands.	Khoảng của chúng không có độ rộng, điều mà ước lượng nào cũng không có, nên kết quả thường được giữ nguyên.

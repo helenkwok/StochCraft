@@ -64,6 +64,19 @@
 //! `stochcraft_stats::precision` (Hoad, Robinson and Davies, 2010), judged on the same interval
 //! the results report (across batches in the modes above, which needs two batches at least).
 //!
+//! **Control variates** ([`control`]). An output can name controls: inputs, whose own mean is known
+//! (where the sampler draws exactly it, [`control::exact_mean`]), or earlier outputs with a mean the
+//! modeller states. Each trial's Y is corrected to Y − bᵀ(C − μ) with b fitted by least squares on a
+//! pilot, the first batch (the first half of a run under 2,000 trials), which the controlled
+//! estimate leaves out so that it is unbiased. The controlled mean and target probability, with
+//! intervals on the run's own basis, are in [`OutputResult::controlled`] beside the plain results,
+//! which they leave as they are; percentiles, the histogram and the extremes are not controlled.
+//! The pilot is a whole batch where trials are grouped by batch (Latin hypercube, Sobol,
+//! correlated inputs), so those runs need two batches for an estimate and three for its
+//! interval, and whole pairs for antithetic sampling. The unbiasedness holds for a fixed number
+//! of trials, not for a run that stops at a precision target; and a trial with no number
+//! withdraws the controlled estimate.
+//!
 //! **Which inputs matter** ([`Influence`], on each output). Two figures for each input that
 //! varies. The tornado is one at a time and deterministic: the output with every input at its
 //! median and one moved to its 10th and to its 90th percentile (Clemen and Reilly, *Making
@@ -78,19 +91,21 @@ use std::collections::BTreeMap;
 
 use stochcraft_model::expr::{self, Expr, Kind, Value};
 pub use stochcraft_model::{
-    Dist, McCorrelation, McInput, McOutput, McStop, McTarget, MonteCarlo, Sampling,
+    Control, Dist, McCorrelation, McInput, McOutput, McStop, McTarget, MonteCarlo, Sampling,
 };
 use stochcraft_random::Rng;
 use stochcraft_stats::precision::{self, Reason, Scale, Step};
 use stochcraft_stats::spread::quantile as sorted_quantile;
 use stochcraft_stats::{Proportion, Summary, t_critical_95};
 
+pub mod control;
 pub mod correlate;
 pub mod qmc;
 pub mod quantile;
 pub mod sobol;
 pub mod table;
 
+pub use control::{ControlUsed, Controlled, ControlledEstimate, ControlledTarget};
 pub use correlate::rank_correlation;
 pub use sobol::{
     Estimate, SobolError, SobolIndex, SobolOptions, SobolOutput, SobolResults, SobolRun,
@@ -127,7 +142,8 @@ pub struct Problem {
     /// A stable code: `no_outputs`, `bad_name`, `duplicate_name`, `bad_distribution`,
     /// `bad_expression`, `unknown_name`, `not_yet_computed`, `text_output`, `bad_target`,
     /// `bad_correlation`, `inconsistent_correlations`, `antithetic_correlated`, `too_many_inputs`,
-    /// `bad_stop` or `unused_input`.
+    /// `bad_stop`, `unused_input`, `unknown_control`, `control_not_earlier`, `inexact_control`,
+    /// `constant_control`, `duplicate_control` or `bad_control`.
     pub code: &'static str,
     /// What is wrong and what to do, in English.
     pub message: String,
@@ -296,6 +312,18 @@ fn check_all(mc: &MonteCarlo) -> (Vec<Problem>, Checked) {
         }
         exprs.push(ok.then_some(parsed));
     }
+    // An input that only some output names as a control still changes that output's controlled
+    // result, so it is used.
+    for o in &mc.outputs {
+        for c in &o.controls {
+            if let Control::Input { name } = c
+                && let Some(at) = mc.inputs.iter().position(|i| i.name == *name)
+                && let Some(u) = used.get_mut(at)
+            {
+                *u = true;
+            }
+        }
+    }
     for (k, i) in mc.inputs.iter().enumerate() {
         if !mc.outputs.is_empty() && !used.get(k).copied().unwrap_or(true) {
             out.push(Problem::warning(
@@ -308,6 +336,16 @@ fn check_all(mc: &MonteCarlo) -> (Vec<Problem>, Checked) {
             ));
         }
     }
+    control::check(
+        mc,
+        &|i| {
+            exprs
+                .get(i)
+                .and_then(|e| e.as_ref())
+                .is_some_and(|e| e.references().is_empty())
+        },
+        &mut out,
+    );
     // Correlations: between two different inputs, strictly between -1 and 1, once per pair.
     let index = |n: &str| mc.inputs.iter().position(|i| i.name == n);
     let mut pairs: BTreeMap<(usize, usize), f64> = BTreeMap::new();
@@ -458,6 +496,8 @@ pub struct Compiled {
     correlated: Vec<usize>,
     factor: Vec<Vec<f64>>,
     correlations: Vec<McCorrelation>,
+    /// Each output's controls, resolved.
+    controls: Vec<Vec<control::ControlSpec>>,
     /// The model's warnings.
     pub warnings: Vec<Problem>,
 }
@@ -500,6 +540,7 @@ pub fn compile(mc: &MonteCarlo, seed: u64) -> Result<Compiled, Vec<Problem>> {
         .zip(checked.exprs)
         .filter_map(|(o, e)| Some((o.clone(), e?)))
         .collect();
+    let controls = control::resolve(mc, &names);
     Ok(Compiled {
         seed,
         sampling: mc.sampling,
@@ -509,6 +550,7 @@ pub fn compile(mc: &MonteCarlo, seed: u64) -> Result<Compiled, Vec<Problem>> {
         correlated: checked.correlated,
         factor: checked.factor,
         correlations: mc.correlations.clone(),
+        controls,
         warnings: problems,
     })
 }
@@ -1082,6 +1124,7 @@ impl Summing {
                     if c.batched() || c.paired() {
                         by_units(&mut r, out, blocks, o, c.paired());
                     }
+                    r.controlled = control::controlled(c, o, blocks);
                     self.outputs.push(r);
                 }
             }
@@ -1503,6 +1546,9 @@ pub struct OutputResult {
     pub cdf: Vec<(f64, f64)>,
     /// Which inputs it depends on.
     pub influence: Influence,
+    /// The output's control variates and the controlled estimate, if it has controls. The
+    /// fields above are the uncontrolled results and stay as they are.
+    pub controlled: Option<Controlled>,
 }
 
 /// Which inputs an output depends on, two ways. The tornado holds every input at its median and
@@ -1753,6 +1799,7 @@ fn describe_output(out: &McOutput, sorted: &[f64], total: usize, ps: &[f64]) -> 
             })
             .collect(),
         influence: Influence::default(),
+        controlled: None,
     }
 }
 
@@ -1812,6 +1859,7 @@ mod tests {
             expression: expression.into(),
             unit: String::new(),
             target: None,
+            controls: Vec::new(),
         }
     }
 

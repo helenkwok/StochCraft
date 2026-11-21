@@ -1337,6 +1337,21 @@ unit	yr	a
 	{name}: the ± is across {n} of the {of} pairs, the rest had no trial with a number.	{name}: il ± è calcolato su {n} delle {of} coppie, le altre non avevano alcuna prova con un numero.
 	No interval: every pair gave the same share, so their spread gives none.	Nessun intervallo: tutte le coppie hanno dato la stessa quota, quindi la loro dispersione non ne dà alcuno.
 	No interval: too few pairs of trials for one.	Nessun intervallo: troppo poche coppie di prove per calcolarne uno.
+	Controls	Controlli
+	Expected mean	Media attesa
+	Remove the control {name}	Rimuovi il controllo {name}
+	Add a control	Aggiungi un controllo
+	{name} (an output; you give its mean)	{name} (un'uscita; ne indichi tu la media)
+	No input or earlier output can be a control.	Nessun input né uscita precedente può essere un controllo.
+	A control is an input whose mean is known, or an earlier output whose mean you know. The results use how it moves with this output to narrow the interval of the output's mean and target chance.	Un controllo è un input di cui si conosce la media, o un'uscita precedente di cui conosci la media. I risultati usano come si muove insieme a questa uscita per restringere l'intervallo della sua media e della probabilità di raggiungere l'obiettivo.
+	Controlled mean	Media controllata
+	Controls for {output}: {controls}.	Controlli per {output}: {controls}.
+	No controlled result: {reason}	Nessun risultato controllato: {reason}
+	They narrowed the interval by {percent}; this is the result shown above.	Hanno ristretto l'intervallo del {percent}; è il risultato mostrato sopra.
+	They made the interval {percent} wider, so the plain result stands.	Hanno allargato l'intervallo del {percent}, quindi vale il risultato semplice.
+	They did not help: their correlation with {output} is weak ({correlation}), so the plain result stands.	Non hanno aiutato: la loro correlazione con {output} è debole ({correlation}), quindi vale il risultato semplice.
+	They did not help, so the plain result stands.	Non hanno aiutato, quindi vale il risultato semplice.
+	The mean given for {name}, {stated}, is far from the trials' mean, {sample}: the controlled result is biased until it is corrected.	La media indicata per {name}, {stated}, è lontana dalla media delle prove, {sample}: il risultato controllato è distorto finché non viene corretta.
 	Stock	Scorta
 	Flow	Flusso
 	Auxiliary	Variabile ausiliaria
@@ -1381,3 +1396,6 @@ unit	yr	a
 	Replace the XMILE file?	Sostituire il file XMILE?
 	Save As writes a new file and keeps {file} as it is. Replacing {file} leaves out what StochCraft does not keep.	Salva con nome scrive un nuovo file e lascia {file} com'è. Sostituire {file} omette ciò che StochCraft non conserva.
 	Replace	Sostituisci
+	The estimated chance that {output} is more than {value} is {percent}.	La probabilità stimata che {output} sia maggiore di {value} è {percent}.
+	The estimated chance that {output} is less than {value} is {percent}.	La probabilità stimata che {output} sia minore di {value} è {percent}.
+	Their interval has no width, which no estimate has, so the plain result stands.	Il loro intervallo non ha ampiezza, cosa che nessuna stima ha, quindi resta il risultato semplice.

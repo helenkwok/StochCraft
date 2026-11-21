@@ -972,6 +972,92 @@ fn influence_lines(o: &Value, correlated: bool, out: &mut String) {
     }
 }
 
+/// An output's control variates in words: the controls with their known means and coefficients, the
+/// controlled mean and target probability with their intervals, and how much the controls
+/// narrowed the interval (or that they did not help, or made it wider, so the plain result stands).
+fn controlled_lines(o: &Value, out: &mut String) {
+    let c = &o["controlled"];
+    let Some(controls) = c["controls"].as_array() else {
+        return;
+    };
+    let name = s(&o["name"]);
+    let names: Vec<&str> = controls.iter().map(|u| s(&u["name"])).collect();
+    let _ = writeln!(
+        out,
+        "
+control variates for {name}: {}",
+        names.join(", ")
+    );
+    for u in controls {
+        let _ = writeln!(
+            out,
+            "{} ({}): known mean {}, coefficient {}",
+            s(&u["name"]),
+            s(&u["kind"]),
+            f(&u["mean"]),
+            f(&u["coefficient"])
+        );
+        if u["mean_mismatch"] == true {
+            let _ = writeln!(
+                out,
+                "warning: the trials' mean of {} is {}, far from its stated mean {}: if the stated mean is wrong the controlled result is biased",
+                s(&u["name"]),
+                f(&u["sample_mean"]),
+                f(&u["mean"])
+            );
+        }
+    }
+    let e = &c["estimate"];
+    if e.is_null() {
+        let _ = writeln!(
+            out,
+            "no controlled estimate: {}",
+            c["unavailable"].as_str().unwrap_or("not enough trials")
+        );
+        return;
+    }
+    let pct = |v: &Value| v.as_f64().map_or_else(|| "-".into(), |p| number(p * 100.0));
+    let _ = writeln!(
+        out,
+        "controlled mean of {name}: {} ± {} (the coefficients were fitted on the first {} trials, which it leaves out; the same {} trials without the controls: {} ± {})",
+        f(&e["mean"]),
+        f(&e["half_width"]),
+        c["pilot_trials"],
+        e["trials"],
+        f(&e["uncontrolled_mean"]),
+        f(&e["uncontrolled_half_width"]),
+    );
+    let correlation = c["correlation"].as_f64();
+    let verdict = match e["narrowing"].as_f64() {
+        Some(n) if n >= 0.1 => format!(
+            "the controls narrowed the interval by {}%",
+            (n * 100.0).round()
+        ),
+        Some(n) if n < 0.0 => format!(
+            "the controls made the interval {}% wider, so the plain result stands",
+            (-n * 100.0).round()
+        ),
+        _ => match correlation {
+            Some(r) if r < 0.5 => {
+                format!("the controls did not help: their correlation with {name} is weak ({r:.2})")
+            }
+            _ => "the controls did not help".to_owned(),
+        },
+    };
+    let _ = writeln!(out, "{verdict}");
+    let t = &e["target"];
+    if !t.is_null() {
+        let _ = writeln!(
+            out,
+            "controlled chance of meeting the target: {}% (95% interval {}% to {}%); without the controls on the same trials {}%",
+            pct(&t["probability"]),
+            pct(&t["interval"][0]),
+            pct(&t["interval"][1]),
+            pct(&t["uncontrolled_probability"])
+        );
+    }
+}
+
 /// A Monte Carlo run's results as a table: a row per output with its mean, half-width, standard
 /// deviation and percentiles, then each target in words, which inputs matter for each output,
 /// the correlations achieved and the run record.
@@ -1079,6 +1165,9 @@ pub fn mc_table(name: &str, r: &Value) -> String {
                 s(&r["interval_basis"]["across"])
             );
         }
+    }
+    for o in r["outputs"].as_array().into_iter().flatten() {
+        controlled_lines(o, &mut out);
     }
     let correlated = r["correlations"].as_array().is_some_and(|c| !c.is_empty());
     for o in r["outputs"].as_array().into_iter().flatten() {
@@ -1645,5 +1734,48 @@ mod tests {
         assert!(
             mc_table("m", &r).contains("includes the effect of the inputs it is correlated with")
         );
+    }
+
+    /// Control variates in words: the coefficients, the controlled mean, how much narrower, and a
+    /// control that did not help says its correlation is weak.
+    #[test]
+    fn an_mc_table_says_what_the_controls_did() {
+        let mut r = serde_json::json!({
+            "trials": 20000,
+            "interval_basis": { "across": "trials", "count": 20000 },
+            "record": { "interval": "Student-t across 20000 independent trials" },
+            "outputs": [{
+                "name": "cost", "unit": "", "interval_count": 20000, "invalid": 0,
+                "controlled": {
+                    "controls": [{ "name": "labour", "kind": "input", "mean": 110.0,
+                                   "coefficient": 45.2, "sample_mean": 110.1,
+                                   "mean_mismatch": false }],
+                    "pilot_trials": 1000, "correlation": 0.93, "unavailable": null,
+                    "estimate": {
+                        "trials": 19000, "interval_count": 19000, "mean": 5200.0,
+                        "half_width": 4.0, "uncontrolled_mean": 5201.0,
+                        "uncontrolled_half_width": 10.8, "variance_ratio": 7.3,
+                        "narrowing": 0.63, "helped": true, "target": null
+                    },
+                },
+            }],
+        });
+        let out = mc_table("m", &r);
+        assert!(out.contains("control variates for cost: labour"), "{out}");
+        assert!(out.contains("coefficient 45.2"), "{out}");
+        assert!(out.contains("controlled mean of cost: 5200 ± 4"), "{out}");
+        assert!(out.contains("narrowed the interval by 63%"), "{out}");
+        r["outputs"][0]["controlled"]["estimate"]["narrowing"] = serde_json::json!(0.02);
+        r["outputs"][0]["controlled"]["correlation"] = serde_json::json!(0.08);
+        let out = mc_table("m", &r);
+        assert!(
+            out.contains("did not help: their correlation with cost is weak (0.08)"),
+            "{out}"
+        );
+        r["outputs"][0]["controlled"]["estimate"]["narrowing"] = serde_json::json!(-0.2);
+        assert!(mc_table("m", &r).contains("20% wider, so the plain result stands"));
+        r["outputs"][0]["controlled"]["estimate"] = serde_json::Value::Null;
+        r["outputs"][0]["controlled"]["unavailable"] = serde_json::json!("too short");
+        assert!(mc_table("m", &r).contains("no controlled estimate: too short"));
     }
 }
