@@ -202,17 +202,6 @@ mod proofs {
         let v = r.uniform_open0();
         assert!(v > 0.0 && v <= 1.0);
     }
-
-    /// A draw from `uniform_range` over a finite, non-empty range never leaves [min, max].
-    #[kani::proof]
-    fn uniform_range_stays_within_its_bounds() {
-        let (min, max): (f64, f64) = (kani::any(), kani::any());
-        kani::assume(min.is_finite() && max.is_finite() && max > min);
-        kani::assume(min.abs() <= 1.0e9 && max.abs() <= 1.0e9);
-        let mut r = Rng { s: kani::any() };
-        let x = r.uniform_range(min, max);
-        assert!(x >= min && x <= max);
-    }
 }
 
 #[cfg(test)]

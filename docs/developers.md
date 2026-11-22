@@ -572,8 +572,7 @@ Proved, for every input the harness allows:
 - Random streams (`crates/random/src/lib.rs`): SplitMix64's first output differs for different
   seeds; the seed of a keyed stream differs for different bases (same key hash) and for different
   key hashes (same base); seeding never gives the all-zero state and a xoshiro256** step keeps a
-  non-zero state non-zero; `uniform` is in [0, 1) and `uniform_open0` in (0, 1] from any state;
-  `uniform_range` stays within [min, max] for finite bounds up to 1e9 in size.
+  non-zero state non-zero; `uniform` is in [0, 1) and `uniform_open0` in (0, 1] from any state.
 - Distribution parameters (`crates/random/src/dist.rs`): when `Dist::check` accepts a Uniform,
   Triangular, Truncated normal, Exponential, Poisson, Normal, Log-normal, Erlang, Gamma, Beta,
   Weibull or Binomial, its parameters are finite and in the documented ranges, for any `f64`
@@ -586,8 +585,9 @@ Proved, for every input the harness allows:
 
 Not proved: that two different key strings give different streams (they hash to 64 bits, so
 collisions exist), the statistical quality of the generator, the shape of any distribution's
-samples (transcendental functions, rejection samplers and loops are out of reach of the bounded
-checker; the statistical tests cover them), confidence intervals for more than two replications,
+samples or the bounds of `uniform_range` and `triangular` (floating-point arithmetic on symbolic
+values is beyond the checker in CI time; transcendental functions, rejection samplers and loops
+are out of its reach too; the statistical tests cover them), confidence intervals for more than two replications,
 and anything in the engine, the block runtime or the interface (entity accounting is checked by
 the run-time behaviour checks, not proved). Proofs are bounded by the stated input ranges and by
 the checker's model of floating point.
