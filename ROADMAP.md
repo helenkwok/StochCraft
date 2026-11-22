@@ -2953,11 +2953,12 @@ StochCraft matches that and adds:
       agents waiting on them in population, then agent order;
     - a **message**, matched by its name and, optionally, a condition on its data. A message no
       transition matches is dropped, and counted, so a model that loses messages says so.
-  - In the file, a timeout or rate is SCXML's own `<send delayexpr>` on entry with a `<cancel>`
-    on exit, so another SCXML tool reads the chart's structure and its fixed timeouts. A random
-    delay uses D17's `stochcraft` data model, and a `stochcraft:` attribute marks a rate so it
-    is drawn again on change; a tool without those extensions does not reproduce either. The
-    window shows each as one transition.
+  - In the file, a timeout or rate is SCXML's own `<send>` on entry with a `<cancel>` on exit.
+    A fixed timeout is a literal `delay` in seconds (the model's time unit converted), which
+    any conforming SCXML processor runs, even one with only the null data model. A random delay
+    is a `delayexpr` in D17's `stochcraft` data model, and a `stochcraft:` attribute marks a
+    rate so it is drawn again on change; a tool without those extensions reads the chart's
+    structure but does not reproduce either. The window shows each as one transition.
 - **Messages:** to one agent, to a random agent of a population (never the sender), to all of a
   population, to the agents it is connected to (all, or one at random), or to its grid
   neighbours. Each is delivered as its own event at the same time, after the current one
