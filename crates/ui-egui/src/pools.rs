@@ -322,7 +322,13 @@ impl App {
                 .iter()
                 .position(|b| b["resource"].as_str() == Some(pid))
         };
-        let mut changed: Option<Vec<Value>> = None;
+        // Every toggle and time edit of this frame goes into one working list, found by pool id
+        // there, so a removal earlier in the frame does not move a later edit to another pool.
+        let mut work = entries.clone();
+        let place = |work: &[Value], pid: &str| {
+            work.iter()
+                .position(|b| b["resource"].as_str() == Some(pid))
+        };
         let mut schema = params_schema("block.set");
         schema["properties"]["service"]["description"] = Value::Null;
         let unit = self.time_unit_label();
@@ -331,16 +337,14 @@ impl App {
             let mut own = at.is_some();
             ui.add_space(4.0);
             if ui.checkbox(&mut own, name.as_str()).changed() {
-                let mut all = entries.clone();
-                match (at, own) {
+                match (place(&work, pid), own) {
                     // The task's own time to start from, which the user then changes.
-                    (None, true) => all.push(json!({ "resource": pid, "time": el["service"] })),
+                    (None, true) => work.push(json!({ "resource": pid, "time": el["service"] })),
                     (Some(i), false) => {
-                        all.remove(i);
+                        work.remove(i);
                     }
                     _ => {}
                 }
-                changed = Some(all);
             }
             if let Some(i) = at {
                 let mut cx = form::Cx {
@@ -358,19 +362,18 @@ impl App {
                         "service",
                         &entries[i]["time"],
                         true,
-                    ) {
-                        let mut all = entries.clone();
-                        all[i]["time"] = v;
-                        changed = Some(all);
+                    ) && let Some(w) = place(&work, pid)
+                    {
+                        work[w]["time"] = v;
                     }
                 });
             }
         }
-        if let Some(all) = changed {
-            let value = if all.is_empty() {
+        if work != entries {
+            let value = if work.is_empty() {
                 Value::Null
             } else {
-                json!({ "by_resource": all })
+                json!({ "by_resource": work })
             };
             self.execute(
                 "block.set",

@@ -1804,9 +1804,10 @@ A line that makes several products, and results in the terms lean practice uses.
   can draw on a service time of its own (servers that differ in speed), ahead of the time by
   property and the task's own time; the vendor extension `stochcraft:processingTimeByResource`.
   A take that spans pools counts the pool that supplied its first unit. Each entry draws from
-  its own stream, so a model without entries gives the results it gave before. Units that come
-  free at one instant go to the waiting entities after all of them are free, each entity trying
-  its alternatives in the order of its task's needs. Checked against the exact answer of Able and
+  its own stream, so a model without entries makes the random draws it made before. Units that
+  come free at one instant go to the waiting entities after all of them are free, each entity
+  trying its alternatives in the order of its task's needs; this can change the outcome of an
+  exact tie in any model, entries or not (the repair-shop reference result changed). Checked against the exact answer of Able and
   Baker (Banks et al., Example 2.2) as a discrete-time Markov chain. Not here: a capacity-table
   formula for such a task, and a time by pool for a task with its own resource.
 - **Lean results:**
