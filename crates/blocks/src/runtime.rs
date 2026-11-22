@@ -3437,6 +3437,10 @@ impl Setups {
     }
 }
 
+/// Mixed into the seed of a server's failure stream, so it is not its service stream's or its
+/// setup or health check streams'.
+const BREAKDOWN_STREAM: u64 = 0x2c9b_0d37_a6f1_85e3;
+
 /// Mixed into the seed of a server's setup stream, so it is not its service stream's.
 const SETUP_STREAM: u64 = 0x5e7f_a11d_c4a9_6e01;
 
@@ -3605,8 +3609,13 @@ fn spawn_unit_server(sim: &mut Sim, mut env: BlockEnv, parts: UnitServer) {
     } = parts;
     let ctx = env.ctx.clone();
     let me = tag(env.me);
-    // The failures draw from their own stream, so they do not change the service times.
-    let mut fail_rng = breakdown.as_ref().map(|_| env.rng.fork());
+    // The failures draw from their own stream, so they do not change the service times. Like the
+    // setups and health checks below, it is seeded without drawing from the element's own
+    // (forking would advance it), so adding or removing a breakdown leaves the service times of
+    // the same seed as they were, which keeps paired comparisons paired.
+    let mut fail_rng = breakdown
+        .as_ref()
+        .map(|_| Rng::new(env.rng.clone().next_u64() ^ BREAKDOWN_STREAM));
     // So do the setups. Their stream is seeded without drawing from the element's own (forking
     // would), so the service times and the failures stay those of the model without setups.
     let mut setup_rng = setup
