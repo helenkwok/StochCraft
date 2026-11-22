@@ -20,6 +20,16 @@
 //! falls on and is the same in every pass of that step, so its volume is delivered whole under
 //! either method. `STEP` and `RAMP` are functions of the time of the pass.
 //!
+//! **Discontinuities under Runge-Kutta.** The method assumes the rates are smooth over a step.
+//! `STEP` is the one jump the stepping handles: it is continuous from the right, and the last of
+//! a step's four evaluations is at the end of the step, where the integral over the step wants
+//! the value from the left, so that evaluation sees the value just before the jump. A `STEP`
+//! whose time falls on a step boundary is then integrated as Euler does it (a jump at 1 adds
+//! nothing to the integral up to 1). A jump inside a step, or one made another way (`IF` on
+//! `TIME`, a comparison, `MIN`/`MAX` of rates), makes the step's four evaluations disagree about
+//! the rate and the method falls to first order there: put such jumps on the step boundaries,
+//! use Euler or lower the step (the halved-step check shows the dependence).
+//!
 //! **Random functions** hold one value for an interval (the file's step unless the equation
 //! gives one, in whole steps of the run) and draw it from a stream keyed by the variable, the
 //! call and the draw's number under the replication's stream (`Rng::keyed`), so a draw depends
@@ -98,6 +108,11 @@ pub struct StockCheck {
     pub max_relative_difference: f64,
     /// The time it is largest at (in the results' time unit).
     pub at_time: f64,
+    /// How many saved times after the start the two runs share and were compared at.
+    pub compared: usize,
+    /// Whether the check cannot say for this stock: no time to compare, or a value at one that
+    /// is missing or not a number. Its difference is then not a measure of anything.
+    pub inconclusive: bool,
 }
 
 /// The halved-step check.
@@ -108,8 +123,16 @@ pub struct DtCheck {
     pub stocks: Vec<StockCheck>,
     /// The largest of the stocks' differences.
     pub max_relative_difference: f64,
-    /// Whether it is within [`DT_CHECK_THRESHOLD`].
+    /// Whether it is within [`DT_CHECK_THRESHOLD`]. Never true when the check is inconclusive.
     pub within_threshold: bool,
+    /// Whether the check cannot say: some stock is inconclusive (or there is no stock).
+    pub inconclusive: bool,
+    /// Whether the two runs use the same random draws: true for a model with no random function,
+    /// and for one whose every random function draws at the same times at both steps.
+    pub draws_matched: bool,
+    /// What a reader needs to know to take the answer: different end times, inconclusive stocks,
+    /// draws that are not matched.
+    pub notes: Vec<String>,
 }
 
 /// The results of a run.
@@ -156,6 +179,9 @@ struct Machine<'a> {
     dt: f64,
     n: u64,
     time: f64,
+    /// Whether the pass is the one at the end of a Runge-Kutta step, where `STEP` takes the
+    /// value it has just before its time (see the module's note on discontinuities).
+    end_stage: bool,
     values: Vec<f64>,
     /// The state the pass works from: stocks, then the hidden stocks of delays and smooths.
     x: Vec<f64>,
@@ -168,6 +194,9 @@ struct Machine<'a> {
     draw_every: Vec<u64>,
     rand_k: Vec<Option<u64>>,
     rand_val: Vec<f64>,
+    /// A digest of when each fresh draw was made: the random function, its draw number and the
+    /// time of the stage that made it. Two runs that agree on it shared every random value.
+    draw_digest: u64,
     gf_warned: Vec<bool>,
     warnings: BTreeSet<String>,
 }
@@ -178,6 +207,8 @@ struct Run {
     /// For each variable, its value at each saved time.
     values: Vec<Vec<f64>>,
     warnings: BTreeSet<String>,
+    /// See [`Machine::draw_digest`].
+    draw_digest: u64,
 }
 
 fn integer_power(x: f64, n: i64) -> f64 {
@@ -230,6 +261,7 @@ impl<'a> Machine<'a> {
             dt,
             n: 0,
             time: p.start,
+            end_stage: false,
             values: vec![0.0; p.vars.len()],
             x: vec![0.0; p.stocks.len() + p.hidden],
             avail: vec![0.0; p.stocks.len()],
@@ -241,6 +273,7 @@ impl<'a> Machine<'a> {
             draw_every,
             rand_k: vec![None; p.randoms.len()],
             rand_val: vec![0.0; p.randoms.len()],
+            draw_digest: 0,
             gf_warned: vec![false; p.vars.len()],
             warnings,
         }
@@ -467,6 +500,9 @@ impl<'a> Machine<'a> {
         if let Some(s) = self.rand_k.get_mut(r) {
             *s = Some(k);
         }
+        for word in [r as u64, k, self.time.to_bits()] {
+            self.draw_digest = Rng::keyed(self.draw_digest ^ word, "draw-digest").next_u64();
+        }
         if let Some(s) = self.rand_val.get_mut(r) {
             *s = v;
         }
@@ -543,6 +579,22 @@ impl<'a> Machine<'a> {
                     }
                 }
             }
+            Ex::Fn(Func::Step, args) if self.end_stage => {
+                // At the end of a step a STEP is taken at its left limit: the whole call, its
+                // arguments too, a hair before the step's end. A step that switches on exactly
+                // there is not yet on, while `STEP(6, TIME)` stays on, as it is at every stage.
+                let (time, tol) = (self.time, 1e-9 * self.dt);
+                self.time = time - 2.0 * tol;
+                self.end_stage = false;
+                let v = args
+                    .iter()
+                    .map(|a| self.eval(a))
+                    .collect::<Result<Vec<_>, _>>();
+                let value = v.map(|v| self.function(Func::Step, &v));
+                self.time = time;
+                self.end_stage = true;
+                value?
+            }
             Ex::Fn(f, args) => {
                 let mut v = Vec::with_capacity(args.len());
                 for a in args {
@@ -617,6 +669,7 @@ impl<'a> Machine<'a> {
     fn pass(&mut self, frac: f64) -> Result<Vec<f64>, SdError> {
         let p = self.p;
         self.time = p.start + (self.n as f64 + frac) * self.dt;
+        self.end_stage = frac >= 1.0;
         for (pos, &vi) in p.stocks.iter().enumerate() {
             let level = self.x.get(pos).copied().unwrap_or(0.0);
             if let Some(v) = self.values.get_mut(vi) {
@@ -629,20 +682,41 @@ impl<'a> Machine<'a> {
         for &vi in &p.order {
             let Some(info) = p.vars.get(vi) else { continue };
             let mut v = self.variable_value(vi, info.eqn.as_ref())?;
-            if info.role == Role::Flow {
+            if info.role == Role::Flow && v.is_finite() {
+                // A rate that is not a number is not limited: limiting it (`NaN.min(room)` is
+                // `room`) would turn it into a real transfer. It stays as it is, is reported
+                // below, and carries through to the stocks it touches.
                 if info.flow_non_negative {
                     v = v.max(0.0);
                 }
-                for &pos in &info.limited_by {
-                    let room = self.avail.get(pos).copied().unwrap_or(0.0).max(0.0);
-                    v = v.min(room);
-                }
                 if v > 0.0 {
                     for &pos in &info.limited_by {
-                        if let Some(a) = self.avail.get_mut(pos) {
-                            *a -= v;
+                        let room = self.avail.get(pos).copied().unwrap_or(0.0).max(0.0);
+                        v = v.min(room);
+                    }
+                    if v > 0.0 {
+                        for &pos in &info.limited_by {
+                            if let Some(a) = self.avail.get_mut(pos) {
+                                *a -= v;
+                            }
                         }
                     }
+                } else if v < 0.0 {
+                    // Negative: the flow runs backwards, so the stocks it enters are the ones
+                    // it takes from, and they limit it.
+                    let mut take = -v;
+                    for &pos in &info.limited_by_rev {
+                        let room = self.avail.get(pos).copied().unwrap_or(0.0).max(0.0);
+                        take = take.min(room);
+                    }
+                    if take > 0.0 {
+                        for &pos in &info.limited_by_rev {
+                            if let Some(a) = self.avail.get_mut(pos) {
+                                *a -= take;
+                            }
+                        }
+                    }
+                    v = -take;
                 }
             }
             if !v.is_finite() {
@@ -783,6 +857,7 @@ fn simulate(
         times,
         values,
         warnings: m.warnings,
+        draw_digest: m.draw_digest,
     })
 }
 
@@ -918,7 +993,13 @@ impl SdJob {
         }
         let half = if opts.dt_check {
             let half_dt = dt / 2.0;
-            let (half_steps, _) = step_count(p, half_dt)?;
+            // Twice the steps, so both runs end at the same time, the one the run stops at.
+            let half_steps = steps.saturating_mul(2);
+            if half_steps > MAX_STEPS {
+                return Err(run_err(format!(
+                    "the halved-step check would take {half_steps} steps (the limit is {MAX_STEPS}): lower the length or raise the time step"
+                )));
+            }
             Some(Plan {
                 dt: half_dt,
                 steps: half_steps,
@@ -1000,45 +1081,25 @@ impl SdJob {
         // The halved-step check, on the mean paths of the stocks.
         let mut dt_check = None;
         if let Some(half) = self.half {
-            let (_, half_series, w) = collect(p, &self.half_runs, BTreeSet::new());
+            let (half_times, half_series, w) = collect(p, &self.half_runs, BTreeSet::new());
             warnings.extend(w);
-            let mut stocks = Vec::new();
-            for (a, b) in series.iter().zip(half_series.iter()) {
-                if a.kind != "stock" {
-                    continue;
-                }
-                let peak = b
-                    .mean
+            // A random function drawn under a condition can be first called at a time one run
+            // reaches and the other does not; equal intervals alone do not show that.
+            let same_draw_times = self.runs.len() == self.half_runs.len()
+                && self
+                    .runs
                     .iter()
-                    .filter(|v| v.is_finite())
-                    .fold(0.0_f64, |m, v| m.max(v.abs()));
-                let floor = (1e-3 * peak).max(f64::MIN_POSITIVE);
-                let mut worst = 0.0_f64;
-                let mut at = 0.0;
-                for (k, (x, y)) in a.mean.iter().zip(b.mean.iter()).enumerate() {
-                    let rel = (x - y).abs() / y.abs().max(floor);
-                    if rel > worst {
-                        worst = rel;
-                        at = times.get(k).copied().unwrap_or(0.0);
-                    }
-                }
-                stocks.push(StockCheck {
-                    name: a.name.clone(),
-                    max_relative_difference: worst,
-                    at_time: at,
-                });
-            }
-            let max = stocks
-                .iter()
-                .map(|s| s.max_relative_difference)
-                .fold(0.0_f64, f64::max);
-            dt_check = Some(DtCheck {
-                dt,
-                half_dt: half.dt,
-                stocks,
-                max_relative_difference: max,
-                within_threshold: max <= DT_CHECK_THRESHOLD,
-            });
+                    .zip(&self.half_runs)
+                    .all(|(a, b)| a.draw_digest == b.draw_digest);
+            dt_check = Some(compare_steps(
+                p,
+                &series,
+                &times,
+                &half_series,
+                &half_times,
+                (dt, half.dt),
+                same_draw_times,
+            ));
         }
 
         // Times in the unit asked for.
@@ -1070,12 +1131,14 @@ impl SdJob {
             times.iter_mut().for_each(|t| *t *= factor);
             if let Some(check) = dt_check.as_mut() {
                 check.stocks.iter_mut().for_each(|s| s.at_time *= factor);
+                check.dt *= factor;
+                check.half_dt *= factor;
             }
         }
         Ok(SdResults {
             name: p.name.clone(),
             method: p.method.name(),
-            dt,
+            dt: dt * factor,
             start: p.start * factor,
             stop: p.stop * factor,
             time_unit: unit,
@@ -1089,6 +1152,122 @@ impl SdJob {
             warnings: warnings.into_iter().collect(),
             dt_check,
         })
+    }
+}
+
+/// The time between draws of a random function at step `dt`: a whole number of steps.
+fn draw_interval(p: &Program, r: usize, dt: f64) -> f64 {
+    let interval = p.randoms.get(r).and_then(|x| x.interval).unwrap_or(p.dt);
+    (interval / dt).round().max(1.0) * dt
+}
+
+/// The halved-step check: for each stock, the largest relative difference between its mean path
+/// at the step and at half the step, compared at the times both saved (by time, not by position
+/// in the saved lists). A stock with no time to compare after the start, or whose value at a
+/// shared time is missing or not a number, is inconclusive, not a difference of 0.
+fn compare_steps(
+    p: &Program,
+    coarse: &[Series],
+    times: &[f64],
+    fine: &[Series],
+    fine_times: &[f64],
+    steps: (f64, f64),
+    same_draw_times: bool,
+) -> DtCheck {
+    let (dt, half_dt) = steps;
+    let tol = 1e-9 * dt;
+    // The index pairs of the saved times the two runs share, after the start.
+    let mut pairs: Vec<(usize, usize)> = Vec::new();
+    let mut j = 0;
+    for (i, t) in times.iter().enumerate() {
+        while fine_times.get(j).is_some_and(|f| *f < t - tol) {
+            j += 1;
+        }
+        if fine_times.get(j).is_some_and(|f| (f - t).abs() <= tol) && *t > p.start + tol {
+            pairs.push((i, j));
+        }
+    }
+    let mut notes = Vec::new();
+    let (end, fine_end) = (
+        times.last().copied().unwrap_or(p.start),
+        fine_times.last().copied().unwrap_or(p.start),
+    );
+    if (end - fine_end).abs() > tol {
+        notes.push(format!(
+            "the runs end at different times ({end} at the step, {fine_end} at half of it): compared at the times they share"
+        ));
+    }
+    let mut stocks = Vec::new();
+    for (a, b) in coarse.iter().zip(fine.iter()) {
+        if a.kind != "stock" {
+            continue;
+        }
+        let peak = b
+            .mean
+            .iter()
+            .filter(|v| v.is_finite())
+            .fold(0.0_f64, |m, v| m.max(v.abs()));
+        let floor = (1e-3 * peak).max(f64::MIN_POSITIVE);
+        let mut worst = 0.0_f64;
+        let mut at = 0.0;
+        let mut inconclusive = pairs.is_empty();
+        for &(i, j) in &pairs {
+            let (Some(x), Some(y)) = (a.mean.get(i), b.mean.get(j)) else {
+                inconclusive = true;
+                continue;
+            };
+            if !(x.is_finite() && y.is_finite()) {
+                inconclusive = true;
+                continue;
+            }
+            let rel = (x - y).abs() / y.abs().max(floor);
+            if rel > worst {
+                worst = rel;
+                at = times.get(i).copied().unwrap_or(0.0);
+            }
+        }
+        if pairs.is_empty() {
+            notes.push(format!(
+                "`{}`: the two runs share no saved time after the start, so there is nothing to compare",
+                a.name
+            ));
+        } else if inconclusive {
+            notes.push(format!(
+                "`{}`: a value is missing or not a number at a time compared, so the check cannot say",
+                a.name
+            ));
+        }
+        stocks.push(StockCheck {
+            name: a.name.clone(),
+            max_relative_difference: worst,
+            at_time: at,
+            compared: pairs.len(),
+            inconclusive,
+        });
+    }
+    let inconclusive = stocks.is_empty() || stocks.iter().any(|s| s.inconclusive);
+    let max = stocks
+        .iter()
+        .map(|s| s.max_relative_difference)
+        .fold(0.0_f64, f64::max);
+    let draws_matched = same_draw_times
+        && (0..p.randoms.len())
+            .all(|r| (draw_interval(p, r, dt) - draw_interval(p, r, half_dt)).abs() <= tol);
+    if !draws_matched {
+        notes.push(
+            "a random function draws at different times at the two steps, so the two runs do not share their random values and part of the difference is sampling noise"
+                .to_owned(),
+        );
+    }
+    DtCheck {
+        dt,
+        half_dt,
+        stocks,
+        max_relative_difference: max,
+        within_threshold: !inconclusive && max <= DT_CHECK_THRESHOLD,
+        inconclusive,
+        draws_matched,
+        notes,
     }
 }
 

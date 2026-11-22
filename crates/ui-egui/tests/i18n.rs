@@ -182,7 +182,7 @@ fn every_state_is_translated() {
         }
     };
     let mut h = pseudo();
-    h.state_mut().offer_recovery(&copy);
+    h.state_mut().offer_recovery("session-1", &copy);
     settle(&mut h);
     h.get_by_label_contains("Recover unsaved changes?");
     missed.extend(untranslated(&h));

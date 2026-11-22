@@ -940,7 +940,6 @@ unit	yr	J.
 	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	Das ist das erste Modell. Die ersten Zeilen unter Ergebnisse sagen, was der Lauf ergeben hat; Hilfe ▸ Was die Ergebnisse bedeuten erklärt jede Zahl.
 # Which inputs matter in the Monte Carlo results (ROADMAP M4.1, part 3a)
 	Which inputs matter	Welche Eingaben wichtig sind
-	{output} depends most on {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile.	{output} hängt am stärksten von {input} ab: Der Wert geht von {low} bis {high}, wenn {input} vom 10. zum 90. Perzentil geht.
 	Each input from its 10th to its 90th percentile, with the others at their medians	Jede Eingabe vom 10. bis zum 90. Perzentil, die anderen bei ihren Medianen
 	Base {value}	Basiswert {value}
 	A correlated input's figure includes the effect of the inputs it is correlated with.	Die Zahl einer korrelierten Eingabe enthält die Wirkung der Eingaben, mit denen sie korreliert ist.
@@ -1369,7 +1368,6 @@ unit	yr	J.
 	The model: its settings and variables	Das Modell: seine Einstellungen und Variablen
 	System dynamics model	System-Dynamics-Modell
 	Variables	Variablen
-	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	Dieses Modell lässt sich mit Befehlen ändern, von einem Agenten über den MCP-Server oder von der Befehlszeile aus. Das Bearbeiten auf der Zeichenfläche folgt als Nächstes.
 	From {start} to {stop}, in steps of {dt}, by the {method} method.	Von {start} bis {stop}, in Schritten von {dt}, mit dem Verfahren {method}.
 	Notes from the file	Hinweise aus der Datei
 	Equation	Gleichung
@@ -1420,8 +1418,36 @@ unit	yr	J.
 	The estimated chance that {output} is more than {value} is {percent}.	Die geschätzte Wahrscheinlichkeit, dass {output} über {value} liegt, beträgt {percent}.
 	The estimated chance that {output} is less than {value} is {percent}.	Die geschätzte Wahrscheinlichkeit, dass {output} unter {value} liegt, beträgt {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	Ihr Intervall hat keine Breite, die keine Schätzung hat, daher bleibt das einfache Ergebnis bestehen.
+	{output} changes most with {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile, the other inputs at their medians.	{output} ändert sich am stärksten mit {input}: es geht von {low} bis {high}, wenn {input} von seinem 10. zu seinem 90. Perzentil geht und die anderen Eingaben auf ihren Medianen liegen.
+	No variation was observed, so there is no interval for the mean; a rare event the trials did not reach could still move it.	Es wurde keine Streuung beobachtet, daher gibt es kein Intervall für den Mittelwert; ein seltenes Ereignis, das die Versuche nicht erreicht haben, könnte ihn trotzdem verschieben.
+	They narrowed the interval by {percent}, but a mean given for a control is far from the trials' mean, so the plain result stands.	Sie haben das Intervall um {percent} verengt, aber ein für eine Kontrolle angegebener Mittelwert liegt weit vom Mittelwert der Versuche entfernt, daher bleibt das einfache Ergebnis bestehen.
+	The output does not move in one direction with {inputs} (its value at the median is outside its values at the 10th and 90th percentiles), so the swing understates the effect.	Die Ausgabe bewegt sich mit {inputs} nicht in eine Richtung (ihr Wert am Median liegt außerhalb ihrer Werte beim 10. und 90. Perzentil), daher unterschätzt die Schwankungsbreite den Effekt.
+	Did not open {file}: a different model was opened in the meantime	{file} wurde nicht geöffnet: In der Zwischenzeit wurde ein anderes Modell geöffnet
+	Select	Auswählen
+	Link	Verknüpfung
+	Initial value	Anfangswert
+	Click the diagram to place a stock.	Klicken Sie ins Diagramm, um einen Bestand zu platzieren.
+	Click the diagram to place an auxiliary.	Klicken Sie ins Diagramm, um eine Hilfsgröße zu platzieren.
+	Drag from a stock, or from empty space, to another stock or empty space to draw a flow.	Ziehen Sie von einem Bestand oder einer leeren Stelle zu einem anderen Bestand oder einer leeren Stelle, um einen Fluss zu zeichnen.
+	Drag from one variable to another to show that the second uses the first.	Ziehen Sie von einer Variablen zu einer anderen, um zu zeigen, dass die zweite die erste verwendet.
+	Click a variable to select it and edit it here. Drag a variable to move it.	Klicken Sie auf eine Variable, um sie auszuwählen und hier zu bearbeiten. Ziehen Sie sie, um sie zu verschieben.
+	Moved {name}	{name} verschoben
+	Added {kind}: {name}	Hinzugefügt: {kind} {name}
+	Edited {name}	{name} bearbeitet
+	Removed {name}	{name} entfernt
+	Linked {from} to {to}	{from} mit {to} verknüpft
+	Add Variable	Variable hinzufügen
+	Edit Variable	Variable bearbeiten
+	Remove Variable	Variable entfernen
+	Simulation Settings	Simulationseinstellungen
+	Change Diagram	Diagramm ändern
+	You can change this model on the Diagram tab, or with commands, from an agent through the MCP server or from the command line.	Sie können dieses Modell auf dem Tab „Diagramm“ ändern oder mit Befehlen, von einem Agenten über den MCP-Server oder von der Befehlszeile aus.
 	Inconclusive at current precision	Bei der aktuellen Genauigkeit nicht entscheidbar
 	No difference detected	Kein Unterschied festgestellt
 	Agrees within ±{tolerance}	Stimmt überein innerhalb ±{tolerance}
 	This is not evidence of agreement: set a tolerance to test for it.	Das ist kein Beleg für Übereinstimmung: Legen Sie eine Toleranz fest, um sie zu prüfen.
 	Tolerance (0 for none)	Toleranz (0 für keine)
+	Arrivals that keep their distance	Ankünfte, die Abstand halten
+	One server fed by the gaps between zeros of the Riemann zeta function, beside Poisson arrivals at the same rate.	Ein Bedienplatz, den die Abstände zwischen den Nullstellen der Riemannschen Zetafunktion speisen, neben Poisson-Ankünften mit derselben Rate.
+	Do arrivals that avoid bunching make a shorter queue?	Ergeben Ankünfte, die Ballungen vermeiden, eine kürzere Warteschlange?
+	Same average rate, half the wait: arrivals that repel one another bunch up less than random ones.	Gleiche mittlere Rate, halbe Wartezeit: Ankünfte, die einander abstoßen, ballen sich seltener als zufällige.

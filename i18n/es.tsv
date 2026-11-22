@@ -940,7 +940,6 @@ unit	yr	a
 	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	Este es su primer modelo. Las primeras líneas de Resultados dicen lo que encontró la ejecución; Ayuda ▸ Qué significan los resultados explica cada número.
 # Which inputs matter in the Monte Carlo results (ROADMAP M4.1, part 3a)
 	Which inputs matter	Qué entradas importan
-	{output} depends most on {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile.	{output} depende sobre todo de {input}: va de {low} a {high} cuando {input} va de su percentil 10 a su percentil 90.
 	Each input from its 10th to its 90th percentile, with the others at their medians	Cada entrada de su percentil 10 a su percentil 90, con las demás en su mediana
 	Base {value}	Valor base {value}
 	A correlated input's figure includes the effect of the inputs it is correlated with.	La cifra de una entrada correlacionada incluye el efecto de las entradas con las que está correlacionada.
@@ -1369,7 +1368,6 @@ unit	yr	a
 	The model: its settings and variables	El modelo: sus ajustes y variables
 	System dynamics model	Modelo de dinámica de sistemas
 	Variables	Variables
-	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	Puede cambiar este modelo con comandos, desde un agente mediante el servidor MCP o desde la línea de comandos. La edición en el lienzo llegará después.
 	From {start} to {stop}, in steps of {dt}, by the {method} method.	Desde {start} hasta {stop}, en pasos de {dt}, con el método {method}.
 	Notes from the file	Notas del archivo
 	Equation	Ecuación
@@ -1420,8 +1418,36 @@ unit	yr	a
 	The estimated chance that {output} is more than {value} is {percent}.	La probabilidad estimada de que {output} sea mayor que {value} es {percent}.
 	The estimated chance that {output} is less than {value} is {percent}.	La probabilidad estimada de que {output} sea menor que {value} es {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	Su intervalo no tiene anchura, algo que ninguna estimación tiene, así que se mantiene el resultado simple.
+	{output} changes most with {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile, the other inputs at their medians.	{output} cambia más con {input}: va de {low} a {high} cuando {input} va de su percentil 10 a su percentil 90, con las demás entradas en sus medianas.
+	No variation was observed, so there is no interval for the mean; a rare event the trials did not reach could still move it.	No se observó ninguna variación, así que no hay intervalo para la media; un suceso raro que las pruebas no alcanzaron aún podría moverla.
+	They narrowed the interval by {percent}, but a mean given for a control is far from the trials' mean, so the plain result stands.	Estrecharon el intervalo un {percent}, pero una media dada para un control está lejos de la media de las pruebas, así que se mantiene el resultado simple.
+	The output does not move in one direction with {inputs} (its value at the median is outside its values at the 10th and 90th percentiles), so the swing understates the effect.	La salida no se mueve en una sola dirección con {inputs} (su valor en la mediana queda fuera de sus valores en los percentiles 10 y 90), así que la oscilación subestima el efecto.
+	Did not open {file}: a different model was opened in the meantime	No se abrió {file}: mientras tanto se abrió otro modelo
+	Select	Seleccionar
+	Link	Enlace
+	Initial value	Valor inicial
+	Click the diagram to place a stock.	Haga clic en el diagrama para colocar un nivel.
+	Click the diagram to place an auxiliary.	Haga clic en el diagrama para colocar una variable auxiliar.
+	Drag from a stock, or from empty space, to another stock or empty space to draw a flow.	Arrastre desde un nivel o desde un espacio vacío hasta otro nivel o espacio vacío para dibujar un flujo.
+	Drag from one variable to another to show that the second uses the first.	Arrastre de una variable a otra para indicar que la segunda usa la primera.
+	Click a variable to select it and edit it here. Drag a variable to move it.	Haga clic en una variable para seleccionarla y editarla aquí. Arrástrela para moverla.
+	Moved {name}	Se movió {name}
+	Added {kind}: {name}	Se añadió {kind}: {name}
+	Edited {name}	Se editó {name}
+	Removed {name}	Se eliminó {name}
+	Linked {from} to {to}	Se enlazó {from} con {to}
+	Add Variable	Añadir variable
+	Edit Variable	Editar variable
+	Remove Variable	Eliminar variable
+	Simulation Settings	Ajustes de simulación
+	Change Diagram	Cambiar diagrama
+	You can change this model on the Diagram tab, or with commands, from an agent through the MCP server or from the command line.	Puede cambiar este modelo en la pestaña Diagrama, o con comandos, desde un agente a través del servidor MCP o desde la línea de comandos.
 	Inconclusive at current precision	No concluyente con la precisión actual
 	No difference detected	No se detecta diferencia
 	Agrees within ±{tolerance}	Coincide dentro de ±{tolerance}
 	This is not evidence of agreement: set a tolerance to test for it.	Esto no es prueba de coincidencia: fija una tolerancia para comprobarlo.
 	Tolerance (0 for none)	Tolerancia (0 para ninguna)
+	Arrivals that keep their distance	Llegadas que guardan las distancias
+	One server fed by the gaps between zeros of the Riemann zeta function, beside Poisson arrivals at the same rate.	Un servidor alimentado por los intervalos entre los ceros de la función zeta de Riemann, junto a llegadas de Poisson con la misma tasa.
+	Do arrivals that avoid bunching make a shorter queue?	¿Las llegadas que evitan agruparse hacen una cola más corta?
+	Same average rate, half the wait: arrivals that repel one another bunch up less than random ones.	Misma tasa media, la mitad de espera: las llegadas que se repelen entre sí se agrupan menos que las aleatorias.

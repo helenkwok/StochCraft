@@ -940,7 +940,6 @@ unit	yr	р.
 	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	Це ваша перша модель. Перші рядки у розділі «Результати» розповідають, що виявив запуск; Довідка ▸ Що означають результати пояснює кожне число.
 # Which inputs matter in the Monte Carlo results (ROADMAP M4.1, part 3a)
 	Which inputs matter	Які вхідні величини важливі
-	{output} depends most on {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile.	{output} найбільше залежить від величини {input}: воно змінюється від {low} до {high}, коли {input} змінюється від свого 10-го до 90-го процентиля.
 	Each input from its 10th to its 90th percentile, with the others at their medians	Кожна вхідна величина від 10-го до 90-го процентиля, решта на медіанах
 	Base {value}	Базове значення {value}
 	A correlated input's figure includes the effect of the inputs it is correlated with.	Число для корельованої вхідної величини включає вплив величин, з якими вона корельована.
@@ -1369,7 +1368,6 @@ unit	yr	р.
 	The model: its settings and variables	Модель: її налаштування та змінні
 	System dynamics model	Модель системної динаміки
 	Variables	Змінні
-	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	Цю модель можна змінювати командами: з агента через сервер MCP або з командного рядка. Редагування на полотні з'явиться пізніше.
 	From {start} to {stop}, in steps of {dt}, by the {method} method.	Від {start} до {stop}, кроками по {dt}, методом {method}.
 	Notes from the file	Нотатки з файлу
 	Equation	Рівняння
@@ -1420,8 +1418,36 @@ unit	yr	р.
 	The estimated chance that {output} is more than {value} is {percent}.	Оцінена ймовірність того, що {output} більше за {value}, становить {percent}.
 	The estimated chance that {output} is less than {value} is {percent}.	Оцінена ймовірність того, що {output} менше за {value}, становить {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	Їхній інтервал не має ширини, чого не буває в оцінки, тому залишається звичайний результат.
+	{output} changes most with {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile, the other inputs at their medians.	{output} найбільше змінюється з {input}: воно йде від {low} до {high}, коли {input} іде від свого 10-го до свого 90-го процентиля, а решта входів стоїть на своїх медіанах.
+	No variation was observed, so there is no interval for the mean; a rare event the trials did not reach could still move it.	Мінливості не спостерігалося, тому інтервалу для середнього немає; рідкісна подія, до якої випробування не дійшли, усе ж могла б його зсунути.
+	They narrowed the interval by {percent}, but a mean given for a control is far from the trials' mean, so the plain result stands.	Вони звузили інтервал на {percent}, але середнє, задане для контролю, далеко від середнього випробувань, тому лишається звичайний результат.
+	The output does not move in one direction with {inputs} (its value at the median is outside its values at the 10th and 90th percentiles), so the swing understates the effect.	Вихід не рухається в одному напрямку з {inputs} (його значення на медіані лежить поза його значеннями на 10-му та 90-му процентилях), тому розмах занижує ефект.
+	Did not open {file}: a different model was opened in the meantime	{file} не відкрито: тим часом відкрито іншу модель
+	Select	Вибрати
+	Link	Зв’язок
+	Initial value	Початкове значення
+	Click the diagram to place a stock.	Клацніть діаграму, щоб розмістити запас.
+	Click the diagram to place an auxiliary.	Клацніть діаграму, щоб розмістити допоміжну змінну.
+	Drag from a stock, or from empty space, to another stock or empty space to draw a flow.	Перетягніть від запасу або від порожнього місця до іншого запасу або порожнього місця, щоб намалювати потік.
+	Drag from one variable to another to show that the second uses the first.	Перетягніть від однієї змінної до іншої, щоб показати, що друга використовує першу.
+	Click a variable to select it and edit it here. Drag a variable to move it.	Клацніть змінну, щоб вибрати її та редагувати тут. Перетягніть змінну, щоб перемістити її.
+	Moved {name}	Переміщено: {name}
+	Added {kind}: {name}	Додано ({kind}): {name}
+	Edited {name}	Змінено: {name}
+	Removed {name}	Видалено: {name}
+	Linked {from} to {to}	{from} з’єднано з {to}
+	Add Variable	Додати змінну
+	Edit Variable	Редагувати змінну
+	Remove Variable	Видалити змінну
+	Simulation Settings	Параметри симуляції
+	Change Diagram	Змінити діаграму
+	You can change this model on the Diagram tab, or with commands, from an agent through the MCP server or from the command line.	Ви можете змінити цю модель на вкладці «Діаграма» або за допомогою команд — від агента через сервер MCP чи з командного рядка.
 	Inconclusive at current precision	Невизначено за поточної точності
 	No difference detected	Відмінності не виявлено
 	Agrees within ±{tolerance}	Збігається в межах ±{tolerance}
 	This is not evidence of agreement: set a tolerance to test for it.	Це не доказ збігу: задайте допуск, щоб його перевірити.
 	Tolerance (0 for none)	Допуск (0 — немає)
+	Arrivals that keep their distance	Надходження, які тримають дистанцію
+	One server fed by the gaps between zeros of the Riemann zeta function, beside Poisson arrivals at the same rate.	Один обслуговувальний пристрій, на який заявки надходять через проміжки між нулями дзета-функції Рімана, поруч із пуассонівськими надходженнями тієї самої інтенсивності.
+	Do arrivals that avoid bunching make a shorter queue?	Чи дають надходження, що уникають скупчення, коротшу чергу?
+	Same average rate, half the wait: arrivals that repel one another bunch up less than random ones.	Та сама середня інтенсивність, очікування вдвічі менше: надходження, які відштовхуються одне від одного, скупчуються рідше за випадкові.

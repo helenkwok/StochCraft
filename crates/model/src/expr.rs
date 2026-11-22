@@ -29,7 +29,9 @@
 //! side is one, else as strings. A property a token does not have reads as XPath's empty
 //! node-set would: the empty string, which is `NaN` as a number and false as a boolean. Every
 //! operation is exact IEEE arithmetic (`mod` is the truncating remainder), so results are the
-//! same on every platform.
+//! same on every platform. An expression nests at most 256 deep (parentheses, signs, calls and
+//! the length of a run of one operator), so a hostile file is refused with a position rather
+//! than overflowing the stack.
 
 use std::fmt;
 
@@ -418,10 +420,26 @@ fn tokenize(src: &str, variables: bool) -> Result<Vec<(usize, Tok)>, ExprError> 
     Ok(out)
 }
 
+/// The deepest an expression may nest, in parentheses, signs and function calls: each level
+/// is several nested calls of the parser (one per precedence level), so this is kept well below
+/// what a small stack holds (a debug build's 2 MB test thread, a 1 MB main thread on Windows).
+/// Models nest a handful of levels.
+const MAX_NEST: usize = 64;
+
+/// The tallest tree an expression may build: a long run of `+` is read in a loop, not by recursion,
+/// but builds a tree as tall as the run is long, and evaluating, copying and dropping it recurse
+/// once per level, with small frames.
+const MAX_HEIGHT: usize = 512;
+
+/// A parsed tree and its height (a number or a name has height 1).
+type Node = (Expr, usize);
+
 struct Parser {
     toks: Vec<(usize, Tok)>,
     at: usize,
     end: usize,
+    /// How many of the parser's own nested calls are open now.
+    nest: usize,
 }
 
 /// Operator precedence levels, loosest first.
@@ -449,7 +467,42 @@ impl Parser {
         t
     }
 
-    fn binary(&mut self, level: usize) -> Result<Expr, ExprError> {
+    fn too_deep(&self, limit: usize) -> ExprError {
+        err(
+            self.pos(),
+            format!("the expression nests more than {limit} deep"),
+        )
+    }
+
+    /// Runs `f` one nested call deeper, or says the expression nests too deeply.
+    fn nested(
+        &mut self,
+        f: impl FnOnce(&mut Self) -> Result<Node, ExprError>,
+    ) -> Result<Node, ExprError> {
+        self.nest += 1;
+        if self.nest > MAX_NEST {
+            return Err(self.too_deep(MAX_NEST));
+        }
+        let n = f(self)?;
+        self.nest -= 1;
+        Ok(n)
+    }
+
+    /// `node` as the parent of children `heights` tall, if the tree stays within the limit.
+    fn grow(&self, node: Expr, heights: &[usize]) -> Result<Node, ExprError> {
+        let h = heights.iter().copied().max().unwrap_or(0) + 1;
+        if h > MAX_HEIGHT {
+            return Err(self.too_deep(MAX_HEIGHT));
+        }
+        Ok((node, h))
+    }
+
+    /// A whole expression: how an operand in parentheses or an argument is read.
+    fn expression(&mut self) -> Result<Node, ExprError> {
+        self.nested(|p| p.binary(0))
+    }
+
+    fn binary(&mut self, level: usize) -> Result<Node, ExprError> {
         let Some(ops) = LEVELS.get(level) else {
             return self.unary();
         };
@@ -462,26 +515,30 @@ impl Parser {
             };
             self.bump();
             let right = self.binary(level + 1)?;
-            left = Expr::Binary(op, Box::new(left), Box::new(right));
+            left = self.grow(
+                Expr::Binary(op, Box::new(left.0), Box::new(right.0)),
+                &[left.1, right.1],
+            )?;
         }
     }
 
-    fn unary(&mut self) -> Result<Expr, ExprError> {
+    fn unary(&mut self) -> Result<Node, ExprError> {
         if self.peek() == Some(&Tok::Minus) {
             self.bump();
-            return Ok(Expr::Neg(Box::new(self.unary()?)));
+            let (e, h) = self.nested(Self::unary)?;
+            return self.grow(Expr::Neg(Box::new(e)), &[h]);
         }
         self.primary()
     }
 
-    fn primary(&mut self) -> Result<Expr, ExprError> {
+    fn primary(&mut self) -> Result<Node, ExprError> {
         let pos = self.pos();
         match self.bump() {
-            Some(Tok::Num(n)) => Ok(Expr::Number(n)),
-            Some(Tok::Lit(s)) => Ok(Expr::Text(s)),
-            Some(Tok::Var(name)) => Ok(Expr::Variable(name)),
+            Some(Tok::Num(n)) => Ok((Expr::Number(n), 1)),
+            Some(Tok::Lit(s)) => Ok((Expr::Text(s), 1)),
+            Some(Tok::Var(name)) => Ok((Expr::Variable(name), 1)),
             Some(Tok::LParen) => {
-                let e = self.binary(0)?;
+                let e = self.expression()?;
                 self.expect_close()?;
                 Ok(e)
             }
@@ -496,9 +553,12 @@ impl Parser {
                 }
                 self.bump();
                 let mut args = Vec::new();
+                let mut heights = Vec::new();
                 if self.peek() != Some(&Tok::RParen) {
                     loop {
-                        args.push(self.binary(0)?);
+                        let (a, h) = self.expression()?;
+                        args.push(a);
+                        heights.push(h);
                         if self.peek() == Some(&Tok::Comma) {
                             self.bump();
                         } else {
@@ -507,7 +567,8 @@ impl Parser {
                     }
                 }
                 self.expect_close()?;
-                call(pos, &name, args)
+                let e = call(pos, &name, args)?;
+                self.grow(e, &heights)
             }
             Some(Tok::RParen) => Err(err(pos, "`)` without a matching `(`")),
             Some(Tok::Comma) => Err(err(pos, "unexpected `,`")),
@@ -605,8 +666,9 @@ fn parse_as(src: &str, variables: bool) -> Result<Expr, ExprError> {
         toks,
         at: 0,
         end: src.chars().count(),
+        nest: 0,
     };
-    let e = p.binary(0)?;
+    let (e, _) = p.expression()?;
     if p.at < p.toks.len() {
         return Err(err(p.pos(), "unexpected text after the expression"));
     }
@@ -1022,5 +1084,39 @@ mod tests {
             parse("getProperty('a')").map(|e| e.kind()),
             Ok(Kind::Property)
         );
+    }
+
+    /// Parentheses, signs, function calls and long runs of one operator all nest without bound
+    /// in a file, and must be refused with a position, not overflow the stack.
+    #[test]
+    fn nesting_is_limited() {
+        let n = 100_000;
+        let deep = [
+            format!("{}1{}", "(".repeat(n), ")".repeat(n)),
+            format!("{}1", "-".repeat(n)),
+            format!("1{}", " + 1".repeat(n)),
+            format!("1{}", " - 1".repeat(n)),
+            format!("1{}", " and 1".repeat(n)),
+            format!("{}1{}", "not(".repeat(n), ")".repeat(n)),
+            format!("{}1{}", "floor(".repeat(n), ")".repeat(n)),
+        ];
+        for src in &deep {
+            for parsed in [parse(src), parse_with_variables(src)] {
+                match parsed {
+                    Ok(_) => panic!("`{}` parsed", &src[..20]),
+                    Err(e) => {
+                        assert!(e.message.contains("nests more than"), "{e}");
+                        assert!(e.position > 0, "{e}");
+                    }
+                }
+            }
+        }
+        let if_chain = format!("{}1{}", "if(1, 1, ".repeat(n), ")".repeat(n));
+        assert!(parse_with_variables(&if_chain).is_err_and(|e| e.message.contains("nests more")));
+        // Deep, but within the limit: still read, evaluated and dropped.
+        let ok = format!("{}1{}", "(".repeat(50), ")".repeat(50));
+        assert_eq!(num(&ok), 1.0);
+        assert_eq!(num(&format!("1{}", " + 1".repeat(200))), 201.0);
+        assert_eq!(num(&format!("{}1", "-".repeat(50))), 1.0);
     }
 }

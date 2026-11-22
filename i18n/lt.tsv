@@ -940,7 +940,6 @@ unit	yr	m.
 	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	Tai jūsų pirmasis modelis. Pirmosios Rezultatai eilutės nurodo, ką rodo vykdymas; Žinynas ▸ Ką reiškia rezultatai paaiškina kiekvieną skaičių.
 # Which inputs matter in the Monte Carlo results (ROADMAP M4.1, part 3a)
 	Which inputs matter	Kurios įvestys svarbios
-	{output} depends most on {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile.	{output} labiausiai priklauso nuo {input}: reikšmė kinta nuo {low} iki {high}, kai {input} kinta nuo savo 10-ojo iki 90-ojo procentilio.
 	Each input from its 10th to its 90th percentile, with the others at their medians	Kiekviena įvestis nuo savo 10-ojo iki 90-ojo procentilio, kitos ties savo mediana
 	Base {value}	Bazinė reikšmė {value}
 	A correlated input's figure includes the effect of the inputs it is correlated with.	Koreliuotos įvesties skaičius apima įvesčių, su kuriomis ji koreliuoja, poveikį.
@@ -1369,7 +1368,6 @@ unit	yr	m.
 	The model: its settings and variables	Modelis: jo nustatymai ir kintamieji
 	System dynamics model	Sistemų dinamikos modelis
 	Variables	Kintamieji
-	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	Šį modelį galite keisti komandomis – iš agento per MCP serverį arba iš komandų eilutės. Redagavimas drobėje bus vėliau.
 	From {start} to {stop}, in steps of {dt}, by the {method} method.	Nuo {start} iki {stop}, {dt} žingsniais, {method} metodu.
 	Notes from the file	Pastabos iš failo
 	Equation	Lygtis
@@ -1420,8 +1418,36 @@ unit	yr	m.
 	The estimated chance that {output} is more than {value} is {percent}.	Numatoma tikimybė, kad {output} yra didesnis nei {value}, yra {percent}.
 	The estimated chance that {output} is less than {value} is {percent}.	Numatoma tikimybė, kad {output} yra mažesnis nei {value}, yra {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	Jų intervalas neturi pločio, o jokio įverčio taip nebūna, todėl lieka įprastas rezultatas.
+	{output} changes most with {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile, the other inputs at their medians.	{output} labiausiai keičiasi su {input}: jis eina nuo {low} iki {high}, kai {input} eina nuo savo 10-ojo iki 90-ojo procentilio, o kitos įvestys yra ties savo medianomis.
+	No variation was observed, so there is no interval for the mean; a rare event the trials did not reach could still move it.	Kitimo nepastebėta, todėl vidurkiui intervalo nėra; retas įvykis, kurio bandymai nepasiekė, vis dar galėtų jį pastumti.
+	They narrowed the interval by {percent}, but a mean given for a control is far from the trials' mean, so the plain result stands.	Jie susiaurino intervalą {percent}, bet kontrolei duotas vidurkis toli nuo bandymų vidurkio, todėl lieka paprastas rezultatas.
+	The output does not move in one direction with {inputs} (its value at the median is outside its values at the 10th and 90th percentiles), so the swing understates the effect.	Išvestis nejuda viena kryptimi su {inputs} (jos reikšmė ties mediana yra už jos reikšmių ties 10-uoju ir 90-uoju procentiliu), todėl svyravimas nepakankamai įvertina poveikį.
+	Did not open {file}: a different model was opened in the meantime	{file} neatidarytas: tuo metu buvo atidarytas kitas modelis
+	Select	Pasirinkti
+	Link	Saitas
+	Initial value	Pradinė reikšmė
+	Click the diagram to place a stock.	Spustelėkite diagramą, kad padėtumėte atsargą.
+	Click the diagram to place an auxiliary.	Spustelėkite diagramą, kad padėtumėte pagalbinį kintamąjį.
+	Drag from a stock, or from empty space, to another stock or empty space to draw a flow.	Vilkite iš atsargos arba tuščios vietos į kitą atsargą ar tuščią vietą, kad nubraižytumėte srautą.
+	Drag from one variable to another to show that the second uses the first.	Vilkite nuo vieno kintamojo prie kito, kad parodytumėte, jog antrasis naudoja pirmąjį.
+	Click a variable to select it and edit it here. Drag a variable to move it.	Spustelėkite kintamąjį, kad jį pasirinktumėte ir redaguotumėte čia. Vilkite kintamąjį, kad jį perkeltumėte.
+	Moved {name}	Perkelta: {name}
+	Added {kind}: {name}	Pridėta: {kind} {name}
+	Edited {name}	Redaguota: {name}
+	Removed {name}	Pašalinta: {name}
+	Linked {from} to {to}	{from} sujungta su {to}
+	Add Variable	Pridėti kintamąjį
+	Edit Variable	Keisti kintamąjį
+	Remove Variable	Pašalinti kintamąjį
+	Simulation Settings	Modeliavimo nustatymai
+	Change Diagram	Keisti diagramą
+	You can change this model on the Diagram tab, or with commands, from an agent through the MCP server or from the command line.	Šį modelį galite keisti skirtuke Diagrama arba komandomis, iš agento per MCP serverį arba iš komandų eilutės.
 	Inconclusive at current precision	Esamu tikslumu neįrodoma
 	No difference detected	Skirtumo neaptikta
 	Agrees within ±{tolerance}	Sutampa ±{tolerance} ribose
 	This is not evidence of agreement: set a tolerance to test for it.	Tai nėra sutapimo įrodymas: nustatykite leidžiamąją paklaidą, kad tai patikrintumėte.
 	Tolerance (0 for none)	Leidžiamoji paklaida (0 – jokios)
+	Arrivals that keep their distance	Atvykimai, laikantys atstumą
+	One server fed by the gaps between zeros of the Riemann zeta function, beside Poisson arrivals at the same rate.	Vienas aptarnavimo punktas, kuriam atvykimus lemia tarpai tarp Riemanno dzeta funkcijos nulių, šalia Puasono atvykimų tokiu pat dažniu.
+	Do arrivals that avoid bunching make a shorter queue?	Ar atvykimai, vengiantys susigrūdimo, sukuria trumpesnę eilę?
+	Same average rate, half the wait: arrivals that repel one another bunch up less than random ones.	Tas pats vidutinis dažnis, perpus mažiau laukimo: vienas kitą stumiantys atvykimai grupuojasi rečiau nei atsitiktiniai.

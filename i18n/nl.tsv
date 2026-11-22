@@ -940,7 +940,6 @@ unit	yr	j
 	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	Dat is uw eerste model. De eerste regels van Resultaten vertellen wat de uitvoering heeft gevonden; Help ▸ Wat de resultaten betekenen legt elk getal uit.
 # Which inputs matter in the Monte Carlo results (ROADMAP M4.1, part 3a)
 	Which inputs matter	Welke invoer ertoe doet
-	{output} depends most on {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile.	{output} hangt het meest af van {input}: het gaat van {low} naar {high} als {input} van zijn 10e naar zijn 90e percentiel gaat.
 	Each input from its 10th to its 90th percentile, with the others at their medians	Elke invoer van zijn 10e tot zijn 90e percentiel, de andere op hun mediaan
 	Base {value}	Basiswaarde {value}
 	A correlated input's figure includes the effect of the inputs it is correlated with.	Het cijfer van gecorreleerde invoer omvat het effect van de invoer waarmee die gecorreleerd is.
@@ -1369,7 +1368,6 @@ unit	yr	j
 	The model: its settings and variables	Het model: zijn instellingen en variabelen
 	System dynamics model	Systeemdynamicamodel
 	Variables	Variabelen
-	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	Je kunt dit model wijzigen met opdrachten, vanuit een agent via de MCP-server of vanaf de opdrachtregel. Bewerken op het canvas komt hierna.
 	From {start} to {stop}, in steps of {dt}, by the {method} method.	Van {start} tot {stop}, in stappen van {dt}, met de {method}-methode.
 	Notes from the file	Notities uit het bestand
 	Equation	Vergelijking
@@ -1420,8 +1418,36 @@ unit	yr	j
 	The estimated chance that {output} is more than {value} is {percent}.	De geschatte kans dat {output} groter is dan {value} is {percent}.
 	The estimated chance that {output} is less than {value} is {percent}.	De geschatte kans dat {output} kleiner is dan {value} is {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	Hun interval heeft geen breedte, wat geen schatting heeft, dus het gewone resultaat blijft staan.
+	{output} changes most with {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile, the other inputs at their medians.	{output} verandert het meest met {input}: het gaat van {low} naar {high} als {input} van zijn 10e naar zijn 90e percentiel gaat, met de andere invoer op hun mediaan.
+	No variation was observed, so there is no interval for the mean; a rare event the trials did not reach could still move it.	Er is geen variatie waargenomen, dus er is geen interval voor het gemiddelde; een zeldzame gebeurtenis die de proeven niet bereikten, zou het nog kunnen verschuiven.
+	They narrowed the interval by {percent}, but a mean given for a control is far from the trials' mean, so the plain result stands.	Ze verkleinden het interval met {percent}, maar een voor een controle opgegeven gemiddelde ligt ver van het gemiddelde van de proeven, dus het gewone resultaat blijft staan.
+	The output does not move in one direction with {inputs} (its value at the median is outside its values at the 10th and 90th percentiles), so the swing understates the effect.	De uitvoer beweegt niet in één richting met {inputs} (de waarde bij de mediaan ligt buiten de waarden bij het 10e en 90e percentiel), dus de uitslag onderschat het effect.
+	Did not open {file}: a different model was opened in the meantime	{file} is niet geopend: er is in de tussentijd een ander model geopend
+	Select	Selecteren
+	Link	Koppeling
+	Initial value	Beginwaarde
+	Click the diagram to place a stock.	Klik op het diagram om een voorraad te plaatsen.
+	Click the diagram to place an auxiliary.	Klik op het diagram om een hulpvariabele te plaatsen.
+	Drag from a stock, or from empty space, to another stock or empty space to draw a flow.	Sleep vanaf een voorraad of een lege plek naar een andere voorraad of lege plek om een stroom te tekenen.
+	Drag from one variable to another to show that the second uses the first.	Sleep van de ene variabele naar de andere om te laten zien dat de tweede de eerste gebruikt.
+	Click a variable to select it and edit it here. Drag a variable to move it.	Klik op een variabele om die te selecteren en hier te bewerken. Sleep een variabele om die te verplaatsen.
+	Moved {name}	{name} verplaatst
+	Added {kind}: {name}	Toegevoegd: {kind} {name}
+	Edited {name}	{name} bewerkt
+	Removed {name}	{name} verwijderd
+	Linked {from} to {to}	{from} gekoppeld aan {to}
+	Add Variable	Variabele toevoegen
+	Edit Variable	Variabele wijzigen
+	Remove Variable	Variabele verwijderen
+	Simulation Settings	Simulatie-instellingen
+	Change Diagram	Diagram wijzigen
+	You can change this model on the Diagram tab, or with commands, from an agent through the MCP server or from the command line.	U kunt dit model wijzigen op het tabblad Diagram, of met opdrachten, vanuit een agent via de MCP-server of vanaf de opdrachtregel.
 	Inconclusive at current precision	Niet doorslaggevend bij de huidige nauwkeurigheid
 	No difference detected	Geen verschil aangetoond
 	Agrees within ±{tolerance}	Komt overeen binnen ±{tolerance}
 	This is not evidence of agreement: set a tolerance to test for it.	Dit is geen bewijs van overeenstemming: stel een tolerantie in om dat te toetsen.
 	Tolerance (0 for none)	Tolerantie (0 voor geen)
+	Arrivals that keep their distance	Aankomsten die afstand houden
+	One server fed by the gaps between zeros of the Riemann zeta function, beside Poisson arrivals at the same rate.	Eén loket, gevoed door de tussenpozen tussen de nulpunten van de Riemann-zetafunctie, naast Poisson-aankomsten met dezelfde intensiteit.
+	Do arrivals that avoid bunching make a shorter queue?	Geven aankomsten die klontering vermijden een kortere rij?
+	Same average rate, half the wait: arrivals that repel one another bunch up less than random ones.	Dezelfde gemiddelde intensiteit, de helft van de wachttijd: aankomsten die elkaar afstoten, klonteren minder samen dan willekeurige.

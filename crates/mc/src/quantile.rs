@@ -71,7 +71,12 @@ fn continuous(d: &Dist, p: f64) -> f64 {
         } => {
             let (a, b) = ((min - mean) / std_dev, (max - mean) / std_dev);
             // In whichever tail keeps the probabilities away from 1, where they lose digits.
-            let x = if a > 0.0 {
+            let x = if a > FAR_TAIL {
+                // So far out that the tail probabilities underflow: worked in logarithms.
+                mean + std_dev * far_tail(a, b, p)
+            } else if b < -FAR_TAIL {
+                mean - std_dev * far_tail(-b, -a, 1.0 - p)
+            } else if a > 0.0 {
                 let (sa, sb) = (normal_cdf(-a), normal_cdf(-b));
                 mean - std_dev * z(sa - p * (sa - sb))
             } else {
@@ -99,6 +104,43 @@ fn continuous(d: &Dist, p: f64) -> f64 {
             discrete(d, &[p]).first().copied().unwrap_or(f64::NAN)
         }
     }
+}
+
+/// How many standard deviations from the mean a truncated normal's near bound is before its tail
+/// probabilities (about 5e-198 at 30) are worked in logarithms.
+const FAR_TAIL: f64 = 30.0;
+
+/// ln Q(x), Q the standard normal's upper tail, for x > 0: the tail itself while it is a normal
+/// number (x below 37), and its asymptotic series (Abramowitz and Stegun 26.2.12, with the terms
+/// to x⁻⁸, which are below 1e-12 of the sum from 37 up) beyond, so it never underflows.
+fn ln_upper_tail(x: f64) -> f64 {
+    if x < 37.0 {
+        return ln(normal_cdf(-x));
+    }
+    let r = 1.0 / (x * x);
+    let series = 1.0 - r + 3.0 * r * r - 15.0 * r * r * r + 105.0 * r * r * r * r;
+    -0.5 * x * x - ln(x) - 0.5 * ln(2.0 * std::f64::consts::PI) + ln(series)
+}
+
+/// The standard normal truncated to [a, b] (0 < a < b) at probability `p`: the x where
+/// Q(x) = (1 − p) Q(a) + p Q(b), found on the logarithms of the tails so that it holds however
+/// far out a is, by bisection on the decreasing ln Q.
+fn far_tail(a: f64, b: f64, p: f64) -> f64 {
+    let (la, lb) = (ln_upper_tail(a), ln_upper_tail(b));
+    let target = la + ln((1.0 - p) + p * exp(lb - la));
+    let (mut lo, mut hi) = (a, b);
+    for _ in 0..200 {
+        let mid = 0.5 * (lo + hi);
+        if ln_upper_tail(mid) > target {
+            lo = mid;
+        } else {
+            hi = mid;
+        }
+        if hi - lo <= 1e-15 * hi {
+            break;
+        }
+    }
+    0.5 * (lo + hi)
 }
 
 /// ln(1 + x), accurate for small x.
@@ -416,6 +458,49 @@ mod tests {
         );
         assert!(mid.abs() < 1e-12, "{mid}");
         assert_eq!(quantile(&Dist::Constant(-4.0), 0.3), -4.0);
+    }
+
+    /// A normal truncated 40 standard deviations out (Normal(0, 1) on [40, 41]): its tail
+    /// probabilities underflow, but the quantiles are spread over the interval and their mean is
+    /// the distribution's own (about 40.0249), on either side of the mean.
+    #[test]
+    fn a_truncated_normal_far_in_a_tail_keeps_its_mean() {
+        let n = 10_000;
+        let ps: Vec<f64> = (0..n)
+            .map(|i| (f64::from(i) + 0.5) / f64::from(n))
+            .collect();
+        for (min, max, sign) in [(40.0, 41.0, 1.0), (-41.0, -40.0, -1.0)] {
+            let d = Dist::TruncatedNormal {
+                mean: 0.0,
+                std_dev: 1.0,
+                min,
+                max,
+            };
+            let xs = quantiles(&d, &ps);
+            assert!(xs.iter().all(|x| (min..=max).contains(x)), "{min}");
+            assert!(xs.windows(2).all(|w| w[0] <= w[1]), "{min}");
+            let mean = xs.iter().sum::<f64>() / xs.len() as f64;
+            let want = d.mean().unwrap_or(f64::NAN);
+            assert!((mean - want).abs() < 1e-4, "{mean} {want}");
+            assert!((want.abs() - 40.0249).abs() < 1e-3, "{want}");
+            assert!(sign * mean > 0.0);
+            // Not all at one end: the spread is the exponential-like tail of about 1/40.
+            let (lo, hi) = xs
+                .iter()
+                .fold((f64::MAX, f64::MIN), |(l, h), x| (l.min(*x), h.max(*x)));
+            assert!(hi - lo > 0.1, "{lo} {hi}");
+        }
+        // Where both ways are exact, the logarithmic one agrees with the direct one.
+        let d = Dist::TruncatedNormal {
+            mean: 0.0,
+            std_dev: 1.0,
+            min: 10.0,
+            max: 11.0,
+        };
+        for p in [0.01, 0.3, 0.5, 0.9, 0.99] {
+            let direct = quantile(&d, p);
+            assert!((far_tail(10.0, 11.0, p) - direct).abs() < 1e-9, "{p}");
+        }
     }
 
     #[test]

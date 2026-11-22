@@ -39,7 +39,8 @@ pub enum Dist {
     /// shape-below-one boost.
     Gamma { shape: f64, scale: f64 },
     /// Beta on [0, 1]. BPSim names its parameters `shape` and `scale`; they are taken as the two
-    /// shape parameters α = `shape`, β = `scale` (mean α / (α + β)). Ratio of two gammas.
+    /// shape parameters α = `shape`, β = `scale` (mean α / (α + β)). Ratio of two gammas, and
+    /// for a shape below 0.1 the same ratio formed from their logs.
     Beta { shape: f64, scale: f64 },
     /// Erlang: the sum of `k` exponentials, with overall mean `mean`.
     Erlang { mean: f64, k: u64 },
@@ -219,6 +220,39 @@ fn gamma_sample(rng: &mut Rng, shape: f64, scale: f64) -> f64 {
             return d * v * scale;
         }
     }
+}
+
+/// The natural log of a Gamma(`shape`, 1) draw, for a shape so small that the draw itself
+/// underflows to 0: below 1, ln Γ(k) = ln Γ(k + 1) + ln(U) / k, kept as a log (the draws and
+/// their order are those of [`gamma_sample`]).
+fn ln_gamma_sample(rng: &mut Rng, shape: f64) -> f64 {
+    if shape < 1.0 {
+        let u = rng.uniform_open0();
+        return ln_gamma_sample(rng, shape + 1.0) + ln(u) / shape;
+    }
+    ln(gamma_sample(rng, shape, 1.0))
+}
+
+/// Both shapes of a beta at or above this are drawn as X / (X + Y) from two gammas. Below it, a
+/// gamma draw can lose its digits or underflow to 0 (which made the beta 0 too often and its
+/// mean wrong), so it is drawn from the logs of the gammas instead.
+const BETA_DIRECT_FROM: f64 = 0.1;
+
+fn beta_sample(rng: &mut Rng, a: f64, b: f64) -> f64 {
+    if a >= BETA_DIRECT_FROM && b >= BETA_DIRECT_FROM {
+        let x = gamma_sample(rng, a, 1.0);
+        let y = gamma_sample(rng, b, 1.0);
+        return if x + y > 0.0 { x / (x + y) } else { 0.0 };
+    }
+    // X / (X + Y) = 1 / (1 + Y / X), with Y / X = exp(ln Y − ln X) formed without either.
+    let lx = ln_gamma_sample(rng, a);
+    let ly = ln_gamma_sample(rng, b);
+    let d = ly - lx;
+    if d.is_nan() {
+        // Both logs overflowed the same way (shapes below 1e-300): a tie.
+        return 0.5;
+    }
+    1.0 / (1.0 + exp(d))
 }
 
 /// A standard normal restricted to [a, b], a < b (Robert, 1995).
@@ -718,11 +752,7 @@ impl Dist {
                 exp(mu + s2.sqrt() * standard_normal(rng))
             }
             Dist::Gamma { shape, scale } => gamma_sample(rng, *shape, *scale),
-            Dist::Beta { shape, scale } => {
-                let x = gamma_sample(rng, *shape, 1.0);
-                let y = gamma_sample(rng, *scale, 1.0);
-                if x + y > 0.0 { x / (x + y) } else { 0.0 }
-            }
+            Dist::Beta { shape, scale } => beta_sample(rng, *shape, *scale),
             // The sum of k exponentials costs k draws, so a large k (a fit to tightly clustered
             // data can give millions) is drawn as the gamma it is. Small k keep the sum, so
             // their fixed-seed draws stay as they were.
@@ -787,7 +817,10 @@ impl Dist {
     }
 
     /// The theoretical mean (`None` where it has no simple closed form or the parameters are
-    /// invalid).
+    /// invalid). A constant is clamped at 0, but a normal is not: its mean is its `mean`, whatever
+    /// the chance of a negative draw, so it is not the mean of a duration drawn from it (negative
+    /// draws wait 0, see [`Dist::Normal`]). Code that needs the mean of a time must not use it for
+    /// a normal; the capacity table refuses one, and a truncated normal says what is meant.
     pub fn mean(&self) -> Option<f64> {
         self.check().ok()?;
         Some(match self {
@@ -805,7 +838,8 @@ impl Dist {
                 max,
             } => truncated_moments(*mean, *std_dev, *min, *max).0,
             Dist::Gamma { shape, scale } => shape * scale,
-            Dist::Beta { shape, scale } => shape / (shape + scale),
+            // Written so that two shapes near the largest number do not overflow their sum.
+            Dist::Beta { shape, scale } => 1.0 / (1.0 + scale / shape),
             Dist::Weibull { shape, scale } => scale * exp(ln_gamma(1.0 + 1.0 / shape)),
             Dist::Binomial {
                 probability,
@@ -1225,6 +1259,46 @@ mod tests {
             "{m}"
         );
         assert!((v / (36.0 / 65.0) - 1.0).abs() < 0.05, "{v}");
+    }
+
+    /// A beta with a tiny shape is nearly all at 0 or 1, but its mean is still α / (α + β). Drawn
+    /// as a ratio of two gammas it lost its mean once a gamma underflowed to 0.
+    #[test]
+    fn a_beta_with_tiny_shapes_keeps_its_mean() {
+        let n = 100_000;
+        for (a, b, seed) in [
+            (0.01, 0.01, 21),
+            (0.001, 0.001, 22),
+            (0.000_1, 0.000_1, 23),
+            (0.002, 0.004, 24),
+            (0.000_5, 3.0, 25),
+        ] {
+            let d = Dist::Beta { shape: a, scale: b };
+            let mut rng = Rng::new(seed);
+            let xs: Vec<f64> = (0..n).map(|_| d.sample(&mut rng)).collect();
+            assert!(xs.iter().all(|x| (0.0..=1.0).contains(x)), "({a}, {b})");
+            let m = xs.iter().sum::<f64>() / n as f64;
+            let want = a / (a + b);
+            let var = d.variance().unwrap_or(0.25);
+            // Seven standard errors.
+            let tol = 7.0 * (var / n as f64).sqrt();
+            assert!((m - want).abs() < tol, "Beta({a}, {b}): {m} against {want}");
+        }
+    }
+
+    /// The beta mean does not overflow when both shapes are near the largest number.
+    #[test]
+    fn the_beta_mean_does_not_overflow() {
+        let big = Dist::Beta {
+            shape: 1e308,
+            scale: 1e308,
+        };
+        assert_eq!(big.mean(), Some(0.5));
+        let d = Dist::Beta {
+            shape: 2.0,
+            scale: 3.0,
+        };
+        assert!((d.mean().unwrap_or(f64::NAN) - 0.4).abs() < 1e-15);
     }
 
     fn all() -> Vec<Dist> {
@@ -1907,5 +1981,110 @@ mod tests {
                 );
             }
         }
+    }
+}
+
+/// Machine-checked properties (Kani, `cargo kani -p stochcraft-random`; see docs/developers.md).
+/// `Dist::check` only accepts parameters a draw can be made from: each harness takes arbitrary
+/// `f64` parameters (NaN and infinities included) and shows what an `Ok` implies.
+#[cfg(kani)]
+mod proofs {
+    use super::*;
+
+    fn any_f64() -> f64 {
+        kani::any()
+    }
+
+    #[kani::proof]
+    fn bounded_kinds_are_accepted_only_with_finite_ordered_bounds() {
+        let (min, mode, max) = (any_f64(), any_f64(), any_f64());
+        if (Dist::Uniform { min, max }).check().is_ok() {
+            assert!(min.is_finite() && max.is_finite() && min < max);
+        }
+        if (Dist::Triangular { min, mode, max }).check().is_ok() {
+            assert!(min.is_finite() && mode.is_finite() && max.is_finite());
+            assert!(min < max && min <= mode && mode <= max);
+        }
+        let (mean, std_dev) = (any_f64(), any_f64());
+        if (Dist::TruncatedNormal {
+            mean,
+            std_dev,
+            min,
+            max,
+        })
+        .check()
+        .is_ok()
+        {
+            assert!(mean.is_finite() && min.is_finite() && max.is_finite() && min < max);
+            assert!(std_dev.is_finite() && std_dev > 0.0);
+        }
+    }
+
+    #[kani::proof]
+    fn scale_kinds_are_accepted_only_with_finite_non_negative_parameters() {
+        let (a, b) = (any_f64(), any_f64());
+        if (Dist::Exponential { mean: a }).check().is_ok() {
+            assert!(a.is_finite() && a >= 0.0);
+        }
+        if (Dist::Poisson { mean: a }).check().is_ok() {
+            assert!(a.is_finite() && a >= 0.0);
+        }
+        if (Dist::Normal {
+            mean: a,
+            std_dev: b,
+        })
+        .check()
+        .is_ok()
+        {
+            assert!(a.is_finite() && b.is_finite() && b >= 0.0);
+        }
+        if (Dist::LogNormal {
+            mean: a,
+            std_dev: b,
+        })
+        .check()
+        .is_ok()
+        {
+            assert!(a.is_finite() && a > 0.0 && b.is_finite() && b >= 0.0);
+        }
+        let k: u64 = kani::any();
+        if (Dist::Erlang { mean: a, k }).check().is_ok() {
+            assert!(a.is_finite() && a >= 0.0 && k >= 1);
+        }
+    }
+
+    #[kani::proof]
+    fn shape_scale_kinds_and_binomial_are_accepted_only_in_range() {
+        let (shape, scale) = (any_f64(), any_f64());
+        let kinds = [
+            Dist::Gamma { shape, scale },
+            Dist::Beta { shape, scale },
+            Dist::Weibull { shape, scale },
+        ];
+        for d in &kinds {
+            if d.check().is_ok() {
+                assert!(shape.is_finite() && shape > 0.0);
+                assert!(scale.is_finite() && scale > 0.0);
+            }
+        }
+        let trials: u64 = kani::any();
+        let probability = any_f64();
+        if (Dist::Binomial {
+            probability,
+            trials,
+        })
+        .check()
+        .is_ok()
+        {
+            assert!(probability >= 0.0 && probability <= 1.0);
+        }
+    }
+
+    /// A constant never samples NaN, infinite or negative, whatever the value.
+    #[kani::proof]
+    fn a_constant_samples_finite_and_non_negative() {
+        let mut rng = Rng { s: [1, 2, 3, 4] };
+        let x = Dist::Constant(any_f64()).sample(&mut rng);
+        assert!(x.is_finite() && x >= 0.0);
     }
 }

@@ -940,7 +940,6 @@ unit	yr	г.
 	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	Това е първият ви модел. Първите редове на Резултати казват какво е установило стартирането; Помощ ▸ Какво означават резултатите обяснява всяко число.
 # Which inputs matter in the Monte Carlo results (ROADMAP M4.1, part 3a)
 	Which inputs matter	Кои входове имат значение
-	{output} depends most on {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile.	Стойността на {output} зависи най-много от {input}: тя се променя от {low} до {high}, когато {input} се променя от 10-ия до 90-ия си персентил.
 	Each input from its 10th to its 90th percentile, with the others at their medians	Всеки вход от 10-ия до 90-ия си персентил, а останалите при медианите си
 	Base {value}	Базова стойност {value}
 	A correlated input's figure includes the effect of the inputs it is correlated with.	Числото за корелиран вход включва ефекта на входовете, с които е корелиран.
@@ -1369,7 +1368,6 @@ unit	yr	г.
 	The model: its settings and variables	Моделът: настройки и променливи
 	System dynamics model	Модел на системната динамика
 	Variables	Променливи
-	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	Можете да променяте този модел с команди, от агент през MCP сървъра или от командния ред. Редактирането върху платното идва следващо.
 	From {start} to {stop}, in steps of {dt}, by the {method} method.	От {start} до {stop}, със стъпки от {dt}, по метода {method}.
 	Notes from the file	Бележки от файла
 	Equation	Уравнение
@@ -1420,8 +1418,36 @@ unit	yr	г.
 	The estimated chance that {output} is more than {value} is {percent}.	Прогнозната вероятност {output} да е над {value} е {percent}.
 	The estimated chance that {output} is less than {value} is {percent}.	Прогнозната вероятност {output} да е под {value} е {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	Техният интервал няма ширина, каквато няма никоя оценка, затова остава обикновеният резултат.
+	{output} changes most with {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile, the other inputs at their medians.	{output} се променя най-много с {input}: от {low} до {high}, когато {input} върви от своя 10-и до своя 90-и персентил, а останалите входове са на медианите си.
+	No variation was observed, so there is no interval for the mean; a rare event the trials did not reach could still move it.	Не е наблюдавана вариация, затова няма интервал за средната стойност; рядко събитие, до което опитите не са стигнали, все още би могло да я промени.
+	They narrowed the interval by {percent}, but a mean given for a control is far from the trials' mean, so the plain result stands.	Те стесниха интервала с {percent}, но зададената средна стойност на контрола е далеч от средната на опитите, затова обикновеният резултат остава.
+	The output does not move in one direction with {inputs} (its value at the median is outside its values at the 10th and 90th percentiles), so the swing understates the effect.	Резултатът не се движи в една посока с {inputs} (стойността му при медианата е извън стойностите му при 10-ия и 90-ия персентил), затова размахът подценява ефекта.
+	Did not open {file}: a different model was opened in the meantime	{file} не е отворен: междувременно е отворен друг модел
+	Select	Избор
+	Link	Връзка
+	Initial value	Начална стойност
+	Click the diagram to place a stock.	Щракнете върху диаграмата, за да поставите запас.
+	Click the diagram to place an auxiliary.	Щракнете върху диаграмата, за да поставите спомагателна променлива.
+	Drag from a stock, or from empty space, to another stock or empty space to draw a flow.	Плъзнете от запас или от празно място до друг запас или празно място, за да начертаете поток.
+	Drag from one variable to another to show that the second uses the first.	Плъзнете от една променлива до друга, за да покажете, че втората използва първата.
+	Click a variable to select it and edit it here. Drag a variable to move it.	Щракнете върху променлива, за да я изберете и редактирате тук. Плъзнете я, за да я преместите.
+	Moved {name}	Преместено: {name}
+	Added {kind}: {name}	Добавено: {kind} {name}
+	Edited {name}	Редактирано: {name}
+	Removed {name}	Премахнато: {name}
+	Linked {from} to {to}	{from} е свързано с {to}
+	Add Variable	Добавяне на променлива
+	Edit Variable	Промяна на променлива
+	Remove Variable	Премахване на променлива
+	Simulation Settings	Настройки на симулацията
+	Change Diagram	Промяна на диаграмата
+	You can change this model on the Diagram tab, or with commands, from an agent through the MCP server or from the command line.	Можете да променяте този модел в раздела „Диаграма“ или с команди, от агент през MCP сървъра или от командния ред.
 	Inconclusive at current precision	Неубедително при текущата точност
 	No difference detected	Не е открита разлика
 	Agrees within ±{tolerance}	Съвпада в рамките на ±{tolerance}
 	This is not evidence of agreement: set a tolerance to test for it.	Това не е доказателство за съвпадение: задайте допуск, за да го проверите.
 	Tolerance (0 for none)	Допуск (0 за липса)
+	Arrivals that keep their distance	Пристигания, които пазят дистанция
+	One server fed by the gaps between zeros of the Riemann zeta function, beside Poisson arrivals at the same rate.	Един обслужващ пункт, захранван с интервалите между нулите на дзета функцията на Риман, до пристигания по Поасон със същата интензивност.
+	Do arrivals that avoid bunching make a shorter queue?	Дават ли по-кратка опашка пристиганията, които избягват струпването?
+	Same average rate, half the wait: arrivals that repel one another bunch up less than random ones.	Същата средна честота, наполовина по-кратко чакане: пристиганията, които се отблъскват, се струпват по-рядко от случайните.

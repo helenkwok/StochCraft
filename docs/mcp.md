@@ -87,7 +87,7 @@ driving the app is the channel's token (below).
 | `inspect_model` | — | `model.get` (elements, connections, pools, calendars, experiment) and `history` (what undo and redo would do, unsaved changes). |
 | `check_model` | — | `model.validate`: every problem, errors first, with the element, a stable code and a message in English that starts with its severity, names the block by its name and says what to do. The same text comes as `parts` (each a template `key` and the `args` that fill it) and, for a problem with one field, `field`: the window builds its translated message from those, and a client may do the same. The code never changes with the wording. |
 | `open` | `path`, `scenario?` | `file.open`: a `.bpmn` or `.xpdl` file with BPSim data. |
-| `save` | `path?`, `as_new?` | `file.save`: into the model's own file (keeping what StochCraft does not understand), or to `path`. |
+| `save` | `path?`, `as_new?`, `allow_loss?` | `file.save`: into the model's own file (keeping what StochCraft does not understand), or to `path`. A save that would leave out content of the opened file that StochCraft does not keep is refused, naming it, unless `allow_loss` is `true`. |
 | `run` | `replications?`, `seed?` | `run`: each element's metrics as means with 95% confidence intervals, the warm-up MSER-5 suggests (`warmup_suggestion`), the warnings about the results, and the run record. The values over the run (`series`) are left out, since they multiply the reply's size; `execute` with `run` gives them. An experiment with sequential replications (`experiment.set` with `sequential`) adds replications until its key measures are precise enough, and `sequential` in the results says how many ran and why it stopped. |
 | `undo`, `redo` | — | `undo`, `redo`. |
 
@@ -227,14 +227,40 @@ the target; `confidence`, its name before #69, is still accepted, and the answer
 The share is not a statistical confidence: the answer's `stochastic.interval` is its Wilson 95%
 interval, and when its lower end is below `target_share` the share is not shown to be met.
 
+`experiment.size` is a greedy heuristic: it adds a unit at the busiest resource until the share is
+reached, and need not find the fewest units. It refuses a target that names nothing in the model
+(`not_found`) and a metric that no replication reports for that element at the starting size
+(`invalid_params`: the metric does not apply to that kind of element, or nothing reached it). With
+`apply`, the answer becomes the model's only if it reached `target_share`; otherwise the model is
+unchanged and the answer says `"applied": false` (`apply_unreached` applies the last size tried
+anyway). The share and its interval come from the replications that guided the search, so check
+the sizes it chose with a run on another seed.
+
+A file read with errors (`open` returns them in `notes`, with severity `error`) does not run:
+`run`, `run.start` and the `experiment.*` commands fail with `invalid_model` and the errors in
+`details`, because the model holds a stand-in for each part StochCraft could not read. Run it
+anyway with `allow_approximations: true` (through `execute`); the run record then lists the
+substitutions in `approximations`. An error the reader pinned to one field (a task's processing time, `field` in the note) stops
+counting while that field is set to something else (undo brings it back), and nothing of the
+replaced stand-in is recorded; renaming the block or editing another property does not clear it,
+and any other error stands until the file is opened again.
+
 `experiment.design` varies several parameters at once. Each factor is a parameter as a sweep
 takes it (`{id, field}`) with its `levels`, or its range as `min` and `max`. The default design,
 `full_factorial`, runs every combination of the levels (the last factor changing fastest);
 `latin_hypercube` with `points` samples each range in that many strata, the same design for the
-same seed. Every point runs the same replications on the same seed, so a full factorial's
+same seed; `sobol` takes the first `points` points of the Sobol sequence (a power of two: another
+number is refused, naming the powers either side), one dimension for each factor in the order
+given (at most 64 factors), in `batches` batches (default 4, at least 2), each with its own random
+digital shift, so the batches are independent replicates and the same seed gives the same design.
+Sobol points cover several factors' ranges at once more evenly than a Latin hypercube's random
+matching. Every point runs the same replications on the same seed, so a full factorial's
 `main_effects` and two-way `interactions` (between factors with two levels) come with paired 95%
-intervals, and a Latin hypercube's `correlations` give each factor's rank (Spearman) correlation
-with each result. A design of more than 10,000 runs (points × replications) is refused with the
+intervals, and the `correlations` of a Latin hypercube or Sobol design give each factor's rank
+(Spearman) correlation with each result. A Sobol design adds each correlation's value in every
+batch (`batch_spearman`, with `batch_mean` and its `half_width` across the batches) and
+`result_means`, each result's mean over the factors' ranges per batch with its 95% interval
+across the batches. A design of more than 10,000 runs (points × replications) is refused with the
 number it would take, so an agent can drop levels, points or replications and try again.
 
 A Monte Carlo model (a calculation with no process) is built and run through `execute`:
@@ -243,11 +269,11 @@ them, with `$name`), `mc.correlation.set` correlates two inputs, `mc.set` picks 
 (`random`, `latin_hypercube`, `antithetic` or `sobol`) or a sequential stop, and `mc.run` gives each output's mean with its interval,
 percentiles and the chance of meeting its target. `mc.inputs.export` and `mc.inputs.import` move
 the input table as CSV text; they read and write no files. `mc.sobol` gives each input's share of
-each output's variance, alone and with its interactions (it needs independent inputs). `mc.output.set` also takes `controls`, control variates that narrow the interval of the output's mean and target chance: `[{"input": "labour"}, {"output": "base", "expected": 5200}]` names inputs (whose own mean is known; counts with a very large spread and constants are refused) and earlier outputs with a mean you give, replacing the output's present controls (`[]` removes them). `mc.run` then adds a `controlled` object to the output: the controls with their coefficients, and `controlled.estimate` with the controlled `mean`, `half_width` and `narrowing` (how much narrower the controlled interval is than the plain one on the same trials; `helped` is at least 10%), and for a target `controlled.estimate.target` with its `probability` and `interval`. `controlled.estimate` is `null` when there is no controlled estimate (`unavailable` says why). A control object has the fields of one form only: `{"input": ...}` or `{"output": ..., "expected": ...}`. The coefficients are fitted on a pilot that the controlled estimate leaves out: the first 1,000 trials, or the first half of a random run under 2,000 trials (whole pairs for antithetic sampling); with Latin hypercube or Sobol sampling or correlated inputs the pilot is the whole first batch, so one batch gives no controlled estimate (two are needed, three for its interval). The estimate is unbiased for a run of a fixed number of trials, not for a run that stops at a precision target, and a trial with no number in the output or a control withdraws it (`unavailable` says so). A replacing `mc.inputs.import` removes the controls of inputs it drops. Percentiles, the histogram and the extremes are not controlled.
+each output's variance, alone and with its interactions (it needs independent inputs). `mc.output.set` also takes `controls`, control variates that narrow the interval of the output's mean and target chance: `[{"input": "labour"}, {"output": "base", "expected": 5200}]` names inputs (whose own mean is known; counts with a very large spread and constants are refused) and earlier outputs with a mean you give, replacing the output's present controls (`[]` removes them). `mc.run` then adds a `controlled` object to the output: the controls with their coefficients, and `controlled.estimate` with the controlled `mean`, `half_width` and `narrowing` (how much narrower the controlled interval is than the plain one on the same trials; `helped` is at least 10%), and for a target `controlled.estimate.target` with its `probability` and `interval`. `controlled.estimate` is `null` when there is no controlled estimate (`unavailable` says why). A control object has the fields of one form only: `{"input": ...}` or `{"output": ..., "expected": ...}`. The coefficients are fitted on a pilot that the controlled estimate leaves out: the first 1,000 trials, or the first half of a random run under 2,000 trials (whole pairs for antithetic sampling); with Latin hypercube or Sobol sampling or correlated inputs the pilot is the whole first batch, so one batch gives no controlled estimate (two are needed, three for its interval). The estimate is unbiased for a run of a fixed number of trials, not for a run that stops at a precision target, and a trial with no number in the output or a control withdraws it (`unavailable` says so). A replacing `mc.inputs.import` removes the controls of inputs it drops. Percentiles, the histogram and the extremes are not controlled. `controlled.mean_mismatch` is true when the trials' mean of any control is far from the mean given for it: the controlled estimate is then biased (a narrow interval around a wrong value), so report the plain `mean` and target `probability`, not the controlled ones. In each output `half_width` is `null` with `no_variation` true when every value the interval is across was the same (no variation was observed, which does not show that the mean is exact); with antithetic sampling the `mean` is the mean of all valid trials and the interval is the ratio estimator's across pairs; each input in `influence` has `not_monotone`, true when the output at the input's median is outside its values at its 10th and 90th percentiles, so `swing` understates that input's effect. An `mc.sobol` output with any row that has no finite value has no indices (`unavailable` gives the counts).
 
 A system dynamics model (stocks and flows, an XMILE file) is opened with `file.open` or `sd.open`
 (the text of the file), run with `sd.run` (`replications` and `seed` for a model with a random
-function, `dt`, `dt_check` to run again at half the step, `time_unit`) and read with `sd.get`. A
+function, `dt`, `dt_check` to run again at half the step (it reports `inconclusive` rather than 0% when a stock cannot be compared, and `draws_matched`), `time_unit`) and read with `sd.get`. A
 run gives every variable over time: the mean, and for a replicated model the median and the 5th
 and 95th percentiles. `run` refuses such a model and names `sd.run`. `sd.new` starts an empty model
 (name, start, stop, `dt`, method, time unit) and `sd.variable.add`, `sd.variable.set` (with

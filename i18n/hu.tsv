@@ -940,7 +940,6 @@ unit	yr	év
 	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	Ez az első modellje. Az Eredmények első sorai megmondják, mit talált a futtatás; a Súgó ▸ Mit jelentenek az eredmények minden számot elmagyaráz.
 # Which inputs matter in the Monte Carlo results (ROADMAP M4.1, part 3a)
 	Which inputs matter	Mely bemenetek számítanak
-	{output} depends most on {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile.	{output} leginkább a(z) {input} bemenettől függ: {low} és {high} között változik, ha a(z) {input} a 10. és a 90. percentilise között változik.
 	Each input from its 10th to its 90th percentile, with the others at their medians	Minden bemenet a 10. és a 90. percentilise között, a többi a mediánján
 	Base {value}	Alapérték: {value}
 	A correlated input's figure includes the effect of the inputs it is correlated with.	Egy korrelált bemenet értéke tartalmazza azon bemenetek hatását, amelyekkel korrelál.
@@ -1369,7 +1368,6 @@ unit	yr	év
 	The model: its settings and variables	A modell: beállításai és változói
 	System dynamics model	Rendszerdinamikai modell
 	Variables	Változók
-	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	Ezt a modellt parancsokkal módosíthatja, ügynökkel az MCP-kiszolgálón át vagy a parancssorból. A vásznon való szerkesztés a következő lépés.
 	From {start} to {stop}, in steps of {dt}, by the {method} method.	{start} és {stop} között, {dt} lépésekkel, a(z) {method} módszerrel.
 	Notes from the file	Megjegyzések a fájlból
 	Equation	Egyenlet
@@ -1420,8 +1418,36 @@ unit	yr	év
 	The estimated chance that {output} is more than {value} is {percent}.	Annak becsült valószínűsége, hogy {output} nagyobb, mint {value}: {percent}.
 	The estimated chance that {output} is less than {value} is {percent}.	Annak becsült valószínűsége, hogy {output} kisebb, mint {value}: {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	Az intervallumuknak nincs szélessége, ami egyetlen becslésnek sincs, ezért az egyszerű eredmény marad.
+	{output} changes most with {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile, the other inputs at their medians.	A(z) {output} a(z) {input} függvényében változik a legjobban: {low} és {high} között mozog, miközben a(z) {input} a 10. percentilisétől a 90. percentilisééig megy, a többi bemenet pedig a mediánján van.
+	No variation was observed, so there is no interval for the mean; a rare event the trials did not reach could still move it.	Nem figyeltünk meg szórást, ezért az átlaghoz nincs intervallum; egy ritka esemény, amelyet a próbák nem értek el, még mindig elmozdíthatná.
+	They narrowed the interval by {percent}, but a mean given for a control is far from the trials' mean, so the plain result stands.	Ezek {percent}-kal szűkítették az intervallumot, de a kontrollhoz megadott átlag messze van a próbák átlagától, ezért az egyszerű eredmény marad.
+	The output does not move in one direction with {inputs} (its value at the median is outside its values at the 10th and 90th percentiles), so the swing understates the effect.	A kimenet nem egy irányban mozog a(z) {inputs} bemenettel (a mediánnál felvett értéke kívül esik a 10. és 90. percentilisnél felvett értékein), ezért a lengés alábecsüli a hatást.
+	Did not open {file}: a different model was opened in the meantime	A(z) {file} megnyitása elmaradt: közben egy másik modellt nyitottak meg
+	Select	Kijelölés
+	Link	Kapcsolat
+	Initial value	Kezdőérték
+	Click the diagram to place a stock.	Kattintson a diagramra készlet elhelyezéséhez.
+	Click the diagram to place an auxiliary.	Kattintson a diagramra segédváltozó elhelyezéséhez.
+	Drag from a stock, or from empty space, to another stock or empty space to draw a flow.	Folyamat rajzolásához húzzon egy készletből vagy üres helyről egy másik készletbe vagy üres helyre.
+	Drag from one variable to another to show that the second uses the first.	Húzzon az egyik változóról a másikra annak jelzésére, hogy a második az elsőt használja.
+	Click a variable to select it and edit it here. Drag a variable to move it.	Kattintson egy változóra a kijelöléséhez és itteni szerkesztéséhez. Húzza el az áthelyezéséhez.
+	Moved {name}	Áthelyezve: {name}
+	Added {kind}: {name}	Hozzáadva: {kind} {name}
+	Edited {name}	Szerkesztve: {name}
+	Removed {name}	Eltávolítva: {name}
+	Linked {from} to {to}	{from} összekapcsolva ezzel: {to}
+	Add Variable	Változó hozzáadása
+	Edit Variable	Változó szerkesztése
+	Remove Variable	Változó eltávolítása
+	Simulation Settings	Szimulációs beállítások
+	Change Diagram	Diagram módosítása
+	You can change this model on the Diagram tab, or with commands, from an agent through the MCP server or from the command line.	Ezt a modellt a Diagram lapon vagy parancsokkal módosíthatja, ügynökből az MCP-kiszolgálón keresztül vagy a parancssorból.
 	Inconclusive at current precision	A jelenlegi pontosságnál nem eldönthető
 	No difference detected	Nem mutatható ki eltérés
 	Agrees within ±{tolerance}	Egyezik ±{tolerance} belül
 	This is not evidence of agreement: set a tolerance to test for it.	Ez nem bizonyíték az egyezésre: az ellenőrzéséhez adjon meg tűréshatárt.
 	Tolerance (0 for none)	Tűréshatár (0: nincs)
+	Arrivals that keep their distance	Egymástól távolságot tartó érkezések
+	One server fed by the gaps between zeros of the Riemann zeta function, beside Poisson arrivals at the same rate.	Egy kiszolgáló, amelyet a Riemann-féle zétafüggvény zérushelyei közötti hézagok táplálnak, mellette azonos ütemű Poisson-érkezések.
+	Do arrivals that avoid bunching make a shorter queue?	Rövidebb sort adnak a csoportosulást kerülő érkezések?
+	Same average rate, half the wait: arrivals that repel one another bunch up less than random ones.	Azonos átlagos ütem, feleannyi várakozás: az egymást taszító érkezések kevésbé torlódnak, mint a véletlenszerűek.

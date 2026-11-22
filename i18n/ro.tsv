@@ -940,7 +940,6 @@ unit	yr	a
 	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	Acesta este primul dumneavoastră model. Primele rânduri din Rezultate spun ce a găsit rularea; Ajutor ▸ Ce înseamnă rezultatele explică fiecare număr.
 # Which inputs matter in the Monte Carlo results (ROADMAP M4.1, part 3a)
 	Which inputs matter	Ce intrări contează
-	{output} depends most on {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile.	{output} depinde cel mai mult de {input}: merge de la {low} la {high} când {input} merge de la percentila 10 la percentila 90.
 	Each input from its 10th to its 90th percentile, with the others at their medians	Fiecare intrare de la percentila 10 la percentila 90, celelalte la mediană
 	Base {value}	Valoare de bază {value}
 	A correlated input's figure includes the effect of the inputs it is correlated with.	Cifra unei intrări corelate include efectul intrărilor cu care este corelată.
@@ -1369,7 +1368,6 @@ unit	yr	a
 	The model: its settings and variables	Modelul: setările și variabilele sale
 	System dynamics model	Model de dinamică a sistemelor
 	Variables	Variabile
-	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	Puteți modifica acest model cu comenzi, dintr-un agent prin serverul MCP sau din linia de comandă. Editarea pe canava vine mai târziu.
 	From {start} to {stop}, in steps of {dt}, by the {method} method.	De la {start} la {stop}, în pași de {dt}, prin metoda {method}.
 	Notes from the file	Note din fișier
 	Equation	Ecuație
@@ -1420,8 +1418,36 @@ unit	yr	a
 	The estimated chance that {output} is more than {value} is {percent}.	Probabilitatea estimată ca {output} să fie mai mare decât {value} este {percent}.
 	The estimated chance that {output} is less than {value} is {percent}.	Probabilitatea estimată ca {output} să fie mai mică decât {value} este {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	Intervalul lor nu are lățime, ceea ce nicio estimare nu are, așa că rămâne rezultatul simplu.
+	{output} changes most with {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile, the other inputs at their medians.	{output} se schimbă cel mai mult odată cu {input}: merge de la {low} la {high} când {input} merge de la percentila sa 10 la percentila sa 90, cu celelalte intrări la medianele lor.
+	No variation was observed, so there is no interval for the mean; a rare event the trials did not reach could still move it.	Nu s-a observat nicio variație, deci nu există interval pentru medie; un eveniment rar pe care încercările nu l-au atins ar putea totuși să o mute.
+	They narrowed the interval by {percent}, but a mean given for a control is far from the trials' mean, so the plain result stands.	Au îngustat intervalul cu {percent}, dar o medie dată pentru un control este departe de media încercărilor, deci rămâne rezultatul simplu.
+	The output does not move in one direction with {inputs} (its value at the median is outside its values at the 10th and 90th percentiles), so the swing understates the effect.	Ieșirea nu se mișcă într-o singură direcție cu {inputs} (valoarea ei la mediană este în afara valorilor ei la percentilele 10 și 90), deci amplitudinea subestimează efectul.
+	Did not open {file}: a different model was opened in the meantime	{file} nu a fost deschis: între timp a fost deschis alt model
+	Select	Selectează
+	Link	Legătură
+	Initial value	Valoare inițială
+	Click the diagram to place a stock.	Faceți clic pe diagramă pentru a plasa un stoc.
+	Click the diagram to place an auxiliary.	Faceți clic pe diagramă pentru a plasa o variabilă auxiliară.
+	Drag from a stock, or from empty space, to another stock or empty space to draw a flow.	Trageți de la un stoc sau de la un spațiu gol la alt stoc sau spațiu gol pentru a desena un flux.
+	Drag from one variable to another to show that the second uses the first.	Trageți de la o variabilă la alta pentru a arăta că a doua o folosește pe prima.
+	Click a variable to select it and edit it here. Drag a variable to move it.	Faceți clic pe o variabilă pentru a o selecta și a o edita aici. Trageți-o pentru a o muta.
+	Moved {name}	S-a mutat {name}
+	Added {kind}: {name}	S-a adăugat {kind}: {name}
+	Edited {name}	S-a editat {name}
+	Removed {name}	S-a eliminat {name}
+	Linked {from} to {to}	S-a legat {from} de {to}
+	Add Variable	Adaugă variabilă
+	Edit Variable	Modifică variabila
+	Remove Variable	Elimină variabila
+	Simulation Settings	Setări de simulare
+	Change Diagram	Modifică diagrama
+	You can change this model on the Diagram tab, or with commands, from an agent through the MCP server or from the command line.	Puteți modifica acest model în fila Diagramă sau cu comenzi, de la un agent prin serverul MCP sau din linia de comandă.
 	Inconclusive at current precision	Neconcludent la precizia actuală
 	No difference detected	Nicio diferență detectată
 	Agrees within ±{tolerance}	Concordă în limita ±{tolerance}
 	This is not evidence of agreement: set a tolerance to test for it.	Aceasta nu este o dovadă de concordanță: stabilește o toleranță pentru a o testa.
 	Tolerance (0 for none)	Toleranță (0 pentru niciuna)
+	Arrivals that keep their distance	Sosiri care păstrează distanța
+	One server fed by the gaps between zeros of the Riemann zeta function, beside Poisson arrivals at the same rate.	Un server alimentat de intervalele dintre zerourile funcției zeta a lui Riemann, alături de sosiri Poisson cu aceeași rată.
+	Do arrivals that avoid bunching make a shorter queue?	Sosirile care evită aglomerarea fac o coadă mai scurtă?
+	Same average rate, half the wait: arrivals that repel one another bunch up less than random ones.	Aceeași rată medie, jumătate din așteptare: sosirile care se resping se aglomerează mai puțin decât cele aleatorii.

@@ -940,7 +940,6 @@ unit	yr	वर्ष
 	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	यह आपका पहला मॉडल है। परिणाम की शुरुआती पंक्तियाँ बताती हैं कि चलाने पर क्या मिला; सहायता ▸ परिणामों का अर्थ हर संख्या को समझाता है।
 # Which inputs matter in the Monte Carlo results (ROADMAP M4.1, part 3a)
 	Which inputs matter	कौन-से इनपुट मायने रखते हैं
-	{output} depends most on {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile.	{output} सबसे अधिक {input} पर निर्भर करता है: जब {input} अपने 10वें से 90वें प्रतिशतक तक जाता है, तब यह {low} से {high} तक जाता है।
 	Each input from its 10th to its 90th percentile, with the others at their medians	हर इनपुट अपने 10वें से 90वें प्रतिशतक तक, बाकी अपनी माध्यिका पर
 	Base {value}	आधार मान {value}
 	A correlated input's figure includes the effect of the inputs it is correlated with.	सहसंबद्ध इनपुट के आँकड़े में उन इनपुट का प्रभाव भी शामिल है जिनसे वह सहसंबद्ध है।
@@ -1369,7 +1368,6 @@ unit	yr	वर्ष
 	The model: its settings and variables	मॉडल: इसकी सेटिंग और चर
 	System dynamics model	सिस्टम डायनामिक्स मॉडल
 	Variables	चर
-	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	आप इस मॉडल को कमांड से बदल सकते हैं: एजेंट से MCP सर्वर के ज़रिए, या कमांड लाइन से। कैनवास पर संपादन आगे आएगा।
 	From {start} to {stop}, in steps of {dt}, by the {method} method.	{start} से {stop} तक, {dt} के चरणों में, {method} विधि से।
 	Notes from the file	फ़ाइल से टिप्पणियाँ
 	Equation	समीकरण
@@ -1420,8 +1418,36 @@ unit	yr	वर्ष
 	The estimated chance that {output} is more than {value} is {percent}.	{output} के {value} से अधिक होने की अनुमानित संभावना {percent} है।
 	The estimated chance that {output} is less than {value} is {percent}.	{output} के {value} से कम होने की अनुमानित संभावना {percent} है।
 	Their interval has no width, which no estimate has, so the plain result stands.	उनके अंतराल की कोई चौड़ाई नहीं है, जो किसी अनुमान की नहीं होती, इसलिए सामान्य परिणाम ही रहता है।
+	{output} changes most with {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile, the other inputs at their medians.	{output} सबसे अधिक {input} के साथ बदलता है: जब {input} अपने 10वें से 90वें प्रतिशतक पर जाता है तो यह {low} से {high} तक जाता है, बाकी इनपुट अपनी माध्यिका पर रहते हैं।
+	No variation was observed, so there is no interval for the mean; a rare event the trials did not reach could still move it.	कोई भिन्नता नहीं देखी गई, इसलिए माध्य के लिए कोई अंतराल नहीं है; कोई दुर्लभ घटना, जहाँ तक परीक्षण नहीं पहुँचे, फिर भी इसे बदल सकती है।
+	They narrowed the interval by {percent}, but a mean given for a control is far from the trials' mean, so the plain result stands.	इन्होंने अंतराल को {percent} संकरा किया, लेकिन किसी नियंत्रण के लिए दिया गया माध्य परीक्षणों के माध्य से बहुत दूर है, इसलिए सामान्य परिणाम ही रहता है।
+	The output does not move in one direction with {inputs} (its value at the median is outside its values at the 10th and 90th percentiles), so the swing understates the effect.	आउटपुट {inputs} के साथ एक दिशा में नहीं चलता (माध्यिका पर इसका मान 10वें और 90वें प्रतिशतक के इसके मानों से बाहर है), इसलिए स्विंग प्रभाव को कम आँकता है।
+	Did not open {file}: a different model was opened in the meantime	{file} नहीं खोली गई: इस बीच कोई दूसरा मॉडल खोल दिया गया
+	Select	चुनें
+	Link	लिंक
+	Initial value	प्रारंभिक मान
+	Click the diagram to place a stock.	स्टॉक रखने के लिए आरेख पर क्लिक करें।
+	Click the diagram to place an auxiliary.	सहायक चर रखने के लिए आरेख पर क्लिक करें।
+	Drag from a stock, or from empty space, to another stock or empty space to draw a flow.	प्रवाह बनाने के लिए किसी स्टॉक या खाली जगह से दूसरे स्टॉक या खाली जगह तक खींचें।
+	Drag from one variable to another to show that the second uses the first.	यह दिखाने के लिए कि दूसरा चर पहले का उपयोग करता है, एक चर से दूसरे तक खींचें।
+	Click a variable to select it and edit it here. Drag a variable to move it.	किसी चर को चुनने और यहाँ संपादित करने के लिए उस पर क्लिक करें। उसे हिलाने के लिए खींचें।
+	Moved {name}	{name} को हिलाया गया
+	Added {kind}: {name}	जोड़ा गया {kind}: {name}
+	Edited {name}	{name} संपादित किया गया
+	Removed {name}	{name} हटाया गया
+	Linked {from} to {to}	{from} को {to} से लिंक किया गया
+	Add Variable	चर जोड़ें
+	Edit Variable	चर बदलें
+	Remove Variable	चर हटाएँ
+	Simulation Settings	सिमुलेशन सेटिंग
+	Change Diagram	आरेख बदलें
+	You can change this model on the Diagram tab, or with commands, from an agent through the MCP server or from the command line.	आप इस मॉडल को आरेख टैब में, या कमांड से, एजेंट द्वारा MCP सर्वर के माध्यम से या कमांड लाइन से बदल सकते हैं।
 	Inconclusive at current precision	वर्तमान सटीकता पर अनिर्णायक
 	No difference detected	कोई अंतर नहीं मिला
 	Agrees within ±{tolerance}	±{tolerance} के भीतर मेल खाता है
 	This is not evidence of agreement: set a tolerance to test for it.	यह मेल का प्रमाण नहीं है: इसे जाँचने के लिए सहनसीमा तय करें।
 	Tolerance (0 for none)	सहनसीमा (कोई नहीं के लिए 0)
+	Arrivals that keep their distance	दूरी बनाए रखने वाले आगमन
+	One server fed by the gaps between zeros of the Riemann zeta function, beside Poisson arrivals at the same rate.	एक सर्वर, जिसे रीमान ज़ेटा फलन के शून्यों के बीच के अंतरालों से आगमन मिलते हैं, उसी दर के पॉइसन आगमनों के साथ।
+	Do arrivals that avoid bunching make a shorter queue?	क्या गुच्छे बनने से बचने वाले आगमन छोटी कतार बनाते हैं?
+	Same average rate, half the wait: arrivals that repel one another bunch up less than random ones.	वही औसत दर, आधा इंतज़ार: एक-दूसरे को दूर धकेलने वाले आगमन यादृच्छिक आगमनों से कम गुच्छे बनाते हैं।
