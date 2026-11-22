@@ -1031,18 +1031,24 @@ impl App {
                         if !incoming && kind != "source" {
                             let c = connection(model, cid);
                             if decision {
-                                let refused = ui
-                                    .horizontal(|ui| {
-                                        ui.add_space(12.0);
-                                        self.flow_fields(ui, cid, &c)
-                                    })
-                                    .inner;
-                                if let Some(why) = refused {
-                                    ui.horizontal(|ui| {
-                                        ui.add_space(12.0);
-                                        theme::error_message(ui, why);
-                                    });
-                                }
+                                // One column whether or not a refusal shows under the fields, so
+                                // the line appearing doesn't give the widgets after it new ids
+                                // (taking the keyboard from a field below, and its node from a
+                                // screen reader).
+                                ui.vertical(|ui| {
+                                    let refused = ui
+                                        .horizontal(|ui| {
+                                            ui.add_space(12.0);
+                                            self.flow_fields(ui, cid, &c)
+                                        })
+                                        .inner;
+                                    if let Some(why) = refused {
+                                        ui.horizontal(|ui| {
+                                            ui.add_space(12.0);
+                                            theme::error_message(ui, why);
+                                        });
+                                    }
+                                });
                             }
                             ui.horizontal(|ui| {
                                 ui.add_space(12.0);
