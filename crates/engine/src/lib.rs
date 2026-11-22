@@ -287,6 +287,55 @@ pub fn build_id() -> String {
     id
 }
 
+/// Whether the build that wrote a journal (`journal`, a [`build_id`]) is the build `here`.
+///
+/// A version and a platform do not name a build: two builds of one version from different
+/// commits can give different numbers from the same seed (a change to a sampler is enough). So
+/// only two ids that both carry a source revision, and agree in full, are the same build; ids
+/// that differ in version, platform or revision are different builds; anything else (an id with
+/// no revision, or a journal with no id) is unknown.
+pub fn build_match(journal: Option<&str>, here: &str) -> BuildMatch {
+    let Some(journal) = journal else {
+        return BuildMatch::Unknown;
+    };
+    // The version and platform, and the revision if there is one.
+    type Parts<'a> = ((Option<&'a str>, Option<&'a str>), Option<&'a str>);
+    fn split(id: &str) -> Parts<'_> {
+        let mut words = id.split_whitespace();
+        let base = (words.next(), words.next());
+        (base, words.next())
+    }
+    let ((base, revision), (here_base, here_revision)) = (split(journal), split(here));
+    match (revision, here_revision) {
+        _ if base != here_base => BuildMatch::Different,
+        (Some(a), Some(b)) if a == b => BuildMatch::Same,
+        (Some(_), Some(_)) => BuildMatch::Different,
+        _ => BuildMatch::Unknown,
+    }
+}
+
+/// What [`build_match`] found.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum BuildMatch {
+    /// The same version, platform and source revision.
+    Same,
+    /// A different version, platform or source revision.
+    Different,
+    /// Not known: a build id without a source revision, or no id at all.
+    Unknown,
+}
+
+impl BuildMatch {
+    /// Its name on the wire.
+    pub fn name(self) -> &'static str {
+        match self {
+            BuildMatch::Same => "same",
+            BuildMatch::Different => "different",
+            BuildMatch::Unknown => "unknown",
+        }
+    }
+}
+
 /// Which steps of a journal a replay carries out.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
 pub enum ReplayMode {
@@ -337,13 +386,18 @@ pub fn replay_summary(journal: &Journal, mode: ReplayMode) -> Value {
         }
     }
     let here = build_id();
-    let same_build = journal.engine.as_deref() == Some(here.as_str());
-    let numbers = if runs == 0 {
-        "none: no run was made again, only the edits were replayed"
-    } else if same_build {
-        "made again by the same build that wrote the journal; they are not compared with the original numbers"
-    } else {
-        "made again by a different or unknown build than the one that wrote the journal, so they may differ from the original numbers"
+    let matched = build_match(journal.engine.as_deref(), &here);
+    let numbers = match matched {
+        _ if runs == 0 => "none: no run was made again, only the edits were replayed",
+        BuildMatch::Same => {
+            "made again by the same build that wrote the journal (the same version, platform and source revision); they are not compared with the original numbers"
+        }
+        BuildMatch::Different => {
+            "made again by a different build than the one that wrote the journal, so they may differ from the original numbers"
+        }
+        BuildMatch::Unknown => {
+            "made again by a build that may not be the one that wrote the journal (build match unknown: a source revision is missing, and a version and platform alone do not name a build), so they may differ from the original numbers"
+        }
     };
     json!({
         "replay": {
@@ -352,6 +406,7 @@ pub fn replay_summary(journal: &Journal, mode: ReplayMode) -> Value {
             "steps_skipped": skipped,
             "journal_engine": journal.engine,
             "this_engine": here,
+            "build_match": matched.name(),
             "numerical_results": numbers,
         }
     })

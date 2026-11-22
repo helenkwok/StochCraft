@@ -71,6 +71,10 @@ jobs:
           # the default, for pull requests and manual runs.
           ref: ${{ github.event.workflow_run.head_sha }}
           persist-credentials: false
+      - name: Stamp the source revision
+        # The commit checked out, so a journal names the build exactly (see build_id).
+        shell: bash
+        run: echo "STOCHCRAFT_REVISION=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: storytold/craft-fonts

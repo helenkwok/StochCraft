@@ -552,12 +552,24 @@ fn the_journal_names_its_build_and_a_replay_says_what_it_reproduced() {
             .as_str()
             .is_some_and(|s| s.starts_with("none"))
     );
+    // This build's own journal: the same build only when the build was stamped with its source
+    // revision, else unknown.
     let same = stochcraft_engine::replay_summary(&journal, ReplayMode::All);
     assert_eq!(same["replay"]["runs_made_again"], 1);
+    let stamped = option_env!("STOCHCRAFT_REVISION").is_some();
+    assert_eq!(
+        same["replay"]["build_match"],
+        if stamped { "same" } else { "unknown" },
+        "{same}"
+    );
+    let text = same["replay"]["numerical_results"].as_str().unwrap_or("");
     assert!(
-        same["replay"]["numerical_results"]
-            .as_str()
-            .is_some_and(|s| s.contains("same build"))
+        text.contains(if stamped {
+            "same build"
+        } else {
+            "build match unknown"
+        }),
+        "{text}"
     );
     journal.engine = Some("0.0.0 other-build".to_owned());
     let other = stochcraft_engine::replay_summary(&journal, ReplayMode::All);
@@ -566,6 +578,41 @@ fn the_journal_names_its_build_and_a_replay_says_what_it_reproduced() {
             .as_str()
             .is_some_and(|s| s.contains("may differ"))
     );
+    assert_eq!(other["replay"]["build_match"], "different");
+}
+
+#[test]
+fn only_two_builds_with_the_same_source_revision_are_the_same_build() {
+    use stochcraft_engine::{BuildMatch, build_match};
+    let here = "0.3.0 x86_64-linux 1111111";
+    assert_eq!(build_match(Some(here), here), BuildMatch::Same);
+    // One version on one platform from two commits: a sampler can differ between them.
+    assert_eq!(
+        build_match(Some("0.3.0 x86_64-linux 2222222"), here),
+        BuildMatch::Different
+    );
+    assert_eq!(
+        build_match(Some("0.2.0 x86_64-linux 1111111"), here),
+        BuildMatch::Different
+    );
+    assert_eq!(
+        build_match(Some("0.3.0 aarch64-macos"), here),
+        BuildMatch::Different
+    );
+    // Without a revision on either side, a matching version and platform say nothing more.
+    assert_eq!(
+        build_match(Some("0.3.0 x86_64-linux"), "0.3.0 x86_64-linux"),
+        BuildMatch::Unknown
+    );
+    assert_eq!(
+        build_match(Some("0.3.0 x86_64-linux"), here),
+        BuildMatch::Unknown
+    );
+    assert_eq!(
+        build_match(Some(here), "0.3.0 x86_64-linux"),
+        BuildMatch::Unknown
+    );
+    assert_eq!(build_match(None, here), BuildMatch::Unknown);
 }
 
 #[test]
