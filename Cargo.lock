@@ -3430,6 +3430,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "stochcraft-agents"
+version = "0.2.0"
+dependencies = [
+ "stochcraft-des",
+ "stochcraft-model",
+ "stochcraft-random",
+]
+
+[[package]]
 name = "stochcraft-blocks"
 version = "0.2.0"
 dependencies = [

@@ -96,6 +96,8 @@ draw only with fonts the visitor's own system has.
 - `stochcraft-sd` runs system dynamics models: stocks and flows read from XMILE 1.0, with delays,
   smooths, graphical functions and random functions, by Euler or fourth-order Runge-Kutta, and
   every variable over time with bands across replications.
+- `stochcraft-agents` runs state charts with the semantics of W3C SCXML 1.0, their data in BPSim's
+  expressions and their timeouts and rates on the `des` clock (see [Agents](#agents) below).
 - `stochcraft-io` reads and writes models as BPSim on BPMN or XPDL.
 - `stochcraft-engine` makes every change and run a command with a JSON schema, undo and redo,
   and a replayable journal, and adds sweeps, sensitivity analysis, designed experiments and
@@ -613,6 +615,36 @@ at different times at the two steps (its interval is a whole number of steps, so
 move it); the random values are then not the same ones and `notes` says so. `time_unit` converts
 `dt` and the halved `dt` as well as the times. XMILE elements are recognised by their namespace
 URI, whatever prefix the file uses; a file whose root is in another namespace is refused.
+
+### Agents
+
+`crates/agents` is the first stage of M4.3: state charts alone, built in code, with no
+populations, messages between agents or files yet. A chart is a `ChartSpec` (the tree of an SCXML
+document: states, parallel and final states, shallow and deep history, transitions with event
+descriptors, conditions, targets and the type internal or external, and `onentry`, `onexit` and
+transition content of `<assign>`, `<raise>`, `<send>`, `<cancel>` and `<log>`). `Chart::new`
+checks it (targets, ids, declared variables, `In()` names) and compiles it; an `Agent` runs it by
+the algorithm of SCXML's Appendix D, and a `Driver` runs agents on `stochcraft_des::EventQueue`,
+each event handled by one complete macrostep in zero time (D18).
+
+- Expressions are BPSim's (`stochcraft_model::expr::parse_with_functions`), reading variables as
+  `$x` or `getProperty('x')`, with `In('state')` and the distribution functions (`exponential(m)`,
+  `uniform(a, b)`, `triangular`, `normal`, `erlang`, ... and `random()`), each expression drawing
+  from its own stream `Rng::keyed(seed, "<agent key>/<place in the chart>")` (D17, D18).
+- A `<send>` to the agent itself has a fixed `delay`, a `delayexpr`, or a rate (`Send::at_rate`, an
+  extension): an exponential delay with mean 1 / rate, drawn again when a variable the rate reads
+  has changed at the end of a macrostep. `<cancel>` leaves the event on the queue, skipped when
+  popped.
+- A macrostep that takes more than 10,000 microsteps (`Agent::with_microstep_limit`) stops the run
+  with `RunError::MicrostepLimit`, which names the latest transitions.
+- A failing action (a negative delay or rate) raises `error.execution`, as SCXML §5.10 says.
+
+The tests (`crates/agents/tests`) work out the order of actions by hand for transitions between
+cousins, branches, history, parallel regions, internal transitions and conflicting transitions,
+and check fixed timeouts, cancels, and rates (and redrawn rates) against the exponential by their
+mean and a Kolmogorov–Smirnov test, with fixed seeds. Not there yet: `<if>`, `<foreach>`,
+`<invoke>`, `<donedata>`, event data, sends to other agents, `<initial>` elements with content,
+late binding, and reading and writing SCXML files.
 
 ### The journal
 
