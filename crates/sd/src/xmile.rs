@@ -34,7 +34,7 @@ use crate::layout::{AUX_SIZE, Connector, Layout, STOCK_SIZE, Shape, ends};
 use crate::model::{
     Gf, GfKind, GfX, Method, SdModel, SimSpecs, Step, VarKind, Variable, canonical,
 };
-use crate::xml::{Element, escape, parse};
+use crate::xml::{Element, escape, parse, resolve_namespaces};
 use crate::{ErrorKind, SdError};
 
 /// The XMILE 1.0 namespace.
@@ -344,7 +344,13 @@ fn read_behavior(b: &Element, notes: &mut Notes) -> (Option<bool>, Option<bool>)
 
 /// Reads an XMILE file.
 pub fn read_xmile(text: &str) -> Result<XmileFile, SdError> {
-    let root = parse(text).map_err(xml_err)?;
+    let mut root = parse(text).map_err(xml_err)?;
+    resolve_namespaces(&mut root, NAMESPACE);
+    if root.name == "xmile" && root.prefix.is_some() {
+        return Err(xml_err(format!(
+            "the root element <xmile> is not in the XMILE 1.0 namespace ({NAMESPACE}), so this is not an XMILE file"
+        )));
+    }
     if root.name != "xmile" {
         return Err(xml_err(format!(
             "the root element is <{}>, not <xmile>",

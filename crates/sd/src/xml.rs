@@ -1,9 +1,10 @@
 //! The element tree the rest of the crate reads, built from quick-xml's events, and the escapes
 //! the writer needs.
 //!
-//! Names are split into a prefix and a local name, and namespaces are not resolved: XMILE's
-//! elements are matched by local name, and an element with a prefix is another vendor's
-//! extension. Comments, processing instructions and the declaration are dropped; CDATA is text.
+//! Names are split into a prefix and a local name. [`resolve_namespaces`] then reads the `xmlns`
+//! declarations: an element in the given namespace loses its prefix (so it is found by its
+//! local name whatever prefix the file chose), and an element in another namespace keeps or gets
+//! one (so it is another vendor's extension). Comments, processing instructions and the declaration are dropped; CDATA is text.
 
 use quick_xml::events::Event;
 use quick_xml::reader::Reader;
@@ -75,6 +76,42 @@ impl Element {
 }
 
 type Res<T> = Result<T, String>;
+
+/// Resolves the namespaces under `root` against `wanted`, as the module's note says. An element
+/// with no namespace in scope and no prefix is left as it is (a file may omit the namespace);
+/// one with a prefix that is not declared is left an extension.
+pub(crate) fn resolve_namespaces(root: &mut Element, wanted: &str) {
+    let mut scope: Vec<(String, String)> = Vec::new();
+    resolve_in(root, wanted, &mut scope);
+}
+
+fn resolve_in(e: &mut Element, wanted: &str, scope: &mut Vec<(String, String)>) {
+    let mark = scope.len();
+    for (k, v) in &e.attrs {
+        if k == "xmlns" {
+            scope.push((String::new(), v.clone()));
+        } else if let Some(p) = k.strip_prefix("xmlns:") {
+            scope.push((p.to_owned(), v.clone()));
+        }
+    }
+    let key = e.prefix.clone().unwrap_or_default();
+    let uri = scope
+        .iter()
+        .rev()
+        .find(|(p, _)| *p == key)
+        .map(|(_, u)| u.clone());
+    match uri {
+        Some(u) if u == wanted => e.prefix = None,
+        Some(_) if e.prefix.is_none() => e.prefix = Some("ns".to_owned()),
+        _ => {}
+    }
+    for c in &mut e.children {
+        if let Node::Element(child) = c {
+            resolve_in(child, wanted, scope);
+        }
+    }
+    scope.truncate(mark);
+}
 
 /// How deep elements may nest, so a hostile file cannot run the stack out.
 const MAX_DEPTH: usize = 256;
