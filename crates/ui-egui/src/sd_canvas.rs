@@ -779,7 +779,11 @@ impl App {
             .as_deref()
             .and_then(|s| at.get(s).copied());
 
-        let bg = ui.interact(rect, egui::Id::new("sd-diagram"), Sense::click_and_drag());
+        let bg = ui.interact(
+            rect,
+            ui.scope_id().with("sd-diagram"),
+            Sense::click_and_drag(),
+        );
         bg.widget_info(|| egui::WidgetInfo::labeled(egui::Role::Canvas, true, t("Diagram")));
         let resized = self.sd_canvas.auto_fit && self.sd_canvas.fitted != Some(rect.size());
         if (self.sd_canvas.fit || resized) && rect.width() > 1.0 {
@@ -1010,7 +1014,7 @@ impl App {
             let hit = Rect::from_center_size(c, s.max(Vec2::splat(16.0))).intersect(rect);
             let resp = ui.interact(
                 hit,
-                egui::Id::new(("sd-shape", &v.name)),
+                ui.scope_id().with(("sd-shape", &v.name)),
                 if hit.is_positive() {
                     Sense::click_and_drag()
                 } else {
