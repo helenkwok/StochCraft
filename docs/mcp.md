@@ -18,7 +18,9 @@ stochcraft-cli mcp --connect 127.0.0.1:7070
 ```
 
 With `--connect`, an app that cannot be reached when the server starts gives a headless session
-instead (a note goes to stderr). stdout carries only protocol messages; errors go to stderr.
+instead (a note goes to stderr), and so does one that is not running (no token file and no
+token given). An app that is reachable but refuses the connection (a wrong token, all its places taken) is an error, not a headless session (see [The token](#the-token)).
+stdout carries only protocol messages; errors go to stderr.
 
 ### Claude Code
 
@@ -72,10 +74,8 @@ The two flags keep a headless agent to the folders you give it:
 - The roots must be existing folders; a missing one stops the server with an error.
 
 The roots cannot be combined with `--connect`: the app opens and saves files wherever its user
-asks, so an agent driving it is not confined. The control channel listens only on this
-computer's loopback address, but that limits where a connection can come from, not who makes
-it: on a computer shared by several accounts, a program under another account can reach the
-port too. Use `--connect` only where every program that can reach the port is one you trust.
+asks, so an agent driving it is not confined. What stops another account's programs from
+driving the app is the channel's token (below).
 
 ## Tools
 
@@ -118,8 +118,41 @@ Commands from the channel behave in the window as they would from the person:
 - The window's background runs (`run.start`, `run.status`, `run.cancel`) are its own and are
   refused; use `run`.
 
-Any program on the computer that can reach the port can drive the app, as a person at the window
-can.
+### The token
+
+The loopback address limits where a connection comes from, not who makes it, so on a computer
+shared by several accounts a program under another account could reach the port. The channel
+therefore asks every connection for a token:
+
+- When the app opens the channel it makes a random 256-bit token from the operating system's
+  random source, shown as 64 hexadecimal digits, and writes `{"port": 7070, "token": "..."}` to a
+  file only its user can read:
+  - Linux and other Unix systems: `$XDG_RUNTIME_DIR/stochcraft/control.json`, or, where that is
+    not set, `control.json` in `stochcraft` under the user's config folder (`~/.config` on Linux,
+    `~/Library/Application Support` on macOS). The file is made with mode 0600, in a folder of
+    mode 0700 (an existing folder with another mode is changed to 0700, and the app refuses to write the token there if it cannot), by writing a file of its own and renaming it over the old one, under a lock file beside it (`control.json.lock`) so two apps starting together cannot both take the file.
+  - Windows: `%LOCALAPPDATA%\StochCraft\control.json`. The profile's default permissions already
+    limit that folder to the user (and administrators), and StochCraft adds no permissions of its
+    own there.
+- The file is removed when the app closes. If another running app still answers on the port
+  named in an existing file, a second app's `--control` fails and says so, rather than replace the
+  first one's token; close the first one.
+- Each connection's first line must be `{"token": "..."}`. The channel compares it with the
+  token in constant time and answers `{"id": null, "result": {"authenticated": true}}`. A missing
+  or wrong token, or no whole line (of at most 1 KiB) within 2 seconds of connecting, gets one error line with the code `unauthorized`,
+  and the connection is closed without running anything.
+- `stochcraft-cli mcp --connect` reads the token from that file by default. The environment
+  variable `STOCHCRAFT_TOKEN` or `--token HEX` give one by hand, for when the file is not
+  reachable (an app on another computer, reached by a tunnel, or under another account that
+  shared the token on purpose); they take precedence over the file, `--token` first. On some
+  systems other local users can see a program's arguments in the process list, so prefer
+  `STOCHCRAFT_TOKEN` or the token file to `--token`. With no token given and no token file, the
+  app is taken to be not running: the session is headless, with a note on stderr naming the
+  file. An app that is there but answers the connection with an error (a wrong token, or all 8
+  places taken) is an error that stops the server, never a headless session.
+
+The token keeps other accounts out. A program running as the same user as the app can read the
+file, as it could read that user's other files.
 
 ## Limits
 
