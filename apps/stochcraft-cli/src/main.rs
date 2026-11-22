@@ -206,6 +206,44 @@ enum Command {
         #[arg(long)]
         allow_approximations: bool,
     },
+    /// Evaluate given values of the decisions for a range of replications (the engine's
+    /// `experiment.evaluate`), for an optimiser of your own: with `--decide`, one evaluation from
+    /// the arguments; without, one per line of standard input, each a JSON object with the
+    /// command's parameters (`decisions`, and optionally `results`, `first`, `count`, `seed`),
+    /// the arguments giving what a line leaves out. Writes one JSON line per evaluation: the
+    /// answer, or `{"error": {...}}` for one refused, after which it reads on. Exits with 1 if any
+    /// was refused.
+    Evaluate {
+        file: PathBuf,
+        /// A decision and its value, `id.field=value` (such as `server.mean=0.5`). The field is
+        /// `capacity`, `quantity`, `queue_capacity` or `mean`. Repeat for each decision.
+        #[arg(long)]
+        decide: Vec<String>,
+        /// The range a decision's values must lie in, `id.field=min..max`, for every
+        /// evaluation; a value outside it is refused. Repeat for each decision.
+        #[arg(long)]
+        range: Vec<String>,
+        /// A result to report, `element.metric` (such as `server.mean_work_in_progress`).
+        /// Repeat for more.
+        #[arg(long)]
+        result: Vec<String>,
+        /// The first replication, counting from 0 (default 0).
+        #[arg(long)]
+        first: Option<u64>,
+        /// How many replications from `--first` (default: the scenario's replications).
+        #[arg(long)]
+        count: Option<u64>,
+        /// Random seed (default: the scenario's).
+        #[arg(long, short)]
+        seed: Option<u64>,
+        /// The BPSim scenario to read (default: the first).
+        #[arg(long)]
+        scenario: Option<String>,
+        /// Run although StochCraft could not read parts of the file, with stand-ins for them
+        /// (as for `run`).
+        #[arg(long)]
+        allow_approximations: bool,
+    },
     /// A Monte Carlo model's input table as CSV (`name,distribution,parameters,unit`): printed,
     /// or with `--import`, read from a CSV file into the model, which is saved.
     Inputs {
@@ -1177,6 +1215,168 @@ fn design(a: &DesignArgs) -> Result<u8, Failure> {
     Ok(0)
 }
 
+/// `id.field=value` as a decision of `experiment.evaluate`.
+fn decision(text: &str) -> Result<Value, Failure> {
+    let bad = || {
+        Failure(format!(
+            "`{text}`: give a decision as `id.field=value`, such as `server.mean=0.5`"
+        ))
+    };
+    let (name, value) = text.split_once('=').ok_or_else(bad)?;
+    let (id, field) = name.rsplit_once('.').ok_or_else(bad)?;
+    let value: f64 = value.trim().parse().map_err(|_| bad())?;
+    Ok(json!({ "id": id, "field": field, "value": value }))
+}
+
+/// `id.field=min..max` as a decision's range: the id, the field and the bounds.
+fn decision_range(text: &str) -> Result<(String, String, f64, f64), Failure> {
+    let bad = || {
+        Failure(format!(
+            "`{text}`: give a range as `id.field=min..max`, such as `server.mean=0.2..0.9`"
+        ))
+    };
+    let (name, values) = text.split_once('=').ok_or_else(bad)?;
+    let (id, field) = name.rsplit_once('.').ok_or_else(bad)?;
+    let (lo, hi) = values.split_once("..").ok_or_else(bad)?;
+    let num = |v: &str| v.trim().parse::<f64>().map_err(|_| bad());
+    Ok((id.to_owned(), field.to_owned(), num(lo)?, num(hi)?))
+}
+
+struct EvaluateArgs<'a> {
+    file: &'a Path,
+    decisions: &'a [String],
+    ranges: &'a [String],
+    results: &'a [String],
+    first: Option<u64>,
+    count: Option<u64>,
+    seed: Option<u64>,
+    scenario: Option<&'a str>,
+    allow_approximations: bool,
+}
+
+/// One evaluation's parameters: a line's (or the arguments'), with what it leaves out from the
+/// arguments, and each decision's range from `--range` unless the line gives one.
+fn evaluation(
+    mut params: Value,
+    a: &EvaluateArgs,
+    results: &[Value],
+    ranges: &[(String, String, f64, f64)],
+) -> Result<Value, String> {
+    let Some(obj) = params.as_object_mut() else {
+        return Err(
+            "each line must be a JSON object with the parameters of experiment.evaluate".into(),
+        );
+    };
+    if !obj.contains_key("results") {
+        obj.insert("results".into(), json!(results));
+    }
+    for (key, v) in [("first", a.first), ("count", a.count), ("seed", a.seed)] {
+        if let Some(v) = v
+            && !obj.contains_key(key)
+        {
+            obj.insert(key.into(), json!(v));
+        }
+    }
+    if a.allow_approximations && !obj.contains_key("allow_approximations") {
+        obj.insert("allow_approximations".into(), json!(true));
+    }
+    if let Some(decisions) = obj.get_mut("decisions").and_then(Value::as_array_mut) {
+        for d in decisions {
+            let Some(range) = ranges
+                .iter()
+                .find(|r| d["id"] == r.0.as_str() && d["field"] == r.1.as_str())
+            else {
+                continue;
+            };
+            if let Some(d) = d.as_object_mut() {
+                d.entry("min").or_insert(json!(range.2));
+                d.entry("max").or_insert(json!(range.3));
+            }
+        }
+    }
+    Ok(params)
+}
+
+/// Writes one JSON line and flushes it, so a program reading the other end gets it at once.
+fn json_line(out: &mut impl std::io::Write, v: &Value) -> Result<(), Failure> {
+    writeln!(out, "{v}")
+        .and_then(|()| out.flush())
+        .map_err(|e| Failure(format!("cannot write the output: {e}")))
+}
+
+fn evaluate(a: &EvaluateArgs) -> Result<u8, Failure> {
+    use std::io::BufRead;
+    let results = a
+        .results
+        .iter()
+        .map(|r| result(r))
+        .collect::<Result<Vec<_>, _>>()?;
+    let ranges = a
+        .ranges
+        .iter()
+        .map(|r| decision_range(r))
+        .collect::<Result<Vec<_>, _>>()?;
+    let mut engine = Engine::new();
+    open(&mut engine, a.file, a.scenario)?;
+    let mut out = std::io::stdout().lock();
+    let mut tally = Tally::default();
+    if !a.decisions.is_empty() {
+        let decisions = a
+            .decisions
+            .iter()
+            .map(|d| decision(d))
+            .collect::<Result<Vec<_>, _>>()?;
+        let params = evaluation(json!({ "decisions": decisions }), a, &results, &ranges);
+        evaluate_one(&mut engine, params, &mut out, &mut tally)?;
+    } else {
+        for line in std::io::stdin().lock().lines() {
+            let line = line.map_err(|e| Failure(format!("cannot read standard input: {e}")))?;
+            if line.trim().is_empty() {
+                continue;
+            }
+            let params = serde_json::from_str::<Value>(&line)
+                .map_err(|e| format!("the line is not JSON: {e}"))
+                .and_then(|p| evaluation(p, a, &results, &ranges));
+            evaluate_one(&mut engine, params, &mut out, &mut tally)?;
+        }
+    }
+    Ok(u8::from(tally.refused))
+}
+
+/// What the evaluations so far came to.
+#[derive(Default)]
+struct Tally {
+    /// Any evaluation was refused.
+    refused: bool,
+    /// The stand-ins of a file read with errors were reported (once, not on every line).
+    reported: bool,
+}
+
+/// Carries out one evaluation and writes its line: the answer, or the error.
+fn evaluate_one(
+    engine: &mut Engine,
+    params: Result<Value, String>,
+    out: &mut impl std::io::Write,
+    tally: &mut Tally,
+) -> Result<(), Failure> {
+    let answer = params
+        .map_err(|m| CommandError::new(ErrorCode::InvalidParams, m))
+        .and_then(|p| engine.execute("experiment.evaluate", p));
+    match answer {
+        Ok(v) => {
+            if !tally.reported {
+                report_approximations(&v["approximations"]);
+                tally.reported = true;
+            }
+            json_line(out, &v)
+        }
+        Err(e) => {
+            tally.refused = true;
+            json_line(out, &json!({ "error": e.to_json() }))
+        }
+    }
+}
+
 /// What `exec` replays: a bare script, or a journal with the state it started from.
 enum Script {
     Steps(Vec<JournalEntry>),
@@ -1449,6 +1649,27 @@ fn main() -> ExitCode {
             seed,
             format,
             out: out.as_deref(),
+            allow_approximations,
+        }),
+        Command::Evaluate {
+            file,
+            decide,
+            range,
+            result,
+            first,
+            count,
+            seed,
+            scenario,
+            allow_approximations,
+        } => evaluate(&EvaluateArgs {
+            file: &file,
+            decisions: &decide,
+            ranges: &range,
+            results: &result,
+            first,
+            count,
+            seed,
+            scenario: scenario.as_deref(),
             allow_approximations,
         }),
         Command::Inputs {

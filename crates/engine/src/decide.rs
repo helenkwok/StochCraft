@@ -13,7 +13,7 @@ use serde::{Deserialize, Serialize};
 use serde_json::{Value, json};
 use stochcraft_blocks::checks::check_reports;
 use stochcraft_blocks::{ExperimentSummary, Metric, compile, run_warnings, summarise};
-use stochcraft_experiment::Experiment;
+use stochcraft_experiment::{Control, Experiment};
 use stochcraft_model::{Dist, ElementId, ElementKind, Model, ResourcePool};
 use stochcraft_stats::{Proportion, difference};
 
@@ -234,16 +234,29 @@ pub fn run(
     replications: u64,
     seed: u64,
 ) -> Result<(ExperimentSummary, Value), CommandError> {
+    run_range(model, 0..replications, seed)
+}
+
+/// As [`run`], for replications `range.start` up to (not including) `range.end` only: each one
+/// exactly as a run of them all makes it, since its random stream depends only on the seed and
+/// its index ([`Experiment::run_range`]).
+pub fn run_range(
+    model: &Model,
+    range: std::ops::Range<u64>,
+    seed: u64,
+) -> Result<(ExperimentSummary, Value), CommandError> {
     let compiled = compile(model).map_err(|ds| CommandError {
         code: ErrorCode::InvalidModel,
         message: "the model has errors and cannot run".into(),
         details: Some(wire::diagnostics(model, &ds)),
     })?;
-    let reports = Experiment::new(replications, seed)
-        .run(|r| compiled.run(r.rng))
+    let first = range.start;
+    let count = range.end.saturating_sub(range.start);
+    let reports = Experiment::new(count, seed)
+        .run_range(range, |r| compiled.run(r.rng), &Control::new())
         .map_err(|e| CommandError::new(ErrorCode::Internal, e.to_string()))?
         .into_iter()
-        .zip(0u64..)
+        .zip(first..)
         .map(|(r, index)| r.map_err(|e| crate::run::run_failed(index, &e)))
         .collect::<Result<Vec<_>, _>>()?;
     let summary = summarise(&reports);

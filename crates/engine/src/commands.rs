@@ -1390,6 +1390,17 @@ fn experiment_design(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
     Ok(v)
 }
 
+/// Evaluates given values of the decisions for a range of replications. Not recorded in later
+/// runs' records, unlike a sweep or a design: an outside optimiser evaluates thousands of
+/// candidates, and the record would grow with each.
+fn experiment_evaluate(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
+    let p: crate::evaluate::EvaluateParams = parse(p)?;
+    let approximations = e.approximations(p.allow_approximations)?;
+    let mut v = crate::evaluate::evaluate(e.model(), &p)?;
+    note_approximations(&mut v, approximations);
+    Ok(v)
+}
+
 /// An answer that came from a run of a file read with errors says so: the substitutions the run
 /// made, as the run record's `approximations`.
 fn note_approximations(answer: &mut Value, approximations: Vec<Value>) {
@@ -2800,6 +2811,14 @@ pub static COMMANDS: &[Command] = &[
         schema: schema::<crate::design::DesignParams>,
         example: || json!({ "factors": [{ "id": "arrivals", "field": "mean", "levels": [2.0, 3.0] }, { "id": "desk", "field": "mean", "levels": [0.8, 1.2] }], "results": [{ "element": "desk", "metric": "mean_wait" }], "replications": 4 }),
         run: experiment_design,
+    },
+    Command {
+        name: "experiment.evaluate",
+        summary: "Evaluate given values of the decisions (each a parameter as a sweep takes it, `{id, field}`, with its `value` and optionally the `min` and `max` it must lie in) for replications `first` (counting from 0, default 0) to `first` + `count` − 1 (default: the experiment's replications), on the model's seed or the one given: each result's value in every replication, with their mean and 95% interval. Replication i depends only on the seed and i, so replications evaluated in stages give exactly what they give at once, and every evaluation meets the same random numbers (common random numbers). An unknown decision, a value of the wrong kind or out of its range, or a decision given twice is refused with the decision named. The model is unchanged; for an optimiser of your own driving the runs (the command line's `evaluate` reads and writes JSON lines). At most 10,000 replications at a time.",
+        kind: CommandKind::Action,
+        schema: schema::<crate::evaluate::EvaluateParams>,
+        example: || json!({ "decisions": [{ "id": "desk", "field": "mean", "value": 1.2, "min": 0.5, "max": 2.0 }], "results": [{ "element": "desk", "metric": "mean_wait" }], "first": 0, "count": 4 }),
+        run: experiment_evaluate,
     },
     Command {
         name: "experiment.size",

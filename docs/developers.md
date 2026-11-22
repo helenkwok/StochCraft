@@ -254,6 +254,22 @@ A factor is `id.field=levels` or `id.field=min..max`, the field one of `capacity
 and gives each factor's rank correlation with each result. A design may take at most 10,000 runs
 (points × replications).
 
+For an optimiser of your own, `evaluate` runs given values of the decisions for a range of
+replications and prints the engine's `experiment.evaluate` answer as one JSON line: each
+result's value in every replication, with their mean and 95% interval.
+
+```bash
+stochcraft-cli evaluate queue.bpmn --decide server.mean=0.8 --range server.mean=0.5..1.2   --result server.mean_wait --first 0 --count 10
+```
+
+Without `--decide` it reads one evaluation per line of standard input (a JSON object with the
+command's parameters: `decisions`, and optionally `results`, `first`, `count`, `seed`) and writes
+one line back for each, the arguments giving what a line leaves out; a refused line gets
+`{"error": {...}}` naming the decision, and the next is read. Replications count from 0, and
+replication i depends only on the seed and i, so replications evaluated in stages are exactly
+those of one evaluation of them all. The user guide has worked examples with Optuna and pymoo
+(`examples/optimisers/`), which CI runs.
+
 To choose a distribution for measured times, `fit` fits one column of a CSV file (or a plain list,
 one value per line; `-` reads standard input) to each family by maximum likelihood and ranks the
 fits by Anderson–Darling A², with the Kolmogorov–Smirnov distance beside it:
@@ -706,7 +722,7 @@ stops with the error from opening it; with `--force` it replays onto the file's 
 It then re-applies the edits, undo and redo, and
 skips the saves, runs and experiments (`file.save`, `run`, `mc.run`, `mc.sobol`, `sd.run`, `run.start`,
 `run.cancel`, `experiment.sweep`, `experiment.sensitivity`, `experiment.design`,
-`experiment.size`), printing `"skipped": true` for each; `--all` carries them out too, and a
+`experiment.size`, `experiment.evaluate`), printing `"skipped": true` for each; `--all` carries them out too, and a
 replayed `run.start` is run to completion so later steps find its results. In Rust,
 `Engine::journal_document` gives the journal and `Engine::replay_journal` replays it
 (`ReplayMode::EditsOnly` or `All`); `Engine::replay` still runs a plain list of steps in full.

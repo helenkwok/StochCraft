@@ -263,6 +263,17 @@ batch (`batch_spearman`, with `batch_mean` and its `half_width` across the batch
 across the batches. A design of more than 10,000 runs (points × replications) is refused with the
 number it would take, so an agent can drop levels, points or replications and try again.
 
+`experiment.evaluate` is for a search of the agent's own: given `decisions` (each a parameter as
+a sweep takes it, `{id, field}`, with its `value`, and optionally the `min` and `max` it must lie
+in), the `results`, and replications `first` (counting from 0) to `first` + `count` − 1, it gives
+each result's `values` in every replication with their `mean`, `half_width` and `n`, on the
+model's seed or the one given. Replication i depends only on the seed and i, so replications
+evaluated in stages give exactly what one evaluation of them all gives, and every evaluation
+meets the same random numbers. An unknown decision (`not_found`), or a value of the wrong kind
+or out of its range, or a decision given twice (`invalid_params`), is refused with the decision
+named as `id.field`. The model is not changed, and the evaluation is not recorded in later runs'
+records (a search makes thousands).
+
 A Monte Carlo model (a calculation with no process) is built and run through `execute`:
 `mc.input.set` and `mc.output.set` add inputs (distributions) and outputs (expressions over
 them, with `$name`), `mc.correlation.set` correlates two inputs, `mc.set` picks the sampling

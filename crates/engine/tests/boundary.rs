@@ -102,6 +102,14 @@ fn a_file_read_with_errors_does_not_run() {
             "experiment.size",
             json!({ "target": target, "target_share": 0.5, "replications": 2 }),
         ),
+        (
+            "experiment.evaluate",
+            json!({
+                "decisions": [{ "id": "arrive", "field": "mean", "value": 1.0 }],
+                "results": [{ "element": "leave", "metric": "entered" }],
+                "count": 2,
+            }),
+        ),
     ];
     for (command, params) in experiments {
         let f = err(&mut e, command, params);

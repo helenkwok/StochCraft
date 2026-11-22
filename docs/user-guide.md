@@ -16,6 +16,7 @@ differ, it says so. To get the app, see the [installation guide](installation.md
 - [Watch a run](#watch-a-run)
 - [Other views of the model](#other-views-of-the-model)
 - [Ask what-if questions: the Analysis view](#ask-what-if-questions-the-analysis-view)
+- [Drive the runs from an optimiser of your own](#drive-the-runs-from-an-optimiser-of-your-own)
 - [Monte Carlo models](#monte-carlo-models)
 - [Save, open and export](#save-open-and-export)
 - [Change how it looks and which keys do what](#change-how-it-looks-and-which-keys-do-what)
@@ -489,6 +490,97 @@ come from your change, not from chance. Each analysis can take a while.
 - **Size the resources:** adds a unit at the busiest task or pool until enough runs meet a
   target, such as "mean wait at most 5 minutes in 70% of runs". **Use these units in the
   model** applies the answer as one change you can undo.
+
+## Drive the runs from an optimiser of your own
+
+StochCraft's searches answer "which of these is best" with a stated confidence. To use a search
+of your own instead (Optuna, pymoo, or code in any language), let it choose the values and let
+StochCraft run them: `stochcraft-cli evaluate` takes values of the decisions and a range of
+replications, and gives back each result's value in every replication, with their mean and 95%
+interval.
+
+```bash
+stochcraft-cli evaluate examples/optimisers/mm1-cost.bpmn \
+  --decide server.mean=0.5 --range server.mean=0.2..0.9 \
+  --result server.mean_work_in_progress --first 0 --count 10
+```
+
+A decision is named as `id.field`, the field being `capacity`, `quantity`, `queue_capacity` or
+`mean` (as for a sweep or a designed experiment), and a result as `element.metric`. Without
+`--decide`, the command reads one evaluation per line of standard input and writes one JSON line
+back for each, so a program keeps one `evaluate` running and talks to it line by line:
+
+```json
+{"decisions": [{"id": "server", "field": "mean", "value": 0.5}], "first": 0, "count": 5}
+```
+
+The answer has `values` (the result in each replication, in order), `mean`, `half_width` and `n`
+for each result, with the `decisions`, `seed`, `first` and `count` it ran. A line can also give
+`results` and `seed`; `--result`, `--seed`, `--first` and `--count` give what a line leaves out,
+and `--range` the range each decision's value must lie in. A decision the model does not have, a
+value of the wrong kind or out of its range, or a decision given twice is answered with
+`{"error": {...}}` naming the decision, and the next line is read as usual; the command then
+exits with 1. Replications count from 0.
+
+Two things make the numbers fair to compare. Every evaluation uses the same seed, so replication
+*i* of every candidate meets the same random numbers (common random numbers), and a difference
+between two candidates comes from the decisions, not from chance. And replication *i* depends
+only on the seed and *i*, so replications 0–4 and then 5–9 give exactly what 0–9 give at once:
+a search can give a candidate a few replications, and more only while it looks promising. The
+engine command is `experiment.evaluate` (for scripts and agents, [mcp.md](mcp.md)).
+
+The two examples below choose the mean service time *s* of an M/M/1 server, with arrivals at
+rate 1, between 0.2 and 0.9. The cost is the mean number at the server, *s* / (1 − *s*), minus
+4*s* (a slower machine is cheaper), so it is least at *s* = 0.5, where it is −1 (−0.933 at 0.4,
+−0.9 at 0.6). The model and the scripts are in `examples/optimisers/`; `stochcraft_evaluate.py`
+there keeps one `evaluate` running and sends it a line per evaluation. CI runs both scripts and
+checks that each ends within 0.05 of 0.5.
+
+**Optuna, asking and telling** (`optuna_mm1.py`; `pip install optuna`). Each trial gets
+replications 0–4; Optuna's median pruner stops it there if it is worse than the median of the
+earlier trials, and otherwise it gets 5–9 too:
+
+```python
+study = optuna.create_study(direction="minimize",
+                            sampler=optuna.samplers.TPESampler(seed=1),
+                            pruner=optuna.pruners.MedianPruner(n_startup_trials=5))
+for _ in range(40):
+    trial = study.ask()
+    s = trial.suggest_float("s", 0.2, 0.9)
+    costs = cost(evaluator.evaluate({"server.mean": s}, first=0, count=5), s)
+    trial.report(sum(costs) / len(costs), step=0)
+    if trial.should_prune():
+        study.tell(trial, state=optuna.trial.TrialState.PRUNED)
+        continue
+    costs += cost(evaluator.evaluate({"server.mean": s}, first=5, count=5), s)
+    study.tell(trial, sum(costs) / len(costs))
+print(study.best_trial.params["s"])
+```
+
+where `cost` gives each replication's mean number at the server minus 4*s*.
+
+**pymoo** (`pymoo_mm1.py`; `pip install pymoo`). The problem's one variable is *s*, and each
+candidate runs replications 0–9; pymoo's pattern search (Hooke and Jeeves) follows the cost
+down:
+
+```python
+class ServiceTime(ElementwiseProblem):
+    def __init__(self, evaluator):
+        super().__init__(n_var=1, n_obj=1, xl=np.array([0.2]), xu=np.array([0.9]))
+        self.evaluator = evaluator
+
+    def _evaluate(self, x, out, *args, **kwargs):
+        s = float(np.clip(x[0], 0.2, 0.9))
+        answer = self.evaluator.evaluate({"server.mean": s}, first=0, count=10)
+        out["F"] = [answer["results"][0]["mean"] - 4 * s]
+
+result = minimize(ServiceTime(evaluator), PatternSearch(), termination=("n_evals", 60), seed=1)
+print(result.X[0])
+```
+
+Run them with the path to the command line: `python optuna_mm1.py path/to/stochcraft-cli`.
+What such a search finds is the best it found, not a proven best: neither method says how sure
+it is that nothing it did not try is better.
 
 ## Monte Carlo models
 
