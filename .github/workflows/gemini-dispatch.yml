@@ -53,6 +53,8 @@ jobs:
     # For comments: only on a pull request, and only if the user types @gemini-cli and is OWNER,
     # MEMBER or COLLABORATOR.
     # For manual runs: anyone with write access can start the workflow from the Actions tab.
+    # Comments and manual runs are checked again in 'Extract command': the event does not say
+    # whether the pull request comes from a fork.
     if: |-
       (
         github.event_name == 'pull_request' &&
@@ -83,6 +85,7 @@ jobs:
         env:
           EVENT_TYPE: '${{ github.event_name }}.${{ github.event.action }}'
           REQUEST: '${{ github.event.comment.body || github.event.review.body }}'
+          PULL_REQUEST_NUMBER: '${{ github.event.pull_request.number || github.event.issue.number || inputs.pull_request_number }}'
         with:
           script: |
             const eventType = process.env.EVENT_TYPE;
@@ -97,9 +100,25 @@ jobs:
               core.setOutput('additional_context', additionalContext);
             } else {
               core.setOutput('command', 'fallthrough');
+              return;
+            }
+
+            // Comments and manual runs name a pull request without the event saying where it
+            // comes from: review only branches of this repository, and not Dependabot's.
+            const { data: pr } = await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: Number(process.env.PULL_REQUEST_NUMBER),
+            });
+            const ownRepo = `${context.repo.owner}/${context.repo.repo}`;
+            if (pr.head.repo?.full_name !== ownRepo || pr.user.login === 'dependabot[bot]') {
+              core.notice(`Pull request #${pr.number} comes from ${pr.head.repo?.full_name ?? 'a deleted fork'}; not reviewed.`);
+              core.setOutput('command', 'skip');
             }
 
       - name: 'Acknowledge request'
+        if: |-
+          ${{ steps.extract_command.outputs.command != 'skip' }}
         env:
           GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN || github.token }}'
           ISSUE_NUMBER: '${{ github.event.pull_request.number || github.event.issue.number || inputs.pull_request_number }}'

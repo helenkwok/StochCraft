@@ -1,6 +1,7 @@
 # Reviews a pull request with the Gemini CLI. Called by gemini-dispatch.yml.
 # Adapted from google-github-actions/run-gemini-cli, examples/workflows/pr-review (Apache-2.0);
-# the GitHub App token step is removed (the workflow token is used).
+# the GitHub App token step is removed (the workflow token is used), the pull request is passed to
+# /pr-code-review directly, and tools.core lists the tools the review needs (an empty list denies all).
 name: 'Gemini Review'
 
 on:
@@ -34,23 +35,9 @@ jobs:
       pull-requests: 'write'
     steps:
       - name: 'Checkout repository'
-        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6, as the upstream example: v7 sets a git config the extension install refuses
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6, as the upstream example
         with:
           persist-credentials: 'false'
-
-      - name: 'Prepare prompt context'
-        shell: 'bash'
-        run: |-
-          mkdir -p .gemini
-          jq -n \
-            --arg repo "${REPOSITORY}" \
-            --arg pr "${PULL_REQUEST_NUMBER}" \
-            --arg context "${ADDITIONAL_CONTEXT}" \
-            '{repository: $repo, pull_request_number: $pr, additional_context: $context}' > .gemini/context.json
-        env:
-          REPOSITORY: '${{ github.repository }}'
-          PULL_REQUEST_NUMBER: '${{ github.event.pull_request.number || github.event.issue.number || inputs.pull_request_number }}'
-          ADDITIONAL_CONTEXT: '${{ inputs.additional_context }}'
 
       - name: 'Run Gemini pull request review'
         uses: google-github-actions/run-gemini-cli@f77273f4c914e4bf38440cf36a0369cb64a37489 # v0.1.22
@@ -59,13 +46,19 @@ jobs:
           GEMINI_CLI_TRUST_WORKSPACE: 'true'
           GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN || github.token }}'
           GEMINI_API_KEY: '${{ secrets.GEMINI_API_KEY }}'
+          # The code-review extension's /pr-code-review reads these three.
+          REPOSITORY: '${{ github.repository }}'
+          PULL_REQUEST_NUMBER: '${{ inputs.pull_request_number || github.event.pull_request.number || github.event.issue.number }}'
+          ADDITIONAL_CONTEXT: '${{ inputs.additional_context }}'
         with:
           gcp_location: '${{ vars.GOOGLE_CLOUD_LOCATION }}'
           gcp_project_id: '${{ vars.GOOGLE_CLOUD_PROJECT }}'
           gcp_service_account: '${{ vars.SERVICE_ACCOUNT_EMAIL }}'
           gcp_workload_identity_provider: '${{ vars.GCP_WIF_PROVIDER }}'
           gemini_api_key: '${{ secrets.GEMINI_API_KEY }}'
-          gemini_cli_version: '${{ vars.GEMINI_CLI_VERSION }}'
+          # 0.70.0 cannot install extensions: its git library refuses the GIT_CONFIG_SYSTEM
+          # override the CLI itself sets. 0.69.0 is the last release before that library update.
+          gemini_cli_version: '${{ vars.GEMINI_CLI_VERSION || ''0.69.0'' }}'
           gemini_debug: '${{ fromJSON(vars.GEMINI_DEBUG || vars.ACTIONS_STEP_DEBUG || false) }}'
           gemini_model: '${{ vars.GEMINI_MODEL }}'
           google_api_key: '${{ secrets.GOOGLE_API_KEY }}'
@@ -74,7 +67,7 @@ jobs:
           upload_artifacts: '${{ vars.UPLOAD_ARTIFACTS }}'
           workflow_name: 'gemini-review'
           # Explicitly set the PR number to handle `issue_comment` triggers (which GitHub treats as issues, not PRs)
-          github_pr_number: '${{ github.event.pull_request.number || inputs.pull_request_number }}'
+          github_pr_number: '${{ inputs.pull_request_number || github.event.pull_request.number }}'
           settings: |-
             {
               "model": {
@@ -107,11 +100,14 @@ jobs:
                 }
               },
               "tools": {
-                "core": []
+                "core": [
+                  "activate_skill",
+                  "mcp_github_*"
+                ]
               }
             }
           extensions: |
             [
               "https://github.com/gemini-cli-extensions/code-review"
             ]
-          prompt: '/pr-code-review'
+          prompt: '/pr-code-review ${{ github.server_url }}/${{ github.repository }}/pull/${{ inputs.pull_request_number || github.event.pull_request.number || github.event.issue.number }}'
