@@ -605,12 +605,10 @@ fn a_file_that_cannot_be_read_is_refused_with_the_engines_message() {
 /// The runs "n of N runs finished" says are made, if the page says so now.
 fn runs_made(h: &Harness<'static, App>) -> Option<u64> {
     let node = h.query_by_label_contains("runs finished")?;
-    node.accesskit_node()
-        .label()?
-        .split(' ')
-        .next()?
-        .parse()
-        .ok()
+    // A plain label's text is the node's value; a button's is its label.
+    let node = node.accesskit_node();
+    let text = node.label().or_else(|| node.value())?;
+    text.split(' ').next()?.parse().ok()
 }
 
 /// Opens the noise model on its Results tab with `runs` runs asked for.
@@ -650,7 +648,10 @@ fn a_long_run_is_made_a_few_runs_a_frame_and_ends_with_sd_runs_numbers() {
         if frames <= 3 {
             said.extend(
                 h.get_all_by_label_contains("run")
-                    .filter_map(|n| n.accesskit_node().label())
+                    .filter_map(|n| {
+                        let n = n.accesskit_node();
+                        n.label().or_else(|| n.value())
+                    })
                     .map(|l| format!("{frames}: {l}")),
             );
         }
