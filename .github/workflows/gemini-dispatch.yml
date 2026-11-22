@@ -1,4 +1,6 @@
-# Routes pull request events and "@gemini-cli /review" comments to gemini-review.yml.
+# Routes "@gemini-cli /review" comments, manual runs, and CodeRabbit's "rate limited" comments to
+# gemini-review.yml: Gemini reviews a pull request automatically only while CodeRabbit is out of
+# reviews, at most once per head commit.
 # Adapted from google-github-actions/run-gemini-cli, examples/workflows/gemini-dispatch (Apache-2.0);
 # the triage, invoke and plan-execute routes and the GitHub App token steps are removed.
 name: 'Gemini Dispatch'
@@ -10,13 +12,11 @@ on:
   pull_request_review:
     types:
       - 'submitted'
-  pull_request:
-    types:
-      - 'opened'
-      - 'reopened'
   issue_comment:
     types:
       - 'created'
+      # CodeRabbit edits its summary comment in place when it runs out of reviews.
+      - 'edited'
   workflow_dispatch:
     inputs:
       pull_request_number:
@@ -49,7 +49,7 @@ jobs:
           env | grep '^DEBUG_'
 
   dispatch:
-    # For PRs: only if not from a fork, and not Dependabot's (its runs get no secrets).
+    # For CodeRabbit: only its own comment on a pull request saying it is rate limited.
     # For comments: only on a pull request, and only if the user types @gemini-cli and is OWNER,
     # MEMBER or COLLABORATOR.
     # For manual runs: anyone with write access can start the workflow from the Actions tab.
@@ -57,17 +57,23 @@ jobs:
     # whether the pull request comes from a fork.
     if: |-
       (
-        github.event_name == 'pull_request' &&
-        github.event.pull_request.head.repo.fork == false &&
-        github.event.pull_request.user.login != 'dependabot[bot]'
+        github.event_name == 'issue_comment' &&
+        github.event.issue.pull_request &&
+        github.event.comment.user.login == 'coderabbitai[bot]' &&
+        contains(github.event.comment.body, 'rate limited by coderabbit.ai')
       ) || (
         github.event_name == 'workflow_dispatch'
       ) || (
+        github.event.action != 'edited' &&
         (github.event_name != 'issue_comment' || github.event.issue.pull_request) &&
         github.event.sender.type == 'User' &&
         startsWith(github.event.comment.body || github.event.review.body, '@gemini-cli') &&
         contains(fromJSON('["OWNER", "MEMBER", "COLLABORATOR"]'), github.event.comment.author_association || github.event.review.author_association)
       )
+    # One dispatch at a time per pull request, so two "rate limited" edits do not both review.
+    concurrency:
+      group: 'gemini-dispatch-${{ github.event.pull_request.number || github.event.issue.number || inputs.pull_request_number }}'
+      cancel-in-progress: false
     runs-on: 'ubuntu-latest'
     permissions:
       contents: 'read'
@@ -78,12 +84,15 @@ jobs:
       request: '${{ steps.extract_command.outputs.request }}'
       additional_context: '${{ steps.extract_command.outputs.additional_context }}'
       issue_number: '${{ github.event.pull_request.number || github.event.issue.number || inputs.pull_request_number }}'
+      head_sha: '${{ steps.extract_command.outputs.head_sha }}'
+      coderabbit_out: '${{ steps.extract_command.outputs.coderabbit_out }}'
     steps:
       - name: 'Extract command'
         id: 'extract_command'
         uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7
         env:
           EVENT_TYPE: '${{ github.event_name }}.${{ github.event.action }}'
+          COMMENT_USER: '${{ github.event.comment.user.login }}'
           REQUEST: '${{ github.event.comment.body || github.event.review.body }}'
           PULL_REQUEST_NUMBER: '${{ github.event.pull_request.number || github.event.issue.number || inputs.pull_request_number }}'
         with:
@@ -92,7 +101,13 @@ jobs:
             const request = process.env.REQUEST || '';
             core.setOutput('request', request);
 
-            if (['pull_request.opened', 'pull_request.reopened'].includes(eventType) || eventType.startsWith('workflow_dispatch')) {
+            const coderabbitOut = eventType.startsWith('issue_comment') &&
+              process.env.COMMENT_USER === 'coderabbitai[bot]';
+            core.setOutput('coderabbit_out', coderabbitOut ? 'true' : 'false');
+            if (coderabbitOut) {
+              core.setOutput('request', '');
+              core.setOutput('command', 'review');
+            } else if (eventType.startsWith('workflow_dispatch')) {
               core.setOutput('command', 'review');
             } else if (request.startsWith("@gemini-cli /review")) {
               core.setOutput('command', 'review');
@@ -114,6 +129,24 @@ jobs:
             if (pr.head.repo?.full_name !== ownRepo || pr.user.login === 'dependabot[bot]') {
               core.notice(`Pull request #${pr.number} comes from ${pr.head.repo?.full_name ?? 'a deleted fork'}; not reviewed.`);
               core.setOutput('command', 'skip');
+              return;
+            }
+            core.setOutput('head_sha', pr.head.sha);
+
+            // Standing in for CodeRabbit: once per head commit. The acknowledgement below
+            // carries a marker with the commit it is for.
+            if (coderabbitOut) {
+              const marker = `<!-- gemini-stand-in: ${pr.head.sha} -->`;
+              const comments = await github.paginate(github.rest.issues.listComments, {
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: pr.number,
+                per_page: 100,
+              });
+              if (comments.some((c) => (c.body || '').includes(marker))) {
+                core.notice(`Gemini already stood in for CodeRabbit on ${pr.head.sha}; not reviewed again.`);
+                core.setOutput('command', 'skip');
+              }
             }
 
       - name: 'Acknowledge request'
@@ -123,7 +156,7 @@ jobs:
           GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN || github.token }}'
           ISSUE_NUMBER: '${{ github.event.pull_request.number || github.event.issue.number || inputs.pull_request_number }}'
           MESSAGE: |-
-            Hi @${{ github.actor }}, I've received your request, and I'm working on it now! You can track my progress [in the logs](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) for more details.
+            ${{ steps.extract_command.outputs.coderabbit_out == 'true' && format('CodeRabbit is out of reviews for now, so the Gemini review runs instead. <!-- gemini-stand-in: {0} -->', steps.extract_command.outputs.head_sha) || format('Hi @{0}, I''ve received your request, and I''m working on it now!', github.actor) }} You can track progress [in the logs](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}).
           REPOSITORY: '${{ github.repository }}'
         run: |-
           gh issue comment "${ISSUE_NUMBER}" \
