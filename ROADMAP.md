@@ -71,7 +71,10 @@ window on the flowchart canvas (M3.4).
    whose 95% confidence interval must cover it (M/M/1, M/M/c, M/M/1/K, Erlang loss, Jackson
    networks). Blocks without one get exact deterministic tests. A few core invariants (stream
    seeding, parameter checks, the verdict rules) are also machine-checked with Kani
-   ([developers guide](docs/developers.md#machine-checked-proofs)).
+   ([developers guide](docs/developers.md#machine-checked-proofs)). The formulas these tests
+   compare against (Erlang B and C, the M/M/1 means, Pollaczek–Khinchine, Little's law on a sample
+   path) are proved as algebra from stated assumptions in Lean 4 with Mathlib
+   ([formal/](formal/README.md)); the proofs cover the formulas, not the simulator.
 5. **Layers stay shallow.** New crates get a row in `xtask/src/layers.rs` before code is written;
    the UI never reaches below the engine.
 6. **Clean room.** Behaviour comes from textbooks, papers and vendors' public documentation read
