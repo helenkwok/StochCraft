@@ -5,13 +5,16 @@ name: Kani
 # (stochcraft-random, stochcraft-stats); normal builds never see them. What is and is not proved
 # is in docs/developers.md ("Machine-checked proofs").
 
-# The proofs run nightly on main rather than on every pull request.
-# A pull request that changes this file runs them once; any branch can run them by hand.
+# The proofs run on pull requests that change the code they cover, and nightly on main, so a
+# change elsewhere that breaks one (a toolchain or dependency update) is still caught.
 on:
   schedule:
     - cron: "30 17 * * *"
   pull_request:
     paths:
+      - "crates/**"
+      - "Cargo.toml"
+      - "Cargo.lock"
       - ".github/workflows/kani.yml"
   workflow_dispatch:
 
