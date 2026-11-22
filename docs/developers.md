@@ -121,10 +121,10 @@ substitutes something for each part it could not read (a time of zero for that e
 the numbers would be of another model. `run --allow-approximations` (the parameter
 `allow_approximations` of `run`, `run.start` and the `experiment.*` commands) runs the
 substitution deliberately: each substitution is printed on stderr and listed in the run record
-(`approximations`, in addition to `file_notes`). The errors stand until the file's notes are read
-again: by opening the file after correcting it, or by saving the model into it (in the window,
-correct the block, save, then run). An edit alone does not clear them, since it cannot be told
-whether it answers the error or changes something else at the block. A Monte Carlo model needs no
+(`approximations`, in addition to `file_notes`). An error pinned to one field (a task's processing time) stops counting while that field is set
+to something else (undo brings it back), since the edit replaces the stand-in; renaming the block or
+editing another property does not clear it, and any other error stands until the file is opened
+again. A Monte Carlo model needs no
 such gate: reading its inputs and outputs raises warnings only, never an error that substitutes
 something.
 

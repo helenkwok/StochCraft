@@ -600,7 +600,7 @@ standards that process-modelling tools share.
   new BPMN file, which leaves them out.
 - If StochCraft could not read part of a file (an expression it cannot evaluate, a value out of
   range), **Run** and the other commands that run the model refuse with the first such error, so
-  results are never of a model that is not the file's: correct that block and save, and it runs. The
+  results are never of a model that is not the file's: set that block's time again (renaming it does not count), and it runs. The
   command line (`run --allow-approximations`) and scripts can run the stand-in model deliberately.
 - **Unsaved changes are kept** (process models). If StochCraft closes with unsaved changes, it
   offers to **Recover** them the next time it starts.

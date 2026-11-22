@@ -181,7 +181,10 @@ A file read with errors (`open` returns them in `notes`, with severity `error`) 
 `run`, `run.start` and the `experiment.*` commands fail with `invalid_model` and the errors in
 `details`, because the model holds a stand-in for each part StochCraft could not read. Run it
 anyway with `allow_approximations: true` (through `execute`); the run record then lists the
-substitutions in `approximations`.
+substitutions in `approximations`. An error the reader pinned to one field (a task's processing time, `field` in the note) stops
+counting while that field is set to something else (undo brings it back), and nothing of the
+replaced stand-in is recorded; renaming the block or editing another property does not clear it,
+and any other error stands until the file is opened again.
 
 `experiment.design` varies several parameters at once. Each factor is a parameter as a sweep
 takes it (`{id, field}`) with its `levels`, or its range as `min` and `max`. The default design,

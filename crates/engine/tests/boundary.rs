@@ -147,29 +147,33 @@ fn a_file_read_cleanly_runs_with_no_approximations() {
 }
 
 #[test]
-fn an_edit_alone_does_not_clear_the_error_but_correcting_and_saving_does() {
+fn only_setting_the_substituted_value_clears_the_error_and_undo_brings_it_back() {
     let mut e = opened_with_error();
-    // An edit at the block, even one that has nothing to do with the error, is no answer to it.
+    let refused = |e: &mut Engine| {
+        let f = err(e, "run", json!({ "replications": 2 }));
+        assert_eq!(f.code, ErrorCode::InvalidModel, "{f:?}");
+    };
+    // Another element's edit is no answer to it.
+    ok(
+        &mut e,
+        "block.rename",
+        json!({ "id": "leave", "name": "Exit" }),
+    );
+    refused(&mut e);
+    // Nor is renaming the element, or editing another of its properties: the stand-in is still
+    // in the model.
     ok(
         &mut e,
         "block.rename",
         json!({ "id": "serve", "name": "Counter" }),
     );
-    let f = err(&mut e, "run", json!({ "replications": 2 }));
-    assert_eq!(f.code, ErrorCode::InvalidModel, "{f:?}");
+    refused(&mut e);
 
+    // Setting the processing time replaces the stand-in: nothing of it is recorded.
     ok(
         &mut e,
         "block.set",
         json!({ "id": "serve", "service": { "type": "exponential", "mean": 1.0 } }),
-    );
-    let dir = std::path::Path::new(env!("CARGO_TARGET_TMPDIR")).join("engine-tests");
-    let _ = std::fs::create_dir_all(&dir);
-    let path = dir.join("boundary-corrected.bpmn");
-    ok(
-        &mut e,
-        "file.save",
-        json!({ "path": path.to_string_lossy() }),
     );
     let r = ok(&mut e, "run", json!({ "replications": 2 }));
     assert!(
@@ -177,6 +181,12 @@ fn an_edit_alone_does_not_clear_the_error_but_correcting_and_saving_does() {
         "{}",
         r["record"]
     );
+
+    // Undoing it puts the stand-in back, and the error with it.
+    ok(&mut e, "undo", json!({}));
+    refused(&mut e);
+    ok(&mut e, "redo", json!({}));
+    ok(&mut e, "run", json!({ "replications": 2 }));
 }
 
 #[test]

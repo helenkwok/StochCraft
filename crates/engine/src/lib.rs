@@ -820,21 +820,30 @@ impl Engine {
         Ok(compiled.live(rng))
     }
 
-    /// The errors found when the opened file was read: each is something StochCraft could not
-    /// read, so the model it made substitutes for it (a zero time for a processing-time
-    /// expression, say) and does not behave as the file describes. They stand until the notes
-    /// are read again, by opening the file, or by saving the model into it (the edit that
-    /// answers an error is then written in place of what could not be read). An edit alone does
-    /// not clear one: it cannot be told whether it answers the error or changes something else
-    /// at the same block, and a wrong guess would let the stand-in run unmarked.
+    /// The errors found when the opened file was read that still stand: each is something
+    /// StochCraft could not read, so the model it made substitutes for it (a zero time for a
+    /// processing-time expression, say) and does not behave as the file describes. An error
+    /// that the reader pinned to one field of one element (`at` and `field`, a task's
+    /// processing time) stops standing while that field differs from what was read or last
+    /// saved: setting it replaces the stand-in, so nothing of the stand-in is recorded for a run
+    /// after it. Renaming the element or editing another of its properties does not clear it,
+    /// and undoing the edit brings it back. Any other error (no field to pin) stands until the
+    /// notes are read again, by opening the file or saving the model into it.
     fn import_errors(&self) -> Vec<Value> {
-        self.file.as_ref().map_or_else(Vec::new, |file| {
-            file.notes
-                .iter()
-                .filter(|n| n["severity"] == "error")
-                .cloned()
-                .collect()
-        })
+        let Some(file) = &self.file else {
+            return Vec::new();
+        };
+        let replaced = |n: &Value| match (n["at"].as_str(), n["field"].as_str()) {
+            (Some(at), Some(field)) => {
+                stand_in_field(&self.model, at, field) != stand_in_field(&self.saved, at, field)
+            }
+            _ => false,
+        };
+        file.notes
+            .iter()
+            .filter(|n| n["severity"] == "error" && !replaced(n))
+            .cloned()
+            .collect()
     }
 
     /// Whether a run may go ahead given the errors found reading the file. Returns the
@@ -860,7 +869,7 @@ impl Engine {
         Err(CommandError {
             code: ErrorCode::InvalidModel,
             message: format!(
-                "the file has {count} StochCraft could not read, so the model would not run as the file describes (the first, {first}). Correct the file (correcting a block in the window counts once the file is saved), or run with `allow_approximations` (`--allow-approximations` on the command line) to run what StochCraft substituted instead; the run record then lists each substitution"
+                "the file has {count} StochCraft could not read, so the model would not run as the file describes (the first, {first}). Correct the block (or the file), or run with `allow_approximations` (`--allow-approximations` on the command line) to run what StochCraft substituted instead; the run record then lists each substitution"
             ),
             details: Some(Value::Array(errors)),
         })
@@ -1052,6 +1061,7 @@ fn notes_json(notes: &[stochcraft_io::Note]) -> Vec<Value> {
                 "severity": format!("{:?}", n.severity).to_lowercase(),
                 "at": n.at,
                 "message": n.message,
+                "field": n.field,
             })
         })
         .collect()
@@ -1079,5 +1089,24 @@ fn format_name(f: Format) -> &'static str {
     match f {
         Format::Bpmn => "bpmn",
         Format::Xpdl => "xpdl",
+    }
+}
+
+/// The value in element `id` that a file error's stand-in went into (`field` as the reader pins
+/// it: `processing_time`), or `None` for no such element or field.
+fn stand_in_field<'a>(
+    model: &'a Model,
+    id: &str,
+    field: &str,
+) -> Option<&'a stochcraft_model::Dist> {
+    use stochcraft_model::ElementKind;
+    let el = model.element(&stochcraft_model::ElementId::unchecked(id))?;
+    match (field, &el.kind) {
+        (
+            "processing_time",
+            ElementKind::Server { service, .. } | ElementKind::SharedTask { service, .. },
+        ) => Some(service),
+        ("processing_time", ElementKind::Delay { duration, .. }) => Some(duration),
+        _ => None,
     }
 }
