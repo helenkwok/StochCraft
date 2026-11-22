@@ -3437,6 +3437,10 @@ impl Setups {
     }
 }
 
+/// Mixed into the seed of a server's failure stream, so it is not its service stream's or its
+/// setup or health check streams'.
+const BREAKDOWN_STREAM: u64 = 0x2c9b_0d37_a6f1_85e3;
+
 /// Mixed into the seed of a server's setup stream, so it is not its service stream's.
 const SETUP_STREAM: u64 = 0x5e7f_a11d_c4a9_6e01;
 
@@ -3593,7 +3597,7 @@ fn release_place(units: &RefCell<Vec<Unit>>, u: usize, places: Option<&Rc<Places
 /// for a free unit before it takes the next entity from the queue, so every waiting entity
 /// stays in the queue, where a retried job goes ahead of them all. A retried start's wait is
 /// taken back, so the mean wait runs from arrival to the start of the attempt that finished.
-fn spawn_unit_server(sim: &mut Sim, mut env: BlockEnv, parts: UnitServer) {
+fn spawn_unit_server(sim: &mut Sim, env: BlockEnv, parts: UnitServer) {
     let UnitServer {
         capacity,
         service,
@@ -3605,8 +3609,13 @@ fn spawn_unit_server(sim: &mut Sim, mut env: BlockEnv, parts: UnitServer) {
     } = parts;
     let ctx = env.ctx.clone();
     let me = tag(env.me);
-    // The failures draw from their own stream, so they do not change the service times.
-    let mut fail_rng = breakdown.as_ref().map(|_| env.rng.fork());
+    // The failures draw from their own stream, so they do not change the service times. Like the
+    // setups and health checks below, it is seeded without drawing from the element's own
+    // (forking would advance it), so adding or removing a breakdown leaves the service times of
+    // the same seed as they were, which keeps paired comparisons paired.
+    let mut fail_rng = breakdown
+        .as_ref()
+        .map(|_| Rng::new(env.rng.clone().next_u64() ^ BREAKDOWN_STREAM));
     // So do the setups. Their stream is seeded without drawing from the element's own (forking
     // would), so the service times and the failures stay those of the model without setups.
     let mut setup_rng = setup
