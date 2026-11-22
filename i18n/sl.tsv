@@ -1395,6 +1395,27 @@ unit	yr	l.
 	Replace the XMILE file?	Želite zamenjati datoteko XMILE?
 	Save As writes a new file and keeps {file} as it is. Replacing {file} leaves out what StochCraft does not keep.	Shrani kot zapiše novo datoteko in pusti {file} nespremenjeno. Zamenjava datoteke {file} izpusti to, česar StochCraft ne ohrani.
 	Replace	Zamenjaj
+	Observed data	Opazovani podatki
+	Real measurements to check the results against: the value seen in the real system, or a bound the result must meet.	Dejanske meritve, s katerimi se preverjajo rezultati: vrednost, opažena v resničnem sistemu, ali meja, ki jo mora rezultat izpolnjevati.
+	Add an observed value	Dodaj opazovano vrednost
+	Observed value	Opazovana vrednost
+	Checked as	Preverja se kot
+	Its 95% half-width	Njena 95-odstotna polovična širina
+	Add Observed Value	Dodaj opazovano vrednost
+	Change Observed Value	Spremeni opazovano vrednost
+	Remove Observed Value	Odstrani opazovano vrednost
+	Checked against observed data	Preverjeno z opazovanimi podatki
+	{result} ({block}): observed {observed}, simulated {simulated}.	{result} ({block}): opazovano {observed}, simulirano {simulated}.
+	{result} ({block}): must be at most {bound}, simulated {simulated}.	{result} ({block}): mora biti največ {bound}, simulirano {simulated}.
+	{result} ({block}): must be at least {bound}, simulated {simulated}.	{result} ({block}): mora biti vsaj {bound}, simulirano {simulated}.
+	Simulated minus observed: {difference}.	Simulirano minus opazovano: {difference}.
+	Agrees	Se ujema
+	Differs	Se razlikuje
+	Passes	Izpolnjuje
+	Fails	Ne izpolnjuje
+	Can't tell yet: more runs would decide	Še ni mogoče reči: več zagonov bi odločilo
+	No result	Ni rezultata
+	Observed data is given for a block that does not exist, so there is no result to check it against. Remove it, or choose a block that exists.	Opazovani podatki so podani za blok, ki ne obstaja, zato ni rezultata, s katerim bi jih preverili. Odstranite jih ali izberite blok, ki obstaja.
 	The estimated chance that {output} is more than {value} is {percent}.	Ocenjena verjetnost, da je {output} večji od {value}, je {percent}.
 	The estimated chance that {output} is less than {value} is {percent}.	Ocenjena verjetnost, da je {output} manjši od {value}, je {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	Njihov interval nima širine, česar nobena ocena nima, zato ostane navadni rezultat.
@@ -1402,3 +1423,8 @@ unit	yr	l.
 	No variation was observed, so there is no interval for the mean; a rare event the trials did not reach could still move it.	Ni bilo opaženo nobene variacije, zato za povprečje ni intervala; redek dogodek, ki ga poskusi niso dosegli, bi ga še vedno lahko premaknil.
 	They narrowed the interval by {percent}, but a mean given for a control is far from the trials' mean, so the plain result stands.	Zožili so interval za {percent}, vendar je povprečje, podano za kontrolo, daleč od povprečja poskusov, zato ostane navaden rezultat.
 	The output does not move in one direction with {inputs} (its value at the median is outside its values at the 10th and 90th percentiles), so the swing understates the effect.	Izhod se z {inputs} ne premika v eni smeri (njegova vrednost pri mediani je zunaj njegovih vrednosti pri 10. in 90. percentilu), zato razpon podcenjuje učinek.
+	Inconclusive at current precision	Neodločljivo pri trenutni natančnosti
+	No difference detected	Razlika ni zaznana
+	Agrees within ±{tolerance}	Se ujema v mejah ±{tolerance}
+	This is not evidence of agreement: set a tolerance to test for it.	To ni dokaz ujemanja: za preverjanje nastavite toleranco.
+	Tolerance (0 for none)	Toleranca (0 za nobeno)

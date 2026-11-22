@@ -1395,6 +1395,27 @@ unit	yr	ปี
 	Replace the XMILE file?	แทนที่ไฟล์ XMILE หรือไม่
 	Save As writes a new file and keeps {file} as it is. Replacing {file} leaves out what StochCraft does not keep.	บันทึกเป็น จะเขียนไฟล์ใหม่และคง {file} ไว้ตามเดิม การแทนที่ {file} จะทำให้สิ่งที่ StochCraft ไม่เก็บไว้หายไป
 	Replace	แทนที่
+	Observed data	ข้อมูลที่สังเกตได้
+	Real measurements to check the results against: the value seen in the real system, or a bound the result must meet.	ค่าวัดจริงที่ใช้ตรวจสอบผลลัพธ์: ค่าที่เห็นในระบบจริง หรือขอบเขตที่ผลลัพธ์ต้องเป็นไปตาม
+	Add an observed value	เพิ่มค่าที่สังเกตได้
+	Observed value	ค่าที่สังเกตได้
+	Checked as	ตรวจสอบเป็น
+	Its 95% half-width	ครึ่งความกว้าง 95% ของค่านี้
+	Add Observed Value	เพิ่มค่าที่สังเกตได้
+	Change Observed Value	เปลี่ยนค่าที่สังเกตได้
+	Remove Observed Value	นำค่าที่สังเกตได้ออก
+	Checked against observed data	ตรวจสอบกับข้อมูลที่สังเกตได้
+	{result} ({block}): observed {observed}, simulated {simulated}.	{result} ({block}): สังเกตได้ {observed}, จำลองได้ {simulated}
+	{result} ({block}): must be at most {bound}, simulated {simulated}.	{result} ({block}): ต้องไม่เกิน {bound}, จำลองได้ {simulated}
+	{result} ({block}): must be at least {bound}, simulated {simulated}.	{result} ({block}): ต้องไม่น้อยกว่า {bound}, จำลองได้ {simulated}
+	Simulated minus observed: {difference}.	ค่าจำลองลบค่าที่สังเกตได้: {difference}
+	Agrees	สอดคล้อง
+	Differs	แตกต่าง
+	Passes	ผ่าน
+	Fails	ไม่ผ่าน
+	Can't tell yet: more runs would decide	ยังบอกไม่ได้: การรันเพิ่มจะช่วยตัดสินได้
+	No result	ไม่มีผลลัพธ์
+	Observed data is given for a block that does not exist, so there is no result to check it against. Remove it, or choose a block that exists.	มีการระบุข้อมูลที่สังเกตได้สำหรับบล็อกที่ไม่มีอยู่ จึงไม่มีผลลัพธ์ให้ตรวจสอบ ให้นำออก หรือเลือกบล็อกที่มีอยู่
 	The estimated chance that {output} is more than {value} is {percent}.	ความน่าจะเป็นโดยประมาณที่ {output} จะมากกว่า {value} คือ {percent}
 	The estimated chance that {output} is less than {value} is {percent}.	ความน่าจะเป็นโดยประมาณที่ {output} จะน้อยกว่า {value} คือ {percent}
 	Their interval has no width, which no estimate has, so the plain result stands.	ช่วงของค่าเหล่านี้ไม่มีความกว้าง ซึ่งไม่มีการประมาณใดเป็นเช่นนั้น จึงใช้ผลลัพธ์ธรรมดาต่อไป
@@ -1402,3 +1423,8 @@ unit	yr	ปี
 	No variation was observed, so there is no interval for the mean; a rare event the trials did not reach could still move it.	ไม่พบความแปรผันใด ๆ จึงไม่มีช่วงสำหรับค่าเฉลี่ย เหตุการณ์หายากที่การทดลองไปไม่ถึงอาจยังทำให้ค่าเฉลี่ยขยับได้
 	They narrowed the interval by {percent}, but a mean given for a control is far from the trials' mean, so the plain result stands.	ตัวแปรควบคุมทำให้ช่วงแคบลง {percent} แต่ค่าเฉลี่ยที่ให้ไว้สำหรับตัวควบคุมอยู่ไกลจากค่าเฉลี่ยของการทดลอง จึงยังคงใช้ผลลัพธ์ธรรมดา
 	The output does not move in one direction with {inputs} (its value at the median is outside its values at the 10th and 90th percentiles), so the swing understates the effect.	ผลลัพธ์ไม่เคลื่อนไปทางเดียวกับ {inputs} (ค่าที่มัธยฐานอยู่นอกช่วงค่าที่เปอร์เซ็นไทล์ที่ 10 และ 90) ดังนั้นช่วงแกว่งจึงประเมินผลต่ำไป
+	Inconclusive at current precision	สรุปไม่ได้ที่ความแม่นยำปัจจุบัน
+	No difference detected	ไม่พบความแตกต่าง
+	Agrees within ±{tolerance}	สอดคล้องภายใน ±{tolerance}
+	This is not evidence of agreement: set a tolerance to test for it.	นี่ไม่ใช่หลักฐานของความสอดคล้อง: ตั้งค่าความคลาดเคลื่อนที่ยอมรับได้เพื่อทดสอบ
+	Tolerance (0 for none)	ความคลาดเคลื่อนที่ยอมรับได้ (0 คือไม่มี)

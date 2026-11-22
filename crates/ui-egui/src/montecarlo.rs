@@ -47,7 +47,7 @@ use crate::{App, Request, Running, commands, comparable, theme};
 type OutputEdit = (String, Value, Option<(String, String)>);
 
 /// The time a frame spends making trials before it draws.
-const FRAME_BUDGET: std::time::Duration = std::time::Duration::from_millis(8);
+pub(crate) const FRAME_BUDGET: std::time::Duration = std::time::Duration::from_millis(8);
 
 /// The first distribution of a new input: a three-point estimate, the most common input.
 fn first_distribution() -> Value {

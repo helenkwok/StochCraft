@@ -1395,6 +1395,27 @@ unit	yr	বছর
 	Replace the XMILE file?	XMILE ফাইলটি প্রতিস্থাপন করবেন?
 	Save As writes a new file and keeps {file} as it is. Replacing {file} leaves out what StochCraft does not keep.	নতুন নামে সংরক্ষণ একটি নতুন ফাইল লেখে এবং {file} যেমন আছে তেমনই রাখে। {file} প্রতিস্থাপন করলে StochCraft যা রাখে না তা বাদ পড়ে।
 	Replace	প্রতিস্থাপন
+	Observed data	পর্যবেক্ষিত ডেটা
+	Real measurements to check the results against: the value seen in the real system, or a bound the result must meet.	ফলাফল যাচাই করার জন্য বাস্তব পরিমাপ: বাস্তব ব্যবস্থায় দেখা মান, অথবা ফলাফলকে যে সীমা মানতে হবে।
+	Add an observed value	পর্যবেক্ষিত মান যোগ করুন
+	Observed value	পর্যবেক্ষিত মান
+	Checked as	যাচাইয়ের ধরন
+	Its 95% half-width	এর 95% অর্ধ-প্রস্থ
+	Add Observed Value	পর্যবেক্ষিত মান যোগ করুন
+	Change Observed Value	পর্যবেক্ষিত মান পরিবর্তন
+	Remove Observed Value	পর্যবেক্ষিত মান অপসারণ
+	Checked against observed data	পর্যবেক্ষিত ডেটার সঙ্গে যাচাই
+	{result} ({block}): observed {observed}, simulated {simulated}.	{result} ({block}): পর্যবেক্ষিত {observed}, সিমুলেটেড {simulated}।
+	{result} ({block}): must be at most {bound}, simulated {simulated}.	{result} ({block}): সর্বোচ্চ {bound} হতে হবে, সিমুলেটেড {simulated}।
+	{result} ({block}): must be at least {bound}, simulated {simulated}.	{result} ({block}): অন্তত {bound} হতে হবে, সিমুলেটেড {simulated}।
+	Simulated minus observed: {difference}.	সিমুলেটেড বিয়োগ পর্যবেক্ষিত: {difference}।
+	Agrees	মিলে যায়
+	Differs	মেলে না
+	Passes	উত্তীর্ণ
+	Fails	অনুত্তীর্ণ
+	Can't tell yet: more runs would decide	এখনো বলা যায় না: আরও পুনরাবৃত্তি সিদ্ধান্ত দিত
+	No result	কোনো ফলাফল নেই
+	Observed data is given for a block that does not exist, so there is no result to check it against. Remove it, or choose a block that exists.	যে ব্লক নেই তার জন্য পর্যবেক্ষিত ডেটা দেওয়া হয়েছে, তাই মিলিয়ে দেখার মতো কোনো ফলাফল নেই। এটি সরান, অথবা এমন একটি ব্লক বেছে নিন যা আছে।
 	The estimated chance that {output} is more than {value} is {percent}.	{output} {value}-এর বেশি হওয়ার আনুমানিক সম্ভাবনা {percent}।
 	The estimated chance that {output} is less than {value} is {percent}.	{output} {value}-এর কম হওয়ার আনুমানিক সম্ভাবনা {percent}।
 	Their interval has no width, which no estimate has, so the plain result stands.	এদের ব্যবধানের কোনো প্রস্থ নেই, যা কোনো আনুমানিক মানের থাকে না, তাই সাধারণ ফলাফলই থাকছে।
@@ -1402,3 +1423,8 @@ unit	yr	বছর
 	No variation was observed, so there is no interval for the mean; a rare event the trials did not reach could still move it.	কোনো তারতম্য দেখা যায়নি, তাই গড়ের জন্য কোনো ব্যবধান নেই; পরীক্ষাগুলো যে বিরল ঘটনায় পৌঁছায়নি তা এখনও গড় বদলে দিতে পারে।
 	They narrowed the interval by {percent}, but a mean given for a control is far from the trials' mean, so the plain result stands.	এগুলো ব্যবধান {percent} সংকীর্ণ করেছে, কিন্তু একটি নিয়ন্ত্রকের জন্য দেওয়া গড় পরীক্ষাগুলোর গড় থেকে অনেক দূরে, তাই সাধারণ ফলাফলই থাকছে।
 	The output does not move in one direction with {inputs} (its value at the median is outside its values at the 10th and 90th percentiles), so the swing understates the effect.	আউটপুট {inputs}-এর সাথে এক দিকে বদলায় না (মধ্যমায় এর মান ১০ম ও ৯০তম পার্সেন্টাইলের মানের বাইরে), তাই সুইং প্রভাবকে কম দেখায়।
+	Inconclusive at current precision	বর্তমান নির্ভুলতায় অনির্ণায়ক
+	No difference detected	কোনো পার্থক্য পাওয়া যায়নি
+	Agrees within ±{tolerance}	±{tolerance}-এর মধ্যে মিলে যায়
+	This is not evidence of agreement: set a tolerance to test for it.	এটি মিলের প্রমাণ নয়: যাচাই করতে একটি সহনসীমা দিন।
+	Tolerance (0 for none)	সহনসীমা (না চাইলে 0)

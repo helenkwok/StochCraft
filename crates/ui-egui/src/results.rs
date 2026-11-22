@@ -537,6 +537,7 @@ pub fn trust(ui: &mut egui::Ui, results: &Value) -> Option<Fix> {
 /// ([`key_measures`]).
 pub fn key(ui: &mut egui::Ui, results: &Value) {
     let p = theme::palette(ui.ctx());
+    crate::observed::section_of_results(ui, results);
     let r = &results["record"];
     let unit = unit_label(r["time_unit"].as_str().unwrap_or(""));
     // Warnings from before the run (the record's), from its results, and the file's notes.
@@ -1248,6 +1249,8 @@ fn answers(results: &Value) -> Vec<(String, String)> {
 /// so one collapse seen in many results reads as one finding. Draws nothing when there are none.
 pub fn findings(ui: &mut egui::Ui, results: &Value) {
     let p = theme::palette(ui.ctx());
+    // What differs from the observed data, or violates a bound, comes first.
+    crate::observed::findings(ui, results);
     let answers = answers(results);
     if !answers.is_empty() {
         ui.label(theme::strong(t("What the run found")));

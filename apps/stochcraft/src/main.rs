@@ -56,8 +56,9 @@ struct Desktop {
     /// The system menu bar (macOS).
     #[cfg(target_os = "macos")]
     native_menu: Option<craft_menu::NativeMenu>,
-    /// Commands from the control channel (`--control`), waiting for the next frame.
-    control: Option<std::sync::mpsc::Receiver<control::Call>>,
+    /// The control channel (`--control`): commands wait on it for the next frame, and its token
+    /// file is removed when it is dropped.
+    control: Option<control::Channel>,
 }
 
 impl Desktop {
@@ -78,9 +79,12 @@ impl Desktop {
         let control = control_port.and_then(|port| {
             let wake = ctx.clone();
             match control::listen(port, move || wake.request_repaint()) {
-                Ok((addr, calls)) => {
-                    eprintln!("stochcraft: listening for engine commands on {addr}");
-                    Some(calls)
+                Ok(channel) => {
+                    eprintln!(
+                        "stochcraft: listening for engine commands on {}",
+                        channel.addr
+                    );
+                    Some(channel)
                 }
                 Err(e) => {
                     app.report_error(format!("--control {port}: {e}"));
@@ -109,10 +113,10 @@ impl Desktop {
 
     /// Runs the commands that came in on the control channel, and answers them.
     fn take_control_calls(&mut self) {
-        let Some(calls) = &self.control else {
+        let Some(channel) = &self.control else {
             return;
         };
-        for call in calls.try_iter().collect::<Vec<_>>() {
+        for call in channel.calls.try_iter().collect::<Vec<_>>() {
             let result = self.app.control(&call.command, call.params.clone());
             call.answer(result);
         }
@@ -347,6 +351,8 @@ impl eframe::App for Desktop {
     }
 
     fn on_exit(&mut self, _gl: Option<&eframe::glow::Context>) {
+        // Closes the control channel, which removes its token file.
+        self.control = None;
         self.autosave(None, true);
         self.sync_settings(None);
         if let Err(e) = self.settings.flush() {

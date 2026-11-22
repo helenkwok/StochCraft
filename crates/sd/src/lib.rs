@@ -56,8 +56,8 @@ pub use layout::{AUX_SIZE, Connector, Layout, STOCK_SIZE, Shape, VALVE_SIZE, flo
 pub use model::{Gf, GfKind, GfX, Method, SdModel, SimSpecs, Step, VarKind, Variable, canonical};
 pub use program::{Program, compile};
 pub use run::{
-    DEFAULT_REPLICATIONS, DT_CHECK_THRESHOLD, DtCheck, RunOptions, SdResults, Series, StockCheck,
-    run,
+    DEFAULT_REPLICATIONS, DT_CHECK_THRESHOLD, DtCheck, RunOptions, SdJob, SdResults, Series,
+    StockCheck, run,
 };
 pub use units::{Units, time_unit};
 pub use xmile::{

@@ -1395,6 +1395,27 @@ unit	yr	년
 	Replace the XMILE file?	XMILE 파일을 바꾸시겠습니까?
 	Save As writes a new file and keeps {file} as it is. Replacing {file} leaves out what StochCraft does not keep.	다른 이름으로 저장은 새 파일을 쓰고 {file}은 그대로 둡니다. {file}을 바꾸면 StochCraft가 유지하지 않는 내용이 빠집니다.
 	Replace	바꾸기
+	Observed data	관측 데이터
+	Real measurements to check the results against: the value seen in the real system, or a bound the result must meet.	결과를 확인할 실제 측정값: 실제 시스템에서 본 값, 또는 결과가 충족해야 하는 한계.
+	Add an observed value	관측값 추가
+	Observed value	관측값
+	Checked as	확인 방식
+	Its 95% half-width	이 값의 95% 반폭
+	Add Observed Value	관측값 추가
+	Change Observed Value	관측값 변경
+	Remove Observed Value	관측값 제거
+	Checked against observed data	관측 데이터와 대조
+	{result} ({block}): observed {observed}, simulated {simulated}.	{result}({block}): 관측 {observed}, 시뮬레이션 {simulated}.
+	{result} ({block}): must be at most {bound}, simulated {simulated}.	{result}({block}): {bound} 이하여야 함, 시뮬레이션 {simulated}.
+	{result} ({block}): must be at least {bound}, simulated {simulated}.	{result}({block}): {bound} 이상이어야 함, 시뮬레이션 {simulated}.
+	Simulated minus observed: {difference}.	시뮬레이션 − 관측: {difference}.
+	Agrees	일치
+	Differs	불일치
+	Passes	통과
+	Fails	실패
+	Can't tell yet: more runs would decide	아직 판단할 수 없음: 실행 횟수를 늘리면 판단할 수 있음
+	No result	결과 없음
+	Observed data is given for a block that does not exist, so there is no result to check it against. Remove it, or choose a block that exists.	존재하지 않는 블록에 관측 데이터가 지정되어 있어 대조할 결과가 없습니다. 제거하거나 존재하는 블록을 선택하세요.
 	The estimated chance that {output} is more than {value} is {percent}.	{output}이(가) {value}보다 클 확률의 추정값은 {percent}입니다.
 	The estimated chance that {output} is less than {value} is {percent}.	{output}이(가) {value}보다 작을 확률의 추정값은 {percent}입니다.
 	Their interval has no width, which no estimate has, so the plain result stands.	구간의 폭이 없는데, 어떤 추정치에도 그런 일은 없으므로 기존 결과를 그대로 씁니다.
@@ -1402,3 +1423,8 @@ unit	yr	년
 	No variation was observed, so there is no interval for the mean; a rare event the trials did not reach could still move it.	변동이 관찰되지 않았으므로 평균의 구간이 없습니다. 시행이 도달하지 못한 드문 사건이 여전히 평균을 움직일 수 있습니다.
 	They narrowed the interval by {percent}, but a mean given for a control is far from the trials' mean, so the plain result stands.	구간이 {percent} 좁아졌지만, 통제 변수에 준 평균이 시행의 평균과 크게 달라서 일반 결과를 그대로 씁니다.
 	The output does not move in one direction with {inputs} (its value at the median is outside its values at the 10th and 90th percentiles), so the swing understates the effect.	출력은 {inputs}에 대해 한 방향으로 움직이지 않습니다(중앙값에서의 값이 10번째와 90번째 백분위수에서의 값 바깥에 있습니다). 그래서 변동 폭이 영향을 과소평가합니다.
+	Inconclusive at current precision	현재 정밀도로는 판단 불가
+	No difference detected	차이가 검출되지 않음
+	Agrees within ±{tolerance}	±{tolerance} 이내에서 일치
+	This is not evidence of agreement: set a tolerance to test for it.	이것은 일치의 증거가 아닙니다. 확인하려면 허용 오차를 설정하세요.
+	Tolerance (0 for none)	허용 오차(없으면 0)
