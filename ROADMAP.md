@@ -2933,7 +2933,8 @@ StochCraft matches that and adds:
   can move to another population of the same type.
 - **State chart** (SCXML's semantics, D16–D18):
   - states nested and in parallel, with entry and exit actions, final states, and shallow and
-    deep history (with no history yet, the history state goes to the initial state);
+    deep history (with no history yet, the history state takes its own default transition,
+    with that transition's target and actions);
   - a branch point: a transient state whose transitions carry conditions, taken in document
     order, with at most one default; a branch with no condition true and no default stops the
     run with the agent's id and the branch named;
@@ -2953,8 +2954,10 @@ StochCraft matches that and adds:
     - a **message**, matched by its name and, optionally, a condition on its data. A message no
       transition matches is dropped, and counted, so a model that loses messages says so.
   - In the file, a timeout or rate is SCXML's own `<send delayexpr>` on entry with a `<cancel>`
-    on exit, so another SCXML tool runs the same timing; a `stochcraft:` attribute marks a rate,
-    so it is drawn again on change. The window shows each as one transition.
+    on exit, so another SCXML tool reads the chart's structure and its fixed timeouts. A random
+    delay uses D17's `stochcraft` data model, and a `stochcraft:` attribute marks a rate so it
+    is drawn again on change; a tool without those extensions does not reproduce either. The
+    window shows each as one transition.
 - **Messages:** to one agent, to a random agent of a population (never the sender), to all of a
   population, to the agents it is connected to (all, or one at random), or to its grid
   neighbours. Each is delivered as its own event at the same time, after the current one
@@ -2970,9 +2973,11 @@ StochCraft matches that and adds:
 - **Stepped mode** (D18): for models written in steps. Every step the environment's before-step
   action runs, then every agent's before-step action, then every agent's step action, then the
   environment's after-step action. The agents run in a fixed or a random order, set openly.
-  With before-step actions that only read and step actions that write, every agent sees the
-  same state (synchronous update, as cellular automata need); otherwise the order shows, and
-  the answer says which order was used.
+  For a synchronous update, as cellular automata need, each agent's before-step action reads
+  the state before the step and stores its next value in a variable of its own, and its step
+  action only copies that stored value in; then every agent sees the same state whatever the
+  order. A step action that reads another agent's variables sees whatever that agent has
+  already written this step, so the order shows, and the answer says which order was used.
 - **Statistics:** per population, count, sum, mean, minimum and maximum of an expression, each
   over the agents that meet a condition (for example the count in each state); recorded over
   time at a save interval with bands across replications, as system dynamics results are; and
@@ -2988,11 +2993,14 @@ given stream (W3C SCXML 1.0, §3.13 and Appendix D).
 **Stages** (one PR each, each with its checks and docs):
 
 - **A1 State charts, model-free** (`agents`): the chart in memory, SCXML's algorithm (macrosteps
-  and microsteps, conflicting transitions by document order, exit and entry sets, history,
+  and microsteps, conflicting transitions (a descendant's before its ancestor's, otherwise by
+  document order), exit and entry sets, history,
   parallel states, the microstep limit), the data model of D17 over `model::expr`, timeouts and
   rates on the `des` event list with cancellation, and one agent's random streams.
   - *Checks:* hand-worked charts for the order of actions (nested exits and entries, a branch,
-    history both shallow and deep, a parallel state, an internal transition), each written as
+    history both shallow and deep, and a history's default target and actions when there is no
+    history yet, a parallel state, an internal transition, and a child's transition chosen over
+    its parent's for the same event even where the parent's comes first in the file), each written as
     the expected list of actions; a chart that loops in zero time stops at the limit with its
     path; a timeout fixed at 2 fires at exactly 2; a rate of 3 gives exponential times whose mean
     and a Kolmogorov–Smirnov test agree with 1/3; a rate drawn again on change matches an
