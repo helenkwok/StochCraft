@@ -590,9 +590,10 @@ impl<'a> Machine<'a> {
                     .iter()
                     .map(|a| self.eval(a))
                     .collect::<Result<Vec<_>, _>>();
+                let value = v.map(|v| self.function(Func::Step, &v));
                 self.time = time;
                 self.end_stage = true;
-                self.function(Func::Step, &v?)
+                value?
             }
             Ex::Fn(f, args) => {
                 let mut v = Vec::with_capacity(args.len());
