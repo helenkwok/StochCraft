@@ -653,7 +653,7 @@ fn call(pos: usize, name: &str, args: Vec<Expr>, provided: &[Provided]) -> Resul
 /// readable by other BPSim tools. The functions beyond it (`min`, `max`, `sum`, `abs`, `sqrt`,
 /// `exp`, `log`, `pow`, `sin`, `cos`, `if`) are for Monte Carlo models ([`parse_with_variables`]).
 pub fn parse(src: &str) -> Result<Expr, ExprError> {
-    let e = parse_as(src, false)?;
+    let e = parse_as(src, false, &[])?;
     let mut beyond = None;
     e.visit(&mut |x| {
         if let Expr::Call(f, _) = x
