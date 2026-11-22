@@ -243,6 +243,9 @@ mod proofs {
         let n: u64 = kani::any();
         kani::assume(n < 2);
         let (mean, half_width, x): (f64, f64, f64) = (kani::any(), kani::any(), kani::any());
+        // Kani flags any NaN-producing operation, and `judge` subtracts before it looks at
+        // the inputs (the result is discarded as NaN is not finite), so keep them finite.
+        kani::assume(mean.is_finite() && half_width.is_finite() && x.is_finite());
         let check = match kani::any::<u8>() % 3 {
             0 => Check::AtMost(x),
             1 => Check::AtLeast(x),

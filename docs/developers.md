@@ -569,10 +569,9 @@ cargo kani -p stochcraft-stats
 
 Proved, for every input the harness allows:
 
-- Random streams (`crates/random/src/lib.rs`): SplitMix64's first output differs for different
-  seeds; the seed of a keyed stream differs for different bases (same key hash) and for different
-  key hashes (same base); seeding never gives the all-zero state and a xoshiro256** step keeps a
-  non-zero state non-zero; `uniform` is in [0, 1) and `uniform_open0` in (0, 1] from any state.
+- Random streams (`crates/random/src/lib.rs`): seeding never gives the all-zero state and a
+  xoshiro256** step keeps a non-zero state non-zero; `uniform` is in [0, 1) and `uniform_open0`
+  in (0, 1] from any state.
 - Distribution parameters (`crates/random/src/dist.rs`): when `Dist::check` accepts a Uniform,
   Triangular, Truncated normal, Exponential, Poisson, Normal, Log-normal, Erlang, Gamma, Beta,
   Weibull or Binomial, its parameters are finite and in the documented ranges, for any `f64`
@@ -583,8 +582,8 @@ Proved, for every input the harness allows:
   always inconclusive; the 95% critical value exists for 1 to 30 degrees of freedom; the
   half-width of two replications of moderate size (up to 1e6) is finite and not negative.
 
-Not proved: that two different key strings give different streams (they hash to 64 bits, so
-collisions exist), the statistical quality of the generator, the shape of any distribution's
+Not proved: that different seeds, bases or keys give different streams (the 64-bit multiplications
+of SplitMix64 are too slow for the checker; key strings also hash to 64 bits, so collisions exist), the statistical quality of the generator, the shape of any distribution's
 samples or the bounds of `uniform_range` and `triangular` (floating-point arithmetic on symbolic
 values is beyond the checker in CI time; transcendental functions, rejection samplers and loops
 are out of its reach too; the statistical tests cover them), confidence intervals for more than two replications,

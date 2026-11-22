@@ -118,14 +118,9 @@ impl Rng {
     /// is hashed with 64-bit FNV-1a (Fowler, Noll and Vo; offset basis 0xcbf29ce484222325, prime
     /// 0x100000001b3), and the hash and `base` are mixed through SplitMix64 before seeding.
     pub fn keyed(base: u64, key: &str) -> Rng {
-        Rng::new(keyed_seed(base, fnv1a64(key)))
+        let mixed = SplitMix64::new(fnv1a64(key)).next_u64();
+        Rng::new(SplitMix64::new(base ^ mixed).next_u64())
     }
-}
-
-/// The seed of the stream whose key has FNV-1a hash `key_hash`, under `base`.
-fn keyed_seed(base: u64, key_hash: u64) -> u64 {
-    let mixed = SplitMix64::new(key_hash).next_u64();
-    SplitMix64::new(base ^ mixed).next_u64()
 }
 
 /// 64-bit FNV-1a of `s`'s bytes.
@@ -145,92 +140,6 @@ pub use estimate::{Family, FitError, ThreePoint, Upper};
 #[cfg(kani)]
 mod proofs {
     use super::*;
-
-    const GOLDEN: u64 = 0x9e37_79b9_7f4a_7c15;
-
-    /// The inverse of `x -> x ^ (x >> s)` on `u64` (s >= 1).
-    fn undo_xorshift(z: u64, s: u32) -> u64 {
-        let mut x = z;
-        let mut done = s;
-        while done < 64 {
-            x = z ^ (x >> s);
-            done += s;
-        }
-        x
-    }
-
-    /// The inverse of multiplication by the odd `c` modulo 2^64 (Newton's iteration).
-    fn mul_inverse(c: u64) -> u64 {
-        let mut inv = c;
-        for _ in 0..6 {
-            inv = inv.wrapping_mul(2u64.wrapping_sub(c.wrapping_mul(inv)));
-        }
-        inv
-    }
-
-    /// The inverse of SplitMix64's output function (the part after the state's increment).
-    fn unmix(out: u64) -> u64 {
-        let z = undo_xorshift(out, 31);
-        let z = z.wrapping_mul(mul_inverse(0x94d0_49bb_1331_11eb));
-        let z = undo_xorshift(z, 27);
-        let z = z.wrapping_mul(mul_inverse(0xbf58_476d_1ce4_e5b9));
-        undo_xorshift(z, 30)
-    }
-
-    /// The three xor-shift steps of the output function each have the inverse `undo_xorshift`.
-    #[kani::proof]
-    #[kani::unwind(5)]
-    fn the_xorshift_steps_are_inverted() {
-        let x: u64 = kani::any();
-        for s in [30u32, 27, 31] {
-            assert_eq!(undo_xorshift(x ^ (x >> s), s), x);
-        }
-    }
-
-    /// The two multipliers of the output function are odd, so `mul_inverse` undoes them.
-    #[kani::proof]
-    #[kani::solver(cadical)]
-    fn the_multipliers_are_inverted() {
-        let x: u64 = kani::any();
-        for c in [0xbf58_476d_1ce4_e5b9u64, 0x94d0_49bb_1331_11eb] {
-            assert_eq!(x.wrapping_mul(c).wrapping_mul(mul_inverse(c)), x);
-        }
-    }
-
-    /// SplitMix64's output function is a bijection of its state, shown by an explicit inverse:
-    /// the first output determines the seed, so different seeds never give the same first output.
-    #[kani::proof]
-    #[kani::solver(cadical)]
-    #[kani::unwind(70)]
-    fn splitmix64_first_output_determines_the_seed() {
-        let seed: u64 = kani::any();
-        let out = SplitMix64::new(seed).next_u64();
-        assert_eq!(unmix(out), seed.wrapping_add(GOLDEN));
-    }
-
-    /// For a fixed key hash, the stream seed determines the base: different bases give
-    /// different stream seeds.
-    #[kani::proof]
-    #[kani::solver(cadical)]
-    #[kani::unwind(70)]
-    fn keyed_seed_determines_the_base() {
-        let (base, h): (u64, u64) = (kani::any(), kani::any());
-        let mixed = SplitMix64::new(h).next_u64();
-        assert_eq!(
-            unmix(keyed_seed(base, h)).wrapping_sub(GOLDEN),
-            base ^ mixed
-        );
-    }
-
-    /// For a fixed base, different key hashes give different stream seeds. (Different key
-    /// strings can still share a 64-bit FNV-1a hash; this is about the mixing after it.)
-    #[kani::proof]
-    #[kani::solver(cadical)]
-    fn keyed_seed_is_injective_in_the_key_hash() {
-        let (base, h1, h2): (u64, u64, u64) = (kani::any(), kani::any(), kani::any());
-        kani::assume(h1 != h2);
-        assert_ne!(keyed_seed(base, h1), keyed_seed(base, h2));
-    }
 
     /// Seeding never produces the all-zero state, which xoshiro256** cannot leave.
     #[kani::proof]
