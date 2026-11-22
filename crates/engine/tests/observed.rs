@@ -22,8 +22,8 @@ fn fails(e: &mut Engine, command: &str, params: Value) -> ErrorCode {
     }
 }
 
-/// The M/M/1 example: a clerk (a shared pool) serving customers who arrive every 80 seconds on
-/// average, 16 replications.
+/// The M/M/1 example: one clerk (the task `serve`, whose resource is its own) serving customers
+/// who arrive every 80 seconds on average, 16 replications.
 fn mm1() -> Engine {
     let path = Path::new(concat!(
         env!("CARGO_MANIFEST_DIR"),
@@ -84,7 +84,7 @@ fn a_run_is_checked_against_observed_values_and_bounds() {
     let mut e = mm1();
     let first = ok(&mut e, "run", json!({}));
     let wait = simulated(&first, "serve", "mean_wait");
-    let util = simulated(&first, "clerk", "utilisation");
+    let util = simulated(&first, "serve", "utilisation");
     let (wait_mean, wait_hw) = (num(&wait["mean"]), num(&wait["half_width"]));
     let util_mean = num(&util["mean"]);
     let time = simulated(&first, "leave", "mean_time_in_system");
@@ -103,7 +103,7 @@ fn a_run_is_checked_against_observed_values_and_bounds() {
     ok(
         &mut e,
         "observation.add",
-        json!({ "check": "value", "element": "clerk", "metric": "utilisation",
+        json!({ "check": "value", "element": "serve", "metric": "utilisation",
                 "value": util_mean + 0.2 }),
     );
     // Bounds: well above the interval passes, well below fails, on the mean straddles.
@@ -128,7 +128,7 @@ fn a_run_is_checked_against_observed_values_and_bounds() {
 
     let r = ok(&mut e, "run", json!({}));
     assert_eq!(verdict(&r, "serve", "mean_wait"), "agrees");
-    assert_eq!(verdict(&r, "clerk", "utilisation"), "differs");
+    assert_eq!(verdict(&r, "serve", "utilisation"), "differs");
     assert_eq!(verdict(&r, "serve", "mean_queue_length"), "passes");
     assert_eq!(verdict(&r, "serve", "left"), "fails");
     // The mean on the bound: the interval straddles it, so it is not decided by the mean.
@@ -310,7 +310,7 @@ fn the_commands_add_change_and_remove_and_undo() {
     ok(
         &mut e,
         "observation.add",
-        json!({ "check": "value", "element": "clerk", "metric": "utilisation", "value": 0.75 }),
+        json!({ "check": "value", "element": "serve", "metric": "utilisation", "value": 0.75 }),
     );
     assert_eq!(e.model().experiment.observed.len(), 2);
 
@@ -368,7 +368,7 @@ fn the_commands_add_change_and_remove_and_undo() {
     ok(
         &mut e,
         "observation.remove",
-        json!({ "element": "clerk", "metric": "utilisation" }),
+        json!({ "element": "serve", "metric": "utilisation" }),
     );
     assert_eq!(e.model().experiment.observed.len(), 1);
     let before = e.journal().len();
@@ -403,7 +403,7 @@ fn observed_data_round_trip_through_the_model_document() {
     for p in [
         json!({ "check": "value", "element": "serve", "metric": "mean_wait", "value": 3.2,
                 "half_width": 0.4 }),
-        json!({ "check": "at_most", "element": "clerk", "metric": "utilisation", "bound": 0.85 }),
+        json!({ "check": "at_most", "element": "serve", "metric": "utilisation", "bound": 0.85 }),
         json!({ "check": "at_least", "element": "serve", "metric": "left", "bound": 400.0 }),
     ] {
         ok(&mut e, "observation.add", p);
