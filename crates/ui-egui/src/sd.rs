@@ -817,6 +817,9 @@ impl App {
             .on_hover_text(t("The model: its settings and variables"))
             .clicked()
         {
+            if self.sd_canvas.on {
+                self.sd_flush_drafts();
+            }
             self.show_results = false;
             self.sd_canvas.on = false;
         }

@@ -301,6 +301,24 @@ fn tab_moves_the_selection_through_the_variables_in_name_order() {
 }
 
 #[test]
+fn an_equation_typed_without_enter_is_kept_when_the_tab_changes() {
+    let mut h = diagram();
+    h.get_by_role_and_label(Role::Button, "Auxiliary innovation")
+        .focus();
+    settle(&mut h);
+    h.get_by_role_and_label(Role::TextInput, "Equation").click();
+    settle(&mut h);
+    h.key_press_modifiers(Modifiers::COMMAND, egui::Key::A);
+    h.get_by_role_and_label(Role::TextInput, "Equation")
+        .type_text("0.04");
+    settle(&mut h);
+    // No Enter: the Results tab is chosen while the field still has the keyboard.
+    h.get_by_role_and_label(Role::Tab, "Results").click();
+    settle(&mut h);
+    assert_eq!(variable(&mut h, "innovation")["equation"], "0.04");
+}
+
+#[test]
 fn an_equation_is_edited_in_the_side_panel_and_a_bad_one_is_refused_in_the_field() {
     let mut h = diagram();
     h.get_by_role_and_label(Role::Button, "Auxiliary innovation")

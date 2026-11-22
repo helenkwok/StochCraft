@@ -83,6 +83,11 @@ impl App {
                     }
                 });
                 if r.clicked() {
+                    // A field of the diagram's panel being typed in commits before the diagram
+                    // goes, as it would on leaving the field.
+                    if self.sd_canvas.on && view != 6 {
+                        self.sd_flush_drafts();
+                    }
                     self.show_results = view == 1;
                     self.show_analysis = view == 2;
                     self.show_capacity = view == 3;

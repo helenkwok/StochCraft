@@ -525,6 +525,8 @@ impl App {
             "Added {kind}: {name}",
             &[("kind", kind_label(kind.key())), ("name", &name)],
         );
+        // What was typed for the variable selected so far goes in first.
+        self.sd_flush_drafts();
         if self.sd_apply("sd.variable.add", params, done) {
             self.sd_canvas.selected = Some(name);
             self.sd_canvas.tool = Tool::Select;
@@ -572,6 +574,8 @@ impl App {
             "Added {kind}: {name}",
             &[("kind", kind_label("flow")), ("name", &name)],
         );
+        // What was typed for the variable selected so far goes in first.
+        self.sd_flush_drafts();
         if self.sd_apply("sd.variable.add", params, done) {
             self.sd_canvas.selected = Some(name);
             self.sd_canvas.tool = Tool::Select;
@@ -632,6 +636,33 @@ impl App {
             Err(e) => {
                 self.sd_canvas.drafts.insert(key, value);
                 self.sd_canvas.refused = Some((key, e.message));
+            }
+        }
+    }
+
+    /// Commits what is typed in the side panel and not committed yet, as leaving the field would:
+    /// called before the panel goes (another variable is selected, the Diagram tab is left), when
+    /// the field would otherwise never see that it lost the keyboard.
+    pub(crate) fn sd_flush_drafts(&mut self) {
+        let Some(name) = self.sd_canvas.selected.clone() else {
+            return;
+        };
+        let info = self.sd_info();
+        let Some(v) = read(&info).into_iter().find(|v| v.name == name) else {
+            return;
+        };
+        // The name last, so the other fields still find the variable by its old name.
+        for key in ["equation", "units", "name"] {
+            let Some(text) = self.sd_canvas.drafts.remove(key) else {
+                continue;
+            };
+            let current = match key {
+                "name" => &v.name,
+                "equation" => &v.equation,
+                _ => &v.units,
+            };
+            if text.trim() != current {
+                self.sd_commit(&name, key, text.trim().to_owned());
             }
         }
     }
