@@ -128,7 +128,7 @@ fn the_results_of_a_finished_run_are_idle_once_drawn() {
 fn fields(h: &Harness<'static, App>) -> Vec<(String, NodeId)> {
     [Role::TextInput, Role::ComboBox, Role::CheckBox]
         .into_iter()
-        .flat_map(|role| h.get_all_by_role(role).collect::<Vec<_>>())
+        .flat_map(|role| h.query_all_by_role(role).collect::<Vec<_>>())
         .map(|n| {
             let n = n.accesskit_node();
             (n.label().unwrap_or_default(), n.locate().0)

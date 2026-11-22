@@ -117,7 +117,7 @@ fn large_model() -> Value {
             .into_iter()
             .map(|f| json!({ "command": "connect", "params": f })),
     );
-    json!({ "label": "large model", "commands": commands })
+    json!({ "label": "batch", "commands": commands })
 }
 
 /// The large model as a BPMN file, opened in the window as a user would open it.
