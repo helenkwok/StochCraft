@@ -111,6 +111,10 @@ pub struct DesignParams {
     pub replications: Option<u32>,
     #[serde(default)]
     pub seed: Option<u64>,
+    /// Run although the file had errors StochCraft could not read, with what it substituted
+    /// for each (as for `run`); the answer then lists them (`approximations`).
+    #[serde(default)]
+    pub allow_approximations: bool,
 }
 
 /// What a factor takes: levels, or a continuous range.

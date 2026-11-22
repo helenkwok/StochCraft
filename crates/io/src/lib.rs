@@ -42,6 +42,9 @@ pub struct Note {
     /// The id of the element it concerns, if any.
     pub at: Option<String>,
     pub message: String,
+    /// For an error: the one field of the element at `at` that the model has a stand-in in (`processing_time`), when it can be
+    /// pinned to one, so the stand-in is known to be replaced once that field differs.
+    pub field: Option<String>,
 }
 
 impl Note {
@@ -50,6 +53,16 @@ impl Note {
             severity,
             at: at.map(str::to_owned),
             message: message.into(),
+            field: None,
+        }
+    }
+
+    /// Marks the errors among `notes` at `at` as having their stand-in in `field`.
+    pub(crate) fn pin(notes: &mut [Note], at: &str, field: &str) {
+        for n in notes {
+            if n.severity == Severity::Error && n.at.as_deref() == Some(at) {
+                n.field = Some(field.to_owned());
+            }
         }
     }
 

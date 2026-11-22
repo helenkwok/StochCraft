@@ -18,6 +18,8 @@ stochcraft-engine = { workspace = true }
 stochcraft-mcp = { workspace = true }
 # Command-line parsing (MIT OR Apache-2.0).
 clap = { version = "4", features = ["derive"] }
+# Whether two paths are one file, hard links included (MIT OR Unlicense).
+same-file = "1"
 serde_json = "1"
 
 [lints]

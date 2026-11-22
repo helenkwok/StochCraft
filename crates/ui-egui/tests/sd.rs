@@ -601,6 +601,51 @@ fn a_file_that_cannot_be_read_is_refused_with_the_engines_message() {
     assert!(!app.has_unsaved_changes());
 }
 
+/// Export stays on while a run is on its way, and what it writes is still the last run's.
+#[test]
+fn a_table_exported_while_a_run_is_pending_is_labelled_a_prior_run() {
+    let mut h = harness();
+    let e = adoption();
+    h.state_mut().open_file(e.file, e.bytes);
+    settle(&mut h);
+    run(&mut h);
+    change_innovation(h.state_mut());
+    settle(&mut h);
+    // Run is asked for and has not been made: the old results are still on show.
+    h.state_mut().run();
+    h.state_mut().export_csv();
+    let requests = h.state_mut().take_requests();
+    let [Request::Export { name, bytes }] = requests.as_slice() else {
+        panic!("expected one export, got {requests:?}");
+    };
+    assert_eq!(name, "adoption-results-prior-run.csv");
+    let csv = String::from_utf8_lossy(bytes);
+    let header = csv.lines().next().unwrap_or("");
+    assert!(header.contains("run_status"), "{header}");
+    for row in csv.lines().skip(1) {
+        assert!(
+            row.contains("prior run: the model has changed since"),
+            "{row}"
+        );
+        // The run's numerical settings go with it: the integration method and its steps.
+        for key in ["method=", "dt=", "save_step="] {
+            assert!(row.contains(key), "{key} in {row}");
+        }
+    }
+
+    // Once the run is made its results are the current ones, and the export is unlabelled.
+    h.step();
+    h.step();
+    settle(&mut h);
+    h.state_mut().export_csv();
+    let requests = h.state_mut().take_requests();
+    let [Request::Export { name, bytes }] = requests.as_slice() else {
+        panic!("expected one export, got {requests:?}");
+    };
+    assert_eq!(name, "adoption-results.csv");
+    assert!(!String::from_utf8_lossy(bytes).contains("run_status"));
+}
+
 /// The runs "n of N runs finished" says are made, if the page says so now.
 fn runs_made(h: &Harness<'static, App>) -> Option<u64> {
     let node = h.query_by_label_contains("runs finished")?;

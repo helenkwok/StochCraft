@@ -1492,3 +1492,45 @@ fn the_menus_wait_while_the_save_dialog_is_open() {
     settle(&mut h);
     assert_eq!(h.state_mut().take_requests(), vec![Request::PickOpen]);
 }
+
+#[test]
+fn a_csv_exported_after_an_edit_says_it_is_of_a_prior_run() {
+    let mut h = harness(Platform::DESKTOP);
+    menu(&mut h, &["File", "Open Example", "M/M/1 queue"]);
+    menu(&mut h, &["Model", "Run"]);
+    finish_run(&mut h);
+    let digest = h
+        .state()
+        .results()
+        .and_then(|r| r["record"]["model_digest"].as_str().map(str::to_owned))
+        .expect("the run has a record");
+    // The model changes after the run: the table on show is out of date.
+    let changed = h
+        .state_mut()
+        .execute("block.set", json!({ "id": "serve", "capacity": 2 }));
+    assert!(changed.is_some());
+    settle(&mut h);
+    assert!(h.state().results_out_of_date());
+    h.state_mut().export_csv();
+    let requests = h.state_mut().take_requests();
+    let [Request::Export { name, bytes }] = requests.as_slice() else {
+        panic!("expected one export, got {requests:?}");
+    };
+    assert_eq!(name, "mm1-results-prior-run.csv");
+    let text = String::from_utf8_lossy(bytes);
+    let mut rows = text.lines();
+    let header = rows.next().expect("a header");
+    assert!(
+        header.ends_with(",run_status,run_model_digest,run_seed,run_runs,run_settings"),
+        "{header}"
+    );
+    let rows: Vec<&str> = rows.collect();
+    assert!(!rows.is_empty());
+    for row in rows {
+        assert!(
+            row.contains(",prior run: the model has changed since,"),
+            "{row}"
+        );
+        assert!(row.contains(&digest), "{row}");
+    }
+}

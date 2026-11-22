@@ -280,8 +280,12 @@ impl App {
     /// Exports the results table as CSV.
     pub fn export_csv(&mut self) {
         if self.is_sd() {
-            if let Some(text) = self.sd_table_csv() {
-                let name = format!("{}-results.csv", self.export_stem());
+            if let Some((text, stale)) = self.sd_table_csv() {
+                let name = format!(
+                    "{}-results{}.csv",
+                    self.export_stem(),
+                    if stale { "-prior-run" } else { "" }
+                );
                 self.requests.push(Request::Export {
                     name,
                     bytes: text.into_bytes(),
@@ -290,12 +294,23 @@ impl App {
             return;
         }
         if let Some(r) = &self.results {
-            let name = format!("{}-results.csv", self.export_stem());
-            let text = if r["kind"] == "monte_carlo" {
+            let mut text = if r["kind"] == "monte_carlo" {
                 stochcraft_engine::mc::results_csv(r)
             } else {
                 stochcraft_engine::wire::results_csv(r)
             };
+            // The results are those of the last run. After an edit they are of a model that is
+            // no longer the one shown (the window says "out of date"), and a file leaves that
+            // behind: it is named and labelled as a prior run, with the run it came from.
+            let stale = self.results_out_of_date();
+            if stale {
+                text = stochcraft_engine::wire::label_prior_run(&text, r);
+            }
+            let name = format!(
+                "{}-results{}.csv",
+                self.export_stem(),
+                if stale { "-prior-run" } else { "" }
+            );
             let bytes = text.into_bytes();
             self.requests.push(Request::Export { name, bytes });
         }

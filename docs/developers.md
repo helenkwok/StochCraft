@@ -141,6 +141,23 @@ enough to reproduce the numbers. `--format json` or `--format csv` gives machine
 results, `--out` writes them to a file, and `--seed`, `--warmup` and `--duration` override the
 model's scenario for that run. Any BPMN or XPDL file with BPSim data can be run the same way.
 
+A file that StochCraft read with errors (`validate` lists them: a processing-time expression it
+cannot evaluate, say) is not run, in any output format, in the window or through MCP: reading it
+substitutes something for each part it could not read (a time of zero for that expression), so
+the numbers would be of another model. `run --allow-approximations` (the parameter
+`allow_approximations` of `run`, `run.start` and the `experiment.*` commands) runs the
+substitution deliberately: each substitution is printed on stderr and listed in the run record
+(`approximations`, in addition to `file_notes`). An error pinned to one field (a task's processing time) stops counting while that field is set
+to something else (undo brings it back), since the edit replaces the stand-in; renaming the block or
+editing another property does not clear it, and any other error stands until the file is opened
+again. A Monte Carlo model needs no
+such gate: reading its inputs and outputs raises warnings only, never an error that substitutes
+something.
+
+`--out` (also `design --out`) refuses a path that is the model file it reads, and writes through
+a temporary file that is renamed over the target, so a crash or a full disk leaves the old file
+whole.
+
 To run until the numbers are precise enough rather than a fixed number of times, give a target:
 
 ```bash
@@ -548,7 +565,8 @@ stock's peak); within 1% is called independent of the step.
 The engine records every command that is not a query in its journal. A new or opened document
 (`model.new`, `file.open`, and opening a file in the app) starts a new journal, so a journal is
 the history of one document. `exec --journal out.json` writes the journal of what the script did,
-also when a step failed, as a JSON object:
+also when a step failed (atomically, and never over the script, the file given with `--open` or
+the file the script opened or saved: those are refused), as a JSON object:
 
 ```json
 {

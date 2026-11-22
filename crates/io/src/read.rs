@@ -1053,6 +1053,7 @@ fn to_model(p: Process, scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> M
                         ));
                     }
                 }
+                let first = notes.len();
                 let time = dist_of(
                     val(id, "TimeParameters/ProcessingTime", notes),
                     "the processing time",
@@ -1060,6 +1061,7 @@ fn to_model(p: Process, scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> M
                     notes,
                 )
                 .unwrap_or(Dist::Constant(0.0));
+                Note::pin(&mut notes[first..], id, "processing_time");
                 let processing_by = processing_by_of(scenario, id, unit, notes);
                 let priority = match val(id, "PriorityParameters/Priority", notes) {
                     Some(Value::Number(x)) => Some(x),

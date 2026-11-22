@@ -227,6 +227,24 @@ the target; `confidence`, its name before #69, is still accepted, and the answer
 The share is not a statistical confidence: the answer's `stochastic.interval` is its Wilson 95%
 interval, and when its lower end is below `target_share` the share is not shown to be met.
 
+`experiment.size` is a greedy heuristic: it adds a unit at the busiest resource until the share is
+reached, and need not find the fewest units. It refuses a target that names nothing in the model
+(`not_found`) and a metric that no replication reports for that element at the starting size
+(`invalid_params`: the metric does not apply to that kind of element, or nothing reached it). With
+`apply`, the answer becomes the model's only if it reached `target_share`; otherwise the model is
+unchanged and the answer says `"applied": false` (`apply_unreached` applies the last size tried
+anyway). The share and its interval come from the replications that guided the search, so check
+the sizes it chose with a run on another seed.
+
+A file read with errors (`open` returns them in `notes`, with severity `error`) does not run:
+`run`, `run.start` and the `experiment.*` commands fail with `invalid_model` and the errors in
+`details`, because the model holds a stand-in for each part StochCraft could not read. Run it
+anyway with `allow_approximations: true` (through `execute`); the run record then lists the
+substitutions in `approximations`. An error the reader pinned to one field (a task's processing time, `field` in the note) stops
+counting while that field is set to something else (undo brings it back), and nothing of the
+replaced stand-in is recorded; renaming the block or editing another property does not clear it,
+and any other error stands until the file is opened again.
+
 `experiment.design` varies several parameters at once. Each factor is a parameter as a sweep
 takes it (`{id, field}`) with its `levels`, or its range as `min` and `max`. The default design,
 `full_factorial`, runs every combination of the levels (the last factor changing fastest);
