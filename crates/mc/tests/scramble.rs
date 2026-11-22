@@ -280,7 +280,7 @@ fn variance(n: usize, batches: u64, matrix: bool) -> (f64, f64) {
         })
         .collect();
     let mean = means.iter().sum::<f64>() / means.len() as f64;
-    let var = means.iter().map(|m| (m - mean).powi(2)).sum::<f64>() / (means.len() - 1) as f64;
+    let var = means.iter().map(|m| (m - mean) * (m - mean)).sum::<f64>() / (means.len() - 1) as f64;
     (mean, var)
 }
 
@@ -310,6 +310,11 @@ fn the_scramble_narrows_the_variance_of_a_smooth_integrand() {
     }
 }
 
+/// base^-d, by multiplication (exact for the powers of 2, and the same on every target).
+fn inverse_power(base: f64, d: usize) -> f64 {
+    (0..d).fold(1.0, |acc, _| acc / base)
+}
+
 /// The squared L2-star discrepancy of points x_1 ... x_n in [0, 1)^d, by Warnock's formula
 /// (Warnock 1972; Morokoff and Caflisch, "Quasi-random sequences and their discrepancies", *SIAM
 /// J. Sci. Comput.* 15(6), 1994): 3^-d - (2^(1-d) / n) Σ_i Π_k (1 - x_ik²)
@@ -331,8 +336,7 @@ fn l2_star_squared(points: &[Vec<f64>]) -> f64 {
                 .product::<f64>();
         }
     }
-    let d = i32::try_from(d).unwrap_or(0);
-    3_f64.powi(-d) - 2_f64.powi(1 - d) / n * single + double / (n * n)
+    inverse_power(3.0, d) - 2.0 * inverse_power(2.0, d) / n * single + double / (n * n)
 }
 
 /// The first `n` scrambled points of dimensions 0 to d - 1, as rows.
@@ -357,7 +361,7 @@ fn scrambled_rows(n: usize, d: usize, label: &str) -> Vec<Vec<f64>> {
 /// is, Owen 2003, §3.4, while they change the variance of a given integrand). The advantage under this measure
 /// shrinks as the dimension grows at a fixed number of points, so the 10-dimensional limit has
 /// the least margin, still about six times the spread measured.
-const DISCREPANCY_LIMITS: [(i32, f64); 3] = [(2, 0.02), (5, 0.2), (10, 0.8)];
+const DISCREPANCY_LIMITS: [(usize, f64); 3] = [(2, 0.02), (5, 0.2), (10, 0.8)];
 
 /// Warnock's formula is right: for one point it is 3^-d - 2^(1-d) Π (1 - x²) + Π (1 - x), and
 /// on independent uniform points its mean is (2^-d - 3^-d) / n (Morokoff and Caflisch, 1994).
@@ -389,9 +393,9 @@ fn scrambled_points_have_a_low_l2_star_discrepancy() {
     );
 
     for (d, most) in DISCREPANCY_LIMITS {
-        let expected = (2_f64.powi(-d) - 3_f64.powi(-d)) / n as f64;
+        let expected = (inverse_power(2.0, d) - inverse_power(3.0, d)) / n as f64;
         for batch in 0..2 {
-            let pts = scrambled_rows(n, d as usize, &format!("disc/{d}/{batch}"));
+            let pts = scrambled_rows(n, d, &format!("disc/{d}/{batch}"));
             let ratio = l2_star_squared(&pts) / expected;
             println!("{d} dimensions, batch {batch}: L2-star² ratio to random {ratio:.4}");
             assert!(
