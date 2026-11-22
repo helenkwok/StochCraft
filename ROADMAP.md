@@ -3621,6 +3621,8 @@ published methods whose guarantees are stated in their papers, and uses few of t
   there by trying variants by hand).
 - "Which order of these nine jobs finishes soonest?" (permutation flow shop; makespan).
 - "Which routing rule, and which machine speed, give the shortest time in system?"
+- "What does each extra operator buy in waiting?": the trade-off between two or three results,
+  as a list of designs none of which is better in every one (O5).
 
 **The problem, as the engine takes it:**
 
@@ -3751,7 +3753,7 @@ JSON (`--format json`).
 
 ### Stages
 
-Each stage is one PR, and each adds its checks and its docs; O5 adds the strings in all 44
+Each stage is one PR, and each adds its checks and its docs; O6 adds the strings in all 44
 catalogs.
 
 - **O1 Selection and feasibility, model-free** (`experiment`): KN, with its constants η and h²
@@ -3830,7 +3832,52 @@ catalogs.
     plus a cost of −4 per unit of s (a slower machine is cheaper). The objective is
     s / (1 − s) − 4s, with its least value −1 at s = 0.5, against −0.933 at 0.4 and −0.9 at 0.6.
     The search ends within 0.05 of 0.5 and within δ = 0.05 of −1.
-- **O5 The window:** Analysis ▸ Find the best, with these parts:
+- **O5 Trade-offs between results** (`experiment`, `engine::optimize`, CLI, MCP): two or three
+  objectives, each a result or the decisions' costs, and the designs that trade them off (the
+  Pareto front: designs none of which is at least as good in every objective and better in one).
+  The method is the ε-constraint method (Haimes, Lasdon and Wismer 1971): minimise one objective
+  with each other one capped, and move the caps along a grid. Each point is then an O2 or O4
+  problem with one more constraint, so it is solved by the same search, feasibility check and
+  clean-up, and keeps their guarantee. The steps:
+  - *Ranges.* Each objective is optimised alone, then the others are optimised within δ of it, a
+    lexicographic payoff table as in Mavrotas's augmented ε-constraint method (2009; AUGMECON2,
+    Mavrotas and Florios 2013). The table gives each capped objective's range, best to worst.
+  - *The grid.* Each capped objective's range is cut into q equal steps (default 10, so 11 caps;
+    with three objectives 11 × 11 at most). The caps run from the loosest to the tightest, and once
+    a cap is found infeasible the tighter ones on that line are skipped. A point whose answer
+    already meets the next cap with room to spare skips the caps it meets, AUGMECON2's bypass.
+  - *Reuse.* Every point uses the same common random numbers, so a design the search visited at one point
+    keeps its search replications at the next (each clean-up still runs on fresh ones); each search starts from the previous point's answer.
+  - *The front.* The points' chosen designs, filtered to the non-dominated ones by Kung, Luccio
+    and Preparata's algorithm (1975) on their means. That also drops the weakly dominated
+    designs a cap can return (as good in the capped objective, worse in the other), which
+    AUGMECON2 avoids with slack terms for exact objectives. Two designs whose objectives are all
+    within their δ of each other are not told apart: the front says so instead of ranking them.
+  - *Its size.* The hypervolume indicator (Emmerich and Deutz 2018): the area (with three
+    objectives, the volume) the front dominates up to a reference point, the payoff table's worst
+    values. It is reported with the front so two searches of one model can be compared.
+  - *What it claims.* Each point: "with 95% confidence, the best, or within δ of it, of the
+    designs compared at the end that meet these caps", as O2 says. The confidence is per point,
+    not for the whole front at once; the answer says so, and gives the number of points.
+  - The weighted sum of the objectives is not used: it finds only the points on the front's
+    convex hull (Martins and Ning, chapter 9: "not recommended"), and with whole-number decisions
+    the points it misses are common.
+  - *Checks:* the two desks of O2 with two objectives, the number of servers (exact) and the total
+    mean queue length. For each total N, Erlang C gives the best split and its queue: 19 servers
+    (12, 7) 3.0573, 20 (13, 7) 1.7613, 21 (13, 8) 1.2297, 22 (14, 8) 0.7141, 23 (15, 8) 0.4829, 24
+    (15, 9) 0.3047, 25 (16, 9) 0.1962. At 21 servers (14, 7) gives 1.2457, 0.016 more, so with
+    δ = 0.05 in the queue either split is correct. In at least 95 of 100 seeds every point from
+    19 to 25 servers is the best split or within δ of it, and the hypervolume's interval covers
+    the exact front's.
+  - *A point no weighting finds* (model-free, normal noise with standard deviation 1): designs with
+    means (0, 10), (10, 0), (6, 6), (7, 7) and (8, 6). (6, 6) is on the front but above the line
+    from (0, 10) to (10, 0), so no weighted sum chooses it. The ε-constraint method with a cap of
+    6 on the first objective does, (7, 7) is dropped as dominated, and (8, 6), which a cap of 8
+    can return, is dropped as weakly dominated by (6, 6).
+  - *Every design a trade-off:* one desk, arrivals 4 an hour, mean service 1 hour, servers 5 to
+    12 against their mean wait: no design dominates another, so the front is all eight, each
+    with its Erlang C wait inside its interval.
+- **O6 The window:** Analysis ▸ Find the best, with these parts:
   - *The setup:* the decisions picked from the model's tasks, pools, buffers, gateways and job
     lists, with ranges; the objective and its costs; constraints; δ with its suggestion; and the
     budget.
@@ -3844,6 +3891,11 @@ catalogs.
   - Strings in all 44 catalogs; the user guide's section; the parity rows in docs/ui-parity.md;
     two gallery examples, each with its checked answer: the two desks, and the 7-job flow shop.
     Any table taken from a paper is recorded in ATTRIBUTION.md.
+  - *Trade-offs (O5):* a second objective in the setup turns the answer into the front, drawn as
+    points with their intervals (two objectives as a scatter, three as a table and a scatter of
+    two with the third as a label), each point's design on hover and in the table, and Apply on
+    the one chosen. The words first: "From 19 to 22 servers each extra one cuts the queue by 0.5
+    to 1.3 customers; after 24, by less than 0.15."
 
 **Not planned:**
 
@@ -3856,9 +3908,11 @@ catalogs.
 - **Surrogate and Bayesian optimisation** (Kriging, neural networks): heavy, with tuning of their
   own and no simple statement of how sure the answer is. A response surface on a design is
   M2.8's "not yet".
-- **Pareto fronts of several noisy objectives:** costs, a cap and constraints express the
-  trade-offs asked for so far; selecting a front needs its own theory, so it waits for a case
-  that needs it.
+- **Population methods for fronts** (NSGA-II, SPEA2, SMS-EMOA) and **MO-COMPASS** (Li, Lee, Chew
+  and Lendermann 2015): the first need many evaluations, each one replications of a run here,
+  and state no probability of a correct selection; MO-COMPASS is proved only to converge
+  locally. O5's ε-constraint points keep O2's guarantee point by point. More than three
+  objectives, and a front over job orders, come later.
 - **Rinott's procedure and OCBA as the clean-up:** the first was derived for independent
   sampling, and the second states no guaranteed probability of correct selection; KN has both
   properties wanted here.
@@ -3907,6 +3961,28 @@ catalogs.
   *Management Science* 42(7):954–973, 1996, doi 10.1287/mnsc.42.7.954; K.-H. Chang, "Stochastic
   Nelder–Mead simplex method: a new globally convergent direct search method for simulation
   optimization", *European Journal of Operational Research* 220:684–694, 2012
+- Y. Y. Haimes, L. S. Lasdon, D. A. Wismer, "On a bicriterion formulation of the problems of
+  integrated system identification and system optimization", *IEEE Transactions on Systems, Man,
+  and Cybernetics* SMC-1(3):296–297, 1971, doi 10.1109/tsmc.1971.4308298 (the ε-constraint
+  method)
+- G. Mavrotas, "Effective implementation of the ε-constraint method in multi-objective
+  mathematical programming problems", *Applied Mathematics and Computation* 213(2):455–465, 2009;
+  G. Mavrotas, K. Florios, "An improved version of the augmented ε-constraint method (AUGMECON2)
+  for finding the exact Pareto set in multi-objective integer programming problems", *Applied
+  Mathematics and Computation* 219(18):9652–9669, 2013 (the payoff table, the grid, the bypass
+  and the early exit)
+- H. T. Kung, F. Luccio, F. P. Preparata, "On finding the maxima of a set of vectors", *Journal
+  of the ACM* 22(4):469–476, 1975, doi 10.1145/321906.321910
+- M. T. M. Emmerich, A. H. Deutz, "A tutorial on multiobjective optimization: fundamentals and
+  evolutionary methods", *Natural Computing* 17:585–609, 2018, doi 10.1007/s11047-018-9685-y
+  (CC BY 4.0; the hypervolume indicator, Chebyshev scalarisation, the families of evolutionary
+  methods)
+- J. R. R. A. Martins, A. Ning, *Engineering Design Optimization*, Cambridge University Press,
+  2021, doi 10.1017/9781108980647, chapter 9 (weighted sum, ε-constraint, normal boundary
+  intersection, NSGA-II): <https://mdobook.github.io/html/multiobj/>
+- H. Li, L. H. Lee, E. P. Chew, P. Lendermann, "MO-COMPASS: a fast convergent search algorithm for
+  multi-objective discrete optimization via simulation", *IIE Transactions* 47(11):1153–1169,
+  2015, doi 10.1080/0740817X.2015.1005778 (considered; locally convergent)
 - M. Nawaz, E. E. Enscore, I. Ham, "A heuristic algorithm for the m-machine, n-job flow-shop
   sequencing problem", *Omega* 11(1):91–95, 1983, doi 10.1016/0305-0483(83)90088-9; E. Taillard,
   "Some efficient heuristic methods for the flow shop sequencing problem", *European Journal of
@@ -4135,8 +4211,8 @@ M1.1 model ─ M1.2 compile ─ M1.3 io ─ M1.4 engine ─ M1.5 cli ─ M1.6 de
 
 M6.1 the Python package: any time after M1.4 (it wraps the engine)
 M6.2 command plugins: after M3.7     M6.3 logic plugins: with or after M4.3
-M8 optimisation: O1–O4 any time (engine and `experiment` only, on M2.8's experiments);
-                 O5, the window, after U5 (the experiment editor)
+M8 optimisation: O1–O5 any time (engine and `experiment` only, on M2.8's experiments);
+                 O6, the window, after U5 (the experiment editor)
 ```
 
 Examples for teaching are added alongside, as each feature they need lands.
