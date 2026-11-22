@@ -1083,7 +1083,7 @@ fn expression_model(name: &str) -> String {
     );
     assert_ne!(text, altered, "the mm1 fixture changed");
     let path = scratch(name);
-    std::fs::write(&path, altered).expect("write a test file");
+    std::fs::write(&path, altered).unwrap_or_else(|e| panic!("cannot write a test file: {e}"));
     path.to_string_lossy().into_owned()
 }
 
@@ -1144,7 +1144,8 @@ fn a_model_read_cleanly_runs_without_the_flag_and_says_nothing_on_stderr() {
 #[test]
 fn output_is_never_the_model_it_was_made_from() {
     let copy = scratch("alias.bpmn");
-    std::fs::copy(model("mm1.bpmn"), &copy).expect("copy the model");
+    std::fs::copy(model("mm1.bpmn"), &copy)
+        .unwrap_or_else(|e| panic!("cannot copy the model: {e}"));
     let before = std::fs::read(&copy).unwrap_or_default();
     let path = copy.to_string_lossy().into_owned();
     let o = cli(&[
@@ -1162,14 +1163,15 @@ fn output_is_never_the_model_it_was_made_from() {
 #[test]
 fn a_journal_is_never_written_over_the_model_or_the_script() {
     let copy = scratch("alias-journal.bpmn");
-    std::fs::copy(model("mm1.bpmn"), &copy).expect("copy the model");
+    std::fs::copy(model("mm1.bpmn"), &copy)
+        .unwrap_or_else(|e| panic!("cannot copy the model: {e}"));
     let before = std::fs::read(&copy).unwrap_or_default();
     let path = copy.to_string_lossy().into_owned();
     // A script whose second step fails, so the journal would be written after a failure.
     let script = scratch("alias-journal.json");
     let text =
         r#"[{"command": "history", "params": {}}, {"command": "no.such.command", "params": {}}]"#;
-    std::fs::write(&script, text).expect("write a test file");
+    std::fs::write(&script, text).unwrap_or_else(|e| panic!("cannot write a test file: {e}"));
     let script_path = script.to_string_lossy().into_owned();
 
     let o = cli(&["exec", &script_path, "--open", &path, "--journal", &path]);
@@ -1208,7 +1210,8 @@ fn output_is_never_a_hard_link_to_the_model() {
     let copy = scratch("hard-linked.bpmn");
     let link = scratch("hard-linked-out.csv");
     let _ = std::fs::remove_file(&link);
-    std::fs::copy(model("mm1.bpmn"), &copy).expect("copy the model");
+    std::fs::copy(model("mm1.bpmn"), &copy)
+        .unwrap_or_else(|e| panic!("cannot copy the model: {e}"));
     let before = std::fs::read(&copy).unwrap_or_default();
     std::fs::hard_link(&copy, &link).unwrap_or_else(|e| panic!("cannot link: {e}"));
     let (path, out) = (copy.to_string_lossy(), link.to_string_lossy());
@@ -1228,7 +1231,8 @@ fn output_is_never_a_hard_link_to_the_model() {
 #[test]
 fn inputs_out_is_never_the_model() {
     let copy = scratch("inputs-alias.bpmn");
-    std::fs::copy(model("mm1.bpmn"), &copy).expect("copy the model");
+    std::fs::copy(model("mm1.bpmn"), &copy)
+        .unwrap_or_else(|e| panic!("cannot copy the model: {e}"));
     let before = std::fs::read(&copy).unwrap_or_default();
     let path = copy.to_string_lossy().into_owned();
     let o = cli(&["inputs", &path, "--out", &path]);
@@ -1245,15 +1249,18 @@ fn inputs_out_is_never_the_model() {
 fn a_journal_is_never_written_over_a_file_the_script_opened_earlier() {
     let first = scratch("opened-first.bpmn");
     let second = scratch("opened-second.bpmn");
-    std::fs::copy(model("mm1.bpmn"), &first).expect("copy the model");
-    std::fs::copy(model("mm1.bpmn"), &second).expect("copy the model");
+    std::fs::copy(model("mm1.bpmn"), &first)
+        .unwrap_or_else(|e| panic!("cannot copy the model: {e}"));
+    std::fs::copy(model("mm1.bpmn"), &second)
+        .unwrap_or_else(|e| panic!("cannot copy the model: {e}"));
     let before = std::fs::read(&first).unwrap_or_default();
     let steps: Vec<Value> = [&first, &second]
         .iter()
         .map(|p| serde_json::json!({ "command": "file.open", "params": { "path": p.to_string_lossy() } }))
         .collect();
     let script = scratch("opened-earlier.json");
-    std::fs::write(&script, Value::Array(steps).to_string()).expect("write a test file");
+    std::fs::write(&script, Value::Array(steps).to_string())
+        .unwrap_or_else(|e| panic!("cannot write a test file: {e}"));
     let o = cli(&[
         "exec",
         &script.to_string_lossy(),
