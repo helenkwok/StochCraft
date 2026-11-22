@@ -58,8 +58,11 @@
 //! expression language (`stochcraft_model::expr`), reading variables as `$x` or
 //! `getProperty('x')`, with `In('state')` and random draws such as `exponential(2)` beside the
 //! language's own functions ([`FUNCTIONS`]). An expression that reads an undeclared variable,
-//! an assignment to one, a target or `In()` naming no state, are refused by [`Chart::new`]. An
-//! action that fails as it runs (a delay or rate that is negative or not a number) puts
+//! an assignment to one, a target or a quoted `In('id')` naming no state, targets that cannot
+//! be active together, and states nested more than [`MAX_DEPTH`] deep are refused by
+//! [`Chart::new`]; a computed `In()` name is not checked, and one that names no state reads as
+//! false. An action that fails as it runs (a delay or rate that is negative, not a number, or
+//! too long to be a time) puts
 //! `error.execution` on the internal queue, records [`Step::Error`] and skips the rest of its
 //! block, as SCXML §4.9 says.
 //!
@@ -71,9 +74,14 @@
 //! queue ([`SendSpec::internal`]) acts as `<raise>`.
 //!
 //! **Random streams** (D18): each expression of the chart draws from a stream of its own,
-//! `stochcraft_random::Rng::keyed(seed, "<agent key>/<purpose>")`, where the purpose is where it
-//! is in the chart ([`Chart::stream_purposes`]), so two agents never share a stream and making
+//! `stochcraft_random::Rng::keyed(seed, "<n>:<agent key>/<purpose>")`, where `<n>` is the agent
+//! key's length in bytes and the purpose is where the expression is in the chart, with each
+//! state id written after its length ([`Chart::stream_purposes`], such as
+//! `state/4:idle/onentry/1`), so two agents or two expressions never share a stream and making
 //! another agent never changes an agent's numbers.
+//!
+//! **Errors.** A [`RunError`] stops its agent for good: its pending sends are dropped (those
+//! already on the clock are skipped when they come up) and no [`Step::Done`] is recorded.
 //!
 //! **Not here yet:** `<if>`, `<foreach>`, `<script>` (never: D17), `<invoke>`, `<donedata>`,
 //! event data and `<param>`, `<send>` to other agents or with a target or type other than the
@@ -87,8 +95,8 @@ mod driver;
 mod interp;
 
 pub use chart::{
-    Action, Chart, ChartError, ChartSpec, Data, Delay, History, Kind, SendSpec, StateSpec, Target,
-    TransitionSpec,
+    Action, Chart, ChartError, ChartSpec, Data, Delay, History, Kind, MAX_DEPTH, SendSpec,
+    StateSpec, Target, TransitionSpec,
 };
 pub use data::FUNCTIONS;
 pub use driver::Driver;

@@ -471,18 +471,25 @@ pub struct Chart {
     pub(crate) initial: u32,
     pub(crate) vars: Vec<(String, Code)>,
     pub(crate) var_index: BTreeMap<String, u32>,
-    /// The purpose of each random stream, such as `state/idle/onentry/1`.
+    /// The purpose of each random stream, such as `state/4:idle/onentry/1`.
     pub(crate) sites: Vec<String>,
     pub(crate) ids: BTreeMap<String, u32>,
 }
 
 impl Chart {
-    /// Checks `spec` and compiles it. Every state id must be unique and every target, initial
-    /// state and `In()` name a state; history states sit in a compound or parallel state with a
-    /// default transition to its children (shallow) or descendants (deep); final states have no
-    /// children or transitions; parallel states have at least one child; every expression must
-    /// parse and read only declared variables (or `getProperty('_event.name')`, the current
-    /// event's name); a fixed delay is a time of 0 or more; an internal send has no delay.
+    /// Checks `spec` and compiles it. Every state id must be unique and every target and
+    /// initial state name a state; states nest at most [`MAX_DEPTH`] deep; the targets of one
+    /// transition, and a compound state's or the chart's initial states, must be able to be
+    /// active together (no two in one compound state or the chart itself, none inside another:
+    /// only different regions of a parallel state); history states sit in a compound or
+    /// parallel state with a default transition to its children (shallow) or descendants
+    /// (deep), never to a history state; final states have no children or transitions; parallel
+    /// states have at least one child; every expression must parse and read only declared
+    /// variables (or `getProperty('_event.name')`, the current event's name); a fixed delay is
+    /// a time of 0 or more; an internal send has no delay.
+    ///
+    /// `In('id')` with a quoted name is checked to name a state. A name the expression computes
+    /// (`In(concat('a', 'b'))`) is not checked: one that names no state reads as false.
     pub fn new(spec: &ChartSpec) -> Result<Chart, ChartError> {
         if spec.states.is_empty() {
             return fail(&format!("chart `{}`", spec.name), "it has no states");
@@ -502,7 +509,7 @@ impl Chart {
         let mut specs: Vec<Option<&StateSpec>> = vec![None];
         let mut ids = BTreeMap::new();
         for s in &spec.states {
-            number(s, 0, &mut nodes, &mut specs, &mut ids)?;
+            number(s, 0, 1, &mut nodes, &mut specs, &mut ids)?;
         }
         let mut c = Compiler {
             ids: &ids,
@@ -535,7 +542,8 @@ impl Chart {
         for (n, s) in specs.iter().enumerate() {
             let Some(s) = *s else { continue };
             let place = format!("state `{}`", s.id);
-            let prefix = format!("state/{}", s.id);
+            // The id's length first, so no two states' purposes are the same text.
+            let prefix = format!("state/{}:{}", s.id.len(), s.id);
             let parent = nodes[n].parent.unwrap_or(0);
             match s.kind {
                 Kind::Final if !s.children.is_empty() || !s.transitions.is_empty() => {
@@ -591,6 +599,7 @@ impl Chart {
                 }
                 initial.push(t);
             }
+            check_together(&nodes, &initial, &place)?;
             if s.kind == Kind::State && initial.is_empty() {
                 initial.extend(child_states.first().copied());
             }
@@ -601,8 +610,14 @@ impl Chart {
                 let tplace = format!("transition {} of state `{}`", k + 1, s.id);
                 let tprefix = format!("{prefix}/transition/{}", k + 1);
                 let compiled = c.transition(t, n as u32, &tplace, &tprefix)?;
+                check_together(&nodes, &compiled.targets, &tplace)?;
                 if let Kind::History(depth) = s.kind {
                     for &target in &compiled.targets {
+                        // A default to a history state could lead back to itself; to states
+                        // only, the default entry always goes deeper and ends.
+                        if matches!(nodes[target as usize].kind, NodeKind::History(_)) {
+                            return fail(&place, "its default target is a history state");
+                        }
                         let ok = match depth {
                             History::Shallow => nodes[target as usize].parent == Some(parent),
                             History::Deep => is_descendant(&nodes, target, parent),
@@ -630,6 +645,7 @@ impl Chart {
         for id in &spec.initial {
             targets.push(c.state(id, &place)?);
         }
+        check_together(&nodes, &targets, &place)?;
         if targets.is_empty() {
             targets.extend(nodes[0].children.first().copied());
         }
@@ -741,6 +757,52 @@ fn is_descendant(nodes: &[Node], a: u32, b: u32) -> bool {
     false
 }
 
+/// The deepest states may nest (a top-level state is at depth 1): compiling and running a
+/// chart recurse once per level.
+pub const MAX_DEPTH: u32 = 128;
+
+/// Checks that `targets` can be active together (SCXML §3.11): no two the same or one inside
+/// the other, and each two meeting first in a parallel state.
+fn check_together(nodes: &[Node], targets: &[u32], place: &str) -> Result<(), ChartError> {
+    let id = |s: u32| nodes.get(s as usize).map_or("", |n| n.id.as_str());
+    for (k, &a) in targets.iter().enumerate() {
+        for &b in &targets[k + 1..] {
+            if a == b || is_descendant(nodes, a, b) || is_descendant(nodes, b, a) {
+                return fail(
+                    place,
+                    format!(
+                        "its states `{}` and `{}` are the same or one is inside the other",
+                        id(a),
+                        id(b)
+                    ),
+                );
+            }
+            // The nearest state holding both.
+            let mut meet = nodes.get(a as usize).and_then(|n| n.parent);
+            while let Some(m) = meet {
+                if is_descendant(nodes, b, m) {
+                    break;
+                }
+                meet = nodes.get(m as usize).and_then(|n| n.parent);
+            }
+            let parallel = meet
+                .and_then(|m| nodes.get(m as usize))
+                .is_some_and(|n| n.kind == NodeKind::Parallel);
+            if !parallel {
+                return fail(
+                    place,
+                    format!(
+                        "its states `{}` and `{}` cannot be active together: only states in                          different regions of a parallel state can",
+                        id(a),
+                        id(b)
+                    ),
+                );
+            }
+        }
+    }
+    Ok(())
+}
+
 fn is_name(s: &str) -> bool {
     let mut chars = s.chars();
     chars
@@ -749,15 +811,19 @@ fn is_name(s: &str) -> bool {
         && chars.all(|c| c.is_ascii_alphanumeric() || c == '_')
 }
 
-/// Numbers `s` and its descendants in document order.
+/// Numbers `s` (at `depth`) and its descendants in document order.
 fn number<'a>(
     s: &'a StateSpec,
     parent: u32,
+    depth: u32,
     nodes: &mut Vec<Node>,
     specs: &mut Vec<Option<&'a StateSpec>>,
     ids: &mut BTreeMap<String, u32>,
 ) -> Result<(), ChartError> {
     let place = format!("state `{}`", s.id);
+    if depth > MAX_DEPTH {
+        return fail(&place, format!("states nest more than {MAX_DEPTH} deep"));
+    }
     if s.id.is_empty() || s.id.chars().any(char::is_whitespace) {
         return fail(&place, "a state's id is not empty and has no spaces");
     }
@@ -791,7 +857,7 @@ fn number<'a>(
         }
     }
     for c in &s.children {
-        number(c, i, nodes, specs, ids)?;
+        number(c, i, depth + 1, nodes, specs, ids)?;
     }
     Ok(())
 }

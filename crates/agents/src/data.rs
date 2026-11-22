@@ -53,9 +53,13 @@ pub const FUNCTIONS: &[Provided<'static>] = &[
 pub(crate) fn draw(name: &str, args: &[Value], rng: &RefCell<Rng>) -> Option<Value> {
     let x: Vec<f64> = args.iter().map(Value::number).collect();
     let a = |i: usize| x.get(i).copied().unwrap_or(f64::NAN);
-    // A whole count, as a u64.
-    let count =
-        |v: f64| (v.is_finite() && v >= 0.0 && v.fract() == 0.0 && v <= 1e15).then_some(v as u64);
+    // A whole count of 0 or more that a u64 holds (below 2^64); anything else is no count.
+    // Dist's samplers do not grow in cost with it: an Erlang of more than 64 phases is drawn as
+    // a gamma, and a binomial by transformed rejection.
+    let count = |v: f64| {
+        (v.is_finite() && v >= 0.0 && v.fract() == 0.0 && v < 18_446_744_073_709_551_616.0)
+            .then_some(v as u64)
+    };
     let nan = Some(Value::Number(f64::NAN));
     let dist = match name {
         "random" => return Some(Value::Number(rng.borrow_mut().uniform())),

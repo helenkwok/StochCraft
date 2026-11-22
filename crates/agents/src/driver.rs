@@ -121,6 +121,12 @@ impl Driver {
         let now = self.queue.now();
         for s in agent.take_sends() {
             if self.queue.schedule_in(s.delay, 0, (i, s.token)).is_err() {
+                // The agent stops: its pending sends are dropped, so those already queued are
+                // skipped when popped.
+                agent.halt(format!(
+                    "an event sent {} after time {now} would not be at a finite time",
+                    s.delay
+                ));
                 return Err(RunError::Schedule {
                     agent: agent.key().to_string(),
                     time: now,

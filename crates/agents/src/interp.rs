@@ -12,7 +12,7 @@ use std::fmt;
 use std::sync::Arc;
 
 use stochcraft_model::expr::Value;
-use stochcraft_random::Rng;
+use stochcraft_random::{Rng, math};
 
 use crate::chart::{Chart, Code, DelayExec, Exec, History, NodeKind};
 use crate::data;
@@ -74,6 +74,7 @@ pub struct Scheduled {
 pub enum RunError {
     /// A macrostep took more microsteps than the limit: the chart loops without waiting for an
     /// event. `path` is the latest transitions, oldest first, as `source -> targets on event`.
+    /// The agent has stopped, its pending sends and internal events dropped.
     MicrostepLimit {
         chart: String,
         agent: String,
@@ -81,7 +82,8 @@ pub enum RunError {
         limit: u64,
         path: Vec<String>,
     },
-    /// The clock refused an event (its time would not be a finite number).
+    /// The clock refused an event (its time would not be a finite number). The agent has
+    /// stopped, its other pending sends dropped.
     Schedule {
         agent: String,
         time: f64,
@@ -132,7 +134,8 @@ struct RateWatch {
 /// One state chart running: its configuration, its variables, its queues and its random
 /// streams.
 ///
-/// Its streams are `stochcraft_random::Rng::keyed(seed, "<key>/<purpose>")`, one for each
+/// Its streams are `stochcraft_random::Rng::keyed(seed, "<n>:<key>/<purpose>")`, where `<n>` is
+/// the length of the key in bytes, one for each
 /// expression in the chart ([`Chart::stream_purposes`]), made when first drawn from: they
 /// depend only on the seed, the agent's key and the expression, never on other agents or on
 /// the order agents are made.
@@ -246,9 +249,25 @@ impl Agent {
         self.pending.len()
     }
 
-    /// The events it has sent itself since the last call, for the clock.
+    /// The events it has sent itself since the last call, for the clock. A send cancelled or
+    /// redrawn since it was made is left out.
     pub fn take_sends(&mut self) -> Vec<Scheduled> {
-        std::mem::take(&mut self.outbox)
+        let outbox = std::mem::take(&mut self.outbox);
+        outbox
+            .into_iter()
+            .filter(|s| self.pending.contains_key(&s.token))
+            .collect()
+    }
+
+    /// Stops the agent after a [`RunError`]: it records the reason, and drops its pending sends
+    /// (so the ones already on a clock are skipped when they arrive) and its internal events.
+    /// Its states stay as they were, without exit actions, and no [`Step::Done`] is recorded.
+    pub(crate) fn halt(&mut self, reason: String) {
+        self.running = false;
+        self.record(Step::Error(reason));
+        self.pending.clear();
+        self.outbox.clear();
+        self.internal.clear();
     }
 
     /// Starts the chart at time `now`: its variables take their first values in declaration
@@ -539,13 +558,20 @@ impl Agent {
         out
     }
 
-    /// `microstep`: exit the sources' states, run the transitions' content in the order they
-    /// were selected, enter the targets.
+    /// `microstep`: exit the sources' states, run the transitions' content, enter the targets.
+    ///
+    /// The content runs in document order of the transitions, as SCXML §3.13 (normative) says:
+    /// "It MUST then execute the executable content contained in the transitions in document
+    /// order". Appendix D (informative) runs it in the order the atomic states selected the
+    /// transitions; the two differ only when a state's transition and an ancestor's are both
+    /// taken (targetless, or not conflicting). A state's transitions count as written before
+    /// its children's.
     fn microstep(&mut self, chart: &Chart, enabled: &[u32]) -> Result<(), RunError> {
         if self.microsteps >= self.limit {
-            self.running = false;
-            let message = format!("more than {} transitions in one macrostep", self.limit);
-            self.record(Step::Error(message));
+            self.halt(format!(
+                "more than {} transitions in one macrostep",
+                self.limit
+            ));
             return Err(RunError::MicrostepLimit {
                 chart: chart.name.clone(),
                 agent: self.key.clone(),
@@ -563,7 +589,9 @@ impl Agent {
             }
         }
         self.exit_states(chart, enabled);
-        for &t in enabled {
+        let mut in_document_order = enabled.to_vec();
+        in_document_order.sort_unstable();
+        for t in in_document_order {
             self.execute(chart, &chart.transition(t).actions);
         }
         self.enter_states(chart, enabled);
@@ -621,7 +649,9 @@ impl Agent {
 
     /// `enterStates`: the entry set (`computeEntrySet`) in entry order (document order); each
     /// state joins the configuration and runs its entry actions, then a history's default
-    /// content if it was entered through one; entering a final state raises `done.state.<id>`
+    /// content if it was entered through one (§3.10: after the parent's entry actions; when the
+    /// parent stays active, as for an internal transition to its own history, before its first
+    /// descendant is entered); entering a final state raises `done.state.<id>`
     /// of its parent, and of the parallel grandparent once all of that one's children are
     /// final, or ends the chart if it is top-level.
     fn enter_states(&mut self, chart: &Chart, enabled: &[u32]) {
@@ -637,16 +667,30 @@ impl Agent {
             }
         }
         to_enter.sort_unstable();
+        // Default histories whose parent is already active and not entered again.
+        let mut waiting: Vec<(u32, u32)> = default_history
+            .iter()
+            .filter(|(p, _)| !to_enter.contains(p))
+            .map(|(&p, &h)| (p, h))
+            .collect();
         for s in to_enter {
+            let mut k = 0;
+            while k < waiting.len() {
+                let (p, h) = waiting[k];
+                if chart.is_descendant(s, p) {
+                    waiting.remove(k);
+                    self.history_default_content(chart, h);
+                } else {
+                    k += 1;
+                }
+            }
             self.active[s as usize] = true;
             self.record(Step::Enter(chart.node(s).id.clone()));
             self.execute(chart, &chart.node(s).on_entry);
             // A compound state's default entry would run its <initial> transition's content
             // here; initial states are given by the `initial` attribute, which has none.
-            if let Some(&h) = default_history.get(&s)
-                && let Some(&d) = chart.node(h).transitions.first()
-            {
-                self.execute(chart, &chart.transition(d).actions);
+            if let Some(&h) = default_history.get(&s) {
+                self.history_default_content(chart, h);
             }
             if chart.node(s).kind != NodeKind::Final {
                 continue;
@@ -665,6 +709,16 @@ impl Agent {
                     }
                 }
             }
+        }
+        for (_, h) in waiting {
+            self.history_default_content(chart, h);
+        }
+    }
+
+    /// Runs the content of history state `h`'s default transition.
+    fn history_default_content(&mut self, chart: &Chart, h: u32) {
+        if let Some(&d) = chart.node(h).transitions.first() {
+            self.execute(chart, &chart.transition(d).actions);
         }
     }
 
@@ -836,9 +890,16 @@ impl Agent {
             return Err(format!("the rate is {rate}, not a number of 0 or more"));
         }
         let delay = if rate > 0.0 {
+            // −ln(U) / rate, not an exponential of mean 1 / rate: a tiny rate's reciprocal
+            // can be infinite where the delay is not.
             let mut rng = self.take_stream(chart, code.site);
-            let d = rng.exponential(1.0 / rate);
+            let d = (0.0 - math::ln(rng.uniform_open0())) / rate;
             self.streams.insert(code.site, rng);
+            if !d.is_finite() {
+                return Err(format!(
+                    "the rate {rate} gives a delay too long to be a time"
+                ));
+            }
             Some(d)
         } else {
             None
@@ -902,7 +963,7 @@ impl Agent {
     fn take_stream(&mut self, chart: &Chart, site: u32) -> Rng {
         self.streams.remove(&site).unwrap_or_else(|| {
             let purpose = chart.sites.get(site as usize).map_or("", String::as_str);
-            Rng::keyed(self.seed, &format!("{}/{purpose}", self.key))
+            Rng::keyed(self.seed, &stream_key(&self.key, purpose))
         })
     }
 
@@ -938,6 +999,12 @@ impl Agent {
         }
         data::draw(name, args, rng).unwrap_or(Value::Text(String::new()))
     }
+}
+
+/// The key of an agent's stream: the agent key's length in bytes, `:`, the agent key, `/`, the
+/// purpose, so no two pairs of agent key and purpose give the same key.
+fn stream_key(agent: &str, purpose: &str) -> String {
+    format!("{}:{agent}/{purpose}", agent.len())
 }
 
 /// Equal values, NaN equal to NaN (a variable that stays NaN has not changed).

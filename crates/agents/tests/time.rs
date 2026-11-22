@@ -11,7 +11,7 @@
 use std::sync::Arc;
 
 use stochcraft_agents::{
-    Action, Agent, Chart, ChartSpec, Driver, SendSpec, StateSpec, Step, TransitionSpec,
+    Action, Agent, Chart, ChartSpec, Driver, RunError, SendSpec, StateSpec, Step, TransitionSpec,
 };
 use stochcraft_random::math::exp;
 
@@ -249,4 +249,87 @@ fn a_rate_of_0_waits_until_it_becomes_positive() {
     let fire = times_of(agent(&d, i), "fire");
     assert_eq!(fire.len(), 1);
     assert!(fire[0] >= 1.0 && fire[0] < 1.0 + 1e-6, "{fire:?}");
+}
+
+/// A rate is turned into a delay as −ln(U) / rate: a rate of 1e-300 waits about 1e300, and a
+/// rate of 2^-1060, whose reciprocal is not a finite number, gives a delay too long to be a
+/// time, which is an error, not an event at once.
+#[test]
+fn a_tiny_rate_waits_long_and_one_too_tiny_is_an_error() {
+    let chart = |rate: &str| {
+        build(
+            &ChartSpec::new("tiny")
+                .state(
+                    StateSpec::state("wait")
+                        .on_entry(SendSpec::new("fire").at_rate(rate))
+                        .transition(TransitionSpec::on("fire").to("fired"))
+                        .transition(TransitionSpec::on("error.execution").to("failed")),
+                )
+                .state(StateSpec::state("fired"))
+                .state(StateSpec::state("failed")),
+        )
+    };
+    let mut d = Driver::new(0.0);
+    let i = add(&mut d, Agent::new(chart("1 div pow(10, 300)"), 1, "a"));
+    assert_eq!(run_until(&mut d, 1e6), 0);
+    assert!(agent(&d, i).is_in("wait"));
+    assert_eq!(agent(&d, i).pending_sends(), 1);
+    let mut d = Driver::new(0.0);
+    let i = add(
+        &mut d,
+        Agent::new(chart("1 div pow(2, 1000) div pow(2, 60)"), 1, "a"),
+    );
+    assert!(agent(&d, i).is_in("failed"));
+    assert_eq!(step(&mut d), None);
+}
+
+#[test]
+fn a_send_cancelled_before_it_reaches_the_clock_is_not_scheduled() {
+    let chart = build(
+        &ChartSpec::new("cancelled").state(
+            StateSpec::state("s")
+                .on_entry(SendSpec::new("never").id("t").after(f64::MAX))
+                .on_entry(Action::cancel("t")),
+        ),
+    );
+    let mut a = Agent::new(Arc::clone(&chart), 1, "a");
+    if let Err(e) = a.start(0.0) {
+        panic!("{e}");
+    }
+    assert!(a.take_sends().is_empty());
+    // At 1e308 the cancelled send's time would not be finite; it is never put on the clock.
+    let mut d = Driver::new(1e308);
+    let i = add(&mut d, Agent::new(chart, 1, "a"));
+    assert!(agent(&d, i).is_running());
+    assert_eq!(step(&mut d), None);
+}
+
+#[test]
+fn a_send_the_clock_cannot_hold_stops_its_agent() {
+    let chart = build(
+        &ChartSpec::new("overflow")
+            .state(
+                StateSpec::state("s")
+                    .on_entry(SendSpec::new("first"))
+                    .on_entry(SendSpec::new("far").after(1e308))
+                    .on_entry(SendSpec::new("third").after(1.0))
+                    .transition(TransitionSpec::on("first").to("t")),
+            )
+            .state(StateSpec::state("t")),
+    );
+    let mut d = Driver::new(1e308);
+    match d.add(Agent::new(chart, 1, "a").with_trace()) {
+        Err(RunError::Schedule { delay, .. }) => assert_eq!(delay, 1e308),
+        other => panic!("{other:?}"),
+    }
+    let a = &d.agents()[0];
+    assert!(!a.is_running());
+    assert_eq!(a.pending_sends(), 0);
+    assert!(matches!(
+        a.trace().last().map(|r| &r.step),
+        Some(Step::Error(_))
+    ));
+    // `first` was on the clock already: it is skipped.
+    assert_eq!(step(&mut d), None);
+    assert!(d.agents()[0].is_in("s"));
 }

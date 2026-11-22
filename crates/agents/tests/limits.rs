@@ -4,7 +4,8 @@
 use std::sync::Arc;
 
 use stochcraft_agents::{
-    Action, Agent, Chart, ChartSpec, DEFAULT_MICROSTEP_LIMIT, RunError, StateSpec, TransitionSpec,
+    Action, Agent, Chart, ChartSpec, DEFAULT_MICROSTEP_LIMIT, RunError, SendSpec, StateSpec, Step,
+    TransitionSpec,
 };
 
 fn build(spec: &ChartSpec) -> Arc<Chart> {
@@ -71,6 +72,37 @@ fn a_loop_through_raised_events_stops_too() {
         }
         other => panic!("{other:?}"),
     }
+}
+
+/// A stopped agent keeps no pending sends or internal events, and has not ended normally.
+#[test]
+fn a_loop_stopped_at_the_limit_leaves_nothing_pending() {
+    let chart = build(
+        &ChartSpec::new("loop")
+            .state(
+                StateSpec::state("a")
+                    .on_entry(SendSpec::new("later").after(5.0))
+                    .on_entry(Action::raise("soon"))
+                    .transition(TransitionSpec::eventless().to("b")),
+            )
+            .state(StateSpec::state("b").transition(TransitionSpec::eventless().to("a"))),
+    );
+    let mut agent = Agent::new(chart, 1, "looper")
+        .with_microstep_limit(10)
+        .with_trace();
+    assert!(agent.start(0.0).is_err());
+    assert_eq!(agent.pending_sends(), 0);
+    assert!(agent.take_sends().is_empty());
+    assert!(matches!(
+        agent.trace().last().map(|r| &r.step),
+        Some(Step::Error(_))
+    ));
+    assert!(!agent.trace().iter().any(|r| r.step == Step::Done));
+    assert_eq!(
+        agent.fire(0, 1.0),
+        Ok(false),
+        "a send already on a clock is skipped"
+    );
 }
 
 /// A chain of exactly `limit` eventless transitions is not a loop; one more is refused.

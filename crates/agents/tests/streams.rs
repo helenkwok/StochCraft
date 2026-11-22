@@ -86,3 +86,28 @@ fn agents_streams_do_not_depend_on_each_other() {
     assert_eq!(together[1], crowded[1]);
     assert_ne!(together[0], together[1]);
 }
+
+/// The agent key and the place in the chart are kept apart in a stream's key: agent `a` with
+/// state `s/state/t` and agent `a/state/s` with state `t` would otherwise share
+/// `a/state/s/state/t/onentry/1`.
+#[test]
+fn agent_keys_and_state_ids_do_not_run_together() {
+    let draw = |key: &str, state: &str| {
+        let spec = ChartSpec::new("keys")
+            .data("x", "0")
+            .state(StateSpec::state(state).on_entry(Action::assign("x", "random()")));
+        let chart = match spec.build() {
+            Ok(c) => Arc::new(c),
+            Err(e) => panic!("{e}"),
+        };
+        let mut a = Agent::new(chart, 7, key);
+        if let Err(e) = a.start(0.0) {
+            panic!("{e}");
+        }
+        a.value("x").map(|v| v.number())
+    };
+    let one = draw("a", "s/state/t");
+    assert!(one.is_some_and(|x| (0.0..1.0).contains(&x)));
+    assert_ne!(one, draw("a/state/s", "t"));
+    assert_eq!(one, draw("a", "s/state/t"));
+}

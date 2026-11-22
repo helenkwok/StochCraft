@@ -6,8 +6,106 @@
 use std::sync::Arc;
 
 use stochcraft_agents::{
-    Action, Agent, ChartSpec, History, SendSpec, StateSpec, Step, TransitionSpec,
+    Action, Agent, ChartSpec, History, MAX_DEPTH, SendSpec, StateSpec, Step, TransitionSpec,
 };
+
+/// A chart of states nested `depth` deep.
+fn nested(depth: u32) -> ChartSpec {
+    let mut s = StateSpec::state(&format!("s{depth}"));
+    for k in (1..depth).rev() {
+        s = StateSpec::state(&format!("s{k}")).child(s);
+    }
+    ChartSpec::new("nested").state(s)
+}
+
+#[test]
+fn states_nest_up_to_the_limit() {
+    let a = start(&nested(MAX_DEPTH));
+    assert_eq!(a.active_states().len(), MAX_DEPTH as usize);
+}
+
+#[test]
+fn one_transition_enters_two_regions_of_a_parallel_state() {
+    let region = |r: &str, a: &str, b: &str| {
+        StateSpec::state(r)
+            .child(StateSpec::state(a))
+            .child(StateSpec::state(b))
+    };
+    let spec = ChartSpec::new("regions")
+        .state(StateSpec::state("Out").transition(TransitionSpec::on("go").to("b1").to("b2")))
+        .state(
+            StateSpec::parallel("P")
+                .child(region("R1", "a1", "b1"))
+                .child(region("R2", "a2", "b2")),
+        );
+    let mut a = start(&spec);
+    assert_eq!(
+        handle(&mut a, "go"),
+        [
+            "event go", "exit Out", "enter P", "enter R1", "enter b1", "enter R2", "enter b2"
+        ]
+    );
+}
+
+/// SCXML §3.13: "It MUST then execute the executable content contained in the transitions in
+/// document order." P's transition is written before its children's, so its content runs first,
+/// although the state that selected it (b) comes after the one that selected a's.
+#[test]
+fn transition_content_runs_in_document_order() {
+    let spec = ChartSpec::new("content").state(
+        StateSpec::parallel("P")
+            .transition(TransitionSpec::on("go").then(Action::log("P")))
+            .child(StateSpec::state("R1").child(
+                StateSpec::state("a").transition(TransitionSpec::on("go").then(Action::log("a"))),
+            ))
+            .child(StateSpec::state("R2").child(StateSpec::state("b"))),
+    );
+    let mut a = start(&spec);
+    assert_eq!(handle(&mut a, "go"), ["event go", "log P", "log a"]);
+}
+
+/// SCXML §3.10: a history's default content runs whenever its default is taken, also when its
+/// parent stays active (an internal transition to the parent's own history).
+#[test]
+fn a_default_history_s_content_runs_when_its_parent_stays_active() {
+    let spec = ChartSpec::new("own history").state(
+        StateSpec::state("P")
+            .child(StateSpec::history(
+                "H",
+                History::Shallow,
+                TransitionSpec::eventless()
+                    .to("p2")
+                    .then(Action::log("default")),
+            ))
+            .child(StateSpec::state("p1"))
+            .child(StateSpec::state("p2"))
+            .transition(TransitionSpec::on("h").to("H").internal()),
+    );
+    let mut a = start(&spec);
+    assert_eq!(steps(&a), ["enter P", "enter p1"]);
+    assert_eq!(
+        handle(&mut a, "h"),
+        ["event h", "exit p1", "log default", "enter p2"]
+    );
+}
+
+/// Only a quoted name in `In()` is checked when the chart is built; a computed one that names
+/// no state reads as false.
+#[test]
+fn a_computed_in_name_is_read_when_it_runs() {
+    for (name, to) in [("concat('mis', 'sing')", "s"), ("concat('s', '')", "t")] {
+        let spec = ChartSpec::new("in")
+            .state(
+                StateSpec::state("s").transition(
+                    TransitionSpec::eventless()
+                        .when(&format!("In({name})"))
+                        .to("t"),
+                ),
+            )
+            .state(StateSpec::state("t"));
+        assert_eq!(start(&spec).active_states(), [to], "{name}");
+    }
+}
 
 fn start(spec: &ChartSpec) -> Agent {
     let chart = match spec.build() {
@@ -532,6 +630,61 @@ fn charts_with_mistakes_are_refused() {
             "not an event name",
         ),
         (ChartSpec::new("empty"), "no states"),
+        // A history's default leading to itself, or to another history.
+        (
+            one(StateSpec::state("P")
+                .child(StateSpec::history(
+                    "H",
+                    History::Shallow,
+                    TransitionSpec::eventless().to("H"),
+                ))
+                .child(StateSpec::state("p"))),
+            "default target is a history state",
+        ),
+        (
+            one(StateSpec::state("P")
+                .child(StateSpec::history(
+                    "H1",
+                    History::Deep,
+                    TransitionSpec::eventless().to("H2"),
+                ))
+                .child(StateSpec::history(
+                    "H2",
+                    History::Deep,
+                    TransitionSpec::eventless().to("p"),
+                ))
+                .child(StateSpec::state("p"))),
+            "default target is a history state",
+        ),
+        // Targets that cannot be active together.
+        (
+            ChartSpec::new("bad")
+                .initial(&["a", "b"])
+                .state(StateSpec::state("a"))
+                .state(StateSpec::state("b")),
+            "cannot be active together",
+        ),
+        (
+            one(StateSpec::state("P")
+                .initial(&["x", "y"])
+                .child(StateSpec::state("x"))
+                .child(StateSpec::state("y"))),
+            "cannot be active together",
+        ),
+        (
+            ChartSpec::new("bad")
+                .state(StateSpec::state("a").transition(TransitionSpec::on("e").to("b").to("c")))
+                .state(StateSpec::state("b"))
+                .state(StateSpec::state("c")),
+            "cannot be active together",
+        ),
+        (
+            ChartSpec::new("bad")
+                .state(StateSpec::state("a").transition(TransitionSpec::on("e").to("Q").to("q")))
+                .state(StateSpec::state("Q").child(StateSpec::state("q"))),
+            "one is inside the other",
+        ),
+        (nested(MAX_DEPTH + 1), "nest more than"),
     ];
     for (spec, words) in refused {
         match spec.build() {
