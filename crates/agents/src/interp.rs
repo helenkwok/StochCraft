@@ -14,7 +14,7 @@ use std::sync::Arc;
 use stochcraft_model::expr::Value;
 use stochcraft_random::{Rng, math};
 
-use crate::chart::{Chart, Code, DelayExec, Exec, History, NodeKind};
+use crate::chart::{Chart, Code, DelayExec, Exec, History, NodeKind, ToExec};
 use crate::data;
 
 /// The microsteps a macrostep may take before the run is stopped as looping.
@@ -89,6 +89,10 @@ pub enum RunError {
         time: f64,
         delay: f64,
     },
+    /// After one event in a [`Model`](crate::Model), more than `limit` re-tests of conditions
+    /// on populations took a transition: agents keep changing each other without waiting for
+    /// an event.
+    RetestLimit { time: f64, limit: u64 },
 }
 
 impl fmt::Display for RunError {
@@ -110,11 +114,64 @@ impl fmt::Display for RunError {
                 f,
                 "agent `{agent}` sent an event {delay} after time {time}, which is not a time"
             ),
+            RunError::RetestLimit { time, limit } => write!(
+                f,
+                "at time {time}, agents whose conditions read populations changed each other \
+                 more than {limit} times without waiting for an event, so they loop"
+            ),
         }
     }
 }
 
 impl std::error::Error for RunError {}
+
+/// What an agent's expressions see beyond the agent itself: the populations of a model. It
+/// answers `serial()` and the population functions ([`data::POPULATION_FUNCTIONS`]); `me` is the
+/// agent evaluating, which its model has taken out of its population while it runs.
+pub(crate) trait World {
+    fn call(&self, name: &str, args: &[Value], me: &Agent) -> Value;
+}
+
+/// No model: the population functions read as empty and `serial()` as NaN.
+pub(crate) struct NoWorld;
+
+impl World for NoWorld {
+    fn call(&self, name: &str, _: &[Value], _: &Agent) -> Value {
+        if name == "serial" {
+            Value::Number(f64::NAN)
+        } else {
+            Value::Text(String::new())
+        }
+    }
+}
+
+/// Who a message goes to, as the sender resolved it.
+#[derive(Debug, Clone, PartialEq)]
+pub(crate) enum Recipient {
+    /// The agent of this serial number (as the expression gave it: not yet checked to be one).
+    One { population: String, serial: f64 },
+    /// One agent other than the sender, picked by this draw (64 random bits).
+    Random { population: String, draw: u64 },
+    /// Every agent but the sender.
+    All { population: String },
+}
+
+/// Something a macrostep sent out, in the order its actions ran.
+#[derive(Debug, Clone, PartialEq)]
+pub(crate) enum Out {
+    /// An event to the agent itself.
+    Own(Scheduled),
+    Message {
+        to: Recipient,
+        event: String,
+        data: Option<f64>,
+    },
+    Create(String),
+    Remove {
+        population: String,
+        serial: f64,
+    },
+}
 
 /// A send that has not arrived yet.
 #[derive(Debug, Clone)]
@@ -122,6 +179,7 @@ struct Pending {
     event: String,
     send_id: Option<String>,
     rate: Option<RateWatch>,
+    data: Option<f64>,
 }
 
 /// A rate send's expression and the values of the variables it read when it was drawn.
@@ -150,6 +208,7 @@ pub struct Agent {
     history: BTreeMap<u32, Vec<u32>>,
     internal: VecDeque<String>,
     event: String,
+    event_data: Option<f64>,
     now: f64,
     started: bool,
     running: bool,
@@ -158,7 +217,7 @@ pub struct Agent {
     path: VecDeque<String>,
     pending: BTreeMap<u64, Pending>,
     next_token: u64,
-    outbox: Vec<Scheduled>,
+    outbox: Vec<Out>,
     trace: Option<Vec<Record>>,
 }
 
@@ -178,6 +237,7 @@ impl Agent {
             history: BTreeMap::new(),
             internal: VecDeque::new(),
             event: String::new(),
+            event_data: None,
             now: 0.0,
             started: false,
             running: false,
@@ -250,12 +310,28 @@ impl Agent {
     }
 
     /// The events it has sent itself since the last call, for the clock. A send cancelled or
-    /// redrawn since it was made is left out.
+    /// redrawn since it was made is left out, and so are messages to other agents and the
+    /// agents it creates or removes, which only a [`Model`](crate::Model) delivers.
     pub fn take_sends(&mut self) -> Vec<Scheduled> {
+        self.take_out()
+            .into_iter()
+            .filter_map(|o| match o {
+                Out::Own(s) => Some(s),
+                _ => None,
+            })
+            .collect()
+    }
+
+    /// Everything it has sent out since the last call, in the order its actions ran (its own
+    /// sends cancelled or redrawn since left out).
+    pub(crate) fn take_out(&mut self) -> Vec<Out> {
         let outbox = std::mem::take(&mut self.outbox);
         outbox
             .into_iter()
-            .filter(|s| self.pending.contains_key(&s.token))
+            .filter(|o| match o {
+                Out::Own(s) => self.pending.contains_key(&s.token),
+                _ => true,
+            })
             .collect()
     }
 
@@ -274,6 +350,10 @@ impl Agent {
     /// order, its initial states are entered, and it runs until it waits for an event (one
     /// macrostep).
     pub fn start(&mut self, now: f64) -> Result<(), RunError> {
+        self.start_in(now, &NoWorld)
+    }
+
+    pub(crate) fn start_in(&mut self, now: f64, w: &dyn World) -> Result<(), RunError> {
         if self.started {
             return Ok(());
         }
@@ -283,21 +363,33 @@ impl Agent {
         self.begin_macrostep();
         let chart = Arc::clone(&self.chart);
         for (i, (_, code)) in chart.vars.iter().enumerate() {
-            let v = self.eval(&chart, code);
+            let v = self.eval(&chart, code, w);
             if let Some(slot) = self.values.get_mut(i) {
                 *slot = v;
             }
         }
-        self.enter_states(&chart, &[chart.initial]);
-        self.settle(&chart)
+        self.enter_states(&chart, &[chart.initial], w);
+        self.settle(&chart, w)
     }
 
     /// Handles the external event `name` at time `now`: one macrostep (the transitions it
     /// enables, then every eventless transition and internal event that follows). Ignored if
     /// the chart is not running.
     pub fn handle(&mut self, name: &str, now: f64) -> Result<(), RunError> {
+        self.handle_in(name, None, now, &NoWorld).map(|_| ())
+    }
+
+    /// [`Agent::handle`] with the event's data and a world; returns whether a transition took
+    /// the event (false also if the chart is not running).
+    pub(crate) fn handle_in(
+        &mut self,
+        name: &str,
+        data: Option<f64>,
+        now: f64,
+        w: &dyn World,
+    ) -> Result<bool, RunError> {
         if !self.running {
-            return Ok(());
+            return Ok(false);
         }
         self.now = now;
         self.begin_macrostep();
@@ -306,12 +398,57 @@ impl Agent {
             internal: false,
         });
         self.event = name.to_string();
+        self.event_data = data;
         let chart = Arc::clone(&self.chart);
-        let enabled = self.select(&chart, Some(name));
-        if !enabled.is_empty() {
-            self.microstep(&chart, &enabled)?;
+        let enabled = self.select(&chart, Some(name), w);
+        let taken = !enabled.is_empty();
+        if taken {
+            self.microstep(&chart, &enabled, w)?;
         }
-        self.settle(&chart)
+        self.settle(&chart, w)?;
+        Ok(taken)
+    }
+
+    /// Tests its eventless transitions again at time `now`, as a macrostep with no event (for a
+    /// condition that reads a population that has changed). Returns whether it took a
+    /// transition.
+    pub(crate) fn retest(&mut self, now: f64, w: &dyn World) -> Result<bool, RunError> {
+        if !self.running {
+            return Ok(false);
+        }
+        self.now = now;
+        self.begin_macrostep();
+        let chart = Arc::clone(&self.chart);
+        self.settle(&chart, w)?;
+        Ok(self.microsteps > 0)
+    }
+
+    /// Ends the chart at time `now` as SCXML's `exitInterpreter` does: every active state is
+    /// exited, its exit actions run (their messages still go out), and the pending sends are
+    /// dropped.
+    pub(crate) fn stop(&mut self, now: f64, w: &dyn World) {
+        if !self.running {
+            return;
+        }
+        self.now = now;
+        self.begin_macrostep();
+        self.running = false;
+        let chart = Arc::clone(&self.chart);
+        self.exit_interpreter(&chart, w);
+    }
+
+    /// Whether its last macrostep took a transition.
+    pub(crate) fn took_steps(&self) -> bool {
+        self.microsteps > 0
+    }
+
+    /// Evaluates an expression over the agent as it is now, drawing nothing (a statistic's
+    /// expression, which [`Chart`]'s `agent_expression` checked).
+    pub(crate) fn evaluate(&self, code: &Code, w: &dyn World) -> Value {
+        let chart = &self.chart;
+        let property = |name: &str| self.lookup(chart, name);
+        let provided = |name: &str, args: &[Value]| self.provided(chart, name, args, None, w);
+        code.expr.eval_with(&property, &provided)
     }
 
     /// Sends the agent the external event `name`, to arrive `delay` from now (through
@@ -325,6 +462,7 @@ impl Agent {
             event: name.to_string(),
             send_id: None,
             rate: None,
+            data: None,
         };
         Some(self.add_pending(pending, Some(delay)))
     }
@@ -332,13 +470,22 @@ impl Agent {
     /// Delivers the send `token` at time `now`, handling its event. Returns false (and does
     /// nothing) if the send was cancelled or redrawn since, or the chart has ended.
     pub fn fire(&mut self, token: u64, now: f64) -> Result<bool, RunError> {
+        self.fire_in(token, now, &NoWorld)
+    }
+
+    pub(crate) fn fire_in(
+        &mut self,
+        token: u64,
+        now: f64,
+        w: &dyn World,
+    ) -> Result<bool, RunError> {
         let Some(p) = self.pending.remove(&token) else {
             return Ok(false);
         };
         if !self.running {
             return Ok(false);
         }
-        self.handle(&p.event, now)?;
+        self.handle_in(&p.event, p.data, now, w)?;
         Ok(true)
     }
 
@@ -359,7 +506,7 @@ impl Agent {
         self.next_token = self.next_token.wrapping_add(1);
         self.pending.insert(token, pending);
         if let Some(delay) = delay {
-            self.outbox.push(Scheduled { token, delay });
+            self.outbox.push(Out::Own(Scheduled { token, delay }));
         }
         token
     }
@@ -368,10 +515,10 @@ impl Agent {
     /// until neither enables anything; then rate sends whose variables changed are redrawn
     /// (which may raise `error.execution`, handled in turn). Ends the chart (`exitInterpreter`)
     /// if a top-level final state was entered.
-    fn settle(&mut self, chart: &Chart) -> Result<(), RunError> {
+    fn settle(&mut self, chart: &Chart, w: &dyn World) -> Result<(), RunError> {
         loop {
             while self.running {
-                let mut enabled = self.select(chart, None);
+                let mut enabled = self.select(chart, None, w);
                 if enabled.is_empty() {
                     let Some(ev) = self.internal.pop_front() else {
                         break;
@@ -382,40 +529,41 @@ impl Agent {
                     });
                     // SCXML sets `_event` before selecting, so conditions read it.
                     self.event.clone_from(&ev);
-                    enabled = self.select(chart, Some(&ev));
+                    self.event_data = None;
+                    enabled = self.select(chart, Some(&ev), w);
                 }
                 if !enabled.is_empty() {
-                    self.microstep(chart, &enabled)?;
+                    self.microstep(chart, &enabled, w)?;
                 }
             }
             if !self.running {
                 break;
             }
-            self.redraw_rates(chart);
+            self.redraw_rates(chart, w);
             if self.internal.is_empty() {
                 break;
             }
         }
         if !self.running {
-            self.exit_interpreter(chart);
+            self.exit_interpreter(chart, w);
         }
         Ok(())
     }
 
     /// `exitInterpreter`: exits every active state in exit order, running its exit actions, and
-    /// drops the sends still pending.
-    fn exit_interpreter(&mut self, chart: &Chart) {
+    /// drops the sends to itself still pending (its messages to other agents still go out).
+    fn exit_interpreter(&mut self, chart: &Chart, w: &dyn World) {
         let mut states: Vec<u32> = (0..chart.len())
             .filter(|&i| self.active[i as usize])
             .collect();
         states.reverse();
         for s in states {
             self.record(Step::Exit(chart.node(s).id.clone()));
-            self.execute(chart, &chart.node(s).on_exit);
+            self.execute(chart, &chart.node(s).on_exit, w);
             self.active[s as usize] = false;
         }
         self.pending.clear();
-        self.outbox.clear();
+        self.outbox.retain(|o| !matches!(o, Out::Own(_)));
         self.internal.clear();
         self.record(Step::Done);
     }
@@ -424,7 +572,7 @@ impl Agent {
     /// active atomic state in document order, the first transition in document order of it or
     /// its nearest ancestor that matches and whose condition holds; then
     /// `removeConflictingTransitions`.
-    fn select(&mut self, chart: &Chart, event: Option<&str>) -> Vec<u32> {
+    fn select(&mut self, chart: &Chart, event: Option<&str>, w: &dyn World) -> Vec<u32> {
         let mut enabled: Vec<u32> = Vec::new();
         for state in 0..chart.len() {
             if !self.active[state as usize] || !chart.is_atomic(state) {
@@ -444,7 +592,7 @@ impl Agent {
                     }
                     let holds = match &tr.cond {
                         None => true,
-                        Some(c) => self.eval(chart, c).boolean(),
+                        Some(c) => self.eval(chart, c, w).boolean(),
                     };
                     if holds {
                         if !enabled.contains(&t) {
@@ -566,7 +714,7 @@ impl Agent {
     /// transitions; the two differ only when a state's transition and an ancestor's are both
     /// taken (targetless, or not conflicting). A state's transitions count as written before
     /// its children's.
-    fn microstep(&mut self, chart: &Chart, enabled: &[u32]) -> Result<(), RunError> {
+    fn microstep(&mut self, chart: &Chart, enabled: &[u32], w: &dyn World) -> Result<(), RunError> {
         if self.microsteps >= self.limit {
             self.halt(format!(
                 "more than {} transitions in one macrostep",
@@ -588,13 +736,13 @@ impl Agent {
                 self.path.pop_front();
             }
         }
-        self.exit_states(chart, enabled);
+        self.exit_states(chart, enabled, w);
         let mut in_document_order = enabled.to_vec();
         in_document_order.sort_unstable();
         for t in in_document_order {
-            self.execute(chart, &chart.transition(t).actions);
+            self.execute(chart, &chart.transition(t).actions, w);
         }
-        self.enter_states(chart, enabled);
+        self.enter_states(chart, enabled, w);
         Ok(())
     }
 
@@ -620,7 +768,7 @@ impl Agent {
     /// `exitStates`: the exit set in exit order (innermost first, then reverse document order);
     /// every history of those states is recorded first, then each state's exit actions run and
     /// it leaves the configuration.
-    fn exit_states(&mut self, chart: &Chart, enabled: &[u32]) {
+    fn exit_states(&mut self, chart: &Chart, enabled: &[u32], w: &dyn World) {
         let mut exits = self.exit_set(chart, enabled);
         exits.sort_unstable();
         exits.reverse();
@@ -642,7 +790,7 @@ impl Agent {
         }
         for s in exits {
             self.record(Step::Exit(chart.node(s).id.clone()));
-            self.execute(chart, &chart.node(s).on_exit);
+            self.execute(chart, &chart.node(s).on_exit, w);
             self.active[s as usize] = false;
         }
     }
@@ -654,7 +802,7 @@ impl Agent {
     /// descendant is entered); entering a final state raises `done.state.<id>`
     /// of its parent, and of the parallel grandparent once all of that one's children are
     /// final, or ends the chart if it is top-level.
-    fn enter_states(&mut self, chart: &Chart, enabled: &[u32]) {
+    fn enter_states(&mut self, chart: &Chart, enabled: &[u32], w: &dyn World) {
         let mut to_enter = Vec::new();
         let mut default_history: BTreeMap<u32, u32> = BTreeMap::new();
         for &t in enabled {
@@ -679,18 +827,18 @@ impl Agent {
                 let (p, h) = waiting[k];
                 if chart.is_descendant(s, p) {
                     waiting.remove(k);
-                    self.history_default_content(chart, h);
+                    self.history_default_content(chart, h, w);
                 } else {
                     k += 1;
                 }
             }
             self.active[s as usize] = true;
             self.record(Step::Enter(chart.node(s).id.clone()));
-            self.execute(chart, &chart.node(s).on_entry);
+            self.execute(chart, &chart.node(s).on_entry, w);
             // A compound state's default entry would run its <initial> transition's content
             // here; initial states are given by the `initial` attribute, which has none.
             if let Some(&h) = default_history.get(&s) {
-                self.history_default_content(chart, h);
+                self.history_default_content(chart, h, w);
             }
             if chart.node(s).kind != NodeKind::Final {
                 continue;
@@ -711,14 +859,14 @@ impl Agent {
             }
         }
         for (_, h) in waiting {
-            self.history_default_content(chart, h);
+            self.history_default_content(chart, h, w);
         }
     }
 
     /// Runs the content of history state `h`'s default transition.
-    fn history_default_content(&mut self, chart: &Chart, h: u32) {
+    fn history_default_content(&mut self, chart: &Chart, h: u32, w: &dyn World) {
         if let Some(&d) = chart.node(h).transitions.first() {
-            self.execute(chart, &chart.transition(d).actions);
+            self.execute(chart, &chart.transition(d).actions, w);
         }
     }
 
@@ -816,9 +964,9 @@ impl Agent {
 
     /// Runs a block of executable content; the first action that fails puts
     /// `error.execution` on the internal queue and skips the rest (SCXML §4.9).
-    fn execute(&mut self, chart: &Chart, block: &[Exec]) {
+    fn execute(&mut self, chart: &Chart, block: &[Exec], w: &dyn World) {
         for e in block {
-            if let Err(message) = self.run(chart, e) {
+            if let Err(message) = self.run(chart, e, w) {
                 self.record(Step::Error(message));
                 self.internal.push_back("error.execution".to_string());
                 break;
@@ -826,10 +974,10 @@ impl Agent {
         }
     }
 
-    fn run(&mut self, chart: &Chart, e: &Exec) -> Result<(), String> {
+    fn run(&mut self, chart: &Chart, e: &Exec, w: &dyn World) -> Result<(), String> {
         match e {
             Exec::Assign { var, code } => {
-                let v = self.eval(chart, code);
+                let v = self.eval(chart, code, w);
                 if let Some(slot) = self.values.get_mut(*var as usize) {
                     *slot = v;
                 }
@@ -838,26 +986,62 @@ impl Agent {
             Exec::Cancel(id) => self.pending.retain(|_, p| p.send_id.as_ref() != Some(id)),
             Exec::Log { label, code } => {
                 let text = match code {
-                    Some(c) => format!("{label}: {}", self.eval(chart, c).text()),
+                    Some(c) => format!("{label}: {}", self.eval(chart, c, w).text()),
                     None => label.clone(),
                 };
                 self.record(Step::Log(text));
+            }
+            Exec::Create(population) => self.outbox.push(Out::Create(population.clone())),
+            Exec::Remove { population, serial } => {
+                let serial = self.eval(chart, serial, w).number();
+                self.outbox.push(Out::Remove {
+                    population: population.clone(),
+                    serial,
+                });
             }
             Exec::SendSpec(s) => {
                 if s.internal {
                     self.internal.push_back(s.event.clone());
                     return Ok(());
                 }
+                let data = s.data.as_ref().map(|c| self.eval(chart, c, w).number());
+                if let Some(to) = &s.to {
+                    let to = match to {
+                        ToExec::Agent { population, serial } => Recipient::One {
+                            population: population.clone(),
+                            serial: self.eval(chart, serial, w).number(),
+                        },
+                        ToExec::Random { population, site } => {
+                            let mut rng = self.take_stream(chart, *site);
+                            let draw = rng.next_u64();
+                            self.streams.insert(*site, rng);
+                            Recipient::Random {
+                                population: population.clone(),
+                                draw,
+                            }
+                        }
+                        ToExec::All { population } => Recipient::All {
+                            population: population.clone(),
+                        },
+                    };
+                    self.outbox.push(Out::Message {
+                        to,
+                        event: s.event.clone(),
+                        data,
+                    });
+                    return Ok(());
+                }
                 let mut pending = Pending {
                     event: s.event.clone(),
                     send_id: s.id.clone(),
                     rate: None,
+                    data,
                 };
                 let delay = match &s.delay {
                     DelayExec::None => Some(0.0),
                     DelayExec::Fixed(d) => Some(*d),
                     DelayExec::Expr(c) => {
-                        let d = self.eval(chart, c).number();
+                        let d = self.eval(chart, c, w).number();
                         if !(d.is_finite() && d >= 0.0) {
                             return Err(format!(
                                 "the delay of the send of `{}` is {d}, not a time of 0 or more",
@@ -867,7 +1051,7 @@ impl Agent {
                         Some(d)
                     }
                     DelayExec::Rate { code, reads } => {
-                        let (watch, delay) = self.draw_rate(chart, code, reads)?;
+                        let (watch, delay) = self.draw_rate(chart, code, reads, w)?;
                         pending.rate = Some(watch);
                         delay
                     }
@@ -884,8 +1068,9 @@ impl Agent {
         chart: &Chart,
         code: &Code,
         reads: &[u32],
+        w: &dyn World,
     ) -> Result<(RateWatch, Option<f64>), String> {
-        let rate = self.eval(chart, code).number();
+        let rate = self.eval(chart, code, w).number();
         if !(rate.is_finite() && rate >= 0.0) {
             return Err(format!("the rate is {rate}, not a number of 0 or more"));
         }
@@ -924,7 +1109,7 @@ impl Agent {
 
     /// Redraws every pending rate send one of whose variables has changed since it was drawn
     /// (the exponential forgets the time already waited, so the event comes at the new rate).
-    fn redraw_rates(&mut self, chart: &Chart) {
+    fn redraw_rates(&mut self, chart: &Chart, w: &dyn World) {
         let changed: Vec<u64> = self
             .pending
             .iter()
@@ -947,7 +1132,7 @@ impl Agent {
                 continue;
             };
             let reads: Vec<u32> = old.reads.iter().map(|(v, _)| *v).collect();
-            match self.draw_rate(chart, &old.code, &reads) {
+            match self.draw_rate(chart, &old.code, &reads, w) {
                 Ok((watch, delay)) => {
                     p.rate = Some(watch);
                     self.add_pending(p, delay);
@@ -968,11 +1153,12 @@ impl Agent {
     }
 
     /// Evaluates an expression, its draws from its own stream.
-    fn eval(&mut self, chart: &Chart, code: &Code) -> Value {
+    fn eval(&mut self, chart: &Chart, code: &Code, w: &dyn World) -> Value {
         let cell = RefCell::new(self.take_stream(chart, code.site));
         let value = {
             let property = |name: &str| self.lookup(chart, name);
-            let provided = |name: &str, args: &[Value]| self.provided(chart, name, args, &cell);
+            let provided =
+                |name: &str, args: &[Value]| self.provided(chart, name, args, Some(&cell), w);
             code.expr.eval_with(&property, &provided)
         };
         self.streams.insert(code.site, cell.into_inner());
@@ -983,21 +1169,39 @@ impl Agent {
         if name == data::EVENT_NAME {
             return Some(Value::Text(self.event.clone()));
         }
+        if name == data::EVENT_DATA {
+            return self.event_data.map(Value::Number);
+        }
         let i = *chart.var_index.get(name)?;
         self.values.get(i as usize).cloned()
     }
 
-    fn provided(&self, chart: &Chart, name: &str, args: &[Value], rng: &RefCell<Rng>) -> Value {
-        if name == "In" {
-            let active = args
-                .first()
-                .and_then(|a| chart.ids.get(&a.text()))
-                .is_some_and(|&i| {
-                    !matches!(chart.node(i).kind, NodeKind::History(_)) && self.active[i as usize]
-                });
-            return Value::Boolean(active);
+    fn provided(
+        &self,
+        chart: &Chart,
+        name: &str,
+        args: &[Value],
+        rng: Option<&RefCell<Rng>>,
+        w: &dyn World,
+    ) -> Value {
+        match name {
+            "In" => {
+                let active = args
+                    .first()
+                    .and_then(|a| chart.ids.get(&a.text()))
+                    .is_some_and(|&i| {
+                        !matches!(chart.node(i).kind, NodeKind::History(_))
+                            && self.active[i as usize]
+                    });
+                Value::Boolean(active)
+            }
+            "time" => Value::Number(self.now),
+            "serial" => w.call(name, args, self),
+            _ if data::POPULATION_FUNCTIONS.contains(&name) => w.call(name, args, self),
+            _ => rng
+                .and_then(|rng| data::draw(name, args, rng))
+                .unwrap_or(Value::Text(String::new())),
         }
-        data::draw(name, args, rng).unwrap_or(Value::Text(String::new()))
     }
 }
 

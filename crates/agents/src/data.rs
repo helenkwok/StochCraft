@@ -11,8 +11,20 @@
 //!   `weibull(shape, scale)`, `poisson(mean)` and `binomial(p, n)`: the distributions of
 //!   `stochcraft_random::Dist`, sampled as it samples them. Parameters it refuses give NaN.
 //!
+//! - `time()`: the current time.
+//! - In a population ([`Model`](crate::Model)): `serial()`, the agent's serial number in its
+//!   population; `population-size('p')`, how many agents population `p` has;
+//!   `population-count('p', 's')`, how many of them are in state `s`; `population-sum('p', 'x')`
+//!   and `population-mean('p', 'x')`, the sum and mean of their variable `x` (the mean of none is
+//!   NaN); and `agent-value('p', n, 'x')`, the variable `x` of agent `n` of `p` (empty if there is
+//!   no such agent). The population, state and variable names are quoted literals, so the model
+//!   knows which populations each expression reads and checks the names when it is built. Outside
+//!   a model (an [`Agent`](crate::Agent) on its own or in a [`Driver`](crate::Driver)) they read
+//!   as empty, and `serial()` as NaN.
+//!
 //! `getProperty('_event.name')` reads the name of the event being handled (SCXML's
-//! `_event.name`).
+//! `_event.name`), and `getProperty('_event.data')` the number a message or send carries
+//! (empty if it carries none, and for internal events).
 
 use std::cell::RefCell;
 
@@ -21,6 +33,23 @@ use stochcraft_random::{Dist, Rng};
 
 /// The name under which an expression reads the current event's name.
 pub(crate) const EVENT_NAME: &str = "_event.name";
+
+/// The name under which an expression reads the current event's data.
+pub(crate) const EVENT_DATA: &str = "_event.data";
+
+/// The functions that read populations: each one's first argument is a population's name.
+pub(crate) const POPULATION_FUNCTIONS: &[&str] = &[
+    "population-size",
+    "population-count",
+    "population-sum",
+    "population-mean",
+    "agent-value",
+];
+
+/// Whether `name` is one of the distribution functions (which draw from a stream).
+pub(crate) fn is_draw(name: &str) -> bool {
+    !matches!(name, "In" | "time" | "serial") && !POPULATION_FUNCTIONS.contains(&name)
+}
 
 const fn f(name: &'static str, min: usize, max: usize) -> Provided<'static> {
     Provided {
@@ -46,6 +75,13 @@ pub const FUNCTIONS: &[Provided<'static>] = &[
     f("weibull", 2, 2),
     f("poisson", 1, 1),
     f("binomial", 2, 2),
+    f("time", 0, 0),
+    f("serial", 0, 0),
+    f("population-size", 1, 1),
+    f("population-count", 2, 2),
+    f("population-sum", 2, 2),
+    f("population-mean", 2, 2),
+    f("agent-value", 3, 3),
 ];
 
 /// A draw from the distribution function `name` with these arguments, or `None` if `name` is

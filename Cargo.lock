@@ -3436,6 +3436,7 @@ dependencies = [
  "stochcraft-des",
  "stochcraft-model",
  "stochcraft-random",
+ "stochcraft-stats",
 ]
 
 [[package]]

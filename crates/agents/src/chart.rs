@@ -188,6 +188,13 @@ pub enum Action {
     Cancel { send_id: String },
     /// `<log label expr>`: recorded in the agent's trace.
     Log { label: String, expr: Option<String> },
+    /// Creates one agent of `population` (in a [`Model`](crate::Model)): an event at the
+    /// current time, after the current one, starts it.
+    Create { population: String },
+    /// Removes the agent of `population` whose serial number `serial` gives (in a
+    /// [`Model`](crate::Model)): an event at the current time, after the current one, ends its
+    /// chart (its active states are exited, their exit actions run) and takes it out.
+    Remove { population: String, serial: String },
 }
 
 impl Action {
@@ -223,6 +230,45 @@ impl Action {
             expr: Some(expr.to_string()),
         }
     }
+
+    pub fn create(population: &str) -> Self {
+        Action::Create {
+            population: population.to_string(),
+        }
+    }
+
+    pub fn remove(population: &str, serial: &str) -> Self {
+        Action::Remove {
+            population: population.to_string(),
+            serial: serial.to_string(),
+        }
+    }
+}
+
+/// Which other agents a [`SendSpec`] goes to (in a [`Model`](crate::Model)). Each recipient gets
+/// the message as an event of its own at the current time, after the current event (ROADMAP
+/// D18); a message to no agent (none of that serial, or no other agent to pick) is counted as
+/// undelivered, and one that no transition of its recipient takes as dropped
+/// ([`Counts`](crate::Counts)).
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub enum To {
+    /// The agent of `population` whose serial number the expression `serial` gives.
+    Agent { population: String, serial: String },
+    /// An agent of `population` picked at random, never the sender, from a stream of the
+    /// sender's own (keyed by the send's place in the chart and `pick`).
+    Random { population: String },
+    /// Every agent of `population` but the sender, in serial order.
+    All { population: String },
+}
+
+impl To {
+    pub fn population(&self) -> &str {
+        match self {
+            To::Agent { population, .. } | To::Random { population } | To::All { population } => {
+                population
+            }
+        }
+    }
 }
 
 /// Where a [`SendSpec`] goes.
@@ -256,7 +302,7 @@ pub enum Delay {
     Rate(String),
 }
 
-/// `<send>`: an event to the agent itself, at once or later.
+/// `<send>`: an event to the agent itself, at once or later, or a message to other agents.
 #[derive(Debug, Clone, PartialEq)]
 pub struct SendSpec {
     pub event: String,
@@ -264,6 +310,11 @@ pub struct SendSpec {
     pub id: Option<String>,
     pub target: Target,
     pub delay: Delay,
+    /// Other agents to send it to; `None`: the agent itself. A message to others is delivered
+    /// at once: it takes no delay, id or internal target.
+    pub to: Option<To>,
+    /// An expression for the number it carries, read as `getProperty('_event.data')`.
+    pub data: Option<String>,
 }
 
 impl SendSpec {
@@ -274,7 +325,40 @@ impl SendSpec {
             id: None,
             target: Target::External,
             delay: Delay::None,
+            to: None,
+            data: None,
         }
+    }
+
+    /// To the agent of `population` whose serial number `serial` (an expression) gives.
+    pub fn to_agent(mut self, population: &str, serial: &str) -> Self {
+        self.to = Some(To::Agent {
+            population: population.to_string(),
+            serial: serial.to_string(),
+        });
+        self
+    }
+
+    /// To an agent of `population` picked at random, never the sender.
+    pub fn to_random(mut self, population: &str) -> Self {
+        self.to = Some(To::Random {
+            population: population.to_string(),
+        });
+        self
+    }
+
+    /// To every agent of `population` but the sender.
+    pub fn to_all(mut self, population: &str) -> Self {
+        self.to = Some(To::All {
+            population: population.to_string(),
+        });
+        self
+    }
+
+    /// Carrying the number `expr` gives.
+    pub fn with_data(mut self, expr: &str) -> Self {
+        self.data = Some(expr.to_string());
+        self
     }
 
     pub fn id(mut self, id: &str) -> Self {
@@ -418,6 +502,26 @@ pub(crate) struct Node {
 pub(crate) struct Code {
     pub expr: Expr,
     pub site: u32,
+    /// The populations it reads through the population functions, sorted, without repeats.
+    pub populations: Vec<String>,
+    /// Whether it calls `time()`.
+    pub reads_time: bool,
+}
+
+/// A name in a chart that belongs to a population, checked when a model is built.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub(crate) struct PopRef {
+    pub population: String,
+    pub what: RefWhat,
+    /// Where it is, as [`ChartError::place`] gives it.
+    pub place: String,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub(crate) enum RefWhat {
+    Population,
+    State(String),
+    Variable(String),
 }
 
 #[derive(Debug, Clone)]
@@ -438,6 +542,8 @@ pub(crate) enum Exec {
     SendSpec(SendExec),
     Cancel(String),
     Log { label: String, code: Option<Code> },
+    Create(String),
+    Remove { population: String, serial: Code },
 }
 
 #[derive(Debug, Clone)]
@@ -446,6 +552,24 @@ pub(crate) struct SendExec {
     pub id: Option<String>,
     pub internal: bool,
     pub delay: DelayExec,
+    pub to: Option<ToExec>,
+    pub data: Option<Code>,
+}
+
+#[derive(Debug, Clone)]
+pub(crate) enum ToExec {
+    Agent {
+        population: String,
+        serial: Code,
+    },
+    /// The stream (site) the pick draws from.
+    Random {
+        population: String,
+        site: u32,
+    },
+    All {
+        population: String,
+    },
 }
 
 #[derive(Debug, Clone)]
@@ -474,6 +598,11 @@ pub struct Chart {
     /// The purpose of each random stream, such as `state/4:idle/onentry/1`.
     pub(crate) sites: Vec<String>,
     pub(crate) ids: BTreeMap<String, u32>,
+    /// The populations the conditions of its eventless transitions read: when one of them
+    /// changes, an agent running this chart is tested again (ROADMAP M4.3).
+    pub(crate) waits_on: Vec<String>,
+    /// Every population, and population state or variable, the chart names.
+    pub(crate) refs: Vec<PopRef>,
 }
 
 impl Chart {
@@ -515,6 +644,7 @@ impl Chart {
             ids: &ids,
             var_index: BTreeMap::new(),
             sites: Vec::new(),
+            refs: Vec::new(),
         };
         // Variables, in declaration order.
         let mut vars = Vec::new();
@@ -658,9 +788,20 @@ impl Chart {
             internal: true,
             actions: Vec::new(),
         });
+        let mut waits_on: Vec<String> = transitions
+            .iter()
+            .filter(|t| t.events.is_none())
+            .filter_map(|t| t.cond.as_ref())
+            .flat_map(|c| c.populations.iter().cloned())
+            .collect();
+        waits_on.sort();
+        waits_on.dedup();
         let sites = c.sites;
         let var_index = c.var_index;
+        let refs = c.refs;
         Ok(Chart {
+            waits_on,
+            refs,
             name: spec.name.clone(),
             nodes,
             transitions,
@@ -691,6 +832,52 @@ impl Chart {
     /// expression draws from its own stream, keyed by where it is in the chart.
     pub fn stream_purposes(&self) -> &[String] {
         &self.sites
+    }
+
+    /// The populations whose changes make an agent of this chart test its eventless
+    /// transitions again: those their conditions read through the population functions.
+    pub fn waits_on(&self) -> &[String] {
+        &self.waits_on
+    }
+
+    /// Compiles an expression over one agent of this chart, for a statistic: it reads the
+    /// chart's variables, `In()`, `serial()` and `time()`, and draws nothing and reads no
+    /// population.
+    pub(crate) fn agent_expression(&self, src: &str, place: &str) -> Result<Code, ChartError> {
+        let mut c = Compiler {
+            ids: &self.ids,
+            var_index: self.var_index.clone(),
+            sites: Vec::new(),
+            refs: Vec::new(),
+        };
+        let code = c.code(src, place, "")?;
+        let mut bad = None;
+        data::walk(&code.expr, &mut |x| {
+            if let Expr::Provided(f, _) = x
+                && (data::is_draw(f) || data::POPULATION_FUNCTIONS.contains(&f.as_str()))
+                && bad.is_none()
+            {
+                bad = Some(f.clone());
+            }
+        });
+        if let Some(f) = bad {
+            return fail(
+                place,
+                format!("`{src}` calls {f}(), but a statistic reads only the agent itself"),
+            );
+        }
+        if code.expr.references().contains(&data::EVENT_NAME)
+            || code.expr.references().contains(&data::EVENT_DATA)
+        {
+            return fail(
+                place,
+                format!("`{src}` reads the event, but a statistic has none"),
+            );
+        }
+        Ok(Code {
+            site: u32::MAX,
+            ..code
+        })
     }
 
     pub(crate) fn node(&self, i: u32) -> &Node {
@@ -888,6 +1075,15 @@ struct Compiler<'a> {
     ids: &'a BTreeMap<String, u32>,
     var_index: BTreeMap<String, u32>,
     sites: Vec<String>,
+    refs: Vec<PopRef>,
+}
+
+/// The quoted text of argument `i` of a call, if it is a literal.
+fn literal(args: &[Expr], i: usize) -> Option<&str> {
+    match args.get(i) {
+        Some(Expr::Text(s)) => Some(s),
+        _ => None,
+    }
 }
 
 impl Compiler<'_> {
@@ -906,7 +1102,10 @@ impl Compiler<'_> {
             Err(e) => return fail(place, format!("`{src}`: {e}")),
         };
         for name in e.references() {
-            if name != data::EVENT_NAME && !self.var_index.contains_key(name) {
+            if name != data::EVENT_NAME
+                && name != data::EVENT_DATA
+                && !self.var_index.contains_key(name)
+            {
                 return fail(
                     place,
                     format!("`{src}` reads `{name}`, which is not declared"),
@@ -930,12 +1129,68 @@ impl Compiler<'_> {
                 format!("`{src}` asks In('{id}'), but there is no such state"),
             );
         }
+        // The population functions name their population, state and variable as literals, so
+        // what each expression reads is known before the run.
+        let mut populations = Vec::new();
+        let mut refs = Vec::new();
+        let mut bad = None;
+        let mut reads_time = false;
+        data::walk(&e, &mut |x| {
+            let Expr::Provided(f, args) = x else { return };
+            if f == "time" {
+                reads_time = true;
+            }
+            if !data::POPULATION_FUNCTIONS.contains(&f.as_str()) {
+                return;
+            }
+            let Some(p) = literal(args, 0) else {
+                bad.get_or_insert_with(|| format!("{f}() names its population in quotes"));
+                return;
+            };
+            populations.push(p.to_string());
+            let what = match f.as_str() {
+                "population-size" => Some(RefWhat::Population),
+                "population-count" => literal(args, 1).map(|s| RefWhat::State(s.to_string())),
+                "population-sum" | "population-mean" => {
+                    literal(args, 1).map(|v| RefWhat::Variable(v.to_string()))
+                }
+                _ => literal(args, 2).map(|v| RefWhat::Variable(v.to_string())),
+            };
+            match what {
+                Some(what) => refs.push(PopRef {
+                    population: p.to_string(),
+                    what,
+                    place: place.to_string(),
+                }),
+                None => {
+                    bad.get_or_insert_with(|| {
+                        format!("{f}() names its state or variable in quotes")
+                    });
+                }
+            }
+        });
+        if let Some(message) = bad {
+            return fail(place, format!("`{src}`: {message}"));
+        }
+        populations.sort();
+        populations.dedup();
+        self.refs.extend(refs);
         let index = self.sites.len() as u32;
         self.sites.push(site.to_string());
         Ok(Code {
             expr: e,
             site: index,
+            populations,
+            reads_time,
         })
+    }
+
+    fn population(&mut self, population: &str, place: &str) {
+        self.refs.push(PopRef {
+            population: population.to_string(),
+            what: RefWhat::Population,
+            place: place.to_string(),
+        });
     }
 
     fn block(
@@ -985,9 +1240,62 @@ impl Compiler<'_> {
                     None => None,
                 },
             },
+            Action::Create { population } => {
+                self.population(population, place);
+                Exec::Create(population.clone())
+            }
+            Action::Remove { population, serial } => {
+                self.population(population, place);
+                Exec::Remove {
+                    population: population.clone(),
+                    serial: self.code(serial, place, site)?,
+                }
+            }
             Action::SendSpec(s) => {
                 let event = Self::event_name(&s.event, place)?;
+                let data = match &s.data {
+                    Some(d) => Some(self.code(d, place, &format!("{site}/data"))?),
+                    None => None,
+                };
+                if let Some(to) = &s.to {
+                    if s.target == Target::Internal || s.delay != Delay::None || s.id.is_some() {
+                        return fail(
+                            place,
+                            "a message to other agents is delivered at once: it takes no delay, \
+                             id or internal target",
+                        );
+                    }
+                    self.population(to.population(), place);
+                    let to = match to {
+                        To::Agent { population, serial } => ToExec::Agent {
+                            population: population.clone(),
+                            serial: self.code(serial, place, &format!("{site}/to"))?,
+                        },
+                        To::Random { population } => {
+                            let index = self.sites.len() as u32;
+                            self.sites.push(format!("{site}/pick"));
+                            ToExec::Random {
+                                population: population.clone(),
+                                site: index,
+                            }
+                        }
+                        To::All { population } => ToExec::All {
+                            population: population.clone(),
+                        },
+                    };
+                    return Ok(Exec::SendSpec(SendExec {
+                        event,
+                        id: None,
+                        internal: false,
+                        delay: DelayExec::None,
+                        to: Some(to),
+                        data,
+                    }));
+                }
                 let internal = s.target == Target::Internal;
+                if internal && data.is_some() {
+                    return fail(place, "a send to the internal queue carries no data");
+                }
                 if internal && s.delay != Delay::None {
                     return fail(place, "a send to the internal queue takes no delay");
                 }
@@ -1000,6 +1308,15 @@ impl Compiler<'_> {
                     Delay::Expr(e) => DelayExec::Expr(self.code(e, place, site)?),
                     Delay::Rate(e) => {
                         let code = self.code(e, place, site)?;
+                        if !code.populations.is_empty() || code.reads_time {
+                            return fail(
+                                place,
+                                format!(
+                                    "the rate `{e}` reads a population or the time, but a rate \
+                                     is drawn again only when the agent's own variables change"
+                                ),
+                            );
+                        }
                         let mut reads: Vec<u32> = code
                             .expr
                             .references()
@@ -1016,6 +1333,8 @@ impl Compiler<'_> {
                     id: s.id.clone(),
                     internal,
                     delay,
+                    to: None,
+                    data,
                 })
             }
         })
