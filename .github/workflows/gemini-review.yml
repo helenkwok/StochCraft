@@ -59,7 +59,7 @@ jobs:
           # 0.70.0 cannot install extensions: its git library refuses the GIT_CONFIG_SYSTEM
           # override the CLI itself sets. 0.69.0 is the last release before that library update.
           gemini_cli_version: '${{ vars.GEMINI_CLI_VERSION || ''0.69.0'' }}'
-          gemini_debug: '${{ fromJSON(vars.GEMINI_DEBUG || vars.ACTIONS_STEP_DEBUG || false) }}'
+          gemini_debug: true # TEMP diagnostic run
           gemini_model: '${{ vars.GEMINI_MODEL }}'
           google_api_key: '${{ secrets.GOOGLE_API_KEY }}'
           use_gemini_code_assist: '${{ vars.GOOGLE_GENAI_USE_GCA }}'
