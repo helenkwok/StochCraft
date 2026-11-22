@@ -656,6 +656,27 @@ fn charts_with_mistakes_are_refused() {
                 .child(StateSpec::state("p"))),
             "default target is a history state",
         ),
+        // A history target with another target inside its parent (here the history's default
+        // enters R1 at x while the other target is y, also in R1).
+        (
+            ChartSpec::new("bad")
+                .state(StateSpec::state("a").transition(TransitionSpec::on("e").to("H").to("y")))
+                .state(
+                    StateSpec::parallel("P")
+                        .child(StateSpec::history(
+                            "H",
+                            History::Shallow,
+                            TransitionSpec::eventless().to("R1").to("R2"),
+                        ))
+                        .child(
+                            StateSpec::state("R1")
+                                .child(StateSpec::state("x"))
+                                .child(StateSpec::state("y")),
+                        )
+                        .child(StateSpec::state("R2").child(StateSpec::state("z"))),
+                ),
+            "inside the parent of its history state",
+        ),
         // Targets that cannot be active together.
         (
             ChartSpec::new("bad")

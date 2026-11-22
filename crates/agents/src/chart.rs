@@ -767,6 +767,27 @@ fn check_together(nodes: &[Node], targets: &[u32], place: &str) -> Result<(), Ch
     let id = |s: u32| nodes.get(s as usize).map_or("", |n| n.id.as_str());
     for (k, &a) in targets.iter().enumerate() {
         for &b in &targets[k + 1..] {
+            // A history state stands for states inside its parent, chosen only when it is
+            // entered (stored or by its default), so no other target may lie in that parent: the
+            // two could leave a compound state with two active children.
+            for (h, other) in [(a, b), (b, a)] {
+                let hist = nodes
+                    .get(h as usize)
+                    .filter(|n| matches!(n.kind, NodeKind::History(_)));
+                if let Some(parent) = hist.and_then(|n| n.parent)
+                    && is_descendant(nodes, other, parent)
+                {
+                    return fail(
+                        place,
+                        format!(
+                            "its state `{}` lies inside the parent of its history state `{}`, \
+                             which already decides the states entered there",
+                            id(other),
+                            id(h)
+                        ),
+                    );
+                }
+            }
             if a == b || is_descendant(nodes, a, b) || is_descendant(nodes, b, a) {
                 return fail(
                     place,
@@ -792,7 +813,8 @@ fn check_together(nodes: &[Node], targets: &[u32], place: &str) -> Result<(), Ch
                 return fail(
                     place,
                     format!(
-                        "its states `{}` and `{}` cannot be active together: only states in                          different regions of a parallel state can",
+                        "its states `{}` and `{}` cannot be active together: only states in \
+                         different regions of a parallel state can",
                         id(a),
                         id(b)
                     ),
