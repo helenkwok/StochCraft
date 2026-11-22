@@ -507,6 +507,32 @@ fn a_connection_without_the_token_runs_nothing_and_is_closed() {
     assert_refused(None, false);
 }
 
+/// What a web page can send to a local port without a preflight (a `text/plain` POST) carries a
+/// request in its body: refused at its first line, and the body is never run.
+#[test]
+fn an_http_post_with_a_request_in_its_body_runs_nothing() {
+    use std::io::{BufRead, BufReader, Write};
+    let (addr, calls) = control::listen_with_token(0, TOKEN, || {}).unwrap();
+    let stream = std::net::TcpStream::connect(addr).unwrap();
+    let mut w = stream.try_clone().unwrap();
+    let body = r#"{"id":1,"method":"engine.execute","params":{"command":"file.save","params":{"path":"pwned.bpmn"}}}"#;
+    let request = format!(
+        "POST / HTTP/1.1\r\nHost: 127.0.0.1\r\nOrigin: https://example.com\r\n\
+         Content-Type: text/plain\r\nContent-Length: {}\r\n\r\n{body}\n",
+        body.len() + 1
+    );
+    // All at once, as a browser sends it; the channel may reset the connection while the rest is
+    // unread, so its answer may not arrive, but if it does it is a refusal.
+    let _ = w.write_all(request.as_bytes());
+    let mut reply = String::new();
+    if BufReader::new(stream).read_line(&mut reply).is_ok() && !reply.is_empty() {
+        let reply: Value = serde_json::from_str(&reply).unwrap();
+        assert_eq!(reply["error"]["code"], "unauthorized", "{reply}");
+    }
+    std::thread::sleep(std::time::Duration::from_millis(200));
+    assert!(calls.try_recv().is_err(), "the body was run");
+}
+
 #[test]
 fn the_right_token_works_and_the_cli_side_is_told_when_it_is_wrong() {
     let addr = app_with_control().to_string();
