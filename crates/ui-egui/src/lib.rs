@@ -26,6 +26,7 @@ mod dashboard;
 mod decide;
 mod documents;
 pub use autosave::Autosave;
+pub use documents::OpenTicket;
 mod editor;
 pub mod form;
 mod guide;
@@ -40,6 +41,7 @@ mod prefs;
 mod results;
 mod runs;
 mod sd;
+mod sd_canvas;
 mod start;
 mod tabs;
 pub mod theme;
@@ -869,6 +871,8 @@ pub struct App {
     selected: Option<String>,
     /// The flowchart's view, its multiple selection and its clipboard.
     canvas: canvas::Canvas,
+    /// A system dynamics model's diagram: its view, tool, selection and half-typed fields.
+    sd_canvas: sd_canvas::SdCanvas,
     /// A run being watched on the canvas (M3.5).
     watching: Option<live::Watching>,
     /// The engine revision of the model last validated, and its problems, so a frame validates
@@ -953,12 +957,25 @@ pub struct App {
     applied_theme: Option<ThemeChoice>,
     /// The shell shows the menus in the system's menu bar (macOS), not in the window.
     native_menu: bool,
-    /// The digest of the model last handed out as a recovery copy.
+    /// The digest of the model last handed out as this session's recovery copy.
     autosaved: Option<String>,
-    /// The recovery copy can go (a damaged one, or the user discarded it).
+    /// This session's own recovery copy can go (it was handed out and nothing is unsaved now,
+    /// but the shell could not remove it).
     autosave_clear_pending: bool,
-    /// A recovery copy found at start, waiting for the user's answer.
-    recovery: Option<Value>,
+    /// Recovery copies left by sessions that are gone, found at start, waiting for the user's
+    /// answer: each is its slot's name (the shell's) and the copy. Asked about one at a time.
+    recovery: std::collections::VecDeque<(String, Value)>,
+    /// Slots of recovery copies this session recovered, kept until its own copy of the recovered
+    /// model is written (or it has nothing unsaved any more), so a crash in between loses nothing.
+    recovery_held: Vec<String>,
+    /// Slots the shell can remove now (recovered and now kept by this session, discarded, or
+    /// damaged): [`App::take_dropped_copies`].
+    recovery_drops: Vec<String>,
+    /// The slots of `recovery_held` that the last [`Autosave::Write`] released, put back if its
+    /// write fails.
+    recovery_released: Vec<String>,
+    /// Counts the files being opened ([`App::begin_open`]): a newer one makes older ones stale.
+    open_serial: u64,
     /// The user chose to quit (discarding any changes): no recovery copy is kept.
     quitting: bool,
     /// Settings ▸ Keyboard Shortcuts…, while it is open (craft-keymap's dialog).
@@ -1005,6 +1022,7 @@ impl App {
             names_in_english: Vec::new(),
             selected: None,
             canvas: canvas::Canvas::default(),
+            sd_canvas: sd_canvas::SdCanvas::default(),
             watching: None,
             problems_of: None,
             drafts: std::collections::HashMap::new(),
@@ -1049,7 +1067,11 @@ impl App {
             shortcuts_dialog: None,
             autosaved: None,
             autosave_clear_pending: false,
-            recovery: None,
+            recovery: std::collections::VecDeque::new(),
+            recovery_held: Vec::new(),
+            recovery_drops: Vec::new(),
+            recovery_released: Vec::new(),
+            open_serial: 0,
             quitting: false,
             title_bar: None,
             numbers: form::messages(craft_ui::localized::LocaleNumbers::new(
@@ -1211,6 +1233,11 @@ fn change_label(command: &str) -> &str {
         "mc.correlation.set" => "Change Correlation",
         "mc.set" => "Monte Carlo Settings",
         "layout.set" => "Move",
+        "sd.variable.add" => "Add Variable",
+        "sd.variable.set" => "Edit Variable",
+        "sd.variable.remove" => "Remove Variable",
+        "sd.specs.set" => "Simulation Settings",
+        "sd.layout.set" => "Change Diagram",
         "batch" => "Changes",
         "paste" => "Paste",
         "delete" => "Delete",

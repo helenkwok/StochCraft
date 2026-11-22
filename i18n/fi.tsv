@@ -940,7 +940,6 @@ unit	yr	v
 	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	Tämä on ensimmäinen mallisi. Tulosten ensimmäiset rivit kertovat, mitä ajo havaitsi; Ohje ▸ Mitä tulokset tarkoittavat selittää jokaisen luvun.
 # Which inputs matter in the Monte Carlo results (ROADMAP M4.1, part 3a)
 	Which inputs matter	Mitkä syötteet ovat tärkeitä
-	{output} depends most on {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile.	{output} riippuu eniten syötteestä {input}: se kulkee arvosta {low} arvoon {high}, kun {input} kulkee 10. persentiilistaan 90. persentiiliinsä.
 	Each input from its 10th to its 90th percentile, with the others at their medians	Kukin syöte 10. persentiilistaan 90. persentiiliinsä, muut mediaaneillaan
 	Base {value}	Perusarvo {value}
 	A correlated input's figure includes the effect of the inputs it is correlated with.	Korreloivan syötteen luku sisältää niiden syötteiden vaikutuksen, joiden kanssa se korreloi.
@@ -1369,7 +1368,6 @@ unit	yr	v
 	The model: its settings and variables	Malli: sen asetukset ja muuttujat
 	System dynamics model	Systeemidynamiikan malli
 	Variables	Muuttujat
-	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	Voit muuttaa tätä mallia komennoilla, agentin kautta MCP-palvelimen avulla tai komentoriviltä. Muokkaus piirtoalueella tulee seuraavaksi.
 	From {start} to {stop}, in steps of {dt}, by the {method} method.	Ajanhetkestä {start} hetkeen {stop}, {dt} askelin, menetelmällä {method}.
 	Notes from the file	Tiedoston huomautukset
 	Equation	Yhtälö
@@ -1420,6 +1418,30 @@ unit	yr	v
 	The estimated chance that {output} is more than {value} is {percent}.	Arvioitu todennäköisyys sille, että {output} on yli {value}, on {percent}.
 	The estimated chance that {output} is less than {value} is {percent}.	Arvioitu todennäköisyys sille, että {output} on alle {value}, on {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	Niiden välillä ei ole leveyttä, mitä millään arviolla ei ole, joten tavallinen tulos jää voimaan.
+	{output} changes most with {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile, the other inputs at their medians.	{output} muuttuu eniten muuttujan {input} mukaan: se kulkee arvosta {low} arvoon {high}, kun {input} kulkee 10. persentiilistaan 90. persentiiliinsa ja muut syötteet ovat mediaaneissaan.
+	No variation was observed, so there is no interval for the mean; a rare event the trials did not reach could still move it.	Vaihtelua ei havaittu, joten keskiarvolle ei ole väliä; harvinainen tapahtuma, johon kokeet eivät yltäneet, voisi silti siirtää sitä.
+	They narrowed the interval by {percent}, but a mean given for a control is far from the trials' mean, so the plain result stands.	Ne kavensivat väliä {percent}, mutta kontrollille annettu keskiarvo on kaukana kokeiden keskiarvosta, joten tavallinen tulos pätee.
+	The output does not move in one direction with {inputs} (its value at the median is outside its values at the 10th and 90th percentiles), so the swing understates the effect.	Tulos ei liiku yhteen suuntaan syötteen {inputs} mukana (sen arvo mediaanissa on sen 10. ja 90. persentiilin arvojen ulkopuolella), joten heilahdus aliarvioi vaikutuksen.
+	Did not open {file}: a different model was opened in the meantime	Tiedostoa {file} ei avattu: välissä avattiin toinen malli
+	Select	Valitse
+	Link	Linkki
+	Initial value	Alkuarvo
+	Click the diagram to place a stock.	Aseta varanto napsauttamalla kaaviota.
+	Click the diagram to place an auxiliary.	Aseta apumuuttuja napsauttamalla kaaviota.
+	Drag from a stock, or from empty space, to another stock or empty space to draw a flow.	Piirrä virta vetämällä varannosta tai tyhjästä kohdasta toiseen varantoon tai tyhjään kohtaan.
+	Drag from one variable to another to show that the second uses the first.	Vedä muuttujasta toiseen osoittaaksesi, että jälkimmäinen käyttää edellistä.
+	Click a variable to select it and edit it here. Drag a variable to move it.	Valitse muuttuja ja muokkaa sitä täällä napsauttamalla sitä. Siirrä muuttujaa vetämällä.
+	Moved {name}	Siirrettiin {name}
+	Added {kind}: {name}	Lisättiin {kind}: {name}
+	Edited {name}	Muokattiin {name}
+	Removed {name}	Poistettiin {name}
+	Linked {from} to {to}	Linkitettiin {from} kohteeseen {to}
+	Add Variable	Lisää muuttuja
+	Edit Variable	Muokkaa muuttujaa
+	Remove Variable	Poista muuttuja
+	Simulation Settings	Simulaation asetukset
+	Change Diagram	Muuta kaaviota
+	You can change this model on the Diagram tab, or with commands, from an agent through the MCP server or from the command line.	Voit muuttaa tätä mallia Kaavio-välilehdellä tai komennoilla, agentilta MCP-palvelimen kautta tai komentoriviltä.
 	Inconclusive at current precision	Ei ratkaisevaa nykyisellä tarkkuudella
 	No difference detected	Eroa ei havaittu
 	Agrees within ±{tolerance}	Täsmää rajoissa ±{tolerance}

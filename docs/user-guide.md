@@ -512,15 +512,21 @@ On the **Model** tab:
   moves with the output, or made the interval wider, it says so and the plain result stays. The
   percentiles, histogram and extremes are not corrected. A constant and a count with a very large
   spread cannot be controls, with the reason in the row. For an earlier output the mean you give
-  must be exact: the window warns when the trials are far from it, and a wrong mean biases the
-  corrected result.
+  must be exact: a wrong mean biases the corrected result, and gives a narrow interval around a
+  wrong value. When the trials are far from a mean you gave, the window warns, keeps the plain
+  mean and chance as the headline however much narrower the corrected interval is, and shows
+  the corrected figures only beside it (the **Mean** and **Controlled mean** rows); the command
+  line labels them "biased, not used".
 - **Trials and sampling:** the number of trials (10,000 for a new model), the seed, and the
   sampling. **Latin hypercube** cuts each input's range into equally likely strata (the same
   chance of a draw in each, not equally spaced values) and draws once from each, which usually
   makes the results more precise; it does not promise fewer trials for every output.
   **Antithetic pairs** make trials two at a time, the second from the opposite end of every
   input's range from the first (where the first drew the 30th percentile, the second draws the
-  70th), and the mean and its ± are then of the pairs' means (a pair where one trial gave no number counts as that other trial alone, and a pair with neither is left out); for an output that rises or falls with its inputs the pair's errors tend to cancel,
+  70th), and the mean is the mean of all the valid trials, with a ± across the pairs (they
+  are the independent units; where a pair has lost a trial that gave no number, the ± is the
+  ratio estimator's, which allows for pairs of one trial and of two, and a pair with neither is
+  left out); for an output that rises or falls with its inputs the pair's errors tend to cancel,
   so the results are usually more precise for the same trials, but for an output that peaks
   in the middle of an input's range they may not be, and they cannot be used with correlated
   inputs, which reorder the trials. **Quasi-random (Sobol)** draws spread the trials evenly
@@ -554,15 +560,22 @@ The **Results** tab answers the question first:
   independent), and the trials run in whole batches: 2,500 trials asked for run as 3,000, and the
   results say so. With antithetic pairs the two trials of a pair depend on each other and the
   pairs do not, so it is across pairs. How many batches or pairs the ± is across is in the same
-  place; with fewer than two there is no ±.
+  place; with fewer than two there is no ±. Where every trial (or batch, or pair) gave the same
+  value, the results say "No variation was observed" and give no ± at all, not a ± of 0: a
+  rare event that none of the trials reached looks exactly like an output that cannot vary, so
+  the run cannot show the mean is exact.
 - The line under **Results** gives the trials, the seed and the sampling, and how a run with
   **More until precise enough** stopped. **Export table (CSV)** saves a row per output.
   With controls, the lines under an output's finding name them and say what they did, and its numbers
   have a **Controlled mean** row; the CSV (and `run --format csv`) add the controlled mean, its
   half-width, how much narrower it is and the controlled chance of meeting the target.
-- **Which inputs matter**, for each output, says in words which input it depends on most: "duration
-  depends most on build: it goes from 29.02 to 38.58 days as build goes from its 10th to its 90th
-  percentile". Under it, a tornado chart: one bar for each input, from the output with that input at
+- **Which inputs matter**, for each output, says in words which input changes it most: "duration
+  changes most with build: it goes from 29.02 to 38.58 days as build goes from its 10th to its 90th
+  percentile, the other inputs at their medians". That is the largest change between the two
+  endpoints, not the largest share of the variation (the shares, below, are that): an input
+  that moves the output up and down along its range (a square, say) can show a small or no
+  swing, so the results name each input whose output at its median lies outside its two
+  endpoint values and say the swing understates it. Under it, a tornado chart: one bar for each input, from the output with that input at
   its 10th percentile to the output with it at its 90th, and every other input at its median (the
   median, not the mean, so a skewed input swings about the same middle either way; this is the
   swing of decision analysis, Clemen and Reilly, *Making Hard Decisions*). The widest bar is first,
@@ -579,7 +592,10 @@ The **Results** tab answers the question first:
   pointer on a share for its 95% interval. It runs on request, because it evaluates the model
   1,000 × (inputs + 2) times (6,000 for 4 inputs, which the button says), with its progress in the
   status bar; **Cancel** or Esc stops it. It needs independent inputs, so a model with correlated
-  inputs has no button and the results say why. Editing the model takes the shares away.
+  inputs has no button and the results say why. An output that has no number for some of the
+  evaluations (a division by zero for part of the inputs' ranges, say) gets no shares, with how
+  many of the evaluations lacked one, because the evaluations left out would depend on the
+  inputs; the other outputs keep theirs. Editing the model takes the shares away.
 
 ## System dynamics models
 
@@ -587,12 +603,12 @@ A system dynamics model is **stocks** (levels, such as customers or inventory) t
 drain through **flows** (rates), with **auxiliaries** (other quantities worked out from them),
 over time. It is an **XMILE** file (`.xmile` or `.stmx`): open it with **File ▸ Open…** or drop it
 on the window, or open the example **Product adoption** from the start page. A model that uses
-arrays or modules is refused, with the reason. As with a Monte Carlo model there are two tabs,
-**Model** and **Results**, and no canvas.
+arrays or modules is refused, with the reason. There are three tabs, **Model**, **Diagram** and
+**Results**.
 
-**Model** shows the model, and for now only shows it. You change it with commands, from an agent
-through the MCP server or from the command line (`stochcraft-cli`); the tab reads the model again
-whenever it changes. Editing it on the canvas comes next.
+**Model** shows the model: its settings, the checks' warnings and a table of its variables. You
+change it on the Diagram tab, or with commands, from an agent through the MCP server or from the
+command line (`stochcraft-cli`); the tab reads the model again whenever it changes.
 
 - Its name, and its settings in a sentence: from when to when, the time step and the method
   (Euler or fourth-order Runge-Kutta).
@@ -600,6 +616,32 @@ whenever it changes. Editing it on the canvas comes next.
   against a delay), or that none were found.
 - **Variables:** each one's kind (stock, flow or auxiliary), equation (for a stock, its starting
   value), units and, for a stock, the flows into and out of it.
+
+**Diagram** draws the model as stocks and flows and lets you edit it. Stocks are rectangles,
+auxiliaries circles, and a flow is a pipe (two parallel lines) with a bow-tie valve on it; where a
+flow has no stock at one end the pipe ends in a cloud. A thin curved arrow between two variables
+means the second uses the first in its equation. Names are under the shapes. Scroll to pan,
+Ctrl+scroll or pinch to zoom, drag the background to pan, and **Fit** brings the whole model into
+view.
+
+- **Select:** click a variable, or press Tab to go through them in name order (a ring shows where
+  the keyboard is). The panel beside the diagram shows its kind, name, equation (for a stock, its
+  initial value) and unit. Type in a field and press Enter, or move on, to change it; Escape gives
+  the change up. If the model cannot take it (an unknown name, an equation that depends on itself)
+  the reason is shown under the field and nothing changes.
+- **Move:** drag a stock, an auxiliary or a valve. The pipes at a stock follow it. Each move is
+  one step of **Undo**.
+- **Add:** pick **Stock** or **Auxiliary** and click the diagram to place one (or press Enter on
+  the diagram to put it in the middle); it is named Stock 1, Auxiliary 1… and starts at 0, for you to
+  edit. Pick **Flow** and drag from a stock, or from empty space (a cloud), to another stock or to
+  empty space; the stocks' inflows and outflows are set for you. Pick **Link** and drag from a
+  variable to another to draw a link; the next time the second variable's equation is edited, a
+  link its equation does not use is dropped, so edit the equation to use the first as well.
+- **Delete:** press Delete with a variable selected, or use the panel's **Delete** button. A
+  variable another equation uses, or a flow a stock lists, is refused, and the message says what
+  uses it. Escape puts the tool back to Select.
+- Every change is one step of Undo and Redo (Edit menu), named for what it did: Add Variable, Edit
+  Variable, Remove Variable or Change Diagram.
 
 **Results** runs the model. A model with no random function runs once, and shows at once. One with
 a random function (`NORMAL`, `RANDOM`) runs in replications: **Runs** and **Seed** choose how many

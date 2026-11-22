@@ -976,7 +976,7 @@ fn mc_record(context: &Value, r: &McResults, m: &MonteCarlo) -> Value {
         "correlation": "rank correlations induced by Iman and Conover's method (1982) in each batch, on van der Waerden scores with Pearson correlation 2 sin(πρ/6) for a rank correlation ρ",
         "uncertainty": uncertainty_text(r),
         "controls": "an output with controls has a controlled estimate beside its results (controlled): the coefficients b of Y - b(C - mu) are fitted by least squares on a pilot, the first batch of 1,000 trials (the first half for a run under 2,000 trials), whose trials are left out of the estimate; for a run of a fixed number of trials that makes it unbiased (a run that stops at a precision target can still be biased by the stopping rule, which judges the same trials); where trials are grouped by batch (Latin hypercube, Sobol, correlated inputs) the pilot is the whole first batch, so one batch gives no controlled estimate (two are needed, three for an interval), and antithetic runs round the pilot to whole pairs; a trial with no number in the output or a control withdraws the controlled estimate; the controlled mean and target probability, with their 95% intervals on the run's interval basis, come from the remaining trials; variance_ratio and narrowing compare the controlled interval with the uncontrolled one on those same trials. Percentiles, histogram and extremes are not controlled; a sequential stop is judged on the uncontrolled mean",
-        "influence": "per output and per input that is not a constant, widest swing first. base: the output with every input at its median. low and high: the output with that input at its 10th (p10) and its 90th (p90) percentile and every other input at its median (the tornado of decision analysis, Clemen and Reilly, Making Hard Decisions, 3rd ed., 2014); swing: |high - low|, null if either is not a number. No sampling is used, so these do not vary with the seed, the trials or the sampling, and they leave out what correlated inputs do together. rank_correlation: Spearman's, between the input and the output across the run's trials where the output has a number; for a correlated input it includes the effect of the inputs it is correlated with; null if either has no spread",
+        "influence": "per output and per input that is not a constant, widest swing first. base: the output with every input at its median. low and high: the output with that input at its 10th (p10) and its 90th (p90) percentile and every other input at its median (the tornado of decision analysis, Clemen and Reilly, Making Hard Decisions, 3rd ed., 2014); swing: |high - low|, null if either is not a number: the largest change between the two endpoints with the other inputs at their medians, not a share of the output's variance (the Sobol shares are). not_monotone: base lies outside low and high, so the output goes up and down along the input's range and the endpoints understate its effect or miss it (a square, say). No sampling is used, so these do not vary with the seed, the trials or the sampling, and they leave out what correlated inputs do together. rank_correlation: Spearman's, between the input and the output across the run's trials where the output has a number; for a correlated input it includes the effect of the inputs it is correlated with; null if either has no spread",
         "file_notes": context["file_notes"],
     })
 }
@@ -1003,13 +1003,13 @@ pub fn interval_text(r: &McResults) -> String {
 fn uncertainty_text(r: &McResults) -> &'static str {
     match r.interval {
         IntervalBasis::Trials => {
-            "plain random sampling with no correlations: the trials are independent, so the mean has the 95% Student-t interval across trials (half_width) and a target's probability Wilson's 95% score interval; percentiles by Hyndman and Fan's definition 7"
+            "plain random sampling with no correlations: the trials are independent, so the mean has the 95% Student-t interval across trials (half_width) and a target's probability Wilson's 95% score interval; percentiles by Hyndman and Fan's definition 7; half_width is null, with no_variation true, when every trial gave the same value (no variation was observed, which does not show that the mean is exact)"
         }
         IntervalBasis::Batches { .. } => {
-            "Latin hypercube or Sobol sampling or correlated inputs make the trials within a batch dependent, so each batch is one independent replicate (replicated Latin hypercube sampling, Owen, 1992; Glasserman, 2003, section 4.4; Sobol sampling is randomised quasi-Monte Carlo with an independent random linear matrix scramble and digital shift in each batch, Matousek, 1998, and Owen, 2003): the mean has the 95% Student-t interval on the batch means and a target's probability the 95% Student-t interval on the batch proportions, clamped to [0, 1], with batches - 1 degrees of freedom, and none with fewer than two batches; runs are whole batches; std_dev is across trials; percentiles by Hyndman and Fan's definition 7"
+            "Latin hypercube or Sobol sampling or correlated inputs make the trials within a batch dependent, so each batch is one independent replicate (replicated Latin hypercube sampling, Owen, 1992; Glasserman, 2003, section 4.4; Sobol sampling is randomised quasi-Monte Carlo with an independent random linear matrix scramble and digital shift in each batch, Matousek, 1998, and Owen, 2003): the mean has the 95% Student-t interval on the batch means and a target's probability the 95% Student-t interval on the batch proportions, clamped to [0, 1], with batches - 1 degrees of freedom, and none with fewer than two batches; runs are whole batches; std_dev is across trials; percentiles by Hyndman and Fan's definition 7; half_width is null, with no_variation true, when every batch gave the same mean (no variation was observed, which does not show that the mean is exact)"
         }
         IntervalBasis::Pairs { .. } => {
-            "antithetic sampling makes the two trials of a pair (u and 1 - u for every input) dependent, and the pairs independent (Glasserman, 2003, section 4.2): the mean has the 95% Student-t interval on the pair means and a target's probability the 95% Student-t interval on the pair proportions, clamped to [0, 1], with pairs - 1 degrees of freedom; runs are whole pairs; std_dev is across trials, so it is not the spread the interval is made from; percentiles by Hyndman and Fan's definition 7"
+            "antithetic sampling makes the two trials of a pair (u and 1 - u for every input) dependent, and the pairs independent (Glasserman, 2003, section 4.2): the mean is the mean of all the valid trials, with the 95% Student-t interval of the ratio estimator across pairs (Cochran, 1977, section 6.4: the pairs are clusters of 2 trials, or 1 where one has no number, and the interval allows for that; with every pair complete it is the interval on the pair means), and a target's probability the same on the pairs' hits, clamped to [0, 1], with pairs - 1 degrees of freedom; runs are whole pairs; std_dev is across trials, so it is not the spread the interval is made from; percentiles by Hyndman and Fan's definition 7. half_width is null, with no_variation true, when every pair gave the same value: no variation was observed, which does not show that the mean is exact"
         }
     }
 }
@@ -1056,6 +1056,7 @@ fn controlled_json(c: &stochcraft_mc::Controlled) -> Value {
         })).collect::<Vec<_>>(),
         "pilot_trials": c.pilot_trials,
         "correlation": c.correlation,
+        "mean_mismatch": c.controls.iter().any(|u| u.mismatch),
         "unavailable": c.unavailable,
         "estimate": estimate,
     })
@@ -1074,6 +1075,7 @@ fn output_json(o: &OutputResult) -> Value {
         "invalid": o.invalid,
         "mean": o.mean,
         "half_width": o.half_width,
+        "no_variation": o.no_variation,
         "interval_count": o.interval_count,
         "std_dev": o.std_dev,
         "min": o.min,
@@ -1090,6 +1092,7 @@ fn output_json(o: &OutputResult) -> Value {
                 "low": i.low,
                 "high": i.high,
                 "swing": i.swing(),
+                "not_monotone": i.not_monotone(o.influence.base),
                 "rank_correlation": i.rank_correlation,
             })).collect::<Vec<_>>(),
         },

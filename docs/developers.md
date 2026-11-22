@@ -27,6 +27,18 @@ In the browser, runs use a web worker for each core but one (up to 16), and the 
 installed and used offline. Every pull request gets a preview build, linked from the pull
 request.
 
+#### How the site is published
+
+`.github/workflows/pages.yml` builds the browser app and keeps the site folder as an Actions artifact
+(`site-main` for `main`, `site-pr-<number>` for each pull request from this repository, 30 days).
+Nothing is committed to a branch. `.github/workflows/pages-deploy.yml` runs after every Pages run and
+when a pull request closes (`pages-cleanup.yml` exists only to trigger it), takes the newest
+`site-main` for the root and the newest `site-pr-<number>` of each open pull request for
+`pr/<number>/`, and serves the result with `actions/deploy-pages`. A preview whose artifact has
+expired or whose build failed is absent. If `main` has had no build for 30 days there is no root to
+serve and the deploy fails, leaving the live site as it is: run the Pages workflow on `main` again.
+The repository's Pages source is "GitHub Actions". The old `gh-pages` branch is no longer written to.
+
 ### Fonts for the browser build
 
 Without more, the browser app has only IBM Plex and egui's faces, so Japanese, Korean, Chinese,
@@ -64,6 +76,20 @@ draw only with fonts the visitor's own system has.
 - `stochcraft-mcp` serves the engine's commands to AI agents over the Model Context Protocol.
 - `stochcraft-cli` runs models from the command line; the app (`apps/stochcraft`,
   `apps/stochcraft-web`, UI in `crates/ui-egui`) runs them in a window.
+
+### What a shell does for recovery and late files
+
+The window (`stochcraft-ui-egui`'s `App`) decides what is worth keeping; a shell decides where.
+Every window or tab is a session with a slot of its own: `App::autosave` returns the copy to
+write (`Autosave::Write`), to remove (`Clear`) or nothing (`Keep`), and the shell reports a
+failure with `App::autosave_write_failed` or `App::autosave_clear_failed` so the call is made
+again. At start the shell offers each copy left by a session that is gone with
+`App::offer_recovery(slot, copy)`, and after each autosave call removes the slots from
+`App::take_dropped_copies`. The desktop shell (`apps/stochcraft/src/recovery.rs`) tells a gone
+session by its lock file (`File::try_lock`); the browser shell (`apps/stochcraft-web`,
+`storage.rs`) by a time stamp the tab refreshes, with a few minutes' grace. A shell that reads a
+file in the background calls `App::begin_open` when it starts and hands the ticket back to
+`App::finish_open` with the bytes, which drops a stale completion.
 
 [architecture.md](architecture.md) has the layers and how they depend on each other, and
 [ROADMAP.md](../ROADMAP.md) what is done and what comes next.
@@ -236,7 +262,11 @@ maximum, and, with a target (`at_most` or `at_least`), the share of trials meeti
 95% interval; `--format json` adds a histogram, the cumulative curve, the percentiles
 P10 and P90. For each output the table and the JSON also say which inputs matter: a tornado of
 swings (the output with each input at its 10th and 90th percentile, the others at their
-medians) and the rank correlation of each input with it. `--until 1% --max 1000000` adds trials
+medians) and the rank correlation of each input with it. The table says "changes most with" for
+the widest swing, which is the largest change between those two endpoints and not the largest
+share of the variance (that is the Sobol share), and names each input whose output at its
+median is outside its two endpoint values (`not_monotone` in the JSON), where the swing
+understates or misses its effect. `--until 1% --max 1000000` adds trials
 until every output's mean is within ±1% of itself. Outputs are BPSim expressions with the inputs (and earlier outputs) as `$name`, the
 arithmetic of XPath and `min`, `max`, `sum`, `abs`, `sqrt`, `exp`, `log`, `pow`, `sin`, `cos`, `round` and
 `if(condition, then, else)`; a condition such as `$cost > 6000` gives 1 or 0 in each trial, so its
@@ -250,7 +280,11 @@ JSON has a `sobol` field. The command behind it is `mc.sobol` (`rows`, `seed`, w
 model's own by default, and `bootstrap`, 1,000 by default): per output its `variance`,
 `rows_used`, `rows_dropped`, `unavailable` (why it has no indices, if it has none) and for each
 input `first` and `total`, each with a `value` and an `interval`, besides `rows`, `evaluations`
-and the `constants` left out. The estimates are not clamped: a small sample can give one a little
+and the `constants` left out. An output with a row whose value is not a finite number in any of
+the evaluations the estimators compare (`rows_dropped` above 0) gets no indices, with the counts
+and the reason in `unavailable`: which rows are missing depends on the inputs, so leaving them
+out conditions the inputs and what is left does not estimate the shares of independent inputs.
+The other outputs keep their indices. The estimates are not clamped: a small sample can give one a little
 below 0 or above 1. The indices need independent inputs, so a model with correlated inputs is
 refused with an `invalid_model` error that says so; `run --sobol` then prints the reason (under
 `sobol.unavailable` in the JSON, on stderr for `--format csv`) and still prints the normal
@@ -296,9 +330,20 @@ record's `interval` says which, for example `Student-t across 12 independent Lat
 batches of 1000 trials`. Sobol sampling is judged the same way (each batch's scramble is
 independent, so its batch means are independent replicates; `interval_basis` is `batches`).
 Antithetic trials depend on their twin and not on the other pairs, so the interval is Student-t
-on the pair means, with one degree of freedom fewer than there are pairs (Glasserman, 2003,
-§4.2; `interval_basis` is `pairs`, and runs are whole pairs). The standard deviation is always across trials: it describes the
-output, not the precision of its mean.
+across the pairs, with one degree of freedom fewer than there are pairs (Glasserman, 2003,
+§4.2; `interval_basis` is `pairs`, and runs are whole pairs). The reported mean is the mean of
+all the valid trials. A pair with one trial that gave no number is a cluster of one trial, and
+averaging the pair means would give that lone trial the weight of a whole pair (the mean
+would then differ from the mean of the trials, and from a target's share of them), so the
+interval is the ratio estimator's, R = Σy_j / Σn_j over the pairs j that have a valid trial,
+with variance Σ(y_j − R n_j)² / ((k − 1) k n̄²) (Cochran, *Sampling Techniques*, 3rd ed., 1977,
+§6.4; the pairs are independent clusters of random size); where every pair is complete it is
+the interval on the pair means. A target's probability gets the same on the pairs' hits. A
+sequential stop judges the same numbers. The standard deviation is always across trials: it
+describes the output, not the precision of its mean. Where every value the interval is across
+is the same, `half_width` is `null` and `no_variation` is `true`: a width of 0 would claim the
+mean is exact, which a run cannot know (a rare event the trials did not reach gives the same
+picture).
 
 **Control variates** ([`stochcraft_mc::control`](../crates/mc/src/control.rs); Law, *Simulation
 Modeling and Analysis*, 5th ed., §11.3; Glasserman, 2003, §4.1; Nelson, 1990). An output can name
@@ -342,8 +387,11 @@ least 10% narrower); its `target` has the same for the probability. With too few
 run of one batch where intervals are across batches, `estimate` is `null` and `unavailable` says
 why. An input named only as a control is not reported as `unused_input`, and a replacing
 `mc.inputs.import` drops the controls of inputs it removes, as it drops their correlations; a
-control object with fields of both forms is refused. The window makes the controlled results the
-headline where `helped`, words a controlled chance as an estimate (never as a count of trials),
+control object with fields of both forms is refused. `controlled.mean_mismatch` is true when any
+control's is: the controlled estimate is then biased, and neither the window nor the command line
+lets it displace the plain headline (the window keeps the plain mean and chance and shows the
+controlled ones beside them; the table labels them "biased, not used"). The window makes the
+controlled results the headline where `helped` and no control is flagged, words a controlled chance as an estimate (never as a count of trials),
 and says so in words otherwise; `stochcraft_engine::mc::control_inputs` lists the inputs that can be controls.
 
 The input table goes out and back in as CSV:
@@ -381,8 +429,19 @@ stochcraft-cli exec changes.json --open queue.bpmn
 
 A system dynamics model is stocks (levels) and flows (rates) over time, read from an XMILE 1.0
 file (OASIS, 2015). It is opened, edited, run, saved and read through the engine and the command
-line; the window shows and runs it (the Model and Results tabs, `crates/ui-egui/src/sd.rs`), and
-the canvas comes next.
+line; the window shows, runs and edits it (the Model and Results tabs, `crates/ui-egui/src/sd.rs`, and
+the Diagram tab, the canvas, `crates/ui-egui/src/sd_canvas.rs`).
+
+The Diagram tab draws what `sd.get` gives (each variable's centre, size and, for a flow, its pipe, the
+stocks it leaves and enters, and the links) and sends every change as one engine command, so it
+undoes in one step: a drag on release is `sd.layout.set` (the engine moves the pipes at a stock),
+an added stock or auxiliary is `sd.variable.add` with a `position`, an added flow is
+`sd.variable.add` with `from_stock`/`into_stock`, a field of the side panel is `sd.variable.set`, a
+link is `sd.layout.set` with `add_connectors`, and Delete is `sd.variable.remove`. The undo labels
+are the commands' names, which `change_label` in `crates/ui-egui/src/lib.rs` words ("Add Variable",
+"Edit Variable", "Remove Variable", "Simulation Settings", "Change Diagram"). The canvas keeps its
+view, tool, selection and half-typed fields in `SdCanvas` and re-reads `sd.get` only when the
+engine's revision changes.
 
 ```bash
 stochcraft-cli run tests/models/sir.xmile                     # each variable at the end of the run

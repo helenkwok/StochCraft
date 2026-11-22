@@ -1063,10 +1063,22 @@ fn influence_lines(o: &Value, correlated: bool, out: &mut String) {
     {
         let _ = writeln!(
             out,
-            "{name} depends most on {input}: it goes from {low}{unit} to {high}{unit} as {input} goes from its 10th to its 90th percentile",
+            "{name} changes most with {input}: it goes from {low}{unit} to {high}{unit} as {input} goes from its 10th to its 90th percentile, the other inputs at their medians",
             input = s(&top["input"]),
             low = f(&top["low"]),
             high = f(&top["high"]),
+        );
+    }
+    let bent: Vec<&str> = inputs
+        .iter()
+        .filter(|i| i["not_monotone"] == true)
+        .map(|i| s(&i["input"]))
+        .collect();
+    if !bent.is_empty() {
+        let _ = writeln!(
+            out,
+            "{name} does not move in one direction with {} (its value at the median is outside its values at the 10th and 90th percentiles), so the swing understates the effect",
+            bent.join(", ")
         );
     }
     if let Some(base) = o["influence"]["base"].as_f64() {
@@ -1153,9 +1165,17 @@ control variates for {name}: {}",
         return;
     }
     let pct = |v: &Value| v.as_f64().map_or_else(|| "-".into(), |p| number(p * 100.0));
+    // Where a stated mean is far from the trials', the controlled figures are biased and the plain
+    // ones in the table stand.
+    let mismatch = controls.iter().any(|u| u["mean_mismatch"] == true);
+    let kind = if mismatch {
+        "controlled (biased, not used)"
+    } else {
+        "controlled"
+    };
     let _ = writeln!(
         out,
-        "controlled mean of {name}: {} ± {} (the coefficients were fitted on the first {} trials, which it leaves out; the same {} trials without the controls: {} ± {})",
+        "{kind} mean of {name}: {} ± {} (the coefficients were fitted on the first {} trials, which it leaves out; the same {} trials without the controls: {} ± {})",
         f(&e["mean"]),
         f(&e["half_width"]),
         c["pilot_trials"],
@@ -1165,6 +1185,10 @@ control variates for {name}: {}",
     );
     let correlation = c["correlation"].as_f64();
     let verdict = match e["narrowing"].as_f64() {
+        _ if mismatch => format!(
+            "the plain result stands: a mean given for a control is far from the trials' mean, so the controlled result is biased until it is corrected (the plain mean of {name} is {})",
+            f(&o["mean"])
+        ),
         Some(n) if n >= 0.1 => format!(
             "the controls narrowed the interval by {}%",
             (n * 100.0).round()
@@ -1185,7 +1209,7 @@ control variates for {name}: {}",
     if !t.is_null() {
         let _ = writeln!(
             out,
-            "controlled chance of meeting the target: {}% (95% interval {}% to {}%); without the controls on the same trials {}%",
+            "{kind} chance of meeting the target: {}% (95% interval {}% to {}%); without the controls on the same trials {}%",
             pct(&t["probability"]),
             pct(&t["interval"][0]),
             pct(&t["interval"][1]),
@@ -1285,6 +1309,13 @@ pub fn mc_table(name: &str, r: &Value) -> String {
                 "{}: {} trials gave no number (a division by zero, say) and are left out",
                 s(&o["name"]),
                 o["invalid"]
+            );
+        }
+        if o["no_variation"] == true {
+            let _ = writeln!(
+                out,
+                "{}: no variation was observed, so there is no interval for its mean; a rare event the trials did not reach could still move it",
+                s(&o["name"])
             );
         }
         // An interval across fewer values than the run has (trials with no number, batches
@@ -1914,7 +1945,15 @@ mod tests {
         });
         let out = mc_table("m", &r);
         assert!(
-            out.contains("duration depends most on build: it goes from 29 days to 38.6 days as build goes from its 10th to its 90th percentile"),
+            out.contains("duration changes most with build: it goes from 29 days to 38.6 days as build goes from its 10th to its 90th percentile, the other inputs at their medians"),
+            "{out}"
+        );
+        assert!(!out.contains("depends most"), "{out}");
+        assert!(!out.contains("one direction"), "{out}");
+        // An input the output goes up and down along is flagged.
+        r["outputs"][0]["influence"]["inputs"][1]["not_monotone"] = serde_json::json!(true);
+        assert!(
+            mc_table("m", &r).contains("duration does not move in one direction with design"),
             "{out}"
         );
         assert!(
@@ -1961,6 +2000,21 @@ mod tests {
         assert!(out.contains("coefficient 45.2"), "{out}");
         assert!(out.contains("controlled mean of cost: 5200 ± 4"), "{out}");
         assert!(out.contains("narrowed the interval by 63%"), "{out}");
+        // A stated mean the trials contradict: the controlled figures are labelled biased and the
+        // plain result stands, however much narrower they are.
+        r["outputs"][0]["mean"] = serde_json::json!(5201.0);
+        r["outputs"][0]["controlled"]["controls"][0]["mean_mismatch"] = serde_json::json!(true);
+        let out = mc_table("m", &r);
+        assert!(
+            out.contains("controlled (biased, not used) mean of cost"),
+            "{out}"
+        );
+        assert!(
+            out.contains("the plain result stands: a mean given"),
+            "{out}"
+        );
+        assert!(!out.contains("narrowed the interval by 63%"), "{out}");
+        r["outputs"][0]["controlled"]["controls"][0]["mean_mismatch"] = serde_json::json!(false);
         r["outputs"][0]["controlled"]["estimate"]["narrowing"] = serde_json::json!(0.02);
         r["outputs"][0]["controlled"]["correlation"] = serde_json::json!(0.08);
         let out = mc_table("m", &r);
@@ -1973,5 +2027,25 @@ mod tests {
         r["outputs"][0]["controlled"]["estimate"] = serde_json::Value::Null;
         r["outputs"][0]["controlled"]["unavailable"] = serde_json::json!("too short");
         assert!(mc_table("m", &r).contains("no controlled estimate: too short"));
+    }
+
+    /// An output whose trials show no spread says "no variation observed", not a zero-width
+    /// interval.
+    #[test]
+    fn an_mc_table_says_when_no_variation_was_observed() {
+        let r = serde_json::json!({
+            "trials": 10000,
+            "interval_basis": { "across": "pairs", "count": 5000 },
+            "record": { "interval": "Student-t across 5000 independent antithetic pairs of trials" },
+            "outputs": [{
+                "name": "y", "unit": "", "interval_count": 5000, "invalid": 0,
+                "mean": 1.0, "half_width": null, "no_variation": true,
+            }],
+        });
+        let out = mc_table("m", &r);
+        assert!(
+            out.contains("y: no variation was observed, so there is no interval for its mean"),
+            "{out}"
+        );
     }
 }

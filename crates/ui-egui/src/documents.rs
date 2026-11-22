@@ -10,6 +10,17 @@ use crate::{
     charts, comparable, extension, file_name, help, layout_view, view3d,
 };
 
+/// A file being read in the background, from [`App::begin_open`].
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct OpenTicket {
+    /// The request's number: a newer request makes this one stale.
+    serial: u64,
+    /// The document shown when the read began (`doc_gen`).
+    doc: u64,
+    /// The engine's revision then: it differs once the model has been edited.
+    revision: u64,
+}
+
 impl App {
     /// Opens a model file read from `path` and lists it under File ▸ Open Recent.
     pub fn open_path(&mut self, path: &str, bytes: &[u8]) {
@@ -170,6 +181,7 @@ impl App {
         self.help.read_results = false;
         self.selected = None;
         self.canvas = canvas::Canvas::default();
+        self.sd_canvas = crate::sd_canvas::SdCanvas::default();
         self.view3d = view3d::View3d::default();
         self.layout_view = layout_view::LayoutView::default();
         self.watching = None;
@@ -218,6 +230,40 @@ impl App {
             _ => {}
         }
         Ok(result)
+    }
+
+    /// A shell that reads a file in the background (the browser's picker, a dropped file) calls
+    /// this when it starts, and hands the ticket back to [`App::finish_open`] with what it read.
+    /// The completion may come late or out of order, so the ticket says which model was open and
+    /// which request was the newest when the read began.
+    pub fn begin_open(&mut self) -> OpenTicket {
+        self.open_serial += 1;
+        OpenTicket {
+            serial: self.open_serial,
+            doc: self.doc_gen,
+            revision: self.engine.revision(),
+        }
+    }
+
+    /// A file read in the background arrived (`dropped`: it was dropped on the window rather
+    /// than chosen in the picker).
+    ///
+    /// It is not opened if another file was asked for since, or the model was replaced
+    /// meanwhile (a stale completion is dropped, and the status bar says so). A picked file
+    /// opens at once only while the model is as it was when the picker was shown, since the
+    /// unsaved changes were asked about before that; if it was edited since, the question is
+    /// asked again, as for a dropped file, which is always asked about unsaved changes.
+    pub fn finish_open(&mut self, ticket: OpenTicket, name: &str, bytes: Vec<u8>, dropped: bool) {
+        if ticket.serial != self.open_serial || ticket.doc != self.doc_gen {
+            self.info(tf(
+                "Did not open {file}: a different model was opened in the meantime",
+                &[("file", file_name(name))],
+            ));
+        } else if dropped || ticket.revision != self.engine.revision() {
+            self.drop_file(name, bytes);
+        } else {
+            self.open_file(name, &bytes);
+        }
     }
 
     /// Opens a file dropped on the window, first asking about unsaved changes.

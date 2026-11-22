@@ -940,7 +940,6 @@ unit	yr	năm
 	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	Đây là mô hình đầu tiên của bạn. Những dòng đầu của “Kết quả” cho biết lần chạy đã tìm ra gì; Trợ giúp ▸ Ý nghĩa của kết quả giải thích từng con số.
 # Which inputs matter in the Monte Carlo results (ROADMAP M4.1, part 3a)
 	Which inputs matter	Đầu vào nào quan trọng
-	{output} depends most on {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile.	{output} phụ thuộc nhiều nhất vào {input}: nó đi từ {low} đến {high} khi {input} đi từ phân vị thứ 10 đến phân vị thứ 90 của nó.
 	Each input from its 10th to its 90th percentile, with the others at their medians	Mỗi đầu vào từ phân vị thứ 10 đến phân vị thứ 90, các đầu vào khác ở trung vị
 	Base {value}	Giá trị cơ sở {value}
 	A correlated input's figure includes the effect of the inputs it is correlated with.	Số liệu của một đầu vào có tương quan bao gồm tác động của các đầu vào mà nó có tương quan với.
@@ -1369,7 +1368,6 @@ unit	yr	năm
 	The model: its settings and variables	Mô hình: các thiết lập và biến của nó
 	System dynamics model	Mô hình động lực học hệ thống
 	Variables	Biến
-	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	Bạn có thể thay đổi mô hình này bằng lệnh, từ một tác tử qua máy chủ MCP hoặc từ dòng lệnh. Việc chỉnh sửa trên khung vẽ sẽ đến sau.
 	From {start} to {stop}, in steps of {dt}, by the {method} method.	Từ {start} đến {stop}, theo bước {dt}, bằng phương pháp {method}.
 	Notes from the file	Ghi chú từ tệp
 	Equation	Phương trình
@@ -1420,6 +1418,30 @@ unit	yr	năm
 	The estimated chance that {output} is more than {value} is {percent}.	Xác suất ước tính để {output} lớn hơn {value} là {percent}.
 	The estimated chance that {output} is less than {value} is {percent}.	Xác suất ước tính để {output} nhỏ hơn {value} là {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	Khoảng của chúng không có độ rộng, điều mà ước lượng nào cũng không có, nên kết quả thường được giữ nguyên.
+	{output} changes most with {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile, the other inputs at their medians.	{output} thay đổi nhiều nhất theo {input}: nó đi từ {low} đến {high} khi {input} đi từ phân vị thứ 10 đến phân vị thứ 90 của nó, các đầu vào khác ở trung vị của chúng.
+	No variation was observed, so there is no interval for the mean; a rare event the trials did not reach could still move it.	Không quan sát thấy biến thiên nào, nên không có khoảng cho giá trị trung bình; một sự kiện hiếm mà các lần thử chưa chạm tới vẫn có thể làm nó dịch chuyển.
+	They narrowed the interval by {percent}, but a mean given for a control is far from the trials' mean, so the plain result stands.	Chúng thu hẹp khoảng {percent}, nhưng giá trị trung bình được cho cho một biến kiểm soát lệch xa trung bình của các lần thử, nên kết quả thường vẫn được giữ.
+	The output does not move in one direction with {inputs} (its value at the median is outside its values at the 10th and 90th percentiles), so the swing understates the effect.	Đầu ra không đi theo một hướng với {inputs} (giá trị của nó tại trung vị nằm ngoài các giá trị tại phân vị thứ 10 và 90), nên biên độ dao động đánh giá thấp tác động.
+	Did not open {file}: a different model was opened in the meantime	Không mở {file}: trong lúc đó một mô hình khác đã được mở
+	Select	Chọn
+	Link	Liên kết
+	Initial value	Giá trị ban đầu
+	Click the diagram to place a stock.	Nhấp vào sơ đồ để đặt một kho.
+	Click the diagram to place an auxiliary.	Nhấp vào sơ đồ để đặt một biến phụ trợ.
+	Drag from a stock, or from empty space, to another stock or empty space to draw a flow.	Kéo từ một kho, hoặc từ khoảng trống, đến kho khác hoặc khoảng trống khác để vẽ một dòng.
+	Drag from one variable to another to show that the second uses the first.	Kéo từ biến này sang biến khác để cho thấy biến thứ hai dùng biến thứ nhất.
+	Click a variable to select it and edit it here. Drag a variable to move it.	Nhấp vào một biến để chọn và chỉnh sửa tại đây. Kéo biến để di chuyển.
+	Moved {name}	Đã di chuyển {name}
+	Added {kind}: {name}	Đã thêm {kind}: {name}
+	Edited {name}	Đã chỉnh sửa {name}
+	Removed {name}	Đã xóa {name}
+	Linked {from} to {to}	Đã liên kết {from} với {to}
+	Add Variable	Thêm biến
+	Edit Variable	Chỉnh sửa biến
+	Remove Variable	Xóa biến
+	Simulation Settings	Cài đặt mô phỏng
+	Change Diagram	Thay đổi sơ đồ
+	You can change this model on the Diagram tab, or with commands, from an agent through the MCP server or from the command line.	Bạn có thể thay đổi mô hình này trên tab Sơ đồ, hoặc bằng lệnh, từ một tác nhân qua máy chủ MCP hoặc từ dòng lệnh.
 	Inconclusive at current precision	Chưa kết luận được ở độ chính xác hiện tại
 	No difference detected	Không phát hiện khác biệt
 	Agrees within ±{tolerance}	Khớp trong phạm vi ±{tolerance}
