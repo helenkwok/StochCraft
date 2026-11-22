@@ -998,6 +998,13 @@ fields (`“Service time”`) are named in the messages by their own rows.
   decide" and "Agrees" in the code; those rows stay in the catalogs unused. Not reviewed by
   native speakers; the least certain are lo, th, ta, te, bn, ka, kk and sq.
 
+- The rows for the example "Arrivals that keep their distance" (its title, one-line description,
+  question and what it teaches) were machine-drafted from the plain meaning of the English, with
+  each catalog's own words for arrival, server, queue, wait and Poisson from the earlier example
+  cards; "Riemann zeta function" and "Poisson" are written as each language writes the names. Not
+  checked against any other source and not reviewed by native speakers; the least certain are lo,
+  th, ta, te, bn, ka, kk, hi and sq.
+
 **Adding or changing a string:** add the English in the code through `i18n::t` (or `tf`, `tn`),
 then add its row to each catalog here, or leave it out to show English until it is translated.
 Right-to-left languages are not offered until the layout is mirrored.

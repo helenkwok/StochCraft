@@ -1447,3 +1447,7 @@ unit	yr	ஆண்டு
 	Agrees within ±{tolerance}	±{tolerance} க்குள் பொருந்துகிறது
 	This is not evidence of agreement: set a tolerance to test for it.	இது பொருத்தத்திற்கான சான்று அல்ல: சோதிக்க ஒரு சகிப்பை அமைக்கவும்.
 	Tolerance (0 for none)	சகிப்பு (இல்லையெனில் 0)
+	Arrivals that keep their distance	இடைவெளி காக்கும் வருகைகள்
+	One server fed by the gaps between zeros of the Riemann zeta function, beside Poisson arrivals at the same rate.	ரீமான் ஜீட்டா சார்பின் பூஜ்யங்களுக்கு இடையிலான இடைவெளிகளில் வருகைகளைப் பெறும் ஒரு சேவையகம், அதே வீதத்திலான பாய்சான் வருகைகளுடன் ஒப்பிடப்படுகிறது.
+	Do arrivals that avoid bunching make a shorter queue?	கூட்டமாகச் சேர்வதைத் தவிர்க்கும் வருகைகள் குறுகிய வரிசையை உருவாக்குமா?
+	Same average rate, half the wait: arrivals that repel one another bunch up less than random ones.	அதே சராசரி வீதம், பாதி காத்திருப்பு: ஒன்றையொன்று விலக்கும் வருகைகள் சீரற்ற வருகைகளை விடக் குறைவாகக் கூட்டமாகச் சேர்கின்றன.

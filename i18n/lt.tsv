@@ -1447,3 +1447,7 @@ unit	yr	m.
 	Agrees within ±{tolerance}	Sutampa ±{tolerance} ribose
 	This is not evidence of agreement: set a tolerance to test for it.	Tai nėra sutapimo įrodymas: nustatykite leidžiamąją paklaidą, kad tai patikrintumėte.
 	Tolerance (0 for none)	Leidžiamoji paklaida (0 – jokios)
+	Arrivals that keep their distance	Atvykimai, laikantys atstumą
+	One server fed by the gaps between zeros of the Riemann zeta function, beside Poisson arrivals at the same rate.	Vienas aptarnavimo punktas, kuriam atvykimus lemia tarpai tarp Riemanno dzeta funkcijos nulių, šalia Puasono atvykimų tokiu pat dažniu.
+	Do arrivals that avoid bunching make a shorter queue?	Ar atvykimai, vengiantys susigrūdimo, sukuria trumpesnę eilę?
+	Same average rate, half the wait: arrivals that repel one another bunch up less than random ones.	Tas pats vidutinis dažnis, perpus mažiau laukimo: vienas kitą stumiantys atvykimai grupuojasi rečiau nei atsitiktiniai.

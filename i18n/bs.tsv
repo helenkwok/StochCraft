@@ -1447,3 +1447,7 @@ unit	yr	god.
 	Agrees within ±{tolerance}	Slaže se u granicama ±{tolerance}
 	This is not evidence of agreement: set a tolerance to test for it.	Ovo nije dokaz slaganja: zadajte toleranciju da to provjerite.
 	Tolerance (0 for none)	Tolerancija (0 za nijednu)
+	Arrivals that keep their distance	Dolasci koji drže razmak
+	One server fed by the gaps between zeros of the Riemann zeta function, beside Poisson arrivals at the same rate.	Jedan poslužitelj kojem dolaske određuju razmaci između nula Riemannove zeta funkcije, uz Poissonove dolaske iste učestalosti.
+	Do arrivals that avoid bunching make a shorter queue?	Prave li dolasci koji izbjegavaju grupisanje kraći red?
+	Same average rate, half the wait: arrivals that repel one another bunch up less than random ones.	Isti prosječni intenzitet, upola kraće čekanje: dolasci koji se međusobno odbijaju grupišu se rjeđe od slučajnih.

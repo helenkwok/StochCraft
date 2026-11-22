@@ -1447,3 +1447,7 @@ unit	yr	సం.
 	Agrees within ±{tolerance}	±{tolerance} లోపు సరిపోతుంది
 	This is not evidence of agreement: set a tolerance to test for it.	ఇది సరిపోలికకు రుజువు కాదు: పరీక్షించడానికి సహనాన్ని సెట్ చేయండి.
 	Tolerance (0 for none)	సహనం (లేకపోతే 0)
+	Arrivals that keep their distance	దూరం పాటించే రాకలు
+	One server fed by the gaps between zeros of the Riemann zeta function, beside Poisson arrivals at the same rate.	రీమాన్ జీటా ఫంక్షన్ శూన్యాల మధ్య ఖాళీలతో రాకలు అందుకునే ఒక సర్వర్, అదే రేటుతో వచ్చే పాయిసన్ రాకలతో పాటు.
+	Do arrivals that avoid bunching make a shorter queue?	గుంపులు కట్టకుండా తప్పించుకునే రాకలు తక్కువ క్యూను ఇస్తాయా?
+	Same average rate, half the wait: arrivals that repel one another bunch up less than random ones.	అదే సగటు రేటు, సగం నిరీక్షణ: ఒకదానినొకటి దూరంగా నెట్టుకునే రాకలు యాదృచ్ఛిక రాకల కంటే తక్కువగా గుంపులు కడతాయి.

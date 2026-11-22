@@ -1447,3 +1447,7 @@ unit	yr	წელი
 	Agrees within ±{tolerance}	ემთხვევა ±{tolerance}-ის ფარგლებში
 	This is not evidence of agreement: set a tolerance to test for it.	ეს ემთხვევის დასტური არ არის: შესამოწმებლად დააყენეთ დასაშვები გადახრა.
 	Tolerance (0 for none)	დასაშვები გადახრა (0 — არ არის)
+	Arrivals that keep their distance	დისტანციის დამცველი მოსვლები
+	One server fed by the gaps between zeros of the Riemann zeta function, beside Poisson arrivals at the same rate.	ერთი მომსახურე, რომელსაც მოსვლებს რიმანის ზეტა-ფუნქციის ნულებს შორის ინტერვალები განსაზღვრავს, იმავე სიხშირის პუასონის მოსვლებთან ერთად.
+	Do arrivals that avoid bunching make a shorter queue?	უფრო მოკლე რიგს ქმნის თუ არა ის მოსვლები, რომლებიც გროვდებას გაურბიან?
+	Same average rate, half the wait: arrivals that repel one another bunch up less than random ones.	იგივე საშუალო სიხშირე, ორჯერ ნაკლები ლოდინი: მოსვლები, რომლებიც ერთმანეთს განიზიდავენ, შემთხვევითზე ნაკლებად გროვდებიან.

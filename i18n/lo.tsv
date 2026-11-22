@@ -1447,3 +1447,7 @@ unit	yr	ປີ
 	Agrees within ±{tolerance}	ກົງກັນພາຍໃນ ±{tolerance}
 	This is not evidence of agreement: set a tolerance to test for it.	ນີ້ບໍ່ແມ່ນຫຼັກຖານຂອງການກົງກັນ: ກຳນົດຄ່າຍອມຮັບເພື່ອທົດສອບ.
 	Tolerance (0 for none)	ຄ່າຍອມຮັບ (0 ຖ້າບໍ່ມີ)
+	Arrivals that keep their distance	ການມາທີ່ຮັກສາໄລຍະຫ່າງ
+	One server fed by the gaps between zeros of the Riemann zeta function, beside Poisson arrivals at the same rate.	ເຄື່ອງໃຫ້ບໍລິການໜຶ່ງເຄື່ອງທີ່ຮັບການມາຕາມໄລຍະຫ່າງລະຫວ່າງສູນຂອງຟັງຊັນຊີຕາຂອງຣີມານ, ຄຽງຄູ່ກັບການມາແບບປັວຊອງທີ່ມີອັດຕາດຽວກັນ.
+	Do arrivals that avoid bunching make a shorter queue?	ການມາທີ່ຫຼີກເວັ້ນການກຸ່ມກັນເຮັດໃຫ້ແຖວສັ້ນລົງບໍ?
+	Same average rate, half the wait: arrivals that repel one another bunch up less than random ones.	ອັດຕາສະເລ່ຍເທົ່າກັນ, ລໍຖ້າເຄິ່ງໜຶ່ງ: ການມາທີ່ຍູ້ກັນອອກເກີດການກຸ່ມກັນໜ້ອຍກວ່າການມາແບບສຸ່ມ.

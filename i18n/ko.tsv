@@ -1447,3 +1447,7 @@ unit	yr	년
 	Agrees within ±{tolerance}	±{tolerance} 이내에서 일치
 	This is not evidence of agreement: set a tolerance to test for it.	이것은 일치의 증거가 아닙니다. 확인하려면 허용 오차를 설정하세요.
 	Tolerance (0 for none)	허용 오차(없으면 0)
+	Arrivals that keep their distance	간격을 지키는 도착
+	One server fed by the gaps between zeros of the Riemann zeta function, beside Poisson arrivals at the same rate.	리만 제타 함수의 영점 사이 간격으로 도착이 들어오는 서버 한 대를, 같은 도착률의 푸아송 도착과 나란히 놓습니다.
+	Do arrivals that avoid bunching make a shorter queue?	뭉치지 않으려는 도착은 대기열을 더 짧게 만들까요?
+	Same average rate, half the wait: arrivals that repel one another bunch up less than random ones.	평균 도착률은 같은데 대기는 절반: 서로 밀어내는 도착은 무작위 도착보다 덜 뭉칩니다.

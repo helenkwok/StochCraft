@@ -1447,3 +1447,7 @@ unit	yr	वर्ष
 	Agrees within ±{tolerance}	±{tolerance} के भीतर मेल खाता है
 	This is not evidence of agreement: set a tolerance to test for it.	यह मेल का प्रमाण नहीं है: इसे जाँचने के लिए सहनसीमा तय करें।
 	Tolerance (0 for none)	सहनसीमा (कोई नहीं के लिए 0)
+	Arrivals that keep their distance	दूरी बनाए रखने वाले आगमन
+	One server fed by the gaps between zeros of the Riemann zeta function, beside Poisson arrivals at the same rate.	एक सर्वर, जिसे रीमान ज़ेटा फलन के शून्यों के बीच के अंतरालों से आगमन मिलते हैं, उसी दर के पॉइसन आगमनों के साथ।
+	Do arrivals that avoid bunching make a shorter queue?	क्या गुच्छे बनने से बचने वाले आगमन छोटी कतार बनाते हैं?
+	Same average rate, half the wait: arrivals that repel one another bunch up less than random ones.	वही औसत दर, आधा इंतज़ार: एक-दूसरे को दूर धकेलने वाले आगमन यादृच्छिक आगमनों से कम गुच्छे बनाते हैं।
