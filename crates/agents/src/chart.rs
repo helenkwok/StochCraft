@@ -539,7 +539,7 @@ pub(crate) struct Transition {
 pub(crate) enum Exec {
     Assign { var: u32, code: Code },
     Raise(String),
-    SendSpec(SendExec),
+    SendSpec(Box<SendExec>),
     Cancel(String),
     Log { label: String, code: Option<Code> },
     Create(String),
@@ -1283,14 +1283,14 @@ impl Compiler<'_> {
                             population: population.clone(),
                         },
                     };
-                    return Ok(Exec::SendSpec(SendExec {
+                    return Ok(Exec::SendSpec(Box::new(SendExec {
                         event,
                         id: None,
                         internal: false,
                         delay: DelayExec::None,
                         to: Some(to),
                         data,
-                    }));
+                    })));
                 }
                 let internal = s.target == Target::Internal;
                 if internal && data.is_some() {
@@ -1328,14 +1328,14 @@ impl Compiler<'_> {
                         DelayExec::Rate { code, reads }
                     }
                 };
-                Exec::SendSpec(SendExec {
+                Exec::SendSpec(Box::new(SendExec {
                     event,
                     id: s.id.clone(),
                     internal,
                     delay,
                     to: None,
                     data,
-                })
+                }))
             }
         })
     }

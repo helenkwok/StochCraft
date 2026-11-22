@@ -291,9 +291,9 @@ fn the_stepped_mode_runs_its_phases_in_order() {
     for stepping in [Stepping::every(1.0), Stepping::every(1.0).random_order()] {
         let sim = simulate(&ring(&synchronous, stepping), 5, 1.0);
         assert_eq!(values(&sim), [4.0, 0.0, 1.0, 2.0, 3.0], "{stepping:?}");
-        let e = sim
-            .environment()
-            .map_or_else(|| panic!("no environment"), |a| a);
+        let Some(e) = sim.environment() else {
+            panic!("no environment");
+        };
         // Before the first step, no agent has stored a next value yet; after it, agent 0 has 4.
         assert_eq!(e.value("before").map(|v| v.number()), Some(-5.0));
         assert_eq!(e.value("after").map(|v| v.number()), Some(4.0));
