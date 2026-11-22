@@ -35,7 +35,7 @@ pub enum Step {
     /// A `<log>`: its label, then `: ` and its value if it has an expression.
     Log(String),
     /// An action failed; `error.execution` was put on the internal queue and the rest of its
-    /// block skipped (SCXML §5.10).
+    /// block skipped (SCXML §4.9).
     Error(String),
     /// A top-level final state was reached and the chart has ended.
     Done,

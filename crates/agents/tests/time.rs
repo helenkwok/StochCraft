@@ -3,9 +3,9 @@
 //! The rate checks compare the waiting times with the exponential distribution they should
 //! follow: the mean within four standard errors of 1 / rate (a band a correct sampler leaves
 //! about once in 16,000 seeds), and the Kolmogorov–Smirnov distance D below the asymptotic 1%
-//! critical value, sqrt(−ln(0.005) / 2) / √n = 1.6276 / √n (Kolmogorov's limiting
-//! distribution; e.g. Conover, *Practical Nonparametric Statistics*, 3rd ed., table A13). The
-//! seeds are fixed, so the checks are deterministic.
+//! critical value, sqrt(−ln(0.005) / 2) / √n = 1.6276 / √n (from Kolmogorov's limiting
+//! distribution, whose upper tail is 2 e^(−2x²) to within 2 × 10⁻⁹ here). The seeds are fixed, so
+//! the checks are deterministic.
 #![allow(clippy::panic)] // A chart that fails to build or run fails the test.
 
 use std::sync::Arc;

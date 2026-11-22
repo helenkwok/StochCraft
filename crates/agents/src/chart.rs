@@ -621,6 +621,10 @@ impl Chart {
             }
         }
         // The `<scxml>` element's initial transition: to the given states, or the first one.
+        // Appendix D enters it through `enterStates`, whose domain (`getTransitionDomain`) would
+        // look for a proper ancestor of the `<scxml>` element; it is made an internal transition
+        // from the root, and the root counts as compound there, so its domain is the root and
+        // the entry set is the targets and their ancestors below it.
         let place = format!("chart `{}`", spec.name);
         let mut targets = Vec::new();
         for id in &spec.initial {

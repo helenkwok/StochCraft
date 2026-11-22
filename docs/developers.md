@@ -637,7 +637,7 @@ each event handled by one complete macrostep in zero time (D18).
   popped.
 - A macrostep that takes more than 10,000 microsteps (`Agent::with_microstep_limit`) stops the run
   with `RunError::MicrostepLimit`, which names the latest transitions.
-- A failing action (a negative delay or rate) raises `error.execution`, as SCXML §5.10 says.
+- A failing action (a negative delay or rate) raises `error.execution` and skips the rest of its block, as SCXML §4.9 says.
 
 The tests (`crates/agents/tests`) work out the order of actions by hand for transitions between
 cousins, branches, history, parallel regions, internal transitions and conflicting transitions,

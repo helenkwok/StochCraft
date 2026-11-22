@@ -61,7 +61,7 @@
 //! an assignment to one, a target or `In()` naming no state, are refused by [`Chart::new`]. An
 //! action that fails as it runs (a delay or rate that is negative or not a number) puts
 //! `error.execution` on the internal queue, records [`Step::Error`] and skips the rest of its
-//! block, as SCXML §5.10 says.
+//! block, as SCXML §4.9 says.
 //!
 //! **Time** (ROADMAP D18): a send to the agent itself with a delay, or with none, becomes an
 //! event on the clock; [`Action::Cancel`] makes the pending sends with its id never arrive. A
