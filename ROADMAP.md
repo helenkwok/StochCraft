@@ -2273,7 +2273,9 @@ Part 2b, variance reduction, is done: two more samplings for the same trials, `a
 (Hammersley and Morton 1956; Glasserman 2003 §4.2): for an output that rises or falls with its
 inputs the pair's errors cancel (exp(U): the interval is about a fifth as wide as random
 sampling's with the same trials). The trials of a pair depend on each other and the pairs do
-not, so the interval is Student-t across the pair means and runs are whole pairs; correlated
+not, so the interval is Student-t across the pairs (the pair means where every pair is complete;
+where a pair has lost a trial to a value with no number, the mean stays the mean of the valid
+trials and the interval is the ratio estimator's, Cochran 1977 §6.4) and runs are whole pairs; correlated
 inputs are refused, as their reordering breaks the pairs. Sobol sampling is randomised
 quasi-Monte Carlo (`stochcraft_mc::qmc`): each batch of 1,000 takes the first points of the
 Sobol sequence with Joe and Kuo's direction numbers (2008, "new-joe-kuo-6.21201", 64 dimensions,
@@ -2311,6 +2313,18 @@ contradict by more than five standard errors is flagged. Checked against exact a
 X + Z the controlled variance is Var(Z) / Var(X + Z) of the plain one, several controls recover
 (2, −3), an unrelated control does no harm, exp(X) is unbiased over 400 seeds, every sampling's
 controlled interval covers, and each distribution allowed as a control draws its stated mean.
+Result validity (an outside review of 2026-11-22, each case checked against exact answers):
+a control whose stated mean the trials contradict no longer takes the headline in the window,
+and the command line labels its controlled figures "biased, not used"; an antithetic run
+with pairs that lost a trial keeps the mean of the valid trials (the pair means weighted a lone
+trial like a whole pair) with a ratio-estimator interval; a Sobol output with rows that have no
+finite value gets no indices, with the counts (the other outputs keep theirs); a normal
+truncated far in a tail (40 standard deviations out, where the tail probabilities underflow) is
+inverted on the logarithms of the tails, so Latin hypercube, antithetic and Sobol sampling and
+the tornado keep its mean; an output whose values show no spread says "No variation was
+observed" instead of giving a zero-width interval; and the tornado says "changes most with" (the
+largest change between the 10th and 90th percentile endpoints, not the largest share of the
+variance) and names an input the output goes up and down along (`not_monotone`).
 
 **What it is:** a model of a calculation, not a process. Inputs are distributions (a cost, a
 duration, a demand), outputs are expressions over them (a total cost, a finish date, a profit),

@@ -940,7 +940,6 @@ unit	yr	thn
 	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	Itulah model pertama Anda. Baris pertama Hasil menjelaskan temuan proses tersebut; Bantuan ▸ Arti Hasil menjelaskan setiap angka.
 # Which inputs matter in the Monte Carlo results (ROADMAP M4.1, part 3a)
 	Which inputs matter	Masukan mana yang penting
-	{output} depends most on {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile.	{output} paling bergantung pada {input}: nilainya bergerak dari {low} ke {high} saat {input} bergerak dari persentil ke-10 ke persentil ke-90.
 	Each input from its 10th to its 90th percentile, with the others at their medians	Setiap masukan dari persentil ke-10 ke persentil ke-90, dengan yang lain pada mediannya
 	Base {value}	Nilai dasar {value}
 	A correlated input's figure includes the effect of the inputs it is correlated with.	Angka untuk masukan yang berkorelasi mencakup pengaruh masukan yang berkorelasi dengannya.
@@ -1419,6 +1418,10 @@ unit	yr	thn
 	The estimated chance that {output} is more than {value} is {percent}.	Perkiraan peluang {output} lebih dari {value} adalah {percent}.
 	The estimated chance that {output} is less than {value} is {percent}.	Perkiraan peluang {output} kurang dari {value} adalah {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	Interval mereka tidak punya lebar, hal yang tidak dimiliki perkiraan mana pun, sehingga hasil biasa tetap dipakai.
+	{output} changes most with {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile, the other inputs at their medians.	{output} paling banyak berubah bersama {input}: nilainya bergerak dari {low} ke {high} saat {input} bergerak dari persentil ke-10 ke persentil ke-90, dengan input lain pada mediannya.
+	No variation was observed, so there is no interval for the mean; a rare event the trials did not reach could still move it.	Tidak ada variasi yang teramati, jadi tidak ada interval untuk rata-rata; kejadian langka yang tidak dicapai percobaan masih bisa menggesernya.
+	They narrowed the interval by {percent}, but a mean given for a control is far from the trials' mean, so the plain result stands.	Mereka mempersempit interval sebesar {percent}, tetapi rata-rata yang diberikan untuk sebuah kontrol jauh dari rata-rata percobaan, jadi hasil biasa tetap dipakai.
+	The output does not move in one direction with {inputs} (its value at the median is outside its values at the 10th and 90th percentiles), so the swing understates the effect.	Keluaran tidak bergerak ke satu arah bersama {inputs} (nilainya pada median berada di luar nilainya pada persentil ke-10 dan ke-90), jadi ayunan meremehkan pengaruhnya.
 	Did not open {file}: a different model was opened in the meantime	{file} tidak dibuka: model lain dibuka sementara itu
 	Select	Pilih
 	Link	Tautan

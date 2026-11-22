@@ -940,7 +940,6 @@ unit	yr	a
 	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	Aquest és el vostre primer model. Les primeres línies de Resultats diuen què ha trobat l'execució; Ajuda ▸ Què volen dir els resultats explica cada número.
 # Which inputs matter in the Monte Carlo results (ROADMAP M4.1, part 3a)
 	Which inputs matter	Quines entrades importen
-	{output} depends most on {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile.	{output} depèn sobretot de {input}: va de {low} a {high} quan {input} va del seu percentil 10 al seu percentil 90.
 	Each input from its 10th to its 90th percentile, with the others at their medians	Cada entrada del seu percentil 10 al seu percentil 90, amb les altres a la mediana
 	Base {value}	Valor base {value}
 	A correlated input's figure includes the effect of the inputs it is correlated with.	La xifra d'una entrada correlacionada inclou l'efecte de les entrades amb què està correlacionada.
@@ -1419,6 +1418,10 @@ unit	yr	a
 	The estimated chance that {output} is more than {value} is {percent}.	La probabilitat estimada que {output} sigui superior a {value} és {percent}.
 	The estimated chance that {output} is less than {value} is {percent}.	La probabilitat estimada que {output} sigui inferior a {value} és {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	El seu interval no té amplada, cosa que cap estimació no té, així que es manté el resultat senzill.
+	{output} changes most with {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile, the other inputs at their medians.	{output} canvia més amb {input}: va de {low} a {high} quan {input} va del seu 10è al seu 90è percentil, amb les altres entrades a la mediana.
+	No variation was observed, so there is no interval for the mean; a rare event the trials did not reach could still move it.	No s'ha observat cap variació, de manera que no hi ha cap interval per a la mitjana; un esdeveniment rar que les proves no han assolit encara la podria moure.
+	They narrowed the interval by {percent}, but a mean given for a control is far from the trials' mean, so the plain result stands.	Han estretit l'interval un {percent}, però la mitjana donada per a un control és lluny de la mitjana de les proves, de manera que es manté el resultat simple.
+	The output does not move in one direction with {inputs} (its value at the median is outside its values at the 10th and 90th percentiles), so the swing understates the effect.	La sortida no es mou en una sola direcció amb {inputs} (el seu valor a la mediana és fora dels seus valors al 10è i al 90è percentil), de manera que l'oscil·lació en subestima l'efecte.
 	Did not open {file}: a different model was opened in the meantime	No s'ha obert {file}: mentrestant s'ha obert un altre model
 	Select	Selecciona
 	Link	Enllaç

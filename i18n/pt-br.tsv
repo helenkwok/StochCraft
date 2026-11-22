@@ -940,7 +940,6 @@ unit	yr	a
 	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	Esse é o seu primeiro modelo. As primeiras linhas de Resultados dizem o que a execução encontrou; Ajuda ▸ O que os resultados significam explica cada número.
 # Which inputs matter in the Monte Carlo results (ROADMAP M4.1, part 3a)
 	Which inputs matter	Quais entradas importam
-	{output} depends most on {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile.	{output} depende mais de {input}: vai de {low} a {high} quando {input} vai do seu percentil 10 ao seu percentil 90.
 	Each input from its 10th to its 90th percentile, with the others at their medians	Cada entrada do seu percentil 10 ao seu percentil 90, com as outras na mediana
 	Base {value}	Valor base {value}
 	A correlated input's figure includes the effect of the inputs it is correlated with.	O número de uma entrada correlacionada inclui o efeito das entradas com as quais ela é correlacionada.
@@ -1419,6 +1418,10 @@ unit	yr	a
 	The estimated chance that {output} is more than {value} is {percent}.	A probabilidade estimada de {output} ser maior que {value} é {percent}.
 	The estimated chance that {output} is less than {value} is {percent}.	A probabilidade estimada de {output} ser menor que {value} é {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	O intervalo deles não tem largura, algo que nenhuma estimativa tem, então o resultado simples permanece.
+	{output} changes most with {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile, the other inputs at their medians.	{output} muda mais com {input}: vai de {low} a {high} quando {input} vai do seu percentil 10 ao seu percentil 90, com as outras entradas nas suas medianas.
+	No variation was observed, so there is no interval for the mean; a rare event the trials did not reach could still move it.	Nenhuma variação foi observada, então não há intervalo para a média; um evento raro que os testes não alcançaram ainda poderia movê-la.
+	They narrowed the interval by {percent}, but a mean given for a control is far from the trials' mean, so the plain result stands.	Eles estreitaram o intervalo em {percent}, mas uma média dada para um controle está longe da média dos testes, então o resultado simples permanece.
+	The output does not move in one direction with {inputs} (its value at the median is outside its values at the 10th and 90th percentiles), so the swing understates the effect.	A saída não se move em uma só direção com {inputs} (o seu valor na mediana fica fora dos seus valores nos percentis 10 e 90), então a oscilação subestima o efeito.
 	Did not open {file}: a different model was opened in the meantime	{file} não foi aberto: outro modelo foi aberto nesse meio tempo
 	Select	Selecionar
 	Link	Vínculo

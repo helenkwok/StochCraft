@@ -940,7 +940,6 @@ unit	yr	r.
 	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	To je váš první model. První řádky Výsledků říkají, co běh zjistil; Nápověda ▸ Co znamenají výsledky vysvětluje každé číslo.
 # Which inputs matter in the Monte Carlo results (ROADMAP M4.1, part 3a)
 	Which inputs matter	Které vstupy hrají roli
-	{output} depends most on {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile.	{output} závisí nejvíce na vstupu {input}: pohybuje se od {low} do {high}, když se {input} pohybuje od svého 10. do svého 90. percentilu.
 	Each input from its 10th to its 90th percentile, with the others at their medians	Každý vstup od svého 10. do svého 90. percentilu, ostatní na svých mediánech
 	Base {value}	Základní hodnota {value}
 	A correlated input's figure includes the effect of the inputs it is correlated with.	Údaj korelovaného vstupu zahrnuje vliv vstupů, se kterými koreluje.
@@ -1419,6 +1418,10 @@ unit	yr	r.
 	The estimated chance that {output} is more than {value} is {percent}.	Odhadovaná pravděpodobnost, že {output} bude větší než {value}, je {percent}.
 	The estimated chance that {output} is less than {value} is {percent}.	Odhadovaná pravděpodobnost, že {output} bude menší než {value}, je {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	Jejich interval nemá žádnou šířku, což žádný odhad nemá, proto zůstává obyčejný výsledek.
+	{output} changes most with {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile, the other inputs at their medians.	{output} se nejvíce mění s {input}: jde od {low} do {high}, když {input} jde od svého 10. do svého 90. percentilu a ostatní vstupy jsou na svých mediánech.
+	No variation was observed, so there is no interval for the mean; a rare event the trials did not reach could still move it.	Nebyla pozorována žádná variabilita, proto pro průměr není interval; vzácná událost, ke které pokusy nedošly, by ho stále mohla posunout.
+	They narrowed the interval by {percent}, but a mean given for a control is far from the trials' mean, so the plain result stands.	Zúžily interval o {percent}, ale průměr zadaný pro kontrolu je daleko od průměru pokusů, takže zůstává obyčejný výsledek.
+	The output does not move in one direction with {inputs} (its value at the median is outside its values at the 10th and 90th percentiles), so the swing understates the effect.	Výstup se s {inputs} nepohybuje jedním směrem (jeho hodnota v mediánu leží mimo jeho hodnoty u 10. a 90. percentilu), takže rozpětí podhodnocuje účinek.
 	Did not open {file}: a different model was opened in the meantime	Soubor {file} nebyl otevřen: mezitím byl otevřen jiný model
 	Select	Vybrat
 	Link	Spojnice

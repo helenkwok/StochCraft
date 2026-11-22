@@ -940,7 +940,6 @@ unit	yr	a
 	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	Acesta este primul dumneavoastră model. Primele rânduri din Rezultate spun ce a găsit rularea; Ajutor ▸ Ce înseamnă rezultatele explică fiecare număr.
 # Which inputs matter in the Monte Carlo results (ROADMAP M4.1, part 3a)
 	Which inputs matter	Ce intrări contează
-	{output} depends most on {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile.	{output} depinde cel mai mult de {input}: merge de la {low} la {high} când {input} merge de la percentila 10 la percentila 90.
 	Each input from its 10th to its 90th percentile, with the others at their medians	Fiecare intrare de la percentila 10 la percentila 90, celelalte la mediană
 	Base {value}	Valoare de bază {value}
 	A correlated input's figure includes the effect of the inputs it is correlated with.	Cifra unei intrări corelate include efectul intrărilor cu care este corelată.
@@ -1419,6 +1418,10 @@ unit	yr	a
 	The estimated chance that {output} is more than {value} is {percent}.	Probabilitatea estimată ca {output} să fie mai mare decât {value} este {percent}.
 	The estimated chance that {output} is less than {value} is {percent}.	Probabilitatea estimată ca {output} să fie mai mică decât {value} este {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	Intervalul lor nu are lățime, ceea ce nicio estimare nu are, așa că rămâne rezultatul simplu.
+	{output} changes most with {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile, the other inputs at their medians.	{output} se schimbă cel mai mult odată cu {input}: merge de la {low} la {high} când {input} merge de la percentila sa 10 la percentila sa 90, cu celelalte intrări la medianele lor.
+	No variation was observed, so there is no interval for the mean; a rare event the trials did not reach could still move it.	Nu s-a observat nicio variație, deci nu există interval pentru medie; un eveniment rar pe care încercările nu l-au atins ar putea totuși să o mute.
+	They narrowed the interval by {percent}, but a mean given for a control is far from the trials' mean, so the plain result stands.	Au îngustat intervalul cu {percent}, dar o medie dată pentru un control este departe de media încercărilor, deci rămâne rezultatul simplu.
+	The output does not move in one direction with {inputs} (its value at the median is outside its values at the 10th and 90th percentiles), so the swing understates the effect.	Ieșirea nu se mișcă într-o singură direcție cu {inputs} (valoarea ei la mediană este în afara valorilor ei la percentilele 10 și 90), deci amplitudinea subestimează efectul.
 	Did not open {file}: a different model was opened in the meantime	{file} nu a fost deschis: între timp a fost deschis alt model
 	Select	Selectează
 	Link	Legătură

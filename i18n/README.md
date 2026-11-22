@@ -961,6 +961,17 @@ fields (`“Service time”`) are named in the messages by their own rows.
   undo names of blocks; placeholders checked by script; not checked against any other source or
   reviewed by native speakers. The least certain are bn, hi, ka, kk, lo, sq, ta, te, th and vi.
 
+- The four rows added when Monte Carlo results stopped claiming more than the trials show
+  (ROADMAP M4.1: "{output} changes most with {input}: …", which replaced "{output} depends
+  most on {input}: …" because the swing is the change between the 10th and 90th percentile
+  endpoints, not a share of the spread; "No variation was observed, so there is no interval for
+  the mean; …"; "They narrowed the interval by {percent}, but a mean given for a control is far
+  from the trials' mean, so the plain result stands."; and "The output does not move in one
+  direction with {inputs} (…), so the swing understates the effect.") were machine-drafted with
+  Claude Code from the plain meaning of the English; placeholders checked by script; not
+  checked against any other source or reviewed by native speakers. The least certain are bn,
+  hi, ka, kk, lo, sq, ta, te, th and vi, and the case of the numbers around {low}, {high} and
+  {percent} in the highly inflected languages.
 - The rows for validation against observed data (issue #226: the Observed data section of the
   model page and its hint, Add an observed value, Observed value, Checked as, Its 95%
   half-width, the undo names Add, Change and Remove Observed Value, the results' Checked against

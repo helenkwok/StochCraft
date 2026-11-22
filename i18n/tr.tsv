@@ -940,7 +940,6 @@ unit	yr	yıl
 	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	Bu sizin ilk modeliniz. Sonuçlar'ın ilk satırları çalıştırmanın ne bulduğunu söyler; Yardım ▸ Sonuçlar Ne Anlama Geliyor her sayıyı açıklar.
 # Which inputs matter in the Monte Carlo results (ROADMAP M4.1, part 3a)
 	Which inputs matter	Hangi girdiler önemli
-	{output} depends most on {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile.	{output} en çok {input} girdisine bağlıdır: {input} kendi 10. yüzdeliğinden 90. yüzdeliğine giderken {low} değerinden {high} değerine gider.
 	Each input from its 10th to its 90th percentile, with the others at their medians	Her girdi kendi 10. yüzdeliğinden 90. yüzdeliğine, diğerleri medyanlarında
 	Base {value}	Temel değer {value}
 	A correlated input's figure includes the effect of the inputs it is correlated with.	Korelasyonlu bir girdinin rakamı, korelasyonlu olduğu girdilerin etkisini de içerir.
@@ -1419,6 +1418,10 @@ unit	yr	yıl
 	The estimated chance that {output} is more than {value} is {percent}.	{output} değerinin {value} değerinden büyük olma olasılığı tahminen {percent}.
 	The estimated chance that {output} is less than {value} is {percent}.	{output} değerinin {value} değerinden küçük olma olasılığı tahminen {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	Aralıklarının genişliği yok, bu hiçbir tahminde olmaz, bu yüzden sade sonuç geçerli kalır.
+	{output} changes most with {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile, the other inputs at their medians.	{output}, en çok {input} ile değişir: {input} 10. yüzdeliğinden 90. yüzdeliğine giderken {low} değerinden {high} değerine gider, diğer girdiler ise ortancalarındadır.
+	No variation was observed, so there is no interval for the mean; a rare event the trials did not reach could still move it.	Hiçbir değişim gözlenmedi, bu yüzden ortalama için aralık yok; denemelerin ulaşmadığı nadir bir olay yine de onu kaydırabilir.
+	They narrowed the interval by {percent}, but a mean given for a control is far from the trials' mean, so the plain result stands.	Aralığı {percent} daralttılar, ancak bir kontrol için verilen ortalama denemelerin ortalamasından çok uzak, bu yüzden sade sonuç geçerli kalır.
+	The output does not move in one direction with {inputs} (its value at the median is outside its values at the 10th and 90th percentiles), so the swing understates the effect.	Çıktı, {inputs} ile tek yönde hareket etmiyor (ortancadaki değeri 10. ve 90. yüzdeliklerdeki değerlerinin dışında), bu yüzden salınım etkiyi olduğundan az gösterir.
 	Did not open {file}: a different model was opened in the meantime	{file} açılmadı: bu sırada başka bir model açıldı
 	Select	Seç
 	Link	Bağlantı

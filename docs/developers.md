@@ -262,7 +262,11 @@ maximum, and, with a target (`at_most` or `at_least`), the share of trials meeti
 95% interval; `--format json` adds a histogram, the cumulative curve, the percentiles
 P10 and P90. For each output the table and the JSON also say which inputs matter: a tornado of
 swings (the output with each input at its 10th and 90th percentile, the others at their
-medians) and the rank correlation of each input with it. `--until 1% --max 1000000` adds trials
+medians) and the rank correlation of each input with it. The table says "changes most with" for
+the widest swing, which is the largest change between those two endpoints and not the largest
+share of the variance (that is the Sobol share), and names each input whose output at its
+median is outside its two endpoint values (`not_monotone` in the JSON), where the swing
+understates or misses its effect. `--until 1% --max 1000000` adds trials
 until every output's mean is within ±1% of itself. Outputs are BPSim expressions with the inputs (and earlier outputs) as `$name`, the
 arithmetic of XPath and `min`, `max`, `sum`, `abs`, `sqrt`, `exp`, `log`, `pow`, `sin`, `cos`, `round` and
 `if(condition, then, else)`; a condition such as `$cost > 6000` gives 1 or 0 in each trial, so its
@@ -276,7 +280,11 @@ JSON has a `sobol` field. The command behind it is `mc.sobol` (`rows`, `seed`, w
 model's own by default, and `bootstrap`, 1,000 by default): per output its `variance`,
 `rows_used`, `rows_dropped`, `unavailable` (why it has no indices, if it has none) and for each
 input `first` and `total`, each with a `value` and an `interval`, besides `rows`, `evaluations`
-and the `constants` left out. The estimates are not clamped: a small sample can give one a little
+and the `constants` left out. An output with a row whose value is not a finite number in any of
+the evaluations the estimators compare (`rows_dropped` above 0) gets no indices, with the counts
+and the reason in `unavailable`: which rows are missing depends on the inputs, so leaving them
+out conditions the inputs and what is left does not estimate the shares of independent inputs.
+The other outputs keep their indices. The estimates are not clamped: a small sample can give one a little
 below 0 or above 1. The indices need independent inputs, so a model with correlated inputs is
 refused with an `invalid_model` error that says so; `run --sobol` then prints the reason (under
 `sobol.unavailable` in the JSON, on stderr for `--format csv`) and still prints the normal
@@ -319,9 +327,20 @@ record's `interval` says which, for example `Student-t across 12 independent Lat
 batches of 1000 trials`. Sobol sampling is judged the same way (each batch's shift is
 independent, so its batch means are independent replicates; `interval_basis` is `batches`).
 Antithetic trials depend on their twin and not on the other pairs, so the interval is Student-t
-on the pair means, with one degree of freedom fewer than there are pairs (Glasserman, 2003,
-§4.2; `interval_basis` is `pairs`, and runs are whole pairs). The standard deviation is always across trials: it describes the
-output, not the precision of its mean.
+across the pairs, with one degree of freedom fewer than there are pairs (Glasserman, 2003,
+§4.2; `interval_basis` is `pairs`, and runs are whole pairs). The reported mean is the mean of
+all the valid trials. A pair with one trial that gave no number is a cluster of one trial, and
+averaging the pair means would give that lone trial the weight of a whole pair (the mean
+would then differ from the mean of the trials, and from a target's share of them), so the
+interval is the ratio estimator's, R = Σy_j / Σn_j over the pairs j that have a valid trial,
+with variance Σ(y_j − R n_j)² / ((k − 1) k n̄²) (Cochran, *Sampling Techniques*, 3rd ed., 1977,
+§6.4; the pairs are independent clusters of random size); where every pair is complete it is
+the interval on the pair means. A target's probability gets the same on the pairs' hits. A
+sequential stop judges the same numbers. The standard deviation is always across trials: it
+describes the output, not the precision of its mean. Where every value the interval is across
+is the same, `half_width` is `null` and `no_variation` is `true`: a width of 0 would claim the
+mean is exact, which a run cannot know (a rare event the trials did not reach gives the same
+picture).
 
 **Control variates** ([`stochcraft_mc::control`](../crates/mc/src/control.rs); Law, *Simulation
 Modeling and Analysis*, 5th ed., §11.3; Glasserman, 2003, §4.1; Nelson, 1990). An output can name
@@ -365,8 +384,11 @@ least 10% narrower); its `target` has the same for the probability. With too few
 run of one batch where intervals are across batches, `estimate` is `null` and `unavailable` says
 why. An input named only as a control is not reported as `unused_input`, and a replacing
 `mc.inputs.import` drops the controls of inputs it removes, as it drops their correlations; a
-control object with fields of both forms is refused. The window makes the controlled results the
-headline where `helped`, words a controlled chance as an estimate (never as a count of trials),
+control object with fields of both forms is refused. `controlled.mean_mismatch` is true when any
+control's is: the controlled estimate is then biased, and neither the window nor the command line
+lets it displace the plain headline (the window keeps the plain mean and chance and shows the
+controlled ones beside them; the table labels them "biased, not used"). The window makes the
+controlled results the headline where `helped` and no control is flagged, words a controlled chance as an estimate (never as a count of trials),
 and says so in words otherwise; `stochcraft_engine::mc::control_inputs` lists the inputs that can be controls.
 
 The input table goes out and back in as CSV:

@@ -940,7 +940,6 @@ unit	yr	წელი
 	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	ეს არის თქვენი პირველი მოდელი. „შედეგების“ პირველი სტრიქონები გეუბნებათ, რა აღმოაჩინა გაშვებამ; დახმარება ▸ რას ნიშნავს შედეგები ყოველ რიცხვს განმარტავს.
 # Which inputs matter in the Monte Carlo results (ROADMAP M4.1, part 3a)
 	Which inputs matter	რომელი შემავალი სიდიდეები მნიშვნელოვანია
-	{output} depends most on {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile.	{output} ყველაზე მეტად დამოკიდებულია {input}-ზე: ის {low}-დან {high}-მდე იცვლება, როცა {input} თავისი მე-10 პროცენტილიდან მე-90 პროცენტილამდე გადადის.
 	Each input from its 10th to its 90th percentile, with the others at their medians	თითოეული შემავალი სიდიდე მე-10-დან მე-90 პროცენტილამდე, დანარჩენი თავის მედიანაზე
 	Base {value}	საბაზო მნიშვნელობა {value}
 	A correlated input's figure includes the effect of the inputs it is correlated with.	კორელირებული შემავალი სიდიდის მაჩვენებელი მოიცავს იმ შემავალი სიდიდეების გავლენას, რომლებთანაც ის კორელირებს.
@@ -1419,6 +1418,10 @@ unit	yr	წელი
 	The estimated chance that {output} is more than {value} is {percent}.	{output}-ის {value}-ზე მეტი იქნება სავარაუდო ალბათობა არის {percent}.
 	The estimated chance that {output} is less than {value} is {percent}.	{output}-ის {value}-ზე ნაკლები იქნება სავარაუდო ალბათობა არის {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	მათ ინტერვალს სიგანე არ აქვს, რაც არც ერთ შეფასებას არ აქვს, ამიტომ ჩვეულებრივი შედეგი რჩება.
+	{output} changes most with {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile, the other inputs at their medians.	{output} ყველაზე მეტად {input}-ის მიხედვით იცვლება: ის {low}-დან {high}-მდე მიდის, როცა {input} თავისი მე-10 პერცენტილიდან მე-90 პერცენტილამდე მიდის, დანარჩენი შეყვანები კი თავიანთ მედიანაზეა.
+	No variation was observed, so there is no interval for the mean; a rare event the trials did not reach could still move it.	ვარიაცია არ დაფიქსირებულა, ამიტომ საშუალოსთვის ინტერვალი არ არსებობს; იშვიათ მოვლენას, რომლამდეც ცდები არ მისულა, მაინც შეეძლო მისი გადაადგილება.
+	They narrowed the interval by {percent}, but a mean given for a control is far from the trials' mean, so the plain result stands.	მათ ინტერვალი {percent}-ით დააკლეს, მაგრამ საკონტროლოსთვის მიცემული საშუალო ცდების საშუალოსგან შორსაა, ამიტომ ჩვეულებრივი შედეგი რჩება.
+	The output does not move in one direction with {inputs} (its value at the median is outside its values at the 10th and 90th percentiles), so the swing understates the effect.	გამოსავალი {inputs}-თან ერთად ერთი მიმართულებით არ მოძრაობს (მისი მნიშვნელობა მედიანაზე მე-10 და მე-90 პერცენტილის მნიშვნელობებს გარეთაა), ამიტომ ამპლიტუდა ეფექტს ნაკლებად აფასებს.
 	Did not open {file}: a different model was opened in the meantime	{file} არ გაიხსნა: ამასობაში სხვა მოდელი გაიხსნა
 	Select	მონიშვნა
 	Link	ბმა
