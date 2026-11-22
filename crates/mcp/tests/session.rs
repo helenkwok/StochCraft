@@ -809,7 +809,16 @@ fn experiment_evaluate_is_listed_and_runs() {
     e.execute("file.open", json!({"path": path.to_string_lossy()}))
         .unwrap();
     let direct = e.execute("experiment.evaluate", params).unwrap();
-    assert_eq!(r["results"], direct["results"]);
+    // The tool's text is parsed back here, which may round a number's last bit (serde_json's
+    // default parser is not exact): the values are compared exactly, the mean and interval to
+    // the last bits.
+    let (got, want) = (&r["results"][0], &direct["results"][0]);
+    assert_eq!(got["values"], want["values"]);
+    assert_eq!(got["n"], want["n"]);
+    for key in ["mean", "half_width"] {
+        let (a, b) = (got[key].as_f64().unwrap(), want[key].as_f64().unwrap());
+        assert!((a - b).abs() <= 1e-12 * b.abs(), "{key}: {a} vs {b}");
+    }
     let (err, error) = s.call(
         "execute",
         json!({"command": "experiment.evaluate", "params": {

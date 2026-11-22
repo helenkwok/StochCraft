@@ -4493,7 +4493,7 @@ catalogs.
 
 ## M9: open search, many objectives, and optimisers of your own
 
-**Status:** planned (#284); P1 (Evaluate from outside) is in the pull request that adds `experiment.evaluate`; the rest is not built yet.
+**Status:** planned (#284); P1 (Evaluate from outside) in #287; the rest is not built yet.
 
 **Outcome:** what Python users get from Optuna and pymoo, for simulation models, with answers
 that say what they have not proved. M8 searches spaces small enough for a stated probability
