@@ -28,9 +28,12 @@
 //!
 //! Sobol sampling is randomised quasi-Monte Carlo ([`qmc`]): each batch takes the first n points
 //! of the Sobol sequence, one dimension per input in declaration order (at most
-//! [`qmc::MAX_DIMENSIONS`]), each dimension shifted at random, through the inverse distribution
-//! function. For a smooth output of few inputs the points cover the space more evenly than random
-//! ones and the error falls faster than 1/√n.
+//! [`qmc::MAX_DIMENSIONS`]), each dimension given a random linear matrix scramble and a random
+//! digital shift (Matoušek, 1998; Owen, 2003), through the inverse distribution function. For a
+//! smooth output of few inputs the points cover the space more evenly than random ones and the
+//! error falls faster than 1/√n; the scramble keeps the points' net property and, unlike a shift
+//! alone, gives each point its own place within its cell, so the error of a smooth output falls
+//! faster still (it has the variance of Owen's nested uniform scrambling: Owen, 2008).
 //!
 //! **Correlation.** Rank correlations between inputs are induced by the method of Iman and
 //! Conover (1982) within each batch ([`correlate`]).
@@ -54,8 +57,8 @@
 //! is Student-t on the batch proportions, clamped to [0, 1]; runs are whole batches (the trials
 //! asked for are rounded up to a multiple of [`BATCH`]); with fewer than two batches there is
 //! no interval. Point estimates are the same either way. Sobol sampling is judged the same way:
-//! each batch's digital shift is independent, so the batch means are independent replicates
-//! (Owen, 1995; L'Ecuyer and Lemieux, 2002). Antithetic pairs depend on themselves and not on
+//! each batch's scramble and shift are independent, so the batch means are independent
+//! replicates (Owen, 1995; L'Ecuyer and Lemieux, 2002; Owen, 2003). Antithetic pairs depend on themselves and not on
 //! each other, so the interval is Student-t on the pair means (pairs − 1 degrees of freedom;
 //! Glasserman, 2003, §4.2) and the target's on the pair proportions; runs are whole pairs. Where
 //! a pair has lost a trial to a value with no number, the mean stays the mean of the valid trials
@@ -638,7 +641,7 @@ impl Compiled {
             .iter()
             .enumerate()
             .map(|(dim, input)| {
-                // Sobol points have streams of their own: only the digital shift is random.
+                // Sobol points have streams of their own: only the scramble and shift are random.
                 let key = if self.sampling == Sampling::Sobol {
                     format!("mc/qmc/{}/{}", job.index, input.name)
                 } else {
@@ -669,8 +672,8 @@ impl Compiled {
                         quantile::quantiles(&input.dist, &ps)
                     }
                     Sampling::Sobol => {
-                        let shift = u32::try_from(rng.next_u64() >> 32).unwrap_or(0);
-                        qmc::shifted(dim, n, shift)
+                        let scramble = qmc::Scramble::draw(&mut rng);
+                        qmc::scrambled(dim, n, &scramble)
                             .map(|ps| quantile::quantiles(&input.dist, &ps))
                             .unwrap_or_default()
                     }
