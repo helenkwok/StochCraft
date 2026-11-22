@@ -146,23 +146,60 @@ pub use estimate::{Family, FitError, ThreePoint, Upper};
 mod proofs {
     use super::*;
 
-    /// SplitMix64's output function is a bijection of its state: different seeds never give the
-    /// same first output (adding an odd constant, xor-shifts and odd multipliers all invert).
-    #[kani::proof]
-    #[kani::solver(cadical)]
-    fn splitmix64_first_output_is_injective_in_the_seed() {
-        let (a, b): (u64, u64) = (kani::any(), kani::any());
-        kani::assume(a != b);
-        assert_ne!(SplitMix64::new(a).next_u64(), SplitMix64::new(b).next_u64());
+    const GOLDEN: u64 = 0x9e37_79b9_7f4a_7c15;
+
+    /// The inverse of `x -> x ^ (x >> s)` on `u64` (s >= 1).
+    fn undo_xorshift(z: u64, s: u32) -> u64 {
+        let mut x = z;
+        let mut done = s;
+        while done < 64 {
+            x = z ^ (x >> s);
+            done += s;
+        }
+        x
     }
 
-    /// For a fixed key hash, different bases give different stream seeds.
+    /// The inverse of multiplication by the odd `c` modulo 2^64 (Newton's iteration).
+    fn mul_inverse(c: u64) -> u64 {
+        let mut inv = c;
+        for _ in 0..6 {
+            inv = inv.wrapping_mul(2u64.wrapping_sub(c.wrapping_mul(inv)));
+        }
+        inv
+    }
+
+    /// The inverse of SplitMix64's output function (the part after the state's increment).
+    fn unmix(out: u64) -> u64 {
+        let z = undo_xorshift(out, 31);
+        let z = z.wrapping_mul(mul_inverse(0x94d0_49bb_1331_11eb));
+        let z = undo_xorshift(z, 27);
+        let z = z.wrapping_mul(mul_inverse(0xbf58_476d_1ce4_e5b9));
+        undo_xorshift(z, 30)
+    }
+
+    /// SplitMix64's output function is a bijection of its state, shown by an explicit inverse:
+    /// the first output determines the seed, so different seeds never give the same first output.
     #[kani::proof]
     #[kani::solver(cadical)]
-    fn keyed_seed_is_injective_in_the_base() {
-        let (a, b, h): (u64, u64, u64) = (kani::any(), kani::any(), kani::any());
-        kani::assume(a != b);
-        assert_ne!(keyed_seed(a, h), keyed_seed(b, h));
+    #[kani::unwind(70)]
+    fn splitmix64_first_output_determines_the_seed() {
+        let seed: u64 = kani::any();
+        let out = SplitMix64::new(seed).next_u64();
+        assert_eq!(unmix(out), seed.wrapping_add(GOLDEN));
+    }
+
+    /// For a fixed key hash, the stream seed determines the base: different bases give
+    /// different stream seeds.
+    #[kani::proof]
+    #[kani::solver(cadical)]
+    #[kani::unwind(70)]
+    fn keyed_seed_determines_the_base() {
+        let (base, h): (u64, u64) = (kani::any(), kani::any());
+        let mixed = SplitMix64::new(h).next_u64();
+        assert_eq!(
+            unmix(keyed_seed(base, h)).wrapping_sub(GOLDEN),
+            base ^ mixed
+        );
     }
 
     /// For a fixed base, different key hashes give different stream seeds. (Different key
