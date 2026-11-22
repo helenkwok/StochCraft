@@ -37,8 +37,8 @@ checks keep that in hand:
   canvas, in the 3D view and on the results page, with AccessKit off and on in alternating blocks
   (the app's pass and tessellation, plus the tree update handed to an `accesskit_consumer` tree;
   no GPU). It fails when AccessKit on takes more than 1.75 times as long as off (measured 1.07
-  to 1.34), and warns when a median frame with AccessKit on exceeds its view's budget (about
-  three times the fastest GitHub Linux runner: canvas 250 ms, 3D view 20 ms, results 500 ms).
+  to 1.36), and warns when a median frame with AccessKit on exceeds its view's budget (about
+  three times the slower GitHub Linux runner: canvas 250 ms, 3D view 20 ms, results 500 ms).
   The budgets only warn because runners differed by up to 1.6 times between runs, while the
   ratio, timed on one runner, held. Timings need release, so the test is
   `#[ignore]`d and runs in CI's heavy job, which prints the numbers in its log and job summary.

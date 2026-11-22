@@ -46,12 +46,12 @@ const FRAMES_PER_BLOCK: usize = 15;
 const VIEW_LIMIT: Duration = Duration::from_secs(40);
 
 /// Each view's budget for a median frame with AccessKit on, in milliseconds: about three times the
-/// fastest GitHub Linux runner measured (canvas 57 and 89, 3D view 5.9 and 6.2, results 133 and
-/// 190 ms in two runs). Runners differed by up to 1.6 times between runs, so going over is a
+/// slower of the GitHub Linux runners measured (canvas 56 to 89, 3D view 5.0 to 6.2, results 133
+/// to 190 ms in three runs). Runners differed by up to 1.6 times between runs, so going over is a
 /// warning in the log, not a failure.
 const BUDGETS: [(&str, u64); 3] = [("canvas", 250), ("3D view", 20), ("results", 500)];
 /// The most AccessKit on may take over off (median against median), which fails the test: it
-/// measured 1.07 to 1.34 times. Both are timed on the same runner in alternating blocks, so the
+/// measured 1.07 to 1.36 times. Both are timed on the same runner in alternating blocks, so the
 /// ratio holds across machines where a time does not.
 const ACCESSKIT_RATIO: f64 = 1.75;
 
@@ -177,6 +177,9 @@ fn settle(h: &mut Harness<'static, App>) {
 struct Frame {
     pass: Duration,
     consumer: Duration,
+    /// What the frame drew: shapes before tessellation, and AccessKit nodes (0 when off).
+    shapes: usize,
+    nodes: usize,
 }
 
 /// One frame of `app` on `ctx`, as the shell runs it, without the GPU.
@@ -192,11 +195,14 @@ fn frame(ctx: &egui::Context, app: &mut App, tree: &mut Option<kittest::State>) 
     let start = Instant::now();
     let mut output = ctx.run_ui(input, |ui| app.ui(ui));
     let shapes = std::mem::take(&mut output.shapes);
+    let shape_count = shapes.len();
     let primitives = ctx.tessellate(shapes, output.pixels_per_point);
     std::hint::black_box(primitives);
     let pass = start.elapsed();
     let start = Instant::now();
+    let mut nodes = 0;
     if let Some(update) = output.platform_output.accesskit_update.take() {
+        nodes = update.nodes.len();
         match tree {
             Some(t) => t.update(update),
             None => *tree = Some(kittest::State::new(update)),
@@ -205,6 +211,8 @@ fn frame(ctx: &egui::Context, app: &mut App, tree: &mut Option<kittest::State>) 
     Frame {
         pass,
         consumer: start.elapsed(),
+        shapes: shape_count,
+        nodes,
     }
 }
 
@@ -214,6 +222,9 @@ struct Times {
     off: Vec<Duration>,
     on: Vec<Duration>,
     on_consumer: Vec<Duration>,
+    /// Shapes and AccessKit nodes of the last frame with AccessKit on.
+    shapes: usize,
+    nodes: usize,
 }
 
 /// The `p`th percentile (nearest rank) of `times`.
@@ -252,6 +263,7 @@ fn time_view(h: &mut Harness<'static, App>) -> Times {
                 if on {
                     times.on.push(f.pass + f.consumer);
                     times.on_consumer.push(f.consumer);
+                    (times.shapes, times.nodes) = (f.shapes, f.nodes);
                 } else {
                     times.off.push(f.pass);
                 }
@@ -285,7 +297,7 @@ fn summarise(view: &str, t: &Times) -> (Duration, Duration) {
     report(&format!(
         "{view}: AccessKit off median {:.2} ms, p95 {:.2} ms ({} frames); \
          on median {:.2} ms, p95 {:.2} ms ({} frames; of the median, {:.2} ms in the consumer); \
-         on / off {:.2}",
+         on / off {:.2}; a frame draws {} shapes and {} AccessKit nodes",
         ms(off50),
         ms(off95),
         t.off.len(),
@@ -294,6 +306,8 @@ fn summarise(view: &str, t: &Times) -> (Duration, Duration) {
         t.on.len(),
         ms(consumer50),
         on50.as_secs_f64() / off50.as_secs_f64().max(1e-9),
+        t.shapes,
+        t.nodes,
     ));
     (off50, on50)
 }
