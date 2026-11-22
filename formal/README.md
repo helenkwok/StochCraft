@@ -89,6 +89,7 @@ lake exe cache get   # download Mathlib's prebuilt files (a few GB) instead of c
 lake build --wfail   # warnings, including any `sorry`, are errors
 ```
 
-`lean-toolchain` pins Lean and `lakefile.toml` pins the Mathlib release that matches it. CI
+`lean-toolchain` pins Lean and `lakefile.toml` pins the Mathlib release that matches it; `lake-manifest.json` records the exact commits of
+Mathlib and its dependencies (Mathlib's own manifest at that tag). CI
 (`.github/workflows/lean.yml`) runs the same build when `formal/` changes. Mathlib is
 Apache-2.0; it is fetched at build time into `.lake/` and not committed.

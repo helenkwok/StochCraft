@@ -33,6 +33,3 @@ jobs:
           lake-package-directory: formal
           use-mathlib-cache: "true"
           build-args: "--wfail"
-      - name: Lake manifest
-        if: always()
-        run: cat formal/lake-manifest.json || true
