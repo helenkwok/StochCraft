@@ -166,8 +166,8 @@ enum Command {
         allow_approximations: bool,
     },
     /// Run a designed experiment with several factors at once (the engine's
-    /// `experiment.design`): every combination of the factors' levels, or a Latin hypercube of
-    /// their ranges, each point with the same seed. Prints each result at each point and the
+    /// `experiment.design`): every combination of the factors' levels, a Latin hypercube of
+    /// their ranges, or a randomised Sobol design, each point with the same seed. Prints each result at each point and the
     /// factors' effects.
     Design {
         file: PathBuf,
@@ -180,9 +180,13 @@ enum Command {
         result: Vec<String>,
         #[arg(long, value_enum, default_value_t = DesignKind::FullFactorial)]
         design: DesignKind,
-        /// A Latin hypercube's number of points.
+        /// A Latin hypercube's number of points; a Sobol design's number of points in each batch
+        /// (a power of two).
         #[arg(long)]
         points: Option<u32>,
+        /// A Sobol design's number of batches, each shifted at random (default 4, at least 2).
+        #[arg(long)]
+        batches: Option<u32>,
         /// The BPSim scenario to run (default: the first).
         #[arg(long)]
         scenario: Option<String>,
@@ -354,6 +358,9 @@ enum DesignKind {
     FullFactorial,
     /// `--points` points, each factor's range cut into that many strata, each used once.
     LatinHypercube,
+    /// `--batches` batches of `--points` Sobol points (a power of two), each batch shifted at
+    /// random.
+    Sobol,
 }
 
 /// A failure to report: the message, and the exit code.
@@ -1119,6 +1126,7 @@ struct DesignArgs<'a> {
     results: &'a [String],
     design: DesignKind,
     points: Option<u32>,
+    batches: Option<u32>,
     scenario: Option<&'a str>,
     reps: Option<u32>,
     seed: Option<u64>,
@@ -1137,10 +1145,14 @@ fn design(a: &DesignArgs) -> Result<u8, Failure> {
         "design": match a.design {
             DesignKind::FullFactorial => "full_factorial",
             DesignKind::LatinHypercube => "latin_hypercube",
+            DesignKind::Sobol => "sobol",
         },
     });
     if let Some(n) = a.points {
         params["points"] = json!(n);
+    }
+    if let Some(n) = a.batches {
+        params["batches"] = json!(n);
     }
     if let Some(r) = a.reps {
         params["replications"] = json!(r);
@@ -1418,6 +1430,7 @@ fn main() -> ExitCode {
             result,
             design: kind,
             points,
+            batches,
             scenario,
             reps,
             seed,
@@ -1430,6 +1443,7 @@ fn main() -> ExitCode {
             results: &result,
             design: kind,
             points,
+            batches,
             scenario: scenario.as_deref(),
             reps,
             seed,

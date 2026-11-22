@@ -437,6 +437,7 @@ pub fn design_table(name: &str, d: &Value) -> String {
     };
     let kind = match s(&d["design"]) {
         "latin_hypercube" => "Latin hypercube",
+        "sobol" => "Sobol design",
         _ => "full factorial",
     };
     let _ = writeln!(
@@ -454,6 +455,14 @@ pub fn design_table(name: &str, d: &Value) -> String {
         "every point runs on the same seed (common random numbers); ± is the half-width of a 95% \
          Student-t confidence interval across replications\n"
     );
+    if let Some(batches) = d["batches"].as_u64() {
+        let _ = writeln!(
+            out,
+            "{batches} batches of {} Sobol points, each batch shifted at random, so the batches              are independent replicates
+",
+            d["points_per_batch"]
+        );
+    }
     let mut header = vec!["point".to_owned()];
     header.extend(factors.iter().map(label));
     header.extend(["result", "mean", "± half-width", "n"].map(String::from));
@@ -556,20 +565,54 @@ pub fn design_table(name: &str, d: &Value) -> String {
             "\nrank (Spearman) correlations across the points, from −1 to 1; with few points one \
              factor's effect can hide another's, so a value near 0 does not show no effect"
         );
-        let mut rows = vec![
-            ["factor", "result", "spearman", "n"]
-                .map(String::from)
-                .to_vec(),
-        ];
+        let batched = d["batches"].is_u64();
+        let mut head = ["factor", "result", "spearman", "n"]
+            .map(String::from)
+            .to_vec();
+        if batched {
+            head.extend(["batch mean", "± half-width"].map(String::from));
+        }
+        let mut rows = vec![head];
         rows.extend(corr.iter().map(|c| {
-            vec![
+            let mut row = vec![
                 label(c),
                 format!("{}.{}", s(&c["element"]), s(&c["metric"])),
                 f(&c["spearman"]),
                 c["n"].to_string(),
+            ];
+            if batched {
+                row.extend([f(&c["batch_mean"]), f(&c["half_width"])]);
+            }
+            row
+        }));
+        let numeric = [true, true, false, false, false, false];
+        aligned(&rows, &numeric[..rows[0].len()], &mut out);
+        if batched {
+            let _ = writeln!(
+                out,
+                "batch mean: the mean of the rank correlation within each batch, with its 95%                  Student-t half-width across the batches"
+            );
+        }
+    }
+    if let Some(means) = d["result_means"].as_array().filter(|m| !m.is_empty()) {
+        let _ = writeln!(
+            out,
+            "
+each result's mean over the factors' ranges: the mean of the batches' means, with              its 95% Student-t half-width across the batches"
+        );
+        let mut rows = vec![
+            ["result", "mean", "± half-width"]
+                .map(String::from)
+                .to_vec(),
+        ];
+        rows.extend(means.iter().map(|m| {
+            vec![
+                format!("{}.{}", s(&m["element"]), s(&m["metric"])),
+                f(&m["mean"]),
+                f(&m["half_width"]),
             ]
         }));
-        aligned(&rows, &[true, true, false, false], &mut out);
+        aligned(&rows, &[true, false, false], &mut out);
     }
     // What a run of each point warns of, as for a single run.
     let warned: Vec<String> = points

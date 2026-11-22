@@ -1,5 +1,5 @@
 //! Designed experiments with several factors at once (M2.8): a full factorial, every
-//! combination of the factors' levels, or a Latin hypercube sample of their ranges.
+//! combination of the factors' levels, a Latin hypercube sample or a randomised Sobol sample of their ranges.
 //!
 //! As in a sweep, every design point runs the model's replications on the same seed, so
 //! replication i of every point meets the same random numbers (common random numbers; A. M.
@@ -28,13 +28,30 @@
 //!   count (units, a buffer) given as a range, which means its whole numbers, takes the level
 //!   at ⌊u L⌋ of its L sorted levels. Each result is judged by its rank (Spearman) correlation
 //!   with each factor across the points.
+//! - **Sobol** (I. M. Sobol', "On the distribution of points in a cube and the approximate
+//!   evaluation of integrals", *USSR Computational Mathematics and Mathematical Physics* 7(4),
+//!   1967, 86-112; direction numbers of S. Joe and F. Y. Kuo, *SIAM Journal on Scientific
+//!   Computing* 30(5), 2008, 2635-2654, as `stochcraft_mc::qmc` has them): `batches` batches of
+//!   `points` points, `points` a power of two (the balance of the sequence holds for the first
+//!   2^m points; any other number is refused, naming the powers on either side). Factor k is
+//!   dimension k of the sequence in the order given, at most `qmc::MAX_DIMENSIONS` factors, and a
+//!   coordinate is placed in the factor's range as the Latin hypercube does. Compared with a
+//!   Latin hypercube, whose factors are matched at random, the points cover the ranges of
+//!   several factors at once more evenly. Each batch has its own random digital shift for each
+//!   factor (Owen, 1995; L'Ecuyer and Lemieux, 2002), the first draw of the stream
+//!   `Rng::keyed(seed, "design/qmc/<batch>/<id>.<field>")`, so every point is uniform on its own,
+//!   the batches are independent replicates and the same seed gives the same design. Beside the
+//!   rank correlation across all points, each result's mean is worked out per batch, and the
+//!   interval of a mean (a correlation, or a result's average over the ranges) is the t interval
+//!   across the batches.
 
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 use serde_json::{Value, json};
+use stochcraft_mc::qmc;
 use stochcraft_model::Model;
 use stochcraft_random::Rng;
-use stochcraft_stats::difference;
+use stochcraft_stats::{Summary, difference};
 
 use crate::CommandError;
 use crate::decide::{Field, Output, Param, invalid, metric, reps_seed, run, samples};
@@ -42,6 +59,9 @@ use crate::decide::{Field, Output, Param, invalid, metric, reps_seed, run, sampl
 /// The most runs (design points × replications) a design may take. A 3 × 3 × 3 factorial with
 /// 20 replications is 540 runs; a 9 × 5 grid with 100 is 4,500.
 pub const MAX_RUNS: u64 = 10_000;
+
+/// A Sobol design's batches when `batches` is not given.
+pub const DEFAULT_BATCHES: u32 = 4;
 
 /// How the design points are chosen.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default, Serialize, Deserialize, JsonSchema)]
@@ -52,6 +72,9 @@ pub enum Kind {
     FullFactorial,
     /// `points` points, each factor's range cut into `points` strata, each stratum used once.
     LatinHypercube,
+    /// `batches` batches of `points` points each (a power of two), the first points of the Sobol
+    /// sequence, each batch shifted at random.
+    Sobol,
 }
 
 impl Kind {
@@ -59,6 +82,7 @@ impl Kind {
         match self {
             Kind::FullFactorial => "full_factorial",
             Kind::LatinHypercube => "latin_hypercube",
+            Kind::Sobol => "sobol",
         }
     }
 }
@@ -74,7 +98,7 @@ pub struct Factor {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub levels: Option<Vec<f64>>,
     /// The range, instead of levels: in a full factorial its two ends are the two levels; in a
-    /// Latin hypercube it is sampled (a count takes its whole numbers from `min` to `max`).
+    /// Latin hypercube or Sobol design it is sampled (a count takes its whole numbers from `min` to `max`).
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub min: Option<f64>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -100,12 +124,16 @@ pub struct DesignParams {
     pub factors: Vec<Factor>,
     /// The results to report at each point.
     pub results: Vec<Output>,
-    /// `full_factorial` (the default) or `latin_hypercube`.
+    /// `full_factorial` (the default), `latin_hypercube` or `sobol`.
     #[serde(default)]
     pub design: Kind,
-    /// A Latin hypercube's number of points.
+    /// A Latin hypercube's number of points; a Sobol design's number of points in each batch (a
+    /// power of two).
     #[serde(default)]
     pub points: Option<u32>,
+    /// A Sobol design's number of batches, each shifted at random (default 4, at least 2).
+    #[serde(default)]
+    pub batches: Option<u32>,
     /// Replications at each point (default: the experiment's).
     #[serde(default)]
     pub replications: Option<u32>,
@@ -150,7 +178,7 @@ fn values(f: &Factor, kind: Kind) -> Result<Values, CommandError> {
             }
             match kind {
                 Kind::FullFactorial => Ok(Values::Levels(vec![lo, hi])),
-                Kind::LatinHypercube if f.field.integral() => {
+                Kind::LatinHypercube | Kind::Sobol if f.field.integral() => {
                     if lo.fract() != 0.0 || hi.fract() != 0.0 {
                         return Err(invalid(format!(
                             "`{label}` is a count: give its range as whole numbers"
@@ -164,7 +192,7 @@ fn values(f: &Factor, kind: Kind) -> Result<Values, CommandError> {
                     let n = (hi - lo) as u64;
                     Ok(Values::Levels((0..=n).map(|i| lo + i as f64).collect()))
                 }
-                Kind::LatinHypercube => Ok(Values::Range(lo, hi)),
+                Kind::LatinHypercube | Kind::Sobol => Ok(Values::Range(lo, hi)),
             }
         }
         _ => Err(invalid(format!(
@@ -199,6 +227,30 @@ fn factorial(levels: &[Vec<f64>]) -> Vec<Vec<f64>> {
     points
 }
 
+/// The value of `v` at the fraction `u` of its range (`sorted`: its levels, ascending): a range
+/// is interpolated, levels take the one at ⌊u L⌋ of L.
+fn place(v: &Values, sorted: &[f64], u: f64) -> f64 {
+    match v {
+        Values::Range(lo, hi) => lo + u * (hi - lo),
+        Values::Levels(_) => {
+            let k = ((u * sorted.len() as f64) as usize).min(sorted.len() - 1);
+            sorted[k]
+        }
+    }
+}
+
+/// `v`'s levels in ascending order (none for a range).
+fn sorted_levels(v: &Values) -> Vec<f64> {
+    match v {
+        Values::Levels(ls) => {
+            let mut s = ls.clone();
+            s.sort_by(f64::total_cmp);
+            s
+        }
+        Values::Range(..) => Vec::new(),
+    }
+}
+
 /// Factor `f`'s column of an `n`-point Latin hypercube with `seed` (see the module's comment).
 fn hypercube_column(f: &Factor, v: &Values, n: usize, seed: u64) -> Vec<f64> {
     let mut rng = Rng::keyed(seed, &format!("design/{}", f.label()));
@@ -207,26 +259,38 @@ fn hypercube_column(f: &Factor, v: &Values, n: usize, seed: u64) -> Vec<f64> {
         let j = ((rng.uniform() * (i + 1) as f64) as usize).min(i);
         perm.swap(i, j);
     }
-    let sorted = match v {
-        Values::Levels(ls) => {
-            let mut s = ls.clone();
-            s.sort_by(f64::total_cmp);
-            s
-        }
-        Values::Range(..) => Vec::new(),
-    };
+    let sorted = sorted_levels(v);
     perm.iter()
-        .map(|&p| {
-            let u = (p as f64 + rng.uniform()) / n as f64;
-            match v {
-                Values::Range(lo, hi) => lo + u * (hi - lo),
-                Values::Levels(_) => {
-                    let k = ((u * sorted.len() as f64) as usize).min(sorted.len() - 1);
-                    sorted[k]
-                }
-            }
-        })
+        .map(|&p| place(v, &sorted, (p as f64 + rng.uniform()) / n as f64))
         .collect()
+}
+
+/// The digital shift of factor `f` in Sobol batch `batch`: the first draw of the stream
+/// `design/qmc/<batch>/<id>.<field>`.
+fn sobol_shift(f: &Factor, batch: usize, seed: u64) -> u32 {
+    let mut rng = Rng::keyed(seed, &format!("design/qmc/{batch}/{}", f.label()));
+    u32::try_from(rng.next_u64() >> 32).unwrap_or(0)
+}
+
+/// One Sobol batch: the first `n` points of the sequence, factor k on dimension k, shifted by
+/// `shifts[k]`, each coordinate placed in its factor's range. `None` beyond the dimensions
+/// there are directions for.
+fn sobol_batch(vals: &[Values], n: usize, shifts: &[u32]) -> Option<Vec<Vec<f64>>> {
+    let columns: Vec<Vec<f64>> = vals
+        .iter()
+        .zip(shifts)
+        .enumerate()
+        .map(|(k, (v, &shift))| {
+            let sorted = sorted_levels(v);
+            let us = qmc::shifted(k, n, shift)?;
+            Some(us.into_iter().map(|u| place(v, &sorted, u)).collect())
+        })
+        .collect::<Option<_>>()?;
+    Some(
+        (0..n)
+            .map(|i| columns.iter().map(|c| c[i]).collect())
+            .collect(),
+    )
 }
 
 /// One result at one point: its summary and its value in each replication.
@@ -305,6 +369,18 @@ pub(crate) fn spearman(x: &[f64], y: &[f64]) -> Option<f64> {
     (sxx > 0.0 && syy > 0.0).then(|| sxy / (sxx * syy).sqrt())
 }
 
+/// The mean of `xs` and the 95% t half-width of that mean (`None` for no values, and for no
+/// half-width with fewer than two).
+fn across(xs: &[f64]) -> (Option<f64>, Option<f64>) {
+    match Summary::of(xs) {
+        Some(s) => (
+            Some(s.mean),
+            (s.n > 1 && s.half_width.is_finite()).then_some(s.half_width),
+        ),
+        None => (None, None),
+    }
+}
+
 /// Runs a designed experiment: each result at each point, and the factors' effects on them.
 pub fn design(model: &Model, p: &DesignParams) -> Result<Value, CommandError> {
     if p.factors.is_empty() || p.results.is_empty() {
@@ -329,11 +405,17 @@ pub fn design(model: &Model, p: &DesignParams) -> Result<Value, CommandError> {
         .iter()
         .map(|f| values(f, p.design))
         .collect::<Result<_, _>>()?;
+    if p.batches.is_some() && p.design != Kind::Sobol {
+        return Err(invalid("`batches` is for a Sobol design"));
+    }
+    // The batch each point belongs to (a Sobol design's; empty otherwise).
+    let mut batch_of: Vec<usize> = Vec::new();
     let points: Vec<Vec<f64>> = match p.design {
         Kind::FullFactorial => {
             if p.points.is_some() {
                 return Err(invalid(
-                    "`points` is for a Latin hypercube; a full factorial runs every combination",
+                    "`points` is for a Latin hypercube or a Sobol design; a full factorial runs \
+                     every combination",
                 ));
             }
             let levels: Vec<Vec<f64>> = vals
@@ -374,6 +456,52 @@ pub fn design(model: &Model, p: &DesignParams) -> Result<Value, CommandError> {
                 .map(|i| columns.iter().map(|c| c[i]).collect())
                 .collect()
         }
+        Kind::Sobol => {
+            let n = p
+                .points
+                .ok_or_else(|| invalid("a Sobol design needs its number of `points` per batch"))?;
+            if n < 2 {
+                return Err(invalid(
+                    "a Sobol design needs at least 2 `points` per batch",
+                ));
+            }
+            if !n.is_power_of_two() {
+                let up = n.checked_next_power_of_two().unwrap_or(1 << 31);
+                return Err(invalid(format!(
+                    "a Sobol design's `points` per batch must be a power of two (2, 4, 8, ...), \
+                     which keeps the points balanced; {n} is not: use {} or {up}",
+                    up / 2
+                )));
+            }
+            let batches = p.batches.unwrap_or(DEFAULT_BATCHES);
+            if batches < 2 {
+                return Err(invalid(
+                    "a Sobol design needs at least 2 `batches`, for an interval across them",
+                ));
+            }
+            if p.factors.len() > qmc::MAX_DIMENSIONS {
+                return Err(invalid(format!(
+                    "a Sobol design takes at most {} factors, one dimension each; {} were given",
+                    qmc::MAX_DIMENSIONS,
+                    p.factors.len()
+                )));
+            }
+            let total = u128::from(n) * u128::from(batches);
+            let runs = total * u128::from(reps);
+            if runs > u128::from(MAX_RUNS) {
+                return Err(too_many(runs, total, reps));
+            }
+            let n = n as usize;
+            let mut points = Vec::with_capacity(n * batches as usize);
+            for b in 0..batches as usize {
+                let shifts: Vec<u32> = p.factors.iter().map(|f| sobol_shift(f, b, seed)).collect();
+                let batch = sobol_batch(&vals, n, &shifts)
+                    .ok_or_else(|| invalid("a Sobol design has too many factors"))?;
+                batch_of.extend(std::iter::repeat_n(b, n));
+                points.extend(batch);
+            }
+            points
+        }
     };
     // Every point's model first, so a level that cannot be set fails before anything runs.
     let models: Vec<Model> = points
@@ -412,7 +540,8 @@ pub fn design(model: &Model, p: &DesignParams) -> Result<Value, CommandError> {
         .iter()
         .zip(&cells)
         .zip(warned)
-        .map(|((xs, row), warnings)| {
+        .enumerate()
+        .map(|(i, ((xs, row), warnings))| {
             let results: Vec<Value> = p
                 .results
                 .iter()
@@ -427,7 +556,11 @@ pub fn design(model: &Model, p: &DesignParams) -> Result<Value, CommandError> {
                     })
                 })
                 .collect();
-            json!({ "values": xs, "results": results, "warnings": warnings })
+            let mut point = json!({ "values": xs, "results": results, "warnings": warnings });
+            if let Some(b) = batch_of.get(i) {
+                point["batch"] = json!(b);
+            }
+            point
         })
         .collect();
     let factors_json: Vec<Value> = p
@@ -448,6 +581,10 @@ pub fn design(model: &Model, p: &DesignParams) -> Result<Value, CommandError> {
         "runs": points.len() as u64 * reps,
         "points": point_json,
     });
+    if p.design == Kind::Sobol {
+        answer["batches"] = json!(batch_of.last().map_or(0, |b| b + 1));
+        answer["points_per_batch"] = json!(batch_of.iter().filter(|&&b| b == 0).count());
+    }
     match p.design {
         Kind::FullFactorial => {
             let mut main = Vec::new();
@@ -514,6 +651,67 @@ pub fn design(model: &Model, p: &DesignParams) -> Result<Value, CommandError> {
                 "full factorial: every combination of the levels, the last factor changing fastest, each point run with the same seed (common random numbers), so replication i of every point meets the same random numbers; main effect: the mean of the result over the points at the factor's highest level minus the mean over the points at its lowest, so averaged over the other factors' levels; interaction (two factors with two levels each, as in a 2^k design, Law chapter 12): half the change in one factor's effect between the other's high and low level, the mean over the points where both are high or both low minus the mean over the rest; each effect is worked out replication by replication, and half_width is the 95% t half-width of those values (n − 1 degrees of freedom, n the replications where every point involved has a value); significant: that interval excludes 0 (null with fewer than two replications). Each of the `tests` effects is tested on its own at 95%, so about one in twenty of those with no real effect still shows as significant by chance; for 95% confidence in all of them at once (Bonferroni), each would need its own interval at 1 − 0.05/tests, which is wider"
             );
         }
+        Kind::Sobol => {
+            let nb = batch_of.last().map_or(0, |b| b + 1);
+            let per = points.len() / nb.max(1);
+            let mut corr = Vec::new();
+            for (k, f) in p.factors.iter().enumerate() {
+                for (r, o) in p.results.iter().enumerate() {
+                    let pairs = |range: std::ops::Range<usize>| -> (Vec<f64>, Vec<f64>) {
+                        range
+                            .filter_map(|i| Some((points[i][k], cells[i][r].mean?)))
+                            .unzip()
+                    };
+                    let (xs, ys) = pairs(0..points.len());
+                    let each: Vec<Option<f64>> = (0..nb)
+                        .map(|b| {
+                            let (x, y) = pairs(b * per..(b + 1) * per);
+                            spearman(&x, &y)
+                        })
+                        .collect();
+                    let found: Vec<f64> = each.iter().flatten().copied().collect();
+                    let (mean, half_width) = across(&found);
+                    corr.push(json!({
+                        "id": f.id,
+                        "field": f.field,
+                        "element": o.element,
+                        "metric": o.metric,
+                        "spearman": spearman(&xs, &ys),
+                        "n": xs.len(),
+                        "batch_spearman": each,
+                        "batch_mean": mean,
+                        "half_width": half_width,
+                    }));
+                }
+            }
+            // Each result's mean over the factors' ranges: one mean per batch, and their
+            // interval across the independent batches.
+            let mut summary = Vec::new();
+            for (r, o) in p.results.iter().enumerate() {
+                let means: Vec<Option<f64>> = (0..nb)
+                    .map(|b| {
+                        let v: Vec<f64> = (b * per..(b + 1) * per)
+                            .filter_map(|i| cells[i][r].mean)
+                            .collect();
+                        (!v.is_empty()).then(|| v.iter().sum::<f64>() / v.len() as f64)
+                    })
+                    .collect();
+                let found: Vec<f64> = means.iter().flatten().copied().collect();
+                let (mean, half_width) = across(&found);
+                summary.push(json!({
+                    "element": o.element,
+                    "metric": o.metric,
+                    "batch_means": means,
+                    "mean": mean,
+                    "half_width": half_width,
+                }));
+            }
+            answer["correlations"] = json!(corr);
+            answer["result_means"] = json!(summary);
+            answer["method"] = json!(
+                "Sobol design (Sobol', 1967; direction numbers of Joe and Kuo, 2008): in each batch the first `points` points of the Sobol sequence (a power of two, which keeps them balanced), factor k on dimension k in the order given, so the points cover the factors' ranges more evenly together than a Latin hypercube's random matching does; each batch is shifted by its own random digital shift for each factor (Owen, 1995; L'Ecuyer and Lemieux, 2002), drawn from the seed, so every point is uniform on its own, the batches are independent replicates and the same seed gives the same design; each point run with the same seed (common random numbers); spearman: the rank correlation across all the points between the factor's value and the result's mean (ties share their mean rank; null with fewer than three points with a value or when either is constant), from −1 to 1, near 0 when the factor does not drive the result in one direction; batch_spearman: the same within each batch, batch_mean their mean and half_width the 95% t half-width of that mean across the batches (null with fewer than two); result_means: each result's mean over the points of each batch, their mean and its 95% t half-width across the batches, the average of the result over the factors' ranges. A rank correlation near 0 does not show that a factor has no effect"
+            );
+        }
         Kind::LatinHypercube => {
             let mut corr = Vec::new();
             for (k, f) in p.factors.iter().enumerate() {
@@ -560,6 +758,50 @@ mod tests {
                 vec![2.0, 30.0],
             ]
         );
+    }
+
+    #[test]
+    fn unshifted_sobol_points_are_the_published_ones_in_the_range() {
+        // The first points of Sobol's dimension 1 (the van der Corput sequence, in Gray-code
+        // order) are 0, 1/2, 3/4, 1/4, 3/8, 7/8, 5/8, 1/8, and of dimension 2 are 0, 1/2, 1/4,
+        // 3/4 (Joe and Kuo, 2008); a coordinate is placed at lo + u (hi - lo). Every dimension
+        // is also checked against `qmc::points`.
+        let vals = [
+            Values::Range(10.0, 20.0),
+            Values::Range(-1.0, 1.0),
+            Values::Range(0.0, 100.0),
+        ];
+        let batch = sobol_batch(&vals, 8, &[0, 0, 0]).unwrap_or_default();
+        assert_eq!(batch.len(), 8);
+        for (k, v) in vals.iter().enumerate() {
+            let Values::Range(lo, hi) = v else { continue };
+            let us = qmc::points(k, 8).unwrap_or_default();
+            for (point, u) in batch.iter().zip(&us) {
+                // A shift of 0 puts a coordinate at the middle of its 2^-32 cell.
+                assert!((point[k] - (lo + u * (hi - lo))).abs() < 1e-6 * (hi - lo));
+            }
+        }
+        let first: Vec<f64> = batch.iter().map(|p| (p[0] - 10.0) / 10.0).collect();
+        for (got, want) in first
+            .iter()
+            .zip([0.0, 0.5, 0.75, 0.25, 0.375, 0.875, 0.625, 0.125])
+        {
+            assert!((got - want).abs() < 1e-9, "{first:?}");
+        }
+        let second: Vec<f64> = batch.iter().map(|p| (p[1] + 1.0) / 2.0).collect();
+        for (got, want) in second.iter().zip([0.0, 0.5, 0.25, 0.75]) {
+            assert!((got - want).abs() < 1e-9, "{second:?}");
+        }
+    }
+
+    #[test]
+    fn a_whole_number_range_takes_each_of_its_levels_equally_often() {
+        // 8 points of a 4-level count: the first 8 Sobol points are balanced over the quarters.
+        let levels = Values::Levels(vec![1.0, 2.0, 3.0, 4.0]);
+        let batch = sobol_batch(&[levels], 8, &[0x1234_5678]).unwrap_or_default();
+        let mut got: Vec<f64> = batch.iter().map(|p| p[0]).collect();
+        got.sort_by(f64::total_cmp);
+        assert_eq!(got, [1.0, 1.0, 2.0, 2.0, 3.0, 3.0, 4.0, 4.0]);
     }
 
     #[test]
