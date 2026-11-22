@@ -1419,6 +1419,7 @@ unit	yr	a
 	The estimated chance that {output} is more than {value} is {percent}.	A probabilidade estimada de que {output} sexa maior que {value} é {percent}.
 	The estimated chance that {output} is less than {value} is {percent}.	A probabilidade estimada de que {output} sexa menor que {value} é {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	O seu intervalo non ten anchura, algo que ningunha estimación ten, polo que se mantén o resultado simple.
+	Did not open {file}: a different model was opened in the meantime	Non se abriu {file}: mentres tanto abriuse outro modelo
 	Select	Seleccionar
 	Link	Ligazón
 	Initial value	Valor inicial

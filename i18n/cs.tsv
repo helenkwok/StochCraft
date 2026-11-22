@@ -1419,6 +1419,7 @@ unit	yr	r.
 	The estimated chance that {output} is more than {value} is {percent}.	Odhadovaná pravděpodobnost, že {output} bude větší než {value}, je {percent}.
 	The estimated chance that {output} is less than {value} is {percent}.	Odhadovaná pravděpodobnost, že {output} bude menší než {value}, je {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	Jejich interval nemá žádnou šířku, což žádný odhad nemá, proto zůstává obyčejný výsledek.
+	Did not open {file}: a different model was opened in the meantime	Soubor {file} nebyl otevřen: mezitím byl otevřen jiný model
 	Select	Vybrat
 	Link	Spojnice
 	Initial value	Počáteční hodnota

@@ -1419,6 +1419,7 @@ unit	yr	г.
 	The estimated chance that {output} is more than {value} is {percent}.	Прогнозната вероятност {output} да е над {value} е {percent}.
 	The estimated chance that {output} is less than {value} is {percent}.	Прогнозната вероятност {output} да е под {value} е {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	Техният интервал няма ширина, каквато няма никоя оценка, затова остава обикновеният резултат.
+	Did not open {file}: a different model was opened in the meantime	{file} не е отворен: междувременно е отворен друг модел
 	Select	Избор
 	Link	Връзка
 	Initial value	Начална стойност

@@ -1419,6 +1419,7 @@ unit	yr	a
 	The estimated chance that {output} is more than {value} is {percent}.	Probabilitatea estimată ca {output} să fie mai mare decât {value} este {percent}.
 	The estimated chance that {output} is less than {value} is {percent}.	Probabilitatea estimată ca {output} să fie mai mică decât {value} este {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	Intervalul lor nu are lățime, ceea ce nicio estimare nu are, așa că rămâne rezultatul simplu.
+	Did not open {file}: a different model was opened in the meantime	{file} nu a fost deschis: între timp a fost deschis alt model
 	Select	Selectează
 	Link	Legătură
 	Initial value	Valoare inițială

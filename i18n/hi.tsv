@@ -1419,6 +1419,7 @@ unit	yr	वर्ष
 	The estimated chance that {output} is more than {value} is {percent}.	{output} के {value} से अधिक होने की अनुमानित संभावना {percent} है।
 	The estimated chance that {output} is less than {value} is {percent}.	{output} के {value} से कम होने की अनुमानित संभावना {percent} है।
 	Their interval has no width, which no estimate has, so the plain result stands.	उनके अंतराल की कोई चौड़ाई नहीं है, जो किसी अनुमान की नहीं होती, इसलिए सामान्य परिणाम ही रहता है।
+	Did not open {file}: a different model was opened in the meantime	{file} नहीं खोली गई: इस बीच कोई दूसरा मॉडल खोल दिया गया
 	Select	चुनें
 	Link	लिंक
 	Initial value	प्रारंभिक मान

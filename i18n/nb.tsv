@@ -1419,6 +1419,7 @@ unit	yr	år
 	The estimated chance that {output} is more than {value} is {percent}.	Den anslåtte sannsynligheten for at {output} er over {value}, er {percent}.
 	The estimated chance that {output} is less than {value} is {percent}.	Den anslåtte sannsynligheten for at {output} er under {value}, er {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	Intervallet deres har ingen bredde, noe ingen anslag har, så det vanlige resultatet står.
+	Did not open {file}: a different model was opened in the meantime	{file} ble ikke åpnet: en annen modell ble åpnet i mellomtiden
 	Select	Velg
 	Link	Kobling
 	Initial value	Startverdi

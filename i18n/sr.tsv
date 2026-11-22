@@ -1419,6 +1419,7 @@ unit	yr	год.
 	The estimated chance that {output} is more than {value} is {percent}.	Процењена вероватноћа да је {output} већи од {value} износи {percent}.
 	The estimated chance that {output} is less than {value} is {percent}.	Процењена вероватноћа да је {output} мањи од {value} износи {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	Њихов интервал нема ширину, што ниједна процена нема, па остаје обичан резултат.
+	Did not open {file}: a different model was opened in the meantime	{file} није отворен: у међувремену је отворен други модел
 	Select	Изабери
 	Link	Веза
 	Initial value	Почетна вредност
