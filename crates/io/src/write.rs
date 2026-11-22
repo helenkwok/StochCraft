@@ -9,9 +9,9 @@ use std::collections::{BTreeMap, BTreeSet};
 use stochcraft_model::{
     BalkJoin, Balking, Bounds, Breakdown, Calendar, ConveyorShape, DateTime, Demand, Dist,
     ElementKind, Estimate, Experiment, HealthCheck, LengthUnit, Model, MonteCarlo, Need,
-    OnShiftEnd, OnTakeout, Patience, PatienceUntil, PlaceWhileOut, Power, ProcessingBy, Property,
-    PropertyType, PropertyValue, QueueLimit, ResourcePool, Routing, Scrap, Sequential, Setup, Stop,
-    Timed, Transfer,
+    Observation, Observed, OnShiftEnd, OnTakeout, Patience, PatienceUntil, PlaceWhileOut, Power,
+    ProcessingBy, Property, PropertyType, PropertyValue, QueueLimit, ResourcePool, Routing, Scrap,
+    Sequential, Setup, Stop, Timed, Transfer,
 };
 
 use crate::bpsim::NS2;
@@ -335,6 +335,9 @@ pub(crate) fn scenario_extensions(x: &Experiment) -> Vec<Element> {
     if let Some(q) = &x.sequential {
         out.push(sequential_element(q));
     }
+    if !x.observed.is_empty() {
+        out.push(observed_element(&x.observed));
+    }
     out
 }
 
@@ -446,6 +449,47 @@ pub(crate) fn sequential_element(x: &Sequential) -> Element {
         .with_attr("name", crate::bpsim::SEQUENTIAL)
         .with_attr("xmlns:stochcraft", ns)
         .with_child(body)
+}
+
+/// The observed data as StochCraft's vendor extension ([`crate::bpsim::OBSERVED`]): one
+/// `observation` for each result, with its observed value (and the half-width of its own
+/// interval), or its bound.
+pub(crate) fn observed_element(list: &[Observation]) -> Element {
+    let ns = crate::bpsim::STOCHCRAFT_NS;
+    let mut body = Element::new("stochcraft:observed", Some(ns));
+    for o in list {
+        let mut e = Element::new("stochcraft:observation", Some(ns))
+            .with_attr("element", o.element.as_str())
+            .with_attr("metric", &o.metric);
+        e = match o.target {
+            Observed::Value {
+                value,
+                half_width,
+                tolerance,
+            } => {
+                let mut e = e.with_attr("value", &num(value));
+                if let Some(h) = half_width {
+                    e = e.with_attr("halfWidth", &num(h));
+                }
+                if let Some(t) = tolerance {
+                    e = e.with_attr("tolerance", &num(t));
+                }
+                e
+            }
+            Observed::AtMost(x) => e.with_attr("atMost", &num(x)),
+            Observed::AtLeast(x) => e.with_attr("atLeast", &num(x)),
+        };
+        body.push(e);
+    }
+    s("VendorExtension")
+        .with_attr("name", crate::bpsim::OBSERVED)
+        .with_attr("xmlns:stochcraft", ns)
+        .with_child(body)
+}
+
+/// What clears the observed data an inherited scenario sets.
+pub(crate) fn observed_off_element() -> Element {
+    vendor_value_element(crate::bpsim::OBSERVED, "off")
 }
 
 /// What turns off the sequential replications an inherited scenario sets.

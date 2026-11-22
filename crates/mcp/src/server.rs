@@ -36,7 +36,9 @@ replications with its 95% confidence interval; to compare, change a parameter, `
 `execute` results.compare (the last run against the one before: each difference with its 95% \
 interval, paired when both runs keep the seed and replications, so keep them; experiment.sweep and \
 experiment.sensitivity do this over many values, and experiment.design over several factors at once, \
-a full factorial or a Latin hypercube); `save`. \
+a full factorial or a Latin hypercube); to check a model against real data, `execute` observation.add \
+{check: value | at_most | at_least, element, metric, ...} and `run`: the results' `observed` says, by the \
+95% interval, whether each agrees; `save`. \
 Every failure leaves the model unchanged and says why; `undo` takes back an edit.";
 
 pub struct Server {

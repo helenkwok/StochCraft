@@ -269,6 +269,10 @@ enum Command {
         /// `127.0.0.1:7070`. If it cannot be reached, the server runs headless.
         #[arg(long, conflicts_with_all = ["read_root", "write_root"])]
         connect: Option<String>,
+        /// The app's control channel token, for when its token file is not reachable. Default: the
+        /// environment variable `STOCHCRAFT_TOKEN`, else the file the app wrote (docs/mcp.md).
+        #[arg(long, requires = "connect")]
+        token: Option<String>,
         /// Run an engine in this process, with no window (the default).
         #[arg(long, conflicts_with = "connect")]
         headless: bool,
@@ -1301,14 +1305,24 @@ fn schema(command: Option<&str>) -> Result<u8, Failure> {
 }
 
 /// `stochcraft-cli mcp`: serves until stdin closes. Only protocol messages go to stdout.
-fn mcp(connect: Option<String>, read: Option<&Path>, write: Option<&Path>) -> Result<u8, Failure> {
+fn mcp(
+    connect: Option<String>,
+    token: Option<String>,
+    read: Option<&Path>,
+    write: Option<&Path>,
+) -> Result<u8, Failure> {
     let roots = if read.is_some() || write.is_some() {
         stochcraft_mcp::Roots::new(read, write).map_err(Failure)?
     } else {
         stochcraft_mcp::Roots::default()
     };
-    let (backend, note) =
-        stochcraft_mcp::backend(stochcraft_mcp::Options { connect, roots }).map_err(Failure)?;
+    let (backend, note) = stochcraft_mcp::backend(stochcraft_mcp::Options {
+        connect,
+        token,
+        token_file: None,
+        roots,
+    })
+    .map_err(Failure)?;
     if let Some(note) = note {
         eprintln!("stochcraft-cli mcp: {note}");
     }
@@ -1446,10 +1460,11 @@ fn main() -> ExitCode {
         Command::Schema { command } => schema(command.as_deref()),
         Command::Mcp {
             connect,
+            token,
             headless: _,
             read_root,
             write_root,
-        } => mcp(connect, read_root.as_deref(), write_root.as_deref()),
+        } => mcp(connect, token, read_root.as_deref(), write_root.as_deref()),
     };
     match outcome {
         Ok(code) => ExitCode::from(code),

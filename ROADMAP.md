@@ -10,7 +10,8 @@ answer the question, has steps 1–5 done, and M5's sorter is built alongside it
 are done, and so is M2.10 (abandonment and balking) apart from the gaps listed in it. M2.11
 (changeovers and lean measures) has its changeovers, product-type times, takt and cycle times,
 state times and most of OEE done; M2.9 (output analysis) has its recorder of results over time,
-MSER-5's warm-up suggestion, its warnings, streams by element id and starting contents done. M4
+MSER-5's warm-up suggestion, its warnings, streams by element id, starting contents and
+validation against observed data (values and bounds, #226) done. M4
 is being planned, and M4.1 (Monte Carlo) has its engine, files and command line (part 1), its
 window (part 2) and which inputs matter (part 3: tornado, rank correlations and Sobol shares) done.
 M5 has its conveyors (M5.1), the operators in the model and files (M5.2, PR 1), a first 3D view
@@ -1337,15 +1338,51 @@ ch. 10 §10.4, in Brailsford, Churilov and Dangerfield, eds., 2014). Related and
   once, with the reason in the commit.
 - **Validation against observed data** (#226). Compare a run's results with held-out real data
   (black-box validation, ch. 6 §6.5.5 and ch. 10 §10.4.1).
-  - Not yet: **checks that pass or fail.** An experiment can carry checks on its results: a
-    bound ("mean wait under 2 min", "throughput at least 400 a day", with the 95% interval
-    deciding, not the mean alone), a comparison of two scenarios with common random numbers
-    ("the third packer cuts the wait"), or observed values with their spread. A run reports
-    each check as met, not met, or not decided (the interval straddles the bound), and
-    `stochcraft-cli check` exits non-zero when a check is not met, so a model can be tested in
-    CI. The checks are saved with the experiment (a `stochcraft:` vendor extension) and can
-    write a short report (Markdown) of the checks, the settings and the results. Also offered
-    by desflow (MIT, `desflow experiment`), seen 2026-11.
+  - **Done (#226):** **observed data.** An experiment carries real measurements for results the
+    run reports, at most one for each result (a block's or pool's metric, by the names the results
+    use, in the metric's own unit, a share as a fraction): an observed value, with the half-width
+    of its own 95% interval where its data give one, and a tolerance, or a bound, at most or at least (Law,
+    *Simulation Modeling and Analysis*, 5th ed., section 5.6.2; Sargent 2013). The results check
+    each and say so in words (`observed` in the results, "Checked against observed data" in the
+    window and `run`'s table, a finding first for each that differs or fails):
+    - An observed value has an optional **tolerance** (above 0, the difference the modeller
+      accepts, set in advance). Its difference interval is (simulated mean − observed) ±
+      `hypot(hs, ho)` for the simulated half-width `hs` and the observed `ho` (the usual
+      large-sample approximation, without Welch's degrees of freedom; `ho` counts as 0 where not
+      given). Without a tolerance it **differs** when the 95% interval excludes 0 and otherwise
+      is **no difference detected**, never agreement: a wide interval holds 0 whatever the truth
+      (Sargent 2013). With a tolerance t it is an equivalence test: **agrees** when the whole
+      interval is inside [−t, +t], **differs** when wholly outside, else **inconclusive**; the
+      95% interval is conservative against the 90% interval of two one-sided tests (Schuirmann).
+    - A bound **passes** when the whole simulated 95% interval meets it (the edge itself meets
+      it), **fails** when the whole interval violates it, and otherwise is **inconclusive**:
+      more replications would decide, never the mean alone. Fewer than 2 replications give no
+      interval, so every check is inconclusive; a result the run does not report is `no_result`.
+      Results are listed with those that differ or fail first, then those inconclusive or with
+      no difference detected, then those that agree or pass.
+    - Saved with the experiment in the file as the `stochcraft:observed` extension on the
+      scenario (written only when there are observations; elements outside StochCraft's
+      namespace are ignored; `off` clears what an inherited scenario sets; declared in
+      `stochcraft-bpsim-1.xsd`). Engine commands `observation.add`, `.set` and `.remove`,
+      journalled and undoable like any edit; `model.get` carries them as `experiment.observed`.
+      Observed data for a block that is gone is the warning `bad_observation`, and the check says
+      `no_result`; it does not stop the run.
+    - In the window: **Observed data** in the model page (a result to add, then its kind,
+      number and half-width in the row, **Remove**), and **Checked against observed data** in
+      the results. A share is a percentage in the window. The observed data are part of the
+      experiment, so editing them marks the results out of date, like any edit.
+    - Tests: `stochcraft-stats` (the agreement rules, the root of the sum of squares, the three
+      outcomes of a bound, one replication), `io` (round trip, in-place save, inheriting and
+      clearing, foreign namespace, unreadable entries, the schema), `engine/tests/observed.rs`
+      (a run of the M/M/1 example with observed data that agree and differ, bounds, the
+      commands, the model problem), `ui-egui/tests/observed.rs` and `i18n/`.
+    - Not here: more than one observation for the same result (say a value and a bound), and a
+      way to enter observed data in the command line except through the file.
+  - Not yet: **checks that compare scenarios or fail a script.** A comparison of two scenarios
+    with common random numbers ("the third packer cuts the wait"), and `stochcraft-cli check`
+    exiting non-zero when a check is not met, so a model can be tested in CI, with a short
+    report (Markdown) of the checks, the settings and the results. Also offered by desflow (MIT,
+    `desflow experiment`), seen 2026-11.
   - **Done:** **behaviour checks after every run** (`blocks/src/checks.rs`). Checks that need
     no reference, made on each replication's results and reported as warnings, one per element
     and check, saying in how many replications it failed (in the run's `warnings`, so the CLI's
@@ -1782,8 +1819,8 @@ M4.
 
 **M2 size:** about nine PRs for M2.1–M2.8 and one or two each for M2.9, M2.10 and M2.11, each independently mergeable after M1. **M2.1–M2.8 are complete**, and so is M2.10 apart from the gaps listed in it.
 What each leaves for later is under its own "Not yet" or "Not here". The rest of M2.9 (output
-analysis: the window's Welch plot, sequential replications, validation against observed data,
-the capacity table) and the rest of M2.11 (a line cycle time, ISO's NEE index, per-product plans, current and future
+analysis: the window's Welch plot, checks that compare scenarios or fail a script, the capacity
+table) and the rest of M2.11 (a line cycle time, ISO's NEE index, per-product plans, current and future
 state) are next.
 
 ---
@@ -2051,13 +2088,17 @@ replications other than the first.
   the agent opens and saves (links followed, whole-folder comparison, as in FieldCraft).
 - **Watching an agent:** `stochcraft --control PORT` listens on the loopback interface, and
   `stochcraft-cli mcp --connect 127.0.0.1:PORT` drives the window through it. A model the agent
-  opens replaces the one shown, its runs' results are shown, and its edits can be undone.
+  opens replaces the one shown, its runs' results are shown, and its edits can be undone. The
+  channel takes only connections that present a random 256-bit token as their first line; the
+  app writes it, with the port, to a file only its user can read (mode 0600 on Unix, the
+  profile's default permissions on Windows), and `--connect` reads it from there, or from
+  `--token` or `STOCHCRAFT_TOKEN` (#248).
 - **Tests:** `mcp/tests/session.rs` covers four areas:
   - an agent's session (open, batch build, check, run against M/M/1 theory, undo, save,
     resources);
   - hostile input;
   - the roots;
-  - the same tools through a control channel.
+  - the same tools through a control channel, which refuses a connection without the token.
 
   `ui-egui/tests/control.rs` checks that an agent's commands show in the window. Checked by hand:
   the desktop app on a virtual display, driven by `stochcraft-cli mcp --connect`, opened the
@@ -2344,8 +2385,7 @@ write XMILE (the engine's; Save As never rewrites a chosen name, and a Save into
 content the reader does not keep, a second diagram or styles, asks first with Replace, Save As and
 Cancel), and the title, the header and the question on closing follow its
 unsaved state, so a model changed by an agent's or the command line's edit is marked edited; the
-recovery copy is for process models only for now. The window's run is made whole, not a few replications a frame, because `stochcraft-sd` gives
-only aggregates (a stepped job needs per-replication results there). The canvas, then the replication of hybrids with M4.3 and M4.4; arrays, the
+recovery copy is for process models only for now. The window's run is made a few replications a frame, as Monte Carlo's is (`stochcraft_sd::SdJob`, wrapped by the engine's `SdJob` and `Engine::sd_start`, `Engine::sd_results`), with "n of N runs finished", Cancel (or Esc) and no size limit of its own beyond the engine's; changing the model while it runs, or opening another, cancels it. One replication is not interrupted, so a single very long replication still holds a frame up. The canvas, then the replication of hybrids with M4.3 and M4.4; arrays, the
 lint on rate-to-rate links and docking are not done.
 
 **What Python users already have, and so the minimum:** PySD runs models from the common

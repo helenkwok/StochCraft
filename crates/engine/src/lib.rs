@@ -59,6 +59,7 @@ mod distribution;
 mod edit;
 mod fit;
 pub mod mc;
+pub mod observed;
 pub mod precision;
 mod run;
 pub mod sd;

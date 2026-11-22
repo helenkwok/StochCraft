@@ -1483,6 +1483,52 @@ pub struct Experiment {
     /// extension on the scenario (`stochcraft:sequential`), since BPSim runs a fixed number.
     /// `None` runs exactly [`Experiment::replications`].
     pub sequential: Option<Sequential>,
+    /// Real measurements the results are checked against (black-box validation), at most one
+    /// for each result. A StochCraft vendor extension on the scenario (`stochcraft:observed`).
+    pub observed: Vec<Observation>,
+}
+
+/// A measurement of the real system for one result of the model to be checked against: an
+/// element's metric (by its name in the results, such as `mean_wait`), in the metric's own unit
+/// (a share as a fraction: 0.85 is 85%).
+#[derive(Debug, Clone, PartialEq)]
+pub struct Observation {
+    /// A block or a pool of the model.
+    pub element: ElementId,
+    pub metric: String,
+    pub target: Observed,
+}
+
+/// What a result is checked against ([`Observation::target`]).
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub enum Observed {
+    /// The value seen in the real system, with the half-width of its own 95% interval where its
+    /// data give one, and a `tolerance` (above 0, in the metric's unit) that the modeller sets in
+    /// advance: the difference the model may have and still count as agreeing. The simulated mean
+    /// differs from it when the 95% interval of the difference excludes 0 (with a tolerance:
+    /// lies wholly outside it), agrees when the whole interval is inside the tolerance, and
+    /// otherwise no difference is detected or the check is inconclusive.
+    Value {
+        value: f64,
+        half_width: Option<f64>,
+        tolerance: Option<f64>,
+    },
+    /// The result should be at most this; decided by the simulated 95% interval, not by the mean
+    /// alone.
+    AtMost(f64),
+    /// The result should be at least this; decided as an upper bound is.
+    AtLeast(f64),
+}
+
+impl Observed {
+    /// The number it is given, whatever it is checked as.
+    pub fn value(self) -> f64 {
+        match self {
+            Observed::Value { value, .. } | Observed::AtMost(value) | Observed::AtLeast(value) => {
+                value
+            }
+        }
+    }
 }
 
 /// How a sequential experiment decides it has run enough replications: each result it watches
@@ -1572,6 +1618,7 @@ impl Default for Experiment {
             stop: None,
             result_frequency: None,
             sequential: None,
+            observed: Vec::new(),
         }
     }
 }
@@ -1930,6 +1977,9 @@ pub enum Problem {
     BadStop {
         reason: StopFault,
     },
+    /// An observed value ([`Experiment::observed`]) is for a block or pool that the model does
+    /// not have, so there is no result to check it against.
+    BadObservation,
     /// The starting contents of a block ([`Model::starting`]) cannot be used, and why.
     BadStarting {
         reason: StartingFault,
@@ -2267,6 +2317,7 @@ impl Problem {
             Problem::QuantityIgnored => "quantity_ignored",
             Problem::NothingToUnbatch => "nothing_to_unbatch",
             Problem::BadStop { .. } => "bad_stop",
+            Problem::BadObservation => "bad_observation",
             Problem::BadStarting { .. } => "bad_starting",
             Problem::StopWithWarmup => "stop_with_warmup",
             Problem::EndedInWarmup { .. } => "ended_in_warmup",
@@ -2943,6 +2994,7 @@ impl Model {
         }
         self.check_experiment(&mut out);
         self.check_stop(&mut out);
+        self.check_observations(&mut out);
         self.check_estimates(&mut out);
         self.check_starting(&mut out);
         self.check_properties(&mut out);
@@ -3659,6 +3711,21 @@ impl Model {
             out.push(Diagnostic::error(Some(id), Problem::BadStop { reason }));
         } else if self.experiment.warmup > 0.0 {
             out.push(Diagnostic::warning(Some(id), Problem::StopWithWarmup));
+        }
+    }
+
+    /// Each observed value is for a block or pool the model has. A warning, not an error: the
+    /// run still goes, and the results say there is nothing to check that observation against.
+    fn check_observations(&self, out: &mut Vec<Diagnostic>) {
+        for o in &self.experiment.observed {
+            let known = self.element(&o.element).is_some()
+                || self.resources.iter().any(|r| r.id == o.element);
+            if !known {
+                out.push(Diagnostic::warning(
+                    Some(&o.element),
+                    Problem::BadObservation,
+                ));
+            }
         }
     }
 
@@ -5191,6 +5258,56 @@ mod tests {
             ),
             "{text:#?}"
         );
+    }
+
+    #[test]
+    fn an_observation_of_a_block_the_model_lacks_is_a_warning_not_an_error() {
+        let found = |element: &str| {
+            let mut m = mm1();
+            m.experiment.observed = vec![Observation {
+                element: ElementId::unchecked(element),
+                metric: "mean_wait".into(),
+                target: Observed::AtMost(2.0),
+            }];
+            m.validate()
+                .into_iter()
+                .filter(|d| d.problem.code() == "bad_observation")
+                .map(|d| (d.severity, d.at.map(|a| a.to_string())))
+                .collect::<Vec<_>>()
+        };
+        // A block the model has is fine.
+        assert!(found("machine").is_empty());
+        // One it no longer has is reported at that id, and does not stop a run.
+        assert_eq!(
+            found("removed"),
+            vec![(Severity::Warning, Some("removed".to_owned()))]
+        );
+    }
+
+    #[test]
+    fn an_observation_of_a_pool_is_fine() {
+        let mut m = mm1();
+        m.resources.push(ResourcePool::new(
+            ElementId::unchecked("crew"),
+            "Crew",
+            2,
+            Vec::new(),
+        ));
+        m.experiment.observed = vec![Observation {
+            element: ElementId::unchecked("crew"),
+            metric: "utilisation".into(),
+            target: Observed::Value {
+                value: 0.8,
+                half_width: Some(0.05),
+                tolerance: None,
+            },
+        }];
+        assert!(
+            !m.validate()
+                .iter()
+                .any(|d| d.problem.code() == "bad_observation")
+        );
+        assert_eq!(m.experiment.observed[0].target.value(), 0.8);
     }
 
     #[test]

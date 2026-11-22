@@ -268,8 +268,8 @@ impl App {
         self.guide_overlay(&ctx);
         // Once everything of this frame is laid out, including what is drawn over the charts.
         self.check_pending_png(&ctx);
-        // A system dynamics run asked for is made two frames on; keep the frames coming.
-        if self.sd_pending() {
+        // A system dynamics run is made a few replications a frame; keep the frames coming.
+        if self.sd_running() {
             ctx.request_repaint();
         }
     }

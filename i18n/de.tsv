@@ -1396,6 +1396,32 @@ unit	yr	J.
 	Replace the XMILE file?	XMILE-Datei ersetzen?
 	Save As writes a new file and keeps {file} as it is. Replacing {file} leaves out what StochCraft does not keep.	„Speichern unter“ schreibt eine neue Datei und lässt {file} unverändert. Beim Ersetzen von {file} geht verloren, was StochCraft nicht übernimmt.
 	Replace	Ersetzen
+	Observed data	Beobachtete Daten
+	Real measurements to check the results against: the value seen in the real system, or a bound the result must meet.	Reale Messwerte, mit denen die Ergebnisse geprüft werden: der im realen System gesehene Wert oder eine Grenze, die das Ergebnis einhalten muss.
+	Add an observed value	Beobachteten Wert hinzufügen
+	Observed value	Beobachteter Wert
+	Checked as	Geprüft als
+	Its 95% half-width	Seine 95-%-Halbbreite
+	Add Observed Value	Beobachteten Wert hinzufügen
+	Change Observed Value	Beobachteten Wert ändern
+	Remove Observed Value	Beobachteten Wert entfernen
+	Checked against observed data	Mit beobachteten Daten geprüft
+	{result} ({block}): observed {observed}, simulated {simulated}.	{result} ({block}): beobachtet {observed}, simuliert {simulated}.
+	{result} ({block}): must be at most {bound}, simulated {simulated}.	{result} ({block}): darf höchstens {bound} betragen, simuliert {simulated}.
+	{result} ({block}): must be at least {bound}, simulated {simulated}.	{result} ({block}): muss mindestens {bound} betragen, simuliert {simulated}.
+	Simulated minus observed: {difference}.	Simuliert minus beobachtet: {difference}.
+	Agrees	Stimmt überein
+	Differs	Weicht ab
+	Passes	Erfüllt
+	Fails	Nicht erfüllt
+	Can't tell yet: more runs would decide	Noch nicht zu entscheiden: mehr Läufe würden entscheiden
+	No result	Kein Ergebnis
+	Observed data is given for a block that does not exist, so there is no result to check it against. Remove it, or choose a block that exists.	Für einen Block, den es nicht gibt, sind beobachtete Daten angegeben, daher gibt es kein Ergebnis, gegen das sie geprüft werden könnten. Entfernen Sie sie, oder wählen Sie einen vorhandenen Block.
 	The estimated chance that {output} is more than {value} is {percent}.	Die geschätzte Wahrscheinlichkeit, dass {output} über {value} liegt, beträgt {percent}.
 	The estimated chance that {output} is less than {value} is {percent}.	Die geschätzte Wahrscheinlichkeit, dass {output} unter {value} liegt, beträgt {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	Ihr Intervall hat keine Breite, die keine Schätzung hat, daher bleibt das einfache Ergebnis bestehen.
+	Inconclusive at current precision	Bei der aktuellen Genauigkeit nicht entscheidbar
+	No difference detected	Kein Unterschied festgestellt
+	Agrees within ±{tolerance}	Stimmt überein innerhalb ±{tolerance}
+	This is not evidence of agreement: set a tolerance to test for it.	Das ist kein Beleg für Übereinstimmung: Legen Sie eine Toleranz fest, um sie zu prüfen.
+	Tolerance (0 for none)	Toleranz (0 für keine)
