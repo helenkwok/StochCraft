@@ -3597,7 +3597,7 @@ fn release_place(units: &RefCell<Vec<Unit>>, u: usize, places: Option<&Rc<Places
 /// for a free unit before it takes the next entity from the queue, so every waiting entity
 /// stays in the queue, where a retried job goes ahead of them all. A retried start's wait is
 /// taken back, so the mean wait runs from arrival to the start of the attempt that finished.
-fn spawn_unit_server(sim: &mut Sim, mut env: BlockEnv, parts: UnitServer) {
+fn spawn_unit_server(sim: &mut Sim, env: BlockEnv, parts: UnitServer) {
     let UnitServer {
         capacity,
         service,
