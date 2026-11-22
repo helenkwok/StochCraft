@@ -180,9 +180,8 @@ fn the_example_opens_runs_and_charts_its_stocks() {
     assert!(h.query_by_role_and_label(Role::Tab, "Results").is_some());
     assert!(h.query_by_role_and_label(Role::Tab, "3D").is_none());
     assert!(h.query_all_by_label("System dynamics model").count() >= 1);
-    // Not edited in the window yet: it says how the model can be changed, and what comes next.
-    h.get_by_label_contains("change this model with commands");
-    h.get_by_label_contains("Editing it on the canvas comes next");
+    // It says where the model can be changed: on the Diagram tab, or by commands.
+    h.get_by_label_contains("change this model on the Diagram tab");
     // Its settings, in a sentence, and its variables in a table, with a stock's flows.
     h.get_by_label_contains(
         "From 0 Years to 12 Years, in steps of 0.125 Years, by the RK4 method.",

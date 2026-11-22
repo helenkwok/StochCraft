@@ -1368,7 +1368,6 @@ unit	yr	j
 	The model: its settings and variables	Het model: zijn instellingen en variabelen
 	System dynamics model	Systeemdynamicamodel
 	Variables	Variabelen
-	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	Je kunt dit model wijzigen met opdrachten, vanuit een agent via de MCP-server of vanaf de opdrachtregel. Bewerken op het canvas komt hierna.
 	From {start} to {stop}, in steps of {dt}, by the {method} method.	Van {start} tot {stop}, in stappen van {dt}, met de {method}-methode.
 	Notes from the file	Notities uit het bestand
 	Equation	Vergelijking
@@ -1423,6 +1422,25 @@ unit	yr	j
 	No variation was observed, so there is no interval for the mean; a rare event the trials did not reach could still move it.	Er is geen variatie waargenomen, dus er is geen interval voor het gemiddelde; een zeldzame gebeurtenis die de proeven niet bereikten, zou het nog kunnen verschuiven.
 	They narrowed the interval by {percent}, but a mean given for a control is far from the trials' mean, so the plain result stands.	Ze verkleinden het interval met {percent}, maar een voor een controle opgegeven gemiddelde ligt ver van het gemiddelde van de proeven, dus het gewone resultaat blijft staan.
 	The output does not move in one direction with {inputs} (its value at the median is outside its values at the 10th and 90th percentiles), so the swing understates the effect.	De uitvoer beweegt niet in één richting met {inputs} (de waarde bij de mediaan ligt buiten de waarden bij het 10e en 90e percentiel), dus de uitslag onderschat het effect.
+	Select	Selecteren
+	Link	Koppeling
+	Initial value	Beginwaarde
+	Click the diagram to place a stock.	Klik op het diagram om een voorraad te plaatsen.
+	Click the diagram to place an auxiliary.	Klik op het diagram om een hulpvariabele te plaatsen.
+	Drag from a stock, or from empty space, to another stock or empty space to draw a flow.	Sleep vanaf een voorraad of een lege plek naar een andere voorraad of lege plek om een stroom te tekenen.
+	Drag from one variable to another to show that the second uses the first.	Sleep van de ene variabele naar de andere om te laten zien dat de tweede de eerste gebruikt.
+	Click a variable to select it and edit it here. Drag a variable to move it.	Klik op een variabele om die te selecteren en hier te bewerken. Sleep een variabele om die te verplaatsen.
+	Moved {name}	{name} verplaatst
+	Added {kind}: {name}	Toegevoegd: {kind} {name}
+	Edited {name}	{name} bewerkt
+	Removed {name}	{name} verwijderd
+	Linked {from} to {to}	{from} gekoppeld aan {to}
+	Add Variable	Variabele toevoegen
+	Edit Variable	Variabele wijzigen
+	Remove Variable	Variabele verwijderen
+	Simulation Settings	Simulatie-instellingen
+	Change Diagram	Diagram wijzigen
+	You can change this model on the Diagram tab, or with commands, from an agent through the MCP server or from the command line.	U kunt dit model wijzigen op het tabblad Diagram, of met opdrachten, vanuit een agent via de MCP-server of vanaf de opdrachtregel.
 	Inconclusive at current precision	Niet doorslaggevend bij de huidige nauwkeurigheid
 	No difference detected	Geen verschil aangetoond
 	Agrees within ±{tolerance}	Komt overeen binnen ±{tolerance}

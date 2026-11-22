@@ -1368,7 +1368,6 @@ unit	yr	సం.
 	The model: its settings and variables	నమూనా: దాని సెట్టింగ్‌లు, చరరాశులు
 	System dynamics model	సిస్టమ్ డైనమిక్స్ నమూనా
 	Variables	చరరాశులు
-	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	ఈ నమూనాను ఆదేశాలతో మార్చవచ్చు: ఏజెంట్ నుండి MCP సర్వర్ ద్వారా, లేదా కమాండ్ లైన్ నుండి. కాన్వాస్‌పై సవరణ తర్వాత వస్తుంది.
 	From {start} to {stop}, in steps of {dt}, by the {method} method.	{start} నుండి {stop} వరకు, {dt} దశలలో, {method} పద్ధతిలో.
 	Notes from the file	ఫైల్ నుండి గమనికలు
 	Equation	సమీకరణం
@@ -1423,6 +1422,25 @@ unit	yr	సం.
 	No variation was observed, so there is no interval for the mean; a rare event the trials did not reach could still move it.	ఎటువంటి మార్పు గమనించబడలేదు, కాబట్టి సగటుకు అంతరం లేదు; ప్రయత్నాలు చేరుకోని అరుదైన సంఘటన ఇంకా దానిని కదిలించవచ్చు.
 	They narrowed the interval by {percent}, but a mean given for a control is far from the trials' mean, so the plain result stands.	అవి అంతరాన్ని {percent} తగ్గించాయి, కానీ ఒక నియంత్రణకు ఇచ్చిన సగటు ప్రయత్నాల సగటుకు చాలా దూరంగా ఉంది, కాబట్టి సాధారణ ఫలితమే నిలుస్తుంది.
 	The output does not move in one direction with {inputs} (its value at the median is outside its values at the 10th and 90th percentiles), so the swing understates the effect.	అవుట్‌పుట్ {inputs} తో ఒకే దిశలో కదలదు (మధ్యగతం వద్ద దాని విలువ 10వ మరియు 90వ శతమానాల వద్ద దాని విలువలకు బయట ఉంది), కాబట్టి స్వింగ్ ప్రభావాన్ని తక్కువగా అంచనా వేస్తుంది.
+	Select	ఎంచుకో
+	Link	లింక్
+	Initial value	ప్రారంభ విలువ
+	Click the diagram to place a stock.	నిల్వను ఉంచడానికి రేఖాచిత్రంపై క్లిక్ చేయండి.
+	Click the diagram to place an auxiliary.	సహాయక చరరాశిని ఉంచడానికి రేఖాచిత్రంపై క్లిక్ చేయండి.
+	Drag from a stock, or from empty space, to another stock or empty space to draw a flow.	ప్రవాహాన్ని గీయడానికి, ఒక నిల్వ నుండి లేదా ఖాళీ స్థలం నుండి మరో నిల్వకు లేదా ఖాళీ స్థలానికి లాగండి.
+	Drag from one variable to another to show that the second uses the first.	రెండవ చరరాశి మొదటిదాన్ని ఉపయోగిస్తుందని చూపడానికి, ఒక చరరాశి నుండి మరొక దానికి లాగండి.
+	Click a variable to select it and edit it here. Drag a variable to move it.	చరరాశిని ఎంచుకుని ఇక్కడ సవరించడానికి దానిపై క్లిక్ చేయండి. చరరాశిని తరలించడానికి లాగండి.
+	Moved {name}	{name} తరలించబడింది
+	Added {kind}: {name}	{kind} జోడించబడింది: {name}
+	Edited {name}	{name} సవరించబడింది
+	Removed {name}	{name} తొలగించబడింది
+	Linked {from} to {to}	{from} ను {to} కు లింక్ చేయబడింది
+	Add Variable	చరరాశిని జోడించు
+	Edit Variable	చరరాశిని సవరించు
+	Remove Variable	చరరాశిని తొలగించు
+	Simulation Settings	అనుకరణ సెట్టింగ్‌లు
+	Change Diagram	రేఖాచిత్రాన్ని మార్చు
+	You can change this model on the Diagram tab, or with commands, from an agent through the MCP server or from the command line.	ఈ మోడల్‌ను రేఖాచిత్రం ట్యాబ్‌లో, లేదా ఆదేశాలతో, ఏజెంట్ ద్వారా MCP సర్వర్ నుండి లేదా కమాండ్ లైన్ నుండి మార్చవచ్చు.
 	Inconclusive at current precision	ప్రస్తుత కచ్చితత్వంలో నిర్ధారించలేము
 	No difference detected	తేడా కనుగొనబడలేదు
 	Agrees within ±{tolerance}	±{tolerance} లోపు సరిపోతుంది

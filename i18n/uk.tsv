@@ -1368,7 +1368,6 @@ unit	yr	р.
 	The model: its settings and variables	Модель: її налаштування та змінні
 	System dynamics model	Модель системної динаміки
 	Variables	Змінні
-	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	Цю модель можна змінювати командами: з агента через сервер MCP або з командного рядка. Редагування на полотні з'явиться пізніше.
 	From {start} to {stop}, in steps of {dt}, by the {method} method.	Від {start} до {stop}, кроками по {dt}, методом {method}.
 	Notes from the file	Нотатки з файлу
 	Equation	Рівняння
@@ -1423,6 +1422,25 @@ unit	yr	р.
 	No variation was observed, so there is no interval for the mean; a rare event the trials did not reach could still move it.	Мінливості не спостерігалося, тому інтервалу для середнього немає; рідкісна подія, до якої випробування не дійшли, усе ж могла б його зсунути.
 	They narrowed the interval by {percent}, but a mean given for a control is far from the trials' mean, so the plain result stands.	Вони звузили інтервал на {percent}, але середнє, задане для контролю, далеко від середнього випробувань, тому лишається звичайний результат.
 	The output does not move in one direction with {inputs} (its value at the median is outside its values at the 10th and 90th percentiles), so the swing understates the effect.	Вихід не рухається в одному напрямку з {inputs} (його значення на медіані лежить поза його значеннями на 10-му та 90-му процентилях), тому розмах занижує ефект.
+	Select	Вибрати
+	Link	Зв’язок
+	Initial value	Початкове значення
+	Click the diagram to place a stock.	Клацніть діаграму, щоб розмістити запас.
+	Click the diagram to place an auxiliary.	Клацніть діаграму, щоб розмістити допоміжну змінну.
+	Drag from a stock, or from empty space, to another stock or empty space to draw a flow.	Перетягніть від запасу або від порожнього місця до іншого запасу або порожнього місця, щоб намалювати потік.
+	Drag from one variable to another to show that the second uses the first.	Перетягніть від однієї змінної до іншої, щоб показати, що друга використовує першу.
+	Click a variable to select it and edit it here. Drag a variable to move it.	Клацніть змінну, щоб вибрати її та редагувати тут. Перетягніть змінну, щоб перемістити її.
+	Moved {name}	Переміщено: {name}
+	Added {kind}: {name}	Додано ({kind}): {name}
+	Edited {name}	Змінено: {name}
+	Removed {name}	Видалено: {name}
+	Linked {from} to {to}	{from} з’єднано з {to}
+	Add Variable	Додати змінну
+	Edit Variable	Редагувати змінну
+	Remove Variable	Видалити змінну
+	Simulation Settings	Параметри симуляції
+	Change Diagram	Змінити діаграму
+	You can change this model on the Diagram tab, or with commands, from an agent through the MCP server or from the command line.	Ви можете змінити цю модель на вкладці «Діаграма» або за допомогою команд — від агента через сервер MCP чи з командного рядка.
 	Inconclusive at current precision	Невизначено за поточної точності
 	No difference detected	Відмінності не виявлено
 	Agrees within ±{tolerance}	Збігається в межах ±{tolerance}

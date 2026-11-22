@@ -1368,7 +1368,6 @@ unit	yr	god.
 	The model: its settings and variables	Model: njegova podešavanja i promenljive
 	System dynamics model	Model sistemske dinamike
 	Variables	Promenljive
-	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	Ovaj model možete menjati naredbama, iz agenta preko MCP servera ili iz komandne linije. Uređivanje na platnu dolazi sledeće.
 	From {start} to {stop}, in steps of {dt}, by the {method} method.	Od {start} do {stop}, u koracima od {dt}, metodom {method}.
 	Notes from the file	Napomene iz datoteke
 	Equation	Jednačina
@@ -1423,6 +1422,25 @@ unit	yr	god.
 	No variation was observed, so there is no interval for the mean; a rare event the trials did not reach could still move it.	Nije primećena nikakva varijacija, pa nema intervala za srednju vrednost; redak događaj do kog ogledi nisu došli i dalje bi je mogao pomeriti.
 	They narrowed the interval by {percent}, but a mean given for a control is far from the trials' mean, so the plain result stands.	Suzili su interval za {percent}, ali je srednja vrednost zadata za kontrolu daleko od srednje vrednosti ogleda, pa ostaje običan rezultat.
 	The output does not move in one direction with {inputs} (its value at the median is outside its values at the 10th and 90th percentiles), so the swing understates the effect.	Izlaz se ne kreće u jednom smeru sa {inputs} (njegova vrednost na medijani je van njegovih vrednosti na 10. i 90. percentilu), pa raspon potcenjuje uticaj.
+	Select	Izaberi
+	Link	Veza
+	Initial value	Početna vrednost
+	Click the diagram to place a stock.	Kliknite na dijagram da postavite zalihu.
+	Click the diagram to place an auxiliary.	Kliknite na dijagram da postavite pomoćnu promenljivu.
+	Drag from a stock, or from empty space, to another stock or empty space to draw a flow.	Prevucite od zalihe ili od praznog mesta do druge zalihe ili praznog mesta da nacrtate tok.
+	Drag from one variable to another to show that the second uses the first.	Prevucite od jedne promenljive do druge da pokažete da druga koristi prvu.
+	Click a variable to select it and edit it here. Drag a variable to move it.	Kliknite na promenljivu da je izaberete i uredite ovde. Prevucite promenljivu da je premestite.
+	Moved {name}	Premešteno: {name}
+	Added {kind}: {name}	Dodato ({kind}): {name}
+	Edited {name}	Izmenjeno: {name}
+	Removed {name}	Uklonjeno: {name}
+	Linked {from} to {to}	{from} povezano sa {to}
+	Add Variable	Dodaj promenljivu
+	Edit Variable	Izmeni promenljivu
+	Remove Variable	Ukloni promenljivu
+	Simulation Settings	Podešavanja simulacije
+	Change Diagram	Promeni dijagram
+	You can change this model on the Diagram tab, or with commands, from an agent through the MCP server or from the command line.	Ovaj model možete promeniti na kartici Dijagram ili komandama, iz agenta preko MCP servera ili iz komandne linije.
 	Inconclusive at current precision	Neodlučno pri trenutnoj preciznosti
 	No difference detected	Razlika nije otkrivena
 	Agrees within ±{tolerance}	Slaže se u granicama ±{tolerance}

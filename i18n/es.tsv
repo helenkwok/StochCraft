@@ -1368,7 +1368,6 @@ unit	yr	a
 	The model: its settings and variables	El modelo: sus ajustes y variables
 	System dynamics model	Modelo de dinámica de sistemas
 	Variables	Variables
-	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	Puede cambiar este modelo con comandos, desde un agente mediante el servidor MCP o desde la línea de comandos. La edición en el lienzo llegará después.
 	From {start} to {stop}, in steps of {dt}, by the {method} method.	Desde {start} hasta {stop}, en pasos de {dt}, con el método {method}.
 	Notes from the file	Notas del archivo
 	Equation	Ecuación
@@ -1423,6 +1422,25 @@ unit	yr	a
 	No variation was observed, so there is no interval for the mean; a rare event the trials did not reach could still move it.	No se observó ninguna variación, así que no hay intervalo para la media; un suceso raro que las pruebas no alcanzaron aún podría moverla.
 	They narrowed the interval by {percent}, but a mean given for a control is far from the trials' mean, so the plain result stands.	Estrecharon el intervalo un {percent}, pero una media dada para un control está lejos de la media de las pruebas, así que se mantiene el resultado simple.
 	The output does not move in one direction with {inputs} (its value at the median is outside its values at the 10th and 90th percentiles), so the swing understates the effect.	La salida no se mueve en una sola dirección con {inputs} (su valor en la mediana queda fuera de sus valores en los percentiles 10 y 90), así que la oscilación subestima el efecto.
+	Select	Seleccionar
+	Link	Enlace
+	Initial value	Valor inicial
+	Click the diagram to place a stock.	Haga clic en el diagrama para colocar un nivel.
+	Click the diagram to place an auxiliary.	Haga clic en el diagrama para colocar una variable auxiliar.
+	Drag from a stock, or from empty space, to another stock or empty space to draw a flow.	Arrastre desde un nivel o desde un espacio vacío hasta otro nivel o espacio vacío para dibujar un flujo.
+	Drag from one variable to another to show that the second uses the first.	Arrastre de una variable a otra para indicar que la segunda usa la primera.
+	Click a variable to select it and edit it here. Drag a variable to move it.	Haga clic en una variable para seleccionarla y editarla aquí. Arrástrela para moverla.
+	Moved {name}	Se movió {name}
+	Added {kind}: {name}	Se añadió {kind}: {name}
+	Edited {name}	Se editó {name}
+	Removed {name}	Se eliminó {name}
+	Linked {from} to {to}	Se enlazó {from} con {to}
+	Add Variable	Añadir variable
+	Edit Variable	Editar variable
+	Remove Variable	Eliminar variable
+	Simulation Settings	Ajustes de simulación
+	Change Diagram	Cambiar diagrama
+	You can change this model on the Diagram tab, or with commands, from an agent through the MCP server or from the command line.	Puede cambiar este modelo en la pestaña Diagrama, o con comandos, desde un agente a través del servidor MCP o desde la línea de comandos.
 	Inconclusive at current precision	No concluyente con la precisión actual
 	No difference detected	No se detecta diferencia
 	Agrees within ±{tolerance}	Coincide dentro de ±{tolerance}

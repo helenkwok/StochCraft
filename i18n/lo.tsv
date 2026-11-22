@@ -1368,7 +1368,6 @@ unit	yr	ປີ
 	The model: its settings and variables	ແບບຈຳລອງ: ການຕັ້ງຄ່າ ແລະ ຕົວແປຂອງມັນ
 	System dynamics model	ແບບຈຳລອງພາວະຜັນແປຂອງລະບົບ
 	Variables	ຕົວແປ
-	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	ທ່ານສາມາດປ່ຽນແບບຈຳລອງນີ້ດ້ວຍຄຳສັ່ງ, ຈາກເອເຈນຜ່ານເຊີບເວີ MCP ຫຼືຈາກແຖວຄຳສັ່ງ. ການແກ້ໄຂເທິງຜ້າໃບຈະມາຕໍ່ໄປ.
 	From {start} to {stop}, in steps of {dt}, by the {method} method.	ຈາກ {start} ເຖິງ {stop}, ເປັນຂັ້ນ {dt}, ດ້ວຍວິທີ {method}.
 	Notes from the file	ໝາຍເຫດຈາກໄຟລ໌
 	Equation	ສົມຜົນ
@@ -1423,6 +1422,25 @@ unit	yr	ປີ
 	No variation was observed, so there is no interval for the mean; a rare event the trials did not reach could still move it.	ບໍ່ພົບການປ່ຽນແປງ, ສະນັ້ນຈຶ່ງບໍ່ມີຊ່ວງສຳລັບຄ່າສະເລ່ຍ; ເຫດການທີ່ຫາຍາກທີ່ການທົດລອງບໍ່ໄດ້ເຖິງ ຍັງອາດເຮັດໃຫ້ມັນເຄື່ອນໄດ້.
 	They narrowed the interval by {percent}, but a mean given for a control is far from the trials' mean, so the plain result stands.	ພວກມັນເຮັດໃຫ້ຊ່ວງແຄບລົງ {percent}, ແຕ່ຄ່າສະເລ່ຍທີ່ໃຫ້ສຳລັບຕົວຄວບຄຸມຢູ່ຫ່າງຈາກຄ່າສະເລ່ຍຂອງການທົດລອງຫຼາຍ, ສະນັ້ນຜົນລັບທຳມະດາຈຶ່ງຍັງຢູ່.
 	The output does not move in one direction with {inputs} (its value at the median is outside its values at the 10th and 90th percentiles), so the swing understates the effect.	ຜົນອອກບໍ່ເຄື່ອນໄປທາງດຽວກັບ {inputs} (ຄ່າຂອງມັນທີ່ມັດທະຍະຖານຢູ່ນອກຄ່າຂອງມັນທີ່ເປີເຊັນທາຍທີ 10 ແລະ 90), ສະນັ້ນຊ່ວງການແກວ່ງຈຶ່ງປະເມີນຜົນກະທົບຕ່ຳເກີນໄປ.
+	Select	ເລືອກ
+	Link	ລິ້ງ
+	Initial value	ຄ່າເລີ່ມຕົ້ນ
+	Click the diagram to place a stock.	ກົດທີ່ແຜນວາດເພື່ອວາງສະຕັອກ.
+	Click the diagram to place an auxiliary.	ກົດທີ່ແຜນວາດເພື່ອວາງຕົວແປຊ່ວຍ.
+	Drag from a stock, or from empty space, to another stock or empty space to draw a flow.	ລາກຈາກສະຕັອກ ຫຼື ບ່ອນຫວ່າງ ໄປຫາສະຕັອກ ຫຼື ບ່ອນຫວ່າງອື່ນ ເພື່ອແຕ້ມການໄຫຼ.
+	Drag from one variable to another to show that the second uses the first.	ລາກຈາກຕົວແປໜຶ່ງໄປຫາອີກຕົວໜຶ່ງ ເພື່ອສະແດງວ່າຕົວທີສອງໃຊ້ຕົວທຳອິດ.
+	Click a variable to select it and edit it here. Drag a variable to move it.	ກົດທີ່ຕົວແປເພື່ອເລືອກ ແລະ ແກ້ໄຂທີ່ນີ້. ລາກຕົວແປເພື່ອຍ້າຍ.
+	Moved {name}	ຍ້າຍ {name} ແລ້ວ
+	Added {kind}: {name}	ເພີ່ມແລ້ວ {kind}: {name}
+	Edited {name}	ແກ້ໄຂ {name} ແລ້ວ
+	Removed {name}	ລຶບ {name} ແລ້ວ
+	Linked {from} to {to}	ເຊື່ອມ {from} ກັບ {to} ແລ້ວ
+	Add Variable	ເພີ່ມຕົວແປ
+	Edit Variable	ປ່ຽນຕົວແປ
+	Remove Variable	ລຶບຕົວແປ
+	Simulation Settings	ການຕັ້ງຄ່າການຈຳລອງ
+	Change Diagram	ປ່ຽນແຜນວາດ
+	You can change this model on the Diagram tab, or with commands, from an agent through the MCP server or from the command line.	ທ່ານສາມາດປ່ຽນແບບຈຳລອງນີ້ໄດ້ໃນແຖບແຜນວາດ ຫຼື ດ້ວຍຄຳສັ່ງ ຈາກເອເຢັນຜ່ານເຊີບເວີ MCP ຫຼື ຈາກແຖວຄຳສັ່ງ.
 	Inconclusive at current precision	ບໍ່ສາມາດສະຫຼຸບໄດ້ທີ່ຄວາມແມ່ນຍຳປັດຈຸບັນ
 	No difference detected	ບໍ່ພົບຄວາມແຕກຕ່າງ
 	Agrees within ±{tolerance}	ກົງກັນພາຍໃນ ±{tolerance}

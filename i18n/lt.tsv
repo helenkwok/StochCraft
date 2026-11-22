@@ -1368,7 +1368,6 @@ unit	yr	m.
 	The model: its settings and variables	Modelis: jo nustatymai ir kintamieji
 	System dynamics model	Sistemų dinamikos modelis
 	Variables	Kintamieji
-	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	Šį modelį galite keisti komandomis – iš agento per MCP serverį arba iš komandų eilutės. Redagavimas drobėje bus vėliau.
 	From {start} to {stop}, in steps of {dt}, by the {method} method.	Nuo {start} iki {stop}, {dt} žingsniais, {method} metodu.
 	Notes from the file	Pastabos iš failo
 	Equation	Lygtis
@@ -1423,6 +1422,25 @@ unit	yr	m.
 	No variation was observed, so there is no interval for the mean; a rare event the trials did not reach could still move it.	Kitimo nepastebėta, todėl vidurkiui intervalo nėra; retas įvykis, kurio bandymai nepasiekė, vis dar galėtų jį pastumti.
 	They narrowed the interval by {percent}, but a mean given for a control is far from the trials' mean, so the plain result stands.	Jie susiaurino intervalą {percent}, bet kontrolei duotas vidurkis toli nuo bandymų vidurkio, todėl lieka paprastas rezultatas.
 	The output does not move in one direction with {inputs} (its value at the median is outside its values at the 10th and 90th percentiles), so the swing understates the effect.	Išvestis nejuda viena kryptimi su {inputs} (jos reikšmė ties mediana yra už jos reikšmių ties 10-uoju ir 90-uoju procentiliu), todėl svyravimas nepakankamai įvertina poveikį.
+	Select	Pasirinkti
+	Link	Saitas
+	Initial value	Pradinė reikšmė
+	Click the diagram to place a stock.	Spustelėkite diagramą, kad padėtumėte atsargą.
+	Click the diagram to place an auxiliary.	Spustelėkite diagramą, kad padėtumėte pagalbinį kintamąjį.
+	Drag from a stock, or from empty space, to another stock or empty space to draw a flow.	Vilkite iš atsargos arba tuščios vietos į kitą atsargą ar tuščią vietą, kad nubraižytumėte srautą.
+	Drag from one variable to another to show that the second uses the first.	Vilkite nuo vieno kintamojo prie kito, kad parodytumėte, jog antrasis naudoja pirmąjį.
+	Click a variable to select it and edit it here. Drag a variable to move it.	Spustelėkite kintamąjį, kad jį pasirinktumėte ir redaguotumėte čia. Vilkite kintamąjį, kad jį perkeltumėte.
+	Moved {name}	Perkelta: {name}
+	Added {kind}: {name}	Pridėta: {kind} {name}
+	Edited {name}	Redaguota: {name}
+	Removed {name}	Pašalinta: {name}
+	Linked {from} to {to}	{from} sujungta su {to}
+	Add Variable	Pridėti kintamąjį
+	Edit Variable	Keisti kintamąjį
+	Remove Variable	Pašalinti kintamąjį
+	Simulation Settings	Modeliavimo nustatymai
+	Change Diagram	Keisti diagramą
+	You can change this model on the Diagram tab, or with commands, from an agent through the MCP server or from the command line.	Šį modelį galite keisti skirtuke Diagrama arba komandomis, iš agento per MCP serverį arba iš komandų eilutės.
 	Inconclusive at current precision	Esamu tikslumu neįrodoma
 	No difference detected	Skirtumo neaptikta
 	Agrees within ±{tolerance}	Sutampa ±{tolerance} ribose

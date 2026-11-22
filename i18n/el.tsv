@@ -1368,7 +1368,6 @@ unit	yr	έτ
 	The model: its settings and variables	Το μοντέλο: οι ρυθμίσεις και οι μεταβλητές του
 	System dynamics model	Μοντέλο δυναμικής συστημάτων
 	Variables	Μεταβλητές
-	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	Μπορείτε να αλλάξετε αυτό το μοντέλο με εντολές, από έναν πράκτορα μέσω του διακομιστή MCP ή από τη γραμμή εντολών. Η επεξεργασία στον καμβά έρχεται στη συνέχεια.
 	From {start} to {stop}, in steps of {dt}, by the {method} method.	Από {start} έως {stop}, με βήματα {dt}, με τη μέθοδο {method}.
 	Notes from the file	Σημειώσεις από το αρχείο
 	Equation	Εξίσωση
@@ -1423,6 +1422,25 @@ unit	yr	έτ
 	No variation was observed, so there is no interval for the mean; a rare event the trials did not reach could still move it.	Δεν παρατηρήθηκε καμία μεταβολή, οπότε δεν υπάρχει διάστημα για τη μέση τιμή· ένα σπάνιο γεγονός που οι δοκιμές δεν έφτασαν θα μπορούσε ακόμη να την μετακινήσει.
 	They narrowed the interval by {percent}, but a mean given for a control is far from the trials' mean, so the plain result stands.	Περιόρισαν το διάστημα κατά {percent}, αλλά η μέση τιμή που δόθηκε για έναν έλεγχο απέχει πολύ από τη μέση τιμή των δοκιμών, οπότε μένει το απλό αποτέλεσμα.
 	The output does not move in one direction with {inputs} (its value at the median is outside its values at the 10th and 90th percentiles), so the swing understates the effect.	Η έξοδος δεν κινείται προς μία κατεύθυνση με {inputs} (η τιμή της στη διάμεσο είναι εκτός των τιμών της στο 10ο και στο 90ό εκατοστημόριο), οπότε το εύρος υποτιμά την επίδραση.
+	Select	Επιλογή
+	Link	Σύνδεση
+	Initial value	Αρχική τιμή
+	Click the diagram to place a stock.	Κάντε κλικ στο διάγραμμα για να τοποθετήσετε ένα απόθεμα.
+	Click the diagram to place an auxiliary.	Κάντε κλικ στο διάγραμμα για να τοποθετήσετε μια βοηθητική μεταβλητή.
+	Drag from a stock, or from empty space, to another stock or empty space to draw a flow.	Σύρετε από ένα απόθεμα ή από κενό χώρο σε άλλο απόθεμα ή κενό χώρο για να σχεδιάσετε μια ροή.
+	Drag from one variable to another to show that the second uses the first.	Σύρετε από μια μεταβλητή σε άλλη για να δείξετε ότι η δεύτερη χρησιμοποιεί την πρώτη.
+	Click a variable to select it and edit it here. Drag a variable to move it.	Κάντε κλικ σε μια μεταβλητή για να την επιλέξετε και να την επεξεργαστείτε εδώ. Σύρετέ την για να τη μετακινήσετε.
+	Moved {name}	Μετακινήθηκε το {name}
+	Added {kind}: {name}	Προστέθηκε: {kind} {name}
+	Edited {name}	Επεξεργάστηκε το {name}
+	Removed {name}	Αφαιρέθηκε το {name}
+	Linked {from} to {to}	Συνδέθηκε το {from} με το {to}
+	Add Variable	Προσθήκη μεταβλητής
+	Edit Variable	Επεξεργασία μεταβλητής
+	Remove Variable	Αφαίρεση μεταβλητής
+	Simulation Settings	Ρυθμίσεις προσομοίωσης
+	Change Diagram	Αλλαγή διαγράμματος
+	You can change this model on the Diagram tab, or with commands, from an agent through the MCP server or from the command line.	Μπορείτε να αλλάξετε αυτό το μοντέλο στην καρτέλα Διάγραμμα ή με εντολές, από έναν πράκτορα μέσω του διακομιστή MCP ή από τη γραμμή εντολών.
 	Inconclusive at current precision	Μη οριστικό στην τρέχουσα ακρίβεια
 	No difference detected	Δεν εντοπίστηκε διαφορά
 	Agrees within ±{tolerance}	Συμφωνεί εντός ±{tolerance}

@@ -1368,7 +1368,6 @@ unit	yr	ปี
 	The model: its settings and variables	แบบจำลอง: การตั้งค่าและตัวแปรของมัน
 	System dynamics model	แบบจำลองพลวัตระบบ
 	Variables	ตัวแปร
-	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	คุณเปลี่ยนแบบจำลองนี้ได้ด้วยคำสั่ง จากเอเจนต์ผ่านเซิร์ฟเวอร์ MCP หรือจากบรรทัดคำสั่ง การแก้ไขบนผืนผ้าใบจะมาในลำดับถัดไป
 	From {start} to {stop}, in steps of {dt}, by the {method} method.	ตั้งแต่ {start} ถึง {stop} ทีละขั้น {dt} ด้วยวิธี {method}
 	Notes from the file	บันทึกจากไฟล์
 	Equation	สมการ
@@ -1423,6 +1422,25 @@ unit	yr	ปี
 	No variation was observed, so there is no interval for the mean; a rare event the trials did not reach could still move it.	ไม่พบความแปรผันใด ๆ จึงไม่มีช่วงสำหรับค่าเฉลี่ย เหตุการณ์หายากที่การทดลองไปไม่ถึงอาจยังทำให้ค่าเฉลี่ยขยับได้
 	They narrowed the interval by {percent}, but a mean given for a control is far from the trials' mean, so the plain result stands.	ตัวแปรควบคุมทำให้ช่วงแคบลง {percent} แต่ค่าเฉลี่ยที่ให้ไว้สำหรับตัวควบคุมอยู่ไกลจากค่าเฉลี่ยของการทดลอง จึงยังคงใช้ผลลัพธ์ธรรมดา
 	The output does not move in one direction with {inputs} (its value at the median is outside its values at the 10th and 90th percentiles), so the swing understates the effect.	ผลลัพธ์ไม่เคลื่อนไปทางเดียวกับ {inputs} (ค่าที่มัธยฐานอยู่นอกช่วงค่าที่เปอร์เซ็นไทล์ที่ 10 และ 90) ดังนั้นช่วงแกว่งจึงประเมินผลต่ำไป
+	Select	เลือก
+	Link	เชื่อมโยง
+	Initial value	ค่าเริ่มต้น
+	Click the diagram to place a stock.	คลิกที่แผนภาพเพื่อวางสต็อก
+	Click the diagram to place an auxiliary.	คลิกที่แผนภาพเพื่อวางตัวแปรช่วย
+	Drag from a stock, or from empty space, to another stock or empty space to draw a flow.	ลากจากสต็อกหรือจากพื้นที่ว่างไปยังสต็อกอื่นหรือพื้นที่ว่างเพื่อวาดโฟลว์
+	Drag from one variable to another to show that the second uses the first.	ลากจากตัวแปรหนึ่งไปยังอีกตัวแปรหนึ่งเพื่อแสดงว่าตัวหลังใช้ตัวแรก
+	Click a variable to select it and edit it here. Drag a variable to move it.	คลิกตัวแปรเพื่อเลือกและแก้ไขที่นี่ ลากตัวแปรเพื่อย้าย
+	Moved {name}	ย้าย {name} แล้ว
+	Added {kind}: {name}	เพิ่ม{kind}แล้ว: {name}
+	Edited {name}	แก้ไข {name} แล้ว
+	Removed {name}	นำ {name} ออกแล้ว
+	Linked {from} to {to}	เชื่อมโยง {from} กับ {to} แล้ว
+	Add Variable	เพิ่มตัวแปร
+	Edit Variable	แก้ไขตัวแปร
+	Remove Variable	นำตัวแปรออก
+	Simulation Settings	การตั้งค่าการจำลอง
+	Change Diagram	เปลี่ยนแผนภาพ
+	You can change this model on the Diagram tab, or with commands, from an agent through the MCP server or from the command line.	คุณสามารถเปลี่ยนโมเดลนี้ได้ที่แท็บแผนภาพ หรือด้วยคำสั่งจากเอเจนต์ผ่านเซิร์ฟเวอร์ MCP หรือจากบรรทัดคำสั่ง
 	Inconclusive at current precision	สรุปไม่ได้ที่ความแม่นยำปัจจุบัน
 	No difference detected	ไม่พบความแตกต่าง
 	Agrees within ±{tolerance}	สอดคล้องภายใน ±{tolerance}

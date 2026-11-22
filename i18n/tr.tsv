@@ -1368,7 +1368,6 @@ unit	yr	yıl
 	The model: its settings and variables	Model: ayarları ve değişkenleri
 	System dynamics model	Sistem dinamiği modeli
 	Variables	Değişkenler
-	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	Bu modeli komutlarla değiştirebilirsiniz: bir ajandan MCP sunucusu üzerinden ya da komut satırından. Tuval üzerinde düzenleme sonra gelecek.
 	From {start} to {stop}, in steps of {dt}, by the {method} method.	{start} ile {stop} arasında, {dt} adımlarla, {method} yöntemiyle.
 	Notes from the file	Dosyadan notlar
 	Equation	Denklem
@@ -1423,6 +1422,25 @@ unit	yr	yıl
 	No variation was observed, so there is no interval for the mean; a rare event the trials did not reach could still move it.	Hiçbir değişim gözlenmedi, bu yüzden ortalama için aralık yok; denemelerin ulaşmadığı nadir bir olay yine de onu kaydırabilir.
 	They narrowed the interval by {percent}, but a mean given for a control is far from the trials' mean, so the plain result stands.	Aralığı {percent} daralttılar, ancak bir kontrol için verilen ortalama denemelerin ortalamasından çok uzak, bu yüzden sade sonuç geçerli kalır.
 	The output does not move in one direction with {inputs} (its value at the median is outside its values at the 10th and 90th percentiles), so the swing understates the effect.	Çıktı, {inputs} ile tek yönde hareket etmiyor (ortancadaki değeri 10. ve 90. yüzdeliklerdeki değerlerinin dışında), bu yüzden salınım etkiyi olduğundan az gösterir.
+	Select	Seç
+	Link	Bağlantı
+	Initial value	Başlangıç değeri
+	Click the diagram to place a stock.	Stok yerleştirmek için diyagrama tıklayın.
+	Click the diagram to place an auxiliary.	Yardımcı değişken yerleştirmek için diyagrama tıklayın.
+	Drag from a stock, or from empty space, to another stock or empty space to draw a flow.	Akış çizmek için bir stoktan veya boş alandan başka bir stoka veya boş alana sürükleyin.
+	Drag from one variable to another to show that the second uses the first.	İkincinin birincisini kullandığını göstermek için bir değişkenden diğerine sürükleyin.
+	Click a variable to select it and edit it here. Drag a variable to move it.	Bir değişkeni seçip burada düzenlemek için tıklayın. Taşımak için değişkeni sürükleyin.
+	Moved {name}	{name} taşındı
+	Added {kind}: {name}	{kind} eklendi: {name}
+	Edited {name}	{name} düzenlendi
+	Removed {name}	{name} kaldırıldı
+	Linked {from} to {to}	{from}, {to} öğesine bağlandı
+	Add Variable	Değişken ekle
+	Edit Variable	Değişkeni düzenle
+	Remove Variable	Değişkeni kaldır
+	Simulation Settings	Simülasyon ayarları
+	Change Diagram	Diyagramı değiştir
+	You can change this model on the Diagram tab, or with commands, from an agent through the MCP server or from the command line.	Bu modeli Diyagram sekmesinde veya komutlarla, bir aracıdan MCP sunucusu üzerinden ya da komut satırından değiştirebilirsiniz.
 	Inconclusive at current precision	Mevcut hassasiyette sonuçsuz
 	No difference detected	Fark saptanmadı
 	Agrees within ±{tolerance}	±{tolerance} içinde uyuşuyor

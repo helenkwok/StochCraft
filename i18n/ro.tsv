@@ -1368,7 +1368,6 @@ unit	yr	a
 	The model: its settings and variables	Modelul: setările și variabilele sale
 	System dynamics model	Model de dinamică a sistemelor
 	Variables	Variabile
-	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	Puteți modifica acest model cu comenzi, dintr-un agent prin serverul MCP sau din linia de comandă. Editarea pe canava vine mai târziu.
 	From {start} to {stop}, in steps of {dt}, by the {method} method.	De la {start} la {stop}, în pași de {dt}, prin metoda {method}.
 	Notes from the file	Note din fișier
 	Equation	Ecuație
@@ -1423,6 +1422,25 @@ unit	yr	a
 	No variation was observed, so there is no interval for the mean; a rare event the trials did not reach could still move it.	Nu s-a observat nicio variație, deci nu există interval pentru medie; un eveniment rar pe care încercările nu l-au atins ar putea totuși să o mute.
 	They narrowed the interval by {percent}, but a mean given for a control is far from the trials' mean, so the plain result stands.	Au îngustat intervalul cu {percent}, dar o medie dată pentru un control este departe de media încercărilor, deci rămâne rezultatul simplu.
 	The output does not move in one direction with {inputs} (its value at the median is outside its values at the 10th and 90th percentiles), so the swing understates the effect.	Ieșirea nu se mișcă într-o singură direcție cu {inputs} (valoarea ei la mediană este în afara valorilor ei la percentilele 10 și 90), deci amplitudinea subestimează efectul.
+	Select	Selectează
+	Link	Legătură
+	Initial value	Valoare inițială
+	Click the diagram to place a stock.	Faceți clic pe diagramă pentru a plasa un stoc.
+	Click the diagram to place an auxiliary.	Faceți clic pe diagramă pentru a plasa o variabilă auxiliară.
+	Drag from a stock, or from empty space, to another stock or empty space to draw a flow.	Trageți de la un stoc sau de la un spațiu gol la alt stoc sau spațiu gol pentru a desena un flux.
+	Drag from one variable to another to show that the second uses the first.	Trageți de la o variabilă la alta pentru a arăta că a doua o folosește pe prima.
+	Click a variable to select it and edit it here. Drag a variable to move it.	Faceți clic pe o variabilă pentru a o selecta și a o edita aici. Trageți-o pentru a o muta.
+	Moved {name}	S-a mutat {name}
+	Added {kind}: {name}	S-a adăugat {kind}: {name}
+	Edited {name}	S-a editat {name}
+	Removed {name}	S-a eliminat {name}
+	Linked {from} to {to}	S-a legat {from} de {to}
+	Add Variable	Adaugă variabilă
+	Edit Variable	Modifică variabila
+	Remove Variable	Elimină variabila
+	Simulation Settings	Setări de simulare
+	Change Diagram	Modifică diagrama
+	You can change this model on the Diagram tab, or with commands, from an agent through the MCP server or from the command line.	Puteți modifica acest model în fila Diagramă sau cu comenzi, de la un agent prin serverul MCP sau din linia de comandă.
 	Inconclusive at current precision	Neconcludent la precizia actuală
 	No difference detected	Nicio diferență detectată
 	Agrees within ±{tolerance}	Concordă în limita ±{tolerance}

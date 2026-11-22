@@ -1368,7 +1368,6 @@ unit	yr	년
 	The model: its settings and variables	모델: 설정과 변수
 	System dynamics model	시스템 다이내믹스 모델
 	Variables	변수
-	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	이 모델은 에이전트에서 MCP 서버를 통해, 또는 명령줄에서 명령으로 변경할 수 있습니다. 캔버스에서의 편집은 다음에 추가됩니다.
 	From {start} to {stop}, in steps of {dt}, by the {method} method.	{start}부터 {stop}까지, {dt} 간격, {method} 방식.
 	Notes from the file	파일의 메모
 	Equation	방정식
@@ -1423,6 +1422,25 @@ unit	yr	년
 	No variation was observed, so there is no interval for the mean; a rare event the trials did not reach could still move it.	변동이 관찰되지 않았으므로 평균의 구간이 없습니다. 시행이 도달하지 못한 드문 사건이 여전히 평균을 움직일 수 있습니다.
 	They narrowed the interval by {percent}, but a mean given for a control is far from the trials' mean, so the plain result stands.	구간이 {percent} 좁아졌지만, 통제 변수에 준 평균이 시행의 평균과 크게 달라서 일반 결과를 그대로 씁니다.
 	The output does not move in one direction with {inputs} (its value at the median is outside its values at the 10th and 90th percentiles), so the swing understates the effect.	출력은 {inputs}에 대해 한 방향으로 움직이지 않습니다(중앙값에서의 값이 10번째와 90번째 백분위수에서의 값 바깥에 있습니다). 그래서 변동 폭이 영향을 과소평가합니다.
+	Select	선택
+	Link	링크
+	Initial value	초기값
+	Click the diagram to place a stock.	다이어그램을 클릭하여 재고를 배치합니다.
+	Click the diagram to place an auxiliary.	다이어그램을 클릭하여 보조 변수를 배치합니다.
+	Drag from a stock, or from empty space, to another stock or empty space to draw a flow.	재고 또는 빈 공간에서 다른 재고 또는 빈 공간으로 끌어 흐름을 그립니다.
+	Drag from one variable to another to show that the second uses the first.	한 변수에서 다른 변수로 끌어 두 번째가 첫 번째를 사용함을 나타냅니다.
+	Click a variable to select it and edit it here. Drag a variable to move it.	변수를 클릭하여 선택하고 여기에서 편집합니다. 변수를 끌어 이동합니다.
+	Moved {name}	{name}을(를) 이동함
+	Added {kind}: {name}	추가함: {kind} {name}
+	Edited {name}	{name}을(를) 편집함
+	Removed {name}	{name}을(를) 제거함
+	Linked {from} to {to}	{from}을(를) {to}에 링크함
+	Add Variable	변수 추가
+	Edit Variable	변수 변경
+	Remove Variable	변수 제거
+	Simulation Settings	시뮬레이션 설정
+	Change Diagram	다이어그램 변경
+	You can change this model on the Diagram tab, or with commands, from an agent through the MCP server or from the command line.	이 모델은 다이어그램 탭에서, 또는 명령으로(에이전트에서 MCP 서버를 통해 또는 명령줄에서) 변경할 수 있습니다.
 	Inconclusive at current precision	현재 정밀도로는 판단 불가
 	No difference detected	차이가 검출되지 않음
 	Agrees within ±{tolerance}	±{tolerance} 이내에서 일치

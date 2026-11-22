@@ -1368,7 +1368,6 @@ unit	yr	év
 	The model: its settings and variables	A modell: beállításai és változói
 	System dynamics model	Rendszerdinamikai modell
 	Variables	Változók
-	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	Ezt a modellt parancsokkal módosíthatja, ügynökkel az MCP-kiszolgálón át vagy a parancssorból. A vásznon való szerkesztés a következő lépés.
 	From {start} to {stop}, in steps of {dt}, by the {method} method.	{start} és {stop} között, {dt} lépésekkel, a(z) {method} módszerrel.
 	Notes from the file	Megjegyzések a fájlból
 	Equation	Egyenlet
@@ -1423,6 +1422,25 @@ unit	yr	év
 	No variation was observed, so there is no interval for the mean; a rare event the trials did not reach could still move it.	Nem figyeltünk meg szórást, ezért az átlaghoz nincs intervallum; egy ritka esemény, amelyet a próbák nem értek el, még mindig elmozdíthatná.
 	They narrowed the interval by {percent}, but a mean given for a control is far from the trials' mean, so the plain result stands.	Ezek {percent}-kal szűkítették az intervallumot, de a kontrollhoz megadott átlag messze van a próbák átlagától, ezért az egyszerű eredmény marad.
 	The output does not move in one direction with {inputs} (its value at the median is outside its values at the 10th and 90th percentiles), so the swing understates the effect.	A kimenet nem egy irányban mozog a(z) {inputs} bemenettel (a mediánnál felvett értéke kívül esik a 10. és 90. percentilisnél felvett értékein), ezért a lengés alábecsüli a hatást.
+	Select	Kijelölés
+	Link	Kapcsolat
+	Initial value	Kezdőérték
+	Click the diagram to place a stock.	Kattintson a diagramra készlet elhelyezéséhez.
+	Click the diagram to place an auxiliary.	Kattintson a diagramra segédváltozó elhelyezéséhez.
+	Drag from a stock, or from empty space, to another stock or empty space to draw a flow.	Folyamat rajzolásához húzzon egy készletből vagy üres helyről egy másik készletbe vagy üres helyre.
+	Drag from one variable to another to show that the second uses the first.	Húzzon az egyik változóról a másikra annak jelzésére, hogy a második az elsőt használja.
+	Click a variable to select it and edit it here. Drag a variable to move it.	Kattintson egy változóra a kijelöléséhez és itteni szerkesztéséhez. Húzza el az áthelyezéséhez.
+	Moved {name}	Áthelyezve: {name}
+	Added {kind}: {name}	Hozzáadva: {kind} {name}
+	Edited {name}	Szerkesztve: {name}
+	Removed {name}	Eltávolítva: {name}
+	Linked {from} to {to}	{from} összekapcsolva ezzel: {to}
+	Add Variable	Változó hozzáadása
+	Edit Variable	Változó szerkesztése
+	Remove Variable	Változó eltávolítása
+	Simulation Settings	Szimulációs beállítások
+	Change Diagram	Diagram módosítása
+	You can change this model on the Diagram tab, or with commands, from an agent through the MCP server or from the command line.	Ezt a modellt a Diagram lapon vagy parancsokkal módosíthatja, ügynökből az MCP-kiszolgálón keresztül vagy a parancssorból.
 	Inconclusive at current precision	A jelenlegi pontosságnál nem eldönthető
 	No difference detected	Nem mutatható ki eltérés
 	Agrees within ±{tolerance}	Egyezik ±{tolerance} belül

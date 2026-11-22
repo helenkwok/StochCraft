@@ -1368,7 +1368,6 @@ unit	yr	v
 	The model: its settings and variables	Modeli: cilësimet dhe ndryshoret e tij
 	System dynamics model	Model i dinamikës së sistemeve
 	Variables	Ndryshoret
-	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	Mund ta ndryshoni këtë model me komanda, nga një agjent përmes serverit MCP ose nga linja e komandave. Redaktimi në kanavacë vjen më pas.
 	From {start} to {stop}, in steps of {dt}, by the {method} method.	Nga {start} deri në {stop}, me hapa {dt}, me metodën {method}.
 	Notes from the file	Shënime nga skedari
 	Equation	Ekuacioni
@@ -1423,6 +1422,25 @@ unit	yr	v
 	No variation was observed, so there is no interval for the mean; a rare event the trials did not reach could still move it.	Nuk u vëzhgua asnjë ndryshim, ndaj nuk ka interval për mesataren; një ngjarje e rrallë që provat nuk e arritën mund ta lëvizte ende.
 	They narrowed the interval by {percent}, but a mean given for a control is far from the trials' mean, so the plain result stands.	Ata e ngushtuan intervalin me {percent}, por një mesatare e dhënë për një kontroll është larg mesatares së provave, ndaj mbetet rezultati i thjeshtë.
 	The output does not move in one direction with {inputs} (its value at the median is outside its values at the 10th and 90th percentiles), so the swing understates the effect.	Dalja nuk lëviz në një drejtim me {inputs} (vlera e saj te mesorja është jashtë vlerave të saj te përqindshi i 10-të dhe i 90-ti), ndaj luhatja e nënvlerëson efektin.
+	Select	Zgjidh
+	Link	Lidhja
+	Initial value	Vlera fillestare
+	Click the diagram to place a stock.	Kliko në diagram për të vendosur një stok.
+	Click the diagram to place an auxiliary.	Kliko në diagram për të vendosur një ndryshore ndihmëse.
+	Drag from a stock, or from empty space, to another stock or empty space to draw a flow.	Zvarrit nga një stok ose hapësirë e zbrazët te një stok tjetër ose hapësirë e zbrazët për të vizatuar një rrjedhë.
+	Drag from one variable to another to show that the second uses the first.	Zvarrit nga një ndryshore te tjetra për të treguar se e dyta përdor të parën.
+	Click a variable to select it and edit it here. Drag a variable to move it.	Kliko mbi një ndryshore për ta zgjedhur dhe redaktuar këtu. Zvarrite për ta lëvizur.
+	Moved {name}	U lëviz {name}
+	Added {kind}: {name}	U shtua {kind}: {name}
+	Edited {name}	U redaktua {name}
+	Removed {name}	U hoq {name}
+	Linked {from} to {to}	U lidh {from} me {to}
+	Add Variable	Shto ndryshore
+	Edit Variable	Ndrysho ndryshoren
+	Remove Variable	Hiq ndryshoren
+	Simulation Settings	Cilësimet e simulimit
+	Change Diagram	Ndrysho diagramin
+	You can change this model on the Diagram tab, or with commands, from an agent through the MCP server or from the command line.	Këtë model mund ta ndryshosh te skeda Diagrami, ose me komanda, nga një agjent përmes serverit MCP ose nga linja e komandës.
 	Inconclusive at current precision	Jo përfundimtare me saktësinë aktuale
 	No difference detected	Nuk u zbulua ndryshim
 	Agrees within ±{tolerance}	Përputhet brenda ±{tolerance}

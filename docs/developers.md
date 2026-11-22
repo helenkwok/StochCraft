@@ -400,8 +400,19 @@ stochcraft-cli exec changes.json --open queue.bpmn
 
 A system dynamics model is stocks (levels) and flows (rates) over time, read from an XMILE 1.0
 file (OASIS, 2015). It is opened, edited, run, saved and read through the engine and the command
-line; the window shows and runs it (the Model and Results tabs, `crates/ui-egui/src/sd.rs`), and
-the canvas comes next.
+line; the window shows, runs and edits it (the Model and Results tabs, `crates/ui-egui/src/sd.rs`, and
+the Diagram tab, the canvas, `crates/ui-egui/src/sd_canvas.rs`).
+
+The Diagram tab draws what `sd.get` gives (each variable's centre, size and, for a flow, its pipe, the
+stocks it leaves and enters, and the links) and sends every change as one engine command, so it
+undoes in one step: a drag on release is `sd.layout.set` (the engine moves the pipes at a stock),
+an added stock or auxiliary is `sd.variable.add` with a `position`, an added flow is
+`sd.variable.add` with `from_stock`/`into_stock`, a field of the side panel is `sd.variable.set`, a
+link is `sd.layout.set` with `add_connectors`, and Delete is `sd.variable.remove`. The undo labels
+are the commands' names, which `change_label` in `crates/ui-egui/src/lib.rs` words ("Add Variable",
+"Edit Variable", "Remove Variable", "Simulation Settings", "Change Diagram"). The canvas keeps its
+view, tool, selection and half-typed fields in `SdCanvas` and re-reads `sd.get` only when the
+engine's revision changes.
 
 ```bash
 stochcraft-cli run tests/models/sir.xmile                     # each variable at the end of the run

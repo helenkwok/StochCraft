@@ -1368,7 +1368,6 @@ unit	yr	г.
 	The model: its settings and variables	Моделът: настройки и променливи
 	System dynamics model	Модел на системната динамика
 	Variables	Променливи
-	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	Можете да променяте този модел с команди, от агент през MCP сървъра или от командния ред. Редактирането върху платното идва следващо.
 	From {start} to {stop}, in steps of {dt}, by the {method} method.	От {start} до {stop}, със стъпки от {dt}, по метода {method}.
 	Notes from the file	Бележки от файла
 	Equation	Уравнение
@@ -1423,6 +1422,25 @@ unit	yr	г.
 	No variation was observed, so there is no interval for the mean; a rare event the trials did not reach could still move it.	Не е наблюдавана вариация, затова няма интервал за средната стойност; рядко събитие, до което опитите не са стигнали, все още би могло да я промени.
 	They narrowed the interval by {percent}, but a mean given for a control is far from the trials' mean, so the plain result stands.	Те стесниха интервала с {percent}, но зададената средна стойност на контрола е далеч от средната на опитите, затова обикновеният резултат остава.
 	The output does not move in one direction with {inputs} (its value at the median is outside its values at the 10th and 90th percentiles), so the swing understates the effect.	Резултатът не се движи в една посока с {inputs} (стойността му при медианата е извън стойностите му при 10-ия и 90-ия персентил), затова размахът подценява ефекта.
+	Select	Избор
+	Link	Връзка
+	Initial value	Начална стойност
+	Click the diagram to place a stock.	Щракнете върху диаграмата, за да поставите запас.
+	Click the diagram to place an auxiliary.	Щракнете върху диаграмата, за да поставите спомагателна променлива.
+	Drag from a stock, or from empty space, to another stock or empty space to draw a flow.	Плъзнете от запас или от празно място до друг запас или празно място, за да начертаете поток.
+	Drag from one variable to another to show that the second uses the first.	Плъзнете от една променлива до друга, за да покажете, че втората използва първата.
+	Click a variable to select it and edit it here. Drag a variable to move it.	Щракнете върху променлива, за да я изберете и редактирате тук. Плъзнете я, за да я преместите.
+	Moved {name}	Преместено: {name}
+	Added {kind}: {name}	Добавено: {kind} {name}
+	Edited {name}	Редактирано: {name}
+	Removed {name}	Премахнато: {name}
+	Linked {from} to {to}	{from} е свързано с {to}
+	Add Variable	Добавяне на променлива
+	Edit Variable	Промяна на променлива
+	Remove Variable	Премахване на променлива
+	Simulation Settings	Настройки на симулацията
+	Change Diagram	Промяна на диаграмата
+	You can change this model on the Diagram tab, or with commands, from an agent through the MCP server or from the command line.	Можете да променяте този модел в раздела „Диаграма“ или с команди, от агент през MCP сървъра или от командния ред.
 	Inconclusive at current precision	Неубедително при текущата точност
 	No difference detected	Не е открита разлика
 	Agrees within ±{tolerance}	Съвпада в рамките на ±{tolerance}

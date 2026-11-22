@@ -2202,7 +2202,7 @@ over time, a second kind of diagram on the canvas). Then M4.1, the smallest and 
 reuses most of what exists; then M4.2 and M4.3 (agents in flows first); then M4.4. Agents in
 space are built with M5, which needs the same layout and travel.
 
-M4.1 parts 1, 2, 2b and 3a and its control variates are done, and M4.2 parts 1 and 2 (the `sd` crate, editing and saving, the window) are done except the canvas (below); the rest is not started. D15–D18 are settled; D10–D13 (#71 has
+M4.1 parts 1, 2, 2b and 3a and its control variates are done, and M4.2 parts 1 and 2 (the `sd` crate, editing and saving, the window, the canvas) are done except arrays, the rate-to-rate lint and docking (below); the rest is not started. D15–D18 are settled; D10–D13 (#71 has
 them) are to settle first.
 
 ### M4.1 Monte Carlo
@@ -2399,8 +2399,26 @@ write XMILE (the engine's; Save As never rewrites a chosen name, and a Save into
 content the reader does not keep, a second diagram or styles, asks first with Replace, Save As and
 Cancel), and the title, the header and the question on closing follow its
 unsaved state, so a model changed by an agent's or the command line's edit is marked edited; the
-recovery copy is for process models only for now. The window's run is made a few replications a frame, as Monte Carlo's is (`stochcraft_sd::SdJob`, wrapped by the engine's `SdJob` and `Engine::sd_start`, `Engine::sd_results`), with "n of N runs finished", Cancel (or Esc) and no size limit of its own beyond the engine's; changing the model while it runs, or opening another, cancels it. One replication is not interrupted, so a single very long replication still holds a frame up. The canvas, then the replication of hybrids with M4.3 and M4.4; arrays, the
-lint on rate-to-rate links and docking are not done.
+recovery copy is for process models only for now. The window's run is made a few replications a frame, as Monte Carlo's is (`stochcraft_sd::SdJob`, wrapped by the engine's `SdJob` and `Engine::sd_start`, `Engine::sd_results`), with "n of N runs finished", Cancel (or Esc) and no size limit of its own beyond the engine's; changing the model while it runs, or opening another, cancels it. One replication is not interrupted, so a single very long replication still holds a frame up.
+
+The canvas is done (the **Diagram** tab, `crates/ui-egui/src/sd_canvas.rs`, between Model and
+Results): the model's diagram drawn in the plain stock-and-flow notation of the textbooks (stocks
+as rectangles, auxiliaries as circles, flows as a double-line pipe with a bow-tie valve and a
+cloud at an open end, information links as thin curved arrows, names under the shapes), pan and
+zoom as the process canvas has them and a fit to the model on open. A variable is selected by a
+click or by Tab (in name order, with a focus ring and a label such as "Stock Customers"), and a
+side panel edits its name, equation (a stock's initial value) and unit, committing `sd.variable.set`
+on Enter or when the field is left and showing the engine's refusal under the field. Dragging a
+stock, an auxiliary or a valve is one `sd.layout.set` on release, so one undo step, and the pipes
+at a stock follow it. The tools add a stock or an auxiliary where the diagram is clicked (one
+`sd.variable.add` with a position, so one undo step), draw a flow by dragging from a stock or empty
+space to a stock or empty space (one `sd.variable.add` with `from_stock` and `into_stock`; empty
+space is a cloud), and link two variables by dragging from one to the other. Delete removes the
+selection through `sd.variable.remove`, whose refusal (the variable is used) is shown. The undo
+names are "Add Variable", "Edit Variable", "Remove Variable", "Simulation Settings" and "Change
+Diagram". Not done: arrays, the lint on rate-to-rate links, docking, removing or bending a link
+on the canvas, drawing a flow or a link from the keyboard, and the replication of hybrids with
+M4.3 and M4.4.
 
 **What Python users already have, and so the minimum:** PySD runs models from the common
 system dynamics formats, with their stocks, flows, auxiliaries, delays, lookups and arrays, and
