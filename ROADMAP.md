@@ -3661,7 +3661,7 @@ data without a model. The decisions, objective, constraints and their wiring to 
 `engine::optimize`, beside `decide.rs` and `design.rs`, reusing `Param`, `Output`, `Target`, `run`
 and `samples`.
 
-**The command:** `experiment.optimize` with `decisions`, `objective` (`element` and `metric` or
+**The command:** `experiment.optimise` with `decisions`, `objective` (`element` and `metric` or
 `stop_time`, `sense`, `weight`, `costs`), `cost_cap`, `constraints` (with `tolerance`),
 `confidence`, `indifference`, `replications_per_visit` (default 10), `max_runs`, `reserve`,
 `time_limit`, `seed` and `apply`. The answer gives the chosen design, the claim above in words
