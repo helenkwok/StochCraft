@@ -2349,7 +2349,7 @@ sequence against the authors' published ones.
 
 ### M4.2 System dynamics
 
-**Status:** part 1 done: the `sd` crate (stocks, flows, auxiliaries, graphical functions, `DELAY1`,
+**Status:** (Journal identity: an XMILE journal records the system dynamics model's digest and the document kind, replay refuses another model, kind or edited file bytes without `--force`, a replayed `run.start` completes, and `file.save` keeps an unchanged file's bytes and refuses a lossy overwrite without `allow_loss`.) Part 1 done: the `sd` crate (stocks, flows, auxiliaries, graphical functions, `DELAY1`,
 `DELAY3`, `SMTH1`, `SMTH3`, `PULSE`, `STEP`, `RAMP`, `IF THEN ELSE` and the random functions
 `NORMAL` and `RANDOM` with a seed; Euler or fourth-order Runge-Kutta; time as start + n·DT from a
 counter; evaluation in topological order with ties broken by name, and an algebraic loop named as

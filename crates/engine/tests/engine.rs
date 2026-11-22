@@ -759,7 +759,11 @@ fn files_open_save_and_track_changes() {
         "{reason:?}"
     );
     assert_eq!(h.format(), Some("bpmn"));
-    ok(&mut h, "file.save", json!({"as_new": true}));
+    ok(
+        &mut h,
+        "file.save",
+        json!({"as_new": true, "allow_loss": true}),
+    );
     // Undoing back to the saved model is clean again.
     ok(&mut f, "undo", json!({}));
     assert!(f.is_dirty());

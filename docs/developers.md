@@ -433,7 +433,11 @@ equation names the variable or a stock lists it, naming who; `force` clears the 
 An edit's undo entry is a snapshot of the whole `SdModel` before it (`Undo::Sd` in the engine, the
 counterpart of `Op::SetModel`), on the same stacks as process edits; undo swaps it in and compiles
 it. The model is dirty while it, diagram included, differs from the one opened or last saved.
-`file.save` writes XMILE (`format` is `xmile`); a journal that began with `sd.new` records its
+`file.save` writes XMILE (`format` is `xmile`); an unchanged model is written as the bytes it was
+read from, and saving a changed model into the file it was read from, when the reader noted
+content it does not keep (a second view, display settings), is refused with `conflict` and the
+list in `details.would_lose` unless `allow_loss` is `true` (a process model saved with `as_new`
+over its own file that has notes is refused the same way). A journal that began with `sd.new` records its
 parameters in the start record and replays from it.
 
 **The diagram** is `SdModel.layout`: a shape per variable by canonical name (the centre; a stock
@@ -515,19 +519,31 @@ also when a step failed, as a JSON object:
   (`model.new`, with the model's `name`) or `file` (with the name the file was opened under,
   the digest of its bytes and the scenario). `model_digest` is the digest the run records carry,
   of the model at the start. `file_digest`, `name` and `scenario` are left out when they do not
-  apply. The command that started the document is not an entry: `start` records it.
+  apply. The command that started the document is not an entry: `start` records it. `document` is
+  `process` or `system_dynamics`; for a system dynamics model `model_digest` is the digest of the
+  model without its diagram (the one its run records carry), not of an empty process model. A
+  journal written before `document` existed is a legacy one: a process journal replays as before,
+  a legacy journal that began with `sd.new` rebuilds its model from that step, and one that began
+  from an opened XMILE file cannot vouch for its model and is refused unless `--force`.
+- `engine` names the build that wrote it (the version, the platform and, when the build was given
+  `STOCHCRAFT_REVISION`, the source revision). A replay prints, on stderr, how many edits it
+  replayed and how many runs it made again, and whether this is the same build: runs are made
+  again, not compared with the original numbers, and only the same build is expected to give the
+  same ones.
 - `entries` are the commands in order, as `{"command", "params"}`. A script for `exec` is the same
   array on its own, and `exec` runs that in full.
 
 Replaying a journal (`exec journal.json`) first checks that the model is the one it started from
 (`--open` the same file, which opens the scenario the journal records in `start.scenario`; a
 journal that began with `model.new` starts its own model) and refuses
-with a `conflict` error if not, unless `--force`. If the file has no scenario of that name, `exec`
+with a `conflict` error if not, unless `--force`. The same model from other bytes (the file was
+edited since) and a document of the other kind are refused too. If the file has no scenario of that name, `exec`
 stops with the error from opening it; with `--force` it replays onto the file's first scenario.
 It then re-applies the edits, undo and redo, and
 skips the saves, runs and experiments (`file.save`, `run`, `mc.run`, `mc.sobol`, `sd.run`, `run.start`,
 `run.cancel`, `experiment.sweep`, `experiment.sensitivity`, `experiment.design`,
-`experiment.size`), printing `"skipped": true` for each; `--all` carries them out too. In Rust,
+`experiment.size`), printing `"skipped": true` for each; `--all` carries them out too, and a
+replayed `run.start` is run to completion so later steps find its results. In Rust,
 `Engine::journal_document` gives the journal and `Engine::replay_journal` replays it
 (`ReplayMode::EditsOnly` or `All`); `Engine::replay` still runs a plain list of steps in full.
 

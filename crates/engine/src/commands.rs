@@ -830,6 +830,11 @@ pub struct FileSave {
     /// Write a new BPMN file from the model alone, instead of saving into the opened file.
     #[serde(default)]
     pub as_new: bool,
+    /// Replace the file even though it holds what StochCraft does not keep (a second diagram, a
+    /// note the reader made about it): without this such a save is refused and says what it
+    /// would leave out.
+    #[serde(default)]
+    pub allow_loss: bool,
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -2369,6 +2374,17 @@ fn file_save(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
                 "the model has no file yet: give a `path`",
             )
         })?;
+    let loss = e.save_loss(&path, p.as_new);
+    if !loss.is_empty() && !p.allow_loss {
+        return Err(CommandError {
+            code: ErrorCode::Conflict,
+            message: format!(
+                "saving into {path} would leave out what StochCraft does not keep of it: {}; `\"allow_loss\": true` saves anyway",
+                loss.join("; ")
+            ),
+            details: Some(json!({ "would_lose": loss })),
+        });
+    }
     let bytes = e.save_bytes(p.as_new).map_err(|mut err| {
         if err.code == ErrorCode::Unsupported {
             err.message += "; `\"as_new\": true` writes the model as a new BPMN file instead, without the content StochCraft does not understand";
