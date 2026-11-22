@@ -42,7 +42,8 @@ pub enum SamplingSpec {
     /// an output that rises with the inputs has the pair's errors cancel.
     Antithetic,
     /// Randomised quasi-Monte Carlo: within each batch of 1,000 trials, Sobol points with a
-    /// random digital shift, one dimension per input (at most 64 inputs).
+    /// random linear matrix scramble and digital shift, one dimension per input (at most 64
+    /// inputs).
     Sobol,
 }
 
@@ -971,7 +972,7 @@ fn mc_record(context: &Value, r: &McResults, m: &MonteCarlo) -> Value {
         "interval": interval_text(r),
         "batch": BATCH,
         "stop": m.stop.map(StopDoc::from),
-        "random_streams": "trials in batches of 1,000; each input's draws in batch b from the stream keyed mc/<b>/input/<name> under the seed (with Sobol sampling its random digital shift, from mc/qmc/<b>/<name>, the points being the first of Joe and Kuo's Sobol sequence with one dimension per input in declaration order), and the pairing of correlated inputs from mc/<b>/correlation, so results do not depend on the number of threads",
+        "random_streams": "trials in batches of 1,000; each input's draws in batch b from the stream keyed mc/<b>/input/<name> under the seed (with Sobol sampling its random linear matrix scramble and digital shift, from mc/qmc/<b>/<name>, the points being the first of Joe and Kuo's Sobol sequence with one dimension per input in declaration order), and the pairing of correlated inputs from mc/<b>/correlation, so results do not depend on the number of threads",
         "correlation": "rank correlations induced by Iman and Conover's method (1982) in each batch, on van der Waerden scores with Pearson correlation 2 sin(πρ/6) for a rank correlation ρ",
         "uncertainty": uncertainty_text(r),
         "controls": "an output with controls has a controlled estimate beside its results (controlled): the coefficients b of Y - b(C - mu) are fitted by least squares on a pilot, the first batch of 1,000 trials (the first half for a run under 2,000 trials), whose trials are left out of the estimate; for a run of a fixed number of trials that makes it unbiased (a run that stops at a precision target can still be biased by the stopping rule, which judges the same trials); where trials are grouped by batch (Latin hypercube, Sobol, correlated inputs) the pilot is the whole first batch, so one batch gives no controlled estimate (two are needed, three for an interval), and antithetic runs round the pilot to whole pairs; a trial with no number in the output or a control withdraws the controlled estimate; the controlled mean and target probability, with their 95% intervals on the run's interval basis, come from the remaining trials; variance_ratio and narrowing compare the controlled interval with the uncontrolled one on those same trials. Percentiles, histogram and extremes are not controlled; a sequential stop is judged on the uncontrolled mean",
@@ -1005,7 +1006,7 @@ fn uncertainty_text(r: &McResults) -> &'static str {
             "plain random sampling with no correlations: the trials are independent, so the mean has the 95% Student-t interval across trials (half_width) and a target's probability Wilson's 95% score interval; percentiles by Hyndman and Fan's definition 7"
         }
         IntervalBasis::Batches { .. } => {
-            "Latin hypercube or Sobol sampling or correlated inputs make the trials within a batch dependent, so each batch is one independent replicate (replicated Latin hypercube sampling, Owen, 1992; Glasserman, 2003, section 4.4; Sobol sampling is randomised quasi-Monte Carlo with an independent random digital shift in each batch, Owen, 1995, and L'Ecuyer and Lemieux, 2002): the mean has the 95% Student-t interval on the batch means and a target's probability the 95% Student-t interval on the batch proportions, clamped to [0, 1], with batches - 1 degrees of freedom, and none with fewer than two batches; runs are whole batches; std_dev is across trials; percentiles by Hyndman and Fan's definition 7"
+            "Latin hypercube or Sobol sampling or correlated inputs make the trials within a batch dependent, so each batch is one independent replicate (replicated Latin hypercube sampling, Owen, 1992; Glasserman, 2003, section 4.4; Sobol sampling is randomised quasi-Monte Carlo with an independent random linear matrix scramble and digital shift in each batch, Matousek, 1998, and Owen, 2003): the mean has the 95% Student-t interval on the batch means and a target's probability the 95% Student-t interval on the batch proportions, clamped to [0, 1], with batches - 1 degrees of freedom, and none with fewer than two batches; runs are whole batches; std_dev is across trials; percentiles by Hyndman and Fan's definition 7"
         }
         IntervalBasis::Pairs { .. } => {
             "antithetic sampling makes the two trials of a pair (u and 1 - u for every input) dependent, and the pairs independent (Glasserman, 2003, section 4.2): the mean has the 95% Student-t interval on the pair means and a target's probability the 95% Student-t interval on the pair proportions, clamped to [0, 1], with pairs - 1 degrees of freedom; runs are whole pairs; std_dev is across trials, so it is not the spread the interval is made from; percentiles by Hyndman and Fan's definition 7"

@@ -2263,9 +2263,16 @@ inputs are refused, as their reordering breaks the pairs. Sobol sampling is rand
 quasi-Monte Carlo (`stochcraft_mc::qmc`): each batch of 1,000 takes the first points of the
 Sobol sequence with Joe and Kuo's direction numbers (2008, "new-joe-kuo-6.21201", 64 dimensions,
 one per input in declaration order, more refused; their BSD-style licence is in NOTICE and
-ATTRIBUTION.md), shifts each dimension by a random 32-bit integer keyed by the seed, the batch and
-the input's name (a random digital shift; Owen 1995; L'Ecuyer and Lemieux 2002), so the batches are
-independent replicates and the interval is across batches of 1,000, as Latin hypercube's is.
+ATTRIBUTION.md), and randomises each dimension with a random linear matrix scramble followed by a
+random digital shift (Matoušek 1998; affine matrix scrambling in Owen 2003), drawn from a stream
+keyed by the seed, the batch and the input's name, so the batches are independent replicates and
+the interval is across batches of 1,000, as Latin hypercube's is. The scramble (a random
+lower-triangular binary matrix with ones on the diagonal, applied to the direction integers)
+keeps the net property and has the sampling variance of Owen's nested uniform scrambling (Owen
+2008), where the digital shift alone, used before, left every point of a dimension the same
+offset within its cell: on a smooth five-input product the variance of a batch mean is about a
+fifth of the shift's at 1,000 points and about 1/200 at 1,024 (`crates/mc/tests/scramble.rs`).
+The estimate stays unbiased and the interval method is unchanged.
 Both are checked against exact answers (the intervals hold the mean about 95% of the time over
 200 seeds, are much narrower on a monotone and on a smooth integrand, and the first Sobol points
 are the published ones).

@@ -524,7 +524,7 @@ On the **Model** tab:
   so the results are usually more precise for the same trials, but for an output that peaks
   in the middle of an input's range they may not be, and they cannot be used with correlated
   inputs, which reorder the trials. **Quasi-random (Sobol)** draws spread the trials evenly
-  over the inputs' ranges instead of by chance, with a fresh random shift in every batch of
+  over the inputs' ranges instead of by chance, with a fresh random scramble in every batch of
   1,000 so that the batches are independent; it usually does best for a smooth output of a few
   inputs, and has points for up to 64 inputs. On the command line, `stochcraft-cli run model.bpmn
   --sampling antithetic` or `--sampling quasi-random` chooses it for one run. **How many trials** can be **More until precise enough**: trials are added until every output's mean is
@@ -550,7 +550,7 @@ The **Results** tab answers the question first:
 - **How sure are these numbers?** says what each ± is across. With plain random sampling and no
   correlations it is across the trials. Latin hypercube sampling, Sobol sampling and correlations
   make the trials within a batch of 1,000 depend on each other, so there it is across batches
-  (with Sobol sampling each batch has a random shift of its own, so the batches are
+  (with Sobol sampling each batch has a random scramble of its own, so the batches are
   independent), and the trials run in whole batches: 2,500 trials asked for run as 3,000, and the
   results say so. With antithetic pairs the two trials of a pair depend on each other and the
   pairs do not, so it is across pairs. How many batches or pairs the ± is across is in the same

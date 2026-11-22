@@ -119,7 +119,7 @@ pub enum Sampling {
     /// Antithetic pairs: trials come in pairs that use each input's uniform u and 1 - u.
     Antithetic,
     /// Randomised quasi-Monte Carlo: within each batch of trials, Sobol points with a random
-    /// digital shift.
+    /// linear matrix scramble and digital shift.
     Sobol,
 }
 

@@ -1,5 +1,5 @@
-//! Randomised quasi-Monte Carlo (ROADMAP M4.1 part 2b): Sobol points with a random digital
-//! shift for each batch.
+//! Randomised quasi-Monte Carlo (ROADMAP M4.1 part 2b): Sobol points, scrambled and shifted at
+//! random for each batch.
 //!
 //! **Points.** The Sobol sequence (Sobol', 1967) in Gray-code order, one dimension for each
 //! input in declaration order. Its direction numbers are the "new-joe-kuo-6.21201" set of Joe
@@ -11,22 +11,65 @@
 //! V_i = V_{i-s} ⊕ (V_{i-s} ≫ s) ⊕ (⊕ over k < s with a_k = 1 of V_{i-k}) after. Dimension 1
 //! is the van der Corput sequence (every m_i = 1). Point n is the exclusive or of the V_i for
 //! each set bit i - 1 of n ⊕ (n ≫ 1), and its first points are those the authors publish
-//! (`tests/variance.rs`).
+//! (`tests/variance.rs`). A batch takes the points from index 0 on and none is dropped: dropping
+//! the first points breaks the net property and slows the convergence of a randomised net (Owen,
+//! "On dropping the first Sobol' point", 2020).
 //!
 //! **Licence.** The direction numbers are covered by the authors' BSD-style licence, kept below,
 //! in NOTICE and in ATTRIBUTION.md.
 //!
-//! **Randomisation.** A random digital shift (Owen, "Randomly permuted (t, m, s)-nets and
-//! (t, s)-sequences", 1995; L'Ecuyer and Lemieux, "Recent advances in randomized
-//! quasi-Monte Carlo methods", 2002): each dimension's integer coordinates are exclusive-or'd
-//! with one random 32-bit integer. Every shifted point is uniform on its own, so the estimate of
-//! a mean is unbiased, and batches shifted independently are independent replicates, which is
-//! what the interval across batches needs. The coordinate is taken at the middle of its 2^-32
-//! cell, so it is never exactly 0 or 1.
+//! **Randomisation.** Each dimension of each batch gets a random linear matrix scramble followed
+//! by a random digital shift ([`Scramble`], [`scrambled`]): Matoušek, "On the L2-discrepancy for
+//! anchored boxes", *Journal of Complexity* 14, 527-556 (1998), called affine matrix scrambling
+//! by Owen, "Variance with alternative scramblings of digital nets", *ACM TOMACS* 13(4), 363-378
+//! (2003). With the binary digits of a coordinate written most significant first, the scrambled
+//! digits are x = L·y ⊕ e, where y are the digits of the Sobol point, L is a random 32 × 32
+//! lower-triangular binary matrix with ones on its diagonal and independent fair bits below it,
+//! and e is a random 32-bit shift. Digit k of x so depends only on digits 1 ... k of y, through an
+//! invertible map, so every elementary interval [j/2^k, (j+1)/2^k) goes onto another one whole
+//! and the points keep the (t, m, s)-net property of the sequence: of the first 2^m points, each
+//! such box of volume 2^(t-m) still holds exactly 2^t. As the map is linear it is applied to the
+//! direction integers once (the scrambled generator matrix is L·C) and the Gray-code walk runs
+//! over them unchanged, the way Hong and Hickernell, "Algorithm 823: Implementing scrambled
+//! digital sequences", *ACM TOMS* 29(2), 95-109 (2003), scramble digital sequences through their
+//! generator matrices. The shift makes every point uniform on its own (Owen, 2003, Proposition
+//! 3.1), so the estimate of a mean is unbiased, and batches scrambled independently are
+//! independent replicates, which is what the interval across batches needs. The coordinate is
+//! taken at the middle of its 2^-32 cell, so it is never exactly 0 or 1.
 //!
-//! **Streams.** The shift of input `x` in batch `b` is the first draw of the stream keyed
-//! `mc/qmc/<b>/<x>`, so adding an input leaves the other inputs' points as they were (provided
-//! it is added after them: the dimension is the input's place in the declaration order).
+//! **Why the matrix.** A digital shift alone moves every point of a dimension by the same
+//! exclusive or, so all of the first 2^m points keep one common offset inside their intervals of
+//! width 2^-m: for f(x) = x the variance of the mean of 2^m shifted van der Corput points is
+//! 1/(12 n²), where Owen's nested uniform scrambling ("Randomly permuted (t, m, s)-nets and
+//! (t, s)-sequences", 1995) gives 1/(12 n³) (Owen, 2003, §3.1). The matrix mixes the leading
+//! digits into the trailing ones, so each point gets an offset of its own. For a pair of points
+//! whose digits first differ at position r, the scrambled digits after r differ by a fresh fair
+//! bit of L's column r, independent of the shift, which is the same joint law nested uniform
+//! scrambling gives the pair; the variance of a mean depends on the points only through such
+//! pairs, so random linear scrambling with a digital shift has the sampling variance of nested
+//! uniform scrambling (Owen, "Local antithetic sampling with scrambled nets", *Annals of
+//! Statistics* 36(5), 2319-2343, 2008) at a cost of 32 words a dimension. For smooth
+//! integrands that variance falls as O(n^-3 (log n)^(s-1)) at n = 2^m points (Owen, "Scrambled net
+//! variance for integrals of smooth functions", *Annals of Statistics* 25(4), 1997). Applied
+//! evidence for scrambled nets over independent draws: Sándor and Train, "Quasi-random simulation
+//! of discrete choice models", *Transportation Research B* 38, 313-327 (2004), where, in
+//! simulated maximum likelihood for a mixed logit model, 64 points of the better scrambled nets
+//! in five dimensions did as well as 512 independent draws. Adding a uniform shift
+//! modulo 1 instead (Tuffin, 1996; a Cranley-Patterson rotation) carries between digits, so a
+//! box of side 2^-k moves across the edges of the boxes of the next coarser grid, and the net
+//! property need not survive; the exclusive or never carries.
+//!
+//! A batch of `stochcraft_mc::BATCH` = 1,000 trials is not a power of two, so a run's batches get
+//! the full net only for their first 512 points; the gain over the digital shift is smaller there
+//! than at 1,024 points (`tests/scramble.rs`).
+//!
+//! **Streams.** The scramble of input `x` in batch `b` comes from the stream keyed
+//! `mc/qmc/<b>/<x>`: its first draw gives the shift (the shift that stream gave before matrices
+//! were added) and the next 31 give rows 2 to 32 of L, so adding an input leaves the other
+//! inputs' points as they were (provided it is added after them: the dimension is the input's
+//! place in the declaration order).
+//!
+//! [`shifted`] keeps the digital shift alone, for code that wants it.
 //!
 //! # Joe and Kuo's licence
 //!
@@ -64,8 +107,8 @@
 /// The most dimensions (inputs) a Sobol run has: the first 64 of Joe and Kuo's set.
 pub const MAX_DIMENSIONS: usize = 64;
 
-/// Bits of each coordinate.
-const BITS: usize = 32;
+/// Bits of each coordinate, and rows of a [`Scramble`] matrix.
+pub const BITS: usize = 32;
 
 /// 2^32, to scale a coordinate into [0, 1).
 const SCALE: f64 = 4_294_967_296.0;
@@ -237,7 +280,11 @@ fn directions(dim: usize) -> Option<[u32; BITS]> {
 /// coordinates, point 0 first; each is its coordinate times 2^32. `None` beyond
 /// [`MAX_DIMENSIONS`].
 pub fn integers(dim: usize, n: usize) -> Option<Vec<u32>> {
-    let v = directions(dim)?;
+    Some(walk(&directions(dim)?, n))
+}
+
+/// The first `n` points of the digital sequence with direction integers `v`, in Gray-code order.
+fn walk(v: &[u32; BITS], n: usize) -> Vec<u32> {
     let mut out = Vec::with_capacity(n);
     let mut x = 0_u32;
     for i in 0..n {
@@ -249,7 +296,7 @@ pub fn integers(dim: usize, n: usize) -> Option<Vec<u32>> {
         }
         out.push(x);
     }
-    Some(out)
+    out
 }
 
 /// The first `n` points of Sobol dimension `dim` in [0, 1), unshifted (the first is 0).
@@ -269,6 +316,101 @@ pub fn shifted(dim: usize, n: usize, shift: u32) -> Option<Vec<f64>> {
         integers(dim, n)?
             .into_iter()
             .map(|x| (f64::from(x ^ shift) + 0.5) / SCALE)
+            .collect(),
+    )
+}
+
+/// A random linear matrix scramble with a digital shift (Matoušek, 1998) of one dimension: the
+/// 32-bit integer coordinate y becomes L·y ⊕ `shift`, its binary digits taken most significant
+/// first.
+///
+/// Row k of L (counting from 0) is `rows[k]`, a mask over the input bits: its own diagonal bit
+/// 31 - k is always set and only the bits above it (the more significant digits) may be, so L is
+/// lower triangular with ones on the diagonal and invertible. Output bit 31 - k is the parity of
+/// `y & rows[k]`.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct Scramble {
+    rows: [u32; BITS],
+    shift: u32,
+}
+
+impl Scramble {
+    /// The scramble whose row k keeps the bits of `words[k]` above the diagonal, with the
+    /// diagonal bit set and the bits below it cleared (so `words[0]` is not used), and the shift
+    /// `shift`.
+    pub fn new(words: [u32; BITS], shift: u32) -> Self {
+        let mut rows = [0_u32; BITS];
+        for (k, (row, word)) in rows.iter_mut().zip(words).enumerate() {
+            // Bits 32 - k ... 31: the k digits before digit k + 1. No bits for k = 0.
+            let above = !(u32::MAX >> k);
+            let diagonal = 1_u32 << (BITS - 1 - k);
+            *row = (word & above) | diagonal;
+        }
+        Self { rows, shift }
+    }
+
+    /// The identity matrix with the shift `shift`: the digital shift alone, as [`shifted`].
+    pub fn shift_only(shift: u32) -> Self {
+        Self::new([0; BITS], shift)
+    }
+
+    /// Draws a scramble from `rng`: the first draw gives the shift, the next 31 rows 2 to 32 of
+    /// the matrix (each the top 32 bits of a draw).
+    pub fn draw(rng: &mut stochcraft_random::Rng) -> Self {
+        let mut top = || u32::try_from(rng.next_u64() >> 32).unwrap_or(0);
+        let shift = top();
+        let mut words = [0_u32; BITS];
+        for word in words.iter_mut().skip(1) {
+            *word = top();
+        }
+        Self::new(words, shift)
+    }
+
+    /// The rows of L.
+    pub fn rows(&self) -> &[u32; BITS] {
+        &self.rows
+    }
+
+    /// The shift.
+    pub fn shift(&self) -> u32 {
+        self.shift
+    }
+
+    /// L·y over the binary digits, without the shift.
+    pub fn linear(&self, y: u32) -> u32 {
+        let mut out = 0_u32;
+        for (k, row) in self.rows.iter().enumerate() {
+            out |= ((y & row).count_ones() & 1) << (BITS - 1 - k);
+        }
+        out
+    }
+
+    /// L·y ⊕ shift: one integer coordinate scrambled.
+    pub fn apply(&self, y: u32) -> u32 {
+        self.linear(y) ^ self.shift
+    }
+}
+
+/// The first `n` points of Sobol dimension `dim` under `scramble`, as 32-bit integers. The
+/// matrix is applied to the direction integers (L·C) and the Gray-code walk runs over them, then
+/// the shift; by linearity each point is `scramble.apply` of the unscrambled one. `None` beyond
+/// [`MAX_DIMENSIONS`].
+pub fn scrambled_integers(dim: usize, n: usize, scramble: &Scramble) -> Option<Vec<u32>> {
+    let mut v = directions(dim)?;
+    for d in v.iter_mut() {
+        *d = scramble.linear(*d);
+    }
+    let shift = scramble.shift();
+    Some(walk(&v, n).into_iter().map(|x| x ^ shift).collect())
+}
+
+/// The first `n` points of Sobol dimension `dim` under `scramble`, each at the middle of its
+/// cell, so strictly inside (0, 1). `None` beyond [`MAX_DIMENSIONS`].
+pub fn scrambled(dim: usize, n: usize, scramble: &Scramble) -> Option<Vec<f64>> {
+    Some(
+        scrambled_integers(dim, n, scramble)?
+            .into_iter()
+            .map(|x| (f64::from(x) + 0.5) / SCALE)
             .collect(),
     )
 }

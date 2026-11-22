@@ -266,9 +266,12 @@ refused with correlated inputs, whose reordering would break the pairs. `"sobol"
 quasi-Monte Carlo (`stochcraft_mc::qmc`): each batch takes the first 1,000 points of the Sobol
 sequence with Joe and Kuo's direction numbers (2008, "new-joe-kuo-6.21201", the first 64
 dimensions; their licence is in NOTICE), one dimension per input in declaration order, and
-shifts each dimension by a random 32-bit integer keyed by the seed, the batch and the input's
-name (a random digital shift; Owen, 1995; L'Ecuyer and Lemieux, 2002); more than 64 inputs are
-refused. The file format keeps the sampling as `sampling="antithetic"` or `"sobol"` on
+randomises each dimension with a random linear matrix scramble and a random digital shift
+(Matoušek, 1998; Owen, 2003: a random lower-triangular binary matrix with ones on its diagonal
+applied to the direction integers, then an exclusive or with a random 32-bit integer), drawn from
+the stream keyed by the seed, the batch and the input's name; more than 64 inputs are refused.
+The scramble keeps the net property and has the variance of nested uniform scrambling (Owen,
+2008); `qmc::shifted`, the digital shift alone, stays for other callers. The file format keeps the sampling as `sampling="antithetic"` or `"sobol"` on
 `stochcraft:monteCarlo`; a reader from before them warns that it does not know the value and
 samples at random. On the command line `run --sampling random|latin-hypercube|antithetic|quasi-random`
 chooses it for one run (`sobol` is accepted for `quasi-random`; it is not `--sobol`, the shares of
@@ -290,7 +293,7 @@ than there are batches. Such runs are whole batches, so the trials asked for are
 multiple of 1,000 (the results and the run record give both numbers), a run of one batch has no
 interval, and a sequential run judges its outputs on the intervals across batches. The run
 record's `interval` says which, for example `Student-t across 12 independent Latin hypercube
-batches of 1000 trials`. Sobol sampling is judged the same way (each batch's shift is
+batches of 1000 trials`. Sobol sampling is judged the same way (each batch's scramble is
 independent, so its batch means are independent replicates; `interval_basis` is `batches`).
 Antithetic trials depend on their twin and not on the other pairs, so the interval is Student-t
 on the pair means, with one degree of freedom fewer than there are pairs (Glasserman, 2003,
