@@ -170,6 +170,7 @@ impl App {
         self.help.read_results = false;
         self.selected = None;
         self.canvas = canvas::Canvas::default();
+        self.sd_canvas = crate::sd_canvas::SdCanvas::default();
         self.view3d = view3d::View3d::default();
         self.layout_view = layout_view::LayoutView::default();
         self.watching = None;

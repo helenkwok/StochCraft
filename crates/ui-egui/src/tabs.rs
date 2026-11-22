@@ -18,6 +18,8 @@ impl App {
             // 5: the Layout view.
             let current = if self.show_results {
                 1
+            } else if self.is_sd() && self.sd_diagram_on() {
+                6
             } else if self.show_analysis {
                 2
             } else if self.show_3d {
@@ -27,16 +29,22 @@ impl App {
             } else {
                 0
             };
-            let views = [
-                (t("Model"), 0),
-                (t("Results"), 1),
-                (t("Analysis"), 2),
-                (t("Capacity"), 3),
-                (t("3D"), 4),
-                (t("Layout"), 5),
-            ];
-            let shown = if monte_carlo { 2 } else { views.len() };
-            for (label, view) in views.into_iter().take(shown) {
+            // 6: a system dynamics model's diagram, between its model and its results.
+            let views: Vec<(&str, i32)> = if self.is_sd() {
+                vec![(t("Model"), 0), (t("Diagram"), 6), (t("Results"), 1)]
+            } else {
+                let all = [
+                    (t("Model"), 0),
+                    (t("Results"), 1),
+                    (t("Analysis"), 2),
+                    (t("Capacity"), 3),
+                    (t("3D"), 4),
+                    (t("Layout"), 5),
+                ];
+                let shown = if monte_carlo { 2 } else { all.len() };
+                all.into_iter().take(shown).collect()
+            };
+            for (label, view) in views {
                 let on = current == view;
                 let width = ui.fonts_mut(|f| {
                     f.layout_no_wrap(label.into(), font.clone(), p.text)
@@ -75,11 +83,17 @@ impl App {
                     }
                 });
                 if r.clicked() {
+                    // A field of the diagram's panel being typed in commits before the diagram
+                    // goes, as it would on leaving the field.
+                    if self.sd_canvas.on && view != 6 {
+                        self.sd_flush_drafts();
+                    }
                     self.show_results = view == 1;
                     self.show_analysis = view == 2;
                     self.show_capacity = view == 3;
                     self.show_3d = view == 4 || view == 5;
                     self.layout_view.on = view == 5;
+                    self.sd_canvas.on = view == 6;
                 }
             }
             if !monte_carlo {
@@ -116,6 +130,8 @@ impl App {
         if self.is_sd() {
             return if self.show_results {
                 View::SdResults
+            } else if self.sd_diagram_on() {
+                View::SdDiagram
             } else {
                 View::SdModel
             };
@@ -194,6 +210,7 @@ impl App {
             View::McModel => self.mc_model_view(ui),
             View::McResults => self.mc_results_view(ui),
             View::SdModel => self.sd_model_view(ui),
+            View::SdDiagram => self.sd_diagram_view(ui),
             View::SdResults => self.sd_results_view(ui),
             View::Other => {
                 // A readable column, not the full width of a wide window.
@@ -230,6 +247,8 @@ enum View {
     McResults,
     /// A system dynamics model's settings and variables.
     SdModel,
+    /// A system dynamics model's diagram, which is edited on it.
+    SdDiagram,
     /// A system dynamics model's run.
     SdResults,
     /// A run's progress, the "ready" page (the Results tab with no results) or the start page.

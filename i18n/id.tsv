@@ -1369,7 +1369,6 @@ unit	yr	thn
 	The model: its settings and variables	Model: pengaturan dan variabelnya
 	System dynamics model	Model dinamika sistem
 	Variables	Variabel
-	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	Anda dapat mengubah model ini dengan perintah, dari agen melalui server MCP atau dari baris perintah. Penyuntingan di kanvas menyusul.
 	From {start} to {stop}, in steps of {dt}, by the {method} method.	Dari {start} hingga {stop}, dengan langkah {dt}, memakai metode {method}.
 	Notes from the file	Catatan dari berkas
 	Equation	Persamaan
@@ -1420,6 +1419,25 @@ unit	yr	thn
 	The estimated chance that {output} is more than {value} is {percent}.	Perkiraan peluang {output} lebih dari {value} adalah {percent}.
 	The estimated chance that {output} is less than {value} is {percent}.	Perkiraan peluang {output} kurang dari {value} adalah {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	Interval mereka tidak punya lebar, hal yang tidak dimiliki perkiraan mana pun, sehingga hasil biasa tetap dipakai.
+	Select	Pilih
+	Link	Tautan
+	Initial value	Nilai awal
+	Click the diagram to place a stock.	Klik diagram untuk menempatkan stok.
+	Click the diagram to place an auxiliary.	Klik diagram untuk menempatkan variabel bantu.
+	Drag from a stock, or from empty space, to another stock or empty space to draw a flow.	Seret dari stok atau ruang kosong ke stok atau ruang kosong lain untuk menggambar aliran.
+	Drag from one variable to another to show that the second uses the first.	Seret dari satu variabel ke variabel lain untuk menunjukkan bahwa yang kedua menggunakan yang pertama.
+	Click a variable to select it and edit it here. Drag a variable to move it.	Klik variabel untuk memilihnya dan mengeditnya di sini. Seret variabel untuk memindahkannya.
+	Moved {name}	{name} dipindahkan
+	Added {kind}: {name}	Ditambahkan {kind}: {name}
+	Edited {name}	{name} diedit
+	Removed {name}	{name} dihapus
+	Linked {from} to {to}	{from} ditautkan ke {to}
+	Add Variable	Tambah Variabel
+	Edit Variable	Ubah Variabel
+	Remove Variable	Hapus Variabel
+	Simulation Settings	Pengaturan Simulasi
+	Change Diagram	Ubah Diagram
+	You can change this model on the Diagram tab, or with commands, from an agent through the MCP server or from the command line.	Anda dapat mengubah model ini di tab Diagram, atau dengan perintah, dari agen melalui server MCP atau dari baris perintah.
 	Inconclusive at current precision	Belum meyakinkan pada presisi saat ini
 	No difference detected	Tidak ada perbedaan terdeteksi
 	Agrees within ±{tolerance}	Sesuai dalam ±{tolerance}

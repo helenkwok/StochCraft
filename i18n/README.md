@@ -947,6 +947,14 @@ fields (`“Service time”`) are named in the messages by their own rows.
   placeholders checked by script; not checked against any other source or reviewed by native
   speakers. The least certain are bn, hi, ka, kk, lo, sq, ta, te, th and vi, and the case of the
   numbers around {value} and {percent} in the highly inflected languages.
+- The rows for the system dynamics diagram (the Diagram tab: the tools Select and Link, the Initial
+  value field, the hint under each tool, the status messages for a move, an addition, an edit, a
+  removal and a link, the undo names "Add Variable", "Edit Variable", "Remove Variable",
+  "Simulation Settings" and "Change Diagram", and the reworded note at the top of the Model tab)
+  were machine-drafted with Claude Code from the plain meaning of the English, reusing each
+  catalog's own words for stock, flow, auxiliary, diagram, equation and unit and its casing for the
+  undo names of blocks; placeholders checked by script; not checked against any other source or
+  reviewed by native speakers. The least certain are bn, hi, ka, kk, lo, sq, ta, te, th and vi.
 
 - The rows for validation against observed data (issue #226: the Observed data section of the
   model page and its hint, Add an observed value, Observed value, Checked as, Its 95%

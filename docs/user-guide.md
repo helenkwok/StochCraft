@@ -587,12 +587,12 @@ A system dynamics model is **stocks** (levels, such as customers or inventory) t
 drain through **flows** (rates), with **auxiliaries** (other quantities worked out from them),
 over time. It is an **XMILE** file (`.xmile` or `.stmx`): open it with **File ▸ Open…** or drop it
 on the window, or open the example **Product adoption** from the start page. A model that uses
-arrays or modules is refused, with the reason. As with a Monte Carlo model there are two tabs,
-**Model** and **Results**, and no canvas.
+arrays or modules is refused, with the reason. There are three tabs, **Model**, **Diagram** and
+**Results**.
 
-**Model** shows the model, and for now only shows it. You change it with commands, from an agent
-through the MCP server or from the command line (`stochcraft-cli`); the tab reads the model again
-whenever it changes. Editing it on the canvas comes next.
+**Model** shows the model: its settings, the checks' warnings and a table of its variables. You
+change it on the Diagram tab, or with commands, from an agent through the MCP server or from the
+command line (`stochcraft-cli`); the tab reads the model again whenever it changes.
 
 - Its name, and its settings in a sentence: from when to when, the time step and the method
   (Euler or fourth-order Runge-Kutta).
@@ -600,6 +600,32 @@ whenever it changes. Editing it on the canvas comes next.
   against a delay), or that none were found.
 - **Variables:** each one's kind (stock, flow or auxiliary), equation (for a stock, its starting
   value), units and, for a stock, the flows into and out of it.
+
+**Diagram** draws the model as stocks and flows and lets you edit it. Stocks are rectangles,
+auxiliaries circles, and a flow is a pipe (two parallel lines) with a bow-tie valve on it; where a
+flow has no stock at one end the pipe ends in a cloud. A thin curved arrow between two variables
+means the second uses the first in its equation. Names are under the shapes. Scroll to pan,
+Ctrl+scroll or pinch to zoom, drag the background to pan, and **Fit** brings the whole model into
+view.
+
+- **Select:** click a variable, or press Tab to go through them in name order (a ring shows where
+  the keyboard is). The panel beside the diagram shows its kind, name, equation (for a stock, its
+  initial value) and unit. Type in a field and press Enter, or move on, to change it; Escape gives
+  the change up. If the model cannot take it (an unknown name, an equation that depends on itself)
+  the reason is shown under the field and nothing changes.
+- **Move:** drag a stock, an auxiliary or a valve. The pipes at a stock follow it. Each move is
+  one step of **Undo**.
+- **Add:** pick **Stock** or **Auxiliary** and click the diagram to place one (or press Enter on
+  the diagram to put it in the middle); it is named Stock 1, Auxiliary 1… and starts at 0, for you to
+  edit. Pick **Flow** and drag from a stock, or from empty space (a cloud), to another stock or to
+  empty space; the stocks' inflows and outflows are set for you. Pick **Link** and drag from a
+  variable to another to draw a link; the next time the second variable's equation is edited, a
+  link its equation does not use is dropped, so edit the equation to use the first as well.
+- **Delete:** press Delete with a variable selected, or use the panel's **Delete** button. A
+  variable another equation uses, or a flow a stock lists, is refused, and the message says what
+  uses it. Escape puts the tool back to Select.
+- Every change is one step of Undo and Redo (Edit menu), named for what it did: Add Variable, Edit
+  Variable, Remove Variable or Change Diagram.
 
 **Results** runs the model. A model with no random function runs once, and shows at once. One with
 a random function (`NORMAL`, `RANDOM`) runs in replications: **Runs** and **Seed** choose how many

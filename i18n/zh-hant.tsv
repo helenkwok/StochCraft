@@ -1369,7 +1369,6 @@ unit	yr	年
 	The model: its settings and variables	模型：其設定和變數
 	System dynamics model	系統動力學模型
 	Variables	變數
-	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	你可以用命令變更此模型：透過代理程式經 MCP 伺服器，或從命令列。在畫布上編輯將在之後提供。
 	From {start} to {stop}, in steps of {dt}, by the {method} method.	從 {start} 到 {stop}，步長 {dt}，使用 {method} 方法。
 	Notes from the file	檔案中的備註
 	Equation	方程式
@@ -1420,6 +1419,25 @@ unit	yr	年
 	The estimated chance that {output} is more than {value} is {percent}.	{output} 大於 {value} 的估計機率為 {percent}。
 	The estimated chance that {output} is less than {value} is {percent}.	{output} 小於 {value} 的估計機率為 {percent}。
 	Their interval has no width, which no estimate has, so the plain result stands.	它們的區間沒有寬度，而任何估計都不會如此，因此保留一般結果。
+	Select	選取
+	Link	連結
+	Initial value	初始值
+	Click the diagram to place a stock.	點擊圖表以放置存量。
+	Click the diagram to place an auxiliary.	點擊圖表以放置輔助變數。
+	Drag from a stock, or from empty space, to another stock or empty space to draw a flow.	從存量或空白處拖曳到另一個存量或空白處，即可繪製流量。
+	Drag from one variable to another to show that the second uses the first.	從一個變數拖曳到另一個變數，表示後者使用前者。
+	Click a variable to select it and edit it here. Drag a variable to move it.	點擊變數即可選取並在此編輯。拖曳變數可移動它。
+	Moved {name}	已移動 {name}
+	Added {kind}: {name}	已新增{kind}：{name}
+	Edited {name}	已編輯 {name}
+	Removed {name}	已移除 {name}
+	Linked {from} to {to}	已將 {from} 連結到 {to}
+	Add Variable	新增變數
+	Edit Variable	編輯變數
+	Remove Variable	移除變數
+	Simulation Settings	模擬設定
+	Change Diagram	變更圖表
+	You can change this model on the Diagram tab, or with commands, from an agent through the MCP server or from the command line.	您可以在「圖表」分頁中變更此模型，也可以使用指令，透過代理程式經由 MCP 伺服器或在命令列中變更。
 	Inconclusive at current precision	在目前精度下無法判定
 	No difference detected	未偵測到差異
 	Agrees within ±{tolerance}	在 ±{tolerance} 內一致

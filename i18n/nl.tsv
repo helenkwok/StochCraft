@@ -1369,7 +1369,6 @@ unit	yr	j
 	The model: its settings and variables	Het model: zijn instellingen en variabelen
 	System dynamics model	Systeemdynamicamodel
 	Variables	Variabelen
-	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	Je kunt dit model wijzigen met opdrachten, vanuit een agent via de MCP-server of vanaf de opdrachtregel. Bewerken op het canvas komt hierna.
 	From {start} to {stop}, in steps of {dt}, by the {method} method.	Van {start} tot {stop}, in stappen van {dt}, met de {method}-methode.
 	Notes from the file	Notities uit het bestand
 	Equation	Vergelijking
@@ -1420,6 +1419,25 @@ unit	yr	j
 	The estimated chance that {output} is more than {value} is {percent}.	De geschatte kans dat {output} groter is dan {value} is {percent}.
 	The estimated chance that {output} is less than {value} is {percent}.	De geschatte kans dat {output} kleiner is dan {value} is {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	Hun interval heeft geen breedte, wat geen schatting heeft, dus het gewone resultaat blijft staan.
+	Select	Selecteren
+	Link	Koppeling
+	Initial value	Beginwaarde
+	Click the diagram to place a stock.	Klik op het diagram om een voorraad te plaatsen.
+	Click the diagram to place an auxiliary.	Klik op het diagram om een hulpvariabele te plaatsen.
+	Drag from a stock, or from empty space, to another stock or empty space to draw a flow.	Sleep vanaf een voorraad of een lege plek naar een andere voorraad of lege plek om een stroom te tekenen.
+	Drag from one variable to another to show that the second uses the first.	Sleep van de ene variabele naar de andere om te laten zien dat de tweede de eerste gebruikt.
+	Click a variable to select it and edit it here. Drag a variable to move it.	Klik op een variabele om die te selecteren en hier te bewerken. Sleep een variabele om die te verplaatsen.
+	Moved {name}	{name} verplaatst
+	Added {kind}: {name}	Toegevoegd: {kind} {name}
+	Edited {name}	{name} bewerkt
+	Removed {name}	{name} verwijderd
+	Linked {from} to {to}	{from} gekoppeld aan {to}
+	Add Variable	Variabele toevoegen
+	Edit Variable	Variabele wijzigen
+	Remove Variable	Variabele verwijderen
+	Simulation Settings	Simulatie-instellingen
+	Change Diagram	Diagram wijzigen
+	You can change this model on the Diagram tab, or with commands, from an agent through the MCP server or from the command line.	U kunt dit model wijzigen op het tabblad Diagram, of met opdrachten, vanuit een agent via de MCP-server of vanaf de opdrachtregel.
 	Inconclusive at current precision	Niet doorslaggevend bij de huidige nauwkeurigheid
 	No difference detected	Geen verschil aangetoond
 	Agrees within ±{tolerance}	Komt overeen binnen ±{tolerance}

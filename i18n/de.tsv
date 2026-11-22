@@ -1369,7 +1369,6 @@ unit	yr	J.
 	The model: its settings and variables	Das Modell: seine Einstellungen und Variablen
 	System dynamics model	System-Dynamics-Modell
 	Variables	Variablen
-	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	Dieses Modell lässt sich mit Befehlen ändern, von einem Agenten über den MCP-Server oder von der Befehlszeile aus. Das Bearbeiten auf der Zeichenfläche folgt als Nächstes.
 	From {start} to {stop}, in steps of {dt}, by the {method} method.	Von {start} bis {stop}, in Schritten von {dt}, mit dem Verfahren {method}.
 	Notes from the file	Hinweise aus der Datei
 	Equation	Gleichung
@@ -1420,6 +1419,25 @@ unit	yr	J.
 	The estimated chance that {output} is more than {value} is {percent}.	Die geschätzte Wahrscheinlichkeit, dass {output} über {value} liegt, beträgt {percent}.
 	The estimated chance that {output} is less than {value} is {percent}.	Die geschätzte Wahrscheinlichkeit, dass {output} unter {value} liegt, beträgt {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	Ihr Intervall hat keine Breite, die keine Schätzung hat, daher bleibt das einfache Ergebnis bestehen.
+	Select	Auswählen
+	Link	Verknüpfung
+	Initial value	Anfangswert
+	Click the diagram to place a stock.	Klicken Sie ins Diagramm, um einen Bestand zu platzieren.
+	Click the diagram to place an auxiliary.	Klicken Sie ins Diagramm, um eine Hilfsgröße zu platzieren.
+	Drag from a stock, or from empty space, to another stock or empty space to draw a flow.	Ziehen Sie von einem Bestand oder einer leeren Stelle zu einem anderen Bestand oder einer leeren Stelle, um einen Fluss zu zeichnen.
+	Drag from one variable to another to show that the second uses the first.	Ziehen Sie von einer Variablen zu einer anderen, um zu zeigen, dass die zweite die erste verwendet.
+	Click a variable to select it and edit it here. Drag a variable to move it.	Klicken Sie auf eine Variable, um sie auszuwählen und hier zu bearbeiten. Ziehen Sie sie, um sie zu verschieben.
+	Moved {name}	{name} verschoben
+	Added {kind}: {name}	Hinzugefügt: {kind} {name}
+	Edited {name}	{name} bearbeitet
+	Removed {name}	{name} entfernt
+	Linked {from} to {to}	{from} mit {to} verknüpft
+	Add Variable	Variable hinzufügen
+	Edit Variable	Variable bearbeiten
+	Remove Variable	Variable entfernen
+	Simulation Settings	Simulationseinstellungen
+	Change Diagram	Diagramm ändern
+	You can change this model on the Diagram tab, or with commands, from an agent through the MCP server or from the command line.	Sie können dieses Modell auf dem Tab „Diagramm“ ändern oder mit Befehlen, von einem Agenten über den MCP-Server oder von der Befehlszeile aus.
 	Inconclusive at current precision	Bei der aktuellen Genauigkeit nicht entscheidbar
 	No difference detected	Kein Unterschied festgestellt
 	Agrees within ±{tolerance}	Stimmt überein innerhalb ±{tolerance}

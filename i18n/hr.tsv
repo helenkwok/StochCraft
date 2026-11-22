@@ -1369,7 +1369,6 @@ unit	yr	god.
 	The model: its settings and variables	Model: njegove postavke i varijable
 	System dynamics model	Model sistemske dinamike
 	Variables	Varijable
-	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	Ovaj model možete mijenjati naredbama, iz agenta preko MCP poslužitelja ili iz naredbenog retka. Uređivanje na platnu dolazi sljedeće.
 	From {start} to {stop}, in steps of {dt}, by the {method} method.	Od {start} do {stop}, u koracima od {dt}, metodom {method}.
 	Notes from the file	Bilješke iz datoteke
 	Equation	Jednadžba
@@ -1420,6 +1419,25 @@ unit	yr	god.
 	The estimated chance that {output} is more than {value} is {percent}.	Procijenjena vjerojatnost da je {output} veći od {value} iznosi {percent}.
 	The estimated chance that {output} is less than {value} is {percent}.	Procijenjena vjerojatnost da je {output} manji od {value} iznosi {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	Njihov interval nema širinu, što nijedna procjena nema, pa ostaje obični rezultat.
+	Select	Odaberi
+	Link	Veza
+	Initial value	Početna vrijednost
+	Click the diagram to place a stock.	Kliknite na dijagram da postavite zalihu.
+	Click the diagram to place an auxiliary.	Kliknite na dijagram da postavite pomoćnu varijablu.
+	Drag from a stock, or from empty space, to another stock or empty space to draw a flow.	Povucite od zalihe ili praznog prostora do druge zalihe ili praznog prostora da nacrtate tok.
+	Drag from one variable to another to show that the second uses the first.	Povucite od jedne varijable do druge da pokažete da druga koristi prvu.
+	Click a variable to select it and edit it here. Drag a variable to move it.	Kliknite varijablu da je odaberete i uredite ovdje. Povucite varijablu da je premjestite.
+	Moved {name}	Premješteno: {name}
+	Added {kind}: {name}	Dodano: {kind} {name}
+	Edited {name}	Uređeno: {name}
+	Removed {name}	Uklonjeno: {name}
+	Linked {from} to {to}	{from} je povezan s {to}
+	Add Variable	Dodaj varijablu
+	Edit Variable	Uredi varijablu
+	Remove Variable	Ukloni varijablu
+	Simulation Settings	Postavke simulacije
+	Change Diagram	Promijeni dijagram
+	You can change this model on the Diagram tab, or with commands, from an agent through the MCP server or from the command line.	Ovaj model možete mijenjati na kartici Dijagram ili naredbama, iz agenta preko MCP poslužitelja ili iz naredbenog retka.
 	Inconclusive at current precision	Neodlučno pri trenutnoj preciznosti
 	No difference detected	Razlika nije otkrivena
 	Agrees within ±{tolerance}	Slaže se unutar ±{tolerance}

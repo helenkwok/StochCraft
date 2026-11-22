@@ -1369,7 +1369,6 @@ unit	yr	წელი
 	The model: its settings and variables	მოდელი: მისი პარამეტრები და ცვლადები
 	System dynamics model	სისტემური დინამიკის მოდელი
 	Variables	ცვლადები
-	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	ამ მოდელის შეცვლა შეგიძლიათ ბრძანებებით: აგენტიდან MCP სერვერის საშუალებით ან ბრძანების ხაზიდან. ტილოზე რედაქტირება შემდეგ დაემატება.
 	From {start} to {stop}, in steps of {dt}, by the {method} method.	{start}-დან {stop}-მდე, {dt} ბიჯით, {method} მეთოდით.
 	Notes from the file	შენიშვნები ფაილიდან
 	Equation	განტოლება
@@ -1420,6 +1419,25 @@ unit	yr	წელი
 	The estimated chance that {output} is more than {value} is {percent}.	{output}-ის {value}-ზე მეტი იქნება სავარაუდო ალბათობა არის {percent}.
 	The estimated chance that {output} is less than {value} is {percent}.	{output}-ის {value}-ზე ნაკლები იქნება სავარაუდო ალბათობა არის {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	მათ ინტერვალს სიგანე არ აქვს, რაც არც ერთ შეფასებას არ აქვს, ამიტომ ჩვეულებრივი შედეგი რჩება.
+	Select	მონიშვნა
+	Link	ბმა
+	Initial value	საწყისი მნიშვნელობა
+	Click the diagram to place a stock.	დააწკაპუნეთ დიაგრამაზე მარაგის განსათავსებლად.
+	Click the diagram to place an auxiliary.	დააწკაპუნეთ დიაგრამაზე დამხმარე ცვლადის განსათავსებლად.
+	Drag from a stock, or from empty space, to another stock or empty space to draw a flow.	ნაკადის დასახატად გადაათრიეთ მარაგიდან ან ცარიელი ადგილიდან სხვა მარაგზე ან ცარიელ ადგილზე.
+	Drag from one variable to another to show that the second uses the first.	გადაათრიეთ ერთი ცვლადიდან მეორეზე, რომ აჩვენოთ, რომ მეორე პირველს იყენებს.
+	Click a variable to select it and edit it here. Drag a variable to move it.	დააწკაპუნეთ ცვლადზე მის მოსანიშნად და აქ სარედაქტიროდ. გადასატანად გადაათრიეთ.
+	Moved {name}	{name} გადატანილია
+	Added {kind}: {name}	დაემატა {kind}: {name}
+	Edited {name}	{name} შეიცვალა
+	Removed {name}	{name} წაიშალა
+	Linked {from} to {to}	{from} დაუკავშირდა {to}-ს
+	Add Variable	ცვლადის დამატება
+	Edit Variable	ცვლადის შეცვლა
+	Remove Variable	ცვლადის წაშლა
+	Simulation Settings	სიმულაციის პარამეტრები
+	Change Diagram	დიაგრამის შეცვლა
+	You can change this model on the Diagram tab, or with commands, from an agent through the MCP server or from the command line.	ამ მოდელის შეცვლა შეგიძლიათ დიაგრამის ჩანართში ან ბრძანებებით, აგენტიდან MCP სერვერის მეშვეობით ან ბრძანების ხაზიდან.
 	Inconclusive at current precision	მიმდინარე სიზუსტით გაურკვეველია
 	No difference detected	სხვაობა ვერ აღმოჩნდა
 	Agrees within ±{tolerance}	ემთხვევა ±{tolerance}-ის ფარგლებში

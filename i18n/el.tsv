@@ -1369,7 +1369,6 @@ unit	yr	έτ
 	The model: its settings and variables	Το μοντέλο: οι ρυθμίσεις και οι μεταβλητές του
 	System dynamics model	Μοντέλο δυναμικής συστημάτων
 	Variables	Μεταβλητές
-	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	Μπορείτε να αλλάξετε αυτό το μοντέλο με εντολές, από έναν πράκτορα μέσω του διακομιστή MCP ή από τη γραμμή εντολών. Η επεξεργασία στον καμβά έρχεται στη συνέχεια.
 	From {start} to {stop}, in steps of {dt}, by the {method} method.	Από {start} έως {stop}, με βήματα {dt}, με τη μέθοδο {method}.
 	Notes from the file	Σημειώσεις από το αρχείο
 	Equation	Εξίσωση
@@ -1420,6 +1419,25 @@ unit	yr	έτ
 	The estimated chance that {output} is more than {value} is {percent}.	Η εκτιμώμενη πιθανότητα το {output} να είναι μεγαλύτερο από {value} είναι {percent}.
 	The estimated chance that {output} is less than {value} is {percent}.	Η εκτιμώμενη πιθανότητα το {output} να είναι μικρότερο από {value} είναι {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	Το διάστημά τους δεν έχει πλάτος, κάτι που καμία εκτίμηση δεν έχει, οπότε μένει το απλό αποτέλεσμα.
+	Select	Επιλογή
+	Link	Σύνδεση
+	Initial value	Αρχική τιμή
+	Click the diagram to place a stock.	Κάντε κλικ στο διάγραμμα για να τοποθετήσετε ένα απόθεμα.
+	Click the diagram to place an auxiliary.	Κάντε κλικ στο διάγραμμα για να τοποθετήσετε μια βοηθητική μεταβλητή.
+	Drag from a stock, or from empty space, to another stock or empty space to draw a flow.	Σύρετε από ένα απόθεμα ή από κενό χώρο σε άλλο απόθεμα ή κενό χώρο για να σχεδιάσετε μια ροή.
+	Drag from one variable to another to show that the second uses the first.	Σύρετε από μια μεταβλητή σε άλλη για να δείξετε ότι η δεύτερη χρησιμοποιεί την πρώτη.
+	Click a variable to select it and edit it here. Drag a variable to move it.	Κάντε κλικ σε μια μεταβλητή για να την επιλέξετε και να την επεξεργαστείτε εδώ. Σύρετέ την για να τη μετακινήσετε.
+	Moved {name}	Μετακινήθηκε το {name}
+	Added {kind}: {name}	Προστέθηκε: {kind} {name}
+	Edited {name}	Επεξεργάστηκε το {name}
+	Removed {name}	Αφαιρέθηκε το {name}
+	Linked {from} to {to}	Συνδέθηκε το {from} με το {to}
+	Add Variable	Προσθήκη μεταβλητής
+	Edit Variable	Επεξεργασία μεταβλητής
+	Remove Variable	Αφαίρεση μεταβλητής
+	Simulation Settings	Ρυθμίσεις προσομοίωσης
+	Change Diagram	Αλλαγή διαγράμματος
+	You can change this model on the Diagram tab, or with commands, from an agent through the MCP server or from the command line.	Μπορείτε να αλλάξετε αυτό το μοντέλο στην καρτέλα Διάγραμμα ή με εντολές, από έναν πράκτορα μέσω του διακομιστή MCP ή από τη γραμμή εντολών.
 	Inconclusive at current precision	Μη οριστικό στην τρέχουσα ακρίβεια
 	No difference detected	Δεν εντοπίστηκε διαφορά
 	Agrees within ±{tolerance}	Συμφωνεί εντός ±{tolerance}
