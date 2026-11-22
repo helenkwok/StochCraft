@@ -215,10 +215,15 @@ impl Experiment {
                 scope.spawn(|| {
                     let mut local = Vec::new();
                     while !control.is_cancelled() {
-                        let index = next.fetch_add(1, Ordering::Relaxed);
-                        if index >= end {
+                        // Claim an index only while it is below `end`, so the counter never
+                        // passes it (a plain increment would wrap at `u64::MAX`).
+                        let Ok(index) =
+                            next.fetch_update(Ordering::Relaxed, Ordering::Relaxed, |i| {
+                                (i < end).then_some(i + 1)
+                            })
+                        else {
                             break;
-                        }
+                        };
                         let rep = self.replication(index);
                         let outcome = std::panic::catch_unwind(AssertUnwindSafe(|| model(rep)))
                             .map_err(|_| ());
@@ -293,6 +298,20 @@ mod tests {
                 Ok(&whole[8..12])
             );
             assert_eq!(x.run_range(3..3, model, &Control::new()), Ok(vec![]));
+        }
+    }
+
+    /// A range that ends at the last index runs exactly its replications on any number of
+    /// threads: claiming indices never wraps the counter past the end.
+    #[test]
+    fn a_range_ending_at_the_last_index_stops_there() {
+        let model = |r: Replication| r.index;
+        for threads in [1, 2, 4] {
+            let x = Experiment::new(2, 7).threads(threads);
+            assert_eq!(
+                x.run_range(u64::MAX - 2..u64::MAX, model, &Control::new()),
+                Ok(vec![u64::MAX - 2, u64::MAX - 1])
+            );
         }
     }
 
