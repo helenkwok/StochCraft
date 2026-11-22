@@ -6,3 +6,9 @@ target/
 /web-fonts/
 # Agent worktrees.
 /.claude/worktrees/
+
+# gemini-cli settings (the Gemini review workflow writes them in its checkout).
+.gemini/
+
+# GitHub App credentials the Gemini action may write.
+gha-creds-*.json

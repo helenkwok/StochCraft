@@ -662,6 +662,21 @@ targets, and Latin hypercube strata holding one value each. They are
 also checked against another BPSim simulator's published results for the BPSim car repair model. StochCraft runs
 about 54× faster than SimPy on an M/M/1 benchmark ([bench/](../bench/README.md)).
 
+### Pull request reviews
+
+Two automated reviewers comment on pull requests. CodeRabbit is a GitHub app and needs nothing
+from the repository. The Gemini CLI review is the workflows `.github/workflows/gemini-dispatch.yml`
+and `gemini-review.yml` (adapted from the `run-gemini-cli` examples, which are Apache-2.0). It runs
+when a pull request from a branch of this repository is opened or reopened, when a repository
+owner, member or collaborator starts a comment or review with `@gemini-cli /review` (any text
+after it is passed to the reviewer as extra focus, for example `@gemini-cli /review check error
+handling`), or when someone with write access runs the "Gemini Dispatch" workflow by hand with a
+pull request number. Pull requests from forks are not reviewed, because a fork's run must not see
+secrets. The review needs a repository secret named `GEMINI_API_KEY` (a Gemini API key from
+Google AI Studio); without it the run fails and posts a failure comment. It posts with the
+workflow's own token and reads the pull request through GitHub's MCP server in a container. Its
+comments are suggestions, not checks: CI is the gate.
+
 ## Contributing
 
 See [CONTRIBUTING.md](../CONTRIBUTING.md) for the clean-room and licence rules.
