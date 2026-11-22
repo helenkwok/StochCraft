@@ -428,8 +428,13 @@ fn saving_into_a_file_that_lost_content_asks_first() {
     let mut h = harness();
     h.state_mut()
         .open_path("/models/two.xmile", TWO_VIEWS.as_bytes());
+    // Changed, so saving writes the model and leaves out the second diagram (an unchanged save
+    // writes the file's own bytes and loses nothing).
+    h.state_mut()
+        .control("sd.variable.set", json!({ "name": "f", "equation": "0.2" }))
+        .expect("an edit");
     assert!(h.state().is_system_dynamics());
-    assert!(!h.state().has_unsaved_changes());
+    assert!(h.state().has_unsaved_changes());
 
     // Replace the file anyway.
     h.state_mut().save();
@@ -466,6 +471,11 @@ fn saving_into_a_file_that_lost_content_asks_first() {
     // Save As keeps the original.
     h.state_mut()
         .open_path("/models/two.xmile", TWO_VIEWS.as_bytes());
+    // Changed, so saving writes the model and leaves out the second diagram (an unchanged save
+    // writes the file's own bytes and loses nothing).
+    h.state_mut()
+        .control("sd.variable.set", json!({ "name": "f", "equation": "0.2" }))
+        .expect("an edit");
     h.state_mut().save();
     settle(&mut h);
     click(&mut h, Role::Button, "Save As…");
@@ -490,6 +500,11 @@ fn saving_into_a_file_that_lost_content_asks_first() {
     // Cancel writes nothing.
     h.state_mut()
         .open_path("/models/two.xmile", TWO_VIEWS.as_bytes());
+    // Changed, so saving writes the model and leaves out the second diagram (an unchanged save
+    // writes the file's own bytes and loses nothing).
+    h.state_mut()
+        .control("sd.variable.set", json!({ "name": "f", "equation": "0.2" }))
+        .expect("an edit");
     h.state_mut().save();
     settle(&mut h);
     click(&mut h, Role::Button, "Cancel");
@@ -499,6 +514,11 @@ fn saving_into_a_file_that_lost_content_asks_first() {
     // Save As naming the opened file replaces it as well, so it is asked about too.
     h.state_mut()
         .open_path("/models/two.xmile", TWO_VIEWS.as_bytes());
+    // Changed, so saving writes the model and leaves out the second diagram (an unchanged save
+    // writes the file's own bytes and loses nothing).
+    h.state_mut()
+        .control("sd.variable.set", json!({ "name": "f", "equation": "0.2" }))
+        .expect("an edit");
     h.state_mut().save_to("/models/two.xmile");
     assert_eq!(h.state_mut().take_requests(), vec![], "asked first");
     settle(&mut h);
@@ -510,6 +530,11 @@ fn saving_into_a_file_that_lost_content_asks_first() {
     // answer would write the new model over the file asked about, so the question is dropped.
     h.state_mut()
         .open_path("/models/two.xmile", TWO_VIEWS.as_bytes());
+    // Changed, so saving writes the model and leaves out the second diagram (an unchanged save
+    // writes the file's own bytes and loses nothing).
+    h.state_mut()
+        .control("sd.variable.set", json!({ "name": "f", "equation": "0.2" }))
+        .expect("an edit");
     h.state_mut().save();
     settle(&mut h);
     h.get_by_label("Replace the XMILE file?");
