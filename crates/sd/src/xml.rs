@@ -102,6 +102,8 @@ fn resolve_in(e: &mut Element, wanted: &str, scope: &mut Vec<(String, String)>) 
         .map(|(_, u)| u.clone());
     match uri {
         Some(u) if u == wanted => e.prefix = None,
+        // `xmlns=""` takes the default namespace away: the element has none, as if undeclared.
+        Some(u) if u.is_empty() => {}
         Some(_) if e.prefix.is_none() => e.prefix = Some("ns".to_owned()),
         _ => {}
     }

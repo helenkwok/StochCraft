@@ -194,6 +194,9 @@ struct Machine<'a> {
     draw_every: Vec<u64>,
     rand_k: Vec<Option<u64>>,
     rand_val: Vec<f64>,
+    /// A digest of when each fresh draw was made: the random function, its draw number and the
+    /// time of the stage that made it. Two runs that agree on it shared every random value.
+    draw_digest: u64,
     gf_warned: Vec<bool>,
     warnings: BTreeSet<String>,
 }
@@ -204,6 +207,8 @@ struct Run {
     /// For each variable, its value at each saved time.
     values: Vec<Vec<f64>>,
     warnings: BTreeSet<String>,
+    /// See [`Machine::draw_digest`].
+    draw_digest: u64,
 }
 
 fn integer_power(x: f64, n: i64) -> f64 {
@@ -268,6 +273,7 @@ impl<'a> Machine<'a> {
             draw_every,
             rand_k: vec![None; p.randoms.len()],
             rand_val: vec![0.0; p.randoms.len()],
+            draw_digest: 0,
             gf_warned: vec![false; p.vars.len()],
             warnings,
         }
@@ -494,6 +500,9 @@ impl<'a> Machine<'a> {
         if let Some(s) = self.rand_k.get_mut(r) {
             *s = Some(k);
         }
+        for word in [r as u64, k, self.time.to_bits()] {
+            self.draw_digest = Rng::keyed(self.draw_digest ^ word, "draw-digest").next_u64();
+        }
         if let Some(s) = self.rand_val.get_mut(r) {
             *s = v;
         }
@@ -570,6 +579,21 @@ impl<'a> Machine<'a> {
                     }
                 }
             }
+            Ex::Fn(Func::Step, args) if self.end_stage => {
+                // At the end of a step a STEP is taken at its left limit: the whole call, its
+                // arguments too, a hair before the step's end. A step that switches on exactly
+                // there is not yet on, while `STEP(6, TIME)` stays on, as it is at every stage.
+                let (time, tol) = (self.time, 1e-9 * self.dt);
+                self.time = time - 2.0 * tol;
+                self.end_stage = false;
+                let v = args
+                    .iter()
+                    .map(|a| self.eval(a))
+                    .collect::<Result<Vec<_>, _>>();
+                self.time = time;
+                self.end_stage = true;
+                self.function(Func::Step, &v?)
+            }
             Ex::Fn(f, args) => {
                 let mut v = Vec::with_capacity(args.len());
                 for a in args {
@@ -608,13 +632,11 @@ impl<'a> Machine<'a> {
                 }
             }
             Func::Step => {
-                let tol = 1e-9 * self.dt;
-                let on = if self.end_stage {
-                    self.time > arg(1) + tol
+                if self.time >= arg(1) - 1e-9 * self.dt {
+                    arg(0)
                 } else {
-                    self.time >= arg(1) - tol
-                };
-                if on { arg(0) } else { 0.0 }
+                    0.0
+                }
             }
             Func::Ramp => {
                 let end = v.get(2).copied().unwrap_or(f64::INFINITY);
@@ -834,6 +856,7 @@ fn simulate(
         times,
         values,
         warnings: m.warnings,
+        draw_digest: m.draw_digest,
     })
 }
 
@@ -1059,6 +1082,14 @@ impl SdJob {
         if let Some(half) = self.half {
             let (half_times, half_series, w) = collect(p, &self.half_runs, BTreeSet::new());
             warnings.extend(w);
+            // A random function drawn under a condition can be first called at a time one run
+            // reaches and the other does not; equal intervals alone do not show that.
+            let same_draw_times = self.runs.len() == self.half_runs.len()
+                && self
+                    .runs
+                    .iter()
+                    .zip(&self.half_runs)
+                    .all(|(a, b)| a.draw_digest == b.draw_digest);
             dt_check = Some(compare_steps(
                 p,
                 &series,
@@ -1066,6 +1097,7 @@ impl SdJob {
                 &half_series,
                 &half_times,
                 (dt, half.dt),
+                same_draw_times,
             ));
         }
 
@@ -1139,6 +1171,7 @@ fn compare_steps(
     fine: &[Series],
     fine_times: &[f64],
     steps: (f64, f64),
+    same_draw_times: bool,
 ) -> DtCheck {
     let (dt, half_dt) = steps;
     let tol = 1e-9 * dt;
@@ -1216,8 +1249,9 @@ fn compare_steps(
         .iter()
         .map(|s| s.max_relative_difference)
         .fold(0.0_f64, f64::max);
-    let draws_matched = (0..p.randoms.len())
-        .all(|r| (draw_interval(p, r, dt) - draw_interval(p, r, half_dt)).abs() <= tol);
+    let draws_matched = same_draw_times
+        && (0..p.randoms.len())
+            .all(|r| (draw_interval(p, r, dt) - draw_interval(p, r, half_dt)).abs() <= tol);
     if !draws_matched {
         notes.push(
             "a random function draws at different times at the two steps, so the two runs do not share their random values and part of the difference is sampling noise"

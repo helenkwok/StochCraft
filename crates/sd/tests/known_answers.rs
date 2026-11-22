@@ -1169,8 +1169,24 @@ fn the_halved_step_check_claims_the_same_draws_only_when_the_clocks_agree() {
         "{:?}",
         c.notes
     );
-    // An interval of a whole number of both steps agrees.
+    // An interval of a whole number of both steps agrees, at either method.
     assert!(check_of(&draws("2")).draws_matched);
+    assert!(check_of(&draws("2").replace("\"Euler\"", "\"RK4\"")).draws_matched);
+    // Equal intervals are not enough when a condition decides when the first draw is made: at a
+    // step of 1 it is at 1, at half of it at 0.5, and with parameters taken then.
+    let conditional = xmile_file(
+        "Euler",
+        "10",
+        "1",
+        "<stock name=\"s\"><eqn>0</eqn><inflow>r</inflow></stock><flow name=\"r\"><eqn>IF TIME >= 0.5 THEN RANDOM(TIME,TIME+1,0,2) ELSE 0</eqn></flow>",
+    );
+    let c = check_of(&conditional);
+    assert!(!c.draws_matched, "{c:?}");
+    assert!(
+        c.notes.iter().any(|n| n.contains("random")),
+        "{:?}",
+        c.notes
+    );
 }
 
 #[test]
@@ -1187,6 +1203,15 @@ fn xmile_namespaces_are_resolved_by_uri_not_by_prefix() {
     let e = read_xmile(&wrong).unwrap_err();
     assert_eq!(e.kind, ErrorKind::Xml);
     assert!(e.message.contains("namespace"), "{}", e.message);
+    // An empty default namespace is no namespace, which a file may leave out.
+    let none = xmile_file(
+        "Euler",
+        "2",
+        "1",
+        "<stock name=\"s\"><eqn>0</eqn><inflow>f</inflow></stock><flow name=\"f\"><eqn>1</eqn></flow>",
+    )
+    .replace(XMILE_NS, "");
+    assert_eq!(last(&once(&read_xmile(&none).unwrap().model), "s"), 2.0);
 }
 
 #[test]
@@ -1225,5 +1250,21 @@ fn a_step_on_a_step_boundary_is_integrated_the_same_by_both_methods() {
         );
         let r = once(&from_file(&text));
         assert_eq!(mean(&r, "s"), vec![0.0, 0.0, 6.0], "{method}");
+    }
+}
+
+#[test]
+fn a_step_whose_time_moves_with_the_clock_stays_on_at_every_stage() {
+    // s' = STEP(6, TIME) is 6 at every time, so s = 6 t. Taking the call from the left at the end
+    // of a fourth-order step must not drop that stage to 0.
+    for method in ["Euler", "RK4"] {
+        let text = xmile_file(
+            method,
+            "2",
+            "1",
+            "<stock name=\"s\"><eqn>0</eqn><inflow>f</inflow></stock><flow name=\"f\"><eqn>STEP(6,TIME)</eqn></flow>",
+        );
+        let r = once(&from_file(&text));
+        assert_eq!(mean(&r, "s"), vec![0.0, 6.0, 12.0], "{method}");
     }
 }
