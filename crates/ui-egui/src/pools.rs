@@ -302,7 +302,7 @@ impl App {
             .as_array()
             .into_iter()
             .flatten()
-            .filter(|p| drawn(*p))
+            .filter(|p| drawn(p))
             .filter_map(|p| {
                 let pid = p["id"].as_str()?.to_owned();
                 let name = p["name"].as_str().filter(|n| !n.is_empty()).unwrap_or(&pid);
