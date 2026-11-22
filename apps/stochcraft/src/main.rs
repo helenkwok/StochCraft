@@ -27,6 +27,8 @@ use stochcraft_mcp::control;
 use stochcraft_ui_egui::i18n::{t, tf};
 use stochcraft_ui_egui::{App, Autosave, Platform, Prefs, Request};
 
+mod recovery;
+
 /// What a file dialog's answer is for.
 enum Then {
     Open,
@@ -53,6 +55,8 @@ struct Desktop {
     may_close: bool,
     /// When the recovery copy was last brought up to date.
     autosaved_at: Instant,
+    /// This window's recovery copy, beside the other windows' (none without a data folder).
+    recovery: Option<recovery::Store>,
     /// The system menu bar (macOS).
     #[cfg(target_os = "macos")]
     native_menu: Option<craft_menu::NativeMenu>,
@@ -69,8 +73,11 @@ impl Desktop {
         if report.has_problems() {
             app.report_error("the settings could not all be read; defaults are used where not");
         }
-        if let Some(copy) = recovery_path().and_then(|p| std::fs::read_to_string(p).ok()) {
-            app.offer_recovery(&copy);
+        // Copies left by windows that are gone are offered; those of windows still open are not.
+        let recovery = recovery_dir()
+            .map(|dir| recovery::Store::open(dir, legacy_recovery_path(), recovery::new_session()));
+        for (slot, copy) in recovery.iter().flat_map(recovery::Store::orphans) {
+            app.offer_recovery(&slot, &copy);
         }
         if let Some(path) = file {
             open(&mut app, &path);
@@ -101,6 +108,7 @@ impl Desktop {
             settings,
             may_close: false,
             autosaved_at: Instant::now(),
+            recovery,
             #[cfg(target_os = "macos")]
             native_menu,
             control,
@@ -233,8 +241,14 @@ impl Desktop {
     }
 }
 
-/// Where the recovery copy of unsaved changes is kept: the platform's local data folder.
-fn recovery_path() -> Option<PathBuf> {
+/// Where the recovery copies of unsaved changes are kept, one file per window: the platform's
+/// local data folder.
+fn recovery_dir() -> Option<PathBuf> {
+    dirs::data_local_dir().map(|d| d.join("stochcraft").join("recovery"))
+}
+
+/// The one shared file older versions kept the copy in.
+fn legacy_recovery_path() -> Option<PathBuf> {
     dirs::data_local_dir().map(|d| d.join("stochcraft").join("recovery.json"))
 }
 
@@ -255,23 +269,29 @@ impl Desktop {
             return;
         }
         self.autosaved_at = Instant::now();
-        let Some(path) = recovery_path() else {
+        let Some(store) = &self.recovery else {
             return;
         };
         match self.app.autosave() {
             Autosave::Write(copy) => {
-                let written = path
-                    .parent()
-                    .map_or(Ok(()), std::fs::create_dir_all)
-                    .and_then(|()| craft_atomic::atomic_write(&path, copy.as_bytes()));
-                if let Err(e) = written {
+                if let Err(e) = store.write(&copy) {
+                    // Told again at the next call, even if the model is unchanged.
+                    self.app.autosave_write_failed();
                     self.app.report_error(format!("autosave: {e}"));
                 }
             }
             Autosave::Clear => {
-                let _ = std::fs::remove_file(&path);
+                if store.clear().is_err() {
+                    self.app.autosave_clear_failed();
+                }
             }
             Autosave::Keep => {}
+        }
+        // Other windows' copies this one recovered or discarded (after its own is written).
+        for slot in self.app.take_dropped_copies() {
+            if let Err(e) = store.remove(&slot) {
+                self.app.report_error(format!("autosave: {e}"));
+            }
         }
     }
 }

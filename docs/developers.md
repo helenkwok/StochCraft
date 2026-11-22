@@ -65,6 +65,20 @@ draw only with fonts the visitor's own system has.
 - `stochcraft-cli` runs models from the command line; the app (`apps/stochcraft`,
   `apps/stochcraft-web`, UI in `crates/ui-egui`) runs them in a window.
 
+### What a shell does for recovery and late files
+
+The window (`stochcraft-ui-egui`'s `App`) decides what is worth keeping; a shell decides where.
+Every window or tab is a session with a slot of its own: `App::autosave` returns the copy to
+write (`Autosave::Write`), to remove (`Clear`) or nothing (`Keep`), and the shell reports a
+failure with `App::autosave_write_failed` or `App::autosave_clear_failed` so the call is made
+again. At start the shell offers each copy left by a session that is gone with
+`App::offer_recovery(slot, copy)`, and after each autosave call removes the slots from
+`App::take_dropped_copies`. The desktop shell (`apps/stochcraft/src/recovery.rs`) tells a gone
+session by its lock file (`File::try_lock`); the browser shell (`apps/stochcraft-web`,
+`storage.rs`) by a time stamp the tab refreshes, with a few minutes' grace. A shell that reads a
+file in the background calls `App::begin_open` when it starts and hands the ticket back to
+`App::finish_open` with the bytes, which drops a stale completion.
+
 [architecture.md](architecture.md) has the layers and how they depend on each other, and
 [ROADMAP.md](../ROADMAP.md) what is done and what comes next.
 

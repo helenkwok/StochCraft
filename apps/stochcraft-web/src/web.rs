@@ -4,7 +4,7 @@
 use std::cell::RefCell;
 use std::rc::Rc;
 
-use stochcraft_ui_egui::{App, Platform, Request};
+use stochcraft_ui_egui::{App, OpenTicket, Platform, Request};
 use wasm_bindgen::JsCast as _;
 use wasm_bindgen::prelude::*;
 
@@ -15,9 +15,10 @@ const LOADING_ID: &str = "stochcraft_loading";
 /// The page's visually hidden `aria-live` region (index.html), which screen readers announce.
 const STATUS_ID: &str = "stochcraft_status";
 
-/// Files read in the background, waiting for the next frame: whether each was dropped (rather
-/// than picked after File ▸ Open), its name and contents.
-type Inbox = Rc<RefCell<Vec<(bool, String, Vec<u8>)>>>;
+/// Files read in the background, waiting for the next frame: the ticket the app gave when the
+/// read began (it says whether the file is still wanted when it arrives), whether each was
+/// dropped (rather than picked after File ▸ Open), its name and contents.
+type Inbox = Rc<RefCell<Vec<(OpenTicket, bool, String, Vec<u8>)>>>;
 
 struct Web {
     app: App,
@@ -27,6 +28,9 @@ struct Web {
     /// The prefix of this page's storage keys: a pull request's preview keeps its own
     /// ([`storage::scope`]).
     scope: Option<String>,
+    /// This tab's name in the browser's storage: its recovery copy is kept under it, apart from
+    /// other tabs' ([`storage::copy_key`]).
+    session: String,
     /// What the live region and the page's `lang` last said, so each is set only on a change.
     announced: String,
     lang: &'static str,
@@ -34,8 +38,93 @@ struct Web {
 
 /// Where the browser keeps the app's preferences (eframe's storage: the page's local storage).
 const PREFS_KEY: &str = "stochcraft.prefs";
-/// Where the browser keeps the recovery copy of unsaved changes.
-const RECOVERY_KEY: &str = "stochcraft.recovery";
+/// How often the tab records that it is open, in milliseconds.
+const HEARTBEAT_MS: i32 = 10_000;
+
+/// The browser's local storage, if it can be used (it can't in some private windows).
+fn local_storage() -> Option<web_sys::Storage> {
+    web_sys::window()?.local_storage().ok().flatten()
+}
+
+/// Records that this tab is open, so other tabs leave its recovery copy alone.
+fn heartbeat(scope: Option<&str>, session: &str) {
+    if let Some(local) = local_storage() {
+        let _ = local.set_item(
+            &storage::alive_key(scope, session),
+            &js_sys::Date::now().to_string(),
+        );
+    }
+}
+
+/// A name for this tab: the time it started (so the newest sorts last) and a random part.
+fn new_session() -> String {
+    format!(
+        "{:013x}-{:x}",
+        js_sys::Date::now() as u64,
+        (js_sys::Math::random() * 4_294_967_296.0) as u64
+    )
+}
+
+/// The recovery copies left by tabs that are gone (and the one shared copy older versions kept),
+/// newest first: each is its slot's name and the copy. A tab's copy is left alone while the tab
+/// is still open.
+fn orphans(local: &web_sys::Storage, scope: Option<&str>, own: &str) -> Vec<(String, String)> {
+    let now = js_sys::Date::now();
+    let mut slots: Vec<String> = (0..local.length().unwrap_or(0))
+        .filter_map(|i| local.key(i).ok().flatten())
+        .filter_map(|k| storage::copy_session(scope, &k).map(str::to_owned))
+        .filter(|session| session != own)
+        .filter(|session| {
+            let beat = local
+                .get_item(&storage::alive_key(scope, session))
+                .ok()
+                .flatten()
+                .and_then(|v| v.parse::<f64>().ok());
+            !storage::session_alive(beat, now)
+        })
+        .collect();
+    // The names start with the time the tab began.
+    slots.sort();
+    slots.reverse();
+    slots.push(storage::LEGACY_SLOT.to_owned());
+    slots
+        .into_iter()
+        .filter_map(|slot| {
+            let copy = local
+                .get_item(&storage::slot_key(scope, &slot))
+                .ok()
+                .flatten()
+                .filter(|c| !c.is_empty())?;
+            Some((slot, copy))
+        })
+        .collect()
+}
+
+/// Keeps the tab's sign of life up to date while it is open, and takes it back when the page
+/// goes away (its recovery copy, if it has unsaved changes, stays for the next visit).
+fn keep_alive(scope: Option<String>, session: String) {
+    let Some(window) = web_sys::window() else {
+        return;
+    };
+    heartbeat(scope.as_deref(), &session);
+    let (beat_scope, beat_session) = (scope.clone(), session.clone());
+    let beat = Closure::<dyn FnMut()>::new(move || {
+        heartbeat(beat_scope.as_deref(), &beat_session);
+    });
+    let _ = window.set_interval_with_callback_and_timeout_and_arguments_0(
+        beat.as_ref().unchecked_ref(),
+        HEARTBEAT_MS,
+    );
+    // Lives as long as the page.
+    beat.forget();
+    let leave = Closure::<dyn FnMut(web_sys::Event)>::new(move |_: web_sys::Event| {
+        if let Some(local) = local_storage() {
+            let _ = local.remove_item(&storage::alive_key(scope.as_deref(), &session));
+        }
+    });
+    let _ = window.add_event_listener_with_callback("pagehide", leave.as_ref().unchecked_ref());
+    leave.forget();
+}
 
 impl eframe::App for Web {
     /// Remembers the appearance between visits, and keeps a recovery copy of unsaved changes
@@ -45,12 +134,32 @@ impl eframe::App for Web {
         if let Ok(json) = serde_json::to_string(&self.app.prefs()) {
             store.set_string(&storage::key(scope, PREFS_KEY), json);
         }
-        let recovery = storage::key(scope, RECOVERY_KEY);
+        // This tab's copy is in local storage under its own key, written there directly (not
+        // through eframe's storage) so a full or blocked storage is noticed and the copy
+        // tried again.
+        let Some(local) = local_storage() else {
+            return;
+        };
+        let recovery = storage::copy_key(scope, &self.session);
         match self.app.autosave() {
-            stochcraft_ui_egui::Autosave::Write(copy) => store.set_string(&recovery, copy),
-            stochcraft_ui_egui::Autosave::Clear => store.remove_string(&recovery),
+            stochcraft_ui_egui::Autosave::Write(copy) => {
+                if let Err(e) = local.set_item(&recovery, &copy) {
+                    self.app.autosave_write_failed();
+                    self.app.report_error(format!("autosave: {e:?}"));
+                }
+            }
+            stochcraft_ui_egui::Autosave::Clear => {
+                if local.remove_item(&recovery).is_err() {
+                    self.app.autosave_clear_failed();
+                }
+            }
             stochcraft_ui_egui::Autosave::Keep => {}
         }
+        // Copies of tabs that are gone which this tab recovered or discarded.
+        for slot in self.app.take_dropped_copies() {
+            let _ = local.remove_item(&storage::slot_key(scope, &slot));
+        }
+        heartbeat(scope, &self.session);
     }
 
     /// eframe keeps egui's memory (panel sizes and the like) under one key it chooses, so only
@@ -62,20 +171,19 @@ impl eframe::App for Web {
     fn ui(&mut self, ui: &mut egui::Ui, _frame: &mut eframe::Frame) {
         let ctx = ui.ctx().clone();
         let files: Vec<_> = self.inbox.borrow_mut().drain(..).collect();
-        for (dropped, name, bytes) in files {
-            if dropped {
-                self.app.drop_file(&name, bytes);
-            } else {
-                self.app.open_file(&name, &bytes);
-            }
+        // A file that arrives late is opened only if it is still wanted: not after another file
+        // was asked for, the model was replaced, or (for a picked file) it was edited.
+        for (ticket, dropped, name, bytes) in files {
+            self.app.finish_open(ticket, &name, bytes, dropped);
         }
         // Files dropped on the page are read in the background, like the picker's.
         for file in ctx.input(|i| i.raw.dropped_files.clone()) {
             let (inbox, ctx) = (Rc::clone(&self.inbox), ctx.clone());
+            let ticket = self.app.begin_open();
             wasm_bindgen_futures::spawn_local(async move {
                 let name = file.path().to_string_lossy().into_owned();
                 if let Ok(bytes) = file.bytes_async().await {
-                    inbox.borrow_mut().push((true, name, bytes));
+                    inbox.borrow_mut().push((ticket, true, name, bytes));
                     ctx.request_repaint();
                 }
             });
@@ -83,7 +191,10 @@ impl eframe::App for Web {
         self.app.ui(ui);
         for request in self.app.take_requests() {
             match request {
-                Request::PickOpen => pick(&self.inbox, &ctx),
+                Request::PickOpen => {
+                    let ticket = self.app.begin_open();
+                    pick(&self.inbox, &ctx, ticket);
+                }
                 // Started, not necessarily kept: the browser doesn't say whether the user saved
                 // the file or cancelled, so the model is not marked saved.
                 Request::Download { name, bytes } => match download(&name, &bytes) {
@@ -138,8 +249,9 @@ impl Web {
     }
 }
 
-/// Shows the browser's file picker; the chosen file is read in the background into `inbox`.
-fn pick(inbox: &Inbox, ctx: &egui::Context) {
+/// Shows the browser's file picker; the chosen file is read in the background into `inbox`, with
+/// the `ticket` from when the picker was asked for.
+fn pick(inbox: &Inbox, ctx: &egui::Context, ticket: OpenTicket) {
     let Some(document) = web_sys::window().and_then(|w| w.document()) else {
         return;
     };
@@ -160,7 +272,7 @@ fn pick(inbox: &Inbox, ctx: &egui::Context) {
             let name = file.name();
             if let Ok(buffer) = wasm_bindgen_futures::JsFuture::from(file.array_buffer()).await {
                 let bytes = js_sys::Uint8Array::new(&buffer).to_vec();
-                inbox.borrow_mut().push((false, name, bytes));
+                inbox.borrow_mut().push((ticket, false, name, bytes));
                 ctx.request_repaint();
             }
         });
@@ -205,6 +317,8 @@ pub fn start() {
     let scope = web_sys::window()
         .and_then(|w| w.location().pathname().ok())
         .and_then(|path| storage::scope(&path));
+    let session = new_session();
+    keep_alive(scope.clone(), session.clone());
     wasm_bindgen_futures::spawn_local(async move {
         let Some(document) = web_sys::window().and_then(|w| w.document()) else {
             return;
@@ -230,18 +344,17 @@ pub fn start() {
                     {
                         app.set_prefs(&prefs);
                     }
-                    if let Some(copy) = cc
-                        .storage
-                        .and_then(|s| s.get_string(&key(RECOVERY_KEY)))
-                        .filter(|c| !c.is_empty())
-                    {
-                        app.offer_recovery(&copy);
+                    if let Some(local) = local_storage() {
+                        for (slot, copy) in orphans(&local, scope.as_deref(), &session) {
+                            app.offer_recovery(&slot, &copy);
+                        }
                     }
                     Ok(Box::new(Web {
                         app,
                         inbox: Inbox::default(),
                         unsaved,
                         scope,
+                        session,
                         announced: String::new(),
                         lang: "",
                     }))

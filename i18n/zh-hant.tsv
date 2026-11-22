@@ -1399,3 +1399,4 @@ unit	yr	年
 	The estimated chance that {output} is more than {value} is {percent}.	{output} 大於 {value} 的估計機率為 {percent}。
 	The estimated chance that {output} is less than {value} is {percent}.	{output} 小於 {value} 的估計機率為 {percent}。
 	Their interval has no width, which no estimate has, so the plain result stands.	它們的區間沒有寬度，而任何估計都不會如此，因此保留一般結果。
+	Did not open {file}: a different model was opened in the meantime	未開啟 {file}：在此期間已開啟了另一個模型

@@ -1399,3 +1399,4 @@ unit	yr	年
 	The estimated chance that {output} is more than {value} is {percent}.	{output} が {value} を超える確率の推定値は {percent} です。
 	The estimated chance that {output} is less than {value} is {percent}.	{output} が {value} を下回る確率の推定値は {percent} です。
 	Their interval has no width, which no estimate has, so the plain result stands.	区間の幅がなく、これはどんな推定にもあり得ないため、通常の結果をそのまま使います。
+	Did not open {file}: a different model was opened in the meantime	{file} は開きませんでした。その間に別のモデルが開かれました

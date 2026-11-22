@@ -947,6 +947,11 @@ fields (`“Service time”`) are named in the messages by their own rows.
   placeholders checked by script; not checked against any other source or reviewed by native
   speakers. The least certain are bn, hi, ka, kk, lo, sq, ta, te, th and vi, and the case of the
   numbers around {value} and {percent} in the highly inflected languages.
+- The row added when a file read in the background arrived after another model had been opened
+  ("Did not open {file}: a different model was opened in the meantime") was machine-drafted
+  with Claude Code from the plain meaning of the English; placeholders checked by script; not
+  checked against any other source or reviewed by native speakers. The least certain are bn, hi, ka, kk, lo, sq,
+  ta, te, th and vi.
 
 **Adding or changing a string:** add the English in the code through `i18n::t` (or `tf`, `tn`),
 then add its row to each catalog here, or leave it out to show English until it is translated.

@@ -1399,3 +1399,4 @@ unit	yr	ஆண்டு
 	The estimated chance that {output} is more than {value} is {percent}.	{output} {value}-ஐ விட அதிகமாக இருப்பதற்கான மதிப்பிடப்பட்ட நிகழ்தகவு {percent}.
 	The estimated chance that {output} is less than {value} is {percent}.	{output} {value}-ஐ விட குறைவாக இருப்பதற்கான மதிப்பிடப்பட்ட நிகழ்தகவு {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	அவற்றின் இடைவெளிக்கு அகலமே இல்லை, எந்த மதிப்பீட்டுக்கும் அப்படி இருக்காது, எனவே சாதாரண முடிவே நிலைக்கிறது.
+	Did not open {file}: a different model was opened in the meantime	{file} திறக்கப்படவில்லை: இதற்கிடையில் வேறொரு மாதிரி திறக்கப்பட்டது

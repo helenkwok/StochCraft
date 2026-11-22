@@ -1399,3 +1399,4 @@ unit	yr	a
 	The estimated chance that {output} is more than {value} is {percent}.	Hinnanguline tõenäosus, et {output} on suurem kui {value}, on {percent}.
 	The estimated chance that {output} is less than {value} is {percent}.	Hinnanguline tõenäosus, et {output} on väiksem kui {value}, on {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	Nende vahemikul pole laiust, mida ühelgi hinnangul ei ole, seega jääb tavatulemus kehtima.
+	Did not open {file}: a different model was opened in the meantime	Faili {file} ei avatud: vahepeal avati teine mudel

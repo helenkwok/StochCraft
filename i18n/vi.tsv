@@ -1399,3 +1399,4 @@ unit	yr	năm
 	The estimated chance that {output} is more than {value} is {percent}.	Xác suất ước tính để {output} lớn hơn {value} là {percent}.
 	The estimated chance that {output} is less than {value} is {percent}.	Xác suất ước tính để {output} nhỏ hơn {value} là {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	Khoảng của chúng không có độ rộng, điều mà ước lượng nào cũng không có, nên kết quả thường được giữ nguyên.
+	Did not open {file}: a different model was opened in the meantime	Không mở {file}: trong lúc đó một mô hình khác đã được mở
