@@ -759,7 +759,11 @@ fn files_open_save_and_track_changes() {
         "{reason:?}"
     );
     assert_eq!(h.format(), Some("bpmn"));
-    ok(&mut h, "file.save", json!({"as_new": true}));
+    ok(
+        &mut h,
+        "file.save",
+        json!({"as_new": true, "allow_loss": true}),
+    );
     // Undoing back to the saved model is clean again.
     ok(&mut f, "undo", json!({}));
     assert!(f.is_dirty());
@@ -2817,6 +2821,156 @@ fn a_latin_hypercube_takes_each_stratum_once_and_follows_the_seed() {
     assert_eq!(record["seed"], 5, "{record}");
     assert!(record.get("main_effects").is_none(), "{record}");
     assert!(r.get("main_effects").is_none());
+}
+
+#[test]
+fn a_sobol_design_is_shifted_batches_that_stay_in_range_and_follow_the_seed() {
+    let mut e = short_mm1();
+    let design = |e: &mut Engine, seed: u64, with_units: bool, points: u32, batches: u32| {
+        let mut factors = vec![
+            json!({ "id": "arrivals", "field": "mean", "min": 1.5, "max": 3.0 }),
+            json!({ "id": "server", "field": "mean", "min": 0.5, "max": 1.0 }),
+        ];
+        if with_units {
+            factors.push(json!({ "id": "server", "field": "capacity", "min": 1, "max": 4 }));
+        }
+        ok(
+            e,
+            "experiment.design",
+            json!({
+                "design": "sobol",
+                "points": points,
+                "batches": batches,
+                "factors": factors,
+                "results": [{ "element": "server", "metric": "mean_wait" }],
+                "replications": 2,
+                "seed": seed
+            }),
+        )
+    };
+    let r = design(&mut e, 5, true, 16, 4);
+    assert_eq!(r["design"], "sobol");
+    assert_eq!(r["batches"], 4);
+    assert_eq!(r["points_per_batch"], 16);
+    assert_eq!(r["runs"], 16 * 4 * 2);
+    let points = r["points"].as_array().cloned().unwrap_or_default();
+    assert_eq!(points.len(), 64);
+    // Every point is inside the ranges, and each is in its batch.
+    for (i, p) in points.iter().enumerate() {
+        assert_eq!(p["batch"], i / 16, "{p}");
+        for (k, (lo, hi)) in [(1.5, 3.0), (0.5, 1.0)].into_iter().enumerate() {
+            let x = p["values"][k].as_f64().unwrap_or(f64::NAN);
+            assert!(x > lo && x < hi, "{x} outside {lo}..{hi}");
+        }
+        let units = p["values"][2].as_f64().unwrap_or(f64::NAN);
+        assert!([1.0, 2.0, 3.0, 4.0].contains(&units), "{units}");
+    }
+    // Within a batch the 16 points have one in each sixteenth of each range (the first 2^m
+    // Sobol points are a (0, m, s)-net in the first two dimensions' margins).
+    for b in 0..4 {
+        for (k, (lo, hi)) in [(1.5, 3.0), (0.5, 1.0)].into_iter().enumerate() {
+            let mut strata: Vec<usize> = points[b * 16..(b + 1) * 16]
+                .iter()
+                .map(|p| {
+                    ((p["values"][k].as_f64().unwrap_or(0.0) - lo) / (hi - lo) * 16.0) as usize
+                })
+                .collect();
+            strata.sort_unstable();
+            assert_eq!(strata, (0..16).collect::<Vec<_>>(), "batch {b} factor {k}");
+        }
+    }
+    // A count's range is its whole numbers, each taken by four of a batch's sixteen points.
+    for b in 0..4 {
+        let mut units: Vec<f64> = points[b * 16..(b + 1) * 16]
+            .iter()
+            .map(|p| p["values"][2].as_f64().unwrap_or(0.0))
+            .collect();
+        units.sort_by(f64::total_cmp);
+        assert_eq!(units.iter().filter(|&&u| u == 1.0).count(), 4, "{units:?}");
+        assert_eq!(units.iter().filter(|&&u| u == 4.0).count(), 4, "{units:?}");
+    }
+    // The batches are shifted differently, so their points differ.
+    assert_ne!(points[0]["values"], points[16]["values"]);
+    assert_ne!(points[16]["values"], points[32]["values"]);
+    // The same seed gives the same design and results; another seed another design; a factor
+    // added last leaves the others' values as they were; more batches keep the first ones.
+    assert_eq!(design(&mut e, 5, true, 16, 4)["points"], r["points"]);
+    assert_ne!(column(&design(&mut e, 6, true, 16, 4), 0), column(&r, 0));
+    let fewer = design(&mut e, 5, false, 16, 4);
+    assert_eq!(column(&fewer, 0), column(&r, 0));
+    assert_eq!(column(&fewer, 1), column(&r, 1));
+    let more = design(&mut e, 5, false, 16, 5);
+    assert_eq!(column(&more, 0)[..64], column(&r, 0)[..]);
+    // Slower service waits longer, a longer time between arrivals less, more units less.
+    let rho = |r: &Value, field: &str, id: &str| {
+        let c = r["correlations"]
+            .as_array()
+            .and_then(|c| c.iter().find(|c| c["id"] == id && c["field"] == field))
+            .cloned()
+            .unwrap_or_default();
+        assert_eq!(c["n"], 64, "{c}");
+        assert_eq!(c["batch_spearman"].as_array().map_or(0, Vec::len), 4, "{c}");
+        c["spearman"].as_f64().unwrap_or(0.0)
+    };
+    assert!(rho(&fewer, "mean", "server") > 0.4);
+    assert!(rho(&fewer, "mean", "arrivals") < -0.2);
+    assert!(rho(&r, "capacity", "server") < -0.5);
+    // Each result's mean over the ranges: one per batch, and an interval across them.
+    let means = &r["result_means"][0];
+    assert_eq!(
+        means["batch_means"].as_array().map_or(0, Vec::len),
+        4,
+        "{means}"
+    );
+    assert!(means["mean"].as_f64().is_some_and(|m| m > 0.0), "{means}");
+    assert!(
+        means["half_width"].as_f64().is_some_and(|h| h > 0.0),
+        "{means}"
+    );
+    let run = ok(&mut e, "run", json!({ "replications": 2 }));
+    let record = &run["record"]["sensitivity"][0];
+    assert_eq!(record["kind"], "design", "{record}");
+    assert_eq!(record["points"], 64, "{record}");
+    assert_eq!(record["batches"], 4, "{record}");
+    assert_eq!(record["seed"], 5, "{record}");
+    assert!(record.get("main_effects").is_none(), "{record}");
+}
+
+#[test]
+fn a_sobol_design_needs_a_power_of_two_of_points_and_two_batches() {
+    let mut e = short_mm1();
+    let factor = json!({ "id": "server", "field": "mean", "min": 0.5, "max": 1.0 });
+    let result = json!([{ "element": "server", "metric": "mean_wait" }]);
+    let message = |e: &mut Engine, p: Value| {
+        e.execute("experiment.design", p)
+            .err()
+            .map(|e| e.message)
+            .unwrap_or_default()
+    };
+    let m = message(
+        &mut e,
+        json!({ "factors": [factor], "results": result, "design": "sobol", "points": 6 }),
+    );
+    assert!(m.contains("power of two") && m.contains("4 or 8"), "{m}");
+    for bad in [
+        // No points, one point, one batch.
+        json!({ "factors": [factor], "results": result, "design": "sobol" }),
+        json!({ "factors": [factor], "results": result, "design": "sobol", "points": 1 }),
+        json!({ "factors": [factor], "results": result, "design": "sobol", "points": 8, "batches": 1 }),
+        // `batches` for other designs.
+        json!({ "factors": [factor], "results": result, "design": "latin_hypercube", "points": 8, "batches": 2 }),
+        json!({ "factors": [factor], "results": result, "batches": 2 }),
+        // Levels instead of a range with a count that is not whole is refused as for a Latin
+        // hypercube, and a design too large.
+        json!({ "factors": [{ "id": "server", "field": "capacity", "min": 1, "max": 2.5 }], "results": result, "design": "sobol", "points": 8 }),
+        json!({ "factors": [factor], "results": result, "design": "sobol", "points": 2048, "batches": 4, "replications": 2 }),
+    ] {
+        assert_eq!(
+            err(&mut e, "experiment.design", bad.clone()),
+            ErrorCode::InvalidParams,
+            "{bad}"
+        );
+    }
 }
 
 #[test]

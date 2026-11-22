@@ -940,7 +940,6 @@ unit	yr	god.
 	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	To je vaš prvi model. Prvi retci Rezultata govore što je pokretanje pronašlo; Pomoć ▸ Što znače rezultati objašnjava svaki broj.
 # Which inputs matter in the Monte Carlo results (ROADMAP M4.1, part 3a)
 	Which inputs matter	Koji ulazi su važni
-	{output} depends most on {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile.	{output} najviše ovisi o ulazu {input}: ide od {low} do {high} kako {input} ide od svog 10. do svog 90. percentila.
 	Each input from its 10th to its 90th percentile, with the others at their medians	Svaki ulaz od svog 10. do svog 90. percentila, a ostali na svojim medijanima
 	Base {value}	Osnovna vrijednost {value}
 	A correlated input's figure includes the effect of the inputs it is correlated with.	Broj za koreliran ulaz uključuje učinak ulaza s kojima je koreliran.
@@ -1369,7 +1368,6 @@ unit	yr	god.
 	The model: its settings and variables	Model: njegove postavke i varijable
 	System dynamics model	Model sistemske dinamike
 	Variables	Varijable
-	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	Ovaj model možete mijenjati naredbama, iz agenta preko MCP poslužitelja ili iz naredbenog retka. Uređivanje na platnu dolazi sljedeće.
 	From {start} to {stop}, in steps of {dt}, by the {method} method.	Od {start} do {stop}, u koracima od {dt}, metodom {method}.
 	Notes from the file	Bilješke iz datoteke
 	Equation	Jednadžba
@@ -1420,8 +1418,36 @@ unit	yr	god.
 	The estimated chance that {output} is more than {value} is {percent}.	Procijenjena vjerojatnost da je {output} veći od {value} iznosi {percent}.
 	The estimated chance that {output} is less than {value} is {percent}.	Procijenjena vjerojatnost da je {output} manji od {value} iznosi {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	Njihov interval nema širinu, što nijedna procjena nema, pa ostaje obični rezultat.
+	{output} changes most with {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile, the other inputs at their medians.	{output} se najviše mijenja s {input}: ide od {low} do {high} kad {input} ide od svog 10. do svog 90. percentila, a ostali ulazi su na svojim medijanima.
+	No variation was observed, so there is no interval for the mean; a rare event the trials did not reach could still move it.	Nije uočena nikakva varijacija, pa nema intervala za srednju vrijednost; rijedak događaj do kojeg pokusi nisu došli i dalje bi je mogao pomaknuti.
+	They narrowed the interval by {percent}, but a mean given for a control is far from the trials' mean, so the plain result stands.	Suzili su interval za {percent}, ali srednja vrijednost zadana za kontrolu daleko je od srednje vrijednosti pokusa, pa ostaje običan rezultat.
+	The output does not move in one direction with {inputs} (its value at the median is outside its values at the 10th and 90th percentiles), so the swing understates the effect.	Izlaz se ne kreće u jednom smjeru s {inputs} (njegova vrijednost na medijanu izvan je njegovih vrijednosti na 10. i 90. percentilu), pa raspon podcjenjuje učinak.
+	Did not open {file}: a different model was opened in the meantime	{file} nije otvoren: u međuvremenu je otvoren drugi model
+	Select	Odaberi
+	Link	Veza
+	Initial value	Početna vrijednost
+	Click the diagram to place a stock.	Kliknite na dijagram da postavite zalihu.
+	Click the diagram to place an auxiliary.	Kliknite na dijagram da postavite pomoćnu varijablu.
+	Drag from a stock, or from empty space, to another stock or empty space to draw a flow.	Povucite od zalihe ili praznog prostora do druge zalihe ili praznog prostora da nacrtate tok.
+	Drag from one variable to another to show that the second uses the first.	Povucite od jedne varijable do druge da pokažete da druga koristi prvu.
+	Click a variable to select it and edit it here. Drag a variable to move it.	Kliknite varijablu da je odaberete i uredite ovdje. Povucite varijablu da je premjestite.
+	Moved {name}	Premješteno: {name}
+	Added {kind}: {name}	Dodano: {kind} {name}
+	Edited {name}	Uređeno: {name}
+	Removed {name}	Uklonjeno: {name}
+	Linked {from} to {to}	{from} je povezan s {to}
+	Add Variable	Dodaj varijablu
+	Edit Variable	Uredi varijablu
+	Remove Variable	Ukloni varijablu
+	Simulation Settings	Postavke simulacije
+	Change Diagram	Promijeni dijagram
+	You can change this model on the Diagram tab, or with commands, from an agent through the MCP server or from the command line.	Ovaj model možete mijenjati na kartici Dijagram ili naredbama, iz agenta preko MCP poslužitelja ili iz naredbenog retka.
 	Inconclusive at current precision	Neodlučno pri trenutnoj preciznosti
 	No difference detected	Razlika nije otkrivena
 	Agrees within ±{tolerance}	Slaže se unutar ±{tolerance}
 	This is not evidence of agreement: set a tolerance to test for it.	Ovo nije dokaz slaganja: zadajte toleranciju da to provjerite.
 	Tolerance (0 for none)	Tolerancija (0 za nijednu)
+	Arrivals that keep their distance	Dolasci koji drže razmak
+	One server fed by the gaps between zeros of the Riemann zeta function, beside Poisson arrivals at the same rate.	Jedan poslužitelj kojemu dolaske određuju razmaci između nula Riemannove zeta funkcije, uz Poissonove dolaske iste učestalosti.
+	Do arrivals that avoid bunching make a shorter queue?	Stvaraju li dolasci koji izbjegavaju skupljanje kraći red?
+	Same average rate, half the wait: arrivals that repel one another bunch up less than random ones.	Ista prosječna učestalost, upola kraće čekanje: dolasci koji se međusobno odbijaju skupljaju se rjeđe od slučajnih.

@@ -57,7 +57,11 @@
 //! each batch's digital shift is independent, so the batch means are independent replicates
 //! (Owen, 1995; L'Ecuyer and Lemieux, 2002). Antithetic pairs depend on themselves and not on
 //! each other, so the interval is Student-t on the pair means (pairs − 1 degrees of freedom;
-//! Glasserman, 2003, §4.2) and the target's on the pair proportions; runs are whole pairs.
+//! Glasserman, 2003, §4.2) and the target's on the pair proportions; runs are whole pairs. Where
+//! a pair has lost a trial to a value with no number, the mean stays the mean of the valid trials
+//! and the interval is the ratio estimator's across pairs (Cochran, 1977, §6.4), as pair means
+//! would weigh a lone trial like a whole pair. Values with no spread at all give no interval
+//! ([`OutputResult::no_variation`]).
 //!
 //! **Sequential runs.** With a stop ([`McStop`]), batches are added until every output's mean
 //! has a 95% half-width within the share of itself asked for, by the rule of
@@ -1124,6 +1128,11 @@ impl Summing {
                     if c.batched() || c.paired() {
                         by_units(&mut r, out, blocks, o, c.paired());
                     }
+                    // Two or more values with no spread at all: no interval, and say so.
+                    if r.half_width == Some(0.0) {
+                        r.half_width = None;
+                        r.no_variation = true;
+                    }
                     r.controlled = control::controlled(c, o, blocks);
                     self.outputs.push(r);
                 }
@@ -1397,20 +1406,109 @@ fn per_unit(blocks: &[Block], o: usize, pairs: bool) -> Vec<Vec<f64>> {
     }
 }
 
-/// Output `o`'s mean in each block, or each pair (over its valid trials; a unit with none is
-/// left out).
-fn unit_means(blocks: &[Block], o: usize, pairs: bool) -> Vec<f64> {
-    per_unit(blocks, o, pairs)
+/// The mean of each unit that has a valid trial (a unit with none is left out).
+fn means_of(units: &[Vec<f64>]) -> Vec<f64> {
+    units
         .iter()
         .filter(|v| !v.is_empty())
         .map(|v| v.iter().sum::<f64>() / v.len() as f64)
         .collect()
 }
 
-/// Output `o`'s summary across its independent units (each block's, or each pair's mean): the
-/// one set of means the reported mean, the interval and a sequential stop's precision all use.
+/// The mean over all the valid trials of antithetic pairs, with the 95% Student-t interval of
+/// the ratio estimator of the mean of clustered trials (Cochran, *Sampling Techniques*, 3rd ed.,
+/// Wiley, 1977, §2.11 and §6.4): each pair j is a cluster of `n_j` valid trials (2, or 1 where
+/// one trial has no number) with total `y_j`; the pairs are the independent units, so
+/// R = Σy_j / Σn_j and
+/// Var(R) ≈ Σ(y_j − R n_j)² / ((k − 1) k n̄²), with k the pairs that have a valid trial and
+/// n̄ the mean `n_j`, on k − 1 degrees of freedom. A pair with no valid trial is left out.
+/// With every pair complete this is the mean of the pair means and the usual interval across
+/// them (Glasserman, 2003, §4.2). Where a pair has lost a trial it is still the mean of the valid
+/// trials, which the mean of the pair means is not (it gives a lone trial the weight of a whole
+/// pair), and the interval allows for the pairs' different sizes. `std_dev` is the one for which
+/// `half_width` = t · `std_dev` / √k. `None` with no pair.
+fn ratio_summary(pairs: &[Vec<f64>]) -> Option<Summary> {
+    let units: Vec<(f64, f64)> = pairs
+        .iter()
+        .filter(|v| !v.is_empty())
+        .map(|v| (v.iter().sum::<f64>(), v.len() as f64))
+        .collect();
+    let k = units.len();
+    let (total, count) = units
+        .iter()
+        .fold((0.0, 0.0), |(y, n), (uy, un)| (y + uy, n + un));
+    if k == 0 || count <= 0.0 {
+        return None;
+    }
+    let mean = total / count;
+    if k == 1 {
+        return Some(Summary {
+            n: 1,
+            mean,
+            std_dev: 0.0,
+            half_width: f64::INFINITY,
+        });
+    }
+    // Values that are all the same have no spread, exactly (a sum of them divided by their
+    // count need not give them back).
+    let first = pairs.iter().flatten().next().copied();
+    if let Some(v) = first
+        && pairs.iter().flatten().all(|x| *x == v)
+    {
+        return Some(Summary {
+            n: k as u64,
+            mean: v,
+            std_dev: 0.0,
+            half_width: 0.0,
+        });
+    }
+    let kf = k as f64;
+    let residual: f64 = units
+        .iter()
+        .map(|(y, n)| {
+            let miss = y - mean * n;
+            miss * miss
+        })
+        .sum();
+    let std_dev = (residual / (kf - 1.0)).sqrt() / (count / kf);
+    let half_width = match t_critical_95(k as u64 - 1) {
+        Some(t) => t * std_dev / kf.sqrt(),
+        None => f64::INFINITY,
+    };
+    Some(Summary {
+        n: k as u64,
+        mean,
+        std_dev,
+        half_width,
+    })
+}
+
+/// Whether every antithetic pair that has a valid trial has both (none has lost one to a value
+/// with no number).
+fn all_complete(pairs: &[Vec<f64>]) -> bool {
+    pairs.iter().all(|v| v.is_empty() || v.len() == 2)
+}
+
+/// The summary across antithetic pairs: with every pair complete, the mean of the pair means
+/// and the Student-t interval across them (Glasserman, 2003, §4.2), worked out as for batches;
+/// otherwise the ratio estimator's ([`ratio_summary`]).
+fn pair_summary(pairs: &[Vec<f64>]) -> Option<Summary> {
+    if all_complete(pairs) {
+        Summary::of(&means_of(pairs))
+    } else {
+        ratio_summary(pairs)
+    }
+}
+
+/// Output `o`'s summary across its independent units: the mean and ± of the batches' means, or
+/// of the pairs ([`pair_summary`]). The one set of numbers the reported interval and a
+/// sequential stop's precision both use.
 fn unit_summary(blocks: &[Block], o: usize, pairs: bool) -> Option<Summary> {
-    Summary::of(&unit_means(blocks, o, pairs))
+    if pairs {
+        pair_summary(&per_pair(blocks, o))
+    } else {
+        Summary::of(&means_of(&per_block(blocks, o)))
+    }
 }
 
 /// The half-width of the 95% Student-t interval of the mean of `xs` (independent values), or
@@ -1427,24 +1525,48 @@ fn t_half_width(xs: &[f64]) -> Option<f64> {
 /// when every one gave the same proportion (their spread says nothing about how far the chance
 /// may be from it, and a width of 0 would claim it is exact).
 ///
-/// With antithetic pairs the reported mean is the antithetic estimator itself, the mean of the
-/// pair means (a pair's mean is the average of its valid trials, and a pair with none is
-/// dropped; Glasserman, 2003, §4.2), so that the mean, the ± and a sequential stop's precision
-/// are of the same set of means. The two differ only where a pair has one trial with no number.
-/// Percentiles, the extremes, the histogram and the target's probability stay over all valid
-/// trials.
+/// With antithetic pairs the mean stays the mean of all the valid trials (the finite-trial
+/// estimate, which is also what the target's probability is the share of), and its interval is
+/// the ratio estimator's across pairs ([`ratio_summary`]), which allows for a pair that has lost
+/// a trial to a value with no number; the target's probability gets the same, on the trials'
+/// hits. Where every pair is complete these are the mean of the pair means and the interval
+/// across them. Percentiles, the extremes and the histogram are over all valid trials.
 fn by_units(r: &mut OutputResult, out: &McOutput, blocks: &[Block], o: usize, pairs: bool) {
     let each = per_unit(blocks, o, pairs);
-    let means: Vec<f64> = each
-        .iter()
-        .filter(|v| !v.is_empty())
-        .map(|v| v.iter().sum::<f64>() / v.len() as f64)
-        .collect();
+    if pairs {
+        let s = pair_summary(&each);
+        r.half_width = s
+            .filter(|s| s.n >= 2)
+            .map(|s| s.half_width)
+            .filter(|h| h.is_finite());
+        r.interval_count = s.map_or(0, |s| s.n);
+        // With every pair complete the mean of the pair means is the mean of the trials; the
+        // one worked out for the interval is kept, as it always was.
+        if all_complete(&each)
+            && let Some(s) = s
+        {
+            r.mean = Some(s.mean);
+        }
+        if let (Some(t), Some(result)) = (out.target, r.target.as_mut()) {
+            let hits: Vec<Vec<f64>> = each
+                .iter()
+                .map(|v| v.iter().map(|x| f64::from(u8::from(t.met(*x)))).collect())
+                .collect();
+            result.interval = result
+                .probability
+                .zip(
+                    pair_summary(&hits)
+                        .filter(|s| s.n >= 2)
+                        .map(|s| s.half_width)
+                        .filter(|h| h.is_finite() && *h > 0.0),
+                )
+                .map(|(p, h)| ((p - h).max(0.0), (p + h).min(1.0)));
+        }
+        return;
+    }
+    let means = means_of(&each);
     r.half_width = t_half_width(&means);
     r.interval_count = means.len() as u64;
-    if pairs && let Some(s) = unit_summary(blocks, o, true) {
-        r.mean = Some(s.mean);
-    }
     if let (Some(t), Some(result)) = (out.target, r.target.as_mut()) {
         let shares: Vec<f64> = each
             .iter()
@@ -1501,7 +1623,8 @@ pub enum IntervalBasis {
     Batches { batches: u64, size: u64 },
     /// Independent pairs of trials (antithetic sampling): each pair's two trials use u and
     /// 1 - u, so they depend on each other and the pairs do not; Student-t on the pair means
-    /// and on the pair proportions, with `pairs` - 1 degrees of freedom.
+    /// and on the pair proportions (the ratio estimator's where a pair has lost a trial), with
+    /// `pairs` - 1 degrees of freedom.
     Pairs { pairs: u64 },
 }
 
@@ -1534,6 +1657,11 @@ pub struct OutputResult {
     /// How many values the intervals are across: this output's valid trials, or the batches
     /// that have a valid trial of it (so the run's count less those left out).
     pub interval_count: u64,
+    /// Every value the interval would be across was the same (two or more of them), so its
+    /// spread is 0 and `half_width` is `None`: a width of 0 would claim the mean is exact,
+    /// which a run can only show if it knows the output cannot vary, and a rare event the trials
+    /// did not reach is exactly what they would not show. Say "no variation observed".
+    pub no_variation: bool,
     pub std_dev: Option<f64>,
     pub min: Option<f64>,
     pub max: Option<f64>,
@@ -1587,6 +1715,19 @@ impl InputInfluence {
     /// `None` if either end is not a number.
     pub fn swing(&self) -> Option<f64> {
         Some((self.high? - self.low?).abs())
+    }
+
+    /// Whether the output at the input's median (`base`, with every input at its median) lies
+    /// outside the values at its 10th and 90th percentiles: the output then goes up and down as
+    /// the input goes from one end to the other (a square, say), so the two endpoints, which
+    /// are all the swing looks at, understate its effect or show none. `false` if any of the
+    /// three is not a number.
+    pub fn not_monotone(&self, base: Option<f64>) -> bool {
+        let (Some(base), Some(low), Some(high)) = (base, self.low, self.high) else {
+            return false;
+        };
+        let slack = 1e-9 * (base.abs() + low.abs() + high.abs());
+        base < low.min(high) - slack || base > low.max(high) + slack
     }
 }
 
@@ -1783,6 +1924,7 @@ fn describe_output(out: &McOutput, sorted: &[f64], total: usize, ps: &[f64]) -> 
         mean: s.map(|s| s.mean),
         half_width: s.map(|s| s.half_width).filter(|h| h.is_finite()),
         interval_count: valid,
+        no_variation: false,
         std_dev: s.map(|s| s.std_dev),
         min: sorted.first().copied(),
         max: sorted.last().copied(),
@@ -2013,7 +2155,9 @@ mod tests {
             percentiles: vec![],
         });
         assert_eq!(r.outputs[0].mean, Some(95.0));
-        assert_eq!(r.outputs[0].half_width, Some(0.0));
+        // No spread across the trials: no interval, and the result says so.
+        assert_eq!(r.outputs[0].half_width, None);
+        assert!(r.outputs[0].no_variation);
         // About half the trials divide by zero (infinite), and are counted apart.
         let ratio = &r.outputs[1];
         assert_eq!(ratio.valid + ratio.invalid, 2_000);
@@ -2357,14 +2501,19 @@ mod tests {
     }
 
     /// With antithetic pairs where some have one trial with no number, the reported mean is the
-    /// mean of the pair means, and the ± and the sequential stop's precision are of those same
-    /// means, not of the plain average of all valid trials.
+    /// mean of the valid trials (not of the pair means, which would give a lone trial the weight
+    /// of a whole pair), the ± is the ratio estimator's across pairs, and the sequential stop
+    /// judges those same numbers.
     #[test]
-    fn paired_mean_interval_and_stop_use_the_same_pair_means() {
+    fn paired_mean_is_the_trials_mean_with_a_ratio_interval_that_the_stop_shares() {
         let nan = f64::NAN;
-        // Pairs: (10, 20) -> 15; (nan, 100) -> 100; (40, nan) -> 40; (nan, nan) dropped;
-        // (30, 50) -> 40. The mean of the pair means is 48.75; the plain mean of the six valid
-        // trials is 250 / 6 = 41.67.
+        // Pairs: (10, 20) -> total 30 of 2; (nan, 100) -> 100 of 1; (40, nan) -> 40 of 1;
+        // (nan, nan) dropped; (30, 50) -> 80 of 2. The mean of the six valid trials is
+        // 250 / 6 = 41.67; the mean of the pair means (15, 100, 40, 40) would be 48.75.
+        // Cochran's ratio estimator: the residuals y - R n are -53.33, 58.33, -1.667 and
+        // -3.333, their squares sum to 6261.1, so with k = 4 pairs and n-bar = 1.5 the
+        // standard error is sqrt(6261.1 / 3) / 1.5 / sqrt(4) = 15.228, and the half-width is
+        // t(3) = 3.182 times it, 48.454.
         let y = vec![10.0, 20.0, nan, 100.0, 40.0, nan, nan, nan, 30.0, 50.0];
         let block = Block {
             index: 0,
@@ -2377,20 +2526,23 @@ mod tests {
         let blocks = [block];
         let results = c.summarise(&blocks, &[]);
         let r = &results.outputs[0];
-        let means = [15.0, 100.0, 40.0, 40.0];
-        let want = t_half_width(&means).unwrap_or(f64::NAN);
+        let want = 48.454;
         assert!(
-            (r.mean.unwrap_or(f64::NAN) - 48.75).abs() < 1e-12,
+            (r.mean.unwrap_or(f64::NAN) - 250.0 / 6.0).abs() < 1e-12,
             "{:?}",
             r.mean
         );
-        assert!((r.half_width.unwrap_or(f64::NAN) - want).abs() < 1e-12);
+        assert!(
+            (r.half_width.unwrap_or(f64::NAN) - want).abs() < 0.01,
+            "{:?}",
+            r.half_width
+        );
         assert_eq!(r.interval_count, 4);
-        // The sequential stop judges the same means.
+        // The sequential stop judges the same numbers.
         let s = unit_summary(&blocks, 0, true).unwrap_or_else(|| unreachable!("a summary"));
         assert!((s.mean - r.mean.unwrap_or(f64::NAN)).abs() < 1e-12);
         assert!(
-            (s.half_width - want).abs() < 1e-12,
+            (s.half_width - r.half_width.unwrap_or(f64::NAN)).abs() < 1e-12,
             "{} {want}",
             s.half_width
         );
@@ -2406,5 +2558,121 @@ mod tests {
             c.next_look(&blocks, stop, 10, 1_000),
             Step::Continue(_)
         ));
+    }
+
+    /// Results of antithetic pairs whose values are `y`, an output `y` with a target `y >= 100`.
+    fn paired_results(y: Vec<f64>, target: Option<McTarget>) -> OutputResult {
+        let block = Block {
+            index: 0,
+            inputs: vec![vec![0.5; y.len()]],
+            outputs: vec![y],
+        };
+        let mut mc = model(Sampling::Antithetic, None);
+        mc.outputs = vec![output("y", "$x")];
+        mc.outputs[0].target = target;
+        let c = compile(&mc, 1).unwrap_or_else(|p| unreachable!("{p:?}"));
+        let mut results = c.summarise(&[block], &[]);
+        results.outputs.remove(0)
+    }
+
+    /// Pairs that are mostly 100 when complete and 0 when a lone trial: the mean is the trials'
+    /// own (and the share meeting `>= 100` is the same number over 100), not the mean of the
+    /// pair means, which gives each lone 0 the weight of a pair of 100s.
+    #[test]
+    fn incomplete_pairs_keep_the_trials_mean_and_the_target_share() {
+        let nan = f64::NAN;
+        let mut y = Vec::new();
+        for _ in 0..25 {
+            y.extend([100.0, 100.0]); // a complete pair
+        }
+        for _ in 0..50 {
+            y.extend([0.0, nan]); // a lone 0
+        }
+        // 50 trials of 100 and 50 of 0: mean 50; the mean of the pair means (25 at 100 and 50 at
+        // 0) would be 33.33.
+        let r = paired_results(y, Some(McTarget::AtLeast(100.0)));
+        assert_eq!((r.valid, r.invalid), (100, 50));
+        assert!(
+            (r.mean.unwrap_or(f64::NAN) - 50.0).abs() < 1e-12,
+            "{:?}",
+            r.mean
+        );
+        let t = r.target.unwrap_or_else(|| unreachable!());
+        assert_eq!(t.probability, Some(0.5));
+        // The ± is the ratio estimator's: the pairs are 25 of (total 200, 2 trials) and 50 of
+        // (0, 1), so y - R n (R = 50) is 100 and -50, and with k = 75 pairs and n-bar = 100 / 75
+        // the standard error is sqrt(sum of squares / 74) / n-bar / sqrt(75).
+        let (k, nbar) = (75.0_f64, 100.0 / 75.0);
+        let resid: f64 = 25.0 * 100.0 * 100.0 + 50.0 * 50.0 * 50.0;
+        let se = (resid / (k - 1.0)).sqrt() / nbar / k.sqrt();
+        let want = t_critical_95(74).unwrap_or(f64::NAN) * se;
+        assert!(
+            (r.half_width.unwrap_or(f64::NAN) - want).abs() < 1e-9,
+            "{:?} {want}",
+            r.half_width
+        );
+        assert_eq!(r.interval_count, 75);
+        let (lo, hi) = t.interval.unwrap_or_else(|| unreachable!());
+        assert!(lo < 0.5 && 0.5 < hi && (hi - lo) / 2.0 > 0.01, "{lo} {hi}");
+    }
+
+    /// With every pair complete the mean is the mean of the pair means and the interval the
+    /// usual Student-t one across them (the same numbers, to the bit, as before incomplete
+    /// pairs were allowed for), so complete-pair runs are as they were.
+    #[test]
+    fn complete_pairs_give_the_interval_across_the_pair_means() {
+        let y = vec![1.0, 3.0, 2.0, 6.0, 5.0, 5.0, 0.0, 4.0];
+        let r = paired_results(y, None);
+        let means = [2.0, 4.0, 5.0, 2.0];
+        assert_eq!(r.mean, Summary::of(&means).map(|s| s.mean));
+        assert_eq!(r.half_width, t_half_width(&means));
+    }
+
+    /// A constant that does not add up exactly (0.1) has no spread whether the pairs are
+    /// complete or one has lost a trial, so the result says no variation was observed (and a
+    /// sequential stop is not told the interval is settled by a width of 1e-17).
+    #[test]
+    fn a_constant_that_does_not_add_up_exactly_has_no_spread() {
+        let nan = f64::NAN;
+        for lone in [false, true] {
+            let mut y: Vec<f64> = (0..4_000).map(|_| 0.1).collect();
+            if lone {
+                y.extend([0.1, nan]);
+            }
+            let block = Block {
+                index: 0,
+                inputs: vec![vec![0.5; y.len()]],
+                outputs: vec![y],
+            };
+            let mut mc = model(Sampling::Antithetic, None);
+            mc.outputs = vec![output("y", "$x")];
+            let c = compile(&mc, 1).unwrap_or_else(|p| unreachable!("{p:?}"));
+            let blocks = [block];
+            let r = c.summarise(&blocks, &[]).outputs.remove(0);
+            assert_eq!((r.half_width, r.no_variation), (None, true), "{lone}");
+            assert_eq!(r.mean, Some(0.1), "{lone}");
+            let stop = McStop {
+                relative: 0.05,
+                max: 1_000_000,
+            };
+            assert!(
+                matches!(
+                    c.next_look(&blocks, stop, 4_002, 1_000_000),
+                    Step::Continue(_)
+                ),
+                "{lone}"
+            );
+        }
+    }
+
+    /// Values with no spread at all (a rare event that never happened in the trials) have no
+    /// interval, and the result says so instead of giving one of width 0.
+    #[test]
+    fn no_spread_is_no_variation_and_not_a_zero_width_interval() {
+        let r = paired_results(vec![1.0; 10], None);
+        assert_eq!((r.half_width, r.no_variation), (None, true));
+        assert_eq!(r.mean, Some(1.0));
+        let r = paired_results(vec![1.0, 2.0, 3.0, 4.0], None);
+        assert!(r.half_width.is_some() && !r.no_variation);
     }
 }

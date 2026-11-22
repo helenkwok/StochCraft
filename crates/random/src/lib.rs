@@ -136,6 +136,40 @@ pub mod estimate;
 pub mod fit;
 pub use estimate::{Family, FitError, ThreePoint, Upper};
 
+/// Machine-checked properties (Kani, `cargo kani -p stochcraft-random`; see docs/developers.md).
+#[cfg(kani)]
+mod proofs {
+    use super::*;
+
+    /// Seeding never produces the all-zero state, which xoshiro256** cannot leave.
+    #[kani::proof]
+    #[kani::solver(cadical)]
+    fn seeding_never_gives_the_all_zero_state() {
+        let seed: u64 = kani::any();
+        assert_ne!(Rng::new(seed).s, [0u64; 4]);
+    }
+
+    /// One xoshiro256** step takes a non-zero state to a non-zero state (the step is invertible).
+    #[kani::proof]
+    fn a_step_keeps_the_state_non_zero() {
+        let s: [u64; 4] = kani::any();
+        kani::assume(s != [0u64; 4]);
+        let mut r = Rng { s };
+        r.next_u64();
+        assert_ne!(r.s, [0u64; 4]);
+    }
+
+    /// `uniform` is in [0, 1) and `uniform_open0` in (0, 1], from any generator state.
+    #[kani::proof]
+    fn uniform_draws_stay_in_their_intervals() {
+        let mut r = Rng { s: kani::any() };
+        let u = r.uniform();
+        assert!(u >= 0.0 && u < 1.0);
+        let v = r.uniform_open0();
+        assert!(v > 0.0 && v <= 1.0);
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -147,6 +181,16 @@ mod tests {
         assert_eq!(sm.next_u64(), 0xe220_a839_7b1d_cdaf);
         assert_eq!(sm.next_u64(), 0x6e78_9e6a_a1b9_65f4);
         assert_eq!(sm.next_u64(), 0x06c4_5d18_8009_454f);
+    }
+
+    /// The first outputs of xoshiro256** seeded from 42 by SplitMix64, as the published C
+    /// reference code gives them, so the generator itself is pinned, not only its seeding.
+    #[test]
+    fn xoshiro256_starstar_matches_the_reference_for_seed_42() {
+        let mut r = Rng::new(42);
+        assert_eq!(r.next_u64(), 1_546_998_764_402_558_742);
+        assert_eq!(r.next_u64(), 6_990_951_692_964_543_102);
+        assert_eq!(r.next_u64(), 12_544_586_762_248_559_009);
     }
 
     #[test]

@@ -940,7 +940,6 @@ unit	yr	yıl
 	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	Bu sizin ilk modeliniz. Sonuçlar'ın ilk satırları çalıştırmanın ne bulduğunu söyler; Yardım ▸ Sonuçlar Ne Anlama Geliyor her sayıyı açıklar.
 # Which inputs matter in the Monte Carlo results (ROADMAP M4.1, part 3a)
 	Which inputs matter	Hangi girdiler önemli
-	{output} depends most on {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile.	{output} en çok {input} girdisine bağlıdır: {input} kendi 10. yüzdeliğinden 90. yüzdeliğine giderken {low} değerinden {high} değerine gider.
 	Each input from its 10th to its 90th percentile, with the others at their medians	Her girdi kendi 10. yüzdeliğinden 90. yüzdeliğine, diğerleri medyanlarında
 	Base {value}	Temel değer {value}
 	A correlated input's figure includes the effect of the inputs it is correlated with.	Korelasyonlu bir girdinin rakamı, korelasyonlu olduğu girdilerin etkisini de içerir.
@@ -1369,7 +1368,6 @@ unit	yr	yıl
 	The model: its settings and variables	Model: ayarları ve değişkenleri
 	System dynamics model	Sistem dinamiği modeli
 	Variables	Değişkenler
-	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	Bu modeli komutlarla değiştirebilirsiniz: bir ajandan MCP sunucusu üzerinden ya da komut satırından. Tuval üzerinde düzenleme sonra gelecek.
 	From {start} to {stop}, in steps of {dt}, by the {method} method.	{start} ile {stop} arasında, {dt} adımlarla, {method} yöntemiyle.
 	Notes from the file	Dosyadan notlar
 	Equation	Denklem
@@ -1420,8 +1418,36 @@ unit	yr	yıl
 	The estimated chance that {output} is more than {value} is {percent}.	{output} değerinin {value} değerinden büyük olma olasılığı tahminen {percent}.
 	The estimated chance that {output} is less than {value} is {percent}.	{output} değerinin {value} değerinden küçük olma olasılığı tahminen {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	Aralıklarının genişliği yok, bu hiçbir tahminde olmaz, bu yüzden sade sonuç geçerli kalır.
+	{output} changes most with {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile, the other inputs at their medians.	{output}, en çok {input} ile değişir: {input} 10. yüzdeliğinden 90. yüzdeliğine giderken {low} değerinden {high} değerine gider, diğer girdiler ise ortancalarındadır.
+	No variation was observed, so there is no interval for the mean; a rare event the trials did not reach could still move it.	Hiçbir değişim gözlenmedi, bu yüzden ortalama için aralık yok; denemelerin ulaşmadığı nadir bir olay yine de onu kaydırabilir.
+	They narrowed the interval by {percent}, but a mean given for a control is far from the trials' mean, so the plain result stands.	Aralığı {percent} daralttılar, ancak bir kontrol için verilen ortalama denemelerin ortalamasından çok uzak, bu yüzden sade sonuç geçerli kalır.
+	The output does not move in one direction with {inputs} (its value at the median is outside its values at the 10th and 90th percentiles), so the swing understates the effect.	Çıktı, {inputs} ile tek yönde hareket etmiyor (ortancadaki değeri 10. ve 90. yüzdeliklerdeki değerlerinin dışında), bu yüzden salınım etkiyi olduğundan az gösterir.
+	Did not open {file}: a different model was opened in the meantime	{file} açılmadı: bu sırada başka bir model açıldı
+	Select	Seç
+	Link	Bağlantı
+	Initial value	Başlangıç değeri
+	Click the diagram to place a stock.	Stok yerleştirmek için diyagrama tıklayın.
+	Click the diagram to place an auxiliary.	Yardımcı değişken yerleştirmek için diyagrama tıklayın.
+	Drag from a stock, or from empty space, to another stock or empty space to draw a flow.	Akış çizmek için bir stoktan veya boş alandan başka bir stoka veya boş alana sürükleyin.
+	Drag from one variable to another to show that the second uses the first.	İkincinin birincisini kullandığını göstermek için bir değişkenden diğerine sürükleyin.
+	Click a variable to select it and edit it here. Drag a variable to move it.	Bir değişkeni seçip burada düzenlemek için tıklayın. Taşımak için değişkeni sürükleyin.
+	Moved {name}	{name} taşındı
+	Added {kind}: {name}	{kind} eklendi: {name}
+	Edited {name}	{name} düzenlendi
+	Removed {name}	{name} kaldırıldı
+	Linked {from} to {to}	{from}, {to} öğesine bağlandı
+	Add Variable	Değişken ekle
+	Edit Variable	Değişkeni düzenle
+	Remove Variable	Değişkeni kaldır
+	Simulation Settings	Simülasyon ayarları
+	Change Diagram	Diyagramı değiştir
+	You can change this model on the Diagram tab, or with commands, from an agent through the MCP server or from the command line.	Bu modeli Diyagram sekmesinde veya komutlarla, bir aracıdan MCP sunucusu üzerinden ya da komut satırından değiştirebilirsiniz.
 	Inconclusive at current precision	Mevcut hassasiyette sonuçsuz
 	No difference detected	Fark saptanmadı
 	Agrees within ±{tolerance}	±{tolerance} içinde uyuşuyor
 	This is not evidence of agreement: set a tolerance to test for it.	Bu, uyuşmanın kanıtı değildir: sınamak için bir tolerans belirleyin.
 	Tolerance (0 for none)	Tolerans (yoksa 0)
+	Arrivals that keep their distance	Mesafesini koruyan varışlar
+	One server fed by the gaps between zeros of the Riemann zeta function, beside Poisson arrivals at the same rate.	Varışları Riemann zeta fonksiyonunun sıfırları arasındaki aralıklar belirleyen tek bir sunucu, aynı hızdaki Poisson varışlarının yanında.
+	Do arrivals that avoid bunching make a shorter queue?	Kümelenmekten kaçınan varışlar daha kısa bir kuyruk oluşturur mu?
+	Same average rate, half the wait: arrivals that repel one another bunch up less than random ones.	Aynı ortalama hız, yarı yarıya daha az bekleme: birbirini iten varışlar, rastgele varışlardan daha az kümelenir.

@@ -368,7 +368,7 @@ impl App {
             || self.new_file.is_some()
             || self.pick_for.is_some()
             || self.shortcuts_dialog.is_some()
-            || self.recovery.is_some()
+            || self.recovery_waiting()
             || self.themes.is_some()
             || self.chart_colours.is_some()
     }

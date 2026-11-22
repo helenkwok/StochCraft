@@ -1025,3 +1025,246 @@ fn a_job_refuses_what_run_refuses_and_finish_makes_what_is_left() {
     assert_eq!(job.progress(), (1, 4));
     assert_eq!(job.finish().unwrap(), run(&p, &opts).unwrap());
 }
+
+// Numerical contracts: what a flow that is not a number, or runs backwards, does to a stock that
+// cannot go negative; the halved-step check compared by time; XMILE namespaces; time units;
+// jumps under Runge-Kutta.
+
+const XMILE_NS: &str = "http://docs.oasis-open.org/xmile/ns/XMILE/v1.0";
+
+/// An XMILE file with the given method, stop, step and variables.
+fn xmile_file(method: &str, stop: &str, dt: &str, variables: &str) -> String {
+    format!(
+        "<?xml version=\"1.0\"?><xmile version=\"1.0\" xmlns=\"{XMILE_NS}\"><header><name>t</name></header><sim_specs method=\"{method}\" time_units=\"Hours\"><start>0</start><stop>{stop}</stop><dt>{dt}</dt></sim_specs><model><variables>{variables}</variables></model></xmile>"
+    )
+}
+
+fn from_file(text: &str) -> SdModel {
+    read_xmile(text).unwrap().model
+}
+
+#[test]
+fn a_rate_that_is_not_a_number_is_not_limited_into_a_transfer() {
+    let text = xmile_file(
+        "Euler",
+        "1",
+        "1",
+        "<stock name=\"A\"><eqn>10</eqn><outflow>f</outflow><non_negative/></stock><stock name=\"B\"><eqn>0</eqn><inflow>f</inflow></stock><flow name=\"f\"><eqn>SQRT(-1)</eqn></flow>",
+    );
+    let r = once(&from_file(&text));
+    // Not "A = 0, B = 10": the stocks it touches are not numbers, and the run says so.
+    assert!(last(&r, "A").is_nan(), "{}", last(&r, "A"));
+    assert!(last(&r, "B").is_nan(), "{}", last(&r, "B"));
+    assert!(
+        r.warnings.iter().any(|w| w.contains("not a finite number")),
+        "{:?}",
+        r.warnings
+    );
+}
+
+#[test]
+fn a_flow_that_runs_backwards_is_limited_by_the_stock_it_takes_from() {
+    // Declared from B to A, but it comes out as -2: A, which holds 1 and cannot go negative,
+    // is the one that gives, so only 1 moves: (A, B) = (0, 1), not (-1, 2).
+    let text = xmile_file(
+        "Euler",
+        "1",
+        "1",
+        "<stock name=\"A\"><eqn>1</eqn><inflow>f</inflow><non_negative/></stock><stock name=\"B\"><eqn>0</eqn><outflow>f</outflow></stock><flow name=\"f\"><eqn>-2</eqn></flow>",
+    );
+    let r = once(&from_file(&text));
+    assert_eq!(last(&r, "A"), 0.0);
+    assert_eq!(last(&r, "B"), 1.0);
+    // At the end A is empty, so the flow it would give is limited to nothing.
+    assert_eq!(last(&r, "f"), 0.0);
+    // Two flows between the same stocks, both negative: A gives to B through `g` (3 asked,
+    // only the 1 it holds at the start of the step), and takes 2 from B through `f`.
+    let text = xmile_file(
+        "Euler",
+        "1",
+        "1",
+        "<stock name=\"A\"><eqn>1</eqn><outflow>f</outflow><inflow>g</inflow><non_negative/></stock><stock name=\"B\"><eqn>0</eqn><outflow>g</outflow><inflow>f</inflow></stock><flow name=\"f\"><eqn>-2</eqn></flow><flow name=\"g\"><eqn>-3</eqn></flow>",
+    );
+    let r = once(&from_file(&text));
+    assert!(last(&r, "A") >= 0.0, "{}", last(&r, "A"));
+    assert!((last(&r, "A") + last(&r, "B") - 1.0).abs() < 1e-12);
+}
+
+#[test]
+fn a_flow_listed_twice_at_a_stock_is_refused() {
+    let text = xmile_file(
+        "Euler",
+        "1",
+        "1",
+        "<stock name=\"A\"><eqn>10</eqn><outflow>f</outflow></stock><stock name=\"B\"><eqn>0</eqn><inflow>f</inflow><inflow>f</inflow></stock><flow name=\"f\"><eqn>1</eqn></flow>",
+    );
+    let e = compile(&from_file(&text)).unwrap_err();
+    assert_eq!(e.kind, ErrorKind::Model);
+    assert!(e.message.contains("more than once"), "{}", e.message);
+}
+
+fn check_of(text: &str) -> stochcraft_sd::DtCheck {
+    let r = go(
+        &from_file(text),
+        &RunOptions {
+            dt_check: true,
+            ..RunOptions::default()
+        },
+    );
+    r.dt_check.unwrap()
+}
+
+#[test]
+fn the_halved_step_check_compares_by_time_and_an_exact_case_passes() {
+    // X' = 1 is integrated exactly at any step; the run stops at 2 (1.6 rounded to whole steps),
+    // and the halved run goes to the same time.
+    let text = xmile_file(
+        "Euler",
+        "1.6",
+        "1",
+        "<stock name=\"s\"><eqn>0</eqn><inflow>f</inflow></stock><flow name=\"f\"><eqn>1</eqn></flow>",
+    );
+    let c = check_of(&text);
+    assert!(!c.inconclusive);
+    assert!(c.within_threshold);
+    assert!(c.max_relative_difference.abs() < 1e-12, "{c:?}");
+    let s = c.stocks.first().unwrap();
+    assert_eq!(s.compared, 2);
+    assert!(c.draws_matched);
+}
+
+#[test]
+fn the_halved_step_check_is_inconclusive_when_a_value_is_not_a_number() {
+    let text = xmile_file(
+        "Euler",
+        "2",
+        "1",
+        "<stock name=\"s\"><eqn>0</eqn><inflow>f</inflow></stock><flow name=\"f\"><eqn>SQRT(-1)</eqn></flow>",
+    );
+    let c = check_of(&text);
+    assert!(c.inconclusive);
+    assert!(!c.within_threshold);
+    assert!(c.stocks.first().unwrap().inconclusive);
+    assert!(!c.notes.is_empty());
+}
+
+#[test]
+fn the_halved_step_check_claims_the_same_draws_only_when_the_clocks_agree() {
+    // A draw every 1.4 hours is every whole step: 1 step at 1 hour, 3 at half an hour (1.5
+    // hours), so the draws are at different times.
+    let draws = |every: &str| {
+        xmile_file(
+            "Euler",
+            "10",
+            "1",
+            &format!(
+                "<stock name=\"s\"><eqn>0</eqn><inflow>r</inflow></stock><flow name=\"r\"><eqn>RANDOM(0,1,0,{every})</eqn></flow>"
+            ),
+        )
+    };
+    let c = check_of(&draws("1.4"));
+    assert!(!c.draws_matched);
+    assert!(
+        c.notes.iter().any(|n| n.contains("random")),
+        "{:?}",
+        c.notes
+    );
+    // An interval of a whole number of both steps agrees, at either method.
+    assert!(check_of(&draws("2")).draws_matched);
+    assert!(check_of(&draws("2").replace("\"Euler\"", "\"RK4\"")).draws_matched);
+    // Equal intervals are not enough when a condition decides when the first draw is made: at a
+    // step of 1 it is at 1, at half of it at 0.5, and with parameters taken then.
+    let conditional = xmile_file(
+        "Euler",
+        "10",
+        "1",
+        "<stock name=\"s\"><eqn>0</eqn><inflow>r</inflow></stock><flow name=\"r\"><eqn>IF TIME >= 0.5 THEN RANDOM(TIME,TIME+1,0,2) ELSE 0</eqn></flow>",
+    );
+    let c = check_of(&conditional);
+    assert!(!c.draws_matched, "{c:?}");
+    assert!(
+        c.notes.iter().any(|n| n.contains("random")),
+        "{:?}",
+        c.notes
+    );
+}
+
+#[test]
+fn xmile_namespaces_are_resolved_by_uri_not_by_prefix() {
+    let prefixed = "<?xml version=\"1.0\"?><xm:xmile version=\"1.0\" xmlns:xm=\"http://docs.oasis-open.org/xmile/ns/XMILE/v1.0\"><xm:header><xm:name>p</xm:name></xm:header><xm:sim_specs method=\"Euler\" time_units=\"Hours\"><xm:start>0</xm:start><xm:stop>2</xm:stop><xm:dt>1</xm:dt></xm:sim_specs><xm:model><xm:variables><xm:stock name=\"s\"><xm:eqn>0</xm:eqn><xm:inflow>f</xm:inflow></xm:stock><xm:flow name=\"f\"><xm:eqn>1</xm:eqn></xm:flow></xm:variables></xm:model></xm:xmile>";
+    let f = read_xmile(prefixed).unwrap();
+    assert_eq!(f.model.name, "p");
+    assert_eq!(last(&once(&f.model), "s"), 2.0);
+    // A prefix is not enough: it has to be bound to the XMILE namespace.
+    let elsewhere = prefixed.replace(XMILE_NS, "urn:not-xmile");
+    assert_eq!(read_xmile(&elsewhere).unwrap_err().kind, ErrorKind::Xml);
+    // Nor is a default namespace that is another one.
+    let wrong = xmile_file("Euler", "2", "1", "").replace(XMILE_NS, "urn:not-xmile");
+    let e = read_xmile(&wrong).unwrap_err();
+    assert_eq!(e.kind, ErrorKind::Xml);
+    assert!(e.message.contains("namespace"), "{}", e.message);
+    // An empty default namespace is no namespace, which a file may leave out.
+    let none = xmile_file(
+        "Euler",
+        "2",
+        "1",
+        "<stock name=\"s\"><eqn>0</eqn><inflow>f</inflow></stock><flow name=\"f\"><eqn>1</eqn></flow>",
+    )
+    .replace(XMILE_NS, "");
+    assert_eq!(last(&once(&read_xmile(&none).unwrap().model), "s"), 2.0);
+}
+
+#[test]
+fn a_change_of_time_unit_converts_the_steps_too() {
+    let text = xmile_file(
+        "Euler",
+        "2",
+        "1",
+        "<stock name=\"s\"><eqn>0</eqn><inflow>f</inflow></stock><flow name=\"f\"><eqn>1</eqn></flow>",
+    );
+    let r = go(
+        &from_file(&text),
+        &RunOptions {
+            dt_check: true,
+            time_unit: Some("Minutes".to_owned()),
+            ..RunOptions::default()
+        },
+    );
+    assert_eq!(r.times, vec![0.0, 60.0, 120.0]);
+    assert_eq!(r.save_step, 60.0);
+    assert_eq!(r.dt, 60.0);
+    let c = r.dt_check.unwrap();
+    assert_eq!((c.dt, c.half_dt), (60.0, 30.0));
+}
+
+#[test]
+fn a_step_on_a_step_boundary_is_integrated_the_same_by_both_methods() {
+    // s' = STEP(6, 1): s is 0 up to 1 and 6 (t - 1) after, so 6 at t = 2. A fourth-order step
+    // takes the value from the left at its end, so the jump at 1 is not counted in [0, 1].
+    for method in ["Euler", "RK4"] {
+        let text = xmile_file(
+            method,
+            "2",
+            "1",
+            "<stock name=\"s\"><eqn>0</eqn><inflow>f</inflow></stock><flow name=\"f\"><eqn>STEP(6,1)</eqn></flow>",
+        );
+        let r = once(&from_file(&text));
+        assert_eq!(mean(&r, "s"), vec![0.0, 0.0, 6.0], "{method}");
+    }
+}
+
+#[test]
+fn a_step_whose_time_moves_with_the_clock_stays_on_at_every_stage() {
+    // s' = STEP(6, TIME) is 6 at every time, so s = 6 t. Taking the call from the left at the end
+    // of a fourth-order step must not drop that stage to 0.
+    for method in ["Euler", "RK4"] {
+        let text = xmile_file(
+            method,
+            "2",
+            "1",
+            "<stock name=\"s\"><eqn>0</eqn><inflow>f</inflow></stock><flow name=\"f\"><eqn>STEP(6,TIME)</eqn></flow>",
+        );
+        let r = once(&from_file(&text));
+        assert_eq!(mean(&r, "s"), vec![0.0, 6.0, 12.0], "{method}");
+    }
+}

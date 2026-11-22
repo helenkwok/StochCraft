@@ -940,7 +940,6 @@ unit	yr	సం.
 	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	ఇదే మీ మొదటి నమూనా. “ఫలితాలు” విభాగంలోని మొదటి పంక్తులు అమలులో కనుగొన్నదాన్ని చెబుతాయి; సహాయం ▸ ఫలితాల అర్థం ప్రతి సంఖ్యను వివరిస్తుంది.
 # Which inputs matter in the Monte Carlo results (ROADMAP M4.1, part 3a)
 	Which inputs matter	ఏ ఇన్‌పుట్‌లు ముఖ్యం
-	{output} depends most on {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile.	{output} ఎక్కువగా {input}పై ఆధారపడుతుంది: {input} తన 10వ శతాంశం నుండి 90వ శతాంశానికి వెళ్ళినప్పుడు అది {low} నుండి {high}కి వెళ్తుంది.
 	Each input from its 10th to its 90th percentile, with the others at their medians	ప్రతి ఇన్‌పుట్ తన 10వ నుండి 90వ శతాంశం వరకు, మిగతావి వాటి మధ్యగతంలో
 	Base {value}	ఆధార విలువ {value}
 	A correlated input's figure includes the effect of the inputs it is correlated with.	సహసంబంధం ఉన్న ఇన్‌పుట్ సంఖ్యలో అది ఏ ఇన్‌పుట్‌లతో సహసంబంధం కలిగి ఉందో వాటి ప్రభావం కూడా ఉంటుంది.
@@ -1369,7 +1368,6 @@ unit	yr	సం.
 	The model: its settings and variables	నమూనా: దాని సెట్టింగ్‌లు, చరరాశులు
 	System dynamics model	సిస్టమ్ డైనమిక్స్ నమూనా
 	Variables	చరరాశులు
-	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	ఈ నమూనాను ఆదేశాలతో మార్చవచ్చు: ఏజెంట్ నుండి MCP సర్వర్ ద్వారా, లేదా కమాండ్ లైన్ నుండి. కాన్వాస్‌పై సవరణ తర్వాత వస్తుంది.
 	From {start} to {stop}, in steps of {dt}, by the {method} method.	{start} నుండి {stop} వరకు, {dt} దశలలో, {method} పద్ధతిలో.
 	Notes from the file	ఫైల్ నుండి గమనికలు
 	Equation	సమీకరణం
@@ -1420,8 +1418,36 @@ unit	yr	సం.
 	The estimated chance that {output} is more than {value} is {percent}.	{output} {value} కంటే ఎక్కువ ఉండే అంచనా సంభావ్యత {percent}.
 	The estimated chance that {output} is less than {value} is {percent}.	{output} {value} కంటే తక్కువ ఉండే అంచనా సంభావ్యత {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	వాటి అంతరానికి వెడల్పు లేదు, ఏ అంచనాకూ ఉండదు, కాబట్టి సాధారణ ఫలితమే ఉంటుంది.
+	{output} changes most with {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile, the other inputs at their medians.	{output} అత్యధికంగా {input} తో మారుతుంది: {input} తన 10వ శతమానం నుండి 90వ శతమానానికి వెళ్ళినప్పుడు అది {low} నుండి {high} కి వెళ్తుంది, ఇతర ఇన్‌పుట్‌లు తమ మధ్యగతంలో ఉంటాయి.
+	No variation was observed, so there is no interval for the mean; a rare event the trials did not reach could still move it.	ఎటువంటి మార్పు గమనించబడలేదు, కాబట్టి సగటుకు అంతరం లేదు; ప్రయత్నాలు చేరుకోని అరుదైన సంఘటన ఇంకా దానిని కదిలించవచ్చు.
+	They narrowed the interval by {percent}, but a mean given for a control is far from the trials' mean, so the plain result stands.	అవి అంతరాన్ని {percent} తగ్గించాయి, కానీ ఒక నియంత్రణకు ఇచ్చిన సగటు ప్రయత్నాల సగటుకు చాలా దూరంగా ఉంది, కాబట్టి సాధారణ ఫలితమే నిలుస్తుంది.
+	The output does not move in one direction with {inputs} (its value at the median is outside its values at the 10th and 90th percentiles), so the swing understates the effect.	అవుట్‌పుట్ {inputs} తో ఒకే దిశలో కదలదు (మధ్యగతం వద్ద దాని విలువ 10వ మరియు 90వ శతమానాల వద్ద దాని విలువలకు బయట ఉంది), కాబట్టి స్వింగ్ ప్రభావాన్ని తక్కువగా అంచనా వేస్తుంది.
+	Did not open {file}: a different model was opened in the meantime	{file} తెరవబడలేదు: ఈలోగా మరొక నమూనా తెరవబడింది
+	Select	ఎంచుకో
+	Link	లింక్
+	Initial value	ప్రారంభ విలువ
+	Click the diagram to place a stock.	నిల్వను ఉంచడానికి రేఖాచిత్రంపై క్లిక్ చేయండి.
+	Click the diagram to place an auxiliary.	సహాయక చరరాశిని ఉంచడానికి రేఖాచిత్రంపై క్లిక్ చేయండి.
+	Drag from a stock, or from empty space, to another stock or empty space to draw a flow.	ప్రవాహాన్ని గీయడానికి, ఒక నిల్వ నుండి లేదా ఖాళీ స్థలం నుండి మరో నిల్వకు లేదా ఖాళీ స్థలానికి లాగండి.
+	Drag from one variable to another to show that the second uses the first.	రెండవ చరరాశి మొదటిదాన్ని ఉపయోగిస్తుందని చూపడానికి, ఒక చరరాశి నుండి మరొక దానికి లాగండి.
+	Click a variable to select it and edit it here. Drag a variable to move it.	చరరాశిని ఎంచుకుని ఇక్కడ సవరించడానికి దానిపై క్లిక్ చేయండి. చరరాశిని తరలించడానికి లాగండి.
+	Moved {name}	{name} తరలించబడింది
+	Added {kind}: {name}	{kind} జోడించబడింది: {name}
+	Edited {name}	{name} సవరించబడింది
+	Removed {name}	{name} తొలగించబడింది
+	Linked {from} to {to}	{from} ను {to} కు లింక్ చేయబడింది
+	Add Variable	చరరాశిని జోడించు
+	Edit Variable	చరరాశిని సవరించు
+	Remove Variable	చరరాశిని తొలగించు
+	Simulation Settings	అనుకరణ సెట్టింగ్‌లు
+	Change Diagram	రేఖాచిత్రాన్ని మార్చు
+	You can change this model on the Diagram tab, or with commands, from an agent through the MCP server or from the command line.	ఈ మోడల్‌ను రేఖాచిత్రం ట్యాబ్‌లో, లేదా ఆదేశాలతో, ఏజెంట్ ద్వారా MCP సర్వర్ నుండి లేదా కమాండ్ లైన్ నుండి మార్చవచ్చు.
 	Inconclusive at current precision	ప్రస్తుత కచ్చితత్వంలో నిర్ధారించలేము
 	No difference detected	తేడా కనుగొనబడలేదు
 	Agrees within ±{tolerance}	±{tolerance} లోపు సరిపోతుంది
 	This is not evidence of agreement: set a tolerance to test for it.	ఇది సరిపోలికకు రుజువు కాదు: పరీక్షించడానికి సహనాన్ని సెట్ చేయండి.
 	Tolerance (0 for none)	సహనం (లేకపోతే 0)
+	Arrivals that keep their distance	దూరం పాటించే రాకలు
+	One server fed by the gaps between zeros of the Riemann zeta function, beside Poisson arrivals at the same rate.	రీమాన్ జీటా ఫంక్షన్ శూన్యాల మధ్య ఖాళీలతో రాకలు అందుకునే ఒక సర్వర్, అదే రేటుతో వచ్చే పాయిసన్ రాకలతో పాటు.
+	Do arrivals that avoid bunching make a shorter queue?	గుంపులు కట్టకుండా తప్పించుకునే రాకలు తక్కువ క్యూను ఇస్తాయా?
+	Same average rate, half the wait: arrivals that repel one another bunch up less than random ones.	అదే సగటు రేటు, సగం నిరీక్షణ: ఒకదానినొకటి దూరంగా నెట్టుకునే రాకలు యాదృచ్ఛిక రాకల కంటే తక్కువగా గుంపులు కడతాయి.

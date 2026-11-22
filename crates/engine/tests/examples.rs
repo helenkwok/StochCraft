@@ -21,11 +21,13 @@
 //!   mean numbers inside its network of infinite-server stations;
 //! - Penny Fab (Hopp and Spearman, Factory Physics) against the practical worst case, exact for a
 //!   balanced closed line with exponential times, and the best case for fixed times.
+//! - arrivals at the gaps between zeros of the Riemann zeta function against exact G/M/1 theory,
+//!   beside Poisson arrivals at the same rate (M/M/1).
 //!
 //! The first five files were written by `stochcraft-cli new -t <name>`; the others were built with
 //! the same engine commands and saved, with their comparison scenarios (each inheriting the first)
 //! added by hand, as in `mm1.bpmn`. The starting contents of the prison and of Penny Fab were
-//! added by hand too.
+//! added by hand too. The zeta queue was assembled from the output of `tools/zeta-gaps/generate.py`.
 //!
 //! Each check allows √2 times the 95% half-width, since several checks read the same runs (as in
 //! `crates/blocks/tests/queueing_cases.rs`).
@@ -37,6 +39,7 @@ use std::path::Path;
 use serde_json::{Value, json};
 use stochcraft_engine::Engine;
 use stochcraft_model::{ElementId, ElementKind, Model};
+use stochcraft_random::Dist;
 
 fn ok(e: &mut Engine, command: &str, params: Value) -> Value {
     let r = e.execute(command, params.clone());
@@ -1036,4 +1039,83 @@ fn penny_fab_matches_the_practical_worst_case_and_the_best_case() {
     }
     let (out, _) = result(&r, "deburr", "entered");
     assert!((out - rb * duration).abs() <= 2.0, "{out}");
+}
+
+/// The root σ in (0, 1) of σ = A*(μ(1 − σ)) for a G/M/1 queue whose times between arrivals take
+/// the values `points` (probability, value) with service rate `mu`; A* is the Laplace–Stieltjes
+/// transform of the time between arrivals, here the finite sum Σ pᵢ·exp(−s·tᵢ). Then an
+/// arrival waits with chance σ and, on average, σ / (μ(1 − σ)) in the queue (Gross and Harris, Fundamentals of
+/// Queueing Theory, on the G/M/1 queue; Kleinrock, Queueing Systems, vol. 1, on G/M/m).
+fn gm1_sigma(points: &[(f64, f64)], mu: f64) -> f64 {
+    let total: f64 = points.iter().map(|(p, _)| p).sum();
+    let gap = |sigma: f64| {
+        points
+            .iter()
+            .map(|(p, t)| p / total * stochcraft_random::math::exp(-mu * (1.0 - sigma) * t))
+            .sum::<f64>()
+            - sigma
+    };
+    // σ = 1 is always a root; with the utilisation below 1 the other one lies below it, where
+    // the gap is positive at 0 and negative just under 1.
+    let (mut lo, mut hi) = (0.0, 1.0 - 1e-6);
+    assert!(gap(lo) > 0.0 && gap(hi) < 0.0, "no root in (0, 1)");
+    for _ in 0..200 {
+        let mid = 0.5 * (lo + hi);
+        if gap(mid) > 0.0 {
+            lo = mid;
+        } else {
+            hi = mid;
+        }
+    }
+    0.5 * (lo + hi)
+}
+
+/// A server of exponential service with mean 1 minute, fed at 0.8 a minute on average (ρ = 0.8).
+/// With Poisson arrivals the mean wait is 4 minutes (M/M/1). With the gaps between the zeros of
+/// the Riemann zeta function, which repel one another (Wigner–Dyson spacing, few short gaps),
+/// the same rate gives a G/M/1 queue with σ = 0.672 and a mean wait of about 2.05 minutes, read
+/// here from the distribution in the model file.
+#[test]
+fn arrivals_that_keep_their_distance_match_g_m_1() {
+    let experiment = json!({ "replications": 20, "duration": 50_000.0 });
+    let m = model_of("zeta-queue.bpmn", Some("zeta"));
+    let points = match m
+        .element(&ElementId::unchecked("arrivals"))
+        .map(|e| &e.kind)
+    {
+        Some(ElementKind::Source {
+            interarrival: Dist::User { points, .. },
+            ..
+        }) => points.clone(),
+        _ => panic!("the arrivals are not a user distribution"),
+    };
+    let (service, capacity) = server(&m, "server");
+    assert_eq!(capacity, 1);
+    let mu = 1.0 / service;
+    let gap = interarrival(&m, "arrivals");
+    assert!((gap - 1.25).abs() < 1e-6, "{gap}");
+    let lambda = 1.0 / gap;
+    let rho = lambda / mu;
+    assert!((rho - 0.8).abs() < 1e-6, "{rho}");
+
+    let sigma = gm1_sigma(&points, mu);
+    let wait = sigma / (mu * (1.0 - sigma));
+    // The gaps spread less than exponential ones (variance 0.15 of the mean squared, not 1), so
+    // fewer arrivals find the server busy and they wait about half as long.
+    assert!(sigma < rho && (sigma - 0.672).abs() < 1e-3, "{sigma}");
+    assert!((wait - 2.05).abs() < 0.01, "{wait}");
+    let mut e = open_scenario("zeta-queue.bpmn", Some("zeta"), experiment.clone());
+    let r = ok(&mut e, "run", json!({}));
+    covers(&r, "server", "mean_wait", wait);
+    covers(&r, "server", "mean_queue_length", lambda * wait);
+    covers(&r, "server", "utilisation", rho);
+
+    // The same mean gap with exponential gaps: σ = ρ, and Wq = ρ / (μ − λ) = 4 minutes.
+    let m = model_of("zeta-queue.bpmn", Some("poisson"));
+    let poisson_gap = interarrival(&m, "arrivals");
+    assert!((poisson_gap - gap).abs() < 1e-6, "{poisson_gap}");
+    let mut e = open_scenario("zeta-queue.bpmn", Some("poisson"), experiment);
+    let r = ok(&mut e, "run", json!({}));
+    covers(&r, "server", "mean_wait", rho / (mu - lambda));
+    covers(&r, "server", "utilisation", rho);
 }

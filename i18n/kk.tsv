@@ -940,7 +940,6 @@ unit	yr	ж.
 	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	Бұл – сіздің алғашқы модельіңіз. «Нәтижелер» бөлімінің алғашқы жолдары іске қосу нені тапқанын айтады; «Көмек» ▸ «Нәтижелер нені білдіреді» әр санды түсіндіреді.
 # Which inputs matter in the Monte Carlo results (ROADMAP M4.1, part 3a)
 	Which inputs matter	Қай кіріс шамалар маңызды
-	{output} depends most on {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile.	{output} ең көп {input} шамасына тәуелді: {input} өзінің 10-шы процентилінен 90-шы процентиліне өткенде, ол {low}-дан {high}-ге дейін өзгереді.
 	Each input from its 10th to its 90th percentile, with the others at their medians	Әр кіріс шама 10-шы процентилінен 90-шы процентиліне дейін, қалғандары медианасында
 	Base {value}	Базалық мән {value}
 	A correlated input's figure includes the effect of the inputs it is correlated with.	Корреляцияланған кіріс шаманың көрсеткіші онымен корреляцияланған кіріс шамалардың әсерін қамтиды.
@@ -1369,7 +1368,6 @@ unit	yr	ж.
 	The model: its settings and variables	Модель: оның параметрлері мен айнымалылары
 	System dynamics model	Жүйелік динамика моделі
 	Variables	Айнымалылар
-	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	Бұл модельді пәрмендермен өзгертуге болады: агент арқылы MCP серверімен немесе пәрмен жолынан. Кенепте өңдеу кейін қосылады.
 	From {start} to {stop}, in steps of {dt}, by the {method} method.	{start} бастап {stop} дейін, {dt} қадаммен, {method} әдісімен.
 	Notes from the file	Файлдағы ескертпелер
 	Equation	Теңдеу
@@ -1420,8 +1418,36 @@ unit	yr	ж.
 	The estimated chance that {output} is more than {value} is {percent}.	{output} {value} мәнінен үлкен болуының бағалық ықтималдығы {percent}.
 	The estimated chance that {output} is less than {value} is {percent}.	{output} {value} мәнінен кіші болуының бағалық ықтималдығы {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	Олардың аралығының ені жоқ, бұл ешбір бағада болмайды, сондықтан қарапайым нәтиже қалады.
+	{output} changes most with {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile, the other inputs at their medians.	{output} ең көп {input} бойынша өзгереді: {input} өзінің 10-шы процентилінен 90-шы процентиліне өткенде ол {low} мәнінен {high} мәніне өтеді, басқа кірістер медианасында тұрады.
+	No variation was observed, so there is no interval for the mean; a rare event the trials did not reach could still move it.	Ешқандай өзгерту байқалмады, сондықтан орташа үшін аралық жоқ; сынақтар жетпеген сирек оқиға оны әлі де жылжыта алады.
+	They narrowed the interval by {percent}, but a mean given for a control is far from the trials' mean, so the plain result stands.	Олар аралықты {percent} тарылтты, бірақ бақылауға берілген орташа сынақтардың орташасынан алыс, сондықтан қарапайым нәтиже қалады.
+	The output does not move in one direction with {inputs} (its value at the median is outside its values at the 10th and 90th percentiles), so the swing understates the effect.	Шығыс {inputs} бойынша бір бағытта қозғалмайды (оның медианадағы мәні 10-шы және 90-шы процентильдегі мәндерінің сыртында), сондықтан ауытқу әсерді төмен бағалайды.
+	Did not open {file}: a different model was opened in the meantime	{file} ашылмады: осы аралықта басқа модель ашылды
+	Select	Таңдау
+	Link	Сілтеме
+	Initial value	Бастапқы мән
+	Click the diagram to place a stock.	Қорды орналастыру үшін диаграмманы басыңыз.
+	Click the diagram to place an auxiliary.	Көмекші айнымалыны орналастыру үшін диаграмманы басыңыз.
+	Drag from a stock, or from empty space, to another stock or empty space to draw a flow.	Ағынды сызу үшін қордан немесе бос орыннан басқа қорға немесе бос орынға сүйреңіз.
+	Drag from one variable to another to show that the second uses the first.	Екіншісі біріншісін пайдаланатынын көрсету үшін бір айнымалыдан екіншісіне сүйреңіз.
+	Click a variable to select it and edit it here. Drag a variable to move it.	Айнымалыны таңдап, осында өңдеу үшін оны басыңыз. Жылжыту үшін сүйреңіз.
+	Moved {name}	{name} жылжытылды
+	Added {kind}: {name}	Қосылды: {kind} {name}
+	Edited {name}	{name} өңделді
+	Removed {name}	{name} жойылды
+	Linked {from} to {to}	{from} мен {to} байланыстырылды
+	Add Variable	Айнымалы қосу
+	Edit Variable	Айнымалыны өзгерту
+	Remove Variable	Айнымалыны жою
+	Simulation Settings	Модельдеу параметрлері
+	Change Diagram	Диаграмманы өзгерту
+	You can change this model on the Diagram tab, or with commands, from an agent through the MCP server or from the command line.	Бұл модельді Диаграмма қойындысында немесе пәрмендермен, агенттен MCP сервері арқылы немесе пәрмен жолынан өзгертуге болады.
 	Inconclusive at current precision	Қазіргі дәлдікте анық емес
 	No difference detected	Айырмашылық табылмады
 	Agrees within ±{tolerance}	±{tolerance} шегінде сәйкес келеді
 	This is not evidence of agreement: set a tolerance to test for it.	Бұл сәйкестіктің дәлелі емес: тексеру үшін рұқсат етілген ауытқуды орнатыңыз.
 	Tolerance (0 for none)	Рұқсат етілген ауытқу (0 — жоқ)
+	Arrivals that keep their distance	Қашықтық сақтайтын келулер
+	One server fed by the gaps between zeros of the Riemann zeta function, beside Poisson arrivals at the same rate.	Римандық дзета-функцияның нөлдері арасындағы аралықтармен келулер қабылдайтын бір қызмет көрсетуші, сондай жиіліктегі Пуассон келулерімен қатар.
+	Do arrivals that avoid bunching make a shorter queue?	Шоғырланудан қашатын келулер кезекті қысқартады ма?
+	Same average rate, half the wait: arrivals that repel one another bunch up less than random ones.	Орташа жиілік сол, күту екі есе аз: бір-бірін тебетін келулер кездейсоқ келулерге қарағанда аз шоғырланады.

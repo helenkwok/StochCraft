@@ -940,7 +940,6 @@ unit	yr	г.
 	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	Это ваша первая модель. Первые строки раздела Результаты говорят, что обнаружил запуск; Справка ▸ Что означают результаты объясняет каждое число.
 # Which inputs matter in the Monte Carlo results (ROADMAP M4.1, part 3a)
 	Which inputs matter	Какие входные величины важны
-	{output} depends most on {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile.	{output} больше всего зависит от величины {input}: оно меняется от {low} до {high}, когда {input} меняется от своего 10-го до 90-го процентиля.
 	Each input from its 10th to its 90th percentile, with the others at their medians	Каждая входная величина от 10-го до 90-го процентиля, остальные на медианах
 	Base {value}	Базовое значение {value}
 	A correlated input's figure includes the effect of the inputs it is correlated with.	Число для коррелированной входной величины включает влияние величин, с которыми она коррелирует.
@@ -1369,7 +1368,6 @@ unit	yr	г.
 	The model: its settings and variables	Модель: её настройки и переменные
 	System dynamics model	Модель системной динамики
 	Variables	Переменные
-	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	Эту модель можно изменять командами: из агента через сервер MCP или из командной строки. Редактирование на холсте появится позже.
 	From {start} to {stop}, in steps of {dt}, by the {method} method.	От {start} до {stop}, шагами по {dt}, методом {method}.
 	Notes from the file	Заметки из файла
 	Equation	Уравнение
@@ -1420,8 +1418,36 @@ unit	yr	г.
 	The estimated chance that {output} is more than {value} is {percent}.	Оценочная вероятность того, что {output} больше {value}, составляет {percent}.
 	The estimated chance that {output} is less than {value} is {percent}.	Оценочная вероятность того, что {output} меньше {value}, составляет {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	Их интервал не имеет ширины, чего не бывает у оценки, поэтому остаётся обычный результат.
+	{output} changes most with {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile, the other inputs at their medians.	{output} сильнее всего меняется с {input}: он идёт от {low} до {high}, когда {input} идёт от своего 10-го до своего 90-го процентиля, а остальные входы стоят на своих медианах.
+	No variation was observed, so there is no interval for the mean; a rare event the trials did not reach could still move it.	Изменчивость не наблюдалась, поэтому интервала для среднего нет; редкое событие, до которого испытания не дошли, всё же могло бы его сдвинуть.
+	They narrowed the interval by {percent}, but a mean given for a control is far from the trials' mean, so the plain result stands.	Они сузили интервал на {percent}, но среднее, заданное для контрольной величины, далеко от среднего испытаний, поэтому остаётся обычный результат.
+	The output does not move in one direction with {inputs} (its value at the median is outside its values at the 10th and 90th percentiles), so the swing understates the effect.	Выход не движется в одном направлении с {inputs} (его значение на медиане лежит вне его значений на 10-м и 90-м процентилях), поэтому размах занижает эффект.
+	Did not open {file}: a different model was opened in the meantime	{file} не открыт: тем временем была открыта другая модель
+	Select	Выбрать
+	Link	Связь
+	Initial value	Начальное значение
+	Click the diagram to place a stock.	Щёлкните по диаграмме, чтобы поместить запас.
+	Click the diagram to place an auxiliary.	Щёлкните по диаграмме, чтобы поместить вспомогательную переменную.
+	Drag from a stock, or from empty space, to another stock or empty space to draw a flow.	Перетащите от запаса или пустого места к другому запасу или пустому месту, чтобы нарисовать поток.
+	Drag from one variable to another to show that the second uses the first.	Перетащите от одной переменной к другой, чтобы показать, что вторая использует первую.
+	Click a variable to select it and edit it here. Drag a variable to move it.	Щёлкните по переменной, чтобы выбрать её и изменить здесь. Перетащите переменную, чтобы переместить её.
+	Moved {name}	Перемещено: {name}
+	Added {kind}: {name}	Добавлено: {kind} {name}
+	Edited {name}	Изменено: {name}
+	Removed {name}	Удалено: {name}
+	Linked {from} to {to}	{from} связано с {to}
+	Add Variable	Добавить переменную
+	Edit Variable	Изменить переменную
+	Remove Variable	Удалить переменную
+	Simulation Settings	Параметры моделирования
+	Change Diagram	Изменить диаграмму
+	You can change this model on the Diagram tab, or with commands, from an agent through the MCP server or from the command line.	Эту модель можно изменить на вкладке «Диаграмма» или командами, из агента через сервер MCP или из командной строки.
 	Inconclusive at current precision	Неопределённо при текущей точности
 	No difference detected	Различие не обнаружено
 	Agrees within ±{tolerance}	Совпадает в пределах ±{tolerance}
 	This is not evidence of agreement: set a tolerance to test for it.	Это не доказательство совпадения: задайте допуск, чтобы его проверить.
 	Tolerance (0 for none)	Допуск (0 — нет)
+	Arrivals that keep their distance	Поступления, которые держат дистанцию
+	One server fed by the gaps between zeros of the Riemann zeta function, beside Poisson arrivals at the same rate.	Один обслуживающий прибор, на который заявки поступают через промежутки между нулями дзета-функции Римана, рядом с пуассоновскими поступлениями той же интенсивности.
+	Do arrivals that avoid bunching make a shorter queue?	Дают ли поступления, избегающие скучивания, более короткую очередь?
+	Same average rate, half the wait: arrivals that repel one another bunch up less than random ones.	Та же средняя интенсивность, ожидание вдвое меньше: поступления, которые отталкиваются друг от друга, скучиваются реже случайных.

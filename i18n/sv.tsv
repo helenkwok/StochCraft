@@ -940,7 +940,6 @@ unit	yr	år
 	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	Det här är din första modell. De första raderna i Resultat berättar vad körningen kom fram till; Hjälp ▸ Vad resultaten betyder förklarar varje siffra.
 # Which inputs matter in the Monte Carlo results (ROADMAP M4.1, part 3a)
 	Which inputs matter	Vilka indata som spelar roll
-	{output} depends most on {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile.	{output} beror mest på {input}: den går från {low} till {high} när {input} går från sin 10:e till sin 90:e percentil.
 	Each input from its 10th to its 90th percentile, with the others at their medians	Varje indata från sin 10:e till sin 90:e percentil, med de andra vid sina medianer
 	Base {value}	Basvärde {value}
 	A correlated input's figure includes the effect of the inputs it is correlated with.	Siffran för korrelerade indata omfattar effekten av de indata den är korrelerad med.
@@ -1369,7 +1368,6 @@ unit	yr	år
 	The model: its settings and variables	Modellen: dess inställningar och variabler
 	System dynamics model	Systemdynamisk modell
 	Variables	Variabler
-	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	Du kan ändra den här modellen med kommandon, från en agent via MCP-servern eller från kommandoraden. Redigering på arbetsytan kommer härnäst.
 	From {start} to {stop}, in steps of {dt}, by the {method} method.	Från {start} till {stop}, i steg om {dt}, med {method}-metoden.
 	Notes from the file	Anteckningar från filen
 	Equation	Ekvation
@@ -1420,8 +1418,36 @@ unit	yr	år
 	The estimated chance that {output} is more than {value} is {percent}.	Den uppskattade sannolikheten att {output} är över {value} är {percent}.
 	The estimated chance that {output} is less than {value} is {percent}.	Den uppskattade sannolikheten att {output} är under {value} är {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	Deras intervall har ingen bredd, vilket ingen skattning har, så det vanliga resultatet står kvar.
+	{output} changes most with {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile, the other inputs at their medians.	{output} ändras mest med {input}: den går från {low} till {high} när {input} går från sin 10:e till sin 90:e percentil, med de andra indata på sina medianer.
+	No variation was observed, so there is no interval for the mean; a rare event the trials did not reach could still move it.	Ingen variation observerades, så det finns inget intervall för medelvärdet; en sällsynt händelse som försöken inte nådde skulle ändå kunna flytta det.
+	They narrowed the interval by {percent}, but a mean given for a control is far from the trials' mean, so the plain result stands.	De smalnade av intervallet med {percent}, men ett medelvärde angivet för en kontroll ligger långt från försökens medelvärde, så det vanliga resultatet gäller.
+	The output does not move in one direction with {inputs} (its value at the median is outside its values at the 10th and 90th percentiles), so the swing understates the effect.	Utdata rör sig inte i en riktning med {inputs} (värdet vid medianen ligger utanför värdena vid 10:e och 90:e percentilen), så utslaget underskattar effekten.
+	Did not open {file}: a different model was opened in the meantime	{file} öppnades inte: en annan modell öppnades under tiden
+	Select	Markera
+	Link	Länk
+	Initial value	Startvärde
+	Click the diagram to place a stock.	Klicka i diagrammet för att placera ett lager.
+	Click the diagram to place an auxiliary.	Klicka i diagrammet för att placera en hjälpvariabel.
+	Drag from a stock, or from empty space, to another stock or empty space to draw a flow.	Dra från ett lager, eller från tom yta, till ett annat lager eller en tom yta för att rita ett flöde.
+	Drag from one variable to another to show that the second uses the first.	Dra från en variabel till en annan för att visa att den andra använder den första.
+	Click a variable to select it and edit it here. Drag a variable to move it.	Klicka på en variabel för att markera den och redigera den här. Dra en variabel för att flytta den.
+	Moved {name}	Flyttade {name}
+	Added {kind}: {name}	Lade till {kind}: {name}
+	Edited {name}	Ändrade {name}
+	Removed {name}	Tog bort {name}
+	Linked {from} to {to}	Länkade {from} till {to}
+	Add Variable	Lägg till variabel
+	Edit Variable	Redigera variabel
+	Remove Variable	Ta bort variabel
+	Simulation Settings	Simuleringsinställningar
+	Change Diagram	Ändra diagram
+	You can change this model on the Diagram tab, or with commands, from an agent through the MCP server or from the command line.	Du kan ändra modellen på fliken Diagram, eller med kommandon, från en agent via MCP-servern eller från kommandoraden.
 	Inconclusive at current precision	Inte avgörande vid nuvarande precision
 	No difference detected	Ingen skillnad påvisad
 	Agrees within ±{tolerance}	Stämmer inom ±{tolerance}
 	This is not evidence of agreement: set a tolerance to test for it.	Detta är inget bevis på överensstämmelse: ange en tolerans för att testa det.
 	Tolerance (0 for none)	Tolerans (0 för ingen)
+	Arrivals that keep their distance	Ankomster som håller avstånd
+	One server fed by the gaps between zeros of the Riemann zeta function, beside Poisson arrivals at the same rate.	En betjäning som matas av avstånden mellan nollställena till Riemanns zetafunktion, bredvid Poisson-ankomster med samma takt.
+	Do arrivals that avoid bunching make a shorter queue?	Ger ankomster som undviker att klumpa ihop sig en kortare kö?
+	Same average rate, half the wait: arrivals that repel one another bunch up less than random ones.	Samma genomsnittliga takt, halva väntetiden: ankomster som stöter bort varandra klumpar ihop sig mindre än slumpmässiga.

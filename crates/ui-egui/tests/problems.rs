@@ -276,3 +276,35 @@ fn run_reaches_a_blocks_error_after_the_models_own() {
         assert_eq!(seen[1].as_deref(), Some("serve"));
     }
 }
+
+#[test]
+fn a_file_read_with_errors_does_not_run_in_the_window() {
+    let path = concat!(env!("CARGO_MANIFEST_DIR"), "/../../tests/models/mm1.bpmn");
+    let text = std::fs::read_to_string(path).unwrap_or_default();
+    // A processing-time expression, which the reader cannot use: it reads as a time of zero.
+    let altered = text.replacen(
+        "<bpsim:NegativeExponentialDistribution mean=\"1\"/>",
+        "<bpsim:ExpressionParameter value=\"1 + 9\"/>",
+        1,
+    );
+    assert_ne!(text, altered, "the fixture changed");
+    let mut h = Harness::builder()
+        .with_size(egui::vec2(1200.0, 900.0))
+        .build_ui_state(
+            |ui, app: &mut App| app.ui(ui),
+            english(App::new(Platform::DESKTOP)),
+        );
+    h.run();
+    h.state_mut()
+        .open_file("expression.bpmn", altered.as_bytes());
+    settle(&mut h);
+    h.state_mut().run_command(&CommandRef::new(commands::RUN));
+    settle(&mut h);
+    assert!(!h.state().is_running());
+    assert!(h.state().results().is_none());
+    assert!(
+        h.state().status().contains("could not read"),
+        "{}",
+        h.state().status()
+    );
+}

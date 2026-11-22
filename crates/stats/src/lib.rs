@@ -240,6 +240,38 @@ impl std::fmt::Display for Summary {
     }
 }
 
+/// Machine-checked properties (Kani, `cargo kani -p stochcraft-stats`; see docs/developers.md).
+#[cfg(kani)]
+mod proofs {
+    use super::*;
+
+    /// The critical value is defined and is at least the normal limit for 1 to 30 degrees of
+    /// freedom (the table range), and undefined for none.
+    #[kani::proof]
+    fn the_critical_value_is_defined_from_one_degree_of_freedom() {
+        let df: u64 = kani::any();
+        kani::assume((1..=30).contains(&df));
+        let t = t_critical_95(df);
+        assert!(t.is_some_and(|t| t.is_finite() && t >= 1.96));
+        assert!(t_critical_95(0).is_none());
+    }
+
+    /// The half-width of two replications' 95% interval is finite and not negative, and the mean
+    /// is finite, for any finite results of moderate size (two replications, the smallest case
+    /// with an interval).
+    #[kani::proof]
+    #[kani::unwind(4)]
+    fn two_replications_give_a_finite_non_negative_half_width() {
+        let (a, b): (f64, f64) = (kani::any(), kani::any());
+        kani::assume(a.abs() <= 1.0e6 && b.abs() <= 1.0e6);
+        let summary = Summary::of(&[a, b]);
+        assert!(summary.is_some_and(|s| s.n == 2
+            && s.mean.is_finite()
+            && s.half_width.is_finite()
+            && s.half_width >= 0.0));
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

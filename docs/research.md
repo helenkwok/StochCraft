@@ -336,7 +336,13 @@ The methods of M2.8, each implemented from its published description:
   Beckman and W. J. Conover, "A comparison of three methods for selecting values of input
   variables in the analysis of output from a computer code", *Technometrics* 21(2), 1979,
   239–245, construct it, and each factor is judged by its rank (Spearman) correlation with each
-  result.
+  result; a Sobol design takes the first 2^m points of I. M. Sobol's sequence (*USSR
+  Computational Mathematics and Mathematical Physics* 7(4), 1967, 86–112, with the direction
+  numbers of S. Joe and F. Y. Kuo, *SIAM Journal on Scientific Computing* 30(5), 2008,
+  2635–2654), several independent batches each given a random digital shift (A. B. Owen,
+  "Randomly permuted (t, m, s)-nets and (t, s)-sequences", 1995; P. L'Ecuyer and C. Lemieux,
+  "Recent advances in randomized quasi-Monte Carlo methods", 2002), so a mean has a t interval
+  across the batches.
 - **Elasticities** are central differences, one parameter at a time: the relative change in a
   result over the relative change in the parameter. For the M/M/1 time in system
   W = s / (1 − s/a), with service time s and time between arrivals a, they are 1 / (1 − ρ) and
