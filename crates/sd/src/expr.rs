@@ -202,9 +202,20 @@ fn lex(text: &str) -> Result<Vec<Tok>, String> {
     Ok(out)
 }
 
+/// The deepest an equation may nest, in parentheses, signs, `IF`s and calls, and the tallest
+/// tree it may build (a long run of `+` builds a tree as tall as the run is long). The same
+/// limit as for the elements of a model file, so that reading, compiling, evaluating and
+/// dropping an equation stay within a small stack, whatever the file holds.
+const MAX_DEPTH: usize = 256;
+
+/// A parsed tree and its height (a name or number has height 1).
+type Node = (Ast, usize);
+
 struct Parser {
     toks: Vec<Tok>,
     i: usize,
+    /// How many of the parser's own nested calls are open now.
+    nest: usize,
 }
 
 impl Parser {
@@ -229,27 +240,48 @@ impl Parser {
         }
     }
 
-    fn or(&mut self) -> Result<Ast, String> {
+    /// Opens one more nested call, or says the equation nests too deeply.
+    fn enter(&mut self) -> Result<(), String> {
+        self.nest += 1;
+        if self.nest > MAX_DEPTH {
+            Err(too_deep(self.i))
+        } else {
+            Ok(())
+        }
+    }
+
+    /// The node for `op` over two operands, if the tree stays within [`MAX_DEPTH`].
+    fn bin(&self, op: BinOp, l: Node, r: Node) -> Result<Node, String> {
+        let h = l.1.max(r.1) + 1;
+        if h > MAX_DEPTH {
+            return Err(too_deep(self.i));
+        }
+        Ok((Ast::Bin(op, Box::new(l.0), Box::new(r.0)), h))
+    }
+
+    fn or(&mut self) -> Result<Node, String> {
+        self.enter()?;
         let mut l = self.and()?;
         while self.word("or") {
             self.bump();
             let r = self.and()?;
-            l = Ast::Bin(BinOp::Or, Box::new(l), Box::new(r));
+            l = self.bin(BinOp::Or, l, r)?;
         }
+        self.nest -= 1;
         Ok(l)
     }
 
-    fn and(&mut self) -> Result<Ast, String> {
+    fn and(&mut self) -> Result<Node, String> {
         let mut l = self.equality()?;
         while self.word("and") {
             self.bump();
             let r = self.equality()?;
-            l = Ast::Bin(BinOp::And, Box::new(l), Box::new(r));
+            l = self.bin(BinOp::And, l, r)?;
         }
         Ok(l)
     }
 
-    fn equality(&mut self) -> Result<Ast, String> {
+    fn equality(&mut self) -> Result<Node, String> {
         let mut l = self.relation()?;
         loop {
             let op = match self.peek() {
@@ -259,11 +291,11 @@ impl Parser {
             };
             self.bump();
             let r = self.relation()?;
-            l = Ast::Bin(op, Box::new(l), Box::new(r));
+            l = self.bin(op, l, r)?;
         }
     }
 
-    fn relation(&mut self) -> Result<Ast, String> {
+    fn relation(&mut self) -> Result<Node, String> {
         let mut l = self.additive()?;
         loop {
             let op = match self.peek() {
@@ -275,11 +307,11 @@ impl Parser {
             };
             self.bump();
             let r = self.additive()?;
-            l = Ast::Bin(op, Box::new(l), Box::new(r));
+            l = self.bin(op, l, r)?;
         }
     }
 
-    fn additive(&mut self) -> Result<Ast, String> {
+    fn additive(&mut self) -> Result<Node, String> {
         let mut l = self.multiplicative()?;
         loop {
             let op = match self.peek() {
@@ -289,11 +321,11 @@ impl Parser {
             };
             self.bump();
             let r = self.multiplicative()?;
-            l = Ast::Bin(op, Box::new(l), Box::new(r));
+            l = self.bin(op, l, r)?;
         }
     }
 
-    fn multiplicative(&mut self) -> Result<Ast, String> {
+    fn multiplicative(&mut self) -> Result<Node, String> {
         let mut l = self.unary()?;
         loop {
             let op = match self.peek() {
@@ -304,44 +336,57 @@ impl Parser {
             };
             self.bump();
             let r = self.unary()?;
-            l = Ast::Bin(op, Box::new(l), Box::new(r));
+            l = self.bin(op, l, r)?;
         }
     }
 
-    fn unary(&mut self) -> Result<Ast, String> {
+    fn unary(&mut self) -> Result<Node, String> {
         match self.peek() {
             Some(Tok::Minus) => {
                 self.bump();
-                Ok(Ast::Neg(Box::new(self.unary()?)))
+                let (e, h) = self.nested_unary()?;
+                Ok((Ast::Neg(Box::new(e)), h + 1))
             }
             Some(Tok::Plus) => {
                 self.bump();
-                self.unary()
+                self.nested_unary()
             }
             Some(Tok::Ident(s)) if s == "not" => {
                 self.bump();
-                Ok(Ast::Not(Box::new(self.unary()?)))
+                let (e, h) = self.nested_unary()?;
+                Ok((Ast::Not(Box::new(e)), h + 1))
             }
             _ => self.power(),
         }
     }
 
-    fn power(&mut self) -> Result<Ast, String> {
+    /// An operand of a sign or of `NOT`: one call deeper, and no taller than the limit.
+    fn nested_unary(&mut self) -> Result<Node, String> {
+        self.enter()?;
+        let n = self.unary()?;
+        self.nest -= 1;
+        if n.1 >= MAX_DEPTH {
+            return Err(too_deep(self.i));
+        }
+        Ok(n)
+    }
+
+    fn power(&mut self) -> Result<Node, String> {
         let base = self.primary()?;
         if self.peek() == Some(&Tok::Caret) {
             self.bump();
             // Right to left, and the exponent may carry a sign: 2^-3^2 is 2^(-(3^2)).
-            let exp = self.unary()?;
-            return Ok(Ast::Bin(BinOp::Pow, Box::new(base), Box::new(exp)));
+            let exp = self.nested_unary()?;
+            return self.bin(BinOp::Pow, base, exp);
         }
         Ok(base)
     }
 
-    fn primary(&mut self) -> Result<Ast, String> {
+    fn primary(&mut self) -> Result<Node, String> {
         match self.peek().cloned() {
             Some(Tok::Num(v)) => {
                 self.bump();
-                Ok(Ast::Num(v))
+                Ok((Ast::Num(v), 1))
             }
             Some(Tok::LParen) => {
                 self.bump();
@@ -351,30 +396,37 @@ impl Parser {
             }
             Some(Tok::Ident(s)) if s == "if" => {
                 self.bump();
-                let c = self.or()?;
+                let (c, hc) = self.or()?;
                 if !self.word("then") {
                     return Err("`THEN` was expected".to_owned());
                 }
                 self.bump();
-                let a = self.or()?;
+                let (a, ha) = self.or()?;
                 if !self.word("else") {
                     return Err("`ELSE` was expected".to_owned());
                 }
                 self.bump();
-                let b = self.or()?;
-                Ok(Ast::If(Box::new(c), Box::new(a), Box::new(b)))
+                let (b, hb) = self.or()?;
+                let h = hc.max(ha).max(hb) + 1;
+                if h > MAX_DEPTH {
+                    return Err(too_deep(self.i));
+                }
+                Ok((Ast::If(Box::new(c), Box::new(a), Box::new(b)), h))
             }
             Some(Tok::Ident(s)) => {
                 self.bump();
                 if self.peek() == Some(&Tok::LParen) {
                     self.bump();
                     let mut args = Vec::new();
+                    let mut h = 1;
                     if self.peek() == Some(&Tok::RParen) {
                         self.bump();
-                        return Ok(Ast::Call(s, args));
+                        return Ok((Ast::Call(s, args), h));
                     }
                     loop {
-                        args.push(self.or()?);
+                        let (a, ha) = self.or()?;
+                        h = h.max(ha + 1);
+                        args.push(a);
                         match self.peek() {
                             Some(Tok::Comma) => self.bump(),
                             Some(Tok::RParen) => {
@@ -384,9 +436,12 @@ impl Parser {
                             _ => return Err("`,` or `)` was expected".to_owned()),
                         }
                     }
-                    Ok(Ast::Call(s, args))
+                    if h > MAX_DEPTH {
+                        return Err(too_deep(self.i));
+                    }
+                    Ok((Ast::Call(s, args), h))
                 } else {
-                    Ok(Ast::Name(s))
+                    Ok((Ast::Name(s), 1))
                 }
             }
             Some(_) => Err("a value was expected".to_owned()),
@@ -395,14 +450,26 @@ impl Parser {
     }
 }
 
-/// Reads an equation. The error says what was expected.
+fn too_deep(token: usize) -> String {
+    format!(
+        "the equation nests more than {MAX_DEPTH} deep (near token {})",
+        token + 1
+    )
+}
+
+/// Reads an equation. The error says what was expected. An equation may nest at most
+/// [`MAX_DEPTH`] deep.
 pub fn parse(text: &str) -> Result<Ast, String> {
     let toks = lex(text)?;
     if toks.is_empty() {
         return Err("the equation is empty".to_owned());
     }
-    let mut p = Parser { toks, i: 0 };
-    let e = p.or()?;
+    let mut p = Parser {
+        toks,
+        i: 0,
+        nest: 0,
+    };
+    let (e, _) = p.or()?;
     if p.peek().is_some() {
         return Err("something follows the end of the equation".to_owned());
     }
@@ -475,5 +542,35 @@ mod tests {
         assert!(parse("(1").is_err());
         assert!(parse("").is_err());
         assert!(parse("1 2").is_err());
+    }
+
+    /// Parentheses, signs, `NOT`, `IF`, calls, powers and long runs of one operator all nest
+    /// without bound in a file, and must be refused, not overflow the stack.
+    #[test]
+    fn nesting_is_limited() {
+        let n = 100_000;
+        let deep = [
+            format!("{}1{}", "(".repeat(n), ")".repeat(n)),
+            format!("{}1", "-".repeat(n)),
+            format!("{}1", "+".repeat(n)),
+            format!("{}1", "not ".repeat(n)),
+            format!("1{}", "+1".repeat(n)),
+            format!("1{}", " and 1".repeat(n)),
+            format!("{}2", "2^".repeat(n)),
+            format!("{}1", "if 1 then 1 else ".repeat(n)),
+            format!("{}1{}", "min(1, ".repeat(n), ")".repeat(n)),
+        ];
+        for src in &deep {
+            assert!(
+                parse(src).is_err_and(|m| m.contains("nests more than")),
+                "{}",
+                &src[..20]
+            );
+        }
+        // Deep, but within the limit: still read.
+        let ok = format!("{}1{}", "(".repeat(200), ")".repeat(200));
+        assert!(parse(&ok).is_ok());
+        assert!(parse(&format!("1{}", "+1".repeat(200))).is_ok());
+        assert!(parse(&format!("{}1", "-".repeat(200))).is_ok());
     }
 }
