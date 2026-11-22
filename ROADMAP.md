@@ -1,12 +1,14 @@
 # StochCraft roadmap
 
-Where StochCraft is going next and in what order. Eight milestones: **M1** model files, the
+Where StochCraft is going next and in what order. Nine milestones: **M1** model files, the
 engine and a command line; **M2** the flow logic a factory or logistics model needs; **M3** the
 desktop app (and the browser app built from it); **M4** Monte Carlo, system dynamics, agents and
 hybrid models; **M5** transport and layout, led by a reference model, the sorter; **M6** Python
 and plugins; **M7** industrial engineering (line balancing, material flow on the layout,
 inventory, sharing a model); **M8** optimisation (a search over several decisions or a job
-order, then the best design with how sure it is; planned, #272). M1 and M3.1–M3.6 are done; M3.7, a redesign that makes results
+order, then the best design with how sure it is; planned, #272); **M9** open search (many
+decisions, four objectives or more, and optimisers of the user's own driving the runs, with
+answers that say what they do not prove). M1 and M3.1–M3.6 are done; M3.7, a redesign that makes results
 answer the question, has steps 1–5 done, and M5's sorter is built alongside it (D21). M2.1–M2.8
 are done, and so is M2.10 (abandonment and balking) apart from the gaps listed in it. M2.11
 (changeovers and lean measures) has its changeovers, product-type times, takt and cycle times,
@@ -2573,11 +2575,10 @@ what it finds. Each part below lists what that means for its kind of model.
 
 **Order.** After the redesign of the results and the canvas, because all three need it (results
 over time, a second kind of diagram on the canvas). Then M4.1, the smallest and the one that
-reuses most of what exists; then M4.2 and M4.3 (agents in flows first); then M4.4. Agents in
+reuses most of what exists; then M4.2 and M4.3 (populations first, D34); then M4.4. Agents in
 space are built with M5, which needs the same layout and travel.
 
-M4.1 parts 1, 2, 2b and 3a and its control variates are done, and M4.2 parts 1 and 2 (the `sd` crate, editing and saving, the window, the canvas) are done except arrays, the rate-to-rate lint and docking (below); the rest is not started. D15–D18 are settled; D10–D13 (#71 has
-them) are to settle first.
+M4.1 parts 1, 2, 2b and 3a and its control variates are done, and M4.2 parts 1 and 2 (the `sd` crate, editing and saving, the window, the canvas) are done except arrays, the rate-to-rate lint and docking (below); the rest is not started. D11 and D15–D18 are settled, and D34 sets M4.3's order; D10, D12 and D13 (#71) are for M4.4. M4.3's stages are A1 to A6 below.
 
 ### M4.1 Monte Carlo
 
@@ -2883,22 +2884,29 @@ Chapter references are to Brailsford, Churilov and Dangerfield (eds.),
     teaching example.
 ### M4.3 Agents
 
+**Status:** planned (#283); nothing built yet. D16–D18 settled how state charts are saved and run; D34
+settled the order below.
+
 **What it is:** individuals that each keep their own state and memory and decide what to do
 next, rather than being moved by the process. Three kinds, planned together and built in this
-order:
+order (D34):
 
-1. **Agents in a flow:** today's entities and resources given behaviour. A client that retries
+1. **Populations:** agents outside any flow that meet and influence each other, through a
+   network (who knows whom), through contacts at random, or by place on a grid: product
+   adoption, word of mouth, an epidemic, a workforce, machines that fail and are repaired.
+   Results are counts over time, as in system dynamics, and the classic checks compare the two
+   (D11's clock). First, because it needs only the settled D16–D18, and its checks have exact
+   answers.
+2. **Agents in a flow:** today's entities and resources given behaviour. A client that retries
    with growing back-off and gives up, a patient whose condition worsens while waiting, a
    machine with its own modes. They still pass through the blocks; their state chart decides
-   what they do between and inside them. This is the first step because it builds on the
-   blocks, and it is what the retry-storm and triage cases need.
-2. **Populations:** agents outside any flow that meet and influence each other, through a
-   network (who knows whom) or through contacts at random or by place: product adoption, word of
-   mouth, an epidemic, a workforce. Results are counts over time, as in system dynamics, and
-   the classic checks compare the two (D11's clock).
+   what they do between and inside them. An agent of a population can also enter the flow at a
+   block, go through it, and return to its population when it leaves (#71 §9: entering a flow
+   without a source, removing one given entity). This is what the retry-storm and triage cases
+   need.
 3. **Agents in space:** agents with a position that move: people walking through a building,
    vehicles and robots on a layout. Built with M5, which needs the same layout, distances and
-   travel; continuous space and grids first, the walking of crowds later.
+   travel; continuous space first, the walking of crowds later.
 
 **What Python users already have, and so the minimum:** Mesa gives agents with their own step,
 activation in a fixed or random order, grids, continuous space and networks, a data collector
@@ -2906,7 +2914,7 @@ for any agent or model variable over time, batch runs over parameters, and a bro
 StochCraft matches that and adds:
 
 - **Behaviour without code:** state charts drawn on the canvas, with states, transitions on a
-  timeout (fixed or random), a condition, a message or a rate, and actions in the expression
+  timeout (fixed or random), a rate, a condition or a message, and actions in the expression
   language; no Python.
 - **Time that is exact:** agents act at the times their events fall, on the `des` event list,
   not in fixed steps (a stepped mode is available for models written that way).
@@ -2915,41 +2923,156 @@ StochCraft matches that and adds:
 - **Reproducible:** one random stream per agent population and purpose, so adding an agent does
   not change every other agent's draws.
 
-**Building blocks** (generic terms; what each needs from `des` and `blocks` is in #71 §9):
+**Building blocks** (generic terms):
 
 - **Agent type:** its variables (with BPSim's property types, D3), its state chart, and the
   statistics to collect.
-- **Population:** a number of agents of one type, created at the start, from arrivals, or by
-  other agents; removed when their state chart ends.
-- **State chart:** states nested and in parallel, entry and exit actions, transitions on a
-  timeout, a condition, a message, an arrival rate, or another agent's change; history states.
-- **Messages:** to one agent, to a random one, to neighbours (in the network or within a
-  distance), or to all of a population.
-- **Environment:** a network (random, small-world, scale-free, or read from a file), a grid, or
-  continuous space with M5's layout.
-- **Links to the flow:** an agent enters a block as an entity, waits for a resource, leaves;
-  a block can send an agent a message; a resource unit can be an agent.
-- **Statistics:** counts by state over time, means over a population, and any agent variable.
+- **Population:** a number of agents of one type, created at the start (a count, or one agent
+  per row of a CSV table whose columns set the variables), by an arrival rate, or by other
+  agents; removed when their state chart reaches a final state, or by another agent. An agent
+  can move to another population of the same type.
+- **State chart** (SCXML's semantics, D16–D18):
+  - states nested and in parallel, with entry and exit actions, final states, and shallow and
+    deep history (with no history yet, the history state takes its own default transition,
+    with that transition's target and actions);
+  - a branch point: a transient state whose transitions carry conditions, taken in document
+    order, with at most one default; a branch with no condition true and no default stops the
+    run with the agent's id and the branch named;
+  - internal transitions, which neither exit nor re-enter their state, for background work such
+    as a timer that ticks while the main activity goes on;
+  - the order of actions when a transition is taken: exits from the innermost state out, the
+    transition's action, then entries from the outermost state in (SCXML Appendix D);
+  - transitions on:
+    - a **timeout**, fixed or random, counted from entering the transition's source state;
+    - a **rate**: an exponential timeout. When a variable it reads changes, it is drawn again
+      at the new rate, which is exact because the exponential has no memory. A rate below zero
+      stops the run;
+    - a **condition**, tested after every event the agent handles. A condition that reads
+      another agent or a population's statistic is also tested after every event that changes
+      what it reads: the engine records which populations each condition reads, and tests the
+      agents waiting on them in population, then agent order;
+    - a **message**, matched by its name and, optionally, a condition on its data. A message no
+      transition matches is dropped, and counted, so a model that loses messages says so.
+  - In the file, a timeout or rate is SCXML's own `<send>` on entry with a `<cancel>` on exit;
+    a fixed timeout is a literal `delay` in seconds (the model's time unit converted), a random
+    one a `delayexpr`, and a `stochcraft:` attribute marks a rate so it is drawn again on
+    change. Another SCXML tool reads the chart's structure. Running it there is not promised:
+    the variables, random delays and rates need D17's `stochcraft` data model, and SCXML's
+    `<cancel>` is best effort, so elsewhere a timeout already delivered when its state was left
+    may still arrive. In StochCraft a cancelled send never fires (D18). The window shows each as
+    one transition.
+- **Messages:** to one agent, to a random agent of a population (never the sender), to all of a
+  population, to the agents it is connected to (all, or one at random), or to its grid
+  neighbours. Each is delivered as its own event at the same time, after the current one
+  (D18).
+- **Environment:**
+  - **networks:** random with a given mean degree, ring lattice, small world (Watts and
+    Strogatz 1998), scale free by preferential attachment (Barabási and Albert 1999), all within
+    a distance of positions placed at random in a rectangle, or read from a CSV list of links;
+    links added and removed during a run;
+  - **grids:** cells with Moore or von Neumann neighbours, with or without wrapping at the
+    edges, one agent per cell or many;
+  - continuous space and movement with M5's layout.
+- **Stepped mode** (D18): for models written in steps. Every step the environment's before-step
+  action runs, then every agent's before-step action, then every agent's step action, then the
+  environment's after-step action. The agents run in a fixed or a random order, set openly.
+  For a synchronous update, as cellular automata need, each agent's before-step action reads
+  the state before the step and stores its next value in a variable of its own, and its step
+  action only copies that stored value in; then every agent sees the same state whatever the
+  order. A step action that reads another agent's variables sees whatever that agent has
+  already written this step, so the order shows, and the answer says which order was used.
+- **Statistics:** per population, count, sum, mean, minimum and maximum of an expression, each
+  over the agents that meet a condition (for example the count in each state); recorded over
+  time at a save interval with bands across replications, as system dynamics results are; and
+  any agent's variables for a chosen agent.
+- **Watching:** Watch a run colours agents by state, with words; selecting an agent shows its
+  state, variables and links.
 
 **Engine:** a new L2 crate, `agents`, beside `blocks` and `sd`, all on the `des` clock (D11).
 State charts follow SCXML's semantics: run to completion, a fixed order for conflicting
 transitions, internal events before external ones, which makes each agent deterministic for a
 given stream (W3C SCXML 1.0, §3.13 and Appendix D).
 
-**In the window:** the agent types and their state charts drawn on the canvas with the redesign's
-blocks; populations and the environment set in the inspector; Watch a run shows agents in their
-states (coloured by state, with words), and moving when they have a place.
+**Stages** (one PR each, each with its checks and docs):
 
-**Checks with known answers:**
+- **A1 State charts, model-free** (`agents`): the chart in memory, SCXML's algorithm (macrosteps
+  and microsteps, conflicting transitions (a descendant's before its ancestor's, otherwise by
+  document order), exit and entry sets, history,
+  parallel states, the microstep limit), the data model of D17 over `model::expr`, timeouts and
+  rates on the `des` event list with cancellation, and one agent's random streams.
+  - *Checks:* hand-worked charts for the order of actions (nested exits and entries, a branch,
+    history both shallow and deep, and a history's default target and actions when there is no
+    history yet, a parallel state, an internal transition, and a child's transition chosen over
+    its parent's for the same event even where the parent's comes first in the file), each written as
+    the expected list of actions; a chart that loops in zero time stops at the limit with its
+    path; a timeout fixed at 2 fires at exactly 2; a rate of 3 gives exponential times whose mean
+    and a Kolmogorov–Smirnov test agree with 1/3; a rate drawn again on change matches an
+    exponential at the new rate from the change. Where its licence allows, W3C's SCXML test
+    suite for the features above, fetched in CI at a pinned commit and not committed, as for
+    D14.
+- **A2 Populations and messages** (`agents`): populations created at the start and by rates,
+  removal, messages of every kind above without networks, the statistics over time with their
+  bands, and the stepped mode.
+  - *Checks with exact answers* (finite populations, worked out from their Markov chains rather
+    than the large-population curves, as the Able and Baker check was):
+    - *Independent failures:* 200 agents, each failing at rate 0.1 and never repaired: the count
+      still working at time t is binomial(200, e^(−0.1t)), so its mean and its distribution at
+      t = 5 are exact.
+    - *Bass diffusion as agents:* 1,000 agents, each adopting by advertising at rate p = 0.011,
+      and each adopter sending word-of-mouth messages at rate q = 1.5 to a random other agent,
+      which adopts on receiving one. With k adopters, adoptions happen at rate
+      (N − k)(p + q·k/(N − 1)), a pure-birth chain, so the time until all have adopted has mean
+      Σ 1/λₖ = 8.2502 (standard deviation 0.8905), and the time until half have, 3.3052. The
+      closed-form Bass curve of the same p and q (Bass 1969) reaches one half at 3.2627: the two
+      differ by more than the replications' interval, which shows why the check uses the
+      chain.
+    - *SIR in a well-mixed population:* the exact distribution of the final number ever infected,
+      from the embedded jump chain, for N = 100 with one infective and R₀ = 1.5 (Kermack and
+      McKendrick 1927; Bailey's final size). Its mean, and the share of runs in which the
+      epidemic dies out early, are compared, not the closed-form final size, which holds only
+      for large N and runs that take off.
+    - *A stepped model:* one agent of each colour to start; each step one new agent copies the colour
+      of an agent chosen at random. After n steps the number of new agents of the first colour
+      is exactly uniform on 0, 1, …, n (Pólya's urn; from two of each it would not be), checked by
+      a chi-squared test over the replications.
+    - *Determinism:* adding an agent to a population leaves every other agent's draws as they
+      were.
+- **A3 Networks and grids** (`agents`): the networks and grids above, and messages along them.
+  - *Checks:* a ring lattice of 100 agents with 2 links each side has clustering exactly 0.5
+    (3(k − 2)/(4(k − 1)) with k = 4) and mean shortest path 12.8788 (worked out by breadth-first
+    search); small world with rewiring 0 is the lattice; the random network's mean degree
+    matches its setting; preferential attachment's degree distribution has the power-law tail
+    with exponent 3 within its interval; a Game of Life glider on a wrapped grid returns to its
+    shape moved one cell diagonally every 4 steps, exactly; SIR on a network with every agent
+    linked to every other matches A2's well-mixed answer.
+- **A4 Files, engine, command line:** the SCXML file per agent type and the `stochcraft:`
+  extensions in the BPMN file for populations, the environment and statistics (D16), with the
+  XSD; reading, writing and round trips; engine commands, MCP, the journal and replay; the CLI
+  `run` with results over time; golden digests.
+- **A5 The window:** agent types and their state charts drawn on the canvas with the redesign's
+  blocks; populations, networks and grids set in the properties; charts of the statistics over
+  time with bands; Watch a run as above; strings in all 44 catalogs; the user guide; gallery
+  examples (Bass diffusion, SIR, machines that fail and are repaired), each with its checked
+  answer.
+- **A6 Agents in a flow:** entities with state charts, a population's agent entering and
+  leaving the flow, a block sending an agent a message, a resource unit as an agent (#71 §9).
+  - *Check:* M/M/1 with clients that give up after an exponential patience, the patience now a
+    state chart, against M2.10's M/M/1+M results.
 
-- the SIR epidemic in a large, well-mixed population against its system dynamics equations
-  (Kermack and McKendrick, 1927), and its final size against the closed-form equation;
-- the Bass diffusion model of adoption as agents against its closed-form curve (Bass, *A new
-  product growth for model consumer durables*, Management Science 15(5), 1969);
-- a population of independent agents each failing at a constant rate: the count still working
-  is binomial, exactly;
-- agents in a flow: M/M/1 with clients that give up after an exponential patience against
-  M2.10's M/M/1+M results, now with the patience as a state chart.
+**Not planned here:** continuous space and movement (M5); maps; the walking of crowds;
+inheritance between agent types (a type can be copied); logging every agent's history to a
+database (the statistics and a chosen agent's variables cover the questions asked).
+
+**Sources:** W3C, *State Chart XML (SCXML): State Machine Notation for Control Abstraction*,
+Recommendation, 1 September 2015; F. M. Bass, "A new product growth for model consumer
+durables", *Management Science* 15(5):215–227, 1969; W. O. Kermack, A. G. McKendrick, "A
+contribution to the mathematical theory of epidemics", *Proceedings of the Royal Society A*
+115:700–721, 1927; N. T. J. Bailey, *The Mathematical Theory of Infectious Diseases*, 2nd ed.,
+Griffin, 1975 (the final size of a small epidemic); D. J. Watts, S. H. Strogatz, "Collective
+dynamics of 'small-world' networks", *Nature* 393:440–442, 1998; A.-L. Barabási, R. Albert,
+"Emergence of scaling in random networks", *Science* 286:509–512, 1999; M. A. Janssen,
+*Introduction to Agent-Based Modeling*, 2020 (the classic models taught with agents: cellular
+automata, segregation, diffusion on networks, epidemics, lock-in).
 
 ### M4.4 Hybrid models
 
@@ -4262,7 +4385,8 @@ catalogs.
   and Lendermann 2015): the first need many evaluations, each one replications of a run here,
   and state no probability of a correct selection; MO-COMPASS is proved only to converge
   locally. O5's ε-constraint points keep O2's guarantee point by point. More than three
-  objectives, and a front over job orders, come later.
+  objectives, and a front over job orders, are M9's, with NSGA-II and NSGA-III and an answer
+  that says what they do not prove.
 - **Rinott's procedure and OCBA as the clean-up:** the first was derived for independent
   sampling, and the second states no guaranteed probability of correct selection; KN has both
   properties wanted here.
@@ -4330,6 +4454,14 @@ catalogs.
 - J. R. R. A. Martins, A. Ning, *Engineering Design Optimization*, Cambridge University Press,
   2021, doi 10.1017/9781108980647, chapter 9 (weighted sum, ε-constraint, normal boundary
   intersection, NSGA-II): <https://mdobook.github.io/html/multiobj/>
+- M. Ehrgott, M. Köksalan, M. Kadziński, K. Deb, "Fifty years of multi-objective optimization
+  and decision-making: from mathematical programming to evolutionary computation", *European
+  Journal of Operational Research* 330:1–25, 2026 (§3.2: with whole-number decisions most
+  efficient designs are unsupported, so no weighted sum finds them, as O5 assumes)
+- G. Kirlik, S. Sayın, "A new algorithm for generating all nondominated solutions of
+  multiobjective discrete optimization problems", *European Journal of Operational Research*
+  232(3):479–488, 2014 (considered for three objectives: it needs an exact solver for each
+  point, which a simulation does not have, so O5 keeps its grid of caps)
 - H. Li, L. H. Lee, E. P. Chew, P. Lendermann, "MO-COMPASS: a fast convergent search algorithm for
   multi-objective discrete optimization via simulation", *IIE Transactions* 47(11):1153–1169,
   2015, doi 10.1080/0740817X.2015.1005778 (considered; locally convergent)
@@ -4356,6 +4488,180 @@ catalogs.
 - M. Selmair, G. Monakhov, "Advanced random number implementation techniques: a guide towards
   reliable scenario comparisons in simulation modelling", 2024 (preprint), after M. Selmair,
   "Taking randomness for granted", ECMS 2022, pp. 181–185, doi 10.7148/2022-0181
+
+---
+
+## M9: open search, many objectives, and optimisers of your own
+
+**Status:** planned (#284); nothing built yet.
+
+**Outcome:** what Python users get from Optuna and pymoo, for simulation models, with answers
+that say what they have not proved. M8 searches spaces small enough for a stated probability
+of choosing the best, with at most three objectives. M9 covers what M8 leaves out: many
+continuous, whole-number and named decisions at once; four objectives or more; trade-offs over
+job orders; and an optimiser of the user's own, in Python or any language, driving the runs.
+Where M8 says "with 95% confidence, the best, or within δ of it", M9 says "the best found",
+followed by M8's clean-up of the finalists, which states how sure it is about those.
+
+**The questions it answers:**
+
+- "Which of these twelve settings (speeds, buffer sizes, the routing rule, a mean) give the
+  lowest cost?", where every combination is far beyond any budget.
+- "What are the trade-offs between cost, mean wait, output and energy?" (four objectives).
+- "Which orders of these jobs trade the makespan against the total lateness?"
+- "I already use Optuna (or pymoo, or my own code): can it drive StochCraft's runs?"
+
+**How statistical validity is kept, and what is not claimed:**
+
+- Every candidate runs on the same replications and seed (common random numbers, streams keyed
+  per element and purpose), as in M8, so two candidates are compared replication by
+  replication.
+- **Replications in stages, with racing.** A candidate gets a few replications, then more while
+  it stays in contention. It is dropped early only when a paired interval over the replications
+  it shares with the best so far says it is worse by more than δ. This is racing (Birattari,
+  Stützle, Paquete and Varrentrapp 2002) with a paired t interval rather than their Friedman
+  test, because common random numbers pair the replications; the same idea as Optuna's
+  Wilcoxon pruner.
+- **The clean-up.** With one objective, the k best candidates found are run again on fresh
+  replications that no step of the search used, and KN (M8's O1) selects among them: "of these
+  k, this is the best or within δ of it, with 95% confidence; the search tried 412 candidates
+  and does not prove that none of the others is better." With several objectives, every point
+  of the front found is run again on fresh replications. A point is dropped only if another
+  is better in every objective by a paired interval; points that cannot be told apart in an
+  objective are marked so rather than ranked.
+- **The front's quality** is the hypervolume (Emmerich and Deutz 2018, as in O5), with an
+  interval across batches of replications. The checks also use IGD+ (Ishibuchi, Masuda,
+  Tanigaki and Nojima 2015) against fronts known exactly.
+- **What it never says:** that a design is the best of the whole space, or that the front found
+  is the whole front. Population methods give neither guarantee, which is why M8 does not use
+  them; M9 says so in every answer.
+
+**Methods** (few, each from its paper):
+
+- random and Sobol points (M2.8's Sobol design) as the baselines every other method must beat;
+- CMA-ES (Hansen and Ostermeier 2001) for continuous decisions, with its handling of noisy
+  objectives (Hansen, Niederberger, Guzzella and Koumoutsakos 2009);
+- the tree-structured Parzen estimator (Bergstra, Bardenet, Bengio and Kégl 2011; Watanabe
+  2023) for mixed decisions, with named rules and decisions that apply only when another has a
+  given value;
+- NSGA-II (Deb, Pratap, Agarwal and Meyarivan 2002), with its constrained domination, for two
+  or three objectives, and NSGA-III (Deb and Jain 2014), with Das and Dennis's reference
+  directions (1998), for four or more; for job orders, the order crossover (Davis 1985) and the
+  inversion mutation;
+- **choosing from a front:** the knee, where a little more of one objective costs much of
+  another (Branke, Deb, Dierolf and Osswald 2004); pseudo-weights, each point's position as a
+  share of each objective's range (Deb 2001); and the point nearest a reference point the user
+  sets, by Wierzbicki's achievement function (1980), which also reaches points no weighting
+  does.
+
+**Stages** (one PR each, each with its checks and docs):
+
+- **P1 Evaluate from outside** (`experiment`, engine, CLI, MCP): `experiment.evaluate` takes
+  values of the decisions and a range of replications, and returns each replication's results
+  with their means and intervals, on the model's common random numbers. Replications 1 to 10
+  then 11 to 20 give exactly what 1 to 20 give, so an outside optimiser can add replications in
+  stages and stop early, as a pruner does. The CLI reads decisions and writes results as JSON
+  lines, so any language can drive it; with M6.1's package, a Python function. The user guide
+  has worked examples with Optuna (ask and tell) and with pymoo, run in CI with those packages
+  installed in the CI job only.
+  - *Checks:* the same decisions and seed give identical results; the staged replications equal
+    the whole; an unknown decision or a value out of its range is refused with the decision
+    named; the guide's two examples find the M/M/1 cost optimum of O4 (s = 0.5) within 0.05.
+- **P2 Racing and the clean-up** (`experiment`, model-free): the staged replications, the
+  paired elimination, and the clean-up by KN, for any search, M9's or the user's.
+  - *Checks:* normal slippage configurations as in O1, with independent and with correlated
+    systems: over 1,000 macro-replications the best system is eliminated by racing, or not
+    selected by the clean-up, in no more than 5% (within the binomial band); racing saves runs
+    against running every candidate to the end.
+- **P3 CMA-ES and the tree-structured Parzen estimator** (`experiment`, one objective).
+  - *Checks:* model-free, the sphere and Rosenbrock functions in 5 dimensions with normal noise,
+    each ending within a tolerance of its optimum in at least 95 of 100 seeds (the tolerance set
+    in the PR from a calibration run, and the band binomial); on the O4 M/M/1 cost, within 0.05
+    of s = 0.5; on O4's two servers behind a gateway, the estimator chooses joining the shortest
+    queue over the random split; on O2's two desks, the clean-up's answer is (14, 8) or within
+    δ = 2 an hour of it.
+- **P4 NSGA-II and NSGA-III** (`experiment`, fronts).
+  - *Checks:* ZDT1 (Zitzler, Deb and Thiele 2000), whose front is f₂ = 1 − √f₁, with normal
+    noise, by IGD+ after the clean-up; DTLZ2 with four objectives (Deb, Thiele, Laumanns and
+    Zitzler 2005), whose front is the part of the unit sphere with every objective at least 0,
+    each point's distance from the sphere; O5's two desks, where the front must equal the exact
+    one from Erlang C; and a seven-job, four-machine flow shop with makespan against total flow
+    time, where the front by enumeration of all 5,040 orders is the answer. Each threshold is
+    set in its PR from a calibration run and checked over 100 seeds with a binomial band.
+- **P5 Choosing from a front:** the knee, pseudo-weights and the reference point.
+  - *Checks:* on a front given as points, the knee, the pseudo-weights (summing to 1) and the
+    point nearest a reference point agree with hand-worked values; on O5's front of the two
+    desks, the knee is the total where an extra server first cuts the queue by less than its
+    cost.
+- **P6 The window:** Analysis ▸ Explore, beside M8's Find the best: the method (chosen for the
+  decisions given, or set), the budget, progress (the best by runs used, or the front by
+  generation), the answer in words first, the front as a scatter for two objectives and
+  parallel coordinates for more, the chosen point's design and Apply as one undo step. Strings
+  in all 44 catalogs; the user guide; a gallery example with its checked answer.
+
+**Order:** P1 needs only the engine and can come at any time; it is also how M6.1's Python
+package reaches the runs. P2 shares KN with M8's O1 and follows it. P3 to P6 follow M8's O2,
+whose decisions and costs they reuse.
+
+**Not planned:**
+
+- **Bayesian optimisation by Gaussian processes, and neural surrogates:** heavy, with tuning of
+  their own; the tree-structured Parzen estimator covers the mixed spaces that matter here, and
+  P1 lets a user bring any of them.
+- **Many methods:** pymoo offers dozens. M9 keeps one method per kind of problem, each checked;
+  others come through P1.
+- **Search spread over several machines:** one machine, with its threads.
+- **Measures of which decision matters most** (functional ANOVA of the trials): later, after
+  M2.8's Sobol indices are reused for it.
+
+### Sources
+
+- T. Akiba, S. Sano, T. Yanase, T. Ohta, M. Koyama, "Optuna: a next-generation hyperparameter
+  optimization framework", *Proc. KDD* 2019, pp. 2623–2631, doi 10.1145/3292500.3330701; the
+  tutorial: <https://optuna.readthedocs.io/en/stable/tutorial/index.html> (MIT)
+- J. Blank, K. Deb, "pymoo: multi-objective optimization in Python", *IEEE Access* 8:89497–89509,
+  2020, doi 10.1109/ACCESS.2020.2990567; <https://pymoo.org/> (Apache-2.0)
+- M. Ehrgott, M. Köksalan, M. Kadziński, K. Deb, "Fifty years of multi-objective optimization
+  and decision-making: from mathematical programming to evolutionary computation", *European
+  Journal of Operational Research* 330:1–25, 2026 (the review this plan follows for which
+  methods made the difference)
+- M. Birattari, T. Stützle, L. Paquete, K. Varrentrapp, "A racing algorithm for configuring
+  metaheuristics", *Proc. GECCO* 2002, pp. 11–18
+- N. Hansen, A. Ostermeier, "Completely derandomized self-adaptation in evolution strategies",
+  *Evolutionary Computation* 9(2):159–195, 2001, doi 10.1162/106365601750190398
+- N. Hansen, A. S. P. Niederberger, L. Guzzella, P. Koumoutsakos, "A method for handling
+  uncertainty in evolutionary optimization with an application to feedback control of
+  combustion", *IEEE Transactions on Evolutionary Computation* 13(1):180–197, 2009
+- J. Bergstra, R. Bardenet, Y. Bengio, B. Kégl, "Algorithms for hyper-parameter optimization",
+  *Advances in Neural Information Processing Systems* 24, 2011; S. Watanabe, "Tree-structured
+  Parzen estimator: understanding its algorithm components and their roles for better empirical
+  performance", arXiv:2304.11127, 2023
+- K. Deb, A. Pratap, S. Agarwal, T. Meyarivan, "A fast and elitist multiobjective genetic
+  algorithm: NSGA-II", *IEEE Transactions on Evolutionary Computation* 6(2):182–197, 2002, doi
+  10.1109/4235.996017
+- K. Deb, H. Jain, "An evolutionary many-objective optimization algorithm using
+  reference-point-based nondominated sorting approach, part I", *IEEE Transactions on
+  Evolutionary Computation* 18(4):577–601, 2014, doi 10.1109/TEVC.2013.2281535
+- I. Das, J. E. Dennis, "Normal-boundary intersection: a new method for generating the Pareto
+  surface in nonlinear multicriteria optimization problems", *SIAM Journal on Optimization*
+  8(3):631–657, 1998
+- L. Davis, "Applying adaptive algorithms to epistatic domains", *Proc. IJCAI* 1985, pp. 162–164
+  (the order crossover)
+- J. Branke, K. Deb, H. Dierolf, M. Osswald, "Finding knees in multi-objective optimization",
+  *Parallel Problem Solving from Nature VIII*, LNCS 3242, pp. 722–731, 2004
+- K. Deb, *Multi-Objective Optimization Using Evolutionary Algorithms*, Wiley, 2001
+  (pseudo-weights)
+- A. P. Wierzbicki, "The use of reference objectives in multiobjective optimization", in
+  *Multiple Criteria Decision Making: Theory and Application*, LNEMS 177, Springer, 1980,
+  pp. 468–486
+- E. Zitzler, K. Deb, L. Thiele, "Comparison of multiobjective evolutionary algorithms:
+  empirical results", *Evolutionary Computation* 8(2):173–195, 2000 (ZDT)
+- K. Deb, L. Thiele, M. Laumanns, E. Zitzler, "Scalable test problems for evolutionary
+  multiobjective optimization", in *Evolutionary Multiobjective Optimization*, Springer, 2005,
+  pp. 105–145 (DTLZ)
+- H. Ishibuchi, H. Masuda, Y. Tanigaki, Y. Nojima, "Modified distance calculation in
+  generational distance and inverted generational distance", *Evolutionary Multi-Criterion
+  Optimization 2015*, LNCS 9019, pp. 110–125
 
 ---
 
@@ -4563,6 +4869,7 @@ M6.1 the Python package: any time after M1.4 (it wraps the engine)
 M6.2 command plugins: after M3.7     M6.3 logic plugins: with or after M4.3
 M8 optimisation: O1–O5 any time (engine and `experiment` only, on M2.8's experiments);
                  O6, the window, after U5 (the experiment editor)
+M9 open search: P1 any time (engine only); P2 after O1; P3–P6 after O2
 ```
 
 Examples for teaching are added alongside, as each feature they need lands.
@@ -4610,3 +4917,4 @@ and the Pages preview of an M3 pull request shows the blocks already merged.
 | D31 | The parcel hub example's scope (M5.5) | **Recommended:** S's outbound segment first (its checks are the stronger), then B's inbound side; whole-hub figures only as labelled scale context, never as a check |
 | D32 | Job lists for job orders (M8, O3) | **Recommended:** a `stochcraft:jobs` vendor extension on a start event: an ordered list of jobs, each with an id, its property values and optionally a release time, released in that order (BPMN and BPSim have no ordered arrivals); each machine's time per job from M2.11's time by property value; each job's random times from a stream keyed by the job (`"job/<id>"`), so a new order changes when each job runs, never which times it draws. A file without the extension reads as today |
 | D33 | How M8 selects the best and states it (M8) | **Recommended:** Kim and Nelson's KN on fresh replications common to the finalists, with δ given by the user in the objective's unit; the claim names the designs it covers ("of the 7 compared at the end", or "of all 48"); "best found, not proven best" when the reserved budget runs out; neither Rinott's procedure (derived for independent sampling) nor OCBA (no guaranteed probability) as the clean-up |
+| D34 | Which agents first (M4.3) | Settled (2026-11-23): populations (state charts, messages, networks, grids, the stepped mode, statistics over time) before agents in a flow, because they need only D16–D18 and their checks have exact answers; agents in a flow follow as A6, with #71 §9's changes to the blocks |
