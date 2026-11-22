@@ -335,7 +335,7 @@ enum SamplingChoice {
     LatinHypercube,
     /// Trials in pairs that use u and 1 - u for every input.
     Antithetic,
-    /// Sobol points with a random digital shift in each batch.
+    /// Sobol points with a random linear scramble and digital shift in each batch.
     #[value(name = "quasi-random", alias = "sobol")]
     QuasiRandom,
 }

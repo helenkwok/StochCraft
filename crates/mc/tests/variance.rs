@@ -206,7 +206,8 @@ fn antithetic_trials_come_in_pairs() {
     assert_eq!(c.trials_for(1), 2);
 }
 
-/// The same seed gives the same run, a different seed a different one, in both modes.
+/// The same seed gives the same run, a different seed a different one, in both modes (the
+/// scramble itself is checked in `tests/scramble.rs`).
 #[test]
 fn runs_are_reproducible_by_seed() {
     let (inputs, expression) = product();
@@ -264,10 +265,10 @@ fn adding_an_input_leaves_the_others_values_unchanged() {
     }
 }
 
-/// Each Sobol batch is the same points under a shift of its own, so the batches differ, yet each
-/// keeps the even spread: of a uniform input's 1,000 values, the first 512 of the sequence fall
-/// one in each 512th of the range (shifted or not) and the other 488 add at most one more to a
-/// cell, so every cell holds one or two.
+/// Each Sobol batch is the same points under a scramble and shift of its own, so the batches
+/// differ, yet each keeps the even spread: of a uniform input's 1,000 values, the first 512 of the
+/// sequence fall one in each 512th of the range (scrambled or not) and the other 488, part of the
+/// next 512, add at most one more to a cell, so every cell holds one or two.
 #[test]
 fn each_sobol_batch_is_shifted_on_its_own() {
     let mc = model(vec![uniform("u", 0.0, 1.0)], "$u", Sampling::Sobol);
