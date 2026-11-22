@@ -398,11 +398,16 @@ pub fn results_json(r: &SdResults, digest: &str, notes: &[String]) -> Value {
                 "name": s.name,
                 "max_relative_difference": finite(s.max_relative_difference),
                 "at_time": s.at_time,
+                "compared_times": s.compared,
+                "inconclusive": s.inconclusive,
             })).collect::<Vec<_>>(),
             "max_relative_difference": finite(c.max_relative_difference),
             "threshold": stochcraft_sd::DT_CHECK_THRESHOLD,
             "within_threshold": c.within_threshold,
-            "method": "the model run again at half the time step, with the same seed and draws at the same times; for each stock, the largest over the saved times of the difference between the two mean paths, relative to the larger of the value at half the step and 0.1% of the stock's largest value",
+            "inconclusive": c.inconclusive,
+            "draws_matched": c.draws_matched,
+            "notes": c.notes,
+            "method": "the model run again at half the time step, to the same end time, with the same seed (the random values are the same ones when `draws_matched` is true); for each stock, the largest over the saved times both runs share (compared by time, after the start) of the difference between the two mean paths, relative to the larger of the value at half the step and 0.1% of the stock's largest value; inconclusive, not a difference of 0, when a stock has no shared time or a value that is missing or not a number",
         })
     });
     let uncertainty = if r.replications > 1 {

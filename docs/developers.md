@@ -550,7 +550,14 @@ one, gets `Layout::auto`.
 topological order of what their equations name, ties broken by name; an algebraic loop is an error
 naming the cycle. A stock that cannot go negative limits its outflows, in the order it lists them,
 to what it holds at the start of the pass, so the stock that receives a flow gets the same
-limited flow and material is conserved. `DELAYn` and `SMTHn` are hidden stocks (their time
+limited flow and material is conserved. A flow that comes out negative runs backwards, and the
+stocks it enters are the ones it takes from: they limit it (in the order the flows are worked
+out), so no such stock goes below 0 and nothing is clipped afterwards. A flow that is not a
+number is not limited (the limit would turn it into a transfer): it stays not a number, with a
+warning, and so do the stocks it touches. A flow listed twice at one stock is refused. Under
+Runge-Kutta a `STEP` on a step boundary is integrated as under Euler (the stage at the end of a
+step sees the value from the left); a jump inside a step, or made with `IF` on `TIME`, makes that
+step first order: put jumps on step boundaries, use Euler, or lower the step. `DELAYn` and `SMTHn` are hidden stocks (their time
 constant is never taken below the step), `PULSE` delivers its volume in one step under either
 method, a graphical function is clamped at its ends with a warning, and a random function holds one
 draw for its interval and takes it from a stream keyed by variable, call and draw number, so
@@ -560,9 +567,16 @@ gives the mean, the median and the 5th and 95th percentiles at each saved time. 
 on both sides of each equation (compound units, and `1`), and a flow against its stock's units per
 the model's time unit; a mismatch is a warning. `time_unit` reports times in another unit.
 
-`dt_check` runs the model again at half the step and gives, for each stock, the largest relative
-difference between the two mean paths (relative to the larger of the value and 0.1% of the
-stock's peak); within 1% is called independent of the step.
+`dt_check` runs the model again at half the step, to the same end time, and gives, for each stock,
+the largest relative difference between the two mean paths (relative to the larger of the value
+and 0.1% of the stock's peak), compared at the saved times the two runs share; within 1% is
+called independent of the step. A stock with no shared time after the start, or a value that is
+missing or not a number at one, is `inconclusive` (and so is the check, which is then never
+`within_threshold`), not a difference of 0. `draws_matched` is false when a random function draws
+at different times at the two steps (its interval is a whole number of steps, so a half step can
+move it); the random values are then not the same ones and `notes` says so. `time_unit` converts
+`dt` and the halved `dt` as well as the times. XMILE elements are recognised by their namespace
+URI, whatever prefix the file uses; a file whose root is in another namespace is refused.
 
 ### The journal
 

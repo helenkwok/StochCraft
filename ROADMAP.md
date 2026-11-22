@@ -2391,7 +2391,16 @@ runs in replications and gives the mean, the median and the 5% to 95% band at ea
 answers check it: exponential growth (and Euler's error halving with the step), logistic growth
 by RK4, `DELAY3`'s pulse response against the Erlang density, `SMTH1`'s step response, a
 non-negative stock and the order of updates of the fisheries example, and an SIR epidemic against
-an RK4 reference at a small step. Part 2 so far: a model can be edited, undone and saved. The
+an RK4 reference at a small step. Numerical contracts (review fixes): a flow that is not a number
+is never limited into a real transfer (it stays not a number, with a warning, and so do the stocks
+it touches); a flow that comes out negative is limited by the non-negative stock it then takes
+from, so no stock goes below 0 and mass is kept; a flow listed twice at a stock is refused. The
+halved-step check runs to the same end time, compares by time, and says it is inconclusive (never
+0%) when a stock has no shared time or a value that is missing or not a number, and notes when
+the random draws are not at the same times at the two steps. XMILE namespaces are resolved by
+URI (a prefix bound to the XMILE namespace is read; another namespace is refused), a change of
+time unit converts `dt` and the halved `dt` as well, and under RK4 a `STEP` on a step boundary
+is integrated as under Euler (a jump inside a step is first order, documented). Part 2 so far: a model can be edited, undone and saved. The
 `sd` crate keeps the XMILE diagram (`views`: the position and size of each stock and auxiliary,
 each flow's valve and right-angled pipe, the information links; a cloud is the open end of a
 pipe) and gives a file with none a deterministic layout, stocks in rows along their flows and

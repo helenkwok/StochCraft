@@ -25,7 +25,8 @@
 //! **Numerics.** Euler (the default) or classical fourth-order Runge-Kutta, as the file asks.
 //! Time is `start + n * DT` from an integer counter. Variables are worked out in topological
 //! order, ties broken by name; an algebraic loop is an error naming the cycle. A stock that
-//! cannot go negative limits its outflows to what it holds, so material is conserved. Delays
+//! cannot go negative limits its outflows to what it holds (and a flow that runs backwards into it,
+//! to what it holds too), so material is conserved. Delays
 //! and smooths are hidden stocks; a graphical function is clamped at its ends, with a warning.
 //! See [`run`](mod@run) for the rest.
 //!

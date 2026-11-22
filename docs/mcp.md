@@ -265,7 +265,7 @@ each output's variance, alone and with its interactions (it needs independent in
 
 A system dynamics model (stocks and flows, an XMILE file) is opened with `file.open` or `sd.open`
 (the text of the file), run with `sd.run` (`replications` and `seed` for a model with a random
-function, `dt`, `dt_check` to run again at half the step, `time_unit`) and read with `sd.get`. A
+function, `dt`, `dt_check` to run again at half the step (it reports `inconclusive` rather than 0% when a stock cannot be compared, and `draws_matched`), `time_unit`) and read with `sd.get`. A
 run gives every variable over time: the mean, and for a replicated model the median and the 5th
 and 95th percentiles. `run` refuses such a model and names `sd.run`. `sd.new` starts an empty model
 (name, start, stop, `dt`, method, time unit) and `sd.variable.add`, `sd.variable.set` (with

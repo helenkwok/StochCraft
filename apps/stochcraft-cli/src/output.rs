@@ -1600,7 +1600,12 @@ pub fn sd_table(name: &str, r: &Value) -> String {
                 f(&st["at_time"])
             );
         }
-        let verdict = if c["within_threshold"] == true {
+        for n in c["notes"].as_array().into_iter().flatten() {
+            let _ = writeln!(out, "  note: {}", s(n));
+        }
+        let verdict = if c["inconclusive"] == true {
+            "the check is inconclusive: it could not compare the stocks (see the notes above)"
+        } else if c["within_threshold"] == true {
             "results do not depend on the step beyond 1%"
         } else {
             "results depend on the step by more than 1%: use a smaller one"
