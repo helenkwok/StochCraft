@@ -1395,6 +1395,27 @@ unit	yr	an
 	Replace the XMILE file?	Remplacer le fichier XMILE ?
 	Save As writes a new file and keeps {file} as it is. Replacing {file} leaves out what StochCraft does not keep.	Enregistrer sous écrit un nouveau fichier et laisse {file} tel quel. Remplacer {file} omet ce que StochCraft ne conserve pas.
 	Replace	Remplacer
+	Observed data	Données observées
+	Real measurements to check the results against: the value seen in the real system, or a bound the result must meet.	Mesures réelles auxquelles comparer les résultats : la valeur constatée dans le système réel, ou une borne que le résultat doit respecter.
+	Add an observed value	Ajouter une valeur observée
+	Observed value	Valeur observée
+	Checked as	Vérifié comme
+	Its 95% half-width	Sa demi-largeur à 95 %
+	Add Observed Value	Ajouter une valeur observée
+	Change Observed Value	Modifier la valeur observée
+	Remove Observed Value	Supprimer la valeur observée
+	Checked against observed data	Comparé aux données observées
+	{result} ({block}): observed {observed}, simulated {simulated}.	{result} ({block}) : observé {observed}, simulé {simulated}.
+	{result} ({block}): must be at most {bound}, simulated {simulated}.	{result} ({block}) : doit être au plus {bound}, simulé {simulated}.
+	{result} ({block}): must be at least {bound}, simulated {simulated}.	{result} ({block}) : doit être au moins {bound}, simulé {simulated}.
+	Simulated minus observed: {difference}.	Simulé moins observé : {difference}.
+	Agrees	Concorde
+	Differs	Diffère
+	Passes	Respecté
+	Fails	Non respecté
+	Can't tell yet: more runs would decide	Impossible de trancher pour l'instant : davantage d'exécutions permettraient de décider
+	No result	Aucun résultat
+	Observed data is given for a block that does not exist, so there is no result to check it against. Remove it, or choose a block that exists.	Des données observées sont données pour un bloc qui n'existe pas, il n'y a donc aucun résultat auquel les comparer. Supprimez-les, ou choisissez un bloc qui existe.
 	The estimated chance that {output} is more than {value} is {percent}.	La probabilité estimée que {output} dépasse {value} est de {percent}.
 	The estimated chance that {output} is less than {value} is {percent}.	La probabilité estimée que {output} soit inférieur à {value} est de {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	Leur intervalle n'a aucune largeur, ce qu'aucune estimation n'a, donc le résultat simple est conservé.
@@ -1417,3 +1438,8 @@ unit	yr	an
 	Simulation Settings	Paramètres de simulation
 	Change Diagram	Modifier le diagramme
 	You can change this model on the Diagram tab, or with commands, from an agent through the MCP server or from the command line.	Vous pouvez modifier ce modèle dans l'onglet Diagramme, ou par des commandes, depuis un agent via le serveur MCP ou depuis la ligne de commande.
+	Inconclusive at current precision	Non concluant à la précision actuelle
+	No difference detected	Aucune différence détectée
+	Agrees within ±{tolerance}	Concorde à ±{tolerance} près
+	This is not evidence of agreement: set a tolerance to test for it.	Ce n'est pas une preuve de concordance : fixez une tolérance pour la tester.
+	Tolerance (0 for none)	Tolérance (0 pour aucune)

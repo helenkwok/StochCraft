@@ -1395,6 +1395,27 @@ unit	yr	r.
 	Replace the XMILE file?	Nahradiť súbor XMILE?
 	Save As writes a new file and keeps {file} as it is. Replacing {file} leaves out what StochCraft does not keep.	Uložiť ako zapíše nový súbor a {file} ponechá bez zmeny. Nahradením {file} sa vynechá to, čo StochCraft nezachováva.
 	Replace	Nahradiť
+	Observed data	Pozorované údaje
+	Real measurements to check the results against: the value seen in the real system, or a bound the result must meet.	Skutočné merania, s ktorými sa výsledky porovnávajú: hodnota zistená v skutočnom systéme alebo hranica, ktorú musí výsledok spĺňať.
+	Add an observed value	Pridať pozorovanú hodnotu
+	Observed value	Pozorovaná hodnota
+	Checked as	Porovnáva sa ako
+	Its 95% half-width	Jej 95 % polovičná šírka
+	Add Observed Value	Pridať pozorovanú hodnotu
+	Change Observed Value	Zmeniť pozorovanú hodnotu
+	Remove Observed Value	Odstrániť pozorovanú hodnotu
+	Checked against observed data	Porovnanie s pozorovanými údajmi
+	{result} ({block}): observed {observed}, simulated {simulated}.	{result} ({block}): pozorované {observed}, simulované {simulated}.
+	{result} ({block}): must be at most {bound}, simulated {simulated}.	{result} ({block}): musí byť najviac {bound}, simulované {simulated}.
+	{result} ({block}): must be at least {bound}, simulated {simulated}.	{result} ({block}): musí byť aspoň {bound}, simulované {simulated}.
+	Simulated minus observed: {difference}.	Simulované mínus pozorované: {difference}.
+	Agrees	Zhoduje sa
+	Differs	Líši sa
+	Passes	Spĺňa
+	Fails	Nespĺňa
+	Can't tell yet: more runs would decide	Zatiaľ sa nedá určiť: viac behov by rozhodlo
+	No result	Žiadny výsledok
+	Observed data is given for a block that does not exist, so there is no result to check it against. Remove it, or choose a block that exists.	Pozorované údaje sú zadané pre blok, ktorý neexistuje, takže nie je výsledok, s ktorým by sa dali porovnať. Odstráňte ich alebo vyberte existujúci blok.
 	The estimated chance that {output} is more than {value} is {percent}.	Odhadovaná pravdepodobnosť, že {output} bude väčšie ako {value}, je {percent}.
 	The estimated chance that {output} is less than {value} is {percent}.	Odhadovaná pravdepodobnosť, že {output} bude menšie ako {value}, je {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	Ich interval nemá žiadnu šírku, čo žiadny odhad nemá, preto zostáva obyčajný výsledok.
@@ -1417,3 +1438,8 @@ unit	yr	r.
 	Simulation Settings	Nastavenia simulácie
 	Change Diagram	Zmeniť diagram
 	You can change this model on the Diagram tab, or with commands, from an agent through the MCP server or from the command line.	Tento model môžete meniť na karte Diagram alebo príkazmi, od agenta cez server MCP alebo z príkazového riadka.
+	Inconclusive at current precision	Nepreukazné pri súčasnej presnosti
+	No difference detected	Rozdiel sa nezistil
+	Agrees within ±{tolerance}	Zhoduje sa v rozmedzí ±{tolerance}
+	This is not evidence of agreement: set a tolerance to test for it.	To nie je dôkaz zhody: na jej overenie nastavte toleranciu.
+	Tolerance (0 for none)	Tolerancia (0 = žiadna)

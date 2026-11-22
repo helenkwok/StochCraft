@@ -8,7 +8,7 @@
 
 use egui::accesskit::Role;
 use egui_kittest::Harness;
-use egui_kittest::kittest::Queryable;
+use egui_kittest::kittest::{NodeT, Queryable};
 use serde_json::{Value, json};
 use stochcraft_engine::Engine;
 use stochcraft_ui_egui::{App, Autosave, EXAMPLES, Example, Platform, Request};
@@ -93,13 +93,18 @@ fn variable<'a>(results: &'a Value, name: &str) -> &'a Value {
         .unwrap_or(&NULL)
 }
 
-/// Runs the model on screen: the frame after Run is pressed paints "Running…", the one after
-/// makes the run.
+/// Runs the model on screen: the frame after Run is pressed paints "Running…", the ones after
+/// make the replications, a few a frame; this steps until the run is over.
 fn run(h: &mut Harness<'static, App>) {
     h.state_mut().run();
     h.step();
-    h.step();
-    h.step();
+    for _ in 0..20_000 {
+        if !h.state().is_running() {
+            break;
+        }
+        h.step();
+    }
+    assert!(!h.state().is_running(), "the run did not finish");
     settle(h);
 }
 
@@ -594,4 +599,147 @@ fn a_file_that_cannot_be_read_is_refused_with_the_engines_message() {
     assert_eq!(app.engine().system_dynamics_path(), Some("adoption.xmile"));
     assert!(app.title().starts_with("adoption.xmile"), "{}", app.title());
     assert!(!app.has_unsaved_changes());
+}
+
+/// The runs "n of N runs finished" says are made, if the page says so now.
+fn runs_made(h: &Harness<'static, App>) -> Option<u64> {
+    let node = h.query_by_label_contains("runs finished")?;
+    // A plain label's text is the node's value; a button's is its label.
+    let node = node.accesskit_node();
+    let text = node.label().or_else(|| node.value())?;
+    text.split(' ').next()?.parse().ok()
+}
+
+/// Opens the noise model on its Results tab with `runs` runs asked for.
+fn noise_with_runs(runs: &str) -> Harness<'static, App> {
+    let mut h = harness();
+    h.state_mut()
+        .control("sd.open", json!({ "text": NOISE, "name": "noise.xmile" }))
+        .expect("it opens");
+    settle(&mut h);
+    click(&mut h, Role::Tab, "Results");
+    type_into(&mut h, Role::TextInput, "Runs", runs);
+    h
+}
+
+/// Steps a started run for up to `frames` frames, or until it ends.
+fn step_while(h: &mut Harness<'static, App>, frames: usize) {
+    for _ in 0..frames {
+        if !h.state().is_running() {
+            return;
+        }
+        h.step();
+    }
+}
+
+#[test]
+fn a_long_run_is_made_a_few_runs_a_frame_and_ends_with_sd_runs_numbers() {
+    let mut h = noise_with_runs("20000");
+    h.state_mut().run();
+    assert!(h.state().is_running());
+    h.step();
+    let (mut seen, mut frames) = (Vec::new(), 0);
+    // What the page said about the run on the first frames, to tell why if no progress is seen.
+    let mut said: Vec<String> = Vec::new();
+    while h.state().is_running() && frames < 20_000 {
+        h.step();
+        frames += 1;
+        if frames <= 3 {
+            said.extend(
+                h.get_all_by_label_contains("run")
+                    .filter_map(|n| {
+                        let n = n.accesskit_node();
+                        n.label().or_else(|| n.value())
+                    })
+                    .map(|l| format!("{frames}: {l}")),
+            );
+        }
+        if let Some(n) = runs_made(&h)
+            && seen.last() != Some(&n)
+        {
+            seen.push(n);
+        }
+    }
+    assert!(!h.state().is_running(), "the run did not finish");
+    // Progress was shown over several frames, and only grew.
+    assert!(
+        seen.len() >= 3,
+        "progress seen: {seen:?} over {frames} frames; the page said {said:?}"
+    );
+    assert!(seen.windows(2).all(|w| w[0] < w[1]), "{seen:?}");
+    assert!(seen.iter().all(|n| *n < 20_000), "{seen:?}");
+    settle(&mut h);
+    let status = h.state().status().to_owned();
+    let results = h.state().sd_results().cloned().expect(&status);
+    assert_eq!(results["replications"], 20_000);
+    assert_eq!(status.replace(',', ""), "Finished 20000 runs");
+    // The same numbers as sd.run gives, which is the journal's one step.
+    let mut e = Engine::new();
+    e.execute("sd.open", json!({ "text": NOISE }))
+        .expect("it opens");
+    let whole = e
+        .execute("sd.run", json!({ "replications": 20_000, "seed": 1 }))
+        .expect("it runs");
+    assert_eq!(results["variables"], whole["variables"]);
+    let journal = h.state().engine().journal();
+    assert_eq!(journal.len(), 1);
+    assert_eq!(journal[0].command, "sd.run");
+}
+
+#[test]
+fn cancelling_a_run_discards_what_it_made() {
+    let mut h = noise_with_runs("20");
+    run(&mut h);
+    let first = h.state().sd_results().cloned().expect("the first results");
+    type_into(&mut h, Role::TextInput, "Runs", "20000");
+    h.state_mut().run();
+    h.step();
+    step_while(&mut h, 3);
+    assert!(h.state().is_running());
+    click(&mut h, Role::Button, "Cancel run");
+    assert!(!h.state().is_running());
+    assert_eq!(h.state().status(), "Run cancelled");
+    // The results on show are still the first run's, and the cancelled run is not journalled.
+    assert_eq!(h.state().sd_results(), Some(&first));
+    assert_eq!(h.state().engine().journal().len(), 1);
+    // The page is not left running.
+    h.get_by_label("Run again");
+}
+
+#[test]
+fn changing_the_model_cancels_a_run_in_progress() {
+    let mut h = noise_with_runs("20000");
+    h.state_mut().run();
+    h.step();
+    step_while(&mut h, 3);
+    assert!(h.state().is_running());
+    h.state_mut()
+        .control("sd.specs.set", json!({ "stop": 40.0 }))
+        .expect("it changes");
+    step_while(&mut h, 3);
+    settle(&mut h);
+    assert!(!h.state().is_running());
+    assert_eq!(h.state().status(), "Run cancelled");
+    assert!(h.state().sd_results().is_none());
+    assert!(
+        h.state()
+            .engine()
+            .journal()
+            .iter()
+            .all(|j| j.command != "sd.run")
+    );
+}
+
+#[test]
+fn opening_another_model_cancels_a_run_in_progress() {
+    let mut h = noise_with_runs("20000");
+    h.state_mut().run();
+    h.step();
+    step_while(&mut h, 3);
+    assert!(h.state().is_running());
+    let e = adoption();
+    h.state_mut().open_file(e.file, e.bytes);
+    settle(&mut h);
+    assert!(!h.state().is_running());
+    assert!(h.state().sd_results().is_none());
 }

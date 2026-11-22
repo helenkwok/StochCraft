@@ -1395,6 +1395,27 @@ unit	yr	v
 	Replace the XMILE file?	Të zëvendësohet skedari XMILE?
 	Save As writes a new file and keeps {file} as it is. Replacing {file} leaves out what StochCraft does not keep.	Ruaj si shkruan një skedar të ri dhe e lë {file} siç është. Zëvendësimi i {file} lë jashtë atë që StochCraft nuk e ruan.
 	Replace	Zëvendëso
+	Observed data	Të dhënat e vëzhguara
+	Real measurements to check the results against: the value seen in the real system, or a bound the result must meet.	Matje reale me të cilat kontrollohen rezultatet: vlera e parë në sistemin real, ose një kufi që rezultati duhet ta plotësojë.
+	Add an observed value	Shto një vlerë të vëzhguar
+	Observed value	Vlera e vëzhguar
+	Checked as	Kontrollohet si
+	Its 95% half-width	Gjysmëgjerësia e saj 95%
+	Add Observed Value	Shto vlerë të vëzhguar
+	Change Observed Value	Ndrysho vlerën e vëzhguar
+	Remove Observed Value	Hiq vlerën e vëzhguar
+	Checked against observed data	Kontrolluar me të dhënat e vëzhguara
+	{result} ({block}): observed {observed}, simulated {simulated}.	{result} ({block}): e vëzhguar {observed}, e simuluar {simulated}.
+	{result} ({block}): must be at most {bound}, simulated {simulated}.	{result} ({block}): duhet të jetë më së shumti {bound}, e simuluar {simulated}.
+	{result} ({block}): must be at least {bound}, simulated {simulated}.	{result} ({block}): duhet të jetë të paktën {bound}, e simuluar {simulated}.
+	Simulated minus observed: {difference}.	E simuluar minus e vëzhguar: {difference}.
+	Agrees	Përputhet
+	Differs	Ndryshon
+	Passes	Plotësohet
+	Fails	Nuk plotësohet
+	Can't tell yet: more runs would decide	Ende nuk mund të thuhet: më shumë ekzekutime do ta vendosnin
+	No result	Pa rezultat
+	Observed data is given for a block that does not exist, so there is no result to check it against. Remove it, or choose a block that exists.	Janë dhënë të dhëna të vëzhguara për një bllok që nuk ekziston, kështu që nuk ka rezultat me të cilin të kontrollohen. Hiqini ose zgjidhni një bllok që ekziston.
 	The estimated chance that {output} is more than {value} is {percent}.	Gjasa e vlerësuar që {output} të jetë më e madhe se {value} është {percent}.
 	The estimated chance that {output} is less than {value} is {percent}.	Gjasa e vlerësuar që {output} të jetë më e vogël se {value} është {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	Intervali i tyre nuk ka gjerësi, gjë që asnjë vlerësim nuk e ka, ndaj mbetet rezultati i thjeshtë.
@@ -1417,3 +1438,8 @@ unit	yr	v
 	Simulation Settings	Cilësimet e simulimit
 	Change Diagram	Ndrysho diagramin
 	You can change this model on the Diagram tab, or with commands, from an agent through the MCP server or from the command line.	Këtë model mund ta ndryshosh te skeda Diagrami, ose me komanda, nga një agjent përmes serverit MCP ose nga linja e komandës.
+	Inconclusive at current precision	Jo përfundimtare me saktësinë aktuale
+	No difference detected	Nuk u zbulua ndryshim
+	Agrees within ±{tolerance}	Përputhet brenda ±{tolerance}
+	This is not evidence of agreement: set a tolerance to test for it.	Kjo nuk është provë përputhjeje: vendosni një tolerancë për ta testuar.
+	Tolerance (0 for none)	Toleranca (0 për asnjë)

@@ -1395,6 +1395,27 @@ unit	yr	ປີ
 	Replace the XMILE file?	ປ່ຽນໄຟລ໌ XMILE ບໍ?
 	Save As writes a new file and keeps {file} as it is. Replacing {file} leaves out what StochCraft does not keep.	ບັນທຶກເປັນ ຈະຂຽນໄຟລ໌ໃໝ່ ແລະ ປ່ອຍ {file} ໄວ້ຕາມເດີມ. ການປ່ຽນ {file} ຈະເຮັດໃຫ້ສິ່ງທີ່ StochCraft ບໍ່ເກັບໄວ້ຫາຍໄປ.
 	Replace	ປ່ຽນ
+	Observed data	ຂໍ້ມູນທີ່ສັງເກດໄດ້
+	Real measurements to check the results against: the value seen in the real system, or a bound the result must meet.	ການວັດແທກຈິງເພື່ອກວດສອບຜົນໄດ້ຮັບ: ຄ່າທີ່ເຫັນໃນລະບົບຈິງ ຫຼື ຂອບເຂດທີ່ຜົນໄດ້ຮັບຕ້ອງຜ່ານ.
+	Add an observed value	ເພີ່ມຄ່າທີ່ສັງເກດໄດ້
+	Observed value	ຄ່າທີ່ສັງເກດໄດ້
+	Checked as	ກວດສອບເປັນ
+	Its 95% half-width	ຄວາມກວ້າງເຄິ່ງໜຶ່ງ 95% ຂອງມັນ
+	Add Observed Value	ເພີ່ມຄ່າທີ່ສັງເກດໄດ້
+	Change Observed Value	ປ່ຽນຄ່າທີ່ສັງເກດໄດ້
+	Remove Observed Value	ລຶບຄ່າທີ່ສັງເກດໄດ້
+	Checked against observed data	ກວດສອບກັບຂໍ້ມູນທີ່ສັງເກດໄດ້
+	{result} ({block}): observed {observed}, simulated {simulated}.	{result} ({block}): ສັງເກດໄດ້ {observed}, ຈຳລອງໄດ້ {simulated}.
+	{result} ({block}): must be at most {bound}, simulated {simulated}.	{result} ({block}): ຕ້ອງຫຼາຍສຸດ {bound}, ຈຳລອງໄດ້ {simulated}.
+	{result} ({block}): must be at least {bound}, simulated {simulated}.	{result} ({block}): ຕ້ອງຢ່າງໜ້ອຍ {bound}, ຈຳລອງໄດ້ {simulated}.
+	Simulated minus observed: {difference}.	ຈຳລອງ ລົບ ສັງເກດ: {difference}.
+	Agrees	ກົງກັນ
+	Differs	ແຕກຕ່າງ
+	Passes	ຜ່ານ
+	Fails	ບໍ່ຜ່ານ
+	Can't tell yet: more runs would decide	ຍັງບອກບໍ່ໄດ້: ຮອບຈຳລອງເພີ່ມຈະຕັດສິນໄດ້
+	No result	ບໍ່ມີຜົນໄດ້ຮັບ
+	Observed data is given for a block that does not exist, so there is no result to check it against. Remove it, or choose a block that exists.	ໄດ້ໃຫ້ຂໍ້ມູນທີ່ສັງເກດໄດ້ສຳລັບບລັອກທີ່ບໍ່ມີ ດັ່ງນັ້ນຈຶ່ງບໍ່ມີຜົນໄດ້ຮັບໃຫ້ກວດສອບ. ລຶບມັນ ຫຼື ເລືອກບລັອກທີ່ມີຢູ່.
 	The estimated chance that {output} is more than {value} is {percent}.	ຄວາມເປັນໄປໄດ້ໂດຍປະມານທີ່ {output} ຈະຫຼາຍກວ່າ {value} ແມ່ນ {percent}.
 	The estimated chance that {output} is less than {value} is {percent}.	ຄວາມເປັນໄປໄດ້ໂດຍປະມານທີ່ {output} ຈະນ້ອຍກວ່າ {value} ແມ່ນ {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	ຊ່ວງຂອງມັນບໍ່ມີຄວາມກວ້າງ ຊຶ່ງບໍ່ມີການຄາດຄະເນໃດມີ ສະນັ້ນຜົນລັບທຳມະດາຈຶ່ງຍັງຢູ່.
@@ -1417,3 +1438,8 @@ unit	yr	ປີ
 	Simulation Settings	ການຕັ້ງຄ່າການຈຳລອງ
 	Change Diagram	ປ່ຽນແຜນວາດ
 	You can change this model on the Diagram tab, or with commands, from an agent through the MCP server or from the command line.	ທ່ານສາມາດປ່ຽນແບບຈຳລອງນີ້ໄດ້ໃນແຖບແຜນວາດ ຫຼື ດ້ວຍຄຳສັ່ງ ຈາກເອເຢັນຜ່ານເຊີບເວີ MCP ຫຼື ຈາກແຖວຄຳສັ່ງ.
+	Inconclusive at current precision	ບໍ່ສາມາດສະຫຼຸບໄດ້ທີ່ຄວາມແມ່ນຍຳປັດຈຸບັນ
+	No difference detected	ບໍ່ພົບຄວາມແຕກຕ່າງ
+	Agrees within ±{tolerance}	ກົງກັນພາຍໃນ ±{tolerance}
+	This is not evidence of agreement: set a tolerance to test for it.	ນີ້ບໍ່ແມ່ນຫຼັກຖານຂອງການກົງກັນ: ກຳນົດຄ່າຍອມຮັບເພື່ອທົດສອບ.
+	Tolerance (0 for none)	ຄ່າຍອມຮັບ (0 ຖ້າບໍ່ມີ)

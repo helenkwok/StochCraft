@@ -1395,6 +1395,27 @@ unit	yr	г.
 	Replace the XMILE file?	Да се замени ли XMILE файлът?
 	Save As writes a new file and keeps {file} as it is. Replacing {file} leaves out what StochCraft does not keep.	„Запази като“ записва нов файл и оставя {file} непроменен. Замяната на {file} пропуска онова, което StochCraft не запазва.
 	Replace	Замени
+	Observed data	Наблюдавани данни
+	Real measurements to check the results against: the value seen in the real system, or a bound the result must meet.	Реални измервания, с които да се сверят резултатите: стойността, наблюдавана в реалната система, или граница, която резултатът трябва да спазва.
+	Add an observed value	Добавяне на наблюдавана стойност
+	Observed value	Наблюдавана стойност
+	Checked as	Проверява се като
+	Its 95% half-width	Неговата 95% полуширина
+	Add Observed Value	Добавяне на наблюдавана стойност
+	Change Observed Value	Промяна на наблюдавана стойност
+	Remove Observed Value	Премахване на наблюдавана стойност
+	Checked against observed data	Сверено с наблюдавани данни
+	{result} ({block}): observed {observed}, simulated {simulated}.	{result} ({block}): наблюдавано {observed}, симулирано {simulated}.
+	{result} ({block}): must be at most {bound}, simulated {simulated}.	{result} ({block}): трябва да е най-много {bound}, симулирано {simulated}.
+	{result} ({block}): must be at least {bound}, simulated {simulated}.	{result} ({block}): трябва да е поне {bound}, симулирано {simulated}.
+	Simulated minus observed: {difference}.	Симулирано минус наблюдавано: {difference}.
+	Agrees	Съвпада
+	Differs	Различава се
+	Passes	Преминава
+	Fails	Не преминава
+	Can't tell yet: more runs would decide	Още не може да се определи: повече изпълнения биха решили
+	No result	Няма резултат
+	Observed data is given for a block that does not exist, so there is no result to check it against. Remove it, or choose a block that exists.	Зададени са наблюдавани данни за блок, който не съществува, затова няма резултат, с който да се сверят. Премахнете ги или изберете блок, който съществува.
 	The estimated chance that {output} is more than {value} is {percent}.	Прогнозната вероятност {output} да е над {value} е {percent}.
 	The estimated chance that {output} is less than {value} is {percent}.	Прогнозната вероятност {output} да е под {value} е {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	Техният интервал няма ширина, каквато няма никоя оценка, затова остава обикновеният резултат.
@@ -1417,3 +1438,8 @@ unit	yr	г.
 	Simulation Settings	Настройки на симулацията
 	Change Diagram	Промяна на диаграмата
 	You can change this model on the Diagram tab, or with commands, from an agent through the MCP server or from the command line.	Можете да променяте този модел в раздела „Диаграма“ или с команди, от агент през MCP сървъра или от командния ред.
+	Inconclusive at current precision	Неубедително при текущата точност
+	No difference detected	Не е открита разлика
+	Agrees within ±{tolerance}	Съвпада в рамките на ±{tolerance}
+	This is not evidence of agreement: set a tolerance to test for it.	Това не е доказателство за съвпадение: задайте допуск, за да го проверите.
+	Tolerance (0 for none)	Допуск (0 за липса)

@@ -8,8 +8,8 @@
 
 use stochcraft_random::math::{exp, powf};
 use stochcraft_sd::{
-    ErrorKind, Gf, GfKind, GfX, Layout, Method, RunOptions, SdModel, SdResults, SimSpecs, Step,
-    VarKind, Variable, compile, read_xmile, run, write_xmile,
+    ErrorKind, Gf, GfKind, GfX, Layout, Method, RunOptions, SdJob, SdModel, SdResults, SimSpecs,
+    Step, VarKind, Variable, compile, read_xmile, run, write_xmile,
 };
 
 fn specs(stop: f64, dt: f64, method: Method) -> SimSpecs {
@@ -946,4 +946,82 @@ fn a_file_with_no_diagram_gets_one_with_nothing_overlapping() {
     assert_eq!(read_xmile(sir_file()).unwrap().model.layout, *l);
     let back = read_xmile(&write_xmile(&f.model)).unwrap();
     assert_eq!(back.model.layout, *l);
+}
+
+fn stepped(m: &SdModel, opts: &RunOptions, at_a_time: usize) -> SdResults {
+    let p = compile(m).unwrap();
+    let mut job = SdJob::new(&p, opts).unwrap();
+    let (done, total) = job.progress();
+    assert_eq!(done, 0);
+    let mut last_done = 0;
+    while !job.is_done() {
+        job.step(at_a_time).unwrap();
+        let (done, total_now) = job.progress();
+        assert_eq!(total_now, total);
+        assert!(done > last_done && done <= total, "{done} of {total}");
+        assert!(done - last_done <= at_a_time as u64);
+        last_done = done;
+    }
+    assert_eq!(job.progress(), (total, total));
+    job.finish().unwrap()
+}
+
+#[test]
+fn a_job_stepped_a_few_replications_at_a_time_gives_what_run_gives() {
+    let opts = RunOptions {
+        replications: Some(23),
+        seed: 5,
+        ..RunOptions::default()
+    };
+    let whole = go(&walk(true), &opts);
+    for at_a_time in [1, 7, 23, 1000] {
+        assert_eq!(
+            stepped(&walk(true), &opts, at_a_time),
+            whole,
+            "{at_a_time} at a time"
+        );
+    }
+    // A model with no random function is one replication.
+    let m = growth(0.25, Method::Rk4);
+    let once = go(&m, &RunOptions::default());
+    let job = stepped(&m, &RunOptions::default(), 1);
+    assert_eq!(job, once);
+    assert_eq!(job.replications, 1);
+}
+
+#[test]
+fn the_halved_step_check_counts_in_the_jobs_progress_and_is_the_same() {
+    let opts = RunOptions {
+        replications: Some(6),
+        seed: 3,
+        dt_check: true,
+        ..RunOptions::default()
+    };
+    let m = walk(false);
+    let p = compile(&m).unwrap();
+    let job = SdJob::new(&p, &opts).unwrap();
+    assert_eq!(job.progress(), (0, 12));
+    let whole = go(&m, &opts);
+    assert!(whole.dt_check.is_some());
+    assert_eq!(stepped(&m, &opts, 5), whole);
+    assert_eq!(stepped(&m, &opts, 1), whole);
+}
+
+#[test]
+fn a_job_refuses_what_run_refuses_and_finish_makes_what_is_left() {
+    let p = compile(&walk(false)).unwrap();
+    let bad = RunOptions {
+        replications: Some(0),
+        ..RunOptions::default()
+    };
+    assert!(SdJob::new(&p, &bad).is_err());
+    assert!(run(&p, &bad).is_err());
+    let opts = RunOptions {
+        replications: Some(4),
+        ..RunOptions::default()
+    };
+    let mut job = SdJob::new(&p, &opts).unwrap();
+    job.step(1).unwrap();
+    assert_eq!(job.progress(), (1, 4));
+    assert_eq!(job.finish().unwrap(), run(&p, &opts).unwrap());
 }

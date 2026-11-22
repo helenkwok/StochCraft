@@ -1395,6 +1395,27 @@ unit	yr	సం.
 	Replace the XMILE file?	XMILE ఫైల్‌ను భర్తీ చేయాలా?
 	Save As writes a new file and keeps {file} as it is. Replacing {file} leaves out what StochCraft does not keep.	ఇలా సేవ్ చేయి కొత్త ఫైల్‌ను రాస్తుంది, {file} ను అలాగే ఉంచుతుంది. {file} ను భర్తీ చేస్తే StochCraft ఉంచనిది వదిలివేయబడుతుంది.
 	Replace	భర్తీ చేయి
+	Observed data	పరిశీలించిన డేటా
+	Real measurements to check the results against: the value seen in the real system, or a bound the result must meet.	ఫలితాలను తనిఖీ చేయడానికి నిజమైన కొలతలు: నిజమైన వ్యవస్థలో కనిపించిన విలువ, లేదా ఫలితం పాటించాల్సిన పరిమితి.
+	Add an observed value	పరిశీలించిన విలువను జోడించు
+	Observed value	పరిశీలించిన విలువ
+	Checked as	తనిఖీ రకం
+	Its 95% half-width	దాని 95% అర్ధ-వెడల్పు
+	Add Observed Value	పరిశీలించిన విలువను జోడించు
+	Change Observed Value	పరిశీలించిన విలువను మార్చు
+	Remove Observed Value	పరిశీలించిన విలువను తొలగించు
+	Checked against observed data	పరిశీలించిన డేటాతో తనిఖీ చేయబడింది
+	{result} ({block}): observed {observed}, simulated {simulated}.	{result} ({block}): పరిశీలించినది {observed}, అనుకరించినది {simulated}.
+	{result} ({block}): must be at most {bound}, simulated {simulated}.	{result} ({block}): గరిష్టంగా {bound} ఉండాలి, అనుకరించినది {simulated}.
+	{result} ({block}): must be at least {bound}, simulated {simulated}.	{result} ({block}): కనీసం {bound} ఉండాలి, అనుకరించినది {simulated}.
+	Simulated minus observed: {difference}.	అనుకరించినది మైనస్ పరిశీలించినది: {difference}.
+	Agrees	సరిపోతుంది
+	Differs	భిన్నంగా ఉంది
+	Passes	ఉత్తీర్ణం
+	Fails	విఫలం
+	Can't tell yet: more runs would decide	ఇంకా చెప్పలేము: మరిన్ని అమలులు నిర్ణయిస్తాయి
+	No result	ఫలితం లేదు
+	Observed data is given for a block that does not exist, so there is no result to check it against. Remove it, or choose a block that exists.	ఉనికిలో లేని బ్లాక్ కోసం పరిశీలించిన డేటా ఇవ్వబడింది, కాబట్టి దాన్ని తనిఖీ చేయడానికి ఫలితం ఏదీ లేదు. దాన్ని తొలగించండి, లేదా ఉన్న ఒక బ్లాక్ ఎంచుకోండి.
 	The estimated chance that {output} is more than {value} is {percent}.	{output} {value} కంటే ఎక్కువ ఉండే అంచనా సంభావ్యత {percent}.
 	The estimated chance that {output} is less than {value} is {percent}.	{output} {value} కంటే తక్కువ ఉండే అంచనా సంభావ్యత {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	వాటి అంతరానికి వెడల్పు లేదు, ఏ అంచనాకూ ఉండదు, కాబట్టి సాధారణ ఫలితమే ఉంటుంది.
@@ -1417,3 +1438,8 @@ unit	yr	సం.
 	Simulation Settings	అనుకరణ సెట్టింగ్‌లు
 	Change Diagram	రేఖాచిత్రాన్ని మార్చు
 	You can change this model on the Diagram tab, or with commands, from an agent through the MCP server or from the command line.	ఈ మోడల్‌ను రేఖాచిత్రం ట్యాబ్‌లో, లేదా ఆదేశాలతో, ఏజెంట్ ద్వారా MCP సర్వర్ నుండి లేదా కమాండ్ లైన్ నుండి మార్చవచ్చు.
+	Inconclusive at current precision	ప్రస్తుత కచ్చితత్వంలో నిర్ధారించలేము
+	No difference detected	తేడా కనుగొనబడలేదు
+	Agrees within ±{tolerance}	±{tolerance} లోపు సరిపోతుంది
+	This is not evidence of agreement: set a tolerance to test for it.	ఇది సరిపోలికకు రుజువు కాదు: పరీక్షించడానికి సహనాన్ని సెట్ చేయండి.
+	Tolerance (0 for none)	సహనం (లేకపోతే 0)

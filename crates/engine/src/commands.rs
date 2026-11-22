@@ -315,6 +315,16 @@ pub struct PropertySet {
     pub value: PropertyValueSpec,
 }
 
+/// The result an observed value or bound is for, to remove it.
+#[derive(Debug, Deserialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
+pub struct ObservationRemove {
+    /// The id of the block or pool.
+    pub element: String,
+    /// The result's name, such as `mean_wait`.
+    pub metric: String,
+}
+
 #[derive(Debug, Deserialize, JsonSchema)]
 #[serde(deny_unknown_fields)]
 pub struct PropertyRemove {
@@ -2168,6 +2178,77 @@ fn experiment_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
     Ok(json!({}))
 }
 
+/// The index in the experiment's observed data of the one for `element`'s `metric`.
+fn observation_index(model: &Model, element: &str, metric: &str) -> Option<usize> {
+    model
+        .experiment
+        .observed
+        .iter()
+        .position(|o| o.element.as_str() == element && o.metric == metric)
+}
+
+fn observation_add(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
+    let p: wire::ObservationSpec = parse(p)?;
+    if observation_index(e.model(), p.element(), p.metric()).is_some() {
+        return Err(CommandError::new(
+            ErrorCode::Conflict,
+            format!(
+                "`{}` already has observed data for `{}`: change it with observation.set",
+                p.element(),
+                p.metric()
+            ),
+        ));
+    }
+    let observation = crate::observed::from_spec(e.model(), p)?;
+    let mut x = e.model().experiment.clone();
+    x.observed.push(observation);
+    e.edit("observation.add", Op::SetExperiment(x))?;
+    Ok(json!({}))
+}
+
+fn observation_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
+    let p: wire::ObservationSpec = parse(p)?;
+    let Some(i) = observation_index(e.model(), p.element(), p.metric()) else {
+        return Err(CommandError::new(
+            ErrorCode::NotFound,
+            format!(
+                "`{}` has no observed data for `{}`: add it with observation.add",
+                p.element(),
+                p.metric()
+            ),
+        ));
+    };
+    let observation = crate::observed::from_spec(e.model(), p)?;
+    let mut x = e.model().experiment.clone();
+    x.observed[i] = observation;
+    e.edit("observation.set", Op::SetExperiment(x))?;
+    Ok(json!({}))
+}
+
+fn observation_remove(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
+    let p: ObservationRemove = parse(p)?;
+    // Not checked against the model's elements: observed data for a block that was removed is
+    // the very thing to remove.
+    let Some(i) = observation_index(e.model(), &p.element, &p.metric) else {
+        return Err(CommandError::new(
+            ErrorCode::NotFound,
+            format!("`{}` has no observed data for `{}`", p.element, p.metric),
+        ));
+    };
+    let mut x = e.model().experiment.clone();
+    x.observed.remove(i);
+    e.edit("observation.remove", Op::SetExperiment(x))?;
+    Ok(json!({}))
+}
+
+/// The schema of an observation's parameters: its variants are objects, which is said at the top
+/// as for every other command's parameters.
+fn observation_schema() -> Value {
+    let mut s = schema::<wire::ObservationSpec>();
+    s["type"] = json!("object");
+    s
+}
+
 fn undo(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
     parse::<NoParams>(p)?;
     let label = e.undo()?;
@@ -2512,6 +2593,30 @@ pub static COMMANDS: &[Command] = &[
         schema: schema::<ExperimentSet>,
         example: || json!({ "replications": 5, "duration": 240.0 }),
         run: experiment_set,
+    },
+    Command {
+        name: "observation.add",
+        summary: "Add real data for a result to be checked against (black-box validation): an observed value (`check` `value`, with the half-width of its own 95% interval if known) or a bound (`at_most` or `at_least`), in the result's own unit (a share as a fraction). The results then say, for each, whether the run agrees: an observed value agrees when the 95% interval of the difference holds 0, and a bound passes or fails only when the whole simulated 95% interval does. One for each result (a block or pool id and a metric name).",
+        kind: CommandKind::Edit,
+        schema: observation_schema,
+        example: || json!({ "check": "value", "element": "desk", "metric": "mean_wait", "value": 3.2, "half_width": 0.4 }),
+        run: observation_add,
+    },
+    Command {
+        name: "observation.set",
+        summary: "Change the observed data for a result that has some (the same parameters as observation.add).",
+        kind: CommandKind::Edit,
+        schema: observation_schema,
+        example: || json!({ "check": "at_most", "element": "desk", "metric": "mean_wait", "bound": 4.0 }),
+        run: observation_set,
+    },
+    Command {
+        name: "observation.remove",
+        summary: "Remove the observed data for a result.",
+        kind: CommandKind::Edit,
+        schema: schema::<ObservationRemove>,
+        example: || json!({ "element": "desk", "metric": "mean_wait" }),
+        run: observation_remove,
     },
     Command {
         name: "resource.add",

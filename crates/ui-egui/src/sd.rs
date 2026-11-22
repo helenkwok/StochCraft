@@ -17,12 +17,14 @@
 //! mean dashed for runs in replications; or the same values as a table, with a CSV export of the
 //! variables shown. Results are marked out of date once the model is changed after the run.
 //!
-//! A run is made in one piece, two frames after Run is pressed (the status bar says "Running…"
-//! meanwhile), not a few replications a frame as a Monte Carlo run is: `stochcraft-sd` runs
-//! whole replications and gives only the aggregates, so a stepped job would need a new interface
-//! in that crate. The window refuses a run larger than [`WORK_LIMIT`] (a guess at what finishes
-//! in about a second) with the way out, though the engine would allow it; the command line has
-//! no such limit beyond the engine's own.
+//! A run is made a few replications a frame, as a Monte Carlo run is (`stochcraft_engine::sd::SdJob`,
+//! stepped by `App::sd_poll` for about the Monte Carlo frame budget): the page shows "n of N runs
+//! finished" with a Cancel (or Esc) that drops the partial run, and the results replace the last
+//! when the last replication is in. Changing the model while it runs (an agent's `sd.*` command)
+//! cancels the run, as does opening another model; its results would be of a model that is no
+//! longer the open one. One replication is not interrupted, so a model run once, or one whose
+//! single replication is very long, is made in one step; the window has no size limit of its own
+//! beyond the engine's.
 
 use std::cell::RefCell;
 use std::collections::{BTreeSet, HashMap};
@@ -31,18 +33,15 @@ use std::rc::Rc;
 
 use egui::{Align2, Color32, FontId, Rect, Stroke, pos2, vec2};
 use serde_json::{Value, json};
+use stochcraft_engine::sd::SdJob;
 
 use crate::chart_palette::series_color;
 use crate::charts::nice_step;
 use crate::editor::section;
 use crate::i18n::{t, tf, tn};
+use crate::montecarlo::FRAME_BUDGET;
 use crate::results::{grouped, round_sig};
-use crate::{App, commands, theme};
-
-/// The most work one run may do in the window: steps, times replications, times variables. A
-/// guess, not a measurement, of what finishes in about a second in the browser; a larger run is
-/// refused with the way out, though the engine would allow it.
-const WORK_LIMIT: f64 = 20_000_000.0;
+use crate::{App, Running, commands, theme};
 
 /// The most replications the Runs field takes (the engine's own limit).
 const MOST_RUNS: f64 = 100_000.0;
@@ -50,18 +49,6 @@ const MOST_RUNS: f64 = 100_000.0;
 /// The height of a table row, and the width of its columns.
 const ROW_HEIGHT: f32 = 20.0;
 const COLUMN_WIDTH: f32 = 140.0;
-
-/// Where a run asked for with Run is: the status bar must be painted saying "Running…" before the
-/// run, which blocks, is made, so it waits one frame more than the frame after the request.
-#[derive(Clone, Copy, PartialEq, Eq)]
-enum Pending {
-    /// No run is waiting.
-    Idle,
-    /// Run was pressed: the next frame paints the status bar with "Running…".
-    Asked,
-    /// That frame is painted: the run is made now.
-    Shown,
-}
 
 /// The plots drawn so far, by variable name.
 type Plots = HashMap<String, Option<Rc<Plot>>>;
@@ -79,8 +66,11 @@ pub(crate) struct Sd {
     /// The runs and the seed of the next run, for a model with a random function.
     runs: f64,
     seed: f64,
-    /// Run was pressed and the run is not made yet.
-    pending: Pending,
+    /// The run in progress, made a few replications a frame by `sd_poll`.
+    job: Option<SdJob>,
+    /// The first frame of the run has been painted, so the next may step it: Run pressed in a
+    /// frame is drawn as "Running…" before a long replication holds the page up.
+    painted: bool,
     /// The variables shown, by name; `None` until the user picks (then the stocks).
     chosen: Option<BTreeSet<String>>,
     /// The Results tab shows the table in place of the charts.
@@ -95,7 +85,8 @@ impl Default for Sd {
             plots: Rc::default(),
             runs: 100.0,
             seed: 1.0,
-            pending: Pending::Idle,
+            job: None,
+            painted: false,
             chosen: None,
             table: false,
         }
@@ -697,6 +688,11 @@ impl App {
         Some(low.into_iter().zip(high).collect())
     }
 
+    /// Whether a run is being made.
+    pub(crate) fn sd_running(&self) -> bool {
+        self.sd.job.is_some()
+    }
+
     /// Whether the model was changed after the run whose results are on show: the Results tab
     /// marks them out of date (what `sd.get` gives as `results_stale`).
     pub(crate) fn sd_results_stale(&self) -> bool {
@@ -720,29 +716,95 @@ impl App {
         info
     }
 
-    /// Model ▸ Run on a system dynamics model: the run is made two frames on ([`App::poll`]).
-    /// Run can be pressed after the status bar was drawn in its frame, so the next frame is the
-    /// one that paints "Running…", and only the one after makes the run, which blocks.
+    /// Model ▸ Run on a system dynamics model: starts the run, made a few replications a frame
+    /// by [`App::sd_poll`], with the Runs and Seed fields' values for a model with a random
+    /// function. The first frame only paints it as running.
     pub(crate) fn sd_run(&mut self) {
-        if self.sd.pending != Pending::Idle {
+        if self.running.is_some() {
             return;
         }
-        self.sd.pending = Pending::Asked;
-        self.show_results = true;
-        self.info(t("Running…"));
+        let info = self.sd_info();
+        let random = info["random"].as_bool().unwrap_or(false);
+        let params = if random {
+            let runs = self.sd.runs.round().clamp(1.0, MOST_RUNS);
+            json!({ "replications": runs as u64, "seed": self.sd.seed.round().max(0.0) as u64 })
+        } else {
+            json!({})
+        };
+        match self.engine.sd_start(params) {
+            Ok(job) => {
+                let (done, total) = job.progress();
+                self.sd.job = Some(job);
+                self.sd.painted = false;
+                self.show_results = true;
+                self.running = Some(Running {
+                    done,
+                    partial: 0.0,
+                    total,
+                    on_workers: false,
+                });
+                self.info(t("Running…"));
+            }
+            Err(e) => self.report_error(e.message),
+        }
     }
 
-    /// Whether a run was asked for and not made yet.
-    pub(crate) fn sd_pending(&self) -> bool {
-        self.sd.pending != Pending::Idle
+    /// Makes replications for about a frame's time; true while the run goes on. A run stops,
+    /// with its partial results dropped, when the model it runs is changed.
+    pub(crate) fn sd_poll(&mut self) -> bool {
+        let Some(job) = self.sd.job.as_mut() else {
+            return false;
+        };
+        if job.revision() != self.engine.revision() {
+            self.sd_cancel();
+            return false;
+        }
+        // The frame that shows the run's start is painted before the first replication, which
+        // may take long, is made.
+        if !self.sd.painted {
+            self.sd.painted = true;
+            return true;
+        }
+        let start = web_time::Instant::now();
+        let outcome = loop {
+            let step = job.step(1);
+            if !matches!(step, Ok(false)) || start.elapsed() >= FRAME_BUDGET {
+                break step;
+            }
+        };
+        let (done, total) = job.progress();
+        match outcome {
+            Ok(false) => {
+                if let Some(r) = &mut self.running {
+                    r.done = done;
+                    r.total = total;
+                }
+                true
+            }
+            Ok(true) => {
+                let results = self.sd.job.take().map(|job| self.engine.sd_results(job));
+                self.running = None;
+                match results {
+                    Some(Ok(results)) => self.sd_ran(results),
+                    Some(Err(e)) => self.report_error(e.message),
+                    None => {}
+                }
+                false
+            }
+            Err(e) => {
+                self.sd.job = None;
+                self.running = None;
+                self.report_error(e.message);
+                false
+            }
+        }
     }
 
-    /// Moves a run Run asked for one frame on: from asked to painted, then it is made.
-    pub(crate) fn sd_advance(&mut self) {
-        match self.sd.pending {
-            Pending::Idle => {}
-            Pending::Asked => self.sd.pending = Pending::Shown,
-            Pending::Shown => self.sd_run_now(),
+    /// Drops the run in progress, and what it has made.
+    pub(crate) fn sd_cancel(&mut self) {
+        if self.sd.job.take().is_some() {
+            self.running = None;
+            self.info(t("Run cancelled"));
         }
     }
 
@@ -750,41 +812,6 @@ impl App {
     fn sd_show(&mut self, results: Value) {
         self.sd.results = Some(Rc::new(results));
         self.sd.plots.borrow_mut().clear();
-    }
-
-    /// Makes the run Run asked for: the model's own, or for a model with a random function the
-    /// Runs and Seed fields'. One too large for the window is refused.
-    pub(crate) fn sd_run_now(&mut self) {
-        self.sd.pending = Pending::Idle;
-        let info = self.sd_info();
-        let random = info["random"].as_bool().unwrap_or(false);
-        let runs = self.sd.runs.round().clamp(1.0, MOST_RUNS);
-        let steps = ((info["stop"].as_f64().unwrap_or(0.0)
-            - info["start"].as_f64().unwrap_or(0.0))
-            / info["dt"].as_f64().unwrap_or(1.0))
-        .round()
-        .max(1.0);
-        let variables = info["variables"].as_array().map_or(1, Vec::len).max(1) as f64;
-        let work = steps * variables * if random { runs } else { 1.0 };
-        if work.is_nan() || work > WORK_LIMIT {
-            self.report_error(t(
-                "This run is too large to make in the window: shorten it, raise the time step or lower the runs, or run it from the command line.",
-            ));
-            return;
-        }
-        let params = if random {
-            json!({ "replications": runs as u64, "seed": self.sd.seed.round().max(0.0) as u64 })
-        } else {
-            json!({})
-        };
-        match self.engine.execute("sd.run", params) {
-            Ok(results) => {
-                let n = results["replications"].as_u64().unwrap_or(1);
-                self.sd_show(results);
-                self.info(tn(n, "Finished {n} run", "Finished {n} runs"));
-            }
-            Err(e) => self.report_error(e.message),
-        }
     }
 
     /// An agent's `sd.run` ran: its results are the ones on show.
@@ -988,12 +1015,21 @@ impl App {
     /// The Results tab of a system dynamics model: Run, where each stock ends up in words, then
     /// the charts or the table of the variables picked.
     pub(crate) fn sd_results_view(&mut self, ui: &mut egui::Ui) {
+        // A run in progress shows its progress, not the results it will replace.
+        if let Some(r) = &self.running {
+            let (done, partial, total) = (r.done, r.partial, r.total);
+            let size = vec2(ui.available_width().min(640.0), ui.available_height());
+            ui.allocate_ui_with_layout(size, egui::Layout::top_down(egui::Align::Min), |ui| {
+                self.running_view(ui, done, partial, total);
+            });
+            return;
+        }
         let info = self.sd_info();
         let random = info["random"].as_bool().unwrap_or(false);
         let results = self.sd.results.clone();
         let plots = Rc::clone(&self.sd.plots);
         // Not while a run is on its way, which will replace them.
-        let stale = self.sd_results_stale() && !self.sd_pending();
+        let stale = self.sd_results_stale();
         let mut runs = self.sd.runs;
         let mut seed = self.sd.seed;
         let mut table = self.sd.table;

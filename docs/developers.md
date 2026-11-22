@@ -144,6 +144,29 @@ be 95%. A scenario can make its runs sequential itself (the engine's `experiment
 Robinson and Davies (2011), "Automated selection of the number of replications for a
 discrete-event simulation", *Journal of the Operational Research Society* 62(11).
 
+A scenario can also carry real measurements to check a run against (black-box validation, Law,
+*Simulation Modeling and Analysis*, 5th ed., section 5.6.2): the engine's `observation.add`,
+`observation.set` and `observation.remove`, saved in the file as the `stochcraft:observed`
+extension on the scenario (an `observation` for each result, with its `element` and `metric` and
+one of `value` with an optional `halfWidth` and an optional `tolerance` above 0, `atMost` and
+`atLeast`, in the metric's own unit; only elements in StochCraft's namespace count, and the
+extension's value `off` clears what an inherited scenario sets). `run` prints a **checked against
+observed data** table after the results: each observation, the simulated mean with its 95%
+half-width, the difference with its own interval for an observed value, and `agrees within
+tolerance`, `differs`, `no difference detected`, `passes`, `fails` or `inconclusive at current
+precision`, those that differ or fail first, then those not decided, then those that agree or
+pass. The rules are in `stochcraft-stats` (`observed`). The difference interval of an observed
+value is (simulated mean − observed) ± hypot(hs, ho). Without a tolerance it `differs` when the
+interval excludes 0 and otherwise only detects no difference, which is not agreement (a wide
+interval holds 0 whatever the truth; Sargent 2013). With a tolerance t it is an equivalence test
+in the manner of two one-sided tests: `agrees` when the whole interval is inside [-t, +t],
+`differs` when wholly outside, else `inconclusive`; the 95% interval is conservative against the
+90% interval of the exact test. A bound passes when the whole simulated interval meets it, fails
+when the whole interval violates it (the edge itself meets it), and is inconclusive otherwise,
+never decided by the mean alone; fewer than 2 replications make every check inconclusive.
+`--format json` has the checks as `observed`. The engine adds them in `wire::results`
+(`engine/src/observed.rs`), so `run`, `run.start` and every client get them.
+
 To vary several parameters at once, `design` runs every combination of their levels (a full
 factorial) on the same seed, and gives each result at each point, each factor's main effect and,
 for factors with two levels, their two-way interactions, each with a paired 95% interval:
@@ -392,10 +415,19 @@ is refused, nothing written); `Engine::save_drops` lists what a plain Save into 
 would leave out (the reader's notes, any of which means something was not kept or was run another
 way, as the notes are free text), empty once the model has been written to it, and the window
 asks first (the `NewFile` question, with Replace, Save As and Cancel); its unsaved state is `Engine::is_dirty`, and its
-recovery copy is skipped (recovery copies are process models only). The window's run is made
-whole, two frames after Run is pressed (the first paints "Running…"), with the work bounded (steps times variables times runs, at most
-20 million); a run a few replications at a time like Monte Carlo's would need `stochcraft-sd` to
-give per-replication results.
+recovery copy is skipped (recovery copies are process models only). The window's run is a job
+made a few replications a frame, as Monte Carlo's is: `stochcraft_sd::SdJob` (`new` checks the
+run as `run` does, `step(n)` makes up to `n` whole replications, `progress`, `finish`; `run` is
+`new` and `finish`, so there is one code path, and each replication's streams are keyed by the seed
+and its number alone, so the results are the same however the replications are spread over steps).
+The engine's `sd::SdJob` wraps it: `Engine::sd_start` takes `sd.run`'s parameters, and
+`Engine::sd_results` makes the results the model's last (as `sd.run` does, so `sd.get` and the
+stale marking behave the same) and journals an `sd.run` step; it is refused with `conflict` if the
+model was changed since the job started (`SdJob::revision`), which the window checks every frame
+and answers by cancelling the run. The window (`App::sd_poll`) steps one replication at a time for
+about the Monte Carlo frame budget (8 ms) and paints the first frame as running before the first
+replication, which may take long, is made. A replication is not interrupted, so stepping inside
+one is not offered.
 
 **Editing.** `sd.variable.add` (stock, flow or aux with its equation, units, a graphical function,
 a stock's flows, a position; `into_stock` and `from_stock` attach a new flow), `sd.variable.set`
@@ -520,7 +552,8 @@ claude mcp add stochcraft -- /path/to/stochcraft-cli mcp
 ```
 
 Start the app with `stochcraft --control 7070` and add `--connect 127.0.0.1:7070` to watch the
-agent work in the window. [mcp.md](mcp.md) has the tools and options.
+agent work in the window; the app writes a token to a file only its user can read, and `--connect`
+reads it from there. [mcp.md](mcp.md) has the tools, the options and how the token works.
 
 ## How it is checked
 
