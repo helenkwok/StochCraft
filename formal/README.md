@@ -72,6 +72,8 @@ This is the finite-horizon sample-path identity, not the limit theorem `L = λW`
 
 With `Wq = λ E[S²] / (2(1 − λ E[S]))`:
 
+- `pkWait_mean_value`: if `λ E[S] < 1`, the formula satisfies the mean-value equation
+  `W = λ E[S] W + λ E[S²]/2`.
 - `pkWait_of_mean_value`: if `λ E[S] < 1` and `W = λ E[S] W + λ E[S²]/2` (the mean-value
   equation from mean residual work and Little's law, assumed), then `W` is the formula.
 - `pkWait_exponential`: with `E[S] = 1/μ`, `E[S²] = 2/μ²` and `λ < μ` it is `ρ/(μ − λ)`, the
@@ -85,7 +87,7 @@ With `Wq = λ E[S²] / (2(1 − λ E[S]))`:
 Install [elan](https://github.com/leanprover/elan), then in this folder:
 
 ```sh
-lake exe cache get   # download Mathlib's prebuilt files (a few GB) instead of compiling it
+lake exe cache get   # download Mathlib's prebuilt files (about 9,000 files) instead of compiling it
 lake build --wfail   # warnings, including any `sorry`, are errors
 ```
 

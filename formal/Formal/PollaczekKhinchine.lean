@@ -8,9 +8,9 @@ public import Mathlib
 The tests use the M/G/1 mean wait `Wq = λ E[S²] / (2 (1 − λ E[S]))` (`pollaczek_khinchine` in
 `crates/engine/tests/examples.rs`). This file proves only algebra about that formula:
 
-* it is the unique solution of the mean-value equation `W = λ E[S] W + λ E[S²]/2` when
-  `λ E[S] < 1` (that equation, from mean residual work and Little's law, is assumed, not
-  proved);
+* when `λ E[S] < 1` it satisfies the mean-value equation `W = λ E[S] W + λ E[S²]/2`, and is
+  its only solution (that the M/G/1 mean wait obeys this equation, from mean residual work and
+  Little's law, is assumed, not proved);
 * with exponential service (`E[S] = 1/μ`, `E[S²] = 2/μ²`) it reduces to the M/M/1 wait
   `ρ/(μ − λ)`;
 * with the same mean, a larger second moment gives a longer wait;
@@ -27,7 +27,16 @@ namespace Formal
 moment of the service time `s2`. -/
 noncomputable def pkWait (lam m s2 : ℝ) : ℝ := lam * s2 / (2 * (1 - lam * m))
 
-/-- The formula solves the mean-value equation `W = λ m W + λ s2 / 2` when `λ m < 1`. -/
+/-- The formula satisfies the mean-value equation `W = λ m W + λ s2 / 2` when `λ m < 1`. -/
+theorem pkWait_mean_value {lam m s2 : ℝ} (hρ : lam * m < 1) :
+    pkWait lam m s2 = lam * m * pkWait lam m s2 + lam * s2 / 2 := by
+  have hne : 2 * (1 - lam * m) ≠ 0 := mul_ne_zero two_ne_zero (sub_pos.mpr hρ).ne'
+  have E : (2 * (1 - lam * m))⁻¹ * (2 * (1 - lam * m)) = 1 := inv_mul_cancel₀ hne
+  unfold pkWait
+  linear_combination (lam * s2 / 2) * E
+
+/-- Any `W` satisfying the mean-value equation `W = λ m W + λ s2 / 2`, with `λ m < 1`, is the
+formula. -/
 theorem pkWait_of_mean_value {lam m s2 W : ℝ} (hρ : lam * m < 1)
     (h : W = lam * m * W + lam * s2 / 2) : W = pkWait lam m s2 := by
   have hne : 2 * (1 - lam * m) ≠ 0 := mul_ne_zero two_ne_zero (sub_pos.mpr hρ).ne'
