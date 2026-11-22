@@ -23,7 +23,6 @@ stochcraft-blocks = { path = "crates/blocks" }
 stochcraft-io = { path = "crates/io" }
 stochcraft-engine = { path = "crates/engine" }
 stochcraft-render = { path = "crates/render" }
-stochcraft-testkit = { path = "crates/testkit" }
 stochcraft-ui-egui = { path = "crates/ui-egui" }
 stochcraft-mcp = { path = "crates/mcp" }
 stochcraft-mc = { path = "crates/mc" }

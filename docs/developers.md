@@ -27,6 +27,18 @@ In the browser, runs use a web worker for each core but one (up to 16), and the 
 installed and used offline. Every pull request gets a preview build, linked from the pull
 request.
 
+#### How the site is published
+
+`.github/workflows/pages.yml` builds the browser app and keeps the site folder as an Actions artifact
+(`site-main` for `main`, `site-pr-<number>` for each pull request from this repository, 30 days).
+Nothing is committed to a branch. `.github/workflows/pages-deploy.yml` runs after every Pages run and
+when a pull request closes (`pages-cleanup.yml` exists only to trigger it), takes the newest
+`site-main` for the root and the newest `site-pr-<number>` of each open pull request for
+`pr/<number>/`, and serves the result with `actions/deploy-pages`. A preview whose artifact has
+expired or whose build failed is absent. If `main` has had no build for 30 days there is no root to
+serve and the deploy fails, leaving the live site as it is: run the Pages workflow on `main` again.
+The repository's Pages source is "GitHub Actions". The old `gh-pages` branch is no longer written to.
+
 ### Fonts for the browser build
 
 Without more, the browser app has only IBM Plex and egui's faces, so Japanese, Korean, Chinese,
@@ -64,6 +76,20 @@ draw only with fonts the visitor's own system has.
 - `stochcraft-mcp` serves the engine's commands to AI agents over the Model Context Protocol.
 - `stochcraft-cli` runs models from the command line; the app (`apps/stochcraft`,
   `apps/stochcraft-web`, UI in `crates/ui-egui`) runs them in a window.
+
+### What a shell does for recovery and late files
+
+The window (`stochcraft-ui-egui`'s `App`) decides what is worth keeping; a shell decides where.
+Every window or tab is a session with a slot of its own: `App::autosave` returns the copy to
+write (`Autosave::Write`), to remove (`Clear`) or nothing (`Keep`), and the shell reports a
+failure with `App::autosave_write_failed` or `App::autosave_clear_failed` so the call is made
+again. At start the shell offers each copy left by a session that is gone with
+`App::offer_recovery(slot, copy)`, and after each autosave call removes the slots from
+`App::take_dropped_copies`. The desktop shell (`apps/stochcraft/src/recovery.rs`) tells a gone
+session by its lock file (`File::try_lock`); the browser shell (`apps/stochcraft-web`,
+`storage.rs`) by a time stamp the tab refreshes, with a few minutes' grace. A shell that reads a
+file in the background calls `App::begin_open` when it starts and hands the ticket back to
+`App::finish_open` with the bytes, which drops a stale completion.
 
 [architecture.md](architecture.md) has the layers and how they depend on each other, and
 [ROADMAP.md](../ROADMAP.md) what is done and what comes next.
@@ -114,6 +140,23 @@ run record (version, model digest, scenario, seed, replications, warm-up and dur
 enough to reproduce the numbers. `--format json` or `--format csv` gives machine-readable
 results, `--out` writes them to a file, and `--seed`, `--warmup` and `--duration` override the
 model's scenario for that run. Any BPMN or XPDL file with BPSim data can be run the same way.
+
+A file that StochCraft read with errors (`validate` lists them: a processing-time expression it
+cannot evaluate, say) is not run, in any output format, in the window or through MCP: reading it
+substitutes something for each part it could not read (a time of zero for that expression), so
+the numbers would be of another model. `run --allow-approximations` (the parameter
+`allow_approximations` of `run`, `run.start` and the `experiment.*` commands) runs the
+substitution deliberately: each substitution is printed on stderr and listed in the run record
+(`approximations`, in addition to `file_notes`). An error pinned to one field (a task's processing time) stops counting while that field is set
+to something else (undo brings it back), since the edit replaces the stand-in; renaming the block or
+editing another property does not clear it, and any other error stands until the file is opened
+again. A Monte Carlo model needs no
+such gate: reading its inputs and outputs raises warnings only, never an error that substitutes
+something.
+
+`--out` (also `design --out`) refuses a path that is the model file it reads, and writes through
+a temporary file that is renamed over the target, so a crash or a full disk leaves the old file
+whole.
 
 To run until the numbers are precise enough rather than a fixed number of times, give a target:
 
@@ -236,7 +279,11 @@ maximum, and, with a target (`at_most` or `at_least`), the share of trials meeti
 95% interval; `--format json` adds a histogram, the cumulative curve, the percentiles
 P10 and P90. For each output the table and the JSON also say which inputs matter: a tornado of
 swings (the output with each input at its 10th and 90th percentile, the others at their
-medians) and the rank correlation of each input with it. `--until 1% --max 1000000` adds trials
+medians) and the rank correlation of each input with it. The table says "changes most with" for
+the widest swing, which is the largest change between those two endpoints and not the largest
+share of the variance (that is the Sobol share), and names each input whose output at its
+median is outside its two endpoint values (`not_monotone` in the JSON), where the swing
+understates or misses its effect. `--until 1% --max 1000000` adds trials
 until every output's mean is within ±1% of itself. Outputs are BPSim expressions with the inputs (and earlier outputs) as `$name`, the
 arithmetic of XPath and `min`, `max`, `sum`, `abs`, `sqrt`, `exp`, `log`, `pow`, `sin`, `cos`, `round` and
 `if(condition, then, else)`; a condition such as `$cost > 6000` gives 1 or 0 in each trial, so its
@@ -250,7 +297,11 @@ JSON has a `sobol` field. The command behind it is `mc.sobol` (`rows`, `seed`, w
 model's own by default, and `bootstrap`, 1,000 by default): per output its `variance`,
 `rows_used`, `rows_dropped`, `unavailable` (why it has no indices, if it has none) and for each
 input `first` and `total`, each with a `value` and an `interval`, besides `rows`, `evaluations`
-and the `constants` left out. The estimates are not clamped: a small sample can give one a little
+and the `constants` left out. An output with a row whose value is not a finite number in any of
+the evaluations the estimators compare (`rows_dropped` above 0) gets no indices, with the counts
+and the reason in `unavailable`: which rows are missing depends on the inputs, so leaving them
+out conditions the inputs and what is left does not estimate the shares of independent inputs.
+The other outputs keep their indices. The estimates are not clamped: a small sample can give one a little
 below 0 or above 1. The indices need independent inputs, so a model with correlated inputs is
 refused with an `invalid_model` error that says so; `run --sobol` then prints the reason (under
 `sobol.unavailable` in the JSON, on stderr for `--format csv`) and still prints the normal
@@ -293,9 +344,20 @@ record's `interval` says which, for example `Student-t across 12 independent Lat
 batches of 1000 trials`. Sobol sampling is judged the same way (each batch's shift is
 independent, so its batch means are independent replicates; `interval_basis` is `batches`).
 Antithetic trials depend on their twin and not on the other pairs, so the interval is Student-t
-on the pair means, with one degree of freedom fewer than there are pairs (Glasserman, 2003,
-§4.2; `interval_basis` is `pairs`, and runs are whole pairs). The standard deviation is always across trials: it describes the
-output, not the precision of its mean.
+across the pairs, with one degree of freedom fewer than there are pairs (Glasserman, 2003,
+§4.2; `interval_basis` is `pairs`, and runs are whole pairs). The reported mean is the mean of
+all the valid trials. A pair with one trial that gave no number is a cluster of one trial, and
+averaging the pair means would give that lone trial the weight of a whole pair (the mean
+would then differ from the mean of the trials, and from a target's share of them), so the
+interval is the ratio estimator's, R = Σy_j / Σn_j over the pairs j that have a valid trial,
+with variance Σ(y_j − R n_j)² / ((k − 1) k n̄²) (Cochran, *Sampling Techniques*, 3rd ed., 1977,
+§6.4; the pairs are independent clusters of random size); where every pair is complete it is
+the interval on the pair means. A target's probability gets the same on the pairs' hits. A
+sequential stop judges the same numbers. The standard deviation is always across trials: it
+describes the output, not the precision of its mean. Where every value the interval is across
+is the same, `half_width` is `null` and `no_variation` is `true`: a width of 0 would claim the
+mean is exact, which a run cannot know (a rare event the trials did not reach gives the same
+picture).
 
 **Control variates** ([`stochcraft_mc::control`](../crates/mc/src/control.rs); Law, *Simulation
 Modeling and Analysis*, 5th ed., §11.3; Glasserman, 2003, §4.1; Nelson, 1990). An output can name
@@ -339,8 +401,11 @@ least 10% narrower); its `target` has the same for the probability. With too few
 run of one batch where intervals are across batches, `estimate` is `null` and `unavailable` says
 why. An input named only as a control is not reported as `unused_input`, and a replacing
 `mc.inputs.import` drops the controls of inputs it removes, as it drops their correlations; a
-control object with fields of both forms is refused. The window makes the controlled results the
-headline where `helped`, words a controlled chance as an estimate (never as a count of trials),
+control object with fields of both forms is refused. `controlled.mean_mismatch` is true when any
+control's is: the controlled estimate is then biased, and neither the window nor the command line
+lets it displace the plain headline (the window keeps the plain mean and chance and shows the
+controlled ones beside them; the table labels them "biased, not used"). The window makes the
+controlled results the headline where `helped` and no control is flagged, words a controlled chance as an estimate (never as a count of trials),
 and says so in words otherwise; `stochcraft_engine::mc::control_inputs` lists the inputs that can be controls.
 
 The input table goes out and back in as CSV:
@@ -378,8 +443,19 @@ stochcraft-cli exec changes.json --open queue.bpmn
 
 A system dynamics model is stocks (levels) and flows (rates) over time, read from an XMILE 1.0
 file (OASIS, 2015). It is opened, edited, run, saved and read through the engine and the command
-line; the window shows and runs it (the Model and Results tabs, `crates/ui-egui/src/sd.rs`), and
-the canvas comes next.
+line; the window shows, runs and edits it (the Model and Results tabs, `crates/ui-egui/src/sd.rs`, and
+the Diagram tab, the canvas, `crates/ui-egui/src/sd_canvas.rs`).
+
+The Diagram tab draws what `sd.get` gives (each variable's centre, size and, for a flow, its pipe, the
+stocks it leaves and enters, and the links) and sends every change as one engine command, so it
+undoes in one step: a drag on release is `sd.layout.set` (the engine moves the pipes at a stock),
+an added stock or auxiliary is `sd.variable.add` with a `position`, an added flow is
+`sd.variable.add` with `from_stock`/`into_stock`, a field of the side panel is `sd.variable.set`, a
+link is `sd.layout.set` with `add_connectors`, and Delete is `sd.variable.remove`. The undo labels
+are the commands' names, which `change_label` in `crates/ui-egui/src/lib.rs` words ("Add Variable",
+"Edit Variable", "Remove Variable", "Simulation Settings", "Change Diagram"). The canvas keeps its
+view, tool, selection and half-typed fields in `SdCanvas` and re-reads `sd.get` only when the
+engine's revision changes.
 
 ```bash
 stochcraft-cli run tests/models/sir.xmile                     # each variable at the end of the run
@@ -433,7 +509,11 @@ equation names the variable or a stock lists it, naming who; `force` clears the 
 An edit's undo entry is a snapshot of the whole `SdModel` before it (`Undo::Sd` in the engine, the
 counterpart of `Op::SetModel`), on the same stacks as process edits; undo swaps it in and compiles
 it. The model is dirty while it, diagram included, differs from the one opened or last saved.
-`file.save` writes XMILE (`format` is `xmile`); a journal that began with `sd.new` records its
+`file.save` writes XMILE (`format` is `xmile`); an unchanged model is written as the bytes it was
+read from, and saving a changed model into the file it was read from, when the reader noted
+content it does not keep (a second view, display settings), is refused with `conflict` and the
+list in `details.would_lose` unless `allow_loss` is `true` (a process model saved with `as_new`
+over its own file that has notes is refused the same way). A journal that began with `sd.new` records its
 parameters in the start record and replays from it.
 
 **The diagram** is `SdModel.layout`: a shape per variable by canonical name (the centre; a stock
@@ -470,7 +550,14 @@ one, gets `Layout::auto`.
 topological order of what their equations name, ties broken by name; an algebraic loop is an error
 naming the cycle. A stock that cannot go negative limits its outflows, in the order it lists them,
 to what it holds at the start of the pass, so the stock that receives a flow gets the same
-limited flow and material is conserved. `DELAYn` and `SMTHn` are hidden stocks (their time
+limited flow and material is conserved. A flow that comes out negative runs backwards, and the
+stocks it enters are the ones it takes from: they limit it (in the order the flows are worked
+out), so no such stock goes below 0 and nothing is clipped afterwards. A flow that is not a
+number is not limited (the limit would turn it into a transfer): it stays not a number, with a
+warning, and so do the stocks it touches. A flow listed twice at one stock is refused. Under
+Runge-Kutta a `STEP` on a step boundary is integrated as under Euler (the stage at the end of a
+step sees the value from the left); a jump inside a step, or made with `IF` on `TIME`, makes that
+step first order: put jumps on step boundaries, use Euler, or lower the step. `DELAYn` and `SMTHn` are hidden stocks (their time
 constant is never taken below the step), `PULSE` delivers its volume in one step under either
 method, a graphical function is clamped at its ends with a warning, and a random function holds one
 draw for its interval and takes it from a stream keyed by variable, call and draw number, so
@@ -480,16 +567,24 @@ gives the mean, the median and the 5th and 95th percentiles at each saved time. 
 on both sides of each equation (compound units, and `1`), and a flow against its stock's units per
 the model's time unit; a mismatch is a warning. `time_unit` reports times in another unit.
 
-`dt_check` runs the model again at half the step and gives, for each stock, the largest relative
-difference between the two mean paths (relative to the larger of the value and 0.1% of the
-stock's peak); within 1% is called independent of the step.
+`dt_check` runs the model again at half the step, to the same end time, and gives, for each stock,
+the largest relative difference between the two mean paths (relative to the larger of the value
+and 0.1% of the stock's peak), compared at the saved times the two runs share; within 1% is
+called independent of the step. A stock with no shared time after the start, or a value that is
+missing or not a number at one, is `inconclusive` (and so is the check, which is then never
+`within_threshold`), not a difference of 0. `draws_matched` is false when a random function draws
+at different times at the two steps (its interval is a whole number of steps, so a half step can
+move it); the random values are then not the same ones and `notes` says so. `time_unit` converts
+`dt` and the halved `dt` as well as the times. XMILE elements are recognised by their namespace
+URI, whatever prefix the file uses; a file whose root is in another namespace is refused.
 
 ### The journal
 
 The engine records every command that is not a query in its journal. A new or opened document
 (`model.new`, `file.open`, and opening a file in the app) starts a new journal, so a journal is
 the history of one document. `exec --journal out.json` writes the journal of what the script did,
-also when a step failed, as a JSON object:
+also when a step failed (atomically, and never over the script, the file given with `--open` or
+the file the script opened or saved: those are refused), as a JSON object:
 
 ```json
 {
@@ -515,19 +610,31 @@ also when a step failed, as a JSON object:
   (`model.new`, with the model's `name`) or `file` (with the name the file was opened under,
   the digest of its bytes and the scenario). `model_digest` is the digest the run records carry,
   of the model at the start. `file_digest`, `name` and `scenario` are left out when they do not
-  apply. The command that started the document is not an entry: `start` records it.
+  apply. The command that started the document is not an entry: `start` records it. `document` is
+  `process` or `system_dynamics`; for a system dynamics model `model_digest` is the digest of the
+  model without its diagram (the one its run records carry), not of an empty process model. A
+  journal written before `document` existed is a legacy one: a process journal replays as before,
+  a legacy journal that began with `sd.new` rebuilds its model from that step, and one that began
+  from an opened XMILE file cannot vouch for its model and is refused unless `--force`.
+- `engine` names the build that wrote it (the version, the platform and, when the build was given
+  `STOCHCRAFT_REVISION`, the source revision). A replay prints, on stderr, how many edits it
+  replayed and how many runs it made again, and whether this is the same build: runs are made
+  again, not compared with the original numbers, and only the same build is expected to give the
+  same ones.
 - `entries` are the commands in order, as `{"command", "params"}`. A script for `exec` is the same
   array on its own, and `exec` runs that in full.
 
 Replaying a journal (`exec journal.json`) first checks that the model is the one it started from
 (`--open` the same file, which opens the scenario the journal records in `start.scenario`; a
 journal that began with `model.new` starts its own model) and refuses
-with a `conflict` error if not, unless `--force`. If the file has no scenario of that name, `exec`
+with a `conflict` error if not, unless `--force`. The same model from other bytes (the file was
+edited since) and a document of the other kind are refused too. If the file has no scenario of that name, `exec`
 stops with the error from opening it; with `--force` it replays onto the file's first scenario.
 It then re-applies the edits, undo and redo, and
 skips the saves, runs and experiments (`file.save`, `run`, `mc.run`, `mc.sobol`, `sd.run`, `run.start`,
 `run.cancel`, `experiment.sweep`, `experiment.sensitivity`, `experiment.design`,
-`experiment.size`), printing `"skipped": true` for each; `--all` carries them out too. In Rust,
+`experiment.size`), printing `"skipped": true` for each; `--all` carries them out too, and a
+replayed `run.start` is run to completion so later steps find its results. In Rust,
 `Engine::journal_document` gives the journal and `Engine::replay_journal` replays it
 (`ReplayMode::EditsOnly` or `All`); `Engine::replay` still runs a plain list of steps in full.
 
@@ -590,6 +697,21 @@ are out of its reach too; the statistical tests cover them), confidence interval
 and anything in the engine, the block runtime or the interface (entity accounting is checked by
 the run-time behaviour checks, not proved). Proofs are bounded by the stated input ranges and by
 the checker's model of floating point.
+
+### Pull request reviews
+
+Two automated reviewers comment on pull requests. CodeRabbit is a GitHub app and needs nothing
+from the repository. The Gemini CLI review is the workflows `.github/workflows/gemini-dispatch.yml`
+and `gemini-review.yml` (adapted from the `run-gemini-cli` examples, which are Apache-2.0). It runs
+when a pull request from a branch of this repository is opened or reopened, when a repository
+owner, member or collaborator starts a comment or review with `@gemini-cli /review` (any text
+after it is passed to the reviewer as extra focus, for example `@gemini-cli /review check error
+handling`), or when someone with write access runs the "Gemini Dispatch" workflow by hand with a
+pull request number. Pull requests from forks are not reviewed, because a fork's run must not see
+secrets. The review needs a repository secret named `GEMINI_API_KEY` (a Gemini API key from
+Google AI Studio); without it the run fails and posts a failure comment. It posts with the
+workflow's own token and reads the pull request through GitHub's MCP server in a container. Its
+comments are suggestions, not checks: CI is the gate.
 
 ## Contributing
 

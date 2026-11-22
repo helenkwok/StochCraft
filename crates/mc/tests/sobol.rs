@@ -248,10 +248,11 @@ fn constant_inputs_are_left_out_and_an_output_that_does_not_vary_has_no_indices(
     );
 }
 
-/// Rows whose output is not a finite number in some matrix are dropped for that output, and
-/// counted.
+/// An output with a row that is not a finite number in some matrix gets no indices (the rows
+/// left out depend on the inputs, so what is left does not estimate the shares), with the
+/// counts; an output with a number in every row keeps its indices.
 #[test]
-fn rows_with_a_value_that_is_not_a_number_are_dropped_and_counted() {
+fn an_output_with_rows_that_are_not_a_number_gets_no_indices_but_the_others_keep_theirs() {
     let mc = model(
         vec![input("x", Dist::Uniform { min: 0.0, max: 1.0 })],
         vec![output("y", "if($x > 0.9, 1 div 0, $x)"), output("z", "$x")],
@@ -263,9 +264,15 @@ fn rows_with_a_value_that_is_not_a_number_are_dropped_and_counted() {
     // A row survives when x is at most 0.9 in A and in B: 81% of them.
     assert!(y.rows_dropped > 200 && y.rows_dropped < 550, "{y:?}");
     assert_eq!(y.rows_used + y.rows_dropped, 2_000);
-    assert!(y.unavailable.is_none());
+    assert!(y.indices.is_empty(), "{y:?}");
+    let why = y.unavailable.as_deref().unwrap_or("");
+    assert!(
+        why.contains(&format!("{} of 2000 rows", y.rows_dropped)),
+        "{why}"
+    );
     let z = r.outputs.get(1).unwrap_or_else(|| unreachable!());
     assert_eq!(z.rows_dropped, 0);
+    assert!(z.unavailable.is_none() && !z.indices.is_empty(), "{z:?}");
 }
 
 #[test]

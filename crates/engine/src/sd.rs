@@ -36,9 +36,18 @@ pub(crate) struct SdDoc {
     /// Saving into `file` would leave out what the reader noted it does not keep: the model was
     /// read from that file and not written back to it since.
     pub drops_on_save: bool,
+    /// The bytes the model was read from or last written as, which an unchanged save writes
+    /// again, so what the reader does not keep (a second diagram, display settings) survives it.
+    pub bytes: Option<Vec<u8>>,
     pub last: Option<SdResults>,
     /// The model was edited since `last` was run.
     pub last_stale: bool,
+}
+
+/// The digest that identifies a system dynamics model in a journal and a run's record: of the
+/// model without its diagram, so moving a shape does not change it.
+pub(crate) fn sd_digest(model: &SdModel) -> String {
+    crate::bytes_digest(stochcraft_sd::model_text(model).as_bytes())
 }
 
 pub(crate) fn sd_error(e: SdError) -> CommandError {
@@ -92,6 +101,7 @@ impl Engine {
         })?;
         let mut start = JournalStart::new(StartKind::File, Some(name.to_owned()));
         start.file_digest = Some(crate::bytes_digest(bytes));
+        start.document = Some("system_dynamics".to_owned());
         let result = json!({
             "path": name,
             "format": "xmile",
@@ -110,10 +120,16 @@ impl Engine {
             model: file.model,
             program,
             drops_on_save: is_file && !file.notes.is_empty(),
+            bytes: Some(bytes.to_vec()),
             notes: file.notes,
             last: None,
             last_stale: false,
         });
+        // The journal identifies the model that was opened, not the empty process model the
+        // document was begun with.
+        if let Some(d) = &self.sd {
+            self.journal_start.model_digest = sd_digest(&d.model);
+        }
         Ok(result)
     }
 }
@@ -331,7 +347,7 @@ impl Engine {
         };
         let results = job.job.finish().map_err(sd_error)?;
         // The digest is of the model without its diagram: moving a shape does not change it.
-        let digest = crate::bytes_digest(stochcraft_sd::model_text(&doc.model).as_bytes());
+        let digest = sd_digest(&doc.model);
         let mut json = results_json(&results, &digest, &doc.notes);
         json["record"]["file"] = if doc.path.is_empty() {
             Value::Null
@@ -382,11 +398,16 @@ pub fn results_json(r: &SdResults, digest: &str, notes: &[String]) -> Value {
                 "name": s.name,
                 "max_relative_difference": finite(s.max_relative_difference),
                 "at_time": s.at_time,
+                "compared_times": s.compared,
+                "inconclusive": s.inconclusive,
             })).collect::<Vec<_>>(),
             "max_relative_difference": finite(c.max_relative_difference),
             "threshold": stochcraft_sd::DT_CHECK_THRESHOLD,
             "within_threshold": c.within_threshold,
-            "method": "the model run again at half the time step, with the same seed and draws at the same times; for each stock, the largest over the saved times of the difference between the two mean paths, relative to the larger of the value at half the step and 0.1% of the stock's largest value",
+            "inconclusive": c.inconclusive,
+            "draws_matched": c.draws_matched,
+            "notes": c.notes,
+            "method": "the model run again at half the time step, to the same end time, with the same seed (the random values are the same ones when `draws_matched` is true); for each stock, the largest over the saved times both runs share (compared by time, after the start) of the difference between the two mean paths, relative to the larger of the value at half the step and 0.1% of the stock's largest value; inconclusive, not a difference of 0, when a stock has no shared time or a value that is missing or not a number",
         })
     });
     let uncertainty = if r.replications > 1 {

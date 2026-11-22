@@ -782,3 +782,65 @@ fn a_replacing_import_removes_the_controls_of_inputs_that_are_gone() {
     // The model runs.
     ok(&mut e, "mc.run", json!({ "trials": 3_000, "seed": 1 }));
 }
+
+/// Results that do not claim more than the trials show: a normal truncated far in its tail keeps
+/// its mean under Latin hypercube sampling, an output with no spread says no variation was
+/// observed instead of giving a zero-width interval, and an input the output goes up and down
+/// along is flagged in the influence table.
+#[test]
+fn results_say_what_the_trials_show_and_no_more() {
+    let mut e = Engine::new();
+    ok(&mut e, "model.new", json!({ "name": "Tails" }));
+    ok(
+        &mut e,
+        "mc.input.set",
+        json!({ "name": "x", "distribution": { "type": "truncated_normal", "mean": 0.0, "std_dev": 1.0, "min": 40.0, "max": 41.0 } }),
+    );
+    ok(
+        &mut e,
+        "mc.input.set",
+        json!({ "name": "u", "distribution": { "type": "uniform", "min": -1.0, "max": 1.0 } }),
+    );
+    ok(
+        &mut e,
+        "mc.output.set",
+        json!({ "name": "tail", "expression": "$x" }),
+    );
+    ok(
+        &mut e,
+        "mc.output.set",
+        json!({ "name": "flat", "expression": "1" }),
+    );
+    ok(
+        &mut e,
+        "mc.output.set",
+        json!({ "name": "square", "expression": "$u * $u + 0.01 * $x" }),
+    );
+    for sampling in ["random", "latin_hypercube"] {
+        ok(&mut e, "mc.set", json!({ "sampling": sampling }));
+        let r = ok(&mut e, "mc.run", json!({ "trials": 10_000, "seed": 1 }));
+        let mean = r["outputs"][0]["mean"].as_f64().unwrap_or(f64::NAN);
+        // The exact mean is 40.0249.
+        assert!((mean - 40.0249).abs() < 0.002, "{sampling}: {mean}");
+        // The constant output: no interval, said so.
+        let flat = &r["outputs"][1];
+        assert_eq!(flat["no_variation"], true, "{sampling}");
+        assert!(flat["half_width"].is_null(), "{sampling}: {flat}");
+        assert_eq!(r["outputs"][0]["no_variation"], false, "{sampling}");
+    }
+    // u*u at u's median is 0, outside its endpoints' 0.64 and 0.64: not monotone; x's flat
+    // effect on `square` is a straight line.
+    let r = ok(&mut e, "mc.run", json!({ "trials": 1_000, "seed": 1 }));
+    let inputs = r["outputs"][2]["influence"]["inputs"]
+        .as_array()
+        .cloned()
+        .unwrap_or_default();
+    let flag = |name: &str| {
+        inputs
+            .iter()
+            .find(|i| i["input"] == name)
+            .map(|i| i["not_monotone"].clone())
+    };
+    assert_eq!(flag("u"), Some(json!(true)), "{inputs:?}");
+    assert_eq!(flag("x"), Some(json!(false)), "{inputs:?}");
+}

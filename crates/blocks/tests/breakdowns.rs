@@ -162,3 +162,50 @@ fn an_interrupted_job_resumes_where_it_stopped() {
     let a = m.and_then(|e| e.availability);
     assert!(a.is_some_and(|a| (a - 59.0 / 69.0).abs() < 1e-9), "{a:?}");
 }
+
+/// A breakdown has a stream of its own: a server whose breakdown never fires (its first failure
+/// is long after the run ends) gives the very service times, waits and flows of the same server
+/// without one, under every seed. Service times that moved with the breakdown would unpair
+/// comparisons between a model with failures and one without (common random numbers).
+#[test]
+fn a_breakdown_that_never_fires_leaves_the_service_times_alone() {
+    let run = |with: bool, seed: u64| {
+        let mut m = Builder::new();
+        let src = m.source("in", Dist::exponential_rate(0.9), None);
+        let srv = m.server("machine", 1, Dist::exponential_rate(1.0));
+        if with {
+            m.breakdown(
+                srv,
+                Breakdown {
+                    time_to_failure: Dist::Constant(1e15),
+                    repair: Dist::Constant(1.0),
+                    interruptible: true,
+                    hands_on_while_down: true,
+                },
+            );
+        }
+        let out = m.sink("out");
+        m.connect(src, srv);
+        m.connect(srv, out);
+        let compiled = compile(&m.build(experiment(0.0, 2_000.0)));
+        let Ok(compiled) = compiled else {
+            panic!("{compiled:?}")
+        };
+        compiled
+            .run(Rng::new(seed))
+            .unwrap_or_else(|e| panic!("{e}"))
+    };
+    for seed in [1, 2, 3, 70_000] {
+        let (a, b) = (run(false, seed), run(true, seed));
+        for id in ["machine", "out"] {
+            let (x, y) = (a.element(id), b.element(id));
+            assert!(x.is_some() && y.is_some(), "{id}");
+            let pick = |e: Option<&stochcraft_blocks::ElementReport>| {
+                e.map(|e| (e.entered, e.left, e.mean_wait, e.mean_time_in_system))
+            };
+            assert_eq!(pick(x), pick(y), "{id}, seed {seed}");
+        }
+        // Something was served, with waits: the comparison is not of empty runs.
+        assert!(a.element("out").is_some_and(|e| e.left > 1_000), "{a:?}");
+    }
+}

@@ -142,6 +142,7 @@ pub fn tool_definitions() -> Vec<Value> {
                 json!({
                     "path": string("Where to save (default: the model's file)"),
                     "as_new": {"type": "boolean", "description": "Write a new BPMN file from the model alone"},
+                    "allow_loss": {"type": "boolean", "description": "Replace the file even though it holds what StochCraft does not keep; without this such a save is refused and names what it would leave out"},
                 }),
                 &[],
             ),
@@ -326,7 +327,7 @@ fn dispatch(b: &mut dyn Backend, name: &str, a: &Map<String, Value>) -> Result<V
         })),
         "check_model" => b.execute("model.validate", json!({})),
         "open" => b.execute("file.open", pick(a, &["path", "scenario"])),
-        "save" => b.execute("file.save", pick(a, &["path", "as_new"])),
+        "save" => b.execute("file.save", pick(a, &["path", "as_new", "allow_loss"])),
         "run" => {
             // Without the results over time, which multiply the reply's size for a chart an
             // agent rarely needs; the warm-up suggested from them stays. `execute` with `run`

@@ -198,6 +198,7 @@ pub(crate) fn new(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
     let program = stochcraft_sd::compile(&model).map_err(sd_error)?;
     let mut start = JournalStart::new(StartKind::NewSd, p.name);
     start.params = Some(raw);
+    start.document = Some("system_dynamics".to_owned());
     let result = json!({
         "model": describe(&model, &program),
         "diagnostics": warnings_json(&program),
@@ -211,9 +212,13 @@ pub(crate) fn new(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         program,
         notes: Vec::new(),
         drops_on_save: false,
+        bytes: None,
         last: None,
         last_stale: false,
     });
+    if let Some(d) = &e.sd {
+        e.journal_start.model_digest = crate::sd::sd_digest(&d.model);
+    }
     Ok(result)
 }
 

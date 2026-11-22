@@ -1896,6 +1896,21 @@ every half minute and on closing the page on the web (the browser's storage), an
 the model is saved, closed or discarded on quit. If StochCraft stops with changes unsaved, the
 next start asks whether to recover them as an untitled model or discard them.
 
+**Recovery with several windows, and files that arrive late:** each window or tab keeps its own
+recovery copy (`recovery/<session>.json` in the local data folder, held by a lock the system
+drops when the process ends; `stochcraft.recovery.<session>` in local storage, with a sign of
+life every ten seconds that the page takes back when it goes away), so two windows never replace
+or remove each other's. At start the copies of windows that are gone are offered, newest
+first and one at a time; a copy that is recovered goes only once this session has written its
+own, or once the recovered model is saved, so Save straight after Recover leaves nothing to come
+back. A write that fails is not counted as kept: it is tried again at the next tick, an
+unchanged model included. In the browser a file read in the background (the picker, a dropped
+file) carries a ticket: it is dropped when another file was asked for or the model was replaced
+meanwhile, and a picked file is asked about again if the model was edited meanwhile. The old
+single `recovery.json` is offered like the copy of a window that is gone. Not covered by
+automated tests: the browser's storage and timers and the desktop's file locks across real
+processes (the store's tests run two sessions in one process).
+
 **M3.1f (translations):** every interface string goes through craft-i18n, with a pseudo-locale
 test that fails on any that doesn't. StochCraft's own catalogs (`i18n/`, 44 left-to-right
 languages) are built in, each with a row for every string the window and the desktop shell look
@@ -2204,7 +2219,7 @@ over time, a second kind of diagram on the canvas). Then M4.1, the smallest and 
 reuses most of what exists; then M4.2 and M4.3 (agents in flows first); then M4.4. Agents in
 space are built with M5, which needs the same layout and travel.
 
-M4.1 parts 1, 2, 2b and 3a and its control variates are done, and M4.2 parts 1 and 2 (the `sd` crate, editing and saving, the window) are done except the canvas (below); the rest is not started. D15–D18 are settled; D10–D13 (#71 has
+M4.1 parts 1, 2, 2b and 3a and its control variates are done, and M4.2 parts 1 and 2 (the `sd` crate, editing and saving, the window, the canvas) are done except arrays, the rate-to-rate lint and docking (below); the rest is not started. D15–D18 are settled; D10–D13 (#71 has
 them) are to settle first.
 
 ### M4.1 Monte Carlo
@@ -2260,7 +2275,9 @@ Part 2b, variance reduction, is done: two more samplings for the same trials, `a
 (Hammersley and Morton 1956; Glasserman 2003 §4.2): for an output that rises or falls with its
 inputs the pair's errors cancel (exp(U): the interval is about a fifth as wide as random
 sampling's with the same trials). The trials of a pair depend on each other and the pairs do
-not, so the interval is Student-t across the pair means and runs are whole pairs; correlated
+not, so the interval is Student-t across the pairs (the pair means where every pair is complete;
+where a pair has lost a trial to a value with no number, the mean stays the mean of the valid
+trials and the interval is the ratio estimator's, Cochran 1977 §6.4) and runs are whole pairs; correlated
 inputs are refused, as their reordering breaks the pairs. Sobol sampling is randomised
 quasi-Monte Carlo (`stochcraft_mc::qmc`): each batch of 1,000 takes the first points of the
 Sobol sequence with Joe and Kuo's direction numbers (2008, "new-joe-kuo-6.21201", 64 dimensions,
@@ -2298,6 +2315,18 @@ contradict by more than five standard errors is flagged. Checked against exact a
 X + Z the controlled variance is Var(Z) / Var(X + Z) of the plain one, several controls recover
 (2, −3), an unrelated control does no harm, exp(X) is unbiased over 400 seeds, every sampling's
 controlled interval covers, and each distribution allowed as a control draws its stated mean.
+Result validity (an outside review of 2026-11-22, each case checked against exact answers):
+a control whose stated mean the trials contradict no longer takes the headline in the window,
+and the command line labels its controlled figures "biased, not used"; an antithetic run
+with pairs that lost a trial keeps the mean of the valid trials (the pair means weighted a lone
+trial like a whole pair) with a ratio-estimator interval; a Sobol output with rows that have no
+finite value gets no indices, with the counts (the other outputs keep theirs); a normal
+truncated far in a tail (40 standard deviations out, where the tail probabilities underflow) is
+inverted on the logarithms of the tails, so Latin hypercube, antithetic and Sobol sampling and
+the tornado keep its mean; an output whose values show no spread says "No variation was
+observed" instead of giving a zero-width interval; and the tornado says "changes most with" (the
+largest change between the 10th and 90th percentile endpoints, not the largest share of the
+variance) and names an input the output goes up and down along (`not_monotone`).
 
 **What it is:** a model of a calculation, not a process. Inputs are distributions (a cost, a
 duration, a demand), outputs are expressions over them (a total cost, a finish date, a profit),
@@ -2351,7 +2380,7 @@ sequence against the authors' published ones.
 
 ### M4.2 System dynamics
 
-**Status:** part 1 done: the `sd` crate (stocks, flows, auxiliaries, graphical functions, `DELAY1`,
+**Status:** (Journal identity: an XMILE journal records the system dynamics model's digest and the document kind, replay refuses another model, kind or edited file bytes without `--force`, a replayed `run.start` completes, and `file.save` keeps an unchanged file's bytes and refuses a lossy overwrite without `allow_loss`.) Part 1 done: the `sd` crate (stocks, flows, auxiliaries, graphical functions, `DELAY1`,
 `DELAY3`, `SMTH1`, `SMTH3`, `PULSE`, `STEP`, `RAMP`, `IF THEN ELSE` and the random functions
 `NORMAL` and `RANDOM` with a seed; Euler or fourth-order Runge-Kutta; time as start + n·DT from a
 counter; evaluation in topological order with ties broken by name, and an algebraic loop named as
@@ -2364,7 +2393,16 @@ runs in replications and gives the mean, the median and the 5% to 95% band at ea
 answers check it: exponential growth (and Euler's error halving with the step), logistic growth
 by RK4, `DELAY3`'s pulse response against the Erlang density, `SMTH1`'s step response, a
 non-negative stock and the order of updates of the fisheries example, and an SIR epidemic against
-an RK4 reference at a small step. Part 2 so far: a model can be edited, undone and saved. The
+an RK4 reference at a small step. Numerical contracts (review fixes): a flow that is not a number
+is never limited into a real transfer (it stays not a number, with a warning, and so do the stocks
+it touches); a flow that comes out negative is limited by the non-negative stock it then takes
+from, so no stock goes below 0 and mass is kept; a flow listed twice at a stock is refused. The
+halved-step check runs to the same end time, compares by time, and says it is inconclusive (never
+0%) when a stock has no shared time or a value that is missing or not a number, and notes when
+the random draws are not at the same times at the two steps. XMILE namespaces are resolved by
+URI (a prefix bound to the XMILE namespace is read; another namespace is refused), a change of
+time unit converts `dt` and the halved `dt` as well, and under RK4 a `STEP` on a step boundary
+is integrated as under Euler (a jump inside a step is first order, documented). Part 2 so far: a model can be edited, undone and saved. The
 `sd` crate keeps the XMILE diagram (`views`: the position and size of each stock and auxiliary,
 each flow's valve and right-angled pipe, the information links; a cloud is the open end of a
 pipe) and gives a file with none a deterministic layout, stocks in rows along their flows and
@@ -2387,8 +2425,26 @@ write XMILE (the engine's; Save As never rewrites a chosen name, and a Save into
 content the reader does not keep, a second diagram or styles, asks first with Replace, Save As and
 Cancel), and the title, the header and the question on closing follow its
 unsaved state, so a model changed by an agent's or the command line's edit is marked edited; the
-recovery copy is for process models only for now. The window's run is made a few replications a frame, as Monte Carlo's is (`stochcraft_sd::SdJob`, wrapped by the engine's `SdJob` and `Engine::sd_start`, `Engine::sd_results`), with "n of N runs finished", Cancel (or Esc) and no size limit of its own beyond the engine's; changing the model while it runs, or opening another, cancels it. One replication is not interrupted, so a single very long replication still holds a frame up. The canvas, then the replication of hybrids with M4.3 and M4.4; arrays, the
-lint on rate-to-rate links and docking are not done.
+recovery copy is for process models only for now. The window's run is made a few replications a frame, as Monte Carlo's is (`stochcraft_sd::SdJob`, wrapped by the engine's `SdJob` and `Engine::sd_start`, `Engine::sd_results`), with "n of N runs finished", Cancel (or Esc) and no size limit of its own beyond the engine's; changing the model while it runs, or opening another, cancels it. One replication is not interrupted, so a single very long replication still holds a frame up.
+
+The canvas is done (the **Diagram** tab, `crates/ui-egui/src/sd_canvas.rs`, between Model and
+Results): the model's diagram drawn in the plain stock-and-flow notation of the textbooks (stocks
+as rectangles, auxiliaries as circles, flows as a double-line pipe with a bow-tie valve and a
+cloud at an open end, information links as thin curved arrows, names under the shapes), pan and
+zoom as the process canvas has them and a fit to the model on open. A variable is selected by a
+click or by Tab (in name order, with a focus ring and a label such as "Stock Customers"), and a
+side panel edits its name, equation (a stock's initial value) and unit, committing `sd.variable.set`
+on Enter or when the field is left and showing the engine's refusal under the field. Dragging a
+stock, an auxiliary or a valve is one `sd.layout.set` on release, so one undo step, and the pipes
+at a stock follow it. The tools add a stock or an auxiliary where the diagram is clicked (one
+`sd.variable.add` with a position, so one undo step), draw a flow by dragging from a stock or empty
+space to a stock or empty space (one `sd.variable.add` with `from_stock` and `into_stock`; empty
+space is a cloud), and link two variables by dragging from one to the other. Delete removes the
+selection through `sd.variable.remove`, whose refusal (the variable is used) is shown. The undo
+names are "Add Variable", "Edit Variable", "Remove Variable", "Simulation Settings" and "Change
+Diagram". Not done: arrays, the lint on rate-to-rate links, docking, removing or bending a link
+on the canvas, drawing a flow or a link from the keyboard, and the replication of hybrids with
+M4.3 and M4.4.
 
 **What Python users already have, and so the minimum:** PySD runs models from the common
 system dynamics formats, with their stocks, flows, auxiliaries, delays, lookups and arrays, and

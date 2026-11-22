@@ -183,6 +183,16 @@ mod tests {
         assert_eq!(sm.next_u64(), 0x06c4_5d18_8009_454f);
     }
 
+    /// The first outputs of xoshiro256** seeded from 42 by SplitMix64, as the published C
+    /// reference code gives them, so the generator itself is pinned, not only its seeding.
+    #[test]
+    fn xoshiro256_starstar_matches_the_reference_for_seed_42() {
+        let mut r = Rng::new(42);
+        assert_eq!(r.next_u64(), 1_546_998_764_402_558_742);
+        assert_eq!(r.next_u64(), 6_990_951_692_964_543_102);
+        assert_eq!(r.next_u64(), 12_544_586_762_248_559_009);
+    }
+
     #[test]
     fn same_seed_same_stream() {
         let (mut a, mut b) = (Rng::new(42), Rng::new(42));

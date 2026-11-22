@@ -338,3 +338,306 @@ fn the_apps_open_and_save_are_journalled_as_events() {
     let elements = |e: &mut Engine| ok(e, "model.get", json!({}))["elements"].clone();
     assert_eq!(elements(&mut again), elements(&mut e));
 }
+
+// ---------------------------------------------------------------------------------------------
+// Identity: which document a journal belongs to, and what a replay says it reproduced.
+
+fn xmile(rate: &str) -> String {
+    format!(
+        "<xmile version=\"1.0\" xmlns=\"http://docs.oasis-open.org/xmile/ns/XMILE/v1.0\"><header><name>Growth</name></header><sim_specs method=\"Euler\"><start>0</start><stop>10</stop><dt>0.25</dt><run/></sim_specs><model><variables><stock name=\"Population\"><eqn>100</eqn><inflow>growth</inflow></stock><flow name=\"growth\"><eqn>{rate} * Population</eqn></flow></variables></model></xmile>"
+    )
+}
+
+fn open_xmile(text: &str, name: &str) -> Engine {
+    let mut e = Engine::new();
+    let r = e.open_bytes(name, text.as_bytes(), None);
+    assert!(r.is_ok(), "{r:?}");
+    e
+}
+
+#[test]
+fn an_xmile_journal_records_the_system_dynamics_model_not_an_empty_process_model() {
+    let mut e = open_xmile(&xmile("0.1"), "a.xmile");
+    ok(
+        &mut e,
+        "sd.variable.set",
+        json!({"name": "Population", "doc": "people"}),
+    );
+    let journal = e.journal_document();
+    assert_eq!(journal.start.document.as_deref(), Some("system_dynamics"));
+    assert_ne!(
+        journal.start.model_digest,
+        model_digest(&stochcraft_model::Model::default())
+    );
+    // The same file replays; a different model of the same kind is refused, as is a fresh engine
+    // with no model open, which used to match the placeholder and skip the run silently.
+    let mut same = open_xmile(&xmile("0.1"), "a.xmile");
+    assert!(
+        same.replay_journal(&journal, ReplayOptions::default())
+            .is_ok()
+    );
+    let all = ReplayOptions {
+        mode: ReplayMode::All,
+        force: false,
+    };
+    let mut other = open_xmile(&xmile("0.2"), "a.xmile");
+    let refused = other.replay_journal(&journal, all);
+    assert!(
+        refused
+            .as_ref()
+            .is_err_and(|r| r.error.code == ErrorCode::Conflict),
+        "{refused:?}"
+    );
+    let mut empty = Engine::new();
+    assert!(
+        empty
+            .replay_journal(&journal, ReplayOptions::default())
+            .is_err()
+    );
+    // Forced, it replays onto the other model.
+    let forced = other.replay_journal(
+        &journal,
+        ReplayOptions {
+            mode: ReplayMode::EditsOnly,
+            force: true,
+        },
+    );
+    assert!(forced.is_ok(), "{forced:?}");
+}
+
+#[test]
+fn a_journal_of_one_kind_of_document_is_not_replayed_onto_the_other() {
+    let mut sd = open_xmile(&xmile("0.1"), "a.xmile");
+    ok(
+        &mut sd,
+        "sd.variable.set",
+        json!({"name": "Population", "doc": "x"}),
+    );
+    let sd_journal = sd.journal_document();
+    let mut process = Engine::new();
+    let r = process.replay_journal(&sd_journal, ReplayOptions::default());
+    assert!(
+        r.as_ref()
+            .is_err_and(|e| e.error.code == ErrorCode::Conflict
+                && e.error.message.contains("system dynamics")),
+        "{r:?}"
+    );
+    let process_journal = Engine::new().journal_document();
+    let mut sd2 = open_xmile(&xmile("0.1"), "a.xmile");
+    let r = sd2.replay_journal(&process_journal, ReplayOptions::default());
+    assert!(
+        r.as_ref()
+            .is_err_and(|e| e.error.code == ErrorCode::Conflict),
+        "{r:?}"
+    );
+}
+
+#[test]
+fn a_legacy_xmile_journal_cannot_vouch_for_its_model_and_needs_force() {
+    // As written before the document kind was recorded: the placeholder digest of an empty
+    // process model, and no kind.
+    let mut e = open_xmile(&xmile("0.1"), "a.xmile");
+    let mut journal = e.journal_document();
+    journal.start.document = None;
+    journal.start.model_digest = model_digest(&stochcraft_model::Model::default());
+    journal.engine = None;
+    let r = e.replay_journal(&journal, ReplayOptions::default());
+    assert!(
+        r.as_ref().is_err_and(
+            |e| e.error.code == ErrorCode::Conflict && e.error.message.contains("before")
+        ),
+        "{r:?}"
+    );
+    let forced = e.replay_journal(
+        &journal,
+        ReplayOptions {
+            mode: ReplayMode::EditsOnly,
+            force: true,
+        },
+    );
+    assert!(forced.is_ok(), "{forced:?}");
+    // A legacy journal of a new system dynamics model rebuilds it by its own step.
+    let mut made = Engine::new();
+    ok(&mut made, "sd.new", json!({"stop": 5.0}));
+    let mut legacy = made.journal_document();
+    legacy.start.document = None;
+    legacy.start.model_digest = model_digest(&stochcraft_model::Model::default());
+    let mut again = Engine::new();
+    let r = again.replay_journal(&legacy, ReplayOptions::default());
+    assert!(r.is_ok(), "{r:?}");
+}
+
+#[test]
+fn a_journal_started_from_other_bytes_of_the_same_model_is_refused_without_force() {
+    let bytes = mm1_bytes();
+    let mut e = Engine::new();
+    assert!(e.open_bytes("mm1.bpmn", &bytes, None).is_ok());
+    ok(&mut e, "model.rename", json!({"name": "Edited"}));
+    let journal = e.journal_document();
+    // Trailing text after the root changes the bytes and not the model.
+    let mut edited = bytes.clone();
+    edited.extend_from_slice(b"\n<!-- edited -->\n");
+    let mut other = Engine::new();
+    assert!(other.open_bytes("mm1.bpmn", &edited, None).is_ok());
+    assert_eq!(model_digest(other.model()), journal.start.model_digest);
+    let r = other.replay_journal(&journal, ReplayOptions::default());
+    assert!(
+        r.as_ref().is_err_and(
+            |e| e.error.code == ErrorCode::Conflict && e.error.message.contains("bytes")
+        ),
+        "{r:?}"
+    );
+    let forced = other.replay_journal(
+        &journal,
+        ReplayOptions {
+            mode: ReplayMode::EditsOnly,
+            force: true,
+        },
+    );
+    assert!(forced.is_ok(), "{forced:?}");
+    let mut same = Engine::new();
+    assert!(same.open_bytes("mm1.bpmn", &bytes, None).is_ok());
+    assert!(
+        same.replay_journal(&journal, ReplayOptions::default())
+            .is_ok()
+    );
+}
+
+#[test]
+fn a_completed_sliced_run_replayed_in_full_reaches_completion() {
+    let mut e = Engine::new();
+    assert!(e.open_bytes("mm1.bpmn", &mm1_bytes(), None).is_ok());
+    ok(
+        &mut e,
+        "run.start",
+        json!({"mode": "slices", "replications": 2}),
+    );
+    // The window or an agent polls it to the end; the journal holds only the start.
+    for _ in 0..100_000 {
+        if e.poll_run(1, 5_000)["state"] != "running" {
+            break;
+        }
+    }
+    let journal = e.journal_document();
+    assert_eq!(journal.entries[0].command, "run.start");
+    let mut again = Engine::new();
+    assert!(again.open_bytes("mm1.bpmn", &mm1_bytes(), None).is_ok());
+    let all = ReplayOptions {
+        mode: ReplayMode::All,
+        force: false,
+    };
+    let steps = again.replay_journal(&journal, all);
+    assert!(steps.is_ok(), "{steps:?}");
+    let status = ok(&mut again, "run.status", json!({}));
+    assert_eq!(status["state"], "finished", "{status}");
+}
+
+#[test]
+fn the_journal_names_its_build_and_a_replay_says_what_it_reproduced() {
+    let mut e = Engine::new();
+    assert!(e.open_bytes("mm1.bpmn", &mm1_bytes(), None).is_ok());
+    ok(&mut e, "model.rename", json!({"name": "Edited"}));
+    ok(&mut e, "run", json!({"replications": 2}));
+    let mut journal = e.journal_document();
+    assert_eq!(
+        journal.engine.as_deref(),
+        Some(stochcraft_engine::build_id().as_str())
+    );
+    let edits = stochcraft_engine::replay_summary(&journal, ReplayMode::EditsOnly);
+    assert_eq!(edits["replay"]["edits_replayed"], 1);
+    assert_eq!(edits["replay"]["runs_made_again"], 0);
+    assert_eq!(edits["replay"]["steps_skipped"], 1);
+    assert!(
+        edits["replay"]["numerical_results"]
+            .as_str()
+            .is_some_and(|s| s.starts_with("none"))
+    );
+    let same = stochcraft_engine::replay_summary(&journal, ReplayMode::All);
+    assert_eq!(same["replay"]["runs_made_again"], 1);
+    assert!(
+        same["replay"]["numerical_results"]
+            .as_str()
+            .is_some_and(|s| s.contains("same build"))
+    );
+    journal.engine = Some("0.0.0 other-build".to_owned());
+    let other = stochcraft_engine::replay_summary(&journal, ReplayMode::All);
+    assert!(
+        other["replay"]["numerical_results"]
+            .as_str()
+            .is_some_and(|s| s.contains("may differ"))
+    );
+}
+
+#[test]
+fn saving_an_unchanged_xmile_file_keeps_its_bytes_and_a_lossy_save_needs_allow_loss() {
+    let path = scratch("kept.xmile");
+    let text = xmile("0.1");
+    assert!(std::fs::write(&path, &text).is_ok());
+    let mut e = Engine::new();
+    ok(&mut e, "file.open", json!({"path": path.to_string_lossy()}));
+    // Unchanged: saved as read, into the file and as a copy.
+    ok(&mut e, "file.save", json!({}));
+    assert_eq!(std::fs::read_to_string(&path).unwrap_or_default(), text);
+    let copy = scratch("kept-copy.xmile");
+    ok(&mut e, "file.save", json!({"path": copy.to_string_lossy()}));
+    assert_eq!(std::fs::read_to_string(&copy).unwrap_or_default(), text);
+    // Changed, into the file the reader noted content of that it does not keep: refused.
+    let mut f = Engine::new();
+    ok(&mut f, "file.open", json!({"path": path.to_string_lossy()}));
+    ok(
+        &mut f,
+        "sd.variable.set",
+        json!({"name": "Population", "doc": "people"}),
+    );
+    let refused = f.execute("file.save", json!({}));
+    assert!(
+        refused
+            .as_ref()
+            .is_err_and(|e| e.code == ErrorCode::Conflict
+                && e.message.contains("allow_loss")
+                && e.details.is_some()),
+        "{refused:?}"
+    );
+    assert_eq!(std::fs::read_to_string(&path).unwrap_or_default(), text);
+    // To another file it loses nothing of that one.
+    let other = scratch("kept-other.xmile");
+    ok(
+        &mut f,
+        "file.save",
+        json!({"path": other.to_string_lossy()}),
+    );
+    ok(
+        &mut f,
+        "sd.variable.set",
+        json!({"name": "Population", "doc": "more"}),
+    );
+    ok(
+        &mut f,
+        "file.save",
+        json!({"path": path.to_string_lossy(), "allow_loss": true}),
+    );
+    assert_ne!(std::fs::read_to_string(&path).unwrap_or_default(), text);
+}
+
+#[test]
+fn a_new_file_over_an_opened_process_file_with_notes_needs_allow_loss() {
+    let src = scratch("notes-src.bpmn");
+    assert!(std::fs::write(&src, mm1_bytes()).is_ok());
+    let mut e = Engine::new();
+    let opened = ok(&mut e, "file.open", json!({"path": src.to_string_lossy()}));
+    let has_notes = opened["notes"].as_array().is_some_and(|n| !n.is_empty());
+    let r = e.execute("file.save", json!({"as_new": true}));
+    if has_notes {
+        assert!(
+            r.as_ref().is_err_and(|e| e.code == ErrorCode::Conflict),
+            "{r:?}"
+        );
+        ok(
+            &mut e,
+            "file.save",
+            json!({"as_new": true, "allow_loss": true}),
+        );
+    } else {
+        assert!(r.is_ok(), "{r:?}");
+    }
+}
