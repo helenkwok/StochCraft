@@ -35,6 +35,7 @@ pub mod i18n;
 mod layout_view;
 mod live;
 mod montecarlo;
+mod observed;
 mod pools;
 mod prefs;
 mod results;
@@ -1211,6 +1212,9 @@ fn change_label(command: &str) -> &str {
         "property.remove" => "Remove Property",
         "estimate.set" => "Change Estimate",
         "estimate.remove" => "Remove Estimate",
+        "observation.add" => "Add Observed Value",
+        "observation.set" => "Change Observed Value",
+        "observation.remove" => "Remove Observed Value",
         "resource.add" => "Add Pool",
         "resource.set" => "Change Pool",
         "resource.remove" => "Remove Pool",

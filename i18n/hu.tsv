@@ -1396,7 +1396,33 @@ unit	yr	év
 	Replace the XMILE file?	Lecseréli az XMILE-fájlt?
 	Save As writes a new file and keeps {file} as it is. Replacing {file} leaves out what StochCraft does not keep.	A Mentés másként új fájlt ír, és a(z) {file} fájlt változatlanul hagyja. A(z) {file} lecserélése kihagyja azt, amit a StochCraft nem őriz meg.
 	Replace	Csere
+	Observed data	Megfigyelt adatok
+	Real measurements to check the results against: the value seen in the real system, or a bound the result must meet.	Valós mérések, amelyekkel az eredményeket ellenőrzi: a valós rendszerben látott érték, vagy egy korlát, amelyet az eredménynek teljesítenie kell.
+	Add an observed value	Megfigyelt érték hozzáadása
+	Observed value	Megfigyelt érték
+	Checked as	Ellenőrzés módja
+	Its 95% half-width	95%-os félszélessége
+	Add Observed Value	Megfigyelt érték hozzáadása
+	Change Observed Value	Megfigyelt érték módosítása
+	Remove Observed Value	Megfigyelt érték eltávolítása
+	Checked against observed data	Összevetés a megfigyelt adatokkal
+	{result} ({block}): observed {observed}, simulated {simulated}.	{result} ({block}): megfigyelt {observed}, szimulált {simulated}.
+	{result} ({block}): must be at most {bound}, simulated {simulated}.	{result} ({block}): legfeljebb {bound} lehet, szimulált {simulated}.
+	{result} ({block}): must be at least {bound}, simulated {simulated}.	{result} ({block}): legalább {bound} kell legyen, szimulált {simulated}.
+	Simulated minus observed: {difference}.	Szimulált mínusz megfigyelt: {difference}.
+	Agrees	Egyezik
+	Differs	Eltér
+	Passes	Teljesül
+	Fails	Nem teljesül
+	Can't tell yet: more runs would decide	Még nem eldönthető: több futás eldöntené
+	No result	Nincs eredmény
+	Observed data is given for a block that does not exist, so there is no result to check it against. Remove it, or choose a block that exists.	Megfigyelt adatok vannak megadva egy nem létező blokkhoz, ezért nincs eredmény, amellyel összevethetők lennének. Távolítsa el őket, vagy válasszon egy létező blokkot.
 	The estimated chance that {output} is more than {value} is {percent}.	Annak becsült valószínűsége, hogy {output} nagyobb, mint {value}: {percent}.
 	The estimated chance that {output} is less than {value} is {percent}.	Annak becsült valószínűsége, hogy {output} kisebb, mint {value}: {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	Az intervallumuknak nincs szélessége, ami egyetlen becslésnek sincs, ezért az egyszerű eredmény marad.
 	Did not open {file}: a different model was opened in the meantime	A(z) {file} megnyitása elmaradt: közben egy másik modellt nyitottak meg
+	Inconclusive at current precision	A jelenlegi pontosságnál nem eldönthető
+	No difference detected	Nem mutatható ki eltérés
+	Agrees within ±{tolerance}	Egyezik ±{tolerance} belül
+	This is not evidence of agreement: set a tolerance to test for it.	Ez nem bizonyíték az egyezésre: az ellenőrzéséhez adjon meg tűréshatárt.
+	Tolerance (0 for none)	Tűréshatár (0: nincs)

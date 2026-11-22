@@ -12,10 +12,10 @@ use stochcraft_model::capacity;
 use stochcraft_model::{
     AfterJob, BalkJoin, BalkRow, Balking, Bounds, Breakdown, ByValue, Change, Connection,
     ConveyorShape, Demand, DemandPer, Diagnostic, Dist, Element, ElementId, ElementKind, Estimate,
-    Experiment, Family, HealthCheck, LengthUnit, Mobility, Model, Need, OnShiftEnd, OnTakeout,
-    Patience, PatienceUntil, PlaceWhileOut, Power, ProcessingBy, Property, PropertyType,
-    PropertyValue, QueueLimit, ResourcePool, Routing, Scrap, Sequential, SequentialMeasure, Setup,
-    Severity, Stop, ThreePoint, TimeUnit, Timed, Transfer, Upper,
+    Experiment, Family, HealthCheck, LengthUnit, Mobility, Model, Need, Observation, Observed,
+    OnShiftEnd, OnTakeout, Patience, PatienceUntil, PlaceWhileOut, Power, ProcessingBy, Property,
+    PropertyType, PropertyValue, QueueLimit, ResourcePool, Routing, Scrap, Sequential,
+    SequentialMeasure, Setup, Severity, Stop, ThreePoint, TimeUnit, Timed, Transfer, Upper,
 };
 use stochcraft_stats::split::{self, Split};
 
@@ -2155,6 +2155,141 @@ pub struct ExperimentDoc {
     /// precise enough or `max` is reached; left out for a fixed number of replications.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub sequential: Option<SequentialSpec>,
+    /// Real measurements the results are checked against (black-box validation), at most one for
+    /// each result; left out when there are none. Each is added, changed and removed by
+    /// `observation.add`, `observation.set` and `observation.remove`.
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub observed: Vec<ObservationSpec>,
+}
+
+/// A real measurement for one result of the model to be checked against, in the result's own
+/// unit (a share as a fraction: 0.85 is 85%): an observed value, which differs from the simulated
+/// mean when the 95% interval of their difference excludes 0 and, with a `tolerance`, agrees when
+/// that interval is wholly inside it, or a bound, which passes
+/// when the whole simulated 95% interval meets it, fails when the whole interval violates it, and
+/// is otherwise not yet decided (more replications would decide it).
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, JsonSchema)]
+#[serde(tag = "check", rename_all = "snake_case", deny_unknown_fields)]
+pub enum ObservationSpec {
+    /// The value seen in the real system.
+    Value {
+        /// The id of a block or a pool.
+        element: String,
+        /// The result's name, such as `mean_wait`, `utilisation` or `left`.
+        metric: String,
+        value: f64,
+        /// The half-width of the observed value's own 95% interval, where its data give one.
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        half_width: Option<f64>,
+        /// The difference, above 0 and in the result's unit, that still counts as agreeing,
+        /// set in advance. With it, the check agrees when the whole 95% interval of the
+        /// difference is inside it, differs when the whole interval is outside it, and is
+        /// otherwise inconclusive; without it, the check differs when the interval excludes 0
+        /// and otherwise detects no difference, which is not agreement.
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        tolerance: Option<f64>,
+    },
+    /// The result should be at most `bound`.
+    AtMost {
+        element: String,
+        metric: String,
+        bound: f64,
+    },
+    /// The result should be at least `bound`.
+    AtLeast {
+        element: String,
+        metric: String,
+        bound: f64,
+    },
+}
+
+impl ObservationSpec {
+    /// The id of the block or pool the result is of.
+    pub fn element(&self) -> &str {
+        match self {
+            ObservationSpec::Value { element, .. }
+            | ObservationSpec::AtMost { element, .. }
+            | ObservationSpec::AtLeast { element, .. } => element,
+        }
+    }
+
+    /// The result's name.
+    pub fn metric(&self) -> &str {
+        match self {
+            ObservationSpec::Value { metric, .. }
+            | ObservationSpec::AtMost { metric, .. }
+            | ObservationSpec::AtLeast { metric, .. } => metric,
+        }
+    }
+}
+
+impl From<&Observation> for ObservationSpec {
+    fn from(o: &Observation) -> Self {
+        let (element, metric) = (o.element.to_string(), o.metric.clone());
+        match o.target {
+            Observed::Value {
+                value,
+                half_width,
+                tolerance,
+            } => ObservationSpec::Value {
+                element,
+                metric,
+                value,
+                half_width,
+                tolerance,
+            },
+            Observed::AtMost(bound) => ObservationSpec::AtMost {
+                element,
+                metric,
+                bound,
+            },
+            Observed::AtLeast(bound) => ObservationSpec::AtLeast {
+                element,
+                metric,
+                bound,
+            },
+        }
+    }
+}
+
+impl From<ObservationSpec> for Observation {
+    fn from(s: ObservationSpec) -> Self {
+        match s {
+            ObservationSpec::Value {
+                element,
+                metric,
+                value,
+                half_width,
+                tolerance,
+            } => Observation {
+                element: ElementId::unchecked(&element),
+                metric,
+                target: Observed::Value {
+                    value,
+                    half_width,
+                    tolerance,
+                },
+            },
+            ObservationSpec::AtMost {
+                element,
+                metric,
+                bound,
+            } => Observation {
+                element: ElementId::unchecked(&element),
+                metric,
+                target: Observed::AtMost(bound),
+            },
+            ObservationSpec::AtLeast {
+                element,
+                metric,
+                bound,
+            } => Observation {
+                element: ElementId::unchecked(&element),
+                metric,
+                target: Observed::AtLeast(bound),
+            },
+        }
+    }
 }
 
 /// How a sequential experiment decides it has run enough replications: each result it watches
@@ -2254,6 +2389,7 @@ impl From<&Experiment> for ExperimentDoc {
             stop: x.stop.as_ref().map(Into::into),
             result_frequency: x.result_frequency,
             sequential: x.sequential.as_ref().map(Into::into),
+            observed: x.observed.iter().map(Into::into).collect(),
         }
     }
 }
@@ -2272,6 +2408,7 @@ impl From<ExperimentDoc> for Experiment {
             stop: x.stop.map(Into::into),
             result_frequency: x.result_frequency,
             sequential: x.sequential.map(Into::into),
+            observed: x.observed.into_iter().map(Into::into).collect(),
         }
     }
 }
@@ -2568,6 +2705,7 @@ pub fn results(
             (e.id.to_string(), Value::Object(per))
         })
         .collect();
+    let observed = crate::observed::check(model, summary);
     let mut v = json!({
         "replications": replications,
         "seed": seed,
@@ -2603,6 +2741,10 @@ pub fn results(
             .and_then(|s| s.warmup.as_ref())
             .map_or(Value::Null, warmup_suggestion),
     });
+    // Left out without observed data, so other results are as before.
+    if let Some(observed) = observed {
+        v["observed"] = observed;
+    }
     if let Some(stop) = &x.stop {
         let met = summary.stop_times.iter().flatten().count();
         let mut s = serde_json::to_value(StopSpec::from(stop)).unwrap_or(Value::Null);

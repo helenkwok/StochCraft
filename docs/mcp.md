@@ -18,7 +18,9 @@ stochcraft-cli mcp --connect 127.0.0.1:7070
 ```
 
 With `--connect`, an app that cannot be reached when the server starts gives a headless session
-instead (a note goes to stderr). stdout carries only protocol messages; errors go to stderr.
+instead (a note goes to stderr), and so does one that is not running (no token file and no
+token given). An app that is reachable but refuses the connection (a wrong token, all its places taken) is an error, not a headless session (see [The token](#the-token)).
+stdout carries only protocol messages; errors go to stderr.
 
 ### Claude Code
 
@@ -72,10 +74,8 @@ The two flags keep a headless agent to the folders you give it:
 - The roots must be existing folders; a missing one stops the server with an error.
 
 The roots cannot be combined with `--connect`: the app opens and saves files wherever its user
-asks, so an agent driving it is not confined. The control channel listens only on this
-computer's loopback address, but that limits where a connection can come from, not who makes
-it: on a computer shared by several accounts, a program under another account can reach the
-port too. Use `--connect` only where every program that can reach the port is one you trust.
+asks, so an agent driving it is not confined. What stops another account's programs from
+driving the app is the channel's token (below).
 
 ## Tools
 
@@ -90,6 +90,32 @@ port too. Use `--connect` only where every program that can reach the port is on
 | `save` | `path?`, `as_new?` | `file.save`: into the model's own file (keeping what StochCraft does not understand), or to `path`. |
 | `run` | `replications?`, `seed?` | `run`: each element's metrics as means with 95% confidence intervals, the warm-up MSER-5 suggests (`warmup_suggestion`), the warnings about the results, and the run record. The values over the run (`series`) are left out, since they multiply the reply's size; `execute` with `run` gives them. An experiment with sequential replications (`experiment.set` with `sequential`) adds replications until its key measures are precise enough, and `sequential` in the results says how many ran and why it stopped. |
 | `undo`, `redo` | — | `undo`, `redo`. |
+
+Real measurements to check a run against (black-box validation) are set with `execute`:
+`observation.add`, `observation.set` and `observation.remove`. An observation is for one result,
+a block's or pool's `element` and a `metric` such as `mean_wait`, `utilisation` or `left`, in the
+metric's own unit (a share as a fraction), and is one of three `check`s: `value` (the observed
+`value`, with the `half_width` of its own 95% interval where its data give one, and a `tolerance`
+above 0 in the metric's unit, which only an observed value takes: any other check with one is
+`invalid_params`), `at_most` or `at_least` (a `bound`). One for each result: `add` fails with
+`conflict` if there is one, `set` with `not_found` if there is none. They are saved in the file
+(`stochcraft:observed`) and come back in `model.get` as `experiment.observed`. A run's results
+then have `observed`, one entry for each, those that `differ` or `fail` first, then those
+`inconclusive` or `no_difference_detected`, then those that `agree` or `pass`, each with the
+`observed` value (and its `half_width` and `tolerance`) or `bound`, the `simulated` mean with its
+95% `half_width` and `n`, for an observed value the `difference` (simulated minus observed) with
+its 95% `difference_half_width`, and the `verdict`: `agrees`, `differs`, `no_difference_detected`,
+`passes`, `fails`, `inconclusive` or `no_result`. The difference's half-width is
+`hypot(half_width, observed half_width)` (the usual large-sample approximation; the observed one
+counts as 0 where not given). Without a `tolerance`, the interval excluding 0 is `differs` and
+holding 0 is only `no_difference_detected`, never agreement: a wide interval holds 0 whatever the
+truth. With a `tolerance` t it is an equivalence test: `agrees` when the whole interval is inside
+[-t, +t], `differs` when wholly outside, else `inconclusive` (the 95% interval is conservative
+against the 90% interval of the two one-sided tests). A bound passes only when the whole
+simulated interval meets it and fails only when the whole interval violates it, and is
+`inconclusive` where the interval straddles it (more replications would decide) or there are
+fewer than 2. Observed data for a block that is gone is the warning `bad_observation` in
+`check_model` (the run still goes, and says `no_result`).
 
 Resources: `stochcraft://model` (`model.get`) and `stochcraft://commands` (the command catalogue).
 
@@ -118,8 +144,41 @@ Commands from the channel behave in the window as they would from the person:
 - The window's background runs (`run.start`, `run.status`, `run.cancel`) are its own and are
   refused; use `run`.
 
-Any program on the computer that can reach the port can drive the app, as a person at the window
-can.
+### The token
+
+The loopback address limits where a connection comes from, not who makes it, so on a computer
+shared by several accounts a program under another account could reach the port. The channel
+therefore asks every connection for a token:
+
+- When the app opens the channel it makes a random 256-bit token from the operating system's
+  random source, shown as 64 hexadecimal digits, and writes `{"port": 7070, "token": "..."}` to a
+  file only its user can read:
+  - Linux and other Unix systems: `$XDG_RUNTIME_DIR/stochcraft/control.json`, or, where that is
+    not set, `control.json` in `stochcraft` under the user's config folder (`~/.config` on Linux,
+    `~/Library/Application Support` on macOS). The file is made with mode 0600, in a folder of
+    mode 0700 (an existing folder with another mode is changed to 0700, and the app refuses to write the token there if it cannot), by writing a file of its own and renaming it over the old one, under a lock file beside it (`control.json.lock`) so two apps starting together cannot both take the file.
+  - Windows: `%LOCALAPPDATA%\StochCraft\control.json`. The profile's default permissions already
+    limit that folder to the user (and administrators), and StochCraft adds no permissions of its
+    own there.
+- The file is removed when the app closes. If another running app still answers on the port
+  named in an existing file, a second app's `--control` fails and says so, rather than replace the
+  first one's token; close the first one.
+- Each connection's first line must be `{"token": "..."}`. The channel compares it with the
+  token in constant time and answers `{"id": null, "result": {"authenticated": true}}`. A missing
+  or wrong token, or no whole line (of at most 1 KiB) within 2 seconds of connecting, gets one error line with the code `unauthorized`,
+  and the connection is closed without running anything.
+- `stochcraft-cli mcp --connect` reads the token from that file by default. The environment
+  variable `STOCHCRAFT_TOKEN` or `--token HEX` give one by hand, for when the file is not
+  reachable (an app on another computer, reached by a tunnel, or under another account that
+  shared the token on purpose); they take precedence over the file, `--token` first. On some
+  systems other local users can see a program's arguments in the process list, so prefer
+  `STOCHCRAFT_TOKEN` or the token file to `--token`. With no token given and no token file, the
+  app is taken to be not running: the session is headless, with a note on stderr naming the
+  file. An app that is there but answers the connection with an error (a wrong token, or all 8
+  places taken) is an error that stops the server, never a headless session.
+
+The token keeps other accounts out. A program running as the same user as the app can read the
+file, as it could read that user's other files.
 
 ## Limits
 

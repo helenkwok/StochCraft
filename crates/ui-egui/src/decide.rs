@@ -112,7 +112,7 @@ fn family_label(f: &str) -> &'static str {
 }
 
 /// An element's display name.
-fn name_of(model: &Value, id: &str) -> String {
+pub(crate) fn name_of(model: &Value, id: &str) -> String {
     model["elements"]
         .as_array()
         .into_iter()
@@ -125,7 +125,7 @@ fn name_of(model: &Value, id: &str) -> String {
         .to_owned()
 }
 
-fn kind_of(model: &Value, id: &str) -> String {
+pub(crate) fn kind_of(model: &Value, id: &str) -> String {
     if model["resources"]
         .as_array()
         .into_iter()
@@ -164,7 +164,7 @@ fn metrics_for(kind: &str) -> &'static [&'static str] {
 
 /// Every result that can be asked about, as `element/metric` keys with their labels: from the
 /// last run's values where there is one, otherwise by kind.
-fn outputs(model: &Value, results: Option<&Value>) -> Vec<(String, String)> {
+pub(crate) fn outputs(model: &Value, results: Option<&Value>) -> Vec<(String, String)> {
     let ids = model["elements"]
         .as_array()
         .into_iter()

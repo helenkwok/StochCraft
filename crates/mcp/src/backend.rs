@@ -134,6 +134,29 @@ fn first_reachable(targets: impl IntoIterator<Item = SocketAddr>) -> std::io::Re
     Err(last)
 }
 
+/// Why [`Remote::connect`] failed.
+#[derive(Debug)]
+pub enum ConnectError {
+    /// No connection could be made (refused, timed out, unreachable, nothing to resolve).
+    Unreachable(std::io::Error),
+    /// A connection was made but the app's answer to the token was an error, or none.
+    Refused(String),
+    /// A connection was made, so the app is there, but setting it up here failed.
+    Broken(std::io::Error),
+}
+
+impl std::fmt::Display for ConnectError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            ConnectError::Unreachable(e) => write!(f, "{e}"),
+            ConnectError::Refused(m) => write!(f, "{m}"),
+            ConnectError::Broken(e) => write!(f, "{e}"),
+        }
+    }
+}
+
+impl std::error::Error for ConnectError {}
+
 /// The running app's control channel (`stochcraft --control PORT`): one JSON request per line,
 /// `{"id", "method": "engine.execute", "params": {"command", "params"}}` or
 /// `{"id", "method": "engine.commands"}`, answered by one line, `{"id", "result"}` or
@@ -146,18 +169,52 @@ pub struct Remote {
 }
 
 impl Remote {
-    /// Connects to the app's control channel at `addr` (`127.0.0.1:7070`). Each address the name
-    /// resolves to is tried in turn: `localhost` may give `::1` first, while the app listens on
-    /// `127.0.0.1` only.
-    pub fn connect(addr: &str) -> std::io::Result<Self> {
-        let stream = first_reachable(addr.to_socket_addrs()?)?;
-        stream.set_nodelay(true)?;
-        Ok(Self {
+    /// Connects to the app's control channel at `addr` (`127.0.0.1:7070`) and presents `token`
+    /// (the channel's first line). Each address the name resolves to is tried in turn:
+    /// `localhost` may give `::1` first, while the app listens on `127.0.0.1` only. A channel
+    /// that answers with an error (a wrong token, too many clients) or breaks the handshake is
+    /// [`ConnectError::Refused`], and a failure setting up a connection that was made is
+    /// [`ConnectError::Broken`]: either way the app is there, so the caller must not use another
+    /// engine. Only [`ConnectError::Unreachable`] means no connection was made.
+    pub fn connect(addr: &str, token: &str) -> Result<Self, ConnectError> {
+        let stream = addr
+            .to_socket_addrs()
+            .and_then(first_reachable)
+            .map_err(ConnectError::Unreachable)?;
+        stream.set_nodelay(true).map_err(ConnectError::Broken)?;
+        let mut remote = Self {
             addr: addr.to_owned(),
-            reader: BufReader::new(stream.try_clone()?),
+            reader: BufReader::new(stream.try_clone().map_err(ConnectError::Broken)?),
             writer: stream,
             next_id: 1,
-        })
+        };
+        remote.authenticate(token).map_err(ConnectError::Refused)?;
+        Ok(remote)
+    }
+
+    /// Sends the token and reads the channel's answer to it; the failure is what to tell the user.
+    fn authenticate(&mut self, token: &str) -> Result<(), String> {
+        let broken = |e: std::io::Error| format!("the handshake failed: {e}");
+        self.writer
+            .set_read_timeout(Some(Duration::from_secs(10)))
+            .map_err(broken)?;
+        writeln!(self.writer, "{}", json!({ "token": token })).map_err(broken)?;
+        self.writer.flush().map_err(broken)?;
+        let mut line = String::new();
+        let read = (&mut self.reader)
+            .take(MAX_REPLY)
+            .read_line(&mut line)
+            .map_err(broken)?;
+        self.writer.set_read_timeout(None).map_err(broken)?;
+        if read == 0 {
+            return Err("the app closed the connection during the handshake".into());
+        }
+        let reply: Value = serde_json::from_str(&line)
+            .map_err(|e| format!("the app's answer to the token is not JSON: {e}"))?;
+        match reply.get("error") {
+            None => Ok(()),
+            Some(error) => Err(error["message"].as_str().unwrap_or("refused").to_owned()),
+        }
     }
 
     fn call(&mut self, method: &str, params: Value) -> Result<Value, String> {
