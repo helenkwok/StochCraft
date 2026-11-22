@@ -1150,11 +1150,24 @@ pub fn results_json(r: &McResults) -> Value {
         })).collect::<Vec<_>>(),
     });
     if let Some(s) = r.stop.as_ref() {
+        // Which outputs met the precision asked for, and which did not establish it: on a stop
+        // at the target these are the ones with no variation in any trial, which a rare value
+        // could still have hidden.
+        let names = |settled: bool| {
+            r.outputs
+                .iter()
+                .zip(&s.settled)
+                .filter(|(_, s)| **s == settled)
+                .map(|(o, _)| o.name.clone())
+                .collect::<Vec<_>>()
+        };
         v["stop"] = json!({
             "relative": s.relative,
             "max": s.max,
             "reason": s.reason.name(),
             "looks": s.looks,
+            "met": names(true),
+            "not_established": names(false),
             "note": "estimated precision after adaptive stopping: the interval's coverage is not guaranteed to be 95%",
         });
     }

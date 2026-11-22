@@ -357,7 +357,12 @@ sequential stop judges the same numbers. The standard deviation is always across
 describes the output, not the precision of its mean. Where every value the interval is across
 is the same, `half_width` is `null` and `no_variation` is `true`: a width of 0 would claim the
 mean is exact, which a run cannot know (a rare event the trials did not reach gives the same
-picture).
+picture). A sequential stop does not wait on such an output once another has met its precision
+(more trials of the same value would not give it an interval), but it does not count it as met
+either: `stop.met` lists the outputs within the share asked for and `stop.not_established` the
+others, and the window and the command line say so by name. An outcome rarer than about 3 in n
+trials (the rule of three) can go unseen in n trials: a 1-in-10,000 event does in 1,000 trials
+about 90% of the time.
 
 **Control variates** ([`stochcraft_mc::control`](../crates/mc/src/control.rs); Law, *Simulation
 Modeling and Analysis*, 5th ed., §11.3; Glasserman, 2003, §4.1; Nelson, 1990). An output can name
