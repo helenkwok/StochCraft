@@ -1375,15 +1375,34 @@ Anderson-Cook 2016), 2 to 6 factors.
 - **The fit:** the full quadratic in coded units (−1 to 1), 1 + 2k + k(k−1)/2 coefficients, by
   least squares, once per replication; each coefficient is the mean over replications with its t
   interval. The surface's predictions come with the same per-replication intervals.
-- **Lack of fit, said plainly.** With more replications than points, Rao's (1959) F test, which
+- **Lack of fit, said plainly.** When it can be used, Rao's (1959) F test, which
   allows the correlation common random numbers bring between points, as Kleijnen, Feelders and
   Cheng (1998) restate it: the residuals of the generalised least-squares fit, weighted by the
   inverse of the points' covariance matrix estimated across replications, give F with n − q and
   m − n + q degrees of freedom for n points, q coefficients and m replications. (The reported
-  coefficients stay the per-replication ones above; the generalised fit serves only this test.) With fewer replications than that, each
-  point's mean residual is judged by its own interval with a Bonferroni correction, and the
-  answer says the joint test needed more replications (and how many). Either way, a significant
-  lack of fit leads the answer: "a quadratic does not describe this region; the best setting
+  coefficients stay the per-replication ones above; the generalised fit serves only this test.)
+  More replications do not make the test usable on their own. It needs m − n + q ≥ 1 and an
+  estimated covariance matrix of full rank n, checked by its smallest eigenvalue relative to its
+  largest (1e-10). A random offset common to every point (one replication's streams moving every
+  point's result together) gives a covariance of rank one however many replications there are.
+  So does a point whose result never varies. Each case where the test cannot be used has its
+  stated fallback:
+  - *Too few replications:* each point's mean residual is judged by its own interval with a
+    Bonferroni correction, and the answer says how many replications the joint test needs.
+  - *A covariance not of full rank:* the residuals are computed per replication. Where a
+    point's residual is the same in every replication, it is exact: a residual beyond 1e-9 of the
+    result's scale is lack of fit, with no interval needed. The other points are judged by their
+    own intervals as above.
+  - The answer always says which of three it found: "lack of fit found", "no lack of fit
+    detected (Rao's test, F = …)", or "Rao's test not available: …" with the reason and the
+    fallback used. It never reports "not detected" when the test could not be run.
+  - *Three levels cannot see everything.* On a face-centred or Box–Behnken design, each factor
+    takes three levels, and any function of one factor alone at three levels is a quadratic. So
+    curvature beyond quadratic in a single factor is invisible there; only misfit across factors
+    (x₁²x₂², for example) can show. The answer says so with every three-level surface, and
+    names the rotatable design (five levels) as the check.
+
+  Either way, a lack of fit found leads the answer: "a quadratic does not describe this region; the best setting
   below is not reliable: try a narrower region". The same paper reports that the test rejects
   too often for skewed results; the answer says so when the results across replications are
   strongly skewed (waits near saturation, for example).
@@ -1391,12 +1410,28 @@ Anderson-Cook 2016), 2 to 6 factors.
   reported as a maximum, a minimum or a saddle, and whether x_s lies inside the box.
 - **The best setting in the box:** the fitted quadratic's minimum (or maximum, `sense`) over
   the box, found exactly by solving on every face of the box (each factor at its low end, its high
-  end or free: 3^k linear systems, 729 for 6 factors). For a count, the nearest whole levels.
-- **Confirmation run** (on by default, `confirm: false` to skip): the model run at the best
-  setting with the design's replications and seed. Replication i's result there is paired with
-  replication i's surface's prediction, and the answer gives the observed mean, the predicted
-  mean and the paired 95% interval of their difference. "Predicted 4.21 minutes, observed
-  4.35 ± 0.12: the surface overestimates the improvement by 0.14 ± 0.09" or "agrees".
+  end or free: 3^k linear systems, 729 for 6 factors).
+  - *Counts are not rounded.* The nearest whole levels, even every floor and ceiling, can miss
+    the best whole-number setting of the fitted surface. Instead, every legal tuple of the counts
+    in the box is enumerated, and for each the continuous factors are optimised exactly as above.
+  - This runs under its own work cap (default 100,000 tuple and face solves). Beyond it, the
+    setting is reported as "a candidate from the nearest whole levels and their neighbours, not
+    the best whole-number setting of the surface", never as the best.
+- **Confirmation run** (on by default, `confirm: false` to skip). The best setting is frozen and
+  run on a fresh, fixed block of replications that no design point used:
+  - The block's seed is `Rng::keyed(seed, "design/confirm")` and its size is
+    `confirm_replications` (default: the design's).
+  - A rerun on the design's own seed at a point the design ran is an in-sample residual, not a
+    confirmation. It is kept only as a diagnostic, labelled as such.
+  - The observed mean is compared with the surface's predicted mean by Welch's interval: the
+    fresh block is independent of the replications the surface was fitted on, so no pairing is
+    claimed.
+  - "Agrees" needs a practical tolerance set in advance (`confirm_tolerance`, in the result's
+    unit): the difference's whole interval within ± the tolerance.
+  - An interval that covers 0 but is wider than that, or with no tolerance given, is "no
+    difference detected", not agreement. An interval that excludes 0 is a difference, given
+    with its size: "Predicted 4.21 minutes, observed 4.35 ± 0.12: the surface overestimates the
+    improvement by 0.14 ± 0.13".
 - **Beside M8 (#272).** The surface is a classical designed-experiment metamodel, a cheap first
   look at where a good setting may be, in a fixed number of runs. It selects nothing with a stated
   probability; when a decision has to be right, the answer points to M8, whose search and
@@ -1406,9 +1441,15 @@ Anderson-Cook 2016), 2 to 6 factors.
 **Uniform designs, maximin Latin hypercubes and a coverage score** (Fang and Wang 1994; Fang,
 Lin, Winker and Zhang 2000; Morris and Mitchell 1995; Hickernell 1998).
 - **Uniform designs from good lattice points:** n points with a generating vector h,
-  gcd(h_j, n) = 1, point k's coordinate j at ((k h_j mod n) − ½)/n, 0 counted as n. For n up to 50
-  and up to 4 factors, every admissible h is tried; otherwise Korobov's power vectors
-  h = (1, a, a², …) mod n. The h with the smallest centered L2 discrepancy is kept. Supported:
+  gcd(h_j, n) = 1, point k's coordinate j at ((k h_j mod n) − ½)/n, 0 counted as n. The columns must be
+  distinct mod n. A generating vector with a repeated h_j repeats a column and is rejected.
+  - Every admissible set of distinct h is tried when there are at most 20,000 of them (the
+    φ(n) numbers prime to n, choose the factors). Otherwise Korobov's power vectors
+    h = (1, a, a², …) mod n are tried, keeping only those with distinct entries.
+  - A power vector is not always usable. For n = 24 the eight numbers prime to 24 all square to
+    1 mod 24, so every power vector repeats columns from the third factor; there the search over
+    sets is used.
+  - The h with the smallest centered L2 discrepancy is kept. Supported:
   5 to 100 points, 2 to 20 factors, when n has enough numbers prime to it for the factors (an n
   without is refused, naming the nearest that works; a prime n works for up to n − 1 factors).
 - **Maximin Latin hypercubes:** Morris and Mitchell's φ_p criterion (p = 50 by default) on a
@@ -1416,6 +1457,14 @@ Lin, Winker and Zhang 2000; Morris and Mitchell 1995; Hickernell 1998).
   exchanges within a column, a fixed number of iterations, from `Rng::keyed(seed,
   "design/maximin/<batch>")`. Unlike the plain Latin hypercube, columns are optimised together:
   adding a factor changes the others, and the answer says so.
+  - *The run points are jittered.* Once the layout is chosen, each point is moved uniformly
+    within its strata, independently in each batch (`Rng::keyed(seed,
+    "design/maximin/<batch>/jitter")`). Without that, the batches only permute the same
+    midpoints, which do not estimate the mean over the region. For f(x) = x² every five-point
+    midpoint Latin hypercube gives 0.33 against the true 1/3, and batch intervals of zero width
+    exclude it.
+  - `centred: true` keeps the midpoints. The answer then says its interval is of the midpoint
+    design's mean, not of the mean over the region.
 - **Honest intervals from deterministic point sets:** as the Sobol design does, `batches`
   batches (default 4). A uniform design's batch is the lattice shifted at random modulo 1 per
   factor (Cranley and Patterson 1976), the shift the first draw of `Rng::keyed(seed,
@@ -1431,9 +1480,12 @@ Lin, Winker and Zhang 2000; Morris and Mitchell 1995; Hickernell 1998).
 
 **Commands.** `experiment.design`'s `kind` gains `fractional_factorial` (`resolution` or
 `points`, `foldover`), `plackett_burman`, `central_composite` (`alpha`: `face` or `rotatable`),
-`box_behnken`, `uniform` and `maximin_latin_hypercube` (`points`, `batches`, `p`). Answers gain
-`aliases` and `resolution` (screening); `surface`, `lack_of_fit`, `stationary`, `best` and
-`confirmation` (response surfaces); `cd2` (space-filling). The CLI's `design` takes `--kind
+`box_behnken`, `uniform` and `maximin_latin_hypercube` (`points`, `batches`, `p`, `centred`).
+Response surfaces take `confirm`, `confirm_replications` and `confirm_tolerance`. Answers gain
+`aliases` and `resolution` (screening); `surface`, `lack_of_fit` (with `status`: `found`,
+`not_detected` or `unavailable`, and the reason and fallback when unavailable), `stationary`,
+`best` (with `exact: false` for a candidate beyond the counts' work cap) and `confirmation`
+(response surfaces); `cd2` (space-filling). The CLI's `design` takes `--kind
 fractional --resolution 4`, `--kind ccd --alpha face`, `--kind uniform --points 31` and the like,
 and prints the confounding or the lack of fit above the table. The MCP server offers the kinds
 as it offers every command.
@@ -1457,19 +1509,42 @@ experiments, README's list):
   seeds.
 - **X3 Response surfaces, model-free and through the engine.** *Checks:* model-free, on
   y = 10 − (x₁ − 0.3)² − 2(x₂ + 0.2)² + 0.5 x₁x₂ with normal noise (standard deviation 0.1)
-  correlated 0.8 across points (as common random numbers make it): each coefficient's interval
-  covers the true one in at least 95% of 2,000 macro-replications (judged by the Wilson
-  interval), the stationary point (0.258, −0.168), where y = 9.975, is found as a maximum inside
-  the box, and Rao's test rejects in about 5%. On y = exp(2x₁) + x₂ with the same noise, the lack
-  of fit is flagged in at least 90%. Through the engine, the help desk's M/M/1 wait
+  correlated 0.8 across points (as common random numbers make it): a face-centred central composite design (9 points), 20 replications and α = 0.05,
+  fixed for every count below.
+  - *Coverage:* each coefficient's interval covers the true one in 1,861 to 1,935 of 2,000
+    macro-replications. At true 95% coverage, "at least 95%" passes only 52.7% of the time.
+    This band is the binomial's central range with 0.1/12 % in each tail, so the six
+    coefficients together fail by chance in under 0.1% of runs.
+  - The stationary point (0.258, −0.168), where y = 9.975, is found as a maximum inside the box.
+  - *Size:* Rao's test rejects the true quadratic in 69 to 133 of 2,000 (94 in planning).
+  - *Power:*
+    - The quadratic plus 0.1 x₁²x₂²: flagged in at least 1,900 of 2,000 (2,000 in planning;
+      1,431 at 0.05 x₁²x₂²).
+    - y = exp(2x₁) + x₂ on the rotatable design (five levels; factorial points inscribed at
+      ±1/√2): flagged in at least 1,900 of 2,000 (2,000 in planning; the true quadratic there is
+      rejected 115 times, the test's size).
+    - The same y on the face-centred design is rejected only at the test's size (106 in
+      planning): a quadratic passes exactly through any three levels of x₁. The answer says
+      the three-level design cannot see this curvature.
+  - *Test not available:* y = x₁²x₂² + Z_r, Z_r one normal offset per replication common to
+    every point. The covariance has rank one with 100 replications as with 20. The answer says
+    Rao's test is not available and why, and finds the lack of fit exactly: the residuals are
+    the same in every replication and not 0.
+  - *Counts:* for whole x, y in [0, 10], minimise (5y − x − 2)² + 0.01(x − 0.4)². The
+    continuous optimum is (0.4, 0.48) at 0. The best of every floor and ceiling is (0, 0) at
+    4.0016; enumeration gives (3, 1) at 0.0676, which the answer must choose. With the work
+    cap set below 121 tuples, the answer calls its setting a candidate. Through the engine, the help desk's M/M/1 wait
   s² / (a − s): in a small region (a from 2.8 to 3.2, s from 0.9 to 1.1) the lack of fit is not
   significant, and the prediction at the centre covers 0.5; in a wide one reaching near
   saturation (s up to 1.9 with a from 2 to 3) the answer says a quadratic does not describe it.
   The box's best wait is at the corner (a = 3.2, s = 0.9), which the answer finds.
-- **X4 Confirmation run and the answer in words** (CLI, MCP, journal, run records). *Checks:* on
-  the small help-desk region, the confirmation at the corner agrees with the prediction (its paired
-  interval covers 0), and both cover s² / (a − s) = 0.352; the same seed gives the same answer on
-  native and wasm32 builds.
+- **X4 Confirmation run and the answer in words** (CLI, MCP, journal, run records).
+  - *Checks:* on the small help-desk region, the confirmation at the corner runs on replications
+    no design point used (its seed differs from every design point's). Its observed mean's
+    interval covers s² / (a − s) = 0.352.
+  - With `confirm_tolerance` 0.05 the answer is "agrees" only when the difference's interval
+    lies within ±0.05, and "no difference detected" otherwise.
+  - The same seed gives the same answer on native and wasm32 builds.
 - **X5 Uniform designs, maximin and CD2.** *Checks:* CD2² of one point at the centre in one
   dimension is exactly 1/12; CD2² of the six-point design (1, 3), (2, 6), (3, 2), (4, 5), (5, 1),
   (6, 4), placed at (u − ½)/6, is 0.0081420396…, the value SciPy's documentation (BSD-3-Clause)
@@ -1477,7 +1552,13 @@ experiments, README's list):
   of Hickernell's definition in one and two dimensions; the lattice search equals exhaustive
   search over every admissible h for n ≤ 13 and two to four factors; simulated annealing reaches
   the φ_p optimum found by enumerating every 5-point, 2-factor Latin hypercube; and a uniform
-  design's CD2 is below the mean of 200 random Latin hypercubes' of the same size. Published
+  design's CD2 is below the mean of 200 random Latin hypercubes' of the same size.
+  - *Distinct columns:* for n = 24 and five factors no power vector has distinct columns; the
+    search over sets finds one, and no design has two equal columns.
+  - *Midpoints and jitter:* f(x) = x² on five-point Latin hypercubes in four batches. With
+    `centred: true` every batch gives 0.33, and the answer names the midpoint design's mean.
+    Jittered, the batch interval covers 1/3 in 1,861 to 1,935 of 2,000 macro-replications
+    (1,889 in planning). Published
   values from Fang et al.'s tables are typed in as further checks when the tables are at hand,
   with a row in ATTRIBUTION.md.
 - **X6 The window:** the designed-experiment form (the third part's "not yet"), with the kind,
