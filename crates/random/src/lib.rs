@@ -177,6 +177,26 @@ mod proofs {
         undo_xorshift(z, 30)
     }
 
+    /// The three xor-shift steps of the output function each have the inverse `undo_xorshift`.
+    #[kani::proof]
+    #[kani::unwind(5)]
+    fn the_xorshift_steps_are_inverted() {
+        let x: u64 = kani::any();
+        for s in [30u32, 27, 31] {
+            assert_eq!(undo_xorshift(x ^ (x >> s), s), x);
+        }
+    }
+
+    /// The two multipliers of the output function are odd, so `mul_inverse` undoes them.
+    #[kani::proof]
+    #[kani::solver(cadical)]
+    fn the_multipliers_are_inverted() {
+        let x: u64 = kani::any();
+        for c in [0xbf58_476d_1ce4_e5b9u64, 0x94d0_49bb_1331_11eb] {
+            assert_eq!(x.wrapping_mul(c).wrapping_mul(mul_inverse(c)), x);
+        }
+    }
+
     /// SplitMix64's output function is a bijection of its state, shown by an explicit inverse:
     /// the first output determines the seed, so different seeds never give the same first output.
     #[kani::proof]
