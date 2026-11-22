@@ -1422,6 +1422,7 @@ unit	yr	r.
 	No variation was observed, so there is no interval for the mean; a rare event the trials did not reach could still move it.	Nebola pozorovaná žiadna variabilita, preto pre priemer nie je interval; zriedkavá udalosť, ku ktorej pokusy nedošli, by ho stále mohla posunúť.
 	They narrowed the interval by {percent}, but a mean given for a control is far from the trials' mean, so the plain result stands.	Zúžili interval o {percent}, ale priemer zadaný pre kontrolu je ďaleko od priemeru pokusov, takže zostáva obyčajný výsledok.
 	The output does not move in one direction with {inputs} (its value at the median is outside its values at the 10th and 90th percentiles), so the swing understates the effect.	Výstup sa s {inputs} nepohybuje jedným smerom (jeho hodnota v mediáne leží mimo jeho hodnôt pri 10. a 90. percentile), takže rozpätie podhodnocuje účinok.
+	Did not open {file}: a different model was opened in the meantime	Súbor {file} sa neotvoril: medzitým sa otvoril iný model
 	Select	Vybrať
 	Link	Spojnica
 	Initial value	Počiatočná hodnota

@@ -1422,6 +1422,7 @@ unit	yr	J.
 	No variation was observed, so there is no interval for the mean; a rare event the trials did not reach could still move it.	Es wurde keine Streuung beobachtet, daher gibt es kein Intervall für den Mittelwert; ein seltenes Ereignis, das die Versuche nicht erreicht haben, könnte ihn trotzdem verschieben.
 	They narrowed the interval by {percent}, but a mean given for a control is far from the trials' mean, so the plain result stands.	Sie haben das Intervall um {percent} verengt, aber ein für eine Kontrolle angegebener Mittelwert liegt weit vom Mittelwert der Versuche entfernt, daher bleibt das einfache Ergebnis bestehen.
 	The output does not move in one direction with {inputs} (its value at the median is outside its values at the 10th and 90th percentiles), so the swing understates the effect.	Die Ausgabe bewegt sich mit {inputs} nicht in eine Richtung (ihr Wert am Median liegt außerhalb ihrer Werte beim 10. und 90. Perzentil), daher unterschätzt die Schwankungsbreite den Effekt.
+	Did not open {file}: a different model was opened in the meantime	{file} wurde nicht geöffnet: In der Zwischenzeit wurde ein anderes Modell geöffnet
 	Select	Auswählen
 	Link	Verknüpfung
 	Initial value	Anfangswert

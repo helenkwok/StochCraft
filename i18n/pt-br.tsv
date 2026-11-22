@@ -1422,6 +1422,7 @@ unit	yr	a
 	No variation was observed, so there is no interval for the mean; a rare event the trials did not reach could still move it.	Nenhuma variação foi observada, então não há intervalo para a média; um evento raro que os testes não alcançaram ainda poderia movê-la.
 	They narrowed the interval by {percent}, but a mean given for a control is far from the trials' mean, so the plain result stands.	Eles estreitaram o intervalo em {percent}, mas uma média dada para um controle está longe da média dos testes, então o resultado simples permanece.
 	The output does not move in one direction with {inputs} (its value at the median is outside its values at the 10th and 90th percentiles), so the swing understates the effect.	A saída não se move em uma só direção com {inputs} (o seu valor na mediana fica fora dos seus valores nos percentis 10 e 90), então a oscilação subestima o efeito.
+	Did not open {file}: a different model was opened in the meantime	{file} não foi aberto: outro modelo foi aberto nesse meio tempo
 	Select	Selecionar
 	Link	Vínculo
 	Initial value	Valor inicial

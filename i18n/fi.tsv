@@ -1422,6 +1422,7 @@ unit	yr	v
 	No variation was observed, so there is no interval for the mean; a rare event the trials did not reach could still move it.	Vaihtelua ei havaittu, joten keskiarvolle ei ole väliä; harvinainen tapahtuma, johon kokeet eivät yltäneet, voisi silti siirtää sitä.
 	They narrowed the interval by {percent}, but a mean given for a control is far from the trials' mean, so the plain result stands.	Ne kavensivat väliä {percent}, mutta kontrollille annettu keskiarvo on kaukana kokeiden keskiarvosta, joten tavallinen tulos pätee.
 	The output does not move in one direction with {inputs} (its value at the median is outside its values at the 10th and 90th percentiles), so the swing understates the effect.	Tulos ei liiku yhteen suuntaan syötteen {inputs} mukana (sen arvo mediaanissa on sen 10. ja 90. persentiilin arvojen ulkopuolella), joten heilahdus aliarvioi vaikutuksen.
+	Did not open {file}: a different model was opened in the meantime	Tiedostoa {file} ei avattu: välissä avattiin toinen malli
 	Select	Valitse
 	Link	Linkki
 	Initial value	Alkuarvo

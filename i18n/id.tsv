@@ -1422,6 +1422,7 @@ unit	yr	thn
 	No variation was observed, so there is no interval for the mean; a rare event the trials did not reach could still move it.	Tidak ada variasi yang teramati, jadi tidak ada interval untuk rata-rata; kejadian langka yang tidak dicapai percobaan masih bisa menggesernya.
 	They narrowed the interval by {percent}, but a mean given for a control is far from the trials' mean, so the plain result stands.	Mereka mempersempit interval sebesar {percent}, tetapi rata-rata yang diberikan untuk sebuah kontrol jauh dari rata-rata percobaan, jadi hasil biasa tetap dipakai.
 	The output does not move in one direction with {inputs} (its value at the median is outside its values at the 10th and 90th percentiles), so the swing understates the effect.	Keluaran tidak bergerak ke satu arah bersama {inputs} (nilainya pada median berada di luar nilainya pada persentil ke-10 dan ke-90), jadi ayunan meremehkan pengaruhnya.
+	Did not open {file}: a different model was opened in the meantime	{file} tidak dibuka: model lain dibuka sementara itu
 	Select	Pilih
 	Link	Tautan
 	Initial value	Nilai awal

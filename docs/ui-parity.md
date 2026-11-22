@@ -204,7 +204,7 @@ re-graded. Since then:
 | Item | Status | Notes |
 |---|---|---|
 | Open, save, save as, unsaved-change prompts, recent files | done | [nv] ROADMAP M3.1a and M3.1b |
-| Autosave and crash recovery | done | [nv] Every ten seconds on the desktop (the browser's interval not verified) |
+| Autosave and crash recovery | done | [nv] Every ten seconds on the desktop (the browser's interval not verified); each window keeps its own copy |
 | An open file format other tools read | done (ours) | BPMN 2.0 or XPDL with BPSim; a model drawn in another BPMN editor opens with its layout. The 3D-first tool and the flowchart-first tool save to formats of their own (the flowchart-first one: from public summaries, not confirmed) |
 | Open vendor models | missing | No import; a switcher rebuilds the model |
 | Runs in a browser, offline | done (ours) | The GitHub Pages build installs and works offline. The flowchart-first tool's features page (read directly) offers modelling in the browser too; the 3D-first tool is a Windows desktop program |

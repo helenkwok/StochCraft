@@ -1422,6 +1422,7 @@ unit	yr	năm
 	No variation was observed, so there is no interval for the mean; a rare event the trials did not reach could still move it.	Không quan sát thấy biến thiên nào, nên không có khoảng cho giá trị trung bình; một sự kiện hiếm mà các lần thử chưa chạm tới vẫn có thể làm nó dịch chuyển.
 	They narrowed the interval by {percent}, but a mean given for a control is far from the trials' mean, so the plain result stands.	Chúng thu hẹp khoảng {percent}, nhưng giá trị trung bình được cho cho một biến kiểm soát lệch xa trung bình của các lần thử, nên kết quả thường vẫn được giữ.
 	The output does not move in one direction with {inputs} (its value at the median is outside its values at the 10th and 90th percentiles), so the swing understates the effect.	Đầu ra không đi theo một hướng với {inputs} (giá trị của nó tại trung vị nằm ngoài các giá trị tại phân vị thứ 10 và 90), nên biên độ dao động đánh giá thấp tác động.
+	Did not open {file}: a different model was opened in the meantime	Không mở {file}: trong lúc đó một mô hình khác đã được mở
 	Select	Chọn
 	Link	Liên kết
 	Initial value	Giá trị ban đầu

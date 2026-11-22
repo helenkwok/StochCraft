@@ -1422,6 +1422,7 @@ unit	yr	a
 	No variation was observed, so there is no interval for the mean; a rare event the trials did not reach could still move it.	Muutlikkust ei täheldatud, seega keskmisele vahemikku ei ole; haruldane sündmus, milleni katsed ei jõudnud, võiks seda siiski nihutada.
 	They narrowed the interval by {percent}, but a mean given for a control is far from the trials' mean, so the plain result stands.	Need kitsendasid vahemikku {percent} võrra, kuid kontrollile antud keskmine on katsete keskmisest kaugel, seega jääb kehtima tavaline tulemus.
 	The output does not move in one direction with {inputs} (its value at the median is outside its values at the 10th and 90th percentiles), so the swing understates the effect.	Väljund ei liigu sisendiga {inputs} ühes suunas (selle väärtus mediaanil jääb väljapoole selle väärtusi 10. ja 90. protsentiilil), seega hälve alahindab mõju.
+	Did not open {file}: a different model was opened in the meantime	Faili {file} ei avatud: vahepeal avati teine mudel
 	Select	Vali
 	Link	Seos
 	Initial value	Algväärtus

@@ -1422,6 +1422,7 @@ unit	yr	a
 	No variation was observed, so there is no interval for the mean; a rare event the trials did not reach could still move it.	Nu s-a observat nicio variație, deci nu există interval pentru medie; un eveniment rar pe care încercările nu l-au atins ar putea totuși să o mute.
 	They narrowed the interval by {percent}, but a mean given for a control is far from the trials' mean, so the plain result stands.	Au îngustat intervalul cu {percent}, dar o medie dată pentru un control este departe de media încercărilor, deci rămâne rezultatul simplu.
 	The output does not move in one direction with {inputs} (its value at the median is outside its values at the 10th and 90th percentiles), so the swing understates the effect.	Ieșirea nu se mișcă într-o singură direcție cu {inputs} (valoarea ei la mediană este în afara valorilor ei la percentilele 10 și 90), deci amplitudinea subestimează efectul.
+	Did not open {file}: a different model was opened in the meantime	{file} nu a fost deschis: între timp a fost deschis alt model
 	Select	Selectează
 	Link	Legătură
 	Initial value	Valoare inițială

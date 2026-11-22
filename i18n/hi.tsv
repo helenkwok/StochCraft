@@ -1422,6 +1422,7 @@ unit	yr	वर्ष
 	No variation was observed, so there is no interval for the mean; a rare event the trials did not reach could still move it.	कोई भिन्नता नहीं देखी गई, इसलिए माध्य के लिए कोई अंतराल नहीं है; कोई दुर्लभ घटना, जहाँ तक परीक्षण नहीं पहुँचे, फिर भी इसे बदल सकती है।
 	They narrowed the interval by {percent}, but a mean given for a control is far from the trials' mean, so the plain result stands.	इन्होंने अंतराल को {percent} संकरा किया, लेकिन किसी नियंत्रण के लिए दिया गया माध्य परीक्षणों के माध्य से बहुत दूर है, इसलिए सामान्य परिणाम ही रहता है।
 	The output does not move in one direction with {inputs} (its value at the median is outside its values at the 10th and 90th percentiles), so the swing understates the effect.	आउटपुट {inputs} के साथ एक दिशा में नहीं चलता (माध्यिका पर इसका मान 10वें और 90वें प्रतिशतक के इसके मानों से बाहर है), इसलिए स्विंग प्रभाव को कम आँकता है।
+	Did not open {file}: a different model was opened in the meantime	{file} नहीं खोली गई: इस बीच कोई दूसरा मॉडल खोल दिया गया
 	Select	चुनें
 	Link	लिंक
 	Initial value	प्रारंभिक मान

@@ -1422,6 +1422,7 @@ unit	yr	年
 	No variation was observed, so there is no interval for the mean; a rare event the trials did not reach could still move it.	没有观察到任何变化，因此平均值没有区间；试验没有触及的罕见事件仍可能使它移动。
 	They narrowed the interval by {percent}, but a mean given for a control is far from the trials' mean, so the plain result stands.	它们把区间缩窄了 {percent}，但给控制变量的均值与试验的均值相差很远，因此保留普通结果。
 	The output does not move in one direction with {inputs} (its value at the median is outside its values at the 10th and 90th percentiles), so the swing understates the effect.	输出随 {inputs} 并非朝同一方向变化（其在中位数处的值落在第 10 和第 90 百分位处的值之外），因此摆幅会低估其影响。
+	Did not open {file}: a different model was opened in the meantime	未打开 {file}：在此期间已打开了另一个模型
 	Select	选择
 	Link	连接
 	Initial value	初始值

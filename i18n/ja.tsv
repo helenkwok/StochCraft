@@ -1422,6 +1422,7 @@ unit	yr	年
 	No variation was observed, so there is no interval for the mean; a rare event the trials did not reach could still move it.	ばらつきが観測されなかったため、平均の区間はありません。試行が到達しなかった稀な事象が、それでも平均を動かす可能性があります。
 	They narrowed the interval by {percent}, but a mean given for a control is far from the trials' mean, so the plain result stands.	区間は {percent} 狭まりましたが、制御変量に与えた平均が試行の平均から大きく離れているため、通常の結果をそのまま使います。
 	The output does not move in one direction with {inputs} (its value at the median is outside its values at the 10th and 90th percentiles), so the swing understates the effect.	出力は {inputs} に対して一方向に動きません（中央値での値が 10 パーセンタイルと 90 パーセンタイルでの値の外にあります）。そのため、振れ幅は影響を過小に示します。
+	Did not open {file}: a different model was opened in the meantime	{file} は開きませんでした。その間に別のモデルが開かれました
 	Select	選択
 	Link	リンク
 	Initial value	初期値

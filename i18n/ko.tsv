@@ -1422,6 +1422,7 @@ unit	yr	년
 	No variation was observed, so there is no interval for the mean; a rare event the trials did not reach could still move it.	변동이 관찰되지 않았으므로 평균의 구간이 없습니다. 시행이 도달하지 못한 드문 사건이 여전히 평균을 움직일 수 있습니다.
 	They narrowed the interval by {percent}, but a mean given for a control is far from the trials' mean, so the plain result stands.	구간이 {percent} 좁아졌지만, 통제 변수에 준 평균이 시행의 평균과 크게 달라서 일반 결과를 그대로 씁니다.
 	The output does not move in one direction with {inputs} (its value at the median is outside its values at the 10th and 90th percentiles), so the swing understates the effect.	출력은 {inputs}에 대해 한 방향으로 움직이지 않습니다(중앙값에서의 값이 10번째와 90번째 백분위수에서의 값 바깥에 있습니다). 그래서 변동 폭이 영향을 과소평가합니다.
+	Did not open {file}: a different model was opened in the meantime	{file}을(를) 열지 않았습니다. 그동안 다른 모델이 열렸습니다
 	Select	선택
 	Link	링크
 	Initial value	초기값

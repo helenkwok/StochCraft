@@ -1422,6 +1422,7 @@ unit	yr	ປີ
 	No variation was observed, so there is no interval for the mean; a rare event the trials did not reach could still move it.	ບໍ່ພົບການປ່ຽນແປງ, ສະນັ້ນຈຶ່ງບໍ່ມີຊ່ວງສຳລັບຄ່າສະເລ່ຍ; ເຫດການທີ່ຫາຍາກທີ່ການທົດລອງບໍ່ໄດ້ເຖິງ ຍັງອາດເຮັດໃຫ້ມັນເຄື່ອນໄດ້.
 	They narrowed the interval by {percent}, but a mean given for a control is far from the trials' mean, so the plain result stands.	ພວກມັນເຮັດໃຫ້ຊ່ວງແຄບລົງ {percent}, ແຕ່ຄ່າສະເລ່ຍທີ່ໃຫ້ສຳລັບຕົວຄວບຄຸມຢູ່ຫ່າງຈາກຄ່າສະເລ່ຍຂອງການທົດລອງຫຼາຍ, ສະນັ້ນຜົນລັບທຳມະດາຈຶ່ງຍັງຢູ່.
 	The output does not move in one direction with {inputs} (its value at the median is outside its values at the 10th and 90th percentiles), so the swing understates the effect.	ຜົນອອກບໍ່ເຄື່ອນໄປທາງດຽວກັບ {inputs} (ຄ່າຂອງມັນທີ່ມັດທະຍະຖານຢູ່ນອກຄ່າຂອງມັນທີ່ເປີເຊັນທາຍທີ 10 ແລະ 90), ສະນັ້ນຊ່ວງການແກວ່ງຈຶ່ງປະເມີນຜົນກະທົບຕ່ຳເກີນໄປ.
+	Did not open {file}: a different model was opened in the meantime	ບໍ່ໄດ້ເປີດ {file}: ໃນລະຫວ່າງນັ້ນໄດ້ເປີດແບບຈຳລອງອື່ນ
 	Select	ເລືອກ
 	Link	ລິ້ງ
 	Initial value	ຄ່າເລີ່ມຕົ້ນ

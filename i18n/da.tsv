@@ -1422,6 +1422,7 @@ unit	yr	år
 	No variation was observed, so there is no interval for the mean; a rare event the trials did not reach could still move it.	Der blev ikke observeret nogen variation, så der er intet interval for gennemsnittet; en sjælden hændelse, som forsøgene ikke nåede, kunne stadig flytte det.
 	They narrowed the interval by {percent}, but a mean given for a control is far from the trials' mean, so the plain result stands.	De indsnævrede intervallet med {percent}, men et gennemsnit angivet for en kontrol er langt fra forsøgenes gennemsnit, så det almindelige resultat står ved magt.
 	The output does not move in one direction with {inputs} (its value at the median is outside its values at the 10th and 90th percentiles), so the swing understates the effect.	Output bevæger sig ikke i én retning med {inputs} (værdien ved medianen ligger uden for værdierne ved 10. og 90. percentil), så udsvinget undervurderer effekten.
+	Did not open {file}: a different model was opened in the meantime	{file} blev ikke åbnet: en anden model blev åbnet i mellemtiden
 	Select	Vælg
 	Link	Link
 	Initial value	Startværdi

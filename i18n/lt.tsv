@@ -1422,6 +1422,7 @@ unit	yr	m.
 	No variation was observed, so there is no interval for the mean; a rare event the trials did not reach could still move it.	Kitimo nepastebėta, todėl vidurkiui intervalo nėra; retas įvykis, kurio bandymai nepasiekė, vis dar galėtų jį pastumti.
 	They narrowed the interval by {percent}, but a mean given for a control is far from the trials' mean, so the plain result stands.	Jie susiaurino intervalą {percent}, bet kontrolei duotas vidurkis toli nuo bandymų vidurkio, todėl lieka paprastas rezultatas.
 	The output does not move in one direction with {inputs} (its value at the median is outside its values at the 10th and 90th percentiles), so the swing understates the effect.	Išvestis nejuda viena kryptimi su {inputs} (jos reikšmė ties mediana yra už jos reikšmių ties 10-uoju ir 90-uoju procentiliu), todėl svyravimas nepakankamai įvertina poveikį.
+	Did not open {file}: a different model was opened in the meantime	{file} neatidarytas: tuo metu buvo atidarytas kitas modelis
 	Select	Pasirinkti
 	Link	Saitas
 	Initial value	Pradinė reikšmė

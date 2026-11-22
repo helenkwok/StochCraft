@@ -1422,6 +1422,7 @@ unit	yr	v
 	No variation was observed, so there is no interval for the mean; a rare event the trials did not reach could still move it.	Nuk u vëzhgua asnjë ndryshim, ndaj nuk ka interval për mesataren; një ngjarje e rrallë që provat nuk e arritën mund ta lëvizte ende.
 	They narrowed the interval by {percent}, but a mean given for a control is far from the trials' mean, so the plain result stands.	Ata e ngushtuan intervalin me {percent}, por një mesatare e dhënë për një kontroll është larg mesatares së provave, ndaj mbetet rezultati i thjeshtë.
 	The output does not move in one direction with {inputs} (its value at the median is outside its values at the 10th and 90th percentiles), so the swing understates the effect.	Dalja nuk lëviz në një drejtim me {inputs} (vlera e saj te mesorja është jashtë vlerave të saj te përqindshi i 10-të dhe i 90-ti), ndaj luhatja e nënvlerëson efektin.
+	Did not open {file}: a different model was opened in the meantime	{file} nuk u hap: ndërkohë u hap një model tjetër
 	Select	Zgjidh
 	Link	Lidhja
 	Initial value	Vlera fillestare

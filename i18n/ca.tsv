@@ -1422,6 +1422,7 @@ unit	yr	a
 	No variation was observed, so there is no interval for the mean; a rare event the trials did not reach could still move it.	No s'ha observat cap variació, de manera que no hi ha cap interval per a la mitjana; un esdeveniment rar que les proves no han assolit encara la podria moure.
 	They narrowed the interval by {percent}, but a mean given for a control is far from the trials' mean, so the plain result stands.	Han estretit l'interval un {percent}, però la mitjana donada per a un control és lluny de la mitjana de les proves, de manera que es manté el resultat simple.
 	The output does not move in one direction with {inputs} (its value at the median is outside its values at the 10th and 90th percentiles), so the swing understates the effect.	La sortida no es mou en una sola direcció amb {inputs} (el seu valor a la mediana és fora dels seus valors al 10è i al 90è percentil), de manera que l'oscil·lació en subestima l'efecte.
+	Did not open {file}: a different model was opened in the meantime	No s'ha obert {file}: mentrestant s'ha obert un altre model
 	Select	Selecciona
 	Link	Enllaç
 	Initial value	Valor inicial

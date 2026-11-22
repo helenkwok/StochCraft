@@ -1422,6 +1422,7 @@ unit	yr	г.
 	No variation was observed, so there is no interval for the mean; a rare event the trials did not reach could still move it.	Не е наблюдавана вариация, затова няма интервал за средната стойност; рядко събитие, до което опитите не са стигнали, все още би могло да я промени.
 	They narrowed the interval by {percent}, but a mean given for a control is far from the trials' mean, so the plain result stands.	Те стесниха интервала с {percent}, но зададената средна стойност на контрола е далеч от средната на опитите, затова обикновеният резултат остава.
 	The output does not move in one direction with {inputs} (its value at the median is outside its values at the 10th and 90th percentiles), so the swing understates the effect.	Резултатът не се движи в една посока с {inputs} (стойността му при медианата е извън стойностите му при 10-ия и 90-ия персентил), затова размахът подценява ефекта.
+	Did not open {file}: a different model was opened in the meantime	{file} не е отворен: междувременно е отворен друг модел
 	Select	Избор
 	Link	Връзка
 	Initial value	Начална стойност

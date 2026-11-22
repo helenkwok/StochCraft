@@ -1894,6 +1894,21 @@ every half minute and on closing the page on the web (the browser's storage), an
 the model is saved, closed or discarded on quit. If StochCraft stops with changes unsaved, the
 next start asks whether to recover them as an untitled model or discard them.
 
+**Recovery with several windows, and files that arrive late:** each window or tab keeps its own
+recovery copy (`recovery/<session>.json` in the local data folder, held by a lock the system
+drops when the process ends; `stochcraft.recovery.<session>` in local storage, with a sign of
+life every ten seconds that the page takes back when it goes away), so two windows never replace
+or remove each other's. At start the copies of windows that are gone are offered, newest
+first and one at a time; a copy that is recovered goes only once this session has written its
+own, or once the recovered model is saved, so Save straight after Recover leaves nothing to come
+back. A write that fails is not counted as kept: it is tried again at the next tick, an
+unchanged model included. In the browser a file read in the background (the picker, a dropped
+file) carries a ticket: it is dropped when another file was asked for or the model was replaced
+meanwhile, and a picked file is asked about again if the model was edited meanwhile. The old
+single `recovery.json` is offered like the copy of a window that is gone. Not covered by
+automated tests: the browser's storage and timers and the desktop's file locks across real
+processes (the store's tests run two sessions in one process).
+
 **M3.1f (translations):** every interface string goes through craft-i18n, with a pseudo-locale
 test that fails on any that doesn't. StochCraft's own catalogs (`i18n/`, 44 left-to-right
 languages) are built in, each with a row for every string the window and the desktop shell look

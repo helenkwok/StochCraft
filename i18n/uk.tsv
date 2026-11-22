@@ -1422,6 +1422,7 @@ unit	yr	р.
 	No variation was observed, so there is no interval for the mean; a rare event the trials did not reach could still move it.	Мінливості не спостерігалося, тому інтервалу для середнього немає; рідкісна подія, до якої випробування не дійшли, усе ж могла б його зсунути.
 	They narrowed the interval by {percent}, but a mean given for a control is far from the trials' mean, so the plain result stands.	Вони звузили інтервал на {percent}, але середнє, задане для контролю, далеко від середнього випробувань, тому лишається звичайний результат.
 	The output does not move in one direction with {inputs} (its value at the median is outside its values at the 10th and 90th percentiles), so the swing understates the effect.	Вихід не рухається в одному напрямку з {inputs} (його значення на медіані лежить поза його значеннями на 10-му та 90-му процентилях), тому розмах занижує ефект.
+	Did not open {file}: a different model was opened in the meantime	{file} не відкрито: тим часом відкрито іншу модель
 	Select	Вибрати
 	Link	Зв’язок
 	Initial value	Початкове значення

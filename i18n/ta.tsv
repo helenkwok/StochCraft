@@ -1422,6 +1422,7 @@ unit	yr	ஆண்டு
 	No variation was observed, so there is no interval for the mean; a rare event the trials did not reach could still move it.	எந்த மாறுபாடும் காணப்படவில்லை, எனவே சராசரிக்கு இடைவெளி இல்லை; சோதனைகள் எட்டாத அரிய நிகழ்வு இன்னும் அதை நகர்த்தக்கூடும்.
 	They narrowed the interval by {percent}, but a mean given for a control is far from the trials' mean, so the plain result stands.	அவை இடைவெளியை {percent} குறுக்கின, ஆனால் ஒரு கட்டுப்பாட்டுக்குக் கொடுத்த சராசரி சோதனைகளின் சராசரியிலிருந்து வெகு தொலைவில் உள்ளது, எனவே சாதாரண முடிவே நிற்கிறது.
 	The output does not move in one direction with {inputs} (its value at the median is outside its values at the 10th and 90th percentiles), so the swing understates the effect.	வெளியீடு {inputs} உடன் ஒரே திசையில் நகரவில்லை (இடைநிலையில் அதன் மதிப்பு 10வது மற்றும் 90வது சதவீதங்களில் அதன் மதிப்புகளுக்கு வெளியே உள்ளது), எனவே ஊசலாட்டம் விளைவைக் குறைத்து மதிப்பிடுகிறது.
+	Did not open {file}: a different model was opened in the meantime	{file} திறக்கப்படவில்லை: இதற்கிடையில் வேறொரு மாதிரி திறக்கப்பட்டது
 	Select	தேர்ந்தெடு
 	Link	இணைப்பு
 	Initial value	தொடக்க மதிப்பு

@@ -1422,6 +1422,7 @@ unit	yr	సం.
 	No variation was observed, so there is no interval for the mean; a rare event the trials did not reach could still move it.	ఎటువంటి మార్పు గమనించబడలేదు, కాబట్టి సగటుకు అంతరం లేదు; ప్రయత్నాలు చేరుకోని అరుదైన సంఘటన ఇంకా దానిని కదిలించవచ్చు.
 	They narrowed the interval by {percent}, but a mean given for a control is far from the trials' mean, so the plain result stands.	అవి అంతరాన్ని {percent} తగ్గించాయి, కానీ ఒక నియంత్రణకు ఇచ్చిన సగటు ప్రయత్నాల సగటుకు చాలా దూరంగా ఉంది, కాబట్టి సాధారణ ఫలితమే నిలుస్తుంది.
 	The output does not move in one direction with {inputs} (its value at the median is outside its values at the 10th and 90th percentiles), so the swing understates the effect.	అవుట్‌పుట్ {inputs} తో ఒకే దిశలో కదలదు (మధ్యగతం వద్ద దాని విలువ 10వ మరియు 90వ శతమానాల వద్ద దాని విలువలకు బయట ఉంది), కాబట్టి స్వింగ్ ప్రభావాన్ని తక్కువగా అంచనా వేస్తుంది.
+	Did not open {file}: a different model was opened in the meantime	{file} తెరవబడలేదు: ఈలోగా మరొక నమూనా తెరవబడింది
 	Select	ఎంచుకో
 	Link	లింక్
 	Initial value	ప్రారంభ విలువ

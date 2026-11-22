@@ -1422,6 +1422,7 @@ unit	yr	г.
 	No variation was observed, so there is no interval for the mean; a rare event the trials did not reach could still move it.	Изменчивость не наблюдалась, поэтому интервала для среднего нет; редкое событие, до которого испытания не дошли, всё же могло бы его сдвинуть.
 	They narrowed the interval by {percent}, but a mean given for a control is far from the trials' mean, so the plain result stands.	Они сузили интервал на {percent}, но среднее, заданное для контрольной величины, далеко от среднего испытаний, поэтому остаётся обычный результат.
 	The output does not move in one direction with {inputs} (its value at the median is outside its values at the 10th and 90th percentiles), so the swing understates the effect.	Выход не движется в одном направлении с {inputs} (его значение на медиане лежит вне его значений на 10-м и 90-м процентилях), поэтому размах занижает эффект.
+	Did not open {file}: a different model was opened in the meantime	{file} не открыт: тем временем была открыта другая модель
 	Select	Выбрать
 	Link	Связь
 	Initial value	Начальное значение

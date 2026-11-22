@@ -1422,6 +1422,7 @@ unit	yr	ж.
 	No variation was observed, so there is no interval for the mean; a rare event the trials did not reach could still move it.	Ешқандай өзгерту байқалмады, сондықтан орташа үшін аралық жоқ; сынақтар жетпеген сирек оқиға оны әлі де жылжыта алады.
 	They narrowed the interval by {percent}, but a mean given for a control is far from the trials' mean, so the plain result stands.	Олар аралықты {percent} тарылтты, бірақ бақылауға берілген орташа сынақтардың орташасынан алыс, сондықтан қарапайым нәтиже қалады.
 	The output does not move in one direction with {inputs} (its value at the median is outside its values at the 10th and 90th percentiles), so the swing understates the effect.	Шығыс {inputs} бойынша бір бағытта қозғалмайды (оның медианадағы мәні 10-шы және 90-шы процентильдегі мәндерінің сыртында), сондықтан ауытқу әсерді төмен бағалайды.
+	Did not open {file}: a different model was opened in the meantime	{file} ашылмады: осы аралықта басқа модель ашылды
 	Select	Таңдау
 	Link	Сілтеме
 	Initial value	Бастапқы мән
