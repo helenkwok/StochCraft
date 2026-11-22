@@ -1075,7 +1075,8 @@ fn a_flow_that_runs_backwards_is_limited_by_the_stock_it_takes_from() {
     let r = once(&from_file(&text));
     assert_eq!(last(&r, "A"), 0.0);
     assert_eq!(last(&r, "B"), 1.0);
-    assert_eq!(last(&r, "f"), -1.0);
+    // At the end A is empty, so the flow it would give is limited to nothing.
+    assert_eq!(last(&r, "f"), 0.0);
     // Two flows between the same stocks, both negative: A gives to B through `g` (3 asked,
     // only the 1 it holds at the start of the step), and takes 2 from B through `f`.
     let text = xmile_file(
