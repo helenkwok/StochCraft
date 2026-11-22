@@ -1425,3 +1425,7 @@ unit	yr	r.
 	Agrees within ±{tolerance}	Shoduje se v rozmezí ±{tolerance}
 	This is not evidence of agreement: set a tolerance to test for it.	To není důkaz shody: pro její ověření nastavte toleranci.
 	Tolerance (0 for none)	Tolerance (0 = žádná)
+	Arrivals that keep their distance	Příchody, které drží odstup
+	One server fed by the gaps between zeros of the Riemann zeta function, beside Poisson arrivals at the same rate.	Jedna obsluha, na kterou přicházejí zákazníci v rozestupech mezi nulami Riemannovy zeta funkce, vedle Poissonových příchodů téže intenzity.
+	Do arrivals that avoid bunching make a shorter queue?	Dělají příchody, které se vyhýbají shlukování, kratší frontu?
+	Same average rate, half the wait: arrivals that repel one another bunch up less than random ones.	Stejná průměrná intenzita, poloviční čekání: příchody, které se vzájemně odpuzují, se shlukují méně než náhodné.

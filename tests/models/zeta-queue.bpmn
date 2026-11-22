@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Arrivals that keep their distance. Time between arrivals: the gaps between consecutive zeros of the Riemann zeta function (the first 10001 zeros, so 10000 gaps), scaled to a mean of 1.25 minutes and drawn independently from their histogram (40 bins). The data are made by tools/zeta-gaps/generate.py. The "Poisson arrivals" scenario keeps the mean and draws exponential gaps. One server with exponential service of mean 1 minute: utilisation 0.8 in both. Exact G/M/1 answer in crates/engine/tests/examples.rs. -->
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:bpsim="http://www.bpsim.org/schemas/2.0" id="definitions" name="Zeta arrivals" targetNamespace="https://github.com/helenkwok/StochCraft/model" exporter="StochCraft" exporterVersion="0.1.0">
+  <bpmn:resource id="server_resource" name="Server"/>
+  <bpmn:process id="process" name="Zeta arrivals" isExecutable="false">
+    <bpmn:startEvent id="arrivals" name="Arrivals">
+      <bpmn:outgoing>flow-1</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:task id="server" name="Server">
+      <bpmn:incoming>flow-1</bpmn:incoming>
+      <bpmn:outgoing>flow-2</bpmn:outgoing>
+      <bpmn:performer>
+        <bpmn:resourceRef>server_resource</bpmn:resourceRef>
+      </bpmn:performer>
+    </bpmn:task>
+    <bpmn:endEvent id="done" name="Departures">
+      <bpmn:incoming>flow-2</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="flow-1" sourceRef="arrivals" targetRef="server"/>
+    <bpmn:sequenceFlow id="flow-2" sourceRef="server" targetRef="done"/>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="diagram">
+    <bpmndi:BPMNPlane id="plane" bpmnElement="process">
+      <bpmndi:BPMNShape id="arrivals_di" bpmnElement="arrivals">
+        <dc:Bounds x="82" y="82" width="36" height="36"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="server_di" bpmnElement="server">
+        <dc:Bounds x="230" y="60" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="done_di" bpmnElement="done">
+        <dc:Bounds x="442" y="82" width="36" height="36"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="flow-1_di" bpmnElement="flow-1">
+        <di:waypoint x="118" y="100"/>
+        <di:waypoint x="230" y="100"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow-2_di" bpmnElement="flow-2">
+        <di:waypoint x="330" y="100"/>
+        <di:waypoint x="442" y="100"/>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+  <bpmn:relationship type="BPSimData">
+    <bpmn:extensionElements>
+      <bpsim:BPSimData>
+        <bpsim:Scenario id="zeta" name="Zeta zero gaps" vendor="StochCraft" version="0.1.0">
+          <bpsim:ScenarioParameters replication="10" seed="1" baseTimeUnit="min">
+            <bpsim:Duration>
+              <bpsim:FloatingParameter value="21000"/>
+            </bpsim:Duration>
+            <bpsim:Warmup>
+              <bpsim:FloatingParameter value="1000"/>
+            </bpsim:Warmup>
+          </bpsim:ScenarioParameters>
+          <bpsim:ElementParameters elementRef="arrivals">
+            <bpsim:ControlParameters>
+              <bpsim:InterTriggerTimer>
+                <bpsim:UserDistribution discrete="true">
+                  <bpsim:UserDistributionDataPoint probability="0.0002"><bpsim:FloatingParameter value="0.038811"/></bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.0008"><bpsim:FloatingParameter value="0.116434"/></bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.0024"><bpsim:FloatingParameter value="0.194056"/></bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.0061"><bpsim:FloatingParameter value="0.271678"/></bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.0091"><bpsim:FloatingParameter value="0.349301"/></bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.0153"><bpsim:FloatingParameter value="0.426923"/></bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.023"><bpsim:FloatingParameter value="0.504546"/></bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.0289"><bpsim:FloatingParameter value="0.582168"/></bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.0376"><bpsim:FloatingParameter value="0.659790"/></bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.0452"><bpsim:FloatingParameter value="0.737413"/></bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.0493"><bpsim:FloatingParameter value="0.815035"/></bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.061"><bpsim:FloatingParameter value="0.892658"/></bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.0634"><bpsim:FloatingParameter value="0.970280"/></bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.0636"><bpsim:FloatingParameter value="1.047902"/></bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.0605"><bpsim:FloatingParameter value="1.125525"/></bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.0649"><bpsim:FloatingParameter value="1.203147"/></bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.0596"><bpsim:FloatingParameter value="1.280770"/></bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.0576"><bpsim:FloatingParameter value="1.358392"/></bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.0495"><bpsim:FloatingParameter value="1.436014"/></bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.0489"><bpsim:FloatingParameter value="1.513637"/></bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.0417"><bpsim:FloatingParameter value="1.591259"/></bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.0356"><bpsim:FloatingParameter value="1.668881"/></bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.0336"><bpsim:FloatingParameter value="1.746504"/></bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.0275"><bpsim:FloatingParameter value="1.824126"/></bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.0239"><bpsim:FloatingParameter value="1.901749"/></bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.0172"><bpsim:FloatingParameter value="1.979371"/></bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.0161"><bpsim:FloatingParameter value="2.056993"/></bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.0124"><bpsim:FloatingParameter value="2.134616"/></bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.0104"><bpsim:FloatingParameter value="2.212238"/></bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.0095"><bpsim:FloatingParameter value="2.289861"/></bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.0062"><bpsim:FloatingParameter value="2.367483"/></bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.0043"><bpsim:FloatingParameter value="2.445105"/></bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.0049"><bpsim:FloatingParameter value="2.522728"/></bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.0025"><bpsim:FloatingParameter value="2.600350"/></bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.003"><bpsim:FloatingParameter value="2.677973"/></bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.0018"><bpsim:FloatingParameter value="2.755595"/></bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.001"><bpsim:FloatingParameter value="2.833217"/></bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.0004"><bpsim:FloatingParameter value="2.910840"/></bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.0004"><bpsim:FloatingParameter value="2.988462"/></bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.0007"><bpsim:FloatingParameter value="3.066085"/></bpsim:UserDistributionDataPoint>
+                </bpsim:UserDistribution>
+              </bpsim:InterTriggerTimer>
+            </bpsim:ControlParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="server">
+            <bpsim:TimeParameters>
+              <bpsim:ProcessingTime>
+                <bpsim:NegativeExponentialDistribution mean="1"/>
+              </bpsim:ProcessingTime>
+            </bpsim:TimeParameters>
+            <bpsim:ResourceParameters>
+              <bpsim:Selection>
+                <bpsim:ExpressionParameter value="getResource('server_resource', 1)"/>
+              </bpsim:Selection>
+            </bpsim:ResourceParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="server_resource">
+            <bpsim:ResourceParameters>
+              <bpsim:Quantity>
+                <bpsim:NumericParameter value="1"/>
+              </bpsim:Quantity>
+            </bpsim:ResourceParameters>
+          </bpsim:ElementParameters>
+        </bpsim:Scenario>
+        <bpsim:Scenario id="poisson" name="Poisson arrivals" inherits="zeta">
+          <bpsim:ElementParameters elementRef="arrivals">
+            <bpsim:ControlParameters>
+              <bpsim:InterTriggerTimer>
+                <bpsim:NegativeExponentialDistribution mean="1.25"/>
+              </bpsim:InterTriggerTimer>
+            </bpsim:ControlParameters>
+          </bpsim:ElementParameters>
+        </bpsim:Scenario>
+      </bpsim:BPSimData>
+    </bpmn:extensionElements>
+    <bpmn:source>definitions</bpmn:source>
+    <bpmn:target>definitions</bpmn:target>
+  </bpmn:relationship>
+</bpmn:definitions>

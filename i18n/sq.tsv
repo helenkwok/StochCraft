@@ -1425,3 +1425,7 @@ unit	yr	v
 	Agrees within ±{tolerance}	Përputhet brenda ±{tolerance}
 	This is not evidence of agreement: set a tolerance to test for it.	Kjo nuk është provë përputhjeje: vendosni një tolerancë për ta testuar.
 	Tolerance (0 for none)	Toleranca (0 për asnjë)
+	Arrivals that keep their distance	Mbërritje që mbajnë distancë
+	One server fed by the gaps between zeros of the Riemann zeta function, beside Poisson arrivals at the same rate.	Një shërbyes i ushqyer nga hapësirat midis zerove të funksionit zeta të Riemannit, pranë mbërritjeve të Poissonit me të njëjtin ritëm.
+	Do arrivals that avoid bunching make a shorter queue?	A bëjnë një radhë më të shkurtër mbërritjet që shmangin grumbullimin?
+	Same average rate, half the wait: arrivals that repel one another bunch up less than random ones.	I njëjti ritëm mesatar, gjysma e pritjes: mbërritjet që e zmbrapsin njëra-tjetrën grumbullohen më pak se ato të rastësishme.

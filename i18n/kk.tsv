@@ -1425,3 +1425,7 @@ unit	yr	ж.
 	Agrees within ±{tolerance}	±{tolerance} шегінде сәйкес келеді
 	This is not evidence of agreement: set a tolerance to test for it.	Бұл сәйкестіктің дәлелі емес: тексеру үшін рұқсат етілген ауытқуды орнатыңыз.
 	Tolerance (0 for none)	Рұқсат етілген ауытқу (0 — жоқ)
+	Arrivals that keep their distance	Қашықтық сақтайтын келулер
+	One server fed by the gaps between zeros of the Riemann zeta function, beside Poisson arrivals at the same rate.	Римандық дзета-функцияның нөлдері арасындағы аралықтармен келулер қабылдайтын бір қызмет көрсетуші, сондай жиіліктегі Пуассон келулерімен қатар.
+	Do arrivals that avoid bunching make a shorter queue?	Шоғырланудан қашатын келулер кезекті қысқартады ма?
+	Same average rate, half the wait: arrivals that repel one another bunch up less than random ones.	Орташа жиілік сол, күту екі есе аз: бір-бірін тебетін келулер кездейсоқ келулерге қарағанда аз шоғырланады.

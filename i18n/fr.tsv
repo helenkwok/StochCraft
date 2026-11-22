@@ -1425,3 +1425,7 @@ unit	yr	an
 	Agrees within ±{tolerance}	Concorde à ±{tolerance} près
 	This is not evidence of agreement: set a tolerance to test for it.	Ce n'est pas une preuve de concordance : fixez une tolérance pour la tester.
 	Tolerance (0 for none)	Tolérance (0 pour aucune)
+	Arrivals that keep their distance	Des arrivées qui gardent leurs distances
+	One server fed by the gaps between zeros of the Riemann zeta function, beside Poisson arrivals at the same rate.	Un serveur alimenté par les écarts entre les zéros de la fonction zêta de Riemann, à côté d'arrivées de Poisson au même taux.
+	Do arrivals that avoid bunching make a shorter queue?	Des arrivées qui évitent de se regrouper font-elles une file plus courte ?
+	Same average rate, half the wait: arrivals that repel one another bunch up less than random ones.	Même taux moyen, moitié moins d'attente : des arrivées qui se repoussent se regroupent moins que des arrivées aléatoires.

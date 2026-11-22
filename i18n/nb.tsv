@@ -1425,3 +1425,7 @@ unit	yr	år
 	Agrees within ±{tolerance}	Stemmer innenfor ±{tolerance}
 	This is not evidence of agreement: set a tolerance to test for it.	Dette er ikke bevis for samsvar: angi en toleranse for å teste det.
 	Tolerance (0 for none)	Toleranse (0 for ingen)
+	Arrivals that keep their distance	Ankomster som holder avstand
+	One server fed by the gaps between zeros of the Riemann zeta function, beside Poisson arrivals at the same rate.	Én betjent som får kunder etter avstandene mellom nullpunktene til Riemanns zetafunksjon, ved siden av Poisson-ankomster med samme rate.
+	Do arrivals that avoid bunching make a shorter queue?	Gir ankomster som unngår å klumpe seg sammen, en kortere kø?
+	Same average rate, half the wait: arrivals that repel one another bunch up less than random ones.	Samme gjennomsnittlige rate, halv ventetid: ankomster som støter hverandre fra seg, klumper seg mindre enn tilfeldige.
