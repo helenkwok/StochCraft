@@ -69,7 +69,9 @@ window on the flowchart canvas (M3.4).
    native, wasm32 and (later) wasm64, with any thread count. A golden-results test enforces it.
 4. **Validated against theory.** Every block that has an analytic counterpart ships with a test
    whose 95% confidence interval must cover it (M/M/1, M/M/c, M/M/1/K, Erlang loss, Jackson
-   networks). Blocks without one get exact deterministic tests.
+   networks). Blocks without one get exact deterministic tests. A few core invariants (stream
+   seeding, parameter checks, the verdict rules) are also machine-checked with Kani
+   ([developers guide](docs/developers.md#machine-checked-proofs)).
 5. **Layers stay shallow.** New crates get a row in `xtask/src/layers.rs` before code is written;
    the UI never reaches below the engine.
 6. **Clean room.** Behaviour comes from textbooks, papers and vendors' public documentation read
