@@ -940,7 +940,6 @@ unit	yr	r.
 	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	To jest Twój pierwszy model. Pierwsze wiersze Wyniki mówią, co wykazało uruchomienie; Pomoc ▸ Co oznaczają wyniki wyjaśnia każdą liczbę.
 # Which inputs matter in the Monte Carlo results (ROADMAP M4.1, part 3a)
 	Which inputs matter	Które wejścia mają znaczenie
-	{output} depends most on {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile.	{output} zależy najbardziej od wejścia {input}: zmienia się od {low} do {high}, gdy {input} przechodzi od swojego 10. do 90. percentyla.
 	Each input from its 10th to its 90th percentile, with the others at their medians	Każde wejście od swojego 10. do 90. percentyla, pozostałe przy medianach
 	Base {value}	Wartość bazowa {value}
 	A correlated input's figure includes the effect of the inputs it is correlated with.	Liczba dla skorelowanego wejścia obejmuje wpływ wejść, z którymi jest skorelowane.
@@ -1399,3 +1398,7 @@ unit	yr	r.
 	The estimated chance that {output} is more than {value} is {percent}.	Szacowane prawdopodobieństwo, że {output} jest większe niż {value}, wynosi {percent}.
 	The estimated chance that {output} is less than {value} is {percent}.	Szacowane prawdopodobieństwo, że {output} jest mniejsze niż {value}, wynosi {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	Ich przedział nie ma szerokości, czego nie ma żadne oszacowanie, więc zostaje zwykły wynik.
+	{output} changes most with {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile, the other inputs at their medians.	{output} zmienia się najbardziej wraz z {input}: przechodzi od {low} do {high}, gdy {input} przechodzi od swojego 10. do swojego 90. percentyla, a pozostałe wejścia są na swoich medianach.
+	No variation was observed, so there is no interval for the mean; a rare event the trials did not reach could still move it.	Nie zaobserwowano żadnej zmienności, więc nie ma przedziału dla średniej; rzadkie zdarzenie, którego próby nie osiągnęły, nadal mogłoby ją przesunąć.
+	They narrowed the interval by {percent}, but a mean given for a control is far from the trials' mean, so the plain result stands.	Zwęziły przedział o {percent}, ale średnia podana dla kontroli jest daleko od średniej prób, więc zostaje zwykły wynik.
+	The output does not move in one direction with {inputs} (its value at the median is outside its values at the 10th and 90th percentiles), so the swing understates the effect.	Wyjście nie porusza się w jednym kierunku wraz z {inputs} (jego wartość w medianie leży poza jego wartościami przy 10. i 90. percentylu), więc rozstęp niedocenia wpływu.

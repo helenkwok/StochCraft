@@ -940,7 +940,6 @@ unit	yr	वर्ष
 	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	यह आपका पहला मॉडल है। परिणाम की शुरुआती पंक्तियाँ बताती हैं कि चलाने पर क्या मिला; सहायता ▸ परिणामों का अर्थ हर संख्या को समझाता है।
 # Which inputs matter in the Monte Carlo results (ROADMAP M4.1, part 3a)
 	Which inputs matter	कौन-से इनपुट मायने रखते हैं
-	{output} depends most on {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile.	{output} सबसे अधिक {input} पर निर्भर करता है: जब {input} अपने 10वें से 90वें प्रतिशतक तक जाता है, तब यह {low} से {high} तक जाता है।
 	Each input from its 10th to its 90th percentile, with the others at their medians	हर इनपुट अपने 10वें से 90वें प्रतिशतक तक, बाकी अपनी माध्यिका पर
 	Base {value}	आधार मान {value}
 	A correlated input's figure includes the effect of the inputs it is correlated with.	सहसंबद्ध इनपुट के आँकड़े में उन इनपुट का प्रभाव भी शामिल है जिनसे वह सहसंबद्ध है।
@@ -1399,3 +1398,7 @@ unit	yr	वर्ष
 	The estimated chance that {output} is more than {value} is {percent}.	{output} के {value} से अधिक होने की अनुमानित संभावना {percent} है।
 	The estimated chance that {output} is less than {value} is {percent}.	{output} के {value} से कम होने की अनुमानित संभावना {percent} है।
 	Their interval has no width, which no estimate has, so the plain result stands.	उनके अंतराल की कोई चौड़ाई नहीं है, जो किसी अनुमान की नहीं होती, इसलिए सामान्य परिणाम ही रहता है।
+	{output} changes most with {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile, the other inputs at their medians.	{output} सबसे अधिक {input} के साथ बदलता है: जब {input} अपने 10वें से 90वें प्रतिशतक पर जाता है तो यह {low} से {high} तक जाता है, बाकी इनपुट अपनी माध्यिका पर रहते हैं।
+	No variation was observed, so there is no interval for the mean; a rare event the trials did not reach could still move it.	कोई भिन्नता नहीं देखी गई, इसलिए माध्य के लिए कोई अंतराल नहीं है; कोई दुर्लभ घटना, जहाँ तक परीक्षण नहीं पहुँचे, फिर भी इसे बदल सकती है।
+	They narrowed the interval by {percent}, but a mean given for a control is far from the trials' mean, so the plain result stands.	इन्होंने अंतराल को {percent} संकरा किया, लेकिन किसी नियंत्रण के लिए दिया गया माध्य परीक्षणों के माध्य से बहुत दूर है, इसलिए सामान्य परिणाम ही रहता है।
+	The output does not move in one direction with {inputs} (its value at the median is outside its values at the 10th and 90th percentiles), so the swing understates the effect.	आउटपुट {inputs} के साथ एक दिशा में नहीं चलता (माध्यिका पर इसका मान 10वें और 90वें प्रतिशतक के इसके मानों से बाहर है), इसलिए स्विंग प्रभाव को कम आँकता है।

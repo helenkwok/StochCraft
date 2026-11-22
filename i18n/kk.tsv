@@ -940,7 +940,6 @@ unit	yr	ж.
 	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	Бұл – сіздің алғашқы модельіңіз. «Нәтижелер» бөлімінің алғашқы жолдары іске қосу нені тапқанын айтады; «Көмек» ▸ «Нәтижелер нені білдіреді» әр санды түсіндіреді.
 # Which inputs matter in the Monte Carlo results (ROADMAP M4.1, part 3a)
 	Which inputs matter	Қай кіріс шамалар маңызды
-	{output} depends most on {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile.	{output} ең көп {input} шамасына тәуелді: {input} өзінің 10-шы процентилінен 90-шы процентиліне өткенде, ол {low}-дан {high}-ге дейін өзгереді.
 	Each input from its 10th to its 90th percentile, with the others at their medians	Әр кіріс шама 10-шы процентилінен 90-шы процентиліне дейін, қалғандары медианасында
 	Base {value}	Базалық мән {value}
 	A correlated input's figure includes the effect of the inputs it is correlated with.	Корреляцияланған кіріс шаманың көрсеткіші онымен корреляцияланған кіріс шамалардың әсерін қамтиды.
@@ -1399,3 +1398,7 @@ unit	yr	ж.
 	The estimated chance that {output} is more than {value} is {percent}.	{output} {value} мәнінен үлкен болуының бағалық ықтималдығы {percent}.
 	The estimated chance that {output} is less than {value} is {percent}.	{output} {value} мәнінен кіші болуының бағалық ықтималдығы {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	Олардың аралығының ені жоқ, бұл ешбір бағада болмайды, сондықтан қарапайым нәтиже қалады.
+	{output} changes most with {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile, the other inputs at their medians.	{output} ең көп {input} бойынша өзгереді: {input} өзінің 10-шы процентилінен 90-шы процентиліне өткенде ол {low} мәнінен {high} мәніне өтеді, басқа кірістер медианасында тұрады.
+	No variation was observed, so there is no interval for the mean; a rare event the trials did not reach could still move it.	Ешқандай өзгерту байқалмады, сондықтан орташа үшін аралық жоқ; сынақтар жетпеген сирек оқиға оны әлі де жылжыта алады.
+	They narrowed the interval by {percent}, but a mean given for a control is far from the trials' mean, so the plain result stands.	Олар аралықты {percent} тарылтты, бірақ бақылауға берілген орташа сынақтардың орташасынан алыс, сондықтан қарапайым нәтиже қалады.
+	The output does not move in one direction with {inputs} (its value at the median is outside its values at the 10th and 90th percentiles), so the swing understates the effect.	Шығыс {inputs} бойынша бір бағытта қозғалмайды (оның медианадағы мәні 10-шы және 90-шы процентильдегі мәндерінің сыртында), сондықтан ауытқу әсерді төмен бағалайды.

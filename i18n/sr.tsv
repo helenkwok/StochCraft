@@ -940,7 +940,6 @@ unit	yr	год.
 	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	То је ваш први модел. Прве линије у делу „Резултати” говоре шта је покретање открило; Помоћ ▸ Шта значе резултати објашњава сваки број.
 # Which inputs matter in the Monte Carlo results (ROADMAP M4.1, part 3a)
 	Which inputs matter	Које улазне величине су важне
-	{output} depends most on {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile.	{output} највише зависи од величине {input}: иде од {low} до {high} како {input} иде од свог 10. до свог 90. перцентила.
 	Each input from its 10th to its 90th percentile, with the others at their medians	Свака улазна величина од свог 10. до свог 90. перцентила, а остале на својим медијанама
 	Base {value}	Основна вредност {value}
 	A correlated input's figure includes the effect of the inputs it is correlated with.	Број за корелисану улазну величину укључује утицај улазних величина са којима је корелисана.
@@ -1399,3 +1398,7 @@ unit	yr	год.
 	The estimated chance that {output} is more than {value} is {percent}.	Процењена вероватноћа да је {output} већи од {value} износи {percent}.
 	The estimated chance that {output} is less than {value} is {percent}.	Процењена вероватноћа да је {output} мањи од {value} износи {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	Њихов интервал нема ширину, што ниједна процена нема, па остаје обичан резултат.
+	{output} changes most with {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile, the other inputs at their medians.	{output} се највише мења са {input}: иде од {low} до {high} када {input} иде од свог 10. до свог 90. перцентила, а остали улази су на својим медијанама.
+	No variation was observed, so there is no interval for the mean; a rare event the trials did not reach could still move it.	Није примећена никаква варијација, па нема интервала за средњу вредност; редак догађај до ког огледи нису дошли и даље би је могао померити.
+	They narrowed the interval by {percent}, but a mean given for a control is far from the trials' mean, so the plain result stands.	Сузили су интервал за {percent}, али је средња вредност задата за контролу далеко од средње вредности огледа, па остаје обичан резултат.
+	The output does not move in one direction with {inputs} (its value at the median is outside its values at the 10th and 90th percentiles), so the swing understates the effect.	Излаз се не креће у једном смеру са {inputs} (његова вредност на медијани је ван његових вредности на 10. и 90. перцентилу), па распон потцењује утицај.

@@ -940,7 +940,6 @@ unit	yr	ปี
 	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	นี่คือแบบจำลองแรกของคุณ บรรทัดแรกของ “ผลลัพธ์” บอกสิ่งที่การรันพบ วิธีใช้ ▸ ความหมายของผลลัพธ์ อธิบายแต่ละตัวเลข
 # Which inputs matter in the Monte Carlo results (ROADMAP M4.1, part 3a)
 	Which inputs matter	อินพุตใดมีความสำคัญ
-	{output} depends most on {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile.	{output} ขึ้นอยู่กับ {input} มากที่สุด: ค่าจะเปลี่ยนจาก {low} เป็น {high} เมื่อ {input} เปลี่ยนจากเปอร์เซ็นไทล์ที่ 10 ไปเป็นเปอร์เซ็นไทล์ที่ 90
 	Each input from its 10th to its 90th percentile, with the others at their medians	อินพุตแต่ละตัวจากเปอร์เซ็นไทล์ที่ 10 ถึงที่ 90 โดยตัวอื่นอยู่ที่ค่ามัธยฐาน
 	Base {value}	ค่าฐาน {value}
 	A correlated input's figure includes the effect of the inputs it is correlated with.	ตัวเลขของอินพุตที่มีสหสัมพันธ์รวมผลของอินพุตที่มันมีสหสัมพันธ์ด้วย
@@ -1399,3 +1398,7 @@ unit	yr	ปี
 	The estimated chance that {output} is more than {value} is {percent}.	ความน่าจะเป็นโดยประมาณที่ {output} จะมากกว่า {value} คือ {percent}
 	The estimated chance that {output} is less than {value} is {percent}.	ความน่าจะเป็นโดยประมาณที่ {output} จะน้อยกว่า {value} คือ {percent}
 	Their interval has no width, which no estimate has, so the plain result stands.	ช่วงของค่าเหล่านี้ไม่มีความกว้าง ซึ่งไม่มีการประมาณใดเป็นเช่นนั้น จึงใช้ผลลัพธ์ธรรมดาต่อไป
+	{output} changes most with {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile, the other inputs at their medians.	{output} เปลี่ยนไปมากที่สุดตาม {input}: ไปจาก {low} ถึง {high} เมื่อ {input} ไปจากเปอร์เซ็นไทล์ที่ 10 ถึงเปอร์เซ็นไทล์ที่ 90 โดยอินพุตอื่นอยู่ที่ค่ามัธยฐานของมัน
+	No variation was observed, so there is no interval for the mean; a rare event the trials did not reach could still move it.	ไม่พบความแปรผันใด ๆ จึงไม่มีช่วงสำหรับค่าเฉลี่ย เหตุการณ์หายากที่การทดลองไปไม่ถึงอาจยังทำให้ค่าเฉลี่ยขยับได้
+	They narrowed the interval by {percent}, but a mean given for a control is far from the trials' mean, so the plain result stands.	ตัวแปรควบคุมทำให้ช่วงแคบลง {percent} แต่ค่าเฉลี่ยที่ให้ไว้สำหรับตัวควบคุมอยู่ไกลจากค่าเฉลี่ยของการทดลอง จึงยังคงใช้ผลลัพธ์ธรรมดา
+	The output does not move in one direction with {inputs} (its value at the median is outside its values at the 10th and 90th percentiles), so the swing understates the effect.	ผลลัพธ์ไม่เคลื่อนไปทางเดียวกับ {inputs} (ค่าที่มัธยฐานอยู่นอกช่วงค่าที่เปอร์เซ็นไทล์ที่ 10 และ 90) ดังนั้นช่วงแกว่งจึงประเมินผลต่ำไป

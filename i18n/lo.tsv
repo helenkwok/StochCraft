@@ -940,7 +940,6 @@ unit	yr	ປີ
 	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	ນີ້ຄືແບບຈຳລອງທຳອິດຂອງທ່ານ. ບັນທັດທຳອິດຂອງ ຜົນໄດ້ຮັບ ບອກສິ່ງທີ່ການແລ່ນພົບ; ຊ່ວຍເຫຼືອ ▸ ຄວາມໝາຍຂອງຜົນລັບ ອະທິບາຍແຕ່ລະຕົວເລກ.
 # Which inputs matter in the Monte Carlo results (ROADMAP M4.1, part 3a)
 	Which inputs matter	ຄ່າປ້ອນເຂົ້າໃດສຳຄັນ
-	{output} depends most on {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile.	{output} ຂຶ້ນກັບ {input} ຫຼາຍທີ່ສຸດ: ມັນປ່ຽນຈາກ {low} ເປັນ {high} ເມື່ອ {input} ປ່ຽນຈາກເປີເຊັນໄທລ໌ທີ 10 ເປັນເປີເຊັນໄທລ໌ທີ 90 ຂອງມັນ.
 	Each input from its 10th to its 90th percentile, with the others at their medians	ແຕ່ລະຄ່າປ້ອນເຂົ້າຈາກເປີເຊັນໄທລ໌ທີ 10 ຫາທີ 90 ຂອງມັນ, ຄ່າອື່ນຢູ່ທີ່ມັດທະຍະຖານຂອງມັນ
 	Base {value}	ຄ່າຖານ {value}
 	A correlated input's figure includes the effect of the inputs it is correlated with.	ຕົວເລກຂອງຄ່າປ້ອນເຂົ້າທີ່ມີສະຫະສຳພັນລວມຜົນຂອງຄ່າປ້ອນເຂົ້າທີ່ມັນມີສະຫະສຳພັນນຳ.
@@ -1399,3 +1398,7 @@ unit	yr	ປີ
 	The estimated chance that {output} is more than {value} is {percent}.	ຄວາມເປັນໄປໄດ້ໂດຍປະມານທີ່ {output} ຈະຫຼາຍກວ່າ {value} ແມ່ນ {percent}.
 	The estimated chance that {output} is less than {value} is {percent}.	ຄວາມເປັນໄປໄດ້ໂດຍປະມານທີ່ {output} ຈະນ້ອຍກວ່າ {value} ແມ່ນ {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	ຊ່ວງຂອງມັນບໍ່ມີຄວາມກວ້າງ ຊຶ່ງບໍ່ມີການຄາດຄະເນໃດມີ ສະນັ້ນຜົນລັບທຳມະດາຈຶ່ງຍັງຢູ່.
+	{output} changes most with {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile, the other inputs at their medians.	{output} ປ່ຽນແປງຫຼາຍທີ່ສຸດກັບ {input}: ມັນໄປຈາກ {low} ຫາ {high} ເມື່ອ {input} ໄປຈາກເປີເຊັນທາຍທີ 10 ຫາເປີເຊັນທາຍທີ 90 ຂອງມັນ, ໂດຍຂໍ້ມູນເຂົ້າອື່ນຢູ່ທີ່ມັດທະຍະຖານຂອງມັນ.
+	No variation was observed, so there is no interval for the mean; a rare event the trials did not reach could still move it.	ບໍ່ພົບການປ່ຽນແປງ, ສະນັ້ນຈຶ່ງບໍ່ມີຊ່ວງສຳລັບຄ່າສະເລ່ຍ; ເຫດການທີ່ຫາຍາກທີ່ການທົດລອງບໍ່ໄດ້ເຖິງ ຍັງອາດເຮັດໃຫ້ມັນເຄື່ອນໄດ້.
+	They narrowed the interval by {percent}, but a mean given for a control is far from the trials' mean, so the plain result stands.	ພວກມັນເຮັດໃຫ້ຊ່ວງແຄບລົງ {percent}, ແຕ່ຄ່າສະເລ່ຍທີ່ໃຫ້ສຳລັບຕົວຄວບຄຸມຢູ່ຫ່າງຈາກຄ່າສະເລ່ຍຂອງການທົດລອງຫຼາຍ, ສະນັ້ນຜົນລັບທຳມະດາຈຶ່ງຍັງຢູ່.
+	The output does not move in one direction with {inputs} (its value at the median is outside its values at the 10th and 90th percentiles), so the swing understates the effect.	ຜົນອອກບໍ່ເຄື່ອນໄປທາງດຽວກັບ {inputs} (ຄ່າຂອງມັນທີ່ມັດທະຍະຖານຢູ່ນອກຄ່າຂອງມັນທີ່ເປີເຊັນທາຍທີ 10 ແລະ 90), ສະນັ້ນຊ່ວງການແກວ່ງຈຶ່ງປະເມີນຜົນກະທົບຕ່ຳເກີນໄປ.

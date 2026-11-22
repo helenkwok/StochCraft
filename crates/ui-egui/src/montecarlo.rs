@@ -292,16 +292,34 @@ pub(crate) fn finding_across(o: &Value, basis: &Value) -> Option<(String, Option
             ],
         ),
     };
-    Some((sentence, None))
+    // Every value the same: no interval to give, and no claim that the mean is exact.
+    let sure = (o["no_variation"] == true).then(|| {
+        t("No variation was observed, so there is no interval for the mean; a rare event the trials did not reach could still move it.")
+            .to_owned()
+    });
+    Some((sentence, sure))
+}
+
+/// Whether a control's stated mean is far from the mean of its trials (the engine's
+/// `mean_mismatch`), which makes the controlled estimate biased.
+fn control_mismatch(o: &Value) -> bool {
+    o["controlled"]["controls"]
+        .as_array()
+        .is_some_and(|c| c.iter().any(|u| u["mean_mismatch"] == true))
 }
 
 /// The output as the headline reads it: where the controls narrowed an interval by a tenth or
 /// more, the controlled mean (for an output with no target) or the controlled chance of meeting
 /// the target (with its interval) in place of the plain ones. Everything else is as it was. An
-/// interval with no width is no narrowing: the plain result stays. A controlled chance is marked
-/// (`controlled`), so that it is worded as an estimate, and kept within 0 and 1.
+/// interval with no width is no narrowing: the plain result stays. So does it where a control's
+/// stated mean is far from the trials' mean (the controlled result is biased until the stated
+/// mean is corrected, and is shown beside the plain one, not in place of it). A controlled chance
+/// is marked (`controlled`), so that it is worded as an estimate, and kept within 0 and 1.
 pub(crate) fn controlled_headline(o: &Value) -> Value {
     let mut shown = o.clone();
+    if control_mismatch(o) {
+        return shown;
+    }
     let e = &o["controlled"]["estimate"];
     if e["helped"] == true
         && !o["target"].is_object()
@@ -356,6 +374,11 @@ pub(crate) fn control_lines(o: &Value) -> Vec<String> {
         e["half_width"].as_f64() == Some(0.0)
     };
     let verdict = match what["narrowing"].as_f64() {
+        // A narrower interval around a biased estimate is no gain: the plain result stands.
+        Some(n) if what["helped"] == true && control_mismatch(o) => tf(
+            "They narrowed the interval by {percent}, but a mean given for a control is far from the trials' mean, so the plain result stands.",
+            &[("percent", &share_text(n))],
+        ),
         Some(n) if what["helped"] == true => tf(
             "They narrowed the interval by {percent}; this is the result shown above.",
             &[("percent", &share_text(n))],
@@ -1814,13 +1837,28 @@ fn influence_section(
     {
         ui.add(
             egui::Label::new(tf(
-                "{output} depends most on {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile.",
+                "{output} changes most with {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile, the other inputs at their medians.",
                 &[
                     ("output", name),
                     ("input", input),
                     ("low", &with_unit(value_text(low), unit)),
                     ("high", &with_unit(value_text(high), unit)),
                 ],
+            ))
+            .wrap(),
+        );
+    }
+    // An input the output goes up and down along: its two endpoints understate its effect.
+    let bent: Vec<&str> = all
+        .iter()
+        .filter(|i| i["not_monotone"] == true)
+        .filter_map(|i| i["input"].as_str())
+        .collect();
+    if !bent.is_empty() {
+        ui.add(
+            egui::Label::new(tf(
+                "The output does not move in one direction with {inputs} (its value at the median is outside its values at the 10th and 90th percentiles), so the swing understates the effect.",
+                &[("inputs", &bent.join(", "))],
             ))
             .wrap(),
         );
@@ -2555,6 +2593,63 @@ mod tests {
         let mut stale = o.clone();
         stale["controlled"]["estimate"]["helped"] = json!(true);
         assert_eq!(controlled_headline(&stale)["mean"], 100.0);
+    }
+
+    /// An output whose trials show no spread has no ±, and the line under its finding says so
+    /// instead of leaving a mean that looks exact.
+    #[test]
+    fn no_variation_is_said_not_shown_as_an_exact_mean() {
+        let o = json!({
+            "name": "y", "unit": "", "mean": 1.0, "half_width": null, "no_variation": true,
+            "percentiles": { "5": 1.0, "95": 1.0 },
+        });
+        let (sentence, sure) = finding(&o).unwrap_or_default();
+        assert!(sentence.contains("the mean is 1."), "{sentence}");
+        assert!(!sentence.contains('±'), "{sentence}");
+        let sure = sure.unwrap_or_default();
+        assert!(sure.starts_with("No variation was observed"), "{sure}");
+        // Without the flag there is no such line.
+        let mut plain = o.clone();
+        plain["no_variation"] = json!(false);
+        assert_eq!(finding(&plain).map(|f| f.1), Some(None));
+    }
+
+    /// A control whose stated mean the trials contradict (a wrong mean gives a narrow interval
+    /// around a wrong value) never takes the headline, for a mean or for a target's chance; the
+    /// lines say the plain result stands.
+    #[test]
+    fn a_flagged_control_never_displaces_the_plain_headline() {
+        let controls = json!([{ "name": "c", "kind": "input", "mean": 0.0,
+                                "coefficient": 2.0, "sample_mean": 0.5, "mean_mismatch": true }]);
+        let mut o = output(json!({ "at_most": 1.0 }), 0.5019, json!([0.49, 0.51]));
+        o["name"] = json!("y");
+        o["mean"] = json!(0.9976);
+        o["half_width"] = json!(0.01);
+        o["controlled"] = json!({
+            "controls": controls, "pilot_trials": 1000, "correlation": 1.0, "unavailable": null,
+            "estimate": { "mean": -0.0018, "half_width": 0.001, "narrowing": 0.9, "helped": true,
+                          "target": { "probability": 1.0, "interval": [0.99, 1.0],
+                                      "narrowing": 0.9, "helped": true } },
+        });
+        let shown = controlled_headline(&o);
+        assert_eq!(shown["target"]["probability"], 0.5019);
+        assert_eq!(shown["target"]["interval"], json!([0.49, 0.51]));
+        assert!(shown["target"]["controlled"].is_null());
+        let lines = control_lines(&o);
+        assert!(lines[1].contains("plain result stands"), "{lines:?}");
+        assert!(!lines[1].contains("shown above"), "{lines:?}");
+        // The same for a mean.
+        let mut m = o.clone();
+        m["target"] = Value::Null;
+        m["controlled"]["estimate"]["target"] = Value::Null;
+        let shown = controlled_headline(&m);
+        assert_eq!(
+            (shown["mean"].as_f64(), shown["half_width"].as_f64()),
+            (Some(0.9976), Some(0.01))
+        );
+        // With the flag cleared the controlled mean is the headline again.
+        m["controlled"]["controls"][0]["mean_mismatch"] = json!(false);
+        assert_eq!(controlled_headline(&m)["mean"], -0.0018);
     }
 
     /// With a target, the controlled chance of meeting it is the headline when it helped.

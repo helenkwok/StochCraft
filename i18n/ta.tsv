@@ -940,7 +940,6 @@ unit	yr	ஆண்டு
 	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	இதுதான் உங்கள் முதல் மாதிரி. “முடிவுகள்” பகுதியின் முதல் வரிகள் இயக்கம் கண்டறிந்ததைச் சொல்கின்றன; உதவி ▸ முடிவுகளின் பொருள் ஒவ்வொரு எண்ணையும் விளக்குகிறது.
 # Which inputs matter in the Monte Carlo results (ROADMAP M4.1, part 3a)
 	Which inputs matter	எந்த உள்ளீடுகள் முக்கியம்
-	{output} depends most on {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile.	{output} மிகவும் சார்ந்திருப்பது {input}-ஐ: {input} தனது 10-ஆம் சதமானத்திலிருந்து 90-ஆம் சதமானத்துக்குச் செல்லும்போது அது {low}-இலிருந்து {high}-க்குச் செல்கிறது.
 	Each input from its 10th to its 90th percentile, with the others at their medians	ஒவ்வொரு உள்ளீடும் தனது 10-ஆம் சதமானத்திலிருந்து 90-ஆம் சதமானம் வரை, மற்றவை அவற்றின் இடைநிலையில்
 	Base {value}	அடிப்படை மதிப்பு {value}
 	A correlated input's figure includes the effect of the inputs it is correlated with.	ஒட்டுறவுள்ள உள்ளீட்டின் எண்ணில் அது எந்த உள்ளீடுகளுடன் ஒட்டுறவு கொண்டுள்ளதோ அவற்றின் விளைவும் அடங்கும்.
@@ -1399,3 +1398,7 @@ unit	yr	ஆண்டு
 	The estimated chance that {output} is more than {value} is {percent}.	{output} {value}-ஐ விட அதிகமாக இருப்பதற்கான மதிப்பிடப்பட்ட நிகழ்தகவு {percent}.
 	The estimated chance that {output} is less than {value} is {percent}.	{output} {value}-ஐ விட குறைவாக இருப்பதற்கான மதிப்பிடப்பட்ட நிகழ்தகவு {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	அவற்றின் இடைவெளிக்கு அகலமே இல்லை, எந்த மதிப்பீட்டுக்கும் அப்படி இருக்காது, எனவே சாதாரண முடிவே நிலைக்கிறது.
+	{output} changes most with {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile, the other inputs at their medians.	{output} மிக அதிகமாக {input} உடன் மாறுகிறது: {input} தன் 10வது சதவீதத்திலிருந்து 90வது சதவீதத்துக்குச் செல்லும்போது அது {low} இலிருந்து {high} க்குச் செல்கிறது, மற்ற உள்ளீடுகள் தங்கள் இடைநிலையில் இருக்கும்.
+	No variation was observed, so there is no interval for the mean; a rare event the trials did not reach could still move it.	எந்த மாறுபாடும் காணப்படவில்லை, எனவே சராசரிக்கு இடைவெளி இல்லை; சோதனைகள் எட்டாத அரிய நிகழ்வு இன்னும் அதை நகர்த்தக்கூடும்.
+	They narrowed the interval by {percent}, but a mean given for a control is far from the trials' mean, so the plain result stands.	அவை இடைவெளியை {percent} குறுக்கின, ஆனால் ஒரு கட்டுப்பாட்டுக்குக் கொடுத்த சராசரி சோதனைகளின் சராசரியிலிருந்து வெகு தொலைவில் உள்ளது, எனவே சாதாரண முடிவே நிற்கிறது.
+	The output does not move in one direction with {inputs} (its value at the median is outside its values at the 10th and 90th percentiles), so the swing understates the effect.	வெளியீடு {inputs} உடன் ஒரே திசையில் நகரவில்லை (இடைநிலையில் அதன் மதிப்பு 10வது மற்றும் 90வது சதவீதங்களில் அதன் மதிப்புகளுக்கு வெளியே உள்ளது), எனவே ஊசலாட்டம் விளைவைக் குறைத்து மதிப்பிடுகிறது.

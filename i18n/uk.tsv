@@ -940,7 +940,6 @@ unit	yr	р.
 	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	Це ваша перша модель. Перші рядки у розділі «Результати» розповідають, що виявив запуск; Довідка ▸ Що означають результати пояснює кожне число.
 # Which inputs matter in the Monte Carlo results (ROADMAP M4.1, part 3a)
 	Which inputs matter	Які вхідні величини важливі
-	{output} depends most on {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile.	{output} найбільше залежить від величини {input}: воно змінюється від {low} до {high}, коли {input} змінюється від свого 10-го до 90-го процентиля.
 	Each input from its 10th to its 90th percentile, with the others at their medians	Кожна вхідна величина від 10-го до 90-го процентиля, решта на медіанах
 	Base {value}	Базове значення {value}
 	A correlated input's figure includes the effect of the inputs it is correlated with.	Число для корельованої вхідної величини включає вплив величин, з якими вона корельована.
@@ -1399,3 +1398,7 @@ unit	yr	р.
 	The estimated chance that {output} is more than {value} is {percent}.	Оцінена ймовірність того, що {output} більше за {value}, становить {percent}.
 	The estimated chance that {output} is less than {value} is {percent}.	Оцінена ймовірність того, що {output} менше за {value}, становить {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	Їхній інтервал не має ширини, чого не буває в оцінки, тому залишається звичайний результат.
+	{output} changes most with {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile, the other inputs at their medians.	{output} найбільше змінюється з {input}: воно йде від {low} до {high}, коли {input} іде від свого 10-го до свого 90-го процентиля, а решта входів стоїть на своїх медіанах.
+	No variation was observed, so there is no interval for the mean; a rare event the trials did not reach could still move it.	Мінливості не спостерігалося, тому інтервалу для середнього немає; рідкісна подія, до якої випробування не дійшли, усе ж могла б його зсунути.
+	They narrowed the interval by {percent}, but a mean given for a control is far from the trials' mean, so the plain result stands.	Вони звузили інтервал на {percent}, але середнє, задане для контролю, далеко від середнього випробувань, тому лишається звичайний результат.
+	The output does not move in one direction with {inputs} (its value at the median is outside its values at the 10th and 90th percentiles), so the swing understates the effect.	Вихід не рухається в одному напрямку з {inputs} (його значення на медіані лежить поза його значеннями на 10-му та 90-му процентилях), тому розмах занижує ефект.

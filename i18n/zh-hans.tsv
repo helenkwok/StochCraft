@@ -940,7 +940,6 @@ unit	yr	年
 	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	这就是你的第一个模型。“结果”开头几行说明本次运行的发现；帮助 ▸ 结果的含义 解释每个数字。
 # Which inputs matter in the Monte Carlo results (ROADMAP M4.1, part 3a)
 	Which inputs matter	哪些输入重要
-	{output} depends most on {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile.	{output} 最取决于 {input}：当 {input} 从其第 10 百分位数变到第 90 百分位数时，它从 {low} 变到 {high}。
 	Each input from its 10th to its 90th percentile, with the others at their medians	每个输入从其第 10 百分位数到第 90 百分位数，其余输入取中位数
 	Base {value}	基准值 {value}
 	A correlated input's figure includes the effect of the inputs it is correlated with.	相关输入的数值包含了与它相关的各输入的影响。
@@ -1399,3 +1398,7 @@ unit	yr	年
 	The estimated chance that {output} is more than {value} is {percent}.	{output} 大于 {value} 的估计概率为 {percent}。
 	The estimated chance that {output} is less than {value} is {percent}.	{output} 小于 {value} 的估计概率为 {percent}。
 	Their interval has no width, which no estimate has, so the plain result stands.	它们的区间没有宽度，而任何估计都不会如此，因此保留普通结果。
+	{output} changes most with {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile, the other inputs at their medians.	{output} 随 {input} 变化最大：当 {input} 从其第 10 百分位变到第 90 百分位、其他输入取中位数时，它从 {low} 变到 {high}。
+	No variation was observed, so there is no interval for the mean; a rare event the trials did not reach could still move it.	没有观察到任何变化，因此平均值没有区间；试验没有触及的罕见事件仍可能使它移动。
+	They narrowed the interval by {percent}, but a mean given for a control is far from the trials' mean, so the plain result stands.	它们把区间缩窄了 {percent}，但给控制变量的均值与试验的均值相差很远，因此保留普通结果。
+	The output does not move in one direction with {inputs} (its value at the median is outside its values at the 10th and 90th percentiles), so the swing understates the effect.	输出随 {inputs} 并非朝同一方向变化（其在中位数处的值落在第 10 和第 90 百分位处的值之外），因此摆幅会低估其影响。

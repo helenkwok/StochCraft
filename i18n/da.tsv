@@ -940,7 +940,6 @@ unit	yr	år
 	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	Det er din første model. De første linjer i Resultater fortæller, hvad kørslen fandt; Hjælp ▸ Hvad resultaterne betyder forklarer hvert tal.
 # Which inputs matter in the Monte Carlo results (ROADMAP M4.1, part 3a)
 	Which inputs matter	Hvilke input der betyder noget
-	{output} depends most on {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile.	{output} afhænger mest af {input}: den går fra {low} til {high}, når {input} går fra sin 10. til sin 90. percentil.
 	Each input from its 10th to its 90th percentile, with the others at their medians	Hvert input fra sin 10. til sin 90. percentil, med de andre ved deres medianer
 	Base {value}	Basisværdi {value}
 	A correlated input's figure includes the effect of the inputs it is correlated with.	Tallet for et korreleret input omfatter effekten af de input, det er korreleret med.
@@ -1399,3 +1398,7 @@ unit	yr	år
 	The estimated chance that {output} is more than {value} is {percent}.	Den anslåede sandsynlighed for, at {output} er over {value}, er {percent}.
 	The estimated chance that {output} is less than {value} is {percent}.	Den anslåede sandsynlighed for, at {output} er under {value}, er {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	Deres interval har ingen bredde, hvilket intet estimat har, så det almindelige resultat står ved magt.
+	{output} changes most with {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile, the other inputs at their medians.	{output} ændrer sig mest med {input}: den går fra {low} til {high}, når {input} går fra sin 10. til sin 90. percentil, mens de andre input er på deres medianer.
+	No variation was observed, so there is no interval for the mean; a rare event the trials did not reach could still move it.	Der blev ikke observeret nogen variation, så der er intet interval for gennemsnittet; en sjælden hændelse, som forsøgene ikke nåede, kunne stadig flytte det.
+	They narrowed the interval by {percent}, but a mean given for a control is far from the trials' mean, so the plain result stands.	De indsnævrede intervallet med {percent}, men et gennemsnit angivet for en kontrol er langt fra forsøgenes gennemsnit, så det almindelige resultat står ved magt.
+	The output does not move in one direction with {inputs} (its value at the median is outside its values at the 10th and 90th percentiles), so the swing understates the effect.	Output bevæger sig ikke i én retning med {inputs} (værdien ved medianen ligger uden for værdierne ved 10. og 90. percentil), så udsvinget undervurderer effekten.

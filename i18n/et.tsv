@@ -940,7 +940,6 @@ unit	yr	a
 	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	See on teie esimene mudel. Tulemuste esimesed read ütlevad, mida käivitus leidis; Abi ▸ Mida tulemused tähendavad selgitab iga numbrit.
 # Which inputs matter in the Monte Carlo results (ROADMAP M4.1, part 3a)
 	Which inputs matter	Millised sisendid loevad
-	{output} depends most on {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile.	{output} sõltub kõige rohkem sisendist {input}: see liigub vahemikus {low} kuni {high}, kui {input} liigub oma 10. protsentiililt 90. protsentiilile.
 	Each input from its 10th to its 90th percentile, with the others at their medians	Iga sisend oma 10. kuni 90. protsentiilini, teised oma mediaanidel
 	Base {value}	Baasväärtus {value}
 	A correlated input's figure includes the effect of the inputs it is correlated with.	Korreleeritud sisendi arv hõlmab nende sisendite mõju, millega see on korreleeritud.
@@ -1399,3 +1398,7 @@ unit	yr	a
 	The estimated chance that {output} is more than {value} is {percent}.	Hinnanguline tõenäosus, et {output} on suurem kui {value}, on {percent}.
 	The estimated chance that {output} is less than {value} is {percent}.	Hinnanguline tõenäosus, et {output} on väiksem kui {value}, on {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	Nende vahemikul pole laiust, mida ühelgi hinnangul ei ole, seega jääb tavatulemus kehtima.
+	{output} changes most with {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile, the other inputs at their medians.	{output} muutub kõige rohkem sõltuvalt sisendist {input}: see läheb väärtuselt {low} väärtusele {high}, kui {input} liigub oma 10. protsentiilist 90. protsentiilini ja teised sisendid on oma mediaanidel.
+	No variation was observed, so there is no interval for the mean; a rare event the trials did not reach could still move it.	Muutlikkust ei täheldatud, seega keskmisele vahemikku ei ole; haruldane sündmus, milleni katsed ei jõudnud, võiks seda siiski nihutada.
+	They narrowed the interval by {percent}, but a mean given for a control is far from the trials' mean, so the plain result stands.	Need kitsendasid vahemikku {percent} võrra, kuid kontrollile antud keskmine on katsete keskmisest kaugel, seega jääb kehtima tavaline tulemus.
+	The output does not move in one direction with {inputs} (its value at the median is outside its values at the 10th and 90th percentiles), so the swing understates the effect.	Väljund ei liigu sisendiga {inputs} ühes suunas (selle väärtus mediaanil jääb väljapoole selle väärtusi 10. ja 90. protsentiilil), seega hälve alahindab mõju.
