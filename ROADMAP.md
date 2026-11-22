@@ -1,11 +1,12 @@
 # StochCraft roadmap
 
-Where StochCraft is going next and in what order. Seven milestones: **M1** model files, the
+Where StochCraft is going next and in what order. Eight milestones: **M1** model files, the
 engine and a command line; **M2** the flow logic a factory or logistics model needs; **M3** the
 desktop app (and the browser app built from it); **M4** Monte Carlo, system dynamics, agents and
 hybrid models; **M5** transport and layout, led by a reference model, the sorter; **M6** Python
 and plugins; **M7** industrial engineering (line balancing, material flow on the layout,
-inventory, sharing a model). M1 and M3.1–M3.6 are done; M3.7, a redesign that makes results
+inventory, sharing a model); **M8** optimisation (a search over several decisions or a job
+order, then the best design with how sure it is; planned, #272). M1 and M3.1–M3.6 are done; M3.7, a redesign that makes results
 answer the question, has steps 1–5 done, and M5's sorter is built alongside it (D21). M2.1–M2.8
 are done, and so is M2.10 (abandonment and balking) apart from the gaps listed in it. M2.11
 (changeovers and lean measures) has its changeovers, product-type times, takt and cycle times,
@@ -1279,7 +1280,8 @@ id since #152; before that the same search stopped at 6 ovens.)
 | M/M/1 of issue #66, 2 × 2 of small changes: half-width of a main effect, paired against independent points | narrower | 0.068 and 0.062 against 0.21 |
 | Latin hypercube, 8 points: values per eighth of each range | one each | one each; same seed, same design |
 
-**Not yet:** sizing several resources a step at a time, or by cost; saving targets in the model
+**Not yet:** sizing several resources a step at a time, or by cost (planned as M8's
+optimisation); saving targets in the model
 file; running analyses in the background or on the browser's web workers. For designed
 experiments: the window's form and a heatmap of a two-factor grid; fitting a response surface
 (a regression on the factors); and fractional factorials (2^(k−p)) for many two-level factors.
@@ -3527,6 +3529,329 @@ See D21: the sorter (M5) first, alongside M3.7; then line balancing (M7.1), the 
 
 ---
 
+## M8: optimisation
+
+**Status:** planned (#272); nothing built yet.
+
+**Outcome:** a search over several decisions at once, followed by a selection of the best design
+that says how sure it is. M2.8 varies one parameter (`experiment.sweep`), evaluates a grid or a
+Latin hypercube (`experiment.design`) and adds a unit at the busiest task or pool until a target
+share is met (`experiment.size`). None of them searches many decisions under a cost cap, orders a
+list of jobs, or selects the best of many designs with a stated probability of being right.
+People coming from commercial simulators expect an optimiser; theirs are proprietary engines
+(scatter search with tabu search, by their public descriptions). StochCraft builds only from
+published methods whose guarantees are stated in their papers, and uses few of them.
+
+**The questions it answers:**
+
+- "How many operators at each of two desks give the lowest cost of staff and waiting, with at most
+  21 operators in all?"
+- "What is the fewest operators that keeps the mean wait under 3 minutes?", or that keeps a
+  line's output at its target (the question of the operator-rotation study below, answered
+  there by trying variants by hand).
+- "Which order of these nine jobs finishes soonest?" (permutation flow shop; makespan).
+- "Which routing rule, and which machine speed, give the shortest time in system?"
+
+**The problem, as the engine takes it:**
+
+- **Decisions,** each one of:
+  - a whole number in a range with a step: M2.8's `Field`s `capacity`, `quantity` and
+    `queue_capacity`;
+  - a rule from a short list: a gateway's `routing` (as drawn, or shortest queue), a timetable's
+    `on_shift_end` (finish, retry, resume), a mobile pool's `after_job` (stay, go home);
+  - a number in a range: a time distribution's `mean`, its shape kept (`Dist::scaled`);
+  - the order of a source's job list (new in O3, below).
+- **Objective:** one result to minimise or maximise (an element's metric, or `stop_time`, the
+  makespan of a run that stops when the last job leaves), times a weight, plus a cost per unit
+  of each decision ("50 per customer-hour waiting plus 20 per operator-hour"). Cost is not a
+  metric, and the decisions' part of the objective is known exactly, so only the result is
+  noisy. An objective of decision costs alone is allowed when constraints carry the statistics
+  ("fewest operators such that ...").
+- **Cost cap:** the decisions' costs at most a value, checked before a design is run; designs
+  over it are never simulated.
+- **Constraints:** other results' means at most or at least a value, each with a tolerance ε in
+  the result's unit (designs within ε of the limit count as acceptable either way, as Batur and
+  Kim define it).
+- **Statistics:** confidence 1 − α (default 0.95) and the indifference amount δ, the smallest
+  difference in the objective worth telling apart, in the objective's unit. δ is required: there
+  is no sensible default across units; the window suggests one from the starting design's
+  half-width.
+- **Budget:** a number of runs (replications summed over designs), which is reproducible. A
+  share of it (default 30%) is kept for the clean-up, so the search cannot spend it all. A time
+  limit can be added; a search it stops records the runs it used, and repeating it with that
+  number of runs gives the same answer.
+
+**How statistical validity is kept:**
+
+- **Common random numbers.** Every design runs replication i on the same seed, and each
+  element's streams are keyed by its id and purpose (#152), so a change to one decision leaves the
+  other elements' random numbers alone, the discipline Selmair and Monakhov argue for. The
+  search compares designs on their paired differences.
+- **A clean-up on fresh replications.** The search's best-looking designs are partly lucky: their
+  sample means are biased towards the better side. The finalists (the search's best design, its
+  active neighbours, each start's local optimum and the starting design) are therefore compared
+  again on a fresh block of replications common to all of them (their seed derived with
+  `Rng::keyed(seed, "optimize/clean-up")`) by Kim and Nelson's fully sequential procedure KN
+  (D33).
+  KN allows unequal variances and common random numbers, since it works on the variance of
+  each pair's differences (as Tsai and Nelson restate it); common random numbers make those
+  variances smaller and the clean-up shorter. Rinott's two-stage procedure and OCBA assume
+  independent sampling, so they are not used. Industrial Strength COMPASS also cleans up (after
+  Boesel, Nelson and Kim), but proves its guarantee for independent sampling; KN does not need
+  that assumption.
+- **What the answer claims.** "With 95% confidence, this design is the best, or within δ of the
+  best, of the 7 designs compared at the end (312 tried)": the guarantee covers the finalists,
+  not the whole space, and the answer says so. When the space is small enough for every design
+  to go to the clean-up (by default up to 50 designs, if the budget allows), it says "of all 48
+  designs". Beside it are the chosen design's objective with its interval, and the paired
+  difference against the starting design with its interval (`stats::difference::paired`).
+- **When the budget runs out first:** "best found, not proven best", with the designs still in
+  contention and their means. A design the feasibility check could not settle is listed as
+  undecided, never as feasible.
+- **Normal data.** KN and the feasibility check assume normal observations. A replication's mean
+  over a long run is close to normal, but a count in a short run may not be; the results warn
+  when the replications' values are few and strongly skewed.
+- **No randomness:** a model whose replications all give the same values is "compared exactly",
+  one replication per design, with no probability stated.
+
+**The methods, one per kind of decision:**
+
+- **Small spaces (any kind):** every design, straight to the clean-up.
+- **Whole numbers: COMPASS** (Hong and Nelson 2006). Each step samples new designs from the most
+  promising area, the designs closer to the current best than to any other visited design, and
+  adds replications to the designs that define that area. It converges to a local optimum with
+  probability 1, for terminating and steady-state runs. Industrial Strength COMPASS (Xu, Nelson
+  and Hong 2010) adds three things. It prunes visited designs that no longer define the area,
+  which is a small linear programme for each design. It tests local optimality when the area is a
+  single design: a comparison of that design, as the standard, with its neighbours (Kim 2003).
+  And it ends with the clean-up. Instead of its niching genetic algorithm as a global phase,
+  StochCraft starts COMPASS from the starting design and from a few Latin hypercube points
+  (`design.rs`'s sampler, keyed by `"optimize/start/<n>"`), and sends each start's local optimum
+  to the clean-up. Linear constraints on the decisions (the cost cap) bound the area, as the
+  paper allows.
+- **Rules:** a few levels; every combination of rule levels (refused above 8) is searched with the
+  whole numbers in turn, and all of them meet in one clean-up.
+- **Job orders: NEH, then iterated greedy.** NEH (Nawaz, Enscore and Ham 1983) inserts the jobs, the
+  longest total work first, each where it lengthens the makespan least; it is the usual starting
+  point. Iterated greedy (Ruiz and Stützle 2007) then repeats three steps. It takes a few jobs out
+  and reinserts them NEH's way. It improves the order by insertion. And it accepts a worse order
+  with a probability set by a constant temperature. On a stochastic model each order is judged by
+  its mean over a fixed number of common replications (one on a deterministic model). The
+  distinct best orders, by default 10, go to the clean-up. NEH's insertion is evaluated by
+  simulation, not by a formula, so blocking, breakdowns and shifts count.
+- **A number in a range: Nelder–Mead with Barton and Ivey's changes.** Plain Nelder–Mead on a noisy
+  response shrinks too early: a lucky vertex stays best, and the simplex collapses around it.
+  Barton and Ivey (1996) re-evaluate the best vertex and shrink less. StochCraft runs their variant
+  on common random numbers with a fixed number of replications per vertex, restarts once from the
+  best point, and sends the last simplex's vertices to the clean-up. It is a local method with no
+  convergence guarantee under noise (Chang's stochastic Nelder–Mead, 2012, has one, at a higher
+  cost), and the answer says that the search is local. One or two continuous decisions at most
+  in O4; with rules or whole numbers beside them, the continuous ones are searched for each.
+
+**Where it lives** (principle 5): the procedures (KN, the feasibility check, COMPASS's most
+promising area, NEH, iterated greedy, Nelder–Mead) in `experiment` (L3), on a closure that
+evaluates a design for a range of replications (`Experiment::run_range` already adds batches of
+replications exactly as a single run would make them), so they are tested on synthetic normal
+data without a model. The decisions, objective, constraints and their wiring to models are in a new
+`engine::optimize`, beside `decide.rs` and `design.rs`, reusing `Param`, `Output`, `Target`, `run`
+and `samples`.
+
+**The command:** `experiment.optimize` with `decisions`, `objective` (`element` and `metric` or
+`stop_time`, `sense`, `weight`, `costs`), `cost_cap`, `constraints` (with `tolerance`),
+`confidence`, `indifference`, `replications_per_visit` (default 10), `max_runs`, `reserve`,
+`time_limit`, `seed` and `apply`. The answer gives the chosen design, the claim above in words
+and as fields, the paired difference against the start, the feasibility of each constraint, the
+designs compared at the end with their means and intervals, the trace (runs used, best
+objective after each step) and the runs used. `apply` makes the chosen design the model's, as one
+undo step, as `experiment.size` does. Like the other analyses, the command is in the journal, a
+replay of edits only skips it (`SKIPPED_BY_DEFAULT`), and later runs' records list it with the
+model's digest. Long searches report progress and can be cancelled (`Control`), and a stepped
+form (`Engine::optimize_start`, as `sobol_start`) keeps the browser's page responsive. The MCP
+server offers it as it offers every command.
+
+**CLI:** `stochcraft-cli optimize MODEL --decide id.field=11..40 --decide gw.routing
+--minimize element.metric --cost id.field=20 --cost-cap 420 --constraint element.metric<=0.05~0.005
+--delta 2 --max-runs 20000`, which prints a table of the finalists and the answer in words, or
+JSON (`--format json`).
+
+### Stages
+
+Each stage is one PR, and each adds its checks and its docs; O5 adds the strings in all 44
+catalogs.
+
+- **O1 Selection and feasibility, model-free** (`experiment`): KN, with its constants η and h²
+  from the first-stage size n₀ and the number of designs k, as the paper gives them. Also Batur
+  and Kim's feasibility check for several constraints, KN among the designs found feasible, and
+  Kim's comparison with a standard for the local-optimality test.
+  - *Checks:* in the slippage configuration (the best δ better than k − 1 equal others), with
+    k = 10, n₀ = 10 and 1 − α = 0.95, the best is chosen in at least 95% of 2,000
+    macro-replications (judged by the Wilson interval), with independent normal systems and with
+    a correlation of 0.5 between them, which needs fewer replications. With every mean within δ
+    of the best, any choice is correct, and the check records only the replications used. The
+    feasibility check decides correctly in at least 95% of macro-replications when every system
+    sits ε from its limit.
+- **O2 Whole-number decisions** (`engine::optimize`, CLI, MCP, journal, records): COMPASS with
+  pruning, starts and the clean-up; every design when the space is small; costs, the cap and
+  constraints.
+  - *Checks:* two M/M/c desks in tandem, arrivals 10 an hour, mean service 1 hour at the first
+    and 0.5 hour at the second (exponential; the second desk's arrivals are Poisson by Burke's
+    theorem, so each desk is its own M/M/c). Each server costs 20 an hour and each customer
+    waiting 50 an hour, from each desk's mean queue length. Erlang C then gives the optimum
+    (14, 8), at 301.77 + 173.94 = 475.71 an hour, with (13, 8) at 481.48 and (14, 7) at 482.29.
+    The search runs over 11–40 servers at each desk (900 designs), from (11, 6), with δ = 2. In
+    at least 95 of 100 seeds it chooses (14, 8), or a design within 2 of it.
+  - *A binding cap* of 21 servers: (13, 8) and (14, 7) are 0.80 apart, so with δ = 2 either is a
+    correct answer, and the check accepts both.
+  - *A near tie:* one desk, arrivals 4 an hour, mean service 1 hour, a server at 10 and waiting at
+    25 an hour: 6 servers cost 74.24 and 7 cost 74.50. With δ = 1, either is correct. With
+    δ = 0.1, the clean-up either chooses 6 or runs out of budget and says "not proven best".
+  - *Costs alone:* the fewest servers at the first desk such that the mean wait is at most 0.05
+    hour (tolerance 0.005) is 14 (Erlang C: 0.0435; 13 servers give 0.0951).
+  - *No randomness:* a model with constant times says "compared exactly".
+  - *Determinism:* the same seed gives the same answer, digit for digit, on native and wasm32
+    builds with any number of threads; a search stopped by its time limit, repeated with its
+    recorded runs, gives the same answer.
+  - The heavy checks run on GitHub Actions.
+- **O3 Job lists and job orders.** A source can release an ordered job list: each job with an
+  id and its property values, all at time 0 or at given times, as a `stochcraft:jobs` vendor
+  extension (D32). Each machine's time per job comes from M2.11's time by property value. Each
+  job's random times are drawn from a stream keyed by the job, `"job/<id>"`, so reordering the
+  jobs leaves each job's times unchanged (common random numbers across orders). Then NEH and
+  iterated greedy, and the clean-up over the best orders.
+  - *Checks:* the engine's makespan equals the completion-time recursion for five orders of each
+    instance below, with unlimited buffers between machines and with none (`queue_capacity` 0,
+    blocking after service).
+  - *A 7-job, 4-machine instance* where NEH misses: enumerating its 5,040 orders gives an optimum
+    of 56, where NEH gives 58. Its times, one job per row, machines in order: (5, 4, 8, 4),
+    (7, 5, 1, 2), (8, 6, 8, 3), (3, 9, 5, 7), (5, 3, 9, 3), (7, 4, 8, 2), (6, 6, 7, 3). NEH here
+    breaks ties by the lower job number and inserts at the first best place. The search reaches
+    56 from NEH's order, and from the order 1–7 with NEH turned off.
+  - *Kaczmar and Bányai's instance* (nine jobs on eight machines, their Table II), as a
+    regression. By the recursion and enumeration of all 362,880 orders, the optimum is 64 with
+    unlimited buffers (17 orders reach it, among them 7, 1, 2, 8, 3, 6, 4, 9, 5) and 67 with no
+    buffers. 64 is the value their spreadsheet's evolutionary solver reports, 90% of the 72 that
+    the commercial optimiser found. The search must reach 64 and 67.
+  - The table does not reproduce all of Kaczmar and Bányai's reported values. With unlimited
+    buffers, the order 1–9 gives 78, as they report. Their "optimal" order 6, 1, 4, 5, 2, 3, 8,
+    7, 9 gives 71, not 72, and the order 9–1 gives 76, not 80; with no buffers they give 79 and
+    84. Their text also speaks of nine machines where the table has eight. So the checks use only
+    the table and what the recursion gives from it, never their reported makespans.
+  - *A stochastic order with a proved answer:* one machine, seven jobs at time 0 with exponential
+    times of means 1 to 7, and the objective the mean time in system at the sink (the mean
+    completion time). By linearity of expectation and an exchange of adjacent jobs, shortest
+    expected processing time first is optimal. Its expected mean completion time is
+    (7·1 + 6·2 + … + 1·7) / 7 = 12, against 20 for the reverse order. The search chooses that
+    order, or one within δ, and the interval of its mean covers 12.
+- **O4 Rules and a continuous mean:** the rule decisions and Nelder–Mead.
+  - *Checks:* two identical M/M/1 servers behind a gateway, the gateway's routing as the decision.
+    A random half-and-half split makes each server M/M/1 at half the arrival rate, and the
+    finalists' interval for it covers that wait; joining the shortest queue is chosen. It is the
+    comparison Selmair and Monakhov use to show what streams shared by every consumer do.
+  - *An M/M/1 server with arrivals at rate 1:* the decision is its mean service time s in
+    [0.2, 0.9], and the objective its mean number inside (`mean_work_in_progress`, s / (1 − s))
+    plus 4 per unit of (1 − s), a faster machine costing more. The optimum is s = 0.5, with value
+    3, against 3.067 at 0.4 and 3.1 at 0.6. The search ends within 0.05 of 0.5 and within δ = 0.05
+    of 3.
+- **O5 The window:** Analysis ▸ Find the best, with these parts:
+  - *The setup:* the decisions picked from the model's tasks, pools, buffers, gateways and job
+    lists, with ranges; the objective and its costs; constraints; δ with its suggestion; and the
+    budget.
+  - *While it runs:* progress, with the best objective so far by runs used, and Cancel or Esc.
+  - *The answer first:* "Use 14 and 8 operators: 475.7 ± 1.3 an hour. 95% sure this is the
+    cheapest, or within 2 an hour of it, of the 7 designs compared at the end (312 tried). 6.2 ±
+    0.9 an hour cheaper than now." Then the finalists' table; for a job order, the list and a
+    Gantt chart of one replication.
+  - *Apply* makes the design the model's, as one undo step. An answer is shown only while the
+    model is the one it was found for, as the other analyses are.
+  - Strings in all 44 catalogs; the user guide's section; the parity rows in docs/ui-parity.md;
+    two gallery examples, each with its checked answer: the two desks, and the 7-job flow shop.
+    Any table taken from a paper is recorded in ATTRIBUTION.md.
+
+**Not planned:**
+
+- **A copy of the commercial optimisers' engines:** their internals are proprietary. Scatter
+  search and tabu search are published, but they state no probability of correct selection; the
+  methods above do.
+- **Gradient methods** (infinitesimal perturbation analysis, likelihood ratios, stochastic
+  approximation): they need derivatives through the event logic or a step-size schedule tuned per
+  model, and most decisions here are whole numbers or orders.
+- **Surrogate and Bayesian optimisation** (Kriging, neural networks): heavy, with tuning of their
+  own and no simple statement of how sure the answer is. A response surface on a design is
+  M2.8's "not yet".
+- **Pareto fronts of several noisy objectives:** costs, a cap and constraints express the
+  trade-offs asked for so far; selecting a front needs its own theory, so it waits for a case
+  that needs it.
+- **Rinott's procedure and OCBA:** both assume that the designs are sampled independently, which
+  would throw away common random numbers.
+- **Job shops, and sequence-dependent changeovers in the search:** later, on O3's job lists.
+- **Constraints on a share of replications** ("met in 70% of weeks", as `experiment.size` has):
+  one replication's yes or no is far from normal. They come later, judged on batches of
+  replications.
+
+### Sources
+
+- S. Amaran, N. V. Sahinidis, B. Sharda, S. J. Bury, "Simulation optimization: a review of
+  algorithms and applications", *Annals of Operations Research* 240:351–380, 2016, doi
+  10.1007/s10479-015-2019-x; arXiv:1706.08591 (CC BY-NC-ND 4.0): <https://arxiv.org/abs/1706.08591>
+- S.-H. Kim, B. L. Nelson, "A fully sequential procedure for indifference-zone selection in
+  simulation", *ACM Transactions on Modeling and Computer Simulation* 11(3):251–273, 2001,
+  doi 10.1145/502109.502111; restated, with its constants and its allowance for common random
+  numbers, in S. C. Tsai, B. L. Nelson, "Fully sequential selection procedures with control
+  variates", 2008 (the authors' version)
+- S.-H. Kim, "Comparison with a standard via fully sequential procedures", Proc. Winter
+  Simulation Conference 2003: <https://informs-sim.org/wsc03papers/065.pdf>
+- Y. Rinott, "On two-stage selection procedures and related probability-inequalities",
+  *Communications in Statistics – Theory and Methods* 7(8):799–811, 1978, doi
+  10.1080/03610927808827671
+- B. L. Nelson, J. Swann, D. Goldsman, W. Song, "Simple procedures for selecting the best
+  simulated system when the number of alternatives is large", *Operations Research*
+  49(6):950–963, 2001, doi 10.1287/opre.49.6.950.10019 (screening, then selection)
+- J. Boesel, B. L. Nelson, S.-H. Kim, "Using ranking and selection to 'clean up' after simulation
+  optimization", *Operations Research* 51(5):814–825, 2003, doi 10.1287/opre.51.5.814.16751
+- C.-H. Chen, J. Lin, E. Yücesan, S. E. Chick, "Simulation budget allocation for further enhancing
+  the efficiency of ordinal optimization", *Discrete Event Dynamic Systems* 10(3):251–270, 2000,
+  doi 10.1023/A:1008349927281 (OCBA)
+- L. J. Hong, B. L. Nelson, "Discrete optimization via simulation using COMPASS", *Operations
+  Research* 54(1):115–129, 2006, doi 10.1287/opre.1050.0237
+- J. Xu, B. L. Nelson, L. J. Hong, "Industrial strength COMPASS: a comprehensive algorithm and
+  software for optimization via simulation", *ACM Transactions on Modeling and Computer
+  Simulation* 20(1), article 3, 2010, doi 10.1145/1667072.1667075
+- D. Batur, S.-H. Kim, "Finding feasible systems in the presence of constraints on multiple
+  performance measures", *ACM Transactions on Modeling and Computer Simulation* 20(3), article 13,
+  2010, doi 10.1145/1842713.1842716; S. Andradóttir, S.-H. Kim, "Fully sequential procedures for
+  comparing constrained systems via simulation", *Naval Research Logistics* 57(5):403–421, 2010,
+  doi 10.1002/nav.20408; both as described in Y. Zhou, S. Andradóttir, S.-H. Kim, C. Park,
+  "Indifference-zone relaxation procedures for finding feasible systems", arXiv:2509.04514, 2025
+- R. R. Barton, J. S. Ivey, "Nelder-Mead simplex modifications for simulation optimization",
+  *Management Science* 42(7):954–973, 1996, doi 10.1287/mnsc.42.7.954; K.-H. Chang, "Stochastic
+  Nelder–Mead simplex method: a new globally convergent direct search method for simulation
+  optimization", *European Journal of Operational Research* 220:684–694, 2012
+- M. Nawaz, E. E. Enscore, I. Ham, "A heuristic algorithm for the m-machine, n-job flow-shop
+  sequencing problem", *Omega* 11(1):91–95, 1983, doi 10.1016/0305-0483(83)90088-9; E. Taillard,
+  "Some efficient heuristic methods for the flow shop sequencing problem", *European Journal of
+  Operational Research* 47(1):65–74, 1990, doi 10.1016/0377-2217(90)90090-X (NEH's faster
+  evaluation, for when makespans can be computed without a run)
+- R. Ruiz, T. Stützle, "A simple and effective iterated greedy algorithm for the permutation
+  flowshop scheduling problem", *European Journal of Operational Research* 177(3):2033–2049, 2007,
+  doi 10.1016/j.ejor.2005.12.009; C. R. Reeves, "A genetic algorithm for flowshop sequencing",
+  *Computers & Operations Research* 22(1):5–13, 1995 (considered; iterated greedy is simpler and
+  starts from NEH)
+- M. H. Rothkopf, "Scheduling with random service times", *Management Science* 12(9):707–713,
+  1966, doi 10.1287/mnsc.12.9.707 (weighted shortest expected processing time first on one
+  machine)
+- I. Kaczmar, T. Bányai, "Optimisation of flow shop scheduling problem: simulation system vs.
+  evolutive solver", *Advanced Logistic Systems – Theory and Practice* 16(1):31–40, 2022, doi
+  10.32971/als.2022.003 (Table II, the nine-job instance)
+- V. Kotrady, P. Gabštur, M. Kočiško, M. Pollák, J. Kaščak, "Simulation-based optimization of
+  assembly line efficiency through intelligent operator rotation and resource utilization
+  balancing", *Journal of Manufacturing and Materials Processing* 10(4):132, 2026, doi
+  10.3390/jmmp10040132 (fewer operators at the same output, found by trying variants)
+- M. Selmair, G. Monakhov, "Advanced random number implementation techniques: a guide towards
+  reliable scenario comparisons in simulation modelling", 2024 (preprint), after M. Selmair,
+  "Taking randomness for granted", ECMS 2022, pp. 181–185, doi 10.7148/2022-0181
+
+---
+
 ## Examples for teaching
 
 A goal rather than a milestone: course-ready example models that a teacher can hand out as they
@@ -3729,6 +4054,8 @@ M1.1 model ─ M1.2 compile ─ M1.3 io ─ M1.4 engine ─ M1.5 cli ─ M1.6 de
 
 M6.1 the Python package: any time after M1.4 (it wraps the engine)
 M6.2 command plugins: after M3.7     M6.3 logic plugins: with or after M4.3
+M8 optimisation: O1–O4 any time (engine and `experiment` only, on M2.8's experiments);
+                 O5, the window, after U5 (the experiment editor)
 ```
 
 Examples for teaching are added alongside, as each feature they need lands.
@@ -3774,3 +4101,5 @@ and the Pages preview of an M3 pull request shows the blocks already merged.
 | D29 | Recirculation on a sorter loop (M5.5) | **Recommended:** built in at every divert: a full lane sends the item round again; after a set number of rounds (default 3) it goes to an exception lane; counts per divert and per item are reported |
 | D30 | Decision rules for routing and classification (M5.5) | **Settled (2026-11-19):** DMN decision tables, read from a `.dmn` file beside the BPMN, named from a business rule task, gateway or divert by a `stochcraft:` extension; first the hit policies UNIQUE, FIRST, PRIORITY and COLLECT and a small FEEL subset for input entries |
 | D31 | The parcel hub example's scope (M5.5) | **Recommended:** S's outbound segment first (its checks are the stronger), then B's inbound side; whole-hub figures only as labelled scale context, never as a check |
+| D32 | Job lists for job orders (M8, O3) | **Recommended:** a `stochcraft:jobs` vendor extension on a start event: an ordered list of jobs, each with an id, its property values and optionally a release time, released in that order (BPMN and BPSim have no ordered arrivals); each machine's time per job from M2.11's time by property value; each job's random times from a stream keyed by the job (`"job/<id>"`), so a new order changes when each job runs, never which times it draws. A file without the extension reads as today |
+| D33 | How M8 selects the best and states it (M8) | **Recommended:** Kim and Nelson's KN on fresh replications common to the finalists, with δ given by the user in the objective's unit; the claim names the designs it covers ("of the 7 compared at the end", or "of all 48"); "best found, not proven best" when the reserved budget runs out; no Rinott or OCBA, which assume independent sampling |
