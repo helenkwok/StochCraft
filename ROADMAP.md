@@ -1800,6 +1800,15 @@ A line that makes several products, and results in the terms lean practice uses.
   from the part's own time. Checked against M/G/1 with
   hyperexponential service (Pollaczek-Khinchine), overall and per type. Not here: results per
   product type (route by type to separate sinks for each type's time in system).
+- **Service time by serving pool:** done. A task with shared resources can give each pool it
+  can draw on a service time of its own (servers that differ in speed), ahead of the time by
+  property and the task's own time; the vendor extension `stochcraft:processingTimeByResource`.
+  A take that spans pools counts the pool that supplied its first unit. Each entry draws from
+  its own stream, so a model without entries gives the results it gave before. Units that come
+  free at one instant go to the waiting entities after all of them are free, each entity trying
+  its alternatives in the order of its task's needs. Checked against the exact answer of Able and
+  Baker (Banks et al., Example 2.2) as a discrete-time Markov chain. Not here: a capacity-table
+  formula for such a task, and a time by pool for a task with its own resource.
 - **Lean results:**
   - takt and cycle time: done (#123). A departures block can have a customer demand, a
     quantity per run, day, week or shift of a calendar (the vendor extension

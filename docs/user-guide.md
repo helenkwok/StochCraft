@@ -159,7 +159,8 @@ Select a block to see its settings. The most used ones come first, under **Param
   **Waiting room** (unlimited unless set), **Transfer time**, **Setup**, and **Planned run time
   per item** for OEE.
 - **Task with shared resources:** **Service time** and **Priority**; what it needs from the
-  pools is under **Needs**.
+  pools is under **Needs**, and **Service time by resource** gives the units of a pool a time of
+  their own.
 - **Task:** **Duration**.
 - **Batch:** **Batch size**.
 - **Inside at the start** (under **More settings** on a task or a batch): how many entities are
@@ -200,6 +201,29 @@ a **Default flow**. A flow can be marked **Rework**, and on a task with a resour
 **Gave up**, **Turned away** or **Balked**.
 
 ### Shared resources and shifts
+
+**Servers that differ in speed.** A task that needs either of two pools, say a faster and a
+slower server (**Add alternative** under **Needs**), can serve in a different time depending on
+which pool serves. Under **Service time by resource** the inspector has one row per pool the task
+can draw on; tick a pool and give its units a **Service time** of their own. The times apply in
+this order, and the first that exists is used:
+
+1. the **Service time** of the pool that serves (when one take spans several pools, the pool that
+   supplied its first unit);
+2. the entity's **Service time by property**, if it has one for its value;
+3. the task's own **Service time**.
+
+A pool without a row serves in the task's time (or its time by property). A row for a pool the
+model lacks, one the task does not need, or one pool twice is a problem, not ignored. In the
+file it is the extension `stochcraft:processingTimeByResource`; from the command line, the
+`processing_by_resource` parameter of `block.set` and `block.add` (`{by_resource: [{resource,
+time}]}`).
+
+When several units come free at the same instant and entities wait, the units go to the waiting
+entities in order of priority, then of arrival, and each entity takes the first of its
+alternatives that is free, in the order under **Needs**: with Able listed before Baker, a waiting
+customer gets Able even if Baker's job ended first. The capacity table gives no queueing formula
+for such a task, since its units do not share one service time.
 
 With nothing selected, the inspector shows the whole model:
 

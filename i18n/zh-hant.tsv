@@ -1451,3 +1451,8 @@ unit	yr	年
 	One server fed by the gaps between zeros of the Riemann zeta function, beside Poisson arrivals at the same rate.	一個服務台依黎曼 ζ 函數零點之間的間隔接收到達，並與相同到達率的卜瓦松到達並排比較。
 	Do arrivals that avoid bunching make a shorter queue?	避免扎堆的到達會讓隊伍更短嗎？
 	Same average rate, half the wait: arrivals that repel one another bunch up less than random ones.	平均到達率相同，等待卻減半：彼此排斥的到達比隨機到達更少扎堆。
+	Service time by resource	服務時間依資源而定
+	Tick a pool to give its units a service time of their own. The other pools serve with the task's service time.	勾選一個資源池，可讓其單元使用自己的服務時間。其他資源池依任務的服務時間服務。
+	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	{block} 為資源池「{pool}」設定了服務時間，但模型中沒有該資源池。請移除該時間，或選擇存在的資源池。
+	{block} has two service times for the pool “{pool}”. Keep one.	{block} 為資源池「{pool}」設定了兩個服務時間。請只保留其中一個。
+	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	{block} 為資源池「{pool}」設定了服務時間，但它並不需要該資源池。請把該資源池加入它所需的資源，或移除該時間。

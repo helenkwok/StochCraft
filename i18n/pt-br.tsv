@@ -1451,3 +1451,8 @@ unit	yr	a
 	One server fed by the gaps between zeros of the Riemann zeta function, beside Poisson arrivals at the same rate.	Um servidor alimentado pelos intervalos entre os zeros da função zeta de Riemann, ao lado de chegadas de Poisson com a mesma taxa.
 	Do arrivals that avoid bunching make a shorter queue?	Chegadas que evitam se agrupar formam uma fila menor?
 	Same average rate, half the wait: arrivals that repel one another bunch up less than random ones.	Mesma taxa média, metade da espera: chegadas que se repelem se agrupam menos que as aleatórias.
+	Service time by resource	Tempo de serviço conforme o recurso
+	Tick a pool to give its units a service time of their own. The other pools serve with the task's service time.	Marque um pool para dar às suas unidades um tempo de serviço próprio. Os outros pools atendem com o tempo de serviço da tarefa.
+	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	{block} tem um tempo de serviço para o pool “{pool}”, que o modelo não tem. Remova esse tempo ou escolha um pool que exista.
+	{block} has two service times for the pool “{pool}”. Keep one.	{block} tem dois tempos de serviço para o pool “{pool}”. Mantenha apenas um.
+	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	{block} tem um tempo de serviço para o pool “{pool}”, de que não precisa. Adicione o pool às suas necessidades ou remova esse tempo.

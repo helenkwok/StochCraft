@@ -7,12 +7,12 @@
 use std::collections::{BTreeMap, BTreeSet};
 
 use stochcraft_model::{
-    AfterJob, BalkJoin, BalkRow, Balking, Bounds, Breakdown, ByValue, Calendar, Change, Connection,
-    ConveyorShape, DateTime, Demand, DemandPer, Dist, Element as ModelElement, ElementId,
-    ElementKind, Estimate, Experiment, Family, HealthCheck, Mobility, Model, Need, OnShiftEnd,
-    OnTakeout, Patience, PatienceUntil, PlaceWhileOut, Power, ProcessingBy, Property, PropertyType,
-    PropertyValue, QueueLimit, ResourcePool, Routing, Scrap, Setup, Stop, ThreePoint, TimeUnit,
-    Timed, Transfer, Upper,
+    AfterJob, BalkJoin, BalkRow, Balking, Bounds, Breakdown, ByResource, ByValue, Calendar, Change,
+    Connection, ConveyorShape, DateTime, Demand, DemandPer, Dist, Element as ModelElement,
+    ElementId, ElementKind, Estimate, Experiment, Family, HealthCheck, Mobility, Model, Need,
+    OnShiftEnd, OnTakeout, Patience, PatienceUntil, PlaceWhileOut, Power, ProcessingBy,
+    ProcessingByResource, Property, PropertyType, PropertyValue, QueueLimit, ResourcePool, Routing,
+    Scrap, Setup, Stop, ThreePoint, TimeUnit, Timed, Transfer, Upper,
 };
 
 use crate::bpsim::{self, NSS, Scenario, Value};
@@ -1063,6 +1063,7 @@ fn to_model(p: Process, scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> M
                 .unwrap_or(Dist::Constant(0.0));
                 Note::pin(&mut notes[first..], id, "processing_time");
                 let processing_by = processing_by_of(scenario, id, unit, notes);
+                let processing_by_resource = processing_by_resource_of(scenario, id, unit, notes);
                 let priority = match val(id, "PriorityParameters/Priority", notes) {
                     Some(Value::Number(x)) => Some(x),
                     Some(other) => {
@@ -1086,6 +1087,9 @@ fn to_model(p: Process, scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> M
                         if processing_by.is_some() {
                             ignored.push("its processing time by property");
                         }
+                        if processing_by_resource.is_some() {
+                            ignored.push("its processing time by resource");
+                        }
                         if shared.is_some() || own.is_some() {
                             ignored.push("its resource");
                         }
@@ -1103,10 +1107,17 @@ fn to_model(p: Process, scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> M
                     (None, Some(needs), _) => ElementKind::SharedTask {
                         service: time,
                         processing_by,
+                        processing_by_resource,
                         needs: needs.clone(),
                         priority: priority.unwrap_or(0.0),
                     },
                     (None, None, Some(r)) => {
+                        if processing_by_resource.is_some() {
+                            notes.push(Note::warning(
+                                Some(id),
+                                "a processing time by resource (stochcraft:processingTimeByResource) applies to a task with shared resources; this task has its own resource, so it is ignored",
+                            ));
+                        }
                         if priority.is_some_and(|x| x != 0.0) {
                             notes.push(Note::info(Some(id), "a priority matters only among tasks that share a resource; this task has its own"));
                         }
@@ -1138,10 +1149,18 @@ fn to_model(p: Process, scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> M
                             health_check: health_check_of(scenario, id, unit, notes),
                         }
                     }
-                    (None, None, None) => ElementKind::Delay {
-                        duration: time,
-                        processing_by,
-                    },
+                    (None, None, None) => {
+                        if processing_by_resource.is_some() {
+                            notes.push(Note::warning(
+                                Some(id),
+                                "a processing time by resource (stochcraft:processingTimeByResource) applies to a task with shared resources; this task has none, so it is ignored",
+                            ));
+                        }
+                        ElementKind::Delay {
+                            duration: time,
+                            processing_by,
+                        }
+                    }
                 }
             }
             NodeKind::Exclusive(default) => ElementKind::ExclusiveGateway {
@@ -1541,6 +1560,7 @@ fn queue_capacity(scenario: Option<&Scenario>, id: &str, notes: &mut Vec<Note>) 
             bpsim::TRANSFER_TIME,
             bpsim::CHANGEOVER,
             bpsim::PROCESSING_TIME_BY,
+            bpsim::PROCESSING_TIME_BY_RESOURCE,
             bpsim::ROUTING,
             bpsim::POWER,
             bpsim::PLANNED_RUN_TIME,
@@ -2059,6 +2079,65 @@ fn processing_by_of(
         }
     }
     Some(ProcessingBy { property, by_value })
+}
+
+/// Task `id`'s service times by the pool that serves (StochCraft's vendor extension), if the
+/// file gives them. An entry naming a pool the model lacks, or one the task does not need, is
+/// kept for the model's check to report.
+fn processing_by_resource_of(
+    scenario: Option<&Scenario>,
+    id: &str,
+    unit: TimeUnit,
+    notes: &mut Vec<Note>,
+) -> Option<ProcessingByResource> {
+    let ext = scenario.and_then(|s| {
+        s.param(
+            id,
+            &format!("VendorExtension/{}", bpsim::PROCESSING_TIME_BY_RESOURCE),
+        )
+    })?;
+    let body = ext
+        .elements()
+        .find(|e| e.local() == "processingTimeByResource");
+    let mut by_resource: Vec<ByResource> = Vec::new();
+    for t in body
+        .into_iter()
+        .flat_map(|b| b.elements())
+        .filter(|e| e.local() == "time")
+    {
+        let Some(resource) = t.attr("resource") else {
+            notes.push(Note::error(
+                Some(id),
+                "a processing time by resource needs a `resource` for each time; that time is left out",
+            ));
+            continue;
+        };
+        let resource = resource.trim().to_owned();
+        if by_resource.iter().any(|b| b.resource.as_str() == resource) {
+            notes.push(Note::error(
+                Some(id),
+                format!(
+                    "a processing time by resource gives the resource `{resource}` more than once; only the first is used"
+                ),
+            ));
+            continue;
+        }
+        let d = bpsim::default_value(t, unit, notes, Some(id))
+            .and_then(|v| dist_of(Some(v), "a processing time by resource", id, notes));
+        match d {
+            Some(time) => by_resource.push(ByResource {
+                resource: ElementId::unchecked(&resource),
+                time,
+            }),
+            None => notes.push(Note::error(
+                Some(id),
+                format!(
+                    "the processing time for the resource `{resource}` needs a time; it is left out"
+                ),
+            )),
+        }
+    }
+    Some(ProcessingByResource { by_resource })
 }
 
 fn transfer_of(

@@ -1451,3 +1451,8 @@ unit	yr	έτ
 	One server fed by the gaps between zeros of the Riemann zeta function, beside Poisson arrivals at the same rate.	Ένας εξυπηρετητής που τροφοδοτείται από τα διαστήματα ανάμεσα στα μηδενικά της ζήτα συνάρτησης του Ρίμαν, δίπλα σε αφίξεις Πουασόν με τον ίδιο ρυθμό.
 	Do arrivals that avoid bunching make a shorter queue?	Οι αφίξεις που αποφεύγουν τη συγκέντρωση δημιουργούν μικρότερη ουρά;
 	Same average rate, half the wait: arrivals that repel one another bunch up less than random ones.	Ίδιος μέσος ρυθμός, μισή αναμονή: οι αφίξεις που απωθούν η μία την άλλη συγκεντρώνονται λιγότερο από τις τυχαίες.
+	Service time by resource	Χρόνος εξυπηρέτησης βάσει πόρου
+	Tick a pool to give its units a service time of their own. The other pools serve with the task's service time.	Επιλέξτε μια δεξαμενή για να δώσετε στις μονάδες της δικό τους χρόνο εξυπηρέτησης. Οι άλλες δεξαμενές εξυπηρετούν με τον χρόνο εξυπηρέτησης της εργασίας.
+	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	Το μπλοκ {block} έχει χρόνο εξυπηρέτησης για τη δεξαμενή «{pool}», που το μοντέλο δεν έχει. Αφαιρέστε αυτόν τον χρόνο ή επιλέξτε μια δεξαμενή που υπάρχει.
+	{block} has two service times for the pool “{pool}”. Keep one.	Το μπλοκ {block} έχει δύο χρόνους εξυπηρέτησης για τη δεξαμενή «{pool}». Κρατήστε τον έναν.
+	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	Το μπλοκ {block} έχει χρόνο εξυπηρέτησης για τη δεξαμενή «{pool}», που δεν χρειάζεται. Προσθέστε τη δεξαμενή στις ανάγκες του ή αφαιρέστε αυτόν τον χρόνο.

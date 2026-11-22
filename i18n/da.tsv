@@ -1451,3 +1451,8 @@ unit	yr	år
 	One server fed by the gaps between zeros of the Riemann zeta function, beside Poisson arrivals at the same rate.	Én betjening, der fødes af afstandene mellem nulpunkterne i Riemanns zetafunktion, ved siden af Poisson-ankomster med samme rate.
 	Do arrivals that avoid bunching make a shorter queue?	Giver ankomster, der undgår at klumpe sig sammen, en kortere kø?
 	Same average rate, half the wait: arrivals that repel one another bunch up less than random ones.	Samme gennemsnitlige rate, halv ventetid: ankomster, der frastøder hinanden, klumper sig mindre sammen end tilfældige.
+	Service time by resource	Servicetid efter ressource
+	Tick a pool to give its units a service time of their own. The other pools serve with the task's service time.	Sæt hak ved en pulje for at give dens enheder en servicetid for sig. De andre puljer betjener med opgavens servicetid.
+	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	{block} har en servicetid for puljen »{pool}«, som modellen ikke har. Fjern den tid, eller vælg en pulje, der findes.
+	{block} has two service times for the pool “{pool}”. Keep one.	{block} har to servicetider for puljen »{pool}«. Behold en af dem.
+	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	{block} har en servicetid for puljen »{pool}«, som den ikke har brug for. Føj puljen til dens behov, eller fjern den tid.

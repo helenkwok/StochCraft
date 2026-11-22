@@ -1451,3 +1451,8 @@ unit	yr	ປີ
 	One server fed by the gaps between zeros of the Riemann zeta function, beside Poisson arrivals at the same rate.	ເຄື່ອງໃຫ້ບໍລິການໜຶ່ງເຄື່ອງທີ່ຮັບການມາຕາມໄລຍະຫ່າງລະຫວ່າງສູນຂອງຟັງຊັນຊີຕາຂອງຣີມານ, ຄຽງຄູ່ກັບການມາແບບປັວຊອງທີ່ມີອັດຕາດຽວກັນ.
 	Do arrivals that avoid bunching make a shorter queue?	ການມາທີ່ຫຼີກເວັ້ນການກຸ່ມກັນເຮັດໃຫ້ແຖວສັ້ນລົງບໍ?
 	Same average rate, half the wait: arrivals that repel one another bunch up less than random ones.	ອັດຕາສະເລ່ຍເທົ່າກັນ, ລໍຖ້າເຄິ່ງໜຶ່ງ: ການມາທີ່ຍູ້ກັນອອກເກີດການກຸ່ມກັນໜ້ອຍກວ່າການມາແບບສຸ່ມ.
+	Service time by resource	ເວລາໃຫ້ບໍລິການຕາມຊັບພະຍາກອນ
+	Tick a pool to give its units a service time of their own. The other pools serve with the task's service time.	ຕິກກຸ່ມຊັບພະຍາກອນເພື່ອໃຫ້ໜ່ວຍຂອງມັນມີເວລາໃຫ້ບໍລິການຂອງຕົນເອງ ກຸ່ມອື່ນຈະໃຫ້ບໍລິການດ້ວຍເວລາໃຫ້ບໍລິການຂອງໜ້າວຽກ
+	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	{block} ມີເວລາໃຫ້ບໍລິການສຳລັບກຸ່ມ “{pool}” ທີ່ບໍ່ມີໃນແບບຈຳລອງ ລຶບເວລານັ້ນ ຫຼື ເລືອກກຸ່ມທີ່ມີຢູ່
+	{block} has two service times for the pool “{pool}”. Keep one.	{block} ມີສອງເວລາໃຫ້ບໍລິການສຳລັບກຸ່ມ “{pool}” ເກັບໄວ້ອັນດຽວ
+	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	{block} ມີເວລາໃຫ້ບໍລິການສຳລັບກຸ່ມ “{pool}” ທີ່ມັນບໍ່ຕ້ອງໃຊ້ ເພີ່ມກຸ່ມນັ້ນເຂົ້າໃນສິ່ງທີ່ຕ້ອງໃຊ້ ຫຼື ລຶບເວລານັ້ນ

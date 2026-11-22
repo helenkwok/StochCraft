@@ -1451,3 +1451,8 @@ unit	yr	a
 	One server fed by the gaps between zeros of the Riemann zeta function, beside Poisson arrivals at the same rate.	Un servidor alimentat pels intervals entre zeros de la funció zeta de Riemann, al costat d'arribades de Poisson amb la mateixa taxa.
 	Do arrivals that avoid bunching make a shorter queue?	Les arribades que eviten amuntegar-se fan una cua més curta?
 	Same average rate, half the wait: arrivals that repel one another bunch up less than random ones.	Mateixa taxa mitjana, la meitat d'espera: les arribades que es repel·leixen s'amunteguen menys que les aleatòries.
+	Service time by resource	Temps de servei segons el recurs
+	Tick a pool to give its units a service time of their own. The other pools serve with the task's service time.	Marqueu un grup perquè les seves unitats tinguin un temps de servei propi. Els altres grups serveixen amb el temps de servei de la tasca.
+	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	{block} té un temps de servei per al grup «{pool}», que el model no té. Elimineu aquest temps o trieu un grup que existeixi.
+	{block} has two service times for the pool “{pool}”. Keep one.	{block} té dos temps de servei per al grup «{pool}». Conserveu-ne només un.
+	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	{block} té un temps de servei per al grup «{pool}», que no necessita. Afegiu el grup a les seves necessitats o elimineu aquest temps.

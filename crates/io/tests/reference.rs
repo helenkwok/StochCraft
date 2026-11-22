@@ -930,6 +930,14 @@ fn showcase() -> Model {
         3.5,
     );
     m.processing_by(fit, "issues", vec![("3", Dist::Constant(2.25))]);
+    // A service time for each pool it can draw on: by id, and through the role alternative.
+    m.processing_by_resource(
+        fit,
+        vec![
+            ("crew", Dist::Exponential { mean: 2.0 }),
+            ("seniors", Dist::Constant(1.75)),
+        ],
+    );
     // Calendars: arrivals faster on weekday mornings, and a crew of 5 on the day shift.
     m.calendar(
         "mornings",

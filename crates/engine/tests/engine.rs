@@ -3728,6 +3728,102 @@ fn processing_times_by_property_are_set_run_and_removed() {
     assert!(!m.to_string().contains("processing_by"), "{m}");
 }
 
+/// A shared task's service times by serving pool: set by command, read back, checked (a pool the
+/// model lacks, one the task does not need, one twice), refused where they do not apply, undone
+/// and removed.
+#[test]
+fn service_times_by_resource_are_set_checked_and_removed() {
+    let mut e = help_desk();
+    for pool in ["able", "baker", "cook"] {
+        ok(&mut e, "resource.add", json!({"id": pool}));
+    }
+    ok(
+        &mut e,
+        "block.add",
+        json!({"kind": "shared_task", "id": "fit",
+               "needs": [{"resource": "able"}, {"resource": "baker"}]}),
+    );
+    let before = ok(&mut e, "model.get", json!({})).to_string();
+    let fit = |e: &mut Engine| {
+        ok(e, "model.get", json!({}))["elements"]
+            .as_array()
+            .and_then(|es| es.iter().find(|x| x["id"] == "fit"))
+            .cloned()
+            .unwrap_or_default()
+    };
+    ok(
+        &mut e,
+        "block.set",
+        json!({"id": "fit", "processing_by_resource": {"by_resource": [
+            {"resource": "able", "time": {"type": "constant", "value": 2.0}},
+            {"resource": "baker", "time": {"type": "constant", "value": 3.0}},
+        ]}}),
+    );
+    let t = fit(&mut e);
+    assert_eq!(
+        t["processing_by_resource"]["by_resource"][1]["resource"],
+        "baker"
+    );
+    assert_eq!(
+        t["processing_by_resource"]["by_resource"][0]["time"]["value"],
+        2.0
+    );
+    let v = ok(&mut e, "model.validate", json!({})).to_string();
+    assert!(!v.contains("time_for_"), "{v}");
+    // Undo takes the whole change back.
+    ok(&mut e, "undo", json!({}));
+    assert_eq!(ok(&mut e, "model.get", json!({})).to_string(), before);
+    // A pool the model lacks, one the task does not need, and one twice are errors.
+    for (entries, code) in [
+        (
+            json!([{"resource": "nobody", "time": {"type": "constant", "value": 1.0}}]),
+            "time_for_unknown_pool",
+        ),
+        (
+            json!([{"resource": "cook", "time": {"type": "constant", "value": 1.0}}]),
+            "time_for_pool_not_needed",
+        ),
+        (
+            json!([
+                {"resource": "able", "time": {"type": "constant", "value": 1.0}},
+                {"resource": "able", "time": {"type": "constant", "value": 2.0}},
+            ]),
+            "duplicate_time_by_pool",
+        ),
+    ] {
+        ok(
+            &mut e,
+            "block.set",
+            json!({"id": "fit", "processing_by_resource": {"by_resource": entries}}),
+        );
+        let v = ok(&mut e, "model.validate", json!({})).to_string();
+        assert!(v.contains(code), "{code}: {v}");
+    }
+    // A server or a sink has no pools to key by; misspelt fields are refused.
+    assert_eq!(
+        err(
+            &mut e,
+            "block.set",
+            json!({"id": "desk", "processing_by_resource": {"by_resource": []}})
+        ),
+        ErrorCode::InvalidParams
+    );
+    assert_eq!(
+        err(
+            &mut e,
+            "block.set",
+            json!({"id": "fit", "processing_by_resource": {"by_pool": []}})
+        ),
+        ErrorCode::InvalidParams
+    );
+    ok(
+        &mut e,
+        "block.set",
+        json!({"id": "fit", "processing_by_resource": null}),
+    );
+    assert!(fit(&mut e).get("processing_by_resource").is_none());
+}
+
 /// Balking and a way for those that balk are set by command, show in the model, give the server
 /// its balking rows, undo exactly, and are removed again; a bad table is reported.
 #[test]

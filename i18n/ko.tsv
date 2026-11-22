@@ -1451,3 +1451,8 @@ unit	yr	년
 	One server fed by the gaps between zeros of the Riemann zeta function, beside Poisson arrivals at the same rate.	리만 제타 함수의 영점 사이 간격으로 도착이 들어오는 서버 한 대를, 같은 도착률의 푸아송 도착과 나란히 놓습니다.
 	Do arrivals that avoid bunching make a shorter queue?	뭉치지 않으려는 도착은 대기열을 더 짧게 만들까요?
 	Same average rate, half the wait: arrivals that repel one another bunch up less than random ones.	평균 도착률은 같은데 대기는 절반: 서로 밀어내는 도착은 무작위 도착보다 덜 뭉칩니다.
+	Service time by resource	자원별 서비스 시간
+	Tick a pool to give its units a service time of their own. The other pools serve with the task's service time.	풀을 선택하면 그 풀의 자원 단위에 고유한 서비스 시간을 지정합니다. 나머지 풀은 작업의 서비스 시간으로 처리합니다.
+	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	{block}에 모델에 없는 풀 “{pool}”의 서비스 시간이 있습니다. 그 시간을 제거하거나 존재하는 풀을 선택하세요.
+	{block} has two service times for the pool “{pool}”. Keep one.	{block}에 풀 “{pool}”의 서비스 시간이 둘 있습니다. 하나만 남기세요.
+	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	{block}에 필요하지 않은 풀 “{pool}”의 서비스 시간이 있습니다. 그 풀을 필요 자원에 추가하거나 그 시간을 제거하세요.

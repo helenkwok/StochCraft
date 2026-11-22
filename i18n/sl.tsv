@@ -1451,3 +1451,8 @@ unit	yr	l.
 	One server fed by the gaps between zeros of the Riemann zeta function, beside Poisson arrivals at the same rate.	En strežnik, ki mu prihode določajo razmiki med ničlami Riemannove funkcije zeta, ob Poissonovih prihodih z enako hitrostjo.
 	Do arrivals that avoid bunching make a shorter queue?	Ali prihodi, ki se izogibajo kopičenju, naredijo krajšo vrsto?
 	Same average rate, half the wait: arrivals that repel one another bunch up less than random ones.	Enaka povprečna hitrost, polovica čakanja: prihodi, ki se odbijajo, se kopičijo manj kot naključni.
+	Service time by resource	Čas strežbe glede na vir
+	Tick a pool to give its units a service time of their own. The other pools serve with the task's service time.	Označite skupino, da bodo imele njene enote lasten čas strežbe. Druge skupine strežejo s časom strežbe naloge.
+	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	{block} ima čas strežbe za skupino »{pool}«, ki je model nima. Odstranite ta čas ali izberite skupino, ki obstaja.
+	{block} has two service times for the pool “{pool}”. Keep one.	{block} ima dva časa strežbe za skupino »{pool}«. Obdržite enega.
+	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	{block} ima čas strežbe za skupino »{pool}«, ki je ne potrebuje. Dodajte skupino med njegove zahteve ali odstranite ta čas.

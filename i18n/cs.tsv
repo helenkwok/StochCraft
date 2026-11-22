@@ -1451,3 +1451,8 @@ unit	yr	r.
 	One server fed by the gaps between zeros of the Riemann zeta function, beside Poisson arrivals at the same rate.	Jedna obsluha, na kterou přicházejí zákazníci v rozestupech mezi nulami Riemannovy zeta funkce, vedle Poissonových příchodů téže intenzity.
 	Do arrivals that avoid bunching make a shorter queue?	Dělají příchody, které se vyhýbají shlukování, kratší frontu?
 	Same average rate, half the wait: arrivals that repel one another bunch up less than random ones.	Stejná průměrná intenzita, poloviční čekání: příchody, které se vzájemně odpuzují, se shlukují méně než náhodné.
+	Service time by resource	Doba obsluhy podle zdroje
+	Tick a pool to give its units a service time of their own. The other pools serve with the task's service time.	Zaškrtněte fond, aby jeho jednotky měly vlastní dobu obsluhy. Ostatní fondy obsluhují s dobou obsluhy úlohy.
+	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	{block} má dobu obsluhy pro fond „{pool}“, který model nemá. Odeberte tuto dobu nebo vyberte existující fond.
+	{block} has two service times for the pool “{pool}”. Keep one.	{block} má dvě doby obsluhy pro fond „{pool}“. Ponechte jednu.
+	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	{block} má dobu obsluhy pro fond „{pool}“, který nepotřebuje. Přidejte fond k jeho požadavkům nebo tuto dobu odeberte.

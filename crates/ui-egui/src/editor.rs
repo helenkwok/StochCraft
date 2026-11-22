@@ -914,6 +914,7 @@ impl App {
 
         if kind == "shared_task" {
             self.needs_section(ui, model, el);
+            self.by_resource_section(ui, model, el);
         }
         if kind == "sink" {
             self.demand_section(ui, model, el, &id);

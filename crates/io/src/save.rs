@@ -25,11 +25,11 @@ use crate::write::{
     conveyor_element, demand_element, dist_element, edge_ends, estimate_element,
     health_check_element, interruptible_param, mobility_element, numeric, observed_element,
     observed_off_element, on_shift_end_element, own_marker, patience_element, planned_element,
-    power_element, probability_element, processing_by_element, property_element, quantity_element,
-    quantity_param, queue_capacity_element, rework_element, routing_element, scenario_extensions,
-    scenario_parameters, scrap_element, sequential_element, sequential_off_element, size,
-    start_param, starting_element, stop_element, timer_param, transfer_element, transport_element,
-    turned_away_element, units_param, vendor_value_element,
+    power_element, probability_element, processing_by_element, processing_by_resource_element,
+    property_element, quantity_element, quantity_param, queue_capacity_element, rework_element,
+    routing_element, scenario_extensions, scenario_parameters, scrap_element, sequential_element,
+    sequential_off_element, size, start_param, starting_element, stop_element, timer_param,
+    transfer_element, transport_element, turned_away_element, units_param, vendor_value_element,
 };
 use crate::xml::{self, Element, Node};
 use crate::{Format, SaveError};
@@ -147,11 +147,12 @@ fn near_dist(a: &Dist, b: &Dist) -> bool {
 }
 
 /// StochCraft's vendor extensions that hold time distributions.
-const VENDOR_TIMES: [&str; 8] = [
+const VENDOR_TIMES: [&str; 9] = [
     crate::bpsim::BREAKDOWN,
     crate::bpsim::TRANSFER_TIME,
     crate::bpsim::CHANGEOVER,
     crate::bpsim::PROCESSING_TIME_BY,
+    crate::bpsim::PROCESSING_TIME_BY_RESOURCE,
     crate::bpsim::PLANNED_RUN_TIME,
     crate::bpsim::PATIENCE,
     crate::bpsim::HEALTH_CHECK,
@@ -162,11 +163,17 @@ const VENDOR_TIMES: [&str; 8] = [
 fn vendor_dists(kind: &mut ElementKind, name: &str, f: &mut dyn FnMut(&mut Dist)) {
     use crate::bpsim::{
         BREAKDOWN, CHANGEOVER, HEALTH_CHECK, PATIENCE, PLANNED_RUN_TIME, PROCESSING_TIME_BY,
-        TRANSFER_TIME, TRANSPORT,
+        PROCESSING_TIME_BY_RESOURCE, TRANSFER_TIME, TRANSPORT,
     };
     if name == PROCESSING_TIME_BY {
         if let Some(Some(by)) = kind.processing_by_mut() {
             by.by_value.iter_mut().for_each(|v| f(&mut v.time));
+        }
+        return;
+    }
+    if name == PROCESSING_TIME_BY_RESOURCE {
+        if let Some(Some(by)) = kind.processing_by_resource_mut() {
+            by.by_resource.iter_mut().for_each(|v| f(&mut v.time));
         }
         return;
     }
@@ -2504,6 +2511,21 @@ impl Editor {
                     }),
                 ));
             }
+            // A shared task's processing times by serving pool, likewise.
+            let old_by = was.and_then(ElementKind::processing_by_resource);
+            let new_by = e.kind.processing_by_resource();
+            if old_by != new_by {
+                vendor_writes.push((
+                    id.clone(),
+                    crate::bpsim::PROCESSING_TIME_BY_RESOURCE,
+                    new_by.map(|x| {
+                        // Its pools' ids as the file's encoding needs.
+                        let mut v = processing_by_resource_element(x);
+                        self.text_attrs(&mut v);
+                        v
+                    }),
+                ));
+            }
             // Customer demand at a sink.
             let old_demand = match was {
                 Some(ElementKind::Sink { demand, .. }) => demand.as_ref(),
@@ -2867,7 +2889,7 @@ impl Editor {
             // Names and text values; a changeover's property and the values it changes between;
             // the block and the result an observation names.
             for a in [
-                "name", "value", "property", "from", "to", "element", "metric",
+                "name", "value", "property", "from", "to", "element", "metric", "resource",
             ] {
                 if let Some(v) = e.attr(a).filter(|v| !v.is_ascii()) {
                     self.set_text_attr(e, a, &v);

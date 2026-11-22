@@ -10,8 +10,8 @@ use stochcraft_model::{
     BalkJoin, Balking, Bounds, Breakdown, Calendar, ConveyorShape, DateTime, Demand, Dist,
     ElementKind, Estimate, Experiment, HealthCheck, LengthUnit, Model, MonteCarlo, Need,
     Observation, Observed, OnShiftEnd, OnTakeout, Patience, PatienceUntil, PlaceWhileOut, Power,
-    ProcessingBy, Property, PropertyType, PropertyValue, QueueLimit, ResourcePool, Routing, Scrap,
-    Sequential, Setup, Stop, Timed, Transfer,
+    ProcessingBy, ProcessingByResource, Property, PropertyType, PropertyValue, QueueLimit,
+    ResourcePool, Routing, Scrap, Sequential, Setup, Stop, Timed, Transfer,
 };
 
 use crate::bpsim::NS2;
@@ -620,6 +620,24 @@ pub(crate) fn processing_by_element(x: &ProcessingBy) -> Element {
         .with_child(body)
 }
 
+/// A shared task's service times by serving pool as StochCraft's vendor extension
+/// ([`crate::bpsim::PROCESSING_TIME_BY_RESOURCE`]).
+pub(crate) fn processing_by_resource_element(x: &ProcessingByResource) -> Element {
+    let ns = crate::bpsim::STOCHCRAFT_NS;
+    let mut body = Element::new("stochcraft:processingTimeByResource", Some(ns));
+    for b in &x.by_resource {
+        body.push(
+            Element::new("stochcraft:time", Some(ns))
+                .with_attr("resource", b.resource.as_str())
+                .with_child(dist_element(&b.time)),
+        );
+    }
+    s("VendorExtension")
+        .with_attr("name", crate::bpsim::PROCESSING_TIME_BY_RESOURCE)
+        .with_attr("xmlns:stochcraft", ns)
+        .with_child(body)
+}
+
 /// A sink's customer demand as StochCraft's vendor extension ([`crate::bpsim::DEMAND`]).
 pub(crate) fn demand_element(d: &Demand) -> Element {
     let ns = crate::bpsim::STOCHCRAFT_NS;
@@ -1153,6 +1171,9 @@ pub fn write_new(model: &Model) -> Vec<u8> {
         }
         if let Some(x) = e.kind.processing_by() {
             ep.push(processing_by_element(x));
+        }
+        if let Some(x) = e.kind.processing_by_resource() {
+            ep.push(processing_by_resource_element(x));
         }
         if let ElementKind::Server { on_shift_end, .. } = &e.kind
             && let Some(x) = on_shift_end_element(*on_shift_end)

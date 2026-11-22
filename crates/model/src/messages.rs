@@ -251,6 +251,18 @@ pub const TEMPLATES: &[(&str, &str)] = &[
         "Set the time of {block} for the value “{value}” to a mean of 0 or more.",
     ),
     (
+        "time_for_unknown_pool",
+        "{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.",
+    ),
+    (
+        "duplicate_time_by_pool",
+        "{block} has two service times for the pool “{pool}”. Keep one.",
+    ),
+    (
+        "time_for_pool_not_needed",
+        "{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.",
+    ),
+    (
         "scrap_not_against_server",
         "The scrap at {block} counts against {other}, which is not a task with a resource. Choose a task with a resource.",
     ),
@@ -941,6 +953,17 @@ impl Diagnostic {
             Problem::TimeByValueNegative { value } => part(
                 "time_by_value_negative",
                 vec![b(), ("value", value.clone())],
+            ),
+            Problem::TimeForUnknownPool { id } => {
+                part("time_for_unknown_pool", vec![b(), ("pool", names.name(id))])
+            }
+            Problem::DuplicateTimeByPool { id } => part(
+                "duplicate_time_by_pool",
+                vec![b(), ("pool", names.name(id))],
+            ),
+            Problem::TimeForPoolNotNeeded { id } => part(
+                "time_for_pool_not_needed",
+                vec![b(), ("pool", names.name(id))],
             ),
             Problem::ScrapNotAgainstServer { id } => part(
                 "scrap_not_against_server",

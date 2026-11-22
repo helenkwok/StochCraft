@@ -1451,3 +1451,8 @@ unit	yr	ปี
 	One server fed by the gaps between zeros of the Riemann zeta function, beside Poisson arrivals at the same rate.	เซิร์ฟเวอร์หนึ่งเครื่องที่รับการมาถึงตามช่วงห่างระหว่างศูนย์ของฟังก์ชันซีตาของรีมันน์ เทียบกับการมาถึงแบบปัวซองที่อัตราเท่ากัน
 	Do arrivals that avoid bunching make a shorter queue?	การมาถึงที่หลีกเลี่ยงการกระจุกตัวทำให้คิวสั้นลงหรือไม่
 	Same average rate, half the wait: arrivals that repel one another bunch up less than random ones.	อัตราเฉลี่ยเท่ากัน รอน้อยลงครึ่งหนึ่ง: การมาถึงที่ผลักกันเองจะกระจุกตัวน้อยกว่าการมาถึงแบบสุ่ม
+	Service time by resource	เวลาให้บริการตามทรัพยากร
+	Tick a pool to give its units a service time of their own. The other pools serve with the task's service time.	ติ๊กกลุ่มทรัพยากรเพื่อให้หน่วยของกลุ่มนั้นมีเวลาให้บริการของตัวเอง กลุ่มอื่นจะให้บริการด้วยเวลาให้บริการของงาน
+	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	{block} มีเวลาให้บริการสำหรับกลุ่มทรัพยากร “{pool}” ซึ่งไม่มีในแบบจำลอง ให้นำเวลานั้นออก หรือเลือกกลุ่มทรัพยากรที่มีอยู่
+	{block} has two service times for the pool “{pool}”. Keep one.	{block} มีเวลาให้บริการสองค่าสำหรับกลุ่มทรัพยากร “{pool}” ให้เก็บไว้ค่าเดียว
+	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	{block} มีเวลาให้บริการสำหรับกลุ่มทรัพยากร “{pool}” ซึ่งไม่ได้ใช้ ให้เพิ่มกลุ่มนั้นในสิ่งที่ต้องใช้ หรือนำเวลานั้นออก

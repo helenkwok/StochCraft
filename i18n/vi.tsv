@@ -1451,3 +1451,8 @@ unit	yr	năm
 	One server fed by the gaps between zeros of the Riemann zeta function, beside Poisson arrivals at the same rate.	Một máy phục vụ nhận lượt đến theo các khoảng cách giữa các không điểm của hàm zeta Riemann, cạnh lượt đến Poisson có cùng tốc độ.
 	Do arrivals that avoid bunching make a shorter queue?	Các lượt đến tránh dồn cục có làm hàng đợi ngắn hơn không?
 	Same average rate, half the wait: arrivals that repel one another bunch up less than random ones.	Cùng tốc độ trung bình, chờ ít đi một nửa: các lượt đến đẩy nhau ra ít bị dồn cục hơn các lượt đến ngẫu nhiên.
+	Service time by resource	Thời gian phục vụ theo tài nguyên
+	Tick a pool to give its units a service time of their own. The other pools serve with the task's service time.	Đánh dấu một nhóm để các đơn vị của nhóm có thời gian phục vụ riêng. Các nhóm khác phục vụ theo thời gian phục vụ của tác vụ.
+	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	{block} có thời gian phục vụ cho nhóm “{pool}”, nhóm mà mô hình không có. Hãy xóa thời gian đó hoặc chọn một nhóm đang có.
+	{block} has two service times for the pool “{pool}”. Keep one.	{block} có hai thời gian phục vụ cho nhóm “{pool}”. Giữ lại một.
+	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	{block} có thời gian phục vụ cho nhóm “{pool}”, nhóm mà nó không cần. Hãy thêm nhóm vào nhu cầu của nó hoặc xóa thời gian đó.

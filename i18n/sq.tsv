@@ -1451,3 +1451,8 @@ unit	yr	v
 	One server fed by the gaps between zeros of the Riemann zeta function, beside Poisson arrivals at the same rate.	Një shërbyes i ushqyer nga hapësirat midis zerove të funksionit zeta të Riemannit, pranë mbërritjeve të Poissonit me të njëjtin ritëm.
 	Do arrivals that avoid bunching make a shorter queue?	A bëjnë një radhë më të shkurtër mbërritjet që shmangin grumbullimin?
 	Same average rate, half the wait: arrivals that repel one another bunch up less than random ones.	I njëjti ritëm mesatar, gjysma e pritjes: mbërritjet që e zmbrapsin njëra-tjetrën grumbullohen më pak se ato të rastësishme.
+	Service time by resource	Koha e shërbimit sipas burimit
+	Tick a pool to give its units a service time of their own. The other pools serve with the task's service time.	Shënoni një grup që njësitë e tij të kenë kohë shërbimi të vetën. Grupet e tjera shërbejnë me kohën e shërbimit të detyrës.
+	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	Blloku {block} ka një kohë shërbimi për grupin „{pool}”, që modeli nuk e ka. Hiqeni atë kohë ose zgjidhni një grup që ekziston.
+	{block} has two service times for the pool “{pool}”. Keep one.	Blloku {block} ka dy kohë shërbimi për grupin „{pool}”. Mbani njërën.
+	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	Blloku {block} ka një kohë shërbimi për grupin „{pool}”, që nuk i nevojitet. Shtojeni grupin te nevojat e tij ose hiqeni atë kohë.

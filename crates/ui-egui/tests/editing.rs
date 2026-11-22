@@ -702,6 +702,43 @@ fn pools_are_added_and_a_shared_task_needs_them_by_pool_or_role() {
     );
 }
 
+/// A task with shared resources has a row per pool it needs for a service time of its own: ticking
+/// the pool starts from the task's time, and unticking removes it.
+#[test]
+fn a_service_time_by_resource_is_set_per_pool_in_the_inspector() {
+    let mut h = mm1();
+    click(&mut h, Role::Button, "Add pool");
+    click(&mut h, Role::Button, "+ Add block");
+    click(&mut h, Role::Button, "Task with shared resources");
+    assert!(
+        element(&h, "shared_task-1")
+            .get("processing_by_resource")
+            .is_none()
+    );
+    click(&mut h, Role::CheckBox, "resource-1");
+    assert_eq!(
+        element(&h, "shared_task-1")["processing_by_resource"],
+        json!({"by_resource": [
+            {"resource": "resource-1", "time": {"type": "exponential", "mean": 1.0}}
+        ]})
+    );
+    // One step, which Undo takes back whole.
+    h.state_mut().undo();
+    settle(&mut h);
+    assert!(
+        element(&h, "shared_task-1")
+            .get("processing_by_resource")
+            .is_none()
+    );
+    click(&mut h, Role::CheckBox, "resource-1");
+    click(&mut h, Role::CheckBox, "resource-1");
+    assert!(
+        element(&h, "shared_task-1")
+            .get("processing_by_resource")
+            .is_none()
+    );
+}
+
 /// Selects the field labelled `label` and types `text` into it, without pressing Enter.
 fn type_without_enter(h: &mut Harness<'static, App>, label: &str, text: &str) {
     h.get_by_role_and_label(Role::TextInput, label).click();

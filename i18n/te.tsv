@@ -1451,3 +1451,8 @@ unit	yr	సం.
 	One server fed by the gaps between zeros of the Riemann zeta function, beside Poisson arrivals at the same rate.	రీమాన్ జీటా ఫంక్షన్ శూన్యాల మధ్య ఖాళీలతో రాకలు అందుకునే ఒక సర్వర్, అదే రేటుతో వచ్చే పాయిసన్ రాకలతో పాటు.
 	Do arrivals that avoid bunching make a shorter queue?	గుంపులు కట్టకుండా తప్పించుకునే రాకలు తక్కువ క్యూను ఇస్తాయా?
 	Same average rate, half the wait: arrivals that repel one another bunch up less than random ones.	అదే సగటు రేటు, సగం నిరీక్షణ: ఒకదానినొకటి దూరంగా నెట్టుకునే రాకలు యాదృచ్ఛిక రాకల కంటే తక్కువగా గుంపులు కడతాయి.
+	Service time by resource	వనరును బట్టి సేవా సమయం
+	Tick a pool to give its units a service time of their own. The other pools serve with the task's service time.	ఒక పూల్‌ను టిక్ చేస్తే దాని యూనిట్‌లకు సొంత సేవా సమయం ఉంటుంది. మిగిలిన పూల్‌లు పని సేవా సమయంతో సేవ చేస్తాయి.
+	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	{block} లో మోడల్‌లో లేని “{pool}” పూల్‌కు ఒక సేవా సమయం ఉంది. ఆ సమయాన్ని తొలగించండి, లేదా ఉన్న పూల్‌ను ఎంచుకోండి.
+	{block} has two service times for the pool “{pool}”. Keep one.	{block} లో “{pool}” పూల్‌కు రెండు సేవా సమయాలు ఉన్నాయి. ఒకదాన్ని ఉంచండి.
+	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	{block} లో దానికి అవసరం లేని “{pool}” పూల్‌కు ఒక సేవా సమయం ఉంది. ఆ పూల్‌ను దాని అవసరాలకు జోడించండి, లేదా ఆ సమయాన్ని తొలగించండి.

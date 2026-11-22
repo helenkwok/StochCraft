@@ -263,15 +263,22 @@ pub enum ElementKind {
     /// A task whose units come from shared resource pools ([`Model::resources`]): each entity
     /// takes what the first of `needs` that can be met right now asks for, all at once, holds it
     /// for its service (and while blocked after it), then gives it back. Entities wait here in
-    /// one queue per task; when units come free, waiting entities across all tasks get them in
-    /// order of their task's `priority` (higher first), then of arrival. An entity that cannot be
-    /// served now does not hold back one behind it that can. BPSim's `selection` with
+    /// one queue per task. At the end of each instant, once every event at it has happened
+    /// (units given back, entities arrived), the free units go to the waiting entities across all
+    /// tasks in order of their task's `priority` (higher first), then of arrival, each taking the
+    /// first of its `needs` the free units can meet: units that come free together go to the
+    /// first alternative, whichever job ended first. An entity that cannot be served now does
+    /// not hold back one behind it that can. BPSim's `selection` with
     /// `getResource`, `getResourceByRoles` and `orResource`, and `priority`.
     SharedTask {
         service: Dist,
         /// Processing times for entities with particular values of a property, `service`
         /// applying to the others; `None`: `service` for every entity. See [`ProcessingBy`].
         processing_by: Option<ProcessingBy>,
+        /// Service times by the pool whose units serve the entity, ahead of `processing_by` and
+        /// `service` (a StochCraft vendor extension, `stochcraft:processingTimeByResource`);
+        /// `None`: the pool does not change the time. See [`ProcessingByResource`].
+        processing_by_resource: Option<ProcessingByResource>,
         /// The alternatives, tried in order (BPSim `orResource`); at least one.
         needs: Vec<Need>,
         /// Who gets freed units first, higher first (BPSim `priority`; default 0).
@@ -579,6 +586,36 @@ impl ProcessingBy {
         self.by_value
             .iter()
             .find(|b| b.value == value)
+            .map(|b| &b.time)
+    }
+}
+
+/// A shared task's service time by the pool whose units serve an entity (a StochCraft vendor
+/// extension, `stochcraft:processingTimeByResource`; Banks et al.'s servers that differ in
+/// speed): an entity served by units of a pool that has an entry takes that entry's time. The
+/// key is the pool, not the unit, since a pool's units are alike. When one take spans pools (a
+/// quantity above 1 that no one pool can meet), the entry of the pool that supplied the first
+/// unit, in the order the take was filled, applies. The entry comes first, then the task's time
+/// by property ([`ProcessingBy`]), then its own `service`: an entity served by a pool without an
+/// entry takes the time it would without these.
+#[derive(Debug, Clone, PartialEq)]
+pub struct ProcessingByResource {
+    pub by_resource: Vec<ByResource>,
+}
+
+/// The service time of entities served by units of pool `resource`.
+#[derive(Debug, Clone, PartialEq)]
+pub struct ByResource {
+    pub resource: ElementId,
+    pub time: Dist,
+}
+
+impl ProcessingByResource {
+    /// The time of an entity served by pool `pool`, if it has an entry.
+    pub fn time_for(&self, pool: &ElementId) -> Option<&Dist> {
+        self.by_resource
+            .iter()
+            .find(|b| &b.resource == pool)
             .map(|b| &b.time)
     }
 }
@@ -1146,6 +1183,28 @@ impl ElementKind {
         }
     }
 
+    /// A shared task's service times by serving pool, if it has them.
+    pub fn processing_by_resource(&self) -> Option<&ProcessingByResource> {
+        match self {
+            ElementKind::SharedTask {
+                processing_by_resource,
+                ..
+            } => processing_by_resource.as_ref(),
+            _ => None,
+        }
+    }
+
+    /// A shared task's service times by serving pool, to change; `None` for any other element.
+    pub fn processing_by_resource_mut(&mut self) -> Option<&mut Option<ProcessingByResource>> {
+        match self {
+            ElementKind::SharedTask {
+                processing_by_resource,
+                ..
+            } => Some(processing_by_resource),
+            _ => None,
+        }
+    }
+
     /// Whether this is a gateway: it routes entities at once and holds none.
     pub fn is_gateway(&self) -> bool {
         matches!(
@@ -1200,6 +1259,11 @@ impl ElementKind {
             }
             ElementKind::SharedTask { service, .. } => std::iter::once(("service", service))
                 .chain(by_value_times(self.processing_by()).map(|t| ("service", t)))
+                .chain(
+                    self.processing_by_resource()
+                        .into_iter()
+                        .flat_map(|b| b.by_resource.iter().map(|r| ("service", &r.time))),
+                )
                 .collect(),
             ElementKind::Delay { duration, .. } => std::iter::once(("duration", duration))
                 .chain(by_value_times(self.processing_by()).map(|t| ("duration", t)))
@@ -1779,6 +1843,18 @@ pub enum Problem {
     TimeByValueNegative {
         value: String,
     },
+    /// A service time by pool for a pool the model does not have.
+    TimeForUnknownPool {
+        id: ElementId,
+    },
+    /// Two service times by pool for one pool.
+    DuplicateTimeByPool {
+        id: ElementId,
+    },
+    /// A service time by pool for a pool the task does not need.
+    TimeForPoolNotNeeded {
+        id: ElementId,
+    },
     /// A scrap sink counts its scrap against an element that is not a server.
     ScrapNotAgainstServer {
         id: String,
@@ -2262,6 +2338,9 @@ impl Problem {
             Problem::TimesByValueWithoutProperty => "times_by_value_without_property",
             Problem::DuplicateTimeByValue { .. } => "duplicate_time_by_value",
             Problem::TimeByValueNegative { .. } => "time_by_value_negative",
+            Problem::TimeForUnknownPool { .. } => "time_for_unknown_pool",
+            Problem::DuplicateTimeByPool { .. } => "duplicate_time_by_pool",
+            Problem::TimeForPoolNotNeeded { .. } => "time_for_pool_not_needed",
             Problem::ScrapNotAgainstServer { .. } => "scrap_not_against_server",
             Problem::PlannedRunTimeNotPositive => "planned_run_time_not_positive",
             Problem::PatienceNegative => "patience_negative",
@@ -3228,6 +3307,42 @@ impl Model {
                 } else {
                     Diagnostic::warning(Some(&e.id), problem)
                 });
+            }
+            // Service times by pool: each names a pool the model has and the task can draw on,
+            // once. An entry the task could never use is an error, not a silent fallback.
+            if let Some(by) = e.kind.processing_by_resource() {
+                let mut seen = BTreeSet::new();
+                for b in &by.by_resource {
+                    if !seen.insert(&b.resource) {
+                        out.push(Diagnostic::error(
+                            Some(&e.id),
+                            Problem::DuplicateTimeByPool {
+                                id: b.resource.clone(),
+                            },
+                        ));
+                    }
+                    let Some(pool) = self.resources.iter().find(|r| r.id == b.resource) else {
+                        out.push(Diagnostic::error(
+                            Some(&e.id),
+                            Problem::TimeForUnknownPool {
+                                id: b.resource.clone(),
+                            },
+                        ));
+                        continue;
+                    };
+                    let needed = needs.iter().any(|n| match n {
+                        Need::Resource { id, .. } => *id == pool.id,
+                        Need::Roles { roles, .. } => pool.has_roles(roles),
+                    });
+                    if !needed {
+                        out.push(Diagnostic::error(
+                            Some(&e.id),
+                            Problem::TimeForPoolNotNeeded {
+                                id: b.resource.clone(),
+                            },
+                        ));
+                    }
+                }
             }
         }
         for r in &self.resources {

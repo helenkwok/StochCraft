@@ -1451,3 +1451,8 @@ unit	yr	г.
 	One server fed by the gaps between zeros of the Riemann zeta function, beside Poisson arrivals at the same rate.	Один обслуживающий прибор, на который заявки поступают через промежутки между нулями дзета-функции Римана, рядом с пуассоновскими поступлениями той же интенсивности.
 	Do arrivals that avoid bunching make a shorter queue?	Дают ли поступления, избегающие скучивания, более короткую очередь?
 	Same average rate, half the wait: arrivals that repel one another bunch up less than random ones.	Та же средняя интенсивность, ожидание вдвое меньше: поступления, которые отталкиваются друг от друга, скучиваются реже случайных.
+	Service time by resource	Время обслуживания в зависимости от ресурса
+	Tick a pool to give its units a service time of their own. The other pools serve with the task's service time.	Отметьте пул, чтобы у его единиц было собственное время обслуживания. Остальные пулы обслуживают со временем обслуживания задачи.
+	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	У блока {block} есть время обслуживания для пула «{pool}», которого нет в модели. Удалите это время или выберите существующий пул.
+	{block} has two service times for the pool “{pool}”. Keep one.	У блока {block} два времени обслуживания для пула «{pool}». Оставьте одно.
+	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	У блока {block} есть время обслуживания для пула «{pool}», который ему не нужен. Добавьте пул в его потребности или удалите это время.

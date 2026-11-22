@@ -658,7 +658,8 @@ reads it from there. [mcp.md](mcp.md) has the tools, the options and how the tok
 
 Results are checked against queueing theory and exact results: M/M/1, M/M/c (Erlang C), M/M/1/K,
 priority queues, machine repair, a Jackson network, a two-machine line with a finite buffer,
-E₄/M/1 batches, assembly, arrivals by time of day, breakdowns and activity networks. Monte Carlo
+E₄/M/1 batches, assembly, arrivals by time of day, breakdowns, activity networks and two servers
+that differ in speed behind one queue (Able and Baker, a discrete-time Markov chain). Monte Carlo
 models are checked against exact answers: the sum of independent normals, the product of
 log-normals, a PERT schedule's finish on a single path, rank correlations induced against their
 targets, and Latin hypercube strata holding one value each. They are

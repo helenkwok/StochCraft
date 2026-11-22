@@ -38,6 +38,7 @@ Rows of the checklist that the ranking above does not cover:
 | Gap | Hours |
 |---|---|
 | Pools and operators drawn on the canvas and linked to the tasks that use them | 15–30 |
+| A service time that depends on which pool serves (servers that differ in speed): done as a shared task's service time by resource, in the model, files, commands and the inspector. Open: a rate or speed per unit within one pool, a time by pool for tasks with their own resource, and a capacity-table formula for such a task (its units do not share one service time, so the table gives none) | 4–10 for the formula |
 | A New model button on the start screen; a set-up dialog for name, time unit and start date and time; templates in the window | 8–15 |
 | A 2D floor plan under the model, paths, transporters, then a 3D view (M5 and later). Partly done: a 3D view and a read-only Layout view (#205, #216), `Path` in the model (#216), and the Transport block and mobile pools in the model and files (#202, without a runtime yet) | 230–450 |
 

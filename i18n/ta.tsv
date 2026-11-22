@@ -1451,3 +1451,8 @@ unit	yr	ஆண்டு
 	One server fed by the gaps between zeros of the Riemann zeta function, beside Poisson arrivals at the same rate.	ரீமான் ஜீட்டா சார்பின் பூஜ்யங்களுக்கு இடையிலான இடைவெளிகளில் வருகைகளைப் பெறும் ஒரு சேவையகம், அதே வீதத்திலான பாய்சான் வருகைகளுடன் ஒப்பிடப்படுகிறது.
 	Do arrivals that avoid bunching make a shorter queue?	கூட்டமாகச் சேர்வதைத் தவிர்க்கும் வருகைகள் குறுகிய வரிசையை உருவாக்குமா?
 	Same average rate, half the wait: arrivals that repel one another bunch up less than random ones.	அதே சராசரி வீதம், பாதி காத்திருப்பு: ஒன்றையொன்று விலக்கும் வருகைகள் சீரற்ற வருகைகளை விடக் குறைவாகக் கூட்டமாகச் சேர்கின்றன.
+	Service time by resource	வளத்தைப் பொறுத்த சேவை நேரம்
+	Tick a pool to give its units a service time of their own. The other pools serve with the task's service time.	ஒரு தொகுப்பைத் தேர்வுசெய்தால், அதன் அலகுகளுக்கு அவற்றுக்கே உரிய சேவை நேரம் கிடைக்கும். மற்ற தொகுப்புகள் பணியின் சேவை நேரத்தில் சேவை செய்யும்.
+	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	{block} இல் மாதிரியில் இல்லாத “{pool}” தொகுப்புக்கு ஒரு சேவை நேரம் உள்ளது. அந்த நேரத்தை அகற்றவும், அல்லது இருக்கும் ஒரு தொகுப்பைத் தேர்ந்தெடுக்கவும்.
+	{block} has two service times for the pool “{pool}”. Keep one.	{block} இல் “{pool}” தொகுப்புக்கு இரண்டு சேவை நேரங்கள் உள்ளன. ஒன்றை மட்டும் வைத்திருக்கவும்.
+	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	{block} இல் தனக்குத் தேவையில்லாத “{pool}” தொகுப்புக்கு ஒரு சேவை நேரம் உள்ளது. அந்தத் தொகுப்பை அதன் தேவைகளில் சேர்க்கவும், அல்லது அந்த நேரத்தை அகற்றவும்.

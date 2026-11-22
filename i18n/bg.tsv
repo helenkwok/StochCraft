@@ -1451,3 +1451,8 @@ unit	yr	г.
 	One server fed by the gaps between zeros of the Riemann zeta function, beside Poisson arrivals at the same rate.	Един обслужващ пункт, захранван с интервалите между нулите на дзета функцията на Риман, до пристигания по Поасон със същата интензивност.
 	Do arrivals that avoid bunching make a shorter queue?	Дават ли по-кратка опашка пристиганията, които избягват струпването?
 	Same average rate, half the wait: arrivals that repel one another bunch up less than random ones.	Същата средна честота, наполовина по-кратко чакане: пристиганията, които се отблъскват, се струпват по-рядко от случайните.
+	Service time by resource	Време за обслужване според ресурс
+	Tick a pool to give its units a service time of their own. The other pools serve with the task's service time.	Отметнете пул, за да дадете на единиците му собствено време за обслужване. Останалите пулове обслужват с времето за обслужване на задачата.
+	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	Блокът {block} има време за обслужване за пула „{pool}“, който моделът няма. Премахнете това време или изберете пул, който съществува.
+	{block} has two service times for the pool “{pool}”. Keep one.	Блокът {block} има две времена за обслужване за пула „{pool}“. Оставете едното.
+	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	Блокът {block} има време за обслужване за пула „{pool}“, от който не се нуждае. Добавете пула към изискванията му или премахнете това време.
