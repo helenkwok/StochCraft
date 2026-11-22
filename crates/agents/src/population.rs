@@ -538,7 +538,6 @@ fn check_name(name: &str, place: &str) -> Result<(), ModelError> {
 }
 
 /// One replication of a [`Model`] running: its populations, environment, clock and statistics.
-#[derive(Debug)]
 pub struct Simulation {
     pops: Vec<Pop>,
     env: Option<Agent>,
@@ -557,6 +556,17 @@ pub struct Simulation {
     values: Vec<Vec<f64>>,
     microstep_limit: u64,
     retest_limit: u64,
+}
+
+impl fmt::Debug for Simulation {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("Simulation")
+            .field("now", &self.queue.now())
+            .field("queued", &self.queue.len())
+            .field("counts", &self.counts())
+            .field("times", &self.times)
+            .finish()
+    }
 }
 
 impl Simulation {
