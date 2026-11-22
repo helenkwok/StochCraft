@@ -1369,7 +1369,6 @@ unit	yr	년
 	The model: its settings and variables	모델: 설정과 변수
 	System dynamics model	시스템 다이내믹스 모델
 	Variables	변수
-	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	이 모델은 에이전트에서 MCP 서버를 통해, 또는 명령줄에서 명령으로 변경할 수 있습니다. 캔버스에서의 편집은 다음에 추가됩니다.
 	From {start} to {stop}, in steps of {dt}, by the {method} method.	{start}부터 {stop}까지, {dt} 간격, {method} 방식.
 	Notes from the file	파일의 메모
 	Equation	방정식
@@ -1399,3 +1398,22 @@ unit	yr	년
 	The estimated chance that {output} is more than {value} is {percent}.	{output}이(가) {value}보다 클 확률의 추정값은 {percent}입니다.
 	The estimated chance that {output} is less than {value} is {percent}.	{output}이(가) {value}보다 작을 확률의 추정값은 {percent}입니다.
 	Their interval has no width, which no estimate has, so the plain result stands.	구간의 폭이 없는데, 어떤 추정치에도 그런 일은 없으므로 기존 결과를 그대로 씁니다.
+	Select	선택
+	Link	링크
+	Initial value	초기값
+	Click the diagram to place a stock.	다이어그램을 클릭하여 재고를 배치합니다.
+	Click the diagram to place an auxiliary.	다이어그램을 클릭하여 보조 변수를 배치합니다.
+	Drag from a stock, or from empty space, to another stock or empty space to draw a flow.	재고 또는 빈 공간에서 다른 재고 또는 빈 공간으로 끌어 흐름을 그립니다.
+	Drag from one variable to another to show that the second uses the first.	한 변수에서 다른 변수로 끌어 두 번째가 첫 번째를 사용함을 나타냅니다.
+	Click a variable to select it and edit it here. Drag a variable to move it.	변수를 클릭하여 선택하고 여기에서 편집합니다. 변수를 끌어 이동합니다.
+	Moved {name}	{name}을(를) 이동함
+	Added {kind}: {name}	추가함: {kind} {name}
+	Edited {name}	{name}을(를) 편집함
+	Removed {name}	{name}을(를) 제거함
+	Linked {from} to {to}	{from}을(를) {to}에 링크함
+	Add Variable	변수 추가
+	Edit Variable	변수 변경
+	Remove Variable	변수 제거
+	Simulation Settings	시뮬레이션 설정
+	Change Diagram	다이어그램 변경
+	You can change this model on the Diagram tab, or with commands, from an agent through the MCP server or from the command line.	이 모델은 다이어그램 탭에서, 또는 명령으로(에이전트에서 MCP 서버를 통해 또는 명령줄에서) 변경할 수 있습니다.

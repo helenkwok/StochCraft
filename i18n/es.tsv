@@ -1369,7 +1369,6 @@ unit	yr	a
 	The model: its settings and variables	El modelo: sus ajustes y variables
 	System dynamics model	Modelo de dinámica de sistemas
 	Variables	Variables
-	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	Puede cambiar este modelo con comandos, desde un agente mediante el servidor MCP o desde la línea de comandos. La edición en el lienzo llegará después.
 	From {start} to {stop}, in steps of {dt}, by the {method} method.	Desde {start} hasta {stop}, en pasos de {dt}, con el método {method}.
 	Notes from the file	Notas del archivo
 	Equation	Ecuación
@@ -1399,3 +1398,22 @@ unit	yr	a
 	The estimated chance that {output} is more than {value} is {percent}.	La probabilidad estimada de que {output} sea mayor que {value} es {percent}.
 	The estimated chance that {output} is less than {value} is {percent}.	La probabilidad estimada de que {output} sea menor que {value} es {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	Su intervalo no tiene anchura, algo que ninguna estimación tiene, así que se mantiene el resultado simple.
+	Select	Seleccionar
+	Link	Enlace
+	Initial value	Valor inicial
+	Click the diagram to place a stock.	Haga clic en el diagrama para colocar un nivel.
+	Click the diagram to place an auxiliary.	Haga clic en el diagrama para colocar una variable auxiliar.
+	Drag from a stock, or from empty space, to another stock or empty space to draw a flow.	Arrastre desde un nivel o desde un espacio vacío hasta otro nivel o espacio vacío para dibujar un flujo.
+	Drag from one variable to another to show that the second uses the first.	Arrastre de una variable a otra para indicar que la segunda usa la primera.
+	Click a variable to select it and edit it here. Drag a variable to move it.	Haga clic en una variable para seleccionarla y editarla aquí. Arrástrela para moverla.
+	Moved {name}	Se movió {name}
+	Added {kind}: {name}	Se añadió {kind}: {name}
+	Edited {name}	Se editó {name}
+	Removed {name}	Se eliminó {name}
+	Linked {from} to {to}	Se enlazó {from} con {to}
+	Add Variable	Añadir variable
+	Edit Variable	Editar variable
+	Remove Variable	Eliminar variable
+	Simulation Settings	Ajustes de simulación
+	Change Diagram	Cambiar diagrama
+	You can change this model on the Diagram tab, or with commands, from an agent through the MCP server or from the command line.	Puede cambiar este modelo en la pestaña Diagrama, o con comandos, desde un agente a través del servidor MCP o desde la línea de comandos.

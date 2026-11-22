@@ -1369,7 +1369,6 @@ unit	yr	वर्ष
 	The model: its settings and variables	मॉडल: इसकी सेटिंग और चर
 	System dynamics model	सिस्टम डायनामिक्स मॉडल
 	Variables	चर
-	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	आप इस मॉडल को कमांड से बदल सकते हैं: एजेंट से MCP सर्वर के ज़रिए, या कमांड लाइन से। कैनवास पर संपादन आगे आएगा।
 	From {start} to {stop}, in steps of {dt}, by the {method} method.	{start} से {stop} तक, {dt} के चरणों में, {method} विधि से।
 	Notes from the file	फ़ाइल से टिप्पणियाँ
 	Equation	समीकरण
@@ -1399,3 +1398,22 @@ unit	yr	वर्ष
 	The estimated chance that {output} is more than {value} is {percent}.	{output} के {value} से अधिक होने की अनुमानित संभावना {percent} है।
 	The estimated chance that {output} is less than {value} is {percent}.	{output} के {value} से कम होने की अनुमानित संभावना {percent} है।
 	Their interval has no width, which no estimate has, so the plain result stands.	उनके अंतराल की कोई चौड़ाई नहीं है, जो किसी अनुमान की नहीं होती, इसलिए सामान्य परिणाम ही रहता है।
+	Select	चुनें
+	Link	लिंक
+	Initial value	प्रारंभिक मान
+	Click the diagram to place a stock.	स्टॉक रखने के लिए आरेख पर क्लिक करें।
+	Click the diagram to place an auxiliary.	सहायक चर रखने के लिए आरेख पर क्लिक करें।
+	Drag from a stock, or from empty space, to another stock or empty space to draw a flow.	प्रवाह बनाने के लिए किसी स्टॉक या खाली जगह से दूसरे स्टॉक या खाली जगह तक खींचें।
+	Drag from one variable to another to show that the second uses the first.	यह दिखाने के लिए कि दूसरा चर पहले का उपयोग करता है, एक चर से दूसरे तक खींचें।
+	Click a variable to select it and edit it here. Drag a variable to move it.	किसी चर को चुनने और यहाँ संपादित करने के लिए उस पर क्लिक करें। उसे हिलाने के लिए खींचें।
+	Moved {name}	{name} को हिलाया गया
+	Added {kind}: {name}	जोड़ा गया {kind}: {name}
+	Edited {name}	{name} संपादित किया गया
+	Removed {name}	{name} हटाया गया
+	Linked {from} to {to}	{from} को {to} से लिंक किया गया
+	Add Variable	चर जोड़ें
+	Edit Variable	चर बदलें
+	Remove Variable	चर हटाएँ
+	Simulation Settings	सिमुलेशन सेटिंग
+	Change Diagram	आरेख बदलें
+	You can change this model on the Diagram tab, or with commands, from an agent through the MCP server or from the command line.	आप इस मॉडल को आरेख टैब में, या कमांड से, एजेंट द्वारा MCP सर्वर के माध्यम से या कमांड लाइन से बदल सकते हैं।

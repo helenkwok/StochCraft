@@ -1369,7 +1369,6 @@ unit	yr	l.
 	The model: its settings and variables	Model: njegove nastavitve in spremenljivke
 	System dynamics model	Model sistemske dinamike
 	Variables	Spremenljivke
-	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	Ta model lahko spreminjate z ukazi, iz agenta prek strežnika MCP ali iz ukazne vrstice. Urejanje na platnu pride naslednje.
 	From {start} to {stop}, in steps of {dt}, by the {method} method.	Od {start} do {stop}, v korakih po {dt}, z metodo {method}.
 	Notes from the file	Opombe iz datoteke
 	Equation	Enačba
@@ -1399,3 +1398,22 @@ unit	yr	l.
 	The estimated chance that {output} is more than {value} is {percent}.	Ocenjena verjetnost, da je {output} večji od {value}, je {percent}.
 	The estimated chance that {output} is less than {value} is {percent}.	Ocenjena verjetnost, da je {output} manjši od {value}, je {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	Njihov interval nima širine, česar nobena ocena nima, zato ostane navadni rezultat.
+	Select	Izberi
+	Link	Povezava
+	Initial value	Začetna vrednost
+	Click the diagram to place a stock.	Kliknite diagram, da postavite zalogo.
+	Click the diagram to place an auxiliary.	Kliknite diagram, da postavite pomožno spremenljivko.
+	Drag from a stock, or from empty space, to another stock or empty space to draw a flow.	Povlecite iz zaloge ali praznega mesta v drugo zalogo ali prazno mesto, da narišete tok.
+	Drag from one variable to another to show that the second uses the first.	Povlecite od ene spremenljivke do druge, da pokažete, da druga uporablja prvo.
+	Click a variable to select it and edit it here. Drag a variable to move it.	Kliknite spremenljivko, da jo izberete in uredite tukaj. Povlecite jo, da jo premaknete.
+	Moved {name}	Premaknjeno: {name}
+	Added {kind}: {name}	Dodano: {kind} {name}
+	Edited {name}	Urejeno: {name}
+	Removed {name}	Odstranjeno: {name}
+	Linked {from} to {to}	{from} je povezan z {to}
+	Add Variable	Dodaj spremenljivko
+	Edit Variable	Spremeni spremenljivko
+	Remove Variable	Odstrani spremenljivko
+	Simulation Settings	Nastavitve simulacije
+	Change Diagram	Spremeni diagram
+	You can change this model on the Diagram tab, or with commands, from an agent through the MCP server or from the command line.	Ta model lahko spremenite na zavihku Diagram ali z ukazi, iz agenta prek strežnika MCP ali iz ukazne vrstice.

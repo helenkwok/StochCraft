@@ -1369,7 +1369,6 @@ unit	yr	v
 	The model: its settings and variables	Malli: sen asetukset ja muuttujat
 	System dynamics model	Systeemidynamiikan malli
 	Variables	Muuttujat
-	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	Voit muuttaa tätä mallia komennoilla, agentin kautta MCP-palvelimen avulla tai komentoriviltä. Muokkaus piirtoalueella tulee seuraavaksi.
 	From {start} to {stop}, in steps of {dt}, by the {method} method.	Ajanhetkestä {start} hetkeen {stop}, {dt} askelin, menetelmällä {method}.
 	Notes from the file	Tiedoston huomautukset
 	Equation	Yhtälö
@@ -1399,3 +1398,22 @@ unit	yr	v
 	The estimated chance that {output} is more than {value} is {percent}.	Arvioitu todennäköisyys sille, että {output} on yli {value}, on {percent}.
 	The estimated chance that {output} is less than {value} is {percent}.	Arvioitu todennäköisyys sille, että {output} on alle {value}, on {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	Niiden välillä ei ole leveyttä, mitä millään arviolla ei ole, joten tavallinen tulos jää voimaan.
+	Select	Valitse
+	Link	Linkki
+	Initial value	Alkuarvo
+	Click the diagram to place a stock.	Aseta varanto napsauttamalla kaaviota.
+	Click the diagram to place an auxiliary.	Aseta apumuuttuja napsauttamalla kaaviota.
+	Drag from a stock, or from empty space, to another stock or empty space to draw a flow.	Piirrä virta vetämällä varannosta tai tyhjästä kohdasta toiseen varantoon tai tyhjään kohtaan.
+	Drag from one variable to another to show that the second uses the first.	Vedä muuttujasta toiseen osoittaaksesi, että jälkimmäinen käyttää edellistä.
+	Click a variable to select it and edit it here. Drag a variable to move it.	Valitse muuttuja ja muokkaa sitä täällä napsauttamalla sitä. Siirrä muuttujaa vetämällä.
+	Moved {name}	Siirrettiin {name}
+	Added {kind}: {name}	Lisättiin {kind}: {name}
+	Edited {name}	Muokattiin {name}
+	Removed {name}	Poistettiin {name}
+	Linked {from} to {to}	Linkitettiin {from} kohteeseen {to}
+	Add Variable	Lisää muuttuja
+	Edit Variable	Muokkaa muuttujaa
+	Remove Variable	Poista muuttuja
+	Simulation Settings	Simulaation asetukset
+	Change Diagram	Muuta kaaviota
+	You can change this model on the Diagram tab, or with commands, from an agent through the MCP server or from the command line.	Voit muuttaa tätä mallia Kaavio-välilehdellä tai komennoilla, agentilta MCP-palvelimen kautta tai komentoriviltä.

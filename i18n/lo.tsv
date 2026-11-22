@@ -1369,7 +1369,6 @@ unit	yr	ປີ
 	The model: its settings and variables	ແບບຈຳລອງ: ການຕັ້ງຄ່າ ແລະ ຕົວແປຂອງມັນ
 	System dynamics model	ແບບຈຳລອງພາວະຜັນແປຂອງລະບົບ
 	Variables	ຕົວແປ
-	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	ທ່ານສາມາດປ່ຽນແບບຈຳລອງນີ້ດ້ວຍຄຳສັ່ງ, ຈາກເອເຈນຜ່ານເຊີບເວີ MCP ຫຼືຈາກແຖວຄຳສັ່ງ. ການແກ້ໄຂເທິງຜ້າໃບຈະມາຕໍ່ໄປ.
 	From {start} to {stop}, in steps of {dt}, by the {method} method.	ຈາກ {start} ເຖິງ {stop}, ເປັນຂັ້ນ {dt}, ດ້ວຍວິທີ {method}.
 	Notes from the file	ໝາຍເຫດຈາກໄຟລ໌
 	Equation	ສົມຜົນ
@@ -1399,3 +1398,22 @@ unit	yr	ປີ
 	The estimated chance that {output} is more than {value} is {percent}.	ຄວາມເປັນໄປໄດ້ໂດຍປະມານທີ່ {output} ຈະຫຼາຍກວ່າ {value} ແມ່ນ {percent}.
 	The estimated chance that {output} is less than {value} is {percent}.	ຄວາມເປັນໄປໄດ້ໂດຍປະມານທີ່ {output} ຈະນ້ອຍກວ່າ {value} ແມ່ນ {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	ຊ່ວງຂອງມັນບໍ່ມີຄວາມກວ້າງ ຊຶ່ງບໍ່ມີການຄາດຄະເນໃດມີ ສະນັ້ນຜົນລັບທຳມະດາຈຶ່ງຍັງຢູ່.
+	Select	ເລືອກ
+	Link	ລິ້ງ
+	Initial value	ຄ່າເລີ່ມຕົ້ນ
+	Click the diagram to place a stock.	ກົດທີ່ແຜນວາດເພື່ອວາງສະຕັອກ.
+	Click the diagram to place an auxiliary.	ກົດທີ່ແຜນວາດເພື່ອວາງຕົວແປຊ່ວຍ.
+	Drag from a stock, or from empty space, to another stock or empty space to draw a flow.	ລາກຈາກສະຕັອກ ຫຼື ບ່ອນຫວ່າງ ໄປຫາສະຕັອກ ຫຼື ບ່ອນຫວ່າງອື່ນ ເພື່ອແຕ້ມການໄຫຼ.
+	Drag from one variable to another to show that the second uses the first.	ລາກຈາກຕົວແປໜຶ່ງໄປຫາອີກຕົວໜຶ່ງ ເພື່ອສະແດງວ່າຕົວທີສອງໃຊ້ຕົວທຳອິດ.
+	Click a variable to select it and edit it here. Drag a variable to move it.	ກົດທີ່ຕົວແປເພື່ອເລືອກ ແລະ ແກ້ໄຂທີ່ນີ້. ລາກຕົວແປເພື່ອຍ້າຍ.
+	Moved {name}	ຍ້າຍ {name} ແລ້ວ
+	Added {kind}: {name}	ເພີ່ມແລ້ວ {kind}: {name}
+	Edited {name}	ແກ້ໄຂ {name} ແລ້ວ
+	Removed {name}	ລຶບ {name} ແລ້ວ
+	Linked {from} to {to}	ເຊື່ອມ {from} ກັບ {to} ແລ້ວ
+	Add Variable	ເພີ່ມຕົວແປ
+	Edit Variable	ປ່ຽນຕົວແປ
+	Remove Variable	ລຶບຕົວແປ
+	Simulation Settings	ການຕັ້ງຄ່າການຈຳລອງ
+	Change Diagram	ປ່ຽນແຜນວາດ
+	You can change this model on the Diagram tab, or with commands, from an agent through the MCP server or from the command line.	ທ່ານສາມາດປ່ຽນແບບຈຳລອງນີ້ໄດ້ໃນແຖບແຜນວາດ ຫຼື ດ້ວຍຄຳສັ່ງ ຈາກເອເຢັນຜ່ານເຊີບເວີ MCP ຫຼື ຈາກແຖວຄຳສັ່ງ.

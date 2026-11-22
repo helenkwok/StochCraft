@@ -39,6 +39,7 @@ mod prefs;
 mod results;
 mod runs;
 mod sd;
+mod sd_canvas;
 mod start;
 mod tabs;
 pub mod theme;
@@ -868,6 +869,8 @@ pub struct App {
     selected: Option<String>,
     /// The flowchart's view, its multiple selection and its clipboard.
     canvas: canvas::Canvas,
+    /// A system dynamics model's diagram: its view, tool, selection and half-typed fields.
+    sd_canvas: sd_canvas::SdCanvas,
     /// A run being watched on the canvas (M3.5).
     watching: Option<live::Watching>,
     /// The engine revision of the model last validated, and its problems, so a frame validates
@@ -1004,6 +1007,7 @@ impl App {
             names_in_english: Vec::new(),
             selected: None,
             canvas: canvas::Canvas::default(),
+            sd_canvas: sd_canvas::SdCanvas::default(),
             watching: None,
             problems_of: None,
             drafts: std::collections::HashMap::new(),
@@ -1207,6 +1211,11 @@ fn change_label(command: &str) -> &str {
         "mc.correlation.set" => "Change Correlation",
         "mc.set" => "Monte Carlo Settings",
         "layout.set" => "Move",
+        "sd.variable.add" => "Add Variable",
+        "sd.variable.set" => "Edit Variable",
+        "sd.variable.remove" => "Remove Variable",
+        "sd.specs.set" => "Simulation Settings",
+        "sd.layout.set" => "Change Diagram",
         "batch" => "Changes",
         "paste" => "Paste",
         "delete" => "Delete",

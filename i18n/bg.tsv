@@ -1369,7 +1369,6 @@ unit	yr	г.
 	The model: its settings and variables	Моделът: настройки и променливи
 	System dynamics model	Модел на системната динамика
 	Variables	Променливи
-	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	Можете да променяте този модел с команди, от агент през MCP сървъра или от командния ред. Редактирането върху платното идва следващо.
 	From {start} to {stop}, in steps of {dt}, by the {method} method.	От {start} до {stop}, със стъпки от {dt}, по метода {method}.
 	Notes from the file	Бележки от файла
 	Equation	Уравнение
@@ -1399,3 +1398,22 @@ unit	yr	г.
 	The estimated chance that {output} is more than {value} is {percent}.	Прогнозната вероятност {output} да е над {value} е {percent}.
 	The estimated chance that {output} is less than {value} is {percent}.	Прогнозната вероятност {output} да е под {value} е {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	Техният интервал няма ширина, каквато няма никоя оценка, затова остава обикновеният резултат.
+	Select	Избор
+	Link	Връзка
+	Initial value	Начална стойност
+	Click the diagram to place a stock.	Щракнете върху диаграмата, за да поставите запас.
+	Click the diagram to place an auxiliary.	Щракнете върху диаграмата, за да поставите спомагателна променлива.
+	Drag from a stock, or from empty space, to another stock or empty space to draw a flow.	Плъзнете от запас или от празно място до друг запас или празно място, за да начертаете поток.
+	Drag from one variable to another to show that the second uses the first.	Плъзнете от една променлива до друга, за да покажете, че втората използва първата.
+	Click a variable to select it and edit it here. Drag a variable to move it.	Щракнете върху променлива, за да я изберете и редактирате тук. Плъзнете я, за да я преместите.
+	Moved {name}	Преместено: {name}
+	Added {kind}: {name}	Добавено: {kind} {name}
+	Edited {name}	Редактирано: {name}
+	Removed {name}	Премахнато: {name}
+	Linked {from} to {to}	{from} е свързано с {to}
+	Add Variable	Добавяне на променлива
+	Edit Variable	Промяна на променлива
+	Remove Variable	Премахване на променлива
+	Simulation Settings	Настройки на симулацията
+	Change Diagram	Промяна на диаграмата
+	You can change this model on the Diagram tab, or with commands, from an agent through the MCP server or from the command line.	Можете да променяте този модел в раздела „Диаграма“ или с команди, от агент през MCP сървъра или от командния ред.

@@ -4,11 +4,11 @@
 //! an empty process model beside it, so the window shows these screens and none of a process
 //! model's views.
 //!
-//! It shows two tabs. **Model** reads the model as `sd.get` describes it: its settings, the
-//! checks' warnings, and a table of its variables (kind, equation, units, a stock's flows). The
-//! window does not edit it yet (the canvas editor comes next); the model is changed by commands,
-//! from an agent through the MCP server or from the command line, and the tab reads it again
-//! whenever the engine's revision changes. Save, Save As and the guards on closing work as for a
+//! It shows three tabs. **Model** reads the model as `sd.get` describes it: its settings, the
+//! checks' warnings, and a table of its variables (kind, equation, units, a stock's flows).
+//! **Diagram** (`sd_canvas.rs`) draws the model's layout and edits it. The tabs read the model
+//! again whenever the engine's revision changes, so a change by commands (an agent through the
+//! MCP server, the command line) shows too. Save, Save As and the guards on closing work as for a
 //! process model, through the engine, which writes the model as XMILE. **Results** runs the model
 //! (`sd.run`) and answers first, in words: where each stock ends up, with, for a model that has a
 //! random function, the median and the 5th to 95th percentiles it ends between. Under it, a chart
@@ -180,7 +180,7 @@ fn kind_rank(kind: &str) -> u8 {
     }
 }
 
-fn kind_label(kind: &str) -> &'static str {
+pub(crate) fn kind_label(kind: &str) -> &'static str {
     match kind {
         "stock" => t("Stock"),
         "flow" => t("Flow"),
@@ -671,7 +671,7 @@ impl App {
     }
 
     /// The document is a system dynamics model (an XMILE file), which the window shows, runs and
-    /// saves as XMILE; it does not edit it yet (an agent or the command line does).
+    /// saves as XMILE, and edits on its diagram.
     pub fn is_system_dynamics(&self) -> bool {
         self.is_sd()
     }
@@ -704,7 +704,7 @@ impl App {
     }
 
     /// `sd.get`'s description of the model, read again only when the engine's revision changed.
-    fn sd_info(&mut self) -> Rc<Value> {
+    pub(crate) fn sd_info(&mut self) -> Rc<Value> {
         let revision = self.engine.revision();
         if let Some((read_at, info)) = &self.sd.info
             && *read_at == revision
@@ -818,6 +818,7 @@ impl App {
             .clicked()
         {
             self.show_results = false;
+            self.sd_canvas.on = false;
         }
         ui.label(theme::weak(ui, t("System dynamics model")));
         ui.add_space(12.0);
@@ -847,7 +848,8 @@ impl App {
             .map_or_else(|| self.document_name(), str::to_owned)
     }
 
-    /// The Model tab of a system dynamics model: read-only in the window for now.
+    /// The Model tab of a system dynamics model: its settings, problems and variables (edited on
+    /// the Diagram tab).
     pub(crate) fn sd_model_view(&mut self, ui: &mut egui::Ui) {
         let p = theme::palette(ui.ctx());
         let info = self.sd_info();
@@ -862,7 +864,7 @@ impl App {
                 ui.add(
                     egui::Label::new(theme::weak(
                         ui,
-                        t("You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next."),
+                        t("You can change this model on the Diagram tab, or with commands, from an agent through the MCP server or from the command line."),
                     ))
                     .wrap(),
                 );

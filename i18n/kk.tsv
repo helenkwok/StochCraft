@@ -1369,7 +1369,6 @@ unit	yr	ж.
 	The model: its settings and variables	Модель: оның параметрлері мен айнымалылары
 	System dynamics model	Жүйелік динамика моделі
 	Variables	Айнымалылар
-	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	Бұл модельді пәрмендермен өзгертуге болады: агент арқылы MCP серверімен немесе пәрмен жолынан. Кенепте өңдеу кейін қосылады.
 	From {start} to {stop}, in steps of {dt}, by the {method} method.	{start} бастап {stop} дейін, {dt} қадаммен, {method} әдісімен.
 	Notes from the file	Файлдағы ескертпелер
 	Equation	Теңдеу
@@ -1399,3 +1398,22 @@ unit	yr	ж.
 	The estimated chance that {output} is more than {value} is {percent}.	{output} {value} мәнінен үлкен болуының бағалық ықтималдығы {percent}.
 	The estimated chance that {output} is less than {value} is {percent}.	{output} {value} мәнінен кіші болуының бағалық ықтималдығы {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	Олардың аралығының ені жоқ, бұл ешбір бағада болмайды, сондықтан қарапайым нәтиже қалады.
+	Select	Таңдау
+	Link	Сілтеме
+	Initial value	Бастапқы мән
+	Click the diagram to place a stock.	Қорды орналастыру үшін диаграмманы басыңыз.
+	Click the diagram to place an auxiliary.	Көмекші айнымалыны орналастыру үшін диаграмманы басыңыз.
+	Drag from a stock, or from empty space, to another stock or empty space to draw a flow.	Ағынды сызу үшін қордан немесе бос орыннан басқа қорға немесе бос орынға сүйреңіз.
+	Drag from one variable to another to show that the second uses the first.	Екіншісі біріншісін пайдаланатынын көрсету үшін бір айнымалыдан екіншісіне сүйреңіз.
+	Click a variable to select it and edit it here. Drag a variable to move it.	Айнымалыны таңдап, осында өңдеу үшін оны басыңыз. Жылжыту үшін сүйреңіз.
+	Moved {name}	{name} жылжытылды
+	Added {kind}: {name}	Қосылды: {kind} {name}
+	Edited {name}	{name} өңделді
+	Removed {name}	{name} жойылды
+	Linked {from} to {to}	{from} мен {to} байланыстырылды
+	Add Variable	Айнымалы қосу
+	Edit Variable	Айнымалыны өзгерту
+	Remove Variable	Айнымалыны жою
+	Simulation Settings	Модельдеу параметрлері
+	Change Diagram	Диаграмманы өзгерту
+	You can change this model on the Diagram tab, or with commands, from an agent through the MCP server or from the command line.	Бұл модельді Диаграмма қойындысында немесе пәрмендермен, агенттен MCP сервері арқылы немесе пәрмен жолынан өзгертуге болады.
