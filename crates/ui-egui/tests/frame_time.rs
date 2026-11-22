@@ -45,12 +45,14 @@ const FRAMES_PER_BLOCK: usize = 15;
 /// After this long on one view, no further blocks are started (at least two always run).
 const VIEW_LIMIT: Duration = Duration::from_secs(40);
 
-/// The most each view's median frame may take with AccessKit on, in milliseconds: about three
-/// times what GitHub's Linux runners measured (canvas 57, 3D view 5.9, results 133 ms), so a
-/// slower runner passes and a change that makes frames several times slower does not.
-const BUDGETS: [(&str, u64); 3] = [("canvas", 180), ("3D view", 20), ("results", 400)];
-/// The most AccessKit on may take over off (median against median): it measured 1.15 to 1.34
-/// times. A ratio holds across machines better than a time does.
+/// Each view's budget for a median frame with AccessKit on, in milliseconds: about three times the
+/// fastest GitHub Linux runner measured (canvas 57 and 89, 3D view 5.9 and 6.2, results 133 and
+/// 190 ms in two runs). Runners differed by up to 1.6 times between runs, so going over is a
+/// warning in the log, not a failure.
+const BUDGETS: [(&str, u64); 3] = [("canvas", 250), ("3D view", 20), ("results", 500)];
+/// The most AccessKit on may take over off (median against median), which fails the test: it
+/// measured 1.07 to 1.34 times. Both are timed on the same runner in alternating blocks, so the
+/// ratio holds across machines where a time does not.
 const ACCESSKIT_RATIO: f64 = 1.75;
 
 /// The engine commands for the model: 1,000 blocks and their connections, placed on a grid.
@@ -353,11 +355,17 @@ fn frames_of_a_large_model_stay_within_budget() {
             .map(|b| Duration::from_millis(b.1))
             .unwrap_or_default();
         if on > budget {
-            over.push(format!(
+            let line = format!(
                 "{view}: median frame with AccessKit on {:.1} ms, over its budget of {:.0} ms",
                 ms(on),
                 ms(budget)
-            ));
+            );
+            report(&line);
+            // A GitHub Actions annotation, shown on the run's page (it must start the line).
+            let _ = writeln!(
+                std::io::stderr().lock(),
+                "::warning title=Frame time::{line}"
+            );
         }
         let ratio = on.as_secs_f64() / off.as_secs_f64();
         if ratio > ACCESSKIT_RATIO {

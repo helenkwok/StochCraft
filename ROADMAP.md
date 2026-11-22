@@ -1847,10 +1847,11 @@ look as the other Craft apps.
 - All UI changes go through engine commands (principle 2), so undo, redo and the journal work
   from the first window.
 - **Frame time and accessibility checks:** a release benchmark times frames with 1,000 blocks
-  open, AccessKit off and on, against budgets in CI; tests check that settled views ask for no
-  more frames and that fields keep their ids when errors appear (developers guide, "Frame time,
-  idle frames and widget ids"). With 1,000 blocks a frame takes about 50 ms on the canvas and
-  100 ms on the results page on CI's runners: making both fit a 60 Hz frame is open.
+  open, AccessKit off and on, in CI (AccessKit's overhead fails above 1.75 times, the frame
+  budgets warn); tests check that settled views ask for no more frames and that fields keep
+  their ids when errors appear (developers guide, "Frame time, idle frames and widget ids").
+  With 1,000 blocks a frame takes 50 to 90 ms on the canvas and 100 to 190 ms on the results
+  page on CI's runners: making both fit a 60 Hz frame is open.
 
 ### M3.1 Shell and documents
 
