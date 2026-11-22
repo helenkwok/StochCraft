@@ -809,6 +809,7 @@ impl Engine {
     /// by step for watching: the same random stream, so the same events, as that replication of
     /// `run.start` with the experiment's seed.
     pub fn live_run(&self, replication: u64) -> Result<Live<'static>, CommandError> {
+        self.approximations(false)?;
         let compiled = compile(&self.model).map_err(|ds| CommandError {
             code: ErrorCode::InvalidModel,
             message: "the model has errors and cannot run".into(),
@@ -819,9 +820,56 @@ impl Engine {
         Ok(compiled.live(rng))
     }
 
+    /// The errors found when the opened file was read: each is something StochCraft could not
+    /// read, so the model it made substitutes for it (a zero time for a processing-time
+    /// expression, say) and does not behave as the file describes. They stand until the notes
+    /// are read again, by opening the file, or by saving the model into it (the edit that
+    /// answers an error is then written in place of what could not be read). An edit alone does
+    /// not clear one: it cannot be told whether it answers the error or changes something else
+    /// at the same block, and a wrong guess would let the stand-in run unmarked.
+    fn import_errors(&self) -> Vec<Value> {
+        self.file.as_ref().map_or_else(Vec::new, |file| {
+            file.notes
+                .iter()
+                .filter(|n| n["severity"] == "error")
+                .cloned()
+                .collect()
+        })
+    }
+
+    /// Whether a run may go ahead given the errors found reading the file. Returns the
+    /// substitutions the run would make (empty when the file read cleanly), and refuses with
+    /// them listed unless `allow` says the approximation is deliberate. Every command that runs
+    /// the model asks first, so an invalid result never comes from a file read with errors, in
+    /// any output format or through any front end.
+    pub(crate) fn approximations(&self, allow: bool) -> Result<Vec<Value>, CommandError> {
+        let errors = self.import_errors();
+        if errors.is_empty() || allow {
+            return Ok(errors);
+        }
+        let first = errors[0]["message"].as_str().unwrap_or("");
+        let first = match errors[0]["at"].as_str() {
+            Some(at) => format!("at `{at}`: {first}"),
+            None => first.to_owned(),
+        };
+        let count = if errors.len() == 1 {
+            "1 error".to_owned()
+        } else {
+            format!("{} errors", errors.len())
+        };
+        Err(CommandError {
+            code: ErrorCode::InvalidModel,
+            message: format!(
+                "the file has {count} StochCraft could not read, so the model would not run as the file describes (the first, {first}). Correct the file (correcting a block in the window counts once the file is saved), or run with `allow_approximations` (`--allow-approximations` on the command line) to run what StochCraft substituted instead; the run record then lists each substitution"
+            ),
+            details: Some(Value::Array(errors)),
+        })
+    }
+
     /// The plan of a run of the model's experiment, with these overrides. `sequential` overrides
     /// the experiment's sequential replications: `Some(None)` runs a fixed number, `None` keeps
-    /// the experiment's.
+    /// the experiment's. `allow_approximations` accepts what StochCraft substituted for errors
+    /// in the file (see [`Engine::approximations`]).
     fn plan(
         &self,
         replications: Option<u32>,
@@ -829,6 +877,7 @@ impl Engine {
         threads: Option<u32>,
         series: bool,
         sequential: Option<Option<stochcraft_model::Sequential>>,
+        allow_approximations: bool,
     ) -> Result<Plan, CommandError> {
         if self.model.is_monte_carlo() {
             return Err(CommandError::new(
@@ -842,6 +891,7 @@ impl Engine {
                 "this is a system dynamics model: run it with sd.run",
             ));
         }
+        let approximations = self.approximations(allow_approximations)?;
         let compiled = compile(&self.model).map_err(|ds| CommandError {
             code: ErrorCode::InvalidModel,
             message: "the model has errors and cannot run".into(),
@@ -861,7 +911,12 @@ impl Engine {
         if let Some(t) = threads {
             experiment = experiment.threads(t as usize);
         }
-        let record = self.record(&experiment, compiled.warnings());
+        let mut record = self.record(&experiment, compiled.warnings());
+        if !approximations.is_empty() {
+            // The run was asked for although the file had errors: what the model has instead
+            // of each is in the record, beside the results it explains.
+            record["approximations"] = Value::Array(approximations);
+        }
         Ok(Plan {
             compiled,
             experiment,
@@ -965,6 +1020,13 @@ impl Engine {
         self.keep_if_finished(&status);
         status
     }
+}
+
+/// Writes `bytes` to `path` through a temporary file beside it that is then renamed over it, so a
+/// crash or a full disk leaves the old file whole rather than half written (as `file.save`
+/// writes). For the command line's output files.
+pub fn write_atomically(path: &std::path::Path, bytes: &[u8]) -> std::io::Result<()> {
+    craft_atomic::atomic_write(path, bytes)
 }
 
 /// A digest of the model as the engine holds it (its JSON form), so results can be matched to

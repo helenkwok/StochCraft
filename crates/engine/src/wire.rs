@@ -2741,6 +2741,87 @@ pub(crate) fn text_cell(text: &str) -> String {
     }
 }
 
+/// The five columns [`label_prior_run`] adds.
+const PRIOR_RUN_COLUMNS: [&str; 5] = [
+    "run_status",
+    "run_model_digest",
+    "run_seed",
+    "run_runs",
+    "run_settings",
+];
+
+/// A results CSV (of [`results_csv`] or `mc::results_csv`) of a run the model has changed since,
+/// labelled as such: five columns on every row say that it is a prior run (`run_status`) and
+/// which one, by the digest of the model it was a run of, its seed, its number of runs
+/// (replications or trials) and its settings, taken from the results' run record. The numbers
+/// are not changed. A CSV carries no banner a reader would see, so the label is in the data
+/// itself and cannot be separated from it by opening the file in a spreadsheet or a script.
+pub fn label_prior_run(csv: &str, results: &Value) -> String {
+    let record = &results["record"];
+    let plain = |v: &Value| match v {
+        Value::Null => String::new(),
+        Value::String(s) => s.clone(),
+        other => other.to_string(),
+    };
+    let field = |v: &Value| csv_field(&text_cell(&plain(v)));
+    let runs = if record["replications"].is_null() {
+        &record["trials"]
+    } else {
+        &record["replications"]
+    };
+    // A run record's settings, or the results' own where the record has none (a system dynamics
+    // run's start, stop and time unit).
+    let setting = |k: &str| {
+        if record[k].is_null() {
+            &results[k]
+        } else {
+            &record[k]
+        }
+    };
+    let settings = [
+        "warmup",
+        "duration",
+        "start",
+        "stop",
+        "time_unit",
+        "sampling",
+    ]
+    .iter()
+    .filter(|k| !setting(k).is_null())
+    .map(|k| format!("{k}={}", plain(setting(k))))
+    .collect::<Vec<_>>()
+    .join("; ");
+    let cells = [
+        csv_field("prior run: the model has changed since"),
+        field(&record["model_digest"]),
+        field(&record["seed"]),
+        field(runs),
+        csv_field(&settings),
+    ]
+    .join(",");
+    // Rows end at a line break outside quotes (a quoted field may hold one).
+    let mut out = String::with_capacity(csv.len() + csv.lines().count() * (cells.len() + 1));
+    let mut quoted = false;
+    let mut header = true;
+    for c in csv.chars() {
+        match c {
+            '"' => quoted = !quoted,
+            '\n' if !quoted => {
+                out.push(',');
+                out.push_str(&if header {
+                    PRIOR_RUN_COLUMNS.join(",")
+                } else {
+                    cells.clone()
+                });
+                header = false;
+            }
+            _ => {}
+        }
+        out.push(c);
+    }
+    out
+}
+
 /// [`results`] as CSV, one row per element and metric, and per property it assigns (metric
 /// `property:<name>`), as the app's Export table (CSV) and `stochcraft-cli run --format csv` write
 /// them. Where a result's replications split into two outcomes, the last six columns give the

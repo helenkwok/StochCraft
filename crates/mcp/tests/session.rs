@@ -502,3 +502,50 @@ fn the_control_channel_takes_a_limited_number_of_clients() {
         std::thread::sleep(std::time::Duration::from_millis(20));
     }
 }
+
+#[test]
+fn a_file_read_with_errors_does_not_run_for_an_agent_unless_it_allows_it() {
+    let dir = Scratch::new("errors");
+    let text = std::fs::read_to_string(models().join("mm1.bpmn")).unwrap();
+    // A processing-time expression, which the reader cannot use: it reads as a time of zero.
+    let altered = text.replacen(
+        "<bpsim:NegativeExponentialDistribution mean=\"1\"/>",
+        "<bpsim:ExpressionParameter value=\"1 + 9\"/>",
+        1,
+    );
+    assert_ne!(text, altered, "the fixture changed");
+    let file = dir.0.join("expression.bpmn");
+    std::fs::write(&file, altered).unwrap();
+
+    let mut s = Session::new(Box::new(Headless::default()));
+    let opened = s.ok("open", json!({"path": file.to_string_lossy()}));
+    assert!(
+        opened["notes"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .any(|n| n["severity"] == "error"),
+        "{opened}"
+    );
+    let (refused, error) = s.call("run", json!({"replications": 2}));
+    assert!(error, "{refused}");
+    assert_eq!(refused["code"], "invalid_model", "{refused}");
+    assert!(
+        refused["message"]
+            .as_str()
+            .unwrap()
+            .contains("allow_approximations")
+    );
+    let allowed = s.ok(
+        "execute",
+        json!({"command": "run", "params": {"replications": 2, "allow_approximations": true}}),
+    );
+    assert!(
+        !allowed["record"]["approximations"]
+            .as_array()
+            .unwrap()
+            .is_empty(),
+        "{}",
+        allowed["record"]
+    );
+}

@@ -598,11 +598,19 @@ standards that process-modelling tools share.
   [System dynamics models](#system-dynamics-models).
 - If a file you opened holds things StochCraft does not understand, saving asks before writing a
   new BPMN file, which leaves them out.
+- If StochCraft could not read part of a file (an expression it cannot evaluate, a value out of
+  range), **Run** and the other commands that run the model refuse with the first such error, so
+  results are never of a model that is not the file's: correct that block and save, and it runs. The
+  command line (`run --allow-approximations`) and scripts can run the stand-in model deliberately.
 - **Unsaved changes are kept** (process models). If StochCraft closes with unsaved changes, it
   offers to **Recover** them the next time it starts.
 - **Export results:** on the **Results** tab, **Export table (CSV)** and **Export charts (PNG)**
   (in the browser: **Download**). The CSV has one row per block and metric, with the mean, the
-  half-width of its confidence interval, the standard deviation and the number of runs.
+  half-width of its confidence interval, the standard deviation and the number of runs. After you
+  change the model, the results on show say "out of date" and the file is named
+  `…-results-prior-run.csv`, with five more columns on every row (`run_status`,
+  `run_model_digest`, `run_seed`, `run_runs`, `run_settings`) that say it is a run of a model that
+  has since changed, and which one; run again for a table of the model as it is.
   **Export charts (PNG)** needs every chart on screen: in a window too short for them, the status
   bar says to make the window taller, and nothing is exported.
 

@@ -316,6 +316,16 @@ impl Target {
         }
     }
 
+    /// Whether any replication of `s` has a value for the target's element and metric.
+    fn reported(&self, s: &ExperimentSummary) -> Result<bool, CommandError> {
+        let m = metric(&self.metric)?;
+        Ok(s.elements
+            .iter()
+            .find(|e| e.id.as_str() == self.element)
+            .and_then(|e| e.samples(m))
+            .is_some_and(|v| !v.is_empty()))
+    }
+
     /// How many replications of `s` met the target, out of how many.
     fn met(&self, s: &ExperimentSummary) -> Result<Proportion, CommandError> {
         let meets = self.meets()?;
@@ -348,6 +358,10 @@ pub struct SweepParams {
     pub replications: Option<u32>,
     #[serde(default)]
     pub seed: Option<u64>,
+    /// Run although the file had errors StochCraft could not read, with what it substituted
+    /// for each (as for `run`); the answer then lists them (`approximations`).
+    #[serde(default)]
+    pub allow_approximations: bool,
 }
 
 #[derive(Debug, Deserialize, JsonSchema)]
@@ -363,6 +377,10 @@ pub struct SensitivityParams {
     pub replications: Option<u32>,
     #[serde(default)]
     pub seed: Option<u64>,
+    /// Run although the file had errors StochCraft could not read, with what it substituted
+    /// for each (as for `run`); the answer then lists them (`approximations`).
+    #[serde(default)]
+    pub allow_approximations: bool,
 }
 
 pub(crate) fn reps_seed(model: &Model, replications: Option<u32>, seed: Option<u64>) -> (u64, u64) {
@@ -543,9 +561,18 @@ pub struct SizeParams {
     pub replications: Option<u32>,
     #[serde(default)]
     pub seed: Option<u64>,
-    /// Make the stochastic answer the model's (one undoable edit).
+    /// Make the stochastic answer the model's (one undoable edit), if it reached the target
+    /// share. An answer that did not (the search ran out of units to add) is not applied unless
+    /// `apply_unreached` says to: it is the last size tried, not one that meets the target.
     #[serde(default)]
     pub apply: bool,
+    /// With `apply`, make the answer the model's even if it did not reach the target share.
+    #[serde(default)]
+    pub apply_unreached: bool,
+    /// Run although the file had errors StochCraft could not read, with what it substituted
+    /// for each (as for `run`); the answer then lists them (`approximations`).
+    #[serde(default)]
+    pub allow_approximations: bool,
 }
 
 /// What can grow: a task's or a pool's units.
@@ -653,12 +680,16 @@ struct Sized {
     reached: bool,
 }
 
+/// `check_target`: refuse, at the first run, a target that no replication reports (a metric
+/// that does not apply to the element, or an element nothing reached): every size would then
+/// "fail" it and the search would only run out of units.
 fn grow(
     model: &Model,
     p: &SizeParams,
     resources: &[Param],
     reps: u64,
     seed: u64,
+    check_target: bool,
 ) -> Result<Sized, CommandError> {
     let mut m = model.clone();
     let mut steps = Vec::new();
@@ -666,6 +697,12 @@ fn grow(
     let mut added = 0;
     loop {
         let (s, warnings) = run(&m, reps, seed)?;
+        if check_target && added == 0 && !p.target.reported(&s)? {
+            return Err(invalid(format!(
+                "no replication reports `{}` for `{}` at the starting size, so sizing cannot tell whether the target is met: that metric does not apply to this kind of element, or nothing reached it. Choose another element or metric",
+                p.target.metric, p.target.element
+            )));
+        }
         let met = p.target.met(&s)?;
         let probability = met.estimate().unwrap_or(0.0);
         // The busiest of the resources that may grow.
@@ -730,6 +767,13 @@ pub fn size(model: &Model, p: &SizeParams) -> Result<(Value, Model), CommandErro
     }
     drop(p.target.meets()?);
     metric(&p.target.metric)?;
+    let target_id = ElementId::unchecked(&p.target.element);
+    if model.element(&target_id).is_none() && pool(model, &target_id).is_err() {
+        return Err(not_found(format!(
+            "the target names `{}`, which is neither an element nor a pool of the model",
+            p.target.element
+        )));
+    }
     let resources = candidates(model, p.resources.as_deref())?;
     if resources.is_empty() {
         return Err(invalid(
@@ -737,9 +781,9 @@ pub fn size(model: &Model, p: &SizeParams) -> Result<(Value, Model), CommandErro
         ));
     }
     let (reps, seed) = reps_seed(model, p.replications, p.seed);
-    let stochastic = grow(model, p, &resources, reps, seed)?;
+    let stochastic = grow(model, p, &resources, reps, seed, true)?;
     // One replication is the whole story when nothing is random.
-    let fixed = grow(&deterministic(model), p, &resources, 1, seed)?;
+    let fixed = grow(&deterministic(model), p, &resources, 1, seed, false)?;
     let units = |m: &Model| -> serde_json::Map<String, Value> {
         resources
             .iter()
@@ -765,7 +809,7 @@ pub fn size(model: &Model, p: &SizeParams) -> Result<(Value, Model), CommandErro
             "reached": fixed.reached,
             "steps": fixed.steps,
         },
-        "method": "run, add a unit to the busiest resource that may grow (highest utilisation), run again, until the share of replications meeting the target reaches the target share (`confidence` in earlier answers: a share of the replications run, not a statistical confidence); deterministic: the same with every time distribution replaced by its mean and one replication, while property values, routing probabilities, balking, scrap and mixes of text values are still drawn; the interval is Wilson's at 95% for the share meeting the target, and when its lower end is below the target share, the share is not shown to be met with 95% confidence",
+        "method": "a greedy heuristic, not an optimisation: run, add a unit to the busiest resource that may grow (highest utilisation), run again, until the share of replications meeting the target reaches the target share (`confidence` in earlier answers: a share of the replications run, not a statistical confidence); deterministic: the same with every time distribution replaced by its mean and one replication, while property values, routing probabilities, balking, scrap and mixes of text values are still drawn; the interval is Wilson's at 95% for the share meeting the target, and when its lower end is below the target share, the share is not shown to be met with 95% confidence; the search may not find the fewest units that meet the target, and the share and its interval come from the same replications that guided the search, so check the sizes it chose with a run on another seed",
     });
     Ok((answer, stochastic.model))
 }

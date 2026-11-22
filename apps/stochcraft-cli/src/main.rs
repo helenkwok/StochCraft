@@ -153,9 +153,17 @@ enum Command {
         sampling: Option<SamplingChoice>,
         #[arg(long, value_enum, default_value_t = Format::Table)]
         format: Format,
-        /// Write the results to this file instead of the terminal.
+        /// Write the results to this file instead of the terminal. Not the model file or its
+        /// scenario's file: the output replaces whatever is there.
         #[arg(long, short)]
         out: Option<PathBuf>,
+        /// Run a process model although StochCraft could not read parts of its file (see
+        /// `validate`): each such part is replaced by a stand-in (a processing-time expression
+        /// by a time of zero, say), so the results are of an approximation of the model. The
+        /// stand-ins are listed on stderr and in the run record. Without this, the run is
+        /// refused.
+        #[arg(long)]
+        allow_approximations: bool,
     },
     /// Run a designed experiment with several factors at once (the engine's
     /// `experiment.design`): every combination of the factors' levels, or a Latin hypercube of
@@ -186,9 +194,13 @@ enum Command {
         seed: Option<u64>,
         #[arg(long, value_enum, default_value_t = Format::Table)]
         format: Format,
-        /// Write the output to this file instead of the terminal.
+        /// Write the output to this file instead of the terminal. Not the model file.
         #[arg(long, short)]
         out: Option<PathBuf>,
+        /// Run although StochCraft could not read parts of the file, with stand-ins for them
+        /// (as for `run`).
+        #[arg(long)]
+        allow_approximations: bool,
     },
     /// A Monte Carlo model's input table as CSV (`name,distribution,parameters,unit`): printed,
     /// or with `--import`, read from a CSV file into the model, which is saved.
@@ -370,9 +382,45 @@ fn open(engine: &mut Engine, file: &Path, scenario: Option<&str>) -> Result<Valu
     Ok(engine.execute("file.open", params)?)
 }
 
+/// Whether two paths are the same file (both exist, and are one after resolving links).
+fn same_file(a: &Path, b: &Path) -> bool {
+    matches!((std::fs::canonicalize(a), std::fs::canonicalize(b)), (Ok(x), Ok(y)) if x == y)
+}
+
+/// Refuses an output file that is one of the files the command reads: it would replace its own
+/// input, and a command that fails part-way would leave the input gone.
+fn refuse_overwriting_input(out: Option<&Path>, inputs: &[&Path]) -> Result<(), Failure> {
+    match out.and_then(|o| inputs.iter().find(|i| same_file(o, i))) {
+        Some(i) => Err(Failure(format!(
+            "the output file is the input {}: give another path for the output",
+            i.display()
+        ))),
+        None => Ok(()),
+    }
+}
+
+/// Says on stderr what a run that was allowed to went ahead with: each error in the file and
+/// the stand-in the model has instead, so results are not mistaken for the file's own model.
+fn report_approximations(approximations: &Value) {
+    let Some(list) = approximations.as_array().filter(|l| !l.is_empty()) else {
+        return;
+    };
+    eprintln!(
+        "warning: this run is of an approximation of the model: StochCraft could not read {} part{} of the file and used a stand-in",
+        list.len(),
+        if list.len() == 1 { "" } else { "s" }
+    );
+    for a in list {
+        let at = a["at"]
+            .as_str()
+            .map_or_else(String::new, |at| format!(" at `{at}`"));
+        eprintln!("  error{at}: {}", a["message"].as_str().unwrap_or(""));
+    }
+}
+
 fn emit(text: &str, out: Option<&Path>) -> Result<(), Failure> {
     match out {
-        Some(p) => std::fs::write(p, text)
+        Some(p) => stochcraft_engine::write_atomically(p, text.as_bytes())
             .map_err(|e| Failure(format!("cannot write {}: {e}", p.display()))),
         None => {
             print!("{text}");
@@ -755,7 +803,9 @@ fn run(
     sampling: Option<SamplingChoice>,
     format: Format,
     out: Option<&Path>,
+    allow_approximations: bool,
 ) -> Result<u8, Failure> {
+    refuse_overwriting_input(out, &[file])?;
     let mut engine = Engine::new();
     let opened = open(&mut engine, file, scenario)?;
     if opened["kind"] == "system_dynamics" {
@@ -833,7 +883,11 @@ fn run(
     if let Some(q) = until.param(&engine) {
         params["sequential"] = q;
     }
+    if allow_approximations {
+        params["allow_approximations"] = json!(true);
+    }
     let results = engine.execute("run", params)?;
+    report_approximations(&results["record"]["approximations"]);
     let text = match format {
         Format::Json => format!(
             "{}\n",
@@ -1063,9 +1117,11 @@ struct DesignArgs<'a> {
     seed: Option<u64>,
     format: Format,
     out: Option<&'a Path>,
+    allow_approximations: bool,
 }
 
 fn design(a: &DesignArgs) -> Result<u8, Failure> {
+    refuse_overwriting_input(a.out, &[a.file])?;
     let mut engine = Engine::new();
     open(&mut engine, a.file, a.scenario)?;
     let mut params = json!({
@@ -1085,7 +1141,11 @@ fn design(a: &DesignArgs) -> Result<u8, Failure> {
     if let Some(s) = a.seed {
         params["seed"] = json!(s);
     }
+    if a.allow_approximations {
+        params["allow_approximations"] = json!(true);
+    }
     let answer = engine.execute("experiment.design", params)?;
+    report_approximations(&answer["approximations"]);
     let text = match a.format {
         Format::Json => format!(
             "{}\n",
@@ -1111,6 +1171,10 @@ fn exec(
     all: bool,
     force: bool,
 ) -> Result<u8, Failure> {
+    // A journal written over the script or the model it replays would replace it, and a script
+    // that failed part-way would leave only the journal of how far it got.
+    let inputs: Vec<&Path> = std::iter::once(script).chain(open_file).collect();
+    refuse_overwriting_input(journal_out, &inputs)?;
     let text = std::fs::read_to_string(script)
         .map_err(|e| Failure(format!("cannot read {}: {e}", script.display())))?;
     let not_a_script = |e: serde_json::Error| {
@@ -1148,8 +1212,12 @@ fn exec(
     let ran = exec_steps(&mut engine, &script, all, force);
     // The journal of what was done is written even when a step failed: it says how far it got.
     let written = journal_out.map(|out| {
+        // The script may have opened or saved another file than the one it was given: not that
+        // one either.
+        let opened: Vec<&Path> = engine.path().map(Path::new).into_iter().collect();
+        refuse_overwriting_input(Some(out), &opened)?;
         let text = serde_json::to_string_pretty(&engine.journal_document()).unwrap_or_default();
-        std::fs::write(out, text + "\n")
+        stochcraft_engine::write_atomically(out, (text + "\n").as_bytes())
             .map_err(|e| Failure(format!("cannot write {}: {e}", out.display())))
     });
     let code = ran?;
@@ -1281,6 +1349,7 @@ fn main() -> ExitCode {
             sampling,
             format,
             out,
+            allow_approximations,
         } => run(
             &file,
             scenario.as_deref(),
@@ -1306,6 +1375,7 @@ fn main() -> ExitCode {
             sampling,
             format,
             out.as_deref(),
+            allow_approximations,
         ),
         Command::Design {
             file,
@@ -1318,6 +1388,7 @@ fn main() -> ExitCode {
             seed,
             format,
             out,
+            allow_approximations,
         } => design(&DesignArgs {
             file: &file,
             factors: &factor,
@@ -1329,6 +1400,7 @@ fn main() -> ExitCode {
             seed,
             format,
             out: out.as_deref(),
+            allow_approximations,
         }),
         Command::Inputs {
             file,

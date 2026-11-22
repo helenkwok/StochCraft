@@ -1071,3 +1071,134 @@ fn a_system_dynamics_model_runs_from_the_command_line() {
     );
     assert!(!cli(&["run", &m, "--dt", "0"]).status.success());
 }
+
+/// The M/M/1 model with its service time replaced by a processing-time expression, which the
+/// reader cannot use (it reads as a time of zero and notes an error), written to a scratch file.
+fn expression_model(name: &str) -> String {
+    let text = std::fs::read_to_string(model("mm1.bpmn")).unwrap_or_default();
+    let altered = text.replacen(
+        "<bpsim:NegativeExponentialDistribution mean=\"1\"/>",
+        "<bpsim:ExpressionParameter value=\"1 + 9\"/>",
+        1,
+    );
+    assert_ne!(text, altered, "the mm1 fixture changed");
+    let path = scratch(name);
+    let _ = std::fs::write(&path, altered);
+    path.to_string_lossy().into_owned()
+}
+
+#[test]
+fn a_model_read_with_errors_does_not_run_in_any_format() {
+    let file = expression_model("expression.bpmn");
+    for format in ["table", "json", "csv"] {
+        let o = cli(&["run", &file, "--reps", "1", "--format", format]);
+        assert_eq!(o.status.code(), Some(1), "{format}: {}", stdout(&o));
+        assert!(stdout(&o).is_empty(), "{format}: {}", stdout(&o));
+        assert!(
+            stderr(&o).contains("--allow-approximations"),
+            "{format}: {}",
+            stderr(&o)
+        );
+        assert!(stderr(&o).contains("serve"), "{format}: {}", stderr(&o));
+    }
+    let o = cli(&[
+        "run",
+        &file,
+        "--reps",
+        "1",
+        "--format",
+        "csv",
+        "--out",
+        &scratch("refused.csv").to_string_lossy(),
+    ]);
+    assert_eq!(o.status.code(), Some(1));
+}
+
+#[test]
+fn allowing_approximations_runs_and_says_what_was_substituted() {
+    let file = expression_model("expression-allowed.bpmn");
+    let o = cli(&[
+        "run",
+        &file,
+        "--reps",
+        "1",
+        "--format",
+        "json",
+        "--allow-approximations",
+    ]);
+    assert!(o.status.success(), "{}", stderr(&o));
+    assert!(stderr(&o).contains("approximation"), "{}", stderr(&o));
+    assert!(stderr(&o).contains("`serve`"), "{}", stderr(&o));
+    let r = json(&stdout(&o));
+    let list = r["record"]["approximations"].as_array().cloned();
+    assert!(!list.unwrap_or_default().is_empty(), "{}", r["record"]);
+}
+
+#[test]
+fn a_model_read_cleanly_runs_without_the_flag_and_says_nothing_on_stderr() {
+    let o = cli(&["run", &model("mm1.bpmn"), "--reps", "1", "--format", "csv"]);
+    assert!(o.status.success(), "{}", stderr(&o));
+    assert!(stderr(&o).is_empty(), "{}", stderr(&o));
+}
+
+#[test]
+fn output_is_never_the_model_it_was_made_from() {
+    let copy = scratch("alias.bpmn");
+    let _ = std::fs::copy(model("mm1.bpmn"), &copy);
+    let before = std::fs::read(&copy).unwrap_or_default();
+    let path = copy.to_string_lossy().into_owned();
+    let o = cli(&[
+        "run", &path, "--reps", "1", "--format", "csv", "--out", &path,
+    ]);
+    assert_eq!(o.status.code(), Some(1), "{}", stdout(&o));
+    assert!(
+        stderr(&o).contains("the output file is the input"),
+        "{}",
+        stderr(&o)
+    );
+    assert_eq!(std::fs::read(&copy).unwrap_or_default(), before);
+}
+
+#[test]
+fn a_journal_is_never_written_over_the_model_or_the_script() {
+    let copy = scratch("alias-journal.bpmn");
+    let _ = std::fs::copy(model("mm1.bpmn"), &copy);
+    let before = std::fs::read(&copy).unwrap_or_default();
+    let path = copy.to_string_lossy().into_owned();
+    // A script whose second step fails, so the journal would be written after a failure.
+    let script = scratch("alias-journal.json");
+    let text =
+        r#"[{"command": "history", "params": {}}, {"command": "no.such.command", "params": {}}]"#;
+    let _ = std::fs::write(&script, text);
+    let script_path = script.to_string_lossy().into_owned();
+
+    let o = cli(&["exec", &script_path, "--open", &path, "--journal", &path]);
+    assert_eq!(o.status.code(), Some(1));
+    assert!(
+        stderr(&o).contains("the output file is the input"),
+        "{}",
+        stderr(&o)
+    );
+    assert_eq!(
+        std::fs::read(&copy).unwrap_or_default(),
+        before,
+        "the model was replaced"
+    );
+
+    let o = cli(&["exec", &script_path, "--journal", &script_path]);
+    assert_eq!(o.status.code(), Some(1));
+    assert_eq!(std::fs::read_to_string(&script).unwrap_or_default(), text);
+
+    // Another path is fine, and gets the journal of how far the script got.
+    let journal = scratch("alias-journal-out.json");
+    let o = cli(&[
+        "exec",
+        &script_path,
+        "--open",
+        &path,
+        "--journal",
+        &journal.to_string_lossy(),
+    ]);
+    assert_eq!(o.status.code(), Some(1));
+    assert!(json(&std::fs::read_to_string(&journal).unwrap_or_default())["entries"].is_array());
+}

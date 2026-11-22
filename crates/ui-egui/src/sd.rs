@@ -795,14 +795,25 @@ impl App {
     }
 
     /// The table on show as CSV (the variables picked, as `stochcraft-cli run --format csv`
-    /// writes them), for the Export table button.
-    pub(crate) fn sd_table_csv(&self) -> Option<String> {
+    /// writes them), for the Export table button, and whether it is of a run the model has changed
+    /// since: the table then carries the label of a prior run on every row (see
+    /// [`stochcraft_engine::wire::label_prior_run`]).
+    pub(crate) fn sd_table_csv(&self) -> Option<(String, bool)> {
         let mut results = Value::clone(self.sd.results.as_deref()?);
         let names = shown_names(self.sd.chosen.as_ref(), &results);
         if let Some(vars) = results["variables"].as_array_mut() {
             vars.retain(|v| v["name"].as_str().is_some_and(|n| names.contains(n)));
         }
-        Some(stochcraft_engine::sd::results_csv(&results))
+        let text = stochcraft_engine::sd::results_csv(&results);
+        let stale = self.sd_results_stale() && !self.sd_pending();
+        Some(if stale {
+            (
+                stochcraft_engine::wire::label_prior_run(&text, &results),
+                true,
+            )
+        } else {
+            (text, false)
+        })
     }
 
     /// The left rail of a system dynamics model: its name, and its variables with their kinds.
