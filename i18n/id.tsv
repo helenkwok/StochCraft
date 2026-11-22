@@ -1420,3 +1420,8 @@ unit	yr	thn
 	The estimated chance that {output} is more than {value} is {percent}.	Perkiraan peluang {output} lebih dari {value} adalah {percent}.
 	The estimated chance that {output} is less than {value} is {percent}.	Perkiraan peluang {output} kurang dari {value} adalah {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	Interval mereka tidak punya lebar, hal yang tidak dimiliki perkiraan mana pun, sehingga hasil biasa tetap dipakai.
+	Inconclusive at current precision	Belum meyakinkan pada presisi saat ini
+	No difference detected	Tidak ada perbedaan terdeteksi
+	Agrees within ±{tolerance}	Sesuai dalam ±{tolerance}
+	This is not evidence of agreement: set a tolerance to test for it.	Ini bukan bukti kesesuaian: tetapkan toleransi untuk mengujinya.
+	Tolerance (0 for none)	Toleransi (0 untuk tanpa)

@@ -166,7 +166,8 @@ pub const SEQUENTIAL: &str = "stochcraft:sequential";
 /// `stochcraft:observed` vendor extension on the scenario holding a `stochcraft:observed`
 /// element with one `stochcraft:observation` child for each result: `element` (a block or pool
 /// id) and `metric` (its name in the results), and one of `value` (the observed value, with an
-/// optional `halfWidth`, that of its own 95% interval), `atMost` and `atLeast`, in the metric's
+/// optional `halfWidth`, that of its own 95% interval, and an optional `tolerance` above 0, the
+/// difference that still counts as agreeing), `atMost` and `atLeast`, in the metric's
 /// own unit (a share as a fraction). Only elements in StochCraft's own namespace count. A
 /// scenario that inherits another has its own list or none: the value `off`
 /// (`stochcraft:value="off"`) clears what an inherited scenario sets.
@@ -539,17 +540,29 @@ fn observation_number(o: &Element, name: &str) -> Result<Option<f64>, String> {
 }
 
 /// What an observation is checked against: exactly one of `value` (with an optional `halfWidth`
-/// of at least 0), `atMost` and `atLeast`; or why it cannot be read.
+/// of at least 0 and an optional `tolerance` above 0), `atMost` and `atLeast`; or why it cannot
+/// be read.
 fn read_observed_target(o: &Element) -> Result<Observed, String> {
     let value = observation_number(o, "value")?;
     let at_most = observation_number(o, "atMost")?;
     let at_least = observation_number(o, "atLeast")?;
     let half_width = observation_number(o, "halfWidth")?;
+    let tolerance = observation_number(o, "tolerance")?;
     if half_width.is_some_and(|h| h < 0.0) {
         return Err("has a `halfWidth` below 0".to_owned());
     }
+    if tolerance.is_some_and(|t| t <= 0.0) {
+        return Err("has a `tolerance` that is not above 0".to_owned());
+    }
     match (value, at_most, at_least) {
-        (Some(value), None, None) => Ok(Observed::Value { value, half_width }),
+        (Some(value), None, None) => Ok(Observed::Value {
+            value,
+            half_width,
+            tolerance,
+        }),
+        (None, Some(_) | None, Some(_) | None) if tolerance.is_some() => {
+            Err("has a `tolerance` without a `value`".to_owned())
+        }
         (None, Some(x), None) => Ok(Observed::AtMost(x)),
         (None, None, Some(x)) => Ok(Observed::AtLeast(x)),
         _ => Err("needs exactly one of `value`, `atMost` and `atLeast`".to_owned()),

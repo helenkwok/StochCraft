@@ -1420,3 +1420,8 @@ unit	yr	έτ
 	The estimated chance that {output} is more than {value} is {percent}.	Η εκτιμώμενη πιθανότητα το {output} να είναι μεγαλύτερο από {value} είναι {percent}.
 	The estimated chance that {output} is less than {value} is {percent}.	Η εκτιμώμενη πιθανότητα το {output} να είναι μικρότερο από {value} είναι {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	Το διάστημά τους δεν έχει πλάτος, κάτι που καμία εκτίμηση δεν έχει, οπότε μένει το απλό αποτέλεσμα.
+	Inconclusive at current precision	Μη οριστικό στην τρέχουσα ακρίβεια
+	No difference detected	Δεν εντοπίστηκε διαφορά
+	Agrees within ±{tolerance}	Συμφωνεί εντός ±{tolerance}
+	This is not evidence of agreement: set a tolerance to test for it.	Αυτό δεν αποτελεί απόδειξη συμφωνίας: ορίστε ανοχή για να τη ελέγξετε.
+	Tolerance (0 for none)	Ανοχή (0 για καμία)

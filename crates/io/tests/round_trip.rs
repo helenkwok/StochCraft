@@ -2366,6 +2366,7 @@ fn observed() -> Vec<stochcraft_model::Observation> {
             Observed::Value {
                 value: 3.2,
                 half_width: Some(0.4),
+                tolerance: None,
             },
         ),
         of(
@@ -2373,6 +2374,7 @@ fn observed() -> Vec<stochcraft_model::Observation> {
             Observed::Value {
                 value: 2.0,
                 half_width: None,
+                tolerance: None,
             },
         ),
         of("utilisation", Observed::AtMost(0.85)),
@@ -2410,6 +2412,7 @@ fn observed_data_are_written_saved_and_removed() {
     edited.experiment.observed[0].target = stochcraft_model::Observed::Value {
         value: 3.25,
         half_width: None,
+        tolerance: None,
     };
     edited
         .experiment
@@ -2538,6 +2541,63 @@ fn bad_observations_are_noted() {
         unreachable!()
     };
     assert!(loaded.model.experiment.observed.is_empty());
+}
+
+/// An observed value's tolerance is written and read back; one that is not above 0 or not a
+/// number, or on a bound, is noted and the observation left out.
+#[test]
+fn an_observed_values_tolerance_round_trips_and_a_bad_one_is_noted() {
+    use stochcraft_model::{ElementId, Observation, Observed};
+    let mut model = showcase();
+    model.experiment.observed = vec![Observation {
+        element: ElementId::unchecked("cut"),
+        metric: "mean_wait".to_owned(),
+        target: Observed::Value {
+            value: 3.2,
+            half_width: Some(0.4),
+            tolerance: Some(0.5),
+        },
+    }];
+    let bytes = write_new(&model);
+    let text = String::from_utf8_lossy(&bytes).into_owned();
+    let written = r#"value="3.2" halfWidth="0.4" tolerance="0.5"/>"#;
+    assert!(text.contains(written), "{text}");
+    let Ok(loaded) = read(&bytes) else {
+        unreachable!()
+    };
+    assert_eq!(loaded.model, laid_out(model));
+    for (bad, expected) in [
+        (r#"tolerance="0""#, "`tolerance` that is not above 0"),
+        (r#"tolerance="-1""#, "`tolerance` that is not above 0"),
+        (r#"tolerance="x""#, "`tolerance` `x` that is not a number"),
+    ] {
+        let changed = text.replace(r#"tolerance="0.5""#, bad);
+        let Ok(loaded) = read(changed.as_bytes()) else {
+            unreachable!()
+        };
+        assert!(loaded.model.experiment.observed.is_empty(), "{bad}");
+        assert!(
+            loaded.notes.iter().any(|n| n.message.contains(expected)),
+            "{bad}: {:?}",
+            loaded.notes
+        );
+    }
+    let on_a_bound = text.replace(
+        r#"value="3.2" halfWidth="0.4" tolerance="0.5""#,
+        r#"atMost="3.2" tolerance="0.5""#,
+    );
+    let Ok(loaded) = read(on_a_bound.as_bytes()) else {
+        unreachable!()
+    };
+    assert!(loaded.model.experiment.observed.is_empty());
+    assert!(
+        loaded
+            .notes
+            .iter()
+            .any(|n| n.message.contains("`tolerance` without a `value`")),
+        "{:?}",
+        loaded.notes
+    );
 }
 
 /// Settings that cannot be read are noted and their defaults used; `off` turns them off.

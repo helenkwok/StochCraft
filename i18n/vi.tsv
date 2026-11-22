@@ -1420,3 +1420,8 @@ unit	yr	năm
 	The estimated chance that {output} is more than {value} is {percent}.	Xác suất ước tính để {output} lớn hơn {value} là {percent}.
 	The estimated chance that {output} is less than {value} is {percent}.	Xác suất ước tính để {output} nhỏ hơn {value} là {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	Khoảng của chúng không có độ rộng, điều mà ước lượng nào cũng không có, nên kết quả thường được giữ nguyên.
+	Inconclusive at current precision	Chưa kết luận được ở độ chính xác hiện tại
+	No difference detected	Không phát hiện khác biệt
+	Agrees within ±{tolerance}	Khớp trong phạm vi ±{tolerance}
+	This is not evidence of agreement: set a tolerance to test for it.	Đây không phải bằng chứng về sự khớp: hãy đặt dung sai để kiểm tra.
+	Tolerance (0 for none)	Dung sai (0 nếu không có)

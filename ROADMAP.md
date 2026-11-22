@@ -1341,18 +1341,25 @@ ch. 10 §10.4, in Brailsford, Churilov and Dangerfield, eds., 2014). Related and
   - **Done (#226):** **observed data.** An experiment carries real measurements for results the
     run reports, at most one for each result (a block's or pool's metric, by the names the results
     use, in the metric's own unit, a share as a fraction): an observed value, with the half-width
-    of its own 95% interval where its data give one, or a bound, at most or at least (Law,
+    of its own 95% interval where its data give one, and a tolerance, or a bound, at most or at least (Law,
     *Simulation Modeling and Analysis*, 5th ed., section 5.6.2; Sargent 2013). The results check
     each and say so in words (`observed` in the results, "Checked against observed data" in the
     window and `run`'s table, a finding first for each that differs or fails):
-    - An observed value **agrees** when the 95% interval of (simulated mean − observed) holds 0,
-      and **differs** when it does not. Its half-width combines the simulated mean's `hs` and the
-      observed value's `ho` as `sqrt(hs² + ho²)` (the usual large-sample approximation for two
-      independent estimates, without Welch's degrees of freedom); with no `ho` it is `hs`.
+    - An observed value has an optional **tolerance** (above 0, the difference the modeller
+      accepts, set in advance). Its difference interval is (simulated mean − observed) ±
+      `hypot(hs, ho)` for the simulated half-width `hs` and the observed `ho` (the usual
+      large-sample approximation, without Welch's degrees of freedom; `ho` counts as 0 where not
+      given). Without a tolerance it **differs** when the 95% interval excludes 0 and otherwise
+      is **no difference detected**, never agreement: a wide interval holds 0 whatever the truth
+      (Sargent 2013). With a tolerance t it is an equivalence test: **agrees** when the whole
+      interval is inside [−t, +t], **differs** when wholly outside, else **inconclusive**; the
+      95% interval is conservative against the 90% interval of two one-sided tests (Schuirmann).
     - A bound **passes** when the whole simulated 95% interval meets it (the edge itself meets
-      it), **fails** when the whole interval violates it, and otherwise is **not yet decided**:
+      it), **fails** when the whole interval violates it, and otherwise is **inconclusive**:
       more replications would decide, never the mean alone. Fewer than 2 replications give no
-      interval, so nothing is decided; a result the run does not report is `no_result`.
+      interval, so every check is inconclusive; a result the run does not report is `no_result`.
+      Results are listed with those that differ or fail first, then those inconclusive or with
+      no difference detected, then those that agree or pass.
     - Saved with the experiment in the file as the `stochcraft:observed` extension on the
       scenario (written only when there are observations; elements outside StochCraft's
       namespace are ignored; `off` clears what an inherited scenario sets; declared in

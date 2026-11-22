@@ -1420,3 +1420,8 @@ unit	yr	år
 	The estimated chance that {output} is more than {value} is {percent}.	Den anslåtte sannsynligheten for at {output} er over {value}, er {percent}.
 	The estimated chance that {output} is less than {value} is {percent}.	Den anslåtte sannsynligheten for at {output} er under {value}, er {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	Intervallet deres har ingen bredde, noe ingen anslag har, så det vanlige resultatet står.
+	Inconclusive at current precision	Ikke avgjørende ved dagens presisjon
+	No difference detected	Ingen forskjell påvist
+	Agrees within ±{tolerance}	Stemmer innenfor ±{tolerance}
+	This is not evidence of agreement: set a tolerance to test for it.	Dette er ikke bevis for samsvar: angi en toleranse for å teste det.
+	Tolerance (0 for none)	Toleranse (0 for ingen)

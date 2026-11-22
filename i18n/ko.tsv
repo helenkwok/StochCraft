@@ -1420,3 +1420,8 @@ unit	yr	년
 	The estimated chance that {output} is more than {value} is {percent}.	{output}이(가) {value}보다 클 확률의 추정값은 {percent}입니다.
 	The estimated chance that {output} is less than {value} is {percent}.	{output}이(가) {value}보다 작을 확률의 추정값은 {percent}입니다.
 	Their interval has no width, which no estimate has, so the plain result stands.	구간의 폭이 없는데, 어떤 추정치에도 그런 일은 없으므로 기존 결과를 그대로 씁니다.
+	Inconclusive at current precision	현재 정밀도로는 판단 불가
+	No difference detected	차이가 검출되지 않음
+	Agrees within ±{tolerance}	±{tolerance} 이내에서 일치
+	This is not evidence of agreement: set a tolerance to test for it.	이것은 일치의 증거가 아닙니다. 확인하려면 허용 오차를 설정하세요.
+	Tolerance (0 for none)	허용 오차(없으면 0)

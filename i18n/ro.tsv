@@ -1420,3 +1420,8 @@ unit	yr	a
 	The estimated chance that {output} is more than {value} is {percent}.	Probabilitatea estimată ca {output} să fie mai mare decât {value} este {percent}.
 	The estimated chance that {output} is less than {value} is {percent}.	Probabilitatea estimată ca {output} să fie mai mică decât {value} este {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	Intervalul lor nu are lățime, ceea ce nicio estimare nu are, așa că rămâne rezultatul simplu.
+	Inconclusive at current precision	Neconcludent la precizia actuală
+	No difference detected	Nicio diferență detectată
+	Agrees within ±{tolerance}	Concordă în limita ±{tolerance}
+	This is not evidence of agreement: set a tolerance to test for it.	Aceasta nu este o dovadă de concordanță: stabilește o toleranță pentru a o testa.
+	Tolerance (0 for none)	Toleranță (0 pentru niciuna)

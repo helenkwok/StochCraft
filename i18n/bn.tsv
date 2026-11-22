@@ -1420,3 +1420,8 @@ unit	yr	বছর
 	The estimated chance that {output} is more than {value} is {percent}.	{output} {value}-এর বেশি হওয়ার আনুমানিক সম্ভাবনা {percent}।
 	The estimated chance that {output} is less than {value} is {percent}.	{output} {value}-এর কম হওয়ার আনুমানিক সম্ভাবনা {percent}।
 	Their interval has no width, which no estimate has, so the plain result stands.	এদের ব্যবধানের কোনো প্রস্থ নেই, যা কোনো আনুমানিক মানের থাকে না, তাই সাধারণ ফলাফলই থাকছে।
+	Inconclusive at current precision	বর্তমান নির্ভুলতায় অনির্ণায়ক
+	No difference detected	কোনো পার্থক্য পাওয়া যায়নি
+	Agrees within ±{tolerance}	±{tolerance}-এর মধ্যে মিলে যায়
+	This is not evidence of agreement: set a tolerance to test for it.	এটি মিলের প্রমাণ নয়: যাচাই করতে একটি সহনসীমা দিন।
+	Tolerance (0 for none)	সহনসীমা (না চাইলে 0)

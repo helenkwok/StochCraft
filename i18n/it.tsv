@@ -1420,3 +1420,8 @@ unit	yr	a
 	The estimated chance that {output} is more than {value} is {percent}.	La probabilità stimata che {output} sia maggiore di {value} è {percent}.
 	The estimated chance that {output} is less than {value} is {percent}.	La probabilità stimata che {output} sia minore di {value} è {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	Il loro intervallo non ha ampiezza, cosa che nessuna stima ha, quindi resta il risultato semplice.
+	Inconclusive at current precision	Non conclusivo alla precisione attuale
+	No difference detected	Nessuna differenza rilevata
+	Agrees within ±{tolerance}	Concorda entro ±{tolerance}
+	This is not evidence of agreement: set a tolerance to test for it.	Questa non è una prova di concordanza: imposta una tolleranza per verificarla.
+	Tolerance (0 for none)	Tolleranza (0 per nessuna)

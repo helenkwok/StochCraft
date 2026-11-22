@@ -1420,3 +1420,8 @@ unit	yr	г.
 	The estimated chance that {output} is more than {value} is {percent}.	Оценочная вероятность того, что {output} больше {value}, составляет {percent}.
 	The estimated chance that {output} is less than {value} is {percent}.	Оценочная вероятность того, что {output} меньше {value}, составляет {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	Их интервал не имеет ширины, чего не бывает у оценки, поэтому остаётся обычный результат.
+	Inconclusive at current precision	Неопределённо при текущей точности
+	No difference detected	Различие не обнаружено
+	Agrees within ±{tolerance}	Совпадает в пределах ±{tolerance}
+	This is not evidence of agreement: set a tolerance to test for it.	Это не доказательство совпадения: задайте допуск, чтобы его проверить.
+	Tolerance (0 for none)	Допуск (0 — нет)

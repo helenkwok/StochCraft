@@ -1420,3 +1420,8 @@ unit	yr	a
 	The estimated chance that {output} is more than {value} is {percent}.	Hinnanguline tõenäosus, et {output} on suurem kui {value}, on {percent}.
 	The estimated chance that {output} is less than {value} is {percent}.	Hinnanguline tõenäosus, et {output} on väiksem kui {value}, on {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	Nende vahemikul pole laiust, mida ühelgi hinnangul ei ole, seega jääb tavatulemus kehtima.
+	Inconclusive at current precision	Praeguse täpsuse juures otsustamatu
+	No difference detected	Erinevust ei tuvastatud
+	Agrees within ±{tolerance}	Langeb kokku piirides ±{tolerance}
+	This is not evidence of agreement: set a tolerance to test for it.	See ei ole tõend kokkulangevusest: määra selle kontrollimiseks tolerants.
+	Tolerance (0 for none)	Tolerants (0 = puudub)

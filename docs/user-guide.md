@@ -272,7 +272,8 @@ With nothing selected, the **Experiment** section of the inspector sets how the 
 - **Observed data:** real measurements to check the results against, from the system the model
   stands for. Choose a result under **Add an observed value** (a block or a pool, and a result
   such as **Mean wait** or **Utilisation**), then say what you know of it: an **Observed value**,
-  with the half-width of its own 95% interval if its data give one (**Its 95% half-width**), or
+  with the half-width of its own 95% interval if its data give one (**Its 95% half-width**) and
+  a **Tolerance** (the difference you accept as agreement, in the same unit; 0 for none), or
   **At most** or **At least** a bound the result must meet, such as "the mean wait is under
   2 min". Times are in the model's time unit and a share such as utilisation is a percentage.
   **Remove** takes one out. The results then say whether the run agrees: see
@@ -370,25 +371,39 @@ against observed data** section above the key measures, one line for each, and a
 the very top for each that differs or fails. Each line gives the result, what it was checked
 against, the simulated mean with its 95% half-width, and a verdict in words:
 
-- **An observed value** **agrees** when the 95% interval of the difference (simulated mean minus
-  observed value) holds 0, and **differs** when it does not. The line gives the difference with
-  its own interval. With a half-width of its own for the observed value, the difference's
-  half-width is the square root of the sum of the two half-widths squared (the usual large-sample
-  approximation for two independent estimates); without one, the observed value is taken as
-  exact and the difference's half-width is the simulated mean's.
+- **An observed value** is checked by the 95% interval of the difference (simulated mean minus
+  observed value), shown with the line. With a half-width of its own for the observed value, the
+  difference's half-width is the square root of the sum of the two half-widths squared (the usual
+  large-sample approximation for two independent estimates); without one, the observed value is
+  taken as exact and the difference's half-width is the simulated mean's. There are three
+  outcomes:
+  - **Differs:** the interval excludes 0 (with a tolerance: it lies wholly outside it). The model
+    and the real system are not the same on this result.
+  - **No difference detected:** the interval holds 0, and no tolerance is set. This is **not**
+    agreement: an interval holds 0 when the runs are too few or too noisy to tell, so a wide
+    interval around any value "agrees" with the observed one. Run more, or set a tolerance.
+  - **Agrees within ±T:** only with a **Tolerance** T, set in advance as the difference you would
+    accept, and only when the whole interval lies inside -T to +T. If it lies wholly outside, the
+    result differs; if it straddles an edge, it is **Inconclusive at current precision**. This is
+    an equivalence test, in the manner of two one-sided tests (Schuirmann); using the 95%
+    interval is conservative against the 90% interval of the exact test, so it asks for slightly
+    more runs than it needs.
 - **A bound** is decided by the whole simulated 95% interval, never by the mean alone. It
   **passes** when the whole interval meets the bound, **fails** when the whole interval violates
-  it, and otherwise says **Can't tell yet: more runs would decide**, because the interval
-  straddles the bound; more runs narrow the interval. A mean just under "at most 2" with an
-  interval reaching past 2 is therefore not a pass.
-- With fewer than 2 runs there is no interval, so nothing is decided.
+  it, and otherwise is **Inconclusive at current precision**, because the interval straddles the
+  bound; more runs narrow the interval. A mean just under "at most 2" with an interval reaching
+  past 2 is therefore not a pass.
+- With fewer than 2 runs there is no interval, so every check is inconclusive.
 - **No result** means the run has no such result: the block is gone, or does not report that
   result (a source has no utilisation).
 
+The lines are ordered with those that differ or fail first, then those inconclusive or with no
+difference detected, then those that agree or pass.
+
 These checks follow the black-box validation of Law (*Simulation Modeling and Analysis*, 5th ed.,
 section 5.6.2) and Sargent (2013). An agreement is not proof the model is right: it says only
-that this run, on this result, cannot be told from the real system's at the 95% level, and a
-model can agree on one result and differ on another. The observed data are part of the
+that this run's result is within the tolerance you chose of the real system's, and a model can
+agree on one result and differ on another. The observed data are part of the
 experiment, so changing them marks the results out of date; run again to check against the new
 ones. They are saved with the experiment in the file, and the command line prints the same
 section.

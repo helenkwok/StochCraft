@@ -1420,3 +1420,8 @@ unit	yr	r.
 	The estimated chance that {output} is more than {value} is {percent}.	Odhadovaná pravdepodobnosť, že {output} bude väčšie ako {value}, je {percent}.
 	The estimated chance that {output} is less than {value} is {percent}.	Odhadovaná pravdepodobnosť, že {output} bude menšie ako {value}, je {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	Ich interval nemá žiadnu šírku, čo žiadny odhad nemá, preto zostáva obyčajný výsledok.
+	Inconclusive at current precision	Nepreukazné pri súčasnej presnosti
+	No difference detected	Rozdiel sa nezistil
+	Agrees within ±{tolerance}	Zhoduje sa v rozmedzí ±{tolerance}
+	This is not evidence of agreement: set a tolerance to test for it.	To nie je dôkaz zhody: na jej overenie nastavte toleranciu.
+	Tolerance (0 for none)	Tolerancia (0 = žiadna)

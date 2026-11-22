@@ -1503,9 +1503,16 @@ pub struct Observation {
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub enum Observed {
     /// The value seen in the real system, with the half-width of its own 95% interval where its
-    /// data give one. The simulated mean agrees with it when the 95% interval of the difference
-    /// holds 0.
-    Value { value: f64, half_width: Option<f64> },
+    /// data give one, and a `tolerance` (above 0, in the metric's unit) that the modeller sets in
+    /// advance: the difference the model may have and still count as agreeing. The simulated mean
+    /// differs from it when the 95% interval of the difference excludes 0 (with a tolerance:
+    /// lies wholly outside it), agrees when the whole interval is inside the tolerance, and
+    /// otherwise no difference is detected or the check is inconclusive.
+    Value {
+        value: f64,
+        half_width: Option<f64>,
+        tolerance: Option<f64>,
+    },
     /// The result should be at most this; decided by the simulated 95% interval, not by the mean
     /// alone.
     AtMost(f64),
@@ -5292,6 +5299,7 @@ mod tests {
             target: Observed::Value {
                 value: 0.8,
                 half_width: Some(0.05),
+                tolerance: None,
             },
         }];
         assert!(

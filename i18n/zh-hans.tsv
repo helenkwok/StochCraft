@@ -1420,3 +1420,8 @@ unit	yr	年
 	The estimated chance that {output} is more than {value} is {percent}.	{output} 大于 {value} 的估计概率为 {percent}。
 	The estimated chance that {output} is less than {value} is {percent}.	{output} 小于 {value} 的估计概率为 {percent}。
 	Their interval has no width, which no estimate has, so the plain result stands.	它们的区间没有宽度，而任何估计都不会如此，因此保留普通结果。
+	Inconclusive at current precision	在当前精度下无法判定
+	No difference detected	未检测到差异
+	Agrees within ±{tolerance}	在 ±{tolerance} 内一致
+	This is not evidence of agreement: set a tolerance to test for it.	这不能证明一致：请设置容差来检验。
+	Tolerance (0 for none)	容差（无则填 0）

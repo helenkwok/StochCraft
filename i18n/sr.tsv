@@ -1420,3 +1420,8 @@ unit	yr	год.
 	The estimated chance that {output} is more than {value} is {percent}.	Процењена вероватноћа да је {output} већи од {value} износи {percent}.
 	The estimated chance that {output} is less than {value} is {percent}.	Процењена вероватноћа да је {output} мањи од {value} износи {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	Њихов интервал нема ширину, што ниједна процена нема, па остаје обичан резултат.
+	Inconclusive at current precision	Неодлучно при тренутној прецизности
+	No difference detected	Разлика није откривена
+	Agrees within ±{tolerance}	Слаже се у границама ±{tolerance}
+	This is not evidence of agreement: set a tolerance to test for it.	Ово није доказ слагања: задајте толеранцију да то проверите.
+	Tolerance (0 for none)	Толеранција (0 за ниједну)

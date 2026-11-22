@@ -462,12 +462,19 @@ pub(crate) fn observed_element(list: &[Observation]) -> Element {
             .with_attr("element", o.element.as_str())
             .with_attr("metric", &o.metric);
         e = match o.target {
-            Observed::Value { value, half_width } => {
-                let e = e.with_attr("value", &num(value));
-                match half_width {
-                    Some(h) => e.with_attr("halfWidth", &num(h)),
-                    None => e,
+            Observed::Value {
+                value,
+                half_width,
+                tolerance,
+            } => {
+                let mut e = e.with_attr("value", &num(value));
+                if let Some(h) = half_width {
+                    e = e.with_attr("halfWidth", &num(h));
                 }
+                if let Some(t) = tolerance {
+                    e = e.with_attr("tolerance", &num(t));
+                }
+                e
             }
             Observed::AtMost(x) => e.with_attr("atMost", &num(x)),
             Observed::AtLeast(x) => e.with_attr("atLeast", &num(x)),

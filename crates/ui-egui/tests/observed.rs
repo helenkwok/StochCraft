@@ -152,26 +152,34 @@ fn the_model_page_adds_changes_and_removes_observed_data() {
         vec![json!({ "check": "value", "element": serve, "metric": "mean_wait", "value": 0.0 })]
     );
 
-    // The value, and the half-width of its own interval.
+    // The value, the half-width of its own interval, and the tolerance (none until set).
     type_into(&mut h, "Observed value", "3");
     type_into(&mut h, "Its 95% half-width", "0.5");
+    assert!(observed(&h)[0].get("tolerance").is_none());
+    type_into(&mut h, "Tolerance (0 for none)", "0.25");
     let o = observed(&h)[0].clone();
     assert_eq!(
-        (o["value"].as_f64(), o["half_width"].as_f64()),
-        (Some(3.0), Some(0.5)),
+        (
+            o["value"].as_f64(),
+            o["half_width"].as_f64(),
+            o["tolerance"].as_f64()
+        ),
+        (Some(3.0), Some(0.5), Some(0.25)),
         "{o}"
     );
+    type_into(&mut h, "Tolerance (0 for none)", "0");
+    assert!(observed(&h)[0].get("tolerance").is_none());
+    type_into(&mut h, "Tolerance (0 for none)", "0.25");
 
-    // As a bound: the number stays, the half-width goes.
+    // As a bound: the number stays, the half-width and tolerance go.
     choose(&mut h, "Checked as", "At most");
     assert_eq!(
         observed(&h),
         vec![json!({ "check": "at_most", "element": serve, "metric": "mean_wait", "bound": 3.0 })]
     );
-    assert!(
-        h.query_by_role_and_label(Role::TextInput, "Its 95% half-width")
-            .is_none()
-    );
+    for gone in ["Its 95% half-width", "Tolerance (0 for none)"] {
+        assert!(h.query_by_role_and_label(Role::TextInput, gone).is_none());
+    }
 
     // One undo for each change.
     h.state_mut().undo();
@@ -224,7 +232,8 @@ fn the_results_say_whether_the_run_agrees_with_the_observed_data() {
     let state = h.state_mut();
     state.execute(
         "observation.add",
-        json!({ "check": "value", "element": serve, "metric": "mean_wait", "value": mean }),
+        json!({ "check": "value", "element": serve, "metric": "mean_wait", "value": mean,
+                "tolerance": 100.0 }),
     );
     state.execute(
         "observation.add",
@@ -244,7 +253,7 @@ fn the_results_say_whether_the_run_agrees_with_the_observed_data() {
         .iter()
         .filter_map(|c| c["verdict"].as_str())
         .collect();
-    assert_eq!(verdicts, ["fails", "agrees", "no_result"]);
+    assert_eq!(verdicts, ["fails", "no_result", "agrees"]);
 
     // In words, the section and a finding for the one that fails.
     h.get_by_label("Checked against observed data");
@@ -261,16 +270,22 @@ fn the_results_say_whether_the_run_agrees_with_the_observed_data() {
     assert_eq!(h.query_all_by_label("Finding").count(), 1);
     // The finding and the row both say Fails; the others say what they found.
     assert_eq!(h.query_all_by_label("Fails").count(), 2);
-    h.get_by_label("Agrees");
+    h.get_by_label("Agrees within ±100 min");
     h.get_by_label("No result");
-    // The one that fails comes before the one that agrees.
-    let (fails, agrees) = (
-        h.get_all_by_label("Fails").next().map(|n| n.rect().top()),
-        h.get_by_label("Agrees").rect().top(),
+    // The one that fails comes first, then the one with no result, then the one that agrees.
+    let top = |label: &str| h.get_all_by_label(label).next().map(|n| n.rect().top());
+    let (fails, none, agrees) = (
+        top("Fails"),
+        top("No result"),
+        top("Agrees within ±100 min"),
     );
-    assert!(fails.is_some_and(|f| f < agrees), "{fails:?} {agrees}");
+    assert!(
+        fails < none && none < agrees && fails.is_some(),
+        "{fails:?} {none:?} {agrees:?}"
+    );
 
-    // A bound the interval straddles is not decided, and says more runs would.
+    // A bound the interval straddles is inconclusive, and an observed value with no tolerance
+    // that the interval holds is no difference detected, which says it is not agreement.
     let mut h = mm1();
     let serve = id_of(&h, "Serve customer");
     run(&mut h);
@@ -285,12 +300,31 @@ fn the_results_say_whether_the_run_agrees_with_the_observed_data() {
                 .as_f64()
         })
         .expect("the simulated mean wait");
+    let queue = h
+        .state()
+        .results()
+        .and_then(|r| {
+            r["elements"]
+                .as_array()?
+                .iter()
+                .find(|e| e["id"] == serve.as_str())?["metrics"]["mean_queue_length"]["mean"]
+                .as_f64()
+        })
+        .expect("the simulated mean queue length");
     h.state_mut().execute(
         "observation.add",
         json!({ "check": "at_most", "element": serve, "metric": "mean_wait", "bound": mean }),
     );
+    h.state_mut().execute(
+        "observation.add",
+        json!({ "check": "value", "element": serve, "metric": "mean_queue_length",
+                "value": queue }),
+    );
     settle(&mut h);
     run(&mut h);
-    h.get_by_label("Can't tell yet: more runs would decide");
+    h.get_by_label("Inconclusive at current precision");
+    h.get_by_label("No difference detected");
+    h.get_by_label_contains("not evidence of agreement");
+    assert!(h.query_by_label_contains("Agrees").is_none());
     assert!(h.query_by_label("Finding").is_none());
 }

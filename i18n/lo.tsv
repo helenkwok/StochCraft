@@ -1420,3 +1420,8 @@ unit	yr	ປີ
 	The estimated chance that {output} is more than {value} is {percent}.	ຄວາມເປັນໄປໄດ້ໂດຍປະມານທີ່ {output} ຈະຫຼາຍກວ່າ {value} ແມ່ນ {percent}.
 	The estimated chance that {output} is less than {value} is {percent}.	ຄວາມເປັນໄປໄດ້ໂດຍປະມານທີ່ {output} ຈະນ້ອຍກວ່າ {value} ແມ່ນ {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	ຊ່ວງຂອງມັນບໍ່ມີຄວາມກວ້າງ ຊຶ່ງບໍ່ມີການຄາດຄະເນໃດມີ ສະນັ້ນຜົນລັບທຳມະດາຈຶ່ງຍັງຢູ່.
+	Inconclusive at current precision	ບໍ່ສາມາດສະຫຼຸບໄດ້ທີ່ຄວາມແມ່ນຍຳປັດຈຸບັນ
+	No difference detected	ບໍ່ພົບຄວາມແຕກຕ່າງ
+	Agrees within ±{tolerance}	ກົງກັນພາຍໃນ ±{tolerance}
+	This is not evidence of agreement: set a tolerance to test for it.	ນີ້ບໍ່ແມ່ນຫຼັກຖານຂອງການກົງກັນ: ກຳນົດຄ່າຍອມຮັບເພື່ອທົດສອບ.
+	Tolerance (0 for none)	ຄ່າຍອມຮັບ (0 ຖ້າບໍ່ມີ)

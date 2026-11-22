@@ -148,18 +148,23 @@ A scenario can also carry real measurements to check a run against (black-box va
 *Simulation Modeling and Analysis*, 5th ed., section 5.6.2): the engine's `observation.add`,
 `observation.set` and `observation.remove`, saved in the file as the `stochcraft:observed`
 extension on the scenario (an `observation` for each result, with its `element` and `metric` and
-one of `value` with an optional `halfWidth`, `atMost` and `atLeast`, in the metric's own unit; only
-elements in StochCraft's namespace count, and the extension's value `off` clears what an
-inherited scenario sets). `run` prints a **checked against observed data** table after the
-results: each observation, the simulated mean with its 95% half-width, the difference with its
-own interval for an observed value, and `agrees`, `differs`, `passes`, `fails` or `can't tell
-yet`, those that differ or fail first. The rules are in `stochcraft-stats` (`observed`): an
-observed value agrees when the 95% interval of (simulated mean − observed) holds 0, its
-half-width the square root of the two half-widths' squares (the usual large-sample
-approximation; the observed one counts as 0 where not given); a bound passes when the whole
-simulated interval meets it, fails when the whole interval violates it (the edge itself meets it),
-and is not yet decided otherwise, never by the mean alone; fewer than 2 replications decide
-nothing. `--format json` has the checks as `observed`. The engine adds them in `wire::results`
+one of `value` with an optional `halfWidth` and an optional `tolerance` above 0, `atMost` and
+`atLeast`, in the metric's own unit; only elements in StochCraft's namespace count, and the
+extension's value `off` clears what an inherited scenario sets). `run` prints a **checked against
+observed data** table after the results: each observation, the simulated mean with its 95%
+half-width, the difference with its own interval for an observed value, and `agrees within
+tolerance`, `differs`, `no difference detected`, `passes`, `fails` or `inconclusive at current
+precision`, those that differ or fail first, then those not decided, then those that agree or
+pass. The rules are in `stochcraft-stats` (`observed`). The difference interval of an observed
+value is (simulated mean − observed) ± hypot(hs, ho). Without a tolerance it `differs` when the
+interval excludes 0 and otherwise only detects no difference, which is not agreement (a wide
+interval holds 0 whatever the truth; Sargent 2013). With a tolerance t it is an equivalence test
+in the manner of two one-sided tests: `agrees` when the whole interval is inside [-t, +t],
+`differs` when wholly outside, else `inconclusive`; the 95% interval is conservative against the
+90% interval of the exact test. A bound passes when the whole simulated interval meets it, fails
+when the whole interval violates it (the edge itself meets it), and is inconclusive otherwise,
+never decided by the mean alone; fewer than 2 replications make every check inconclusive.
+`--format json` has the checks as `observed`. The engine adds them in `wire::results`
 (`engine/src/observed.rs`), so `run`, `run.start` and every client get them.
 
 To vary several parameters at once, `design` runs every combination of their levels (a full

@@ -1420,3 +1420,8 @@ unit	yr	l.
 	The estimated chance that {output} is more than {value} is {percent}.	Ocenjena verjetnost, da je {output} večji od {value}, je {percent}.
 	The estimated chance that {output} is less than {value} is {percent}.	Ocenjena verjetnost, da je {output} manjši od {value}, je {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	Njihov interval nima širine, česar nobena ocena nima, zato ostane navadni rezultat.
+	Inconclusive at current precision	Neodločljivo pri trenutni natančnosti
+	No difference detected	Razlika ni zaznana
+	Agrees within ±{tolerance}	Se ujema v mejah ±{tolerance}
+	This is not evidence of agreement: set a tolerance to test for it.	To ni dokaz ujemanja: za preverjanje nastavite toleranco.
+	Tolerance (0 for none)	Toleranca (0 za nobeno)

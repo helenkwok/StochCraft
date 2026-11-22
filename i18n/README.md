@@ -965,6 +965,15 @@ fields (`“Service time”`) are named in the messages by their own rows.
   the verbs for "passes" and "fails" (a bound met or violated) in the languages that have no
   short one (fi, hu, et, lt, nb, da, sv).
 
+- The rows for the tolerance of an observed value (issue #226, after review: Tolerance (0 for
+  none), Agrees within ±{tolerance}, No difference detected and its note "This is not evidence of
+  agreement: set a tolerance to test for it.", and Inconclusive at current precision) were
+  machine-drafted the same way, with each catalog's existing words for tolerance-free comparison
+  left to the plain meaning ("tolerance" is the language's engineering word for a permitted
+  deviation); placeholders were checked by script. They replace "Can't tell yet: more runs would
+  decide" and "Agrees" in the code; those rows stay in the catalogs unused. Not reviewed by
+  native speakers; the least certain are lo, th, ta, te, bn, ka, kk and sq.
+
 **Adding or changing a string:** add the English in the code through `i18n::t` (or `tf`, `tn`),
 then add its row to each catalog here, or leave it out to show English until it is translated.
 Right-to-left languages are not offered until the layout is mirrored.

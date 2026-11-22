@@ -6,23 +6,35 @@
 //! where its data give one, or a bound the result must meet. The simulated result is the mean of
 //! the replications with its 95% Student-t half-width.
 //!
-//! - An observed value is checked by the interval of the difference (simulated mean minus
-//!   observed): the two agree when it contains 0. With the half-width `hs` of the simulated mean
-//!   and `ho` of the observed value the difference's half-width is `sqrt(hs² + ho²)`, the usual
-//!   large-sample approximation for two independent estimates (the two means' intervals are
-//!   combined as their variances would be, not added, and not given Welch's degrees of
-//!   freedom); without an `ho` it is `hs`.
+//! - An observed value is checked by the 95% interval of the difference (simulated mean minus
+//!   observed). With the half-width `hs` of the simulated mean and `ho` of the observed value its
+//!   half-width is `hypot(hs, ho)`, the usual large-sample approximation for two independent
+//!   estimates (variances combined, not half-widths added, and no Welch degrees of freedom);
+//!   without an `ho` it is `hs`.
+//!   - Without a tolerance: an interval that excludes 0 is a difference (`Differs`); one that
+//!     holds 0 is only "no difference detected", never agreement: a wide interval holds 0 whatever
+//!     the truth, so failing to detect a difference is not evidence there is none (Sargent 2013).
+//!   - With a tolerance `t`, set in advance by the modeller, the check is an equivalence test: the
+//!     whole interval inside [-t, +t] is `Agrees`, the whole interval outside it (entirely above
+//!     +t or below -t) is `Differs`, anything else `Inconclusive`. This is the two one-sided
+//!     tests rule (Schuirmann 1987) with the 95% interval, which is conservative against the 90%
+//!     interval of the exact test.
 //! - A bound is decided by the whole simulated interval, never by the mean alone: it passes when
-//!   every value in the interval meets it, fails when every value violates it, and is not yet
-//!   decided when the interval straddles it (more replications would narrow the interval).
-//! - Fewer than 2 replications give no interval, so nothing can be decided.
+//!   every value in the interval meets it, fails when every value violates it, and is
+//!   inconclusive when the interval straddles it (more replications would narrow the interval).
+//! - Fewer than 2 replications give no interval, so nothing can be decided: inconclusive.
 
 /// What a simulated result is checked against.
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub enum Check {
     /// The value seen in the real system, with the half-width of its own 95% interval where
-    /// known.
-    Value { value: f64, half_width: Option<f64> },
+    /// known, and a tolerance (above 0) within which the model counts as agreeing, where the
+    /// modeller has set one.
+    Value {
+        value: f64,
+        half_width: Option<f64>,
+        tolerance: Option<f64>,
+    },
     /// The result should be at most this.
     AtMost(f64),
     /// The result should be at least this.
@@ -32,17 +44,22 @@ pub enum Check {
 /// How a check came out.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Outcome {
-    /// An observed value: the interval of the difference contains 0.
+    /// An observed value with a tolerance: the whole interval of the difference is inside it.
     Agrees,
-    /// An observed value: the interval of the difference excludes 0.
+    /// An observed value: the interval of the difference excludes 0 (with a tolerance: lies
+    /// wholly outside it).
     Differs,
+    /// An observed value with no tolerance: the interval of the difference holds 0. Not evidence
+    /// of agreement.
+    NoDifferenceDetected,
     /// A bound: the whole interval meets it.
     Passes,
     /// A bound: the whole interval violates it.
     Fails,
-    /// No interval to judge by (fewer than 2 replications), or a bound the interval straddles:
-    /// more replications would decide it.
-    CantTell,
+    /// No interval to judge by (fewer than 2 replications), a bound the interval straddles, or a
+    /// difference interval that is neither inside nor outside the tolerance: more replications
+    /// would narrow it.
+    Inconclusive,
 }
 
 impl Outcome {
@@ -51,9 +68,10 @@ impl Outcome {
         match self {
             Outcome::Agrees => "agrees",
             Outcome::Differs => "differs",
+            Outcome::NoDifferenceDetected => "no_difference_detected",
             Outcome::Passes => "passes",
             Outcome::Fails => "fails",
-            Outcome::CantTell => "cant_tell",
+            Outcome::Inconclusive => "inconclusive",
         }
     }
 
@@ -61,6 +79,16 @@ impl Outcome {
     /// violated.
     pub fn is_bad(self) -> bool {
         matches!(self, Outcome::Differs | Outcome::Fails)
+    }
+
+    /// Where the check sorts in the results: those found wrong first (0), then those not decided
+    /// or only without a detected difference (1), then those found right (2).
+    pub fn rank(self) -> u8 {
+        match self {
+            Outcome::Differs | Outcome::Fails => 0,
+            Outcome::Inconclusive | Outcome::NoDifferenceDetected => 1,
+            Outcome::Agrees | Outcome::Passes => 2,
+        }
     }
 }
 
@@ -77,18 +105,20 @@ pub struct Verdict {
 }
 
 /// Judges the simulated `mean` with its 95% `half_width` over `n` replications against `check`.
-/// An infinite or negative half-width, or fewer than 2 replications, give no interval.
+/// An infinite or negative half-width, or fewer than 2 replications, give no interval. An
+/// unusable tolerance (not finite, or not above 0) counts as none.
 pub fn judge(check: Check, mean: f64, half_width: f64, n: u64) -> Verdict {
     let has_interval = n >= 2 && mean.is_finite() && half_width.is_finite() && half_width >= 0.0;
     match check {
         Check::Value {
             value,
             half_width: observed,
+            tolerance,
         } => {
             let difference = (mean.is_finite() && value.is_finite()).then_some(mean - value);
             if !has_interval || !value.is_finite() {
                 return Verdict {
-                    outcome: Outcome::CantTell,
+                    outcome: Outcome::Inconclusive,
                     difference,
                     half_width: None,
                 };
@@ -101,12 +131,16 @@ pub fn judge(check: Check, mean: f64, half_width: f64, n: u64) -> Verdict {
             // Scaled, so neither a tiny nor a huge width is lost to underflow or overflow.
             let combined = half_width.hypot(ho);
             let d = mean - value;
+            let (low, high) = (d - combined, d + combined);
+            let outcome = match tolerance.filter(|t| t.is_finite() && *t > 0.0) {
+                Some(t) if low >= -t && high <= t => Outcome::Agrees,
+                Some(t) if low > t || high < -t => Outcome::Differs,
+                Some(_) => Outcome::Inconclusive,
+                None if d.abs() > combined => Outcome::Differs,
+                None => Outcome::NoDifferenceDetected,
+            };
             Verdict {
-                outcome: if d.abs() <= combined {
-                    Outcome::Agrees
-                } else {
-                    Outcome::Differs
-                },
+                outcome,
                 difference,
                 half_width: Some(combined),
             }
@@ -118,7 +152,7 @@ pub fn judge(check: Check, mean: f64, half_width: f64, n: u64) -> Verdict {
                 half_width: None,
             };
             if !has_interval || !bound.is_finite() {
-                return none(Outcome::CantTell);
+                return none(Outcome::Inconclusive);
             }
             let (low, high) = (mean - half_width, mean + half_width);
             let outcome = match check {
@@ -126,7 +160,7 @@ pub fn judge(check: Check, mean: f64, half_width: f64, n: u64) -> Verdict {
                 Check::AtMost(_) if low > bound => Outcome::Fails,
                 Check::AtLeast(_) if low >= bound => Outcome::Passes,
                 Check::AtLeast(_) if high < bound => Outcome::Fails,
-                _ => Outcome::CantTell,
+                _ => Outcome::Inconclusive,
             };
             none(outcome)
         }
@@ -141,24 +175,68 @@ mod tests {
         Check::Value {
             value: v,
             half_width: h,
+            tolerance: None,
+        }
+    }
+
+    fn within(v: f64, tolerance: f64) -> Check {
+        Check::Value {
+            value: v,
+            half_width: None,
+            tolerance: Some(tolerance),
         }
     }
 
     #[test]
-    fn an_observed_value_agrees_when_the_interval_of_the_difference_holds_0() {
-        // 10 ± 1 against an exact 10.8: the difference, -0.8, is inside ± 1.
+    fn without_a_tolerance_an_interval_holding_0_is_not_agreement() {
+        // Observed 10: 12 ± 0.2 excludes 0 and differs; 12 ± 5 holds 0 (the interval allows
+        // -3 to +7), which is no evidence of a match, so it is never "agrees".
+        let v = judge(value(10.0, None), 12.0, 0.2, 10);
+        assert_eq!(v.outcome, Outcome::Differs);
+        let v = judge(value(10.0, None), 12.0, 5.0, 10);
+        assert_eq!(v.outcome, Outcome::NoDifferenceDetected);
+        // 10.8 against 10 ± 1 holds 0: no difference detected. 11.2 does not.
         let v = judge(value(10.8, None), 10.0, 1.0, 10);
-        assert_eq!(v.outcome, Outcome::Agrees);
+        assert_eq!(v.outcome, Outcome::NoDifferenceDetected);
         assert!(v.difference.is_some_and(|d| (d + 0.8).abs() < 1e-12));
         assert_eq!(v.half_width, Some(1.0));
-        // Against 11.2 it is outside.
-        let v = judge(value(11.2, None), 10.0, 1.0, 10);
-        assert_eq!(v.outcome, Outcome::Differs);
-        // Exactly on the edge agrees: the interval is closed.
+        assert_eq!(
+            judge(value(11.2, None), 10.0, 1.0, 10).outcome,
+            Outcome::Differs
+        );
+        // Exactly on the edge holds 0: the interval is closed.
         assert_eq!(
             judge(value(11.0, None), 10.0, 1.0, 10).outcome,
-            Outcome::Agrees
+            Outcome::NoDifferenceDetected
         );
+    }
+
+    #[test]
+    fn a_tolerance_makes_it_an_equivalence_test() {
+        // Observed 10, tolerance 1, interval of the difference d ± hs.
+        let c = within(10.0, 1.0);
+        // 10.2 ± 0.3: -0.1 to 0.5 for the difference, inside ± 1.
+        assert_eq!(judge(c, 10.2, 0.3, 10).outcome, Outcome::Agrees);
+        // 12 ± 0.5: 1.5 to 2.5, wholly above +1.
+        assert_eq!(judge(c, 12.0, 0.5, 10).outcome, Outcome::Differs);
+        // 8 ± 0.5: wholly below -1.
+        assert_eq!(judge(c, 8.0, 0.5, 10).outcome, Outcome::Differs);
+        // 10.5 ± 1: -0.5 to 1.5 straddles +1.
+        assert_eq!(judge(c, 10.5, 1.0, 10).outcome, Outcome::Inconclusive);
+        // A wide interval around the observed value is inconclusive, not agreement.
+        assert_eq!(judge(c, 10.0, 5.0, 10).outcome, Outcome::Inconclusive);
+        // The edges: wholly inside includes the edge; wholly outside excludes it.
+        assert_eq!(judge(c, 10.5, 0.5, 10).outcome, Outcome::Agrees);
+        assert_eq!(judge(c, 11.5, 0.5, 10).outcome, Outcome::Inconclusive);
+        assert_eq!(judge(c, 11.75, 0.5, 10).outcome, Outcome::Differs);
+        // An unusable tolerance counts as none.
+        for t in [0.0, -1.0, f64::NAN, f64::INFINITY] {
+            assert_eq!(
+                judge(within(10.0, t), 12.0, 5.0, 10).outcome,
+                Outcome::NoDifferenceDetected,
+                "{t}"
+            );
+        }
     }
 
     #[test]
@@ -166,9 +244,9 @@ mod tests {
         // 1e-200 ± 2e-200 against an exact 0: squaring 2e-200 would give 0, and "differs".
         assert_eq!(
             judge(value(1e-200, Some(2e-200)), 0.0, 0.0, 10).outcome,
-            Outcome::Agrees
+            Outcome::NoDifferenceDetected
         );
-        // Squaring 1e200 would give infinity, and "agrees" whatever the difference.
+        // Squaring 1e200 would give infinity, and no difference whatever the difference.
         let v = judge(value(0.0, Some(1e200)), 3e200, 1e200, 10);
         assert_eq!(v.outcome, Outcome::Differs);
         assert!(v.half_width.is_some_and(f64::is_finite));
@@ -179,7 +257,7 @@ mod tests {
         // sqrt(1.5² + 1.5²) = 2.1213: a difference of 2 is inside, though it is outside either
         // half-width alone.
         let v = judge(value(12.0, Some(1.5)), 10.0, 1.5, 10);
-        assert_eq!(v.outcome, Outcome::Agrees);
+        assert_eq!(v.outcome, Outcome::NoDifferenceDetected);
         assert!(
             v.half_width
                 .is_some_and(|h| (h - 4.5_f64.sqrt()).abs() < 1e-12)
@@ -213,26 +291,35 @@ mod tests {
         // 1.5 ± 0.4 is within 1.1 to 1.9: passes.
         assert_eq!(judge(at_most, 1.5, 0.4, 10).outcome, Outcome::Passes);
         // The mean is under the bound but the interval straddles it: not decided.
-        assert_eq!(judge(at_most, 1.8, 0.4, 10).outcome, Outcome::CantTell);
+        assert_eq!(judge(at_most, 1.8, 0.4, 10).outcome, Outcome::Inconclusive);
         // The mean is over the bound but the interval straddles it: not decided.
-        assert_eq!(judge(at_most, 2.1, 0.4, 10).outcome, Outcome::CantTell);
+        assert_eq!(judge(at_most, 2.1, 0.4, 10).outcome, Outcome::Inconclusive);
         // 2.5 ± 0.4 is within 2.1 to 2.9: fails.
         assert_eq!(judge(at_most, 2.5, 0.4, 10).outcome, Outcome::Fails);
         // The top of the interval on the bound meets it; the bottom on it does not violate it
         // (values that are exact in binary, so the edges are exact).
         assert_eq!(judge(at_most, 1.5, 0.5, 10).outcome, Outcome::Passes);
-        assert_eq!(judge(at_most, 2.5, 0.5, 10).outcome, Outcome::CantTell);
+        assert_eq!(judge(at_most, 2.5, 0.5, 10).outcome, Outcome::Inconclusive);
     }
 
     #[test]
     fn a_lower_bound_is_decided_by_the_whole_interval() {
         let at_least = Check::AtLeast(400.0);
         assert_eq!(judge(at_least, 450.0, 20.0, 10).outcome, Outcome::Passes);
-        assert_eq!(judge(at_least, 410.0, 20.0, 10).outcome, Outcome::CantTell);
-        assert_eq!(judge(at_least, 390.0, 20.0, 10).outcome, Outcome::CantTell);
+        assert_eq!(
+            judge(at_least, 410.0, 20.0, 10).outcome,
+            Outcome::Inconclusive
+        );
+        assert_eq!(
+            judge(at_least, 390.0, 20.0, 10).outcome,
+            Outcome::Inconclusive
+        );
         assert_eq!(judge(at_least, 350.0, 20.0, 10).outcome, Outcome::Fails);
         assert_eq!(judge(at_least, 420.0, 20.0, 10).outcome, Outcome::Passes);
-        assert_eq!(judge(at_least, 380.0, 20.0, 10).outcome, Outcome::CantTell);
+        assert_eq!(
+            judge(at_least, 380.0, 20.0, 10).outcome,
+            Outcome::Inconclusive
+        );
     }
 
     #[test]
@@ -243,14 +330,25 @@ mod tests {
 
     #[test]
     fn fewer_than_two_replications_decide_nothing() {
-        for check in [value(10.0, None), Check::AtMost(100.0), Check::AtLeast(0.0)] {
+        for check in [
+            value(10.0, None),
+            within(10.0, 1.0),
+            Check::AtMost(100.0),
+            Check::AtLeast(0.0),
+        ] {
             // One replication: an infinite half-width (or zero, whichever the caller has).
             for hw in [f64::INFINITY, 0.0] {
-                assert_eq!(judge(check, 10.0, hw, 1).outcome, Outcome::CantTell);
+                assert_eq!(judge(check, 10.0, hw, 1).outcome, Outcome::Inconclusive);
             }
-            assert_eq!(judge(check, 10.0, 0.0, 0).outcome, Outcome::CantTell);
-            assert_eq!(judge(check, 10.0, f64::NAN, 10).outcome, Outcome::CantTell);
-            assert_eq!(judge(check, f64::NAN, 1.0, 10).outcome, Outcome::CantTell);
+            assert_eq!(judge(check, 10.0, 0.0, 0).outcome, Outcome::Inconclusive);
+            assert_eq!(
+                judge(check, 10.0, f64::NAN, 10).outcome,
+                Outcome::Inconclusive
+            );
+            assert_eq!(
+                judge(check, f64::NAN, 1.0, 10).outcome,
+                Outcome::Inconclusive
+            );
         }
         // The difference is still said, without an interval.
         let v = judge(value(8.0, None), 10.0, f64::INFINITY, 1);
@@ -263,11 +361,15 @@ mod tests {
         // Every replication gave 100: the interval is a point.
         assert_eq!(
             judge(value(100.0, None), 100.0, 0.0, 10).outcome,
-            Outcome::Agrees
+            Outcome::NoDifferenceDetected
         );
         assert_eq!(
             judge(value(101.0, None), 100.0, 0.0, 10).outcome,
             Outcome::Differs
+        );
+        assert_eq!(
+            judge(within(101.0, 2.0), 100.0, 0.0, 10).outcome,
+            Outcome::Agrees
         );
         assert_eq!(
             judge(Check::AtMost(100.0), 100.0, 0.0, 10).outcome,
@@ -280,21 +382,45 @@ mod tests {
     }
 
     #[test]
-    fn only_a_differing_value_or_a_violated_bound_is_bad() {
-        assert!(Outcome::Differs.is_bad() && Outcome::Fails.is_bad());
-        assert!(
-            !Outcome::Agrees.is_bad() && !Outcome::Passes.is_bad() && !Outcome::CantTell.is_bad()
-        );
+    fn only_a_differing_value_or_a_violated_bound_is_bad_and_they_sort_first() {
+        use Outcome::*;
+        assert!(Differs.is_bad() && Fails.is_bad());
+        for o in [Agrees, Passes, Inconclusive, NoDifferenceDetected] {
+            assert!(!o.is_bad());
+        }
+        let ranks: Vec<u8> = [
+            Differs,
+            Fails,
+            Inconclusive,
+            NoDifferenceDetected,
+            Agrees,
+            Passes,
+        ]
+        .into_iter()
+        .map(Outcome::rank)
+        .collect();
+        assert_eq!(ranks, [0, 0, 1, 1, 2, 2]);
         let names: Vec<&str> = [
-            Outcome::Agrees,
-            Outcome::Differs,
-            Outcome::Passes,
-            Outcome::Fails,
-            Outcome::CantTell,
+            Agrees,
+            Differs,
+            NoDifferenceDetected,
+            Passes,
+            Fails,
+            Inconclusive,
         ]
         .into_iter()
         .map(Outcome::name)
         .collect();
-        assert_eq!(names, ["agrees", "differs", "passes", "fails", "cant_tell"]);
+        assert_eq!(
+            names,
+            [
+                "agrees",
+                "differs",
+                "no_difference_detected",
+                "passes",
+                "fails",
+                "inconclusive"
+            ]
+        );
     }
 }

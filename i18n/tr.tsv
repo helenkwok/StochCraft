@@ -1420,3 +1420,8 @@ unit	yr	yıl
 	The estimated chance that {output} is more than {value} is {percent}.	{output} değerinin {value} değerinden büyük olma olasılığı tahminen {percent}.
 	The estimated chance that {output} is less than {value} is {percent}.	{output} değerinin {value} değerinden küçük olma olasılığı tahminen {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	Aralıklarının genişliği yok, bu hiçbir tahminde olmaz, bu yüzden sade sonuç geçerli kalır.
+	Inconclusive at current precision	Mevcut hassasiyette sonuçsuz
+	No difference detected	Fark saptanmadı
+	Agrees within ±{tolerance}	±{tolerance} içinde uyuşuyor
+	This is not evidence of agreement: set a tolerance to test for it.	Bu, uyuşmanın kanıtı değildir: sınamak için bir tolerans belirleyin.
+	Tolerance (0 for none)	Tolerans (yoksa 0)

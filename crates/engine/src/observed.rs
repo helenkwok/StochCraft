@@ -3,24 +3,29 @@
 //! An experiment carries [`Observation`]s ([`stochcraft_model::Experiment::observed`]), each
 //! naming a result the run reports (a block's or pool's metric, by the names the results use)
 //! and either an observed value or a bound. The rules are
-//! [`stochcraft_stats::observed::judge`]'s: an observed value agrees when the 95% interval of
-//! (simulated mean − observed) holds 0; a bound passes or fails only when the whole simulated 95%
-//! interval does, and is otherwise not yet decided.
+//! [`stochcraft_stats::observed::judge`]'s: an observed value differs when the 95% interval of
+//! (simulated mean − observed) excludes 0 and otherwise detects no difference (not agreement),
+//! or, with a tolerance, agrees when that interval is wholly inside it; a bound passes or fails
+//! only when the whole simulated 95% interval does, and is otherwise inconclusive.
 //!
 //! The results carry the checks as `observed` (left out when there are none): an array with one
-//! entry for each observation, those that differ or fail first, the rest in the order they are
-//! kept. An entry has the `element` (id) and its `name`, the `metric`, the `check` (`value`,
+//! entry for each observation, those that differ or fail first, then those inconclusive or with
+//! no difference detected, then those that agree or pass, each group in the order kept. An entry has the `element` (id) and its `name`, the `metric`, the `check` (`value`,
 //! `at_most` or `at_least`), the `observed` value and its own `half_width` (`null` when not
 //! given) or the `bound`, the `simulated` result (`mean`, 95% `half_width`, `n`; `null` when the
 //! run has no such result), for an observed value the `difference` (simulated minus observed)
 //! with the 95% `difference_half_width`, and the `verdict`: `agrees`, `differs`, `passes`,
-//! `fails`, `cant_tell` (no interval yet, or a bound the interval straddles) or `no_result`
+//! `fails`, `no_difference_detected` (an observed value with no tolerance whose difference
+//! interval holds 0: not agreement), `inconclusive` (no interval yet, a bound the interval
+//! straddles, or a difference interval neither inside nor outside the tolerance) or `no_result`
 //! (the run reports no such result: the block is gone, or does not report that metric).
+//! An observed value may carry a `tolerance`: with it the check is `agrees` when the whole
+//! interval of the difference is inside it, `differs` when wholly outside, else `inconclusive`.
 
 use serde_json::{Value, json};
 use stochcraft_blocks::{ExperimentSummary, Metric};
 use stochcraft_model::{ElementId, Model, Observation, Observed};
-use stochcraft_stats::observed::{Check, Outcome, judge};
+use stochcraft_stats::observed::{Check, judge};
 
 use crate::wire::ObservationSpec;
 use crate::{CommandError, ErrorCode};
@@ -28,7 +33,15 @@ use crate::{CommandError, ErrorCode};
 /// What `o` is checked against, for [`judge`].
 fn check_of(o: &Observation) -> Check {
     match o.target {
-        Observed::Value { value, half_width } => Check::Value { value, half_width },
+        Observed::Value {
+            value,
+            half_width,
+            tolerance,
+        } => Check::Value {
+            value,
+            half_width,
+            tolerance,
+        },
         Observed::AtMost(bound) => Check::AtMost(bound),
         Observed::AtLeast(bound) => Check::AtLeast(bound),
     }
@@ -62,8 +75,13 @@ fn one(model: &Model, summary: &ExperimentSummary, o: &Observation) -> Value {
         })),
     });
     match o.target {
-        Observed::Value { value, half_width } => {
-            v["observed"] = json!({ "value": value, "half_width": half_width });
+        Observed::Value {
+            value,
+            half_width,
+            tolerance,
+        } => {
+            v["observed"] =
+                json!({ "value": value, "half_width": half_width, "tolerance": tolerance });
         }
         Observed::AtMost(bound) | Observed::AtLeast(bound) => v["bound"] = json!(bound),
     }
@@ -88,19 +106,21 @@ pub fn check(model: &Model, summary: &ExperimentSummary) -> Option<Value> {
         return None;
     }
     let checks: Vec<Value> = list.iter().map(|o| one(model, summary, o)).collect();
-    let bad = |c: &Value| {
-        matches!(
-            c["verdict"].as_str(),
-            Some(v) if v == Outcome::Differs.name() || v == Outcome::Fails.name()
-        )
+    // Those that differ or fail first, then those not decided or with no difference detected
+    // (and results the run lacks), then those that agree or pass; each group as kept.
+    let rank = |c: &Value| match c["verdict"].as_str() {
+        Some("differs" | "fails") => 0,
+        Some("agrees" | "passes") => 2,
+        _ => 1,
     };
-    // Those that differ or fail first; the rest as kept.
-    let (first, rest): (Vec<Value>, Vec<Value>) = checks.into_iter().partition(bad);
-    Some(Value::Array(first.into_iter().chain(rest).collect()))
+    let mut checks = checks;
+    checks.sort_by_key(rank);
+    Some(Value::Array(checks))
 }
 
 /// The observation a command's `spec` gives, checked against `model`: the block or pool exists,
-/// the metric has a name the results use, and the numbers are finite (a half-width not below 0).
+/// the metric has a name the results use, and the numbers are finite (a half-width not below 0,
+/// a tolerance above 0).
 pub fn from_spec(model: &Model, spec: ObservationSpec) -> Result<Observation, CommandError> {
     let bad = |what: String| CommandError::new(ErrorCode::InvalidParams, what);
     let id = ElementId::unchecked(spec.element());
@@ -125,9 +145,17 @@ pub fn from_spec(model: &Model, spec: ObservationSpec) -> Result<Observation, Co
     };
     match &spec {
         ObservationSpec::Value {
-            value, half_width, ..
+            value,
+            half_width,
+            tolerance,
+            ..
         } => {
             number("value", *value)?;
+            if let Some(t) = tolerance
+                && !(t.is_finite() && *t > 0.0)
+            {
+                return Err(bad(format!("`tolerance` must be above 0, not {t}")));
+            }
             if let Some(h) = half_width
                 && !(h.is_finite() && *h >= 0.0)
             {

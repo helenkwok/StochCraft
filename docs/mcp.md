@@ -95,20 +95,27 @@ Real measurements to check a run against (black-box validation) are set with `ex
 `observation.add`, `observation.set` and `observation.remove`. An observation is for one result,
 a block's or pool's `element` and a `metric` such as `mean_wait`, `utilisation` or `left`, in the
 metric's own unit (a share as a fraction), and is one of three `check`s: `value` (the observed
-`value`, with the `half_width` of its own 95% interval where its data give one), `at_most` or
-`at_least` (a `bound`). One for each result: `add` fails with `conflict` if there is one,
-`set` with `not_found` if there is none. They are saved in the file (`stochcraft:observed`) and
-come back in `model.get` as `experiment.observed`. A run's results then have `observed`, one
-entry for each, those that `differ` or `fail` first, each with the `observed` value or `bound`,
-the `simulated` mean with its 95% `half_width` and `n`, for an observed value the `difference`
-(simulated minus observed) with its 95% `difference_half_width`, and the `verdict`: `agrees`,
-`differs`, `passes`, `fails`, `cant_tell` or `no_result`. An observed value agrees when the
-interval of the difference holds 0, where the difference's half-width is the square root of the
-two half-widths' squares (the usual large-sample approximation; the observed one counts as 0
-where not given). A bound passes only when the whole simulated interval meets it and fails only
-when the whole interval violates it, and is `cant_tell` where the interval straddles it (more
-replications would decide) or there are fewer than 2. Observed data for a block that is gone is
-the warning `bad_observation` in `check_model` (the run still goes, and says `no_result`).
+`value`, with the `half_width` of its own 95% interval where its data give one, and a `tolerance`
+above 0 in the metric's unit, which only an observed value takes: any other check with one is
+`invalid_params`), `at_most` or `at_least` (a `bound`). One for each result: `add` fails with
+`conflict` if there is one, `set` with `not_found` if there is none. They are saved in the file
+(`stochcraft:observed`) and come back in `model.get` as `experiment.observed`. A run's results
+then have `observed`, one entry for each, those that `differ` or `fail` first, then those
+`inconclusive` or `no_difference_detected`, then those that `agree` or `pass`, each with the
+`observed` value (and its `half_width` and `tolerance`) or `bound`, the `simulated` mean with its
+95% `half_width` and `n`, for an observed value the `difference` (simulated minus observed) with
+its 95% `difference_half_width`, and the `verdict`: `agrees`, `differs`, `no_difference_detected`,
+`passes`, `fails`, `inconclusive` or `no_result`. The difference's half-width is
+`hypot(half_width, observed half_width)` (the usual large-sample approximation; the observed one
+counts as 0 where not given). Without a `tolerance`, the interval excluding 0 is `differs` and
+holding 0 is only `no_difference_detected`, never agreement: a wide interval holds 0 whatever the
+truth. With a `tolerance` t it is an equivalence test: `agrees` when the whole interval is inside
+[-t, +t], `differs` when wholly outside, else `inconclusive` (the 95% interval is conservative
+against the 90% interval of the two one-sided tests). A bound passes only when the whole
+simulated interval meets it and fails only when the whole interval violates it, and is
+`inconclusive` where the interval straddles it (more replications would decide) or there are
+fewer than 2. Observed data for a block that is gone is the warning `bad_observation` in
+`check_model` (the run still goes, and says `no_result`).
 
 Resources: `stochcraft://model` (`model.get`) and `stochcraft://commands` (the command catalogue).
 

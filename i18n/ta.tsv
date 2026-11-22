@@ -1420,3 +1420,8 @@ unit	yr	ஆண்டு
 	The estimated chance that {output} is more than {value} is {percent}.	{output} {value}-ஐ விட அதிகமாக இருப்பதற்கான மதிப்பிடப்பட்ட நிகழ்தகவு {percent}.
 	The estimated chance that {output} is less than {value} is {percent}.	{output} {value}-ஐ விட குறைவாக இருப்பதற்கான மதிப்பிடப்பட்ட நிகழ்தகவு {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	அவற்றின் இடைவெளிக்கு அகலமே இல்லை, எந்த மதிப்பீட்டுக்கும் அப்படி இருக்காது, எனவே சாதாரண முடிவே நிலைக்கிறது.
+	Inconclusive at current precision	தற்போதைய துல்லியத்தில் தீர்மானிக்க இயலாது
+	No difference detected	வேறுபாடு கண்டறியப்படவில்லை
+	Agrees within ±{tolerance}	±{tolerance} க்குள் பொருந்துகிறது
+	This is not evidence of agreement: set a tolerance to test for it.	இது பொருத்தத்திற்கான சான்று அல்ல: சோதிக்க ஒரு சகிப்பை அமைக்கவும்.
+	Tolerance (0 for none)	சகிப்பு (இல்லையெனில் 0)

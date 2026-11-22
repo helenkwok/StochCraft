@@ -58,14 +58,24 @@ impl Kind {
 }
 
 /// The engine's parameters for an observation: a value with the half-width of its own interval
-/// (left out when 0, which says the same), or a bound.
-fn spec(element: &str, metric: &str, kind: Kind, value: f64, half_width: f64) -> Value {
+/// (left out when 0, which says the same) and a tolerance (left out when 0: none), or a bound.
+fn spec(
+    element: &str,
+    metric: &str,
+    kind: Kind,
+    value: f64,
+    half_width: f64,
+    tolerance: f64,
+) -> Value {
     let mut s = json!({ "check": kind.key(), "element": element, "metric": metric });
     match kind {
         Kind::Value => {
             s["value"] = json!(value);
             if half_width > 0.0 {
                 s["half_width"] = json!(half_width);
+            }
+            if tolerance > 0.0 {
+                s["tolerance"] = json!(tolerance);
             }
         }
         Kind::AtMost | Kind::AtLeast => s["bound"] = json!(value),
@@ -98,8 +108,9 @@ fn interval(mean: Option<f64>, half_width: Option<f64>, scale: f64, unit: &str) 
 
 /// One check of the results in words.
 struct Said {
-    /// Agrees, differs, passes, fails, cannot yet be told, or no such result.
-    verdict: &'static str,
+    /// Agrees (within the tolerance), differs, no difference detected, passes, fails,
+    /// inconclusive, or no such result.
+    verdict: String,
     /// The run found the result wrong: it differs, or violates its bound.
     bad: bool,
     /// The run found the result right: it agrees, or meets its bound.
@@ -108,6 +119,8 @@ struct Said {
     sentence: String,
     /// For an observed value: the difference, with its own interval.
     difference: Option<String>,
+    /// For no difference detected: that it is not evidence of agreement.
+    note: Option<String>,
 }
 
 /// Check `c` of `results["observed"]` in words.
@@ -172,13 +185,31 @@ fn said(results: &Value, c: &Value) -> Said {
             )],
         )
     });
+    let mut note = None;
     let (verdict, bad, good) = match c["verdict"].as_str() {
-        Some("agrees") => (t("Agrees"), false, true),
-        Some("differs") => (t("Differs"), true, false),
-        Some("passes") => (t("Passes"), false, true),
-        Some("fails") => (t("Fails"), true, false),
-        Some("no_result") => (t("No result"), false, false),
-        _ => (t("Can't tell yet: more runs would decide"), false, false),
+        Some("agrees") => {
+            let tolerance = interval(c["observed"]["tolerance"].as_f64(), None, scale, u);
+            (
+                tf("Agrees within ±{tolerance}", &[("tolerance", &tolerance)]),
+                false,
+                true,
+            )
+        }
+        Some("differs") => (t("Differs").to_owned(), true, false),
+        Some("no_difference_detected") => {
+            note = Some(
+                t("This is not evidence of agreement: set a tolerance to test for it.").to_owned(),
+            );
+            (t("No difference detected").to_owned(), false, false)
+        }
+        Some("passes") => (t("Passes").to_owned(), false, true),
+        Some("fails") => (t("Fails").to_owned(), true, false),
+        Some("no_result") => (t("No result").to_owned(), false, false),
+        _ => (
+            t("Inconclusive at current precision").to_owned(),
+            false,
+            false,
+        ),
     };
     Said {
         verdict,
@@ -186,6 +217,7 @@ fn said(results: &Value, c: &Value) -> Said {
         good,
         sentence,
         difference,
+        note,
     }
 }
 
@@ -223,7 +255,7 @@ pub fn findings(ui: &mut egui::Ui, results: &Value) {
         }
         ui.horizontal_wrapped(|ui| {
             ui.label(theme::strong(t("Finding")).color(p.accent));
-            ui.label(theme::strong(s.verdict).color(p.error));
+            ui.label(theme::strong(s.verdict.as_str()).color(p.error));
             ui.label(s.sentence.as_str());
         });
     }
@@ -250,10 +282,13 @@ pub fn section_of_results(ui: &mut egui::Ui, results: &Value) {
             p.text
         };
         ui.horizontal_wrapped(|ui| {
-            ui.label(theme::strong(s.verdict).color(colour));
+            ui.label(theme::strong(s.verdict.as_str()).color(colour));
             ui.label(s.sentence.as_str());
             if let Some(d) = &s.difference {
                 ui.label(theme::weak(ui, d.as_str()));
+            }
+            if let Some(n) = &s.note {
+                ui.label(theme::weak(ui, n.as_str()));
             }
         });
     }
@@ -311,7 +346,7 @@ impl App {
         if let Some((element, metric)) = picked.as_deref().and_then(|k| k.split_once('/')) {
             self.execute(
                 "observation.add",
-                spec(element, metric, Kind::Value, 0.0, 0.0),
+                spec(element, metric, Kind::Value, 0.0, 0.0, 0.0),
             );
         }
     }
@@ -345,7 +380,8 @@ impl App {
         };
         let mut value = o[key].as_f64().unwrap_or(0.0) * scale;
         let mut half_width = o["half_width"].as_f64().unwrap_or(0.0) * scale;
-        let before = (value, half_width);
+        let mut tolerance = o["tolerance"].as_f64().unwrap_or(0.0) * scale;
+        let before = (value, half_width, tolerance);
         let mut chosen = kind;
         let mut remove = false;
         ui.horizontal_wrapped(|ui| {
@@ -390,6 +426,17 @@ impl App {
                     70.0,
                 );
             }
+            if kind == Kind::Value {
+                ui.label(t("Tolerance (0 for none)"));
+                number(
+                    ui,
+                    &self.numbers,
+                    &format!("x/observed/{i}/tolerance"),
+                    t("Tolerance (0 for none)"),
+                    &mut tolerance,
+                    70.0,
+                );
+            }
             remove = ui.add(theme::secondary(ui, t("Remove"))).clicked();
         });
         if remove {
@@ -399,7 +446,7 @@ impl App {
             );
             return true;
         }
-        if chosen != kind || (value, half_width) != before {
+        if chosen != kind || (value, half_width, tolerance) != before {
             // Kept within what the engine takes: a half-width of 0 or more.
             let params = spec(
                 &element,
@@ -407,6 +454,7 @@ impl App {
                 chosen,
                 value / scale,
                 half_width.max(0.0) / scale,
+                tolerance.max(0.0) / scale,
             );
             self.execute("observation.set", params);
             return true;
@@ -455,8 +503,20 @@ mod tests {
             s.difference.as_deref(),
             Some("Simulated minus observed: 1.9 ± 0.5 min.")
         );
-        let s = said(&r, &mean_wait("agrees"));
+        // With a tolerance, agreeing says within what.
+        let mut agrees = mean_wait("agrees");
+        agrees["observed"]["tolerance"] = json!(0.5);
+        let s = said(&r, &agrees);
         assert!(s.good && !s.bad);
+        assert_eq!(s.verdict, "Agrees within ±0.5 min");
+        // With none, no difference is not agreement, and says so.
+        let s = said(&r, &mean_wait("no_difference_detected"));
+        assert_eq!(s.verdict, "No difference detected");
+        assert!(!s.good && !s.bad);
+        assert!(
+            s.note
+                .is_some_and(|n| n.contains("not evidence of agreement"))
+        );
     }
 
     #[test]
@@ -464,7 +524,7 @@ mod tests {
         let r = results(json!([]));
         let bound = json!({
             "element": "desk", "name": "Desk", "metric": "utilisation", "check": "at_most",
-            "verdict": "cant_tell", "bound": 0.85,
+            "verdict": "inconclusive", "bound": 0.85,
             "simulated": { "mean": 0.83, "half_width": 0.02, "n": 10 },
         });
         let s = said(&r, &bound);
@@ -472,7 +532,7 @@ mod tests {
             s.sentence,
             "Utilisation (Desk): must be at most 85%, simulated 83 ± 2%."
         );
-        assert_eq!(s.verdict, "Can't tell yet: more runs would decide");
+        assert_eq!(s.verdict, "Inconclusive at current precision");
         assert!(!s.bad && !s.good && s.difference.is_none());
         let none = json!({
             "element": "gone", "name": "gone", "metric": "left", "check": "at_least",
@@ -486,15 +546,19 @@ mod tests {
     #[test]
     fn the_parameters_are_the_engines() {
         assert_eq!(
-            spec("desk", "mean_wait", Kind::Value, 3.2, 0.0),
+            spec("desk", "mean_wait", Kind::Value, 3.2, 0.0, 0.0),
             json!({ "check": "value", "element": "desk", "metric": "mean_wait", "value": 3.2 })
         );
         assert_eq!(
-            spec("desk", "mean_wait", Kind::Value, 3.2, 0.4)["half_width"],
+            spec("desk", "mean_wait", Kind::Value, 3.2, 0.4, 0.5)["half_width"],
             0.4
         );
         assert_eq!(
-            spec("desk", "utilisation", Kind::AtMost, 0.85, 0.4),
+            spec("desk", "mean_wait", Kind::Value, 3.2, 0.0, 0.5)["tolerance"],
+            0.5
+        );
+        assert_eq!(
+            spec("desk", "utilisation", Kind::AtMost, 0.85, 0.4, 0.5),
             json!({ "check": "at_most", "element": "desk", "metric": "utilisation", "bound": 0.85 })
         );
         assert_eq!(unit("utilisation"), Unit::Share);

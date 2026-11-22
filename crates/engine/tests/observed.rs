@@ -1,5 +1,6 @@
 //! Validation against observed data (#226): a run's results checked against real measurements,
-//! an observed value (agrees or differs by the interval of the difference) or a bound (passes,
+//! an observed value (differs when the interval of the difference excludes 0, agrees only within a
+//! tolerance) or a bound (passes,
 //! fails, or cannot yet be told, by the whole simulated interval). The rules themselves are
 //! tested in `stochcraft-stats`; here are the commands, the results and the model problem.
 
@@ -77,8 +78,9 @@ fn a_run_without_observed_data_says_nothing_of_it() {
     );
 }
 
-/// An observed value equal to the simulated mean agrees; one 20 points of utilisation away
-/// differs, and is listed first; bounds are decided by the whole interval.
+/// An observed value equal to the simulated mean agrees within a tolerance, and with none only
+/// detects no difference; one 20 points of utilisation away differs, and is listed first; bounds
+/// are decided by the whole interval.
 #[test]
 fn a_run_is_checked_against_observed_values_and_bounds() {
     let mut e = mm1();
@@ -92,12 +94,21 @@ fn a_run_is_checked_against_observed_values_and_bounds() {
     assert!(wait_hw > 0.0 && wait["n"] == 16, "{wait}");
     assert!(num(&time["half_width"]) > 0.0, "{time}");
 
-    // The mean wait agrees with its own mean, given with a half-width of its own.
+    let entered = num(&simulated(&first, "leave", "entered")["mean"]);
+    // The mean wait is its own mean, given with a half-width of its own and a tolerance wider
+    // than the interval: it agrees.
+    let tolerance = wait_hw + 1.0;
     ok(
         &mut e,
         "observation.add",
         json!({ "check": "value", "element": "serve", "metric": "mean_wait",
-                "value": wait_mean, "half_width": 0.1 }),
+                "value": wait_mean, "half_width": 0.1, "tolerance": tolerance }),
+    );
+    // Another equal to its mean, with no tolerance: no difference detected, not agreement.
+    ok(
+        &mut e,
+        "observation.add",
+        json!({ "check": "value", "element": "leave", "metric": "entered", "value": entered }),
     );
     // A utilisation 20 points off differs (the interval of 16 runs is a fraction of a point).
     ok(
@@ -132,16 +143,18 @@ fn a_run_is_checked_against_observed_values_and_bounds() {
     assert_eq!(verdict(&r, "serve", "mean_queue_length"), "passes");
     assert_eq!(verdict(&r, "serve", "left"), "fails");
     // The mean on the bound: the interval straddles it, so it is not decided by the mean.
-    assert_eq!(verdict(&r, "leave", "mean_time_in_system"), "cant_tell");
+    assert_eq!(verdict(&r, "leave", "mean_time_in_system"), "inconclusive");
+    assert_eq!(verdict(&r, "leave", "entered"), "no_difference_detected");
     let checks = r["observed"].as_array().expect("the checks");
-    assert_eq!(checks.len(), 5);
+    assert_eq!(checks.len(), 6);
     let straddling = checks
         .iter()
         .find(|c| c["check"] == "at_most" && c["metric"] == "mean_time_in_system")
         .expect("the bound on the mean time in the system");
-    assert_eq!(straddling["verdict"], "cant_tell");
+    assert_eq!(straddling["verdict"], "inconclusive");
 
-    // Those that differ or fail come first, the rest in the order kept.
+    // Those that differ or fail come first, then those inconclusive or with no difference
+    // detected, then those that agree or pass, each in the order kept.
     let order: Vec<(&str, &str)> = checks
         .iter()
         .map(|c| {
@@ -156,9 +169,10 @@ fn a_run_is_checked_against_observed_values_and_bounds() {
         [
             ("utilisation", "differs"),
             ("left", "fails"),
+            ("entered", "no_difference_detected"),
+            ("mean_time_in_system", "inconclusive"),
             ("mean_wait", "agrees"),
             ("mean_queue_length", "passes"),
-            ("mean_time_in_system", "cant_tell"),
         ]
     );
 
@@ -171,7 +185,7 @@ fn a_run_is_checked_against_observed_values_and_bounds() {
     assert_eq!(agrees["name"], "Serve customer");
     assert_eq!(
         agrees["observed"],
-        json!({ "value": wait_mean, "half_width": 0.1 })
+        json!({ "value": wait_mean, "half_width": 0.1, "tolerance": tolerance })
     );
     assert_eq!(agrees["simulated"]["n"], 16);
     let (hw, d) = (
@@ -215,8 +229,8 @@ fn one_replication_decides_nothing() {
         json!({ "check": "value", "element": "serve", "metric": "left", "value": 5.0 }),
     );
     let r = ok(&mut e, "run", json!({ "replications": 1 }));
-    assert_eq!(verdict(&r, "serve", "mean_wait"), "cant_tell");
-    assert_eq!(verdict(&r, "serve", "left"), "cant_tell");
+    assert_eq!(verdict(&r, "serve", "mean_wait"), "inconclusive");
+    assert_eq!(verdict(&r, "serve", "left"), "inconclusive");
     // Said without an interval, and the difference still given.
     let value = r["observed"]
         .as_array()
@@ -330,6 +344,22 @@ fn the_commands_add_change_and_remove_and_undo() {
             ErrorCode::InvalidParams,
         ),
         (
+            // A tolerance is above 0, and only for an observed value.
+            json!({ "check": "value", "element": "serve", "metric": "left", "value": 1.0,
+                    "tolerance": 0.0 }),
+            ErrorCode::InvalidParams,
+        ),
+        (
+            json!({ "check": "value", "element": "serve", "metric": "left", "value": 1.0,
+                    "tolerance": -2.0 }),
+            ErrorCode::InvalidParams,
+        ),
+        (
+            json!({ "check": "at_most", "element": "serve", "metric": "left", "bound": 1.0,
+                    "tolerance": 1.0 }),
+            ErrorCode::InvalidParams,
+        ),
+        (
             // A bound has no half-width, and a value has no bound.
             json!({ "check": "at_most", "element": "serve", "metric": "left", "bound": 1.0,
                     "half_width": 1.0 }),
@@ -402,7 +432,7 @@ fn observed_data_round_trip_through_the_model_document() {
     let mut e = mm1();
     for p in [
         json!({ "check": "value", "element": "serve", "metric": "mean_wait", "value": 3.2,
-                "half_width": 0.4 }),
+                "half_width": 0.4, "tolerance": 0.5 }),
         json!({ "check": "at_most", "element": "serve", "metric": "utilisation", "bound": 0.85 }),
         json!({ "check": "at_least", "element": "serve", "metric": "left", "bound": 400.0 }),
     ] {

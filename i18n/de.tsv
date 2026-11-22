@@ -1420,3 +1420,8 @@ unit	yr	J.
 	The estimated chance that {output} is more than {value} is {percent}.	Die geschätzte Wahrscheinlichkeit, dass {output} über {value} liegt, beträgt {percent}.
 	The estimated chance that {output} is less than {value} is {percent}.	Die geschätzte Wahrscheinlichkeit, dass {output} unter {value} liegt, beträgt {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	Ihr Intervall hat keine Breite, die keine Schätzung hat, daher bleibt das einfache Ergebnis bestehen.
+	Inconclusive at current precision	Bei der aktuellen Genauigkeit nicht entscheidbar
+	No difference detected	Kein Unterschied festgestellt
+	Agrees within ±{tolerance}	Stimmt überein innerhalb ±{tolerance}
+	This is not evidence of agreement: set a tolerance to test for it.	Das ist kein Beleg für Übereinstimmung: Legen Sie eine Toleranz fest, um sie zu prüfen.
+	Tolerance (0 for none)	Toleranz (0 für keine)

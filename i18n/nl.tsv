@@ -1420,3 +1420,8 @@ unit	yr	j
 	The estimated chance that {output} is more than {value} is {percent}.	De geschatte kans dat {output} groter is dan {value} is {percent}.
 	The estimated chance that {output} is less than {value} is {percent}.	De geschatte kans dat {output} kleiner is dan {value} is {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	Hun interval heeft geen breedte, wat geen schatting heeft, dus het gewone resultaat blijft staan.
+	Inconclusive at current precision	Niet doorslaggevend bij de huidige nauwkeurigheid
+	No difference detected	Geen verschil aangetoond
+	Agrees within ±{tolerance}	Komt overeen binnen ±{tolerance}
+	This is not evidence of agreement: set a tolerance to test for it.	Dit is geen bewijs van overeenstemming: stel een tolerantie in om dat te toetsen.
+	Tolerance (0 for none)	Tolerantie (0 voor geen)

@@ -761,17 +761,22 @@ fn observed_lines(results: &Value, out: &mut String) {
         "difference".into(),
     ]];
     let mut undecided = false;
+    let mut no_difference = false;
     for c in checks {
         let metric = s(&c["metric"]);
         let verdict = match s(&c["verdict"]) {
-            "agrees" => "agrees",
+            "agrees" => "agrees within tolerance",
             "differs" => "differs",
+            "no_difference_detected" => {
+                no_difference = true;
+                "no difference detected"
+            }
             "passes" => "passes",
             "fails" => "fails",
             "no_result" => "no result",
             _ => {
                 undecided = true;
-                "can't tell yet"
+                "inconclusive at current precision"
             }
         };
         let observed = match s(&c["check"]) {
@@ -783,12 +788,21 @@ fn observed_lines(results: &Value, out: &mut String) {
                 "at least {}",
                 observed_number(c["bound"].as_f64().unwrap_or(f64::NAN), metric, time_unit)
             ),
-            _ => observed_interval(
-                &c["observed"]["value"],
-                &c["observed"]["half_width"],
-                metric,
-                time_unit,
-            ),
+            _ => {
+                let value = observed_interval(
+                    &c["observed"]["value"],
+                    &c["observed"]["half_width"],
+                    metric,
+                    time_unit,
+                );
+                match c["observed"]["tolerance"].as_f64() {
+                    Some(t) => format!(
+                        "{value}, tolerance ±{}",
+                        observed_number(t, metric, time_unit)
+                    ),
+                    None => value,
+                }
+            }
         };
         let simulated = if c["simulated"].is_object() {
             observed_interval(
@@ -819,9 +833,14 @@ fn observed_lines(results: &Value, out: &mut String) {
     }
     out.push_str("\nchecked against observed data:\n");
     aligned(&rows, &[true, true, false, false, false], out);
+    if no_difference {
+        out.push_str(
+            "no difference detected: the 95% interval of the difference holds 0. This is not evidence of agreement unless a tolerance is set: a wide interval holds 0 whatever the truth\n",
+        );
+    }
     if undecided {
         out.push_str(
-            "can't tell yet: the 95% interval is too wide to decide, or there are fewer than 2 replications; more replications would decide\n",
+            "inconclusive at current precision: the 95% interval is too wide to decide (a bound it straddles, a difference neither inside nor outside the tolerance), or there are fewer than 2 replications; more replications would narrow it\n",
         );
     }
     if checks.iter().any(|c| s(&c["verdict"]) == "no_result") {
@@ -1807,8 +1826,13 @@ mod tests {
                   "observed": { "value": 3.2, "half_width": 0.4 },
                   "simulated": { "mean": 5.1, "half_width": 0.3, "n": 10 },
                   "difference": 1.9, "difference_half_width": 0.5 },
-                { "element": "desk", "metric": "utilisation", "check": "at_most", "verdict": "cant_tell",
+                { "element": "desk", "metric": "utilisation", "check": "at_most", "verdict": "inconclusive",
                   "bound": 0.85, "simulated": { "mean": 0.83, "half_width": 0.02, "n": 10 } },
+                { "element": "desk", "metric": "mean_queue_length", "check": "value",
+                  "verdict": "no_difference_detected",
+                  "observed": { "value": 2.0, "half_width": null, "tolerance": 0.5 },
+                  "simulated": { "mean": 2.1, "half_width": 0.9, "n": 10 },
+                  "difference": 0.1, "difference_half_width": 0.9 },
                 { "element": "gone", "metric": "left", "check": "at_least", "verdict": "no_result",
                   "bound": 5.0, "simulated": null },
             ],
@@ -1821,7 +1845,9 @@ mod tests {
         assert!(at.is_some(), "no section: {out}");
         let section = lines[at.unwrap_or(0) + 1..].join("\n");
         let differs = section.find("differs").unwrap_or(usize::MAX);
-        let tell = section.find("can't tell yet").unwrap_or(usize::MAX);
+        let tell = section
+            .find("inconclusive at current precision")
+            .unwrap_or(usize::MAX);
         assert!(differs < tell, "{section}");
         assert!(
             section.contains("desk.mean_wait") && section.contains("3.2 ± 0.4 min"),
@@ -1833,8 +1859,11 @@ mod tests {
         assert!(section.contains("at most 85%"), "{section}");
         assert!(section.contains("83 ± 2%"), "{section}");
         assert!(section.contains("no result"), "{section}");
+        assert!(section.contains("no difference detected"), "{section}");
+        assert!(section.contains("tolerance ±0.5"), "{section}");
+        assert!(section.contains("not evidence of agreement"), "{section}");
         assert!(
-            section.contains("more replications would decide"),
+            section.contains("more replications would narrow it"),
             "{section}"
         );
         // Without observed data there is no section.

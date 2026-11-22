@@ -1420,3 +1420,8 @@ unit	yr	v
 	The estimated chance that {output} is more than {value} is {percent}.	Gjasa e vlerësuar që {output} të jetë më e madhe se {value} është {percent}.
 	The estimated chance that {output} is less than {value} is {percent}.	Gjasa e vlerësuar që {output} të jetë më e vogël se {value} është {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	Intervali i tyre nuk ka gjerësi, gjë që asnjë vlerësim nuk e ka, ndaj mbetet rezultati i thjeshtë.
+	Inconclusive at current precision	Jo përfundimtare me saktësinë aktuale
+	No difference detected	Nuk u zbulua ndryshim
+	Agrees within ±{tolerance}	Përputhet brenda ±{tolerance}
+	This is not evidence of agreement: set a tolerance to test for it.	Kjo nuk është provë përputhjeje: vendosni një tolerancë për ta testuar.
+	Tolerance (0 for none)	Toleranca (0 për asnjë)

@@ -2163,8 +2163,9 @@ pub struct ExperimentDoc {
 }
 
 /// A real measurement for one result of the model to be checked against, in the result's own
-/// unit (a share as a fraction: 0.85 is 85%): an observed value, which agrees with the
-/// simulated mean when the 95% interval of their difference holds 0, or a bound, which passes
+/// unit (a share as a fraction: 0.85 is 85%): an observed value, which differs from the simulated
+/// mean when the 95% interval of their difference excludes 0 and, with a `tolerance`, agrees when
+/// that interval is wholly inside it, or a bound, which passes
 /// when the whole simulated 95% interval meets it, fails when the whole interval violates it, and
 /// is otherwise not yet decided (more replications would decide it).
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, JsonSchema)]
@@ -2180,6 +2181,13 @@ pub enum ObservationSpec {
         /// The half-width of the observed value's own 95% interval, where its data give one.
         #[serde(default, skip_serializing_if = "Option::is_none")]
         half_width: Option<f64>,
+        /// The difference, above 0 and in the result's unit, that still counts as agreeing,
+        /// set in advance. With it, the check agrees when the whole 95% interval of the
+        /// difference is inside it, differs when the whole interval is outside it, and is
+        /// otherwise inconclusive; without it, the check differs when the interval excludes 0
+        /// and otherwise detects no difference, which is not agreement.
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        tolerance: Option<f64>,
     },
     /// The result should be at most `bound`.
     AtMost {
@@ -2219,11 +2227,16 @@ impl From<&Observation> for ObservationSpec {
     fn from(o: &Observation) -> Self {
         let (element, metric) = (o.element.to_string(), o.metric.clone());
         match o.target {
-            Observed::Value { value, half_width } => ObservationSpec::Value {
+            Observed::Value {
+                value,
+                half_width,
+                tolerance,
+            } => ObservationSpec::Value {
                 element,
                 metric,
                 value,
                 half_width,
+                tolerance,
             },
             Observed::AtMost(bound) => ObservationSpec::AtMost {
                 element,
@@ -2247,10 +2260,15 @@ impl From<ObservationSpec> for Observation {
                 metric,
                 value,
                 half_width,
+                tolerance,
             } => Observation {
                 element: ElementId::unchecked(&element),
                 metric,
-                target: Observed::Value { value, half_width },
+                target: Observed::Value {
+                    value,
+                    half_width,
+                    tolerance,
+                },
             },
             ObservationSpec::AtMost {
                 element,

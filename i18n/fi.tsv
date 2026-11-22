@@ -1420,3 +1420,8 @@ unit	yr	v
 	The estimated chance that {output} is more than {value} is {percent}.	Arvioitu todennäköisyys sille, että {output} on yli {value}, on {percent}.
 	The estimated chance that {output} is less than {value} is {percent}.	Arvioitu todennäköisyys sille, että {output} on alle {value}, on {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	Niiden välillä ei ole leveyttä, mitä millään arviolla ei ole, joten tavallinen tulos jää voimaan.
+	Inconclusive at current precision	Ei ratkaisevaa nykyisellä tarkkuudella
+	No difference detected	Eroa ei havaittu
+	Agrees within ±{tolerance}	Täsmää rajoissa ±{tolerance}
+	This is not evidence of agreement: set a tolerance to test for it.	Tämä ei ole todiste täsmäämisestä: aseta toleranssi sen testaamiseksi.
+	Tolerance (0 for none)	Toleranssi (0 = ei mitään)

@@ -1420,3 +1420,8 @@ unit	yr	वर्ष
 	The estimated chance that {output} is more than {value} is {percent}.	{output} के {value} से अधिक होने की अनुमानित संभावना {percent} है।
 	The estimated chance that {output} is less than {value} is {percent}.	{output} के {value} से कम होने की अनुमानित संभावना {percent} है।
 	Their interval has no width, which no estimate has, so the plain result stands.	उनके अंतराल की कोई चौड़ाई नहीं है, जो किसी अनुमान की नहीं होती, इसलिए सामान्य परिणाम ही रहता है।
+	Inconclusive at current precision	वर्तमान सटीकता पर अनिर्णायक
+	No difference detected	कोई अंतर नहीं मिला
+	Agrees within ±{tolerance}	±{tolerance} के भीतर मेल खाता है
+	This is not evidence of agreement: set a tolerance to test for it.	यह मेल का प्रमाण नहीं है: इसे जाँचने के लिए सहनसीमा तय करें।
+	Tolerance (0 for none)	सहनसीमा (कोई नहीं के लिए 0)

@@ -1420,3 +1420,8 @@ unit	yr	m.
 	The estimated chance that {output} is more than {value} is {percent}.	Numatoma tikimybė, kad {output} yra didesnis nei {value}, yra {percent}.
 	The estimated chance that {output} is less than {value} is {percent}.	Numatoma tikimybė, kad {output} yra mažesnis nei {value}, yra {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	Jų intervalas neturi pločio, o jokio įverčio taip nebūna, todėl lieka įprastas rezultatas.
+	Inconclusive at current precision	Esamu tikslumu neįrodoma
+	No difference detected	Skirtumo neaptikta
+	Agrees within ±{tolerance}	Sutampa ±{tolerance} ribose
+	This is not evidence of agreement: set a tolerance to test for it.	Tai nėra sutapimo įrodymas: nustatykite leidžiamąją paklaidą, kad tai patikrintumėte.
+	Tolerance (0 for none)	Leidžiamoji paklaida (0 – jokios)
