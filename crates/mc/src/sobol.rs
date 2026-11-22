@@ -467,6 +467,22 @@ impl SobolRun {
                 unavailable: Some(why),
             })
         };
+        // The estimators compare the evaluations of one row with each other, and which rows are
+        // missing depends on the inputs, so leaving them out conditions the inputs on the model
+        // having a number: what is left no longer estimates the shares of independent inputs.
+        // None are given for this output; the counts say how much was missing.
+        if dropped > 0 {
+            return none(
+                format!(
+                    "{dropped} of {} rows have no finite value in at least one of the evaluations \
+                     the indices compare, so the shares of the spread are not worked out for \
+                     this output (the rows left out depend on the inputs, which would bias \
+                     them).",
+                    fa.len()
+                ),
+                None,
+            );
+        }
         if used < MIN_ROWS {
             return none(
                 format!(

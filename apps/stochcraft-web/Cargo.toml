@@ -31,7 +31,7 @@ egui = { workspace = true }
 js-sys = "0.3"
 wasm-bindgen = "0.2"
 wasm-bindgen-futures = "0.4"
-web-sys = { version = "0.3", features = ["Window", "Location", "Document", "Element", "HtmlElement", "HtmlCanvasElement", "HtmlInputElement", "File", "FileList", "Event", "BeforeUnloadEvent", "Navigator", "Worker", "MessageEvent", "ErrorEvent", "DedicatedWorkerGlobalScope"] }
+web-sys = { version = "0.3", features = ["Window", "Location", "Document", "Element", "HtmlElement", "HtmlCanvasElement", "HtmlInputElement", "File", "FileList", "Event", "BeforeUnloadEvent", "Navigator", "Storage", "Worker", "MessageEvent", "ErrorEvent", "DedicatedWorkerGlobalScope"] }
 
 # Natively only the pure parts are built, for their tests (src/schedule.rs, src/worker.rs).
 [dev-dependencies]

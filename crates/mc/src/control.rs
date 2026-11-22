@@ -64,7 +64,8 @@ pub fn is_constant(d: &Dist) -> bool {
 /// or why it is not or is not known. Every distribution but counts with a standard deviation
 /// above 10,000 is drawn exactly, by every sampling: no draw is clamped, resampled or truncated
 /// (a normal input can go negative; a truncated normal is drawn by exact rejection; a
-/// constant is its value as given). Those counts are drawn by a quantile expansion under Latin
+/// constant is its value as given; a beta with a tiny shape is drawn from the logs of its two
+/// gammas, so that its mean stays exact). Those counts are drawn by a quantile expansion under Latin
 /// hypercube, antithetic and Sobol sampling, which is within 1 of the exact value but not
 /// exactly the distribution, so they are refused under every sampling.
 pub fn exact_mean(d: &Dist) -> Result<f64, String> {

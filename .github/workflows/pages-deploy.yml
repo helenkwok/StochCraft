@@ -1,12 +1,20 @@
 name: Pages deploy
 
-# Serves the `gh-pages` branch on GitHub Pages with actions/deploy-pages: `main`'s build at the
-# site's root and each open pull request's at `pr/<number>/`, as the Pages workflow keeps them.
+# Serves the browser app on GitHub Pages with actions/deploy-pages, assembling the site from the
+# Actions artifacts the Pages workflow keeps: `main`'s newest build (`site-main`) at the site's
+# root and, for each open pull request from this repository, its newest build
+# (`site-pr-<number>`) at `pr/<number>/`. A pull request whose artifact has expired, or was never
+# made (its build failed), is simply left out; a closed one drops out.
 #
-# It runs after every Pages or Pages cleanup run (and on demand), from `main`'s context: the `github-pages`
-# environment only lets the default branch deploy, which a pull request's own run is not.
+# It runs after every Pages or Pages cleanup run (and on demand), from `main`'s context: the
+# `github-pages` environment only lets the default branch deploy, which a pull request's own run
+# is not. It only copies files from the artifacts; it never runs anything from them.
 #
 # Needs Settings → Pages → Build and deployment → Source = "GitHub Actions" (once).
+#
+# Artifacts expire after 30 days (the Pages workflow's retention-days). If `main` has had no
+# build for that long there is no `site-main` to serve; this workflow then fails and leaves the
+# site as it is, until Pages is run on main (Actions → Pages → Run workflow).
 
 on:
   workflow_run:
@@ -19,24 +27,66 @@ permissions:
 
 concurrency:
   group: pages-deploy
-  # A deployment in progress finishes; the next one then serves the newest tree.
+  # A deployment in progress finishes; the next one then assembles from the newest artifacts.
   cancel-in-progress: false
 
 jobs:
   build:
-    name: Collect gh-pages
+    name: Assemble the site
     if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      # Listing and downloading artifacts of other runs (the artifacts API and `gh run download`).
+      actions: read
+      pull-requests: read
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          ref: gh-pages
-          persist-credentials: false
+      - name: Download main's site and the open previews
+        run: |
+          set -euo pipefail
+
+          # The run that made the newest unexpired artifact of this name; empty if there is none.
+          latest_run() {
+            gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts?name=$1&per_page=100" \
+              --jq '[.artifacts[] | select(.expired | not)] | sort_by(.created_at) | last | .workflow_run.id // empty'
+          }
+
+          mkdir site
+          run=$(latest_run site-main)
+          if [ -z "$run" ]; then
+            echo "::error::No unexpired site-main artifact: run the Pages workflow on main first."
+            exit 1
+          fi
+          gh run download "$run" --name site-main --dir site
+          echo "Root: site-main from run $run" >>"$GITHUB_STEP_SUMMARY"
+
+          # Open pull requests from this repository (forks have no previews).
+          prs=$(gh api "repos/${GITHUB_REPOSITORY}/pulls?state=open&per_page=100" --paginate \
+            --jq '.[] | select(.head.repo.full_name == "'"${GITHUB_REPOSITORY}"'") | .number')
+          for pr in $prs; do
+            run=$(latest_run "site-pr-${pr}")
+            if [ -z "$run" ]; then
+              echo "Pull request #${pr}: no preview artifact, left out." >>"$GITHUB_STEP_SUMMARY"
+              continue
+            fi
+            if gh run download "$run" --name "site-pr-${pr}" --dir "site/pr/${pr}"; then
+              # Previews use the main site's fonts (../../fonts/); never keep a copy here.
+              rm -rf "site/pr/${pr}/fonts"
+              echo "Pull request #${pr}: site-pr-${pr} from run $run" >>"$GITHUB_STEP_SUMMARY"
+            else
+              rm -rf "site/pr/${pr}"
+              echo "Pull request #${pr}: download failed, left out." >>"$GITHUB_STEP_SUMMARY"
+            fi
+          done
+          du -sh site >>"$GITHUB_STEP_SUMMARY"
       - uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6.0.0
       - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
         with:
-          path: .
+          path: site
 
   deploy:
     name: Deploy to GitHub Pages

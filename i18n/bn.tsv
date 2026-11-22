@@ -940,7 +940,6 @@ unit	yr	বছর
 	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	এটাই আপনার প্রথম মডেল। ফলাফলের প্রথম কয়েকটি লাইন বলে দেয় চালানোয় কী পাওয়া গেছে; সহায়তা ▸ ফলাফলের অর্থ প্রতিটি সংখ্যা ব্যাখ্যা করে।
 # Which inputs matter in the Monte Carlo results (ROADMAP M4.1, part 3a)
 	Which inputs matter	কোন ইনপুট গুরুত্বপূর্ণ
-	{output} depends most on {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile.	{output} সবচেয়ে বেশি নির্ভর করে {input}-এর উপর: {input} তার ১০তম থেকে ৯০তম শতাংশকে গেলে এটি {low} থেকে {high}-এ যায়।
 	Each input from its 10th to its 90th percentile, with the others at their medians	প্রতিটি ইনপুট তার ১০তম থেকে ৯০তম শতাংশক পর্যন্ত, বাকিগুলো তাদের মধ্যমায়
 	Base {value}	ভিত্তি মান {value}
 	A correlated input's figure includes the effect of the inputs it is correlated with.	সহসম্পর্কযুক্ত ইনপুটের সংখ্যায় যেসব ইনপুটের সঙ্গে তার সহসম্পর্ক আছে তাদের প্রভাবও থাকে।
@@ -1369,7 +1368,6 @@ unit	yr	বছর
 	The model: its settings and variables	মডেল: এর সেটিংস ও চলকসমূহ
 	System dynamics model	সিস্টেম ডায়নামিক্স মডেল
 	Variables	চলকসমূহ
-	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	আপনি কমান্ড দিয়ে এই মডেল বদলাতে পারেন: এজেন্টের মাধ্যমে MCP সার্ভার দিয়ে, অথবা কমান্ড লাইন থেকে। ক্যানভাসে সম্পাদনা আসছে পরে।
 	From {start} to {stop}, in steps of {dt}, by the {method} method.	{start} থেকে {stop} পর্যন্ত, {dt} ধাপে, {method} পদ্ধতিতে।
 	Notes from the file	ফাইল থেকে নোট
 	Equation	সমীকরণ
@@ -1420,6 +1418,30 @@ unit	yr	বছর
 	The estimated chance that {output} is more than {value} is {percent}.	{output} {value}-এর বেশি হওয়ার আনুমানিক সম্ভাবনা {percent}।
 	The estimated chance that {output} is less than {value} is {percent}.	{output} {value}-এর কম হওয়ার আনুমানিক সম্ভাবনা {percent}।
 	Their interval has no width, which no estimate has, so the plain result stands.	এদের ব্যবধানের কোনো প্রস্থ নেই, যা কোনো আনুমানিক মানের থাকে না, তাই সাধারণ ফলাফলই থাকছে।
+	{output} changes most with {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile, the other inputs at their medians.	{output} সবচেয়ে বেশি বদলায় {input}-এর সাথে: {input} তার ১০ম থেকে ৯০তম পার্সেন্টাইলে গেলে এটি {low} থেকে {high}-এ যায়, অন্য ইনপুটগুলো তাদের মধ্যমায় থাকে।
+	No variation was observed, so there is no interval for the mean; a rare event the trials did not reach could still move it.	কোনো তারতম্য দেখা যায়নি, তাই গড়ের জন্য কোনো ব্যবধান নেই; পরীক্ষাগুলো যে বিরল ঘটনায় পৌঁছায়নি তা এখনও গড় বদলে দিতে পারে।
+	They narrowed the interval by {percent}, but a mean given for a control is far from the trials' mean, so the plain result stands.	এগুলো ব্যবধান {percent} সংকীর্ণ করেছে, কিন্তু একটি নিয়ন্ত্রকের জন্য দেওয়া গড় পরীক্ষাগুলোর গড় থেকে অনেক দূরে, তাই সাধারণ ফলাফলই থাকছে।
+	The output does not move in one direction with {inputs} (its value at the median is outside its values at the 10th and 90th percentiles), so the swing understates the effect.	আউটপুট {inputs}-এর সাথে এক দিকে বদলায় না (মধ্যমায় এর মান ১০ম ও ৯০তম পার্সেন্টাইলের মানের বাইরে), তাই সুইং প্রভাবকে কম দেখায়।
+	Did not open {file}: a different model was opened in the meantime	{file} খোলা হয়নি: ইতিমধ্যে অন্য একটি মডেল খোলা হয়েছে
+	Select	নির্বাচন
+	Link	সংযোগ
+	Initial value	প্রারম্ভিক মান
+	Click the diagram to place a stock.	একটি মজুত বসাতে ডায়াগ্রামে ক্লিক করুন।
+	Click the diagram to place an auxiliary.	একটি সহায়ক চলক বসাতে ডায়াগ্রামে ক্লিক করুন।
+	Drag from a stock, or from empty space, to another stock or empty space to draw a flow.	প্রবাহ আঁকতে একটি মজুত বা ফাঁকা জায়গা থেকে অন্য মজুত বা ফাঁকা জায়গায় টানুন।
+	Drag from one variable to another to show that the second uses the first.	দ্বিতীয়টি প্রথমটি ব্যবহার করে তা দেখাতে এক চলক থেকে অন্যটিতে টানুন।
+	Click a variable to select it and edit it here. Drag a variable to move it.	একটি চলক নির্বাচন করে এখানে সম্পাদনা করতে তাতে ক্লিক করুন। সরাতে চলকটি টানুন।
+	Moved {name}	{name} সরানো হয়েছে
+	Added {kind}: {name}	যোগ করা হয়েছে {kind}: {name}
+	Edited {name}	{name} সম্পাদনা করা হয়েছে
+	Removed {name}	{name} সরানো হয়েছে
+	Linked {from} to {to}	{from} কে {to} এর সাথে সংযুক্ত করা হয়েছে
+	Add Variable	চলক যোগ করুন
+	Edit Variable	চলক পরিবর্তন
+	Remove Variable	চলক সরান
+	Simulation Settings	সিমুলেশন সেটিংস
+	Change Diagram	ডায়াগ্রাম পরিবর্তন
+	You can change this model on the Diagram tab, or with commands, from an agent through the MCP server or from the command line.	আপনি এই মডেলটি ডায়াগ্রাম ট্যাবে, অথবা কমান্ড দিয়ে, এজেন্ট থেকে MCP সার্ভারের মাধ্যমে বা কমান্ড লাইন থেকে পরিবর্তন করতে পারেন।
 	Inconclusive at current precision	বর্তমান নির্ভুলতায় অনির্ণায়ক
 	No difference detected	কোনো পার্থক্য পাওয়া যায়নি
 	Agrees within ±{tolerance}	±{tolerance}-এর মধ্যে মিলে যায়
