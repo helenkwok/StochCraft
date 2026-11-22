@@ -420,11 +420,16 @@ fn tokenize(src: &str, variables: bool) -> Result<Vec<(usize, Tok)>, ExprError> 
     Ok(out)
 }
 
-/// The deepest an expression may nest, in parentheses, signs and function calls, and the tallest
-/// tree it may build (a long run of `+` builds a tree as tall as the run is long). The same limit
-/// as for the nesting of a system dynamics equation, so that reading, evaluating, copying and
-/// dropping an expression stay within a small stack, whatever the file holds.
-const MAX_DEPTH: usize = 256;
+/// The deepest an expression may nest, in parentheses, signs and function calls: each level
+/// is several nested calls of the parser (one per precedence level), so this is kept well below
+/// what a small stack holds (a debug build's 2 MB test thread, a 1 MB main thread on Windows).
+/// Models nest a handful of levels.
+const MAX_NEST: usize = 64;
+
+/// The tallest tree an expression may build: a long run of `+` is read in a loop, not by recursion,
+/// but builds a tree as tall as the run is long, and evaluating, copying and dropping it recurse
+/// once per level, with small frames.
+const MAX_HEIGHT: usize = 512;
 
 /// A parsed tree and its height (a number or a name has height 1).
 type Node = (Expr, usize);
@@ -462,10 +467,10 @@ impl Parser {
         t
     }
 
-    fn too_deep(&self) -> ExprError {
+    fn too_deep(&self, limit: usize) -> ExprError {
         err(
             self.pos(),
-            format!("the expression nests more than {MAX_DEPTH} deep"),
+            format!("the expression nests more than {limit} deep"),
         )
     }
 
@@ -475,8 +480,8 @@ impl Parser {
         f: impl FnOnce(&mut Self) -> Result<Node, ExprError>,
     ) -> Result<Node, ExprError> {
         self.nest += 1;
-        if self.nest > MAX_DEPTH {
-            return Err(self.too_deep());
+        if self.nest > MAX_NEST {
+            return Err(self.too_deep(MAX_NEST));
         }
         let n = f(self)?;
         self.nest -= 1;
@@ -486,8 +491,8 @@ impl Parser {
     /// `node` as the parent of children `heights` tall, if the tree stays within the limit.
     fn grow(&self, node: Expr, heights: &[usize]) -> Result<Node, ExprError> {
         let h = heights.iter().copied().max().unwrap_or(0) + 1;
-        if h > MAX_DEPTH {
-            return Err(self.too_deep());
+        if h > MAX_HEIGHT {
+            return Err(self.too_deep(MAX_HEIGHT));
         }
         Ok((node, h))
     }
@@ -1109,9 +1114,9 @@ mod tests {
         let if_chain = format!("{}1{}", "if(1, 1, ".repeat(n), ")".repeat(n));
         assert!(parse_with_variables(&if_chain).is_err_and(|e| e.message.contains("nests more")));
         // Deep, but within the limit: still read, evaluated and dropped.
-        let ok = format!("{}1{}", "(".repeat(200), ")".repeat(200));
+        let ok = format!("{}1{}", "(".repeat(50), ")".repeat(50));
         assert_eq!(num(&ok), 1.0);
         assert_eq!(num(&format!("1{}", " + 1".repeat(200))), 201.0);
-        assert_eq!(num(&format!("{}1", "-".repeat(200))), 1.0);
+        assert_eq!(num(&format!("{}1", "-".repeat(50))), 1.0);
     }
 }

@@ -202,11 +202,16 @@ fn lex(text: &str) -> Result<Vec<Tok>, String> {
     Ok(out)
 }
 
-/// The deepest an equation may nest, in parentheses, signs, `IF`s and calls, and the tallest
-/// tree it may build (a long run of `+` builds a tree as tall as the run is long). The same
-/// limit as for the elements of a model file, so that reading, compiling, evaluating and
-/// dropping an equation stay within a small stack, whatever the file holds.
-const MAX_DEPTH: usize = 256;
+/// The deepest an equation may nest, in parentheses, signs, `IF`s and function calls: each level
+/// is several nested calls of the parser (one per precedence level), so this is kept well below
+/// what a small stack holds (a debug build's 2 MB test thread, a 1 MB main thread on Windows).
+/// Models nest a handful of levels.
+const MAX_NEST: usize = 64;
+
+/// The tallest tree an equation may build: a long run of `+` is read in a loop, not by recursion,
+/// but builds a tree as tall as the run is long, and evaluating, copying and dropping it recurse
+/// once per level, with small frames.
+const MAX_HEIGHT: usize = 512;
 
 /// A parsed tree and its height (a name or number has height 1).
 type Node = (Ast, usize);
@@ -243,18 +248,18 @@ impl Parser {
     /// Opens one more nested call, or says the equation nests too deeply.
     fn enter(&mut self) -> Result<(), String> {
         self.nest += 1;
-        if self.nest > MAX_DEPTH {
-            Err(too_deep(self.i))
+        if self.nest > MAX_NEST {
+            Err(too_deep(MAX_NEST, self.i))
         } else {
             Ok(())
         }
     }
 
-    /// The node for `op` over two operands, if the tree stays within [`MAX_DEPTH`].
+    /// The node for `op` over two operands, if the tree stays within [`MAX_HEIGHT`].
     fn bin(&self, op: BinOp, l: Node, r: Node) -> Result<Node, String> {
         let h = l.1.max(r.1) + 1;
-        if h > MAX_DEPTH {
-            return Err(too_deep(self.i));
+        if h > MAX_HEIGHT {
+            return Err(too_deep(MAX_HEIGHT, self.i));
         }
         Ok((Ast::Bin(op, Box::new(l.0), Box::new(r.0)), h))
     }
@@ -365,8 +370,8 @@ impl Parser {
         self.enter()?;
         let n = self.unary()?;
         self.nest -= 1;
-        if n.1 >= MAX_DEPTH {
-            return Err(too_deep(self.i));
+        if n.1 >= MAX_HEIGHT {
+            return Err(too_deep(MAX_HEIGHT, self.i));
         }
         Ok(n)
     }
@@ -408,8 +413,8 @@ impl Parser {
                 self.bump();
                 let (b, hb) = self.or()?;
                 let h = hc.max(ha).max(hb) + 1;
-                if h > MAX_DEPTH {
-                    return Err(too_deep(self.i));
+                if h > MAX_HEIGHT {
+                    return Err(too_deep(MAX_HEIGHT, self.i));
                 }
                 Ok((Ast::If(Box::new(c), Box::new(a), Box::new(b)), h))
             }
@@ -436,8 +441,8 @@ impl Parser {
                             _ => return Err("`,` or `)` was expected".to_owned()),
                         }
                     }
-                    if h > MAX_DEPTH {
-                        return Err(too_deep(self.i));
+                    if h > MAX_HEIGHT {
+                        return Err(too_deep(MAX_HEIGHT, self.i));
                     }
                     Ok((Ast::Call(s, args), h))
                 } else {
@@ -450,15 +455,15 @@ impl Parser {
     }
 }
 
-fn too_deep(token: usize) -> String {
+fn too_deep(limit: usize, token: usize) -> String {
     format!(
-        "the equation nests more than {MAX_DEPTH} deep (near token {})",
+        "the equation nests more than {limit} deep (near token {})",
         token + 1
     )
 }
 
 /// Reads an equation. The error says what was expected. An equation may nest at most
-/// [`MAX_DEPTH`] deep.
+/// [`MAX_NEST`] deep and build a tree at most [`MAX_HEIGHT`] tall.
 pub fn parse(text: &str) -> Result<Ast, String> {
     let toks = lex(text)?;
     if toks.is_empty() {
@@ -568,9 +573,9 @@ mod tests {
             );
         }
         // Deep, but within the limit: still read.
-        let ok = format!("{}1{}", "(".repeat(200), ")".repeat(200));
+        let ok = format!("{}1{}", "(".repeat(50), ")".repeat(50));
         assert!(parse(&ok).is_ok());
         assert!(parse(&format!("1{}", "+1".repeat(200))).is_ok());
-        assert!(parse(&format!("{}1", "-".repeat(200))).is_ok());
+        assert!(parse(&format!("{}1", "-".repeat(50))).is_ok());
     }
 }
