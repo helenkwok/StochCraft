@@ -1395,7 +1395,10 @@ pub fn mc_table(name: &str, r: &Value) -> String {
     }
     if let Some(stop) = r.get("stop") {
         let why = match s(&stop["reason"]) {
-            "target_met" => "every output's mean is within the share asked for".to_owned(),
+            "target_met" => match mc_not_established(r) {
+                Some(open) => open,
+                None => "every output's mean is within the share asked for".to_owned(),
+            },
             "max_reached" => format!("it reached the most trials, {}", stop["max"]),
             other => other.replace('_', " "),
         };
@@ -1432,6 +1435,34 @@ pub fn mc_table(name: &str, r: &Value) -> String {
 /// A Monte Carlo run's results as CSV: a row per output, as the app exports them.
 pub fn mc_csv(r: &Value) -> String {
     stochcraft_engine::mc::results_csv(r)
+}
+
+/// On a sequential Monte Carlo stop at its target, the words for outputs whose precision is not
+/// established: they gave the same value in every trial, so they have no interval, and an
+/// outcome rarer than about 3 in the trials (the rule of three's 95% bound) could have gone
+/// unseen. `None` when every output met the precision.
+fn mc_not_established(r: &Value) -> Option<String> {
+    let names = |key: &str| {
+        r["stop"][key]
+            .as_array()
+            .map(|a| a.iter().map(|n| s(n).to_owned()).collect::<Vec<_>>())
+            .unwrap_or_default()
+    };
+    let (met, open) = (names("met"), names("not_established"));
+    if open.is_empty() {
+        return None;
+    }
+    let n = r["trials"].as_u64().unwrap_or(0);
+    let rare = (n / 3).max(1);
+    Some(format!(
+        "precision was met for {}; it is not established for {} (no variation was observed in {n} trials, and an outcome rarer than about 1 in {rare} trials could have gone unseen)",
+        if met.is_empty() {
+            "no output".to_owned()
+        } else {
+            met.join(", ")
+        },
+        open.join(", ")
+    ))
 }
 
 /// A share of a variance as a whole percentage: below 0 shown as 0% and above 1 as 100%, as a
@@ -2095,5 +2126,26 @@ mod tests {
             out.contains("y: no variation was observed, so there is no interval for its mean"),
             "{out}"
         );
+    }
+
+    /// A sequential stop on its target with an output that never varied names what met the
+    /// precision and what did not establish it, not "every output".
+    #[test]
+    fn a_sequential_stop_names_the_outputs_whose_precision_is_not_established() {
+        let mut r = serde_json::json!({
+            "trials": 1000,
+            "outputs": [],
+            "stop": { "reason": "target_met", "relative": 0.05, "max": 100000, "looks": [1000],
+                      "met": ["A"], "not_established": ["B"] },
+        });
+        let out = mc_table("m", &r);
+        assert!(
+            out.contains("precision was met for A; it is not established for B (no variation was observed in 1000 trials, and an outcome rarer than about 1 in 333 trials could have gone unseen)"),
+            "{out}"
+        );
+        assert!(!out.contains("every output"), "{out}");
+        r["stop"]["met"] = serde_json::json!(["A", "B"]);
+        r["stop"]["not_established"] = serde_json::json!([]);
+        assert!(mc_table("m", &r).contains("every output's mean is within the share asked for"));
     }
 }

@@ -1308,6 +1308,7 @@ unit	yr	年
 @plural	Imported {n} input|Imported {n} inputs	已匯入 {n} 個輸入
 @plural	Makes {n} trial from seed {seed}: each draws every input once and works out every output.|Makes {n} trials from seed {seed}: each draws every input once and works out every output.	從隨機種子 {seed} 進行 {n} 次試驗：每次對每個輸入抽取一次並算出每個輸出。
 @plural	Stopped after {n} trial: every output's mean is within ±{share} of itself.|Stopped after {n} trials: every output's mean is within ±{share} of itself.	{n} 次試驗後停止：每個輸出的平均值都在其自身的 ±{share} 以內。
+@plural	Stopped after {n} trial: precision met for {met}; not established for {open}, which gave the same value in every trial (an outcome rarer than about 1 in {rare} trials could have gone unseen).|Stopped after {n} trials: precision met for {met}; not established for {open}, which gave the same value in every trial (an outcome rarer than about 1 in {rare} trials could have gone unseen).	{n} 次試驗後停止：{met} 已達到精度要求；{open} 在每次試驗中都得到相同的值，因此精度未能確立（比約 {rare} 次試驗中出現 1 次更罕見的結果可能沒有被觀察到）。
 @plural	Stopped at the most allowed, {n} trial, before every output's mean was within ±{share} of itself.|Stopped at the most allowed, {n} trials, before every output's mean was within ±{share} of itself.	達到允許的上限 {n} 次試驗時停止，此時並非每個輸出的平均值都在其自身的 ±{share} 以內。
 @plural	{done} of {n} trial made|{done} of {n} trials made	已進行 {done}/{n} 次試驗
 @plural	{n} trial gave no number (a division by zero, say) and is left out.|{n} trials gave no number (a division by zero, say) and are left out.	{n} 次試驗未得出數值（例如除以零），已被排除。

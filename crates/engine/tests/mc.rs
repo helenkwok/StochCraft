@@ -149,6 +149,39 @@ fn a_sequential_run_says_why_it_stopped() {
 }
 
 #[test]
+fn a_sequential_stop_says_which_outputs_met_the_precision_and_which_never_varied() {
+    // A varies and settles quickly; B is 0 in every trial (an event that never happened), so it
+    // has no interval. The run stops on its target, and says B's precision is not established.
+    let mut e = Engine::new();
+    ok(&mut e, "model.new", json!({ "name": "Rare" }));
+    ok(
+        &mut e,
+        "mc.input.set",
+        json!({ "name": "u", "distribution": { "type": "uniform", "min": 0.0, "max": 1.0 } }),
+    );
+    ok(
+        &mut e,
+        "mc.output.set",
+        json!({ "name": "A", "expression": "$u + 10" }),
+    );
+    ok(
+        &mut e,
+        "mc.output.set",
+        json!({ "name": "B", "expression": "$u > 2" }),
+    );
+    let r = ok(
+        &mut e,
+        "mc.run",
+        json!({ "trials": 1_000, "stop": { "relative": 0.05, "max": 100_000 } }),
+    );
+    let stop = &r["stop"];
+    assert_eq!(stop["reason"], "target_met", "{stop}");
+    assert_eq!(stop["met"], json!(["A"]), "{stop}");
+    assert_eq!(stop["not_established"], json!(["B"]), "{stop}");
+    assert_eq!(r["outputs"][1]["no_variation"], true, "{r}");
+}
+
+#[test]
 fn bad_edits_are_refused() {
     let mut e = cost_model();
     assert_eq!(

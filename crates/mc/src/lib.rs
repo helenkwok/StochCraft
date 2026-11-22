@@ -874,7 +874,17 @@ impl Compiled {
     /// Whether a sequential run stops after `n` trials, or how many it goes on to (whole
     /// batches, at most `max`), judged on `blocks`.
     fn next_look(&self, blocks: &[Block], stop: McStop, n: u64, max: u64) -> Step {
-        let verdicts: Vec<precision::Verdict> = (0..self.outputs.len())
+        match precision::next_count(n, max, &self.verdicts(blocks, stop)) {
+            Step::Continue(next) => {
+                Step::Continue(next.div_ceil(BATCH).saturating_mul(BATCH).min(max))
+            }
+            stop => stop,
+        }
+    }
+
+    /// Each output's precision verdict on `blocks` against `stop`'s share of the mean.
+    fn verdicts(&self, blocks: &[Block], stop: McStop) -> Vec<precision::Verdict> {
+        (0..self.outputs.len())
             .map(|o| {
                 // Judged on the interval the results report: across trials, or across batches
                 // (whose count, not the trials', says whether there is one), or across pairs.
@@ -891,13 +901,7 @@ impl Compiled {
                     Scale::Relative(stop.relative),
                 )
             })
-            .collect();
-        match precision::next_count(n, max, &verdicts) {
-            Step::Continue(next) => {
-                Step::Continue(next.div_ceil(BATCH).saturating_mul(BATCH).min(max))
-            }
-            stop => stop,
-        }
+            .collect()
     }
 
     /// The results of `blocks` (in index order), every piece worked out without a pause, as
@@ -1771,6 +1775,10 @@ pub struct StopReport {
     pub reason: Reason,
     /// The trials after each look.
     pub looks: Vec<u64>,
+    /// For each output, whether its mean was within the share asked for at the stop. A run
+    /// stops on its target with some output not settled when every one of those gave the same
+    /// value in every trial: no variation was observed, which does not establish its precision.
+    pub settled: Vec<bool>,
 }
 
 /// A run made a few batches at a time ([`Compiled::stepper`]), so a window can draw between
@@ -1899,6 +1907,11 @@ impl Stepper {
                 Step::Continue(_) => Reason::MaxReached,
             },
             looks: self.looks.clone(),
+            settled: compiled
+                .verdicts(&self.blocks, stop)
+                .iter()
+                .map(|v| v.is_settled())
+                .collect(),
         });
         self.summing = Some(Summing::new(&self.options.percentiles, stop));
     }

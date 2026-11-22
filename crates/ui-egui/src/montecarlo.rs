@@ -505,8 +505,31 @@ fn stop_line(r: &Value) -> Option<String> {
     let stop = r["stop"].as_object()?;
     let n = r["trials"].as_u64().unwrap_or(0);
     let share = percent(stop.get("relative").and_then(Value::as_f64).unwrap_or(0.0));
+    // The outputs named in `key` ("met", "not_established"), joined.
+    let names = |key: &str| {
+        stop.get(key).and_then(Value::as_array).map(|a| {
+            a.iter()
+                .filter_map(Value::as_str)
+                .collect::<Vec<_>>()
+                .join(", ")
+        })
+    };
     Some(
-        if stop.get("reason").and_then(Value::as_str) == Some("target_met") {
+        if stop.get("reason").and_then(Value::as_str) == Some("target_met")
+            && let Some(open) = names("not_established").filter(|o| !o.is_empty())
+        {
+            // Stopped on its target, with some output that never varied: its precision is not
+            // established, and an outcome rarer than about 3 in the trials (the rule of three)
+            // could have gone unseen.
+            let met = names("met").unwrap_or_default();
+            let rare = (n / 3).max(1).to_string();
+            tnf(
+                n,
+                "Stopped after {n} trial: precision met for {met}; not established for {open}, which gave the same value in every trial (an outcome rarer than about 1 in {rare} trials could have gone unseen).",
+                "Stopped after {n} trials: precision met for {met}; not established for {open}, which gave the same value in every trial (an outcome rarer than about 1 in {rare} trials could have gone unseen).",
+                &[("met", &met), ("open", &open), ("rare", &rare)],
+            )
+        } else if stop.get("reason").and_then(Value::as_str) == Some("target_met") {
             tnf(
                 n,
                 "Stopped after {n} trial: every output's mean is within ±{share} of itself.",
@@ -2612,6 +2635,26 @@ mod tests {
         let mut plain = o.clone();
         plain["no_variation"] = json!(false);
         assert_eq!(finding(&plain).map(|f| f.1), Some(None));
+    }
+
+    /// A stop on its target with an output that never varied does not say every output met the
+    /// precision.
+    #[test]
+    fn a_stop_names_the_outputs_whose_precision_is_not_established() {
+        let mut r = json!({
+            "trials": 1000,
+            "stop": { "reason": "target_met", "relative": 0.05, "met": ["A"], "not_established": ["B"] },
+        });
+        let line = stop_line(&r).unwrap_or_default();
+        assert!(
+            line.contains("precision met for A; not established for B"),
+            "{line}"
+        );
+        assert!(line.contains("about 1 in 333 trials"), "{line}");
+        assert!(!line.contains("every output"), "{line}");
+        r["stop"]["not_established"] = json!([]);
+        let line = stop_line(&r).unwrap_or_default();
+        assert!(line.contains("every output's mean is within"), "{line}");
     }
 
     /// A control whose stated mean the trials contradict (a wrong mean gives a narrow interval
