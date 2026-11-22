@@ -9,7 +9,7 @@
 use egui::accesskit::Role;
 use egui::{Modifiers, Pos2, Vec2};
 use egui_kittest::Harness;
-use egui_kittest::kittest::Queryable;
+use egui_kittest::kittest::{NodeT, Queryable};
 use serde_json::{Value, json};
 use stochcraft_ui_egui::{App, EXAMPLES, Platform};
 
@@ -343,5 +343,16 @@ fn an_equation_is_edited_in_the_side_panel_and_a_bad_one_is_refused_in_the_field
 
     // A unit and a new name go through the same panel.
     type_into(&mut h, "Unit", "1/month");
-    assert_eq!(variable(&mut h, "innovation")["units"], "1/month");
+    assert_eq!(
+        variable(&mut h, "innovation")["units"],
+        "1/month",
+        "status {:?}; the panel says {:?}",
+        h.state().status(),
+        h.get_all_by_role(Role::TextInput)
+            .map(|n| {
+                let n = n.accesskit_node();
+                (n.label(), n.value())
+            })
+            .collect::<Vec<_>>()
+    );
 }

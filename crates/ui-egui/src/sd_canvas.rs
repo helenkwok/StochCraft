@@ -94,6 +94,9 @@ pub(crate) struct SdCanvas {
     refused: Option<(&'static str, String)>,
     /// The selection and the engine's revision the drafts are of.
     drafts_of: (Option<String>, u64),
+    /// A field of the side panel had the keyboard on the last frame, so Delete and Escape are
+    /// the field's, not the diagram's.
+    typing: bool,
 }
 
 impl Default for SdCanvas {
@@ -111,6 +114,7 @@ impl Default for SdCanvas {
             drafts: HashMap::new(),
             refused: None,
             drafts_of: (None, 0),
+            typing: false,
         }
     }
 }
@@ -651,6 +655,7 @@ impl App {
             .cloned()
             .unwrap_or_else(|| current.to_owned());
         let r = ui.add(egui::TextEdit::singleline(&mut text).desired_width(f32::INFINITY));
+        self.sd_canvas.typing |= r.has_focus();
         crate::form::field_outline(ui, &r);
         r.widget_info(|| egui::WidgetInfo::labeled(egui::Role::TextInput, true, label));
         if r.has_focus() && ui.input(|i| i.key_pressed(egui::Key::Escape)) {
@@ -680,6 +685,8 @@ impl App {
     /// The side panel: the selected variable's kind and name, its equation (a stock's initial
     /// value) and unit to edit, its flows, and Delete; or what to do to select one.
     fn sd_panel(&mut self, ui: &mut egui::Ui, v: Option<&Var>) {
+        // Found again by the fields drawn this frame.
+        self.sd_canvas.typing = false;
         let Some(v) = v else {
             ui.add(
                 egui::Label::new(theme::weak(
@@ -1231,8 +1238,10 @@ impl App {
         self.sd_zoom_controls(ui, rect);
 
         // Delete removes the selection, Escape lets go of the tool or the selection; not while a
-        // field is being typed in.
-        if !ui.ctx().egui_wants_keyboard_input() {
+        // field of the panel is being typed in. (egui's own "wants keyboard input" is true while
+        // any widget has the keyboard, a shape reached by Tab too, so it would stop Delete for
+        // the keyboard user.)
+        if !self.sd_canvas.typing {
             if let Some(i) = selected
                 && ui.input_mut(|k| {
                     k.consume_key(Modifiers::NONE, egui::Key::Delete)
