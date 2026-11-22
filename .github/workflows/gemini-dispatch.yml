@@ -149,8 +149,10 @@ jobs:
     needs:
       - 'dispatch'
       - 'review'
+    # A review that runs out of time ends as cancelled, not failed: the usual way it ends when the
+    # model keeps answering 503 and the CLI keeps retrying. It must still say so on the pull request.
     if: |-
-      ${{ always() && !cancelled() && (failure() || needs.dispatch.outputs.command == 'fallthrough') }}
+      ${{ always() && (needs.dispatch.outputs.command == 'fallthrough' || needs.dispatch.result == 'failure' || needs.review.result == 'failure' || needs.review.result == 'cancelled') }}
     runs-on: 'ubuntu-latest'
     permissions:
       contents: 'read'
@@ -162,7 +164,7 @@ jobs:
           GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN || github.token }}'
           ISSUE_NUMBER: '${{ github.event.pull_request.number || github.event.issue.number || inputs.pull_request_number }}'
           MESSAGE: |-
-            ${{ needs.dispatch.outputs.command == 'fallthrough' && 'Only "@gemini-cli /review" is supported here.' || 'The Gemini review did not finish; a used-up API quota is the usual cause.' }} [See the logs](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) for details.
+            ${{ needs.dispatch.outputs.command == 'fallthrough' && 'Only "@gemini-cli /review" is supported here.' || 'The Gemini review did not finish (it failed, ran out of its 7 minutes, or a newer review replaced it). The usual causes are the model answering 503 (high demand), which the CLI retries until the time runs out, and the free tier''s daily limit of 20 requests (429), which every retry counts against and which resets at midnight Pacific time. A comment starting with "@gemini-cli /review" tries again.' }} [See the logs](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) for details.
           REPOSITORY: '${{ github.repository }}'
         run: |-
           gh issue comment "${ISSUE_NUMBER}" \
