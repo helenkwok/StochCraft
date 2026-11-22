@@ -1322,8 +1322,9 @@ Kleijnen 2015).
   planning). More than that at resolution V is refused, naming the resolution IV design that fits.
 - **Plackett–Burman designs** for 12, 20 and 24 points, from one cyclic generating row each
   (Plackett and Burman 1946), checked in code by the orthogonality of every pair of columns, not
-  trusted from a table; 8, 16 and 32 points are the regular saturated fractions above. With 25 to
-  30 factors the 32-point fraction is used: 28 points is not a single cyclic row and is not built.
+  trusted from a table; 8, 16 and 32 points are the regular saturated fractions above. With 24 to
+  30 factors the 32-point fraction is used (24 points have room for 23 factors; 28 points is not a
+  single cyclic row and is not built).
 - **What is confounded, stated with the answer.** For a regular fraction: the defining relation,
   its resolution, and each main effect's aliases among the two-factor interactions ("the effect
   of `oven.capacity` is also the interaction of `mixer.mean` with `belt.mean`"); at resolution
@@ -1355,10 +1356,12 @@ Anderson-Cook 2016), 2 to 6 factors.
 - **The fit:** the full quadratic in coded units (−1 to 1), 1 + 2k + k(k−1)/2 coefficients, by
   least squares, once per replication; each coefficient is the mean over replications with its t
   interval. The surface's predictions come with the same per-replication intervals.
-- **Lack of fit, said plainly.** With more replications than points, Rao's (1959) F test on the
-  residuals, which allows the correlation common random numbers bring between points, as
-  Kleijnen, Feelders and Cheng (1998) restate it: F with n − q and m − n + q degrees of freedom
-  for n points, q coefficients and m replications. With fewer replications than that, each
+- **Lack of fit, said plainly.** With more replications than points, Rao's (1959) F test, which
+  allows the correlation common random numbers bring between points, as Kleijnen, Feelders and
+  Cheng (1998) restate it: the residuals of the generalised least-squares fit, weighted by the
+  inverse of the points' covariance matrix estimated across replications, give F with n − q and
+  m − n + q degrees of freedom for n points, q coefficients and m replications. (The reported
+  coefficients stay the per-replication ones above; the generalised fit serves only this test.) With fewer replications than that, each
   point's mean residual is judged by its own interval with a Bonferroni correction, and the
   answer says the joint test needed more replications (and how many). Either way, a significant
   lack of fit leads the answer: "a quadratic does not describe this region; the best setting
@@ -1388,7 +1391,7 @@ Lin, Winker and Zhang 2000; Morris and Mitchell 1995; Hickernell 1998).
   and up to 4 factors, every admissible h is tried; otherwise Korobov's power vectors
   h = (1, a, a², …) mod n. The h with the smallest centered L2 discrepancy is kept. Supported:
   5 to 100 points, 2 to 20 factors, when n has enough numbers prime to it for the factors (an n
-  without is refused, naming the nearest that works; a prime n always works).
+  without is refused, naming the nearest that works; a prime n works for up to n − 1 factors).
 - **Maximin Latin hypercubes:** Morris and Mitchell's φ_p criterion (p = 50 by default) on a
   Latin hypercube with points at the strata's middles, improved by simulated annealing with
   exchanges within a column, a fixed number of iterations, from `Rng::keyed(seed,
@@ -1488,7 +1491,8 @@ planning):
 - R. L. Plackett, J. P. Burman, "The design of optimum multifactorial experiments",
   *Biometrika* 33(4):305–325, 1946, doi 10.1093/biomet/33.4.305
 - G. E. P. Box, J. S. Hunter, W. G. Hunter, *Statistics for Experimenters*, 2nd ed., Wiley, 2005;
-  D. C. Montgomery, *Design and Analysis of Experiments*, 10th ed., Wiley
+  D. C. Montgomery, *Design and Analysis of Experiments*, 10th ed., Wiley; A. M. Law, *Simulation
+  Modeling and Analysis*, 5th ed., McGraw-Hill, 2015
 - J. P. C. Kleijnen, *Design and Analysis of Simulation Experiments*, 2nd ed., Springer
   (International Series in Operations Research & Management Science), 2015, doi
   10.1007/978-3-319-18087-8
@@ -1516,8 +1520,8 @@ planning):
 - M. D. Morris, T. J. Mitchell, "Exploratory designs for computational experiments", *Journal of
   Statistical Planning and Inference* 43(3):381–402, 1995, doi 10.1016/0378-3758(94)00035-T
 - F. J. Hickernell, "A generalized discrepancy and quadrature error bound", *Mathematics of
-  Computation* 67(221):299–322, 1998, doi 10.1090/S0025-5718-98-00894-1; its closed form as
-  restated in C. D. Lin, B. Tang, "Latin hypercubes and space-filling designs", arXiv:2203.06334
+  Computation* 67(221):299–322, 1998, doi 10.1090/S0025-5718-98-00894-1; the closed form used in
+  planning reproduces SciPy's example below and the exact 1/12 of a single centre point
 - R. Cranley, T. N. L. Patterson, "Randomization of number theoretic methods for multiple
   integration", *SIAM Journal on Numerical Analysis* 13(6):904–914, 1976, doi 10.1137/0713071
 - SciPy, `scipy.stats.qmc.discrepancy` documentation (BSD-3-Clause), the six-point example:
