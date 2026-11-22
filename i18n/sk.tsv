@@ -1369,7 +1369,6 @@ unit	yr	r.
 	The model: its settings and variables	Model: jeho nastavenia a premenné
 	System dynamics model	Model systémovej dynamiky
 	Variables	Premenné
-	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	Tento model môžete meniť príkazmi, z agenta cez server MCP alebo z príkazového riadka. Úpravy na plátne prídu nabudúce.
 	From {start} to {stop}, in steps of {dt}, by the {method} method.	Od {start} do {stop}, v krokoch po {dt}, metódou {method}.
 	Notes from the file	Poznámky zo súboru
 	Equation	Rovnica
@@ -1421,6 +1420,25 @@ unit	yr	r.
 	The estimated chance that {output} is less than {value} is {percent}.	Odhadovaná pravdepodobnosť, že {output} bude menšie ako {value}, je {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	Ich interval nemá žiadnu šírku, čo žiadny odhad nemá, preto zostáva obyčajný výsledok.
 	Did not open {file}: a different model was opened in the meantime	Súbor {file} sa neotvoril: medzitým sa otvoril iný model
+	Select	Vybrať
+	Link	Spojnica
+	Initial value	Počiatočná hodnota
+	Click the diagram to place a stock.	Kliknutím do diagramu umiestnite zásobu.
+	Click the diagram to place an auxiliary.	Kliknutím do diagramu umiestnite pomocnú veličinu.
+	Drag from a stock, or from empty space, to another stock or empty space to draw a flow.	Ťahaním zo zásoby alebo z prázdneho miesta do inej zásoby alebo prázdneho miesta nakreslíte tok.
+	Drag from one variable to another to show that the second uses the first.	Ťahaním od jednej veličiny k druhej ukážete, že druhá používa prvú.
+	Click a variable to select it and edit it here. Drag a variable to move it.	Kliknutím na veličinu ju vyberiete a upravíte tu. Ťahaním ju presuniete.
+	Moved {name}	Presunuté: {name}
+	Added {kind}: {name}	Pridané: {kind} {name}
+	Edited {name}	Upravené: {name}
+	Removed {name}	Odstránené: {name}
+	Linked {from} to {to}	{from} prepojené s {to}
+	Add Variable	Pridať premennú
+	Edit Variable	Zmeniť premennú
+	Remove Variable	Odstrániť premennú
+	Simulation Settings	Nastavenia simulácie
+	Change Diagram	Zmeniť diagram
+	You can change this model on the Diagram tab, or with commands, from an agent through the MCP server or from the command line.	Tento model môžete meniť na karte Diagram alebo príkazmi, od agenta cez server MCP alebo z príkazového riadka.
 	Inconclusive at current precision	Nepreukazné pri súčasnej presnosti
 	No difference detected	Rozdiel sa nezistil
 	Agrees within ±{tolerance}	Zhoduje sa v rozmedzí ±{tolerance}

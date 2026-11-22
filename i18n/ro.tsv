@@ -1369,7 +1369,6 @@ unit	yr	a
 	The model: its settings and variables	Modelul: setările și variabilele sale
 	System dynamics model	Model de dinamică a sistemelor
 	Variables	Variabile
-	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	Puteți modifica acest model cu comenzi, dintr-un agent prin serverul MCP sau din linia de comandă. Editarea pe canava vine mai târziu.
 	From {start} to {stop}, in steps of {dt}, by the {method} method.	De la {start} la {stop}, în pași de {dt}, prin metoda {method}.
 	Notes from the file	Note din fișier
 	Equation	Ecuație
@@ -1421,6 +1420,25 @@ unit	yr	a
 	The estimated chance that {output} is less than {value} is {percent}.	Probabilitatea estimată ca {output} să fie mai mică decât {value} este {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	Intervalul lor nu are lățime, ceea ce nicio estimare nu are, așa că rămâne rezultatul simplu.
 	Did not open {file}: a different model was opened in the meantime	{file} nu a fost deschis: între timp a fost deschis alt model
+	Select	Selectează
+	Link	Legătură
+	Initial value	Valoare inițială
+	Click the diagram to place a stock.	Faceți clic pe diagramă pentru a plasa un stoc.
+	Click the diagram to place an auxiliary.	Faceți clic pe diagramă pentru a plasa o variabilă auxiliară.
+	Drag from a stock, or from empty space, to another stock or empty space to draw a flow.	Trageți de la un stoc sau de la un spațiu gol la alt stoc sau spațiu gol pentru a desena un flux.
+	Drag from one variable to another to show that the second uses the first.	Trageți de la o variabilă la alta pentru a arăta că a doua o folosește pe prima.
+	Click a variable to select it and edit it here. Drag a variable to move it.	Faceți clic pe o variabilă pentru a o selecta și a o edita aici. Trageți-o pentru a o muta.
+	Moved {name}	S-a mutat {name}
+	Added {kind}: {name}	S-a adăugat {kind}: {name}
+	Edited {name}	S-a editat {name}
+	Removed {name}	S-a eliminat {name}
+	Linked {from} to {to}	S-a legat {from} de {to}
+	Add Variable	Adaugă variabilă
+	Edit Variable	Modifică variabila
+	Remove Variable	Elimină variabila
+	Simulation Settings	Setări de simulare
+	Change Diagram	Modifică diagrama
+	You can change this model on the Diagram tab, or with commands, from an agent through the MCP server or from the command line.	Puteți modifica acest model în fila Diagramă sau cu comenzi, de la un agent prin serverul MCP sau din linia de comandă.
 	Inconclusive at current precision	Neconcludent la precizia actuală
 	No difference detected	Nicio diferență detectată
 	Agrees within ±{tolerance}	Concordă în limita ±{tolerance}

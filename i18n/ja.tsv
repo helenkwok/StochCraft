@@ -1369,7 +1369,6 @@ unit	yr	年
 	The model: its settings and variables	モデル: 設定と変数
 	System dynamics model	システムダイナミクスのモデル
 	Variables	変数
-	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	このモデルは、エージェントから MCP サーバー経由で、またはコマンドラインから、コマンドで変更できます。キャンバス上での編集は次に追加されます。
 	From {start} to {stop}, in steps of {dt}, by the {method} method.	{start} から {stop} まで、{dt} 刻み、{method} 法。
 	Notes from the file	ファイルからの注記
 	Equation	方程式
@@ -1421,6 +1420,25 @@ unit	yr	年
 	The estimated chance that {output} is less than {value} is {percent}.	{output} が {value} を下回る確率の推定値は {percent} です。
 	Their interval has no width, which no estimate has, so the plain result stands.	区間の幅がなく、これはどんな推定にもあり得ないため、通常の結果をそのまま使います。
 	Did not open {file}: a different model was opened in the meantime	{file} は開きませんでした。その間に別のモデルが開かれました
+	Select	選択
+	Link	リンク
+	Initial value	初期値
+	Click the diagram to place a stock.	ダイアグラムをクリックしてストックを配置します。
+	Click the diagram to place an auxiliary.	ダイアグラムをクリックして補助変数を配置します。
+	Drag from a stock, or from empty space, to another stock or empty space to draw a flow.	ストックまたは空きスペースから、別のストックまたは空きスペースへドラッグしてフローを描きます。
+	Drag from one variable to another to show that the second uses the first.	ある変数から別の変数へドラッグして、後者が前者を使うことを示します。
+	Click a variable to select it and edit it here. Drag a variable to move it.	変数をクリックして選択し、ここで編集します。ドラッグすると移動します。
+	Moved {name}	{name} を移動しました
+	Added {kind}: {name}	追加しました: {kind} {name}
+	Edited {name}	{name} を編集しました
+	Removed {name}	{name} を削除しました
+	Linked {from} to {to}	{from} を {to} にリンクしました
+	Add Variable	変数を追加
+	Edit Variable	変数を変更
+	Remove Variable	変数を削除
+	Simulation Settings	シミュレーション設定
+	Change Diagram	ダイアグラムを変更
+	You can change this model on the Diagram tab, or with commands, from an agent through the MCP server or from the command line.	このモデルは、ダイアグラムタブで、またはコマンドで（エージェントから MCP サーバー経由、またはコマンドラインから）変更できます。
 	Inconclusive at current precision	現在の精度では判定不能
 	No difference detected	差は検出されませんでした
 	Agrees within ±{tolerance}	±{tolerance} 以内で一致

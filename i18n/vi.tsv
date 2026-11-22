@@ -1369,7 +1369,6 @@ unit	yr	năm
 	The model: its settings and variables	Mô hình: các thiết lập và biến của nó
 	System dynamics model	Mô hình động lực học hệ thống
 	Variables	Biến
-	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	Bạn có thể thay đổi mô hình này bằng lệnh, từ một tác tử qua máy chủ MCP hoặc từ dòng lệnh. Việc chỉnh sửa trên khung vẽ sẽ đến sau.
 	From {start} to {stop}, in steps of {dt}, by the {method} method.	Từ {start} đến {stop}, theo bước {dt}, bằng phương pháp {method}.
 	Notes from the file	Ghi chú từ tệp
 	Equation	Phương trình
@@ -1421,6 +1420,25 @@ unit	yr	năm
 	The estimated chance that {output} is less than {value} is {percent}.	Xác suất ước tính để {output} nhỏ hơn {value} là {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	Khoảng của chúng không có độ rộng, điều mà ước lượng nào cũng không có, nên kết quả thường được giữ nguyên.
 	Did not open {file}: a different model was opened in the meantime	Không mở {file}: trong lúc đó một mô hình khác đã được mở
+	Select	Chọn
+	Link	Liên kết
+	Initial value	Giá trị ban đầu
+	Click the diagram to place a stock.	Nhấp vào sơ đồ để đặt một kho.
+	Click the diagram to place an auxiliary.	Nhấp vào sơ đồ để đặt một biến phụ trợ.
+	Drag from a stock, or from empty space, to another stock or empty space to draw a flow.	Kéo từ một kho, hoặc từ khoảng trống, đến kho khác hoặc khoảng trống khác để vẽ một dòng.
+	Drag from one variable to another to show that the second uses the first.	Kéo từ biến này sang biến khác để cho thấy biến thứ hai dùng biến thứ nhất.
+	Click a variable to select it and edit it here. Drag a variable to move it.	Nhấp vào một biến để chọn và chỉnh sửa tại đây. Kéo biến để di chuyển.
+	Moved {name}	Đã di chuyển {name}
+	Added {kind}: {name}	Đã thêm {kind}: {name}
+	Edited {name}	Đã chỉnh sửa {name}
+	Removed {name}	Đã xóa {name}
+	Linked {from} to {to}	Đã liên kết {from} với {to}
+	Add Variable	Thêm biến
+	Edit Variable	Chỉnh sửa biến
+	Remove Variable	Xóa biến
+	Simulation Settings	Cài đặt mô phỏng
+	Change Diagram	Thay đổi sơ đồ
+	You can change this model on the Diagram tab, or with commands, from an agent through the MCP server or from the command line.	Bạn có thể thay đổi mô hình này trên tab Sơ đồ, hoặc bằng lệnh, từ một tác nhân qua máy chủ MCP hoặc từ dòng lệnh.
 	Inconclusive at current precision	Chưa kết luận được ở độ chính xác hiện tại
 	No difference detected	Không phát hiện khác biệt
 	Agrees within ±{tolerance}	Khớp trong phạm vi ±{tolerance}

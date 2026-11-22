@@ -1369,7 +1369,6 @@ unit	yr	a
 	The model: its settings and variables	El model: la configuració i les variables
 	System dynamics model	Model de dinàmica de sistemes
 	Variables	Variables
-	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	Podeu canviar aquest model amb ordres, des d'un agent mitjançant el servidor MCP o des de la línia d'ordres. L'edició al llenç vindrà després.
 	From {start} to {stop}, in steps of {dt}, by the {method} method.	Des de {start} fins a {stop}, en passos de {dt}, pel mètode {method}.
 	Notes from the file	Notes del fitxer
 	Equation	Equació
@@ -1421,6 +1420,25 @@ unit	yr	a
 	The estimated chance that {output} is less than {value} is {percent}.	La probabilitat estimada que {output} sigui inferior a {value} és {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	El seu interval no té amplada, cosa que cap estimació no té, així que es manté el resultat senzill.
 	Did not open {file}: a different model was opened in the meantime	No s'ha obert {file}: mentrestant s'ha obert un altre model
+	Select	Selecciona
+	Link	Enllaç
+	Initial value	Valor inicial
+	Click the diagram to place a stock.	Feu clic al diagrama per col·locar un estoc.
+	Click the diagram to place an auxiliary.	Feu clic al diagrama per col·locar una variable auxiliar.
+	Drag from a stock, or from empty space, to another stock or empty space to draw a flow.	Arrossegueu d'un estoc, o d'un espai buit, a un altre estoc o espai buit per dibuixar un flux.
+	Drag from one variable to another to show that the second uses the first.	Arrossegueu d'una variable a una altra per indicar que la segona utilitza la primera.
+	Click a variable to select it and edit it here. Drag a variable to move it.	Feu clic en una variable per seleccionar-la i editar-la aquí. Arrossegueu-la per moure-la.
+	Moved {name}	S'ha mogut {name}
+	Added {kind}: {name}	S'ha afegit {kind}: {name}
+	Edited {name}	S'ha editat {name}
+	Removed {name}	S'ha eliminat {name}
+	Linked {from} to {to}	S'ha enllaçat {from} amb {to}
+	Add Variable	Afegeix una variable
+	Edit Variable	Edita la variable
+	Remove Variable	Elimina la variable
+	Simulation Settings	Configuració de la simulació
+	Change Diagram	Canvia el diagrama
+	You can change this model on the Diagram tab, or with commands, from an agent through the MCP server or from the command line.	Podeu canviar aquest model a la pestanya Diagrama, o amb ordres, des d'un agent mitjançant el servidor MCP o des de la línia d'ordres.
 	Inconclusive at current precision	No concloent amb la precisió actual
 	No difference detected	No s'ha detectat cap diferència
 	Agrees within ±{tolerance}	Coincideix dins de ±{tolerance}

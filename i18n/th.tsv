@@ -1369,7 +1369,6 @@ unit	yr	ปี
 	The model: its settings and variables	แบบจำลอง: การตั้งค่าและตัวแปรของมัน
 	System dynamics model	แบบจำลองพลวัตระบบ
 	Variables	ตัวแปร
-	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	คุณเปลี่ยนแบบจำลองนี้ได้ด้วยคำสั่ง จากเอเจนต์ผ่านเซิร์ฟเวอร์ MCP หรือจากบรรทัดคำสั่ง การแก้ไขบนผืนผ้าใบจะมาในลำดับถัดไป
 	From {start} to {stop}, in steps of {dt}, by the {method} method.	ตั้งแต่ {start} ถึง {stop} ทีละขั้น {dt} ด้วยวิธี {method}
 	Notes from the file	บันทึกจากไฟล์
 	Equation	สมการ
@@ -1421,6 +1420,25 @@ unit	yr	ปี
 	The estimated chance that {output} is less than {value} is {percent}.	ความน่าจะเป็นโดยประมาณที่ {output} จะน้อยกว่า {value} คือ {percent}
 	Their interval has no width, which no estimate has, so the plain result stands.	ช่วงของค่าเหล่านี้ไม่มีความกว้าง ซึ่งไม่มีการประมาณใดเป็นเช่นนั้น จึงใช้ผลลัพธ์ธรรมดาต่อไป
 	Did not open {file}: a different model was opened in the meantime	ไม่ได้เปิด {file}: ระหว่างนั้นมีการเปิดแบบจำลองอื่นแล้ว
+	Select	เลือก
+	Link	เชื่อมโยง
+	Initial value	ค่าเริ่มต้น
+	Click the diagram to place a stock.	คลิกที่แผนภาพเพื่อวางสต็อก
+	Click the diagram to place an auxiliary.	คลิกที่แผนภาพเพื่อวางตัวแปรช่วย
+	Drag from a stock, or from empty space, to another stock or empty space to draw a flow.	ลากจากสต็อกหรือจากพื้นที่ว่างไปยังสต็อกอื่นหรือพื้นที่ว่างเพื่อวาดโฟลว์
+	Drag from one variable to another to show that the second uses the first.	ลากจากตัวแปรหนึ่งไปยังอีกตัวแปรหนึ่งเพื่อแสดงว่าตัวหลังใช้ตัวแรก
+	Click a variable to select it and edit it here. Drag a variable to move it.	คลิกตัวแปรเพื่อเลือกและแก้ไขที่นี่ ลากตัวแปรเพื่อย้าย
+	Moved {name}	ย้าย {name} แล้ว
+	Added {kind}: {name}	เพิ่ม{kind}แล้ว: {name}
+	Edited {name}	แก้ไข {name} แล้ว
+	Removed {name}	นำ {name} ออกแล้ว
+	Linked {from} to {to}	เชื่อมโยง {from} กับ {to} แล้ว
+	Add Variable	เพิ่มตัวแปร
+	Edit Variable	แก้ไขตัวแปร
+	Remove Variable	นำตัวแปรออก
+	Simulation Settings	การตั้งค่าการจำลอง
+	Change Diagram	เปลี่ยนแผนภาพ
+	You can change this model on the Diagram tab, or with commands, from an agent through the MCP server or from the command line.	คุณสามารถเปลี่ยนโมเดลนี้ได้ที่แท็บแผนภาพ หรือด้วยคำสั่งจากเอเจนต์ผ่านเซิร์ฟเวอร์ MCP หรือจากบรรทัดคำสั่ง
 	Inconclusive at current precision	สรุปไม่ได้ที่ความแม่นยำปัจจุบัน
 	No difference detected	ไม่พบความแตกต่าง
 	Agrees within ±{tolerance}	สอดคล้องภายใน ±{tolerance}

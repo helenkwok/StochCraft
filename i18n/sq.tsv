@@ -1369,7 +1369,6 @@ unit	yr	v
 	The model: its settings and variables	Modeli: cilësimet dhe ndryshoret e tij
 	System dynamics model	Model i dinamikës së sistemeve
 	Variables	Ndryshoret
-	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	Mund ta ndryshoni këtë model me komanda, nga një agjent përmes serverit MCP ose nga linja e komandave. Redaktimi në kanavacë vjen më pas.
 	From {start} to {stop}, in steps of {dt}, by the {method} method.	Nga {start} deri në {stop}, me hapa {dt}, me metodën {method}.
 	Notes from the file	Shënime nga skedari
 	Equation	Ekuacioni
@@ -1421,6 +1420,25 @@ unit	yr	v
 	The estimated chance that {output} is less than {value} is {percent}.	Gjasa e vlerësuar që {output} të jetë më e vogël se {value} është {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	Intervali i tyre nuk ka gjerësi, gjë që asnjë vlerësim nuk e ka, ndaj mbetet rezultati i thjeshtë.
 	Did not open {file}: a different model was opened in the meantime	{file} nuk u hap: ndërkohë u hap një model tjetër
+	Select	Zgjidh
+	Link	Lidhja
+	Initial value	Vlera fillestare
+	Click the diagram to place a stock.	Kliko në diagram për të vendosur një stok.
+	Click the diagram to place an auxiliary.	Kliko në diagram për të vendosur një ndryshore ndihmëse.
+	Drag from a stock, or from empty space, to another stock or empty space to draw a flow.	Zvarrit nga një stok ose hapësirë e zbrazët te një stok tjetër ose hapësirë e zbrazët për të vizatuar një rrjedhë.
+	Drag from one variable to another to show that the second uses the first.	Zvarrit nga një ndryshore te tjetra për të treguar se e dyta përdor të parën.
+	Click a variable to select it and edit it here. Drag a variable to move it.	Kliko mbi një ndryshore për ta zgjedhur dhe redaktuar këtu. Zvarrite për ta lëvizur.
+	Moved {name}	U lëviz {name}
+	Added {kind}: {name}	U shtua {kind}: {name}
+	Edited {name}	U redaktua {name}
+	Removed {name}	U hoq {name}
+	Linked {from} to {to}	U lidh {from} me {to}
+	Add Variable	Shto ndryshore
+	Edit Variable	Ndrysho ndryshoren
+	Remove Variable	Hiq ndryshoren
+	Simulation Settings	Cilësimet e simulimit
+	Change Diagram	Ndrysho diagramin
+	You can change this model on the Diagram tab, or with commands, from an agent through the MCP server or from the command line.	Këtë model mund ta ndryshosh te skeda Diagrami, ose me komanda, nga një agjent përmes serverit MCP ose nga linja e komandës.
 	Inconclusive at current precision	Jo përfundimtare me saktësinë aktuale
 	No difference detected	Nuk u zbulua ndryshim
 	Agrees within ±{tolerance}	Përputhet brenda ±{tolerance}

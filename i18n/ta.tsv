@@ -1369,7 +1369,6 @@ unit	yr	ஆண்டு
 	The model: its settings and variables	மாதிரி: அதன் அமைப்புகளும் மாறிகளும்
 	System dynamics model	அமைப்பு இயக்கவியல் மாதிரி
 	Variables	மாறிகள்
-	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	இந்த மாதிரியைக் கட்டளைகளால் மாற்றலாம்: முகவர் மூலம் MCP சேவையகம் வழியாக, அல்லது கட்டளை வரியிலிருந்து. கித்தானில் திருத்துதல் அடுத்து வரும்.
 	From {start} to {stop}, in steps of {dt}, by the {method} method.	{start} முதல் {stop} வரை, {dt} படிகளில், {method} முறையில்.
 	Notes from the file	கோப்பிலிருந்து குறிப்புகள்
 	Equation	சமன்பாடு
@@ -1421,6 +1420,25 @@ unit	yr	ஆண்டு
 	The estimated chance that {output} is less than {value} is {percent}.	{output} {value}-ஐ விட குறைவாக இருப்பதற்கான மதிப்பிடப்பட்ட நிகழ்தகவு {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	அவற்றின் இடைவெளிக்கு அகலமே இல்லை, எந்த மதிப்பீட்டுக்கும் அப்படி இருக்காது, எனவே சாதாரண முடிவே நிலைக்கிறது.
 	Did not open {file}: a different model was opened in the meantime	{file} திறக்கப்படவில்லை: இதற்கிடையில் வேறொரு மாதிரி திறக்கப்பட்டது
+	Select	தேர்ந்தெடு
+	Link	இணைப்பு
+	Initial value	தொடக்க மதிப்பு
+	Click the diagram to place a stock.	இருப்பை வைக்க வரைபடத்தில் சொடுக்கவும்.
+	Click the diagram to place an auxiliary.	துணை மாறியை வைக்க வரைபடத்தில் சொடுக்கவும்.
+	Drag from a stock, or from empty space, to another stock or empty space to draw a flow.	ஓட்டத்தை வரைய, ஓர் இருப்பிலிருந்து அல்லது வெற்று இடத்திலிருந்து மற்றோர் இருப்புக்கு அல்லது வெற்று இடத்துக்கு இழுக்கவும்.
+	Drag from one variable to another to show that the second uses the first.	இரண்டாவது மாறி முதலாவதைப் பயன்படுத்துகிறது எனக் காட்ட, ஒரு மாறியிலிருந்து மற்றொன்றுக்கு இழுக்கவும்.
+	Click a variable to select it and edit it here. Drag a variable to move it.	மாறியைத் தேர்ந்தெடுத்து இங்கே திருத்த அதைச் சொடுக்கவும். மாறியை நகர்த்த அதை இழுக்கவும்.
+	Moved {name}	{name} நகர்த்தப்பட்டது
+	Added {kind}: {name}	{kind} சேர்க்கப்பட்டது: {name}
+	Edited {name}	{name} திருத்தப்பட்டது
+	Removed {name}	{name} அகற்றப்பட்டது
+	Linked {from} to {to}	{from} ஐ {to} உடன் இணைத்தது
+	Add Variable	மாறியைச் சேர்
+	Edit Variable	மாறியைத் திருத்து
+	Remove Variable	மாறியை அகற்று
+	Simulation Settings	உருவகப்படுத்துதல் அமைப்புகள்
+	Change Diagram	வரைபடத்தை மாற்று
+	You can change this model on the Diagram tab, or with commands, from an agent through the MCP server or from the command line.	இந்த மாதிரியை வரைபடம் தாவலில், அல்லது கட்டளைகள் மூலம், முகவர் வழியாக MCP சேவையகம் மூலம் அல்லது கட்டளை வரியிலிருந்து மாற்றலாம்.
 	Inconclusive at current precision	தற்போதைய துல்லியத்தில் தீர்மானிக்க இயலாது
 	No difference detected	வேறுபாடு கண்டறியப்படவில்லை
 	Agrees within ±{tolerance}	±{tolerance} க்குள் பொருந்துகிறது

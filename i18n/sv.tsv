@@ -1369,7 +1369,6 @@ unit	yr	år
 	The model: its settings and variables	Modellen: dess inställningar och variabler
 	System dynamics model	Systemdynamisk modell
 	Variables	Variabler
-	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	Du kan ändra den här modellen med kommandon, från en agent via MCP-servern eller från kommandoraden. Redigering på arbetsytan kommer härnäst.
 	From {start} to {stop}, in steps of {dt}, by the {method} method.	Från {start} till {stop}, i steg om {dt}, med {method}-metoden.
 	Notes from the file	Anteckningar från filen
 	Equation	Ekvation
@@ -1421,6 +1420,25 @@ unit	yr	år
 	The estimated chance that {output} is less than {value} is {percent}.	Den uppskattade sannolikheten att {output} är under {value} är {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	Deras intervall har ingen bredd, vilket ingen skattning har, så det vanliga resultatet står kvar.
 	Did not open {file}: a different model was opened in the meantime	{file} öppnades inte: en annan modell öppnades under tiden
+	Select	Markera
+	Link	Länk
+	Initial value	Startvärde
+	Click the diagram to place a stock.	Klicka i diagrammet för att placera ett lager.
+	Click the diagram to place an auxiliary.	Klicka i diagrammet för att placera en hjälpvariabel.
+	Drag from a stock, or from empty space, to another stock or empty space to draw a flow.	Dra från ett lager, eller från tom yta, till ett annat lager eller en tom yta för att rita ett flöde.
+	Drag from one variable to another to show that the second uses the first.	Dra från en variabel till en annan för att visa att den andra använder den första.
+	Click a variable to select it and edit it here. Drag a variable to move it.	Klicka på en variabel för att markera den och redigera den här. Dra en variabel för att flytta den.
+	Moved {name}	Flyttade {name}
+	Added {kind}: {name}	Lade till {kind}: {name}
+	Edited {name}	Ändrade {name}
+	Removed {name}	Tog bort {name}
+	Linked {from} to {to}	Länkade {from} till {to}
+	Add Variable	Lägg till variabel
+	Edit Variable	Redigera variabel
+	Remove Variable	Ta bort variabel
+	Simulation Settings	Simuleringsinställningar
+	Change Diagram	Ändra diagram
+	You can change this model on the Diagram tab, or with commands, from an agent through the MCP server or from the command line.	Du kan ändra modellen på fliken Diagram, eller med kommandon, från en agent via MCP-servern eller från kommandoraden.
 	Inconclusive at current precision	Inte avgörande vid nuvarande precision
 	No difference detected	Ingen skillnad påvisad
 	Agrees within ±{tolerance}	Stämmer inom ±{tolerance}

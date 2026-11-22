@@ -1369,7 +1369,6 @@ unit	yr	a
 	The model: its settings and variables	O modelo: suas configurações e variáveis
 	System dynamics model	Modelo de dinâmica de sistemas
 	Variables	Variáveis
-	You can change this model with commands, from an agent through the MCP server or from the command line. Editing it on the canvas comes next.	Você pode alterar este modelo com comandos, de um agente pelo servidor MCP ou pela linha de comando. A edição na tela vem a seguir.
 	From {start} to {stop}, in steps of {dt}, by the {method} method.	De {start} a {stop}, em passos de {dt}, pelo método {method}.
 	Notes from the file	Notas do arquivo
 	Equation	Equação
@@ -1421,6 +1420,25 @@ unit	yr	a
 	The estimated chance that {output} is less than {value} is {percent}.	A probabilidade estimada de {output} ser menor que {value} é {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	O intervalo deles não tem largura, algo que nenhuma estimativa tem, então o resultado simples permanece.
 	Did not open {file}: a different model was opened in the meantime	{file} não foi aberto: outro modelo foi aberto nesse meio tempo
+	Select	Selecionar
+	Link	Vínculo
+	Initial value	Valor inicial
+	Click the diagram to place a stock.	Clique no diagrama para posicionar um estoque.
+	Click the diagram to place an auxiliary.	Clique no diagrama para posicionar uma variável auxiliar.
+	Drag from a stock, or from empty space, to another stock or empty space to draw a flow.	Arraste de um estoque, ou de um espaço vazio, para outro estoque ou espaço vazio para desenhar um fluxo.
+	Drag from one variable to another to show that the second uses the first.	Arraste de uma variável para outra para indicar que a segunda usa a primeira.
+	Click a variable to select it and edit it here. Drag a variable to move it.	Clique em uma variável para selecioná-la e editá-la aqui. Arraste-a para movê-la.
+	Moved {name}	{name} movido
+	Added {kind}: {name}	Adicionado: {kind} {name}
+	Edited {name}	{name} editado
+	Removed {name}	{name} removido
+	Linked {from} to {to}	{from} vinculado a {to}
+	Add Variable	Adicionar variável
+	Edit Variable	Editar variável
+	Remove Variable	Remover variável
+	Simulation Settings	Configurações da simulação
+	Change Diagram	Alterar diagrama
+	You can change this model on the Diagram tab, or with commands, from an agent through the MCP server or from the command line.	Você pode alterar este modelo na aba Diagrama, ou com comandos, a partir de um agente pelo servidor MCP ou pela linha de comando.
 	Inconclusive at current precision	Inconclusivo na precisão atual
 	No difference detected	Nenhuma diferença detectada
 	Agrees within ±{tolerance}	Concorda dentro de ±{tolerance}
