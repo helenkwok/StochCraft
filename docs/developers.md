@@ -27,6 +27,18 @@ In the browser, runs use a web worker for each core but one (up to 16), and the 
 installed and used offline. Every pull request gets a preview build, linked from the pull
 request.
 
+#### How the site is published
+
+`.github/workflows/pages.yml` builds the browser app and keeps the site folder as an Actions artifact
+(`site-main` for `main`, `site-pr-<number>` for each pull request from this repository, 30 days).
+Nothing is committed to a branch. `.github/workflows/pages-deploy.yml` runs after every Pages run and
+when a pull request closes (`pages-cleanup.yml` exists only to trigger it), takes the newest
+`site-main` for the root and the newest `site-pr-<number>` of each open pull request for
+`pr/<number>/`, and serves the result with `actions/deploy-pages`. A preview whose artifact has
+expired or whose build failed is absent. If `main` has had no build for 30 days there is no root to
+serve and the deploy fails, leaving the live site as it is: run the Pages workflow on `main` again.
+The repository's Pages source is "GitHub Actions". The old `gh-pages` branch is no longer written to.
+
 ### Fonts for the browser build
 
 Without more, the browser app has only IBM Plex and egui's faces, so Japanese, Korean, Chinese,

@@ -1,44 +1,21 @@
 name: Pages cleanup
 
-# Removes a closed pull request's preview (`pr/<number>/`) from the `gh-pages` branch; the Pages
-# deploy workflow then serves the site without it.
+# Closing a pull request has nothing to delete (its preview lives in an Actions artifact, and
+# pages-deploy.yml serves only open pull requests' previews). This workflow exists so that the
+# closing starts pages-deploy.yml, which then deploys the site without that preview.
 
 on:
   pull_request:
     types: [closed]
 
-permissions:
-  contents: read
+permissions: {}
 
 jobs:
-  remove:
-    name: Remove the preview
-    # Forks never publish a preview.
-    if: github.event.pull_request.head.repo.full_name == github.repository
+  closed:
+    name: Pull request closed
     runs-on: ubuntu-latest
-    timeout-minutes: 10
-    permissions:
-      contents: write
-    concurrency:
-      group: gh-pages
-      cancel-in-progress: false
+    timeout-minutes: 2
     steps:
-      - name: Delete pr/<number>/ from gh-pages
+      - run: echo "Pull request ${PR} closed; Pages deploy follows."
         env:
-          GH_TOKEN: ${{ github.token }}
           PR: ${{ github.event.pull_request.number }}
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          url="https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
-          git ls-remote --exit-code --heads "$url" gh-pages >/dev/null || exit 0
-          git clone --depth 1 --branch gh-pages "$url" site
-          cd site
-          [ -d "pr/$PR" ] || exit 0
-          git rm -rq "pr/$PR"
-          git commit -q -m "Remove the preview of pull request #$PR"
-          for i in 1 2 3; do
-            git push origin gh-pages && exit 0
-            git pull --rebase origin gh-pages || exit 1
-          done
-          exit 1
