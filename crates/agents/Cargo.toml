@@ -1,0 +1,18 @@
+[package]
+name = "stochcraft-agents"
+description = "StochCraft's agents: state charts with the semantics of W3C SCXML 1.0, their data in BPSim's expressions, and their timeouts and rates on the discrete-event clock."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+repository.workspace = true
+publish.workspace = true
+
+[dependencies]
+stochcraft-des = { workspace = true }
+stochcraft-model = { workspace = true }
+stochcraft-random = { workspace = true }
+
+[lints]
+workspace = true

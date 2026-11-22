@@ -20,6 +20,12 @@
 //! a Monte Carlo model's outputs use for its inputs). Its names are letters, digits and `_`, so
 //! `$a-1` is `$a` minus 1.
 //!
+//! [`parse_with_functions`] reads the same as [`parse_with_variables`] and also calls to functions
+//! the caller provides ([`Provided`]), such as a state chart's `In('state')` or a random draw: the
+//! parsed call is [`Expr::Provided`], and [`Expr::eval_with`] hands its name and evaluated arguments
+//! to the caller. [`parse`] and [`parse_with_variables`] never produce one, so what they accept is
+//! unchanged.
+//!
 //! Anything else (paths, variables, unions, other functions) is a parse error with its position,
 //! so a model that uses it gets a diagnostic, never a wrong result. BPSim's resource functions
 //! (`getResource`) belong to a task's resource selection, which is read separately (M2.5).
@@ -208,8 +214,12 @@ pub enum Expr {
     Text(String),
     /// `getProperty('name')`.
     Property(String),
-    /// `$name`, read as the value named `name` (only from [`parse_with_variables`]).
+    /// `$name`, read as the value named `name` (only from [`parse_with_variables`] and
+    /// [`parse_with_functions`]).
     Variable(String),
+    /// A call to a function the caller provides, by its name as written (only from
+    /// [`parse_with_functions`]); [`Expr::eval_with`] evaluates it.
+    Provided(String, Vec<Expr>),
     Neg(Box<Expr>),
     Binary(BinOp, Box<Expr>, Box<Expr>),
     Call(Func, Vec<Expr>),
@@ -434,12 +444,14 @@ const MAX_HEIGHT: usize = 512;
 /// A parsed tree and its height (a number or a name has height 1).
 type Node = (Expr, usize);
 
-struct Parser {
+struct Parser<'a> {
     toks: Vec<(usize, Tok)>,
     at: usize,
     end: usize,
     /// How many of the parser's own nested calls are open now.
     nest: usize,
+    /// The functions the caller provides (empty for [`parse`] and [`parse_with_variables`]).
+    provided: &'a [Provided<'a>],
 }
 
 /// Operator precedence levels, loosest first.
@@ -452,7 +464,7 @@ const LEVELS: [&[BinOp]; 6] = [
     &[BinOp::Mul, BinOp::Div, BinOp::Mod],
 ];
 
-impl Parser {
+impl Parser<'_> {
     fn peek(&self) -> Option<&Tok> {
         self.toks.get(self.at).map(|(_, t)| t)
     }
@@ -567,7 +579,7 @@ impl Parser {
                     }
                 }
                 self.expect_close()?;
-                let e = call(pos, &name, args)?;
+                let e = call(pos, &name, args, self.provided)?;
                 self.grow(e, &heights)
             }
             Some(Tok::RParen) => Err(err(pos, "`)` without a matching `(`")),
@@ -586,7 +598,7 @@ impl Parser {
     }
 }
 
-fn call(pos: usize, name: &str, args: Vec<Expr>) -> Result<Expr, ExprError> {
+fn call(pos: usize, name: &str, args: Vec<Expr>, provided: &[Provided]) -> Result<Expr, ExprError> {
     let local = name
         .strip_prefix("bpsim:")
         .or_else(|| name.strip_prefix("fn:"))
@@ -607,7 +619,14 @@ fn call(pos: usize, name: &str, args: Vec<Expr>) -> Result<Expr, ExprError> {
             format!("`{local}` selects a task's resource and is only read there (M2.5)"),
         ));
     }
-    let (f, min, max) = Func::lookup(local).ok_or_else(|| {
+    let found = match Func::lookup(local) {
+        Some((f, min, max)) => Some((Some(f), min, max)),
+        None => provided
+            .iter()
+            .find(|p| p.name == name)
+            .map(|p| (None, p.min, p.max)),
+    };
+    let (f, min, max) = found.ok_or_else(|| {
         err(
             pos,
             format!("the function `{name}` is not supported in BPSim expressions here"),
@@ -624,14 +643,17 @@ fn call(pos: usize, name: &str, args: Vec<Expr>) -> Result<Expr, ExprError> {
             format!("`{local}` takes {want} arguments, not {}", args.len()),
         ));
     }
-    Ok(Expr::Call(f, args))
+    Ok(match f {
+        Some(f) => Expr::Call(f, args),
+        None => Expr::Provided(name.to_string(), args),
+    })
 }
 
 /// Parses an expression of a process model: BPSim's XPath 1.0 subset only, so the file stays
 /// readable by other BPSim tools. The functions beyond it (`min`, `max`, `sum`, `abs`, `sqrt`,
 /// `exp`, `log`, `pow`, `sin`, `cos`, `if`) are for Monte Carlo models ([`parse_with_variables`]).
 pub fn parse(src: &str) -> Result<Expr, ExprError> {
-    let e = parse_as(src, false)?;
+    let e = parse_as(src, false, &[])?;
     let mut beyond = None;
     e.visit(&mut |x| {
         if let Expr::Call(f, _) = x
@@ -654,10 +676,26 @@ pub fn parse(src: &str) -> Result<Expr, ExprError> {
 /// Parses an expression in which `$name` reads the value named `name` (as `getProperty`
 /// does): how a Monte Carlo model's outputs name its inputs and earlier outputs.
 pub fn parse_with_variables(src: &str) -> Result<Expr, ExprError> {
-    parse_as(src, true)
+    parse_as(src, true, &[])
 }
 
-fn parse_as(src: &str, variables: bool) -> Result<Expr, ExprError> {
+/// A function the caller of [`parse_with_functions`] provides: its name, as written in the
+/// expression, and the least and most arguments it takes (`None`: any number).
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct Provided<'a> {
+    pub name: &'a str,
+    pub min: usize,
+    pub max: Option<usize>,
+}
+
+/// Parses as [`parse_with_variables`] does, and also reads calls to the functions in
+/// `provided` (a built-in function of the same name is still the built-in one). Evaluate the
+/// result with [`Expr::eval_with`].
+pub fn parse_with_functions(src: &str, provided: &[Provided]) -> Result<Expr, ExprError> {
+    parse_as(src, true, provided)
+}
+
+fn parse_as(src: &str, variables: bool, provided: &[Provided]) -> Result<Expr, ExprError> {
     let toks = tokenize(src, variables)?;
     if toks.is_empty() {
         return Err(err(0, "the expression is empty"));
@@ -667,6 +705,7 @@ fn parse_as(src: &str, variables: bool) -> Result<Expr, ExprError> {
         at: 0,
         end: src.chars().count(),
         nest: 0,
+        provided,
     };
     let (e, _) = p.expression()?;
     if p.at < p.toks.len() {
@@ -679,18 +718,39 @@ impl Expr {
     /// Evaluates the expression, reading properties with `property` (`None`: the token does not
     /// have it).
     pub fn eval(&self, property: &dyn Fn(&str) -> Option<Value>) -> Value {
+        self.eval_with(property, &|_, _| Value::Text(String::new()))
+    }
+
+    /// Evaluates the expression as [`Expr::eval`] does, calling `provided` with the name and
+    /// evaluated arguments of each call to a provided function ([`Expr::Provided`]) that is
+    /// reached (as with `if`, only the branch taken is evaluated).
+    pub fn eval_with(
+        &self,
+        property: &dyn Fn(&str) -> Option<Value>,
+        provided: &dyn Fn(&str, &[Value]) -> Value,
+    ) -> Value {
+        let env = Env { property, provided };
+        self.evaluate(&env)
+    }
+
+    fn evaluate(&self, env: &Env) -> Value {
+        let property = env.property;
         match self {
             Expr::Number(n) => Value::Number(*n),
             Expr::Text(s) => Value::Text(s.clone()),
             Expr::Property(name) | Expr::Variable(name) => {
                 property(name).unwrap_or(Value::Text(String::new()))
             }
-            Expr::Neg(e) => Value::Number(-e.eval(property).number()),
-            Expr::Binary(op, a, b) => binary(*op, a, b, property),
+            Expr::Neg(e) => Value::Number(-e.evaluate(env).number()),
+            Expr::Binary(op, a, b) => binary(*op, a, b, env),
+            Expr::Provided(name, args) => {
+                let values: Vec<Value> = args.iter().map(|a| a.evaluate(env)).collect();
+                (env.provided)(name, &values)
+            }
             Expr::Call(f, args) => {
                 let arg = |i: usize| {
                     args.get(i)
-                        .map_or(Value::Text(String::new()), |a| a.eval(property))
+                        .map_or(Value::Text(String::new()), |a| a.evaluate(env))
                 };
                 match f {
                     Func::True => Value::Boolean(true),
@@ -703,18 +763,16 @@ impl Expr {
                     Func::Ceiling => Value::Number(arg(0).number().ceil()),
                     Func::Round => Value::Number(round(arg(0).number())),
                     Func::Concat => {
-                        Value::Text(args.iter().map(|a| a.eval(property).text()).collect())
+                        Value::Text(args.iter().map(|a| a.evaluate(env).text()).collect())
                     }
                     Func::Contains => Value::Boolean(arg(0).text().contains(&arg(1).text())),
                     Func::StartsWith => Value::Boolean(arg(0).text().starts_with(&arg(1).text())),
                     Func::StringLength => Value::Number(arg(0).text().chars().count() as f64),
                     Func::Min | Func::Max => {
-                        let xs: Vec<f64> = args.iter().map(|a| a.eval(property).number()).collect();
+                        let xs: Vec<f64> = args.iter().map(|a| a.evaluate(env).number()).collect();
                         Value::Number(extreme(&xs, *f == Func::Max))
                     }
-                    Func::Sum => {
-                        Value::Number(args.iter().map(|a| a.eval(property).number()).sum())
-                    }
+                    Func::Sum => Value::Number(args.iter().map(|a| a.evaluate(env).number()).sum()),
                     Func::Abs => Value::Number(arg(0).number().abs()),
                     Func::Sqrt => Value::Number(arg(0).number().sqrt()),
                     Func::Exp => Value::Number(stochcraft_random::math::exp(arg(0).number())),
@@ -768,7 +826,7 @@ impl Expr {
                 a.visit(f);
                 b.visit(f);
             }
-            Expr::Call(_, args) => args.iter().for_each(|a| a.visit(f)),
+            Expr::Call(_, args) | Expr::Provided(_, args) => args.iter().for_each(|a| a.visit(f)),
             Expr::Number(_) | Expr::Text(_) | Expr::Property(_) | Expr::Variable(_) => {}
         }
     }
@@ -778,7 +836,7 @@ impl Expr {
         match self {
             Expr::Number(_) | Expr::Neg(_) => Kind::Number,
             Expr::Text(_) => Kind::Text,
-            Expr::Property(_) | Expr::Variable(_) => Kind::Property,
+            Expr::Property(_) | Expr::Variable(_) | Expr::Provided(..) => Kind::Property,
             Expr::Binary(op, _, _) => match op {
                 BinOp::Add | BinOp::Sub | BinOp::Mul | BinOp::Div | BinOp::Mod => Kind::Number,
                 _ => Kind::Boolean,
@@ -843,12 +901,18 @@ fn round(n: f64) -> f64 {
     if r == 0.0 && n < 0.0 { -0.0 } else { r }
 }
 
-fn binary(op: BinOp, a: &Expr, b: &Expr, property: &dyn Fn(&str) -> Option<Value>) -> Value {
+/// What an evaluation reads: properties and variables, and the provided functions.
+struct Env<'a> {
+    property: &'a dyn Fn(&str) -> Option<Value>,
+    provided: &'a dyn Fn(&str, &[Value]) -> Value,
+}
+
+fn binary(op: BinOp, a: &Expr, b: &Expr, env: &Env) -> Value {
     match op {
-        BinOp::Or => Value::Boolean(a.eval(property).boolean() || b.eval(property).boolean()),
-        BinOp::And => Value::Boolean(a.eval(property).boolean() && b.eval(property).boolean()),
+        BinOp::Or => Value::Boolean(a.evaluate(env).boolean() || b.evaluate(env).boolean()),
+        BinOp::And => Value::Boolean(a.evaluate(env).boolean() && b.evaluate(env).boolean()),
         _ => {
-            let (x, y) = (a.eval(property), b.eval(property));
+            let (x, y) = (a.evaluate(env), b.evaluate(env));
             match op {
                 BinOp::Eq => Value::Boolean(equal(&x, &y)),
                 BinOp::Ne => Value::Boolean(!equal(&x, &y)),
@@ -1084,6 +1148,51 @@ mod tests {
             parse("getProperty('a')").map(|e| e.kind()),
             Ok(Kind::Property)
         );
+    }
+
+    #[test]
+    fn provided_functions_only_where_asked_for() {
+        let provided = [
+            Provided {
+                name: "In",
+                min: 1,
+                max: Some(1),
+            },
+            Provided {
+                name: "draw",
+                min: 0,
+                max: None,
+            },
+        ];
+        // The other entry points refuse them, as before.
+        assert!(parse("In('s')").is_err());
+        assert!(parse_with_variables("In('s')").is_err());
+        let call = |name: &str, args: &[Value]| match (name, args) {
+            ("In", [Value::Text(s)]) => Value::Boolean(s == "on"),
+            ("draw", _) => Value::Number(args.len() as f64),
+            _ => Value::Text(String::new()),
+        };
+        let value = |src: &str| match parse_with_functions(src, &provided) {
+            Ok(e) => e.eval_with(&|n| (n == "x").then_some(Value::Number(2.0)), &call),
+            Err(e) => Value::Text(format!("error: {e}")),
+        };
+        assert_eq!(value("In('on') and $x = 2"), Value::Boolean(true));
+        assert_eq!(value("In('off')"), Value::Boolean(false));
+        assert_eq!(value("draw(1, 2, 3) + $x"), Value::Number(5.0));
+        assert_eq!(value("if(true(), draw(), 9)"), Value::Number(0.0));
+        // Built-in functions keep their meaning.
+        assert_eq!(value("max(1, 4)"), Value::Number(4.0));
+        let e = parse_with_functions("In('a', 'b')", &provided);
+        assert!(e.is_err_and(|e| e.message.contains("takes 1 arguments")));
+        assert!(parse_with_functions("Out('a')", &provided).is_err());
+        let e = parse_with_functions("In('a')", &provided);
+        assert_eq!(
+            e.as_ref().map(Expr::kind),
+            Ok(Kind::Property),
+            "a provided function's kind is unknown until it is called"
+        );
+        // Evaluated without the caller's functions, a provided call reads as empty.
+        assert_eq!(e.map(|e| e.eval(&|_| None)), Ok(Value::Text(String::new())));
     }
 
     /// Parentheses, signs, function calls and long runs of one operator all nest without bound
