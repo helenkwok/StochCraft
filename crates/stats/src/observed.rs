@@ -98,7 +98,8 @@ pub fn judge(check: Check, mean: f64, half_width: f64, n: u64) -> Verdict {
             let ho = observed
                 .filter(|h| h.is_finite() && *h >= 0.0)
                 .unwrap_or(0.0);
-            let combined = (half_width * half_width + ho * ho).sqrt();
+            // Scaled, so neither a tiny nor a huge width is lost to underflow or overflow.
+            let combined = half_width.hypot(ho);
             let d = mean - value;
             Verdict {
                 outcome: if d.abs() <= combined {
@@ -158,6 +159,19 @@ mod tests {
             judge(value(11.0, None), 10.0, 1.0, 10).outcome,
             Outcome::Agrees
         );
+    }
+
+    #[test]
+    fn tiny_and_huge_half_widths_are_combined_without_underflow_or_overflow() {
+        // 1e-200 ± 2e-200 against an exact 0: squaring 2e-200 would give 0, and "differs".
+        assert_eq!(
+            judge(value(1e-200, Some(2e-200)), 0.0, 0.0, 10).outcome,
+            Outcome::Agrees
+        );
+        // Squaring 1e200 would give infinity, and "agrees" whatever the difference.
+        let v = judge(value(0.0, Some(1e200)), 3e200, 1e200, 10);
+        assert_eq!(v.outcome, Outcome::Differs);
+        assert!(v.half_width.is_some_and(f64::is_finite));
     }
 
     #[test]

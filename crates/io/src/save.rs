@@ -2864,8 +2864,11 @@ impl Editor {
     /// expression) as character references where the file's encoding needs it.
     fn text_attrs(&self, e: &mut Element) {
         if self.ascii {
-            // Names and text values; a changeover's property and the values it changes between.
-            for a in ["name", "value", "property", "from", "to"] {
+            // Names and text values; a changeover's property and the values it changes between;
+            // the block and the result an observation names.
+            for a in [
+                "name", "value", "property", "from", "to", "element", "metric",
+            ] {
                 if let Some(v) = e.attr(a).filter(|v| !v.is_ascii()) {
                     self.set_text_attr(e, a, &v);
                 }
@@ -3178,7 +3181,9 @@ impl Editor {
         if b.observed != a.observed {
             // Cleared: said only where an inherited scenario would otherwise bring them back.
             let written = if !a.observed.is_empty() {
-                Some(observed_element(&a.observed))
+                let mut e = observed_element(&a.observed);
+                self.text_attrs(&mut e);
+                Some(e)
             } else if inherited_observed {
                 Some(observed_off_element())
             } else {
