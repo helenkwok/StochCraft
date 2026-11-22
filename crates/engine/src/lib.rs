@@ -298,11 +298,13 @@ pub fn build_match(journal: Option<&str>, here: &str) -> BuildMatch {
     let Some(journal) = journal else {
         return BuildMatch::Unknown;
     };
-    let split = |id: &str| {
+    // The version and platform, and the revision if there is one.
+    type Parts<'a> = ((Option<&'a str>, Option<&'a str>), Option<&'a str>);
+    fn split(id: &str) -> Parts<'_> {
         let mut words = id.split_whitespace();
         let base = (words.next(), words.next());
         (base, words.next())
-    };
+    }
     let ((base, revision), (here_base, here_revision)) = (split(journal), split(here));
     match (revision, here_revision) {
         _ if base != here_base => BuildMatch::Different,
