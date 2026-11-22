@@ -1,4 +1,6 @@
-import Mathlib
+module
+
+public import Mathlib
 
 /-!
 # Little's law on one sample path over a finite horizon
@@ -14,6 +16,8 @@ the average time in system of the `n` customers.
 It does not prove the limit form of Little's law (`L = λW` for stationary queues or as
 `T → ∞`), and it does not prove that the simulator's statistics compute these quantities.
 -/
+
+@[expose] public section
 
 namespace Formal
 

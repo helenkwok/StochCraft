@@ -1,4 +1,6 @@
-import Mathlib
+module
+
+public import Mathlib
 
 /-!
 # Pollaczek–Khinchine mean wait: algebra and consistency checks
@@ -16,6 +18,8 @@ The tests use the M/G/1 mean wait `Wq = λ E[S²] / (2 (1 − λ E[S]))` (`polla
 
 It does not derive the formula from the M/G/1 queue and says nothing about the Rust code.
 -/
+
+@[expose] public section
 
 namespace Formal
 

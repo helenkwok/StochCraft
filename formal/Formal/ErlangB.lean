@@ -1,4 +1,6 @@
-import Mathlib
+module
+
+public import Mathlib
 
 /-!
 # Erlang B: the recurrence equals the closed form
@@ -11,6 +13,8 @@ This file proves that the recurrence gives the textbook closed form
 It is a statement about the formula only: it does not derive the formula from a loss system's
 dynamics, and it says nothing about the Rust code or floating-point rounding.
 -/
+
+@[expose] public section
 
 namespace Formal
 

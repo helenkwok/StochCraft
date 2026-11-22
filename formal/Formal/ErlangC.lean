@@ -1,4 +1,6 @@
-import Formal.ErlangB
+module
+
+public import Formal.ErlangB
 
 /-!
 # Erlang C: the tests' formula, the textbook form, and Erlang C from Erlang B
@@ -13,6 +15,8 @@ Erlang B value of `Formal.ErlangB` (both the recurrence and the closed form).
 These are identities between formulas. They do not derive Erlang C from the M/M/c queue, and
 the mean wait `Wq = C / (cμ − λ)` that the tests also use is not proved here.
 -/
+
+@[expose] public section
 
 namespace Formal
 

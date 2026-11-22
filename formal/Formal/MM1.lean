@@ -1,4 +1,6 @@
-import Mathlib
+module
+
+public import Mathlib
 
 /-!
 # M/M/1: the geometric distribution and its means
@@ -18,6 +20,8 @@ proves that
 It does not prove that the M/M/1 queue has this stationary distribution (that needs the
 Markov-chain theory of the queue), nor anything about the Rust code.
 -/
+
+@[expose] public section
 
 namespace Formal
 
