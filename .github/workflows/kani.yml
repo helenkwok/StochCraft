@@ -5,7 +5,7 @@ name: Kani
 # (stochcraft-random, stochcraft-stats); normal builds never see them. What is and is not proved
 # is in docs/developers.md ("Machine-checked proofs").
 
-# The proofs take about 22 minutes, so they run nightly on main rather than on every pull request.
+# The proofs run nightly on main rather than on every pull request.
 # A pull request that changes this file runs them once; any branch can run them by hand.
 on:
   schedule:

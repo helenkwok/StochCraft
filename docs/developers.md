@@ -559,7 +559,7 @@ about 54× faster than SimPy on an M/M/1 benchmark ([bench/](../bench/README.md)
 
 A few invariants are proved, not only tested, with [Kani](https://github.com/model-checking/kani)
 (a bounded model checker for Rust). The harnesses sit in `#[cfg(kani)] mod proofs` beside the code
-they check, so normal builds never see them. CI runs them nightly on main in `.github/workflows/kani.yml` (they take about 22 minutes); locally,
+they check, so normal builds never see them. CI runs them nightly on main in `.github/workflows/kani.yml`; locally,
 after installing Kani (`cargo install --locked kani-verifier && cargo kani setup`):
 
 ```bash
