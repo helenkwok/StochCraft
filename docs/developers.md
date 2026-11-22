@@ -555,6 +555,43 @@ targets, and Latin hypercube strata holding one value each. They are
 also checked against another BPSim simulator's published results for the BPSim car repair model. StochCraft runs
 about 54× faster than SimPy on an M/M/1 benchmark ([bench/](../bench/README.md)).
 
+### Machine-checked proofs
+
+A few invariants are proved, not only tested, with [Kani](https://github.com/model-checking/kani)
+(a bounded model checker for Rust). The harnesses sit in `#[cfg(kani)] mod proofs` beside the code
+they check, so normal builds never see them. CI runs them in `.github/workflows/kani.yml`; locally,
+after installing Kani (`cargo install --locked kani-verifier && cargo kani setup`):
+
+```bash
+cargo kani -p stochcraft-random
+cargo kani -p stochcraft-stats
+```
+
+Proved, for every input the harness allows:
+
+- Random streams (`crates/random/src/lib.rs`): SplitMix64's first output differs for different
+  seeds; the seed of a keyed stream differs for different bases (same key hash) and for different
+  key hashes (same base); seeding never gives the all-zero state and a xoshiro256** step keeps a
+  non-zero state non-zero; `uniform` is in [0, 1) and `uniform_open0` in (0, 1] from any state;
+  `uniform_range` stays within [min, max] for finite bounds up to 1e9 in size.
+- Distribution parameters (`crates/random/src/dist.rs`): when `Dist::check` accepts a Uniform,
+  Triangular, Truncated normal, Exponential, Poisson, Normal, Log-normal, Erlang, Gamma, Beta,
+  Weibull or Binomial, its parameters are finite and in the documented ranges, for any `f64`
+  including NaN and infinities; a constant never samples NaN, infinite or negative.
+- Output analysis (`crates/stats`): an observed value agrees only inside its tolerance and
+  differs only outside it, and never agrees without a usable tolerance; a bound passes only when
+  the mean meets it and fails only when the mean violates it; fewer than two replications are
+  always inconclusive; the 95% critical value exists for 1 to 30 degrees of freedom; the
+  half-width of two replications of moderate size (up to 1e6) is finite and not negative.
+
+Not proved: that two different key strings give different streams (they hash to 64 bits, so
+collisions exist), the statistical quality of the generator, the shape of any distribution's
+samples (transcendental functions, rejection samplers and loops are out of reach of the bounded
+checker; the statistical tests cover them), confidence intervals for more than two replications,
+and anything in the engine, the block runtime or the interface (entity accounting is checked by
+the run-time behaviour checks, not proved). Proofs are bounded by the stated input ranges and by
+the checker's model of floating point.
+
 ## Contributing
 
 See [CONTRIBUTING.md](../CONTRIBUTING.md) for the clean-room and licence rules.

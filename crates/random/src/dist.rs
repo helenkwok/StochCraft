@@ -1909,3 +1909,108 @@ mod tests {
         }
     }
 }
+
+/// Machine-checked properties (Kani, `cargo kani -p stochcraft-random`; see docs/developers.md).
+/// `Dist::check` only accepts parameters a draw can be made from: each harness takes arbitrary
+/// `f64` parameters (NaN and infinities included) and shows what an `Ok` implies.
+#[cfg(kani)]
+mod proofs {
+    use super::*;
+
+    fn any_f64() -> f64 {
+        kani::any()
+    }
+
+    #[kani::proof]
+    fn bounded_kinds_are_accepted_only_with_finite_ordered_bounds() {
+        let (min, mode, max) = (any_f64(), any_f64(), any_f64());
+        if (Dist::Uniform { min, max }).check().is_ok() {
+            assert!(min.is_finite() && max.is_finite() && min < max);
+        }
+        if (Dist::Triangular { min, mode, max }).check().is_ok() {
+            assert!(min.is_finite() && mode.is_finite() && max.is_finite());
+            assert!(min < max && min <= mode && mode <= max);
+        }
+        let (mean, std_dev) = (any_f64(), any_f64());
+        if (Dist::TruncatedNormal {
+            mean,
+            std_dev,
+            min,
+            max,
+        })
+        .check()
+        .is_ok()
+        {
+            assert!(mean.is_finite() && min.is_finite() && max.is_finite() && min < max);
+            assert!(std_dev.is_finite() && std_dev > 0.0);
+        }
+    }
+
+    #[kani::proof]
+    fn scale_kinds_are_accepted_only_with_finite_non_negative_parameters() {
+        let (a, b) = (any_f64(), any_f64());
+        if (Dist::Exponential { mean: a }).check().is_ok() {
+            assert!(a.is_finite() && a >= 0.0);
+        }
+        if (Dist::Poisson { mean: a }).check().is_ok() {
+            assert!(a.is_finite() && a >= 0.0);
+        }
+        if (Dist::Normal {
+            mean: a,
+            std_dev: b,
+        })
+        .check()
+        .is_ok()
+        {
+            assert!(a.is_finite() && b.is_finite() && b >= 0.0);
+        }
+        if (Dist::LogNormal {
+            mean: a,
+            std_dev: b,
+        })
+        .check()
+        .is_ok()
+        {
+            assert!(a.is_finite() && a > 0.0 && b.is_finite() && b >= 0.0);
+        }
+        let k: u64 = kani::any();
+        if (Dist::Erlang { mean: a, k }).check().is_ok() {
+            assert!(a.is_finite() && a >= 0.0 && k >= 1);
+        }
+    }
+
+    #[kani::proof]
+    fn shape_scale_kinds_and_binomial_are_accepted_only_in_range() {
+        let (shape, scale) = (any_f64(), any_f64());
+        let kinds = [
+            Dist::Gamma { shape, scale },
+            Dist::Beta { shape, scale },
+            Dist::Weibull { shape, scale },
+        ];
+        for d in &kinds {
+            if d.check().is_ok() {
+                assert!(shape.is_finite() && shape > 0.0);
+                assert!(scale.is_finite() && scale > 0.0);
+            }
+        }
+        let trials: u64 = kani::any();
+        let probability = any_f64();
+        if (Dist::Binomial {
+            probability,
+            trials,
+        })
+        .check()
+        .is_ok()
+        {
+            assert!(probability >= 0.0 && probability <= 1.0);
+        }
+    }
+
+    /// A constant never samples NaN, infinite or negative, whatever the value.
+    #[kani::proof]
+    fn a_constant_samples_finite_and_non_negative() {
+        let mut rng = Rng { s: [1, 2, 3, 4] };
+        let x = Dist::Constant(any_f64()).sample(&mut rng);
+        assert!(x.is_finite() && x >= 0.0);
+    }
+}

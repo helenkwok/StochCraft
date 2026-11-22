@@ -49,6 +49,8 @@ craft-window = { version = "0.1.0", git = "https://github.com/storytold/craft-li
 
 [workspace.lints.rust]
 unsafe_code = "forbid"
+# `cfg(kani)` is set by the Kani model checker (`cargo kani`) for its proof harnesses.
+unexpected_cfgs = { level = "warn", check-cfg = ["cfg(kani)"] }
 
 [workspace.lints.clippy]
 unwrap_used = "deny"

@@ -118,9 +118,14 @@ impl Rng {
     /// is hashed with 64-bit FNV-1a (Fowler, Noll and Vo; offset basis 0xcbf29ce484222325, prime
     /// 0x100000001b3), and the hash and `base` are mixed through SplitMix64 before seeding.
     pub fn keyed(base: u64, key: &str) -> Rng {
-        let mixed = SplitMix64::new(fnv1a64(key)).next_u64();
-        Rng::new(SplitMix64::new(base ^ mixed).next_u64())
+        Rng::new(keyed_seed(base, fnv1a64(key)))
     }
+}
+
+/// The seed of the stream whose key has FNV-1a hash `key_hash`, under `base`.
+fn keyed_seed(base: u64, key_hash: u64) -> u64 {
+    let mixed = SplitMix64::new(key_hash).next_u64();
+    SplitMix64::new(base ^ mixed).next_u64()
 }
 
 /// 64-bit FNV-1a of `s`'s bytes.
@@ -135,6 +140,80 @@ pub use dist::{Dist, DistError, Requirement, ln_binomial_pmf, ln_gamma, ln_poiss
 pub mod estimate;
 pub mod fit;
 pub use estimate::{Family, FitError, ThreePoint, Upper};
+
+/// Machine-checked properties (Kani, `cargo kani -p stochcraft-random`; see docs/developers.md).
+#[cfg(kani)]
+mod proofs {
+    use super::*;
+
+    /// SplitMix64's output function is a bijection of its state: different seeds never give the
+    /// same first output (adding an odd constant, xor-shifts and odd multipliers all invert).
+    #[kani::proof]
+    #[kani::solver(cadical)]
+    fn splitmix64_first_output_is_injective_in_the_seed() {
+        let (a, b): (u64, u64) = (kani::any(), kani::any());
+        kani::assume(a != b);
+        assert_ne!(SplitMix64::new(a).next_u64(), SplitMix64::new(b).next_u64());
+    }
+
+    /// For a fixed key hash, different bases give different stream seeds.
+    #[kani::proof]
+    #[kani::solver(cadical)]
+    fn keyed_seed_is_injective_in_the_base() {
+        let (a, b, h): (u64, u64, u64) = (kani::any(), kani::any(), kani::any());
+        kani::assume(a != b);
+        assert_ne!(keyed_seed(a, h), keyed_seed(b, h));
+    }
+
+    /// For a fixed base, different key hashes give different stream seeds. (Different key
+    /// strings can still share a 64-bit FNV-1a hash; this is about the mixing after it.)
+    #[kani::proof]
+    #[kani::solver(cadical)]
+    fn keyed_seed_is_injective_in_the_key_hash() {
+        let (base, h1, h2): (u64, u64, u64) = (kani::any(), kani::any(), kani::any());
+        kani::assume(h1 != h2);
+        assert_ne!(keyed_seed(base, h1), keyed_seed(base, h2));
+    }
+
+    /// Seeding never produces the all-zero state, which xoshiro256** cannot leave.
+    #[kani::proof]
+    #[kani::solver(cadical)]
+    fn seeding_never_gives_the_all_zero_state() {
+        let seed: u64 = kani::any();
+        assert_ne!(Rng::new(seed).s, [0u64; 4]);
+    }
+
+    /// One xoshiro256** step takes a non-zero state to a non-zero state (the step is invertible).
+    #[kani::proof]
+    fn a_step_keeps_the_state_non_zero() {
+        let s: [u64; 4] = kani::any();
+        kani::assume(s != [0u64; 4]);
+        let mut r = Rng { s };
+        r.next_u64();
+        assert_ne!(r.s, [0u64; 4]);
+    }
+
+    /// `uniform` is in [0, 1) and `uniform_open0` in (0, 1], from any generator state.
+    #[kani::proof]
+    fn uniform_draws_stay_in_their_intervals() {
+        let mut r = Rng { s: kani::any() };
+        let u = r.uniform();
+        assert!(u >= 0.0 && u < 1.0);
+        let v = r.uniform_open0();
+        assert!(v > 0.0 && v <= 1.0);
+    }
+
+    /// A draw from `uniform_range` over a finite, non-empty range never leaves [min, max].
+    #[kani::proof]
+    fn uniform_range_stays_within_its_bounds() {
+        let (min, max): (f64, f64) = (kani::any(), kani::any());
+        kani::assume(min.is_finite() && max.is_finite() && max > min);
+        kani::assume(min.abs() <= 1.0e9 && max.abs() <= 1.0e9);
+        let mut r = Rng { s: kani::any() };
+        let x = r.uniform_range(min, max);
+        assert!(x >= min && x <= max);
+    }
+}
 
 #[cfg(test)]
 mod tests {
