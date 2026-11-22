@@ -231,10 +231,18 @@ interval, and when its lower end is below `target_share` the share is not shown 
 takes it (`{id, field}`) with its `levels`, or its range as `min` and `max`. The default design,
 `full_factorial`, runs every combination of the levels (the last factor changing fastest);
 `latin_hypercube` with `points` samples each range in that many strata, the same design for the
-same seed. Every point runs the same replications on the same seed, so a full factorial's
+same seed; `sobol` takes the first `points` points of the Sobol sequence (a power of two: another
+number is refused, naming the powers either side), one dimension for each factor in the order
+given (at most 64 factors), in `batches` batches (default 4, at least 2), each with its own random
+digital shift, so the batches are independent replicates and the same seed gives the same design.
+Sobol points cover several factors' ranges at once more evenly than a Latin hypercube's random
+matching. Every point runs the same replications on the same seed, so a full factorial's
 `main_effects` and two-way `interactions` (between factors with two levels) come with paired 95%
-intervals, and a Latin hypercube's `correlations` give each factor's rank (Spearman) correlation
-with each result. A design of more than 10,000 runs (points × replications) is refused with the
+intervals, and the `correlations` of a Latin hypercube or Sobol design give each factor's rank
+(Spearman) correlation with each result. A Sobol design adds each correlation's value in every
+batch (`batch_spearman`, with `batch_mean` and its `half_width` across the batches) and
+`result_means`, each result's mean over the factors' ranges per batch with its 95% interval
+across the batches. A design of more than 10,000 runs (points × replications) is refused with the
 number it would take, so an agent can drop levels, points or replications and try again.
 
 A Monte Carlo model (a calculation with no process) is built and run through `execute`:

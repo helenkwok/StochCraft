@@ -1258,6 +1258,17 @@ id since #152; before that the same search stopped at 6 ovens.)
   same seed gives the same design, and adding a factor leaves the other columns alone. A count
   given as a range takes its whole numbers. Each factor's rank (Spearman) correlation with each
   result is reported.
+- **Sobol** (Sobol', 1967; Joe and Kuo, 2008, the direction numbers `stochcraft-mc` has):
+  `batches` batches (default 4) of `points` points, `points` a power of two (the sequence is
+  balanced over its first 2^m points; any other number is refused, naming the powers either side).
+  Factor k is Sobol dimension k in the order given (at most 64 factors), and a coordinate is
+  placed in the range as the Latin hypercube places it, a count taking its whole numbers. Several
+  factors' ranges are covered more evenly together than a Latin hypercube's random matching
+  does. Each batch has its own random digital shift per factor (Owen, 1995; L'Ecuyer and
+  Lemieux, 2002), the first draw of `Rng::keyed(seed, "design/qmc/<batch>/<id>.<field>")`, so
+  the batches are independent replicates and the same seed gives the same design. Reported as
+  for a Latin hypercube (rank correlations across all points), with each correlation per batch
+  and each result's mean per batch, and their 95% t intervals across the batches.
 - Every point runs the same replications on the same seed (common random numbers, #66), so each
   effect is worked out replication by replication and judged by its paired 95% t interval, with
   `tests` and the Bonferroni note as in a sensitivity analysis. Points run one after another,
@@ -1278,6 +1289,7 @@ id since #152; before that the same search stopped at 6 ovens.)
 | A second server's service time on the first server's wait | 0 | 0, not significant |
 | M/M/1 of issue #66, 2 × 2 of small changes: half-width of a main effect, paired against independent points | narrower | 0.068 and 0.062 against 0.21 |
 | Latin hypercube, 8 points: values per eighth of each range | one each | one each; same seed, same design |
+| Sobol, 4 batches of 16 points: values per sixteenth of each range, per batch | one each | one each; batches differ; same seed, same design |
 
 **Not yet:** sizing several resources a step at a time, or by cost; saving targets in the model
 file; running analyses in the background or on the browser's web workers. For designed

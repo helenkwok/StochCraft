@@ -417,6 +417,37 @@ fn design_runs_a_factorial_and_a_hypercube() {
     );
     assert!(text.contains("spearman"), "{text}");
     assert_eq!(hypercube(), text);
+
+    let sobol = || {
+        ok(&[
+            "design",
+            &m,
+            "--design",
+            "sobol",
+            "--points",
+            "4",
+            "--batches",
+            "3",
+            "--factor",
+            "arrive.mean=1.5..3",
+            "--factor",
+            "serve.capacity=1..3",
+            "--result",
+            "serve.mean_wait",
+            "--reps",
+            "2",
+        ])
+    };
+    let text = sobol();
+    assert!(
+        text.contains("Sobol design of 2 factors, 12 points"),
+        "{text}"
+    );
+    assert!(
+        text.contains("3 batches of 4 Sobol points") && text.contains("batch mean"),
+        "{text}"
+    );
+    assert_eq!(sobol(), text);
 }
 
 #[test]

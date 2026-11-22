@@ -1342,12 +1342,15 @@ fn experiment_design(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         "main_effects",
         "interactions",
         "correlations",
+        "batches",
+        "points_per_batch",
+        "result_means",
     ] {
         if let Some(x) = v.get(key) {
             record[key] = x.clone();
         }
     }
-    if v["design"] == "latin_hypercube" {
+    if v["design"] == "latin_hypercube" || v["design"] == "sobol" {
         record["points"] = json!(v["points"].as_array().map_or(0, Vec::len));
     }
     e.sensitivity.push(record);
@@ -2716,7 +2719,7 @@ pub static COMMANDS: &[Command] = &[
     },
     Command {
         name: "experiment.design",
-        summary: "Run a designed experiment with several factors at once: every combination of their levels (`full_factorial`, the default) or a Latin hypercube of their ranges, each point with the same seed; reports each result at each point, the factors' main effects and two-way interactions with paired intervals (or rank correlations for a Latin hypercube). At most 10,000 runs (points × replications). Each point comes with the warnings its run gives, as a single run's without results over time (`warnings`).",
+        summary: "Run a designed experiment with several factors at once: every combination of their levels (`full_factorial`, the default), a Latin hypercube of their ranges (`latin_hypercube`, `points`) or a randomised Sobol design (`sobol`: `batches` batches, default 4, of `points` points each, a power of two, each batch with its own random shift, so the batches are independent replicates), each point with the same seed; reports each result at each point, the factors' main effects and two-way interactions with paired intervals (or rank correlations for a Latin hypercube or Sobol design; a Sobol design adds each correlation's value per batch and each result's mean per batch, with 95% intervals across the batches). At most 10,000 runs (points × replications). Each point comes with the warnings its run gives, as a single run's without results over time (`warnings`).",
         kind: CommandKind::Action,
         schema: schema::<crate::design::DesignParams>,
         example: || json!({ "factors": [{ "id": "arrivals", "field": "mean", "levels": [2.0, 3.0] }, { "id": "desk", "field": "mean", "levels": [0.8, 1.2] }], "results": [{ "element": "desk", "metric": "mean_wait" }], "replications": 4 }),
