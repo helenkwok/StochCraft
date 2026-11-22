@@ -1254,6 +1254,8 @@ fn exec_steps(
             } else {
                 ReplayMode::EditsOnly
             };
+            // On stderr, so the steps on stdout stay one JSON line each.
+            eprintln!("{}", stochcraft_engine::replay_summary(journal, mode));
             (journal.entries.as_slice(), mode)
         }
     };
@@ -1269,10 +1271,14 @@ fn exec_steps(
             touched.extend(step.params["path"].as_str().map(PathBuf::from));
         }
         match engine.execute(&step.command, step.params.clone()) {
-            Ok(result) => println!(
-                "{}",
-                json!({ "step": i, "command": step.command, "result": result })
-            ),
+            Ok(result) => {
+                // A started run is finished here, as a replay has no one to poll it.
+                engine.finish_started_run(&step.command);
+                println!(
+                    "{}",
+                    json!({ "step": i, "command": step.command, "result": result })
+                );
+            }
             Err(e) => {
                 println!(
                     "{}",

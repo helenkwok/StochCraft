@@ -190,6 +190,9 @@ pub struct JournalEntry {
     pub params: Value,
 }
 
+const DOCUMENT_PROCESS: &str = "process";
+const DOCUMENT_SD: &str = "system_dynamics";
+
 /// The version of the journal format this engine writes and reads (see [`Journal`]).
 pub const JOURNAL_FORMAT: u32 = 1;
 
@@ -228,6 +231,12 @@ pub struct JournalStart {
     /// For [`StartKind::NewSd`], the parameters `sd.new` was given.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub params: Option<Value>,
+    /// What kind of document it was: `"process"` or `"system_dynamics"`. A replay refuses a
+    /// document of the other kind. Absent in a journal written before this was recorded, whose
+    /// system dynamics models were identified by a placeholder digest (see
+    /// [`Engine::begin_replay`]).
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub document: Option<String>,
 }
 
 impl JournalStart {
@@ -240,6 +249,7 @@ impl JournalStart {
             file_digest: None,
             scenario: None,
             params: None,
+            document: None,
         }
     }
 }
@@ -254,6 +264,27 @@ pub struct Journal {
     pub stochcraft: String,
     pub start: JournalStart,
     pub entries: Vec<JournalEntry>,
+    /// The build of StochCraft that wrote it ([`build_id`]): the version, the platform and, when
+    /// the build was given one, the source revision. Numbers are reproduced only by the same
+    /// build, so a replay says whether this one is it. Absent in older journals.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub engine: Option<String>,
+}
+
+/// Names this build of the engine: the version, the platform and, when the environment variable
+/// `STOCHCRAFT_REVISION` was set while building, the source revision.
+pub fn build_id() -> String {
+    let mut id = format!(
+        "{} {}-{}",
+        env!("CARGO_PKG_VERSION"),
+        std::env::consts::ARCH,
+        std::env::consts::OS
+    );
+    if let Some(revision) = option_env!("STOCHCRAFT_REVISION") {
+        id.push(' ');
+        id.push_str(revision);
+    }
+    id
 }
 
 /// Which steps of a journal a replay carries out.
@@ -287,6 +318,43 @@ impl ReplayMode {
     pub fn applies(self, command: &str) -> bool {
         self == ReplayMode::All || !SKIPPED_BY_DEFAULT.contains(&command)
     }
+}
+
+/// What a replay of `journal` in `mode` claims, separating the edits it re-applies from the
+/// numerical results it makes again. Re-running a step does not compare its numbers with the
+/// original run's (a journal keeps no results), and numbers are only expected to be the same
+/// from the same build, so this says which build wrote the journal and whether it is this one.
+pub fn replay_summary(journal: &Journal, mode: ReplayMode) -> Value {
+    let produces_results = |c: &str| c != "file.save" && SKIPPED_BY_DEFAULT.contains(&c);
+    let (mut edits, mut runs, mut skipped) = (0u64, 0u64, 0u64);
+    for step in &journal.entries {
+        if !mode.applies(&step.command) {
+            skipped += 1;
+        } else if produces_results(&step.command) {
+            runs += 1;
+        } else {
+            edits += 1;
+        }
+    }
+    let here = build_id();
+    let same_build = journal.engine.as_deref() == Some(here.as_str());
+    let numbers = if runs == 0 {
+        "none: no run was made again, only the edits were replayed"
+    } else if same_build {
+        "made again by the same build that wrote the journal; they are not compared with the original numbers"
+    } else {
+        "made again by a different or unknown build than the one that wrote the journal, so they may differ from the original numbers"
+    };
+    json!({
+        "replay": {
+            "edits_replayed": edits,
+            "runs_made_again": runs,
+            "steps_skipped": skipped,
+            "journal_engine": journal.engine,
+            "this_engine": here,
+            "numerical_results": numbers,
+        }
+    })
 }
 
 /// How [`Engine::replay_journal`] replays.
@@ -403,6 +471,7 @@ impl Engine {
     pub fn with_model(model: Model) -> Self {
         let mut journal_start = JournalStart::new(StartKind::Engine, None);
         journal_start.model_digest = model_digest(&model);
+        journal_start.document = Some(DOCUMENT_PROCESS.to_owned());
         Self {
             saved: model.clone(),
             model,
@@ -476,6 +545,7 @@ impl Engine {
             stochcraft: env!("CARGO_PKG_VERSION").to_owned(),
             start: self.journal_start.clone(),
             entries: self.journal.clone(),
+            engine: Some(build_id()),
         }
     }
 
@@ -488,6 +558,7 @@ impl Engine {
             .enumerate()
             .map(|(index, step)| {
                 self.execute(&step.command, step.params.clone())
+                    .inspect(|_| self.finish_started_run(&step.command))
                     .map_err(|error| ReplayError {
                         index,
                         command: step.command.clone(),
@@ -495,6 +566,23 @@ impl Engine {
                     })
             })
             .collect()
+    }
+
+    /// After a replayed `run.start`, makes the run complete (a replay has no one to poll it), so
+    /// the steps after it find its results, as they did when the journal was recorded.
+    pub fn finish_started_run(&mut self, command: &str) {
+        if command != "run.start" {
+            return;
+        }
+        loop {
+            let status = self.poll_run(u64::MAX, u64::MAX);
+            // A run for the caller's own workers waits for their answers: not ours to finish.
+            if status["state"] != "running" || self.worker_task().is_some() {
+                return;
+            }
+            #[cfg(not(target_arch = "wasm32"))]
+            std::thread::sleep(std::time::Duration::from_millis(1));
+        }
     }
 
     /// Like [`Engine::replay`], but leaves out the steps `mode` skips and says which.
@@ -511,7 +599,10 @@ impl Engine {
                     return Ok(ReplayStep::Skipped);
                 }
                 self.execute(&step.command, step.params.clone())
-                    .map(ReplayStep::Applied)
+                    .map(|result| {
+                        self.finish_started_run(&step.command);
+                        ReplayStep::Applied(result)
+                    })
                     .map_err(|error| ReplayError {
                         index,
                         command: step.command.clone(),
@@ -550,8 +641,40 @@ impl Engine {
             self.execute("sd.new", start.params.clone().unwrap_or_else(|| json!({})))
                 .map_err(refuse)?;
         }
-        let found = model_digest(&self.model);
-        if found != start.model_digest && !force {
+        if force {
+            return Ok(());
+        }
+        // The kind of document, then which one: a journal of one kind is never replayed onto the
+        // other, and a model that is not the one it started from is refused.
+        if let Some(recorded) = &start.document
+            && recorded != self.document_kind()
+        {
+            return Err(refuse(CommandError {
+                code: ErrorCode::Conflict,
+                message: format!(
+                    "the journal is of a {} document, but the open document is a {} one; open the same file first, or force the replay",
+                    recorded.replace('_', " "),
+                    self.document_kind().replace('_', " ")
+                ),
+                details: Some(json!({ "expected": recorded, "found": self.document_kind() })),
+            }));
+        }
+        let found = self.document_digest();
+        let legacy_sd = start.document.is_none()
+            && self.sd.is_some()
+            && start.model_digest == model_digest(&Model::default());
+        // A journal written before the document kind was recorded identified an XMILE model by
+        // the digest of an empty process model, which says nothing about the model. A new
+        // system dynamics model is rebuilt by its own `sd.new` step; an opened file cannot be
+        // checked, so it is refused unless forced.
+        if legacy_sd && start.kind != StartKind::NewSd {
+            return Err(refuse(CommandError {
+                code: ErrorCode::Conflict,
+                message: "the journal was written before system dynamics models were identified in it, so it cannot tell whether the open model is the one it started from; force the replay to run it anyway".to_owned(),
+                details: Some(json!({ "found": found })),
+            }));
+        }
+        if found != start.model_digest && !legacy_sd {
             let from = match (start.kind, &start.name) {
                 (StartKind::File, Some(name)) => format!("the file `{name}`"),
                 (StartKind::New, _) => "a new model".to_owned(),
@@ -567,7 +690,37 @@ impl Engine {
                 details: Some(json!({ "expected": start.model_digest, "found": found })),
             }));
         }
+        // The same model from different bytes: the file was edited (or is another file) since.
+        if let (Some(recorded), Some(here)) = (&start.file_digest, &self.journal_start.file_digest)
+            && recorded != here
+        {
+            return Err(refuse(CommandError {
+                code: ErrorCode::Conflict,
+                message: format!(
+                    "the journal started from a file with bytes {recorded}, but the open file has {here}: it was edited, or is another file; open the same file, or force the replay"
+                ),
+                details: Some(json!({ "expected": recorded, "found": here })),
+            }));
+        }
         Ok(())
+    }
+
+    /// `"process"` or `"system_dynamics"`: the kind of the open document.
+    fn document_kind(&self) -> &'static str {
+        if self.sd.is_some() {
+            DOCUMENT_SD
+        } else {
+            DOCUMENT_PROCESS
+        }
+    }
+
+    /// The digest that identifies the open document: [`model_digest`] of the process model, or
+    /// the system dynamics model's own (without its diagram).
+    fn document_digest(&self) -> String {
+        match &self.sd {
+            Some(d) => sd::sd_digest(&d.model),
+            None => model_digest(&self.model),
+        }
     }
 
     /// Replays a journal that was written by [`Engine::journal_document`]: checks where it
@@ -669,6 +822,9 @@ impl Engine {
     /// compare them with the new model's.
     fn new_document(&mut self, model: Model, mut start: JournalStart) {
         start.model_digest = model_digest(&model);
+        start
+            .document
+            .get_or_insert_with(|| DOCUMENT_PROCESS.to_owned());
         self.journal_start = start;
         self.journal.clear();
         self.documents += 1;
@@ -733,6 +889,13 @@ impl Engine {
     /// reason.
     pub fn save_bytes(&self, as_new: bool) -> Result<Vec<u8>, CommandError> {
         if let Some(d) = &self.sd {
+            // Unchanged since it was read or written: the same bytes, with whatever the reader
+            // does not keep.
+            if d.model == d.saved
+                && let Some(bytes) = &d.bytes
+            {
+                return Ok(bytes.clone());
+            }
             return Ok(stochcraft_sd::write_xmile(&d.model).into_bytes());
         }
         match &self.file {
@@ -758,8 +921,36 @@ impl Engine {
     /// when nothing would be lost, there is no such file, or the model was written to it since.
     pub fn save_drops(&self) -> &[String] {
         match &self.sd {
-            Some(d) if d.drops_on_save && d.file.is_some() => &d.notes,
+            Some(d) if d.drops_on_save && d.file.is_some() && d.model != d.saved => &d.notes,
             _ => &[],
+        }
+    }
+
+    /// What saving to `path` would leave out of the file there, which `file.save` refuses to do
+    /// unless it is given `allow_loss`: what the reader noted it does not keep of the file the
+    /// model was opened from, when `path` is that file and the bytes written would not carry it.
+    /// Empty when nothing would be lost (an unchanged model is written as its own bytes).
+    pub fn save_loss(&self, path: &str, as_new: bool) -> Vec<String> {
+        match &self.sd {
+            Some(d) => match &d.file {
+                Some(file) if d.drops_on_save && d.model != d.saved && same_file(file, path) => {
+                    d.notes.clone()
+                }
+                _ => Vec::new(),
+            },
+            None => match &self.file {
+                Some(f)
+                    if as_new
+                        && f.path.as_deref().is_some_and(|p| same_file(p, path))
+                        && !f.notes.is_empty() =>
+                {
+                    f.notes
+                        .iter()
+                        .filter_map(|n| n["message"].as_str().map(str::to_owned))
+                        .collect()
+                }
+                _ => Vec::new(),
+            },
         }
     }
 
@@ -780,7 +971,12 @@ impl Engine {
             d.saved = d.model.clone();
             d.file = Some(path.to_owned());
             d.path = path.to_owned();
-            d.drops_on_save = false;
+            // Written as it was read: what the reader noted is still in the file. Written from
+            // the model: it is not.
+            if d.bytes.as_deref() != Some(bytes) {
+                d.drops_on_save = false;
+                d.bytes = Some(bytes.to_vec());
+            }
             return Ok(json!({ "path": path, "format": "xmile", "bytes": bytes.len() as u64 }));
         }
         // Read back what was written, so the next unchanged save gives the same bytes again, in
@@ -1044,6 +1240,15 @@ pub fn write_atomically(path: &std::path::Path, bytes: &[u8]) -> std::io::Result
 pub fn model_digest(model: &Model) -> String {
     let text = serde_json::to_string(&wire::ModelDoc::from(model)).unwrap_or_default();
     bytes_digest(text.as_bytes())
+}
+
+/// Whether two paths name the same file (the same text, or the same file once resolved).
+fn same_file(a: &str, b: &str) -> bool {
+    a == b
+        || matches!(
+            (std::fs::canonicalize(a), std::fs::canonicalize(b)),
+            (Ok(x), Ok(y)) if x == y
+        )
 }
 
 /// The digest of some bytes, written `sha256:` and hex, as [`model_digest`] writes it.

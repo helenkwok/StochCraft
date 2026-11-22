@@ -87,7 +87,7 @@ driving the app is the channel's token (below).
 | `inspect_model` | — | `model.get` (elements, connections, pools, calendars, experiment) and `history` (what undo and redo would do, unsaved changes). |
 | `check_model` | — | `model.validate`: every problem, errors first, with the element, a stable code and a message in English that starts with its severity, names the block by its name and says what to do. The same text comes as `parts` (each a template `key` and the `args` that fill it) and, for a problem with one field, `field`: the window builds its translated message from those, and a client may do the same. The code never changes with the wording. |
 | `open` | `path`, `scenario?` | `file.open`: a `.bpmn` or `.xpdl` file with BPSim data. |
-| `save` | `path?`, `as_new?` | `file.save`: into the model's own file (keeping what StochCraft does not understand), or to `path`. |
+| `save` | `path?`, `as_new?`, `allow_loss?` | `file.save`: into the model's own file (keeping what StochCraft does not understand), or to `path`. A save that would leave out content of the opened file that StochCraft does not keep is refused, naming it, unless `allow_loss` is `true`. |
 | `run` | `replications?`, `seed?` | `run`: each element's metrics as means with 95% confidence intervals, the warm-up MSER-5 suggests (`warmup_suggestion`), the warnings about the results, and the run record. The values over the run (`series`) are left out, since they multiply the reply's size; `execute` with `run` gives them. An experiment with sequential replications (`experiment.set` with `sequential`) adds replications until its key measures are precise enough, and `sequential` in the results says how many ran and why it stopped. |
 | `undo`, `redo` | — | `undo`, `redo`. |
 
