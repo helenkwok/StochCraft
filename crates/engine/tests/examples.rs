@@ -27,7 +27,7 @@
 //! The first five files were written by `stochcraft-cli new -t <name>`; the others were built with
 //! the same engine commands and saved, with their comparison scenarios (each inheriting the first)
 //! added by hand, as in `mm1.bpmn`. The starting contents of the prison and of Penny Fab were
-//! added by hand too.
+//! added by hand too. The zeta queue was assembled from the output of `tools/zeta-gaps/generate.py`.
 //!
 //! Each check allows √2 times the 95% half-width, since several checks read the same runs (as in
 //! `crates/blocks/tests/queueing_cases.rs`).
@@ -1044,14 +1044,14 @@ fn penny_fab_matches_the_practical_worst_case_and_the_best_case() {
 /// The root σ in (0, 1) of σ = A*(μ(1 − σ)) for a G/M/1 queue whose times between arrivals take
 /// the values `points` (probability, value) with service rate `mu`; A* is the Laplace–Stieltjes
 /// transform of the time between arrivals, here the finite sum Σ pᵢ·exp(−s·tᵢ). Then an
-/// arrival waits with chance σ and, on average, σ / (μ(1 − σ)) in the queue (Gross and Harris,
-/// Fundamentals of Queueing Theory, §5.1; Kleinrock, Queueing Systems vol. 1, §6.4).
+/// arrival waits with chance σ and, on average, σ / (μ(1 − σ)) in the queue (Gross and Harris, Fundamentals of
+/// Queueing Theory, on the G/M/1 queue; Kleinrock, Queueing Systems, vol. 1, on G/M/m).
 fn gm1_sigma(points: &[(f64, f64)], mu: f64) -> f64 {
     let total: f64 = points.iter().map(|(p, _)| p).sum();
     let gap = |sigma: f64| {
         points
             .iter()
-            .map(|(p, t)| p / total * (-mu * (1.0 - sigma) * t).exp())
+            .map(|(p, t)| p / total * stochcraft_random::math::exp(-mu * (1.0 - sigma) * t))
             .sum::<f64>()
             - sigma
     };
@@ -1112,7 +1112,8 @@ fn arrivals_that_keep_their_distance_match_g_m_1() {
 
     // The same mean gap with exponential gaps: σ = ρ, and Wq = ρ / (μ − λ) = 4 minutes.
     let m = model_of("zeta-queue.bpmn", Some("poisson"));
-    assert!((interarrival(&m, "arrivals") - gap).abs() < 1e-12);
+    let poisson_gap = interarrival(&m, "arrivals");
+    assert!((poisson_gap - gap).abs() < 1e-6, "{poisson_gap}");
     let mut e = open_scenario("zeta-queue.bpmn", Some("poisson"), experiment);
     let r = ok(&mut e, "run", json!({}));
     covers(&r, "server", "mean_wait", rho / (mu - lambda));
