@@ -654,7 +654,13 @@ impl App {
             .get(key)
             .cloned()
             .unwrap_or_else(|| current.to_owned());
-        let r = ui.add(egui::TextEdit::singleline(&mut text).desired_width(f32::INFINITY));
+        // Its own id: an automatic one would change when a refusal shown above it comes or goes,
+        // taking the keyboard from the field while it is typed in.
+        let r = ui.add(
+            egui::TextEdit::singleline(&mut text)
+                .id_salt(("sd-field", key))
+                .desired_width(f32::INFINITY),
+        );
         self.sd_canvas.typing |= r.has_focus();
         crate::form::field_outline(ui, &r);
         r.widget_info(|| egui::WidgetInfo::labeled(egui::Role::TextInput, true, label));
