@@ -5,7 +5,9 @@
 
 use std::sync::Arc;
 
-use stochcraft_agents::{Action, Agent, ChartSpec, History, Send, StateSpec, Step, TransitionSpec};
+use stochcraft_agents::{
+    Action, Agent, ChartSpec, History, SendSpec, StateSpec, Step, TransitionSpec,
+};
 
 fn start(spec: &ChartSpec) -> Agent {
     let chart = match spec.build() {
@@ -219,6 +221,37 @@ fn both_regions_of_a_parallel_state_react_to_one_event() {
     );
 }
 
+/// A transition from outside to a state deep in one region of a parallel state enters the
+/// parallel state, that region down to the target, and every other region at its initial state,
+/// in document order.
+#[test]
+fn entering_one_region_of_a_parallel_state_enters_the_others_at_their_initial_states() {
+    let spec = ChartSpec::new("into-parallel")
+        .state(StateSpec::state("A").transition(TransitionSpec::on("go").to("a2")))
+        .state(
+            StateSpec::parallel("P")
+                .child(
+                    StateSpec::state("R1")
+                        .child(StateSpec::state("a1"))
+                        .child(StateSpec::state("a2")),
+                )
+                .child(
+                    StateSpec::state("R2")
+                        .child(StateSpec::state("b1"))
+                        .child(StateSpec::state("b2")),
+                ),
+        );
+    let mut a = start(&spec);
+    assert_eq!(steps(&a), ["enter A"]);
+    assert_eq!(
+        handle(&mut a, "go"),
+        [
+            "event go", "exit A", "enter P", "enter R1", "enter a2", "enter R2", "enter b1",
+        ]
+    );
+    assert_eq!(a.active_states(), ["P", "R1", "a2", "R2", "b1"]);
+}
+
 #[test]
 fn an_internal_transition_does_not_exit_its_source() {
     let spec = ChartSpec::new("internal").state(
@@ -397,7 +430,7 @@ fn a_failed_action_raises_error_execution() {
     let spec = ChartSpec::new("error")
         .state(
             StateSpec::state("s")
-                .on_entry(Send::new("later").after_expr("-1"))
+                .on_entry(SendSpec::new("later").after_expr("-1"))
                 .on_entry(Action::log("skipped"))
                 .transition(TransitionSpec::on("error").to("failed")),
         )
@@ -483,11 +516,11 @@ fn charts_with_mistakes_are_refused() {
             "final state",
         ),
         (
-            one(StateSpec::state("a").on_entry(Send::new("e").after(-1.0))),
+            one(StateSpec::state("a").on_entry(SendSpec::new("e").after(-1.0))),
             "not a time",
         ),
         (
-            one(StateSpec::state("a").on_entry(Send::new("e").internal().after(1.0))),
+            one(StateSpec::state("a").on_entry(SendSpec::new("e").internal().after(1.0))),
             "no delay",
         ),
         (

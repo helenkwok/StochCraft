@@ -7,14 +7,14 @@
 //!
 //! ```
 //! use std::sync::Arc;
-//! use stochcraft_agents::{Action, Agent, ChartSpec, Driver, Send, StateSpec, TransitionSpec};
+//! use stochcraft_agents::{Action, Agent, ChartSpec, Driver, SendSpec, StateSpec, TransitionSpec};
 //!
 //! // A machine that works for a fixed 2, then waits for a repair.
 //! let chart = ChartSpec::new("machine")
 //!     .data("jobs", "0")
 //!     .state(
 //!         StateSpec::state("working")
-//!             .on_entry(Send::new("done").after(2.0))
+//!             .on_entry(SendSpec::new("done").after(2.0))
 //!             .transition(
 //!                 TransitionSpec::on("done")
 //!                     .to("idle")
@@ -65,10 +65,10 @@
 //!
 //! **Time** (ROADMAP D18): a send to the agent itself with a delay, or with none, becomes an
 //! event on the clock; [`Action::Cancel`] makes the pending sends with its id never arrive. A
-//! rate send ([`Send::at_rate`]) waits an exponential time with mean 1 / rate, and is drawn again
+//! rate send ([`SendSpec::at_rate`]) waits an exponential time with mean 1 / rate, and is drawn again
 //! whenever, at the end of a macrostep, a variable its rate reads has a new value: by the
 //! exponential's lack of memory the event then comes at the new rate. A send to the internal
-//! queue ([`Send::internal`]) acts as `<raise>`.
+//! queue ([`SendSpec::internal`]) acts as `<raise>`.
 //!
 //! **Random streams** (D18): each expression of the chart draws from a stream of its own,
 //! `stochcraft_random::Rng::keyed(seed, "<agent key>/<purpose>")`, where the purpose is where it
@@ -87,7 +87,7 @@ mod driver;
 mod interp;
 
 pub use chart::{
-    Action, Chart, ChartError, ChartSpec, Data, Delay, History, Kind, Send, StateSpec, Target,
+    Action, Chart, ChartError, ChartSpec, Data, Delay, History, Kind, SendSpec, StateSpec, Target,
     TransitionSpec,
 };
 pub use data::FUNCTIONS;

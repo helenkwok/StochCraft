@@ -789,7 +789,7 @@ impl Agent {
                 };
                 self.record(Step::Log(text));
             }
-            Exec::Send(s) => {
+            Exec::SendSpec(s) => {
                 if s.internal {
                     self.internal.push_back(s.event.clone());
                     return Ok(());

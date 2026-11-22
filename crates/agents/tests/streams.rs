@@ -5,7 +5,7 @@
 use std::sync::Arc;
 
 use stochcraft_agents::{
-    Action, Agent, Chart, ChartSpec, Driver, Record, Send, StateSpec, TransitionSpec,
+    Action, Agent, Chart, ChartSpec, Driver, Record, SendSpec, StateSpec, TransitionSpec,
 };
 
 fn chart() -> Arc<Chart> {
@@ -14,7 +14,7 @@ fn chart() -> Arc<Chart> {
         .data("tries", "0")
         .state(
             StateSpec::state("s")
-                .on_entry(Send::new("go").after_expr("exponential(1)"))
+                .on_entry(SendSpec::new("go").after_expr("exponential(1)"))
                 .on_entry(Action::assign("x", "uniform(0, 10)"))
                 .on_entry(Action::log_value("x", "$x"))
                 .transition(

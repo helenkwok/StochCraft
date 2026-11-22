@@ -631,7 +631,7 @@ each event handled by one complete macrostep in zero time (D18).
   `$x` or `getProperty('x')`, with `In('state')` and the distribution functions (`exponential(m)`,
   `uniform(a, b)`, `triangular`, `normal`, `erlang`, ... and `random()`), each expression drawing
   from its own stream `Rng::keyed(seed, "<agent key>/<place in the chart>")` (D17, D18).
-- A `<send>` to the agent itself has a fixed `delay`, a `delayexpr`, or a rate (`Send::at_rate`, an
+- A `<send>` to the agent itself has a fixed `delay`, a `delayexpr`, or a rate (`SendSpec::at_rate`, an
   extension): an exponential delay with mean 1 / rate, drawn again when a variable the rate reads
   has changed at the end of a macrostep. `<cancel>` leaves the event on the queue, skipped when
   popped.

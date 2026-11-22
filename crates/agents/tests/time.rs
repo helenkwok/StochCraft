@@ -11,7 +11,7 @@
 use std::sync::Arc;
 
 use stochcraft_agents::{
-    Action, Agent, Chart, ChartSpec, Driver, Send, StateSpec, Step, TransitionSpec,
+    Action, Agent, Chart, ChartSpec, Driver, SendSpec, StateSpec, Step, TransitionSpec,
 };
 use stochcraft_random::math::exp;
 
@@ -65,7 +65,7 @@ fn a_fixed_timeout_of_2_fires_at_exactly_2() {
         &ChartSpec::new("timeout")
             .state(
                 StateSpec::state("wait")
-                    .on_entry(Send::new("timeout").after(2.0))
+                    .on_entry(SendSpec::new("timeout").after(2.0))
                     .transition(TransitionSpec::on("timeout").to("done")),
             )
             .state(StateSpec::final_state("done")),
@@ -90,8 +90,8 @@ fn a_cancelled_send_never_fires() {
         &ChartSpec::new("cancel")
             .state(
                 StateSpec::state("wait")
-                    .on_entry(Send::new("timeout").id("t").after(2.0))
-                    .on_entry(Send::new("stop").after(1.0))
+                    .on_entry(SendSpec::new("timeout").id("t").after(2.0))
+                    .on_entry(SendSpec::new("stop").after(1.0))
                     .transition(
                         TransitionSpec::on("stop")
                             .then(Action::cancel("t"))
@@ -117,9 +117,9 @@ fn a_send_without_delay_comes_after_the_events_already_due() {
     let chart = build(
         &ChartSpec::new("now").state(
             StateSpec::state("s")
-                .on_entry(Send::new("first"))
-                .on_entry(Send::new("second"))
-                .transition(TransitionSpec::on("first").then(Send::new("third"))),
+                .on_entry(SendSpec::new("first"))
+                .on_entry(SendSpec::new("second"))
+                .transition(TransitionSpec::on("first").then(SendSpec::new("third"))),
         ),
     );
     let mut d = Driver::new(5.0);
@@ -175,7 +175,7 @@ fn a_rate_of_3_gives_exponential_times_with_mean_one_third() {
     let chart = build(
         &ChartSpec::new("rate").state(
             StateSpec::state("wait")
-                .on_entry(Send::new("tick").at_rate("3"))
+                .on_entry(SendSpec::new("tick").at_rate("3"))
                 .transition(TransitionSpec::on("tick").to("wait")),
         ),
     );
@@ -202,8 +202,8 @@ fn a_rate_is_redrawn_when_its_variable_changes() {
             .data("r", "1")
             .state(
                 StateSpec::state("wait")
-                    .on_entry(Send::new("fire").at_rate("$r").id("f"))
-                    .on_entry(Send::new("change").after(0.5))
+                    .on_entry(SendSpec::new("fire").at_rate("$r").id("f"))
+                    .on_entry(SendSpec::new("change").after(0.5))
                     .transition(TransitionSpec::on("change").then(Action::assign("r", "6")))
                     .transition(TransitionSpec::on("fire").to("done")),
             )
@@ -234,8 +234,8 @@ fn a_rate_of_0_waits_until_it_becomes_positive() {
             .data("r", "0")
             .state(
                 StateSpec::state("wait")
-                    .on_entry(Send::new("fire").at_rate("$r"))
-                    .on_entry(Send::new("go").after(1.0))
+                    .on_entry(SendSpec::new("fire").at_rate("$r"))
+                    .on_entry(SendSpec::new("go").after(1.0))
                     .transition(TransitionSpec::on("go").then(Action::assign("r", "1000000000")))
                     .transition(TransitionSpec::on("fire").to("done")),
             )

@@ -183,7 +183,7 @@ pub enum Action {
     /// `<raise event>`: an event on the internal queue.
     Raise { event: String },
     /// `<send>`.
-    Send(Send),
+    SendSpec(SendSpec),
     /// `<cancel sendid>`: the pending sends with this id never arrive.
     Cancel { send_id: String },
     /// `<log label expr>`: recorded in the agent's trace.
@@ -225,7 +225,7 @@ impl Action {
     }
 }
 
-/// Where a [`Send`] goes.
+/// Where a [`SendSpec`] goes.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
 pub enum Target {
     /// The agent's own external queue (SCXML's default target): an event on the discrete-event
@@ -236,7 +236,7 @@ pub enum Target {
     Internal,
 }
 
-/// When a [`Send`] arrives.
+/// When a [`SendSpec`] arrives.
 #[derive(Debug, Clone, PartialEq, Default)]
 pub enum Delay {
     /// At once: for an external send, an event on the clock at the current time, after the
@@ -258,7 +258,7 @@ pub enum Delay {
 
 /// `<send>`: an event to the agent itself, at once or later.
 #[derive(Debug, Clone, PartialEq)]
-pub struct Send {
+pub struct SendSpec {
     pub event: String,
     /// The `id` that a [`Action::Cancel`] names.
     pub id: Option<String>,
@@ -266,7 +266,7 @@ pub struct Send {
     pub delay: Delay,
 }
 
-impl Send {
+impl SendSpec {
     /// An external send of `event` with no delay.
     pub fn new(event: &str) -> Self {
         Self {
@@ -308,9 +308,9 @@ impl Send {
     }
 }
 
-impl From<Send> for Action {
-    fn from(s: Send) -> Self {
-        Action::Send(s)
+impl From<SendSpec> for Action {
+    fn from(s: SendSpec) -> Self {
+        Action::SendSpec(s)
     }
 }
 
@@ -435,7 +435,7 @@ pub(crate) struct Transition {
 pub(crate) enum Exec {
     Assign { var: u32, code: Code },
     Raise(String),
-    Send(SendExec),
+    SendSpec(SendExec),
     Cancel(String),
     Log { label: String, code: Option<Code> },
 }
@@ -897,7 +897,7 @@ impl Compiler<'_> {
                     None => None,
                 },
             },
-            Action::Send(s) => {
+            Action::SendSpec(s) => {
                 let event = Self::event_name(&s.event, place)?;
                 let internal = s.target == Target::Internal;
                 if internal && s.delay != Delay::None {
@@ -923,7 +923,7 @@ impl Compiler<'_> {
                         DelayExec::Rate { code, reads }
                     }
                 };
-                Exec::Send(SendExec {
+                Exec::SendSpec(SendExec {
                     event,
                     id: s.id.clone(),
                     internal,
