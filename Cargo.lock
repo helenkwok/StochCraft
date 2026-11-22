@@ -3444,6 +3444,7 @@ name = "stochcraft-cli"
 version = "0.2.0"
 dependencies = [
  "clap",
+ "same-file",
  "serde_json",
  "stochcraft-engine",
  "stochcraft-mcp",

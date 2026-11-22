@@ -940,7 +940,6 @@ unit	yr	l.
 	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	To je vaš prvi model. Prve vrstice v Rezultati povedo, kaj je zagon ugotovil; Pomoč ▸ Kaj pomenijo rezultati razloži vsako številko.
 # Which inputs matter in the Monte Carlo results (ROADMAP M4.1, part 3a)
 	Which inputs matter	Kateri vhodi so pomembni
-	{output} depends most on {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile.	{output} je največ odvisen od vhoda {input}: giblje se od {low} do {high}, ko se {input} premakne od svojega 10. do svojega 90. percentila.
 	Each input from its 10th to its 90th percentile, with the others at their medians	Vsak vhod od svojega 10. do svojega 90. percentila, drugi pri svojih medianah
 	Base {value}	Osnovna vrednost {value}
 	A correlated input's figure includes the effect of the inputs it is correlated with.	Podatek za korelirani vhod vključuje učinek vhodov, s katerimi je koreliran.
@@ -1419,6 +1418,10 @@ unit	yr	l.
 	The estimated chance that {output} is more than {value} is {percent}.	Ocenjena verjetnost, da je {output} večji od {value}, je {percent}.
 	The estimated chance that {output} is less than {value} is {percent}.	Ocenjena verjetnost, da je {output} manjši od {value}, je {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	Njihov interval nima širine, česar nobena ocena nima, zato ostane navadni rezultat.
+	{output} changes most with {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile, the other inputs at their medians.	{output} se najbolj spreminja z {input}: gre od {low} do {high}, ko {input} gre od svojega 10. do svojega 90. percentila, ostali vhodi pa so na svojih medianah.
+	No variation was observed, so there is no interval for the mean; a rare event the trials did not reach could still move it.	Ni bilo opaženo nobene variacije, zato za povprečje ni intervala; redek dogodek, ki ga poskusi niso dosegli, bi ga še vedno lahko premaknil.
+	They narrowed the interval by {percent}, but a mean given for a control is far from the trials' mean, so the plain result stands.	Zožili so interval za {percent}, vendar je povprečje, podano za kontrolo, daleč od povprečja poskusov, zato ostane navaden rezultat.
+	The output does not move in one direction with {inputs} (its value at the median is outside its values at the 10th and 90th percentiles), so the swing understates the effect.	Izhod se z {inputs} ne premika v eni smeri (njegova vrednost pri mediani je zunaj njegovih vrednosti pri 10. in 90. percentilu), zato razpon podcenjuje učinek.
 	Did not open {file}: a different model was opened in the meantime	Datoteka {file} ni bila odprta: vmes je bil odprt drug model
 	Select	Izberi
 	Link	Povezava
@@ -1444,3 +1447,7 @@ unit	yr	l.
 	Agrees within ±{tolerance}	Se ujema v mejah ±{tolerance}
 	This is not evidence of agreement: set a tolerance to test for it.	To ni dokaz ujemanja: za preverjanje nastavite toleranco.
 	Tolerance (0 for none)	Toleranca (0 za nobeno)
+	Arrivals that keep their distance	Prihodi, ki držijo razdaljo
+	One server fed by the gaps between zeros of the Riemann zeta function, beside Poisson arrivals at the same rate.	En strežnik, ki mu prihode določajo razmiki med ničlami Riemannove funkcije zeta, ob Poissonovih prihodih z enako hitrostjo.
+	Do arrivals that avoid bunching make a shorter queue?	Ali prihodi, ki se izogibajo kopičenju, naredijo krajšo vrsto?
+	Same average rate, half the wait: arrivals that repel one another bunch up less than random ones.	Enaka povprečna hitrost, polovica čakanja: prihodi, ki se odbijajo, se kopičijo manj kot naključni.

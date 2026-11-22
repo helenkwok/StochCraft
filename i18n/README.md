@@ -961,6 +961,17 @@ fields (`“Service time”`) are named in the messages by their own rows.
   undo names of blocks; placeholders checked by script; not checked against any other source or
   reviewed by native speakers. The least certain are bn, hi, ka, kk, lo, sq, ta, te, th and vi.
 
+- The four rows added when Monte Carlo results stopped claiming more than the trials show
+  (ROADMAP M4.1: "{output} changes most with {input}: …", which replaced "{output} depends
+  most on {input}: …" because the swing is the change between the 10th and 90th percentile
+  endpoints, not a share of the spread; "No variation was observed, so there is no interval for
+  the mean; …"; "They narrowed the interval by {percent}, but a mean given for a control is far
+  from the trials' mean, so the plain result stands."; and "The output does not move in one
+  direction with {inputs} (…), so the swing understates the effect.") were machine-drafted with
+  Claude Code from the plain meaning of the English; placeholders checked by script; not
+  checked against any other source or reviewed by native speakers. The least certain are bn,
+  hi, ka, kk, lo, sq, ta, te, th and vi, and the case of the numbers around {low}, {high} and
+  {percent} in the highly inflected languages.
 - The rows for validation against observed data (issue #226: the Observed data section of the
   model page and its hint, Add an observed value, Observed value, Checked as, Its 95%
   half-width, the undo names Add, Change and Remove Observed Value, the results' Checked against
@@ -986,6 +997,13 @@ fields (`“Service time”`) are named in the messages by their own rows.
   deviation); placeholders were checked by script. They replace "Can't tell yet: more runs would
   decide" and "Agrees" in the code; those rows stay in the catalogs unused. Not reviewed by
   native speakers; the least certain are lo, th, ta, te, bn, ka, kk and sq.
+
+- The rows for the example "Arrivals that keep their distance" (its title, one-line description,
+  question and what it teaches) were machine-drafted from the plain meaning of the English, with
+  each catalog's own words for arrival, server, queue, wait and Poisson from the earlier example
+  cards; "Riemann zeta function" and "Poisson" are written as each language writes the names. Not
+  checked against any other source and not reviewed by native speakers; the least certain are lo,
+  th, ta, te, bn, ka, kk, hi and sq.
 
 **Adding or changing a string:** add the English in the code through `i18n::t` (or `tf`, `tn`),
 then add its row to each catalog here, or leave it out to show English until it is translated.

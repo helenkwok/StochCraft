@@ -940,7 +940,6 @@ unit	yr	năm
 	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	Đây là mô hình đầu tiên của bạn. Những dòng đầu của “Kết quả” cho biết lần chạy đã tìm ra gì; Trợ giúp ▸ Ý nghĩa của kết quả giải thích từng con số.
 # Which inputs matter in the Monte Carlo results (ROADMAP M4.1, part 3a)
 	Which inputs matter	Đầu vào nào quan trọng
-	{output} depends most on {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile.	{output} phụ thuộc nhiều nhất vào {input}: nó đi từ {low} đến {high} khi {input} đi từ phân vị thứ 10 đến phân vị thứ 90 của nó.
 	Each input from its 10th to its 90th percentile, with the others at their medians	Mỗi đầu vào từ phân vị thứ 10 đến phân vị thứ 90, các đầu vào khác ở trung vị
 	Base {value}	Giá trị cơ sở {value}
 	A correlated input's figure includes the effect of the inputs it is correlated with.	Số liệu của một đầu vào có tương quan bao gồm tác động của các đầu vào mà nó có tương quan với.
@@ -1419,6 +1418,10 @@ unit	yr	năm
 	The estimated chance that {output} is more than {value} is {percent}.	Xác suất ước tính để {output} lớn hơn {value} là {percent}.
 	The estimated chance that {output} is less than {value} is {percent}.	Xác suất ước tính để {output} nhỏ hơn {value} là {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	Khoảng của chúng không có độ rộng, điều mà ước lượng nào cũng không có, nên kết quả thường được giữ nguyên.
+	{output} changes most with {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile, the other inputs at their medians.	{output} thay đổi nhiều nhất theo {input}: nó đi từ {low} đến {high} khi {input} đi từ phân vị thứ 10 đến phân vị thứ 90 của nó, các đầu vào khác ở trung vị của chúng.
+	No variation was observed, so there is no interval for the mean; a rare event the trials did not reach could still move it.	Không quan sát thấy biến thiên nào, nên không có khoảng cho giá trị trung bình; một sự kiện hiếm mà các lần thử chưa chạm tới vẫn có thể làm nó dịch chuyển.
+	They narrowed the interval by {percent}, but a mean given for a control is far from the trials' mean, so the plain result stands.	Chúng thu hẹp khoảng {percent}, nhưng giá trị trung bình được cho cho một biến kiểm soát lệch xa trung bình của các lần thử, nên kết quả thường vẫn được giữ.
+	The output does not move in one direction with {inputs} (its value at the median is outside its values at the 10th and 90th percentiles), so the swing understates the effect.	Đầu ra không đi theo một hướng với {inputs} (giá trị của nó tại trung vị nằm ngoài các giá trị tại phân vị thứ 10 và 90), nên biên độ dao động đánh giá thấp tác động.
 	Did not open {file}: a different model was opened in the meantime	Không mở {file}: trong lúc đó một mô hình khác đã được mở
 	Select	Chọn
 	Link	Liên kết
@@ -1444,3 +1447,7 @@ unit	yr	năm
 	Agrees within ±{tolerance}	Khớp trong phạm vi ±{tolerance}
 	This is not evidence of agreement: set a tolerance to test for it.	Đây không phải bằng chứng về sự khớp: hãy đặt dung sai để kiểm tra.
 	Tolerance (0 for none)	Dung sai (0 nếu không có)
+	Arrivals that keep their distance	Lượt đến giữ khoảng cách
+	One server fed by the gaps between zeros of the Riemann zeta function, beside Poisson arrivals at the same rate.	Một máy phục vụ nhận lượt đến theo các khoảng cách giữa các không điểm của hàm zeta Riemann, cạnh lượt đến Poisson có cùng tốc độ.
+	Do arrivals that avoid bunching make a shorter queue?	Các lượt đến tránh dồn cục có làm hàng đợi ngắn hơn không?
+	Same average rate, half the wait: arrivals that repel one another bunch up less than random ones.	Cùng tốc độ trung bình, chờ ít đi một nửa: các lượt đến đẩy nhau ra ít bị dồn cục hơn các lượt đến ngẫu nhiên.

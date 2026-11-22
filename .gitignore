@@ -6,3 +6,11 @@ target/
 /web-fonts/
 # Agent worktrees.
 /.claude/worktrees/
+# Lean build output and fetched packages (Mathlib).
+/formal/.lake/
+
+# gemini-cli settings (the Gemini review workflow writes them in its checkout).
+.gemini/
+
+# GitHub App credentials the Gemini action may write.
+gha-creds-*.json

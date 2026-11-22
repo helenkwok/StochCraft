@@ -940,7 +940,6 @@ unit	yr	년
 	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	첫 모델이 완성되었습니다. 결과의 첫 줄들이 실행으로 알아낸 내용을 알려 주며, 도움말 ▸ 결과의 의미에서 각 숫자를 설명합니다.
 # Which inputs matter in the Monte Carlo results (ROADMAP M4.1, part 3a)
 	Which inputs matter	중요한 입력
-	{output} depends most on {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile.	{output}은(는) {input}에 가장 크게 좌우됩니다. {input}이(가) 10번째 백분위수에서 90번째 백분위수로 움직이면 {low}에서 {high}로 바뀝니다.
 	Each input from its 10th to its 90th percentile, with the others at their medians	각 입력을 10번째에서 90번째 백분위수까지 움직이고 나머지는 중앙값에 둠
 	Base {value}	기준값 {value}
 	A correlated input's figure includes the effect of the inputs it is correlated with.	상관된 입력의 수치에는 그 입력과 상관된 입력의 영향이 포함됩니다.
@@ -1419,6 +1418,10 @@ unit	yr	년
 	The estimated chance that {output} is more than {value} is {percent}.	{output}이(가) {value}보다 클 확률의 추정값은 {percent}입니다.
 	The estimated chance that {output} is less than {value} is {percent}.	{output}이(가) {value}보다 작을 확률의 추정값은 {percent}입니다.
 	Their interval has no width, which no estimate has, so the plain result stands.	구간의 폭이 없는데, 어떤 추정치에도 그런 일은 없으므로 기존 결과를 그대로 씁니다.
+	{output} changes most with {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile, the other inputs at their medians.	{output}은(는) {input}에 따라 가장 많이 변합니다. 다른 입력을 중앙값에 둔 채 {input}이(가) 10번째 백분위수에서 90번째 백분위수로 가면 {low}에서 {high}로 바뀝니다.
+	No variation was observed, so there is no interval for the mean; a rare event the trials did not reach could still move it.	변동이 관찰되지 않았으므로 평균의 구간이 없습니다. 시행이 도달하지 못한 드문 사건이 여전히 평균을 움직일 수 있습니다.
+	They narrowed the interval by {percent}, but a mean given for a control is far from the trials' mean, so the plain result stands.	구간이 {percent} 좁아졌지만, 통제 변수에 준 평균이 시행의 평균과 크게 달라서 일반 결과를 그대로 씁니다.
+	The output does not move in one direction with {inputs} (its value at the median is outside its values at the 10th and 90th percentiles), so the swing understates the effect.	출력은 {inputs}에 대해 한 방향으로 움직이지 않습니다(중앙값에서의 값이 10번째와 90번째 백분위수에서의 값 바깥에 있습니다). 그래서 변동 폭이 영향을 과소평가합니다.
 	Did not open {file}: a different model was opened in the meantime	{file}을(를) 열지 않았습니다. 그동안 다른 모델이 열렸습니다
 	Select	선택
 	Link	링크
@@ -1444,3 +1447,7 @@ unit	yr	년
 	Agrees within ±{tolerance}	±{tolerance} 이내에서 일치
 	This is not evidence of agreement: set a tolerance to test for it.	이것은 일치의 증거가 아닙니다. 확인하려면 허용 오차를 설정하세요.
 	Tolerance (0 for none)	허용 오차(없으면 0)
+	Arrivals that keep their distance	간격을 지키는 도착
+	One server fed by the gaps between zeros of the Riemann zeta function, beside Poisson arrivals at the same rate.	리만 제타 함수의 영점 사이 간격으로 도착이 들어오는 서버 한 대를, 같은 도착률의 푸아송 도착과 나란히 놓습니다.
+	Do arrivals that avoid bunching make a shorter queue?	뭉치지 않으려는 도착은 대기열을 더 짧게 만들까요?
+	Same average rate, half the wait: arrivals that repel one another bunch up less than random ones.	평균 도착률은 같은데 대기는 절반: 서로 밀어내는 도착은 무작위 도착보다 덜 뭉칩니다.

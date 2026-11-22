@@ -940,7 +940,6 @@ unit	yr	年
 	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	這就是你的第一個模型。「結果」開頭幾行說明本次執行的發現；說明 ▸ 結果的意義 解釋每個數字。
 # Which inputs matter in the Monte Carlo results (ROADMAP M4.1, part 3a)
 	Which inputs matter	哪些輸入重要
-	{output} depends most on {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile.	{output} 最取決於 {input}：當 {input} 從其第 10 百分位數變到第 90 百分位數時，它從 {low} 變到 {high}。
 	Each input from its 10th to its 90th percentile, with the others at their medians	每個輸入從其第 10 百分位數到第 90 百分位數，其餘輸入取中位數
 	Base {value}	基準值 {value}
 	A correlated input's figure includes the effect of the inputs it is correlated with.	相關輸入的數值包含了與它相關的各輸入的影響。
@@ -1419,6 +1418,10 @@ unit	yr	年
 	The estimated chance that {output} is more than {value} is {percent}.	{output} 大於 {value} 的估計機率為 {percent}。
 	The estimated chance that {output} is less than {value} is {percent}.	{output} 小於 {value} 的估計機率為 {percent}。
 	Their interval has no width, which no estimate has, so the plain result stands.	它們的區間沒有寬度，而任何估計都不會如此，因此保留一般結果。
+	{output} changes most with {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile, the other inputs at their medians.	{output} 隨 {input} 變化最大：當 {input} 從其第 10 百分位變到第 90 百分位、其他輸入取中位數時，它從 {low} 變到 {high}。
+	No variation was observed, so there is no interval for the mean; a rare event the trials did not reach could still move it.	沒有觀察到任何變化，因此平均值沒有區間；試驗沒有觸及的罕見事件仍可能使它移動。
+	They narrowed the interval by {percent}, but a mean given for a control is far from the trials' mean, so the plain result stands.	它們把區間縮窄了 {percent}，但給控制變數的均值與試驗的均值相差很遠，因此保留一般結果。
+	The output does not move in one direction with {inputs} (its value at the median is outside its values at the 10th and 90th percentiles), so the swing understates the effect.	輸出隨 {inputs} 並非朝同一方向變化（其在中位數處的值落在第 10 和第 90 百分位處的值之外），因此擺幅會低估其影響。
 	Did not open {file}: a different model was opened in the meantime	未開啟 {file}：在此期間已開啟了另一個模型
 	Select	選取
 	Link	連結
@@ -1444,3 +1447,7 @@ unit	yr	年
 	Agrees within ±{tolerance}	在 ±{tolerance} 內一致
 	This is not evidence of agreement: set a tolerance to test for it.	這不能證明一致：請設定容差來檢驗。
 	Tolerance (0 for none)	容差（無則填 0）
+	Arrivals that keep their distance	保持間隔的到達
+	One server fed by the gaps between zeros of the Riemann zeta function, beside Poisson arrivals at the same rate.	一個服務台依黎曼 ζ 函數零點之間的間隔接收到達，並與相同到達率的卜瓦松到達並排比較。
+	Do arrivals that avoid bunching make a shorter queue?	避免扎堆的到達會讓隊伍更短嗎？
+	Same average rate, half the wait: arrivals that repel one another bunch up less than random ones.	平均到達率相同，等待卻減半：彼此排斥的到達比隨機到達更少扎堆。

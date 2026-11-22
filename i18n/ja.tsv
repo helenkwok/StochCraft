@@ -940,7 +940,6 @@ unit	yr	年
 	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	これで最初のモデルができました。「結果」の冒頭の数行に、実行で分かったことが書かれています。「ヘルプ」▸「結果の意味」で各数値を説明しています。
 # Which inputs matter in the Monte Carlo results (ROADMAP M4.1, part 3a)
 	Which inputs matter	どの入力が重要か
-	{output} depends most on {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile.	{output} は {input} に最も左右されます。{input} が 10 パーセンタイルから 90 パーセンタイルまで動くと、{low} から {high} になります。
 	Each input from its 10th to its 90th percentile, with the others at their medians	各入力を 10 パーセンタイルから 90 パーセンタイルまで動かし、他は中央値に固定
 	Base {value}	基準値 {value}
 	A correlated input's figure includes the effect of the inputs it is correlated with.	相関のある入力の値には、その入力と相関する入力の影響が含まれます。
@@ -1419,6 +1418,10 @@ unit	yr	年
 	The estimated chance that {output} is more than {value} is {percent}.	{output} が {value} を超える確率の推定値は {percent} です。
 	The estimated chance that {output} is less than {value} is {percent}.	{output} が {value} を下回る確率の推定値は {percent} です。
 	Their interval has no width, which no estimate has, so the plain result stands.	区間の幅がなく、これはどんな推定にもあり得ないため、通常の結果をそのまま使います。
+	{output} changes most with {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile, the other inputs at their medians.	{output} が最も大きく変わるのは {input} によるものです。他の入力を中央値に置いたまま {input} が 10 パーセンタイルから 90 パーセンタイルへ動くと、{low} から {high} になります。
+	No variation was observed, so there is no interval for the mean; a rare event the trials did not reach could still move it.	ばらつきが観測されなかったため、平均の区間はありません。試行が到達しなかった稀な事象が、それでも平均を動かす可能性があります。
+	They narrowed the interval by {percent}, but a mean given for a control is far from the trials' mean, so the plain result stands.	区間は {percent} 狭まりましたが、制御変量に与えた平均が試行の平均から大きく離れているため、通常の結果をそのまま使います。
+	The output does not move in one direction with {inputs} (its value at the median is outside its values at the 10th and 90th percentiles), so the swing understates the effect.	出力は {inputs} に対して一方向に動きません（中央値での値が 10 パーセンタイルと 90 パーセンタイルでの値の外にあります）。そのため、振れ幅は影響を過小に示します。
 	Did not open {file}: a different model was opened in the meantime	{file} は開きませんでした。その間に別のモデルが開かれました
 	Select	選択
 	Link	リンク
@@ -1444,3 +1447,7 @@ unit	yr	年
 	Agrees within ±{tolerance}	±{tolerance} 以内で一致
 	This is not evidence of agreement: set a tolerance to test for it.	これは一致の証拠ではありません。確かめるには許容差を設定してください。
 	Tolerance (0 for none)	許容差（なしは 0）
+	Arrivals that keep their distance	間隔を保つ到着
+	One server fed by the gaps between zeros of the Riemann zeta function, beside Poisson arrivals at the same rate.	リーマンゼータ関数の零点の間隔で到着する客を1台の窓口が受け、同じ到着率のポアソン到着と並べて比べます。
+	Do arrivals that avoid bunching make a shorter queue?	固まりを避ける到着は、待ち行列を短くするか。
+	Same average rate, half the wait: arrivals that repel one another bunch up less than random ones.	平均の到着率は同じでも待ち時間は半分に。互いに反発する到着は、ランダムな到着より固まりにくいからです。

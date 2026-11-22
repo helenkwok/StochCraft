@@ -131,16 +131,8 @@ pub fn judge(check: Check, mean: f64, half_width: f64, n: u64) -> Verdict {
             // Scaled, so neither a tiny nor a huge width is lost to underflow or overflow.
             let combined = half_width.hypot(ho);
             let d = mean - value;
-            let (low, high) = (d - combined, d + combined);
-            let outcome = match tolerance.filter(|t| t.is_finite() && *t > 0.0) {
-                Some(t) if low >= -t && high <= t => Outcome::Agrees,
-                Some(t) if low > t || high < -t => Outcome::Differs,
-                Some(_) => Outcome::Inconclusive,
-                None if d.abs() > combined => Outcome::Differs,
-                None => Outcome::NoDifferenceDetected,
-            };
             Verdict {
-                outcome,
+                outcome: value_outcome(d, combined, tolerance),
                 difference,
                 half_width: Some(combined),
             }
@@ -154,16 +146,119 @@ pub fn judge(check: Check, mean: f64, half_width: f64, n: u64) -> Verdict {
             if !has_interval || !bound.is_finite() {
                 return none(Outcome::Inconclusive);
             }
-            let (low, high) = (mean - half_width, mean + half_width);
-            let outcome = match check {
-                Check::AtMost(_) if high <= bound => Outcome::Passes,
-                Check::AtMost(_) if low > bound => Outcome::Fails,
-                Check::AtLeast(_) if low >= bound => Outcome::Passes,
-                Check::AtLeast(_) if high < bound => Outcome::Fails,
-                _ => Outcome::Inconclusive,
-            };
-            none(outcome)
+            none(bound_outcome(
+                matches!(check, Check::AtMost(_)),
+                mean,
+                half_width,
+                bound,
+            ))
         }
+    }
+}
+
+/// The outcome for an observed value: the difference `d` with the half-width `combined` of its
+/// interval, against the tolerance, if there is a usable one.
+fn value_outcome(d: f64, combined: f64, tolerance: Option<f64>) -> Outcome {
+    let (low, high) = (d - combined, d + combined);
+    match tolerance.filter(|t| t.is_finite() && *t > 0.0) {
+        Some(t) if low >= -t && high <= t => Outcome::Agrees,
+        Some(t) if low > t || high < -t => Outcome::Differs,
+        Some(_) => Outcome::Inconclusive,
+        None if d.abs() > combined => Outcome::Differs,
+        None => Outcome::NoDifferenceDetected,
+    }
+}
+
+/// The outcome for a bound (`at_most`, or at least) the interval `mean` +- `half_width` is
+/// judged against as a whole.
+fn bound_outcome(at_most: bool, mean: f64, half_width: f64, bound: f64) -> Outcome {
+    let (low, high) = (mean - half_width, mean + half_width);
+    if at_most {
+        if high <= bound {
+            Outcome::Passes
+        } else if low > bound {
+            Outcome::Fails
+        } else {
+            Outcome::Inconclusive
+        }
+    } else if low >= bound {
+        Outcome::Passes
+    } else if high < bound {
+        Outcome::Fails
+    } else {
+        Outcome::Inconclusive
+    }
+}
+
+/// Machine-checked properties (Kani, `cargo kani -p stochcraft-stats`; see docs/developers.md).
+#[cfg(kani)]
+mod proofs {
+    use super::*;
+
+    /// An observed value agrees only inside its tolerance and differs only outside it, so the
+    /// two verdicts cannot both describe one interval. With no usable tolerance it never agrees.
+    #[kani::proof]
+    fn a_value_agrees_only_inside_its_tolerance_and_differs_only_outside() {
+        let (d, combined): (f64, f64) = (kani::any(), kani::any());
+        kani::assume(d.is_finite() && combined.is_finite() && combined >= 0.0);
+        let tolerance: Option<f64> = if kani::any() { Some(kani::any()) } else { None };
+        let usable = tolerance.filter(|t| t.is_finite() && *t > 0.0);
+        match value_outcome(d, combined, tolerance) {
+            Outcome::Agrees => {
+                let t = usable.unwrap_or(f64::NAN);
+                assert!(d >= -t && d <= t);
+            }
+            Outcome::Differs => match usable {
+                Some(t) => assert!(d > t || d < -t),
+                None => assert!(d.abs() > combined),
+            },
+            Outcome::NoDifferenceDetected => assert!(usable.is_none() && d.abs() <= combined),
+            Outcome::Inconclusive => assert!(usable.is_some()),
+            Outcome::Passes | Outcome::Fails => panic!("a value is never judged as a bound"),
+        }
+    }
+
+    /// A bound passes only if the mean itself meets it, and fails only if the mean violates it.
+    #[kani::proof]
+    fn a_bound_never_contradicts_the_point_estimate() {
+        let (mean, half_width, bound): (f64, f64, f64) = (kani::any(), kani::any(), kani::any());
+        kani::assume(mean.is_finite() && half_width.is_finite() && half_width >= 0.0);
+        kani::assume(bound.is_finite());
+        let at_most: bool = kani::any();
+        match bound_outcome(at_most, mean, half_width, bound) {
+            Outcome::Passes => assert!(if at_most {
+                mean <= bound
+            } else {
+                mean >= bound
+            }),
+            Outcome::Fails => assert!(if at_most { mean > bound } else { mean < bound }),
+            Outcome::Inconclusive => {}
+            _ => panic!("a bound is only passed, failed or inconclusive"),
+        }
+    }
+
+    /// With fewer than two replications nothing is decided, whatever the check or the numbers.
+    #[kani::proof]
+    fn fewer_than_two_replications_are_inconclusive() {
+        let n: u64 = kani::any();
+        kani::assume(n < 2);
+        let (mean, half_width, x): (f64, f64, f64) = (kani::any(), kani::any(), kani::any());
+        // Kani flags any NaN-producing operation, and `judge` subtracts before it looks at
+        // the inputs (the result is discarded as NaN is not finite), so keep them finite.
+        kani::assume(mean.is_finite() && half_width.is_finite() && x.is_finite());
+        let check = match kani::any::<u8>() % 3 {
+            0 => Check::AtMost(x),
+            1 => Check::AtLeast(x),
+            _ => Check::Value {
+                value: x,
+                half_width: None,
+                tolerance: None,
+            },
+        };
+        assert_eq!(
+            judge(check, mean, half_width, n).outcome,
+            Outcome::Inconclusive
+        );
     }
 }
 

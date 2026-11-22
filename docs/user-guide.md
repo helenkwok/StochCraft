@@ -78,6 +78,7 @@ The examples are also under **File ▸ Open Example**:
 | **Mass vaccination hub** | How many doses a day can a vaccination hub give? The inputs of Hanly et al., *BMC Health Services Research*, 2022 (a small hub of 21 staff and a large one of 63); each station's utilisation checked by flow balance, all under 80%, and about 470 doses in an 8-hour day for the small hub. Arrivals are random rather than by appointment and walking times are left out, so the time inside is not checked against the paper. |
 | **Prison population** | How many prison places are needed? The case of Brailsford, Churilov and Dangerfield, ch. 8, scaled down 100 times, starting at its equilibrium; the numbers inside checked against the infinite-server network's means (500 petty and 260 serious offenders). A second scenario has fewer petty offenders reoffend. |
 | **Penny Fab** | How much work in process does a line need? Hopp and Spearman's four-station line with a fixed number of jobs going round; checked against the practical worst case with random times (1, 4, 8 and 16 jobs) and the best case with fixed times. |
+| **Arrivals that keep their distance** | Do arrivals that avoid bunching make a shorter queue? One exponential server (mean 1 minute) fed at 0.8 a minute, once with the gaps between zeros of the Riemann zeta function and once with Poisson arrivals at the same rate. The zeros repel one another (their spacings follow the random-matrix, GUE, law: a hundredth of the gaps are under a quarter of the mean, against a fifth for Poisson), so fewer arrivals find the server busy. Checked against exact G/M/1 theory: the root σ of σ = A\*(μ(1 − σ)), with A\* the transform of the gap distribution, gives a mean wait of σ / (μ(1 − σ)) = 2.05 minutes (σ = 0.672), against 4 minutes for Poisson arrivals (M/M/1). The data are the first 10,001 zeros, computed with mpmath (BSD-3, used only to make the data) by `tools/zeta-gaps/generate.py`, unfolded to a mean gap of 1 and binned into 40 values; the model draws gaps independently from that histogram, so it keeps the gap distribution but not the zeros' correlations. At these low heights the gaps differ from the GUE limit by a few percent (histogram total variation distance 4.4% from the Wigner surmise, variance 0.154 against 0.178). |
 | **M/M/1 queue** | How long do customers wait at one busy clerk? Checked against queueing theory. |
 | **Four-machine line with weekend breaks** | What do failures and weekend breaks do to a line's output and energy per part? Schmitt et al. 2026, Case A: matches the published throughput. |
 | **Seven-machine line with two presses** | Which machine holds back a line with two presses in parallel? Schmitt et al. 2026, Case B. |
@@ -512,19 +513,25 @@ On the **Model** tab:
   moves with the output, or made the interval wider, it says so and the plain result stays. The
   percentiles, histogram and extremes are not corrected. A constant and a count with a very large
   spread cannot be controls, with the reason in the row. For an earlier output the mean you give
-  must be exact: the window warns when the trials are far from it, and a wrong mean biases the
-  corrected result.
+  must be exact: a wrong mean biases the corrected result, and gives a narrow interval around a
+  wrong value. When the trials are far from a mean you gave, the window warns, keeps the plain
+  mean and chance as the headline however much narrower the corrected interval is, and shows
+  the corrected figures only beside it (the **Mean** and **Controlled mean** rows); the command
+  line labels them "biased, not used".
 - **Trials and sampling:** the number of trials (10,000 for a new model), the seed, and the
   sampling. **Latin hypercube** cuts each input's range into equally likely strata (the same
   chance of a draw in each, not equally spaced values) and draws once from each, which usually
   makes the results more precise; it does not promise fewer trials for every output.
   **Antithetic pairs** make trials two at a time, the second from the opposite end of every
   input's range from the first (where the first drew the 30th percentile, the second draws the
-  70th), and the mean and its ± are then of the pairs' means (a pair where one trial gave no number counts as that other trial alone, and a pair with neither is left out); for an output that rises or falls with its inputs the pair's errors tend to cancel,
+  70th), and the mean is the mean of all the valid trials, with a ± across the pairs (they
+  are the independent units; where a pair has lost a trial that gave no number, the ± is the
+  ratio estimator's, which allows for pairs of one trial and of two, and a pair with neither is
+  left out); for an output that rises or falls with its inputs the pair's errors tend to cancel,
   so the results are usually more precise for the same trials, but for an output that peaks
   in the middle of an input's range they may not be, and they cannot be used with correlated
   inputs, which reorder the trials. **Quasi-random (Sobol)** draws spread the trials evenly
-  over the inputs' ranges instead of by chance, with a fresh random shift in every batch of
+  over the inputs' ranges instead of by chance, with a fresh random scramble in every batch of
   1,000 so that the batches are independent; it usually does best for a smooth output of a few
   inputs, and has points for up to 64 inputs. On the command line, `stochcraft-cli run model.bpmn
   --sampling antithetic` or `--sampling quasi-random` chooses it for one run. **How many trials** can be **More until precise enough**: trials are added until every output's mean is
@@ -550,19 +557,26 @@ The **Results** tab answers the question first:
 - **How sure are these numbers?** says what each ± is across. With plain random sampling and no
   correlations it is across the trials. Latin hypercube sampling, Sobol sampling and correlations
   make the trials within a batch of 1,000 depend on each other, so there it is across batches
-  (with Sobol sampling each batch has a random shift of its own, so the batches are
+  (with Sobol sampling each batch has a random scramble of its own, so the batches are
   independent), and the trials run in whole batches: 2,500 trials asked for run as 3,000, and the
   results say so. With antithetic pairs the two trials of a pair depend on each other and the
   pairs do not, so it is across pairs. How many batches or pairs the ± is across is in the same
-  place; with fewer than two there is no ±.
+  place; with fewer than two there is no ±. Where every trial (or batch, or pair) gave the same
+  value, the results say "No variation was observed" and give no ± at all, not a ± of 0: a
+  rare event that none of the trials reached looks exactly like an output that cannot vary, so
+  the run cannot show the mean is exact.
 - The line under **Results** gives the trials, the seed and the sampling, and how a run with
   **More until precise enough** stopped. **Export table (CSV)** saves a row per output.
   With controls, the lines under an output's finding name them and say what they did, and its numbers
   have a **Controlled mean** row; the CSV (and `run --format csv`) add the controlled mean, its
   half-width, how much narrower it is and the controlled chance of meeting the target.
-- **Which inputs matter**, for each output, says in words which input it depends on most: "duration
-  depends most on build: it goes from 29.02 to 38.58 days as build goes from its 10th to its 90th
-  percentile". Under it, a tornado chart: one bar for each input, from the output with that input at
+- **Which inputs matter**, for each output, says in words which input changes it most: "duration
+  changes most with build: it goes from 29.02 to 38.58 days as build goes from its 10th to its 90th
+  percentile, the other inputs at their medians". That is the largest change between the two
+  endpoints, not the largest share of the variation (the shares, below, are that): an input
+  that moves the output up and down along its range (a square, say) can show a small or no
+  swing, so the results name each input whose output at its median lies outside its two
+  endpoint values and say the swing understates it. Under it, a tornado chart: one bar for each input, from the output with that input at
   its 10th percentile to the output with it at its 90th, and every other input at its median (the
   median, not the mean, so a skewed input swings about the same middle either way; this is the
   swing of decision analysis, Clemen and Reilly, *Making Hard Decisions*). The widest bar is first,
@@ -579,7 +593,10 @@ The **Results** tab answers the question first:
   pointer on a share for its 95% interval. It runs on request, because it evaluates the model
   1,000 × (inputs + 2) times (6,000 for 4 inputs, which the button says), with its progress in the
   status bar; **Cancel** or Esc stops it. It needs independent inputs, so a model with correlated
-  inputs has no button and the results say why. Editing the model takes the shares away.
+  inputs has no button and the results say why. An output that has no number for some of the
+  evaluations (a division by zero for part of the inputs' ranges, say) gets no shares, with how
+  many of the evaluations lacked one, because the evaluations left out would depend on the
+  inputs; the other outputs keep theirs. Editing the model takes the shares away.
 
 ## System dynamics models
 
@@ -685,11 +702,19 @@ standards that process-modelling tools share.
   [System dynamics models](#system-dynamics-models).
 - If a file you opened holds things StochCraft does not understand, saving asks before writing a
   new BPMN file, which leaves them out.
+- If StochCraft could not read part of a file (an expression it cannot evaluate, a value out of
+  range), **Run** and the other commands that run the model refuse with the first such error, so
+  results are never of a model that is not the file's: set that block's time again (renaming it does not count), and it runs. The
+  command line (`run --allow-approximations`) and scripts can run the stand-in model deliberately.
 - **Unsaved changes are kept** (process models). If StochCraft closes with unsaved changes, it
   offers to **Recover** them the next time it starts.
 - **Export results:** on the **Results** tab, **Export table (CSV)** and **Export charts (PNG)**
   (in the browser: **Download**). The CSV has one row per block and metric, with the mean, the
-  half-width of its confidence interval, the standard deviation and the number of runs.
+  half-width of its confidence interval, the standard deviation and the number of runs. After you
+  change the model, the results on show say "out of date" and the file is named
+  `…-results-prior-run.csv`, with five more columns on every row (`run_status`,
+  `run_model_digest`, `run_seed`, `run_runs`, `run_settings`) that say it is a run of a model that
+  has since changed, and which one; run again for a table of the model as it is.
   **Export charts (PNG)** needs every chart on screen: in a window too short for them, the status
   bar says to make the window taller, and nothing is exported.
 

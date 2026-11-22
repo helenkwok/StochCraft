@@ -1,0 +1,38 @@
+name: Lean
+
+# Checks the Lean 4 + Mathlib proofs in formal/ (see formal/README.md): `lake build` with
+# warnings as errors, so a `sorry` fails the job. Mathlib's prebuilt files come from its cache
+# (`lake exe cache get`), so nothing of Mathlib is compiled here.
+
+on:
+  push:
+    branches: [main]
+    paths: ['formal/**', '.github/workflows/lean.yml']
+  pull_request:
+    paths: ['formal/**', '.github/workflows/lean.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: lean-${{ github.event_name == 'pull_request' && github.ref || github.run_id }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  build:
+    name: lake build (formal)
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: leanprover/lean-action@ba3fdfe5c4476c925da13bf11a005ddb47e47aee # v1.7.1
+        with:
+          lake-package-directory: formal
+          use-mathlib-cache: "true"
+          # The action's own Actions cache of .lake is about 2 GB and would crowd out the Rust
+          # caches; the Mathlib cache download is quick without it.
+          use-github-cache: "false"
+          build-args: "--wfail"

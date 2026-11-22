@@ -940,7 +940,6 @@ unit	yr	a
 	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	Ese é o seu primeiro modelo. As primeiras liñas de Resultados din o que atopou a execución; Axuda ▸ Que significan os resultados explica cada número.
 # Which inputs matter in the Monte Carlo results (ROADMAP M4.1, part 3a)
 	Which inputs matter	Que entradas importan
-	{output} depends most on {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile.	{output} depende sobre todo de {input}: vai de {low} a {high} cando {input} vai do seu percentil 10 ao seu percentil 90.
 	Each input from its 10th to its 90th percentile, with the others at their medians	Cada entrada do seu percentil 10 ao seu percentil 90, coas demais na súa mediana
 	Base {value}	Valor base {value}
 	A correlated input's figure includes the effect of the inputs it is correlated with.	A cifra dunha entrada correlacionada inclúe o efecto das entradas coas que está correlacionada.
@@ -1419,6 +1418,10 @@ unit	yr	a
 	The estimated chance that {output} is more than {value} is {percent}.	A probabilidade estimada de que {output} sexa maior que {value} é {percent}.
 	The estimated chance that {output} is less than {value} is {percent}.	A probabilidade estimada de que {output} sexa menor que {value} é {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	O seu intervalo non ten anchura, algo que ningunha estimación ten, polo que se mantén o resultado simple.
+	{output} changes most with {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile, the other inputs at their medians.	{output} cambia máis con {input}: vai de {low} a {high} cando {input} vai do seu percentil 10 ao seu percentil 90, coas outras entradas nas súas medianas.
+	No variation was observed, so there is no interval for the mean; a rare event the trials did not reach could still move it.	Non se observou ningunha variación, así que non hai intervalo para a media; un suceso raro que as probas non acadaron aínda podería movela.
+	They narrowed the interval by {percent}, but a mean given for a control is far from the trials' mean, so the plain result stands.	Estreitaron o intervalo un {percent}, pero unha media dada para un control está lonxe da media das probas, así que se mantén o resultado simple.
+	The output does not move in one direction with {inputs} (its value at the median is outside its values at the 10th and 90th percentiles), so the swing understates the effect.	A saída non se move nunha soa dirección con {inputs} (o seu valor na mediana queda fóra dos seus valores nos percentís 10 e 90), así que a oscilación subestima o efecto.
 	Did not open {file}: a different model was opened in the meantime	Non se abriu {file}: mentres tanto abriuse outro modelo
 	Select	Seleccionar
 	Link	Ligazón
@@ -1444,3 +1447,7 @@ unit	yr	a
 	Agrees within ±{tolerance}	Coincide dentro de ±{tolerance}
 	This is not evidence of agreement: set a tolerance to test for it.	Isto non é proba de coincidencia: fixa unha tolerancia para comprobalo.
 	Tolerance (0 for none)	Tolerancia (0 para ningunha)
+	Arrivals that keep their distance	Chegadas que gardan as distancias
+	One server fed by the gaps between zeros of the Riemann zeta function, beside Poisson arrivals at the same rate.	Un servidor alimentado polos intervalos entre os ceros da función zeta de Riemann, xunto a chegadas de Poisson coa mesma taxa.
+	Do arrivals that avoid bunching make a shorter queue?	As chegadas que evitan agruparse fan unha cola máis curta?
+	Same average rate, half the wait: arrivals that repel one another bunch up less than random ones.	Mesma taxa media, a metade de espera: as chegadas que se repelen entre si agrúpanse menos que as aleatorias.

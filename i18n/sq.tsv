@@ -940,7 +940,6 @@ unit	yr	v
 	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	Ky është modeli juaj i parë. Rreshtat e parë të Rezultatet tregojnë çfarë gjeti ekzekutimi; Ndihmë ▸ Çfarë do të thonë rezultatet shpjegon çdo numër.
 # Which inputs matter in the Monte Carlo results (ROADMAP M4.1, part 3a)
 	Which inputs matter	Cilat hyrje kanë rëndësi
-	{output} depends most on {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile.	{output} varet më shumë nga {input}: shkon nga {low} në {high} kur {input} shkon nga përqindëshi i tij i 10-të te i 90-ti.
 	Each input from its 10th to its 90th percentile, with the others at their medians	Çdo hyrje nga përqindëshi i 10-të te i 90-ti, me të tjerat në medianë
 	Base {value}	Vlera bazë {value}
 	A correlated input's figure includes the effect of the inputs it is correlated with.	Shifra e një hyrjeje të korreluar përfshin efektin e hyrjeve me të cilat ajo është e korreluar.
@@ -1419,6 +1418,10 @@ unit	yr	v
 	The estimated chance that {output} is more than {value} is {percent}.	Gjasa e vlerësuar që {output} të jetë më e madhe se {value} është {percent}.
 	The estimated chance that {output} is less than {value} is {percent}.	Gjasa e vlerësuar që {output} të jetë më e vogël se {value} është {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	Intervali i tyre nuk ka gjerësi, gjë që asnjë vlerësim nuk e ka, ndaj mbetet rezultati i thjeshtë.
+	{output} changes most with {input}: it goes from {low} to {high} as {input} goes from its 10th to its 90th percentile, the other inputs at their medians.	{output} ndryshon më shumë me {input}: shkon nga {low} te {high} kur {input} shkon nga përqindshi i tij i 10-të te i 90-ti, me hyrjet e tjera në mesoret e tyre.
+	No variation was observed, so there is no interval for the mean; a rare event the trials did not reach could still move it.	Nuk u vëzhgua asnjë ndryshim, ndaj nuk ka interval për mesataren; një ngjarje e rrallë që provat nuk e arritën mund ta lëvizte ende.
+	They narrowed the interval by {percent}, but a mean given for a control is far from the trials' mean, so the plain result stands.	Ata e ngushtuan intervalin me {percent}, por një mesatare e dhënë për një kontroll është larg mesatares së provave, ndaj mbetet rezultati i thjeshtë.
+	The output does not move in one direction with {inputs} (its value at the median is outside its values at the 10th and 90th percentiles), so the swing understates the effect.	Dalja nuk lëviz në një drejtim me {inputs} (vlera e saj te mesorja është jashtë vlerave të saj te përqindshi i 10-të dhe i 90-ti), ndaj luhatja e nënvlerëson efektin.
 	Did not open {file}: a different model was opened in the meantime	{file} nuk u hap: ndërkohë u hap një model tjetër
 	Select	Zgjidh
 	Link	Lidhja
@@ -1444,3 +1447,7 @@ unit	yr	v
 	Agrees within ±{tolerance}	Përputhet brenda ±{tolerance}
 	This is not evidence of agreement: set a tolerance to test for it.	Kjo nuk është provë përputhjeje: vendosni një tolerancë për ta testuar.
 	Tolerance (0 for none)	Toleranca (0 për asnjë)
+	Arrivals that keep their distance	Mbërritje që mbajnë distancë
+	One server fed by the gaps between zeros of the Riemann zeta function, beside Poisson arrivals at the same rate.	Një shërbyes i ushqyer nga hapësirat midis zerove të funksionit zeta të Riemannit, pranë mbërritjeve të Poissonit me të njëjtin ritëm.
+	Do arrivals that avoid bunching make a shorter queue?	A bëjnë një radhë më të shkurtër mbërritjet që shmangin grumbullimin?
+	Same average rate, half the wait: arrivals that repel one another bunch up less than random ones.	I njëjti ritëm mesatar, gjysma e pritjes: mbërritjet që e zmbrapsin njëra-tjetrën grumbullohen më pak se ato të rastësishme.

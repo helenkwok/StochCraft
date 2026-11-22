@@ -772,6 +772,11 @@ pub struct Run {
     /// results say how many replications ran and why it stopped (`sequential`).
     #[serde(default, deserialize_with = "some")]
     pub sequential: Option<Option<wire::SequentialSpec>>,
+    /// Run although the file had errors StochCraft could not read: the model then has what
+    /// StochCraft substituted for each, which the run record lists (`approximations`). Without
+    /// this, a file read with errors does not run.
+    #[serde(default)]
+    pub allow_approximations: bool,
 }
 
 #[derive(Debug, Deserialize, JsonSchema)]
@@ -797,6 +802,9 @@ pub struct RunStart {
     /// Sequential replications for this run only, as for `run`.
     #[serde(default, deserialize_with = "some")]
     pub sequential: Option<Option<wire::SequentialSpec>>,
+    /// As for `run`: accept what StochCraft substituted for errors in the file.
+    #[serde(default)]
+    pub allow_approximations: bool,
 }
 
 #[derive(Debug, Deserialize, JsonSchema)]
@@ -830,6 +838,11 @@ pub struct FileSave {
     /// Write a new BPMN file from the model alone, instead of saving into the opened file.
     #[serde(default)]
     pub as_new: bool,
+    /// Replace the file even though it holds what StochCraft does not keep (a second diagram, a
+    /// note the reader made about it): without this such a save is refused and says what it
+    /// would leave out.
+    #[serde(default)]
+    pub allow_loss: bool,
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -1303,7 +1316,9 @@ fn estimate_fit(_: &mut Engine, p: Value) -> Result<Value, CommandError> {
 
 fn experiment_sweep(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
     let p: crate::decide::SweepParams = parse(p)?;
-    let v = crate::decide::sweep(e.model(), &p)?;
+    let approximations = e.approximations(p.allow_approximations)?;
+    let mut v = crate::decide::sweep(e.model(), &p)?;
+    note_approximations(&mut v, approximations);
     e.sensitivity.push(json!({
         "kind": "sweep",
         "model_digest": crate::model_digest(e.model()),
@@ -1316,7 +1331,9 @@ fn experiment_sweep(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
 
 fn experiment_sensitivity(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
     let p: crate::decide::SensitivityParams = parse(p)?;
-    let v = crate::decide::sensitivity(e.model(), &p)?;
+    let approximations = e.approximations(p.allow_approximations)?;
+    let mut v = crate::decide::sensitivity(e.model(), &p)?;
+    note_approximations(&mut v, approximations);
     e.sensitivity.push(json!({
         "kind": "one at a time",
         "model_digest": crate::model_digest(e.model()),
@@ -1328,7 +1345,9 @@ fn experiment_sensitivity(e: &mut Engine, p: Value) -> Result<Value, CommandErro
 
 fn experiment_design(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
     let p: crate::design::DesignParams = parse(p)?;
-    let v = crate::design::design(e.model(), &p)?;
+    let approximations = e.approximations(p.allow_approximations)?;
+    let mut v = crate::design::design(e.model(), &p)?;
+    note_approximations(&mut v, approximations);
     let mut record = json!({
         "kind": "design",
         "model_digest": crate::model_digest(e.model()),
@@ -1342,24 +1361,46 @@ fn experiment_design(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         "main_effects",
         "interactions",
         "correlations",
+        "batches",
+        "points_per_batch",
+        "result_means",
     ] {
         if let Some(x) = v.get(key) {
             record[key] = x.clone();
         }
     }
-    if v["design"] == "latin_hypercube" {
+    if v["design"] == "latin_hypercube" || v["design"] == "sobol" {
         record["points"] = json!(v["points"].as_array().map_or(0, Vec::len));
     }
     e.sensitivity.push(record);
     Ok(v)
 }
 
+/// An answer that came from a run of a file read with errors says so: the substitutions the run
+/// made, as the run record's `approximations`.
+fn note_approximations(answer: &mut Value, approximations: Vec<Value>) {
+    if !approximations.is_empty() {
+        answer["approximations"] = Value::Array(approximations);
+    }
+}
+
 fn experiment_size(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
     let p: crate::decide::SizeParams = parse(p)?;
+    let approximations = e.approximations(p.allow_approximations)?;
     let (mut v, sized) = crate::decide::size(e.model(), &p)?;
-    if p.apply && &sized != e.model() {
-        e.edit("experiment.size", Op::SetModel(Box::new(sized)))?;
-        v["applied"] = json!(true);
+    note_approximations(&mut v, approximations);
+    if p.apply {
+        // The last size tried is the answer only if it met the target share: otherwise the
+        // search ran out of units to add, and the model keeps its own sizes unless asked.
+        if v["stochastic"]["reached"] != true && !p.apply_unreached {
+            v["applied"] = json!(false);
+            v["not_applied"] = json!(
+                "the target share was not reached, so the model is unchanged; `apply_unreached` applies the last size tried anyway"
+            );
+        } else if &sized != e.model() {
+            e.edit("experiment.size", Op::SetModel(Box::new(sized)))?;
+            v["applied"] = json!(true);
+        }
     }
     Ok(v)
 }
@@ -2321,6 +2362,7 @@ fn run(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         p.threads,
         p.series.unwrap_or(true),
         sequential,
+        p.allow_approximations,
     )?
     .run_now()
 }
@@ -2334,6 +2376,7 @@ fn run_start(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         p.threads,
         p.series.unwrap_or(true),
         sequential,
+        p.allow_approximations,
     )?;
     e.start_run(plan, p.mode.unwrap_or_else(RunMode::default_for_target))
 }
@@ -2369,6 +2412,17 @@ fn file_save(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
                 "the model has no file yet: give a `path`",
             )
         })?;
+    let loss = e.save_loss(&path, p.as_new);
+    if !loss.is_empty() && !p.allow_loss {
+        return Err(CommandError {
+            code: ErrorCode::Conflict,
+            message: format!(
+                "saving into {path} would leave out what StochCraft does not keep of it: {}; `\"allow_loss\": true` saves anyway",
+                loss.join("; ")
+            ),
+            details: Some(json!({ "would_lose": loss })),
+        });
+    }
     let bytes = e.save_bytes(p.as_new).map_err(|mut err| {
         if err.code == ErrorCode::Unsupported {
             err.message += "; `\"as_new\": true` writes the model as a new BPMN file instead, without the content StochCraft does not understand";
@@ -2716,7 +2770,7 @@ pub static COMMANDS: &[Command] = &[
     },
     Command {
         name: "experiment.design",
-        summary: "Run a designed experiment with several factors at once: every combination of their levels (`full_factorial`, the default) or a Latin hypercube of their ranges, each point with the same seed; reports each result at each point, the factors' main effects and two-way interactions with paired intervals (or rank correlations for a Latin hypercube). At most 10,000 runs (points × replications). Each point comes with the warnings its run gives, as a single run's without results over time (`warnings`).",
+        summary: "Run a designed experiment with several factors at once: every combination of their levels (`full_factorial`, the default), a Latin hypercube of their ranges (`latin_hypercube`, `points`) or a randomised Sobol design (`sobol`: `batches` batches, default 4, of `points` points each, a power of two, each batch with its own random shift, so the batches are independent replicates), each point with the same seed; reports each result at each point, the factors' main effects and two-way interactions with paired intervals (or rank correlations for a Latin hypercube or Sobol design; a Sobol design adds each correlation's value per batch and each result's mean per batch, with 95% intervals across the batches). At most 10,000 runs (points × replications). Each point comes with the warnings its run gives, as a single run's without results over time (`warnings`).",
         kind: CommandKind::Action,
         schema: schema::<crate::design::DesignParams>,
         example: || json!({ "factors": [{ "id": "arrivals", "field": "mean", "levels": [2.0, 3.0] }, { "id": "desk", "field": "mean", "levels": [0.8, 1.2] }], "results": [{ "element": "desk", "metric": "mean_wait" }], "replications": 4 }),
@@ -2724,7 +2778,7 @@ pub static COMMANDS: &[Command] = &[
     },
     Command {
         name: "experiment.size",
-        summary: "Add units at the bottleneck until the share of replications meeting a target reaches `target_share` (`confidence` is its old name), with the answer from mean times beside it; `apply` makes it the model's. Each step comes with the warnings its run gives, as a single run's without results over time (`warnings`).",
+        summary: "Add units at the bottleneck until the share of replications meeting a target reaches `target_share` (`confidence` is its old name), with the answer from mean times beside it; `apply` makes it the model's when the target share was reached (`apply_unreached` also applies the last size tried when it was not). A greedy heuristic: it need not find the fewest units. Each step comes with the warnings its run gives, as a single run's without results over time (`warnings`).",
         kind: CommandKind::Edit,
         schema: schema::<crate::decide::SizeParams>,
         example: || json!({ "target": { "element": "desk", "metric": "mean_wait", "at_most": 1.0 }, "target_share": 0.7, "replications": 4, "apply": true }),

@@ -123,6 +123,9 @@ pub(crate) struct VarInfo {
     /// For a flow: the positions (in the state) of the non-negative stocks it leaves, which
     /// limit it.
     pub limited_by: Vec<usize>,
+    /// For a flow: the positions of the non-negative stocks it enters. When the flow comes out
+    /// negative they are the ones it takes from, so they limit it in that direction.
+    pub limited_by_rev: Vec<usize>,
     pub units: Option<String>,
 }
 
@@ -632,6 +635,7 @@ pub fn compile(model: &SdModel) -> Result<Program, SdError> {
             table,
             flow_non_negative: matches!(v.kind, VarKind::Flow { non_negative: true }),
             limited_by: Vec::new(),
+            limited_by_rev: Vec::new(),
             units: v.units.clone(),
         });
     }
@@ -681,12 +685,37 @@ pub fn compile(model: &SdModel) -> Result<Program, SdError> {
         };
         let ins = lookup(ins, "inflow")?;
         let outs = lookup(outs, "outflow")?;
+        let mut seen = BTreeSet::new();
+        for &f in ins.iter().chain(outs.iter()) {
+            if !seen.insert(f) {
+                return Err(err(
+                    ErrorKind::Model,
+                    format!(
+                        "the stock `{}` lists the flow `{}` more than once (as an inflow or an outflow): a flow can be listed once at a stock",
+                        v.name,
+                        vars.get(f).map(|x| x.name.as_str()).unwrap_or_default()
+                    ),
+                ));
+            }
+        }
         inflows.push(ins);
         outflows.push(outs);
         non_negative.push(*nn);
     }
-    // A flow that leaves a non-negative stock is limited by it, after the flows before it.
+    // A flow that leaves a non-negative stock is limited by it, after the flows before it. A flow
+    // that enters one is limited by it too when it comes out negative (it then takes from that
+    // stock); those are limited in the order the flows are worked out.
     let mut extra_deps: BTreeMap<usize, BTreeSet<usize>> = BTreeMap::new();
+    for (pos, ins) in inflows.iter().enumerate() {
+        if !non_negative.get(pos).copied().unwrap_or(false) {
+            continue;
+        }
+        for &f in ins {
+            if let Some(info) = vars.get_mut(f) {
+                info.limited_by_rev.push(pos);
+            }
+        }
+    }
     for (pos, outs) in outflows.iter().enumerate() {
         if !non_negative.get(pos).copied().unwrap_or(false) {
             continue;

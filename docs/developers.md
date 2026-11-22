@@ -142,6 +142,23 @@ enough to reproduce the numbers. `--format json` or `--format csv` gives machine
 results, `--out` writes them to a file, and `--seed`, `--warmup` and `--duration` override the
 model's scenario for that run. Any BPMN or XPDL file with BPSim data can be run the same way.
 
+A file that StochCraft read with errors (`validate` lists them: a processing-time expression it
+cannot evaluate, say) is not run, in any output format, in the window or through MCP: reading it
+substitutes something for each part it could not read (a time of zero for that expression), so
+the numbers would be of another model. `run --allow-approximations` (the parameter
+`allow_approximations` of `run`, `run.start` and the `experiment.*` commands) runs the
+substitution deliberately: each substitution is printed on stderr and listed in the run record
+(`approximations`, in addition to `file_notes`). An error pinned to one field (a task's processing time) stops counting while that field is set
+to something else (undo brings it back), since the edit replaces the stand-in; renaming the block or
+editing another property does not clear it, and any other error stands until the file is opened
+again. A Monte Carlo model needs no
+such gate: reading its inputs and outputs raises warnings only, never an error that substitutes
+something.
+
+`--out` (also `design --out`) refuses a path that is the model file it reads, and writes through
+a temporary file that is renamed over the target, so a crash or a full disk leaves the old file
+whole.
+
 To run until the numbers are precise enough rather than a fixed number of times, give a target:
 
 ```bash
@@ -263,7 +280,11 @@ maximum, and, with a target (`at_most` or `at_least`), the share of trials meeti
 95% interval; `--format json` adds a histogram, the cumulative curve, the percentiles
 P10 and P90. For each output the table and the JSON also say which inputs matter: a tornado of
 swings (the output with each input at its 10th and 90th percentile, the others at their
-medians) and the rank correlation of each input with it. `--until 1% --max 1000000` adds trials
+medians) and the rank correlation of each input with it. The table says "changes most with" for
+the widest swing, which is the largest change between those two endpoints and not the largest
+share of the variance (that is the Sobol share), and names each input whose output at its
+median is outside its two endpoint values (`not_monotone` in the JSON), where the swing
+understates or misses its effect. `--until 1% --max 1000000` adds trials
 until every output's mean is within ±1% of itself. Outputs are BPSim expressions with the inputs (and earlier outputs) as `$name`, the
 arithmetic of XPath and `min`, `max`, `sum`, `abs`, `sqrt`, `exp`, `log`, `pow`, `sin`, `cos`, `round` and
 `if(condition, then, else)`; a condition such as `$cost > 6000` gives 1 or 0 in each trial, so its
@@ -277,7 +298,11 @@ JSON has a `sobol` field. The command behind it is `mc.sobol` (`rows`, `seed`, w
 model's own by default, and `bootstrap`, 1,000 by default): per output its `variance`,
 `rows_used`, `rows_dropped`, `unavailable` (why it has no indices, if it has none) and for each
 input `first` and `total`, each with a `value` and an `interval`, besides `rows`, `evaluations`
-and the `constants` left out. The estimates are not clamped: a small sample can give one a little
+and the `constants` left out. An output with a row whose value is not a finite number in any of
+the evaluations the estimators compare (`rows_dropped` above 0) gets no indices, with the counts
+and the reason in `unavailable`: which rows are missing depends on the inputs, so leaving them
+out conditions the inputs and what is left does not estimate the shares of independent inputs.
+The other outputs keep their indices. The estimates are not clamped: a small sample can give one a little
 below 0 or above 1. The indices need independent inputs, so a model with correlated inputs is
 refused with an `invalid_model` error that says so; `run --sobol` then prints the reason (under
 `sobol.unavailable` in the JSON, on stderr for `--format csv`) and still prints the normal
@@ -293,9 +318,12 @@ refused with correlated inputs, whose reordering would break the pairs. `"sobol"
 quasi-Monte Carlo (`stochcraft_mc::qmc`): each batch takes the first 1,000 points of the Sobol
 sequence with Joe and Kuo's direction numbers (2008, "new-joe-kuo-6.21201", the first 64
 dimensions; their licence is in NOTICE), one dimension per input in declaration order, and
-shifts each dimension by a random 32-bit integer keyed by the seed, the batch and the input's
-name (a random digital shift; Owen, 1995; L'Ecuyer and Lemieux, 2002); more than 64 inputs are
-refused. The file format keeps the sampling as `sampling="antithetic"` or `"sobol"` on
+randomises each dimension with a random linear matrix scramble and a random digital shift
+(Matoušek, 1998; Owen, 2003: a random lower-triangular binary matrix with ones on its diagonal
+applied to the direction integers, then an exclusive or with a random 32-bit integer), drawn from
+the stream keyed by the seed, the batch and the input's name; more than 64 inputs are refused.
+The scramble keeps the net property and has the variance of nested uniform scrambling (Owen,
+2008); `qmc::shifted`, the digital shift alone, stays for other callers. The file format keeps the sampling as `sampling="antithetic"` or `"sobol"` on
 `stochcraft:monteCarlo`; a reader from before them warns that it does not know the value and
 samples at random. On the command line `run --sampling random|latin-hypercube|antithetic|quasi-random`
 chooses it for one run (`sobol` is accepted for `quasi-random`; it is not `--sobol`, the shares of
@@ -317,12 +345,23 @@ than there are batches. Such runs are whole batches, so the trials asked for are
 multiple of 1,000 (the results and the run record give both numbers), a run of one batch has no
 interval, and a sequential run judges its outputs on the intervals across batches. The run
 record's `interval` says which, for example `Student-t across 12 independent Latin hypercube
-batches of 1000 trials`. Sobol sampling is judged the same way (each batch's shift is
+batches of 1000 trials`. Sobol sampling is judged the same way (each batch's scramble is
 independent, so its batch means are independent replicates; `interval_basis` is `batches`).
 Antithetic trials depend on their twin and not on the other pairs, so the interval is Student-t
-on the pair means, with one degree of freedom fewer than there are pairs (Glasserman, 2003,
-§4.2; `interval_basis` is `pairs`, and runs are whole pairs). The standard deviation is always across trials: it describes the
-output, not the precision of its mean.
+across the pairs, with one degree of freedom fewer than there are pairs (Glasserman, 2003,
+§4.2; `interval_basis` is `pairs`, and runs are whole pairs). The reported mean is the mean of
+all the valid trials. A pair with one trial that gave no number is a cluster of one trial, and
+averaging the pair means would give that lone trial the weight of a whole pair (the mean
+would then differ from the mean of the trials, and from a target's share of them), so the
+interval is the ratio estimator's, R = Σy_j / Σn_j over the pairs j that have a valid trial,
+with variance Σ(y_j − R n_j)² / ((k − 1) k n̄²) (Cochran, *Sampling Techniques*, 3rd ed., 1977,
+§6.4; the pairs are independent clusters of random size); where every pair is complete it is
+the interval on the pair means. A target's probability gets the same on the pairs' hits. A
+sequential stop judges the same numbers. The standard deviation is always across trials: it
+describes the output, not the precision of its mean. Where every value the interval is across
+is the same, `half_width` is `null` and `no_variation` is `true`: a width of 0 would claim the
+mean is exact, which a run cannot know (a rare event the trials did not reach gives the same
+picture).
 
 **Control variates** ([`stochcraft_mc::control`](../crates/mc/src/control.rs); Law, *Simulation
 Modeling and Analysis*, 5th ed., §11.3; Glasserman, 2003, §4.1; Nelson, 1990). An output can name
@@ -366,8 +405,11 @@ least 10% narrower); its `target` has the same for the probability. With too few
 run of one batch where intervals are across batches, `estimate` is `null` and `unavailable` says
 why. An input named only as a control is not reported as `unused_input`, and a replacing
 `mc.inputs.import` drops the controls of inputs it removes, as it drops their correlations; a
-control object with fields of both forms is refused. The window makes the controlled results the
-headline where `helped`, words a controlled chance as an estimate (never as a count of trials),
+control object with fields of both forms is refused. `controlled.mean_mismatch` is true when any
+control's is: the controlled estimate is then biased, and neither the window nor the command line
+lets it displace the plain headline (the window keeps the plain mean and chance and shows the
+controlled ones beside them; the table labels them "biased, not used"). The window makes the
+controlled results the headline where `helped` and no control is flagged, words a controlled chance as an estimate (never as a count of trials),
 and says so in words otherwise; `stochcraft_engine::mc::control_inputs` lists the inputs that can be controls.
 
 The input table goes out and back in as CSV:
@@ -471,7 +513,11 @@ equation names the variable or a stock lists it, naming who; `force` clears the 
 An edit's undo entry is a snapshot of the whole `SdModel` before it (`Undo::Sd` in the engine, the
 counterpart of `Op::SetModel`), on the same stacks as process edits; undo swaps it in and compiles
 it. The model is dirty while it, diagram included, differs from the one opened or last saved.
-`file.save` writes XMILE (`format` is `xmile`); a journal that began with `sd.new` records its
+`file.save` writes XMILE (`format` is `xmile`); an unchanged model is written as the bytes it was
+read from, and saving a changed model into the file it was read from, when the reader noted
+content it does not keep (a second view, display settings), is refused with `conflict` and the
+list in `details.would_lose` unless `allow_loss` is `true` (a process model saved with `as_new`
+over its own file that has notes is refused the same way). A journal that began with `sd.new` records its
 parameters in the start record and replays from it.
 
 **The diagram** is `SdModel.layout`: a shape per variable by canonical name (the centre; a stock
@@ -508,7 +554,14 @@ one, gets `Layout::auto`.
 topological order of what their equations name, ties broken by name; an algebraic loop is an error
 naming the cycle. A stock that cannot go negative limits its outflows, in the order it lists them,
 to what it holds at the start of the pass, so the stock that receives a flow gets the same
-limited flow and material is conserved. `DELAYn` and `SMTHn` are hidden stocks (their time
+limited flow and material is conserved. A flow that comes out negative runs backwards, and the
+stocks it enters are the ones it takes from: they limit it (in the order the flows are worked
+out), so no such stock goes below 0 and nothing is clipped afterwards. A flow that is not a
+number is not limited (the limit would turn it into a transfer): it stays not a number, with a
+warning, and so do the stocks it touches. A flow listed twice at one stock is refused. Under
+Runge-Kutta a `STEP` on a step boundary is integrated as under Euler (the stage at the end of a
+step sees the value from the left); a jump inside a step, or made with `IF` on `TIME`, makes that
+step first order: put jumps on step boundaries, use Euler, or lower the step. `DELAYn` and `SMTHn` are hidden stocks (their time
 constant is never taken below the step), `PULSE` delivers its volume in one step under either
 method, a graphical function is clamped at its ends with a warning, and a random function holds one
 draw for its interval and takes it from a stream keyed by variable, call and draw number, so
@@ -518,16 +571,24 @@ gives the mean, the median and the 5th and 95th percentiles at each saved time. 
 on both sides of each equation (compound units, and `1`), and a flow against its stock's units per
 the model's time unit; a mismatch is a warning. `time_unit` reports times in another unit.
 
-`dt_check` runs the model again at half the step and gives, for each stock, the largest relative
-difference between the two mean paths (relative to the larger of the value and 0.1% of the
-stock's peak); within 1% is called independent of the step.
+`dt_check` runs the model again at half the step, to the same end time, and gives, for each stock,
+the largest relative difference between the two mean paths (relative to the larger of the value
+and 0.1% of the stock's peak), compared at the saved times the two runs share; within 1% is
+called independent of the step. A stock with no shared time after the start, or a value that is
+missing or not a number at one, is `inconclusive` (and so is the check, which is then never
+`within_threshold`), not a difference of 0. `draws_matched` is false when a random function draws
+at different times at the two steps (its interval is a whole number of steps, so a half step can
+move it); the random values are then not the same ones and `notes` says so. `time_unit` converts
+`dt` and the halved `dt` as well as the times. XMILE elements are recognised by their namespace
+URI, whatever prefix the file uses; a file whose root is in another namespace is refused.
 
 ### The journal
 
 The engine records every command that is not a query in its journal. A new or opened document
 (`model.new`, `file.open`, and opening a file in the app) starts a new journal, so a journal is
 the history of one document. `exec --journal out.json` writes the journal of what the script did,
-also when a step failed, as a JSON object:
+also when a step failed (atomically, and never over the script, the file given with `--open` or
+the file the script opened or saved: those are refused), as a JSON object:
 
 ```json
 {
@@ -553,19 +614,31 @@ also when a step failed, as a JSON object:
   (`model.new`, with the model's `name`) or `file` (with the name the file was opened under,
   the digest of its bytes and the scenario). `model_digest` is the digest the run records carry,
   of the model at the start. `file_digest`, `name` and `scenario` are left out when they do not
-  apply. The command that started the document is not an entry: `start` records it.
+  apply. The command that started the document is not an entry: `start` records it. `document` is
+  `process` or `system_dynamics`; for a system dynamics model `model_digest` is the digest of the
+  model without its diagram (the one its run records carry), not of an empty process model. A
+  journal written before `document` existed is a legacy one: a process journal replays as before,
+  a legacy journal that began with `sd.new` rebuilds its model from that step, and one that began
+  from an opened XMILE file cannot vouch for its model and is refused unless `--force`.
+- `engine` names the build that wrote it (the version, the platform and, when the build was given
+  `STOCHCRAFT_REVISION`, the source revision). A replay prints, on stderr, how many edits it
+  replayed and how many runs it made again, and whether this is the same build: runs are made
+  again, not compared with the original numbers, and only the same build is expected to give the
+  same ones.
 - `entries` are the commands in order, as `{"command", "params"}`. A script for `exec` is the same
   array on its own, and `exec` runs that in full.
 
 Replaying a journal (`exec journal.json`) first checks that the model is the one it started from
 (`--open` the same file, which opens the scenario the journal records in `start.scenario`; a
 journal that began with `model.new` starts its own model) and refuses
-with a `conflict` error if not, unless `--force`. If the file has no scenario of that name, `exec`
+with a `conflict` error if not, unless `--force`. The same model from other bytes (the file was
+edited since) and a document of the other kind are refused too. If the file has no scenario of that name, `exec`
 stops with the error from opening it; with `--force` it replays onto the file's first scenario.
 It then re-applies the edits, undo and redo, and
 skips the saves, runs and experiments (`file.save`, `run`, `mc.run`, `mc.sobol`, `sd.run`, `run.start`,
 `run.cancel`, `experiment.sweep`, `experiment.sensitivity`, `experiment.design`,
-`experiment.size`), printing `"skipped": true` for each; `--all` carries them out too. In Rust,
+`experiment.size`), printing `"skipped": true` for each; `--all` carries them out too, and a
+replayed `run.start` is run to completion so later steps find its results. In Rust,
 `Engine::journal_document` gives the journal and `Engine::replay_journal` replays it
 (`ReplayMode::EditsOnly` or `All`); `Engine::replay` still runs a plain list of steps in full.
 
@@ -592,6 +665,66 @@ log-normals, a PERT schedule's finish on a single path, rank correlations induce
 targets, and Latin hypercube strata holding one value each. They are
 also checked against another BPSim simulator's published results for the BPSim car repair model. StochCraft runs
 about 54× faster than SimPy on an M/M/1 benchmark ([bench/](../bench/README.md)).
+
+Some of the formulas behind the theory values are also proved, independently of the code:
+[formal/](../formal/README.md) is a Lean 4 project with Mathlib that restates them by hand and
+proves them (the Erlang B recurrence against its closed form, Erlang C in the tests' form and from
+Erlang B, the M/M/1 geometric distribution's sum, balance equations and means, Little's law on one
+sample path, and algebra about the Pollaczek–Khinchine mean wait). It proves those restatements
+over the reals, not the values the Rust tests compute, their floating-point arithmetic or the
+simulator; its README says what each theorem does and does not establish. A separate CI workflow
+(`.github/workflows/lean.yml`) builds it when `formal/` changes.
+
+### Machine-checked proofs
+
+A few invariants are proved, not only tested, with [Kani](https://github.com/model-checking/kani)
+(a bounded model checker for Rust). The harnesses sit in `#[cfg(kani)] mod proofs` beside the code
+they check, so normal builds never see them. CI runs them in `.github/workflows/kani.yml`, on pull requests that change `crates/` and nightly on main; locally,
+after installing Kani (`cargo install --locked kani-verifier && cargo kani setup`):
+
+```bash
+cargo kani -p stochcraft-random
+cargo kani -p stochcraft-stats
+```
+
+Proved, for every input the harness allows:
+
+- Random streams (`crates/random/src/lib.rs`): seeding never gives the all-zero state and a
+  xoshiro256** step keeps a non-zero state non-zero; `uniform` is in [0, 1) and `uniform_open0`
+  in (0, 1] from any state.
+- Distribution parameters (`crates/random/src/dist.rs`): when `Dist::check` accepts a Uniform,
+  Triangular, Truncated normal, Exponential, Poisson, Normal, Log-normal, Erlang, Gamma, Beta,
+  Weibull or Binomial, its parameters are finite and in the documented ranges, for any `f64`
+  including NaN and infinities; a constant never samples NaN, infinite or negative.
+- Output analysis (`crates/stats`): an observed value agrees only inside its tolerance and
+  differs only outside it, and never agrees without a usable tolerance; a bound passes only when
+  the mean meets it and fails only when the mean violates it; fewer than two replications are
+  always inconclusive; the 95% critical value exists for 1 to 30 degrees of freedom; the
+  half-width of two replications of moderate size (up to 1e6) is finite and not negative.
+
+Not proved: that different seeds, bases or keys give different streams (the 64-bit multiplications
+of SplitMix64 are too slow for the checker; key strings also hash to 64 bits, so collisions exist), the statistical quality of the generator, the shape of any distribution's
+samples or the bounds of `uniform_range` and `triangular` (floating-point arithmetic on symbolic
+values is beyond the checker in CI time; transcendental functions, rejection samplers and loops
+are out of its reach too; the statistical tests cover them), confidence intervals for more than two replications,
+and anything in the engine, the block runtime or the interface (entity accounting is checked by
+the run-time behaviour checks, not proved). Proofs are bounded by the stated input ranges and by
+the checker's model of floating point.
+
+### Pull request reviews
+
+Two automated reviewers comment on pull requests. CodeRabbit is a GitHub app and needs nothing
+from the repository. The Gemini CLI review is the workflows `.github/workflows/gemini-dispatch.yml`
+and `gemini-review.yml` (adapted from the `run-gemini-cli` examples, which are Apache-2.0). It runs
+when a pull request from a branch of this repository is opened or reopened, when a repository
+owner, member or collaborator starts a comment or review with `@gemini-cli /review` (any text
+after it is passed to the reviewer as extra focus, for example `@gemini-cli /review check error
+handling`), or when someone with write access runs the "Gemini Dispatch" workflow by hand with a
+pull request number. Pull requests from forks are not reviewed, because a fork's run must not see
+secrets. The review needs a repository secret named `GEMINI_API_KEY` (a Gemini API key from
+Google AI Studio); without it the run fails and posts a failure comment. It posts with the
+workflow's own token and reads the pull request through GitHub's MCP server in a container. Its
+comments are suggestions, not checks: CI is the gate.
 
 ## Contributing
 

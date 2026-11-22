@@ -546,6 +546,26 @@ pub const EXAMPLES: &[Example] = &[
             featured: true,
         },
     },
+    Example {
+        title: "Arrivals that keep their distance",
+        about: "One server fed by the gaps between zeros of the Riemann zeta function, beside Poisson arrivals at the same rate.",
+        file: "zeta-queue.bpmn",
+        bytes: include_bytes!("../../../tests/models/zeta-queue.bpmn"),
+        card: start::Card {
+            question: "Do arrivals that avoid bunching make a shorter queue?",
+            industry: start::Industry::Reference,
+            topics: &[start::Topic::Change],
+            teaches: "Same average rate, half the wait: arrivals that repel one another bunch up less than random ones.",
+            minutes: 3,
+            proof: Some(start::Proof::Theory),
+            flow: &[
+                start::Glyph::Arrivals,
+                start::Glyph::Resource,
+                start::Glyph::Departures,
+            ],
+            featured: false,
+        },
+    },
 ];
 
 /// A built-in example model.

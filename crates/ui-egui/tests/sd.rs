@@ -427,8 +427,13 @@ fn saving_into_a_file_that_lost_content_asks_first() {
     let mut h = harness();
     h.state_mut()
         .open_path("/models/two.xmile", TWO_VIEWS.as_bytes());
+    // Changed, so saving writes the model and leaves out the second diagram (an unchanged save
+    // writes the file's own bytes and loses nothing).
+    h.state_mut()
+        .control("sd.variable.set", json!({ "name": "f", "equation": "0.2" }))
+        .expect("an edit");
     assert!(h.state().is_system_dynamics());
-    assert!(!h.state().has_unsaved_changes());
+    assert!(h.state().has_unsaved_changes());
 
     // Replace the file anyway.
     h.state_mut().save();
@@ -465,6 +470,11 @@ fn saving_into_a_file_that_lost_content_asks_first() {
     // Save As keeps the original.
     h.state_mut()
         .open_path("/models/two.xmile", TWO_VIEWS.as_bytes());
+    // Changed, so saving writes the model and leaves out the second diagram (an unchanged save
+    // writes the file's own bytes and loses nothing).
+    h.state_mut()
+        .control("sd.variable.set", json!({ "name": "f", "equation": "0.2" }))
+        .expect("an edit");
     h.state_mut().save();
     settle(&mut h);
     click(&mut h, Role::Button, "Save As…");
@@ -489,6 +499,11 @@ fn saving_into_a_file_that_lost_content_asks_first() {
     // Cancel writes nothing.
     h.state_mut()
         .open_path("/models/two.xmile", TWO_VIEWS.as_bytes());
+    // Changed, so saving writes the model and leaves out the second diagram (an unchanged save
+    // writes the file's own bytes and loses nothing).
+    h.state_mut()
+        .control("sd.variable.set", json!({ "name": "f", "equation": "0.2" }))
+        .expect("an edit");
     h.state_mut().save();
     settle(&mut h);
     click(&mut h, Role::Button, "Cancel");
@@ -498,6 +513,11 @@ fn saving_into_a_file_that_lost_content_asks_first() {
     // Save As naming the opened file replaces it as well, so it is asked about too.
     h.state_mut()
         .open_path("/models/two.xmile", TWO_VIEWS.as_bytes());
+    // Changed, so saving writes the model and leaves out the second diagram (an unchanged save
+    // writes the file's own bytes and loses nothing).
+    h.state_mut()
+        .control("sd.variable.set", json!({ "name": "f", "equation": "0.2" }))
+        .expect("an edit");
     h.state_mut().save_to("/models/two.xmile");
     assert_eq!(h.state_mut().take_requests(), vec![], "asked first");
     settle(&mut h);
@@ -509,6 +529,11 @@ fn saving_into_a_file_that_lost_content_asks_first() {
     // answer would write the new model over the file asked about, so the question is dropped.
     h.state_mut()
         .open_path("/models/two.xmile", TWO_VIEWS.as_bytes());
+    // Changed, so saving writes the model and leaves out the second diagram (an unchanged save
+    // writes the file's own bytes and loses nothing).
+    h.state_mut()
+        .control("sd.variable.set", json!({ "name": "f", "equation": "0.2" }))
+        .expect("an edit");
     h.state_mut().save();
     settle(&mut h);
     h.get_by_label("Replace the XMILE file?");
@@ -566,10 +591,10 @@ fn results_are_marked_out_of_date_once_the_model_is_changed() {
 }
 
 #[test]
-fn the_start_page_offers_the_example_among_23() {
-    assert_eq!(EXAMPLES.len(), 23);
+fn the_start_page_offers_the_example_among_24() {
+    assert_eq!(EXAMPLES.len(), 24);
     let mut h = harness();
-    h.get_by_label("See all 23 examples, including reference models")
+    h.get_by_label("See all 24 examples, including reference models")
         .click_accesskit();
     settle(&mut h);
     click(&mut h, Role::Button, "How fast does a new product spread?");
@@ -599,6 +624,51 @@ fn a_file_that_cannot_be_read_is_refused_with_the_engines_message() {
     assert_eq!(app.engine().system_dynamics_path(), Some("adoption.xmile"));
     assert!(app.title().starts_with("adoption.xmile"), "{}", app.title());
     assert!(!app.has_unsaved_changes());
+}
+
+/// Export stays on while a run is on its way, and what it writes is still the last run's.
+#[test]
+fn a_table_exported_while_a_run_is_pending_is_labelled_a_prior_run() {
+    let mut h = harness();
+    let e = adoption();
+    h.state_mut().open_file(e.file, e.bytes);
+    settle(&mut h);
+    run(&mut h);
+    change_innovation(h.state_mut());
+    settle(&mut h);
+    // Run is asked for and has not been made: the old results are still on show.
+    h.state_mut().run();
+    h.state_mut().export_csv();
+    let requests = h.state_mut().take_requests();
+    let [Request::Export { name, bytes }] = requests.as_slice() else {
+        panic!("expected one export, got {requests:?}");
+    };
+    assert_eq!(name, "adoption-results-prior-run.csv");
+    let csv = String::from_utf8_lossy(bytes);
+    let header = csv.lines().next().unwrap_or("");
+    assert!(header.contains("run_status"), "{header}");
+    for row in csv.lines().skip(1) {
+        assert!(
+            row.contains("prior run: the model has changed since"),
+            "{row}"
+        );
+        // The run's numerical settings go with it: the integration method and its steps.
+        for key in ["method=", "dt=", "save_step="] {
+            assert!(row.contains(key), "{key} in {row}");
+        }
+    }
+
+    // Once the run is made its results are the current ones, and the export is unlabelled.
+    h.step();
+    h.step();
+    settle(&mut h);
+    h.state_mut().export_csv();
+    let requests = h.state_mut().take_requests();
+    let [Request::Export { name, bytes }] = requests.as_slice() else {
+        panic!("expected one export, got {requests:?}");
+    };
+    assert_eq!(name, "adoption-results.csv");
+    assert!(!String::from_utf8_lossy(bytes).contains("run_status"));
 }
 
 /// The runs "n of N runs finished" says are made, if the page says so now.
