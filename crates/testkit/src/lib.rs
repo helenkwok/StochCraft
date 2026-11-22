@@ -40,6 +40,12 @@ pub static GOLDEN: &[Golden] = &[
         name: "repair-shop.bpmn",
         bytes: include_bytes!("../../../tests/models/repair-shop.bpmn"),
     },
+    // A task whose two pools serve in times of their own (a service time by resource), with
+    // whole-minute times, so units come free together and arrivals meet them.
+    Golden {
+        name: "able-baker.bpmn",
+        bytes: include_bytes!("../../../tests/models/able-baker.bpmn"),
+    },
 ];
 
 /// Replications per golden run: enough to exercise the experiment, few enough to be quick on a

@@ -1452,3 +1452,8 @@ unit	yr	বছর
 	One server fed by the gaps between zeros of the Riemann zeta function, beside Poisson arrivals at the same rate.	রিম্যান জিটা ফাংশনের শূন্যগুলোর মধ্যকার ব্যবধানে আগত একটি সার্ভার, একই হারের পয়সন আগমনের পাশাপাশি।
 	Do arrivals that avoid bunching make a shorter queue?	গুচ্ছবদ্ধ হওয়া এড়িয়ে চলা আগমন কি ছোট সারি তৈরি করে?
 	Same average rate, half the wait: arrivals that repel one another bunch up less than random ones.	একই গড় হার, অর্ধেক অপেক্ষা: যে আগমনগুলো একে অপরকে দূরে ঠেলে, সেগুলো এলোমেলো আগমনের চেয়ে কম জটলা পাকায়।
+	Service time by resource	সম্পদ অনুযায়ী সেবা সময়
+	Tick a pool to give its units a service time of their own. The other pools serve with the task's service time.	কোনো পুল টিক দিলে তার এককগুলোর নিজস্ব সেবা সময় হয়। অন্য পুলগুলো কাজের সেবা সময় অনুযায়ী সেবা দেয়।
+	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	{block}-এ “{pool}” পুলের জন্য একটি সেবা সময় আছে, কিন্তু মডেলে এই পুল নেই। সেই সময়টি সরান, অথবা এমন পুল বেছে নিন যা আছে।
+	{block} has two service times for the pool “{pool}”. Keep one.	{block}-এ “{pool}” পুলের জন্য দুটি সেবা সময় আছে। একটি রাখুন।
+	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	{block}-এ “{pool}” পুলের জন্য একটি সেবা সময় আছে, কিন্তু এর এই পুলের প্রয়োজন নেই। পুলটি প্রয়োজনের তালিকায় যোগ করুন, অথবা সেই সময়টি সরান।

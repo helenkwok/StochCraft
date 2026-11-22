@@ -1452,3 +1452,8 @@ unit	yr	J.
 	One server fed by the gaps between zeros of the Riemann zeta function, beside Poisson arrivals at the same rate.	Ein Bedienplatz, den die Abstände zwischen den Nullstellen der Riemannschen Zetafunktion speisen, neben Poisson-Ankünften mit derselben Rate.
 	Do arrivals that avoid bunching make a shorter queue?	Ergeben Ankünfte, die Ballungen vermeiden, eine kürzere Warteschlange?
 	Same average rate, half the wait: arrivals that repel one another bunch up less than random ones.	Gleiche mittlere Rate, halbe Wartezeit: Ankünfte, die einander abstoßen, ballen sich seltener als zufällige.
+	Service time by resource	Bearbeitungszeit nach Ressource
+	Tick a pool to give its units a service time of their own. The other pools serve with the task's service time.	Markieren Sie einen Pool, damit seine Einheiten eine eigene Bearbeitungszeit haben. Die übrigen Pools bearbeiten mit der Bearbeitungszeit der Aufgabe.
+	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	Block {block} hat eine Bearbeitungszeit für den Pool „{pool}“, den das Modell nicht hat. Entfernen Sie diese Zeit, oder wählen Sie einen vorhandenen Pool.
+	{block} has two service times for the pool “{pool}”. Keep one.	Block {block} hat zwei Bearbeitungszeiten für den Pool „{pool}“. Behalten Sie eine.
+	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	Block {block} hat eine Bearbeitungszeit für den Pool „{pool}“, den er nicht braucht. Fügen Sie den Pool seinem Bedarf hinzu, oder entfernen Sie diese Zeit.

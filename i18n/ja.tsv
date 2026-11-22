@@ -1452,3 +1452,8 @@ unit	yr	年
 	One server fed by the gaps between zeros of the Riemann zeta function, beside Poisson arrivals at the same rate.	リーマンゼータ関数の零点の間隔で到着する客を1台の窓口が受け、同じ到着率のポアソン到着と並べて比べます。
 	Do arrivals that avoid bunching make a shorter queue?	固まりを避ける到着は、待ち行列を短くするか。
 	Same average rate, half the wait: arrivals that repel one another bunch up less than random ones.	平均の到着率は同じでも待ち時間は半分に。互いに反発する到着は、ランダムな到着より固まりにくいからです。
+	Service time by resource	リソース別のサービス時間
+	Tick a pool to give its units a service time of their own. The other pools serve with the task's service time.	プールにチェックを入れると、そのユニットに専用のサービス時間を設定できます。ほかのプールはタスクのサービス時間で処理します。
+	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	{block} にプール「{pool}」のサービス時間がありますが、モデルにそのプールはありません。その時間を削除するか、存在するプールを選んでください。
+	{block} has two service times for the pool “{pool}”. Keep one.	{block} にプール「{pool}」のサービス時間が 2 つあります。どちらか一方を残してください。
+	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	{block} にプール「{pool}」のサービス時間がありますが、このブロックはそのプールを必要としていません。プールを必要なリソースに追加するか、その時間を削除してください。

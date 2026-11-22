@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Able and Baker, two servers who differ in speed behind one queue (Banks, Carson, Nelson and Nicol, Discrete-Event System Simulation, Example 2.2, the Able Baker call center problem). Customers arrive at discrete times between arrivals of 1 to 4 minutes; a customer who finds both free goes to Able, who is the more experienced. Able serves in 2 to 5 minutes and Baker in 3 to 6 minutes, each with the textbook's probabilities, so the service time depends on who serves: a service time by resource (stochcraft:processingTimeByResource) on one task that needs either of the two. The task's own processing time is the one a pool without an entry would take and is not used here. The exact long-run answer comes from the discrete-time Markov chain of the system (tools/able-baker/chain.py); crates/engine/tests/examples.rs checks the model against it. -->
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:bpsim="http://www.bpsim.org/schemas/2.0" id="definitions" name="Able and Baker" targetNamespace="https://github.com/helenkwok/StochCraft/model" exporter="StochCraft" exporterVersion="0.2.0">
+  <bpmn:resource id="able" name="Able"/>
+  <bpmn:resource id="baker" name="Baker"/>
+  <bpmn:process id="process" name="Able and Baker" isExecutable="false">
+    <bpmn:startEvent id="arrivals" name="Customers arrive">
+      <bpmn:outgoing>flow-1</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:task id="service" name="Serve">
+      <bpmn:incoming>flow-1</bpmn:incoming>
+      <bpmn:outgoing>flow-2</bpmn:outgoing>
+      <bpmn:performer>
+        <bpmn:resourceRef>able</bpmn:resourceRef>
+      </bpmn:performer>
+      <bpmn:performer>
+        <bpmn:resourceRef>baker</bpmn:resourceRef>
+      </bpmn:performer>
+    </bpmn:task>
+    <bpmn:endEvent id="done" name="Customers leave">
+      <bpmn:incoming>flow-2</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="flow-1" sourceRef="arrivals" targetRef="service"/>
+    <bpmn:sequenceFlow id="flow-2" sourceRef="service" targetRef="done"/>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="diagram">
+    <bpmndi:BPMNPlane id="plane" bpmnElement="process">
+      <bpmndi:BPMNShape id="arrivals_di" bpmnElement="arrivals">
+        <dc:Bounds x="82" y="82" width="36" height="36"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="service_di" bpmnElement="service">
+        <dc:Bounds x="230" y="60" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="done_di" bpmnElement="done">
+        <dc:Bounds x="442" y="82" width="36" height="36"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="flow-1_di" bpmnElement="flow-1">
+        <di:waypoint x="118" y="100"/>
+        <di:waypoint x="230" y="100"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow-2_di" bpmnElement="flow-2">
+        <di:waypoint x="330" y="100"/>
+        <di:waypoint x="442" y="100"/>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+  <bpmn:relationship type="BPSimData">
+    <bpmn:extensionElements>
+      <bpsim:BPSimData>
+        <bpsim:Scenario id="able-baker" name="Able and Baker" vendor="StochCraft" version="0.2.0">
+          <bpsim:ScenarioParameters replication="10" seed="1" baseTimeUnit="min">
+            <bpsim:Duration>
+              <bpsim:FloatingParameter value="21000"/>
+            </bpsim:Duration>
+            <bpsim:Warmup>
+              <bpsim:FloatingParameter value="1000"/>
+            </bpsim:Warmup>
+          </bpsim:ScenarioParameters>
+          <bpsim:ElementParameters elementRef="arrivals">
+            <bpsim:ControlParameters>
+              <bpsim:InterTriggerTimer>
+                <bpsim:UserDistribution discrete="true">
+                  <bpsim:UserDistributionDataPoint probability="0.25"><bpsim:FloatingParameter value="1"/></bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.4"><bpsim:FloatingParameter value="2"/></bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.2"><bpsim:FloatingParameter value="3"/></bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.15"><bpsim:FloatingParameter value="4"/></bpsim:UserDistributionDataPoint>
+                </bpsim:UserDistribution>
+              </bpsim:InterTriggerTimer>
+            </bpsim:ControlParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="service">
+            <bpsim:TimeParameters>
+              <bpsim:ProcessingTime>
+                <bpsim:UserDistribution discrete="true">
+                  <bpsim:UserDistributionDataPoint probability="0.3"><bpsim:FloatingParameter value="2"/></bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.28"><bpsim:FloatingParameter value="3"/></bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.25"><bpsim:FloatingParameter value="4"/></bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.17"><bpsim:FloatingParameter value="5"/></bpsim:UserDistributionDataPoint>
+                </bpsim:UserDistribution>
+              </bpsim:ProcessingTime>
+            </bpsim:TimeParameters>
+            <bpsim:ResourceParameters>
+              <bpsim:Selection>
+                <bpsim:ExpressionParameter value="orResource(getResource('able', 1), getResource('baker', 1))"/>
+              </bpsim:Selection>
+            </bpsim:ResourceParameters>
+            <bpsim:VendorExtension name="stochcraft:processingTimeByResource" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1">
+              <stochcraft:processingTimeByResource>
+                <stochcraft:time resource="able">
+                  <bpsim:UserDistribution discrete="true">
+                    <bpsim:UserDistributionDataPoint probability="0.3"><bpsim:FloatingParameter value="2"/></bpsim:UserDistributionDataPoint>
+                    <bpsim:UserDistributionDataPoint probability="0.28"><bpsim:FloatingParameter value="3"/></bpsim:UserDistributionDataPoint>
+                    <bpsim:UserDistributionDataPoint probability="0.25"><bpsim:FloatingParameter value="4"/></bpsim:UserDistributionDataPoint>
+                    <bpsim:UserDistributionDataPoint probability="0.17"><bpsim:FloatingParameter value="5"/></bpsim:UserDistributionDataPoint>
+                  </bpsim:UserDistribution>
+                </stochcraft:time>
+                <stochcraft:time resource="baker">
+                  <bpsim:UserDistribution discrete="true">
+                    <bpsim:UserDistributionDataPoint probability="0.35"><bpsim:FloatingParameter value="3"/></bpsim:UserDistributionDataPoint>
+                    <bpsim:UserDistributionDataPoint probability="0.25"><bpsim:FloatingParameter value="4"/></bpsim:UserDistributionDataPoint>
+                    <bpsim:UserDistributionDataPoint probability="0.2"><bpsim:FloatingParameter value="5"/></bpsim:UserDistributionDataPoint>
+                    <bpsim:UserDistributionDataPoint probability="0.2"><bpsim:FloatingParameter value="6"/></bpsim:UserDistributionDataPoint>
+                  </bpsim:UserDistribution>
+                </stochcraft:time>
+              </stochcraft:processingTimeByResource>
+            </bpsim:VendorExtension>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="able">
+            <bpsim:ResourceParameters>
+              <bpsim:Quantity>
+                <bpsim:NumericParameter value="1"/>
+              </bpsim:Quantity>
+            </bpsim:ResourceParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="baker">
+            <bpsim:ResourceParameters>
+              <bpsim:Quantity>
+                <bpsim:NumericParameter value="1"/>
+              </bpsim:Quantity>
+            </bpsim:ResourceParameters>
+          </bpsim:ElementParameters>
+        </bpsim:Scenario>
+      </bpsim:BPSimData>
+    </bpmn:extensionElements>
+    <bpmn:source>definitions</bpmn:source>
+    <bpmn:target>definitions</bpmn:target>
+  </bpmn:relationship>
+</bpmn:definitions>

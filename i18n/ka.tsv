@@ -1452,3 +1452,8 @@ unit	yr	წელი
 	One server fed by the gaps between zeros of the Riemann zeta function, beside Poisson arrivals at the same rate.	ერთი მომსახურე, რომელსაც მოსვლებს რიმანის ზეტა-ფუნქციის ნულებს შორის ინტერვალები განსაზღვრავს, იმავე სიხშირის პუასონის მოსვლებთან ერთად.
 	Do arrivals that avoid bunching make a shorter queue?	უფრო მოკლე რიგს ქმნის თუ არა ის მოსვლები, რომლებიც გროვდებას გაურბიან?
 	Same average rate, half the wait: arrivals that repel one another bunch up less than random ones.	იგივე საშუალო სიხშირე, ორჯერ ნაკლები ლოდინი: მოსვლები, რომლებიც ერთმანეთს განიზიდავენ, შემთხვევითზე ნაკლებად გროვდებიან.
+	Service time by resource	მომსახურების დრო რესურსის მიხედვით
+	Tick a pool to give its units a service time of their own. The other pools serve with the task's service time.	მონიშნეთ პული, რომ მის ერთეულებს საკუთარი მომსახურების დრო ჰქონდეს. დანარჩენი პულები დავალების მომსახურების დროით ემსახურებიან.
+	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	{block}-ს აქვს მომსახურების დრო პულისთვის „{pool}“, რომელიც მოდელში არ არის. წაშალეთ ეს დრო ან აირჩიეთ არსებული პული.
+	{block} has two service times for the pool “{pool}”. Keep one.	{block}-ს ორი მომსახურების დრო აქვს პულისთვის „{pool}“. დატოვეთ ერთი.
+	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	{block}-ს აქვს მომსახურების დრო პულისთვის „{pool}“, რომელიც მას არ სჭირდება. დაამატეთ პული მის საჭიროებებში ან წაშალეთ ეს დრო.

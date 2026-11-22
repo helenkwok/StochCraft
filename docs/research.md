@@ -242,6 +242,17 @@ again in the tests' comments.
   (N − n)λ and death rate min(n, R)μ. Gross et al., finite-source queues (the machine-repair
   problem).
 
+- **Able and Baker** (`tests/models/able-baker.bpmn`, checked in `crates/engine/tests/examples.rs`):
+  two servers who differ in speed behind one queue, with discrete times between arrivals and
+  discrete service times for each server, so that each server's time depends on who serves.
+  Every time is a whole number of minutes, so the system is a discrete-time Markov chain on the
+  minutes to the next arrival, each server's remaining time and the queue, solved exactly by
+  `tools/able-baker/chain.py`. At an instant, finished services free their servers, an arrival
+  joins the queue, then the queue takes the free servers, Able before Baker. Able is busy 0.8854
+  and Baker 0.7452 of the time, the mean queue is 0.3840 and the mean wait 0.8639 minutes. J.
+  Banks, J. S. Carson II, B. L. Nelson and D. M. Nicol, *Discrete-Event System Simulation*,
+  Example 2.2 (the Able Baker call center problem), for the system and its data.
+
 ## Calendars
 
 The checks for M2.6's calendars (`crates/blocks/tests/calendars.rs`):

@@ -47,9 +47,9 @@ use std::collections::{BTreeMap, BTreeSet};
 pub use stochcraft_model::calendar::{Calendar, Event, Rule};
 use stochcraft_model::expr;
 pub use stochcraft_model::{
-    BalkJoin, BalkRow, Balking, Breakdown, ByValue, Change, ConveyorShape, Demand, DemandPer,
-    HealthCheck, OnShiftEnd, OnTakeout, Patience, PatienceUntil, PlaceWhileOut, Power,
-    ProcessingBy, QueueLimit, Routing, Scrap, Setup, Transfer,
+    BalkJoin, BalkRow, Balking, Breakdown, ByResource, ByValue, Change, ConveyorShape, Demand,
+    DemandPer, HealthCheck, OnShiftEnd, OnTakeout, Patience, PatienceUntil, PlaceWhileOut, Power,
+    ProcessingBy, ProcessingByResource, QueueLimit, Routing, Scrap, Setup, Transfer,
 };
 use stochcraft_model::{
     Connection, Diagnostic, Element, ElementId, ElementKind, Experiment, Model, Need, Problem,
@@ -1772,6 +1772,26 @@ impl Builder {
         }
     }
 
+    /// Gives shared task `block` service times by the pool that serves the entity: `(pool, time)`
+    /// pairs, the pool by its id ([`ProcessingByResource`]).
+    pub fn processing_by_resource(&mut self, block: BlockId, by_resource: Vec<(&str, Dist)>) {
+        if let Some(p) = self
+            .elements
+            .get_mut(block.0)
+            .and_then(|(_, kind, _)| kind.processing_by_resource_mut())
+        {
+            *p = Some(ProcessingByResource {
+                by_resource: by_resource
+                    .into_iter()
+                    .map(|(pool, time)| ByResource {
+                        resource: ElementId::unchecked(pool),
+                        time,
+                    })
+                    .collect(),
+            });
+        }
+    }
+
     /// A calendar of `events`; its name is its id.
     pub fn calendar(&mut self, name: &str, events: Vec<Event>) {
         self.calendars.push(Calendar {
@@ -1832,6 +1852,7 @@ impl Builder {
             name,
             ElementKind::SharedTask {
                 processing_by: None,
+                processing_by_resource: None,
                 service,
                 needs,
                 priority,

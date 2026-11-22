@@ -1452,3 +1452,8 @@ unit	yr	a
 	One server fed by the gaps between zeros of the Riemann zeta function, beside Poisson arrivals at the same rate.	Üks teenindaja, kellele saabumisi annavad Riemanni zeetafunktsiooni nullkohtade vahed, kõrval Poissoni saabumised sama kiirusega.
 	Do arrivals that avoid bunching make a shorter queue?	Kas ummistust vältivad saabumised teevad järjekorra lühemaks?
 	Same average rate, half the wait: arrivals that repel one another bunch up less than random ones.	Sama keskmine kiirus, poole lühem ootamine: üksteist tõrjuvad saabumised kogunevad vähem kui juhuslikud.
+	Service time by resource	Teenindusaeg ressursi järgi
+	Tick a pool to give its units a service time of their own. The other pools serve with the task's service time.	Märgi kogum, et selle ühikutel oleks oma teenindusaeg. Teised kogumid teenindavad ülesande teenindusajaga.
+	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	Plokil {block} on teenindusaeg kogumile „{pool}”, mida mudelis pole. Eemalda see aeg või vali olemasolev kogum.
+	{block} has two service times for the pool “{pool}”. Keep one.	Plokil {block} on kaks teenindusaega kogumile „{pool}”. Jäta üks.
+	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	Plokil {block} on teenindusaeg kogumile „{pool}”, mida see ei vaja. Lisa kogum selle vajadustesse või eemalda see aeg.

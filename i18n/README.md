@@ -1005,6 +1005,14 @@ fields (`“Service time”`) are named in the messages by their own rows.
   checked against any other source and not reviewed by native speakers; the least certain are lo,
   th, ta, te, bn, ka, kk, hi and sq.
 
+- The rows for a task's service time by resource (its section title, the line that explains
+  ticking a pool, and the three validation messages for a time that names a pool the model lacks,
+  names one twice or names one the task does not need) were machine-drafted from the plain
+  meaning of the English, with each catalog's own words for service time, pool, block and needs
+  from its existing rows (the English says "resource" in the section title where the pool is
+  meant, as the models' own pools are resources). Not checked against any other source and not
+  reviewed by native speakers; the least certain are lo, th, ta, te, bn, ka, kk, hi and sq.
+
 **Adding or changing a string:** add the English in the code through `i18n::t` (or `tf`, `tn`),
 then add its row to each catalog here, or leave it out to show English until it is translated.
 Right-to-left languages are not offered until the layout is mirrored.

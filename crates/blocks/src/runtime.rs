@@ -587,10 +587,26 @@ impl Compiled {
                 ElementKind::SharedTask {
                     service,
                     processing_by,
+                    processing_by_resource,
                     needs,
                     priority,
                 } => {
-                    let service = Times::new(service, processing_by, &self.slots, &env.rng);
+                    // The pools with an entry, by index in the model's resources (an entry for a
+                    // pool the model lacks is refused by validation).
+                    let by_pool: Vec<(usize, Dist)> = processing_by_resource
+                        .into_iter()
+                        .flat_map(|x| x.by_resource)
+                        .filter_map(|x| {
+                            let at = self
+                                .model
+                                .resources
+                                .iter()
+                                .position(|r| r.id == x.resource)?;
+                            Some((at, x.time))
+                        })
+                        .collect();
+                    let service =
+                        Times::with_pools(service, processing_by, &by_pool, &self.slots, &env.rng);
                     let alternatives = alternatives(&self.model, &needs);
                     let request = Rc::new(Request {
                         alternatives,
@@ -3356,7 +3372,7 @@ fn spawn_server(sim: &mut Sim, env: BlockEnv, capacity: u32, service: Rc<Times>)
                     e.adjust(|s| &mut s.waiting, -1.0);
                     e.adjust(|s| &mut s.busy, 1.0);
                     book.change(&e, u, |d| d.processing = true);
-                    service.sample(&entity, &mut e.rng)
+                    service.sample(&entity, None, &mut e.rng)
                 };
                 if let Some(p) = &env.borrow().patient {
                     p.start(&entity, duration);
@@ -3452,15 +3468,30 @@ const HEALTH_STREAM: u64 = 0x4ea1_7c4e_c0ff_ee05;
 /// not its service stream's, its setup stream's or its health check stream's.
 const BY_VALUE_STREAM: u64 = 0x7b1d_e5a1_0c3f_92d7;
 
-/// A task's processing time ([`stochcraft_model::ProcessingBy`]): an entity whose value of the
-/// property has an entry takes that entry's time, drawn from a stream of the task's own; any
-/// other takes the task's own time, from its service stream as without entries. That stream is
-/// seeded without drawing from the element's own, so a model without entries, or whose entries
-/// no entity matches, draws exactly what it did before, and the times of the other entities
-/// are the service stream's draws in the same order whatever the entries.
+/// Mixed into the seed of the streams of a shared task's service times by serving pool, so they
+/// are not its service stream's or its times by property's.
+const BY_RESOURCE_STREAM: u64 = 0x3d6a_94c2_b81f_e70b;
+
+/// A task's processing time. An entity served by a pool that has an entry of the task's times by
+/// pool ([`stochcraft_model::ProcessingByResource`]) takes that entry's time. Otherwise, an entity
+/// whose value of the property has an entry of its times by property
+/// ([`stochcraft_model::ProcessingBy`]) takes that entry's time. Any other takes the task's own
+/// time, from its service stream as without entries. Each entry draws from a stream of its
+/// own, seeded without drawing from the element's own, so a model without entries, or whose
+/// entries no entity matches, draws exactly what it did before, and the times of the other
+/// entities are the service stream's draws in the same order whatever the entries.
 struct Times {
     default: Dist,
     by: Option<ByValues>,
+    by_resource: Vec<ByResource>,
+}
+
+/// One entry of a shared task's service times by pool: the pool (its index in the model's
+/// resources), its time, and the stream it draws from.
+struct ByResource {
+    pool: usize,
+    time: Dist,
+    rng: RefCell<Rng>,
 }
 
 /// The entries of a task's processing times by property value, the slot of the property they
@@ -3480,6 +3511,19 @@ impl Times {
         slots: &[String],
         rng: &Rng,
     ) -> Rc<Self> {
+        Self::with_pools(default, by, &[], slots, rng)
+    }
+
+    /// As [`Times::new`], with the entries of a shared task's times by pool: each a pool (its
+    /// index in the model's resources) and its time. An entry's stream is seeded from the task's
+    /// own with the entry's place in the list mixed in, so the entries do not draw alike.
+    fn with_pools(
+        default: Dist,
+        by: Option<stochcraft_model::ProcessingBy>,
+        by_pool: &[(usize, Dist)],
+        slots: &[String],
+        rng: &Rng,
+    ) -> Rc<Self> {
         let by = by.filter(|b| !b.by_value.is_empty()).map(|by| ByValues {
             slot: slots
                 .binary_search_by(|s| s.as_str().cmp(by.property.trim()))
@@ -3487,12 +3531,34 @@ impl Times {
             by,
             rng: RefCell::new(Rng::new(rng.clone().next_u64() ^ BY_VALUE_STREAM)),
         });
-        Rc::new(Self { default, by })
+        let seed = rng.clone().next_u64() ^ BY_RESOURCE_STREAM;
+        let by_resource = by_pool
+            .iter()
+            .enumerate()
+            .map(|(k, (pool, time))| ByResource {
+                pool: *pool,
+                time: time.clone(),
+                rng: RefCell::new(Rng::new(
+                    seed.wrapping_add((k as u64 + 1).wrapping_mul(0x9e37_79b9_7f4a_7c15)),
+                )),
+            })
+            .collect();
+        Rc::new(Self {
+            default,
+            by,
+            by_resource,
+        })
     }
 
-    /// The processing time of `entity`, from its entry, else from `rng` (the task's own
-    /// stream).
-    fn sample(&self, entity: &Entity, rng: &mut Rng) -> f64 {
+    /// The processing time of `entity`, served by units of pool `pool` (its index in the model's
+    /// resources; `None` for a task without pools): the pool's entry, else the entity's entry
+    /// by property, else from `rng` (the task's own stream).
+    fn sample(&self, entity: &Entity, pool: Option<usize>, rng: &mut Rng) -> f64 {
+        if let Some(p) = pool
+            && let Some(r) = self.by_resource.iter().find(|r| r.pool == p)
+        {
+            return r.time.sample(&mut r.rng.borrow_mut());
+        }
         if let Some(b) = &self.by {
             let value = b
                 .slot
@@ -3872,7 +3938,7 @@ fn spawn_unit_server(sim: &mut Sim, env: BlockEnv, parts: UnitServer) {
                     d.processing = true;
                     d.setup = set_up.is_some();
                 });
-                service.sample(&entity, &mut e.rng)
+                service.sample(&entity, None, &mut e.rng)
             };
             if let Some(p) = &patient {
                 p.start(&entity, set_up.unwrap_or(0.0).max(0.0) + duration.max(0.0));
@@ -4453,6 +4519,8 @@ struct Pools {
     /// Highest priority first, then by arrival.
     waiting: RefCell<Vec<Waiting>>,
     seq: RefCell<u64>,
+    /// Whether a hand-out of free units is already scheduled for the end of this instant.
+    dispatch_pending: Cell<bool>,
 }
 
 impl Pools {
@@ -4471,12 +4539,13 @@ impl Pools {
             units: RefCell::new(units),
             waiting: RefCell::new(Vec::new()),
             seq: RefCell::new(0),
+            dispatch_pending: Cell::new(false),
         }
     }
 
     /// Sets pool `p`'s units (a shift change). Units taken away that are busy finish their job
-    /// first; units added go to waiting entities at once.
-    fn set_units(&self, p: usize, n: u32) {
+    /// first; units added go to waiting entities at the end of this instant.
+    fn set_units(self: &Rc<Self>, p: usize, n: u32) {
         let now = self.ctx.now();
         let more = {
             let mut units = self.units.borrow_mut();
@@ -4494,7 +4563,7 @@ impl Pools {
             more
         };
         if more {
-            self.dispatch();
+            self.dispatch_later();
         }
     }
 
@@ -4553,11 +4622,9 @@ impl Pools {
         }
     }
 
-    /// Waits until units for `request` are free, then takes them.
-    async fn acquire(&self, request: &Rc<Request>) -> Taken {
-        if let Some(taken) = self.try_take(request) {
-            return taken;
-        }
+    /// Waits until units for `request` are free, then takes them. An entity asking joins the
+    /// queue at once, and takes units when the instant's hand-out runs ([`Pools::dispatch_later`]).
+    async fn acquire(self: &Rc<Self>, request: &Rc<Request>) -> Taken {
         let grant = Store::new(&self.ctx);
         let seq = {
             let mut s = self.seq.borrow_mut();
@@ -4580,12 +4647,13 @@ impl Pools {
                 },
             );
         }
+        self.dispatch_later();
         grant.get().await
     }
 
-    /// Gives back `taken`, then hands free units to waiting entities: in priority order, each
-    /// that can be served now (one that cannot does not hold back the others).
-    fn release(&self, taken: Taken) {
+    /// Gives back `taken`, then hands free units to waiting entities at the end of this
+    /// instant ([`Pools::dispatch_later`]).
+    fn release(self: &Rc<Self>, taken: Taken) {
         {
             let mut free = self.free.borrow_mut();
             for &(p, n) in &taken {
@@ -4595,7 +4663,27 @@ impl Pools {
             }
         }
         self.record(&taken, false);
-        self.dispatch();
+        self.dispatch_later();
+    }
+
+    /// Schedules the hand-out of free units for the end of this instant, behind every other
+    /// event at it ([`Ctx::hold_late`]). Units given back, entities that arrive and units that
+    /// come on shift at one instant all count before anyone is served, so what happens does not
+    /// depend on the order those events were scheduled in: the waiting entities, in priority
+    /// order and then of arrival, take the free units, each trying its alternatives in the order
+    /// of its task's needs (the first the free units can meet). So with two units of different
+    /// pools freed together and one entity waiting, it takes the unit of the pool its task lists
+    /// first, not the one whose job happened to end first.
+    fn dispatch_later(self: &Rc<Self>) {
+        if self.dispatch_pending.replace(true) {
+            return;
+        }
+        let (me, ctx) = (Rc::clone(self), self.ctx.clone());
+        self.ctx.spawn(async move {
+            ctx.hold_late(0.0).await;
+            me.dispatch_pending.set(false);
+            me.dispatch();
+        });
     }
 
     /// Hands free units to waiting entities: in priority order, each that can be served now
@@ -4773,7 +4861,9 @@ fn spawn_shared(
                     e.with_stats(|s| s.wait.add(now - entity.entered));
                     e.adjust(|s| &mut s.waiting, -1.0);
                     e.adjust(|s| &mut s.busy, 1.0);
-                    service.sample(&entity, &mut e.rng)
+                    // The pool that supplied the first unit of the take, in the order it was
+                    // filled, sets the time ([`stochcraft_model::ProcessingByResource`]).
+                    service.sample(&entity, taken.first().map(|t| t.0), &mut e.rng)
                 };
                 c.hold(duration).await;
                 env2.borrow().adjust(|s| &mut s.busy, -1.0);
@@ -5047,7 +5137,7 @@ fn spawn_delay(sim: &mut Sim, env: BlockEnv, duration: Rc<Times>) {
                 let mut e = env.borrow_mut();
                 e.adjust(|s| &mut s.waiting, -1.0);
                 e.adjust(|s| &mut s.busy, 1.0);
-                duration.sample(&entity, &mut e.rng)
+                duration.sample(&entity, None, &mut e.rng)
             };
             let (c, env2) = (ctx.clone(), Rc::clone(&env));
             ctx.spawn(async move {

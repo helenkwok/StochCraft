@@ -1452,3 +1452,8 @@ unit	yr	m.
 	One server fed by the gaps between zeros of the Riemann zeta function, beside Poisson arrivals at the same rate.	Vienas aptarnavimo punktas, kuriam atvykimus lemia tarpai tarp Riemanno dzeta funkcijos nulių, šalia Puasono atvykimų tokiu pat dažniu.
 	Do arrivals that avoid bunching make a shorter queue?	Ar atvykimai, vengiantys susigrūdimo, sukuria trumpesnę eilę?
 	Same average rate, half the wait: arrivals that repel one another bunch up less than random ones.	Tas pats vidutinis dažnis, perpus mažiau laukimo: vienas kitą stumiantys atvykimai grupuojasi rečiau nei atsitiktiniai.
+	Service time by resource	Aptarnavimo laikas pagal išteklį
+	Tick a pool to give its units a service time of their own. The other pools serve with the task's service time.	Pažymėkite grupę, kad jos vienetai turėtų savo aptarnavimo laiką. Kitos grupės aptarnauja užduoties aptarnavimo laiku.
+	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	Blokas {block} turi aptarnavimo laiką grupei „{pool}“, kurios modelyje nėra. Pašalinkite tą laiką arba pasirinkite esamą grupę.
+	{block} has two service times for the pool “{pool}”. Keep one.	Blokas {block} turi du aptarnavimo laikus grupei „{pool}“. Palikite vieną.
+	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	Blokas {block} turi aptarnavimo laiką grupei „{pool}“, kurios jam nereikia. Įtraukite grupę į jo poreikius arba pašalinkite tą laiką.

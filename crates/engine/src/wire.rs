@@ -10,12 +10,13 @@ use stochcraft_model::balance;
 use stochcraft_model::calendar::{Calendar, DateTime, Event, Rule};
 use stochcraft_model::capacity;
 use stochcraft_model::{
-    AfterJob, BalkJoin, BalkRow, Balking, Bounds, Breakdown, ByValue, Change, Connection,
-    ConveyorShape, Demand, DemandPer, Diagnostic, Dist, Element, ElementId, ElementKind, Estimate,
-    Experiment, Family, HealthCheck, LengthUnit, Mobility, Model, Need, Observation, Observed,
-    OnShiftEnd, OnTakeout, Patience, PatienceUntil, PlaceWhileOut, Power, ProcessingBy, Property,
-    PropertyType, PropertyValue, QueueLimit, ResourcePool, Routing, Scrap, Sequential,
-    SequentialMeasure, Setup, Severity, Stop, ThreePoint, TimeUnit, Timed, Transfer, Upper,
+    AfterJob, BalkJoin, BalkRow, Balking, Bounds, Breakdown, ByResource, ByValue, Change,
+    Connection, ConveyorShape, Demand, DemandPer, Diagnostic, Dist, Element, ElementId,
+    ElementKind, Estimate, Experiment, Family, HealthCheck, LengthUnit, Mobility, Model, Need,
+    Observation, Observed, OnShiftEnd, OnTakeout, Patience, PatienceUntil, PlaceWhileOut, Power,
+    ProcessingBy, ProcessingByResource, Property, PropertyType, PropertyValue, QueueLimit,
+    ResourcePool, Routing, Scrap, Sequential, SequentialMeasure, Setup, Severity, Stop, ThreePoint,
+    TimeUnit, Timed, Transfer, Upper,
 };
 use stochcraft_stats::split::{self, Split};
 
@@ -282,8 +283,10 @@ pub enum KindSpec {
     },
     /// A task whose units come from the model's shared resource pools (`resources`): each
     /// entity takes what the first of `needs` that can be met now asks for, holds it for its
-    /// service, then gives it back. When units come free, waiting entities across all tasks get
-    /// them by their task's `priority` (higher first), then by arrival.
+    /// service, then gives it back. At the end of each instant, once everything that happens at
+    /// it has happened, the free units go to the waiting entities across all tasks by their
+    /// task's `priority` (higher first), then by arrival, each taking the first of its `needs`
+    /// that the free units can meet.
     SharedTask {
         /// Time to serve one entity.
         #[serde(default = "exponential_1")]
@@ -292,6 +295,10 @@ pub enum KindSpec {
         /// product type), `service` applying to the others; left out when none.
         #[serde(default, skip_serializing_if = "Option::is_none")]
         processing_by: Option<ProcessingBySpec>,
+        /// Service times by the pool whose units serve the entity, ahead of `processing_by` and
+        /// `service`; left out when none.
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        processing_by_resource: Option<ProcessingByResourceSpec>,
         /// The alternatives, tried in order (BPSim `orResource`).
         needs: Vec<NeedSpec>,
         /// Who gets freed units first, higher first; left out, 0.
@@ -757,6 +764,61 @@ pub fn processing_by(spec: Option<ProcessingBySpec>) -> Option<ProcessingBy> {
     })
 }
 
+/// A shared task's service times by the pool whose units serve the entity (Banks's servers that
+/// differ in speed): an entity served by units of the pool `resource` of one of `by_resource`
+/// takes that `time`, ahead of the task's time by property and its own `service`. When a take
+/// spans pools, the pool that supplied the first unit, in the order the take was filled,
+/// counts.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
+pub struct ProcessingByResourceSpec {
+    /// One time per pool, each pool once and one the task needs.
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub by_resource: Vec<ByResourceSpec>,
+}
+
+/// The service time of entities served by units of pool `resource`.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
+pub struct ByResourceSpec {
+    /// The pool's id.
+    pub resource: String,
+    pub time: DistSpec,
+}
+
+impl From<&ProcessingByResource> for ProcessingByResourceSpec {
+    fn from(b: &ProcessingByResource) -> Self {
+        Self {
+            by_resource: b
+                .by_resource
+                .iter()
+                .map(|v| ByResourceSpec {
+                    resource: v.resource.to_string(),
+                    time: (&v.time).into(),
+                })
+                .collect(),
+        }
+    }
+}
+
+/// Service times by serving pool from their wire form. An entry that names no pool the model
+/// has, or one the task does not need, is kept; the model's check reports it.
+pub fn processing_by_resource(
+    spec: Option<ProcessingByResourceSpec>,
+) -> Option<ProcessingByResource> {
+    let s = spec?;
+    Some(ProcessingByResource {
+        by_resource: s
+            .by_resource
+            .into_iter()
+            .map(|v| ByResource {
+                resource: ElementId::unchecked(v.resource.trim()),
+                time: v.time.into(),
+            })
+            .collect(),
+    })
+}
+
 /// How a server's units fail: each unit, independently, after a time to failure since its last
 /// repair (busy or idle), then is repaired.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, JsonSchema)]
@@ -1141,11 +1203,13 @@ impl From<&ElementKind> for KindSpec {
             ElementKind::SharedTask {
                 service,
                 processing_by,
+                processing_by_resource,
                 needs,
                 priority,
             } => KindSpec::SharedTask {
                 service: service.into(),
                 processing_by: processing_by.as_ref().map(Into::into),
+                processing_by_resource: processing_by_resource.as_ref().map(Into::into),
                 needs: needs.iter().map(Into::into).collect(),
                 priority: *priority,
             },
@@ -1257,11 +1321,13 @@ impl From<KindSpec> for ElementKind {
             KindSpec::SharedTask {
                 service,
                 processing_by: by,
+                processing_by_resource: by_resource,
                 needs,
                 priority,
             } => ElementKind::SharedTask {
                 service: service.into(),
                 processing_by: processing_by(by),
+                processing_by_resource: processing_by_resource(by_resource),
                 needs: needs.into_iter().map(Into::into).collect(),
                 priority,
             },

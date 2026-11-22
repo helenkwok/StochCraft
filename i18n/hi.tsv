@@ -1452,3 +1452,8 @@ unit	yr	वर्ष
 	One server fed by the gaps between zeros of the Riemann zeta function, beside Poisson arrivals at the same rate.	एक सर्वर, जिसे रीमान ज़ेटा फलन के शून्यों के बीच के अंतरालों से आगमन मिलते हैं, उसी दर के पॉइसन आगमनों के साथ।
 	Do arrivals that avoid bunching make a shorter queue?	क्या गुच्छे बनने से बचने वाले आगमन छोटी कतार बनाते हैं?
 	Same average rate, half the wait: arrivals that repel one another bunch up less than random ones.	वही औसत दर, आधा इंतज़ार: एक-दूसरे को दूर धकेलने वाले आगमन यादृच्छिक आगमनों से कम गुच्छे बनाते हैं।
+	Service time by resource	संसाधन के अनुसार सेवा समय
+	Tick a pool to give its units a service time of their own. The other pools serve with the task's service time.	किसी पूल पर निशान लगाएँ ताकि उसकी इकाइयों का अपना सेवा समय हो। बाकी पूल कार्य के सेवा समय से सेवा देते हैं।
+	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	{block} में पूल “{pool}” के लिए एक सेवा समय है, जो मॉडल में नहीं है। वह समय हटाएँ, या कोई मौजूदा पूल चुनें।
+	{block} has two service times for the pool “{pool}”. Keep one.	{block} में पूल “{pool}” के लिए दो सेवा समय हैं। उनमें से एक ही रखें।
+	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	{block} में पूल “{pool}” के लिए एक सेवा समय है, जिसकी उसे ज़रूरत नहीं है। पूल को उसकी आवश्यकताओं में जोड़ें, या वह समय हटाएँ।

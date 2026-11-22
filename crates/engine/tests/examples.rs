@@ -23,6 +23,8 @@
 //!   balanced closed line with exponential times, and the best case for fixed times.
 //! - arrivals at the gaps between zeros of the Riemann zeta function against exact G/M/1 theory,
 //!   beside Poisson arrivals at the same rate (M/M/1).
+//! - Able and Baker, two servers that differ in speed behind one queue (a service time by
+//!   resource), against the exact long-run answer of their discrete-time Markov chain.
 //!
 //! The first five files were written by `stochcraft-cli new -t <name>`; the others were built with
 //! the same engine commands and saved, with their comparison scenarios (each inheriting the first)
@@ -1118,4 +1120,72 @@ fn arrivals_that_keep_their_distance_match_g_m_1() {
     let r = ok(&mut e, "run", json!({}));
     covers(&r, "server", "mean_wait", rho / (mu - lambda));
     covers(&r, "server", "utilisation", rho);
+}
+
+/// Able and Baker (Banks, Carson, Nelson and Nicol, Discrete-Event System Simulation, Example
+/// 2.2): customers come 1 to 4 minutes apart (probabilities 0.25, 0.40, 0.20, 0.15) and queue
+/// for two servers who differ in speed, one task that needs either of two pools. A customer
+/// who finds both free goes to Able, who serves in 2 to 5 minutes (0.30, 0.28, 0.25, 0.17);
+/// Baker serves in 3 to 6 (0.35, 0.25, 0.20, 0.20).
+///
+/// Every time is a whole number of minutes, so the system is a discrete-time Markov chain,
+/// solved exactly by `tools/able-baker/chain.py` (the same to six digits with the queue cut at
+/// 30 and at 50). At an instant, finished services free their servers, an arrival joins the
+/// queue, then the queue takes the free servers, Able before Baker: the engine hands units that
+/// come free together to the waiting entities, each trying its alternatives in the order of its
+/// task's needs, so this holds whichever job happened to end first. Its answer:
+///
+/// - Able busy 0.885383 and Baker busy 0.745157 of the time. This split is the discriminating
+///   check: it needs each server's own service time, where one time for both would leave them
+///   about equally busy;
+/// - a mean queue of 0.383956 and a mean wait of 0.863902 minutes, so that 39.13% of the
+///   customers wait 2.2078 minutes each.
+///
+/// Cross-check, without the chain: the arrival rate is each server's busy share over its mean
+/// service time, summed: 0.885383 / 3.29 + 0.745157 / 4.25 = 1 / 2.25.
+#[test]
+fn able_and_baker_match_their_markov_chain() {
+    let m = model_of("able-baker.bpmn", None);
+    let gap = interarrival(&m, "arrivals");
+    assert!((gap - 2.25).abs() < 1e-9, "{gap}");
+    let lambda = 1.0 / gap;
+    let by = match m.element(&ElementId::unchecked("service")).map(|e| &e.kind) {
+        Some(kind) => kind.processing_by_resource(),
+        None => None,
+    };
+    let times: Vec<(String, f64)> = by
+        .map(|b| {
+            b.by_resource
+                .iter()
+                .map(|r| (r.resource.to_string(), r.time.mean().unwrap_or(f64::NAN)))
+                .collect()
+        })
+        .unwrap_or_default();
+    let (able, baker) = (0.885_383, 0.745_157);
+    assert_eq!(times.len(), 2, "{times:?}");
+    assert_eq!(times[0].0, "able");
+    assert!((times[0].1 - 3.29).abs() < 1e-9, "{times:?}");
+    assert_eq!(times[1].0, "baker");
+    assert!((times[1].1 - 4.25).abs() < 1e-9, "{times:?}");
+    assert!(
+        (able / times[0].1 + baker / times[1].1 - lambda).abs() < 1e-5,
+        "the chain's busy shares do not carry the arrival rate"
+    );
+
+    let experiment = json!({ "replications": 20, "duration": 50_000.0 });
+    let mut e = open("able-baker.bpmn", experiment);
+    let r = ok(&mut e, "run", json!({}));
+    covers(&r, "able", "utilisation", able);
+    covers(&r, "baker", "utilisation", baker);
+    covers(&r, "service", "mean_queue_length", 0.383_956);
+    covers(&r, "service", "mean_wait", 0.863_902);
+    // Each customer is served once, by one of the two.
+    let served = |id: &str| result(&r, id, "entered").0;
+    let duration = 50_000.0;
+    assert!(
+        (served("able") + served("baker") - lambda * duration).abs() < 0.01 * lambda * duration,
+        "{} + {}",
+        served("able"),
+        served("baker")
+    );
 }

@@ -261,6 +261,127 @@ impl App {
         }
     }
 
+    /// A task with shared resources: a service time of its own for each pool it can draw on,
+    /// one row per pool in its needs (a need by role names every pool with those roles). A
+    /// ticked pool serves with its own time, before the task's time by property and its own
+    /// service time; an unticked one takes those.
+    pub(crate) fn by_resource_section(&mut self, ui: &mut egui::Ui, model: &Value, el: &Value) {
+        let id = el["id"].as_str().unwrap_or("").to_owned();
+        section(ui, t("Service time by resource"));
+        ui.label(theme::weak(
+            ui,
+            t("Tick a pool to give its units a service time of their own. The other pools serve with the task's service time."),
+        ));
+        let entries: Vec<Value> = el["processing_by_resource"]["by_resource"]
+            .as_array()
+            .cloned()
+            .unwrap_or_default();
+        // The pools the task can draw on, in the model's order, as (id, name), and any pool it
+        // has a time for that it no longer needs (a row to untick, since the model reports it).
+        let drawn = |pool: &Value| {
+            let pid = pool["id"].as_str().unwrap_or("");
+            entries.iter().any(|b| b["resource"].as_str() == Some(pid))
+                || el["needs"].as_array().into_iter().flatten().any(|n| {
+                    if let Some(roles) = n["roles"].as_array() {
+                        let have: Vec<&str> = pool["roles"]
+                            .as_array()
+                            .into_iter()
+                            .flatten()
+                            .filter_map(Value::as_str)
+                            .collect();
+                        roles
+                            .iter()
+                            .filter_map(Value::as_str)
+                            .all(|r| have.contains(&r))
+                    } else {
+                        n["resource"].as_str() == Some(pid)
+                    }
+                })
+        };
+        let mut pools: Vec<(String, String)> = model["resources"]
+            .as_array()
+            .into_iter()
+            .flatten()
+            .filter(|p| drawn(p))
+            .filter_map(|p| {
+                let pid = p["id"].as_str()?.to_owned();
+                let name = p["name"].as_str().filter(|n| !n.is_empty()).unwrap_or(&pid);
+                Some((pid.clone(), name.to_owned()))
+            })
+            .collect();
+        // A time for a pool the model does not have also gets a row, named by its id.
+        for b in &entries {
+            if let Some(rid) = b["resource"].as_str()
+                && !pools.iter().any(|(p, _)| p == rid)
+            {
+                pools.push((rid.to_owned(), rid.to_owned()));
+            }
+        }
+        let entry_of = |pid: &str| {
+            entries
+                .iter()
+                .position(|b| b["resource"].as_str() == Some(pid))
+        };
+        // Every toggle and time edit of this frame goes into one working list, found by pool id
+        // there, so a removal earlier in the frame does not move a later edit to another pool.
+        let mut work = entries.clone();
+        let place = |work: &[Value], pid: &str| {
+            work.iter()
+                .position(|b| b["resource"].as_str() == Some(pid))
+        };
+        let mut schema = params_schema("block.set");
+        schema["properties"]["service"]["description"] = Value::Null;
+        let unit = self.time_unit_label();
+        for (pid, name) in &pools {
+            let at = entry_of(pid);
+            let mut own = at.is_some();
+            ui.add_space(4.0);
+            if ui.checkbox(&mut own, name.as_str()).changed() {
+                match (place(&work, pid), own) {
+                    // The task's own time to start from, which the user then changes.
+                    (None, true) => work.push(json!({ "resource": pid, "time": el["service"] })),
+                    (Some(i), false) => {
+                        work.remove(i);
+                    }
+                    _ => {}
+                }
+            }
+            if let Some(i) = at {
+                let mut cx = form::Cx {
+                    time_unit: &unit,
+                    numbers: &self.numbers,
+                    drafts: &mut self.drafts,
+                    calendars: &[],
+                };
+                ui.indent((&id, "by_resource", pid), |ui| {
+                    if let Some(v) = form::field(
+                        ui,
+                        &mut cx,
+                        Schema::new(&schema),
+                        &format!("{id}/processing_by_resource/{pid}"),
+                        "service",
+                        &entries[i]["time"],
+                        true,
+                    ) && let Some(w) = place(&work, pid)
+                    {
+                        work[w]["time"] = v;
+                    }
+                });
+            }
+        }
+        if work != entries {
+            let value = if work.is_empty() {
+                Value::Null
+            } else {
+                json!({ "by_resource": work })
+            };
+            self.execute(
+                "block.set",
+                json!({ "id": id, "processing_by_resource": value }),
+            );
+        }
+    }
+
     /// Adds a task with shared resources (`params` are `block.add`'s), needing one unit of the
     /// first pool. With no pool yet, a new one is added with it, in one step that Undo takes
     /// back whole. The `block.add` result, or None with the error shown.

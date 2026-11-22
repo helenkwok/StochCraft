@@ -15,9 +15,9 @@ use crate::run::RunMode;
 use crate::wire::{
     self, AvailabilityDoc, BalkingSpec, BreakdownSpec, ConveyorShapeSpec, DemandSpec, DistSpec,
     EstimateDoc, EventDoc, FamilySpec, HealthCheckSpec, KindSpec, LengthUnitSpec, MobilityDoc,
-    ModelDoc, NeedSpec, OnShiftEndSpec, PatienceSpec, PowerSpec, ProcessingBySpec, PropertyDoc,
-    PropertyTypeSpec, PropertyValueSpec, QueueShiftDoc, RoutingSpec, ScrapSpec, SetupSpec,
-    ShiftDoc, Stamp, StopSpec, TimeUnitSpec, TimedDist,
+    ModelDoc, NeedSpec, OnShiftEndSpec, PatienceSpec, PowerSpec, ProcessingByResourceSpec,
+    ProcessingBySpec, PropertyDoc, PropertyTypeSpec, PropertyValueSpec, QueueShiftDoc, RoutingSpec,
+    ScrapSpec, SetupSpec, ShiftDoc, Stamp, StopSpec, TimeUnitSpec, TimedDist,
 };
 use crate::{CommandError, Engine, ErrorCode, HistoryEntry, JournalStart, StartKind, Undo};
 
@@ -126,7 +126,13 @@ fn check_keys(v: &Value, extra: &[&str]) -> Result<(), CommandError> {
             "on_shift_end",
         ],
         Some("sink") => &["scrap", "demand"],
-        Some("shared_task") => &["service", "processing_by", "needs", "priority"],
+        Some("shared_task") => &[
+            "service",
+            "processing_by",
+            "processing_by_resource",
+            "needs",
+            "priority",
+        ],
         Some("delay") => &["duration", "processing_by"],
         Some("exclusive_gateway") => &["default", "routing"],
         Some("batch") => &["size"],
@@ -371,6 +377,14 @@ pub struct BlockSet {
     #[serde(default, deserialize_with = "some")]
     #[schemars(with = "Option<ProcessingBySpec>")]
     pub processing_by: Option<Option<ProcessingBySpec>>,
+    /// Shared tasks: service times by the pool whose units serve the entity (servers that differ
+    /// in speed): `{by_resource: [{resource, time}]}`, each pool once and one of the task's
+    /// needs; an entity served by a pool with a time takes it, ahead of `processing_by` and
+    /// the task's own `service`. When a take spans pools, the pool that supplied its first unit
+    /// counts. `null` removes them.
+    #[serde(default, deserialize_with = "some")]
+    #[schemars(with = "Option<ProcessingByResourceSpec>")]
+    pub processing_by_resource: Option<Option<ProcessingByResourceSpec>>,
     /// Servers: a finite buffer, the most entities that wait for a unit (not counting those in
     /// service); 0 means no waiting room. While it is full, a server or delay sending here
     /// holds its finished entity (blocking after service), a gateway waits, and a source's
@@ -1457,6 +1471,7 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         ("capacity", p.capacity.is_some()),
         ("service", p.service.is_some()),
         ("processing_by", p.processing_by.is_some()),
+        ("processing_by_resource", p.processing_by_resource.is_some()),
         ("queue_capacity", p.queue_capacity.is_some()),
         (
             "queue_per_working_server",
@@ -1519,9 +1534,14 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
             "on_shift_end",
             "starting",
         ],
-        ElementKind::SharedTask { .. } => {
-            &["service", "processing_by", "needs", "priority", "starting"]
-        }
+        ElementKind::SharedTask { .. } => &[
+            "service",
+            "processing_by",
+            "processing_by_resource",
+            "needs",
+            "priority",
+            "starting",
+        ],
         ElementKind::Delay { .. } => &["duration", "processing_by", "starting"],
         ElementKind::ExclusiveGateway { .. } => &["default", "routing"],
         ElementKind::Batch { .. } => &["size", "starting"],
@@ -1553,6 +1573,11 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         && let Some(by) = kind.processing_by_mut()
     {
         *by = wire::processing_by(x);
+    }
+    if let Some(x) = p.processing_by_resource
+        && let Some(by) = kind.processing_by_resource_mut()
+    {
+        *by = wire::processing_by_resource(x);
     }
     match &mut kind {
         ElementKind::Source {

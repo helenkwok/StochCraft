@@ -211,6 +211,21 @@
       </stochcraft:processingTimeBy>
     </bpsim:VendorExtension>
 
+  stochcraft:processingTimeByResource, on a task's ElementParameters, for a task with shared
+  resources (a selection naming pools): processing times by the pool whose units serve the
+  token, for servers that differ in speed. A token served by units of the pool named by the
+  attribute resource of a stochcraft:time takes that time, a BPSim distribution or constant,
+  ahead of the task's stochcraft:processingTimeBy and its own TimeParameters/ProcessingTime;
+  a take that spans pools counts the pool that supplied its first unit. Each pool appears once
+  and is one the task needs.
+
+    <bpsim:VendorExtension name="stochcraft:processingTimeByResource" xmlns:stochcraft="…">
+      <stochcraft:processingTimeByResource>
+        <stochcraft:time resource="able"><bpsim:FloatingParameter value="2.5"/></stochcraft:time>
+        <stochcraft:time resource="baker"><bpsim:FloatingParameter value="4"/></stochcraft:time>
+      </stochcraft:processingTimeByResource>
+    </bpsim:VendorExtension>
+
   stochcraft:routing, on an exclusive gateway's ElementParameters, with the value shortestQueue
   (or standard, BPMN's own routing): each entity goes to the way with the fewest entities waiting
   or in transit among those with room, a tie to the way taken longest ago; while no way has
@@ -503,6 +518,21 @@
         </xs:element>
       </xs:sequence>
       <xs:attribute name="property" type="xs:string" use="required"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="processingTimeByResource">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="time" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:complexContent>
+              <xs:extension base="stochcraft:Value">
+                <xs:attribute name="resource" type="xs:string" use="required"/>
+              </xs:extension>
+            </xs:complexContent>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="power">

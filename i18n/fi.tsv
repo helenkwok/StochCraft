@@ -1452,3 +1452,8 @@ unit	yr	v
 	One server fed by the gaps between zeros of the Riemann zeta function, beside Poisson arrivals at the same rate.	Yksi palvelija, jolle saapumiset tulevat Riemannin zeetafunktion nollakohtien välien mukaan, rinnalla Poisson-saapumiset samalla tahdilla.
 	Do arrivals that avoid bunching make a shorter queue?	Tekevätkö kasautumista välttävät saapumiset lyhyemmän jonon?
 	Same average rate, half the wait: arrivals that repel one another bunch up less than random ones.	Sama keskimääräinen tahti, puolet lyhyempi odotus: toisiaan hylkivät saapumiset kasautuvat vähemmän kuin satunnaiset.
+	Service time by resource	Palveluaika resurssin mukaan
+	Tick a pool to give its units a service time of their own. The other pools serve with the task's service time.	Merkitse pooli, jos haluat antaa sen yksiköille oman palveluajan. Muut poolit palvelevat tehtävän palveluajalla.
+	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	Lohkolla {block} on palveluaika poolille ”{pool}”, jota mallissa ei ole. Poista tämä aika tai valitse olemassa oleva pooli.
+	{block} has two service times for the pool “{pool}”. Keep one.	Lohkolla {block} on kaksi palveluaikaa poolille ”{pool}”. Säilytä toinen.
+	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	Lohkolla {block} on palveluaika poolille ”{pool}”, jota se ei tarvitse. Lisää pooli sen tarpeisiin tai poista tämä aika.

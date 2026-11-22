@@ -1452,3 +1452,8 @@ unit	yr	j
 	One server fed by the gaps between zeros of the Riemann zeta function, beside Poisson arrivals at the same rate.	Eén loket, gevoed door de tussenpozen tussen de nulpunten van de Riemann-zetafunctie, naast Poisson-aankomsten met dezelfde intensiteit.
 	Do arrivals that avoid bunching make a shorter queue?	Geven aankomsten die klontering vermijden een kortere rij?
 	Same average rate, half the wait: arrivals that repel one another bunch up less than random ones.	Dezelfde gemiddelde intensiteit, de helft van de wachttijd: aankomsten die elkaar afstoten, klonteren minder samen dan willekeurige.
+	Service time by resource	Servicetijd per hulpbron
+	Tick a pool to give its units a service time of their own. The other pools serve with the task's service time.	Vink een pool aan om de eenheden ervan een eigen servicetijd te geven. De andere pools bedienen met de servicetijd van de taak.
+	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	{block} heeft een servicetijd voor de pool ‘{pool}’, die het model niet heeft. Verwijder die tijd of kies een bestaande pool.
+	{block} has two service times for the pool “{pool}”. Keep one.	{block} heeft twee servicetijden voor de pool ‘{pool}’. Houd er één van over.
+	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	{block} heeft een servicetijd voor de pool ‘{pool}’, die het niet nodig heeft. Voeg de pool toe aan de behoeften of verwijder die tijd.

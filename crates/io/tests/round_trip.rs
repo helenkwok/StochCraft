@@ -1743,6 +1743,145 @@ fn bad_processing_times_by_property_are_noted() {
     );
 }
 
+/// Two servers who differ in speed behind one queue: a task needing either of two pools, with a
+/// service time for each.
+fn able_and_baker() -> Model {
+    let mut m = Builder::new();
+    m.pool("able", 1, &[]);
+    m.pool("baker", 1, &[]);
+    let src = m.source("arrivals", Dist::Exponential { mean: 2.25 }, None);
+    let serve = m.shared_task(
+        "serve",
+        Dist::Constant(4.0),
+        ["able", "baker"]
+            .map(|id| Need::Resource {
+                id: stochcraft_model::ElementId::unchecked(id),
+                quantity: 1,
+            })
+            .to_vec(),
+        0.0,
+    );
+    m.processing_by_resource(
+        serve,
+        vec![
+            ("able", Dist::Constant(3.0)),
+            ("baker", Dist::Uniform { min: 3.0, max: 6.0 }),
+        ],
+    );
+    let out = m.sink("out");
+    m.connect(src, serve);
+    m.connect(serve, out);
+    m.build(Experiment::default())
+}
+
+/// A shared task's service times by serving pool are StochCraft's vendor extension: written next
+/// to the task's own, read back, changed and removed in place; a task whose resource is its own,
+/// or that has none, ignores them with a note.
+#[test]
+fn service_times_by_resource_are_written_saved_and_removed() {
+    let model = able_and_baker();
+    assert_eq!(model.validate(), vec![]);
+    let bytes = write_new(&model);
+    let text = String::from_utf8_lossy(&bytes);
+    assert!(
+        text.contains(r#"<bpsim:VendorExtension name="stochcraft:processingTimeByResource""#)
+            && text.contains("<stochcraft:processingTimeByResource>")
+            && text.contains(r#"<stochcraft:time resource="baker">"#),
+        "{text}"
+    );
+    assert_eq!(text.matches("<stochcraft:time resource=").count(), 2);
+    let Ok(loaded) = read(&bytes) else {
+        unreachable!()
+    };
+    assert!(loaded.notes.is_empty(), "{:#?}", loaded.notes);
+    assert_eq!(loaded.model, laid_out(model));
+
+    // Changed in the opened file: a new time for Able.
+    let mut edited = loaded.model.clone();
+    if let Some(Some(by)) = edited.elements[1].kind.processing_by_resource_mut() {
+        by.by_resource[0].time = Dist::Constant(2.5);
+    }
+    let saved = loaded.opened.save(&edited);
+    assert!(saved.is_ok(), "{saved:?}");
+    let Ok(saved) = saved else { return };
+    let back = read(&saved);
+    assert!(
+        back.as_ref().is_ok_and(|l| l.notes.is_empty()),
+        "{:?}",
+        back.as_ref().map(|l| &l.notes)
+    );
+    assert_eq!(back.map(|l| l.model).ok(), Some(edited.clone()));
+
+    // Removed: the extension goes from the file.
+    let mut removed = edited.clone();
+    if let Some(by) = removed.elements[1].kind.processing_by_resource_mut() {
+        *by = None;
+    }
+    let saved = loaded.opened.save(&removed);
+    assert!(saved.is_ok(), "{saved:?}");
+    let Ok(saved) = saved else { return };
+    assert!(
+        !String::from_utf8_lossy(&saved).contains("processingTimeByResource"),
+        "{}",
+        String::from_utf8_lossy(&saved)
+    );
+
+    // An old file, without them, reads exactly as before.
+    let Ok(old) = read(&write_new(&removed)) else {
+        unreachable!()
+    };
+    assert!(old.notes.is_empty(), "{:#?}", old.notes);
+    assert_eq!(old.model.elements[1].kind.processing_by_resource(), None);
+}
+
+/// Bad input is noted: a time without a resource, a resource twice; one for a pool the task does
+/// not need is read as it is and left for the model's check.
+#[test]
+fn bad_service_times_by_resource_are_noted() {
+    let bytes = write_new(&able_and_baker());
+    let read_with = |from: &str, to: &str| {
+        let text = String::from_utf8_lossy(&bytes).replacen(from, to, 1);
+        let Ok(loaded) = read(text.as_bytes()) else {
+            unreachable!()
+        };
+        loaded
+    };
+    let noted = |l: &stochcraft_io::Loaded, what: &str| {
+        assert!(
+            l.notes.iter().any(|n| n.message.contains(what)),
+            "{what}: {:?}",
+            l.notes
+        );
+    };
+    let l = read_with(r#"<stochcraft:time resource="able">"#, "<stochcraft:time>");
+    noted(&l, "needs a `resource`");
+    let l = read_with(
+        r#"<stochcraft:time resource="baker">"#,
+        r#"<stochcraft:time resource="able">"#,
+    );
+    noted(&l, "more than once");
+    assert_eq!(
+        l.model.elements[1]
+            .kind
+            .processing_by_resource()
+            .map(|b| b.by_resource.len()),
+        Some(1)
+    );
+    let l = read_with(
+        r#"<stochcraft:time resource="baker">"#,
+        r#"<stochcraft:time resource="nobody">"#,
+    );
+    assert!(l.notes.is_empty(), "{:?}", l.notes);
+    assert!(
+        l.model.validate().iter().any(|d| d.problem
+            == stochcraft_model::Problem::TimeForUnknownPool {
+                id: stochcraft_model::ElementId::unchecked("nobody")
+            }),
+        "{:?}",
+        l.model.validate()
+    );
+}
+
 /// A waiting room by timetable or per working server, and the way for entities turned away, are
 /// StochCraft's vendor extensions: written, read back, changed and removed in place.
 #[test]

@@ -140,6 +140,8 @@ pub enum Why {
     NoWayOut(ElementId),
     /// The times depend on a property of the entity, whose mix is not known before a run.
     ByProperty,
+    /// The service time depends on which pool serves, which is not known before a run.
+    ByResource,
     /// The setups depend on the order of the entities' types.
     Changeover,
     /// The time can be negative (cut to 0 in a run), or has no mean.
@@ -210,6 +212,7 @@ impl Why {
             Why::NoArrivalRate(_) => "no_arrival_rate",
             Why::NoWayOut(_) => "no_way_out",
             Why::ByProperty => "by_property",
+            Why::ByResource => "by_resource",
             Why::Changeover => "changeover",
             Why::NoMean => "no_mean",
             Why::Alternatives => "alternatives",
@@ -273,6 +276,7 @@ impl Why {
             ),
             Why::NoWayOut(id) => format!("{} is on a loop that sends every entity back", name(id)),
             Why::ByProperty => "the times depend on a property whose mix is not known".into(),
+            Why::ByResource => "the times depend on which pool serves, which is not known".into(),
             Why::Changeover => "the setups depend on the order of the types".into(),
             Why::NoMean => "the time has no mean, or can be negative".into(),
             Why::Alternatives => "which pool serves depends on the run".into(),
@@ -1573,6 +1577,12 @@ impl<'a> Net<'a> {
         if let Some(j) = self.held_up_by(i) {
             return Err(Why::HeldUp(self.element(j).id.clone()));
         }
+        // With service times by pool there is no single service time to put in a formula, and
+        // the task's own time is not the one its units take: no formula row (rather than a
+        // note beside a figure that would be wrong), and no averaging of the entries.
+        if self.element(i).kind.processing_by_resource().is_some() {
+            return Err(Why::ByResource);
+        }
         let lambda = rate.exact_value().ok_or(Why::Bounds)?;
         let s = service.exact_value().ok_or(Why::NoMean)?;
         if lambda * s >= f64::from(c) {
@@ -1757,6 +1767,16 @@ fn mean_service(e: &Element) -> Value {
     if let Some(by) = e.kind.processing_by() {
         bound = Bound::AtLeast;
         for v in &by.by_value {
+            least = match (least, mean_of(&v.time)) {
+                (Some(a), Some(b)) => Some(a.min(b)),
+                _ => None,
+            };
+        }
+    }
+    // Likewise with times by serving pool: the least of the entries too, never their average.
+    if let Some(by) = e.kind.processing_by_resource() {
+        bound = Bound::AtLeast;
+        for v in &by.by_resource {
             least = match (least, mean_of(&v.time)) {
                 (Some(a), Some(b)) => Some(a.min(b)),
                 _ => None,

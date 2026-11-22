@@ -668,6 +668,9 @@ pub fn deterministic(model: &Model) -> Model {
         if let Some(Some(by)) = e.kind.processing_by_mut() {
             by.by_value.iter_mut().for_each(|v| mean(&mut v.time));
         }
+        if let Some(Some(by)) = e.kind.processing_by_resource_mut() {
+            by.by_resource.iter_mut().for_each(|v| mean(&mut v.time));
+        }
     }
     m
 }

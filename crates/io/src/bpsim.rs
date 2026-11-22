@@ -71,6 +71,16 @@ pub const CHANGEOVER: &str = "stochcraft:changeover";
 /// token.
 pub const PROCESSING_TIME_BY: &str = "stochcraft:processingTimeBy";
 
+/// The vendor extension for a task with shared resources' service time by the pool whose units
+/// serve the entity (servers that differ in speed): a `stochcraft:processingTimeByResource`
+/// element holding any number of `stochcraft:time` elements, each with an attribute `resource`
+/// (the pool's id) and a BPSim distribution or constant, in the task's `ElementParameters`. An
+/// entity served by units of a pool that has a time takes it, ahead of the time by property and
+/// the task's own `TimeParameters/ProcessingTime`; a take that spans pools counts the pool
+/// that supplied its first unit. BPSim 2.0 has one processing time per task, for every token and
+/// every resource.
+pub const PROCESSING_TIME_BY_RESOURCE: &str = "stochcraft:processingTimeByResource";
+
 /// An exclusive gateway's routing rule: `stochcraft:routing` with the value `shortestQueue` on
 /// the gateway's `ElementParameters` sends each entity to the way with the shortest queue that
 /// has room.

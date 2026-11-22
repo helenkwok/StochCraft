@@ -580,6 +580,7 @@ fn a_pool_carries_its_tasks_load() {
             ElementKind::SharedTask {
                 service: Dist::exponential_rate(1.0 / mean),
                 processing_by: None,
+                processing_by_resource: None,
                 needs: vec![Need::Resource {
                     id: id("staff"),
                     quantity,
@@ -849,6 +850,7 @@ fn shared_task(i: &str, mean: f64) -> Element {
         ElementKind::SharedTask {
             service: Dist::exponential_rate(1.0 / mean),
             processing_by: None,
+            processing_by_resource: None,
             needs: vec![Need::Resource {
                 id: id("staff"),
                 quantity: 1,
@@ -856,6 +858,48 @@ fn shared_task(i: &str, mean: f64) -> Element {
             priority: 0.0,
         },
     )
+}
+
+/// With service times by pool there is no single service time: the task's mean service is at
+/// least the least of its own and the entries' (never their average), and no formula is given.
+#[test]
+fn service_times_by_pool_get_no_formula_and_a_lower_bound() {
+    let mut m = model(
+        vec![
+            source("in", Dist::exponential_rate(0.2)),
+            shared_task("a", 2.0),
+            sink("out"),
+        ],
+        vec![link("in", "a"), link("a", "out")],
+    );
+    m.resources = vec![ResourcePool::new(id("staff"), "Staff", 1, Vec::new())];
+    // Without entries the task alone on its pool has the M/M/1 formula.
+    let c = m.capacity(DEFAULT_TARGET);
+    assert_eq!(formula(row(&c, "a")).name, "M/M/1");
+    if let ElementKind::SharedTask {
+        processing_by_resource,
+        ..
+    } = &mut m.elements[1].kind
+    {
+        *processing_by_resource = Some(crate::ProcessingByResource {
+            by_resource: vec![crate::ByResource {
+                resource: id("staff"),
+                time: Dist::exponential_rate(1.0 / 0.5),
+            }],
+        });
+    }
+    let c = m.capacity(DEFAULT_TARGET);
+    let a = row(&c, "a");
+    assert!(
+        matches!(
+            a.mean_service,
+            Value::Known { value, bound: Bound::AtLeast } if near(value, 0.5)
+        ),
+        "{:?}",
+        a.mean_service
+    );
+    assert_eq!(reason(a), &Why::ByResource);
+    assert_eq!(Why::ByResource.code(), "by_resource");
 }
 
 #[test]
