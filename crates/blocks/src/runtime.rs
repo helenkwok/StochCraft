@@ -593,7 +593,7 @@ impl Compiled {
                 } => {
                     // The pools with an entry, by index in the model's resources (an entry for a
                     // pool the model lacks is refused by validation).
-                    let by_pool: Vec<(usize, Dist)> = processing_by_resource
+                    let by_pool: Vec<(usize, ElementId, Dist)> = processing_by_resource
                         .into_iter()
                         .flat_map(|x| x.by_resource)
                         .filter_map(|x| {
@@ -602,7 +602,7 @@ impl Compiled {
                                 .resources
                                 .iter()
                                 .position(|r| r.id == x.resource)?;
-                            Some((at, x.time))
+                            Some((at, x.resource, x.time))
                         })
                         .collect();
                     let service =
@@ -3515,12 +3515,13 @@ impl Times {
     }
 
     /// As [`Times::new`], with the entries of a shared task's times by pool: each a pool (its
-    /// index in the model's resources) and its time. An entry's stream is seeded from the task's
-    /// own with the entry's place in the list mixed in, so the entries do not draw alike.
+    /// index in the model's resources), its id and its time. An entry's stream is keyed by its
+    /// pool's id, not by its place in the list, so adding, removing or reordering one entry
+    /// leaves the other pools' draws as they were.
     fn with_pools(
         default: Dist,
         by: Option<stochcraft_model::ProcessingBy>,
-        by_pool: &[(usize, Dist)],
+        by_pool: &[(usize, ElementId, Dist)],
         slots: &[String],
         rng: &Rng,
     ) -> Rc<Self> {
@@ -3534,13 +3535,10 @@ impl Times {
         let seed = rng.clone().next_u64() ^ BY_RESOURCE_STREAM;
         let by_resource = by_pool
             .iter()
-            .enumerate()
-            .map(|(k, (pool, time))| ByResource {
+            .map(|(pool, id, time)| ByResource {
                 pool: *pool,
                 time: time.clone(),
-                rng: RefCell::new(Rng::new(
-                    seed.wrapping_add((k as u64 + 1).wrapping_mul(0x9e37_79b9_7f4a_7c15)),
-                )),
+                rng: RefCell::new(Rng::keyed(seed, &format!("by-resource/{}", id.as_str()))),
             })
             .collect();
         Rc::new(Self {

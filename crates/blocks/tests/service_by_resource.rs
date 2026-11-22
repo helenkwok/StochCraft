@@ -251,6 +251,42 @@ fn entries_no_entity_uses_change_nothing() {
     assert_eq!(without, with);
 }
 
+/// Each entry draws from a stream keyed by its pool, not by its place in the list. Main serves
+/// every customer (arrivals 100 apart, its times at most 2), with a time of its own; an entry for
+/// the spare, which never serves, added before or after main's, leaves main's times as they
+/// were.
+#[test]
+fn an_entrys_stream_does_not_depend_on_its_place_in_the_list() {
+    let run = |entries: &[&str]| {
+        let mut b = Builder::new();
+        b.pool("main", 1, &[]);
+        b.pool("spare", 1, &[]);
+        let src = b.source("in", Dist::Constant(100.0), None);
+        let t = b.shared_task(
+            "serve",
+            Dist::Exponential { mean: 1.0 },
+            vec![pool("main"), pool("spare")],
+            0.0,
+        );
+        let time = |id: &str| match id {
+            "main" => Dist::Uniform { min: 1.0, max: 2.0 },
+            _ => Dist::Exponential { mean: 0.5 },
+        };
+        b.processing_by_resource(t, entries.iter().map(|id| (*id, time(id))).collect());
+        let out = b.sink("out");
+        b.connect(src, t);
+        b.connect(t, out);
+        let r = b.run(Rng::new(7), 0.0, 1000.0);
+        let Ok(r) = r else { panic!("{r:?}") };
+        r
+    };
+    let alone = run(&["main"]);
+    assert_eq!(element(&alone, "spare").entered, 0, "{alone:?}");
+    assert!(element(&alone, "main").entered > 0, "{alone:?}");
+    assert_eq!(run(&["spare", "main"]), alone);
+    assert_eq!(run(&["main", "spare"]), alone);
+}
+
 /// An entry for a pool the model lacks, one the task does not need, and one pool twice are
 /// errors, never a silent fallback.
 #[test]
