@@ -604,9 +604,13 @@ the file the script opened or saved: those are refused), as a JSON object:
   from an opened XMILE file cannot vouch for its model and is refused unless `--force`.
 - `engine` names the build that wrote it (the version, the platform and, when the build was given
   `STOCHCRAFT_REVISION`, the source revision). A replay prints, on stderr, how many edits it
-  replayed and how many runs it made again, and whether this is the same build: runs are made
-  again, not compared with the original numbers, and only the same build is expected to give the
-  same ones.
+  replayed and how many runs it made again, and whether this is the same build (`build_match`:
+  `same` only when both ids carry the same source revision, `different` when the version, platform
+  or revision differ, `unknown` when a revision is missing, since one version on one platform can
+  be built from commits that sample differently): runs are made again, not compared with the
+  original numbers, and only the same build is expected to give the same ones. Release and Pages
+  builds are stamped with the commit they were built from; a local build is not, unless
+  `STOCHCRAFT_REVISION` is set.
 - `entries` are the commands in order, as `{"command", "params"}`. A script for `exec` is the same
   array on its own, and `exec` runs that in full.
 
