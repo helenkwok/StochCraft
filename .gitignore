@@ -6,3 +6,5 @@ target/
 /web-fonts/
 # Agent worktrees.
 /.claude/worktrees/
+# Lean build output and fetched packages (Mathlib).
+/formal/.lake/

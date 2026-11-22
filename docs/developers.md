@@ -555,6 +555,14 @@ targets, and Latin hypercube strata holding one value each. They are
 also checked against another BPSim simulator's published results for the BPSim car repair model. StochCraft runs
 about 54× faster than SimPy on an M/M/1 benchmark ([bench/](../bench/README.md)).
 
+The theory values themselves are checked too: [formal/](../formal/README.md) is a Lean 4 project
+with Mathlib that proves the formulas the tests compute (the Erlang B recurrence against its
+closed form, Erlang C in the tests' form and from Erlang B, the M/M/1 geometric distribution's
+sum, balance equations and means, Little's law on one sample path, and algebra about the
+Pollaczek–Khinchine mean wait). It proves the formulas, not the Rust code or the simulator; its
+README says what each theorem does and does not establish. A separate CI workflow
+(`.github/workflows/lean.yml`) builds it when `formal/` changes.
+
 ## Contributing
 
 See [CONTRIBUTING.md](../CONTRIBUTING.md) for the clean-room and licence rules.

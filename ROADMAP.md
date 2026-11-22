@@ -69,7 +69,10 @@ window on the flowchart canvas (M3.4).
    native, wasm32 and (later) wasm64, with any thread count. A golden-results test enforces it.
 4. **Validated against theory.** Every block that has an analytic counterpart ships with a test
    whose 95% confidence interval must cover it (M/M/1, M/M/c, M/M/1/K, Erlang loss, Jackson
-   networks). Blocks without one get exact deterministic tests.
+   networks). Blocks without one get exact deterministic tests. The formulas these tests compare
+   against (Erlang B and C, the M/M/1 means, Pollaczek–Khinchine, Little's law on a sample path)
+   are proved as algebra in Lean 4 with Mathlib ([formal/](formal/README.md)); the proofs cover
+   the formulas, not the simulator.
 5. **Layers stay shallow.** New crates get a row in `xtask/src/layers.rs` before code is written;
    the UI never reaches below the engine.
 6. **Clean room.** Behaviour comes from textbooks, papers and vendors' public documentation read
