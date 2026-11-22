@@ -805,7 +805,9 @@ impl App {
             vars.retain(|v| v["name"].as_str().is_some_and(|n| names.contains(n)));
         }
         let text = stochcraft_engine::sd::results_csv(&results);
-        let stale = self.sd_results_stale() && !self.sd_pending();
+        // Labelled while a run is on its way too: they stay the last run's until `sd_show` puts
+        // the new results on show.
+        let stale = self.sd_results_stale();
         Some(if stale {
             (
                 stochcraft_engine::wire::label_prior_run(&text, &results),

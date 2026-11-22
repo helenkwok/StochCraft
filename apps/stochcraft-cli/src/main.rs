@@ -382,15 +382,16 @@ fn open(engine: &mut Engine, file: &Path, scenario: Option<&str>) -> Result<Valu
     Ok(engine.execute("file.open", params)?)
 }
 
-/// Whether two paths are the same file (both exist, and are one after resolving links).
-fn same_file(a: &Path, b: &Path) -> bool {
-    matches!((std::fs::canonicalize(a), std::fs::canonicalize(b)), (Ok(x), Ok(y)) if x == y)
+/// Whether two paths are the same file: both exist, and are one after resolving links or are
+/// hard links to one file.
+fn is_same(a: &Path, b: &Path) -> bool {
+    same_file::is_same_file(a, b).unwrap_or(false)
 }
 
 /// Refuses an output file that is one of the files the command reads: it would replace its own
 /// input, and a command that fails part-way would leave the input gone.
 fn refuse_overwriting_input(out: Option<&Path>, inputs: &[&Path]) -> Result<(), Failure> {
-    match out.and_then(|o| inputs.iter().find(|i| same_file(o, i))) {
+    match out.and_then(|o| inputs.iter().find(|i| is_same(o, i))) {
         Some(i) => Err(Failure(format!(
             "the output file is the input {}: give another path for the output",
             i.display()
@@ -1046,6 +1047,8 @@ fn inputs(
     replace: bool,
     out: Option<&Path>,
 ) -> Result<u8, Failure> {
+    // `--out` writes the table of the model: not over the model.
+    refuse_overwriting_input(out, &[file])?;
     let mut engine = Engine::new();
     let opened = open(&mut engine, file, None)?;
     match import {
@@ -1209,13 +1212,16 @@ fn exec(
             Err(e) => return Err(e),
         }
     }
-    let ran = exec_steps(&mut engine, &script, all, force);
+    // Every file the steps open or save, not only the one open at the end.
+    let mut touched: Vec<PathBuf> = Vec::new();
+    let ran = exec_steps(&mut engine, &script, all, force, &mut touched);
     // The journal of what was done is written even when a step failed: it says how far it got.
     let written = journal_out.map(|out| {
-        // The script may have opened or saved another file than the one it was given: not that
-        // one either.
-        let opened: Vec<&Path> = engine.path().map(Path::new).into_iter().collect();
-        refuse_overwriting_input(Some(out), &opened)?;
+        // The script may have opened or saved other files than the one it was given: not those
+        // either, nor the one open at the end.
+        touched.extend(engine.path().map(PathBuf::from));
+        let touched: Vec<&Path> = touched.iter().map(PathBuf::as_path).collect();
+        refuse_overwriting_input(Some(out), &touched)?;
         let text = serde_json::to_string_pretty(&engine.journal_document()).unwrap_or_default();
         stochcraft_engine::write_atomically(out, (text + "\n").as_bytes())
             .map_err(|e| Failure(format!("cannot write {}: {e}", out.display())))
@@ -1225,7 +1231,13 @@ fn exec(
     Ok(code)
 }
 
-fn exec_steps(engine: &mut Engine, script: &Script, all: bool, force: bool) -> Result<u8, Failure> {
+fn exec_steps(
+    engine: &mut Engine,
+    script: &Script,
+    all: bool,
+    force: bool,
+    touched: &mut Vec<PathBuf>,
+) -> Result<u8, Failure> {
     // A bare script runs in full; a journal re-applies its edits unless `--all`.
     let (steps, mode) = match script {
         Script::Steps(steps) => (steps.as_slice(), ReplayMode::All),
@@ -1248,6 +1260,9 @@ fn exec_steps(engine: &mut Engine, script: &Script, all: bool, force: bool) -> R
                 json!({ "step": i, "command": step.command, "skipped": true })
             );
             continue;
+        }
+        if matches!(step.command.as_str(), "file.open" | "file.save") {
+            touched.extend(step.params["path"].as_str().map(PathBuf::from));
         }
         match engine.execute(&step.command, step.params.clone()) {
             Ok(result) => println!(

@@ -1202,3 +1202,69 @@ fn a_journal_is_never_written_over_the_model_or_the_script() {
     assert_eq!(o.status.code(), Some(1));
     assert!(json(&std::fs::read_to_string(&journal).unwrap_or_default())["entries"].is_array());
 }
+
+#[test]
+fn output_is_never_a_hard_link_to_the_model() {
+    let copy = scratch("hard-linked.bpmn");
+    let link = scratch("hard-linked-out.csv");
+    let _ = std::fs::remove_file(&link);
+    let _ = std::fs::copy(model("mm1.bpmn"), &copy);
+    let before = std::fs::read(&copy).unwrap_or_default();
+    std::fs::hard_link(&copy, &link).unwrap_or_else(|e| panic!("cannot link: {e}"));
+    let (path, out) = (copy.to_string_lossy(), link.to_string_lossy());
+    let o = cli(&[
+        "run", &path, "--reps", "1", "--format", "csv", "--out", &out,
+    ]);
+    assert_eq!(o.status.code(), Some(1), "{}", stdout(&o));
+    assert!(
+        stderr(&o).contains("the output file is the input"),
+        "{}",
+        stderr(&o)
+    );
+    assert_eq!(std::fs::read(&copy).unwrap_or_default(), before);
+    assert_eq!(std::fs::read(&link).unwrap_or_default(), before);
+}
+
+#[test]
+fn inputs_out_is_never_the_model() {
+    let copy = scratch("inputs-alias.bpmn");
+    let _ = std::fs::copy(model("mm1.bpmn"), &copy);
+    let before = std::fs::read(&copy).unwrap_or_default();
+    let path = copy.to_string_lossy().into_owned();
+    let o = cli(&["inputs", &path, "--out", &path]);
+    assert_eq!(o.status.code(), Some(1), "{}", stdout(&o));
+    assert!(
+        stderr(&o).contains("the output file is the input"),
+        "{}",
+        stderr(&o)
+    );
+    assert_eq!(std::fs::read(&copy).unwrap_or_default(), before);
+}
+
+#[test]
+fn a_journal_is_never_written_over_a_file_the_script_opened_earlier() {
+    let first = scratch("opened-first.bpmn");
+    let second = scratch("opened-second.bpmn");
+    let _ = std::fs::copy(model("mm1.bpmn"), &first);
+    let _ = std::fs::copy(model("mm1.bpmn"), &second);
+    let before = std::fs::read(&first).unwrap_or_default();
+    let steps: Vec<Value> = [&first, &second]
+        .iter()
+        .map(|p| serde_json::json!({ "command": "file.open", "params": { "path": p.to_string_lossy() } }))
+        .collect();
+    let script = scratch("opened-earlier.json");
+    let _ = std::fs::write(&script, Value::Array(steps).to_string());
+    let o = cli(&[
+        "exec",
+        &script.to_string_lossy(),
+        "--journal",
+        &first.to_string_lossy(),
+    ]);
+    assert_eq!(o.status.code(), Some(1), "{}", stdout(&o));
+    assert!(
+        stderr(&o).contains("the output file is the input"),
+        "{}",
+        stderr(&o)
+    );
+    assert_eq!(std::fs::read(&first).unwrap_or_default(), before);
+}
