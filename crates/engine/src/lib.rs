@@ -558,10 +558,7 @@ impl Engine {
             .enumerate()
             .map(|(index, step)| {
                 self.execute(&step.command, step.params.clone())
-                    .map(|result| {
-                        self.finish_started_run(&step.command);
-                        result
-                    })
+                    .inspect(|_| self.finish_started_run(&step.command))
                     .map_err(|error| ReplayError {
                         index,
                         command: step.command.clone(),
