@@ -3557,8 +3557,8 @@ published methods whose guarantees are stated in their papers, and uses few of t
 - **Decisions,** each one of:
   - a whole number in a range with a step: M2.8's `Field`s `capacity`, `quantity` and
     `queue_capacity`;
-  - a rule from a short list: a gateway's `routing` (as drawn, or shortest queue), a timetable's
-    `on_shift_end` (finish, retry, resume), a mobile pool's `after_job` (stay, go home);
+  - a rule from a short list: a gateway's `routing` (as drawn, or shortest queue), a task's
+    `on_shift_end` under its timetable (finish, retry, resume), a mobile pool's `after_job` (stay, go home);
   - a number in a range: a time distribution's `mean`, its shape kept (`Dist::scaled`);
   - the order of a source's job list (new in O3, below).
 - **Objective:** one result to minimise or maximise (an element's metric, or `stop_time`, the
@@ -3595,16 +3595,20 @@ published methods whose guarantees are stated in their papers, and uses few of t
   (D33).
   KN allows unequal variances and common random numbers, since it works on the variance of
   each pair's differences (as Tsai and Nelson restate it); common random numbers make those
-  variances smaller and the clean-up shorter. Rinott's two-stage procedure and OCBA assume
-  independent sampling, so they are not used. Industrial Strength COMPASS also cleans up (after
-  Boesel, Nelson and Kim), but proves its guarantee for independent sampling; KN does not need
-  that assumption.
+  variances smaller and the clean-up shorter. Rinott's two-stage procedure was derived for
+  independent sampling (E. J. Chen 2001 gives conditions under which it may be used with common
+  random numbers), and OCBA spends a fixed budget to make a correct selection likely without
+  guaranteeing a probability, so neither is the clean-up. Industrial Strength COMPASS also
+  cleans up (after Boesel, Nelson and Kim), but proves its guarantee for independent sampling;
+  KN does not need that assumption.
 - **What the answer claims.** "With 95% confidence, this design is the best, or within δ of the
   best, of the 7 designs compared at the end (312 tried)": the guarantee covers the finalists,
   not the whole space, and the answer says so. When the space is small enough for every design
   to go to the clean-up (by default up to 50 designs, if the budget allows), it says "of all 48
   designs". Beside it are the chosen design's objective with its interval, and the paired
-  difference against the starting design with its interval (`stats::difference::paired`).
+  difference against the starting design with its interval (`stats::difference::paired`). With
+  constraints, the error α is split between the feasibility check and KN (α/2 each by default,
+  by Bonferroni's inequality), so the stated confidence holds for both decisions together.
 - **When the budget runs out first:** "best found, not proven best", with the designs still in
   contention and their means. A design the feasibility check could not settle is listed as
   undecided, never as feasible.
@@ -3619,10 +3623,11 @@ published methods whose guarantees are stated in their papers, and uses few of t
 - **Small spaces (any kind):** every design, straight to the clean-up.
 - **Whole numbers: COMPASS** (Hong and Nelson 2006). Each step samples new designs from the most
   promising area, the designs closer to the current best than to any other visited design, and
-  adds replications to the designs that define that area. It converges to a local optimum with
-  probability 1, for terminating and steady-state runs. Industrial Strength COMPASS (Xu, Nelson
-  and Hong 2010) adds three things. It prunes visited designs that no longer define the area,
-  which is a small linear programme for each design. It tests local optimality when the area is a
+  adds replications to the visited designs by a simulation-allocation rule. It converges to a
+  local optimum with probability 1, for terminating and steady-state runs. Industrial Strength
+  COMPASS (Xu, Nelson and Hong 2010) adds three things. It prunes visited designs that no longer
+  define the area (a small linear programme for each design), so only those that do, the current
+  best and the new samples receive replications. It tests local optimality when the area is a
   single design: a comparison of that design, as the standard, with its neighbours (Kim 2003).
   And it ends with the clean-up. Instead of its niching genetic algorithm as a global phase,
   StochCraft starts COMPASS from the starting design and from a few Latin hypercube points
@@ -3698,7 +3703,8 @@ catalogs.
     theorem, so each desk is its own M/M/c). Each server costs 20 an hour and each customer
     waiting 50 an hour, from each desk's mean queue length. Erlang C then gives the optimum
     (14, 8), at 301.77 + 173.94 = 475.71 an hour, with (13, 8) at 481.48 and (14, 7) at 482.29.
-    The search runs over 11–40 servers at each desk (900 designs), from (11, 6), with δ = 2. In
+    The search runs over 11–40 servers at the first desk and 6–35 at the second (900 designs),
+    from (11, 6), with δ = 2. In
     at least 95 of 100 seeds it chooses (14, 8), or a design within 2 of it.
   - *A binding cap* of 21 servers: (13, 8) and (14, 7) are 0.80 apart, so with δ = 2 either is a
     correct answer, and the check accepts both.
@@ -3730,7 +3736,9 @@ catalogs.
     regression. By the recursion and enumeration of all 362,880 orders, the optimum is 64 with
     unlimited buffers (17 orders reach it, among them 7, 1, 2, 8, 3, 6, 4, 9, 5) and 67 with no
     buffers. 64 is the value their spreadsheet's evolutionary solver reports, 90% of the 72 that
-    the commercial optimiser found. The search must reach 64 and 67.
+    the commercial optimiser found. The search must reach 64 and 67. The journal's article page
+    states no licence, so the test types in the 72 processing times as data, with the citation
+    and a row in ATTRIBUTION.md, and nothing else from the paper is committed.
   - The table does not reproduce all of Kaczmar and Bányai's reported values. With unlimited
     buffers, the order 1–9 gives 78, as they report. Their "optimal" order 6, 1, 4, 5, 2, 3, 8,
     7, 9 gives 71, not 72, and the order 9–1 gives 76, not 80; with no buffers they give 79 and
@@ -3749,9 +3757,9 @@ catalogs.
     comparison Selmair and Monakhov use to show what streams shared by every consumer do.
   - *An M/M/1 server with arrivals at rate 1:* the decision is its mean service time s in
     [0.2, 0.9], and the objective its mean number inside (`mean_work_in_progress`, s / (1 − s))
-    plus 4 per unit of (1 − s), a faster machine costing more. The optimum is s = 0.5, with value
-    3, against 3.067 at 0.4 and 3.1 at 0.6. The search ends within 0.05 of 0.5 and within δ = 0.05
-    of 3.
+    plus a cost of −4 per unit of s (a slower machine is cheaper). The objective is
+    s / (1 − s) − 4s, with its least value −1 at s = 0.5, against −0.933 at 0.4 and −0.9 at 0.6.
+    The search ends within 0.05 of 0.5 and within δ = 0.05 of −1.
 - **O5 The window:** Analysis ▸ Find the best, with these parts:
   - *The setup:* the decisions picked from the model's tasks, pools, buffers, gateways and job
     lists, with ranges; the objective and its costs; constraints; δ with its suggestion; and the
@@ -3781,8 +3789,9 @@ catalogs.
 - **Pareto fronts of several noisy objectives:** costs, a cap and constraints express the
   trade-offs asked for so far; selecting a front needs its own theory, so it waits for a case
   that needs it.
-- **Rinott's procedure and OCBA:** both assume that the designs are sampled independently, which
-  would throw away common random numbers.
+- **Rinott's procedure and OCBA as the clean-up:** the first was derived for independent
+  sampling, and the second states no guaranteed probability of correct selection; KN has both
+  properties wanted here.
 - **Job shops, and sequence-dependent changeovers in the search:** later, on O3's job lists.
 - **Constraints on a share of replications** ("met in 70% of weeks", as `experiment.size` has):
   one replication's yes or no is far from normal. They come later, judged on batches of
@@ -3803,6 +3812,8 @@ catalogs.
 - Y. Rinott, "On two-stage selection procedures and related probability-inequalities",
   *Communications in Statistics – Theory and Methods* 7(8):799–811, 1978, doi
   10.1080/03610927808827671
+- E. J. Chen, "Using common random numbers for indifference-zone selection", Proc. Winter
+  Simulation Conference 2001: <https://informs-sim.org/wsc01papers/053.PDF>
 - B. L. Nelson, J. Swann, D. Goldsman, W. Song, "Simple procedures for selecting the best
   simulated system when the number of alternatives is large", *Operations Research*
   49(6):950–963, 2001, doi 10.1287/opre.49.6.950.10019 (screening, then selection)
@@ -4102,4 +4113,4 @@ and the Pages preview of an M3 pull request shows the blocks already merged.
 | D30 | Decision rules for routing and classification (M5.5) | **Settled (2026-11-19):** DMN decision tables, read from a `.dmn` file beside the BPMN, named from a business rule task, gateway or divert by a `stochcraft:` extension; first the hit policies UNIQUE, FIRST, PRIORITY and COLLECT and a small FEEL subset for input entries |
 | D31 | The parcel hub example's scope (M5.5) | **Recommended:** S's outbound segment first (its checks are the stronger), then B's inbound side; whole-hub figures only as labelled scale context, never as a check |
 | D32 | Job lists for job orders (M8, O3) | **Recommended:** a `stochcraft:jobs` vendor extension on a start event: an ordered list of jobs, each with an id, its property values and optionally a release time, released in that order (BPMN and BPSim have no ordered arrivals); each machine's time per job from M2.11's time by property value; each job's random times from a stream keyed by the job (`"job/<id>"`), so a new order changes when each job runs, never which times it draws. A file without the extension reads as today |
-| D33 | How M8 selects the best and states it (M8) | **Recommended:** Kim and Nelson's KN on fresh replications common to the finalists, with δ given by the user in the objective's unit; the claim names the designs it covers ("of the 7 compared at the end", or "of all 48"); "best found, not proven best" when the reserved budget runs out; no Rinott or OCBA, which assume independent sampling |
+| D33 | How M8 selects the best and states it (M8) | **Recommended:** Kim and Nelson's KN on fresh replications common to the finalists, with δ given by the user in the objective's unit; the claim names the designs it covers ("of the 7 compared at the end", or "of all 48"); "best found, not proven best" when the reserved budget runs out; neither Rinott's procedure (derived for independent sampling) nor OCBA (no guaranteed probability) as the clean-up |
