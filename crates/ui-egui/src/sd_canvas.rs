@@ -60,10 +60,11 @@ enum Drag {
     None,
     /// Moving a variable by `by` (diagram units).
     Move { name: String, by: Vec2 },
-    /// Drawing a flow from a stock (`from`), or from the point `start` (screen), to the pointer.
+    /// Drawing a flow from a stock (`from`), or from the point `start` (diagram units), to the
+    /// pointer (screen).
     Flow {
         from: Option<String>,
-        start: Pos2,
+        start: (f64, f64),
         to: Pos2,
     },
     /// Drawing a link from a variable to the pointer.
@@ -321,9 +322,19 @@ fn distance_to_segment(p: Pos2, a: Pos2, b: Pos2) -> f32 {
     p.distance(a + ab * t)
 }
 
+/// The radius of the blobs of a cloud at `zoom`.
+fn cloud_radius(zoom: f32) -> f32 {
+    (7.0 * zoom).clamp(4.0, 14.0)
+}
+
+/// How far a cloud reaches from its centre, outline included.
+fn cloud_reach(zoom: f32) -> f32 {
+    cloud_radius(zoom) * 1.9 + 1.5
+}
+
 /// A cloud (the end of a pipe that has no stock) at `at`.
 fn cloud(painter: &egui::Painter, at: Pos2, zoom: f32, p: &theme::Palette) {
-    let r = (7.0 * zoom).clamp(4.0, 14.0);
+    let r = cloud_radius(zoom);
     let blobs = [
         Vec2::new(-r * 0.9, r * 0.3),
         Vec2::new(0.0, -r * 0.5),
@@ -411,12 +422,18 @@ impl App {
             ("+".to_owned(), t("Zoom in"), 28.0),
             (t("Fit").to_owned(), t("Fit the diagram to the view"), 44.0),
         ];
-        let total: f32 = buttons.iter().map(|b| b.2 + 4.0).sum();
-        let mut x = rect.right() - 8.0 - total;
-        let y = rect.bottom() - 8.0 - 24.0;
-        for (i, (label, hint, w)) in buttons.into_iter().enumerate() {
+        // From the right: a button that would pass the diagram's left edge starts a row above.
+        let left = rect.left() + 8.0;
+        let mut right = rect.right() - 8.0;
+        let mut y = rect.bottom() - 8.0 - 24.0;
+        for (i, (label, hint, w)) in buttons.into_iter().enumerate().rev() {
+            if right - w < left && right < rect.right() - 8.0 {
+                right = rect.right() - 8.0;
+                y -= 28.0;
+            }
+            let x = (right - w).max(left);
             let r = Rect::from_min_size(Pos2::new(x, y), Vec2::new(w, 24.0));
-            x += w + 4.0;
+            right = x - 4.0;
             if ui
                 .put(
                     r,
@@ -441,7 +458,9 @@ impl App {
     fn sd_zoom_at(&mut self, factor: f32, at: Vec2) {
         let c = &mut self.sd_canvas;
         c.auto_fit = false;
-        let z = (c.zoom * factor).clamp(MIN_ZOOM, MAX_ZOOM);
+        // Below the floor (a fitted large model), zooming out stays put and zooming in starts from
+        // there.
+        let z = (c.zoom * factor).clamp(MIN_ZOOM.min(c.zoom), MAX_ZOOM.max(c.zoom));
         let f = z / c.zoom;
         c.offset = at - (at - c.offset) * f;
         c.zoom = z;
@@ -472,9 +491,7 @@ impl App {
         };
         let w = b.width() + 2.0 * MARGIN;
         let h = b.height() + 2.0 * MARGIN;
-        let zoom = (rect.width() / w)
-            .min(rect.height() / h)
-            .clamp(MIN_ZOOM, 1.0);
+        let zoom = (rect.width() / w).min(rect.height() / h).clamp(0.01, 1.0);
         let c = &mut self.sd_canvas;
         c.zoom = zoom;
         c.offset = rect.size() / 2.0 - b.center().to_vec2() * zoom;
@@ -508,13 +525,19 @@ impl App {
     }
 
     /// Adds a stock or an auxiliary with its shape centred on `at` (diagram units), and selects it.
-    fn sd_add(&mut self, kind: Kind, at: (f64, f64), vars: &[Var]) {
+    fn sd_add(&mut self, kind: Kind, at: (f64, f64)) {
+        // What was typed for the variable selected so far goes in first (it may be a rename that
+        // takes a name this would have used); if the engine refuses it, nothing is added and the
+        // panel keeps the refusal.
+        if !self.sd_flush_drafts() {
+            return;
+        }
         let base = if kind == Kind::Stock {
             "Stock"
         } else {
             "Auxiliary"
         };
-        let name = fresh_name(base, vars);
+        let name = fresh_name(base, &read(&self.sd_info()));
         let params = json!({
             "kind": kind.key(),
             "name": name,
@@ -525,8 +548,6 @@ impl App {
             "Added {kind}: {name}",
             &[("kind", kind_label(kind.key())), ("name", &name)],
         );
-        // What was typed for the variable selected so far goes in first.
-        self.sd_flush_drafts();
         if self.sd_apply("sd.variable.add", params, done) {
             self.sd_canvas.selected = Some(name);
             self.sd_canvas.tool = Tool::Select;
@@ -534,15 +555,39 @@ impl App {
     }
 
     /// Adds a flow from the stock `from` (or from the point `start`, a cloud) to the stock `to`
-    /// (or to the point `end`), and selects it. The valve is put on the way between them.
+    /// (or to the point `end`), and selects it. The valve is put on the way between them. A stock
+    /// that is named but not in the model is not drawn to a cloud instead: nothing is added.
     fn sd_add_flow(
         &mut self,
-        from: Option<&Var>,
+        from: Option<&str>,
         start: (f64, f64),
-        to: Option<&Var>,
+        to: Option<&str>,
         end: (f64, f64),
-        vars: &[Var],
     ) {
+        // A draft that renames the selected stock goes in first, and the names follow it.
+        let before = self.sd_canvas.selected.clone();
+        if !self.sd_flush_drafts() {
+            return;
+        }
+        let after = self.sd_canvas.selected.clone();
+        let current = |n: &str| match (&before, &after) {
+            (Some(b), Some(a)) if b == n => a.clone(),
+            _ => n.to_owned(),
+        };
+        let vars = read(&self.sd_info());
+        let find = |n: Option<&str>| -> Option<Option<Var>> {
+            match n {
+                None => Some(None),
+                Some(n) => {
+                    let n = current(n);
+                    vars.iter().find(|v| v.name == n).cloned().map(Some)
+                }
+            }
+        };
+        let (Some(from), Some(to)) = (find(from), find(to)) else {
+            return;
+        };
+        let (from, to) = (from.as_ref(), to.as_ref());
         if let (Some(a), Some(b)) = (from, to)
             && a.name == b.name
         {
@@ -557,7 +602,7 @@ impl App {
             (true, false) => (e.0 - 50.0, e.1),
             _ => (snap((s.0 + e.0) / 2.0), snap((s.1 + e.1) / 2.0)),
         };
-        let name = fresh_name("Flow", vars);
+        let name = fresh_name("Flow", &vars);
         let mut params = json!({
             "kind": "flow",
             "name": name,
@@ -574,8 +619,6 @@ impl App {
             "Added {kind}: {name}",
             &[("kind", kind_label("flow")), ("name", &name)],
         );
-        // What was typed for the variable selected so far goes in first.
-        self.sd_flush_drafts();
         if self.sd_apply("sd.variable.add", params, done) {
             self.sd_canvas.selected = Some(name);
             self.sd_canvas.tool = Tool::Select;
@@ -643,13 +686,22 @@ impl App {
     /// Commits what is typed in the side panel and not committed yet, as leaving the field would:
     /// called before the panel goes (another variable is selected, the Diagram tab is left), when
     /// the field would otherwise never see that it lost the keyboard.
-    pub(crate) fn sd_flush_drafts(&mut self) {
+    ///
+    /// Drafts of an earlier revision of the model (an external edit came between) are dropped, as
+    /// the next sync would, not committed over the change. False if the engine refused a draft:
+    /// the refusal is shown under its field, so the caller should leave the selection as it is.
+    pub(crate) fn sd_flush_drafts(&mut self) -> bool {
         let Some(name) = self.sd_canvas.selected.clone() else {
-            return;
+            return true;
         };
+        if self.sd_canvas.drafts_of != (Some(name.clone()), self.engine.revision()) {
+            self.sd_canvas.drafts.clear();
+            self.sd_canvas.refused = None;
+            return true;
+        }
         let info = self.sd_info();
         let Some(v) = read(&info).into_iter().find(|v| v.name == name) else {
-            return;
+            return true;
         };
         // The name last, so the other fields still find the variable by its old name.
         for key in ["equation", "units", "name"] {
@@ -663,8 +715,12 @@ impl App {
             };
             if text.trim() != current {
                 self.sd_commit(&name, key, text.trim().to_owned());
+                if self.sd_canvas.refused.is_some() {
+                    return false;
+                }
             }
         }
+        true
     }
 
     /// A text field of the side panel, labelled `label`: what it commits (on Enter or when it
@@ -953,12 +1009,22 @@ impl App {
 
         // Pipes, as two parallel lines, with an arrowhead where they enter a stock or a cloud.
         for v in vars.iter().filter(|v| v.kind == Kind::Flow && v.placed) {
-            let pts: Vec<Pos2> = v.pipe.iter().map(|q| view.pos(q.0, q.1)).collect();
+            let mut pts: Vec<Pos2> = v.pipe.iter().map(|q| view.pos(q.0, q.1)).collect();
             let (Some(&first), Some(&last)) = (pts.first(), pts.last()) else {
                 continue;
             };
             if pts.len() < 2 {
                 continue;
+            }
+            // A pipe into a cloud ends at the cloud's outline, so the arrowhead is not under it.
+            if v.sink.is_none()
+                && let [.., before, end] = pts.as_mut_slice()
+            {
+                let d = *end - *before;
+                let len = d.length();
+                if len > 1e-3 {
+                    *end -= d / len * cloud_reach(view.zoom).min(len * 0.5);
+                }
             }
             let colour = if on(v) { p.accent } else { p.text };
             let width = (7.0 * view.zoom).clamp(4.0, 12.0);
@@ -1127,7 +1193,7 @@ impl App {
                 Tool::Flow if v.kind == Kind::Stock => {
                     self.sd_canvas.drag = Drag::Flow {
                         from: Some(v.name.clone()),
-                        start: c,
+                        start: view.diagram(c),
                         to,
                     };
                 }
@@ -1148,11 +1214,21 @@ impl App {
                 .input(|i| i.pointer.press_origin())
                 .or(pointer)
                 .unwrap_or(rect.center());
+            // Kept in diagram units, so a zoom or pan during the drag leaves it where it was.
             self.sd_canvas.drag = Drag::Flow {
                 from: None,
-                start,
+                start: view.diagram(start),
                 to: pointer.unwrap_or(start),
             };
+        }
+        // A flow drag from a stock that is gone (renamed or removed meanwhile) is given up, not
+        // finished as a flow from a cloud.
+        if let Drag::Flow {
+            from: Some(name), ..
+        } = &self.sd_canvas.drag
+            && !at.contains_key(name.as_str())
+        {
+            self.sd_canvas.drag = Drag::None;
         }
         match &mut self.sd_canvas.drag {
             Drag::Move { by, .. } => *by += dragging / view.zoom,
@@ -1170,7 +1246,7 @@ impl App {
                 let a = from
                     .as_deref()
                     .and_then(|n| at.get(n))
-                    .map_or(*start, |&k| centre(&vars[k]));
+                    .map_or_else(|| view.pos(start.0, start.1), |&k| centre(&vars[k]));
                 painter.line_segment([a, *to], Stroke::new(3.0, p.accent));
                 arrowhead(&painter, *to, *to - a, p.accent, 9.0);
             }
@@ -1215,16 +1291,9 @@ impl App {
                         .iter()
                         .rev()
                         .find(|(k, r)| vars[*k].kind == Kind::Stock && r.contains(to))
-                        .map(|(k, _)| *k);
+                        .map(|(k, _)| vars[*k].name.as_str());
                     if rect.contains(to) {
-                        let source = from.as_deref().and_then(|n| at.get(n)).map(|&k| &vars[k]);
-                        self.sd_add_flow(
-                            source,
-                            view.diagram(start),
-                            target.map(|k| &vars[k]),
-                            view.diagram(to),
-                            &vars,
-                        );
+                        self.sd_add_flow(from.as_deref(), start, target, view.diagram(to));
                     }
                 }
                 Drag::None => {}
@@ -1237,8 +1306,8 @@ impl App {
             && let Some(pt) = bg.interact_pointer_pos()
         {
             match tool {
-                Tool::Stock => self.sd_add(Kind::Stock, view.diagram(pt), &vars),
-                Tool::Aux => self.sd_add(Kind::Aux, view.diagram(pt), &vars),
+                Tool::Stock => self.sd_add(Kind::Stock, view.diagram(pt)),
+                Tool::Aux => self.sd_add(Kind::Aux, view.diagram(pt)),
                 Tool::Select => {
                     let pipe = vars
                         .iter()
@@ -1269,7 +1338,7 @@ impl App {
             } else {
                 Kind::Aux
             };
-            self.sd_add(kind, view.diagram(rect.center()), &vars);
+            self.sd_add(kind, view.diagram(rect.center()));
         }
 
         self.sd_zoom_controls(ui, rect);

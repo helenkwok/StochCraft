@@ -158,15 +158,29 @@ fn a_dragged_stock_moves_with_one_command_and_undo_puts_it_back() {
     assert_eq!(h.state().status(), "Moved Customers");
     // The pipe of the flow that enters the stock follows it.
     let pipe = variable(&mut h, "adoption")["pipe"].clone();
-    let end = pipe
+    let last = pipe
         .as_array()
         .and_then(|p| p.last())
-        .and_then(|q| q[1].as_f64())
         .expect("the pipe's last point");
-    let top = after["y"].as_f64().expect("y") - after["height"].as_f64().expect("height") / 2.0;
+    let (ex, ey) = (
+        last[0].as_f64().expect("pipe x"),
+        last[1].as_f64().expect("pipe y"),
+    );
+    let (cx, cy) = (
+        after["x"].as_f64().expect("x"),
+        after["y"].as_f64().expect("y"),
+    );
+    let (hw, hh) = (
+        after["width"].as_f64().expect("width") / 2.0,
+        after["height"].as_f64().expect("height") / 2.0,
+    );
+    // The pipe ends on the stock's outline: on a side or on the top or bottom edge.
+    let tol = 1.0;
+    let on_side = ((ex - cx).abs() - hw).abs() <= tol && (ey - cy).abs() <= hh + tol;
+    let on_edge = ((ey - cy).abs() - hh).abs() <= tol && (ex - cx).abs() <= hw + tol;
     assert!(
-        end >= top,
-        "the pipe ends at {end}, above the stock at {top}"
+        on_side || on_edge,
+        "the pipe ends at ({ex}, {ey}), off the stock at ({cx}, {cy}) of {hw}x{hh} (half sizes)"
     );
 
     h.state_mut().undo();
@@ -373,4 +387,136 @@ fn an_equation_is_edited_in_the_side_panel_and_a_bad_one_is_refused_in_the_field
             })
             .collect::<Vec<_>>()
     );
+}
+
+/// Types `text` into the field labelled `label` without pressing Enter.
+fn type_without_enter(h: &mut Harness<'static, App>, label: &str, text: &str) {
+    h.get_by_role_and_label(Role::TextInput, label).click();
+    settle(h);
+    h.key_press_modifiers(Modifiers::COMMAND, egui::Key::A);
+    h.get_by_role_and_label(Role::TextInput, label)
+        .type_text(text);
+    settle(h);
+}
+
+#[test]
+fn a_new_stock_takes_a_name_after_a_pending_rename_is_committed() {
+    let mut h = diagram();
+    h.get_by_role_and_label(Role::Button, "Auxiliary innovation")
+        .focus();
+    settle(&mut h);
+    type_without_enter(&mut h, "Name", "Stock 1");
+    h.get_by_role_and_label(Role::Button, "Stock").click();
+    settle(&mut h);
+    let canvas = h.get_by_role_and_label(Role::Canvas, "Diagram").rect();
+    click_at(
+        &mut h,
+        Pos2::new(canvas.left() + 100.0, canvas.bottom() - 120.0),
+    );
+    assert_ne!(variable(&mut h, "Stock 1"), Value::Null);
+    assert_eq!(
+        variable(&mut h, "Stock 1")["kind"],
+        "aux",
+        "the renamed one"
+    );
+    assert_eq!(variable(&mut h, "Stock 2")["kind"], "stock");
+    assert_eq!(h.state().sd_selected(), Some("Stock 2"));
+}
+
+#[test]
+fn a_refused_pending_edit_keeps_the_selection_and_adds_nothing() {
+    let mut h = diagram();
+    h.get_by_role_and_label(Role::Button, "Auxiliary innovation")
+        .focus();
+    settle(&mut h);
+    let steps = undo_labels(&mut h).len();
+    type_without_enter(&mut h, "Equation", "no_such_name + 1");
+    h.get_by_role_and_label(Role::Button, "Stock").click();
+    settle(&mut h);
+    let canvas = h.get_by_role_and_label(Role::Canvas, "Diagram").rect();
+    click_at(
+        &mut h,
+        Pos2::new(canvas.left() + 100.0, canvas.bottom() - 120.0),
+    );
+    assert_eq!(variable(&mut h, "Stock 1"), Value::Null);
+    assert_eq!(undo_labels(&mut h).len(), steps);
+    assert_eq!(h.state().sd_selected(), Some("innovation"));
+    // The text and the refusal are still in the panel.
+    assert_eq!(variable(&mut h, "innovation")["equation"], "0.03");
+    h.get_by_role_and_label(Role::TextInput, "Equation");
+}
+
+#[test]
+fn a_draft_is_not_committed_over_an_external_edit() {
+    let mut h = diagram();
+    h.get_by_role_and_label(Role::Button, "Auxiliary innovation")
+        .focus();
+    settle(&mut h);
+    type_without_enter(&mut h, "Equation", "0.04");
+    h.state_mut()
+        .control(
+            "sd.variable.set",
+            json!({ "name": "innovation", "equation": "0.09" }),
+        )
+        .expect("an external edit");
+    h.get_by_role_and_label(Role::Tab, "Results").click();
+    settle(&mut h);
+    assert_eq!(variable(&mut h, "innovation")["equation"], "0.09");
+}
+
+#[test]
+fn a_flow_drag_from_a_stock_renamed_meanwhile_adds_nothing() {
+    let mut h = diagram();
+    h.get_by_role_and_label(Role::Button, "Flow").click();
+    settle(&mut h);
+    let r = shape(&h, "Stock Customers");
+    let canvas = h.get_by_role_and_label(Role::Canvas, "Diagram").rect();
+    let to = Pos2::new(canvas.left() + 80.0, canvas.bottom() - 60.0);
+    h.hover_at(r.center());
+    settle(&mut h);
+    h.drag_at(r.center());
+    h.run_steps(1);
+    h.hover_at(to);
+    h.run_steps(1);
+    h.state_mut()
+        .control(
+            "sd.variable.set",
+            json!({ "name": "Customers", "rename": "Clients" }),
+        )
+        .expect("a rename");
+    h.run_steps(2);
+    h.drop_at(to);
+    settle(&mut h);
+    assert_eq!(variable(&mut h, "Flow 1"), Value::Null);
+    assert_ne!(variable(&mut h, "Clients"), Value::Null);
+}
+
+/// A flow drawn from empty space to empty space, with a zoom about the pointer's end in between.
+fn cloud_flow(zoom: bool) -> Value {
+    let mut h = diagram();
+    h.get_by_role_and_label(Role::Button, "Flow").click();
+    settle(&mut h);
+    let canvas = h.get_by_role_and_label(Role::Canvas, "Diagram").rect();
+    let from = Pos2::new(canvas.left() + 60.0, canvas.bottom() - 60.0);
+    let to = Pos2::new(canvas.left() + 200.0, canvas.bottom() - 60.0);
+    h.hover_at(from);
+    settle(&mut h);
+    h.drag_at(from);
+    h.run_steps(1);
+    h.hover_at(to);
+    h.run_steps(1);
+    if zoom {
+        h.event(egui::Event::Zoom(1.5));
+        h.run_steps(2);
+    }
+    h.drop_at(to);
+    settle(&mut h);
+    variable(&mut h, "Flow 1")
+}
+
+#[test]
+fn a_zoom_during_a_flow_drag_leaves_the_cloud_where_it_was_pressed() {
+    let plain = cloud_flow(false);
+    assert_eq!(plain["kind"], "flow", "{plain}");
+    assert_eq!(cloud_flow(true), plain);
 }
