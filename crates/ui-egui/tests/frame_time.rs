@@ -45,6 +45,14 @@ const FRAMES_PER_BLOCK: usize = 15;
 /// After this long on one view, no further blocks are started (at least two always run).
 const VIEW_LIMIT: Duration = Duration::from_secs(40);
 
+/// The most each view's median frame may take with AccessKit on, in milliseconds: about three
+/// times what GitHub's Linux runners measured (canvas 57, 3D view 5.9, results 133 ms), so a
+/// slower runner passes and a change that makes frames several times slower does not.
+const BUDGETS: [(&str, u64); 3] = [("canvas", 180), ("3D view", 20), ("results", 400)];
+/// The most AccessKit on may take over off (median against median): it measured 1.15 to 1.34
+/// times. A ratio holds across machines better than a time does.
+const ACCESSKIT_RATIO: f64 = 1.75;
+
 /// The engine commands for the model: 1,000 blocks and their connections, placed on a grid.
 fn large_model() -> Value {
     let mut commands = Vec::new();
@@ -333,10 +341,30 @@ fn frames_of_a_large_model_stay_within_budget() {
     let results = time_view(&mut h);
     medians.push(("results", summarise("results", &results)));
 
+    let mut over = Vec::new();
     for (view, (off, on)) in medians {
         assert!(
             off > Duration::ZERO && on > Duration::ZERO,
             "{view}: no time"
         );
+        let budget = BUDGETS
+            .iter()
+            .find(|b| b.0 == view)
+            .map(|b| Duration::from_millis(b.1))
+            .unwrap_or_default();
+        if on > budget {
+            over.push(format!(
+                "{view}: median frame with AccessKit on {:.1} ms, over its budget of {:.0} ms",
+                ms(on),
+                ms(budget)
+            ));
+        }
+        let ratio = on.as_secs_f64() / off.as_secs_f64();
+        if ratio > ACCESSKIT_RATIO {
+            over.push(format!(
+                "{view}: AccessKit on takes {ratio:.2} times as long as off, over {ACCESSKIT_RATIO}"
+            ));
+        }
     }
+    assert!(over.is_empty(), "{}", over.join("\n"));
 }

@@ -27,6 +27,31 @@ In the browser, runs use a web worker for each core but one (up to 16), and the 
 installed and used offline. Every pull request gets a preview build, linked from the pull
 request.
 
+#### Frame time, idle frames and widget ids
+
+The window is immediate-mode: it lays everything out again each frame and, with AccessKit on,
+builds the accessibility tree each frame for the platform adapter to compare with the last. Three
+checks keep that in hand:
+
+- `crates/ui-egui/tests/frame_time.rs` opens a model of 1,000 blocks and times frames on the
+  canvas, in the 3D view and on the results page, with AccessKit off and on in alternating blocks
+  (the app's pass and tessellation, plus the tree update handed to an `accesskit_consumer` tree;
+  no GPU). It fails when a median frame with AccessKit on exceeds its view's budget (about three
+  times the time on GitHub's Linux runners: canvas 180 ms, 3D view 20 ms, results 400 ms) or when
+  AccessKit on takes more than 1.75 times as long as off. Timings need release, so the test is
+  `#[ignore]`d and runs in CI's heavy job, which prints the numbers in its log and job summary.
+  Locally:
+
+  ```bash
+  cargo test --release -p stochcraft-ui-egui --test frame_time -- --ignored --nocapture
+  ```
+
+- `crates/ui-egui/tests/frames.rs` checks that the start page, the canvas, the 3D view and the
+  results of a finished run settle and then ask for no further frames, and that an error
+  appearing under a field leaves the other fields' AccessKit ids, and the keyboard, where they
+  were. A field drawn after something that comes and goes needs an id of its own (`id_salt`), or
+  the changing part goes in a container that is always there.
+
 #### How the site is published
 
 `.github/workflows/pages.yml` builds the browser app and keeps the site folder as an Actions artifact
