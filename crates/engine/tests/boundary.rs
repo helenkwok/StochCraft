@@ -285,5 +285,7 @@ fn a_prior_run_csv_says_so_on_every_row() {
             "{row}"
         );
         assert!(row.contains(&format!(",{digest},7,3,")), "{row}");
+        // A discrete-event run has no integration settings to report.
+        assert!(!row.contains("method="), "{row}");
     }
 }

@@ -627,6 +627,10 @@ fn a_table_exported_while_a_run_is_pending_is_labelled_a_prior_run() {
             row.contains("prior run: the model has changed since"),
             "{row}"
         );
+        // The run's numerical settings go with it: the integration method and its steps.
+        for key in ["method=", "dt=", "save_step="] {
+            assert!(row.contains(key), "{key} in {row}");
+        }
     }
 
     // Once the run is made its results are the current ones, and the export is unlabelled.

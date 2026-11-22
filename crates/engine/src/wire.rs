@@ -2927,6 +2927,9 @@ pub fn label_prior_run(csv: &str, results: &Value) -> String {
         "stop",
         "time_unit",
         "sampling",
+        "method",
+        "dt",
+        "save_step",
     ]
     .iter()
     .filter(|k| !setting(k).is_null())
