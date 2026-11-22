@@ -499,6 +499,10 @@ pub const TEMPLATES: &[(&str, &str)] = &[
         "The stop condition waits for {block} to empty, but only a task can empty. Choose a task.",
     ),
     (
+        "bad_observation",
+        "Observed data is given for a block that does not exist, so there is no result to check it against. Remove it, or choose a block that exists.",
+    ),
+    (
         "bad_starting_missing",
         "Entities inside at the start are given for a block that does not exist. Remove them.",
     ),
@@ -1138,6 +1142,7 @@ impl Diagnostic {
                 StopFault::ZeroCount => part("bad_stop_count", vec![b()]),
                 StopFault::NotATask => part("bad_stop_empty", vec![b()]),
             },
+            Problem::BadObservation => part("bad_observation", vec![]),
             Problem::BadStarting { reason } => match reason {
                 StartingFault::NoSuchBlock => part("bad_starting_missing", vec![]),
                 StartingFault::CannotHold => part("bad_starting_kind", vec![b()]),

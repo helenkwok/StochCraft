@@ -1396,6 +1396,32 @@ unit	yr	m.
 	Replace the XMILE file?	Pakeisti XMILE failą?
 	Save As writes a new file and keeps {file} as it is. Replacing {file} leaves out what StochCraft does not keep.	Įrašyti kaip sukuria naują failą ir palieka {file} nepakeistą. Pakeitus {file}, praleidžiama tai, ko StochCraft nesaugo.
 	Replace	Pakeisti
+	Observed data	Stebėti duomenys
+	Real measurements to check the results against: the value seen in the real system, or a bound the result must meet.	Tikri matavimai, su kuriais tikrinami rezultatai: realioje sistemoje matyta reikšmė arba riba, kurią rezultatas turi atitikti.
+	Add an observed value	Pridėti stebėtą reikšmę
+	Observed value	Stebėta reikšmė
+	Checked as	Tikrinama kaip
+	Its 95% half-width	Jos 95 % pusplotis
+	Add Observed Value	Pridėti stebėtą reikšmę
+	Change Observed Value	Keisti stebėtą reikšmę
+	Remove Observed Value	Šalinti stebėtą reikšmę
+	Checked against observed data	Palyginta su stebėtais duomenimis
+	{result} ({block}): observed {observed}, simulated {simulated}.	{result} ({block}): stebėta {observed}, imituota {simulated}.
+	{result} ({block}): must be at most {bound}, simulated {simulated}.	{result} ({block}): turi būti ne daugiau kaip {bound}, imituota {simulated}.
+	{result} ({block}): must be at least {bound}, simulated {simulated}.	{result} ({block}): turi būti ne mažiau kaip {bound}, imituota {simulated}.
+	Simulated minus observed: {difference}.	Imituota minus stebėta: {difference}.
+	Agrees	Sutampa
+	Differs	Skiriasi
+	Passes	Tenkina
+	Fails	Netenkina
+	Can't tell yet: more runs would decide	Dar negalima pasakyti: daugiau vykdymų leistų nuspręsti
+	No result	Rezultato nėra
+	Observed data is given for a block that does not exist, so there is no result to check it against. Remove it, or choose a block that exists.	Stebėti duomenys nurodyti blokui, kurio nėra, todėl nėra rezultato, su kuriuo juos būtų galima palyginti. Pašalinkite juos arba pasirinkite esamą bloką.
 	The estimated chance that {output} is more than {value} is {percent}.	Numatoma tikimybė, kad {output} yra didesnis nei {value}, yra {percent}.
 	The estimated chance that {output} is less than {value} is {percent}.	Numatoma tikimybė, kad {output} yra mažesnis nei {value}, yra {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	Jų intervalas neturi pločio, o jokio įverčio taip nebūna, todėl lieka įprastas rezultatas.
+	Inconclusive at current precision	Esamu tikslumu neįrodoma
+	No difference detected	Skirtumo neaptikta
+	Agrees within ±{tolerance}	Sutampa ±{tolerance} ribose
+	This is not evidence of agreement: set a tolerance to test for it.	Tai nėra sutapimo įrodymas: nustatykite leidžiamąją paklaidą, kad tai patikrintumėte.
+	Tolerance (0 for none)	Leidžiamoji paklaida (0 – jokios)

@@ -1396,6 +1396,32 @@ unit	yr	a
 	Replace the XMILE file?	Substituír o ficheiro XMILE?
 	Save As writes a new file and keeps {file} as it is. Replacing {file} leaves out what StochCraft does not keep.	Gardar como escribe un ficheiro novo e deixa {file} tal como está. Substituír {file} omite o que StochCraft non conserva.
 	Replace	Substituír
+	Observed data	Datos observados
+	Real measurements to check the results against: the value seen in the real system, or a bound the result must meet.	Medicións reais coas que comprobar os resultados: o valor visto no sistema real, ou un límite que o resultado debe cumprir.
+	Add an observed value	Engadir un valor observado
+	Observed value	Valor observado
+	Checked as	Comprobado como
+	Its 95% half-width	A súa semiamplitude ao 95 %
+	Add Observed Value	Engadir valor observado
+	Change Observed Value	Cambiar valor observado
+	Remove Observed Value	Eliminar valor observado
+	Checked against observed data	Comprobado cos datos observados
+	{result} ({block}): observed {observed}, simulated {simulated}.	{result} ({block}): observado {observed}, simulado {simulated}.
+	{result} ({block}): must be at most {bound}, simulated {simulated}.	{result} ({block}): debe ser como máximo {bound}, simulado {simulated}.
+	{result} ({block}): must be at least {bound}, simulated {simulated}.	{result} ({block}): debe ser polo menos {bound}, simulado {simulated}.
+	Simulated minus observed: {difference}.	Simulado menos observado: {difference}.
+	Agrees	Coincide
+	Differs	Difire
+	Passes	Cumpre
+	Fails	Non cumpre
+	Can't tell yet: more runs would decide	Aínda non se pode decidir: máis execucións decidiríano
+	No result	Sen resultado
+	Observed data is given for a block that does not exist, so there is no result to check it against. Remove it, or choose a block that exists.	Deuse datos observados para un bloque que non existe, así que non hai ningún resultado co que comprobalos. Elimínaos ou escolle un bloque que exista.
 	The estimated chance that {output} is more than {value} is {percent}.	A probabilidade estimada de que {output} sexa maior que {value} é {percent}.
 	The estimated chance that {output} is less than {value} is {percent}.	A probabilidade estimada de que {output} sexa menor que {value} é {percent}.
 	Their interval has no width, which no estimate has, so the plain result stands.	O seu intervalo non ten anchura, algo que ningunha estimación ten, polo que se mantén o resultado simple.
+	Inconclusive at current precision	Non concluínte coa precisión actual
+	No difference detected	Non se detecta diferenza
+	Agrees within ±{tolerance}	Coincide dentro de ±{tolerance}
+	This is not evidence of agreement: set a tolerance to test for it.	Isto non é proba de coincidencia: fixa unha tolerancia para comprobalo.
+	Tolerance (0 for none)	Tolerancia (0 para ningunha)

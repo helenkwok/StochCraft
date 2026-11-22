@@ -441,6 +441,7 @@ fn samples() -> Vec<Diagnostic> {
                 reason: StopFault::NotATask,
             },
         ),
+        found(Some("ghost"), Problem::BadObservation),
         found(
             Some("ghost"),
             Problem::BadStarting {
@@ -576,6 +577,7 @@ const NO_BLOCK_NAME: &[&str] = &[
     "invalid_id",
     "duplicate_id",
     "bad_stop_missing",
+    "bad_observation",
     "bad_starting_missing",
     "no_source",
     "no_sink",
