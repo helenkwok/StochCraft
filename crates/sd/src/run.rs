@@ -832,179 +832,283 @@ fn aggregate(p: &Program, runs: &[Run], saved: usize) -> Vec<Series> {
         .collect()
 }
 
-/// The saved times, the series and the warnings of replications run.
-type RunAll = (Vec<f64>, Vec<Series>, BTreeSet<String>);
-
-fn run_all(
-    p: &Program,
+/// What one pass of replications makes: the step it is made at and the steps and saving of each.
+#[derive(Debug, Clone, Copy)]
+struct Plan {
     dt: f64,
     steps: u64,
     save_every: u64,
+}
+
+/// A run made a few replications at a time, so a window can draw between them and a long run
+/// never holds up the page: [`SdJob::new`] checks the run as [`run`] does, each
+/// [`SdJob::step`] makes some replications, [`SdJob::progress`] says how far it has got and
+/// [`SdJob::finish`] gives the results. [`run`] is the same job with every replication made at
+/// once, so the results are the same however the replications are spread over steps: each one's
+/// streams are keyed by the seed and its number alone.
+///
+/// The job is stepped by whole replications; one replication is not interrupted, so a single
+/// huge one (a model run once, or a very long run) is made in one step.
+pub struct SdJob {
+    program: Program,
+    opts: RunOptions,
+    plan: Plan,
+    /// The plan of the halved-step check, and its runs.
+    half: Option<Plan>,
     reps: u64,
-    seed: u64,
-) -> Result<RunAll, SdError> {
-    let mut runs = Vec::new();
-    for r in 0..reps {
-        runs.push(simulate(
-            p,
-            dt,
-            steps,
-            save_every,
-            replication_base(seed, r),
-        )?);
+    warnings: BTreeSet<String>,
+    runs: Vec<Run>,
+    half_runs: Vec<Run>,
+}
+
+impl SdJob {
+    /// Checks the run `opts` asks of `p`, with the same refusals as [`run`], and gets it ready
+    /// without making any replication.
+    pub fn new(p: &Program, opts: &RunOptions) -> Result<Self, SdError> {
+        let dt = opts.dt.unwrap_or(p.dt);
+        if !(dt.is_finite() && dt > 0.0) {
+            return Err(run_err(format!(
+                "the time step must be above 0 (it is {dt})"
+            )));
+        }
+        let (steps, length_note) = step_count(p, dt)?;
+        let reps = if p.is_random() {
+            let r = opts.replications.unwrap_or(DEFAULT_REPLICATIONS);
+            if r == 0 || r > MAX_REPLICATIONS {
+                return Err(run_err(format!(
+                    "replications must be from 1 to {MAX_REPLICATIONS} (it is {r})"
+                )));
+            }
+            r
+        } else {
+            1
+        };
+        if steps.saturating_mul(reps) > MAX_WORK {
+            return Err(run_err(format!(
+                "{reps} replications of {steps} steps is more than the limit of {MAX_WORK} steps: lower one of them"
+            )));
+        }
+        let save_step = p.save_step.unwrap_or(p.dt);
+        let every = (save_step / dt).round();
+        let save_every = if every >= 1.0 { every as u64 } else { 1 };
+        let saved = steps / save_every + 2;
+        if saved
+            .saturating_mul(p.vars.len() as u64)
+            .saturating_mul(reps)
+            > MAX_RECORDED
+        {
+            return Err(run_err(
+                "the results would be too large: raise the save step or lower the replications"
+                    .to_owned(),
+            ));
+        }
+        let mut warnings: BTreeSet<String> = p.warnings.iter().cloned().collect();
+        warnings.extend(length_note);
+        if ((save_step / dt) - every).abs() > 1e-6 || every < 1.0 {
+            warnings.insert(format!(
+                "the save step {save_step} is not a whole number of time steps of {dt}: results are saved every {} instead",
+                save_every as f64 * dt
+            ));
+        }
+        if !p.is_random() && opts.replications.is_some_and(|r| r > 1) {
+            warnings.insert(
+                "the model has no random function, so it was run once, not in replications"
+                    .to_owned(),
+            );
+        }
+        let half = if opts.dt_check {
+            let half_dt = dt / 2.0;
+            let (half_steps, _) = step_count(p, half_dt)?;
+            Some(Plan {
+                dt: half_dt,
+                steps: half_steps,
+                save_every: save_every * 2,
+            })
+        } else {
+            None
+        };
+        Ok(Self {
+            program: p.clone(),
+            opts: opts.clone(),
+            plan: Plan {
+                dt,
+                steps,
+                save_every,
+            },
+            half,
+            reps,
+            warnings,
+            runs: Vec::new(),
+            half_runs: Vec::new(),
+        })
     }
+
+    /// Replications made, and replications to make (those of the halved-step check included).
+    pub fn progress(&self) -> (u64, u64) {
+        let each = if self.half.is_some() { 2 } else { 1 };
+        (
+            (self.runs.len() + self.half_runs.len()) as u64,
+            self.reps * each,
+        )
+    }
+
+    /// Whether every replication is made.
+    pub fn is_done(&self) -> bool {
+        let (done, total) = self.progress();
+        done >= total
+    }
+
+    /// Makes up to `replications` (at least one) of the replications still to make. Stops at the
+    /// first error, which the job keeps hitting if stepped again.
+    pub fn step(&mut self, replications: usize) -> Result<(), SdError> {
+        let mut left = replications.max(1);
+        while left > 0 && !self.is_done() {
+            let seed = self.opts.seed;
+            if (self.runs.len() as u64) < self.reps {
+                let r = self.runs.len() as u64;
+                let run = simulate(
+                    &self.program,
+                    self.plan.dt,
+                    self.plan.steps,
+                    self.plan.save_every,
+                    replication_base(seed, r),
+                )?;
+                self.runs.push(run);
+            } else if let Some(half) = self.half {
+                let r = self.half_runs.len() as u64;
+                let run = simulate(
+                    &self.program,
+                    half.dt,
+                    half.steps,
+                    half.save_every,
+                    replication_base(seed, r),
+                )?;
+                self.half_runs.push(run);
+            }
+            left -= 1;
+        }
+        Ok(())
+    }
+
+    /// The results. Makes any replication not yet made first.
+    pub fn finish(mut self) -> Result<SdResults, SdError> {
+        self.step(usize::MAX)?;
+        let p = &self.program;
+        let dt = self.plan.dt;
+        let (mut times, series, mut warnings) = collect(p, &self.runs, self.warnings);
+
+        // The halved-step check, on the mean paths of the stocks.
+        let mut dt_check = None;
+        if let Some(half) = self.half {
+            let (_, half_series, w) = collect(p, &self.half_runs, BTreeSet::new());
+            warnings.extend(w);
+            let mut stocks = Vec::new();
+            for (a, b) in series.iter().zip(half_series.iter()) {
+                if a.kind != "stock" {
+                    continue;
+                }
+                let peak = b
+                    .mean
+                    .iter()
+                    .filter(|v| v.is_finite())
+                    .fold(0.0_f64, |m, v| m.max(v.abs()));
+                let floor = (1e-3 * peak).max(f64::MIN_POSITIVE);
+                let mut worst = 0.0_f64;
+                let mut at = 0.0;
+                for (k, (x, y)) in a.mean.iter().zip(b.mean.iter()).enumerate() {
+                    let rel = (x - y).abs() / y.abs().max(floor);
+                    if rel > worst {
+                        worst = rel;
+                        at = times.get(k).copied().unwrap_or(0.0);
+                    }
+                }
+                stocks.push(StockCheck {
+                    name: a.name.clone(),
+                    max_relative_difference: worst,
+                    at_time: at,
+                });
+            }
+            let max = stocks
+                .iter()
+                .map(|s| s.max_relative_difference)
+                .fold(0.0_f64, f64::max);
+            dt_check = Some(DtCheck {
+                dt,
+                half_dt: half.dt,
+                stocks,
+                max_relative_difference: max,
+                within_threshold: max <= DT_CHECK_THRESHOLD,
+            });
+        }
+
+        // Times in the unit asked for.
+        let model_unit = p.time_units.trim().to_owned();
+        let mut unit = model_unit.clone();
+        let mut factor = 1.0;
+        if let Some(want) = self
+            .opts
+            .time_unit
+            .as_deref()
+            .filter(|w| !w.trim().is_empty())
+        {
+            match (time_unit(&model_unit), time_unit(want)) {
+                (Some((from_name, from)), Some((to_name, to))) => {
+                    if from_name != to_name {
+                        factor = from / to;
+                        unit = to_name.to_owned();
+                    }
+                }
+                _ => {
+                    warnings.insert(format!(
+                        "the model's time unit ({}) and the unit asked for ({want}) are not both ones StochCraft knows, so times are given in the model's",
+                        if model_unit.is_empty() { "none" } else { model_unit.as_str() }
+                    ));
+                }
+            }
+        }
+        if (factor - 1.0).abs() > 0.0 {
+            times.iter_mut().for_each(|t| *t *= factor);
+            if let Some(check) = dt_check.as_mut() {
+                check.stocks.iter_mut().for_each(|s| s.at_time *= factor);
+            }
+        }
+        Ok(SdResults {
+            name: p.name.clone(),
+            method: p.method.name(),
+            dt,
+            start: p.start * factor,
+            stop: p.stop * factor,
+            time_unit: unit,
+            save_step: self.plan.save_every as f64 * dt * factor,
+            times,
+            series,
+            replications: self.reps,
+            random: p.is_random(),
+            seed: self.opts.seed,
+            steps: self.plan.steps,
+            warnings: warnings.into_iter().collect(),
+            dt_check,
+        })
+    }
+}
+
+/// The saved times, the series, and `warnings` with those of the replications `runs`.
+fn collect(
+    p: &Program,
+    runs: &[Run],
+    mut warnings: BTreeSet<String>,
+) -> (Vec<f64>, Vec<Series>, BTreeSet<String>) {
     let saved = runs.first().map_or(0, |r| r.times.len());
     let times = runs.first().map(|r| r.times.clone()).unwrap_or_default();
-    let series = aggregate(p, &runs, saved);
-    let mut warnings = BTreeSet::new();
-    for r in &runs {
+    let series = aggregate(p, runs, saved);
+    for r in runs {
         warnings.extend(r.warnings.iter().cloned());
     }
-    Ok((times, series, warnings))
+    (times, series, warnings)
 }
 
 /// Runs `p`: once, or, for a model with random functions, in as many replications as asked.
+/// The one-call form of [`SdJob`].
 pub fn run(p: &Program, opts: &RunOptions) -> Result<SdResults, SdError> {
-    let dt = opts.dt.unwrap_or(p.dt);
-    if !(dt.is_finite() && dt > 0.0) {
-        return Err(run_err(format!(
-            "the time step must be above 0 (it is {dt})"
-        )));
-    }
-    let (steps, length_note) = step_count(p, dt)?;
-    let reps = if p.is_random() {
-        let r = opts.replications.unwrap_or(DEFAULT_REPLICATIONS);
-        if r == 0 || r > MAX_REPLICATIONS {
-            return Err(run_err(format!(
-                "replications must be from 1 to {MAX_REPLICATIONS} (it is {r})"
-            )));
-        }
-        r
-    } else {
-        1
-    };
-    if steps.saturating_mul(reps) > MAX_WORK {
-        return Err(run_err(format!(
-            "{reps} replications of {steps} steps is more than the limit of {MAX_WORK} steps: lower one of them"
-        )));
-    }
-    let save_step = p.save_step.unwrap_or(p.dt);
-    let every = (save_step / dt).round();
-    let save_every = if every >= 1.0 { every as u64 } else { 1 };
-    let saved = steps / save_every + 2;
-    if saved
-        .saturating_mul(p.vars.len() as u64)
-        .saturating_mul(reps)
-        > MAX_RECORDED
-    {
-        return Err(run_err(
-            "the results would be too large: raise the save step or lower the replications"
-                .to_owned(),
-        ));
-    }
-    let mut warnings: BTreeSet<String> = p.warnings.iter().cloned().collect();
-    warnings.extend(length_note);
-    if ((save_step / dt) - every).abs() > 1e-6 || every < 1.0 {
-        warnings.insert(format!(
-            "the save step {save_step} is not a whole number of time steps of {dt}: results are saved every {} instead",
-            save_every as f64 * dt
-        ));
-    }
-    if !p.is_random() && opts.replications.is_some_and(|r| r > 1) {
-        warnings.insert(
-            "the model has no random function, so it was run once, not in replications".to_owned(),
-        );
-    }
-    let (mut times, series, w) = run_all(p, dt, steps, save_every, reps, opts.seed)?;
-    warnings.extend(w);
-
-    // The halved-step check, on the mean paths of the stocks.
-    let mut dt_check = None;
-    if opts.dt_check {
-        let half = dt / 2.0;
-        let (half_steps, _) = step_count(p, half)?;
-        let (_, half_series, w) = run_all(p, half, half_steps, save_every * 2, reps, opts.seed)?;
-        warnings.extend(w);
-        let mut stocks = Vec::new();
-        for (a, b) in series.iter().zip(half_series.iter()) {
-            if a.kind != "stock" {
-                continue;
-            }
-            let peak = b
-                .mean
-                .iter()
-                .filter(|v| v.is_finite())
-                .fold(0.0_f64, |m, v| m.max(v.abs()));
-            let floor = (1e-3 * peak).max(f64::MIN_POSITIVE);
-            let mut worst = 0.0_f64;
-            let mut at = 0.0;
-            for (k, (x, y)) in a.mean.iter().zip(b.mean.iter()).enumerate() {
-                let rel = (x - y).abs() / y.abs().max(floor);
-                if rel > worst {
-                    worst = rel;
-                    at = times.get(k).copied().unwrap_or(0.0);
-                }
-            }
-            stocks.push(StockCheck {
-                name: a.name.clone(),
-                max_relative_difference: worst,
-                at_time: at,
-            });
-        }
-        let max = stocks
-            .iter()
-            .map(|s| s.max_relative_difference)
-            .fold(0.0_f64, f64::max);
-        dt_check = Some(DtCheck {
-            dt,
-            half_dt: half,
-            stocks,
-            max_relative_difference: max,
-            within_threshold: max <= DT_CHECK_THRESHOLD,
-        });
-    }
-
-    // Times in the unit asked for.
-    let model_unit = p.time_units.trim().to_owned();
-    let mut unit = model_unit.clone();
-    let mut factor = 1.0;
-    if let Some(want) = opts.time_unit.as_deref().filter(|w| !w.trim().is_empty()) {
-        match (time_unit(&model_unit), time_unit(want)) {
-            (Some((from_name, from)), Some((to_name, to))) => {
-                if from_name != to_name {
-                    factor = from / to;
-                    unit = to_name.to_owned();
-                }
-            }
-            _ => {
-                warnings.insert(format!(
-                    "the model's time unit ({}) and the unit asked for ({want}) are not both ones StochCraft knows, so times are given in the model's",
-                    if model_unit.is_empty() { "none" } else { model_unit.as_str() }
-                ));
-            }
-        }
-    }
-    if (factor - 1.0).abs() > 0.0 {
-        times.iter_mut().for_each(|t| *t *= factor);
-        if let Some(check) = dt_check.as_mut() {
-            check.stocks.iter_mut().for_each(|s| s.at_time *= factor);
-        }
-    }
-    Ok(SdResults {
-        name: p.name.clone(),
-        method: p.method.name(),
-        dt,
-        start: p.start * factor,
-        stop: p.stop * factor,
-        time_unit: unit,
-        save_step: save_every as f64 * dt * factor,
-        times,
-        series,
-        replications: reps,
-        random: p.is_random(),
-        seed: opts.seed,
-        steps,
-        warnings: warnings.into_iter().collect(),
-        dt_check,
-    })
+    SdJob::new(p, opts)?.finish()
 }

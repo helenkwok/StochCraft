@@ -238,29 +238,110 @@ pub struct Run {
 }
 
 pub(crate) fn run(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
-    let p: Run = parse(p)?;
-    let Some(doc) = e.sd.as_mut() else {
-        return Err(no_model());
-    };
-    let options = RunOptions {
-        replications: p.replications,
-        seed: p.seed.unwrap_or(1),
-        dt: p.dt,
-        dt_check: p.dt_check.unwrap_or(false),
-        time_unit: p.time_unit,
-    };
-    let results = stochcraft_sd::run(&doc.program, &options).map_err(sd_error)?;
-    // The digest is of the model without its diagram: moving a shape does not change it.
-    let digest = crate::bytes_digest(stochcraft_sd::model_text(&doc.model).as_bytes());
-    let mut json = results_json(&results, &digest, &doc.notes);
-    json["record"]["file"] = if doc.path.is_empty() {
-        Value::Null
-    } else {
-        json!(doc.path)
-    };
-    doc.last = Some(results);
-    doc.last_stale = false;
-    Ok(json)
+    let mut job = e.sd_start(p)?;
+    job.step(usize::MAX)?;
+    e.sd_finish(job)
+}
+
+/// A system dynamics run made a few replications at a time ([`Engine::sd_start`]), so the window
+/// can draw between them and a long run never holds up the page: each [`SdJob::step`] makes
+/// some replications, and [`Engine::sd_results`] gives the results once all are made. `sd.run`
+/// is the same run with every replication made at once, so the results are the same however the
+/// replications are spread over steps. One replication is not interrupted.
+///
+/// The job runs the model as it was when it started. [`Engine::sd_results`] refuses it if the
+/// model was changed since (its [`SdJob::revision`] is no longer the engine's), so results of an
+/// old model are never shown as the open one's.
+pub struct SdJob {
+    job: stochcraft_sd::SdJob,
+    /// `sd.run`'s parameters, for the journal.
+    params: Value,
+    revision: u64,
+}
+
+impl SdJob {
+    /// Makes up to `replications` (at least one) of the replications still to make. True once
+    /// every one is made.
+    pub fn step(&mut self, replications: usize) -> Result<bool, CommandError> {
+        self.job.step(replications).map_err(sd_error)?;
+        Ok(self.job.is_done())
+    }
+
+    /// The replications made, and those the run is to make (a halved-step check counts its own).
+    pub fn progress(&self) -> (u64, u64) {
+        self.job.progress()
+    }
+
+    /// The engine's [`Engine::revision`] when the run started.
+    pub fn revision(&self) -> u64 {
+        self.revision
+    }
+}
+
+impl Engine {
+    /// Gets a run of the open system dynamics model ready, with `sd.run`'s parameters, without
+    /// making any replication yet: the window makes them a few a frame with [`SdJob::step`].
+    pub fn sd_start(&self, params: Value) -> Result<SdJob, CommandError> {
+        let params = if params.is_null() { json!({}) } else { params };
+        let p: Run = parse(params.clone())?;
+        let Some(doc) = self.sd.as_ref() else {
+            return Err(no_model());
+        };
+        let options = RunOptions {
+            replications: p.replications,
+            seed: p.seed.unwrap_or(1),
+            dt: p.dt,
+            dt_check: p.dt_check.unwrap_or(false),
+            time_unit: p.time_unit,
+        };
+        let job = stochcraft_sd::SdJob::new(&doc.program, &options).map_err(sd_error)?;
+        Ok(SdJob {
+            job,
+            params,
+            revision: self.revision,
+        })
+    }
+
+    /// A finished run's results, as `sd.run` gives them, which are now the model's last results
+    /// (so `sd.get` and the stale marking behave as after `sd.run`), and the run is journalled as an `sd.run`
+    /// step. Makes any replication not made yet. Refused with [`ErrorCode::Conflict`] if the
+    /// model was changed, or another opened, since the run started.
+    pub fn sd_results(&mut self, mut job: SdJob) -> Result<Value, CommandError> {
+        job.step(usize::MAX)?;
+        let params = job.params.clone();
+        let result = self.sd_finish(job)?;
+        self.journal.push(crate::JournalEntry {
+            command: "sd.run".to_owned(),
+            params,
+        });
+        Ok(result)
+    }
+
+    /// Makes the results of a run whose replications are all made the model's last, without
+    /// journalling (`execute` does that for `sd.run`).
+    fn sd_finish(&mut self, job: SdJob) -> Result<Value, CommandError> {
+        if job.revision != self.revision {
+            return Err(CommandError::new(
+                ErrorCode::Conflict,
+                "the model was changed while it was run: run it again",
+            ));
+        }
+        let Some(doc) = self.sd.as_mut() else {
+            return Err(no_model());
+        };
+        let results = job.job.finish().map_err(sd_error)?;
+        // The digest is of the model without its diagram: moving a shape does not change it.
+        let digest = crate::bytes_digest(stochcraft_sd::model_text(&doc.model).as_bytes());
+        let mut json = results_json(&results, &digest, &doc.notes);
+        json["record"]["file"] = if doc.path.is_empty() {
+            Value::Null
+        } else {
+            json!(doc.path)
+        };
+        doc.last = Some(results);
+        doc.last_stale = false;
+        Ok(json)
+    }
 }
 
 fn finite(v: f64) -> Value {

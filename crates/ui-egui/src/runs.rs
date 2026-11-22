@@ -166,6 +166,10 @@ impl App {
 
     /// Stops the run in progress.
     pub fn cancel_run(&mut self) {
+        if self.sd_running() {
+            self.sd_cancel();
+            return;
+        }
         if self.running.is_some() {
             // A Monte Carlo run is the window's own: dropping it stops it.
             self.mc.job = None;
@@ -180,11 +184,10 @@ impl App {
 
     /// Advances and collects the background run. Called every frame; true while it runs.
     pub fn poll(&mut self) -> bool {
-        // A system dynamics run asked for is made two frames on: the status bar says so in
-        // the frame between.
-        if self.sd_pending() {
-            self.sd_advance();
-            return true;
+        // A system dynamics run is made a few replications a frame, the first frame only painted
+        // as running.
+        if self.sd_running() {
+            return self.sd_poll();
         }
         // The shares of a Monte Carlo output's spread, worked out beside the results on show.
         if self.is_working_out_shares() {

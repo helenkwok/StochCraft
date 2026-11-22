@@ -1,5 +1,6 @@
 //! System dynamics models through the engine's commands.
 
+#![allow(clippy::unwrap_used, clippy::indexing_slicing)]
 use serde_json::{Value, json};
 use stochcraft_engine::{Engine, ErrorCode};
 
@@ -197,4 +198,60 @@ fn results_come_out_as_csv() {
         )
     );
     assert!(lines.get(1).is_some_and(|l| l.starts_with("0,990,10,0,")));
+}
+
+const NOISE: &str = "<xmile version=\"1.0\"><sim_specs><start>0</start><stop>50</stop><dt>1</dt></sim_specs><model><variables><stock name=\"w\"><eqn>0</eqn><inflow>n</inflow></stock><flow name=\"n\"><eqn>NORMAL(0, 1)</eqn></flow></variables></model></xmile>";
+
+#[test]
+fn a_job_stepped_a_few_replications_at_a_time_gives_sd_runs_results_and_is_journalled() {
+    let mut e = Engine::new();
+    ok(&mut e, "sd.open", json!({ "text": NOISE }));
+    let params = json!({ "replications": 30, "seed": 5 });
+    let whole = ok(&mut e, "sd.run", params.clone());
+    assert_eq!(e.journal().len(), 1);
+
+    let mut job = e.sd_start(params.clone()).unwrap();
+    assert_eq!(job.progress(), (0, 30));
+    let mut frames = 0;
+    while !job.step(7).unwrap() {
+        frames += 1;
+    }
+    assert_eq!(frames, 4);
+    assert_eq!(job.progress(), (30, 30));
+    let stepped = e.sd_results(job).unwrap();
+    assert_eq!(stepped["variables"], whole["variables"]);
+    assert_eq!(stepped["replications"], 30);
+    // Journalled as the same step.
+    assert_eq!(e.journal().len(), 2);
+    assert_eq!(e.journal()[1].command, "sd.run");
+    assert_eq!(e.journal()[1].params, params);
+    // Its results are the model's last, current until the model is changed.
+    assert!(!e.system_dynamics_results_stale());
+    ok(&mut e, "sd.specs.set", json!({ "stop": 40.0 }));
+    assert!(e.system_dynamics_results_stale());
+}
+
+#[test]
+fn a_job_is_refused_for_a_model_changed_since_it_started_and_for_bad_parameters() {
+    let mut e = Engine::new();
+    assert_eq!(
+        e.sd_start(json!({})).err().map(|c| c.code),
+        Some(ErrorCode::NotFound)
+    );
+    ok(&mut e, "sd.open", json!({ "text": NOISE }));
+    assert_eq!(
+        e.sd_start(json!({ "replications": 0 }))
+            .err()
+            .map(|c| c.code),
+        Some(ErrorCode::InvalidParams)
+    );
+    let job = e.sd_start(json!({ "replications": 3 })).unwrap();
+    ok(&mut e, "sd.specs.set", json!({ "stop": 40.0 }));
+    assert_ne!(job.revision(), e.revision());
+    let before = e.journal().len();
+    assert_eq!(
+        e.sd_results(job).err().map(|c| c.code),
+        Some(ErrorCode::Conflict)
+    );
+    assert_eq!(e.journal().len(), before);
 }
