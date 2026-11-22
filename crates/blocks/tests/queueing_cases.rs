@@ -220,6 +220,49 @@ fn mm4_matches_erlang_c() {
     covers(&s, "exit", Metric::MeanTimeInSystem, w, reps);
 }
 
+/// An M/D/1 server with arrivals every `interarrival` on average and a constant service time.
+fn md1_model(interarrival: f64, service: f64, reps: u32) -> Model {
+    let mut b = Builder::new();
+    let src = b.source("arrivals", Dist::Exponential { mean: interarrival }, None);
+    let srv = b.server("server", 1, Dist::Constant(service));
+    let exit = b.sink("exit");
+    b.connect(src, srv);
+    b.connect(srv, exit);
+    b.build(Experiment {
+        warmup: 5_000.0,
+        duration: 100_000.0,
+        replications: reps,
+        ..Experiment::default()
+    })
+}
+
+#[test]
+fn md1_matches_pollaczek_khinchine() {
+    // Long-run M/D/1 (time unit: minutes; Cooper, Introduction to Queueing Theory, 2nd ed.,
+    // ch. 3; Gross et al., Fundamentals of Queueing Theory, 4th ed.): Poisson arrivals at
+    // λ = 1/3 per minute, a constant service time d = 2, ρ = 2/3. Pollaczek–Khinchine with
+    // E[S²] = d²: Wq = λ d² / (2 (1 − ρ)) = 2, W = Wq + d = 4, Lq = λ Wq = 2/3. An exponential
+    // service time of the same mean gives Wq = 4: deterministic service halves the wait.
+    let reps = 16;
+    let s = run_replications(&md1_model(3.0, 2.0, reps), 203);
+    covers(&s, "server", Metric::MeanWait, 2.0, reps);
+    covers(&s, "server", Metric::MeanQueueLength, 2.0 / 3.0, reps);
+    covers(&s, "server", Metric::Utilisation, 2.0 / 3.0, reps);
+    covers(&s, "exit", Metric::MeanTimeInSystem, 4.0, reps);
+}
+
+#[test]
+fn md1_at_high_load_matches_pollaczek_khinchine() {
+    // M/D/1 at ρ = 0.8: λ = 1 per minute, d = 0.8. Wq = λ d² / (2 (1 − ρ)) = 1.6, W = 2.4,
+    // Lq = 1.6.
+    let reps = 16;
+    let s = run_replications(&md1_model(1.0, 0.8, reps), 204);
+    covers(&s, "server", Metric::MeanWait, 1.6, reps);
+    covers(&s, "server", Metric::MeanQueueLength, 1.6, reps);
+    covers(&s, "server", Metric::Utilisation, 0.8, reps);
+    covers(&s, "exit", Metric::MeanTimeInSystem, 2.4, reps);
+}
+
 #[test]
 fn mm5_priority_classes_on_a_pool_match_cobham() {
     // Long-run M/M/5 non-preemptive priority queue (time unit: minutes):
