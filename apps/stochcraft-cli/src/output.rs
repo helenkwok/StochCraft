@@ -1805,10 +1805,12 @@ pub fn sd_csv(r: &Value) -> String {
 /// A decision's value as it is: a whole number without rounding, otherwise its shortest exact
 /// form.
 fn exact(v: &Value) -> String {
-    match v.as_f64() {
-        Some(x) if x.fract() == 0.0 && x.abs() < 9.0e15 => format!("{}", x as i64),
-        Some(x) => format!("{x}"),
-        None => "-".into(),
+    match (v.as_f64(), v.as_str()) {
+        (Some(x), _) if x.fract() == 0.0 && x.abs() < 9.0e15 => format!("{}", x as i64),
+        (Some(x), _) => format!("{x}"),
+        // A rule's level, by name.
+        (None, Some(name)) => name.to_owned(),
+        (None, None) => "-".into(),
     }
 }
 

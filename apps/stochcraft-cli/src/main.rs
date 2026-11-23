@@ -244,18 +244,24 @@ enum Command {
         #[arg(long)]
         allow_approximations: bool,
     },
-    /// Find the best whole-number decisions (the engine's `experiment.optimise`): COMPASS over
-    /// the decisions' ranges from the model's values and a few Latin hypercube starts (every
-    /// design when there are at most 50), then the finalists compared again on fresh
-    /// replications by KN. Prints the answer in words, how sure it is, and the finalists.
+    /// Find the best decisions (the engine's `experiment.optimise`): counts by COMPASS over their
+    /// ranges from the model's values and a few Latin hypercube starts (every design when there
+    /// are at most 50), rules by trying each combination of their levels, means by Nelder–Mead
+    /// (a local search); then the finalists compared again on fresh replications by KN. Prints
+    /// the answer in words, how sure it is, and the finalists.
     Optimize {
         file: PathBuf,
-        /// A decision, `id.field=min..max` or `id.field=min..max:step`, the field `capacity`,
-        /// `quantity` or `queue_capacity` (such as `desk.capacity=11..40`). Repeat for each.
+        /// A decision. A count: `id.field=min..max` or `id.field=min..max:step`, the field
+        /// `capacity`, `quantity` or `queue_capacity` (such as `desk.capacity=11..40`). A mean:
+        /// `id.mean=min..max` (such as `desk.mean=0.2..0.9`). A rule: `id.field` for its default
+        /// levels, or `id.field=level,level`, the field `routing` (`standard`, `shortest_queue`,
+        /// `divert`), `on_shift_end` (`finish`, `retry`, `resume`) or `after_job` (`stay`,
+        /// `go_home`), such as `split.routing`. Repeat for each.
         #[arg(long, required = true)]
         decide: Vec<String>,
-        /// A decision's starting value, `id.field=value`, one of its range's values (default:
-        /// the model's value, which must then be one of them). Repeat for each.
+        /// A decision's starting value, `id.field=value`: one of its values, a number in a mean's
+        /// range, or a rule's level by name (default: the model's value, which must then be one
+        /// of them). Repeat for each.
         #[arg(long)]
         start: Vec<String>,
         /// A result to minimise, `element.metric`, or `element.metric*weight` for a cost per
@@ -265,8 +271,8 @@ enum Command {
         /// A result to maximise, as for `--minimize`.
         #[arg(long)]
         maximize: Vec<String>,
-        /// A decision's cost per unit, `id.field=cost` (such as `desk.capacity=20`). Repeat for
-        /// each.
+        /// A decision's cost per unit, `id.field=cost` (such as `desk.capacity=20` or
+        /// `desk.mean=-4`; a rule has no cost). Repeat for each.
         #[arg(long)]
         cost: Vec<String>,
         /// The most the decisions' costs may add up to; designs over it are never run.
@@ -1386,21 +1392,41 @@ fn decision_range(text: &str) -> Result<(String, String, f64, f64), Failure> {
     Ok((id.to_owned(), field.to_owned(), num(lo)?, num(hi)?))
 }
 
-/// `id.field=min..max` or `id.field=min..max:step` as a decision of `experiment.optimise`.
+/// A decision of `experiment.optimise`: `id.field=min..max` or `id.field=min..max:step` (a count,
+/// or a mean with decimal bounds), `id.field` (a rule with its default levels) or
+/// `id.field=level,level,...` (a rule with the levels given).
 fn search_decision(text: &str) -> Result<Value, Failure> {
     let bad = || {
         Failure(format!(
-            "`{text}`: give a decision as `id.field=min..max` or `id.field=min..max:step`, such as `desk.capacity=11..40`"
+            "`{text}`: give a decision as `id.field=min..max` or `id.field=min..max:step` (such as `desk.capacity=11..40` or `desk.mean=0.2..0.9`), or a rule as `id.field` or `id.field=level,level` (such as `split.routing=standard,shortest_queue`)"
         ))
     };
-    let (name, values) = text.split_once('=').ok_or_else(bad)?;
+    let Some((name, values)) = text.split_once('=') else {
+        let (id, field) = text.rsplit_once('.').ok_or_else(bad)?;
+        return Ok(json!({ "id": id, "field": field }));
+    };
     let (id, field) = name.rsplit_once('.').ok_or_else(bad)?;
+    if !values.contains("..") {
+        let levels: Vec<&str> = values.split(',').map(str::trim).collect();
+        if levels.iter().any(|l| l.is_empty()) {
+            return Err(bad());
+        }
+        return Ok(json!({ "id": id, "field": field, "values": levels }));
+    }
     let (range, step) = match values.split_once(':') {
         Some((r, s)) => (r, Some(s.trim().parse::<u32>().map_err(|_| bad())?)),
         None => (values, None),
     };
     let (lo, hi) = range.split_once("..").ok_or_else(bad)?;
-    let num = |v: &str| v.trim().parse::<u32>().map_err(|_| bad());
+    // A whole number stays one in the JSON; a decimal bound (a mean's) must be finite.
+    let num = |v: &str| -> Result<Value, Failure> {
+        let v = v.trim();
+        if let Ok(n) = v.parse::<u32>() {
+            return Ok(json!(n));
+        }
+        let x = v.parse::<f64>().map_err(|_| bad())?;
+        Ok(json!(finite_number("--decide", text, x)?))
+    };
     let mut d = json!({ "id": id, "field": field, "min": num(lo)?, "max": num(hi)? });
     if let Some(s) = step {
         d["step"] = json!(s);
@@ -1529,12 +1555,22 @@ fn optimize(a: &OptimizeArgs) -> Result<u8, Failure> {
     for text in a.starts_at {
         let bad = || {
             Failure(format!(
-                "`{text}`: give a starting value as `id.field=value`, such as `desk.capacity=14`"
+                "`{text}`: give a starting value as `id.field=value`, such as `desk.capacity=14`, `desk.mean=0.5` or `split.routing=standard`"
             ))
         };
         let (name, value) = text.split_once('=').ok_or_else(bad)?;
         let (id, field) = name.rsplit_once('.').ok_or_else(bad)?;
-        let value: u32 = value.trim().parse().map_err(|_| bad())?;
+        let value = value.trim();
+        // A whole number, a decimal (a mean's, which must be finite) or a rule's level by name.
+        let value = if let Ok(n) = value.parse::<u32>() {
+            json!(n)
+        } else if let Ok(x) = value.parse::<f64>() {
+            json!(finite_number("--start", text, x)?)
+        } else if !value.is_empty() {
+            json!(value)
+        } else {
+            return Err(bad());
+        };
         let d = decisions
             .iter_mut()
             .find(|d| d["id"] == id && d["field"] == field)
