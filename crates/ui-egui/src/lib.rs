@@ -1234,6 +1234,7 @@ fn change_label(command: &str) -> &str {
         "experiment.size" => "Size Resources",
         // Its own label comes with the window (ROADMAP M8, O6); it sets counts, as sizing does.
         "experiment.optimise" => "Size Resources",
+        "decisions.set" => "Size Resources",
         "property.set" => "Set Property",
         "property.remove" => "Remove Property",
         "estimate.set" => "Change Estimate",

@@ -1495,3 +1495,46 @@ fn optimize_matches_the_engine_and_prints_the_claim() {
     assert!(!o.status.success());
     assert!(stderr(&o).contains("id.field=min..max"), "{}", stderr(&o));
 }
+
+/// `--start` sets a decision's starting value; one for something that is not a decision, or off
+/// the range's values, is refused.
+#[test]
+fn optimize_takes_a_starting_value() {
+    let file = model("mm1.bpmn");
+    let base = [
+        "optimize",
+        &file,
+        "--decide",
+        "serve.capacity=1..4",
+        "--minimize",
+        "serve.mean_wait*2",
+        "--cost",
+        "serve.capacity=1",
+        "--delta",
+        "1",
+        "--max-runs",
+        "400",
+        "--format",
+        "json",
+    ];
+    let mut args = base.to_vec();
+    args.extend(["--start", "serve.capacity=3"]);
+    let v = json(&ok(&args));
+    let start = v["finalists"]
+        .as_array()
+        .and_then(|fs| fs.iter().find(|f| f["starting_design"] == true))
+        .map(|f| f["decisions"][0]["value"].clone());
+    assert_eq!(start, Some(serde_json::json!(3.0)), "{v}");
+
+    let mut args = base.to_vec();
+    args.extend(["--start", "clerk.quantity=2"]);
+    let o = cli(&args);
+    assert!(!o.status.success());
+    assert!(stderr(&o).contains("is not a decision"), "{}", stderr(&o));
+
+    let mut args = base.to_vec();
+    args.extend(["--start", "serve.capacity=7"]);
+    let o = cli(&args);
+    assert!(!o.status.success());
+    assert!(stderr(&o).contains("serve.capacity"), "{}", stderr(&o));
+}

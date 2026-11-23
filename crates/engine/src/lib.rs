@@ -342,7 +342,9 @@ impl BuildMatch {
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
 pub enum ReplayMode {
     /// Re-applies the edits (and undo, redo and starting a document). Saving a file, runs and
-    /// experiments are skipped: they write files or take time, and change nothing in the model.
+    /// experiments are skipped: they write files or take time, and change nothing in the model
+    /// (an optimisation that applied its answer is journalled with the change as a separate
+    /// `decisions.set` edit, which is replayed).
     #[default]
     EditsOnly,
     /// Carries out every step, as [`Engine::replay`] does.
@@ -577,10 +579,26 @@ impl Engine {
             self.keep_results(result.clone());
         }
         if c.kind != CommandKind::Query && self.documents == documents {
-            self.journal.push(JournalEntry {
-                command: command.to_owned(),
-                params,
-            });
+            if command == "experiment.optimise" && result.get("applied") == Some(&json!(true)) {
+                // The search is journalled without `apply`, and the change it made as an
+                // ordinary edit, so an edits-only replay makes the change without searching
+                // again, and a full replay searches once and makes it once.
+                let mut search = params;
+                search["apply"] = json!(false);
+                self.journal.push(JournalEntry {
+                    command: command.to_owned(),
+                    params: search,
+                });
+                self.journal.push(JournalEntry {
+                    command: "decisions.set".to_owned(),
+                    params: json!({ "decisions": result["chosen"]["decisions"] }),
+                });
+            } else {
+                self.journal.push(JournalEntry {
+                    command: command.to_owned(),
+                    params,
+                });
+            }
         }
         Ok(result)
     }

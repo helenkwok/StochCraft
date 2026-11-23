@@ -1712,6 +1712,16 @@ pub fn sd_csv(r: &Value) -> String {
     stochcraft_engine::sd::results_csv(r)
 }
 
+/// A decision's value as it is: a whole number without rounding, otherwise its shortest exact
+/// form.
+fn exact(v: &Value) -> String {
+    match v.as_f64() {
+        Some(x) if x.fract() == 0.0 && x.abs() < 9.0e15 => format!("{}", x as i64),
+        Some(x) => format!("{x}"),
+        None => "-".into(),
+    }
+}
+
 /// `experiment.optimise`'s answer: the claim in words, then the finalists (the chosen one marked
 /// `*`), the difference against the starting design and the runs used.
 pub fn optimize_table(name: &str, a: &Value) -> String {
@@ -1722,11 +1732,12 @@ pub fn optimize_table(name: &str, a: &Value) -> String {
         name
     };
     let _ = writeln!(out, "{title}: {}\n", s(&a["claim"]));
+    // Decisions are whole numbers, printed exactly (1000001, not 1.0000e6).
     let values = |d: &Value| -> Vec<String> {
         d.as_array()
             .into_iter()
             .flatten()
-            .map(|x| f(&x["value"]))
+            .map(|x| exact(&x["value"]))
             .collect()
     };
     let finalists = a["finalists"].as_array().map_or(&[][..], Vec::as_slice);
@@ -2228,5 +2239,21 @@ mod tests {
         r["stop"]["met"] = serde_json::json!(["A", "B"]);
         r["stop"]["not_established"] = serde_json::json!([]);
         assert!(mc_table("m", &r).contains("every output's mean is within the share asked for"));
+    }
+
+    #[test]
+    fn optimize_table_prints_decisions_exactly() {
+        let a = serde_json::json!({
+            "claim": "c",
+            "finalists": [
+                { "decisions": [{ "id": "b", "field": "queue_capacity", "value": 1000001.0 }],
+                  "cost": 1.0, "objective": { "mean": 2.0, "half_width": 0.1, "n": 10 }, "chosen": true },
+                { "decisions": [{ "id": "b", "field": "queue_capacity", "value": 1000002.0 }],
+                  "cost": 1.0, "objective": { "mean": 3.0, "half_width": 0.1, "n": 10 } }
+            ],
+            "runs": {}, "warnings": []
+        });
+        let t = optimize_table("m", &a);
+        assert!(t.contains("1000001") && t.contains("1000002"), "{t}");
     }
 }

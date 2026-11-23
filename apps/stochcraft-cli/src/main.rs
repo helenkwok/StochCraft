@@ -254,6 +254,10 @@ enum Command {
         /// `quantity` or `queue_capacity` (such as `desk.capacity=11..40`). Repeat for each.
         #[arg(long, required = true)]
         decide: Vec<String>,
+        /// A decision's starting value, `id.field=value`, one of its range's values (default:
+        /// the model's value, which must then be one of them). Repeat for each.
+        #[arg(long)]
+        start: Vec<String>,
         /// A result to minimise, `element.metric`, or `element.metric*weight` for a cost per
         /// unit of it (such as `desk.mean_queue_length*50`). Repeat for a weighted sum.
         #[arg(long, conflicts_with = "maximize")]
@@ -1383,6 +1387,7 @@ fn constraint(text: &str) -> Result<Value, Failure> {
 struct OptimizeArgs<'a> {
     file: &'a Path,
     decisions: &'a [String],
+    starts_at: &'a [String],
     minimize: &'a [String],
     maximize: &'a [String],
     costs: &'a [String],
@@ -1410,8 +1415,32 @@ fn optimize(a: &OptimizeArgs) -> Result<u8, Failure> {
     } else {
         ("maximise", a.maximize)
     };
+    let mut decisions = a
+        .decisions
+        .iter()
+        .map(|d| search_decision(d))
+        .collect::<Result<Vec<_>, _>>()?;
+    for text in a.starts_at {
+        let bad = || {
+            Failure(format!(
+                "`{text}`: give a starting value as `id.field=value`, such as `desk.capacity=14`"
+            ))
+        };
+        let (name, value) = text.split_once('=').ok_or_else(bad)?;
+        let (id, field) = name.rsplit_once('.').ok_or_else(bad)?;
+        let value: u32 = value.trim().parse().map_err(|_| bad())?;
+        let d = decisions
+            .iter_mut()
+            .find(|d| d["id"] == id && d["field"] == field)
+            .ok_or_else(|| {
+                Failure(format!(
+                    "`{text}`: `{name}` is not a decision; give it with `--decide` too"
+                ))
+            })?;
+        d["start"] = json!(value);
+    }
     let mut params = json!({
-        "decisions": a.decisions.iter().map(|d| search_decision(d)).collect::<Result<Vec<_>, _>>()?,
+        "decisions": decisions,
         "objective": {
             "results": terms.iter().map(|t| weighted(t)).collect::<Result<Vec<_>, _>>()?,
             "sense": sense,
@@ -1885,6 +1914,7 @@ fn main() -> ExitCode {
         Command::Optimize {
             file,
             decide,
+            start,
             minimize,
             maximize,
             cost,
@@ -1905,6 +1935,7 @@ fn main() -> ExitCode {
         } => optimize(&OptimizeArgs {
             file: &file,
             decisions: &decide,
+            starts_at: &start,
             minimize: &minimize,
             maximize: &maximize,
             costs: &cost,

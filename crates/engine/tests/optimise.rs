@@ -9,7 +9,7 @@
 use std::io::Write;
 
 use serde_json::{Value, json};
-use stochcraft_engine::{COMMANDS, Engine, ErrorCode};
+use stochcraft_engine::{COMMANDS, Engine, ErrorCode, ReplayOptions};
 use stochcraft_stats::Proportion;
 
 fn ok(e: &mut Engine, command: &str, params: Value) -> Value {
@@ -508,4 +508,150 @@ fn the_fewest_servers_for_a_mean_wait() {
         },
         |v| chosen(v) == [14],
     );
+}
+
+/// One desk's servers from 5 to 12, 10 a server and 25 a customer waiting, δ = 5, applied.
+fn one_desk_search() -> Value {
+    json!({
+        "decisions": [{ "id": "desk", "field": "capacity", "min": 5, "max": 12 }],
+        "objective": {
+            "results": [{ "element": "desk", "metric": "mean_queue_length", "weight": 25.0 }],
+            "costs": [{ "id": "desk", "field": "capacity", "cost": 10.0 }]
+        },
+        "indifference": 5.0,
+        "max_runs": 3000,
+        "apply": true,
+    })
+}
+
+/// An applied answer is journalled as the search without `apply`, then the change as a
+/// `decisions.set` edit: an edits-only replay (the default) makes the same model without
+/// searching, and a full replay searches once and applies once.
+#[test]
+fn an_applied_answer_replays_as_an_edit() {
+    let mut e = one_desk_with(9);
+    let v = ok(&mut e, "experiment.optimise", one_desk_search());
+    assert_eq!(v["applied"], true, "{v}");
+    let journal = e.journal_document();
+    let n = journal.entries.len();
+    assert_eq!(journal.entries[n - 2].command, "experiment.optimise");
+    assert_eq!(journal.entries[n - 2].params["apply"], false);
+    assert_eq!(journal.entries[n - 1].command, "decisions.set");
+    let mut edits = Engine::new();
+    edits
+        .replay_journal(&journal, ReplayOptions::default())
+        .unwrap();
+    assert_eq!(edits.model(), e.model());
+    let mut all = Engine::new();
+    let options = ReplayOptions {
+        mode: stochcraft_engine::ReplayMode::All,
+        ..ReplayOptions::default()
+    };
+    all.replay_journal(&journal, options).unwrap();
+    assert_eq!(all.model(), e.model());
+}
+
+/// A batch that fails takes back the record of an optimisation it ran.
+#[test]
+fn a_failed_batch_takes_back_its_optimisation_record() {
+    let mut e = one_desk_with(6);
+    let mut search = one_desk_search();
+    search["apply"] = json!(false);
+    let f = err(
+        &mut e,
+        "batch",
+        json!({ "commands": [
+            { "command": "experiment.optimise", "params": search },
+            { "command": "block.set", "params": { "id": "nowhere", "capacity": 2 } }
+        ]}),
+    );
+    assert!(f.message.contains("step 2"), "{}", f.message);
+    let run = ok(&mut e, "run", json!({ "replications": 2 }));
+    assert_eq!(run["record"]["sensitivity"], json!([]), "{}", run["record"]);
+}
+
+/// A cost given twice for one decision is refused in either order, a cost of 0 included.
+#[test]
+fn a_cost_given_twice_is_refused_in_either_order() {
+    for costs in [[0.0, 20.0], [20.0, 0.0]] {
+        let mut e = one_desk_with(6);
+        let mut p = one_desk_search();
+        p["objective"]["costs"] = json!([
+            { "id": "desk", "field": "capacity", "cost": costs[0] },
+            { "id": "desk", "field": "capacity", "cost": costs[1] }
+        ]);
+        let f = err(&mut e, "experiment.optimise", p);
+        assert!(
+            f.message.contains("more than once"),
+            "{costs:?}: {}",
+            f.message
+        );
+    }
+}
+
+/// The cap is one rule, with an allowance for rounding only: at 10⁻¹⁰ a server and a cap of
+/// 6·10⁻¹⁰, 7 servers are never run; at 0.1 a server and a cap of 0.6, 6 servers (0.1 × 6 =
+/// 0.6000000000000001) are inside it.
+#[test]
+fn the_cap_is_kept_exactly_up_to_rounding() {
+    for (cost, cap, most) in [(1e-10, 6e-10, 6u32), (0.1, 0.6, 6)] {
+        let mut e = one_desk_with(6);
+        let mut p = one_desk_search();
+        p["apply"] = json!(false);
+        p["objective"]["costs"][0]["cost"] = json!(cost);
+        p["cost_cap"] = json!(cap);
+        let v = ok(&mut e, "experiment.optimise", p);
+        let ds = designs(&v);
+        assert!(ds.iter().all(|d| d[0] <= most), "{cost}: {ds:?}");
+        assert!(ds.iter().any(|d| d[0] == most), "{cost}: {ds:?}");
+        for f in v["finalists"].as_array().unwrap() {
+            let c = f["cost"].as_f64().unwrap();
+            assert!(
+                c <= cap * (1.0 + 1e-12),
+                "{cost}: cost {c} over the cap {cap}"
+            );
+        }
+    }
+}
+
+/// Constant times but a random way at a gateway: not "compared exactly".
+#[test]
+fn constant_times_with_a_random_route_are_not_compared_exactly() {
+    let constant = |mean: f64| json!({ "type": "constant", "value": mean });
+    let mut e = Engine::new();
+    ok(
+        &mut e,
+        "model.set",
+        json!({ "model": {
+            "name": "Two ways",
+            "elements": [
+                { "id": "arrivals", "kind": "source", "interarrival": constant(0.1) },
+                { "id": "split", "kind": "exclusive_gateway" },
+                { "id": "desk1", "kind": "server", "capacity": 11, "service": constant(1.0) },
+                { "id": "desk2", "kind": "server", "capacity": 6, "service": constant(0.5) },
+                { "id": "exit", "kind": "sink" }
+            ],
+            "connections": [
+                { "id": "f0", "from": "arrivals", "to": "split" },
+                { "id": "f1", "from": "split", "to": "desk1", "probability": 0.5 },
+                { "id": "f2", "from": "split", "to": "desk2", "probability": 0.5 },
+                { "id": "f3", "from": "desk1", "to": "exit" },
+                { "id": "f4", "from": "desk2", "to": "exit" }
+            ],
+            "experiment": { "time_unit": "hour", "warmup": 2.0, "duration": 20.0, "replications": 10, "seed": 1 }
+        }}),
+    );
+    let v = ok(&mut e, "experiment.optimise", tandem_search(1, 800));
+    assert_eq!(v["no_randomness"], false, "{v}");
+    assert_ne!(v["outcome"], "compared_exactly");
+    assert_eq!(v["runs"]["probe"], 0);
+}
+
+/// The check for randomness is skipped when the budget cannot pay for its two runs.
+#[test]
+fn the_check_for_randomness_stays_within_the_budget() {
+    let mut e = tandem("constant", 20.0);
+    let v = ok(&mut e, "experiment.optimise", tandem_search(1, 1));
+    assert!(v["runs"]["total"].as_u64().unwrap() <= 1, "{}", v["runs"]);
+    assert_eq!(v["runs"]["probe"], 0);
 }

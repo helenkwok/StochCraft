@@ -1154,6 +1154,8 @@ fn batch(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
     };
     let start = e.undo.len();
     let redo = e.redo.clone();
+    // Records an optimisation in the batch adds are taken back with it if a step fails.
+    let records = e.sensitivity.len();
     let mut results = Vec::with_capacity(p.commands.len());
     for (i, step) in p.commands.into_iter().enumerate() {
         let params = if step.params.is_null() {
@@ -1185,6 +1187,7 @@ fn batch(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
                     }
                 }
                 e.redo = redo;
+                e.sensitivity.truncate(records);
                 return Err(CommandError {
                     message: format!("step {} (`{}`): {}", i + 1, step.command, err.message),
                     ..err
@@ -1407,6 +1410,25 @@ fn note_approximations(answer: &mut Value, approximations: Vec<Value>) {
     if !approximations.is_empty() {
         answer["approximations"] = Value::Array(approximations);
     }
+}
+
+#[derive(Debug, Deserialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
+struct DecisionsSet {
+    /// Each decision and its value, as `experiment.evaluate` takes them (`{id, field, value}`).
+    decisions: Vec<crate::evaluate::Decision>,
+}
+
+/// Sets decisions' values as one undo step: what `experiment.optimise`'s `apply` does, and the
+/// step its journal records for it, so an edits-only replay makes the same change.
+fn decisions_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
+    let p: DecisionsSet = parse(p)?;
+    let (m, decisions) = crate::evaluate::decided(e.model(), &p.decisions)?;
+    let changed = &m != e.model();
+    if changed {
+        e.edit("decisions.set", Op::SetModel(Box::new(m)))?;
+    }
+    Ok(json!({ "decisions": decisions, "changed": changed }))
 }
 
 /// Searches whole-number decisions for the best design (M8, stage O2) and cleans up the
@@ -2871,8 +2893,16 @@ pub static COMMANDS: &[Command] = &[
         run: experiment_evaluate,
     },
     Command {
+        name: "decisions.set",
+        summary: "Set decisions' values (each `{id, field, value}`, the field one of `capacity`, `quantity`, `queue_capacity` and `mean`, as `experiment.evaluate` takes them) as one undo step. An unknown decision, a value of the wrong kind or out of its range, or a decision given twice is refused with the decision named. `experiment.optimise` with `apply` journals its change as this step, so a replay of the edits makes it without searching again.",
+        kind: CommandKind::Edit,
+        schema: schema::<DecisionsSet>,
+        example: || json!({ "decisions": [{ "id": "desk", "field": "capacity", "value": 1 }] }),
+        run: decisions_set,
+    },
+    Command {
         name: "experiment.optimise",
-        summary: "Find the best whole-number decisions (`decisions`: each a count, `{id, field}` with `field` one of `capacity`, `quantity`, `queue_capacity`, from `min` to `max` in steps of `step`, starting from the model's value or `start`). The objective is Σ weight × result plus Σ cost × decision (`objective`: `results` each `{element, metric, weight}`, `sense` minimise or maximise, `costs` each `{id, field, cost}`); `cost_cap` caps the decisions' costs, and designs over it are never run; `constraints` keep results' means `at_most` or `at_least` a limit, each with a `tolerance`. The search is COMPASS from the starting design and a few Latin hypercube `starts`; a space of at most `all_designs_up_to` (50) designs is not searched. The finalists are compared again on fresh replications by Kim and Nelson's KN (after Batur and Kim's feasibility check with constraints), so the answer says, with `confidence` (default 0.95), that the chosen design is the best or within `indifference` (δ, required, in the objective's unit) of the best of the designs compared at the end, or of all designs when every one was compared; \"best found, not proven best\" when the budget (`max_runs`, default 10,000, of which `reserve`, 30%, is kept for the clean-up) runs out first, and \"compared exactly\" for a model with no randomness. Beside it: the chosen design's objective with its interval, the paired difference against the starting design, each constraint's decision, the finalists, the search's trace and the runs used. `time_limit` (seconds) stops the search; its answer's `repeat` gives the `max_runs` and `reserve_runs` that repeat it exactly. `apply` makes the chosen design the model's, as one undo step.",
+        summary: "Find the best whole-number decisions (`decisions`: each a count, `{id, field}` with `field` one of `capacity`, `quantity`, `queue_capacity`, from `min` to `max` in steps of `step`, starting from the model's value or `start`). The objective is Σ weight × result plus Σ cost × decision (`objective`: `results` each `{element, metric, weight}`, `sense` minimise or maximise, `costs` each `{id, field, cost}`); `cost_cap` caps the decisions' costs, and designs over it are never run; `constraints` keep results' means `at_most` or `at_least` a limit, each with a `tolerance`. The search is COMPASS from the starting design and a few Latin hypercube `starts`. A space is not searched, and every design is compared, when it has at most `all_designs_up_to` (50) designs, it can be counted (its ranges hold at most a million points), and the budget pays for the clean-up's first stage (10 replications) of every design. The finalists are compared again on fresh replications by Kim and Nelson's KN (after Batur and Kim's feasibility check with constraints), so the answer says, with `confidence` (default 0.95), that the chosen design is the best or within `indifference` (δ, required, in the objective's unit) of the best of the designs compared at the end, or of all designs when every one was compared; \"best found, not proven best\" when the budget (`max_runs`, default 10,000, of which `reserve`, 30%, is kept for the clean-up) runs out first, and \"compared exactly\" for a model with no randomness. Beside it: the chosen design's objective with its interval, the paired difference against the starting design, each constraint's decision, the finalists, the search's trace and the runs used. `time_limit` (seconds) stops the search; its answer's `repeat` gives the `max_runs` and `reserve_runs` that repeat it exactly. `apply` makes the chosen design the model's, as one undo step, journalled as `decisions.set` so an edits-only replay repeats the change without the search.",
         kind: CommandKind::Edit,
         schema: schema::<crate::optimize::OptimiseParams>,
         example: || json!({ "decisions": [{ "id": "desk", "field": "capacity", "min": 1, "max": 3 }], "objective": { "results": [{ "element": "desk", "metric": "mean_wait", "weight": 1.0 }], "costs": [{ "id": "desk", "field": "capacity", "cost": 2.0 }] }, "indifference": 1.0, "max_runs": 300 }),

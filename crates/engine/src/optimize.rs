@@ -187,6 +187,8 @@ struct Checked {
     /// The last index: values are min + step·k for k from 0 to `last`.
     last: u32,
     cost: f64,
+    /// A cost entry was given for this decision (a cost of 0 included).
+    costed: bool,
     start: u32,
 }
 
@@ -296,6 +298,7 @@ fn decisions(model: &Model, p: &OptimiseParams) -> Result<Vec<Checked>, CommandE
             step,
             last: (d.max - d.min) / step,
             cost: 0.0,
+            costed: false,
             start,
         });
     }
@@ -309,12 +312,13 @@ fn decisions(model: &Model, p: &OptimiseParams) -> Result<Vec<Checked>, CommandE
                 "the cost of `{name}`: costs are for decisions, and `{name}` is not one"
             )));
         };
-        if d.cost != 0.0 {
+        if d.costed {
             return Err(invalid(format!(
                 "the cost of `{name}` is given more than once"
             )));
         }
         d.cost = c.cost;
+        d.costed = true;
     }
     Ok(out)
 }
@@ -372,6 +376,41 @@ fn deadline(seconds: Option<f64>) -> Result<Box<dyn FnMut() -> bool>, CommandErr
         )),
         None => Ok(Box::new(|| false)),
     }
+}
+
+/// What, in a model's description, means something is drawn at random: a distribution other
+/// than a constant (in a time, a property, a breakdown, a pool or anywhere else), a probability
+/// on a connection, an exclusive gateway (its ways are drawn when no condition decides), balking,
+/// scrap, and a property drawn from a mix of values.
+const DRAWS: [&str; 17] = [
+    "Exponential {",
+    "Uniform {",
+    "Triangular {",
+    "Normal {",
+    "Gamma {",
+    "Beta {",
+    "Erlang {",
+    "Weibull {",
+    "Poisson {",
+    "Binomial {",
+    "User {",
+    "Random(",
+    "Choice(",
+    "probability: Some(",
+    "ExclusiveGateway",
+    "balking: Some(",
+    "scrap: Some(",
+];
+
+/// Whether nothing in `model` is drawn at random: every time is constant, and nothing in its
+/// whole description (`DRAWS`) draws. Conservative: a name that happens to contain one of those
+/// words also counts as a draw, which only means the designs are compared statistically.
+fn nothing_drawn(model: &Model) -> bool {
+    if deterministic(model) != *model {
+        return false;
+    }
+    let text = format!("{model:?}");
+    !DRAWS.iter().any(|d| text.contains(d))
 }
 
 /// The sample skewness of `v` (n ≥ 3), `None` when it cannot be worked out.
@@ -521,9 +560,12 @@ pub fn optimise(model: &Model, p: &OptimiseParams) -> Result<(Value, Option<Mode
             ));
         }
         let at_min: f64 = ds.iter().map(|d| d.cost * f64::from(d.min)).sum();
+        // The costs at the ranges' least values are the limit's offset, not subtracted from the
+        // cap, so the one rule of `Space::fits` judges the whole sum against the cap itself.
         space.limits.push(Linear {
             coefficients: ds.iter().map(|d| d.cost * f64::from(d.step)).collect(),
-            limit: cap - at_min,
+            offset: at_min,
+            limit: cap,
         });
         if !space.contains(&start) {
             return Err(invalid(format!(
@@ -586,10 +628,11 @@ pub fn optimise(model: &Model, p: &OptimiseParams) -> Result<(Value, Option<Mode
         })
     };
 
-    // No randomness: every time in the model is constant, and the starting design's first two
-    // replications give the same values.
+    // No randomness: nothing in the model is drawn, and the starting design's first two
+    // replications give the same values. The probe's two runs come out of the budget, so a
+    // budget of one run never compares exactly.
     let mut probe = 0;
-    let exact = if deterministic(model) == *model {
+    let exact = if max_runs >= 2 && nothing_drawn(model) {
         let r = runs_of(Stream::Search, &start, 0..2);
         probe = 2;
         match r {
@@ -1053,7 +1096,7 @@ impl Words<'_> {
     }
 }
 
-const METHOD: &str = "COMPASS (Hong and Nelson 2006) over the decisions' values, with the pruning and local-optimality test of Industrial Strength COMPASS (Xu, Nelson and Hong 2010), from the starting design and Latin hypercube starts; every design runs replication i on the same seed (common random numbers); the finalists (the search's best, the designs active around it, each start's final design and the starting design) are compared again on fresh replications seeded by Rng::keyed(seed, \"optimize/clean-up\") by Kim and Nelson's KN, after Batur and Kim's feasibility check when there are constraints (alpha split equally between the two); a space of at most all_designs_up_to designs is not searched and every design is compared; designs over the cost cap are never run; objective: the weighted results plus the decisions' costs, per replication; objective mean and half_width: over the clean-up's replications of the design (95% t interval); against_start: the paired difference chosen minus starting design over their common clean-up replications";
+const METHOD: &str = "a space is compared whole, with no search, when it has at most all_designs_up_to designs, it can be counted (its ranges hold at most a million points) and the budget pays for the clean-up's first stage (10 replications) of every design; otherwise COMPASS (Hong and Nelson 2006) over the decisions' values, with the pruning and local-optimality test of Industrial Strength COMPASS (Xu, Nelson and Hong 2010), from the starting design and Latin hypercube starts; every design runs replication i on the same seed (common random numbers); the finalists (the search's best, the designs active around it, each start's final design and the starting design) are compared again on fresh replications seeded by Rng::keyed(seed, \"optimize/clean-up\") by Kim and Nelson's KN, after Batur and Kim's feasibility check when there are constraints (alpha split equally between the two); designs over the cost cap are never run; objective: the weighted results plus the decisions' costs, per replication; objective mean and half_width: over the clean-up's replications of the design (95% t interval); against_start: the paired difference chosen minus starting design over their common clean-up replications";
 
 #[cfg(test)]
 mod tests {
