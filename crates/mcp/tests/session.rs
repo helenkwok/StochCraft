@@ -829,3 +829,53 @@ fn experiment_evaluate_is_listed_and_runs() {
     assert!(error);
     assert!(err.to_string().contains("ghost.mean"), "{err}");
 }
+
+/// The search for whole-number decisions is offered as every command is, and gives through
+/// `execute` what the engine gives.
+#[test]
+fn experiment_optimise_is_listed_and_runs() {
+    let mut s = Session::new(Box::new(Headless::default()));
+    let listed = s.ok("list_commands", json!({"filter": "experiment.optimise"}));
+    assert!(
+        listed
+            .as_array()
+            .unwrap()
+            .iter()
+            .any(|c| c["name"] == "experiment.optimise" && c["params"].is_object()),
+        "{listed}"
+    );
+    let path = models().join("mm1.bpmn");
+    s.ok("open", json!({"path": path.to_string_lossy()}));
+    let params = json!({
+        "decisions": [{"id": "serve", "field": "capacity", "min": 1, "max": 3}],
+        "objective": {
+            "results": [{"element": "serve", "metric": "mean_wait", "weight": 2.0}],
+            "costs": [{"id": "serve", "field": "capacity", "cost": 1.0}],
+        },
+        "indifference": 1.0,
+        "max_runs": 300,
+        "seed": 3,
+    });
+    let r = s.ok(
+        "execute",
+        json!({"command": "experiment.optimise", "params": params.clone()}),
+    );
+    let mut e = Engine::new();
+    e.execute("file.open", json!({"path": path.to_string_lossy()}))
+        .unwrap();
+    let direct = e.execute("experiment.optimise", params).unwrap();
+    for key in ["outcome", "claim", "chosen", "runs", "designs_compared"] {
+        let want: Value = serde_json::from_str(&direct[key].to_string()).unwrap();
+        assert_eq!(r[key], want, "{key}");
+    }
+    let (err, error) = s.call(
+        "execute",
+        json!({"command": "experiment.optimise", "params": {
+            "decisions": [{"id": "ghost", "field": "capacity", "min": 1, "max": 3}],
+            "objective": {"results": [{"element": "serve", "metric": "mean_wait"}]},
+            "indifference": 1.0,
+        }}),
+    );
+    assert!(error);
+    assert!(err.to_string().contains("ghost.capacity"), "{err}");
+}

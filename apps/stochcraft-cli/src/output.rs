@@ -1802,6 +1802,106 @@ pub fn sd_csv(r: &Value) -> String {
     stochcraft_engine::sd::results_csv(r)
 }
 
+/// A decision's value as it is: a whole number without rounding, otherwise its shortest exact
+/// form.
+fn exact(v: &Value) -> String {
+    match v.as_f64() {
+        Some(x) if x.fract() == 0.0 && x.abs() < 9.0e15 => format!("{}", x as i64),
+        Some(x) => format!("{x}"),
+        None => "-".into(),
+    }
+}
+
+/// `experiment.optimise`'s answer: the claim in words, then the finalists (the chosen one marked
+/// `*`), the difference against the starting design and the runs used.
+pub fn optimize_table(name: &str, a: &Value) -> String {
+    let mut out = String::new();
+    let title = if name.is_empty() {
+        "(unnamed model)"
+    } else {
+        name
+    };
+    let _ = writeln!(out, "{title}: {}\n", s(&a["claim"]));
+    // Decisions are whole numbers, printed exactly (1000001, not 1.0000e6).
+    let values = |d: &Value| -> Vec<String> {
+        d.as_array()
+            .into_iter()
+            .flatten()
+            .map(|x| exact(&x["value"]))
+            .collect()
+    };
+    let finalists = a["finalists"].as_array().map_or(&[][..], Vec::as_slice);
+    let names: Vec<String> = finalists
+        .first()
+        .and_then(|x| x["decisions"].as_array())
+        .into_iter()
+        .flatten()
+        .map(|d| format!("{}.{}", s(&d["id"]), s(&d["field"])))
+        .collect();
+    let constrained = finalists.iter().any(|x| !x["feasibility"].is_null());
+    let mut header = vec![String::new()];
+    header.extend(names.iter().cloned());
+    header.extend(["cost", "objective", "± half-width", "n"].map(String::from));
+    if constrained {
+        header.push("feasibility".into());
+    }
+    let mut rows = vec![header];
+    for x in finalists {
+        let mut mark = String::new();
+        if x["chosen"] == true {
+            mark.push('*');
+        }
+        if x["starting_design"] == true {
+            mark.push_str(" start");
+        }
+        let mut row = vec![mark];
+        row.extend(values(&x["decisions"]));
+        row.push(f(&x["cost"]));
+        row.push(f(&x["objective"]["mean"]));
+        row.push(f(&x["objective"]["half_width"]));
+        row.push(x["objective"]["n"].to_string());
+        if constrained {
+            row.push(s(&x["feasibility"]).to_owned());
+        }
+        rows.push(row);
+    }
+    let mut left = vec![true];
+    left.extend(std::iter::repeat_n(false, names.len() + 4));
+    if constrained {
+        left.push(true);
+    }
+    aligned(&rows, &left, &mut out);
+    let d = &a["against_start"];
+    if !d.is_null() && a["chosen"]["decisions"] != d["start"] {
+        let _ = writeln!(
+            out,
+            "\nagainst the starting design ({}): {} ± {} (paired over {} replications)",
+            values(&d["start"]).join(", "),
+            f(&d["difference"]),
+            f(&d["half_width"]),
+            d["n"]
+        );
+    }
+    let r = &a["runs"];
+    let _ = writeln!(
+        out,
+        "\nruns: {} in the search, {} in the clean-up, {} in all (budget {}); {} designs tried; seed {}",
+        r["search"], r["clean_up"], r["total"], r["max_runs"], a["designs_tried"], a["seed"]
+    );
+    let repeat = &a["repeat"];
+    if !repeat.is_null() {
+        let _ = writeln!(
+            out,
+            "the time limit stopped the search; to repeat it exactly, run again with --max-runs {} --reserve-runs {} and without --time-limit",
+            repeat["max_runs"], repeat["reserve_runs"]
+        );
+    }
+    for w in a["warnings"].as_array().into_iter().flatten() {
+        let _ = writeln!(out, "warning: {}", s(&w["message"]));
+    }
+    out
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -2237,5 +2337,34 @@ mod tests {
         r["stop"]["met"] = serde_json::json!(["A", "B"]);
         r["stop"]["not_established"] = serde_json::json!([]);
         assert!(mc_table("m", &r).contains("every output's mean is within the share asked for"));
+    }
+
+    #[test]
+    fn optimize_table_prints_decisions_exactly() {
+        let a = serde_json::json!({
+            "claim": "c",
+            "finalists": [
+                { "decisions": [{ "id": "b", "field": "queue_capacity", "value": 1000001.0 }],
+                  "cost": 1.0, "objective": { "mean": 2.0, "half_width": 0.1, "n": 10 }, "chosen": true },
+                { "decisions": [{ "id": "b", "field": "queue_capacity", "value": 1000002.0 }],
+                  "cost": 1.0, "objective": { "mean": 3.0, "half_width": 0.1, "n": 10 } }
+            ],
+            "runs": {}, "warnings": []
+        });
+        let t = optimize_table("m", &a);
+        assert!(t.contains("1000001") && t.contains("1000002"), "{t}");
+    }
+
+    #[test]
+    fn optimize_table_says_how_to_repeat_a_search_the_time_limit_stopped() {
+        let a = serde_json::json!({
+            "claim": "c", "finalists": [], "runs": {}, "warnings": [],
+            "repeat": { "max_runs": 2000, "reserve_runs": 1990 }
+        });
+        let t = optimize_table("m", &a);
+        assert!(
+            t.contains("--max-runs 2000 --reserve-runs 1990 and without --time-limit"),
+            "{t}"
+        );
     }
 }

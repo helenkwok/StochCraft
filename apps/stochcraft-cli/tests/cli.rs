@@ -1429,6 +1429,116 @@ fn evaluate_reads_and_writes_json_lines_and_matches_the_engine() {
     assert_eq!(staged, values(&lines[4]));
 }
 
+/// `optimize` gives what the engine's `experiment.optimise` gives, as JSON, and a table that
+/// starts with the claim in words.
+#[test]
+fn optimize_matches_the_engine_and_prints_the_claim() {
+    let file = model("mm1.bpmn");
+    let args = [
+        "optimize",
+        &file,
+        "--decide",
+        "serve.capacity=1..4",
+        "--minimize",
+        "serve.mean_wait*2",
+        "--cost",
+        "serve.capacity=1",
+        "--delta",
+        "1",
+        "--max-runs",
+        "400",
+        "--seed",
+        "5",
+    ];
+    let mut with_json = args.to_vec();
+    with_json.extend(["--format", "json"]);
+    let from_cli = json(&ok(&with_json));
+
+    let mut engine = stochcraft_engine::Engine::new();
+    let opened = engine.execute("file.open", serde_json::json!({ "path": file }));
+    assert!(opened.is_ok(), "{opened:?}");
+    let direct = engine.execute(
+        "experiment.optimise",
+        serde_json::json!({
+            "decisions": [{ "id": "serve", "field": "capacity", "min": 1, "max": 4 }],
+            "objective": {
+                "results": [{ "element": "serve", "metric": "mean_wait", "weight": 2.0 }],
+                "sense": "minimise",
+                "costs": [{ "id": "serve", "field": "capacity", "cost": 1.0 }],
+            },
+            "constraints": [],
+            "indifference": 1.0,
+            "max_runs": 400,
+            "seed": 5,
+        }),
+    );
+    let Ok(direct) = direct else {
+        panic!("{direct:?}")
+    };
+    // Both parsed from their printed text, so a number's last bit is read alike.
+    assert_eq!(from_cli, json(&direct.to_string()));
+    assert_eq!(from_cli["designs_compared"], 4, "{from_cli}");
+
+    let table = ok(&args);
+    let claim = from_cli["claim"].as_str().unwrap_or_default();
+    assert!(!claim.is_empty() && table.contains(claim), "{table}");
+    assert!(table.contains("serve.capacity"), "{table}");
+
+    let o = cli(&[
+        "optimize",
+        &file,
+        "--decide",
+        "serve.capacity=1-4",
+        "--delta",
+        "1",
+    ]);
+    assert!(!o.status.success());
+    assert!(stderr(&o).contains("id.field=min..max"), "{}", stderr(&o));
+}
+
+/// `--start` sets a decision's starting value; one for something that is not a decision, or off
+/// the range's values, is refused.
+#[test]
+fn optimize_takes_a_starting_value() {
+    let file = model("mm1.bpmn");
+    let base = [
+        "optimize",
+        &file,
+        "--decide",
+        "serve.capacity=1..4",
+        "--minimize",
+        "serve.mean_wait*2",
+        "--cost",
+        "serve.capacity=1",
+        "--delta",
+        "1",
+        "--max-runs",
+        "400",
+        "--format",
+        "json",
+    ];
+    let mut args = base.to_vec();
+    args.extend(["--start", "serve.capacity=3"]);
+    let v = json(&ok(&args));
+    let start = v["finalists"]
+        .as_array()
+        .and_then(|fs| fs.iter().find(|f| f["starting_design"] == true))
+        .map(|f| f["decisions"][0]["value"].clone());
+    assert_eq!(start, Some(serde_json::json!(3.0)), "{v}");
+
+    let mut args = base.to_vec();
+    args.extend(["--start", "clerk.quantity=2"]);
+    let o = cli(&args);
+    assert!(!o.status.success());
+    assert!(stderr(&o).contains("is not a decision"), "{}", stderr(&o));
+
+    let mut args = base.to_vec();
+    args.extend(["--start", "serve.capacity=7"]);
+    let o = cli(&args);
+    assert!(!o.status.success());
+    assert!(stderr(&o).contains("serve.capacity"), "{}", stderr(&o));
+}
+
 /// An agent-based model (a BPMN file with the stochcraft:agents extension and an SCXML chart
 /// beside it): `run` prints each statistic at the end with its band, CSV and JSON give each over
 /// time, and `validate` checks the charts and populations.
@@ -1475,4 +1585,38 @@ fn an_agent_based_model_runs_from_the_command_line() {
         "{}",
         stderr(&refused)
     );
+}
+
+/// A number that is not finite is refused before anything runs, naming its flag: a NaN would
+/// reach the engine as `null`, which means "not given".
+#[test]
+fn optimize_refuses_numbers_that_are_not_finite() {
+    let file = model("mm1.bpmn");
+    let base = [
+        "optimize",
+        &file,
+        "--decide",
+        "serve.capacity=1..4",
+        "--cost",
+        "serve.capacity=1",
+        "--delta",
+        "1",
+    ];
+    for (extra, flag) in [
+        (vec!["--minimize", "serve.mean_wait*NaN"], "--minimize"),
+        (
+            vec!["--minimize", "serve.mean_wait", "--cost-cap", "NaN"],
+            "--cost-cap",
+        ),
+        (
+            vec!["--minimize", "serve.mean_wait", "--time-limit", "inf"],
+            "--time-limit",
+        ),
+    ] {
+        let mut args = base.to_vec();
+        args.extend(extra);
+        let o = cli(&args);
+        assert!(!o.status.success(), "{flag}");
+        assert!(stderr(&o).contains(flag), "{flag}: {}", stderr(&o));
+    }
 }
