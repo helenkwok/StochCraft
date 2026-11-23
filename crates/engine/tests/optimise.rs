@@ -89,6 +89,11 @@ fn tandem(service: &str, hours: f64) -> Engine {
 /// One desk: arrivals 4 an hour, mean service 1 hour, 6 servers; a warm-up of 10 hours and 100
 /// measured.
 fn one_desk() -> Engine {
+    one_desk_with(6)
+}
+
+/// One desk as [`one_desk`], with `servers` servers.
+fn one_desk_with(servers: u32) -> Engine {
     let mut e = Engine::new();
     ok(
         &mut e,
@@ -97,7 +102,7 @@ fn one_desk() -> Engine {
             "name": "One desk",
             "elements": [
                 { "id": "arrivals", "kind": "source", "interarrival": { "type": "exponential", "mean": 0.25 } },
-                { "id": "desk", "kind": "server", "capacity": 6, "service": { "type": "exponential", "mean": 1.0 } },
+                { "id": "desk", "kind": "server", "capacity": servers, "service": { "type": "exponential", "mean": 1.0 } },
                 { "id": "exit", "kind": "sink" }
             ],
             "connections": [
@@ -194,7 +199,8 @@ fn the_catalogue_example_compares_every_design_of_a_small_space() {
 
 #[test]
 fn apply_makes_the_chosen_design_the_models_as_one_undo_step() {
-    let mut e = one_desk();
+    // Nine servers to start with, so the answer (6 or 7) changes the model.
+    let mut e = one_desk_with(9);
     let before = ok(&mut e, "model.get", json!({}));
     let v = ok(
         &mut e,
