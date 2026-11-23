@@ -222,6 +222,8 @@ fn another_prefix_and_initial_elements_read_the_same() {
             .initial(&["b"])
             .on_entry(SendSpec::new("e").at_rate("3"))
             .on_entry(Action::create("people"))
+            // Two `<onentry>` elements stay two blocks.
+            .next_entry_block()
             .on_entry(Action::cancel("e1"))
             .child(StateSpec::state("b")),
     );
