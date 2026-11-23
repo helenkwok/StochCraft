@@ -17,6 +17,7 @@
 //!   connections, waits for one entity on each before going on. Any element may have several
 //!   incoming connections (a merge).
 
+pub mod agents;
 pub mod balance;
 pub mod calendar;
 pub mod capacity;
@@ -1714,6 +1715,10 @@ pub struct Model {
     /// ([`montecarlo`]): `None` for a process model. A model with one and no elements is a Monte
     /// Carlo model, which [`Model::validate`] leaves to `stochcraft-mc` to check.
     pub monte_carlo: Option<MonteCarlo>,
+    /// The populations, environment and statistics of an agent-based model, a model with no
+    /// process ([`agents`]): `None` for any other. A model with one and no elements is an
+    /// agent-based model, which [`Model::validate`] leaves to `stochcraft-agents` to check.
+    pub agents: Option<agents::Agents>,
 }
 
 /// Where an element is drawn: its shape's top-left corner and size, in the diagram's units
@@ -2533,11 +2538,18 @@ impl Model {
         self.monte_carlo.is_some() && self.elements.is_empty()
     }
 
+    /// Whether this is an agent-based model: populations of agents with no process
+    /// ([`agents`]).
+    pub fn is_agents(&self) -> bool {
+        self.agents.is_some() && self.elements.is_empty()
+    }
+
     /// Every problem with the model, errors first, each group in model order. A Monte Carlo
     /// model ([`Model::is_monte_carlo`]) has none here: it has no process, and its inputs and
-    /// outputs are checked by `stochcraft-mc`.
+    /// outputs are checked by `stochcraft-mc`; nor does an agent-based model
+    /// ([`Model::is_agents`]), whose charts and populations `stochcraft-agents` checks.
     pub fn validate(&self) -> Vec<Diagnostic> {
-        if self.is_monte_carlo() {
+        if self.is_monte_carlo() || self.is_agents() {
             return Vec::new();
         }
         let mut out = Vec::new();
@@ -4569,6 +4581,7 @@ mod tests {
             estimates: BTreeMap::new(),
             starting: BTreeMap::new(),
             monte_carlo: None,
+            agents: None,
             calendars: Vec::new(),
         }
     }

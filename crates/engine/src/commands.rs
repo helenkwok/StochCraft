@@ -2506,7 +2506,15 @@ fn file_open(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
     let p: FileOpen = parse(p)?;
     let bytes = std::fs::read(&p.path)
         .map_err(|err| CommandError::new(ErrorCode::Io, format!("{}: {err}", p.path)))?;
-    e.open_bytes(&p.path, &bytes, p.scenario.as_deref())
+    // An agent-based model's charts and lists of links are read from beside it.
+    let dir = std::path::Path::new(&p.path)
+        .parent()
+        .map(std::path::Path::to_path_buf)
+        .unwrap_or_default();
+    e.open_bytes_with(&p.path, &bytes, p.scenario.as_deref(), &mut |href: &str| {
+        let path = crate::agents::beside(&dir, href)?;
+        std::fs::read(path).map_err(|err| err.to_string())
+    })
 }
 
 fn file_save(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
@@ -2537,10 +2545,45 @@ fn file_save(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         }
         err
     })?;
+    // An agent-based model's charts and lists of links go beside it, each written only where
+    // there is no file of its name yet. One that is there and differs (another model's, or one
+    // edited since the model was opened) is never replaced: the save is refused before anything
+    // is written.
+    let dir = std::path::Path::new(&path)
+        .parent()
+        .map(std::path::Path::to_path_buf)
+        .unwrap_or_default();
+    let mut siblings = Vec::new();
+    for (href, content) in e.agent_files() {
+        let to = crate::agents::beside(&dir, &href)
+            .map_err(|m| CommandError::new(ErrorCode::InvalidParams, m))?;
+        match std::fs::read(&to) {
+            Ok(there) if there == content => {}
+            Ok(_) => {
+                return Err(CommandError::new(
+                    ErrorCode::Conflict,
+                    format!(
+                        "{} is already there and differs from the model's `{href}`: save the model in another folder, or move that file first",
+                        to.display()
+                    ),
+                ));
+            }
+            Err(_) => siblings.push((to, content)),
+        }
+    }
     // Written to a temporary file beside it and renamed over it, so a crash or a full disk
     // leaves the old file whole rather than half written.
     craft_atomic::atomic_write(std::path::Path::new(&path), &bytes)
         .map_err(|err| CommandError::new(ErrorCode::Io, format!("{path}: {err}")))?;
+    for (to, content) in siblings {
+        if let Some(parent) = to.parent() {
+            std::fs::create_dir_all(parent).map_err(|err| {
+                CommandError::new(ErrorCode::Io, format!("{}: {err}", parent.display()))
+            })?;
+        }
+        craft_atomic::atomic_write(&to, &content)
+            .map_err(|err| CommandError::new(ErrorCode::Io, format!("{}: {err}", to.display())))?;
+    }
     e.record_saved(&path, &bytes)
 }
 
@@ -3147,5 +3190,29 @@ materials,normal,mean=500;std_dev=50,USD
         schema: schema::<crate::sd_edit::VariableRemove>,
         example: || json!({ "name": "Buffer" }),
         run: crate::sd_edit::variable_remove,
+    },
+    Command {
+        name: "agents.open",
+        summary: "Agents: open an agent-based model from its text (a BPMN file with no process and the stochcraft:agents extension) and the texts of the files it names (each agent type's SCXML 1.0 state chart, each CSV list of links) in `files`, by their references, replacing the model, clearing the history and starting a new journal. A file on disk is opened with file.open, which reads those files from beside it. Run it with agents.run; file.save writes the model and its files.",
+        kind: CommandKind::Action,
+        schema: schema::<crate::agents::Open>,
+        example: || json!({ "text": crate::agents::EXAMPLE_BPMN, "files": { "person.scxml": crate::agents::EXAMPLE_SCXML } }),
+        run: crate::agents::open,
+    },
+    Command {
+        name: "agents.get",
+        summary: "Agents: the open agent-based model: the run's length, replications, seed and time unit; each agent type with its chart's states and variables; the populations with their networks and grids; the environment; the statistics; the stepped mode; the files it reads; any problem that stops it running; and whether the last agents.run's results are stale.",
+        kind: CommandKind::Query,
+        schema: schema::<crate::agents::Get>,
+        example: || json!({}),
+        run: crate::agents::get,
+    },
+    Command {
+        name: "agents.run",
+        summary: "Agents: run the open agent-based model in its replications (or `replications`, at most 100,000) from its seed (or `seed`) to the end of its warm-up and duration (or `end`). Each statistic over time at the save interval: the mean, and over more than one replication the median and the 5th and 95th percentiles at each time; each population's agents created, removed and alive at the end (means over the replications) and the messages dropped and undelivered; and the run record. A run that stops (a chart that loops, a rate below zero) is refused with the agent and the replication.",
+        kind: CommandKind::Action,
+        schema: schema::<crate::agents::RunParams>,
+        example: || json!({ "replications": 3, "seed": 7 }),
+        run: crate::agents::run,
     },
 ];

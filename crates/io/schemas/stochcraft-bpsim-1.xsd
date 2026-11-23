@@ -349,6 +349,34 @@
         <stochcraft:stop relative="0.01" max="1000000"/>
       </stochcraft:monteCarlo>
     </bpsim:VendorExtension>
+
+  stochcraft:agents, on a Scenario (after its ElementParameters and Calendars): the scenario is
+  an agent-based model (ROADMAP M4.3, decision D16), with no process, and the file needs none.
+  The scenario gives the run's length (its duration, which includes the warm-up), the
+  replications, the seed and the time unit, which rates and intervals are in. agentType names an
+  agent type and its state chart, a W3C SCXML 1.0 file named by a reference relative to this
+  file (StochCraft's extensions to SCXML are in stochcraft-scxml-1.xsd). population is agents of
+  one type: count created at the start and new ones arriving at arrivalRate, with optionally a
+  network (kind empty, random with meanDegree, ring with eachSide, smallWorld with eachSide and
+  rewire, scaleFree with initial and links, distance with width, height and range, links with
+  link children naming two serial numbers, or file with the href of a CSV list of links) and a
+  grid (rows and columns, Moore or von Neumann neighbours, wrapped or not, one agent per cell or
+  many, placed in order or at random). environment names the agent type of one agent outside the
+  populations. statistic is a count, sum, mean, min or max of an expression over a population's
+  agents that meet a condition, recorded at the start, every saveEvery and at the end. stepping
+  is the stepped mode: a step every `every`, the agents in fixed or random order. microstepLimit
+  and retestLimit stop a run that loops.
+
+    <bpsim:VendorExtension name="stochcraft:agents" xmlns:stochcraft="…">
+      <stochcraft:agents saveEvery="1">
+        <stochcraft:agentType name="person" chart="person.scxml"/>
+        <stochcraft:population name="people" type="person" count="100">
+          <stochcraft:network kind="ring" eachSide="2"/>
+        </stochcraft:population>
+        <stochcraft:statistic name="infected" population="people" measure="count"
+            condition="In('infected')"/>
+      </stochcraft:agents>
+    </bpsim:VendorExtension>
 -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
     xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1"
@@ -687,6 +715,134 @@
       <xs:attribute name="element" type="xs:string"/>
       <xs:attribute name="metric" type="xs:string"/>
       <xs:attribute name="halfWidth" type="xs:double"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="agents">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="agentType" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:attribute name="name" type="xs:string" use="required"/>
+            <xs:attribute name="chart" type="xs:anyURI" use="required"/>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="population" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="network" minOccurs="0">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="link" minOccurs="0" maxOccurs="unbounded">
+                      <xs:complexType>
+                        <xs:attribute name="a" type="xs:nonNegativeInteger" use="required"/>
+                        <xs:attribute name="b" type="xs:nonNegativeInteger" use="required"/>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                  <xs:attribute name="kind" use="required">
+                    <xs:simpleType>
+                      <xs:restriction base="xs:string">
+                        <xs:enumeration value="empty"/>
+                        <xs:enumeration value="random"/>
+                        <xs:enumeration value="ring"/>
+                        <xs:enumeration value="smallWorld"/>
+                        <xs:enumeration value="scaleFree"/>
+                        <xs:enumeration value="distance"/>
+                        <xs:enumeration value="links"/>
+                        <xs:enumeration value="file"/>
+                      </xs:restriction>
+                    </xs:simpleType>
+                  </xs:attribute>
+                  <xs:attribute name="meanDegree" type="xs:double"/>
+                  <xs:attribute name="eachSide" type="xs:nonNegativeInteger"/>
+                  <xs:attribute name="rewire" type="xs:double"/>
+                  <xs:attribute name="initial" type="xs:nonNegativeInteger"/>
+                  <xs:attribute name="links" type="xs:nonNegativeInteger"/>
+                  <xs:attribute name="width" type="xs:double"/>
+                  <xs:attribute name="height" type="xs:double"/>
+                  <xs:attribute name="range" type="xs:double"/>
+                  <xs:attribute name="href" type="xs:anyURI"/>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="grid" minOccurs="0">
+                <xs:complexType>
+                  <xs:attribute name="rows" type="xs:nonNegativeInteger" use="required"/>
+                  <xs:attribute name="columns" type="xs:nonNegativeInteger" use="required"/>
+                  <xs:attribute name="neighbourhood" default="moore">
+                    <xs:simpleType>
+                      <xs:restriction base="xs:string">
+                        <xs:enumeration value="moore"/>
+                        <xs:enumeration value="vonNeumann"/>
+                      </xs:restriction>
+                    </xs:simpleType>
+                  </xs:attribute>
+                  <xs:attribute name="wrap" type="xs:boolean" default="false"/>
+                  <xs:attribute name="perCell" default="one">
+                    <xs:simpleType>
+                      <xs:restriction base="xs:string">
+                        <xs:enumeration value="one"/>
+                        <xs:enumeration value="many"/>
+                      </xs:restriction>
+                    </xs:simpleType>
+                  </xs:attribute>
+                  <xs:attribute name="placement" default="inOrder">
+                    <xs:simpleType>
+                      <xs:restriction base="xs:string">
+                        <xs:enumeration value="inOrder"/>
+                        <xs:enumeration value="random"/>
+                      </xs:restriction>
+                    </xs:simpleType>
+                  </xs:attribute>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+            <xs:attribute name="name" type="xs:string" use="required"/>
+            <xs:attribute name="type" type="xs:string" use="required"/>
+            <xs:attribute name="count" type="xs:nonNegativeInteger" default="0"/>
+            <xs:attribute name="arrivalRate" type="xs:double"/>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="environment" minOccurs="0">
+          <xs:complexType>
+            <xs:attribute name="type" type="xs:string" use="required"/>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="statistic" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:attribute name="name" type="xs:string" use="required"/>
+            <xs:attribute name="population" type="xs:string" use="required"/>
+            <xs:attribute name="measure" default="count">
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:enumeration value="count"/>
+                  <xs:enumeration value="sum"/>
+                  <xs:enumeration value="mean"/>
+                  <xs:enumeration value="min"/>
+                  <xs:enumeration value="max"/>
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:attribute>
+            <xs:attribute name="expression" type="xs:string"/>
+            <xs:attribute name="condition" type="xs:string"/>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="stepping" minOccurs="0">
+          <xs:complexType>
+            <xs:attribute name="every" type="xs:double" use="required"/>
+            <xs:attribute name="order" default="fixed">
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:enumeration value="fixed"/>
+                  <xs:enumeration value="random"/>
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:attribute>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+      <xs:attribute name="saveEvery" type="xs:double"/>
+      <xs:attribute name="microstepLimit" type="xs:nonNegativeInteger"/>
+      <xs:attribute name="retestLimit" type="xs:nonNegativeInteger"/>
     </xs:complexType>
   </xs:element>
 </xs:schema>

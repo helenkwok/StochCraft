@@ -1538,3 +1538,51 @@ fn optimize_takes_a_starting_value() {
     assert!(!o.status.success());
     assert!(stderr(&o).contains("serve.capacity"), "{}", stderr(&o));
 }
+
+/// An agent-based model (a BPMN file with the stochcraft:agents extension and an SCXML chart
+/// beside it): `run` prints each statistic at the end with its band, CSV and JSON give each over
+/// time, and `validate` checks the charts and populations.
+#[test]
+fn an_agent_based_model_runs_from_the_command_line() {
+    let m = model("sir-agents.bpmn");
+    let table = ok(&["run", &m, "--reps", "5"]);
+    assert!(table.contains("agent-based, 0 to 60 day"), "{table}");
+    assert!(table.contains("5 replications, seed 1"), "{table}");
+    assert!(table.contains("recovered"), "{table}");
+    assert!(table.contains("people"), "{table}");
+
+    let csv = ok(&[
+        "run",
+        &m,
+        "--reps",
+        "3",
+        "--duration",
+        "10",
+        "--format",
+        "csv",
+    ]);
+    assert_eq!(csv.lines().count(), 12, "{csv}");
+    assert!(
+        csv.starts_with("time (day),susceptible,susceptible median,"),
+        "{csv}"
+    );
+
+    let r = json(&ok(&[
+        "run", &m, "--reps", "2", "--seed", "4", "--format", "json",
+    ]));
+    assert_eq!(r["replications"], 2);
+    assert_eq!(r["seed"], 4);
+    assert_eq!(r["statistics"].as_array().map(Vec::len), Some(3));
+
+    let checked = ok(&["validate", &m]);
+    assert!(checked.contains("0 errors"), "{checked}");
+
+    // What means nothing for such a model is refused, not ignored.
+    let refused = cli(&["run", &m, "--until", "0.05"]);
+    assert!(!refused.status.success());
+    assert!(
+        stderr(&refused).contains("agent-based"),
+        "{}",
+        stderr(&refused)
+    );
+}
