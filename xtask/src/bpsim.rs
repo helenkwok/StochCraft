@@ -8,6 +8,11 @@
 //! committed: they are downloaded, checked against pinned SHA-256 checksums (a changed file is
 //! refused, so tests never silently run on different data) and unpacked. Downloads use `curl`
 //! and unpacking uses `unzip`, both present on CI runners, Linux and macOS.
+//!
+//! W3C's XML Schema for SCXML 1.0 (its driver, the modules it includes and the schema of the XML
+//! namespace it imports) is fetched beside them the same way, for the test that every state
+//! chart StochCraft writes is valid SCXML (`crates/io/tests/scxml.rs`). W3C's notice allows
+//! copying it, but it is fetched rather than committed, like the rest.
 
 use std::path::{Path, PathBuf};
 use std::process::Command;
@@ -16,8 +21,8 @@ use sha2::{Digest, Sha256};
 
 use crate::root;
 
-/// (URL, file name, SHA-256) of each download.
-pub const FILES: [(&str, &str, &str); 2] = [
+/// (URL, file name, SHA-256) of each download. The first is the guide's zip, which is unpacked.
+pub const FILES: [(&str, &str, &str); 10] = [
     (
         "https://www.bpsim.org/implementers/2.0/BPSim%20Implementer's%20Guide%20v2.0.zip",
         "implementers-guide-2.0.zip",
@@ -27,6 +32,47 @@ pub const FILES: [(&str, &str, &str); 2] = [
         "https://www.bpsim.org/schemas/2.0/BPSim-2.0.xsd",
         "BPSim-2.0.xsd",
         "35999c20096c2cba9e6012d8cbb1b37d2deaac152d8da2ea4f95eb5a990ffcd2",
+    ),
+    (
+        "https://www.w3.org/2011/04/SCXML/scxml.xsd",
+        "scxml.xsd",
+        "98e14d0e03d5f9bb49b03fe4a2c24d72c165789d68fe93eee24fc403e4b23b48",
+    ),
+    (
+        "https://www.w3.org/2011/04/SCXML/scxml-module-core.xsd",
+        "scxml-module-core.xsd",
+        "cbe0cde7a2cc165b84263e0dad45abd74296ed99a9196611e4b0c98b494222e4",
+    ),
+    (
+        "https://www.w3.org/2011/04/SCXML/scxml-module-data.xsd",
+        "scxml-module-data.xsd",
+        "c34438431aa5d9815a63a64415e3127b832abd451ca509ff79a89d529dddba47",
+    ),
+    (
+        "https://www.w3.org/2011/04/SCXML/scxml-module-external.xsd",
+        "scxml-module-external.xsd",
+        "899b13488332a6b37700ea53766e16d39b1b4f38fb829d0d3b12f0955a08057d",
+    ),
+    (
+        "https://www.w3.org/2011/04/SCXML/scxml-datatypes.xsd",
+        "scxml-datatypes.xsd",
+        "51036cac697db9be6f92ad853215dc3166990ca292786fed1612d0666932163b",
+    ),
+    (
+        "https://www.w3.org/2011/04/SCXML/scxml-attribs.xsd",
+        "scxml-attribs.xsd",
+        "b74de05e9e8d86123a4e8cca6655761fae78009e8d63b95cc27ae38222a2de01",
+    ),
+    (
+        "https://www.w3.org/2011/04/SCXML/scxml-contentmodels.xsd",
+        "scxml-contentmodels.xsd",
+        "704baaf6e19c480fa76039390dc0a0e045f5544b5f68ec294c47fe51d40d0053",
+    ),
+    // The schema of the XML namespace, which SCXML's imports.
+    (
+        "https://www.w3.org/2001/xml.xsd",
+        "xml.xsd",
+        "61960fb3131e38022caad5360e2f33a3382578ab3c80cd58bd74320ede61b20c",
     ),
 ];
 
