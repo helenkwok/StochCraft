@@ -195,6 +195,26 @@ pub enum Action {
     /// [`Model`](crate::Model)): an event at the current time, after the current one, ends its
     /// chart (its active states are exited, their exit actions run) and takes it out.
     Remove { population: String, serial: String },
+    /// Links the agent, which must be of `population`, to the agent of it whose serial number
+    /// `serial` gives, in the population's [`Network`](crate::Network) (a link to itself, to
+    /// an agent that is not alive, or one it has already does nothing). It takes effect when
+    /// the macrostep ends, in the order the actions ran.
+    Connect { population: String, serial: String },
+    /// Removes the agent's link to that agent, as [`Action::Connect`] adds it.
+    Disconnect { population: String, serial: String },
+    /// Moves the agent, which must be of `population`, to the cell at `row` and `column` (two
+    /// expressions) of the population's [`Grid`](crate::Grid), wrapped if the grid wraps. If
+    /// there is no such cell, or it holds another agent and the grid has one per cell, the agent
+    /// stays. It takes effect when the macrostep ends.
+    MoveTo {
+        population: String,
+        row: String,
+        column: String,
+    },
+    /// Moves the agent to one of its neighbouring cells that can take it, picked at random from a
+    /// stream of its own (keyed by the action's place in the chart and `pick`); it stays if
+    /// there is none. It takes effect when the macrostep ends.
+    MoveRandom { population: String },
 }
 
 impl Action {
@@ -243,6 +263,34 @@ impl Action {
             serial: serial.to_string(),
         }
     }
+
+    pub fn connect(population: &str, serial: &str) -> Self {
+        Action::Connect {
+            population: population.to_string(),
+            serial: serial.to_string(),
+        }
+    }
+
+    pub fn disconnect(population: &str, serial: &str) -> Self {
+        Action::Disconnect {
+            population: population.to_string(),
+            serial: serial.to_string(),
+        }
+    }
+
+    pub fn move_to(population: &str, row: &str, column: &str) -> Self {
+        Action::MoveTo {
+            population: population.to_string(),
+            row: row.to_string(),
+            column: column.to_string(),
+        }
+    }
+
+    pub fn move_random(population: &str) -> Self {
+        Action::MoveRandom {
+            population: population.to_string(),
+        }
+    }
 }
 
 /// Which other agents a [`SendSpec`] goes to (in a [`Model`](crate::Model)). Each recipient gets
@@ -259,14 +307,28 @@ pub enum To {
     Random { population: String },
     /// Every agent of `population` but the sender, in serial order.
     All { population: String },
+    /// Every agent linked to the sender in `population`'s network, in serial order (the
+    /// sender must be of `population`).
+    Linked { population: String },
+    /// One agent linked to the sender, picked at random as for [`To::Random`].
+    LinkedRandom { population: String },
+    /// Every agent in the sender's neighbourhood on `population`'s grid (the agents in the
+    /// neighbouring cells and the others in its own cell), in serial order.
+    Neighbours { population: String },
+    /// One agent of the sender's neighbourhood, picked at random as for [`To::Random`].
+    NeighbourRandom { population: String },
 }
 
 impl To {
     pub fn population(&self) -> &str {
         match self {
-            To::Agent { population, .. } | To::Random { population } | To::All { population } => {
-                population
-            }
+            To::Agent { population, .. }
+            | To::Random { population }
+            | To::All { population }
+            | To::Linked { population }
+            | To::LinkedRandom { population }
+            | To::Neighbours { population }
+            | To::NeighbourRandom { population } => population,
         }
     }
 }
@@ -350,6 +412,38 @@ impl SendSpec {
     /// To every agent of `population` but the sender.
     pub fn to_all(mut self, population: &str) -> Self {
         self.to = Some(To::All {
+            population: population.to_string(),
+        });
+        self
+    }
+
+    /// To every agent linked to the sender in `population`'s network.
+    pub fn to_linked(mut self, population: &str) -> Self {
+        self.to = Some(To::Linked {
+            population: population.to_string(),
+        });
+        self
+    }
+
+    /// To one agent linked to the sender, picked at random.
+    pub fn to_linked_random(mut self, population: &str) -> Self {
+        self.to = Some(To::LinkedRandom {
+            population: population.to_string(),
+        });
+        self
+    }
+
+    /// To every agent of the sender's neighbourhood on `population`'s grid.
+    pub fn to_neighbours(mut self, population: &str) -> Self {
+        self.to = Some(To::Neighbours {
+            population: population.to_string(),
+        });
+        self
+    }
+
+    /// To one agent of the sender's neighbourhood, picked at random.
+    pub fn to_neighbour_random(mut self, population: &str) -> Self {
+        self.to = Some(To::NeighbourRandom {
             population: population.to_string(),
         });
         self
@@ -522,6 +616,10 @@ pub(crate) enum RefWhat {
     Population,
     State(String),
     Variable(String),
+    /// The population has a network.
+    Network,
+    /// The population has a grid.
+    Grid,
 }
 
 #[derive(Debug, Clone)]
@@ -537,13 +635,40 @@ pub(crate) struct Transition {
 
 #[derive(Debug, Clone)]
 pub(crate) enum Exec {
-    Assign { var: u32, code: Code },
+    Assign {
+        var: u32,
+        code: Code,
+    },
     Raise(String),
     SendSpec(Box<SendExec>),
     Cancel(String),
-    Log { label: String, code: Option<Code> },
+    Log {
+        label: String,
+        code: Option<Code>,
+    },
     Create(String),
-    Remove { population: String, serial: Code },
+    Remove {
+        population: String,
+        serial: Code,
+    },
+    Connect {
+        population: String,
+        serial: Code,
+    },
+    Disconnect {
+        population: String,
+        serial: Code,
+    },
+    MoveTo {
+        population: String,
+        row: Code,
+        column: Code,
+    },
+    /// The stream (site) the pick draws from.
+    MoveRandom {
+        population: String,
+        site: u32,
+    },
 }
 
 #[derive(Debug, Clone)]
@@ -569,6 +694,16 @@ pub(crate) enum ToExec {
     },
     All {
         population: String,
+    },
+    /// The agents linked to the sender; with a site, one of them picked from that stream.
+    Linked {
+        population: String,
+        site: Option<u32>,
+    },
+    /// The sender's neighbours on the grid; with a site, one of them picked from that stream.
+    Neighbours {
+        population: String,
+        site: Option<u32>,
     },
 }
 
@@ -844,9 +979,14 @@ impl Chart {
     }
 
     /// Compiles an expression over one agent of this chart, for a statistic: it reads the
-    /// chart's variables, `In()`, `serial()` and `time()`, and draws nothing and reads no
-    /// population.
-    pub(crate) fn agent_expression(&self, src: &str, place: &str) -> Result<Code, ChartError> {
+    /// chart's variables, `In()`, `serial()`, `time()` and the agent's neighbourhood
+    /// ([`data::NEIGHBOURHOOD_FUNCTIONS`]), and draws nothing and reads no whole population.
+    /// Returns it with the population names it uses, for the model to check.
+    pub(crate) fn agent_expression(
+        &self,
+        src: &str,
+        place: &str,
+    ) -> Result<(Code, Vec<PopRef>), ChartError> {
         let mut c = Compiler {
             ids: &self.ids,
             var_index: self.var_index.clone(),
@@ -857,7 +997,9 @@ impl Chart {
         let mut bad = None;
         data::walk(&code.expr, &mut |x| {
             if let Expr::Provided(f, _) = x
-                && (data::is_draw(f) || data::POPULATION_FUNCTIONS.contains(&f.as_str()))
+                && (data::is_draw(f)
+                    || (data::POPULATION_FUNCTIONS.contains(&f.as_str())
+                        && !data::NEIGHBOURHOOD_FUNCTIONS.contains(&f.as_str())))
                 && bad.is_none()
             {
                 bad = Some(f.clone());
@@ -866,7 +1008,10 @@ impl Chart {
         if let Some(f) = bad {
             return fail(
                 place,
-                format!("`{src}` calls {f}(), but a statistic reads only the agent itself"),
+                format!(
+                    "`{src}` calls {f}(), but a statistic reads only the agent itself and its \
+                     links and neighbours"
+                ),
             );
         }
         if code.expr.references().contains(&data::EVENT_NAME)
@@ -877,10 +1022,13 @@ impl Chart {
                 format!("`{src}` reads the event, but a statistic has none"),
             );
         }
-        Ok(Code {
-            site: u32::MAX,
-            ..code
-        })
+        Ok((
+            Code {
+                site: u32::MAX,
+                ..code
+            },
+            c.refs,
+        ))
     }
 
     pub(crate) fn node(&self, i: u32) -> &Node {
@@ -1151,24 +1299,32 @@ impl Compiler<'_> {
                 return;
             };
             populations.push(p.to_string());
-            let what = match f.as_str() {
-                "population-size" => Some(RefWhat::Population),
-                "population-count" => literal(args, 1).map(|s| RefWhat::State(s.to_string())),
-                "population-sum" | "population-mean" => {
-                    literal(args, 1).map(|v| RefWhat::Variable(v.to_string()))
-                }
-                _ => literal(args, 2).map(|v| RefWhat::Variable(v.to_string())),
+            let state = |i: usize| literal(args, i).map(|s| RefWhat::State(s.to_string()));
+            let var = |i: usize| literal(args, i).map(|v| RefWhat::Variable(v.to_string()));
+            let what: Vec<Option<RefWhat>> = match f.as_str() {
+                "population-size" => vec![Some(RefWhat::Population)],
+                "population-count" => vec![state(1)],
+                "population-sum" | "population-mean" => vec![var(1)],
+                "degree" => vec![Some(RefWhat::Network)],
+                "linked-count" => vec![Some(RefWhat::Network), state(1)],
+                "linked-sum" => vec![Some(RefWhat::Network), var(1)],
+                "neighbours" => vec![Some(RefWhat::Grid)],
+                "neighbour-count" => vec![Some(RefWhat::Grid), state(1)],
+                "neighbour-sum" => vec![Some(RefWhat::Grid), var(1)],
+                _ => vec![var(2)],
             };
-            match what {
-                Some(what) => refs.push(PopRef {
-                    population: p.to_string(),
-                    what,
-                    place: place.to_string(),
-                }),
-                None => {
-                    bad.get_or_insert_with(|| {
-                        format!("{f}() names its state or variable in quotes")
-                    });
+            for w in what {
+                match w {
+                    Some(what) => refs.push(PopRef {
+                        population: p.to_string(),
+                        what,
+                        place: place.to_string(),
+                    }),
+                    None => {
+                        bad.get_or_insert_with(|| {
+                            format!("{f}() names its state or variable in quotes")
+                        });
+                    }
                 }
             }
         });
@@ -1189,11 +1345,22 @@ impl Compiler<'_> {
     }
 
     fn population(&mut self, population: &str, place: &str) {
+        self.needs(population, place, RefWhat::Population);
+    }
+
+    fn needs(&mut self, population: &str, place: &str, what: RefWhat) {
         self.refs.push(PopRef {
             population: population.to_string(),
-            what: RefWhat::Population,
+            what,
             place: place.to_string(),
         });
+    }
+
+    /// A stream of its own for a random pick at `site`.
+    fn pick_site(&mut self, site: &str) -> u32 {
+        let index = self.sites.len() as u32;
+        self.sites.push(format!("{site}/pick"));
+        index
     }
 
     fn block(
@@ -1254,6 +1421,40 @@ impl Compiler<'_> {
                     serial: self.code(serial, place, site)?,
                 }
             }
+            Action::Connect { population, serial } | Action::Disconnect { population, serial } => {
+                self.population(population, place);
+                self.needs(population, place, RefWhat::Network);
+                let population = population.clone();
+                let serial = self.code(serial, place, site)?;
+                if matches!(a, Action::Connect { .. }) {
+                    Exec::Connect { population, serial }
+                } else {
+                    Exec::Disconnect { population, serial }
+                }
+            }
+            Action::MoveTo {
+                population,
+                row,
+                column,
+            } => {
+                self.population(population, place);
+                self.needs(population, place, RefWhat::Grid);
+                Exec::MoveTo {
+                    population: population.clone(),
+                    row: self.code(row, place, &format!("{site}/row"))?,
+                    column: self.code(column, place, &format!("{site}/column"))?,
+                }
+            }
+            Action::MoveRandom { population } => {
+                self.population(population, place);
+                self.needs(population, place, RefWhat::Grid);
+                let index = self.sites.len() as u32;
+                self.sites.push(format!("{site}/pick"));
+                Exec::MoveRandom {
+                    population: population.clone(),
+                    site: index,
+                }
+            }
             Action::SendSpec(s) => {
                 let event = Self::event_name(&s.event, place)?;
                 let data = match &s.data {
@@ -1274,17 +1475,29 @@ impl Compiler<'_> {
                             population: population.clone(),
                             serial: self.code(serial, place, &format!("{site}/to"))?,
                         },
-                        To::Random { population } => {
-                            let index = self.sites.len() as u32;
-                            self.sites.push(format!("{site}/pick"));
-                            ToExec::Random {
-                                population: population.clone(),
-                                site: index,
-                            }
-                        }
+                        To::Random { population } => ToExec::Random {
+                            population: population.clone(),
+                            site: self.pick_site(site),
+                        },
                         To::All { population } => ToExec::All {
                             population: population.clone(),
                         },
+                        To::Linked { population } | To::LinkedRandom { population } => {
+                            self.needs(population, place, RefWhat::Network);
+                            ToExec::Linked {
+                                population: population.clone(),
+                                site: matches!(to, To::LinkedRandom { .. })
+                                    .then(|| self.pick_site(site)),
+                            }
+                        }
+                        To::Neighbours { population } | To::NeighbourRandom { population } => {
+                            self.needs(population, place, RefWhat::Grid);
+                            ToExec::Neighbours {
+                                population: population.clone(),
+                                site: matches!(to, To::NeighbourRandom { .. })
+                                    .then(|| self.pick_site(site)),
+                            }
+                        }
                     };
                     return Ok(Exec::SendSpec(Box::new(SendExec {
                         event,

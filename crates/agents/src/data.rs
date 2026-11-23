@@ -21,6 +21,15 @@
 //!   knows which populations each expression reads and checks the names when it is built. Outside
 //!   a model (an [`Agent`](crate::Agent) on its own or in a [`Driver`](crate::Driver)) they read
 //!   as empty, and `serial()` as NaN.
+//! - Along a population's network or grid (stage A3, [`network`](crate::network)), for an agent
+//!   of that population: `degree('p')`, how many agents it is linked to; `linked-count('p', 's')`
+//!   and `linked-sum('p', 'x')`, how many of them are in state `s` and the sum of their variable
+//!   `x`; `neighbours('p')`, how many agents are in its grid neighbourhood (its neighbouring cells
+//!   and the others in its own cell); and `neighbour-count('p', 's')` and
+//!   `neighbour-sum('p', 'x')` likewise over them. For an agent of another population, or one with
+//!   no cell, they read as NaN. A condition that calls them is tested again when the population
+//!   changes, as for the other population functions (a link made or removed and a move count as
+//!   changes), and statistics may call them.
 //!
 //! `getProperty('_event.name')` reads the name of the event being handled (SCXML's
 //! `_event.name`), and `getProperty('_event.data')` the number a message or send carries
@@ -44,6 +53,23 @@ pub(crate) const POPULATION_FUNCTIONS: &[&str] = &[
     "population-sum",
     "population-mean",
     "agent-value",
+    "degree",
+    "linked-count",
+    "linked-sum",
+    "neighbours",
+    "neighbour-count",
+    "neighbour-sum",
+];
+
+/// The population functions that read only the agent's own links or grid neighbourhood, which a
+/// statistic may call too.
+pub(crate) const NEIGHBOURHOOD_FUNCTIONS: &[&str] = &[
+    "degree",
+    "linked-count",
+    "linked-sum",
+    "neighbours",
+    "neighbour-count",
+    "neighbour-sum",
 ];
 
 /// Whether `name` is one of the distribution functions (which draw from a stream).
@@ -82,6 +108,12 @@ pub const FUNCTIONS: &[Provided<'static>] = &[
     f("population-sum", 2, 2),
     f("population-mean", 2, 2),
     f("agent-value", 3, 3),
+    f("degree", 1, 1),
+    f("linked-count", 2, 2),
+    f("linked-sum", 2, 2),
+    f("neighbours", 1, 1),
+    f("neighbour-count", 2, 2),
+    f("neighbour-sum", 2, 2),
 ];
 
 /// A draw from the distribution function `name` with these arguments, or `None` if `name` is
