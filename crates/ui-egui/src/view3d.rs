@@ -777,15 +777,15 @@ pub(crate) struct Camera {
 }
 
 impl Camera {
-    /// A camera at a three-quarter view from the front left, as near as it can be while every
-    /// corner of `bounds` shows in a view `aspect` (width over height) wide, with a margin, and
-    /// with the box centred on screen.
+    /// A camera at a three-quarter view from the front right (from `-y`, a little towards `+x`),
+    /// as near as it can be while every corner of `bounds` shows in a view `aspect` (width over
+    /// height) wide, with a margin, and with the box centred on screen.
     pub(crate) fn fitted(bounds: (Vec3, Vec3), aspect: f32) -> Self {
         let (lo, hi) = bounds;
         let mut cam = Self {
             target: midpoint(lo, hi),
-            yaw: -FRAC_PI_2 - 0.6,
-            pitch: 0.62,
+            yaw: -FRAC_PI_2 + 0.5,
+            pitch: 0.68,
             distance: 1.0,
         };
         let corners: Vec<Vec3> = (0..8)
