@@ -78,6 +78,9 @@ pub fn save_edited(
     if before.monte_carlo != after.monte_carlo {
         ed.save_monte_carlo(&mut doc.root, scenario, after)?;
     }
+    if before.site.scene != after.site.scene {
+        ed.save_scene(&mut doc.root, scenario, after)?;
+    }
     let unit = ed.unit.clone();
     tidy(&mut doc.root, "", &unit);
     let out = xml::write(&doc).into_bytes();
@@ -456,6 +459,16 @@ fn difference_within(
     };
     if started(got) != started(want) {
         return Some(format!("its starting contents read as {:?}", got.starting));
+    }
+    // The layout too: tracks and places on the elements they are for, and the scenery.
+    let placed = |m: &Model| {
+        let mut site = m.site.clone();
+        site.paths.retain(|id, _| want.element(id).is_some());
+        site.places.retain(|id, _| want.element(id).is_some());
+        site
+    };
+    if placed(got) != placed(want) {
+        return Some(format!("its layout reads as {:?}", got.site));
     }
     // Shapes are kept to the precision the file writes them with.
     let near = |a: &Bounds, b: &Bounds| {
@@ -2819,6 +2832,33 @@ impl Editor {
             });
             writes.push((id.to_string(), ESTIMATE, v));
         }
+        // The physical layout (D24): each conveyor's track and each block's place, where it
+        // changed.
+        let site_ids: BTreeSet<&ElementId> = before
+            .site
+            .paths
+            .keys()
+            .chain(after.site.paths.keys())
+            .chain(before.site.places.keys())
+            .chain(after.site.places.keys())
+            .collect();
+        for id in site_ids {
+            let again = replaced.contains(id.as_str());
+            let track = |m: &Model| m.site.paths.get(id);
+            if track(before) != track(after) || again {
+                let v = track(after)
+                    .filter(|_| exists(id))
+                    .map(crate::layout::path_element);
+                writes.push((id.to_string(), crate::bpsim::PATH, v));
+            }
+            let place = |m: &Model| m.site.places.get(id);
+            if place(before) != place(after) || again {
+                let v = place(after)
+                    .filter(|_| exists(id))
+                    .map(crate::layout::place_element);
+                writes.push((id.to_string(), crate::bpsim::PLACE, v));
+            }
+        }
         // Starting contents, 0 being none, on blocks that can hold them.
         let count = |m: &Model, id: &ElementId| {
             m.starting
@@ -2899,6 +2939,29 @@ impl Editor {
                 self.text_attrs(c);
             }
         }
+    }
+
+    /// Writes the scenery (`stochcraft:scene`) into the scenario that was opened, in place of
+    /// what was there; with none, removes it.
+    fn save_scene(
+        &mut self,
+        root: &mut Element,
+        scenario: Option<&str>,
+        after: &Model,
+    ) -> Result<(), SaveError> {
+        let new = crate::layout::scene_element(&after.site.scene);
+        let s = if new.is_some() {
+            self.ensure_scenario(root, scenario)?
+        } else {
+            match scenario_mut(root, scenario) {
+                Some(s) => s,
+                None => return Ok(()),
+            }
+        };
+        let ns = s.ns.clone().unwrap_or_else(|| NS2.to_owned());
+        let prefix = s.prefix().to_owned();
+        set_scenario_extension(s, crate::bpsim::SCENE, new, &prefix, &ns);
+        Ok(())
     }
 
     /// The scenario that was opened, created (with its `BPSimData`) if the file had none.

@@ -15,6 +15,7 @@
 
 pub mod bpsim;
 pub mod duration;
+pub mod layout;
 mod mc;
 pub mod read;
 mod save;

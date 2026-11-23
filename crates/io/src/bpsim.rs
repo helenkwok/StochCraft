@@ -144,6 +144,20 @@ pub const UNBATCH: &str = "stochcraft:unbatch";
 /// as a conveyor; other tools see a plain task.
 pub const CONVEYOR: &str = "stochcraft:conveyor";
 
+/// A conveyor's track (ROADMAP.md, M5.5, D23 and D24): a `stochcraft:path` element on the
+/// conveyor's `ElementParameters` with a start frame (`x`, `y`, `z`, `heading`), the belt's
+/// `width` and `line`, `arc` and `helix` segments ([`crate::layout`]). The conveyor's length is
+/// its path's; a `length` that differs is an override.
+pub const PATH: &str = "stochcraft:path";
+
+/// A block's place on the floor: a `stochcraft:place` element on its `ElementParameters`, with a
+/// frame (`x`, `y`, `z`, `heading`) or a conveyor (`path`) and a distance along it (`s`).
+pub const PLACE: &str = "stochcraft:place";
+
+/// Look-only scenery: a `stochcraft:scene` element, a child of the scenario, holding `object`
+/// elements, each with an `id`, a `kind`, a frame and a size. The run never reads it.
+pub const SCENE: &str = "stochcraft:scene";
+
 /// A transport: a `stochcraft:transport` element on a task's `ElementParameters` with the
 /// attribute `pool` (the id of a mobile resource) and the children `load` and `unload`, each
 /// holding a BPSim distribution. A task carrying it reads as a transport; other tools see a
@@ -290,6 +304,8 @@ pub struct ScenarioSettings {
     pub sequential: Option<Sequential>,
     /// The observed data ([`OBSERVED`]); empty without any or where turned off.
     pub observed: Vec<Observation>,
+    /// Look-only scenery ([`SCENE`]), in id order; empty without any.
+    pub scene: Vec<stochcraft_model::Scenery>,
 }
 
 /// A BPSim `Calendar` as the file has it: id, name and iCalendar text.
@@ -663,6 +679,7 @@ fn read_extensions(exts: &[&Element], s: &mut ScenarioSettings, notes: &mut Vec<
             }
             Some(SEQUENTIAL) => s.sequential = read_sequential(ext, notes),
             Some(OBSERVED) => s.observed = read_observed(ext, notes),
+            Some(SCENE) => s.scene = crate::layout::read_scene(ext, notes),
             _ => {}
         }
     }

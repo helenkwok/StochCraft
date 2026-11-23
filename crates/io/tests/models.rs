@@ -226,3 +226,42 @@ fn truncated_files_never_panic() {
         let _ = stochcraft_io::read(&corrupted);
     }
 }
+
+/// The sorter example's layout: every block is placed, each conveyor's length is its path's
+/// (12 m infeed, 30 m loop, 4 m lanes, as the run had before the layout), and nothing is noted.
+#[test]
+fn the_sorter_is_laid_out_and_its_lengths_are_its_paths() {
+    let l = load("sorter.bpmn", None);
+    assert!(l.notes.is_empty(), "{:#?}", l.notes);
+    let m = &l.model;
+    for e in &m.elements {
+        let placed = m.site.frame_of(&e.id).is_some();
+        assert!(placed, "{} has no place", e.id);
+        if let ElementKind::Conveyor { length, .. } = e.kind {
+            let track = m.site.paths.get(&e.id);
+            assert_eq!(track.map(|t| t.length()), Some(length), "{}", e.id);
+        }
+    }
+    let length = |id: &str| match kind(m, id) {
+        ElementKind::Conveyor { length, .. } => *length,
+        _ => panic!("{id} is not a conveyor"),
+    };
+    assert_eq!(
+        [length("infeed"), length("loop"), length("lane_red")],
+        [12.0, 30.0, 4.0]
+    );
+    // The loop closes: it ends where it starts, where the divert is.
+    let end = m.site.paths[&stochcraft_model::ElementId::unchecked("loop")]
+        .path
+        .end();
+    assert!(end.x.abs() < 1e-9 && end.y.abs() < 1e-9, "{end:?}");
+    assert!(
+        m.validate()
+            .iter()
+            .all(|d| d.severity != stochcraft_model::Severity::Error
+                && !matches!(
+                    d.problem,
+                    stochcraft_model::Problem::ConveyorLengthMismatch { .. }
+                ))
+    );
+}

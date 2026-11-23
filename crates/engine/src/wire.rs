@@ -2506,6 +2506,10 @@ pub struct ModelDoc {
     /// process model.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub monte_carlo: Option<crate::mc::MonteCarloDoc>,
+    /// The physical layout: conveyors' tracks, blocks' places and scenery; left out for a model
+    /// without one.
+    #[serde(default, skip_serializing_if = "crate::site::SiteDoc::is_empty")]
+    pub site: crate::site::SiteDoc,
 }
 
 impl From<&Model> for ModelDoc {
@@ -2545,6 +2549,7 @@ impl From<&Model> for ModelDoc {
             calendars: m.calendars.iter().map(Into::into).collect(),
             experiment: (&m.experiment).into(),
             monte_carlo: m.monte_carlo.as_ref().map(Into::into),
+            site: (&m.site).into(),
         }
     }
 }
@@ -2607,6 +2612,7 @@ impl From<ModelDoc> for Model {
             calendars: m.calendars.into_iter().map(Into::into).collect(),
             experiment: m.experiment.into(),
             monte_carlo: m.monte_carlo.map(Into::into),
+            site: m.site.into(),
         }
     }
 }

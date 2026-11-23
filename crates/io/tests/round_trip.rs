@@ -2831,3 +2831,112 @@ fn scenario_extensions_are_read_from_the_scenario_and_from_its_parameters() {
     };
     assert_eq!(old.model, new.model);
 }
+
+/// The physical layout (D24): a conveyor's track, blocks' places and scenery are written as
+/// StochCraft's vendor extensions, read back as they were, and saved in place when they change.
+/// A typed length that agrees with the track is the track's; one that differs stays, as an
+/// override (D23).
+#[test]
+fn a_layout_writes_reads_and_saves() {
+    use stochcraft_model::{ElementId, Frame, LengthUnit, Path, Place, Scenery, Segment, Track};
+    let id = |s: &str| ElementId::unchecked(s);
+    let mut model = belt_model();
+    model.experiment.length_unit = LengthUnit::Metres;
+    // 10 m straight, then a quarter circle of radius 10/π (5 m): 15 m in all.
+    let track = Track {
+        path: Path::new(
+            Frame::new(1.0, 2.0, 0.0, 90.0),
+            vec![
+                Segment::Line {
+                    length: 10.0,
+                    rise: 0.0,
+                },
+                Segment::Arc {
+                    radius: 10.0 / std::f64::consts::PI,
+                    angle_deg: -90.0,
+                    rise: 0.0,
+                },
+            ],
+        ),
+        width: 0.8,
+    };
+    model.site.paths.insert(id("belt"), track.clone());
+    model
+        .site
+        .places
+        .insert(id("in"), Place::At(Frame::new(1.0, 1.0, 0.0, 90.0)));
+    model.site.places.insert(
+        id("out"),
+        Place::Along {
+            path: id("belt"),
+            s: 15.0,
+        },
+    );
+    model.site.scene.push(Scenery {
+        id: "floor".to_owned(),
+        kind: "floor".to_owned(),
+        at: Frame::new(5.0, 8.0, 0.0, 0.0),
+        size: [12.0, 16.0, 0.0],
+    });
+    // A typed 15 m is the track's length: written, it reads back as exactly 15.
+    if let ElementKind::Conveyor { length, .. } = &mut model.elements[1].kind {
+        *length = 15.0;
+    }
+    let bytes = write_new(&model);
+    let text = String::from_utf8_lossy(&bytes);
+    assert!(
+        text.contains("stochcraft:path")
+            && text.contains("stochcraft:place")
+            && text.contains("stochcraft:scene")
+    );
+    let Ok(loaded) = read(&bytes) else {
+        unreachable!()
+    };
+    assert!(loaded.notes.is_empty(), "{:#?}", loaded.notes);
+    assert_eq!(loaded.model, laid_out(model.clone()));
+    assert!(loaded.model.validate().iter().all(|d| !matches!(
+        d.problem,
+        stochcraft_model::Problem::ConveyorLengthMismatch { .. }
+    )));
+    assert_eq!(loaded.opened.save(&loaded.model), Ok(bytes.clone()));
+
+    // Moved, widened and the floor gone: saved in place, read back as saved.
+    let mut moved = loaded.model.clone();
+    if let Some(t) = moved.site.paths.get_mut(&id("belt")) {
+        t.path.start.x = 3.0;
+        t.width = 1.0;
+    }
+    moved
+        .site
+        .places
+        .insert(id("in"), Place::At(Frame::new(3.0, 1.0, 0.0, 90.0)));
+    moved.site.scene.clear();
+    let saved = loaded.opened.save(&moved);
+    let back = saved.as_deref().map(|b| read(b).map(|l| l.model));
+    assert_eq!(back, Ok(Ok(moved.clone())));
+    let Ok(saved) = saved else { return };
+    assert!(!String::from_utf8_lossy(&saved).contains("stochcraft:scene"));
+
+    // A typed 16 m overrides the 15 m track: it is kept, and flagged.
+    let Ok(middle) = read(&saved) else {
+        unreachable!()
+    };
+    let mut longer = middle.model.clone();
+    if let ElementKind::Conveyor { length, .. } = &mut longer.elements[1].kind {
+        *length = 16.0;
+    }
+    let saved = middle.opened.save(&longer);
+    let back = saved.as_deref().map(|b| read(b).map(|l| l.model));
+    assert_eq!(back, Ok(Ok(longer.clone())));
+    assert_eq!(
+        longer
+            .validate()
+            .iter()
+            .filter(|d| matches!(
+                d.problem,
+                stochcraft_model::Problem::ConveyorLengthMismatch { .. }
+            ))
+            .count(),
+        1
+    );
+}

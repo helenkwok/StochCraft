@@ -1124,14 +1124,18 @@ impl Diagnostic {
             Problem::ConveyorLengthMismatch {
                 length,
                 path_length,
-            } => part(
-                "conveyor_length_mismatch",
-                vec![
-                    b(),
-                    ("length", num(*length)),
-                    ("path_length", num(*path_length)),
-                ],
-            ),
+            } => {
+                // Shown at the typed length, which overrides the path's (D23).
+                field = Some("length".to_owned());
+                part(
+                    "conveyor_length_mismatch",
+                    vec![
+                        b(),
+                        ("length", num(*length)),
+                        ("path_length", num(*path_length)),
+                    ],
+                )
+            }
             Problem::TransportNotSimulated => part("transport_not_simulated", vec![b()]),
             Problem::TransportPool { pool, exists } => part(
                 if *exists {

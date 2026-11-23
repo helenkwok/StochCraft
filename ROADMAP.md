@@ -3844,9 +3844,16 @@ plot (M). U1 and U2 come before L4, since layout editing leans on them; the rest
 
 **Status:** L1 is done (#216): `model::Path` with exact `length` and `point_at`, and the read-only
 Layout view with its grid, scale bar, conveyors and footprints to scale, and the unplaced list.
-A conveyor still stores its `ConveyorShape`, which gives its `Path`; folding the shape into the
-path waits for L2's file format, and until then the Layout view places blocks from the diagram,
-as the 3D view does. U1, the run bar, is done (#218).
+L2 is done: `model::Site` holds each conveyor's track (its `Path` and belt width), each block's
+place (a frame, or `s` along a conveyor) and look-only scenery, read and written losslessly as
+`stochcraft:path`, `stochcraft:place` and `stochcraft:scene` (in the extension schema); a
+conveyor with a track runs for the path's length to 0.1 mm, a typed length that differs is an
+override flagged at the Length field (D23), and only the sim fields enter the results baseline
+(D28). The sorter example carries a drawn layout with its lengths unchanged (12 m, 30 m, 4 m).
+Left from L2: glTF export (there is no export yet to extend); a conveyor without a track still
+draws from its `ConveyorShape`, which folds into `Path` once every example has a track; and the
+Layout and 3D views still place blocks from the diagram until L3. U1, the run bar, is done
+(#218).
 
 #### Sources
 

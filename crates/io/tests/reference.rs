@@ -1110,6 +1110,15 @@ fn everything_stochcraft_writes_is_schema_valid() {
         return missing("xmllint is not installed (libxml2-utils)");
     }
     validate(&write_new(&showcase()), "showcase", &xsd);
+    // A physical layout (tracks, places, scenery): the sorter example as committed and as
+    // StochCraft writes it afresh.
+    let sorter =
+        std::fs::read(Path::new(env!("CARGO_MANIFEST_DIR")).join("../../tests/models/sorter.bpmn"))
+            .unwrap_or_default();
+    validate(&sorter, "sorter", &xsd);
+    let laid = read(&sorter).map(|l| l.model).unwrap_or_default();
+    assert!(!laid.site.is_empty(), "the sorter example has a layout");
+    validate(&write_new(&laid), "sorter written", &xsd);
     // Batches, splits and a bill of materials, as vendor extensions.
     let mut b = Builder::new();
     let parts = b.source("parts", Dist::Constant(1.0), None);

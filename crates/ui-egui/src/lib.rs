@@ -1207,10 +1207,22 @@ fn length_unit(engine: &Engine) -> String {
 }
 
 /// How the Edit menu and the status bar name a change, from the command that made it.
-/// `model` as results are kept against it: its wire form without where blocks are drawn, so
-/// moving a block leaves the results current while any other change marks them out of date.
+/// `model` as results are kept against it: its wire form without where blocks are drawn, and
+/// with only the layout's sim fields (D28), so moving a block on the diagram or changing how the
+/// layout looks leaves the results current while any other change marks them out of date.
 fn comparable(model: &stochcraft_model::Model) -> Value {
     let mut m = stochcraft_engine::wire::model(model);
+    let sim = model.site.for_results(model);
+    if let Some(o) = m.as_object_mut() {
+        o.remove("site");
+        if !sim.is_empty() {
+            o.insert(
+                "site".to_owned(),
+                serde_json::to_value(stochcraft_engine::site::SiteDoc::from(&sim))
+                    .unwrap_or(Value::Null),
+            );
+        }
+    }
     for e in m["elements"].as_array_mut().into_iter().flatten() {
         if let Some(e) = e.as_object_mut() {
             e.remove("bounds");
@@ -1285,6 +1297,36 @@ mod tests {
     use super::*;
     use serde_json::json;
     use stochcraft_engine::{COMMANDS, CommandKind};
+
+    /// Results are kept against the layout's sim fields only (D28): the scenery and a belt's
+    /// width leave them current, a path does not.
+    #[test]
+    fn only_the_layouts_sim_fields_mark_results_out_of_date() {
+        use stochcraft_model::{ElementId, Frame, Path, Scenery, Segment, Track};
+        let line =
+            |length: f64| Path::new(Frame::default(), vec![Segment::Line { length, rise: 0.0 }]);
+        let mut m = stochcraft_model::Model::default();
+        m.site
+            .paths
+            .insert(ElementId::unchecked("belt"), Track::new(line(12.0)));
+        let kept = comparable(&m);
+        let mut look = m.clone();
+        look.site.scene.push(Scenery {
+            id: "floor".to_owned(),
+            kind: "floor".to_owned(),
+            at: Frame::default(),
+            size: [10.0, 10.0, 0.0],
+        });
+        if let Some(t) = look.site.paths.get_mut(&ElementId::unchecked("belt")) {
+            t.width = 1.0;
+        }
+        assert_eq!(comparable(&look), kept);
+        let mut sim = m.clone();
+        sim.site
+            .paths
+            .insert(ElementId::unchecked("belt"), Track::new(line(14.0)));
+        assert_ne!(comparable(&sim), kept);
+    }
 
     /// Every command that goes on the undo history is named in the Edit menu and the status bar
     /// by its own label, not its command name (`change_label` returns the name when it has none).

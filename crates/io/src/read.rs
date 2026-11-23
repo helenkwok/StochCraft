@@ -1385,6 +1385,8 @@ fn to_model(p: Process, scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> M
     experiment.stop = stop_of(scenario, &elements, notes);
     let estimates = estimates_of(scenario, &elements, notes);
     let starting = starting_of(scenario, &elements, notes);
+    let site = crate::layout::site_of(scenario, &elements, notes);
+    crate::layout::lengths_from_paths(&site, &mut elements);
     Model {
         name: p.name,
         elements,
@@ -1396,6 +1398,7 @@ fn to_model(p: Process, scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> M
         estimates,
         starting,
         monte_carlo: None,
+        site,
     }
 }
 

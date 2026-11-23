@@ -1207,6 +1207,13 @@ pub fn write_new(model: &Model) -> Vec<u8> {
         {
             ep.push(starting_element(*n));
         }
+        // The physical layout (D24): a conveyor's track and a block's place.
+        if let Some(t) = model.site.paths.get(&e.id) {
+            ep.push(crate::layout::path_element(t));
+        }
+        if let Some(p) = model.site.places.get(&e.id) {
+            ep.push(crate::layout::place_element(p));
+        }
         if ep.elements().next().is_none() {
             continue;
         }
@@ -1300,6 +1307,9 @@ pub fn write_new(model: &Model) -> Vec<u8> {
     }
     // The scenario's vendor extensions, after its calendars (BPSim's schema order).
     for x in scenario_extensions(&model.experiment) {
+        scenario.push(x);
+    }
+    if let Some(x) = crate::layout::scene_element(&model.site.scene) {
         scenario.push(x);
     }
     // The rest of a Monte Carlo model, last, where BPSim puts a scenario's vendor extensions.
