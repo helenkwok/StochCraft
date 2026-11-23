@@ -614,7 +614,9 @@ fn the_cap_is_kept_exactly_up_to_rounding() {
     }
 }
 
-/// Constant times but a random way at a gateway: not "compared exactly".
+/// Constant times but a random way at a gateway: not "compared exactly". The desks start short
+/// of servers (4 and 2 for about 5 customers an hour each), so the random split shows in the
+/// queues.
 #[test]
 fn constant_times_with_a_random_route_are_not_compared_exactly() {
     let constant = |mean: f64| json!({ "type": "constant", "value": mean });
@@ -627,8 +629,8 @@ fn constant_times_with_a_random_route_are_not_compared_exactly() {
             "elements": [
                 { "id": "arrivals", "kind": "source", "interarrival": constant(0.1) },
                 { "id": "split", "kind": "exclusive_gateway" },
-                { "id": "desk1", "kind": "server", "capacity": 11, "service": constant(1.0) },
-                { "id": "desk2", "kind": "server", "capacity": 6, "service": constant(0.5) },
+                { "id": "desk1", "kind": "server", "capacity": 4, "service": constant(1.0) },
+                { "id": "desk2", "kind": "server", "capacity": 2, "service": constant(0.5) },
                 { "id": "exit", "kind": "sink" }
             ],
             "connections": [
@@ -641,7 +643,10 @@ fn constant_times_with_a_random_route_are_not_compared_exactly() {
             "experiment": { "time_unit": "hour", "warmup": 2.0, "duration": 20.0, "replications": 10, "seed": 1 }
         }}),
     );
-    let v = ok(&mut e, "experiment.optimise", tandem_search(1, 800));
+    let mut p = tandem_search(1, 800);
+    p["decisions"][0]["min"] = json!(4);
+    p["decisions"][1]["min"] = json!(2);
+    let v = ok(&mut e, "experiment.optimise", p);
     assert_eq!(v["no_randomness"], false, "{v}");
     assert_ne!(v["outcome"], "compared_exactly");
     assert_eq!(v["runs"]["probe"], 0);
