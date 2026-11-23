@@ -24,7 +24,7 @@
 
 use std::collections::BTreeMap;
 
-use crate::{ElementId, ElementKind, Frame, LengthUnit, Model, Path};
+use crate::{Element, ElementId, ElementKind, Frame, LengthUnit, Model, Path};
 
 /// The width a belt is drawn with when its track does not say: 0.6 m ([`default_width`] in a
 /// model's unit).
@@ -237,6 +237,23 @@ impl Site {
     }
 }
 
+/// Gives each conveyor in `elements` with a track in `site` its path's length (D23) where its
+/// typed length agrees with it to within 0.1 mm (in `unit`, the model's); a length that differs
+/// more stays, as an override. Reading a file and reading JSON both do this, so a model reads the
+/// same either way.
+pub fn lengths_from_paths(site: &Site, elements: &mut [Element], unit: LengthUnit) {
+    for e in elements {
+        if let (Some(t), ElementKind::Conveyor { length, .. }) =
+            (site.paths.get(&e.id), &mut e.kind)
+        {
+            let drawn = t.length(unit);
+            if (drawn - *length).abs() <= length_step(unit) {
+                *length = drawn;
+            }
+        }
+    }
+}
+
 /// Whether a transport carries to or from block `id`, or a mobile pool's units start there.
 pub fn served_by_transport(model: &Model, id: &ElementId) -> bool {
     let is_transport = |e: &ElementId| {
@@ -291,6 +308,49 @@ mod tests {
         assert_eq!(t.length(M), 30.0);
         assert_eq!((t.length(M) / 0.6).floor(), 50.0);
         assert_eq!(to_step(1.23456, M), 1.2346);
+    }
+
+    /// The override's message gives both lengths to the step a path is taken to: in kilometres
+    /// 0.012 and 0.012001 differ by 1 m and must read differently; in metres the numbers stay
+    /// short.
+    #[test]
+    fn the_override_message_tells_the_two_lengths_apart_in_any_unit() {
+        let message = |unit: LengthUnit, typed: f64, drawn: f64| {
+            let mut m = Model::default();
+            m.experiment.length_unit = unit;
+            m.elements.push(Element::new(
+                id("belt"),
+                "Belt",
+                ElementKind::Conveyor {
+                    length: typed,
+                    speed: 1.0,
+                    accumulating: true,
+                    item_length: typed / 100.0,
+                    gap: 0.0,
+                    shape: crate::ConveyorShape::Straight,
+                },
+            ));
+            let line = Path::new(
+                Frame::default(),
+                vec![Segment::Line {
+                    length: drawn,
+                    rise: 0.0,
+                }],
+            );
+            m.site.paths.insert(id("belt"), Track::new(line, unit));
+            m.validate()
+                .iter()
+                .find(|d| matches!(d.problem, crate::Problem::ConveyorLengthMismatch { .. }))
+                .map(|d| d.describe(&m).english())
+                .unwrap_or_default()
+        };
+        let km = message(LengthUnit::Kilometres, 0.012, 0.012001);
+        assert!(
+            km.contains("is 0.012001 long") && km.contains("is 0.012,"),
+            "{km}"
+        );
+        let m = message(LengthUnit::Metres, 32.0, 30.0);
+        assert!(m.contains("is 30 long") && m.contains("is 32,"), "{m}");
     }
 
     #[test]

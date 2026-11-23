@@ -783,6 +783,22 @@ fn part(key: &'static str, args: Args) -> Vec<Part> {
 
 /// A number as short as it reads: at most four decimals, no trailing zeros.
 fn num(v: f64) -> String {
+    num_to(v, 4)
+}
+
+/// The decimal places that show a step of `step` (0.0001 needs 4; 0.1 needs 1), at most 12.
+fn places_for(step: f64) -> usize {
+    let mut places = 0;
+    let mut s = step;
+    while places < 12 && s < 1.0 - 1e-9 {
+        s *= 10.0;
+        places += 1;
+    }
+    places
+}
+
+/// `v` with at most `decimals` decimal places, trailing zeros dropped.
+fn num_to(v: f64, decimals: usize) -> String {
     // A value that is no number at all is said in words: users read "NaN" and "inf" as codes.
     if v.is_nan() {
         return "undefined".to_owned();
@@ -790,7 +806,7 @@ fn num(v: f64) -> String {
     if v.is_infinite() {
         return "infinite".to_owned();
     }
-    let s = format!("{v:.4}");
+    let s = format!("{v:.decimals$}");
     if s.contains('.') {
         s.trim_end_matches('0').trim_end_matches('.').to_owned()
     } else {
@@ -1125,14 +1141,18 @@ impl Diagnostic {
                 length,
                 path_length,
             } => {
-                // Shown at the typed length, which overrides the path's (D23).
+                // Shown at the typed length, which overrides the path's (D23). Both are written to
+                // the step a path's length is taken to (0.1 mm in the model's unit), so they differ
+                // in the message whenever they differ by more than it.
                 field = Some("length".to_owned());
+                let places =
+                    places_for(crate::site::length_step(model.experiment.length_unit)).max(4);
                 part(
                     "conveyor_length_mismatch",
                     vec![
                         b(),
-                        ("length", num(*length)),
-                        ("path_length", num(*path_length)),
+                        ("length", num_to(*length, places)),
+                        ("path_length", num_to(*path_length, places)),
                     ],
                 )
             }

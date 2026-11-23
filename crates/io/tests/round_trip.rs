@@ -3074,3 +3074,28 @@ fn a_layout_in_millimetres_takes_lengths_to_a_tenth_of_a_millimetre() {
         assert!((width - stochcraft_model::site::default_width(unit)).abs() < 1e-9);
     }
 }
+
+/// In a file that declares an encoding other than UTF-8, scenery whose id and kind are not ASCII
+/// is written as character references, and reads back as it was.
+#[test]
+fn scenery_in_a_file_that_is_not_utf8_is_written_as_character_references() {
+    use stochcraft_model::{Frame, Scenery};
+    let text = String::from_utf8_lossy(&write_new(&belt_model()))
+        .replace("encoding=\"UTF-8\"", "encoding=\"ISO-8859-1\"");
+    let Ok(loaded) = read(text.as_bytes()) else {
+        unreachable!()
+    };
+    let mut model = loaded.model.clone();
+    model.site.scene.push(Scenery {
+        id: "sol-ø".to_owned(),
+        kind: "café".to_owned(),
+        at: Frame::default(),
+        size: [1.0, 1.0, 0.0],
+    });
+    let saved = loaded.opened.save(&model);
+    assert!(saved.is_ok(), "{saved:?}");
+    let Ok(saved) = saved else { unreachable!() };
+    assert!(saved.is_ascii(), "the file stays ASCII");
+    let back = read(&saved).map(|l| l.model.site.scene);
+    assert_eq!(back, Ok(model.site.scene.clone()));
+}

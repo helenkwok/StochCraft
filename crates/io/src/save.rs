@@ -2926,9 +2926,10 @@ impl Editor {
     fn text_attrs(&self, e: &mut Element) {
         if self.ascii {
             // Names and text values; a changeover's property and the values it changes between;
-            // the block and the result an observation names.
+            // the block and the result an observation names; a scenery object's id and kind.
             for a in [
-                "name", "value", "property", "from", "to", "element", "metric", "resource",
+                "name", "value", "property", "from", "to", "element", "metric", "resource", "id",
+                "kind",
             ] {
                 if let Some(v) = e.attr(a).filter(|v| !v.is_ascii()) {
                     self.set_text_attr(e, a, &v);
@@ -2961,11 +2962,14 @@ impl Editor {
                     || a.child(&NSS, "ScenarioParameters")
                         .is_some_and(|p| p.elements().any(is_scene))
             });
-        let new = if inherited {
+        let mut new = if inherited {
             Some(crate::layout::empty_scene_element())
         } else {
             crate::layout::scene_element(&after.site.scene)
         };
+        if let Some(e) = new.as_mut() {
+            self.text_attrs(e);
+        }
         let s = if new.is_some() {
             self.ensure_scenario(root, scenario)?
         } else {

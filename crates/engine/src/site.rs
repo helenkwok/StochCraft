@@ -270,6 +270,49 @@ mod tests {
 
     use super::*;
 
+    /// JSON gives a conveyor its track's length where the typed one agrees to within 0.1 mm,
+    /// as reading a file does; one that differs more stays, as an override.
+    #[test]
+    fn json_takes_a_conveyors_length_from_its_track_as_a_file_does() {
+        use stochcraft_model::{Element, ElementKind, Model};
+        let read_back = |typed: f64| {
+            let mut m = Model::default();
+            m.elements.push(Element::new(
+                ElementId::unchecked("belt"),
+                "Belt",
+                ElementKind::Conveyor {
+                    length: typed,
+                    speed: 1.0,
+                    accumulating: true,
+                    item_length: 0.4,
+                    gap: 0.2,
+                    shape: Default::default(),
+                },
+            ));
+            m.site.paths.insert(
+                ElementId::unchecked("belt"),
+                Track::new(
+                    Path::new(
+                        Frame::default(),
+                        vec![Segment::Line {
+                            length: 30.0,
+                            rise: 0.0,
+                        }],
+                    ),
+                    LengthUnit::Metres,
+                ),
+            );
+            let json = crate::wire::model(&m);
+            let doc: crate::wire::ModelDoc = serde_json::from_value(json).unwrap();
+            match &Model::from(doc).elements[0].kind {
+                ElementKind::Conveyor { length, .. } => *length,
+                _ => f64::NAN,
+            }
+        };
+        assert_eq!(read_back(29.99995), 30.0);
+        assert_eq!(read_back(31.0), 31.0);
+    }
+
     #[test]
     fn a_site_goes_to_json_and_back_unchanged() {
         let mut site = Site::default();

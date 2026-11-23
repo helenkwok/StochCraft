@@ -2578,7 +2578,7 @@ impl From<ModelDoc> for Model {
             .iter()
             .filter_map(|e| Some((ElementId::unchecked(&e.id), e.starting.filter(|n| *n > 0)?)))
             .collect();
-        Self {
+        let mut out = Self {
             layout,
             estimates,
             starting,
@@ -2617,7 +2617,11 @@ impl From<ModelDoc> for Model {
             // An agent-based model's populations are not part of a process model's JSON: they
             // are read with `agents.get`. A model set from JSON is a process model.
             agents: None,
-        }
+        };
+        // A conveyor whose typed length agrees with its track to within 0.1 mm runs for the
+        // track's length, as when the model is read from a file (D23).
+        stochcraft_model::site::lengths_from_paths(&out.site, &mut out.elements, unit);
+        out
     }
 }
 

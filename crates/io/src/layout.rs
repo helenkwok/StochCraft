@@ -26,7 +26,7 @@
 //! Numbers are written in full, so a file reads back as exactly the layout that was saved.
 //! Scenery objects are written in id order.
 
-use stochcraft_model::site::{default_width, length_step};
+use stochcraft_model::site::default_width;
 use stochcraft_model::{
     Element as ModelElement, ElementId, ElementKind, Frame, LengthUnit, Path, Place, Scenery,
     Segment, Site, Track,
@@ -242,7 +242,8 @@ pub fn read_scene(ext: &Element, notes: &mut Vec<Note>) -> Vec<Scenery> {
     }
     for o in b.elements().filter(|e| e.local() == "object") {
         let read = || -> Result<Scenery, String> {
-            let id = o.attr("id").ok_or("needs `id`")?.trim().to_owned();
+            // The id as written: one differing only in its spaces is another id.
+            let id = o.attr("id").ok_or("needs `id`")?;
             let kind = o.attr("kind").ok_or("needs `kind`")?.trim().to_owned();
             Ok(Scenery {
                 id,
@@ -334,16 +335,7 @@ pub fn site_of(
 /// Gives each conveyor with a track its path's length (D23) where its typed length agrees with
 /// it to within 0.1 mm (in `unit`, the model's); a length that differs more stays, as an override.
 pub fn lengths_from_paths(site: &Site, elements: &mut [ModelElement], unit: LengthUnit) {
-    for e in elements {
-        if let (Some(t), ElementKind::Conveyor { length, .. }) =
-            (site.paths.get(&e.id), &mut e.kind)
-        {
-            let drawn = t.length(unit);
-            if (drawn - *length).abs() <= length_step(unit) {
-                *length = drawn;
-            }
-        }
-    }
+    stochcraft_model::site::lengths_from_paths(site, elements, unit);
 }
 
 #[cfg(test)]
@@ -410,6 +402,21 @@ mod tests {
         // Written and read in id order.
         assert_eq!(back, vec![scene[1].clone(), scene[0].clone()]);
         assert!(scene_element(&[]).is_none());
+    }
+
+    #[test]
+    fn scenery_ids_are_read_as_written() {
+        let object = |id: &str| Scenery {
+            id: id.to_owned(),
+            kind: "floor".to_owned(),
+            at: Frame::default(),
+            size: [1.0, 1.0, 0.0],
+        };
+        let scene = vec![object(" floor"), object("floor")];
+        let mut notes = Vec::new();
+        let back = read_scene(&scene_element(&scene).unwrap(), &mut notes);
+        assert!(notes.is_empty(), "{notes:?}");
+        assert_eq!(back, scene, "two ids, one with a leading space");
     }
 
     #[test]
