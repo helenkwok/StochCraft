@@ -1156,6 +1156,16 @@ impl App {
                 );
             }
         }
+        if !scene.tris.is_empty() && !scene.unplaced.is_empty() {
+            // Blocks the layout leaves out are named, never drawn somewhere guessed.
+            painter.text(
+                rect.left_top() + vec2(8.0, 8.0),
+                Align2::LEFT_TOP,
+                format!("{}: {}", t("Unplaced"), scene.unplaced.join(", ")),
+                FontId::proportional(12.0),
+                p.text_weak,
+            );
+        }
         if scene.tris.is_empty() {
             painter.text(
                 rect.center(),
