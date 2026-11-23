@@ -33,6 +33,23 @@
 //! `stepping/order`. For a synchronous update, an agent's `before-step` stores its next value
 //! and its `step` copies it in.
 //!
+//! **Networks and grids** (stage A3, [`network`](crate::network)): a population's
+//! [`Network`] is built before its first agents are created and its [`Grid`] places each agent
+//! as it is created, so a distance network's position and a cell are in the agent's variables
+//! (`x` and `y`, `row` and `column`, which its chart must declare) before its data's other first
+//! values are worked out. Messages along links or to grid neighbours go to the agents alive then,
+//! in serial order, each as its own event like the others; one sent by an agent that is not of
+//! that population reaches no one and is counted as undelivered. Links made or removed and moves
+//! ([`Action::connect`](crate::Action::connect), [`Action::move_to`](crate::Action::move_to),
+//! ...) take effect when the acting agent's macrostep ends, in the order its actions ran (so in
+//! the stepped mode an agent that moves sees the cell taken by an agent that moved before it in
+//! the same step), and mark the population changed for the re-tests; an agent that moved is
+//! itself tested again first, since its `row` and `column` changed after its macrostep (its
+//! conditions on them are taken then, and its rates that read them drawn again). An agent that
+//! ends keeps its links and cell while what it sent goes out, in order, then leaves and loses
+//! them; so does one that stops the run with an error. The model keeps `x`, `y`, `row` and
+//! `column` where it uses them: a chart that assigns them there is refused.
+//!
 //! **Statistics** ([`Statistic`]) are recorded at the start, every `save_every`, and at the end,
 //! each after every event at that time. [`bands`] turns many replications into the mean, median
 //! and 5% to 95% band at each time.
@@ -56,6 +73,7 @@ use stochcraft_stats::spread::quantile;
 
 use crate::chart::{Chart, ChartError, Code, PopRef, RefWhat};
 use crate::interp::{Agent, Out, Recipient, RunError, World};
+use crate::network::{self, Grid, Net, Network, Space, pick};
 
 /// The re-tests after one event that may take a transition before the run is stopped as
 /// looping.
@@ -70,6 +88,10 @@ pub struct Population {
     pub count: u64,
     /// Agents arriving at this rate (exponential gaps), from the start.
     pub arrival_rate: Option<f64>,
+    /// The links between its agents ([`network`](crate::network)).
+    pub network: Option<Network>,
+    /// The grid its agents are on ([`network`](crate::network)).
+    pub grid: Option<Grid>,
 }
 
 impl Population {
@@ -79,6 +101,8 @@ impl Population {
             chart,
             count: 0,
             arrival_rate: None,
+            network: None,
+            grid: None,
         }
     }
 
@@ -89,6 +113,18 @@ impl Population {
 
     pub fn arrivals(mut self, rate: f64) -> Self {
         self.arrival_rate = Some(rate);
+        self
+    }
+
+    /// Links its agents by `network`, built at the start.
+    pub fn network(mut self, network: Network) -> Self {
+        self.network = Some(network);
+        self
+    }
+
+    /// Puts its agents on `grid`.
+    pub fn grid(mut self, grid: Grid) -> Self {
+        self.grid = Some(grid);
         self
     }
 }
@@ -429,6 +465,33 @@ struct Pop {
     live: Vec<u64>,
     arrivals: Option<(f64, Rng)>,
     counts: Counts,
+    net: Option<Net>,
+    space: Option<Space>,
+}
+
+impl Pop {
+    fn is_live(&self, s: u64) -> bool {
+        self.live.binary_search(&s).is_ok()
+    }
+
+    /// The live agents linked to `s`, ascending.
+    fn linked(&self, s: u64) -> Vec<u64> {
+        self.net
+            .as_ref()
+            .map(|n| n.linked(s))
+            .unwrap_or_default()
+            .into_iter()
+            .filter(|&x| self.is_live(x))
+            .collect()
+    }
+
+    /// The agents in `s`'s grid neighbourhood, ascending.
+    fn neighbours(&self, s: u64) -> Vec<u64> {
+        self.space
+            .as_ref()
+            .map(|g| g.neighbours(s))
+            .unwrap_or_default()
+    }
 }
 
 #[derive(Debug)]
@@ -477,6 +540,40 @@ impl World for View<'_> {
             return empty;
         };
         let agents = || pop.live.iter().filter_map(move |&s| self.agent(p, s, me));
+        if crate::data::NEIGHBOURHOOD_FUNCTIONS.contains(&name) {
+            let nan = Value::Number(f64::NAN);
+            let Some(Who::Agent(q, s)) = self.who else {
+                return nan;
+            };
+            if q != p {
+                return nan;
+            }
+            let grid = name.starts_with("neighbour");
+            if grid && pop.space.as_ref().and_then(|g| g.cell_of(s)).is_none() {
+                return nan;
+            }
+            let others = if grid {
+                pop.neighbours(s)
+            } else {
+                pop.linked(s)
+            };
+            let others = others.into_iter().filter_map(|x| self.agent(p, x, me));
+            return match name {
+                "degree" | "neighbours" => Value::Number(others.count() as f64),
+                "linked-count" | "neighbour-count" => {
+                    let state = text(1);
+                    Value::Number(others.filter(|a| a.is_in(&state)).count() as f64)
+                }
+                _ => {
+                    let var = text(1);
+                    Value::Number(
+                        others
+                            .map(|a| a.value(&var).map_or(f64::NAN, Value::number))
+                            .sum(),
+                    )
+                }
+            };
+        }
         match name {
             "population-size" => Value::Number(pop.live.len() as f64),
             "population-count" => {
@@ -523,9 +620,16 @@ fn index(serial: u64) -> Option<usize> {
     usize::try_from(serial).ok()
 }
 
-/// An index below `m` from 64 random bits: the top 53 bits as a fraction of `m`.
-fn pick(draw: u64, m: usize) -> usize {
-    (((draw >> 11) as u128 * m as u128) >> 53) as usize
+/// All of `others`, or with a draw the one it picks (none if there are none).
+fn one_or_all(others: Vec<u64>, draw: Option<u64>) -> Vec<u64> {
+    match draw {
+        None => others,
+        Some(d) => others
+            .get(pick(d, others.len()))
+            .copied()
+            .into_iter()
+            .collect(),
+    }
 }
 
 fn check_name(name: &str, place: &str) -> Result<(), ModelError> {
@@ -553,6 +657,8 @@ pub struct Simulation {
     readers: Vec<Vec<u32>>,
     env_reads: Vec<bool>,
     dirty: BTreeSet<u32>,
+    /// Agents that moved on a grid since they were last tested.
+    moved: BTreeSet<(u32, u64)>,
     queue: EventQueue<Ev>,
     seed: u64,
     stepping: Option<(Stepping, Rng)>,
@@ -620,12 +726,64 @@ impl Simulation {
                             );
                         }
                     }
+                    RefWhat::Network => {
+                        if q.network.is_none() {
+                            return invalid(
+                                &r.place,
+                                format!("population `{}` has no network", q.name),
+                            );
+                        }
+                    }
+                    RefWhat::Grid => {
+                        if q.grid.is_none() {
+                            return invalid(
+                                &r.place,
+                                format!("population `{}` has no grid", q.name),
+                            );
+                        }
+                    }
                 }
             }
             Ok(())
         };
         for p in &model.populations {
             check_refs(&p.chart.refs)?;
+            let declares = |vars: [&str; 2], what: &str| -> Result<(), ModelError> {
+                if !vars.iter().all(|v| p.chart.var_index.contains_key(*v)) {
+                    return invalid(
+                        &format!("population `{}`", p.name),
+                        format!(
+                            "its agents' {what} is kept in the variables `{}` and `{}`, which \
+                             its chart `{}` must declare",
+                            vars[0], vars[1], p.chart.name
+                        ),
+                    );
+                }
+                // The model keeps them: an assignment would leave the variable and the
+                // agent's real position or cell apart.
+                if let Some(v) = vars.iter().find(|v| p.chart.assigns(v)) {
+                    let how = if what == "cell" {
+                        " (`Action::move_to` and `Action::move_random` move an agent)"
+                    } else {
+                        ""
+                    };
+                    return invalid(
+                        &format!("population `{}`", p.name),
+                        format!(
+                            "its chart `{}` assigns `{v}`, which holds its agents' {what} and \
+                             only the model sets{how}",
+                            p.chart.name
+                        ),
+                    );
+                }
+                Ok(())
+            };
+            if matches!(p.network, Some(Network::Distance { .. })) {
+                declares(["x", "y"], "position")?;
+            }
+            if p.grid.is_some() {
+                declares(["row", "column"], "cell")?;
+            }
         }
         if let Some(env) = &model.environment {
             check_refs(&env.refs)?;
@@ -654,23 +812,22 @@ impl Simulation {
                 return invalid(&place, format!("there is no population `{}`", s.population));
             };
             let chart = &model.populations[p].chart;
+            let compile = |e: &str| -> Result<Code, ModelError> {
+                let (code, refs) = chart
+                    .agent_expression(e, &place)
+                    .map_err(ModelError::Invalid)?;
+                check_refs(&refs)?;
+                Ok(code)
+            };
             let expr = match (&s.expr, s.measure) {
                 (None, Measure::Count) => None,
-                (Some(e), m) if m != Measure::Count => Some(
-                    chart
-                        .agent_expression(e, &place)
-                        .map_err(ModelError::Invalid)?,
-                ),
+                (Some(e), m) if m != Measure::Count => Some(compile(e)?),
                 _ => {
                     return invalid(&place, "a count has no expression; the others have one");
                 }
             };
             let condition = match &s.condition {
-                Some(c) => Some(
-                    chart
-                        .agent_expression(c, &place)
-                        .map_err(ModelError::Invalid)?,
-                ),
+                Some(c) => Some(compile(c)?),
                 None => None,
             };
             stat_names.push(s.name.clone());
@@ -705,10 +862,30 @@ impl Simulation {
                     .is_some_and(|e| e.waits_on.contains(&p.name))
             })
             .collect();
-        let pops = model
-            .populations
-            .iter()
-            .map(|p| Pop {
+        let mut pops = Vec::new();
+        for p in &model.populations {
+            let place = format!("population `{}`", p.name);
+            let net = match &p.network {
+                Some(n) => {
+                    let key = format!("network/{}:{}", p.name.len(), p.name);
+                    let net = Net::new(n, p.count, Rng::keyed(seed, &key))
+                        .or_else(|m| invalid(&format!("the network of {place}"), m))?;
+                    Some(net)
+                }
+                None => None,
+            };
+            let space = match p.grid {
+                Some(g) => {
+                    let key = format!("grid/{}:{}", p.name.len(), p.name);
+                    let space = Space::new(g, p.count, Rng::keyed(seed, &key))
+                        .or_else(|m| invalid(&format!("the grid of {place}"), m))?;
+                    Some(space)
+                }
+                None => None,
+            };
+            pops.push(Pop {
+                net,
+                space,
                 name: p.name.clone(),
                 chart: Arc::clone(&p.chart),
                 agents: Vec::new(),
@@ -725,8 +902,8 @@ impl Simulation {
                     dropped: 0,
                     undelivered: 0,
                 },
-            })
-            .collect();
+            });
+        }
         let mut sim = Simulation {
             pops,
             env: None,
@@ -736,6 +913,7 @@ impl Simulation {
             readers,
             env_reads,
             dirty: BTreeSet::new(),
+            moved: BTreeSet::new(),
             queue: EventQueue::new(0.0),
             seed,
             stepping: model
@@ -794,6 +972,46 @@ impl Simulation {
 
     pub fn environment(&self) -> Option<&Agent> {
         self.env.as_ref()
+    }
+
+    fn pop(&self, population: &str) -> Option<&Pop> {
+        self.pops.iter().find(|p| p.name == population)
+    }
+
+    /// Every link of `population`'s network now, the lower serial first, sorted (empty if it
+    /// has no network).
+    pub fn links(&self, population: &str) -> Vec<(u64, u64)> {
+        self.pop(population)
+            .and_then(|p| p.net.as_ref())
+            .map(Net::links)
+            .unwrap_or_default()
+    }
+
+    /// The agents linked to agent `serial` of `population`, ascending.
+    pub fn linked(&self, population: &str, serial: u64) -> Vec<u64> {
+        self.pop(population)
+            .map(|p| p.linked(serial))
+            .unwrap_or_default()
+    }
+
+    /// The position of agent `serial` in `population`'s distance network.
+    pub fn position(&self, population: &str, serial: u64) -> Option<(f64, f64)> {
+        self.pop(population)
+            .and_then(|p| p.net.as_ref())
+            .and_then(|n| n.positions.get(&serial).copied())
+    }
+
+    /// The cell (row, column) of agent `serial` on `population`'s grid.
+    pub fn cell(&self, population: &str, serial: u64) -> Option<(u64, u64)> {
+        let space = self.pop(population)?.space.as_ref()?;
+        space.cell_of(serial).map(|c| space.row_column(c))
+    }
+
+    /// The agents in the grid neighbourhood of agent `serial` of `population`, ascending.
+    pub fn neighbours(&self, population: &str, serial: u64) -> Vec<u64> {
+        self.pop(population)
+            .map(|p| p.neighbours(serial))
+            .unwrap_or_default()
     }
 
     /// Each population's counts so far.
@@ -946,7 +1164,47 @@ impl Simulation {
         };
         let serial = pop.agents.len() as u64;
         let key = format!("{}/{serial}", pop.name);
-        let agent = Agent::new(Arc::clone(&pop.chart), seed, key).with_microstep_limit(limit);
+        let mut agent = Agent::new(Arc::clone(&pop.chart), seed, key).with_microstep_limit(limit);
+        if let Some(net) = &mut pop.net
+            && let (Some(range), Some((w, h))) = (net.range, net.size)
+        {
+            let at = match net.positions.get(&serial) {
+                Some(&at) => at,
+                None => {
+                    // Created during the run: a position of its own, linked within the range.
+                    let at = (net.rng.uniform() * w, net.rng.uniform() * h);
+                    let near: Vec<u64> = pop
+                        .live
+                        .iter()
+                        .copied()
+                        .filter(|o| {
+                            net.positions
+                                .get(o)
+                                .is_some_and(|&q| network::within(at, q, range))
+                        })
+                        .collect();
+                    for o in near {
+                        net.connect(serial, o);
+                    }
+                    net.positions.insert(serial, at);
+                    at
+                }
+            };
+            agent.preset("x", Value::Number(at.0));
+            agent.preset("y", Value::Number(at.1));
+        }
+        if let Some(space) = &mut pop.space {
+            let (row, column) = match space.choose(serial) {
+                Some(cell) => {
+                    space.place(serial, cell);
+                    let (r, c) = space.row_column(cell);
+                    (r as f64, c as f64)
+                }
+                None => (-1.0, -1.0),
+            };
+            agent.preset("row", Value::Number(row));
+            agent.preset("column", Value::Number(column));
+        }
         pop.agents.push(Some(agent));
         pop.live.push(serial);
         pop.counts.created += 1;
@@ -1000,26 +1258,64 @@ impl Simulation {
                 }
             }
             Who::Agent(p, s) => {
-                if let Some(pop) = self.pops.get_mut(p as usize) {
-                    if ended {
-                        if let Ok(i) = pop.live.binary_search(&s) {
-                            pop.live.remove(i);
-                        }
-                        pop.counts.removed += 1;
-                    } else if let Some(slot) = index(s).and_then(|i| pop.agents.get_mut(i)) {
-                        *slot = Some(agent);
-                    }
+                if !ended
+                    && let Some(slot) = self
+                        .pops
+                        .get_mut(p as usize)
+                        .and_then(|pop| pop.agents.get_mut(index(s)?))
+                {
+                    *slot = Some(agent);
                 }
             }
         }
-        let (matched, changed) = result?;
-        self.dispatch(who, out)?;
+        // An agent that ended stays alive, with its links and cell, until what it sent out
+        // has gone, in order (a link it removed or a move it made counts for its last
+        // messages); then it leaves. It never receives what it sent.
+        let (matched, changed) = match result {
+            Ok(r) => r,
+            Err(e) => {
+                self.retire(who);
+                return Err(e);
+            }
+        };
+        let sent = self.dispatch(who, out);
+        if ended {
+            self.retire(who);
+        }
+        sent?;
         if let Who::Agent(p, _) = who
             && (changed || ended)
         {
             self.dirty.insert(p);
         }
         Ok(Some(matched))
+    }
+
+    /// Takes agent `who` out of its population (if it is still there): out of the agents alive,
+    /// its slot, its links and its cell.
+    fn retire(&mut self, who: Who) {
+        let Who::Agent(p, s) = who else {
+            self.env = None;
+            return;
+        };
+        let Some(pop) = self.pops.get_mut(p as usize) else {
+            return;
+        };
+        let Ok(i) = pop.live.binary_search(&s) else {
+            return;
+        };
+        pop.live.remove(i);
+        pop.counts.removed += 1;
+        if let Some(slot) = index(s).and_then(|i| pop.agents.get_mut(i)) {
+            *slot = None;
+        }
+        if let Some(net) = &mut pop.net {
+            net.forget(s);
+        }
+        if let Some(space) = &mut pop.space {
+            space.remove(s);
+        }
+        self.dirty.insert(p);
     }
 
     /// Puts what an agent sent out on the clock, in order.
@@ -1031,6 +1327,7 @@ impl Simulation {
                     let key = self.key(who);
                     if let Err(e) = self.schedule(s.delay, Ev::Fire(who, s.token), &key) {
                         self.halt(who, "an event it sent would not be at a finite time");
+                        self.retire(who);
                         return Err(e);
                     }
                 }
@@ -1038,7 +1335,9 @@ impl Simulation {
                     let population = match &to {
                         Recipient::One { population, .. }
                         | Recipient::Random { population, .. }
-                        | Recipient::All { population } => population,
+                        | Recipient::All { population }
+                        | Recipient::Linked { population, .. }
+                        | Recipient::Neighbours { population, .. } => population,
                     };
                     let Some(p) = find(&self.pops, population) else {
                         continue;
@@ -1074,6 +1373,14 @@ impl Simulation {
                             .copied()
                             .filter(|&s| Some(s) != sender)
                             .collect(),
+                        Recipient::Linked { draw, .. } => {
+                            let others = sender.map(|s| pop.linked(s)).unwrap_or_default();
+                            one_or_all(others, draw)
+                        }
+                        Recipient::Neighbours { draw, .. } => {
+                            let others = sender.map(|s| pop.neighbours(s)).unwrap_or_default();
+                            one_or_all(others, draw)
+                        }
                     };
                     if recipients.is_empty() {
                         if let Some(pop) = self.pops.get_mut(p as usize) {
@@ -1103,9 +1410,99 @@ impl Simulation {
                         self.schedule(0.0, Ev::Remove(p, s), &key)?;
                     }
                 }
+                Out::Connect { population, serial } => self.link(who, &population, serial, true),
+                Out::Disconnect { population, serial } => {
+                    self.link(who, &population, serial, false);
+                }
+                Out::MoveTo {
+                    population,
+                    row,
+                    column,
+                } => {
+                    if let Some((p, s)) = self.actor(who, &population) {
+                        let cell = self.pops.get(p as usize).and_then(|pop| {
+                            let space = pop.space.as_ref()?;
+                            let cell = space.cell_at(row, column)?;
+                            let here = space.cell_of(s) == Some(cell);
+                            (here || space.can_enter(cell)).then_some(cell)
+                        });
+                        if let Some(cell) = cell {
+                            self.move_agent(p, s, cell);
+                        }
+                    }
+                }
+                Out::MoveRandom { population, draw } => {
+                    if let Some((p, s)) = self.actor(who, &population) {
+                        let cell = self.pops.get(p as usize).and_then(|pop| {
+                            let space = pop.space.as_ref()?;
+                            let free: Vec<u64> = space
+                                .neighbour_cells(space.cell_of(s)?)
+                                .into_iter()
+                                .filter(|&c| space.can_enter(c))
+                                .collect();
+                            free.get(pick(draw, free.len())).copied()
+                        });
+                        if let Some(cell) = cell {
+                            self.move_agent(p, s, cell);
+                        }
+                    }
+                }
             }
         }
         Ok(())
+    }
+
+    /// The acting agent as one of `population`, if it is and is alive.
+    fn actor(&self, who: Who, population: &str) -> Option<(u32, u64)> {
+        let Who::Agent(p, s) = who else { return None };
+        let pop = self.pops.get(p as usize)?;
+        (pop.name == population && pop.is_live(s)).then_some((p, s))
+    }
+
+    /// Links (or unlinks) the acting agent and agent `serial` of `population`.
+    fn link(&mut self, who: Who, population: &str, serial: f64, connect: bool) {
+        let Some((p, s)) = self.actor(who, population) else {
+            return;
+        };
+        let Some(pop) = self.pops.get_mut(p as usize) else {
+            return;
+        };
+        let Some(other) = whole(serial).filter(|&o| pop.is_live(o)) else {
+            return;
+        };
+        let Some(net) = &mut pop.net else { return };
+        let changed = if connect {
+            net.connect(s, other)
+        } else {
+            net.disconnect(s, other)
+        };
+        if changed {
+            self.dirty.insert(p);
+        }
+    }
+
+    /// Moves agent `s` of population `p` to `cell`, and writes its `row` and `column`.
+    fn move_agent(&mut self, p: u32, s: u64, cell: u64) {
+        let Some(pop) = self.pops.get_mut(p as usize) else {
+            return;
+        };
+        let Some(space) = &mut pop.space else { return };
+        if space.cell_of(s) == Some(cell) {
+            return;
+        }
+        space.place(s, cell);
+        let (r, c) = space.row_column(cell);
+        if let Some(a) = index(s)
+            .and_then(|i| pop.agents.get_mut(i))
+            .and_then(Option::as_mut)
+        {
+            a.set_value("row", Value::Number(r as f64));
+            a.set_value("column", Value::Number(c as f64));
+        }
+        self.dirty.insert(p);
+        // Its own conditions and rates may read `row` and `column`, which changed after its
+        // macrostep tested them: it is tested again (`propagate`).
+        self.moved.insert((p, s));
     }
 
     /// Stops an agent after a scheduling error, as [`Agent`]'s own driver does.
@@ -1191,21 +1588,21 @@ impl Simulation {
         Ok(())
     }
 
-    /// Tests again the agents waiting on each changed population, in population, then serial
-    /// order, then the environment, until no re-test changes anything.
+    /// Tests again the agents that moved on a grid (each first, in population, then serial
+    /// order: their `row` and `column` changed after their own macrostep, so their conditions
+    /// are tested and their rates drawn again), then the agents waiting on each changed
+    /// population, in population, then serial order, then the environment, until no re-test
+    /// changes anything.
     fn propagate(&mut self) -> Result<(), RunError> {
         let mut changes = 0u64;
-        while let Some(p) = self.dirty.pop_first() {
-            let readers = self.readers.get(p as usize).cloned().unwrap_or_default();
-            let mut who: Vec<Who> = Vec::new();
-            for q in readers {
-                if let Some(pop) = self.pops.get(q as usize) {
-                    who.extend(pop.live.iter().map(|&s| Who::Agent(q, s)));
-                }
-            }
-            if self.env_reads.get(p as usize).copied().unwrap_or(false) {
-                who.push(Who::Env);
-            }
+        loop {
+            let who: Vec<Who> = if let Some((p, s)) = self.moved.pop_first() {
+                vec![Who::Agent(p, s)]
+            } else if let Some(p) = self.dirty.pop_first() {
+                self.readers_of(p)
+            } else {
+                return Ok(());
+            };
             for w in who {
                 if self.act(w, Op::Retest)? == Some(true) {
                     changes += 1;
@@ -1218,6 +1615,20 @@ impl Simulation {
                 }
             }
         }
-        Ok(())
+    }
+
+    /// The agents whose conditions read population `p`, in population, then serial order, then
+    /// the environment.
+    fn readers_of(&self, p: u32) -> Vec<Who> {
+        let mut who: Vec<Who> = Vec::new();
+        for &q in self.readers.get(p as usize).map_or(&[][..], Vec::as_slice) {
+            if let Some(pop) = self.pops.get(q as usize) {
+                who.extend(pop.live.iter().map(|&s| Who::Agent(q, s)));
+            }
+        }
+        if self.env_reads.get(p as usize).copied().unwrap_or(false) {
+            who.push(Who::Env);
+        }
+        who
     }
 }

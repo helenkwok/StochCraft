@@ -154,6 +154,16 @@ pub(crate) enum Recipient {
     Random { population: String, draw: u64 },
     /// Every agent but the sender.
     All { population: String },
+    /// The agents linked to the sender, or with a draw one of them.
+    Linked {
+        population: String,
+        draw: Option<u64>,
+    },
+    /// The sender's grid neighbours, or with a draw one of them.
+    Neighbours {
+        population: String,
+        draw: Option<u64>,
+    },
 }
 
 /// Something a macrostep sent out, in the order its actions ran.
@@ -170,6 +180,23 @@ pub(crate) enum Out {
     Remove {
         population: String,
         serial: f64,
+    },
+    Connect {
+        population: String,
+        serial: f64,
+    },
+    Disconnect {
+        population: String,
+        serial: f64,
+    },
+    MoveTo {
+        population: String,
+        row: f64,
+        column: f64,
+    },
+    MoveRandom {
+        population: String,
+        draw: u64,
     },
 }
 
@@ -219,6 +246,9 @@ pub struct Agent {
     next_token: u64,
     outbox: Vec<Out>,
     trace: Option<Vec<Record>>,
+    /// Variables given their first value by the model (a position, a cell) in place of their
+    /// expression's.
+    presets: Vec<(u32, Value)>,
 }
 
 impl Agent {
@@ -248,6 +278,7 @@ impl Agent {
             next_token: 0,
             outbox: Vec::new(),
             trace: None,
+            presets: Vec::new(),
         }
     }
 
@@ -255,6 +286,24 @@ impl Agent {
     pub fn with_microstep_limit(mut self, limit: u64) -> Self {
         self.limit = limit;
         self
+    }
+
+    /// Gives the variable `name` (if the chart declares it) this first value in place of its
+    /// expression's, as SCXML's `<param>` does for an invoked chart.
+    pub(crate) fn preset(&mut self, name: &str, v: Value) {
+        if let Some(&i) = self.chart.var_index.get(name) {
+            self.presets.retain(|(j, _)| *j != i);
+            self.presets.push((i, v));
+        }
+    }
+
+    /// Sets the variable `name`, if the chart declares it.
+    pub(crate) fn set_value(&mut self, name: &str, v: Value) {
+        if let Some(&i) = self.chart.var_index.get(name)
+            && let Some(slot) = self.values.get_mut(i as usize)
+        {
+            *slot = v;
+        }
     }
 
     /// Records what the agent does ([`Agent::trace`]).
@@ -362,7 +411,18 @@ impl Agent {
         self.now = now;
         self.begin_macrostep();
         let chart = Arc::clone(&self.chart);
+        // The model's values first, so every other first value can read them whatever the
+        // order of declaration; then the others, in order.
+        let presets = std::mem::take(&mut self.presets);
+        for (j, v) in &presets {
+            if let Some(slot) = self.values.get_mut(*j as usize) {
+                *slot = v.clone();
+            }
+        }
         for (i, (_, code)) in chart.vars.iter().enumerate() {
+            if presets.iter().any(|(j, _)| *j as usize == i) {
+                continue;
+            }
             let v = self.eval(&chart, code, w);
             if let Some(slot) = self.values.get_mut(i) {
                 *slot = v;
@@ -1006,6 +1066,40 @@ impl Agent {
                     serial,
                 });
             }
+            Exec::Connect { population, serial } => {
+                let serial = self.eval(chart, serial, w).number();
+                self.outbox.push(Out::Connect {
+                    population: population.clone(),
+                    serial,
+                });
+            }
+            Exec::Disconnect { population, serial } => {
+                let serial = self.eval(chart, serial, w).number();
+                self.outbox.push(Out::Disconnect {
+                    population: population.clone(),
+                    serial,
+                });
+            }
+            Exec::MoveTo {
+                population,
+                row,
+                column,
+            } => {
+                let row = self.eval(chart, row, w).number();
+                let column = self.eval(chart, column, w).number();
+                self.outbox.push(Out::MoveTo {
+                    population: population.clone(),
+                    row,
+                    column,
+                });
+            }
+            Exec::MoveRandom { population, site } => {
+                let draw = self.draw_bits(chart, *site);
+                self.outbox.push(Out::MoveRandom {
+                    population: population.clone(),
+                    draw,
+                });
+            }
             Exec::SendSpec(s) => {
                 if s.internal {
                     self.internal.push_back(s.event.clone());
@@ -1018,17 +1112,20 @@ impl Agent {
                             population: population.clone(),
                             serial: self.eval(chart, serial, w).number(),
                         },
-                        ToExec::Random { population, site } => {
-                            let mut rng = self.take_stream(chart, *site);
-                            let draw = rng.next_u64();
-                            self.streams.insert(*site, rng);
-                            Recipient::Random {
-                                population: population.clone(),
-                                draw,
-                            }
-                        }
+                        ToExec::Random { population, site } => Recipient::Random {
+                            population: population.clone(),
+                            draw: self.draw_bits(chart, *site),
+                        },
                         ToExec::All { population } => Recipient::All {
                             population: population.clone(),
+                        },
+                        ToExec::Linked { population, site } => Recipient::Linked {
+                            population: population.clone(),
+                            draw: site.map(|site| self.draw_bits(chart, site)),
+                        },
+                        ToExec::Neighbours { population, site } => Recipient::Neighbours {
+                            population: population.clone(),
+                            draw: site.map(|site| self.draw_bits(chart, site)),
                         },
                     };
                     self.outbox.push(Out::Message {
@@ -1150,6 +1247,14 @@ impl Agent {
                 }
             }
         }
+    }
+
+    /// 64 random bits from the stream of `site`.
+    fn draw_bits(&mut self, chart: &Chart, site: u32) -> u64 {
+        let mut rng = self.take_stream(chart, site);
+        let draw = rng.next_u64();
+        self.streams.insert(site, rng);
+        draw
     }
 
     fn take_stream(&mut self, chart: &Chart, site: u32) -> Rng {

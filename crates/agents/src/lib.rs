@@ -90,19 +90,30 @@
 //! what they read changes; [`Statistic`]s over time and their [`bands`] across replications;
 //! and a stepped mode ([`Stepping`]). A [`Simulation`] runs one replication from a seed.
 //!
+//! **Networks and grids** (stage A3, [`network`]): a population can have a [`Network`] (random,
+//! ring lattice, small world, scale free, within a distance, or a list of links, built at the
+//! start from the population's own stream) and a [`Grid`] (Moore or von Neumann neighbours,
+//! wrapped or not, one agent per cell or many); messages go along them
+//! ([`SendSpec::to_linked`], [`SendSpec::to_linked_random`], [`SendSpec::to_neighbours`],
+//! [`SendSpec::to_neighbour_random`]); actions link, unlink and move agents
+//! ([`Action::connect`], [`Action::disconnect`], [`Action::move_to`], [`Action::move_random`]);
+//! and `degree('p')`, `linked-count('p', 's')`, `neighbour-count('p', 's')` and the others of
+//! [`FUNCTIONS`] read an agent's neighbourhood.
+//!
 //! **Errors.** A [`RunError`] stops its agent for good: its pending sends are dropped (those
 //! already on the clock are skipped when they come up) and no [`Step::Done`] is recorded; in a
 //! [`Model`] it stops the run.
 //!
 //! **Not here yet:** `<if>`, `<foreach>`, `<script>` (never: D17), `<invoke>`, `<donedata>`,
 //! `<param>`, `<send>` with a delay to other agents, `<initial>` elements with content (initial
-//! states are the `initial` attribute), late data binding, networks and grids (stage A3), and
-//! reading and writing SCXML files (stage A4).
+//! states are the `initial` attribute), late data binding, and reading and writing SCXML files
+//! (stage A4).
 
 mod chart;
 mod data;
 mod driver;
 mod interp;
+pub mod network;
 pub mod population;
 
 pub use chart::{
@@ -112,6 +123,7 @@ pub use chart::{
 pub use data::FUNCTIONS;
 pub use driver::Driver;
 pub use interp::{Agent, DEFAULT_MICROSTEP_LIMIT, Record, RunError, Scheduled, Step};
+pub use network::{Grid, LinkError, Neighbourhood, Network, Placement, read_links, write_links};
 pub use population::{
     Band, Bands, Counts, DEFAULT_RETEST_LIMIT, Measure, Model, ModelError, Order, Population, Run,
     Series, Simulation, Statistic, Stepping, bands,

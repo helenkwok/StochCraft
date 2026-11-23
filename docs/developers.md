@@ -635,8 +635,8 @@ URI, whatever prefix the file uses; a file whose root is in another namespace is
 
 ### Agents
 
-`crates/agents` holds M4.3's first two stages: state charts (A1) and populations of agents
-exchanging messages (A2), built in code, with no files yet. A chart is a `ChartSpec` (the tree of an SCXML
+`crates/agents` holds M4.3's first three stages: state charts (A1), populations of agents
+exchanging messages (A2), and networks and grids (A3), built in code, with no files yet. A chart is a `ChartSpec` (the tree of an SCXML
 document: states, parallel and final states, shallow and deep history, transitions with event
 descriptors, conditions, targets and the type internal or external, and `onentry`, `onexit` and
 transition content of `<assign>`, `<raise>`, `<send>`, `<cancel>` and `<log>`). `Chart::new`
@@ -686,6 +686,41 @@ from a seed, and `Model::run` returns its `Run` (the statistics over time and ea
   then `step` to every agent (in population, then serial order, or one random order per step from
   the stream `stepping/order`), and `after-step` to the environment.
 
+A population can have a `Network` and a `Grid` (module `network`, stage A3):
+
+- Networks are built at the start, over the agents created then, from the population's own stream
+  `network/<n>:<population>`, so other populations never change them: `Network::random(d)`
+  (Erdős–Rényi G(n, M) with M = round(n·d/2), drawn by Floyd's algorithm, so the mean degree is d
+  exactly when n·d/2 is whole), `ring(k)` (k links each side), `small_world(k, p)` (Watts and
+  Strogatz 1998: each lattice link's far end rewired with probability p, lap by lap round the
+  ring, never to the agent itself or to one it is linked to), `scale_free(m0, m)` (Barabási and
+  Albert 1999: a complete network of m0, then each agent linked to m distinct earlier ones with
+  probability proportional to degree), `distance(w, h, r)` (positions uniform in a w × h
+  rectangle, in the variables `x` and `y`, linked within r; every pair compared), and a list of
+  links, `links(...)` or `csv(text)` (`read_links` refuses a bad line, a self-link, a link given
+  twice and a serial of no agent, with its line number; `write_links` writes them back). Links are
+  undirected, never to the agent itself and never twice. Agents created later have no links (in a
+  distance network they get a position and the links within the range), and an agent that leaves
+  loses its links.
+- Grids have rows × columns cells, Moore or von Neumann neighbours, wrapped or not, one agent per
+  cell or many; agents are placed in order or at random (stream `grid/<n>:<population>`), their
+  cell in the variables `row` and `column`. An agent's neighbours are the agents in its
+  neighbouring cells and the others in its own cell.
+- `Action::connect`, `disconnect`, `move_to` and `move_random` take effect when the acting agent's
+  macrostep ends, in the order its actions ran; `SendSpec::to_linked`, `to_linked_random`,
+  `to_neighbours` and `to_neighbour_random` send along links and to neighbours, in serial order,
+  the random pick from the sender's own stream as for `to_random`. `degree('p')`,
+  `linked-count('p', 's')`, `linked-sum('p', 'x')`, `neighbours('p')`, `neighbour-count('p', 's')`
+  and `neighbour-sum('p', 'x')` read an agent's neighbourhood in conditions and statistics; a
+  condition that calls them is tested again when the population changes, links made and removed
+  and moves included; an agent that moved is itself tested again first (its conditions on `row`
+  and `column` taken, its rates that read them drawn again). An agent that ends keeps its links and
+  cell while its last messages go out, in order, then loses them. A model whose charts name a
+  network or grid their population lacks, whose grid or distance network has no variables for the
+  cell or position, or whose chart assigns those variables (they are the model's), is refused.
+  Bounded draws use all 64 bits with rejection (unbiased), and distances are scaled so they neither
+  underflow nor overflow.
+
 The tests (`crates/agents/tests`) work out the order of actions by hand for transitions between
 cousins, branches, history, parallel regions, internal transitions and conflicting transitions,
 and check fixed timeouts, cancels, and rates (and redrawn rates) against the exponential by their
@@ -694,8 +729,17 @@ random picks, re-tested conditions, removal, arrivals and the stepped mode's pha
 four models against exact finite-population answers: independent failures (binomial at t = 5),
 Bass diffusion as agents (the pure-birth chain's mean times to half and to all adopters; N = 1,000
 in the heavy tests), SIR's final size for N = 100 and R0 = 1.5 (the embedded jump chain), and
-Pólya's urn in the stepped mode (uniform). Not there yet: `<if>`, `<foreach>`, `<invoke>`,
-`<donedata>`, `<initial>` elements with content, late binding, networks and grids (A3), and reading
+Pólya's urn in the stepped mode (uniform). For networks and grids they check a ring lattice of 100
+with 2 links each side (clustering exactly 1/2, a mean shortest path of 127,500 / 9,900 = 12.8788
+by breadth-first search), the small world with rewiring 0 (the lattice) and 1 (as many links, none
+repeated), the random network's exact mean degree, preferential attachment's least degree m and
+its tail exponent (the maximum-likelihood estimate against its value for the exact degree
+distribution 2m(m + 1)/(k(k + 1)(k + 2)), whose tail falls as k^−3), the distance network pair by
+pair, links through CSV and back, links made and removed during a run, Moore and von Neumann
+neighbourhoods by hand, moves, messages to neighbours, a Game of Life glider that is its own shape
+moved one cell diagonally every 4 steps, and SIR on a complete network, which is A2's well-mixed run
+draw for draw and matches its exact mean final size of 20.3696. Not there yet: `<if>`,
+`<foreach>`, `<invoke>`, `<donedata>`, `<initial>` elements with content, late binding, and reading
 and writing SCXML files (A4).
 
 ### Selecting the best
