@@ -217,11 +217,22 @@ impl Experiment {
                     while !control.is_cancelled() {
                         // Claim an index only while it is below `end`, so the counter never
                         // passes it (a plain increment would wrap at `u64::MAX`).
-                        let Ok(index) =
-                            next.fetch_update(Ordering::Relaxed, Ordering::Relaxed, |i| {
-                                (i < end).then_some(i + 1)
-                            })
-                        else {
+                        let mut seen = next.load(Ordering::Relaxed);
+                        let claimed = loop {
+                            if seen >= end {
+                                break None;
+                            }
+                            match next.compare_exchange_weak(
+                                seen,
+                                seen + 1,
+                                Ordering::Relaxed,
+                                Ordering::Relaxed,
+                            ) {
+                                Ok(_) => break Some(seen),
+                                Err(now) => seen = now,
+                            }
+                        };
+                        let Some(index) = claimed else {
                             break;
                         };
                         let rep = self.replication(index);
