@@ -1145,8 +1145,12 @@ impl Diagnostic {
                 // the step a path's length is taken to (0.1 mm in the model's unit), so they differ
                 // in the message whenever they differ by more than it.
                 field = Some("length".to_owned());
-                let places =
-                    places_for(crate::site::length_step(model.experiment.length_unit)).max(4);
+                let places = places_for(crate::site::length_step(
+                    names
+                        .0
+                        .map_or(crate::LengthUnit::Metres, |m| m.experiment.length_unit),
+                ))
+                .max(4);
                 part(
                     "conveyor_length_mismatch",
                     vec![
