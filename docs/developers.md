@@ -751,19 +751,32 @@ The race's error is held by Bonferroni's inequality over the planned looks and p
 planned for at most M candidates (`max_candidates`, more are refused) and L stages each
 (`stages`), and each test is run at β = α_race / ((M − 1)·L). The best candidate tried can only be
 dropped against one of the M − 1 others at one of the L shared counts, so the race drops it with
-probability at most α_race, whichever candidate leads at each look. `clean_up` then runs KN
-(`select_best`) among every candidate still in contention, on replications numbered from the
-first index the race never asked for, at confidence 1 − α_clean. α is split between the two (`racing_share`,
-half each by default). The answer (`RaceAnswer`, also as words)
-states the chosen candidate, "of these k finalists, the best or within δ of it, with 1 − α
-confidence", how many candidates the search tried and racing dropped, and that it does not prove
-that none of the others is better. `finalists` can cap the clean-up at the k best race means
-(`None`, no cap, by default); that cut has no probability behind it, so a capped answer lists the
-candidates it left out (`left_out`) and says that its confidence covers only the finalists.
-KN's `ComparedExactly` and `NotProven` pass through. `max_race_runs` stops the race early and the
-clean-up runs on what is left; a `max_cleanup_runs` that cannot pay for KN's
-first stage gives a not-proven answer. The checks (`crates/experiment/tests/race.rs`, heavy) run
-1,000 macro-replications each: the slippage configuration (ten candidates, independent and with
+probability at most α_race, whichever candidate leads at each look and in whatever order the
+requests are told (that order can change who leads, which pairs are tested and who reaches the
+clean-up). The bound treats each paired test as a fixed test on fixed data, so it holds only for
+candidates chosen without looking at the values told on the replication indices they will share:
+candidates fixed in advance, or proposed from a fixed design, a random or Sobol sequence or a
+list. An adaptive search that reads the race's results and then proposes a candidate to run on
+the same indices breaks it, and then the bound on dropping the best is not claimed. The paired t
+interval and KN also need the vectors of all candidates' values in a replication to be
+independent across replications and jointly (multivariate) normal; `Sampling::Common` only sets
+KN's constants and does not remove that requirement.
+
+`clean_up` then runs KN (`select_best`) among every candidate still in contention, on
+replications numbered from the first index the race never asked for, at confidence 1 − α_clean.
+α is split between the two (`racing_share`, half each by default). KN's statement about its
+finalists holds whatever chose them. The answer (`RaceAnswer`, also as words) states the chosen
+candidate, "of these k finalists, the best or within δ of it, with 1 − α confidence", how many
+candidates the search tried and racing dropped, and that it does not prove that none of the
+others is better. `finalists` can cap the clean-up at the k best race means (`None`, no cap, by
+default); that cut has no probability behind it, so a capped answer lists the candidates it left
+out (`left_out`) and says that its confidence covers only the finalists. Candidates whose first
+stage never ran (the racing budget ran out, or the clean-up was called while they waited) are
+listed in `untested`, and the answer says that its confidence covers only the candidates that
+raced. KN's `ComparedExactly` and `NotProven` pass through. `max_race_runs` stops the race early
+and the clean-up runs on what is left; a `max_cleanup_runs` that cannot pay for KN's first stage
+gives a not-proven answer. The checks (`crates/experiment/tests/race.rs`, heavy) run 1,000
+macro-replications each: the slippage configuration (ten candidates, independent and with
 correlation 0.5) and a feed of 50 candidates arriving one at a time with the best arriving late,
 where racing must also use fewer runs than running every candidate to the end with the same
 clean-up, both without a cap. Since the procedure is conservative, each rate must itself be at

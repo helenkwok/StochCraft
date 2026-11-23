@@ -5,9 +5,8 @@
 //! stays in contention. This is racing (Birattari, Stützle, Paquete and Varrentrapp 2002), with a
 //! paired t interval in place of their Friedman test, because every candidate is run on the same
 //! replications (common random numbers) and so two candidates pair replication by replication.
-//! When the race is over, the k best candidates still in contention are run again on fresh
-//! replications that no step of the race used, and KN ([`crate::select::select_best`]) selects
-//! among them.
+//! When the race is over, the candidates still in contention are run again on fresh replications
+//! that no step of the race used, and KN ([`crate::select::select_best`]) selects among them.
 //!
 //! **Elimination.** After a candidate's stage, the candidate with the best mean in contention is
 //! the leader b. Candidate i is dropped only when the one-sided paired t interval for
@@ -28,6 +27,21 @@
 //! best candidate tried with probability at most α_race. Testing the same pair again at the same
 //! count repeats the same event and adds no error.
 //!
+//! **Which candidates the bound covers.** "A fixed test on fixed data" needs each candidate to be
+//! chosen without looking at the values told on the replication indices it will share with the
+//! others. That holds when the candidates are fixed in advance, or when the search chooses each
+//! one from information independent of those values (a fixed design, a random or Sobol sequence,
+//! a list). It does not hold for an adaptive search that reads the race's results and then
+//! proposes a candidate to be run on the same indices: its paired differences on those indices
+//! then depend on the choice, a single test can exceed β, and the bound on dropping the best is
+//! not claimed. KN's clean-up on fresh replications is unaffected: its statement about the
+//! finalists holds whatever chose them.
+//!
+//! **The order of tells.** Requests may complete in any order. The leader at each look, and so
+//! which pairs are tested and at which counts, depends on that order: telling the same values in
+//! another order can drop other candidates and change who reaches the clean-up. The bound holds
+//! for every order, since it covers every pair and every count.
+//!
 //! **The clean-up.** By default every candidate still in contention is a finalist. KN runs on
 //! replications numbered from the first index after every one the race asked for, so its data are
 //! independent of the race and its guarantee holds for the set it is given, at confidence
@@ -37,13 +51,22 @@
 //! k finalists, or within δ of it, with 1 − α confidence (KN's own level, 1 − α_clean, is
 //! higher), and that the search tried more candidates than it proves anything about.
 //!
+//! **Candidates never raced.** A candidate whose first stage was never run (the race's budget ran
+//! out first, or the clean-up was called while it still waited) was neither raced nor cleaned up.
+//! The answer lists such candidates ([`RaceAnswer::untested`]) and says that its confidence
+//! covers only the candidates that raced.
+//!
 //! **A cap on the finalists.** [`Racing::finalists`] may cap the clean-up at the k candidates in
 //! contention with the best means. That cut is not covered by any probability: a candidate left
 //! out may be the best. When the cap cuts, the answer lists the candidates left out
 //! ([`RaceAnswer::left_out`]) and says in words that its confidence covers only the finalists.
 //!
-//! **Assumptions.** Observations are normal and independent across replications, as KN and the t
-//! interval assume.
+//! **Assumptions.** The vectors of all candidates' values in a replication must be independent
+//! across replications and identically distributed, jointly (multivariate) normal, as KN and the
+//! paired t interval assume; each candidate's values being normal on its own is not enough, since
+//! the differences of two normal values need not be normal. [`Sampling::Common`] only chooses
+//! KN's constants for dependent candidates; it does not remove this requirement. A replication's
+//! mean over a long run is close to normal; a count in a short run may not be.
 //!
 //! The procedure is written from the published papers; no code of any implementation was used.
 
@@ -166,12 +189,15 @@ impl Racing {
         if self.cleanup_first_stage < 2 {
             return bad("cleanup_first_stage");
         }
-        // KN's range for up to k systems: 1/k < 1 − α_clean.
+        // KN's range for every count of finalists it can be given, 1 to k: 0 < 1 − α_clean < 1,
+        // and 1/m < 1 − α_clean for m from 2 to k, which is 1/2 < 1 − α_clean when k ≥ 2.
         let k = self
             .finalists
             .unwrap_or(self.max_candidates)
             .min(self.max_candidates);
-        if k > 1 && self.cleanup_confidence() <= 1.0 / k as f64 {
+        let clean = self.cleanup_confidence();
+        let floor = if k > 1 { 0.5 } else { 0.0 };
+        if !(clean > floor && clean < 1.0) {
             return bad("confidence");
         }
         if self.max_replications() == u64::MAX {
@@ -193,7 +219,8 @@ pub enum Status {
     /// Dropped: the paired interval against `against` (the leader then), over the first
     /// `replications` replications they share, lay wholly beyond δ.
     Dropped { against: usize, replications: u64 },
-    /// Never run: the race's budget ran out before its first stage.
+    /// Never run: the race's budget ran out before its first stage. Not covered by the answer's
+    /// confidence ([`RaceAnswer::untested`]).
     NotRun,
 }
 
@@ -215,8 +242,9 @@ pub struct Request {
 #[derive(Debug, Clone, PartialEq)]
 struct Entry {
     values: Vec<f64>,
-    /// The sum of `values`, for the mean.
-    sum: f64,
+    /// The mean of `values`, kept as a running mean (each step adds x/n − mean/n), so that large
+    /// finite values do not overflow a sum.
+    mean: f64,
     status: Status,
     pending: Option<Range<u64>>,
 }
@@ -228,8 +256,9 @@ struct Entry {
 /// [`Race::ask`] gives every waiting candidate its first stage first, in the order they were
 /// added, then the next stage to the candidate in contention with the fewest replications (the
 /// lowest number on a tie), so the candidates advance nearly together. Several requests may be
-/// outstanding at once (one per candidate), so they can run in parallel; the order of the tells
-/// does not change what a candidate is compared on, only when.
+/// outstanding at once (one per candidate), so they can run in parallel. The order in which they
+/// are told can change who leads at each look, and so which pairs are compared, which candidates
+/// are dropped and who reaches the clean-up; the race's error bound holds for every order.
 #[derive(Debug, Clone, PartialEq)]
 pub struct Race {
     settings: Racing,
@@ -271,7 +300,7 @@ impl Race {
         }
         self.candidates.push(Entry {
             values: Vec::new(),
-            sum: 0.0,
+            mean: 0.0,
             status: if self.budget_spent {
                 Status::NotRun
             } else {
@@ -309,7 +338,7 @@ impl Race {
         if self
             .settings
             .max_race_runs
-            .is_some_and(|max| self.runs.saturating_add(size) > max)
+            .is_some_and(|max| self.runs.checked_add(size).is_none_or(|total| total > max))
         {
             self.budget_spent = true;
             for e in &mut self.candidates {
@@ -358,8 +387,15 @@ impl Race {
             });
         }
         entry.pending = None;
-        entry.values.extend_from_slice(values);
-        entry.sum += values.iter().sum::<f64>();
+        for &x in values {
+            entry.values.push(x);
+            let n = entry.values.len() as f64;
+            entry.mean = if entry.values.len() == 1 {
+                x
+            } else {
+                entry.mean + (x / n - entry.mean / n)
+            };
+        }
         if entry.status == Status::Waiting {
             entry.status = Status::Racing;
         }
@@ -373,12 +409,23 @@ impl Race {
     }
 
     /// Asks and tells until the race has nothing more to run, with `sample(candidate,
-    /// replications)` giving one value per replication.
+    /// replications)` giving one value per replication. Requests already outstanding are run
+    /// first, without being charged again: when a tell fails (wrong count, a value not finite),
+    /// its request stays outstanding, so calling `run` again samples that same range again.
     pub fn run<F>(&mut self, sample: &mut F) -> Result<(), RaceError>
     where
         F: FnMut(usize, Range<u64>) -> Vec<f64>,
     {
-        while let Some(request) = self.ask() {
+        loop {
+            let outstanding = self.candidates.iter().enumerate().find_map(|(c, e)| {
+                e.pending.clone().map(|replications| Request {
+                    candidate: c,
+                    replications,
+                })
+            });
+            let Some(request) = outstanding.or_else(|| self.ask()) else {
+                break;
+            };
             let values = sample(request.candidate, request.replications.clone());
             self.tell(request.candidate, &values)?;
         }
@@ -389,7 +436,7 @@ impl Race {
     /// first stage.
     pub fn mean(&self, candidate: usize) -> Option<f64> {
         let e = self.candidates.get(candidate)?;
-        (!e.values.is_empty()).then(|| e.sum / e.values.len() as f64)
+        (!e.values.is_empty()).then_some(e.mean)
     }
 
     /// Replications told for the candidate.
@@ -495,21 +542,38 @@ impl Race {
             .take(n)
             .map(|(y, x)| s * (y - x))
             .collect();
-        let nf = n as f64;
-        let mean = d.iter().sum::<f64>() / nf;
-        if mean.is_nan() || mean <= self.settings.delta {
+        // A difference that overflowed: nothing reliable to test, so nobody is dropped.
+        if d.iter().any(|v| !v.is_finite()) {
             return None;
         }
-        let constant = d.iter().all(|v| Some(v) == d.first());
-        if constant {
-            // No variation in the differences: the difference is known exactly.
-            return Some(n as u64);
+        let delta = self.settings.delta;
+        if let Some(&first) = d.first()
+            && d.iter().all(|&v| v == first)
+        {
+            // Finite and exactly constant: the difference is known exactly.
+            return (first > delta).then_some(n as u64);
         }
-        let var = d.iter().map(|v| (v - mean) * (v - mean)).sum::<f64>() / (nf - 1.0);
-        if var.is_nan() || var <= 0.0 {
-            return Some(n as u64);
+        // The differences scaled by the largest in size, so that neither their sum nor their
+        // squared deviations overflow or underflow.
+        let scale = d.iter().fold(0.0_f64, |m, v| m.max(v.abs()));
+        let nf = n as f64;
+        let scaled: Vec<f64> = d.iter().map(|v| v / scale).collect();
+        let mean_scaled = scaled.iter().sum::<f64>() / nf;
+        let mean = mean_scaled * scale;
+        if !mean.is_finite() || mean <= delta {
+            return None;
         }
-        let t = (mean - self.settings.delta) / (var / nf).sqrt();
+        let var_scaled = scaled
+            .iter()
+            .map(|v| (v - mean_scaled) * (v - mean_scaled))
+            .sum::<f64>()
+            / (nf - 1.0);
+        let se = scale * (var_scaled / nf).sqrt();
+        if !(se.is_finite() && se > 0.0) {
+            // The spread could not be computed reliably: no elimination.
+            return None;
+        }
+        let t = (mean - delta) / se;
         (t_upper_tail(t, nf - 1.0) <= self.level).then_some(n as u64)
     }
 
@@ -534,6 +598,12 @@ impl Race {
         let finalists = ranked;
         let count =
             |f: fn(&Status) -> bool| self.candidates.iter().filter(|e| f(&e.status)).count();
+        let untested: Vec<usize> = self
+            .candidates
+            .iter()
+            .enumerate()
+            .filter_map(|(c, e)| matches!(e.status, Status::NotRun | Status::Waiting).then_some(c))
+            .collect();
         let mut answer = RaceAnswer {
             outcome: Outcome::NotProven,
             chosen: finalists.first().copied(),
@@ -545,7 +615,7 @@ impl Race {
             delta: self.settings.delta,
             tried: self.candidates.len(),
             dropped: count(|s| matches!(s, Status::Dropped { .. })),
-            not_run: count(|s| matches!(s, Status::NotRun | Status::Waiting)),
+            untested,
             race_runs: self.runs,
             cleanup_runs: 0,
             race_budget_spent: self.budget_spent,
@@ -571,12 +641,30 @@ impl Race {
             max_runs: self.settings.max_cleanup_runs,
         };
         let start = self.fresh_from;
+        // KN numbers its replications from 0; they are moved past the race's. A range that cannot
+        // be represented after the move is refused before the sampler is called.
+        let mut unrepresentable: Option<RaceError> = None;
         let selection = select_best(&kn, finalists.len(), |p, reps| {
-            finalists.get(p).map_or_else(Vec::new, |&c| {
-                sample(c, reps.start + start..reps.end + start)
-            })
-        })
-        .map_err(|e| match e {
+            let Some(&c) = finalists.get(p) else {
+                return Vec::new();
+            };
+            match (reps.start.checked_add(start), reps.end.checked_add(start)) {
+                (Some(a), Some(b)) => sample(c, a..b),
+                _ => {
+                    unrepresentable.get_or_insert(RaceError::Replications {
+                        candidate: c,
+                        start: reps.start,
+                        end: reps.end,
+                        offset: start,
+                    });
+                    Vec::new()
+                }
+            }
+        });
+        if let Some(e) = unrepresentable {
+            return Err(e);
+        }
+        let selection = selection.map_err(|e| match e {
             SelectError::WrongCount {
                 system,
                 expected,
@@ -591,7 +679,7 @@ impl Race {
                 replication,
             } => RaceError::NotFinite {
                 candidate: finalists.get(system).copied().unwrap_or(system),
-                replication: replication + start,
+                replication: replication.saturating_add(start),
             },
             other => RaceError::Select(other),
         })?;
@@ -646,8 +734,9 @@ pub struct RaceAnswer {
     pub tried: usize,
     /// Candidates the race dropped.
     pub dropped: usize,
-    /// Candidates never run (the race's budget ran out first).
-    pub not_run: usize,
+    /// Candidates tried but never raced: their first stage never ran (the race's budget ran out
+    /// first, or the clean-up was called while they waited). The confidence does not cover them.
+    pub untested: Vec<usize>,
     pub race_runs: u64,
     pub cleanup_runs: u64,
     /// The race stopped because its budget was spent.
@@ -706,10 +795,19 @@ impl std::fmt::Display for RaceAnswer {
             " The search tried {} candidates; racing dropped {}",
             self.tried, self.dropped
         )?;
-        if self.not_run > 0 {
-            write!(f, ", and {} were never run", self.not_run)?;
-        }
         write!(f, ".")?;
+        if !self.untested.is_empty() {
+            let never = self
+                .untested
+                .iter()
+                .map(usize::to_string)
+                .collect::<Vec<_>>()
+                .join(", ");
+            write!(
+                f,
+                " Never raced: candidates {never}; the confidence covers only the candidates that raced.",
+            )?;
+        }
         if !self.left_out.is_empty() {
             let left = self
                 .left_out
@@ -750,6 +848,13 @@ pub enum RaceError {
         candidate: usize,
         replication: u64,
     },
+    /// KN's replications `start..end`, moved past the race's by `offset`, cannot be represented.
+    Replications {
+        candidate: usize,
+        start: u64,
+        end: u64,
+        offset: u64,
+    },
     /// KN refused in the clean-up.
     Select(SelectError),
 }
@@ -782,6 +887,15 @@ impl std::fmt::Display for RaceError {
             } => write!(
                 f,
                 "candidate {candidate} gave a value that is not a number in replication {replication}"
+            ),
+            RaceError::Replications {
+                candidate,
+                start,
+                end,
+                offset,
+            } => write!(
+                f,
+                "the clean-up's replications {start}..{end} of candidate {candidate}, moved past the race's {offset}, cannot be numbered"
             ),
             RaceError::Select(e) => write!(f, "the clean-up: {e}"),
         }
@@ -926,7 +1040,7 @@ mod tests {
         let a = r.clean_up(&mut sample);
         let Ok(a) = a else { panic!("{a:?}") };
         assert!(a.race_budget_spent);
-        assert_eq!((a.tried, a.not_run), (7, 1));
+        assert_eq!((a.tried, a.untested.clone()), (7, vec![6]));
         assert!(a.selection.is_some());
         assert!(
             a.to_string().starts_with("The racing budget ran out"),
@@ -1051,5 +1165,236 @@ mod tests {
                 replication: 4
             })
         );
+    }
+
+    fn new_race(settings: Racing) -> Race {
+        match Race::new(settings) {
+            Ok(r) => r,
+            Err(e) => panic!("{e}"),
+        }
+    }
+
+    #[test]
+    fn a_clean_up_confidence_kn_would_refuse_is_refused_up_front() {
+        // 1 − α_clean = 1 − 0.8 × 0.8 = 0.36, below the 1/2 KN needs for two finalists.
+        let low = Racing {
+            confidence: 0.2,
+            racing_share: 0.2,
+            ..Racing::new(1.0, Sense::Maximise, 3)
+        };
+        assert_eq!(Race::new(low).err(), Some(RaceError::Setting("confidence")));
+        // One finalist at most (one candidate, or a cap of one): KN gets one system, valid.
+        assert!(
+            Race::new(Racing {
+                max_candidates: 1,
+                ..low
+            })
+            .is_ok()
+        );
+        assert!(
+            Race::new(Racing {
+                finalists: Some(1),
+                ..low
+            })
+            .is_ok()
+        );
+        // A split that rounds the clean-up's confidence to 1, which KN refuses.
+        let near = Racing {
+            confidence: 1.0 - f64::EPSILON / 2.0,
+            ..Racing::new(1.0, Sense::Maximise, 3)
+        };
+        assert_eq!(near.cleanup_confidence(), 1.0);
+        assert_eq!(
+            Race::new(near).err(),
+            Some(RaceError::Setting("confidence"))
+        );
+    }
+
+    #[test]
+    fn the_run_cap_refuses_a_total_that_overflows() {
+        let big = Racing {
+            first_stage: 1 << 63,
+            stages: 1,
+            max_race_runs: Some(u64::MAX),
+            ..Racing::new(1.0, Sense::Maximise, 2)
+        };
+        let mut r = new_race(big);
+        assert_eq!((r.add(), r.add()), (Ok(0), Ok(1)));
+        assert!(r.ask().is_some());
+        assert_eq!(r.ask(), None);
+        assert!(r.budget_spent());
+        assert_eq!(r.runs(), 1 << 63);
+        assert_eq!(r.status(1), Some(Status::NotRun));
+        // An exact fit still passes.
+        let fit = Racing {
+            first_stage: 10,
+            stages: 1,
+            max_race_runs: Some(20),
+            ..Racing::new(1.0, Sense::Maximise, 2)
+        };
+        let mut r = new_race(fit);
+        assert_eq!((r.add(), r.add()), (Ok(0), Ok(1)));
+        assert!(r.ask().is_some() && r.ask().is_some());
+        assert_eq!(r.ask(), None);
+        assert!(!r.budget_spent());
+        assert_eq!(r.runs(), 20);
+    }
+
+    #[test]
+    fn large_finite_values_keep_finite_distinct_means() {
+        let settings = Racing {
+            first_stage: 2,
+            stages: 1,
+            finalists: Some(1),
+            ..Racing::new(1e308, Sense::Maximise, 2)
+        };
+        let values = [1e308, 1.5e308];
+        let a = race(&settings, 2, |c, reps| reps.map(|_| values[c]).collect());
+        let Ok(a) = a else { panic!("{a:?}") };
+        // A summed total would be infinite for both and tie; the means are 1e308 and 1.5e308.
+        assert_eq!(
+            (a.finalists.clone(), a.left_out.clone()),
+            (vec![1], vec![0])
+        );
+        assert_eq!(a.chosen, Some(1));
+        let mut r = new_race(settings);
+        assert_eq!((r.add(), r.add()), (Ok(0), Ok(1)));
+        let mut sample = |c: usize, reps: Range<u64>| reps.map(|_| values[c]).collect::<Vec<_>>();
+        assert!(r.run(&mut sample).is_ok());
+        assert_eq!((r.mean(0), r.mean(1)), (Some(1e308), Some(1.5e308)));
+    }
+
+    #[test]
+    fn a_failed_tell_leaves_the_request_for_run_to_retry() {
+        let settings = Racing {
+            stages: 1,
+            ..Racing::new(1.0, Sense::Maximise, 1)
+        };
+        let mut r = new_race(settings);
+        assert_eq!(r.add(), Ok(0));
+        let mut short = |_: usize, _: Range<u64>| vec![0.0];
+        assert_eq!(
+            r.run(&mut short),
+            Err(RaceError::WrongCount {
+                candidate: 0,
+                expected: 10,
+                got: 1
+            })
+        );
+        assert_eq!(r.runs(), 10);
+        let mut asked = Vec::new();
+        let mut good = |_: usize, reps: Range<u64>| {
+            asked.push(reps.clone());
+            reps.map(|j| j as f64).collect::<Vec<_>>()
+        };
+        assert!(r.run(&mut good).is_ok());
+        // The same range again, not charged twice.
+        assert_eq!(asked, vec![0..10]);
+        assert_eq!((r.runs(), r.replications(0)), (10, Some(10)));
+        assert!(
+            r.clean_up(|_, reps| reps.map(|j| j as f64).collect())
+                .is_ok()
+        );
+        // Through ask and tell, corrected values are accepted for the same request.
+        let mut r = new_race(settings);
+        assert_eq!(r.add(), Ok(0));
+        let Some(q) = r.ask() else {
+            panic!("no request")
+        };
+        assert!(r.tell(0, &[1.0]).is_err());
+        let values: Vec<f64> = q.replications.map(|j| j as f64).collect();
+        assert_eq!(r.tell(0, &values), Ok(()));
+        assert_eq!(r.status(0), Some(Status::Finished));
+    }
+
+    #[test]
+    fn an_unreliable_spread_drops_nobody() {
+        // Paired differences [0, 4e-200] with δ = 1e-200: squaring them unscaled underflows to
+        // a variance of 0; scaled, t = 0.5, far from the level.
+        let settings = Racing {
+            first_stage: 2,
+            stages: 1,
+            ..Racing::new(1e-200, Sense::Maximise, 2)
+        };
+        let values = [[0.0, 0.0], [0.0, -4e-200]];
+        let a = race(&settings, 2, |c, reps| {
+            reps.map(|j| values[c][(j % 2) as usize]).collect()
+        });
+        let Ok(a) = a else { panic!("{a:?}") };
+        assert_eq!(a.dropped, 0, "{a:?}");
+        assert_eq!(a.finalists, vec![0, 1]);
+        // Differences that overflow (1.7e308 − (−1.7e308)): no elimination either.
+        let wide = Racing {
+            first_stage: 2,
+            stages: 1,
+            ..Racing::new(1.0, Sense::Maximise, 2)
+        };
+        let values = [[1.7e308, 1.6e308], [-1.7e308, -1.6e308]];
+        let a = race(&wide, 2, |c, reps| {
+            reps.map(|j| values[c][(j % 2) as usize]).collect()
+        });
+        let Ok(a) = a else { panic!("{a:?}") };
+        assert_eq!(a.dropped, 0, "{a:?}");
+    }
+
+    #[test]
+    fn clean_up_ranges_that_cannot_be_numbered_are_refused() {
+        let settings = Racing {
+            first_stage: 2,
+            stages: 1,
+            cleanup_first_stage: u64::MAX,
+            ..Racing::new(1.0, Sense::Maximise, 1)
+        };
+        let mut r = new_race(settings);
+        assert_eq!(r.add(), Ok(0));
+        assert!(r.run(&mut normals(1, vec![0.0])).is_ok());
+        assert_eq!(r.fresh_from(), 2);
+        let mut called = false;
+        let e = r.clean_up(|_, _| {
+            called = true;
+            Vec::new()
+        });
+        assert_eq!(
+            e,
+            Err(RaceError::Replications {
+                candidate: 0,
+                start: 0,
+                end: u64::MAX,
+                offset: 2
+            })
+        );
+        assert!(!called);
+    }
+
+    #[test]
+    fn candidates_never_raced_are_listed_and_not_covered() {
+        // The budget pays for the first candidate's first stage only.
+        let settings = Racing {
+            max_race_runs: Some(10),
+            ..Racing::new(0.5, Sense::Maximise, 3)
+        };
+        let a = race(&settings, 3, normals(2, vec![0.0, 5.0, 5.0]));
+        let Ok(a) = a else { panic!("{a:?}") };
+        assert_eq!(a.untested, vec![1, 2]);
+        assert_eq!(a.finalists, vec![0]);
+        let words = a.to_string();
+        assert!(
+            words.contains(
+                "Never raced: candidates 1, 2; the confidence covers only the candidates that raced."
+            ),
+            "{words}"
+        );
+        // A candidate still waiting, with nothing outstanding, when the clean-up is called.
+        let mut r = new_race(Racing::new(0.5, Sense::Maximise, 2));
+        assert_eq!((r.add(), r.add()), (Ok(0), Ok(1)));
+        let Some(q) = r.ask() else {
+            panic!("no request")
+        };
+        let values: Vec<f64> = q.replications.map(|j| j as f64).collect();
+        assert_eq!(r.tell(q.candidate, &values), Ok(()));
+        let a = r.clean_up(normals(3, vec![0.0, 0.0]));
+        let Ok(a) = a else { panic!("{a:?}") };
+        assert_eq!(a.untested, vec![1]);
+        assert!(a.to_string().contains("Never raced: candidates 1;"), "{a}");
     }
 }
