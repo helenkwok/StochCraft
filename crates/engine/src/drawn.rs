@@ -29,8 +29,13 @@ pub(crate) fn draws(model: &Model) -> bool {
         estimates: _,
         starting: _,
         monte_carlo: _,
+        agents,
     } = model;
-    elements.iter().any(|e| element(e, connections))
+    // `experiment.optimise` does not refuse a model with agents (one with a process beside its
+    // populations reaches here), and agents' charts have random timeouts and rates, so any agent
+    // content counts as drawn.
+    agents.is_some()
+        || elements.iter().any(|e| element(e, connections))
         || connections.iter().any(connection)
         || resources.iter().any(pool)
 }
@@ -267,4 +272,18 @@ fn pool(p: &ResourcePool) -> bool {
         mobility: _,
     } = p;
     false
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn agents_count_as_drawn() {
+        assert!(!draws(&Model::default()));
+        assert!(draws(&Model {
+            agents: Some(stochcraft_model::agents::Agents::default()),
+            ..Model::default()
+        }));
+    }
 }
