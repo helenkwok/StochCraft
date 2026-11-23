@@ -170,29 +170,29 @@ fn build_plan(model: &Model) -> Plan {
             _ => {}
         }
     }
+    // What is drawn, each point with how far round it its drawing reaches; the floor only when
+    // nothing else is.
+    let mut reach: Vec<([f32; 2], f32)> = places
+        .iter()
+        .flat_map(|p| p.footprint.corners().map(|c| (c, 0.0)))
+        .chain(
+            belts
+                .iter()
+                .flat_map(|b| b.points.iter().map(|q| (*q, b.width / 2.0 + RAIL))),
+        )
+        .collect();
+    if reach.is_empty() {
+        reach = floors
+            .iter()
+            .flat_map(|f| f.corners().map(|c| (c, 0.0)))
+            .collect();
+    }
     let mut low = [f32::INFINITY; 2];
     let mut high = [f32::NEG_INFINITY; 2];
-    let mut grow = |p: [f32; 2], by: f32| {
+    for (p, by) in reach {
         if p.iter().all(|c| c.is_finite()) {
             low = [low[0].min(p[0] - by), low[1].min(p[1] - by)];
             high = [high[0].max(p[0] + by), high[1].max(p[1] + by)];
-        }
-    };
-    for p in &places {
-        for c in p.footprint.corners() {
-            grow(c, 0.0);
-        }
-    }
-    for b in &belts {
-        for q in &b.points {
-            grow(*q, b.width / 2.0 + RAIL);
-        }
-    }
-    if low[0] > high[0] {
-        for fl in &floors {
-            for c in fl.corners() {
-                grow(c, 0.0);
-            }
         }
     }
     if low[0] > high[0] {

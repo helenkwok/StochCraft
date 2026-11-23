@@ -996,7 +996,7 @@ pub(crate) struct View3d {
 
 /// The colour of `paint` in the current theme (light or dark).
 fn paint_colour(ctx: &egui::Context, paint: Paint) -> Color32 {
-    let dark = ctx.style().visuals.dark_mode;
+    let dark = ctx.theme() == egui::Theme::Dark;
     let pick = |light: [u8; 3], night: [u8; 3]| {
         let [r, g, b] = if dark { night } else { light };
         Color32::from_rgb(r, g, b)
