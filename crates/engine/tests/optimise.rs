@@ -54,7 +54,7 @@ fn one_desk_cost(c: u32) -> f64 {
 
 /// Two M/M/c desks in tandem, hours: arrivals 10 an hour, mean service 1 hour at the first and
 /// 0.5 at the second, exponential (or constant); 11 and 6 servers; a warm-up of a tenth of the
-/// measured `hours` (200 for the heavy checks, fewer for quick ones).
+/// measured `hours` (100 for the heavy checks, fewer for quick ones).
 fn tandem(service: &str, hours: f64) -> Engine {
     let time = |mean: f64| {
         if service == "constant" {
@@ -86,7 +86,8 @@ fn tandem(service: &str, hours: f64) -> Engine {
     e
 }
 
-/// One desk: arrivals 4 an hour, mean service 1 hour, 6 servers.
+/// One desk: arrivals 4 an hour, mean service 1 hour, 6 servers; a warm-up of 10 hours and 100
+/// measured.
 fn one_desk() -> Engine {
     let mut e = Engine::new();
     ok(
@@ -103,7 +104,7 @@ fn one_desk() -> Engine {
                 { "id": "f1", "from": "arrivals", "to": "desk" },
                 { "id": "f2", "from": "desk", "to": "exit" }
             ],
-            "experiment": { "time_unit": "hour", "warmup": 20.0, "duration": 200.0, "replications": 10, "seed": 1 }
+            "experiment": { "time_unit": "hour", "warmup": 10.0, "duration": 100.0, "replications": 10, "seed": 1 }
         }}),
     );
     e
@@ -403,7 +404,7 @@ where
 }
 
 /// The number of seeds of each heavy check.
-const SEEDS: u64 = 8;
+const SEEDS: u64 = 100;
 
 /// Two desks in tandem: Erlang C's optimum is (14, 8) at 475.71 an hour; (13, 8) costs 481.48
 /// and (14, 7) 482.29, both more than δ = 2 worse. From (11, 6) over 11–40 × 6–35, the search
@@ -416,7 +417,7 @@ fn two_desks_in_tandem() {
     many(
         "two desks",
         SEEDS,
-        || tandem("exponential", 200.0),
+        || tandem("exponential", 100.0),
         |seed| tandem_search(seed, 20_000),
         |v| {
             let c = chosen(v);
@@ -435,7 +436,7 @@ fn two_desks_under_a_binding_cap() {
     many(
         "two desks, cap of 21",
         SEEDS,
-        || tandem("exponential", 200.0),
+        || tandem("exponential", 100.0),
         |seed| {
             let mut p = tandem_search(seed, 20_000);
             p["cost_cap"] = json!(420.0);
@@ -488,7 +489,7 @@ fn the_fewest_servers_for_a_mean_wait() {
     many(
         "fewest servers",
         SEEDS,
-        || tandem("exponential", 200.0),
+        || tandem("exponential", 100.0),
         |seed| {
             json!({
                 "decisions": [{ "id": "desk1", "field": "capacity", "min": 11, "max": 40 }],
