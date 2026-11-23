@@ -140,13 +140,23 @@ fn a_fixed_delay_is_seconds_and_exact_where_seconds_would_not_be() {
     let text = write(&chart(2.0), 60.0);
     assert!(text.contains("delay=\"120s\""), "{text}");
     assert!(!text.contains("stochcraft:delay"), "{text}");
-    // A third of a minute does not come back from its seconds: the exact value is kept too.
+    // A third of a minute comes back from its 20 seconds exactly: nothing else needed.
     let text = write(&chart(1.0 / 3.0), 60.0);
     assert!(text.contains("delay=\"20s\""), "{text}");
+    assert!(!text.contains("stochcraft:delay"), "{text}");
+    // A delay whose seconds do not convert back to the same number keeps it exactly too.
+    let inexact = (1..10_000)
+        .map(|k| f64::from(k) / 97.0)
+        .find(|d| (d * 60.0) / 60.0 != *d);
+    let Some(d) = inexact else {
+        panic!("every k / 97 minutes converts back from its seconds")
+    };
+    let text = write(&chart(d), 60.0);
     assert!(
-        text.contains("stochcraft:delay=\"0.3333333333333333\""),
+        text.contains(&format!("stochcraft:delay=\"{d}\"")),
         "{text}"
     );
+    assert_eq!(read(&text, 60.0), chart(d));
     // A delay below zero is no CSS2 time: only StochCraft's attribute.
     let text = write(&chart(-1.0), 60.0);
     assert!(!text.contains(" delay="), "{text}");
