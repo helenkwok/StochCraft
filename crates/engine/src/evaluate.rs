@@ -130,7 +130,10 @@ pub struct EvaluateParams {
 
 /// The model with each decision set to its value: unknown decisions, values of the wrong kind
 /// or out of their range, and a decision given twice are refused with the decision named.
-fn decided(model: &Model, decisions: &[Decision]) -> Result<(Model, Vec<Value>), CommandError> {
+pub(crate) fn decided(
+    model: &Model,
+    decisions: &[Decision],
+) -> Result<(Model, Vec<Value>), CommandError> {
     let mut m = model.clone();
     let mut echo = Vec::new();
     let mut seen: Vec<String> = Vec::new();

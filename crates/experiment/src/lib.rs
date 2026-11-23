@@ -14,6 +14,7 @@ use std::sync::atomic::{AtomicBool, AtomicU64, Ordering};
 use stochcraft_random::{Rng, SplitMix64};
 pub use stochcraft_stats::Summary;
 
+pub mod compass;
 pub mod race;
 pub mod select;
 

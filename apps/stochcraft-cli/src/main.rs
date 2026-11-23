@@ -244,6 +244,76 @@ enum Command {
         #[arg(long)]
         allow_approximations: bool,
     },
+    /// Find the best whole-number decisions (the engine's `experiment.optimise`): COMPASS over
+    /// the decisions' ranges from the model's values and a few Latin hypercube starts (every
+    /// design when there are at most 50), then the finalists compared again on fresh
+    /// replications by KN. Prints the answer in words, how sure it is, and the finalists.
+    Optimize {
+        file: PathBuf,
+        /// A decision, `id.field=min..max` or `id.field=min..max:step`, the field `capacity`,
+        /// `quantity` or `queue_capacity` (such as `desk.capacity=11..40`). Repeat for each.
+        #[arg(long, required = true)]
+        decide: Vec<String>,
+        /// A decision's starting value, `id.field=value`, one of its range's values (default:
+        /// the model's value, which must then be one of them). Repeat for each.
+        #[arg(long)]
+        start: Vec<String>,
+        /// A result to minimise, `element.metric`, or `element.metric*weight` for a cost per
+        /// unit of it (such as `desk.mean_queue_length*50`). Repeat for a weighted sum.
+        #[arg(long, conflicts_with = "maximize")]
+        minimize: Vec<String>,
+        /// A result to maximise, as for `--minimize`.
+        #[arg(long)]
+        maximize: Vec<String>,
+        /// A decision's cost per unit, `id.field=cost` (such as `desk.capacity=20`). Repeat for
+        /// each.
+        #[arg(long)]
+        cost: Vec<String>,
+        /// The most the decisions' costs may add up to; designs over it are never run.
+        #[arg(long)]
+        cost_cap: Option<f64>,
+        /// A constraint on a result's mean, `element.metric<=limit~tolerance` or
+        /// `element.metric>=limit~tolerance` (such as `desk.mean_wait<=0.05~0.005`).
+        #[arg(long)]
+        constraint: Vec<String>,
+        /// δ, the smallest difference in the objective worth telling apart, in its unit.
+        #[arg(long)]
+        delta: f64,
+        /// The confidence of the answer (default 0.95).
+        #[arg(long)]
+        confidence: Option<f64>,
+        /// The budget in runs, replications summed over designs (default 10,000).
+        #[arg(long)]
+        max_runs: Option<u64>,
+        /// The share of the budget kept for the clean-up (default 0.3).
+        #[arg(long)]
+        reserve: Option<f64>,
+        /// The runs kept for the clean-up, in place of `--reserve` (to repeat a search a time
+        /// limit stopped).
+        #[arg(long)]
+        reserve_runs: Option<u64>,
+        /// Latin hypercube starts beside the model's design (default 3).
+        #[arg(long)]
+        starts: Option<u32>,
+        /// Replications a design gets at its first visit (default 10).
+        #[arg(long)]
+        per_visit: Option<u32>,
+        /// Stop the search after this many seconds; the clean-up still runs.
+        #[arg(long)]
+        time_limit: Option<f64>,
+        /// Random seed (default: the scenario's).
+        #[arg(long, short)]
+        seed: Option<u64>,
+        /// The BPSim scenario to read (default: the first).
+        #[arg(long)]
+        scenario: Option<String>,
+        #[arg(long, value_enum, default_value_t = CheckFormat::Table)]
+        format: CheckFormat,
+        /// Run although StochCraft could not read parts of the file, with stand-ins for them
+        /// (as for `run`).
+        #[arg(long)]
+        allow_approximations: bool,
+    },
     /// A Monte Carlo model's input table as CSV (`name,distribution,parameters,unit`): printed,
     /// or with `--import`, read from a CSV file into the model, which is saved.
     Inputs {
@@ -1316,6 +1386,207 @@ fn decision_range(text: &str) -> Result<(String, String, f64, f64), Failure> {
     Ok((id.to_owned(), field.to_owned(), num(lo)?, num(hi)?))
 }
 
+/// `id.field=min..max` or `id.field=min..max:step` as a decision of `experiment.optimise`.
+fn search_decision(text: &str) -> Result<Value, Failure> {
+    let bad = || {
+        Failure(format!(
+            "`{text}`: give a decision as `id.field=min..max` or `id.field=min..max:step`, such as `desk.capacity=11..40`"
+        ))
+    };
+    let (name, values) = text.split_once('=').ok_or_else(bad)?;
+    let (id, field) = name.rsplit_once('.').ok_or_else(bad)?;
+    let (range, step) = match values.split_once(':') {
+        Some((r, s)) => (r, Some(s.trim().parse::<u32>().map_err(|_| bad())?)),
+        None => (values, None),
+    };
+    let (lo, hi) = range.split_once("..").ok_or_else(bad)?;
+    let num = |v: &str| v.trim().parse::<u32>().map_err(|_| bad());
+    let mut d = json!({ "id": id, "field": field, "min": num(lo)?, "max": num(hi)? });
+    if let Some(s) = step {
+        d["step"] = json!(s);
+    }
+    Ok(d)
+}
+
+/// A number given to `flag` that must be finite: `NaN` and infinities would reach the engine as
+/// JSON `null`, which means "not given".
+fn finite_number(flag: &str, text: &str, v: f64) -> Result<f64, Failure> {
+    if v.is_finite() {
+        Ok(v)
+    } else {
+        Err(Failure(format!(
+            "`{flag}`: `{text}` has a value that is not a finite number"
+        )))
+    }
+}
+
+/// `element.metric` or `element.metric*weight` as a result of an objective (`flag` is
+/// `--minimize` or `--maximize`, for messages); without `*weight` the weight is 1.
+fn weighted(flag: &str, text: &str) -> Result<Value, Failure> {
+    let bad = || {
+        Failure(format!(
+            "`{text}`: give a result as `element.metric` or `element.metric*weight`, such as `desk.mean_queue_length*50`"
+        ))
+    };
+    let (name, weight) = match text.rsplit_once('*') {
+        Some((n, w)) => (
+            n,
+            finite_number(flag, text, w.trim().parse::<f64>().map_err(|_| bad())?)?,
+        ),
+        None => (text, 1.0),
+    };
+    let (element, metric) = name.rsplit_once('.').ok_or_else(bad)?;
+    Ok(json!({ "element": element, "metric": metric, "weight": weight }))
+}
+
+/// `id.field=cost` as a decision's cost per unit.
+fn unit_cost(text: &str) -> Result<Value, Failure> {
+    let bad = || {
+        Failure(format!(
+            "`{text}`: give a cost as `id.field=cost`, such as `desk.capacity=20`"
+        ))
+    };
+    let (name, cost) = text.split_once('=').ok_or_else(bad)?;
+    let (id, field) = name.rsplit_once('.').ok_or_else(bad)?;
+    let cost: f64 = cost.trim().parse().map_err(|_| bad())?;
+    let cost = finite_number("--cost", text, cost)?;
+    Ok(json!({ "id": id, "field": field, "cost": cost }))
+}
+
+/// `element.metric<=limit~tolerance` (or `>=`) as a constraint.
+fn constraint(text: &str) -> Result<Value, Failure> {
+    let bad = || {
+        Failure(format!(
+            "`{text}`: give a constraint as `element.metric<=limit~tolerance` or `element.metric>=limit~tolerance`, such as `desk.mean_wait<=0.05~0.005`"
+        ))
+    };
+    let (name, rest, bound) = if let Some((n, r)) = text.split_once("<=") {
+        (n, r, "at_most")
+    } else if let Some((n, r)) = text.split_once(">=") {
+        (n, r, "at_least")
+    } else {
+        return Err(bad());
+    };
+    let (element, metric) = name.rsplit_once('.').ok_or_else(bad)?;
+    let (limit, tolerance) = rest.split_once('~').ok_or_else(bad)?;
+    let num = |v: &str| {
+        let x = v.trim().parse::<f64>().map_err(|_| bad())?;
+        finite_number("--constraint", text, x)
+    };
+    let mut c = json!({ "element": element, "metric": metric, "tolerance": num(tolerance)? });
+    c[bound] = json!(num(limit)?);
+    Ok(c)
+}
+
+struct OptimizeArgs<'a> {
+    file: &'a Path,
+    decisions: &'a [String],
+    starts_at: &'a [String],
+    minimize: &'a [String],
+    maximize: &'a [String],
+    costs: &'a [String],
+    cost_cap: Option<f64>,
+    constraints: &'a [String],
+    delta: f64,
+    confidence: Option<f64>,
+    max_runs: Option<u64>,
+    reserve: Option<f64>,
+    reserve_runs: Option<u64>,
+    starts: Option<u32>,
+    per_visit: Option<u32>,
+    time_limit: Option<f64>,
+    seed: Option<u64>,
+    scenario: Option<&'a str>,
+    format: CheckFormat,
+    allow_approximations: bool,
+}
+
+fn optimize(a: &OptimizeArgs) -> Result<u8, Failure> {
+    // Every number given must be finite before it becomes JSON, where a NaN would be `null`.
+    for (flag, v) in [
+        ("--delta", Some(a.delta)),
+        ("--cost-cap", a.cost_cap),
+        ("--confidence", a.confidence),
+        ("--reserve", a.reserve),
+        ("--time-limit", a.time_limit),
+    ] {
+        if let Some(x) = v {
+            finite_number(flag, &x.to_string(), x)?;
+        }
+    }
+    let mut engine = Engine::new();
+    open(&mut engine, a.file, a.scenario)?;
+    let (sense, flag, terms) = if a.maximize.is_empty() {
+        ("minimise", "--minimize", a.minimize)
+    } else {
+        ("maximise", "--maximize", a.maximize)
+    };
+    let mut decisions = a
+        .decisions
+        .iter()
+        .map(|d| search_decision(d))
+        .collect::<Result<Vec<_>, _>>()?;
+    for text in a.starts_at {
+        let bad = || {
+            Failure(format!(
+                "`{text}`: give a starting value as `id.field=value`, such as `desk.capacity=14`"
+            ))
+        };
+        let (name, value) = text.split_once('=').ok_or_else(bad)?;
+        let (id, field) = name.rsplit_once('.').ok_or_else(bad)?;
+        let value: u32 = value.trim().parse().map_err(|_| bad())?;
+        let d = decisions
+            .iter_mut()
+            .find(|d| d["id"] == id && d["field"] == field)
+            .ok_or_else(|| {
+                Failure(format!(
+                    "`{text}`: `{name}` is not a decision; give it with `--decide` too"
+                ))
+            })?;
+        d["start"] = json!(value);
+    }
+    let mut params = json!({
+        "decisions": decisions,
+        "objective": {
+            "results": terms.iter().map(|t| weighted(flag, t)).collect::<Result<Vec<_>, _>>()?,
+            "sense": sense,
+            "costs": a.costs.iter().map(|c| unit_cost(c)).collect::<Result<Vec<_>, _>>()?,
+        },
+        "constraints": a.constraints.iter().map(|c| constraint(c)).collect::<Result<Vec<_>, _>>()?,
+        "indifference": a.delta,
+    });
+    let optional = [
+        ("cost_cap", a.cost_cap.map(|x| json!(x))),
+        ("confidence", a.confidence.map(|x| json!(x))),
+        ("max_runs", a.max_runs.map(|x| json!(x))),
+        ("reserve", a.reserve.map(|x| json!(x))),
+        ("reserve_runs", a.reserve_runs.map(|x| json!(x))),
+        ("starts", a.starts.map(|x| json!(x))),
+        ("replications_per_visit", a.per_visit.map(|x| json!(x))),
+        ("time_limit", a.time_limit.map(|x| json!(x))),
+        ("seed", a.seed.map(|x| json!(x))),
+    ];
+    for (key, value) in optional {
+        if let Some(v) = value {
+            params[key] = v;
+        }
+    }
+    if a.allow_approximations {
+        params["allow_approximations"] = json!(true);
+    }
+    let answer = engine.execute("experiment.optimise", params)?;
+    report_approximations(&answer["approximations"]);
+    let text = match a.format {
+        CheckFormat::Json => format!(
+            "{}\n",
+            serde_json::to_string_pretty(&answer).unwrap_or_default()
+        ),
+        CheckFormat::Table => output::optimize_table(&engine.model().name, &answer),
+    };
+    emit(&text, None)?;
+    Ok(0)
+}
+
 struct EvaluateArgs<'a> {
     file: &'a Path,
     decisions: &'a [String],
@@ -1744,6 +2015,49 @@ fn main() -> ExitCode {
             count,
             seed,
             scenario: scenario.as_deref(),
+            allow_approximations,
+        }),
+        Command::Optimize {
+            file,
+            decide,
+            start,
+            minimize,
+            maximize,
+            cost,
+            cost_cap,
+            constraint,
+            delta,
+            confidence,
+            max_runs,
+            reserve,
+            reserve_runs,
+            starts,
+            per_visit,
+            time_limit,
+            seed,
+            scenario,
+            format,
+            allow_approximations,
+        } => optimize(&OptimizeArgs {
+            file: &file,
+            decisions: &decide,
+            starts_at: &start,
+            minimize: &minimize,
+            maximize: &maximize,
+            costs: &cost,
+            cost_cap,
+            constraints: &constraint,
+            delta,
+            confidence,
+            max_runs,
+            reserve,
+            reserve_runs,
+            starts,
+            per_visit,
+            time_limit,
+            seed,
+            scenario: scenario.as_deref(),
+            format,
             allow_approximations,
         }),
         Command::Inputs {

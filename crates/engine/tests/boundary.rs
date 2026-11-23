@@ -110,6 +110,14 @@ fn a_file_read_with_errors_does_not_run() {
                 "count": 2,
             }),
         ),
+        (
+            "experiment.optimise",
+            json!({
+                "decisions": [{ "id": "arrive", "field": "capacity", "min": 1, "max": 2 }],
+                "objective": { "results": [{ "element": "leave", "metric": "entered" }] },
+                "indifference": 1.0,
+            }),
+        ),
     ];
     for (command, params) in experiments {
         let f = err(&mut e, command, params);

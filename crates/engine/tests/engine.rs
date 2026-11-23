@@ -57,6 +57,7 @@ fn catalogue_is_complete_and_its_examples_run_in_order() {
     assert_eq!(unique.len(), names.len(), "duplicate command names");
 
     let mut e = Engine::new();
+    let mut applied = Vec::new();
     for c in COMMANDS {
         let schema = c.params_schema();
         assert_eq!(schema["type"], "object", "{}: {schema}", c.name);
@@ -66,19 +67,22 @@ fn catalogue_is_complete_and_its_examples_run_in_order() {
         if let Some(p) = params.get("path").and_then(Value::as_str) {
             params["path"] = json!(scratch(p).to_string_lossy());
         }
-        ok(&mut e, c.name, params);
+        let r = ok(&mut e, c.name, params);
+        applied.push(r["applied"] == true);
     }
     // Queries are not journalled; everything else is, since the last command that started a
-    // document (`file.open` and `model.new` start a new journal and are its start record).
+    // document (`file.open` and `model.new` start a new journal and are its start record). A
+    // sizing or an optimisation that applied its answer is kept as two steps, the analysis and
+    // its change (`decisions.set`).
     let mut journalled = 0;
-    for c in COMMANDS {
+    for (c, applied) in COMMANDS.iter().zip(&applied) {
         if matches!(
             c.name,
             "file.open" | "model.new" | "sd.open" | "sd.new" | "agents.open"
         ) {
             journalled = 0;
         } else if c.kind != CommandKind::Query {
-            journalled += 1;
+            journalled += if *applied { 2 } else { 1 };
         }
     }
     assert_eq!(e.journal().len(), journalled);

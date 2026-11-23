@@ -62,11 +62,13 @@ mod compare;
 mod decide;
 mod design;
 mod distribution;
+mod drawn;
 mod edit;
 mod evaluate;
 mod fit;
 pub mod mc;
 pub mod observed;
+mod optimize;
 pub mod precision;
 mod run;
 pub mod sd;
@@ -348,7 +350,9 @@ impl BuildMatch {
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
 pub enum ReplayMode {
     /// Re-applies the edits (and undo, redo and starting a document). Saving a file, runs and
-    /// experiments are skipped: they write files or take time, and change nothing in the model.
+    /// experiments are skipped: they write files or take time, and change nothing in the model
+    /// (an optimisation that applied its answer is journalled with the change as a separate
+    /// `decisions.set` edit, which is replayed).
     #[default]
     EditsOnly,
     /// Carries out every step, as [`Engine::replay`] does.
@@ -356,7 +360,7 @@ pub enum ReplayMode {
 }
 
 /// The commands [`ReplayMode::EditsOnly`] skips.
-const SKIPPED_BY_DEFAULT: [&str; 13] = [
+const SKIPPED_BY_DEFAULT: [&str; 14] = [
     "file.save",
     "run",
     "mc.run",
@@ -370,6 +374,7 @@ const SKIPPED_BY_DEFAULT: [&str; 13] = [
     "experiment.design",
     "experiment.size",
     "experiment.evaluate",
+    "experiment.optimise",
 ];
 
 impl ReplayMode {
@@ -377,6 +382,92 @@ impl ReplayMode {
     pub fn applies(self, command: &str) -> bool {
         self == ReplayMode::All || !SKIPPED_BY_DEFAULT.contains(&command)
     }
+}
+
+/// How a step that ran is kept in the journal. An optimisation that applied its answer is kept
+/// as the search without `apply`, then its change as a `decisions.set` edit, so an edits-only
+/// replay makes the change without searching again and a full replay searches once and applies
+/// once. `experiment.size` is kept the same way. A batch keeps its steps the same way, one by one with their results, nested batches
+/// included, and stays one step (one undo step when replayed).
+fn journalled(command: &str, params: Value, result: &Value) -> Vec<JournalEntry> {
+    let entry = |command: &str, params: Value| JournalEntry {
+        command: command.to_owned(),
+        params,
+    };
+    match command {
+        "experiment.optimise" | "experiment.size"
+            if result.get("applied") == Some(&json!(true)) =>
+        {
+            let decisions = if command == "experiment.size" {
+                result["applied_decisions"].clone()
+            } else {
+                result["chosen"]["decisions"].clone()
+            };
+            let mut search = params;
+            search["apply"] = json!(false);
+            vec![
+                entry(command, search),
+                entry("decisions.set", json!({ "decisions": decisions })),
+            ]
+        }
+        "batch" => {
+            let mut params = params;
+            let results = result["results"].as_array().cloned().unwrap_or_default();
+            if let Some(steps) = params.get("commands").and_then(Value::as_array) {
+                let mut kept = Vec::new();
+                for (i, step) in steps.iter().enumerate() {
+                    let name = step["command"].as_str().unwrap_or_default();
+                    let inner = if step["params"].is_null() {
+                        json!({})
+                    } else {
+                        step["params"].clone()
+                    };
+                    let r = results.get(i).cloned().unwrap_or(Value::Null);
+                    let applied = r.get("applied") == Some(&json!(true));
+                    let analysis = matches!(name, "experiment.optimise" | "experiment.size");
+                    if name == "batch" || (analysis && applied) {
+                        for e in journalled(name, inner, &r) {
+                            kept.push(json!({ "command": e.command, "params": e.params }));
+                        }
+                    } else {
+                        // Every other step is kept as it was given.
+                        kept.push(step.clone());
+                    }
+                }
+                params["commands"] = Value::Array(kept);
+            }
+            vec![entry(command, params)]
+        }
+        _ => vec![entry(command, params)],
+    }
+}
+
+/// A batch's parameters with the steps `mode` skips left out, nested batches included.
+fn batch_for(mode: ReplayMode, params: &Value) -> Value {
+    let mut params = params.clone();
+    if let Some(steps) = params.get("commands").and_then(Value::as_array) {
+        let kept: Vec<Value> = steps
+            .iter()
+            .filter(|s| {
+                let name = s["command"].as_str().unwrap_or_default();
+                // A sizing or an optimisation recorded with `apply` true comes from a journal
+                // written before applied changes were kept as their own `decisions.set` step:
+                // it is replayed as it was then, searching again and applying.
+                let older = matches!(name, "experiment.size" | "experiment.optimise")
+                    && s["params"]["apply"] == json!(true);
+                mode.applies(name) || older
+            })
+            .map(|s| {
+                let mut s = s.clone();
+                if s["command"] == "batch" {
+                    s["params"] = batch_for(mode, &s["params"]);
+                }
+                s
+            })
+            .collect();
+        params["commands"] = Value::Array(kept);
+    }
+    params
 }
 
 /// What a replay of `journal` in `mode` claims, separating the edits it re-applies from the
@@ -586,10 +677,7 @@ impl Engine {
             self.keep_results(result.clone());
         }
         if c.kind != CommandKind::Query && self.documents == documents {
-            self.journal.push(JournalEntry {
-                command: command.to_owned(),
-                params,
-            });
+            self.journal.extend(journalled(command, params, &result));
         }
         Ok(result)
     }
@@ -666,7 +754,15 @@ impl Engine {
                 if !mode.applies(&step.command) {
                     return Ok(ReplayStep::Skipped);
                 }
-                self.execute(&step.command, step.params.clone())
+                // A batch replayed for its edits leaves out the steps the mode skips, so an
+                // optimisation inside it is not searched again (its change is a
+                // `decisions.set` step of the batch).
+                let params = if step.command == "batch" {
+                    batch_for(mode, &step.params)
+                } else {
+                    step.params.clone()
+                };
+                self.execute(&step.command, params)
                     .map(|result| {
                         self.finish_started_run(&step.command);
                         ReplayStep::Applied(result)
