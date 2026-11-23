@@ -526,7 +526,11 @@ designs".
 - `--max-runs` is the budget in runs (default 10,000); 30% of it is kept for the final comparison.
   When the budget runs out first, the answer says "best found, not proven best" and lists the
   designs still in contention. `--time-limit` stops the search after that many seconds.
-- A model with no randomness is "compared exactly", one run per design, with no probability.
+- A model with no randomness (nothing in it is drawn) is "compared exactly", one run per design,
+  with no probability. A model that draws random numbers is never compared exactly, even when
+  designs give the same values in every run so far: a rare event may simply not have happened
+  yet. When two designs give the same difference in every run of the final comparison's first
+  stage, the answer says "best found, not proven best" and why.
 
 Scripts and agents use the engine command `experiment.optimise` ([mcp.md](mcp.md)); its `apply`
 makes the chosen design the model's, as one change you can undo.

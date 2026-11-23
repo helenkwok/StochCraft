@@ -61,6 +61,16 @@
 //! out may be the best. When the cap cuts, the answer lists the candidates left out
 //! ([`RaceAnswer::left_out`]) and says in words that its confidence covers only the finalists.
 //!
+//! **A flat difference is not proof of no randomness.** Equal differences in every shared
+//! replication can come from candidates that do vary (a rare event not yet seen, or common random
+//! numbers that move both alike). Unless the caller states that the candidates have no randomness
+//! ([`Racing::deterministic`]), such a pair is not tested at that look: nobody is dropped on it,
+//! which only removes ways of dropping the best, so the bound above still holds. A later look
+//! whose differences vary tests the pair as usual. With the statement, a constant difference is
+//! known exactly and the candidate is dropped when it exceeds δ. The clean-up passes the same
+//! statement to KN, whose answer is [`Outcome::ComparedExactly`] only with it; without it, a flat
+//! pair of finalists leaves KN's answer not proven ([`crate::select`]'s notes).
+//!
 //! **Assumptions.** The vectors of all candidates' values in a replication must be independent
 //! across replications and identically distributed, jointly (multivariate) normal, as KN and the
 //! paired t interval assume; each candidate's values being normal on its own is not enough, since
@@ -121,6 +131,10 @@ pub struct Racing {
     /// The most replications the clean-up may take. If it cannot pay for KN's first stage, or KN
     /// runs out, the answer is not proven.
     pub max_cleanup_runs: Option<u64>,
+    /// The caller states that the candidates have no randomness (default `false`). Only then is
+    /// a constant paired difference taken as exact in the race, and is the clean-up compared
+    /// exactly; equal values alone are never proof of it.
+    pub deterministic: bool,
 }
 
 impl Racing {
@@ -139,6 +153,7 @@ impl Racing {
             sampling: Sampling::Common,
             max_race_runs: None,
             max_cleanup_runs: None,
+            deterministic: false,
         }
     }
 
@@ -550,8 +565,11 @@ impl Race {
         if let Some(&first) = d.first()
             && d.iter().all(|&v| v == first)
         {
-            // Finite and exactly constant: the difference is known exactly.
-            return (first > delta).then_some(n as u64);
+            // Finite and exactly constant. Known exactly only when the caller states there is no
+            // randomness; otherwise it may be a rare event not yet seen, or common random numbers
+            // moving both alike, and with a zero spread there is nothing to test: nobody is
+            // dropped at this look.
+            return (self.settings.deterministic && first > delta).then_some(n as u64);
         }
         // The differences scaled by the largest in size, so that neither their sum nor their
         // squared deviations overflow or underflow.
@@ -639,6 +657,7 @@ impl Race {
             sense: self.settings.sense,
             sampling: self.settings.sampling,
             max_runs: self.settings.max_cleanup_runs,
+            deterministic: self.settings.deterministic,
         };
         let start = self.fresh_from;
         // KN numbers its replications from 0; they are moved past the race's. A range that cannot
@@ -711,8 +730,11 @@ where
 #[derive(Debug, Clone, PartialEq)]
 pub struct RaceAnswer {
     /// KN's outcome in the clean-up: [`Outcome::Selected`] with the confidence,
-    /// [`Outcome::ComparedExactly`] without randomness, or [`Outcome::NotProven`] when the
-    /// clean-up's budget could not pay for KN or ran out, or nothing was left to clean up.
+    /// [`Outcome::ComparedExactly`] when the candidates were stated to have no randomness
+    /// ([`Racing::deterministic`]) and every value was the same, or [`Outcome::NotProven`] when
+    /// the clean-up's budget could not pay for KN or ran out, two finalists gave the same
+    /// difference in every first-stage replication without that statement ([`Selection::flat`]),
+    /// or nothing was left to clean up.
     pub outcome: Outcome,
     /// The chosen candidate; when not proven, the best-looking finalist (by KN's means, or by the
     /// race's when KN did not run). `None` when no candidate finished its first stage.
@@ -783,7 +805,11 @@ impl std::fmt::Display for RaceAnswer {
             )?,
             (Outcome::ComparedExactly, _) => write!(
                 f,
-                "Of these {k} finalists ({list}), candidate {chosen} is the best: every replication gave the same values, so they were compared exactly and no probability is stated."
+                "Of these {k} finalists ({list}), candidate {chosen} is the best: they were stated to have no randomness and every replication gave the same values, so they were compared exactly and no probability is stated."
+            )?,
+            _ if self.selection.as_ref().is_some_and(|s| s.flat) => write!(
+                f,
+                "Not proven: some finalists gave the same difference in every replication of the clean-up's first stage, which does not show that they have no randomness, so the clean-up could not tell them apart; candidate {chosen} looks best of the finalists ({list})."
             )?,
             _ => write!(
                 f,
@@ -967,10 +993,13 @@ mod tests {
 
     #[test]
     fn no_randomness_is_compared_exactly() {
-        // Minimise; candidate 2 is best; 1 is within δ of it and stays; 0 and 3 are worse by more
-        // than δ and are dropped on their first stage.
+        // Stated without randomness. Minimise; candidate 2 is best; 1 is within δ of it and
+        // stays; 0 and 3 are worse by more than δ and are dropped on their first stage.
         let means = [3.0, 1.3, 1.0, 2.0];
-        let settings = Racing::new(0.5, Sense::Minimise, 4);
+        let settings = Racing {
+            deterministic: true,
+            ..Racing::new(0.5, Sense::Minimise, 4)
+        };
         let a = race(&settings, 4, |s, reps| reps.map(|_| means[s]).collect());
         let Ok(a) = a else { panic!("{a:?}") };
         assert_eq!(a.outcome, Outcome::ComparedExactly);
@@ -979,6 +1008,57 @@ mod tests {
         assert_eq!(a.dropped, 2);
         assert_eq!(a.confidence, None);
         assert!(a.to_string().contains("compared exactly"), "{a}");
+        // The same values without the statement: nobody is dropped on a flat difference, and
+        // the clean-up proves nothing.
+        let settings = Racing::new(0.5, Sense::Minimise, 4);
+        let a = race(&settings, 4, |s, reps| reps.map(|_| means[s]).collect());
+        let Ok(a) = a else { panic!("{a:?}") };
+        assert_eq!((a.outcome, a.confidence), (Outcome::NotProven, None));
+        assert_eq!(a.dropped, 0);
+        assert_eq!(a.finalists, vec![2, 1, 3, 0]);
+        assert!(a.selection.as_ref().is_some_and(|s| s.flat));
+        assert!(a.to_string().contains("could not tell them apart"), "{a}");
+    }
+
+    /// A rare event under common random numbers: both candidates vary alike, candidate 0 is 2
+    /// above a shared normal, candidate 1 is the shared normal itself except in replications
+    /// numbered 37 mod 50, where it is 200 above it, so its mean is the higher (by 2). Maximising
+    /// with δ = 0.5, the race's first stage (replications 0 to 9) and the clean-up's
+    /// (10 to 19) both see a constant difference of 2 > δ, which must neither drop candidate 1
+    /// nor let the clean-up pick candidate 0.
+    #[test]
+    fn a_flat_difference_drops_nobody() {
+        let sample = |s: usize, reps: Range<u64>| -> Vec<f64> {
+            reps.map(|j| {
+                let base = normal(41, 0, j);
+                match s {
+                    0 => base + 2.0,
+                    _ if j % 50 == 37 => base + 200.0,
+                    _ => base,
+                }
+            })
+            .collect()
+        };
+        let settings = Racing {
+            stages: 1,
+            max_cleanup_runs: Some(400),
+            ..Racing::new(0.5, Sense::Maximise, 2)
+        };
+        let a = race(&settings, 2, sample);
+        let Ok(a) = a else { panic!("{a:?}") };
+        assert_eq!(a.dropped, 0, "{a:?}");
+        assert_eq!(a.finalists, vec![0, 1]);
+        assert_eq!((a.outcome, a.confidence), (Outcome::NotProven, None));
+        assert!(a.selection.as_ref().is_some_and(|s| s.flat), "{a:?}");
+        // With the (here false) statement of no randomness, the constant difference is taken as
+        // exact and candidate 1 is dropped: the flag is the caller's responsibility.
+        let stated = Racing {
+            deterministic: true,
+            ..settings
+        };
+        let a = race(&stated, 2, sample);
+        let Ok(a) = a else { panic!("{a:?}") };
+        assert_eq!(a.dropped, 1, "{a:?}");
     }
 
     #[test]
@@ -1067,7 +1147,10 @@ mod tests {
         // Minimise, no randomness, all within δ = 0.5 of the best: none is dropped.
         let means = [1.2, 1.0, 1.3, 1.1];
         let exact = |s: usize, reps: Range<u64>| reps.map(|_| means[s]).collect::<Vec<f64>>();
-        let settings = Racing::new(0.5, Sense::Minimise, 4);
+        let settings = Racing {
+            deterministic: true,
+            ..Racing::new(0.5, Sense::Minimise, 4)
+        };
         let a = race(&settings, 4, exact);
         let Ok(a) = a else { panic!("{a:?}") };
         assert_eq!(a.finalists, vec![1, 3, 0, 2]);

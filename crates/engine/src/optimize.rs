@@ -20,7 +20,10 @@
 //!
 //! The answer's claim covers the designs compared at the end, not the whole space, and says so;
 //! when every design of the space was compared, it says that instead. A model with no randomness
-//! is compared exactly, one replication per design, with no probability stated.
+//! (nothing in it is drawn) is compared exactly, one replication per design, with no probability
+//! stated. Equal values from a model that does draw are not taken as proof of no randomness: in
+//! the clean-up a pair of designs with the same difference in every first-stage replication is
+//! left undecided, and the answer says it is not proven and why.
 
 use std::collections::BTreeMap;
 use std::ops::Range;
@@ -1042,22 +1045,11 @@ impl Words<'_> {
                     )
                 }
             }
-            (Outcome::ComparedExactly, Some(_)) => {
-                if self.exact {
-                    format!(
-                        "The model has no randomness, so the designs were compared exactly, one replication each: {what} is the best {scope}. No probability is stated."
-                    )
-                } else if let Some(c) = a.confidence {
-                    format!(
-                        "With {}% confidence every design was rightly declared feasible or infeasible (within each constraint's tolerance); the objective has no randomness, so {what} is exactly the best {scope} that meet the constraints.",
-                        percent(c)
-                    )
-                } else {
-                    format!(
-                        "Every replication gave the same values, so the designs were compared exactly: {what} is the best {scope}. No probability is stated."
-                    )
-                }
-            }
+            // Only on the search's exact path, taken when nothing in the model is drawn: equal
+            // values from a model that draws are never taken as exact.
+            (Outcome::ComparedExactly, Some(_)) => format!(
+                "The model has no randomness, so the designs were compared exactly, one replication each: {what} is the best {scope}. No probability is stated."
+            ),
             (_, Some(_)) => {
                 let still: Vec<String> = a
                     .in_contention
@@ -1065,11 +1057,19 @@ impl Words<'_> {
                     .filter_map(|&i| a.finalists.get(i))
                     .map(|f| design_text(ds, &f.design))
                     .collect();
+                let why = if a.flat {
+                    "some of the designs compared at the end gave the same difference in every replication of the clean-up's first stage, which does not show that they have no randomness (the model draws random numbers), so the clean-up could not tell them apart"
+                } else {
+                    "the budget ran out before the clean-up could settle it"
+                };
                 format!(
-                    "Best found, not proven best: {what} looks best {scope}, but the budget ran out before the clean-up could settle it. Still in contention: {}.",
+                    "Best found, not proven best: {what} looks best {scope}, but {why}. Still in contention: {}.",
                     still.join(", ")
                 )
             }
+            (_, None) if constrained && a.flat => format!(
+                "No design was proven to meet the constraints {scope}: a constrained result was the same in every replication of the check's first stage, which does not show that it has no randomness (the model draws random numbers), so the check could not settle it."
+            ),
             (_, None) if constrained => format!(
                 "No design was proven to meet the constraints {scope}: none was declared feasible, or the budget ran out before every one was decided."
             ),

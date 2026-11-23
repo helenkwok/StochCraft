@@ -282,7 +282,9 @@ plus `objective.costs`, each `{id, field, cost}`, minimised unless `objective.se
 `at_least` a limit with a `tolerance`. `indifference` (δ) is required. The answer's `claim` says
 in words what is proven: with `confidence`, the `chosen` design is the best, or within δ of it,
 of the `finalists` compared at the end (or of all designs, `all_designs`). Otherwise `outcome`
-is `not_proven` ("best found, not proven best") or `compared_exactly`. `against_start` is the
+is `not_proven` ("best found, not proven best") or `compared_exactly`, which is given only when
+nothing in the model is drawn (`no_randomness`); equal values from a model that draws are not
+taken as exact, and the `claim` then says why the answer is not proven. `against_start` is the
 paired difference against the starting design, and `runs` the runs used against `max_runs`
 (default 10,000). A `time_limit` answer's `repeat` gives the `max_runs` and `reserve_runs` that
 repeat it exactly. `apply` makes the chosen design the model's, as one undo step. The search is

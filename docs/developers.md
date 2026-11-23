@@ -830,7 +830,8 @@ allow.
 - `select_best` is Kim and Nelson's fully sequential procedure KN (2001), with its constants
   η = ½ [(2α/(k − 1))^(−2/(n₀ − 1)) − 1] and h² = 2η(n₀ − 1) as Tsai and Nelson restate them, and
   the pairwise variances of differences. It chooses the best, or one within δ of it, with
-  probability at least 1 − α (`Kn`: δ, confidence, n₀, sense, sampling, `max_runs`).
+  probability at least 1 − α (`Kn`: δ, confidence, n₀, sense, sampling, `max_runs`,
+  `deterministic`).
 - `check_feasibility` is Batur and Kim's check F_B (2010) for several constraints on means, each
   with a limit and a tolerance ε (`Constraint`); each system is `Feasible`, `Infeasible` or, when
   the budget runs out, `Undecided`.
@@ -841,9 +842,28 @@ allow.
   kept unless an alternative is better; it is the local-optimality test O2 needs.
 
 The answers say what they claim: `Outcome::Selected` with the confidence, `ComparedExactly` when
-every first-stage value of every system is the same (no randomness; no probability stated), and
-`NotProven` with the systems still in contention when `max_runs` ran out, beside the chosen
-system, the replications and the mean of each system. All use the triangular region with c = 1.
+the caller states that the systems have no randomness (`deterministic`) and every first-stage
+value of every system is the same (no probability stated), and `NotProven` with the systems still
+in contention when `max_runs` ran out, beside the chosen system, the replications and the mean of
+each system.
+
+A flat first stage is not proof of no randomness: a system that gives 1 with probability 1% and 0
+otherwise gives ten zeros 90% of the time, and under common random numbers two varying systems
+can give the same difference in every first-stage replication. So without `deterministic` a zero
+first-stage variance never gives an exact or confident answer. The procedures fix S² from the
+first stage, and their guarantees are for that fixed S², so a zero S² is not estimated again: a
+pair with a zero variance of differences is never eliminated by the test, and a constraint with a
+zero variance is never settled by it. Declining to eliminate or decide only removes ways of being
+wrong, so the guarantee for the other pairs and constraints holds. A system still in contention
+with such a pair cannot be declared best: once every other pair's region has closed (or the budget
+runs out) the answer is `NotProven` with `Selection::flat` set, since more replications cannot
+change a zero S². A system left with only such constraints stays `Undecided`, takes no more
+replications, and sets `FeasibilityCheck::flat`. A sum, difference, variance or bound of the
+region that overflows is refused with `SelectError::Overflow` rather than compared.
+The racing and COMPASS layers follow the same rule: the race drops nobody on a constant paired
+difference unless `Racing::deterministic` is set, and COMPASS's exact mode (`Compass::exact`) is
+the caller's statement, which `experiment.optimise` makes only when nothing in the model is
+drawn. All use the triangular region with c = 1.
 Kim's 2003 paper prints its elimination bound as max{0, −a + λr}; the code uses min{0, −a + λr},
 Kim and Nelson's region, since the printed form would eliminate both systems of a close pair.
 The checks (`crates/experiment/tests/select.rs`, heavy) run 2,000 macro-replications each: KN in
