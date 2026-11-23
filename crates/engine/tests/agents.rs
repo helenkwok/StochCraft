@@ -243,6 +243,35 @@ fn saved_elsewhere_the_charts_go_beside_it_and_it_opens_the_same() {
         before["record"]["model_digest"],
         after["record"]["model_digest"]
     );
+    // A different file of a chart's name beside it is never replaced: the save is refused and
+    // nothing is written.
+    let bpmn_before = std::fs::read(&to).unwrap();
+    std::fs::write(scratch("saved/sir-person.scxml"), "another chart").unwrap();
+    ok(&mut e, "experiment.set", json!({ "duration": 10.0 }));
+    let (code, message) = err(&mut e, "file.save", json!({ "path": to.to_string_lossy() }));
+    assert_eq!(code, ErrorCode::Conflict);
+    assert!(message.contains("differs"), "{message}");
+    assert_eq!(std::fs::read(&to).unwrap(), bpmn_before);
+    assert_eq!(
+        std::fs::read(scratch("saved/sir-person.scxml")).unwrap(),
+        b"another chart"
+    );
+}
+
+#[test]
+fn only_charts_and_lists_of_links_inside_the_folder_are_read() {
+    let bpmn = std::fs::read_to_string(models().join("sir-agents.bpmn")).unwrap();
+    let mut e = Engine::new();
+    for chart in ["config.toml", "nul.scxml", "../x.scxml"] {
+        let text = bpmn.replace("chart=\"sir-person.scxml\"", &format!("chart=\"{chart}\""));
+        let (code, message) = err(
+            &mut e,
+            "agents.open",
+            json!({ "text": text, "files": { chart: "" } }),
+        );
+        assert_eq!(code, ErrorCode::BadFile, "{chart}");
+        assert!(message.contains("relative reference"), "{message}");
+    }
 }
 
 #[test]

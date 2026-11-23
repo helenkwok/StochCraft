@@ -2440,7 +2440,8 @@ fn file_open(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         .map(std::path::Path::to_path_buf)
         .unwrap_or_default();
     e.open_bytes_with(&p.path, &bytes, p.scenario.as_deref(), &mut |href: &str| {
-        std::fs::read(dir.join(href)).map_err(|err| err.to_string())
+        let path = crate::agents::beside(&dir, href)?;
+        std::fs::read(path).map_err(|err| err.to_string())
     })
 }
 
@@ -2472,24 +2473,37 @@ fn file_save(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         }
         err
     })?;
-    // Written to a temporary file beside it and renamed over it, so a crash or a full disk
-    // leaves the old file whole rather than half written.
-    craft_atomic::atomic_write(std::path::Path::new(&path), &bytes)
-        .map_err(|err| CommandError::new(ErrorCode::Io, format!("{path}: {err}")))?;
     // An agent-based model's charts and lists of links go beside it, each written only where
-    // the file there is not already the same.
+    // there is no file of its name yet. One that is there and differs (another model's, or one
+    // edited since the model was opened) is never replaced: the save is refused before anything
+    // is written.
     let dir = std::path::Path::new(&path)
         .parent()
         .map(std::path::Path::to_path_buf)
         .unwrap_or_default();
+    let mut siblings = Vec::new();
     for (href, content) in e.agent_files() {
-        if !crate::agents::is_safe_reference(&href) {
-            continue;
+        let to = crate::agents::beside(&dir, &href)
+            .map_err(|m| CommandError::new(ErrorCode::InvalidParams, m))?;
+        match std::fs::read(&to) {
+            Ok(there) if there == content => {}
+            Ok(_) => {
+                return Err(CommandError::new(
+                    ErrorCode::Conflict,
+                    format!(
+                        "{} is already there and differs from the model's `{href}`: save the model in another folder, or move that file first",
+                        to.display()
+                    ),
+                ));
+            }
+            Err(_) => siblings.push((to, content)),
         }
-        let to = dir.join(&href);
-        if std::fs::read(&to).is_ok_and(|b| b == content) {
-            continue;
-        }
+    }
+    // Written to a temporary file beside it and renamed over it, so a crash or a full disk
+    // leaves the old file whole rather than half written.
+    craft_atomic::atomic_write(std::path::Path::new(&path), &bytes)
+        .map_err(|err| CommandError::new(ErrorCode::Io, format!("{path}: {err}")))?;
+    for (to, content) in siblings {
         if let Some(parent) = to.parent() {
             std::fs::create_dir_all(parent).map_err(|err| {
                 CommandError::new(ErrorCode::Io, format!("{}: {err}", parent.display()))

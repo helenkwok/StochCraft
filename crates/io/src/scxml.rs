@@ -126,11 +126,49 @@ pub fn read_scxml(bytes: &[u8], seconds_per_unit: f64) -> Result<ChartSpec, Scxm
             ),
         );
     }
+    let scope: Scope = vec![("xml".into(), "http://www.w3.org/XML/1998/namespace".into())];
+    check_ours(root, &mut scope.clone())?;
     let mut r = Reader {
-        scope: vec![("xml".into(), "http://www.w3.org/XML/1998/namespace".into())],
+        scope,
         seconds: seconds_per_unit,
     };
     r.chart(root)
+}
+
+/// StochCraft's attributes that a `<send>` may carry.
+const SEND_ATTRIBUTES: [&str; 5] = ["rate", "delay", "to", "population", "serial"];
+
+/// Refuses an attribute of StochCraft's namespace that StochCraft does not read where it is
+/// (a misspelt one, or one on another element than `<send>`), rather than drop it.
+fn check_ours(e: &Element, scope: &mut Scope) -> Result<(), ScxmlError> {
+    let pushed = push_scope(scope, e);
+    for (name, _) in &e.attrs {
+        let Some((p, local)) = name.split_once(':') else {
+            continue;
+        };
+        if p == "xmlns" {
+            continue;
+        }
+        let ours = scope
+            .iter()
+            .rev()
+            .find(|(q, _)| q == p)
+            .is_some_and(|(_, u)| u == STOCHCRAFT_SCXML_NS);
+        if ours && !(e.is(SCXML_NS, "send") && SEND_ATTRIBUTES.contains(&local)) {
+            return err(
+                &e.attr("id").map(|i| format!("`{i}`")).unwrap_or_default(),
+                format!(
+                    "the attribute `{name}` of `<{}>` is not one StochCraft reads there",
+                    e.local()
+                ),
+            );
+        }
+    }
+    for c in e.elements() {
+        check_ours(c, scope)?;
+    }
+    scope.truncate(scope.len() - pushed);
+    Ok(())
 }
 
 struct Reader {
@@ -603,6 +641,29 @@ impl Reader {
                 "neighbourRandom" => To::NeighbourRandom { population },
                 other => return err(place, format!("stochcraft:to `{other}` is not known")),
             });
+        }
+        // What a message to other agents carries, without one, would send the event to the agent
+        // itself: refused rather than dropped.
+        let serial_unused = !matches!(s.to, Some(To::Agent { .. })) && st("serial").is_some();
+        if (s.to.is_none() && st("population").is_some()) || serial_unused {
+            return err(
+                place,
+                "stochcraft:population and stochcraft:serial go with a stochcraft:to that uses them",
+            );
+        }
+        if s.to.is_none() && c.attr("type").as_deref() == Some(AGENTS_PROCESSOR) {
+            return err(
+                place,
+                "a send to StochCraft's agents processor says whom with stochcraft:to",
+            );
+        }
+        if s.to.is_some()
+            && (s.target == Target::Internal || s.delay != Delay::None || s.id.is_some())
+        {
+            return err(
+                place,
+                "a message to other agents goes at once: no target, delay or id",
+            );
         }
         for x in c.elements() {
             if !x.is(SCXML_NS, "content") || s.data.is_some() {

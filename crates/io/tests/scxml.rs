@@ -248,6 +248,22 @@ fn what_a_chart_cannot_hold_is_refused_by_name() {
         (wrap("<onentry><cancel sendidexpr=\"$id\"/></onentry>"), "computed send id"),
         (wrap("<onentry><other xmlns=\"urn:x\"/></onentry>"), "<other>"),
         (
+            wrap("<onentry><send xmlns:s=\"https://helenkwok.github.io/StochCraft/scxml/1\" event=\"e\" s:rat=\"2\"/></onentry>"),
+            "s:rat",
+        ),
+        (
+            wrap("<transition xmlns:s=\"https://helenkwok.github.io/StochCraft/scxml/1\" s:rate=\"2\"/>"),
+            "s:rate",
+        ),
+        (
+            wrap("<onentry><send xmlns:s=\"https://helenkwok.github.io/StochCraft/scxml/1\" event=\"e\" s:population=\"people\"/></onentry>"),
+            "stochcraft:to",
+        ),
+        (
+            wrap("<onentry><send event=\"e\" type=\"https://helenkwok.github.io/StochCraft/scxml/1#agents\"/></onentry>"),
+            "stochcraft:to",
+        ),
+        (
             r#"<scxml xmlns="http://www.w3.org/2005/07/scxml" version="1.0" datamodel="ecmascript"/>"#.to_owned(),
             "ecmascript",
         ),
@@ -460,6 +476,26 @@ fn every_chart_written_is_valid_scxml() {
         let text = write(&chart, seconds);
         if let Some(errors) = schema_errors(&text, label, &dir) {
             panic!("{label} is not valid SCXML 1.0:\n{errors}\n{text}");
+        }
+    }
+    // The charts shipped with the examples and the tests, as written by hand.
+    let shipped = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../tests/models");
+    for entry in std::fs::read_dir(&shipped).into_iter().flatten().flatten() {
+        let path = entry.path();
+        if path.extension().is_some_and(|e| e == "scxml") {
+            let text = std::fs::read_to_string(&path).unwrap_or_else(|e| panic!("{e}"));
+            let label = path
+                .file_stem()
+                .map(|s| {
+                    s.to_string_lossy()
+                        .replace(|c: char| !c.is_alphanumeric(), "_")
+                })
+                .unwrap_or_default();
+            if let Some(errors) = schema_errors(&text, &label, &dir) {
+                panic!("{} is not valid SCXML 1.0:\n{errors}", path.display());
+            }
+            // And it reads.
+            read(&text, 86_400.0);
         }
     }
     // The check itself: a chart the schema refuses is caught.

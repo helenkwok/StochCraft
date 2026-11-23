@@ -50,6 +50,7 @@ build it from source; see the [installation guide](docs/installation.md).
 | Export the results table as CSV and the charts as PNG | Check a run against observed data: an observed value differs, or agrees within a tolerance, and a bound passes, fails or is inconclusive, by the 95% interval |
 | Monte Carlo models: uncertain inputs, outputs with targets, the chance of missing each target in words, and which inputs matter (tornado, rank correlations, each input's share of the spread) | |
 | System dynamics models (XMILE files): stocks and flows over time, run once or in replications with a median and a 5% to 95% band, charted and tabulated in the window, also from the [command line](docs/developers.md#system-dynamics-models) and the [MCP server](docs/mcp.md) | |
+| Agent-based models: populations of agents with SCXML state charts, meeting by messages, networks and grids, with counts over time and their bands across replications, from the [command line](docs/user-guide.md#agent-based-models) and the [MCP server](docs/mcp.md) (the window comes next) | |
 
 ## Documentation
 

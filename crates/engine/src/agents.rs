@@ -80,15 +80,60 @@ pub(crate) struct AgentsDoc {
     pub last: Option<(Value, u64)>,
 }
 
-/// Whether `href` is a reference StochCraft reads beside the model: relative, in the model's
-/// folder or below it (no `..`, no root, drive or scheme).
+/// Whether `href` is a reference StochCraft reads beside the model: an SCXML chart (`.scxml`)
+/// or a CSV list of links (`.csv`), relative, in the model's folder or below it (no `..`, no
+/// root, drive or scheme, and no part that Windows takes for a device, such as `nul`).
 pub fn is_safe_reference(href: &str) -> bool {
-    !href.is_empty()
+    let lower = href.to_ascii_lowercase();
+    let device = |part: &str| {
+        let stem = part
+            .split('.')
+            .next()
+            .unwrap_or(part)
+            .trim_end()
+            .to_ascii_lowercase();
+        let numbered = (stem.starts_with("com") || stem.starts_with("lpt"))
+            && stem.len() == 4
+            && stem.chars().nth(3).is_some_and(|c| c.is_ascii_digit());
+        numbered || matches!(stem.as_str(), "con" | "prn" | "aux" | "nul")
+    };
+    (lower.ends_with(".scxml") || lower.ends_with(".csv"))
         && !href.starts_with(['/', '\\'])
         && !href.contains(':')
         && href
             .split(['/', '\\'])
-            .all(|part| !part.is_empty() && part != "." && part != "..")
+            .all(|part| !part.is_empty() && part != "." && part != ".." && !device(part))
+}
+
+/// The file `href` names beside a model in `dir`, once links are followed: refused if it leads
+/// out of `dir` (through a link to elsewhere), so a model reads and writes files only in its own
+/// folder and below. For a file that does not exist yet, its nearest existing folder is checked.
+pub fn beside(dir: &std::path::Path, href: &str) -> Result<std::path::PathBuf, String> {
+    if !is_safe_reference(href) {
+        return Err(format!(
+            "`{href}` is not a relative reference to an .scxml or .csv file beside the model"
+        ));
+    }
+    let dir = if dir.as_os_str().is_empty() {
+        std::path::Path::new(".")
+    } else {
+        dir
+    };
+    let base = std::fs::canonicalize(dir).map_err(|e| format!("{}: {e}", dir.display()))?;
+    let path = base.join(href);
+    let mut existing = path.as_path();
+    while !existing.exists() {
+        match existing.parent() {
+            Some(p) => existing = p,
+            None => break,
+        }
+    }
+    let real = std::fs::canonicalize(existing).map_err(|e| format!("{href}: {e}"))?;
+    if real.starts_with(&base) {
+        Ok(path)
+    } else {
+        Err(format!("`{href}` leads out of the model's folder"))
+    }
 }
 
 pub(crate) fn no_model() -> CommandError {
@@ -206,7 +251,7 @@ impl Engine {
                     return Err(CommandError::new(
                         ErrorCode::BadFile,
                         format!(
-                            "{name}: `{href}` is not a relative reference to a file beside the model (no `..`, root, drive or scheme)"
+                            "{name}: `{href}` is not a relative reference to an .scxml or .csv file beside the model (no `..`, root, drive, scheme or device name)"
                         ),
                     ));
                 }
@@ -657,6 +702,12 @@ mod tests {
             "./x",
             "a//b",
             "https://example.org/x.scxml",
+            "../x.scxml",
+            "charts/../../x.csv",
+            "nul.scxml",
+            "charts/COM1.csv",
+            ".cargo/config.toml",
+            "person.xml",
         ] {
             assert!(!is_safe_reference(bad), "{bad}");
         }
