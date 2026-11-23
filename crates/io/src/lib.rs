@@ -5,7 +5,9 @@
 //!   could not use, and an [`Opened`] document that remembers the original bytes.
 //! - [`write_new`] writes a model StochCraft created as BPMN 2.0 with BPSim 2.0, in the order the
 //!   BPSim XML Schema requires, with a diagram other BPMN editors can display. A Monte Carlo
-//!   model is a BPMN file with no process (decision D15; see `bpsim::MONTE_CARLO`).
+//!   model is a BPMN file with no process (decision D15; see `bpsim::MONTE_CARLO`), and so is an
+//!   agent-based model (decision D16; see `bpsim::AGENTS`), whose agent types' state charts are
+//!   SCXML 1.0 files of their own ([`scxml`]).
 //! - [`Opened::save`] writes an opened file back: unchanged models byte for byte, edited ones with
 //!   only their changes written in and everything else kept as it was, checked by reading the
 //!   result back.
@@ -13,12 +15,14 @@
 //! Reading is lenient and writing strict: element order, BPSim 1.0 namespaces and other time units
 //! are accepted on reading; everything written follows the schema.
 
+pub mod agents;
 pub mod bpsim;
 pub mod duration;
 pub mod layout;
 mod mc;
 pub mod read;
 mod save;
+pub mod scxml;
 pub mod selection;
 pub mod write;
 

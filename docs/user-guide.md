@@ -802,6 +802,44 @@ diagram, styles, display settings or other content it does not keep says so when
 A file that lost nothing saves at once, and so does one that was replaced. Unsaved changes to these models are not kept for recovery after a
 crash: recovery copies are for process models only for now.
 
+## Agent-based models
+
+An agent-based model is **populations of agents**, each agent with its own state and memory, that
+meet and influence each other: by messages to random others, along a network of who knows whom,
+or by place on a grid. Each **agent type**'s behaviour is a **state chart**: states (nested or
+in parallel), and transitions on a timeout, a rate, a condition or a message. Results are
+**statistics over time** (how many agents are in each state, the mean of a variable), with their
+band across replications.
+
+The window does not show or edit these models yet; for now they are run from the command line
+and by agents through the MCP server. A model is a BPMN file with no process, beside one **SCXML**
+file per agent type (the W3C standard for state charts):
+
+- The BPMN file's BPSim scenario gives how long each replication runs (its warm-up plus its
+  duration), how many replications, the seed and the time unit. Its `stochcraft:agents`
+  extension lists the agent types (each naming its chart file, such as `person.scxml`), the
+  populations (how many agents of which type at the start, new ones arriving at a rate, a
+  network and a grid), the statistics and the stepped mode. `tests/models/sir-agents.bpmn` is an
+  example: an epidemic among 100 people.
+- The chart files sit beside the BPMN file (or in a folder under it). Other SCXML tools can open
+  them and show their states and transitions, but not run them: the conditions and values are
+  StochCraft's expressions, and random timeouts, rates and messages to other agents are
+  StochCraft's own additions.
+
+```text
+stochcraft-cli run tests/models/sir-agents.bpmn                      # each statistic at the end, with its band
+stochcraft-cli run tests/models/sir-agents.bpmn --format csv         # each statistic over time
+stochcraft-cli run tests/models/sir-agents.bpmn --reps 200 --seed 3  # more replications, another seed
+stochcraft-cli run tests/models/sir-agents.bpmn --duration 30        # a shorter run
+stochcraft-cli validate tests/models/sir-agents.bpmn                 # check the charts and populations
+```
+
+The table gives each statistic at the end of the run: the mean over the replications and, over
+more than one, the 5th, 50th and 95th percentiles; then each population's agents created,
+removed and alive at the end, and the messages no transition took (dropped) or that reached no
+agent (undelivered). The CSV has a row for each recorded time. The same seed gives the same
+numbers, and adding an agent does not change the others' random draws.
+
 ## Save, open and export
 
 StochCraft reads and writes **BPMN** and **XPDL** files with **BPSim** simulation data, the open

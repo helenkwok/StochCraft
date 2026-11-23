@@ -2613,6 +2613,9 @@ impl From<ModelDoc> for Model {
             experiment: m.experiment.into(),
             monte_carlo: m.monte_carlo.map(Into::into),
             site: m.site.into(),
+            // An agent-based model's populations are not part of a process model's JSON: they
+            // are read with `agents.get`. A model set from JSON is a process model.
+            agents: None,
         }
     }
 }

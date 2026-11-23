@@ -1707,6 +1707,96 @@ fn share_text_exact(v: &Value) -> String {
         .map_or_else(|| "-".to_owned(), |x| format!("{}%", number(x * 100.0)))
 }
 
+/// An agent-based run's results as a table: each statistic at the end (with its band over the
+/// replications), then each population's agents and messages.
+pub fn agents_table(r: &Value) -> String {
+    let mut out = String::new();
+    let title = match s(&r["model"]) {
+        "" => "(unnamed model)",
+        t => t,
+    };
+    let unit = s(&r["time_unit"]);
+    let _ = writeln!(out, "{title}  (agent-based, 0 to {} {unit})", f(&r["end"]));
+    let many = r["replications"].as_u64().unwrap_or(1) > 1;
+    if many {
+        let _ = writeln!(
+            out,
+            "{} replications, seed {}; band: the 5th and 95th percentiles across them",
+            r["replications"], r["seed"]
+        );
+    } else {
+        let _ = writeln!(out, "one replication, seed {}", r["seed"]);
+    }
+    let _ = writeln!(
+        out,
+        "StochCraft {}, model {}",
+        s(&r["record"]["stochcraft"]),
+        s(&r["record"]["model_digest"])
+    );
+    out.push('\n');
+    let mut head: Vec<String> = ["statistic", "population", "measure", "at the end"]
+        .iter()
+        .map(|h| (*h).to_owned())
+        .collect();
+    if many {
+        head.push("P5".to_owned());
+        head.push("P50".to_owned());
+        head.push("P95".to_owned());
+    }
+    let mut rows = vec![head];
+    for v in r["statistics"].as_array().into_iter().flatten() {
+        let last = |key: &str| {
+            v[key]
+                .as_array()
+                .and_then(|a| a.last())
+                .map_or_else(|| "-".to_owned(), f)
+        };
+        let mut row = vec![
+            s(&v["name"]).to_owned(),
+            s(&v["population"]).to_owned(),
+            s(&v["measure"]).to_owned(),
+            f(&v["final"]),
+        ];
+        if many {
+            row.push(last("p5"));
+            row.push(last("median"));
+            row.push(last("p95"));
+        }
+        rows.push(row);
+    }
+    let mut left = vec![true, true, true, false];
+    if many {
+        left.extend([false, false, false]);
+    }
+    aligned(&rows, &left, &mut out);
+    out.push('\n');
+    let mut rows = vec![
+        [
+            "population",
+            "created (mean)",
+            "removed (mean)",
+            "alive at the end (mean)",
+            "messages dropped",
+            "undelivered",
+        ]
+        .iter()
+        .map(|h| (*h).to_owned())
+        .collect::<Vec<_>>(),
+    ];
+    for p in r["populations"].as_array().into_iter().flatten() {
+        rows.push(vec![
+            s(&p["name"]).to_owned(),
+            f(&p["created_mean"]),
+            f(&p["removed_mean"]),
+            f(&p["alive_at_end_mean"]),
+            f(&p["messages_dropped"]),
+            f(&p["messages_undelivered"]),
+        ]);
+    }
+    aligned(&rows, &[true, false, false, false, false, false], &mut out);
+    out
+}
+
 /// A system dynamics run's results as CSV: a row per saved time.
 pub fn sd_csv(r: &Value) -> String {
     stochcraft_engine::sd::results_csv(r)

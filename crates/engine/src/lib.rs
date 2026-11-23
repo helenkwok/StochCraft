@@ -45,12 +45,18 @@
 //!   (see [`sd`]); `run` refuses one. `sd.new` starts an empty one and `sd.variable.add`, `.set`,
 //!   `.remove`, `sd.specs.set` and `sd.layout.set` edit it, on the same undo and redo as any other
 //!   edit; `file.save` writes it as an XMILE file.
+//! - An agent-based model (populations of agents with state charts) is a BPMN file with no
+//!   process and the `stochcraft:agents` extension, beside an SCXML file per agent type:
+//!   `file.open` or `agents.open` opens it, `agents.run` runs it (each statistic over time, with
+//!   its band across replications) and `agents.get` describes it (see [`agents`]); `run` refuses
+//!   one, and `file.save` writes the charts beside the model.
 //! - Files are BPSim on BPMN or XPDL (`stochcraft-io`). `file.save` writes edits into the file
 //!   the model was opened from, keeping everything StochCraft does not understand and every line
 //!   it did not change; saved unchanged, the file comes back byte for byte. An edit that cannot
 //!   be written into that file is refused with the reason, and `as_new` then writes a new BPMN
 //!   file from the model alone.
 
+pub mod agents;
 mod commands;
 mod compare;
 mod decide;
@@ -194,6 +200,7 @@ pub struct JournalEntry {
 
 const DOCUMENT_PROCESS: &str = "process";
 const DOCUMENT_SD: &str = "system_dynamics";
+const DOCUMENT_AGENTS: &str = "agents";
 
 /// The version of the journal format this engine writes and reads (see [`Journal`]).
 pub const JOURNAL_FORMAT: u32 = 1;
@@ -350,12 +357,13 @@ pub enum ReplayMode {
 }
 
 /// The commands [`ReplayMode::EditsOnly`] skips.
-const SKIPPED_BY_DEFAULT: [&str; 12] = [
+const SKIPPED_BY_DEFAULT: [&str; 13] = [
     "file.save",
     "run",
     "mc.run",
     "mc.sobol",
     "sd.run",
+    "agents.run",
     "run.start",
     "run.cancel",
     "experiment.sweep",
@@ -495,6 +503,8 @@ pub struct Engine {
     file: Option<FileState>,
     /// The system dynamics model, if the document is one (see [`sd`]).
     sd: Option<sd::SdDoc>,
+    /// The files an agent-based model reads beside its own, and its last run (see [`agents`]).
+    agents: Option<agents::AgentsDoc>,
     /// The model as last opened or saved, to tell whether there are unsaved changes.
     saved: Model,
     job: Option<Job>,
@@ -540,6 +550,7 @@ impl Engine {
             documents: 0,
             file: None,
             sd: None,
+            agents: None,
             job: None,
             job_kept: false,
             last_results: None,
@@ -763,20 +774,24 @@ impl Engine {
         Ok(())
     }
 
-    /// `"process"` or `"system_dynamics"`: the kind of the open document.
+    /// `"process"`, `"system_dynamics"` or `"agents"`: the kind of the open document.
     fn document_kind(&self) -> &'static str {
         if self.sd.is_some() {
             DOCUMENT_SD
+        } else if self.agents.is_some() && self.model.is_agents() {
+            DOCUMENT_AGENTS
         } else {
             DOCUMENT_PROCESS
         }
     }
 
     /// The digest that identifies the open document: [`model_digest`] of the process model, or
-    /// the system dynamics model's own (without its diagram).
+    /// the system dynamics model's own (without its diagram), or an agent-based model's (with
+    /// its populations and the files it reads).
     fn document_digest(&self) -> String {
         match &self.sd {
             Some(d) => sd::sd_digest(&d.model),
+            None if self.document_kind() == DOCUMENT_AGENTS => self.agents_digest(),
             None => model_digest(&self.model),
         }
     }
@@ -893,6 +908,7 @@ impl Engine {
         self.redo.clear();
         self.file = None;
         self.sd = None;
+        self.agents = None;
         self.cancel_run();
         self.job = None;
         self.job_kept = false;
@@ -900,18 +916,29 @@ impl Engine {
     }
 
     /// Opens a model file from its bytes (`name` is reported back and used by `file.save`),
-    /// replacing the model, clearing the history and starting a new journal.
+    /// replacing the model, clearing the history and starting a new journal. An agent-based
+    /// model, which reads files beside its own, is refused: open it with
+    /// [`Engine::open_bytes_with`], `file.open` or `agents.open`.
     pub fn open_bytes(
         &mut self,
         name: &str,
         bytes: &[u8],
         scenario: Option<&str>,
     ) -> Result<Value, CommandError> {
-        if stochcraft_sd::looks_like_xmile(bytes) {
-            return self.open_sd(name, bytes, true);
-        }
-        let loaded = stochcraft_io::read_scenario(bytes, scenario)
-            .map_err(|e| CommandError::new(ErrorCode::BadFile, format!("{name}: {e}")))?;
+        self.open_bytes_with(name, bytes, scenario, &mut |_| {
+            Err("an agent-based model given alone as bytes cannot read the files beside it: open it from its file (file.open), or with agents.open and their texts".to_owned())
+        })
+    }
+
+    /// Replaces the document with a model read from `bytes` (what `open_bytes` does once the
+    /// file is read).
+    fn open_loaded(
+        &mut self,
+        name: &str,
+        bytes: &[u8],
+        loaded: stochcraft_io::Loaded,
+        agents: bool,
+    ) -> Result<Value, CommandError> {
         let notes = notes_json(&loaded.notes);
         let opened = loaded.opened;
         let result = json!({
@@ -926,6 +953,9 @@ impl Engine {
         let mut start = JournalStart::new(StartKind::File, Some(name.to_owned()));
         start.file_digest = Some(bytes_digest(bytes));
         start.scenario = opened.scenario.clone();
+        if agents {
+            start.document = Some(DOCUMENT_AGENTS.to_owned());
+        }
         self.new_document(loaded.model, start);
         self.file = Some(FileState {
             path: Some(name.to_owned()),
@@ -1155,6 +1185,12 @@ impl Engine {
                 "this is a system dynamics model: run it with sd.run",
             ));
         }
+        if self.model.is_agents() {
+            return Err(CommandError::new(
+                ErrorCode::Unsupported,
+                "this is an agent-based model, populations with no process: run it with agents.run",
+            ));
+        }
         let approximations = self.approximations(allow_approximations)?;
         let compiled = compile(&self.model).map_err(|ds| CommandError {
             code: ErrorCode::InvalidModel,
@@ -1331,10 +1367,13 @@ fn notes_json(notes: &[stochcraft_io::Note]) -> Vec<Value> {
         .collect()
 }
 
-/// `"monte_carlo"` for a Monte Carlo model, else `"process"`.
+/// `"monte_carlo"` for a Monte Carlo model, `"agents"` for an agent-based one, else
+/// `"process"`.
 fn model_kind(model: &Model) -> &'static str {
     if model.is_monte_carlo() {
         "monte_carlo"
+    } else if model.is_agents() {
+        "agents"
     } else {
         "process"
     }

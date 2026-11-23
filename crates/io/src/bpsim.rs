@@ -197,6 +197,13 @@ pub const SEQUENTIAL: &str = "stochcraft:sequential";
 /// (`stochcraft:value="off"`) clears what an inherited scenario sets.
 pub const OBSERVED: &str = "stochcraft:observed";
 
+/// An agent-based model (decision D16): a `stochcraft:agents` vendor extension on the scenario,
+/// holding a `stochcraft:agents` element with its agent types (each naming its SCXML state
+/// chart), populations (with a network and a grid), the environment, statistics and the stepped
+/// mode. The file has no process; the scenario gives the run's length, replications, seed and
+/// time unit. See `crate::agents`.
+pub const AGENTS: &str = "stochcraft:agents";
+
 /// A Monte Carlo model (decision D15): a `stochcraft:monteCarlo` vendor extension on the
 /// scenario, holding a `stochcraft:monteCarlo` element with an optional `sampling` (`random`,
 /// the default, `latinHypercube`, `antithetic` or `sobol`; a reader that does not know the last

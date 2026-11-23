@@ -99,7 +99,8 @@ draw only with fonts the visitor's own system has.
   every variable over time with bands across replications.
 - `stochcraft-agents` runs state charts with the semantics of W3C SCXML 1.0, their data in BPSim's
   expressions and their timeouts and rates on the `des` clock (see [Agents](#agents) below).
-- `stochcraft-io` reads and writes models as BPSim on BPMN or XPDL.
+- `stochcraft-io` reads and writes models as BPSim on BPMN or XPDL, and agents' state charts as
+  SCXML 1.0.
 - `stochcraft-engine` makes every change and run a command with a JSON schema, undo and redo,
   and a replayable journal, and adds sweeps, sensitivity analysis, designed experiments and
   capacity sizing.
@@ -636,7 +637,8 @@ URI, whatever prefix the file uses; a file whose root is in another namespace is
 ### Agents
 
 `crates/agents` holds M4.3's first three stages: state charts (A1), populations of agents
-exchanging messages (A2), and networks and grids (A3), built in code, with no files yet. A chart is a `ChartSpec` (the tree of an SCXML
+exchanging messages (A2), and networks and grids (A3); A4 puts them in files and through the
+engine (below). A chart is a `ChartSpec` (the tree of an SCXML
 document: states, parallel and final states, shallow and deep history, transitions with event
 descriptors, conditions, targets and the type internal or external, and `onentry`, `onexit` and
 transition content of `<assign>`, `<raise>`, `<send>`, `<cancel>` and `<log>`). `Chart::new`
@@ -739,8 +741,59 @@ pair, links through CSV and back, links made and removed during a run, Moore and
 neighbourhoods by hand, moves, messages to neighbours, a Game of Life glider that is its own shape
 moved one cell diagonally every 4 steps, and SIR on a complete network, which is A2's well-mixed run
 draw for draw and matches its exact mean final size of 20.3696. Not there yet: `<if>`,
-`<foreach>`, `<invoke>`, `<donedata>`, `<initial>` elements with content, late binding, and reading
-and writing SCXML files (A4).
+`<foreach>`, `<invoke>`, `<donedata>`, `<initial>` elements with content, and late binding.
+
+**Files, engine and command line (A4).** An agent-based model is a BPMN file with no process
+(`stochcraft_model::Model::is_agents`): its BPSim scenario gives the run's length (warm-up plus
+duration), replications, seed and time unit, and its `stochcraft:agents` vendor extension
+(`stochcraft_model::agents::Agents`, read and written by `crates/io/src/agents.rs`, declared in
+`crates/io/schemas/stochcraft-bpsim-1.xsd`) holds the agent types, each naming its state chart
+by a relative reference, the populations with their networks (a `file` network names a CSV list
+of links) and grids, the environment, the statistics, the stepped mode, the save interval and the
+limits. Saved unchanged it is the same bytes; edited, only the extension is rewritten.
+
+- Each agent type's chart is a W3C SCXML 1.0 file (`stochcraft_io::scxml::{read_scxml,
+  write_scxml}`), `datamodel="stochcraft"` (D17). What SCXML covers is plain SCXML, valid
+  against W3C's schema (`crates/io/tests/scxml.rs` validates every chart written with xmllint,
+  against the schema `cargo xtask fetch-scxml` fetches with pinned checksums). What only
+  StochCraft does is in the namespace `https://helenkwok.github.io/StochCraft/scxml/1`
+  (`crates/io/schemas/stochcraft-scxml-1.xsd`): `stochcraft:rate` on a `<send>` (which also
+  carries `delayexpr="exponential(1 div (rate))"`), `stochcraft:delay` where a fixed delay's CSS2
+  seconds would not convert back to the same number, `stochcraft:to`, `population` and `serial`
+  for messages to other agents (whose `type` names StochCraft's own event I/O processor, so another
+  SCXML tool reports it instead of sending it to the agent itself), `<content expr>` for a
+  message's number, and `<stochcraft:create>`, `remove`, `connect`, `disconnect`, `moveTo` and
+  `moveRandom`. Generic SCXML tools read the structure but do not run the expressions. Reading
+  refuses by name what a chart cannot hold (`<if>`, `<script>`, `<invoke>`, `<param>`, another
+  data model, late binding, computed event names, targets and send ids); writing refuses what
+  SCXML's schema would not take (two states, variables or sends with one id, since SCXML gives
+  them one id space; ids that are not XML names; event names it does not accept). Every chart
+  feature round trips exactly, in any time unit, and a chart read back runs draw for draw as the
+  original.
+- `stochcraft_agents::described::build` makes the `Model` an `Agents` and its read files
+  (`Files`) describe, refusing a missing type, file or population and a chart that does not
+  compile, with the place.
+- The engine (`crates/engine/src/agents.rs`): `file.open` reads the files a model names from
+  beside it (relative references only: no `..`, root, drive or scheme), `agents.open` takes them
+  as texts, and `Engine::open_bytes_with` takes a resolver (the testkit's golden runs use it;
+  `open_bytes` alone refuses such a model, naming the ways to open it). The files' bytes are kept
+  with the document and read again as each run starts, in the experiment's time unit then.
+  `agents.get` describes the model (types with their states and variables, populations,
+  statistics, the files, any problem that stops it running, whether the last results are stale);
+  `agents.run` runs `replications` from `seed` (replication r from
+  `Rng::keyed(seed, "replication/r")`) to `end` and gives each statistic's mean (with the median
+  and the 5th and 95th percentiles over more than one replication) at every recorded time, each
+  population's counts and the run record; `agents::results_csv` gives it as CSV. `run` refuses an
+  agent-based model. The document kind is `agents` in the journal, identified by a digest of the
+  model, its extension and every file it reads, so a replay onto a model whose chart changed is
+  refused; `agents.run` is skipped by an edits-only replay. `file.save` writes the charts beside
+  the model wherever it is saved. Editing populations and charts comes with the window (A5);
+  `experiment.set` changes the run's length, replications and seed.
+- `stochcraft-cli run` on such a file gives a table of each statistic at the end with its band,
+  `--format csv` each over time, `--format json` everything (`--reps`, `--seed`, `--warmup`,
+  `--duration`); `validate` builds it and reports a problem as an error.
+- `tests/models/sir-agents.bpmn` with `sir-person.scxml` (A2's SIR among 100 people) is a golden
+  model: `stochcraft-testkit` digests its times, statistics and counts.
 
 ### Selecting the best
 

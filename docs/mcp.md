@@ -302,6 +302,20 @@ kinds of model. Its edits show on the Model tab, mark the model edited (the wind
 as XMILE; into a file with content StochCraft does not keep, it asks the user first, whereas
 `file.save` writes at once) and mark the results on show out of date until `sd.run` runs again.
 
+An agent-based model (populations of agents with SCXML state charts, a BPMN file with the
+`stochcraft:agents` extension) is opened with `file.open`, which reads each agent type's chart
+and each list of links from beside the file (references relative to it, inside its folder), or
+with `agents.open` (`text`, and `files`: each chart's text by its reference). `agents.get`
+describes it (the run's length, replications, seed and time unit, the agent types with their
+states and variables, the populations with their networks and grids, the statistics, the files,
+and `problem`, what stops it running if anything). `agents.run` (`replications`, `seed`, `end`)
+gives each statistic over time (the mean, and over more than one replication the median and the
+5th and 95th percentiles), each population's agents created, removed and alive at the end and its
+messages dropped and undelivered, and the run record. `run` refuses such a model and names
+`agents.run`; `experiment.set` changes its duration, replications and seed; `file.save` writes the
+model and its chart files beside it. Populations and charts are not edited by commands yet. In
+the app, the window does not show these models yet.
+
 `crates/mcp/tests/session.rs` covers four areas:
 - a session like this one, checked only through MCP;
 - malformed messages, oversized lines and batches, and arguments that do not match the schema;

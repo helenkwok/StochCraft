@@ -962,8 +962,9 @@ pub fn write_new(model: &Model) -> Vec<u8> {
                 .with_attr("targetRef", c.to.as_str()),
         );
     }
-    // A Monte Carlo model is a file with no process (D15), and so no diagram.
-    let monte_carlo = model.is_monte_carlo();
+    // A Monte Carlo model is a file with no process (D15), and so no diagram; so is an
+    // agent-based model (D16).
+    let monte_carlo = model.is_monte_carlo() || model.is_agents();
     if !monte_carlo {
         defs.push(process);
     }
@@ -1315,6 +1316,10 @@ pub fn write_new(model: &Model) -> Vec<u8> {
     // The rest of a Monte Carlo model, last, where BPSim puts a scenario's vendor extensions.
     if let Some(mc) = &model.monte_carlo {
         scenario.push(crate::mc::extension_element(mc));
+    }
+    // The populations of an agent-based model, likewise.
+    if let Some(a) = &model.agents {
+        scenario.push(crate::agents::extension_element(a));
     }
     let relationship = b("relationship")
         .with_attr("type", "BPSimData")

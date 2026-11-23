@@ -523,10 +523,17 @@ fn validate(file: &Path, scenario: Option<&str>, format: CheckFormat) -> Result<
     let mut engine = Engine::new();
     let opened = open(&mut engine, file, scenario)?;
     let notes = opened["notes"].as_array().cloned().unwrap_or_default();
-    let diagnostics = opened["diagnostics"]
+    let mut diagnostics = opened["diagnostics"]
         .as_array()
         .cloned()
         .unwrap_or_default();
+    // An agent-based model's charts and populations are checked by building it.
+    if opened["kind"] == "agents" {
+        let got = engine.execute("agents.get", json!({}))?;
+        if let Some(problem) = got["problem"].as_str() {
+            diagnostics.push(json!({ "severity": "error", "code": "agents", "message": problem }));
+        }
+    }
     let errors = notes
         .iter()
         .chain(&diagnostics)
@@ -545,7 +552,11 @@ fn validate(file: &Path, scenario: Option<&str>, format: CheckFormat) -> Result<
             }))
             .unwrap_or_default()
         ),
-        CheckFormat::Table => print!("{}", output::validation(file, &opened, errors)),
+        CheckFormat::Table => {
+            let mut shown = opened.clone();
+            shown["diagnostics"] = Value::Array(diagnostics);
+            print!("{}", output::validation(file, &shown, errors));
+        }
     }
     Ok(u8::from(errors > 0))
 }
@@ -568,6 +579,12 @@ fn explain(
 ) -> Result<u8, Failure> {
     let mut engine = Engine::new();
     let opened = open(&mut engine, file, scenario)?;
+    if opened["kind"] == "agents" {
+        return Err(Failure(format!(
+            "{} is an agent-based model: explain works out the capacity of a process's blocks",
+            file.display()
+        )));
+    }
     // A model with errors has no table worth trusting: say what they are, as `run` does.
     let errors: Vec<String> = opened["notes"]
         .as_array()
@@ -880,6 +897,22 @@ fn run(
             "--dt and --dt-check are for system dynamics models (XMILE files)".into(),
         ));
     }
+    if opened["kind"] == "agents" {
+        if until.relative.is_some()
+            || until.points.is_some()
+            || until.max.is_some()
+            || until.fixed
+            || shares.wanted
+            || sampling.is_some()
+            || threads.is_some()
+        {
+            return Err(Failure(
+                "an agent-based model runs a fixed number of replications to a fixed end: use --reps, --seed, --warmup and --duration"
+                    .into(),
+            ));
+        }
+        return run_agents(&mut engine, reps, seed, warmup, duration, format, out);
+    }
     if opened["kind"] == "monte_carlo" {
         if warmup.is_some() || duration.is_some() || until.points.is_some() {
             return Err(Failure(
@@ -945,6 +978,47 @@ fn run(
         ),
         Format::Csv => output::csv(&results),
         Format::Table => output::table(&engine.model().name, &results),
+    };
+    emit(&text, out)?;
+    Ok(0)
+}
+
+/// `run` on an agent-based model: each statistic over time, with its band across replications.
+fn run_agents(
+    engine: &mut Engine,
+    reps: Option<u32>,
+    seed: Option<u64>,
+    warmup: Option<f64>,
+    duration: Option<f64>,
+    format: Format,
+    out: Option<&Path>,
+) -> Result<u8, Failure> {
+    let mut set = json!({});
+    if let Some(w) = warmup {
+        set["warmup"] = json!(w);
+    }
+    if let Some(d) = duration {
+        set["duration"] = json!(d);
+    }
+    if set.as_object().is_some_and(|o| !o.is_empty()) {
+        engine.execute("experiment.set", set)?;
+    }
+    let mut params = json!({});
+    if let Some(r) = reps {
+        params["replications"] = json!(r);
+    }
+    if let Some(s) = seed {
+        params["seed"] = json!(s);
+    }
+    let results = engine.execute("agents.run", params)?;
+    let text = match format {
+        Format::Json => format!(
+            "{}
+",
+            serde_json::to_string_pretty(&results).unwrap_or_default()
+        ),
+        Format::Csv => stochcraft_engine::agents::results_csv(&results),
+        Format::Table => output::agents_table(&results),
     };
     emit(&text, out)?;
     Ok(0)
