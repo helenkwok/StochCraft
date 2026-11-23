@@ -79,7 +79,7 @@ pub struct PopulationSpec {
 pub enum NetworkSpec {
     /// No links at the start (agents link during the run).
     Empty,
-    /// Each pair linked with the probability that gives this mean degree.
+    /// Links between pairs picked at random, as many as give this mean degree.
     Random { mean_degree: f64 },
     /// A ring lattice: each agent linked to `each_side` neighbours on each side.
     Ring { each_side: u64 },

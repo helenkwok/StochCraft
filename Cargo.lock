@@ -3476,6 +3476,7 @@ dependencies = [
  "serde",
  "serde_json",
  "sha2",
+ "stochcraft-agents",
  "stochcraft-blocks",
  "stochcraft-experiment",
  "stochcraft-io",
