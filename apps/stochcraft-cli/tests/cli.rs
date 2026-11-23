@@ -1306,3 +1306,125 @@ fn a_journal_is_never_written_over_a_file_the_script_opened_earlier() {
     );
     assert_eq!(std::fs::read(&first).unwrap_or_default(), before);
 }
+
+/// The example model of the user guide's optimisers.
+fn example(name: &str) -> String {
+    Path::new(env!("CARGO_MANIFEST_DIR"))
+        .join("../../examples/optimisers")
+        .join(name)
+        .to_string_lossy()
+        .into_owned()
+}
+
+/// `evaluate` with `input` on standard input: its lines, and whether it succeeded.
+fn evaluate_lines(args: &[&str], input: &str) -> (Vec<Value>, bool) {
+    let mut child = Command::new(env!("CARGO_BIN_EXE_stochcraft-cli"))
+        .arg("evaluate")
+        .args(args)
+        .stdin(std::process::Stdio::piped())
+        .stdout(std::process::Stdio::piped())
+        .stderr(std::process::Stdio::piped())
+        .spawn()
+        .unwrap_or_else(|e| panic!("cannot run stochcraft-cli: {e}"));
+    if let Some(mut stdin) = child.stdin.take() {
+        use std::io::Write as _;
+        let _ = stdin.write_all(input.as_bytes());
+    }
+    let out = child
+        .wait_with_output()
+        .unwrap_or_else(|e| panic!("stochcraft-cli: {e}"));
+    let lines = stdout(&out).lines().map(json).collect();
+    (lines, out.status.success())
+}
+
+/// `evaluate` gives exactly what the engine's `experiment.evaluate` gives, from arguments and
+/// from JSON lines on standard input, one line out per line in; a refused line is answered with
+/// its error, and the lines after it are still evaluated.
+#[test]
+fn evaluate_reads_and_writes_json_lines_and_matches_the_engine() {
+    let file = example("mm1-cost.bpmn");
+    let from_args = ok(&[
+        "evaluate",
+        &file,
+        "--decide",
+        "server.mean=0.4",
+        "--range",
+        "server.mean=0.2..0.9",
+        "--result",
+        "server.mean_work_in_progress",
+        "--first",
+        "3",
+        "--count",
+        "4",
+        "--seed",
+        "9",
+    ]);
+    assert_eq!(from_args.lines().count(), 1, "{from_args}");
+
+    let mut engine = stochcraft_engine::Engine::new();
+    let opened = engine.execute("file.open", serde_json::json!({ "path": file }));
+    assert!(opened.is_ok(), "{opened:?}");
+    let direct = engine.execute(
+        "experiment.evaluate",
+        serde_json::json!({
+            "decisions": [{ "id": "server", "field": "mean", "value": 0.4, "min": 0.2, "max": 0.9 }],
+            "results": [{ "element": "server", "metric": "mean_work_in_progress" }],
+            "first": 3,
+            "count": 4,
+            "seed": 9,
+        }),
+    );
+    let direct = direct.unwrap_or_else(|e| panic!("{e}"));
+    // The same text, so the same numbers to the last bit.
+    assert_eq!(from_args.trim_end(), direct.to_string());
+
+    // The same evaluation as a line, then one refused, then the replications after the first
+    // ones: the staged values are those of the whole.
+    let line = |value: f64, first: u64, count: u64| {
+        format!(
+            "{{\"decisions\": [{{\"id\": \"server\", \"field\": \"mean\", \"value\": {value}}}], \"first\": {first}, \"count\": {count}}}\n"
+        )
+    };
+    let input = [
+        line(0.4, 3, 4),
+        "\n".to_owned(),
+        line(0.95, 0, 2),
+        "not json\n".to_owned(),
+        line(0.4, 0, 3),
+        line(0.4, 0, 7),
+    ]
+    .concat();
+    let (lines, success) = evaluate_lines(
+        &[
+            &file,
+            "--range",
+            "server.mean=0.2..0.9",
+            "--result",
+            "server.mean_work_in_progress",
+            "--seed",
+            "9",
+        ],
+        &input,
+    );
+    assert!(!success, "a refused line makes the exit code 1");
+    assert_eq!(lines.len(), 5, "{lines:?}");
+    assert_eq!(lines[0].to_string(), direct.to_string());
+    assert_eq!(lines[1]["error"]["code"], "invalid_params");
+    assert!(
+        lines[1]["error"]["message"]
+            .as_str()
+            .is_some_and(|m| m.contains("server.mean")),
+        "{}",
+        lines[1]
+    );
+    assert_eq!(lines[2]["error"]["code"], "invalid_params");
+    let values = |v: &Value| {
+        v["results"][0]["values"]
+            .as_array()
+            .cloned()
+            .unwrap_or_default()
+    };
+    let mut staged = values(&lines[3]);
+    staged.extend(values(&lines[0]));
+    assert_eq!(staged, values(&lines[4]));
+}

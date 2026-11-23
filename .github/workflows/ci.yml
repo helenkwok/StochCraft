@@ -265,6 +265,33 @@ jobs:
       - run: cargo run --release --manifest-path bench/Cargo.toml --locked -- hold 200000
       - run: cargo run --release --manifest-path bench/Cargo.toml --locked -- devstone 60 20
 
+  # The user guide's examples of an optimiser of your own driving `stochcraft-cli evaluate`:
+  # Optuna (MIT) and pymoo (Apache-2.0), pinned and installed in this job only, never vendored.
+  # Each script fails unless it ends within 0.05 of the M/M/1 cost optimum s = 0.5.
+  optimisers:
+    name: Optimisers of your own (Optuna, pymoo)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: dtolnay/rust-toolchain@683b588c487a69d01f6c6ddf40f036ff682cc2c8 # master
+        with:
+          toolchain: stable
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2.9.3
+        with:
+          key: optimisers
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.12"
+      - run: python -m pip install optuna==5.0.0 pymoo==0.6.2
+      - run: cargo build --release --locked -p stochcraft-cli
+      - name: Optuna, ask and tell
+        run: python examples/optimisers/optuna_mm1.py target/release/stochcraft-cli
+      - name: pymoo, pattern search
+        run: python examples/optimisers/pymoo_mm1.py target/release/stochcraft-cli
+
   licences:
     name: cargo deny (licences, sources, bans)
     runs-on: ubuntu-latest

@@ -191,6 +191,7 @@ fn skipped_commands_are_catalogue_commands_that_are_not_queries() {
         "experiment.sensitivity",
         "experiment.design",
         "experiment.size",
+        "experiment.evaluate",
     ];
     for name in skipped {
         let c = COMMANDS.iter().find(|c| c.name == name);

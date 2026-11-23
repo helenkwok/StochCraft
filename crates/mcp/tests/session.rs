@@ -776,3 +776,56 @@ fn a_file_read_with_errors_does_not_run_for_an_agent_unless_it_allows_it() {
         allowed["record"]
     );
 }
+
+/// An outside optimiser's evaluation is offered as every command is: listed with its schema, and
+/// carried out through `execute`, giving what the engine gives.
+#[test]
+fn experiment_evaluate_is_listed_and_runs() {
+    let mut s = Session::new(Box::new(Headless::default()));
+    let listed = s.ok("list_commands", json!({"filter": "experiment.evaluate"}));
+    let listed = listed.as_array().unwrap();
+    assert!(
+        listed
+            .iter()
+            .any(|c| c["name"] == "experiment.evaluate" && c["params"].is_object()),
+        "{listed:?}"
+    );
+    let path = models().join("mm1.bpmn");
+    s.ok("open", json!({"path": path.to_string_lossy()}));
+    let params = json!({
+        "decisions": [{"id": "serve", "field": "mean", "value": 0.8}],
+        "results": [{"element": "serve", "metric": "mean_wait"}],
+        "first": 2,
+        "count": 3,
+        "seed": 11,
+    });
+    let r = s.ok(
+        "execute",
+        json!({"command": "experiment.evaluate", "params": params.clone()}),
+    );
+    assert_eq!(r["first"], 2);
+    assert_eq!(r["results"][0]["values"].as_array().map(Vec::len), Some(3));
+    let mut e = Engine::new();
+    e.execute("file.open", json!({"path": path.to_string_lossy()}))
+        .unwrap();
+    let direct = e.execute("experiment.evaluate", params).unwrap();
+    // The tool's text is parsed back here, which may round a number's last bit (serde_json's
+    // default parser is not exact): the values are compared exactly, the mean and interval to
+    // the last bits.
+    let (got, want) = (&r["results"][0], &direct["results"][0]);
+    assert_eq!(got["values"], want["values"]);
+    assert_eq!(got["n"], want["n"]);
+    for key in ["mean", "half_width"] {
+        let (a, b) = (got[key].as_f64().unwrap(), want[key].as_f64().unwrap());
+        assert!((a - b).abs() <= 1e-12 * b.abs(), "{key}: {a} vs {b}");
+    }
+    let (err, error) = s.call(
+        "execute",
+        json!({"command": "experiment.evaluate", "params": {
+            "decisions": [{"id": "ghost", "field": "mean", "value": 1.0}],
+            "results": [{"element": "serve", "metric": "mean_wait"}],
+        }}),
+    );
+    assert!(error);
+    assert!(err.to_string().contains("ghost.mean"), "{err}");
+}
