@@ -177,9 +177,9 @@ mod tests {
         ElementId::unchecked(s)
     }
 
-    /// A racetrack loop: two 10 m straights and two half circles of radius 10/π, 30 m round.
+    /// A racetrack loop: two 10 m straights and two half circles of radius 5/π (5 m each), 30 m round.
     fn racetrack() -> Path {
-        let r = 10.0 / std::f64::consts::PI;
+        let r = 5.0 / std::f64::consts::PI;
         let half = Segment::Arc {
             radius: r,
             angle_deg: 180.0,
