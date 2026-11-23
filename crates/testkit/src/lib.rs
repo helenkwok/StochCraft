@@ -154,6 +154,91 @@ pub fn optimise() -> Result<Value, String> {
         .map_err(|e| format!("optimise: {e}"))
 }
 
+/// A search of a rule (`experiment.optimise`, stage O4): two M/M/1 servers behind a gateway, its
+/// routing a random split or the shortest queue, beside the first server's units from 1 to 60
+/// (more than the 50 designs that skip the search, so COMPASS runs from a start at each routing).
+pub fn optimise_rules() -> Result<Value, String> {
+    let exp = |mean: f64| json!({ "type": "exponential", "mean": mean });
+    let mut engine = Engine::new();
+    let model = json!({ "model": {
+        "name": "Two servers",
+        "elements": [
+            { "id": "arrivals", "kind": "source", "interarrival": exp(1.0) },
+            { "id": "split", "kind": "exclusive_gateway" },
+            { "id": "s1", "kind": "server", "capacity": 1, "service": exp(1.0) },
+            { "id": "s2", "kind": "server", "capacity": 1, "service": exp(1.0) },
+            { "id": "exit", "kind": "sink" }
+        ],
+        "connections": [
+            { "id": "f0", "from": "arrivals", "to": "split" },
+            { "id": "f1", "from": "split", "to": "s1" },
+            { "id": "f2", "from": "split", "to": "s2" },
+            { "id": "f3", "from": "s1", "to": "exit" },
+            { "id": "f4", "from": "s2", "to": "exit" }
+        ],
+        "experiment": { "warmup": 5.0, "duration": 50.0, "replications": 4, "seed": 2026 }
+    }});
+    engine
+        .execute("model.set", model)
+        .map_err(|e| format!("optimise rules: {e}"))?;
+    engine
+        .execute(
+            "experiment.optimise",
+            json!({
+                "decisions": [
+                    { "id": "split", "field": "routing" },
+                    { "id": "s1", "field": "capacity", "min": 1, "max": 60 }
+                ],
+                "objective": {
+                    "results": [{ "element": "exit", "metric": "mean_time_in_system" }],
+                    "costs": [{ "id": "s1", "field": "capacity", "cost": 0.1 }]
+                },
+                "indifference": 0.2,
+                "max_runs": 400,
+                "starts": 1,
+            }),
+        )
+        .map_err(|e| format!("optimise rules: {e}"))
+}
+
+/// A search of a mean (`experiment.optimise`, stage O4): an M/M/1 server's mean service time from
+/// 0.2 to 0.9, its mean number inside plus −4 per unit of the mean, by Nelder–Mead.
+pub fn optimise_mean() -> Result<Value, String> {
+    let exp = |mean: f64| json!({ "type": "exponential", "mean": mean });
+    let mut engine = Engine::new();
+    let model = json!({ "model": {
+        "name": "One server",
+        "elements": [
+            { "id": "arrivals", "kind": "source", "interarrival": exp(1.0) },
+            { "id": "server", "kind": "server", "capacity": 1, "service": exp(0.8) },
+            { "id": "exit", "kind": "sink" }
+        ],
+        "connections": [
+            { "id": "f1", "from": "arrivals", "to": "server" },
+            { "id": "f2", "from": "server", "to": "exit" }
+        ],
+        "experiment": { "warmup": 5.0, "duration": 50.0, "replications": 4, "seed": 2026 }
+    }});
+    engine
+        .execute("model.set", model)
+        .map_err(|e| format!("optimise mean: {e}"))?;
+    engine
+        .execute(
+            "experiment.optimise",
+            json!({
+                "decisions": [{ "id": "server", "field": "mean", "min": 0.2, "max": 0.9 }],
+                "objective": {
+                    "results": [{ "element": "server", "metric": "mean_work_in_progress" }],
+                    "costs": [{ "id": "server", "field": "mean", "cost": -4.0 }]
+                },
+                "indifference": 0.05,
+                "max_runs": 400,
+                "replications_per_visit": 4,
+            }),
+        )
+        .map_err(|e| format!("optimise mean: {e}"))
+}
+
 /// The digest of a whole answer, exactly.
 pub fn digest_all(answer: &Value) -> String {
     let text = serde_json::to_string(answer).unwrap_or_default();
@@ -170,6 +255,8 @@ pub fn digests() -> Result<String, String> {
         lines.push(format!("{} {}", g.name, digest(&run(g)?)));
     }
     lines.push(format!("optimise {}", digest_all(&optimise()?)));
+    lines.push(format!("optimise-rules {}", digest_all(&optimise_rules()?)));
+    lines.push(format!("optimise-mean {}", digest_all(&optimise_mean()?)));
     lines.sort();
     Ok(lines.join("\n") + "\n")
 }

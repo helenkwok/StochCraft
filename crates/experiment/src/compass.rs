@@ -1910,6 +1910,56 @@ mod tests {
         assert!(answer.finalists.iter().any(|f| f.design == vec![30, 30]));
     }
 
+    /// A held decision (a rule's level) is never moved: each start searches the other decision
+    /// at its own level, and the levels meet in the clean-up, where the better one is chosen.
+    #[test]
+    fn a_held_decision_stays_at_each_starts_level() {
+        let space = Space {
+            bounds: vec![(0, 1), (0, 60)],
+            limits: Vec::new(),
+        };
+        let f = |x: &[i64]| {
+            let shift = if x[0] == 1 { -5.0 } else { 0.0 };
+            ((x[1] - 10) * (x[1] - 10)) as f64 + shift
+        };
+        let mut setup = Compass::new(0.5, Sense::Minimise, 6000);
+        setup.held = vec![0];
+        let answer = optimise(
+            &setup,
+            &space,
+            &[vec![0, 50], vec![1, 50]],
+            |stream, x, reps| {
+                Ok(reps
+                    .map(|j| {
+                        let salt = if stream == Stream::Search { 1 } else { 2 };
+                        let mut r = Rng::keyed(j, &format!("{salt}"));
+                        let mut own = Rng::keyed(j, &format!("{salt}/{x:?}"));
+                        vec![f(x) + (r.uniform() - 0.5) + 0.3 * (own.uniform() - 0.5)]
+                    })
+                    .collect())
+            },
+            || false,
+        )
+        .unwrap();
+        for s in &answer.starts {
+            let end = s.end.clone().unwrap();
+            assert_eq!(end[0], s.start[0], "{:?}", answer.starts);
+        }
+        let chosen = &answer.finalists[answer.chosen.unwrap()].design;
+        assert_eq!(chosen, &vec![1, 10], "{answer:?}");
+        assert!(answer.finalists.iter().any(|f| f.design[0] == 0));
+        // A held position outside the space is refused.
+        setup.held = vec![2];
+        let e = optimise(
+            &setup,
+            &space,
+            &[vec![0, 50]],
+            |_, _, _| Ok(vec![]),
+            || false,
+        );
+        assert_eq!(e.unwrap_err(), CompassError::Setting("held"));
+    }
+
     /// A search stopped by the caller after S runs is repeated exactly with `search_runs` = S.
     #[test]
     fn a_stopped_search_repeats_with_its_runs() {

@@ -1539,6 +1539,49 @@ fn optimize_takes_a_starting_value() {
     assert!(stderr(&o).contains("serve.capacity"), "{}", stderr(&o));
 }
 
+/// A mean is searched by Nelder–Mead from the command line, and the answer says the search is
+/// local; a bound that is not a finite number is refused, naming `--decide`.
+#[test]
+fn optimize_searches_a_mean() {
+    let file = model("mm1.bpmn");
+    let v = json(&ok(&[
+        "optimize",
+        &file,
+        "--decide",
+        "serve.mean=0.5..2",
+        "--minimize",
+        "serve.mean_wait",
+        "--cost",
+        "serve.mean=-1",
+        "--delta",
+        "0.5",
+        "--max-runs",
+        "300",
+        "--format",
+        "json",
+    ]));
+    assert!(
+        v["claim"].as_str().unwrap_or_default().contains("is local"),
+        "{v}"
+    );
+    assert!(
+        v["runs"]["total"].as_u64().unwrap_or(u64::MAX) <= 300,
+        "{v}"
+    );
+    let o = cli(&[
+        "optimize",
+        &file,
+        "--decide",
+        "serve.mean=0.5..NaN",
+        "--minimize",
+        "serve.mean_wait",
+        "--delta",
+        "1",
+    ]);
+    assert!(!o.status.success());
+    assert!(stderr(&o).contains("--decide"), "{}", stderr(&o));
+}
+
 /// An agent-based model (a BPMN file with the stochcraft:agents extension and an SCXML chart
 /// beside it): `run` prints each statistic at the end with its band, CSV and JSON give each over
 /// time, and `validate` checks the charts and populations.

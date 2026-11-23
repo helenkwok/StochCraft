@@ -1401,12 +1401,16 @@ fn search_decision(text: &str) -> Result<Value, Failure> {
             "`{text}`: give a decision as `id.field=min..max` or `id.field=min..max:step` (such as `desk.capacity=11..40` or `desk.mean=0.2..0.9`), or a rule as `id.field` or `id.field=level,level` (such as `split.routing=standard,shortest_queue`)"
         ))
     };
+    let rule = |field: &str| matches!(field, "routing" | "on_shift_end" | "after_job");
     let Some((name, values)) = text.split_once('=') else {
         let (id, field) = text.rsplit_once('.').ok_or_else(bad)?;
+        if !rule(field) {
+            return Err(bad());
+        }
         return Ok(json!({ "id": id, "field": field }));
     };
     let (id, field) = name.rsplit_once('.').ok_or_else(bad)?;
-    if !values.contains("..") {
+    if rule(field) {
         let levels: Vec<&str> = values.split(',').map(str::trim).collect();
         if levels.iter().any(|l| l.is_empty()) {
             return Err(bad());
