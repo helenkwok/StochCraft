@@ -491,7 +491,7 @@ come from your change, not from chance. Each analysis can take a while.
   target, such as "mean wait at most 5 minutes in 70% of runs". **Use these units in the
   model** applies the answer as one change you can undo.
 
-## Find the best numbers of servers, operators and buffers
+## Find the best numbers of servers, operators and buffers, rules and times
 
 `stochcraft-cli optimize` searches whole-number decisions (a task's units, a pool's units, a
 buffer) for the design with the lowest cost, or the highest value, of results and decisions
@@ -527,6 +527,22 @@ designs".
   When the budget runs out first, the answer says "best found, not proven best" and lists the
   designs still in contention. `--time-limit` stops the search after that many seconds.
 - A model with no randomness is "compared exactly", one run per design, with no probability.
+
+It also chooses between rules and searches a mean:
+
+- A rule: `--decide split.routing` compares a gateway's random split (`standard`) with sending
+  each item to the shortest queue (`shortest_queue`); `--decide split.routing=standard,divert`
+  names the levels to compare. A task's `on_shift_end` (`finish`, `retry`, `resume`; the task
+  needs shifts) and a mobile pool's `after_job` (`stay`, `go_home`) work the same way. Every
+  combination of the rules' levels (at most 8) is tried, and all of them meet in the final
+  comparison.
+- A mean: `--decide server.mean=0.2..0.9` searches the server's mean service time between 0.2
+  and 0.9, the shape of its distribution kept. `--cost server.mean=-4` gives each unit of it a
+  cost (here a slower machine is cheaper). The search is Nelder–Mead, which moves a small
+  triangle of trial values (a segment, for one mean) downhill; it is a local search, and the
+  answer says so: it does not show that no better value lies elsewhere in the range. One or two
+  means at a time; with counts or rules beside them, the counts and rules may take at most 8
+  combinations of values.
 
 Scripts and agents use the engine command `experiment.optimise` ([mcp.md](mcp.md)); its `apply`
 makes the chosen design the model's, as one change you can undo.
