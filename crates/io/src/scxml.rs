@@ -637,19 +637,16 @@ fn literal(x: &str) -> Option<String> {
 /// gives.
 fn css_seconds(d: &str) -> Option<f64> {
     let d = d.trim();
-    let (number, factor) = if let Some(n) = d.strip_suffix("ms") {
-        (n, 0.001)
-    } else if let Some(n) = d.strip_suffix('s') {
-        (n, 1.0)
-    } else if let Some(n) = d.strip_suffix('m') {
-        (n, 60.0)
-    } else if let Some(n) = d.strip_suffix('h') {
-        (n, 3600.0)
-    } else if let Some(n) = d.strip_suffix('d') {
-        (n, 86_400.0)
-    } else {
-        return None;
-    };
+    let units: [(&str, f64); 5] = [
+        ("ms", 0.001),
+        ("s", 1.0),
+        ("m", 60.0),
+        ("h", 3600.0),
+        ("d", 86_400.0),
+    ];
+    let (number, factor) = units
+        .iter()
+        .find_map(|(u, f)| d.strip_suffix(u).map(|n| (n, *f)))?;
     if number.is_empty() || !number.chars().all(|c| c.is_ascii_digit() || c == '.') {
         return None;
     }

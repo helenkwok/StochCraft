@@ -561,7 +561,7 @@ mod tests {
         assert!(!text.contains("<bpmn:process"), "{text}");
         let loaded = crate::read(&bytes).map_err(|e| e.to_string());
         let Ok(loaded) = loaded else {
-            panic!("{loaded:?}")
+            unreachable!("{loaded:?}")
         };
         assert!(loaded.model.is_agents());
         assert_eq!(loaded.model, m, "{text}");
@@ -576,7 +576,7 @@ mod tests {
         let bytes = crate::write_new(&m);
         let loaded = crate::read(&bytes).map_err(|e| e.to_string());
         let Ok(loaded) = loaded else {
-            panic!("{loaded:?}")
+            unreachable!("{loaded:?}")
         };
         assert_eq!(loaded.opened.save(&m).as_deref(), Ok(&bytes[..]));
         let mut edited = m.clone();
@@ -587,7 +587,7 @@ mod tests {
         }
         let saved = loaded.opened.save(&edited).map_err(|e| e.to_string());
         let Ok(saved) = saved else {
-            panic!("{saved:?}")
+            unreachable!("{saved:?}")
         };
         let back = crate::read(&saved).map(|l| l.model);
         assert_eq!(back.ok(), Some(edited));
@@ -635,7 +635,7 @@ mod tests {
             .replace("measure=\"mean\"", "measure=\"median\"");
         let loaded = crate::read(text.as_bytes()).map_err(|e| e.to_string());
         let Ok(loaded) = loaded else {
-            panic!("{loaded:?}")
+            unreachable!("{loaded:?}")
         };
         let messages: Vec<&str> = loaded.notes.iter().map(|n| n.message.as_str()).collect();
         assert!(
