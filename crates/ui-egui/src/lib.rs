@@ -1309,9 +1309,10 @@ mod tests {
         let line =
             |length: f64| Path::new(Frame::default(), vec![Segment::Line { length, rise: 0.0 }]);
         let mut m = stochcraft_model::Model::default();
-        m.site
-            .paths
-            .insert(ElementId::unchecked("belt"), Track::new(line(12.0)));
+        m.site.paths.insert(
+            ElementId::unchecked("belt"),
+            Track::new(line(12.0), stochcraft_model::LengthUnit::Metres),
+        );
         let kept = comparable(&m);
         let mut look = m.clone();
         look.site.scene.push(Scenery {
@@ -1325,9 +1326,10 @@ mod tests {
         }
         assert_eq!(comparable(&look), kept);
         let mut sim = m.clone();
-        sim.site
-            .paths
-            .insert(ElementId::unchecked("belt"), Track::new(line(14.0)));
+        sim.site.paths.insert(
+            ElementId::unchecked("belt"),
+            Track::new(line(14.0), stochcraft_model::LengthUnit::Metres),
+        );
         assert_ne!(comparable(&sim), kept);
     }
 

@@ -2941,14 +2941,31 @@ impl Editor {
     }
 
     /// Writes the scenery (`stochcraft:scene`) into the scenario that was opened, in place of
-    /// what was there; with none, removes it.
+    /// what was there; with none, removes it, or writes an empty scene where an inherited
+    /// scenario has scenery.
     fn save_scene(
         &mut self,
         root: &mut Element,
         scenario: Option<&str>,
         after: &Model,
     ) -> Result<(), SaveError> {
-        let new = crate::layout::scene_element(&after.site.scene);
+        // Cleared where a scenario this one inherits from has scenery: an empty scene says so,
+        // or the inherited one would come back on reading.
+        let inherited = after.site.scene.is_empty()
+            && ancestors(root, scenario).iter().any(|a| {
+                let is_scene = |x: &Element| {
+                    x.is_any(&NSS, "VendorExtension")
+                        && x.attr("name").as_deref() == Some(crate::bpsim::SCENE)
+                };
+                a.elements().any(is_scene)
+                    || a.child(&NSS, "ScenarioParameters")
+                        .is_some_and(|p| p.elements().any(is_scene))
+            });
+        let new = if inherited {
+            Some(crate::layout::empty_scene_element())
+        } else {
+            crate::layout::scene_element(&after.site.scene)
+        };
         let s = if new.is_some() {
             self.ensure_scenario(root, scenario)?
         } else {

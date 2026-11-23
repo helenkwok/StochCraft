@@ -21,14 +21,15 @@
 //! ```
 //!
 //! Distances are in the scenario's length unit, headings and angles in degrees; `z`, `heading`,
-//! `rise`, `width` (0.6 m for a track) and a size of 0 are left out when they are the default.
+//! `rise` and a size of 0 are left out when they are the default. A track's `width` is always
+//! written; one left out of a file is 0.6 m, in the scenario's unit.
 //! Numbers are written in full, so a file reads back as exactly the layout that was saved.
 //! Scenery objects are written in id order.
 
-use stochcraft_model::site::{DEFAULT_WIDTH, LENGTH_STEP};
+use stochcraft_model::site::{default_width, length_step};
 use stochcraft_model::{
-    Element as ModelElement, ElementId, ElementKind, Frame, Path, Place, Scenery, Segment, Site,
-    Track,
+    Element as ModelElement, ElementId, ElementKind, Frame, LengthUnit, Path, Place, Scenery,
+    Segment, Site, Track,
 };
 
 use crate::Note;
@@ -73,12 +74,8 @@ fn with_frame(e: Element, f: &Frame) -> Element {
 
 /// A conveyor's track as its `stochcraft:path` vendor extension.
 pub fn path_element(t: &Track) -> Element {
-    let mut body = with_num(
-        with_frame(st("path"), &t.path.start),
-        "width",
-        t.width,
-        DEFAULT_WIDTH,
-    );
+    // The width is always written: its default depends on the unit (0.6 m).
+    let mut body = with_frame(st("path"), &t.path.start).with_attr("width", &num(t.width));
     for seg in &t.path.segments {
         let child = match *seg {
             Segment::Line { length, rise } => with_num(
@@ -122,6 +119,14 @@ pub fn place_element(p: &Place) -> Element {
             .with_attr("s", &num(*s)),
     };
     extension(bpsim::PLACE, body)
+}
+
+/// An empty `stochcraft:scene`: no scenery, in place of any a scenario inherits.
+pub fn empty_scene_element() -> Element {
+    extension(
+        bpsim::SCENE,
+        st("scene").with_attr("version", SCENE_VERSION),
+    )
 }
 
 /// The scenery as the scenario's `stochcraft:scene` vendor extension, objects in id order;
@@ -172,10 +177,10 @@ fn body<'a>(ext: &'a Element, local: &str) -> Option<&'a Element> {
 }
 
 /// A track from a `stochcraft:path` vendor extension.
-pub fn read_track(ext: &Element) -> Result<Track, String> {
+pub fn read_track(ext: &Element, unit: LengthUnit) -> Result<Track, String> {
     let b = body(ext, "path").ok_or("has no `path` element")?;
     let start = read_frame(b)?;
-    let width = number(b, "width", Some(DEFAULT_WIDTH))?;
+    let width = number(b, "width", Some(default_width(unit)))?;
     if width <= 0.0 {
         return Err("has a `width` that is not above 0".to_owned());
     }
@@ -289,7 +294,7 @@ pub fn site_of(
                     "a path (stochcraft:path) belongs to a conveyor; it is ignored here",
                 ));
             } else {
-                match read_track(ext) {
+                match read_track(ext, s.settings.length_unit) {
                     Ok(t) => {
                         site.paths.insert(e.id.clone(), t);
                     }
@@ -327,14 +332,14 @@ pub fn site_of(
 }
 
 /// Gives each conveyor with a track its path's length (D23) where its typed length agrees with
-/// it to within [`LENGTH_STEP`]; a length that differs more stays, as an override.
-pub fn lengths_from_paths(site: &Site, elements: &mut [ModelElement]) {
+/// it to within 0.1 mm (in `unit`, the model's); a length that differs more stays, as an override.
+pub fn lengths_from_paths(site: &Site, elements: &mut [ModelElement], unit: LengthUnit) {
     for e in elements {
         if let (Some(t), ElementKind::Conveyor { length, .. }) =
             (site.paths.get(&e.id), &mut e.kind)
         {
-            let drawn = t.length();
-            if (drawn - *length).abs() <= LENGTH_STEP {
+            let drawn = t.length(unit);
+            if (drawn - *length).abs() <= length_step(unit) {
                 *length = drawn;
             }
         }
@@ -371,7 +376,10 @@ mod tests {
             ),
             width: 0.8,
         };
-        assert_eq!(read_track(&path_element(&track)), Ok(track));
+        assert_eq!(
+            read_track(&path_element(&track), LengthUnit::Metres),
+            Ok(track)
+        );
         for place in [
             Place::At(Frame::new(2.0, -5.2, 0.0, -90.0)),
             Place::Along {
@@ -405,12 +413,33 @@ mod tests {
     }
 
     #[test]
+    fn a_track_with_no_width_is_six_tenths_of_a_metre_in_the_models_unit() {
+        let path = extension(
+            bpsim::PATH,
+            st("path")
+                .with_attr("x", "0")
+                .with_attr("y", "0")
+                .with_child(st("line").with_attr("length", "1")),
+        );
+        for (unit, width) in [
+            (LengthUnit::Metres, 0.6),
+            (LengthUnit::Centimetres, 60.0),
+            (LengthUnit::Millimetres, 600.0),
+        ] {
+            assert_eq!(read_track(&path, unit).map(|t| t.width), Ok(width));
+        }
+        // An empty scene reads as no scenery.
+        let mut notes = Vec::new();
+        assert!(read_scene(&empty_scene_element(), &mut notes).is_empty() && notes.is_empty());
+    }
+
+    #[test]
     fn a_path_without_segments_or_with_a_bad_number_is_refused() {
         let empty = extension(
             bpsim::PATH,
             st("path").with_attr("x", "0").with_attr("y", "0"),
         );
-        assert!(read_track(&empty).is_err());
+        assert!(read_track(&empty, LengthUnit::Metres).is_err());
         let bad = extension(
             bpsim::PATH,
             st("path")
@@ -418,6 +447,10 @@ mod tests {
                 .with_attr("y", "zero")
                 .with_child(st("line").with_attr("length", "1")),
         );
-        assert!(read_track(&bad).unwrap_err().contains("`y`"));
+        assert!(
+            read_track(&bad, LengthUnit::Metres)
+                .unwrap_err()
+                .contains("`y`")
+        );
     }
 }

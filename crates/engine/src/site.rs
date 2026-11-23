@@ -5,8 +5,8 @@ use std::collections::BTreeMap;
 
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
-use stochcraft_model::site::DEFAULT_WIDTH;
-use stochcraft_model::{ElementId, Frame, Path, Place, Scenery, Segment, Site, Track};
+use stochcraft_model::site::default_width;
+use stochcraft_model::{ElementId, Frame, LengthUnit, Path, Place, Scenery, Segment, Site, Track};
 
 /// A point on the floor, its height and the way it faces.
 #[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize, JsonSchema)]
@@ -24,14 +24,6 @@ pub struct FrameDoc {
 
 fn is_zero(x: &f64) -> bool {
     *x == 0.0
-}
-
-fn default_width() -> f64 {
-    DEFAULT_WIDTH
-}
-
-fn is_default_width(x: &f64) -> bool {
-    *x == DEFAULT_WIDTH
 }
 
 impl From<Frame> for FrameDoc {
@@ -131,9 +123,9 @@ impl From<SegmentDoc> for Segment {
 pub struct TrackDoc {
     pub start: FrameDoc,
     pub segments: Vec<SegmentDoc>,
-    /// The belt's width, drawn only; 0.6 when left out.
-    #[serde(default = "default_width", skip_serializing_if = "is_default_width")]
-    pub width: f64,
+    /// The belt's width, drawn only; when left out, 0.6 m in the model's length unit.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub width: Option<f64>,
 }
 
 /// Where a block is: along a conveyor's track (`path`, at `s`), or at a frame.
@@ -186,7 +178,7 @@ impl From<&Site> for SiteDoc {
                         TrackDoc {
                             start: t.path.start.into(),
                             segments: t.path.segments.iter().map(|x| (*x).into()).collect(),
-                            width: t.width,
+                            width: Some(t.width),
                         },
                     )
                 })
@@ -219,8 +211,11 @@ impl From<&Site> for SiteDoc {
     }
 }
 
-impl From<SiteDoc> for Site {
-    fn from(s: SiteDoc) -> Self {
+impl SiteDoc {
+    /// The layout, its distances in `unit` (the model's), where a track with no width gets the
+    /// default, 0.6 m.
+    pub fn into_site(self, unit: LengthUnit) -> Site {
+        let s = self;
         let mut scene: Vec<Scenery> = s
             .scene
             .into_iter()
@@ -232,7 +227,7 @@ impl From<SiteDoc> for Site {
             })
             .collect();
         scene.sort_by(|a, b| a.id.cmp(&b.id));
-        Self {
+        Site {
             paths: s
                 .paths
                 .into_iter()
@@ -245,7 +240,7 @@ impl From<SiteDoc> for Site {
                         ElementId::unchecked(&id),
                         Track {
                             path,
-                            width: t.width,
+                            width: t.width.unwrap_or_else(|| default_width(unit)),
                         },
                     )
                 })
@@ -317,7 +312,7 @@ mod tests {
         });
         let json = serde_json::to_value(SiteDoc::from(&site)).unwrap();
         let back: SiteDoc = serde_json::from_value(json).unwrap();
-        assert_eq!(Site::from(back), site);
+        assert_eq!(back.into_site(LengthUnit::Metres), site);
         assert!(SiteDoc::from(&Site::default()).is_empty());
     }
 }

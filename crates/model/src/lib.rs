@@ -2844,8 +2844,11 @@ impl Model {
                 // track, the drawing shape's length is checked to within 1%.
                 let track = self.site.paths.get(&e.id);
                 if let Some(t) = track.filter(|_| !bad) {
-                    let path_length = t.length();
-                    if path_length.is_finite() && (path_length - length).abs() > site::LENGTH_STEP {
+                    let path_length = t.length(self.experiment.length_unit);
+                    if path_length.is_finite()
+                        && (path_length - length).abs()
+                            > site::length_step(self.experiment.length_unit)
+                    {
                         out.push(Diagnostic::warning(
                             Some(&e.id),
                             Problem::ConveyorLengthMismatch {

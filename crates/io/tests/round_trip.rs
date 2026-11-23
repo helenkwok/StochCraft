@@ -2954,13 +2954,16 @@ fn a_layout_left_stranded_by_an_edit_goes_from_the_file() {
     }
     model.site.paths.insert(
         id("belt"),
-        Track::new(Path::new(
-            Frame::default(),
-            vec![Segment::Line {
-                length: 12.0,
-                rise: 0.0,
-            }],
-        )),
+        Track::new(
+            Path::new(
+                Frame::default(),
+                vec![Segment::Line {
+                    length: 12.0,
+                    rise: 0.0,
+                }],
+            ),
+            LengthUnit::Metres,
+        ),
     );
     model.site.places.insert(
         id("out"),
@@ -2991,4 +2994,83 @@ fn a_layout_left_stranded_by_an_edit_goes_from_the_file() {
     };
     assert_eq!(back.model.site, delay.site.kept(&delay));
     assert_eq!(back.model.site.places.len(), 1);
+}
+
+/// A scenario that inherits scenery, saved with its own scenery cleared, says so with an empty
+/// scene: reading it back gives none, and the scenario it inherits from keeps its own.
+#[test]
+fn an_inherited_scene_cleared_is_saved_as_an_empty_scene() {
+    use stochcraft_model::{Frame, Scenery};
+    let mut model = belt_model();
+    model.site.scene.push(Scenery {
+        id: "floor".to_owned(),
+        kind: "floor".to_owned(),
+        at: Frame::default(),
+        size: [10.0, 10.0, 0.0],
+    });
+    let text = String::from_utf8_lossy(&write_new(&model)).into_owned();
+    let start = text.find("<bpsim:Scenario id=\"").map(|i| i + 20);
+    let parent = start
+        .and_then(|i| text[i..].find('"').map(|j| text[i..i + j].to_owned()))
+        .unwrap_or_default();
+    assert!(!parent.is_empty());
+    let text = text.replace(
+        "</bpsim:BPSimData>",
+        &format!(
+            "<bpsim:Scenario id=\"child\" name=\"Child\" inherits=\"{parent}\"><bpsim:ScenarioParameters/></bpsim:Scenario></bpsim:BPSimData>"
+        ),
+    );
+    let Ok(child) = stochcraft_io::read_scenario(text.as_bytes(), Some("child")) else {
+        unreachable!()
+    };
+    assert_eq!(child.model.site.scene.len(), 1, "inherited");
+    let mut cleared = child.model.clone();
+    cleared.site.scene.clear();
+    let saved = child.opened.save(&cleared);
+    assert!(saved.is_ok(), "{saved:?}");
+    let Ok(saved) = saved else { unreachable!() };
+    let back = stochcraft_io::read_scenario(&saved, Some("child")).map(|l| l.model);
+    assert_eq!(back.map(|m| m.site.scene.len()), Ok(0));
+    let base = stochcraft_io::read_scenario(&saved, Some(parent.as_str())).map(|l| l.model);
+    assert_eq!(base.map(|m| m.site.scene.len()), Ok(1));
+}
+
+/// A layout in millimetres: the step a typed length may differ by is 0.1 mm there too, and
+/// lengths agreeing with the path to within it are the path's.
+#[test]
+fn a_layout_in_millimetres_takes_lengths_to_a_tenth_of_a_millimetre() {
+    use stochcraft_model::{ElementId, Frame, LengthUnit, Path, Segment, Track};
+    for (unit, length, typed) in [
+        (LengthUnit::Millimetres, 12_000.0, 12_000.04),
+        (LengthUnit::Centimetres, 1_200.0, 1_200.004),
+    ] {
+        let mut model = belt_model();
+        model.experiment.length_unit = unit;
+        if let ElementKind::Conveyor {
+            length: l,
+            item_length,
+            gap,
+            ..
+        } = &mut model.elements[1].kind
+        {
+            *l = typed;
+            *item_length = 400.0;
+            *gap = 100.0;
+        }
+        let line = Path::new(Frame::default(), vec![Segment::Line { length, rise: 0.0 }]);
+        model
+            .site
+            .paths
+            .insert(ElementId::unchecked("belt"), Track::new(line, unit));
+        let Ok(back) = read(&write_new(&model)) else {
+            unreachable!()
+        };
+        let got = match &back.model.elements[1].kind {
+            ElementKind::Conveyor { length, .. } => *length,
+            _ => f64::NAN,
+        };
+        assert_eq!(got, length, "{unit:?}: the typed length is the path's");
+        let width = back.model.site.paths[&ElementId::unchecked("belt")].width;
+        assert!((width - stochcraft_model::site::default_width(unit)).abs() < 1e-9);
+    }
 }

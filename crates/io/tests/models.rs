@@ -239,7 +239,12 @@ fn the_sorter_is_laid_out_and_its_lengths_are_its_paths() {
         assert!(placed, "{} has no place", e.id);
         if let ElementKind::Conveyor { length, .. } = e.kind {
             let track = m.site.paths.get(&e.id);
-            assert_eq!(track.map(|t| t.length()), Some(length), "{}", e.id);
+            assert_eq!(
+                track.map(|t| t.length(m.experiment.length_unit)),
+                Some(length),
+                "{}",
+                e.id
+            );
         }
     }
     let length = |id: &str| match kind(m, id) {

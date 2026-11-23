@@ -2557,6 +2557,7 @@ impl From<&Model> for ModelDoc {
 impl From<ModelDoc> for Model {
     /// Ids are kept as written; [`Model::validate`] reports invalid ones.
     fn from(m: ModelDoc) -> Self {
+        let unit: LengthUnit = m.experiment.length_unit.into();
         let layout = m
             .elements
             .iter()
@@ -2612,7 +2613,7 @@ impl From<ModelDoc> for Model {
             calendars: m.calendars.into_iter().map(Into::into).collect(),
             experiment: m.experiment.into(),
             monte_carlo: m.monte_carlo.map(Into::into),
-            site: m.site.into(),
+            site: m.site.into_site(unit),
             // An agent-based model's populations are not part of a process model's JSON: they
             // are read with `agents.get`. A model set from JSON is a process model.
             agents: None,

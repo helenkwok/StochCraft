@@ -5,9 +5,15 @@
 //! [`Scenery`]. Distances are in the experiment's length unit, like a conveyor's `length`, so a
 //! conveyor's length is its path's length with no conversion; headings are in degrees.
 //!
+//! **Units.** Every distance in a site (positions, path lengths, radii, rises, a belt's width,
+//! scenery sizes) is in the experiment's [`LengthUnit`]. The two fixed amounts the layout uses
+//! are stated in metres and converted to that unit: a belt's default width
+//! ([`DEFAULT_WIDTH_M`], [`default_width`]) and the step a path's length is taken to
+//! ([`LENGTH_STEP_M`], [`length_step`]).
+//!
 //! **Length from the path (D23).** A conveyor with a track runs for its path's length, taken to
-//! [`LENGTH_STEP`] (the 0.1 mm a file keeps). A typed length that differs is an override: the run
-//! uses it, and validation warns, naming both ([`crate::Problem::ConveyorLengthMismatch`]).
+//! 0.1 mm (the precision a file keeps). A typed length that differs by more is an override: the
+//! run uses it, and validation warns, naming both ([`crate::Problem::ConveyorLengthMismatch`]).
 //!
 //! **Sim and look (D28).** Every field is tagged ([`FIELDS`]): the run reads the *sim* ones, which
 //! enter the results baseline ([`Site::for_results`]); a *look* field never marks results out of
@@ -18,15 +24,64 @@
 
 use std::collections::BTreeMap;
 
-use crate::{ElementId, ElementKind, Frame, Model, Path};
+use crate::{ElementId, ElementKind, Frame, LengthUnit, Model, Path};
 
-/// The width a belt is drawn with when its track does not say, in metres.
-pub const DEFAULT_WIDTH: f64 = 0.6;
+/// The width a belt is drawn with when its track does not say: 0.6 m ([`default_width`] in a
+/// model's unit).
+pub const DEFAULT_WIDTH_M: f64 = 0.6;
 
-/// The step a path's length is taken to: a ten-thousandth of the length unit (0.1 mm in
-/// metres), the precision a file keeps, so a loop drawn with arcs is exactly as long as its
-/// straight sum says and a typed length that agrees with it is no override.
-pub const LENGTH_STEP: f64 = 1e-4;
+/// The step a path's length is taken to: 0.1 mm, the precision a file keeps, so a loop drawn
+/// with arcs is exactly as long as its straight sum says and a typed length that agrees with it
+/// is no override ([`length_step`] in a model's unit).
+pub const LENGTH_STEP_M: f64 = 1e-4;
+
+/// Metres in one of `unit`.
+pub fn metres(unit: LengthUnit) -> f64 {
+    match unit {
+        LengthUnit::Millimetres => 0.001,
+        LengthUnit::Centimetres => 0.01,
+        LengthUnit::Metres => 1.0,
+        LengthUnit::Kilometres => 1000.0,
+        LengthUnit::Inches => 0.0254,
+        LengthUnit::Feet => 0.3048,
+    }
+}
+
+/// How many [`LENGTH_STEP_M`] steps (0.1 mm) one of `unit` holds, written out so that each is
+/// exact.
+fn steps_per_unit(unit: LengthUnit) -> f64 {
+    match unit {
+        LengthUnit::Millimetres => 10.0,
+        LengthUnit::Centimetres => 100.0,
+        LengthUnit::Metres => 10_000.0,
+        LengthUnit::Kilometres => 10_000_000.0,
+        LengthUnit::Inches => 254.0,
+        LengthUnit::Feet => 3048.0,
+    }
+}
+
+/// 0.1 mm in `unit`: the step a path's length is taken to, and the most a typed length may differ
+/// from it without being an override.
+pub fn length_step(unit: LengthUnit) -> f64 {
+    1.0 / steps_per_unit(unit)
+}
+
+/// The default belt width, 0.6 m, in `unit`.
+pub fn default_width(unit: LengthUnit) -> f64 {
+    match unit {
+        LengthUnit::Millimetres => 600.0,
+        LengthUnit::Centimetres => 60.0,
+        LengthUnit::Metres => DEFAULT_WIDTH_M,
+        LengthUnit::Kilometres => 0.0006,
+        other => DEFAULT_WIDTH_M / metres(other),
+    }
+}
+
+/// `x` (in `unit`) to the nearest 0.1 mm.
+pub fn to_step(x: f64, unit: LengthUnit) -> f64 {
+    let k = steps_per_unit(unit);
+    (x * k).round() / k
+}
 
 /// Whether a field is read by the run or only drawn.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -58,24 +113,18 @@ pub struct Track {
 }
 
 impl Track {
-    /// A track along `path` of the default width (in metres).
-    pub fn new(path: Path) -> Self {
+    /// A track along `path` (in `unit`) of the default width, 0.6 m.
+    pub fn new(path: Path, unit: LengthUnit) -> Self {
         Self {
             path,
-            width: DEFAULT_WIDTH,
+            width: default_width(unit),
         }
     }
 
-    /// The path's length, taken to [`LENGTH_STEP`].
-    pub fn length(&self) -> f64 {
-        to_step(self.path.length())
+    /// The path's length in `unit`, the model's, taken to 0.1 mm.
+    pub fn length(&self, unit: LengthUnit) -> f64 {
+        to_step(self.path.length(), unit)
     }
-}
-
-/// `x` to the nearest [`LENGTH_STEP`].
-pub fn to_step(x: f64) -> f64 {
-    let steps = 1.0 / LENGTH_STEP;
-    (x * steps).round() / steps
 }
 
 /// Where a block is on the floor.
@@ -170,7 +219,12 @@ impl Site {
             paths: self
                 .paths
                 .iter()
-                .map(|(id, t)| (id.clone(), Track::new(t.path.clone())))
+                .map(|(id, t)| {
+                    (
+                        id.clone(),
+                        Track::new(t.path.clone(), model.experiment.length_unit),
+                    )
+                })
                 .collect(),
             places: self
                 .places
@@ -205,6 +259,9 @@ mod tests {
     #![allow(clippy::panic, clippy::expect_used, clippy::unwrap_used)]
 
     use super::*;
+
+    /// The unit of the models in these tests unless one says otherwise.
+    const M: LengthUnit = LengthUnit::Metres;
     use crate::{Connection, Dist, Element, Segment};
 
     fn id(s: &str) -> ElementId {
@@ -228,12 +285,12 @@ mod tests {
 
     #[test]
     fn a_track_is_as_long_as_its_path_to_a_tenth_of_a_millimetre() {
-        let t = Track::new(racetrack());
+        let t = Track::new(racetrack(), M);
         // The arcs make the raw sum differ from 30 in the last bits; the length is 30 exactly,
         // so 30 m of 0.6 m slots is 50 of them, not 49.
-        assert_eq!(t.length(), 30.0);
-        assert_eq!((t.length() / 0.6).floor(), 50.0);
-        assert_eq!(to_step(1.23456), 1.2346);
+        assert_eq!(t.length(M), 30.0);
+        assert_eq!((t.length(M) / 0.6).floor(), 50.0);
+        assert_eq!(to_step(1.23456, M), 1.2346);
     }
 
     #[test]
@@ -252,7 +309,7 @@ mod tests {
                     shape: crate::ConveyorShape::Straight,
                 },
             ));
-            m.site.paths.insert(id("loop"), Track::new(racetrack()));
+            m.site.paths.insert(id("loop"), Track::new(racetrack(), M));
             m.validate()
                 .into_iter()
                 .filter(|d| matches!(d.problem, crate::Problem::ConveyorLengthMismatch { .. }))
@@ -261,6 +318,59 @@ mod tests {
         // 30 m agrees with the racetrack; 32 m overrides it, and says so.
         assert_eq!(belt(30.0), 0);
         assert_eq!(belt(32.0), 1);
+    }
+
+    /// The same 30 m racetrack drawn in millimetres or centimetres: 0.1 mm and 0.6 m are the
+    /// same distances whatever the unit.
+    #[test]
+    fn the_step_and_the_default_width_are_the_same_distances_in_every_unit() {
+        for (unit, k) in [
+            (LengthUnit::Millimetres, 1000.0),
+            (LengthUnit::Centimetres, 100.0),
+            (LengthUnit::Metres, 1.0),
+        ] {
+            let t = Track::new(racetrack().scaled(k), unit);
+            assert_eq!(t.length(unit), 30.0 * k, "{unit:?}");
+            assert!((t.width * metres(unit) - 0.6).abs() < 1e-12, "{unit:?}");
+            assert!(
+                (length_step(unit) * metres(unit) - 1e-4).abs() < 1e-15,
+                "{unit:?}"
+            );
+        }
+        // 0.05 mm is no override in a millimetre model; 0.2 mm is. In centimetres, 0.005 cm
+        // (0.05 mm) is none either.
+        let flagged = |unit: LengthUnit, length: f64, track: f64| {
+            let mut m = Model::default();
+            m.experiment.length_unit = unit;
+            m.elements.push(Element::new(
+                id("belt"),
+                "Belt",
+                ElementKind::Conveyor {
+                    length,
+                    speed: 1.0,
+                    accumulating: false,
+                    item_length: 1.0,
+                    gap: 0.0,
+                    shape: crate::ConveyorShape::Straight,
+                },
+            ));
+            let line = Path::new(
+                Frame::default(),
+                vec![Segment::Line {
+                    length: track,
+                    rise: 0.0,
+                }],
+            );
+            m.site.paths.insert(id("belt"), Track::new(line, unit));
+            m.validate()
+                .iter()
+                .any(|d| matches!(d.problem, crate::Problem::ConveyorLengthMismatch { .. }))
+        };
+        assert!(!flagged(LengthUnit::Millimetres, 12_000.05, 12_000.0));
+        assert!(flagged(LengthUnit::Millimetres, 12_000.2, 12_000.0));
+        assert!(!flagged(LengthUnit::Centimetres, 1_200.005, 1_200.0));
+        assert!(flagged(LengthUnit::Centimetres, 1_200.05, 1_200.0));
+        assert_eq!(to_step(12.34567, LengthUnit::Millimetres), 12.3);
     }
 
     #[test]
@@ -286,7 +396,7 @@ mod tests {
                 routing: crate::Routing::Standard,
             },
         ));
-        m.site.paths.insert(id("loop"), Track::new(racetrack()));
+        m.site.paths.insert(id("loop"), Track::new(racetrack(), M));
         m.site.places.insert(
             id("divert"),
             Place::Along {
@@ -312,7 +422,7 @@ mod tests {
     #[test]
     fn a_place_along_a_track_is_on_its_path_and_a_conveyor_starts_where_its_track_does() {
         let mut site = Site::default();
-        site.paths.insert(id("loop"), Track::new(racetrack()));
+        site.paths.insert(id("loop"), Track::new(racetrack(), M));
         site.places.insert(
             id("divert"),
             Place::Along {
@@ -344,7 +454,7 @@ mod tests {
         m.connections
             .push(Connection::new(id("a-cart"), id("a"), id("cart")));
         let mut site = Site::default();
-        let mut wide = Track::new(racetrack());
+        let mut wide = Track::new(racetrack(), M);
         wide.width = 1.0;
         site.paths.insert(id("loop"), wide);
         site.places.insert(id("a"), Place::At(Frame::default()));
@@ -356,7 +466,7 @@ mod tests {
             size: [20.0, 10.0, 0.0],
         });
         let sim = site.for_results(&m);
-        assert_eq!(sim.paths[&id("loop")].width, DEFAULT_WIDTH);
+        assert_eq!(sim.paths[&id("loop")].width, DEFAULT_WIDTH_M);
         assert_eq!(sim.paths[&id("loop")].path, racetrack());
         // `a` is the transport's pickup; `b` is only drawn.
         assert!(sim.places.contains_key(&id("a")) && !sim.places.contains_key(&id("b")));
@@ -372,7 +482,9 @@ mod tests {
         }
         assert_eq!(moved.for_results(&m), sim);
         // A sim change does not.
-        moved.paths.insert(id("loop"), Track::new(Path::default()));
+        moved
+            .paths
+            .insert(id("loop"), Track::new(Path::default(), M));
         assert_ne!(moved.for_results(&m), sim);
     }
 }
