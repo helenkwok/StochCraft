@@ -79,11 +79,34 @@ use crate::select::{
     select_best, select_feasible,
 };
 
-/// A linear limit on the decisions: Σᵢ `coefficients[i]`·xᵢ ≤ `limit`.
+/// A linear limit on the decisions: `offset` + Σᵢ `coefficients[i]`·xᵢ ≤ `limit` (a cap on
+/// costs: the costs at the ranges' least values, plus a cost per step of each decision).
 #[derive(Debug, Clone, PartialEq)]
 pub struct Linear {
     pub coefficients: Vec<f64>,
+    pub offset: f64,
     pub limit: f64,
+}
+
+impl Linear {
+    /// The left side at `x`, and the size of the numbers summed (for the rounding allowance).
+    fn sum(&self, x: &[i64]) -> (f64, f64) {
+        let mut sum = self.offset;
+        let mut size = self.limit.abs() + self.offset.abs();
+        for (c, &xi) in self.coefficients.iter().zip(x) {
+            let t = c * xi as f64;
+            sum += t;
+            size += t.abs();
+        }
+        (sum, size)
+    }
+}
+
+/// The rounding allowed when a sum of `size` is compared with a limit: 16 units in the last place
+/// of the size, so a design whose decimal costs add up to the cap is inside it, and one above it
+/// by more than rounding is not.
+fn allowance(size: f64) -> f64 {
+    16.0 * f64::EPSILON * size
 }
 
 /// The designs: whole numbers in each decision's range (`bounds`, least and greatest), under
@@ -112,6 +135,7 @@ impl Space {
         for (i, l) in self.limits.iter().enumerate() {
             if l.coefficients.len() != self.bounds.len()
                 || !l.limit.is_finite()
+                || !l.offset.is_finite()
                 || l.coefficients.iter().any(|c| !c.is_finite())
             {
                 return Err(CompassError::Space(format!(
@@ -122,17 +146,22 @@ impl Space {
         Ok(())
     }
 
-    /// Whether `x` meets the limit `l`: Σ cᵢxᵢ ≤ limit, with a tolerance of 10⁻⁹ relative to the
-    /// numbers' size, so that a design exactly on a cap of decimal costs is inside it.
+    /// Whether `x` meets the limit `l`, with the rounding [`allowance`] for the size of the
+    /// numbers summed: the one rule for whether a design is in the space, used by the
+    /// enumeration, the neighbours, the walks and the starts alike.
     fn fits(l: &Linear, x: &[i64]) -> bool {
-        let mut sum = 0.0;
-        let mut size = l.limit.abs();
-        for (c, &xi) in l.coefficients.iter().zip(x) {
-            let t = c * xi as f64;
-            sum += t;
-            size += t.abs();
+        let (sum, size) = l.sum(x);
+        sum <= l.limit + allowance(size)
+    }
+
+    /// The largest rounding allowance [`Space::fits`] gives `l` anywhere in the ranges, so that a
+    /// relaxation with it covers every design the space admits.
+    fn slack(&self, l: &Linear) -> f64 {
+        let mut size = l.limit.abs() + l.offset.abs();
+        for (c, (lo, hi)) in l.coefficients.iter().zip(&self.bounds) {
+            size += c.abs() * (*lo as f64).abs().max((*hi as f64).abs());
         }
-        sum <= l.limit + 1e-9 * (1.0 + size)
+        allowance(size)
     }
 
     /// Whether `x` is a design of the space.
@@ -560,15 +589,6 @@ fn coordinate_range(space: &Space, halves: &[Half], x: &[i64], i: usize) -> (i64
         if ci == 0.0 {
             continue;
         }
-        let rest: f64 = l
-            .coefficients
-            .iter()
-            .zip(x)
-            .enumerate()
-            .filter(|(j, _)| *j != i)
-            .map(|(_, (c, &v))| c * v as f64)
-            .sum();
-        let guess = ((l.limit - rest) / ci).floor();
         let mut y = x.to_vec();
         let mut fits = |t: i64| {
             if let Some(v) = y.get_mut(i) {
@@ -576,34 +596,32 @@ fn coordinate_range(space: &Space, halves: &[Half], x: &[i64], i: usize) -> (i64
             }
             Space::fits(l, &y)
         };
+        // The left side moves one way with t, so whether t fits changes once: a bisection over
+        // the range finds the edge in about 64 steps, however wide the range.
         if ci > 0.0 {
-            // The largest t ≥ x[i] that fits, found from the guess.
-            let mut t = if guess.is_finite() {
-                (guess as i64).clamp(xi, hi.max(xi))
-            } else {
-                xi
-            };
-            while t < hi && fits(t + 1) {
-                t += 1;
+            // The largest t in [x[i], hi] that fits; x[i] does.
+            let (mut a, mut b) = (i128::from(xi), i128::from(hi.max(xi)));
+            while a < b {
+                let m = a + (b - a + 1) / 2;
+                if fits(clamp_i64(m)) {
+                    a = m;
+                } else {
+                    b = m - 1;
+                }
             }
-            while t > xi && !fits(t) {
-                t -= 1;
-            }
-            hi = hi.min(t);
+            hi = hi.min(clamp_i64(a));
         } else {
-            let g = ((l.limit - rest) / ci).ceil();
-            let mut t = if g.is_finite() {
-                (g as i64).clamp(lo.min(xi), xi)
-            } else {
-                xi
-            };
-            while t > lo && fits(t - 1) {
-                t -= 1;
+            // The smallest t in [lo, x[i]] that fits.
+            let (mut a, mut b) = (i128::from(lo.min(xi)), i128::from(xi));
+            while a < b {
+                let m = a + (b - a) / 2;
+                if fits(clamp_i64(m)) {
+                    b = m;
+                } else {
+                    a = m + 1;
+                }
             }
-            while t < xi && !fits(t) {
-                t += 1;
-            }
-            lo = lo.max(t);
+            lo = lo.max(clamp_i64(b));
         }
     }
     (lo.min(xi), hi.max(xi))
@@ -716,7 +734,12 @@ fn base_rows(space: &Space, b: &[i64]) -> Vec<Row> {
             .zip(b)
             .map(|(c, &v)| c * v as f64)
             .sum();
-        rows.push(scaled(l.coefficients.clone(), l.limit - at));
+        // The allowance the space gives the limit is added, so the relaxation covers every
+        // design `Space::fits` admits: a halfspace is dropped only when it is implied there.
+        rows.push(scaled(
+            l.coefficients.clone(),
+            l.limit - l.offset - at + space.slack(l),
+        ));
     }
     rows
 }
@@ -825,7 +848,8 @@ struct Runner<'a, F> {
 enum StepEnd {
     /// It ran this many replications.
     Ran(u64),
-    LocalOptimum,
+    /// The start's local test kept its best design, after running this many replications.
+    LocalOptimum(u64),
     Exhausted,
 }
 
@@ -1087,7 +1111,7 @@ where
             // look feasible has no neighbour that does, so there is nothing to test against.
             s.local_optimum = true;
             s.done = true;
-            return Ok(StepEnd::LocalOptimum);
+            return Ok(StepEnd::LocalOptimum(ran));
         }
         let alternatives: Vec<Vec<i64>> = neighbours
             .into_iter()
@@ -1096,7 +1120,7 @@ where
         if alternatives.is_empty() {
             s.local_optimum = true;
             s.done = true;
-            return Ok(StepEnd::LocalOptimum);
+            return Ok(StepEnd::LocalOptimum(ran));
         }
         let kn = Kn {
             delta: setup.delta,
@@ -1130,7 +1154,7 @@ where
         if test.chosen == 0 && test.outcome != Outcome::NotProven {
             s.local_optimum = true;
             s.done = true;
-            return Ok(StepEnd::LocalOptimum);
+            return Ok(StepEnd::LocalOptimum(ran));
         }
         s.failed_at = Some(best);
         return Ok(StepEnd::Ran(ran));
@@ -1298,8 +1322,9 @@ where
         for s in locals.iter_mut().filter(|l| !l.done) {
             match step(&mut runner, space, s)? {
                 StepEnd::Exhausted => break 'search Ended::Budget,
-                StepEnd::LocalOptimum => {}
-                StepEnd::Ran(ran) => {
+                // A step that ran replications is traced and followed by a look at `stop`,
+                // whether or not it ended its start.
+                StepEnd::LocalOptimum(ran) | StepEnd::Ran(ran) => {
                     if ran > 0 {
                         trace.push(TracePoint {
                             runs: runner.runs,
@@ -1314,6 +1339,23 @@ where
         }
     };
 
+    // Replications a step ran before the budget stopped it are traced too.
+    if runner.runs > trace.last().map_or(0, |t: &TracePoint| t.runs) {
+        trace.push(TracePoint {
+            runs: runner.runs,
+            best: runner.best_mean(),
+        });
+    }
+    // Each start's best and the designs active around it, ranked on every replication run, so
+    // that what the last steps (of this start or another) found counts.
+    for l in locals.iter_mut().filter(|l| !l.visited.is_empty()) {
+        if let Some(b) = runner.best_of(l.visited.iter()) {
+            let mut act = vec![b.clone()];
+            act.extend(active(space, &b, &l.visited).into_iter().map(|(y, _)| y));
+            l.best = b;
+            l.active = act;
+        }
+    }
     // The finalists: the search's best and the designs active around it, each start's final
     // design, and the starting design.
     let ends: Vec<Vec<i64>> = locals
@@ -1520,8 +1562,13 @@ where
             .map(|b| b.0)
     };
     if setup.first_stage.saturating_mul(k as u64) > budget {
-        // The clean-up cannot pay for its first stage: not proven.
-        answer.chosen = best_search(&c.finalists).or(Some(0));
+        // The clean-up cannot pay for its first stage: not proven. With constraints no design
+        // was declared feasible, so none is chosen; without, the best-looking one is named.
+        answer.chosen = if setup.constraints.is_empty() {
+            best_search(&c.finalists).or(Some(0))
+        } else {
+            None
+        };
         answer.in_contention = (0..k).collect();
         answer.finalists = c.finalists;
         return Ok(answer);
@@ -1649,6 +1696,7 @@ mod tests {
             let mut space = square(n);
             if case % 3 == 0 {
                 space.limits.push(Linear {
+                    offset: 0.0,
                     coefficients: vec![1.0, 2.0],
                     limit: 1.5 * n as f64,
                 });
@@ -1681,6 +1729,7 @@ mod tests {
         let space = Space {
             bounds: vec![(0, 9), (0, 9)],
             limits: vec![Linear {
+                offset: 0.0,
                 coefficients: vec![1.0, 1.0],
                 limit: 12.0,
             }],
@@ -1713,6 +1762,7 @@ mod tests {
         let space = Space {
             bounds: vec![(1, 3), (1, 3)],
             limits: vec![Linear {
+                offset: 0.0,
                 coefficients: vec![1.0, 1.0],
                 limit: 4.0,
             }],
@@ -1887,6 +1937,7 @@ mod tests {
         let space = Space {
             bounds: vec![(0, 9), (0, 9)],
             limits: vec![Linear {
+                offset: 0.0,
                 coefficients: vec![1.0, 1.0],
                 limit: 5.0,
             }],
@@ -1900,5 +1951,185 @@ mod tests {
             || false,
         );
         assert_eq!(e, Err(CompassError::Start(0)));
+    }
+
+    /// A coordinate's edge under a limit is found by bisection: a range of a billion values with
+    /// a tiny cost per step takes a few dozen checks, and the edge is where `fits` changes.
+    #[test]
+    fn a_wide_range_is_bounded_by_bisection() {
+        let space = Space {
+            bounds: vec![(0, 1_000_000_000)],
+            limits: vec![Linear {
+                coefficients: vec![1e-18],
+                offset: 0.0,
+                limit: 1e-12,
+            }],
+        };
+        let (lo, hi) = coordinate_range(&space, &[], &[0], 0);
+        assert_eq!(lo, 0);
+        assert!(space.contains(&[hi]), "{hi}");
+        assert!(hi == 1_000_000_000 || !space.contains(&[hi + 1]), "{hi}");
+        // 10⁻¹⁸·x ≤ 10⁻¹² up to x = 10⁶, and the allowance is far too small to admit 10⁶ + 2.
+        assert!((999_999..=1_000_001).contains(&hi), "{hi}");
+    }
+
+    /// A cap of decimal costs: a design exactly on it is inside, one above it by more than
+    /// rounding is not, however small the numbers.
+    #[test]
+    fn the_cap_admits_rounding_and_nothing_more() {
+        let tenth = Space {
+            bounds: vec![(0, 5)],
+            limits: vec![Linear {
+                coefficients: vec![0.1],
+                offset: 0.0,
+                limit: 0.3,
+            }],
+        };
+        assert!(
+            tenth.contains(&[3]),
+            "0.1 × 3 is 0.30000000000000004, on the cap"
+        );
+        assert!(!tenth.contains(&[4]));
+        let tiny = Space {
+            bounds: vec![(0, 2)],
+            limits: vec![Linear {
+                coefficients: vec![1e-10],
+                offset: 0.0,
+                limit: 1e-10,
+            }],
+        };
+        assert!(tiny.contains(&[1]));
+        assert!(!tiny.contains(&[2]), "2e-10 is over a cap of 1e-10");
+    }
+
+    /// Pruning works on a relaxation that covers every design the space admits: with a limit
+    /// of 10⁻¹² on 10⁻¹²·x over 0..3, the area around 0 with 2 visited is as its definition says.
+    #[test]
+    fn pruning_covers_what_the_space_admits() {
+        let space = Space {
+            bounds: vec![(0, 3)],
+            limits: vec![Linear {
+                coefficients: vec![1e-12],
+                offset: 0.0,
+                limit: 1e-12,
+            }],
+        };
+        let visited: BTreeSet<Vec<i64>> = [vec![0], vec![2]].into_iter().collect();
+        let halves: Vec<Half> = active(&space, &[0], &visited)
+            .into_iter()
+            .map(|(_, h)| h)
+            .collect();
+        let all = space.enumerate(u64::MAX).unwrap();
+        let pruned: Vec<Vec<i64>> = all
+            .iter()
+            .filter(|x| halves.iter().all(|h| h.holds(x)))
+            .cloned()
+            .collect();
+        assert_eq!(pruned, area_by_definition(&space, &[0], &visited));
+    }
+
+    /// Every replication the search runs is in its trace, and `stop` is asked after every step
+    /// that ran replications, a step that ended its start included: here every design breaks the
+    /// constraint, so each start ends when its best's neighbours are all visited, after a top-up.
+    #[test]
+    fn the_trace_and_the_stop_see_every_step_that_ran() {
+        let space = Space {
+            bounds: vec![(0, 3)],
+            limits: Vec::new(),
+        };
+        let mut setup = Compass::new(1.0, Sense::Minimise, 5000);
+        setup.all_designs_up_to = 0;
+        setup.constraints = vec![Constraint {
+            bound: crate::select::Bound::AtMost,
+            limit: -1.0,
+            tolerance: 0.1,
+        }];
+        let mut asked = 0;
+        let answer = optimise(
+            &setup,
+            &space,
+            &[vec![0], vec![3]],
+            |_, x, reps| {
+                Ok(reps
+                    .map(|j| vec![x[0] as f64, Rng::keyed(j, "c").uniform()])
+                    .collect())
+            },
+            || {
+                asked += 1;
+                false
+            },
+        )
+        .unwrap();
+        assert_eq!(answer.ended, Ended::LocalOptima);
+        assert_eq!(
+            answer.trace.last().map(|t| t.runs),
+            Some(answer.search_runs)
+        );
+        assert_eq!(asked, answer.trace.len());
+        assert!(answer.starts.iter().all(|s| s.local_optimum));
+    }
+
+    /// The shortlist is ranked on the last replications run: a search whose budget ends right
+    /// after it ran a better design still sends that design to the clean-up.
+    #[test]
+    fn the_shortlist_ranks_the_last_replications() {
+        let space = Space {
+            bounds: vec![(0, 1)],
+            limits: Vec::new(),
+        };
+        let mut setup = Compass::new(1.0, Sense::Minimise, 10);
+        setup.exact = true;
+        setup.all_designs_up_to = 0;
+        setup.search_runs = 2;
+        let answer = optimise(
+            &setup,
+            &space,
+            &[vec![0]],
+            |_, x, reps| Ok(reps.map(|_| vec![1.0 - x[0] as f64]).collect()),
+            || false,
+        )
+        .unwrap();
+        assert_eq!(answer.search_runs, 2);
+        assert_eq!(
+            answer.finalists[answer.chosen.unwrap()].design,
+            vec![1],
+            "{answer:?}"
+        );
+    }
+
+    /// With constraints and no budget left for the clean-up, nothing was declared feasible, so
+    /// nothing is chosen, however good a design that breaks the constraint looks.
+    #[test]
+    fn a_constrained_search_without_a_clean_up_chooses_nothing() {
+        let space = Space {
+            bounds: vec![(0, 1)],
+            limits: Vec::new(),
+        };
+        let mut setup = Compass::new(1.0, Sense::Maximise, 40);
+        setup.all_designs_up_to = 0;
+        setup.search_runs = 40;
+        setup.constraints = vec![Constraint {
+            bound: crate::select::Bound::AtMost,
+            limit: 1.0,
+            tolerance: 0.1,
+        }];
+        let answer = optimise(
+            &setup,
+            &space,
+            &[vec![0]],
+            |_, x, reps| {
+                Ok(reps
+                    .map(|j| {
+                        let e = Rng::keyed(j, "n").uniform() * 0.01;
+                        vec![10.0 * x[0] as f64 + e, 2.0 * x[0] as f64 + e]
+                    })
+                    .collect())
+            },
+            || false,
+        )
+        .unwrap();
+        assert_eq!(answer.outcome, Outcome::NotProven);
+        assert_eq!(answer.chosen, None, "{answer:?}");
+        assert!(!answer.in_contention.is_empty());
     }
 }
