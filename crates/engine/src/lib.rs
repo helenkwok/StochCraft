@@ -61,6 +61,7 @@ mod evaluate;
 mod fit;
 pub mod mc;
 pub mod observed;
+mod optimize;
 pub mod precision;
 mod run;
 pub mod sd;
@@ -349,7 +350,7 @@ pub enum ReplayMode {
 }
 
 /// The commands [`ReplayMode::EditsOnly`] skips.
-const SKIPPED_BY_DEFAULT: [&str; 12] = [
+const SKIPPED_BY_DEFAULT: [&str; 13] = [
     "file.save",
     "run",
     "mc.run",
@@ -362,6 +363,7 @@ const SKIPPED_BY_DEFAULT: [&str; 12] = [
     "experiment.design",
     "experiment.size",
     "experiment.evaluate",
+    "experiment.optimise",
 ];
 
 impl ReplayMode {
