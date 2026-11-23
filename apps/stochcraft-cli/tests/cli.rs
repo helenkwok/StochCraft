@@ -1428,3 +1428,69 @@ fn evaluate_reads_and_writes_json_lines_and_matches_the_engine() {
     staged.extend(values(&lines[0]));
     assert_eq!(staged, values(&lines[4]));
 }
+
+/// `optimize` gives what the engine's `experiment.optimise` gives, as JSON, and a table that
+/// starts with the claim in words.
+#[test]
+fn optimize_matches_the_engine_and_prints_the_claim() {
+    let file = model("mm1.bpmn");
+    let args = [
+        "optimize",
+        &file,
+        "--decide",
+        "clerk.quantity=1..4",
+        "--minimize",
+        "serve.mean_wait*2",
+        "--cost",
+        "clerk.quantity=1",
+        "--delta",
+        "1",
+        "--max-runs",
+        "400",
+        "--seed",
+        "5",
+    ];
+    let mut with_json = args.to_vec();
+    with_json.extend(["--format", "json"]);
+    let from_cli = json(&ok(&with_json));
+
+    let mut engine = stochcraft_engine::Engine::new();
+    let opened = engine.execute("file.open", serde_json::json!({ "path": file }));
+    assert!(opened.is_ok(), "{opened:?}");
+    let direct = engine.execute(
+        "experiment.optimise",
+        serde_json::json!({
+            "decisions": [{ "id": "clerk", "field": "quantity", "min": 1, "max": 4 }],
+            "objective": {
+                "results": [{ "element": "serve", "metric": "mean_wait", "weight": 2.0 }],
+                "sense": "minimise",
+                "costs": [{ "id": "clerk", "field": "quantity", "cost": 1.0 }],
+            },
+            "constraints": [],
+            "indifference": 1.0,
+            "max_runs": 400,
+            "seed": 5,
+        }),
+    );
+    let Ok(direct) = direct else {
+        panic!("{direct:?}")
+    };
+    assert_eq!(from_cli, direct);
+    assert_eq!(from_cli["designs_compared"], 4, "{from_cli}");
+
+    let table = ok(&args);
+    let claim = from_cli["claim"].as_str().unwrap_or_default();
+    assert!(!claim.is_empty() && table.contains(claim), "{table}");
+    assert!(table.contains("clerk.quantity"), "{table}");
+
+    let o = cli(&[
+        "optimize",
+        &file,
+        "--decide",
+        "clerk.quantity=1-4",
+        "--delta",
+        "1",
+    ]);
+    assert!(!o.status.success());
+    assert!(stderr(&o).contains("id.field=min..max"), "{}", stderr(&o));
+}

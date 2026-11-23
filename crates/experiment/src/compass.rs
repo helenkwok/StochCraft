@@ -502,6 +502,7 @@ impl Half {
         }
     }
 
+    #[cfg(test)]
     fn holds(&self, x: &[i64]) -> bool {
         let lhs: i128 = self
             .a
@@ -512,6 +513,9 @@ impl Half {
         lhs <= self.rhs
     }
 }
+
+/// A row g·w ≤ β of a linear programme.
+type Row = (Vec<f64>, f64);
 
 /// ⌊p / q⌋ for q > 0.
 fn floor_div(p: i128, q: i128) -> i128 {
@@ -609,7 +613,7 @@ fn coordinate_range(space: &Space, halves: &[Half], x: &[i64], i: usize) -> (i64
 /// is feasible): the simplex method on w = p − q, p, q ≥ 0, from the slack basis, with Bland's
 /// rule (the lowest index enters, ties in the ratio test go to the lowest basic index), which
 /// cannot cycle. `None` if the programme is unbounded or does not finish in the pivots allowed.
-fn lp_max(c: &[f64], rows: &[(Vec<f64>, f64)]) -> Option<f64> {
+fn lp_max(c: &[f64], rows: &[Row]) -> Option<f64> {
     let d = c.len();
     let m = rows.len();
     let n = 2 * d;
@@ -684,7 +688,7 @@ fn lp_max(c: &[f64], rows: &[(Vec<f64>, f64)]) -> Option<f64> {
 }
 
 /// A row g·w ≤ β of the area around `b` (w = x − b), scaled by its largest coefficient.
-fn scaled(g: Vec<f64>, beta: f64) -> (Vec<f64>, f64) {
+fn scaled(g: Vec<f64>, beta: f64) -> Row {
     let s = g.iter().fold(0.0_f64, |m, v| m.max(v.abs()));
     if s > 0.0 && s.is_finite() {
         (g.iter().map(|v| v / s).collect(), beta / s)
@@ -694,7 +698,7 @@ fn scaled(g: Vec<f64>, beta: f64) -> (Vec<f64>, f64) {
 }
 
 /// The rows of the ranges and limits around `b`.
-fn base_rows(space: &Space, b: &[i64]) -> Vec<(Vec<f64>, f64)> {
+fn base_rows(space: &Space, b: &[i64]) -> Vec<Row> {
     let d = b.len();
     let mut rows = Vec::new();
     for (i, ((lo, hi), &bi)) in space.bounds.iter().zip(b).enumerate() {
@@ -718,7 +722,7 @@ fn base_rows(space: &Space, b: &[i64]) -> Vec<(Vec<f64>, f64)> {
 }
 
 /// The row of halfspace `h` around `b`: a·w ≤ rhs/2 − a·b.
-fn half_row(h: &Half, b: &[i64]) -> (Vec<f64>, f64) {
+fn half_row(h: &Half, b: &[i64]) -> Row {
     let at: i128 = h.a.iter().zip(b).map(|(a, &v)| a * i128::from(v)).sum();
     let beta = h.rhs as f64 / 2.0 - at as f64;
     scaled(h.a.iter().map(|&a| a as f64).collect(), beta)
@@ -726,7 +730,7 @@ fn half_row(h: &Half, b: &[i64]) -> (Vec<f64>, f64) {
 
 /// Whether row `test` is implied by `rows`: the largest value of its left side over them is at
 /// most its bound. Kept (not redundant) when the programme does not answer.
-fn redundant(test: &(Vec<f64>, f64), rows: &[(Vec<f64>, f64)]) -> bool {
+fn redundant(test: &Row, rows: &[Row]) -> bool {
     lp_max(&test.0, rows).is_some_and(|max| max <= test.1 + 1e-9 * (1.0 + test.1.abs()))
 }
 
@@ -746,7 +750,7 @@ fn active(space: &Space, b: &[i64], visited: &BTreeSet<Vec<i64>>) -> Vec<(Vec<i6
     others.sort_by(|p, q| dist(p).cmp(&dist(q)).then(p.cmp(q)));
     let base = base_rows(space, b);
     // The box alone: the largest a·w over the ranges, in closed form.
-    let over_box = |row: &(Vec<f64>, f64)| -> bool {
+    let over_box = |row: &Row| -> bool {
         let max: f64 = row
             .0
             .iter()
@@ -755,7 +759,7 @@ fn active(space: &Space, b: &[i64], visited: &BTreeSet<Vec<i64>>) -> Vec<(Vec<i6
             .sum();
         max <= row.1 + 1e-9 * (1.0 + row.1.abs())
     };
-    let mut kept: Vec<(Vec<i64>, Half, (Vec<f64>, f64))> = Vec::new();
+    let mut kept: Vec<(Vec<i64>, Half, Row)> = Vec::new();
     for y in others {
         let h = Half::new(y, b);
         let row = half_row(&h, b);
