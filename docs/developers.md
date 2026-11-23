@@ -82,7 +82,8 @@ draw only with fonts the visitor's own system has.
 - `stochcraft-des` runs SimPy-style async processes with resources on a deterministic event
   queue.
 - `stochcraft-experiment` runs replications in parallel with reproducible random streams
-  (`stochcraft-random`) and reports 95% confidence intervals (`stochcraft-stats`).
+  (`stochcraft-random`), reports 95% confidence intervals (`stochcraft-stats`), and selects the
+  best of a few systems with a stated probability (`select`, below).
 - `stochcraft-model` is the model in memory (blocks with stable ids, connections, experiment,
   validation), with the capacity table, line balancing and `Path`, geometry with exact lengths.
 - `stochcraft-blocks` compiles models of sources, servers, tasks sharing resource pools, delays,
@@ -696,6 +697,42 @@ in the heavy tests), SIR's final size for N = 100 and R0 = 1.5 (the embedded jum
 Pólya's urn in the stepped mode (uniform). Not there yet: `<if>`, `<foreach>`, `<invoke>`,
 `<donedata>`, `<initial>` elements with content, late binding, networks and grids (A3), and reading
 and writing SCXML files (A4).
+
+### Selecting the best
+
+`stochcraft_experiment::select` holds M8's first stage (O1): procedures that choose the best of a
+few systems, or decide which meet constraints, with a stated probability of being right. They are
+model-free: each takes a sampler `FnMut(system, replications) -> values` (one row of values per
+replication for the constraint procedures), so the same code runs on simulations and on
+synthetic normal data. Every system is asked for replication j under the same index, so a sampler
+that seeds replication j alike for every system gives common random numbers, which all of them
+allow.
+
+- `select_best` is Kim and Nelson's fully sequential procedure KN (2001), with its constants
+  η = ½ [(2α/(k − 1))^(−2/(n₀ − 1)) − 1] and h² = 2η(n₀ − 1) as Tsai and Nelson restate them, and
+  the pairwise variances of differences. It chooses the best, or one within δ of it, with
+  probability at least 1 − α (`Kn`: δ, confidence, n₀, sense, sampling, `max_runs`).
+- `check_feasibility` is Batur and Kim's check F_B (2010) for several constraints on means, each
+  with a limit and a tolerance ε (`Constraint`); each system is `Feasible`, `Infeasible` or, when
+  the budget runs out, `Undecided`.
+- `select_feasible` runs the check, then KN among the systems found feasible on fresh
+  replications, with α split between them (half each by default), so the stated confidence
+  covers both.
+- `compare_with_standard` is Kim's comparison with a standard (2003): system 0 is the standard,
+  kept unless an alternative is better; it is the local-optimality test O2 needs.
+
+The answers say what they claim: `Outcome::Selected` with the confidence, `ComparedExactly` when
+every first-stage value of every system is the same (no randomness; no probability stated), and
+`NotProven` with the systems still in contention when `max_runs` ran out, beside the chosen
+system, the replications and the mean of each system. All use the triangular region with c = 1.
+Kim's 2003 paper prints its elimination bound as max{0, −a + λr}; the code uses min{0, −a + λr},
+Kim and Nelson's region, since the printed form would eliminate both systems of a close pair.
+The checks (`crates/experiment/tests/select.rs`, heavy) run 2,000 macro-replications each: KN in
+the slippage configuration (k = 10, n₀ = 10, independent and with correlation 0.5, which must
+use fewer replications), every mean within δ (replications bounded by where the region closes),
+the check with every system ε from its limits, KN among the feasible, and the comparison with a
+standard with all means equal and with one alternative δ better. A rate passes when the upper end
+of its 95% Wilson interval is at least 0.95; the log prints each rate, interval and mean runs.
 
 ### The journal
 
