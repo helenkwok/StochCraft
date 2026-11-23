@@ -25,7 +25,7 @@ use stochcraft_model::{
 };
 use stochcraft_random::math::{cos, sin};
 use stochcraft_render::kit::{self, Station};
-use stochcraft_render::{Mesh, Operator, box_mesh, operator};
+use stochcraft_render::{Mesh, box_mesh};
 
 use crate::i18n::t;
 use crate::{App, chart_palette, theme};
@@ -119,8 +119,10 @@ pub(crate) enum Paint {
     Housing,
     /// A screen's face, a scanner's window.
     Glow,
-    /// A person.
+    /// A person's hi-vis vest.
     Person,
+    /// A person's face.
+    Skin,
     /// A stack light's lamp: green, amber, red.
     Lamp(u8),
     /// A parcel, by the order of the block it is at.
@@ -267,11 +269,16 @@ pub(crate) fn look_of(e: &Element) -> Look {
                 (s.screen, Paint::Housing),
                 (s.glow, Paint::Glow),
                 (s.cartons, Paint::Cardboard),
-                (
-                    operator(Operator { height: 1.72 }).translated([0.75, 0.15, 0.0]),
-                    Paint::Person,
-                ),
             ];
+            // The packer, behind the bench and facing it.
+            let (torso, limbs, head) = kit::person(kit::Person::default());
+            for (mesh, paint) in [
+                (torso, Paint::Person),
+                (limbs, Paint::Housing),
+                (head, Paint::Skin),
+            ] {
+                parts.push((mesh.translated([0.75, 0.15, 0.0]), paint));
+            }
             // A band along the bench's front in the colour its name says ("Pack red").
             if let Some(c) = named_colour(&e.name) {
                 parts.push((
@@ -777,15 +784,16 @@ pub(crate) struct Camera {
 }
 
 impl Camera {
-    /// A camera at a three-quarter view from the front right (from `-y`, a little towards `+x`),
+    /// A camera at a three-quarter view from the front, a little to the left (from `-y`, a little
+    /// towards `-x`, so that a belt and an arch across a 30-degree infeed both show their faces),
     /// as near as it can be while every corner of `bounds` shows in a view `aspect` (width over
     /// height) wide, with a margin, and with the box centred on screen.
     pub(crate) fn fitted(bounds: (Vec3, Vec3), aspect: f32) -> Self {
         let (lo, hi) = bounds;
         let mut cam = Self {
             target: midpoint(lo, hi),
-            yaw: -FRAC_PI_2 + 0.5,
-            pitch: 0.68,
+            yaw: -FRAC_PI_2 - 0.25,
+            pitch: 0.7,
             distance: 1.0,
         };
         let corners: Vec<Vec3> = (0..8)
@@ -1015,6 +1023,7 @@ fn paint_colour(ctx: &egui::Context, paint: Paint) -> Color32 {
         Paint::Housing => pick([78, 86, 100], [104, 114, 132]),
         Paint::Glow => pick([56, 189, 248], [96, 205, 250]),
         Paint::Person => pick([242, 140, 40], [246, 152, 56]),
+        Paint::Skin => pick([214, 166, 126], [206, 160, 122]),
         Paint::Lamp(0) => Color32::from_rgb(46, 190, 90),
         Paint::Lamp(1) => Color32::from_rgb(246, 176, 34),
         Paint::Lamp(_) => Color32::from_rgb(226, 62, 56),

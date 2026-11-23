@@ -567,6 +567,56 @@ pub fn cabinet(p: Cabinet) -> (Mesh, Mesh, [Mesh; 3]) {
     (body, door, lamps)
 }
 
+/// A standing person, facing `-x`, centred on the origin.
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub struct Person {
+    pub height: f32,
+}
+
+impl Default for Person {
+    fn default() -> Self {
+        Self { height: 1.72 }
+    }
+}
+
+/// A person's parts: the torso (a hi-vis vest), the limbs (legs and arms), and the head.
+pub fn person(p: Person) -> (Mesh, Mesh, Mesh) {
+    if !valid_positive(&[p.height]) {
+        return (Mesh::new(), Mesh::new(), Mesh::new());
+    }
+    // Proportions of a person 1.72 m tall, scaled.
+    let k = p.height / 1.72;
+    let hip = 0.82 * k;
+    let shoulder = 1.38 * k;
+    let torso =
+        bevel_box([0.24 * k, 0.42 * k, shoulder - hip], 0.03 * k).translated([0.0, 0.0, hip]);
+    let mut limbs = Mesh::new();
+    for side in [1.0_f32, -1.0] {
+        limbs.merge(&box_mesh([0.14 * k, 0.14 * k, hip]).translated([
+            0.0,
+            side * 0.1 * k,
+            hip / 2.0,
+        ]));
+        limbs.merge(&box_mesh([0.2 * k, 0.15 * k, 0.05 * k]).translated([
+            -0.03 * k,
+            side * 0.1 * k,
+            0.025 * k,
+        ]));
+        let arm = 0.56 * k;
+        limbs.merge(&box_mesh([0.1 * k, 0.09 * k, arm]).translated([
+            -0.02 * k,
+            side * 0.265 * k,
+            shoulder - arm / 2.0 - 0.02 * k,
+        ]));
+    }
+    let head = bevel_box([0.2 * k, 0.18 * k, 0.24 * k], 0.05 * k).translated([
+        0.0,
+        0.0,
+        p.height - 0.24 * k,
+    ]);
+    (torso, limbs, head)
+}
+
 /// A parcel: a carton of `size` (length along `x`, width, height) with tape along its top.
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Parcel {
@@ -663,6 +713,12 @@ mod tests {
         assert!((cage.bounds().1[2] - 1.7).abs() < 1e-4 && !base.is_empty());
         let (body, door, lamps) = cabinet(Cabinet::default());
         assert!(!body.is_empty() && !door.is_empty() && lamps.iter().all(|l| !l.is_empty()));
+        let (torso, limbs, head) = person(Person::default());
+        assert!((head.bounds().1[2] - 1.72).abs() < 1e-5 && limbs.bounds().0[2].abs() < 1e-5);
+        assert!(
+            torso.bounds().1[2] < head.bounds().0[2],
+            "a neck between torso and head"
+        );
         let (carton, tape) = parcel(Parcel::default());
         assert!((carton.bounds().1[2] - 0.22).abs() < 1e-5 && !tape.is_empty());
     }
