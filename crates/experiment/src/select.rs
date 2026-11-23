@@ -343,7 +343,8 @@ impl FeasibilityCheck {
 pub struct ConstrainedSelection {
     pub feasibility: FeasibilityCheck,
     /// KN among the systems declared feasible, on fresh replications; `None` when none was
-    /// declared feasible or the check did not finish within the budget.
+    /// declared feasible, the check did not finish within the budget, or what the check left of
+    /// the budget cannot pay for KN's first stage (then `confidence` is `None`: not proven).
     pub selection: Option<Selection>,
     /// The probability, covering the feasibility decisions and the selection together, that
     /// the answer claims: `Some(1 − α)` when both were completed on random data.
@@ -456,8 +457,10 @@ impl std::error::Error for SelectError {}
 ///   screen again.
 ///
 /// The region closes when r reaches h²S²ᵢₗ/δ² for every pair left, where every W is 0: the
-/// screening then keeps only the largest totals, and the procedure stops there (Kim and
-/// Nelson's stopping rule, N = ⌊h²S²/δ²⌋). Exactly equal totals at that point, which happen
+/// screening then keeps only the largest totals, and the procedure stops there, where the
+/// region closes (every W = 0). The papers' rule, one system left, then holds unless several
+/// totals are exactly equal, and with W = 0 for good, more replications could not separate them
+/// by the region. Exactly equal totals at that point, which happen
 /// only without randomness, are all kept as survivors and the lowest index is chosen; their
 /// means are equal, so any of them is correct.
 pub fn select_best<F>(setup: &Kn, systems: usize, mut sample: F) -> Result<Selection, SelectError>
@@ -654,6 +657,18 @@ where
     };
     let m = feasible.len();
     kn.validate(m)?;
+    if kn
+        .max_runs
+        .is_some_and(|left| left < setup.first_stage.saturating_mul(m as u64))
+    {
+        // The check finished, but KN's first stage does not fit in what is left: not proven,
+        // with the feasibility decisions kept.
+        return Ok(ConstrainedSelection {
+            feasibility: found,
+            selection: None,
+            confidence: None,
+        });
+    }
     let eta = if m > 1 {
         kn.eta(m).ok_or(SelectError::Confidence(kn.confidence))?
     } else {
@@ -1401,6 +1416,74 @@ mod tests {
         assert_eq!(kn.means[3], None);
         assert!(kn.confidence.is_some_and(|c| close(c, 0.975)));
         assert_eq!(s.total_runs(), s.feasibility.total_runs() + kn.total_runs());
+    }
+
+    #[test]
+    fn a_budget_short_of_kn_keeps_the_feasibility_decisions() {
+        // Constant constraint values: the check is decided on the first stage, 4 × 10 runs.
+        let constrained = [-1.0, -1.0, 1.0, -1.0];
+        let constraints = [Constraint {
+            bound: Bound::AtMost,
+            limit: 0.0,
+            tolerance: 0.5,
+        }];
+        let rows = |s: usize, reps: Range<u64>| -> Vec<Vec<f64>> {
+            reps.map(|j| vec![normal(9, s as u64, j), constrained[s]])
+                .collect()
+        };
+        // KN among the three feasible needs 30 more; one short.
+        let setup = Kn {
+            max_runs: Some(40 + 30 - 1),
+            ..Kn::new(0.5, Sense::Maximise)
+        };
+        let s = select_feasible(&setup, &constraints, 0.5, 4, rows);
+        let Ok(s) = s else { panic!("{s:?}") };
+        assert_eq!(s.feasibility.feasible(), vec![0, 1, 3]);
+        assert_eq!(s.feasibility.total_runs(), 40);
+        assert_eq!(
+            (s.selection.as_ref(), s.confidence, s.chosen()),
+            (None, None, None)
+        );
+        // With the 30, KN runs.
+        let setup = Kn {
+            max_runs: Some(70),
+            ..setup
+        };
+        let s = select_feasible(&setup, &constraints, 0.5, 4, rows);
+        let Ok(s) = s else { panic!("{s:?}") };
+        assert!(s.selection.is_some());
+        assert!(s.total_runs() <= 70, "{}", s.total_runs());
+    }
+
+    #[test]
+    fn feasibility_out_of_budget_leaves_systems_undecided() {
+        // Means 0.05 from the limit with ε = 0.01: far from settled after a few steps.
+        let constraints = [Constraint {
+            bound: Bound::AtMost,
+            limit: 0.0,
+            tolerance: 0.01,
+        }];
+        let setup = Feasibility {
+            max_runs: Some(4 * 10 + 4 * 5),
+            ..Feasibility::default()
+        };
+        let check = check_feasibility(&setup, 4, &constraints, |s, reps| {
+            reps.map(|j| vec![0.05 * (s as f64 - 1.5) + normal(13, s as u64, j)])
+                .collect()
+        });
+        let Ok(check) = check else {
+            panic!("{check:?}")
+        };
+        assert!(!check.is_complete());
+        assert!(check.decisions.contains(&Decision::Undecided));
+        assert!(
+            check
+                .feasible()
+                .iter()
+                .all(|&i| check.decisions[i] == Decision::Feasible)
+        );
+        assert_eq!(check.confidence, None);
+        assert!(check.total_runs() <= 60, "{}", check.total_runs());
     }
 
     #[test]
