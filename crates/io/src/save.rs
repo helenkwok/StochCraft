@@ -2850,18 +2850,14 @@ impl Editor {
             .collect();
         for id in site_ids {
             let again = replaced.contains(id.as_str());
-            let track = |m: &Model| m.site.paths.get(id);
-            if track(before) != track(after) || again {
-                let v = track(after)
-                    .filter(|_| exists(id))
-                    .map(crate::layout::path_element);
+            let (was, now) = (before.site.paths.get(id), after.site.paths.get(id));
+            if was != now || again {
+                let v = now.filter(|_| exists(id)).map(crate::layout::path_element);
                 writes.push((id.to_string(), crate::bpsim::PATH, v));
             }
-            let place = |m: &Model| m.site.places.get(id);
-            if place(before) != place(after) || again {
-                let v = place(after)
-                    .filter(|_| exists(id))
-                    .map(crate::layout::place_element);
+            let (was, now) = (before.site.places.get(id), after.site.places.get(id));
+            if was != now || again {
+                let v = now.filter(|_| exists(id)).map(crate::layout::place_element);
                 writes.push((id.to_string(), crate::bpsim::PLACE, v));
             }
         }
