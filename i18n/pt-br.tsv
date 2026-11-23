@@ -1202,12 +1202,13 @@ unit	yr	a
 	Layout	Layout
 	Layout of the model, to scale	Layout do modelo, em escala
 	Drag to pan · Scroll to zoom	Arraste para deslocar · Role para ampliar
-	Positions from the diagram	Posições do diagrama
+	Positions from the layout	Posições do layout
 	Scale bar: {length} m	Barra de escala: {length} m
 	{length} m	{length} m
 	x {x} m, y {y} m	x {x} m, y {y} m
 	Unplaced	Não posicionados
-	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	Por enquanto, cada bloco é posicionado a partir do diagrama. Um bloco que o diagrama deixa de fora é listado aqui e não é desenhado.
+	Every block is placed.	Todos os blocos estão posicionados.
+	Nothing to draw: this model has no layout yet. The Layout tab lists its blocks as unplaced.	Nada a desenhar: este modelo ainda não tem layout. A aba Layout lista os blocos como não posicionados.
 	The charts are taller than the window: make the window taller, then export them again.	Os gráficos são mais altos que a janela: aumente a altura da janela e exporte-os de novo.
 	The model changed while choosing where to save it, so it was not saved. Save again.	O modelo mudou enquanto se escolhia onde salvá-lo, por isso não foi salvo. Salve novamente.
 	Exactly that many	Exatamente essa quantidade

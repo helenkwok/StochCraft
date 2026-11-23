@@ -1202,12 +1202,13 @@ unit	yr	år
 	Layout	Layout
 	Layout of the model, to scale	Modellens layout i målestok
 	Drag to pan · Scroll to zoom	Træk for at panorere · Rul for at zoome
-	Positions from the diagram	Placeringer fra diagrammet
+	Positions from the layout	Placeringer fra layoutet
 	Scale bar: {length} m	Målestok: {length} m
 	{length} m	{length} m
 	x {x} m, y {y} m	x {x} m, y {y} m
 	Unplaced	Ikke placeret
-	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	Indtil videre er hver blok placeret ud fra diagrammet. En blok, som diagrammet udelader, vises her og tegnes ikke.
+	Every block is placed.	Alle blokke er placeret.
+	Nothing to draw: this model has no layout yet. The Layout tab lists its blocks as unplaced.	Intet at tegne: modellen har endnu intet layout. Fanen Layout viser dens blokke som ikke placeret.
 	The charts are taller than the window: make the window taller, then export them again.	Diagrammerne er højere end vinduet: gør vinduet højere, og eksportér dem så igen.
 	The model changed while choosing where to save it, so it was not saved. Save again.	Modellen blev ændret, mens det blev valgt, hvor den skulle gemmes, så den blev ikke gemt. Gem igen.
 	Exactly that many	Præcis så mange

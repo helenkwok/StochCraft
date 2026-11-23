@@ -459,7 +459,10 @@
           </bpsim:ElementParameters>
           <bpsim:VendorExtension name="stochcraft:scene" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1">
             <stochcraft:scene version="1">
-              <stochcraft:object id="floor" kind="floor" x="0.5" y="-2.4" width="27" depth="13.5"/>
+              <stochcraft:object id="floor" kind="floor" x="0.3" y="-2.4" width="12.8" depth="26.4"/>
+              <stochcraft:object id="infeed-scanner" kind="scanner" x="-1.905" y="-1.1" heading="30" width="1" height="1.4"/>
+              <stochcraft:object id="walkway-a" kind="marking" x="5.25" y="-6.25" width="0.08" depth="9.6"/>
+              <stochcraft:object id="walkway-b" kind="marking" x="5.25" y="-8.35" width="0.08" depth="9.6"/>
             </stochcraft:scene>
           </bpsim:VendorExtension>
         </bpsim:Scenario>

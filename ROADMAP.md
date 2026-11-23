@@ -3850,9 +3850,16 @@ place (a frame, or `s` along a conveyor) and look-only scenery, read and written
 conveyor with a track runs for the path's length to 0.1 mm, a typed length that differs is an
 override flagged at the Length field (D23), and only the sim fields enter the results baseline
 (D28). The sorter example carries a drawn layout with its lengths unchanged (12 m, 30 m, 4 m).
-Left from L2: glTF export (there is no export yet to extend); a conveyor without a track still
-draws from its `ConveyorShape`, which folds into `Path` once every example has a track; and the
-Layout and 3D views still place blocks from the diagram until L3. U1, the run bar, is done
+Left from L2: glTF export (there is no export yet to extend); a conveyor keeps its
+`ConveyorShape` in the file, to fold into `Path` once every example has a track. L3 is
+done: the Layout and 3D views draw only from the layout, and #210's inference from the diagram
+is gone, so a block with no place is listed as unplaced and drawn in neither (every example but
+the sorter shows an empty plan for now). Belts with side rails, legs and accent stripes are swept
+along their paths, a rail opens where a lane leaves or an infeed joins, and each placed block is
+its kind's shape built by code (`stochcraft_render::kit`); items ride the belts at
+`point_at(s)`, and the 3D camera fits the scene at a three-quarter view. Left from L3: a divert
+is still one gateway, so a parcel crosses from the merge to its lane at once (riding the sort
+straight to its divert point needs L5's points along a section). U1, the run bar, is done
 (#218).
 
 #### Sources

@@ -466,13 +466,18 @@ This is one run of many: its numbers differ from the others and from the average
   queueing formula holds. Under the table it names the bottleneck and says what cannot be known
   before a run. Once the model has results, the simulated utilisation and mean wait stand beside
   the worked-out ones. `stochcraft-cli explain` prints the same table.
-- **3D:** the blocks drawn as simple 3D shapes, with conveyors as belts. Drag to orbit, scroll to
-  zoom, Shift-drag to pan, and **Fit** to see it all. While a run is watched, each entity on a
-  conveyor is drawn as a tote where the run has carried it.
+- **3D:** the model's layout in 3D: conveyors as belts with side rails and legs along their drawn
+  paths, and each placed block as a shape for its kind (a packing station with its packer, a
+  pallet of cartons where parcels arrive, a roll cage where they leave, a control cabinet at a
+  divert). Drag to orbit, scroll to zoom, Shift-drag to pan, and **Fit** to see it all. While a
+  run is watched, each item on a conveyor is drawn as a parcel where the run has carried it, in
+  its product's colour.
 - **Layout:** a plan of the model from above, to scale in metres, with a grid and a scale bar.
   Conveyors are drawn as their belts and blocks as their footprints. It is for looking only: drag
-  to pan, scroll to zoom, **Fit**. Positions come from the diagram for now (the view says
-  **Positions from the diagram**), and an **Unplaced** list names any block that is not drawn.
+  to pan, scroll to zoom, **Fit**. Positions come from the model's layout (the view says
+  **Positions from the layout**); a block the layout does not place is listed under **Unplaced**
+  and drawn in neither view, so a model with no layout yet shows an empty plan and 3D view. The
+  parcel sorter example has a layout.
 - **Dashboard** (beside the tabs, or **View ▸ Dashboard**): a panel beside the model with tiles
   for throughput, utilisation by resource, time on conveyors, and entities on the conveyors (or
   in the model) over time. Run the model, or watch a run, to fill it. While a run is watched, the

@@ -1202,12 +1202,13 @@ unit	yr	an
 	Layout	Implantation
 	Layout of the model, to scale	Implantation du modèle, à l'échelle
 	Drag to pan · Scroll to zoom	Glisser pour déplacer · Défiler pour zoomer
-	Positions from the diagram	Positions issues du diagramme
+	Positions from the layout	Positions issues de l’implantation
 	Scale bar: {length} m	Barre d'échelle : {length} m
 	{length} m	{length} m
 	x {x} m, y {y} m	x {x} m, y {y} m
 	Unplaced	Non placés
-	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	Pour l'instant, chaque bloc est placé d'après le diagramme. Un bloc que le diagramme omet est listé ici et n'est pas dessiné.
+	Every block is placed.	Tous les blocs sont placés.
+	Nothing to draw: this model has no layout yet. The Layout tab lists its blocks as unplaced.	Rien à dessiner : ce modèle n’a pas encore d’implantation. L’onglet Implantation liste ses blocs comme non placés.
 	The charts are taller than the window: make the window taller, then export them again.	Les graphiques sont plus hauts que la fenêtre : agrandissez la fenêtre en hauteur, puis exportez-les à nouveau.
 	The model changed while choosing where to save it, so it was not saved. Save again.	Le modèle a changé pendant le choix de l'emplacement d'enregistrement, il n'a donc pas été enregistré. Enregistrez-le de nouveau.
 	Exactly that many	Exactement ce nombre

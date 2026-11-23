@@ -1202,12 +1202,13 @@ unit	yr	年
 	Layout	布局
 	Layout of the model, to scale	按比例绘制的模型布局
 	Drag to pan · Scroll to zoom	拖动平移 · 滚动缩放
-	Positions from the diagram	位置取自流程图
+	Positions from the layout	位置取自布局
 	Scale bar: {length} m	比例尺: {length} m
 	{length} m	{length} m
 	x {x} m, y {y} m	x {x} m, y {y} m
 	Unplaced	未放置
-	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	目前所有模块都按流程图放置。流程图中没有的模块会列在此处，不会绘制。
+	Every block is placed.	每个模块都已放置。
+	Nothing to draw: this model has no layout yet. The Layout tab lists its blocks as unplaced.	没有可绘制的内容：此模型还没有布局。“布局”选项卡将其模块列为未放置。
 	The charts are taller than the window: make the window taller, then export them again.	图表比窗口高：请把窗口调高，然后重新导出。
 	The model changed while choosing where to save it, so it was not saved. Save again.	选择保存位置期间模型已更改，因此未保存。请重新保存。
 	Exactly that many	恰好这么多次

@@ -1202,12 +1202,13 @@ unit	yr	r.
 	Layout	Rozloženie
 	Layout of the model, to scale	Rozloženie modelu v mierke
 	Drag to pan · Scroll to zoom	Ťahaním posúvate · Kolieskom približujete
-	Positions from the diagram	Pozície z diagramu
+	Positions from the layout	Pozície z rozloženia
 	Scale bar: {length} m	Úsečka mierky: {length} m
 	{length} m	{length} m
 	x {x} m, y {y} m	x {x} m, y {y} m
 	Unplaced	Neumiestnené
-	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	Zatiaľ je každý blok umiestnený podľa diagramu. Blok, ktorý diagram vynecháva, je uvedený tu a nekreslí sa.
+	Every block is placed.	Každý blok je umiestnený.
+	Nothing to draw: this model has no layout yet. The Layout tab lists its blocks as unplaced.	Nie je čo kresliť: tento model ešte nemá rozloženie. Karta Rozloženie uvádza jeho bloky ako neumiestnené.
 	The charts are taller than the window: make the window taller, then export them again.	Grafy sú vyššie ako okno: zväčšite výšku okna a potom ich exportujte znova.
 	The model changed while choosing where to save it, so it was not saved. Save again.	Model sa zmenil počas výberu miesta na uloženie, preto nebol uložený. Uložte znova.
 	Exactly that many	Presne toľko

@@ -1,65 +1,56 @@
-//! The 3D view (M5.3): the model's blocks at their layout positions, as the low-poly shapes of
-//! `stochcraft-render`, drawn without any GPU code. Each frame the triangles are projected on the
-//! CPU (an orbit camera with a perspective projection), back faces are dropped, the rest are
-//! shaded flat by one directional light, sorted far to near (the painter's algorithm) and handed
-//! to egui as meshes, so the same code draws in the desktop window and in the browser.
+//! The 3D view (M5.3, fed from the layout since M5.5's L3): the model's physical layout as
+//! low-poly shapes built by code, drawn without any GPU code. Each frame the triangles are
+//! projected on the CPU (an orbit camera with a perspective projection), back faces are dropped,
+//! the rest are shaded flat by a key light and a sky fill, sorted far to near (the painter's
+//! algorithm) and handed to egui as meshes, so the same code draws in the desktop window and in
+//! the browser.
 //!
-//! The scene (every block's mesh in world space) is built once per model revision. While a run is
-//! watched, each item on a conveyor is a tote where the run has carried it, coloured by its
-//! product; at the other blocks, totes stand for the number of entities inside.
+//! The scene is built once per model revision from the model's [`stochcraft_model::Site`]: each
+//! conveyor is a belt with side rails and legs swept along its track's path (a rail leaves a gap
+//! where another belt leaves it or joins it), each placed block is its kind's shape at its place
+//! ([`look_of`]), and the scenery is drawn as its kind says. A block with no place is unplaced:
+//! it is listed, never drawn, and nothing is guessed from the flow diagram. While a run is
+//! watched, each item on a conveyor is a parcel at `point_at(s)` on its path, coloured by its
+//! product; at the other blocks, parcels stand for the number of entities inside.
 //!
-//! Conventions: metres, `z` up. A shape's centre on the canvas `(x, y)` (y grows down) is
-//! `(x, -y)` times [`METRES_PER_UNIT`], so the layout keeps its handedness seen from above.
+//! Conventions: metres, `z` up, `x` and `y` as the layout's.
 
 use core::f32::consts::{FRAC_PI_2, FRAC_PI_4};
 
 use egui::{
     Align2, Color32, FontId, Key, Pos2, Rect, Sense, Shape, Stroke, StrokeKind, pos2, vec2,
 };
-use stochcraft_model::{Bounds, Element, ElementId, ElementKind, LengthUnit, Model};
-use stochcraft_render::{
-    Machine, Mesh, StraightConveyor, Tote, box_mesh, machine, straight_conveyor, tote,
+use stochcraft_model::{
+    Element, ElementId, ElementKind, Frame, LengthUnit, Model, Path, Place, Segment as PathSegment,
 };
+use stochcraft_random::math::{cos, sin};
+use stochcraft_render::kit::{self, Station};
+use stochcraft_render::{Mesh, Operator, box_mesh, operator};
 
 use crate::i18n::t;
 use crate::{App, chart_palette, theme};
 
-/// Metres per drawing unit of the canvas: a 100-unit-wide shape is 2 m wide.
-const METRES_PER_UNIT: f32 = 0.02;
 /// The vertical field of view.
 const FOV: f32 = FRAC_PI_4;
 /// Triangles with a corner nearer than this to the camera (along its view direction) are dropped.
 const NEAR: f32 = 0.1;
 /// Triangles with an edge longer than this are split, so the painter's sort puts a long belt
-/// and the totes on it in the right order.
+/// and the parcels on it in the right order.
 const MAX_EDGE: f32 = 1.5;
-/// The height of a conveyor's transport surface, as `StraightConveyor`'s default.
-const BELT_HEIGHT: f32 = 0.85;
-/// The least length of belt between two blocks; closer than that, the belt runs between their
-/// centres instead.
-const LEAST_BELT: f32 = 0.2;
-/// How far apart lanes that leave (or enter) one block are, sideways, when there is room.
-const LANE_PITCH: f32 = 0.4;
-/// The share of a block's half-width its lanes spread across at most, either side of the middle.
-const LANE_SPREAD: f32 = 0.6;
-/// The side of a gateway's box, which is turned 45 degrees.
-const GATEWAY_SIDE: f32 = 0.7;
-/// The narrowest and widest a loop of belt is (the gap between its two arms' centre lines).
-const LOOP_WIDTH: (f32, f32) = (0.8, 1.2);
-/// How much a loop's corners are cut off, along each arm.
-const LOOP_CUT: f32 = 0.3;
-/// The shortest and longest a loop of belt is drawn, in metres.
-const LOOP_LENGTH: (f32, f32) = (3.0, 60.0);
-/// The widest a long loop flares out to, in metres.
-const LOOP_FLARE: f32 = 8.0;
-/// A tote's size.
-const TOTE_SIZE: [f32; 3] = [0.5, 0.4, 0.3];
-/// The most totes drawn beside a block; more are counted by a number.
-const MOST_AT_A_BLOCK: usize = 10;
-/// The most totes drawn on one conveyor.
+/// The height of a belt's top above the floor (plus its path's own height).
+pub(crate) const BELT_HEIGHT: f32 = 0.85;
+/// The side rails' width, which a belt's outline includes.
+pub(crate) const RAIL: f32 = 0.07;
+/// The longest step between two cross-sections of a belt, in metres.
+const STEP: f64 = 0.25;
+/// The most parcels drawn at a block; more are counted by a number.
+const MOST_AT_A_BLOCK: usize = 3;
+/// The most parcels drawn on one conveyor.
 const MOST_ON_A_BELT: usize = 100;
 /// Triangles to an egui mesh, so a mesh never has more vertices than 16-bit indices reach.
 const CHUNK: usize = 18_000;
+/// Parcel sizes (length along the belt, width, height), chosen by an item's number.
+const PARCELS: [[f32; 3]; 3] = [[0.36, 0.3, 0.22], [0.38, 0.34, 0.28], [0.32, 0.24, 0.16]];
 
 type Vec3 = [f32; 3];
 type Segment = (Vec3, Vec3);
@@ -104,16 +95,37 @@ fn midpoint(a: Vec3, b: Vec3) -> Vec3 {
 /// What a triangle is part of, which decides its colour.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub(crate) enum Paint {
-    Source,
-    Sink,
-    Machine,
-    Delay,
-    Gateway,
-    Batch,
+    /// The floor slab.
+    Floor,
+    /// A soft shadow on the floor under an object.
+    Shadow,
+    /// Safety markings on the floor and accent stripes.
+    Marking,
+    /// A belt's moving surface.
     Belt,
-    /// A tote, by the order of the block it is at.
+    /// Conveyor frames and rails, arches.
+    Frame,
+    /// A lane's rails, or a station's band, in the colour its name says.
+    Lane([u8; 3]),
+    /// Legs, posts and other bare steel.
+    Steel,
+    /// Work tops and pallets.
+    Wood,
+    /// Cartons.
+    Cardboard,
+    /// Parcel tape.
+    Tape,
+    /// Screens' and cabinets' housings.
+    Housing,
+    /// A screen's face, a scanner's window.
+    Glow,
+    /// A person.
+    Person,
+    /// A stack light's lamp: green, amber, red.
+    Lamp(u8),
+    /// A parcel, by the order of the block it is at.
     Tote(usize),
-    /// A tote of a product named after a colour ("red", "Blue parcel"), in that colour.
+    /// A parcel of a product named after a colour ("red", "Blue parcel"), in that colour.
     Named([u8; 3]),
 }
 
@@ -128,18 +140,17 @@ pub(crate) struct Tri {
 /// Where a block's entities are drawn.
 #[derive(Debug, Clone)]
 pub(crate) enum Spot {
-    /// Beside a block: its centre on the floor and half its footprint.
-    Block { centre: [f32; 2], half: f32 },
-    /// Along a conveyor: the corners of its centre line on the floor (two for a straight belt,
-    /// more for a loop) and the length of that line in metres.
-    Path { points: Vec<[f32; 2]>, length: f32 },
+    /// At a block: the point on its top where parcels stand.
+    Block { centre: [f32; 2], top: f32 },
+    /// Along a conveyor: its path in metres.
+    Path { path: Path },
 }
 
 /// A block of the model that can hold entities, in the scene.
 #[derive(Debug, Clone)]
 pub(crate) struct Anchor {
     pub id: String,
-    /// The block's place in the model, for its totes' colour.
+    /// The block's place in the model, for its parcels' colour.
     pub order: usize,
     pub spot: Spot,
 }
@@ -147,20 +158,22 @@ pub(crate) struct Anchor {
 /// The model in world space.
 #[derive(Debug, Clone, Default)]
 pub(crate) struct Scene {
+    /// The floor, its markings and the shadows on it, drawn first in this order.
+    pub floor: Vec<Tri>,
     pub tris: Vec<Tri>,
-    /// Lines on the floor between shapes that no conveyor joins.
-    pub links: Vec<Segment>,
     /// The floor grid.
     pub grid: Vec<Segment>,
     pub anchors: Vec<Anchor>,
-    /// The corners of the box around everything.
+    /// The corners of the box round everything standing on the floor, which Fit frames.
     pub bounds: (Vec3, Vec3),
     /// For each product key, the colour its name says, if it names one.
     pub product_colours: Vec<Option<[u8; 3]>>,
+    /// The names of the blocks with no place, which are not drawn.
+    pub unplaced: Vec<String>,
 }
 
-/// The colour a product's name says, as the first colour word in it: "red", "Lane blue".
-fn named_colour(name: &str) -> Option<[u8; 3]> {
+/// The colour a name says, as the first colour word in it: "red", "Lane blue".
+pub(crate) fn named_colour(name: &str) -> Option<[u8; 3]> {
     const NAMED: [(&str, [u8; 3]); 11] = [
         ("red", [214, 48, 49]),
         ("blue", [41, 109, 204]),
@@ -181,7 +194,7 @@ fn named_colour(name: &str) -> Option<[u8; 3]> {
 }
 
 /// Metres in one of `unit`.
-pub(crate) fn unit_metres(unit: LengthUnit) -> f32 {
+pub(crate) fn unit_metres(unit: LengthUnit) -> f64 {
     match unit {
         LengthUnit::Millimetres => 0.001,
         LengthUnit::Centimetres => 0.01,
@@ -189,6 +202,111 @@ pub(crate) fn unit_metres(unit: LengthUnit) -> f32 {
         LengthUnit::Kilometres => 1000.0,
         LengthUnit::Inches => 0.0254,
         LengthUnit::Feet => 0.3048,
+    }
+}
+
+/// Conveyor `id`'s track in metres: its path, and the belt's width. `None` for an element with
+/// no track.
+pub(crate) fn track_metres(model: &Model, id: &ElementId) -> Option<(Path, f32)> {
+    let m = unit_metres(model.experiment.length_unit);
+    let t = model.site.paths.get(id)?;
+    Some((t.path.scaled(m), (t.width * m) as f32))
+}
+
+/// Where block `e` stands, in metres: its place's frame. A block placed along a conveyor (a
+/// divert) stands beside the belt, on its left, rather than on it. A conveyor's frame is the
+/// start of its track. `None` for a block with no place.
+pub(crate) fn frame_metres(model: &Model, e: &Element) -> Option<Frame> {
+    let m = unit_metres(model.experiment.length_unit);
+    let f = model.site.frame_of(&e.id)?;
+    let mut f = Frame::new(f.x * m, f.y * m, f.z * m, f.heading_deg);
+    if let Some(Place::Along { path, .. }) = model.site.places.get(&e.id) {
+        let width = track_metres(model, path).map_or(0.6, |(_, w)| f64::from(w));
+        let side = width / 2.0 + f64::from(RAIL) + 0.45;
+        let h = f.heading_deg.to_radians();
+        f.x -= sin(h) * side;
+        f.y += cos(h) * side;
+    }
+    Some(f)
+}
+
+/// A block's look: meshes in its own frame (standing on the floor at the origin, facing `+x`),
+/// each with its paint, the size of its footprint (along `x`, along `y`), and the height its
+/// entities are drawn at.
+pub(crate) struct Look {
+    pub parts: Vec<(Mesh, Paint)>,
+    pub footprint: [f32; 2],
+    pub top: f32,
+}
+
+/// What block `e` looks like. This is the one place a block's shape comes from: today a
+/// generator for its kind, built by code from its parameters.
+pub(crate) fn look_of(e: &Element) -> Look {
+    match &e.kind {
+        ElementKind::Source { .. } => {
+            let (wood, cartons) = kit::pallet(kit::Pallet::default());
+            Look {
+                parts: vec![(wood, Paint::Wood), (cartons, Paint::Cardboard)],
+                footprint: [1.2, 0.8],
+                top: 0.7,
+            }
+        }
+        ElementKind::Sink { .. } => {
+            let (frame, base) = kit::roll_cage(kit::RollCage::default());
+            Look {
+                parts: vec![(frame, Paint::Steel), (base, Paint::Frame)],
+                footprint: [0.8, 0.7],
+                top: 0.2,
+            }
+        }
+        ElementKind::Server { .. } | ElementKind::SharedTask { .. } => {
+            let s = kit::pack_station(kit::PackStation::default());
+            let mut parts = vec![
+                (s.frame, Paint::Steel),
+                (s.top, Paint::Wood),
+                (s.screen, Paint::Housing),
+                (s.glow, Paint::Glow),
+                (s.cartons, Paint::Cardboard),
+                (
+                    operator(Operator { height: 1.72 }).translated([0.75, 0.15, 0.0]),
+                    Paint::Person,
+                ),
+            ];
+            // A band along the bench's front in the colour its name says ("Pack red").
+            if let Some(c) = named_colour(&e.name) {
+                parts.push((
+                    box_mesh([0.02, 1.3, 0.08]).translated([-0.41, 0.0, 0.8]),
+                    Paint::Lane(c),
+                ));
+            }
+            Look {
+                parts,
+                footprint: [0.8, 1.4],
+                top: 0.9,
+            }
+        }
+        ElementKind::ExclusiveGateway { .. } | ElementKind::ParallelGateway => {
+            let (body, door, lamps) = kit::cabinet(kit::Cabinet::default());
+            let mut parts = vec![(body, Paint::Housing), (door, Paint::Frame)];
+            for (k, lamp) in lamps.into_iter().enumerate() {
+                parts.push((lamp, Paint::Lamp(k as u8)));
+            }
+            Look {
+                parts,
+                footprint: [0.4, 0.6],
+                top: 1.3,
+            }
+        }
+        ElementKind::Delay { .. } => Look {
+            parts: vec![(kit::bevel_box([1.2, 1.2, 0.08], 0.02), Paint::Frame)],
+            footprint: [1.2, 1.2],
+            top: 0.08,
+        },
+        _ => Look {
+            parts: vec![(kit::bevel_box([0.9, 0.9, 0.7], 0.04), Paint::Housing)],
+            footprint: [0.9, 0.9],
+            top: 0.7,
+        },
     }
 }
 
@@ -233,122 +351,282 @@ fn push_mesh(out: &mut Vec<Tri>, mesh: &Mesh, paint: Paint) {
     }
 }
 
-/// A block's shape, its paint, and half its footprint.
-fn block_shape(kind: &ElementKind) -> (Mesh, Paint, f32) {
-    match kind {
-        ElementKind::Source { .. } => (
-            box_mesh([0.9, 0.9, 0.6]).translated([0.0, 0.0, 0.3]),
-            Paint::Source,
-            0.45,
-        ),
-        ElementKind::Sink { .. } => (
-            box_mesh([0.9, 0.9, 0.6]).translated([0.0, 0.0, 0.3]),
-            Paint::Sink,
-            0.45,
-        ),
-        ElementKind::Server { .. } | ElementKind::SharedTask { .. } => {
-            (machine(Machine::default()), Paint::Machine, 0.8)
-        }
-        ElementKind::Delay { .. } => (
-            box_mesh([1.2, 1.2, 0.08]).translated([0.0, 0.0, 0.04]),
-            Paint::Delay,
-            0.6,
-        ),
-        ElementKind::ExclusiveGateway { .. } | ElementKind::ParallelGateway => (
-            box_mesh([GATEWAY_SIDE; 3])
-                .rotated_z(FRAC_PI_4)
-                .translated([0.0, 0.0, GATEWAY_SIDE / 2.0]),
-            Paint::Gateway,
-            0.5,
-        ),
-        _ => (
-            box_mesh([0.9, 0.9, 0.7]).translated([0.0, 0.0, 0.35]),
-            Paint::Batch,
-            0.45,
-        ),
-    }
+/// A flat rectangle on the floor at height `z`: centre `c`, `along` by `across` metres, its long
+/// side at `heading` radians.
+fn floor_rect(c: [f32; 2], along: f32, across: f32, heading: f32, z: f32) -> Mesh {
+    box_mesh([along, across, 0.001])
+        .rotated_z(heading)
+        .translated([c[0], c[1], z])
 }
 
-/// The outline of a block's footprint on the floor, which belts attach to.
-#[derive(Clone, Copy, Debug, PartialEq)]
-pub(crate) enum Outline {
-    /// An axis-aligned square of this half-side.
-    Square(f32),
-    /// A square turned 45 degrees: the points within this distance of the centre by `|x| + |y|`.
-    Diamond(f32),
+/// The cross-sections of a belt along `path` (in metres): at most [`STEP`] apart, closer on a
+/// tight curve, and at every segment's ends.
+pub(crate) fn stations(path: &Path) -> Vec<Station> {
+    let mut out = Vec::new();
+    let mut done = 0.0;
+    for seg in &path.segments {
+        let len = seg.length();
+        let step = match *seg {
+            PathSegment::Line { .. } => STEP,
+            PathSegment::Arc { radius, .. } | PathSegment::Helix { radius, .. } => {
+                (radius.abs() * 6.0_f64.to_radians()).clamp(0.05, STEP)
+            }
+        };
+        let n = (len / step).ceil().max(1.0) as u32;
+        let first = u32::from(!out.is_empty());
+        for k in first..=n {
+            let f = path.point_at(done + len * f64::from(k) / f64::from(n));
+            out.push(Station {
+                x: f.x as f32,
+                y: f.y as f32,
+                z: f.z as f32,
+                heading: f.heading_deg.to_radians() as f32,
+            });
+        }
+        done += len;
+    }
+    out
 }
 
-impl Outline {
-    /// How far the outline reaches from the centre along an axis: the half-side of the square, the
-    /// half-diagonal of the diamond.
-    pub(crate) fn reach(self) -> f32 {
-        match self {
-            Self::Square(half) | Self::Diamond(half) => half,
+/// The distance along `path` of the point nearest `q`, how far `q` is from it, and on which side
+/// (1 left of the direction of travel, -1 right).
+fn nearest(path: &Path, q: [f64; 2]) -> (f64, f64, f64) {
+    let total = path.length();
+    let n = (total / 0.05).ceil().max(1.0) as u32;
+    let mut best = (0.0, f64::INFINITY, 1.0);
+    for k in 0..=n {
+        let s = total * f64::from(k) / f64::from(n);
+        let f = path.point_at(s);
+        let (dx, dy) = (q[0] - f.x, q[1] - f.y);
+        let d = (dx * dx + dy * dy).sqrt();
+        if d < best.1 {
+            let h = f.heading_deg.to_radians();
+            let side = cos(h) * dy - sin(h) * dx;
+            best = (s, d, if side >= 0.0 { 1.0 } else { -1.0 });
         }
     }
+    best
+}
 
-    /// How far a ray from `p` along the unit vector `d` goes before it leaves the outline around
-    /// `centre` (0 when `p` is outside it on that side).
-    pub(crate) fn leave(self, centre: [f32; 2], p: [f32; 2], d: [f32; 2]) -> f32 {
-        match self {
-            Self::Square(half) => leave_square(centre, half, p, d),
-            Self::Diamond(r) => {
-                let q = [p[0] - centre[0], p[1] - centre[1]];
-                // The four faces are `sx * x + sy * y = r`; the ray meets the ones it heads
-                // towards, and leaves at the nearest.
-                let mut t = f32::INFINITY;
-                for (sx, sy) in [(1.0_f32, 1.0_f32), (1.0, -1.0), (-1.0, 1.0), (-1.0, -1.0)] {
-                    let slope = sx * d[0] + sy * d[1];
-                    if slope > 1e-9 {
-                        t = t.min(((r - (sx * q[0] + sy * q[1])) / slope).max(0.0));
-                    }
-                }
-                if t.is_finite() { t } else { 0.0 }
+/// A belt's rail gaps on its left and right (from, to, in metres along it), and the transfer
+/// plates to add between it and the belts that leave it.
+type Gaps = (Vec<(f32, f32)>, Vec<(f32, f32)>, Vec<Mesh>);
+
+/// Where other belts (`others`: path and width) leave the belt along `path` from its side (a
+/// lane at a divert) or join it with their end (an infeed merging): the rail on that side opens
+/// there, and a plate bridges to a lane that starts a little way off.
+fn gaps_of(path: &Path, width: f32, others: &[(&Path, f32)]) -> Gaps {
+    let (mut left, mut right, mut plates) = (Vec::new(), Vec::new(), Vec::new());
+    let total = path.length();
+    let closed = {
+        let (a, b) = (path.start, path.end());
+        ((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y)).sqrt() < 0.05
+    };
+    let half = f64::from(width / 2.0);
+    let reach = half + f64::from(RAIL) + 0.3;
+    for (other, w) in others {
+        let w = f64::from(*w);
+        // Another belt that starts beside this one: a lane leaving it at a divert.
+        let start = other.start;
+        let (s, d, side) = nearest(path, [start.x, start.y]);
+        if d <= reach && d > half - 0.05 {
+            let gap = ((s - w / 2.0 - 0.06) as f32, (s + w / 2.0 + 0.06) as f32);
+            (if side > 0.0 { &mut left } else { &mut right }).push(gap);
+            let f = path.point_at(s);
+            let h = f.heading_deg.to_radians();
+            let (nx, ny) = (-sin(h) * side, cos(h) * side);
+            let edge = half - 0.02;
+            let span = d - edge;
+            if span > 0.01 {
+                let c = [
+                    (f.x + nx * (edge + span / 2.0)) as f32,
+                    (f.y + ny * (edge + span / 2.0)) as f32,
+                ];
+                let angle = libm::atan2f(ny as f32, nx as f32);
+                plates.push(
+                    box_mesh([span as f32 + 0.04, w as f32, 0.03])
+                        .rotated_z(angle)
+                        .translated([c[0], c[1], f.z as f32 + BELT_HEIGHT - 0.03]),
+                );
+            }
+        }
+        // Another belt that ends on this one: an infeed merging onto it, from one side.
+        let end = other.end();
+        let (s, d, _) = nearest(path, [end.x, end.y]);
+        if d <= reach {
+            let back = other.point_at(other.length() - 1.5);
+            let (_, _, side) = nearest(path, [back.x, back.y]);
+            let target = if side > 0.0 { &mut left } else { &mut right };
+            target.push(((s - 1.6) as f32, (s + 0.4) as f32));
+            if closed {
+                target.push(((s + total - 1.6) as f32, (s + total + 0.4) as f32));
             }
         }
     }
+    (left, right, plates)
 }
 
-/// The outline of a block's footprint: a gateway's diamond, otherwise the square of its half-side.
-pub(crate) fn block_outline(kind: &ElementKind) -> Outline {
-    match kind {
-        ElementKind::ExclusiveGateway { .. } | ElementKind::ParallelGateway => {
-            // Half the diagonal of the box `block_shape` turns.
-            Outline::Diamond(GATEWAY_SIDE * core::f32::consts::FRAC_1_SQRT_2)
+/// `mesh` placed at frame `f` (metres): turned by its heading, then moved.
+fn placed(mesh: &Mesh, f: &Frame) -> Mesh {
+    mesh.rotated_z(f.heading_deg.to_radians() as f32)
+        .translated([f.x as f32, f.y as f32, f.z as f32])
+}
+
+/// The model in world space, from its layout.
+pub(crate) fn scene(model: &Model) -> Scene {
+    let mut tris = Vec::new();
+    let mut floor = Vec::new();
+    let mut shadows = Vec::new();
+    let mut anchors = Vec::new();
+    let mut unplaced = Vec::new();
+    let tracks: Vec<(ElementId, Path, f32)> = model
+        .elements
+        .iter()
+        .filter(|e| matches!(e.kind, ElementKind::Conveyor { .. }))
+        .filter_map(|e| track_metres(model, &e.id).map(|(p, w)| (e.id.clone(), p, w)))
+        .collect();
+    for (order, e) in model.elements.iter().enumerate() {
+        let id = e.id.as_str().to_owned();
+        if matches!(e.kind, ElementKind::Conveyor { .. }) {
+            let Some((_, path, width)) = tracks.iter().find(|(t, _, _)| *t == e.id) else {
+                unplaced.push(crate::layout_view::label_of(e));
+                continue;
+            };
+            let others: Vec<(&Path, f32)> = tracks
+                .iter()
+                .filter(|(t, _, _)| *t != e.id)
+                .map(|(_, p, w)| (p, *w))
+                .collect();
+            let (left, right, plates) = gaps_of(path, *width, &others);
+            let st = stations(path);
+            let belt = kit::Belt {
+                width: *width,
+                height: BELT_HEIGHT,
+                ..kit::Belt::default()
+            };
+            let parts = kit::belt_along(&st, belt, &left, &right);
+            let rails = named_colour(&e.name).map_or(Paint::Frame, Paint::Lane);
+            push_mesh(&mut tris, &parts.belt, Paint::Belt);
+            push_mesh(&mut tris, &parts.frame, rails);
+            push_mesh(&mut tris, &parts.legs, Paint::Steel);
+            push_mesh(&mut tris, &parts.accent, Paint::Marking);
+            for p in &plates {
+                push_mesh(&mut tris, p, Paint::Steel);
+            }
+            for w in st.windows(2) {
+                let (a, b) = (w[0], w[1]);
+                let along = libm::hypotf(b.x - a.x, b.y - a.y);
+                let c = [(a.x + b.x) / 2.0, (a.y + b.y) / 2.0];
+                let h = libm::atan2f(b.y - a.y, b.x - a.x);
+                shadows.push(floor_rect(c, along + 0.02, width + 0.35, h, 0.002));
+            }
+            anchors.push(Anchor {
+                id,
+                order,
+                spot: Spot::Path { path: path.clone() },
+            });
+            continue;
         }
-        _ => Outline::Square(block_shape(kind).2),
+        let Some(f) = frame_metres(model, e) else {
+            unplaced.push(crate::layout_view::label_of(e));
+            continue;
+        };
+        let look = look_of(e);
+        for (mesh, paint) in &look.parts {
+            push_mesh(&mut tris, &placed(mesh, &f), *paint);
+        }
+        shadows.push(floor_rect(
+            [f.x as f32, f.y as f32],
+            look.footprint[0] + 0.3,
+            look.footprint[1] + 0.3,
+            f.heading_deg.to_radians() as f32,
+            0.002,
+        ));
+        if !matches!(
+            e.kind,
+            ElementKind::Source { .. }
+                | ElementKind::Sink { .. }
+                | ElementKind::ExclusiveGateway { .. }
+                | ElementKind::ParallelGateway
+        ) {
+            anchors.push(Anchor {
+                id,
+                order,
+                spot: Spot::Block {
+                    centre: [f.x as f32, f.y as f32],
+                    top: f.z as f32 + look.top,
+                },
+            });
+        }
+    }
+    // The scenery, look only.
+    let m = unit_metres(model.experiment.length_unit);
+    let mut floors: Vec<(Vec3, Vec3)> = Vec::new();
+    let mut markings = Vec::new();
+    for o in &model.site.scene {
+        let f = Frame::new(o.at.x * m, o.at.y * m, o.at.z * m, o.at.heading_deg);
+        let [across, along, high] = o.size.map(|x| (x * m) as f32);
+        let c = [f.x as f32, f.y as f32];
+        let h = f.heading_deg.to_radians() as f32;
+        match o.kind.as_str() {
+            "floor" if along > 0.0 && across > 0.0 => {
+                let slab = floor_rect(c, along, across, h, 0.0);
+                floors.push(slab.bounds());
+                push_mesh(&mut floor, &slab, Paint::Floor);
+            }
+            "marking" if along > 0.0 && across > 0.0 => {
+                markings.push(floor_rect(c, along, across, h, 0.004));
+            }
+            "scanner" => {
+                let arch = kit::ScannerArch {
+                    span: if across > 0.0 { across } else { 1.1 },
+                    height: if high > 0.0 { high } else { 1.45 },
+                    ..kit::ScannerArch::default()
+                };
+                let (frame, accent) = kit::scanner_arch(arch);
+                push_mesh(&mut tris, &placed(&frame, &f), Paint::Frame);
+                push_mesh(&mut tris, &placed(&accent, &f), Paint::Glow);
+            }
+            "column" | "wall" if along > 0.0 && across > 0.0 && high > 0.0 => {
+                let b = kit::bevel_box([along, across, high], 0.03);
+                push_mesh(&mut tris, &placed(&b, &f), Paint::Housing);
+            }
+            _ => {}
+        }
+    }
+    for mk in &markings {
+        push_mesh(&mut floor, mk, Paint::Marking);
+    }
+    for sh in &shadows {
+        push_mesh(&mut floor, sh, Paint::Shadow);
+    }
+    let bounds = bounds_of(&tris);
+    let grid_box = floors.into_iter().reduce(|a, b| {
+        (
+            [a.0[0].min(b.0[0]), a.0[1].min(b.0[1]), 0.0],
+            [a.1[0].max(b.1[0]), a.1[1].max(b.1[1]), 0.0],
+        )
+    });
+    let product_colours = model
+        .product_values()
+        .map(|(_, values)| values.iter().map(|v| named_colour(v)).collect())
+        .unwrap_or_default();
+    Scene {
+        grid: floor_grid(grid_box.unwrap_or(bounds), grid_box.is_some()),
+        floor,
+        tris,
+        anchors,
+        bounds,
+        product_colours,
+        unplaced,
     }
 }
 
-/// The outline a belt meets at element `id`: the footprint of a block, a point for a conveyor
-/// (belts meet at its middle) or an element that is not in the model.
-pub(crate) fn outline_of(model: &Model, id: &ElementId) -> Outline {
-    model.element(id).map_or(Outline::Square(0.0), |n| {
-        if matches!(n.kind, ElementKind::Conveyor { .. }) {
-            Outline::Square(0.0)
-        } else {
-            block_outline(&n.kind)
-        }
-    })
-}
-
-/// A shape's centre on the floor in metres, from its bounds on the canvas (where `y` grows down;
-/// on the floor it grows up). The Layout view and the 3D view both place blocks with this.
-pub(crate) fn centre_metres(b: &Bounds) -> [f32; 2] {
-    let (x, y) = b.centre();
-    [x as f32 * METRES_PER_UNIT, -(y as f32) * METRES_PER_UNIT]
-}
-
-/// The corners of the box around the triangles and links; a small box over the origin when there
-/// are none.
-fn bounds_of(tris: &[Tri], links: &[Segment]) -> (Vec3, Vec3) {
+/// The corners of the box around the triangles; a small box over the origin when there are none.
+fn bounds_of(tris: &[Tri]) -> (Vec3, Vec3) {
     let mut lo = [f32::INFINITY; 3];
     let mut hi = [f32::NEG_INFINITY; 3];
-    let points = tris
-        .iter()
-        .flat_map(|t| t.v)
-        .chain(links.iter().flat_map(|s| [s.0, s.1]));
-    for p in points {
+    for p in tris.iter().flat_map(|t| t.v) {
         if p.iter().all(|c| c.is_finite()) {
             for ((l, h), c) in lo.iter_mut().zip(hi.iter_mut()).zip(p) {
                 *l = l.min(c);
@@ -363,470 +641,123 @@ fn bounds_of(tris: &[Tri], links: &[Segment]) -> (Vec3, Vec3) {
     }
 }
 
-/// A floor grid under `bounds`, a metre apart or wider when the model is large.
-fn floor_grid(bounds: (Vec3, Vec3)) -> Vec<Segment> {
-    let (lo, hi) = bounds;
-    let span = (hi[0] - lo[0]).max(hi[1] - lo[1]) + 4.0;
+/// A floor grid a metre apart (wider for a large model) over `area`; when `exact` is false, a
+/// little beyond it.
+fn floor_grid(area: (Vec3, Vec3), exact: bool) -> Vec<Segment> {
+    let (lo, hi) = area;
+    let pad = if exact { 0.0 } else { 2.0 };
+    let span = (hi[0] - lo[0]).max(hi[1] - lo[1]) + 2.0 * pad;
     let step = [1.0_f32, 2.0, 5.0, 10.0, 20.0, 50.0, 100.0, 200.0, 500.0]
         .into_iter()
-        .find(|s| span / s <= 50.0)
+        .find(|s| span / s <= 60.0)
         .unwrap_or(1000.0);
-    let x0 = libm::floorf((lo[0] - 2.0) / step) * step;
-    let x1 = libm::ceilf((hi[0] + 2.0) / step) * step;
-    let y0 = libm::floorf((lo[1] - 2.0) / step) * step;
-    let y1 = libm::ceilf((hi[1] + 2.0) / step) * step;
-    let count = |a: f32, b: f32| (((b - a) / step) as usize).min(100);
+    let (x0, x1) = (lo[0] - pad, hi[0] + pad);
+    let (y0, y1) = (lo[1] - pad, hi[1] + pad);
     let mut out = Vec::new();
-    for i in 0..=count(x0, x1) {
-        let x = x0 + i as f32 * step;
-        out.push(([x, y0, 0.0], [x, y1, 0.0]));
+    let mut x = libm::ceilf(x0 / step) * step;
+    while x <= x1 && out.len() < 400 {
+        out.push(([x, y0, 0.006], [x, y1, 0.006]));
+        x += step;
     }
-    for i in 0..=count(y0, y1) {
-        let y = y0 + i as f32 * step;
-        out.push(([x0, y, 0.0], [x1, y, 0.0]));
+    let mut y = libm::ceilf(y0 / step) * step;
+    while y <= y1 && out.len() < 800 {
+        out.push(([x0, y, 0.006], [x1, y, 0.006]));
+        y += step;
     }
     out
 }
 
-/// The block a conveyor takes from (`upstream`) or hands to: the other end of its first
-/// connection in that direction.
-pub(crate) fn neighbour<'m>(
-    model: &'m Model,
-    conveyor: &ElementId,
-    upstream: bool,
-) -> Option<&'m ElementId> {
-    model.connections.iter().find_map(|k| {
-        if upstream {
-            (k.to == *conveyor).then_some(&k.from)
-        } else {
-            (k.from == *conveyor).then_some(&k.to)
-        }
-    })
-}
+/// The items on a conveyor: how far along each is (0 to 1), its number and its product key.
+pub(crate) type BeltItems = Vec<(f32, u64, u32)>;
 
-/// The distance between two points on the floor.
-fn dist(a: [f32; 2], b: [f32; 2]) -> f32 {
-    libm::hypotf(b[0] - a[0], b[1] - a[1])
-}
+/// Where to write a number of parcels not drawn.
+type Labels = Vec<(Vec3, String)>;
 
-/// The length of the polyline through `points`.
-pub(crate) fn path_length(points: &[[f32; 2]]) -> f32 {
-    points
-        .windows(2)
-        .map(|w| match w {
-            [a, b] => dist(*a, *b),
-            _ => 0.0,
-        })
-        .sum()
-}
-
-/// Where `distance` metres along `points` is (clamped to the ends), and the heading of the
-/// segment there.
-pub(crate) fn along_path(points: &[[f32; 2]], distance: f32) -> ([f32; 2], f32) {
-    let mut left = distance.max(0.0);
-    let mut at = points.first().copied().unwrap_or([0.0, 0.0]);
-    let mut angle = 0.0;
-    for w in points.windows(2) {
-        let &[a, b] = w else { continue };
-        let (dx, dy) = (b[0] - a[0], b[1] - a[1]);
-        let seg = libm::hypotf(dx, dy);
-        if seg <= 1e-6 {
-            continue;
-        }
-        angle = libm::atan2f(dy, dx);
-        if left <= seg {
-            let k = left / seg;
-            return ([a[0] + dx * k, a[1] + dy * k], angle);
-        }
-        left -= seg;
-        at = b;
-    }
-    (at, angle)
-}
-
-/// Adds a belt along each segment of `points` to `out`.
-fn push_path(out: &mut Vec<Tri>, points: &[[f32; 2]]) {
-    for w in points.windows(2) {
-        let &[a, b] = w else { continue };
-        let seg = dist(a, b);
-        if seg <= 1e-3 {
-            continue;
-        }
-        let mesh = straight_conveyor(StraightConveyor {
-            length: seg,
-            ..StraightConveyor::default()
-        });
-        let angle = libm::atan2f(b[1] - a[1], b[0] - a[0]);
-        let placed = mesh.rotated_z(angle).translated([a[0], a[1], 0.0]);
-        push_mesh(out, &placed, Paint::Belt);
-    }
-}
-
-/// How far a ray from `p` along `d` goes before it leaves the square of half-side `half` around
-/// `centre` (0 when `p` is outside it on that side).
-fn leave_square(centre: [f32; 2], half: f32, p: [f32; 2], d: [f32; 2]) -> f32 {
-    let axis = |c: f32, p: f32, d: f32| {
-        if d.abs() > 1e-9 {
-            ((c + half * d.signum() - p) / d).max(0.0)
-        } else {
-            f32::INFINITY
-        }
-    };
-    let t = axis(centre[0], p[0], d[0]).min(axis(centre[1], p[1], d[1]));
-    if t.is_finite() { t } else { 0.0 }
-}
-
-/// The two ends of a straight conveyor from the block at `a` (outline `out_a`) to the one at
-/// `b`: where the line between the centres, shifted sideways by `side_a` at `a` and `side_b` at
-/// `b`, leaves the first outline and enters the second. When the outlines leave less than
-/// [`LEAST_BELT`] between them, the centres themselves.
-fn edge_to_edge(
-    (a, out_a, side_a): ([f32; 2], Outline, f32),
-    (b, out_b, side_b): ([f32; 2], Outline, f32),
-) -> [[f32; 2]; 2] {
-    let apart = dist(a, b);
-    if apart <= 1e-6 {
-        return [a, b];
-    }
-    let d = [(b[0] - a[0]) / apart, (b[1] - a[1]) / apart];
-    let n = [-d[1], d[0]];
-    let pa = [a[0] + n[0] * side_a, a[1] + n[1] * side_a];
-    let pb = [b[0] + n[0] * side_b, b[1] + n[1] * side_b];
-    let span = dist(pa, pb);
-    let dir = if span > 1e-6 {
-        [(pb[0] - pa[0]) / span, (pb[1] - pa[1]) / span]
-    } else {
-        d
-    };
-    let out = out_a.leave(a, pa, dir);
-    let back = out_b.leave(b, pb, [-dir[0], -dir[1]]);
-    if span - out - back < LEAST_BELT {
-        return [a, b];
-    }
-    [
-        [pa[0] + dir[0] * out, pa[1] + dir[1] * out],
-        [pb[0] - dir[0] * back, pb[1] - dir[1] * back],
-    ]
-}
-
-/// A loop of belt of `total` metres that leaves the block at `centre` (outline `outline`, ring
-/// placed from `half` out) on the side that `toward` lies on, goes out, round two chamfered
-/// corners and back to the same face a belt's width or so along: five straight pieces beside the
-/// block, which closes the ring. Where the outline at the arms' offset lies inside `half` (a
-/// gateway's diamond), a short straight stub joins each end of the ring to the outline, and the
-/// ring is that much shorter, so the whole path is still `total` long.
-fn loop_path(
-    centre: [f32; 2],
-    outline: Outline,
-    half: f32,
-    toward: [f32; 2],
-    total: f32,
-) -> Vec<[f32; 2]> {
-    let (dx, dy) = (toward[0] - centre[0], toward[1] - centre[1]);
-    let out = if dx.abs() >= dy.abs() {
-        [if dx >= 0.0 { 1.0 } else { -1.0 }, 0.0]
-    } else {
-        [0.0, if dy >= 0.0 { 1.0 } else { -1.0 }]
-    };
-    let side = [-out[1], out[0]];
-    let width = (2.0 * half * 0.9).clamp(LOOP_WIDTH.0, LOOP_WIDTH.1);
-    let cut = LOOP_CUT;
-    let h = width / 2.0;
-    // How far out the outline is at each arm's offset, and so how long each stub is.
-    let depth_at = |across: f32| {
-        if across.abs() < outline.reach() {
-            let p = [centre[0] + side[0] * across, centre[1] + side[1] * across];
-            outline.leave(centre, p, out).min(half)
-        } else {
-            half
-        }
-    };
-    let stub = half - depth_at(h);
-    let ring = total - 2.0 * stub;
-    // Two sides of `depth` and the width between them, less 2 * (2 - sqrt 2) * cut for the corners.
-    let depth = (ring - width + 2.0 * (2.0 - core::f32::consts::SQRT_2) * cut) / 2.0;
-    let at = |across: f32, up: f32| {
-        [
-            centre[0] + out[0] * (half + up) + side[0] * across,
-            centre[1] + out[1] * (half + up) + side[1] * across,
-        ]
-    };
-    // The ends of the path: on the outline, `stub` short of the ring's own ends.
-    let on_outline = |across: f32| {
-        let reach = half - stub;
-        [
-            centre[0] + out[0] * reach + side[0] * across,
-            centre[1] + out[1] * reach + side[1] * across,
-        ]
-    };
-    let mut ring_points = {
-        // A long loop flares out at 45 degrees to a ring a quarter as wide as it is long (at most
-        // LOOP_FLARE wide), so it reads as a loop rather than a hairpin; its ends stay at the block.
-        let wide = (total / 4.0).min(LOOP_FLARE);
-        let flare = wide / 2.0 - h;
-        let straight = 0.6;
-        let diagonal = core::f32::consts::SQRT_2 * flare;
-        let far = (ring - wide - 2.0 * straight - 2.0 * diagonal) / 2.0;
-        if total >= 12.0 && flare > 0.0 && far > 0.0 {
-            let w = wide / 2.0;
-            let (near, top) = (straight + flare, straight + flare + far);
-            vec![
-                at(-h, 0.0),
-                at(-h, straight),
-                at(-w, near),
-                at(-w, top),
-                at(w, top),
-                at(w, near),
-                at(h, straight),
-                at(h, 0.0),
-            ]
-        } else {
-            vec![
-                at(-h, 0.0),
-                at(-h, depth - cut),
-                at(-h + cut, depth),
-                at(h - cut, depth),
-                at(h, depth - cut),
-                at(h, 0.0),
-            ]
-        }
-    };
-    if stub > 1e-4 {
-        ring_points.insert(0, on_outline(-h));
-        ring_points.push(on_outline(h));
-    }
-    ring_points
-}
-
-/// The points of conveyor `e` on the floor, in metres: from the edge of the shape before it to the
-/// edge of the shape after it (lanes that leave or enter one block side by side start at different
-/// points of its edge); a loop beside the block it leaves and returns to, as long as its own length
-/// (within limits); and with a neighbour on one side only, or none, its own length along `+x` from
-/// its own centre. `centre_of` gives an element's centre; `None` when `e` is not a conveyor or has none.
-pub(crate) fn belt_points(
-    model: &Model,
-    e: &Element,
-    centre_of: &dyn Fn(&ElementId) -> Option<[f32; 2]>,
-) -> Option<Vec<[f32; 2]>> {
-    let ElementKind::Conveyor { length: len, .. } = &e.kind else {
-        return None;
-    };
-    let c = centre_of(&e.id)?;
-    let metres = unit_metres(model.experiment.length_unit);
-    let before = neighbour(model, &e.id, true).and_then(|f| Some((f, centre_of(f)?)));
-    let after = neighbour(model, &e.id, false).and_then(|t| Some((t, centre_of(t)?)));
-    // Half the footprint of a block; a neighbouring conveyor has none, the belts meet
-    // at its middle.
-    let half_of = |id: &ElementId| {
-        model.element(id).map_or(0.0, |n| {
-            if matches!(n.kind, ElementKind::Conveyor { .. }) {
-                0.0
-            } else {
-                block_shape(&n.kind).2
-            }
-        })
-    };
-    // The outline of a block, likewise a point for a conveyor.
-    let outline_of = |id: &ElementId| outline_of(model, id);
-    // The sideways shift of this lane among the conveyors that leave `block` (or, when
-    // `upstream` is false, enter it), which has the outline `outline`. The lanes are
-    // `LANE_PITCH` apart, or closer when that would take them past `LANE_SPREAD` of the
-    // outline's half-width either side of the middle: spread evenly, they never share a
-    // point.
-    let lane = |block: &ElementId, upstream: bool, outline: Outline| {
-        let mates: Vec<&ElementId> = model
-            .elements
-            .iter()
-            .filter(|m| matches!(m.kind, ElementKind::Conveyor { .. }))
-            .filter(|m| neighbour(model, &m.id, upstream) == Some(block))
-            .map(|m| &m.id)
-            .collect();
-        let at = mates.iter().position(|m| **m == e.id).unwrap_or(0);
-        let gaps = mates.len().saturating_sub(1) as f32;
-        let pitch = if gaps > 0.0 {
-            LANE_PITCH.min(2.0 * LANE_SPREAD * outline.reach() / gaps)
-        } else {
-            0.0
-        };
-        (at as f32 - gaps / 2.0) * pitch
-    };
-    let own_end = [c[0] + *len as f32 * metres, c[1]];
-    let points: Vec<[f32; 2]> = match (before, after) {
-        (Some((f, a)), Some((t, b))) if f == t || dist(a, b) <= 0.05 => {
-            let want = *len as f32 * metres;
-            let total = if want.is_finite() {
-                want.clamp(LOOP_LENGTH.0, LOOP_LENGTH.1)
-            } else {
-                LOOP_LENGTH.0
-            };
-            loop_path(a, outline_of(f), half_of(f), c, total)
-        }
-        (Some((f, a)), Some((t, b))) => {
-            let (oa, ob) = (outline_of(f), outline_of(t));
-            edge_to_edge((a, oa, lane(f, true, oa)), (b, ob, lane(t, false, ob))).to_vec()
-        }
-        _ => vec![c, own_end],
-    };
-    Some(points)
-}
-
-/// The model in world space: each block's shape at its layout position, a conveyor as a belt
-/// from the edge of the shape before it to the edge of the shape after it (lanes that leave or
-/// enter one block side by side start at different points of its edge), and a line on the floor
-/// for each connection that no conveyor carries. A conveyor that returns to the block it leaves
-/// is a loop beside that block, as long as the conveyor's own length (within limits). The
-/// length of a conveyor with a neighbour on only one side, or none, is the model's own, in
-/// metres, along `+x` from its centre.
-pub(crate) fn scene(model: &Model) -> Scene {
-    let placed = model.placed();
-    let centre_of = |id: &ElementId| placed.get(id).map(centre_metres);
-    let is_conveyor = |id: &ElementId| {
-        model
-            .element(id)
-            .is_some_and(|e| matches!(e.kind, ElementKind::Conveyor { .. }))
-    };
-    let mut tris = Vec::new();
-    let mut anchors = Vec::new();
-    for (order, e) in model.elements.iter().enumerate() {
-        let Some(c) = centre_of(&e.id) else { continue };
-        let id = e.id.as_str().to_owned();
-        if matches!(e.kind, ElementKind::Conveyor { .. }) {
-            let points = belt_points(model, e, &centre_of).unwrap_or_default();
-            let belt_length = path_length(&points);
-            push_path(&mut tris, &points);
-            anchors.push(Anchor {
-                id,
-                order,
-                spot: Spot::Path {
-                    points,
-                    length: belt_length,
-                },
-            });
-        } else {
-            let (mesh, paint, half) = block_shape(&e.kind);
-            push_mesh(&mut tris, &mesh.translated([c[0], c[1], 0.0]), paint);
-            // Entities do not pile up at where they come from or go to.
-            if !matches!(paint, Paint::Source | Paint::Sink) {
-                anchors.push(Anchor {
-                    id,
-                    order,
-                    spot: Spot::Block { centre: c, half },
-                });
-            }
-        }
-    }
-    let links: Vec<Segment> = model
-        .connections
-        .iter()
-        .filter(|k| !is_conveyor(&k.from) && !is_conveyor(&k.to))
-        .filter_map(|k| {
-            let (a, b) = (centre_of(&k.from)?, centre_of(&k.to)?);
-            Some(([a[0], a[1], 0.01], [b[0], b[1], 0.01]))
-        })
-        .collect();
-    let bounds = bounds_of(&tris, &links);
-    let product_colours = model
-        .product_values()
-        .map(|(_, values)| values.iter().map(|v| named_colour(v)).collect())
-        .unwrap_or_default();
-    Scene {
-        grid: floor_grid(bounds),
-        tris,
-        links,
-        anchors,
-        bounds,
-        product_colours,
-    }
-}
-
-/// The items on a conveyor: how far along each is (0 to 1) and its product key.
-pub(crate) type BeltItems = Vec<(f32, u32)>;
-
-/// The totes of a watched run. On a conveyor, one per item of `on_belt(id)` at its place along
-/// the belt and in its product's colour; when that is `None`, `inside(id)` totes spread evenly.
-/// At another block, `inside(id)` totes stacked beside it (at most [`MOST_AT_A_BLOCK`]). With
-/// them, the numbers of those too many to draw, and where to write them.
-pub(crate) fn totes(
+/// The parcels of a watched run. On a conveyor, one per item of `on_belt(id)` at its place along
+/// the path, in its product's colour and a size by its number; when that is `None`, `inside(id)`
+/// parcels spread evenly. At another block, `inside(id)` parcels on its top (at most
+/// [`MOST_AT_A_BLOCK`]). With them, the numbers of those too many to draw, and where to write
+/// them.
+pub(crate) fn parcels(
     scene: &Scene,
     inside: &dyn Fn(&str) -> u64,
     on_belt: &dyn Fn(&str) -> Option<BeltItems>,
-) -> (Vec<Tri>, Vec<(Vec3, String)>) {
-    let base = tote(Tote { size: TOTE_SIZE });
+) -> (Vec<Tri>, Labels) {
+    let shapes: Vec<(Mesh, Mesh)> = PARCELS
+        .iter()
+        .map(|size| kit::parcel(kit::Parcel { size: *size }))
+        .collect();
+    let colour = |key: usize| {
+        scene
+            .product_colours
+            .get(key)
+            .copied()
+            .flatten()
+            .map_or(Paint::Tote(key), Paint::Named)
+    };
+    let put = |tris: &mut Vec<Tri>, which: usize, f: &Frame, paint: Paint| {
+        if let Some((carton, tape)) = shapes.get(which % shapes.len()) {
+            push_mesh(tris, &placed(carton, f), paint);
+            push_mesh(tris, &placed(tape, f), Paint::Tape);
+        }
+    };
     let mut tris = Vec::new();
     let mut labels = Vec::new();
     for a in &scene.anchors {
-        if let Spot::Path { points, length } = &a.spot
-            && let Some(items) = on_belt(&a.id)
-        {
-            for &(fraction, product) in items.iter().take(MOST_ON_A_BELT) {
-                let (at, angle) = along_path(points, fraction.clamp(0.0, 1.0) * length);
-                let key = usize::try_from(product).unwrap_or(0);
-                let paint = scene
-                    .product_colours
-                    .get(key)
-                    .copied()
-                    .flatten()
-                    .map_or(Paint::Tote(key), Paint::Named);
-                let placed = base
-                    .rotated_z(angle)
-                    .translated([at[0], at[1], BELT_HEIGHT]);
-                push_mesh(&mut tris, &placed, paint);
-            }
-            if items.len() > MOST_ON_A_BELT {
-                let (mid, _) = along_path(points, length / 2.0);
-                labels.push((
-                    [mid[0], mid[1], BELT_HEIGHT + 0.6],
-                    format!("+{}", items.len() - MOST_ON_A_BELT),
-                ));
-            }
-            continue;
-        }
-        let n = inside(&a.id);
-        if n == 0 {
-            continue;
-        }
-        let n = usize::try_from(n).unwrap_or(usize::MAX);
-        let paint = Paint::Tote(a.order);
         match &a.spot {
-            Spot::Path { points, length } => {
-                let room = if length.is_finite() && *length > 0.0 {
-                    (libm::floorf(length / 0.6) as usize).max(1)
-                } else {
-                    0
+            Spot::Path { path } => {
+                let total = path.length();
+                let on_top = |s: f64| {
+                    let f = path.point_at(s);
+                    Frame::new(f.x, f.y, f.z + f64::from(BELT_HEIGHT), f.heading_deg)
                 };
+                if let Some(items) = on_belt(&a.id) {
+                    for &(fraction, number, product) in items.iter().take(MOST_ON_A_BELT) {
+                        let s = f64::from(fraction.clamp(0.0, 1.0)) * total;
+                        let key = usize::try_from(product).unwrap_or(0);
+                        let which = usize::try_from(number % 3).unwrap_or(0);
+                        put(&mut tris, which, &on_top(s), colour(key));
+                    }
+                    if items.len() > MOST_ON_A_BELT {
+                        let f = on_top(total / 2.0);
+                        labels.push((
+                            [f.x as f32, f.y as f32, f.z as f32 + 0.6],
+                            format!("+{}", items.len() - MOST_ON_A_BELT),
+                        ));
+                    }
+                    continue;
+                }
+                let n = usize::try_from(inside(&a.id)).unwrap_or(usize::MAX);
+                let room = (total / 0.5).floor().max(0.0) as usize;
                 let shown = n.min(room).min(MOST_ON_A_BELT);
                 for i in 0..shown {
-                    let along = (i as f32 + 0.5) / shown as f32 * length;
-                    let (at, angle) = along_path(points, along);
-                    let placed = base
-                        .rotated_z(angle)
-                        .translated([at[0], at[1], BELT_HEIGHT]);
-                    push_mesh(&mut tris, &placed, paint);
+                    let s = (i as f64 + 0.5) / shown as f64 * total;
+                    put(&mut tris, i, &on_top(s), Paint::Tote(a.order));
                 }
                 if n > shown && shown > 0 {
-                    let (mid, _) = along_path(points, length / 2.0);
+                    let f = on_top(total / 2.0);
                     labels.push((
-                        [mid[0], mid[1], BELT_HEIGHT + 0.6],
+                        [f.x as f32, f.y as f32, f.z as f32 + 0.6],
                         format!("+{}", n - shown),
                     ));
                 }
             }
-            Spot::Block { centre, half } => {
+            Spot::Block { centre, top } => {
+                let n = usize::try_from(inside(&a.id)).unwrap_or(usize::MAX);
                 let shown = n.min(MOST_AT_A_BLOCK);
+                let mut z = *top;
                 for i in 0..shown {
-                    let (column, level) = (i / 5, i % 5);
-                    let at = [
-                        centre[0] + half + 0.45 + column as f32 * 0.65,
-                        centre[1],
-                        level as f32 * TOTE_SIZE[2],
-                    ];
-                    push_mesh(&mut tris, &base.translated(at), paint);
+                    let f = Frame::new(
+                        f64::from(centre[0]),
+                        f64::from(centre[1]),
+                        f64::from(z),
+                        30.0 * i as f64,
+                    );
+                    put(&mut tris, i, &f, Paint::Tote(a.order));
+                    z += PARCELS[i % PARCELS.len()][2] + 0.01;
                 }
                 if n > shown {
-                    labels.push((
-                        [centre[0] + half + 0.45, centre[1], 5.0 * TOTE_SIZE[2] + 0.3],
-                        format!("+{}", n - shown),
-                    ));
+                    labels.push(([centre[0], centre[1], z + 0.3], format!("+{}", n - shown)));
                 }
             }
         }
@@ -846,16 +777,54 @@ pub(crate) struct Camera {
 }
 
 impl Camera {
-    /// A camera that sees all of `bounds`.
-    pub(crate) fn fitted(bounds: (Vec3, Vec3)) -> Self {
+    /// A camera at a three-quarter view from the front left, as near as it can be while every
+    /// corner of `bounds` shows in a view `aspect` (width over height) wide, with a margin, and
+    /// with the box centred on screen.
+    pub(crate) fn fitted(bounds: (Vec3, Vec3), aspect: f32) -> Self {
         let (lo, hi) = bounds;
-        let radius = (0.5 * length(sub(hi, lo))).max(1.0);
-        Self {
+        let mut cam = Self {
             target: midpoint(lo, hi),
-            yaw: -FRAC_PI_2 - 0.5,
-            pitch: 0.6,
-            distance: radius / libm::sinf(FOV / 2.0) * 1.1,
+            yaw: -FRAC_PI_2 - 0.6,
+            pitch: 0.62,
+            distance: 1.0,
+        };
+        let corners: Vec<Vec3> = (0..8)
+            .map(|k| {
+                [
+                    if k & 1 == 0 { lo[0] } else { hi[0] },
+                    if k & 2 == 0 { lo[1] } else { hi[1] },
+                    if k & 4 == 0 { lo[2] } else { hi[2] },
+                ]
+            })
+            .collect();
+        let ty = libm::tanf(FOV / 2.0) * 0.92;
+        let tx = ty * aspect.clamp(0.2, 5.0);
+        for _ in 0..6 {
+            // Far enough that each corner is inside the view.
+            let b = cam.basis();
+            let mut d: f32 = 1.0;
+            for c in &corners {
+                let v = sub(*c, cam.target);
+                let (x, y, z) = (dot(v, b.right), dot(v, b.up), dot(v, b.forward));
+                d = d.max(x.abs() / tx - z).max(y.abs() / ty - z);
+            }
+            cam.distance = d.min(5000.0);
+            // Then centre the box: move the target by the middle of the corners' extent on screen.
+            let b = cam.basis();
+            let (mut x0, mut x1, mut y0, mut y1) = (f32::MAX, f32::MIN, f32::MAX, f32::MIN);
+            for c in &corners {
+                let v = sub(*c, b.eye);
+                let depth = dot(v, b.forward).max(NEAR);
+                let (x, y) = (dot(v, b.right) / depth, dot(v, b.up) / depth);
+                (x0, x1, y0, y1) = (x0.min(x), x1.max(x), y0.min(y), y1.max(y));
+            }
+            let shift = add(
+                scale(b.right, (x0 + x1) / 2.0 * cam.distance),
+                scale(b.up, (y0 + y1) / 2.0 * cam.distance),
+            );
+            cam.target = add(cam.target, shift);
         }
+        cam
     }
 
     /// Turns the camera around its target.
@@ -923,7 +892,7 @@ pub(crate) struct Face {
     pub pts: [Pos2; 3],
     /// Distance from the camera along its view direction, the mean of the corners'.
     pub depth: f32,
-    /// How much of its colour the light leaves, 0.35 to 1.
+    /// How much of its colour the light leaves.
     pub shade: f32,
     pub paint: Paint,
 }
@@ -982,10 +951,11 @@ impl View {
         Some([self.on_screen(va), self.on_screen(vb)])
     }
 
-    /// The triangles of `parts` that face the camera and lie in front of it, shaded, far to
-    /// near.
-    pub(crate) fn faces(&self, parts: &[&[Tri]]) -> Vec<Face> {
-        let light = normalized([0.35, -0.45, 0.82]);
+    /// The triangles of `parts` that face the camera and lie in front of it, shaded: far to near
+    /// when `sort`, otherwise in the order given.
+    pub(crate) fn faces(&self, parts: &[&[Tri]], sort: bool) -> Vec<Face> {
+        // A key light from the front left and above, with a sky fill so no face goes black.
+        let light = normalized([0.35, -0.55, 0.76]);
         let mut out = Vec::new();
         for tri in parts.iter().flat_map(|p| p.iter()) {
             if dot(tri.normal, sub(self.basis.eye, tri.v[0])) <= 0.0 {
@@ -995,22 +965,25 @@ impl View {
             if corners.iter().any(|c| c[2] < NEAR) {
                 continue;
             }
+            let sky = 0.5 + 0.5 * tri.normal[2].max(0.0);
             out.push(Face {
                 pts: corners.map(|c| self.on_screen(c)),
                 depth: (corners[0][2] + corners[1][2] + corners[2][2]) / 3.0,
-                shade: 0.35 + 0.65 * dot(tri.normal, light).max(0.0),
+                shade: (0.45 * sky + 0.6 * dot(tri.normal, light).max(0.0)).min(1.0),
                 paint: tri.paint,
             });
         }
-        out.sort_by(|a, b| b.depth.total_cmp(&a.depth));
+        if sort {
+            out.sort_by(|a, b| b.depth.total_cmp(&a.depth));
+        }
         out
     }
 }
 
-/// `colour` lit by `shade`.
+/// `colour` lit by `shade`, keeping its alpha.
 fn shaded(colour: Color32, shade: f32) -> Color32 {
     let k = |c: u8| (f32::from(c) * shade).clamp(0.0, 255.0) as u8;
-    Color32::from_rgb(k(colour.r()), k(colour.g()), k(colour.b()))
+    Color32::from_rgba_premultiplied(k(colour.r()), k(colour.g()), k(colour.b()), colour.a())
 }
 
 /// The 3D view's state: the camera (none until the first frame fits it) and the scene of the
@@ -1021,17 +994,50 @@ pub(crate) struct View3d {
     scene: Option<(u64, Scene)>,
 }
 
-fn paint_colour(ctx: &egui::Context, p: &theme::Palette, paint: Paint) -> Color32 {
+/// The colour of `paint` in the current theme (light or dark).
+fn paint_colour(ctx: &egui::Context, paint: Paint) -> Color32 {
+    let dark = ctx.style().visuals.dark_mode;
+    let pick = |light: [u8; 3], night: [u8; 3]| {
+        let [r, g, b] = if dark { night } else { light };
+        Color32::from_rgb(r, g, b)
+    };
     match paint {
-        Paint::Source => p.accent,
-        Paint::Sink => p.chart,
-        Paint::Machine => p.control_border,
-        Paint::Delay => p.border,
-        Paint::Gateway => p.warning,
-        Paint::Batch => p.chart_hover,
-        Paint::Belt => p.text_weak,
+        Paint::Floor => pick([214, 218, 224], [52, 57, 66]),
+        Paint::Shadow => Color32::from_black_alpha(if dark { 70 } else { 40 }),
+        Paint::Marking => pick([236, 176, 28], [230, 172, 30]),
+        Paint::Belt => pick([46, 50, 58], [24, 26, 31]),
+        Paint::Frame => pick([62, 96, 140], [92, 132, 186]),
+        Paint::Lane([r, g, b]) | Paint::Named([r, g, b]) => Color32::from_rgb(r, g, b),
+        Paint::Steel => pick([120, 128, 140], [140, 148, 160]),
+        Paint::Wood => pick([196, 160, 108], [176, 142, 96]),
+        Paint::Cardboard => pick([200, 160, 104], [184, 146, 94]),
+        Paint::Tape => pick([236, 222, 196], [224, 210, 186]),
+        Paint::Housing => pick([78, 86, 100], [104, 114, 132]),
+        Paint::Glow => pick([56, 189, 248], [96, 205, 250]),
+        Paint::Person => pick([242, 140, 40], [246, 152, 56]),
+        Paint::Lamp(0) => Color32::from_rgb(46, 190, 90),
+        Paint::Lamp(1) => Color32::from_rgb(246, 176, 34),
+        Paint::Lamp(_) => Color32::from_rgb(226, 62, 56),
         Paint::Tote(i) => chart_palette::series_color(ctx, i),
-        Paint::Named([r, g, b]) => Color32::from_rgb(r, g, b),
+    }
+}
+
+/// Paints `faces` onto `painter` in chunks small enough for 16-bit indices.
+fn paint_faces(painter: &egui::Painter, ctx: &egui::Context, faces: &[Face]) {
+    for chunk in faces.chunks(CHUNK) {
+        let mut mesh = egui::Mesh::default();
+        for f in chunk {
+            let colour = match f.paint {
+                Paint::Shadow | Paint::Floor => paint_colour(ctx, f.paint),
+                _ => shaded(paint_colour(ctx, f.paint), f.shade),
+            };
+            let first = mesh.vertices.len() as u32;
+            for pt in f.pts {
+                mesh.colored_vertex(pt, colour);
+            }
+            mesh.add_triangle(first, first + 1, first + 2);
+        }
+        painter.add(Shape::mesh(mesh));
     }
 }
 
@@ -1061,9 +1067,10 @@ impl App {
         ui.ctx()
             .accesskit_node_builder(resp.id, |n| n.set_description(hint));
 
-        let cam = camera.get_or_insert_with(|| Camera::fitted(scene.bounds));
+        let aspect = rect.width() / rect.height().max(1.0);
+        let cam = camera.get_or_insert_with(|| Camera::fitted(scene.bounds, aspect));
         if fit {
-            *cam = Camera::fitted(scene.bounds);
+            *cam = Camera::fitted(scene.bounds, aspect);
         }
         if resp.dragged() {
             let d = resp.drag_delta();
@@ -1109,23 +1116,16 @@ impl App {
             }
         }
 
-        // The run being watched: its totes.
+        // The run being watched: its parcels.
         let (live_tris, labels) = match watching {
-            Some(w) => totes(
+            Some(w) => parcels(
                 scene,
                 &|id| {
                     w.state(id).map_or(0, |s| {
                         s.entered.saturating_sub(s.left).saturating_sub(s.lost)
                     })
                 },
-                &|id| {
-                    Some(
-                        w.conveyor_items(id)
-                            .into_iter()
-                            .map(|(fraction, _, product)| (fraction, product))
-                            .collect(),
-                    )
-                },
+                &|id| Some(w.conveyor_items(id)),
             ),
             None => (Vec::new(), Vec::new()),
         };
@@ -1133,31 +1133,18 @@ impl App {
         let painter = ui.painter_at(rect);
         painter.rect_filled(rect, 4.0, p.canvas);
         let view = cam.view(rect);
+        paint_faces(&painter, ui.ctx(), &view.faces(&[&scene.floor], false));
         let grid = Stroke::new(1.0, p.border);
         for (a, b) in &scene.grid {
             if let Some(line) = view.segment(*a, *b) {
                 painter.line_segment(line, grid);
             }
         }
-        let link = Stroke::new(2.0, p.text_weak);
-        for (a, b) in &scene.links {
-            if let Some(line) = view.segment(*a, *b) {
-                painter.line_segment(line, link);
-            }
-        }
-        let faces = view.faces(&[&scene.tris, &live_tris]);
-        for chunk in faces.chunks(CHUNK) {
-            let mut mesh = egui::Mesh::default();
-            for f in chunk {
-                let colour = shaded(paint_colour(ui.ctx(), &p, f.paint), f.shade);
-                let first = mesh.vertices.len() as u32;
-                for pt in f.pts {
-                    mesh.colored_vertex(pt, colour);
-                }
-                mesh.add_triangle(first, first + 1, first + 2);
-            }
-            painter.add(Shape::mesh(mesh));
-        }
+        paint_faces(
+            &painter,
+            ui.ctx(),
+            &view.faces(&[&scene.tris, &live_tris], true),
+        );
         for (at, text) in labels {
             if let Some(pos) = view.project(at) {
                 painter.text(
@@ -1168,6 +1155,15 @@ impl App {
                     p.text,
                 );
             }
+        }
+        if scene.tris.is_empty() {
+            painter.text(
+                rect.center(),
+                Align2::CENTER_CENTER,
+                t("Nothing to draw: this model has no layout yet. The Layout tab lists its blocks as unplaced."),
+                FontId::proportional(14.0),
+                p.text_weak,
+            );
         }
         painter.text(
             rect.left_bottom() + vec2(8.0, -8.0),
@@ -1192,11 +1188,6 @@ mod tests {
     #![allow(clippy::panic, clippy::expect_used, clippy::unwrap_used)]
 
     use super::*;
-    use stochcraft_model::{Bounds, Connection, Dist, Element, Routing};
-
-    fn id(s: &str) -> ElementId {
-        ElementId::unchecked(s)
-    }
 
     /// A camera 10 m from the origin, in front of it and above.
     fn camera() -> Camera {
@@ -1224,6 +1215,18 @@ mod tests {
         }
     }
 
+    /// The parcel sorter example, as the engine opens it.
+    pub(crate) fn sorter() -> Model {
+        let mut e = stochcraft_engine::Engine::new();
+        e.open_bytes(
+            "sorter.bpmn",
+            include_bytes!("../../../tests/models/sorter.bpmn"),
+            None,
+        )
+        .unwrap();
+        e.model().clone()
+    }
+
     #[test]
     fn the_target_projects_to_the_middle_of_the_rect() {
         let cam = Camera {
@@ -1249,8 +1252,8 @@ mod tests {
         let view = camera().view(rect());
         let facing = triangle(0.0, [0.0, 0.0, 1.0]);
         let away = triangle(0.0, [0.0, 0.0, -1.0]);
-        assert_eq!(view.faces(&[&[facing]]).len(), 1);
-        assert!(view.faces(&[&[away]]).is_empty());
+        assert_eq!(view.faces(&[&[facing]], true).len(), 1);
+        assert!(view.faces(&[&[away]], true).is_empty());
     }
 
     #[test]
@@ -1259,414 +1262,116 @@ mod tests {
         // The camera is on the -y side, so y = 5 is far and y = -5 near; near is listed first.
         let near = triangle(-5.0, [0.0, 0.0, 1.0]);
         let far = triangle(5.0, [0.0, 0.0, 1.0]);
-        let faces = view.faces(&[&[near, far]]);
+        let faces = view.faces(&[&[near, far]], true);
         assert_eq!(faces.len(), 2);
         assert!(faces[0].depth > faces[1].depth, "{faces:?}");
+        // The floor keeps its order.
+        let floor = view.faces(&[&[near, far]], false);
+        assert!(floor[0].depth < floor[1].depth);
     }
 
-    fn conveyor(name: &str, length: f64) -> Element {
-        Element::new(
-            id(name),
-            name,
-            ElementKind::Conveyor {
-                length,
-                speed: 1.0,
-                accumulating: false,
-                item_length: 0.5,
-                gap: 0.1,
-                shape: Default::default(),
-            },
-        )
+    #[test]
+    fn fit_frames_the_whole_box_and_fills_the_view() {
+        let bounds = ([-12.0, -8.0, 0.0], [13.0, 3.5, 1.8]);
+        let r = Rect::from_min_size(pos2(0.0, 0.0), vec2(1200.0, 700.0));
+        let cam = Camera::fitted(bounds, r.width() / r.height());
+        let view = cam.view(r);
+        let (mut x0, mut x1, mut y0, mut y1) = (f32::MAX, f32::MIN, f32::MAX, f32::MIN);
+        for k in 0..8 {
+            let c = [
+                if k & 1 == 0 { bounds.0[0] } else { bounds.1[0] },
+                if k & 2 == 0 { bounds.0[1] } else { bounds.1[1] },
+                if k & 4 == 0 { bounds.0[2] } else { bounds.1[2] },
+            ];
+            let p = view.project(c).expect("in front");
+            assert!(r.expand(2.0).contains(p), "{p:?} is off screen");
+            (x0, x1, y0, y1) = (x0.min(p.x), x1.max(p.x), y0.min(p.y), y1.max(p.y));
+        }
+        // It fills most of the view one way or the other, and is centred.
+        let fill = ((x1 - x0) / r.width()).max((y1 - y0) / r.height());
+        assert!(fill > 0.8, "fills {fill}");
+        assert!(((x0 + x1) / 2.0 - r.center().x).abs() < 0.05 * r.width());
+        assert!(((y0 + y1) / 2.0 - r.center().y).abs() < 0.05 * r.height());
     }
 
-    fn sink(name: &str) -> Element {
-        Element::new(
-            id(name),
-            name,
-            ElementKind::Sink {
-                scrap: None,
-                demand: None,
-            },
-        )
-    }
-
-    fn gateway(name: &str) -> Element {
-        Element::new(
-            id(name),
-            name,
-            ElementKind::ExclusiveGateway {
-                default: None,
-                routing: Routing::Standard,
-            },
-        )
-    }
-
-    fn place(m: &mut Model, name: &str, (x, y, width, height): (f64, f64, f64, f64)) {
-        m.layout.insert(
-            id(name),
-            Bounds {
-                x,
-                y,
-                width,
-                height,
-            },
-        );
-    }
-
-    fn connect(m: &mut Model, from: &str, to: &str) {
-        m.connections.push(Connection::new(
-            id(&format!("{from}-{to}")),
-            id(from),
-            id(to),
-        ));
-    }
-
-    /// Source, conveyor and sink side by side, 400 drawing units (8 m) from the source's centre
-    /// to the sink's, the sink `drop` drawing units lower.
-    fn two_blocks(drop: f64) -> Model {
-        let mut m = Model::default();
-        m.experiment.length_unit = LengthUnit::Metres;
-        m.elements.push(Element::new(
-            id("in"),
-            "In",
-            ElementKind::Source {
-                interarrival: Dist::Constant(1.0),
-                limit: None,
-                timed: Vec::new(),
-                idle_outside: false,
-            },
-        ));
-        m.elements.push(conveyor("belt", 10.0));
-        m.elements.push(sink("out"));
-        connect(&mut m, "in", "belt");
-        connect(&mut m, "belt", "out");
-        place(&mut m, "in", (0.0, 0.0, 100.0, 80.0));
-        place(&mut m, "belt", (200.0, 0.0, 100.0, 80.0));
-        place(&mut m, "out", (400.0, drop, 100.0, 80.0));
-        m
-    }
-
-    fn line_model() -> Model {
-        two_blocks(0.0)
-    }
-
-    /// A gateway whose conveyor leaves it and comes back, `length` metres long, with its own
-    /// canvas position to the right of the gateway.
-    fn loop_model(length: f64) -> Model {
-        let mut m = Model::default();
-        m.experiment.length_unit = LengthUnit::Metres;
-        m.elements.push(gateway("g"));
-        m.elements.push(conveyor("loop", length));
-        connect(&mut m, "g", "loop");
-        connect(&mut m, "loop", "g");
-        place(&mut m, "g", (0.0, 0.0, 50.0, 50.0));
-        place(&mut m, "loop", (200.0, 0.0, 100.0, 80.0));
-        m
-    }
-
-    /// A conveyor's path and length in the scene.
-    fn path_of(s: &Scene, name: &str) -> (Vec<[f32; 2]>, f32) {
-        match s
+    #[test]
+    fn the_sorter_is_drawn_from_its_layout_with_every_block_placed() {
+        let m = sorter();
+        let s = scene(&m);
+        assert!(s.unplaced.is_empty(), "{:?}", s.unplaced);
+        // It stands on the floor, inside the layout's box (the loop's far arc reaches about
+        // 12.4 m, the infeed's pallet about -11.8 m).
+        let (lo, hi) = s.bounds;
+        assert!(lo[2] > -0.01 && hi[2] > BELT_HEIGHT);
+        assert!(hi[0] > 11.5 && hi[0] < 13.5, "{hi:?}");
+        assert!(lo[0] < -10.0 && lo[0] > -13.0, "{lo:?}");
+        assert!(!s.floor.is_empty() && !s.grid.is_empty());
+        // Every conveyor has its path, and every pack station is a spot for parcels.
+        let paths = s
             .anchors
             .iter()
-            .find(|a| a.id == name)
-            .map(|a| a.spot.clone())
-        {
-            Some(Spot::Path { points, length }) => (points, length),
-            other => panic!("{name} has no path: {other:?}"),
-        }
-    }
-
-    /// How far `p` is from `centre` in the largest coordinate: `half` on the edge of a square
-    /// footprint of half-side `half`.
-    fn reach(p: [f32; 2], centre: [f32; 2]) -> f32 {
-        (p[0] - centre[0]).abs().max((p[1] - centre[1]).abs())
+            .filter(|a| matches!(a.spot, Spot::Path { .. }))
+            .count();
+        assert_eq!(paths, 6);
+        assert_eq!(s.anchors.len(), 10);
     }
 
     #[test]
-    fn a_conveyor_runs_from_the_edge_of_the_shape_before_to_the_edge_of_the_one_after() {
-        let s = scene(&line_model());
-        let xs: Vec<f32> = s
-            .tris
-            .iter()
-            .filter(|t| t.paint == Paint::Belt)
-            .flat_map(|t| t.v)
-            .map(|v| v[0])
-            .collect();
-        assert!(!xs.is_empty());
-        let lo = xs.iter().copied().fold(f32::INFINITY, f32::min);
-        let hi = xs.iter().copied().fold(f32::NEG_INFINITY, f32::max);
-        // The centres are at x = 50 and 450 drawing units: 1 m and 9 m. The source and the sink
-        // are 0.9 m across, so the belt runs from 1 + 0.45 = 1.45 m to 9 - 0.45 = 8.55 m.
-        assert!((lo - 1.45).abs() < 1e-3, "{lo}");
-        assert!((hi - 8.55).abs() < 1e-3, "{hi}");
-        // Both ends of the model are drawn too, and no floor line joins what a belt joins.
-        assert!(s.tris.iter().any(|t| t.paint == Paint::Source));
-        assert!(s.tris.iter().any(|t| t.paint == Paint::Sink));
-        assert!(s.links.is_empty());
+    fn a_lane_leaving_the_loop_cuts_a_gap_in_its_rail_on_that_side() {
+        let m = sorter();
+        let (loop_path, w) = track_metres(&m, &ElementId::unchecked("loop")).unwrap();
+        let (lane, lw) = track_metres(&m, &ElementId::unchecked("lane_red")).unwrap();
+        let (left, right, plates) = gaps_of(&loop_path, w, &[(&lane, lw)]);
+        // The lane leaves the sort straight on the right (outside the loop), 2.25 m along it.
+        assert!(left.is_empty());
+        assert_eq!(right.len(), 1);
+        assert!(right[0].0 < 2.25 && right[0].1 > 2.25, "{right:?}");
+        assert_eq!(plates.len(), 1);
+        // The infeed joins at the loop's start (and so at its end, the loop being closed), from
+        // the right.
+        let (infeed, iw) = track_metres(&m, &ElementId::unchecked("infeed")).unwrap();
+        let (left, right, _) = gaps_of(&loop_path, w, &[(&infeed, iw)]);
+        assert!(left.is_empty());
+        assert_eq!(right.len(), 2, "{right:?}");
     }
 
     #[test]
-    fn a_slanting_conveyor_starts_and_ends_on_the_edges_of_both_footprints() {
-        // The sink is 200 units (4 m) lower: the centres are (1, -0.8) and (9, -4.8) m, 8 m
-        // across and 4 m down. A ray along that line leaves the source's 0.45 m half-side at
-        // 0.45 / 8 = 0.05625 of the way: (1.45, -1.025); it enters the sink's at the same
-        // fraction from the other end: (8.55, -4.575).
-        let s = scene(&two_blocks(200.0));
-        let (points, length) = path_of(&s, "belt");
-        let (start, end) = (points[0], points[points.len() - 1]);
-        let (from, to) = ([1.0, -0.8], [9.0, -4.8]);
-        assert!(
-            reach(start, from) >= 0.45 - 1e-4,
-            "{start:?} is inside the source"
-        );
-        assert!(reach(end, to) >= 0.45 - 1e-4, "{end:?} is inside the sink");
-        assert!(
-            reach(start, from) <= 0.45 + 1e-4,
-            "{start:?} is off the source"
-        );
-        assert!(reach(end, to) <= 0.45 + 1e-4, "{end:?} is off the sink");
-        assert!((start[0] - 1.45).abs() < 1e-3 && (start[1] + 1.025).abs() < 1e-3);
-        assert!((end[0] - 8.55).abs() < 1e-3 && (end[1] + 4.575).abs() < 1e-3);
-        // 1 - 2 * 0.05625 = 0.8875 of the sqrt(80) = 8.944 m between the centres: 7.938 m.
-        assert!((length - 0.8875 * 80.0_f32.sqrt()).abs() < 1e-3, "{length}");
-    }
-
-    #[test]
-    fn lanes_that_leave_one_shape_start_at_different_points_of_its_edge() {
-        // A gateway (a diamond of half-diagonal 0.35 * sqrt 2 = 0.495 m) at (0.5, -0.5) and a
-        // sink (half-side 0.45 m) at (8, -0.5), joined by two conveyors. They are shifted 0.2 m
-        // either side of the line between the centres, so they start where that level line
-        // leaves the diamond, 0.495 - 0.2 = 0.295 m out: (0.795, -0.7) and (0.795, -0.3), and end
-        // at (7.55, -0.7) and (7.55, -0.3): 0.4 m apart at both ends.
-        let mut m = Model::default();
-        m.experiment.length_unit = LengthUnit::Metres;
-        m.elements.push(gateway("g"));
-        m.elements.push(conveyor("a", 5.0));
-        m.elements.push(conveyor("b", 5.0));
-        m.elements.push(sink("s"));
-        for lane in ["a", "b"] {
-            connect(&mut m, "g", lane);
-            connect(&mut m, lane, "s");
-            place(&mut m, lane, (200.0, 100.0, 100.0, 80.0));
-        }
-        place(&mut m, "g", (0.0, 0.0, 50.0, 50.0));
-        place(&mut m, "s", (375.0, 0.0, 50.0, 50.0));
+    fn an_item_on_a_belt_is_drawn_where_its_path_puts_it() {
+        let m = sorter();
         let s = scene(&m);
-        let (a, _) = path_of(&s, "a");
-        let (b, _) = path_of(&s, "b");
-        let first = |p: &[[f32; 2]]| p[0];
-        let last = |p: &[[f32; 2]]| p[p.len() - 1];
-        assert!((first(&a)[0] - 0.795).abs() < 1e-3 && (first(&b)[0] - 0.795).abs() < 1e-3);
-        assert!(on_diamond(first(&a), [0.5, -0.5]) && on_diamond(first(&b), [0.5, -0.5]));
-        assert!((first(&a)[1] + 0.7).abs() < 1e-3, "{:?}", first(&a));
-        assert!((first(&b)[1] + 0.3).abs() < 1e-3, "{:?}", first(&b));
-        assert!((last(&a)[0] - 7.55).abs() < 1e-3 && (last(&b)[0] - 7.55).abs() < 1e-3);
-        assert!((last(&a)[1] + 0.7).abs() < 1e-3, "{:?}", last(&a));
-        assert!((last(&b)[1] + 0.3).abs() < 1e-3, "{:?}", last(&b));
-    }
-
-    /// Whether `p` is on the outline of a gateway's diamond (half-diagonal 0.35 * sqrt 2) around
-    /// `centre`: `|x| + |y|` from the centre is that half-diagonal.
-    fn on_diamond(p: [f32; 2], centre: [f32; 2]) -> bool {
-        let r = 0.35 * core::f32::consts::SQRT_2;
-        ((p[0] - centre[0]).abs() + (p[1] - centre[1]).abs() - r).abs() < 1e-3
-    }
-
-    #[test]
-    fn a_conveyor_back_to_the_block_it_leaves_is_a_loop_beside_it() {
-        // The gateway's centre is (0.5, -0.5) m, a diamond of half-diagonal 0.495 m; the
-        // conveyor's own centre (5, -0.8) is to its right, so the loop leaves to the right. The
-        // arms are 2 * 0.5 * 0.9 = 0.9 m apart, 0.45 m either side of the middle, where the
-        // diamond reaches 0.495 - 0.45 = 0.045 m out. So the path starts on the diamond at
-        // (0.545, -0.95) and ends at (0.545, -0.05), and a straight stub of 0.5 - 0.045 = 0.455 m
-        // each side runs to the ring, which starts at x = 1.0. The ring is 8 - 2 * 0.455 = 7.09 m
-        // long; with the 0.3 m corner cuts its arms are (7.09 - 0.9 + 2 * (2 - sqrt 2) * 0.3) / 2
-        // = 3.2707 m deep.
-        let s = scene(&loop_model(8.0));
-        let (points, length) = path_of(&s, "loop");
-        let centre = [0.5, -0.5];
-        assert!(points.len() >= 4, "{points:?}");
-        let (start, end) = (points[0], points[points.len() - 1]);
-        assert!(on_diamond(start, centre), "{start:?}");
-        assert!(on_diamond(end, centre), "{end:?}");
-        assert!((start[0] - 0.545).abs() < 1e-3 && (end[0] - 0.545).abs() < 1e-3);
-        assert!((start[1] + 0.95).abs() < 1e-3 && (end[1] + 0.05).abs() < 1e-3);
-        // 0.455 + 2.9707 + 0.4243 + 0.15 = 4 m to the middle: 8 m in all, stubs included.
-        assert!((length - 8.0).abs() < 1e-3, "{length}");
-        assert!((path_length(&points) - 8.0).abs() < 1e-3);
-        // All of it lies to the right of the diamond's ends, out to 1.0 + 3.2707.
-        let far = points.iter().map(|p| p[0]).fold(f32::MIN, f32::max);
-        assert!(points.iter().all(|p| p[0] >= 0.545 - 1e-3));
-        assert!((far - 4.2707).abs() < 1e-3, "{far}");
-        assert!(s.tris.iter().any(|t| t.paint == Paint::Belt));
-    }
-
-    #[test]
-    fn five_lanes_between_a_gateway_and_a_sink_are_distinct_in_order_and_on_the_outlines() {
-        // The gateway is at (0.5, -0.5) m and the sink (half-side 0.45) at (8, -0.5). Lanes
-        // spread over 2 * 0.6 of the half-width, in 4 gaps: the gateway's 1.2 * 0.495 / 4 =
-        // 0.1485 m, the sink's 1.2 * 0.45 / 4 = 0.135 m (both under the 0.4 m pitch). So they
-        // start at y = -0.5 + {-0.297, -0.1485, 0, 0.1485, 0.297} and end at y = -0.5 + {-0.27,
-        // -0.135, 0, 0.135, 0.27}: the gateway's at x = 0.5 + 0.495 - |offset|, the sink's at
-        // 7.55.
-        let mut m = Model::default();
-        m.experiment.length_unit = LengthUnit::Metres;
-        m.elements.push(gateway("g"));
-        m.elements.push(sink("s"));
-        let names = ["a", "b", "c", "d", "e"];
-        for lane in names {
-            m.elements.push(conveyor(lane, 5.0));
-            connect(&mut m, "g", lane);
-            connect(&mut m, lane, "s");
-            place(&mut m, lane, (200.0, 100.0, 100.0, 80.0));
-        }
-        place(&mut m, "g", (0.0, 0.0, 50.0, 50.0));
-        place(&mut m, "s", (375.0, 0.0, 50.0, 50.0));
-        let s = scene(&m);
-        let paths: Vec<Vec<[f32; 2]>> = names.iter().map(|n| path_of(&s, n).0).collect();
-        let starts: Vec<[f32; 2]> = paths.iter().map(|p| p[0]).collect();
-        let ends: Vec<[f32; 2]> = paths.iter().map(|p| p[p.len() - 1]).collect();
-        for (start, end) in starts.iter().zip(&ends) {
-            assert!(on_diamond(*start, [0.5, -0.5]), "{start:?}");
-            assert!((reach(*end, [8.0, -0.5]) - 0.45).abs() < 1e-3, "{end:?}");
-        }
-        // In order and at least 0.13 m apart, so no two share a point.
-        for w in starts.windows(2) {
-            assert!(w[1][1] - w[0][1] > 0.13, "{starts:?}");
-        }
-        for w in ends.windows(2) {
-            assert!(w[1][1] - w[0][1] > 0.13, "{ends:?}");
-        }
-        assert!((starts[0][1] + 0.797).abs() < 1e-2 && (starts[4][1] + 0.203).abs() < 1e-2);
-        assert!((ends[0][1] + 0.77).abs() < 1e-2 && (ends[4][1] + 0.23).abs() < 1e-2);
-    }
-
-    #[test]
-    fn a_long_loop_flares_out_to_a_ring_as_long_as_the_conveyor() {
-        // 30 m: a ring 30 / 4 = 7.5 m wide whose path is still 30 m long, both ends on the
-        // gateway's diamond (0.9 m apart, after stubs of 0.455 m to the ring). The ring itself
-        // is 30 - 2 * 0.455 = 29.09 m, still flared to 7.5 m wide.
-        let s = scene(&loop_model(30.0));
-        let (points, length) = path_of(&s, "loop");
-        let arc: f32 = points
-            .windows(2)
-            .map(|w| ((w[1][0] - w[0][0]).powi(2) + (w[1][1] - w[0][1]).powi(2)).sqrt())
-            .sum();
-        assert!((arc - 30.0).abs() < 1e-3, "{arc}");
-        assert!((length - 30.0).abs() < 1e-3, "{length}");
-        let ys: Vec<f32> = points.iter().map(|p| p[1]).collect();
-        let span = ys.iter().copied().fold(f32::MIN, f32::max)
-            - ys.iter().copied().fold(f32::MAX, f32::min);
-        assert!((span - 7.5).abs() < 1e-3, "{span}");
-        let (first, last) = (points[0], points[points.len() - 1]);
-        let gap = ((first[0] - last[0]).powi(2) + (first[1] - last[1]).powi(2)).sqrt();
-        assert!((gap - 0.9).abs() < 1e-3, "{gap}");
-    }
-
-    #[test]
-    fn a_product_named_after_a_colour_is_drawn_in_it() {
-        assert_eq!(named_colour("red"), Some([214, 48, 49]));
-        assert_eq!(named_colour("Lane Blue"), Some([41, 109, 204]));
-        assert_eq!(named_colour("dark-gray box"), Some([140, 140, 145]));
-        // A word that only contains a colour is not one.
-        assert_eq!(named_colour("bored"), None);
-        assert_eq!(named_colour("A"), None);
-    }
-
-    #[test]
-    fn a_loop_is_kept_between_three_and_sixty_metres() {
-        // 0.5 m is drawn as 3 m and 1000 m as 60 m.
-        assert!((path_of(&scene(&loop_model(0.5)), "loop").1 - 3.0).abs() < 1e-3);
-        assert!((path_of(&scene(&loop_model(1000.0)), "loop").1 - 60.0).abs() < 1e-3);
-    }
-
-    #[test]
-    fn totes_are_spread_along_the_conveyor() {
-        let s = scene(&line_model());
-        let (tris, labels) = totes(&s, &|id| u64::from(id == "belt") * 3, &|_| None);
-        assert!(labels.is_empty());
+        let (tris, _) = parcels(&s, &|_| 0, &|id| (id == "loop").then(|| vec![(0.5, 7, 0)]));
         assert!(!tris.is_empty());
-        assert!(tris.iter().all(|t| matches!(t.paint, Paint::Tote(_))));
-        // The belt is 1.45 m to 8.55 m long, and a tote's centre is at least half its 0.5 m
-        // length from the ends.
-        assert!(
-            tris.iter()
-                .flat_map(|t| t.v)
-                .all(|v| v[0] > 1.45 && v[0] < 8.55)
-        );
-    }
-
-    /// The middle of the bounding box of the totes painted `paint`.
-    fn tote_centre(tris: &[Tri], paint: Paint) -> [f32; 2] {
-        let vs: Vec<Vec3> = tris
-            .iter()
-            .filter(|t| t.paint == paint)
-            .flat_map(|t| t.v)
-            .collect();
-        assert!(!vs.is_empty(), "no tote painted {paint:?}");
-        let mid = |axis: usize| {
-            (vs.iter().map(|v| v[axis]).fold(f32::MAX, f32::min)
-                + vs.iter().map(|v| v[axis]).fold(f32::MIN, f32::max))
-                / 2.0
-        };
-        [mid(0), mid(1)]
+        // Half way round the 30 m loop is 15 m along: on the far straight.
+        let (loop_path, _) = track_metres(&m, &ElementId::unchecked("loop")).unwrap();
+        let want = loop_path.point_at(15.0);
+        let n = tris.len() as f32;
+        let sum = tris.iter().fold([0.0_f32; 2], |acc, tri| {
+            let c = tri
+                .v
+                .iter()
+                .fold([0.0_f32; 2], |a, v| [a[0] + v[0], a[1] + v[1]]);
+            [acc[0] + c[0] / 3.0, acc[1] + c[1] / 3.0]
+        });
+        let c = [sum[0] / n, sum[1] / n];
+        assert!((f64::from(c[0]) - want.x).abs() < 0.1, "{c:?} {want:?}");
+        assert!((f64::from(c[1]) - want.y).abs() < 0.1, "{c:?} {want:?}");
+        // In its product's colour.
+        assert!(tris.iter().any(|t| matches!(t.paint, Paint::Named(_))));
     }
 
     #[test]
-    fn items_on_a_belt_are_where_the_run_has_carried_them_in_their_products_colour() {
-        let s = scene(&line_model());
-        let (points, length) = path_of(&s, "belt");
-        // The belt is 7.1 m long from x = 1.45 m.
-        assert!((length - 7.1).abs() < 1e-3, "{length}");
-        // One item at the start of the belt (product 0) and one three quarters along (product 2).
-        let items = vec![(0.0, 0), (0.75, 2)];
-        let (tris, labels) = totes(&s, &|_| 0, &|id| (id == "belt").then(|| items.clone()));
-        assert!(labels.is_empty());
-        // 1.45 + 0.75 * 7.1 = 6.775 m.
-        assert!((tote_centre(&tris, Paint::Tote(0))[0] - points[0][0]).abs() < 1e-3);
-        assert!((tote_centre(&tris, Paint::Tote(2))[0] - 6.775).abs() < 1e-3);
+    fn a_model_without_a_layout_draws_nothing_and_lists_every_block() {
+        let mut m = sorter();
+        m.site = Default::default();
+        let s = scene(&m);
+        assert!(s.tris.is_empty() && s.anchors.is_empty());
+        assert_eq!(s.unplaced.len(), m.elements.len());
     }
 
     #[test]
-    fn an_item_half_way_round_a_loop_is_at_the_half_way_point_of_its_path() {
-        // The loop is 8 m long: 4 m in is the 0.455 m stub and 2.9707 m along the first arm and
-        // 0.4243 m round the first corner (3.85 m), then 0.15 m into the 0.3 m across:
-        // (4.2707, -0.5), the point furthest from the gateway's centre, which is (0.5, -0.5).
-        let s = scene(&loop_model(8.0));
-        let items = vec![(0.5, 1)];
-        let (tris, _) = totes(&s, &|_| 0, &|id| (id == "loop").then(|| items.clone()));
-        let at = tote_centre(&tris, Paint::Tote(1));
-        assert!(
-            (at[0] - 4.2707).abs() < 1e-3 && (at[1] + 0.5).abs() < 1e-3,
-            "{at:?}"
-        );
-    }
-
-    #[test]
-    fn totes_without_positions_spread_evenly_round_a_loop() {
-        // Two totes, at a quarter (2 m: 0.455 m of stub and 1.545 m along the first arm, at
-        // (2.545, -0.95)) and three quarters (6 m: the same distance from the other end, at
-        // (2.545, -0.05)) of the 8 m. A tote is 0.5 m long and 0.4 m across and lies along the
-        // arms: x from 2.295 to 2.795, and y from -0.95 - 0.2 = -1.15 to -0.05 + 0.2 = 0.15.
-        let s = scene(&loop_model(8.0));
-        let (tris, labels) = totes(&s, &|id| u64::from(id == "loop") * 2, &|_| None);
-        assert!(labels.is_empty());
-        let vs: Vec<Vec3> = tris.iter().flat_map(|t| t.v).collect();
-        let range = |axis: usize| {
-            (
-                vs.iter().map(|v| v[axis]).fold(f32::MAX, f32::min),
-                vs.iter().map(|v| v[axis]).fold(f32::MIN, f32::max),
-            )
-        };
-        let (x, y) = (range(0), range(1));
-        assert!(
-            (x.0 - 2.295).abs() < 1e-3 && (x.1 - 2.795).abs() < 1e-3,
-            "{x:?}"
-        );
-        assert!(
-            (y.0 + 1.15).abs() < 1e-3 && (y.1 - 0.15).abs() < 1e-3,
-            "{y:?}"
-        );
+    fn a_name_that_says_a_colour_is_drawn_in_it() {
+        assert_eq!(named_colour("Blue parcel"), Some([41, 109, 204]));
+        assert_eq!(named_colour("gray"), Some([140, 140, 145]));
+        assert_eq!(named_colour("parcel"), None);
     }
 }
