@@ -501,22 +501,25 @@ and 50 an hour for each customer waiting:
 ```bash
 stochcraft-cli optimize two-desks.bpmn \
   --decide desk1.capacity=11..40 --decide desk2.capacity=6..35 \
-  --minimize desk1.mean_queue_length*50 --minimize desk2.mean_queue_length*50 \
+  --minimize 'desk1.mean_queue_length*50' --minimize 'desk2.mean_queue_length*50' \
   --cost desk1.capacity=20 --cost desk2.capacity=20 --delta 2
 ```
 
-It starts from the model's numbers and a few other starting points, and visits designs near the
+It starts from the model's numbers (or `--start desk1.capacity=14`, one of the range's
+values) and a few other starting points, and visits designs near the
 best found so far. Then it compares the best few again, on new replications, so that a design
 that only looked good by chance is not chosen. The answer reads like "With 95% confidence,
 (14, 8) is the best, or within δ = 2 of the best, of the 7 designs compared at the end
 (312 tried)", followed by the table of those designs. That statement is about the designs
-compared at the end, not every design there is. When the whole space has at most 50 designs,
-every one is compared and the answer says "of all 48 designs".
+compared at the end, not every design there is. When the whole space has at most 50 designs and
+the budget pays for 10 runs of each, every one is compared and the answer says "of all 48
+designs".
 
 - `--delta` (δ) is the smallest difference in the objective worth telling apart, in its unit (here
   money an hour). A smaller δ needs more runs.
 - `--cost-cap 420` keeps the decisions' costs at most 420; designs over it are never run.
-- `--constraint desk1.mean_wait<=0.05~0.005` keeps a result's mean at most 0.05, with a
+- `--constraint 'desk1.mean_wait<=0.05~0.005'` (quoted, so the shell does not read `<` as a
+  redirection) keeps a result's mean at most 0.05, with a
   tolerance of 0.005: a design within the tolerance of the limit may count either way. With only
   `--cost` and constraints, it finds the cheapest design that meets them ("the fewest servers that
   keep the mean wait under 3 minutes").

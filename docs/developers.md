@@ -277,16 +277,18 @@ how sure the answer is.
 
 ```bash
 stochcraft-cli optimize tandem.bpmn --decide desk1.capacity=11..40 --decide desk2.capacity=6..35 \
-  --minimize desk1.mean_queue_length*50 --minimize desk2.mean_queue_length*50 \
+  --minimize 'desk1.mean_queue_length*50' --minimize 'desk2.mean_queue_length*50' \
   --cost desk1.capacity=20 --cost desk2.capacity=20 --cost-cap 420 --delta 2 --max-runs 20000
 ```
 
 A decision is `id.field=min..max` or `id.field=min..max:step`, the field one of `capacity`,
-`quantity` and `queue_capacity`; it starts from the model's value. `--minimize` (or `--maximize`)
+`quantity` and `queue_capacity`. It starts from the model's value, or from `--start
+id.field=value`; a starting value that is not one of the range's values (a model's 13 for
+`11..40:2`, say) is refused before anything runs, naming the decision. `--minimize` (or `--maximize`)
 takes `element.metric`, or `element.metric*weight` for a cost per unit of the result, repeated for
 a weighted sum; `--cost id.field=cost` is a decision's cost per unit, and `--cost-cap` caps their
-sum (designs over it are never run). `--constraint element.metric<=limit~tolerance` (or `>=`)
-keeps a result's mean within a limit. `--delta` is δ, the smallest difference in the objective
+sum (designs over it are never run). `--constraint 'element.metric<=limit~tolerance'` (or `>=`;
+quote it, since the shell reads `<` and `>` as redirections) keeps a result's mean within a limit. `--delta` is δ, the smallest difference in the objective
 worth telling apart. It prints the answer in words and the finalists, or JSON (`--format json`);
 `--time-limit` stops the search, and its JSON answer's `repeat` gives the `--max-runs` and
 `--reserve-runs` that repeat it exactly. See "Whole-number decisions" below.
@@ -872,8 +874,11 @@ the objective, then one value per constraint). A design is a vector of whole num
   streams), each with its own visited set, taking a step each in turn and sharing replications.
 - *The clean-up*: the search's best, the designs active around it, each start's final design and
   the starting design, on fresh replications (`Stream::CleanUp`), by `select_best` or, with
-  constraints, `select_feasible` (α split equally). A space of at most `all_designs_up_to` (50)
-  designs is not searched: every design goes to the clean-up. Without randomness each design
+  constraints, `select_feasible` (α split equally). A space is not searched, and every
+  design goes to the clean-up, only when it can be counted (its ranges hold at most a million
+  points, so a box larger than that takes the search path even when the cap leaves few designs),
+  it has at most `all_designs_up_to` (50) designs, and the budget pays for the clean-up's first
+  stage (10 replications) of every one; otherwise it is searched. Without randomness each design
   runs once and they are compared by value.
 - *The budget*: `search_runs` caps the search and the rest of `max_runs` is the clean-up's. A step
   that does not fit ends the search, and nothing runs past the cap. The caller's `stop` (a time

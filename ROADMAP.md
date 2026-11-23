@@ -4222,7 +4222,7 @@ form (`Engine::optimize_start`, as `sobol_start`) keeps the browser's page respo
 server offers it as it offers every command.
 
 **CLI:** `stochcraft-cli optimize MODEL --decide id.field=11..40 --decide gw.routing
---minimize element.metric --cost id.field=20 --cost-cap 420 --constraint element.metric<=0.05~0.005
+--minimize element.metric --cost id.field=20 --cost-cap 420 --constraint 'element.metric<=0.05~0.005'
 --delta 2 --max-runs 20000`, which prints a table of the finalists and the answer in words, or
 JSON (`--format json`).
 
