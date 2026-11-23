@@ -58,4 +58,6 @@ workflow links it from the pull request), so reviewers can try it.
 
 `cargo xtask fetch-bpsim` downloads the BPSim reference models and XML Schema from bpsim.org into
 `target/bpsim/` (they are never committed). Without them, and without `xmllint`, the
-`stochcraft-io` reference tests skip locally with a message; CI always runs them.
+`stochcraft-io` reference tests skip locally with a message; CI always runs them. `cargo xtask
+fetch-scxml` likewise downloads W3C's SCXML 1.0 XML Schema into `target/scxml/`, for the test that
+every state chart written is valid SCXML.

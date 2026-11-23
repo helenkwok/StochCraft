@@ -78,6 +78,9 @@ pub fn save_edited(
     if before.monte_carlo != after.monte_carlo {
         ed.save_monte_carlo(&mut doc.root, scenario, after)?;
     }
+    if before.agents != after.agents {
+        ed.save_agents(&mut doc.root, scenario, after)?;
+    }
     let unit = ed.unit.clone();
     tidy(&mut doc.root, "", &unit);
     let out = xml::write(&doc).into_bytes();
@@ -419,6 +422,9 @@ fn difference_within(
             "its Monte Carlo inputs and outputs read as {:?}",
             got.monte_carlo
         ));
+    }
+    if got.agents != want.agents {
+        return Some(format!("its agent populations read as {:?}", got.agents));
     }
     // A stop is written on the element it watches, so one on no element is not.
     let mut want_x = want.experiment.clone();
@@ -2942,6 +2948,30 @@ impl Editor {
         }
         if let Some(mc) = &after.monte_carlo {
             let mut x = crate::mc::extension_element(mc);
+            rename(&mut x, &prefix, &ns);
+            let at = end_of(s);
+            s.children.insert(at, Node::Element(x));
+        }
+        Ok(())
+    }
+
+    /// Writes an agent-based model's populations (its `stochcraft:agents` extension) into the
+    /// scenario that was opened, in place of what was there.
+    fn save_agents(
+        &mut self,
+        root: &mut Element,
+        scenario: Option<&str>,
+        after: &Model,
+    ) -> Result<(), SaveError> {
+        let s = self.ensure_scenario(root, scenario)?;
+        let ns = s.ns.clone().unwrap_or_else(|| NS2.to_owned());
+        let prefix = s.prefix().to_owned();
+        remove_all(s, &|x: &Element| {
+            x.is_any(&NSS, "VendorExtension")
+                && x.attr("name").as_deref() == Some(crate::bpsim::AGENTS)
+        });
+        if let Some(a) = &after.agents {
+            let mut x = crate::agents::extension_element(a);
             rename(&mut x, &prefix, &ns);
             let at = end_of(s);
             s.children.insert(at, Node::Element(x));

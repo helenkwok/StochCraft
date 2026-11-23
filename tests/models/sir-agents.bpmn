@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- An epidemic among 100 people as an agent-based model (ROADMAP M4.3), written by hand for
+     StochCraft's examples (MIT OR Apache-2.0): a BPMN file with no process, whose BPSim scenario
+     gives the run's length (60 days), replications and seed, and whose stochcraft:agents
+     extension holds one population of the agent type `person`, whose state chart is the SCXML
+     file sir-person.scxml beside this one. One person starts infected; each infected person
+     meets a random other person at rate 1.5 a day and recovers at rate 1 a day, so R0 = 1.5.
+     The exact distribution of the final number ever infected follows from the embedded jump
+     chain (crates/agents/tests/exact.rs checks it); this file is one of the golden models. -->
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
+    xmlns:bpsim="http://www.bpsim.org/schemas/2.0"
+    xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1"
+    id="sir_agents" name="SIR among 100 people" targetNamespace="https://github.com/helenkwok/StochCraft/model">
+  <bpmn:relationship type="BPSimData">
+    <bpmn:extensionElements>
+      <bpsim:BPSimData>
+        <bpsim:Scenario id="base" name="SIR among 100 people">
+          <bpsim:ScenarioParameters replication="100" seed="1" baseTimeUnit="day">
+            <bpsim:Duration><bpsim:FloatingParameter value="60"/></bpsim:Duration>
+          </bpsim:ScenarioParameters>
+          <bpsim:VendorExtension name="stochcraft:agents" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1">
+            <stochcraft:agents saveEvery="1">
+              <stochcraft:agentType name="person" chart="sir-person.scxml"/>
+              <stochcraft:population name="people" type="person" count="100"/>
+              <stochcraft:statistic name="susceptible" population="people" measure="count" condition="In('susceptible')"/>
+              <stochcraft:statistic name="infected" population="people" measure="count" condition="In('infected')"/>
+              <stochcraft:statistic name="recovered" population="people" measure="count" condition="In('recovered')"/>
+            </stochcraft:agents>
+          </bpsim:VendorExtension>
+        </bpsim:Scenario>
+      </bpsim:BPSimData>
+    </bpmn:extensionElements>
+    <bpmn:source>sir_agents</bpmn:source>
+    <bpmn:target>sir_agents</bpmn:target>
+  </bpmn:relationship>
+</bpmn:definitions>

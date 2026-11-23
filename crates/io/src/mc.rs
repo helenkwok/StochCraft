@@ -116,7 +116,7 @@ pub(crate) fn extension_element(m: &MonteCarlo) -> Element {
 }
 
 /// Scenario `id` and those it inherits from, the root first (a loop stops at its first repeat).
-fn chain<'a>(data: &'a Element, id: &str) -> Vec<&'a Element> {
+pub(crate) fn chain<'a>(data: &'a Element, id: &str) -> Vec<&'a Element> {
     let scenarios: Vec<&Element> = data.children_named(&NSS, "Scenario").collect();
     let by_id = |want: &str| {
         scenarios

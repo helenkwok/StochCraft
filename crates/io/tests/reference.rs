@@ -1110,6 +1110,81 @@ fn everything_stochcraft_writes_is_schema_valid() {
         return missing("xmllint is not installed (libxml2-utils)");
     }
     validate(&write_new(&showcase()), "showcase", &xsd);
+    // An agent-based model: populations with every kind of network and a grid, the
+    // environment, statistics and the stepped mode.
+    {
+        use stochcraft_model::agents::{
+            AgentType, Agents, GridSpec, MeasureSpec, NetworkSpec, PopulationSpec, StatisticSpec,
+            SteppingSpec,
+        };
+        let networks = [
+            NetworkSpec::Empty,
+            NetworkSpec::Random { mean_degree: 4.0 },
+            NetworkSpec::Ring { each_side: 2 },
+            NetworkSpec::SmallWorld {
+                each_side: 2,
+                rewire: 0.1,
+            },
+            NetworkSpec::ScaleFree {
+                initial: 3,
+                links: 2,
+            },
+            NetworkSpec::Distance {
+                width: 1.0,
+                height: 1.0,
+                range: 0.2,
+            },
+            NetworkSpec::Links(vec![(0, 1), (1, 2)]),
+            NetworkSpec::File {
+                href: "links.csv".into(),
+            },
+        ];
+        let populations = networks
+            .into_iter()
+            .enumerate()
+            .map(|(i, n)| PopulationSpec {
+                name: format!("p{i}"),
+                agent_type: "person".into(),
+                count: 10,
+                arrival_rate: (i == 0).then_some(0.5),
+                network: Some(n),
+                grid: (i == 1).then(|| GridSpec {
+                    von_neumann: true,
+                    wrap: true,
+                    many_per_cell: true,
+                    random_placement: true,
+                    ..GridSpec::new(5, 5)
+                }),
+            })
+            .collect();
+        let model = Model {
+            name: "Agents".into(),
+            agents: Some(Agents {
+                types: vec![AgentType {
+                    name: "person".into(),
+                    chart: "person.scxml".into(),
+                }],
+                populations,
+                environment: Some("person".into()),
+                statistics: vec![StatisticSpec {
+                    name: "sick".into(),
+                    population: "p0".into(),
+                    measure: MeasureSpec::Mean,
+                    expression: Some("$days".into()),
+                    condition: Some("In('sick')".into()),
+                }],
+                stepping: Some(SteppingSpec {
+                    every: 1.0,
+                    random_order: true,
+                }),
+                save_every: Some(0.5),
+                microstep_limit: Some(100),
+                retest_limit: Some(1000),
+            }),
+            ..Model::default()
+        };
+        validate(&write_new(&model), "agents", &xsd);
+    }
     // Batches, splits and a bill of materials, as vendor extensions.
     let mut b = Builder::new();
     let parts = b.source("parts", Dist::Constant(1.0), None);

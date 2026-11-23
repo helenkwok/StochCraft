@@ -1,7 +1,8 @@
 //! Agents (ROADMAP M4.3): state charts with the semantics of W3C SCXML 1.0.
 //!
 //! The state chart comes first (stage A1), then populations of agents with messages between them
-//! (stage A2), with no files yet. A chart is written as a [`ChartSpec`] (the tree of an SCXML document), checked and
+//! (stage A2), networks and grids (stage A3), and files (stage A4). A chart is written as a
+//! [`ChartSpec`] (the tree of an SCXML document), checked and
 //! compiled by [`Chart::new`], and run as an [`Agent`]; a [`Driver`] runs agents on the
 //! discrete-event clock (`stochcraft_des::EventQueue`).
 //!
@@ -106,11 +107,16 @@
 //!
 //! **Not here yet:** `<if>`, `<foreach>`, `<script>` (never: D17), `<invoke>`, `<donedata>`,
 //! `<param>`, `<send>` with a delay to other agents, `<initial>` elements with content (initial
-//! states are the `initial` attribute), late data binding, and reading and writing SCXML files
-//! (stage A4).
+//! states are the `initial` attribute) and late data binding.
+//!
+//! **Files** (stage A4): a model in a file is described by `stochcraft_model::agents::Agents`
+//! (the `stochcraft:agents` extension of a BPMN file with no process), and each agent type's
+//! chart is an SCXML 1.0 file, which `stochcraft-io`'s `scxml` module reads into a
+//! [`ChartSpec`] and writes back; [`described::build`] makes the [`Model`] they describe.
 
 mod chart;
 mod data;
+pub mod described;
 mod driver;
 mod interp;
 pub mod network;

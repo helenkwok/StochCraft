@@ -3476,6 +3476,7 @@ dependencies = [
  "serde",
  "serde_json",
  "sha2",
+ "stochcraft-agents",
  "stochcraft-blocks",
  "stochcraft-experiment",
  "stochcraft-io",
@@ -3502,6 +3503,7 @@ name = "stochcraft-io"
 version = "0.2.0"
 dependencies = [
  "quick-xml 0.42.0",
+ "stochcraft-agents",
  "stochcraft-blocks",
  "stochcraft-model",
  "stochcraft-random",

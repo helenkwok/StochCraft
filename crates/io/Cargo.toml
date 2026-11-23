@@ -11,6 +11,8 @@ publish.workspace = true
 
 [dependencies]
 stochcraft-model = { workspace = true }
+# Agents' state charts, read from and written to SCXML 1.0 (ROADMAP M4.3, D16).
+stochcraft-agents = { workspace = true }
 # XML reading (MIT).
 quick-xml = "0.42"
 
