@@ -4075,7 +4075,7 @@ See D21: the sorter (M5) first, alongside M3.7; then line balancing (M7.1), the 
 
 ## M8: optimisation
 
-**Status:** planned (#272); nothing built yet.
+**Status:** in progress (#272); O1 (Selection and feasibility, model-free) in #290; O2 to O6 not built yet.
 
 **Outcome:** a search over several decisions at once, followed by a selection of the best design
 that says how sure it is. M2.8 varies one parameter (`experiment.sweep`), evaluates a grid or a
