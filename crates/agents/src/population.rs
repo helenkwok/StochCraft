@@ -331,7 +331,15 @@ impl Model {
     /// Runs one replication from `seed`, from time 0 to `end`, and returns its statistics and
     /// counts.
     pub fn run(&self, seed: u64, end: f64) -> Result<Run, ModelError> {
+        self.run_with_warmup(seed, 0.0, end)
+    }
+
+    /// Runs one replication from `seed`, from time 0 to `end`, and returns its statistics and
+    /// counts from `warmup` on ([`Simulation::warm_up`]): what happened before it is discarded.
+    /// A warm-up of 0 is [`Model::run`]; one past `end` is taken as `end`.
+    pub fn run_with_warmup(&self, seed: u64, warmup: f64, end: f64) -> Result<Run, ModelError> {
         let mut sim = Simulation::new(self, seed)?;
+        sim.warm_up(warmup.min(end))?;
         sim.run_until(end)?;
         Ok(sim.into_run())
     }
@@ -1023,6 +1031,49 @@ impl Simulation {
                 ..p.counts.clone()
             })
             .collect()
+    }
+
+    /// Handles every event due no later than `warmup` without recording anything, then
+    /// discards what came before it, as a process model's warm-up does: the statistics recorded
+    /// so far, and the counts of agents created and removed and of messages dropped and
+    /// undelivered. The statistics are then recorded at `warmup` (after every event at that
+    /// time), and the next saving time is the first after it. A warm-up of 0 or less (or not a
+    /// number) changes nothing. Called before [`Simulation::run_until`].
+    pub fn warm_up(&mut self, warmup: f64) -> Result<(), RunError> {
+        if warmup.is_nan() || warmup <= 0.0 {
+            return Ok(());
+        }
+        while self.queue.peek_time().is_some_and(|t| t <= warmup) {
+            let Some(ev) = self.queue.pop() else { break };
+            self.handle(ev.payload)?;
+        }
+        self.queue.advance_to(warmup);
+        for p in &mut self.pops {
+            p.counts.created = 0;
+            p.counts.removed = 0;
+            p.counts.dropped = 0;
+            p.counts.undelivered = 0;
+        }
+        self.times.clear();
+        for v in &mut self.values {
+            v.clear();
+        }
+        self.record(warmup);
+        // The first saving time after the warm-up, on the grid of `save_every` from 0.
+        self.saved = match self.save_every {
+            Some(e) => {
+                let mut k = (warmup / e).floor().max(0.0) as u64;
+                while k < u64::MAX && (k as f64) * e <= warmup {
+                    k = k.saturating_add(1);
+                }
+                while k > 1 && ((k - 1) as f64) * e > warmup {
+                    k -= 1;
+                }
+                k
+            }
+            None => 1,
+        };
+        Ok(())
     }
 
     /// Handles every event due no later than `end`, recording the statistics at each saving

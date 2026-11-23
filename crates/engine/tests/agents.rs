@@ -33,10 +33,37 @@ fn sir_path() -> String {
         .into_owned()
 }
 
-fn scratch(name: &str) -> std::path::PathBuf {
-    let dir = std::path::Path::new(env!("CARGO_TARGET_TMPDIR")).join("agents-tests");
-    let _ = std::fs::create_dir_all(&dir);
-    dir.join(name)
+/// A folder of its own for one test, made new (never one left by another run or another test)
+/// and removed when the test ends, however it ends.
+struct Scratch(std::path::PathBuf);
+
+impl Scratch {
+    fn new(tag: &str) -> Self {
+        use std::sync::atomic::{AtomicUsize, Ordering};
+        static NEXT: AtomicUsize = AtomicUsize::new(0);
+        loop {
+            let d = std::path::Path::new(env!("CARGO_TARGET_TMPDIR")).join(format!(
+                "agents-{tag}-{}-{}",
+                std::process::id(),
+                NEXT.fetch_add(1, Ordering::Relaxed)
+            ));
+            match std::fs::create_dir(&d) {
+                Ok(()) => return Self(d),
+                Err(e) if e.kind() == std::io::ErrorKind::AlreadyExists => {}
+                Err(e) => panic!("{}: {e}", d.display()),
+            }
+        }
+    }
+
+    fn join(&self, name: &str) -> std::path::PathBuf {
+        self.0.join(name)
+    }
+}
+
+impl Drop for Scratch {
+    fn drop(&mut self) {
+        let _ = std::fs::remove_dir_all(&self.0);
+    }
 }
 
 fn floats(v: &Value) -> Vec<f64> {
@@ -226,11 +253,10 @@ fn saved_elsewhere_the_charts_go_beside_it_and_it_opens_the_same() {
     let mut e = Engine::new();
     ok(&mut e, "file.open", json!({ "path": sir_path() }));
     let before = ok(&mut e, "agents.run", json!({ "replications": 2 }));
-    let to = scratch("saved/sir.bpmn");
-    let _ = std::fs::remove_dir_all(scratch("saved"));
-    std::fs::create_dir_all(scratch("saved")).unwrap();
+    let dir = Scratch::new("saved");
+    let to = dir.join("sir.bpmn");
     ok(&mut e, "file.save", json!({ "path": to.to_string_lossy() }));
-    let chart = std::fs::read(scratch("saved/sir-person.scxml")).unwrap();
+    let chart = std::fs::read(dir.join("sir-person.scxml")).unwrap();
     assert_eq!(
         chart,
         std::fs::read(models().join("sir-person.scxml")).unwrap()
@@ -246,16 +272,157 @@ fn saved_elsewhere_the_charts_go_beside_it_and_it_opens_the_same() {
     // A different file of a chart's name beside it is never replaced: the save is refused and
     // nothing is written.
     let bpmn_before = std::fs::read(&to).unwrap();
-    std::fs::write(scratch("saved/sir-person.scxml"), "another chart").unwrap();
+    std::fs::write(dir.join("sir-person.scxml"), "another chart").unwrap();
     ok(&mut e, "experiment.set", json!({ "duration": 10.0 }));
     let (code, message) = err(&mut e, "file.save", json!({ "path": to.to_string_lossy() }));
     assert_eq!(code, ErrorCode::Conflict);
     assert!(message.contains("differs"), "{message}");
     assert_eq!(std::fs::read(&to).unwrap(), bpmn_before);
     assert_eq!(
-        std::fs::read(scratch("saved/sir-person.scxml")).unwrap(),
+        std::fs::read(dir.join("sir-person.scxml")).unwrap(),
         b"another chart"
     );
+}
+
+/// The model is never saved over a file it reads beside it: not over its chart by name, nor
+/// over another name for the same file (a hard link).
+#[test]
+fn the_model_is_never_saved_over_its_own_chart() {
+    let mut e = Engine::new();
+    ok(&mut e, "file.open", json!({ "path": sir_path() }));
+    let dir = Scratch::new("alias");
+    // By name: nothing is written.
+    let chart = dir.join("sir-person.scxml");
+    let (code, message) = err(
+        &mut e,
+        "file.save",
+        json!({ "path": chart.to_string_lossy() }),
+    );
+    assert_eq!(code, ErrorCode::InvalidParams);
+    assert!(message.contains("sir-person.scxml"), "{message}");
+    assert!(!chart.exists());
+    // Saved properly, then to another name of its chart.
+    let model = dir.join("sir.bpmn");
+    ok(
+        &mut e,
+        "file.save",
+        json!({ "path": model.to_string_lossy() }),
+    );
+    let original = std::fs::read(&chart).unwrap();
+    let alias = dir.join("alias.bpmn");
+    std::fs::hard_link(&chart, &alias).unwrap();
+    let (code, message) = err(
+        &mut e,
+        "file.save",
+        json!({ "path": alias.to_string_lossy() }),
+    );
+    assert_eq!(code, ErrorCode::InvalidParams);
+    assert!(message.contains("sir-person.scxml"), "{message}");
+    assert_eq!(std::fs::read(&chart).unwrap(), original);
+    // A model of its own name beside the chart saves as before.
+    ok(
+        &mut e,
+        "file.save",
+        json!({ "path": model.to_string_lossy() }),
+    );
+}
+
+/// A chart's place that is there but cannot be read (here a folder) stops the save before
+/// anything is written: only a file that is not there is written.
+#[test]
+fn a_chart_that_cannot_be_read_stops_the_save() {
+    let mut e = Engine::new();
+    ok(&mut e, "file.open", json!({ "path": sir_path() }));
+    let dir = Scratch::new("unreadable");
+    std::fs::create_dir(dir.join("sir-person.scxml")).unwrap();
+    let model = dir.join("sir.bpmn");
+    let (code, _) = err(
+        &mut e,
+        "file.save",
+        json!({ "path": model.to_string_lossy() }),
+    );
+    assert_eq!(code, ErrorCode::Io);
+    assert!(!model.exists());
+    assert!(dir.join("sir-person.scxml").is_dir());
+}
+
+/// The charts are written before the model, so a chart that cannot be written leaves the old
+/// model file as it was. Here the chart `a.scxml/b.scxml` needs a folder where the chart
+/// `a.scxml` has just been written.
+#[test]
+fn a_chart_that_cannot_be_written_leaves_the_old_model() {
+    let bpmn = std::fs::read_to_string(models().join("sir-agents.bpmn"))
+        .unwrap()
+        .replace(
+            "<stochcraft:agentType name=\"person\" chart=\"sir-person.scxml\"/>",
+            "<stochcraft:agentType name=\"person\" chart=\"a.scxml\"/><stochcraft:agentType name=\"other\" chart=\"a.scxml/b.scxml\"/>",
+        );
+    let chart = std::fs::read_to_string(models().join("sir-person.scxml")).unwrap();
+    let mut e = Engine::new();
+    ok(
+        &mut e,
+        "agents.open",
+        json!({ "text": bpmn, "files": { "a.scxml": chart, "a.scxml/b.scxml": chart } }),
+    );
+    let dir = Scratch::new("order");
+    let model = dir.join("m.bpmn");
+    std::fs::write(&model, "the old model").unwrap();
+    let (code, _) = err(
+        &mut e,
+        "file.save",
+        json!({ "path": model.to_string_lossy() }),
+    );
+    assert_eq!(code, ErrorCode::Io);
+    assert_eq!(std::fs::read(&model).unwrap(), b"the old model");
+}
+
+/// The run's results are of the time after the warm-up, the same numbers a run from 0 gives
+/// from then on; a warm-up or duration that is no time, or an end before the warm-up, is
+/// refused.
+#[test]
+fn the_warm_up_is_left_out_and_the_run_length_checked() {
+    let mut e = Engine::new();
+    ok(&mut e, "file.open", json!({ "path": sir_path() }));
+    ok(&mut e, "experiment.set", json!({ "duration": 30.0 }));
+    let full = ok(&mut e, "agents.run", json!({ "replications": 4 }));
+    ok(
+        &mut e,
+        "experiment.set",
+        json!({ "warmup": 10.0, "duration": 20.0 }),
+    );
+    let warmed = ok(&mut e, "agents.run", json!({ "replications": 4 }));
+    assert_eq!(warmed["warmup"], 10.0);
+    assert_eq!(warmed["end"], 30.0);
+    let (t_full, t_warmed) = (floats(&full["times"]), floats(&warmed["times"]));
+    assert_eq!(t_warmed.first(), Some(&10.0));
+    assert_eq!(t_full[10..], t_warmed[..]);
+    for name in ["susceptible", "infected", "recovered"] {
+        for k in ["mean", "median", "p5", "p95"] {
+            let a = statistic(&full, name)[k].as_array().unwrap();
+            let b = statistic(&warmed, name)[k].as_array().unwrap();
+            assert_eq!(a[10..], b[..], "{name} {k}");
+        }
+    }
+    // No one is created after the warm-up.
+    assert_eq!(warmed["populations"][0]["created_mean"], 0.0);
+    let (code, _) = err(&mut e, "agents.run", json!({ "end": 5.0 }));
+    assert_eq!(code, ErrorCode::InvalidParams);
+    // A duration below 0 that the warm-up would hide in their sum.
+    ok(
+        &mut e,
+        "experiment.set",
+        json!({ "warmup": 2.0, "duration": -1.0 }),
+    );
+    let (code, message) = err(&mut e, "agents.run", json!({}));
+    assert_eq!(code, ErrorCode::InvalidModel);
+    assert!(message.contains("errors"), "{message}");
+    ok(
+        &mut e,
+        "experiment.set",
+        json!({ "warmup": -1.0, "duration": 10.0 }),
+    );
+    let (code, _) = err(&mut e, "agents.run", json!({}));
+    assert_eq!(code, ErrorCode::InvalidModel);
 }
 
 #[test]

@@ -2549,16 +2549,42 @@ fn file_save(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
     })?;
     // An agent-based model's charts and lists of links go beside it, each written only where
     // there is no file of its name yet. One that is there and differs (another model's, or one
-    // edited since the model was opened) is never replaced: the save is refused before anything
-    // is written.
-    let dir = std::path::Path::new(&path)
+    // edited since the model was opened), or that cannot be read, is never replaced, and the
+    // model is never saved over one of them: the save is refused before anything is written.
+    let model_path = std::path::Path::new(&path);
+    let dir = model_path
         .parent()
         .map(std::path::Path::to_path_buf)
         .unwrap_or_default();
+    // The model's file as `beside` gives a companion's: in the folder with its links followed.
+    let model_beside = std::fs::canonicalize(if dir.as_os_str().is_empty() {
+        std::path::Path::new(".")
+    } else {
+        dir.as_path()
+    })
+    .ok()
+    .zip(model_path.file_name())
+    .map(|(d, n)| d.join(n));
+    let model_is = |to: &std::path::Path| {
+        model_beside.as_deref() == Some(to)
+            || same_file::is_same_file(model_path, to).unwrap_or(false)
+    };
+    let model_over = |href: &str| {
+        CommandError::new(
+            ErrorCode::InvalidParams,
+            format!(
+                "{path} is the model's file `{href}`: the model cannot be saved over a file it reads; give another path"
+            ),
+        )
+    };
+    let mut companions = Vec::new();
     let mut siblings = Vec::new();
     for (href, content) in e.agent_files() {
         let to = crate::agents::beside(&dir, &href)
             .map_err(|m| CommandError::new(ErrorCode::InvalidParams, m))?;
+        if model_is(to.as_path()) {
+            return Err(model_over(href.as_str()));
+        }
         match std::fs::read(&to) {
             Ok(there) if there == content => {}
             Ok(_) => {
@@ -2570,13 +2596,22 @@ fn file_save(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
                     ),
                 ));
             }
-            Err(_) => siblings.push((to, content)),
+            Err(err) if err.kind() == std::io::ErrorKind::NotFound => {
+                siblings.push((to.clone(), content));
+            }
+            Err(err) => {
+                return Err(CommandError::new(
+                    ErrorCode::Io,
+                    format!("{}: {err}", to.display()),
+                ));
+            }
         }
+        companions.push((href, to));
     }
-    // Written to a temporary file beside it and renamed over it, so a crash or a full disk
-    // leaves the old file whole rather than half written.
-    craft_atomic::atomic_write(std::path::Path::new(&path), &bytes)
-        .map_err(|err| CommandError::new(ErrorCode::Io, format!("{path}: {err}")))?;
+    // The model's files first, so one that cannot be written leaves the model's old file as it
+    // was (and a save again keeps those already written, being the same). Each is written to a
+    // temporary file beside it and renamed over it, so a crash or a full disk leaves the old file
+    // whole rather than half written.
     for (to, content) in siblings {
         if let Some(parent) = to.parent() {
             std::fs::create_dir_all(parent).map_err(|err| {
@@ -2586,6 +2621,13 @@ fn file_save(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         craft_atomic::atomic_write(&to, &content)
             .map_err(|err| CommandError::new(ErrorCode::Io, format!("{}: {err}", to.display())))?;
     }
+    // Every one is there now, so a name that differs only in case on a file system that ignores
+    // it is found too.
+    if let Some((href, _)) = companions.iter().find(|(_, to)| model_is(to.as_path())) {
+        return Err(model_over(href.as_str()));
+    }
+    craft_atomic::atomic_write(model_path, &bytes)
+        .map_err(|err| CommandError::new(ErrorCode::Io, format!("{path}: {err}")))?;
     e.record_saved(&path, &bytes)
 }
 

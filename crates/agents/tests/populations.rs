@@ -464,3 +464,56 @@ fn a_random_step_order_shows_in_an_asynchronous_update() {
         assert!(a.iter().all(|v| (0.0..5.0).contains(v)), "{a:?}");
     }
 }
+
+/// A warm-up discards what came before it, as a process model's does: the statistics are
+/// recorded from the warm-up on (at it, then on the save grid from 0, then at the end), and the
+/// counts are of what happened after it. With none, the run is as before.
+#[test]
+fn a_warm_up_discards_what_came_before_it() {
+    let model = failures(50);
+    let full = run(&model, 4, 30.0);
+    let warmed = match model.run_with_warmup(4, 10.0, 30.0) {
+        Ok(r) => r,
+        Err(e) => panic!("{e}"),
+    };
+    assert_eq!(warmed.times, [10.0, 15.0, 20.0, 25.0, 30.0]);
+    let bits = |v: &[f64]| -> Vec<u64> { v.iter().map(|x| x.to_bits()).collect() };
+    for (w, f) in warmed.series.iter().zip(&full.series) {
+        assert_eq!(bits(&w.values[..]), bits(&f.values[2..]), "{}", w.name);
+    }
+    let none = match model.run_with_warmup(4, 0.0, 30.0) {
+        Ok(r) => r,
+        Err(e) => panic!("{e}"),
+    };
+    assert_eq!(none.times, full.times);
+    assert_eq!(none.counts, full.counts);
+    // Off the save grid: recorded at the warm-up, then at the next saving time. Agents 0, 1 and
+    // 3 are gone by 2.5, so only agents 2 and 4 leave after it, and none is created.
+    let chart = build(
+        &ChartSpec::new("mortal")
+            .state(
+                StateSpec::state("alive")
+                    .on_entry(SendSpec::new("end").after_expr("serial() + 1"))
+                    .on_entry(SendSpec::new("cull").after(0.5))
+                    .transition(TransitionSpec::on("end").to("gone"))
+                    .transition(
+                        TransitionSpec::on("cull")
+                            .when("serial() = 0")
+                            .then(Action::remove("p", "3")),
+                    ),
+            )
+            .state(StateSpec::final_state("gone")),
+    );
+    let model = Model::new()
+        .population(Population::new("p", chart).count(5))
+        .statistic(Statistic::count("alive", "p"))
+        .save_every(1.0);
+    let r = match model.run_with_warmup(1, 2.5, 6.0) {
+        Ok(r) => r,
+        Err(e) => panic!("{e}"),
+    };
+    assert_eq!(r.times, [2.5, 3.0, 4.0, 5.0, 6.0]);
+    assert_eq!(r.series[0].values, [2.0, 1.0, 1.0, 0.0, 0.0]);
+    let c = &r.counts[0];
+    assert_eq!((c.created, c.removed, c.alive), (0, 2, 0));
+}

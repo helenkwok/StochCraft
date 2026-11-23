@@ -2546,11 +2546,17 @@ impl Model {
 
     /// Every problem with the model, errors first, each group in model order. A Monte Carlo
     /// model ([`Model::is_monte_carlo`]) has none here: it has no process, and its inputs and
-    /// outputs are checked by `stochcraft-mc`; nor does an agent-based model
-    /// ([`Model::is_agents`]), whose charts and populations `stochcraft-agents` checks.
+    /// outputs are checked by `stochcraft-mc`. An agent-based model ([`Model::is_agents`]) has
+    /// only its warm-up and duration checked here, as a process model's are; its charts and
+    /// populations `stochcraft-agents` checks.
     pub fn validate(&self) -> Vec<Diagnostic> {
-        if self.is_monte_carlo() || self.is_agents() {
+        if self.is_monte_carlo() {
             return Vec::new();
+        }
+        if self.is_agents() {
+            let mut out = Vec::new();
+            self.check_run_length(&mut out);
+            return out;
         }
         let mut out = Vec::new();
         self.check_ids(&mut out);
@@ -3761,6 +3767,23 @@ impl Model {
 
     fn check_experiment(&self, out: &mut Vec<Diagnostic>) {
         let x = &self.experiment;
+        self.check_run_length(out);
+        if !(x.layout_scale.is_finite() && x.layout_scale > 0.0) {
+            out.push(Diagnostic::error(None, Problem::BadLayoutScale));
+        }
+        if x.replications == 0 {
+            out.push(Diagnostic::error(
+                None,
+                Problem::BadExperiment {
+                    field: ExperimentField::Replications,
+                },
+            ));
+        }
+    }
+
+    /// The warm-up, finite and 0 or more, and the duration, finite and above 0.
+    fn check_run_length(&self, out: &mut Vec<Diagnostic>) {
+        let x = &self.experiment;
         if !(x.warmup.is_finite() && x.warmup >= 0.0) {
             out.push(Diagnostic::error(
                 None,
@@ -3774,17 +3797,6 @@ impl Model {
                 None,
                 Problem::BadExperiment {
                     field: ExperimentField::Duration,
-                },
-            ));
-        }
-        if !(x.layout_scale.is_finite() && x.layout_scale > 0.0) {
-            out.push(Diagnostic::error(None, Problem::BadLayoutScale));
-        }
-        if x.replications == 0 {
-            out.push(Diagnostic::error(
-                None,
-                Problem::BadExperiment {
-                    field: ExperimentField::Replications,
                 },
             ));
         }
@@ -4265,6 +4277,33 @@ fn reach<'a>(
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn an_agent_based_models_warm_up_and_duration_are_checked() {
+        let fields = |warmup: f64, duration: f64| -> Vec<Problem> {
+            let mut m = Model {
+                agents: Some(agents::Agents::default()),
+                ..Model::default()
+            };
+            m.experiment.warmup = warmup;
+            m.experiment.duration = duration;
+            assert!(m.is_agents());
+            m.validate().into_iter().map(|d| d.problem).collect()
+        };
+        let warmup = Problem::BadExperiment {
+            field: ExperimentField::Warmup,
+        };
+        let duration = Problem::BadExperiment {
+            field: ExperimentField::Duration,
+        };
+        assert_eq!(fields(0.0, 60.0), vec![]);
+        assert_eq!(fields(10.0, 60.0), vec![]);
+        // A negative duration that a warm-up would hide in their sum is still refused.
+        assert_eq!(fields(2.0, -1.0), vec![duration.clone()]);
+        assert_eq!(fields(-1.0, 60.0), vec![warmup.clone()]);
+        assert_eq!(fields(f64::NAN, 0.0), vec![warmup, duration.clone()]);
+        assert_eq!(fields(0.0, f64::INFINITY), vec![duration]);
+    }
 
     fn id(s: &str) -> ElementId {
         ElementId(s.to_owned())

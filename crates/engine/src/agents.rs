@@ -8,8 +8,9 @@
 //! them from beside the model's file, `agents.open` takes their texts, and `file.save` writes them
 //! beside the file it saves to. They are read again as each run starts, in the experiment's time
 //! unit then. Its run lasts the experiment's warm-up plus its duration, in its replications
-//! from its seed; `run` refuses it, naming `agents.run`. Editing populations and charts comes
-//! with the window (stage A5); `experiment.set` changes the run's length, replications and seed.
+//! from its seed, and its results are of the time after the warm-up; `run` refuses it, naming
+//! `agents.run`. Editing populations and charts comes with the window (stage A5);
+//! `experiment.set` changes the run's length, replications and seed.
 
 use std::collections::BTreeMap;
 
@@ -490,7 +491,7 @@ pub struct RunParams {
     #[serde(default)]
     pub seed: Option<u64>,
     /// The end time in place of the experiment's warm-up plus duration, in the model's time
-    /// unit.
+    /// unit: no earlier than the warm-up.
     #[serde(default)]
     pub end: Option<f64>,
 }
@@ -516,6 +517,20 @@ pub(crate) fn run(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
     let Some(doc) = e.agents.as_ref() else {
         return Err(no_model());
     };
+    // The experiment's warm-up and duration, each checked as for a process model.
+    let problems: Vec<_> = e
+        .model
+        .validate()
+        .into_iter()
+        .filter(|d| d.severity == stochcraft_model::Severity::Error)
+        .collect();
+    if !problems.is_empty() {
+        return Err(CommandError {
+            code: ErrorCode::InvalidModel,
+            message: "the model has errors and cannot run".into(),
+            details: Some(crate::wire::diagnostics(&e.model, &problems)),
+        });
+    }
     let x = &e.model.experiment;
     let replications = p.replications.unwrap_or(u64::from(x.replications));
     if replications == 0 || replications > MAX_REPLICATIONS {
@@ -525,6 +540,7 @@ pub(crate) fn run(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         ));
     }
     let seed = p.seed.unwrap_or(x.seed);
+    let warmup = x.warmup;
     let end = p.end.unwrap_or(x.warmup + x.duration);
     if !(end.is_finite() && end >= 0.0) {
         return Err(CommandError::new(
@@ -532,19 +548,27 @@ pub(crate) fn run(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
             format!("the end time {end} is not a time of 0 or more"),
         ));
     }
+    if end < warmup {
+        return Err(CommandError::new(
+            ErrorCode::InvalidParams,
+            format!("the end time {end} is before the warm-up ends at {warmup}"),
+        ));
+    }
     let files = read_files(a, &doc.files, x.time_unit.seconds())?;
     let model = build(a, &files).map_err(model_error)?;
     let mut runs: Vec<Run> = Vec::new();
     for r in 0..replications {
-        let run = model.run(replication_seed(seed, r), end).map_err(|err| {
-            let mut c = model_error(err);
-            c.message = format!("replication {}: {}", r + 1, c.message);
-            c.details = Some(json!({ "replication": r + 1 }));
-            c
-        })?;
+        let run = model
+            .run_with_warmup(replication_seed(seed, r), warmup, end)
+            .map_err(|err| {
+                let mut c = model_error(err);
+                c.message = format!("replication {}: {}", r + 1, c.message);
+                c.details = Some(json!({ "replication": r + 1 }));
+                c
+            })?;
         runs.push(run);
     }
-    let result = results_json(e, a, &runs, replications, seed, end);
+    let result = results_json(e, a, &runs, replications, seed, warmup, end);
     let revision = e.revision;
     if let Some(d) = e.agents.as_mut() {
         d.last = Some((result.clone(), revision));
@@ -561,6 +585,7 @@ fn results_json(
     runs: &[Run],
     replications: u64,
     seed: u64,
+    warmup: f64,
     end: f64,
 ) -> Value {
     let b = bands(runs);
@@ -613,6 +638,7 @@ fn results_json(
     json!({
         "model": e.model.name,
         "time_unit": x.time_unit.bpsim_name(),
+        "warmup": warmup,
         "end": end,
         "replications": replications,
         "seed": seed,
@@ -625,7 +651,7 @@ fn results_json(
             "file": e.path(),
             "seed": seed,
             "replications": replications,
-            "times": "the statistics are recorded at time 0, every save interval, and at the end, each after every event at that time",
+            "times": "the statistics are recorded at the end of the warm-up (time 0 without one), at every save interval after it, and at the end, each after every event at that time; what happened before the warm-up ends, statistics and population counts alike, is discarded",
             "random_streams": "each replication's streams come from the seed and the replication's number; within one, each agent draws from streams keyed by its population, its serial number and the place in its chart, so adding an agent does not change another's draws (D18)",
             "uncertainty": uncertainty,
         },
