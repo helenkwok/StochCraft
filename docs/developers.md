@@ -271,6 +271,26 @@ replication i depends only on the seed and i, so replications evaluated in stage
 those of one evaluation of them all. The user guide has worked examples with Optuna and pymoo
 (`examples/optimisers/`), which CI runs.
 
+To find the best whole-number decisions, `optimize` runs the engine's `experiment.optimise`: a
+search over the decisions' ranges, then the finalists compared again on fresh replications, with
+how sure the answer is.
+
+```bash
+stochcraft-cli optimize tandem.bpmn --decide desk1.capacity=11..40 --decide desk2.capacity=6..35 \
+  --minimize desk1.mean_queue_length*50 --minimize desk2.mean_queue_length*50 \
+  --cost desk1.capacity=20 --cost desk2.capacity=20 --cost-cap 420 --delta 2 --max-runs 20000
+```
+
+A decision is `id.field=min..max` or `id.field=min..max:step`, the field one of `capacity`,
+`quantity` and `queue_capacity`; it starts from the model's value. `--minimize` (or `--maximize`)
+takes `element.metric`, or `element.metric*weight` for a cost per unit of the result, repeated for
+a weighted sum; `--cost id.field=cost` is a decision's cost per unit, and `--cost-cap` caps their
+sum (designs over it are never run). `--constraint element.metric<=limit~tolerance` (or `>=`)
+keeps a result's mean within a limit. `--delta` is δ, the smallest difference in the objective
+worth telling apart. It prints the answer in words and the finalists, or JSON (`--format json`);
+`--time-limit` stops the search, and its JSON answer's `repeat` gives the `--max-runs` and
+`--reserve-runs` that repeat it exactly. See "Whole-number decisions" below.
+
 To choose a distribution for measured times, `fit` fits one column of a CSV file (or a plain list,
 one value per line; `-` reads standard input) to each family by maximum likelihood and ranks the
 fits by Anderson–Darling A², with the Kolmogorov–Smirnov distance beside it:
@@ -826,6 +846,60 @@ where racing must also use fewer runs than running every candidate to the end wi
 clean-up, both without a cap. Since the procedure is conservative, each rate must itself be at
 least 0.95; the log prints it with its 95% Wilson interval.
 
+### Whole-number decisions
+
+`stochcraft_experiment::compass` holds M8's second stage (O2): COMPASS (Hong and Nelson 2006)
+with the pruning, local-optimality test and clean-up of Industrial Strength COMPASS (Xu, Nelson
+and Hong 2010), model-free on a sampler `FnMut(stream, design, replications) -> rows` (each row
+the objective, then one value per constraint). A design is a vector of whole numbers in a box
+(`Space::bounds`) under linear limits (`Space::limits`, a cost cap).
+
+- *The most promising area* around the best visited design x̂* is every design at least as close
+  to it as to any other visited design: the halfspaces 2 (y − x̂*)·x ≤ ‖y‖² − ‖x̂*‖², in whole
+  numbers. New designs are sampled from it by a walk over the coordinates (ten moves per
+  decision, each a whole number uniform over what the coordinate may take).
+- *Pruning*: a visited design whose halfspace is implied by the others, the box and the limits is
+  not active. A small linear programme (simplex with Bland's rule, on the area relaxed to real
+  numbers, so a design is only dropped when it is surely implied) tests each one. Only x̂*, the
+  active designs and the new samples get replications.
+- *Replications*: at step k of a start, every active design is brought to n(1 + ⌊ln k⌋), n the
+  replications per visit (10). That grows without bound, as COMPASS's convergence proof needs,
+  and slowly.
+- *Local optimality*: when every neighbour of x̂* has been visited, the area is x̂* alone, and
+  Kim's comparison with a standard (`select::compare_with_standard`) decides whether x̂* stays.
+  It reuses the search's replications, so it is a stopping rule. The guarantee is the clean-up's.
+- *Starts*: the starting design and a few Latin hypercube points (`optimize/start/<id>.<field>`
+  streams), each with its own visited set, taking a step each in turn and sharing replications.
+- *The clean-up*: the search's best, the designs active around it, each start's final design and
+  the starting design, on fresh replications (`Stream::CleanUp`), by `select_best` or, with
+  constraints, `select_feasible` (α split equally). A space of at most `all_designs_up_to` (50)
+  designs is not searched: every design goes to the clean-up. Without randomness each design
+  runs once and they are compared by value.
+- *The budget*: `search_runs` caps the search and the rest of `max_runs` is the clean-up's. A step
+  that does not fit ends the search, and nothing runs past the cap. The caller's `stop` (a time
+  limit) is asked only after steps that ran replications, so a search it stopped after S runs is
+  repeated exactly with `search_runs` = S.
+
+`engine::optimize` wires it to models as `experiment.optimise`. Each design is the model with each
+decision set by `Param::set`, compiled once and run on the search's seed, or on
+`Rng::keyed(seed, "optimize/clean-up")` in the clean-up. The objective of a replication is the
+weighted results plus the decisions' costs. The cost cap is a limit of the space, so no design
+over it is run. A model is compared exactly when every time in it is constant and the starting
+design's first two replications agree. The answer gives the claim in words and fields, the chosen
+design's objective with its interval, the paired difference against the starting design, each
+constraint's decision, the finalists, the trace and the runs. A time limit is refused in the
+browser build, which has no clock here.
+
+The checks (`crates/experiment/src/compass.rs`'s unit tests, and `crates/engine/tests/optimise.rs`,
+whose heavy tests run 100 seeds each) cover: pruning that leaves the area exactly as its
+definition gives it on random lattices, and walks that reach all of the area. On the two M/M/c desks in tandem
+(Erlang C optimum (14, 8) at 475.71 an hour), the search must choose it or a design within
+δ = 2, and under a cap of 21 servers (13, 8) or (14, 7). On a near tie on one desk, δ = 0.1 must
+give 6 servers or "not proven". The fewest servers for a mean wait of at most 0.05 hour must be
+14. Constant times must give "compared exactly", and a search stopped by its time limit must
+repeat exactly. Each rate must itself be at least 0.95; the log prints it with its 95% Wilson
+interval.
+
 ### The journal
 
 The engine records every command that is not a query in its journal. A new or opened document
@@ -885,7 +959,7 @@ stops with the error from opening it; with `--force` it replays onto the file's 
 It then re-applies the edits, undo and redo, and
 skips the saves, runs and experiments (`file.save`, `run`, `mc.run`, `mc.sobol`, `sd.run`, `run.start`,
 `run.cancel`, `experiment.sweep`, `experiment.sensitivity`, `experiment.design`,
-`experiment.size`, `experiment.evaluate`), printing `"skipped": true` for each; `--all` carries them out too, and a
+`experiment.size`, `experiment.evaluate`, `experiment.optimise`), printing `"skipped": true` for each; `--all` carries them out too, and a
 replayed `run.start` is run to completion so later steps find its results. In Rust,
 `Engine::journal_document` gives the journal and `Engine::replay_journal` replays it
 (`ReplayMode::EditsOnly` or `All`); `Engine::replay` still runs a plain list of steps in full.

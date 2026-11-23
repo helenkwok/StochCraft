@@ -4075,7 +4075,7 @@ See D21: the sorter (M5) first, alongside M3.7; then line balancing (M7.1), the 
 
 ## M8: optimisation
 
-**Status:** in progress (#272); O1 (Selection and feasibility, model-free) in #290; O2 to O6 not built yet.
+**Status:** in progress (#272); O1 (Selection and feasibility, model-free) in #290; O2 (Whole-number decisions) in #294; O3 to O6 not built yet.
 
 **Outcome:** a search over several decisions at once, followed by a selection of the best design
 that says how sure it is. M2.8 varies one parameter (`experiment.sweep`), evaluates a grid or a
@@ -4107,8 +4107,9 @@ published methods whose guarantees are stated in their papers, and uses few of t
     `on_shift_end` under its timetable (finish, retry, resume), a mobile pool's `after_job` (stay, go home);
   - a number in a range: a time distribution's `mean`, its shape kept (`Dist::scaled`);
   - the order of a source's job list (new in O3, below).
-- **Objective:** one result to minimise or maximise (an element's metric, or `stop_time`, the
-  makespan of a run that stops when the last job leaves), times a weight, plus a cost per unit
+- **Objective:** a result to minimise or maximise (an element's metric, or `stop_time`, the
+  makespan of a run that stops when the last job leaves), times a weight, or a weighted sum of
+  several (the two desks of O2 add both desks' queues), plus a cost per unit
   of each decision ("50 per customer-hour waiting plus 20 per operator-hour"). Cost is not a
   metric, and the decisions' part of the objective is known exactly, so only the result is
   noisy. An objective of decision costs alone is allowed when constraints carry the statistics
@@ -4207,8 +4208,8 @@ data without a model. The decisions, objective, constraints and their wiring to 
 `engine::optimize`, beside `decide.rs` and `design.rs`, reusing `Param`, `Output`, `Target`, `run`
 and `samples`.
 
-**The command:** `experiment.optimise` with `decisions`, `objective` (`element` and `metric` or
-`stop_time`, `sense`, `weight`, `costs`), `cost_cap`, `constraints` (with `tolerance`),
+**The command:** `experiment.optimise` with `decisions`, `objective` (`results`, each `element`,
+`metric` and `weight`, or `stop_time` from O3; `sense`; `costs`), `cost_cap`, `constraints` (with `tolerance`),
 `confidence`, `indifference`, `replications_per_visit` (default 10), `max_runs`, `reserve`,
 `time_limit`, `seed` and `apply`. The answer gives the chosen design, the claim above in words
 and as fields, the paired difference against the start, the feasibility of each constraint, the
@@ -4264,6 +4265,11 @@ catalogs.
     builds with any number of threads; a search stopped by its time limit, repeated with its
     recorded runs, gives the same answer.
   - The heavy checks run on GitHub Actions.
+  - *Built in #294:* the command, the CLI's `optimize`, the journal and records, with the
+    objective as a weighted sum of results. The search is not sent to the browser's workers, and
+    progress, Cancel and the stepped `Engine::optimize_start` come with the window (O6). A time
+    limit is refused in the browser build. The native and wasm32 answers are compared by the
+    golden digests.
 - **O3 Job lists and job orders.** A source can release an ordered job list: each job with an
   id and its property values, all at time 0 or at given times, as a `stochcraft:jobs` vendor
   extension (D32). Each machine's time per job comes from M2.11's time by property value. Each

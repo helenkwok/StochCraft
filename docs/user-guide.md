@@ -491,6 +491,43 @@ come from your change, not from chance. Each analysis can take a while.
   target, such as "mean wait at most 5 minutes in 70% of runs". **Use these units in the
   model** applies the answer as one change you can undo.
 
+## Find the best numbers of servers, operators and buffers
+
+`stochcraft-cli optimize` searches whole-number decisions (a task's units, a pool's units, a
+buffer) for the design with the lowest cost, or the highest value, of results and decisions
+together. Then it says how sure it is. For two desks in tandem, with 20 an hour for each server
+and 50 an hour for each customer waiting:
+
+```bash
+stochcraft-cli optimize two-desks.bpmn \
+  --decide desk1.capacity=11..40 --decide desk2.capacity=6..35 \
+  --minimize desk1.mean_queue_length*50 --minimize desk2.mean_queue_length*50 \
+  --cost desk1.capacity=20 --cost desk2.capacity=20 --delta 2
+```
+
+It starts from the model's numbers and a few other starting points, and visits designs near the
+best found so far. Then it compares the best few again, on new replications, so that a design
+that only looked good by chance is not chosen. The answer reads like "With 95% confidence,
+(14, 8) is the best, or within δ = 2 of the best, of the 7 designs compared at the end
+(312 tried)", followed by the table of those designs. That statement is about the designs
+compared at the end, not every design there is. When the whole space has at most 50 designs,
+every one is compared and the answer says "of all 48 designs".
+
+- `--delta` (δ) is the smallest difference in the objective worth telling apart, in its unit (here
+  money an hour). A smaller δ needs more runs.
+- `--cost-cap 420` keeps the decisions' costs at most 420; designs over it are never run.
+- `--constraint desk1.mean_wait<=0.05~0.005` keeps a result's mean at most 0.05, with a
+  tolerance of 0.005: a design within the tolerance of the limit may count either way. With only
+  `--cost` and constraints, it finds the cheapest design that meets them ("the fewest servers that
+  keep the mean wait under 3 minutes").
+- `--max-runs` is the budget in runs (default 10,000); 30% of it is kept for the final comparison.
+  When the budget runs out first, the answer says "best found, not proven best" and lists the
+  designs still in contention. `--time-limit` stops the search after that many seconds.
+- A model with no randomness is "compared exactly", one run per design, with no probability.
+
+Scripts and agents use the engine command `experiment.optimise` ([mcp.md](mcp.md)); its `apply`
+makes the chosen design the model's, as one change you can undo.
+
 ## Drive the runs from an optimiser of your own
 
 StochCraft's searches answer "which of these is best" with a stated confidence. To use a search

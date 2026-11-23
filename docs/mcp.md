@@ -274,6 +274,20 @@ or out of its range, or a decision given twice (`invalid_params`), is refused wi
 named as `id.field`. The model is not changed, and the evaluation is not recorded in later runs'
 records (a search makes thousands).
 
+`experiment.optimise` searches whole-number decisions (`decisions`, each `{id, field, min, max}`
+with `field` one of `capacity`, `quantity`, `queue_capacity`, and optionally `step` and `start`)
+for the best design. The objective is `objective.results`, each `{element, metric, weight}`,
+plus `objective.costs`, each `{id, field, cost}`, minimised unless `objective.sense` is
+`maximise`. `cost_cap` caps the costs, and `constraints` keep results' means `at_most` or
+`at_least` a limit with a `tolerance`. `indifference` (δ) is required. The answer's `claim` says
+in words what is proven: with `confidence`, the `chosen` design is the best, or within δ of it,
+of the `finalists` compared at the end (or of all designs, `all_designs`). Otherwise `outcome`
+is `not_proven` ("best found, not proven best") or `compared_exactly`. `against_start` is the
+paired difference against the starting design, and `runs` the runs used against `max_runs`
+(default 10,000). A `time_limit` answer's `repeat` gives the `max_runs` and `reserve_runs` that
+repeat it exactly. `apply` makes the chosen design the model's, as one undo step. The search is
+recorded in later runs' records (`record.sensitivity`).
+
 A Monte Carlo model (a calculation with no process) is built and run through `execute`:
 `mc.input.set` and `mc.output.set` add inputs (distributions) and outputs (expressions over
 them, with `$name`), `mc.correlation.set` correlates two inputs, `mc.set` picks the sampling
