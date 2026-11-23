@@ -129,6 +129,40 @@ impl Site {
         }
     }
 
+    /// The entries `model` can hold, which are what a file keeps: a track only on a conveyor, a
+    /// place only on an element of the model, and a place along a conveyor only while that
+    /// conveyor has a track. An edit that removes a block, or makes a conveyor something else,
+    /// leaves the rest out.
+    pub fn kept(&self, model: &Model) -> Site {
+        let paths: BTreeMap<ElementId, Track> = self
+            .paths
+            .iter()
+            .filter(|(id, _)| {
+                model
+                    .element(id)
+                    .is_some_and(|e| matches!(e.kind, ElementKind::Conveyor { .. }))
+            })
+            .map(|(id, t)| (id.clone(), t.clone()))
+            .collect();
+        let places = self
+            .places
+            .iter()
+            .filter(|(id, p)| {
+                model.element(id).is_some()
+                    && match p {
+                        Place::Along { path, .. } => paths.contains_key(path),
+                        Place::At(_) => true,
+                    }
+            })
+            .map(|(id, p)| (id.clone(), p.clone()))
+            .collect();
+        Site {
+            paths,
+            places,
+            scene: self.scene.clone(),
+        }
+    }
+
     /// Only the sim fields (D28), for the results baseline: each track's path at the default
     /// width, the places of blocks a transport serves, and no scenery.
     pub fn for_results(&self, model: &Model) -> Site {
@@ -227,6 +261,52 @@ mod tests {
         // 30 m agrees with the racetrack; 32 m overrides it, and says so.
         assert_eq!(belt(30.0), 0);
         assert_eq!(belt(32.0), 1);
+    }
+
+    #[test]
+    fn what_a_model_can_hold_is_kept_and_the_rest_left_out() {
+        let mut m = Model::default();
+        m.elements.push(Element::new(
+            id("loop"),
+            "Loop",
+            ElementKind::Conveyor {
+                length: 30.0,
+                speed: 0.5,
+                accumulating: false,
+                item_length: 0.4,
+                gap: 0.2,
+                shape: crate::ConveyorShape::Straight,
+            },
+        ));
+        m.elements.push(Element::new(
+            id("divert"),
+            "Divert",
+            ElementKind::ExclusiveGateway {
+                default: None,
+                routing: crate::Routing::Standard,
+            },
+        ));
+        m.site.paths.insert(id("loop"), Track::new(racetrack()));
+        m.site.places.insert(
+            id("divert"),
+            Place::Along {
+                path: id("loop"),
+                s: 0.0,
+            },
+        );
+        m.site
+            .places
+            .insert(id("gone"), Place::At(Frame::default()));
+        let kept = m.site.kept(&m);
+        assert_eq!(kept.paths.len(), 1);
+        assert_eq!(kept.places.len(), 1, "a place on no element goes");
+        // The loop made a delay: its track goes, and so does the divert placed along it.
+        m.elements[0].kind = ElementKind::Delay {
+            duration: Dist::Constant(1.0),
+            processing_by: None,
+        };
+        let kept = m.site.kept(&m);
+        assert!(kept.paths.is_empty() && kept.places.is_empty());
     }
 
     #[test]

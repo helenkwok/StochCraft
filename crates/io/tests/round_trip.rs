@@ -2940,3 +2940,55 @@ fn a_layout_writes_reads_and_saves() {
         1
     );
 }
+
+/// An edit that strands part of the layout (a conveyor with a track made a delay, so a block
+/// placed along it has no path) saves: what the model can no longer hold goes from the file.
+#[test]
+fn a_layout_left_stranded_by_an_edit_goes_from_the_file() {
+    use stochcraft_model::{ElementId, Frame, LengthUnit, Path, Place, Segment, Track};
+    let id = |s: &str| ElementId::unchecked(s);
+    let mut model = belt_model();
+    model.experiment.length_unit = LengthUnit::Metres;
+    if let ElementKind::Conveyor { length, .. } = &mut model.elements[1].kind {
+        *length = 12.0;
+    }
+    model.site.paths.insert(
+        id("belt"),
+        Track::new(Path::new(
+            Frame::default(),
+            vec![Segment::Line {
+                length: 12.0,
+                rise: 0.0,
+            }],
+        )),
+    );
+    model.site.places.insert(
+        id("out"),
+        Place::Along {
+            path: id("belt"),
+            s: 12.0,
+        },
+    );
+    model
+        .site
+        .places
+        .insert(id("in"), Place::At(Frame::new(-1.0, 0.0, 0.0, 0.0)));
+    let Ok(loaded) = read(&write_new(&model)) else {
+        unreachable!()
+    };
+    let mut delay = loaded.model.clone();
+    delay.elements[1].kind = ElementKind::Delay {
+        processing_by: None,
+        duration: Dist::Constant(3.0),
+    };
+    let saved = loaded.opened.save(&delay);
+    assert!(saved.is_ok(), "{saved:?}");
+    let Ok(saved) = saved else { unreachable!() };
+    let text = String::from_utf8_lossy(&saved);
+    assert!(!text.contains("stochcraft:path") && !text.contains("path=\"belt\""));
+    let Ok(back) = read(&saved) else {
+        unreachable!()
+    };
+    assert_eq!(back.model.site, delay.site.kept(&delay));
+    assert_eq!(back.model.site.places.len(), 1);
+}

@@ -466,14 +466,8 @@ fn difference_within(
     if started(got) != started(want) {
         return Some(format!("its starting contents read as {:?}", got.starting));
     }
-    // The layout too: tracks and places on the elements they are for, and the scenery.
-    let placed = |m: &Model| {
-        let mut site = m.site.clone();
-        site.paths.retain(|id, _| want.element(id).is_some());
-        site.places.retain(|id, _| want.element(id).is_some());
-        site
-    };
-    if placed(got) != placed(want) {
+    // The layout too, as much of it as each model can hold (`Site::kept`), and the scenery.
+    if got.site.kept(got) != want.site.kept(want) {
         return Some(format!("its layout reads as {:?}", got.site));
     }
     // Shapes are kept to the precision the file writes them with.
@@ -2848,14 +2842,17 @@ impl Editor {
             .chain(before.site.places.keys())
             .chain(after.site.places.keys())
             .collect();
+        // Only what each model can hold (a track on a conveyor, a place on an element, along a
+        // conveyor that has a track): an entry the edit left stranded goes from the file.
+        let (kept_before, kept_after) = (before.site.kept(before), after.site.kept(after));
         for id in site_ids {
             let again = replaced.contains(id.as_str());
-            let (was, now) = (before.site.paths.get(id), after.site.paths.get(id));
+            let (was, now) = (kept_before.paths.get(id), kept_after.paths.get(id));
             if was != now || again {
                 let v = now.filter(|_| exists(id)).map(crate::layout::path_element);
                 writes.push((id.to_string(), crate::bpsim::PATH, v));
             }
-            let (was, now) = (before.site.places.get(id), after.site.places.get(id));
+            let (was, now) = (kept_before.places.get(id), kept_after.places.get(id));
             if was != now || again {
                 let v = now.filter(|_| exists(id)).map(crate::layout::place_element);
                 writes.push((id.to_string(), crate::bpsim::PLACE, v));
