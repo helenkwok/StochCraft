@@ -1,7 +1,7 @@
 //! Agents (ROADMAP M4.3): state charts with the semantics of W3C SCXML 1.0.
 //!
-//! This first stage is the state chart alone, with no populations, messages between agents or
-//! files yet. A chart is written as a [`ChartSpec`] (the tree of an SCXML document), checked and
+//! The state chart comes first (stage A1), then populations of agents with messages between them
+//! (stage A2), with no files yet. A chart is written as a [`ChartSpec`] (the tree of an SCXML document), checked and
 //! compiled by [`Chart::new`], and run as an [`Agent`]; a [`Driver`] runs agents on the
 //! discrete-event clock (`stochcraft_des::EventQueue`).
 //!
@@ -80,24 +80,39 @@
 //! `state/4:idle/onentry/1`), so two agents or two expressions never share a stream and making
 //! another agent never changes an agent's numbers.
 //!
+//! **Populations** (stage A2, [`population`]): a [`Model`] holds [`Population`]s of agents of one
+//! chart each, created at the start, by arrivals at a rate or by other agents
+//! ([`Action::Create`]), and removed when their chart ends or by other agents
+//! ([`Action::Remove`]); messages to one agent, a random other agent or all others of a
+//! population ([`SendSpec::to_agent`], [`SendSpec::to_random`], [`SendSpec::to_all`]), with a
+//! number as data (`getProperty('_event.data')`); conditions on populations
+//! (`population-count('p', 's')` and the other functions of [`FUNCTIONS`]) tested again when
+//! what they read changes; [`Statistic`]s over time and their [`bands`] across replications;
+//! and a stepped mode ([`Stepping`]). A [`Simulation`] runs one replication from a seed.
+//!
 //! **Errors.** A [`RunError`] stops its agent for good: its pending sends are dropped (those
-//! already on the clock are skipped when they come up) and no [`Step::Done`] is recorded.
+//! already on the clock are skipped when they come up) and no [`Step::Done`] is recorded; in a
+//! [`Model`] it stops the run.
 //!
 //! **Not here yet:** `<if>`, `<foreach>`, `<script>` (never: D17), `<invoke>`, `<donedata>`,
-//! event data and `<param>`, `<send>` to other agents or with a target or type other than the
-//! agent itself, `<initial>` elements with content (initial states are the `initial`
-//! attribute), late data binding, and reading and writing SCXML files (a later stage, with
-//! populations and messages before it).
+//! `<param>`, `<send>` with a delay to other agents, `<initial>` elements with content (initial
+//! states are the `initial` attribute), late data binding, networks and grids (stage A3), and
+//! reading and writing SCXML files (stage A4).
 
 mod chart;
 mod data;
 mod driver;
 mod interp;
+pub mod population;
 
 pub use chart::{
     Action, Chart, ChartError, ChartSpec, Data, Delay, History, Kind, MAX_DEPTH, SendSpec,
-    StateSpec, Target, TransitionSpec,
+    StateSpec, Target, To, TransitionSpec,
 };
 pub use data::FUNCTIONS;
 pub use driver::Driver;
 pub use interp::{Agent, DEFAULT_MICROSTEP_LIMIT, Record, RunError, Scheduled, Step};
+pub use population::{
+    Band, Bands, Counts, DEFAULT_RETEST_LIMIT, Measure, Model, ModelError, Order, Population, Run,
+    Series, Simulation, Statistic, Stepping, bands,
+};

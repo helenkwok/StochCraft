@@ -2884,8 +2884,9 @@ Chapter references are to Brailsford, Churilov and Dangerfield (eds.),
     teaching example.
 ### M4.3 Agents
 
-**Status:** planned (#283); nothing built yet. D16–D18 settled how state charts are saved and run; D34
-settled the order below.
+**Status:** A1, state charts in the `agents` crate, is done (#286); A2, populations, messages,
+statistics over time and the stepped mode, is in #288 (#283). D16–D18 settled how state charts
+are saved and run; D34 settled the order below.
 
 **What it is:** individuals that each keep their own state and memory and decide what to do
 next, rather than being moved by the process. Three kinds, planned together and built in this

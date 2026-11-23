@@ -634,8 +634,8 @@ URI, whatever prefix the file uses; a file whose root is in another namespace is
 
 ### Agents
 
-`crates/agents` is the first stage of M4.3: state charts alone, built in code, with no
-populations, messages between agents or files yet. A chart is a `ChartSpec` (the tree of an SCXML
+`crates/agents` holds M4.3's first two stages: state charts (A1) and populations of agents
+exchanging messages (A2), built in code, with no files yet. A chart is a `ChartSpec` (the tree of an SCXML
 document: states, parallel and final states, shallow and deep history, transitions with event
 descriptors, conditions, targets and the type internal or external, and `onentry`, `onexit` and
 transition content of `<assign>`, `<raise>`, `<send>`, `<cancel>` and `<log>`). `Chart::new`
@@ -644,24 +644,58 @@ the algorithm of SCXML's Appendix D, and a `Driver` runs agents on `stochcraft_d
 each event handled by one complete macrostep in zero time (D18).
 
 - Expressions are BPSim's (`stochcraft_model::expr::parse_with_functions`), reading variables as
-  `$x` or `getProperty('x')`, with `In('state')` and the distribution functions (`exponential(m)`,
+  `$x` or `getProperty('x')`, with `In('state')`, `time()` and the distribution functions (`exponential(m)`,
   `uniform(a, b)`, `triangular`, `normal`, `erlang`, ... and `random()`), each expression drawing
   from its own stream `Rng::keyed(seed, "<n>:<agent key>/<place in the chart>")`, `<n>` the key's
   length in bytes and each state id in the place likewise written after its length (D17, D18).
 - A `<send>` to the agent itself has a fixed `delay`, a `delayexpr`, or a rate (`SendSpec::at_rate`, an
   extension): an exponential delay with mean 1 / rate, drawn again when a variable the rate reads
   has changed at the end of a macrostep. `<cancel>` leaves the event on the queue, skipped when
-  popped.
+  popped. A send may carry a number (`SendSpec::with_data`), read as `getProperty('_event.data')`.
 - A macrostep that takes more than 10,000 microsteps (`Agent::with_microstep_limit`) stops the run
   with `RunError::MicrostepLimit`, which names the latest transitions.
 - A failing action (a negative delay or rate) raises `error.execution` and skips the rest of its block, as SCXML §4.9 says.
 
+A `Model` (module `population`) holds populations of agents of one chart each, an optional
+environment agent, statistics and an optional stepped mode; a `Simulation` runs one replication
+from a seed, and `Model::run` returns its `Run` (the statistics over time and each population's
+`Counts`).
+
+- Agents are created at the start (a count), by arrivals at a rate (exponential gaps from the stream
+  `arrivals/<n>:<population>`), or by another agent (`Action::create`); each gets the next serial
+  number of its population and the key `<population>/<serial>`, so its streams follow D18 and adding
+  an agent never changes another's draws. An agent leaves when its chart reaches a top-level final
+  state, or when another agent removes it (`Action::remove`, which runs its exit actions).
+- Messages go to one agent (`SendSpec::to_agent`, the serial an expression), a random other agent
+  (`to_random`, the pick from the sender's own stream) or every other agent (`to_all`), each as an
+  event of its own at the current time after the current one, a broadcast in serial order. They take
+  no delay. A message no transition takes is counted as dropped, one that reaches no agent as
+  undelivered.
+- `serial()`, `population-size('p')`, `population-count('p', 'state')`, `population-sum('p', 'x')`,
+  `population-mean('p', 'x')` and `agent-value('p', n, 'x')` read populations, with their names as
+  quoted literals, checked when the model is built. An eventless condition that reads a population is
+  tested again after every event that changes it (an agent created, removed or taking a transition):
+  the agents waiting on it in population, then serial order, then the environment, until nothing
+  changes (at most 1,000,000 changes per event, `RunError::RetestLimit`). A rate may not read a
+  population or the time, since it is drawn again only when the agent's own variables change.
+- `Statistic`s (count, sum, mean, minimum and maximum of an expression over the agents meeting a
+  condition) are recorded at the start, every `save_every` and at the end, after every event at that
+  time; `bands` gives the mean, median and 5% to 95% band across replications.
+- The stepped mode (`Stepping`) sends, every step, `before-step` to the environment, `before-step`
+  then `step` to every agent (in population, then serial order, or one random order per step from
+  the stream `stepping/order`), and `after-step` to the environment.
+
 The tests (`crates/agents/tests`) work out the order of actions by hand for transitions between
 cousins, branches, history, parallel regions, internal transitions and conflicting transitions,
 and check fixed timeouts, cancels, and rates (and redrawn rates) against the exponential by their
-mean and a Kolmogorov–Smirnov test, with fixed seeds. Not there yet: `<if>`, `<foreach>`,
-`<invoke>`, `<donedata>`, event data, sends to other agents, `<initial>` elements with content,
-late binding, and reading and writing SCXML files.
+mean and a Kolmogorov–Smirnov test, with fixed seeds. For populations they check broadcasts,
+random picks, re-tested conditions, removal, arrivals and the stepped mode's phases by hand, and
+four models against exact finite-population answers: independent failures (binomial at t = 5),
+Bass diffusion as agents (the pure-birth chain's mean times to half and to all adopters; N = 1,000
+in the heavy tests), SIR's final size for N = 100 and R0 = 1.5 (the embedded jump chain), and
+Pólya's urn in the stepped mode (uniform). Not there yet: `<if>`, `<foreach>`, `<invoke>`,
+`<donedata>`, `<initial>` elements with content, late binding, networks and grids (A3), and reading
+and writing SCXML files (A4).
 
 ### The journal
 
