@@ -14,6 +14,8 @@ use std::sync::atomic::{AtomicBool, AtomicU64, Ordering};
 use stochcraft_random::{Rng, SplitMix64};
 pub use stochcraft_stats::Summary;
 
+pub mod select;
+
 /// What a replication gets: its index and its own random stream.
 pub struct Replication {
     pub index: u64,
