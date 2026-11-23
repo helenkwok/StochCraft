@@ -36,7 +36,7 @@ use stochcraft_model::{ElementId, Model};
 use stochcraft_random::Rng;
 use stochcraft_stats::{Summary, difference};
 
-use crate::decide::{Field, Output, Param, deterministic, invalid, metric, samples};
+use crate::decide::{Field, Output, Param, invalid, metric, samples};
 use crate::{CommandError, ErrorCode};
 
 /// The budget when none is given, in runs (replications summed over designs).
@@ -378,41 +378,6 @@ fn deadline(seconds: Option<f64>) -> Result<Box<dyn FnMut() -> bool>, CommandErr
     }
 }
 
-/// What, in a model's description, means something is drawn at random: a distribution other
-/// than a constant (in a time, a property, a breakdown, a pool or anywhere else), a probability
-/// on a connection, an exclusive gateway (its ways are drawn when no condition decides), balking,
-/// scrap, and a property drawn from a mix of values.
-const DRAWS: [&str; 17] = [
-    "Exponential {",
-    "Uniform {",
-    "Triangular {",
-    "Normal {",
-    "Gamma {",
-    "Beta {",
-    "Erlang {",
-    "Weibull {",
-    "Poisson {",
-    "Binomial {",
-    "User {",
-    "Random(",
-    "Choice(",
-    "probability: Some(",
-    "ExclusiveGateway",
-    "balking: Some(",
-    "scrap: Some(",
-];
-
-/// Whether nothing in `model` is drawn at random: every time is constant, and nothing in its
-/// whole description (`DRAWS`) draws. Conservative: a name that happens to contain one of those
-/// words also counts as a draw, which only means the designs are compared statistically.
-fn nothing_drawn(model: &Model) -> bool {
-    if deterministic(model) != *model {
-        return false;
-    }
-    let text = format!("{model:?}");
-    !DRAWS.iter().any(|d| text.contains(d))
-}
-
 /// The sample skewness of `v` (n ≥ 3), `None` when it cannot be worked out.
 fn skewness(v: &[f64]) -> Option<f64> {
     let n = v.len() as f64;
@@ -632,7 +597,7 @@ pub fn optimise(model: &Model, p: &OptimiseParams) -> Result<(Value, Option<Mode
     // replications give the same values. The probe's two runs come out of the budget, so a
     // budget of one run never compares exactly.
     let mut probe = 0;
-    let exact = if max_runs >= 2 && nothing_drawn(model) {
+    let exact = if max_runs >= 2 && !crate::drawn::draws(model) {
         let r = runs_of(Stream::Search, &start, 0..2);
         probe = 2;
         match r {

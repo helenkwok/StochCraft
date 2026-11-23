@@ -283,7 +283,7 @@ stochcraft-cli optimize tandem.bpmn --decide desk1.capacity=11..40 --decide desk
 
 A decision is `id.field=min..max` or `id.field=min..max:step`, the field one of `capacity`,
 `quantity` and `queue_capacity`. It starts from the model's value, or from `--start
-id.field=value`; a starting value that is not one of the range's values (a model's 13 for
+id.field=value`; a starting value that is not one of the range's values (a model's 12 for
 `11..40:2`, say) is refused before anything runs, naming the decision. `--minimize` (or `--maximize`)
 takes `element.metric`, or `element.metric*weight` for a cost per unit of the result, repeated for
 a weighted sum; `--cost id.field=cost` is a decision's cost per unit, and `--cost-cap` caps their
@@ -889,8 +889,14 @@ the objective, then one value per constraint). A design is a vector of whole num
 decision set by `Param::set`, compiled once and run on the search's seed, or on
 `Rng::keyed(seed, "optimize/clean-up")` in the clean-up. The objective of a replication is the
 weighted results plus the decisions' costs. The cost cap is a limit of the space, so no design
-over it is run. A model is compared exactly when every time in it is constant and the starting
-design's first two replications agree. The answer gives the claim in words and fields, the chosen
+over it is run. A model is compared exactly only when nothing in it is drawn and the starting
+design's first two replications agree. `engine/src/drawn.rs` decides the first from the model's
+types, taking every struct apart and matching every kind of element in full, so a new field or
+kind does not compile until it says whether it draws. Drawn means a distribution other than a
+constant, a probability strictly between 0 and 1, an exclusive gateway whose way is not decided
+by conditions, balking, scrap, a mix of values or an expression; a name never counts. An
+applied answer is journalled as the search without `apply` and a `decisions.set` edit, inside a
+batch too, and an edits-only replay of a batch leaves out the steps it skips. The answer gives the claim in words and fields, the chosen
 design's objective with its interval, the paired difference against the starting design, each
 constraint's decision, the finalists, the trace and the runs. A time limit is refused in the
 browser build, which has no clock here.

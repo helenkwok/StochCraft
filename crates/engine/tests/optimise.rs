@@ -660,3 +660,60 @@ fn the_check_for_randomness_stays_within_the_budget() {
     assert!(v["runs"]["total"].as_u64().unwrap() <= 1, "{}", v["runs"]);
     assert_eq!(v["runs"]["probe"], 0);
 }
+
+/// An applied answer inside a batch, nested in another, is journalled in the batch as the
+/// search without `apply` and a `decisions.set`: the batch stays one undo step, an edits-only
+/// replay makes the same model without searching, and a full replay does too.
+#[test]
+fn an_applied_answer_in_a_batch_replays_as_an_edit() {
+    let mut e = one_desk_with(9);
+    let before = e.model().clone();
+    ok(
+        &mut e,
+        "batch",
+        json!({ "commands": [
+            { "command": "batch", "params": { "commands": [
+                { "command": "experiment.optimise", "params": one_desk_search() }
+            ]}},
+            { "command": "block.rename", "params": { "id": "desk", "name": "Front desk" } }
+        ]}),
+    );
+    assert_ne!(e.model(), &before);
+    let journal = e.journal_document();
+    let last = journal.entries.last().unwrap();
+    assert_eq!(last.command, "batch");
+    let inner = &last.params["commands"][0]["params"]["commands"];
+    assert_eq!(inner[0]["command"], "experiment.optimise", "{inner}");
+    assert_eq!(inner[0]["params"]["apply"], false);
+    assert_eq!(inner[1]["command"], "decisions.set", "{inner}");
+    for mode in [
+        stochcraft_engine::ReplayMode::EditsOnly,
+        stochcraft_engine::ReplayMode::All,
+    ] {
+        let mut r = Engine::new();
+        let options = ReplayOptions {
+            mode,
+            ..ReplayOptions::default()
+        };
+        r.replay_journal(&journal, options).unwrap();
+        assert_eq!(r.model(), e.model(), "{mode:?}");
+    }
+    // One undo step takes back the whole batch.
+    ok(&mut e, "undo", json!({}));
+    assert_eq!(e.model(), &before);
+}
+
+/// The check for randomness reads the model's types, not its text: a block named "probability
+/// gateway" in a model with constant times is still compared exactly.
+#[test]
+fn a_name_that_sounds_random_does_not_make_a_model_random() {
+    let mut e = tandem("constant", 20.0);
+    ok(
+        &mut e,
+        "block.rename",
+        json!({ "id": "desk1", "name": "probability gateway Exponential { mean" }),
+    );
+    let v = ok(&mut e, "experiment.optimise", tandem_search(1, 5000));
+    assert_eq!(v["no_randomness"], true, "{v}");
+    assert_eq!(v["outcome"], "compared_exactly");
+}
