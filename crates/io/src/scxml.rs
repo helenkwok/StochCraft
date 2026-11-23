@@ -371,8 +371,9 @@ impl Reader {
             }
             let history = matches!(kind, Kind::History(_));
             match c.local() {
-                "onentry" if !history => s.on_entry.extend(self.block(c, &place)?),
-                "onexit" if !history => s.on_exit.extend(self.block(c, &place)?),
+                // Each block on its own: an error in one stops only that one (SCXML §4.9).
+                "onentry" if !history => s.on_entry.push(self.block(c, &place)?),
+                "onexit" if !history => s.on_exit.push(self.block(c, &place)?),
                 "transition" if kind != Kind::Final => {
                     s.transitions.push(self.transition(c, &place)?)
                 }
@@ -904,7 +905,7 @@ impl Writer {
         }
         fn actions<'a>(s: &'a StateSpec, out: &mut Vec<(&'a Action, String)>) {
             let place = format!("state `{}`", s.id);
-            for a in s.on_entry.iter().chain(&s.on_exit) {
+            for a in s.on_entry.iter().chain(&s.on_exit).flatten() {
                 out.push((a, place.clone()));
             }
             for t in &s.transitions {
@@ -969,16 +970,17 @@ impl Writer {
             }
             set(&mut e, "initial", &references(&s.initial, &place)?);
         }
-        if !s.on_entry.is_empty() {
+        // A block each, so an error in one still stops only that one when read back.
+        for block in &s.on_entry {
             let mut x = el("onentry");
-            for a in &s.on_entry {
+            for a in block {
                 x.push(self.action(a, &place)?);
             }
             e.push(x);
         }
-        if !s.on_exit.is_empty() {
+        for block in &s.on_exit {
             let mut x = el("onexit");
-            for a in &s.on_exit {
+            for a in block {
                 x.push(self.action(a, &place)?);
             }
             e.push(x);

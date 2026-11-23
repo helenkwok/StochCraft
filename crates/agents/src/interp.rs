@@ -626,7 +626,7 @@ impl Agent {
         states.reverse();
         for s in states {
             self.record(Step::Exit(chart.node(s).id.clone()));
-            self.execute(chart, &chart.node(s).on_exit, w);
+            self.execute_blocks(chart, &chart.node(s).on_exit, w);
             self.active[s as usize] = false;
         }
         self.pending.clear();
@@ -857,7 +857,7 @@ impl Agent {
         }
         for s in exits {
             self.record(Step::Exit(chart.node(s).id.clone()));
-            self.execute(chart, &chart.node(s).on_exit, w);
+            self.execute_blocks(chart, &chart.node(s).on_exit, w);
             self.active[s as usize] = false;
         }
     }
@@ -901,7 +901,7 @@ impl Agent {
             }
             self.active[s as usize] = true;
             self.record(Step::Enter(chart.node(s).id.clone()));
-            self.execute(chart, &chart.node(s).on_entry, w);
+            self.execute_blocks(chart, &chart.node(s).on_entry, w);
             // A compound state's default entry would run its <initial> transition's content
             // here; initial states are given by the `initial` attribute, which has none.
             if let Some(&h) = default_history.get(&s) {
@@ -1031,6 +1031,14 @@ impl Agent {
 
     /// Runs a block of executable content; the first action that fails puts
     /// `error.execution` on the internal queue and skips the rest (SCXML §4.9).
+    /// A state's entry or exit blocks in order, each on its own: an error ends only its block
+    /// (SCXML §4.9).
+    fn execute_blocks(&mut self, chart: &Chart, blocks: &[Vec<Exec>], w: &dyn World) {
+        for block in blocks {
+            self.execute(chart, block, w);
+        }
+    }
+
     fn execute(&mut self, chart: &Chart, block: &[Exec], w: &dyn World) {
         for e in block {
             if let Err(message) = self.run(chart, e, w) {

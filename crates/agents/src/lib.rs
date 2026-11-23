@@ -41,7 +41,9 @@
 //! and the type external or internal. A transient state, a branch, is a state whose
 //! transitions are eventless with conditions. The executable content is `<assign>`, `<raise>`,
 //! `<send>` (to the agent itself, at once or after a `delay`, a `delayexpr`, or a rate),
-//! `<cancel>` and `<log>`, in each state's `onentry` and `onexit` and in each transition.
+//! `<cancel>` and `<log>`, in each state's `onentry` and `onexit` and in each transition. A
+//! state's `onentry` and `onexit` blocks each run on their own: an error stops the rest of its
+//! block (raising `error.execution`), and the blocks after it still run (SCXML §4.9).
 //!
 //! **The algorithm** is SCXML's Appendix D ([`Agent`]): an event is handled by a macrostep, a
 //! series of microsteps; each microstep takes the transitions enabled together (eventless

@@ -12,7 +12,8 @@ use std::sync::Arc;
 use std::sync::atomic::{AtomicUsize, Ordering};
 
 use stochcraft_agents::{
-    Action, ChartSpec, History, Model, Population, SendSpec, StateSpec, Statistic, TransitionSpec,
+    Action, Agent, ChartSpec, Driver, History, Model, Population, SendSpec, StateSpec, Statistic,
+    Step, TransitionSpec,
 };
 use stochcraft_io::scxml::{read_scxml, write_scxml};
 
@@ -367,6 +368,91 @@ fn what_scxml_cannot_say_is_not_written() {
     let text = write(&fine, 1.0);
     assert!(text.contains("target=\"a b\""), "{text}");
     assert!(text.contains("stochcraft:to=\"random\""), "{text}");
+}
+
+/// Where agent 0 of `text`'s chart is at time 1, and whether it ran into an error on the way.
+fn after_entry(text: &str) -> (bool, bool) {
+    let chart = match read(text, 1.0).build() {
+        Ok(c) => Arc::new(c),
+        Err(e) => panic!("{e}"),
+    };
+    let mut d = Driver::new(0.0);
+    let a = match d.add(Agent::new(chart, 1, "a/0").with_trace()) {
+        Ok(a) => a,
+        Err(e) => panic!("{e}"),
+    };
+    if let Err(e) = d.run_until(1.0) {
+        panic!("{e}");
+    }
+    let Some(agent) = d.agent(a) else {
+        panic!("no agent");
+    };
+    let failed = agent
+        .trace()
+        .iter()
+        .any(|r| matches!(r.step, Step::Error(_)));
+    (agent.is_in("done"), failed)
+}
+
+/// Two `<onentry>` blocks stay two: an error in the first (a send whose delay is below 0)
+/// stops only the first, and the second still raises `go` (SCXML 4.9). Written back, they are
+/// two blocks again.
+#[test]
+fn an_error_in_one_entry_block_does_not_stop_the_next() {
+    let two = r#"<scxml xmlns="http://www.w3.org/2005/07/scxml" version="1.0" datamodel="stochcraft">
+  <state id="waiting">
+    <onentry><send event="later" delayexpr="0 - 1"/></onentry>
+    <onentry><raise event="go"/></onentry>
+    <transition event="go" target="done"/>
+  </state>
+  <state id="done"/>
+</scxml>"#;
+    assert_eq!(after_entry(two), (true, true));
+    let chart = read(two, 1.0);
+    assert_eq!(chart.states[0].on_entry.len(), 2);
+    let written = write(&chart, 1.0);
+    assert_eq!(written.matches("<onentry>").count(), 2, "{written}");
+    assert_eq!(read(&written, 1.0), chart);
+    assert_eq!(after_entry(&written), (true, true));
+    // In one block, the error stops the raise after it, as before.
+    let one = two.replace(
+        "</onentry>
+    <onentry>",
+        "",
+    );
+    assert_eq!(read(&one, 1.0).states[0].on_entry.len(), 1);
+    assert_eq!(after_entry(&one), (false, true));
+    // And one block with no error runs all of it.
+    let fine = one.replace("delayexpr=\"0 - 1\"", "delayexpr=\"5\"");
+    assert_eq!(after_entry(&fine), (true, false));
+    // Exit blocks likewise.
+    let exits = r#"<scxml xmlns="http://www.w3.org/2005/07/scxml" version="1.0" datamodel="stochcraft">
+  <state id="start">
+    <transition target="middle"/>
+  </state>
+  <state id="middle">
+    <onentry><raise event="leave"/></onentry>
+    <onexit><send event="later" delayexpr="0 - 1"/></onexit>
+    <onexit><raise event="go"/></onexit>
+    <transition event="leave" target="after"/>
+  </state>
+  <state id="after">
+    <transition event="go" target="done"/>
+  </state>
+  <state id="done"/>
+</scxml>"#;
+    assert_eq!(after_entry(exits), (true, true));
+    // Built in code, `next_entry_block` starts another block.
+    let built = ChartSpec::new("c")
+        .state(
+            StateSpec::state("waiting")
+                .on_entry(SendSpec::new("later").after_expr("0 - 1"))
+                .next_entry_block()
+                .on_entry(Action::raise("go"))
+                .transition(TransitionSpec::on("go").to("done")),
+        )
+        .state(StateSpec::state("done"));
+    assert_eq!(after_entry(&write(&built, 1.0)), (true, true));
 }
 
 /// A Bass diffusion chart, as A2 checks it.
