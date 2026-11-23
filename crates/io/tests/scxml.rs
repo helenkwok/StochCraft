@@ -1,7 +1,7 @@
 //! Agents' state charts as SCXML 1.0 files (ROADMAP M4.3, stage A4): every feature a chart has
 //! written and read back exactly, what cannot be read or written refused by name, a chart read
 //! back running as the original did, and every chart written valid against W3C's SCXML 1.0 XML
-//! Schema (fetched by `cargo xtask fetch-bpsim`, never committed) with StochCraft's extension
+//! Schema (fetched by `cargo xtask fetch-scxml`, never committed) with StochCraft's extension
 //! schema beside it.
 
 #![allow(clippy::panic)] // A chart that fails to be written or read fails the test.
@@ -348,13 +348,13 @@ fn required() -> bool {
 fn missing(what: &str) {
     assert!(
         !required(),
-        "{what} (STOCHCRAFT_REQUIRE_BPSIM=1); run `cargo xtask fetch-bpsim`"
+        "{what} (STOCHCRAFT_REQUIRE_BPSIM=1); run `cargo xtask fetch-scxml`"
     );
-    eprintln!("skipped: {what}; run `cargo xtask fetch-bpsim` to include this test");
+    eprintln!("skipped: {what}; run `cargo xtask fetch-scxml` to include this test");
 }
 
 fn schema_dir() -> PathBuf {
-    Path::new(env!("CARGO_MANIFEST_DIR")).join("../../target/bpsim")
+    Path::new(env!("CARGO_MANIFEST_DIR")).join("../../target/scxml")
 }
 
 /// A `file:` URI for an absolute path, as `schemaLocation` needs.
@@ -437,7 +437,7 @@ fn schema_errors(text: &str, label: &str, dir: &Path) -> Option<String> {
 fn every_chart_written_is_valid_scxml() {
     let dir = schema_dir();
     if !dir.join("scxml.xsd").exists() || !dir.join("xml.xsd").exists() {
-        return missing("W3C's SCXML 1.0 XML Schema is not in target/bpsim");
+        return missing("W3C's SCXML 1.0 XML Schema is not in target/scxml");
     }
     if Command::new("xmllint").arg("--version").output().is_err() {
         return missing("xmllint is not installed (libxml2-utils)");

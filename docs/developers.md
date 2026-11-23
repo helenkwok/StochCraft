@@ -755,7 +755,7 @@ limits. Saved unchanged it is the same bytes; edited, only the extension is rewr
 - Each agent type's chart is a W3C SCXML 1.0 file (`stochcraft_io::scxml::{read_scxml,
   write_scxml}`), `datamodel="stochcraft"` (D17). What SCXML covers is plain SCXML, valid
   against W3C's schema (`crates/io/tests/scxml.rs` validates every chart written with xmllint,
-  against the schema `cargo xtask fetch-bpsim` fetches with pinned checksums). What only
+  against the schema `cargo xtask fetch-scxml` fetches with pinned checksums). What only
   StochCraft does is in the namespace `https://helenkwok.github.io/StochCraft/scxml/1`
   (`crates/io/schemas/stochcraft-scxml-1.xsd`): `stochcraft:rate` on a `<send>` (which also
   carries `delayexpr="exponential(1 div (rate))"`), `stochcraft:delay` where a fixed delay's CSS2

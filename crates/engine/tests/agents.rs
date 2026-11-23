@@ -228,6 +228,7 @@ fn saved_elsewhere_the_charts_go_beside_it_and_it_opens_the_same() {
     let before = ok(&mut e, "agents.run", json!({ "replications": 2 }));
     let to = scratch("saved/sir.bpmn");
     let _ = std::fs::remove_dir_all(scratch("saved"));
+    std::fs::create_dir_all(scratch("saved")).unwrap();
     ok(&mut e, "file.save", json!({ "path": to.to_string_lossy() }));
     let chart = std::fs::read(scratch("saved/sir-person.scxml")).unwrap();
     assert_eq!(
