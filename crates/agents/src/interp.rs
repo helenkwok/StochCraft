@@ -411,16 +411,19 @@ impl Agent {
         self.now = now;
         self.begin_macrostep();
         let chart = Arc::clone(&self.chart);
+        // The model's values first, so every other first value can read them whatever the
+        // order of declaration; then the others, in order.
+        let presets = std::mem::take(&mut self.presets);
+        for (j, v) in &presets {
+            if let Some(slot) = self.values.get_mut(*j as usize) {
+                *slot = v.clone();
+            }
+        }
         for (i, (_, code)) in chart.vars.iter().enumerate() {
-            let preset = self
-                .presets
-                .iter()
-                .find(|(j, _)| *j as usize == i)
-                .map(|(_, v)| v.clone());
-            let v = match preset {
-                Some(v) => v,
-                None => self.eval(&chart, code, w),
-            };
+            if presets.iter().any(|(j, _)| *j as usize == i) {
+                continue;
+            }
+            let v = self.eval(&chart, code, w);
             if let Some(slot) = self.values.get_mut(i) {
                 *slot = v;
             }

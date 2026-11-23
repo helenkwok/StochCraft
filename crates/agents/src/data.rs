@@ -26,8 +26,10 @@
 //!   and `linked-sum('p', 'x')`, how many of them are in state `s` and the sum of their variable
 //!   `x`; `neighbours('p')`, how many agents are in its grid neighbourhood (its neighbouring cells
 //!   and the others in its own cell); and `neighbour-count('p', 's')` and
-//!   `neighbour-sum('p', 'x')` likewise over them. For an agent of another population, or one with
-//!   no cell, they read as NaN. A condition that calls them is tested again when the population
+//!   `neighbour-sum('p', 'x')` likewise over them. All six read as NaN for an agent of another
+//!   population, and the three grid ones also for an agent with no cell (the network ones do not
+//!   depend on a cell: an agent of a population with a network and no grid still has its
+//!   degree). A condition that calls them is tested again when the population
 //!   changes, as for the other population functions (a link made or removed and a move count as
 //!   changes), and statistics may call them.
 //!

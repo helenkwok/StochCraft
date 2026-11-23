@@ -6,6 +6,7 @@
 use std::collections::{BTreeSet, VecDeque};
 use std::sync::Arc;
 
+use stochcraft_agents::network::distance;
 use stochcraft_agents::{
     Action, Chart, ChartSpec, Model, ModelError, Network, Population, Run, SendSpec, Simulation,
     StateSpec, Statistic, TransitionSpec, read_links, write_links,
@@ -253,8 +254,10 @@ fn a_distance_network_links_exactly_the_pairs_within_range() {
         for b in a + 1..n {
             let (pa, pb) = (pos[a as usize], pos[b as usize]);
             let (dx, dy) = (pa.0 - pb.0, pa.1 - pb.1);
-            let near = (dx * dx + dy * dy).sqrt() <= range;
-            assert_eq!(links.contains(&(a, b)), near, "agents {a} and {b}");
+            let d = distance(pa, pb);
+            let plain = (dx * dx + dy * dy).sqrt();
+            assert!((d - plain).abs() <= 1e-12 * plain, "{d} against {plain}");
+            assert_eq!(links.contains(&(a, b)), d <= range, "agents {a} and {b}");
         }
     }
     // Without the variables `x` and `y` the model is refused.
@@ -565,4 +568,44 @@ fn networks_are_deterministic_and_their_own() {
     let links = |m: &Model, seed| simulate(m, seed, 0.0).links("a");
     assert_eq!(links(&alone, 3), links(&with_b, 3));
     assert_ne!(links(&alone, 3), links(&alone, 4));
+}
+
+/// An agent that ends keeps its links until what it sent has gone, in order: it unlinks agent 1,
+/// messages the agents it is still linked to (only agent 2), and enters a final state in one
+/// macrostep. Then it leaves, and its links with it.
+#[test]
+fn an_agent_that_ends_sends_along_its_links_as_they_are_then() {
+    let chart = build(
+        &ChartSpec::new("leaver")
+            .data("got", "0")
+            .state(
+                StateSpec::state("s")
+                    .on_entry(SendSpec::new("go").after(1.0))
+                    .transition(
+                        TransitionSpec::on("go")
+                            .when("serial() = 0")
+                            .to("gone")
+                            .then(Action::disconnect("p", "1"))
+                            .then(SendSpec::new("hi").to_linked("p")),
+                    )
+                    .transition(TransitionSpec::on("hi").then(Action::assign("got", "$got + 1"))),
+            )
+            .state(StateSpec::final_state("gone")),
+    );
+    let model = Model::new().population(
+        Population::new("p", chart)
+            .count(3)
+            .network(Network::links(vec![(0, 1), (0, 2), (1, 2)])),
+    );
+    let sim = simulate(&model, 1, 2.0);
+    assert_eq!(sim.alive("p"), [1, 2]);
+    assert_eq!(sim.links("p"), [(1, 2)]);
+    let got = |s: u64| {
+        sim.agent("p", s)
+            .and_then(|a| a.value("got"))
+            .map_or(f64::NAN, |v| v.number())
+    };
+    assert_eq!((got(1), got(2)), (0.0, 1.0));
+    let c = &sim.counts()[0];
+    assert_eq!((c.removed, c.undelivered), (1, 0));
 }

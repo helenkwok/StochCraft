@@ -8,7 +8,9 @@
 //!
 //! - [`Network::random`]: Erdős and Rényi's G(n, M), M = round(n·d / 2) links for a mean degree
 //!   d, every set of M distinct pairs equally likely (drawn by Floyd's algorithm over the
-//!   n(n − 1)/2 pairs). The mean degree is 2M / n, exactly d when n·d / 2 is whole.
+//!   n(n − 1)/2 pairs). The mean degree is 2M / n, exactly d when n·d / 2 is whole. Every whole
+//!   number the generators and grids draw below a bound is unbiased (64 random bits with
+//!   rejection, Lemire 2019).
 //! - [`Network::ring`]: a ring lattice, each agent linked to the k nearest on each side (degree
 //!   2k; 2k < n).
 //! - [`Network::small_world`]: Watts and Strogatz (1998): the ring lattice, then each link
@@ -23,7 +25,9 @@
 //!   more, and so do the first m0 once there are more than m0.
 //! - [`Network::distance`]: positions placed uniformly at random in a rectangle of the given
 //!   width and height, held in the agents' variables `x` and `y`, and a link between every two
-//!   agents whose distance (√(Δx² + Δy²)) is at most the range; every pair is compared.
+//!   agents whose distance (√(Δx² + Δy²), worked out by [`distance`] so that it neither
+//!   underflows nor overflows) is at most the range; every pair is compared. The variables are
+//!   the model's: a chart may not assign them, nor `row` and `column` on a grid.
 //! - [`Network::links`] and [`Network::csv`]: a list of links, as pairs of serial numbers or
 //!   as the lines `a,b` of a CSV text ([`read_links`], [`write_links`]).
 //! - [`Network::empty`]: no links, for links made during the run.
@@ -200,8 +204,20 @@ pub(crate) fn pick(draw: u64, m: usize) -> usize {
     (((draw >> 11) as u128 * m as u128) >> 53) as usize
 }
 
-fn below(rng: &mut Rng, m: u64) -> u64 {
-    (((rng.next_u64() >> 11) as u128 * m as u128) >> 53) as u64
+/// A uniform integer below `m` (0 if `m` is 0), with no bias: Lemire's multiply-and-reject on all
+/// 64 bits (D. Lemire, "Fast random integer generation in an interval", ACM TOMACS 29(1), 2019).
+pub(crate) fn below(rng: &mut Rng, m: u64) -> u64 {
+    if m == 0 {
+        return 0;
+    }
+    let mut x = rng.next_u64() as u128 * m as u128;
+    if (x as u64) < m {
+        let threshold = m.wrapping_neg() % m;
+        while (x as u64) < threshold {
+            x = rng.next_u64() as u128 * m as u128;
+        }
+    }
+    (x >> 64) as u64
 }
 
 /// The pair (i, j), i < j, of index k in the order (0, 1), (0, 2), (1, 2), (0, 3), ...
@@ -462,8 +478,21 @@ pub(crate) fn build(network: &Network, n: u64, rng: &mut Rng) -> Result<Start, S
 
 /// Whether two positions are within `range` of each other.
 pub(crate) fn within(a: (f64, f64), b: (f64, f64), range: f64) -> bool {
-    let (dx, dy) = (a.0 - b.0, a.1 - b.1);
-    (dx * dx + dy * dy).sqrt() <= range
+    distance(a, b) <= range
+}
+
+/// The distance between two points, scaled by the larger difference so that squaring neither
+/// underflows nor overflows: max · √(1 + (min / max)²). Only division, multiplication and the
+/// square root (all exactly rounded everywhere) are used, so it is the same on every target,
+/// which the platform's `hypot` does not promise.
+pub fn distance(a: (f64, f64), b: (f64, f64)) -> f64 {
+    let (dx, dy) = ((a.0 - b.0).abs(), (a.1 - b.1).abs());
+    let (big, small) = if dx >= dy { (dx, dy) } else { (dy, dx) };
+    if big == 0.0 || !big.is_finite() {
+        return big;
+    }
+    let t = small / big;
+    big * (1.0 + t * t).sqrt()
 }
 
 fn ring(n: u64, k: u64) -> Result<Vec<(u64, u64)>, String> {
@@ -610,29 +639,34 @@ impl Space {
     pub fn choose(&mut self, s: u64) -> Option<u64> {
         match self.grid.placement {
             Placement::InOrder => {
-                let from = s % self.cells;
-                (0..self.cells)
-                    .map(|k| (from + k) % self.cells)
-                    .find(|&c| self.is_free(c))
+                // Only occupied cells are passed over, so this costs at most one step per
+                // agent, not per cell.
+                let mut c = s % self.cells;
+                for _ in 0..=self.occupants.len() {
+                    if self.is_free(c) {
+                        return Some(c);
+                    }
+                    c = (c + 1) % self.cells;
+                }
+                None
             }
             Placement::Random if self.grid.one_per_cell => {
-                let taken = self.occupants.values().filter(|o| !o.is_empty()).count() as u64;
-                let free = self.cells - taken;
+                // `occupants` holds only occupied cells (an emptied one is taken out).
+                let free = self.cells - self.occupants.len() as u64;
                 if free == 0 {
                     return None;
                 }
-                // The k-th free cell in order.
-                let mut k = below(&mut self.rng, free);
-                (0..self.cells).find(|&c| {
-                    if !self.is_free(c) {
-                        return false;
+                // The k-th free cell in order: k, moved on past each occupied cell at or below
+                // it, in ascending order.
+                let mut c = below(&mut self.rng, free);
+                for &taken in self.occupants.keys() {
+                    if taken <= c {
+                        c += 1;
+                    } else {
+                        break;
                     }
-                    if k == 0 {
-                        return true;
-                    }
-                    k -= 1;
-                    false
-                })
+                }
+                Some(c)
             }
             Placement::Random => Some(below(&mut self.rng, self.cells)),
         }
@@ -666,19 +700,21 @@ impl Space {
 
     /// The cell at `row`, `column` (wrapped if the grid wraps), if there is one.
     pub fn cell_at(&self, row: f64, column: f64) -> Option<u64> {
-        let (rows, cols) = (self.grid.rows as f64, self.grid.columns as f64);
-        if !(row.is_finite() && column.is_finite() && row.fract() == 0.0 && column.fract() == 0.0) {
-            return None;
-        }
+        // A whole number an i128 holds exactly (every whole f64 below 2^127 in size does);
+        // the dimensions stay integers, never rounded to f64.
+        let whole =
+            |v: f64| (v.is_finite() && v.fract() == 0.0 && v.abs() < 1.7e38).then_some(v as i128);
+        let (r, c) = (whole(row)?, whole(column)?);
+        let (rows, cols) = (self.grid.rows as i128, self.grid.columns as i128);
         let (r, c) = if self.grid.wrap {
-            (row.rem_euclid(rows), column.rem_euclid(cols))
+            (r.rem_euclid(rows), c.rem_euclid(cols))
         } else {
-            (row, column)
+            (r, c)
         };
-        if r < 0.0 || r >= rows || c < 0.0 || c >= cols {
+        if !(0..rows).contains(&r) || !(0..cols).contains(&c) {
             return None;
         }
-        Some(r as u64 * self.grid.columns + c as u64)
+        u64::try_from(r * cols + c).ok()
     }
 
     /// The cells next to `cell`, ascending, without `cell` itself.
@@ -787,5 +823,43 @@ mod tests {
         assert_eq!(line("0,1\n0;2\n"), Err(2));
         assert_eq!(line("a,b\nx,1\n"), Err(2));
         assert_eq!(line("0,-1\n"), Err(1));
+    }
+
+    /// The bounded draw uses all 64 bits: below 2^60 the old 53-bit fraction could only give
+    /// multiples of 2^7. Small bounds come out evenly.
+    #[test]
+    fn bounded_draws_are_full_width_and_even() {
+        let mut rng = Rng::new(9);
+        let big = 1u64 << 60;
+        let draws: Vec<u64> = (0..64).map(|_| below(&mut rng, big)).collect();
+        assert!(draws.iter().all(|&d| d < big));
+        assert!(draws.iter().any(|&d| d % 128 != 0), "{draws:?}");
+        let mut counts = [0u32; 3];
+        for _ in 0..30_000 {
+            counts[below(&mut rng, 3) as usize] += 1;
+        }
+        // Binomial(30,000, 1/3): standard deviation about 82.
+        for c in counts {
+            assert!((f64::from(c) - 10_000.0).abs() < 400.0, "{counts:?}");
+        }
+        assert_eq!(below(&mut rng, 1), 0);
+        assert_eq!(below(&mut rng, 0), 0);
+    }
+
+    /// Distances neither underflow nor overflow, and are exact where they can be.
+    #[test]
+    fn distances_are_scaled() {
+        assert_eq!(distance((0.0, 0.0), (3.0, 4.0)), 5.0);
+        assert!(within((0.0, 0.0), (3.0, 4.0), 5.0));
+        assert_eq!(distance((1.0, 1.0), (1.0, 1.0)), 0.0);
+        let tiny = distance((0.0, 0.0), (1e-200, 1e-200));
+        assert!(tiny > 1.4e-200 && tiny < 1.5e-200, "{tiny}");
+        assert!(!within((0.0, 0.0), (1e-200, 0.0), 0.0));
+        let huge = distance((0.0, 0.0), (1e200, 1e200));
+        assert!(
+            huge.is_finite() && huge > 1.4e200 && huge < 1.5e200,
+            "{huge}"
+        );
+        assert!(within((0.0, 0.0), (1e200, 1e200), 2e200));
     }
 }

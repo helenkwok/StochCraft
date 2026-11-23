@@ -951,6 +951,21 @@ impl Chart {
         })
     }
 
+    /// Whether any `<assign>` of the chart writes the variable `name`.
+    pub(crate) fn assigns(&self, name: &str) -> bool {
+        let Some(&v) = self.var_index.get(name) else {
+            return false;
+        };
+        let hit = |b: &[Exec]| {
+            b.iter()
+                .any(|e| matches!(e, Exec::Assign { var, .. } if *var == v))
+        };
+        self.nodes
+            .iter()
+            .any(|n| hit(&n.on_entry) || hit(&n.on_exit))
+            || self.transitions.iter().any(|t| hit(&t.actions))
+    }
+
     /// The chart's name.
     pub fn name(&self) -> &str {
         &self.name

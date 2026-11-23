@@ -291,7 +291,9 @@ fn agents_move_to_cells_and_at_random() {
 /// The Game of Life on a 10 × 10 wrapped grid in the stepped mode, updated synchronously: each
 /// cell's before-step works out its next state from its neighbours' current one, and its step
 /// copies it in. A glider keeps its 5 cells and every 4 steps is the same shape moved one cell
-/// down and one right, exactly, for 24 steps (once round the grid and more).
+/// down and one right, exactly, for 44 steps: 11 moves, so it crosses both edges and comes back
+/// to where it started (step 40) and one move further, which a grid that did not wrap would
+/// lose.
 #[test]
 fn a_glider_moves_one_cell_diagonally_every_four_steps() {
     // (0, 1), (1, 2), (2, 0), (2, 1), (2, 2): a glider heading down and right.
@@ -342,7 +344,8 @@ fn a_glider_moves_one_cell_diagonally_every_four_steps() {
             .collect()
     };
     assert_eq!(alive(&sim), shape(0));
-    for step in 1..=24u64 {
+    assert_eq!(shape(10), shape(0));
+    for step in 1..=44u64 {
         advance(&mut sim, step as f64);
         let now = alive(&sim);
         assert_eq!(now.len(), 5, "step {step}: {now:?}");
@@ -352,4 +355,164 @@ fn a_glider_moves_one_cell_diagonally_every_four_steps() {
             assert_ne!(now, shape(step / 4), "step {step} is between shapes");
         }
     }
+}
+
+/// The model's cell is in `row` and `column` before any other first value is worked out, so a
+/// variable declared before them can read them.
+#[test]
+fn a_cell_is_set_before_the_other_first_values() {
+    let chart = build(
+        &ChartSpec::new("early")
+            .data("saved", "$column")
+            .data("row", "-1")
+            .data("column", "-1")
+            .state(StateSpec::state("here")),
+    );
+    let model = Model::new().population(Population::new("g", chart).count(2).grid(Grid::new(1, 2)));
+    let sim = start(&model, 1);
+    assert_eq!(value(&sim, "g", 0, "saved"), 0.0);
+    assert_eq!(value(&sim, "g", 1, "saved"), 1.0);
+}
+
+/// Placing agents and resolving a move do not depend on the grid's area or round its size: on a
+/// grid of a billion cells three agents are placed at random at once, and on a row of 2^53 + 1
+/// cells the last one (column 2^53) can be reached, directly or by wrapping −1.
+#[test]
+fn large_grids_place_and_move_exactly() {
+    let model = Model::new().population(
+        Population::new("g", cell_chart())
+            .count(3)
+            .grid(Grid::new(1, 1_000_000_000).random_placement()),
+    );
+    let sim = start(&model, 4);
+    let cells: BTreeSet<(u64, u64)> = (0..3).filter_map(|s| sim.cell("g", s)).collect();
+    assert_eq!(cells.len(), 3);
+    let last = 9_007_199_254_740_992u64;
+    for (grid, column) in [
+        (Grid::new(1, last + 1), "9007199254740992"),
+        (Grid::new(1, last + 1).wrapped(), "-1"),
+    ] {
+        let mover = build(
+            &ChartSpec::new("mover")
+                .data("row", "-1")
+                .data("column", "-1")
+                .state(
+                    StateSpec::state("s")
+                        .on_entry(SendSpec::new("go").after(1.0))
+                        .transition(
+                            TransitionSpec::on("go").then(Action::move_to("g", "0", column)),
+                        ),
+                ),
+        );
+        let model = Model::new().population(Population::new("g", mover).count(1).grid(grid));
+        let mut sim = start(&model, 1);
+        advance(&mut sim, 2.0);
+        assert_eq!(sim.cell("g", 0), Some((0, last)), "to column {column}");
+    }
+}
+
+/// A chart may not assign the variables the model keeps a cell in (on a grid) or a position in
+/// (in a distance network); without them they are its own.
+#[test]
+fn assigning_the_cell_is_refused() {
+    let chart = build(
+        &ChartSpec::new("jumper")
+            .data("row", "-1")
+            .data("column", "-1")
+            .state(StateSpec::state("s").on_entry(Action::assign("column", "3"))),
+    );
+    let on_grid = Model::new().population(
+        Population::new("g", Arc::clone(&chart))
+            .count(1)
+            .grid(Grid::new(1, 4)),
+    );
+    match Simulation::new(&on_grid, 1) {
+        Err(ModelError::Invalid(e)) => assert!(e.message.contains("assigns `column`"), "{e}"),
+        other => panic!("{other:?}"),
+    }
+    let plain = Model::new().population(Population::new("g", chart).count(1));
+    let sim = start(&plain, 1);
+    assert_eq!(value(&sim, "g", 0, "column"), 3.0);
+}
+
+/// An agent that stops the run (a loop in zero time, or an event at a time that is not a
+/// number) leaves its cell and the agents alive, as one that ends does.
+#[test]
+fn an_agent_that_stops_the_run_leaves_its_cell() {
+    let looping = build(
+        &ChartSpec::new("looping")
+            .data("row", "-1")
+            .data("column", "-1")
+            .state(
+                StateSpec::state("s")
+                    .on_entry(SendSpec::new("go").after(1.0))
+                    .transition(TransitionSpec::on("go").when("serial() = 0").to("a")),
+            )
+            .state(StateSpec::state("a").transition(TransitionSpec::eventless().to("b")))
+            .state(StateSpec::state("b").transition(TransitionSpec::eventless().to("a"))),
+    );
+    let far = build(
+        &ChartSpec::new("far")
+            .data("row", "-1")
+            .data("column", "-1")
+            .state(
+                StateSpec::state("s")
+                    .on_entry(SendSpec::new("go").after(1.5e308))
+                    .transition(
+                        TransitionSpec::on("go")
+                            .when("serial() = 0")
+                            .then(SendSpec::new("go").after(1.5e308)),
+                    ),
+            ),
+    );
+    for chart in [looping, far] {
+        let model =
+            Model::new().population(Population::new("g", chart).count(2).grid(Grid::new(1, 3)));
+        let mut sim = start(&model, 1);
+        assert_eq!(sim.neighbours("g", 1), [0]);
+        assert!(sim.run_until(1.6e308).is_err());
+        assert_eq!(sim.alive("g"), [1]);
+        assert_eq!(sim.cell("g", 0), None);
+        assert!(sim.neighbours("g", 1).is_empty());
+    }
+}
+
+/// A move changes `row` and `column` after the mover's macrostep: the mover is tested again at
+/// once, so a condition on its column is taken at the time of the move, and a rate that reads
+/// its column (0, waiting, before the move) is drawn again at the new rate.
+#[test]
+fn a_mover_is_tested_again_and_its_rates_redrawn() {
+    let chart = build(
+        &ChartSpec::new("mover")
+            .data("row", "-1")
+            .data("column", "-1")
+            .data("at", "-1")
+            .data("fired", "-1")
+            .state(
+                StateSpec::state("life")
+                    .on_entry(SendSpec::new("go").after(1.0))
+                    .on_entry(SendSpec::new("tick").at_rate("$column"))
+                    .transition(TransitionSpec::on("go").then(Action::move_to("g", "0", "1")))
+                    .transition(TransitionSpec::on("tick").then(Action::assign("fired", "time()")))
+                    .child(
+                        StateSpec::state("here").transition(
+                            TransitionSpec::eventless()
+                                .when("$column = 1")
+                                .to("there")
+                                .then(Action::assign("at", "time()")),
+                        ),
+                    )
+                    .child(StateSpec::state("there")),
+            ),
+    );
+    let model = Model::new().population(Population::new("g", chart).count(1).grid(Grid::new(1, 2)));
+    let mut sim = start(&model, 3);
+    advance(&mut sim, 100.0);
+    assert_eq!(sim.cell("g", 0), Some((0, 1)));
+    assert_eq!(value(&sim, "g", 0, "at"), 1.0);
+    let fired = value(&sim, "g", 0, "fired");
+    assert!(
+        fired > 1.0 && fired < 100.0,
+        "the rate-1 event came at {fired}"
+    );
 }

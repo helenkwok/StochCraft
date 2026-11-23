@@ -712,8 +712,13 @@ A population can have a `Network` and a `Grid` (module `network`, stage A3):
   `linked-count('p', 's')`, `linked-sum('p', 'x')`, `neighbours('p')`, `neighbour-count('p', 's')`
   and `neighbour-sum('p', 'x')` read an agent's neighbourhood in conditions and statistics; a
   condition that calls them is tested again when the population changes, links made and removed
-  and moves included. A model whose charts name a network or grid their population lacks, or whose
-  grid or distance network has no variables for the cell or position, is refused.
+  and moves included; an agent that moved is itself tested again first (its conditions on `row`
+  and `column` taken, its rates that read them drawn again). An agent that ends keeps its links and
+  cell while its last messages go out, in order, then loses them. A model whose charts name a
+  network or grid their population lacks, whose grid or distance network has no variables for the
+  cell or position, or whose chart assigns those variables (they are the model's), is refused.
+  Bounded draws use all 64 bits with rejection (unbiased), and distances are scaled so they neither
+  underflow nor overflow.
 
 The tests (`crates/agents/tests`) work out the order of actions by hand for transitions between
 cousins, branches, history, parallel regions, internal transitions and conflicting transitions,

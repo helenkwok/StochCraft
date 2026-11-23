@@ -43,8 +43,12 @@
 //! ([`Action::connect`](crate::Action::connect), [`Action::move_to`](crate::Action::move_to),
 //! ...) take effect when the acting agent's macrostep ends, in the order its actions ran (so in
 //! the stepped mode an agent that moves sees the cell taken by an agent that moved before it in
-//! the same step), and mark the population changed for the re-tests. An agent that leaves loses
-//! its links and its cell once its last messages are sent.
+//! the same step), and mark the population changed for the re-tests; an agent that moved is
+//! itself tested again first, since its `row` and `column` changed after its macrostep (its
+//! conditions on them are taken then, and its rates that read them drawn again). An agent that
+//! ends keeps its links and cell while what it sent goes out, in order, then leaves and loses
+//! them; so does one that stops the run with an error. The model keeps `x`, `y`, `row` and
+//! `column` where it uses them: a chart that assigns them there is refused.
 //!
 //! **Statistics** ([`Statistic`]) are recorded at the start, every `save_every`, and at the end,
 //! each after every event at that time. [`bands`] turns many replications into the mean, median
@@ -653,6 +657,8 @@ pub struct Simulation {
     readers: Vec<Vec<u32>>,
     env_reads: Vec<bool>,
     dirty: BTreeSet<u32>,
+    /// Agents that moved on a grid since they were last tested.
+    moved: BTreeSet<(u32, u64)>,
     queue: EventQueue<Ev>,
     seed: u64,
     stepping: Option<(Stepping, Rng)>,
@@ -742,19 +748,35 @@ impl Simulation {
         };
         for p in &model.populations {
             check_refs(&p.chart.refs)?;
-            let declares = |vars: [&str; 2], what: &str| {
-                if vars.iter().all(|v| p.chart.var_index.contains_key(*v)) {
-                    Ok(())
-                } else {
-                    invalid(
+            let declares = |vars: [&str; 2], what: &str| -> Result<(), ModelError> {
+                if !vars.iter().all(|v| p.chart.var_index.contains_key(*v)) {
+                    return invalid(
                         &format!("population `{}`", p.name),
                         format!(
                             "its agents' {what} is kept in the variables `{}` and `{}`, which \
                              its chart `{}` must declare",
                             vars[0], vars[1], p.chart.name
                         ),
-                    )
+                    );
                 }
+                // The model keeps them: an assignment would leave the variable and the
+                // agent's real position or cell apart.
+                if let Some(v) = vars.iter().find(|v| p.chart.assigns(v)) {
+                    let how = if what == "cell" {
+                        " (`Action::move_to` and `Action::move_random` move an agent)"
+                    } else {
+                        ""
+                    };
+                    return invalid(
+                        &format!("population `{}`", p.name),
+                        format!(
+                            "its chart `{}` assigns `{v}`, which holds its agents' {what} and \
+                             only the model sets{how}",
+                            p.chart.name
+                        ),
+                    );
+                }
+                Ok(())
             };
             if matches!(p.network, Some(Network::Distance { .. })) {
                 declares(["x", "y"], "position")?;
@@ -891,6 +913,7 @@ impl Simulation {
             readers,
             env_reads,
             dirty: BTreeSet::new(),
+            moved: BTreeSet::new(),
             queue: EventQueue::new(0.0),
             seed,
             stepping: model
@@ -1235,36 +1258,64 @@ impl Simulation {
                 }
             }
             Who::Agent(p, s) => {
-                if let Some(pop) = self.pops.get_mut(p as usize) {
-                    if ended {
-                        if let Ok(i) = pop.live.binary_search(&s) {
-                            pop.live.remove(i);
-                        }
-                        pop.counts.removed += 1;
-                    } else if let Some(slot) = index(s).and_then(|i| pop.agents.get_mut(i)) {
-                        *slot = Some(agent);
-                    }
+                if !ended
+                    && let Some(slot) = self
+                        .pops
+                        .get_mut(p as usize)
+                        .and_then(|pop| pop.agents.get_mut(index(s)?))
+                {
+                    *slot = Some(agent);
                 }
             }
         }
-        let (matched, changed) = result?;
-        self.dispatch(who, out)?;
-        if let (Who::Agent(p, s), true) = (who, ended)
-            && let Some(pop) = self.pops.get_mut(p as usize)
-        {
-            if let Some(net) = &mut pop.net {
-                net.forget(s);
+        // An agent that ended stays alive, with its links and cell, until what it sent out
+        // has gone, in order (a link it removed or a move it made counts for its last
+        // messages); then it leaves. It never receives what it sent.
+        let (matched, changed) = match result {
+            Ok(r) => r,
+            Err(e) => {
+                self.retire(who);
+                return Err(e);
             }
-            if let Some(space) = &mut pop.space {
-                space.remove(s);
-            }
+        };
+        let sent = self.dispatch(who, out);
+        if ended {
+            self.retire(who);
         }
+        sent?;
         if let Who::Agent(p, _) = who
             && (changed || ended)
         {
             self.dirty.insert(p);
         }
         Ok(Some(matched))
+    }
+
+    /// Takes agent `who` out of its population (if it is still there): out of the agents alive,
+    /// its slot, its links and its cell.
+    fn retire(&mut self, who: Who) {
+        let Who::Agent(p, s) = who else {
+            self.env = None;
+            return;
+        };
+        let Some(pop) = self.pops.get_mut(p as usize) else {
+            return;
+        };
+        let Ok(i) = pop.live.binary_search(&s) else {
+            return;
+        };
+        pop.live.remove(i);
+        pop.counts.removed += 1;
+        if let Some(slot) = index(s).and_then(|i| pop.agents.get_mut(i)) {
+            *slot = None;
+        }
+        if let Some(net) = &mut pop.net {
+            net.forget(s);
+        }
+        if let Some(space) = &mut pop.space {
+            space.remove(s);
+        }
+        self.dirty.insert(p);
     }
 
     /// Puts what an agent sent out on the clock, in order.
@@ -1276,6 +1327,7 @@ impl Simulation {
                     let key = self.key(who);
                     if let Err(e) = self.schedule(s.delay, Ev::Fire(who, s.token), &key) {
                         self.halt(who, "an event it sent would not be at a finite time");
+                        self.retire(who);
                         return Err(e);
                     }
                 }
@@ -1448,6 +1500,9 @@ impl Simulation {
             a.set_value("column", Value::Number(c as f64));
         }
         self.dirty.insert(p);
+        // Its own conditions and rates may read `row` and `column`, which changed after its
+        // macrostep tested them: it is tested again (`propagate`).
+        self.moved.insert((p, s));
     }
 
     /// Stops an agent after a scheduling error, as [`Agent`]'s own driver does.
@@ -1533,21 +1588,21 @@ impl Simulation {
         Ok(())
     }
 
-    /// Tests again the agents waiting on each changed population, in population, then serial
-    /// order, then the environment, until no re-test changes anything.
+    /// Tests again the agents that moved on a grid (each first, in population, then serial
+    /// order: their `row` and `column` changed after their own macrostep, so their conditions
+    /// are tested and their rates drawn again), then the agents waiting on each changed
+    /// population, in population, then serial order, then the environment, until no re-test
+    /// changes anything.
     fn propagate(&mut self) -> Result<(), RunError> {
         let mut changes = 0u64;
-        while let Some(p) = self.dirty.pop_first() {
-            let readers = self.readers.get(p as usize).cloned().unwrap_or_default();
-            let mut who: Vec<Who> = Vec::new();
-            for q in readers {
-                if let Some(pop) = self.pops.get(q as usize) {
-                    who.extend(pop.live.iter().map(|&s| Who::Agent(q, s)));
-                }
-            }
-            if self.env_reads.get(p as usize).copied().unwrap_or(false) {
-                who.push(Who::Env);
-            }
+        loop {
+            let who: Vec<Who> = if let Some((p, s)) = self.moved.pop_first() {
+                vec![Who::Agent(p, s)]
+            } else if let Some(p) = self.dirty.pop_first() {
+                self.readers_of(p)
+            } else {
+                return Ok(());
+            };
             for w in who {
                 if self.act(w, Op::Retest)? == Some(true) {
                     changes += 1;
@@ -1560,6 +1615,20 @@ impl Simulation {
                 }
             }
         }
-        Ok(())
+    }
+
+    /// The agents whose conditions read population `p`, in population, then serial order, then
+    /// the environment.
+    fn readers_of(&self, p: u32) -> Vec<Who> {
+        let mut who: Vec<Who> = Vec::new();
+        for &q in self.readers.get(p as usize).map_or(&[][..], Vec::as_slice) {
+            if let Some(pop) = self.pops.get(q as usize) {
+                who.extend(pop.live.iter().map(|&s| Who::Agent(q, s)));
+            }
+        }
+        if self.env_reads.get(p as usize).copied().unwrap_or(false) {
+            who.push(Who::Env);
+        }
+        who
     }
 }
