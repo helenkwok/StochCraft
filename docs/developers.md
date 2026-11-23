@@ -835,8 +835,11 @@ the checker's model of floating point.
 
 Two automated reviewers comment on pull requests. CodeRabbit is a GitHub app and needs nothing
 from the repository. The Gemini CLI review is the workflows `.github/workflows/gemini-dispatch.yml`
-and `gemini-review.yml` (adapted from the `run-gemini-cli` examples, which are Apache-2.0). It runs
-when a pull request from a branch of this repository is opened or reopened, when a repository
+and `gemini-review.yml` (adapted from the `run-gemini-cli` examples, which are Apache-2.0). It
+stands in for CodeRabbit: it runs by itself only when CodeRabbit's comment on a pull request from a
+branch of this repository says it is rate limited, and then at most once per head commit (its
+acknowledgement carries the commit, and a second "rate limited" edit for the same commit is
+skipped), which also keeps it inside the free tier's daily requests. It also runs when a repository
 owner, member or collaborator starts a comment or review with `@gemini-cli /review` (any text
 after it is passed to the reviewer as extra focus, for example `@gemini-cli /review check error
 handling`), or when someone with write access runs the "Gemini Dispatch" workflow by hand with a
