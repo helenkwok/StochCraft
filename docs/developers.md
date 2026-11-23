@@ -778,54 +778,6 @@ the check with every system ε from its limits, KN among the feasible, and the c
 standard with all means equal and with one alternative δ better. A rate passes when the upper end
 of its 95% Wilson interval is at least 0.95; the log prints each rate, interval and mean runs.
 
-### Racing and the clean-up
-
-`stochcraft_experiment::race` holds M9's second stage (P2): racing the candidates a search
-proposes, then the clean-up of the finalists by KN. It is model-free and works with any search,
-M9's or an outside one: a `Race` takes candidates as they come (`add`), says which replications
-to run next (`ask`, a `Request` of a candidate and a range of replications) and takes their
-values (`tell`); `run` drains the requests with a sampler, and `race` races a fixed set of
-candidates. Each candidate gets a first stage, then more stages while it stays in contention. It
-is dropped only when the one-sided paired t interval of the leader (the best mean in contention)
-against it, over the replications they share, lies wholly beyond δ: racing (Birattari, Stützle,
-Paquete and Varrentrapp 2002) with a paired t interval in place of their Friedman test, since
-common random numbers pair the replications.
-
-The race's error is held by Bonferroni's inequality over the planned looks and pairs: the race is
-planned for at most M candidates (`max_candidates`, more are refused) and L stages each
-(`stages`), and each test is run at β = α_race / ((M − 1)·L). The best candidate tried can only be
-dropped against one of the M − 1 others at one of the L shared counts, so the race drops it with
-probability at most α_race, whichever candidate leads at each look and in whatever order the
-requests are told (that order can change who leads, which pairs are tested and who reaches the
-clean-up). The bound treats each paired test as a fixed test on fixed data, so it holds only for
-candidates chosen without looking at the values told on the replication indices they will share:
-candidates fixed in advance, or proposed from a fixed design, a random or Sobol sequence or a
-list. An adaptive search that reads the race's results and then proposes a candidate to run on
-the same indices breaks it, and then the bound on dropping the best is not claimed. The paired t
-interval and KN also need the vectors of all candidates' values in a replication to be
-independent across replications and jointly (multivariate) normal; `Sampling::Common` only sets
-KN's constants and does not remove that requirement.
-
-`clean_up` then runs KN (`select_best`) among every candidate still in contention, on
-replications numbered from the first index the race never asked for, at confidence 1 − α_clean.
-α is split between the two (`racing_share`, half each by default). KN's statement about its
-finalists holds whatever chose them. The answer (`RaceAnswer`, also as words) states the chosen
-candidate, "of these k finalists, the best or within δ of it, with 1 − α confidence", how many
-candidates the search tried and racing dropped, and that it does not prove that none of the
-others is better. `finalists` can cap the clean-up at the k best race means (`None`, no cap, by
-default); that cut has no probability behind it, so a capped answer lists the candidates it left
-out (`left_out`) and says that its confidence covers only the finalists. Candidates whose first
-stage never ran (the racing budget ran out, or the clean-up was called while they waited) are
-listed in `untested`, and the answer says that its confidence covers only the candidates that
-raced. KN's `ComparedExactly` and `NotProven` pass through. `max_race_runs` stops the race early
-and the clean-up runs on what is left; a `max_cleanup_runs` that cannot pay for KN's first stage
-gives a not-proven answer. The checks (`crates/experiment/tests/race.rs`, heavy) run 1,000
-macro-replications each: the slippage configuration (ten candidates, independent and with
-correlation 0.5) and a feed of 50 candidates arriving one at a time with the best arriving late,
-where racing must also use fewer runs than running every candidate to the end with the same
-clean-up, both without a cap. Since the procedure is conservative, each rate must itself be at
-least 0.95; the log prints it with its 95% Wilson interval.
-
 ### The journal
 
 The engine records every command that is not a query in its journal. A new or opened document
