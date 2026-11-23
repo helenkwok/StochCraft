@@ -55,7 +55,7 @@ fn two_servers(measured: f64) -> Engine {
                 { "id": "f3", "from": "s1", "to": "exit" },
                 { "id": "f4", "from": "s2", "to": "exit" }
             ],
-            "experiment": { "warmup": measured / 10.0, "duration": measured, "replications": 10, "seed": 1 }
+            "experiment": { "time_unit": "hour", "warmup": measured / 10.0, "duration": measured, "replications": 10, "seed": 1 }
         }}),
     );
     e
@@ -92,7 +92,7 @@ fn one_server(measured: f64) -> Engine {
                 { "id": "f1", "from": "arrivals", "to": "server" },
                 { "id": "f2", "from": "server", "to": "exit" }
             ],
-            "experiment": { "warmup": measured / 10.0, "duration": measured, "replications": 10, "seed": 1 }
+            "experiment": { "time_unit": "hour", "warmup": measured / 10.0, "duration": measured, "replications": 10, "seed": 1 }
         }}),
     );
     e

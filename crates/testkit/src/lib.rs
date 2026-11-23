@@ -176,7 +176,7 @@ pub fn optimise_rules() -> Result<Value, String> {
             { "id": "f3", "from": "s1", "to": "exit" },
             { "id": "f4", "from": "s2", "to": "exit" }
         ],
-        "experiment": { "warmup": 5.0, "duration": 50.0, "replications": 4, "seed": 2026 }
+        "experiment": { "time_unit": "hour", "warmup": 5.0, "duration": 50.0, "replications": 4, "seed": 2026 }
     }});
     engine
         .execute("model.set", model)
@@ -217,7 +217,7 @@ pub fn optimise_mean() -> Result<Value, String> {
             { "id": "f1", "from": "arrivals", "to": "server" },
             { "id": "f2", "from": "server", "to": "exit" }
         ],
-        "experiment": { "warmup": 5.0, "duration": 50.0, "replications": 4, "seed": 2026 }
+        "experiment": { "time_unit": "hour", "warmup": 5.0, "duration": 50.0, "replications": 4, "seed": 2026 }
     }});
     engine
         .execute("model.set", model)
