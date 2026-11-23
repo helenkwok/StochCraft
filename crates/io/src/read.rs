@@ -1587,11 +1587,13 @@ fn queue_capacity(scenario: Option<&Scenario>, id: &str, notes: &mut Vec<Note>) 
             bpsim::STOP_WHEN_EMPTY,
             bpsim::ESTIMATE,
             bpsim::STARTING_CONTENTS,
+            bpsim::PATH,
+            bpsim::PLACE,
         ]
         .contains(&name)
         {
             // Read by `breakdown_of`, `transfer_of`, `routing_of`, `batching_of`,
-            // `vendor_count`, `stop_of`, `estimates_of` and `starting_of`.
+            // `vendor_count`, `stop_of`, `estimates_of`, `starting_of` and `layout::site_of`.
         } else if name.starts_with(bpsim::STOCHCRAFT) {
             notes.push(Note::warning(
                 Some(id),
