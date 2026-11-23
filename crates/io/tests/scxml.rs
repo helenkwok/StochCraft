@@ -318,6 +318,55 @@ fn what_scxml_cannot_say_is_not_written() {
         ChartSpec::new("c").state(StateSpec::state("a").transition(TransitionSpec::on("a..b"))),
         "event descriptor",
     );
+    // A target or initial state that is not an XML name (SCXML's IDREFS).
+    refused(
+        ChartSpec::new("c")
+            .state(StateSpec::state("a").transition(TransitionSpec::on("e").to("a").to("1bad"))),
+        "`1bad` is not a reference",
+    );
+    refused(
+        ChartSpec::new("c")
+            .initial(&["a", "two words"])
+            .state(StateSpec::state("a")),
+        "`two words` is not a reference",
+    );
+    refused(
+        ChartSpec::new("c").state(
+            StateSpec::state("a")
+                .initial(&["-b"])
+                .child(StateSpec::state("b")),
+        ),
+        "`-b` is not a reference",
+    );
+    // A message to other agents that would not read back: it goes at once, with no id.
+    refused(
+        ChartSpec::new("c").state(
+            StateSpec::state("a").on_entry(SendSpec::new("e").to_random("people").after(1.0)),
+        ),
+        "goes at once",
+    );
+    refused(
+        ChartSpec::new("c")
+            .state(StateSpec::state("a").on_entry(SendSpec::new("e").to_random("people").id("m"))),
+        "goes at once",
+    );
+    refused(
+        ChartSpec::new("c").state(
+            StateSpec::state("a").on_entry(SendSpec::new("e").to_random("people").internal()),
+        ),
+        "goes at once",
+    );
+    // What is fine is still written: a list of targets, and a message with no delay or id.
+    let fine = ChartSpec::new("c")
+        .state(
+            StateSpec::state("a")
+                .on_entry(SendSpec::new("e").to_random("people"))
+                .transition(TransitionSpec::on("e").to("a").to("b")),
+        )
+        .state(StateSpec::state("b"));
+    let text = write(&fine, 1.0);
+    assert!(text.contains("target=\"a b\""), "{text}");
+    assert!(text.contains("stochcraft:to=\"random\""), "{text}");
 }
 
 /// A Bass diffusion chart, as A2 checks it.
@@ -358,9 +407,11 @@ fn a_chart_read_back_runs_as_the_original_did() {
     let original = bass();
     let back = read(&write(&original, 86_400.0), 86_400.0);
     for seed in [1, 2, 3] {
-        let a = bass_model(&original).run(seed, 10.0);
-        let b = bass_model(&back).run(seed, 10.0);
-        assert_eq!(a.ok(), b.ok(), "seed {seed}");
+        let run = |chart: &ChartSpec| match bass_model(chart).run(seed, 10.0) {
+            Ok(r) => r,
+            Err(e) => panic!("seed {seed}: {e}"),
+        };
+        assert_eq!(run(&original), run(&back), "seed {seed}");
     }
 }
 
@@ -401,16 +452,39 @@ fn file_uri(path: &Path) -> String {
     uri
 }
 
+/// A folder of its own for one check, made new (never one left by another run or another
+/// check) and removed when the check ends, however it ends.
+struct Scratch(PathBuf);
+
+impl Scratch {
+    fn new() -> Self {
+        static NEXT: AtomicUsize = AtomicUsize::new(0);
+        loop {
+            let d = std::env::temp_dir().join(format!(
+                "stochcraft-scxml-{}-{}",
+                std::process::id(),
+                NEXT.fetch_add(1, Ordering::Relaxed)
+            ));
+            match std::fs::create_dir(&d) {
+                Ok(()) => return Self(d),
+                Err(e) if e.kind() == std::io::ErrorKind::AlreadyExists => {}
+                Err(e) => panic!("{}: {e}", d.display()),
+            }
+        }
+    }
+}
+
+impl Drop for Scratch {
+    fn drop(&mut self) {
+        let _ = std::fs::remove_dir_all(&self.0);
+    }
+}
+
 /// What xmllint says is wrong with `text` against W3C's SCXML schema (with its modules and the
 /// XML namespace's schema read from `dir`, never the network) and StochCraft's extension schema.
 fn schema_errors(text: &str, label: &str, dir: &Path) -> Option<String> {
-    static CALLS: AtomicUsize = AtomicUsize::new(0);
-    let stem = format!(
-        "stochcraft-scxml-{}-{}-{label}",
-        std::process::id(),
-        CALLS.fetch_add(1, Ordering::Relaxed)
-    );
-    let tmp = std::env::temp_dir();
+    let scratch = Scratch::new();
+    let tmp = &scratch.0;
     let dir = std::fs::canonicalize(dir).unwrap_or_else(|e| panic!("{}: {e}", dir.display()));
     let driver = std::fs::read_to_string(dir.join("scxml.xsd"))
         .unwrap_or_else(|e| panic!("scxml.xsd: {e}"))
@@ -422,7 +496,7 @@ fn schema_errors(text: &str, label: &str, dir: &Path) -> Option<String> {
             "schemaLocation=\"scxml-",
             &format!("schemaLocation=\"{}/scxml-", file_uri(&dir)),
         );
-    let driver_path = tmp.join(format!("{stem}-scxml.xsd"));
+    let driver_path = tmp.join("scxml.xsd");
     std::fs::write(&driver_path, driver).unwrap_or_else(|e| panic!("{e}"));
     let ours = Path::new(env!("CARGO_MANIFEST_DIR")).join("schemas/stochcraft-scxml-1.xsd");
     let wrapper = format!(
@@ -435,9 +509,9 @@ fn schema_errors(text: &str, label: &str, dir: &Path) -> Option<String> {
         file_uri(&driver_path),
         file_uri(&ours)
     );
-    let wrapper_path = tmp.join(format!("{stem}-schemas.xsd"));
+    let wrapper_path = tmp.join("schemas.xsd");
     std::fs::write(&wrapper_path, wrapper).unwrap_or_else(|e| panic!("{e}"));
-    let doc = tmp.join(format!("{stem}.scxml"));
+    let doc = tmp.join(format!("{label}.scxml"));
     std::fs::write(&doc, text).unwrap_or_else(|e| panic!("{e}"));
     let result = Command::new("xmllint")
         .arg("--noout")
@@ -446,9 +520,6 @@ fn schema_errors(text: &str, label: &str, dir: &Path) -> Option<String> {
         .arg(&wrapper_path)
         .arg(&doc)
         .output();
-    for p in [&driver_path, &wrapper_path, &doc] {
-        let _ = std::fs::remove_file(p);
-    }
     let result = result.unwrap_or_else(|e| panic!("xmllint: {e}"));
     (!result.status.success()).then(|| {
         format!(
