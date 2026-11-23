@@ -1475,7 +1475,8 @@ fn optimize_matches_the_engine_and_prints_the_claim() {
     let Ok(direct) = direct else {
         panic!("{direct:?}")
     };
-    assert_eq!(from_cli, direct);
+    // Both parsed from their printed text, so a number's last bit is read alike.
+    assert_eq!(from_cli, json(&direct.to_string()));
     assert_eq!(from_cli["designs_compared"], 4, "{from_cli}");
 
     let table = ok(&args);
