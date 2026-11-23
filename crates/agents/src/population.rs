@@ -453,7 +453,7 @@ impl View<'_> {
         }
         self.pops
             .get(p as usize)
-            .and_then(|pop| pop.agents.get(s as usize))
+            .and_then(|pop| pop.agents.get(index(s)?))
             .and_then(Option::as_ref)
     }
 }
@@ -515,6 +515,12 @@ impl World for View<'_> {
 fn whole(v: f64) -> Option<u64> {
     (v.is_finite() && v >= 0.0 && v.fract() == 0.0 && v < 18_446_744_073_709_551_616.0)
         .then_some(v as u64)
+}
+
+/// A serial number as an index, if this target's `usize` holds it (on wasm32 one of 2^32 or
+/// more is no agent rather than another agent's index).
+fn index(serial: u64) -> Option<usize> {
+    usize::try_from(serial).ok()
 }
 
 /// An index below `m` from 64 random bits: the top 53 bits as a fraction of `m`.
@@ -774,7 +780,7 @@ impl Simulation {
         self.pops
             .iter()
             .find(|p| p.name == population)
-            .and_then(|p| p.agents.get(serial as usize))
+            .and_then(|p| p.agents.get(index(serial)?))
             .and_then(Option::as_ref)
     }
 
@@ -860,7 +866,10 @@ impl Simulation {
             };
             let (mut n, mut sum, mut lo, mut hi) = (0u64, 0.0, f64::INFINITY, f64::NEG_INFINITY);
             for &s in &pop.live {
-                let Some(a) = pop.agents.get(s as usize).and_then(Option::as_ref) else {
+                let Some(a) = index(s)
+                    .and_then(|i| pop.agents.get(i))
+                    .and_then(Option::as_ref)
+                else {
                     continue;
                 };
                 let view = View {
@@ -868,13 +877,13 @@ impl Simulation {
                     who: Some(Who::Agent(st.population, s)),
                 };
                 if let Some(c) = &st.condition
-                    && !a.evaluate(c, &view).boolean()
+                    && !a.evaluate(c, t, &view).boolean()
                 {
                     continue;
                 }
                 n += 1;
                 if let Some(e) = &st.expr {
-                    let x = a.evaluate(e, &view).number();
+                    let x = a.evaluate(e, t, &view).number();
                     sum += x;
                     lo = lo.min(x);
                     hi = hi.max(x);
@@ -956,7 +965,7 @@ impl Simulation {
             Who::Agent(p, s) => self
                 .pops
                 .get_mut(p as usize)
-                .and_then(|pop| pop.agents.get_mut(s as usize))
+                .and_then(|pop| pop.agents.get_mut(index(s)?))
                 .and_then(Option::take),
         };
         let Some(mut agent) = taken else {
@@ -997,7 +1006,7 @@ impl Simulation {
                             pop.live.remove(i);
                         }
                         pop.counts.removed += 1;
-                    } else if let Some(slot) = pop.agents.get_mut(s as usize) {
+                    } else if let Some(slot) = index(s).and_then(|i| pop.agents.get_mut(i)) {
                         *slot = Some(agent);
                     }
                 }
@@ -1106,7 +1115,7 @@ impl Simulation {
             Who::Agent(p, s) => self
                 .pops
                 .get_mut(p as usize)
-                .and_then(|pop| pop.agents.get_mut(s as usize))
+                .and_then(|pop| pop.agents.get_mut(index(s)?))
                 .and_then(Option::as_mut),
         };
         if let Some(a) = agent {

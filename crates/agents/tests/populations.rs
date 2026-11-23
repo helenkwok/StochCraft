@@ -412,3 +412,55 @@ fn the_same_seed_gives_the_same_series() {
     assert!(one.series[1].values[0].is_nan(), "the mean over no agents");
     assert!(one.series[0].values.windows(2).all(|w| w[1] <= w[0]));
 }
+
+/// Five agents with v = 0, 2, 4, 6, 8: every measure, worked out by hand, at times 0 and 7 (a
+/// statistic's `time()` is the time it is recorded at).
+#[test]
+fn statistics_measure_by_hand() {
+    let chart = build(
+        &ChartSpec::new("v")
+            .data("v", "2 * serial()")
+            .state(StateSpec::state("s")),
+    );
+    let model = Model::new()
+        .population(Population::new("p", chart).count(5))
+        .statistic(Statistic::count("big", "p").when("$v > 3"))
+        .statistic(Statistic::sum("sum", "p", "$v"))
+        .statistic(Statistic::mean("mean", "p", "$v"))
+        .statistic(Statistic::min("min", "p", "$v").when("$v > 3"))
+        .statistic(Statistic::max("max", "p", "$v + time()"));
+    let r = run(&model, 1, 7.0);
+    assert_eq!(r.times, [0.0, 7.0]);
+    let at = |i: usize| r.series[i].values.clone();
+    assert_eq!(at(0), [3.0, 3.0]);
+    assert_eq!(at(1), [20.0, 20.0]);
+    assert_eq!(at(2), [4.0, 4.0]);
+    assert_eq!(at(3), [4.0, 4.0]);
+    assert_eq!(at(4), [8.0, 15.0]);
+}
+
+/// The asynchronous ring in a random order: the answer depends on the order, so the seeds give
+/// different answers, and one seed always the same.
+#[test]
+fn a_random_step_order_shows_in_an_asynchronous_update() {
+    let chart = build(&ChartSpec::new("async").data("v", "serial()").state(
+        StateSpec::state("s").transition(TransitionSpec::on("step").then(Action::assign(
+            "v",
+            "agent-value('ring', (serial() + 4) mod 5, 'v')",
+        ))),
+    ));
+    let model = Model::new()
+        .population(Population::new("ring", chart).count(5))
+        .stepped(Stepping::every(1.0).random_order());
+    let values = |seed: u64| -> Vec<f64> {
+        let sim = simulate(&model, seed, 1.0);
+        (0..5).map(|s| value(&sim, "ring", s, "v")).collect()
+    };
+    let answers: Vec<Vec<f64>> = (1..=20).map(values).collect();
+    assert_eq!(answers[0], values(1));
+    assert!(answers.iter().any(|a| a != &answers[0]), "{answers:?}");
+    assert!(answers.iter().any(|a| a != &[4.0; 5]), "{answers:?}");
+    for a in &answers {
+        assert!(a.iter().all(|v| (0.0..5.0).contains(v)), "{a:?}");
+    }
+}

@@ -614,7 +614,10 @@ impl Chart {
     /// parallel state with a default transition to its children (shallow) or descendants
     /// (deep), never to a history state; final states have no children or transitions; parallel
     /// states have at least one child; every expression must parse and read only declared
-    /// variables (or `getProperty('_event.name')`, the current event's name); a fixed delay is
+    /// variables (or `getProperty('_event.name')` and `getProperty('_event.data')`, the current
+    /// event's name and data); population functions name their population, state and variable
+    /// in quotes (checked by a [`Model`](crate::Model)); a rate reads no population and not
+    /// `time()`; a message to other agents has no delay; a fixed delay is
     /// a time of 0 or more; an internal send has no delay.
     ///
     /// `In('id')` with a quoted name is checked to name a state. A name the expression computes

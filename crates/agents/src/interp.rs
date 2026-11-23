@@ -442,12 +442,19 @@ impl Agent {
         self.microsteps > 0
     }
 
-    /// Evaluates an expression over the agent as it is now, drawing nothing (a statistic's
-    /// expression, which [`Chart`]'s `agent_expression` checked).
-    pub(crate) fn evaluate(&self, code: &Code, w: &dyn World) -> Value {
+    /// Evaluates an expression over the agent as it is now, at time `now` (what `time()`
+    /// reads), drawing nothing (a statistic's expression, which [`Chart`]'s `agent_expression`
+    /// checked).
+    pub(crate) fn evaluate(&self, code: &Code, now: f64, w: &dyn World) -> Value {
         let chart = &self.chart;
         let property = |name: &str| self.lookup(chart, name);
-        let provided = |name: &str, args: &[Value]| self.provided(chart, name, args, None, w);
+        let provided = |name: &str, args: &[Value]| {
+            if name == "time" {
+                Value::Number(now)
+            } else {
+                self.provided(chart, name, args, None, w)
+            }
+        };
         code.expr.eval_with(&property, &provided)
     }
 

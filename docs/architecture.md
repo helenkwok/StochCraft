@@ -16,8 +16,8 @@ crates above it, so a change near the top touches little and a change near the b
 | — | `testkit` | Test tooling; other crates may use it only as a dev-dependency |
 | apps | `stochcraft`, `stochcraft-cli`, `stochcraft-web` | Exempt from the rules |
 
-Every crate in the table exists (with the three apps); `agents` so far holds state charts alone,
-with populations, messages and files to come (M4.3).
+Every crate in the table exists (with the three apps); `agents` so far holds state charts and
+populations of agents exchanging messages, with networks, grids and files to come (M4.3).
 
 ## The app on craft-libs
 
