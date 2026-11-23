@@ -1438,11 +1438,11 @@ fn optimize_matches_the_engine_and_prints_the_claim() {
         "optimize",
         &file,
         "--decide",
-        "clerk.quantity=1..4",
+        "serve.capacity=1..4",
         "--minimize",
         "serve.mean_wait*2",
         "--cost",
-        "clerk.quantity=1",
+        "serve.capacity=1",
         "--delta",
         "1",
         "--max-runs",
@@ -1460,11 +1460,11 @@ fn optimize_matches_the_engine_and_prints_the_claim() {
     let direct = engine.execute(
         "experiment.optimise",
         serde_json::json!({
-            "decisions": [{ "id": "clerk", "field": "quantity", "min": 1, "max": 4 }],
+            "decisions": [{ "id": "serve", "field": "capacity", "min": 1, "max": 4 }],
             "objective": {
                 "results": [{ "element": "serve", "metric": "mean_wait", "weight": 2.0 }],
                 "sense": "minimise",
-                "costs": [{ "id": "clerk", "field": "quantity", "cost": 1.0 }],
+                "costs": [{ "id": "serve", "field": "capacity", "cost": 1.0 }],
             },
             "constraints": [],
             "indifference": 1.0,
@@ -1481,13 +1481,13 @@ fn optimize_matches_the_engine_and_prints_the_claim() {
     let table = ok(&args);
     let claim = from_cli["claim"].as_str().unwrap_or_default();
     assert!(!claim.is_empty() && table.contains(claim), "{table}");
-    assert!(table.contains("clerk.quantity"), "{table}");
+    assert!(table.contains("serve.capacity"), "{table}");
 
     let o = cli(&[
         "optimize",
         &file,
         "--decide",
-        "clerk.quantity=1-4",
+        "serve.capacity=1-4",
         "--delta",
         "1",
     ]);
