@@ -158,7 +158,8 @@ fn runs(
 /// accent stripe along the outside of each frame. The rail on the left leaves out the stretches
 /// in `gaps_left` (from, to, in metres along the stations) and the right one those in
 /// `gaps_right`, where another belt joins or leaves. Empty for fewer than two stations or
-/// parameters that are not positive.
+/// parameters that are not positive. The stripe's dashes follow the stations, so they show only
+/// where stations are closer than half a `stripe_pitch`.
 pub fn belt_along(
     stations: &[Station],
     p: Belt,
@@ -599,9 +600,9 @@ mod tests {
     use super::*;
 
     fn straight(length: f32) -> Vec<Station> {
-        (0..=10)
+        (0..=50)
             .map(|i| Station {
-                x: length * i as f32 / 10.0,
+                x: length * i as f32 / 50.0,
                 ..Station::default()
             })
             .collect()
