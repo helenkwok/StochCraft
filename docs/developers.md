@@ -702,7 +702,8 @@ from a seed, and `Model::run` returns its `Run` (the statistics over time and ea
   tested again after every event that changes it (an agent created, removed or taking a transition):
   the agents waiting on it in population, then serial order, then the environment, until nothing
   changes (at most 1,000,000 changes per event, `RunError::RetestLimit`). A rate may not read a
-  population or the time, since it is drawn again only when the agent's own variables change.
+  population, the time, `In()` or the event (`_event.name`, `_event.data`), since it is drawn again
+  only when the agent's own variables change; the chart is refused when it is built.
 - `Statistic`s (count, sum, mean, minimum and maximum of an expression over the agents meeting a
   condition) are recorded at the start, every `save_every` and at the end, after every event at that
   time; `bands` gives the mean, median and 5% to 95% band across replications.

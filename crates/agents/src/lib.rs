@@ -71,7 +71,9 @@
 //! event on the clock; [`Action::Cancel`] makes the pending sends with its id never arrive. A
 //! rate send ([`SendSpec::at_rate`]) waits an exponential time with mean 1 / rate, and is drawn again
 //! whenever, at the end of a macrostep, a variable its rate reads has a new value: by the
-//! exponential's lack of memory the event then comes at the new rate. A send to the internal
+//! exponential's lack of memory the event then comes at the new rate. So a rate reads only the
+//! agent's own variables: a chart whose rate reads a population, `time()`, `In()` or the event
+//! is refused when it is built. A send to the internal
 //! queue ([`SendSpec::internal`]) acts as `<raise>`.
 //!
 //! **Random streams** (D18): each expression of the chart draws from a stream of its own,
