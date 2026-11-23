@@ -2,10 +2,11 @@
 //! P2). They are heavy, so they are ignored by default and run in CI's heavy tests job
 //! (`cargo test --release -- --ignored`).
 //!
-//! **The criterion.** As for the selection procedures (`tests/select.rs`): a rate of correct
-//! answers passes when the upper end of the 95% Wilson interval of the observed proportion is at
-//! least 0.95, so the macro-replications do not show the chance that racing drops the best or the
-//! clean-up does not select it to be above 5%. Each check prints its rate, the interval, how often
+//! **The criterion.** The procedure is conservative (Bonferroni bounds on the race and on KN), so
+//! a rate of correct answers must be at least 0.95 itself, not only within the 95% Wilson
+//! interval: the macro-replications must not suggest that racing drops the best or the clean-up
+//! fails to select it more than 5% of the time. Every candidate in contention goes to the clean-up
+//! (no cap on the finalists). Each check prints its rate, the interval, how often
 //! racing dropped the best and how often the best was not a finalist, and the mean runs of racing
 //! against running every candidate to the end with the same clean-up.
 #![allow(clippy::panic)]
@@ -70,7 +71,7 @@ where
     means.sort_by(|a, b| b.1.total_cmp(&a.1).then(a.0.cmp(&b.0)));
     let finalists: Vec<usize> = means
         .iter()
-        .take(settings.finalists)
+        .take(settings.finalists.unwrap_or(candidates))
         .map(|(c, _)| *c)
         .collect();
     let kn = Kn {
@@ -109,7 +110,8 @@ impl Tally {
         self.baseline += baseline;
     }
 
-    /// Prints the rate with its Wilson interval and the runs, and checks it against 0.95.
+    /// Prints the rate with its Wilson interval and the runs, and checks that the rate is at least
+    /// 0.95.
     fn check(&self, name: &str) -> (f64, f64) {
         let p = Proportion::new(self.correct, MACRO);
         let Some((lo, hi)) = p.wilson(0.95) else {
@@ -128,8 +130,8 @@ impl Tally {
             self.best_not_final,
         );
         assert!(
-            hi >= 0.95,
-            "{name}: {}/{MACRO} correct, Wilson 95% [{lo:.4}, {hi:.4}] lies below 0.95",
+            self.correct * 100 >= 95 * MACRO,
+            "{name}: {}/{MACRO} correct (Wilson 95% [{lo:.4}, {hi:.4}]) is below 0.95",
             self.correct
         );
         (runs, baseline)
@@ -138,9 +140,10 @@ impl Tally {
 
 /// The slippage configuration: ten candidates, the best (3) δ = 1/√10 above nine equal others,
 /// variance 1, independent and with correlation 0.5; racing with the defaults (stages of 10, then
-/// 5 up to 30 replications, M = 10), then KN among the five best. The others are exactly δ worse,
-/// so racing, which drops only candidates worse by more than δ, should drop almost none: the
-/// check is that the best is kept and selected at least 95% of the time.
+/// 5 up to 30 replications, M = 10), then KN among every candidate still in contention. The
+/// others are exactly δ worse, so racing, which drops only candidates worse by more than δ,
+/// should drop almost none: the check is that the best is kept and selected at least 95% of the
+/// time.
 #[test]
 #[ignore = "heavy: 2,000 macro-replications"]
 fn racing_in_the_slippage_configuration() {
@@ -180,9 +183,9 @@ fn racing_in_the_slippage_configuration() {
 /// Candidates arriving one at a time: a feed of 50 candidates with known means (minimise), the
 /// race run after each arrival. The best (mean 0) arrives 42nd (candidate 41); the others lie
 /// from δ to 10δ above it, one exactly δ, spread by a fixed permutation. Stages of 10, then 5 up
-/// to 40 replications (L = 7, M = 50), then KN among the five best. The best must be kept and
-/// selected at least 95% of the time, and racing must use fewer runs on average than running
-/// every candidate to the end with the same clean-up.
+/// to 40 replications (L = 7, M = 50), then KN among every candidate still in contention. The
+/// best must be kept and selected at least 95% of the time, and racing must use fewer runs on
+/// average than running every candidate to the end with the same clean-up.
 #[test]
 #[ignore = "heavy: 1,000 macro-replications of 50 candidates"]
 fn racing_a_feed_of_fifty_candidates() {

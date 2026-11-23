@@ -28,16 +28,19 @@
 //! best candidate tried with probability at most α_race. Testing the same pair again at the same
 //! count repeats the same event and adds no error.
 //!
-//! **The clean-up.** The finalists are the k candidates in contention with the best means (fewer
-//! when fewer are left). KN runs on replications numbered from the first index after every one
-//! the race asked for, so its data are independent of the race and its guarantee holds for the
-//! set it is given, at confidence 1 − α_clean. With α_race = share·α and
-//! α_clean = (1 − share)·α (half each by default), Bonferroni's inequality bounds the chance that
-//! the race drops the best or that KN, given the best among the finalists, fails to choose it or
-//! one within δ of it, by α. The answer claims only what KN proves: of these k, the chosen one is
-//! the best or within δ of it, with 1 − α confidence (KN's own level, 1 − α_clean, is higher).
-//! The cut to k finalists by their means is not covered: a candidate still in contention but left
-//! out may be better, and the answer says so, with the number of candidates the search tried.
+//! **The clean-up.** By default every candidate still in contention is a finalist. KN runs on
+//! replications numbered from the first index after every one the race asked for, so its data are
+//! independent of the race and its guarantee holds for the set it is given, at confidence
+//! 1 − α_clean. With α_race = share·α and α_clean = (1 − share)·α (half each by default),
+//! Bonferroni's inequality bounds the chance that the race drops the best or that KN fails to
+//! choose it or one within δ of it by α. The answer states that the chosen one is the best of the
+//! k finalists, or within δ of it, with 1 − α confidence (KN's own level, 1 − α_clean, is
+//! higher), and that the search tried more candidates than it proves anything about.
+//!
+//! **A cap on the finalists.** [`Racing::finalists`] may cap the clean-up at the k candidates in
+//! contention with the best means. That cut is not covered by any probability: a candidate left
+//! out may be the best. When the cap cuts, the answer lists the candidates left out
+//! ([`RaceAnswer::left_out`]) and says in words that its confidence covers only the finalists.
 //!
 //! **Assumptions.** Observations are normal and independent across replications, as KN and the t
 //! interval assume.
@@ -79,8 +82,10 @@ pub struct Racing {
     pub stages: u64,
     /// The most candidates the race takes, M, which sets its per-look level (at least 1).
     pub max_candidates: usize,
-    /// k, the most candidates the clean-up takes (default 5, at least 1).
-    pub finalists: usize,
+    /// A cap k on the candidates the clean-up takes, the best race means first (default `None`:
+    /// every candidate still in contention). A cap that cuts is not covered by the confidence;
+    /// the answer then lists the candidates left out.
+    pub finalists: Option<usize>,
     /// KN's first stage n₀ in the clean-up (default 10, at least 2).
     pub cleanup_first_stage: u64,
     pub sense: Sense,
@@ -105,7 +110,7 @@ impl Racing {
             stage: 5,
             stages: 5,
             max_candidates,
-            finalists: 5,
+            finalists: None,
             cleanup_first_stage: 10,
             sense,
             sampling: Sampling::Common,
@@ -155,14 +160,18 @@ impl Racing {
         if self.max_candidates == 0 {
             return bad("max_candidates");
         }
-        if self.finalists == 0 {
+        if self.finalists == Some(0) {
             return bad("finalists");
         }
         if self.cleanup_first_stage < 2 {
             return bad("cleanup_first_stage");
         }
         // KN's range for up to k systems: 1/k < 1 − α_clean.
-        if self.finalists > 1 && self.cleanup_confidence() <= 1.0 / self.finalists as f64 {
+        let k = self
+            .finalists
+            .unwrap_or(self.max_candidates)
+            .min(self.max_candidates);
+        if k > 1 && self.cleanup_confidence() <= 1.0 / k as f64 {
             return bad("confidence");
         }
         if self.max_replications() == u64::MAX {
@@ -504,7 +513,8 @@ impl Race {
         (t_upper_tail(t, nf - 1.0) <= self.level).then_some(n as u64)
     }
 
-    /// Ends the race: KN among the k best candidates in contention, on replications numbered from
+    /// Ends the race: KN among the candidates in contention (the k best by their race means when
+    /// [`Racing::finalists`] caps them), on replications numbered from
     /// [`Race::fresh_from`], with `sample(candidate, replications)` as in the race. Refused while
     /// a request is outstanding.
     pub fn clean_up<F>(&self, mut sample: F) -> Result<RaceAnswer, RaceError>
@@ -516,7 +526,10 @@ impl Race {
         }
         let mut ranked = self.contenders();
         ranked.sort_by(|&a, &b| self.score(b).total_cmp(&self.score(a)).then(a.cmp(&b)));
-        let k = self.settings.finalists.min(ranked.len());
+        let k = self
+            .settings
+            .finalists
+            .map_or(ranked.len(), |cap| cap.min(ranked.len()));
         let left_out = ranked.split_off(k);
         let finalists = ranked;
         let count =
@@ -618,7 +631,9 @@ pub struct RaceAnswer {
     pub chosen: Option<usize>,
     /// The candidates the clean-up took, best race mean first.
     pub finalists: Vec<usize>,
-    /// Candidates still in contention but beyond the k finalists.
+    /// Candidates still in contention that a cap on the finalists ([`Racing::finalists`]) left
+    /// out of the clean-up, best race mean first; empty without a cap. The confidence does not
+    /// cover them.
     pub left_out: Vec<usize>,
     /// KN's answer, its systems numbered by position in `finalists`; `None` when it did not run.
     pub selection: Option<Selection>,
@@ -691,20 +706,24 @@ impl std::fmt::Display for RaceAnswer {
             " The search tried {} candidates; racing dropped {}",
             self.tried, self.dropped
         )?;
-        if !self.left_out.is_empty() {
-            write!(
-                f,
-                ", and {} still in contention were left out of the clean-up",
-                self.left_out.len()
-            )?;
-        }
         if self.not_run > 0 {
             write!(f, ", and {} were never run", self.not_run)?;
         }
-        write!(
-            f,
-            ". This does not prove that none of the others is better."
-        )
+        write!(f, ".")?;
+        if !self.left_out.is_empty() {
+            let left = self
+                .left_out
+                .iter()
+                .map(usize::to_string)
+                .collect::<Vec<_>>()
+                .join(", ");
+            write!(
+                f,
+                " The cap on the finalists left out {} candidates still in contention ({left}), chosen by their means alone; the confidence covers only the finalists, and one left out may be the best.",
+                self.left_out.len()
+            )?;
+        }
+        write!(f, " This does not prove that none of the others is better.")
     }
 }
 
@@ -927,6 +946,48 @@ mod tests {
             a.to_string().starts_with("The racing budget ran out"),
             "{a}"
         );
+    }
+
+    #[test]
+    fn every_contender_is_a_finalist_unless_a_cap_cuts_and_says_so() {
+        // Minimise, no randomness, all within δ = 0.5 of the best: none is dropped.
+        let means = [1.2, 1.0, 1.3, 1.1];
+        let exact = |s: usize, reps: Range<u64>| reps.map(|_| means[s]).collect::<Vec<f64>>();
+        let settings = Racing::new(0.5, Sense::Minimise, 4);
+        let a = race(&settings, 4, exact);
+        let Ok(a) = a else { panic!("{a:?}") };
+        assert_eq!(a.finalists, vec![1, 3, 0, 2]);
+        assert!(a.left_out.is_empty());
+        assert!(!a.to_string().contains("left out"), "{a}");
+        // A cap of 2: the two best means go to the clean-up, the others are listed as left out.
+        let capped = Racing {
+            finalists: Some(2),
+            ..settings
+        };
+        let a = race(&capped, 4, exact);
+        let Ok(a) = a else { panic!("{a:?}") };
+        assert_eq!(
+            (a.finalists.clone(), a.left_out.clone()),
+            (vec![1, 3], vec![0, 2])
+        );
+        assert_eq!(a.chosen, Some(1));
+        let words = a.to_string();
+        assert!(
+            words.contains("left out 2 candidates still in contention (0, 2)"),
+            "{words}"
+        );
+        assert!(words.contains("covers only the finalists"), "{words}");
+        // With randomness, the stated confidence is for the finalists only.
+        let a = race(&capped, 4, normals(5, vec![1.2, 0.0, 1.3, 1.1]));
+        let Ok(a) = a else { panic!("{a:?}") };
+        assert!(a.finalists.len() <= 2, "{a:?}");
+        assert_eq!(a.confidence, Some(0.95));
+        assert_eq!(a.finalists.len() + a.left_out.len(), 4 - a.dropped, "{a:?}");
+        let bad = Racing {
+            finalists: Some(0),
+            ..settings
+        };
+        assert_eq!(Race::new(bad).err(), Some(RaceError::Setting("finalists")));
     }
 
     #[test]
