@@ -961,8 +961,8 @@ definition gives it on random lattices, and walks that reach all of the area. On
 δ = 2, and under a cap of 21 servers (13, 8) or (14, 7). On a near tie on one desk, δ = 0.1 must
 give 6 servers or "not proven". The fewest servers for a mean wait of at most 0.05 hour must be
 14. Constant times must give "compared exactly", and a search stopped by its time limit must
-repeat exactly. Each rate must itself be at least 0.95; the log prints it with its 95% Wilson
-interval.
+repeat exactly. Each check must be correct in at least 95% of its seeds (the ROADMAP's 95 of 100); the log prints the rate with its 95% Wilson
+interval, for information only.
 
 ### The journal
 

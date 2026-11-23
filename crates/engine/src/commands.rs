@@ -1495,6 +1495,8 @@ fn experiment_size(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
                 "the target share was not reached, so the model is unchanged; `apply_unreached` applies the last size tried anyway"
             );
         } else if &sized != e.model() {
+            // The change as decisions, which the journal keeps as a `decisions.set` edit.
+            v["applied_decisions"] = json!(crate::decide::changed_units(e.model(), &sized));
             e.edit("experiment.size", Op::SetModel(Box::new(sized)))?;
             v["applied"] = json!(true);
         }

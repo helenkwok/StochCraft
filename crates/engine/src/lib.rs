@@ -387,7 +387,7 @@ impl ReplayMode {
 /// How a step that ran is kept in the journal. An optimisation that applied its answer is kept
 /// as the search without `apply`, then its change as a `decisions.set` edit, so an edits-only
 /// replay makes the change without searching again and a full replay searches once and applies
-/// once. A batch keeps its steps the same way, one by one with their results, nested batches
+/// once. `experiment.size` is kept the same way. A batch keeps its steps the same way, one by one with their results, nested batches
 /// included, and stays one step (one undo step when replayed).
 fn journalled(command: &str, params: Value, result: &Value) -> Vec<JournalEntry> {
     let entry = |command: &str, params: Value| JournalEntry {
@@ -395,15 +395,19 @@ fn journalled(command: &str, params: Value, result: &Value) -> Vec<JournalEntry>
         params,
     };
     match command {
-        "experiment.optimise" if result.get("applied") == Some(&json!(true)) => {
+        "experiment.optimise" | "experiment.size"
+            if result.get("applied") == Some(&json!(true)) =>
+        {
+            let decisions = if command == "experiment.size" {
+                result["applied_decisions"].clone()
+            } else {
+                result["chosen"]["decisions"].clone()
+            };
             let mut search = params;
             search["apply"] = json!(false);
             vec![
                 entry(command, search),
-                entry(
-                    "decisions.set",
-                    json!({ "decisions": result["chosen"]["decisions"] }),
-                ),
+                entry("decisions.set", json!({ "decisions": decisions })),
             ]
         }
         "batch" => {
@@ -420,7 +424,8 @@ fn journalled(command: &str, params: Value, result: &Value) -> Vec<JournalEntry>
                     };
                     let r = results.get(i).cloned().unwrap_or(Value::Null);
                     let applied = r.get("applied") == Some(&json!(true));
-                    if name == "batch" || (name == "experiment.optimise" && applied) {
+                    let analysis = matches!(name, "experiment.optimise" | "experiment.size");
+                    if name == "batch" || (analysis && applied) {
                         for e in journalled(name, inner, &r) {
                             kept.push(json!({ "command": e.command, "params": e.params }));
                         }
@@ -443,7 +448,15 @@ fn batch_for(mode: ReplayMode, params: &Value) -> Value {
     if let Some(steps) = params.get("commands").and_then(Value::as_array) {
         let kept: Vec<Value> = steps
             .iter()
-            .filter(|s| mode.applies(s["command"].as_str().unwrap_or_default()))
+            .filter(|s| {
+                let name = s["command"].as_str().unwrap_or_default();
+                // A sizing or an optimisation recorded with `apply` true comes from a journal
+                // written before applied changes were kept as their own `decisions.set` step:
+                // it is replayed as it was then, searching again and applying.
+                let older = matches!(name, "experiment.size" | "experiment.optimise")
+                    && s["params"]["apply"] == json!(true);
+                mode.applies(name) || older
+            })
             .map(|s| {
                 let mut s = s.clone();
                 if s["command"] == "batch" {

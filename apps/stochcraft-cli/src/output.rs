@@ -1888,6 +1888,14 @@ pub fn optimize_table(name: &str, a: &Value) -> String {
         "\nruns: {} in the search, {} in the clean-up, {} in all (budget {}); {} designs tried; seed {}",
         r["search"], r["clean_up"], r["total"], r["max_runs"], a["designs_tried"], a["seed"]
     );
+    let repeat = &a["repeat"];
+    if !repeat.is_null() {
+        let _ = writeln!(
+            out,
+            "the time limit stopped the search; to repeat it exactly, run again with --max-runs {} --reserve-runs {} and without --time-limit",
+            repeat["max_runs"], repeat["reserve_runs"]
+        );
+    }
     for w in a["warnings"].as_array().into_iter().flatten() {
         let _ = writeln!(out, "warning: {}", s(&w["message"]));
     }
@@ -2345,5 +2353,18 @@ mod tests {
         });
         let t = optimize_table("m", &a);
         assert!(t.contains("1000001") && t.contains("1000002"), "{t}");
+    }
+
+    #[test]
+    fn optimize_table_says_how_to_repeat_a_search_the_time_limit_stopped() {
+        let a = serde_json::json!({
+            "claim": "c", "finalists": [], "runs": {}, "warnings": [],
+            "repeat": { "max_runs": 2000, "reserve_runs": 1990 }
+        });
+        let t = optimize_table("m", &a);
+        assert!(
+            t.contains("--max-runs 2000 --reserve-runs 1990 and without --time-limit"),
+            "{t}"
+        );
     }
 }

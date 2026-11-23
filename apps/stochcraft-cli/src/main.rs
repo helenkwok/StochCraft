@@ -1408,15 +1408,31 @@ fn search_decision(text: &str) -> Result<Value, Failure> {
     Ok(d)
 }
 
-/// `element.metric` or `element.metric*weight` as a result of an objective.
-fn weighted(text: &str) -> Result<Value, Failure> {
+/// A number given to `flag` that must be finite: `NaN` and infinities would reach the engine as
+/// JSON `null`, which means "not given".
+fn finite_number(flag: &str, text: &str, v: f64) -> Result<f64, Failure> {
+    if v.is_finite() {
+        Ok(v)
+    } else {
+        Err(Failure(format!(
+            "`{flag}`: `{text}` has a value that is not a finite number"
+        )))
+    }
+}
+
+/// `element.metric` or `element.metric*weight` as a result of an objective (`flag` is
+/// `--minimize` or `--maximize`, for messages); without `*weight` the weight is 1.
+fn weighted(flag: &str, text: &str) -> Result<Value, Failure> {
     let bad = || {
         Failure(format!(
             "`{text}`: give a result as `element.metric` or `element.metric*weight`, such as `desk.mean_queue_length*50`"
         ))
     };
     let (name, weight) = match text.rsplit_once('*') {
-        Some((n, w)) => (n, w.trim().parse::<f64>().map_err(|_| bad())?),
+        Some((n, w)) => (
+            n,
+            finite_number(flag, text, w.trim().parse::<f64>().map_err(|_| bad())?)?,
+        ),
         None => (text, 1.0),
     };
     let (element, metric) = name.rsplit_once('.').ok_or_else(bad)?;
@@ -1433,6 +1449,7 @@ fn unit_cost(text: &str) -> Result<Value, Failure> {
     let (name, cost) = text.split_once('=').ok_or_else(bad)?;
     let (id, field) = name.rsplit_once('.').ok_or_else(bad)?;
     let cost: f64 = cost.trim().parse().map_err(|_| bad())?;
+    let cost = finite_number("--cost", text, cost)?;
     Ok(json!({ "id": id, "field": field, "cost": cost }))
 }
 
@@ -1452,7 +1469,10 @@ fn constraint(text: &str) -> Result<Value, Failure> {
     };
     let (element, metric) = name.rsplit_once('.').ok_or_else(bad)?;
     let (limit, tolerance) = rest.split_once('~').ok_or_else(bad)?;
-    let num = |v: &str| v.trim().parse::<f64>().map_err(|_| bad());
+    let num = |v: &str| {
+        let x = v.trim().parse::<f64>().map_err(|_| bad())?;
+        finite_number("--constraint", text, x)
+    };
     let mut c = json!({ "element": element, "metric": metric, "tolerance": num(tolerance)? });
     c[bound] = json!(num(limit)?);
     Ok(c)
@@ -1482,12 +1502,24 @@ struct OptimizeArgs<'a> {
 }
 
 fn optimize(a: &OptimizeArgs) -> Result<u8, Failure> {
+    // Every number given must be finite before it becomes JSON, where a NaN would be `null`.
+    for (flag, v) in [
+        ("--delta", Some(a.delta)),
+        ("--cost-cap", a.cost_cap),
+        ("--confidence", a.confidence),
+        ("--reserve", a.reserve),
+        ("--time-limit", a.time_limit),
+    ] {
+        if let Some(x) = v {
+            finite_number(flag, &x.to_string(), x)?;
+        }
+    }
     let mut engine = Engine::new();
     open(&mut engine, a.file, a.scenario)?;
-    let (sense, terms) = if a.maximize.is_empty() {
-        ("minimise", a.minimize)
+    let (sense, flag, terms) = if a.maximize.is_empty() {
+        ("minimise", "--minimize", a.minimize)
     } else {
-        ("maximise", a.maximize)
+        ("maximise", "--maximize", a.maximize)
     };
     let mut decisions = a
         .decisions
@@ -1516,7 +1548,7 @@ fn optimize(a: &OptimizeArgs) -> Result<u8, Failure> {
     let mut params = json!({
         "decisions": decisions,
         "objective": {
-            "results": terms.iter().map(|t| weighted(t)).collect::<Result<Vec<_>, _>>()?,
+            "results": terms.iter().map(|t| weighted(flag, t)).collect::<Result<Vec<_>, _>>()?,
             "sense": sense,
             "costs": a.costs.iter().map(|c| unit_cost(c)).collect::<Result<Vec<_>, _>>()?,
         },

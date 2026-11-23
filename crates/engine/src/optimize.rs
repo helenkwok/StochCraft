@@ -47,6 +47,13 @@ pub const MOST_RUNS: u64 = 1_000_000;
 pub const DEFAULT_STARTS: u32 = 3;
 const MOST_STARTS: u32 = 20;
 
+/// An optional number that, when given, must be a number: `null` is refused, never read as "not
+/// given" (a NaN or an infinity sent as JSON arrives as `null`, and a cap or a time limit must
+/// not silently disappear).
+fn number<'de, D: serde::Deserializer<'de>>(d: D) -> Result<Option<f64>, D::Error> {
+    f64::deserialize(d).map(Some)
+}
+
 /// A decision: a count of the model, a whole number from `min` to `max` in steps of `step`.
 #[derive(Debug, Clone, Deserialize, JsonSchema)]
 #[serde(deny_unknown_fields)]
@@ -73,7 +80,8 @@ pub struct Term {
     pub element: String,
     pub metric: String,
     /// The weight (default 1): a cost per unit of the result, such as 50 per customer waiting.
-    #[serde(default)]
+    #[serde(default, deserialize_with = "number")]
+    #[schemars(with = "f64")]
     pub weight: Option<f64>,
 }
 
@@ -119,9 +127,11 @@ pub struct Objective {
 pub struct Limit {
     pub element: String,
     pub metric: String,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "number")]
+    #[schemars(with = "f64")]
     pub at_most: Option<f64>,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "number")]
+    #[schemars(with = "f64")]
     pub at_least: Option<f64>,
     pub tolerance: f64,
 }
@@ -133,14 +143,16 @@ pub struct OptimiseParams {
     pub decisions: Vec<DecisionRange>,
     pub objective: Objective,
     /// The most the decisions' costs may add up to; designs over it are never run.
-    #[serde(default)]
+    #[serde(default, deserialize_with = "number")]
+    #[schemars(with = "f64")]
     pub cost_cap: Option<f64>,
     #[serde(default)]
     pub constraints: Vec<Limit>,
     /// δ, the smallest difference in the objective worth telling apart, in its unit (required).
     pub indifference: f64,
     /// 1 − α (default 0.95), covering the feasibility check and the selection together.
-    #[serde(default)]
+    #[serde(default, deserialize_with = "number")]
+    #[schemars(with = "f64")]
     pub confidence: Option<f64>,
     /// Replications a design gets at its first visit (default 10).
     #[serde(default)]
@@ -150,7 +162,8 @@ pub struct OptimiseParams {
     #[serde(default)]
     pub max_runs: Option<u64>,
     /// The share of the budget kept for the clean-up (default 0.3).
-    #[serde(default)]
+    #[serde(default, deserialize_with = "number")]
+    #[schemars(with = "f64")]
     pub reserve: Option<f64>,
     /// The runs kept for the clean-up, in place of `reserve` (to repeat a search a time limit
     /// stopped, as its answer's `repeat` gives).
@@ -164,7 +177,8 @@ pub struct OptimiseParams {
     pub all_designs_up_to: Option<u32>,
     /// Stop the search after this many seconds (the clean-up still runs). Not available in the
     /// browser.
-    #[serde(default)]
+    #[serde(default, deserialize_with = "number")]
+    #[schemars(with = "f64")]
     pub time_limit: Option<f64>,
     /// The seed (default: the experiment's).
     #[serde(default)]
@@ -812,6 +826,26 @@ impl Words<'_> {
         let chosen = a.chosen.and_then(|c| a.finalists.get(c));
         let mut warnings = Vec::new();
         let against = match (chosen, start_at.and_then(|s| a.finalists.get(s))) {
+            (Some(c), Some(s)) if self.exact => {
+                // No randomness: each design's one value is its objective, so the difference is
+                // exact, with no interval.
+                let value = |f: &compass::Finalist| {
+                    f.cleanup
+                        .values()
+                        .next()
+                        .and_then(|r| r.first().copied())
+                        .or(f.search_mean)
+                };
+                let d = value(c).zip(value(s)).map(|(y, x)| y - x);
+                Some(json!({
+                    "start": design_json(ds, start),
+                    "difference": d.map(finite),
+                    "half_width": Value::Null,
+                    "n": 1,
+                    "significant": d.map(|d| d != 0.0),
+                    "exact": true,
+                }))
+            }
             (Some(c), Some(s)) => {
                 let common: Vec<u64> = c
                     .cleanup

@@ -1586,3 +1586,37 @@ fn an_agent_based_model_runs_from_the_command_line() {
         stderr(&refused)
     );
 }
+
+/// A number that is not finite is refused before anything runs, naming its flag: a NaN would
+/// reach the engine as `null`, which means "not given".
+#[test]
+fn optimize_refuses_numbers_that_are_not_finite() {
+    let file = model("mm1.bpmn");
+    let base = [
+        "optimize",
+        &file,
+        "--decide",
+        "serve.capacity=1..4",
+        "--cost",
+        "serve.capacity=1",
+        "--delta",
+        "1",
+    ];
+    for (extra, flag) in [
+        (vec!["--minimize", "serve.mean_wait*NaN"], "--minimize"),
+        (
+            vec!["--minimize", "serve.mean_wait", "--cost-cap", "NaN"],
+            "--cost-cap",
+        ),
+        (
+            vec!["--minimize", "serve.mean_wait", "--time-limit", "inf"],
+            "--time-limit",
+        ),
+    ] {
+        let mut args = base.to_vec();
+        args.extend(extra);
+        let o = cli(&args);
+        assert!(!o.status.success(), "{flag}");
+        assert!(stderr(&o).contains(flag), "{flag}: {}", stderr(&o));
+    }
+}

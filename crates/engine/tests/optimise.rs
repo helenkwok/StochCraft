@@ -1,8 +1,11 @@
 //! `experiment.optimise`: whole-number decisions by COMPASS and the clean-up (ROADMAP M8, stage
 //! O2). The heavy checks run many seeds of a search on queueing models whose answers are known
 //! from Erlang C; they are ignored by default and run in CI's heavy tests job
-//! (`cargo test --release -- --ignored`), which prints each rate with its 95% Wilson interval.
-//! The search and the clean-up are conservative, so a rate must itself be at least 0.95.
+//! (`cargo test --release -- --ignored`).
+//!
+//! **The criterion** is ROADMAP O2's: correct in at least 95% of seeds (95 of 100). The 95% Wilson
+//! interval of each rate is printed for information only; it is not the criterion, since with 100
+//! seeds even 100 of 100 gives a lower end of 0.963 and 99 of 100 one below 0.95.
 
 #![allow(clippy::unwrap_used, clippy::expect_used, clippy::panic)] // A failed step fails the test.
 
@@ -354,7 +357,7 @@ impl Tally {
         let (lo, hi) = p.wilson(0.95).unwrap();
         let _ = writeln!(
             std::io::stderr(),
-            "optimise {name}: {}/{} correct = {:.4}, Wilson 95% [{lo:.4}, {hi:.4}]; proven or exact {}, not proven {}; mean runs {:.1}; {seconds:.1} s",
+            "optimise {name}: {}/{} correct = {:.4} (required: correct in at least 95% of seeds; the Wilson 95% interval [{lo:.4}, {hi:.4}] is for information); proven or exact {}, not proven {}; mean runs {:.1}; {seconds:.1} s",
             self.correct,
             self.seeds,
             self.correct as f64 / self.seeds as f64,
@@ -364,7 +367,7 @@ impl Tally {
         );
         assert!(
             self.correct * 100 >= 95 * self.seeds,
-            "{name}: {}/{} correct (Wilson 95% [{lo:.4}, {hi:.4}]) is below 0.95",
+            "{name}: {}/{} correct is below the required 95% of seeds (Wilson 95% [{lo:.4}, {hi:.4}], for information)",
             self.correct,
             self.seeds
         );
@@ -716,4 +719,93 @@ fn a_name_that_sounds_random_does_not_make_a_model_random() {
     let v = ok(&mut e, "experiment.optimise", tandem_search(1, 5000));
     assert_eq!(v["no_randomness"], true, "{v}");
     assert_eq!(v["outcome"], "compared_exactly");
+}
+
+/// A number sent as `null` (what a NaN or an infinity becomes in JSON) is refused, never read as
+/// "not given": a cap, a time limit or a weight cannot silently disappear.
+#[test]
+fn a_null_number_is_refused() {
+    for (key, at) in [
+        ("cost_cap", None),
+        ("time_limit", None),
+        ("confidence", None),
+        ("reserve", None),
+        ("weight", Some("objective")),
+    ] {
+        let mut e = one_desk_with(6);
+        let mut p = one_desk_search();
+        p["apply"] = json!(false);
+        match at {
+            None => p[key] = Value::Null,
+            Some(_) => p["objective"]["results"][0][key] = Value::Null,
+        }
+        let f = err(&mut e, "experiment.optimise", p);
+        assert_eq!(f.code, ErrorCode::InvalidParams, "{key}: {f:?}");
+    }
+}
+
+/// Without randomness the difference against the starting design is exact: from (12, 6) to
+/// (11, 6) on the constant-time desks, one server fewer, 20 less.
+#[test]
+fn an_exact_search_gives_the_exact_difference_against_the_start() {
+    let mut e = tandem("constant", 20.0);
+    let mut p = tandem_search(1, 5000);
+    p["decisions"][0]["start"] = json!(12);
+    let v = ok(&mut e, "experiment.optimise", p);
+    assert_eq!(v["outcome"], "compared_exactly", "{v}");
+    assert_eq!(chosen(&v), vec![11, 6]);
+    let d = &v["against_start"];
+    assert_eq!(d["difference"], json!(-20.0), "{d}");
+    assert_eq!(d["exact"], true);
+    assert_eq!(d["n"], 1);
+}
+
+/// A planned run time is only OEE's reference (its mean is read, nothing is drawn from it), so
+/// a constant-time model with an exponential one is still compared exactly.
+#[test]
+fn a_planned_run_time_draws_nothing() {
+    let mut e = tandem("constant", 20.0);
+    ok(
+        &mut e,
+        "block.set",
+        json!({ "id": "desk1", "planned_run_time": { "type": "exponential", "mean": 1.0 } }),
+    );
+    let v = ok(&mut e, "experiment.optimise", tandem_search(1, 5000));
+    assert_eq!(v["no_randomness"], true, "{v}");
+}
+
+/// A sizing that applies its answer inside a batch is journalled as the sizing without `apply`
+/// and a `decisions.set`, so an edits-only replay makes the change; a journal written before
+/// that (the sizing with `apply` true and no separate step) still replays as it did, sizing
+/// again inside the batch.
+#[test]
+fn an_applied_sizing_in_a_batch_replays_in_either_journal_shape() {
+    let mut e = one_desk_with(5);
+    let before = e.model().clone();
+    let steps = json!([
+        { "command": "experiment.size", "params": {
+            "target": { "element": "desk", "metric": "mean_wait", "at_most": 0.05 },
+            "target_share": 0.7, "replications": 4, "apply": true,
+        }},
+        { "command": "block.rename", "params": { "id": "desk", "name": "Front desk" } }
+    ]);
+    ok(&mut e, "batch", json!({ "commands": steps.clone() }));
+    assert_ne!(e.model(), &before);
+    let mut journal = e.journal_document();
+    let inner = journal.entries.last().unwrap().params["commands"].clone();
+    assert_eq!(inner[0]["command"], "experiment.size", "{inner}");
+    assert_eq!(inner[0]["params"]["apply"], false);
+    assert_eq!(inner[1]["command"], "decisions.set", "{inner}");
+    let mut r = Engine::new();
+    r.replay_journal(&journal, ReplayOptions::default())
+        .unwrap();
+    assert_eq!(r.model(), e.model(), "the new shape");
+    // The older shape: the batch as it was given.
+    if let Some(last) = journal.entries.last_mut() {
+        last.params["commands"] = steps;
+    }
+    let mut r = Engine::new();
+    r.replay_journal(&journal, ReplayOptions::default())
+        .unwrap();
+    assert_eq!(r.model(), e.model(), "the older shape");
 }

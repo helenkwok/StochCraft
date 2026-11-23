@@ -95,7 +95,9 @@ fn kind_draws(id: &ElementId, kind: &ElementKind, connections: &[Connection]) ->
             on_shift_end: _,
             power: _,
             setup,
-            planned_run_time,
+            // Only its mean is read, as OEE's ideal time per job (`stochcraft-blocks`'
+            // runtime); it is never sampled, so it draws nothing.
+            planned_run_time: _,
             patience,
             balking,
             health_check,
@@ -105,7 +107,6 @@ fn kind_draws(id: &ElementId, kind: &ElementKind, connections: &[Connection]) ->
                 || breakdown.as_ref().is_some_and(fails)
                 || transfer.as_ref().is_some_and(moves)
                 || setup.as_ref().is_some_and(sets_up)
-                || planned_run_time.as_ref().is_some_and(dist)
                 || patience.as_ref().is_some_and(waits)
                 || balking.as_ref().is_some_and(balks)
                 || health_check.as_ref().is_some_and(checks)

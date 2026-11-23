@@ -589,6 +589,19 @@ pub struct SizeParams {
 }
 
 /// What can grow: a task's or a pool's units.
+/// The units that differ between `old` and `new` (a task's own units, a pool's), as decisions
+/// `{id, field, value}` with the new values: what sizing changed, as `decisions.set` takes it.
+pub(crate) fn changed_units(old: &Model, new: &Model) -> Vec<Value> {
+    candidates(old, None)
+        .unwrap_or_default()
+        .iter()
+        .filter_map(|p| {
+            let (a, b) = (p.get(old).ok()?, p.get(new).ok()?);
+            (a != b).then(|| json!({ "id": p.id, "field": p.field, "value": b }))
+        })
+        .collect()
+}
+
 fn candidates(model: &Model, only: Option<&[String]>) -> Result<Vec<Param>, CommandError> {
     let all: Vec<Param> = model
         .elements
