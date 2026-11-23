@@ -1542,12 +1542,22 @@ impl Compiler<'_> {
                         let code = self.code(e, place, site)?;
                         // The scheduler draws a rate again only when a variable it reads has
                         // changed, so anything else it read would leave the delay stale.
-                        if !code.populations.is_empty() || code.reads_time {
+                        if let Some(p) = code.populations.first() {
                             return fail(
                                 place,
                                 format!(
-                                    "the rate `{e}` reads a population or the time, but a rate \
-                                     is drawn again only when the agent's own variables change"
+                                    "the rate `{e}` reads the population `{p}`, but a rate is \
+                                     drawn again only when the agent's own variables change, not \
+                                     when a population does"
+                                ),
+                            );
+                        }
+                        if code.reads_time {
+                            return fail(
+                                place,
+                                format!(
+                                    "the rate `{e}` reads time(), but a rate is drawn again only \
+                                     when the agent's own variables change, not as time passes"
                                 ),
                             );
                         }

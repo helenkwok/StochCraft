@@ -290,10 +290,10 @@ fn a_rate_that_reads_in_or_the_event_is_refused() {
         assert!(e.contains("reads the event"), "{e}");
         assert!(e.contains("own variables change"), "{e}");
     }
-    for rate in ["time()", "population-size('p')"] {
-        let e = refusal(rate);
-        assert!(e.contains("reads a population or the time"), "{e}");
-    }
+    let e = refusal("time()");
+    assert!(e.contains("reads time()"), "{e}");
+    let e = refusal("population-size('p')");
+    assert!(e.contains("reads the population `p`"), "{e}");
 }
 
 #[test]
