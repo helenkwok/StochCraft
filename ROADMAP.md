@@ -4870,6 +4870,20 @@ Not scheduled yet; recorded so earlier work does not close these doors (docs/res
   times) rather than empty; fitting input distributions from event logs; the engine's journal as
   the audit trail of what-if decisions (it records its version and the state it started
   from, #44).
+- **Incident and near-miss investigation:** a digital twin run backwards over what happened.
+  - **Rebuild the incident** from its records: start from the observed state before it,
+    replay the logged events in order, and work at the resolution the incident needs (seconds
+    inside a shift). Each entity keeps its own times from its start, as particle detector
+    simulation does, so a fine time step loses no precision late in a long run.
+  - **Record by event, not on a grid:** the moments that matter (a buffer full, two vehicles
+    within a set distance, a check skipped) are logged as they happen, like a detector's hits.
+  - **How near it was:** rerun the incident with common random numbers, changing one factor at
+    a time (an operator a minute later, one more part in a buffer), and report the smallest
+    change that turns the near miss into an accident, and which barrier held.
+  - **How often:** near misses, and accidents more so, are rare, and plain replications
+    seldom reach them. Rare-event methods: importance sampling, and splitting (RESTART,
+    Villén-Altamirano and Villén-Altamirano 1991), which detector simulation also uses as event
+    biasing. The answer is a frequency with its interval and the method's assumptions.
 - **Industry 5.0 measures:** workers as resources with skills and shifts; energy and CO₂ per
   part and per element (BPSim cost parameters plus a vendor extension); disruption scenarios.
 - **Bulk flow:** rates, splits by fraction, tanks and batch treatment for process industries,
