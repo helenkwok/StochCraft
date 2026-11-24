@@ -43,8 +43,12 @@ pub struct StateSpec {
     /// The `initial` attribute of a compound state: the states entered by default. Empty: its
     /// first child state in document order.
     pub initial: Vec<String>,
-    pub on_entry: Vec<Action>,
-    pub on_exit: Vec<Action>,
+    /// The entry actions, a list per `<onentry>` block in document order. Each block runs on its
+    /// own: an error stops the rest of its block, and the blocks after it still run (SCXML
+    /// §4.9).
+    pub on_entry: Vec<Vec<Action>>,
+    /// The exit actions, a list per `<onexit>` block, as `on_entry`.
+    pub on_exit: Vec<Vec<Action>>,
     /// In document order. A history state has exactly one, eventless and unconditional: its
     /// default, taken when it has no history yet.
     pub transitions: Vec<TransitionSpec>,
@@ -98,15 +102,34 @@ impl StateSpec {
         self
     }
 
-    /// Adds an entry action.
+    /// Adds an entry action, to the last entry block (the first, if there is none yet).
     pub fn on_entry(mut self, action: impl Into<Action>) -> Self {
-        self.on_entry.push(action.into());
+        match self.on_entry.last_mut() {
+            Some(block) => block.push(action.into()),
+            None => self.on_entry.push(vec![action.into()]),
+        }
         self
     }
 
-    /// Adds an exit action.
+    /// Adds an exit action, to the last exit block (the first, if there is none yet).
     pub fn on_exit(mut self, action: impl Into<Action>) -> Self {
-        self.on_exit.push(action.into());
+        match self.on_exit.last_mut() {
+            Some(block) => block.push(action.into()),
+            None => self.on_exit.push(vec![action.into()]),
+        }
+        self
+    }
+
+    /// Starts another entry block (another `<onentry>`): the entry actions added after it still
+    /// run when one before it fails.
+    pub fn next_entry_block(mut self) -> Self {
+        self.on_entry.push(Vec::new());
+        self
+    }
+
+    /// Starts another exit block (another `<onexit>`), as [`StateSpec::next_entry_block`].
+    pub fn next_exit_block(mut self) -> Self {
+        self.on_exit.push(Vec::new());
         self
     }
 
@@ -586,8 +609,9 @@ pub(crate) struct Node {
     pub parent: Option<u32>,
     pub children: Vec<u32>,
     pub initial: Vec<u32>,
-    pub on_entry: Vec<Exec>,
-    pub on_exit: Vec<Exec>,
+    /// A list per block, each run on its own.
+    pub on_entry: Vec<Vec<Exec>>,
+    pub on_exit: Vec<Vec<Exec>>,
     pub transitions: Vec<u32>,
     pub histories: Vec<u32>,
 }
@@ -873,8 +897,8 @@ impl Chart {
                 initial.extend(child_states.first().copied());
             }
             nodes[n].initial = initial;
-            nodes[n].on_entry = c.block(&s.on_entry, &place, &format!("{prefix}/onentry"))?;
-            nodes[n].on_exit = c.block(&s.on_exit, &place, &format!("{prefix}/onexit"))?;
+            nodes[n].on_entry = c.blocks(&s.on_entry, &place, &format!("{prefix}/onentry"))?;
+            nodes[n].on_exit = c.blocks(&s.on_exit, &place, &format!("{prefix}/onexit"))?;
             for (k, t) in s.transitions.iter().enumerate() {
                 let tplace = format!("transition {} of state `{}`", k + 1, s.id);
                 let tprefix = format!("{prefix}/transition/{}", k + 1);
@@ -961,10 +985,12 @@ impl Chart {
             b.iter()
                 .any(|e| matches!(e, Exec::Assign { var, .. } if *var == v))
         };
-        self.nodes
-            .iter()
-            .any(|n| hit(&n.on_entry) || hit(&n.on_exit))
-            || self.transitions.iter().any(|t| hit(&t.actions))
+        self.nodes.iter().any(|n| {
+            n.on_entry
+                .iter()
+                .chain(&n.on_exit)
+                .any(|b| hit(b.as_slice()))
+        }) || self.transitions.iter().any(|t| hit(&t.actions))
     }
 
     /// The chart's name.
@@ -1377,6 +1403,25 @@ impl Compiler<'_> {
         let index = self.sites.len() as u32;
         self.sites.push(format!("{site}/pick"));
         index
+    }
+
+    /// The blocks of a state's entry or exit actions. The first block's sites are those of a
+    /// state with one block, so its random streams are the same (D18); a later block's have
+    /// its number.
+    fn blocks(
+        &mut self,
+        blocks: &[Vec<Action>],
+        place: &str,
+        prefix: &str,
+    ) -> Result<Vec<Vec<Exec>>, ChartError> {
+        blocks
+            .iter()
+            .enumerate()
+            .map(|(b, actions)| match b {
+                0 => self.block(actions, place, prefix),
+                _ => self.block(actions, place, &format!("{prefix}-block{}", b + 1)),
+            })
+            .collect()
     }
 
     fn block(

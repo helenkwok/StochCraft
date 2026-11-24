@@ -332,7 +332,15 @@ impl Model {
     /// Runs one replication from `seed`, from time 0 to `end`, and returns its statistics and
     /// counts.
     pub fn run(&self, seed: u64, end: f64) -> Result<Run, ModelError> {
+        self.run_with_warmup(seed, 0.0, end)
+    }
+
+    /// Runs one replication from `seed`, from time 0 to `end`, and returns its statistics and
+    /// counts from `warmup` on ([`Simulation::warm_up`]): what happened before it is discarded.
+    /// A warm-up of 0 is [`Model::run`]; one past `end` is taken as `end`.
+    pub fn run_with_warmup(&self, seed: u64, warmup: f64, end: f64) -> Result<Run, ModelError> {
         let mut sim = Simulation::new(self, seed)?;
+        sim.warm_up(warmup.min(end))?;
         sim.run_until(end)?;
         Ok(sim.into_run())
     }
@@ -1026,8 +1034,61 @@ impl Simulation {
             .collect()
     }
 
+    /// Handles every event due no later than `warmup` without recording anything, then
+    /// discards what came before it, as a process model's warm-up does: the statistics recorded
+    /// so far, and the counts of agents created and removed and of messages dropped and
+    /// undelivered. The statistics are then recorded at `warmup` (after every event at that
+    /// time), and the next saving time is the first after it. A warm-up of 0 or less (or not a
+    /// number) changes nothing. Called before [`Simulation::run_until`].
+    pub fn warm_up(&mut self, warmup: f64) -> Result<(), RunError> {
+        if warmup.is_nan() || warmup <= 0.0 {
+            return Ok(());
+        }
+        while self.queue.peek_time().is_some_and(|t| t <= warmup) {
+            let Some(ev) = self.queue.pop() else { break };
+            self.handle(ev.payload)?;
+        }
+        self.queue.advance_to(warmup);
+        for p in &mut self.pops {
+            p.counts.created = 0;
+            p.counts.removed = 0;
+            p.counts.dropped = 0;
+            p.counts.undelivered = 0;
+        }
+        self.times.clear();
+        for v in &mut self.values {
+            v.clear();
+        }
+        self.record(warmup);
+        // The first saving time after the warm-up, on the grid of `save_every` from 0.
+        self.saved = match self.save_every {
+            Some(e) => {
+                let too_many = RunError::SaveTimes {
+                    time: warmup,
+                    every: e,
+                };
+                // `u64::MAX as f64` is 2^64: below it the index is a whole number a u64 holds.
+                let q = (warmup / e).floor();
+                if q.is_nan() || q >= u64::MAX as f64 {
+                    return Err(too_many);
+                }
+                let mut k = q.max(0.0) as u64;
+                while (k as f64) * e <= warmup {
+                    k = k.checked_add(1).ok_or_else(|| too_many.clone())?;
+                }
+                while k > 1 && ((k - 1) as f64) * e > warmup {
+                    k -= 1;
+                }
+                k
+            }
+            None => 1,
+        };
+        Ok(())
+    }
+
     /// Handles every event due no later than `end`, recording the statistics at each saving
-    /// time on the way (after every event at that time), then moves the clock to `end`.
+    /// time on the way (after every event at that time, and once for save times that round to
+    /// the same number), then moves the clock to `end`.
     pub fn run_until(&mut self, end: f64) -> Result<(), RunError> {
         loop {
             let next = self.next_save();
@@ -1041,8 +1102,15 @@ impl Simulation {
             }
             self.queue.advance_to(horizon);
             if next.is_some_and(|t| t <= end) {
-                self.record(horizon);
-                self.saved += 1;
+                // A save time that rounds to the time last recorded (an interval finer than the
+                // spacing of f64 there) is not recorded again: the times strictly increase.
+                if self.times.last().is_none_or(|&last| horizon > last) {
+                    self.record(horizon);
+                }
+                self.saved = self.saved.checked_add(1).ok_or(RunError::SaveTimes {
+                    time: horizon,
+                    every: self.save_every.unwrap_or(0.0),
+                })?;
             } else {
                 return Ok(());
             }

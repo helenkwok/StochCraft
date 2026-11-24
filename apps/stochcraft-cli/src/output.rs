@@ -1716,7 +1716,17 @@ pub fn agents_table(r: &Value) -> String {
         t => t,
     };
     let unit = s(&r["time_unit"]);
-    let _ = writeln!(out, "{title}  (agent-based, 0 to {} {unit})", f(&r["end"]));
+    // From the end of the warm-up: what came before it is discarded.
+    let from = if r["warmup"].as_f64().is_some_and(|w| w > 0.0) {
+        f(&r["warmup"])
+    } else {
+        "0".to_owned()
+    };
+    let _ = writeln!(
+        out,
+        "{title}  (agent-based, {from} to {} {unit})",
+        f(&r["end"])
+    );
     let many = r["replications"].as_u64().unwrap_or(1) > 1;
     if many {
         let _ = writeln!(

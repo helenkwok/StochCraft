@@ -734,6 +734,28 @@ fn rename(e: &mut Element, prefix: &str, ns: &str) {
     }
 }
 
+/// Writes every non-ASCII character in the attributes of a built element and its descendants as
+/// a character reference, for a file whose encoding is not UTF-8.
+fn ascii_refs(e: &mut Element) {
+    for (_, v) in &mut e.attrs {
+        if !v.is_ascii() {
+            *v = v
+                .chars()
+                .map(|c| {
+                    if c.is_ascii() {
+                        c.to_string()
+                    } else {
+                        format!("&#{};", u32::from(c))
+                    }
+                })
+                .collect();
+        }
+    }
+    for c in e.elements_mut() {
+        ascii_refs(c);
+    }
+}
+
 fn num(v: f64) -> String {
     trim_float(v)
 }
@@ -3050,6 +3072,9 @@ impl Editor {
         if let Some(a) = &after.agents {
             let mut x = crate::agents::extension_element(a);
             rename(&mut x, &prefix, &ns);
+            if self.ascii {
+                ascii_refs(&mut x);
+            }
             let at = end_of(s);
             s.children.insert(at, Node::Element(x));
         }

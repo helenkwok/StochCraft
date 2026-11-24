@@ -112,6 +112,12 @@ pub fn build(agents: &Agents, files: &Files) -> Result<Model, ModelError> {
         model = model.environment(chart_of(t, "the environment")?);
     }
     for s in &agents.statistics {
+        if !agents.populations.iter().any(|p| p.name == s.population) {
+            return invalid(
+                format!("statistic `{}`", s.name),
+                format!("there is no population `{}`", s.population),
+            );
+        }
         let measure = match s.measure {
             MeasureSpec::Count => Measure::Count,
             MeasureSpec::Sum => Measure::Sum,
@@ -147,4 +153,59 @@ pub fn build(agents: &Agents, files: &Files) -> Result<Model, ModelError> {
         model = model.retest_limit(l);
     }
     Ok(model)
+}
+
+#[cfg(test)]
+mod tests {
+    #![allow(clippy::panic)] // A model that builds when it should not fails the test.
+
+    use stochcraft_model::agents::{AgentType, PopulationSpec, StatisticSpec};
+
+    use super::*;
+    use crate::StateSpec;
+
+    #[test]
+    fn a_statistic_of_a_population_that_is_not_there_is_refused() {
+        let mut files = Files::default();
+        files.charts.insert(
+            "person.scxml".to_owned(),
+            ChartSpec::new("person").state(StateSpec::state("s")),
+        );
+        let agents = Agents {
+            types: vec![AgentType {
+                name: "person".to_owned(),
+                chart: "person.scxml".to_owned(),
+            }],
+            populations: vec![PopulationSpec {
+                name: "people".to_owned(),
+                agent_type: "person".to_owned(),
+                count: 3,
+                arrival_rate: None,
+                network: None,
+                grid: None,
+            }],
+            statistics: vec![StatisticSpec {
+                name: "lost".to_owned(),
+                population: "missing".to_owned(),
+                measure: MeasureSpec::Count,
+                expression: None,
+                condition: None,
+            }],
+            ..Agents::default()
+        };
+        match build(&agents, &files) {
+            Err(ModelError::Invalid(e)) => {
+                assert_eq!(e.place, "statistic `lost`");
+                assert!(e.message.contains("no population `missing`"), "{e}");
+            }
+            Err(e) => panic!("{e}"),
+            Ok(_) => panic!("a statistic of no population was accepted"),
+        }
+        // Of the population that is there, it builds.
+        let mut fine = agents;
+        fine.statistics[0].population = "people".to_owned();
+        if let Err(e) = build(&fine, &files) {
+            panic!("{e}");
+        }
+    }
 }

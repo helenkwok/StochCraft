@@ -12,7 +12,8 @@ use std::sync::Arc;
 use std::sync::atomic::{AtomicUsize, Ordering};
 
 use stochcraft_agents::{
-    Action, ChartSpec, History, Model, Population, SendSpec, StateSpec, Statistic, TransitionSpec,
+    Action, Agent, ChartSpec, Driver, History, Model, Population, SendSpec, StateSpec, Statistic,
+    Step, TransitionSpec,
 };
 use stochcraft_io::scxml::{read_scxml, write_scxml};
 
@@ -221,6 +222,8 @@ fn another_prefix_and_initial_elements_read_the_same() {
             .initial(&["b"])
             .on_entry(SendSpec::new("e").at_rate("3"))
             .on_entry(Action::create("people"))
+            // Two `<onentry>` elements stay two blocks.
+            .next_entry_block()
             .on_entry(Action::cancel("e1"))
             .child(StateSpec::state("b")),
     );
@@ -318,6 +321,140 @@ fn what_scxml_cannot_say_is_not_written() {
         ChartSpec::new("c").state(StateSpec::state("a").transition(TransitionSpec::on("a..b"))),
         "event descriptor",
     );
+    // A target or initial state that is not an XML name (SCXML's IDREFS).
+    refused(
+        ChartSpec::new("c")
+            .state(StateSpec::state("a").transition(TransitionSpec::on("e").to("a").to("1bad"))),
+        "`1bad` is not a reference",
+    );
+    refused(
+        ChartSpec::new("c")
+            .initial(&["a", "two words"])
+            .state(StateSpec::state("a")),
+        "`two words` is not a reference",
+    );
+    refused(
+        ChartSpec::new("c").state(
+            StateSpec::state("a")
+                .initial(&["-b"])
+                .child(StateSpec::state("b")),
+        ),
+        "`-b` is not a reference",
+    );
+    // A message to other agents that would not read back: it goes at once, with no id.
+    refused(
+        ChartSpec::new("c").state(
+            StateSpec::state("a").on_entry(SendSpec::new("e").to_random("people").after(1.0)),
+        ),
+        "goes at once",
+    );
+    refused(
+        ChartSpec::new("c")
+            .state(StateSpec::state("a").on_entry(SendSpec::new("e").to_random("people").id("m"))),
+        "goes at once",
+    );
+    refused(
+        ChartSpec::new("c").state(
+            StateSpec::state("a").on_entry(SendSpec::new("e").to_random("people").internal()),
+        ),
+        "goes at once",
+    );
+    // What is fine is still written: a list of targets, and a message with no delay or id.
+    let fine = ChartSpec::new("c")
+        .state(
+            StateSpec::state("a")
+                .on_entry(SendSpec::new("e").to_random("people"))
+                .transition(TransitionSpec::on("e").to("a").to("b")),
+        )
+        .state(StateSpec::state("b"));
+    let text = write(&fine, 1.0);
+    assert!(text.contains("target=\"a b\""), "{text}");
+    assert!(text.contains("stochcraft:to=\"random\""), "{text}");
+}
+
+/// Where agent 0 of `text`'s chart is at time 1, and whether it ran into an error on the way.
+fn after_entry(text: &str) -> (bool, bool) {
+    let chart = match read(text, 1.0).build() {
+        Ok(c) => Arc::new(c),
+        Err(e) => panic!("{e}"),
+    };
+    let mut d = Driver::new(0.0);
+    let a = match d.add(Agent::new(chart, 1, "a/0").with_trace()) {
+        Ok(a) => a,
+        Err(e) => panic!("{e}"),
+    };
+    if let Err(e) = d.run_until(1.0) {
+        panic!("{e}");
+    }
+    let Some(agent) = d.agent(a) else {
+        panic!("no agent");
+    };
+    let failed = agent
+        .trace()
+        .iter()
+        .any(|r| matches!(r.step, Step::Error(_)));
+    (agent.is_in("done"), failed)
+}
+
+/// Two `<onentry>` blocks stay two: an error in the first (a send whose delay is below 0)
+/// stops only the first, and the second still raises `go` (SCXML 4.9). Written back, they are
+/// two blocks again.
+#[test]
+fn an_error_in_one_entry_block_does_not_stop_the_next() {
+    let two = r#"<scxml xmlns="http://www.w3.org/2005/07/scxml" version="1.0" datamodel="stochcraft">
+  <state id="waiting">
+    <onentry><send event="later" delayexpr="0 - 1"/></onentry>
+    <onentry><raise event="go"/></onentry>
+    <transition event="go" target="done"/>
+  </state>
+  <state id="done"/>
+</scxml>"#;
+    assert_eq!(after_entry(two), (true, true));
+    let chart = read(two, 1.0);
+    assert_eq!(chart.states[0].on_entry.len(), 2);
+    let written = write(&chart, 1.0);
+    assert_eq!(written.matches("<onentry>").count(), 2, "{written}");
+    assert_eq!(read(&written, 1.0), chart);
+    assert_eq!(after_entry(&written), (true, true));
+    // In one block, the error stops the raise after it, as before.
+    let one = two.replace(
+        "</onentry>
+    <onentry>",
+        "",
+    );
+    assert_eq!(read(&one, 1.0).states[0].on_entry.len(), 1);
+    assert_eq!(after_entry(&one), (false, true));
+    // And one block with no error runs all of it.
+    let fine = one.replace("delayexpr=\"0 - 1\"", "delayexpr=\"5\"");
+    assert_eq!(after_entry(&fine), (true, false));
+    // Exit blocks likewise.
+    let exits = r#"<scxml xmlns="http://www.w3.org/2005/07/scxml" version="1.0" datamodel="stochcraft">
+  <state id="start">
+    <transition target="middle"/>
+  </state>
+  <state id="middle">
+    <onentry><raise event="leave"/></onentry>
+    <onexit><send event="later" delayexpr="0 - 1"/></onexit>
+    <onexit><raise event="go"/></onexit>
+    <transition event="leave" target="after"/>
+  </state>
+  <state id="after">
+    <transition event="go" target="done"/>
+  </state>
+  <state id="done"/>
+</scxml>"#;
+    assert_eq!(after_entry(exits), (true, true));
+    // Built in code, `next_entry_block` starts another block.
+    let built = ChartSpec::new("c")
+        .state(
+            StateSpec::state("waiting")
+                .on_entry(SendSpec::new("later").after_expr("0 - 1"))
+                .next_entry_block()
+                .on_entry(Action::raise("go"))
+                .transition(TransitionSpec::on("go").to("done")),
+        )
+        .state(StateSpec::state("done"));
+    assert_eq!(after_entry(&write(&built, 1.0)), (true, true));
 }
 
 /// A Bass diffusion chart, as A2 checks it.
@@ -358,9 +495,11 @@ fn a_chart_read_back_runs_as_the_original_did() {
     let original = bass();
     let back = read(&write(&original, 86_400.0), 86_400.0);
     for seed in [1, 2, 3] {
-        let a = bass_model(&original).run(seed, 10.0);
-        let b = bass_model(&back).run(seed, 10.0);
-        assert_eq!(a.ok(), b.ok(), "seed {seed}");
+        let run = |chart: &ChartSpec| match bass_model(chart).run(seed, 10.0) {
+            Ok(r) => r,
+            Err(e) => panic!("seed {seed}: {e}"),
+        };
+        assert_eq!(run(&original), run(&back), "seed {seed}");
     }
 }
 
@@ -401,16 +540,39 @@ fn file_uri(path: &Path) -> String {
     uri
 }
 
+/// A folder of its own for one check, made new (never one left by another run or another
+/// check) and removed when the check ends, however it ends.
+struct Scratch(PathBuf);
+
+impl Scratch {
+    fn new() -> Self {
+        static NEXT: AtomicUsize = AtomicUsize::new(0);
+        loop {
+            let d = std::env::temp_dir().join(format!(
+                "stochcraft-scxml-{}-{}",
+                std::process::id(),
+                NEXT.fetch_add(1, Ordering::Relaxed)
+            ));
+            match std::fs::create_dir(&d) {
+                Ok(()) => return Self(d),
+                Err(e) if e.kind() == std::io::ErrorKind::AlreadyExists => {}
+                Err(e) => panic!("{}: {e}", d.display()),
+            }
+        }
+    }
+}
+
+impl Drop for Scratch {
+    fn drop(&mut self) {
+        let _ = std::fs::remove_dir_all(&self.0);
+    }
+}
+
 /// What xmllint says is wrong with `text` against W3C's SCXML schema (with its modules and the
 /// XML namespace's schema read from `dir`, never the network) and StochCraft's extension schema.
 fn schema_errors(text: &str, label: &str, dir: &Path) -> Option<String> {
-    static CALLS: AtomicUsize = AtomicUsize::new(0);
-    let stem = format!(
-        "stochcraft-scxml-{}-{}-{label}",
-        std::process::id(),
-        CALLS.fetch_add(1, Ordering::Relaxed)
-    );
-    let tmp = std::env::temp_dir();
+    let scratch = Scratch::new();
+    let tmp = &scratch.0;
     let dir = std::fs::canonicalize(dir).unwrap_or_else(|e| panic!("{}: {e}", dir.display()));
     let driver = std::fs::read_to_string(dir.join("scxml.xsd"))
         .unwrap_or_else(|e| panic!("scxml.xsd: {e}"))
@@ -422,7 +584,7 @@ fn schema_errors(text: &str, label: &str, dir: &Path) -> Option<String> {
             "schemaLocation=\"scxml-",
             &format!("schemaLocation=\"{}/scxml-", file_uri(&dir)),
         );
-    let driver_path = tmp.join(format!("{stem}-scxml.xsd"));
+    let driver_path = tmp.join("scxml.xsd");
     std::fs::write(&driver_path, driver).unwrap_or_else(|e| panic!("{e}"));
     let ours = Path::new(env!("CARGO_MANIFEST_DIR")).join("schemas/stochcraft-scxml-1.xsd");
     let wrapper = format!(
@@ -435,9 +597,9 @@ fn schema_errors(text: &str, label: &str, dir: &Path) -> Option<String> {
         file_uri(&driver_path),
         file_uri(&ours)
     );
-    let wrapper_path = tmp.join(format!("{stem}-schemas.xsd"));
+    let wrapper_path = tmp.join("schemas.xsd");
     std::fs::write(&wrapper_path, wrapper).unwrap_or_else(|e| panic!("{e}"));
-    let doc = tmp.join(format!("{stem}.scxml"));
+    let doc = tmp.join(format!("{label}.scxml"));
     std::fs::write(&doc, text).unwrap_or_else(|e| panic!("{e}"));
     let result = Command::new("xmllint")
         .arg("--noout")
@@ -446,9 +608,6 @@ fn schema_errors(text: &str, label: &str, dir: &Path) -> Option<String> {
         .arg(&wrapper_path)
         .arg(&doc)
         .output();
-    for p in [&driver_path, &wrapper_path, &doc] {
-        let _ = std::fs::remove_file(p);
-    }
     let result = result.unwrap_or_else(|e| panic!("xmllint: {e}"));
     (!result.status.success()).then(|| {
         format!(

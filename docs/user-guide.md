@@ -876,13 +876,16 @@ stochcraft-cli run tests/models/sir-agents.bpmn                      # each stat
 stochcraft-cli run tests/models/sir-agents.bpmn --format csv         # each statistic over time
 stochcraft-cli run tests/models/sir-agents.bpmn --reps 200 --seed 3  # more replications, another seed
 stochcraft-cli run tests/models/sir-agents.bpmn --duration 30        # a shorter run
+stochcraft-cli run tests/models/sir-agents.bpmn --warmup 10          # leave out the first 10 days
 stochcraft-cli validate tests/models/sir-agents.bpmn                 # check the charts and populations
 ```
 
 The table gives each statistic at the end of the run: the mean over the replications and, over
 more than one, the 5th, 50th and 95th percentiles; then each population's agents created,
 removed and alive at the end, and the messages no transition took (dropped) or that reached no
-agent (undelivered). The CSV has a row for each recorded time. The same seed gives the same
+agent (undelivered). As for a process model, what happens during the warm-up is left out: the
+statistics are recorded from the end of the warm-up, and the agents and messages counted are
+those after it. The CSV has a row for each recorded time. The same seed gives the same
 numbers, and adding an agent does not change the others' random draws.
 
 ## Save, open and export

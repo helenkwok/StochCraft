@@ -224,6 +224,22 @@ impl Read<'_> {
         }
     }
 
+    /// An `xs:boolean` attribute: `true` or `1`, `false` or `0` (spaces around allowed).
+    fn boolean(&mut self, e: &Element, name: &str, at: &str) -> bool {
+        match e.attr(name).as_deref().map(str::trim) {
+            None => false,
+            Some("true" | "1") => true,
+            Some("false" | "0") => false,
+            Some(v) => {
+                self.warn(
+                    Some(at),
+                    format!("`{name}` `{v}` is not true, 1, false or 0; false is used"),
+                );
+                false
+            }
+        }
+    }
+
     fn flag(&mut self, e: &Element, name: &str, yes: &str, no: &str, at: &str) -> bool {
         match e.attr(name) {
             None => false,
@@ -332,7 +348,7 @@ impl Read<'_> {
             rows,
             columns,
             von_neumann: self.flag(e, "neighbourhood", "vonNeumann", "moore", at),
-            wrap: self.flag(e, "wrap", "true", "false", at),
+            wrap: self.boolean(e, "wrap", at),
             many_per_cell: self.flag(e, "perCell", "many", "one", at),
             random_placement: self.flag(e, "placement", "random", "inOrder", at),
         })
@@ -646,6 +662,78 @@ mod tests {
             messages.iter().any(|m| m.contains("`median`")),
             "{messages:?}"
         );
+    }
+
+    #[test]
+    fn a_grids_wrap_reads_every_spelling_of_a_boolean() {
+        let mut a = sample();
+        a.populations.truncate(1);
+        let m = model(a);
+        let text = String::from_utf8_lossy(&crate::write_new(&m)).into_owned();
+        assert!(text.contains("wrap=\"true\""), "{text}");
+        for (spelling, wraps) in [
+            ("true", true),
+            ("1", true),
+            (" 1 ", true),
+            ("false", false),
+            ("0", false),
+        ] {
+            let edited = text.replace("wrap=\"true\"", &format!("wrap=\"{spelling}\""));
+            let loaded = crate::read(edited.as_bytes()).map_err(|e| e.to_string());
+            let Ok(loaded) = loaded else {
+                unreachable!("{loaded:?}")
+            };
+            let grid = loaded
+                .model
+                .agents
+                .as_ref()
+                .and_then(|a| a.populations[0].grid);
+            assert_eq!(grid.map(|g| g.wrap), Some(wraps), "{spelling}");
+            assert!(loaded.notes.is_empty(), "{spelling}: {:?}", loaded.notes);
+        }
+        let edited = text.replace("wrap=\"true\"", "wrap=\"yes\"");
+        let loaded = crate::read(edited.as_bytes()).map_err(|e| e.to_string());
+        let Ok(loaded) = loaded else {
+            unreachable!("{loaded:?}")
+        };
+        assert!(
+            loaded
+                .notes
+                .iter()
+                .any(|n| n.message.contains("`wrap` `yes`")),
+            "{:?}",
+            loaded.notes
+        );
+    }
+
+    /// In a file whose declared encoding is not UTF-8, the extension saved after an edit has
+    /// every non-ASCII character as a character reference, as other saved text has, and reads
+    /// back as it was.
+    #[test]
+    fn saved_into_an_ascii_file_the_extension_is_ascii() {
+        let m = model(sample());
+        let utf8 = String::from_utf8_lossy(&crate::write_new(&m)).into_owned();
+        let ascii = utf8.replace("encoding=\"UTF-8\"", "encoding=\"US-ASCII\"");
+        assert_ne!(ascii, utf8);
+        let loaded = crate::read(ascii.as_bytes()).map_err(|e| e.to_string());
+        let Ok(loaded) = loaded else {
+            unreachable!("{loaded:?}")
+        };
+        let mut edited = m.clone();
+        if let Some(a) = edited.agents.as_mut() {
+            a.types[0].chart = "café.scxml".into();
+            a.statistics[1].name = "âge moyen".into();
+        }
+        let saved = loaded.opened.save(&edited).map_err(|e| e.to_string());
+        let Ok(saved) = saved else {
+            unreachable!("{saved:?}")
+        };
+        assert!(saved.is_ascii(), "{}", String::from_utf8_lossy(&saved));
+        let text = String::from_utf8_lossy(&saved);
+        assert!(text.contains("chart=\"caf&#233;.scxml\""), "{text}");
+        assert!(text.contains("encoding=\"US-ASCII\""), "{text}");
+        let back = crate::read(&saved).map(|l| l.model);
+        assert_eq!(back.ok(), Some(edited));
     }
 
     #[test]
