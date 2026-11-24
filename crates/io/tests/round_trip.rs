@@ -3045,6 +3045,35 @@ fn points_and_junctions_write_read_and_save() {
         .as_deref()
         .map(|b| read(b).map(|l| l.model.site.junctions));
     assert_eq!(back, Ok(Ok(side.site.junctions.clone())));
+    // The same flow re-pointed to another conveyor, its junction kept: written again.
+    let mut repointed = again.model.clone();
+    repointed.elements.push(Element::new(
+        id("spare"),
+        "spare",
+        ElementKind::Conveyor {
+            length: 4.0,
+            speed: 1.0,
+            accumulating: false,
+            item_length: 1.5,
+            gap: 0.5,
+            shape: ConveyorShape::Straight,
+        },
+    ));
+    repointed
+        .connections
+        .push(Connection::new(id("f6"), id("spare"), id("out")));
+    if let Some(c) = repointed
+        .connections
+        .iter_mut()
+        .find(|c| c.id.as_str() == "f2")
+    {
+        c.to = id("spare");
+    }
+    let saved = again.opened.save(&repointed);
+    let back = saved
+        .as_deref()
+        .map(|b| read(b).map(|l| l.model.site.junctions));
+    assert_eq!(back, Ok(Ok(repointed.site.junctions.clone())));
     // A junction on the flow into the sink joins no two conveyors: noted and left out.
     let text = String::from_utf8_lossy(&bytes).replace("elementRef=\"f2\"", "elementRef=\"f5\"");
     let Ok(stray) = read(text.as_bytes()) else {

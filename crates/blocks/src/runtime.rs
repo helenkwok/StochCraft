@@ -3,7 +3,7 @@
 
 use std::borrow::Cow;
 use std::cell::{Cell, RefCell};
-use std::collections::{BTreeMap, BTreeSet, VecDeque};
+use std::collections::{BTreeMap, VecDeque};
 use std::rc::{Rc, Weak};
 
 use stochcraft_des::{
@@ -209,7 +209,7 @@ impl Compiled {
                     Rc::new(Places {
                         room: Room::Belt(Belt {
                             places: n,
-                            on: RefCell::new(BTreeSet::new()),
+                            on: RefCell::new(BTreeMap::new()),
                             free: Cell::new(true),
                             changed: Signal::new(&ctx),
                         }),
@@ -2282,8 +2282,10 @@ enum Room {
 struct Belt {
     /// How many pitches fit along the conveyor.
     places: u64,
-    /// The entities on it, from getting on until they leave its end.
-    on: RefCell<BTreeSet<u64>>,
+    /// The entities on it, from getting on until they leave its end, each with how many times
+    /// it is on: one sent round onto the belt it is leaving takes its place again before it
+    /// gives the old one back.
+    on: RefCell<BTreeMap<u64, u32>>,
     /// Whether the last item to get on has moved a pitch along.
     free: Cell<bool>,
     /// Woken whenever an item gets off or the entrance frees.
@@ -2292,13 +2294,29 @@ struct Belt {
 
 impl Belt {
     fn admits(&self) -> bool {
-        self.free.get() && (self.on.borrow().len() as u64) < self.places
+        self.free.get() && self.count() < self.places
+    }
+
+    /// How many are on it.
+    fn count(&self) -> u64 {
+        self.on.borrow().values().map(|n| u64::from(*n)).sum()
     }
 
     /// Entity `id` gets on: it counts, and the entrance is taken until it has moved a pitch.
     fn take(&self, id: u64) {
-        self.on.borrow_mut().insert(id);
+        *self.on.borrow_mut().entry(id).or_insert(0) += 1;
         self.free.set(false);
+    }
+
+    /// Entity `id` gets off (once, if it is on more than once).
+    fn off(&self, id: u64) {
+        let mut on = self.on.borrow_mut();
+        if let Some(n) = on.get_mut(&id) {
+            *n -= 1;
+            if *n == 0 {
+                on.remove(&id);
+            }
+        }
     }
 }
 
@@ -2491,7 +2509,7 @@ impl Places {
     /// Gives back the place entity `id` holds, as it leaves.
     fn leave(&self, id: u64) {
         if let Room::Belt(b) = &self.room {
-            b.on.borrow_mut().remove(&id);
+            b.off(id);
         }
         let guard = self.held.borrow_mut().remove(&id);
         if guard.is_some() {

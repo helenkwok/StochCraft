@@ -541,3 +541,91 @@ fn an_item_sent_round_onto_the_same_belt_rides_it_again_from_the_start() {
         assert_eq!(element(&r, "end").entered, 0);
     }
 }
+
+#[test]
+fn a_belt_that_sends_round_onto_itself_holds_no_more_than_its_places() {
+    // 4 m at 1 with a pitch of 1: four places. Every item reaching the end is sent straight back
+    // onto the start of the same belt, and new ones keep coming. An item sent round takes its
+    // place again before it gives the old one back, so the belt counts it once, and never holds
+    // more than four.
+    let mut b = Builder::new();
+    let src = b.source("in", Dist::Constant(0.25), None);
+    let belt = b.conveyor("belt", 4.0, 1.0, true, 0.5, 0.5);
+    let divert = b.divert("divert");
+    let end = b.sink("end");
+    b.connect(src, belt);
+    b.connect(belt, divert);
+    b.route(divert, belt, Some(1.0), None);
+    b.route(divert, end, None, None);
+    b.default_route(divert, end);
+    let m = b.build(experiment(200.0));
+    let r = run(&m);
+    let belt = element(&r, "belt");
+    assert!(
+        belt.work_in_progress.is_some_and(|n| n <= 4),
+        "{:?}",
+        belt.work_in_progress
+    );
+    assert!(
+        belt.mean_contents.is_none_or(|c| c <= 4.0 + 1e-9),
+        "{:?}",
+        belt.mean_contents
+    );
+}
+
+#[test]
+fn a_typed_length_that_overrides_the_track_stretches_the_points_with_it() {
+    // A 10 m track with a divert 3 m along, but a typed length of 20 (an override): the divert is
+    // at the same fraction, 6 of the 20, so at 0.5 each item is on the belt 6 / 0.5 = 12.
+    let (b, ..) = line(
+        5.0,
+        Some(10),
+        (20.0, 0.5, true, 0.5, 0.5),
+        |b| b.sink("lane"),
+        |b| b.sink("end"),
+        1.0,
+    );
+    let mut m = b.build(experiment(1_000.0));
+    lay(&mut m, "belt", 10.0);
+    place(&mut m, "divert", "belt", 3.0);
+    let r = run(&m);
+    assert!(close(element(&r, "belt").mean_time_on, 12.0));
+    assert_eq!(element(&r, "lane").entered, 10);
+}
+
+#[test]
+fn rework_into_a_point_counts_as_it_does_into_a_gateway() {
+    // A machine, then a belt whose flow into its divert is marked rework: every item that meets
+    // the divert 3 m along counts as rework of the machine, exactly as when the belt sends into
+    // the same divert at its end.
+    let report = |placed: bool| {
+        let mut b = Builder::new();
+        let src = b.source("in", Dist::Constant(5.0), Some(20));
+        let machine = b.server("machine", 1, Dist::Constant(1.0));
+        let belt = b.conveyor("belt", 10.0, 1.0, true, 0.5, 0.5);
+        let divert = b.divert("divert");
+        let lane = b.sink("lane");
+        let end = b.sink("end");
+        b.connect(src, machine);
+        b.connect(machine, belt);
+        b.connect(belt, divert);
+        b.rework(belt, divert);
+        b.route(divert, lane, Some(1.0), None);
+        b.route(divert, end, None, None);
+        b.default_route(divert, end);
+        let mut m = b.build(experiment(1_000.0));
+        if placed {
+            lay(&mut m, "belt", 10.0);
+            place(&mut m, "divert", "belt", 3.0);
+        }
+        run(&m)
+    };
+    let (at_end, at_point) = (report(false), report(true));
+    let ratio = |r: &Report| element(r, "machine").rework_ratio;
+    assert!(
+        ratio(&at_end).is_some_and(|x| x > 0.0),
+        "{:?}",
+        ratio(&at_end)
+    );
+    assert_eq!(ratio(&at_end), ratio(&at_point));
+}
