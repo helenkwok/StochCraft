@@ -442,15 +442,15 @@ impl ElementKind {
         }
     }
 
-    /// The most entities a conveyor holds at once, ⌊length / pitch⌋: 0 when its numbers are
-    /// not valid (see [`Problem::BadConveyorValue`]). `None` for any other element.
+    /// The most entities a conveyor holds at once, ⌊length / pitch⌋ (see [`whole_pitches`]): 0
+    /// when its numbers are not valid (see [`Problem::BadConveyorValue`]). `None` for any other
+    /// element.
     pub fn conveyor_places(&self) -> Option<u64> {
         match self {
             ElementKind::Conveyor { length, .. } => {
                 let pitch = self.conveyor_pitch()?;
-                // A float-to-integer cast saturates and turns a NaN into 0.
                 Some(if pitch > 0.0 && pitch.is_finite() {
-                    (length / pitch).floor() as u64
+                    whole_pitches(*length, pitch)
                 } else {
                     0
                 })
@@ -458,6 +458,21 @@ impl ElementKind {
             _ => None,
         }
     }
+}
+
+/// How many whole pitches fit in `length`: ⌊length / pitch⌋, where a quotient within rounding
+/// of a whole number counts as that whole number.
+///
+/// A pitch is a sum of two decimals, which binary floating point holds only approximately:
+/// 0.4 + 0.2 is 0.6000000000000001, so 30 / (0.4 + 0.2) is 49.99999999999999 and a plain floor
+/// gives 49 places on a belt that holds 50. The sum and the division each round by at most half
+/// a unit in the last place, so the quotient is nudged up by four units in its last place
+/// before the floor: enough for those errors, and far too little to turn 49.99 into 50.
+///
+/// A negative or NaN quotient gives 0 and an infinite one `u64::MAX` (the cast saturates).
+pub fn whole_pitches(length: f64, pitch: f64) -> u64 {
+    let q = length / pitch;
+    (q + q.abs() * (4.0 * f64::EPSILON)).floor() as u64
 }
 
 /// The electrical power a server's unit draws in each state, in kilowatts. At every instant a
@@ -5180,6 +5195,41 @@ mod tests {
         }
         assert_eq!(LengthUnit::default(), LengthUnit::Metres);
         assert_eq!(LengthUnit::from_name("metres"), None);
+    }
+
+    /// A length that is a whole number of pitches holds that many, although the pitch (a sum of
+    /// decimals) and the quotient are rounded; a length just short of one holds one fewer.
+    #[test]
+    fn a_whole_number_of_pitches_holds_that_many() {
+        let places = |length, item_length, gap| {
+            ElementKind::Conveyor {
+                length,
+                speed: 0.5,
+                accumulating: true,
+                item_length,
+                gap,
+                shape: ConveyorShape::Straight,
+            }
+            .conveyor_places()
+        };
+        // 0.4 + 0.2 is 0.6000000000000001: a plain floor gives 49, 19 and 0.
+        assert_eq!(places(30.0, 0.4, 0.2), Some(50));
+        assert_eq!(places(12.0, 0.4, 0.2), Some(20));
+        assert_eq!(places(4.0, 0.4, 0.2), Some(6));
+        assert_eq!(places(0.6, 0.4, 0.2), Some(1));
+        assert_eq!(places(29.99, 0.4, 0.2), Some(49));
+        assert_eq!(places(0.59, 0.4, 0.2), Some(0));
+        // Exact in binary.
+        assert_eq!(places(3.0, 0.5, 0.0), Some(6));
+        assert_eq!(places(2.9, 0.5, 0.0), Some(5));
+        // Invalid numbers hold none.
+        assert_eq!(places(f64::NAN, 0.4, 0.2), Some(0));
+        assert_eq!(places(-3.0, 0.4, 0.2), Some(0));
+        assert_eq!(places(3.0, f64::NAN, 0.2), Some(0));
+        assert_eq!(places(3.0, 0.0, 0.0), Some(0));
+        assert_eq!(whole_pitches(30.0, 0.4 + 0.2), 50);
+        assert_eq!(whole_pitches(f64::NEG_INFINITY, 0.6), 0);
+        assert_eq!(ElementKind::ParallelGateway.conveyor_places(), None);
     }
 
     #[test]
