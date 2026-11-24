@@ -4874,9 +4874,11 @@ are.
       arm stays open if a case arrives while it shuts, and the gate waits shut when both sides
       are empty. So the check is either a published model that matches these rules, or a
       scenario that matches the published model.
-    - *Published, not exact:* Stuebing's maximum and average queues, and SIMCON's validation
-      on a real network (predicted maximum queues within about a foot), compared as published
-      simulation results, said so on the card.
+    - *Published, not exact:* Stuebing's own maximum and average queues for his design
+      problem, compared as published simulation results, said so on the card.
+    - *Background only:* SIMCON's validation on an existing network (its predicted maximum
+      queues differed from the real ones by less than a foot on average) was for that network,
+      not this problem, so it is history on the write-up, not a check.
   - **Buses that come in threes** ("Transport"): a bus route whose buses leave on a timetable
     and are delayed at each stop in proportion to the riders waiting there, so a late bus
     gathers more riders and falls later while the one behind catches up (bunching; G. F.
