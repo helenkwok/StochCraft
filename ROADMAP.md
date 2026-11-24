@@ -4812,6 +4812,34 @@ are.
     plus customers stay 10,000).
   - Not built in this batch: **the daily peak** (arrivals rising and falling through the day,
     with an exact mean number inside for infinite servers).
+- **Planned examples:** each joins only once its answer is checked against its source with the
+  page, as above.
+  - **A particle detector's readout** (a new "Science" industry): collisions at a collider
+    are a stream of random events, and recording them is a queueing problem. Bunches cross at a
+    fixed rate and each crossing holds a Poisson number of collisions (pile-up), so a share
+    1 − e^−μ of crossings has at least one. A detector channel that is dead for a fixed time τ
+    after each recorded hit, and takes none meanwhile, is a server with no waiting room: it
+    records n / (1 + nτ) of n hits a second (non-paralysable dead time; Erlang B with one
+    server, exact whatever the dead time's distribution). With 100,000 hits a second and τ = 2
+    µs it records 83,333 and loses 1 in 6. A derandomising buffer of K events read out in a
+    fixed time is M/D/1/K, whose loss is exact from its embedded Markov chain. Paralysable dead
+    time (each hit, recorded or not, restarts it: n e^−nτ, 81,873 here) joins once a delay can
+    be restarted. Sources to check: G. F. Knoll, *Radiation Detection and Measurement*, the
+    chapter on dead time; the trigger and data acquisition chapters of a detector textbook.
+  - **A particle shower** (Monte Carlo and agents): Heitler's toy model of an electromagnetic
+    shower. A particle of energy E₀ travels an exponential distance of mean d, splits into two
+    of half its energy, and stops once its energy is below the critical energy E_c. With
+    E₀ / E_c = 2^g every line splits exactly g times, so the shower ends with 2^g particles,
+    and the depth at which each line stops is Erlang (g, d), of mean g d. The chance that a
+    particle crosses a thickness x without interacting is e^−x/d (attenuation). Sources to
+    check: W. Heitler, *The Quantum Theory of Radiation*; J. Matthews, *A Heitler model of
+    extensive air showers*, Astroparticle Physics 22, 2005. The model is the toy model only,
+    not a physics event generator.
+  - **Low-poly scenes** for the 3D view, each with an exact answer: a supermarket checkout,
+    staffed desks against self-service (Erlang C); an ambulance fleet (Erlang B); a delivery
+    depot; a signalised junction or a roundabout; container berths at a port; and a
+    single-track railway with passing loops. Their meshes are made by code (M5.5), with CC0
+    low-poly kits as a visual reference only.
 - **Printed answers are checked, not copied.** T. T. Allen, *Introduction to Discrete Event
   Simulation and Agent-based Modeling*, Springer 2011: §13.6 answers §6.6's problems 5
   (λ = 0.7, μ = 0.1, c = 8) and 7 (λ = 0.8, μ = 0.1, c = 9) with a chance of waiting of 0.875
@@ -4849,6 +4877,20 @@ Not scheduled yet; recorded so earlier work does not close these doors (docs/res
   times) rather than empty; fitting input distributions from event logs; the engine's journal as
   the audit trail of what-if decisions (it records its version and the state it started
   from, #44).
+- **Incident and near-miss investigation:** a digital twin run backwards over what happened.
+  - **Rebuild the incident** from its records: start from the observed state before it,
+    replay the logged events in order, and work at the resolution the incident needs (seconds
+    inside a shift). Each entity keeps its own times from its start, as particle detector
+    simulation does, so a fine time step loses no precision late in a long run.
+  - **Record by event, not on a grid:** the moments that matter (a buffer full, two vehicles
+    within a set distance, a check skipped) are logged as they happen, like a detector's hits.
+  - **How near it was:** rerun the incident with common random numbers, changing one factor at
+    a time (an operator a minute later, one more part in a buffer), and report the smallest
+    change that turns the near miss into an accident, and which barrier held.
+  - **How often:** near misses, and accidents more so, are rare, and plain replications
+    seldom reach them. Rare-event methods: importance sampling, and splitting (RESTART,
+    Villén-Altamirano and Villén-Altamirano 1991), which detector simulation also uses as event
+    biasing. The answer is a frequency with its interval and the method's assumptions.
 - **Industry 5.0 measures:** workers as resources with skills and shifts; energy and CO₂ per
   part and per element (BPSim cost parameters plus a vendor extension); disruption scenarios.
 - **Bulk flow:** rates, splits by fraction, tanks and batch treatment for process industries,
