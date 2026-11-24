@@ -4989,10 +4989,11 @@ struct BeltPoint {
 
 impl BeltPoint {
     /// `e`'s front has reached the point: the divert's rule chooses a way for it, drawn as
-    /// M5.1's divert draws. A way other than the default with room now takes it, with a place
-    /// taken there, and is returned; otherwise (the default chosen, or the way chosen full) it
-    /// rides on, and this returns `None`. The gateway counts it in and out either way.
-    async fn offer(
+    /// M5.1's divert draws. A way other than the default with room now takes it and is
+    /// returned (the caller takes the place there); otherwise (the default chosen, or the way
+    /// chosen full) it rides on, and this returns `None`. The gateway counts it in and out
+    /// either way.
+    fn offer(
         &self,
         e: &mut Entity,
         stats: &Rc<Vec<RefCell<BlockStats>>>,
@@ -5018,10 +5019,6 @@ impl BeltPoint {
             .and_then(|i| r.ways.get(i))
             .filter(|w| w.places.as_ref().is_none_or(|p| p.has_room()))
             .cloned();
-        if let Some(p) = way.as_ref().and_then(|w| w.places.as_ref()) {
-            // There is room, which a request takes at once.
-            p.wait_room(e.id).await;
-        }
         if let Some(s) = stats.get(self.gateway) {
             s.borrow_mut().left += 1;
         }
@@ -5147,7 +5144,7 @@ fn spawn_conveyor(
                     let e = env.borrow();
                     (Rc::clone(&e.stats), Rc::clone(&e.assigner))
                 };
-                let Some(way) = point.offer(&mut entity, &stats, &assigner).await else {
+                let Some(way) = point.offer(&mut entity, &stats, &assigner) else {
                     to.put((entity, got_on, at, ride));
                     continue;
                 };
@@ -5167,6 +5164,11 @@ fn spawn_conveyor(
                     }
                 }
                 view.diverted(ride, now, point.s);
+                // Off this belt first, so a way that leads back onto it counts the entity
+                // again; the way had room, which a request takes at once.
+                if let Some(p) = &way.places {
+                    p.wait_room(entity.id).await;
+                }
                 way.dispatch(&ctx, entity);
             }
         });
