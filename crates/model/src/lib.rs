@@ -3440,9 +3440,10 @@ impl Model {
     fn check_site(&self, out: &mut Vec<Diagnostic>) {
         let unit = self.experiment.length_unit;
         for (id, place) in &self.site.places {
-            let (Place::Along { path, s }, Some(track), Some(e)) =
-                (place, self.site.paths.get(path), self.element(id))
-            else {
+            let Place::Along { path, s } = place else {
+                continue;
+            };
+            let (Some(track), Some(e)) = (self.site.paths.get(path), self.element(id)) else {
                 continue;
             };
             let length = track.length(unit);
