@@ -3490,6 +3490,29 @@ layout. The flagship example is a parcel super hub.
   The logic stays an exclusive gateway with M5.1's `stochcraft:routing="divert"`; the gateway is
   now placed at a divert point (D25). The rule chooses where the item is going; the route then
   takes the branches that lead there.
+- **A merge at `s`** decides which feeder goes next when several wait, by a rule:
+  - *first asked, first in* (rule 4), the default;
+  - *priority:* the main line first, or a fixed order;
+  - *fair share:* one queue per feeder, served as if bit by bit in turn (fair queueing: A.
+    Demers, S. Keshav and S. Shenker, *Analysis and Simulation of a Fair Queueing Algorithm*,
+    ACM SIGCOMM 1989, pp. 1–12). Each item gets a finish number F = max(F of the feeder's
+    previous item, R(t)) + its length, where R(t) counts the rounds served so far, and the
+    smallest goes next, so a feeder sending flat out cannot take more than its share. The same
+    rule serves a server's queue by source. Exact check (§2.3, p. 5): under bit-by-bit turns, a
+    light feeder sharing with N that always wait is delayed exactly as if it were alone at
+    1/(N + 1) of the speed; with Poisson arrivals and items of one length that is M/D/1, whose
+    mean wait Pollaczek–Khinchine gives;
+  - *alternating gate* (a "traffic cop"): a mechanical gate of two arms, each locking the other
+    shut. The open side sends until its queue is empty. Its arm then takes a set closing time to
+    swing shut, and if a case reaches it meanwhile that side carries on. Only once the arm has
+    shut does the other side open; with both sides empty the gate waits shut, and the first
+    case to arrive opens its side. If one side's cases come close enough together, its arm
+    never shuts and the other side waits indefinitely. Results report each side's queue as a
+    length (metres), not a count, since case lengths differ, and each gate's share of time busy.
+    From R. C. Stuebing, *Monte Carlo Simulation of Full Case Conveying Systems*, Digest of the
+    Second Conference on Applications of Simulation, 1968, pp. 272–273, and D. A. Heimburger,
+    *A Cased Goods Conveyor Simulator*, Proceedings of the 1973 Winter Simulation Conference,
+    pp. 112–127 (whose events, OPEN.GATE, PASS.GATE and SHUT.ARM, define the rule).
 - **Lane full, stay on the loop.** Built in: when the chosen lane cannot take the item, it stays
   on the loop and is offered again next time round. Each item counts its rounds; after a set
   number it goes to an exception lane. Results report the recirculation count per divert and
@@ -4835,6 +4858,37 @@ are.
     check: W. Heitler, *The Quantum Theory of Radiation*; J. Matthews, *A Heitler model of
     extensive air showers*, Astroparticle Physics 22, 2005. The model is the toy model only,
     not a physics event generator.
+  - **Packing hall merges** (after L5's alternating gate): packing lines whose cases merge
+    through two-way gates onto one conveyor to the warehouse, Stuebing's design problem (1968,
+    above): four lines at 12 ± 3, 20 ± 3, 8 ± 1 and 12 ± 1 cases a minute, 20-inch cases, and
+    his conveyor lengths and speeds, with the questions he asks (the queues on each conveyor;
+    the main conveyor at 200 ft/min; line C 7 cases a minute faster). Its lesson: at peak the
+    main conveyor takes 61 cases a minute, about 102 ft/min of cases, yet needs to run near
+    200 ft/min, because switching gates waste belt and gather cases into slugs; a faster belt
+    moves the queues more than it shortens them. Checks:
+    - *Exact, to establish:* a gate whose arm shuts at once is close to a two-queue polling
+      system with exhaustive service and switchover times, whose mean waits are known exactly.
+      Candidates, to read: a two-queue cyclic system with random switchover times (Discrete
+      Event Dynamic Systems, doi 10.1007/s10626-009-0072-9) and Dorsman et al. (2014) on
+      two-queue Markovian polling with exhaustive service. The gate differs in two ways: the
+      arm stays open if a case arrives while it shuts, and the gate waits shut when both sides
+      are empty. So the check is either a published model that matches these rules, or a
+      scenario that matches the published model.
+    - *Published, not exact:* Stuebing's own maximum and average queues for his design
+      problem, compared as published simulation results, said so on the card.
+    - *Background only:* SIMCON's validation on an existing network (its predicted maximum
+      queues differed from the real ones by less than a foot on average) was for that network,
+      not this problem, so it is history on the write-up, not a check.
+  - **Buses that come in threes** ("Transport"): a bus route whose buses leave on a timetable
+    and are delayed at each stop in proportion to the riders waiting there, so a late bus
+    gathers more riders and falls later while the one behind catches up (bunching; G. F.
+    Newell and R. B. Potts, *Maintaining a bus schedule*, 1964, to check). Exact check: a
+    rider arriving at random waits on average E[H²] / (2 E[H]) = (E[H] / 2)(1 + CV²) for
+    headways H with coefficient of variation CV (random incidence; R. C. Larson and A. R.
+    Odoni, *Urban Operations Research*, to check with the page): 5 minutes for buses exactly
+    every 10, 10 minutes for exponential headways of the same mean. A scenario with headways
+    held at a control stop shows bunching reduced. The run measures the headways at each stop
+    and checks each stop's mean wait against them.
   - **Low-poly scenes** for the 3D view, each with an exact answer: a supermarket checkout,
     staffed desks against self-service (Erlang C); an ambulance fleet (Erlang B); a delivery
     depot; a signalised junction or a roundabout; container berths at a port; and a
@@ -4877,6 +4931,11 @@ Not scheduled yet; recorded so earlier work does not close these doors (docs/res
   times) rather than empty; fitting input distributions from event logs; the engine's journal as
   the audit trail of what-if decisions (it records its version and the state it started
   from, #44).
+- **Timetables in, delays on top:** read a GTFS feed (its stops, trips and stop times) as
+  timetabled sources and routes, so trains or buses leave as published and then run with
+  random delays, dwell times and headways. Replaying a timetable shows the plan; simulating it
+  shows what the plan does under variation. A real-time feed's observed delays become the
+  starting state of a run (digital twins, above).
 - **Incident and near-miss investigation:** a digital twin run backwards over what happened.
   - **Rebuild the incident** from its records: start from the observed state before it,
     replay the logged events in order, and work at the resolution the incident needs (seconds
