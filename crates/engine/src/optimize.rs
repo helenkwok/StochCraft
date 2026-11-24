@@ -1059,10 +1059,23 @@ impl Words<'_> {
                         "The model has no randomness, so the designs were compared exactly, one replication each: {what} is the best {scope}. No probability is stated."
                     )
                 } else if let Some(c) = a.confidence {
-                    format!(
-                        "With {}% confidence every design was rightly declared feasible or infeasible (within each constraint's tolerance); the objective is the decisions' costs alone, known exactly, so {what} is exactly the best {scope} that meet the constraints.",
+                    let mut s = format!(
+                        "With {}% confidence every design that was decided was rightly declared feasible or infeasible (within each constraint's tolerance); the objective is the decisions' costs alone, known exactly, so {what} is exactly the best {scope} that meet the constraints.",
                         percent(c)
-                    )
+                    );
+                    if !a.set_aside.is_empty() {
+                        let left: Vec<String> = a
+                            .set_aside
+                            .iter()
+                            .filter_map(|&i| a.finalists.get(i))
+                            .map(|f| design_text(ds, &f.design))
+                            .collect();
+                        s.push_str(&format!(
+                            " Left undecided, but costing no less, so they could not be the answer whether they meet the constraints or not: {}.",
+                            left.join(", ")
+                        ));
+                    }
+                    s
                 } else {
                     format!(
                         "The objective is the decisions' costs alone, known exactly, so the designs were compared exactly: {what} is the best {scope}. No probability is stated."

@@ -402,13 +402,22 @@ pub struct ConstrainedSelection {
     /// The probability, covering the feasibility decisions and the selection together, that
     /// the answer claims: `Some(1 − α)` when both were completed on random data.
     pub confidence: Option<f64>,
+    /// The chosen system is proven the best of those that meet the constraints: KN settled it
+    /// among the systems declared feasible, and every system was decided, or (with an objective
+    /// stated exact, [`Kn::deterministic`]) each system left undecided has an objective known
+    /// exactly and no better than the chosen one's, so it could not be the answer whether it is
+    /// feasible or not ([`ConstrainedSelection::set_aside`]).
+    pub proven: bool,
+    /// Systems left undecided by the check that did not stop the answer being proven, because
+    /// their exact objective is no better than the chosen system's.
+    pub set_aside: Vec<usize>,
 }
 
 impl ConstrainedSelection {
     /// The chosen system, when the answer is proven (with the stated confidence, or exactly).
     pub fn chosen(&self) -> Option<usize> {
         let s = self.selection.as_ref()?;
-        (self.feasibility.is_complete() && s.outcome != Outcome::NotProven).then_some(s.chosen)
+        self.proven.then_some(s.chosen)
     }
 
     pub fn total_runs(&self) -> u64 {
@@ -701,6 +710,7 @@ where
         .eta(systems, constraints.len())
         .ok_or(SelectError::Confidence(setup.confidence))?;
     let width = constraints.len() + 1;
+    let mut objective: Vec<Vec<f64>> = vec![Vec::new(); systems];
     let found = feasibility(
         &FeasibilityPlan {
             eta,
@@ -712,15 +722,39 @@ where
         },
         systems,
         constraints,
-        &mut |s, reps| checked_rows(&mut sample, s, reps, width),
+        &mut |s, reps: Range<u64>| {
+            let rows = checked_rows(&mut sample, s, reps.clone(), width)?;
+            if reps.start == 0
+                && let Some(o) = objective.get_mut(s)
+            {
+                o.extend(rows.iter().filter_map(|row| row.first().copied()));
+            }
+            Ok(rows)
+        },
     )?;
     let feasible = found.feasible();
-    if !found.is_complete() || feasible.is_empty() {
-        let confidence = found.confidence.map(|_| setup.confidence);
+    let complete = found.is_complete();
+    let undecided: Vec<usize> = (0..systems)
+        .filter(|&i| found.decisions.get(i) == Some(&Decision::Undecided))
+        .collect();
+    // With an objective stated exact, a system left undecided (by a flat constraint or the
+    // budget) whose objective was the same in every first-stage replication has that value
+    // exactly, larger-is-better scaled; it is compared with the chosen system's below.
+    let exact_objective = |i: usize| -> Option<f64> {
+        let o = objective.get(i)?;
+        (setup.deterministic && !o.is_empty() && constant(o))
+            .then(|| o.first().map(|v| setup.sense.sign() * v))
+            .flatten()
+    };
+    let can_set_aside = undecided.iter().all(|&i| exact_objective(i).is_some());
+    if feasible.is_empty() || !(complete || can_set_aside) {
+        let confidence = (complete && found.confidence.is_some()).then_some(setup.confidence);
         return Ok(ConstrainedSelection {
             feasibility: found,
             selection: None,
             confidence,
+            proven: false,
+            set_aside: Vec::new(),
         });
     }
     let kn = Kn {
@@ -740,6 +774,8 @@ where
             feasibility: found,
             selection: None,
             confidence: None,
+            proven: false,
+            set_aside: Vec::new(),
         });
     }
     let eta = if m > 1 {
@@ -765,17 +801,38 @@ where
             .collect())
     })?;
     let selection = run.into_selection(&plan, systems, kn.confidence);
-    let confidence = match (found.confidence, selection.outcome) {
-        (Some(_), Outcome::Selected) => Some(setup.confidence),
-        // A feasible set found exactly and a selection with confidence: the selection's.
-        (None, Outcome::Selected) if found.exact => Some(kn.confidence),
-        (Some(_), Outcome::ComparedExactly) => Some(check.confidence),
+    // The undecided systems are set aside only when the chosen one's objective is exact too
+    // (compared exactly) and none of theirs is better: then whether they meet the constraints
+    // cannot change the answer.
+    let chosen_value = selection
+        .means
+        .get(selection.chosen)
+        .copied()
+        .flatten()
+        .map(|m| setup.sense.sign() * m);
+    let set_aside_ok = selection.outcome == Outcome::ComparedExactly
+        && undecided
+            .iter()
+            .all(|&i| matches!((exact_objective(i), chosen_value), (Some(u), Some(c)) if u <= c));
+    let proven = selection.outcome != Outcome::NotProven && (complete || set_aside_ok);
+    // The check's decisions, those it made, are right together with probability 1 − α_check:
+    // its error is shared out by Bonferroni's inequality over every system and constraint, so
+    // the systems it left undecided only remove terms.
+    let confidence = match (proven, selection.outcome) {
+        (true, Outcome::Selected) => Some(setup.confidence),
+        (true, Outcome::ComparedExactly) => Some(check.confidence),
         _ => None,
     };
     Ok(ConstrainedSelection {
         feasibility: found,
         selection: Some(selection),
         confidence,
+        proven,
+        set_aside: if proven && !complete {
+            undecided
+        } else {
+            Vec::new()
+        },
     })
 }
 
@@ -1919,6 +1976,76 @@ mod tests {
         );
         assert!(!check.flat);
         assert_eq!(check.confidence, Some(0.95));
+    }
+
+    /// An objective of known costs (stated exact) with random constraints: system 2's
+    /// constrained value is the same in every first-stage replication, so the check leaves it
+    /// undecided. When it costs more than the cheapest feasible system it cannot be the answer
+    /// and is set aside; when it costs less, nothing is proven.
+    #[test]
+    fn an_undecided_system_that_costs_more_is_set_aside() {
+        let constraints = [Constraint {
+            bound: Bound::AtMost,
+            limit: 0.0,
+            tolerance: 0.5,
+        }];
+        let setup = Kn {
+            deterministic: true,
+            max_runs: Some(1000),
+            ..Kn::new(0.5, Sense::Minimise)
+        };
+        let run = |costs: [f64; 3]| {
+            select_feasible(&setup, &constraints, 0.5, 3, |s, reps: Range<u64>| {
+                reps.map(|j| {
+                    let y = if s == 2 {
+                        -1.0
+                    } else {
+                        -1.0 + 0.001 * normal(61, s as u64, j)
+                    };
+                    vec![costs[s], y]
+                })
+                .collect()
+            })
+        };
+        let s = run([1.0, 2.0, 3.0]);
+        let Ok(s) = s else { panic!("{s:?}") };
+        assert_eq!(
+            s.feasibility.decisions,
+            vec![Decision::Feasible, Decision::Feasible, Decision::Undecided]
+        );
+        assert!(s.proven, "{s:?}");
+        assert_eq!(s.chosen(), Some(0));
+        assert_eq!(s.set_aside, vec![2]);
+        assert!(s.confidence.is_some_and(|c| close(c, 0.975)), "{s:?}");
+        assert_eq!(
+            s.selection.as_ref().map(|k| k.outcome),
+            Some(Outcome::ComparedExactly)
+        );
+        // The undecided system is the cheapest: it might be the answer, so nothing is proven.
+        let s = run([1.0, 2.0, 0.5]);
+        let Ok(s) = s else { panic!("{s:?}") };
+        assert!(!s.proven, "{s:?}");
+        assert_eq!((s.chosen(), s.confidence), (None, None));
+        assert!(s.set_aside.is_empty());
+        // Without the statement that the objective is exact, nothing is set aside.
+        let random = Kn {
+            deterministic: false,
+            ..setup
+        };
+        let s = select_feasible(&random, &constraints, 0.5, 3, |s, reps: Range<u64>| {
+            reps.map(|j| {
+                let y = if s == 2 {
+                    -1.0
+                } else {
+                    -1.0 + 0.001 * normal(61, s as u64, j)
+                };
+                vec![[1.0, 2.0, 3.0][s], y]
+            })
+            .collect()
+        });
+        let Ok(s) = s else { panic!("{s:?}") };
+        assert!(!s.proven);
+        assert!(s.selection.is_none());
     }
 
     #[test]

@@ -968,7 +968,11 @@ weighted results plus the decisions' costs. The cost cap is a limit of the space
 over it is run. A model is compared exactly only when nothing in it is drawn and the starting
 design's first two replications agree; an objective of costs alone (no results) is compared
 exactly in the clean-up (`Compass::exact_objective`, passed to KN as `Kn::deterministic`) while
-the constraints are checked as random. `engine/src/drawn.rs` decides the first from the model's
+the constraints are checked as random. A design the check leaves undecided (a constrained result
+the same in every first-stage replication, as a wait of 0 with many servers, or the budget) is
+then set aside when its exact cost is no lower than the chosen design's, since it could not be
+the answer either way (`ConstrainedSelection::set_aside`, listed in the claim); a cheaper one
+leaves the answer not proven. `engine/src/drawn.rs` decides the first from the model's
 types, taking every struct apart and matching every kind of element in full, so a new field or
 kind does not compile until it says whether it draws. Drawn means a distribution other than a
 constant, a probability strictly between 0 and 1, an exclusive gateway whose way is not decided

@@ -463,6 +463,10 @@ pub struct Answer {
     /// without [`Compass::exact`]: that is not proof of no randomness, so KN or the check could
     /// not settle it ([`crate::select::Selection::flat`]).
     pub flat: bool,
+    /// With [`Compass::exact_objective`]: finalists the feasibility check left undecided that do
+    /// not affect the answer, since their exact objective is no better than the chosen one's
+    /// ([`crate::select::ConstrainedSelection::set_aside`]).
+    pub set_aside: Vec<usize>,
 }
 
 impl Answer {
@@ -1501,6 +1505,7 @@ where
         trace: Vec::new(),
         space: None,
         flat: false,
+        set_aside: Vec::new(),
     };
     let mut c = CleanUp {
         sample,
@@ -1628,10 +1633,12 @@ where
         answer.feasibility = Some(found.feasibility.decisions.clone());
         answer.by_constraint = Some(found.feasibility.by_constraint.clone());
         answer.confidence = found.confidence;
-        answer.flat = found.feasibility.flat || found.selection.as_ref().is_some_and(|s| s.flat);
+        answer.flat = !found.proven
+            && (found.feasibility.flat || found.selection.as_ref().is_some_and(|s| s.flat));
+        answer.set_aside = found.set_aside.clone();
         match &found.selection {
             Some(s) => {
-                answer.outcome = if found.feasibility.is_complete() {
+                answer.outcome = if found.proven {
                     s.outcome
                 } else {
                     Outcome::NotProven
