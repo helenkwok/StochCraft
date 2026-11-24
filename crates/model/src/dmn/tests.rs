@@ -2,6 +2,8 @@
 
 //! Decision tables worked by hand: each hit policy, the checks, and what is refused.
 
+use std::collections::BTreeMap;
+
 use super::*;
 
 /// A decision `d` with a table of `inputs` (property names), `outputs` (names) and `rules`
@@ -45,7 +47,7 @@ fn table(
     }
 }
 
-fn reader(pairs: &[(&str, Value)]) -> impl Fn(&str) -> Option<Value> {
+fn reader(pairs: &[(&str, Value)]) -> impl Fn(&str) -> Option<Value> + use<> {
     let map: BTreeMap<String, Value> = pairs
         .iter()
         .map(|(k, v)| ((*k).to_owned(), v.clone()))

@@ -36,8 +36,6 @@
 //! rule covers, each with an example: it splits each input's values at every number and string
 //! the cells name, so every rule matches all of a piece or none of it.
 
-use std::collections::BTreeMap;
-
 use crate::expr::Value;
 
 /// The namespace of DMN 1.6 models, which StochCraft writes.
