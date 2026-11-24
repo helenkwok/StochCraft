@@ -1018,6 +1018,14 @@ fields (`“Service time”`) are named in the messages by their own rows.
   meaning of the English, with each catalog's own words for Layout, Unplaced and block from its
   existing rows. Not checked against any other source and not reviewed by native speakers; the
   least certain are lo, th, ta, te, bn, ka and kk.
+- The rows for the properties of the selection (M5.5, U2: a field's reset, why a value is in
+  bold, mixed values across selected blocks, a flow's page with its condition and Remove flow,
+  and the properties several blocks share) were machine-drafted from the plain meaning of the
+  English, with each catalog's own words for reset, default, flow, condition, block and
+  properties from its existing rows; "Flow" has the context `connection`, as a connection
+  between blocks (the word the catalog uses in "Remove the flow {id}"). Not checked against any
+  other source and not reviewed by native speakers; the least certain are lo, th, ta, te, bn,
+  ka, kk and sq.
 - The rows for the layout's three validation messages (M5.5, L5: a place off its conveyor's path,
   divert points out of order along a path, a junction with a negative transfer time) were
   machine-drafted from the plain meaning of the English, with each catalog's own words for

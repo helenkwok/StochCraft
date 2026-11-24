@@ -1458,6 +1458,15 @@ unit	yr	a
 	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	{block} ha un tempo di servizio per il pool «{pool}», che il modello non ha. Rimuovi quel tempo o scegli un pool esistente.
 	{block} has two service times for the pool “{pool}”. Keep one.	{block} ha due tempi di servizio per il pool «{pool}». Tienine uno solo.
 	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	{block} ha un tempo di servizio per il pool «{pool}», di cui non ha bisogno. Aggiungi il pool al suo fabbisogno o rimuovi quel tempo.
+	Reset {field}	Reimposta {field}
+	Changed from the default	Modificato rispetto al valore predefinito
+	Changed from the inherited scenario	Modificato rispetto allo scenario ereditato
+	Mixed values	Valori diversi
+connection	Flow	Flusso
+	Remove flow	Rimuovi il flusso
+	Condition	Condizione
+	Shared properties	Proprietà comuni
+	These blocks share no properties.	Questi blocchi non hanno proprietà in comune.
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	{block} è posizionato a {s} lungo il nastro trasportatore {conveyor}, il cui percorso è lungo {length}. Posizionalo tra 0 e {length} lungo il percorso.
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	Le entità sul nastro trasportatore {conveyor} raggiungono {before} prima di {block}, ma {block} è posizionato più vicino all'inizio ({s} lungo il nastro, {before} a {before_s}). Posiziona {block} più avanti lungo il percorso rispetto a {before}, oppure scambiali nei flussi.
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	La giunzione sul flusso {flow} richiede {time} per essere attraversata. Imposta il suo tempo di trasferimento a 0 o più.

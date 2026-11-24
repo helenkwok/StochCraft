@@ -1458,6 +1458,15 @@ unit	yr	év
 	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	A(z) {block} blokknak van kiszolgálási ideje a(z) „{pool}” készletre, amely nincs a modellben. Távolítsa el ezt az időt, vagy válasszon létező készletet.
 	{block} has two service times for the pool “{pool}”. Keep one.	A(z) {block} blokknak két kiszolgálási ideje van a(z) „{pool}” készletre. Egyiket tartsa meg.
 	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	A(z) {block} blokknak van kiszolgálási ideje a(z) „{pool}” készletre, amelyre nincs szüksége. Adja hozzá a készletet az igényeihez, vagy távolítsa el ezt az időt.
+	Reset {field}	{field} visszaállítása
+	Changed from the default	Eltér az alapértelmezettől
+	Changed from the inherited scenario	Eltér az örökölt forgatókönyvtől
+	Mixed values	Eltérő értékek
+connection	Flow	Folyamat
+	Remove flow	Folyamat eltávolítása
+	Condition	Feltétel
+	Shared properties	Közös tulajdonságok
+	These blocks share no properties.	Ezeknek a blokkoknak nincs közös tulajdonságuk.
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	A(z) {block} blokk a(z) {conveyor} szállítószalag mentén {s} távolságra van elhelyezve, amelynek útvonala {length} hosszú. Helyezze 0 és {length} közé az útvonal mentén.
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	A(z) {conveyor} szállítószalagon az entitások a(z) {before} elemet előbb érik el, mint a(z) {block} blokkot, de a(z) {block} közelebb van elhelyezve az elejéhez ({s} távolságra rajta, a(z) {before} pedig {before_s} távolságra). Helyezze a(z) {block} blokkot az útvonalon a(z) {before} után, vagy cserélje fel őket a folyamatokban.
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	A(z) {flow} folyamat csatlakozásának átlépése {time} ideig tart. Állítsa a továbbítási időt 0 vagy nagyobb értékre.

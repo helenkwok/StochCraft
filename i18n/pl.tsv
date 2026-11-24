@@ -1458,6 +1458,15 @@ unit	yr	r.
 	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	Blok {block} ma czas obsługi dla puli „{pool}”, której nie ma w modelu. Usuń ten czas albo wybierz istniejącą pulę.
 	{block} has two service times for the pool “{pool}”. Keep one.	Blok {block} ma dwa czasy obsługi dla puli „{pool}”. Zostaw jeden.
 	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	Blok {block} ma czas obsługi dla puli „{pool}”, której nie potrzebuje. Dodaj pulę do jego wymagań albo usuń ten czas.
+	Reset {field}	Resetuj: {field}
+	Changed from the default	Zmieniono względem wartości domyślnej
+	Changed from the inherited scenario	Zmieniono względem dziedziczonego scenariusza
+	Mixed values	Różne wartości
+connection	Flow	Przepływ
+	Remove flow	Usuń przepływ
+	Condition	Warunek
+	Shared properties	Wspólne właściwości
+	These blocks share no properties.	Te bloki nie mają wspólnych właściwości.
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	Blok {block} jest umieszczony {s} wzdłuż przenośnika {conveyor}, którego ścieżka ma długość {length}. Umieść go między 0 a {length} wzdłuż ścieżki.
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	Jednostki na przenośniku {conveyor} docierają do {before} przed {block}, ale {block} jest umieszczony bliżej początku ({s} wzdłuż niego, {before} przy {before_s}). Umieść {block} dalej na ścieżce niż {before} albo zamień je miejscami w przepływach.
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	Złącze na przepływie {flow} przekracza się w czasie {time}. Ustaw jego czas transferu na 0 lub więcej.

@@ -1458,6 +1458,15 @@ unit	yr	år
 	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	{block} har en servicetid för poolen ”{pool}”, som modellen inte har. Ta bort den tiden eller välj en pool som finns.
 	{block} has two service times for the pool “{pool}”. Keep one.	{block} har två servicetider för poolen ”{pool}”. Behåll en av dem.
 	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	{block} har en servicetid för poolen ”{pool}”, som den inte behöver. Lägg till poolen bland dess behov eller ta bort den tiden.
+	Reset {field}	Återställ {field}
+	Changed from the default	Ändrat från standardvärdet
+	Changed from the inherited scenario	Ändrat från det ärvda scenariot
+	Mixed values	Blandade värden
+connection	Flow	Flöde
+	Remove flow	Ta bort flödet
+	Condition	Villkor
+	Shared properties	Gemensamma egenskaper
+	These blocks share no properties.	Dessa block har inga gemensamma egenskaper.
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	{block} är placerat {s} längs transportbandet {conveyor}, vars bana är {length} lång. Placera det mellan 0 och {length} längs banan.
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	Entiteter på transportbandet {conveyor} når {before} före {block}, men {block} är placerat närmare början ({s} längs det, {before} vid {before_s}). Placera {block} längre fram längs banan än {before}, eller byt plats på dem i flödena.
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	Övergången på flödet {flow} tar {time} att korsa. Sätt dess överföringstid till 0 eller mer.

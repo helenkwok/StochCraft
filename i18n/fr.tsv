@@ -1458,6 +1458,15 @@ unit	yr	an
 	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	{block} a un temps de service pour le pool « {pool} », que le modèle n'a pas. Supprimez ce temps ou choisissez un pool existant.
 	{block} has two service times for the pool “{pool}”. Keep one.	{block} a deux temps de service pour le pool « {pool} ». N'en gardez qu'un.
 	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	{block} a un temps de service pour le pool « {pool} », dont il n'a pas besoin. Ajoutez le pool à ses besoins ou supprimez ce temps.
+	Reset {field}	Réinitialiser {field}
+	Changed from the default	Modifié par rapport à la valeur par défaut
+	Changed from the inherited scenario	Modifié par rapport au scénario hérité
+	Mixed values	Valeurs différentes
+connection	Flow	Flux
+	Remove flow	Supprimer le flux
+	Condition	Condition
+	Shared properties	Propriétés communes
+	These blocks share no properties.	Ces blocs n'ont aucune propriété commune.
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	{block} est placé à {s} le long du convoyeur {conveyor}, dont le tracé mesure {length}. Placez-le entre 0 et {length} le long du tracé.
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	Les entités sur le convoyeur {conveyor} atteignent {before} avant {block}, mais {block} est placé plus près du début ({s} le long du convoyeur, {before} à {before_s}). Placez {block} plus loin sur le tracé que {before}, ou échangez-les dans les flux.
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	La jonction sur le flux {flow} met {time} à être franchie. Faites en sorte que son temps de transfert soit de 0 ou plus.

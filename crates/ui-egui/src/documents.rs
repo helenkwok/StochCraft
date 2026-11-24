@@ -128,7 +128,13 @@ impl App {
     /// Opens a model file from its bytes (`name` is its path, or its name where there are no
     /// paths).
     pub fn open_file(&mut self, name: &str, bytes: &[u8]) {
-        match self.engine.open_bytes(name, bytes, None) {
+        self.open_scenario(name, bytes, None);
+    }
+
+    /// Opens scenario `scenario` of a model file (`None`: its first), as [`App::open_file`]
+    /// does. A scenario that inherits from another shows, in bold, the values it changes.
+    pub fn open_scenario(&mut self, name: &str, bytes: &[u8], scenario: Option<&str>) {
+        match self.engine.open_bytes(name, bytes, scenario) {
             Ok(opened) => {
                 self.forget_view();
                 // Warnings and errors from reading the file and checking the model; information

@@ -1458,6 +1458,15 @@ unit	yr	yıl
 	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	{block} bloğunda modelde olmayan "{pool}" havuzu için bir hizmet süresi var. Bu süreyi kaldırın veya var olan bir havuz seçin.
 	{block} has two service times for the pool “{pool}”. Keep one.	{block} bloğunda "{pool}" havuzu için iki hizmet süresi var. Birini tutun.
 	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	{block} bloğunda ihtiyaç duymadığı "{pool}" havuzu için bir hizmet süresi var. Havuzu ihtiyaçlarına ekleyin veya bu süreyi kaldırın.
+	Reset {field}	{field} değerini sıfırla
+	Changed from the default	Varsayılandan değiştirildi
+	Changed from the inherited scenario	Devralınan senaryodan değiştirildi
+	Mixed values	Farklı değerler
+connection	Flow	Akış
+	Remove flow	Akışı kaldır
+	Condition	Koşul
+	Shared properties	Ortak özellikler
+	These blocks share no properties.	Bu blokların ortak özelliği yok.
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	{block} bloğu {conveyor} konveyörü boyunca {s} uzaklığa yerleştirilmiş, ama yolunun uzunluğu {length}. Onu yol boyunca 0 ile {length} arasına yerleştirin.
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	{conveyor} konveyöründeki varlıklar {before} bloğuna {block} bloğundan önce ulaşıyor, ama {block} başlangıca daha yakın yerleştirilmiş (konveyör boyunca {s}, {before} ise {before_s} noktasında). {block} bloğunu yol boyunca {before} bloğundan daha ileriye yerleştirin ya da akışlarda yerlerini değiştirin.
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	{flow} akışındaki bağlantıyı geçmek {time} sürüyor. Aktarma süresini 0 veya daha fazla yapın.

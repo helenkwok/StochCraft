@@ -1458,6 +1458,15 @@ unit	yr	a
 	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	{block} tiene un tiempo de servicio para el grupo «{pool}», que el modelo no tiene. Elimine ese tiempo o elija un grupo que exista.
 	{block} has two service times for the pool “{pool}”. Keep one.	{block} tiene dos tiempos de servicio para el grupo «{pool}». Conserve solo uno.
 	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	{block} tiene un tiempo de servicio para el grupo «{pool}», que no necesita. Añada el grupo a sus necesidades o elimine ese tiempo.
+	Reset {field}	Restablecer {field}
+	Changed from the default	Cambiado respecto al valor predeterminado
+	Changed from the inherited scenario	Cambiado respecto al escenario heredado
+	Mixed values	Valores distintos
+connection	Flow	Flujo
+	Remove flow	Eliminar el flujo
+	Condition	Condición
+	Shared properties	Propiedades compartidas
+	These blocks share no properties.	Estos bloques no comparten ninguna propiedad.
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	{block} está colocado a {s} a lo largo de la cinta transportadora {conveyor}, cuyo trazado mide {length}. Colóquelo entre 0 y {length} a lo largo del trazado.
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	Las entidades de la cinta transportadora {conveyor} llegan a {before} antes que a {block}, pero {block} está colocado más cerca del inicio ({s} a lo largo de ella, {before} a {before_s}). Coloque {block} más adelante en el trazado que {before} o intercámbielos en los flujos.
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	La unión en el flujo {flow} tarda {time} en cruzarse. Haga que su tiempo de transferencia sea 0 o más.

@@ -1458,6 +1458,15 @@ unit	yr	р.
 	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	У блока {block} є час обслуговування для пулу «{pool}», якого немає в моделі. Видаліть цей час або виберіть наявний пул.
 	{block} has two service times for the pool “{pool}”. Keep one.	У блока {block} час обслуговування для пулу «{pool}» задано двічі. Залиште один.
 	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	У блока {block} є час обслуговування для пулу «{pool}», який йому не потрібен. Додайте пул до його потреб або видаліть цей час.
+	Reset {field}	Скинути: {field}
+	Changed from the default	Змінено порівняно зі значенням за замовчуванням
+	Changed from the inherited scenario	Змінено порівняно з успадкованим сценарієм
+	Mixed values	Різні значення
+connection	Flow	Потік
+	Remove flow	Видалити потік
+	Condition	Умова
+	Shared properties	Спільні властивості
+	These blocks share no properties.	Ці блоки не мають спільних властивостей.
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	Блок {block} розміщено на відстані {s} уздовж конвеєра {conveyor}, шлях якого має довжину {length}. Розмістіть його між 0 і {length} уздовж шляху.
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	Сутності на конвеєрі {conveyor} доходять до {before} раніше, ніж до {block}, але {block} розміщено ближче до початку ({s} уздовж нього, {before} на {before_s}). Розмістіть {block} далі шляхом, ніж {before}, або поміняйте їх місцями в потоках.
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	Стик на потоці {flow} проходиться за {time}. Задайте час передачі 0 або більше.

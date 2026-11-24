@@ -3908,7 +3908,14 @@ its kind's shape built by code (`stochcraft_render::kit`); items ride the belts 
 `point_at(s)`, and the 3D camera fits the scene at a three-quarter view. Left from L3: a divert
 is still one gateway, so a parcel crosses from the merge to its lane at once (riding the sort
 straight to its divert point needs L5's points along a section). U1, the run bar, is done
-(#218).
+(#218). U2 is done: a value changed from its default (what a new block or flow has) is in bold
+with a reset per field, one undo step each; a model opened in a scenario that inherits from
+another is measured against that scenario instead; a selected flow has its own page; and
+several selected blocks show the parameters they share, values that differ marked as mixed,
+an edit to all of them one undo step. Left from U2: collapsible groups for the parameters,
+flows and shared properties (the folds below them already collapse), units typed with the
+value, a scenario picker in the window, and the experiment fields and connections table
+leaving the model page (with U5).
 
 L5's first part is done: points along a section and junctions. A divert gateway placed at `s`
 along the conveyor that sends into it is a point of that conveyor (`model::site::points`): its

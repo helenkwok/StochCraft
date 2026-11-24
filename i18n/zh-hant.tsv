@@ -1458,6 +1458,15 @@ unit	yr	年
 	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	{block} 為資源池「{pool}」設定了服務時間，但模型中沒有該資源池。請移除該時間，或選擇存在的資源池。
 	{block} has two service times for the pool “{pool}”. Keep one.	{block} 為資源池「{pool}」設定了兩個服務時間。請只保留其中一個。
 	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	{block} 為資源池「{pool}」設定了服務時間，但它並不需要該資源池。請把該資源池加入它所需的資源，或移除該時間。
+	Reset {field}	重設{field}
+	Changed from the default	已不同於預設值
+	Changed from the inherited scenario	已不同於繼承的情境
+	Mixed values	值各不相同
+connection	Flow	順序流
+	Remove flow	移除順序流
+	Condition	條件
+	Shared properties	共有屬性
+	These blocks share no properties.	這些區塊沒有共有屬性。
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	{block} 放在輸送帶 {conveyor} 上距起點 {s} 處，但該輸送帶的路徑只有 {length} 長。請把它放在路徑上 0 到 {length} 之間。
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	輸送帶 {conveyor} 上的實體先到達 {before}，後到達 {block}，但 {block} 的位置更靠近起點（沿輸送帶 {s}，而 {before} 在 {before_s}）。請把 {block} 放在路徑上比 {before} 更後面的位置，或在順序流中交換它們。
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	順序流 {flow} 上的銜接處需要 {time} 才能通過。請把它的傳送時間設為 0 或更大。

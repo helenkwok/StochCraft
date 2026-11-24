@@ -1458,6 +1458,15 @@ unit	yr	a
 	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	{block} tem um tempo de serviço para o pool “{pool}”, que o modelo não tem. Remova esse tempo ou escolha um pool que exista.
 	{block} has two service times for the pool “{pool}”. Keep one.	{block} tem dois tempos de serviço para o pool “{pool}”. Mantenha apenas um.
 	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	{block} tem um tempo de serviço para o pool “{pool}”, de que não precisa. Adicione o pool às suas necessidades ou remova esse tempo.
+	Reset {field}	Redefinir {field}
+	Changed from the default	Alterado em relação ao padrão
+	Changed from the inherited scenario	Alterado em relação ao cenário herdado
+	Mixed values	Valores diferentes
+connection	Flow	Fluxo
+	Remove flow	Remover o fluxo
+	Condition	Condição
+	Shared properties	Propriedades compartilhadas
+	These blocks share no properties.	Estes blocos não compartilham nenhuma propriedade.
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	{block} está posicionado a {s} ao longo da esteira transportadora {conveyor}, cujo trajeto tem {length}. Posicione-o entre 0 e {length} ao longo do trajeto.
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	As entidades na esteira transportadora {conveyor} alcançam {before} antes de {block}, mas {block} está posicionado mais perto do início ({s} ao longo dela, {before} a {before_s}). Posicione {block} mais adiante no trajeto do que {before}, ou troque-os nos fluxos.
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	A junção no fluxo {flow} leva {time} para ser atravessada. Faça o tempo de transferência dela ser 0 ou mais.

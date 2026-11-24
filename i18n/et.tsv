@@ -1458,6 +1458,15 @@ unit	yr	a
 	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	Plokil {block} on teenindusaeg kogumile „{pool}”, mida mudelis pole. Eemalda see aeg või vali olemasolev kogum.
 	{block} has two service times for the pool “{pool}”. Keep one.	Plokil {block} on kaks teenindusaega kogumile „{pool}”. Jäta üks.
 	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	Plokil {block} on teenindusaeg kogumile „{pool}”, mida see ei vaja. Lisa kogum selle vajadustesse või eemalda see aeg.
+	Reset {field}	Lähtesta: {field}
+	Changed from the default	Vaikeväärtusest muudetud
+	Changed from the inherited scenario	Päritud stsenaariumist muudetud
+	Mixed values	Erinevad väärtused
+connection	Flow	Voog
+	Remove flow	Eemalda voog
+	Condition	Tingimus
+	Shared properties	Ühised omadused
+	These blocks share no properties.	Neil plokkidel pole ühiseid omadusi.
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	Plokk {block} on paigutatud {s} kaugusele piki konveierit {conveyor}, mille tee on {length} pikk. Paiguta see 0 ja {length} vahele piki teed.
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	Olemid konveieril {conveyor} jõuavad plokini {before} enne kui plokini {block}, kuid {block} on paigutatud alguse lähedale ({s} piki seda, {before} kohas {before_s}). Paiguta {block} teel kaugemale kui {before} või vaheta need vooludes ära.
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	Ristumiskoht voos {flow} võtab ületamiseks {time}. Tee selle ülekandeaeg 0 või suurem.
