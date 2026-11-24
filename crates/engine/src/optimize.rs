@@ -1089,17 +1089,13 @@ impl Words<'_> {
                     .filter_map(|&i| a.finalists.get(i))
                     .map(|f| design_text(ds, &f.design))
                     .collect();
-                let why = if a.flat {
-                    "some of the designs compared at the end gave the same difference in every replication of the clean-up's first stage, which does not show that they have no randomness (the model draws random numbers), so the clean-up could not tell them apart"
-                } else {
-                    "the budget ran out before the clean-up could settle it"
-                };
+                let why = not_proven_because(a.flat, a.flat_constraint);
                 format!(
                     "Best found, not proven best: {what} looks best {scope}, but {why}. Still in contention: {}.",
                     still.join(", ")
                 )
             }
-            (_, None) if constrained && a.flat => format!(
+            (_, None) if constrained && a.flat_constraint => format!(
                 "No design was proven to meet the constraints {scope}: a constrained result was the same in every replication of the check's first stage, which does not show that it has no randomness (the model draws random numbers), so the check could not settle it."
             ),
             (_, None) if constrained => format!(
@@ -1127,11 +1123,44 @@ impl Words<'_> {
     }
 }
 
+/// Why a clean-up with a best-looking design was not proven: a flat objective difference
+/// between two finalists (KN), a flat constrained result that left a finalist undecided (the
+/// feasibility check), both, or the budget.
+fn not_proven_because(flat_pair: bool, flat_constraint: bool) -> &'static str {
+    match (flat_pair, flat_constraint) {
+        (true, true) => {
+            "some of the designs compared at the end gave the same difference in every replication of the clean-up's first stage, and a constrained result of a design was the same in every replication of the feasibility check's first stage; neither shows that there is no randomness (the model draws random numbers), so the clean-up could not settle them"
+        }
+        (true, false) => {
+            "some of the designs compared at the end gave the same difference in every replication of the clean-up's first stage, which does not show that they have no randomness (the model draws random numbers), so the clean-up could not tell them apart"
+        }
+        (false, true) => {
+            "a design still in contention had a constrained result that was the same in every replication of the feasibility check's first stage, which does not show that it has no randomness (the model draws random numbers), so the check could not decide whether it meets the constraints"
+        }
+        (false, false) => "the budget ran out before the clean-up could settle it",
+    }
+}
+
 const METHOD: &str = "a space is compared whole, with no search, when it has at most all_designs_up_to designs, it can be counted (its ranges hold at most a million points) and the budget pays for the clean-up's first stage (10 replications) of every design; otherwise COMPASS (Hong and Nelson 2006) over the decisions' values, with the pruning and local-optimality test of Industrial Strength COMPASS (Xu, Nelson and Hong 2010), from the starting design and Latin hypercube starts; every design runs replication i on the same seed (common random numbers); the finalists (the search's best, the designs active around it, each start's final design and the starting design) are compared again on fresh replications seeded by Rng::keyed(seed, \"optimize/clean-up\") by Kim and Nelson's KN, after Batur and Kim's feasibility check when there are constraints (alpha split equally between the two); designs over the cost cap are never run; objective: the weighted results plus the decisions' costs, per replication; objective mean and half_width: over the clean-up's replications of the design (95% t interval); against_start: the paired difference chosen minus starting design over their common clean-up replications";
 
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn a_flat_constraint_is_not_blamed_on_the_comparison() {
+        let check = not_proven_because(false, true);
+        assert!(check.contains("feasibility check"), "{check}");
+        assert!(check.contains("meets the constraints"), "{check}");
+        assert!(!check.contains("tell them apart"), "{check}");
+        assert!(!check.contains("same difference"), "{check}");
+        let pair = not_proven_because(true, false);
+        assert!(pair.contains("same difference"), "{pair}");
+        assert!(!pair.contains("feasibility check"), "{pair}");
+        let both = not_proven_because(true, true);
+        assert!(both.contains("same difference") && both.contains("feasibility check"));
+        assert!(not_proven_because(false, false).contains("budget"));
+    }
 
     #[test]
     fn skewness_of_a_symmetric_sample_is_zero() {
