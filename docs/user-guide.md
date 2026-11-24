@@ -227,10 +227,12 @@ extension in its BPSim data).
 
 - As an entity enters the block, the table is evaluated on the entity's properties and each
   output is written back as a property of that name. A table no rule of which matches gives no
-  result (or its default output), and the outputs are cleared.
+  result (or its default output), and the outputs are cleared. An output must fit the
+  property's type: text cannot go into a property of type boolean, nor a fraction into a long.
 - A decision none of whose flows out has a condition takes the flow whose id, or whose target's
-  id or name, is the output; with conditions, the conditions read the outputs. A divert does the
-  same, then takes its default flow if the chosen way is full.
+  id or name, is the output, compared exactly (`true` names only a flow or block called `true`);
+  a value that names more than one flow is an error. With conditions, the conditions read the
+  outputs. A divert does the same, then takes its default flow if the chosen way is full.
 - The hit policies are Unique (at most one rule may match), First (the first match in rule
   order), Priority (the match whose outputs come first in the outputs' lists of values) and
   Collect (with Sum, Count, Minimum or Maximum).
@@ -241,8 +243,9 @@ extension in its BPSim data).
 - **Open decision table** on the block's page shows the table as a grid, rules in rows; each
   cell is taken when you leave it, and each change undoes in one step. A table that cannot run
   is refused with the cell and the reason.
-- The model's problems include rules that overlap in a Unique table (an error, with an example)
-  and inputs no rule covers (a warning, with an example).
+- The model's problems include rules that overlap in a Unique table (an error, with an example,
+  `null` for an entity without the property) and inputs no rule covers (a warning, with an
+  example). Inputs that read the same property are checked with one value.
 - Not yet: the hit policies Any, Rule order and Output order; names, dates and durations in
   cells; literal expressions and decisions that require other decisions. A file using them is
   refused with a message naming the construct. Numbers are 64-bit floating point.

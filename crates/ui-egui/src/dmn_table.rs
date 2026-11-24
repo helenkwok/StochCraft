@@ -19,6 +19,9 @@ use crate::{App, theme};
 /// The decision table window's state while it is open.
 #[derive(Debug, Default)]
 pub(crate) struct Grid {
+    /// The document it was opened on (`App::doc_gen`): it closes when that is replaced, so no
+    /// draft of one model reaches another's table of the same file and id.
+    doc: u64,
     /// The `.dmn` file and the decision's id.
     file: String,
     decision: String,
@@ -61,6 +64,7 @@ impl App {
     /// Opens the decision table window on decision `decision` of the `.dmn` file `file`.
     pub(crate) fn open_decision_table(&mut self, file: &str, decision: &str) {
         self.dmn_table = Some(Grid {
+            doc: self.doc_gen,
             file: file.to_owned(),
             decision: decision.to_owned(),
             typed: BTreeMap::new(),
@@ -92,12 +96,16 @@ impl App {
         }
     }
 
-    /// Draws the decision table window while it is open; it closes when its table is gone (another
-    /// model opened, an undo that removed it).
+    /// Draws the decision table window while it is open; it closes when its document is replaced
+    /// (a new model, one opened, recovered or dropped in) or its table is gone (an undo that
+    /// removed it).
     pub(crate) fn decision_table_window(&mut self, ctx: &egui::Context) {
         let Some(mut grid) = self.dmn_table.take() else {
             return;
         };
+        if grid.doc != self.doc_gen {
+            return;
+        }
         let Some(decision) = self
             .engine
             .model()
@@ -119,6 +127,8 @@ impl App {
             .collect();
         let mut open = true;
         let mut changed = false;
+        // The cells whose drafts this change takes.
+        let mut taken = Vec::new();
         let mut remove = None;
         egui::Window::new(t("Decision table"))
             .id(egui::Id::unique("dmn-table"))
@@ -210,6 +220,7 @@ impl App {
                                 }
                                 if response.lost_focus() && *current != text {
                                     *current = text;
+                                    taken.push((r, c));
                                     changed = true;
                                 }
                             }
@@ -247,17 +258,95 @@ impl App {
             changed = true;
         }
         if changed {
-            let params = json!({
-                "file": grid.file,
-                "decision": grid.decision,
-                "table": table,
-            });
-            if self.execute("dmn.set", params).is_some() {
-                grid.typed.clear();
-            }
+            self.commit_table(&mut grid, &table, &taken);
         }
         if open {
             self.dmn_table = Some(grid);
         }
+    }
+
+    /// Sends `table`, as edited, to `dmn.set`. Taken, the drafts of the cells it took (`taken`)
+    /// go; the others, refused before, stay to be corrected or given up.
+    fn commit_table(&mut self, grid: &mut Grid, table: &TableDoc, taken: &[(usize, usize)]) {
+        let params = json!({
+            "file": grid.file,
+            "decision": grid.decision,
+            "table": table,
+        });
+        if self.execute("dmn.set", params).is_some() {
+            grid.typed.retain(|k, _| !taken.contains(k));
+        }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use serde_json::json;
+
+    use crate::{App, Platform};
+
+    fn with_table() -> App {
+        let mut app = App::new(Platform::DESKTOP);
+        let example = stochcraft_engine::COMMANDS
+            .iter()
+            .find(|c| c.name == "model.set")
+            .map(|c| c.example())
+            .unwrap_or_default();
+        assert!(app.execute("model.set", example).is_some());
+        let table = json!({
+            "file": "desk.dmn",
+            "decision": "priority",
+            "table": {
+                "inputs": [{ "expression": "size" }],
+                "outputs": [{ "name": "priority" }],
+                "rules": [{ "inputs": ["< 10"], "outputs": ["1"] }, { "inputs": [">= 10"], "outputs": ["2"] }]
+            }
+        });
+        assert!(app.execute("dmn.set", table).is_some());
+        app.open_decision_table("desk.dmn", "priority");
+        app
+    }
+
+    fn doc(app: &App) -> stochcraft_engine::dmn::TableDoc {
+        let d = app
+            .engine
+            .model()
+            .dmn
+            .get("desk.dmn")
+            .and_then(|f| f.decision("priority"))
+            .map(|d| stochcraft_engine::dmn::TableDoc::from(&d.table));
+        d.unwrap_or_default()
+    }
+
+    /// A cell's refused text stays when another cell's change is taken.
+    #[test]
+    fn a_refused_draft_outlives_another_cell_s_change() {
+        let mut app = with_table();
+        let mut grid = app.dmn_table.take().unwrap_or_default();
+        // Rule 1's input: refused, its draft kept.
+        grid.typed.insert((0, 0), "[".into());
+        let mut t = doc(&app);
+        t.rules[0].inputs[0] = "[".into();
+        app.commit_table(&mut grid, &t, &[(0, 0)]);
+        assert_eq!(grid.typed.get(&(0, 0)).map(String::as_str), Some("["));
+        // Rule 2's output: taken, and only its own draft goes.
+        grid.typed.insert((1, 1), "3".into());
+        let mut t = doc(&app);
+        t.rules[1].outputs[0] = "3".into();
+        app.commit_table(&mut grid, &t, &[(1, 1)]);
+        assert_eq!(doc(&app).rules[1].outputs[0], "3");
+        assert_eq!(grid.typed.get(&(0, 0)).map(String::as_str), Some("["));
+        assert_eq!(grid.typed.get(&(1, 1)), None);
+    }
+
+    /// Another document closes the window, drafts and all, even with a table of the same file
+    /// and id.
+    #[test]
+    fn the_window_closes_when_its_document_is_replaced() {
+        let mut app = with_table();
+        app.forget_view();
+        assert!(app.dmn_table.is_some());
+        app.decision_table_window(&egui::Context::default());
+        assert!(app.dmn_table.is_none());
     }
 }
