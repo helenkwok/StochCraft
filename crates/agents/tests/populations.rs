@@ -535,3 +535,23 @@ fn a_save_interval_too_small_to_count_is_refused() {
         panic!("{e}");
     }
 }
+
+/// A save interval finer than the spacing of f64 near the current time gives save times that
+/// round to the same number; each is recorded once, so the times strictly increase.
+#[test]
+fn save_times_that_round_to_one_number_are_recorded_once() {
+    let every = 1.0 / 18_014_398_509_481_984.0; // 2^-54
+    let end = 1.0 + f64::EPSILON; // 1 + 2^-52
+    let r = match failures(3).save_every(every).run_with_warmup(1, 1.0, end) {
+        Ok(r) => r,
+        Err(e) => panic!("{e}"),
+    };
+    assert_eq!(r.times, [1.0, end]);
+    assert_eq!(r.series[0].values.len(), 2);
+    // From 0, with no warm-up, likewise: never the same time twice.
+    let r = match failures(3).save_every(every).run(1, every * 8.0) {
+        Ok(r) => r,
+        Err(e) => panic!("{e}"),
+    };
+    assert!(r.times.windows(2).all(|w| w[1] > w[0]), "{:?}", r.times);
+}

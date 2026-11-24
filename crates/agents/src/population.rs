@@ -1087,7 +1087,8 @@ impl Simulation {
     }
 
     /// Handles every event due no later than `end`, recording the statistics at each saving
-    /// time on the way (after every event at that time), then moves the clock to `end`.
+    /// time on the way (after every event at that time, and once for save times that round to
+    /// the same number), then moves the clock to `end`.
     pub fn run_until(&mut self, end: f64) -> Result<(), RunError> {
         loop {
             let next = self.next_save();
@@ -1101,7 +1102,11 @@ impl Simulation {
             }
             self.queue.advance_to(horizon);
             if next.is_some_and(|t| t <= end) {
-                self.record(horizon);
+                // A save time that rounds to the time last recorded (an interval finer than the
+                // spacing of f64 there) is not recorded again: the times strictly increase.
+                if self.times.last().is_none_or(|&last| horizon > last) {
+                    self.record(horizon);
+                }
                 self.saved = self.saved.checked_add(1).ok_or(RunError::SaveTimes {
                     time: horizon,
                     every: self.save_every.unwrap_or(0.0),
