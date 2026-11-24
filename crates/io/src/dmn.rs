@@ -34,15 +34,53 @@ fn err<T>(place: impl Into<String>, message: impl Into<String>) -> Result<T, Dmn
     })
 }
 
+/// The URIs by which DMN 1.1 to 1.6 name FEEL (each version's schema default for
+/// `expressionLanguage`).
+const FEEL_URIS: &[&str] = &[
+    "https://www.omg.org/spec/DMN/20240513/FEEL/",
+    "https://www.omg.org/spec/DMN/20230324/FEEL/",
+    "https://www.omg.org/spec/DMN/20211108/FEEL/",
+    "https://www.omg.org/spec/DMN/20191111/FEEL/",
+    "http://www.omg.org/spec/DMN/20180521/FEEL/",
+    "http://www.omg.org/spec/FEEL/20140401",
+];
+
+/// Whether `lang` names FEEL: one of [`FEEL_URIS`], whatever its scheme (`http` or `https`),
+/// case or final `/`, or the bare name `feel` some tools write.
+fn is_feel(lang: &str) -> bool {
+    let bare = |s: &str| -> String {
+        let s = s.trim().to_ascii_lowercase();
+        s.strip_prefix("https://")
+            .or_else(|| s.strip_prefix("http://"))
+            .unwrap_or(&s)
+            .trim_end_matches('/')
+            .to_owned()
+    };
+    lang.trim().eq_ignore_ascii_case("feel") || FEEL_URIS.iter().any(|u| bare(u) == bare(lang))
+}
+
 /// Whether an `expressionLanguage` attribute names FEEL (or is absent, FEEL by default).
 fn feel(e: &Element, place: &str) -> Result<(), DmnError> {
     match e.attr("expressionLanguage") {
-        Some(lang) if !lang.contains("FEEL") => err(
+        Some(lang) if !is_feel(&lang) => err(
             place,
             format!("the expression language “{lang}” is not supported (only FEEL is)"),
         ),
         _ => Ok(()),
     }
+}
+
+/// The text of a literal expression (an output entry or a default output entry): `None` without
+/// one. Its language must be FEEL, and values imported from elsewhere are refused.
+fn literal_text(e: &Element, ns: &str, place: &str) -> Result<Option<String>, DmnError> {
+    feel(e, place)?;
+    if e.child(&[ns], "importedValues").is_some() {
+        return err(
+            place,
+            "imported values are not supported yet: write the value as text",
+        );
+    }
+    Ok(text_of(e, ns))
 }
 
 /// The children of a decision that are not its logic.
@@ -242,16 +280,26 @@ fn read_table(t: &Element, ns: &str) -> Result<Table, DmnError> {
             values,
         });
     }
-    for c in t.children_named(&[ns], "output") {
+    for (j, c) in t.children_named(&[ns], "output").enumerate() {
+        let place = format!("output {}", j + 1);
+        let values = match c.child(&[ns], "outputValues") {
+            Some(v) => {
+                feel(v, &place)?;
+                text_of(v, ns)
+            }
+            None => None,
+        };
+        let default = match c.child(&[ns], "defaultOutputEntry") {
+            Some(v) => literal_text(v, ns, &format!("{place} default"))?,
+            None => None,
+        };
         table.outputs.push(Output {
             id: opt_attr(c, "id"),
             label: opt_attr(c, "label"),
             name: opt_attr(c, "name"),
             type_ref: opt_attr(c, "typeRef"),
-            values: c.child(&[ns], "outputValues").and_then(|v| text_of(v, ns)),
-            default: c
-                .child(&[ns], "defaultOutputEntry")
-                .and_then(|v| text_of(v, ns)),
+            values,
+            default,
         });
     }
     for c in t.children_named(&[ns], "annotation") {
@@ -272,8 +320,8 @@ fn read_table(t: &Element, ns: &str) -> Result<Table, DmnError> {
             rule.inputs.push(text_of(x, ns).unwrap_or_default());
         }
         for x in c.children_named(&[ns], "outputEntry") {
-            feel(x, &place)?;
-            rule.outputs.push(text_of(x, ns).unwrap_or_default());
+            rule.outputs
+                .push(literal_text(x, ns, &place)?.unwrap_or_default());
         }
         for x in c.children_named(&[ns], "annotationEntry") {
             rule.annotations.push(text_of(x, ns).unwrap_or_default());
@@ -316,56 +364,64 @@ fn set_opt(e: &mut Element, name: &str, value: Option<&str>) {
     }
 }
 
+fn input_element(prefix: &str, input: &Input) -> Element {
+    let mut c = el(prefix, "input");
+    set_opt(&mut c, "id", input.id.as_deref());
+    set_opt(&mut c, "label", input.label.as_deref());
+    let mut x = texted(prefix, "inputExpression", &input.expression);
+    set_opt(&mut x, "typeRef", input.type_ref.as_deref());
+    c.push(x);
+    if let Some(v) = &input.values {
+        c.push(texted(prefix, "inputValues", v));
+    }
+    c
+}
+
+fn output_element(prefix: &str, output: &Output) -> Element {
+    let mut c = el(prefix, "output");
+    set_opt(&mut c, "id", output.id.as_deref());
+    set_opt(&mut c, "label", output.label.as_deref());
+    set_opt(&mut c, "name", output.name.as_deref());
+    set_opt(&mut c, "typeRef", output.type_ref.as_deref());
+    if let Some(v) = &output.values {
+        c.push(texted(prefix, "outputValues", v));
+    }
+    if let Some(v) = &output.default {
+        c.push(texted(prefix, "defaultOutputEntry", v));
+    }
+    c
+}
+
+fn rule_element(prefix: &str, rule: &Rule) -> Element {
+    let mut c = el(prefix, "rule");
+    set_opt(&mut c, "id", rule.id.as_deref());
+    if let Some(d) = &rule.description {
+        c.push(el(prefix, "description").with_text(d));
+    }
+    for x in &rule.inputs {
+        c.push(texted(prefix, "inputEntry", x));
+    }
+    for x in &rule.outputs {
+        c.push(texted(prefix, "outputEntry", x));
+    }
+    for x in &rule.annotations {
+        c.push(texted(prefix, "annotationEntry", x));
+    }
+    c
+}
+
 /// The children of a decision table: its inputs, outputs, annotation columns and rules, in the
 /// schema's order.
 fn table_children(prefix: &str, t: &Table) -> Vec<Element> {
     let mut out = Vec::new();
-    for input in &t.inputs {
-        let mut c = el(prefix, "input");
-        set_opt(&mut c, "id", input.id.as_deref());
-        set_opt(&mut c, "label", input.label.as_deref());
-        let mut x = texted(prefix, "inputExpression", &input.expression);
-        set_opt(&mut x, "typeRef", input.type_ref.as_deref());
-        c.push(x);
-        if let Some(v) = &input.values {
-            c.push(texted(prefix, "inputValues", v));
-        }
-        out.push(c);
-    }
-    for output in &t.outputs {
-        let mut c = el(prefix, "output");
-        set_opt(&mut c, "id", output.id.as_deref());
-        set_opt(&mut c, "label", output.label.as_deref());
-        set_opt(&mut c, "name", output.name.as_deref());
-        set_opt(&mut c, "typeRef", output.type_ref.as_deref());
-        if let Some(v) = &output.values {
-            c.push(texted(prefix, "outputValues", v));
-        }
-        if let Some(v) = &output.default {
-            c.push(texted(prefix, "defaultOutputEntry", v));
-        }
-        out.push(c);
-    }
-    for a in &t.annotations {
-        out.push(el(prefix, "annotation").with_attr("name", a));
-    }
-    for rule in &t.rules {
-        let mut c = el(prefix, "rule");
-        set_opt(&mut c, "id", rule.id.as_deref());
-        if let Some(d) = &rule.description {
-            c.push(el(prefix, "description").with_text(d));
-        }
-        for x in &rule.inputs {
-            c.push(texted(prefix, "inputEntry", x));
-        }
-        for x in &rule.outputs {
-            c.push(texted(prefix, "outputEntry", x));
-        }
-        for x in &rule.annotations {
-            c.push(texted(prefix, "annotationEntry", x));
-        }
-        out.push(c);
-    }
+    out.extend(t.inputs.iter().map(|c| input_element(prefix, c)));
+    out.extend(t.outputs.iter().map(|c| output_element(prefix, c)));
+    out.extend(
+        t.annotations
+            .iter()
+            .map(|a| el(prefix, "annotation").with_attr("name", a)),
+    );
+    out.extend(t.rules.iter().map(|r| rule_element(prefix, r)));
     out
 }
 
@@ -381,10 +437,10 @@ fn table_attrs(e: &mut Element, t: &Table) {
 }
 
 fn decision_element(prefix: &str, d: &Decision) -> Element {
-    let mut e = el(prefix, "decision").with_attr("id", &d.id);
-    if !d.name.is_empty() {
-        e.set_attr("name", &d.name);
-    }
+    // The schema requires a name, even an empty one.
+    let mut e = el(prefix, "decision")
+        .with_attr("id", &d.id)
+        .with_attr("name", &d.name);
     if let Some(v) = &d.variable {
         e.push(el(prefix, "variable").with_attr("name", v));
     }
@@ -399,17 +455,18 @@ fn decision_element(prefix: &str, d: &Decision) -> Element {
 
 /// A new DMN 1.6 file with `defs`'s decisions.
 pub fn write_dmn(defs: &Definitions) -> String {
-    let mut root = el("", "definitions").with_attr("xmlns", DMN_NS).with_attr(
-        "id",
-        if defs.id.is_empty() {
-            "definitions"
-        } else {
-            defs.id.as_str()
-        },
-    );
-    if !defs.name.is_empty() {
-        root.set_attr("name", &defs.name);
-    }
+    let mut root = el("", "definitions")
+        .with_attr("xmlns", DMN_NS)
+        .with_attr(
+            "id",
+            if defs.id.is_empty() {
+                "definitions"
+            } else {
+                defs.id.as_str()
+            },
+        )
+        // The schema requires a name, even an empty one.
+        .with_attr("name", &defs.name);
     let namespace = if defs.namespace.is_empty() {
         "https://helenkwok.github.io/StochCraft/dmn"
     } else {
@@ -422,25 +479,424 @@ pub fn write_dmn(defs: &Definitions) -> String {
     xml::write(&Document::new(root))
 }
 
-/// Puts line breaks and indentation between the children of `e` (built in memory, inside parsed
-/// content that keeps its own whitespace), `indent` being the indentation of `e` itself.
+/// Puts line breaks and indentation between the children of `e`, an element StochCraft built
+/// (inside parsed content that keeps its own whitespace), and so on down: `indent` is the
+/// indentation of `e` itself.
 fn lay_out(e: &mut Element, indent: &str) {
     if !e.children.iter().any(|n| matches!(n, Node::Element(_))) {
         return;
     }
+    let nodes = std::mem::take(&mut e.children);
+    arrange(e, nodes, indent);
+}
+
+/// Makes `nodes` the children of `e` (whose own indentation is `indent`), each on a line of its
+/// own one step further in, the whitespace that was between them dropped. Those StochCraft built
+/// are laid out in turn ([`lay_out`]); a parsed one is kept as it was, whatever it holds.
+fn arrange(e: &mut Element, nodes: Vec<Node>, indent: &str) {
     let inner = format!("{indent}  ");
     let mut out = Vec::new();
-    for n in std::mem::take(&mut e.children) {
-        if let Node::Element(mut c) = n {
-            lay_out(&mut c, &inner);
-            out.push(Node::Text(format!("\n{inner}")));
-            out.push(Node::Element(c));
-        } else {
-            out.push(n);
+    for n in nodes {
+        match n {
+            Node::Text(t) if t.trim().is_empty() => {}
+            Node::Element(mut c) => {
+                if c.is_new() {
+                    lay_out(&mut c, &inner);
+                }
+                out.push(Node::Text(format!("\n{inner}")));
+                out.push(Node::Element(c));
+            }
+            other => {
+                out.push(Node::Text(format!("\n{inner}")));
+                out.push(other);
+            }
         }
     }
     out.push(Node::Text(format!("\n{indent}")));
     e.children = out;
+}
+
+/// The indentation of the line `e`'s end tag is on, if its content ends with a line break.
+fn closing_indent(e: &Element) -> Option<String> {
+    match e.children.last() {
+        Some(Node::Text(t)) if t.contains('\n') && t.trim().is_empty() => {
+            t.rsplit('\n').next().map(str::to_owned)
+        }
+        _ => None,
+    }
+}
+
+/// For each of `new`'s items, the one of `old`'s it continues, if any: the one with the same id;
+/// for an item without an id, one without an id that is equal to it, else the one at its place
+/// if that has no id either. Each of `old`'s is taken once.
+fn pair<T: PartialEq>(old: &[T], new: &[T], id: impl Fn(&T) -> Option<&str>) -> Vec<Option<usize>> {
+    let mut used = vec![false; old.len()];
+    let mut out: Vec<Option<usize>> = vec![None; new.len()];
+    // Three passes: by id, then equal items without ids, then items without ids by place.
+    for pass in 0..3 {
+        for (j, n) in new.iter().enumerate() {
+            if out[j].is_some() || (pass == 0) != id(n).is_some() {
+                continue;
+            }
+            let fits = |i: usize, o: &T| {
+                !used[i]
+                    && match pass {
+                        0 => id(o) == id(n),
+                        1 => id(o).is_none() && o == n,
+                        _ => i == j && id(o).is_none(),
+                    }
+            };
+            if let Some(i) = old.iter().enumerate().position(|(i, o)| fits(i, o)) {
+                used[i] = true;
+                out[j] = Some(i);
+            }
+        }
+    }
+    out
+}
+
+/// Whether `pairs` keeps all of `old` items, each where it was.
+fn in_place(pairs: &[Option<usize>], old: usize) -> bool {
+    pairs.len() == old && pairs.iter().enumerate().all(|(j, p)| *p == Some(j))
+}
+
+/// Sets attribute `name` to `now` where it differs from `was` (so an attribute that is not
+/// edited keeps its exact spelling).
+fn set_changed(e: &mut Element, name: &str, was: Option<&str>, now: Option<&str>) {
+    if was != now {
+        set_opt(e, name, now);
+    }
+}
+
+/// Where a child of an element was, among the others, when [`Patch::split`] took it out.
+enum Slot {
+    Node(Node),
+    Part(usize, usize),
+}
+
+/// Writes an edited table into the parsed `decisionTable` element it was read from. Every
+/// column, rule and cell element that is still there is kept, with what the model does not hold
+/// of it (the id of a cell, extension elements, attributes of other namespaces, comments): only
+/// what was edited is written. An element that keeps its children in their order keeps its
+/// whitespace too; one whose children change is laid out again, one level only.
+struct Patch<'a> {
+    ns: &'a str,
+    prefix: &'a str,
+}
+
+impl Patch<'_> {
+    /// Takes `e`'s children out: the elements of `kinds` (in the DMN namespace), each kind's in
+    /// order, and where each was among the rest.
+    fn split(&self, e: &mut Element, kinds: &[&str]) -> (Vec<Vec<Option<Element>>>, Vec<Slot>) {
+        let mut parts: Vec<Vec<Option<Element>>> = kinds.iter().map(|_| Vec::new()).collect();
+        let mut slots = Vec::new();
+        for n in std::mem::take(&mut e.children) {
+            let kind = match &n {
+                Node::Element(c) => kinds.iter().position(|k| c.is(self.ns, k)),
+                _ => None,
+            };
+            match (kind, n) {
+                (Some(k), Node::Element(c)) => {
+                    if let Some(list) = parts.get_mut(k) {
+                        slots.push(Slot::Part(k, list.len()));
+                        list.push(Some(c));
+                    }
+                }
+                (_, n) => slots.push(Slot::Node(n)),
+            }
+        }
+        (parts, slots)
+    }
+
+    /// Puts `e`'s children back: `built`, per kind, for what [`Patch::split`] took out. If `same`
+    /// (the same elements, in the same order) each goes where its old one was; otherwise the
+    /// first `lead` kinds, then the rest, then the other kinds, all laid out again ([`arrange`]).
+    fn put(
+        e: &mut Element,
+        slots: Vec<Slot>,
+        built: Vec<Vec<Element>>,
+        same: bool,
+        lead: usize,
+        indent: &str,
+    ) {
+        if same {
+            let mut built: Vec<Vec<Option<Element>>> = built
+                .into_iter()
+                .map(|v| v.into_iter().map(Some).collect())
+                .collect();
+            e.children = slots
+                .into_iter()
+                .filter_map(|s| match s {
+                    Slot::Node(n) => Some(n),
+                    Slot::Part(k, i) => built.get_mut(k)?.get_mut(i)?.take().map(Node::Element),
+                })
+                .collect();
+            return;
+        }
+        let rest = slots.into_iter().filter_map(|s| match s {
+            Slot::Node(n) => Some(n),
+            Slot::Part(..) => None,
+        });
+        let mut built = built.into_iter();
+        let first: Vec<Node> = built
+            .by_ref()
+            .take(lead)
+            .flatten()
+            .map(Node::Element)
+            .collect();
+        let nodes = first
+            .into_iter()
+            .chain(rest)
+            .chain(built.flatten().map(Node::Element))
+            .collect();
+        arrange(e, nodes, indent);
+    }
+
+    /// Sets the text of cell `c` (its `text` child's).
+    fn set_text(&self, c: &mut Element, text: &str) {
+        match c.child_mut(&[self.ns], "text") {
+            Some(t) => t.children = vec![Node::Text(xml::escape(text))],
+            None => c.push(el(self.prefix, "text").with_text(text)),
+        }
+    }
+
+    /// An optional texted child (`local`), found or not, as it is to be (`now`, from `was`); and
+    /// whether it stays as it was there.
+    fn optional(
+        &self,
+        found: Option<Element>,
+        local: &str,
+        was: Option<&str>,
+        now: Option<&str>,
+    ) -> (Vec<Element>, bool) {
+        match (found, now) {
+            (Some(mut c), Some(v)) => {
+                if was != Some(v) {
+                    self.set_text(&mut c, v);
+                }
+                (vec![c], true)
+            }
+            (Some(_), None) => (Vec::new(), false),
+            (None, Some(v)) => (vec![texted(self.prefix, local, v)], false),
+            (None, None) => (Vec::new(), true),
+        }
+    }
+
+    fn table(&self, table: &mut Element, old: &Table, new: &Table, indent: &str) {
+        let inner = format!("{indent}  ");
+        let inputs = pair(&old.inputs, &new.inputs, |c| c.id.as_deref());
+        let outputs = pair(&old.outputs, &new.outputs, |c| c.id.as_deref());
+        let annotations = pair(&old.annotations, &new.annotations, |_| None);
+        let rules = pair(&old.rules, &new.rules, |r| r.id.as_deref());
+        let (mut parts, slots) = self.split(table, &["input", "output", "annotation", "rule"]);
+        let mut kept = |k: usize, from: &Option<usize>| -> Option<(usize, Element)> {
+            let i = (*from)?;
+            Some((i, parts.get_mut(k)?.get_mut(i)?.take()?))
+        };
+        let built_inputs: Vec<Element> = new
+            .inputs
+            .iter()
+            .zip(&inputs)
+            .map(
+                |(c, from)| match (kept(0, from), from.and_then(|i| old.inputs.get(i))) {
+                    (Some((_, mut e)), Some(was)) => {
+                        self.input(&mut e, was, c, &inner);
+                        e
+                    }
+                    _ => input_element(self.prefix, c),
+                },
+            )
+            .collect();
+        let built_outputs: Vec<Element> = new
+            .outputs
+            .iter()
+            .zip(&outputs)
+            .map(
+                |(c, from)| match (kept(1, from), from.and_then(|i| old.outputs.get(i))) {
+                    (Some((_, mut e)), Some(was)) => {
+                        self.output(&mut e, was, c, &inner);
+                        e
+                    }
+                    _ => output_element(self.prefix, c),
+                },
+            )
+            .collect();
+        let built_annotations: Vec<Element> = new
+            .annotations
+            .iter()
+            .zip(&annotations)
+            .map(|(a, from)| match kept(2, from) {
+                Some((i, mut e)) => {
+                    set_changed(
+                        &mut e,
+                        "name",
+                        old.annotations.get(i).map(String::as_str),
+                        Some(a.as_str()),
+                    );
+                    e
+                }
+                None => el(self.prefix, "annotation").with_attr("name", a),
+            })
+            .collect();
+        let columns: [&[Option<usize>]; 3] = [&inputs, &outputs, &annotations];
+        let built_rules: Vec<Element> = new
+            .rules
+            .iter()
+            .zip(&rules)
+            .map(
+                |(r, from)| match (kept(3, from), from.and_then(|i| old.rules.get(i))) {
+                    (Some((_, mut e)), Some(was)) => {
+                        self.rule(&mut e, was, r, &columns, &inner);
+                        e
+                    }
+                    _ => rule_element(self.prefix, r),
+                },
+            )
+            .collect();
+        let same = in_place(&inputs, old.inputs.len())
+            && in_place(&outputs, old.outputs.len())
+            && in_place(&annotations, old.annotations.len())
+            && in_place(&rules, old.rules.len());
+        Self::put(
+            table,
+            slots,
+            vec![built_inputs, built_outputs, built_annotations, built_rules],
+            same,
+            0,
+            indent,
+        );
+    }
+
+    fn input(&self, e: &mut Element, old: &Input, new: &Input, fallback: &str) {
+        set_changed(e, "id", old.id.as_deref(), new.id.as_deref());
+        set_changed(e, "label", old.label.as_deref(), new.label.as_deref());
+        let indent = closing_indent(e).unwrap_or_else(|| fallback.to_owned());
+        let (mut parts, slots) = self.split(e, &["inputExpression", "inputValues"]);
+        let first =
+            |parts: &mut [Vec<Option<Element>>], k: usize| parts.get_mut(k)?.first_mut()?.take();
+        let (mut x, x_same) = self.optional(
+            first(parts.as_mut_slice(), 0),
+            "inputExpression",
+            Some(old.expression.as_str()),
+            Some(new.expression.as_str()),
+        );
+        for x in &mut x {
+            set_changed(
+                x,
+                "typeRef",
+                old.type_ref.as_deref(),
+                new.type_ref.as_deref(),
+            );
+        }
+        let (values, values_same) = self.optional(
+            first(parts.as_mut_slice(), 1),
+            "inputValues",
+            old.values.as_deref(),
+            new.values.as_deref(),
+        );
+        Self::put(e, slots, vec![x, values], x_same && values_same, 0, &indent);
+    }
+
+    fn output(&self, e: &mut Element, old: &Output, new: &Output, fallback: &str) {
+        set_changed(e, "id", old.id.as_deref(), new.id.as_deref());
+        set_changed(e, "label", old.label.as_deref(), new.label.as_deref());
+        set_changed(e, "name", old.name.as_deref(), new.name.as_deref());
+        set_changed(
+            e,
+            "typeRef",
+            old.type_ref.as_deref(),
+            new.type_ref.as_deref(),
+        );
+        let indent = closing_indent(e).unwrap_or_else(|| fallback.to_owned());
+        let (mut parts, slots) = self.split(e, &["outputValues", "defaultOutputEntry"]);
+        let first =
+            |parts: &mut [Vec<Option<Element>>], k: usize| parts.get_mut(k)?.first_mut()?.take();
+        let (values, values_same) = self.optional(
+            first(parts.as_mut_slice(), 0),
+            "outputValues",
+            old.values.as_deref(),
+            new.values.as_deref(),
+        );
+        let (default, default_same) = self.optional(
+            first(parts.as_mut_slice(), 1),
+            "defaultOutputEntry",
+            old.default.as_deref(),
+            new.default.as_deref(),
+        );
+        Self::put(
+            e,
+            slots,
+            vec![values, default],
+            values_same && default_same,
+            0,
+            &indent,
+        );
+    }
+
+    /// Rule `e`, read as `old`, written as `new`, its cells following their columns
+    /// (`columns`: for the inputs, outputs and annotations, the old column each new one is).
+    fn rule(
+        &self,
+        e: &mut Element,
+        old: &Rule,
+        new: &Rule,
+        columns: &[&[Option<usize>]; 3],
+        fallback: &str,
+    ) {
+        set_changed(e, "id", old.id.as_deref(), new.id.as_deref());
+        let indent = closing_indent(e).unwrap_or_else(|| fallback.to_owned());
+        let kinds = ["inputEntry", "outputEntry", "annotationEntry"];
+        let (mut parts, slots) = self.split(e, &["description", kinds[0], kinds[1], kinds[2]]);
+        let mut same = true;
+        let found = parts.get_mut(0).and_then(|d| d.first_mut()?.take());
+        let description = match (found, &new.description) {
+            (Some(mut d), Some(text)) => {
+                if old.description != new.description {
+                    d.children = vec![Node::Text(xml::escape(text))];
+                }
+                vec![d]
+            }
+            (Some(_), None) => {
+                same = false;
+                Vec::new()
+            }
+            (None, Some(text)) => {
+                same = false;
+                vec![el(self.prefix, "description").with_text(text)]
+            }
+            (None, None) => Vec::new(),
+        };
+        let mut built = vec![description];
+        let was = [&old.inputs, &old.outputs, &old.annotations];
+        let now = [&new.inputs, &new.outputs, &new.annotations];
+        for (k, local) in kinds.iter().enumerate() {
+            let (Some(pairs), Some(was), Some(now)) = (columns.get(k), was.get(k), now.get(k))
+            else {
+                continue;
+            };
+            let cells = parts.get_mut(k + 1);
+            same &= cells.as_ref().is_some_and(|c| in_place(pairs, c.len()));
+            let mut cells = cells.map(std::mem::take).unwrap_or_default();
+            built.push(
+                now.iter()
+                    .zip(pairs.iter())
+                    .map(|(text, from)| {
+                        let kept = from.and_then(|i| Some((i, cells.get_mut(i)?.take()?)));
+                        match kept {
+                            Some((i, mut c)) => {
+                                if was.get(i) != Some(text) {
+                                    self.set_text(&mut c, text);
+                                }
+                                c
+                            }
+                            None => texted(self.prefix, local, text),
+                        }
+                    })
+                    .collect(),
+            );
+        }
+        Self::put(e, slots, built, same, 1, &indent);
+    }
 }
 
 /// The indentation of the line a child at `index` of `parent` starts on, from the text before it.
@@ -513,22 +969,11 @@ pub fn save_dmn(
             p => format!("{p}:"),
         };
         table_attrs(table, &new.table);
-        // Its description and extension elements stay; the columns and rules are written anew.
-        let kept: Vec<Node> = std::mem::take(&mut table.children)
-            .into_iter()
-            .filter(|n| match n {
-                Node::Element(e) => {
-                    e.ns.as_deref() != Some(ns.as_str())
-                        || matches!(e.local(), "description" | "extensionElements")
-                }
-                _ => false,
-            })
-            .collect();
-        table.children = kept;
-        for c in table_children(&prefix, &new.table) {
-            table.push(c);
+        Patch {
+            ns: &ns,
+            prefix: &prefix,
         }
-        lay_out(table, &indent);
+        .table(table, &old.table, &new.table, &indent);
     }
     let bytes = xml::write(&doc).into_bytes();
     // What was written must read back as what was meant.
@@ -708,5 +1153,142 @@ mod tests {
         );
         assert!(refusal(&java).contains("expression language"));
         assert!(refusal("<definitions/>").contains("not a DMN file"));
+    }
+
+    #[test]
+    fn feel_is_named_by_its_uris_exactly() {
+        let with = |lang: &str| {
+            FILE.replace(
+                r#"<dmn:decisionTable id="t1" hitPolicy="FIRST">"#,
+                &format!(
+                    r#"<dmn:decisionTable id="t1" hitPolicy="FIRST" expressionLanguage="{lang}">"#
+                ),
+            )
+        };
+        for ok in [
+            "https://www.omg.org/spec/DMN/20240513/FEEL/",
+            "https://www.omg.org/spec/DMN/20191111/FEEL/",
+            "http://www.omg.org/spec/DMN/20180521/FEEL/",
+            "http://www.omg.org/spec/FEEL/20140401",
+            "http://www.omg.org/spec/DMN/20240513/FEEL",
+            "feel",
+        ] {
+            assert_eq!(read(&with(ok)), read(FILE), "{ok}");
+        }
+        for not in ["https://example.org/FEELish", "FEEL-like", "urn:other"] {
+            assert!(refusal(&with(not)).contains("expression language"), "{not}");
+        }
+    }
+
+    #[test]
+    fn output_values_and_defaults_are_feel_text() {
+        let output = |inner: &str| {
+            FILE.replace(
+                r#"<dmn:output id="o1"/>"#,
+                &format!(r#"<dmn:output id="o1">{inner}</dmn:output>"#),
+            )
+        };
+        let other = output(
+            r#"<dmn:defaultOutputEntry expressionLanguage="urn:other"><dmn:text>"large"</dmn:text></dmn:defaultOutputEntry>"#,
+        );
+        assert!(
+            refusal(&other).contains("output 1 default"),
+            "{}",
+            refusal(&other)
+        );
+        let values = output(
+            r#"<dmn:outputValues expressionLanguage="urn:other"><dmn:text>"small","large"</dmn:text></dmn:outputValues>"#,
+        );
+        assert!(refusal(&values).contains("expression language"));
+        let imported = output(
+            r#"<dmn:defaultOutputEntry><dmn:importedValues importType="urn:x"><dmn:importedElement>x</dmn:importedElement></dmn:importedValues></dmn:defaultOutputEntry>"#,
+        );
+        assert!(refusal(&imported).contains("imported values"));
+        // Text in FEEL is read, as before.
+        let fine = output(
+            r#"<dmn:defaultOutputEntry><dmn:text>"large"</dmn:text></dmn:defaultOutputEntry>"#,
+        );
+        assert_eq!(
+            read(&fine).decisions[0].table.outputs[0].default.as_deref(),
+            Some("\"large\"")
+        );
+    }
+
+    #[test]
+    fn names_are_written_even_when_empty() {
+        let mut d = read(FILE);
+        d.name.clear();
+        d.decisions[0].name.clear();
+        let text = write_dmn(&d);
+        assert!(text.contains(r#"<definitions xmlns="https://www.omg.org/spec/DMN/20240513/MODEL/" id="hub" name="""#), "{text}");
+        assert!(text.contains(r#"<decision id="chute" name="">"#), "{text}");
+        assert_eq!(read(&text), d);
+    }
+
+    #[test]
+    fn an_edited_cell_changes_only_its_text() {
+        let before = read(FILE);
+        let mut after = before.clone();
+        after.decisions[0].table.rules[0].inputs[0] = "< 12".into();
+        let bytes = save_dmn(FILE.as_bytes(), &before, &after).unwrap_or_else(|e| panic!("{e}"));
+        assert_eq!(
+            String::from_utf8_lossy(&bytes),
+            FILE.replace("&lt; 10", "&lt; 12")
+        );
+    }
+
+    #[test]
+    fn what_the_model_does_not_hold_survives_an_edit() {
+        let file = FILE
+            .replace(
+                r#"<dmn:decisionTable id="t1" hitPolicy="FIRST">"#,
+                "<dmn:decisionTable id=\"t1\" hitPolicy=\"FIRST\">\n      <dmn:extensionElements><v:label xmlns:v=\"urn:v\">A<v:marker/>B</v:label></dmn:extensionElements>",
+            )
+            .replace(
+                "<dmn:inputEntry><dmn:text>&lt; 10</dmn:text></dmn:inputEntry>",
+                "<dmn:extensionElements><v:note xmlns:v=\"urn:v\">C<v:marker/>D</v:note></dmn:extensionElements>\n        <dmn:inputEntry id=\"ie1\" v:x=\"1\" xmlns:v=\"urn:v\"><dmn:text>&lt; 10</dmn:text></dmn:inputEntry>",
+            )
+            .replace(
+                r#"<dmn:outputEntry><dmn:text>"small"</dmn:text></dmn:outputEntry>"#,
+                r#"<dmn:outputEntry id="oe1"><dmn:text>"small"</dmn:text></dmn:outputEntry>"#,
+            );
+        let before = read(&file);
+        let mut after = before.clone();
+        let t = &mut after.decisions[0].table;
+        t.rules[0].outputs[0] = "\"tiny\"".into();
+        t.rules.insert(
+            0,
+            Rule {
+                inputs: vec!["> 100".into()],
+                outputs: vec!["\"pallet\"".into()],
+                annotations: vec![String::new()],
+                ..Rule::default()
+            },
+        );
+        let bytes = save_dmn(file.as_bytes(), &before, &after).unwrap_or_else(|e| panic!("{e}"));
+        let text = String::from_utf8_lossy(&bytes).into_owned();
+        assert_eq!(read(&text), after);
+        for kept in [
+            // The table's extension, its mixed content as it was.
+            "<dmn:extensionElements><v:label xmlns:v=\"urn:v\">A<v:marker/>B</v:label></dmn:extensionElements>",
+            // The rule's extension, and the cell's id and attribute of another namespace.
+            "<dmn:extensionElements><v:note xmlns:v=\"urn:v\">C<v:marker/>D</v:note></dmn:extensionElements>",
+            "<dmn:inputEntry id=\"ie1\" v:x=\"1\" xmlns:v=\"urn:v\"><dmn:text>&lt; 10</dmn:text></dmn:inputEntry>",
+            // The edited cell keeps its id.
+            r#"<dmn:outputEntry id="oe1"><dmn:text>"tiny"</dmn:text></dmn:outputEntry>"#,
+        ] {
+            assert!(text.contains(kept), "{kept}\n{text}");
+        }
+        // The new rule comes first, laid out below the table.
+        let new_rule = text.find("&gt; 100").unwrap_or(usize::MAX);
+        assert!(new_rule < text.find("ie1").unwrap_or(0), "{text}");
+        // Removing a rule keeps the one that stays as it was, its cells' ids with it.
+        let mut fewer = before.clone();
+        fewer.decisions[0].table.rules.remove(1);
+        let bytes = save_dmn(file.as_bytes(), &before, &fewer).unwrap_or_else(|e| panic!("{e}"));
+        let text = String::from_utf8_lossy(&bytes).into_owned();
+        assert_eq!(read(&text), fewer);
+        assert!(text.contains("id=\"ie1\""), "{text}");
+        assert!(!text.contains("r_rest"), "{text}");
     }
 }
