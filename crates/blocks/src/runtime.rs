@@ -4968,7 +4968,7 @@ impl BeltClock {
     }
 }
 
-//// A divert point on a conveyor (ROADMAP.md, M5.5, L5; [`stochcraft_model::site::points`]): a
+/// A divert point on a conveyor (ROADMAP.md, M5.5, L5; [`stochcraft_model::site::points`]): a
 /// divert gateway met at `s` along the belt (in the run's length).
 struct BeltPoint {
     s: f64,
