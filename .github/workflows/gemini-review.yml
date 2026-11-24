@@ -147,12 +147,14 @@ jobs:
             cause='none'
           elif [[ -f "${log}" ]] && grep -q -i 'exhausted your daily quota' "${log}"; then
             cause='quota'
-          elif [[ -f "${RUNNER_TEMP}/gemini-guard/stopped" ]] || { [[ -f "${log}" ]] && grep -q -E 'status 503|high demand' "${log}"; }; then
+          elif [[ -f "${RUNNER_TEMP}/gemini-guard/stopped" ]]; then
             cause='503'
           elif [[ ! -f gemini-artifacts/stderr.log && -f "${RUNNER_TEMP}/gemini-guard/stderr.log" ]]; then
             # The CLI started (the guard saw its stderr) but never exited: the action copies stderr
             # to gemini-artifacts when the CLI exits, so the step's time limit stopped it.
             cause='time'
+          elif [[ -f "${log}" ]] && grep -q -E 'status 503|high demand' "${log}"; then
+            cause='503'
           else
             cause='other'
           fi

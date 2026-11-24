@@ -304,7 +304,7 @@ jobs:
                 message="The Gemini review stopped: the free tier's daily limit of 20 requests is used up. It resets at ${QUOTA_RESETS} (in ${QUOTA_ETA}); until then, requests skip Gemini without calling it."
                 ;;
               503)
-                message="The Gemini review stopped after two failed requests, usually the model answering 503 (high demand). It is stopped early because every retry counts against the free tier's daily limit of 20 requests. ${again}"
+                message="The Gemini review stopped because its requests failed, usually with the model answering 503 (high demand). It stops after two failed requests, because every retry counts against the free tier's daily limit of 20 requests. ${again}"
                 ;;
               time)
                 message="The Gemini review ran out of its 5 minutes. ${again}"
