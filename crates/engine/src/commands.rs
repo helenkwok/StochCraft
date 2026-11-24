@@ -2517,6 +2517,10 @@ fn file_open(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
     })
 }
 
+/// A file to write beside the model: its reference, where, its bytes, and what was there when the
+/// save looked (`None`: nothing).
+type Sibling = (String, std::path::PathBuf, Vec<u8>, Option<Vec<u8>>);
+
 fn file_save(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
     let p: FileSave = parse(p)?;
     let path = p
@@ -2622,7 +2626,7 @@ fn file_save(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         .collect();
     let mut companions = Vec::new();
     // Each file to write, with what was there when the save looked (`None`: nothing).
-    let mut siblings: Vec<(String, std::path::PathBuf, Vec<u8>, Option<Vec<u8>>)> = Vec::new();
+    let mut siblings: Vec<Sibling> = Vec::new();
     // The `.dmn` files already as the model would write them.
     let mut same = Vec::new();
     for (href, content, replaceable) in files {
