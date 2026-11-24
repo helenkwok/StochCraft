@@ -530,7 +530,9 @@ designs".
   with no probability. A model that draws random numbers is never compared exactly, even when
   designs give the same values in every run so far: a rare event may simply not have happened
   yet. When two designs give the same difference in every run of the final comparison's first
-  stage, the answer says "best found, not proven best" and why.
+  stage, the answer says "best found, not proven best" and why. An objective of costs alone
+  (`--cost` with constraints, no result in the objective) is known exactly, so the designs that
+  meet the constraints are compared on it exactly.
 
 Scripts and agents use the engine command `experiment.optimise` ([mcp.md](mcp.md)); its `apply`
 makes the chosen design the model's, as one change you can undo.

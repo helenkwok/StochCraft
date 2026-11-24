@@ -42,7 +42,9 @@
 //! probability 0.99¹⁰ ≈ 90%. Under common random numbers two varying systems can also give the
 //! same difference in every first-stage replication. So a zero first-stage variance (of a pair's
 //! differences for KN and the comparison, of a constrained value for the check) never by itself
-//! gives an exact or confident answer:
+//! gives an exact or confident answer. For a pair, a spread within rounding of the values (at
+//! most 64 units in the last place of the largest, as when B = A + 0.1 is computed in floating
+//! point) counts as zero:
 //! - Unless the caller states that the systems have no randomness ([`Kn::deterministic`],
 //!   [`Feasibility::deterministic`]), such a pair is never eliminated by the test and such a
 //!   constraint is never settled by it. The procedures fix S² from the first stage, and their
@@ -59,9 +61,12 @@
 //!   system is the same the answer is [`Outcome::ComparedExactly`], with no probability stated.
 //!   Values that vary are handled as usual.
 //!
-//! **Overflow.** A sum, a difference, a variance or a bound of the region that is not finite
-//! (values near the largest `f64`) is refused with [`SelectError::Overflow`] rather than
-//! compared.
+//! **Values near the ends of the `f64` range.** When the first stage's values (with δ, or with a
+//! constraint's limit and ε) are larger than 1e150 or smaller than 1e-150 in size, everything is
+//! computed on them times a power of two that brings them near 1, which changes no decision and
+//! multiplies exactly; the means are given back in the values' unit. A sum, a difference, a
+//! variance or a bound of the region that is still not finite (later values far larger than the
+//! first stage's) is refused with [`SelectError::Overflow`] rather than compared.
 
 use std::ops::Range;
 
@@ -657,6 +662,12 @@ where
 /// independent of which systems passed and its guarantee holds for the set it is given (its η
 /// comes from the number of systems declared feasible). The check's replications of the
 /// objective are not reused. The budget `setup.max_runs` covers both stages.
+///
+/// [`Kn::deterministic`] here states that the objective has no randomness (as when it is made of
+/// known costs alone): KN then compares it exactly. The constrained values are always treated as
+/// random, so a constraint whose value is the same in every first-stage replication is left
+/// undecided; for constraints with no randomness, run [`check_feasibility`] with
+/// [`Feasibility::deterministic`] and then [`select_best`].
 pub fn select_feasible<F>(
     setup: &Kn,
     constraints: &[Constraint],
@@ -681,7 +692,9 @@ where
         first_stage: setup.first_stage,
         sampling: setup.sampling,
         max_runs: setup.max_runs,
-        deterministic: setup.deterministic,
+        // `setup.deterministic` speaks for the objective only: the constrained values are
+        // always treated as random here.
+        deterministic: false,
     };
     check.validate(systems, constraints)?;
     let eta = check
@@ -695,7 +708,7 @@ where
             budget: setup.max_runs,
             confidence: check.confidence,
             offset: 1,
-            deterministic: setup.deterministic,
+            deterministic: false,
         },
         systems,
         constraints,
@@ -918,6 +931,38 @@ fn finite(value: f64, what: &'static str) -> Result<f64, SelectError> {
     }
 }
 
+/// A spread of differences at most this many units in the last place of the values involved
+/// (64 ε times their largest magnitude) is indistinguishable from rounding: two systems that
+/// differ by a constant, each computed in floating point, give differences that vary in their
+/// last bits. Such a spread is treated as zero.
+pub(crate) const ROUNDING: f64 = 64.0 * f64::EPSILON;
+
+/// Whether a spread `sd` of differences of values no larger than `magnitude` is zero or
+/// indistinguishable from rounding.
+pub(crate) fn negligible(sd: f64, magnitude: f64) -> bool {
+    sd == 0.0 || sd <= ROUNDING * magnitude
+}
+
+/// A power of two that brings `big`, the largest magnitude in play, into (0.5, 1] when it lies
+/// outside [1e-150, 1e150], and 1 otherwise. The procedures' decisions are unchanged when the
+/// values and δ (or a constraint's values, limit and ε) are all multiplied by the same factor,
+/// and a power of two multiplies exactly (away from subnormal results), so values near the ends
+/// of the `f64` range are compared without their sums or squares overflowing or underflowing,
+/// and values in an ordinary range give exactly what they gave without it.
+fn scale_for(big: f64) -> f64 {
+    if !(big.is_finite() && big > 0.0) || (1e-150..=1e150).contains(&big) {
+        return 1.0;
+    }
+    let mut s = 1.0_f64;
+    while big * s > 1.0 {
+        s *= 0.5;
+    }
+    while big * s <= 0.5 && (s * 2.0).is_finite() {
+        s *= 2.0;
+    }
+    s
+}
+
 const SUM: &str = "a sum of the values";
 const DIFFERENCE: &str = "a difference of two systems' values";
 const VARIANCE: &str = "a variance";
@@ -935,32 +980,45 @@ where
     {
         return Err(SelectError::Budget { needed, max_runs });
     }
+    // First stage.
+    let mut stage: Vec<Vec<f64>> = Vec::with_capacity(m);
+    for &system in &plan.systems {
+        stage.push(sample(system, plan.start..plan.start + n0)?);
+    }
+    // Everything is computed on the values and δ times `scale` (see [`scale_for`]); the means
+    // are divided back.
+    let scale = scale_for(
+        stage
+            .iter()
+            .flatten()
+            .fold(plan.delta, |big, x| big.max(x.abs())),
+    );
+    let delta = plan.delta * scale;
     let bonus = |p: usize| {
         if plan.standard && p == 0 {
-            plan.delta / 2.0
+            delta / 2.0
         } else {
             0.0
         }
     };
     let pair_delta = |p: usize, q: usize| {
         if plan.standard && (p == 0 || q == 0) {
-            plan.delta / 2.0
+            delta / 2.0
         } else {
-            plan.delta
+            delta
         }
     };
-
-    // First stage.
     let mut first: Vec<Vec<f64>> = Vec::with_capacity(m);
     let mut raw = vec![0.0; m];
     let mut sums = vec![0.0; m];
-    for (p, &system) in plan.systems.iter().enumerate() {
-        let values = sample(system, plan.start..plan.start + n0)?;
-        let adjusted: Vec<f64> = values.iter().map(|x| plan.sign * x + bonus(p)).collect();
-        raw[p] = finite(values.iter().sum(), SUM)?;
+    for (p, values) in stage.iter().enumerate() {
+        let scaled: Vec<f64> = values.iter().map(|x| x * scale).collect();
+        let adjusted: Vec<f64> = scaled.iter().map(|x| plan.sign * x + bonus(p)).collect();
+        raw[p] = finite(scaled.iter().sum(), SUM)?;
         sums[p] = finite(adjusted.iter().sum(), SUM)?;
         first.push(adjusted);
     }
+    let mean = |s: f64, n: u64| s / n as f64 / scale;
     // Exact only on the caller's statement that there is no randomness: equal first-stage
     // values alone are not proof of it.
     let exact = plan.deterministic && first.iter().all(|v| constant(v));
@@ -969,7 +1027,7 @@ where
         return Ok(Found {
             chosen: 0,
             survivors: vec![0],
-            means: raw.iter().map(|s| s / n0 as f64).collect(),
+            means: raw.iter().map(|&s| mean(s, n0)).collect(),
             runs,
             exact,
             proven: true,
@@ -977,10 +1035,11 @@ where
         });
     }
     // aₚq = η(n₀ − 1)S²ₚq/δₚq, the region's half-width at r = 0, and whether the pair is flat:
-    // a zero S² without the caller's statement that there is no randomness. KN's guarantee is
-    // for S² fixed from the first stage, so a zero S² is not estimated again later; the test
-    // never eliminates either system of a flat pair, and a flat pair still in contention leaves
-    // the answer not proven (see the module's notes).
+    // a zero S² (or one indistinguishable from rounding, see [`ROUNDING`]) without the caller's
+    // statement that there is no randomness. KN's guarantee is for S² fixed from the first
+    // stage, so a zero S² is not estimated again later; the test never eliminates either system
+    // of a flat pair, and a flat pair still in contention leaves the answer not proven (see the
+    // module's notes).
     let mut a = vec![0.0; m * m];
     let mut flat = vec![false; m * m];
     for (p, x) in first.iter().enumerate() {
@@ -996,7 +1055,8 @@ where
             };
             let d = pair_delta(p, q);
             let apq = finite(plan.eta * (n0 as f64 - 1.0) * v / d, REGION)?;
-            let f = v == 0.0 && !plan.deterministic;
+            let magnitude = x.iter().chain(y).fold(0.0_f64, |b, u| b.max(u.abs()));
+            let f = !plan.deterministic && negligible(v.sqrt(), magnitude);
             a[p * m + q] = apq;
             a[q * m + p] = apq;
             flat[p * m + q] = f;
@@ -1058,7 +1118,7 @@ where
             return Ok(Found {
                 chosen: best_of(&active, &sums),
                 survivors: active,
-                means: raw.iter().zip(&runs).map(|(s, n)| s / *n as f64).collect(),
+                means: raw.iter().zip(&runs).map(|(&s, &n)| mean(s, n)).collect(),
                 runs,
                 exact,
                 proven: settled && !stuck,
@@ -1068,7 +1128,7 @@ where
         for &p in &active {
             let rep = plan.start + r;
             let values = sample(plan.systems[p], rep..rep + 1)?;
-            let x = values.first().copied().unwrap_or(f64::NAN);
+            let x = values.first().copied().unwrap_or(f64::NAN) * scale;
             raw[p] = finite(raw[p] + x, SUM)?;
             sums[p] = finite(sums[p] + plan.sign * x + bonus(p), SUM)?;
             runs[p] += 1;
@@ -1114,9 +1174,12 @@ where
         decision: Decision,
         by_constraint: Vec<Decision>,
         runs: u64,
-        /// Σⱼ Yᵢₗⱼ, for the means.
+        /// The factor of [`scale_for`] for each constraint: the values, the limit and ε are all
+        /// multiplied by it.
+        scale: Vec<f64>,
+        /// Σⱼ Yᵢₗⱼ (scaled), for the means.
         raw: Vec<f64>,
-        /// Σⱼ (Yᵢₗⱼ − qₗ) on the "at most" scale.
+        /// Σⱼ (Yᵢₗⱼ − qₗ) on the "at most" scale (scaled).
         sums: Vec<f64>,
         /// h²S²ᵢₗ/(2εₗ), with S²ᵢₗ from the first stage: the region's half-width at r = 0.
         a: Vec<f64>,
@@ -1146,6 +1209,7 @@ where
             decision: Decision::Undecided,
             by_constraint: vec![Decision::Undecided; s],
             runs: n0,
+            scale: Vec::with_capacity(s),
             raw: Vec::with_capacity(s),
             sums: Vec::with_capacity(s),
             a: Vec::with_capacity(s),
@@ -1153,9 +1217,17 @@ where
         };
         for (l, c) in constraints.iter().enumerate() {
             let column: Vec<f64> = rows.iter().map(|row| value(row, l)).collect();
+            let k = scale_for(
+                column
+                    .iter()
+                    .fold(c.limit.abs().max(c.tolerance), |big, y| big.max(y.abs())),
+            );
+            let column: Vec<f64> = column.iter().map(|y| y * k).collect();
+            let limit = c.limit * k;
+            state.scale.push(k);
             state.raw.push(finite(column.iter().sum(), SUM)?);
             state.sums.push(finite(
-                column.iter().map(|y| c.bound.sign() * (y - c.limit)).sum(),
+                column.iter().map(|y| c.bound.sign() * (y - limit)).sum(),
                 SUM,
             )?);
             let s2 = if constant(&column) {
@@ -1164,7 +1236,9 @@ where
                 constant_all = false;
                 finite(variance(column.iter().copied()), VARIANCE)?
             };
-            state.a.push(finite(h2 * s2 / (2.0 * c.tolerance), REGION)?);
+            state
+                .a
+                .push(finite(h2 * s2 / (2.0 * c.tolerance * k), REGION)?);
             state.flat.push(s2 == 0.0 && !plan.deterministic);
         }
         states.push(state);
@@ -1182,7 +1256,7 @@ where
                 if state.by_constraint[l] != Decision::Undecided || state.flat[l] {
                     continue;
                 }
-                let bound = (state.a[l] - c.tolerance * r as f64 / 2.0).max(0.0);
+                let bound = (state.a[l] - c.tolerance * state.scale[l] * r as f64 / 2.0).max(0.0);
                 if state.sums[l] <= -bound {
                     state.by_constraint[l] = Decision::Feasible;
                 } else if state.sums[l] >= bound {
@@ -1215,7 +1289,13 @@ where
                 decisions: states.iter().map(|st| st.decision).collect(),
                 means: states
                     .iter()
-                    .map(|st| st.raw.iter().map(|x| x / st.runs as f64).collect())
+                    .map(|st| {
+                        st.raw
+                            .iter()
+                            .zip(&st.scale)
+                            .map(|(x, k)| x / st.runs as f64 / k)
+                            .collect()
+                    })
                     .collect(),
                 runs: states.iter().map(|st| st.runs).collect(),
                 by_constraint: states.into_iter().map(|st| st.by_constraint).collect(),
@@ -1231,9 +1311,10 @@ where
                 continue;
             };
             for (l, c) in constraints.iter().enumerate() {
-                let y = value(row, l);
+                let k = state.scale[l];
+                let y = value(row, l) * k;
                 state.raw[l] = finite(state.raw[l] + y, SUM)?;
-                state.sums[l] = finite(state.sums[l] + c.bound.sign() * (y - c.limit), SUM)?;
+                state.sums[l] = finite(state.sums[l] + c.bound.sign() * (y - c.limit * k), SUM)?;
             }
             state.runs += 1;
         }
@@ -1451,39 +1532,118 @@ mod tests {
     }
 
     #[test]
-    fn values_that_overflow_are_refused() {
-        // Truly constant, but ten of them sum past the largest f64: refused, not compared.
+    fn values_near_the_largest_f64_are_compared_without_overflow() {
+        // Truly constant, and ten of them sum past the largest f64: compared on a scale where
+        // they do not, so the right one wins (or nothing is claimed), never a tie of infinities.
         let huge = [1e308, 1.1e308];
-        for deterministic in [false, true] {
-            let setup = Kn {
-                deterministic,
-                ..Kn::new(1.0, Sense::Minimise)
+        for (sense, best) in [(Sense::Minimise, 0), (Sense::Maximise, 1)] {
+            let exact = Kn {
+                deterministic: true,
+                ..Kn::new(1.0, sense)
             };
-            let s = select_best(&setup, 2, |s, reps| reps.map(|_| huge[s]).collect());
-            assert!(matches!(s, Err(SelectError::Overflow(_))), "{s:?}");
-            let s = compare_with_standard(&setup, 1, |s, reps| reps.map(|_| huge[s]).collect());
-            assert!(matches!(s, Err(SelectError::Overflow(_))), "{s:?}");
-            let check = check_feasibility(
-                &Feasibility {
-                    deterministic,
-                    ..Feasibility::default()
-                },
-                2,
-                &[Constraint {
-                    bound: Bound::AtMost,
-                    limit: 0.0,
-                    tolerance: 1.0,
-                }],
-                |s, reps| reps.map(|_| vec![huge[s]]).collect(),
+            let s = select_best(&exact, 2, |s, reps| reps.map(|_| huge[s]).collect());
+            let Ok(s) = s else { panic!("{s:?}") };
+            assert_eq!((s.outcome, s.chosen), (Outcome::ComparedExactly, best));
+            assert!(
+                s.means[0].is_some_and(|m| close(m, 1e308))
+                    && s.means[1].is_some_and(|m| close(m, 1.1e308)),
+                "{s:?}"
             );
-            assert!(matches!(check, Err(SelectError::Overflow(_))), "{check:?}");
+            let s = compare_with_standard(&exact, 1, |s, reps| reps.map(|_| huge[s]).collect());
+            let Ok(s) = s else { panic!("{s:?}") };
+            assert_eq!((s.outcome, s.chosen), (Outcome::ComparedExactly, best));
+            // Not stated deterministic: flat, so not proven.
+            let s = select_best(&Kn::new(1.0, sense), 2, |s, reps| {
+                reps.map(|_| huge[s]).collect()
+            });
+            let Ok(s) = s else { panic!("{s:?}") };
+            assert_eq!(
+                (s.outcome, s.chosen, s.flat),
+                (Outcome::NotProven, best, true)
+            );
         }
-        // Each total finite (±9.45e307), but their difference is not.
-        let s = select_best(&Kn::new(1.0, Sense::Minimise), 2, |s, reps| {
-            reps.map(|_| if s == 0 { 9.45e306 } else { -9.45e306 })
+        // ±9.45e307 totals whose difference would overflow unscaled.
+        let s = select_best(
+            &Kn {
+                deterministic: true,
+                ..Kn::new(1.0, Sense::Minimise)
+            },
+            2,
+            |s, reps| {
+                reps.map(|_| if s == 0 { 9.45e306 } else { -9.45e306 })
+                    .collect()
+            },
+        );
+        let Ok(s) = s else { panic!("{s:?}") };
+        assert_eq!((s.outcome, s.chosen), (Outcome::ComparedExactly, 1));
+        // The check, on the same scale.
+        let constraint = [Constraint {
+            bound: Bound::AtMost,
+            limit: 0.0,
+            tolerance: 1.0,
+        }];
+        let check = check_feasibility(
+            &Feasibility {
+                deterministic: true,
+                ..Feasibility::default()
+            },
+            2,
+            &constraint,
+            |s, reps| reps.map(|_| vec![huge[s]]).collect(),
+        );
+        let Ok(check) = check else {
+            panic!("{check:?}")
+        };
+        assert_eq!(check.decisions, vec![Decision::Infeasible; 2]);
+        assert!(
+            close(check.means[0][0], 1e308) && close(check.means[1][0], 1.1e308),
+            "{check:?}"
+        );
+    }
+
+    #[test]
+    fn values_that_overflow_are_refused() {
+        // A first stage near 0 sets an ordinary scale; then both systems give 1.7e308, and the
+        // second such replication takes the totals past the largest f64: refused, not compared.
+        let late = |s: usize, reps: Range<u64>| -> Vec<f64> {
+            reps.map(|j| {
+                if j < 10 {
+                    normal(51, s as u64, j)
+                } else {
+                    1.7e308
+                }
+            })
+            .collect()
+        };
+        let setup = Kn::new(0.01, Sense::Maximise);
+        assert_eq!(
+            select_best(&setup, 2, late),
+            Err(SelectError::Overflow(SUM))
+        );
+        assert_eq!(
+            compare_with_standard(&setup, 1, late),
+            Err(SelectError::Overflow(SUM))
+        );
+        // The check: the first constraint's value is 0 in the first stage (flat, so never
+        // settled), then 1.7e308; the second stays near its limit, so the system stays undecided
+        // while the first constraint's total overflows.
+        let constraints = [
+            Constraint {
+                bound: Bound::AtMost,
+                limit: 0.0,
+                tolerance: 0.01,
+            },
+            Constraint {
+                bound: Bound::AtMost,
+                limit: 0.0,
+                tolerance: 0.01,
+            },
+        ];
+        let check = check_feasibility(&Feasibility::default(), 2, &constraints, |s, reps| {
+            reps.map(|j| vec![if j < 10 { 0.0 } else { 1.7e308 }, normal(52, s as u64, j)])
                 .collect()
         });
-        assert_eq!(s, Err(SelectError::Overflow(DIFFERENCE)));
+        assert_eq!(check, Err(SelectError::Overflow(SUM)));
         assert!(
             SelectError::Overflow("a sum of the values")
                 .to_string()
@@ -1804,7 +1964,8 @@ mod tests {
 
     #[test]
     fn a_budget_short_of_kn_keeps_the_feasibility_decisions() {
-        // Constant constraint values: the check is decided on the first stage, 4 × 10 runs.
+        // Constraint values far from the limit with a tiny spread: the check is decided on the
+        // first stage, 4 × 10 runs.
         let constrained = [-1.0, -1.0, 1.0, -1.0];
         let constraints = [Constraint {
             bound: Bound::AtMost,
@@ -1812,13 +1973,17 @@ mod tests {
             tolerance: 0.5,
         }];
         let rows = |s: usize, reps: Range<u64>| -> Vec<Vec<f64>> {
-            reps.map(|j| vec![normal(9, s as u64, j), constrained[s]])
-                .collect()
+            reps.map(|j| {
+                vec![
+                    normal(9, s as u64, j),
+                    constrained[s] + 0.001 * normal(10, s as u64, j),
+                ]
+            })
+            .collect()
         };
         // KN among the three feasible needs 30 more; one short.
         let setup = Kn {
             max_runs: Some(40 + 30 - 1),
-            deterministic: true,
             ..Kn::new(0.5, Sense::Maximise)
         };
         let s = select_feasible(&setup, &constraints, 0.5, 4, rows);

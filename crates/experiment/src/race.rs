@@ -64,7 +64,8 @@
 //! **A flat difference is not proof of no randomness.** Equal differences in every shared
 //! replication can come from candidates that do vary (a rare event not yet seen, or common random
 //! numbers that move both alike). Unless the caller states that the candidates have no randomness
-//! ([`Racing::deterministic`]), such a pair is not tested at that look: nobody is dropped on it,
+//! ([`Racing::deterministic`]), such a pair (or one whose spread is within rounding of the values)
+//! is not tested at that look: nobody is dropped on it,
 //! which only removes ways of dropping the best, so the bound above still holds. A later look
 //! whose differences vary tests the pair as usual. With the statement, a constant difference is
 //! known exactly and the candidate is dropped when it exceeds δ. The clean-up passes the same
@@ -589,6 +590,19 @@ impl Race {
         let se = scale * (var_scaled / nf).sqrt();
         if !(se.is_finite() && se > 0.0) {
             // The spread could not be computed reliably: no elimination.
+            return None;
+        }
+        // A spread indistinguishable from rounding (a constant difference whose last bits vary,
+        // as when both candidates are computed in floating point) is flat, as above.
+        let magnitude = xb
+            .values
+            .iter()
+            .take(n)
+            .chain(xi.values.iter().take(n))
+            .fold(0.0_f64, |m, v| m.max(v.abs()));
+        if !self.settings.deterministic
+            && crate::select::negligible(scale * var_scaled.sqrt(), magnitude)
+        {
             return None;
         }
         let t = (mean - delta) / se;
@@ -1410,6 +1424,10 @@ mod tests {
         let wide = Racing {
             first_stage: 2,
             stages: 1,
+            // The clean-up compares ±1.7e308 on a scale where nothing overflows; with δ = 1 so far
+            // below their spread, KN would need an astronomical number of replications, so its
+            // budget is capped.
+            max_cleanup_runs: Some(100),
             ..Racing::new(1.0, Sense::Maximise, 2)
         };
         let values = [[1.7e308, 1.6e308], [-1.7e308, -1.6e308]];

@@ -276,6 +276,11 @@ pub struct Compass {
     /// The caller states that there is no randomness: each design is run once and compared by
     /// value. Never inferred from equal values.
     pub exact: bool,
+    /// The caller states that the objective has no randomness (it is made of known costs alone),
+    /// while the constrained results may vary (default `false`): the local-optimality test and
+    /// the clean-up compare the objective exactly ([`Kn::deterministic`]) and check the
+    /// constraints as random.
+    pub exact_objective: bool,
     /// The seed of the walks that sample the most promising area.
     pub seed: u64,
 }
@@ -296,6 +301,7 @@ impl Compass {
             search_runs: max_runs,
             all_designs_up_to: 50,
             exact: false,
+            exact_objective: false,
             seed: 0,
         };
         c.reserve(0.3);
@@ -1140,8 +1146,8 @@ where
             sense: setup.sense,
             sampling: Sampling::Common,
             max_runs: None,
-            // Exact mode never reaches the test; here the designs may vary.
-            deterministic: false,
+            // Exact mode never reaches the test; here only the objective may be stated exact.
+            deterministic: setup.exact_objective,
         };
         let before = runner.runs;
         let test = compare_with_standard(&kn, alternatives.len(), |p, reps| {
@@ -1564,8 +1570,8 @@ where
         sense: setup.sense,
         sampling: Sampling::Common,
         max_runs: Some(budget),
-        // Exact mode returned above; here the designs may vary.
-        deterministic: false,
+        // Exact mode returned above; here only the objective may be stated exact.
+        deterministic: setup.exact_objective,
     };
     let best_search = |fs: &[Finalist]| -> Option<usize> {
         fs.iter()

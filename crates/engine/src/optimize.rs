@@ -23,7 +23,9 @@
 //! (nothing in it is drawn) is compared exactly, one replication per design, with no probability
 //! stated. Equal values from a model that does draw are not taken as proof of no randomness: in
 //! the clean-up a pair of designs with the same difference in every first-stage replication is
-//! left undecided, and the answer says it is not proven and why.
+//! left undecided, and the answer says it is not proven and why. An objective of the decisions'
+//! costs alone (no results) is known exactly whatever the model draws, so the clean-up compares
+//! it exactly (`Compass::exact_objective`) and checks the constraints as random.
 
 use std::collections::BTreeMap;
 use std::ops::Range;
@@ -632,6 +634,10 @@ pub fn optimise(model: &Model, p: &OptimiseParams) -> Result<(Value, Option<Mode
     setup.per_visit = per_visit;
     setup.all_designs_up_to = u64::from(p.all_designs_up_to.unwrap_or(50));
     setup.exact = exact;
+    // An objective of the decisions' costs alone is known exactly (each design's value is
+    // computed, not simulated), whatever the model draws: the clean-up compares it exactly and
+    // checks the constraints as random.
+    setup.exact_objective = p.objective.results.is_empty();
     setup.seed = seed;
     match p.reserve_runs {
         Some(r) => setup.search_runs = budget.saturating_sub(r),
@@ -1045,11 +1051,24 @@ impl Words<'_> {
                     )
                 }
             }
-            // Only on the search's exact path, taken when nothing in the model is drawn: equal
-            // values from a model that draws are never taken as exact.
-            (Outcome::ComparedExactly, Some(_)) => format!(
-                "The model has no randomness, so the designs were compared exactly, one replication each: {what} is the best {scope}. No probability is stated."
-            ),
+            // The search's exact path (nothing in the model is drawn), or an objective of costs
+            // alone; equal simulated values are never taken as exact.
+            (Outcome::ComparedExactly, Some(_)) => {
+                if self.exact {
+                    format!(
+                        "The model has no randomness, so the designs were compared exactly, one replication each: {what} is the best {scope}. No probability is stated."
+                    )
+                } else if let Some(c) = a.confidence {
+                    format!(
+                        "With {}% confidence every design was rightly declared feasible or infeasible (within each constraint's tolerance); the objective is the decisions' costs alone, known exactly, so {what} is exactly the best {scope} that meet the constraints.",
+                        percent(c)
+                    )
+                } else {
+                    format!(
+                        "The objective is the decisions' costs alone, known exactly, so the designs were compared exactly: {what} is the best {scope}. No probability is stated."
+                    )
+                }
+            }
             (_, Some(_)) => {
                 let still: Vec<String> = a
                     .in_contention

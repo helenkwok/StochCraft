@@ -858,8 +858,11 @@ wrong, so the guarantee for the other pairs and constraints holds. A system stil
 with such a pair cannot be declared best: once every other pair's region has closed (or the budget
 runs out) the answer is `NotProven` with `Selection::flat` set, since more replications cannot
 change a zero S². A system left with only such constraints stays `Undecided`, takes no more
-replications, and sets `FeasibilityCheck::flat`. A sum, difference, variance or bound of the
-region that overflows is refused with `SelectError::Overflow` rather than compared.
+replications, and sets `FeasibilityCheck::flat`. A pair's spread within rounding of its values
+(64 units in the last place) counts as zero. Values beyond 1e150 or below 1e-150 in size are
+compared times a power of two that brings them near 1, which changes no decision; a sum,
+difference, variance or bound of the region that still overflows is refused with
+`SelectError::Overflow` rather than compared.
 The racing and COMPASS layers follow the same rule: the race drops nobody on a constant paired
 difference unless `Racing::deterministic` is set, and COMPASS's exact mode (`Compass::exact`) is
 the caller's statement, which `experiment.optimise` makes only when nothing in the model is
@@ -963,7 +966,9 @@ decision set by `Param::set`, compiled once and run on the search's seed, or on
 `Rng::keyed(seed, "optimize/clean-up")` in the clean-up. The objective of a replication is the
 weighted results plus the decisions' costs. The cost cap is a limit of the space, so no design
 over it is run. A model is compared exactly only when nothing in it is drawn and the starting
-design's first two replications agree. `engine/src/drawn.rs` decides the first from the model's
+design's first two replications agree; an objective of costs alone (no results) is compared
+exactly in the clean-up (`Compass::exact_objective`, passed to KN as `Kn::deterministic`) while
+the constraints are checked as random. `engine/src/drawn.rs` decides the first from the model's
 types, taking every struct apart and matching every kind of element in full, so a new field or
 kind does not compile until it says whether it draws. Drawn means a distribution other than a
 constant, a probability strictly between 0 and 1, an exclusive gateway whose way is not decided
