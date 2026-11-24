@@ -4859,8 +4859,8 @@ are.
     moves the queues more than it shortens them. Checks:
     - *Exact, to establish:* a gate whose arm shuts at once is close to a two-queue polling
       system with exhaustive service and switchover times, whose mean waits are known exactly.
-      Candidates: O. J. Boxma's two-queue cyclic system with random switchover times (Discrete
-      Event Dynamic Systems, doi 10.1007/s10626-009-0072-9) and J. L. Dorsman et al. on
+      Candidates, to read: a two-queue cyclic system with random switchover times (Discrete
+      Event Dynamic Systems, doi 10.1007/s10626-009-0072-9) and Dorsman et al. (2014) on
       two-queue Markovian polling with exhaustive service. The gate differs in two ways: the
       arm stays open if a case arrives while it shuts, and the gate waits shut when both sides
       are empty. So the check is either a published model that matches these rules, or a
