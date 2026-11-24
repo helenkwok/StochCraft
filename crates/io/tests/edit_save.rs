@@ -1976,3 +1976,295 @@ fn calendar_values_setups_and_transports_with_their_own_unit_save_under_a_new_ti
     );
     relabel(transport.as_bytes(), TimeUnit::Hours);
 }
+
+/// The bank with a second scenario ("six-cashiers", inheriting "scenario") that sets its own
+/// probabilities on the ways out of "Cashier too?", and its own arrivals, a property and a
+/// probability on the way out of the customers' start.
+fn bank_with_own_values() -> String {
+    let original = text(&file("bank.bpmn"));
+    let opening = r#"<bpsim:Scenario id="six-cashiers" name="Six cashiers" inherits="scenario">"#;
+    assert!(original.contains(opening));
+    let own = r#"
+          <bpsim:ElementParameters elementRef="customers">
+            <bpsim:ControlParameters>
+              <bpsim:InterTriggerTimer>
+                <bpsim:NegativeExponentialDistribution mean="9"/>
+              </bpsim:InterTriggerTimer>
+            </bpsim:ControlParameters>
+            <bpsim:PropertyParameters>
+              <bpsim:Property name="segment">
+                <bpsim:StringParameter value="retail"/>
+              </bpsim:Property>
+            </bpsim:PropertyParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="flow-1">
+            <bpsim:ControlParameters>
+              <bpsim:Probability>
+                <bpsim:FloatingParameter value="1"/>
+              </bpsim:Probability>
+            </bpsim:ControlParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="flow-5">
+            <bpsim:ControlParameters>
+              <bpsim:Probability>
+                <bpsim:FloatingParameter value="0.4"/>
+              </bpsim:Probability>
+            </bpsim:ControlParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="flow-6">
+            <bpsim:ControlParameters>
+              <bpsim:Probability>
+                <bpsim:FloatingParameter value="0.6"/>
+              </bpsim:Probability>
+            </bpsim:ControlParameters>
+          </bpsim:ElementParameters>"#;
+    original.replace(opening, &format!("{opening}{own}"))
+}
+
+fn connection<'a>(m: &'a Model, i: &str) -> &'a Connection {
+    m.connections
+        .iter()
+        .find(|c| c.id.as_str() == i)
+        .unwrap_or_else(|| panic!("no connection {i}"))
+}
+
+/// The flow's target and probability in scenario `scenario` of `bytes`.
+fn way(bytes: &[u8], scenario: &str, flow: &str) -> (String, Option<f64>) {
+    let m = read_scenario(bytes, Some(scenario))
+        .unwrap_or_else(|e| panic!("{e}"))
+        .model;
+    let c = connection(&m, flow);
+    (c.to.to_string(), c.probability)
+}
+
+/// A flow re-pointed to another target keeps its id, so each scenario keeps its own parameters
+/// on it, whichever scenario is open when it is saved (#311).
+#[test]
+fn a_re_pointed_flow_keeps_every_scenarios_parameters() {
+    let original = bank_with_own_values();
+    let bytes = original.as_bytes();
+    assert_eq!(
+        way(bytes, "scenario", "flow-5"),
+        ("cashiers".into(), Some(0.3))
+    );
+    assert_eq!(
+        way(bytes, "six-cashiers", "flow-5"),
+        ("cashiers".into(), Some(0.4))
+    );
+    // "Cashier too?" sends its customers back to the ATM instead.
+    let repoint = |m: &mut Model| {
+        if let Some(c) = m.connections.iter_mut().find(|c| c.id.as_str() == "flow-5") {
+            c.to = id("atm");
+        }
+    };
+    for opened in ["scenario", "six-cashiers"] {
+        let saved = edit_bytes("bank.bpmn", bytes, Some(opened), repoint);
+        assert_eq!(way(&saved, "scenario", "flow-5"), ("atm".into(), Some(0.3)));
+        assert_eq!(
+            way(&saved, "six-cashiers", "flow-5"),
+            ("atm".into(), Some(0.4))
+        );
+        assert_eq!(way(&saved, "scenario", "flow-6").1, Some(0.7));
+        assert_eq!(way(&saved, "six-cashiers", "flow-6").1, Some(0.6));
+        // Only the flow's ends and its drawing changed.
+        let d = diff(bytes, &saved);
+        assert!(
+            !d.contains("Probability") && !d.contains("value=\"0."),
+            "{d}"
+        );
+    }
+    // Re-pointed with a new probability in the open scenario: the other keeps its own.
+    let saved = edit_bytes("bank.bpmn", bytes, Some("scenario"), |m| {
+        repoint(m);
+        for (c, p) in [("flow-5", 0.2), ("flow-6", 0.8)] {
+            if let Some(c) = m.connections.iter_mut().find(|x| x.id.as_str() == c) {
+                c.probability = Some(p);
+            }
+        }
+    });
+    assert_eq!(way(&saved, "scenario", "flow-5"), ("atm".into(), Some(0.2)));
+    assert_eq!(
+        way(&saved, "six-cashiers", "flow-5"),
+        ("atm".into(), Some(0.4))
+    );
+    assert_eq!(way(&saved, "six-cashiers", "flow-6").1, Some(0.6));
+}
+
+/// A junction between two conveyors stays in every scenario when its flow is re-pointed to
+/// another conveyor (#311).
+#[test]
+fn a_re_pointed_flow_keeps_every_scenarios_junction() {
+    use stochcraft_model::{ConveyorShape, Junction, JunctionKind};
+    let conveyor = || ElementKind::Conveyor {
+        length: 4.0,
+        speed: 1.0,
+        accumulating: false,
+        item_length: 1.5,
+        gap: 0.5,
+        shape: ConveyorShape::Straight,
+    };
+    let mut model = Model {
+        name: "Belts".into(),
+        elements: vec![
+            Element::new(
+                id("in"),
+                "in",
+                ElementKind::Source {
+                    interarrival: Dist::Constant(1.0),
+                    limit: None,
+                    timed: Vec::new(),
+                    idle_outside: false,
+                },
+            ),
+            Element::new(id("a"), "a", conveyor()),
+            Element::new(id("b"), "b", conveyor()),
+            Element::new(id("c"), "c", conveyor()),
+            Element::new(
+                id("out"),
+                "out",
+                ElementKind::Sink {
+                    scrap: None,
+                    demand: None,
+                },
+            ),
+        ],
+        connections: [
+            ("f1", "in", "a"),
+            ("f2", "a", "b"),
+            ("f3", "b", "out"),
+            ("f4", "c", "out"),
+        ]
+        .into_iter()
+        .map(|(c, from, to)| Connection::new(id(c), id(from), id(to)))
+        .collect(),
+        ..Model::default()
+    };
+    model.site.junctions.insert(
+        id("f2"),
+        Junction {
+            kind: JunctionKind::Turntable,
+            transfer: 2.5,
+        },
+    );
+    let written = text(&stochcraft_io::write_new(&model));
+    // A second scenario with a junction of its own on the same flow.
+    let start = written
+        .find(r#"<bpsim:ElementParameters elementRef="f2">"#)
+        .unwrap_or_else(|| panic!("no junction written:\n{written}"));
+    let end = start
+        + written[start..]
+            .find("</bpsim:ElementParameters>")
+            .unwrap_or_else(|| panic!("{written}"))
+        + "</bpsim:ElementParameters>".len();
+    let base = &written[start..end];
+    let side = base
+        .replace(r#"kind="turntable""#, r#"kind="side""#)
+        .replace(r#"transfer="2.5""#, r#"transfer="1""#);
+    assert_ne!(side, base);
+    let original = written.replace(
+        "</bpsim:BPSimData>",
+        &format!(
+            r#"<bpsim:Scenario id="side" name="Side" inherits="scenario">{side}</bpsim:Scenario>
+</bpsim:BPSimData>"#
+        ),
+    );
+    let junction = |bytes: &[u8], scenario: &str| {
+        let m = read_scenario(bytes, Some(scenario))
+            .unwrap_or_else(|e| panic!("{e}"))
+            .model;
+        (
+            connection(&m, "f2").to.to_string(),
+            m.site.junctions.get(&id("f2")).copied(),
+        )
+    };
+    let turntable = Junction {
+        kind: JunctionKind::Turntable,
+        transfer: 2.5,
+    };
+    let sideways = Junction {
+        kind: JunctionKind::Side,
+        transfer: 1.0,
+    };
+    assert_eq!(
+        junction(original.as_bytes(), "side"),
+        ("b".into(), Some(sideways))
+    );
+    for opened in ["scenario", "side"] {
+        let saved = edit_bytes("belts", original.as_bytes(), Some(opened), |m| {
+            if let Some(c) = m.connections.iter_mut().find(|c| c.id.as_str() == "f2") {
+                c.to = id("c");
+            }
+        });
+        assert_eq!(junction(&saved, "scenario"), ("c".into(), Some(turntable)));
+        assert_eq!(junction(&saved, "side"), ("c".into(), Some(sideways)));
+    }
+}
+
+/// An element made another kind of BPMN element keeps its id: the open scenario's parameters
+/// for it are written afresh, and every other scenario keeps what applies to any element (its
+/// properties) but not what only the old kind had (a start's arrivals); its flows keep theirs.
+/// An element removed outright takes its parameters, and those of its flows, from every
+/// scenario (#311).
+#[test]
+fn a_replaced_element_keeps_what_still_applies_and_a_removed_one_nothing() {
+    let original = bank_with_own_values();
+    let bytes = original.as_bytes();
+    let customers_in = |bytes: &[u8], scenario: &str| {
+        read_scenario(bytes, Some(scenario))
+            .unwrap_or_else(|e| panic!("{e}"))
+            .model
+            .element(&id("customers"))
+            .cloned()
+            .unwrap_or_else(|| panic!("no customers"))
+    };
+    assert!(
+        customers_in(bytes, "six-cashiers")
+            .property("segment")
+            .is_some()
+    );
+    assert_eq!(way(bytes, "six-cashiers", "flow-1").1, Some(1.0));
+    // The start of the process made a task, with either scenario open.
+    for opened in ["scenario", "six-cashiers"] {
+        let saved = edit_bytes("bank.bpmn", bytes, Some(opened), |m| {
+            element(m, "customers").kind = delay_kind();
+        });
+        let t = text(&saved);
+        // Neither scenario's arrivals stay.
+        assert!(
+            !t.contains(r#"mean="9""#) && !t.contains("1.3333333333333333"),
+            "{opened}: the old start's arrivals stay:\n{t}"
+        );
+        for scenario in ["scenario", "six-cashiers"] {
+            let customers = customers_in(&saved, scenario);
+            assert!(
+                matches!(customers.kind, ElementKind::Delay { .. }),
+                "{scenario}"
+            );
+        }
+        assert!(
+            customers_in(&saved, "six-cashiers")
+                .property("segment")
+                .is_some(),
+            "{opened}: the property is lost:\n{t}"
+        );
+        assert_eq!(
+            way(&saved, "six-cashiers", "flow-1").1,
+            Some(1.0),
+            "{opened}"
+        );
+    }
+
+    // Removed: nothing of it, or of its flow, is left in any scenario.
+    let saved = edit_bytes("bank.bpmn", bytes, Some("scenario"), |m| {
+        m.elements.retain(|e| e.id.as_str() != "customers");
+        m.layout.remove(&id("customers"));
+        m.connections.retain(|c| c.id.as_str() != "flow-1");
+    });
+    let t = text(&saved);
+    for gone in ["customers", "flow-1"] {
+        assert!(
+            !t.contains(&format!(r#"elementRef="{gone}""#)),
+            "{gone}:\n{t}"
+        );
+    }
+}
