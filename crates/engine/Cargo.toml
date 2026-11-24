@@ -28,6 +28,9 @@ sha2 = "0.11"
 # Crash-safe saves for `file.save`: a temporary file renamed over the model file (MIT OR
 # Apache-2.0).
 craft-atomic = { workspace = true }
+# Whether a model saved beside its charts would be saved over one, hard links included (MIT OR
+# Unlicense).
+same-file = "1"
 
 [lints]
 workspace = true

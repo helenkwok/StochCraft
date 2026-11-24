@@ -974,6 +974,15 @@ fn run(
         ));
     }
     if opened["kind"] == "agents" {
+        // Nor over a file the model reads beside it: a chart or a list of links.
+        let dir = file.parent().unwrap_or_else(|| Path::new(""));
+        let companions: Vec<PathBuf> = engine
+            .agent_files()
+            .into_iter()
+            .map(|(href, _)| dir.join(href))
+            .collect();
+        let companions: Vec<&Path> = companions.iter().map(PathBuf::as_path).collect();
+        refuse_overwriting_input(out, &companions)?;
         if until.relative.is_some()
             || until.points.is_some()
             || until.max.is_some()

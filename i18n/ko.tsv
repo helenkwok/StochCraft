@@ -1202,12 +1202,13 @@ unit	yr	년
 	Layout	배치도
 	Layout of the model, to scale	축척에 맞춘 모델 배치도
 	Drag to pan · Scroll to zoom	드래그하여 이동 · 스크롤하여 확대/축소
-	Positions from the diagram	다이어그램에서 가져온 위치
+	Positions from the layout	배치도에서 가져온 위치
 	Scale bar: {length} m	축척 막대: {length} m
 	{length} m	{length} m
 	x {x} m, y {y} m	x {x} m, y {y} m
 	Unplaced	미배치
-	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	현재는 모든 블록이 다이어그램을 기준으로 배치됩니다. 다이어그램에 없는 블록은 여기에 나열되며 그려지지 않습니다.
+	Every block is placed.	모든 블록이 배치되었습니다.
+	Nothing to draw: this model has no layout yet. The Layout tab lists its blocks as unplaced.	그릴 것이 없습니다: 이 모델에는 아직 배치도가 없습니다. 배치도 탭에 블록이 미배치로 나열됩니다.
 	The charts are taller than the window: make the window taller, then export them again.	차트가 창보다 높습니다. 창을 세로로 늘린 다음 다시 내보내세요.
 	The model changed while choosing where to save it, so it was not saved. Save again.	저장할 위치를 고르는 동안 모델이 바뀌어 저장하지 않았습니다. 다시 저장하세요.
 	Exactly that many	정확히 그 횟수

@@ -1202,12 +1202,13 @@ unit	yr	m.
 	Layout	Išdėstymas
 	Layout of the model, to scale	Modelio išdėstymas, mastelio
 	Drag to pan · Scroll to zoom	Vilkite perkelti · Slinkite didinti
-	Positions from the diagram	Pozicijos iš diagramos
+	Positions from the layout	Pozicijos iš išdėstymo
 	Scale bar: {length} m	Mastelio juosta: {length} m
 	{length} m	{length} m
 	x {x} m, y {y} m	x {x} m, y {y} m
 	Unplaced	Neišdėstyta
-	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	Kol kas kiekvienas blokas išdėstomas pagal diagramą. Blokas, kurio diagrama nenurodo, išvardytas čia ir nebraižomas.
+	Every block is placed.	Kiekvienas blokas išdėstytas.
+	Nothing to draw: this model has no layout yet. The Layout tab lists its blocks as unplaced.	Nėra ką piešti: šis modelis dar neturi išdėstymo. Skirtuke „Išdėstymas“ jo blokai nurodyti kaip neišdėstyti.
 	The charts are taller than the window: make the window taller, then export them again.	Diagramos aukštesnės už langą: padidinkite lango aukštį ir eksportuokite jas iš naujo.
 	The model changed while choosing where to save it, so it was not saved. Save again.	Modelis pasikeitė renkantis, kur jį įrašyti, todėl jis neįrašytas. Įrašykite dar kartą.
 	Exactly that many	Lygiai tiek

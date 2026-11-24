@@ -43,6 +43,11 @@ application screens ("Operate" mode, the craft floor, layout, typography and col
 https://github.com/pbakaus/impeccable, commit 695cea5, Apache-2.0). No code or text from it is
 included.
 
+The sorter pieces in crates/render/src/mesh/kit.rs (belts with side rails and stripes, the
+scanner arch, the packing station, parcels) were drawn by code with Kenney's Factory Kit
+(https://kenney.nl, CC0 1.0) as a visual reference for proportions and style. No model, image or
+other file from it is included or read at build or run time.
+
 ## Test data (fetched, never committed)
 
 | Where in StochCraft | Source | Licence |

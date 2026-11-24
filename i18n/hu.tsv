@@ -1202,12 +1202,13 @@ unit	yr	év
 	Layout	Elrendezés
 	Layout of the model, to scale	A modell elrendezése, méretarányosan
 	Drag to pan · Scroll to zoom	Húzás: eltolás · Görgetés: nagyítás
-	Positions from the diagram	Pozíciók a diagramból
+	Positions from the layout	Pozíciók az elrendezésből
 	Scale bar: {length} m	Léptékvonal: {length} m
 	{length} m	{length} m
 	x {x} m, y {y} m	x {x} m, y {y} m
 	Unplaced	Nem elhelyezett
-	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	Egyelőre minden blokk a diagram alapján van elhelyezve. A diagram által kihagyott blokk itt szerepel, és nincs megrajzolva.
+	Every block is placed.	Minden blokk el van helyezve.
+	Nothing to draw: this model has no layout yet. The Layout tab lists its blocks as unplaced.	Nincs mit rajzolni: ennek a modellnek még nincs elrendezése. Az Elrendezés lap nem elhelyezettként sorolja fel a blokkjait.
 	The charts are taller than the window: make the window taller, then export them again.	A diagramok magasabbak az ablaknál: növelje az ablak magasságát, majd exportálja őket újra.
 	The model changed while choosing where to save it, so it was not saved. Save again.	A modell megváltozott, miközben a mentés helyét választotta, ezért nem lett mentve. Mentse újra.
 	Exactly that many	Pontosan ennyi

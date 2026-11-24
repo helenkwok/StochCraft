@@ -1630,6 +1630,114 @@ fn an_agent_based_model_runs_from_the_command_line() {
     );
 }
 
+/// A folder of its own for one test, made new (never one left by another run) and removed
+/// when the test ends, however it ends.
+struct Scratch(PathBuf);
+
+impl Scratch {
+    fn new(tag: &str) -> Self {
+        use std::sync::atomic::{AtomicUsize, Ordering};
+        static NEXT: AtomicUsize = AtomicUsize::new(0);
+        loop {
+            let d = std::env::temp_dir().join(format!(
+                "stochcraft-cli-{tag}-{}-{}",
+                std::process::id(),
+                NEXT.fetch_add(1, Ordering::Relaxed)
+            ));
+            match std::fs::create_dir(&d) {
+                Ok(()) => return Self(d),
+                Err(e) if e.kind() == std::io::ErrorKind::AlreadyExists => {}
+                Err(e) => panic!("{}: {e}", d.display()),
+            }
+        }
+    }
+}
+
+impl Drop for Scratch {
+    fn drop(&mut self) {
+        let _ = std::fs::remove_dir_all(&self.0);
+    }
+}
+
+/// `--warmup` on an agent-based model discards what came before it, as on a process model:
+/// the statistics are of the time after it, the same numbers a run from 0 gives from then on.
+#[test]
+fn an_agent_based_models_warm_up_is_left_out_of_its_results() {
+    let m = model("sir-agents.bpmn");
+    let run = |warmup: &str, duration: &str| {
+        json(&ok(&[
+            "run",
+            &m,
+            "--reps",
+            "3",
+            "--warmup",
+            warmup,
+            "--duration",
+            duration,
+            "--format",
+            "json",
+        ]))
+    };
+    let full = run("0", "30");
+    let warmed = run("10", "20");
+    assert_eq!(warmed["warmup"], 10.0);
+    assert_eq!(warmed["end"], 30.0);
+    let times = |r: &Value| -> Vec<f64> {
+        r["times"]
+            .as_array()
+            .into_iter()
+            .flatten()
+            .filter_map(Value::as_f64)
+            .collect()
+    };
+    let (t_full, t_warmed) = (times(&full), times(&warmed));
+    assert_eq!(t_warmed.first(), Some(&10.0));
+    let from = t_full.iter().position(|t| *t == 10.0);
+    assert_eq!(from.map(|k| &t_full[k..]), Some(&t_warmed[..]));
+    for (a, b) in full["statistics"]
+        .as_array()
+        .into_iter()
+        .flatten()
+        .zip(warmed["statistics"].as_array().into_iter().flatten())
+    {
+        let means = |v: &Value| -> Vec<Value> { v["mean"].as_array().cloned().unwrap_or_default() };
+        assert_eq!(from.map(|k| means(a)[k..].to_vec()), Some(means(b)));
+    }
+    let table = ok(&[
+        "run",
+        &m,
+        "--reps",
+        "2",
+        "--warmup",
+        "10",
+        "--duration",
+        "20",
+    ]);
+    assert!(table.contains("agent-based, 10 to 30 day"), "{table}");
+}
+
+/// `run --out` never writes over a file an agent-based model reads beside it (its chart), as it
+/// never writes over the model, and the chart is left as it was.
+#[test]
+fn run_out_is_refused_over_an_agent_based_models_chart() {
+    let dir = Scratch::new("agents-out");
+    let models = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../tests/models");
+    for f in ["sir-agents.bpmn", "sir-person.scxml"] {
+        std::fs::copy(models.join(f), dir.0.join(f)).unwrap_or_else(|e| panic!("{f}: {e}"));
+    }
+    let m = dir.0.join("sir-agents.bpmn").to_string_lossy().into_owned();
+    let chart = dir.0.join("sir-person.scxml");
+    let before = std::fs::read(&chart).unwrap_or_else(|e| panic!("{e}"));
+    let o = cli(&["run", &m, "--reps", "1", "--out", &chart.to_string_lossy()]);
+    assert!(!o.status.success());
+    assert!(stderr(&o).contains("sir-person.scxml"), "{}", stderr(&o));
+    assert_eq!(std::fs::read(&chart).ok(), Some(before));
+    // Another file is written as usual.
+    let other = dir.0.join("results.txt");
+    ok(&["run", &m, "--reps", "1", "--out", &other.to_string_lossy()]);
+    assert!(other.exists());
+}
+
 /// A number that is not finite is refused before anything runs, naming its flag: a NaN would
 /// reach the engine as `null`, which means "not given".
 #[test]

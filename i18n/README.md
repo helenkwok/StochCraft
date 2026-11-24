@@ -1012,6 +1012,12 @@ fields (`“Service time”`) are named in the messages by their own rows.
   from its existing rows (the English says "resource" in the section title where the pool is
   meant, as the models' own pools are resources). Not checked against any other source and not
   reviewed by native speakers; the least certain are lo, th, ta, te, bn, ka, kk, hi and sq.
+- The rows for the Layout and 3D views drawn from the layout (M5.5, L3: Positions from the
+  layout, Every block is placed, and the 3D view's note for a model with no layout) replace the
+  two rows that said positions came from the diagram. They were machine-drafted from the plain
+  meaning of the English, with each catalog's own words for Layout, Unplaced and block from its
+  existing rows. Not checked against any other source and not reviewed by native speakers; the
+  least certain are lo, th, ta, te, bn, ka and kk.
 
 **Adding or changing a string:** add the English in the code through `i18n::t` (or `tf`, `tn`),
 then add its row to each catalog here, or leave it out to show English until it is translated.

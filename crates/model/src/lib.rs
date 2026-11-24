@@ -25,12 +25,14 @@ pub mod expr;
 pub mod messages;
 pub mod montecarlo;
 pub mod path;
+pub mod site;
 
 pub use calendar::{Calendar, DateTime, Timed};
 pub use montecarlo::{
     Control, McCorrelation, McInput, McOutput, McStop, McTarget, MonteCarlo, Sampling,
 };
 pub use path::{Frame, Path, Segment};
+pub use site::{Place, Scenery, Site, Track};
 
 use std::collections::{BTreeMap, BTreeSet, VecDeque};
 
@@ -440,15 +442,15 @@ impl ElementKind {
         }
     }
 
-    /// The most entities a conveyor holds at once, ⌊length / pitch⌋: 0 when its numbers are
-    /// not valid (see [`Problem::BadConveyorValue`]). `None` for any other element.
+    /// The most entities a conveyor holds at once, ⌊length / pitch⌋ (see [`whole_pitches`]): 0
+    /// when its numbers are not valid (see [`Problem::BadConveyorValue`]). `None` for any other
+    /// element.
     pub fn conveyor_places(&self) -> Option<u64> {
         match self {
             ElementKind::Conveyor { length, .. } => {
                 let pitch = self.conveyor_pitch()?;
-                // A float-to-integer cast saturates and turns a NaN into 0.
                 Some(if pitch > 0.0 && pitch.is_finite() {
-                    (length / pitch).floor() as u64
+                    whole_pitches(*length, pitch)
                 } else {
                     0
                 })
@@ -456,6 +458,21 @@ impl ElementKind {
             _ => None,
         }
     }
+}
+
+/// How many whole pitches fit in `length`: ⌊length / pitch⌋, where a quotient within rounding
+/// of a whole number counts as that whole number.
+///
+/// A pitch is a sum of two decimals, which binary floating point holds only approximately:
+/// 0.4 + 0.2 is 0.6000000000000001, so 30 / (0.4 + 0.2) is 49.99999999999999 and a plain floor
+/// gives 49 places on a belt that holds 50. The sum and the division each round by at most half
+/// a unit in the last place, so the quotient is nudged up by four units in its last place
+/// before the floor: enough for those errors, and far too little to turn 49.99 into 50.
+///
+/// A negative or NaN quotient gives 0 and an infinite one `u64::MAX` (the cast saturates).
+pub fn whole_pitches(length: f64, pitch: f64) -> u64 {
+    let q = length / pitch;
+    (q + q.abs() * (4.0 * f64::EPSILON)).floor() as u64
 }
 
 /// The electrical power a server's unit draws in each state, in kilowatts. At every instant a
@@ -1715,6 +1732,9 @@ pub struct Model {
     /// ([`montecarlo`]): `None` for a process model. A model with one and no elements is a Monte
     /// Carlo model, which [`Model::validate`] leaves to `stochcraft-mc` to check.
     pub monte_carlo: Option<MonteCarlo>,
+    /// The physical layout: conveyors' tracks, blocks' places and scenery ([`site`]). Empty for a
+    /// model without one, whose blocks are all unplaced.
+    pub site: Site,
     /// The populations, environment and statistics of an agent-based model, a model with no
     /// process ([`agents`]): `None` for any other. A model with one and no elements is an
     /// agent-based model, which [`Model::validate`] leaves to `stochcraft-agents` to check.
@@ -2546,11 +2566,17 @@ impl Model {
 
     /// Every problem with the model, errors first, each group in model order. A Monte Carlo
     /// model ([`Model::is_monte_carlo`]) has none here: it has no process, and its inputs and
-    /// outputs are checked by `stochcraft-mc`; nor does an agent-based model
-    /// ([`Model::is_agents`]), whose charts and populations `stochcraft-agents` checks.
+    /// outputs are checked by `stochcraft-mc`. An agent-based model ([`Model::is_agents`]) has
+    /// only its warm-up and duration checked here, as a process model's are; its charts and
+    /// populations `stochcraft-agents` checks.
     pub fn validate(&self) -> Vec<Diagnostic> {
-        if self.is_monte_carlo() || self.is_agents() {
+        if self.is_monte_carlo() {
             return Vec::new();
+        }
+        if self.is_agents() {
+            let mut out = Vec::new();
+            self.check_run_length(&mut out);
+            return out;
         }
         let mut out = Vec::new();
         self.check_ids(&mut out);
@@ -2834,7 +2860,25 @@ impl Model {
                         },
                     ));
                 }
-                if !bad && !bad_shape {
+                // A track's path gives the length (D23): a typed length that differs from it by
+                // more than the step a file keeps is an override, and is flagged. Without a
+                // track, the drawing shape's length is checked to within 1%.
+                let track = self.site.paths.get(&e.id);
+                if let Some(t) = track.filter(|_| !bad) {
+                    let path_length = t.length(self.experiment.length_unit);
+                    if path_length.is_finite()
+                        && (path_length - length).abs()
+                            > site::length_step(self.experiment.length_unit)
+                    {
+                        out.push(Diagnostic::warning(
+                            Some(&e.id),
+                            Problem::ConveyorLengthMismatch {
+                                length,
+                                path_length,
+                            },
+                        ));
+                    }
+                } else if !bad && !bad_shape {
                     let path_length = shape.path_length(length);
                     if path_length.is_finite() && (path_length - length).abs() > 0.01 * length {
                         out.push(Diagnostic::warning(
@@ -3761,6 +3805,23 @@ impl Model {
 
     fn check_experiment(&self, out: &mut Vec<Diagnostic>) {
         let x = &self.experiment;
+        self.check_run_length(out);
+        if !(x.layout_scale.is_finite() && x.layout_scale > 0.0) {
+            out.push(Diagnostic::error(None, Problem::BadLayoutScale));
+        }
+        if x.replications == 0 {
+            out.push(Diagnostic::error(
+                None,
+                Problem::BadExperiment {
+                    field: ExperimentField::Replications,
+                },
+            ));
+        }
+    }
+
+    /// The warm-up, finite and 0 or more, and the duration, finite and above 0.
+    fn check_run_length(&self, out: &mut Vec<Diagnostic>) {
+        let x = &self.experiment;
         if !(x.warmup.is_finite() && x.warmup >= 0.0) {
             out.push(Diagnostic::error(
                 None,
@@ -3774,17 +3835,6 @@ impl Model {
                 None,
                 Problem::BadExperiment {
                     field: ExperimentField::Duration,
-                },
-            ));
-        }
-        if !(x.layout_scale.is_finite() && x.layout_scale > 0.0) {
-            out.push(Diagnostic::error(None, Problem::BadLayoutScale));
-        }
-        if x.replications == 0 {
-            out.push(Diagnostic::error(
-                None,
-                Problem::BadExperiment {
-                    field: ExperimentField::Replications,
                 },
             ));
         }
@@ -4266,6 +4316,33 @@ fn reach<'a>(
 mod tests {
     use super::*;
 
+    #[test]
+    fn an_agent_based_models_warm_up_and_duration_are_checked() {
+        let fields = |warmup: f64, duration: f64| -> Vec<Problem> {
+            let mut m = Model {
+                agents: Some(agents::Agents::default()),
+                ..Model::default()
+            };
+            m.experiment.warmup = warmup;
+            m.experiment.duration = duration;
+            assert!(m.is_agents());
+            m.validate().into_iter().map(|d| d.problem).collect()
+        };
+        let warmup = Problem::BadExperiment {
+            field: ExperimentField::Warmup,
+        };
+        let duration = Problem::BadExperiment {
+            field: ExperimentField::Duration,
+        };
+        assert_eq!(fields(0.0, 60.0), vec![]);
+        assert_eq!(fields(10.0, 60.0), vec![]);
+        // A negative duration that a warm-up would hide in their sum is still refused.
+        assert_eq!(fields(2.0, -1.0), vec![duration.clone()]);
+        assert_eq!(fields(-1.0, 60.0), vec![warmup.clone()]);
+        assert_eq!(fields(f64::NAN, 0.0), vec![warmup, duration.clone()]);
+        assert_eq!(fields(0.0, f64::INFINITY), vec![duration]);
+    }
+
     fn id(s: &str) -> ElementId {
         ElementId(s.to_owned())
     }
@@ -4581,6 +4658,7 @@ mod tests {
             estimates: BTreeMap::new(),
             starting: BTreeMap::new(),
             monte_carlo: None,
+            site: Default::default(),
             agents: None,
             calendars: Vec::new(),
         }
@@ -5117,6 +5195,41 @@ mod tests {
         }
         assert_eq!(LengthUnit::default(), LengthUnit::Metres);
         assert_eq!(LengthUnit::from_name("metres"), None);
+    }
+
+    /// A length that is a whole number of pitches holds that many, although the pitch (a sum of
+    /// decimals) and the quotient are rounded; a length just short of one holds one fewer.
+    #[test]
+    fn a_whole_number_of_pitches_holds_that_many() {
+        let places = |length, item_length, gap| {
+            ElementKind::Conveyor {
+                length,
+                speed: 0.5,
+                accumulating: true,
+                item_length,
+                gap,
+                shape: ConveyorShape::Straight,
+            }
+            .conveyor_places()
+        };
+        // 0.4 + 0.2 is 0.6000000000000001: a plain floor gives 49, 19 and 0.
+        assert_eq!(places(30.0, 0.4, 0.2), Some(50));
+        assert_eq!(places(12.0, 0.4, 0.2), Some(20));
+        assert_eq!(places(4.0, 0.4, 0.2), Some(6));
+        assert_eq!(places(0.6, 0.4, 0.2), Some(1));
+        assert_eq!(places(29.99, 0.4, 0.2), Some(49));
+        assert_eq!(places(0.59, 0.4, 0.2), Some(0));
+        // Exact in binary.
+        assert_eq!(places(3.0, 0.5, 0.0), Some(6));
+        assert_eq!(places(2.9, 0.5, 0.0), Some(5));
+        // Invalid numbers hold none.
+        assert_eq!(places(f64::NAN, 0.4, 0.2), Some(0));
+        assert_eq!(places(-3.0, 0.4, 0.2), Some(0));
+        assert_eq!(places(3.0, f64::NAN, 0.2), Some(0));
+        assert_eq!(places(3.0, 0.0, 0.0), Some(0));
+        assert_eq!(whole_pitches(30.0, 0.4 + 0.2), 50);
+        assert_eq!(whole_pitches(f64::NEG_INFINITY, 0.6), 0);
+        assert_eq!(ElementKind::ParallelGateway.conveyor_places(), None);
     }
 
     #[test]

@@ -2,7 +2,11 @@
 <!-- A parcel sorter: parcels arrive on an infeed conveyor, a divert gateway sends each one to the
      lane for its product, and a parcel whose lane is full goes round the loop and tries again.
      Each lane ends in a packing station with no waiting room. Written for StochCraft (MIT OR
-     Apache-2.0). Time is in seconds, lengths in metres. -->
+     Apache-2.0). Time is in seconds, lengths in metres.
+     The layout (stochcraft:path, stochcraft:place, stochcraft:scene): the infeed merges at 30
+     degrees onto a 30 m racetrack loop (two 10.5 m straights, two half circles); the divert sits
+     where the infeed joins, and the four 4 m lanes leave the straight after it at right angles,
+     2 m apart, each ending at its packing station. Each conveyor's length is its path's. -->
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:bpsim="http://www.bpsim.org/schemas/2.0" id="definitions" name="Parcel sorter" targetNamespace="https://github.com/helenkwok/StochCraft/model" exporter="StochCraft" exporterVersion="0.1.0">
   <bpmn:resource id="pack_red_resource" name="Packer red"/>
   <bpmn:resource id="pack_blue_resource" name="Packer blue"/>
@@ -255,38 +259,77 @@
                 </bpsim:UserDistribution>
               </bpsim:Property>
             </bpsim:PropertyParameters>
+            <bpsim:VendorExtension name="stochcraft:place" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1">
+              <stochcraft:place x="-11.17" y="-6.45" heading="30"/>
+            </bpsim:VendorExtension>
           </bpsim:ElementParameters>
           <bpsim:ElementParameters elementRef="infeed">
             <bpsim:VendorExtension name="stochcraft:conveyor" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1">
               <stochcraft:conveyor length="12" speed="0.5" accumulating="true" itemLength="0.4" gap="0.2"/>
             </bpsim:VendorExtension>
+            <bpsim:VendorExtension name="stochcraft:path" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1">
+              <stochcraft:path x="-10.392304845413264" y="-6" heading="30">
+                <stochcraft:line length="12"/>
+              </stochcraft:path>
+            </bpsim:VendorExtension>
           </bpsim:ElementParameters>
           <bpsim:ElementParameters elementRef="sorter">
             <bpsim:VendorExtension name="stochcraft:routing" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1" stochcraft:value="divert"/>
+            <bpsim:VendorExtension name="stochcraft:place" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1">
+              <stochcraft:place path="loop" s="0"/>
+            </bpsim:VendorExtension>
           </bpsim:ElementParameters>
           <bpsim:ElementParameters elementRef="loop">
             <bpsim:VendorExtension name="stochcraft:conveyor" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1">
               <stochcraft:conveyor length="30" speed="0.5" accumulating="false" itemLength="0.4" gap="0.2"/>
+            </bpsim:VendorExtension>
+            <bpsim:VendorExtension name="stochcraft:path" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1">
+              <stochcraft:path x="0" y="0" width="0.8">
+                <stochcraft:line length="10.5"/>
+                <stochcraft:arc radius="1.432394487827058" angle="180"/>
+                <stochcraft:line length="10.5"/>
+                <stochcraft:arc radius="1.432394487827058" angle="180"/>
+              </stochcraft:path>
             </bpsim:VendorExtension>
           </bpsim:ElementParameters>
           <bpsim:ElementParameters elementRef="lane_red">
             <bpsim:VendorExtension name="stochcraft:conveyor" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1">
               <stochcraft:conveyor length="4" speed="0.3" accumulating="true" itemLength="0.4" gap="0.2"/>
             </bpsim:VendorExtension>
+            <bpsim:VendorExtension name="stochcraft:path" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1">
+              <stochcraft:path x="2.25" y="-0.45" heading="-90">
+                <stochcraft:line length="4"/>
+              </stochcraft:path>
+            </bpsim:VendorExtension>
           </bpsim:ElementParameters>
           <bpsim:ElementParameters elementRef="lane_blue">
             <bpsim:VendorExtension name="stochcraft:conveyor" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1">
               <stochcraft:conveyor length="4" speed="0.3" accumulating="true" itemLength="0.4" gap="0.2"/>
+            </bpsim:VendorExtension>
+            <bpsim:VendorExtension name="stochcraft:path" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1">
+              <stochcraft:path x="4.25" y="-0.45" heading="-90">
+                <stochcraft:line length="4"/>
+              </stochcraft:path>
             </bpsim:VendorExtension>
           </bpsim:ElementParameters>
           <bpsim:ElementParameters elementRef="lane_green">
             <bpsim:VendorExtension name="stochcraft:conveyor" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1">
               <stochcraft:conveyor length="4" speed="0.3" accumulating="true" itemLength="0.4" gap="0.2"/>
             </bpsim:VendorExtension>
+            <bpsim:VendorExtension name="stochcraft:path" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1">
+              <stochcraft:path x="6.25" y="-0.45" heading="-90">
+                <stochcraft:line length="4"/>
+              </stochcraft:path>
+            </bpsim:VendorExtension>
           </bpsim:ElementParameters>
           <bpsim:ElementParameters elementRef="lane_yellow">
             <bpsim:VendorExtension name="stochcraft:conveyor" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1">
               <stochcraft:conveyor length="4" speed="0.3" accumulating="true" itemLength="0.4" gap="0.2"/>
+            </bpsim:VendorExtension>
+            <bpsim:VendorExtension name="stochcraft:path" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1">
+              <stochcraft:path x="8.25" y="-0.45" heading="-90">
+                <stochcraft:line length="4"/>
+              </stochcraft:path>
             </bpsim:VendorExtension>
           </bpsim:ElementParameters>
           <bpsim:ElementParameters elementRef="pack_red">
@@ -301,6 +344,9 @@
               </bpsim:Selection>
             </bpsim:ResourceParameters>
             <bpsim:VendorExtension name="stochcraft:queueCapacity" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1" stochcraft:value="0"/>
+            <bpsim:VendorExtension name="stochcraft:place" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1">
+              <stochcraft:place x="2.25" y="-4.95" heading="-90"/>
+            </bpsim:VendorExtension>
           </bpsim:ElementParameters>
           <bpsim:ElementParameters elementRef="pack_blue">
             <bpsim:TimeParameters>
@@ -314,6 +360,9 @@
               </bpsim:Selection>
             </bpsim:ResourceParameters>
             <bpsim:VendorExtension name="stochcraft:queueCapacity" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1" stochcraft:value="0"/>
+            <bpsim:VendorExtension name="stochcraft:place" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1">
+              <stochcraft:place x="4.25" y="-4.95" heading="-90"/>
+            </bpsim:VendorExtension>
           </bpsim:ElementParameters>
           <bpsim:ElementParameters elementRef="pack_green">
             <bpsim:TimeParameters>
@@ -327,6 +376,9 @@
               </bpsim:Selection>
             </bpsim:ResourceParameters>
             <bpsim:VendorExtension name="stochcraft:queueCapacity" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1" stochcraft:value="0"/>
+            <bpsim:VendorExtension name="stochcraft:place" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1">
+              <stochcraft:place x="6.25" y="-4.95" heading="-90"/>
+            </bpsim:VendorExtension>
           </bpsim:ElementParameters>
           <bpsim:ElementParameters elementRef="pack_yellow">
             <bpsim:TimeParameters>
@@ -340,6 +392,9 @@
               </bpsim:Selection>
             </bpsim:ResourceParameters>
             <bpsim:VendorExtension name="stochcraft:queueCapacity" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1" stochcraft:value="0"/>
+            <bpsim:VendorExtension name="stochcraft:place" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1">
+              <stochcraft:place x="8.25" y="-4.95" heading="-90"/>
+            </bpsim:VendorExtension>
           </bpsim:ElementParameters>
           <bpsim:ElementParameters elementRef="flow-5">
             <bpsim:ControlParameters>
@@ -397,6 +452,19 @@
               </bpsim:Quantity>
             </bpsim:ResourceParameters>
           </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="shipped">
+            <bpsim:VendorExtension name="stochcraft:place" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1">
+              <stochcraft:place x="5.25" y="-7.4"/>
+            </bpsim:VendorExtension>
+          </bpsim:ElementParameters>
+          <bpsim:VendorExtension name="stochcraft:scene" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1">
+            <stochcraft:scene version="1">
+              <stochcraft:object id="floor" kind="floor" x="0.3" y="-2.4" width="12.8" depth="26.4"/>
+              <stochcraft:object id="infeed-scanner" kind="scanner" x="-1.905" y="-1.1" heading="30" width="1" height="1.4"/>
+              <stochcraft:object id="walkway-a" kind="marking" x="5.25" y="-6.25" width="0.08" depth="9.6"/>
+              <stochcraft:object id="walkway-b" kind="marking" x="5.25" y="-8.35" width="0.08" depth="9.6"/>
+            </stochcraft:scene>
+          </bpsim:VendorExtension>
         </bpsim:Scenario>
       </bpsim:BPSimData>
     </bpmn:extensionElements>

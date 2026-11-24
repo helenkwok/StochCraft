@@ -170,7 +170,9 @@ Select a block to see its settings. The most used ones come first, under **Param
   wait. With a finite **Waiting room**, at most the units plus the room. Results show them as
   **Inside at the start**, and count them as entered.
 - **Conveyor:** **Length**, **Speed**, **Accumulating**, **Item length** and **Gap**. Lengths are
-  in the experiment's **Length unit**, the speed in that unit per time unit.
+  in the experiment's **Length unit**, the speed in that unit per time unit. A conveyor drawn in
+  the model's layout (as the parcel sorter example's are) is as long as its drawn path; a
+  **Length** typed that differs overrides it, and a warning gives both lengths.
 
 **Times.** Each time is a distribution: pick its type (Constant, Exponential, Uniform, Triangular,
 Normal, Log-normal, Gamma, Erlang, Weibull and others) and fill in its values. If you only know a
@@ -464,13 +466,18 @@ This is one run of many: its numbers differ from the others and from the average
   queueing formula holds. Under the table it names the bottleneck and says what cannot be known
   before a run. Once the model has results, the simulated utilisation and mean wait stand beside
   the worked-out ones. `stochcraft-cli explain` prints the same table.
-- **3D:** the blocks drawn as simple 3D shapes, with conveyors as belts. Drag to orbit, scroll to
-  zoom, Shift-drag to pan, and **Fit** to see it all. While a run is watched, each entity on a
-  conveyor is drawn as a tote where the run has carried it.
+- **3D:** the model's layout in 3D: conveyors as belts with side rails and legs along their drawn
+  paths, and each placed block as a shape for its kind (a packing station with its packer, a
+  pallet of cartons where parcels arrive, a roll cage where they leave, a control cabinet at a
+  divert). Drag to orbit, scroll to zoom, Shift-drag to pan, and **Fit** to see it all. While a
+  run is watched, each item on a conveyor is drawn as a parcel where the run has carried it, in
+  its product's colour.
 - **Layout:** a plan of the model from above, to scale in metres, with a grid and a scale bar.
   Conveyors are drawn as their belts and blocks as their footprints. It is for looking only: drag
-  to pan, scroll to zoom, **Fit**. Positions come from the diagram for now (the view says
-  **Positions from the diagram**), and an **Unplaced** list names any block that is not drawn.
+  to pan, scroll to zoom, **Fit**. Positions come from the model's layout (the view says
+  **Positions from the layout**); a block the layout does not place is listed under **Unplaced**
+  and drawn in neither view, so a model with no layout yet shows an empty plan and 3D view. The
+  parcel sorter example has a layout.
 - **Dashboard** (beside the tabs, or **View ▸ Dashboard**): a panel beside the model with tiles
   for throughput, utilisation by resource, time on conveyors, and entities on the conveyors (or
   in the model) over time. Run the model, or watch a run, to fill it. While a run is watched, the
@@ -885,13 +892,16 @@ stochcraft-cli run tests/models/sir-agents.bpmn                      # each stat
 stochcraft-cli run tests/models/sir-agents.bpmn --format csv         # each statistic over time
 stochcraft-cli run tests/models/sir-agents.bpmn --reps 200 --seed 3  # more replications, another seed
 stochcraft-cli run tests/models/sir-agents.bpmn --duration 30        # a shorter run
+stochcraft-cli run tests/models/sir-agents.bpmn --warmup 10          # leave out the first 10 days
 stochcraft-cli validate tests/models/sir-agents.bpmn                 # check the charts and populations
 ```
 
 The table gives each statistic at the end of the run: the mean over the replications and, over
 more than one, the 5th, 50th and 95th percentiles; then each population's agents created,
 removed and alive at the end, and the messages no transition took (dropped) or that reached no
-agent (undelivered). The CSV has a row for each recorded time. The same seed gives the same
+agent (undelivered). As for a process model, what happens during the warm-up is left out: the
+statistics are recorded from the end of the warm-up, and the agents and messages counted are
+those after it. The CSV has a row for each recorded time. The same seed gives the same
 numbers, and adding an agent does not change the others' random draws.
 
 ## Save, open and export

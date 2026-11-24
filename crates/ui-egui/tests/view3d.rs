@@ -89,3 +89,28 @@ fn a_watched_run_draws_in_the_3d_view() {
     settle(&mut h);
     assert!(has(&h, VIEW));
 }
+
+/// The parcel sorter, drawn from its layout: its 3D view shows, and a watched run draws the
+/// parcels on its belts without trouble.
+#[test]
+fn the_sorter_draws_from_its_layout_while_a_run_is_watched() {
+    let mut h = mm1();
+    h.state_mut().open_file(
+        "sorter.bpmn",
+        include_bytes!("../../../tests/models/sorter.bpmn"),
+    );
+    settle(&mut h);
+    click(&mut h, Role::Tab, "3D");
+    assert!(has(&h, VIEW));
+    h.state_mut().run_command(&CommandRef::new(commands::WATCH));
+    for _ in 0..60 {
+        h.step();
+    }
+    assert!(has(&h, VIEW));
+    click(&mut h, Role::Button, "Fit");
+    assert!(has(&h, VIEW));
+    h.state_mut()
+        .run_command(&CommandRef::new(commands::STOP_WATCHING));
+    settle(&mut h);
+    assert!(has(&h, VIEW));
+}

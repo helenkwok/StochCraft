@@ -2,6 +2,8 @@
 # Adapted from google-github-actions/run-gemini-cli, examples/workflows/pr-review (Apache-2.0);
 # the GitHub App token step is removed (the workflow token is used), the pull request is passed to
 # /pr-code-review directly, and tools.core lists the tools the review needs (an empty list denies all).
+# The retry guard, the cause step and the daily-quota marker are this repository's own: they keep
+# a failing review from using up the free tier's daily request limit (see gemini-dispatch.yml).
 name: 'Gemini Review'
 
 on:
@@ -15,6 +17,10 @@ on:
         type: 'string'
         description: 'Any additional context from the request'
         required: false
+    outputs:
+      cause:
+        description: 'Why the review did not finish: quota, 503, time, other; none when it finished'
+        value: '${{ jobs.review.outputs.cause }}'
 
 concurrency:
   group: '${{ github.workflow }}-review-${{ github.event_name }}-${{ github.event.pull_request.number || github.event.issue.number || inputs.pull_request_number }}'
@@ -27,7 +33,10 @@ defaults:
 jobs:
   review:
     runs-on: 'ubuntu-latest'
+    # The review step has its own 5-minute limit, so the steps after it still run.
     timeout-minutes: 7
+    outputs:
+      cause: '${{ steps.cause.outputs.cause }}'
     permissions:
       contents: 'read'
       id-token: 'write'
@@ -39,9 +48,18 @@ jobs:
         with:
           persist-credentials: 'false'
 
+      # Stops the CLI after two failed requests: it would otherwise retry a 503 up to 10 times,
+      # and each attempt counts against the daily limit.
+      - name: 'Start the retry guard'
+        run: |-
+          nohup bash .github/scripts/gemini-retry-guard.sh 2 > /dev/null 2>&1 &
+
       - name: 'Run Gemini pull request review'
         uses: google-github-actions/run-gemini-cli@f77273f4c914e4bf38440cf36a0369cb64a37489 # v0.1.22
         id: 'gemini_pr_review'
+        # A backstop below the job's limit; the next steps name the cause and fail the job.
+        timeout-minutes: 5
+        continue-on-error: true
         env:
           GEMINI_CLI_TRUST_WORKSPACE: 'true'
           GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN || github.token }}'
@@ -71,7 +89,7 @@ jobs:
           settings: |-
             {
               "model": {
-                "maxSessionTurns": 25
+                "maxSessionTurns": 12
               },
               "telemetry": {
                 "enabled": true,
@@ -111,3 +129,63 @@ jobs:
               "https://github.com/gemini-cli-extensions/code-review"
             ]
           prompt: '/pr-code-review ${{ github.server_url }}/${{ github.repository }}/pull/${{ inputs.pull_request_number || github.event.pull_request.number || github.event.issue.number }}'
+
+      # The guard's copy of stderr survives a step timeout; the action's own copy does not.
+      - name: 'Name the cause'
+        id: 'cause'
+        if: |-
+          ${{ always() }}
+        env:
+          OUTCOME: '${{ steps.gemini_pr_review.outcome }}'
+        run: |-
+          pkill -f 'gemini-retry-guard.sh' || true
+          log="${RUNNER_TEMP}/gemini-guard/stderr.log"
+          if [[ -f gemini-artifacts/stderr.log ]]; then
+            log='gemini-artifacts/stderr.log'
+          fi
+          if [[ "${OUTCOME}" == 'success' ]]; then
+            cause='none'
+          elif [[ -f "${log}" ]] && grep -q -i 'exhausted your daily quota' "${log}"; then
+            cause='quota'
+          elif [[ -f "${RUNNER_TEMP}/gemini-guard/stopped" ]]; then
+            cause='503'
+          elif [[ ! -f gemini-artifacts/stderr.log && -f "${RUNNER_TEMP}/gemini-guard/stderr.log" ]]; then
+            # The CLI started (the guard saw its stderr) but never exited: the action copies stderr
+            # to gemini-artifacts when the CLI exits, so the step's time limit stopped it.
+            cause='time'
+          elif [[ -f "${log}" ]] && grep -q -E 'status 503|high demand' "${log}"; then
+            cause='503'
+          else
+            cause='other'
+          fi
+          echo "cause=${cause}" >> "${GITHUB_OUTPUT}"
+          # The free tier resets at midnight Pacific time, so the quota day is the Pacific date.
+          # Taken five minutes back, so an error just before midnight is not filed under the next day.
+          echo "quota_day=$(TZ=America/Los_Angeles date -d '5 minutes ago' +%F)" >> "${GITHUB_OUTPUT}"
+          echo "Gemini review outcome: ${OUTCOME}; cause: ${cause}"
+
+      # Read by gemini-dispatch.yml (actions/cache/restore, lookup-only): later requests skip Gemini
+      # until the quota resets. The path must stay the same in both files: it is part of the key.
+      - name: 'Write the daily-quota marker'
+        if: |-
+          ${{ always() && steps.cause.outputs.cause == 'quota' }}
+        run: |-
+          mkdir -p .gemini-quota
+          date -u +%FT%TZ > .gemini-quota/exhausted
+
+      - name: 'Remember that the daily quota is used up'
+        if: |-
+          ${{ always() && steps.cause.outputs.cause == 'quota' }}
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: '.gemini-quota/exhausted'
+          key: 'gemini-daily-quota-exhausted-${{ steps.cause.outputs.quota_day }}'
+
+      - name: 'Fail when the review did not finish'
+        if: |-
+          ${{ always() && steps.gemini_pr_review.outcome != 'success' }}
+        env:
+          CAUSE: '${{ steps.cause.outputs.cause }}'
+        run: |-
+          echo "::error title=Gemini review did not finish::cause: ${CAUSE:-unknown}"
+          exit 1

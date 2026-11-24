@@ -717,6 +717,84 @@
       <xs:attribute name="halfWidth" type="xs:double"/>
     </xs:complexType>
   </xs:element>
+  <!--
+    The physical layout (ROADMAP.md, M5.5). Distances are in the scenario's length unit, headings
+    and angles in degrees (0 along +x, positive turning left), z up from the floor.
+
+    stochcraft:path, on a conveyor's ElementParameters: its track, a start frame (x, y, z,
+    heading), the belt's width (drawn only; when left out, 0.6 m in the scenario's unit) and line,
+    arc and helix segments, each going on from the end of the one before. The conveyor's length
+    is the path's, to 0.1 mm; a conveyor length that differs from it by more is an override,
+    which StochCraft flags.
+
+    stochcraft:place, on a block's ElementParameters: where it stands, a frame (x, y, z, heading)
+    or a distance s along a conveyor's track (path names the conveyor).
+
+    stochcraft:scene, a child of the scenario: look-only scenery, one object per element with an
+    id, a kind (floor, wall, pallet, column, marking...), its centre frame and its size. The run
+    never reads it. version says which vocabulary of kinds the scene uses.
+  -->
+  <xs:attributeGroup name="Frame">
+    <xs:attribute name="x" type="xs:double" use="required"/>
+    <xs:attribute name="y" type="xs:double" use="required"/>
+    <xs:attribute name="z" type="xs:double" default="0"/>
+    <xs:attribute name="heading" type="xs:double" default="0"/>
+  </xs:attributeGroup>
+  <xs:element name="path">
+    <xs:complexType>
+      <xs:choice maxOccurs="unbounded">
+        <xs:element name="line">
+          <xs:complexType>
+            <xs:attribute name="length" type="xs:double" use="required"/>
+            <xs:attribute name="rise" type="xs:double" default="0"/>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="arc">
+          <xs:complexType>
+            <xs:attribute name="radius" type="xs:double" use="required"/>
+            <xs:attribute name="angle" type="xs:double" use="required"/>
+            <xs:attribute name="rise" type="xs:double" default="0"/>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="helix">
+          <xs:complexType>
+            <xs:attribute name="radius" type="xs:double" use="required"/>
+            <xs:attribute name="rise" type="xs:double" use="required"/>
+            <xs:attribute name="turns" type="xs:double" use="required"/>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+      <xs:attributeGroup ref="stochcraft:Frame"/>
+      <xs:attribute name="width" type="xs:double"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="place">
+    <xs:complexType>
+      <xs:attribute name="x" type="xs:double"/>
+      <xs:attribute name="y" type="xs:double"/>
+      <xs:attribute name="z" type="xs:double" default="0"/>
+      <xs:attribute name="heading" type="xs:double" default="0"/>
+      <xs:attribute name="path" type="xs:string"/>
+      <xs:attribute name="s" type="xs:double"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="scene">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="object" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:attribute name="id" type="xs:string" use="required"/>
+            <xs:attribute name="kind" type="xs:string" use="required"/>
+            <xs:attributeGroup ref="stochcraft:Frame"/>
+            <xs:attribute name="width" type="xs:double" default="0"/>
+            <xs:attribute name="depth" type="xs:double" default="0"/>
+            <xs:attribute name="height" type="xs:double" default="0"/>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+      <xs:attribute name="version" type="xs:string" use="required"/>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="agents">
     <xs:complexType>
       <xs:sequence>

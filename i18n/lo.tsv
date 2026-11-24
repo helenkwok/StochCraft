@@ -1202,12 +1202,13 @@ unit	yr	ປີ
 	Layout	ແຜນຜັງ
 	Layout of the model, to scale	ແຜນຜັງຂອງແບບຈຳລອງ ຕາມມາດຕາສ່ວນ
 	Drag to pan · Scroll to zoom	ລາກເພື່ອຍ້າຍ · ເລື່ອນເພື່ອຊູມ
-	Positions from the diagram	ຕຳແໜ່ງຈາກແຜນພາບ
+	Positions from the layout	ຕຳແໜ່ງຈາກແຜນຜັງ
 	Scale bar: {length} m	ແຖບມາດຕາສ່ວນ: {length} m
 	{length} m	{length} m
 	x {x} m, y {y} m	x {x} m, y {y} m
 	Unplaced	ຍັງບໍ່ໄດ້ວາງ
-	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	ດຽວນີ້ທຸກບລັອກຖືກວາງຕາມແຜນພາບ. ບລັອກທີ່ແຜນພາບບໍ່ມີຈະຖືກລະບຸໄວ້ບ່ອນນີ້ ແລະ ບໍ່ຖືກແຕ້ມ.
+	Every block is placed.	ທຸກບລັອກຖືກວາງແລ້ວ.
+	Nothing to draw: this model has no layout yet. The Layout tab lists its blocks as unplaced.	ບໍ່ມີຫຍັງໃຫ້ແຕ້ມ: ແບບຈຳລອງນີ້ຍັງບໍ່ມີແຜນຜັງ. ແຖບແຜນຜັງລາຍຊື່ບລັອກຂອງມັນວ່າຍັງບໍ່ໄດ້ວາງ.
 	The charts are taller than the window: make the window taller, then export them again.	ແຜນພູມສູງກວ່າໜ້າຕ່າງ: ເຮັດໃຫ້ໜ້າຕ່າງສູງຂຶ້ນ, ແລ້ວສົ່ງອອກອີກຄັ້ງ.
 	The model changed while choosing where to save it, so it was not saved. Save again.	ແບບຈຳລອງປ່ຽນໄປໃນຂະນະທີ່ເລືອກບ່ອນບັນທຶກ ຈຶ່ງບໍ່ໄດ້ບັນທຶກ. ບັນທຶກອີກຄັ້ງ.
 	Exactly that many	ຈຳນວນນັ້ນພໍດີ
