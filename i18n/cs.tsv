@@ -1475,6 +1475,15 @@ unit	yr	r.
 	Remove rule	Odebrat pravidlo
 	Change Decision Table	Změnit rozhodovací tabulku
 	Use Decision Table	Použít rozhodovací tabulku
+	Reset {field}	Obnovit: {field}
+	Changed from the default	Změněno oproti výchozí hodnotě
+	Changed from the inherited scenario	Změněno oproti zděděnému scénáři
+	Mixed values	Různé hodnoty
+connection	Flow	Tok
+	Remove flow	Odebrat tok
+	Condition	Podmínka
+	Shared properties	Společné vlastnosti
+	These blocks share no properties.	Tyto bloky nemají žádné společné vlastnosti.
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	{block} je umístěn {s} podél dopravníku {conveyor}, jehož dráha je dlouhá {length}. Umístěte ho mezi 0 a {length} podél dráhy.
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	Entity na dopravníku {conveyor} dorazí k {before} dřív než k {block}, ale {block} je umístěn blíž začátku ({s} podél něj, {before} na {before_s}). Umístěte {block} na dráze dál než {before}, nebo je v tocích prohoďte.
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	Spoj na toku {flow} se překonává {time}. Nastavte jeho dobu přesunu na 0 nebo více.

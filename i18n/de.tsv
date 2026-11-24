@@ -1475,6 +1475,15 @@ unit	yr	J.
 	Remove rule	Regel entfernen
 	Change Decision Table	Entscheidungstabelle ändern
 	Use Decision Table	Entscheidungstabelle verwenden
+	Reset {field}	{field} zurücksetzen
+	Changed from the default	Gegenüber dem Standard geändert
+	Changed from the inherited scenario	Gegenüber dem geerbten Szenario geändert
+	Mixed values	Gemischte Werte
+connection	Flow	Verbindung
+	Remove flow	Verbindung entfernen
+	Condition	Bedingung
+	Shared properties	Gemeinsame Eigenschaften
+	These blocks share no properties.	Diese Blöcke haben keine gemeinsamen Eigenschaften.
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	Block {block} ist {s} entlang des Förderbands {conveyor} platziert, dessen Pfad {length} lang ist. Platzieren Sie ihn zwischen 0 und {length} entlang des Pfads.
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	Entitäten auf dem Förderband {conveyor} erreichen {before} vor {block}, aber {block} liegt näher am Anfang ({s} entlang des Förderbands, {before} bei {before_s}). Platzieren Sie {block} weiter hinten auf dem Pfad als {before} oder vertauschen Sie sie in den Verbindungen.
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	Der Übergang an der Verbindung {flow} braucht zum Überqueren {time}. Setzen Sie seine Transferzeit auf 0 oder mehr.

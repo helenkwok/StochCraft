@@ -1475,6 +1475,15 @@ unit	yr	a
 	Remove rule	Elimina la regla
 	Change Decision Table	Canvia la taula de decisió
 	Use Decision Table	Fes servir la taula de decisió
+	Reset {field}	Restableix {field}
+	Changed from the default	Canviat respecte al valor predeterminat
+	Changed from the inherited scenario	Canviat respecte a l'escenari heretat
+	Mixed values	Valors diversos
+connection	Flow	Flux
+	Remove flow	Elimina el flux
+	Condition	Condició
+	Shared properties	Propietats compartides
+	These blocks share no properties.	Aquests blocs no comparteixen cap propietat.
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	{block} està col·locat a {s} al llarg de la cinta transportadora {conveyor}, el traçat de la qual fa {length}. Col·loqueu-lo entre 0 i {length} al llarg del traçat.
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	Les entitats de la cinta transportadora {conveyor} arriben a {before} abans que a {block}, però {block} està col·locat més a prop de l'inici ({s} al llarg de la cinta, {before} a {before_s}). Col·loqueu {block} més endavant al llarg del traçat que {before} o intercanvieu-los als fluxos.
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	El punt d'unió del flux {flow} triga {time} a creuar-se. Feu que el seu temps de transferència sigui 0 o més.

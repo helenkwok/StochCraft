@@ -1475,6 +1475,15 @@ unit	yr	год.
 	Remove rule	Уклони правило
 	Change Decision Table	Промени табелу одлучивања
 	Use Decision Table	Користи табелу одлучивања
+	Reset {field}	Врати на почетно: {field}
+	Changed from the default	Промењено у односу на подразумевано
+	Changed from the inherited scenario	Промењено у односу на наслеђени сценарио
+	Mixed values	Различите вредности
+connection	Flow	Ток
+	Remove flow	Уклони ток
+	Condition	Услов
+	Shared properties	Заједничка својства
+	These blocks share no properties.	Ови блокови немају заједничких својстава.
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	Блок {block} је постављен на {s} дуж транспортера {conveyor}, чија је путања дугачка {length}. Поставите га између 0 и {length} дуж путање.
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	Ентитети на транспортеру {conveyor} стижу до {before} пре {block}, али је {block} постављен ближе почетку ({s} дуж њега, {before} на {before_s}). Поставите {block} даље дуж путање него {before} или их замените у токовима.
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	Прелазак преко споја на току {flow} траје {time}. Поставите његово време преноса на 0 или више.

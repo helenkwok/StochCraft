@@ -1,13 +1,19 @@
-//! Editing the model beside the canvas: the model overview (name, experiment, connections,
-//! problems) and the inspector of the selected block (name, parameters, flows, its problems).
-//! Every change is one engine command, so each is one undo step.
+//! Editing the model beside the canvas: the properties of the selection. With nothing selected,
+//! the model overview (name, experiment, connections, problems); with a block, its inspector
+//! (name, parameters, flows, its problems); with a flow, how entities take it; with several
+//! blocks, the properties they share. A value that differs from its default, or from the
+//! scenario the opened one inherits from, is in bold with a reset beside it (see `props`).
+//! Every change is one engine command (a batch for several blocks), so each is one undo step.
+
+use std::collections::BTreeSet;
 
 use serde_json::{Value, json};
 use stochcraft_engine::COMMANDS;
 use stochcraft_model::Model;
 
-use crate::form::{self, Schema};
-use crate::i18n::{t, tf};
+use crate::form::{self, Mark, Marked, Schema};
+use crate::i18n::{t, tc, tf};
+use crate::props::{self, Against};
 use crate::{App, theme};
 
 /// The kinds of block that can be added, with their parameters when added.
@@ -157,6 +163,67 @@ fn is_set(el: &Value, f: &str) -> bool {
     }
 }
 
+/// A block's parameter `f` as its field shows it: a setting the file leaves out when it has
+/// its default, with that default.
+fn shown_value(f: &str, el: &Value) -> Value {
+    match (f, &el[f]) {
+        ("available" | "transfer_holds_sender", Value::Null) => json!(true),
+        ("idle_outside", Value::Null) => json!(false),
+        (_, v) => v.clone(),
+    }
+}
+
+/// Whether a block's parameter is a time, or a conveyor's length or speed: a number with a unit
+/// after it.
+fn is_timed(f: &str) -> bool {
+    matches!(
+        f,
+        "interarrival"
+            | "service"
+            | "duration"
+            | "transfer"
+            | "planned_run_time"
+            | "length"
+            | "speed"
+            | "item_length"
+            | "gap"
+    )
+}
+
+/// A box for a setting that is on or off (a flow that is rework, entities giving up), its label
+/// in bold with a reset after it while the setting differs from its reference. Whether it was
+/// toggled, and whether the reset was clicked.
+fn marked_checkbox(
+    ui: &mut egui::Ui,
+    on: &mut bool,
+    label: &str,
+    hover: &str,
+    mark: Mark,
+) -> (bool, bool) {
+    ui.horizontal(|ui| {
+        let r = ui
+            .checkbox(on, form::marked_text(label, Some(mark)))
+            .on_hover_text(hover);
+        form::describe_mark(ui, &r, Some(mark), Some(hover));
+        let reset = form::reset_button(ui, Some(mark), label);
+        (r.changed(), reset)
+    })
+    .inner
+}
+
+/// The line above a choice of settings ("Job under way on a server going off shift:"), in bold
+/// with a reset after it while the choice differs from its reference; the reset is named after
+/// the line, without its colon. Whether the reset was clicked.
+fn marked_heading(ui: &mut egui::Ui, text: &str, mark: Mark) -> bool {
+    ui.horizontal(|ui| {
+        let r = ui.label(form::marked_text(text, Some(mark)));
+        form::describe_mark(ui, &r, Some(mark), None);
+        let name = text.trim_end().trim_end_matches([':', '：']).trim_end();
+        form::reset_button(ui, Some(mark), name)
+    })
+    .inner
+}
+
 /// The parameters of a command, from the engine's catalogue.
 pub(crate) fn params_schema(command: &str) -> Value {
     COMMANDS
@@ -286,6 +353,31 @@ impl App {
         true
     }
 
+    /// After a reset of the field under `key`: what was typed in it is dropped (a refused number
+    /// would otherwise stay in it), and on the next frame the keyboard goes to the field's first
+    /// number, since the reset it was on is gone with the change.
+    fn after_reset(&mut self, key: &str) {
+        let under = format!("{key}/");
+        let refused = format!("{key}!");
+        self.drafts
+            .retain(|k, _| k != key && k != &refused && !k.starts_with(&under));
+        self.refocus = Some(key.to_owned());
+    }
+
+    /// Which page of the properties panel the selection shows: a block's, several blocks', a
+    /// flow's or the model's.
+    fn page(&self) -> String {
+        match (&self.selected, &self.canvas.flow) {
+            (Some(id), _) => format!("block {id}"),
+            (None, _) if self.canvas.multi.len() > 1 => {
+                let ids: Vec<&str> = self.canvas.multi.iter().map(String::as_str).collect();
+                format!("blocks {}", ids.join(" "))
+            }
+            (None, Some(flow)) => format!("flow {flow}"),
+            (None, None) => "model".to_owned(),
+        }
+    }
+
     /// Selects `block` (`None`: the model page) in the model view.
     pub(crate) fn show_block(&mut self, block: Option<String>) {
         self.show_results = false;
@@ -373,6 +465,13 @@ impl App {
         let problems = self.problems();
         let model = self.wire_model();
         let ctx = ui.ctx().clone();
+        if let Some(key) = self.refocus.take() {
+            form::focus(Some(key));
+        }
+        self.inherited = self
+            .engine
+            .inherited_model()
+            .map(stochcraft_engine::wire::model);
         // Text typed in a field and not yet entered belongs to the block it was typed for. When
         // another is selected, that block's page is drawn once more with the focus gone from
         // the field, so the field commits as Enter would; the new selection shows next frame.
@@ -398,6 +497,15 @@ impl App {
                 self.drafts.clear();
                 self.drafts_of = self.selected.clone();
                 self.drafts_held = false;
+            }
+        }
+        // The model page, a flow's and several blocks' all have no block selected: text typed
+        // on one of them is dropped when another is shown.
+        if !self.drafts_held {
+            let page = self.page();
+            if self.drafts_page != page {
+                self.drafts.clear();
+                self.drafts_page = page;
             }
         }
         let selected = self.selected.clone();
@@ -429,7 +537,12 @@ impl App {
                     None if self.canvas.multi.len() > 1 && !self.drafts_held => {
                         self.multi_inspector(ui)
                     }
-                    None => self.overview(ui, p, &model, &problems),
+                    None => match self.canvas.flow.clone() {
+                        Some(flow) if !self.drafts_held => {
+                            self.flow_inspector(ui, &model, &flow, &problems);
+                        }
+                        _ => self.overview(ui, p, &model, &problems),
+                    },
                 }
             });
         if self.drafts_held {
@@ -456,7 +569,7 @@ impl App {
             Some(id) => format!("{id}/"),
             None => "x/".to_owned(),
         };
-        if form::focus_key().is_some_and(|k| k.starts_with(&page)) {
+        if form::focus_key().is_some_and(|k| k.starts_with(&page) || k.starts_with("multi/")) {
             form::focus(None);
         }
     }
@@ -693,25 +806,18 @@ impl App {
         let _ = p;
     }
 
-    /// A block's parameters `fields`, each drawn from `block.set`'s schema; an edit is one
-    /// `block.set`.
-    fn block_fields(
-        &mut self,
-        ui: &mut egui::Ui,
-        model: &Value,
-        el: &Value,
-        id: &str,
-        fields: &[&str],
-    ) {
+    /// `block.set`'s schema with the limits the model checks, so the fields refuse the rest: a
+    /// server has a unit (or, with units by calendar, `by_calendar`, may have none outside
+    /// them), a batch at least one entity; a conveyor's lengths and speed are above 0 and its
+    /// gap 0 or more.
+    fn block_schema(by_calendar: bool) -> Value {
         let mut schema = params_schema("block.set");
-        // The limits the model checks, so the fields refuse the rest: a server has a unit (or
-        // none outside the calendars, with units by calendar), a batch at least one entity.
-        if !is_set(el, "shifts") {
+        if !by_calendar {
             schema["properties"]["capacity"]["minimum"] = json!(1);
         }
         schema["properties"]["size"]["minimum"] = json!(1);
-        // A conveyor's numbers: lengths and speed above 0, a gap of 0 or more. The accumulating
-        // box has the words below; the others are plain from their labels and units.
+        // The accumulating box has the words below; the others are plain from their labels
+        // and units.
         for f in ["length", "speed", "item_length"] {
             schema["properties"][f]["exclusiveMinimum"] = json!(0.0);
             schema["properties"][f]["description"] = Value::Null;
@@ -721,48 +827,84 @@ impl App {
         schema["properties"]["accumulating"]["description"] = json!(t(
             "Ticked, entities queue up at the end while the rest keep moving. Unticked, the whole belt stops when the entity at the end cannot leave."
         ));
+        schema
+    }
+
+    /// The unit block field `f`'s numbers are shown in: a conveyor's lengths and speed in their
+    /// own, the rest in the time unit (the form's "time" fields are those with a unit after
+    /// them).
+    fn field_unit(&self, f: &str) -> String {
         let unit = self.time_unit_label();
-        // A conveyor's lengths are in the length unit, its speed in that per the time unit.
-        let length_unit = self.length_unit_label();
-        let speed_unit = format!("{length_unit}/{unit}");
+        match f {
+            "length" | "item_length" | "gap" => self.length_unit_label(),
+            "speed" => format!("{}/{unit}", self.length_unit_label()),
+            _ => unit,
+        }
+    }
+
+    /// Block `id` in the scenario the opened one inherits from, if it inherits from one and the
+    /// block is there.
+    fn inherited_block(&self, id: &str) -> Option<&Value> {
+        self.inherited.as_ref()?["elements"]
+            .as_array()?
+            .iter()
+            .find(|e| e["id"] == id)
+    }
+
+    /// Flow `id` in the scenario the opened one inherits from, if it is there.
+    fn inherited_flow(&self, id: &str) -> Option<&Value> {
+        self.inherited.as_ref()?["connections"]
+            .as_array()?
+            .iter()
+            .find(|c| c["id"] == id)
+    }
+
+    /// How block `el`'s field `f` compares with what it is measured against (the inherited
+    /// scenario's value, or a new block's), and that reference value.
+    fn block_mark(&self, el: &Value, f: &str) -> (Mark, Value) {
+        let id = el["id"].as_str().unwrap_or("");
+        let kind = el["kind"].as_str().unwrap_or("");
+        let (reference, against) = props::block_reference(kind, f, self.inherited_block(id));
+        let changed = props::differs(f, &el[f], &reference);
+        (Mark { changed, against }, reference)
+    }
+
+    /// How flow `c`'s field `f` compares with what it is measured against, and that value.
+    fn flow_mark(&self, c: &Value, f: &str) -> (Mark, Value) {
+        let id = c["id"].as_str().unwrap_or("");
+        let (reference, against) = props::flow_reference(f, self.inherited_flow(id));
+        let changed = props::differs(f, &c[f], &reference);
+        (Mark { changed, against }, reference)
+    }
+
+    /// A block's parameters `fields`, each drawn from `block.set`'s schema, in bold with a
+    /// reset while it differs from its default (or inherited) value; an edit or a reset is one
+    /// `block.set`.
+    fn block_fields(
+        &mut self,
+        ui: &mut egui::Ui,
+        model: &Value,
+        el: &Value,
+        id: &str,
+        fields: &[&str],
+    ) {
+        let schema = Self::block_schema(is_set(el, "shifts"));
         let calendars = form::calendars(model);
         for f in fields {
             // Whether the sender waits applies only to a transfer.
             if *f == "transfer_holds_sender" && el["transfer"].is_null() {
                 continue;
             }
-            // Settings the file leaves out when they have their default.
-            let current = match (*f, &el[*f]) {
-                ("available" | "transfer_holds_sender", Value::Null) => json!(true),
-                ("idle_outside", Value::Null) => json!(false),
-                (_, v) => v.clone(),
-            };
-            // The unit a number is shown in: a conveyor's lengths and speed in their own (the
-            // form's "time" fields are those with a unit after them).
-            let shown_unit = match *f {
-                "length" | "item_length" | "gap" => &length_unit,
-                "speed" => &speed_unit,
-                _ => &unit,
-            };
+            let current = shown_value(f, el);
+            let shown_unit = self.field_unit(f);
+            let (mark, reference) = self.block_mark(el, f);
             let mut cx = form::Cx {
-                time_unit: shown_unit,
+                time_unit: &shown_unit,
                 numbers: &self.numbers,
                 drafts: &mut self.drafts,
                 calendars: &calendars,
             };
             let key = format!("{id}/{f}");
-            let time = matches!(
-                *f,
-                "interarrival"
-                    | "service"
-                    | "duration"
-                    | "transfer"
-                    | "planned_run_time"
-                    | "length"
-                    | "speed"
-                    | "item_length"
-                    | "gap"
-            );
             // The basics' "?", on the task's own fields (not a time by value, say).
             // The words for starting contents speak of units serving, so only on a task with
             // units.
@@ -771,12 +913,404 @@ impl App {
                 _ => el["kind"] != "delay",
             };
             form::explain(&key, explanation(f).filter(|_| shown));
-            let changed = form::field(ui, &mut cx, Schema::new(&schema), &key, f, &current, time);
+            let edit = form::field_marked(
+                ui,
+                &mut cx,
+                Schema::new(&schema),
+                &key,
+                f,
+                &current,
+                is_timed(f),
+                mark,
+            );
             form::explain(&key, None);
-            if let Some(v) = changed {
-                self.execute("block.set", json!({ "id": id, *f: v }));
+            match edit {
+                Marked::Set(v) => {
+                    self.execute("block.set", json!({ "id": id, *f: v }));
+                }
+                Marked::Reset => {
+                    self.after_reset(&key);
+                    let v = props::reset_value(&el[*f], &reference);
+                    self.execute("block.set", json!({ "id": id, *f: v }));
+                }
+                Marked::Unchanged => {}
             }
         }
+    }
+
+    /// The properties the selected blocks share, each in bold with a reset while any of them
+    /// differs from its default (or inherited) value: the fields `block.set` takes for every
+    /// selected kind. Where their values differ the field shows that they do, and an edit sets
+    /// only what was edited, so typing a mean keeps each distribution's other parameters. An
+    /// edit or a reset is one batch, so one undo step for them all.
+    pub(crate) fn multi_properties(&mut self, ui: &mut egui::Ui) {
+        let model = self.wire_model();
+        let els: Vec<Value> = model["elements"]
+            .as_array()
+            .into_iter()
+            .flatten()
+            .filter(|e| {
+                e["id"]
+                    .as_str()
+                    .is_some_and(|id| self.canvas.multi.contains(id))
+            })
+            .cloned()
+            .collect();
+        let Some(first) = els.first() else {
+            return;
+        };
+        let calendars = form::calendars(&model);
+        let all_of = |kind: &str| -> Vec<&'static str> {
+            parameters(kind)
+                .iter()
+                .chain(more_parameters(kind))
+                .chain(timed_parameters(kind))
+                .copied()
+                .collect()
+        };
+        let by_calendar = !calendars.is_empty() || els.iter().any(|e| is_set(e, "shifts"));
+        let fields: Vec<&str> = all_of(first["kind"].as_str().unwrap_or(""))
+            .into_iter()
+            .filter(|f| {
+                els.iter()
+                    .all(|e| all_of(e["kind"].as_str().unwrap_or("")).contains(f))
+            })
+            .filter(|f| *f != "shifts" || by_calendar)
+            .filter(|f| {
+                *f != "transfer_holds_sender" || els.iter().all(|e| !e["transfer"].is_null())
+            })
+            .collect();
+        section(ui, t("Shared properties"));
+        if fields.is_empty() {
+            ui.label(theme::weak(ui, t("These blocks share no properties.")));
+            return;
+        }
+        let schema = Self::block_schema(els.iter().any(|e| is_set(e, "shifts")));
+        for f in fields {
+            let currents: Vec<Value> = els.iter().map(|e| shown_value(f, e)).collect();
+            let marks: Vec<(Mark, Value)> = els.iter().map(|e| self.block_mark(e, f)).collect();
+            let mark = Mark {
+                changed: marks.iter().any(|(m, _)| m.changed),
+                against: if marks.iter().any(|(m, _)| m.against == Against::Inherited) {
+                    Against::Inherited
+                } else {
+                    Against::Default
+                },
+            };
+            let key = format!("multi/{f}");
+            let mut mixed = BTreeSet::new();
+            let shown = props::merge(&currents, &key, &mut mixed);
+            let shown_unit = self.field_unit(f);
+            let mut cx = form::Cx {
+                time_unit: &shown_unit,
+                numbers: &self.numbers,
+                drafts: &mut self.drafts,
+                calendars: &calendars,
+            };
+            // Mixed as a whole (some with a transfer time, some without): the field showed none
+            // of their values, so what is chosen there is set on each as it is.
+            let whole = mixed.contains(&key);
+            form::set_mixed(mixed);
+            let edit = form::field_marked(
+                ui,
+                &mut cx,
+                Schema::new(&schema),
+                &key,
+                f,
+                &shown,
+                is_timed(f),
+                mark,
+            );
+            form::set_mixed(BTreeSet::new());
+            let reset = edit == Marked::Reset;
+            let steps: Vec<Value> = match edit {
+                Marked::Set(v) => els
+                    .iter()
+                    .zip(&currents)
+                    .filter_map(|(e, now)| {
+                        let next = if whole {
+                            v.clone()
+                        } else {
+                            props::patch(now, &shown, &v)
+                        };
+                        (!props::same(&next, now)).then(|| {
+                            json!({"command": "block.set", "params": { "id": e["id"], f: next }})
+                        })
+                    })
+                    .collect(),
+                Marked::Reset => els
+                    .iter()
+                    .zip(&marks)
+                    .filter(|(_, (m, _))| m.changed)
+                    .map(|(e, (_, reference))| {
+                        let v = props::reset_value(&e[f], reference);
+                        json!({"command": "block.set", "params": { "id": e["id"], f: v }})
+                    })
+                    .collect(),
+                Marked::Unchanged => Vec::new(),
+            };
+            if reset {
+                self.after_reset(&key);
+            }
+            if !steps.is_empty() {
+                self.execute("batch", json!({ "commands": steps }));
+            }
+        }
+    }
+
+    /// The properties of the flow selected on the canvas: the blocks it joins, and how entities
+    /// take it (a decision's probability and condition, and whether it is rework or the way for
+    /// those who give up, find no room or balk), each in bold with a reset while it differs
+    /// from a new flow's (or the inherited scenario's) value. Each edit is one `flow.set`.
+    fn flow_inspector(
+        &mut self,
+        ui: &mut egui::Ui,
+        model: &Value,
+        cid: &str,
+        problems: &[Problem],
+    ) {
+        let c = connection(model, cid);
+        if c.is_null() {
+            self.canvas.flow = None;
+            return;
+        }
+        let from = c["from"].as_str().unwrap_or("").to_owned();
+        let to = c["to"].as_str().unwrap_or("").to_owned();
+        let names = element_names(model);
+        let name_of = |x: &str| {
+            names
+                .iter()
+                .find(|(i, _)| i == x)
+                .map_or_else(|| x.to_owned(), |(_, n)| n.clone())
+        };
+        ui.horizontal(|ui| {
+            if ui
+                .link(t("Model"))
+                .on_hover_text(t("Back to the model (Esc)"))
+                .clicked()
+            {
+                self.canvas.flow = None;
+            }
+            ui.label(theme::weak(ui, "›"));
+            ui.label(theme::weak(ui, tc("connection", "Flow")));
+        });
+        ui.add_space(4.0);
+        // From and to, each a link to its block.
+        let mut go = None;
+        let mut remove = false;
+        ui.horizontal(|ui| {
+            if ui
+                .link(egui::RichText::new(name_of(&from)).heading())
+                .clicked()
+            {
+                go = Some(from.clone());
+            }
+            ui.label(theme::weak(ui, "→"));
+            if ui
+                .link(egui::RichText::new(name_of(&to)).heading())
+                .clicked()
+            {
+                go = Some(to.clone());
+            }
+            ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
+                remove = ui
+                    .add(theme::secondary(ui, t("Remove flow")))
+                    .on_hover_text(tf("Remove the flow {id}", &[("id", cid)]))
+                    .clicked();
+            });
+        });
+        ui.label(theme::weak(ui, tf("id {id}", &[("id", cid)])).monospace());
+        ui.add_space(8.0);
+        let p = theme::palette(ui.ctx());
+        for pr in problems.iter().filter(|pr| pr.at.as_deref() == Some(cid)) {
+            self.problem_row(ui, &p, pr, false);
+        }
+        let from_kind = kind_of(model, &from);
+        let from_el = model["elements"]
+            .as_array()
+            .into_iter()
+            .flatten()
+            .find(|e| e["id"] == from.as_str())
+            .cloned()
+            .unwrap_or_default();
+        if from_kind == "exclusive_gateway" {
+            self.flow_probability_row(ui, &c, cid);
+            self.flow_condition_row(ui, &c, cid);
+        }
+        let server = from_kind == "server";
+        let boxes = [
+            (
+                "rework",
+                from_kind != "source",
+                t("Rework"),
+                t(
+                    "Parts taking this flow go back to be worked on again; they count as rework against the last task with a resource they finished at.",
+                ),
+            ),
+            (
+                "abandoned",
+                server,
+                t("Gave up"),
+                t(
+                    "Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.",
+                ),
+            ),
+            (
+                "turned_away",
+                server && from_el["queue_capacity"].is_number(),
+                t("Turned away"),
+                t(
+                    "Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.",
+                ),
+            ),
+            (
+                "balked",
+                server && from_el["balking"].is_object(),
+                t("Balked"),
+                t(
+                    "Entities that do not join the waiting room take this flow at once (to try again later, say), instead of being lost; they count as balked here.",
+                ),
+            ),
+        ];
+        for (f, applies, label, hover) in boxes {
+            // A mark that no longer applies still shows, so it can be taken off.
+            if !applies && c[f].as_bool() != Some(true) {
+                continue;
+            }
+            let (mark, reference) = self.flow_mark(&c, f);
+            let mut on = c[f].as_bool().unwrap_or(false);
+            let (toggled, reset) = marked_checkbox(ui, &mut on, label, hover, mark);
+            if toggled {
+                self.execute("flow.set", json!({ "id": cid, f: on }));
+            } else if reset {
+                self.execute("flow.set", json!({ "id": cid, f: reference }));
+            }
+        }
+        if remove {
+            self.execute("disconnect", json!({ "id": cid }));
+            self.canvas.flow = None;
+        } else if let Some(b) = go {
+            self.select(BTreeSet::from([b]));
+        }
+    }
+
+    /// A decision's way out: its probability, on a row of its own in the flow's page, blank when
+    /// unset, in bold with a reset while set (or while it differs from the inherited one).
+    fn flow_probability_row(&mut self, ui: &mut egui::Ui, c: &Value, cid: &str) {
+        let (mark, reference) = self.flow_mark(c, "probability");
+        let label = t("Probability");
+        let key = format!("{cid}/p");
+        let p_now = c["probability"]
+            .as_f64()
+            .map(crate::results::grouped)
+            .unwrap_or_default();
+        let mut reset = false;
+        ui.vertical(|ui| {
+            let typed = ui
+                .horizontal(|ui| {
+                    let l = form::label_cell(ui, form::marked_text(label, Some(mark)), 26.0);
+                    form::describe_mark(ui, &l, Some(mark), None);
+                    let typed = self.small_field(ui, &key, label, "", &p_now, 80.0);
+                    reset = form::reset_button(ui, Some(mark), label);
+                    typed
+                })
+                .inner;
+            if let Some(typed) = typed {
+                self.probability_typed(cid, &typed);
+            }
+            if let Some(why) = self.probability_refused(cid, &p_now) {
+                theme::error_message(ui, why);
+            }
+        });
+        if reset {
+            self.drafts.remove(&key);
+            self.execute("flow.set", json!({ "id": cid, "probability": reference }));
+        }
+    }
+
+    /// A decision's way out: its condition, on a row of its own in the flow's page.
+    fn flow_condition_row(&mut self, ui: &mut egui::Ui, c: &Value, cid: &str) {
+        let (mark, reference) = self.flow_mark(c, "condition");
+        let label = t("Condition");
+        let key = format!("{cid}/c");
+        let now = c["condition"].as_str().unwrap_or("").to_owned();
+        let mut reset = false;
+        let typed = ui
+            .horizontal(|ui| {
+                let l = form::label_cell(ui, form::marked_text(label, Some(mark)), 26.0);
+                form::describe_mark(ui, &l, Some(mark), None);
+                let typed = self.small_field(ui, &key, label, "", &now, 240.0);
+                reset = form::reset_button(ui, Some(mark), label);
+                typed
+            })
+            .inner;
+        if reset {
+            self.drafts.remove(&key);
+            self.execute("flow.set", json!({ "id": cid, "condition": reference }));
+        } else if let Some(typed) = typed {
+            let typed = typed.trim();
+            let v = if typed.is_empty() {
+                Value::Null
+            } else {
+                json!(typed)
+            };
+            self.execute("flow.set", json!({ "id": cid, "condition": v }));
+        }
+    }
+
+    /// A probability typed for flow `cid`: blank removes it, a number from 0 to 1 is one
+    /// `flow.set`, and anything else stays in the field (under `{cid}/p`, marked refused) until
+    /// it is fixed or Esc drops it.
+    fn probability_typed(&mut self, cid: &str, typed: &str) {
+        let key = format!("{cid}/p");
+        let mark = format!("{key}!");
+        let typed = typed.trim();
+        self.drafts.remove(&mark);
+        if typed.is_empty() {
+            self.execute("flow.set", json!({ "id": cid, "probability": null }));
+            return;
+        }
+        // As the user's region writes it ("0,5" in German), or with a point.
+        let why = match self.numbers.parse(typed) {
+            Ok(v) if (0.0..=1.0).contains(&v) => {
+                self.execute("flow.set", json!({ "id": cid, "probability": v }));
+                None
+            }
+            Ok(_) => Some(tf(
+                "Must be from {min} to {max}",
+                &[("min", "0"), ("max", "1")],
+            )),
+            Err(_) => Some(t("Not a number").to_owned()),
+        };
+        if let Some(why) = why {
+            self.drafts.insert(key, typed.to_owned());
+            self.drafts.insert(mark, why);
+        }
+    }
+
+    /// Why the probability typed for flow `cid` was refused, while it stays in its field, with
+    /// the value the flow keeps (`p_now`, blank when unset).
+    fn probability_refused(&mut self, cid: &str, p_now: &str) -> Option<String> {
+        let key = format!("{cid}/p");
+        let mark = format!("{key}!");
+        // Esc, or a fix, took the text away.
+        if !self.drafts.contains_key(&key) {
+            self.drafts.remove(&mark);
+        }
+        self.drafts.get(&mark).map(|why| {
+            if p_now.is_empty() {
+                why.clone()
+            } else {
+                tf(
+                    "{reason}. {field} is still {value}.",
+                    &[
+                        ("reason", why),
+                        ("field", t("Probability")),
+                        ("value", p_now),
+                    ],
+                )
+            }
+        })
     }
 
     fn inspector(
@@ -1127,13 +1661,22 @@ impl App {
         section(ui, t("Takt"));
         let demand = el["demand"].clone();
         let mut on = demand.is_object();
-        if ui
-            .checkbox(&mut on, t("Customer demand"))
-            .on_hover_text(t(
+        let (mark, reference) = self.block_mark(el, "demand");
+        let (toggled, reset) = marked_checkbox(
+            ui,
+            &mut on,
+            t("Customer demand"),
+            t(
                 "How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.",
-            ))
-            .changed()
-        {
+            ),
+            mark,
+        );
+        if reset {
+            self.after_reset(&format!("{id}/demand"));
+            self.execute("block.set", json!({ "id": id, "demand": reference }));
+            return;
+        }
+        if toggled {
             let v = if on {
                 json!({"quantity": 100.0, "per": "day"})
             } else {
@@ -1273,13 +1816,22 @@ impl App {
         section(ui, t("Quality"));
         let scrap = &el["scrap"];
         let mut on = scrap.is_object();
-        if ui
-            .checkbox(&mut on, t("Scrap"))
-            .on_hover_text(t(
+        let (mark, reference) = self.block_mark(el, "scrap");
+        let (toggled, reset) = marked_checkbox(
+            ui,
+            &mut on,
+            t("Scrap"),
+            t(
                 "What reaches these departures is scrap, counted in the quality ratio of the task it counts against.",
-            ))
-            .changed()
-        {
+            ),
+            mark,
+        );
+        if reset {
+            self.after_reset(&format!("{id}/scrap"));
+            self.execute("block.set", json!({ "id": id, "scrap": reference }));
+            return;
+        }
+        if toggled {
             let v = if on { json!({}) } else { Value::Null };
             self.execute("block.set", json!({ "id": id, "scrap": v }));
         }
@@ -1369,8 +1921,12 @@ impl App {
             .and_then(|d| outs.iter().find(|(c, _)| c == d))
             .map_or_else(|| t("None").to_owned(), |(_, n)| n.clone());
         let mut chosen: Option<Option<String>> = None;
+        let (mark, reference) = self.block_mark(el, "default");
+        let mut reset = false;
         ui.horizontal(|ui| {
-            form::label_cell(ui, t("Default flow"), 26.0);
+            let label = t("Default flow");
+            let l = form::label_cell(ui, form::marked_text(label, Some(mark)), 26.0);
+            form::describe_mark(ui, &l, Some(mark), None);
             craft_ui::ComboBox::from_id_salt((id, "default"))
                 .selected_text(shown)
                 .width(200.0)
@@ -1388,8 +1944,11 @@ impl App {
                 .widget_info(|| {
                     egui::WidgetInfo::labeled(egui::Role::ComboBox, true, t("Default flow"))
                 });
+            reset = form::reset_button(ui, Some(mark), label);
         });
-        if let Some(d) = chosen.filter(|d| *d != now) {
+        if reset {
+            self.execute("block.set", json!({ "id": id, "default": reference }));
+        } else if let Some(d) = chosen.filter(|d| *d != now) {
             self.execute("block.set", json!({ "id": id, "default": d }));
         }
     }
@@ -1404,8 +1963,6 @@ impl App {
             .map(crate::results::grouped)
             .unwrap_or_default();
         let key = format!("{cid}/p");
-        // Marks the text in `key` as refused (see `small_field`).
-        let mark = format!("{key}!");
         if let Some(typed) = self.small_field(
             ui,
             &key,
@@ -1414,47 +1971,9 @@ impl App {
             &p_now,
             56.0,
         ) {
-            let typed = typed.trim();
-            self.drafts.remove(&mark);
-            if typed.is_empty() {
-                self.execute("flow.set", json!({ "id": cid, "probability": null }));
-            } else {
-                // As the user's region writes it ("0,5" in German), or with a point.
-                let why = match self.numbers.parse(typed) {
-                    Ok(v) if (0.0..=1.0).contains(&v) => {
-                        self.execute("flow.set", json!({ "id": cid, "probability": v }));
-                        None
-                    }
-                    Ok(_) => Some(tf(
-                        "Must be from {min} to {max}",
-                        &[("min", "0"), ("max", "1")],
-                    )),
-                    Err(_) => Some(t("Not a number").to_owned()),
-                };
-                if let Some(why) = why {
-                    self.drafts.insert(key.clone(), typed.to_owned());
-                    self.drafts.insert(mark.clone(), why);
-                }
-            }
+            self.probability_typed(cid, &typed);
         }
-        // Esc, or a fix, took the text away.
-        if !self.drafts.contains_key(&key) {
-            self.drafts.remove(&mark);
-        }
-        let refused = self.drafts.get(&mark).map(|why| {
-            if p_now.is_empty() {
-                why.clone()
-            } else {
-                tf(
-                    "{reason}. {field} is still {value}.",
-                    &[
-                        ("reason", why),
-                        ("field", t("Probability")),
-                        ("value", &p_now),
-                    ],
-                )
-            }
-        });
+        let refused = self.probability_refused(cid, &p_now);
         let c_now = c["condition"].as_str().unwrap_or("").to_owned();
         if let Some(t) = self.small_field(
             ui,
@@ -1539,7 +2058,30 @@ impl App {
             "fixed"
         };
         let mut chosen = current.to_owned();
-        ui.label(t("Size of the waiting room:"));
+        // Measured against the choice of the inherited scenario's block, or a new block's
+        // (fixed); the calendars' numbers have their own mark below.
+        let (per_mark, per_ref) = self.block_mark(el, "queue_per_working_server");
+        let (_, shifts_ref) = self.block_mark(el, "queue_shifts");
+        let reference = if per_ref == json!(true) {
+            "per_working_server"
+        } else if shifts_ref.is_array() {
+            "by_calendar"
+        } else {
+            "fixed"
+        };
+        let mark = Mark {
+            changed: reference != current,
+            against: per_mark.against,
+        };
+        if marked_heading(ui, t("Size of the waiting room:"), mark) {
+            let v = match reference {
+                "per_working_server" => json!({ "id": id, "queue_per_working_server": true }),
+                "by_calendar" => json!({ "id": id, "queue_shifts": shifts_ref }),
+                _ => json!({ "id": id, "queue_per_working_server": false, "queue_shifts": [] }),
+            };
+            self.execute("block.set", v);
+            return;
+        }
         ui.radio_value(&mut chosen, "fixed".to_owned(), t("Fixed"))
             .on_hover_text(t(
                 "This many may wait, besides a place for each server; a failed server keeps its place.",
@@ -1586,10 +2128,22 @@ impl App {
     fn patience_section(&mut self, ui: &mut egui::Ui, model: &Value, el: &Value, id: &str) {
         let patience = el["patience"].clone();
         let mut on = patience.is_object();
-        let r = ui.checkbox(&mut on, t("Entities give up waiting")).on_hover_text(t(
-            "Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the flow ticked “Gave up”, or leaves the model.",
-        ));
-        if r.changed() {
+        let (mark, reference) = self.block_mark(el, "patience");
+        let (toggled, reset) = marked_checkbox(
+            ui,
+            &mut on,
+            t("Entities give up waiting"),
+            t(
+                "Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the flow ticked “Gave up”, or leaves the model.",
+            ),
+            mark,
+        );
+        if reset {
+            self.after_reset(&format!("{id}/patience"));
+            self.execute("block.set", json!({ "id": id, "patience": reference }));
+            return;
+        }
+        if toggled {
             let v = if on {
                 json!({"time": {"type": "exponential", "mean": 1.0}})
             } else {
@@ -1673,7 +2227,11 @@ impl App {
     fn shift_end_choice(&mut self, ui: &mut egui::Ui, el: &Value, id: &str) {
         let current = el["on_shift_end"].as_str().unwrap_or("finish").to_owned();
         let mut chosen = current.clone();
-        ui.label(t("Job under way on a server going off shift:"));
+        let (mark, reference) = self.block_mark(el, "on_shift_end");
+        if marked_heading(ui, t("Job under way on a server going off shift:"), mark) {
+            self.execute("block.set", json!({ "id": id, "on_shift_end": reference }));
+            return;
+        }
         ui.radio_value(&mut chosen, "finish".to_owned(), t("Finish, then go off"))
             .on_hover_text(t(
                 "The server finishes the job it has, then goes off; until then it counts as on shift.",
@@ -1696,12 +2254,22 @@ impl App {
     fn health_check_section(&mut self, ui: &mut egui::Ui, model: &Value, el: &Value, id: &str) {
         let check = el["health_check"].clone();
         let mut on = check.is_object();
-        let r = ui
-            .checkbox(&mut on, t("Take servers out when overloaded"))
-            .on_hover_text(t(
+        let (mark, reference) = self.block_mark(el, "health_check");
+        let (toggled, reset) = marked_checkbox(
+            ui,
+            &mut on,
+            t("Take servers out when overloaded"),
+            t(
                 "Each server (unit) is checked every so often, as a load balancer probes the servers behind it. One that fails, with too many waiting, is taken out of service for a restart, then comes back.",
-            ));
-        if r.changed() {
+            ),
+            mark,
+        );
+        if reset {
+            self.after_reset(&format!("{id}/health_check"));
+            self.execute("block.set", json!({ "id": id, "health_check": reference }));
+            return;
+        }
+        if toggled {
             let v = if on {
                 json!({
                     "interval": {"type": "exponential", "mean": 1.0},
@@ -1849,7 +2417,9 @@ impl App {
         current: &str,
         width: f32,
     ) -> Option<String> {
-        ui.label(theme::weak(ui, prefix));
+        if !prefix.is_empty() {
+            ui.label(theme::weak(ui, prefix));
+        }
         let mut text = self
             .drafts
             .get(key)

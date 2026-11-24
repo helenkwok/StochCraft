@@ -149,7 +149,9 @@ Each connection has a **Remove** button.
 - Scroll, or drag with the middle or right mouse button, to pan. Ctrl+scroll or pinch to zoom.
 - The buttons at the bottom right zoom out, show the actual size, zoom in, and **Fit** the whole
   diagram in view.
-- With several blocks selected, the inspector can **Align** them and **Spread out** them evenly.
+- With several blocks selected, the inspector shows the properties they share (see
+  [Several blocks at once](#several-blocks-at-once)) and can **Align** them and **Spread out**
+  them evenly.
 
 ### Set what each block does
 
@@ -310,6 +312,36 @@ Exponential 120 min, Constant 6 min**, or **None**; a section with something set
 The **?** beside **Capacity**, **Service time**, **Waiting room** and a task's **Inside at the
 start** opens a one-line explanation under the field;
 it can be reached with Tab and opened with Enter or Space.
+
+### Changed values in bold, and their reset
+
+A field whose value differs from its default has its label in **bold**, with a reset button
+(↺) after it. The default is what a new block of that kind has (a new **Task with a resource**
+has one unit and a service time of mean 0.8), or, for a setting a new block leaves out, none. The
+reset puts that value back; like any edit, it is one step to undo. Tab reaches the reset right
+after its field, and Enter or Space presses it. A screen reader hears the field's label with
+**Changed from the default**.
+
+A model opened in a scenario that inherits from another (a BPSim scenario with `inherits`) is
+measured against that scenario instead: a value the opened scenario changes is in bold, said as
+**Changed from the inherited scenario**, and its reset puts the inherited value back.
+
+### A flow's properties
+
+Click a flow on the canvas to see its own page: the blocks it joins (each a link to that block),
+**Remove flow**, and how entities take it: out of a decision, its **Probability** and
+**Condition**; whether it is **Rework** (any flow but one out of arrivals); and out of a task
+with a resource, the way for those who **Gave up**, are **Turned away** or **Balked**. Each is in
+bold, with a reset,
+while it differs from a new flow's.
+
+### Several blocks at once
+
+With several blocks selected, the inspector shows **Shared properties**: the fields every
+selected block has. Where their values differ the field says so: a number field is empty with a
+dash, a choice reads **Mixed values**, and a box is neither ticked nor clear. Typing a value sets
+it on all of them; in a distribution, typing one parameter (a mean) keeps each block's other
+parameters. A change, or a reset, to several blocks is one step to undo, named **Changes**.
 
 ### Undo
 

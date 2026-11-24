@@ -1475,6 +1475,15 @@ unit	yr	वर्ष
 	Remove rule	नियम हटाएँ
 	Change Decision Table	निर्णय तालिका बदलें
 	Use Decision Table	निर्णय तालिका उपयोग करें
+	Reset {field}	{field} रीसेट करें
+	Changed from the default	डिफ़ॉल्ट से बदला गया
+	Changed from the inherited scenario	विरासत में मिले परिदृश्य से बदला गया
+	Mixed values	मिश्रित मान
+connection	Flow	प्रवाह
+	Remove flow	प्रवाह हटाएँ
+	Condition	शर्त
+	Shared properties	साझा गुण
+	These blocks share no properties.	इन ब्लॉकों में कोई साझा गुण नहीं है।
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	{block} को कन्वेयर {conveyor} के रास्ते पर {s} की दूरी पर रखा गया है, जबकि उसका रास्ता केवल {length} लंबा है। उसे रास्ते पर 0 और {length} के बीच रखें।
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	कन्वेयर {conveyor} पर इकाइयाँ {block} से पहले {before} तक पहुँचती हैं, पर {block} को शुरुआत के अधिक पास रखा गया है (रास्ते पर {s}, जबकि {before} {before_s} पर है)। {block} को रास्ते पर {before} से आगे रखें, या प्रवाहों में उनकी अदला-बदली करें।
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	प्रवाह {flow} पर जंक्शन को पार करने में {time} लगता है। उसका स्थानांतरण समय 0 या अधिक रखें।

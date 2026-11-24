@@ -212,6 +212,23 @@ impl Opened {
         self.other_ids.contains(id)
     }
 
+    /// The model as the scenario the opened one inherits from (its `inherits`) has it, with that
+    /// scenario's own inheritance resolved: what the opened scenario's values are compared with
+    /// to show what it changes. `None` when the opened scenario inherits from none, or the file
+    /// has no scenarios.
+    pub fn inherited_model(&self) -> Option<stochcraft_model::Model> {
+        let id = self.scenario.as_deref()?;
+        let doc = xml::parse(&self.bytes).ok()?;
+        let data = bpsim::find_data(&doc.root)?;
+        let parent = data
+            .children_named(&bpsim::NSS, "Scenario")
+            .find(|s| s.attr("id").as_deref() == Some(id))?
+            .attr("inherits")?;
+        read_scenario(&self.bytes, Some(&parent))
+            .ok()
+            .map(|loaded| loaded.model)
+    }
+
     /// The file's bytes for `model`: exactly the original bytes when the model is unchanged;
     /// otherwise the original file with the changes written in, and everything StochCraft does
     /// not understand kept as it was. The result is checked by reading it back.

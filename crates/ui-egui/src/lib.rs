@@ -39,6 +39,7 @@ mod montecarlo;
 mod observed;
 mod pools;
 mod prefs;
+mod props;
 mod results;
 mod runs;
 mod sd;
@@ -910,6 +911,14 @@ pub struct App {
     /// The inspector shows `drafts_of` for one more frame, while its field commits, though
     /// another block is selected.
     drafts_held: bool,
+    /// The page of the properties panel the drafts were typed on (the model, a block, a flow or
+    /// several blocks), so text half-typed on one is not shown on another.
+    drafts_page: String,
+    /// The model of the scenario the opened one inherits from, as the window reads models, while
+    /// it inherits from one: what the panel measures the selection's values against.
+    inherited: Option<Value>,
+    /// The key of a field just reset, whose first number takes the keyboard on the next frame.
+    refocus: Option<String>,
     /// The connections table's choices, before Connect.
     connect_from: Option<String>,
     connect_to: Option<String>,
@@ -1052,6 +1061,9 @@ impl App {
             drafts_of: None,
             inspector_focus: None,
             drafts_held: false,
+            drafts_page: String::new(),
+            inherited: None,
+            refocus: None,
             connect_from: None,
             connect_to: None,
             show_results: false,

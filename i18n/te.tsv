@@ -1475,6 +1475,15 @@ unit	yr	సం.
 	Remove rule	నియమాన్ని తీసివేయి
 	Change Decision Table	నిర్ణయ పట్టికను మార్చు
 	Use Decision Table	నిర్ణయ పట్టికను ఉపయోగించు
+	Reset {field}	{field} రీసెట్ చేయి
+	Changed from the default	డిఫాల్ట్ నుండి మార్చబడింది
+	Changed from the inherited scenario	వారసత్వంగా వచ్చిన దృశ్యం నుండి మార్చబడింది
+	Mixed values	మిశ్రమ విలువలు
+connection	Flow	ప్రవాహం
+	Remove flow	ప్రవాహాన్ని తొలగించు
+	Condition	షరతు
+	Shared properties	ఉమ్మడి లక్షణాలు
+	These blocks share no properties.	ఈ బ్లాక్‌లకు ఉమ్మడి లక్షణాలు లేవు.
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	{block} కన్వేయర్ {conveyor} వెంట {s} దూరంలో ఉంచబడింది, కానీ దాని మార్గం {length} పొడవు మాత్రమే. దాన్ని మార్గం వెంట 0 మరియు {length} మధ్య ఉంచండి.
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	కన్వేయర్ {conveyor} పై ఎంటిటీలు {block} కంటే ముందు {before} చేరతాయి, కానీ {block} ప్రారంభానికి దగ్గరగా ఉంచబడింది (దాని వెంట {s}, {before} {before_s} వద్ద). {block} ను మార్గంలో {before} కంటే ముందుకు ఉంచండి, లేదా ప్రవాహాలలో వాటిని మార్చండి.
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	ప్రవాహం {flow} పై జంక్షన్ దాటడానికి {time} పడుతుంది. దాని బదిలీ సమయాన్ని 0 లేదా అంతకంటే ఎక్కువ చేయండి.

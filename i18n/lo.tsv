@@ -1475,6 +1475,15 @@ unit	yr	ປີ
 	Remove rule	ລຶບກົດ
 	Change Decision Table	ປ່ຽນຕາຕະລາງການຕັດສິນໃຈ
 	Use Decision Table	ໃຊ້ຕາຕະລາງການຕັດສິນໃຈ
+	Reset {field}	ຣີເຊັດ {field}
+	Changed from the default	ປ່ຽນຈາກຄ່າເລີ່ມຕົ້ນ
+	Changed from the inherited scenario	ປ່ຽນຈາກສະຖານະການທີ່ສືບທອດມາ
+	Mixed values	ຄ່າທີ່ແຕກຕ່າງກັນ
+connection	Flow	ເສັ້ນທາງ
+	Remove flow	ລຶບເສັ້ນທາງ
+	Condition	ເງື່ອນໄຂ
+	Shared properties	ຄຸນສົມບັດຮ່ວມ
+	These blocks share no properties.	ບລັອກເຫຼົ່ານີ້ບໍ່ມີຄຸນສົມບັດຮ່ວມ.
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	{block} ຖືກວາງຢູ່ທີ່ {s} ຕາມສາຍພານລຳລຽງ {conveyor} ເຊິ່ງເສັ້ນທາງຍາວ {length} ໃຫ້ວາງມັນລະຫວ່າງ 0 ຫາ {length} ຕາມເສັ້ນທາງ
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	ເອນທິຕີເທິງສາຍພານລຳລຽງ {conveyor} ໄປຮອດ {before} ກ່ອນ {block} ແຕ່ {block} ຖືກວາງໃກ້ຈຸດເລີ່ມຕົ້ນກວ່າ ({s} ຕາມສາຍພານ, {before} ຢູ່ທີ່ {before_s}) ໃຫ້ວາງ {block} ໄປຕາມເສັ້ນທາງໄກກວ່າ {before} ຫຼື ສະຫຼັບກັນໃນເສັ້ນທາງ
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	ຈຸດເຊື່ອມຕໍ່ຢູ່ເສັ້ນທາງ {flow} ໃຊ້ເວລາ {time} ເພື່ອຂ້າມ ໃຫ້ຕັ້ງເວລາຂົນຍ້າຍຂອງມັນເປັນ 0 ຫຼືຫຼາຍກວ່າ

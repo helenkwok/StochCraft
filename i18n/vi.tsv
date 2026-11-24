@@ -1475,6 +1475,15 @@ unit	yr	năm
 	Remove rule	Xóa quy tắc
 	Change Decision Table	Đổi bảng quyết định
 	Use Decision Table	Dùng bảng quyết định
+	Reset {field}	Đặt lại {field}
+	Changed from the default	Đã đổi so với mặc định
+	Changed from the inherited scenario	Đã đổi so với kịch bản kế thừa
+	Mixed values	Giá trị khác nhau
+connection	Flow	Luồng
+	Remove flow	Xóa luồng
+	Condition	Điều kiện
+	Shared properties	Thuộc tính chung
+	These blocks share no properties.	Các khối này không có thuộc tính chung.
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	{block} được đặt cách đầu {s} dọc theo băng tải {conveyor}, có đường vẽ dài {length}. Hãy đặt nó trong khoảng từ 0 đến {length} dọc theo đường vẽ.
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	Các thực thể trên băng tải {conveyor} đến {before} trước {block}, nhưng {block} được đặt gần đầu hơn ({s} dọc theo băng tải, {before} ở {before_s}). Hãy đặt {block} xa hơn {before} dọc theo đường vẽ, hoặc hoán đổi chúng trong các luồng.
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	Mối nối trên luồng {flow} mất {time} để đi qua. Hãy cho thời gian chuyển của nó là 0 hoặc lớn hơn.

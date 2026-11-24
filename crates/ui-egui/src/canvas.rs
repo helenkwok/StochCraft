@@ -201,8 +201,9 @@ impl App {
         }
     }
 
-    /// Selects `ids`: one shows its inspector, several the selection's tools.
-    pub(crate) fn select(&mut self, ids: BTreeSet<String>) {
+    /// Selects `ids`: one shows its properties, several the properties they share and the
+    /// selection's tools.
+    pub fn select(&mut self, ids: BTreeSet<String>) {
         self.canvas.flow = None;
         if ids.len() == 1 {
             self.selected = ids.into_iter().next();
@@ -211,6 +212,18 @@ impl App {
             self.selected = None;
             self.canvas.multi = ids;
         }
+    }
+
+    /// Selects the flow (connection) `id` alone, whose properties the panel then shows, as a click
+    /// on it on the canvas does.
+    pub fn select_flow(&mut self, id: &str) {
+        self.select(BTreeSet::new());
+        self.canvas.flow = Some(id.to_owned());
+    }
+
+    /// The flow selected, if any.
+    pub fn selected_flow(&self) -> Option<&str> {
+        self.canvas.flow.as_deref()
     }
 
     /// Keeps the selection in step with the model and with the block list's own selection.
@@ -1347,7 +1360,8 @@ impl App {
         );
     }
 
-    /// The inspector when several blocks are selected: how many, and what can be done to them.
+    /// The inspector when several blocks are selected: how many, the properties they share, and
+    /// what can be done to them.
     pub(crate) fn multi_inspector(&mut self, ui: &mut egui::Ui) {
         let n = self.canvas.multi.len();
         ui.heading(tnf(
@@ -1357,6 +1371,7 @@ impl App {
             &[],
         ));
         ui.add_space(8.0);
+        self.multi_properties(ui);
         crate::editor::section(ui, t("Align"));
         let mut pick = None;
         ui.horizontal_wrapped(|ui| {

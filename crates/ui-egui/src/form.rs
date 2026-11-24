@@ -11,13 +11,14 @@
 //! Because the forms follow the schemas, a parameter the engine gains appears here without
 //! interface code of its own.
 
-use std::collections::HashMap;
+use std::collections::{BTreeSet, HashMap};
 
 use serde_json::{Map, Value, json};
 
 use craft_ui::localized::{LocaleNumbers, NumberField, Unit};
 
 use crate::i18n::{t, td, tf};
+use crate::props::Against;
 use crate::theme;
 
 /// A command's parameter schema, with `$ref`s resolved against its `$defs`.
@@ -314,14 +315,28 @@ fn edit(
     time: bool,
     nullable: bool,
 ) -> Option<Value> {
-    match schema.non_null(node) {
+    let resolved = schema.non_null(node);
+    if is_mixed(key)
+        && matches!(
+            resolved,
+            Node::Typed(_, "array" | "object") | Node::Keyed(_)
+        )
+    {
+        return mixed_whole(ui, schema, node, label, help, nullable);
+    }
+    match resolved {
         Node::Tagged(n) => tagged(ui, cx, schema, n, key, label, current, nullable),
         Node::Typed(n, "object") => object(ui, cx, schema, n, key, label, help, current, nullable),
         Node::Enum(options) => row(ui, label, help, |ui| {
             let now = current.as_str().unwrap_or("");
             let mut picked = None;
+            let shown = if is_mixed(key) {
+                t("Mixed values").to_owned()
+            } else {
+                choice_label(now)
+            };
             craft_ui::ComboBox::from_id_salt(key)
-                .selected_text(choice_label(now))
+                .selected_text(shown)
                 .show_ui(ui, |ui| {
                     for o in &options {
                         if ui.selectable_label(*o == now, choice_label(o)).clicked() && *o != now {
@@ -340,11 +355,25 @@ fn edit(
                 .or_else(|| node["default"].as_bool())
                 .or_else(|| n["default"].as_bool())
                 .unwrap_or(false);
-            let r = ui.checkbox(&mut b, label);
+            let mark = take_mark();
+            let box_ =
+                egui::Checkbox::new(&mut b, marked_text(label, mark)).indeterminate(is_mixed(key));
+            let r = if mark.is_some() {
+                // The reset on the box's line, after it.
+                ui.horizontal(|ui| {
+                    let r = ui.add(box_);
+                    reset_button(ui, mark, label);
+                    r
+                })
+                .inner
+            } else {
+                ui.add(box_)
+            };
             let r = match help {
                 Some(h) => r.on_hover_text(h),
                 None => r,
             };
+            describe_mark(ui, &r, mark, help);
             r.changed().then(|| json!(b))
         }
         Node::Typed(n, ty @ ("number" | "integer")) => {
@@ -355,11 +384,16 @@ fn edit(
                 None
             };
             if nullable {
-                // An optional limit: a checkbox to have one, then its value.
+                // An optional limit: a checkbox to have one, then its value. Values that differ
+                // between the selected blocks (some set, or set differently): a box neither
+                // ticked nor clear, and a field that sets them all.
+                let mixed = is_mixed(key);
                 let mut on = !current.is_null();
                 let mut out = None;
                 row(ui, label, help, |ui| {
-                    let r = ui.checkbox(&mut on, "").on_hover_text(t("Set a value"));
+                    let r = ui
+                        .add(egui::Checkbox::new(&mut on, "").indeterminate(mixed))
+                        .on_hover_text(t("Set a value"));
                     // Named after the field, for screen readers (the box has no text of its own).
                     let ticked = on;
                     r.widget_info(|| {
@@ -367,17 +401,24 @@ fn edit(
                     });
                     if r.changed() {
                         // A first value of the field's scale: room for ten waiting, one
-                        // entity inside at the start, or a thousand arrivals.
+                        // entity inside at the start, half the entities down a flow, or a
+                        // thousand arrivals.
                         let first = if key.ends_with("queue_capacity") {
-                            10
-                        } else if key.ends_with("/starting") {
-                            1
+                            json!(10)
+                        } else if key.ends_with("/starting") || key.ends_with("/quantity") {
+                            json!(1)
+                        } else if key.ends_with("/probability") {
+                            json!(0.5)
                         } else {
-                            1000
+                            json!(1000)
                         };
-                        out = Some(if on { json!(first) } else { Value::Null });
+                        out = Some(if on { first } else { Value::Null });
                     }
-                    if on {
+                    if mixed {
+                        out = out.or_else(|| {
+                            mixed_number(ui, cx, key, label, integer, n, unit.as_deref())
+                        });
+                    } else if on {
                         out = out.or_else(|| {
                             number(ui, cx, key, label, current, integer, n, unit.as_deref())
                         });
@@ -460,13 +501,16 @@ pub fn field_outline(ui: &egui::Ui, r: &egui::Response) {
 
 /// A form row: the label in a fixed column, the editor beside it. A row given an explanation
 /// (see [`explain`]) has a "?" beside its label that opens it under the row: a button, so the
-/// keyboard reaches it, rather than a tooltip only a pointer finds.
+/// keyboard reaches it, rather than a tooltip only a pointer finds. A marked field's row (see
+/// [`field_marked`]) has its label in bold and a reset after the editor while the value differs
+/// from its reference.
 fn row<R>(
     ui: &mut egui::Ui,
     label: &str,
     help: Option<&str>,
     editor: impl FnOnce(&mut egui::Ui) -> Option<R>,
 ) -> Option<R> {
+    let mark = take_mark();
     let explained = EXPLAIN.with(|e| e.borrow_mut().take());
     let open_id = explained
         .as_ref()
@@ -488,7 +532,11 @@ fn row<R>(
                                 .allocate_ui_with_layout(
                                     egui::vec2(144.0, 26.0),
                                     egui::Layout::left_to_right(egui::Align::Center),
-                                    |ui| ui.add(egui::Label::new(label).truncate()),
+                                    |ui| {
+                                        ui.add(
+                                            egui::Label::new(marked_text(label, mark)).truncate(),
+                                        )
+                                    },
                                 )
                                 .inner;
                             let q = ui.add(egui::Button::new("?").small().corner_radius(8.0));
@@ -510,12 +558,16 @@ fn row<R>(
                     )
                     .inner
                 }
-                None => label_cell(ui, label, 26.0),
+                None => label_cell(ui, marked_text(label, mark), 26.0),
             };
-            if let Some(h) = help {
-                r.on_hover_text(h);
-            }
-            editor(ui)
+            let r = match help {
+                Some(h) => r.on_hover_text(h),
+                None => r,
+            };
+            describe_mark(ui, &r, mark, help);
+            let out = editor(ui);
+            reset_button(ui, mark, label);
+            out
         })
         .inner;
     if let Some((_, text)) = explained
@@ -545,6 +597,9 @@ fn number(
     node: &Value,
     unit: Option<&str>,
 ) -> Option<Value> {
+    if is_mixed(key) {
+        return mixed_number(ui, cx, key, label, integer, node, unit);
+    }
     let unit_width = unit.filter(|u| !u.is_empty()).map_or(0.0, |u| {
         let font = egui::TextStyle::Body.resolve(ui.style());
         ui.fonts_mut(|f| {
@@ -759,6 +814,280 @@ thread_local! {
     /// The explanation the next form row opens from its "?", with the field's key.
     static EXPLAIN: std::cell::RefCell<Option<(String, &'static str)>> =
         const { std::cell::RefCell::new(None) };
+    /// How the field [`field_marked`] is drawing compares with its reference: its label, the
+    /// first the field draws, takes it.
+    static MARK: std::cell::Cell<Option<Mark>> = const { std::cell::Cell::new(None) };
+    /// Whether the reset of the field [`field_marked`] is drawing was clicked.
+    static RESET: std::cell::Cell<bool> = const { std::cell::Cell::new(false) };
+    /// The keys of the fields, and of the parts of fields, whose values differ between the
+    /// selected blocks (see [`set_mixed`]).
+    static MIXED: std::cell::RefCell<BTreeSet<String>> =
+        const { std::cell::RefCell::new(BTreeSet::new()) };
+}
+
+/// How a field compares with what it is measured against (see `props`): one that differs is
+/// drawn with its label in bold and a reset beside it, as established simulation and design
+/// tools draw a value changed from its default or from the inherited one.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub(crate) struct Mark {
+    pub changed: bool,
+    pub against: Against,
+}
+
+impl Mark {
+    /// What the bold says, in words: for screen readers and the reset's tooltip.
+    fn why(self) -> &'static str {
+        match self.against {
+            Against::Default => t("Changed from the default"),
+            Against::Inherited => t("Changed from the inherited scenario"),
+        }
+    }
+}
+
+/// What a field drawn by [`field_marked`] did this frame.
+#[derive(Debug, Clone, PartialEq)]
+pub(crate) enum Marked {
+    Unchanged,
+    /// The user committed a new value.
+    Set(Value),
+    /// The user asked for the reference value back.
+    Reset,
+}
+
+/// [`field`], with its label in bold and a reset beside it when `mark` says the value differs
+/// from its reference. The reset is drawn only then, at the end of the label's line, which has
+/// a layout of its own, so it appearing gives no widget below it a new id (and a field being
+/// typed in keeps the keyboard).
+#[allow(clippy::too_many_arguments)]
+pub(crate) fn field_marked(
+    ui: &mut egui::Ui,
+    cx: &mut Cx<'_>,
+    schema: Schema<'_>,
+    key: &str,
+    name: &str,
+    current: &Value,
+    time: bool,
+    mark: Mark,
+) -> Marked {
+    MARK.with(|m| m.set(Some(mark)));
+    RESET.with(|r| r.set(false));
+    let out = field(ui, cx, schema, key, name, current, time);
+    MARK.with(|m| m.set(None));
+    if RESET.with(|r| r.replace(false)) {
+        Marked::Reset
+    } else {
+        out.map_or(Marked::Unchanged, Marked::Set)
+    }
+}
+
+/// Marks the fields (and parts of fields) under `keys` as holding values that differ between the
+/// selected blocks: a number field is then empty with a dash, a choice says "Mixed values" and a
+/// box is neither ticked nor clear. Set before drawing a multi-selection's fields, and cleared
+/// (an empty set) after.
+pub(crate) fn set_mixed(keys: BTreeSet<String>) {
+    MIXED.with(|m| *m.borrow_mut() = keys);
+}
+
+fn is_mixed(key: &str) -> bool {
+    MIXED.with(|m| m.borrow().contains(key))
+}
+
+/// The mark of the field being drawn, for its label (the first one it draws).
+fn take_mark() -> Option<Mark> {
+    MARK.with(|m| m.take())
+}
+
+/// A field's label: bold when its value differs from its reference.
+pub(crate) fn marked_text(label: &str, mark: Option<Mark>) -> egui::RichText {
+    if mark.is_some_and(|m| m.changed) {
+        theme::strong(label)
+    } else {
+        egui::RichText::new(label)
+    }
+}
+
+/// Says on the label `r`, for screen readers, that its field differs: the bold says it only to
+/// the eye (WCAG 1.3.1). Its tooltip `hover`, which is also its description, follows. Called
+/// after the tooltip is set, which would otherwise replace it.
+pub(crate) fn describe_mark(
+    ui: &egui::Ui,
+    r: &egui::Response,
+    mark: Option<Mark>,
+    hover: Option<&str>,
+) {
+    if let Some(m) = mark.filter(|m| m.changed) {
+        let why = match hover {
+            Some(h) => format!("{}. {h}", m.why()),
+            None => m.why().to_owned(),
+        };
+        ui.ctx()
+            .accesskit_node_builder(r.id, |n| n.set_description(why));
+    }
+}
+
+/// The reset beside a field whose value differs from its reference ("Reset Capacity" to a screen
+/// reader, a ↺ drawn rather than a font glyph): nothing when it does not differ. True when
+/// clicked, which [`field_marked`] reports as [`Marked::Reset`].
+pub(crate) fn reset_button(ui: &mut egui::Ui, mark: Option<Mark>, label: &str) -> bool {
+    let Some(m) = mark.filter(|m| m.changed) else {
+        return false;
+    };
+    let r = ui
+        .add(egui::Button::new("").min_size(egui::vec2(24.0, 24.0)))
+        .on_hover_text(m.why());
+    let name = tf("Reset {field}", &[("field", label)]);
+    r.widget_info(|| egui::WidgetInfo::labeled(egui::Role::Button, true, &name));
+    let ink = ui.style().interact(&r).fg_stroke.color;
+    paint_reset(ui.painter(), r.rect.center(), 6.0, ink);
+    let clicked = r.clicked();
+    if clicked {
+        RESET.with(|x| x.set(true));
+    }
+    clicked
+}
+
+/// The reset mark: a ring open at the top right, its arrowhead turning it anticlockwise (↺).
+fn paint_reset(painter: &egui::Painter, centre: egui::Pos2, radius: f32, ink: egui::Color32) {
+    use std::f32::consts::PI;
+    let stroke = egui::Stroke::new(1.6, ink);
+    let (from, to) = (-0.3 * PI, 1.35 * PI);
+    let at = |a: f32| centre + egui::vec2(a.cos(), a.sin()) * radius;
+    let points: Vec<egui::Pos2> = (0..=16)
+        .map(|i| at(from + (to - from) * i as f32 / 16.0))
+        .collect();
+    painter.add(egui::Shape::line(points, stroke));
+    // At the open end, pointing along the ring the way it turns.
+    let tip = at(from);
+    let along = egui::vec2(from.sin(), -from.cos());
+    let across = egui::vec2(-along.y, along.x);
+    painter.add(egui::Shape::convex_polygon(
+        vec![
+            tip + along * 3.5,
+            tip - along * 1.0 + across * 3.0,
+            tip - along * 1.0 - across * 3.0,
+        ],
+        ink,
+        egui::Stroke::NONE,
+    ));
+}
+
+/// A number field for several blocks whose values differ: empty, with a dash, as established
+/// tools show mixed values, and described as "Mixed values" to screen readers. A number entered
+/// (Enter, or leaving the field) sets them all; one that isn't a number or that the limits refuse
+/// stays in the field, with the reason under it, until it is fixed or Esc drops it.
+#[allow(clippy::too_many_arguments)]
+fn mixed_number(
+    ui: &mut egui::Ui,
+    cx: &mut Cx<'_>,
+    key: &str,
+    label: &str,
+    integer: bool,
+    node: &Value,
+    unit: Option<&str>,
+) -> Option<Value> {
+    let limits = Limits::of(node, integer);
+    ui.vertical(|ui| {
+        let mut text = cx.drafts.get(key).cloned().unwrap_or_default();
+        let r = ui
+            .horizontal(|ui| {
+                let r = ui.add(
+                    egui::TextEdit::singleline(&mut text)
+                        .id_salt(key)
+                        .hint_text("—")
+                        .desired_width(110.0),
+                );
+                if let Some(u) = unit.filter(|u| !u.is_empty()) {
+                    ui.label(theme::weak(ui, u));
+                }
+                r
+            })
+            .inner;
+        field_outline(ui, &r);
+        r.widget_info(|| egui::WidgetInfo::labeled(egui::Role::TextInput, true, label));
+        let mixed = t("Mixed values");
+        ui.ctx()
+            .accesskit_node_builder(r.id, |n| n.set_description(mixed));
+        // A field asked to take the keyboard (after its reset), as `number` takes it.
+        if FOCUS.with(|f| {
+            f.borrow()
+                .as_deref()
+                .is_some_and(|k| key == k || key.starts_with(&format!("{k}/")))
+        }) {
+            FOCUS.with(|f| f.borrow_mut().take());
+            r.request_focus();
+            r.scroll_to_me(Some(egui::Align::Center));
+        }
+        let mut out = None;
+        if r.lost_focus() && ui.input(|i| i.key_pressed(egui::Key::Escape)) {
+            cx.drafts.remove(key);
+        } else if r.lost_focus() {
+            let typed = text.trim().to_owned();
+            let value = cx
+                .numbers
+                .parse(&typed)
+                .ok()
+                .map(|v| if integer { v.round() } else { v })
+                .filter(|v| limits.refuse(*v, cx.numbers).is_none());
+            match value {
+                _ if typed.is_empty() => {
+                    cx.drafts.remove(key);
+                }
+                Some(v) => {
+                    cx.drafts.remove(key);
+                    out = Some(if integer { json!(v as u64) } else { json!(v) });
+                }
+                None => {
+                    cx.drafts.insert(key.to_owned(), typed);
+                }
+            }
+        } else if r.has_focus() || r.changed() {
+            cx.drafts.insert(key.to_owned(), text);
+        }
+        // Text kept because it was refused, in words once the field is left.
+        if !r.has_focus()
+            && out.is_none()
+            && let Some(typed) = cx.drafts.get(key)
+        {
+            let reason = cx
+                .numbers
+                .parse(typed)
+                .ok()
+                .and_then(|v| limits.refuse(v, cx.numbers))
+                .unwrap_or_else(|| t("Not a number").to_owned());
+            theme::error_message(ui, reason);
+        }
+        out
+    })
+    .inner
+}
+
+/// A field whose values differ between the selected blocks and that has no one editor for them
+/// all (a list, a set of settings): its label and "Mixed values". One that may be left out has a
+/// box neither ticked nor clear, which gives them all a first value. Its reset puts each block's
+/// own reference value back.
+fn mixed_whole(
+    ui: &mut egui::Ui,
+    schema: Schema<'_>,
+    node: &Value,
+    label: &str,
+    help: Option<&str>,
+    nullable: bool,
+) -> Option<Value> {
+    row(ui, label, help, |ui| {
+        let mut out = None;
+        if nullable {
+            let mut on = false;
+            let r = ui
+                .add(egui::Checkbox::new(&mut on, "").indeterminate(true))
+                .on_hover_text(t("Set a value"));
+            r.widget_info(|| egui::WidgetInfo::selected(egui::Role::CheckBox, true, false, label));
+            if r.changed() {
+                out = Some(first_value(schema, node));
+            }
+        }
+        ui.label(theme::weak(ui, t("Mixed values")));
+        out
+    })
 }
 
 /// Gives the next form row drawn, the field with `key`, a "?" that opens `text` under it
@@ -817,7 +1146,9 @@ fn tagged(
 
     let picked = row(ui, label, node["description"].as_str(), |ui| {
         let mut picked = None;
-        let shown = if nullable && current.is_null() {
+        let shown = if is_mixed(key) {
+            t("Mixed values").to_owned()
+        } else if nullable && current.is_null() {
             t("None").to_owned()
         } else {
             choice_label(&now)
@@ -826,9 +1157,12 @@ fn tagged(
             .selected_text(shown)
             .width(170.0)
             .show_ui(ui, |ui| {
+                let mixed = is_mixed(key);
                 if nullable
-                    && ui.selectable_label(current.is_null(), t("None")).clicked()
-                    && !current.is_null()
+                    && ui
+                        .selectable_label(current.is_null() && !mixed, t("None"))
+                        .clicked()
+                    && (!current.is_null() || mixed)
                 {
                     out = Some(Value::Null);
                 }
@@ -929,7 +1263,10 @@ fn default_variant(variant: &Value, tag: &str, current: &Value) -> Value {
         if f == "type" {
             continue;
         }
-        let v = if let Some(old) = current.get(f).filter(|_| current["type"] != "user") {
+        let v = if let Some(old) = current
+            .get(f)
+            .filter(|v| !v.is_null() && current["type"] != "user")
+        {
             old.clone()
         } else {
             match (f.as_str(), node["type"].as_str()) {
@@ -996,6 +1333,26 @@ fn first_value(schema: Schema<'_>, node: &Value) -> Value {
     }
 }
 
+/// The heading line of a field drawn as several rows (a set of settings, a list): its label in
+/// bold, or for a marked field (see [`field_marked`]) in bold only while its value differs from
+/// its reference, with the reset after it. `help` is its tooltip.
+fn heading(ui: &mut egui::Ui, label: &str, help: Option<&str>) {
+    let mark = take_mark();
+    let hover = |r: egui::Response| match help {
+        Some(h) => r.on_hover_text(h),
+        None => r,
+    };
+    if mark.is_none() {
+        hover(ui.label(theme::strong(label)));
+        return;
+    }
+    ui.horizontal(|ui| {
+        let r = hover(ui.label(marked_text(label, mark)));
+        describe_mark(ui, &r, mark, help);
+        reset_button(ui, mark, label);
+    });
+}
+
 /// Whether property `f` of an object may be left out or `null` (an `Option` field).
 fn optional_field(schema: Schema<'_>, object: &Value, f: &str) -> bool {
     let required = object["required"]
@@ -1047,7 +1404,7 @@ fn object(
             return out;
         }
     } else {
-        ui.label(theme::strong(label));
+        heading(ui, label, None);
     }
     let fields: Vec<&str> = node["required"]
         .as_array()
@@ -1112,10 +1469,7 @@ fn records(
     let items = current.as_array().cloned().unwrap_or_default();
     let mut out: Option<Vec<Value>> = None;
     let mut removed = None;
-    let r = ui.label(theme::strong(label));
-    if let Some(h) = help {
-        r.on_hover_text(h);
-    }
+    heading(ui, label, help);
     let fields: Vec<String> = item["properties"]
         .as_object()
         .map(|m| m.keys().filter(|k| *k != "calendar").cloned().collect())
@@ -1263,7 +1617,7 @@ fn array(
     let items = current.as_array().cloned().unwrap_or_default();
     let mut out: Option<Vec<Value>> = None;
     let mut removed = None;
-    ui.label(theme::strong(label));
+    heading(ui, label, None);
     // In the order the schema requires them (a mix: the value, then its share).
     let fields: Vec<String> = item["required"]
         .as_array()

@@ -1475,6 +1475,15 @@ unit	yr	a
 	Remove rule	Quitar regra
 	Change Decision Table	Cambiar táboa de decisión
 	Use Decision Table	Usar táboa de decisión
+	Reset {field}	Restablecer {field}
+	Changed from the default	Cambiado respecto do valor predeterminado
+	Changed from the inherited scenario	Cambiado respecto do escenario herdado
+	Mixed values	Valores distintos
+connection	Flow	Fluxo
+	Remove flow	Eliminar o fluxo
+	Condition	Condición
+	Shared properties	Propiedades compartidas
+	These blocks share no properties.	Estes bloques non comparten ningunha propiedade.
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	{block} está colocado a {s} ao longo da cinta transportadora {conveyor}, cuxo trazado mide {length}. Colóqueo entre 0 e {length} ao longo do trazado.
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	As entidades da cinta transportadora {conveyor} chegan a {before} antes ca a {block}, pero {block} está colocado máis preto do inicio ({s} ao longo dela, {before} a {before_s}). Coloque {block} máis adiante no trazado ca {before} ou intercámbieos nos fluxos.
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	A unión no fluxo {flow} tarda {time} en cruzarse. Faga que o seu tempo de transferencia sexa 0 ou máis.

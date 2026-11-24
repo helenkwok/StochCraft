@@ -110,6 +110,21 @@ fn inherited_scenario_changes_only_what_it_says() {
     assert_eq!(l.model.experiment.replications, 16);
 }
 
+/// What an inheriting scenario's values are compared with: the model of the scenario it
+/// inherits from. A scenario that inherits from none has none.
+#[test]
+fn an_inheriting_scenario_knows_the_model_it_inherits_from() {
+    let child = load("mm1.bpmn", Some("two-clerks"));
+    let base = load("mm1.bpmn", Some("base"));
+    assert_eq!(child.opened.inherited_model(), Some(base.model.clone()));
+    assert!(matches!(
+        kind(&base.model, "serve"),
+        ElementKind::Server { capacity: 1, .. }
+    ));
+    assert_eq!(base.opened.inherited_model(), None);
+    assert_eq!(load("mm1.bpmn", None).opened.inherited_model(), None);
+}
+
 #[test]
 fn a_file_runs_and_matches_queueing_theory() {
     // λ = 0.75, μ = 1 per minute: W = 1 / (μ − λ) = 4 minutes, utilisation 0.75.

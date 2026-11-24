@@ -1475,6 +1475,15 @@ unit	yr	an
 	Remove rule	Supprimer la règle
 	Change Decision Table	Modifier la table de décision
 	Use Decision Table	Utiliser la table de décision
+	Reset {field}	Réinitialiser {field}
+	Changed from the default	Modifié par rapport à la valeur par défaut
+	Changed from the inherited scenario	Modifié par rapport au scénario hérité
+	Mixed values	Valeurs différentes
+connection	Flow	Flux
+	Remove flow	Supprimer le flux
+	Condition	Condition
+	Shared properties	Propriétés communes
+	These blocks share no properties.	Ces blocs n'ont aucune propriété commune.
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	{block} est placé à {s} le long du convoyeur {conveyor}, dont le tracé mesure {length}. Placez-le entre 0 et {length} le long du tracé.
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	Les entités sur le convoyeur {conveyor} atteignent {before} avant {block}, mais {block} est placé plus près du début ({s} le long du convoyeur, {before} à {before_s}). Placez {block} plus loin sur le tracé que {before}, ou échangez-les dans les flux.
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	La jonction sur le flux {flow} met {time} à être franchie. Faites en sorte que son temps de transfert soit de 0 ou plus.

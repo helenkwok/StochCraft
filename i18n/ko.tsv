@@ -1475,6 +1475,15 @@ unit	yr	년
 	Remove rule	규칙 제거
 	Change Decision Table	결정 테이블 변경
 	Use Decision Table	결정 테이블 사용
+	Reset {field}	{field} 초기화
+	Changed from the default	기본값에서 변경됨
+	Changed from the inherited scenario	상속된 시나리오에서 변경됨
+	Mixed values	서로 다른 값
+connection	Flow	흐름
+	Remove flow	흐름 제거
+	Condition	조건
+	Shared properties	공통 속성
+	These blocks share no properties.	이 블록들에는 공통 속성이 없습니다.
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	{block}은(는) 컨베이어 {conveyor}의 경로를 따라 {s} 위치에 놓여 있지만, 그 경로의 길이는 {length}입니다. 경로를 따라 0에서 {length} 사이에 놓으세요.
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	컨베이어 {conveyor} 위의 엔터티는 {block}보다 {before}에 먼저 도달하지만, {block}은(는) 시작점에 더 가깝게(컨베이어를 따라 {s}, {before}은(는) {before_s}) 놓여 있습니다. {block}을(를) 경로에서 {before}보다 뒤쪽에 놓거나 흐름에서 서로 바꾸세요.
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	흐름 {flow}의 접합부를 지나는 데 {time}이(가) 걸립니다. 이송 시간을 0 이상으로 하세요.

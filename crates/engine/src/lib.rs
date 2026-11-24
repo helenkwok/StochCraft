@@ -579,6 +579,8 @@ struct HistoryEntry {
 struct FileState {
     path: Option<String>,
     opened: Opened,
+    /// The model as the scenario the opened one inherits from has it, if it inherits from one.
+    inherited: Option<Model>,
     /// What StochCraft noted when reading the file, for run records.
     notes: Vec<Value>,
 }
@@ -1062,10 +1064,18 @@ impl Engine {
         self.new_document(loaded.model, start);
         self.file = Some(FileState {
             path: Some(name.to_owned()),
+            inherited: opened.inherited_model(),
             opened,
             notes,
         });
         Ok(result)
+    }
+
+    /// The model as the scenario the opened one inherits from (BPSim `inherits`) has it, so a
+    /// value the opened scenario changes can be shown as changed and put back; `None` when it
+    /// inherits from none. Edits leave it as the file has it.
+    pub fn inherited_model(&self) -> Option<&Model> {
+        self.file.as_ref()?.inherited.as_ref()
     }
 
     /// Whether the opened file uses `id` for something it keeps that the model does not have, so
@@ -1180,6 +1190,7 @@ impl Engine {
         let format = format_name(loaded.opened.format);
         self.file = Some(FileState {
             path: Some(path.to_owned()),
+            inherited: loaded.opened.inherited_model(),
             opened: loaded.opened,
             notes: notes_json(&loaded.notes),
         });
