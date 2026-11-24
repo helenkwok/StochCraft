@@ -4223,8 +4223,12 @@ published methods whose guarantees are stated in their papers, and uses few of t
 - **Normal data.** KN and the feasibility check assume normal observations. A replication's mean
   over a long run is close to normal, but a count in a short run may not be; the results warn
   when the replications' values are few and strongly skewed.
-- **No randomness:** a model whose replications all give the same values is "compared exactly",
-  one replication per design, with no probability stated.
+- **No randomness:** a model in which nothing is drawn (and whose first two replications agree)
+  is "compared exactly", one replication per design, with no probability stated. Equal values
+  from a model that draws are not proof of no randomness: a pair of designs, or a constrained
+  result, that is the same in every first-stage replication is left undecided, and the answer is
+  not proven unless the objective is known exactly (costs alone) and the undecided designs cost
+  no less than the chosen one.
 
 **The methods, one per kind of decision:**
 

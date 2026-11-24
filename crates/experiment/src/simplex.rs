@@ -796,6 +796,24 @@ mod tests {
         assert!(a.starts[0].local_optimum, "{:?}", a.starts);
     }
 
+    /// The same values without noise, but not stated exact: the clean-up (shared with COMPASS)
+    /// does not take the finalists' constant differences as proof of no randomness.
+    #[test]
+    fn constant_values_without_the_statement_are_not_proven() {
+        let a = optimise(
+            &setup(500),
+            &NelderMead::default(),
+            &[start(vec![0.0])],
+            quadratic(vec![0.4], 0.0),
+            || false,
+        )
+        .unwrap();
+        assert!(a.finalists.len() > 1, "{a:?}");
+        assert_eq!(a.outcome, Outcome::NotProven, "{a:?}");
+        assert_eq!(a.confidence, None);
+        assert!(a.flat, "{a:?}");
+    }
+
     #[test]
     fn a_value_that_is_not_a_number_is_refused() {
         let sample = |_: Stream, _: &Point, reps: Range<u64>| -> Result<Vec<Vec<f64>>, String> {

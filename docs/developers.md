@@ -834,7 +834,8 @@ allow.
 - `select_best` is Kim and Nelson's fully sequential procedure KN (2001), with its constants
   η = ½ [(2α/(k − 1))^(−2/(n₀ − 1)) − 1] and h² = 2η(n₀ − 1) as Tsai and Nelson restate them, and
   the pairwise variances of differences. It chooses the best, or one within δ of it, with
-  probability at least 1 − α (`Kn`: δ, confidence, n₀, sense, sampling, `max_runs`).
+  probability at least 1 − α (`Kn`: δ, confidence, n₀, sense, sampling, `max_runs`,
+  `deterministic`).
 - `check_feasibility` is Batur and Kim's check F_B (2010) for several constraints on means, each
   with a limit and a tolerance ε (`Constraint`); each system is `Feasible`, `Infeasible` or, when
   the budget runs out, `Undecided`.
@@ -845,9 +846,31 @@ allow.
   kept unless an alternative is better; it is the local-optimality test O2 needs.
 
 The answers say what they claim: `Outcome::Selected` with the confidence, `ComparedExactly` when
-every first-stage value of every system is the same (no randomness; no probability stated), and
-`NotProven` with the systems still in contention when `max_runs` ran out, beside the chosen
-system, the replications and the mean of each system. All use the triangular region with c = 1.
+the caller states that the systems have no randomness (`deterministic`) and every first-stage
+value of every system is the same (no probability stated), and `NotProven` with the systems still
+in contention when `max_runs` ran out, beside the chosen system, the replications and the mean of
+each system.
+
+A flat first stage is not proof of no randomness: a system that gives 1 with probability 1% and 0
+otherwise gives ten zeros 90% of the time, and under common random numbers two varying systems
+can give the same difference in every first-stage replication. So without `deterministic` a zero
+first-stage variance never gives an exact or confident answer. The procedures fix S² from the
+first stage, and their guarantees are for that fixed S², so a zero S² is not estimated again: a
+pair with a zero variance of differences is never eliminated by the test, and a constraint with a
+zero variance is never settled by it. Declining to eliminate or decide only removes ways of being
+wrong, so the guarantee for the other pairs and constraints holds. A system still in contention
+with such a pair cannot be declared best: once every other pair's region has closed (or the budget
+runs out) the answer is `NotProven` with `Selection::flat` set, since more replications cannot
+change a zero S². A system left with only such constraints stays `Undecided`, takes no more
+replications, and sets `FeasibilityCheck::flat`. A pair's spread within rounding of its values
+(64 units in the last place) counts as zero. Values beyond 1e150 or below 1e-150 in size are
+compared times a power of two that brings them near 1, which changes no decision; a sum,
+difference, variance or bound of the region that still overflows is refused with
+`SelectError::Overflow` rather than compared.
+The racing and COMPASS layers follow the same rule: the race drops nobody on a constant paired
+difference unless `Racing::deterministic` is set, and COMPASS's exact mode (`Compass::exact`) is
+the caller's statement, which `experiment.optimise` makes only when nothing in the model is
+drawn. All use the triangular region with c = 1.
 Kim's 2003 paper prints its elimination bound as max{0, −a + λr}; the code uses min{0, −a + λr},
 Kim and Nelson's region, since the printed form would eliminate both systems of a close pair.
 The checks (`crates/experiment/tests/select.rs`, heavy) run 2,000 macro-replications each: KN in
@@ -947,7 +970,13 @@ decision set by `Param::set`, compiled once and run on the search's seed, or on
 `Rng::keyed(seed, "optimize/clean-up")` in the clean-up. The objective of a replication is the
 weighted results plus the decisions' costs. The cost cap is a limit of the space, so no design
 over it is run. A model is compared exactly only when nothing in it is drawn and the starting
-design's first two replications agree. `engine/src/drawn.rs` decides the first from the model's
+design's first two replications agree; an objective of costs alone (no results) is compared
+exactly in the clean-up (`Compass::exact_objective`, passed to KN as `Kn::deterministic`) while
+the constraints are checked as random. A design the check leaves undecided (a constrained result
+the same in every first-stage replication, as a wait of 0 with many servers, or the budget) is
+then set aside when its exact cost is no lower than the chosen design's, since it could not be
+the answer either way (`ConstrainedSelection::set_aside`, listed in the claim); a cheaper one
+leaves the answer not proven. `engine/src/drawn.rs` decides the first from the model's
 types, taking every struct apart and matching every kind of element in full, so a new field or
 kind does not compile until it says whether it draws. Drawn means a distribution other than a
 constant, a probability strictly between 0 and 1, an exclusive gateway whose way is not decided

@@ -32,7 +32,12 @@
 //!
 //! The answer's claim covers the designs compared at the end, not the whole space, and says so;
 //! when every design of the space was compared, it says that instead. A model with no randomness
-//! is compared exactly, one replication per design, with no probability stated.
+//! (nothing in it is drawn) is compared exactly, one replication per design, with no probability
+//! stated. Equal values from a model that does draw are not taken as proof of no randomness: in
+//! the clean-up a pair of designs with the same difference in every first-stage replication is
+//! left undecided, and the answer says it is not proven and why. An objective of the decisions'
+//! costs alone (no results) is known exactly whatever the model draws, so the clean-up compares
+//! it exactly (`Compass::exact_objective`) and checks the constraints as random.
 
 use std::collections::BTreeMap;
 use std::ops::Range;
@@ -1052,6 +1057,10 @@ pub fn optimise(model: &Model, p: &OptimiseParams) -> Result<(Value, Option<Mode
     setup.per_visit = per_visit;
     setup.all_designs_up_to = u64::from(p.all_designs_up_to.unwrap_or(50));
     setup.exact = exact;
+    // An objective of the decisions' costs alone is known exactly (each design's value is
+    // computed, not simulated), whatever the model draws: the clean-up compares it exactly and
+    // checks the constraints as random.
+    setup.exact_objective = p.objective.results.is_empty();
     setup.seed = seed;
     match p.reserve_runs {
         Some(r) => setup.search_runs = budget.saturating_sub(r),
@@ -1554,19 +1563,34 @@ impl Words<'_> {
                     )
                 }
             }
+            // The search's exact path (nothing in the model is drawn), or an objective of costs
+            // alone; equal simulated values are never taken as exact.
             (Outcome::ComparedExactly, Some(_)) => {
                 if self.exact {
                     format!(
                         "The model has no randomness, so the designs were compared exactly, one replication each: {what} is the best {scope}. No probability is stated."
                     )
                 } else if let Some(c) = a.confidence {
-                    format!(
-                        "With {}% confidence every design was rightly declared feasible or infeasible (within each constraint's tolerance); the objective has no randomness, so {what} is exactly the best {scope} that meet the constraints.",
+                    let mut s = format!(
+                        "With {}% confidence every design that was decided was rightly declared feasible or infeasible (within each constraint's tolerance); the objective is the decisions' costs alone, known exactly, so {what} is exactly the best {scope} that meet the constraints.",
                         percent(c)
-                    )
+                    );
+                    if !a.set_aside.is_empty() {
+                        let left: Vec<String> = a
+                            .set_aside
+                            .iter()
+                            .filter_map(|&i| a.finalists.get(i))
+                            .map(|f| design_text(ds, &f.design))
+                            .collect();
+                        s.push_str(&format!(
+                            " Left undecided, but costing no less, so they could not be the answer whether they meet the constraints or not: {}.",
+                            left.join(", ")
+                        ));
+                    }
+                    s
                 } else {
                     format!(
-                        "Every replication gave the same values, so the designs were compared exactly: {what} is the best {scope}. No probability is stated."
+                        "The objective is the decisions' costs alone, known exactly, so the designs were compared exactly: {what} is the best {scope}. No probability is stated."
                     )
                 }
             }
@@ -1577,11 +1601,15 @@ impl Words<'_> {
                     .filter_map(|&i| a.finalists.get(i))
                     .map(|f| design_text(ds, &f.design))
                     .collect();
+                let why = not_proven_because(a.flat, a.flat_constraint);
                 format!(
-                    "Best found, not proven best: {what} looks best {scope}, but the budget ran out before the clean-up could settle it. Still in contention: {}.",
+                    "Best found, not proven best: {what} looks best {scope}, but {why}. Still in contention: {}.",
                     still.join(", ")
                 )
             }
+            (_, None) if constrained && a.flat_constraint => format!(
+                "No design was proven to meet the constraints {scope}: a constrained result was the same in every replication of the check's first stage, which does not show that it has no randomness (the model draws random numbers), so the check could not settle it."
+            ),
             (_, None) if constrained => format!(
                 "No design was proven to meet the constraints {scope}: none was declared feasible, or the budget ran out before every one was decided."
             ),
@@ -1613,6 +1641,24 @@ impl Words<'_> {
     }
 }
 
+/// Why a clean-up with a best-looking design was not proven: a flat objective difference
+/// between two finalists (KN), a flat constrained result that left a finalist undecided (the
+/// feasibility check), both, or the budget.
+fn not_proven_because(flat_pair: bool, flat_constraint: bool) -> &'static str {
+    match (flat_pair, flat_constraint) {
+        (true, true) => {
+            "some of the designs compared at the end gave the same difference in every replication of the clean-up's first stage, and a constrained result of a design was the same in every replication of the feasibility check's first stage; neither shows that there is no randomness (the model draws random numbers), so the clean-up could not settle them"
+        }
+        (true, false) => {
+            "some of the designs compared at the end gave the same difference in every replication of the clean-up's first stage, which does not show that they have no randomness (the model draws random numbers), so the clean-up could not tell them apart"
+        }
+        (false, true) => {
+            "a design still in contention had a constrained result that was the same in every replication of the feasibility check's first stage, which does not show that it has no randomness (the model draws random numbers), so the check could not decide whether it meets the constraints"
+        }
+        (false, false) => "the budget ran out before the clean-up could settle it",
+    }
+}
+
 const METHOD_RULES: &str = "a rule's levels have no order, so COMPASS never moves along a rule: it searches the counts from a start at each combination of the rules' levels (at most 8), and the combinations meet in the clean-up";
 
 const METHOD_MEAN: &str = "Nelder and Mead's simplex (1965) over the means, each scaled to its range, with Barton and Ivey's RS + S9 changes for noise (1996: the best vertex evaluated again at each shrink, and a shrink of 10% rather than half), run for each combination of the other decisions' values (at most 8), restarted once from its best vertex; every vertex runs replication i on the same seed (common random numbers) and the vertices are compared on the same replications; a simplex stops when its size is below 1% of each range; a local search, with no guarantee of convergence under noise; the finalists (the last simplexes' vertices and the starting design) are compared again on fresh replications seeded by Rng::keyed(seed, \"optimize/clean-up\") by Kim and Nelson's KN, after Batur and Kim's feasibility check when there are constraints (alpha split equally between the two); a mean's value is rounded to ten significant digits; objective: the weighted results plus the decisions' costs, per replication; objective mean and half_width: over the clean-up's replications of the design (95% t interval); against_start: the paired difference chosen minus starting design over their common clean-up replications";
@@ -1622,6 +1668,21 @@ const METHOD: &str = "a space is compared whole, with no search, when it has at 
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn a_flat_constraint_is_not_blamed_on_the_comparison() {
+        let check = not_proven_because(false, true);
+        assert!(check.contains("feasibility check"), "{check}");
+        assert!(check.contains("meets the constraints"), "{check}");
+        assert!(!check.contains("tell them apart"), "{check}");
+        assert!(!check.contains("same difference"), "{check}");
+        let pair = not_proven_because(true, false);
+        assert!(pair.contains("same difference"), "{pair}");
+        assert!(!pair.contains("feasibility check"), "{pair}");
+        let both = not_proven_because(true, true);
+        assert!(both.contains("same difference") && both.contains("feasibility check"));
+        assert!(not_proven_because(false, false).contains("budget"));
+    }
 
     #[test]
     fn skewness_of_a_symmetric_sample_is_zero() {

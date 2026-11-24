@@ -71,7 +71,11 @@
 //!
 //! **No randomness** ([`Compass::exact`]): every design is run once, the search compares values,
 //! the local test is that x̂* is no worse than any neighbour, and the clean-up picks the best
-//! finalist by value: "compared exactly", with no probability stated.
+//! finalist by value: "compared exactly", with no probability stated. This is the caller's
+//! statement (the engine sets it only when nothing in the model is drawn); it is never inferred
+//! from equal values. Without it, the local test and the clean-up run KN and the comparison with
+//! a standard, where a pair of designs with the same difference in every first-stage replication
+//! is left undecided and the answer is not proven ([`Answer::flat`]; [`crate::select`]'s notes).
 
 use std::collections::{BTreeMap, BTreeSet};
 use std::ops::Range;
@@ -274,8 +278,14 @@ pub struct Compass {
     pub search_runs: u64,
     /// With at most this many designs (default 50), every design goes to the clean-up.
     pub all_designs_up_to: u64,
-    /// No randomness: each design is run once and compared by value.
+    /// The caller states that there is no randomness: each design is run once and compared by
+    /// value. Never inferred from equal values.
     pub exact: bool,
+    /// The caller states that the objective has no randomness (it is made of known costs alone),
+    /// while the constrained results may vary (default `false`): the local-optimality test and
+    /// the clean-up compare the objective exactly ([`Kn::deterministic`]) and check the
+    /// constraints as random.
+    pub exact_objective: bool,
     /// The seed of the walks that sample the most promising area.
     pub seed: u64,
     /// Decisions the search never moves (rules): each start keeps them at its own values.
@@ -298,6 +308,7 @@ impl Compass {
             search_runs: max_runs,
             all_designs_up_to: 50,
             exact: false,
+            exact_objective: false,
             seed: 0,
             held: Vec::new(),
         };
@@ -439,9 +450,14 @@ impl<D> Finalist<D> {
 /// The answer of [`optimise`].
 #[derive(Debug, Clone, PartialEq)]
 pub struct Answer<D = Vec<i64>> {
-    /// [`Outcome::Selected`] with the confidence, [`Outcome::ComparedExactly`] without
-    /// randomness, or [`Outcome::NotProven`]: the clean-up's budget could not settle it, or no
-    /// finalist was found feasible.
+    /// [`Outcome::Selected`] with the confidence; [`Outcome::ComparedExactly`] in either exact
+    /// mode: [`Compass::exact`] (the caller states there is no randomness at all) or
+    /// [`Compass::exact_objective`] (the objective alone is known exactly, as with costs only,
+    /// while the constraints are still checked as random, with the check's confidence). An exact
+    /// comparison therefore does not mean the whole model is deterministic. Otherwise
+    /// [`Outcome::NotProven`]: the clean-up's budget could not settle it, a flat first stage left
+    /// it undecided ([`Answer::flat`], [`Answer::flat_constraint`]), or no finalist was found
+    /// feasible.
     pub outcome: Outcome,
     /// The chosen finalist (when not proven, the best-looking one), by position in `finalists`;
     /// `None` when there is none, or none was declared feasible.
@@ -469,6 +485,20 @@ pub struct Answer<D = Vec<i64>> {
     /// The number of designs in the space, when it was counted (at most
     /// [`Compass::all_designs_up_to`]).
     pub space: Option<u64>,
+    /// The clean-up was not proven because two finalists gave the same objective difference in
+    /// every replication of KN's first stage, without a statement that the objective is exact:
+    /// that is not proof of no randomness, so KN could not tell them apart
+    /// ([`crate::select::Selection::flat`]).
+    pub flat: bool,
+    /// The clean-up was not proven because the feasibility check left a finalist undecided whose
+    /// constrained value was the same in every replication of the check's first stage, which is
+    /// not proof of no randomness ([`crate::select::FeasibilityCheck::flat`]). Such a finalist
+    /// is in [`Answer::in_contention`].
+    pub flat_constraint: bool,
+    /// With [`Compass::exact_objective`]: finalists the feasibility check left undecided that do
+    /// not affect the answer, since their exact objective is no better than the chosen one's
+    /// ([`crate::select::ConstrainedSelection::set_aside`]).
+    pub set_aside: Vec<usize>,
 }
 
 impl<D> Answer<D> {
@@ -513,6 +543,9 @@ impl<D> Answer<D> {
                 .collect(),
             trace: self.trace,
             space: self.space,
+            flat: self.flat,
+            flat_constraint: self.flat_constraint,
+            set_aside: self.set_aside,
         }
     }
 }
@@ -1203,6 +1236,8 @@ where
             sense: setup.sense,
             sampling: Sampling::Common,
             max_runs: None,
+            // Exact mode never reaches the test; here only the objective may be stated exact.
+            deterministic: setup.exact_objective,
         };
         let before = runner.runs;
         let test = compare_with_standard(&kn, alternatives.len(), |p, reps| {
@@ -1571,6 +1606,9 @@ where
         starts: Vec::new(),
         trace: Vec::new(),
         space: None,
+        flat: false,
+        flat_constraint: false,
+        set_aside: Vec::new(),
     };
     let mut c = CleanUp {
         sample,
@@ -1640,6 +1678,8 @@ where
         sense: setup.sense,
         sampling: Sampling::Common,
         max_runs: Some(budget),
+        // Exact mode returned above; here only the objective may be stated exact.
+        deterministic: setup.exact_objective,
     };
     let best_search = |fs: &[Finalist<D>]| -> Option<usize> {
         fs.iter()
@@ -1676,6 +1716,7 @@ where
         let selection = selection.map_err(CompassError::Select)?;
         answer.outcome = selection.outcome;
         answer.chosen = Some(selection.chosen);
+        answer.flat = selection.flat;
         answer.confidence = (selection.outcome == Outcome::Selected).then_some(setup.confidence);
         if selection.outcome == Outcome::NotProven {
             answer.in_contention = selection.survivors.clone();
@@ -1695,16 +1736,32 @@ where
         answer.feasibility = Some(found.feasibility.decisions.clone());
         answer.by_constraint = Some(found.feasibility.by_constraint.clone());
         answer.confidence = found.confidence;
+        answer.flat = !found.proven && found.selection.as_ref().is_some_and(|s| s.flat);
+        answer.flat_constraint = !found.proven && found.feasibility.flat;
+        answer.set_aside = found.set_aside.clone();
         match &found.selection {
             Some(s) => {
-                answer.outcome = if found.feasibility.is_complete() {
+                answer.outcome = if found.proven {
                     s.outcome
                 } else {
                     Outcome::NotProven
                 };
                 answer.chosen = Some(s.chosen);
                 if answer.outcome == Outcome::NotProven {
-                    answer.in_contention = s.survivors.clone();
+                    // KN's survivors among those declared feasible, and every finalist the check
+                    // left undecided: any of them may be the answer.
+                    let mut still = s.survivors.clone();
+                    still.extend(
+                        found
+                            .feasibility
+                            .decisions
+                            .iter()
+                            .enumerate()
+                            .filter_map(|(p, d)| (*d == Decision::Undecided).then_some(p)),
+                    );
+                    still.sort_unstable();
+                    still.dedup();
+                    answer.in_contention = still;
                 }
             }
             None => {
@@ -2021,6 +2078,78 @@ mod tests {
         assert_eq!(answer.finalists.len(), 5);
         assert_eq!(answer.finalists[answer.chosen.unwrap()].design, vec![5]);
         assert_eq!(answer.search_runs, 0);
+    }
+
+    /// A costs-only objective (stated exact) and a constraint whose value is the same in every
+    /// first-stage replication for the cheapest design: the check leaves that design undecided,
+    /// and since it costs less than the one KN chose it may be the answer. Not proven, with the
+    /// undecided design in contention and the reason marked as a flat constraint.
+    #[test]
+    fn a_cheaper_design_with_a_flat_constraint_stays_in_contention() {
+        let space = Space {
+            bounds: vec![(1, 3)],
+            limits: Vec::new(),
+        };
+        let mut setup = Compass::new(1.0, Sense::Minimise, 2000);
+        setup.exact_objective = true;
+        setup.constraints = vec![Constraint {
+            bound: crate::select::Bound::AtMost,
+            limit: 0.0,
+            tolerance: 0.5,
+        }];
+        let answer = optimise(
+            &setup,
+            &space,
+            &[vec![2]],
+            |_, x, reps| {
+                Ok(reps
+                    .map(|j| {
+                        let y = if x[0] == 1 {
+                            -1.0
+                        } else {
+                            -1.0 + 0.001 * (Rng::keyed(j, &format!("{x:?}")).uniform() - 0.5)
+                        };
+                        vec![x[0] as f64, y]
+                    })
+                    .collect())
+            },
+            || false,
+        )
+        .unwrap();
+        assert_eq!(answer.outcome, Outcome::NotProven, "{answer:?}");
+        assert_eq!(answer.confidence, None);
+        assert!(answer.flat_constraint, "{answer:?}");
+        assert!(!answer.flat, "{answer:?}");
+        let still: Vec<&Vec<i64>> = answer
+            .in_contention
+            .iter()
+            .map(|&p| &answer.finalists[p].design)
+            .collect();
+        assert!(still.contains(&&vec![1]), "{answer:?}");
+        assert!(still.contains(&&vec![2]), "{answer:?}");
+    }
+
+    /// Equal values in every replication, without the statement that there is no randomness
+    /// (`exact` false): never compared exactly, and nothing claimed with confidence.
+    #[test]
+    fn constant_values_without_the_statement_are_not_proven() {
+        let space = Space {
+            bounds: vec![(1, 5)],
+            limits: Vec::new(),
+        };
+        let setup = Compass::new(1.0, Sense::Maximise, 2000);
+        let answer = optimise(
+            &setup,
+            &space,
+            &[vec![1]],
+            |_, x, reps| Ok(reps.map(|_| vec![x[0] as f64 * 3.0]).collect()),
+            || false,
+        )
+        .unwrap();
+        assert_eq!(answer.outcome, Outcome::NotProven, "{answer:?}");
+        assert_eq!(answer.confidence, None);
+        assert!(answer.flat);
+        assert_eq!(answer.finalists[answer.chosen.unwrap()].design, vec![5]);
     }
 
     #[test]
