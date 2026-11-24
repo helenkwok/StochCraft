@@ -531,16 +531,18 @@ impl Compiled {
                         Some(t) if t > 0.0 && t != *length => length / t,
                         _ => 1.0,
                     };
+                    // The flow into each point: from the conveyor for the first, from the
+                    // point before's default for the rest; rework if it is marked so.
+                    let mut from = i;
                     stochcraft_model::site::points(&self.model, &element.id)
                         .into_iter()
-                        .enumerate()
-                        .filter_map(|(k, p)| {
+                        .filter_map(|p| {
                             let g = elements.iter().position(|e| e.id == p.gateway)?;
-                            let rework = k == 0
-                                && self
-                                    .routes
-                                    .get(i)
-                                    .is_some_and(|rs| rs.iter().any(|r| r.to == g && r.rework));
+                            let rework = self.routes.get(from).is_some_and(|rs| {
+                                rs.iter()
+                                    .any(|r| r.to == g && r.rework && (from == i || r.default))
+                            });
+                            from = g;
                             Some(BeltPoint {
                                 s: (p.s * scale).max(0.0),
                                 gateway: g,
@@ -5000,8 +5002,8 @@ struct BeltPoint {
     /// The gateway (its statistics and its properties).
     gateway: usize,
     router: Rc<Router>,
-    /// Entities meeting it are rework: the first point's flow from the conveyor is marked so,
-    /// counted against the last server each finished at, as when they enter a gateway.
+    /// Entities meeting it are rework: the flow into it (from the conveyor, or the point before's
+    /// default) is marked so; counted against the last server each finished at, as in a gateway.
     rework: bool,
 }
 
