@@ -1202,12 +1202,13 @@ unit	yr	a
 	Layout	Distribución
 	Layout of the model, to scale	Distribución del modelo, a escala
 	Drag to pan · Scroll to zoom	Arrastre para desplazar · Desplace para acercar
-	Positions from the diagram	Posiciones del diagrama
+	Positions from the layout	Posiciones de la distribución
 	Scale bar: {length} m	Barra de escala: {length} m
 	{length} m	{length} m
 	x {x} m, y {y} m	x {x} m, y {y} m
 	Unplaced	Sin colocar
-	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	Por ahora, cada bloque se coloca a partir del diagrama. Un bloque que el diagrama omite aparece aquí y no se dibuja.
+	Every block is placed.	Todos los bloques están colocados.
+	Nothing to draw: this model has no layout yet. The Layout tab lists its blocks as unplaced.	Nada que dibujar: este modelo aún no tiene distribución. La pestaña Distribución muestra sus bloques como sin colocar.
 	The charts are taller than the window: make the window taller, then export them again.	Los gráficos son más altos que la ventana: haga la ventana más alta y vuelva a exportarlos.
 	The model changed while choosing where to save it, so it was not saved. Save again.	El modelo cambió mientras se elegía dónde guardarlo, así que no se guardó. Guárdalo de nuevo.
 	Exactly that many	Exactamente esas

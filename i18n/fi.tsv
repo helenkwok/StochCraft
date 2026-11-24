@@ -1202,12 +1202,13 @@ unit	yr	v
 	Layout	Asettelu
 	Layout of the model, to scale	Mallin asettelu mittakaavassa
 	Drag to pan · Scroll to zoom	Vedä panoroidaksesi · Vieritä zoomataksesi
-	Positions from the diagram	Sijainnit kaaviosta
+	Positions from the layout	Sijainnit asettelusta
 	Scale bar: {length} m	Mittakaavajana: {length} m
 	{length} m	{length} m
 	x {x} m, y {y} m	x {x} m, y {y} m
 	Unplaced	Sijoittamatta
-	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	Toistaiseksi jokainen lohko sijoitetaan kaavion perusteella. Lohko, jonka kaavio jättää pois, luetellaan tässä, eikä sitä piirretä.
+	Every block is placed.	Jokainen lohko on sijoitettu.
+	Nothing to draw: this model has no layout yet. The Layout tab lists its blocks as unplaced.	Ei piirrettävää: mallilla ei ole vielä asettelua. Asettelu-välilehti luettelee sen lohkot sijoittamattomina.
 	The charts are taller than the window: make the window taller, then export them again.	Kaaviot ovat ikkunaa korkeampia: suurenna ikkunan korkeutta ja vie ne sitten uudelleen.
 	The model changed while choosing where to save it, so it was not saved. Save again.	Malli muuttui tallennuspaikan valinnan aikana, joten sitä ei tallennettu. Tallenna uudelleen.
 	Exactly that many	Täsmälleen niin monta

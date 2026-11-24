@@ -1202,12 +1202,13 @@ unit	yr	год.
 	Layout	Распоред
 	Layout of the model, to scale	Распоред модела, у размери
 	Drag to pan · Scroll to zoom	Превуците за померање · Скролујте за зумирање
-	Positions from the diagram	Позиције из дијаграма
+	Positions from the layout	Позиције из распореда
 	Scale bar: {length} m	Трака размере: {length} м
 	{length} m	{length} м
 	x {x} m, y {y} m	x {x} м, y {y} м
 	Unplaced	Непостављено
-	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	За сада је сваки блок постављен према дијаграму. Блок који дијаграм изоставља наводи се овде и не црта се.
+	Every block is placed.	Сваки блок је постављен.
+	Nothing to draw: this model has no layout yet. The Layout tab lists its blocks as unplaced.	Нема шта да се црта: овај модел још нема распоред. Картица Распоред наводи његове блокове као непостављене.
 	The charts are taller than the window: make the window taller, then export them again.	Графикони су виши од прозора: повећајте висину прозора, па их поново извезите.
 	The model changed while choosing where to save it, so it was not saved. Save again.	Модел се променио док се бирало где да се сачува, па није сачуван. Сачувајте поново.
 	Exactly that many	Тачно толико

@@ -1202,12 +1202,13 @@ unit	yr	ж.
 	Layout	Орналасу
 	Layout of the model, to scale	Модельдің орналасуы, масштабпен
 	Drag to pan · Scroll to zoom	Жылжыту үшін сүйреңіз · Масштабтау үшін айналдырыңыз
-	Positions from the diagram	Орындар диаграммадан
+	Positions from the layout	Орындар орналасудан
 	Scale bar: {length} m	Масштаб сызғышы: {length} м
 	{length} m	{length} м
 	x {x} m, y {y} m	x {x} м, y {y} м
 	Unplaced	Орналастырылмаған
-	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	Әзірге әр блок диаграмма бойынша орналастырылады. Диаграмма қалдырып кеткен блок осында тізімделеді және сызылмайды.
+	Every block is placed.	Әр блок орналастырылған.
+	Nothing to draw: this model has no layout yet. The Layout tab lists its blocks as unplaced.	Салатын ештеңе жоқ: бұл модельде әлі орналасу жоқ. «Орналасу» қойындысы оның блоктарын орналастырылмаған деп тізеді.
 	The charts are taller than the window: make the window taller, then export them again.	Диаграммалар терезеден биік: терезені биіктетіп, оларды қайта экспорттаңыз.
 	The model changed while choosing where to save it, so it was not saved. Save again.	Сақтау орнын таңдап жатқанда модель өзгерді, сондықтан ол сақталмады. Қайта сақтаңыз.
 	Exactly that many	Дәл сонша

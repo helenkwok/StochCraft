@@ -1202,12 +1202,13 @@ unit	yr	r.
 	Layout	Układ
 	Layout of the model, to scale	Układ modelu w skali
 	Drag to pan · Scroll to zoom	Przeciągnij, aby przesuwać · Przewiń, aby powiększać
-	Positions from the diagram	Pozycje z diagramu
+	Positions from the layout	Pozycje z układu
 	Scale bar: {length} m	Podziałka: {length} m
 	{length} m	{length} m
 	x {x} m, y {y} m	x {x} m, y {y} m
 	Unplaced	Nieumieszczone
-	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	Na razie każdy blok jest umieszczany na podstawie diagramu. Blok pominięty w diagramie jest wymieniony tutaj i nie jest rysowany.
+	Every block is placed.	Każdy blok jest umieszczony.
+	Nothing to draw: this model has no layout yet. The Layout tab lists its blocks as unplaced.	Nie ma czego rysować: ten model nie ma jeszcze układu. Karta Układ wymienia jego bloki jako nieumieszczone.
 	The charts are taller than the window: make the window taller, then export them again.	Wykresy są wyższe niż okno: zwiększ wysokość okna, a potem wyeksportuj je ponownie.
 	The model changed while choosing where to save it, so it was not saved. Save again.	Model zmienił się podczas wybierania miejsca zapisu, więc nie został zapisany. Zapisz ponownie.
 	Exactly that many	Dokładnie tyle

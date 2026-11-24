@@ -1202,12 +1202,13 @@ unit	yr	năm
 	Layout	Mặt bằng
 	Layout of the model, to scale	Mặt bằng của mô hình, theo tỷ lệ
 	Drag to pan · Scroll to zoom	Kéo để dịch chuyển · Cuộn để thu phóng
-	Positions from the diagram	Vị trí từ sơ đồ
+	Positions from the layout	Vị trí từ mặt bằng
 	Scale bar: {length} m	Thanh tỷ lệ: {length} m
 	{length} m	{length} m
 	x {x} m, y {y} m	x {x} m, y {y} m
 	Unplaced	Chưa đặt
-	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	Hiện tại mọi khối được đặt theo sơ đồ. Khối mà sơ đồ bỏ sót được liệt kê ở đây và không được vẽ.
+	Every block is placed.	Mọi khối đã được đặt.
+	Nothing to draw: this model has no layout yet. The Layout tab lists its blocks as unplaced.	Không có gì để vẽ: mô hình này chưa có mặt bằng. Thẻ Mặt bằng liệt kê các khối của nó là chưa đặt.
 	The charts are taller than the window: make the window taller, then export them again.	Biểu đồ cao hơn cửa sổ: hãy kéo cửa sổ cao hơn, rồi xuất lại.
 	The model changed while choosing where to save it, so it was not saved. Save again.	Mô hình đã thay đổi trong khi chọn nơi lưu, nên chưa được lưu. Hãy lưu lại.
 	Exactly that many	Đúng bằng số đó

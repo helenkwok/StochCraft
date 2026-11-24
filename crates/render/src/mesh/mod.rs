@@ -8,6 +8,8 @@ use core::f32::consts::{FRAC_PI_2, TAU};
 #[cfg(test)]
 mod tests;
 
+pub mod kit;
+
 /// A flat-shaded triangle-list mesh in metres with `z` up.
 #[derive(Debug, Clone, Default, PartialEq)]
 pub struct Mesh {

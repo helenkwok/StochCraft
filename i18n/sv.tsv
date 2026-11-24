@@ -1202,12 +1202,13 @@ unit	yr	år
 	Layout	Layout
 	Layout of the model, to scale	Modellens layout i skala
 	Drag to pan · Scroll to zoom	Dra för att panorera · Rulla för att zooma
-	Positions from the diagram	Positioner från diagrammet
+	Positions from the layout	Positioner från layouten
 	Scale bar: {length} m	Skalstreck: {length} m
 	{length} m	{length} m
 	x {x} m, y {y} m	x {x} m, y {y} m
 	Unplaced	Ej placerade
-	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	Tills vidare placeras varje block utifrån diagrammet. Ett block som diagrammet utelämnar listas här och ritas inte.
+	Every block is placed.	Alla block är placerade.
+	Nothing to draw: this model has no layout yet. The Layout tab lists its blocks as unplaced.	Inget att rita: modellen har ingen layout ännu. Fliken Layout listar dess block som ej placerade.
 	The charts are taller than the window: make the window taller, then export them again.	Diagrammen är högre än fönstret: gör fönstret högre och exportera dem sedan igen.
 	The model changed while choosing where to save it, so it was not saved. Save again.	Modellen ändrades medan det valdes var den skulle sparas, så den sparades inte. Spara igen.
 	Exactly that many	Exakt så många
