@@ -2257,6 +2257,7 @@ fn a_replaced_element_keeps_what_still_applies_and_a_removed_one_nothing() {
     // Removed: nothing of it, or of its flow, is left in any scenario.
     let saved = edit_bytes("bank.bpmn", bytes, Some("scenario"), |m| {
         m.elements.retain(|e| e.id.as_str() != "customers");
+        m.layout.remove(&id("customers"));
         m.connections.retain(|c| c.id.as_str() != "flow-1");
     });
     let t = text(&saved);
