@@ -173,6 +173,18 @@ Select a block to see its settings. The most used ones come first, under **Param
   in the experiment's **Length unit**, the speed in that unit per time unit. A conveyor drawn in
   the model's layout (as the parcel sorter example's are) is as long as its drawn path; a
   **Length** typed that differs overrides it, and a warning gives both lengths.
+  - **Diverts along a conveyor.** A divert placed in the layout at a distance along the conveyor
+    that sends into it is a point on that conveyor: each item rides to it, and as the item's
+    front reaches it, the divert chooses a way. If that way is not the default and has room, the
+    item leaves the conveyor there; otherwise it rides on. Several diverts can sit along one
+    conveyor, each the default way of the one before; items meet them in that order, and at the
+    end of the conveyor go down the last one's default way. The conveyor's capacity and spacing
+    count over its whole length, and an item may span a divert, so a divert that sends nothing
+    changes no time. A divert placed at the very end of the conveyor works as before: the
+    conveyor sends into it at its end.
+  - **Junctions.** A flow from one conveyor straight to another can carry a junction: inline,
+    side transfer or turntable, with a transfer time (0 by default). An item takes its room on
+    the next conveyor, crosses in the transfer time, then rides on.
 
 **Times.** Each time is a distribution: pick its type (Constant, Exponential, Uniform, Triangular,
 Normal, Log-normal, Gamma, Erlang, Weibull and others) and fill in its values. If you only know a

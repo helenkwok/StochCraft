@@ -3909,6 +3909,30 @@ is still one gateway, so a parcel crosses from the merge to its lane at once (ri
 straight to its divert point needs L5's points along a section). U1, the run bar, is done
 (#218).
 
+L5's first part is done: points along a section and junctions. A divert gateway placed at `s`
+along the conveyor that sends into it is a point of that conveyor (`model::site::points`): its
+items meet it as their front reaches `s`, and a non-default way with room takes the item off
+there, else it rides on. Several diverts along one section are chained by their default flows,
+met in order along the track (validated), and the last one's default is where items go at the
+end; a divert at the very end of the track is M5.1's, at the end. Not accumulating, an item
+reaches `s` at its belt time tᵢ + s/v; accumulating, when its own travel and the items ahead let
+it, an item that left at a point holding up the one behind as if it moved on at the speed, so no
+position jumps. Capacity and spacing stay over the whole section, and a section with no points
+runs exactly as before. A place's `s` is a distance along the drawn path, scaled with a typed
+length that overrides it. A divert's place is a sim field. Junctions are `stochcraft:junction`
+on the flow from one conveyor to the next (inline, side or turntable, with a transfer time, 0
+by default; sim), read, written and saved in place, and in the JSON. The sorter's divert sits
+at the end of its loop (30 m, where it closes), with unchanged results. Checks with known
+answers in `crates/blocks/tests/conveyor_points.rs`: the time to a point is s/v; a 1 m item
+passes a point 0.5 m in exactly as on the plain conveyor; a divert by probability 0.3 gives a
+binomial share; a section with points holds ⌊L/p⌋, as the plain one; only the items whose front
+reaches a point behind a shut exit meet it (3 not accumulating, 7 accumulating); a junction adds
+its transfer time and loses nothing. Left from part 1, for later PRs: a merge at `s` (a section
+joining another part-way along) and rule 3's span across a junction (an item on both sections,
+at the lower speed) — a junction still hands an item over front first, as M5.1 does; a station
+doing work at a point; mixed item lengths on one section; photo-eyes. Parts 2 and 3 follow:
+recirculation and the exception lane, then shortest-path routing.
+
 #### Sources
 
 - S: H. Steinkellner, D. Kaever, C. Rockenschaub, "Enhancing Social Sustainability in Parcel Hubs
