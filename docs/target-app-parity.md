@@ -162,7 +162,8 @@ re-graded. Since then:
   shortcuts and the user guide (#169), and a guided first model on the real canvas (#172). Help
   no longer holds only About.
 - **Start screen (area 1):** a start page that asks what you want to find out (#170), and eleven
-  examples, five of them checked against exact answers (#171) and a parcel sorter (#207).
+  examples, five of them checked against exact answers (#171) and a parcel sorter (#207); a search
+  over every example, and the full list grouped by field.
 - **Results (area 10; heuristics 1 and 8):** findings in words, how sure the numbers are, four key
   measures per block and two default charts (#163, #164, #165); results stay, marked out of date,
   after an edit, and compare with a kept baseline (#166, #167, #168); a dashboard panel with four

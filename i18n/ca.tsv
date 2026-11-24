@@ -1470,3 +1470,9 @@ connection	Flow	Flux
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	{block} està col·locat a {s} al llarg de la cinta transportadora {conveyor}, el traçat de la qual fa {length}. Col·loqueu-lo entre 0 i {length} al llarg del traçat.
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	Les entitats de la cinta transportadora {conveyor} arriben a {before} abans que a {block}, però {block} està col·locat més a prop de l'inici ({s} al llarg de la cinta, {before} a {before_s}). Col·loqueu {block} més endavant al llarg del traçat que {before} o intercanvieu-los als fluxos.
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	El punt d'unió del flux {flow} triga {time} a creuar-se. Feu que el seu temps de transferència sigui 0 o més.
+	Search examples	Cerca als exemples
+	Clear search	Esborra la cerca
+	Logistics and warehousing	Logística i emmagatzematge
+	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	Classificació de paquets postals: un circuit alimenta quatre carrils per producte, i els desviadors fan fer una altra volta a un paquet quan el seu carril és ple.
+	How many parcels go round the loop because their lane is full?	Quants paquets fan una altra volta al circuit perquè el seu carril és ple?
+	Conveyors and diverts: parcels sent round the loop when their lane is full.	Cintes transportadores i desviadors: paquets que fan una altra volta al circuit quan el seu carril és ple.

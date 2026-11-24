@@ -1470,3 +1470,9 @@ connection	Flow	Voog
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	Plokk {block} on paigutatud {s} kaugusele piki konveierit {conveyor}, mille tee on {length} pikk. Paiguta see 0 ja {length} vahele piki teed.
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	Olemid konveieril {conveyor} jõuavad plokini {before} enne kui plokini {block}, kuid {block} on paigutatud alguse lähedale ({s} piki seda, {before} kohas {before_s}). Paiguta {block} teel kaugemale kui {before} või vaheta need vooludes ära.
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	Ristumiskoht voos {flow} võtab ületamiseks {time}. Tee selle ülekandeaeg 0 või suurem.
+	Search examples	Otsi näidetest
+	Clear search	Tühjenda otsing
+	Logistics and warehousing	Logistika ja laondus
+	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	Postipakkide sorteerimine: ringkonveier toidab nelja rada toote järgi ja suunajad saadavad paki uuele ringile, kui selle rada on täis.
+	How many parcels go round the loop because their lane is full?	Mitu pakki teeb uue ringi, sest nende rada on täis?
+	Conveyors and diverts: parcels sent round the loop when their lane is full.	Konveierid ja suunajad: pakid teevad uue ringi, kui nende rada on täis.

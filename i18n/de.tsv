@@ -1470,3 +1470,9 @@ connection	Flow	Verbindung
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	Block {block} ist {s} entlang des Förderbands {conveyor} platziert, dessen Pfad {length} lang ist. Platzieren Sie ihn zwischen 0 und {length} entlang des Pfads.
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	Entitäten auf dem Förderband {conveyor} erreichen {before} vor {block}, aber {block} liegt näher am Anfang ({s} entlang des Förderbands, {before} bei {before_s}). Platzieren Sie {block} weiter hinten auf dem Pfad als {before} oder vertauschen Sie sie in den Verbindungen.
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	Der Übergang an der Verbindung {flow} braucht zum Überqueren {time}. Setzen Sie seine Transferzeit auf 0 oder mehr.
+	Search examples	Beispiele durchsuchen
+	Clear search	Suche löschen
+	Logistics and warehousing	Logistik und Lager
+	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	Sortierung von Postpaketen: Ein Kreisförderer speist vier Bahnen nach Produkt, und Ausschleusungen schicken ein Paket eine weitere Runde, wenn seine Bahn voll ist.
+	How many parcels go round the loop because their lane is full?	Wie viele Pakete fahren eine weitere Runde, weil ihre Bahn voll ist?
+	Conveyors and diverts: parcels sent round the loop when their lane is full.	Förderbänder und Ausschleusungen: Pakete fahren eine weitere Runde, wenn ihre Bahn voll ist.

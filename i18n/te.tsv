@@ -1470,3 +1470,9 @@ connection	Flow	ప్రవాహం
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	{block} కన్వేయర్ {conveyor} వెంట {s} దూరంలో ఉంచబడింది, కానీ దాని మార్గం {length} పొడవు మాత్రమే. దాన్ని మార్గం వెంట 0 మరియు {length} మధ్య ఉంచండి.
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	కన్వేయర్ {conveyor} పై ఎంటిటీలు {block} కంటే ముందు {before} చేరతాయి, కానీ {block} ప్రారంభానికి దగ్గరగా ఉంచబడింది (దాని వెంట {s}, {before} {before_s} వద్ద). {block} ను మార్గంలో {before} కంటే ముందుకు ఉంచండి, లేదా ప్రవాహాలలో వాటిని మార్చండి.
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	ప్రవాహం {flow} పై జంక్షన్ దాటడానికి {time} పడుతుంది. దాని బదిలీ సమయాన్ని 0 లేదా అంతకంటే ఎక్కువ చేయండి.
+	Search examples	ఉదాహరణలలో వెతుకు
+	Clear search	వెతుకులాటను తుడిచివేయి
+	Logistics and warehousing	లాజిస్టిక్స్ మరియు గిడ్డంగి
+	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	తపాలా పార్సెల్ సార్టింగ్: ఒక లూప్ ఉత్పత్తి వారీగా నాలుగు లేన్లకు పార్సెల్‌లను పంపుతుంది, లేన్ నిండితే డైవర్ట్‌లు పార్సెల్‌ను మళ్లీ ఒక రౌండ్ పంపుతాయి.
+	How many parcels go round the loop because their lane is full?	లేన్ నిండినందున ఎన్ని పార్సెల్‌లు లూప్‌లో మళ్లీ తిరుగుతాయి?
+	Conveyors and diverts: parcels sent round the loop when their lane is full.	కన్వేయర్లు మరియు డైవర్ట్‌లు: లేన్ నిండితే పార్సెల్‌లు లూప్‌లో మళ్లీ తిరుగుతాయి.

@@ -1470,3 +1470,9 @@ connection	Flow	Ροή
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	Το μπλοκ {block} είναι τοποθετημένο σε απόσταση {s} κατά μήκος του μεταφορέα {conveyor}, του οποίου η διαδρομή έχει μήκος {length}. Τοποθετήστε το μεταξύ 0 και {length} κατά μήκος της διαδρομής.
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	Οι οντότητες στον μεταφορέα {conveyor} φτάνουν στο {before} πριν από το {block}, αλλά το {block} είναι τοποθετημένο πιο κοντά στην αρχή ({s} κατά μήκος του, το {before} στο {before_s}). Τοποθετήστε το {block} πιο πέρα στη διαδρομή από το {before} ή αντιμεταθέστε τα στις ροές.
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	Ο κόμβος στη ροή {flow} χρειάζεται {time} για να διασχιστεί. Ορίστε τον χρόνο μεταφοράς του σε 0 ή περισσότερο.
+	Search examples	Αναζήτηση στα παραδείγματα
+	Clear search	Απαλοιφή αναζήτησης
+	Logistics and warehousing	Εφοδιαστική και αποθήκευση
+	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	Διαλογή ταχυδρομικών δεμάτων: ένας βρόχος τροφοδοτεί τέσσερις λωρίδες ανά προϊόν, και οι εκτροπείς στέλνουν ένα δέμα για άλλο γύρο όταν η λωρίδα του είναι γεμάτη.
+	How many parcels go round the loop because their lane is full?	Πόσα δέματα κάνουν άλλο γύρο στον βρόχο επειδή η λωρίδα τους είναι γεμάτη;
+	Conveyors and diverts: parcels sent round the loop when their lane is full.	Μεταφορείς και εκτροπείς: δέματα που κάνουν άλλο γύρο στον βρόχο όταν η λωρίδα τους είναι γεμάτη.

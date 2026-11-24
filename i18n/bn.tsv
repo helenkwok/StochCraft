@@ -1470,3 +1470,9 @@ connection	Flow	প্রবাহ
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	{block} কনভেয়ার {conveyor}-এর বরাবর {s} দূরত্বে রাখা হয়েছে, কিন্তু এর পথ মাত্র {length} লম্বা। এটিকে পথ বরাবর 0 থেকে {length}-এর মধ্যে রাখুন।
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	কনভেয়ার {conveyor}-এ সত্তারা {block}-এর আগে {before}-এ পৌঁছায়, কিন্তু {block} শুরুর কাছাকাছি রাখা হয়েছে (এর বরাবর {s}, আর {before} আছে {before_s}-এ)। {block}-কে পথ বরাবর {before}-এর চেয়ে সামনে রাখুন, অথবা প্রবাহগুলিতে ওদের অদলবদল করুন।
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	প্রবাহ {flow}-এর সংযোগস্থল পার হতে {time} লাগে। এর স্থানান্তরের সময় 0 বা তার বেশি করুন।
+	Search examples	উদাহরণ খুঁজুন
+	Clear search	খোঁজা মুছুন
+	Logistics and warehousing	লজিস্টিকস ও গুদামজাতকরণ
+	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	ডাক পার্সেল বাছাই: একটি লুপ পণ্য অনুযায়ী চারটি লেনে পার্সেল দেয়, আর লেন ভরা থাকলে ডাইভার্ট পার্সেলটিকে আবার ঘুরিয়ে পাঠায়।
+	How many parcels go round the loop because their lane is full?	লেন ভরা থাকায় কতগুলো পার্সেল লুপে আবার ঘোরে?
+	Conveyors and diverts: parcels sent round the loop when their lane is full.	কনভেয়র ও ডাইভার্ট: লেন ভরা থাকলে পার্সেল লুপে আবার ঘুরে আসে।

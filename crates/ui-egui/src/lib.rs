@@ -494,12 +494,12 @@ pub const EXAMPLES: &[Example] = &[
     },
     Example {
         title: "Parcel sorter",
-        about: "A parcel sorter: a loop, four lanes by product, diverts that send parcels round when a lane is full",
+        about: "Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.",
         file: "sorter.bpmn",
         bytes: include_bytes!("../../../tests/models/sorter.bpmn"),
         card: start::Card {
             question: "How many parcels go round the loop because their lane is full?",
-            industry: start::Industry::Manufacturing,
+            industry: start::Industry::Logistics,
             topics: &[start::Topic::Bottleneck],
             teaches: "Conveyors and diverts: parcels sent round the loop when their lane is full.",
             minutes: 4,
@@ -510,7 +510,7 @@ pub const EXAMPLES: &[Example] = &[
                 start::Glyph::Resource,
                 start::Glyph::Departures,
             ],
-            featured: false,
+            featured: true,
         },
     },
     Example {

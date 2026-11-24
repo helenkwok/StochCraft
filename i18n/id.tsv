@@ -1470,3 +1470,9 @@ connection	Flow	Alur
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	{block} ditempatkan {s} di sepanjang konveyor {conveyor}, yang jalurnya panjangnya {length}. Tempatkan antara 0 dan {length} di sepanjang jalur.
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	Entitas di konveyor {conveyor} mencapai {before} sebelum {block}, tetapi {block} ditempatkan lebih dekat ke awal ({s} di sepanjang konveyor, {before} pada {before_s}). Tempatkan {block} lebih jauh di sepanjang jalur daripada {before}, atau tukar keduanya di alur.
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	Sambungan pada alur {flow} membutuhkan {time} untuk dilewati. Buat waktu perpindahannya 0 atau lebih.
+	Search examples	Cari contoh
+	Clear search	Hapus pencarian
+	Logistics and warehousing	Logistik dan pergudangan
+	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	Penyortiran paket pos: sebuah putaran mengisi empat jalur menurut produk, dan pengalih mengirim paket berputar lagi saat jalurnya penuh.
+	How many parcels go round the loop because their lane is full?	Berapa banyak paket yang berputar lagi karena jalurnya penuh?
+	Conveyors and diverts: parcels sent round the loop when their lane is full.	Konveyor dan pengalih: paket berputar lagi saat jalurnya penuh.

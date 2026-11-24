@@ -1470,3 +1470,9 @@ connection	Flow	Flux
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	Blocul {block} este plasat la {s} de-a lungul transportorului {conveyor}, al cărui traseu are lungimea {length}. Plasați-l între 0 și {length} de-a lungul traseului.
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	Entitățile de pe transportorul {conveyor} ajung la {before} înainte de {block}, dar {block} este plasat mai aproape de început ({s} de-a lungul lui, {before} la {before_s}). Plasați {block} mai departe pe traseu decât {before} sau schimbați-le între ele în fluxuri.
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	Joncțiunea de pe fluxul {flow} durează {time} pentru a fi traversată. Faceți timpul ei de transfer 0 sau mai mare.
+	Search examples	Caută în exemple
+	Clear search	Șterge căutarea
+	Logistics and warehousing	Logistică și depozitare
+	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	Sortarea coletelor poștale: o buclă alimentează patru benzi după produs, iar deviatoarele trimit un colet într-o nouă tură când banda lui este plină.
+	How many parcels go round the loop because their lane is full?	Câte colete fac încă o tură în buclă pentru că banda lor este plină?
+	Conveyors and diverts: parcels sent round the loop when their lane is full.	Transportoare și deviatoare: colete trimise într-o nouă tură când banda lor este plină.
