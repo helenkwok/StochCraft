@@ -62,11 +62,21 @@ fn connection(h: &Harness<'static, App>, id: &str) -> Value {
         .unwrap_or_else(|| panic!("no connection {id}"))
 }
 
-/// What a field's label says to a screen reader besides its text: why it is in bold, or
-/// nothing while its value is the reference one.
+/// What a field's label says to a screen reader besides its text and tooltip: why it is in
+/// bold, or nothing while its value is the reference one.
 fn changed_note(h: &Harness<'static, App>, label: &str) -> Option<String> {
     h.query_all(By::new().role(Role::Label).label(label))
         .find_map(|n| n.accesskit_node().description())
+        .and_then(|d| why_bold(&d))
+}
+
+/// The part of an accessible description that says why a value is in bold (the tooltip
+/// follows it).
+fn why_bold(description: &str) -> Option<String> {
+    let why = description
+        .split_once(". ")
+        .map_or(description, |(why, _)| why);
+    why.starts_with("Changed from").then(|| why.to_owned())
 }
 
 fn has_reset(h: &Harness<'static, App>, label: &str) -> bool {
@@ -267,6 +277,7 @@ fn a_selected_flow_shows_its_own_properties() {
         h.get_by_role_and_label(Role::CheckBox, "Rework")
             .accesskit_node()
             .description()
+            .and_then(|d| why_bold(&d))
     };
     assert_eq!(rework_note(&h), None);
 

@@ -369,11 +369,11 @@ fn edit(
             } else {
                 ui.add(box_)
             };
-            describe_mark(ui, &r, mark);
             let r = match help {
                 Some(h) => r.on_hover_text(h),
                 None => r,
             };
+            describe_mark(ui, &r, mark, help);
             r.changed().then(|| json!(b))
         }
         Node::Typed(n, ty @ ("number" | "integer")) => {
@@ -560,10 +560,11 @@ fn row<R>(
                 }
                 None => label_cell(ui, marked_text(label, mark), 26.0),
             };
-            describe_mark(ui, &r, mark);
-            if let Some(h) = help {
-                r.on_hover_text(h);
-            }
+            let r = match help {
+                Some(h) => r.on_hover_text(h),
+                None => r,
+            };
+            describe_mark(ui, &r, mark, help);
             let out = editor(ui);
             reset_button(ui, mark, label);
             out
@@ -906,10 +907,19 @@ pub(crate) fn marked_text(label: &str, mark: Option<Mark>) -> egui::RichText {
 }
 
 /// Says on the label `r`, for screen readers, that its field differs: the bold says it only to
-/// the eye (WCAG 1.3.1).
-pub(crate) fn describe_mark(ui: &egui::Ui, r: &egui::Response, mark: Option<Mark>) {
+/// the eye (WCAG 1.3.1). Its tooltip `hover`, which is also its description, follows. Called
+/// after the tooltip is set, which would otherwise replace it.
+pub(crate) fn describe_mark(
+    ui: &egui::Ui,
+    r: &egui::Response,
+    mark: Option<Mark>,
+    hover: Option<&str>,
+) {
     if let Some(m) = mark.filter(|m| m.changed) {
-        let why = m.why();
+        let why = match hover {
+            Some(h) => format!("{}. {h}", m.why()),
+            None => m.why().to_owned(),
+        };
         ui.ctx()
             .accesskit_node_builder(r.id, |n| n.set_description(why));
     }
@@ -1312,19 +1322,22 @@ fn first_value(schema: Schema<'_>, node: &Value) -> Value {
 
 /// The heading line of a field drawn as several rows (a set of settings, a list): its label in
 /// bold, or for a marked field (see [`field_marked`]) in bold only while its value differs from
-/// its reference, with the reset after it.
-fn heading(ui: &mut egui::Ui, label: &str) -> egui::Response {
+/// its reference, with the reset after it. `help` is its tooltip.
+fn heading(ui: &mut egui::Ui, label: &str, help: Option<&str>) {
     let mark = take_mark();
+    let hover = |r: egui::Response| match help {
+        Some(h) => r.on_hover_text(h),
+        None => r,
+    };
     if mark.is_none() {
-        return ui.label(theme::strong(label));
+        hover(ui.label(theme::strong(label)));
+        return;
     }
     ui.horizontal(|ui| {
-        let r = ui.label(marked_text(label, mark));
-        describe_mark(ui, &r, mark);
+        let r = hover(ui.label(marked_text(label, mark)));
+        describe_mark(ui, &r, mark, help);
         reset_button(ui, mark, label);
-        r
-    })
-    .inner
+    });
 }
 
 /// Whether property `f` of an object may be left out or `null` (an `Option` field).
@@ -1378,7 +1391,7 @@ fn object(
             return out;
         }
     } else {
-        heading(ui, label);
+        heading(ui, label, None);
     }
     let fields: Vec<&str> = node["required"]
         .as_array()
@@ -1443,10 +1456,7 @@ fn records(
     let items = current.as_array().cloned().unwrap_or_default();
     let mut out: Option<Vec<Value>> = None;
     let mut removed = None;
-    let r = heading(ui, label);
-    if let Some(h) = help {
-        r.on_hover_text(h);
-    }
+    heading(ui, label, help);
     let fields: Vec<String> = item["properties"]
         .as_object()
         .map(|m| m.keys().filter(|k| *k != "calendar").cloned().collect())
@@ -1594,7 +1604,7 @@ fn array(
     let items = current.as_array().cloned().unwrap_or_default();
     let mut out: Option<Vec<Value>> = None;
     let mut removed = None;
-    heading(ui, label);
+    heading(ui, label, None);
     // In the order the schema requires them (a mix: the value, then its share).
     let fields: Vec<String> = item["required"]
         .as_array()

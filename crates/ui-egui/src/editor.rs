@@ -204,7 +204,7 @@ fn marked_checkbox(
         let r = ui
             .checkbox(on, form::marked_text(label, Some(mark)))
             .on_hover_text(hover);
-        form::describe_mark(ui, &r, Some(mark));
+        form::describe_mark(ui, &r, Some(mark), Some(hover));
         let reset = form::reset_button(ui, Some(mark), label);
         (r.changed(), reset)
     })
@@ -217,7 +217,7 @@ fn marked_checkbox(
 fn marked_heading(ui: &mut egui::Ui, text: &str, mark: Mark) -> bool {
     ui.horizontal(|ui| {
         let r = ui.label(form::marked_text(text, Some(mark)));
-        form::describe_mark(ui, &r, Some(mark));
+        form::describe_mark(ui, &r, Some(mark), None);
         let name = text.trim_end().trim_end_matches([':', '：']).trim_end();
         form::reset_button(ui, Some(mark), name)
     })
@@ -1183,7 +1183,7 @@ impl App {
             let typed = ui
                 .horizontal(|ui| {
                     let l = form::label_cell(ui, form::marked_text(label, Some(mark)), 26.0);
-                    form::describe_mark(ui, &l, Some(mark));
+                    form::describe_mark(ui, &l, Some(mark), None);
                     let typed = self.small_field(ui, &key, label, "", &p_now, 80.0);
                     reset = form::reset_button(ui, Some(mark), label);
                     typed
@@ -1212,7 +1212,7 @@ impl App {
         let typed = ui
             .horizontal(|ui| {
                 let l = form::label_cell(ui, form::marked_text(label, Some(mark)), 26.0);
-                form::describe_mark(ui, &l, Some(mark));
+                form::describe_mark(ui, &l, Some(mark), None);
                 let typed = self.small_field(ui, &key, label, "", &now, 240.0);
                 reset = form::reset_button(ui, Some(mark), label);
                 typed
@@ -1897,7 +1897,7 @@ impl App {
         ui.horizontal(|ui| {
             let label = t("Default flow");
             let l = form::label_cell(ui, form::marked_text(label, Some(mark)), 26.0);
-            form::describe_mark(ui, &l, Some(mark));
+            form::describe_mark(ui, &l, Some(mark), None);
             craft_ui::ComboBox::from_id_salt((id, "default"))
                 .selected_text(shown)
                 .width(200.0)
