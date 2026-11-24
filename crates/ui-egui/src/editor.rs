@@ -1671,6 +1671,7 @@ impl App {
             mark,
         );
         if reset {
+            self.after_reset(&format!("{id}/demand"));
             self.execute("block.set", json!({ "id": id, "demand": reference }));
             return;
         }
@@ -1825,6 +1826,7 @@ impl App {
             mark,
         );
         if reset {
+            self.after_reset(&format!("{id}/scrap"));
             self.execute("block.set", json!({ "id": id, "scrap": reference }));
             return;
         }
@@ -2136,6 +2138,7 @@ impl App {
             mark,
         );
         if reset {
+            self.after_reset(&format!("{id}/patience"));
             self.execute("block.set", json!({ "id": id, "patience": reference }));
             return;
         }
@@ -2261,6 +2264,7 @@ impl App {
             mark,
         );
         if reset {
+            self.after_reset(&format!("{id}/health_check"));
             self.execute("block.set", json!({ "id": id, "health_check": reference }));
             return;
         }

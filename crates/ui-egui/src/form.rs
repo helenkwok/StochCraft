@@ -1007,6 +1007,16 @@ fn mixed_number(
         let mixed = t("Mixed values");
         ui.ctx()
             .accesskit_node_builder(r.id, |n| n.set_description(mixed));
+        // A field asked to take the keyboard (after its reset), as `number` takes it.
+        if FOCUS.with(|f| {
+            f.borrow()
+                .as_deref()
+                .is_some_and(|k| key == k || key.starts_with(&format!("{k}/")))
+        }) {
+            FOCUS.with(|f| f.borrow_mut().take());
+            r.request_focus();
+            r.scroll_to_me(Some(egui::Align::Center));
+        }
         let mut out = None;
         if r.lost_focus() && ui.input(|i| i.key_pressed(egui::Key::Escape)) {
             cx.drafts.remove(key);
@@ -1253,7 +1263,10 @@ fn default_variant(variant: &Value, tag: &str, current: &Value) -> Value {
         if f == "type" {
             continue;
         }
-        let v = if let Some(old) = current.get(f).filter(|_| current["type"] != "user") {
+        let v = if let Some(old) = current
+            .get(f)
+            .filter(|v| !v.is_null() && current["type"] != "user")
+        {
             old.clone()
         } else {
             match (f.as_str(), node["type"].as_str()) {
