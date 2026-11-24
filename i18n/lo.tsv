@@ -1458,3 +1458,12 @@ unit	yr	ປີ
 	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	{block} ມີເວລາໃຫ້ບໍລິການສຳລັບກຸ່ມ “{pool}” ທີ່ບໍ່ມີໃນແບບຈຳລອງ ລຶບເວລານັ້ນ ຫຼື ເລືອກກຸ່ມທີ່ມີຢູ່
 	{block} has two service times for the pool “{pool}”. Keep one.	{block} ມີສອງເວລາໃຫ້ບໍລິການສຳລັບກຸ່ມ “{pool}” ເກັບໄວ້ອັນດຽວ
 	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	{block} ມີເວລາໃຫ້ບໍລິການສຳລັບກຸ່ມ “{pool}” ທີ່ມັນບໍ່ຕ້ອງໃຊ້ ເພີ່ມກຸ່ມນັ້ນເຂົ້າໃນສິ່ງທີ່ຕ້ອງໃຊ້ ຫຼື ລຶບເວລານັ້ນ
+	Reset {field}	ຣີເຊັດ {field}
+	Changed from the default	ປ່ຽນຈາກຄ່າເລີ່ມຕົ້ນ
+	Changed from the inherited scenario	ປ່ຽນຈາກສະຖານະການທີ່ສືບທອດມາ
+	Mixed values	ຄ່າທີ່ແຕກຕ່າງກັນ
+connection	Flow	ເສັ້ນທາງ
+	Remove flow	ລຶບເສັ້ນທາງ
+	Condition	ເງື່ອນໄຂ
+	Shared properties	ຄຸນສົມບັດຮ່ວມ
+	These blocks share no properties.	ບລັອກເຫຼົ່ານີ້ບໍ່ມີຄຸນສົມບັດຮ່ວມ.

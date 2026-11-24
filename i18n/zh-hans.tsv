@@ -1458,3 +1458,12 @@ unit	yr	年
 	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	{block} 为资源池“{pool}”设置了服务时间，但模型中没有该资源池。请移除该时间，或选择存在的资源池。
 	{block} has two service times for the pool “{pool}”. Keep one.	{block} 为资源池“{pool}”设置了两个服务时间。请保留其中一个。
 	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	{block} 为资源池“{pool}”设置了服务时间，但它并不需要该资源池。请把该资源池加入它所需的资源，或移除该时间。
+	Reset {field}	重置{field}
+	Changed from the default	已不同于默认值
+	Changed from the inherited scenario	已不同于继承的场景
+	Mixed values	值各不相同
+connection	Flow	顺序流
+	Remove flow	移除顺序流
+	Condition	条件
+	Shared properties	共有属性
+	These blocks share no properties.	这些区块没有共有属性。

@@ -1458,3 +1458,12 @@ unit	yr	წელი
 	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	{block}-ს აქვს მომსახურების დრო პულისთვის „{pool}“, რომელიც მოდელში არ არის. წაშალეთ ეს დრო ან აირჩიეთ არსებული პული.
 	{block} has two service times for the pool “{pool}”. Keep one.	{block}-ს ორი მომსახურების დრო აქვს პულისთვის „{pool}“. დატოვეთ ერთი.
 	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	{block}-ს აქვს მომსახურების დრო პულისთვის „{pool}“, რომელიც მას არ სჭირდება. დაამატეთ პული მის საჭიროებებში ან წაშალეთ ეს დრო.
+	Reset {field}	{field}: საწყისზე დაბრუნება
+	Changed from the default	შეცვლილია ნაგულისხმევთან შედარებით
+	Changed from the inherited scenario	შეცვლილია მემკვიდრეობით მიღებულ სცენართან შედარებით
+	Mixed values	შერეული მნიშვნელობები
+connection	Flow	ნაკადი
+	Remove flow	ნაკადის წაშლა
+	Condition	პირობა
+	Shared properties	საერთო თვისებები
+	These blocks share no properties.	ამ ბლოკებს საერთო თვისებები არ აქვთ.

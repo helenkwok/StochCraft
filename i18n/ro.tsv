@@ -1458,3 +1458,12 @@ unit	yr	a
 	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	Blocul {block} are un timp de servire pentru grupul „{pool}”, pe care modelul nu îl are. Eliminați acel timp sau alegeți un grup existent.
 	{block} has two service times for the pool “{pool}”. Keep one.	Blocul {block} are doi timpi de servire pentru grupul „{pool}”. Păstrați unul.
 	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	Blocul {block} are un timp de servire pentru grupul „{pool}”, de care nu are nevoie. Adăugați grupul la necesarul său sau eliminați acel timp.
+	Reset {field}	Resetează {field}
+	Changed from the default	Modificat față de valoarea implicită
+	Changed from the inherited scenario	Modificat față de scenariul moștenit
+	Mixed values	Valori diferite
+connection	Flow	Flux
+	Remove flow	Elimină fluxul
+	Condition	Condiție
+	Shared properties	Proprietăți comune
+	These blocks share no properties.	Aceste blocuri nu au proprietăți comune.

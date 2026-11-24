@@ -1458,3 +1458,12 @@ unit	yr	a
 	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	Plokil {block} on teenindusaeg kogumile „{pool}”, mida mudelis pole. Eemalda see aeg või vali olemasolev kogum.
 	{block} has two service times for the pool “{pool}”. Keep one.	Plokil {block} on kaks teenindusaega kogumile „{pool}”. Jäta üks.
 	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	Plokil {block} on teenindusaeg kogumile „{pool}”, mida see ei vaja. Lisa kogum selle vajadustesse või eemalda see aeg.
+	Reset {field}	Lähtesta: {field}
+	Changed from the default	Vaikeväärtusest muudetud
+	Changed from the inherited scenario	Päritud stsenaariumist muudetud
+	Mixed values	Erinevad väärtused
+connection	Flow	Voog
+	Remove flow	Eemalda voog
+	Condition	Tingimus
+	Shared properties	Ühised omadused
+	These blocks share no properties.	Neil plokkidel pole ühiseid omadusi.

@@ -1458,3 +1458,12 @@ unit	yr	r.
 	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	{block} má dobu obsluhy pro fond „{pool}“, který model nemá. Odeberte tuto dobu nebo vyberte existující fond.
 	{block} has two service times for the pool “{pool}”. Keep one.	{block} má dvě doby obsluhy pro fond „{pool}“. Ponechte jednu.
 	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	{block} má dobu obsluhy pro fond „{pool}“, který nepotřebuje. Přidejte fond k jeho požadavkům nebo tuto dobu odeberte.
+	Reset {field}	Obnovit: {field}
+	Changed from the default	Změněno oproti výchozí hodnotě
+	Changed from the inherited scenario	Změněno oproti zděděnému scénáři
+	Mixed values	Různé hodnoty
+connection	Flow	Tok
+	Remove flow	Odebrat tok
+	Condition	Podmínka
+	Shared properties	Společné vlastnosti
+	These blocks share no properties.	Tyto bloky nemají žádné společné vlastnosti.

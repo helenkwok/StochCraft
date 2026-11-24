@@ -1458,3 +1458,12 @@ unit	yr	år
 	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	{block} har en servicetid for puljen «{pool}», som modellen ikke har. Fjern den tiden, eller velg en pulje som finnes.
 	{block} has two service times for the pool “{pool}”. Keep one.	{block} har to servicetider for puljen «{pool}». Behold én av dem.
 	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	{block} har en servicetid for puljen «{pool}», som den ikke trenger. Legg puljen til i behovene, eller fjern den tiden.
+	Reset {field}	Nullstill {field}
+	Changed from the default	Endret fra standard
+	Changed from the inherited scenario	Endret fra det arvede scenarioet
+	Mixed values	Blandede verdier
+connection	Flow	Flyt
+	Remove flow	Fjern flyten
+	Condition	Betingelse
+	Shared properties	Felles egenskaper
+	These blocks share no properties.	Disse blokkene har ingen felles egenskaper.

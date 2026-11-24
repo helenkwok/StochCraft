@@ -1458,3 +1458,12 @@ unit	yr	m.
 	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	Blokas {block} turi aptarnavimo laiką grupei „{pool}“, kurios modelyje nėra. Pašalinkite tą laiką arba pasirinkite esamą grupę.
 	{block} has two service times for the pool “{pool}”. Keep one.	Blokas {block} turi du aptarnavimo laikus grupei „{pool}“. Palikite vieną.
 	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	Blokas {block} turi aptarnavimo laiką grupei „{pool}“, kurios jam nereikia. Įtraukite grupę į jo poreikius arba pašalinkite tą laiką.
+	Reset {field}	Atstatyti: {field}
+	Changed from the default	Pakeista, palyginti su numatytąja reikšme
+	Changed from the inherited scenario	Pakeista, palyginti su paveldėtu scenarijumi
+	Mixed values	Skirtingos reikšmės
+connection	Flow	Srautas
+	Remove flow	Pašalinti srautą
+	Condition	Sąlyga
+	Shared properties	Bendros savybės
+	These blocks share no properties.	Šie blokai neturi bendrų savybių.

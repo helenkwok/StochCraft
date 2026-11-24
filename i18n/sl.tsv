@@ -1458,3 +1458,12 @@ unit	yr	l.
 	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	{block} ima čas strežbe za skupino »{pool}«, ki je model nima. Odstranite ta čas ali izberite skupino, ki obstaja.
 	{block} has two service times for the pool “{pool}”. Keep one.	{block} ima dva časa strežbe za skupino »{pool}«. Obdržite enega.
 	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	{block} ima čas strežbe za skupino »{pool}«, ki je ne potrebuje. Dodajte skupino med njegove zahteve ali odstranite ta čas.
+	Reset {field}	Ponastavi: {field}
+	Changed from the default	Spremenjeno glede na privzeto
+	Changed from the inherited scenario	Spremenjeno glede na podedovani scenarij
+	Mixed values	Različne vrednosti
+connection	Flow	Tok
+	Remove flow	Odstrani tok
+	Condition	Pogoj
+	Shared properties	Skupne lastnosti
+	These blocks share no properties.	Ti bloki nimajo skupnih lastnosti.

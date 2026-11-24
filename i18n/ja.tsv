@@ -1458,3 +1458,12 @@ unit	yr	年
 	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	{block} にプール「{pool}」のサービス時間がありますが、モデルにそのプールはありません。その時間を削除するか、存在するプールを選んでください。
 	{block} has two service times for the pool “{pool}”. Keep one.	{block} にプール「{pool}」のサービス時間が 2 つあります。どちらか一方を残してください。
 	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	{block} にプール「{pool}」のサービス時間がありますが、このブロックはそのプールを必要としていません。プールを必要なリソースに追加するか、その時間を削除してください。
+	Reset {field}	{field} をリセット
+	Changed from the default	既定値から変更
+	Changed from the inherited scenario	継承元のシナリオから変更
+	Mixed values	異なる値
+connection	Flow	フロー
+	Remove flow	フローを削除
+	Condition	条件
+	Shared properties	共通のプロパティ
+	These blocks share no properties.	これらのブロックに共通のプロパティはありません。

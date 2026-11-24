@@ -793,6 +793,44 @@ fn files_open_save_and_track_changes() {
     );
 }
 
+/// A scenario that inherits from another comes with that one's model, which edits leave as the
+/// file has it; one that inherits from none has none, nor has a new model.
+#[test]
+fn an_inheriting_scenario_comes_with_the_model_it_inherits_from() {
+    let mm1 = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../tests/models/mm1.bpmn");
+    let path = json!(mm1.to_string_lossy());
+    let capacity = |m: Option<&stochcraft_model::Model>| {
+        m.map(stochcraft_engine::wire::model).and_then(|w| {
+            w["elements"]
+                .as_array()?
+                .iter()
+                .find(|e| e["id"] == "serve")
+                .map(|e| e["capacity"].clone())
+        })
+    };
+    let mut e = Engine::new();
+    ok(
+        &mut e,
+        "file.open",
+        json!({"path": path, "scenario": "two-clerks"}),
+    );
+    assert_eq!(capacity(Some(e.model())), Some(json!(2)));
+    assert_eq!(capacity(e.inherited_model()), Some(json!(1)));
+    ok(&mut e, "block.set", json!({"id": "serve", "capacity": 3}));
+    assert_eq!(capacity(Some(e.model())), Some(json!(3)));
+    assert_eq!(capacity(e.inherited_model()), Some(json!(1)));
+
+    let mut b = Engine::new();
+    ok(
+        &mut b,
+        "file.open",
+        json!({"path": path, "scenario": "base"}),
+    );
+    assert!(b.inherited_model().is_none());
+    ok(&mut b, "model.new", json!({}));
+    assert!(b.inherited_model().is_none());
+}
+
 #[test]
 fn saving_again_writes_into_the_opened_scenario() {
     // mm1.bpmn has "base" and "two-clerks", which inherits from it.

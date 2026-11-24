@@ -1458,3 +1458,12 @@ unit	yr	বছর
 	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	{block}-এ “{pool}” পুলের জন্য একটি সেবা সময় আছে, কিন্তু মডেলে এই পুল নেই। সেই সময়টি সরান, অথবা এমন পুল বেছে নিন যা আছে।
 	{block} has two service times for the pool “{pool}”. Keep one.	{block}-এ “{pool}” পুলের জন্য দুটি সেবা সময় আছে। একটি রাখুন।
 	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	{block}-এ “{pool}” পুলের জন্য একটি সেবা সময় আছে, কিন্তু এর এই পুলের প্রয়োজন নেই। পুলটি প্রয়োজনের তালিকায় যোগ করুন, অথবা সেই সময়টি সরান।
+	Reset {field}	{field} রিসেট করুন
+	Changed from the default	ডিফল্ট থেকে পরিবর্তিত
+	Changed from the inherited scenario	উত্তরাধিকারসূত্রে প্রাপ্ত দৃশ্যকল্প থেকে পরিবর্তিত
+	Mixed values	মিশ্র মান
+connection	Flow	প্রবাহ
+	Remove flow	প্রবাহ সরান
+	Condition	শর্ত
+	Shared properties	যৌথ বৈশিষ্ট্য
+	These blocks share no properties.	এই ব্লকগুলোর কোনো যৌথ বৈশিষ্ট্য নেই।

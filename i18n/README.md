@@ -1018,6 +1018,14 @@ fields (`“Service time”`) are named in the messages by their own rows.
   meaning of the English, with each catalog's own words for Layout, Unplaced and block from its
   existing rows. Not checked against any other source and not reviewed by native speakers; the
   least certain are lo, th, ta, te, bn, ka and kk.
+- The rows for the properties of the selection (M5.5, U2: a field's reset, why a value is in
+  bold, mixed values across selected blocks, a flow's page with its condition and Remove flow,
+  and the properties several blocks share) were machine-drafted from the plain meaning of the
+  English, with each catalog's own words for reset, default, flow, condition, block and
+  properties from its existing rows; "Flow" has the context `connection`, as a connection
+  between blocks (the word the catalog uses in "Remove the flow {id}"). Not checked against any
+  other source and not reviewed by native speakers; the least certain are lo, th, ta, te, bn,
+  ka, kk and sq.
 
 **Adding or changing a string:** add the English in the code through `i18n::t` (or `tf`, `tn`),
 then add its row to each catalog here, or leave it out to show English until it is translated.

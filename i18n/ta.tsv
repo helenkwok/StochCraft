@@ -1458,3 +1458,12 @@ unit	yr	ஆண்டு
 	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	{block} இல் மாதிரியில் இல்லாத “{pool}” தொகுப்புக்கு ஒரு சேவை நேரம் உள்ளது. அந்த நேரத்தை அகற்றவும், அல்லது இருக்கும் ஒரு தொகுப்பைத் தேர்ந்தெடுக்கவும்.
 	{block} has two service times for the pool “{pool}”. Keep one.	{block} இல் “{pool}” தொகுப்புக்கு இரண்டு சேவை நேரங்கள் உள்ளன. ஒன்றை மட்டும் வைத்திருக்கவும்.
 	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	{block} இல் தனக்குத் தேவையில்லாத “{pool}” தொகுப்புக்கு ஒரு சேவை நேரம் உள்ளது. அந்தத் தொகுப்பை அதன் தேவைகளில் சேர்க்கவும், அல்லது அந்த நேரத்தை அகற்றவும்.
+	Reset {field}	{field} மீட்டமை
+	Changed from the default	இயல்புநிலையிலிருந்து மாற்றப்பட்டது
+	Changed from the inherited scenario	மரபுரிமையாகப் பெற்ற சூழ்நிலையிலிருந்து மாற்றப்பட்டது
+	Mixed values	கலப்பு மதிப்புகள்
+connection	Flow	ஓட்டம்
+	Remove flow	ஓட்டத்தை அகற்று
+	Condition	நிபந்தனை
+	Shared properties	பொதுவான பண்புகள்
+	These blocks share no properties.	இந்தத் தொகுதிகளுக்குப் பொதுவான பண்புகள் இல்லை.

@@ -1458,3 +1458,12 @@ unit	yr	έτ
 	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	Το μπλοκ {block} έχει χρόνο εξυπηρέτησης για τη δεξαμενή «{pool}», που το μοντέλο δεν έχει. Αφαιρέστε αυτόν τον χρόνο ή επιλέξτε μια δεξαμενή που υπάρχει.
 	{block} has two service times for the pool “{pool}”. Keep one.	Το μπλοκ {block} έχει δύο χρόνους εξυπηρέτησης για τη δεξαμενή «{pool}». Κρατήστε τον έναν.
 	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	Το μπλοκ {block} έχει χρόνο εξυπηρέτησης για τη δεξαμενή «{pool}», που δεν χρειάζεται. Προσθέστε τη δεξαμενή στις ανάγκες του ή αφαιρέστε αυτόν τον χρόνο.
+	Reset {field}	Επαναφορά: {field}
+	Changed from the default	Αλλαγμένο σε σχέση με την προεπιλογή
+	Changed from the inherited scenario	Αλλαγμένο σε σχέση με το κληρονομημένο σενάριο
+	Mixed values	Ανάμεικτες τιμές
+connection	Flow	Ροή
+	Remove flow	Αφαίρεση ροής
+	Condition	Συνθήκη
+	Shared properties	Κοινές ιδιότητες
+	These blocks share no properties.	Αυτά τα μπλοκ δεν έχουν κοινές ιδιότητες.

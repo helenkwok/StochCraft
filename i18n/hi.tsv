@@ -1458,3 +1458,12 @@ unit	yr	वर्ष
 	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	{block} में पूल “{pool}” के लिए एक सेवा समय है, जो मॉडल में नहीं है। वह समय हटाएँ, या कोई मौजूदा पूल चुनें।
 	{block} has two service times for the pool “{pool}”. Keep one.	{block} में पूल “{pool}” के लिए दो सेवा समय हैं। उनमें से एक ही रखें।
 	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	{block} में पूल “{pool}” के लिए एक सेवा समय है, जिसकी उसे ज़रूरत नहीं है। पूल को उसकी आवश्यकताओं में जोड़ें, या वह समय हटाएँ।
+	Reset {field}	{field} रीसेट करें
+	Changed from the default	डिफ़ॉल्ट से बदला गया
+	Changed from the inherited scenario	विरासत में मिले परिदृश्य से बदला गया
+	Mixed values	मिश्रित मान
+connection	Flow	प्रवाह
+	Remove flow	प्रवाह हटाएँ
+	Condition	शर्त
+	Shared properties	साझा गुण
+	These blocks share no properties.	इन ब्लॉकों में कोई साझा गुण नहीं है।

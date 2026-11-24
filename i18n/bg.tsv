@@ -1458,3 +1458,12 @@ unit	yr	г.
 	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	Блокът {block} има време за обслужване за пула „{pool}“, който моделът няма. Премахнете това време или изберете пул, който съществува.
 	{block} has two service times for the pool “{pool}”. Keep one.	Блокът {block} има две времена за обслужване за пула „{pool}“. Оставете едното.
 	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	Блокът {block} има време за обслужване за пула „{pool}“, от който не се нуждае. Добавете пула към изискванията му или премахнете това време.
+	Reset {field}	Възстановяване на {field}
+	Changed from the default	Променено спрямо стойността по подразбиране
+	Changed from the inherited scenario	Променено спрямо наследения сценарий
+	Mixed values	Различни стойности
+connection	Flow	Поток
+	Remove flow	Премахване на потока
+	Condition	Условие
+	Shared properties	Общи свойства
+	These blocks share no properties.	Тези блокове нямат общи свойства.

@@ -1458,3 +1458,12 @@ unit	yr	v
 	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	Blloku {block} ka një kohë shërbimi për grupin „{pool}”, që modeli nuk e ka. Hiqeni atë kohë ose zgjidhni një grup që ekziston.
 	{block} has two service times for the pool “{pool}”. Keep one.	Blloku {block} ka dy kohë shërbimi për grupin „{pool}”. Mbani njërën.
 	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	Blloku {block} ka një kohë shërbimi për grupin „{pool}”, që nuk i nevojitet. Shtojeni grupin te nevojat e tij ose hiqeni atë kohë.
+	Reset {field}	Rivendos {field}
+	Changed from the default	Ndryshuar nga parazgjedhja
+	Changed from the inherited scenario	Ndryshuar nga skenari i trashëguar
+	Mixed values	Vlera të ndryshme
+connection	Flow	Rrjedhë
+	Remove flow	Hiq rrjedhën
+	Condition	Kusht
+	Shared properties	Veti të përbashkëta
+	These blocks share no properties.	Këto blloqe nuk kanë veti të përbashkëta.

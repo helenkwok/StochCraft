@@ -1458,3 +1458,12 @@ unit	yr	р.
 	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	У блока {block} є час обслуговування для пулу «{pool}», якого немає в моделі. Видаліть цей час або виберіть наявний пул.
 	{block} has two service times for the pool “{pool}”. Keep one.	У блока {block} час обслуговування для пулу «{pool}» задано двічі. Залиште один.
 	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	У блока {block} є час обслуговування для пулу «{pool}», який йому не потрібен. Додайте пул до його потреб або видаліть цей час.
+	Reset {field}	Скинути: {field}
+	Changed from the default	Змінено порівняно зі значенням за замовчуванням
+	Changed from the inherited scenario	Змінено порівняно з успадкованим сценарієм
+	Mixed values	Різні значення
+connection	Flow	Потік
+	Remove flow	Видалити потік
+	Condition	Умова
+	Shared properties	Спільні властивості
+	These blocks share no properties.	Ці блоки не мають спільних властивостей.

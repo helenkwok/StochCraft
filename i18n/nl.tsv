@@ -1458,3 +1458,12 @@ unit	yr	j
 	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	{block} heeft een servicetijd voor de pool ‘{pool}’, die het model niet heeft. Verwijder die tijd of kies een bestaande pool.
 	{block} has two service times for the pool “{pool}”. Keep one.	{block} heeft twee servicetijden voor de pool ‘{pool}’. Houd er één van over.
 	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	{block} heeft een servicetijd voor de pool ‘{pool}’, die het niet nodig heeft. Voeg de pool toe aan de behoeften of verwijder die tijd.
+	Reset {field}	{field} resetten
+	Changed from the default	Gewijzigd ten opzichte van de standaard
+	Changed from the inherited scenario	Gewijzigd ten opzichte van het overgeërfde scenario
+	Mixed values	Verschillende waarden
+connection	Flow	Stroom
+	Remove flow	Stroom verwijderen
+	Condition	Voorwaarde
+	Shared properties	Gedeelde eigenschappen
+	These blocks share no properties.	Deze blokken hebben geen eigenschappen gemeen.

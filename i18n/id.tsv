@@ -1458,3 +1458,12 @@ unit	yr	thn
 	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	{block} memiliki waktu layanan untuk kumpulan “{pool}”, yang tidak ada di model. Hapus waktu itu, atau pilih kumpulan yang ada.
 	{block} has two service times for the pool “{pool}”. Keep one.	{block} memiliki dua waktu layanan untuk kumpulan “{pool}”. Pertahankan salah satunya.
 	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	{block} memiliki waktu layanan untuk kumpulan “{pool}”, yang tidak dibutuhkannya. Tambahkan kumpulan itu ke kebutuhannya, atau hapus waktu itu.
+	Reset {field}	Atur ulang {field}
+	Changed from the default	Diubah dari default
+	Changed from the inherited scenario	Diubah dari skenario yang diwarisi
+	Mixed values	Nilai campuran
+connection	Flow	Alur
+	Remove flow	Hapus alur
+	Condition	Kondisi
+	Shared properties	Properti bersama
+	These blocks share no properties.	Blok-blok ini tidak memiliki properti bersama.

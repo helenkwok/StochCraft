@@ -1458,3 +1458,12 @@ unit	yr	an
 	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	{block} a un temps de service pour le pool « {pool} », que le modèle n'a pas. Supprimez ce temps ou choisissez un pool existant.
 	{block} has two service times for the pool “{pool}”. Keep one.	{block} a deux temps de service pour le pool « {pool} ». N'en gardez qu'un.
 	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	{block} a un temps de service pour le pool « {pool} », dont il n'a pas besoin. Ajoutez le pool à ses besoins ou supprimez ce temps.
+	Reset {field}	Réinitialiser {field}
+	Changed from the default	Modifié par rapport à la valeur par défaut
+	Changed from the inherited scenario	Modifié par rapport au scénario hérité
+	Mixed values	Valeurs différentes
+connection	Flow	Flux
+	Remove flow	Supprimer le flux
+	Condition	Condition
+	Shared properties	Propriétés communes
+	These blocks share no properties.	Ces blocs n'ont aucune propriété commune.

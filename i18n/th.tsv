@@ -1458,3 +1458,12 @@ unit	yr	ปี
 	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	{block} มีเวลาให้บริการสำหรับกลุ่มทรัพยากร “{pool}” ซึ่งไม่มีในแบบจำลอง ให้นำเวลานั้นออก หรือเลือกกลุ่มทรัพยากรที่มีอยู่
 	{block} has two service times for the pool “{pool}”. Keep one.	{block} มีเวลาให้บริการสองค่าสำหรับกลุ่มทรัพยากร “{pool}” ให้เก็บไว้ค่าเดียว
 	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	{block} มีเวลาให้บริการสำหรับกลุ่มทรัพยากร “{pool}” ซึ่งไม่ได้ใช้ ให้เพิ่มกลุ่มนั้นในสิ่งที่ต้องใช้ หรือนำเวลานั้นออก
+	Reset {field}	รีเซ็ต {field}
+	Changed from the default	เปลี่ยนจากค่าเริ่มต้น
+	Changed from the inherited scenario	เปลี่ยนจากสถานการณ์ที่สืบทอดมา
+	Mixed values	ค่าที่แตกต่างกัน
+connection	Flow	โฟลว์
+	Remove flow	นำโฟลว์ออก
+	Condition	เงื่อนไข
+	Shared properties	คุณสมบัติร่วม
+	These blocks share no properties.	บล็อกเหล่านี้ไม่มีคุณสมบัติร่วมกัน
