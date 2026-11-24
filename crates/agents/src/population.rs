@@ -1068,7 +1068,7 @@ impl Simulation {
                 };
                 // `u64::MAX as f64` is 2^64: below it the index is a whole number a u64 holds.
                 let q = (warmup / e).floor();
-                if !(q < u64::MAX as f64) {
+                if q.is_nan() || q >= u64::MAX as f64 {
                     return Err(too_many);
                 }
                 let mut k = q.max(0.0) as u64;
