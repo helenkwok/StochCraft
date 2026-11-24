@@ -21,10 +21,15 @@
 //!
 //! A block with no place is unplaced: it runs, but the Layout and 3D views list it rather than
 //! guess where it is.
+//!
+//! **Points along a section, not cuts (L5).** A divert gateway placed at `s` along a conveyor
+//! that sends into it is a [`Point`] of that conveyor ([`points`]): items keep one position
+//! along the whole section and meet the divert as their front reaches `s`. Two conveyors joined
+//! end to start by a flow may carry a [`Junction`] on that flow, with its kind and transfer time.
 
 use std::collections::BTreeMap;
 
-use crate::{Element, ElementId, ElementKind, Frame, LengthUnit, Model, Path};
+use crate::{Element, ElementId, ElementKind, Frame, LengthUnit, Model, Path, Routing};
 
 /// The width a belt is drawn with when its track does not say: 0.6 m ([`default_width`] in a
 /// model's unit).
@@ -92,14 +97,17 @@ pub enum Tag {
     Look,
 }
 
-/// Each layout field and its tag. A place is *sim* only for a block a transport serves (its
-/// pickup, drop-off or home), where distances are measured between places; elsewhere it is
-/// *look*.
+/// Each layout field and its tag. A place is *sim* for a block a transport serves (its pickup,
+/// drop-off or home), where distances are measured between places, and for a divert gateway
+/// placed along a conveyor, whose `s` is where items meet it; elsewhere it is *look*. A
+/// junction's kind and transfer time are *sim*.
 pub const FIELDS: &[(&str, Tag)] = &[
     ("track.path", Tag::Sim),
     ("track.width", Tag::Look),
     ("place (served by a transport)", Tag::Sim),
+    ("place (a divert along a conveyor)", Tag::Sim),
     ("place (otherwise)", Tag::Look),
+    ("junction", Tag::Sim),
     ("scenery", Tag::Look),
 ];
 
@@ -151,6 +159,63 @@ pub struct Scenery {
     pub size: [f64; 3],
 }
 
+/// How two sections meet at a [`Junction`] (ROADMAP.md, M5.5). Each joins the end of one
+/// section to the start of the next; a section joining another part-way along (a merge at `s`)
+/// is not one of these yet.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+pub enum JunctionKind {
+    /// End to start, the same heading: the item keeps its orientation.
+    #[default]
+    Inline,
+    /// At an angle: the item turns, so the next section's item length (its width here) is the
+    /// one that counts there.
+    Side,
+    /// A turntable between them, whose turn is the transfer time.
+    Turntable,
+}
+
+impl JunctionKind {
+    /// The kind's name in a file.
+    pub fn name(self) -> &'static str {
+        match self {
+            JunctionKind::Inline => "inline",
+            JunctionKind::Side => "side",
+            JunctionKind::Turntable => "turntable",
+        }
+    }
+
+    /// The kind a file names, if it is one.
+    pub fn from_name(s: &str) -> Option<Self> {
+        match s {
+            "inline" => Some(JunctionKind::Inline),
+            "side" => Some(JunctionKind::Side),
+            "turntable" => Some(JunctionKind::Turntable),
+            _ => None,
+        }
+    }
+}
+
+/// Where a flow from one conveyor to another joins their sections: the kind of junction and the
+/// time an item takes across it, from leaving the end of the one to getting on the start of
+/// the other (0 by default, as M5.1's hand-over). The item takes its room on the next section
+/// before it sets off, so a full section holds it at the end of the one before. Sim.
+#[derive(Debug, Clone, Copy, PartialEq, Default)]
+pub struct Junction {
+    pub kind: JunctionKind,
+    /// In the experiment's time unit; 0 or more.
+    pub transfer: f64,
+}
+
+/// A divert point (D25): a divert gateway placed at `s` along a conveyor's track, which items on
+/// that conveyor meet as their front reaches `s` (see [`points`]).
+#[derive(Debug, Clone, PartialEq)]
+pub struct Point {
+    /// The divert gateway.
+    pub gateway: ElementId,
+    /// Its distance along the track, in the length unit.
+    pub s: f64,
+}
+
 /// The physical layout of a model.
 #[derive(Debug, Clone, PartialEq, Default)]
 pub struct Site {
@@ -158,6 +223,8 @@ pub struct Site {
     pub paths: BTreeMap<ElementId, Track>,
     /// Each placed block's place, by the block's id.
     pub places: BTreeMap<ElementId, Place>,
+    /// The junctions between conveyors, by the id of the flow that joins them.
+    pub junctions: BTreeMap<ElementId, Junction>,
     /// Scenery, in id order.
     pub scene: Vec<Scenery>,
 }
@@ -165,7 +232,10 @@ pub struct Site {
 impl Site {
     /// Whether the model has no layout at all.
     pub fn is_empty(&self) -> bool {
-        self.paths.is_empty() && self.places.is_empty() && self.scene.is_empty()
+        self.paths.is_empty()
+            && self.places.is_empty()
+            && self.junctions.is_empty()
+            && self.scene.is_empty()
     }
 
     /// The frame of block `id`: its place's, or for a conveyor, the start of its track. `None`
@@ -179,10 +249,26 @@ impl Site {
     }
 
     /// The entries `model` can hold, which are what a file keeps: a track only on a conveyor, a
-    /// place only on an element of the model, and a place along a conveyor only while that
-    /// conveyor has a track. An edit that removes a block, or makes a conveyor something else,
-    /// leaves the rest out.
+    /// place only on an element of the model, a place along a conveyor only while that
+    /// conveyor has a track, and a junction only on a flow from a conveyor to a conveyor. An
+    /// edit that removes a block, or makes a conveyor something else, leaves the rest out.
     pub fn kept(&self, model: &Model) -> Site {
+        let is_conveyor = |id: &ElementId| {
+            model
+                .element(id)
+                .is_some_and(|e| matches!(e.kind, ElementKind::Conveyor { .. }))
+        };
+        let junctions = self
+            .junctions
+            .iter()
+            .filter(|(id, _)| {
+                model
+                    .connections
+                    .iter()
+                    .any(|c| &c.id == *id && is_conveyor(&c.from) && is_conveyor(&c.to))
+            })
+            .map(|(id, j)| (id.clone(), *j))
+            .collect();
         let paths: BTreeMap<ElementId, Track> = self
             .paths
             .iter()
@@ -208,12 +294,14 @@ impl Site {
         Site {
             paths,
             places,
+            junctions,
             scene: self.scene.clone(),
         }
     }
 
     /// Only the sim fields (D28), for the results baseline: each track's path at the default
-    /// width, the places of blocks a transport serves, and no scenery.
+    /// width, the places of blocks a transport serves and of diverts along a conveyor, the
+    /// junctions, and no scenery.
     pub fn for_results(&self, model: &Model) -> Site {
         Site {
             paths: self
@@ -229,12 +317,99 @@ impl Site {
             places: self
                 .places
                 .iter()
-                .filter(|(id, _)| served_by_transport(model, id))
+                .filter(|(id, p)| served_by_transport(model, id) || is_divert_along(model, id, p))
                 .map(|(id, p)| (id.clone(), p.clone()))
                 .collect(),
+            junctions: self.junctions.clone(),
             scene: Vec::new(),
         }
     }
+}
+
+/// Whether block `id`, at `place`, is a divert gateway placed along a conveyor.
+fn is_divert_along(model: &Model, id: &ElementId, place: &Place) -> bool {
+    matches!(place, Place::Along { .. })
+        && model.element(id).is_some_and(|e| {
+            matches!(
+                e.kind,
+                ElementKind::ExclusiveGateway {
+                    routing: Routing::Divert,
+                    ..
+                }
+            )
+        })
+}
+
+/// The divert points along `conveyor`, in the order its items meet them (D25).
+///
+/// They are found by following the flows: the divert gateway the conveyor's one flow leads to,
+/// if it is placed along this conveyor short of the end of its track; then the gateway that
+/// one's default flow leads to, if it is placed along this conveyor too; and so on. An item on
+/// the conveyor meets each in turn as its front reaches its `s`. A non-default way of a point
+/// leaves the section there; the default flow of the last point is where items go at the end.
+///
+/// A divert placed at the end of the track (within 0.1 mm) is not a point: the conveyor sends
+/// into it at its end, as in M5.1. Nor is a divert placed along a conveyor that does not send
+/// into it this way: it diverts at an instant, wherever its senders are, and its place is only
+/// drawn. Empty for an element that is not a conveyor with a track.
+pub fn points(model: &Model, conveyor: &ElementId) -> Vec<Point> {
+    chain(model, conveyor, false)
+}
+
+/// The diverts placed along `conveyor` in the order its items reach them by the flows, as
+/// [`points`] finds them, but going on past one placed at the end of the track: the order of
+/// the flows and the order along the track are checked over all of them.
+pub fn placed_in_turn(model: &Model, conveyor: &ElementId) -> Vec<Point> {
+    chain(model, conveyor, true)
+}
+
+/// The chain of diverts placed along `conveyor` that its items reach in turn by the flows;
+/// with `past_end`, one at the end of the track does not end it.
+fn chain(model: &Model, conveyor: &ElementId, past_end: bool) -> Vec<Point> {
+    let unit = model.experiment.length_unit;
+    let Some(track) = model.site.paths.get(conveyor) else {
+        return Vec::new();
+    };
+    if !model
+        .element(conveyor)
+        .is_some_and(|e| matches!(e.kind, ElementKind::Conveyor { .. }))
+    {
+        return Vec::new();
+    }
+    let end = track.length(unit) - length_step(unit);
+    let mut outs = model.connections.iter().filter(|c| &c.from == conveyor);
+    let (Some(first), None) = (outs.next(), outs.next()) else {
+        return Vec::new();
+    };
+    let mut out: Vec<Point> = Vec::new();
+    let mut next = Some(first.to.clone());
+    while let Some(g) = next.take() {
+        if out.iter().any(|p| p.gateway == g) {
+            break;
+        }
+        let Some(ElementKind::ExclusiveGateway {
+            default,
+            routing: Routing::Divert,
+        }) = model.element(&g).map(|e| &e.kind)
+        else {
+            break;
+        };
+        let Some(Place::Along { path, s }) = model.site.places.get(&g) else {
+            break;
+        };
+        if path != conveyor || s.is_nan() || (*s >= end && !past_end) {
+            break;
+        }
+        out.push(Point {
+            gateway: g.clone(),
+            s: *s,
+        });
+        next = default
+            .as_ref()
+            .and_then(|d| model.connections.iter().find(|c| &c.id == d))
+            .map(|c| c.to.clone());
+    }
+    out
 }
 
 /// Gives each conveyor in `elements` with a track in `site` its path's length (D23) where its
@@ -477,6 +652,138 @@ mod tests {
         };
         let kept = m.site.kept(&m);
         assert!(kept.paths.is_empty() && kept.places.is_empty());
+    }
+
+    /// A 10 m belt sending into divert `d1`, whose default leads to divert `d2`, whose default
+    /// leads to `out`; each divert's other way is a lane.
+    fn two_diverts(s1: f64, s2: f64) -> Model {
+        let mut m = Model::default();
+        let divert = |name: &str, default: &str| {
+            Element::new(
+                id(name),
+                name,
+                ElementKind::ExclusiveGateway {
+                    default: Some(id(default)),
+                    routing: Routing::Divert,
+                },
+            )
+        };
+        m.elements.push(Element::new(
+            id("belt"),
+            "Belt",
+            ElementKind::Conveyor {
+                length: 10.0,
+                speed: 1.0,
+                accumulating: true,
+                item_length: 0.5,
+                gap: 0.5,
+                shape: crate::ConveyorShape::Straight,
+            },
+        ));
+        m.elements.push(divert("d1", "d1-d2"));
+        m.elements.push(divert("d2", "d2-out"));
+        for (c, from, to) in [
+            ("belt-d1", "belt", "d1"),
+            ("d1-d2", "d1", "d2"),
+            ("d1-lane", "d1", "lane1"),
+            ("d2-out", "d2", "out"),
+            ("d2-lane", "d2", "lane2"),
+        ] {
+            m.connections.push(Connection::new(id(c), id(from), id(to)));
+        }
+        let line = Path::new(
+            Frame::default(),
+            vec![Segment::Line {
+                length: 10.0,
+                rise: 0.0,
+            }],
+        );
+        m.site.paths.insert(id("belt"), Track::new(line, M));
+        for (g, s) in [("d1", s1), ("d2", s2)] {
+            m.site.places.insert(
+                id(g),
+                Place::Along {
+                    path: id("belt"),
+                    s,
+                },
+            );
+        }
+        m
+    }
+
+    #[test]
+    fn the_points_of_a_belt_follow_its_flow_and_the_diverts_defaults() {
+        let at = |m: &Model| -> Vec<(String, f64)> {
+            points(m, &id("belt"))
+                .into_iter()
+                .map(|p| (p.gateway.to_string(), p.s))
+                .collect()
+        };
+        let m = two_diverts(3.0, 6.0);
+        assert_eq!(at(&m), [("d1".to_owned(), 3.0), ("d2".to_owned(), 6.0)]);
+        // A divert at the end of the track is the belt's end, as in M5.1: the chain stops there.
+        assert_eq!(at(&two_diverts(3.0, 10.0)), [("d1".to_owned(), 3.0)]);
+        assert!(at(&two_diverts(10.0, 6.0)).is_empty());
+        // Validation follows the flows past one at the end, so that order is checked too.
+        let past = two_diverts(10.0, 6.0);
+        assert_eq!(placed_in_turn(&past, &id("belt")).len(), 2);
+        assert!(
+            past.validate()
+                .iter()
+                .any(|d| matches!(d.problem, crate::Problem::PointsOutOfOrder { .. }))
+        );
+        // Placed along another conveyor, it is not one of this belt's points.
+        let mut other = two_diverts(3.0, 6.0);
+        other.site.places.insert(
+            id("d1"),
+            Place::Along {
+                path: id("elsewhere"),
+                s: 3.0,
+            },
+        );
+        assert!(at(&other).is_empty());
+        // A divert's s is read by the run, so it is in the results baseline; a junction too.
+        let sim = m.site.for_results(&m);
+        assert!(sim.places.contains_key(&id("d1")) && sim.places.contains_key(&id("d2")));
+    }
+
+    #[test]
+    fn a_junction_is_kept_only_between_two_conveyors() {
+        let mut m = two_diverts(3.0, 6.0);
+        m.site.junctions.insert(id("belt-d1"), Junction::default());
+        assert!(m.site.kept(&m).junctions.is_empty());
+        m.elements.push(Element::new(
+            id("next"),
+            "Next",
+            ElementKind::Conveyor {
+                length: 5.0,
+                speed: 1.0,
+                accumulating: true,
+                item_length: 0.5,
+                gap: 0.5,
+                shape: crate::ConveyorShape::Straight,
+            },
+        ));
+        m.connections
+            .push(Connection::new(id("belt-next"), id("belt"), id("next")));
+        m.site.junctions.insert(
+            id("belt-next"),
+            Junction {
+                kind: JunctionKind::Side,
+                transfer: 1.5,
+            },
+        );
+        let kept = m.site.kept(&m);
+        assert_eq!(kept.junctions.len(), 1);
+        assert_eq!(kept.junctions[&id("belt-next")].transfer, 1.5);
+        assert_eq!(m.site.for_results(&m).junctions.len(), 2);
+        for k in [
+            JunctionKind::Inline,
+            JunctionKind::Side,
+            JunctionKind::Turntable,
+        ] {
+            assert_eq!(JunctionKind::from_name(k.name()), Some(k));
+        }
     }
 
     #[test]

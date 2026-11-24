@@ -2941,6 +2941,152 @@ fn a_layout_writes_reads_and_saves() {
     );
 }
 
+/// Points and junctions (L5): a divert placed along the belt that sends into it, and a junction
+/// on the flow from that belt to a second one, are written, read back as they were, and saved
+/// in place when they change. A junction on a flow that does not join two conveyors is noted
+/// and left out on reading.
+#[test]
+fn points_and_junctions_write_read_and_save() {
+    use stochcraft_model::{
+        Connection, Element, ElementId, Frame, Junction, JunctionKind, LengthUnit, Path, Place,
+        Routing, Segment, Track,
+    };
+    let id = |s: &str| ElementId::unchecked(s);
+    let line = |length: f64| {
+        Track::new(
+            Path::new(Frame::default(), vec![Segment::Line { length, rise: 0.0 }]),
+            LengthUnit::Metres,
+        )
+    };
+    let mut model = belt_model();
+    model.experiment.length_unit = LengthUnit::Metres;
+    // in → belt → divert (lane: out; default: next) and next → out.
+    model.connections.retain(|c| c.id.as_str() != "f2");
+    model.elements.push(Element::new(
+        id("divert"),
+        "divert",
+        ElementKind::ExclusiveGateway {
+            default: Some(id("f4")),
+            routing: Routing::Divert,
+        },
+    ));
+    model.elements.push(Element::new(
+        id("next"),
+        "next",
+        ElementKind::Conveyor {
+            length: 4.0,
+            speed: 1.0,
+            accumulating: false,
+            item_length: 1.5,
+            gap: 0.5,
+            shape: ConveyorShape::Straight,
+        },
+    ));
+    for (c, from, to) in [
+        ("f2", "belt", "divert"),
+        ("f3", "divert", "out"),
+        ("f4", "divert", "next"),
+        ("f5", "next", "out"),
+    ] {
+        model
+            .connections
+            .push(Connection::new(id(c), id(from), id(to)));
+    }
+    model.site.paths.insert(id("belt"), line(12.5));
+    model.site.paths.insert(id("next"), line(4.0));
+    model.site.places.insert(
+        id("divert"),
+        Place::Along {
+            path: id("belt"),
+            s: 5.0,
+        },
+    );
+    let bytes = write_new(&model);
+    assert!(String::from_utf8_lossy(&bytes).contains("stochcraft:place path=\"belt\" s=\"5\""));
+    let Ok(loaded) = read(&bytes) else {
+        unreachable!()
+    };
+    assert!(loaded.notes.is_empty(), "{:#?}", loaded.notes);
+    assert_eq!(loaded.model, laid_out(model.clone()));
+
+    // A junction between the belt and the next one: the divert's default flow joins them
+    // through the gateway, so it goes on a flow straight from one conveyor to the other.
+    let mut joined = loaded.model.clone();
+    joined.connections.retain(|c| c.id.as_str() != "f2");
+    joined
+        .connections
+        .push(Connection::new(id("f2"), id("belt"), id("next")));
+    joined.site.places.clear();
+    joined.site.junctions.insert(
+        id("f2"),
+        Junction {
+            kind: JunctionKind::Turntable,
+            transfer: 2.5,
+        },
+    );
+    let bytes = write_new(&joined);
+    assert!(String::from_utf8_lossy(&bytes).contains("stochcraft:junction"));
+    let Ok(again) = read(&bytes) else {
+        unreachable!()
+    };
+    assert!(again.notes.is_empty(), "{:#?}", again.notes);
+    assert_eq!(again.model.site.junctions, joined.site.junctions);
+    // Changed in place: a side transfer of 1.
+    let mut side = again.model.clone();
+    side.site.junctions.insert(
+        id("f2"),
+        Junction {
+            kind: JunctionKind::Side,
+            transfer: 1.0,
+        },
+    );
+    let saved = again.opened.save(&side);
+    let back = saved
+        .as_deref()
+        .map(|b| read(b).map(|l| l.model.site.junctions));
+    assert_eq!(back, Ok(Ok(side.site.junctions.clone())));
+    // The same flow re-pointed to another conveyor, its junction kept: written again.
+    let mut repointed = again.model.clone();
+    repointed.elements.push(Element::new(
+        id("spare"),
+        "spare",
+        ElementKind::Conveyor {
+            length: 4.0,
+            speed: 1.0,
+            accumulating: false,
+            item_length: 1.5,
+            gap: 0.5,
+            shape: ConveyorShape::Straight,
+        },
+    ));
+    repointed
+        .connections
+        .push(Connection::new(id("f6"), id("spare"), id("out")));
+    if let Some(c) = repointed
+        .connections
+        .iter_mut()
+        .find(|c| c.id.as_str() == "f2")
+    {
+        c.to = id("spare");
+    }
+    let saved = again.opened.save(&repointed);
+    let back = saved
+        .as_deref()
+        .map(|b| read(b).map(|l| l.model.site.junctions));
+    assert_eq!(back, Ok(Ok(repointed.site.junctions.clone())));
+    // A junction on the flow into the sink joins no two conveyors: noted and left out.
+    let text = String::from_utf8_lossy(&bytes).replace("elementRef=\"f2\"", "elementRef=\"f5\"");
+    let Ok(stray) = read(text.as_bytes()) else {
+        unreachable!()
+    };
+    assert!(stray.model.site.junctions.is_empty());
+    assert!(
+        stray.notes.iter().any(|n| n.message.contains("junction")),
+        "{:#?}",
+        stray.notes
+    );
+}
+
 /// An edit that strands part of the layout (a conveyor with a track made a delay, so a block
 /// placed along it has no path) saves: what the model can no longer hold goes from the file.
 #[test]

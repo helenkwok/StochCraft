@@ -162,6 +162,12 @@ pub const PATH: &str = "stochcraft:path";
 /// frame (`x`, `y`, `z`, `heading`) or a conveyor (`path`) and a distance along it (`s`).
 pub const PLACE: &str = "stochcraft:place";
 
+/// A junction between two conveyors (ROADMAP.md, M5.5): a `stochcraft:junction` element on the
+/// `ElementParameters` of the sequence flow that joins them, with the attributes `kind`
+/// (`inline`, `side` or `turntable`; `inline` when left out) and `transfer` (the time across
+/// it, in the scenario's base time unit; 0 when left out).
+pub const JUNCTION: &str = "stochcraft:junction";
+
 /// Look-only scenery: a `stochcraft:scene` element, a child of the scenario, holding `object`
 /// elements, each with an `id`, a `kind`, a frame and a size. The run never reads it.
 pub const SCENE: &str = "stochcraft:scene";

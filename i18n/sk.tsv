@@ -1475,3 +1475,6 @@ unit	yr	r.
 	Remove rule	Odstrániť pravidlo
 	Change Decision Table	Zmeniť rozhodovaciu tabuľku
 	Use Decision Table	Použiť rozhodovaciu tabuľku
+	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	{block} je umiestnený {s} pozdĺž dopravníka {conveyor}, ktorého dráha je dlhá {length}. Umiestnite ho medzi 0 a {length} pozdĺž dráhy.
+	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	Entity na dopravníku {conveyor} dosiahnu {before} skôr ako {block}, ale {block} je umiestnený bližšie k začiatku ({s} pozdĺž neho, {before} pri {before_s}). Umiestnite {block} na dráhe ďalej ako {before}, alebo ich v tokoch vymeňte.
+	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	Spoj na toku {flow} sa prechádza {time}. Nastavte jeho čas presunu na 0 alebo viac.

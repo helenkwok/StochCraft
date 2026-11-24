@@ -1475,3 +1475,6 @@ unit	yr	a
 	Remove rule	Eemalda reegel
 	Change Decision Table	Muuda otsustustabelit
 	Use Decision Table	Kasuta otsustustabelit
+	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	Plokk {block} on paigutatud {s} kaugusele piki konveierit {conveyor}, mille tee on {length} pikk. Paiguta see 0 ja {length} vahele piki teed.
+	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	Olemid konveieril {conveyor} jõuavad plokini {before} enne kui plokini {block}, kuid {block} on paigutatud alguse lähedale ({s} piki seda, {before} kohas {before_s}). Paiguta {block} teel kaugemale kui {before} või vaheta need vooludes ära.
+	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	Ristumiskoht voos {flow} võtab ületamiseks {time}. Tee selle ülekandeaeg 0 või suurem.

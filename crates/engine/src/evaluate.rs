@@ -29,8 +29,9 @@ pub struct Decision {
     /// The element or pool.
     pub id: String,
     pub field: Field,
-    /// The value to evaluate (a whole number for counts).
-    #[schemars(with = "f64")]
+    /// The value to evaluate: a whole number for counts, a number for a mean, the rule's name
+    /// for a rule (`routing`, `on_shift_end`, `after_job`).
+    #[schemars(with = "NumberOrName")]
     pub value: Value,
     /// The least value allowed, if the caller's search has one.
     #[serde(default)]
@@ -38,6 +39,15 @@ pub struct Decision {
     /// The greatest value allowed, if the caller's search has one.
     #[serde(default)]
     pub max: Option<f64>,
+}
+
+/// A number, or a rule's name.
+#[derive(JsonSchema)]
+#[serde(untagged)]
+#[allow(dead_code)] // Only its schema is used.
+enum NumberOrName {
+    Number(f64),
+    Name(String),
 }
 
 impl Decision {
@@ -77,6 +87,11 @@ impl Decision {
             Field::Capacity | Field::Quantity => (1.0, false),
             Field::QueueCapacity => (0.0, false),
             Field::Mean => (0.0, true),
+            Field::Routing | Field::OnShiftEnd | Field::AfterJob => {
+                return Err(invalid(format!(
+                    "decision `{name}`: a rule's value is its name, not a number"
+                )));
+            }
         };
         let too_big = self.field.integral() && v > f64::from(u32::MAX);
         if v < floor || (open && v == floor) || too_big {
@@ -145,24 +160,56 @@ pub(crate) fn decided(
             )));
         }
         seen.push(name.clone());
-        let v = d.checked_value()?;
         let named = |e: CommandError| CommandError {
             message: format!("decision `{name}`: {}", e.message),
             ..e
         };
         let p = d.param();
+        if d.field.is_rule() {
+            let level = d.value.as_str().ok_or_else(|| {
+                invalid(format!(
+                    "decision `{name}`: the value must be the rule's name (one of {}), not {}",
+                    d.field.levels().join(", "),
+                    d.value
+                ))
+            })?;
+            if d.min.is_some() || d.max.is_some() {
+                return Err(invalid(format!(
+                    "decision `{name}`: a rule has no range, so `min` and `max` do not apply"
+                )));
+            }
+            let id = ElementId::unchecked(&d.id);
+            let on_pool = d.field == Field::AfterJob;
+            let exists = if on_pool {
+                m.resources.iter().any(|r| r.id == id)
+            } else {
+                m.element(&id).is_some()
+            };
+            if !exists {
+                return Err(CommandError::new(
+                    ErrorCode::NotFound,
+                    format!(
+                        "decision `{name}`: no {} with id `{}`",
+                        if on_pool { "pool" } else { "element" },
+                        d.id
+                    ),
+                ));
+            }
+            p.set_rule(&mut m, level).map_err(named)?;
+            echo.push(json!({ "id": d.id, "field": d.field, "value": level }));
+            continue;
+        }
+        let v = d.checked_value()?;
         // Whether the model has this decision at all, before changing anything.
         let id = ElementId::unchecked(&d.id);
-        let exists = match d.field {
-            Field::Quantity => m.resources.iter().any(|r| r.id == id),
-            _ => m.element(&id).is_some(),
+        let on_pool = matches!(d.field, Field::Quantity | Field::AfterJob);
+        let exists = if on_pool {
+            m.resources.iter().any(|r| r.id == id)
+        } else {
+            m.element(&id).is_some()
         };
         if !exists {
-            let what = if d.field == Field::Quantity {
-                "pool"
-            } else {
-                "element"
-            };
+            let what = if on_pool { "pool" } else { "element" };
             return Err(CommandError::new(
                 ErrorCode::NotFound,
                 format!("decision `{name}`: no {what} with id `{}`", d.id),

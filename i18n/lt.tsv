@@ -1475,3 +1475,6 @@ unit	yr	m.
 	Remove rule	Pašalinti taisyklę
 	Change Decision Table	Keisti sprendimų lentelę
 	Use Decision Table	Naudoti sprendimų lentelę
+	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	Blokas {block} yra pastatytas {s} atstumu išilgai konvejerio {conveyor}, kurio kelias yra {length} ilgio. Pastatykite jį tarp 0 ir {length} išilgai kelio.
+	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	Objektai ant konvejerio {conveyor} pasiekia {before} anksčiau nei {block}, bet {block} yra pastatytas arčiau pradžios ({s} išilgai jo, {before} ties {before_s}). Pastatykite {block} toliau keliu nei {before} arba sukeiskite juos srautuose.
+	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	Sandūra sraute {flow} kertama per {time}. Padarykite jos perdavimo laiką 0 arba didesnį.

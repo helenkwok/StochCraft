@@ -459,6 +459,18 @@ pub const TEMPLATES: &[(&str, &str)] = &[
         "The drawn path of the conveyor {block} is {path_length} long, but its “Length” is {length}, so the drawing and the run disagree. Make “Length” match the path, or change the shape.",
     ),
     (
+        "place_off_path",
+        "{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.",
+    ),
+    (
+        "points_out_of_order",
+        "Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.",
+    ),
+    (
+        "bad_junction_time",
+        "The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.",
+    ),
+    (
         "transport_not_simulated",
         "{block} is a transport, which StochCraft does not simulate yet. Remove it to run the model.",
     ),
@@ -1176,6 +1188,38 @@ impl Diagnostic {
                     ],
                 )
             }
+            Problem::PlaceOffPath {
+                conveyor,
+                s,
+                length,
+            } => part(
+                "place_off_path",
+                vec![
+                    b(),
+                    ("s", num(*s)),
+                    ("conveyor", names.name(conveyor)),
+                    ("length", num(*length)),
+                ],
+            ),
+            Problem::PointsOutOfOrder {
+                conveyor,
+                s,
+                before,
+                before_s,
+            } => part(
+                "points_out_of_order",
+                vec![
+                    b(),
+                    ("conveyor", names.name(conveyor)),
+                    ("before", names.name(before)),
+                    ("s", num(*s)),
+                    ("before_s", num(*before_s)),
+                ],
+            ),
+            Problem::BadJunctionTime { time } => part(
+                "bad_junction_time",
+                vec![("flow", flow_of(None)), ("time", num(*time))],
+            ),
             Problem::TransportNotSimulated => part("transport_not_simulated", vec![b()]),
             Problem::DecisionUnusable {
                 file,

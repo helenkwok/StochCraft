@@ -1475,3 +1475,6 @@ unit	yr	年
 	Remove rule	ルールを削除
 	Change Decision Table	決定表の変更
 	Use Decision Table	決定表の使用
+	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	{block} はコンベヤ {conveyor} に沿って {s} の位置に置かれていますが、その経路の長さは {length} です。経路に沿って 0 から {length} の間に配置してください。
+	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	コンベヤ {conveyor} 上のエンティティは {block} より先に {before} に到達しますが、{block} はより始点に近い位置（コンベヤに沿って {s}、{before} は {before_s}）に置かれています。{block} を経路上で {before} より先に配置するか、フローで入れ替えてください。
+	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	フロー {flow} 上の接合部の通過に {time} かかります。搬送時間を 0 以上にしてください。

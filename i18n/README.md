@@ -1025,6 +1025,13 @@ fields (`“Service time”`) are named in the messages by their own rows.
   name Unique inside the overlap message stays in English, as DMN spells it in a file. Not
   checked against any other source and not reviewed by native speakers; the least certain are
   lo, th, ta, te, bn, ka, kk and sq ("hit policy").
+- The rows for the layout's three validation messages (M5.5, L5: a place off its conveyor's path,
+  divert points out of order along a path, a junction with a negative transfer time) were
+  machine-drafted from the plain meaning of the English, with each catalog's own words for
+  conveyor, flow, path, block and transfer time from its existing rows. The catalogs have no word
+  for a junction, so each uses a plain word for a joint or crossing point. Not checked against any
+  other source and not reviewed by native speakers; the least certain are lo, th, ta, te, bn, ka,
+  kk and hi.
 
 **Adding or changing a string:** add the English in the code through `i18n::t` (or `tf`, `tn`),
 then add its row to each catalog here, or leave it out to show English until it is translated.

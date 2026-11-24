@@ -1475,3 +1475,6 @@ unit	yr	v
 	Remove rule	Poista sääntö
 	Change Decision Table	Muuta päätöstaulukkoa
 	Use Decision Table	Käytä päätöstaulukkoa
+	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	Lohko {block} on sijoitettu {s} etäisyydelle kuljettimen {conveyor} reitillä, jonka pituus on {length}. Sijoita se välille 0–{length} reitillä.
+	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	Entiteetit kuljettimella {conveyor} saavuttavat kohdan {before} ennen kohtaa {block}, mutta {block} on sijoitettu lähemmäs alkua ({s} reitillä, {before} kohdassa {before_s}). Sijoita {block} reitillä kauemmas kuin {before} tai vaihda niiden paikat virroissa.
+	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	Liitoskohdan ylittäminen virrassa {flow} kestää {time}. Aseta sen siirtoaika arvoon 0 tai suuremmaksi.

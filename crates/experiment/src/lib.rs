@@ -17,6 +17,7 @@ pub use stochcraft_stats::Summary;
 pub mod compass;
 pub mod race;
 pub mod select;
+pub mod simplex;
 
 /// What a replication gets: its index and its own random stream.
 pub struct Replication {

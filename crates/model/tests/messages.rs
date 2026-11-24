@@ -393,6 +393,24 @@ fn samples() -> Vec<Diagnostic> {
                 path_length: 12.5,
             },
         ),
+        found(
+            Some("n3"),
+            Problem::PlaceOffPath {
+                conveyor: id("n2"),
+                s: 12.0,
+                length: 10.0,
+            },
+        ),
+        found(
+            Some("n3"),
+            Problem::PointsOutOfOrder {
+                conveyor: id("n2"),
+                s: 2.0,
+                before: id("n4"),
+                before_s: 5.0,
+            },
+        ),
+        found(flow, Problem::BadJunctionTime { time: -1.0 }),
         found(task, Problem::TransportNotSimulated),
         found(
             task,

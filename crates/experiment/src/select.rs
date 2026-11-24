@@ -36,6 +36,37 @@
 //! **Assumptions.** Observations are normal and independent across replications, as the papers
 //! assume. The guarantees are for that case; a replication's mean over a long run is close to
 //! normal, a count in a short run may not be.
+//!
+//! **A flat first stage is not proof of no randomness.** n₀ equal values can come from a system
+//! that does vary: one that returns 1 with probability 1% and 0 otherwise gives ten zeros with
+//! probability 0.99¹⁰ ≈ 90%. Under common random numbers two varying systems can also give the
+//! same difference in every first-stage replication. So a zero first-stage variance (of a pair's
+//! differences for KN and the comparison, of a constrained value for the check) never by itself
+//! gives an exact or confident answer. For a pair, a spread within rounding of the values (at
+//! most 64 units in the last place of the largest, as when B = A + 0.1 is computed in floating
+//! point) counts as zero:
+//! - Unless the caller states that the systems have no randomness ([`Kn::deterministic`],
+//!   [`Feasibility::deterministic`]), such a pair is never eliminated by the test and such a
+//!   constraint is never settled by it. The procedures fix S² from the first stage, and their
+//!   guarantee is for that fixed S², so it is not estimated again from later replications: a
+//!   zero S² stays zero, the pair's or the constraint's region never opens, and more replications
+//!   cannot settle it. Declining to eliminate or to decide only removes ways of being wrong, so
+//!   the guarantee for every other pair and constraint is kept. A system still in contention
+//!   with such a pair cannot be declared best: once every other pair's region has closed (or the
+//!   budget runs out) the answer is [`Outcome::NotProven`], with [`Selection::flat`] set. A
+//!   system left with only such constraints takes no more replications and stays
+//!   [`Decision::Undecided`], with [`FeasibilityCheck::flat`] set.
+//! - With the flag, a zero variance is taken as no randomness: the pair is compared, or the
+//!   constraint decided, exactly on the first stage, and when every first-stage value of every
+//!   system is the same the answer is [`Outcome::ComparedExactly`], with no probability stated.
+//!   Values that vary are handled as usual.
+//!
+//! **Values near the ends of the `f64` range.** When the first stage's values (with δ, or with a
+//! constraint's limit and ε) are larger than 1e150 or smaller than 1e-150 in size, everything is
+//! computed on them times a power of two that brings them near 1, which changes no decision and
+//! multiplies exactly; the means are given back in the values' unit. A sum, a difference, a
+//! variance or a bound of the region that is still not finite (later values far larger than the
+//! first stage's) is refused with [`SelectError::Overflow`] rather than compared.
 
 use std::ops::Range;
 
@@ -89,6 +120,11 @@ pub struct Kn {
     /// The most replications to take, summed over systems. When the next step would pass it, the
     /// procedure stops and says the result is not proven ([`Outcome::NotProven`]).
     pub max_runs: Option<u64>,
+    /// The caller states that the systems have no randomness (default `false`). Only then is a
+    /// zero first-stage variance taken as exact, and [`Outcome::ComparedExactly`] possible;
+    /// otherwise a pair with a zero variance of differences is left undecided (see the module's
+    /// notes). Equal values in a first stage are never proof of it on their own.
+    pub deterministic: bool,
 }
 
 impl Kn {
@@ -100,6 +136,7 @@ impl Kn {
             sense,
             sampling: Sampling::Common,
             max_runs: None,
+            deterministic: false,
         }
     }
 
@@ -165,12 +202,14 @@ pub fn eta(beta: f64, first_stage: u64) -> Option<f64> {
 pub enum Outcome {
     /// The chosen system is the best, or within δ of the best, with the stated confidence.
     Selected,
-    /// Every system gave the same value in every first-stage replication: there is no
-    /// randomness, the systems were compared exactly on n₀ replications, and no probability is
-    /// stated.
+    /// The caller stated that the systems have no randomness ([`Kn::deterministic`]) and every
+    /// system gave the same value in every first-stage replication: the systems were compared
+    /// exactly on n₀ replications, and no probability is stated. Never given without the
+    /// statement.
     ComparedExactly,
-    /// The budget ran out first: the chosen system is the best-looking of those still in
-    /// contention, not proven best.
+    /// Not settled: the budget ran out first, or a pair still in contention had a zero
+    /// first-stage variance of differences without [`Kn::deterministic`] ([`Selection::flat`]).
+    /// The chosen system is the best-looking of those still in contention, not proven best.
     NotProven,
 }
 
@@ -192,6 +231,10 @@ pub struct Selection {
     /// The probability of a correct selection that the answer claims: `Some(1 − α)` only for
     /// [`Outcome::Selected`].
     pub confidence: Option<f64>,
+    /// Two systems still in contention gave the same difference in every first-stage
+    /// replication, and the systems were not stated to be deterministic: the test cannot decide
+    /// that pair, so the answer is [`Outcome::NotProven`] whatever the budget.
+    pub flat: bool,
 }
 
 impl Selection {
@@ -238,6 +281,10 @@ pub struct Feasibility {
     /// The most replications to take, summed over systems; systems not decided by then are
     /// [`Decision::Undecided`].
     pub max_runs: Option<u64>,
+    /// The caller states that the systems have no randomness (default `false`): only then is a
+    /// constrained value with a zero first-stage variance decided exactly. Otherwise that
+    /// constraint is left undecided (see the module's notes).
+    pub deterministic: bool,
 }
 
 impl Default for Feasibility {
@@ -247,6 +294,7 @@ impl Default for Feasibility {
             first_stage: 10,
             sampling: Sampling::Common,
             max_runs: None,
+            deterministic: false,
         }
     }
 }
@@ -310,12 +358,17 @@ pub struct FeasibilityCheck {
     pub runs: Vec<u64>,
     /// Each system's mean of each constrained value over its replications.
     pub means: Vec<Vec<f64>>,
-    /// Every constrained value was the same in every first-stage replication of every system:
-    /// decided exactly on n₀ replications, with no probability stated.
+    /// The caller stated that the systems have no randomness ([`Feasibility::deterministic`])
+    /// and every constrained value was the same in every first-stage replication of every
+    /// system: decided exactly on n₀ replications, with no probability stated.
     pub exact: bool,
     /// The probability that every system was decided correctly: `Some(1 − α)` when every system
     /// was decided and the data were random.
     pub confidence: Option<f64>,
+    /// A system left undecided has a constraint whose value was the same in every first-stage
+    /// replication, and the systems were not stated to be deterministic: the check cannot
+    /// settle that constraint, so the system stays [`Decision::Undecided`] whatever the budget.
+    pub flat: bool,
 }
 
 impl FeasibilityCheck {
@@ -349,13 +402,22 @@ pub struct ConstrainedSelection {
     /// The probability, covering the feasibility decisions and the selection together, that
     /// the answer claims: `Some(1 − α)` when both were completed on random data.
     pub confidence: Option<f64>,
+    /// The chosen system is proven the best of those that meet the constraints: KN settled it
+    /// among the systems declared feasible, and every system was decided, or (with an objective
+    /// stated exact, [`Kn::deterministic`]) each system left undecided has an objective known
+    /// exactly and no better than the chosen one's, so it could not be the answer whether it is
+    /// feasible or not ([`ConstrainedSelection::set_aside`]).
+    pub proven: bool,
+    /// Systems left undecided by the check that did not stop the answer being proven, because
+    /// their exact objective is no better than the chosen system's.
+    pub set_aside: Vec<usize>,
 }
 
 impl ConstrainedSelection {
     /// The chosen system, when the answer is proven (with the stated confidence, or exactly).
     pub fn chosen(&self) -> Option<usize> {
         let s = self.selection.as_ref()?;
-        (self.feasibility.is_complete() && s.outcome != Outcome::NotProven).then_some(s.chosen)
+        self.proven.then_some(s.chosen)
     }
 
     pub fn total_runs(&self) -> u64 {
@@ -396,6 +458,9 @@ pub enum SelectError {
         expected: u64,
         got: u64,
     },
+    /// A quantity the procedure computes from finite values is not finite (it overflowed): what
+    /// it was (a sum, a difference, a variance or a bound of the region, in words).
+    Overflow(&'static str),
 }
 
 impl std::fmt::Display for SelectError {
@@ -436,6 +501,10 @@ impl std::fmt::Display for SelectError {
             } => write!(
                 f,
                 "system {system} gave {got} values where {expected} were asked for"
+            ),
+            SelectError::Overflow(what) => write!(
+                f,
+                "{what} is too large to compute (it overflowed); rescale the values"
             ),
         }
     }
@@ -485,6 +554,7 @@ where
         standard: false,
         start: 0,
         budget: setup.max_runs,
+        deterministic: setup.deterministic,
     };
     let run = sequential(&plan, &mut |s, reps| checked(&mut sample, s, reps))?;
     Ok(run.into_selection(&plan, systems, setup.confidence))
@@ -537,6 +607,7 @@ where
         standard: true,
         start: 0,
         budget: setup.max_runs,
+        deterministic: setup.deterministic,
     };
     let run = sequential(&plan, &mut |s, reps| checked(&mut sample, s, reps))?;
     Ok(run.into_selection(&plan, systems, setup.confidence))
@@ -578,6 +649,7 @@ where
             budget: setup.max_runs,
             confidence: setup.confidence,
             offset: 0,
+            deterministic: setup.deterministic,
         },
         systems,
         constraints,
@@ -599,6 +671,12 @@ where
 /// independent of which systems passed and its guarantee holds for the set it is given (its η
 /// comes from the number of systems declared feasible). The check's replications of the
 /// objective are not reused. The budget `setup.max_runs` covers both stages.
+///
+/// [`Kn::deterministic`] here states that the objective has no randomness (as when it is made of
+/// known costs alone): KN then compares it exactly. The constrained values are always treated as
+/// random, so a constraint whose value is the same in every first-stage replication is left
+/// undecided; for constraints with no randomness, run [`check_feasibility`] with
+/// [`Feasibility::deterministic`] and then [`select_best`].
 pub fn select_feasible<F>(
     setup: &Kn,
     constraints: &[Constraint],
@@ -623,12 +701,16 @@ where
         first_stage: setup.first_stage,
         sampling: setup.sampling,
         max_runs: setup.max_runs,
+        // `setup.deterministic` speaks for the objective only: the constrained values are
+        // always treated as random here.
+        deterministic: false,
     };
     check.validate(systems, constraints)?;
     let eta = check
         .eta(systems, constraints.len())
         .ok_or(SelectError::Confidence(setup.confidence))?;
     let width = constraints.len() + 1;
+    let mut objective: Vec<Vec<f64>> = vec![Vec::new(); systems];
     let found = feasibility(
         &FeasibilityPlan {
             eta,
@@ -636,18 +718,43 @@ where
             budget: setup.max_runs,
             confidence: check.confidence,
             offset: 1,
+            deterministic: false,
         },
         systems,
         constraints,
-        &mut |s, reps| checked_rows(&mut sample, s, reps, width),
+        &mut |s, reps: Range<u64>| {
+            let rows = checked_rows(&mut sample, s, reps.clone(), width)?;
+            if reps.start == 0
+                && let Some(o) = objective.get_mut(s)
+            {
+                o.extend(rows.iter().filter_map(|row| row.first().copied()));
+            }
+            Ok(rows)
+        },
     )?;
     let feasible = found.feasible();
-    if !found.is_complete() || feasible.is_empty() {
-        let confidence = found.confidence.map(|_| setup.confidence);
+    let complete = found.is_complete();
+    let undecided: Vec<usize> = (0..systems)
+        .filter(|&i| found.decisions.get(i) == Some(&Decision::Undecided))
+        .collect();
+    // With an objective stated exact, a system left undecided (by a flat constraint or the
+    // budget) whose objective was the same in every first-stage replication has that value
+    // exactly, larger-is-better scaled; it is compared with the chosen system's below.
+    let exact_objective = |i: usize| -> Option<f64> {
+        let o = objective.get(i)?;
+        (setup.deterministic && !o.is_empty() && constant(o))
+            .then(|| o.first().map(|v| setup.sense.sign() * v))
+            .flatten()
+    };
+    let can_set_aside = undecided.iter().all(|&i| exact_objective(i).is_some());
+    if feasible.is_empty() || !(complete || can_set_aside) {
+        let confidence = (complete && found.confidence.is_some()).then_some(setup.confidence);
         return Ok(ConstrainedSelection {
             feasibility: found,
             selection: None,
             confidence,
+            proven: false,
+            set_aside: Vec::new(),
         });
     }
     let kn = Kn {
@@ -667,6 +774,8 @@ where
             feasibility: found,
             selection: None,
             confidence: None,
+            proven: false,
+            set_aside: Vec::new(),
         });
     }
     let eta = if m > 1 {
@@ -683,6 +792,7 @@ where
         standard: false,
         start: found.runs.iter().copied().max().unwrap_or(0),
         budget: kn.max_runs,
+        deterministic: setup.deterministic,
     };
     let run = sequential(&plan, &mut |s, reps| {
         Ok(checked_rows(&mut sample, s, reps, width)?
@@ -691,17 +801,38 @@ where
             .collect())
     })?;
     let selection = run.into_selection(&plan, systems, kn.confidence);
-    let confidence = match (found.confidence, selection.outcome) {
-        (Some(_), Outcome::Selected) => Some(setup.confidence),
-        // A feasible set found exactly and a selection with confidence: the selection's.
-        (None, Outcome::Selected) if found.exact => Some(kn.confidence),
-        (Some(_), Outcome::ComparedExactly) => Some(check.confidence),
+    // The undecided systems are set aside only when the chosen one's objective is exact too
+    // (compared exactly) and none of theirs is better: then whether they meet the constraints
+    // cannot change the answer.
+    let chosen_value = selection
+        .means
+        .get(selection.chosen)
+        .copied()
+        .flatten()
+        .map(|m| setup.sense.sign() * m);
+    let set_aside_ok = selection.outcome == Outcome::ComparedExactly
+        && undecided
+            .iter()
+            .all(|&i| matches!((exact_objective(i), chosen_value), (Some(u), Some(c)) if u <= c));
+    let proven = selection.outcome != Outcome::NotProven && (complete || set_aside_ok);
+    // The check's decisions, those it made, are right together with probability 1 − α_check:
+    // its error is shared out by Bonferroni's inequality over every system and constraint, so
+    // the systems it left undecided only remove terms.
+    let confidence = match (proven, selection.outcome) {
+        (true, Outcome::Selected) => Some(setup.confidence),
+        (true, Outcome::ComparedExactly) => Some(check.confidence),
         _ => None,
     };
     Ok(ConstrainedSelection {
         feasibility: found,
         selection: Some(selection),
         confidence,
+        proven,
+        set_aside: if proven && !complete {
+            undecided
+        } else {
+            Vec::new()
+        },
     })
 }
 
@@ -781,6 +912,8 @@ struct Plan {
     /// The first replication's index.
     start: u64,
     budget: Option<u64>,
+    /// The caller states that there is no randomness: a zero S² is exact.
+    deterministic: bool,
 }
 
 /// What [`sequential`] found, by position.
@@ -791,6 +924,7 @@ struct Found {
     means: Vec<f64>,
     exact: bool,
     proven: bool,
+    flat: bool,
 }
 
 impl Found {
@@ -818,6 +952,7 @@ impl Found {
             runs,
             means,
             confidence: (outcome == Outcome::Selected).then_some(confidence),
+            flat: self.flat,
         }
     }
 }
@@ -844,6 +979,52 @@ fn constant(values: &[f64]) -> bool {
         .is_none_or(|v0| values.iter().all(|v| v == v0))
 }
 
+/// `value`, or [`SelectError::Overflow`] naming `what` when it is not finite.
+fn finite(value: f64, what: &'static str) -> Result<f64, SelectError> {
+    if value.is_finite() {
+        Ok(value)
+    } else {
+        Err(SelectError::Overflow(what))
+    }
+}
+
+/// A spread of differences at most this many units in the last place of the values involved
+/// (64 ε times their largest magnitude) is indistinguishable from rounding: two systems that
+/// differ by a constant, each computed in floating point, give differences that vary in their
+/// last bits. Such a spread is treated as zero.
+pub(crate) const ROUNDING: f64 = 64.0 * f64::EPSILON;
+
+/// Whether a spread `sd` of differences of values no larger than `magnitude` is zero or
+/// indistinguishable from rounding.
+pub(crate) fn negligible(sd: f64, magnitude: f64) -> bool {
+    sd == 0.0 || sd <= ROUNDING * magnitude
+}
+
+/// A power of two that brings `big`, the largest magnitude in play, into (0.5, 1] when it lies
+/// outside [1e-150, 1e150], and 1 otherwise. The procedures' decisions are unchanged when the
+/// values and δ (or a constraint's values, limit and ε) are all multiplied by the same factor,
+/// and a power of two multiplies exactly (away from subnormal results), so values near the ends
+/// of the `f64` range are compared without their sums or squares overflowing or underflowing,
+/// and values in an ordinary range give exactly what they gave without it.
+fn scale_for(big: f64) -> f64 {
+    if !(big.is_finite() && big > 0.0) || (1e-150..=1e150).contains(&big) {
+        return 1.0;
+    }
+    let mut s = 1.0_f64;
+    while big * s > 1.0 {
+        s *= 0.5;
+    }
+    while big * s <= 0.5 && (s * 2.0).is_finite() {
+        s *= 2.0;
+    }
+    s
+}
+
+const SUM: &str = "a sum of the values";
+const DIFFERENCE: &str = "a difference of two systems' values";
+const VARIANCE: &str = "a variance";
+const REGION: &str = "a bound of the continuation region";
+
 fn sequential<F>(plan: &Plan, sample: &mut F) -> Result<Found, SelectError>
 where
     F: FnMut(usize, Range<u64>) -> Result<Vec<f64>, SelectError>,
@@ -856,64 +1037,93 @@ where
     {
         return Err(SelectError::Budget { needed, max_runs });
     }
+    // First stage.
+    let mut stage: Vec<Vec<f64>> = Vec::with_capacity(m);
+    for &system in &plan.systems {
+        stage.push(sample(system, plan.start..plan.start + n0)?);
+    }
+    // Everything is computed on the values and δ times `scale` (see [`scale_for`]); the means
+    // are divided back.
+    let scale = scale_for(
+        stage
+            .iter()
+            .flatten()
+            .fold(plan.delta, |big, x| big.max(x.abs())),
+    );
+    let delta = plan.delta * scale;
     let bonus = |p: usize| {
         if plan.standard && p == 0 {
-            plan.delta / 2.0
+            delta / 2.0
         } else {
             0.0
         }
     };
     let pair_delta = |p: usize, q: usize| {
         if plan.standard && (p == 0 || q == 0) {
-            plan.delta / 2.0
+            delta / 2.0
         } else {
-            plan.delta
+            delta
         }
     };
-
-    // First stage.
     let mut first: Vec<Vec<f64>> = Vec::with_capacity(m);
     let mut raw = vec![0.0; m];
     let mut sums = vec![0.0; m];
-    for (p, &system) in plan.systems.iter().enumerate() {
-        let values = sample(system, plan.start..plan.start + n0)?;
-        let adjusted: Vec<f64> = values.iter().map(|x| plan.sign * x + bonus(p)).collect();
-        raw[p] = values.iter().sum();
-        sums[p] = adjusted.iter().sum();
+    for (p, values) in stage.iter().enumerate() {
+        let scaled: Vec<f64> = values.iter().map(|x| x * scale).collect();
+        let adjusted: Vec<f64> = scaled.iter().map(|x| plan.sign * x + bonus(p)).collect();
+        raw[p] = finite(scaled.iter().sum(), SUM)?;
+        sums[p] = finite(adjusted.iter().sum(), SUM)?;
         first.push(adjusted);
     }
-    let exact = first.iter().all(|v| constant(v));
+    let mean = |s: f64, n: u64| s / n as f64 / scale;
+    // Exact only on the caller's statement that there is no randomness: equal first-stage
+    // values alone are not proof of it.
+    let exact = plan.deterministic && first.iter().all(|v| constant(v));
     let mut runs = vec![n0; m];
     if m == 1 {
         return Ok(Found {
             chosen: 0,
             survivors: vec![0],
-            means: raw.iter().map(|s| s / n0 as f64).collect(),
+            means: raw.iter().map(|&s| mean(s, n0)).collect(),
             runs,
             exact,
             proven: true,
+            flat: false,
         });
     }
-    let mut s2 = vec![0.0; m * m];
-    for (p, a) in first.iter().enumerate() {
-        for (q, b) in first.iter().enumerate().skip(p + 1) {
-            let differences: Vec<f64> = a.iter().zip(b).map(|(x, y)| x - y).collect();
+    // aₚq = η(n₀ − 1)S²ₚq/δₚq, the region's half-width at r = 0, and whether the pair is flat:
+    // a zero S² (or one indistinguishable from rounding, see [`ROUNDING`]) without the caller's
+    // statement that there is no randomness. KN's guarantee is for S² fixed from the first
+    // stage, so a zero S² is not estimated again later; the test never eliminates either system
+    // of a flat pair, and a flat pair still in contention leaves the answer not proven (see the
+    // module's notes).
+    let mut a = vec![0.0; m * m];
+    let mut flat = vec![false; m * m];
+    for (p, x) in first.iter().enumerate() {
+        for (q, y) in first.iter().enumerate().skip(p + 1) {
+            let differences: Vec<f64> = x.iter().zip(y).map(|(u, v)| u - v).collect();
+            if differences.iter().any(|d| !d.is_finite()) {
+                return Err(SelectError::Overflow(DIFFERENCE));
+            }
             let v = if constant(&differences) {
                 0.0
             } else {
-                variance(differences.iter().copied())
+                finite(variance(differences.iter().copied()), VARIANCE)?
             };
-            s2[p * m + q] = v;
-            s2[q * m + p] = v;
+            let d = pair_delta(p, q);
+            let apq = finite(plan.eta * (n0 as f64 - 1.0) * v / d, REGION)?;
+            let magnitude = x.iter().chain(y).fold(0.0_f64, |b, u| b.max(u.abs()));
+            let f = !plan.deterministic && negligible(v.sqrt(), magnitude);
+            a[p * m + q] = apq;
+            a[q * m + p] = apq;
+            flat[p * m + q] = f;
+            flat[q * m + p] = f;
         }
     }
     // r·Wₚq(r) = max{0, aₚq − λₚq r}: the half-width of the region for the pair's sum of
     // differences at stage r.
-    let width = |p: usize, q: usize, r: u64| {
-        let d = pair_delta(p, q);
-        let a = plan.eta * (n0 as f64 - 1.0) * s2[p * m + q] / d;
-        (a - d / 2.0 * r as f64).max(0.0)
-    };
+    let width =
+        |p: usize, q: usize, r: u64| (a[p * m + q] - pair_delta(p, q) / 2.0 * r as f64).max(0.0);
     let best_of = |active: &[usize], sums: &[f64]| {
         active
             .iter()
@@ -924,53 +1134,63 @@ where
             })
             .unwrap_or(0)
     };
+    let pairs = |active: &[usize]| -> Vec<(usize, usize)> {
+        let mut all = Vec::new();
+        for (i, &p) in active.iter().enumerate() {
+            for &q in active.iter().skip(i + 1) {
+                all.push((p, q));
+            }
+        }
+        all
+    };
 
     let mut active: Vec<usize> = (0..m).collect();
     let mut r = n0;
     let mut total = needed;
     loop {
+        for (p, q) in pairs(&active) {
+            finite(sums[p] - sums[q], DIFFERENCE)?;
+        }
         let old = active.clone();
         active.retain(|&p| {
             old.iter()
-                .all(|&q| q == p || sums[p] - sums[q] >= -width(p, q, r))
+                .all(|&q| q == p || flat[p * m + q] || sums[p] - sums[q] >= -width(p, q, r))
         });
         if active.is_empty() {
             // Cannot happen (the largest total always stays), kept for safety.
             active = old;
         }
-        let closed = active
+        let left = pairs(&active);
+        let stuck = left.iter().any(|&(p, q)| flat[p * m + q]);
+        // Every pair left whose test can still decide it has closed. A flat pair cannot be
+        // decided by more replications (its S² stays zero), so sampling stops there too.
+        let closed = left
             .iter()
-            .all(|&p| active.iter().all(|&q| q == p || width(p, q, r) == 0.0));
-        if active.len() == 1 || closed {
+            .all(|&(p, q)| flat[p * m + q] || width(p, q, r) == 0.0);
+        let out_of_budget = plan
+            .budget
+            .is_some_and(|max_runs| total + active.len() as u64 > max_runs);
+        let settled = active.len() == 1 || closed;
+        if settled || out_of_budget {
             return Ok(Found {
                 chosen: best_of(&active, &sums),
                 survivors: active,
-                means: raw.iter().zip(&runs).map(|(s, n)| s / *n as f64).collect(),
+                means: raw.iter().zip(&runs).map(|(&s, &n)| mean(s, n)).collect(),
                 runs,
                 exact,
-                proven: true,
-            });
-        }
-        let step = active.len() as u64;
-        if plan.budget.is_some_and(|max_runs| total + step > max_runs) {
-            return Ok(Found {
-                chosen: best_of(&active, &sums),
-                survivors: active,
-                means: raw.iter().zip(&runs).map(|(s, n)| s / *n as f64).collect(),
-                runs,
-                exact,
-                proven: false,
+                proven: settled && !stuck,
+                flat: stuck,
             });
         }
         for &p in &active {
             let rep = plan.start + r;
             let values = sample(plan.systems[p], rep..rep + 1)?;
-            let x = values.first().copied().unwrap_or(f64::NAN);
-            raw[p] += x;
-            sums[p] += plan.sign * x + bonus(p);
+            let x = values.first().copied().unwrap_or(f64::NAN) * scale;
+            raw[p] = finite(raw[p] + x, SUM)?;
+            sums[p] = finite(sums[p] + plan.sign * x + bonus(p), SUM)?;
             runs[p] += 1;
         }
-        total += step;
+        total += active.len() as u64;
         r += 1;
     }
 }
@@ -982,6 +1202,8 @@ struct FeasibilityPlan {
     confidence: f64,
     /// Values in each row before the constraints' (1 when the objective comes first).
     offset: usize,
+    /// The caller states that there is no randomness: a zero S² is exact.
+    deterministic: bool,
 }
 
 fn feasibility<F>(
@@ -1009,41 +1231,77 @@ where
         decision: Decision,
         by_constraint: Vec<Decision>,
         runs: u64,
-        /// Σⱼ Yᵢₗⱼ, for the means.
+        /// The factor of [`scale_for`] for each constraint: the values, the limit and ε are all
+        /// multiplied by it.
+        scale: Vec<f64>,
+        /// Σⱼ Yᵢₗⱼ (scaled), for the means.
         raw: Vec<f64>,
-        /// Σⱼ (Yᵢₗⱼ − qₗ) on the "at most" scale.
+        /// Σⱼ (Yᵢₗⱼ − qₗ) on the "at most" scale (scaled).
         sums: Vec<f64>,
-        /// S²ᵢₗ from the first stage.
-        s2: Vec<f64>,
+        /// h²S²ᵢₗ/(2εₗ), with S²ᵢₗ from the first stage: the region's half-width at r = 0.
+        a: Vec<f64>,
+        /// A zero S²ᵢₗ without the caller's statement that there is no randomness: the test
+        /// never settles that constraint (see the module's notes).
+        flat: Vec<bool>,
+    }
+
+    impl State {
+        /// Undecided, with every constraint still undecided flat: more replications cannot
+        /// settle it, since S² is fixed from the first stage.
+        fn stuck(&self) -> bool {
+            self.decision == Decision::Undecided
+                && self
+                    .by_constraint
+                    .iter()
+                    .zip(&self.flat)
+                    .all(|(d, f)| *d != Decision::Undecided || *f)
+        }
     }
 
     let mut states = Vec::with_capacity(systems);
-    let mut exact = true;
+    let mut constant_all = true;
     for i in 0..systems {
         let rows = sample(i, 0..n0)?;
         let mut state = State {
             decision: Decision::Undecided,
             by_constraint: vec![Decision::Undecided; s],
             runs: n0,
+            scale: Vec::with_capacity(s),
             raw: Vec::with_capacity(s),
             sums: Vec::with_capacity(s),
-            s2: Vec::with_capacity(s),
+            a: Vec::with_capacity(s),
+            flat: Vec::with_capacity(s),
         };
         for (l, c) in constraints.iter().enumerate() {
             let column: Vec<f64> = rows.iter().map(|row| value(row, l)).collect();
-            state.raw.push(column.iter().sum());
-            state
-                .sums
-                .push(column.iter().map(|y| c.bound.sign() * (y - c.limit)).sum());
-            if constant(&column) {
-                state.s2.push(0.0);
+            let k = scale_for(
+                column
+                    .iter()
+                    .fold(c.limit.abs().max(c.tolerance), |big, y| big.max(y.abs())),
+            );
+            let column: Vec<f64> = column.iter().map(|y| y * k).collect();
+            let limit = c.limit * k;
+            state.scale.push(k);
+            state.raw.push(finite(column.iter().sum(), SUM)?);
+            state.sums.push(finite(
+                column.iter().map(|y| c.bound.sign() * (y - limit)).sum(),
+                SUM,
+            )?);
+            let s2 = if constant(&column) {
+                0.0
             } else {
-                exact = false;
-                state.s2.push(variance(column.iter().copied()));
-            }
+                constant_all = false;
+                finite(variance(column.iter().copied()), VARIANCE)?
+            };
+            state
+                .a
+                .push(finite(h2 * s2 / (2.0 * c.tolerance * k), REGION)?);
+            state.flat.push(s2 == 0.0 && !plan.deterministic);
         }
         states.push(state);
     }
+    // Exact only on the caller's statement that there is no randomness.
+    let exact = plan.deterministic && constant_all;
     let mut r = n0;
     let mut total = needed;
     loop {
@@ -1052,11 +1310,10 @@ where
             .filter(|st| st.decision == Decision::Undecided)
         {
             for (l, c) in constraints.iter().enumerate() {
-                if state.by_constraint[l] != Decision::Undecided {
+                if state.by_constraint[l] != Decision::Undecided || state.flat[l] {
                     continue;
                 }
-                let eps = c.tolerance;
-                let bound = (h2 * state.s2[l] / (2.0 * eps) - eps * r as f64 / 2.0).max(0.0);
+                let bound = (state.a[l] - c.tolerance * state.scale[l] * r as f64 / 2.0).max(0.0);
                 if state.sums[l] <= -bound {
                     state.by_constraint[l] = Decision::Feasible;
                 } else if state.sums[l] >= bound {
@@ -1072,21 +1329,36 @@ where
         let open: Vec<usize> = states
             .iter()
             .enumerate()
-            .filter_map(|(i, st)| (st.decision == Decision::Undecided).then_some(i))
+            .filter_map(|(i, st)| (st.decision == Decision::Undecided && !st.stuck()).then_some(i))
             .collect();
         let step = open.len() as u64;
         if open.is_empty() || plan.budget.is_some_and(|max_runs| total + step > max_runs) {
-            let complete = open.is_empty();
+            let complete = states.iter().all(|st| st.decision != Decision::Undecided);
+            let flat = states.iter().any(|st| {
+                st.decision == Decision::Undecided
+                    && st
+                        .by_constraint
+                        .iter()
+                        .zip(&st.flat)
+                        .any(|(d, f)| *d == Decision::Undecided && *f)
+            });
             return Ok(FeasibilityCheck {
                 decisions: states.iter().map(|st| st.decision).collect(),
                 means: states
                     .iter()
-                    .map(|st| st.raw.iter().map(|x| x / st.runs as f64).collect())
+                    .map(|st| {
+                        st.raw
+                            .iter()
+                            .zip(&st.scale)
+                            .map(|(x, k)| x / st.runs as f64 / k)
+                            .collect()
+                    })
                     .collect(),
                 runs: states.iter().map(|st| st.runs).collect(),
                 by_constraint: states.into_iter().map(|st| st.by_constraint).collect(),
                 exact,
                 confidence: (complete && !exact).then_some(plan.confidence),
+                flat,
             });
         }
         for i in open {
@@ -1096,9 +1368,10 @@ where
                 continue;
             };
             for (l, c) in constraints.iter().enumerate() {
-                let y = value(row, l);
-                state.raw[l] += y;
-                state.sums[l] += c.bound.sign() * (y - c.limit);
+                let k = state.scale[l];
+                let y = value(row, l) * k;
+                state.raw[l] = finite(state.raw[l] + y, SUM)?;
+                state.sums[l] = finite(state.sums[l] + c.bound.sign() * (y - c.limit * k), SUM)?;
             }
             state.runs += 1;
         }
@@ -1185,7 +1458,11 @@ mod tests {
 
     #[test]
     fn no_randomness_is_compared_exactly_on_the_first_stage() {
-        let setup = Kn::new(0.5, Sense::Minimise);
+        // Stated deterministic: compared exactly on the first stage.
+        let setup = Kn {
+            deterministic: true,
+            ..Kn::new(0.5, Sense::Minimise)
+        };
         let means = [3.0, 1.0, 2.0, 1.5];
         let s = select_best(&setup, 4, |s, reps| reps.map(|_| means[s]).collect());
         let Ok(s) = s else { panic!("{s:?}") };
@@ -1194,15 +1471,241 @@ mod tests {
         assert_eq!(s.survivors, vec![1]);
         assert_eq!(s.runs, vec![10; 4]);
         assert_eq!(s.confidence, None);
+        assert!(!s.flat);
         assert_eq!(s.means[2], Some(2.0));
         // Exact ties: all of them survive and the lowest index is chosen.
         let means = [1.0, 2.0, 2.0];
-        let s = select_best(&Kn::new(0.5, Sense::Maximise), 3, |s, reps| {
-            reps.map(|_| means[s]).collect()
-        });
+        let s = select_best(
+            &Kn {
+                deterministic: true,
+                ..Kn::new(0.5, Sense::Maximise)
+            },
+            3,
+            |s, reps| reps.map(|_| means[s]).collect(),
+        );
         let Ok(s) = s else { panic!("{s:?}") };
         assert_eq!((s.chosen, s.survivors.clone()), (1, vec![1, 2]));
         assert_eq!(s.total_runs(), 30);
+    }
+
+    #[test]
+    fn constant_samples_without_the_statement_are_not_proven() {
+        // The same constant samplers, not stated deterministic: no pair can be decided, so
+        // nothing is compared exactly or claimed with confidence, and sampling stops at once
+        // (more replications cannot change a zero S²).
+        let means = [3.0, 1.0, 2.0, 1.5];
+        let s = select_best(&Kn::new(0.5, Sense::Minimise), 4, |s, reps| {
+            reps.map(|_| means[s]).collect()
+        });
+        let Ok(s) = s else { panic!("{s:?}") };
+        assert_eq!(s.outcome, Outcome::NotProven);
+        assert_eq!(s.confidence, None);
+        assert!(s.flat);
+        assert_eq!(s.chosen, 1);
+        assert_eq!(s.survivors, vec![0, 1, 2, 3]);
+        assert_eq!(s.total_runs(), 40);
+    }
+
+    /// A rare event the first stage misses: system A gives 0.001 every time; system B gives 1 in
+    /// replications 10, 110, 210…, and 0 otherwise, so its first ten values are all 0 (as they
+    /// are with probability 0.99¹⁰ ≈ 90% for a 1% event) and its true mean (about 0.01) is the
+    /// higher. Maximising, A must not be called best, exactly or with confidence.
+    #[test]
+    fn a_rare_event_missed_by_the_first_stage_proves_nothing() {
+        let rare = |s: usize, reps: Range<u64>| -> Vec<f64> {
+            reps.map(|j| match s {
+                0 => 0.001,
+                _ if j % 100 == 10 => 1.0,
+                _ => 0.0,
+            })
+            .collect()
+        };
+        let setup = Kn {
+            max_runs: Some(2000),
+            ..Kn::new(0.005, Sense::Maximise)
+        };
+        let s = select_best(&setup, 2, rare);
+        let Ok(s) = s else { panic!("{s:?}") };
+        assert_eq!(s.outcome, Outcome::NotProven, "{s:?}");
+        assert_eq!(s.confidence, None);
+        assert!(s.flat);
+        assert_eq!(s.survivors, vec![0, 1]);
+        // The comparison with a standard (A the standard) cannot keep it either.
+        let s = compare_with_standard(&setup, 1, rare);
+        let Ok(s) = s else { panic!("{s:?}") };
+        assert_eq!(s.outcome, Outcome::NotProven, "{s:?}");
+        assert!(s.flat);
+    }
+
+    /// Common random numbers: both systems vary, but their difference is the same in every
+    /// first-stage replication (B = A + 0.1 there), so S² of the difference is 0; later B is
+    /// A − 0.5, so the first stage points the wrong way in either sense. The flat pair must not
+    /// give a winner with confidence.
+    #[test]
+    fn a_flat_difference_under_common_random_numbers_proves_nothing() {
+        let crn = |s: usize, reps: Range<u64>| -> Vec<f64> {
+            reps.map(|j| {
+                let a = normal(21, 0, j);
+                match s {
+                    0 => a,
+                    _ if j < 10 => a + 0.1,
+                    _ => a - 0.5,
+                }
+            })
+            .collect()
+        };
+        for sense in [Sense::Minimise, Sense::Maximise] {
+            let setup = Kn {
+                max_runs: Some(500),
+                ..Kn::new(0.05, sense)
+            };
+            let s = select_best(&setup, 2, crn);
+            let Ok(s) = s else { panic!("{s:?}") };
+            assert_eq!(s.outcome, Outcome::NotProven, "{sense:?}: {s:?}");
+            assert_eq!(s.confidence, None);
+            assert!(s.flat);
+            // A third system clearly worse still is eliminated by its own pairs, which vary.
+            let three = |s: usize, reps: Range<u64>| -> Vec<f64> {
+                if s == 2 {
+                    reps.map(|j| {
+                        normal(22, 2, j)
+                            + if sense == Sense::Minimise {
+                                50.0
+                            } else {
+                                -50.0
+                            }
+                    })
+                    .collect()
+                } else {
+                    crn(s, reps)
+                }
+            };
+            let s = select_best(&setup, 3, three);
+            let Ok(s) = s else { panic!("{s:?}") };
+            assert_eq!(s.outcome, Outcome::NotProven, "{sense:?}: {s:?}");
+            assert_eq!(s.survivors, vec![0, 1]);
+            assert_eq!(s.runs[2], 10);
+        }
+    }
+
+    #[test]
+    fn values_near_the_largest_f64_are_compared_without_overflow() {
+        // Truly constant, and ten of them sum past the largest f64: compared on a scale where
+        // they do not, so the right one wins (or nothing is claimed), never a tie of infinities.
+        let huge = [1e308, 1.1e308];
+        for (sense, best) in [(Sense::Minimise, 0), (Sense::Maximise, 1)] {
+            let exact = Kn {
+                deterministic: true,
+                ..Kn::new(1.0, sense)
+            };
+            let s = select_best(&exact, 2, |s, reps| reps.map(|_| huge[s]).collect());
+            let Ok(s) = s else { panic!("{s:?}") };
+            assert_eq!((s.outcome, s.chosen), (Outcome::ComparedExactly, best));
+            assert!(
+                s.means[0].is_some_and(|m| close(m, 1e308))
+                    && s.means[1].is_some_and(|m| close(m, 1.1e308)),
+                "{s:?}"
+            );
+            let s = compare_with_standard(&exact, 1, |s, reps| reps.map(|_| huge[s]).collect());
+            let Ok(s) = s else { panic!("{s:?}") };
+            assert_eq!((s.outcome, s.chosen), (Outcome::ComparedExactly, best));
+            // Not stated deterministic: flat, so not proven.
+            let s = select_best(&Kn::new(1.0, sense), 2, |s, reps| {
+                reps.map(|_| huge[s]).collect()
+            });
+            let Ok(s) = s else { panic!("{s:?}") };
+            assert_eq!(
+                (s.outcome, s.chosen, s.flat),
+                (Outcome::NotProven, best, true)
+            );
+        }
+        // ±9.45e307 totals whose difference would overflow unscaled.
+        let s = select_best(
+            &Kn {
+                deterministic: true,
+                ..Kn::new(1.0, Sense::Minimise)
+            },
+            2,
+            |s, reps| {
+                reps.map(|_| if s == 0 { 9.45e306 } else { -9.45e306 })
+                    .collect()
+            },
+        );
+        let Ok(s) = s else { panic!("{s:?}") };
+        assert_eq!((s.outcome, s.chosen), (Outcome::ComparedExactly, 1));
+        // The check, on the same scale.
+        let constraint = [Constraint {
+            bound: Bound::AtMost,
+            limit: 0.0,
+            tolerance: 1.0,
+        }];
+        let check = check_feasibility(
+            &Feasibility {
+                deterministic: true,
+                ..Feasibility::default()
+            },
+            2,
+            &constraint,
+            |s, reps| reps.map(|_| vec![huge[s]]).collect(),
+        );
+        let Ok(check) = check else {
+            panic!("{check:?}")
+        };
+        assert_eq!(check.decisions, vec![Decision::Infeasible; 2]);
+        assert!(
+            close(check.means[0][0], 1e308) && close(check.means[1][0], 1.1e308),
+            "{check:?}"
+        );
+    }
+
+    #[test]
+    fn values_that_overflow_are_refused() {
+        // A first stage near 0 sets an ordinary scale; then both systems give 1.7e308, and the
+        // second such replication takes the totals past the largest f64: refused, not compared.
+        let late = |s: usize, reps: Range<u64>| -> Vec<f64> {
+            reps.map(|j| {
+                if j < 10 {
+                    normal(51, s as u64, j)
+                } else {
+                    1.7e308
+                }
+            })
+            .collect()
+        };
+        let setup = Kn::new(0.01, Sense::Maximise);
+        assert_eq!(
+            select_best(&setup, 2, late),
+            Err(SelectError::Overflow(SUM))
+        );
+        assert_eq!(
+            compare_with_standard(&setup, 1, late),
+            Err(SelectError::Overflow(SUM))
+        );
+        // The check: the first constraint's value is 0 in the first stage (flat, so never
+        // settled), then 1.7e308; the second stays near its limit, so the system stays undecided
+        // while the first constraint's total overflows.
+        let constraints = [
+            Constraint {
+                bound: Bound::AtMost,
+                limit: 0.0,
+                tolerance: 0.01,
+            },
+            Constraint {
+                bound: Bound::AtMost,
+                limit: 0.0,
+                tolerance: 0.01,
+            },
+        ];
+        let check = check_feasibility(&Feasibility::default(), 2, &constraints, |s, reps| {
+            reps.map(|j| vec![if j < 10 { 0.0 } else { 1.7e308 }, normal(52, s as u64, j)])
+                .collect()
+        });
+        assert_eq!(check, Err(SelectError::Overflow(SUM)));
+        assert!(
+            SelectError::Overflow("a sum of the values")
+                .to_string()
+                .contains("overflowed")
+        );
     }
 
     #[test]
@@ -1359,7 +1862,11 @@ mod tests {
         // System 0 meets both, 1 is over the first limit, 2 under the second, 3 sits exactly on
         // both limits (feasible by definition).
         let values = [[4.0, 3.0], [6.0, 3.0], [4.0, 1.0], [5.0, 2.0]];
-        let check = check_feasibility(&Feasibility::default(), 4, &constraints, |s, reps| {
+        let setup = Feasibility {
+            deterministic: true,
+            ..Feasibility::default()
+        };
+        let check = check_feasibility(&setup, 4, &constraints, |s, reps| {
             reps.map(|_| values[s].to_vec()).collect()
         });
         let Ok(check) = check else {
@@ -1375,6 +1882,170 @@ mod tests {
         assert_eq!(check.runs, vec![10; 4]);
         assert_eq!(check.by_constraint[2], vec![Feasible, Infeasible]);
         assert_eq!(check.feasible(), vec![0, 3]);
+        // Not stated deterministic: no constraint is settled by its flat first stage, and the
+        // systems take no more replications (more cannot change a zero S²).
+        let check = check_feasibility(&Feasibility::default(), 4, &constraints, |s, reps| {
+            reps.map(|_| values[s].to_vec()).collect()
+        });
+        let Ok(check) = check else {
+            panic!("{check:?}")
+        };
+        assert_eq!(check.decisions, vec![Undecided; 4]);
+        assert!(!check.exact);
+        assert!(check.flat);
+        assert_eq!(check.confidence, None);
+        assert_eq!(check.runs, vec![10; 4]);
+    }
+
+    /// A rare event the first stage misses, against a limit: system 1 gives 1 in replications
+    /// 10, 110, 210… and 0 otherwise (mean about 0.01), above the limit 0.005; system 0 gives
+    /// 0.001, below it. The first ten values of both are constant, which must not declare
+    /// system 1 feasible, exactly or with confidence.
+    #[test]
+    fn a_rare_event_missed_by_the_first_stage_decides_no_constraint() {
+        let constraints = [Constraint {
+            bound: Bound::AtMost,
+            limit: 0.005,
+            tolerance: 0.001,
+        }];
+        let rare = |s: usize, reps: Range<u64>| -> Vec<Vec<f64>> {
+            reps.map(|j| {
+                vec![match s {
+                    0 => 0.001,
+                    _ if j % 100 == 10 => 1.0,
+                    _ => 0.0,
+                }]
+            })
+            .collect()
+        };
+        let setup = Feasibility {
+            max_runs: Some(1000),
+            ..Feasibility::default()
+        };
+        let check = check_feasibility(&setup, 2, &constraints, rare);
+        let Ok(check) = check else {
+            panic!("{check:?}")
+        };
+        assert_eq!(check.decisions, vec![Decision::Undecided; 2]);
+        assert!(check.feasible().is_empty());
+        assert!(!check.exact);
+        assert!(check.flat);
+        assert_eq!(check.confidence, None);
+        // KN after the check: nothing is chosen, nothing is claimed.
+        let s = select_feasible(
+            &Kn {
+                max_runs: Some(1000),
+                ..Kn::new(0.01, Sense::Minimise)
+            },
+            &constraints,
+            0.5,
+            2,
+            |s, reps: Range<u64>| {
+                rare(s, reps)
+                    .into_iter()
+                    .map(|row| vec![s as f64, row[0]])
+                    .collect()
+            },
+        );
+        let Ok(s) = s else { panic!("{s:?}") };
+        assert_eq!((s.chosen(), s.confidence), (None, None));
+        assert!(s.selection.is_none());
+        // A varying constraint beside the flat one still settles an infeasible system.
+        let two = [
+            constraints[0],
+            Constraint {
+                bound: Bound::AtMost,
+                limit: 0.0,
+                tolerance: 0.1,
+            },
+        ];
+        let check = check_feasibility(&setup, 2, &two, |s, reps| {
+            rare(s, reps.clone())
+                .into_iter()
+                .zip(reps)
+                .map(|(row, j)| vec![row[0], 5.0 + normal(31, s as u64, j)])
+                .collect()
+        });
+        let Ok(check) = check else {
+            panic!("{check:?}")
+        };
+        assert_eq!(check.decisions, vec![Decision::Infeasible; 2]);
+        assert_eq!(
+            check.by_constraint[1],
+            vec![Decision::Undecided, Decision::Infeasible]
+        );
+        assert!(!check.flat);
+        assert_eq!(check.confidence, Some(0.95));
+    }
+
+    /// An objective of known costs (stated exact) with random constraints: system 2's
+    /// constrained value is the same in every first-stage replication, so the check leaves it
+    /// undecided. When it costs more than the cheapest feasible system it cannot be the answer
+    /// and is set aside; when it costs less, nothing is proven.
+    #[test]
+    fn an_undecided_system_that_costs_more_is_set_aside() {
+        let constraints = [Constraint {
+            bound: Bound::AtMost,
+            limit: 0.0,
+            tolerance: 0.5,
+        }];
+        let setup = Kn {
+            deterministic: true,
+            max_runs: Some(1000),
+            ..Kn::new(0.5, Sense::Minimise)
+        };
+        let run = |costs: [f64; 3]| {
+            select_feasible(&setup, &constraints, 0.5, 3, |s, reps: Range<u64>| {
+                reps.map(|j| {
+                    let y = if s == 2 {
+                        -1.0
+                    } else {
+                        -1.0 + 0.001 * normal(61, s as u64, j)
+                    };
+                    vec![costs[s], y]
+                })
+                .collect()
+            })
+        };
+        let s = run([1.0, 2.0, 3.0]);
+        let Ok(s) = s else { panic!("{s:?}") };
+        assert_eq!(
+            s.feasibility.decisions,
+            vec![Decision::Feasible, Decision::Feasible, Decision::Undecided]
+        );
+        assert!(s.proven, "{s:?}");
+        assert_eq!(s.chosen(), Some(0));
+        assert_eq!(s.set_aside, vec![2]);
+        assert!(s.confidence.is_some_and(|c| close(c, 0.975)), "{s:?}");
+        assert_eq!(
+            s.selection.as_ref().map(|k| k.outcome),
+            Some(Outcome::ComparedExactly)
+        );
+        // The undecided system is the cheapest: it might be the answer, so nothing is proven.
+        let s = run([1.0, 2.0, 0.5]);
+        let Ok(s) = s else { panic!("{s:?}") };
+        assert!(!s.proven, "{s:?}");
+        assert_eq!((s.chosen(), s.confidence), (None, None));
+        assert!(s.set_aside.is_empty());
+        // Without the statement that the objective is exact, nothing is set aside.
+        let random = Kn {
+            deterministic: false,
+            ..setup
+        };
+        let s = select_feasible(&random, &constraints, 0.5, 3, |s, reps: Range<u64>| {
+            reps.map(|j| {
+                let y = if s == 2 {
+                    -1.0
+                } else {
+                    -1.0 + 0.001 * normal(61, s as u64, j)
+                };
+                vec![[1.0, 2.0, 3.0][s], y]
+            })
+            .collect()
+        });
+        let Ok(s) = s else { panic!("{s:?}") };
+        assert!(!s.proven);
+        assert!(s.selection.is_none());
     }
 
     #[test]
@@ -1420,7 +2091,8 @@ mod tests {
 
     #[test]
     fn a_budget_short_of_kn_keeps_the_feasibility_decisions() {
-        // Constant constraint values: the check is decided on the first stage, 4 × 10 runs.
+        // Constraint values far from the limit with a tiny spread: the check is decided on the
+        // first stage, 4 × 10 runs.
         let constrained = [-1.0, -1.0, 1.0, -1.0];
         let constraints = [Constraint {
             bound: Bound::AtMost,
@@ -1428,8 +2100,13 @@ mod tests {
             tolerance: 0.5,
         }];
         let rows = |s: usize, reps: Range<u64>| -> Vec<Vec<f64>> {
-            reps.map(|j| vec![normal(9, s as u64, j), constrained[s]])
-                .collect()
+            reps.map(|j| {
+                vec![
+                    normal(9, s as u64, j),
+                    constrained[s] + 0.001 * normal(10, s as u64, j),
+                ]
+            })
+            .collect()
         };
         // KN among the three feasible needs 30 more; one short.
         let setup = Kn {
@@ -1489,11 +2166,22 @@ mod tests {
     #[test]
     fn the_standard_is_kept_unless_an_alternative_is_better() {
         let setup = Kn::new(0.5, Sense::Minimise);
-        // Without randomness: the standard (0) at 2, alternatives at 3, 2.2 and 2.5.
+        // Stated without randomness: the standard (0) at 2, alternatives at 3, 2.2 and 2.5.
         let means = [2.0, 3.0, 2.2, 2.5];
-        let s = compare_with_standard(&setup, 3, |s, reps| reps.map(|_| means[s]).collect());
+        let exact = Kn {
+            deterministic: true,
+            ..setup
+        };
+        let s = compare_with_standard(&exact, 3, |s, reps| reps.map(|_| means[s]).collect());
         let Ok(s) = s else { panic!("{s:?}") };
         assert_eq!((s.outcome, s.chosen), (Outcome::ComparedExactly, 0));
+        // The same values not stated deterministic: not proven.
+        let s = compare_with_standard(&setup, 3, |s, reps| reps.map(|_| means[s]).collect());
+        let Ok(s) = s else { panic!("{s:?}") };
+        assert_eq!(
+            (s.outcome, s.confidence, s.flat),
+            (Outcome::NotProven, None, true)
+        );
         // An alternative clearly better (lower) than the standard is chosen.
         let means = vec![2.0, 3.0, 0.5, 2.5];
         let s = compare_with_standard(&setup, 3, normals(4, means));

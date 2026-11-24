@@ -173,6 +173,18 @@ Select a block to see its settings. The most used ones come first, under **Param
   in the experiment's **Length unit**, the speed in that unit per time unit. A conveyor drawn in
   the model's layout (as the parcel sorter example's are) is as long as its drawn path; a
   **Length** typed that differs overrides it, and a warning gives both lengths.
+  - **Diverts along a conveyor.** A divert placed in the layout at a distance along the conveyor
+    that sends into it is a point on that conveyor: each item rides to it, and as the item's
+    front reaches it, the divert chooses a way. If that way is not the default and has room, the
+    item leaves the conveyor there; otherwise it rides on. Several diverts can sit along one
+    conveyor, each the default way of the one before; items meet them in that order, and at the
+    end of the conveyor go down the last one's default way. The conveyor's capacity and spacing
+    count over its whole length, and an item may span a divert, so a divert that sends nothing
+    changes no time. A divert placed at the very end of the conveyor works as before: the
+    conveyor sends into it at its end.
+  - **Junctions.** A flow from one conveyor straight to another can carry a junction: inline,
+    side transfer or turntable, with a transfer time (0 by default). An item takes its room on
+    the next conveyor, crosses in the transfer time, then rides on.
 
 **Times.** Each time is a distribution: pick its type (Constant, Exponential, Uniform, Triangular,
 Normal, Log-normal, Gamma, Erlang, Weibull and others) and fill in its values. If you only know a
@@ -528,7 +540,7 @@ come from your change, not from chance. Each analysis can take a while.
   target, such as "mean wait at most 5 minutes in 70% of runs". **Use these units in the
   model** applies the answer as one change you can undo.
 
-## Find the best numbers of servers, operators and buffers
+## Find the best numbers of servers, operators and buffers, rules and times
 
 `stochcraft-cli optimize` searches whole-number decisions (a task's units, a pool's units, a
 buffer) for the design with the lowest cost, or the highest value, of results and decisions
@@ -563,7 +575,29 @@ designs".
 - `--max-runs` is the budget in runs (default 10,000); 30% of it is kept for the final comparison.
   When the budget runs out first, the answer says "best found, not proven best" and lists the
   designs still in contention. `--time-limit` stops the search after that many seconds.
-- A model with no randomness is "compared exactly", one run per design, with no probability.
+- A model with no randomness (nothing in it is drawn) is "compared exactly", one run per design,
+  with no probability. Results from a model that draws random numbers are never taken as exact,
+  even when designs give the same values in every run so far: a rare event may simply not have
+  happened yet. When two designs give the same difference in every run of the final comparison's first
+  stage, the answer says "best found, not proven best" and why. An objective of costs alone
+  (`--cost` with constraints, no result in the objective) is known exactly, so the designs that
+  meet the constraints are compared on it exactly.
+
+It also chooses between rules and searches a mean:
+
+- A rule: `--decide split.routing` compares a gateway's random split (`standard`) with sending
+  each item to the shortest queue (`shortest_queue`); `--decide split.routing=standard,divert`
+  names the levels to compare. A task's `on_shift_end` (`finish`, `retry`, `resume`; the task
+  needs shifts) and a mobile pool's `after_job` (`stay`, `go_home`) work the same way. Every
+  combination of the rules' levels (at most 8) is tried, and all of them meet in the final
+  comparison.
+- A mean: `--decide server.mean=0.2..0.9` searches the server's mean service time between 0.2
+  and 0.9, the shape of its distribution kept. `--cost server.mean=-4` gives each unit of it a
+  cost (here a slower machine is cheaper). The search is Nelder–Mead, which moves a small
+  triangle of trial values (a segment, for one mean) downhill; it is a local search, and the
+  answer says so: it does not show that no better value lies elsewhere in the range. One or two
+  means at a time; with counts or rules beside them, the counts and rules may take at most 8
+  combinations of values.
 
 Scripts and agents use the engine command `experiment.optimise` ([mcp.md](mcp.md)); its `apply`
 makes the chosen design the model's, as one change you can undo.

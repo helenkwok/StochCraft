@@ -199,6 +199,9 @@ struct Route {
     /// Out of a server with balking: the way entities not joining its queue take, not its
     /// ordinary way out.
     balked: bool,
+    /// From a conveyor to a conveyor across a junction with a transfer time above 0: that time
+    /// ([`stochcraft_model::Junction`]).
+    junction: Option<f64>,
 }
 
 /// A model checked and ready to run.
@@ -396,6 +399,8 @@ pub fn compile(model: &Model) -> Result<Compiled, Vec<Diagnostic>> {
             }
         })
         .collect();
+    // Only junctions between two conveyors count (`Site::kept`).
+    let junctions = model.site.kept(model);
     let routes = model
         .elements
         .iter()
@@ -489,6 +494,11 @@ pub fn compile(model: &Model) -> Result<Compiled, Vec<Diagnostic>> {
                                     ..
                                 }
                             ),
+                        junction: junctions
+                            .junctions
+                            .get(&c.id)
+                            .map(|j| j.transfer)
+                            .filter(|t| *t > 0.0 && t.is_finite()),
                     })
                 })
                 .collect()
