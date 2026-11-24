@@ -1385,6 +1385,8 @@ fn to_model(p: Process, scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> M
     experiment.stop = stop_of(scenario, &elements, notes);
     let estimates = estimates_of(scenario, &elements, notes);
     let starting = starting_of(scenario, &elements, notes);
+    let site = crate::layout::site_of(scenario, &elements, notes);
+    crate::layout::lengths_from_paths(&site, &mut elements, experiment.length_unit);
     Model {
         name: p.name,
         elements,
@@ -1396,6 +1398,7 @@ fn to_model(p: Process, scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> M
         estimates,
         starting,
         monte_carlo: None,
+        site,
         agents: None,
     }
 }
@@ -1584,11 +1587,13 @@ fn queue_capacity(scenario: Option<&Scenario>, id: &str, notes: &mut Vec<Note>) 
             bpsim::STOP_WHEN_EMPTY,
             bpsim::ESTIMATE,
             bpsim::STARTING_CONTENTS,
+            bpsim::PATH,
+            bpsim::PLACE,
         ]
         .contains(&name)
         {
             // Read by `breakdown_of`, `transfer_of`, `routing_of`, `batching_of`,
-            // `vendor_count`, `stop_of`, `estimates_of` and `starting_of`.
+            // `vendor_count`, `stop_of`, `estimates_of`, `starting_of` and `layout::site_of`.
         } else if name.starts_with(bpsim::STOCHCRAFT) {
             notes.push(Note::warning(
                 Some(id),

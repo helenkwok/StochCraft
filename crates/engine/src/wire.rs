@@ -2506,6 +2506,10 @@ pub struct ModelDoc {
     /// process model.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub monte_carlo: Option<crate::mc::MonteCarloDoc>,
+    /// The physical layout: conveyors' tracks, blocks' places and scenery; left out for a model
+    /// without one.
+    #[serde(default, skip_serializing_if = "crate::site::SiteDoc::is_empty")]
+    pub site: crate::site::SiteDoc,
 }
 
 impl From<&Model> for ModelDoc {
@@ -2545,6 +2549,7 @@ impl From<&Model> for ModelDoc {
             calendars: m.calendars.iter().map(Into::into).collect(),
             experiment: (&m.experiment).into(),
             monte_carlo: m.monte_carlo.as_ref().map(Into::into),
+            site: (&m.site).into(),
         }
     }
 }
@@ -2552,6 +2557,7 @@ impl From<&Model> for ModelDoc {
 impl From<ModelDoc> for Model {
     /// Ids are kept as written; [`Model::validate`] reports invalid ones.
     fn from(m: ModelDoc) -> Self {
+        let unit: LengthUnit = m.experiment.length_unit.into();
         let layout = m
             .elements
             .iter()
@@ -2572,7 +2578,7 @@ impl From<ModelDoc> for Model {
             .iter()
             .filter_map(|e| Some((ElementId::unchecked(&e.id), e.starting.filter(|n| *n > 0)?)))
             .collect();
-        Self {
+        let mut out = Self {
             layout,
             estimates,
             starting,
@@ -2607,10 +2613,15 @@ impl From<ModelDoc> for Model {
             calendars: m.calendars.into_iter().map(Into::into).collect(),
             experiment: m.experiment.into(),
             monte_carlo: m.monte_carlo.map(Into::into),
+            site: m.site.into_site(unit),
             // An agent-based model's populations are not part of a process model's JSON: they
             // are read with `agents.get`. A model set from JSON is a process model.
             agents: None,
-        }
+        };
+        // A conveyor whose typed length agrees with its track to within 0.1 mm runs for the
+        // track's length, as when the model is read from a file (D23).
+        stochcraft_model::site::lengths_from_paths(&out.site, &mut out.elements, unit);
+        out
     }
 }
 

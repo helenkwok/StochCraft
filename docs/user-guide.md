@@ -170,7 +170,9 @@ Select a block to see its settings. The most used ones come first, under **Param
   wait. With a finite **Waiting room**, at most the units plus the room. Results show them as
   **Inside at the start**, and count them as entered.
 - **Conveyor:** **Length**, **Speed**, **Accumulating**, **Item length** and **Gap**. Lengths are
-  in the experiment's **Length unit**, the speed in that unit per time unit.
+  in the experiment's **Length unit**, the speed in that unit per time unit. A conveyor drawn in
+  the model's layout (as the parcel sorter example's are) is as long as its drawn path; a
+  **Length** typed that differs overrides it, and a warning gives both lengths.
 
 **Times.** Each time is a distribution: pick its type (Constant, Exponential, Uniform, Triangular,
 Normal, Log-normal, Gamma, Erlang, Weibull and others) and fill in its values. If you only know a

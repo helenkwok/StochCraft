@@ -25,12 +25,14 @@ pub mod expr;
 pub mod messages;
 pub mod montecarlo;
 pub mod path;
+pub mod site;
 
 pub use calendar::{Calendar, DateTime, Timed};
 pub use montecarlo::{
     Control, McCorrelation, McInput, McOutput, McStop, McTarget, MonteCarlo, Sampling,
 };
 pub use path::{Frame, Path, Segment};
+pub use site::{Place, Scenery, Site, Track};
 
 use std::collections::{BTreeMap, BTreeSet, VecDeque};
 
@@ -1715,6 +1717,9 @@ pub struct Model {
     /// ([`montecarlo`]): `None` for a process model. A model with one and no elements is a Monte
     /// Carlo model, which [`Model::validate`] leaves to `stochcraft-mc` to check.
     pub monte_carlo: Option<MonteCarlo>,
+    /// The physical layout: conveyors' tracks, blocks' places and scenery ([`site`]). Empty for a
+    /// model without one, whose blocks are all unplaced.
+    pub site: Site,
     /// The populations, environment and statistics of an agent-based model, a model with no
     /// process ([`agents`]): `None` for any other. A model with one and no elements is an
     /// agent-based model, which [`Model::validate`] leaves to `stochcraft-agents` to check.
@@ -2834,7 +2839,25 @@ impl Model {
                         },
                     ));
                 }
-                if !bad && !bad_shape {
+                // A track's path gives the length (D23): a typed length that differs from it by
+                // more than the step a file keeps is an override, and is flagged. Without a
+                // track, the drawing shape's length is checked to within 1%.
+                let track = self.site.paths.get(&e.id);
+                if let Some(t) = track.filter(|_| !bad) {
+                    let path_length = t.length(self.experiment.length_unit);
+                    if path_length.is_finite()
+                        && (path_length - length).abs()
+                            > site::length_step(self.experiment.length_unit)
+                    {
+                        out.push(Diagnostic::warning(
+                            Some(&e.id),
+                            Problem::ConveyorLengthMismatch {
+                                length,
+                                path_length,
+                            },
+                        ));
+                    }
+                } else if !bad && !bad_shape {
                     let path_length = shape.path_length(length);
                     if path_length.is_finite() && (path_length - length).abs() > 0.01 * length {
                         out.push(Diagnostic::warning(
@@ -4581,6 +4604,7 @@ mod tests {
             estimates: BTreeMap::new(),
             starting: BTreeMap::new(),
             monte_carlo: None,
+            site: Default::default(),
             agents: None,
             calendars: Vec::new(),
         }
