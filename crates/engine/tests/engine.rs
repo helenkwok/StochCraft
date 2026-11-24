@@ -820,6 +820,27 @@ fn an_inheriting_scenario_comes_with_the_model_it_inherits_from() {
     assert_eq!(capacity(Some(e.model())), Some(json!(3)));
     assert_eq!(capacity(e.inherited_model()), Some(json!(1)));
 
+    // Put back to the inherited value (the window's reset) and saved, it reads back so.
+    let copy = scratch("mm1-reset-to-inherited.bpmn");
+    let _ = std::fs::copy(&mm1, &copy);
+    let saved = json!(copy.to_string_lossy());
+    let mut r = Engine::new();
+    ok(
+        &mut r,
+        "file.open",
+        json!({"path": saved, "scenario": "two-clerks"}),
+    );
+    ok(&mut r, "block.set", json!({"id": "serve", "capacity": 1}));
+    ok(&mut r, "file.save", json!({}));
+    let mut again = Engine::new();
+    ok(
+        &mut again,
+        "file.open",
+        json!({"path": saved, "scenario": "two-clerks"}),
+    );
+    assert_eq!(capacity(Some(again.model())), Some(json!(1)));
+    assert_eq!(capacity(again.inherited_model()), Some(json!(1)));
+
     let mut b = Engine::new();
     ok(
         &mut b,

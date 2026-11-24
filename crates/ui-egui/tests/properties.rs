@@ -258,6 +258,47 @@ fn several_blocks_show_what_they_share_and_change_together_in_one_step() {
     assert_eq!(element(&h, "serve")["service"]["mean"], json!(1.5));
 }
 
+/// A setting one selected block has and another lacks shows as mixed, and choosing None there
+/// takes it off every block.
+#[test]
+fn a_setting_only_some_blocks_have_is_mixed_and_none_clears_it_for_all() {
+    let mut h = harness();
+    let e = &EXAMPLES[0];
+    h.state_mut().open_file(e.file, e.bytes);
+    settle(&mut h);
+    let added = h
+        .state_mut()
+        .execute(
+            "block.add",
+            json!({
+                "kind": "server",
+                "name": "Second desk",
+                "transfer": {"type": "constant", "value": 2.0},
+            }),
+        )
+        .expect("a task with a transfer time");
+    let second = added["id"].as_str().expect("its id").to_owned();
+    h.state_mut()
+        .select(BTreeSet::from(["serve".to_owned(), second.clone()]));
+    settle(&mut h);
+    let transfer = h.get_by_role_and_label(Role::ComboBox, "Transfer time");
+    transfer.scroll_to_me();
+    settle(&mut h);
+    h.get_by_role_and_label(Role::ComboBox, "Transfer time")
+        .click();
+    settle(&mut h);
+    h.get_by_role_and_label(Role::Button, "None").click();
+    settle(&mut h);
+    assert!(element(&h, &second)["transfer"].is_null());
+    assert!(element(&h, "serve")["transfer"].is_null());
+    h.state_mut().undo();
+    settle(&mut h);
+    assert_eq!(
+        element(&h, &second)["transfer"],
+        json!({"type": "constant", "value": 2.0})
+    );
+}
+
 #[test]
 fn a_selected_flow_shows_its_own_properties() {
     let mut h = harness();
@@ -317,11 +358,14 @@ fn the_keyboard_reaches_a_fields_reset_right_after_the_field() {
     h.key_press_modifiers(egui::Modifiers::SHIFT, egui::Key::Tab);
     settle(&mut h);
     assert_eq!(focused(&h).as_deref(), Some("Reset Service time"));
-    // Enter on the focused reset puts the default back.
+    // Enter on the focused reset puts the default back, and the keyboard goes to the field,
+    // the reset being gone.
     h.key_press(egui::Key::Enter);
     settle(&mut h);
     assert_eq!(
         element(&h, "serve")["service"],
         json!({"type": "exponential", "mean": 0.8})
     );
+    assert!(!has_reset(&h, "Service time"));
+    assert_eq!(focused(&h).as_deref(), Some("Mean"));
 }

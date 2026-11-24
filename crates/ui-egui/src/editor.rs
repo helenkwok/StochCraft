@@ -353,6 +353,17 @@ impl App {
         true
     }
 
+    /// After a reset of the field under `key`: what was typed in it is dropped (a refused number
+    /// would otherwise stay in it), and on the next frame the keyboard goes to the field's first
+    /// number, since the reset it was on is gone with the change.
+    fn after_reset(&mut self, key: &str) {
+        let under = format!("{key}/");
+        let refused = format!("{key}!");
+        self.drafts
+            .retain(|k, _| k != key && k != &refused && !k.starts_with(&under));
+        self.refocus = Some(key.to_owned());
+    }
+
     /// Which page of the properties panel the selection shows: a block's, several blocks', a
     /// flow's or the model's.
     fn page(&self) -> String {
@@ -454,6 +465,9 @@ impl App {
         let problems = self.problems();
         let model = self.wire_model();
         let ctx = ui.ctx().clone();
+        if let Some(key) = self.refocus.take() {
+            form::focus(Some(key));
+        }
         self.inherited = self
             .engine
             .inherited_model()
@@ -555,7 +569,7 @@ impl App {
             Some(id) => format!("{id}/"),
             None => "x/".to_owned(),
         };
-        if form::focus_key().is_some_and(|k| k.starts_with(&page)) {
+        if form::focus_key().is_some_and(|k| k.starts_with(&page) || k.starts_with("multi/")) {
             form::focus(None);
         }
     }
@@ -915,6 +929,7 @@ impl App {
                     self.execute("block.set", json!({ "id": id, *f: v }));
                 }
                 Marked::Reset => {
+                    self.after_reset(&key);
                     let v = props::reset_value(&el[*f], &reference);
                     self.execute("block.set", json!({ "id": id, *f: v }));
                 }
@@ -992,6 +1007,9 @@ impl App {
                 drafts: &mut self.drafts,
                 calendars: &calendars,
             };
+            // Mixed as a whole (some with a transfer time, some without): the field showed none
+            // of their values, so what is chosen there is set on each as it is.
+            let whole = mixed.contains(&key);
             form::set_mixed(mixed);
             let edit = form::field_marked(
                 ui,
@@ -1004,12 +1022,17 @@ impl App {
                 mark,
             );
             form::set_mixed(BTreeSet::new());
+            let reset = edit == Marked::Reset;
             let steps: Vec<Value> = match edit {
                 Marked::Set(v) => els
                     .iter()
                     .zip(&currents)
                     .filter_map(|(e, now)| {
-                        let next = props::patch(now, &shown, &v);
+                        let next = if whole {
+                            v.clone()
+                        } else {
+                            props::patch(now, &shown, &v)
+                        };
                         (!props::same(&next, now)).then(|| {
                             json!({"command": "block.set", "params": { "id": e["id"], f: next }})
                         })
@@ -1026,6 +1049,9 @@ impl App {
                     .collect(),
                 Marked::Unchanged => Vec::new(),
             };
+            if reset {
+                self.after_reset(&key);
+            }
             if !steps.is_empty() {
                 self.execute("batch", json!({ "commands": steps }));
             }
