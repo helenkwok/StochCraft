@@ -3524,7 +3524,7 @@ name = "stochcraft-mcp"
 version = "0.2.0"
 dependencies = [
  "dirs",
- "getrandom 0.3.4",
+ "getrandom 0.4.3",
  "serde_json",
  "stochcraft-engine",
 ]
