@@ -1275,7 +1275,7 @@ mod tests {
             "<dmn:extensionElements><v:note xmlns:v=\"urn:v\">C<v:marker/>D</v:note></dmn:extensionElements>",
             "<dmn:inputEntry id=\"ie1\" v:x=\"1\" xmlns:v=\"urn:v\"><dmn:text>&lt; 10</dmn:text></dmn:inputEntry>",
             // The edited cell keeps its id.
-            r#"<dmn:outputEntry id="oe1"><dmn:text>"tiny"</dmn:text></dmn:outputEntry>"#,
+            "<dmn:outputEntry id=\"oe1\"><dmn:text>&quot;tiny&quot;</dmn:text></dmn:outputEntry>",
         ] {
             assert!(text.contains(kept), "{kept}\n{text}");
         }
