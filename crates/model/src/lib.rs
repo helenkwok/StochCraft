@@ -32,7 +32,7 @@ pub use montecarlo::{
     Control, McCorrelation, McInput, McOutput, McStop, McTarget, MonteCarlo, Sampling,
 };
 pub use path::{Frame, Path, Segment};
-pub use site::{Place, Scenery, Site, Track};
+pub use site::{Junction, JunctionKind, Place, Point, Scenery, Site, Track};
 
 use std::collections::{BTreeMap, BTreeSet, VecDeque};
 
@@ -2037,6 +2037,27 @@ pub enum Problem {
         length: f64,
         path_length: f64,
     },
+    /// A block is placed `s` along `conveyor`'s track, outside it: below 0 or beyond its
+    /// `length`. An error for a divert, whose `s` the run reads; a warning for any other block,
+    /// which is only drawn there.
+    PlaceOffPath {
+        conveyor: ElementId,
+        s: f64,
+        length: f64,
+    },
+    /// Items on `conveyor` meet the divert `before` (at `before_s` along it) before this one
+    /// (at `s`), by the flows, but this one is placed nearer the start, so the order of the
+    /// flows and the order along the track disagree.
+    PointsOutOfOrder {
+        conveyor: ElementId,
+        s: f64,
+        before: ElementId,
+        before_s: f64,
+    },
+    /// The junction on this flow has a transfer time that is not 0 or more and finite.
+    BadJunctionTime {
+        time: f64,
+    },
     /// Found when the model is prepared to run, not by [`Model::validate`] (a transport can be
     /// drawn, saved and sized meanwhile): transports are not simulated yet.
     TransportNotSimulated,
@@ -2410,6 +2431,9 @@ impl Problem {
             Problem::BadConveyorValue { .. } => "bad_conveyor_value",
             Problem::ConveyorTooShort { .. } => "conveyor_too_short",
             Problem::ConveyorLengthMismatch { .. } => "conveyor_length_mismatch",
+            Problem::PlaceOffPath { .. } => "place_off_path",
+            Problem::PointsOutOfOrder { .. } => "points_out_of_order",
+            Problem::BadJunctionTime { .. } => "bad_junction_time",
             Problem::TransportNotSimulated => "transport_not_simulated",
             Problem::TransportPool { .. } => "transport_pool",
             Problem::BadMobilitySpeed { .. } => "bad_mobility_speed",
@@ -3134,6 +3158,7 @@ impl Model {
         self.check_starting(&mut out);
         self.check_properties(&mut out);
         self.check_routing(&mut out);
+        self.check_site(&mut out);
         self.check_reachability(&outgoing, &mut out);
         self.check_buffers(&served, &mut out);
         self.check_resources(&mut out);
@@ -3409,6 +3434,68 @@ impl Model {
     }
 
     /// Calendars: each referenced one exists, and each has an event.
+    /// The layout's own problems (ROADMAP.md, M5.5): places along a track that fall off it,
+    /// divert points whose order along a track disagrees with the order of the flows, and
+    /// junctions with a transfer time below 0.
+    fn check_site(&self, out: &mut Vec<Diagnostic>) {
+        let unit = self.experiment.length_unit;
+        for (id, place) in &self.site.places {
+            let (Place::Along { path, s }, Some(track), Some(e)) =
+                (place, self.site.paths.get(path), self.element(id))
+            else {
+                continue;
+            };
+            let length = track.length(unit);
+            if s.is_finite() && *s >= 0.0 && *s <= length + site::length_step(unit) {
+                continue;
+            }
+            let problem = Problem::PlaceOffPath {
+                conveyor: path.clone(),
+                s: *s,
+                length,
+            };
+            let divert = matches!(
+                e.kind,
+                ElementKind::ExclusiveGateway {
+                    routing: Routing::Divert,
+                    ..
+                }
+            );
+            out.push(if divert {
+                Diagnostic::error(Some(id), problem)
+            } else {
+                Diagnostic::warning(Some(id), problem)
+            });
+        }
+        for conveyor in self.site.paths.keys() {
+            let points = site::points(self, conveyor);
+            for pair in points.windows(2) {
+                if let [a, b] = pair
+                    && b.s < a.s
+                {
+                    out.push(Diagnostic::error(
+                        Some(&b.gateway),
+                        Problem::PointsOutOfOrder {
+                            conveyor: conveyor.clone(),
+                            s: b.s,
+                            before: a.gateway.clone(),
+                            before_s: a.s,
+                        },
+                    ));
+                }
+            }
+        }
+        let kept = self.site.kept(self);
+        for (id, j) in &kept.junctions {
+            if !(j.transfer.is_finite() && j.transfer >= 0.0) {
+                out.push(Diagnostic::error(
+                    Some(id),
+                    Problem::BadJunctionTime { time: j.transfer },
+                ));
+            }
+        }
+    }
+
     fn check_calendars(&self, out: &mut Vec<Diagnostic>) {
         let known: BTreeSet<&ElementId> = self.calendars.iter().map(|c| &c.id).collect();
         for c in &self.calendars {
