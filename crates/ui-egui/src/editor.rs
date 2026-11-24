@@ -1398,6 +1398,10 @@ impl App {
             section(ui, t("Parameters"));
             self.block_fields(ui, model, el, &id, &fields);
         }
+        // A conveyor's path in the layout, point by point (L4).
+        if kind == "conveyor" {
+            self.path_section(ui, &id);
+        }
         // The rest, folded with a summary of what is set; open when anything is.
         let more = more_parameters(&kind);
         if !more.is_empty() {
@@ -2407,7 +2411,7 @@ impl App {
 
     /// A small labelled text field ("p", "if") that commits on Enter or leaving it, when changed;
     /// Esc restores it.
-    fn small_field(
+    pub(crate) fn small_field(
         &mut self,
         ui: &mut egui::Ui,
         key: &str,
