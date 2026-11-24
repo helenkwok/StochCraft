@@ -16,9 +16,13 @@ differ, it says so. To get the app, see the [installation guide](installation.md
 - [Watch a run](#watch-a-run)
 - [Other views of the model](#other-views-of-the-model)
 - [Ask what-if questions: the Analysis view](#ask-what-if-questions-the-analysis-view)
+- [Find the best numbers of servers, operators and buffers, rules and times](#find-the-best-numbers-of-servers-operators-and-buffers-rules-and-times)
 - [Drive the runs from an optimiser of your own](#drive-the-runs-from-an-optimiser-of-your-own)
 - [Monte Carlo models](#monte-carlo-models)
+- [System dynamics models](#system-dynamics-models)
+- [Agent-based models](#agent-based-models)
 - [Save, open and export](#save-open-and-export)
+- [Get help in the window](#get-help-in-the-window)
 - [Change how it looks and which keys do what](#change-how-it-looks-and-which-keys-do-what)
 - [Keyboard shortcuts](#keyboard-shortcuts)
 - [Troubleshooting](#troubleshooting)
@@ -1066,6 +1070,15 @@ Ctrl on Windows and Linux is ⌘ on a Mac.
 - A baseline compares two versions of a model, one change at a time; there is no table of named
   scenarios yet. For several values of one parameter, use the Analysis view's sweep.
 - Charts can't be configured beyond their colours.
+- The search for the best design (`optimize`) and evaluations for an optimiser of your own run
+  from the command line and the MCP server, not yet from the window.
+- Agent-based models open and run from the command line and the MCP server; the window does not
+  open them yet.
+- The layout (conveyor tracks, places, junctions, scenery) is read from the file and drawn in
+  the Layout and 3D views, but can't be edited in the window yet. Of the examples, only the
+  parcel sorter has a layout; the others show an empty plan and 3D view.
+- A file with several scenarios opens in its first scenario; the window has no scenario picker
+  yet.
 - The canvas is one drawn surface, so screen readers can't yet read its blocks; the menus,
   dialogs and status messages are readable.
 - What is planned next is in the [roadmap](../ROADMAP.md).

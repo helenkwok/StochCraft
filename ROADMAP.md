@@ -39,14 +39,17 @@ The window's UX parity and its gaps: [docs/target-app-parity.md](docs/target-app
 | `random` | L0 | xoshiro256** streams; BPSim's distributions; `Dist`; fits to three-point estimates (`estimate`) |
 | `stats` | L0 | `Tally`, `TimeWeighted`, Student-t 95% intervals, `Summary`; percentiles, empirical distributions with DKW bands, Wilson intervals (`spread`); paired and Welch differences between two runs (`difference`) |
 | `des` | L1 | Event queue; async processes with `hold`, `spawn`, interrupts; priority and preemptive `Resource`; bounded and priority `Store`; waits with deadlines; `Signal`, `Gate`; runs that can be cancelled within a replication and stop when time stops moving (`run_watched`) |
-| `model` | L1 | The model in memory: elements, connections with probabilities, conditions and quantities, finite buffers, shared resource pools, calendars, breakdowns, batches, stop conditions, three-point estimates, layout, entity properties, conveyors, the Transport block and mobile pools, `Path` (geometry with exact lengths), experiment, validation; BPSim's XPath expressions (`expr`); the capacity table (`capacity`); line balancing (`balance`: M7.1's core, the three heuristics, measures and theoretical minimum) |
-| `blocks` | L2 | Compiles a model: source, server, shared task, delay, conveyor (accumulating or not, with divert routing), sink, exclusive and parallel gateways, merges, batch and unbatch, assembly (the Transport block has no runtime yet); finite buffers with blocking after service and loss; shared pools with roles, alternatives, priorities and shifts; breakdowns; calendars; stop conditions; work left inside at the end; entities carry typed properties; per-element statistics; warm-up; one replication stepped and read as it runs (`Live`) |
-| `experiment` | L3 | Parallel replications with reproducible streams, progress and cancellation |
-| `io` | L3 | BPSim on BPMN and XPDL: read (gateways, routing, embedded sub-processes in line, calendars, diagram layout, `stochcraft:` vendor extensions), write new, save edits into opened files |
-| `engine` | L4 | Commands with JSON schemas, undo and redo, a journal with its format, version and starting state; runs on threads, on the page's workers or in slices; editing commands for blocks, flows, pools, calendars, properties, estimates and layout, and `batch` for several as one step; sweeps, sensitivity, designed experiments and sizing; `results.distribution` and `results.compare`; `model.capacity`, `estimate.fit` and `line.balance`; live runs |
-| `stochcraft-cli` | app | `new`, `validate`, `explain`, `balance`, `run` with a run record, `design`, `fit`, `exec` (with `--journal`, `--all`, `--force`), `schema`, `mcp` |
-| `render` | L5 | Parametric low-poly meshes (machines, straight, curved and spiral conveyors, racks, totes, operators, forklifts, AGVs) as plain vertex and index buffers |
-| `ui-egui` | L5 | The app's window: menus and shortcuts; the flowchart canvas and inspector; runs with results, charts and the spread across replications; the Analysis and Capacity views; the 3D view and a read-only Layout view; the dashboard; watching a run from the run bar; autosave; 44 languages besides English |
+| `model` | L1 | The model in memory: elements, connections with probabilities, conditions and quantities, finite buffers, shared resource pools, calendars, breakdowns, batches, stop conditions, three-point estimates, layout, entity properties, conveyors, the Transport block and mobile pools, `Path` (geometry with exact lengths), `Site` (conveyor tracks, places, junctions and scenery), Monte Carlo models and agent-based models as described in their files, experiment, validation; BPSim's XPath expressions (`expr`); the capacity table (`capacity`); line balancing (`balance`: M7.1's core, the three heuristics, measures and theoretical minimum) |
+| `blocks` | L2 | Compiles a model: source, server, shared task, delay, conveyor (accumulating or not, with divert routing, diverts at points along a section and junctions between sections), sink, exclusive and parallel gateways, merges, batch and unbatch, assembly (the Transport block has no runtime yet); finite buffers with blocking after service and loss; shared pools with roles, alternatives, priorities and shifts; breakdowns; calendars; stop conditions; work left inside at the end; entities carry typed properties; per-element statistics; warm-up; one replication stepped and read as it runs (`Live`) |
+| `mc` | L2 | Monte Carlo models: inputs as distributions, outputs as expressions, plain, Latin hypercube, antithetic and Sobol sampling, rank correlations, control variates, sequential stops, tornado, rank correlations with outputs and Sobol indices |
+| `sd` | L2 | System dynamics: XMILE 1.0 read and written, stocks, flows, delays, smooths, graphical and random functions, Euler and Runge-Kutta, replications with bands, renames and removals that follow every reference |
+| `agents` | L2 | State charts with SCXML 1.0's semantics; populations, messages, statistics over time and the stepped mode; networks and grids |
+| `experiment` | L3 | Parallel replications with reproducible streams, progress and cancellation; selection and feasibility (KN, Batur and Kim, comparison with a standard), racing and the clean-up, COMPASS, Nelder–Mead |
+| `io` | L3 | BPSim on BPMN and XPDL: read (gateways, routing, embedded sub-processes in line, calendars, diagram layout, `stochcraft:` vendor extensions, the physical layout), write new, save edits into opened files; SCXML state charts |
+| `engine` | L4 | Commands with JSON schemas, undo and redo, a journal with its format, version and starting state; runs on threads, on the page's workers or in slices; editing commands for blocks, flows, pools, calendars, properties, estimates and layout, and `batch` for several as one step; sweeps, sensitivity, designed experiments and sizing; `experiment.evaluate` and `experiment.optimise`; `results.distribution` and `results.compare`; `model.capacity`, `estimate.fit` and `line.balance`; Monte Carlo (`mc.*`), system dynamics (`sd.*`) and agent-based (`agents.*`) models; live runs |
+| `stochcraft-cli` | app | `new`, `validate`, `explain`, `balance`, `run` with a run record, `design`, `evaluate`, `optimize`, `inputs`, `fit`, `exec` (with `--journal`, `--all`, `--force`), `schema`, `mcp` |
+| `render` | L5 | Parametric low-poly meshes (machines, straight, curved and spiral conveyors, racks, totes, operators, forklifts, AGVs, and the sorter's pieces: belts swept along a path, a scanner arch, packing stations, pallets, roll cages, a control cabinet, parcels) as plain vertex and index buffers |
+| `ui-egui` | L5 | The app's window: menus and shortcuts; the flowchart canvas and inspector; runs with results, charts and the spread across replications; the Analysis and Capacity views; the 3D view and a read-only Layout view, both drawn from the model's layout; the properties of the selection with bold and reset; Monte Carlo and system dynamics models; the dashboard; watching a run from the run bar; autosave; 44 languages besides English |
 | `mcp` | L5 | The MCP server: the engine's commands as tools for agents, headless (with optional read and write roots) or driving the app through its control channel |
 | `stochcraft`, `stochcraft-web` | apps | The desktop shell (native file dialogs, `--control` for agents) and the browser shell, published on GitHub Pages |
 | `bench/` | outside | M/M/1 against simu-des and SimPy (54× SimPy); tandem lines, the hold model and DEVStone LI, HI and HO |
@@ -2909,8 +2912,8 @@ Chapter references are to Brailsford, Churilov and Dangerfield (eds.),
 ### M4.3 Agents
 
 **Status:** A1, state charts in the `agents` crate, is done (#286), and so are A2, populations,
-messages, statistics over time and the stepped mode (#288), and A3, networks and grids (#291); A4,
-files, engine commands and the command line, is in #293 (#283). D16–D18 settled how state charts are saved and run; D34 settled the order below.
+messages, statistics over time and the stepped mode (#288), A3, networks and grids (#291), and A4,
+files, engine commands and the command line (#293, #299) (#283). D16–D18 settled how state charts are saved and run; D34 settled the order below.
 
 **What it is:** individuals that each keep their own state and memory and decide what to do
 next, rather than being moved by the process. Three kinds, planned together and built in this
@@ -3153,7 +3156,7 @@ answers, and ships as an example model with its write-up ("Examples for teaching
 **Status:** step 1, the conveyors, is done (#194, #195, #197, #198); step 2 has its first PR, the
 mobile pool, the Transport block and the scale in the model and files (#202), with the runtime
 not yet merged (branch `operators-runtime`); step 3 has parametric meshes (#191) and a first 3D
-view from the diagram's positions (#205, #208, #210, #213), to be reworked by M5.5; step 4's
+view from the diagram's positions (#205, #208, #210, #213), since reworked by M5.5 to draw from the layout (L3, #297); step 4's
 dashboard is in with four tiles (#209); the sorter example is in (#207), without operators yet.
 
 1. **Conveyors** (M5.1). The design, settled before the code:
@@ -4615,7 +4618,7 @@ catalogs.
 
 ## M9: open search, many objectives, and optimisers of your own
 
-**Status:** planned (#284); P1 (Evaluate from outside) done in #287, P2 (Racing and the clean-up) in #292; the rest is not built yet.
+**Status:** in progress (#284); P1 (Evaluate from outside) done in #287, P2 (Racing and the clean-up) in #292; the rest is not built yet.
 
 **Outcome:** what Python users get from Optuna and pymoo, for simulation models, with answers
 that say what they have not proved. M8 searches spaces small enough for a stated probability

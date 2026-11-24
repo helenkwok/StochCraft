@@ -367,6 +367,13 @@ The methods of M2.8, each implemented from its published description:
   with exponential durations of mean m is their maximum, with distribution (1 − e^(−t/m))^k and
   mean m (1 + 1/2 + … + 1/k).
 
+The search for the best design (ROADMAP M8 and M9) is built from published procedures: Kim and
+Nelson's KN for selecting the best, Batur and Kim's feasibility check, Kim's comparison with a
+standard, racing after Birattari, Stützle, Paquete and Varrentrapp, COMPASS (Hong and Nelson;
+Xu, Nelson and Hong) for whole-number decisions, and Nelder and Mead's simplex with Barton and
+Ivey's changes for a continuous mean. Their papers are cited in [ATTRIBUTION.md](../ATTRIBUTION.md),
+and the [developers guide](developers.md#selecting-the-best) says how each is used.
+
 ## Read and set aside
 
 Outside what a process simulator does: Type IV hydrogen pressure vessels (Khan, IJHE 2026,

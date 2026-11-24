@@ -12,7 +12,7 @@ already have. The [user guide](user-guide.md) has the details.
 | Queue, buffer | The **Waiting room** of a task (with or without a limit), or a separate task |
 | Server, processor, machine, station, activity | **Task with a resource**: a number of **units** that each work on one entity at a time |
 | Delay, travel | **Task**: takes time, with no limit on how many entities at once |
-| Conveyor, belt | **Conveyor**: a length and a speed, each entity taking its item length plus a gap, accumulating or not |
+| Conveyor, belt | **Conveyor**: a length and a speed, each entity taking its item length plus a gap, accumulating or not; diverts along it and junctions between conveyors come from the model's layout |
 | Shared resource, operator team, pool | A **resource pool**, used by a **Task with shared resources** |
 | Sink, exit, absorber | **Departures**: counts entities and their time in the system |
 | Router, decision point, branch | **Decision (one way)**: by chance or by a condition |
