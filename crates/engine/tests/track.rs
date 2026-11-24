@@ -166,7 +166,7 @@ fn two_track_edits_in_a_batch_are_one_undo_step() {
     ok(
         &mut e,
         "batch",
-        json!({ "label": "move", "commands": [
+        json!({ "commands": [
             { "command": "track.set", "params": { "id": "lane_red", "track": l_track() } },
             { "command": "track.set", "params": { "id": "lane_blue", "track": null } }
         ] }),
