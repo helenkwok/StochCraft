@@ -400,3 +400,117 @@ fn compound_outputs_write_each_property() {
         }]
     );
 }
+
+#[test]
+fn rules_that_both_match_a_missing_property_overlap() {
+    // Disjoint for true and for false, but `null = true` and `null = false` are both false, so
+    // both `not(...)` rules match an entity without the property.
+    let d = table(
+        HitPolicy::Unique,
+        &["approved"],
+        &["route"],
+        &[
+            (&["not(true)"], &["\"hold\""]),
+            (&["not(false)"], &["\"send\""]),
+        ],
+    );
+    let c = compiled(&d);
+    assert_eq!(c.evaluate(&reader(&[])), Outcome::Null);
+    assert_eq!(
+        c.check(&[false]),
+        vec![Finding::Overlap {
+            first: 1,
+            second: 2,
+            example: "approved = null".into()
+        }]
+    );
+    // A missing property is no gap: `-` does not match it, and is not meant to.
+    let open = table(HitPolicy::Unique, &["size"], &["band"], &[(&["-"], &["1"])]);
+    assert_eq!(compiled(&open).check(&[false]), vec![]);
+}
+
+#[test]
+fn inputs_reading_one_property_see_one_value() {
+    // No size is both below 0 and 0 or more.
+    let d = table(
+        HitPolicy::Unique,
+        &["size", "size"],
+        &["band"],
+        &[
+            (&["< 0", "-"], &["\"negative\""]),
+            (&["-", ">= 0"], &["\"other\""]),
+        ],
+    );
+    assert_eq!(compiled(&d).check(&[false, false]), vec![]);
+    // 0 is both at most 0 and at least 0; the property is named once in the example.
+    let mut d2 = d;
+    d2.table.rules[0].inputs[0] = "<= 0".into();
+    assert_eq!(
+        compiled(&d2).check(&[false, false]),
+        vec![Finding::Overlap {
+            first: 1,
+            second: 2,
+            example: "size = 0".into()
+        }]
+    );
+}
+
+#[test]
+fn pieces_beyond_two_to_the_fifty_third_are_values_a_float_can_hold() {
+    // 2⁵⁴ + 1 is 2⁵⁴ again; the next float above it, 2⁵⁴ + 4, matches the last two rules.
+    let b = 18_014_398_509_481_984.0_f64;
+    let d = table(
+        HitPolicy::Unique,
+        &["size"],
+        &["band"],
+        &[
+            (&["< 18014398509481984"], &["1"]),
+            (&[">= 18014398509481984"], &["2"]),
+            (&["> 18014398509481984"], &["3"]),
+        ],
+    );
+    let c = compiled(&d);
+    let above = b.next_up();
+    assert_eq!(c.evaluate(&reader(&[("size", num(above))])), Outcome::Null);
+    assert_eq!(
+        c.check(&[false]),
+        vec![Finding::Overlap {
+            first: 2,
+            second: 3,
+            example: format!("size = {}", value_feel(&num(above)))
+        }]
+    );
+    // The same as whole numbers.
+    assert_eq!(
+        c.check(&[true]),
+        vec![Finding::Overlap {
+            first: 2,
+            second: 3,
+            example: format!("size = {}", value_feel(&num(above)))
+        }]
+    );
+}
+
+#[test]
+fn a_table_a_block_uses_is_checked_over_its_property_s_values() {
+    // As whole numbers, nothing is both at most 0.5 and at least 0.5.
+    let mut d = table(
+        HitPolicy::Unique,
+        &["size"],
+        &["band"],
+        &[(&["<= 0.5"], &["1"]), (&[">= 0.5"], &["2"])],
+    );
+    d.table.inputs[0].type_ref = Some("integer".into());
+    let c = compiled(&d);
+    assert_eq!(c.check(&[false]), vec![]);
+    assert_eq!(c.check_bound(&[true]), vec![]);
+    // Bound to a property of type double, 0.5 can reach it, whatever the table says.
+    assert_eq!(
+        c.check_bound(&[false]),
+        vec![Finding::Overlap {
+            first: 1,
+            second: 2,
+            example: "size = 0.5".into()
+        }]
+    );
+}

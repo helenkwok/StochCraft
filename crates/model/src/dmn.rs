@@ -1307,19 +1307,75 @@ impl Compiled {
     /// per input, whether its property holds whole numbers only (a `long`), so that the gaps
     /// between whole numbers are no gaps.
     pub fn check(&self, integer: &[bool]) -> Vec<Finding> {
-        let atoms: Vec<Vec<Value>> = self
+        let whole: Vec<bool> = self
             .inputs
             .iter()
             .enumerate()
-            .map(|(i, c)| pieces_of(c, c.integer || integer.get(i).copied().unwrap_or(false)))
+            .map(|(i, c)| c.integer || integer.get(i).copied().unwrap_or(false))
+            .collect();
+        self.search(&whole)
+    }
+
+    /// As [`Compiled::check`], for a table a block uses: `whole` says, per input, whether the
+    /// property it reads holds whole numbers only (a `long`). The types the table itself gives
+    /// its inputs do not count here, since what reaches them is the property's values.
+    pub fn check_bound(&self, whole: &[bool]) -> Vec<Finding> {
+        let whole: Vec<bool> = (0..self.inputs.len())
+            .map(|i| whole.get(i).copied().unwrap_or(false))
+            .collect();
+        self.search(&whole)
+    }
+
+    /// Of each input, the first input reading the same property: the inputs reading one
+    /// property see one value.
+    fn leaders(&self) -> Vec<usize> {
+        self.inputs
+            .iter()
+            .enumerate()
+            .map(|(i, c)| {
+                self.inputs
+                    .iter()
+                    .position(|d| d.name == c.name)
+                    .unwrap_or(i)
+            })
+            .collect()
+    }
+
+    fn search(&self, whole: &[bool]) -> Vec<Finding> {
+        let leader = self.leaders();
+        let want_overlap = self.hit_policy == HitPolicy::Unique;
+        // The pieces of each property's values, at its first input (the others follow it), cut
+        // at what all its inputs name. And a missing property (null), which `not(...)` matches:
+        // two rules can overlap there, though a gap there is none (`-` does not match it).
+        let atoms: Vec<Vec<Option<Value>>> = (0..self.inputs.len())
+            .map(|i| {
+                if leader.get(i) != Some(&i) {
+                    return Vec::new();
+                }
+                let group: Vec<&ColumnIn> = self
+                    .inputs
+                    .iter()
+                    .zip(&leader)
+                    .filter(|(_, l)| **l == i)
+                    .map(|(c, _)| c)
+                    .collect();
+                let integer = leader.iter().zip(whole).any(|(l, w)| *l == i && *w);
+                let mut out: Vec<Option<Value>> =
+                    pieces_of(&group, integer).into_iter().map(Some).collect();
+                if want_overlap {
+                    out.push(None);
+                }
+                out
+            })
             .collect();
         let mut search = Search {
             table: self,
             atoms: &atoms,
+            leader: &leader,
             overlap: None,
             gap: None,
             pieces: 0,
-            want_overlap: self.hit_policy == HitPolicy::Unique,
+            want_overlap,
             want_gap: !self.has_default(),
         };
         let all: Vec<usize> = (0..self.rules.len()).collect();
@@ -1338,14 +1394,20 @@ impl Compiled {
         out
     }
 
-    /// Describes a point of the input space: `size = 5.5 and class = "B"`; inputs left open are
-    /// left out.
-    fn describe(&self, point: &[Value]) -> String {
+    /// Describes a point of the input space: `size = 5.5 and class = "B"` (`null` for a missing
+    /// property); inputs left open are left out, and so is a property named again.
+    fn describe(&self, point: &[Option<Value>]) -> String {
+        let leader = self.leaders();
         let parts: Vec<String> = self
             .inputs
             .iter()
             .zip(point)
-            .map(|(c, v)| format!("{} = {}", c.name, value_feel(v)))
+            .enumerate()
+            .filter(|(i, _)| leader.get(*i) == Some(i))
+            .map(|(_, (c, v))| {
+                let v = v.as_ref().map_or_else(|| "null".to_owned(), value_feel);
+                format!("{} = {v}", c.name)
+            })
             .collect();
         if parts.is_empty() {
             "any entity".to_owned()
@@ -1381,66 +1443,93 @@ fn check_output(col: &mut ColumnOut, allowed: Option<&Tests>, v: &Literal) -> Re
     Ok(())
 }
 
-/// The pieces input `c`'s values fall into: one value from each, such that every test of the
-/// table holds for all of a piece or for none of it. Only pieces within the input's own values,
-/// if it has some.
-fn pieces_of(c: &ColumnIn, integer: bool) -> Vec<Value> {
-    let in_domain = |v: &Value| c.values.as_ref().is_none_or(|t| t.satisfies(Some(v), None));
+/// The next number above `x` (a whole number if `integer`) that is not `x` itself, if there is
+/// one: `x + 1`, or where that rounds back to `x` (beyond 2⁵³), the next float.
+fn above(x: f64, integer: bool) -> Option<f64> {
+    let y = if integer { x.floor() + 1.0 } else { x + 1.0 };
+    let y = if y > x { y } else { x.next_up() };
+    (y > x && y.is_finite()).then_some(y)
+}
+
+/// As [`above`], below `x`.
+fn below(x: f64, integer: bool) -> Option<f64> {
+    let y = if integer { x.ceil() - 1.0 } else { x - 1.0 };
+    let y = if y < x { y } else { x.next_down() };
+    (y < x && y.is_finite()).then_some(y)
+}
+
+/// The pieces the values of a property fall into, as `group` (the inputs reading it) cut them:
+/// one value from each, such that every test of the table holds for all of a piece or for none
+/// of it. Only pieces within the inputs' own values, if they have some.
+fn pieces_of(group: &[&ColumnIn], integer: bool) -> Vec<Value> {
+    let in_domain = |v: &Value| {
+        group
+            .iter()
+            .all(|c| c.values.as_ref().is_none_or(|t| t.satisfies(Some(v), None)))
+    };
+    let mut kinds: Vec<Kind> = Vec::new();
+    for k in group.iter().filter_map(|c| c.kind) {
+        if !kinds.contains(&k) {
+            kinds.push(k);
+        }
+    }
     let mut out = Vec::new();
-    match c.kind {
-        None => out.push(Value::Number(0.0)),
-        Some(Kind::Boolean) => {
-            out.push(Value::Boolean(true));
-            out.push(Value::Boolean(false));
-        }
-        Some(Kind::Text) => {
-            let mut texts = c.texts.clone();
-            texts.sort();
-            texts.dedup();
-            // A string none of the cells names stands for all the others.
-            let mut other = "other".to_owned();
-            let mut n = 1;
-            while texts.contains(&other) {
-                other = format!("other{n}");
-                n += 1;
+    if kinds.is_empty() {
+        out.push(Value::Number(0.0));
+    }
+    for kind in kinds {
+        match kind {
+            Kind::Boolean => {
+                out.push(Value::Boolean(true));
+                out.push(Value::Boolean(false));
             }
-            out.extend(texts.into_iter().map(Value::Text));
-            out.push(Value::Text(other));
-        }
-        Some(Kind::Number) => {
-            let mut b = c.numbers.clone();
-            b.sort_by(f64::total_cmp);
-            b.dedup();
-            let whole = |x: f64| x.fract() == 0.0;
-            match (b.first(), b.last()) {
-                (Some(&lo), Some(&hi)) => {
-                    out.push(Value::Number(if integer {
-                        lo.floor() - 1.0
-                    } else {
-                        lo - 1.0
-                    }));
-                    for (k, &x) in b.iter().enumerate() {
-                        if !integer || whole(x) {
-                            out.push(Value::Number(x));
-                        }
-                        if let Some(&next) = b.get(k + 1) {
-                            if integer {
-                                let n = x.floor() + 1.0;
-                                if n < next {
-                                    out.push(Value::Number(n));
-                                }
-                            } else {
-                                out.push(Value::Number(x / 2.0 + next / 2.0));
-                            }
+            Kind::Text => {
+                let mut texts: Vec<String> =
+                    group.iter().flat_map(|c| c.texts.iter().cloned()).collect();
+                texts.sort();
+                texts.dedup();
+                // A string none of the cells names stands for all the others.
+                let mut other = "other".to_owned();
+                let mut n = 1;
+                while texts.contains(&other) {
+                    other = format!("other{n}");
+                    n += 1;
+                }
+                out.extend(texts.into_iter().map(Value::Text));
+                out.push(Value::Text(other));
+            }
+            Kind::Number => {
+                let mut b: Vec<f64> = group
+                    .iter()
+                    .flat_map(|c| c.numbers.iter().copied())
+                    .collect();
+                b.sort_by(f64::total_cmp);
+                b.dedup();
+                let whole = |x: f64| x.fract() == 0.0;
+                let (Some(&lo), Some(&hi)) = (b.first(), b.last()) else {
+                    out.push(Value::Number(0.0));
+                    continue;
+                };
+                // Each value strictly inside a piece is one that can be held: at large
+                // magnitudes `x + 1` is `x` again, and between two adjacent floats there is
+                // nothing.
+                out.extend(below(lo, integer).map(Value::Number));
+                for (k, &x) in b.iter().enumerate() {
+                    if !integer || whole(x) {
+                        out.push(Value::Number(x));
+                    }
+                    if let Some(&next) = b.get(k + 1) {
+                        let inside = if integer {
+                            above(x, true)
+                        } else {
+                            Some(x / 2.0 + next / 2.0)
+                        };
+                        if let Some(m) = inside.filter(|m| x < *m && *m < next) {
+                            out.push(Value::Number(m));
                         }
                     }
-                    out.push(Value::Number(if integer {
-                        hi.floor() + 1.0
-                    } else {
-                        hi + 1.0
-                    }));
                 }
-                _ => out.push(Value::Number(0.0)),
+                out.extend(above(hi, integer).map(Value::Number));
             }
         }
     }
@@ -1451,7 +1540,10 @@ fn pieces_of(c: &ColumnIn, integer: bool) -> Vec<Value> {
 /// The depth-first search of [`Compiled::check`].
 struct Search<'a> {
     table: &'a Compiled,
-    atoms: &'a [Vec<Value>],
+    /// Per input, the values to try (`None`: null); empty for an input that follows its leader.
+    atoms: &'a [Vec<Option<Value>>],
+    /// Per input, the first input reading the same property ([`Compiled::leaders`]).
+    leader: &'a [usize],
     overlap: Option<(usize, usize, String)>,
     gap: Option<String>,
     pieces: usize,
@@ -1465,14 +1557,15 @@ impl Search<'_> {
             || self.pieces >= MAX_PIECES
     }
 
-    fn walk(&mut self, col: usize, rules: &[usize], point: &mut Vec<Value>) {
+    fn walk(&mut self, col: usize, rules: &[usize], point: &mut Vec<Option<Value>>) {
         // Copies of the shared references, so that walking deeper can borrow `self`.
-        let (table, all) = (self.table, self.atoms);
+        let (table, all, leader) = (self.table, self.atoms, self.leader);
         if self.done() {
             return;
         }
         if rules.is_empty() {
-            if self.want_gap && self.gap.is_none() {
+            // An entity missing a property is no gap: no rule is meant to match it.
+            if self.want_gap && self.gap.is_none() && point.iter().all(Option::is_some) {
                 self.gap = Some(table.describe(point));
             }
             return;
@@ -1504,6 +1597,15 @@ impl Search<'_> {
             return;
         }
         let column = table.inputs.get(col);
+        // An input reading the same property as an earlier one sees that one's value.
+        let follow: Vec<Option<Value>>;
+        let atoms: &[Option<Value>] = match leader.get(col) {
+            Some(&l) if l != col => {
+                follow = vec![point.get(l).cloned().flatten()];
+                &follow
+            }
+            _ => atoms,
+        };
         for atom in atoms {
             self.pieces += 1;
             if self.done() {
@@ -1518,7 +1620,7 @@ impl Search<'_> {
                         .rules
                         .get(*r)
                         .and_then(|rule| rule.tests.get(col))
-                        .is_some_and(|t| t.satisfies(Some(atom), values))
+                        .is_some_and(|t| t.satisfies(atom.as_ref(), values))
                 })
                 .collect();
             point.push(atom.clone());
