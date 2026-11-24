@@ -66,7 +66,7 @@ fn connection(h: &Harness<'static, App>, id: &str) -> Value {
 /// nothing while its value is the reference one.
 fn changed_note(h: &Harness<'static, App>, label: &str) -> Option<String> {
     h.query_all(By::new().role(Role::Label).label(label))
-        .find_map(|n| n.accesskit_node().description().map(str::to_owned))
+        .find_map(|n| n.accesskit_node().description())
 }
 
 fn has_reset(h: &Harness<'static, App>, label: &str) -> bool {
@@ -210,7 +210,10 @@ fn several_blocks_show_what_they_share_and_change_together_in_one_step() {
     h.get_by_label("Shared properties");
     // Means of 1 and 2: the field says they differ, rather than showing either.
     let mean = h.get_by_role_and_label(Role::TextInput, "Mean");
-    assert_eq!(mean.accesskit_node().description(), Some("Mixed values"));
+    assert_eq!(
+        mean.accesskit_node().description().as_deref(),
+        Some("Mixed values")
+    );
 
     // One capacity for both, each keeping its own mean, in one undo step.
     type_into(&mut h, "Capacity", "3");
@@ -264,7 +267,6 @@ fn a_selected_flow_shows_its_own_properties() {
         h.get_by_role_and_label(Role::CheckBox, "Rework")
             .accesskit_node()
             .description()
-            .map(str::to_owned)
     };
     assert_eq!(rework_note(&h), None);
 
