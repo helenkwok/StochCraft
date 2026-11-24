@@ -11,7 +11,7 @@
 
 use std::f64::consts::TAU;
 
-use stochcraft_random::math::{cos, sin};
+use stochcraft_random::math::{atan2, cos, sin, tan};
 
 /// `√(a² + b²)`: exactly rounded on every target, as `hypot` need not be.
 fn norm(a: f64, b: f64) -> f64 {
@@ -211,6 +211,309 @@ impl Path {
             },
             segments,
         }
+    }
+
+    /// The path as a plan editor shows it ([`Outline`]): the points it turns at, each corner
+    /// with the radius of its bend. `None` for a path that climbs, has a helix, or turns through
+    /// a whole circle or more in one arc: its points cannot be moved on a plan without losing
+    /// that. Each arc becomes one corner, or for one of more than 90 degrees, several of equal
+    /// angle, so the corner points stay near the path.
+    pub fn outline(&self) -> Option<Outline> {
+        let mut points = vec![[self.start.x, self.start.y]];
+        let mut bends = Vec::new();
+        let mut frame = self.start;
+        for seg in &self.segments {
+            match *seg {
+                Segment::Line { length, rise } => {
+                    if rise != 0.0 || !length.is_finite() {
+                        return None;
+                    }
+                    frame = seg.frame_at(frame, 1.0);
+                }
+                Segment::Arc {
+                    radius,
+                    angle_deg,
+                    rise,
+                } => {
+                    if rise != 0.0
+                        || !radius.is_finite()
+                        || !angle_deg.is_finite()
+                        || angle_deg.abs() >= 360.0 - ANGLE_EPS
+                    {
+                        return None;
+                    }
+                    if angle_deg.abs() <= ANGLE_EPS {
+                        continue;
+                    }
+                    let r = radius.abs();
+                    let pieces: u8 = if angle_deg.abs() <= 90.0 {
+                        1
+                    } else if angle_deg.abs() <= 180.0 {
+                        2
+                    } else if angle_deg.abs() <= 270.0 {
+                        3
+                    } else {
+                        4
+                    };
+                    let step = angle_deg / f64::from(pieces);
+                    let t = r * tan((step.abs() / 2.0).to_radians());
+                    let piece = Segment::Arc {
+                        radius: r,
+                        angle_deg: step,
+                        rise: 0.0,
+                    };
+                    for _ in 0..pieces {
+                        let h = frame.heading_deg.to_radians();
+                        points.push([frame.x + t * cos(h), frame.y + t * sin(h)]);
+                        bends.push(r);
+                        frame = piece.frame_at(frame, 1.0);
+                    }
+                }
+                Segment::Helix { .. } => return None,
+            }
+        }
+        points.push([frame.x, frame.y]);
+        Some(Outline {
+            z: self.start.z,
+            points,
+            bends,
+        })
+    }
+}
+
+/// Angles closer than this, in degrees, are taken as equal (no turn).
+const ANGLE_EPS: f64 = 1e-9;
+/// Distances shorter than this, relative to the larger of 1 and the distances compared, are
+/// taken as none.
+const LENGTH_EPS: f64 = 1e-9;
+
+/// `a` in degrees brought into (−180, 180].
+fn half_turn(a: f64) -> f64 {
+    let mut a = a % 360.0;
+    if a > 180.0 {
+        a -= 360.0;
+    } else if a <= -180.0 {
+        a += 360.0;
+    }
+    a
+}
+
+/// A flat path as a plan editor shows it: the points it passes, in order (its start, each
+/// corner, its end), straight between them, and at each corner a bend of a radius, a circular
+/// arc that meets both straights. A bend of radius 0 is a sharp corner.
+///
+/// This is how established layout editors draw a conveyor or a walkway: click the points, and
+/// the corners round themselves. [`Outline::to_path`] makes the [`Path`]: a line along each
+/// straight, shortened at each end by the bend's reach `r · tan(turn / 2)`, and an arc at each
+/// corner. Where two bends would overlap on a short straight, both are tightened to fit, so the
+/// path always passes the points' straights in order.
+#[derive(Debug, Clone, PartialEq)]
+pub struct Outline {
+    /// The height of the whole path.
+    pub z: f64,
+    /// The points, at least two for a path with a length.
+    pub points: Vec<[f64; 2]>,
+    /// The radius of the bend at each corner, the points between the first and the last
+    /// (`points.len() − 2` of them); 0 or more.
+    pub bends: Vec<f64>,
+}
+
+impl Outline {
+    /// The bend at point `i`: `None` at either end.
+    pub fn bend(&self, i: usize) -> Option<f64> {
+        if i == 0 || i + 1 >= self.points.len() {
+            return None;
+        }
+        self.bends.get(i - 1).copied()
+    }
+
+    /// The same outline with point `i` at `to`.
+    pub fn moved(&self, i: usize, to: [f64; 2]) -> Outline {
+        let mut out = self.clone();
+        if let Some(p) = out.points.get_mut(i) {
+            *p = to;
+        }
+        out
+    }
+
+    /// The same outline moved by `by` as a whole.
+    pub fn shifted(&self, by: [f64; 2]) -> Outline {
+        let mut out = self.clone();
+        for p in &mut out.points {
+            p[0] += by[0];
+            p[1] += by[1];
+        }
+        out
+    }
+
+    /// The same outline with a point at `at` put in at index `i` (0 before the start, the
+    /// number of points after the end), with a bend of `bend` where it, or the end it displaces,
+    /// becomes a corner.
+    pub fn inserted(&self, i: usize, at: [f64; 2], bend: f64) -> Outline {
+        let mut out = self.clone();
+        let n = out.points.len();
+        let i = i.min(n);
+        out.points.insert(i, at);
+        if n >= 2 {
+            if i == 0 {
+                out.bends.insert(0, bend);
+            } else if i >= n {
+                out.bends.push(bend);
+            } else {
+                out.bends.insert((i - 1).min(out.bends.len()), bend);
+            }
+        }
+        out.bends.truncate(out.points.len().saturating_sub(2));
+        out
+    }
+
+    /// The same outline without point `i`; `None` if it would have fewer than two.
+    pub fn removed(&self, i: usize) -> Option<Outline> {
+        let n = self.points.len();
+        if n <= 2 || i >= n {
+            return None;
+        }
+        let mut out = self.clone();
+        out.points.remove(i);
+        if !out.bends.is_empty() {
+            if i == 0 {
+                out.bends.remove(0);
+            } else if i + 1 >= n {
+                out.bends.pop();
+            } else {
+                out.bends.remove(i - 1);
+            }
+        }
+        Some(out)
+    }
+
+    /// The same outline with the bend at corner `i` (a point that is neither end) of radius
+    /// `radius`.
+    pub fn with_bend(&self, i: usize, radius: f64) -> Outline {
+        let mut out = self.clone();
+        if i > 0
+            && let Some(b) = out.bends.get_mut(i - 1)
+        {
+            *b = radius;
+        }
+        out
+    }
+
+    /// The radius each corner's bend has in the path once tightened to fit its straights (the
+    /// bend asked for, where it fits), by point: `None` at either end.
+    pub fn fitted_bends(&self) -> Vec<Option<f64>> {
+        let (_, _, turns, reach) = self.layout();
+        (0..self.points.len())
+            .map(|i| {
+                let b = self.bend(i)?;
+                let t = turns.get(i).copied().unwrap_or(0.0);
+                if t.abs() <= ANGLE_EPS {
+                    return Some(b);
+                }
+                let full = b * tan((t.abs() / 2.0).to_radians());
+                let got = reach.get(i).copied().unwrap_or(0.0);
+                Some(if full > 0.0 { b * got / full } else { b })
+            })
+            .collect()
+    }
+
+    /// Each straight's length and heading (degrees), each point's turn (degrees, 0 at either
+    /// end) and each point's reach along its straights once fitted.
+    fn layout(&self) -> (Vec<f64>, Vec<f64>, Vec<f64>, Vec<f64>) {
+        let n = self.points.len();
+        let legs = n.saturating_sub(1);
+        let mut lengths = Vec::with_capacity(legs);
+        let mut headings: Vec<Option<f64>> = Vec::with_capacity(legs);
+        for w in self.points.windows(2) {
+            let (dx, dy) = (w[1][0] - w[0][0], w[1][1] - w[0][1]);
+            let len = norm(dx, dy);
+            lengths.push(len);
+            let scale = w[0][0].abs().max(w[0][1].abs()).max(1.0);
+            headings.push((len > LENGTH_EPS * scale).then(|| atan2(dy, dx).to_degrees()));
+        }
+        // A straight of no length takes the heading of the one before it, or for those at the
+        // start, of the first that has one.
+        let first = headings.iter().flatten().next().copied().unwrap_or(0.0);
+        let mut last = first;
+        let headings: Vec<f64> = headings
+            .into_iter()
+            .map(|h| {
+                if let Some(h) = h {
+                    last = h;
+                }
+                last
+            })
+            .collect();
+        let mut turns = vec![0.0; n];
+        let mut reach = vec![0.0; n];
+        for i in 1..n.saturating_sub(1) {
+            let turn = half_turn(headings[i] - headings[i - 1]);
+            turns[i] = turn;
+            let r = self.bends.get(i - 1).copied().unwrap_or(0.0).max(0.0);
+            if turn.abs() > ANGLE_EPS && turn.abs() < 180.0 - 1e-6 && r.is_finite() {
+                reach[i] = r * tan((turn.abs() / 2.0).to_radians());
+            }
+        }
+        // Two bends that would overlap on a straight are tightened together to meet.
+        let mut scale = vec![1.0_f64; n];
+        for (i, len) in lengths.iter().enumerate() {
+            let need = reach[i] + reach[i + 1];
+            if need > len * (1.0 + LENGTH_EPS) + LENGTH_EPS {
+                let k = if need > 0.0 { len / need } else { 1.0 };
+                scale[i] = scale[i].min(k);
+                scale[i + 1] = scale[i + 1].min(k);
+            }
+        }
+        for (r, k) in reach.iter_mut().zip(&scale) {
+            *r *= k;
+        }
+        (lengths, headings, turns, reach)
+    }
+
+    /// The path: a line along each straight, shortened by the bends at its ends, and an arc at
+    /// each corner. Arcs of one radius that follow each other with no line between are one arc.
+    pub fn to_path(&self) -> Path {
+        let start = self.points.first().copied().unwrap_or([0.0, 0.0]);
+        let (lengths, headings, turns, reach) = self.layout();
+        let heading = headings.first().copied().unwrap_or(0.0);
+        let mut segments: Vec<Segment> = Vec::new();
+        let fitted = self.fitted_bends();
+        for (i, len) in lengths.iter().enumerate() {
+            let line = len - reach[i] - reach[i + 1];
+            if line > LENGTH_EPS * len.max(1.0) {
+                segments.push(Segment::Line {
+                    length: line,
+                    rise: 0.0,
+                });
+            }
+            let corner = i + 1;
+            let turn = turns.get(corner).copied().unwrap_or(0.0);
+            if corner + 1 < self.points.len() && turn.abs() > ANGLE_EPS {
+                let radius = fitted[corner].unwrap_or(0.0).max(0.0);
+                let same = |r: f64| (r - radius).abs() <= LENGTH_EPS * radius.max(1.0);
+                match segments.last_mut() {
+                    Some(Segment::Arc {
+                        radius: r,
+                        angle_deg,
+                        ..
+                    }) if same(*r) && (*angle_deg > 0.0) == (turn > 0.0) => {
+                        *angle_deg += turn;
+                    }
+                    _ => segments.push(Segment::Arc {
+                        radius,
+                        angle_deg: turn,
+                        rise: 0.0,
+                    }),
+                }
+            }
+        }
+        if segments.is_empty() {
+            segments.push(Segment::Line {
+                length: 0.0,
+                rise: 0.0,
+            });
+        }
+        Path::new(Frame::new(start[0], start[1], self.z, heading), segments)
     }
 }
 
@@ -414,5 +717,188 @@ mod tests {
         near(big.length(), path.length() * 1000.0, 1e-6);
         let (a, b) = (path.end(), big.end());
         at(b, a.x * 1000.0, a.y * 1000.0, a.z * 1000.0, a.heading_deg);
+    }
+
+    /// The same path in every way that matters: length, and the frame every metre along.
+    fn same_path(a: &Path, b: &Path) {
+        near(a.length(), b.length(), 1e-9);
+        let n = a.length().ceil() as usize;
+        for k in 0..=n {
+            let s = (k as f64).min(a.length());
+            let (p, q) = (a.point_at(s), b.point_at(s));
+            at(q, p.x, p.y, p.z, p.heading_deg);
+        }
+    }
+
+    fn line(length: f64) -> Segment {
+        Segment::Line { length, rise: 0.0 }
+    }
+
+    fn arc(radius: f64, angle_deg: f64) -> Segment {
+        Segment::Arc {
+            radius,
+            angle_deg,
+            rise: 0.0,
+        }
+    }
+
+    #[test]
+    fn a_racetrack_loop_has_four_corners_and_comes_back_the_same() {
+        // The sorter's loop: two 10.5 m straights and two half circles of 30 m in all.
+        let r = 4.5 / std::f64::consts::PI;
+        let path = Path::new(
+            Frame::default(),
+            vec![line(10.5), arc(r, 180.0), line(10.5), arc(r, 180.0)],
+        );
+        let o = path.outline().unwrap();
+        // Each half circle is two quarter bends at the corners of the box round it.
+        assert_eq!(o.points.len(), 6);
+        assert_eq!(o.bends.len(), 4);
+        assert!(o.bends.iter().all(|b| (b - r).abs() < 1e-12));
+        let corner = o.points[1];
+        near(corner[0], 10.5 + r, 1e-12);
+        near(corner[1], 0.0, 1e-12);
+        let back = o.to_path();
+        same_path(&path, &back);
+        near(back.length(), 30.0, 1e-9);
+        // The quarter bends join again into the half circles: four segments, as drawn.
+        assert_eq!(back.segments.len(), 4, "{:?}", back.segments);
+    }
+
+    #[test]
+    fn a_line_a_bend_and_a_line_is_three_points() {
+        // 10 m, a left quarter turn of radius 5 m, 4 m on: the corner where the straights meet
+        // is (15, 0), and the end (15, 9).
+        let path = Path::new(
+            Frame::new(1.0, 2.0, 0.5, 0.0),
+            vec![line(10.0), arc(5.0, 90.0), line(4.0)],
+        );
+        let o = path.outline().unwrap();
+        assert_eq!(o.points.len(), 3);
+        for (p, q) in o.points.iter().zip([[1.0, 2.0], [16.0, 2.0], [16.0, 11.0]]) {
+            near(p[0], q[0], 1e-12);
+            near(p[1], q[1], 1e-12);
+        }
+        assert_eq!(o.bends, vec![5.0]);
+        near(o.z, 0.5, 0.0);
+        same_path(&path, &o.to_path());
+    }
+
+    #[test]
+    fn clicked_points_round_their_corners() {
+        // An L of 10 m and 6 m with a 1 m bend: the bend reaches 1 m along each straight (a
+        // quarter turn), so 9 m, a quarter circle of π/2 m and 5 m: 14 + π/2.
+        let o = Outline {
+            z: 0.0,
+            points: vec![[0.0, 0.0], [10.0, 0.0], [10.0, 6.0]],
+            bends: vec![1.0],
+        };
+        let p = o.to_path();
+        near(p.length(), 14.0 + std::f64::consts::FRAC_PI_2, 1e-12);
+        at(p.end(), 10.0, 6.0, 0.0, 90.0);
+        // A sharp corner (radius 0) is the two straights end to end.
+        let sharp = o.with_bend(1, 0.0).to_path();
+        near(sharp.length(), 16.0, 1e-12);
+        at(sharp.end(), 10.0, 6.0, 0.0, 90.0);
+        // Turning right mirrors it.
+        let right = Outline {
+            z: 0.0,
+            points: vec![[0.0, 0.0], [10.0, 0.0], [10.0, -6.0]],
+            bends: vec![1.0],
+        }
+        .to_path();
+        at(right.end(), 10.0, -6.0, 0.0, -90.0);
+    }
+
+    #[test]
+    fn bends_too_big_for_their_straights_are_tightened_to_fit() {
+        // A U of 2 m sides and a 1 m bottom with bends of 5 m: each quarter bend could reach
+        // only half the bottom, 0.5 m, so both are 0.5 m in radius.
+        let o = Outline {
+            z: 0.0,
+            points: vec![[0.0, 0.0], [2.0, 0.0], [2.0, 1.0], [0.0, 1.0]],
+            bends: vec![5.0, 5.0],
+        };
+        let fitted = o.fitted_bends();
+        assert_eq!(fitted[0], None);
+        near(fitted[1].unwrap(), 0.5, 1e-12);
+        near(fitted[2].unwrap(), 0.5, 1e-12);
+        let p = o.to_path();
+        // 1.5 + π/2 · 0.5 · 2 + 1.5: a half circle of radius 0.5 between two 1.5 m straights.
+        near(p.length(), 3.0 + std::f64::consts::FRAC_PI_2, 1e-12);
+        at(p.end(), 0.0, 1.0, 0.0, 180.0);
+    }
+
+    #[test]
+    fn points_are_moved_added_and_removed() {
+        let o = Outline {
+            z: 0.0,
+            points: vec![[0.0, 0.0], [10.0, 0.0], [10.0, 6.0]],
+            bends: vec![1.0],
+        };
+        // Moving the corner keeps its bend.
+        let m = o.moved(1, [10.0, -2.0]);
+        assert_eq!(m.points[1], [10.0, -2.0]);
+        assert_eq!(m.bends, vec![1.0]);
+        // A point after the end makes the old end a corner.
+        let a = o.inserted(3, [0.0, 6.0], 2.0);
+        assert_eq!(a.points.len(), 4);
+        assert_eq!(a.bends, vec![1.0, 2.0]);
+        // One before the start, likewise.
+        let b = o.inserted(0, [0.0, -5.0], 2.0);
+        assert_eq!(b.points[0], [0.0, -5.0]);
+        assert_eq!(b.bends, vec![2.0, 1.0]);
+        // One on a straight is a corner of no turn: the path is as long as before.
+        let c = o.inserted(1, [4.0, 0.0], 3.0);
+        assert_eq!(c.bends, vec![3.0, 1.0]);
+        near(c.to_path().length(), o.to_path().length(), 1e-12);
+        // Removing the corner leaves the diagonal from (0, 0) to (10, 6).
+        let d = o.removed(1).unwrap();
+        assert!(d.bends.is_empty());
+        near(d.to_path().length(), 136.0_f64.sqrt(), 1e-12);
+        // Removing an end makes the corner next to it the end.
+        let e = o.removed(2).unwrap();
+        assert_eq!(e.points, vec![[0.0, 0.0], [10.0, 0.0]]);
+        assert!(e.bends.is_empty());
+        // Two points are the least a path has.
+        assert!(e.removed(0).is_none());
+        // Moving the whole outline moves every point.
+        assert_eq!(o.shifted([1.0, 1.0]).points[2], [11.0, 7.0]);
+    }
+
+    #[test]
+    fn a_path_that_climbs_or_coils_has_no_outline() {
+        let climb = Path::new(
+            Frame::default(),
+            vec![Segment::Line {
+                length: 4.0,
+                rise: 1.0,
+            }],
+        );
+        assert!(climb.outline().is_none());
+        let coil = Path::new(
+            Frame::default(),
+            vec![Segment::Helix {
+                radius: 1.0,
+                rise: 0.0,
+                turns: 1.0,
+            }],
+        );
+        assert!(coil.outline().is_none());
+        assert!(
+            Path::new(Frame::default(), vec![arc(1.0, 360.0)])
+                .outline()
+                .is_none()
+        );
+        // A sharp corner in a file (an arc of radius 0) is a corner with a bend of 0.
+        let sharp = Path::new(Frame::default(), vec![line(3.0), arc(0.0, 90.0), line(2.0)]);
+        let o = sharp.outline().unwrap();
+        assert_eq!(o.points.len(), 3);
+        for (p, q) in o.points.iter().zip([[0.0, 0.0], [3.0, 0.0], [3.0, 2.0]]) {
+            near(p[0], q[0], 1e-12);
+            near(p[1], q[1], 1e-12);
+        }
+        assert_eq!(o.bends, vec![0.0]);
+        same_path(&sharp, &o.to_path());
     }
 }

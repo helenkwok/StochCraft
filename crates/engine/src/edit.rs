@@ -6,7 +6,7 @@
 
 use stochcraft_model::{
     Bounds, Connection, Element, ElementId, ElementKind, Estimate, Experiment, Model, MonteCarlo,
-    Property, ResourcePool, calendar::Calendar,
+    Property, ResourcePool, Track, calendar::Calendar,
 };
 
 use crate::{CommandError, ErrorCode};
@@ -60,6 +60,8 @@ pub enum Op {
     SetStarting(ElementId, Option<u32>),
     /// Replace (or, with `None`, remove) the Monte Carlo inputs and outputs.
     SetMonteCarlo(Option<Box<MonteCarlo>>),
+    /// Set (or, with `None`, remove) a conveyor's track in the layout.
+    SetTrack(ElementId, Option<Track>),
 }
 
 fn not_found(what: &str, id: &ElementId) -> CommandError {
@@ -274,5 +276,17 @@ pub fn apply(model: &mut Model, op: Op) -> Result<Op, CommandError> {
         Op::SetMonteCarlo(m) => Op::SetMonteCarlo(
             std::mem::replace(&mut model.monte_carlo, m.map(|b| *b)).map(Box::new),
         ),
+        Op::SetTrack(id, track) => {
+            let was = match track {
+                Some(t) => {
+                    if model.element(&id).is_none() {
+                        return Err(not_found("element", &id));
+                    }
+                    model.site.paths.insert(id.clone(), t)
+                }
+                None => model.site.paths.remove(&id),
+            };
+            Op::SetTrack(id, was)
+        }
     })
 }
