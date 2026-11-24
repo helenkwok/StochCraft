@@ -121,7 +121,7 @@ impl App {
         let mut changed = false;
         let mut remove = None;
         egui::Window::new(t("Decision table"))
-            .id(egui::Id::new("dmn-table"))
+            .id(egui::Id::unique("dmn-table"))
             .open(&mut open)
             .default_width(640.0)
             .show(ctx, |ui| {
