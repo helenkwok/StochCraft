@@ -1470,3 +1470,30 @@ connection	Flow	Ток
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	Блок {block} је постављен на {s} дуж транспортера {conveyor}, чија је путања дугачка {length}. Поставите га између 0 и {length} дуж путање.
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	Ентитети на транспортеру {conveyor} стижу до {before} пре {block}, али је {block} постављен ближе почетку ({s} дуж њега, {before} на {before_s}). Поставите {block} даље дуж путање него {before} или их замените у токовима.
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	Прелазак преко споја на току {flow} траје {time}. Поставите његово време преноса на 0 или више.
+	A path needs at least two points.	Путања мора имати најмање две тачке.
+	Finish	Заврши
+	Drawing the path of {name}: click to add points, double-click or Enter to finish, Backspace to take back a point, Esc to cancel.	Цртање путање за {name}: кликните да додате тачке, двоструки клик или Enter за крај, Backspace враћа последњу тачку, Esc отказује.
+	Draw path	Нацртај путању
+	Select a conveyor to draw its path	Изаберите транспортер да бисте нацртали његову путању
+	Remove path	Уклони путању
+	Click to add a point · Double-click or Enter to finish · Esc to cancel	Кликните да додате тачку · Двоструки клик или Enter за крај · Esc за отказивање
+	Click a belt to select it · Drag its points or the belt · Double-click it to add a point · Drag the floor to pan · Scroll to zoom	Кликните траку да је изаберете · Превуците њене тачке или траку · Двоструки клик додаје тачку · Превуците под за померање · Скролујте за зумирање
+	Point {n} of {name}, x {x} m, y {y} m	Тачка {n} од {name}, x {x} m, y {y} m
+	Click a conveyor here to draw its path.	Кликните овде транспортер да бисте нацртали његову путању.
+	Path	Путања
+	Not drawn in the layout yet.	Још није нацртан у распореду.
+	Draw in the Layout view	Нацртај у приказу Распоред
+	Add a straight path	Додај праву путању
+	Drawn length: {length} {unit}	Нацртана дужина: {length} {unit}
+	This path climbs or has a helix: its points cannot be edited here.	Ова путања се пење или има спиралу: њене тачке се овде не могу уређивати.
+	Point {n}	Тачка {n}
+	x of point {n}	x тачке {n}
+	y of point {n}	y тачке {n}
+	x	x
+	y	y
+	Bend radius at point {n}	Полупречник кривине у тачки {n}
+	bend	кривина
+	tightened to {radius} to fit	сужено на {radius} да стане
+	Remove point {n}	Уклони тачку {n}
+	Add a point at the end	Додај тачку на крај
+	Change Path	Измена путање

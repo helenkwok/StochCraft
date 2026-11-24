@@ -1470,3 +1470,30 @@ connection	Flow	Przepływ
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	Blok {block} jest umieszczony {s} wzdłuż przenośnika {conveyor}, którego ścieżka ma długość {length}. Umieść go między 0 a {length} wzdłuż ścieżki.
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	Jednostki na przenośniku {conveyor} docierają do {before} przed {block}, ale {block} jest umieszczony bliżej początku ({s} wzdłuż niego, {before} przy {before_s}). Umieść {block} dalej na ścieżce niż {before} albo zamień je miejscami w przepływach.
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	Złącze na przepływie {flow} przekracza się w czasie {time}. Ustaw jego czas transferu na 0 lub więcej.
+	A path needs at least two points.	Trasa musi mieć co najmniej dwa punkty.
+	Finish	Zakończ
+	Drawing the path of {name}: click to add points, double-click or Enter to finish, Backspace to take back a point, Esc to cancel.	Rysowanie trasy {name}: kliknij, aby dodać punkty, kliknij dwukrotnie lub naciśnij Enter, aby zakończyć, Backspace cofa ostatni punkt, Esc anuluje.
+	Draw path	Rysuj trasę
+	Select a conveyor to draw its path	Wybierz przenośnik, aby narysować jego trasę
+	Remove path	Usuń trasę
+	Click to add a point · Double-click or Enter to finish · Esc to cancel	Kliknij, aby dodać punkt · Dwukrotne kliknięcie lub Enter kończy · Esc anuluje
+	Click a belt to select it · Drag its points or the belt · Double-click it to add a point · Drag the floor to pan · Scroll to zoom	Kliknij taśmę, aby ją wybrać · Przeciągnij jej punkty lub taśmę · Dwukrotne kliknięcie dodaje punkt · Przeciągnij podłogę, aby przesuwać · Przewiń, aby powiększać
+	Point {n} of {name}, x {x} m, y {y} m	Punkt {n} z {name}, x {x} m, y {y} m
+	Click a conveyor here to draw its path.	Kliknij tutaj przenośnik, aby narysować jego trasę.
+	Path	Trasa
+	Not drawn in the layout yet.	Jeszcze nie narysowano w układzie.
+	Draw in the Layout view	Rysuj w widoku Układ
+	Add a straight path	Dodaj prostą trasę
+	Drawn length: {length} {unit}	Narysowana długość: {length} {unit}
+	This path climbs or has a helix: its points cannot be edited here.	Ta trasa wznosi się lub ma spiralę: jej punktów nie można tu edytować.
+	Point {n}	Punkt {n}
+	x of point {n}	x punktu {n}
+	y of point {n}	y punktu {n}
+	x	x
+	y	y
+	Bend radius at point {n}	Promień łuku w punkcie {n}
+	bend	łuk
+	tightened to {radius} to fit	zwężono do {radius}, aby się zmieścił
+	Remove point {n}	Usuń punkt {n}
+	Add a point at the end	Dodaj punkt na końcu
+	Change Path	Zmień trasę

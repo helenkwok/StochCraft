@@ -1470,3 +1470,30 @@ connection	Flow	Поток
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	Блок {block} размещён на расстоянии {s} вдоль конвейера {conveyor}, путь которого имеет длину {length}. Разместите его между 0 и {length} вдоль пути.
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	Сущности на конвейере {conveyor} доходят до {before} раньше, чем до {block}, но {block} размещён ближе к началу ({s} вдоль него, {before} на {before_s}). Разместите {block} дальше по пути, чем {before}, или поменяйте их местами в потоках.
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	Стык на потоке {flow} проходится за {time}. Задайте время передачи 0 или больше.
+	A path needs at least two points.	У трассы должно быть не менее двух точек.
+	Finish	Готово
+	Drawing the path of {name}: click to add points, double-click or Enter to finish, Backspace to take back a point, Esc to cancel.	Рисуется трасса {name}: щёлкайте, чтобы добавить точки, двойной щелчок или Enter — завершить, Backspace — убрать последнюю точку, Esc — отменить.
+	Draw path	Нарисовать трассу
+	Select a conveyor to draw its path	Выберите конвейер, чтобы нарисовать его трассу
+	Remove path	Удалить трассу
+	Click to add a point · Double-click or Enter to finish · Esc to cancel	Щёлкните, чтобы добавить точку · Двойной щелчок или Enter — завершить · Esc — отменить
+	Click a belt to select it · Drag its points or the belt · Double-click it to add a point · Drag the floor to pan · Scroll to zoom	Щёлкните ленту, чтобы выбрать её · Перетаскивайте её точки или ленту · Двойной щелчок добавляет точку · Перетащите пол для сдвига · Прокрутите для масштаба
+	Point {n} of {name}, x {x} m, y {y} m	Точка {n} из {name}, x {x} m, y {y} m
+	Click a conveyor here to draw its path.	Щёлкните здесь конвейер, чтобы нарисовать его трассу.
+	Path	Трасса
+	Not drawn in the layout yet.	Ещё не нарисован на планировке.
+	Draw in the Layout view	Нарисовать в виде «Планировка»
+	Add a straight path	Добавить прямую трассу
+	Drawn length: {length} {unit}	Нарисованная длина: {length} {unit}
+	This path climbs or has a helix: its points cannot be edited here.	Эта трасса поднимается или имеет спираль: её точки здесь не редактируются.
+	Point {n}	Точка {n}
+	x of point {n}	x точки {n}
+	y of point {n}	y точки {n}
+	x	x
+	y	y
+	Bend radius at point {n}	Радиус поворота в точке {n}
+	bend	поворот
+	tightened to {radius} to fit	сужен до {radius}, чтобы поместиться
+	Remove point {n}	Удалить точку {n}
+	Add a point at the end	Добавить точку в конце
+	Change Path	Изменение трассы

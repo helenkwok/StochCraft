@@ -1470,3 +1470,30 @@ connection	Flow	Verbindung
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	Block {block} ist {s} entlang des Förderbands {conveyor} platziert, dessen Pfad {length} lang ist. Platzieren Sie ihn zwischen 0 und {length} entlang des Pfads.
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	Entitäten auf dem Förderband {conveyor} erreichen {before} vor {block}, aber {block} liegt näher am Anfang ({s} entlang des Förderbands, {before} bei {before_s}). Platzieren Sie {block} weiter hinten auf dem Pfad als {before} oder vertauschen Sie sie in den Verbindungen.
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	Der Übergang an der Verbindung {flow} braucht zum Überqueren {time}. Setzen Sie seine Transferzeit auf 0 oder mehr.
+	A path needs at least two points.	Ein Pfad braucht mindestens zwei Punkte.
+	Finish	Fertig
+	Drawing the path of {name}: click to add points, double-click or Enter to finish, Backspace to take back a point, Esc to cancel.	Pfad von {name} wird gezeichnet: Klicken fügt Punkte hinzu, Doppelklick oder Eingabe beendet, Rücktaste nimmt den letzten Punkt zurück, Esc bricht ab.
+	Draw path	Pfad zeichnen
+	Select a conveyor to draw its path	Wählen Sie einen Förderer, um seinen Pfad zu zeichnen
+	Remove path	Pfad entfernen
+	Click to add a point · Double-click or Enter to finish · Esc to cancel	Klicken fügt einen Punkt hinzu · Doppelklick oder Eingabe beendet · Esc bricht ab
+	Click a belt to select it · Drag its points or the belt · Double-click it to add a point · Drag the floor to pan · Scroll to zoom	Band anklicken zum Auswählen · Seine Punkte oder das Band ziehen · Doppelklick fügt einen Punkt hinzu · Boden ziehen zum Verschieben · Scrollen zum Zoomen
+	Point {n} of {name}, x {x} m, y {y} m	Punkt {n} von {name}, x {x} m, y {y} m
+	Click a conveyor here to draw its path.	Klicken Sie hier auf einen Förderer, um seinen Pfad zu zeichnen.
+	Path	Pfad
+	Not drawn in the layout yet.	Noch nicht im Layout gezeichnet.
+	Draw in the Layout view	In der Layout-Ansicht zeichnen
+	Add a straight path	Geraden Pfad hinzufügen
+	Drawn length: {length} {unit}	Gezeichnete Länge: {length} {unit}
+	This path climbs or has a helix: its points cannot be edited here.	Dieser Pfad steigt an oder hat eine Wendel: Seine Punkte lassen sich hier nicht bearbeiten.
+	Point {n}	Punkt {n}
+	x of point {n}	x von Punkt {n}
+	y of point {n}	y von Punkt {n}
+	x	x
+	y	y
+	Bend radius at point {n}	Kurvenradius an Punkt {n}
+	bend	Kurve
+	tightened to {radius} to fit	auf {radius} verengt, damit es passt
+	Remove point {n}	Punkt {n} entfernen
+	Add a point at the end	Punkt am Ende hinzufügen
+	Change Path	Pfad ändern

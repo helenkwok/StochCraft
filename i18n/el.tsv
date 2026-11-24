@@ -1470,3 +1470,30 @@ connection	Flow	Ροή
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	Το μπλοκ {block} είναι τοποθετημένο σε απόσταση {s} κατά μήκος του μεταφορέα {conveyor}, του οποίου η διαδρομή έχει μήκος {length}. Τοποθετήστε το μεταξύ 0 και {length} κατά μήκος της διαδρομής.
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	Οι οντότητες στον μεταφορέα {conveyor} φτάνουν στο {before} πριν από το {block}, αλλά το {block} είναι τοποθετημένο πιο κοντά στην αρχή ({s} κατά μήκος του, το {before} στο {before_s}). Τοποθετήστε το {block} πιο πέρα στη διαδρομή από το {before} ή αντιμεταθέστε τα στις ροές.
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	Ο κόμβος στη ροή {flow} χρειάζεται {time} για να διασχιστεί. Ορίστε τον χρόνο μεταφοράς του σε 0 ή περισσότερο.
+	A path needs at least two points.	Μια διαδρομή χρειάζεται τουλάχιστον δύο σημεία.
+	Finish	Τέλος
+	Drawing the path of {name}: click to add points, double-click or Enter to finish, Backspace to take back a point, Esc to cancel.	Σχεδίαση της διαδρομής του {name}: κάντε κλικ για να προσθέσετε σημεία, διπλό κλικ ή Enter για τέλος, Backspace για να αφαιρέσετε το τελευταίο σημείο, Esc για ακύρωση.
+	Draw path	Σχεδίαση διαδρομής
+	Select a conveyor to draw its path	Επιλέξτε έναν μεταφορέα για να σχεδιάσετε τη διαδρομή του
+	Remove path	Αφαίρεση διαδρομής
+	Click to add a point · Double-click or Enter to finish · Esc to cancel	Κλικ για προσθήκη σημείου · Διπλό κλικ ή Enter για τέλος · Esc για ακύρωση
+	Click a belt to select it · Drag its points or the belt · Double-click it to add a point · Drag the floor to pan · Scroll to zoom	Κλικ σε ταινία για επιλογή · Σύρετε τα σημεία της ή την ταινία · Διπλό κλικ για προσθήκη σημείου · Σύρετε το δάπεδο για μετακίνηση · Κύλιση για ζουμ
+	Point {n} of {name}, x {x} m, y {y} m	Σημείο {n} του {name}, x {x} m, y {y} m
+	Click a conveyor here to draw its path.	Κάντε κλικ σε έναν μεταφορέα εδώ για να σχεδιάσετε τη διαδρομή του.
+	Path	Διαδρομή
+	Not drawn in the layout yet.	Δεν έχει σχεδιαστεί ακόμη στη διάταξη.
+	Draw in the Layout view	Σχεδίαση στην προβολή Διάταξη
+	Add a straight path	Προσθήκη ευθείας διαδρομής
+	Drawn length: {length} {unit}	Σχεδιασμένο μήκος: {length} {unit}
+	This path climbs or has a helix: its points cannot be edited here.	Αυτή η διαδρομή ανεβαίνει ή έχει έλικα: τα σημεία της δεν επεξεργάζονται εδώ.
+	Point {n}	Σημείο {n}
+	x of point {n}	x του σημείου {n}
+	y of point {n}	y του σημείου {n}
+	x	x
+	y	y
+	Bend radius at point {n}	Ακτίνα καμπύλης στο σημείο {n}
+	bend	καμπύλη
+	tightened to {radius} to fit	μειώθηκε σε {radius} για να χωρέσει
+	Remove point {n}	Αφαίρεση σημείου {n}
+	Add a point at the end	Προσθήκη σημείου στο τέλος
+	Change Path	Αλλαγή διαδρομής

@@ -1470,3 +1470,30 @@ connection	Flow	Tok
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	{block} je umiestnený {s} pozdĺž dopravníka {conveyor}, ktorého dráha je dlhá {length}. Umiestnite ho medzi 0 a {length} pozdĺž dráhy.
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	Entity na dopravníku {conveyor} dosiahnu {before} skôr ako {block}, ale {block} je umiestnený bližšie k začiatku ({s} pozdĺž neho, {before} pri {before_s}). Umiestnite {block} na dráhe ďalej ako {before}, alebo ich v tokoch vymeňte.
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	Spoj na toku {flow} sa prechádza {time}. Nastavte jeho čas presunu na 0 alebo viac.
+	A path needs at least two points.	Trasa potrebuje aspoň dva body.
+	Finish	Dokončiť
+	Drawing the path of {name}: click to add points, double-click or Enter to finish, Backspace to take back a point, Esc to cancel.	Kreslí sa trasa {name}: kliknutím pridáte body, dvojklikom alebo Enter dokončíte, Backspace vráti posledný bod, Esc zruší.
+	Draw path	Nakresliť trasu
+	Select a conveyor to draw its path	Vyberte dopravník, aby ste nakreslili jeho trasu
+	Remove path	Odstrániť trasu
+	Click to add a point · Double-click or Enter to finish · Esc to cancel	Kliknutím pridáte bod · Dvojklik alebo Enter dokončí · Esc zruší
+	Click a belt to select it · Drag its points or the belt · Double-click it to add a point · Drag the floor to pan · Scroll to zoom	Kliknutím vyberiete pás · Ťahajte jeho body alebo pás · Dvojklikom pridáte bod · Ťahaním podlahy posúvate · Kolieskom približujete
+	Point {n} of {name}, x {x} m, y {y} m	Bod {n} z {name}, x {x} m, y {y} m
+	Click a conveyor here to draw its path.	Kliknite sem na dopravník a nakreslite jeho trasu.
+	Path	Trasa
+	Not drawn in the layout yet.	V rozložení ešte nenakreslené.
+	Draw in the Layout view	Nakresliť v zobrazení Rozloženie
+	Add a straight path	Pridať rovnú trasu
+	Drawn length: {length} {unit}	Nakreslená dĺžka: {length} {unit}
+	This path climbs or has a helix: its points cannot be edited here.	Táto trasa stúpa alebo má skrutkovicu: jej body tu nemožno upraviť.
+	Point {n}	Bod {n}
+	x of point {n}	x bodu {n}
+	y of point {n}	y bodu {n}
+	x	x
+	y	y
+	Bend radius at point {n}	Polomer oblúka v bode {n}
+	bend	oblúk
+	tightened to {radius} to fit	zúžené na {radius}, aby sa zmestilo
+	Remove point {n}	Odstrániť bod {n}
+	Add a point at the end	Pridať bod na koniec
+	Change Path	Zmena trasy

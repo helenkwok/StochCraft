@@ -1470,3 +1470,30 @@ connection	Flow	Flux
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	Blocul {block} este plasat la {s} de-a lungul transportorului {conveyor}, al cărui traseu are lungimea {length}. Plasați-l între 0 și {length} de-a lungul traseului.
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	Entitățile de pe transportorul {conveyor} ajung la {before} înainte de {block}, dar {block} este plasat mai aproape de început ({s} de-a lungul lui, {before} la {before_s}). Plasați {block} mai departe pe traseu decât {before} sau schimbați-le între ele în fluxuri.
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	Joncțiunea de pe fluxul {flow} durează {time} pentru a fi traversată. Faceți timpul ei de transfer 0 sau mai mare.
+	A path needs at least two points.	Un traseu are nevoie de cel puțin două puncte.
+	Finish	Termină
+	Drawing the path of {name}: click to add points, double-click or Enter to finish, Backspace to take back a point, Esc to cancel.	Se desenează traseul pentru {name}: faceți clic pentru a adăuga puncte, dublu clic sau Enter pentru a termina, Backspace pentru a retrage ultimul punct, Esc pentru a anula.
+	Draw path	Desenează traseul
+	Select a conveyor to draw its path	Selectați un transportor pentru a-i desena traseul
+	Remove path	Elimină traseul
+	Click to add a point · Double-click or Enter to finish · Esc to cancel	Clic pentru a adăuga un punct · Dublu clic sau Enter pentru a termina · Esc pentru a anula
+	Click a belt to select it · Drag its points or the belt · Double-click it to add a point · Drag the floor to pan · Scroll to zoom	Clic pe o bandă pentru a o selecta · Trageți punctele ei sau banda · Dublu clic pentru a adăuga un punct · Trageți podeaua pentru deplasare · Derulați pentru zoom
+	Point {n} of {name}, x {x} m, y {y} m	Punctul {n} din {name}, x {x} m, y {y} m
+	Click a conveyor here to draw its path.	Faceți clic aici pe un transportor pentru a-i desena traseul.
+	Path	Traseu
+	Not drawn in the layout yet.	Încă nedesenat în amplasare.
+	Draw in the Layout view	Desenează în vizualizarea Amplasare
+	Add a straight path	Adaugă un traseu drept
+	Drawn length: {length} {unit}	Lungime desenată: {length} {unit}
+	This path climbs or has a helix: its points cannot be edited here.	Acest traseu urcă sau are o elice: punctele lui nu pot fi editate aici.
+	Point {n}	Punctul {n}
+	x of point {n}	x al punctului {n}
+	y of point {n}	y al punctului {n}
+	x	x
+	y	y
+	Bend radius at point {n}	Raza curbei în punctul {n}
+	bend	curbă
+	tightened to {radius} to fit	strâns la {radius} ca să încapă
+	Remove point {n}	Elimină punctul {n}
+	Add a point at the end	Adaugă un punct la capăt
+	Change Path	Modificare traseu

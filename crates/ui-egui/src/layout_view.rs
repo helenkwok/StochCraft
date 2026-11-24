@@ -550,18 +550,6 @@ impl App {
         }
     }
 
-    /// Point `i` of conveyor `id`'s path removed, or a note that a path keeps two.
-    pub(crate) fn remove_path_point(&mut self, id: &str, outline: &Outline, i: usize) {
-        match outline.removed(i) {
-            Some(o) => {
-                if self.set_path(id, &o.to_path()) {
-                    self.layout_view.point = None;
-                }
-            }
-            None => self.info(t("A path needs at least two points.")),
-        }
-    }
-
     /// Ends the drawing: its points become the conveyor's path, if there are two.
     fn finish_drawing(&mut self) {
         let Some(d) = self.layout_view.drawing.take() else {
@@ -756,7 +744,7 @@ impl App {
                     _ => *q,
                 };
                 let pos = to_screen(&vw, shown_at);
-                let hid = egui::Id::new(("layout point", ch.id.as_str(), i));
+                let hid = egui::Id::unique(("layout point", ch.id.as_str(), i));
                 handle_ids.push(hid);
                 let r = ui.interact(
                     Rect::from_center_size(pos, Vec2::splat(HANDLE_PX)),

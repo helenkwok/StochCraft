@@ -1470,3 +1470,30 @@ connection	Flow	ເສັ້ນທາງ
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	{block} ຖືກວາງຢູ່ທີ່ {s} ຕາມສາຍພານລຳລຽງ {conveyor} ເຊິ່ງເສັ້ນທາງຍາວ {length} ໃຫ້ວາງມັນລະຫວ່າງ 0 ຫາ {length} ຕາມເສັ້ນທາງ
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	ເອນທິຕີເທິງສາຍພານລຳລຽງ {conveyor} ໄປຮອດ {before} ກ່ອນ {block} ແຕ່ {block} ຖືກວາງໃກ້ຈຸດເລີ່ມຕົ້ນກວ່າ ({s} ຕາມສາຍພານ, {before} ຢູ່ທີ່ {before_s}) ໃຫ້ວາງ {block} ໄປຕາມເສັ້ນທາງໄກກວ່າ {before} ຫຼື ສະຫຼັບກັນໃນເສັ້ນທາງ
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	ຈຸດເຊື່ອມຕໍ່ຢູ່ເສັ້ນທາງ {flow} ໃຊ້ເວລາ {time} ເພື່ອຂ້າມ ໃຫ້ຕັ້ງເວລາຂົນຍ້າຍຂອງມັນເປັນ 0 ຫຼືຫຼາຍກວ່າ
+	A path needs at least two points.	ເສັ້ນທາງຕ້ອງມີຢ່າງໜ້ອຍສອງຈຸດ.
+	Finish	ສຳເລັດ
+	Drawing the path of {name}: click to add points, double-click or Enter to finish, Backspace to take back a point, Esc to cancel.	ກຳລັງແຕ້ມເສັ້ນທາງຂອງ {name}: ຄລິກເພື່ອເພີ່ມຈຸດ, ຄລິກສອງເທື່ອ ຫຼື Enter ເພື່ອສຳເລັດ, Backspace ເພື່ອເອົາຈຸດສຸດທ້າຍອອກ, Esc ເພື່ອຍົກເລີກ.
+	Draw path	ແຕ້ມເສັ້ນທາງ
+	Select a conveyor to draw its path	ເລືອກສາຍພານເພື່ອແຕ້ມເສັ້ນທາງຂອງມັນ
+	Remove path	ລຶບເສັ້ນທາງ
+	Click to add a point · Double-click or Enter to finish · Esc to cancel	ຄລິກເພື່ອເພີ່ມຈຸດ · ຄລິກສອງເທື່ອ ຫຼື Enter ເພື່ອສຳເລັດ · Esc ເພື່ອຍົກເລີກ
+	Click a belt to select it · Drag its points or the belt · Double-click it to add a point · Drag the floor to pan · Scroll to zoom	ຄລິກສາຍພານເພື່ອເລືອກ · ລາກຈຸດຂອງມັນ ຫຼື ສາຍພານ · ຄລິກສອງເທື່ອເພື່ອເພີ່ມຈຸດ · ລາກພື້ນເພື່ອຍ້າຍ · ເລື່ອນເພື່ອຊູມ
+	Point {n} of {name}, x {x} m, y {y} m	ຈຸດ {n} ຂອງ {name}, x {x} m, y {y} m
+	Click a conveyor here to draw its path.	ຄລິກສາຍພານຢູ່ນີ້ເພື່ອແຕ້ມເສັ້ນທາງຂອງມັນ.
+	Path	ເສັ້ນທາງ
+	Not drawn in the layout yet.	ຍັງບໍ່ໄດ້ແຕ້ມໃນແຜນຜັງ.
+	Draw in the Layout view	ແຕ້ມໃນມຸມມອງແຜນຜັງ
+	Add a straight path	ເພີ່ມເສັ້ນທາງຊື່
+	Drawn length: {length} {unit}	ຄວາມຍາວທີ່ແຕ້ມ: {length} {unit}
+	This path climbs or has a helix: its points cannot be edited here.	ເສັ້ນທາງນີ້ຂຶ້ນສູງ ຫຼື ມີກ້ຽວ: ບໍ່ສາມາດແກ້ໄຂຈຸດຂອງມັນຢູ່ນີ້.
+	Point {n}	ຈຸດ {n}
+	x of point {n}	x ຂອງຈຸດ {n}
+	y of point {n}	y ຂອງຈຸດ {n}
+	x	x
+	y	y
+	Bend radius at point {n}	ລັດສະໝີໂຄ້ງທີ່ຈຸດ {n}
+	bend	ໂຄ້ງ
+	tightened to {radius} to fit	ຫຍໍ້ເປັນ {radius} ໃຫ້ພໍດີ
+	Remove point {n}	ລຶບຈຸດ {n}
+	Add a point at the end	ເພີ່ມຈຸດທີ່ທ້າຍ
+	Change Path	ປ່ຽນເສັ້ນທາງ

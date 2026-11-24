@@ -1470,3 +1470,30 @@ connection	Flow	Srautas
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	Blokas {block} yra pastatytas {s} atstumu išilgai konvejerio {conveyor}, kurio kelias yra {length} ilgio. Pastatykite jį tarp 0 ir {length} išilgai kelio.
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	Objektai ant konvejerio {conveyor} pasiekia {before} anksčiau nei {block}, bet {block} yra pastatytas arčiau pradžios ({s} išilgai jo, {before} ties {before_s}). Pastatykite {block} toliau keliu nei {before} arba sukeiskite juos srautuose.
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	Sandūra sraute {flow} kertama per {time}. Padarykite jos perdavimo laiką 0 arba didesnį.
+	A path needs at least two points.	Trasai reikia bent dviejų taškų.
+	Finish	Baigti
+	Drawing the path of {name}: click to add points, double-click or Enter to finish, Backspace to take back a point, Esc to cancel.	Braižoma {name} trasa: spustelėkite, kad pridėtumėte taškų, dukart spustelėkite arba Enter – baigti, Backspace – atšaukti paskutinį tašką, Esc – atšaukti.
+	Draw path	Braižyti trasą
+	Select a conveyor to draw its path	Pasirinkite konvejerį, kad nubraižytumėte jo trasą
+	Remove path	Pašalinti trasą
+	Click to add a point · Double-click or Enter to finish · Esc to cancel	Spustelėkite, kad pridėtumėte tašką · Dukart spustelėkite arba Enter – baigti · Esc – atšaukti
+	Click a belt to select it · Drag its points or the belt · Double-click it to add a point · Drag the floor to pan · Scroll to zoom	Spustelėkite juostą, kad ją pasirinktumėte · Vilkite jos taškus arba juostą · Dukart spustelėkite, kad pridėtumėte tašką · Vilkite grindis perkelti · Slinkite didinti
+	Point {n} of {name}, x {x} m, y {y} m	{name} taškas {n}, x {x} m, y {y} m
+	Click a conveyor here to draw its path.	Spustelėkite čia konvejerį, kad nubraižytumėte jo trasą.
+	Path	Trasa
+	Not drawn in the layout yet.	Išdėstyme dar nenubraižyta.
+	Draw in the Layout view	Braižyti Išdėstymo rodinyje
+	Add a straight path	Pridėti tiesią trasą
+	Drawn length: {length} {unit}	Nubraižytas ilgis: {length} {unit}
+	This path climbs or has a helix: its points cannot be edited here.	Ši trasa kyla arba turi spiralę: jos taškų čia redaguoti negalima.
+	Point {n}	Taškas {n}
+	x of point {n}	taško {n} x
+	y of point {n}	taško {n} y
+	x	x
+	y	y
+	Bend radius at point {n}	Posūkio spindulys taške {n}
+	bend	posūkis
+	tightened to {radius} to fit	susiaurinta iki {radius}, kad tilptų
+	Remove point {n}	Pašalinti tašką {n}
+	Add a point at the end	Pridėti tašką gale
+	Change Path	Keisti trasą

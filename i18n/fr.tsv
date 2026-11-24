@@ -1470,3 +1470,30 @@ connection	Flow	Flux
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	{block} est placé à {s} le long du convoyeur {conveyor}, dont le tracé mesure {length}. Placez-le entre 0 et {length} le long du tracé.
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	Les entités sur le convoyeur {conveyor} atteignent {before} avant {block}, mais {block} est placé plus près du début ({s} le long du convoyeur, {before} à {before_s}). Placez {block} plus loin sur le tracé que {before}, ou échangez-les dans les flux.
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	La jonction sur le flux {flow} met {time} à être franchie. Faites en sorte que son temps de transfert soit de 0 ou plus.
+	A path needs at least two points.	Un tracé doit avoir au moins deux points.
+	Finish	Terminer
+	Drawing the path of {name}: click to add points, double-click or Enter to finish, Backspace to take back a point, Esc to cancel.	Tracé de {name} en cours : cliquez pour ajouter des points, double-cliquez ou appuyez sur Entrée pour terminer, Retour arrière pour retirer le dernier point, Échap pour annuler.
+	Draw path	Dessiner le tracé
+	Select a conveyor to draw its path	Sélectionnez un convoyeur pour dessiner son tracé
+	Remove path	Supprimer le tracé
+	Click to add a point · Double-click or Enter to finish · Esc to cancel	Cliquer pour ajouter un point · Double-clic ou Entrée pour terminer · Échap pour annuler
+	Click a belt to select it · Drag its points or the belt · Double-click it to add a point · Drag the floor to pan · Scroll to zoom	Cliquer sur une bande pour la sélectionner · Glisser ses points ou la bande · Double-clic pour ajouter un point · Glisser le sol pour déplacer · Défiler pour zoomer
+	Point {n} of {name}, x {x} m, y {y} m	Point {n} de {name}, x {x} m, y {y} m
+	Click a conveyor here to draw its path.	Cliquez ici sur un convoyeur pour dessiner son tracé.
+	Path	Tracé
+	Not drawn in the layout yet.	Pas encore dessiné dans l’implantation.
+	Draw in the Layout view	Dessiner dans la vue Implantation
+	Add a straight path	Ajouter un tracé droit
+	Drawn length: {length} {unit}	Longueur dessinée : {length} {unit}
+	This path climbs or has a helix: its points cannot be edited here.	Ce tracé monte ou comporte une hélice : ses points ne peuvent pas être modifiés ici.
+	Point {n}	Point {n}
+	x of point {n}	x du point {n}
+	y of point {n}	y du point {n}
+	x	x
+	y	y
+	Bend radius at point {n}	Rayon de courbure au point {n}
+	bend	courbure
+	tightened to {radius} to fit	resserré à {radius} pour tenir
+	Remove point {n}	Supprimer le point {n}
+	Add a point at the end	Ajouter un point à la fin
+	Change Path	Modifier le tracé

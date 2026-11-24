@@ -517,11 +517,29 @@ This is one run of many: its numbers differ from the others and from the average
   run is watched, each item on a conveyor is drawn as a parcel where the run has carried it, in
   its product's colour.
 - **Layout:** a plan of the model from above, to scale in metres, with a grid and a scale bar.
-  Conveyors are drawn as their belts and blocks as their footprints. It is for looking only: drag
-  to pan, scroll to zoom, **Fit**. Positions come from the model's layout (the view says
+  Conveyors are drawn as their belts and blocks as their footprints. Drag the floor to pan, scroll
+  to zoom, **Fit** to see it all. Positions come from the model's layout (the view says
   **Positions from the layout**); a block the layout does not place is listed under **Unplaced**
   and drawn in neither view, so a model with no layout yet shows an empty plan and 3D view. The
   parcel sorter example has a layout.
+  - **Draw a conveyor's path.** Select the conveyor (on the plan, in the flowchart, or by clicking
+    it under **Unplaced**) and click **Draw path**. Click where the belt starts and at each point
+    it turns, then double-click, press Enter or click **Finish**; Backspace takes back the last
+    point and Esc cancels. Each corner bends round with a radius of 1 m (tighter where the
+    straights beside it are too short). The conveyor's **Length** becomes the drawn path's,
+    unless a typed length already overrode the path, which it keeps.
+  - **Edit it.** Click a belt to select it: its points show as small circles. Drag a point to move
+    it, drag the belt itself to move the whole path, double-click the belt to add a point there,
+    and press Delete to remove the point you picked (a path keeps at least two). The length
+    beside the pointer follows the drag. Every change is one step of **Undo**.
+  - **Without a mouse.** Tab reaches each point; the arrow keys move it 0.1 m (1 m with Shift)
+    and Delete removes it. The conveyor's properties list its path under **Path**: the **Drawn
+    length**, each point's x and y and each corner's bend radius as fields, **Remove** for a
+    point, **Add a point at the end**, **Add a straight path** (of the typed length, for a
+    conveyor not drawn yet) and **Remove path**. A path that climbs or has a helix (drawn in a
+    file) can be moved or removed here but not edited point by point.
+  - Snapping to the grid and to other belts' ends, and a background drawing to trace over, come
+    next.
 - **Dashboard** (beside the tabs, or **View ▸ Dashboard**): a panel beside the model with tiles
   for throughput, utilisation by resource, time on conveyors, and entities on the conveyors (or
   in the model) over time. Run the model, or watch a run, to fill it. While a run is watched, the
@@ -1040,6 +1058,11 @@ Ctrl on Windows and Linux is ⌘ on a Mac.
 | Delete, Backspace | Delete the selection |
 | Ctrl+A | Select all |
 | Up, Down | Select the previous or next block |
+
+In the Layout view, while a path is being drawn: Enter or a double-click finishes it, Backspace
+takes back the last point and Esc cancels. With a point of a path picked: Delete or Backspace
+removes the point (not the conveyor), Esc lets it go, and the arrow keys move it 0.1 m (1 m with
+Shift) while it has the keyboard.
 
 ## Troubleshooting
 

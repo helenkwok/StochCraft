@@ -1470,3 +1470,30 @@ connection	Flow	Flow
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	{block} er placeret {s} langs transportbåndet {conveyor}, hvis bane er {length} lang. Placer den mellem 0 og {length} langs banen.
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	Enheder på transportbåndet {conveyor} når {before} før {block}, men {block} er placeret tættere på starten ({s} langs det, {before} ved {before_s}). Placer {block} længere ude ad banen end {before}, eller byt dem om i flowene.
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	Overgangen på flowet {flow} tager {time} at passere. Sæt dens overførselstid til 0 eller mere.
+	A path needs at least two points.	En bane skal have mindst to punkter.
+	Finish	Afslut
+	Drawing the path of {name}: click to add points, double-click or Enter to finish, Backspace to take back a point, Esc to cancel.	Tegner banen for {name}: klik for at tilføje punkter, dobbeltklik eller Enter for at afslutte, Backspace fjerner det sidste punkt, Esc annullerer.
+	Draw path	Tegn bane
+	Select a conveyor to draw its path	Vælg en transportør for at tegne dens bane
+	Remove path	Fjern bane
+	Click to add a point · Double-click or Enter to finish · Esc to cancel	Klik for at tilføje et punkt · Dobbeltklik eller Enter for at afslutte · Esc for at annullere
+	Click a belt to select it · Drag its points or the belt · Double-click it to add a point · Drag the floor to pan · Scroll to zoom	Klik på et bånd for at vælge det · Træk dets punkter eller båndet · Dobbeltklik for at tilføje et punkt · Træk i gulvet for at panorere · Rul for at zoome
+	Point {n} of {name}, x {x} m, y {y} m	Punkt {n} af {name}, x {x} m, y {y} m
+	Click a conveyor here to draw its path.	Klik på en transportør her for at tegne dens bane.
+	Path	Bane
+	Not drawn in the layout yet.	Endnu ikke tegnet i layoutet.
+	Draw in the Layout view	Tegn i Layout-visningen
+	Add a straight path	Tilføj en lige bane
+	Drawn length: {length} {unit}	Tegnet længde: {length} {unit}
+	This path climbs or has a helix: its points cannot be edited here.	Denne bane stiger eller har en spiral: dens punkter kan ikke redigeres her.
+	Point {n}	Punkt {n}
+	x of point {n}	x for punkt {n}
+	y of point {n}	y for punkt {n}
+	x	x
+	y	y
+	Bend radius at point {n}	Kurveradius ved punkt {n}
+	bend	kurve
+	tightened to {radius} to fit	strammet til {radius} for at passe
+	Remove point {n}	Fjern punkt {n}
+	Add a point at the end	Tilføj et punkt i enden
+	Change Path	Ændr bane

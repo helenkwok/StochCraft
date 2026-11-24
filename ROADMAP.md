@@ -3917,6 +3917,29 @@ flows and shared properties (the folds below them already collapse), units typed
 value, a scenario picker in the window, and the experiment fields and connections table
 leaving the model page (with U5).
 
+L4's first part is done: drawing and dragging paths. A flat path reads as an outline
+(`model::Outline`): its points, straight between them, and a bend of a radius at each corner,
+the circular arc that meets both straights; `Outline::to_path` makes the `Path` back, exactly for
+lines and arcs (an arc of more than 90 degrees is two or more corners, which join again into one
+arc), and bends too big for a short straight are tightened together to fit. A drawn corner bends
+at 1 m by default (a bend of 0, typed in the panel, is a sharp corner). The engine's `track.set` sets or removes a conveyor's track in
+one undo step (inside `batch` too), and the conveyor's length follows the path unless a typed
+length already overrode it (D23). In the Layout view: **Draw path** for the selected conveyor, or
+a click on one under Unplaced; click the points, double-click or Enter to finish, Backspace for
+the last point, Esc to cancel. A click selects a belt or a block, shared with the flowchart and
+the properties panel; the selected belt shows its points, which drag, take the arrow keys (0.1 m,
+1 m with Shift) and go with Delete; dragging the belt moves the whole path and a double-click on
+it adds a point; the length shows beside the pointer while dragging. The properties panel lists a
+conveyor's path as fields (each point's x and y, each corner's bend, add and remove), the way
+without a pointer (WCAG 2.5.7). Checks: the sorter's racetrack loop goes to an outline of four
+quarter bends and back to the same path; an L of clicked points with a 1 m bend is 14 + π/2 m;
+two bends on a 1 m straight are tightened to 0.5 m; a path edited by its points is saved and read
+back the same. Known limits: a path that climbs or has a helix has no outline (it can be moved,
+redrawn or removed, not edited point by point); places along a conveyor (a divert at `s`) keep
+their `s` when its path changes, so one past a shortened path is flagged as off it; blocks other
+than conveyors are selected on the plan but not yet placed or moved there; points are kept to
+0.1 mm, not snapped. Parts 2 and 3 follow: snapping and ports, then the background by two points.
+
 L5's first part is done: points along a section and junctions. A divert gateway placed at `s`
 along the conveyor that sends into it is a point of that conveyor (`model::site::points`): its
 items meet it as their front reaches `s`, and a non-default way with room takes the item off
