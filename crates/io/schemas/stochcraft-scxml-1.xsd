@@ -13,8 +13,9 @@
 
   On <send>:
     stochcraft:rate     an expression: the delay is exponential with this rate, drawn again
-                        whenever a variable the rate reads changes. The send also carries
-                        delayexpr="exponential(1 div (rate))", the same delay drawn once.
+                        whenever a variable the rate reads changes. It reads only the
+                        agent's variables: no population, time(), In() or _event. The send
+                        also carries delayexpr="exponential(1 div (rate))", the same delay drawn once.
     stochcraft:delay    the delay in the model's time unit, exactly, where the CSS2 time in
                         `delay` (seconds) would not convert back to the same number, or is none.
     stochcraft:to       a message to other agents: agent (stochcraft:serial gives its serial

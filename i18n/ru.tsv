@@ -1202,12 +1202,13 @@ unit	yr	г.
 	Layout	Планировка
 	Layout of the model, to scale	Планировка модели в масштабе
 	Drag to pan · Scroll to zoom	Перетащите для сдвига · Прокрутите для масштаба
-	Positions from the diagram	Позиции из диаграммы
+	Positions from the layout	Позиции из планировки
 	Scale bar: {length} m	Масштабная линейка: {length} м
 	{length} m	{length} м
 	x {x} m, y {y} m	x {x} м, y {y} м
 	Unplaced	Не размещены
-	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	Пока каждый блок размещается по диаграмме. Блок, которого нет на диаграмме, указан здесь и не рисуется.
+	Every block is placed.	Все блоки размещены.
+	Nothing to draw: this model has no layout yet. The Layout tab lists its blocks as unplaced.	Нечего рисовать: у этой модели ещё нет планировки. На вкладке «Планировка» её блоки перечислены как не размещённые.
 	The charts are taller than the window: make the window taller, then export them again.	Диаграммы выше окна: увеличьте высоту окна и экспортируйте их снова.
 	The model changed while choosing where to save it, so it was not saved. Save again.	Модель изменилась, пока выбиралось место для сохранения, поэтому она не сохранена. Сохраните ещё раз.
 	Exactly that many	Ровно столько

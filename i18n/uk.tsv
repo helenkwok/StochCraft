@@ -1202,12 +1202,13 @@ unit	yr	р.
 	Layout	Планування
 	Layout of the model, to scale	Планування моделі в масштабі
 	Drag to pan · Scroll to zoom	Перетягніть для зсуву · Прокрутіть для масштабу
-	Positions from the diagram	Позиції з діаграми
+	Positions from the layout	Позиції з планування
 	Scale bar: {length} m	Масштабна лінійка: {length} м
 	{length} m	{length} м
 	x {x} m, y {y} m	x {x} м, y {y} м
 	Unplaced	Не розміщені
-	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	Поки що кожен блок розміщується за діаграмою. Блок, якого немає на діаграмі, наведено тут і не малюється.
+	Every block is placed.	Усі блоки розміщено.
+	Nothing to draw: this model has no layout yet. The Layout tab lists its blocks as unplaced.	Нічого малювати: ця модель ще не має планування. Вкладка «Планування» перелічує її блоки як не розміщені.
 	The charts are taller than the window: make the window taller, then export them again.	Діаграми вищі за вікно: збільште висоту вікна й експортуйте їх знову.
 	The model changed while choosing where to save it, so it was not saved. Save again.	Модель змінилася, поки вибиралося місце для збереження, тому її не збережено. Збережіть ще раз.
 	Exactly that many	Рівно стільки

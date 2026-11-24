@@ -371,8 +371,9 @@ impl Reader {
             }
             let history = matches!(kind, Kind::History(_));
             match c.local() {
-                "onentry" if !history => s.on_entry.extend(self.block(c, &place)?),
-                "onexit" if !history => s.on_exit.extend(self.block(c, &place)?),
+                // Each block on its own: an error in one stops only that one (SCXML §4.9).
+                "onentry" if !history => s.on_entry.push(self.block(c, &place)?),
+                "onexit" if !history => s.on_exit.push(self.block(c, &place)?),
                 "transition" if kind != Kind::Final => {
                     s.transitions.push(self.transition(c, &place)?)
                 }
@@ -657,9 +658,7 @@ impl Reader {
                 "a send to StochCraft's agents processor says whom with stochcraft:to",
             );
         }
-        if s.to.is_some()
-            && (s.target == Target::Internal || s.delay != Delay::None || s.id.is_some())
-        {
+        if goes_at_once_but_does_not(&s) {
             return err(
                 place,
                 "a message to other agents goes at once: no target, delay or id",
@@ -760,6 +759,26 @@ fn is_ncname(s: &str) -> bool {
         && chars.all(|c| c.is_alphanumeric() || matches!(c, '_' | '-' | '.' | '\u{b7}'))
 }
 
+/// The states `ids` name, as SCXML's `IDREFS` (a `target` or `initial`): each an XML name
+/// without a colon, separated by spaces. Refuses, with the place, one that is not.
+fn references(ids: &[String], place: &str) -> Result<String, ScxmlError> {
+    if let Some(bad) = ids.iter().find(|id| !is_ncname(id)) {
+        return err(
+            place,
+            format!(
+                "`{bad}` is not a reference to a state SCXML can write (an XML name: a letter or `_` first, then letters, digits, `.`, `-`, `_`)"
+            ),
+        );
+    }
+    Ok(ids.join(" "))
+}
+
+/// Whether a message to other agents (`to`) also has what only a send to the agent itself
+/// can have: a target, a delay or an id. Reading and writing both refuse it.
+fn goes_at_once_but_does_not(s: &SendSpec) -> bool {
+    s.to.is_some() && (s.target == Target::Internal || s.delay != Delay::None || s.id.is_some())
+}
+
 /// Whether `s` is an XML name token (`NMTOKEN`), which the chart's `name` must be.
 fn is_nmtoken(s: &str) -> bool {
     !s.is_empty()
@@ -832,7 +851,7 @@ pub fn write_scxml(chart: &ChartSpec, seconds_per_unit: f64) -> Result<String, S
         set(&mut root, "name", &chart.name);
     }
     if !chart.initial.is_empty() {
-        set(&mut root, "initial", &chart.initial.join(" "));
+        set(&mut root, "initial", &references(&chart.initial, "scxml")?);
     }
     if !chart.data.is_empty() {
         let mut dm = el("datamodel");
@@ -886,7 +905,7 @@ impl Writer {
         }
         fn actions<'a>(s: &'a StateSpec, out: &mut Vec<(&'a Action, String)>) {
             let place = format!("state `{}`", s.id);
-            for a in s.on_entry.iter().chain(&s.on_exit) {
+            for a in s.on_entry.iter().chain(&s.on_exit).flatten() {
                 out.push((a, place.clone()));
             }
             for t in &s.transitions {
@@ -949,18 +968,19 @@ impl Writer {
             if s.kind != Kind::State {
                 return err(&place, "only a `<state>` has an `initial` attribute");
             }
-            set(&mut e, "initial", &s.initial.join(" "));
+            set(&mut e, "initial", &references(&s.initial, &place)?);
         }
-        if !s.on_entry.is_empty() {
+        // A block each, so an error in one still stops only that one when read back.
+        for block in &s.on_entry {
             let mut x = el("onentry");
-            for a in &s.on_entry {
+            for a in block {
                 x.push(self.action(a, &place)?);
             }
             e.push(x);
         }
-        if !s.on_exit.is_empty() {
+        for block in &s.on_exit {
             let mut x = el("onexit");
-            for a in &s.on_exit {
+            for a in block {
                 x.push(self.action(a, &place)?);
             }
             e.push(x);
@@ -994,7 +1014,7 @@ impl Writer {
             set(&mut e, "cond", c);
         }
         if !t.targets.is_empty() {
-            set(&mut e, "target", &t.targets.join(" "));
+            set(&mut e, "target", &references(&t.targets, place)?);
         }
         if t.internal {
             set(&mut e, "type", "internal");
@@ -1105,7 +1125,13 @@ impl Writer {
         })
     }
 
-    fn send(&mut self, s: &SendSpec, _place: &str) -> Result<Element, ScxmlError> {
+    fn send(&mut self, s: &SendSpec, place: &str) -> Result<Element, ScxmlError> {
+        if goes_at_once_but_does_not(s) {
+            return err(
+                place,
+                "a message to other agents goes at once: no target, delay or id",
+            );
+        }
         let mut e = el("send");
         set(&mut e, "event", &s.event);
         if s.target == Target::Internal {

@@ -3139,7 +3139,7 @@ dashboard is in with four tiles (#209); the sorter example is in (#207), without
      pitch p = item length + gap. One conveyor is one straight run as far as the run is
      concerned: curves and spirals are drawn from the same length (M5.3), and a line of several
      sections is several conveyors joined by connections. Items of different sizes come later.
-     (Superseded by M5.5 once D23 is accepted: the length comes from the conveyor's path, and
+     (Superseded by M5.5 (D23, settled): the length comes from the conveyor's path, and
      sections join at junctions.)
    - **Positions.** An item enters at 0 and leaves at the length L; its position is that of its
      front, and its slot reaches p behind it.
@@ -3385,7 +3385,7 @@ openTCS keeps a plant model in millimetres apart from its drawing, and Casymda, 
 starts from BPMN, moves its entities on a tile map of its own rather than on the diagram. M5.5 makes the
 layout the source of truth for geometry. It supersedes, where they differ, the geometry parts of
 M5.1 ("one conveyor is one straight run"), M5.2 (positions from canvas centres times
-`layout_scale`) and M5.3 (3D from layout positions), once D23 to D28 are accepted.
+`layout_scale`) and M5.3 (3D from layout positions) (D23 to D28, settled 2026-11-23).
 
 **Outcome:** a model has a to-scale layout that the user draws or generates, the run reads its
 lengths and distances from it, and the 2D plan and the 3D view are two pictures of that one
@@ -3490,6 +3490,29 @@ layout. The flagship example is a parcel super hub.
   The logic stays an exclusive gateway with M5.1's `stochcraft:routing="divert"`; the gateway is
   now placed at a divert point (D25). The rule chooses where the item is going; the route then
   takes the branches that lead there.
+- **A merge at `s`** decides which feeder goes next when several wait, by a rule:
+  - *first asked, first in* (rule 4), the default;
+  - *priority:* the main line first, or a fixed order;
+  - *fair share:* one queue per feeder, served as if bit by bit in turn (fair queueing: A.
+    Demers, S. Keshav and S. Shenker, *Analysis and Simulation of a Fair Queueing Algorithm*,
+    ACM SIGCOMM 1989, pp. 1–12). Each item gets a finish number F = max(F of the feeder's
+    previous item, R(t)) + its length, where R(t) counts the rounds served so far, and the
+    smallest goes next, so a feeder sending flat out cannot take more than its share. The same
+    rule serves a server's queue by source. Exact check (§2.3, p. 5): under bit-by-bit turns, a
+    light feeder sharing with N that always wait is delayed exactly as if it were alone at
+    1/(N + 1) of the speed; with Poisson arrivals and items of one length that is M/D/1, whose
+    mean wait Pollaczek–Khinchine gives;
+  - *alternating gate* (a "traffic cop"): a mechanical gate of two arms, each locking the other
+    shut. The open side sends until its queue is empty. Its arm then takes a set closing time to
+    swing shut, and if a case reaches it meanwhile that side carries on. Only once the arm has
+    shut does the other side open; with both sides empty the gate waits shut, and the first
+    case to arrive opens its side. If one side's cases come close enough together, its arm
+    never shuts and the other side waits indefinitely. Results report each side's queue as a
+    length (metres), not a count, since case lengths differ, and each gate's share of time busy.
+    From R. C. Stuebing, *Monte Carlo Simulation of Full Case Conveying Systems*, Digest of the
+    Second Conference on Applications of Simulation, 1968, pp. 272–273, and D. A. Heimburger,
+    *A Cased Goods Conveyor Simulator*, Proceedings of the 1973 Winter Simulation Conference,
+    pp. 112–127 (whose events, OPEN.GATE, PASS.GATE and SHUT.ARM, define the rule).
 - **Lane full, stay on the loop.** Built in: when the chosen lane cannot take the item, it stays
   on the loop and is offered again next time round. Each item counts its rounds; after a set
   number it goes to an exception lane. Results report the recirculation count per divert and
@@ -3844,9 +3867,23 @@ plot (M). U1 and U2 come before L4, since layout editing leans on them; the rest
 
 **Status:** L1 is done (#216): `model::Path` with exact `length` and `point_at`, and the read-only
 Layout view with its grid, scale bar, conveyors and footprints to scale, and the unplaced list.
-A conveyor still stores its `ConveyorShape`, which gives its `Path`; folding the shape into the
-path waits for L2's file format, and until then the Layout view places blocks from the diagram,
-as the 3D view does. U1, the run bar, is done (#218).
+L2 is done: `model::Site` holds each conveyor's track (its `Path` and belt width), each block's
+place (a frame, or `s` along a conveyor) and look-only scenery, read and written losslessly as
+`stochcraft:path`, `stochcraft:place` and `stochcraft:scene` (in the extension schema); a
+conveyor with a track runs for the path's length to 0.1 mm, a typed length that differs is an
+override flagged at the Length field (D23), and only the sim fields enter the results baseline
+(D28). The sorter example carries a drawn layout with its lengths unchanged (12 m, 30 m, 4 m).
+Left from L2: glTF export (there is no export yet to extend); a conveyor keeps its
+`ConveyorShape` in the file, to fold into `Path` once every example has a track. L3 is
+done: the Layout and 3D views draw only from the layout, and #210's inference from the diagram
+is gone, so a block with no place is listed as unplaced and drawn in neither (every example but
+the sorter shows an empty plan for now). Belts with side rails, legs and accent stripes are swept
+along their paths, a rail opens where a lane leaves or an infeed joins, and each placed block is
+its kind's shape built by code (`stochcraft_render::kit`); items ride the belts at
+`point_at(s)`, and the 3D camera fits the scene at a three-quarter view. Left from L3: a divert
+is still one gateway, so a parcel crosses from the merge to its lane at once (riding the sort
+straight to its divert point needs L5's points along a section). U1, the run bar, is done
+(#218).
 
 #### Sources
 
@@ -4798,6 +4835,65 @@ are.
     plus customers stay 10,000).
   - Not built in this batch: **the daily peak** (arrivals rising and falling through the day,
     with an exact mean number inside for infinite servers).
+- **Planned examples:** each joins only once its answer is checked against its source with the
+  page, as above.
+  - **A particle detector's readout** (a new "Science" industry): collisions at a collider
+    are a stream of random events, and recording them is a queueing problem. Bunches cross at a
+    fixed rate and each crossing holds a Poisson number of collisions (pile-up), so a share
+    1 − e^−μ of crossings has at least one. A detector channel that is dead for a fixed time τ
+    after each recorded hit, and takes none meanwhile, is a server with no waiting room: it
+    records n / (1 + nτ) of n hits a second (non-paralysable dead time; Erlang B with one
+    server, exact whatever the dead time's distribution). With 100,000 hits a second and τ = 2
+    µs it records 83,333 and loses 1 in 6. A derandomising buffer of K events read out in a
+    fixed time is M/D/1/K, whose loss is exact from its embedded Markov chain. Paralysable dead
+    time (each hit, recorded or not, restarts it: n e^−nτ, 81,873 here) joins once a delay can
+    be restarted. Sources to check: G. F. Knoll, *Radiation Detection and Measurement*, the
+    chapter on dead time; the trigger and data acquisition chapters of a detector textbook.
+  - **A particle shower** (Monte Carlo and agents): Heitler's toy model of an electromagnetic
+    shower. A particle of energy E₀ travels an exponential distance of mean d, splits into two
+    of half its energy, and stops once its energy is below the critical energy E_c. With
+    E₀ / E_c = 2^g every line splits exactly g times, so the shower ends with 2^g particles,
+    and the depth at which each line stops is Erlang (g, d), of mean g d. The chance that a
+    particle crosses a thickness x without interacting is e^−x/d (attenuation). Sources to
+    check: W. Heitler, *The Quantum Theory of Radiation*; J. Matthews, *A Heitler model of
+    extensive air showers*, Astroparticle Physics 22, 2005. The model is the toy model only,
+    not a physics event generator.
+  - **Packing hall merges** (after L5's alternating gate): packing lines whose cases merge
+    through two-way gates onto one conveyor to the warehouse, Stuebing's design problem (1968,
+    above): four lines at 12 ± 3, 20 ± 3, 8 ± 1 and 12 ± 1 cases a minute, 20-inch cases, and
+    his conveyor lengths and speeds, with the questions he asks (the queues on each conveyor;
+    the main conveyor at 200 ft/min; line C 7 cases a minute faster). Its lesson: at peak the
+    main conveyor takes 61 cases a minute, about 102 ft/min of cases, yet needs to run near
+    200 ft/min, because switching gates waste belt and gather cases into slugs; a faster belt
+    moves the queues more than it shortens them. Checks:
+    - *Exact, to establish:* a gate whose arm shuts at once is close to a two-queue polling
+      system with exhaustive service and switchover times, whose mean waits are known exactly.
+      Candidates, to read: a two-queue cyclic system with random switchover times (Discrete
+      Event Dynamic Systems, doi 10.1007/s10626-009-0072-9) and Dorsman et al. (2014) on
+      two-queue Markovian polling with exhaustive service. The gate differs in two ways: the
+      arm stays open if a case arrives while it shuts, and the gate waits shut when both sides
+      are empty. So the check is either a published model that matches these rules, or a
+      scenario that matches the published model.
+    - *Published, not exact:* Stuebing's own maximum and average queues for his design
+      problem, compared as published simulation results, said so on the card.
+    - *Background only:* SIMCON's validation on an existing network (its predicted maximum
+      queues differed from the real ones by less than a foot on average) was for that network,
+      not this problem, so it is history on the write-up, not a check.
+  - **Buses that come in threes** ("Transport"): a bus route whose buses leave on a timetable
+    and are delayed at each stop in proportion to the riders waiting there, so a late bus
+    gathers more riders and falls later while the one behind catches up (bunching; G. F.
+    Newell and R. B. Potts, *Maintaining a bus schedule*, 1964, to check). Exact check: a
+    rider arriving at random waits on average E[H²] / (2 E[H]) = (E[H] / 2)(1 + CV²) for
+    headways H with coefficient of variation CV (random incidence; R. C. Larson and A. R.
+    Odoni, *Urban Operations Research*, to check with the page): 5 minutes for buses exactly
+    every 10, 10 minutes for exponential headways of the same mean. A scenario with headways
+    held at a control stop shows bunching reduced. The run measures the headways at each stop
+    and checks each stop's mean wait against them.
+  - **Low-poly scenes** for the 3D view, each with an exact answer: a supermarket checkout,
+    staffed desks against self-service (Erlang C); an ambulance fleet (Erlang B); a delivery
+    depot; a signalised junction or a roundabout; container berths at a port; and a
+    single-track railway with passing loops. Their meshes are made by code (M5.5), with CC0
+    low-poly kits as a visual reference only.
 - **Printed answers are checked, not copied.** T. T. Allen, *Introduction to Discrete Event
   Simulation and Agent-based Modeling*, Springer 2011: §13.6 answers §6.6's problems 5
   (λ = 0.7, μ = 0.1, c = 8) and 7 (λ = 0.8, μ = 0.1, c = 9) with a chance of waiting of 0.875
@@ -4835,6 +4931,25 @@ Not scheduled yet; recorded so earlier work does not close these doors (docs/res
   times) rather than empty; fitting input distributions from event logs; the engine's journal as
   the audit trail of what-if decisions (it records its version and the state it started
   from, #44).
+- **Timetables in, delays on top:** read a GTFS feed (its stops, trips and stop times) as
+  timetabled sources and routes, so trains or buses leave as published and then run with
+  random delays, dwell times and headways. Replaying a timetable shows the plan; simulating it
+  shows what the plan does under variation. A real-time feed's observed delays become the
+  starting state of a run (digital twins, above).
+- **Incident and near-miss investigation:** a digital twin run backwards over what happened.
+  - **Rebuild the incident** from its records: start from the observed state before it,
+    replay the logged events in order, and work at the resolution the incident needs (seconds
+    inside a shift). Each entity keeps its own times from its start, as particle detector
+    simulation does, so a fine time step loses no precision late in a long run.
+  - **Record by event, not on a grid:** the moments that matter (a buffer full, two vehicles
+    within a set distance, a check skipped) are logged as they happen, like a detector's hits.
+  - **How near it was:** rerun the incident with common random numbers, changing one factor at
+    a time (an operator a minute later, one more part in a buffer), and report the smallest
+    change that turns the near miss into an accident, and which barrier held.
+  - **How often:** near misses, and accidents more so, are rare, and plain replications
+    seldom reach them. Rare-event methods: importance sampling, and splitting (RESTART,
+    Villén-Altamirano and Villén-Altamirano 1991), which detector simulation also uses as event
+    biasing. The answer is a frequency with its interval and the method's assumptions.
 - **Industry 5.0 measures:** workers as resources with skills and shifts; energy and CO₂ per
   part and per element (BPSim cost parameters plus a vendor extension); disruption scenarios.
 - **Bulk flow:** rates, splits by fraction, tanks and batch treatment for process industries,
@@ -4913,12 +5028,12 @@ and the Pages preview of an M3 pull request shows the blocks already merged.
 | D20 | Plugins (M6.2, M6.3) | Settled (2026-11-16): sandboxed WebAssembly plugins in `wasmi`, as the other Craft apps have; command plugins first (through the engine's commands, one undo step, permissions in a manifest), then logic plugins called during a run with the engine's random streams, an instruction budget and a memory cap |
 | D21 | What comes after the capacity table, and where the sorter sits | Recommended: the sorter (M5.1 conveyors, M5.2 operators, M5.3 the layout view in 2D then 3D, M5.4 its dashboard) first, built alongside M3.7 because it changes `model`, `blocks` and the engine while M3.7 changes `ui-egui`; M5.3 follows #151's moving entities so it reuses them. Then M7.1 line balancing (small, needs no run, reuses takt and the capacity table), M7.2 the from-to chart (reuses the capacity table's rates, and M5.5's layout distances; `layout_scale` only for a model with no layout), M7.3 inventory, M7.4 sharing. M4 waits until the sorter's first two steps are in. M5.5's layout layer then comes before M7.2, which draws on it |
 | D22 | Moving the apps from eframe's glow backend to wgpu | **Superseded by D27**, the single renderer decision. Kept for the record: it recommended the move at M5.3, as its own PR before it, so the 3D view could reuse the Craft apps' shared viewport from SolidCraft (camera, picking, shading, a headless rasterizer, a browser build already working), which runs on wgpu. The alternative, a renderer of our own through an `egui_glow` paint callback, keeps today's backend but rewrites all of that. The 3D view then shipped on a CPU renderer (`view3d.rs`), and D27 keeps it until a measurement shows it too slow |
-| D23 | Conveyor length: typed or from its path (M5.5) | **Recommended: from the path.** The path's exact length is the length the run uses; a typed length stays as an override, shown beside the drawn length with a warning. An existing file whose `length` differs from its path reads that `length` as the override, so no validated result moves |
-| D24 | Where layout data lives (M5.5) | **Recommended:** all of it in the BPMN file as `stochcraft:` extensions (what the run reads, and scenery in `stochcraft:scene`), with glTF 2.0 as the exchange format. No sidecar: a TOML or JSON file would use a standard syntax but a vocabulary of our own, against principle 1. Cost: larger BPMN files and noisier diffs that other BPMN tools carry blindly |
-| D25 | A divert: a point on a conveyor, or a gateway block linked to one (M5.5) | **Recommended: both, one per layer.** The logic stays an exclusive gateway (M5.1's divert routing, conditions, DMN), so BPMN tools still read it; the gateway is placed at a divert point at `s` on a section, which gives it its position and lane. A divert point without a gateway is not allowed |
-| D26 | The whole-screen redesign: before or after the layout work (M5.5) | **Recommended: interleaved.** U1 (run bar) and U2 (properties of the selection) first, since layout editing leans on them; the library and model tree with the Layout view; the experiment editor, spreadsheet view, live card and statistics table as their own PRs alongside L4 to L12 |
-| D27 | The 3D renderer (M5.5) | **Recommended:** keep `view3d.rs`'s CPU renderer, fed from the Layout, with levels of detail and a triangle budget; D22's move to the shared wgpu viewport waits until the CPU renderer is measured too slow (for example 5,000 moving totes in the browser) |
-| D28 | Which layout data marks results out of date; the fate of `layout_scale` (M5.5) | **Recommended:** every field is tagged sim or look; sim fields (paths, places that transports use, chute capacities, walkways) enter the results baseline and look fields never do. `layout_scale` stays only for models without a layout, where distances fall back to the diagram's centres, flagged in the view |
+| D23 | Conveyor length: typed or from its path (M5.5) | Settled (2026-11-23): from the path. The path's exact length is the length the run uses; a typed length stays as an override, shown beside the drawn length with a warning. An existing file whose `length` differs from its path reads that `length` as the override, so no validated result moves |
+| D24 | Where layout data lives (M5.5) | Settled (2026-11-23): all of it in the BPMN file as `stochcraft:` extensions (what the run reads, and scenery in `stochcraft:scene`), with glTF 2.0 as the exchange format. No sidecar: a TOML or JSON file would use a standard syntax but a vocabulary of our own, against principle 1. Cost: larger BPMN files and noisier diffs that other BPMN tools carry blindly |
+| D25 | A divert: a point on a conveyor, or a gateway block linked to one (M5.5) | Settled (2026-11-23): both, one per layer. The logic stays an exclusive gateway (M5.1's divert routing, conditions, DMN), so BPMN tools still read it; the gateway is placed at a divert point at `s` on a section, which gives it its position and lane. A divert point without a gateway is not allowed |
+| D26 | The whole-screen redesign: before or after the layout work (M5.5) | Settled (2026-11-23): interleaved. U1 (run bar) and U2 (properties of the selection) first, since layout editing leans on them; the library and model tree with the Layout view; the experiment editor, spreadsheet view, live card and statistics table as their own PRs alongside L4 to L12 |
+| D27 | The 3D renderer (M5.5) | Settled (2026-11-23): keep `view3d.rs`'s CPU renderer, fed from the Layout, with levels of detail and a triangle budget; D22's move to the shared wgpu viewport waits until the CPU renderer is measured too slow (for example 5,000 moving totes in the browser) |
+| D28 | Which layout data marks results out of date; the fate of `layout_scale` (M5.5) | Settled (2026-11-23): every field is tagged sim or look; sim fields (paths, places that transports use, chute capacities, walkways) enter the results baseline and look fields never do. `layout_scale` stays only for models without a layout, where distances fall back to the diagram's centres, flagged in the view |
 | D29 | Recirculation on a sorter loop (M5.5) | **Recommended:** built in at every divert: a full lane sends the item round again; after a set number of rounds (default 3) it goes to an exception lane; counts per divert and per item are reported |
 | D30 | Decision rules for routing and classification (M5.5) | **Settled (2026-11-19):** DMN decision tables, read from a `.dmn` file beside the BPMN, named from a business rule task, gateway or divert by a `stochcraft:` extension; first the hit policies UNIQUE, FIRST, PRIORITY and COLLECT and a small FEEL subset for input entries |
 | D31 | The parcel hub example's scope (M5.5) | **Recommended:** S's outbound segment first (its checks are the stronger), then B's inbound side; whole-hub figures only as labelled scale context, never as a check |

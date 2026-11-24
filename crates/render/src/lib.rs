@@ -5,6 +5,7 @@
 
 pub mod mesh;
 
+pub use mesh::kit;
 pub use mesh::{
     Agv, ConveyorKind, CurvedConveyor, Forklift, Machine, Mesh, Operator, Rack, SpiralConveyor,
     StraightConveyor, Tote, agv, box_mesh, curved_conveyor, forklift, machine, operator, rack,

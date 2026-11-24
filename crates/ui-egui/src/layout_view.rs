@@ -1,12 +1,12 @@
-//! The Layout view (M5.5, L1): the model's plan in metres, to scale, read-only. A grid, a scale
-//! bar, every conveyor as a belt with its width, every other block as its footprint with
-//! its name, and the list of blocks that are not placed.
+//! The Layout view (M5.5, L1; drawn from the layout since L3): the model's plan in metres, to
+//! scale, read-only. A grid, a scale bar, the floor and markings, every conveyor as its belt along
+//! its track's path with its width and rails, every placed block as its footprint with its name,
+//! and the list of blocks that are not placed.
 //!
-//! There are no layout files yet, so every model is "without a layout": positions come from the
-//! flow diagram, as in the 3D view (block centres on the canvas, [`view3d::centre_metres`]), and
-//! the view says so. A conveyor is drawn exactly as the 3D view builds it (edge to edge between the
-//! footprints, a ring when it returns to its block), so its drawn length can differ from its own,
-//! which its label gives.
+//! Positions come only from the model's layout ([`stochcraft_model::Site`]); a block with no
+//! place is listed as unplaced and drawn nowhere, as in the 3D view. The plan and the 3D view
+//! use the same paths and frames ([`crate::view3d::track_metres`],
+//! [`crate::view3d::frame_metres`]), so every item is at the same `point_at(s)` in both.
 //!
 //! Conventions: metres, `x` right and `y` up, like the 3D view's floor. Drag to pan, scroll to
 //! zoom about the pointer, Fit to see everything; the arrow keys and plus and minus work while
@@ -15,16 +15,13 @@
 use egui::{
     Align2, FontId, Key, Pos2, Rect, RichText, Sense, Shape, Stroke, StrokeKind, Vec2, pos2, vec2,
 };
-use stochcraft_model::{ElementId, ElementKind, Model};
-use stochcraft_render::StraightConveyor;
+use stochcraft_model::{Element, ElementKind, Model};
 
 use crate::App;
 use crate::i18n::{t, tf};
 use crate::results::number;
 use crate::theme;
-use crate::view3d::{
-    Outline, along_path, belt_points, block_outline, centre_metres, path_length, unit_metres,
-};
+use crate::view3d::{RAIL, frame_metres, look_of, stations, track_metres, unit_metres};
 
 /// The least and most pixels a metre may take.
 const MIN_SCALE: f32 = 0.05;
@@ -54,29 +51,56 @@ fn nice_step(scale: f32, least_px: f32, least_m: f64) -> f64 {
         .unwrap_or(10_000.0)
 }
 
-/// A block (not a conveyor) as it is drawn: its name, its centre and the outline of its footprint.
+/// A rectangle on the plan: its centre, its size along and across its heading, and the heading
+/// in radians.
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub(crate) struct Footprint {
+    pub centre: [f32; 2],
+    pub along: f32,
+    pub across: f32,
+    pub heading: f32,
+}
+
+impl Footprint {
+    /// Its four corners, anticlockwise.
+    fn corners(&self) -> [[f32; 2]; 4] {
+        let (s, c) = (libm::sinf(self.heading), libm::cosf(self.heading));
+        let (a, b) = (self.along / 2.0, self.across / 2.0);
+        [(-a, -b), (a, -b), (a, b), (-a, b)].map(|(x, y)| {
+            [
+                self.centre[0] + c * x - s * y,
+                self.centre[1] + s * x + c * y,
+            ]
+        })
+    }
+}
+
+/// A block (not a conveyor) as it is drawn: its name and its footprint.
 #[derive(Debug, Clone, PartialEq)]
 pub(crate) struct Place {
     name: String,
-    centre: [f32; 2],
-    outline: Outline,
+    footprint: Footprint,
 }
 
-/// A conveyor as it is drawn: its name, its path cut into points (in metres), and the point
-/// half way along, where its name goes.
+/// A conveyor as it is drawn: its name, its path cut into points (in metres), its width, and
+/// the point half way along, where its name goes.
 #[derive(Debug, Clone, PartialEq)]
 pub(crate) struct Belt {
     name: String,
     points: Vec<[f32; 2]>,
+    width: f32,
     middle: [f32; 2],
 }
 
 /// What the Layout view draws, worked out from the model once per revision.
 #[derive(Debug, Clone, PartialEq)]
 pub(crate) struct Plan {
+    /// Floor areas and markings from the scenery.
+    floors: Vec<Footprint>,
+    markings: Vec<Footprint>,
     places: Vec<Place>,
     belts: Vec<Belt>,
-    /// The names of the blocks that have no position: listed, not drawn.
+    /// The names of the blocks that have no place: listed, not drawn.
     unplaced: Vec<String>,
     /// The corners of the box round everything drawn.
     low: [f32; 2],
@@ -84,82 +108,105 @@ pub(crate) struct Plan {
 }
 
 /// What a block is called on the drawing: its name, or its id when it has none.
-fn label_of(name: &str, id: &ElementId) -> String {
-    if name.is_empty() {
-        id.as_str().to_owned()
+pub(crate) fn label_of(e: &Element) -> String {
+    if e.name.is_empty() {
+        e.id.as_str().to_owned()
     } else {
-        name.to_owned()
+        e.name.clone()
     }
 }
 
-/// The plan of `model`. Positions are the diagram's ([`Model::placed`]); a block that has none is
-/// unplaced.
+/// The plan of `model`, from its layout; a block with no place is unplaced.
 fn build_plan(model: &Model) -> Plan {
-    let placed = model.placed();
-    let metres = unit_metres(model.experiment.length_unit);
-    let centre_of = |id: &ElementId| placed.get(id).map(centre_metres);
     let mut places = Vec::new();
     let mut belts = Vec::new();
     let mut unplaced = Vec::new();
     for e in &model.elements {
-        let name = label_of(&e.name, &e.id);
-        let Some(c) = centre_of(&e.id) else {
+        let name = label_of(e);
+        if let ElementKind::Conveyor { length, .. } = &e.kind {
+            let Some((path, width)) = track_metres(model, &e.id) else {
+                unplaced.push(name);
+                continue;
+            };
+            let points: Vec<[f32; 2]> = stations(&path).iter().map(|s| [s.x, s.y]).collect();
+            let mid = path.point_at(path.length() / 2.0);
+            let own = number(*length * unit_metres(model.experiment.length_unit));
+            belts.push(Belt {
+                name: format!("{name} · {}", tf("{length} m", &[("length", &own)])),
+                points,
+                width,
+                middle: [mid.x as f32, mid.y as f32],
+            });
+            continue;
+        }
+        let Some(f) = frame_metres(model, e) else {
             unplaced.push(name);
             continue;
         };
-        let ElementKind::Conveyor { length, .. } = &e.kind else {
-            places.push(Place {
-                name,
-                centre: c,
-                outline: block_outline(&e.kind),
-            });
-            continue;
-        };
-        // Drawn exactly as the 3D view builds it, from the diagram's positions, so its drawn
-        // length may differ from its own; the label gives the own length.
-        let Some(points) = belt_points(model, e, &centre_of) else {
-            continue;
-        };
-        let middle = along_path(&points, path_length(&points) / 2.0).0;
-        let own = number(*length * f64::from(metres));
-        belts.push(Belt {
-            name: format!("{name} · {}", tf("{length} m", &[("length", &own)])),
-            points,
-            middle,
+        let look = look_of(e);
+        places.push(Place {
+            name,
+            footprint: Footprint {
+                centre: [f.x as f32, f.y as f32],
+                along: look.footprint[0],
+                across: look.footprint[1],
+                heading: f.heading_deg.to_radians() as f32,
+            },
         });
+    }
+    let m = unit_metres(model.experiment.length_unit);
+    let mut floors = Vec::new();
+    let mut markings = Vec::new();
+    for o in &model.site.scene {
+        let fp = Footprint {
+            centre: [(o.at.x * m) as f32, (o.at.y * m) as f32],
+            along: (o.size[1] * m) as f32,
+            across: (o.size[0] * m) as f32,
+            heading: o.at.heading_deg.to_radians() as f32,
+        };
+        match o.kind.as_str() {
+            "floor" => floors.push(fp),
+            "marking" => markings.push(fp),
+            _ => {}
+        }
+    }
+    // What is drawn, each point with how far round it its drawing reaches; the floor only when
+    // nothing else is.
+    let mut reach: Vec<([f32; 2], f32)> = places
+        .iter()
+        .flat_map(|p| p.footprint.corners().map(|c| (c, 0.0)))
+        .chain(
+            belts
+                .iter()
+                .flat_map(|b| b.points.iter().map(|q| (*q, b.width / 2.0 + RAIL))),
+        )
+        .collect();
+    if reach.is_empty() {
+        reach = floors
+            .iter()
+            .flat_map(|f| f.corners().map(|c| (c, 0.0)))
+            .collect();
     }
     let mut low = [f32::INFINITY; 2];
     let mut high = [f32::NEG_INFINITY; 2];
-    let half_belt = belt_width() / 2.0;
-    let mut grow = |p: [f32; 2], by: f32| {
+    for (p, by) in reach {
         if p.iter().all(|c| c.is_finite()) {
             low = [low[0].min(p[0] - by), low[1].min(p[1] - by)];
             high = [high[0].max(p[0] + by), high[1].max(p[1] + by)];
-        }
-    };
-    for p in &places {
-        grow(p.centre, p.outline.reach());
-    }
-    for b in &belts {
-        for q in &b.points {
-            grow(*q, half_belt);
         }
     }
     if low[0] > high[0] {
         (low, high) = ([-2.0, -2.0], [2.0, 2.0]);
     }
     Plan {
+        floors,
+        markings,
         places,
         belts,
         unplaced,
         low,
         high,
     }
-}
-
-/// How wide a belt is drawn, in metres: the 3D view's.
-fn belt_width() -> f32 {
-    StraightConveyor::default().width
 }
 
 /// Where the drawing is looking: the point in metres at the middle of the canvas and how many
@@ -313,7 +360,7 @@ impl App {
         let mut fit = false;
         ui.horizontal(|ui| {
             fit = ui.button(t("Fit")).clicked();
-            ui.label(RichText::new(t("Positions from the diagram")).color(p.text_weak));
+            ui.label(RichText::new(t("Positions from the layout")).color(p.text_weak));
         });
         ui.add_space(4.0);
 
@@ -373,6 +420,15 @@ impl App {
 
         let painter = ui.painter_at(rect);
         painter.rect_filled(rect, 4.0, p.canvas);
+        let poly = |fp: &Footprint| -> Vec<Pos2> {
+            fp.corners()
+                .iter()
+                .map(|c| vw.on_screen(rect, *c))
+                .collect()
+        };
+        for fl in &plan.floors {
+            painter.add(Shape::convex_polygon(poly(fl), p.stripe, Stroke::NONE));
+        }
         let (xs, ys) = grid_lines(&vw, rect);
         let minor = Stroke::new(1.0, p.border);
         let major = Stroke::new(1.5, p.text_weak.gamma_multiply(0.45));
@@ -384,31 +440,27 @@ impl App {
             let stroke = if strong { major } else { minor };
             painter.line_segment([pos2(rect.left(), y), pos2(rect.right(), y)], stroke);
         }
-        let belt = Stroke::new((belt_width() * vw.scale).max(2.0), p.chart);
+        for mk in &plan.markings {
+            painter.add(Shape::convex_polygon(poly(mk), p.warning, Stroke::NONE));
+        }
+        // Each belt: its rails as a wider band, the belt inside them.
         for b in &plan.belts {
-            let points = b.points.iter().map(|q| vw.on_screen(rect, *q)).collect();
+            let points: Vec<Pos2> = b.points.iter().map(|q| vw.on_screen(rect, *q)).collect();
+            let rails = Stroke::new(
+                ((b.width + 2.0 * RAIL) * vw.scale).max(3.0),
+                p.control_border,
+            );
+            let belt = Stroke::new((b.width * vw.scale).max(2.0), p.chart);
+            painter.add(Shape::line(points.clone(), rails));
             painter.add(Shape::line(points, belt));
         }
         let outline = Stroke::new(1.5, p.control_border);
         for pl in &plan.places {
-            let c = vw.on_screen(rect, pl.centre);
-            let reach = pl.outline.reach() * vw.scale;
-            match pl.outline {
-                Outline::Square(_) => {
-                    let r = Rect::from_center_size(c, vec2(2.0 * reach, 2.0 * reach));
-                    painter.rect_filled(r, 2.0, p.accent_soft);
-                    painter.rect_stroke(r, 2.0, outline, StrokeKind::Inside);
-                }
-                Outline::Diamond(_) => {
-                    let corners = vec![
-                        pos2(c.x + reach, c.y),
-                        pos2(c.x, c.y - reach),
-                        pos2(c.x - reach, c.y),
-                        pos2(c.x, c.y + reach),
-                    ];
-                    painter.add(Shape::convex_polygon(corners, p.accent_soft, outline));
-                }
-            }
+            painter.add(Shape::convex_polygon(
+                poly(&pl.footprint),
+                p.accent_soft,
+                outline,
+            ));
         }
         // The scale bar, bottom left: its length in metres written over it.
         let bar = nice_step(vw.scale, BAR_PX, 0.01);
@@ -449,7 +501,7 @@ impl App {
             name_label(
                 ui,
                 rect,
-                vw.on_screen(rect, pl.centre),
+                vw.on_screen(rect, pl.footprint.centre),
                 &pl.name,
                 &p,
                 &mut drawn,
@@ -476,7 +528,7 @@ impl App {
         });
         ui.label(RichText::new(t("Unplaced")).strong());
         let note = if plan.unplaced.is_empty() {
-            t("Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.").to_owned()
+            t("Every block is placed.").to_owned()
         } else {
             plan.unplaced.join(", ")
         };
@@ -489,159 +541,79 @@ mod tests {
     #![allow(clippy::panic, clippy::expect_used, clippy::unwrap_used)]
 
     use super::*;
-    use stochcraft_model::{Bounds, Connection, ConveyorShape, Dist, Element, LengthUnit, Routing};
-
-    fn id(s: &str) -> ElementId {
-        ElementId::unchecked(s)
-    }
 
     fn rect() -> Rect {
         Rect::from_min_size(pos2(10.0, 20.0), vec2(400.0, 300.0))
     }
 
-    fn put(m: &mut Model, name: &str, x: f64, y: f64) {
-        m.layout.insert(
-            id(name),
-            Bounds {
-                x,
-                y,
-                width: 100.0,
-                height: 80.0,
-            },
-        );
+    fn sorter() -> Model {
+        let mut e = stochcraft_engine::Engine::new();
+        e.open_bytes(
+            "sorter.bpmn",
+            include_bytes!("../../../tests/models/sorter.bpmn"),
+            None,
+        )
+        .unwrap();
+        e.model().clone()
     }
 
-    /// A source and a sink 8 m apart on the canvas (400 drawing units), a conveyor of `shape` and
-    /// `length` metres between them.
-    fn line_with(shape: ConveyorShape, length: f64) -> Model {
-        let mut m = Model::default();
-        m.experiment.length_unit = LengthUnit::Metres;
-        m.elements.push(Element::new(
-            id("in"),
-            "In",
-            ElementKind::Source {
-                interarrival: Dist::Constant(1.0),
-                limit: None,
-                timed: Vec::new(),
-                idle_outside: false,
-            },
-        ));
-        m.elements.push(Element::new(
-            id("belt"),
-            "Belt",
-            ElementKind::Conveyor {
-                length,
-                speed: 1.0,
-                accumulating: false,
-                item_length: 0.5,
-                gap: 0.1,
-                shape,
-            },
-        ));
-        m.elements.push(Element::new(
-            id("out"),
-            "Out",
-            ElementKind::Sink {
-                scrap: None,
-                demand: None,
-            },
-        ));
-        for (a, b) in [("in", "belt"), ("belt", "out")] {
-            m.connections
-                .push(Connection::new(id(&format!("{a}-{b}")), id(a), id(b)));
-        }
-        put(&mut m, "in", 0.0, 0.0);
-        put(&mut m, "belt", 200.0, 0.0);
-        put(&mut m, "out", 400.0, 0.0);
-        m
-    }
-
-    fn polyline_length(points: &[[f32; 2]]) -> f32 {
-        points
+    #[test]
+    fn the_sorter_is_drawn_from_its_layout() {
+        let p = build_plan(&sorter());
+        assert!(p.unplaced.is_empty(), "{:?}", p.unplaced);
+        assert_eq!((p.places.len(), p.belts.len()), (7, 6));
+        assert_eq!(p.floors.len(), 1);
+        let belt = |name: &str| p.belts.iter().find(|b| b.name.starts_with(name)).unwrap();
+        // The loop runs its 30 m round and closes; its label gives its own length.
+        let lp = belt("Loop");
+        assert_eq!(lp.name, "Loop · 30 m");
+        let (first, last) = (lp.points[0], lp.points[lp.points.len() - 1]);
+        assert!(first[0].abs() < 1e-4 && last[0].abs() < 1e-4 && last[1].abs() < 1e-4);
+        let drawn: f32 = lp
+            .points
             .windows(2)
             .map(|w| libm::hypotf(w[1][0] - w[0][0], w[1][1] - w[0][1]))
-            .sum()
+            .sum();
+        assert!((drawn - 30.0).abs() < 0.01, "{drawn}");
+        // A lane leaves the sort straight at right angles, 4 m down to its station.
+        let red = belt("Lane red");
+        assert_eq!(red.points[0], [2.25, -0.45]);
+        let end = red.points[red.points.len() - 1];
+        assert!((end[0] - 2.25).abs() < 1e-4 && (end[1] + 4.45).abs() < 1e-4);
+        let pack = p.places.iter().find(|x| x.name == "Pack red").unwrap();
+        assert!((pack.footprint.centre[1] + 4.95).abs() < 1e-4);
+        // The divert stands beside the loop's start, inside it.
+        let divert = p
+            .places
+            .iter()
+            .find(|x| x.name == "Divert by product")
+            .unwrap();
+        assert!(divert.footprint.centre[1] > 0.4);
     }
 
     #[test]
-    fn a_conveyor_runs_edge_to_edge_as_in_the_3d_view_and_is_labelled_with_its_own_length() {
-        // The source is at (1, -0.8) m and the sink at (9, -0.8) m, both with a half-side of
-        // 0.45 m, so the belt runs from 1.45 m to 8.55 m: 7.1 m drawn, 4.0 m + 1.45 = 5 m at
-        // the middle. Its own length, 10 m, is only in its label.
-        let p = build_plan(&line_with(ConveyorShape::Straight, 10.0));
-        let belt = &p.belts[0];
-        let (first, last) = (belt.points[0], belt.points[belt.points.len() - 1]);
-        assert!((first[0] - 1.45).abs() < 1e-3 && (first[1] + 0.8).abs() < 1e-3);
-        assert!((last[0] - 8.55).abs() < 1e-3 && (last[1] + 0.8).abs() < 1e-3);
-        assert!((polyline_length(&belt.points) - 7.1).abs() < 1e-3);
-        assert!((belt.middle[0] - 5.0).abs() < 1e-3);
-        assert_eq!(belt.name, "Belt · 10 m");
-        assert_eq!(p.places.len(), 2);
-        assert!(p.unplaced.is_empty());
-    }
-
-    #[test]
-    fn a_conveyor_back_to_its_own_block_is_a_ring_as_long_as_its_own_length() {
-        // A gateway with a 30 m conveyor leaving and returning: the 3D view's ring, 30 m round
-        // and 7.5 m across (a quarter of the length).
-        let mut m = Model::default();
-        m.experiment.length_unit = LengthUnit::Metres;
-        m.elements.push(Element::new(
-            id("g"),
-            "G",
-            ElementKind::ExclusiveGateway {
-                default: None,
-                routing: Routing::Standard,
-            },
-        ));
-        m.elements.push(Element::new(
-            id("loop"),
-            "Loop",
-            ElementKind::Conveyor {
-                length: 30.0,
-                speed: 1.0,
-                accumulating: false,
-                item_length: 0.5,
-                gap: 0.1,
-                shape: ConveyorShape::Straight,
-            },
-        ));
-        for (a, b) in [("g", "loop"), ("loop", "g")] {
-            m.connections
-                .push(Connection::new(id(&format!("{a}-{b}")), id(a), id(b)));
-        }
-        put(&mut m, "g", 0.0, 0.0);
-        put(&mut m, "loop", 200.0, 0.0);
+    fn a_model_without_a_layout_draws_nothing_and_lists_every_block() {
+        let mut m = sorter();
+        m.site = Default::default();
         let p = build_plan(&m);
-        let belt = &p.belts[0];
-        assert!((polyline_length(&belt.points) - 30.0).abs() < 1e-3);
-        let ys: Vec<f32> = belt.points.iter().map(|q| q[1]).collect();
-        let span = ys.iter().copied().fold(f32::MIN, f32::max)
-            - ys.iter().copied().fold(f32::MAX, f32::min);
-        assert!((span - 7.5).abs() < 1e-3, "{span}");
-        assert_eq!(belt.name, "Loop · 30 m");
-    }
-
-    #[test]
-    fn a_conveyor_in_another_unit_is_labelled_in_metres() {
-        let mut m = line_with(ConveyorShape::Straight, 1000.0);
-        m.experiment.length_unit = LengthUnit::Millimetres;
-        let p = build_plan(&m);
-        assert_eq!(p.belts[0].name, "Belt · 1 m");
-    }
-    #[test]
-    fn a_model_with_no_diagram_places_every_block() {
-        let mut m = line_with(ConveyorShape::Straight, 10.0);
-        m.layout.clear();
-        let p = build_plan(&m);
-        assert!(p.unplaced.is_empty());
-        assert_eq!(p.places.len() + p.belts.len(), 3);
-    }
-
-    #[test]
-    fn an_empty_model_has_a_small_box_to_fit() {
-        let p = build_plan(&Model::default());
+        assert!(p.places.is_empty() && p.belts.is_empty());
+        assert_eq!(p.unplaced.len(), m.elements.len());
         assert_eq!((p.low, p.high), ([-2.0, -2.0], [2.0, 2.0]));
+    }
+
+    #[test]
+    fn a_footprint_turns_with_its_heading() {
+        let fp = Footprint {
+            centre: [1.0, 1.0],
+            along: 2.0,
+            across: 1.0,
+            heading: core::f32::consts::FRAC_PI_2,
+        };
+        // Turned a quarter: 2 m along y, 1 m along x.
+        let c = fp.corners();
+        let xs = c.iter().map(|p| p[0]);
+        let span_x = xs.clone().fold(f32::MIN, f32::max) - xs.fold(f32::MAX, f32::min);
+        assert!((span_x - 1.0).abs() < 1e-5);
     }
 
     #[test]

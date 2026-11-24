@@ -1202,12 +1202,13 @@ unit	yr	წელი
 	Layout	განლაგება
 	Layout of the model, to scale	მოდელის განლაგება, მასშტაბით
 	Drag to pan · Scroll to zoom	გადაათრიეთ გადასაადგილებლად · გადაახვიეთ გასადიდებლად
-	Positions from the diagram	პოზიციები დიაგრამიდან
+	Positions from the layout	პოზიციები განლაგებიდან
 	Scale bar: {length} m	მასშტაბის ზოლი: {length} m
 	{length} m	{length} m
 	x {x} m, y {y} m	x {x} m, y {y} m
 	Unplaced	განუთავსებელი
-	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	ამჟამად ყველა ბლოკი დიაგრამის მიხედვით თავსდება. ბლოკი, რომელსაც დიაგრამა გამოტოვებს, აქ არის ჩამოთვლილი და არ იხატება.
+	Every block is placed.	ყველა ბლოკი განთავსებულია.
+	Nothing to draw: this model has no layout yet. The Layout tab lists its blocks as unplaced.	დასახატი არაფერია: ამ მოდელს ჯერ არ აქვს განლაგება. ჩანართი „განლაგება“ მის ბლოკებს განუთავსებლად ჩამოთვლის.
 	The charts are taller than the window: make the window taller, then export them again.	დიაგრამები ფანჯარაზე მაღალია: გაზარდეთ ფანჯრის სიმაღლე და ხელახლა გაიტანეთ.
 	The model changed while choosing where to save it, so it was not saved. Save again.	მოდელი შეიცვალა შენახვის ადგილის არჩევისას, ამიტომ არ შეინახა. შეინახეთ ხელახლა.
 	Exactly that many	ზუსტად იმდენი

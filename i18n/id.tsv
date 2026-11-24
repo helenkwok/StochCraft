@@ -1202,12 +1202,13 @@ unit	yr	thn
 	Layout	Tata letak
 	Layout of the model, to scale	Tata letak model, sesuai skala
 	Drag to pan · Scroll to zoom	Seret untuk menggeser · Gulir untuk memperbesar
-	Positions from the diagram	Posisi dari diagram
+	Positions from the layout	Posisi dari tata letak
 	Scale bar: {length} m	Bilah skala: {length} m
 	{length} m	{length} m
 	x {x} m, y {y} m	x {x} m, y {y} m
 	Unplaced	Belum ditempatkan
-	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	Untuk saat ini, setiap blok ditempatkan berdasarkan diagram. Blok yang tidak ada di diagram dicantumkan di sini dan tidak digambar.
+	Every block is placed.	Setiap blok sudah ditempatkan.
+	Nothing to draw: this model has no layout yet. The Layout tab lists its blocks as unplaced.	Tidak ada yang digambar: model ini belum memiliki tata letak. Tab Tata letak mencantumkan bloknya sebagai belum ditempatkan.
 	The charts are taller than the window: make the window taller, then export them again.	Grafik lebih tinggi daripada jendela: tinggikan jendela, lalu ekspor lagi.
 	The model changed while choosing where to save it, so it was not saved. Save again.	Model berubah saat lokasi penyimpanan sedang dipilih, jadi model tidak disimpan. Simpan lagi.
 	Exactly that many	Tepat sejumlah itu

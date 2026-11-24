@@ -1202,12 +1202,13 @@ unit	yr	ปี
 	Layout	ผัง
 	Layout of the model, to scale	ผังของแบบจำลอง ตามมาตราส่วน
 	Drag to pan · Scroll to zoom	ลากเพื่อเลื่อน · เลื่อนเพื่อซูม
-	Positions from the diagram	ตำแหน่งจากแผนภาพ
+	Positions from the layout	ตำแหน่งจากผัง
 	Scale bar: {length} m	แถบมาตราส่วน: {length} m
 	{length} m	{length} m
 	x {x} m, y {y} m	x {x} m, y {y} m
 	Unplaced	ยังไม่ได้วาง
-	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	ขณะนี้ทุกบล็อกถูกวางตามแผนภาพ บล็อกที่แผนภาพไม่มีจะแสดงรายการไว้ที่นี่และไม่ถูกวาด
+	Every block is placed.	ทุกบล็อกถูกวางแล้ว
+	Nothing to draw: this model has no layout yet. The Layout tab lists its blocks as unplaced.	ไม่มีอะไรให้วาด: โมเดลนี้ยังไม่มีผัง แท็บผังแสดงบล็อกของโมเดลว่ายังไม่ได้วาง
 	The charts are taller than the window: make the window taller, then export them again.	แผนภูมิสูงกว่าหน้าต่าง: ขยายหน้าต่างให้สูงขึ้น แล้วส่งออกอีกครั้ง
 	The model changed while choosing where to save it, so it was not saved. Save again.	แบบจำลองเปลี่ยนไประหว่างที่เลือกตำแหน่งบันทึก จึงไม่ได้บันทึก บันทึกอีกครั้ง
 	Exactly that many	ตรงตามจำนวนนั้นพอดี

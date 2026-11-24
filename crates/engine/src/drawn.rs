@@ -29,6 +29,9 @@ pub(crate) fn draws(model: &Model) -> bool {
         estimates: _,
         starting: _,
         monte_carlo: _,
+        // The physical layout: conveyors' lengths come from their tracks before a run (and
+        // are read from `elements`), and places and scenery draw nothing.
+        site: _,
         agents,
     } = model;
     // `experiment.optimise` does not refuse a model with agents (one with a process beside its

@@ -702,7 +702,8 @@ from a seed, and `Model::run` returns its `Run` (the statistics over time and ea
   tested again after every event that changes it (an agent created, removed or taking a transition):
   the agents waiting on it in population, then serial order, then the environment, until nothing
   changes (at most 1,000,000 changes per event, `RunError::RetestLimit`). A rate may not read a
-  population or the time, since it is drawn again only when the agent's own variables change.
+  population, the time, `In()` or the event (`_event.name`, `_event.data`), since it is drawn again
+  only when the agent's own variables change; the chart is refused when it is built.
 - `Statistic`s (count, sum, mean, minimum and maximum of an expression over the agents meeting a
   condition) are recorded at the start, every `save_every` and at the end, after every event at that
   time; `bands` gives the mean, median and 5% to 95% band across replications.
@@ -1144,6 +1145,18 @@ secrets. The review needs a repository secret named `GEMINI_API_KEY` (a Gemini A
 Google AI Studio); without it the run fails and posts a failure comment. It posts with the
 workflow's own token and reads the pull request through GitHub's MCP server in a container. Its
 comments are suggestions, not checks: CI is the gate.
+
+The free tier allows 20 requests a day, and every model turn and every retry is one request. So a
+review has at most 12 turns, and `.github/scripts/gemini-retry-guard.sh` stops the CLI after two
+failed requests (the CLI by itself retries a 503 "high demand" answer up to 10 times). When a
+review fails with "exhausted your daily quota", it saves a cache entry named for the quota day
+(the Pacific date, since the quota resets at midnight Pacific time), and until the reset the
+dispatch skips Gemini without calling it and posts one comment per pull request saying when the
+quota resets. The entry is seen by every pull request when the failed review was started from main
+(CodeRabbit's note, a pull request comment or a manual run), but only by that pull request when it
+was started by a review comment. `gh cache list --key gemini-daily-quota-exhausted-` shows the
+entries, and `gh cache delete <key>` clears one. The failure comment names the cause: the daily
+quota, failed requests (503), the review step's 5-minute limit, or another error.
 
 ## Contributing
 

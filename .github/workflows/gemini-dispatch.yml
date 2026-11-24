@@ -1,6 +1,8 @@
 # Routes "@gemini-cli /review" comments, manual runs, and CodeRabbit's "rate limited" comments to
 # gemini-review.yml: Gemini reviews a pull request automatically only while CodeRabbit is out of
-# reviews, at most once per head commit.
+# reviews, at most once per head commit. Once a review has hit the free tier's daily quota, requests
+# skip Gemini without calling it until the quota resets (midnight Pacific time), and one comment per
+# pull request says so.
 # Adapted from google-github-actions/run-gemini-cli, examples/workflows/gemini-dispatch (Apache-2.0);
 # the triage, invoke and plan-execute routes and the GitHub App token steps are removed.
 name: 'Gemini Dispatch'
@@ -80,12 +82,14 @@ jobs:
       issues: 'write'
       pull-requests: 'write'
     outputs:
-      command: '${{ steps.extract_command.outputs.command }}'
+      command: '${{ steps.decide.outputs.command }}'
       request: '${{ steps.extract_command.outputs.request }}'
       additional_context: '${{ steps.extract_command.outputs.additional_context }}'
       issue_number: '${{ github.event.pull_request.number || github.event.issue.number || inputs.pull_request_number }}'
       head_sha: '${{ steps.extract_command.outputs.head_sha }}'
       coderabbit_out: '${{ steps.extract_command.outputs.coderabbit_out }}'
+      quota_resets: '${{ steps.quota_day.outputs.resets }}'
+      quota_eta: '${{ steps.quota_day.outputs.eta }}'
     steps:
       - name: 'Extract command'
         id: 'extract_command'
@@ -149,9 +153,95 @@ jobs:
               }
             }
 
+      # The free tier resets at midnight Pacific time (08:00 UTC in winter, 07:00 UTC in summer), so
+      # the quota day is the Pacific date.
+      - name: 'Find the quota day'
+        id: 'quota_day'
+        run: |-
+          now="$(date +%s)"
+          reset="$(TZ=America/Los_Angeles date -d '00:00 tomorrow' +%s)"
+          hours=$(( (reset - now + 1800) / 3600 ))
+          if (( hours < 1 )); then
+            eta='less than an hour'
+          elif (( hours == 1 )); then
+            eta='about 1 hour'
+          else
+            eta="about ${hours} hours"
+          fi
+          {
+            echo "day=$(TZ=America/Los_Angeles date +%F)"
+            echo "resets=$(date -u -d "@${reset}" '+%H:%M UTC on %-d %B')"
+            echo "eta=${eta}"
+          } >> "${GITHUB_OUTPUT}"
+
+      # gemini-review.yml saves this entry when a review fails with "exhausted your daily quota".
+      # The path must match the one there: it is part of the cache version. Entries saved by a run
+      # on main (comments and CodeRabbit's notes) are seen by every pull request; one saved by a run
+      # on a pull request's own ref (a review comment) only by that pull request.
+      - name: 'Check the daily-quota marker'
+        id: 'quota_gate'
+        if: |-
+          ${{ steps.extract_command.outputs.command == 'review' }}
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: '.gemini-quota/exhausted'
+          key: 'gemini-daily-quota-exhausted-${{ steps.quota_day.outputs.day }}'
+          lookup-only: 'true'
+
+      - name: 'Decide'
+        id: 'decide'
+        env:
+          COMMAND: '${{ steps.extract_command.outputs.command }}'
+          QUOTA_USED_UP: '${{ steps.quota_gate.outputs.cache-hit }}'
+        run: |-
+          if [[ "${COMMAND}" == 'review' && "${QUOTA_USED_UP}" == 'true' ]]; then
+            echo "::notice::Gemini's daily quota is used up; not calling it."
+            echo 'command=quota' >> "${GITHUB_OUTPUT}"
+          else
+            echo "command=${COMMAND}" >> "${GITHUB_OUTPUT}"
+          fi
+
+      # One comment per pull request and quota day, updated in place (an edit does not notify).
+      - name: 'Say the daily quota is used up'
+        if: |-
+          ${{ steps.decide.outputs.command == 'quota' }}
+        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7
+        env:
+          PULL_REQUEST_NUMBER: '${{ github.event.pull_request.number || github.event.issue.number || inputs.pull_request_number }}'
+          QUOTA_DAY: '${{ steps.quota_day.outputs.day }}'
+          RESETS: '${{ steps.quota_day.outputs.resets }}'
+          ETA: '${{ steps.quota_day.outputs.eta }}'
+        with:
+          script: |
+            const marker = `<!-- gemini-daily-quota: ${process.env.QUOTA_DAY} -->`;
+            const body = `Gemini's free daily quota is used up, so no Gemini review runs until it resets at ${process.env.RESETS} (in ${process.env.ETA}). After that, a comment starting with "@gemini-cli /review" asks for one. ${marker}`;
+            const issue_number = Number(process.env.PULL_REQUEST_NUMBER);
+            const comments = await github.paginate(github.rest.issues.listComments, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number,
+              per_page: 100,
+            });
+            const mine = comments.find((c) => c.user?.login === 'github-actions[bot]' && (c.body || '').includes(marker));
+            if (mine) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: mine.id,
+                body,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number,
+                body,
+              });
+            }
+
       - name: 'Acknowledge request'
         if: |-
-          ${{ steps.extract_command.outputs.command != 'skip' }}
+          ${{ steps.decide.outputs.command != 'skip' && steps.decide.outputs.command != 'quota' }}
         env:
           GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN || github.token }}'
           ISSUE_NUMBER: '${{ github.event.pull_request.number || github.event.issue.number || inputs.pull_request_number }}'
@@ -182,8 +272,8 @@ jobs:
     needs:
       - 'dispatch'
       - 'review'
-    # A review that runs out of time ends as cancelled, not failed: the usual way it ends when the
-    # model keeps answering 503 and the CLI keeps retrying. It must still say so on the pull request.
+    # A review that is replaced or runs out of the job's time ends as cancelled, not failed: it must
+    # still say so on the pull request.
     if: |-
       ${{ always() && (needs.dispatch.outputs.command == 'fallthrough' || needs.dispatch.result == 'failure' || needs.review.result == 'failure' || needs.review.result == 'cancelled') }}
     runs-on: 'ubuntu-latest'
@@ -192,14 +282,41 @@ jobs:
       issues: 'write'
       pull-requests: 'write'
     steps:
+      # gemini-review.yml names the cause from the CLI's stderr; it is empty when the review job
+      # was cancelled or never started.
       - name: 'Send failure comment'
         env:
           GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN || github.token }}'
           ISSUE_NUMBER: '${{ github.event.pull_request.number || github.event.issue.number || inputs.pull_request_number }}'
-          MESSAGE: |-
-            ${{ needs.dispatch.outputs.command == 'fallthrough' && 'Only "@gemini-cli /review" is supported here.' || 'The Gemini review did not finish (it failed, ran out of its 7 minutes, or a newer review replaced it). The usual causes are the model answering 503 (high demand), which the CLI retries until the time runs out, and the free tier''s daily limit of 20 requests (429), which every retry counts against and which resets at midnight Pacific time. A comment starting with "@gemini-cli /review" tries again.' }} [See the logs](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) for details.
+          COMMAND: '${{ needs.dispatch.outputs.command }}'
+          CAUSE: '${{ needs.review.outputs.cause }}'
+          QUOTA_RESETS: '${{ needs.dispatch.outputs.quota_resets }}'
+          QUOTA_ETA: '${{ needs.dispatch.outputs.quota_eta }}'
+          LOGS_URL: '${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}'
           REPOSITORY: '${{ github.repository }}'
         run: |-
+          again='A comment starting with "@gemini-cli /review" tries again.'
+          if [[ "${COMMAND}" == 'fallthrough' ]]; then
+            message='Only "@gemini-cli /review" is supported here.'
+          else
+            case "${CAUSE}" in
+              quota)
+                message="The Gemini review stopped: the free tier's daily limit of 20 requests is used up. It resets at ${QUOTA_RESETS} (in ${QUOTA_ETA}); until then, requests skip Gemini without calling it."
+                ;;
+              503)
+                message="The Gemini review stopped because its requests failed, usually with the model answering 503 (high demand). It stops after two failed requests, because every retry counts against the free tier's daily limit of 20 requests. ${again}"
+                ;;
+              time)
+                message="The Gemini review ran out of its 5 minutes. ${again}"
+                ;;
+              other)
+                message="The Gemini review failed. ${again}"
+                ;;
+              *)
+                message="The Gemini review did not finish: it was cancelled, replaced by a newer review, or did not start. ${again}"
+                ;;
+            esac
+          fi
           gh issue comment "${ISSUE_NUMBER}" \
-            --body "${MESSAGE}" \
+            --body "${message} [See the logs](${LOGS_URL}) for details." \
             --repo "${REPOSITORY}"

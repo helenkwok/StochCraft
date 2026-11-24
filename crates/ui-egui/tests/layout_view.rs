@@ -1,5 +1,5 @@
 //! The Layout view: its tab shows the sorter example's plan to scale, with a scale bar, the
-//! blocks' names and the note about where positions come from. What is drawn is checked by the
+//! blocks' names and the note that positions come from the layout. What is drawn is checked by the
 //! unit tests in `layout_view.rs`.
 
 #![allow(clippy::panic, clippy::expect_used)] // A widget or value missing fails the test.
@@ -44,7 +44,9 @@ fn the_layout_tab_shows_the_scale_bar_and_the_blocks() {
     h.get_by_role_and_label(Role::Tab, "Layout").click();
     settle(&mut h);
     assert!(has(&h, VIEW));
-    assert!(has(&h, "Positions from the diagram"));
+    assert!(has(&h, "Positions from the layout"));
+    // Every block of the sorter has a place in its layout, so none is listed as unplaced.
+    assert!(has(&h, "Every block is placed."));
     assert!(has(&h, "Unplaced"));
     assert!(
         !h.query_all_by_label_contains("Scale bar: ")

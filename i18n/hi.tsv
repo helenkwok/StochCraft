@@ -1202,12 +1202,13 @@ unit	yr	वर्ष
 	Layout	लेआउट
 	Layout of the model, to scale	मॉडल का लेआउट, पैमाने के अनुसार
 	Drag to pan · Scroll to zoom	खिसकाने के लिए खींचें · ज़ूम के लिए स्क्रॉल करें
-	Positions from the diagram	आरेख से ली गई स्थितियाँ
+	Positions from the layout	लेआउट से ली गई स्थितियाँ
 	Scale bar: {length} m	पैमाना पट्टी: {length} m
 	{length} m	{length} m
 	x {x} m, y {y} m	x {x} m, y {y} m
 	Unplaced	बिना स्थान के
-	Every block is placed from the diagram for now. A block the diagram leaves out is listed here and is not drawn.	फ़िलहाल हर ब्लॉक आरेख के आधार पर रखा गया है। जो ब्लॉक आरेख में नहीं है, वह यहाँ सूचीबद्ध है और बनाया नहीं जाता।
+	Every block is placed.	हर ब्लॉक को स्थान मिला है।
+	Nothing to draw: this model has no layout yet. The Layout tab lists its blocks as unplaced.	बनाने को कुछ नहीं: इस मॉडल में अभी कोई लेआउट नहीं है। लेआउट टैब इसके ब्लॉकों को बिना स्थान के दिखाता है।
 	The charts are taller than the window: make the window taller, then export them again.	चार्ट विंडो से ऊँचे हैं: विंडो को ऊँचा करें, फिर उन्हें दोबारा निर्यात करें।
 	The model changed while choosing where to save it, so it was not saved. Save again.	सहेजने का स्थान चुनते समय मॉडल बदल गया, इसलिए इसे सहेजा नहीं गया। फिर से सहेजें।
 	Exactly that many	ठीक उतने ही

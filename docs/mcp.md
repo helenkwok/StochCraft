@@ -323,15 +323,19 @@ as XMILE; into a file with content StochCraft does not keep, it asks the user fi
 An agent-based model (populations of agents with SCXML state charts, a BPMN file with the
 `stochcraft:agents` extension) is opened with `file.open`, which reads each agent type's chart
 and each list of links from beside the file (references relative to it, inside its folder), or
-with `agents.open` (`text`, and `files`: each chart's text by its reference). `agents.get`
+with `agents.open` (`text`, and `files`: the text of each file the model names, by its
+reference: each agent type's chart and each CSV list of links). `agents.get`
 describes it (the run's length, replications, seed and time unit, the agent types with their
 states and variables, the populations with their networks and grids, the statistics, the files,
 and `problem`, what stops it running if anything). `agents.run` (`replications`, `seed`, `end`)
-gives each statistic over time (the mean, and over more than one replication the median and the
-5th and 95th percentiles), each population's agents created, removed and alive at the end and its
-messages dropped and undelivered, and the run record. `run` refuses such a model and names
-`agents.run`; `experiment.set` changes its duration, replications and seed; `file.save` writes the
-model and its chart files beside it. Populations and charts are not edited by commands yet. In
+gives each statistic over time from the end of the warm-up (the mean, and over more than one
+replication the median and the 5th and 95th percentiles), each population's agents created,
+removed and alive at the end and its messages dropped and undelivered after the warm-up, and the
+run record. What happens before the warm-up ends is discarded, as for a process model; an `end`
+before it is refused, and so is a warm-up below 0 or a duration of 0 or less. `run` refuses such
+a model and names `agents.run`; `experiment.set` changes its warm-up, duration, replications and
+seed; `file.save` writes the model's charts and lists of links beside it, then the model, and
+never saves the model over one of them. Populations and charts are not edited by commands yet. In
 the app, the window does not show these models yet.
 
 `crates/mcp/tests/session.rs` covers four areas:
