@@ -728,7 +728,13 @@
     which StochCraft flags.
 
     stochcraft:place, on a block's ElementParameters: where it stands, a frame (x, y, z, heading)
-    or a distance s along a conveyor's track (path names the conveyor).
+    or a distance s along a conveyor's track (path names the conveyor). A divert gateway placed
+    along the conveyor that sends into it is a point of that conveyor: items meet it as their
+    front reaches s.
+
+    stochcraft:junction, on the ElementParameters of a sequence flow from one conveyor to
+    another: how their sections join (kind: inline, side or turntable) and the time across the
+    junction (transfer, in the scenario's base time unit, 0 or more).
 
     stochcraft:scene, a child of the scenario: look-only scenery, one object per element with an
     id, a kind (floor, wall, pallet, column, marking...), its centre frame and its size. The run
@@ -776,6 +782,20 @@
       <xs:attribute name="heading" type="xs:double" default="0"/>
       <xs:attribute name="path" type="xs:string"/>
       <xs:attribute name="s" type="xs:double"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="junction">
+    <xs:complexType>
+      <xs:attribute name="kind" default="inline">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="inline"/>
+            <xs:enumeration value="side"/>
+            <xs:enumeration value="turntable"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="transfer" type="xs:double" default="0"/>
     </xs:complexType>
   </xs:element>
   <xs:element name="scene">

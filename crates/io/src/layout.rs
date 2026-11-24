@@ -25,11 +25,21 @@
 //! written; one left out of a file is 0.6 m, in the scenario's unit.
 //! Numbers are written in full, so a file reads back as exactly the layout that was saved.
 //! Scenery objects are written in id order.
+//!
+//! A junction between two conveyors (L5) is `stochcraft:junction` on the `ElementParameters` of
+//! the sequence flow that joins them; `kind` and `transfer` are left out at their defaults
+//! (`inline`, 0):
+//!
+//! ```xml
+//! <bpsim:VendorExtension name="stochcraft:junction" xmlns:stochcraft="…">
+//!   <stochcraft:junction kind="turntable" transfer="2"/>
+//! </bpsim:VendorExtension>
+//! ```
 
 use stochcraft_model::site::default_width;
 use stochcraft_model::{
-    Element as ModelElement, ElementId, ElementKind, Frame, LengthUnit, Path, Place, Scenery,
-    Segment, Site, Track,
+    Connection, Element as ModelElement, ElementId, ElementKind, Frame, Junction, JunctionKind,
+    LengthUnit, Path, Place, Scenery, Segment, Site, Track,
 };
 
 use crate::Note;
@@ -119,6 +129,29 @@ pub fn place_element(p: &Place) -> Element {
             .with_attr("s", &num(*s)),
     };
     extension(bpsim::PLACE, body)
+}
+
+/// A junction as its `stochcraft:junction` vendor extension.
+pub fn junction_element(j: &Junction) -> Element {
+    let mut body = st("junction");
+    if j.kind != JunctionKind::Inline {
+        body = body.with_attr("kind", j.kind.name());
+    }
+    extension(bpsim::JUNCTION, with_num(body, "transfer", j.transfer, 0.0))
+}
+
+/// A junction from a `stochcraft:junction` vendor extension.
+pub fn read_junction(ext: &Element) -> Result<Junction, String> {
+    let b = body(ext, "junction").ok_or("has no `junction` element")?;
+    let kind = match b.attr("kind") {
+        None => JunctionKind::Inline,
+        Some(k) => JunctionKind::from_name(k.trim())
+            .ok_or_else(|| format!("has the kind \"{k}\", not inline, side or turntable"))?,
+    };
+    Ok(Junction {
+        kind,
+        transfer: number(b, "transfer", Some(0.0))?,
+    })
 }
 
 /// An empty `stochcraft:scene`: no scenery, in place of any a scenario inherits.
@@ -275,10 +308,12 @@ pub fn read_scene(ext: &Element, notes: &mut Vec<Note>) -> Vec<Scenery> {
 /// The layout the scenario gives `elements`: a track for each conveyor with a `stochcraft:path`,
 /// a place for each block with a `stochcraft:place`, and the scenario's scenery. One that cannot
 /// be read, a track on a block that is not a conveyor, or a place along a conveyor that has no
-/// track, is noted and left out.
+/// track, is noted and left out; so is a junction (`stochcraft:junction` on a flow) that cannot
+/// be read or is on a flow that does not join two conveyors.
 pub fn site_of(
     scenario: Option<&Scenario>,
     elements: &[ModelElement],
+    connections: &[Connection],
     notes: &mut Vec<Note>,
 ) -> Site {
     let mut site = Site::default();
@@ -286,6 +321,33 @@ pub fn site_of(
         return site;
     };
     site.scene = s.settings.scene.clone();
+    let is_conveyor = |id: &ElementId| {
+        elements
+            .iter()
+            .any(|e| &e.id == id && matches!(e.kind, ElementKind::Conveyor { .. }))
+    };
+    for c in connections {
+        let id = c.id.as_str();
+        let Some(ext) = s.param(id, &format!("VendorExtension/{}", bpsim::JUNCTION)) else {
+            continue;
+        };
+        if !is_conveyor(&c.from) || !is_conveyor(&c.to) {
+            notes.push(Note::warning(
+                Some(id),
+                "a junction (stochcraft:junction) joins two conveyors; it is ignored on this flow",
+            ));
+            continue;
+        }
+        match read_junction(ext) {
+            Ok(j) => {
+                site.junctions.insert(c.id.clone(), j);
+            }
+            Err(why) => notes.push(Note::warning(
+                Some(id),
+                format!("the junction (stochcraft:junction) {why} and is ignored"),
+            )),
+        }
+    }
     for e in elements {
         let id = e.id.as_str();
         if let Some(ext) = s.param(id, &format!("VendorExtension/{}", bpsim::PATH)) {
@@ -402,6 +464,29 @@ mod tests {
         // Written and read in id order.
         assert_eq!(back, vec![scene[1].clone(), scene[0].clone()]);
         assert!(scene_element(&[]).is_none());
+    }
+
+    #[test]
+    fn a_junction_reads_back_as_written_and_a_bad_kind_is_refused() {
+        for j in [
+            Junction::default(),
+            Junction {
+                kind: JunctionKind::Side,
+                transfer: 0.75,
+            },
+            Junction {
+                kind: JunctionKind::Turntable,
+                transfer: 2.0,
+            },
+        ] {
+            assert_eq!(read_junction(&junction_element(&j)), Ok(j));
+        }
+        // Defaults are left out.
+        let plain = junction_element(&Junction::default());
+        let body = plain.elements().next().unwrap();
+        assert!(body.attr("kind").is_none() && body.attr("transfer").is_none());
+        let bad = extension(bpsim::JUNCTION, st("junction").with_attr("kind", "spiral"));
+        assert!(read_junction(&bad).unwrap_err().contains("spiral"));
     }
 
     #[test]

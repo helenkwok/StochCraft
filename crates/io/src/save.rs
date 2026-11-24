@@ -2880,6 +2880,19 @@ impl Editor {
                 writes.push((id.to_string(), crate::bpsim::PLACE, v));
             }
         }
+        // Junctions, on the flows between conveyors (only those each model can hold).
+        let junction_ids: BTreeSet<&ElementId> = kept_before
+            .junctions
+            .keys()
+            .chain(kept_after.junctions.keys())
+            .collect();
+        for id in junction_ids {
+            let (was, now) = (kept_before.junctions.get(id), kept_after.junctions.get(id));
+            if was != now {
+                let v = now.map(crate::layout::junction_element);
+                writes.push((id.to_string(), crate::bpsim::JUNCTION, v));
+            }
+        }
         // Starting contents, 0 being none, on blocks that can hold them.
         let count = |m: &Model, id: &ElementId| {
             m.starting

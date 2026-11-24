@@ -1385,7 +1385,7 @@ fn to_model(p: Process, scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> M
     experiment.stop = stop_of(scenario, &elements, notes);
     let estimates = estimates_of(scenario, &elements, notes);
     let starting = starting_of(scenario, &elements, notes);
-    let site = crate::layout::site_of(scenario, &elements, notes);
+    let site = crate::layout::site_of(scenario, &elements, &connections, notes);
     crate::layout::lengths_from_paths(&site, &mut elements, experiment.length_unit);
     Model {
         name: p.name,
@@ -1589,6 +1589,7 @@ fn queue_capacity(scenario: Option<&Scenario>, id: &str, notes: &mut Vec<Note>) 
             bpsim::STARTING_CONTENTS,
             bpsim::PATH,
             bpsim::PLACE,
+            bpsim::JUNCTION,
         ]
         .contains(&name)
         {
