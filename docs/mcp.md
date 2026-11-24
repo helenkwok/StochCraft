@@ -274,19 +274,29 @@ or out of its range, or a decision given twice (`invalid_params`), is refused wi
 named as `id.field`. The model is not changed, and the evaluation is not recorded in later runs'
 records (a search makes thousands).
 
-`experiment.optimise` searches whole-number decisions (`decisions`, each `{id, field, min, max}`
-with `field` one of `capacity`, `quantity`, `queue_capacity`, and optionally `step` and `start`)
-for the best design. The objective is `objective.results`, each `{element, metric, weight}`,
+`experiment.optimise` searches decisions for the best design: counts (`decisions`, each `{id,
+field, min, max}` with `field` one of `capacity`, `quantity`, `queue_capacity`, and optionally
+`step` and `start`); rules (`{id, field}` with `field` `routing`, `on_shift_end` or `after_job`,
+optionally `values`, the levels to compare by name, and `start`, a level's name), every
+combination of whose levels (at most 8) is searched and compared; and one or two means (`{id,
+field: "mean", min, max}`), searched by Nelder–Mead for each combination of the other decisions'
+values (at most 8), a local search that the `claim` says is local. The objective is `objective.results`, each `{element, metric, weight}`,
 plus `objective.costs`, each `{id, field, cost}`, minimised unless `objective.sense` is
 `maximise`. `cost_cap` caps the costs, and `constraints` keep results' means `at_most` or
 `at_least` a limit with a `tolerance`. `indifference` (δ) is required. The answer's `claim` says
 in words what is proven: with `confidence`, the `chosen` design is the best, or within δ of it,
 of the `finalists` compared at the end (or of all designs, `all_designs`). Otherwise `outcome`
-is `not_proven` ("best found, not proven best") or `compared_exactly`. `against_start` is the
+is `not_proven` ("best found, not proven best") or `compared_exactly`, which is given only when
+nothing in the model is drawn (`no_randomness`) or the objective is the decisions' costs alone
+(no `results`, so it is known exactly, while the constraints are still checked as random); equal
+simulated values are not taken as exact, and the `claim` then says why the answer is not
+proven. `against_start` is the
 paired difference against the starting design, and `runs` the runs used against `max_runs`
 (default 10,000). A `time_limit` answer's `repeat` gives the `max_runs` and `reserve_runs` that
-repeat it exactly. `apply` makes the chosen design the model's, as one undo step. The search is
-recorded in later runs' records (`record.sensitivity`).
+repeat it exactly. `apply` makes the chosen design the model's, as one undo step, journalled as a
+`decisions.set` edit, which takes a rule's level by name (`{"id": "split", "field": "routing",
+"value": "shortest_queue"}`) and a mean as a number. The search is recorded in later runs'
+records (`record.sensitivity`).
 
 A Monte Carlo model (a calculation with no process) is built and run through `execute`:
 `mc.input.set` and `mc.output.set` add inputs (distributions) and outputs (expressions over

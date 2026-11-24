@@ -3484,7 +3484,7 @@ layout. The flagship example is a parcel super hub.
   - *side transfer:* at an angle; the item turns, so its width becomes its length on the next
     section;
   - *spur or merge:* a section joins another part-way along, at `s`; it does not cut the main
-    section in two;
+    section in two (not built yet: L5's first part has the other three);
   - *turntable:* any number of sections at any angle, with a turn time.
 - **Rules, written down** (JaamSim's change log and users' forum questions are the checklist of
   what goes wrong when they are left vague):
@@ -3638,7 +3638,8 @@ layout. The flagship example is a parcel super hub.
 - **Everything is in the BPMN file, as `stochcraft:` extensions (D24).** No file of our own.
   Sim data: `stochcraft:path` on a conveyor (segment children; the old `shape`
   attribute still read), `stochcraft:place` on a block (x, y, z, heading, or a path id and `s`),
-  walkways and junctions in `stochcraft:layout` on the definitions.
+  a junction between two conveyors as `stochcraft:junction` on the flow that joins them (kind
+  and transfer time; L5), walkways in `stochcraft:layout` on the definitions.
 - **Scenery** (walls, floors, doors, racks that are not resources, parking, furniture) goes in a
   `stochcraft:scene` extension on the definitions: one element per object with its kind and only
   its non-default parameters. A TOML or JSON sidecar was weighed and dropped: the syntax would be
@@ -3916,6 +3917,36 @@ flows and shared properties (the folds below them already collapse), units typed
 value, a scenario picker in the window, and the experiment fields and connections table
 leaving the model page (with U5).
 
+L5's first part is done: points along a section and junctions. A divert gateway placed at `s`
+along the conveyor that sends into it is a point of that conveyor (`model::site::points`): its
+items meet it as their front reaches `s`, and a non-default way with room takes the item off
+there, else it rides on. Several diverts along one section are chained by their default flows,
+met in order along the track (validated), and the last one's default is where items go at the
+end; a divert at the very end of the track is M5.1's, at the end. Not accumulating, an item
+reaches `s` at its belt time tᵢ + s/v; accumulating, when its own travel and the items ahead let
+it, an item that left at a point holding up the one behind as if it moved on at the speed, so no
+position jumps. Capacity and spacing stay over the whole section, and a section with no points
+runs exactly as before. A place's `s` is a distance along the drawn path, scaled with a typed
+length that overrides it. A divert's place is a sim field. Junctions are `stochcraft:junction`
+on the flow from one conveyor to the next (inline, side or turntable, with a transfer time, 0
+by default; sim), read, written and saved in place, and in the JSON. The sorter's divert sits
+at the end of its loop (30 m, where it closes), with unchanged results. Checks with known
+answers in `crates/blocks/tests/conveyor_points.rs`: the time to a point is s/v; a 1 m item
+passes a point 0.5 m in exactly as on the plain conveyor; a divert by probability 0.3 gives a
+binomial share; a section with points holds ⌊L/p⌋, as the plain one; only the items whose front
+reaches a point behind a shut exit meet it (3 not accumulating, 7 accumulating); a junction adds
+its transfer time and loses nothing. Left from part 1, for later PRs: a merge at `s` (a section
+joining another part-way along) and rule 3's span across a junction (an item on both sections,
+at the lower speed) — a junction still hands an item over front first, as M5.1 does; a station
+doing work at a point; mixed item lengths on one section; photo-eyes. Known limits: a junction
+sits on a flow straight from one conveyor to the next, so a section whose flow goes to its first
+divert has none at its end; other senders into a placed divert (an infeed) still route at an
+instant, as M5.1's; a way that leads back onto the same belt checks its room while the item still
+counts there. Each entity now counts once on a belt it is sent round onto, which a loop through
+its own end got wrong before (the sorter's results move by it). Parts 2 and 3 follow:
+recirculation and the exception lane, then shortest-path routing; part 2 also splits the
+sorter's one divert into one per lane at its `s`.
+
 #### Sources
 
 - S: H. Steinkellner, D. Kaever, C. Rockenschaub, "Enhancing Social Sustainability in Parcel Hubs
@@ -4143,7 +4174,7 @@ See D21: the sorter (M5) first, alongside M3.7; then line balancing (M7.1), the 
 
 ## M8: optimisation
 
-**Status:** in progress (#272); O1 (Selection and feasibility, model-free) in #290; O2 (Whole-number decisions) in #294; O3 to O6 not built yet.
+**Status:** in progress (#272); O1 (Selection and feasibility, model-free) in #290; O2 (Whole-number decisions) in #294; O4 (Rules and a continuous mean) in #298; O3, O5 and O6 not built yet.
 
 **Outcome:** a search over several decisions at once, followed by a selection of the best design
 that says how sure it is. M2.8 varies one parameter (`experiment.sweep`), evaluates a grid or a
@@ -4230,8 +4261,12 @@ published methods whose guarantees are stated in their papers, and uses few of t
 - **Normal data.** KN and the feasibility check assume normal observations. A replication's mean
   over a long run is close to normal, but a count in a short run may not be; the results warn
   when the replications' values are few and strongly skewed.
-- **No randomness:** a model whose replications all give the same values is "compared exactly",
-  one replication per design, with no probability stated.
+- **No randomness:** a model in which nothing is drawn (and whose first two replications agree)
+  is "compared exactly", one replication per design, with no probability stated. Equal values
+  from a model that draws are not proof of no randomness: a pair of designs, or a constrained
+  result, that is the same in every first-stage replication is left undecided, and the answer is
+  not proven unless the objective is known exactly (costs alone) and the undecided designs cost
+  no less than the chosen one.
 
 **The methods, one per kind of decision:**
 
@@ -4380,6 +4415,18 @@ catalogs.
     plus a cost of −4 per unit of s (a slower machine is cheaper). The objective is
     s / (1 − s) − 4s, with its least value −1 at s = 0.5, against −0.933 at 0.4 and −0.9 at 0.6.
     The search ends within 0.05 of 0.5 and within δ = 0.05 of −1.
+  - *Built in #298:* rules (`routing`, `on_shift_end`, `after_job`) held by COMPASS at each
+    combination of their levels, and one or two means by Nelder–Mead with Barton and Ivey's RS +
+    S9 (`stochcraft_experiment::simplex`), restarted once, both cleaned up by KN as in O2;
+    `decisions.set` and `experiment.evaluate` take a rule's level by name. A routing compares
+    `standard` and `shortest_queue` unless `values` names others. Under common random numbers
+    the re-evaluation at a shrink adds replications to the best vertex and to the shrunk ones
+    alike, so the vertices stay paired. With counts or rules beside a mean, the simplex runs for
+    each combination of their values only when there are at most 8 (within the cap); a larger
+    space beside a mean, and a cap on a mean's cost, are refused for now. The gateway check holds
+    the choice of the shortest queue to 95 of 100 seeds, and the random split's interval covering
+    the exact 2 to 88 of 100, since a 95% interval covers in about 95% of seeds at best. Progress,
+    Cancel and the window are O6's.
 - **O5 Trade-offs between results** (`experiment`, `engine::optimize`, CLI, MCP): two or three
   objectives, each a result or the decisions' costs, and the designs that trade them off (the
   Pareto front: designs none of which is at least as good in every objective and better in one).

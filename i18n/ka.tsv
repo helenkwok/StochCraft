@@ -1467,3 +1467,6 @@ connection	Flow	ნაკადი
 	Condition	პირობა
 	Shared properties	საერთო თვისებები
 	These blocks share no properties.	ამ ბლოკებს საერთო თვისებები არ აქვთ.
+	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	{block} მოთავსებულია კონვეიერის {conveyor} გასწვრივ {s}-ზე, რომლის გზის სიგრძეა {length}. განათავსეთ ის გზის გასწვრივ 0-სა და {length}-ს შორის.
+	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	კონვეიერზე {conveyor} ერთეულები {before}-ს აღწევენ {block}-მდე, მაგრამ {block} დასაწყისთან უფრო ახლოსაა მოთავსებული ({s} მის გასწვრივ, {before} {before_s}-ზე). განათავსეთ {block} გზაზე {before}-ზე უფრო შორს ან გაცვალეთ ისინი ნაკადებში.
+	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	ნაკადზე {flow} შეერთების გადაკვეთას {time} სჭირდება. გადატანის დრო გახადეთ 0 ან მეტი.

@@ -81,6 +81,7 @@ where
         sense: settings.sense,
         sampling: settings.sampling,
         max_runs: None,
+        deterministic: settings.deterministic,
     };
     let selection = select_best(&kn, finalists.len(), |p, reps| {
         sample(finalists[p], reps.start + n..reps.end + n)

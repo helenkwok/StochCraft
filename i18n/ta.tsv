@@ -1467,3 +1467,6 @@ connection	Flow	ஓட்டம்
 	Condition	நிபந்தனை
 	Shared properties	பொதுவான பண்புகள்
 	These blocks share no properties.	இந்தத் தொகுதிகளுக்குப் பொதுவான பண்புகள் இல்லை.
+	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	{block} கன்வேயர் {conveyor} வழியே {s} தொலைவில் வைக்கப்பட்டுள்ளது, ஆனால் அதன் பாதை {length} நீளமே. அதைப் பாதை வழியே 0 முதல் {length} வரைக்குள் வைக்கவும்.
+	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	கன்வேயர் {conveyor} இல் உருப்படிகள் {block} ஐ விட முன்பு {before} ஐ அடைகின்றன, ஆனால் {block} தொடக்கத்துக்கு நெருக்கமாக வைக்கப்பட்டுள்ளது (அதன் வழியே {s}, {before} {before_s} இல்). {block} ஐப் பாதையில் {before} ஐ விடப் பின்னால் வைக்கவும், அல்லது ஓட்டங்களில் அவற்றை மாற்றி அமைக்கவும்.
+	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	ஓட்டம் {flow} இல் உள்ள இணைப்பைக் கடக்க {time} ஆகிறது. அதன் இடமாற்ற நேரத்தை 0 அல்லது அதிகமாக்கவும்.

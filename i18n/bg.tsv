@@ -1467,3 +1467,6 @@ connection	Flow	Поток
 	Condition	Условие
 	Shared properties	Общи свойства
 	These blocks share no properties.	Тези блокове нямат общи свойства.
+	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	Блокът {block} е поставен на {s} по протежение на конвейера {conveyor}, чийто път е дълъг {length}. Поставете го между 0 и {length} по пътя.
+	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	Същностите по конвейера {conveyor} достигат {before} преди {block}, но {block} е поставен по-близо до началото ({s} по него, {before} при {before_s}). Поставете {block} по-нататък по пътя от {before} или ги разменете в потоците.
+	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	Съединението по потока {flow} отнема {time} за преминаване. Задайте времето му за пренос на 0 или повече.

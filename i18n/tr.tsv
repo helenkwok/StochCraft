@@ -1467,3 +1467,6 @@ connection	Flow	Akış
 	Condition	Koşul
 	Shared properties	Ortak özellikler
 	These blocks share no properties.	Bu blokların ortak özelliği yok.
+	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	{block} bloğu {conveyor} konveyörü boyunca {s} uzaklığa yerleştirilmiş, ama yolunun uzunluğu {length}. Onu yol boyunca 0 ile {length} arasına yerleştirin.
+	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	{conveyor} konveyöründeki varlıklar {before} bloğuna {block} bloğundan önce ulaşıyor, ama {block} başlangıca daha yakın yerleştirilmiş (konveyör boyunca {s}, {before} ise {before_s} noktasında). {block} bloğunu yol boyunca {before} bloğundan daha ileriye yerleştirin ya da akışlarda yerlerini değiştirin.
+	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	{flow} akışındaki bağlantıyı geçmek {time} sürüyor. Aktarma süresini 0 veya daha fazla yapın.

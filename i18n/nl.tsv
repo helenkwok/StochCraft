@@ -1467,3 +1467,6 @@ connection	Flow	Stroom
 	Condition	Voorwaarde
 	Shared properties	Gedeelde eigenschappen
 	These blocks share no properties.	Deze blokken hebben geen eigenschappen gemeen.
+	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	{block} staat {s} langs de transportband {conveyor}, waarvan het pad {length} lang is. Plaats hem tussen 0 en {length} langs het pad.
+	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	Entiteiten op de transportband {conveyor} bereiken {before} vóór {block}, maar {block} staat dichter bij het begin ({s} langs de band, {before} op {before_s}). Plaats {block} verderop langs het pad dan {before}, of wissel ze om in de stromen.
+	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	De overgang op de stroom {flow} duurt {time} om over te steken. Maak de transfertijd 0 of meer.

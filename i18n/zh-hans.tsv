@@ -1467,3 +1467,6 @@ connection	Flow	顺序流
 	Condition	条件
 	Shared properties	共有属性
 	These blocks share no properties.	这些区块没有共有属性。
+	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	{block} 放在传送带 {conveyor} 上距起点 {s} 处，但该传送带的路径只有 {length} 长。请把它放在路径上 0 到 {length} 之间。
+	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	传送带 {conveyor} 上的实体先到达 {before}，后到达 {block}，但 {block} 的位置更靠近起点（沿传送带 {s}，而 {before} 在 {before_s}）。请把 {block} 放在路径上比 {before} 更靠后的位置，或在顺序流中交换它们。
+	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	顺序流 {flow} 上的衔接处需要 {time} 才能通过。请把它的传送时间设为 0 或更大。

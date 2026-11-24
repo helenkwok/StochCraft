@@ -1467,3 +1467,6 @@ connection	Flow	Flyt
 	Condition	Betingelse
 	Shared properties	Felles egenskaper
 	These blocks share no properties.	Disse blokkene har ingen felles egenskaper.
+	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	{block} er plassert {s} langs transportbåndet {conveyor}, hvis bane er {length} lang. Plasser den mellom 0 og {length} langs banen.
+	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	Enheter på transportbåndet {conveyor} når {before} før {block}, men {block} er plassert nærmere starten ({s} langs det, {before} ved {before_s}). Plasser {block} lenger ut langs banen enn {before}, eller bytt dem om i flytene.
+	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	Overgangen på flyten {flow} tar {time} å krysse. Sett overføringstiden til 0 eller mer.

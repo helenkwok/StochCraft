@@ -272,9 +272,9 @@ replication i depends only on the seed and i, so replications evaluated in stage
 those of one evaluation of them all. The user guide has worked examples with Optuna and pymoo
 (`examples/optimisers/`), which CI runs.
 
-To find the best whole-number decisions, `optimize` runs the engine's `experiment.optimise`: a
-search over the decisions' ranges, then the finalists compared again on fresh replications, with
-how sure the answer is.
+To find the best decisions (counts, rules and means), `optimize` runs the engine's
+`experiment.optimise`: a search over the decisions, then the finalists compared again on fresh
+replications, with how sure the answer is.
 
 ```bash
 stochcraft-cli optimize tandem.bpmn --decide desk1.capacity=11..40 --decide desk2.capacity=6..35 \
@@ -283,8 +283,11 @@ stochcraft-cli optimize tandem.bpmn --decide desk1.capacity=11..40 --decide desk
 ```
 
 A decision is `id.field=min..max` or `id.field=min..max:step`, the field one of `capacity`,
-`quantity` and `queue_capacity`. It starts from the model's value, or from `--start
-id.field=value`; a starting value that is not one of the range's values (a model's 12 for
+`quantity` and `queue_capacity`; a mean is `id.mean=min..max` (such as `server.mean=0.2..0.9`);
+a rule is `id.field` with its default levels, or `id.field=level,level`, the field `routing`
+(`standard`, `shortest_queue`, `divert`), `on_shift_end` (`finish`, `retry`, `resume`) or
+`after_job` (`stay`, `go_home`). It starts from the model's value, or from `--start
+id.field=value` (a number, or a rule's level by name); a starting value that is not one of the range's values (a model's 12 for
 `11..40:2`, say) is refused before anything runs, naming the decision. `--minimize` (or `--maximize`)
 takes `element.metric`, or `element.metric*weight` for a cost per unit of the result, repeated for
 a weighted sum; `--cost id.field=cost` is a decision's cost per unit, and `--cost-cap` caps their
@@ -292,7 +295,7 @@ sum (designs over it are never run). `--constraint 'element.metric<=limit~tolera
 quote it, since the shell reads `<` and `>` as redirections) keeps a result's mean within a limit. `--delta` is δ, the smallest difference in the objective
 worth telling apart. It prints the answer in words and the finalists, or JSON (`--format json`);
 `--time-limit` stops the search, and its JSON answer's `repeat` gives the `--max-runs` and
-`--reserve-runs` that repeat it exactly. See "Whole-number decisions" below.
+`--reserve-runs` that repeat it exactly. See "Whole-number decisions" and "Rules and a continuous mean" below.
 
 To choose a distribution for measured times, `fit` fits one column of a CSV file (or a plain list,
 one value per line; `-` reads standard input) to each family by maximum likelihood and ranks the
@@ -831,7 +834,8 @@ allow.
 - `select_best` is Kim and Nelson's fully sequential procedure KN (2001), with its constants
   η = ½ [(2α/(k − 1))^(−2/(n₀ − 1)) − 1] and h² = 2η(n₀ − 1) as Tsai and Nelson restate them, and
   the pairwise variances of differences. It chooses the best, or one within δ of it, with
-  probability at least 1 − α (`Kn`: δ, confidence, n₀, sense, sampling, `max_runs`).
+  probability at least 1 − α (`Kn`: δ, confidence, n₀, sense, sampling, `max_runs`,
+  `deterministic`).
 - `check_feasibility` is Batur and Kim's check F_B (2010) for several constraints on means, each
   with a limit and a tolerance ε (`Constraint`); each system is `Feasible`, `Infeasible` or, when
   the budget runs out, `Undecided`.
@@ -842,9 +846,31 @@ allow.
   kept unless an alternative is better; it is the local-optimality test O2 needs.
 
 The answers say what they claim: `Outcome::Selected` with the confidence, `ComparedExactly` when
-every first-stage value of every system is the same (no randomness; no probability stated), and
-`NotProven` with the systems still in contention when `max_runs` ran out, beside the chosen
-system, the replications and the mean of each system. All use the triangular region with c = 1.
+the caller states that the systems have no randomness (`deterministic`) and every first-stage
+value of every system is the same (no probability stated), and `NotProven` with the systems still
+in contention when `max_runs` ran out, beside the chosen system, the replications and the mean of
+each system.
+
+A flat first stage is not proof of no randomness: a system that gives 1 with probability 1% and 0
+otherwise gives ten zeros 90% of the time, and under common random numbers two varying systems
+can give the same difference in every first-stage replication. So without `deterministic` a zero
+first-stage variance never gives an exact or confident answer. The procedures fix S² from the
+first stage, and their guarantees are for that fixed S², so a zero S² is not estimated again: a
+pair with a zero variance of differences is never eliminated by the test, and a constraint with a
+zero variance is never settled by it. Declining to eliminate or decide only removes ways of being
+wrong, so the guarantee for the other pairs and constraints holds. A system still in contention
+with such a pair cannot be declared best: once every other pair's region has closed (or the budget
+runs out) the answer is `NotProven` with `Selection::flat` set, since more replications cannot
+change a zero S². A system left with only such constraints stays `Undecided`, takes no more
+replications, and sets `FeasibilityCheck::flat`. A pair's spread within rounding of its values
+(64 units in the last place) counts as zero. Values beyond 1e150 or below 1e-150 in size are
+compared times a power of two that brings them near 1, which changes no decision; a sum,
+difference, variance or bound of the region that still overflows is refused with
+`SelectError::Overflow` rather than compared.
+The racing and COMPASS layers follow the same rule: the race drops nobody on a constant paired
+difference unless `Racing::deterministic` is set, and COMPASS's exact mode (`Compass::exact`) is
+the caller's statement, which `experiment.optimise` makes only when nothing in the model is
+drawn. All use the triangular region with c = 1.
 Kim's 2003 paper prints its elimination bound as max{0, −a + λr}; the code uses min{0, −a + λr},
 Kim and Nelson's region, since the printed form would eliminate both systems of a close pair.
 The checks (`crates/experiment/tests/select.rs`, heavy) run 2,000 macro-replications each: KN in
@@ -944,7 +970,13 @@ decision set by `Param::set`, compiled once and run on the search's seed, or on
 `Rng::keyed(seed, "optimize/clean-up")` in the clean-up. The objective of a replication is the
 weighted results plus the decisions' costs. The cost cap is a limit of the space, so no design
 over it is run. A model is compared exactly only when nothing in it is drawn and the starting
-design's first two replications agree. `engine/src/drawn.rs` decides the first from the model's
+design's first two replications agree; an objective of costs alone (no results) is compared
+exactly in the clean-up (`Compass::exact_objective`, passed to KN as `Kn::deterministic`) while
+the constraints are checked as random. A design the check leaves undecided (a constrained result
+the same in every first-stage replication, as a wait of 0 with many servers, or the budget) is
+then set aside when its exact cost is no lower than the chosen design's, since it could not be
+the answer either way (`ConstrainedSelection::set_aside`, listed in the claim); a cheaper one
+leaves the answer not proven. `engine/src/drawn.rs` decides the first from the model's
 types, taking every struct apart and matching every kind of element in full, so a new field or
 kind does not compile until it says whether it draws. Drawn means a distribution other than a
 constant, a probability strictly between 0 and 1, an exclusive gateway whose way is not decided
@@ -964,6 +996,53 @@ give 6 servers or "not proven". The fewest servers for a mean wait of at most 0.
 14. Constant times must give "compared exactly", and a search stopped by its time limit must
 repeat exactly. Each check must be correct in at least 95% of its seeds (the ROADMAP's 95 of 100); the log prints the rate with its 95% Wilson
 interval, for information only.
+
+### Rules and a continuous mean
+
+M8's stage O4 adds two kinds of decision to `experiment.optimise`.
+
+- *Rules* (`Field::Routing`, `Field::OnShiftEnd`, `Field::AfterJob`): a gateway's routing, a
+  task's end-of-shift rule (it needs shifts or an availability calendar), a mobile pool's
+  after-a-job rule, each one of a few named levels (`Field::levels`; by default `standard` and
+  `shortest_queue` for a routing, every level for the others). A rule is a coordinate of the
+  design, its level's index, but its levels have no order, so COMPASS never moves along it:
+  `Compass::held` lists the held coordinates, and each start (`Local`) searches its own copy of
+  the space with them fixed at its values. `engine::optimize` gives a start at every combination
+  of the rules' levels (at most 8, `MOST_COMBINATIONS`), so the combinations are searched with
+  the counts in turn and meet in one clean-up. A small space still goes whole to the clean-up.
+  Every level is set on the model and compiled before anything runs, so a level the model cannot
+  take (a divert with no default way) is refused at once. Whether the model draws is decided for
+  every combination of levels: a standard routing draws where the shortest queue does not.
+- *A mean* (`Field::Mean`, one or two of them, `MOST_MEANS`): searched by
+  `stochcraft_experiment::simplex`, Nelder and Mead's simplex (1965) with Barton and Ivey's RS +
+  S9 changes for noise (1996): the best vertex is evaluated again at each shrink, and a shrink
+  reduces the simplex by 10% instead of half. A design is a `simplex::Point`, the counts' and
+  rules' indices (`group`, held) and a point of the unit cube (`x`), which the engine maps to each
+  range and rounds to ten significant digits (so a value reads back from JSON and a journal to the
+  same bits). Every vertex is compared on the same first L replications (common random numbers);
+  the re-evaluation at a shrink adds n replications to the best vertex and raises L, so the
+  shrunk vertices run on the same replications. A simplex stops when its size is below 1% of
+  each range (or after 200 steps), then restarts once from its best vertex; the last simplex's
+  vertices and the starting design go to the clean-up (`compass::clean_up`, generic over the
+  design type). With counts or rules beside the means, one simplex runs for each combination of
+  their values (at most 8, within the cap), taking a step each in turn, so a search stopped after
+  S runs repeats exactly with S. The claim never says "of all designs" here, and says the search
+  is local. A cap on a mean's cost is refused.
+
+`decisions.set` and `experiment.evaluate` take a rule's level by name (`"value": "shortest_queue"`)
+and a mean as a number, so an applied answer is journalled and replayed as for counts.
+
+The checks (`crates/experiment/src/simplex.rs`'s unit tests, a held-decision test in
+`compass.rs`, and `crates/engine/tests/optimise_rules.rs`, whose heavy tests run 100 seeds each)
+cover two exact answers. Two identical M/M/1 servers behind a gateway (arrivals at rate 1, mean
+service 1): the random split makes each server M/M/1 at rate ½, a mean time in system of 2, and
+joining the shortest queue must be chosen in at least 95 of 100 seeds; the random split's
+clean-up interval must cover 2 in at least 88 of 100 (a 95% interval covers in about 95% of
+seeds at best, and 88 is the bar a true 0.95 misses with probability below 0.01). An M/M/1 server
+with arrivals at rate 1, its mean service s in [0.2, 0.9], and the objective its mean number
+inside plus −4 per unit of s: s / (1 − s) − 4s, least at s = 0.5 with −1. The chosen s must be
+within 0.05 of 0.5 and its exact objective within δ = 0.05 of −1, in at least 95 of 100 seeds.
+The golden digests pin one search of a rule beside a count and one of a mean.
 
 ### The journal
 

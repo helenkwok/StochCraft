@@ -1467,3 +1467,6 @@ connection	Flow	Ағын
 	Condition	Шарт
 	Shared properties	Ортақ қасиеттер
 	These blocks share no properties.	Бұл блоктардың ортақ қасиеттері жоқ.
+	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	{block} блогы {conveyor} конвейері бойымен {s} қашықтыққа орналастырылған, ал оның жолының ұзындығы {length}. Оны жол бойымен 0 мен {length} аралығына орналастырыңыз.
+	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	{conveyor} конвейеріндегі нысандар {before} блогына {block} блогынан бұрын жетеді, бірақ {block} басына жақынырақ орналастырылған (оның бойымен {s}, {before} {before_s} жерінде). {block} блогын жол бойымен {before} блогынан әрі қарай орналастырыңыз немесе оларды ағындарда ауыстырыңыз.
+	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	{flow} ағынындағы түйіспеден өту {time} алады. Тасымалдау уақытын 0 немесе одан көп етіңіз.

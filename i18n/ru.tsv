@@ -1467,3 +1467,6 @@ connection	Flow	Поток
 	Condition	Условие
 	Shared properties	Общие свойства
 	These blocks share no properties.	У этих блоков нет общих свойств.
+	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	Блок {block} размещён на расстоянии {s} вдоль конвейера {conveyor}, путь которого имеет длину {length}. Разместите его между 0 и {length} вдоль пути.
+	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	Сущности на конвейере {conveyor} доходят до {before} раньше, чем до {block}, но {block} размещён ближе к началу ({s} вдоль него, {before} на {before_s}). Разместите {block} дальше по пути, чем {before}, или поменяйте их местами в потоках.
+	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	Стык на потоке {flow} проходится за {time}. Задайте время передачи 0 или больше.

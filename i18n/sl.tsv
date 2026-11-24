@@ -1467,3 +1467,6 @@ connection	Flow	Tok
 	Condition	Pogoj
 	Shared properties	Skupne lastnosti
 	These blocks share no properties.	Ti bloki nimajo skupnih lastnosti.
+	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	{block} je postavljen {s} vzdolž tekočega traku {conveyor}, katerega pot je dolga {length}. Postavite ga med 0 in {length} vzdolž poti.
+	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	Entitete na tekočem traku {conveyor} dosežejo {before} pred {block}, vendar je {block} postavljen bližje začetku ({s} vzdolž njega, {before} pri {before_s}). Postavite {block} dlje po poti kot {before} ali ju zamenjajte v tokovih.
+	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	Prečkanje spoja na toku {flow} traja {time}. Nastavite njegov čas prenosa na 0 ali več.

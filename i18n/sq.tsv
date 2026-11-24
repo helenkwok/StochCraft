@@ -1467,3 +1467,6 @@ connection	Flow	Rrjedhë
 	Condition	Kusht
 	Shared properties	Veti të përbashkëta
 	These blocks share no properties.	Këto blloqe nuk kanë veti të përbashkëta.
+	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	Blloku {block} është vendosur {s} përgjatë transportierit {conveyor}, rruga e të cilit ka gjatësi {length}. Vendoseni midis 0 dhe {length} përgjatë rrugës.
+	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	Entitetet në transportierin {conveyor} arrijnë te {before} para {block}, por {block} është vendosur më afër fillimit ({s} përgjatë tij, {before} te {before_s}). Vendoseni {block} më tej përgjatë rrugës se {before} ose këmbejini mes tyre në rrjedha.
+	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	Bashkimi në rrjedhën {flow} kërkon {time} për t'u kaluar. Bëjeni kohën e tij të transferimit 0 ose më shumë.

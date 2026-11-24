@@ -1467,3 +1467,6 @@ connection	Flow	Fluxo
 	Condition	Condição
 	Shared properties	Propriedades compartilhadas
 	These blocks share no properties.	Estes blocos não compartilham nenhuma propriedade.
+	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	{block} está posicionado a {s} ao longo da esteira transportadora {conveyor}, cujo trajeto tem {length}. Posicione-o entre 0 e {length} ao longo do trajeto.
+	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	As entidades na esteira transportadora {conveyor} alcançam {before} antes de {block}, mas {block} está posicionado mais perto do início ({s} ao longo dela, {before} a {before_s}). Posicione {block} mais adiante no trajeto do que {before}, ou troque-os nos fluxos.
+	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	A junção no fluxo {flow} leva {time} para ser atravessada. Faça o tempo de transferência dela ser 0 ou mais.
