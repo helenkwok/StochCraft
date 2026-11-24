@@ -466,6 +466,24 @@ fn difference_within(
     if started(got) != started(want) {
         return Some(format!("its starting contents read as {:?}", got.starting));
     }
+    // So are the decision tables blocks use (one left by a block that is gone is not written).
+    let used = |m: &'_ Model| -> Vec<(ElementId, String, String, Option<String>)> {
+        m.decisions
+            .iter()
+            .filter(|(id, _)| want.element(id).is_some())
+            .map(|(id, u)| {
+                (
+                    id.clone(),
+                    u.file.clone(),
+                    u.decision.clone(),
+                    u.route.clone(),
+                )
+            })
+            .collect()
+    };
+    if used(got) != used(want) {
+        return Some(format!("its decision tables read as {:?}", got.decisions));
+    }
     // The layout too, as much of it as each model can hold (`Site::kept`), and the scenery.
     if got.site.kept(got) != want.site.kept(want) {
         return Some(format!("its layout reads as {:?}", got.site));
@@ -2952,7 +2970,9 @@ impl Editor {
             };
             writes.push((id.to_string(), STARTING_CONTENTS, v));
         }
-        // The decision table each block uses (D30), where that changed.
+        // The decision table each block uses (D30), where that changed. One a scenario this one
+        // inherits from names comes back on reading if it is only removed here: such a removal
+        // cannot be saved here (as for the other parameters an inherited scenario sets).
         let ids: BTreeSet<&ElementId> = before
             .decisions
             .keys()
@@ -2963,7 +2983,24 @@ impl Editor {
             if was == now && !replaced.contains(id.as_str()) {
                 continue;
             }
-            let v = now.filter(|_| exists(id)).map(decision_element);
+            let mut v = now.filter(|_| exists(id)).map(decision_element);
+            if v.is_none()
+                && exists(id)
+                && parents
+                    .iter()
+                    .any(|a| sets_vendor(a, id.as_str(), crate::bpsim::DECISION))
+            {
+                return Err(fail(format!(
+                    "the decision table of `{id}` comes from an inherited scenario, so removing it here would not remove it; save to a new file (Save As) to change it"
+                )));
+            }
+            // A file declared in another encoding than UTF-8 takes its file names and the like
+            // as character references.
+            if self.ascii
+                && let Some(e) = v.as_mut()
+            {
+                ascii_refs(e);
+            }
             writes.push((id.to_string(), crate::bpsim::DECISION, v));
         }
         if writes.iter().all(|(_, _, v)| v.is_none()) {

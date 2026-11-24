@@ -1976,3 +1976,75 @@ fn calendar_values_setups_and_transports_with_their_own_unit_save_under_a_new_ti
     );
     relabel(transport.as_bytes(), TimeUnit::Hours);
 }
+
+/// The decision table a block uses is written exactly: as character references in a file in
+/// another encoding than UTF-8; refused where an inherited scenario names it, since removing it
+/// here would not remove it; and refused if it would not read back as it is.
+#[test]
+fn a_decision_use_is_saved_exactly() {
+    use stochcraft_model::dmn::DecisionUse;
+    let latin = text(&file("mm1.bpmn")).replace("encoding=\"UTF-8\"", "encoding=\"ISO-8859-1\"");
+    let loaded = read_scenario(latin.as_bytes(), None).unwrap_or_else(|e| panic!("{e}"));
+    let mut m = loaded.model.clone();
+    m.decisions.insert(
+        id("serve"),
+        DecisionUse {
+            file: "trié.dmn".into(),
+            decision: "chute".into(),
+            route: None,
+        },
+    );
+    let saved = loaded.opened.save(&m).unwrap_or_else(|e| panic!("{e}"));
+    assert!(
+        text(&saved).contains("tri&#233;.dmn") && !text(&saved).contains("trié"),
+        "{}",
+        text(&saved)
+    );
+    let back = read_scenario(&saved, None).unwrap_or_else(|e| panic!("{e}"));
+    assert_eq!(back.model, m);
+
+    // A route that is blank reads back as none, so the model with it is not what is saved.
+    let mut blank = m.clone();
+    if let Some(u) = blank.decisions.get_mut(&id("serve")) {
+        u.route = Some(String::new());
+    }
+    let refused = back.opened.save(&blank);
+    assert!(
+        refused
+            .as_ref()
+            .is_err_and(|e| e.to_string().contains("would not read back")),
+        "{refused:?}"
+    );
+
+    // Named in the scenario "two-clerks" inherits from.
+    let original = text(&file("mm1.bpmn")).replace(
+        r#"<bpsim:SetupTime><bpsim:FloatingParameter value="0"/></bpsim:SetupTime>
+            </bpsim:TimeParameters>"#,
+        r#"<bpsim:SetupTime><bpsim:FloatingParameter value="0"/></bpsim:SetupTime>
+            </bpsim:TimeParameters>
+            <bpsim:VendorExtension name="stochcraft:decision" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1">
+              <stochcraft:decision file="sorting.dmn" decision="chute"/>
+            </bpsim:VendorExtension>"#,
+    );
+    let child =
+        read_scenario(original.as_bytes(), Some("two-clerks")).unwrap_or_else(|e| panic!("{e}"));
+    assert!(
+        child.model.decisions.contains_key(&id("serve")),
+        "inherited"
+    );
+    let mut m = child.model.clone();
+    m.decisions.clear();
+    let refused = child.opened.save(&m);
+    assert!(
+        refused
+            .as_ref()
+            .is_err_and(|e| e.to_string().contains("comes from an inherited scenario")),
+        "{refused:?}"
+    );
+    // In the scenario that names it, it goes.
+    let base = read_scenario(original.as_bytes(), Some("base")).unwrap_or_else(|e| panic!("{e}"));
+    let mut m = base.model.clone();
+    m.decisions.clear();
+    let saved = base.opened.save(&m).unwrap_or_else(|e| panic!("{e}"));
+    assert!(!text(&saved).contains("stochcraft:decision"));
+}

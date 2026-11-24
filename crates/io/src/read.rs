@@ -1424,7 +1424,10 @@ fn decisions_of(
         let Some(ext) = s.param(id, &format!("VendorExtension/{}", bpsim::DECISION)) else {
             continue;
         };
-        let Some(body) = ext.elements().find(|x| x.local() == "decision") else {
+        let Some(body) = ext
+            .elements()
+            .find(|x| x.is(bpsim::STOCHCRAFT_NS, "decision"))
+        else {
             notes.push(Note::error(
                 Some(id),
                 format!(
@@ -1434,11 +1437,9 @@ fn decisions_of(
             ));
             continue;
         };
-        let attr = |name: &str| {
-            body.attr(name)
-                .map(|v| v.trim().to_owned())
-                .filter(|v| !v.is_empty())
-        };
+        // A blank attribute is none; any other is kept exactly as written, as the writer wrote
+        // it (a file's name may start or end with a space).
+        let attr = |name: &str| body.attr(name).filter(|v| !v.trim().is_empty());
         match (attr("file"), attr("decision")) {
             (Some(file), Some(decision)) => {
                 out.insert(
