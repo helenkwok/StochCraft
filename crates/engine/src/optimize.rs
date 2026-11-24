@@ -1,17 +1,29 @@
-//! Finding the best whole-number decisions (M8, stage O2): `experiment.optimise`.
+//! Finding the best decisions (M8, stages O2 and O4): `experiment.optimise`.
 //!
 //! The decisions are counts (a task's units, a pool's units, a buffer), each a whole number in a
-//! range with a step. The objective is a weighted sum of results (each an element's or a pool's
-//! metric) plus a cost per unit of each decision, to minimise or maximise; the decisions' part is
-//! known exactly, so only the results are noisy. A cap on the decisions' costs is checked before
-//! a design is run, so designs over it are never simulated. Constraints keep other results'
-//! means at most or at least a limit, each with a tolerance ε.
+//! range with a step; rules (a gateway's routing, a task's end-of-shift rule, a mobile pool's
+//! after-a-job rule), each one of a few named levels; and means (an element's time distribution
+//! rescaled, its shape kept), each a number in a range. The objective is a weighted sum of
+//! results (each an element's or a pool's metric) plus a cost per unit of each count or mean, to
+//! minimise or maximise; the decisions' part is known exactly, so only the results are noisy. A
+//! cap on the decisions' costs is checked before a design is run, so designs over it are never
+//! simulated. Constraints keep other results' means at most or at least a limit, each with a
+//! tolerance ε.
 //!
-//! The search is COMPASS with the pruning, the local-optimality test and the clean-up of
-//! Industrial Strength COMPASS, from the starting design and a few Latin hypercube points
-//! (`stochcraft_experiment::compass`); a space of at most `all_designs_up_to` designs (50 by
-//! default) is not searched, and every design goes to the clean-up. The clean-up compares the
-//! finalists again on a fresh block of replications, seeded by
+//! Without a mean, the search is COMPASS with the pruning, the local-optimality test and the
+//! clean-up of Industrial Strength COMPASS, from the starting design and a few Latin hypercube
+//! points (`stochcraft_experiment::compass`). A rule's levels have no order, so COMPASS never
+//! moves along a rule: it searches the counts from a start at each combination of the rules'
+//! levels (at most 8), and the combinations meet in the clean-up. A space of at most
+//! `all_designs_up_to` designs (50 by default) is not searched, and every design goes to the
+//! clean-up.
+//!
+//! With a mean (one or two of them), the search is Nelder–Mead with Barton and Ivey's changes for
+//! noise (`stochcraft_experiment::simplex`), run for each combination of the other decisions'
+//! values (at most 8), restarted once, the last simplexes' vertices going to the clean-up. It is a
+//! local search, and the answer says so.
+//!
+//! The clean-up compares the finalists again on a fresh block of replications, seeded by
 //! `Rng::keyed(seed, "optimize/clean-up")`, by Kim and Nelson's KN, after Batur and Kim's
 //! feasibility check when there are constraints (α split between the two). Every design runs
 //! replication i on the same seed (common random numbers), and every element's streams are keyed
@@ -36,8 +48,9 @@ use serde_json::{Value, json};
 use stochcraft_blocks::{Compiled, compile, summarise};
 use stochcraft_experiment::compass::{self, Answer, Compass, Ended, Linear, Space, Stream};
 use stochcraft_experiment::select::{Bound, Constraint, Decision, Outcome, Sense};
+use stochcraft_experiment::simplex::{self, NelderMead, Point};
 use stochcraft_experiment::{Control, Experiment};
-use stochcraft_model::{ElementId, Model};
+use stochcraft_model::{ElementId, ElementKind, Model};
 use stochcraft_random::Rng;
 use stochcraft_stats::{Summary, difference};
 
@@ -51,6 +64,11 @@ pub const MOST_RUNS: u64 = 1_000_000;
 /// Latin hypercube starts beside the starting design, when none is given.
 pub const DEFAULT_STARTS: u32 = 3;
 const MOST_STARTS: u32 = 20;
+/// The most combinations of rule levels searched; with a mean, the most combinations of the
+/// other decisions' values.
+pub const MOST_COMBINATIONS: u64 = 8;
+/// The most means searched at once.
+pub const MOST_MEANS: usize = 2;
 
 /// An optional number that, when given, must be a number: `null` is refused, never read as "not
 /// given" (a NaN or an infinity sent as JSON arrives as `null`, and a cap or a time limit must
@@ -59,23 +77,55 @@ fn number<'de, D: serde::Deserializer<'de>>(d: D) -> Result<Option<f64>, D::Erro
     f64::deserialize(d).map(Some)
 }
 
-/// A decision: a count of the model, a whole number from `min` to `max` in steps of `step`.
+/// An optional value that, when given, must not be `null`.
+fn given<'de, D: serde::Deserializer<'de>>(d: D) -> Result<Option<Value>, D::Error> {
+    let v = Value::deserialize(d)?;
+    if v.is_null() {
+        return Err(serde::de::Error::custom(
+            "a starting value must be a number or a rule's name, not null",
+        ));
+    }
+    Ok(Some(v))
+}
+
+/// A number, or a rule's name (for the schema).
+#[derive(JsonSchema)]
+#[serde(untagged)]
+#[allow(dead_code)] // Only its schema is used.
+enum NumberOrName {
+    Number(f64),
+    Name(String),
+}
+
+/// A decision: a count, a whole number from `min` to `max` in steps of `step`; a rule, one of
+/// `values`; or a mean, a number from `min` to `max`.
 #[derive(Debug, Clone, Deserialize, JsonSchema)]
 #[serde(deny_unknown_fields)]
 pub struct DecisionRange {
-    /// The element (a task with units of its own, or a buffer) or pool.
+    /// The element (a task with units of its own, a buffer, a gateway) or pool.
     pub id: String,
-    /// `capacity`, `quantity` or `queue_capacity` (a mean is a continuous decision, not taken
-    /// here).
+    /// A count (`capacity`, `quantity`, `queue_capacity`), a rule (`routing`, `on_shift_end`,
+    /// `after_job`) or `mean`.
     pub field: Field,
-    pub min: u32,
-    pub max: u32,
-    /// The step between values (default 1).
+    /// The least value (a count's or a mean's; required for them).
+    #[serde(default, deserialize_with = "number")]
+    #[schemars(with = "f64")]
+    pub min: Option<f64>,
+    /// The greatest value (a count's or a mean's; required for them).
+    #[serde(default, deserialize_with = "number")]
+    #[schemars(with = "f64")]
+    pub max: Option<f64>,
+    /// The step between a count's values (default 1).
     #[serde(default)]
     pub step: Option<u32>,
-    /// The value the search starts from (default: the model's).
+    /// The value the search starts from (default: the model's): a number, or a rule's name.
+    #[serde(default, deserialize_with = "given")]
+    #[schemars(with = "NumberOrName")]
+    pub start: Option<Value>,
+    /// A rule's levels to compare, by name (default: `standard` and `shortest_queue` for a
+    /// routing, every level for the others).
     #[serde(default)]
-    pub start: Option<u32>,
+    pub values: Option<Vec<String>>,
 }
 
 /// A result in the objective, times its weight.
@@ -90,7 +140,8 @@ pub struct Term {
     pub weight: Option<f64>,
 }
 
-/// A cost per unit of a decision's value, such as 20 per operator.
+/// A cost per unit of a decision's value, such as 20 per operator (counts and means; a rule has
+/// no units).
 #[derive(Debug, Clone, Deserialize, JsonSchema)]
 #[serde(deny_unknown_fields)]
 pub struct Cost {
@@ -159,7 +210,8 @@ pub struct OptimiseParams {
     #[serde(default, deserialize_with = "number")]
     #[schemars(with = "f64")]
     pub confidence: Option<f64>,
-    /// Replications a design gets at its first visit (default 10).
+    /// Replications a design gets at its first visit (default 10); with a mean, each vertex of
+    /// the simplex.
     #[serde(default)]
     pub replications_per_visit: Option<u32>,
     /// The budget in runs, replications summed over designs (default 10,000, at most
@@ -174,10 +226,12 @@ pub struct OptimiseParams {
     /// stopped, as its answer's `repeat` gives).
     #[serde(default)]
     pub reserve_runs: Option<u64>,
-    /// Latin hypercube starts beside the starting design (default 3, at most 20).
+    /// Latin hypercube starts beside the starting design (default 3, at most 20; not used with
+    /// a mean).
     #[serde(default)]
     pub starts: Option<u32>,
-    /// With at most this many designs (default 50), every design goes to the clean-up.
+    /// With at most this many designs (default 50), every design goes to the clean-up (not used
+    /// with a mean).
     #[serde(default)]
     pub all_designs_up_to: Option<u32>,
     /// Stop the search after this many seconds (the clean-up still runs). Not available in the
@@ -197,23 +251,83 @@ pub struct OptimiseParams {
     pub allow_approximations: bool,
 }
 
+/// What kind of decision, with its values.
+enum Kind {
+    /// Values min + step·k for k from 0 to `last`.
+    Count {
+        min: u32,
+        step: u32,
+        last: u32,
+        start: u32,
+    },
+    /// One of `levels`, by position.
+    Rule {
+        levels: Vec<&'static str>,
+        start: usize,
+    },
+    /// A number from `min` to `max`.
+    Mean { min: f64, max: f64, start: f64 },
+}
+
 /// A decision checked against the model.
 struct Checked {
     param: Param,
     label: String,
-    min: u32,
-    step: u32,
-    /// The last index: values are min + step·k for k from 0 to `last`.
-    last: u32,
+    kind: Kind,
     cost: f64,
     /// A cost entry was given for this decision (a cost of 0 included).
     costed: bool,
-    start: u32,
+    /// Its position in a design: in `Point::group` for a count or a rule, in `Point::x` for a
+    /// mean.
+    slot: usize,
+}
+
+/// A decision's value in a design.
+#[derive(Debug, Clone, Copy, PartialEq)]
+enum Val {
+    Number(f64),
+    Name(&'static str),
+}
+
+/// A number with at most ten significant digits, so that it reads back from JSON (and from a
+/// journal) to the same bits.
+fn short(v: f64) -> f64 {
+    format!("{v:.9e}").parse().unwrap_or(v)
 }
 
 impl Checked {
-    fn value(&self, k: i64) -> f64 {
-        f64::from(self.min) + f64::from(self.step) * k as f64
+    /// The highest index of a count or a rule (its values are 0 to `last`).
+    fn last(&self) -> u32 {
+        match &self.kind {
+            Kind::Count { last, .. } => *last,
+            Kind::Rule { levels, .. } => u32::try_from(levels.len().saturating_sub(1)).unwrap_or(0),
+            Kind::Mean { .. } => 0,
+        }
+    }
+
+    fn value(&self, p: &Point) -> Val {
+        match &self.kind {
+            Kind::Count { min, step, .. } => {
+                let k = p.group.get(self.slot).copied().unwrap_or(0);
+                Val::Number(f64::from(*min) + f64::from(*step) * k as f64)
+            }
+            Kind::Rule { levels, .. } => {
+                let k = p.group.get(self.slot).copied().unwrap_or(0);
+                let k = usize::try_from(k).unwrap_or(0);
+                Val::Name(levels.get(k).copied().unwrap_or("standard"))
+            }
+            Kind::Mean { min, max, .. } => {
+                let x = p.x.get(self.slot).copied().unwrap_or(0.0);
+                Val::Number(short(min + (max - min) * x).clamp(*min, *max))
+            }
+        }
+    }
+
+    fn number(&self, p: &Point) -> f64 {
+        match self.value(p) {
+            Val::Number(v) => v,
+            Val::Name(_) => 0.0,
+        }
     }
 }
 
@@ -234,11 +348,205 @@ fn check_result(model: &Model, what: &str, element: &str, name: &str) -> Result<
     Ok(())
 }
 
+/// A count's range and start.
+fn count(d: &DecisionRange, name: &str, current: f64) -> Result<Kind, CommandError> {
+    if d.values.is_some() {
+        return Err(invalid(format!(
+            "decision `{name}`: `values` are a rule's levels; a count takes `min`, `max` and `step`"
+        )));
+    }
+    let floor = if d.field == Field::QueueCapacity {
+        0
+    } else {
+        1
+    };
+    let whole = |v: Option<f64>, which: &str| -> Result<u32, CommandError> {
+        let v = v.ok_or_else(|| {
+            invalid(format!(
+                "decision `{name}`: give its range, `min` and `max`"
+            ))
+        })?;
+        if v.fract() != 0.0 || !(0.0..=f64::from(u32::MAX)).contains(&v) {
+            return Err(invalid(format!(
+                "decision `{name}`: its {which} must be a whole number, not {v}"
+            )));
+        }
+        Ok(v as u32)
+    };
+    let (min, max) = (whole(d.min, "min")?, whole(d.max, "max")?);
+    if min < floor || min > max {
+        return Err(invalid(format!(
+            "decision `{name}`: its range {min}..{max} must run upwards from at least {floor}"
+        )));
+    }
+    let step = d.step.unwrap_or(1);
+    if step == 0 {
+        return Err(invalid(format!(
+            "decision `{name}`: its step must be at least 1"
+        )));
+    }
+    let start = match &d.start {
+        Some(s) => {
+            let v = s.as_f64().filter(|v| v.fract() == 0.0 && *v >= 0.0);
+            match v {
+                Some(v) if v <= f64::from(u32::MAX) => v as u32,
+                _ => {
+                    return Err(invalid(format!(
+                        "decision `{name}`: its starting value must be a whole number, not {s}"
+                    )));
+                }
+            }
+        }
+        None => {
+            if current.fract() != 0.0 || current < 0.0 || current > f64::from(u32::MAX) {
+                return Err(invalid(format!(
+                    "decision `{name}`: the model's value {current} is not a whole number; give `start`"
+                )));
+            }
+            current as u32
+        }
+    };
+    if start < min || start > max || (start - min) % step != 0 {
+        return Err(invalid(format!(
+            "decision `{name}`: the starting value {start} is not one of its values ({min}..{max} in steps of {step}); give `start`"
+        )));
+    }
+    Ok(Kind::Count {
+        min,
+        step,
+        last: (max - min) / step,
+        start,
+    })
+}
+
+/// A rule's levels and start, each level checked on the model.
+fn rule(model: &Model, d: &DecisionRange, name: &str, param: &Param) -> Result<Kind, CommandError> {
+    if d.min.is_some() || d.max.is_some() || d.step.is_some() {
+        return Err(invalid(format!(
+            "decision `{name}`: a rule has no range; give its levels as `values` (or none, for the default levels)"
+        )));
+    }
+    let named = |e: CommandError| CommandError {
+        message: format!("decision `{name}`: {}", e.message),
+        ..e
+    };
+    let current = param.rule(model).map_err(named)?;
+    if d.field == Field::OnShiftEnd {
+        let id = ElementId::unchecked(&d.id);
+        if let Some(ElementKind::Server {
+            shifts,
+            availability,
+            ..
+        }) = model.element(&id).map(|e| &e.kind)
+            && shifts.is_empty()
+            && availability.is_empty()
+        {
+            return Err(invalid(format!(
+                "decision `{name}`: `{}` has no shifts or availability calendar, so what happens at the end of a shift changes nothing",
+                d.id
+            )));
+        }
+    }
+    let all = d.field.levels();
+    let levels: Vec<&'static str> = match &d.values {
+        None if d.field == Field::Routing => vec!["standard", "shortest_queue"],
+        None => all.to_vec(),
+        Some(given) => {
+            let mut out: Vec<&'static str> = Vec::new();
+            for g in given {
+                let Some(&l) = all.iter().find(|l| **l == g.as_str()) else {
+                    return Err(invalid(format!(
+                        "decision `{name}`: `{g}` is not a {}; its levels are {}",
+                        d.field.name(),
+                        all.join(", ")
+                    )));
+                };
+                if out.contains(&l) {
+                    return Err(invalid(format!(
+                        "decision `{name}`: the level `{g}` is given twice"
+                    )));
+                }
+                out.push(l);
+            }
+            out
+        }
+    };
+    if levels.len() < 2 {
+        return Err(invalid(format!(
+            "decision `{name}`: give at least two levels to compare"
+        )));
+    }
+    let start_name = match &d.start {
+        Some(Value::String(s)) => s.clone(),
+        Some(other) => {
+            return Err(invalid(format!(
+                "decision `{name}`: its starting value must be one of its levels by name, not {other}"
+            )));
+        }
+        None => current.to_owned(),
+    };
+    let Some(start) = levels.iter().position(|l| *l == start_name) else {
+        return Err(invalid(format!(
+            "decision `{name}`: the starting level `{start_name}` is not one of its levels ({}); give `start` or add it to `values`",
+            levels.join(", ")
+        )));
+    };
+    // Each level must give a model that runs, so that no design fails in the middle of a search.
+    for l in &levels {
+        let mut m = model.clone();
+        param.set_rule(&mut m, l).map_err(named)?;
+        if let Err(diagnostics) = compile(&m) {
+            return Err(CommandError {
+                code: ErrorCode::InvalidModel,
+                message: format!(
+                    "decision `{name}`: with the level `{l}` the model has errors and cannot run"
+                ),
+                details: Some(crate::wire::diagnostics(&m, &diagnostics)),
+            });
+        }
+    }
+    Ok(Kind::Rule { levels, start })
+}
+
+/// A mean's range and start.
+fn mean(d: &DecisionRange, name: &str, current: f64) -> Result<Kind, CommandError> {
+    if d.values.is_some() || d.step.is_some() {
+        return Err(invalid(format!(
+            "decision `{name}`: a mean is a number in a range: give `min` and `max` only"
+        )));
+    }
+    let (Some(min), Some(max)) = (d.min, d.max) else {
+        return Err(invalid(format!(
+            "decision `{name}`: give its range, `min` and `max`"
+        )));
+    };
+    if !(min.is_finite() && max.is_finite() && min > 0.0 && min < max) {
+        return Err(invalid(format!(
+            "decision `{name}`: its range must run upwards from above 0 ({min}..{max})"
+        )));
+    }
+    let start = match &d.start {
+        Some(s) => s.as_f64().filter(|v| v.is_finite()).ok_or_else(|| {
+            invalid(format!(
+                "decision `{name}`: its starting value must be a number, not {s}"
+            ))
+        })?,
+        None => current,
+    };
+    if !(min..=max).contains(&start) {
+        return Err(invalid(format!(
+            "decision `{name}`: the starting value {start} is outside its range {min}..{max}; give `start`"
+        )));
+    }
+    Ok(Kind::Mean { min, max, start })
+}
+
 fn decisions(model: &Model, p: &OptimiseParams) -> Result<Vec<Checked>, CommandError> {
     if p.decisions.is_empty() {
         return Err(invalid("give at least one decision"));
     }
     let mut out: Vec<Checked> = Vec::new();
+    let (mut discrete, mut means) = (0, 0);
     for d in &p.decisions {
         let name = label(&d.id, d.field);
         if out.iter().any(|c| c.label == name) {
@@ -246,39 +554,15 @@ fn decisions(model: &Model, p: &OptimiseParams) -> Result<Vec<Checked>, CommandE
                 "decision `{name}` is given more than once"
             )));
         }
-        if d.field == Field::Mean {
-            return Err(invalid(format!(
-                "decision `{name}`: a mean is a number in a range, not a count; this search takes `capacity`, `quantity` and `queue_capacity`"
-            )));
-        }
-        let floor = if d.field == Field::QueueCapacity {
-            0
-        } else {
-            1
-        };
-        if d.min < floor || d.min > d.max {
-            return Err(invalid(format!(
-                "decision `{name}`: its range {}..{} must run upwards from at least {floor}",
-                d.min, d.max
-            )));
-        }
-        let step = d.step.unwrap_or(1);
-        if step == 0 {
-            return Err(invalid(format!(
-                "decision `{name}`: its step must be at least 1"
-            )));
-        }
         let id = ElementId::unchecked(&d.id);
-        let exists = match d.field {
-            Field::Quantity => model.resources.iter().any(|r| r.id == id),
-            _ => model.element(&id).is_some(),
+        let on_pool = matches!(d.field, Field::Quantity | Field::AfterJob);
+        let exists = if on_pool {
+            model.resources.iter().any(|r| r.id == id)
+        } else {
+            model.element(&id).is_some()
         };
         if !exists {
-            let what = if d.field == Field::Quantity {
-                "pool"
-            } else {
-                "element"
-            };
+            let what = if on_pool { "pool" } else { "element" };
             return Err(CommandError::new(
                 ErrorCode::NotFound,
                 format!("decision `{name}`: no {what} with id `{}`", d.id),
@@ -292,34 +576,34 @@ fn decisions(model: &Model, p: &OptimiseParams) -> Result<Vec<Checked>, CommandE
             message: format!("decision `{name}`: {}", e.message),
             ..e
         };
-        let current = param.get(model).map_err(named)?;
-        let start = match d.start {
-            Some(s) => s,
-            None => {
-                if current.fract() != 0.0 || current < 0.0 || current > f64::from(u32::MAX) {
-                    return Err(invalid(format!(
-                        "decision `{name}`: the model's value {current} is not a whole number; give `start`"
-                    )));
-                }
-                current as u32
-            }
+        let (kind, slot) = if d.field.is_rule() {
+            let k = rule(model, d, &name, &param)?;
+            discrete += 1;
+            (k, discrete - 1)
+        } else if d.field == Field::Mean {
+            let current = param.get(model).map_err(named)?;
+            let k = mean(d, &name, current)?;
+            means += 1;
+            (k, means - 1)
+        } else {
+            let current = param.get(model).map_err(named)?;
+            let k = count(d, &name, current)?;
+            discrete += 1;
+            (k, discrete - 1)
         };
-        if start < d.min || start > d.max || (start - d.min) % step != 0 {
-            return Err(invalid(format!(
-                "decision `{name}`: the starting value {start} is not one of its values ({}..{} in steps of {step}); give `start`",
-                d.min, d.max
-            )));
-        }
         out.push(Checked {
             param,
             label: name,
-            min: d.min,
-            step,
-            last: (d.max - d.min) / step,
+            kind,
             cost: 0.0,
             costed: false,
-            start,
+            slot,
         });
+    }
+    if means > MOST_MEANS {
+        return Err(invalid(format!(
+            "at most {MOST_MEANS} means can be searched at once"
+        )));
     }
     for c in &p.objective.costs {
         let name = label(&c.id, c.field);
@@ -331,6 +615,11 @@ fn decisions(model: &Model, p: &OptimiseParams) -> Result<Vec<Checked>, CommandE
                 "the cost of `{name}`: costs are for decisions, and `{name}` is not one"
             )));
         };
+        if matches!(d.kind, Kind::Rule { .. }) {
+            return Err(invalid(format!(
+                "the cost of `{name}`: a rule has no units, so it has no cost per unit"
+            )));
+        }
         if d.costed {
             return Err(invalid(format!(
                 "the cost of `{name}` is given more than once"
@@ -342,38 +631,49 @@ fn decisions(model: &Model, p: &OptimiseParams) -> Result<Vec<Checked>, CommandE
     Ok(out)
 }
 
-/// The model with each decision at its value for design `x` (indices into each range).
-fn decided(model: &Model, ds: &[Checked], x: &[i64]) -> Result<Model, CommandError> {
+/// The model with each decision at its value in design `p`.
+fn decided(model: &Model, ds: &[Checked], p: &Point) -> Result<Model, CommandError> {
     let mut m = model.clone();
-    for (d, &k) in ds.iter().zip(x) {
-        d.param.set(&mut m, d.value(k))?;
+    for d in ds {
+        match d.value(p) {
+            Val::Number(v) => d.param.set(&mut m, v)?,
+            Val::Name(l) => d.param.set_rule(&mut m, l)?,
+        }
     }
     Ok(m)
 }
 
+fn val_json(v: Val) -> Value {
+    match v {
+        Val::Number(x) => json!(x),
+        Val::Name(l) => json!(l),
+    }
+}
+
 /// The design as `{id, field, value}` for each decision.
-fn design_json(ds: &[Checked], x: &[i64]) -> Value {
+fn design_json(ds: &[Checked], p: &Point) -> Value {
     Value::Array(
         ds.iter()
-            .zip(x)
-            .map(|(d, &k)| json!({ "id": d.param.id, "field": d.param.field, "value": d.value(k) }))
+            .map(|d| json!({ "id": d.param.id, "field": d.param.field, "value": val_json(d.value(p)) }))
             .collect(),
     )
 }
 
-/// The design as text, `(14, 8)`.
-fn design_text(ds: &[Checked], x: &[i64]) -> String {
+/// The design as text, `(14, 8)` or `(shortest_queue, 0.5)`.
+fn design_text(ds: &[Checked], p: &Point) -> String {
     let values: Vec<String> = ds
         .iter()
-        .zip(x)
-        .map(|(d, &k)| format!("{}", d.value(k)))
+        .map(|d| match d.value(p) {
+            Val::Number(v) => format!("{v}"),
+            Val::Name(l) => l.to_owned(),
+        })
         .collect();
     format!("({})", values.join(", "))
 }
 
-/// The decisions' cost of design `x`.
-fn fixed_cost(ds: &[Checked], x: &[i64]) -> f64 {
-    ds.iter().zip(x).map(|(d, &k)| d.cost * d.value(k)).sum()
+/// The decisions' cost of design `p`.
+fn fixed_cost(ds: &[Checked], p: &Point) -> f64 {
+    ds.iter().map(|d| d.cost * d.number(p)).sum()
 }
 
 /// A stop for the time limit: true once `seconds` have passed since it was made.
@@ -438,6 +738,66 @@ fn decision_name(d: Decision) -> &'static str {
 fn percent(c: f64) -> String {
     let p = (c * 100.0 * 1e6).round() / 1e6;
     format!("{p}")
+}
+
+/// The decisions as a run record lists them: a count's range and step, a mean's range, a rule's
+/// levels.
+pub(crate) fn recorded(p: &OptimiseParams) -> Vec<Value> {
+    p.decisions
+        .iter()
+        .map(|d| {
+            let whole = |v: Option<f64>| match v {
+                Some(x) if x.fract() == 0.0 && (0.0..=f64::from(u32::MAX)).contains(&x) => {
+                    json!(x as u32)
+                }
+                Some(x) => json!(x),
+                None => Value::Null,
+            };
+            if d.field.is_rule() {
+                json!({ "id": d.id, "field": d.field, "values": d.values })
+            } else if d.field == Field::Mean {
+                json!({ "id": d.id, "field": d.field, "min": d.min, "max": d.max })
+            } else {
+                json!({
+                    "id": d.id, "field": d.field, "min": whole(d.min), "max": whole(d.max),
+                    "step": d.step.unwrap_or(1),
+                })
+            }
+        })
+        .collect()
+}
+
+/// Every combination of the rules' levels, as rule-level vectors in the order of the rules among
+/// `ds` (`None` when there are more than [`MOST_COMBINATIONS`]).
+fn rule_combinations(ds: &[Checked]) -> Option<Vec<Vec<usize>>> {
+    let sizes: Vec<usize> = ds
+        .iter()
+        .filter_map(|d| match &d.kind {
+            Kind::Rule { levels, .. } => Some(levels.len()),
+            _ => None,
+        })
+        .collect();
+    let mut total: u64 = 1;
+    for s in &sizes {
+        total = total.checked_mul(*s as u64)?;
+        if total > MOST_COMBINATIONS {
+            return None;
+        }
+    }
+    let mut out = vec![Vec::new()];
+    for s in sizes {
+        out = out
+            .into_iter()
+            .flat_map(|c| {
+                (0..s).map(move |l| {
+                    let mut c = c.clone();
+                    c.push(l);
+                    c
+                })
+            })
+            .collect();
+    }
+    Some(out)
 }
 
 /// The search and the clean-up for `p` on `model`: the answer, and the model with the chosen
@@ -524,16 +884,43 @@ pub fn optimise(model: &Model, p: &OptimiseParams) -> Result<(Value, Option<Mode
         ));
     }
     let mut stop = deadline(p.time_limit)?;
+    let has_mean = ds.iter().any(|d| matches!(d.kind, Kind::Mean { .. }));
+    let has_rule = ds.iter().any(|d| matches!(d.kind, Kind::Rule { .. }));
+    let Some(combinations) = rule_combinations(&ds) else {
+        return Err(invalid(format!(
+            "the rules' levels make more than {MOST_COMBINATIONS} combinations; give fewer `values`"
+        )));
+    };
 
-    // The space, in steps: index k of decision i is the value min + step·k.
+    // The space of the counts and rules, in steps: index k of a count is the value min + step·k,
+    // of a rule its k-th level.
+    let discrete: Vec<&Checked> = ds
+        .iter()
+        .filter(|d| !matches!(d.kind, Kind::Mean { .. }))
+        .collect();
     let mut space = Space {
-        bounds: ds.iter().map(|d| (0, i64::from(d.last))).collect(),
+        bounds: discrete.iter().map(|d| (0, i64::from(d.last()))).collect(),
         limits: Vec::new(),
     };
-    let start: Vec<i64> = ds
-        .iter()
-        .map(|d| i64::from((d.start - d.min) / d.step))
-        .collect();
+    let start = Point {
+        group: discrete
+            .iter()
+            .map(|d| match &d.kind {
+                Kind::Count {
+                    min, step, start, ..
+                } => i64::from((start - min) / step),
+                Kind::Rule { start, .. } => i64::try_from(*start).unwrap_or(0),
+                Kind::Mean { .. } => 0,
+            })
+            .collect(),
+        x: ds
+            .iter()
+            .filter_map(|d| match &d.kind {
+                Kind::Mean { min, max, start } => Some((start - min) / (max - min)),
+                _ => None,
+            })
+            .collect(),
+    };
     if let Some(cap) = p.cost_cap {
         if !cap.is_finite() {
             return Err(invalid("`cost_cap` must be a number"));
@@ -543,15 +930,32 @@ pub fn optimise(model: &Model, p: &OptimiseParams) -> Result<(Value, Option<Mode
                 "`cost_cap` caps the decisions' costs: give a cost for at least one decision",
             ));
         }
-        let at_min: f64 = ds.iter().map(|d| d.cost * f64::from(d.min)).sum();
+        if ds
+            .iter()
+            .any(|d| matches!(d.kind, Kind::Mean { .. }) && d.cost != 0.0)
+        {
+            return Err(invalid(
+                "`cost_cap` caps the costs of counts: a mean with a cost cannot be capped in this version",
+            ));
+        }
+        let (mut coefficients, mut at_min) = (Vec::new(), 0.0);
+        for d in &discrete {
+            match &d.kind {
+                Kind::Count { min, step, .. } => {
+                    coefficients.push(d.cost * f64::from(*step));
+                    at_min += d.cost * f64::from(*min);
+                }
+                _ => coefficients.push(0.0),
+            }
+        }
         // The costs at the ranges' least values are the limit's offset, not subtracted from the
         // cap, so the one rule of `Space::fits` judges the whole sum against the cap itself.
         space.limits.push(Linear {
-            coefficients: ds.iter().map(|d| d.cost * f64::from(d.step)).collect(),
+            coefficients,
             offset: at_min,
             limit: cap,
         });
-        if !space.contains(&start) {
+        if !space.contains(&start.group) {
             return Err(invalid(format!(
                 "the starting design {} costs {}, over the cap of {cap}: give each decision a `start` within it",
                 design_text(&ds, &start),
@@ -588,9 +992,9 @@ pub fn optimise(model: &Model, p: &OptimiseParams) -> Result<(Value, Option<Mode
 
     // The sampler: each design compiled once, its replications run on the search's or the
     // clean-up's seed. A failure is kept here with its code and reported as it is.
-    let mut compiled: BTreeMap<Vec<i64>, Compiled> = BTreeMap::new();
+    let mut compiled: BTreeMap<(Vec<i64>, Vec<u64>), Compiled> = BTreeMap::new();
     let mut failure: Option<CommandError> = None;
-    let mut runs_of = |stream: Stream, design: &[i64], reps: Range<u64>| {
+    let mut runs_of = |stream: Stream, design: &Point, reps: Range<u64>| {
         let result = rows(
             model,
             &ds,
@@ -612,11 +1016,30 @@ pub fn optimise(model: &Model, p: &OptimiseParams) -> Result<(Value, Option<Mode
         })
     };
 
-    // No randomness: nothing in the model is drawn, and the starting design's first two
-    // replications give the same values. The probe's two runs come out of the budget, so a
+    // No randomness: nothing in the model is drawn at any combination of the rules' levels (a
+    // standard routing draws where the shortest queue does not), and the starting design's first
+    // two replications give the same values. The probe's two runs come out of the budget, so a
     // budget of one run never compares exactly.
+    let random = if has_rule {
+        let mut any = false;
+        for c in &combinations {
+            let mut m = model.clone();
+            let rules = ds.iter().filter_map(|d| match &d.kind {
+                Kind::Rule { levels, .. } => Some((d, levels)),
+                _ => None,
+            });
+            for ((d, levels), &l) in rules.zip(c) {
+                d.param
+                    .set_rule(&mut m, levels.get(l).copied().unwrap_or("standard"))?;
+            }
+            any |= crate::drawn::draws(&m);
+        }
+        any
+    } else {
+        crate::drawn::draws(model)
+    };
     let mut probe = 0;
-    let exact = if max_runs >= 2 && !crate::drawn::draws(model) {
+    let exact = if max_runs >= 2 && !random {
         let r = runs_of(Stream::Search, &start, 0..2);
         probe = 2;
         match r {
@@ -643,12 +1066,79 @@ pub fn optimise(model: &Model, p: &OptimiseParams) -> Result<(Value, Option<Mode
         Some(r) => setup.search_runs = budget.saturating_sub(r),
         None => setup.reserve(reserve),
     }
+    // The positions of the rules among the counts and rules: COMPASS holds them.
+    setup.held = discrete
+        .iter()
+        .enumerate()
+        .filter_map(|(i, d)| matches!(d.kind, Kind::Rule { .. }).then_some(i))
+        .collect();
 
-    let mut starts = vec![start.clone()];
-    starts.extend(hypercube_starts(&ds, &space, extra_starts, seed));
-    starts.dedup();
-
-    let found = compass::optimise(&setup, &space, &starts, &mut runs_of, &mut stop);
+    let found = if has_mean {
+        // Each combination of the other decisions' values, the starting one first.
+        let mut groups: Vec<Vec<i64>> = vec![start.group.clone()];
+        if !discrete.is_empty() {
+            let Some(all) = space.enumerate(MOST_COMBINATIONS) else {
+                return Err(invalid(format!(
+                    "with a mean among the decisions, the other decisions may take at most {MOST_COMBINATIONS} combinations of values (within the cap): narrow their ranges or levels"
+                )));
+            };
+            for g in all {
+                if !groups.contains(&g) {
+                    groups.push(g);
+                }
+            }
+        }
+        let starts: Vec<Point> = groups
+            .into_iter()
+            .map(|group| Point {
+                group,
+                x: start.x.clone(),
+            })
+            .collect();
+        simplex::optimise(
+            &setup,
+            &NelderMead::default(),
+            &starts,
+            &mut runs_of,
+            &mut stop,
+        )
+    } else {
+        // A start at each combination of the rules' levels (the starting design's first), then
+        // Latin hypercube points.
+        let mut starts = vec![start.group.clone()];
+        let rule_slots: Vec<usize> = setup.held.clone();
+        for c in &combinations {
+            let mut s = start.group.clone();
+            for (&slot, &l) in rule_slots.iter().zip(c) {
+                if let Some(v) = s.get_mut(slot) {
+                    *v = i64::try_from(l).unwrap_or(0);
+                }
+            }
+            if space.contains(&s) && !starts.contains(&s) {
+                starts.push(s);
+            }
+        }
+        starts.extend(hypercube_starts(&discrete, &space, extra_starts, seed));
+        let mut unique: Vec<Vec<i64>> = Vec::new();
+        for s in starts {
+            if !unique.contains(&s) {
+                unique.push(s);
+            }
+        }
+        let mut whole = |stream: Stream, design: &[i64], reps: Range<u64>| {
+            let point = Point {
+                group: design.to_vec(),
+                x: Vec::new(),
+            };
+            runs_of(stream, &point, reps)
+        };
+        compass::optimise(&setup, &space, &unique, &mut whole, &mut stop).map(|a| {
+            a.map(|group| Point {
+                group,
+                x: Vec::new(),
+            })
+        })
+    };
     let answer = match found {
         Ok(a) => a,
         Err(e) => {
@@ -666,6 +1156,8 @@ pub fn optimise(model: &Model, p: &OptimiseParams) -> Result<(Value, Option<Mode
         answer: &answer,
         confidence,
         exact,
+        has_mean,
+        has_rule,
     };
     let v = words.answer_json(&start, seed, probe, max_runs, &setup);
     let chosen_model = match answer
@@ -692,14 +1184,15 @@ fn sense(g: Goal) -> Sense {
 fn rows(
     model: &Model,
     ds: &[Checked],
-    compiled: &mut BTreeMap<Vec<i64>, Compiled>,
+    compiled: &mut BTreeMap<(Vec<i64>, Vec<u64>), Compiled>,
     weights: &[(Output, f64)],
     limits: &[Output],
     seed: u64,
-    x: &[i64],
+    x: &Point,
     reps: Range<u64>,
 ) -> Result<Vec<Vec<f64>>, CommandError> {
-    if !compiled.contains_key(x) {
+    let key: (Vec<i64>, Vec<u64>) = (x.group.clone(), x.x.iter().map(|v| v.to_bits()).collect());
+    if !compiled.contains_key(&key) {
         let m = decided(model, ds, x)?;
         let c = compile(&m).map_err(|diagnostics| CommandError {
             code: ErrorCode::InvalidModel,
@@ -709,9 +1202,9 @@ fn rows(
             ),
             details: Some(crate::wire::diagnostics(&m, &diagnostics)),
         })?;
-        compiled.insert(x.to_vec(), c);
+        compiled.insert(key.clone(), c);
     }
-    let Some(c) = compiled.get(x) else {
+    let Some(c) = compiled.get(&key) else {
         return Err(CommandError::new(ErrorCode::Internal, "no compiled model"));
     };
     let first = reps.start;
@@ -764,9 +1257,9 @@ fn rows(
 
 /// `n` Latin hypercube points of the space (as `design.rs` samples one): each decision's column
 /// from the stream `Rng::keyed(seed, "optimize/start/<id>.<field>")`, a shuffle of 0..n by
-/// Fisher–Yates and an offset in each stratum, placed at ⌊u (L + 1)⌋ of its L + 1 values. Points
-/// over the cap are left out.
-fn hypercube_starts(ds: &[Checked], space: &Space, n: u32, seed: u64) -> Vec<Vec<i64>> {
+/// Fisher–Yates and an offset in each stratum, placed at ⌊u (L + 1)⌋ of its L + 1 values (a
+/// rule's levels taken in their order). Points over the cap are left out.
+fn hypercube_starts(ds: &[&Checked], space: &Space, n: u32, seed: u64) -> Vec<Vec<i64>> {
     let n = n as usize;
     if n == 0 {
         return Vec::new();
@@ -780,11 +1273,11 @@ fn hypercube_starts(ds: &[Checked], space: &Space, n: u32, seed: u64) -> Vec<Vec
                 let j = ((rng.uniform() * (i + 1) as f64) as usize).min(i);
                 perm.swap(i, j);
             }
-            let levels = f64::from(d.last) + 1.0;
+            let levels = f64::from(d.last()) + 1.0;
             perm.iter()
                 .map(|&q| {
                     let u = (q as f64 + rng.uniform()) / n as f64;
-                    ((u * levels) as i64).clamp(0, i64::from(d.last))
+                    ((u * levels) as i64).clamp(0, i64::from(d.last()))
                 })
                 .collect()
         })
@@ -804,15 +1297,18 @@ fn hypercube_starts(ds: &[Checked], space: &Space, n: u32, seed: u64) -> Vec<Vec
 struct Words<'a> {
     ds: &'a [Checked],
     p: &'a OptimiseParams,
-    answer: &'a Answer,
+    answer: &'a Answer<Point>,
     confidence: f64,
     exact: bool,
+    /// A mean is among the decisions: the search was Nelder–Mead, a local search.
+    has_mean: bool,
+    has_rule: bool,
 }
 
 impl Words<'_> {
     fn answer_json(
         &self,
-        start: &[i64],
+        start: &Point,
         seed: u64,
         probe: u64,
         max_runs: u64,
@@ -822,7 +1318,7 @@ impl Words<'_> {
         let ds = self.ds;
         let k = a.finalists.len();
         let tried = if a.all_designs { k } else { a.tried };
-        let summary = |f: &compass::Finalist| {
+        let summary = |f: &compass::Finalist<Point>| {
             let v = f.objective();
             let s = Summary::of(&v);
             json!({
@@ -831,14 +1327,14 @@ impl Words<'_> {
                 "n": s.map_or(0, |s| s.n),
             })
         };
-        let start_at = a.finalists.iter().position(|f| f.design == start);
+        let start_at = a.finalists.iter().position(|f| &f.design == start);
         let chosen = a.chosen.and_then(|c| a.finalists.get(c));
         let mut warnings = Vec::new();
         let against = match (chosen, start_at.and_then(|s| a.finalists.get(s))) {
             (Some(c), Some(s)) if self.exact => {
                 // No randomness: each design's one value is its objective, so the difference is
                 // exact, with no interval.
-                let value = |f: &compass::Finalist| {
+                let value = |f: &compass::Finalist<Point>| {
                     f.cleanup
                         .values()
                         .next()
@@ -862,7 +1358,7 @@ impl Words<'_> {
                     .filter(|j| s.cleanup.contains_key(j))
                     .copied()
                     .collect();
-                let first = |f: &compass::Finalist| -> Vec<Option<f64>> {
+                let first = |f: &compass::Finalist<Point>| -> Vec<Option<f64>> {
                     common
                         .iter()
                         .map(|j| f.cleanup.get(j).and_then(|r| r.first().copied()))
@@ -1010,7 +1506,7 @@ impl Words<'_> {
             "seed": seed,
             "no_randomness": self.exact,
             "warnings": warnings,
-            "method": METHOD,
+            "method": self.method(),
         });
         if a.ended == Ended::Stopped {
             v["repeat"] = json!({
@@ -1020,6 +1516,17 @@ impl Words<'_> {
             });
         }
         v
+    }
+
+    /// How the answer was worked out.
+    fn method(&self) -> String {
+        if self.has_mean {
+            METHOD_MEAN.to_owned()
+        } else if self.has_rule {
+            format!("{METHOD}; {METHOD_RULES}")
+        } else {
+            METHOD.to_owned()
+        }
     }
 
     /// The claim in words.
@@ -1032,6 +1539,11 @@ impl Words<'_> {
         } else {
             format!("of the {k} designs compared at the end ({} tried)", a.tried)
         };
+        let means: Vec<&str> = ds
+            .iter()
+            .filter(|d| matches!(d.kind, Kind::Mean { .. }))
+            .map(|d| d.label.as_str())
+            .collect();
         let chosen = a.chosen.and_then(|c| a.finalists.get(c));
         let what = chosen.map_or_else(String::new, |f| design_text(ds, &f.design));
         let delta = self.p.indifference;
@@ -1108,6 +1620,12 @@ impl Words<'_> {
                 " The claim covers the designs compared at the end, not every design of the space.",
             );
         }
+        if !means.is_empty() {
+            s.push_str(&format!(
+                " The search over {} is local (Nelder–Mead, which has no guarantee of convergence under noise): it does not show that no better value lies elsewhere in the range.",
+                means.join(" and ")
+            ));
+        }
         match a.ended {
             Ended::Budget => s.push_str(&format!(
                 " The search stopped at its budget after {} runs.",
@@ -1140,6 +1658,10 @@ fn not_proven_because(flat_pair: bool, flat_constraint: bool) -> &'static str {
         (false, false) => "the budget ran out before the clean-up could settle it",
     }
 }
+
+const METHOD_RULES: &str = "a rule's levels have no order, so COMPASS never moves along a rule: it searches the counts from a start at each combination of the rules' levels (at most 8), and the combinations meet in the clean-up";
+
+const METHOD_MEAN: &str = "Nelder and Mead's simplex (1965) over the means, each scaled to its range, with Barton and Ivey's RS + S9 changes for noise (1996: the best vertex evaluated again at each shrink, and a shrink of 10% rather than half), run for each combination of the other decisions' values (at most 8), restarted once from its best vertex; every vertex runs replication i on the same seed (common random numbers) and the vertices are compared on the same replications; a simplex stops when its size is below 1% of each range; a local search, with no guarantee of convergence under noise; the finalists (the last simplexes' vertices and the starting design) are compared again on fresh replications seeded by Rng::keyed(seed, \"optimize/clean-up\") by Kim and Nelson's KN, after Batur and Kim's feasibility check when there are constraints (alpha split equally between the two); a mean's value is rounded to ten significant digits; objective: the weighted results plus the decisions' costs, per replication; objective mean and half_width: over the clean-up's replications of the design (95% t interval); against_start: the paired difference chosen minus starting design over their common clean-up replications";
 
 const METHOD: &str = "a space is compared whole, with no search, when it has at most all_designs_up_to designs, it can be counted (its ranges hold at most a million points) and the budget pays for the clean-up's first stage (10 replications) of every design; otherwise COMPASS (Hong and Nelson 2006) over the decisions' values, with the pruning and local-optimality test of Industrial Strength COMPASS (Xu, Nelson and Hong 2010), from the starting design and Latin hypercube starts; every design runs replication i on the same seed (common random numbers); the finalists (the search's best, the designs active around it, each start's final design and the starting design) are compared again on fresh replications seeded by Rng::keyed(seed, \"optimize/clean-up\") by Kim and Nelson's KN, after Batur and Kim's feasibility check when there are constraints (alpha split equally between the two); designs over the cost cap are never run; objective: the weighted results plus the decisions' costs, per replication; objective mean and half_width: over the clean-up's replications of the design (95% t interval); against_start: the paired difference chosen minus starting design over their common clean-up replications";
 

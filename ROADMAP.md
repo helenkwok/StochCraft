@@ -1783,6 +1783,30 @@ ch. 10 §10.4, in Brailsford, Churilov and Dangerfield, eds., 2014). Related and
     Most tools do the same by default; some count it busy, or let the modeller choose. Until
     2026-11 StochCraft counted it busy, which put a failing machine's utilisation above its
     processing share (on the weld and paint test model, paint: 73.2% against 65.2%).
+- **Regenerative intervals** (planned). Some models return, again and again, to a state from
+  which they start afresh: empty, with every server idle. The cycles between those returns are
+  independent and identically distributed. So one long run gives a confidence interval for a
+  long-run mean as a ratio of two sums over the cycles, with no warm-up to choose and no batches
+  to size (Crane and Iglehart, 1973 Winter Simulation Conference, pp. 264–272; their longer
+  papers in Operations Research, 1974–75, to read).
+  - The check is coverage: over many runs, the 95% interval should hold the exact answer about
+    95% of the time. The models are the repairmen with spares (Examples for teaching) and the
+    paper's M/M/1 (arrivals at rate 5, service at rate 10, mean wait in queue 0.1).
+  - Limits to state in the results: a heavily loaded model returns rarely, so it has few
+    cycles. A model with fixed times may never return to an exact regeneration state.
+- **A hand trace replayed** (planned test). J. H. Mize, *Multiple Sequence Random Number
+  Generators*, Proceedings of the 1973 Winter Simulation Conference, pp. 67–76, argues for a
+  separate stream for each random input, the rule StochCraft follows (streams by element id,
+  above). It traces a small queue by hand from 50 printed random numbers, with one server and
+  then with two.
+  - The trace takes the numbers in turn from one list, whichever draw comes next, arrival or
+    service. So the test gives the arrivals and the service times one shared list in place of
+    their streams, each draw taking the next number. That needs an input that reads a fixed list
+    of numbers, which does not exist yet. The test then checks the run against the paper's
+    tables.
+  - A replay outside StochCraft matches the two-server table exactly. The one-server table
+    matches only with one inconsistency in the paper's own table, which is to be settled
+    against the page image before the test is written.
 - **A capacity table.** Before a run, each station's offered load and utilisation worked out
   from the model's own numbers (arrival rates, mean service times, units), shown beside the
   simulated values after the run. The gap between the two is what variability and blocking
@@ -4112,7 +4136,7 @@ See D21: the sorter (M5) first, alongside M3.7; then line balancing (M7.1), the 
 
 ## M8: optimisation
 
-**Status:** in progress (#272); O1 (Selection and feasibility, model-free) in #290; O2 (Whole-number decisions) in #294; O3 to O6 not built yet.
+**Status:** in progress (#272); O1 (Selection and feasibility, model-free) in #290; O2 (Whole-number decisions) in #294; O4 (Rules and a continuous mean) in #298; O3, O5 and O6 not built yet.
 
 **Outcome:** a search over several decisions at once, followed by a selection of the best design
 that says how sure it is. M2.8 varies one parameter (`experiment.sweep`), evaluates a grid or a
@@ -4199,8 +4223,12 @@ published methods whose guarantees are stated in their papers, and uses few of t
 - **Normal data.** KN and the feasibility check assume normal observations. A replication's mean
   over a long run is close to normal, but a count in a short run may not be; the results warn
   when the replications' values are few and strongly skewed.
-- **No randomness:** a model whose replications all give the same values is "compared exactly",
-  one replication per design, with no probability stated.
+- **No randomness:** a model in which nothing is drawn (and whose first two replications agree)
+  is "compared exactly", one replication per design, with no probability stated. Equal values
+  from a model that draws are not proof of no randomness: a pair of designs, or a constrained
+  result, that is the same in every first-stage replication is left undecided, and the answer is
+  not proven unless the objective is known exactly (costs alone) and the undecided designs cost
+  no less than the chosen one.
 
 **The methods, one per kind of decision:**
 
@@ -4349,6 +4377,18 @@ catalogs.
     plus a cost of −4 per unit of s (a slower machine is cheaper). The objective is
     s / (1 − s) − 4s, with its least value −1 at s = 0.5, against −0.933 at 0.4 and −0.9 at 0.6.
     The search ends within 0.05 of 0.5 and within δ = 0.05 of −1.
+  - *Built in #298:* rules (`routing`, `on_shift_end`, `after_job`) held by COMPASS at each
+    combination of their levels, and one or two means by Nelder–Mead with Barton and Ivey's RS +
+    S9 (`stochcraft_experiment::simplex`), restarted once, both cleaned up by KN as in O2;
+    `decisions.set` and `experiment.evaluate` take a rule's level by name. A routing compares
+    `standard` and `shortest_queue` unless `values` names others. Under common random numbers
+    the re-evaluation at a shrink adds replications to the best vertex and to the shrunk ones
+    alike, so the vertices stay paired. With counts or rules beside a mean, the simplex runs for
+    each combination of their values only when there are at most 8 (within the cap); a larger
+    space beside a mean, and a cap on a mean's cost, are refused for now. The gateway check holds
+    the choice of the shortest queue to 95 of 100 seeds, and the random split's interval covering
+    the exact 2 to 88 of 100, since a 95% interval covers in about 95% of seeds at best. Progress,
+    Cancel and the window are O6's.
 - **O5 Trade-offs between results** (`experiment`, `engine::optimize`, CLI, MCP): two or three
   objectives, each a result or the decisions' costs, and the designs that trade them off (the
   Pareto front: designs none of which is at least as good in every objective and better in one).
@@ -4889,6 +4929,39 @@ are.
     every 10, 10 minutes for exponential headways of the same mean. A scenario with headways
     held at a control stop shows bunching reduced. The run measures the headways at each stop
     and checks each stop's mean wait against them.
+  - **Repairmen with spares**: M. A. Crane and D. L. Iglehart, *A New Approach to Simulating
+    Stable Stochastic Systems*, Proceedings of the 1973 Winter Simulation Conference,
+    pp. 264–272. Ten machines must be running; four spares stand by, and cannot fail while they
+    wait, until one is needed; three repairmen. Each running machine fails at rate 1, and a
+    repair takes an exponential time at rate 4. The number of machines broken is a birth-death
+    chain, so its answers are exact: on average 3.4708 broken (mean square 17.2779). With
+    chance 0.3056 more than four are broken, so fewer than ten run. With chance 0.4378 at least
+    one broken machine waits for a repairman (more than three broken). On average 0.6777 repairmen are idle. These are the paper's
+    own values, recomputed from the chain. It differs from the machine repair crew above
+    because spares on cold standby do not fail. It is also the first check of regenerative
+    intervals (M2.9).
+  - **A closed-loop conveyor with work stations**: L. E. Bussey and M. P. Terrell, *A Model for
+    Analyzing Closed-Loop Conveyor Systems with Multiple Work Stations*, Proceedings of the 1973
+    Winter Simulation Conference, pp. 93–111. Items are loaded onto evenly spaced hooks of a loop
+    moving at constant speed. Each item passes the stations in turn and is taken by the first
+    one free; an item that finds all of them busy rides round the loop again. It needs L6's
+    fixed-cell sections. The paper gives curves, not formulas, and two limits:
+    - at high speed with many hooks, the chance an item goes round again tends to M/M/m's chance
+      that all m stations are busy (Erlang C);
+    - with one station and the loop slowed until the supply side blocks, arrivals become evenly
+      spaced and the chance tends to that of a D/M/1 loss system.
+
+    Those limits are the exact checks. Between them the curves are published simulation
+    results, to be read off the page images and said so on the card.
+  - **A job shop short of workers**: Maggard, Lesso, Hogg and Phillips, *Using an Extended
+    Version of GERT to Simulate Priority and Assignment Rules in a Labor Limited Jobshop*,
+    Proceedings of the 1973 Winter Simulation Conference, pp. 274–288. Each job needs a machine
+    and a worker at the same time (M2.5's shared pools). Exact check: with two machines and one
+    worker, served first come first served, the worker is the only constraint, so the shop is a
+    single-server queue (M/M/1). The authors validated their own model this way. They also
+    solved the shortest-operation-first case of two machines and one worker analytically,
+    following a result in Saaty's *Elements of Queueing Theory*; that is to read before it
+    becomes a second check.
   - **Low-poly scenes** for the 3D view, each with an exact answer: a supermarket checkout,
     staffed desks against self-service (Erlang C); an ambulance fleet (Erlang B); a delivery
     depot; a signalised junction or a roundabout; container berths at a port; and a
