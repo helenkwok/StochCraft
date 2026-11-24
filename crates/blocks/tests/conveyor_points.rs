@@ -512,3 +512,32 @@ fn a_junction_with_a_negative_time_is_an_error_and_one_off_a_conveyor_is_dropped
     let kept = m.site.kept(&m);
     assert_eq!(kept.junctions.len(), 1);
 }
+
+#[test]
+fn an_item_sent_round_onto_the_same_belt_rides_it_again_from_the_start() {
+    // 10 m at 1 with a pitch of 1; a divert 2 m along sends every item straight back onto the
+    // start of the same belt. One item: each ride takes it 2 m, 2 units of time, and the ride
+    // before it, now off the belt ahead, never holds it up. Accumulating, the rides are told
+    // apart even though the entity is the same.
+    for accumulating in [false, true] {
+        let mut b = Builder::new();
+        let src = b.source("in", Dist::Constant(1.0), Some(1));
+        let belt = b.conveyor("belt", 10.0, 1.0, accumulating, 0.5, 0.5);
+        let divert = b.divert("divert");
+        let end = b.sink("end");
+        b.connect(src, belt);
+        b.connect(belt, divert);
+        b.route(divert, belt, Some(1.0), None);
+        b.route(divert, end, None, None);
+        b.default_route(divert, end);
+        let mut m = b.build(experiment(21.5));
+        lay(&mut m, "belt", 10.0);
+        place(&mut m, "divert", "belt", 2.0);
+        let r = run(&m);
+        let belt = element(&r, "belt");
+        assert!(belt.left >= 9, "{accumulating}: {}", belt.left);
+        assert_eq!(element(&r, "divert").left, belt.left);
+        assert!(close(belt.mean_time_on, 2.0), "{:?}", belt.mean_time_on);
+        assert_eq!(element(&r, "end").entered, 0);
+    }
+}

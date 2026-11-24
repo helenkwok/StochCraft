@@ -3469,7 +3469,7 @@ impl Model {
             });
         }
         for conveyor in self.site.paths.keys() {
-            let points = site::points(self, conveyor);
+            let points = site::placed_in_turn(self, conveyor);
             for pair in points.windows(2) {
                 if let [a, b] = pair
                     && b.s < a.s

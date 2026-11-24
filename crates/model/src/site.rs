@@ -353,6 +353,19 @@ fn is_divert_along(model: &Model, id: &ElementId, place: &Place) -> bool {
 /// into it this way: it diverts at an instant, wherever its senders are, and its place is only
 /// drawn. Empty for an element that is not a conveyor with a track.
 pub fn points(model: &Model, conveyor: &ElementId) -> Vec<Point> {
+    chain(model, conveyor, false)
+}
+
+/// The diverts placed along `conveyor` in the order its items reach them by the flows, as
+/// [`points`] finds them, but going on past one placed at the end of the track: the order of
+/// the flows and the order along the track are checked over all of them.
+pub fn placed_in_turn(model: &Model, conveyor: &ElementId) -> Vec<Point> {
+    chain(model, conveyor, true)
+}
+
+/// The chain of diverts placed along `conveyor` that its items reach in turn by the flows;
+/// with `past_end`, one at the end of the track does not end it.
+fn chain(model: &Model, conveyor: &ElementId, past_end: bool) -> Vec<Point> {
     let unit = model.experiment.length_unit;
     let Some(track) = model.site.paths.get(conveyor) else {
         return Vec::new();
@@ -384,7 +397,7 @@ pub fn points(model: &Model, conveyor: &ElementId) -> Vec<Point> {
         let Some(Place::Along { path, s }) = model.site.places.get(&g) else {
             break;
         };
-        if path != conveyor || s.is_nan() || *s >= end {
+        if path != conveyor || s.is_nan() || (*s >= end && !past_end) {
             break;
         }
         out.push(Point {
@@ -711,6 +724,14 @@ mod tests {
         // A divert at the end of the track is the belt's end, as in M5.1: the chain stops there.
         assert_eq!(at(&two_diverts(3.0, 10.0)), [("d1".to_owned(), 3.0)]);
         assert!(at(&two_diverts(10.0, 6.0)).is_empty());
+        // Validation follows the flows past one at the end, so that order is checked too.
+        let past = two_diverts(10.0, 6.0);
+        assert_eq!(placed_in_turn(&past, &id("belt")).len(), 2);
+        assert!(
+            past.validate()
+                .iter()
+                .any(|d| matches!(d.problem, crate::Problem::PointsOutOfOrder { .. }))
+        );
         // Placed along another conveyor, it is not one of this belt's points.
         let mut other = two_diverts(3.0, 6.0);
         other.site.places.insert(

@@ -2886,9 +2886,20 @@ impl Editor {
             .keys()
             .chain(kept_after.junctions.keys())
             .collect();
+        // A flow whose ends changed is a new flow, written again with its parameters.
+        let ends = |m: &Model, id: &ElementId| {
+            m.connections
+                .iter()
+                .find(|c| &c.id == id)
+                .map(|c| (c.from.clone(), c.to.clone()))
+        };
         for id in junction_ids {
             let (was, now) = (kept_before.junctions.get(id), kept_after.junctions.get(id));
-            if was != now {
+            let recreated = ends(before, id) != ends(after, id)
+                || ends(after, id).is_some_and(|(from, to)| {
+                    replaced.contains(from.as_str()) || replaced.contains(to.as_str())
+                });
+            if was != now || (recreated && now.is_some()) {
                 let v = now.map(crate::layout::junction_element);
                 writes.push((id.to_string(), crate::bpsim::JUNCTION, v));
             }

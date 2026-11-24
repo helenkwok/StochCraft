@@ -533,12 +533,19 @@ impl Compiled {
                     };
                     stochcraft_model::site::points(&self.model, &element.id)
                         .into_iter()
-                        .filter_map(|p| {
+                        .enumerate()
+                        .filter_map(|(k, p)| {
                             let g = elements.iter().position(|e| e.id == p.gateway)?;
+                            let rework = k == 0
+                                && self
+                                    .routes
+                                    .get(i)
+                                    .is_some_and(|rs| rs.iter().any(|r| r.to == g && r.rework));
                             Some(BeltPoint {
                                 s: (p.s * scale).max(0.0),
                                 gateway: g,
                                 router: routers.get(g).cloned().flatten()?,
+                                rework,
                             })
                         })
                         .collect()
@@ -4975,6 +4982,9 @@ struct BeltPoint {
     /// The gateway (its statistics and its properties).
     gateway: usize,
     router: Rc<Router>,
+    /// Entities meeting it are rework: the first point's flow from the conveyor is marked so,
+    /// counted against the last server each finished at, as when they enter a gateway.
+    rework: bool,
 }
 
 impl BeltPoint {
@@ -4988,6 +4998,11 @@ impl BeltPoint {
         stats: &Rc<Vec<RefCell<BlockStats>>>,
         assigner: &Assigner,
     ) -> Option<Port> {
+        if self.rework
+            && let Some(s) = e.last_server.and_then(|i| stats.get(i))
+        {
+            s.borrow_mut().rework += 1;
+        }
         assigner.enter(self.gateway, e, stats);
         if let Some(s) = stats.get(self.gateway) {
             s.borrow_mut().entered += 1;
@@ -5014,9 +5029,10 @@ impl BeltPoint {
     }
 }
 
-/// An item on a conveyor, as its processes pass it on: the entity, when it got on, and the
-/// belt's own time then.
-type Ride = (Entity, f64, f64);
+/// An item on a conveyor, as its processes pass it on: the entity, when it got on, the belt's
+/// own time then, and the ride's number on this belt (an entity that comes round again is
+/// another ride).
+type Ride = (Entity, f64, f64, u64);
 
 /// A conveyor (ROADMAP M5.1): items ride it in order at `speed`, each a `pitch` behind the one
 /// before, and leave its end into what follows. The entrance ([`Belt`]) frees again once the
@@ -5059,6 +5075,7 @@ fn spawn_conveyor(
         accumulating,
         items: RefCell::new(VecDeque::new()),
         last_left: Cell::new(None),
+        rides: Cell::new(0),
         changed: Signal::new(&ctx),
     });
     let has_points = !points.is_empty();
@@ -5087,14 +5104,17 @@ fn spawn_conveyor(
                     e.adjust(|s| &mut s.busy, 1.0);
                 }
                 let at = clock.time(now);
+                let ride = view.rides.get() + 1;
+                view.rides.set(ride);
                 view.items.borrow_mut().push_back(OnBelt {
+                    ride,
                     entity: entity.id,
                     got_on: now,
                     at,
                     key: product.as_ref().map_or(0, |p| p.key(&entity)),
                     gone: None,
                 });
-                riding.put((entity, now, at));
+                riding.put((entity, now, at, ride));
                 let (c, k, p) = (ctx.clone(), Rc::clone(&clock), places.clone());
                 ctx.spawn(async move {
                     k.until(&c, at + pitch / speed).await;
@@ -5117,9 +5137,9 @@ fn spawn_conveyor(
         );
         sim.spawn_tagged(me, async move {
             loop {
-                let (mut entity, got_on, at) = from.get().await;
+                let (mut entity, got_on, at, ride) = from.get().await;
                 if accumulating {
-                    view.wait_reach(&ctx, entity.id, point.s).await;
+                    view.wait_reach(&ctx, ride, point.s).await;
                 } else {
                     clock.until(&ctx, at + point.s / speed).await;
                 }
@@ -5128,7 +5148,7 @@ fn spawn_conveyor(
                     (Rc::clone(&e.stats), Rc::clone(&e.assigner))
                 };
                 let Some(way) = point.offer(&mut entity, &stats, &assigner).await else {
-                    to.put((entity, got_on, at));
+                    to.put((entity, got_on, at, ride));
                     continue;
                 };
                 // It leaves the belt here, sideways.
@@ -5146,7 +5166,7 @@ fn spawn_conveyor(
                         p.leave(entity.id);
                     }
                 }
-                view.diverted(entity.id, now, point.s);
+                view.diverted(ride, now, point.s);
                 way.dispatch(&ctx, entity);
             }
         });
@@ -5158,7 +5178,7 @@ fn spawn_conveyor(
     sim.spawn_tagged(me, async move {
         let mut last_left = f64::NEG_INFINITY;
         loop {
-            let (entity, got_on, at) = riding.get().await;
+            let (entity, got_on, at, ride) = riding.get().await;
             clock.until(&ctx, at + length / speed).await;
             if accumulating {
                 let behind = last_left + pitch / speed - ctx.now();
@@ -5167,14 +5187,13 @@ fn spawn_conveyor(
                 }
                 if has_points {
                     // An item that left at a point ahead may still be in the way.
-                    seen.wait_reach(&ctx, entity.id, length).await;
+                    seen.wait_reach(&ctx, ride, length).await;
                 }
             }
             env.borrow().adjust(|s| &mut s.busy, -1.0);
             if !accumulating {
                 clock.stop(ctx.now());
             }
-            let id = entity.id;
             move_on(&env, &ctx, entity, &|| false, None).await;
             let now = ctx.now();
             if !accumulating {
@@ -5186,7 +5205,7 @@ fn spawn_conveyor(
             });
             last_left = now;
             // It stays in the view until it has left, even while it waits at the end.
-            seen.left_end(id, now);
+            seen.left_end(ride, now);
         }
     });
     view
@@ -5194,6 +5213,8 @@ fn spawn_conveyor(
 
 /// An item on a conveyor, as its view keeps it.
 struct OnBelt {
+    /// Its ride's number on this belt ([`Ride`]).
+    ride: u64,
     entity: u64,
     /// When it got on.
     got_on: f64,
@@ -5217,6 +5238,8 @@ struct BeltView {
     items: RefCell<VecDeque<OnBelt>>,
     /// When the last item left the end.
     last_left: Cell<Option<f64>>,
+    /// The rides so far, numbering each item that gets on.
+    rides: Cell<u64>,
     /// Woken whenever an item leaves the belt, at its end or at a point.
     changed: Signal,
 }
@@ -5273,13 +5296,13 @@ impl BeltView {
         out
     }
 
-    /// When the front of item `id` reaches `x` along an accumulating belt, as things stand: the
+    /// When the front of ride `ride` reaches `x` along an accumulating belt, as things stand: the
     /// item moves at the speed from when it got on, a pitch behind the item ahead (or behind
     /// one that left at a point, or the last to leave the end, each moving on at the speed),
     /// and an item still on the belt goes no further than the end. Every position is then
     /// min(v·t + a, c) for constants a and c, so the time is (x − a)/v, or `None` while an
     /// item ahead must first leave the end (c < x). Items leaving only ever bring it forward.
-    fn reach(&self, id: u64, x: f64) -> Option<f64> {
+    fn reach(&self, ride: u64, x: f64) -> Option<f64> {
         let (v, p, length) = (self.speed, self.pitch, self.length);
         // The limit the items ahead set: (a, c).
         let mut limit = match self.last_left.get() {
@@ -5292,7 +5315,7 @@ impl BeltView {
                 None => {
                     let a = (-v * item.got_on).min(limit.0 - p);
                     let c = length.min(limit.1 - p);
-                    if item.entity == id {
+                    if item.ride == ride {
                         let slack = 1e-9 * x.abs().max(1.0);
                         return (c >= x - slack).then_some((x - a) / v);
                     }
@@ -5303,10 +5326,10 @@ impl BeltView {
         None
     }
 
-    /// Waits until the front of item `id` has reached `x` along an accumulating belt.
-    async fn wait_reach(&self, ctx: &Ctx, id: u64, x: f64) {
+    /// Waits until the front of ride `ride` has reached `x` along an accumulating belt.
+    async fn wait_reach(&self, ctx: &Ctx, ride: u64, x: f64) {
         loop {
-            match self.reach(id, x) {
+            match self.reach(ride, x) {
                 Some(t) => {
                     let left = t - ctx.now();
                     // Rounding must not leave a wait too short to move the clock.
@@ -5320,28 +5343,28 @@ impl BeltView {
         }
     }
 
-    /// Item `id` left at a point `s` along, at `now`.
-    fn diverted(&self, id: u64, now: f64, s: f64) {
+    /// Ride `ride` left at a point `s` along, at `now`.
+    fn diverted(&self, ride: u64, now: f64, s: f64) {
         {
             let mut items = self.items.borrow_mut();
             if self.accumulating {
-                if let Some(item) = items.iter_mut().find(|i| i.entity == id) {
+                if let Some(item) = items.iter_mut().find(|i| i.ride == ride) {
                     item.gone = Some((now, s));
                 }
                 self.forget(&mut items, now);
             } else {
-                items.retain(|i| i.entity != id);
+                items.retain(|i| i.ride != ride);
             }
         }
         self.changed.notify_all();
     }
 
-    /// Item `id` left the end at `now`. Those that left at a point ahead of it can no longer
+    /// Ride `ride` left the end at `now`. Those that left at a point ahead of it can no longer
     /// hold anything up.
-    fn left_end(&self, id: u64, now: f64) {
+    fn left_end(&self, ride: u64, now: f64) {
         {
             let mut items = self.items.borrow_mut();
-            match items.iter().position(|i| i.entity == id) {
+            match items.iter().position(|i| i.ride == ride) {
                 Some(k) => {
                     items.drain(..=k);
                 }
