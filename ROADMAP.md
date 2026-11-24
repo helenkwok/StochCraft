@@ -3493,6 +3493,15 @@ layout. The flagship example is a parcel super hub.
 - **A merge at `s`** decides which feeder goes next when several wait, by a rule:
   - *first asked, first in* (rule 4), the default;
   - *priority:* the main line first, or a fixed order;
+  - *fair share:* one queue per feeder, served as if bit by bit in turn (fair queueing: A.
+    Demers, S. Keshav and S. Shenker, *Analysis and Simulation of a Fair Queueing Algorithm*,
+    ACM SIGCOMM 1989, pp. 1–12). Each item gets a finish number F = max(F of the feeder's
+    previous item, R(t)) + its length, where R(t) counts the rounds served so far, and the
+    smallest goes next, so a feeder sending flat out cannot take more than its share. The same
+    rule serves a server's queue by source. Exact check (§2.3, p. 5): under bit-by-bit turns, a
+    light feeder sharing with N that always wait is delayed exactly as if it were alone at
+    1/(N + 1) of the speed; with Poisson arrivals and items of one length that is M/D/1, whose
+    mean wait Pollaczek–Khinchine gives;
   - *alternating gate* (a "traffic cop"): a mechanical gate of two arms, each locking the other
     shut. The open side sends until its queue is empty. Its arm then takes a set closing time to
     swing shut, and if a case reaches it meanwhile that side carries on. Only once the arm has
@@ -4868,6 +4877,16 @@ are.
     - *Published, not exact:* Stuebing's maximum and average queues, and SIMCON's validation
       on a real network (predicted maximum queues within about a foot), compared as published
       simulation results, said so on the card.
+  - **Buses that come in threes** ("Transport"): a bus route whose buses leave on a timetable
+    and are delayed at each stop in proportion to the riders waiting there, so a late bus
+    gathers more riders and falls later while the one behind catches up (bunching; G. F.
+    Newell and R. B. Potts, *Maintaining a bus schedule*, 1964, to check). Exact check: a
+    rider arriving at random waits on average E[H²] / (2 E[H]) = (E[H] / 2)(1 + CV²) for
+    headways H with coefficient of variation CV (random incidence; R. C. Larson and A. R.
+    Odoni, *Urban Operations Research*, to check with the page): 5 minutes for buses exactly
+    every 10, 10 minutes for exponential headways of the same mean. A scenario with headways
+    held at a control stop shows bunching reduced. The run measures the headways at each stop
+    and checks each stop's mean wait against them.
   - **Low-poly scenes** for the 3D view, each with an exact answer: a supermarket checkout,
     staffed desks against self-service (Erlang C); an ambulance fleet (Erlang B); a delivery
     depot; a signalised junction or a roundabout; container berths at a port; and a
@@ -4910,6 +4929,11 @@ Not scheduled yet; recorded so earlier work does not close these doors (docs/res
   times) rather than empty; fitting input distributions from event logs; the engine's journal as
   the audit trail of what-if decisions (it records its version and the state it started
   from, #44).
+- **Timetables in, delays on top:** read a GTFS feed (its stops, trips and stop times) as
+  timetabled sources and routes, so trains or buses leave as published and then run with
+  random delays, dwell times and headways. Replaying a timetable shows the plan; simulating it
+  shows what the plan does under variation. A real-time feed's observed delays become the
+  starting state of a run (digital twins, above).
 - **Incident and near-miss investigation:** a digital twin run backwards over what happened.
   - **Rebuild the incident** from its records: start from the observed state before it,
     replay the logged events in order, and work at the resolution the incident needs (seconds
