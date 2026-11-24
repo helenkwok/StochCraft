@@ -3490,6 +3490,20 @@ layout. The flagship example is a parcel super hub.
   The logic stays an exclusive gateway with M5.1's `stochcraft:routing="divert"`; the gateway is
   now placed at a divert point (D25). The rule chooses where the item is going; the route then
   takes the branches that lead there.
+- **A merge at `s`** decides which feeder goes next when several wait, by a rule:
+  - *first asked, first in* (rule 4), the default;
+  - *priority:* the main line first, or a fixed order;
+  - *alternating gate* (a "traffic cop"): a mechanical gate of two arms, each locking the other
+    shut. The open side sends until its queue is empty. Its arm then takes a set closing time to
+    swing shut, and if a case reaches it meanwhile that side carries on. Only once the arm has
+    shut does the other side open; with both sides empty the gate waits shut, and the first
+    case to arrive opens its side. If one side's cases come close enough together, its arm
+    never shuts and the other side waits indefinitely. Results report each side's queue as a
+    length (metres), not a count, since case lengths differ, and each gate's share of time busy.
+    From R. C. Stuebing, *Monte Carlo Simulation of Full Case Conveying Systems*, Digest of the
+    Second Conference on Applications of Simulation, 1968, pp. 272–273, and D. A. Heimburger,
+    *A Cased Goods Conveyor Simulator*, pp. 112–127 (whose events, OPEN.GATE, PASS.GATE and
+    SHUT.ARM, define the rule; venue and year to confirm).
 - **Lane full, stay on the loop.** Built in: when the chosen lane cannot take the item, it stays
   on the loop and is offered again next time round. Each item counts its rounds; after a set
   number it goes to an exception lane. Results report the recirculation count per divert and
@@ -4835,6 +4849,25 @@ are.
     check: W. Heitler, *The Quantum Theory of Radiation*; J. Matthews, *A Heitler model of
     extensive air showers*, Astroparticle Physics 22, 2005. The model is the toy model only,
     not a physics event generator.
+  - **Packing hall merges** (after L5's alternating gate): packing lines whose cases merge
+    through two-way gates onto one conveyor to the warehouse, Stuebing's design problem (1968,
+    above): four lines at 12 ± 3, 20 ± 3, 8 ± 1 and 12 ± 1 cases a minute, 20-inch cases, and
+    his conveyor lengths and speeds, with the questions he asks (the queues on each conveyor;
+    the main conveyor at 200 ft/min; line C 7 cases a minute faster). Its lesson: at peak the
+    main conveyor takes 61 cases a minute, about 102 ft/min of cases, yet needs to run near
+    200 ft/min, because switching gates waste belt and gather cases into slugs; a faster belt
+    moves the queues more than it shortens them. Checks:
+    - *Exact, to establish:* a gate whose arm shuts at once is close to a two-queue polling
+      system with exhaustive service and switchover times, whose mean waits are known exactly.
+      Candidates: O. J. Boxma's two-queue cyclic system with random switchover times (Discrete
+      Event Dynamic Systems, doi 10.1007/s10626-009-0072-9) and J. L. Dorsman et al. on
+      two-queue Markovian polling with exhaustive service. The gate differs in two ways: the
+      arm stays open if a case arrives while it shuts, and the gate waits shut when both sides
+      are empty. So the check is either a published model that matches these rules, or a
+      scenario that matches the published model.
+    - *Published, not exact:* Stuebing's maximum and average queues, and SIMCON's validation
+      on a real network (predicted maximum queues within about a foot), compared as published
+      simulation results, said so on the card.
   - **Low-poly scenes** for the 3D view, each with an exact answer: a supermarket checkout,
     staffed desks against self-service (Erlang C); an ambulance fleet (Erlang B); a delivery
     depot; a signalised junction or a roundabout; container berths at a port; and a
