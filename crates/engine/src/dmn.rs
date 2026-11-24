@@ -24,6 +24,10 @@ use crate::commands::parse;
 use crate::edit::Op;
 use crate::{CommandError, Engine, ErrorCode};
 
+/// A file written beside the model: its reference, its bytes, and the bytes a save may replace
+/// (a `.dmn` file as it was opened or last saved; `None` for one that is new).
+pub type Companion = (String, Vec<u8>, Option<Vec<u8>>);
+
 /// A `.dmn` file as it was read (or last saved): its bytes, and what they read as.
 #[derive(Debug, Clone)]
 pub(crate) struct DmnFile {
@@ -457,7 +461,7 @@ impl Engine {
     /// The `.dmn` files the model reads, by their references, each as `file.save` writes it,
     /// with the bytes it had when opened or last saved (`None` for a file new since), which a
     /// save may replace.
-    pub fn dmn_files(&self) -> Result<Vec<(String, Vec<u8>, Option<Vec<u8>>)>, CommandError> {
+    pub fn dmn_files(&self) -> Result<Vec<Companion>, CommandError> {
         let mut out = Vec::new();
         for (href, defs) in &self.model.dmn {
             let (bytes, was) = match self.dmn.get(href) {

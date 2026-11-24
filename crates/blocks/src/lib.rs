@@ -155,6 +155,10 @@ struct Decide {
     outputs: Vec<Option<(usize, PropertyType)>>,
 }
 
+/// A way out of a gateway routed directly by a decision table: its connection, and the output
+/// values that take it.
+type KeyedWay = (ElementId, Vec<String>);
+
 /// The condition that takes a way out of a gateway routed directly by a decision table: the
 /// output `output` is one of `keys` (the way's flow id, the id of the block it leads to, that
 /// block's name).
@@ -408,7 +412,7 @@ pub fn compile(model: &Model) -> Result<Compiled, Vec<Diagnostic>> {
             let by_condition = outs.iter().any(|c| c.condition.is_some());
             // A gateway routed directly by its decision table: each way's condition is that the
             // output names it.
-            let direct: Option<(String, Vec<(ElementId, Vec<String>)>)> =
+            let direct: Option<(String, Vec<KeyedWay>)> =
                 model.decision_ways(&e.id).and_then(|ways| {
                     let u = model.decisions.get(&e.id)?;
                     let (d, table) = model.decision_table(u).ok()?;

@@ -2598,7 +2598,7 @@ fn file_save(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         };
         canon(from).is_some() && canon(from) == canon(&dir)
     });
-    let mut files: Vec<(String, Vec<u8>, Option<Vec<u8>>)> = e
+    let mut files: Vec<crate::dmn::Companion> = e
         .agent_files()
         .into_iter()
         .map(|(href, content)| (href, content, None))
