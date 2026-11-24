@@ -78,6 +78,9 @@ pub fn save_edited(
     if before.monte_carlo != after.monte_carlo {
         ed.save_monte_carlo(&mut doc.root, scenario, after)?;
     }
+    if before.site.scene != after.site.scene {
+        ed.save_scene(&mut doc.root, scenario, after)?;
+    }
     if before.agents != after.agents {
         ed.save_agents(&mut doc.root, scenario, after)?;
     }
@@ -462,6 +465,10 @@ fn difference_within(
     };
     if started(got) != started(want) {
         return Some(format!("its starting contents read as {:?}", got.starting));
+    }
+    // The layout too, as much of it as each model can hold (`Site::kept`), and the scenery.
+    if got.site.kept(got) != want.site.kept(want) {
+        return Some(format!("its layout reads as {:?}", got.site));
     }
     // Shapes are kept to the precision the file writes them with.
     let near = |a: &Bounds, b: &Bounds| {
@@ -2847,6 +2854,32 @@ impl Editor {
             });
             writes.push((id.to_string(), ESTIMATE, v));
         }
+        // The physical layout (D24): each conveyor's track and each block's place, where it
+        // changed.
+        let site_ids: BTreeSet<&ElementId> = before
+            .site
+            .paths
+            .keys()
+            .chain(after.site.paths.keys())
+            .chain(before.site.places.keys())
+            .chain(after.site.places.keys())
+            .collect();
+        // Only what each model can hold (a track on a conveyor, a place on an element, along a
+        // conveyor that has a track): an entry the edit left stranded goes from the file.
+        let (kept_before, kept_after) = (before.site.kept(before), after.site.kept(after));
+        for id in site_ids {
+            let again = replaced.contains(id.as_str());
+            let (was, now) = (kept_before.paths.get(id), kept_after.paths.get(id));
+            if was != now || again {
+                let v = now.filter(|_| exists(id)).map(crate::layout::path_element);
+                writes.push((id.to_string(), crate::bpsim::PATH, v));
+            }
+            let (was, now) = (kept_before.places.get(id), kept_after.places.get(id));
+            if was != now || again {
+                let v = now.filter(|_| exists(id)).map(crate::layout::place_element);
+                writes.push((id.to_string(), crate::bpsim::PLACE, v));
+            }
+        }
         // Starting contents, 0 being none, on blocks that can hold them.
         let count = |m: &Model, id: &ElementId| {
             m.starting
@@ -2915,9 +2948,10 @@ impl Editor {
     fn text_attrs(&self, e: &mut Element) {
         if self.ascii {
             // Names and text values; a changeover's property and the values it changes between;
-            // the block and the result an observation names.
+            // the block and the result an observation names; a scenery object's id and kind.
             for a in [
-                "name", "value", "property", "from", "to", "element", "metric", "resource",
+                "name", "value", "property", "from", "to", "element", "metric", "resource", "id",
+                "kind",
             ] {
                 if let Some(v) = e.attr(a).filter(|v| !v.is_ascii()) {
                     self.set_text_attr(e, a, &v);
@@ -2927,6 +2961,49 @@ impl Editor {
                 self.text_attrs(c);
             }
         }
+    }
+
+    /// Writes the scenery (`stochcraft:scene`) into the scenario that was opened, in place of
+    /// what was there; with none, removes it, or writes an empty scene where an inherited
+    /// scenario has scenery.
+    fn save_scene(
+        &mut self,
+        root: &mut Element,
+        scenario: Option<&str>,
+        after: &Model,
+    ) -> Result<(), SaveError> {
+        // Cleared where a scenario this one inherits from has scenery: an empty scene says so,
+        // or the inherited one would come back on reading.
+        let inherited = after.site.scene.is_empty()
+            && ancestors(root, scenario).iter().any(|a| {
+                let is_scene = |x: &Element| {
+                    x.is_any(&NSS, "VendorExtension")
+                        && x.attr("name").as_deref() == Some(crate::bpsim::SCENE)
+                };
+                a.elements().any(is_scene)
+                    || a.child(&NSS, "ScenarioParameters")
+                        .is_some_and(|p| p.elements().any(is_scene))
+            });
+        let mut new = if inherited {
+            Some(crate::layout::empty_scene_element())
+        } else {
+            crate::layout::scene_element(&after.site.scene)
+        };
+        if let Some(e) = new.as_mut() {
+            self.text_attrs(e);
+        }
+        let s = if new.is_some() {
+            self.ensure_scenario(root, scenario)?
+        } else {
+            match scenario_mut(root, scenario) {
+                Some(s) => s,
+                None => return Ok(()),
+            }
+        };
+        let ns = s.ns.clone().unwrap_or_else(|| NS2.to_owned());
+        let prefix = s.prefix().to_owned();
+        set_scenario_extension(s, crate::bpsim::SCENE, new, &prefix, &ns);
+        Ok(())
     }
 
     /// The scenario that was opened, created (with its `BPSimData`) if the file had none.

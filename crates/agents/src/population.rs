@@ -59,7 +59,8 @@
 //! goes to every agent of the population but the sender, as a random pick never picks the
 //! sender; only messages from agents are counted when no transition takes them (an agent's own
 //! timeouts are not); the environment is one agent, started after the populations' first
-//! agents, which messages cannot address; and a rate may not read a population or the time.
+//! agents, which messages cannot address; and a rate may not read a population, the time,
+//! `In()` or the event.
 
 use std::collections::BTreeSet;
 use std::fmt;

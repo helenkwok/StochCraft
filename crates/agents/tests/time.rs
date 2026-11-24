@@ -251,6 +251,60 @@ fn a_rate_of_0_waits_until_it_becomes_positive() {
     assert!(fire[0] >= 1.0 && fire[0] < 1.0 + 1e-6, "{fire:?}");
 }
 
+/// A chart with a rate send on entry to `wait`, beside a state `busy` that `In()` can name.
+fn rate_chart(rate: &str) -> ChartSpec {
+    ChartSpec::new("rated")
+        .data("k", "2")
+        .state(
+            StateSpec::state("wait")
+                .on_entry(SendSpec::new("fire").at_rate(rate))
+                .transition(TransitionSpec::on("fire").to("busy")),
+        )
+        .state(StateSpec::state("busy"))
+}
+
+fn refusal(rate: &str) -> String {
+    match rate_chart(rate).build() {
+        Ok(_) => panic!("the rate `{rate}` was accepted"),
+        Err(e) => e.to_string(),
+    }
+}
+
+/// A rate is drawn again only when a variable it reads changes, so a rate that read the
+/// active states or the current event would keep a stale delay: a rate meant to start when
+/// the agent enters a state would never fire, one meant to stop would still fire after the
+/// agent has left, and a new event would not start the clock. Such a chart is refused.
+#[test]
+fn a_rate_that_reads_in_or_the_event_is_refused() {
+    for rate in ["In('busy')", "In('busy') or $k > 3"] {
+        let e = refusal(rate);
+        assert!(e.contains("reads In()"), "{e}");
+        assert!(e.contains("own variables change"), "{e}");
+    }
+    for rate in [
+        "getProperty('_event.name') = 'go'",
+        "getProperty('_event.data')",
+        "$k * getProperty('_event.data')",
+    ] {
+        let e = refusal(rate);
+        assert!(e.contains("reads the event"), "{e}");
+        assert!(e.contains("own variables change"), "{e}");
+    }
+    let e = refusal("time()");
+    assert!(e.contains("reads time()"), "{e}");
+    let e = refusal("population-size('p')");
+    assert!(e.contains("reads the population `p`"), "{e}");
+}
+
+#[test]
+fn a_rate_that_reads_only_the_agents_variables_is_accepted() {
+    for rate in ["3", "$k", "0.5 * $k + 0.01"] {
+        if let Err(e) = rate_chart(rate).build() {
+            panic!("the rate `{rate}` was refused: {e}");
+        }
+    }
+}
+
 /// A rate is turned into a delay as −ln(U) / rate: a rate of 1e-300 waits about 1e300, and a
 /// rate of 2^-1060, whose reciprocal is not a finite number, gives a delay too long to be a
 /// time, which is an error, not an event at once.

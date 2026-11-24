@@ -2831,3 +2831,271 @@ fn scenario_extensions_are_read_from_the_scenario_and_from_its_parameters() {
     };
     assert_eq!(old.model, new.model);
 }
+
+/// The physical layout (D24): a conveyor's track, blocks' places and scenery are written as
+/// StochCraft's vendor extensions, read back as they were, and saved in place when they change.
+/// A typed length that agrees with the track is the track's; one that differs stays, as an
+/// override (D23).
+#[test]
+fn a_layout_writes_reads_and_saves() {
+    use stochcraft_model::{ElementId, Frame, LengthUnit, Path, Place, Scenery, Segment, Track};
+    let id = |s: &str| ElementId::unchecked(s);
+    let mut model = belt_model();
+    model.experiment.length_unit = LengthUnit::Metres;
+    // 10 m straight, then a quarter circle of radius 10/π (5 m): 15 m in all.
+    let track = Track {
+        path: Path::new(
+            Frame::new(1.0, 2.0, 0.0, 90.0),
+            vec![
+                Segment::Line {
+                    length: 10.0,
+                    rise: 0.0,
+                },
+                Segment::Arc {
+                    radius: 10.0 / std::f64::consts::PI,
+                    angle_deg: -90.0,
+                    rise: 0.0,
+                },
+            ],
+        ),
+        width: 0.8,
+    };
+    model.site.paths.insert(id("belt"), track.clone());
+    model
+        .site
+        .places
+        .insert(id("in"), Place::At(Frame::new(1.0, 1.0, 0.0, 90.0)));
+    model.site.places.insert(
+        id("out"),
+        Place::Along {
+            path: id("belt"),
+            s: 15.0,
+        },
+    );
+    model.site.scene.push(Scenery {
+        id: "floor".to_owned(),
+        kind: "floor".to_owned(),
+        at: Frame::new(5.0, 8.0, 0.0, 0.0),
+        size: [12.0, 16.0, 0.0],
+    });
+    // A typed 15 m is the track's length: written, it reads back as exactly 15.
+    if let ElementKind::Conveyor { length, .. } = &mut model.elements[1].kind {
+        *length = 15.0;
+    }
+    let bytes = write_new(&model);
+    let text = String::from_utf8_lossy(&bytes);
+    assert!(
+        text.contains("stochcraft:path")
+            && text.contains("stochcraft:place")
+            && text.contains("stochcraft:scene")
+    );
+    let Ok(loaded) = read(&bytes) else {
+        unreachable!()
+    };
+    assert!(loaded.notes.is_empty(), "{:#?}", loaded.notes);
+    assert_eq!(loaded.model, laid_out(model.clone()));
+    assert!(loaded.model.validate().iter().all(|d| !matches!(
+        d.problem,
+        stochcraft_model::Problem::ConveyorLengthMismatch { .. }
+    )));
+    assert_eq!(loaded.opened.save(&loaded.model), Ok(bytes.clone()));
+
+    // Moved, widened and the floor gone: saved in place, read back as saved.
+    let mut moved = loaded.model.clone();
+    if let Some(t) = moved.site.paths.get_mut(&id("belt")) {
+        t.path.start.x = 3.0;
+        t.width = 1.0;
+    }
+    moved
+        .site
+        .places
+        .insert(id("in"), Place::At(Frame::new(3.0, 1.0, 0.0, 90.0)));
+    moved.site.scene.clear();
+    let saved = loaded.opened.save(&moved);
+    let back = saved.as_deref().map(|b| read(b).map(|l| l.model));
+    assert_eq!(back, Ok(Ok(moved.clone())));
+    let Ok(saved) = saved else { return };
+    assert!(!String::from_utf8_lossy(&saved).contains("stochcraft:scene"));
+
+    // A typed 16 m overrides the 15 m track: it is kept, and flagged.
+    let Ok(middle) = read(&saved) else {
+        unreachable!()
+    };
+    let mut longer = middle.model.clone();
+    if let ElementKind::Conveyor { length, .. } = &mut longer.elements[1].kind {
+        *length = 16.0;
+    }
+    let saved = middle.opened.save(&longer);
+    let back = saved.as_deref().map(|b| read(b).map(|l| l.model));
+    assert_eq!(back, Ok(Ok(longer.clone())));
+    assert_eq!(
+        longer
+            .validate()
+            .iter()
+            .filter(|d| matches!(
+                d.problem,
+                stochcraft_model::Problem::ConveyorLengthMismatch { .. }
+            ))
+            .count(),
+        1
+    );
+}
+
+/// An edit that strands part of the layout (a conveyor with a track made a delay, so a block
+/// placed along it has no path) saves: what the model can no longer hold goes from the file.
+#[test]
+fn a_layout_left_stranded_by_an_edit_goes_from_the_file() {
+    use stochcraft_model::{ElementId, Frame, LengthUnit, Path, Place, Segment, Track};
+    let id = |s: &str| ElementId::unchecked(s);
+    let mut model = belt_model();
+    model.experiment.length_unit = LengthUnit::Metres;
+    if let ElementKind::Conveyor { length, .. } = &mut model.elements[1].kind {
+        *length = 12.0;
+    }
+    model.site.paths.insert(
+        id("belt"),
+        Track::new(
+            Path::new(
+                Frame::default(),
+                vec![Segment::Line {
+                    length: 12.0,
+                    rise: 0.0,
+                }],
+            ),
+            LengthUnit::Metres,
+        ),
+    );
+    model.site.places.insert(
+        id("out"),
+        Place::Along {
+            path: id("belt"),
+            s: 12.0,
+        },
+    );
+    model
+        .site
+        .places
+        .insert(id("in"), Place::At(Frame::new(-1.0, 0.0, 0.0, 0.0)));
+    let Ok(loaded) = read(&write_new(&model)) else {
+        unreachable!()
+    };
+    let mut delay = loaded.model.clone();
+    delay.elements[1].kind = ElementKind::Delay {
+        processing_by: None,
+        duration: Dist::Constant(3.0),
+    };
+    let saved = loaded.opened.save(&delay);
+    assert!(saved.is_ok(), "{saved:?}");
+    let Ok(saved) = saved else { unreachable!() };
+    let text = String::from_utf8_lossy(&saved);
+    assert!(!text.contains("stochcraft:path") && !text.contains("path=\"belt\""));
+    let Ok(back) = read(&saved) else {
+        unreachable!()
+    };
+    assert_eq!(back.model.site, delay.site.kept(&delay));
+    assert_eq!(back.model.site.places.len(), 1);
+}
+
+/// A scenario that inherits scenery, saved with its own scenery cleared, says so with an empty
+/// scene: reading it back gives none, and the scenario it inherits from keeps its own.
+#[test]
+fn an_inherited_scene_cleared_is_saved_as_an_empty_scene() {
+    use stochcraft_model::{Frame, Scenery};
+    let mut model = belt_model();
+    model.site.scene.push(Scenery {
+        id: "floor".to_owned(),
+        kind: "floor".to_owned(),
+        at: Frame::default(),
+        size: [10.0, 10.0, 0.0],
+    });
+    let text = String::from_utf8_lossy(&write_new(&model)).into_owned();
+    let start = text.find("<bpsim:Scenario id=\"").map(|i| i + 20);
+    let parent = start
+        .and_then(|i| text[i..].find('"').map(|j| text[i..i + j].to_owned()))
+        .unwrap_or_default();
+    assert!(!parent.is_empty());
+    let text = text.replace(
+        "</bpsim:BPSimData>",
+        &format!(
+            "<bpsim:Scenario id=\"child\" name=\"Child\" inherits=\"{parent}\"><bpsim:ScenarioParameters/></bpsim:Scenario></bpsim:BPSimData>"
+        ),
+    );
+    let Ok(child) = stochcraft_io::read_scenario(text.as_bytes(), Some("child")) else {
+        unreachable!()
+    };
+    assert_eq!(child.model.site.scene.len(), 1, "inherited");
+    let mut cleared = child.model.clone();
+    cleared.site.scene.clear();
+    let saved = child.opened.save(&cleared);
+    assert!(saved.is_ok(), "{saved:?}");
+    let Ok(saved) = saved else { unreachable!() };
+    let back = stochcraft_io::read_scenario(&saved, Some("child")).map(|l| l.model);
+    assert_eq!(back.map(|m| m.site.scene.len()), Ok(0));
+    let base = stochcraft_io::read_scenario(&saved, Some(parent.as_str())).map(|l| l.model);
+    assert_eq!(base.map(|m| m.site.scene.len()), Ok(1));
+}
+
+/// A layout in millimetres: the step a typed length may differ by is 0.1 mm there too, and
+/// lengths agreeing with the path to within it are the path's.
+#[test]
+fn a_layout_in_millimetres_takes_lengths_to_a_tenth_of_a_millimetre() {
+    use stochcraft_model::{ElementId, Frame, LengthUnit, Path, Segment, Track};
+    for (unit, length, typed) in [
+        (LengthUnit::Millimetres, 12_000.0, 12_000.04),
+        (LengthUnit::Centimetres, 1_200.0, 1_200.004),
+    ] {
+        let mut model = belt_model();
+        model.experiment.length_unit = unit;
+        if let ElementKind::Conveyor {
+            length: l,
+            item_length,
+            gap,
+            ..
+        } = &mut model.elements[1].kind
+        {
+            *l = typed;
+            *item_length = 400.0;
+            *gap = 100.0;
+        }
+        let line = Path::new(Frame::default(), vec![Segment::Line { length, rise: 0.0 }]);
+        model
+            .site
+            .paths
+            .insert(ElementId::unchecked("belt"), Track::new(line, unit));
+        let Ok(back) = read(&write_new(&model)) else {
+            unreachable!()
+        };
+        let got = match &back.model.elements[1].kind {
+            ElementKind::Conveyor { length, .. } => *length,
+            _ => f64::NAN,
+        };
+        assert_eq!(got, length, "{unit:?}: the typed length is the path's");
+        let width = back.model.site.paths[&ElementId::unchecked("belt")].width;
+        assert!((width - stochcraft_model::site::default_width(unit)).abs() < 1e-9);
+    }
+}
+
+/// In a file that declares an encoding other than UTF-8, scenery whose id and kind are not ASCII
+/// is written as character references, and reads back as it was.
+#[test]
+fn scenery_in_a_file_that_is_not_utf8_is_written_as_character_references() {
+    use stochcraft_model::{Frame, Scenery};
+    let text = String::from_utf8_lossy(&write_new(&belt_model()))
+        .replace("encoding=\"UTF-8\"", "encoding=\"ISO-8859-1\"");
+    let Ok(loaded) = read(text.as_bytes()) else {
+        unreachable!()
+    };
+    let mut model = loaded.model.clone();
+    model.site.scene.push(Scenery {
+        id: "sol-ø".to_owned(),
+        kind: "café".to_owned(),
+        at: Frame::default(),
+        size: [1.0, 1.0, 0.0],
+    });
+    let saved = loaded.opened.save(&model);
+    assert!(saved.is_ok(), "{saved:?}");
+    let Ok(saved) = saved else { unreachable!() };
+    assert!(saved.is_ascii(), "the file stays ASCII");
+    let back = read(&saved).map(|l| l.model.site.scene);
+    assert_eq!(back, Ok(model.site.scene.clone()));
+}
