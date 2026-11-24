@@ -1497,3 +1497,9 @@ connection	Flow	ప్రవాహం
 	Remove point {n}	బిందువు {n}ను తొలగించు
 	Add a point at the end	చివరలో ఒక బిందువు జోడించు
 	Change Path	మార్గాన్ని మార్చు
+	Search examples	ఉదాహరణలలో వెతుకు
+	Clear search	వెతుకులాటను తుడిచివేయి
+	Logistics and warehousing	లాజిస్టిక్స్ మరియు గిడ్డంగి
+	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	తపాలా పార్సెల్ సార్టింగ్: ఒక లూప్ ఉత్పత్తి వారీగా నాలుగు లేన్లకు పార్సెల్‌లను పంపుతుంది, లేన్ నిండితే డైవర్ట్‌లు పార్సెల్‌ను మళ్లీ ఒక రౌండ్ పంపుతాయి.
+	How many parcels go round the loop because their lane is full?	లేన్ నిండినందున ఎన్ని పార్సెల్‌లు లూప్‌లో మళ్లీ తిరుగుతాయి?
+	Conveyors and diverts: parcels sent round the loop when their lane is full.	కన్వేయర్లు మరియు డైవర్ట్‌లు: లేన్ నిండితే పార్సెల్‌లు లూప్‌లో మళ్లీ తిరుగుతాయి.

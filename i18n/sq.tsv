@@ -1497,3 +1497,9 @@ connection	Flow	Rrjedhë
 	Remove point {n}	Hiq pikën {n}
 	Add a point at the end	Shto një pikë në fund
 	Change Path	Ndrysho shtegun
+	Search examples	Kërko në shembuj
+	Clear search	Pastro kërkimin
+	Logistics and warehousing	Logjistikë dhe magazinim
+	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	Renditja e pakove postare: një lak ushqen katër korsi sipas produktit, dhe devijuesit e dërgojnë një pako për një xhiro tjetër kur korsia e saj është plot.
+	How many parcels go round the loop because their lane is full?	Sa pako bëjnë një xhiro tjetër në lak sepse korsia e tyre është plot?
+	Conveyors and diverts: parcels sent round the loop when their lane is full.	Transportierë dhe devijues: pako të dërguara për një xhiro tjetër kur korsia e tyre është plot.

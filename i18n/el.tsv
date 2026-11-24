@@ -1497,3 +1497,9 @@ connection	Flow	Ροή
 	Remove point {n}	Αφαίρεση σημείου {n}
 	Add a point at the end	Προσθήκη σημείου στο τέλος
 	Change Path	Αλλαγή διαδρομής
+	Search examples	Αναζήτηση στα παραδείγματα
+	Clear search	Απαλοιφή αναζήτησης
+	Logistics and warehousing	Εφοδιαστική και αποθήκευση
+	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	Διαλογή ταχυδρομικών δεμάτων: ένας βρόχος τροφοδοτεί τέσσερις λωρίδες ανά προϊόν, και οι εκτροπείς στέλνουν ένα δέμα για άλλο γύρο όταν η λωρίδα του είναι γεμάτη.
+	How many parcels go round the loop because their lane is full?	Πόσα δέματα κάνουν άλλο γύρο στον βρόχο επειδή η λωρίδα τους είναι γεμάτη;
+	Conveyors and diverts: parcels sent round the loop when their lane is full.	Μεταφορείς και εκτροπείς: δέματα που κάνουν άλλο γύρο στον βρόχο όταν η λωρίδα τους είναι γεμάτη.

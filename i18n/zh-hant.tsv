@@ -1497,3 +1497,9 @@ connection	Flow	順序流
 	Remove point {n}	移除點 {n}
 	Add a point at the end	在末端新增點
 	Change Path	變更路徑
+	Search examples	搜尋範例
+	Clear search	清除搜尋
+	Logistics and warehousing	物流與倉儲
+	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	郵政包裹分揀：環形輸送線依產品向四條道口供件，道口已滿時，分流器讓包裹再繞一圈。
+	How many parcels go round the loop because their lane is full?	有多少包裹因道口已滿而再繞環線一圈？
+	Conveyors and diverts: parcels sent round the loop when their lane is full.	輸送帶與分流器：道口已滿時，包裹再繞環線一圈。

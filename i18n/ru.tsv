@@ -1497,3 +1497,9 @@ connection	Flow	Поток
 	Remove point {n}	Удалить точку {n}
 	Add a point at the end	Добавить точку в конце
 	Change Path	Изменение трассы
+	Search examples	Поиск по примерам
+	Clear search	Очистить поиск
+	Logistics and warehousing	Логистика и склад
+	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	Сортировка почтовых посылок: кольцевой конвейер подаёт посылки на четыре линии по продукту, а отводчики отправляют посылку на новый круг, когда её линия заполнена.
+	How many parcels go round the loop because their lane is full?	Сколько посылок идёт на новый круг, потому что их линия заполнена?
+	Conveyors and diverts: parcels sent round the loop when their lane is full.	Конвейеры и отводчики: посылки идут на новый круг, когда их линия заполнена.

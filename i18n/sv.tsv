@@ -1497,3 +1497,9 @@ connection	Flow	Flöde
 	Remove point {n}	Ta bort punkt {n}
 	Add a point at the end	Lägg till en punkt i slutet
 	Change Path	Ändra bana
+	Search examples	Sök i exempel
+	Clear search	Rensa sökningen
+	Logistics and warehousing	Logistik och lager
+	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	Sortering av postpaket: en slinga matar fyra banor efter produkt, och avledare skickar ett paket ett varv till när dess bana är full.
+	How many parcels go round the loop because their lane is full?	Hur många paket åker ett varv till i slingan för att deras bana är full?
+	Conveyors and diverts: parcels sent round the loop when their lane is full.	Transportband och avledare: paket som skickas ett varv till i slingan när deras bana är full.

@@ -1497,3 +1497,9 @@ connection	Flow	Virta
 	Remove point {n}	Poista piste {n}
 	Add a point at the end	Lisää piste loppuun
 	Change Path	Muuta reittiä
+	Search examples	Hae esimerkeistä
+	Clear search	Tyhjennä haku
+	Logistics and warehousing	Logistiikka ja varastointi
+	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	Postipakettien lajittelu: silmukka syöttää neljää rataa tuotteen mukaan, ja ohjaimet lähettävät paketin uudelle kierrokselle, kun sen rata on täynnä.
+	How many parcels go round the loop because their lane is full?	Montako pakettia kiertää silmukan uudelleen, koska niiden rata on täynnä?
+	Conveyors and diverts: parcels sent round the loop when their lane is full.	Kuljettimet ja ohjaimet: paketit kiertävät silmukan uudelleen, kun niiden rata on täynnä.

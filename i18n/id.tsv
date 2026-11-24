@@ -1497,3 +1497,9 @@ connection	Flow	Alur
 	Remove point {n}	Hapus titik {n}
 	Add a point at the end	Tambah titik di ujung
 	Change Path	Ubah Lintasan
+	Search examples	Cari contoh
+	Clear search	Hapus pencarian
+	Logistics and warehousing	Logistik dan pergudangan
+	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	Penyortiran paket pos: sebuah putaran mengisi empat jalur menurut produk, dan pengalih mengirim paket berputar lagi saat jalurnya penuh.
+	How many parcels go round the loop because their lane is full?	Berapa banyak paket yang berputar lagi karena jalurnya penuh?
+	Conveyors and diverts: parcels sent round the loop when their lane is full.	Konveyor dan pengalih: paket berputar lagi saat jalurnya penuh.

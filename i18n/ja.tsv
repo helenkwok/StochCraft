@@ -1497,3 +1497,9 @@ connection	Flow	フロー
 	Remove point {n}	点 {n} を削除
 	Add a point at the end	末尾に点を追加
 	Change Path	経路の変更
+	Search examples	例を検索
+	Clear search	検索をクリア
+	Logistics and warehousing	物流・倉庫
+	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	郵便小包の仕分け：ループが製品別の4つのレーンに小包を送り、レーンが満杯のときは分岐装置が小包をもう一周させます。
+	How many parcels go round the loop because their lane is full?	レーンが満杯のためにループをもう一周する小包はいくつですか？
+	Conveyors and diverts: parcels sent round the loop when their lane is full.	コンベヤと分岐装置：レーンが満杯の小包はループをもう一周します。

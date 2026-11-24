@@ -1497,3 +1497,9 @@ connection	Flow	Luồng
 	Remove point {n}	Xóa điểm {n}
 	Add a point at the end	Thêm một điểm ở cuối
 	Change Path	Thay đổi đường đi
+	Search examples	Tìm trong ví dụ
+	Clear search	Xóa tìm kiếm
+	Logistics and warehousing	Hậu cần và kho bãi
+	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	Phân loại bưu kiện bưu chính: một vòng băng tải cấp cho bốn làn theo sản phẩm, và bộ chuyển hướng cho bưu kiện đi thêm một vòng khi làn của nó đã đầy.
+	How many parcels go round the loop because their lane is full?	Bao nhiêu bưu kiện phải đi thêm một vòng vì làn của chúng đã đầy?
+	Conveyors and diverts: parcels sent round the loop when their lane is full.	Băng tải và bộ chuyển hướng: bưu kiện đi thêm một vòng khi làn của chúng đã đầy.

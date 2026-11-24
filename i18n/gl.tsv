@@ -1497,3 +1497,9 @@ connection	Flow	Fluxo
 	Remove point {n}	Quitar o punto {n}
 	Add a point at the end	Engadir un punto ao final
 	Change Path	Cambiar percorrido
+	Search examples	Buscar nos exemplos
+	Clear search	Borrar a busca
+	Logistics and warehousing	Loxística e almacenaxe
+	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	Clasificación de paquetes postais: un circuíto alimenta catro carrís por produto, e os desviadores fan dar outra volta a un paquete cando o seu carril está cheo.
+	How many parcels go round the loop because their lane is full?	Cantos paquetes dan outra volta ao circuíto porque o seu carril está cheo?
+	Conveyors and diverts: parcels sent round the loop when their lane is full.	Cintas transportadoras e desviadores: paquetes que dan outra volta ao circuíto cando o seu carril está cheo.

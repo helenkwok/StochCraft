@@ -71,6 +71,8 @@ pub fn save_edited(
         unit: indent_unit(&doc.root),
         pool_quantity: Vec::new(),
         model_ids: mine,
+        element_ids: after.elements.iter().map(|e| e.id.to_string()).collect(),
+        connection_ids: after.connections.iter().map(|c| c.id.to_string()).collect(),
         created_scenario: None,
         experiment: after.experiment.clone(),
     };
@@ -774,6 +776,11 @@ struct Editor {
     pool_quantity: Vec<ResourcePool>,
     /// The ids of the saved model's elements, connections and pools.
     model_ids: BTreeSet<String>,
+    /// The ids of the saved model's elements, and of its connections: one written again (a
+    /// connection re-pointed, an element made another kind) keeps its id, and with it its
+    /// parameters in the other scenarios.
+    element_ids: BTreeSet<String>,
+    connection_ids: BTreeSet<String>,
     /// The scenario this save added, when the file had none to write to, so that every later
     /// write of the same save goes to it rather than to another new one.
     created_scenario: Option<String>,
@@ -950,6 +957,12 @@ impl Editor {
         for id in &removed_conns {
             self.remove_flow(root, id);
         }
+        // An element written again as another kind: the opened scenario's parameters for it go
+        // (they are written afresh below), and the other scenarios keep those that still apply.
+        let opened = scenario_id(root, scenario);
+        for id in replaced.iter().filter(|id| new.contains_key(*id)) {
+            keep_params_for_any_kind(root, opened.as_deref(), id);
+        }
         for e in &added {
             self.add_node(root, after, e)?;
         }
@@ -982,7 +995,7 @@ impl Editor {
         self.pools(before, after)?;
         self.parameters(root, scenario, &old, &replaced, after, resources)?;
         self.extensions(root, scenario, before, after, &replaced)?;
-        self.routing(root, scenario, before, after, &replaced)?;
+        self.routing(root, scenario, before, after)?;
         if before.experiment != after.experiment {
             self.experiment(root, scenario, before, after)?;
         }
@@ -1090,7 +1103,10 @@ impl Editor {
             remove_all(root, &|e| e.is(BPMN, "flowNodeRef") && e.text() == id);
             remove_associations(root, id);
         }
-        remove_params(root, id);
+        // An element made another kind keeps its id: `apply` sees to its parameters.
+        if !self.element_ids.contains(id) {
+            remove_params(root, id);
+        }
         for b in &boundary {
             self.remove_node(root, b);
         }
@@ -1108,7 +1124,11 @@ impl Editor {
         if !self.model_ids.contains(id) {
             remove_associations(root, id);
         }
-        remove_params(root, id);
+        // A connection that stays (re-pointed, or joining an element made another kind) keeps
+        // its parameters in every scenario; `routing` writes the opened scenario's changes.
+        if !self.connection_ids.contains(id) {
+            remove_params(root, id);
+        }
     }
 
     fn is_node(&self, e: &Element) -> bool {
@@ -1925,25 +1945,16 @@ impl Editor {
     }
 
     /// Writes the probabilities and conditions of connections that changed (or are new). A
-    /// connection to or from an element written again as another kind (`replaced`) was written
-    /// again with it, without its parameters, so it counts as new.
+    /// connection written again (re-pointed, or joining an element made another kind) kept its
+    /// id and its parameters, so it is compared with what it was.
     fn routing(
         &mut self,
         root: &mut Element,
         scenario: Option<&str>,
         before: &Model,
         after: &Model,
-        replaced: &BTreeSet<&str>,
     ) -> Result<(), SaveError> {
-        let old = |c: &Connection| {
-            before
-                .connections
-                .iter()
-                .find(|o| same_link(o, c))
-                .filter(|_| {
-                    !replaced.contains(c.from.as_str()) && !replaced.contains(c.to.as_str())
-                })
-        };
+        let old = |c: &Connection| before.connections.iter().find(|o| o.id == c.id);
         let mut writes: Vec<(String, &'static str, Option<Element>)> = Vec::new();
         for c in &after.connections {
             let was = old(c);
@@ -2881,25 +2892,30 @@ impl Editor {
             }
         }
         // Junctions, on the flows between conveyors (only those each model can hold).
-        let junction_ids: BTreeSet<&ElementId> = kept_before
-            .junctions
-            .keys()
-            .chain(kept_after.junctions.keys())
-            .collect();
-        // A flow whose ends changed is a new flow, written again with its parameters.
+        // A re-pointed flow keeps its parameters, so only a change is written; but a junction the
+        // file kept while the flow joined no two conveyors (ignored on reading) would count once
+        // it does, so a re-pointed flow without one in the model is cleared too.
         let ends = |m: &Model, id: &ElementId| {
             m.connections
                 .iter()
                 .find(|c| &c.id == id)
                 .map(|c| (c.from.clone(), c.to.clone()))
         };
+        let repointed: BTreeSet<&ElementId> = after
+            .connections
+            .iter()
+            .filter(|c| ends(before, &c.id).is_some_and(|e| e != (c.from.clone(), c.to.clone())))
+            .map(|c| &c.id)
+            .collect();
+        let junction_ids: BTreeSet<&ElementId> = kept_before
+            .junctions
+            .keys()
+            .chain(kept_after.junctions.keys())
+            .chain(repointed.iter().copied())
+            .collect();
         for id in junction_ids {
             let (was, now) = (kept_before.junctions.get(id), kept_after.junctions.get(id));
-            let recreated = ends(before, id) != ends(after, id)
-                || ends(after, id).is_some_and(|(from, to)| {
-                    replaced.contains(from.as_str()) || replaced.contains(to.as_str())
-                });
-            if was != now || (recreated && now.is_some()) {
+            if was != now || (now.is_none() && repointed.contains(id)) {
                 let v = now.map(crate::layout::junction_element);
                 writes.push((id.to_string(), crate::bpsim::JUNCTION, v));
             }
@@ -3897,6 +3913,53 @@ fn remove_params(root: &mut Element, id: &str) {
     remove_all(root, &|e| {
         e.is_any(&NSS, "ElementParameters") && e.attr("elementRef").as_deref() == Some(id)
     });
+}
+
+/// For element `id`, written again as another kind of BPMN element (an event made a task, say):
+/// removes its parameters in the opened scenario (`opened`), which are written afresh, and in
+/// every other scenario keeps only what applies to any kind of element: its properties, its
+/// place on the floor and a stop condition on it (which validation reports if the new kind
+/// cannot hold it). The rest (times, arrivals, resources, costs and StochCraft's settings for
+/// the old kind) went with the old kind, as a BPMN editor's replace keeps only the properties
+/// the new type allows.
+fn keep_params_for_any_kind(root: &mut Element, opened: Option<&str>, id: &str) {
+    use crate::bpsim::{PLACE, STOP_COUNT, STOP_WHEN_EMPTY};
+    let is_ep = |e: &Element| {
+        e.is_any(&NSS, "ElementParameters") && e.attr("elementRef").as_deref() == Some(id)
+    };
+    let applies = |p: &Element| {
+        p.is_any(&NSS, "PropertyParameters")
+            || (p.is_any(&NSS, "VendorExtension")
+                && matches!(
+                    p.attr("name").as_deref(),
+                    Some(PLACE | STOP_COUNT | STOP_WHEN_EMPTY)
+                ))
+    };
+    let Some(data) = data_mut(root) else {
+        return;
+    };
+    for s in data.elements_mut().filter(|s| s.is_any(&NSS, "Scenario")) {
+        if opened.is_some() && s.attr("id").as_deref() == opened {
+            remove_all(s, &is_ep);
+            continue;
+        }
+        for ep in s.elements_mut().filter(|e| is_ep(e)) {
+            // Only the parameters' own children, with the whitespace before each.
+            let mut i = 0;
+            while i < ep.children.len() {
+                if matches!(&ep.children[i], Node::Element(p) if !applies(p)) {
+                    ep.children.remove(i);
+                    if i > 0 && is_ws(&ep.children[i - 1]) {
+                        ep.children.remove(i - 1);
+                        i -= 1;
+                    }
+                    continue;
+                }
+                i += 1;
+            }
+        }
+        remove_all(s, &|e| is_ep(e) && e.elements().next().is_none());
+    }
 }
 
 /// The order of each parameter group's parameters in the BPSim 2.0 schema.

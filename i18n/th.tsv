@@ -1497,3 +1497,9 @@ connection	Flow	โฟลว์
 	Remove point {n}	นำจุด {n} ออก
 	Add a point at the end	เพิ่มจุดที่ปลาย
 	Change Path	เปลี่ยนเส้นทาง
+	Search examples	ค้นหาตัวอย่าง
+	Clear search	ล้างการค้นหา
+	Logistics and warehousing	โลจิสติกส์และคลังสินค้า
+	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	การคัดแยกพัสดุไปรษณีย์: วงรอบป้อนพัสดุเข้าสี่ช่องตามสินค้า และตัวเบี่ยงทางส่งพัสดุวนอีกรอบเมื่อช่องของมันเต็ม
+	How many parcels go round the loop because their lane is full?	มีพัสดุกี่ชิ้นที่วนอีกรอบเพราะช่องของมันเต็ม?
+	Conveyors and diverts: parcels sent round the loop when their lane is full.	สายพานลำเลียงและตัวเบี่ยงทาง: พัสดุวนอีกรอบเมื่อช่องของมันเต็ม

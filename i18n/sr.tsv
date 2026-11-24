@@ -1497,3 +1497,9 @@ connection	Flow	Ток
 	Remove point {n}	Уклони тачку {n}
 	Add a point at the end	Додај тачку на крај
 	Change Path	Измена путање
+	Search examples	Претражи примере
+	Clear search	Обриши претрагу
+	Logistics and warehousing	Логистика и складиштење
+	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	Сортирање поштанских пакета: петља пуни четири траке према производу, а скретнице шаљу пакет на нови круг када је његова трака пуна.
+	How many parcels go round the loop because their lane is full?	Колико пакета иде на нови круг петље јер им је трака пуна?
+	Conveyors and diverts: parcels sent round the loop when their lane is full.	Транспортери и скретнице: пакети иду на нови круг петље када им је трака пуна.

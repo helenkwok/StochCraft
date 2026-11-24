@@ -1497,3 +1497,9 @@ connection	Flow	Folyamat
 	Remove point {n}	{n}. pont eltávolítása
 	Add a point at the end	Pont hozzáadása a végére
 	Change Path	Útvonal módosítása
+	Search examples	Keresés a példákban
+	Clear search	Keresés törlése
+	Logistics and warehousing	Logisztika és raktározás
+	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	Postai csomagok válogatása: egy körpálya termék szerint négy sávot táplál, a terelők pedig újabb körre küldik a csomagot, ha a sávja tele van.
+	How many parcels go round the loop because their lane is full?	Hány csomag tesz újabb kört, mert tele van a sávja?
+	Conveyors and diverts: parcels sent round the loop when their lane is full.	Szállítószalagok és terelők: a csomagok újabb kört tesznek, ha tele van a sávjuk.

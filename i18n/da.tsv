@@ -1497,3 +1497,9 @@ connection	Flow	Flow
 	Remove point {n}	Fjern punkt {n}
 	Add a point at the end	Tilføj et punkt i enden
 	Change Path	Ændr bane
+	Search examples	Søg i eksempler
+	Clear search	Ryd søgning
+	Logistics and warehousing	Logistik og lager
+	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	Sortering af postpakker: en sløjfe fører pakker til fire baner efter produkt, og omstyringer sender en pakke en runde til, når dens bane er fuld.
+	How many parcels go round the loop because their lane is full?	Hvor mange pakker kører en runde til i sløjfen, fordi deres bane er fuld?
+	Conveyors and diverts: parcels sent round the loop when their lane is full.	Transportbånd og omstyringer: pakker sendt en runde til i sløjfen, når deres bane er fuld.

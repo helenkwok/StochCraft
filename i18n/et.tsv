@@ -1497,3 +1497,9 @@ connection	Flow	Voog
 	Remove point {n}	Eemalda punkt {n}
 	Add a point at the end	Lisa punkt lõppu
 	Change Path	Muuda teekonda
+	Search examples	Otsi näidetest
+	Clear search	Tühjenda otsing
+	Logistics and warehousing	Logistika ja laondus
+	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	Postipakkide sorteerimine: ringkonveier toidab nelja rada toote järgi ja suunajad saadavad paki uuele ringile, kui selle rada on täis.
+	How many parcels go round the loop because their lane is full?	Mitu pakki teeb uue ringi, sest nende rada on täis?
+	Conveyors and diverts: parcels sent round the loop when their lane is full.	Konveierid ja suunajad: pakid teevad uue ringi, kui nende rada on täis.

@@ -1497,3 +1497,9 @@ connection	Flow	ნაკადი
 	Remove point {n}	წერტილი {n}-ის წაშლა
 	Add a point at the end	წერტილის დამატება ბოლოში
 	Change Path	ბილიკის შეცვლა
+	Search examples	მაგალითებში ძიება
+	Clear search	ძიების გასუფთავება
+	Logistics and warehousing	ლოჯისტიკა და საწყობი
+	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	საფოსტო ამანათების დახარისხება: წრიული ხაზი პროდუქტის მიხედვით ოთხ ზოლს კვებავს, ხოლო გადამრთველები ამანათს ახალ წრეზე აგზავნიან, როცა მისი ზოლი სავსეა.
+	How many parcels go round the loop because their lane is full?	რამდენი ამანათი გადის ახალ წრეს, რადგან მათი ზოლი სავსეა?
+	Conveyors and diverts: parcels sent round the loop when their lane is full.	კონვეიერები და გადამრთველები: ამანათები ახალ წრეს გადიან, როცა მათი ზოლი სავსეა.

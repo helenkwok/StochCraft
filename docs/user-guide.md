@@ -46,7 +46,12 @@ card with its question, its field, about how long it takes, a strip of its block
 teaches, and, where its answer has been checked, a tag: **Checked against queueing theory** or
 **Matches a published study**. Click a card to open its example. The question buttons (**Where is
 the bottleneck?**, **How many people or machines?**, …) and the **Industry** list narrow the
-cards; **See all examples** adds the reference models. Every example with a tag has a test that
+cards; **See all examples** shows every example, the reference models too, under a heading per
+field (Services, Manufacturing, Logistics and warehousing, Healthcare, … and Reference last).
+**Search examples** above the cards looks through every example, featured or not: type words from
+a title, a question or what an example teaches, such as *parcel*, *beds* or *breakdown*, in
+English or in the window's language; every word must match. Esc in the box, or the **×** beside
+it, clears the search. Every example with a tag has a test that
 runs it and compares its results with the exact answer (`crates/engine/tests/examples.rs` and
 `benchmarks.rs`).
 
@@ -85,13 +90,13 @@ The examples are also under **File ▸ Open Example**:
 | **Seven-machine line with two presses** | Which machine holds back a line with two presses in parallel? Schmitt et al. 2026, Case B. |
 | **Tandem line** | Two stations in series, read from an XPDL file (a reference model). |
 | **Every distribution** | One task per BPSim distribution, to compare their spread (a reference model). |
-| **Parcel sorter** | How many parcels go round the loop because their lane is full? |
+| **Parcel sorter** | How many parcels go round the loop because their lane is full? Postal parcel sorting, under Logistics and warehousing: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full. |
 | **Product adoption** | How fast does a new product spread? A system dynamics model (stocks and flows, from an XMILE file): 10,000 potential customers, some buying on their own and the rest after meeting a customer. Checked against the exact solution of its equations (9,087 customers after 12 years). |
 
 To try the whole cycle, open **M/M/1 queue** and press **Run**. The results show a mean wait close
 to 3 minutes and about 75% utilisation, which is what queueing theory predicts for this model.
 
-![The start page: examples by question, each with what it teaches and how its answer was checked, beside ways in for newcomers, people from other tools and opening a file](screenshots/start.png)
+![The start page: a search box and examples by question, each with what it teaches and how its answer was checked, beside ways in for newcomers, people from other tools and opening a file](screenshots/start.png)
 
 ## Build a model
 

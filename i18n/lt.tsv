@@ -1497,3 +1497,9 @@ connection	Flow	Srautas
 	Remove point {n}	Pašalinti tašką {n}
 	Add a point at the end	Pridėti tašką gale
 	Change Path	Keisti trasą
+	Search examples	Ieškoti pavyzdžiuose
+	Clear search	Išvalyti paiešką
+	Logistics and warehousing	Logistika ir sandėliavimas
+	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	Pašto siuntų rūšiavimas: žiedas tiekia keturias juostas pagal produktą, o nukreipikliai siunčia siuntą dar vienam ratui, kai jos juosta pilna.
+	How many parcels go round the loop because their lane is full?	Kiek siuntų važiuoja dar vieną ratą, nes jų juosta pilna?
+	Conveyors and diverts: parcels sent round the loop when their lane is full.	Konvejeriai ir nukreipikliai: siuntos važiuoja dar vieną ratą, kai jų juosta pilna.

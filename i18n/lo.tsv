@@ -1497,3 +1497,9 @@ connection	Flow	ເສັ້ນທາງ
 	Remove point {n}	ລຶບຈຸດ {n}
 	Add a point at the end	ເພີ່ມຈຸດທີ່ທ້າຍ
 	Change Path	ປ່ຽນເສັ້ນທາງ
+	Search examples	ຊອກຫາຕົວຢ່າງ
+	Clear search	ລ້າງການຊອກຫາ
+	Logistics and warehousing	ໂລຈິສຕິກ ແລະ ສາງສິນຄ້າ
+	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	ການຄັດແຍກພັດສະດຸໄປສະນີ: ວົງຮອບປ້ອນພັດສະດຸເຂົ້າສີ່ຊ່ອງຕາມສິນຄ້າ ແລະ ຕົວປ່ຽນທາງສົ່ງພັດສະດຸໄປອີກຮອບເມື່ອຊ່ອງຂອງມັນເຕັມ.
+	How many parcels go round the loop because their lane is full?	ມີພັດສະດຸຈັກອັນທີ່ວຽນອີກຮອບເພາະຊ່ອງຂອງມັນເຕັມ?
+	Conveyors and diverts: parcels sent round the loop when their lane is full.	ສາຍພານລຳລຽງ ແລະ ຕົວປ່ຽນທາງ: ພັດສະດຸວຽນອີກຮອບເມື່ອຊ່ອງຂອງມັນເຕັມ.

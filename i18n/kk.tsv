@@ -1497,3 +1497,9 @@ connection	Flow	Ағын
 	Remove point {n}	{n} нүктені жою
 	Add a point at the end	Соңына нүкте қосу
 	Change Path	Жолды өзгерту
+	Search examples	Мысалдардан іздеу
+	Clear search	Іздеуді тазарту
+	Logistics and warehousing	Логистика және қойма
+	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	Пошта сәлемдемелерін сұрыптау: айналма конвейер өнім бойынша төрт жолақты толтырады, ал бұрғыштар жолағы толы сәлемдемені тағы бір айналымға жібереді.
+	How many parcels go round the loop because their lane is full?	Жолағы толы болғандықтан қанша сәлемдеме тағы бір айналым жасайды?
+	Conveyors and diverts: parcels sent round the loop when their lane is full.	Конвейерлер мен бұрғыштар: жолағы толы сәлемдемелер тағы бір айналым жасайды.

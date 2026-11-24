@@ -1497,3 +1497,9 @@ connection	Flow	Przepływ
 	Remove point {n}	Usuń punkt {n}
 	Add a point at the end	Dodaj punkt na końcu
 	Change Path	Zmień trasę
+	Search examples	Szukaj w przykładach
+	Clear search	Wyczyść wyszukiwanie
+	Logistics and warehousing	Logistyka i magazynowanie
+	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	Sortowanie paczek pocztowych: pętla zasila cztery tory według produktu, a zwrotnice wysyłają paczkę na kolejne okrążenie, gdy jej tor jest pełny.
+	How many parcels go round the loop because their lane is full?	Ile paczek robi kolejne okrążenie pętli, bo ich tor jest pełny?
+	Conveyors and diverts: parcels sent round the loop when their lane is full.	Przenośniki i zwrotnice: paczki robią kolejne okrążenie pętli, gdy ich tor jest pełny.

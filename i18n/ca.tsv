@@ -1497,3 +1497,9 @@ connection	Flow	Flux
 	Remove point {n}	Elimina el punt {n}
 	Add a point at the end	Afegeix un punt al final
 	Change Path	Canvia el recorregut
+	Search examples	Cerca als exemples
+	Clear search	Esborra la cerca
+	Logistics and warehousing	Logística i emmagatzematge
+	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	Classificació de paquets postals: un circuit alimenta quatre carrils per producte, i els desviadors fan fer una altra volta a un paquet quan el seu carril és ple.
+	How many parcels go round the loop because their lane is full?	Quants paquets fan una altra volta al circuit perquè el seu carril és ple?
+	Conveyors and diverts: parcels sent round the loop when their lane is full.	Cintes transportadores i desviadors: paquets que fan una altra volta al circuit quan el seu carril és ple.

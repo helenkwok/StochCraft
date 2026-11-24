@@ -1497,3 +1497,9 @@ connection	Flow	Flux
 	Remove point {n}	Elimină punctul {n}
 	Add a point at the end	Adaugă un punct la capăt
 	Change Path	Modificare traseu
+	Search examples	Caută în exemple
+	Clear search	Șterge căutarea
+	Logistics and warehousing	Logistică și depozitare
+	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	Sortarea coletelor poștale: o buclă alimentează patru benzi după produs, iar deviatoarele trimit un colet într-o nouă tură când banda lui este plină.
+	How many parcels go round the loop because their lane is full?	Câte colete fac încă o tură în buclă pentru că banda lor este plină?
+	Conveyors and diverts: parcels sent round the loop when their lane is full.	Transportoare și deviatoare: colete trimise într-o nouă tură când banda lor este plină.

@@ -1497,3 +1497,9 @@ connection	Flow	Akış
 	Remove point {n}	{n}. noktayı kaldır
 	Add a point at the end	Sona bir nokta ekle
 	Change Path	Yolu Değiştir
+	Search examples	Örneklerde ara
+	Clear search	Aramayı temizle
+	Logistics and warehousing	Lojistik ve depolama
+	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	Posta kolisi ayırma: bir döngü ürüne göre dört şeridi besler, şeridi dolu olan koliyi yönlendiriciler bir tur daha gönderir.
+	How many parcels go round the loop because their lane is full?	Şeritleri dolu olduğu için kaç koli döngüde bir tur daha atıyor?
+	Conveyors and diverts: parcels sent round the loop when their lane is full.	Konveyörler ve yönlendiriciler: şeridi dolu olan koliler döngüde bir tur daha atar.

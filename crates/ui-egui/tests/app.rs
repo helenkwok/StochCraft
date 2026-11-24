@@ -339,6 +339,63 @@ fn the_start_page_asks_what_to_find_out() {
         egui::accesskit::Role::Button,
         "How do the time distributions differ?",
     );
+    // All of them are grouped under a heading per field, the reference models last.
+    let heading = |h: &Harness<'_, App>, field: &str| {
+        h.get_by_role_and_label(egui::accesskit::Role::Heading, field)
+            .rect()
+            .top()
+    };
+    let manufacturing = heading(&h, "Manufacturing");
+    let logistics = heading(&h, "Logistics and warehousing");
+    let reference = heading(&h, "Reference");
+    assert!(manufacturing < logistics && logistics < reference);
+    h.get_by_label("Show the featured examples only")
+        .click_accesskit();
+    settle(&mut h);
+    assert!(
+        h.query_by_role_and_label(egui::accesskit::Role::Heading, "Reference")
+            .is_none()
+    );
+
+    // The parcel sorter is featured.
+    let sorter = "How many parcels go round the loop because their lane is full?";
+    h.get_by_role_and_label(egui::accesskit::Role::Button, sorter);
+
+    // A search looks through every example, featured or not, by the words of its title, what it
+    // is about, its question and what it teaches; Esc in the box clears it.
+    let search = |h: &mut Harness<'static, App>, text: &str| {
+        h.get_by_role_and_label(egui::accesskit::Role::TextInput, "Search examples")
+            .click();
+        settle(h);
+        h.get_by_role_and_label(egui::accesskit::Role::TextInput, "Search examples")
+            .type_text(text);
+        settle(h);
+    };
+    search(&mut h, "distribution");
+    h.get_by_role_and_label(
+        egui::accesskit::Role::Button,
+        "How do the time distributions differ?",
+    );
+    h.get_by_role_and_label(egui::accesskit::Role::Heading, "Reference");
+    assert!(
+        h.query_by_role_and_label(egui::accesskit::Role::Button, mm1)
+            .is_none()
+    );
+    assert!(
+        h.query_by_label("See all 24 examples, including reference models")
+            .is_none(),
+        "a search already covers every example"
+    );
+    h.key_press(egui::Key::Escape);
+    settle(&mut h);
+    h.get_by_role_and_label(egui::accesskit::Role::Button, mm1);
+    // Nothing found says so; the clear button empties the box.
+    search(&mut h, "zzz");
+    h.get_by_label("No example matches these choices yet.");
+    h.get_by_role_and_label(egui::accesskit::Role::Button, "Clear search")
+        .click_accesskit();
+    settle(&mut h);
+    h.get_by_role_and_label(egui::accesskit::Role::Button, mm1);
 
     // A click anywhere on a card opens its example.
     h.get_by_role_and_label(egui::accesskit::Role::Button, mm1)

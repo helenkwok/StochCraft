@@ -1497,3 +1497,9 @@ connection	Flow	Tok
 	Remove point {n}	Odstrániť bod {n}
 	Add a point at the end	Pridať bod na koniec
 	Change Path	Zmena trasy
+	Search examples	Hľadať v príkladoch
+	Clear search	Vymazať hľadanie
+	Logistics and warehousing	Logistika a skladovanie
+	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	Triedenie poštových zásielok: okruh zásobuje štyri dráhy podľa produktu a výhybky pošlú zásielku na ďalšie kolo, keď je jej dráha plná.
+	How many parcels go round the loop because their lane is full?	Koľko zásielok ide ďalšie kolo okruhu, pretože je ich dráha plná?
+	Conveyors and diverts: parcels sent round the loop when their lane is full.	Dopravníky a výhybky: zásielky idú ďalšie kolo okruhu, keď je ich dráha plná.
