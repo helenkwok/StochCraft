@@ -166,12 +166,20 @@ pub(crate) struct Scene {
     /// The floor grid.
     pub grid: Vec<Segment>,
     pub anchors: Vec<Anchor>,
-    /// The corners of the box round everything standing on the floor, which Fit frames.
+    /// The corners of the box round everything standing on the floor, which Fit frames; the
+    /// floor's own box when nothing stands on it.
     pub bounds: (Vec3, Vec3),
     /// For each product key, the colour its name says, if it names one.
     pub product_colours: Vec<Option<[u8; 3]>>,
     /// The names of the blocks with no place, which are not drawn.
     pub unplaced: Vec<String>,
+}
+
+impl Scene {
+    /// Whether there is nothing to draw: no block, belt or scenery, not even a floor.
+    pub(crate) fn is_empty(&self) -> bool {
+        self.tris.is_empty() && self.floor.is_empty()
+    }
 }
 
 /// The colour a name says, as the first colour word in it: "red", "Lane blue".
@@ -230,6 +238,20 @@ pub(crate) fn frame_metres(model: &Model, e: &Element) -> Option<Frame> {
         f.y += cos(h) * side;
     }
     Some(f)
+}
+
+/// For block `e` placed along a conveyor, the spot on that belt's top at its point, in metres;
+/// `None` for a block placed otherwise.
+fn on_belt_at(model: &Model, e: &Element) -> Option<Spot> {
+    if !matches!(model.site.places.get(&e.id), Some(Place::Along { .. })) {
+        return None;
+    }
+    let m = unit_metres(model.experiment.length_unit);
+    let f = model.site.frame_of(&e.id)?;
+    Some(Spot::Block {
+        centre: [(f.x * m) as f32, (f.y * m) as f32],
+        top: (f.z * m) as f32 + BELT_HEIGHT,
+    })
 }
 
 /// A block's look: meshes in its own frame (standing on the floor at the origin, facing `+x`),
@@ -549,21 +571,21 @@ pub(crate) fn scene(model: &Model) -> Scene {
             f.heading_deg.to_radians() as f32,
             0.002,
         ));
-        if !matches!(
-            e.kind,
-            ElementKind::Source { .. }
-                | ElementKind::Sink { .. }
-                | ElementKind::ExclusiveGateway { .. }
-                | ElementKind::ParallelGateway
-        ) {
-            anchors.push(Anchor {
-                id,
-                order,
-                spot: Spot::Block {
-                    centre: [f.x as f32, f.y as f32],
-                    top: f.z as f32 + look.top,
-                },
-            });
+        // A gateway holds entities while a full buffer after it keeps them from leaving: a divert
+        // holds them on the belt at its point, a gateway standing on its own on its cabinet.
+        let on_top = Spot::Block {
+            centre: [f.x as f32, f.y as f32],
+            top: f.z as f32 + look.top,
+        };
+        let spot = match e.kind {
+            ElementKind::Source { .. } | ElementKind::Sink { .. } => None,
+            ElementKind::ExclusiveGateway { .. } | ElementKind::ParallelGateway => {
+                Some(on_belt_at(model, e).unwrap_or(on_top))
+            }
+            _ => Some(on_top),
+        };
+        if let Some(spot) = spot {
+            anchors.push(Anchor { id, order, spot });
         }
     }
     // The scenery, look only.
@@ -607,7 +629,11 @@ pub(crate) fn scene(model: &Model) -> Scene {
     for sh in &shadows {
         push_mesh(&mut floor, sh, Paint::Shadow);
     }
-    let bounds = bounds_of(&tris);
+    // Fit frames what stands on the floor (the equipment, and scenery such as a scanner arch or
+    // a column), as the plan's Fit frames the placed blocks and belts: a floor is usually far
+    // larger than the equipment on it, and fitting it would shrink the equipment to a corner of
+    // the view. The floor and its markings are framed only when nothing stands on them.
+    let bounds = bounds_of(if tris.is_empty() { &floor } else { &tris });
     let grid_box = floors.into_iter().reduce(|a, b| {
         (
             [a.0[0].min(b.0[0]), a.0[1].min(b.0[1]), 0.0],
@@ -1165,7 +1191,7 @@ impl App {
                 );
             }
         }
-        if !scene.tris.is_empty() && !scene.unplaced.is_empty() {
+        if !scene.is_empty() && !scene.unplaced.is_empty() {
             // Blocks the layout leaves out are named, never drawn somewhere guessed.
             painter.text(
                 rect.left_top() + vec2(8.0, 8.0),
@@ -1175,7 +1201,7 @@ impl App {
                 p.text_weak,
             );
         }
-        if scene.tris.is_empty() {
+        if scene.is_empty() {
             painter.text(
                 rect.center(),
                 Align2::CENTER_CENTER,
@@ -1325,14 +1351,58 @@ mod tests {
         assert!(hi[0] > 11.5 && hi[0] < 13.5, "{hi:?}");
         assert!(lo[0] < -10.0 && lo[0] > -13.0, "{lo:?}");
         assert!(!s.floor.is_empty() && !s.grid.is_empty());
-        // Every conveyor has its path, and every pack station is a spot for parcels.
+        // Every conveyor has its path, and every pack station and the divert is a spot for
+        // parcels.
         let paths = s
             .anchors
             .iter()
             .filter(|a| matches!(a.spot, Spot::Path { .. }))
             .count();
         assert_eq!(paths, 6);
-        assert_eq!(s.anchors.len(), 10);
+        assert_eq!(s.anchors.len(), 11);
+    }
+
+    #[test]
+    fn parcels_held_at_the_divert_stand_on_the_belt_at_its_point() {
+        let m = sorter();
+        let s = scene(&m);
+        let a = s.anchors.iter().find(|a| a.id == "sorter").expect("a spot");
+        let Spot::Block { centre, top } = a.spot else {
+            panic!("{:?}", a.spot);
+        };
+        let (loop_path, _) = track_metres(&m, &ElementId::unchecked("loop")).unwrap();
+        let at = loop_path.point_at(0.0);
+        assert!(
+            (f64::from(centre[0]) - at.x).abs() < 1e-3,
+            "{centre:?} {at:?}"
+        );
+        assert!(
+            (f64::from(centre[1]) - at.y).abs() < 1e-3,
+            "{centre:?} {at:?}"
+        );
+        assert!((top - (at.z as f32 + BELT_HEIGHT)).abs() < 1e-4);
+        let (tris, _) = parcels(&s, &|id| u64::from(id == "sorter") * 2, &|_| None);
+        assert!(!tris.is_empty());
+    }
+
+    #[test]
+    fn a_layout_with_only_a_floor_draws_and_frames_the_floor() {
+        let mut m = sorter();
+        m.site.paths.clear();
+        m.site.places.clear();
+        m.site.scene.retain(|o| o.kind == "floor");
+        let s = scene(&m);
+        assert!(s.tris.is_empty() && !s.is_empty());
+        // The floor is 26.4 m along x by 12.8 m across, centred at (0.3, -2.4).
+        let (lo, hi) = s.bounds;
+        assert!(
+            (lo[0] + 12.9).abs() < 0.01 && (hi[0] - 13.5).abs() < 0.01,
+            "{lo:?} {hi:?}"
+        );
+        assert!(
+            (lo[1] + 8.8).abs() < 0.01 && (hi[1] - 4.0).abs() < 0.01,
+            "{lo:?} {hi:?}"
+        );
     }
 
     #[test]
@@ -1383,7 +1453,7 @@ mod tests {
         let mut m = sorter();
         m.site = Default::default();
         let s = scene(&m);
-        assert!(s.tris.is_empty() && s.anchors.is_empty());
+        assert!(s.is_empty() && s.anchors.is_empty());
         assert_eq!(s.unplaced.len(), m.elements.len());
     }
 

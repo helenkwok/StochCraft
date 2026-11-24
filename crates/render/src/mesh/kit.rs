@@ -87,14 +87,16 @@ fn section(s: &Station, left: f32, right: f32, bottom: f32, top: f32) -> Section
     }
 }
 
-/// The distance along `stations` to each of them.
+/// The distance along `stations` to each of them, climb included, as a path measures it: on a
+/// slope or a helix the gaps and the legs fall where the path's metres put them.
 fn distances(stations: &[Station]) -> Vec<f32> {
     let mut out = Vec::with_capacity(stations.len());
     let mut d = 0.0;
     for (i, s) in stations.iter().enumerate() {
         if i > 0 {
             let p = &stations[i - 1];
-            d += libm::hypotf(s.x - p.x, s.y - p.y);
+            let (dx, dy, dz) = (s.x - p.x, s.y - p.y, s.z - p.z);
+            d += libm::sqrtf(dx * dx + dy * dy + dz * dz);
         }
         out.push(d);
     }
@@ -688,6 +690,28 @@ mod tests {
             .iter()
             .any(|v| v[0] > 2.1 && v[0] < 2.9 && v[1] > 0.0 && v[2] > p.height + 1e-4);
         assert!(!over_gap);
+    }
+
+    #[test]
+    fn on_a_slope_distances_and_gaps_count_the_climb() {
+        // 4 m along and 3 m up: 5 m along the belt.
+        let sloped: Vec<Station> = (0..=50)
+            .map(|i| {
+                let k = i as f32 / 50.0;
+                Station {
+                    x: 4.0 * k,
+                    z: 3.0 * k,
+                    ..Station::default()
+                }
+            })
+            .collect();
+        let at = distances(&sloped);
+        assert!((at.last().copied().unwrap() - 5.0).abs() < 1e-4, "{at:?}");
+        // A gap over the last metre of the belt's 5 leaves rail out there.
+        let p = Belt::default();
+        let whole = belt_along(&sloped, p, &[], &[]);
+        let gapped = belt_along(&sloped, p, &[(4.0, 5.0)], &[]);
+        assert!(gapped.frame.triangle_count() < whole.frame.triangle_count());
     }
 
     #[test]
