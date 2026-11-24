@@ -1458,3 +1458,20 @@ unit	yr	yıl
 	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	{block} bloğunda modelde olmayan "{pool}" havuzu için bir hizmet süresi var. Bu süreyi kaldırın veya var olan bir havuz seçin.
 	{block} has two service times for the pool “{pool}”. Keep one.	{block} bloğunda "{pool}" havuzu için iki hizmet süresi var. Birini tutun.
 	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	{block} bloğunda ihtiyaç duymadığı "{pool}" havuzu için bir hizmet süresi var. Havuzu ihtiyaçlarına ekleyin veya bu süreyi kaldırın.
+	{block} uses the decision table “{decision}” of the file {file}, which it cannot use: {reason} Correct the table, or take it off the block.	{block}, {file} dosyasındaki “{decision}” karar tablosunu kullanıyor ama kullanamıyor: {reason} Tabloyu düzeltin ya da bloktan kaldırın.
+	{block} uses the decision table “{decision}”, whose rules {first} and {second} both match {example}, but under its hit policy Unique only one may. Change the rules so that only one matches, or choose another hit policy.	{block}, “{decision}” karar tablosunu kullanıyor; tablonun {first} ve {second} kuralları {example} ile birlikte eşleşiyor, ama Unique eşleşme ilkesinde yalnızca biri eşleşebilir. Kuralları yalnızca biri eşleşecek şekilde değiştirin ya da başka bir eşleşme ilkesi seçin.
+	{block} uses the decision table “{decision}”, in which no rule matches {example}, so such an entity gets no result there. Add a rule or a default output, if that is not intended.	{block}, “{decision}” karar tablosunu kullanıyor; tabloda hiçbir kural {example} ile eşleşmiyor, bu yüzden böyle bir varlık orada sonuç almıyor. Bu istenmiyorsa bir kural ya da varsayılan çıktı ekleyin.
+	{block} routes by the decision table “{decision}”, which can give “{value}”, the name of none of its ways out. Make each output the name or id of a block the gateway leads to.	{block}, “{decision}” karar tablosuna göre yönlendiriyor; tablo “{value}” verebilir, bu ise hiçbir çıkışının adı değil. Her çıktıyı geçidin vardığı bir bloğun adı ya da kimliği yapın.
+	Decision table	Karar tablosu
+	Open decision table	Karar tablosunu aç
+	Hit policy	Eşleşme ilkesi
+	Unique	Tekil
+	First	İlk
+	Collect	Topla
+	Aggregation	Birleştirme
+	Sum	Toplam
+	Count	Sayı
+	Add rule	Kural ekle
+	Remove rule	Kuralı kaldır
+	Change Decision Table	Karar Tablosunu Değiştir
+	Use Decision Table	Karar Tablosunu Kullan

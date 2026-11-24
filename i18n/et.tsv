@@ -1458,3 +1458,20 @@ unit	yr	a
 	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	Plokil {block} on teenindusaeg kogumile „{pool}”, mida mudelis pole. Eemalda see aeg või vali olemasolev kogum.
 	{block} has two service times for the pool “{pool}”. Keep one.	Plokil {block} on kaks teenindusaega kogumile „{pool}”. Jäta üks.
 	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	Plokil {block} on teenindusaeg kogumile „{pool}”, mida see ei vaja. Lisa kogum selle vajadustesse või eemalda see aeg.
+	{block} uses the decision table “{decision}” of the file {file}, which it cannot use: {reason} Correct the table, or take it off the block.	{block} kasutab faili {file} otsustustabelit „{decision}”, mida see kasutada ei saa: {reason} Parandage tabel või eemaldage see plokilt.
+	{block} uses the decision table “{decision}”, whose rules {first} and {second} both match {example}, but under its hit policy Unique only one may. Change the rules so that only one matches, or choose another hit policy.	{block} kasutab otsustustabelit „{decision}”, mille reeglid {first} ja {second} sobivad mõlemad väärtusele {example}, kuid tabamuspoliitika Unique korral tohib sobida vaid üks. Muutke reegleid nii, et sobiks vaid üks, või valige teine tabamuspoliitika.
+	{block} uses the decision table “{decision}”, in which no rule matches {example}, so such an entity gets no result there. Add a rule or a default output, if that is not intended.	{block} kasutab otsustustabelit „{decision}”, milles ükski reegel ei sobi väärtusele {example}, nii et selline olem ei saa seal tulemust. Lisage reegel või vaikeväljund, kui see pole taotluslik.
+	{block} routes by the decision table “{decision}”, which can give “{value}”, the name of none of its ways out. Make each output the name or id of a block the gateway leads to.	{block} suunab otsustustabeli „{decision}” järgi, mis võib anda „{value}”, mis pole ühegi selle väljapääsu nimi. Tehke igast väljundist ploki nimi või ID, kuhu lüüs viib.
+	Decision table	Otsustustabel
+	Open decision table	Ava otsustustabel
+	Hit policy	Tabamuspoliitika
+	Unique	Unikaalne
+	First	Esimene
+	Collect	Kogu
+	Aggregation	Koondamine
+	Sum	Summa
+	Count	Arv
+	Add rule	Lisa reegel
+	Remove rule	Eemalda reegel
+	Change Decision Table	Muuda otsustustabelit
+	Use Decision Table	Kasuta otsustustabelit

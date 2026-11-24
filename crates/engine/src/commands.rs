@@ -2583,18 +2583,48 @@ fn file_save(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         .path()
         .and_then(|p| std::path::Path::new(p).parent())
         .map(std::path::Path::to_path_buf);
+    // The files the model reads beside it: an agent-based model's charts and lists of links,
+    // and a process model's decision tables, each with the bytes it may replace (a `.dmn` file
+    // as it was opened or last saved, when saving into that folder: edited tables are written
+    // back into it).
+    let same_dir = opened_dir.as_ref().is_some_and(|from| {
+        let canon = |d: &std::path::Path| {
+            std::fs::canonicalize(if d.as_os_str().is_empty() {
+                std::path::Path::new(".")
+            } else {
+                d
+            })
+            .ok()
+        };
+        canon(from).is_some() && canon(from) == canon(&dir)
+    });
+    let mut files: Vec<(String, Vec<u8>, Option<Vec<u8>>)> = e
+        .agent_files()
+        .into_iter()
+        .map(|(href, content)| (href, content, None))
+        .collect();
+    files.extend(
+        e.dmn_files()?
+            .into_iter()
+            .map(|(href, content, was)| (href, content, was.filter(|_| same_dir))),
+    );
     if let Some(from) = &opened_dir {
-        for (href, _) in e.agent_files() {
-            if let Ok(there) = crate::agents::beside(from, &href)
+        for (href, _, _) in &files {
+            if let Ok(there) = crate::agents::beside(from, href)
                 && model_is(there.as_path())
             {
                 return Err(model_over(href.as_str()));
             }
         }
     }
+    let written: Vec<(String, Vec<u8>)> = e
+        .dmn_files()?
+        .into_iter()
+        .map(|(href, content, _)| (href, content))
+        .collect();
     let mut companions = Vec::new();
     let mut siblings = Vec::new();
-    for (href, content) in e.agent_files() {
+    for (href, content, replaceable) in files {
         let to = crate::agents::beside(&dir, &href)
             .map_err(|m| CommandError::new(ErrorCode::InvalidParams, m))?;
         if model_is(to.as_path()) {
@@ -2602,6 +2632,11 @@ fn file_save(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         }
         match std::fs::read(&to) {
             Ok(there) if there == content => {}
+            // A decision table file as it was read, unchanged on disk since: edited, it is
+            // written back.
+            Ok(there) if replaceable.as_deref() == Some(there.as_slice()) => {
+                siblings.push((to.clone(), content));
+            }
             Ok(_) => {
                 return Err(CommandError::new(
                     ErrorCode::Conflict,
@@ -2643,6 +2678,7 @@ fn file_save(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
     }
     craft_atomic::atomic_write(model_path, &bytes)
         .map_err(|err| CommandError::new(ErrorCode::Io, format!("{path}: {err}")))?;
+    e.dmn_saved(written);
     e.record_saved(&path, &bytes)
 }
 
@@ -2688,6 +2724,40 @@ pub static COMMANDS: &[Command] = &[
         schema: schema::<NoParams>,
         example: || json!({}),
         run: model_validate,
+    },
+    Command {
+        name: "dmn.set",
+        summary: "Set a decision table (DMN 1.6, D30): the decision `decision` of the .dmn file `file` beside the model, added (with the file) if it is not there yet. Every cell is FEEL text: input entries are S-FEEL unary tests (`< 10`, `[1..5]`, `\"A\", \"B\"`, `not(...)`, `-`), output entries a number, a string in double quotes, true or false; the hit policy is UNIQUE, FIRST, PRIORITY or COLLECT (with an optional aggregation). A table that cannot run is refused with the cell and the reason. Returns `findings`: rules that overlap under UNIQUE and inputs no rule covers, each with an example.",
+        kind: CommandKind::Edit,
+        schema: schema::<crate::dmn::DmnSet>,
+        example: || {
+            json!({
+                "file": "routing.dmn",
+                "decision": "priority",
+                "table": {
+                    "hit_policy": "UNIQUE",
+                    "outputs": [{ "name": "priority" }],
+                    "rules": [{ "inputs": [], "outputs": ["1"] }]
+                }
+            })
+        },
+        run: crate::dmn::set,
+    },
+    Command {
+        name: "dmn.use",
+        summary: "Make a task or an exclusive gateway use a decision table the model has (`file` and `decision`), or, with neither, stop using one. As an entity enters, the table is evaluated on its properties and the outputs are written back as properties; a gateway none of whose ways out has a condition takes the way whose flow id, target id or target name is the output (`route` names the output when there are several).",
+        kind: CommandKind::Edit,
+        schema: schema::<crate::dmn::DmnUse>,
+        example: || json!({ "element": "desk" }),
+        run: crate::dmn::use_table,
+    },
+    Command {
+        name: "dmn.get",
+        summary: "The decision tables: which block uses which decision of which .dmn file, and every file's decisions with their tables, each cell as its FEEL text.",
+        kind: CommandKind::Query,
+        schema: schema::<crate::dmn::DmnGet>,
+        example: || json!({}),
+        run: crate::dmn::get,
     },
     Command {
         name: "model.capacity",

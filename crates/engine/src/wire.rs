@@ -2,6 +2,8 @@
 //! return. They are the engine's own (the files on disk stay BPSim on BPMN or XPDL); the model
 //! crates below stay free of serialisation.
 
+use std::collections::BTreeMap;
+
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 use serde_json::{Value, json};
@@ -2510,6 +2512,10 @@ pub struct ModelDoc {
     /// without one.
     #[serde(default, skip_serializing_if = "crate::site::SiteDoc::is_empty")]
     pub site: crate::site::SiteDoc,
+    /// The decision tables blocks use, and the `.dmn` files they are in (D30); left out for a
+    /// model that uses none.
+    #[serde(default, skip_serializing_if = "crate::dmn::DecisionsDoc::is_empty")]
+    pub decisions: crate::dmn::DecisionsDoc,
 }
 
 impl From<&Model> for ModelDoc {
@@ -2550,6 +2556,7 @@ impl From<&Model> for ModelDoc {
             experiment: (&m.experiment).into(),
             monte_carlo: m.monte_carlo.as_ref().map(Into::into),
             site: (&m.site).into(),
+            decisions: crate::dmn::DecisionsDoc::of(m),
         }
     }
 }
@@ -2617,7 +2624,10 @@ impl From<ModelDoc> for Model {
             // An agent-based model's populations are not part of a process model's JSON: they
             // are read with `agents.get`. A model set from JSON is a process model.
             agents: None,
+            decisions: BTreeMap::new(),
+            dmn: BTreeMap::new(),
         };
+        m.decisions.apply(&mut out);
         // A conveyor whose typed length agrees with its track to within 0.1 mm runs for the
         // track's length, as when the model is read from a file (D23).
         stochcraft_model::site::lengths_from_paths(&out.site, &mut out.elements, unit);

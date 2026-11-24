@@ -15,6 +15,8 @@ use stochcraft_model::{
     Scrap, Setup, Stop, ThreePoint, TimeUnit, Timed, Transfer, Upper,
 };
 
+use stochcraft_model::dmn::DecisionUse;
+
 use crate::bpsim::{self, NSS, Scenario, Value};
 use crate::xml::Element;
 use crate::{Format, Note};
@@ -1385,6 +1387,7 @@ fn to_model(p: Process, scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> M
     experiment.stop = stop_of(scenario, &elements, notes);
     let estimates = estimates_of(scenario, &elements, notes);
     let starting = starting_of(scenario, &elements, notes);
+    let decisions = decisions_of(scenario, &elements, notes);
     let site = crate::layout::site_of(scenario, &elements, notes);
     crate::layout::lengths_from_paths(&site, &mut elements, experiment.length_unit);
     Model {
@@ -1400,7 +1403,63 @@ fn to_model(p: Process, scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> M
         monte_carlo: None,
         site,
         agents: None,
+        decisions,
+        // The tables are read from their own files, beside the model's (by the engine).
+        dmn: BTreeMap::new(),
     }
+}
+
+/// The decision tables StochCraft's vendor extension names for blocks ([`bpsim::DECISION`]).
+fn decisions_of(
+    scenario: Option<&Scenario>,
+    elements: &[ModelElement],
+    notes: &mut Vec<Note>,
+) -> BTreeMap<ElementId, DecisionUse> {
+    let mut out = BTreeMap::new();
+    let Some(s) = scenario else {
+        return out;
+    };
+    for e in elements {
+        let id = e.id.as_str();
+        let Some(ext) = s.param(id, &format!("VendorExtension/{}", bpsim::DECISION)) else {
+            continue;
+        };
+        let Some(body) = ext.elements().find(|x| x.local() == "decision") else {
+            notes.push(Note::error(
+                Some(id),
+                format!(
+                    "`{}` holds no stochcraft:decision element; it is ignored",
+                    bpsim::DECISION
+                ),
+            ));
+            continue;
+        };
+        let attr = |name: &str| {
+            body.attr(name)
+                .map(|v| v.trim().to_owned())
+                .filter(|v| !v.is_empty())
+        };
+        match (attr("file"), attr("decision")) {
+            (Some(file), Some(decision)) => {
+                out.insert(
+                    e.id.clone(),
+                    DecisionUse {
+                        file,
+                        decision,
+                        route: attr("route"),
+                    },
+                );
+            }
+            _ => notes.push(Note::error(
+                Some(id),
+                format!(
+                    "`{}` needs a file and a decision; it is ignored",
+                    bpsim::DECISION
+                ),
+            )),
+        }
+    }
+    out
 }
 
 /// The starting contents StochCraft's vendor extension gives blocks ([`bpsim::STARTING_CONTENTS`]):
@@ -1587,6 +1646,7 @@ fn queue_capacity(scenario: Option<&Scenario>, id: &str, notes: &mut Vec<Note>) 
             bpsim::STOP_WHEN_EMPTY,
             bpsim::ESTIMATE,
             bpsim::STARTING_CONTENTS,
+            bpsim::DECISION,
             bpsim::PATH,
             bpsim::PLACE,
         ]

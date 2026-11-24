@@ -1458,3 +1458,20 @@ unit	yr	год.
 	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	Блок {block} има време послуживања за фонд „{pool}”, који модел нема. Уклоните то време или изаберите фонд који постоји.
 	{block} has two service times for the pool “{pool}”. Keep one.	Блок {block} има два времена послуживања за фонд „{pool}”. Задржите једно.
 	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	Блок {block} има време послуживања за фонд „{pool}”, који му није потребан. Додајте фонд његовим захтевима или уклоните то време.
+	{block} uses the decision table “{decision}” of the file {file}, which it cannot use: {reason} Correct the table, or take it off the block.	{block} користи табелу одлучивања „{decision}” из датотеке {file}, коју не може да користи: {reason} Исправите табелу или је уклоните са блока.
+	{block} uses the decision table “{decision}”, whose rules {first} and {second} both match {example}, but under its hit policy Unique only one may. Change the rules so that only one matches, or choose another hit policy.	{block} користи табелу одлучивања „{decision}”, чија се правила {first} и {second} оба подударају са {example}, али уз њено правило погодака Unique сме да се подудара само једно. Промените правила тако да се подудара само једно или изаберите друго правило погодака.
+	{block} uses the decision table “{decision}”, in which no rule matches {example}, so such an entity gets no result there. Add a rule or a default output, if that is not intended.	{block} користи табелу одлучивања „{decision}”, у којој се ниједно правило не подудара са {example}, па такав ентитет ту не добија резултат. Додајте правило или подразумевани излаз ако то није намера.
+	{block} routes by the decision table “{decision}”, which can give “{value}”, the name of none of its ways out. Make each output the name or id of a block the gateway leads to.	{block} усмерава према табели одлучивања „{decision}”, која може да да „{value}”, назив ниједног од његових излаза. Нека сваки излаз буде назив или id блока до ког води мрежни пролаз.
+	Decision table	Табела одлучивања
+	Open decision table	Отвори табелу одлучивања
+	Hit policy	Правило погодака
+	Unique	Јединствено
+	First	Прво
+	Collect	Прикупи
+	Aggregation	Агрегација
+	Sum	Збир
+	Count	Број
+	Add rule	Додај правило
+	Remove rule	Уклони правило
+	Change Decision Table	Промени табелу одлучивања
+	Use Decision Table	Користи табелу одлучивања

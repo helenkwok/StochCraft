@@ -1458,3 +1458,20 @@ unit	yr	a
 	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	{block} té un temps de servei per al grup «{pool}», que el model no té. Elimineu aquest temps o trieu un grup que existeixi.
 	{block} has two service times for the pool “{pool}”. Keep one.	{block} té dos temps de servei per al grup «{pool}». Conserveu-ne només un.
 	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	{block} té un temps de servei per al grup «{pool}», que no necessita. Afegiu el grup a les seves necessitats o elimineu aquest temps.
+	{block} uses the decision table “{decision}” of the file {file}, which it cannot use: {reason} Correct the table, or take it off the block.	{block} fa servir la taula de decisió «{decision}» del fitxer {file}, que no pot fer servir: {reason} Corregiu la taula o traieu-la del bloc.
+	{block} uses the decision table “{decision}”, whose rules {first} and {second} both match {example}, but under its hit policy Unique only one may. Change the rules so that only one matches, or choose another hit policy.	{block} fa servir la taula de decisió «{decision}», les regles {first} i {second} de la qual coincideixen totes dues amb {example}, però amb la seva política de coincidència Unique només en pot coincidir una. Canvieu les regles perquè només en coincideixi una, o trieu una altra política de coincidència.
+	{block} uses the decision table “{decision}”, in which no rule matches {example}, so such an entity gets no result there. Add a rule or a default output, if that is not intended.	{block} fa servir la taula de decisió «{decision}», en la qual cap regla no coincideix amb {example}, així que una entitat així no hi obté cap resultat. Afegiu-hi una regla o una sortida per defecte, si no és el que es vol.
+	{block} routes by the decision table “{decision}”, which can give “{value}”, the name of none of its ways out. Make each output the name or id of a block the gateway leads to.	{block} encamina segons la taula de decisió «{decision}», que pot donar «{value}», el nom de cap de les seves sortides. Feu que cada sortida sigui el nom o l’id d’un bloc al qual porta la passarel·la.
+	Decision table	Taula de decisió
+	Open decision table	Obre la taula de decisió
+	Hit policy	Política de coincidència
+	Unique	Única
+	First	Primera
+	Collect	Recull
+	Aggregation	Agregació
+	Sum	Suma
+	Count	Recompte
+	Add rule	Afegeix una regla
+	Remove rule	Elimina la regla
+	Change Decision Table	Canvia la taula de decisió
+	Use Decision Table	Fes servir la taula de decisió

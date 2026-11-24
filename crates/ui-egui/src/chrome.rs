@@ -264,6 +264,7 @@ impl App {
         self.shortcuts_window(&ctx);
         self.themes_window(&ctx);
         self.chart_colours_window(&ctx);
+        self.decision_table_window(&ctx);
         self.recovery_dialog(&ctx);
         self.guide_overlay(&ctx);
         // Once everything of this frame is laid out, including what is drawn over the charts.

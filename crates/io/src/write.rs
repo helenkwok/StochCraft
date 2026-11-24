@@ -14,6 +14,8 @@ use stochcraft_model::{
     ResourcePool, Routing, Scrap, Sequential, Setup, Stop, Timed, Transfer,
 };
 
+use stochcraft_model::dmn::DecisionUse;
+
 use crate::bpsim::NS2;
 use crate::duration::trim_float;
 use crate::read::BPMN;
@@ -347,6 +349,21 @@ pub(crate) fn vendor_value_element(name: &str, value: &str) -> Element {
         .with_attr("name", name)
         .with_attr("xmlns:stochcraft", crate::bpsim::STOCHCRAFT_NS)
         .with_attr("stochcraft:value", value)
+}
+
+/// The decision table a block uses, as StochCraft's vendor extension ([`crate::bpsim::DECISION`]).
+pub(crate) fn decision_element(u: &DecisionUse) -> Element {
+    let ns = crate::bpsim::STOCHCRAFT_NS;
+    let mut body = Element::new("stochcraft:decision", Some(ns))
+        .with_attr("file", &u.file)
+        .with_attr("decision", &u.decision);
+    if let Some(r) = &u.route {
+        body = body.with_attr("route", r);
+    }
+    s("VendorExtension")
+        .with_attr("name", crate::bpsim::DECISION)
+        .with_attr("xmlns:stochcraft", ns)
+        .with_child(body)
 }
 
 /// A block's starting contents as a StochCraft vendor extension: `n` entities inside as each
@@ -1209,6 +1226,9 @@ pub fn write_new(model: &Model) -> Vec<u8> {
             .filter(|n| **n > 0 && e.kind.holds_at_start())
         {
             ep.push(starting_element(*n));
+        }
+        if let Some(u) = model.decisions.get(&e.id) {
+            ep.push(decision_element(u));
         }
         // The physical layout (D24): a conveyor's track and a block's place.
         if let Some(t) = site.paths.get(&e.id) {

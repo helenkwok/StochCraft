@@ -1458,3 +1458,20 @@ unit	yr	წელი
 	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	{block}-ს აქვს მომსახურების დრო პულისთვის „{pool}“, რომელიც მოდელში არ არის. წაშალეთ ეს დრო ან აირჩიეთ არსებული პული.
 	{block} has two service times for the pool “{pool}”. Keep one.	{block}-ს ორი მომსახურების დრო აქვს პულისთვის „{pool}“. დატოვეთ ერთი.
 	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	{block}-ს აქვს მომსახურების დრო პულისთვის „{pool}“, რომელიც მას არ სჭირდება. დაამატეთ პული მის საჭიროებებში ან წაშალეთ ეს დრო.
+	{block} uses the decision table “{decision}” of the file {file}, which it cannot use: {reason} Correct the table, or take it off the block.	{block} იყენებს ფაილ {file}-ის გადაწყვეტილების ცხრილს „{decision}“, რომლის გამოყენებაც არ შეუძლია: {reason} შეასწორეთ ცხრილი ან მოხსენით იგი ბლოკს.
+	{block} uses the decision table “{decision}”, whose rules {first} and {second} both match {example}, but under its hit policy Unique only one may. Change the rules so that only one matches, or choose another hit policy.	{block} იყენებს გადაწყვეტილების ცხრილს „{decision}“, რომლის წესები {first} და {second} ორივე ემთხვევა {example}-ს, მაგრამ მისი დამთხვევის პოლიტიკით Unique მხოლოდ ერთს შეუძლია. შეცვალეთ წესები ისე, რომ მხოლოდ ერთი ემთხვეოდეს, ან აირჩიეთ სხვა დამთხვევის პოლიტიკა.
+	{block} uses the decision table “{decision}”, in which no rule matches {example}, so such an entity gets no result there. Add a rule or a default output, if that is not intended.	{block} იყენებს გადაწყვეტილების ცხრილს „{decision}“, რომელშიც არცერთი წესი არ ემთხვევა {example}-ს, ასე რომ ასეთი ერთეული იქ შედეგს ვერ იღებს. დაამატეთ წესი ან ნაგულისხმევი გამოსავალი, თუ ეს განზრახული არ არის.
+	{block} routes by the decision table “{decision}”, which can give “{value}”, the name of none of its ways out. Make each output the name or id of a block the gateway leads to.	{block} მიმართავს გადაწყვეტილების ცხრილის „{decision}“ მიხედვით, რომელსაც შეუძლია მისცეს „{value}“, რაც არცერთი მისი გასასვლელის სახელი არ არის. თითოეული გამოსავალი გახადეთ იმ ბლოკის სახელი ან id, რომელთანაც კარიბჭე მიდის.
+	Decision table	გადაწყვეტილების ცხრილი
+	Open decision table	გადაწყვეტილების ცხრილის გახსნა
+	Hit policy	დამთხვევის პოლიტიკა
+	Unique	უნიკალური
+	First	პირველი
+	Collect	შეგროვება
+	Aggregation	აგრეგაცია
+	Sum	ჯამი
+	Count	რაოდენობა
+	Add rule	წესის დამატება
+	Remove rule	წესის წაშლა
+	Change Decision Table	გადაწყვეტილების ცხრილის შეცვლა
+	Use Decision Table	გადაწყვეტილების ცხრილის გამოყენება

@@ -24,6 +24,7 @@ mod chrome;
 pub mod commands;
 mod dashboard;
 mod decide;
+mod dmn_table;
 mod documents;
 pub use autosave::Autosave;
 pub use documents::OpenTicket;
@@ -970,6 +971,8 @@ pub struct App {
     chart_palette: String,
     custom_palettes: Vec<chart_palette::ChartPalette>,
     chart_colours: Option<chart_editor::Editor>,
+    /// The decision table window, while it is open.
+    dmn_table: Option<dmn_table::Grid>,
     /// The interface language as the user chose it (`None`: the system's), and as shown.
     language: Option<String>,
     lang: craft_i18n::Lang,
@@ -1080,6 +1083,7 @@ impl App {
             chart_palette: chart_palette::DEFAULT.to_owned(),
             custom_palettes: Vec::new(),
             chart_colours: None,
+            dmn_table: None,
             language: None,
             lang: i18n::I18N.system_lang(),
             applied_theme: None,
@@ -1251,6 +1255,8 @@ fn change_label(command: &str) -> &str {
         "property.remove" => "Remove Property",
         "estimate.set" => "Change Estimate",
         "estimate.remove" => "Remove Estimate",
+        "dmn.set" => "Change Decision Table",
+        "dmn.use" => "Use Decision Table",
         "observation.add" => "Add Observed Value",
         "observation.set" => "Change Observed Value",
         "observation.remove" => "Remove Observed Value",

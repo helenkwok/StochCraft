@@ -21,6 +21,7 @@ pub mod agents;
 pub mod balance;
 pub mod calendar;
 pub mod capacity;
+pub mod dmn;
 pub mod expr;
 pub mod messages;
 pub mod montecarlo;
@@ -1739,6 +1740,13 @@ pub struct Model {
     /// process ([`agents`]): `None` for any other. A model with one and no elements is an
     /// agent-based model, which [`Model::validate`] leaves to `stochcraft-agents` to check.
     pub agents: Option<agents::Agents>,
+    /// The decision table each element uses ([`dmn`], the `stochcraft:decision` vendor
+    /// extension): evaluated as an entity enters, its outputs written as properties.
+    pub decisions: BTreeMap<ElementId, dmn::DecisionUse>,
+    /// The `.dmn` files those decisions are in, by the reference [`dmn::DecisionUse::file`]
+    /// gives. Read beside the model's file by the engine (not by `stochcraft-io`'s reading of
+    /// the model), so a file not read is missing here.
+    pub dmn: BTreeMap<String, dmn::Definitions>,
 }
 
 /// Where an element is drawn: its shape's top-left corner and size, in the diagram's units
@@ -2040,6 +2048,31 @@ pub enum Problem {
     /// Found when the model is prepared to run, not by [`Model::validate`] (a transport can be
     /// drawn, saved and sized meanwhile): transports are not simulated yet.
     TransportNotSimulated,
+    /// A block names a decision table it cannot use: the file was not read, has no such
+    /// decision, or the table cannot be used here (`reason`, a sentence in English).
+    DecisionUnusable {
+        file: String,
+        decision: String,
+        reason: String,
+    },
+    /// Two rules of a UNIQUE decision table (numbered from 1) both match `example`.
+    DecisionOverlap {
+        decision: String,
+        first: usize,
+        second: usize,
+        example: String,
+    },
+    /// No rule of a decision table matches `example`, and it has no default output.
+    DecisionGap {
+        decision: String,
+        example: String,
+    },
+    /// A gateway routed by a decision table can be given `value`, which names none of its ways
+    /// out.
+    DecisionRoute {
+        decision: String,
+        value: String,
+    },
     /// A transport's pool does not exist, or is not mobile.
     TransportPool {
         pool: ElementId,
@@ -2411,6 +2444,10 @@ impl Problem {
             Problem::ConveyorTooShort { .. } => "conveyor_too_short",
             Problem::ConveyorLengthMismatch { .. } => "conveyor_length_mismatch",
             Problem::TransportNotSimulated => "transport_not_simulated",
+            Problem::DecisionUnusable { .. } => "decision_unusable",
+            Problem::DecisionOverlap { .. } => "decision_overlap",
+            Problem::DecisionGap { .. } => "decision_gap",
+            Problem::DecisionRoute { .. } => "decision_route",
             Problem::TransportPool { .. } => "transport_pool",
             Problem::BadMobilitySpeed { .. } => "bad_mobility_speed",
             Problem::UnknownHome { .. } => "unknown_home",
@@ -3133,6 +3170,7 @@ impl Model {
         self.check_estimates(&mut out);
         self.check_starting(&mut out);
         self.check_properties(&mut out);
+        self.check_decisions(&mut out);
         self.check_routing(&mut out);
         self.check_reachability(&outgoing, &mut out);
         self.check_buffers(&served, &mut out);
@@ -3542,7 +3580,204 @@ impl Model {
             };
             types.insert(p.name.clone(), t);
         }
+        // What decision tables write: a number, a string or a boolean, as the outputs give.
+        for u in self.decisions.values() {
+            let Ok((_, table)) = self.decision_table(u) else {
+                continue;
+            };
+            for (name, kind) in table.outputs() {
+                types.entry(name.to_owned()).or_insert(match kind {
+                    Some(dmn::Kind::Text) => PropertyType::String,
+                    Some(dmn::Kind::Boolean) => PropertyType::Boolean,
+                    Some(dmn::Kind::Number) | None => PropertyType::Double,
+                });
+            }
+        }
         types
+    }
+
+    /// The decision `u` names, with its table compiled, or why it cannot be had (a sentence).
+    pub fn decision_table(
+        &self,
+        u: &dmn::DecisionUse,
+    ) -> Result<(&dmn::Decision, dmn::Compiled), String> {
+        let file = self
+            .dmn
+            .get(&u.file)
+            .ok_or_else(|| "the file was not read.".to_owned())?;
+        let d = file
+            .decision(&u.decision)
+            .ok_or_else(|| format!("the file has no decision with the id “{}”.", u.decision))?;
+        let table = d.compile().map_err(|e| format!("{e}."))?;
+        Ok((d, table))
+    }
+
+    /// The ways out of `gateway`, if it is an exclusive gateway routed directly by its decision
+    /// table (it has one, and none of its ways out has a condition), each with the output values
+    /// that take it: its connection's id, the id of the block it leads to, and that block's name.
+    pub fn decision_ways(&self, gateway: &ElementId) -> Option<Vec<(&Connection, Vec<String>)>> {
+        let e = self.element(gateway)?;
+        if !matches!(e.kind, ElementKind::ExclusiveGateway { .. }) {
+            return None;
+        }
+        self.decisions.get(gateway)?;
+        let ways: Vec<&Connection> = self
+            .connections
+            .iter()
+            .filter(|c| &c.from == gateway)
+            .collect();
+        if ways.iter().any(|c| c.condition.is_some()) {
+            return None;
+        }
+        Some(
+            ways.into_iter()
+                .map(|c| {
+                    let mut keys = vec![c.id.to_string(), c.to.to_string()];
+                    if let Some(name) = self
+                        .element(&c.to)
+                        .map(|t| t.name.trim())
+                        .filter(|n| !n.is_empty())
+                    {
+                        keys.push(name.to_owned());
+                    }
+                    (c, keys)
+                })
+                .collect(),
+        )
+    }
+
+    /// The output a gateway routed directly by its decision table routes by: the one its
+    /// decision use names, else the table's only output; `Err` with the reason otherwise.
+    pub fn route_output(u: &dmn::DecisionUse, table: &dmn::Compiled) -> Result<usize, String> {
+        let outputs = table.outputs();
+        match &u.route {
+            Some(r) => outputs
+                .iter()
+                .position(|(n, _)| n == r)
+                .ok_or_else(|| format!("the table has no output named “{r}” to route by.")),
+            None if outputs.len() == 1 => Ok(0),
+            None => Err(
+                "the table has several outputs, and the gateway does not say which to route by."
+                    .to_owned(),
+            ),
+        }
+    }
+
+    fn check_decisions(&self, out: &mut Vec<Diagnostic>) {
+        let types = self.property_types();
+        for (id, u) in &self.decisions {
+            // A use left behind by a block that is gone is not part of the model.
+            let Some(e) = self.element(id) else {
+                continue;
+            };
+            let unusable = |reason: String| {
+                Diagnostic::error(
+                    Some(id),
+                    Problem::DecisionUnusable {
+                        file: u.file.clone(),
+                        decision: u.decision.clone(),
+                        reason,
+                    },
+                )
+            };
+            match &e.kind {
+                ElementKind::ExclusiveGateway {
+                    routing: Routing::ShortestQueue,
+                    ..
+                } => {
+                    out.push(unusable(
+                        "a gateway that sends each entity to the shortest queue reads no decision table."
+                            .to_owned(),
+                    ));
+                    continue;
+                }
+                ElementKind::ExclusiveGateway { .. }
+                | ElementKind::Server { .. }
+                | ElementKind::SharedTask { .. }
+                | ElementKind::Delay { .. } => {}
+                _ => {
+                    out.push(unusable(
+                        "only a task or an exclusive gateway can use a decision table.".to_owned(),
+                    ));
+                    continue;
+                }
+            }
+            let (d, table) = match self.decision_table(u) {
+                Ok(x) => x,
+                Err(reason) => {
+                    out.push(unusable(reason));
+                    continue;
+                }
+            };
+            if table.gives_list() {
+                out.push(unusable(
+                    "under the hit policy Collect without an aggregation it gives a list, which an entity property cannot hold; choose an aggregation or another hit policy."
+                        .to_owned(),
+                ));
+                continue;
+            }
+            let label = d.label().to_owned();
+            for name in table.input_names() {
+                if !types.contains_key(name) {
+                    out.push(Diagnostic::error(
+                        Some(id),
+                        Problem::UnknownProperty {
+                            name: name.to_owned(),
+                        },
+                    ));
+                }
+            }
+            if let Some(ways) = self.decision_ways(id) {
+                match Self::route_output(u, &table) {
+                    // An aggregation's value is not among the cells, so it is not checked here.
+                    Ok(_) if table.aggregation().is_some() => {}
+                    Ok(j) => {
+                        for v in table.output_values(j) {
+                            let key = v.text();
+                            if !ways.iter().any(|(_, keys)| keys.contains(&key)) {
+                                out.push(Diagnostic::error(
+                                    Some(id),
+                                    Problem::DecisionRoute {
+                                        decision: label.clone(),
+                                        value: key,
+                                    },
+                                ));
+                            }
+                        }
+                    }
+                    Err(reason) => out.push(unusable(reason)),
+                }
+            }
+            let integer: Vec<bool> = table
+                .input_names()
+                .iter()
+                .map(|n| types.get(*n) == Some(&PropertyType::Long))
+                .collect();
+            for f in table.check(&integer) {
+                out.push(match f {
+                    dmn::Finding::Overlap {
+                        first,
+                        second,
+                        example,
+                    } => Diagnostic::error(
+                        Some(id),
+                        Problem::DecisionOverlap {
+                            decision: label.clone(),
+                            first,
+                            second,
+                            example,
+                        },
+                    ),
+                    dmn::Finding::Gap { example } => Diagnostic::warning(
+                        Some(id),
+                        Problem::DecisionGap {
+                            decision: label.clone(),
+                            example,
+                        },
+                    ),
+                });
+            }
+        }
     }
 
     fn check_properties(&self, out: &mut Vec<Diagnostic>) {
@@ -4660,6 +4895,8 @@ mod tests {
             monte_carlo: None,
             site: Default::default(),
             agents: None,
+            decisions: BTreeMap::new(),
+            dmn: BTreeMap::new(),
             calendars: Vec::new(),
         }
     }

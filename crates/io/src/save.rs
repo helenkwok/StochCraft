@@ -22,7 +22,7 @@ use crate::read::{self, BPMN, XPDL};
 use crate::write::{
     abandoned_element, availability_param, balked_element, balking_element, batching_element,
     bpmn_local, breakdown_element, calendar_element, changeover_element, condition_element,
-    conveyor_element, demand_element, dist_element, edge_ends, estimate_element,
+    conveyor_element, decision_element, demand_element, dist_element, edge_ends, estimate_element,
     health_check_element, interruptible_param, mobility_element, numeric, observed_element,
     observed_off_element, on_shift_end_element, own_marker, patience_element, planned_element,
     power_element, probability_element, processing_by_element, processing_by_resource_element,
@@ -2927,6 +2927,20 @@ impl Editor {
                 None => None,
             };
             writes.push((id.to_string(), STARTING_CONTENTS, v));
+        }
+        // The decision table each block uses (D30), where that changed.
+        let ids: BTreeSet<&ElementId> = before
+            .decisions
+            .keys()
+            .chain(after.decisions.keys())
+            .collect();
+        for id in ids {
+            let (was, now) = (before.decisions.get(id), after.decisions.get(id));
+            if was == now && !replaced.contains(id.as_str()) {
+                continue;
+            }
+            let v = now.filter(|_| exists(id)).map(decision_element);
+            writes.push((id.to_string(), crate::bpsim::DECISION, v));
         }
         if writes.iter().all(|(_, _, v)| v.is_none()) {
             if let Some(s) = scenario_mut(root, scenario) {

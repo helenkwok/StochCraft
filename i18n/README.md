@@ -1018,6 +1018,13 @@ fields (`“Service time”`) are named in the messages by their own rows.
   meaning of the English, with each catalog's own words for Layout, Unplaced and block from its
   existing rows. Not checked against any other source and not reviewed by native speakers; the
   least certain are lo, th, ta, te, bn, ka and kk.
+- The rows for decision tables (ROADMAP M5.5, L10: the decision table window, its hit policies
+  and aggregations, the inspector's link, the two undo names and the four validation messages)
+  were machine-drafted from the plain meaning of the English and OMG DMN's terms, with each
+  catalog's own words for block, rule, output and default from its existing rows. The policy
+  name Unique inside the overlap message stays in English, as DMN spells it in a file. Not
+  checked against any other source and not reviewed by native speakers; the least certain are
+  lo, th, ta, te, bn, ka, kk and sq ("hit policy").
 
 **Adding or changing a string:** add the English in the code through `i18n::t` (or `tf`, `tn`),
 then add its row to each catalog here, or leave it out to show English until it is translated.

@@ -1458,3 +1458,20 @@ unit	yr	år
 	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	{block} har en servicetid för poolen ”{pool}”, som modellen inte har. Ta bort den tiden eller välj en pool som finns.
 	{block} has two service times for the pool “{pool}”. Keep one.	{block} har två servicetider för poolen ”{pool}”. Behåll en av dem.
 	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	{block} har en servicetid för poolen ”{pool}”, som den inte behöver. Lägg till poolen bland dess behov eller ta bort den tiden.
+	{block} uses the decision table “{decision}” of the file {file}, which it cannot use: {reason} Correct the table, or take it off the block.	{block} använder beslutstabellen ”{decision}” i filen {file}, som den inte kan använda: {reason} Rätta tabellen, eller ta bort den från blocket.
+	{block} uses the decision table “{decision}”, whose rules {first} and {second} both match {example}, but under its hit policy Unique only one may. Change the rules so that only one matches, or choose another hit policy.	{block} använder beslutstabellen ”{decision}”, vars regler {first} och {second} båda matchar {example}, men under träffpolicyn Unique får bara en matcha. Ändra reglerna så att bara en matchar, eller välj en annan träffpolicy.
+	{block} uses the decision table “{decision}”, in which no rule matches {example}, so such an entity gets no result there. Add a rule or a default output, if that is not intended.	{block} använder beslutstabellen ”{decision}”, där ingen regel matchar {example}, så en sådan entitet får inget resultat där. Lägg till en regel eller en standardutdata, om det inte är avsikten.
+	{block} routes by the decision table “{decision}”, which can give “{value}”, the name of none of its ways out. Make each output the name or id of a block the gateway leads to.	{block} dirigerar efter beslutstabellen ”{decision}”, som kan ge ”{value}”, namnet på ingen av dess utgångar. Gör varje utdata till namnet eller id:t för ett block som gatewayen leder till.
+	Decision table	Beslutstabell
+	Open decision table	Öppna beslutstabell
+	Hit policy	Träffpolicy
+	Unique	Unik
+	First	Första
+	Collect	Samla
+	Aggregation	Aggregering
+	Sum	Summa
+	Count	Antal
+	Add rule	Lägg till regel
+	Remove rule	Ta bort regel
+	Change Decision Table	Ändra beslutstabell
+	Use Decision Table	Använd beslutstabell

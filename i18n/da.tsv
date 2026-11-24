@@ -1458,3 +1458,20 @@ unit	yr	år
 	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	{block} har en servicetid for puljen »{pool}«, som modellen ikke har. Fjern den tid, eller vælg en pulje, der findes.
 	{block} has two service times for the pool “{pool}”. Keep one.	{block} har to servicetider for puljen »{pool}«. Behold en af dem.
 	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	{block} har en servicetid for puljen »{pool}«, som den ikke har brug for. Føj puljen til dens behov, eller fjern den tid.
+	{block} uses the decision table “{decision}” of the file {file}, which it cannot use: {reason} Correct the table, or take it off the block.	{block} bruger beslutningstabellen »{decision}« fra filen {file}, som den ikke kan bruge: {reason} Ret tabellen, eller fjern den fra blokken.
+	{block} uses the decision table “{decision}”, whose rules {first} and {second} both match {example}, but under its hit policy Unique only one may. Change the rules so that only one matches, or choose another hit policy.	{block} bruger beslutningstabellen »{decision}«, hvis regler {first} og {second} begge passer på {example}, men under dens hitpolitik Unique må kun én passe. Ret reglerne, så kun én passer, eller vælg en anden hitpolitik.
+	{block} uses the decision table “{decision}”, in which no rule matches {example}, so such an entity gets no result there. Add a rule or a default output, if that is not intended.	{block} bruger beslutningstabellen »{decision}«, hvor ingen regel passer på {example}, så sådan en enhed får intet resultat der. Tilføj en regel eller et standardoutput, hvis det ikke er meningen.
+	{block} routes by the decision table “{decision}”, which can give “{value}”, the name of none of its ways out. Make each output the name or id of a block the gateway leads to.	{block} dirigerer efter beslutningstabellen »{decision}«, som kan give »{value}«, navnet på ingen af dens udgange. Gør hvert output til navnet eller id’et på en blok, som gatewayen fører til.
+	Decision table	Beslutningstabel
+	Open decision table	Åbn beslutningstabel
+	Hit policy	Hitpolitik
+	Unique	Entydig
+	First	Første
+	Collect	Saml
+	Aggregation	Aggregering
+	Sum	Sum
+	Count	Antal
+	Add rule	Tilføj regel
+	Remove rule	Fjern regel
+	Change Decision Table	Skift beslutningstabel
+	Use Decision Table	Brug beslutningstabel

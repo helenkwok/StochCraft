@@ -146,6 +146,30 @@ struct Assign {
     source: Source,
 }
 
+/// A decision table an element evaluates as an entity enters (D30), and where its outputs go:
+/// per output, in column order, the property's slot and type (`None`: not held, which cannot
+/// happen once the model is valid).
+#[derive(Debug, Clone)]
+struct Decide {
+    table: stochcraft_model::dmn::Compiled,
+    outputs: Vec<Option<(usize, PropertyType)>>,
+}
+
+/// The condition that takes a way out of a gateway routed directly by a decision table: the
+/// output `output` is one of `keys` (the way's flow id, the id of the block it leads to, that
+/// block's name).
+fn decision_condition(output: &str, keys: &[String]) -> Option<expr::Expr> {
+    keys.iter()
+        .map(|k| {
+            expr::Expr::Binary(
+                expr::BinOp::Eq,
+                Box::new(expr::Expr::Property(output.to_owned())),
+                Box::new(expr::Expr::Text(k.clone())),
+            )
+        })
+        .reduce(|a, b| expr::Expr::Binary(expr::BinOp::Or, Box::new(a), Box::new(b)))
+}
+
 /// One of the connections an element sends entities down.
 #[derive(Debug, Clone)]
 struct Route {
@@ -189,6 +213,8 @@ pub struct Compiled {
     slots: Vec<String>,
     /// For each element, its property assignments.
     assigns: Vec<Vec<Assign>>,
+    /// For each element, the decision table it evaluates, if any.
+    decides: Vec<Option<Decide>>,
     /// Sources create their first entity at time 0 rather than after the first interval.
     first_arrival_at_zero: bool,
     /// See [`Compiled::max_events_at_one_time`].
@@ -380,6 +406,19 @@ pub fn compile(model: &Model) -> Result<Compiled, Vec<Diagnostic>> {
                 _ => None,
             };
             let by_condition = outs.iter().any(|c| c.condition.is_some());
+            // A gateway routed directly by its decision table: each way's condition is that the
+            // output names it.
+            let direct: Option<(String, Vec<(ElementId, Vec<String>)>)> =
+                model.decision_ways(&e.id).and_then(|ways| {
+                    let u = model.decisions.get(&e.id)?;
+                    let (d, table) = model.decision_table(u).ok()?;
+                    let j = Model::route_output(u, &table).ok()?;
+                    let keyed = ways
+                        .into_iter()
+                        .map(|(c, keys)| (c.id.clone(), keys))
+                        .collect();
+                    Some((d.output_name(j), keyed))
+                });
             // Probabilities: those not given share evenly what the given ones leave; if
             // nothing is left to share, every connection counts the same.
             let given: f64 = outs.iter().filter_map(|c| c.probability).sum();
@@ -410,10 +449,15 @@ pub fn compile(model: &Model) -> Result<Compiled, Vec<Diagnostic>> {
                         to,
                         input,
                         weight,
-                        condition: if by_condition {
-                            c.condition.as_deref().and_then(|s| expr::parse(s).ok())
-                        } else {
-                            None
+                        condition: match &direct {
+                            Some((output, ways)) => ways
+                                .iter()
+                                .find(|(id, _)| id == &c.id)
+                                .and_then(|(_, keys)| decision_condition(output, keys)),
+                            None if by_condition => {
+                                c.condition.as_deref().and_then(|s| expr::parse(s).ok())
+                            }
+                            None => None,
                         },
                         default: default == Some(&c.id),
                         rework: c.rework,
@@ -459,6 +503,24 @@ pub fn compile(model: &Model) -> Result<Compiled, Vec<Diagnostic>> {
                 .collect()
         })
         .collect();
+    // Validation guarantees every decision table named compiles and gives one row.
+    let decides = model
+        .elements
+        .iter()
+        .map(|e| {
+            let u = model.decisions.get(&e.id)?;
+            let (_, table) = model.decision_table(u).ok()?;
+            let outputs = table
+                .outputs()
+                .iter()
+                .map(|(name, _)| {
+                    let slot = slots.iter().position(|s| s == name)?;
+                    Some((slot, *types.get(*name)?))
+                })
+                .collect();
+            Some(Decide { table, outputs })
+        })
+        .collect();
     Ok(Compiled {
         model: model.clone(),
         routes,
@@ -467,6 +529,7 @@ pub fn compile(model: &Model) -> Result<Compiled, Vec<Diagnostic>> {
         warnings: diagnostics,
         slots,
         assigns,
+        decides,
         first_arrival_at_zero: false,
         max_events_at_one_time: MAX_EVENTS_AT_ONE_TIME,
         record: None,

@@ -1458,3 +1458,20 @@ unit	yr	έτ
 	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	Το μπλοκ {block} έχει χρόνο εξυπηρέτησης για τη δεξαμενή «{pool}», που το μοντέλο δεν έχει. Αφαιρέστε αυτόν τον χρόνο ή επιλέξτε μια δεξαμενή που υπάρχει.
 	{block} has two service times for the pool “{pool}”. Keep one.	Το μπλοκ {block} έχει δύο χρόνους εξυπηρέτησης για τη δεξαμενή «{pool}». Κρατήστε τον έναν.
 	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	Το μπλοκ {block} έχει χρόνο εξυπηρέτησης για τη δεξαμενή «{pool}», που δεν χρειάζεται. Προσθέστε τη δεξαμενή στις ανάγκες του ή αφαιρέστε αυτόν τον χρόνο.
+	{block} uses the decision table “{decision}” of the file {file}, which it cannot use: {reason} Correct the table, or take it off the block.	Το {block} χρησιμοποιεί τον πίνακα αποφάσεων «{decision}» του αρχείου {file}, τον οποίο δεν μπορεί να χρησιμοποιήσει: {reason} Διορθώστε τον πίνακα ή αφαιρέστε τον από το μπλοκ.
+	{block} uses the decision table “{decision}”, whose rules {first} and {second} both match {example}, but under its hit policy Unique only one may. Change the rules so that only one matches, or choose another hit policy.	Το {block} χρησιμοποιεί τον πίνακα αποφάσεων «{decision}», του οποίου οι κανόνες {first} και {second} ταιριάζουν και οι δύο με {example}, αλλά με την πολιτική αντιστοίχισης Unique μόνο ένας επιτρέπεται. Αλλάξτε τους κανόνες ώστε να ταιριάζει μόνο ένας ή επιλέξτε άλλη πολιτική αντιστοίχισης.
+	{block} uses the decision table “{decision}”, in which no rule matches {example}, so such an entity gets no result there. Add a rule or a default output, if that is not intended.	Το {block} χρησιμοποιεί τον πίνακα αποφάσεων «{decision}», στον οποίο κανένας κανόνας δεν ταιριάζει με {example}, οπότε μια τέτοια οντότητα δεν παίρνει εκεί αποτέλεσμα. Προσθέστε κανόνα ή προεπιλεγμένη έξοδο, αν αυτό δεν είναι σκόπιμο.
+	{block} routes by the decision table “{decision}”, which can give “{value}”, the name of none of its ways out. Make each output the name or id of a block the gateway leads to.	Το {block} δρομολογεί με τον πίνακα αποφάσεων «{decision}», που μπορεί να δώσει «{value}», όνομα καμίας από τις εξόδους του. Κάντε κάθε έξοδο όνομα ή id ενός μπλοκ στο οποίο οδηγεί η πύλη.
+	Decision table	Πίνακας αποφάσεων
+	Open decision table	Άνοιγμα πίνακα αποφάσεων
+	Hit policy	Πολιτική αντιστοίχισης
+	Unique	Μοναδική
+	First	Πρώτη
+	Collect	Συλλογή
+	Aggregation	Συνάθροιση
+	Sum	Άθροισμα
+	Count	Πλήθος
+	Add rule	Προσθήκη κανόνα
+	Remove rule	Αφαίρεση κανόνα
+	Change Decision Table	Αλλαγή πίνακα αποφάσεων
+	Use Decision Table	Χρήση πίνακα αποφάσεων

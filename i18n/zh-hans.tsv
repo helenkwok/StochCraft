@@ -1458,3 +1458,20 @@ unit	yr	年
 	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	{block} 为资源池“{pool}”设置了服务时间，但模型中没有该资源池。请移除该时间，或选择存在的资源池。
 	{block} has two service times for the pool “{pool}”. Keep one.	{block} 为资源池“{pool}”设置了两个服务时间。请保留其中一个。
 	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	{block} 为资源池“{pool}”设置了服务时间，但它并不需要该资源池。请把该资源池加入它所需的资源，或移除该时间。
+	{block} uses the decision table “{decision}” of the file {file}, which it cannot use: {reason} Correct the table, or take it off the block.	{block} 使用文件 {file} 中的决策表“{decision}”，但无法使用它：{reason} 请更正该表，或将它从块上移除。
+	{block} uses the decision table “{decision}”, whose rules {first} and {second} both match {example}, but under its hit policy Unique only one may. Change the rules so that only one matches, or choose another hit policy.	{block} 使用决策表“{decision}”，其规则 {first} 和 {second} 都匹配 {example}，但在其命中策略 Unique 下只能有一条匹配。请修改规则使只有一条匹配，或选择其他命中策略。
+	{block} uses the decision table “{decision}”, in which no rule matches {example}, so such an entity gets no result there. Add a rule or a default output, if that is not intended.	{block} 使用决策表“{decision}”，其中没有规则匹配 {example}，因此这样的实体在那里得不到结果。如非有意，请添加规则或默认输出。
+	{block} routes by the decision table “{decision}”, which can give “{value}”, the name of none of its ways out. Make each output the name or id of a block the gateway leads to.	{block} 按决策表“{decision}”分流，该表可能给出“{value}”，这不是它任何出口的名称。请让每个输出都是网关通往的某个块的名称或 id。
+	Decision table	决策表
+	Open decision table	打开决策表
+	Hit policy	命中策略
+	Unique	唯一
+	First	首个
+	Collect	收集
+	Aggregation	聚合
+	Sum	求和
+	Count	计数
+	Add rule	添加规则
+	Remove rule	删除规则
+	Change Decision Table	更改决策表
+	Use Decision Table	使用决策表

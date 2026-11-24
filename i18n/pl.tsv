@@ -1458,3 +1458,20 @@ unit	yr	r.
 	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	Blok {block} ma czas obsługi dla puli „{pool}”, której nie ma w modelu. Usuń ten czas albo wybierz istniejącą pulę.
 	{block} has two service times for the pool “{pool}”. Keep one.	Blok {block} ma dwa czasy obsługi dla puli „{pool}”. Zostaw jeden.
 	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	Blok {block} ma czas obsługi dla puli „{pool}”, której nie potrzebuje. Dodaj pulę do jego wymagań albo usuń ten czas.
+	{block} uses the decision table “{decision}” of the file {file}, which it cannot use: {reason} Correct the table, or take it off the block.	{block} używa tabeli decyzyjnej „{decision}” z pliku {file}, której nie może użyć: {reason} Popraw tabelę lub usuń ją z bloku.
+	{block} uses the decision table “{decision}”, whose rules {first} and {second} both match {example}, but under its hit policy Unique only one may. Change the rules so that only one matches, or choose another hit policy.	{block} używa tabeli decyzyjnej „{decision}”, której reguły {first} i {second} obie pasują do {example}, ale przy jej zasadzie trafień Unique może pasować tylko jedna. Zmień reguły tak, by pasowała tylko jedna, lub wybierz inną zasadę trafień.
+	{block} uses the decision table “{decision}”, in which no rule matches {example}, so such an entity gets no result there. Add a rule or a default output, if that is not intended.	{block} używa tabeli decyzyjnej „{decision}”, w której żadna reguła nie pasuje do {example}, więc taki obiekt nie otrzymuje tam wyniku. Dodaj regułę lub wynik domyślny, jeśli to niezamierzone.
+	{block} routes by the decision table “{decision}”, which can give “{value}”, the name of none of its ways out. Make each output the name or id of a block the gateway leads to.	{block} kieruje według tabeli decyzyjnej „{decision}”, która może dać „{value}”, nazwę żadnego z jego wyjść. Niech każdy wynik będzie nazwą lub identyfikatorem bloku, do którego prowadzi bramka.
+	Decision table	Tabela decyzyjna
+	Open decision table	Otwórz tabelę decyzyjną
+	Hit policy	Zasada trafień
+	Unique	Unikalna
+	First	Pierwsza
+	Collect	Zbierz
+	Aggregation	Agregacja
+	Sum	Suma
+	Count	Liczba
+	Add rule	Dodaj regułę
+	Remove rule	Usuń regułę
+	Change Decision Table	Zmień tabelę decyzyjną
+	Use Decision Table	Użyj tabeli decyzyjnej

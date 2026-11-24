@@ -1458,3 +1458,20 @@ unit	yr	an
 	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	{block} a un temps de service pour le pool « {pool} », que le modèle n'a pas. Supprimez ce temps ou choisissez un pool existant.
 	{block} has two service times for the pool “{pool}”. Keep one.	{block} a deux temps de service pour le pool « {pool} ». N'en gardez qu'un.
 	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	{block} a un temps de service pour le pool « {pool} », dont il n'a pas besoin. Ajoutez le pool à ses besoins ou supprimez ce temps.
+	{block} uses the decision table “{decision}” of the file {file}, which it cannot use: {reason} Correct the table, or take it off the block.	{block} utilise la table de décision « {decision} » du fichier {file}, qu’il ne peut pas utiliser : {reason} Corrigez la table, ou retirez-la du bloc.
+	{block} uses the decision table “{decision}”, whose rules {first} and {second} both match {example}, but under its hit policy Unique only one may. Change the rules so that only one matches, or choose another hit policy.	{block} utilise la table de décision « {decision} », dont les règles {first} et {second} correspondent toutes deux à {example}, mais avec sa politique de correspondance Unique une seule le peut. Modifiez les règles pour qu’une seule corresponde, ou choisissez une autre politique de correspondance.
+	{block} uses the decision table “{decision}”, in which no rule matches {example}, so such an entity gets no result there. Add a rule or a default output, if that is not intended.	{block} utilise la table de décision « {decision} », où aucune règle ne correspond à {example} ; une telle entité n’y obtient donc aucun résultat. Ajoutez une règle ou une sortie par défaut, si ce n’est pas voulu.
+	{block} routes by the decision table “{decision}”, which can give “{value}”, the name of none of its ways out. Make each output the name or id of a block the gateway leads to.	{block} oriente selon la table de décision « {decision} », qui peut donner « {value} », le nom d’aucune de ses sorties. Faites de chaque sortie le nom ou l’identifiant d’un bloc auquel mène la passerelle.
+	Decision table	Table de décision
+	Open decision table	Ouvrir la table de décision
+	Hit policy	Politique de correspondance
+	Unique	Unique
+	First	Première
+	Collect	Collecter
+	Aggregation	Agrégation
+	Sum	Somme
+	Count	Nombre
+	Add rule	Ajouter une règle
+	Remove rule	Supprimer la règle
+	Change Decision Table	Modifier la table de décision
+	Use Decision Table	Utiliser la table de décision

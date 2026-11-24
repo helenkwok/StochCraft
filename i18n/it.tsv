@@ -1458,3 +1458,20 @@ unit	yr	a
 	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	{block} ha un tempo di servizio per il pool «{pool}», che il modello non ha. Rimuovi quel tempo o scegli un pool esistente.
 	{block} has two service times for the pool “{pool}”. Keep one.	{block} ha due tempi di servizio per il pool «{pool}». Tienine uno solo.
 	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	{block} ha un tempo di servizio per il pool «{pool}», di cui non ha bisogno. Aggiungi il pool al suo fabbisogno o rimuovi quel tempo.
+	{block} uses the decision table “{decision}” of the file {file}, which it cannot use: {reason} Correct the table, or take it off the block.	{block} usa la tabella decisionale «{decision}» del file {file}, che non può usare: {reason} Correggi la tabella o toglila dal blocco.
+	{block} uses the decision table “{decision}”, whose rules {first} and {second} both match {example}, but under its hit policy Unique only one may. Change the rules so that only one matches, or choose another hit policy.	{block} usa la tabella decisionale «{decision}», le cui regole {first} e {second} corrispondono entrambe a {example}, ma con la sua politica di corrispondenza Unique può farlo una sola. Modifica le regole in modo che ne corrisponda una sola, o scegli un’altra politica di corrispondenza.
+	{block} uses the decision table “{decision}”, in which no rule matches {example}, so such an entity gets no result there. Add a rule or a default output, if that is not intended.	{block} usa la tabella decisionale «{decision}», in cui nessuna regola corrisponde a {example}, quindi un’entità simile lì non ottiene alcun risultato. Aggiungi una regola o un output predefinito, se non è voluto.
+	{block} routes by the decision table “{decision}”, which can give “{value}”, the name of none of its ways out. Make each output the name or id of a block the gateway leads to.	{block} instrada secondo la tabella decisionale «{decision}», che può dare «{value}», il nome di nessuna delle sue uscite. Fai di ogni output il nome o l’id di un blocco a cui porta il gateway.
+	Decision table	Tabella decisionale
+	Open decision table	Apri tabella decisionale
+	Hit policy	Politica di corrispondenza
+	Unique	Unica
+	First	Prima
+	Collect	Raccogli
+	Aggregation	Aggregazione
+	Sum	Somma
+	Count	Conteggio
+	Add rule	Aggiungi regola
+	Remove rule	Rimuovi regola
+	Change Decision Table	Modifica tabella decisionale
+	Use Decision Table	Usa tabella decisionale

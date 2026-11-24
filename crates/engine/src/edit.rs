@@ -6,7 +6,9 @@
 
 use stochcraft_model::{
     Bounds, Connection, Element, ElementId, ElementKind, Estimate, Experiment, Model, MonteCarlo,
-    Property, ResourcePool, calendar::Calendar,
+    Property, ResourcePool,
+    calendar::Calendar,
+    dmn::{Decision, DecisionUse, Definitions},
 };
 
 use crate::{CommandError, ErrorCode};
@@ -60,6 +62,21 @@ pub enum Op {
     SetStarting(ElementId, Option<u32>),
     /// Replace (or, with `None`, remove) the Monte Carlo inputs and outputs.
     SetMonteCarlo(Option<Box<MonteCarlo>>),
+    /// Replace the decision with `decision`'s id in the `.dmn` file `file`, or add it (and the
+    /// file, if the model reads no such file yet).
+    SetDecision {
+        file: String,
+        decision: Box<Decision>,
+    },
+    /// Remove the last decision of `file`, which has id `id`, and the file with it if
+    /// `with_file` (what undoes adding a decision).
+    RemoveDecision {
+        file: String,
+        id: String,
+        with_file: bool,
+    },
+    /// Set (or, with `None`, clear) the decision table an element uses.
+    SetDecisionUse(ElementId, Option<DecisionUse>),
 }
 
 fn not_found(what: &str, id: &ElementId) -> CommandError {
@@ -274,5 +291,75 @@ pub fn apply(model: &mut Model, op: Op) -> Result<Op, CommandError> {
         Op::SetMonteCarlo(m) => Op::SetMonteCarlo(
             std::mem::replace(&mut model.monte_carlo, m.map(|b| *b)).map(Box::new),
         ),
+        Op::SetDecision { file, decision } => {
+            let new_file = !model.dmn.contains_key(&file);
+            let defs = model
+                .dmn
+                .entry(file.clone())
+                .or_insert_with(|| Definitions {
+                    id: "definitions".to_owned(),
+                    name: file
+                        .rsplit(['/', '\\'])
+                        .next()
+                        .unwrap_or(&file)
+                        .trim_end_matches(".dmn")
+                        .to_owned(),
+                    namespace: "https://helenkwok.github.io/StochCraft/dmn".to_owned(),
+                    decisions: Vec::new(),
+                });
+            let id = decision.id.clone();
+            match defs.decisions.iter_mut().find(|d| d.id == id) {
+                Some(d) => Op::SetDecision {
+                    file,
+                    decision: Box::new(std::mem::replace(d, *decision)),
+                },
+                None => {
+                    defs.decisions.push(*decision);
+                    Op::RemoveDecision {
+                        file,
+                        id,
+                        with_file: new_file,
+                    }
+                }
+            }
+        }
+        Op::RemoveDecision {
+            file,
+            id,
+            with_file,
+        } => {
+            let defs = model.dmn.get_mut(&file).ok_or_else(|| {
+                CommandError::new(ErrorCode::NotFound, format!("no file `{file}`"))
+            })?;
+            let decision = match defs.decisions.last() {
+                Some(d) if d.id == id => defs.decisions.pop(),
+                _ => None,
+            }
+            .ok_or_else(|| {
+                CommandError::new(
+                    ErrorCode::NotFound,
+                    format!("no decision `{id}` in `{file}`"),
+                )
+            })?;
+            if with_file {
+                model.dmn.remove(&file);
+            }
+            Op::SetDecision {
+                file,
+                decision: Box::new(decision),
+            }
+        }
+        Op::SetDecisionUse(id, to) => {
+            let was = match to {
+                Some(u) => {
+                    if model.element(&id).is_none() {
+                        return Err(not_found("element", &id));
+                    }
+                    model.decisions.insert(id.clone(), u)
+                }
+                None => model.decisions.remove(&id),
+            };
+            Op::SetDecisionUse(id, was)
+        }
     })
 }

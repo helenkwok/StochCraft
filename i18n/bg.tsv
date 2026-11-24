@@ -1458,3 +1458,20 @@ unit	yr	г.
 	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	Блокът {block} има време за обслужване за пула „{pool}“, който моделът няма. Премахнете това време или изберете пул, който съществува.
 	{block} has two service times for the pool “{pool}”. Keep one.	Блокът {block} има две времена за обслужване за пула „{pool}“. Оставете едното.
 	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	Блокът {block} има време за обслужване за пула „{pool}“, от който не се нуждае. Добавете пула към изискванията му или премахнете това време.
+	{block} uses the decision table “{decision}” of the file {file}, which it cannot use: {reason} Correct the table, or take it off the block.	{block} използва таблицата за решения „{decision}“ от файла {file}, която не може да използва: {reason} Поправете таблицата или я махнете от блока.
+	{block} uses the decision table “{decision}”, whose rules {first} and {second} both match {example}, but under its hit policy Unique only one may. Change the rules so that only one matches, or choose another hit policy.	{block} използва таблицата за решения „{decision}“, чиито правила {first} и {second} съвпадат и двете с {example}, но при нейната политика на съвпадение Unique може само едно. Променете правилата, така че да съвпада само едно, или изберете друга политика на съвпадение.
+	{block} uses the decision table “{decision}”, in which no rule matches {example}, so such an entity gets no result there. Add a rule or a default output, if that is not intended.	{block} използва таблицата за решения „{decision}“, в която нито едно правило не съвпада с {example}, така че такъв обект не получава резултат там. Добавете правило или изход по подразбиране, ако това не е целта.
+	{block} routes by the decision table “{decision}”, which can give “{value}”, the name of none of its ways out. Make each output the name or id of a block the gateway leads to.	{block} насочва по таблицата за решения „{decision}“, която може да даде „{value}“ – името на нито един от изходите му. Направете всеки изход име или id на блок, към който води шлюзът.
+	Decision table	Таблица за решения
+	Open decision table	Отвори таблицата за решения
+	Hit policy	Политика на съвпадение
+	Unique	Единствено
+	First	Първо
+	Collect	Събиране
+	Aggregation	Агрегиране
+	Sum	Сума
+	Count	Брой
+	Add rule	Добави правило
+	Remove rule	Премахни правило
+	Change Decision Table	Промяна на таблица за решения
+	Use Decision Table	Използване на таблица за решения

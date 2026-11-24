@@ -1458,3 +1458,20 @@ unit	yr	ж.
 	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	{block} блогында моделде жоқ «{pool}» қорына қызмет көрсету уақыты бар. Бұл уақытты жойыңыз немесе бар қорды таңдаңыз.
 	{block} has two service times for the pool “{pool}”. Keep one.	{block} блогында «{pool}» қорына екі қызмет көрсету уақыты бар. Біреуін қалдырыңыз.
 	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	{block} блогында өзіне қажет емес «{pool}» қорына қызмет көрсету уақыты бар. Қорды қажеттіліктеріне қосыңыз немесе бұл уақытты жойыңыз.
+	{block} uses the decision table “{decision}” of the file {file}, which it cannot use: {reason} Correct the table, or take it off the block.	{block} {file} файлындағы «{decision}» шешім кестесін пайдаланады, бірақ оны пайдалана алмайды: {reason} Кестені түзетіңіз немесе оны блоктан алып тастаңыз.
+	{block} uses the decision table “{decision}”, whose rules {first} and {second} both match {example}, but under its hit policy Unique only one may. Change the rules so that only one matches, or choose another hit policy.	{block} «{decision}» шешім кестесін пайдаланады, оның {first} және {second} ережелері екеуі де {example} мәніне сәйкес келеді, бірақ оның Unique сәйкестік саясатында тек біреуі ғана сәйкес келе алады. Тек біреуі сәйкес келетіндей ережелерді өзгертіңіз немесе басқа сәйкестік саясатын таңдаңыз.
+	{block} uses the decision table “{decision}”, in which no rule matches {example}, so such an entity gets no result there. Add a rule or a default output, if that is not intended.	{block} «{decision}» шешім кестесін пайдаланады, онда ешбір ереже {example} мәніне сәйкес келмейді, сондықтан мұндай нысан онда нәтиже алмайды. Егер бұл көзделмесе, ереже немесе әдепкі шығыс қосыңыз.
+	{block} routes by the decision table “{decision}”, which can give “{value}”, the name of none of its ways out. Make each output the name or id of a block the gateway leads to.	{block} «{decision}» шешім кестесі бойынша бағыттайды, ол «{value}» бере алады, бірақ бұл оның ешбір шығысының атауы емес. Әр шығысты шлюз апаратын блоктың атауы немесе id-і етіңіз.
+	Decision table	Шешім кестесі
+	Open decision table	Шешім кестесін ашу
+	Hit policy	Сәйкестік саясаты
+	Unique	Бірегей
+	First	Бірінші
+	Collect	Жинау
+	Aggregation	Біріктіру
+	Sum	Қосынды
+	Count	Саны
+	Add rule	Ереже қосу
+	Remove rule	Ережені жою
+	Change Decision Table	Шешім кестесін өзгерту
+	Use Decision Table	Шешім кестесін пайдалану

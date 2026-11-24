@@ -1458,3 +1458,20 @@ unit	yr	বছর
 	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	{block}-এ “{pool}” পুলের জন্য একটি সেবা সময় আছে, কিন্তু মডেলে এই পুল নেই। সেই সময়টি সরান, অথবা এমন পুল বেছে নিন যা আছে।
 	{block} has two service times for the pool “{pool}”. Keep one.	{block}-এ “{pool}” পুলের জন্য দুটি সেবা সময় আছে। একটি রাখুন।
 	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	{block}-এ “{pool}” পুলের জন্য একটি সেবা সময় আছে, কিন্তু এর এই পুলের প্রয়োজন নেই। পুলটি প্রয়োজনের তালিকায় যোগ করুন, অথবা সেই সময়টি সরান।
+	{block} uses the decision table “{decision}” of the file {file}, which it cannot use: {reason} Correct the table, or take it off the block.	{block} ফাইল {file}-এর সিদ্ধান্ত সারণি “{decision}” ব্যবহার করে, যা সে ব্যবহার করতে পারে না: {reason} সারণিটি ঠিক করুন, অথবা ব্লক থেকে সরিয়ে দিন।
+	{block} uses the decision table “{decision}”, whose rules {first} and {second} both match {example}, but under its hit policy Unique only one may. Change the rules so that only one matches, or choose another hit policy.	{block} সিদ্ধান্ত সারণি “{decision}” ব্যবহার করে, যার নিয়ম {first} ও {second} দুটোই {example}-এর সঙ্গে মেলে, কিন্তু এর মিল নীতি Unique-এ কেবল একটিই মিলতে পারে। নিয়মগুলো এমনভাবে বদলান যাতে কেবল একটি মেলে, অথবা অন্য মিল নীতি বেছে নিন।
+	{block} uses the decision table “{decision}”, in which no rule matches {example}, so such an entity gets no result there. Add a rule or a default output, if that is not intended.	{block} সিদ্ধান্ত সারণি “{decision}” ব্যবহার করে, যেখানে কোনো নিয়ম {example}-এর সঙ্গে মেলে না, তাই এমন সত্তা সেখানে কোনো ফল পায় না। এটি উদ্দেশ্য না হলে একটি নিয়ম বা ডিফল্ট আউটপুট যোগ করুন।
+	{block} routes by the decision table “{decision}”, which can give “{value}”, the name of none of its ways out. Make each output the name or id of a block the gateway leads to.	{block} সিদ্ধান্ত সারণি “{decision}” অনুযায়ী পাঠায়, যা “{value}” দিতে পারে, যা তার কোনো প্রস্থানের নাম নয়। প্রতিটি আউটপুটকে সেই ব্লকের নাম বা id করুন যেখানে গেটওয়ে নিয়ে যায়।
+	Decision table	সিদ্ধান্ত সারণি
+	Open decision table	সিদ্ধান্ত সারণি খুলুন
+	Hit policy	মিল নীতি
+	Unique	অনন্য
+	First	প্রথম
+	Collect	সংগ্রহ
+	Aggregation	একত্রীকরণ
+	Sum	যোগফল
+	Count	গণনা
+	Add rule	নিয়ম যোগ করুন
+	Remove rule	নিয়ম সরান
+	Change Decision Table	সিদ্ধান্ত সারণি বদলান
+	Use Decision Table	সিদ্ধান্ত সারণি ব্যবহার করুন

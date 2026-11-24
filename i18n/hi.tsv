@@ -1458,3 +1458,20 @@ unit	yr	वर्ष
 	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	{block} में पूल “{pool}” के लिए एक सेवा समय है, जो मॉडल में नहीं है। वह समय हटाएँ, या कोई मौजूदा पूल चुनें।
 	{block} has two service times for the pool “{pool}”. Keep one.	{block} में पूल “{pool}” के लिए दो सेवा समय हैं। उनमें से एक ही रखें।
 	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	{block} में पूल “{pool}” के लिए एक सेवा समय है, जिसकी उसे ज़रूरत नहीं है। पूल को उसकी आवश्यकताओं में जोड़ें, या वह समय हटाएँ।
+	{block} uses the decision table “{decision}” of the file {file}, which it cannot use: {reason} Correct the table, or take it off the block.	{block} फ़ाइल {file} की निर्णय तालिका “{decision}” का उपयोग करता है, जिसका वह उपयोग नहीं कर सकता: {reason} तालिका ठीक करें, या उसे ब्लॉक से हटाएँ।
+	{block} uses the decision table “{decision}”, whose rules {first} and {second} both match {example}, but under its hit policy Unique only one may. Change the rules so that only one matches, or choose another hit policy.	{block} निर्णय तालिका “{decision}” का उपयोग करता है, जिसके नियम {first} और {second} दोनों {example} से मेल खाते हैं, पर उसकी मिलान नीति Unique में केवल एक ही मेल खा सकता है। नियम ऐसे बदलें कि केवल एक मेल खाए, या कोई दूसरी मिलान नीति चुनें।
+	{block} uses the decision table “{decision}”, in which no rule matches {example}, so such an entity gets no result there. Add a rule or a default output, if that is not intended.	{block} निर्णय तालिका “{decision}” का उपयोग करता है, जिसमें कोई नियम {example} से मेल नहीं खाता, इसलिए ऐसी इकाई को वहाँ कोई परिणाम नहीं मिलता। यदि यह अभिप्रेत नहीं है, तो कोई नियम या डिफ़ॉल्ट आउटपुट जोड़ें।
+	{block} routes by the decision table “{decision}”, which can give “{value}”, the name of none of its ways out. Make each output the name or id of a block the gateway leads to.	{block} निर्णय तालिका “{decision}” के अनुसार रूट करता है, जो “{value}” दे सकती है, जो उसके किसी भी निकास का नाम नहीं है। हर आउटपुट को उस ब्लॉक का नाम या id बनाएँ जिस तक गेटवे ले जाता है।
+	Decision table	निर्णय तालिका
+	Open decision table	निर्णय तालिका खोलें
+	Hit policy	मिलान नीति
+	Unique	अद्वितीय
+	First	पहला
+	Collect	संग्रह
+	Aggregation	एकत्रीकरण
+	Sum	योग
+	Count	गिनती
+	Add rule	नियम जोड़ें
+	Remove rule	नियम हटाएँ
+	Change Decision Table	निर्णय तालिका बदलें
+	Use Decision Table	निर्णय तालिका उपयोग करें

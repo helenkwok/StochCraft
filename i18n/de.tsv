@@ -1458,3 +1458,20 @@ unit	yr	J.
 	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	Block {block} hat eine Bearbeitungszeit für den Pool „{pool}“, den das Modell nicht hat. Entfernen Sie diese Zeit, oder wählen Sie einen vorhandenen Pool.
 	{block} has two service times for the pool “{pool}”. Keep one.	Block {block} hat zwei Bearbeitungszeiten für den Pool „{pool}“. Behalten Sie eine.
 	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	Block {block} hat eine Bearbeitungszeit für den Pool „{pool}“, den er nicht braucht. Fügen Sie den Pool seinem Bedarf hinzu, oder entfernen Sie diese Zeit.
+	{block} uses the decision table “{decision}” of the file {file}, which it cannot use: {reason} Correct the table, or take it off the block.	Block {block} verwendet die Entscheidungstabelle „{decision}“ der Datei {file}, die er nicht verwenden kann: {reason} Korrigieren Sie die Tabelle oder entfernen Sie sie vom Block.
+	{block} uses the decision table “{decision}”, whose rules {first} and {second} both match {example}, but under its hit policy Unique only one may. Change the rules so that only one matches, or choose another hit policy.	Block {block} verwendet die Entscheidungstabelle „{decision}“, deren Regeln {first} und {second} beide auf {example} zutreffen, doch bei ihrer Trefferrichtlinie Unique darf nur eine zutreffen. Ändern Sie die Regeln so, dass nur eine zutrifft, oder wählen Sie eine andere Trefferrichtlinie.
+	{block} uses the decision table “{decision}”, in which no rule matches {example}, so such an entity gets no result there. Add a rule or a default output, if that is not intended.	Block {block} verwendet die Entscheidungstabelle „{decision}“, in der keine Regel auf {example} zutrifft, sodass ein solches Objekt dort kein Ergebnis erhält. Fügen Sie eine Regel oder eine Standardausgabe hinzu, falls das nicht beabsichtigt ist.
+	{block} routes by the decision table “{decision}”, which can give “{value}”, the name of none of its ways out. Make each output the name or id of a block the gateway leads to.	Block {block} leitet nach der Entscheidungstabelle „{decision}“ weiter, die „{value}“ ergeben kann, den Namen keines seiner Ausgänge. Machen Sie jede Ausgabe zum Namen oder zur ID eines Blocks, zu dem das Gateway führt.
+	Decision table	Entscheidungstabelle
+	Open decision table	Entscheidungstabelle öffnen
+	Hit policy	Trefferrichtlinie
+	Unique	Eindeutig
+	First	Erste
+	Collect	Sammeln
+	Aggregation	Zusammenfassung
+	Sum	Summe
+	Count	Anzahl
+	Add rule	Regel hinzufügen
+	Remove rule	Regel entfernen
+	Change Decision Table	Entscheidungstabelle ändern
+	Use Decision Table	Entscheidungstabelle verwenden

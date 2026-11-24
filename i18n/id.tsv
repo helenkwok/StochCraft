@@ -1458,3 +1458,20 @@ unit	yr	thn
 	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	{block} memiliki waktu layanan untuk kumpulan “{pool}”, yang tidak ada di model. Hapus waktu itu, atau pilih kumpulan yang ada.
 	{block} has two service times for the pool “{pool}”. Keep one.	{block} memiliki dua waktu layanan untuk kumpulan “{pool}”. Pertahankan salah satunya.
 	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	{block} memiliki waktu layanan untuk kumpulan “{pool}”, yang tidak dibutuhkannya. Tambahkan kumpulan itu ke kebutuhannya, atau hapus waktu itu.
+	{block} uses the decision table “{decision}” of the file {file}, which it cannot use: {reason} Correct the table, or take it off the block.	{block} memakai tabel keputusan “{decision}” dari file {file}, yang tidak dapat dipakainya: {reason} Perbaiki tabel itu, atau lepaskan dari blok.
+	{block} uses the decision table “{decision}”, whose rules {first} and {second} both match {example}, but under its hit policy Unique only one may. Change the rules so that only one matches, or choose another hit policy.	{block} memakai tabel keputusan “{decision}”, yang aturan {first} dan {second}-nya sama-sama cocok dengan {example}, tetapi dengan kebijakan kecocokan Unique hanya satu yang boleh cocok. Ubah aturannya agar hanya satu yang cocok, atau pilih kebijakan kecocokan lain.
+	{block} uses the decision table “{decision}”, in which no rule matches {example}, so such an entity gets no result there. Add a rule or a default output, if that is not intended.	{block} memakai tabel keputusan “{decision}”, yang tidak satu aturan pun cocok dengan {example}, sehingga entitas seperti itu tidak mendapat hasil di sana. Tambahkan aturan atau keluaran bawaan, jika itu tidak disengaja.
+	{block} routes by the decision table “{decision}”, which can give “{value}”, the name of none of its ways out. Make each output the name or id of a block the gateway leads to.	{block} merutekan menurut tabel keputusan “{decision}”, yang dapat memberi “{value}”, bukan nama jalan keluar mana pun. Jadikan setiap keluaran nama atau id blok yang dituju gateway.
+	Decision table	Tabel keputusan
+	Open decision table	Buka tabel keputusan
+	Hit policy	Kebijakan kecocokan
+	Unique	Unik
+	First	Pertama
+	Collect	Kumpulkan
+	Aggregation	Agregasi
+	Sum	Jumlah
+	Count	Hitungan
+	Add rule	Tambah aturan
+	Remove rule	Hapus aturan
+	Change Decision Table	Ubah Tabel Keputusan
+	Use Decision Table	Pakai Tabel Keputusan

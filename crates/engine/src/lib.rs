@@ -62,6 +62,7 @@ mod compare;
 mod decide;
 mod design;
 mod distribution;
+pub mod dmn;
 mod drawn;
 mod edit;
 mod evaluate;
@@ -77,6 +78,8 @@ mod sd_window;
 pub mod site;
 pub mod wire;
 mod workers;
+
+use std::collections::BTreeMap;
 
 use serde::{Deserialize, Serialize};
 use serde_json::{Value, json};
@@ -596,6 +599,8 @@ pub struct Engine {
     sd: Option<sd::SdDoc>,
     /// The files an agent-based model reads beside its own, and its last run (see [`agents`]).
     agents: Option<agents::AgentsDoc>,
+    /// The `.dmn` files the model reads, as opened or last saved (see [`dmn`]).
+    dmn: BTreeMap<String, dmn::DmnFile>,
     /// The model as last opened or saved, to tell whether there are unsaved changes.
     saved: Model,
     job: Option<Job>,
@@ -642,6 +647,7 @@ impl Engine {
             file: None,
             sd: None,
             agents: None,
+            dmn: BTreeMap::new(),
             job: None,
             job_kept: false,
             last_results: None,
@@ -1005,6 +1011,7 @@ impl Engine {
         self.file = None;
         self.sd = None;
         self.agents = None;
+        self.dmn.clear();
         self.cancel_run();
         self.job = None;
         self.job_kept = false;
@@ -1022,7 +1029,7 @@ impl Engine {
         scenario: Option<&str>,
     ) -> Result<Value, CommandError> {
         self.open_bytes_with(name, bytes, scenario, &mut |_| {
-            Err("an agent-based model given alone as bytes cannot read the files beside it: open it from its file (file.open), or with agents.open and their texts".to_owned())
+            Err("a model given alone as bytes cannot read the files beside it: open it from its file (file.open), or an agent-based model with agents.open and their texts".to_owned())
         })
     }
 

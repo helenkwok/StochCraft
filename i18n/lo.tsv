@@ -1458,3 +1458,20 @@ unit	yr	ປີ
 	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	{block} ມີເວລາໃຫ້ບໍລິການສຳລັບກຸ່ມ “{pool}” ທີ່ບໍ່ມີໃນແບບຈຳລອງ ລຶບເວລານັ້ນ ຫຼື ເລືອກກຸ່ມທີ່ມີຢູ່
 	{block} has two service times for the pool “{pool}”. Keep one.	{block} ມີສອງເວລາໃຫ້ບໍລິການສຳລັບກຸ່ມ “{pool}” ເກັບໄວ້ອັນດຽວ
 	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	{block} ມີເວລາໃຫ້ບໍລິການສຳລັບກຸ່ມ “{pool}” ທີ່ມັນບໍ່ຕ້ອງໃຊ້ ເພີ່ມກຸ່ມນັ້ນເຂົ້າໃນສິ່ງທີ່ຕ້ອງໃຊ້ ຫຼື ລຶບເວລານັ້ນ
+	{block} uses the decision table “{decision}” of the file {file}, which it cannot use: {reason} Correct the table, or take it off the block.	{block} ໃຊ້ຕາຕະລາງການຕັດສິນໃຈ “{decision}” ຂອງໄຟລ໌ {file} ທີ່ມັນໃຊ້ບໍ່ໄດ້: {reason} ແກ້ໄຂຕາຕະລາງ ຫຼື ເອົາອອກຈາກບລັອກ.
+	{block} uses the decision table “{decision}”, whose rules {first} and {second} both match {example}, but under its hit policy Unique only one may. Change the rules so that only one matches, or choose another hit policy.	{block} ໃຊ້ຕາຕະລາງການຕັດສິນໃຈ “{decision}” ເຊິ່ງກົດ {first} ແລະ {second} ກົງກັບ {example} ທັງສອງ, ແຕ່ພາຍໃຕ້ນະໂຍບາຍການກົງກັນ Unique ກົງໄດ້ພຽງກົດດຽວ. ແກ້ກົດໃຫ້ກົງພຽງກົດດຽວ ຫຼື ເລືອກນະໂຍບາຍການກົງກັນອື່ນ.
+	{block} uses the decision table “{decision}”, in which no rule matches {example}, so such an entity gets no result there. Add a rule or a default output, if that is not intended.	{block} ໃຊ້ຕາຕະລາງການຕັດສິນໃຈ “{decision}” ເຊິ່ງບໍ່ມີກົດໃດກົງກັບ {example}, ສິ່ງດັ່ງກ່າວຈຶ່ງບໍ່ໄດ້ຜົນຢູ່ທີ່ນັ້ນ. ເພີ່ມກົດ ຫຼື ຜົນອອກຄ່າເລີ່ມຕົ້ນ ຖ້າບໍ່ໄດ້ຕັ້ງໃຈ.
+	{block} routes by the decision table “{decision}”, which can give “{value}”, the name of none of its ways out. Make each output the name or id of a block the gateway leads to.	{block} ສົ່ງຕໍ່ຕາມຕາຕະລາງການຕັດສິນໃຈ “{decision}” ເຊິ່ງອາດໃຫ້ “{value}” ທີ່ບໍ່ແມ່ນຊື່ຂອງທາງອອກໃດເລີຍ. ໃຫ້ຜົນອອກແຕ່ລະຄ່າເປັນຊື່ ຫຼື id ຂອງບລັອກທີ່ເກດເວໄປເຖິງ.
+	Decision table	ຕາຕະລາງການຕັດສິນໃຈ
+	Open decision table	ເປີດຕາຕະລາງການຕັດສິນໃຈ
+	Hit policy	ນະໂຍບາຍການກົງກັນ
+	Unique	ດຽວເທົ່ານັ້ນ
+	First	ທຳອິດ
+	Collect	ເກັບລວມ
+	Aggregation	ການລວມຄ່າ
+	Sum	ຜົນລວມ
+	Count	ຈຳນວນ
+	Add rule	ເພີ່ມກົດ
+	Remove rule	ລຶບກົດ
+	Change Decision Table	ປ່ຽນຕາຕະລາງການຕັດສິນໃຈ
+	Use Decision Table	ໃຊ້ຕາຕະລາງການຕັດສິນໃຈ
