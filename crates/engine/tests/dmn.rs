@@ -8,9 +8,7 @@ use std::path::{Path, PathBuf};
 use serde_json::{Value, json};
 use stochcraft_blocks::{Builder, compile};
 use stochcraft_engine::Engine;
-use stochcraft_model::dmn::{
-    Decision, DecisionUse, Definitions, HitPolicy, Input, Output, Rule, Table,
-};
+use stochcraft_model::dmn::{Decision, DecisionUse, Definitions, Input, Output, Rule, Table};
 use stochcraft_model::{Dist, ElementId, Experiment, Model, PropertyValue};
 use stochcraft_random::Rng;
 
