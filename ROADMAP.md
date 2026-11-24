@@ -1799,9 +1799,11 @@ ch. 10 §10.4, in Brailsford, Churilov and Dangerfield, eds., 2014). Related and
   separate stream for each random input, the rule StochCraft follows (streams by element id,
   above). It traces a small queue by hand from 50 printed random numbers, with one server and
   then with two.
-  - The test gives the arrivals and the service times those printed numbers in place of their
-    streams (an input that reads a fixed list of numbers, which does not exist yet), and checks
-    the run against the paper's tables.
+  - The trace takes the numbers in turn from one list, whichever draw comes next, arrival or
+    service. So the test gives the arrivals and the service times one shared list in place of
+    their streams, each draw taking the next number. That needs an input that reads a fixed list
+    of numbers, which does not exist yet. The test then checks the run against the paper's
+    tables.
   - A replay outside StochCraft matches the two-server table exactly. The one-server table
     matches only with one inconsistency in the paper's own table, which is to be settled
     against the page image before the test is written.
@@ -4917,8 +4919,8 @@ are.
     wait, until one is needed; three repairmen. Each running machine fails at rate 1, and a
     repair takes an exponential time at rate 4. The number of machines broken is a birth-death
     chain, so its answers are exact: on average 3.4708 broken (mean square 17.2779). With
-    chance 0.3056 more than four are broken, so fewer than ten run. With chance 0.4378 a broken
-    machine waits for a repairman. On average 0.6777 repairmen are idle. These are the paper's
+    chance 0.3056 more than four are broken, so fewer than ten run. With chance 0.4378 at least
+    one broken machine waits for a repairman (more than three broken). On average 0.6777 repairmen are idle. These are the paper's
     own values, recomputed from the chain. It differs from the machine repair crew above
     because spares on cold standby do not fail. It is also the first check of regenerative
     intervals (M2.9).
