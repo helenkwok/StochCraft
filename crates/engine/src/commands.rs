@@ -2577,6 +2577,21 @@ fn file_save(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
             ),
         )
     };
+    // Nor over a file the opened model reads where it was opened from, when the save is to
+    // another folder.
+    let opened_dir = e
+        .path()
+        .and_then(|p| std::path::Path::new(p).parent())
+        .map(std::path::Path::to_path_buf);
+    if let Some(from) = &opened_dir {
+        for (href, _) in e.agent_files() {
+            if let Ok(there) = crate::agents::beside(from, &href)
+                && model_is(there.as_path())
+            {
+                return Err(model_over(href.as_str()));
+            }
+        }
+    }
     let mut companions = Vec::new();
     let mut siblings = Vec::new();
     for (href, content) in e.agent_files() {

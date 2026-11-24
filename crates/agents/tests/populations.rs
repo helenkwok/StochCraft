@@ -5,8 +5,8 @@
 use std::sync::Arc;
 
 use stochcraft_agents::{
-    Action, Chart, ChartSpec, Model, ModelError, Population, Run, SendSpec, Simulation, StateSpec,
-    Statistic, Stepping, TransitionSpec,
+    Action, Chart, ChartSpec, Model, ModelError, Population, Run, RunError, SendSpec, Simulation,
+    StateSpec, Statistic, Stepping, TransitionSpec,
 };
 
 fn build(spec: &ChartSpec) -> Arc<Chart> {
@@ -516,4 +516,22 @@ fn a_warm_up_discards_what_came_before_it() {
     assert_eq!(r.series[0].values, [2.0, 1.0, 1.0, 0.0, 0.0]);
     let c = &r.counts[0];
     assert_eq!((c.created, c.removed, c.alive), (0, 2, 0));
+}
+
+/// A save interval so small that the save times before the warm-up cannot be counted is
+/// refused with an error, not run with a wrong count.
+#[test]
+fn a_save_interval_too_small_to_count_is_refused() {
+    let model = failures(3).save_every(1e-18);
+    match model.run_with_warmup(1, 20.0, 20.0) {
+        Err(ModelError::Run(RunError::SaveTimes { time, every })) => {
+            assert_eq!((time, every), (20.0, 1e-18));
+        }
+        Err(e) => panic!("{e}"),
+        Ok(r) => panic!("ran, with times {:?}", r.times),
+    }
+    // One that can be counted still runs.
+    if let Err(e) = failures(3).save_every(0.5).run_with_warmup(1, 20.0, 21.0) {
+        panic!("{e}");
+    }
 }

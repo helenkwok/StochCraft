@@ -327,6 +327,53 @@ fn the_model_is_never_saved_over_its_own_chart() {
     );
 }
 
+/// Nor over a chart the model was opened with, when the save is to another folder: a model
+/// that reads `charts/person.scxml`, saved to that chart's own path, would otherwise look for
+/// its chart at `charts/charts/person.scxml` and replace the original.
+#[test]
+fn the_model_is_never_saved_over_the_chart_it_was_opened_with() {
+    let dir = Scratch::new("opened");
+    let bpmn = std::fs::read_to_string(models().join("sir-agents.bpmn"))
+        .unwrap()
+        .replace(
+            "chart=\"sir-person.scxml\"",
+            "chart=\"charts/person.scxml\"",
+        );
+    std::fs::create_dir(dir.join("charts")).unwrap();
+    let chart = dir.join("charts").join("person.scxml");
+    std::fs::copy(models().join("sir-person.scxml"), &chart).unwrap();
+    let model = dir.join("m.bpmn");
+    std::fs::write(&model, &bpmn).unwrap();
+    let before = std::fs::read(&chart).unwrap();
+    let mut e = Engine::new();
+    ok(
+        &mut e,
+        "file.open",
+        json!({ "path": model.to_string_lossy() }),
+    );
+    let (code, message) = err(
+        &mut e,
+        "file.save",
+        json!({ "path": chart.to_string_lossy() }),
+    );
+    assert_eq!(code, ErrorCode::InvalidParams);
+    assert!(message.contains("charts/person.scxml"), "{message}");
+    assert_eq!(std::fs::read(&chart).unwrap(), before);
+    assert!(!dir.join("charts").join("charts").exists());
+    // Saved to another folder that is no chart's place, it saves as before.
+    std::fs::create_dir(dir.join("copy")).unwrap();
+    let copy = dir.join("copy").join("m.bpmn");
+    ok(
+        &mut e,
+        "file.save",
+        json!({ "path": copy.to_string_lossy() }),
+    );
+    assert_eq!(
+        std::fs::read(dir.join("copy").join("charts").join("person.scxml")).unwrap(),
+        before
+    );
+}
+
 /// A chart's place that is there but cannot be read (here a folder) stops the save before
 /// anything is written: only a file that is not there is written.
 #[test]

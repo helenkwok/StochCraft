@@ -1062,9 +1062,18 @@ impl Simulation {
         // The first saving time after the warm-up, on the grid of `save_every` from 0.
         self.saved = match self.save_every {
             Some(e) => {
-                let mut k = (warmup / e).floor().max(0.0) as u64;
-                while k < u64::MAX && (k as f64) * e <= warmup {
-                    k = k.saturating_add(1);
+                let too_many = RunError::SaveTimes {
+                    time: warmup,
+                    every: e,
+                };
+                // `u64::MAX as f64` is 2^64: below it the index is a whole number a u64 holds.
+                let q = (warmup / e).floor();
+                if !(q < u64::MAX as f64) {
+                    return Err(too_many);
+                }
+                let mut k = q.max(0.0) as u64;
+                while (k as f64) * e <= warmup {
+                    k = k.checked_add(1).ok_or_else(|| too_many.clone())?;
                 }
                 while k > 1 && ((k - 1) as f64) * e > warmup {
                     k -= 1;
@@ -1092,7 +1101,10 @@ impl Simulation {
             self.queue.advance_to(horizon);
             if next.is_some_and(|t| t <= end) {
                 self.record(horizon);
-                self.saved += 1;
+                self.saved = self.saved.checked_add(1).ok_or(RunError::SaveTimes {
+                    time: horizon,
+                    every: self.save_every.unwrap_or(0.0),
+                })?;
             } else {
                 return Ok(());
             }

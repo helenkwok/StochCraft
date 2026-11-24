@@ -93,6 +93,9 @@ pub enum RunError {
     /// on populations took a transition: agents keep changing each other without waiting for
     /// an event.
     RetestLimit { time: f64, limit: u64 },
+    /// Saving the statistics `every` from time 0 would reach more save times than can be
+    /// counted by `time` (a save interval far too small for the run).
+    SaveTimes { time: f64, every: f64 },
 }
 
 impl fmt::Display for RunError {
@@ -118,6 +121,10 @@ impl fmt::Display for RunError {
                 f,
                 "at time {time}, agents whose conditions read populations changed each other \
                  more than {limit} times without waiting for an event, so they loop"
+            ),
+            RunError::SaveTimes { time, every } => write!(
+                f,
+                "saving the statistics every {every} would take more save times than can be                  counted by time {time}: give a longer save interval"
             ),
         }
     }
