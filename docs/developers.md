@@ -272,9 +272,9 @@ replication i depends only on the seed and i, so replications evaluated in stage
 those of one evaluation of them all. The user guide has worked examples with Optuna and pymoo
 (`examples/optimisers/`), which CI runs.
 
-To find the best whole-number decisions, `optimize` runs the engine's `experiment.optimise`: a
-search over the decisions' ranges, then the finalists compared again on fresh replications, with
-how sure the answer is.
+To find the best decisions (counts, rules and means), `optimize` runs the engine's
+`experiment.optimise`: a search over the decisions, then the finalists compared again on fresh
+replications, with how sure the answer is.
 
 ```bash
 stochcraft-cli optimize tandem.bpmn --decide desk1.capacity=11..40 --decide desk2.capacity=6..35 \
@@ -283,8 +283,11 @@ stochcraft-cli optimize tandem.bpmn --decide desk1.capacity=11..40 --decide desk
 ```
 
 A decision is `id.field=min..max` or `id.field=min..max:step`, the field one of `capacity`,
-`quantity` and `queue_capacity`. It starts from the model's value, or from `--start
-id.field=value`; a starting value that is not one of the range's values (a model's 12 for
+`quantity` and `queue_capacity`; a mean is `id.mean=min..max` (such as `server.mean=0.2..0.9`);
+a rule is `id.field` with its default levels, or `id.field=level,level`, the field `routing`
+(`standard`, `shortest_queue`, `divert`), `on_shift_end` (`finish`, `retry`, `resume`) or
+`after_job` (`stay`, `go_home`). It starts from the model's value, or from `--start
+id.field=value` (a number, or a rule's level by name); a starting value that is not one of the range's values (a model's 12 for
 `11..40:2`, say) is refused before anything runs, naming the decision. `--minimize` (or `--maximize`)
 takes `element.metric`, or `element.metric*weight` for a cost per unit of the result, repeated for
 a weighted sum; `--cost id.field=cost` is a decision's cost per unit, and `--cost-cap` caps their
@@ -292,7 +295,7 @@ sum (designs over it are never run). `--constraint 'element.metric<=limit~tolera
 quote it, since the shell reads `<` and `>` as redirections) keeps a result's mean within a limit. `--delta` is δ, the smallest difference in the objective
 worth telling apart. It prints the answer in words and the finalists, or JSON (`--format json`);
 `--time-limit` stops the search, and its JSON answer's `repeat` gives the `--max-runs` and
-`--reserve-runs` that repeat it exactly. See "Whole-number decisions" below.
+`--reserve-runs` that repeat it exactly. See "Whole-number decisions" and "Rules and a continuous mean" below.
 
 To choose a distribution for measured times, `fit` fits one column of a CSV file (or a plain list,
 one value per line; `-` reads standard input) to each family by maximum likelihood and ranks the
@@ -964,6 +967,53 @@ give 6 servers or "not proven". The fewest servers for a mean wait of at most 0.
 14. Constant times must give "compared exactly", and a search stopped by its time limit must
 repeat exactly. Each check must be correct in at least 95% of its seeds (the ROADMAP's 95 of 100); the log prints the rate with its 95% Wilson
 interval, for information only.
+
+### Rules and a continuous mean
+
+M8's stage O4 adds two kinds of decision to `experiment.optimise`.
+
+- *Rules* (`Field::Routing`, `Field::OnShiftEnd`, `Field::AfterJob`): a gateway's routing, a
+  task's end-of-shift rule (it needs shifts or an availability calendar), a mobile pool's
+  after-a-job rule, each one of a few named levels (`Field::levels`; by default `standard` and
+  `shortest_queue` for a routing, every level for the others). A rule is a coordinate of the
+  design, its level's index, but its levels have no order, so COMPASS never moves along it:
+  `Compass::held` lists the held coordinates, and each start (`Local`) searches its own copy of
+  the space with them fixed at its values. `engine::optimize` gives a start at every combination
+  of the rules' levels (at most 8, `MOST_COMBINATIONS`), so the combinations are searched with
+  the counts in turn and meet in one clean-up. A small space still goes whole to the clean-up.
+  Every level is set on the model and compiled before anything runs, so a level the model cannot
+  take (a divert with no default way) is refused at once. Whether the model draws is decided for
+  every combination of levels: a standard routing draws where the shortest queue does not.
+- *A mean* (`Field::Mean`, one or two of them, `MOST_MEANS`): searched by
+  `stochcraft_experiment::simplex`, Nelder and Mead's simplex (1965) with Barton and Ivey's RS +
+  S9 changes for noise (1996): the best vertex is evaluated again at each shrink, and a shrink
+  reduces the simplex by 10% instead of half. A design is a `simplex::Point`, the counts' and
+  rules' indices (`group`, held) and a point of the unit cube (`x`), which the engine maps to each
+  range and rounds to ten significant digits (so a value reads back from JSON and a journal to the
+  same bits). Every vertex is compared on the same first L replications (common random numbers);
+  the re-evaluation at a shrink adds n replications to the best vertex and raises L, so the
+  shrunk vertices run on the same replications. A simplex stops when its size is below 1% of
+  each range (or after 200 steps), then restarts once from its best vertex; the last simplex's
+  vertices and the starting design go to the clean-up (`compass::clean_up`, generic over the
+  design type). With counts or rules beside the means, one simplex runs for each combination of
+  their values (at most 8, within the cap), taking a step each in turn, so a search stopped after
+  S runs repeats exactly with S. The claim never says "of all designs" here, and says the search
+  is local. A cap on a mean's cost is refused.
+
+`decisions.set` and `experiment.evaluate` take a rule's level by name (`"value": "shortest_queue"`)
+and a mean as a number, so an applied answer is journalled and replayed as for counts.
+
+The checks (`crates/experiment/src/simplex.rs`'s unit tests, a held-decision test in
+`compass.rs`, and `crates/engine/tests/optimise_rules.rs`, whose heavy tests run 100 seeds each)
+cover two exact answers. Two identical M/M/1 servers behind a gateway (arrivals at rate 1, mean
+service 1): the random split makes each server M/M/1 at rate ½, a mean time in system of 2, and
+joining the shortest queue must be chosen in at least 95 of 100 seeds; the random split's
+clean-up interval must cover 2 in at least 88 of 100 (a 95% interval covers in about 95% of
+seeds at best, and 88 is the bar a true 0.95 misses with probability below 0.01). An M/M/1 server
+with arrivals at rate 1, its mean service s in [0.2, 0.9], and the objective its mean number
+inside plus −4 per unit of s: s / (1 − s) − 4s, least at s = 0.5 with −1. The chosen s must be
+within 0.05 of 0.5 and its exact objective within δ = 0.05 of −1, in at least 95 of 100 seeds.
+The golden digests pin one search of a rule beside a count and one of a mean.
 
 ### The journal
 

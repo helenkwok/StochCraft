@@ -14,7 +14,9 @@ use serde_json::{Value, json};
 use stochcraft_blocks::checks::check_reports;
 use stochcraft_blocks::{ExperimentSummary, Metric, compile, run_warnings, summarise};
 use stochcraft_experiment::{Control, Experiment};
-use stochcraft_model::{Dist, ElementId, ElementKind, Model, ResourcePool};
+use stochcraft_model::{
+    AfterJob, Dist, ElementId, ElementKind, Model, OnShiftEnd, ResourcePool, Routing,
+};
 use stochcraft_stats::{Proportion, difference};
 
 use crate::{CommandError, ErrorCode, wire};
@@ -41,11 +43,40 @@ pub enum Field {
     /// The mean of an element's time distribution (a source's time between arrivals, a task's
     /// service time, a delay's duration), its shape kept: the distribution is rescaled.
     Mean,
+    /// A rule, not a number: an exclusive gateway's way of choosing (`standard`, drawn by the
+    /// probabilities or by conditions; `shortest_queue`; `divert`). Taken by
+    /// `experiment.optimise`, `experiment.evaluate` and `decisions.set`, with the rule's name as
+    /// the value.
+    Routing,
+    /// A rule: what a task's job under way does when its unit goes off shift (`finish`,
+    /// `retry`, `resume`).
+    OnShiftEnd,
+    /// A rule: what a mobile pool's unit does once it has put an item down (`stay`, `go_home`).
+    AfterJob,
 }
 
 impl Field {
+    /// A count: a whole number.
     pub(crate) fn integral(self) -> bool {
-        !matches!(self, Field::Mean)
+        matches!(
+            self,
+            Field::Capacity | Field::Quantity | Field::QueueCapacity
+        )
+    }
+
+    /// A rule, whose values are names.
+    pub(crate) fn is_rule(self) -> bool {
+        matches!(self, Field::Routing | Field::OnShiftEnd | Field::AfterJob)
+    }
+
+    /// A rule's levels, by their names on the wire (empty for a number).
+    pub(crate) fn levels(self) -> &'static [&'static str] {
+        match self {
+            Field::Routing => &["standard", "shortest_queue", "divert"],
+            Field::OnShiftEnd => &["finish", "retry", "resume"],
+            Field::AfterJob => &["stay", "go_home"],
+            Field::Capacity | Field::Quantity | Field::QueueCapacity | Field::Mean => &[],
+        }
     }
 
     pub(crate) fn name(self) -> &'static str {
@@ -54,8 +85,19 @@ impl Field {
             Field::Quantity => "quantity",
             Field::QueueCapacity => "queue_capacity",
             Field::Mean => "mean",
+            Field::Routing => "routing",
+            Field::OnShiftEnd => "on_shift_end",
+            Field::AfterJob => "after_job",
         }
     }
+}
+
+/// The refusal of a rule where a number is wanted.
+fn not_a_number(field: Field) -> CommandError {
+    invalid(format!(
+        "`{}` is a rule (a named choice), not a number: only `experiment.optimise`, `experiment.evaluate` and `decisions.set` take it",
+        field.name()
+    ))
 }
 
 /// A parameter: an element's or a pool's number.
@@ -93,6 +135,7 @@ impl Param {
     pub fn get(&self, model: &Model) -> Result<f64, CommandError> {
         let id = ElementId::unchecked(&self.id);
         match self.field {
+            Field::Routing | Field::OnShiftEnd | Field::AfterJob => Err(not_a_number(self.field)),
             Field::Quantity => pool(model, &id).map(|p| f64::from(p.most_units())),
             Field::Mean => model
                 .estimated(&id)
@@ -133,6 +176,7 @@ impl Param {
             Ok(value as u32)
         };
         match self.field {
+            Field::Routing | Field::OnShiftEnd | Field::AfterJob => Err(not_a_number(self.field)),
             Field::Quantity => {
                 let n = count()?;
                 let p = model
@@ -187,6 +231,99 @@ impl Param {
                 Ok(())
             }
         }
+    }
+}
+
+impl Param {
+    /// A rule's level in `model`, by its name on the wire.
+    pub(crate) fn rule(&self, model: &Model) -> Result<&'static str, CommandError> {
+        let id = ElementId::unchecked(&self.id);
+        match self.field {
+            Field::Routing => match model.element(&id).map(|e| &e.kind) {
+                Some(ElementKind::ExclusiveGateway { routing, .. }) => Ok(match routing {
+                    Routing::Standard => "standard",
+                    Routing::ShortestQueue => "shortest_queue",
+                    Routing::Divert => "divert",
+                }),
+                Some(_) => Err(invalid(format!(
+                    "`{id}` is not an exclusive gateway, so it has no routing"
+                ))),
+                None => Err(not_found(format!("no element with id `{id}`"))),
+            },
+            Field::OnShiftEnd => match model.element(&id).map(|e| &e.kind) {
+                Some(ElementKind::Server { on_shift_end, .. }) => Ok(match on_shift_end {
+                    OnShiftEnd::Finish => "finish",
+                    OnShiftEnd::Retry => "retry",
+                    OnShiftEnd::Resume => "resume",
+                }),
+                Some(_) => Err(invalid(format!(
+                    "`{id}` is not a task with a resource of its own, so it has no on_shift_end"
+                ))),
+                None => Err(not_found(format!("no element with id `{id}`"))),
+            },
+            Field::AfterJob => match pool(model, &id)?.mobility.as_ref() {
+                Some(m) => Ok(match m.after_job {
+                    AfterJob::Stay => "stay",
+                    AfterJob::GoHome => "go_home",
+                }),
+                None => Err(invalid(format!(
+                    "`{id}` is a pool whose units do not move, so it has no after_job"
+                ))),
+            },
+            Field::Capacity | Field::Quantity | Field::QueueCapacity | Field::Mean => Err(invalid(
+                format!("`{}` is a number, not a rule", self.field.name()),
+            )),
+        }
+    }
+
+    /// Sets a rule to the level named `level`.
+    pub(crate) fn set_rule(&self, model: &mut Model, level: &str) -> Result<(), CommandError> {
+        self.rule(model)?;
+        if !self.field.levels().contains(&level) {
+            return Err(invalid(format!(
+                "`{level}` is not a {}: give one of {}",
+                self.field.name(),
+                self.field.levels().join(", ")
+            )));
+        }
+        let id = ElementId::unchecked(&self.id);
+        let element = model
+            .elements
+            .iter_mut()
+            .find(|e| e.id == id)
+            .map(|e| &mut e.kind);
+        match (self.field, element) {
+            (Field::Routing, Some(ElementKind::ExclusiveGateway { routing, .. })) => {
+                *routing = match level {
+                    "shortest_queue" => Routing::ShortestQueue,
+                    "divert" => Routing::Divert,
+                    _ => Routing::Standard,
+                };
+            }
+            (Field::OnShiftEnd, Some(ElementKind::Server { on_shift_end, .. })) => {
+                *on_shift_end = match level {
+                    "retry" => OnShiftEnd::Retry,
+                    "resume" => OnShiftEnd::Resume,
+                    _ => OnShiftEnd::Finish,
+                };
+            }
+            (Field::AfterJob, _) => {
+                if let Some(m) = model
+                    .resources
+                    .iter_mut()
+                    .find(|p| p.id == id)
+                    .and_then(|p| p.mobility.as_mut())
+                {
+                    m.after_job = if level == "go_home" {
+                        AfterJob::GoHome
+                    } else {
+                        AfterJob::Stay
+                    };
+                }
+            }
+            _ => {}
+        }
+        Ok(())
     }
 }
 
@@ -496,7 +633,11 @@ pub fn sensitivity(model: &Model, p: &SensitivityParams) -> Result<Value, Comman
         // compared one-sided, from its own value up.
         let floor: f64 = match param.field {
             Field::Capacity | Field::Quantity => 1.0,
-            Field::QueueCapacity | Field::Mean => 0.0,
+            Field::QueueCapacity
+            | Field::Mean
+            | Field::Routing
+            | Field::OnShiftEnd
+            | Field::AfterJob => 0.0,
         };
         let (down, up) = ((x0 - step).max(floor.min(x0)), x0 + step);
         let mut at = |v: f64| -> Result<ExperimentSummary, CommandError> {

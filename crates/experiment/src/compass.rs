@@ -44,6 +44,11 @@
 //! (replication i of a design is the same whichever start asks for it). The starts take one step
 //! each in turn, so the path of each does not depend on the budget.
 //!
+//! **Held decisions.** A decision in [`Compass::held`] (a rule, whose levels have no order) is
+//! never moved by the search: each start searches the other decisions with it held at the start's
+//! value, so its walks, neighbours and most promising area stay inside that level, and the levels
+//! meet only in the clean-up. The caller gives a start for each level it wants searched.
+//!
 //! **The clean-up.** The finalists are the search's best design, the designs active around it,
 //! each start's final design and the starting design. They are compared again on a fresh block
 //! of replications ([`Stream::CleanUp`]) by KN ([`crate::select::select_best`]), or with
@@ -273,6 +278,8 @@ pub struct Compass {
     pub exact: bool,
     /// The seed of the walks that sample the most promising area.
     pub seed: u64,
+    /// Decisions the search never moves (rules): each start keeps them at its own values.
+    pub held: Vec<usize>,
 }
 
 impl Compass {
@@ -292,6 +299,7 @@ impl Compass {
             all_designs_up_to: 50,
             exact: false,
             seed: 0,
+            held: Vec::new(),
         };
         c.reserve(0.3);
         c
@@ -308,7 +316,7 @@ impl Compass {
         self.search_runs = self.max_runs - kept;
     }
 
-    fn validate(&self) -> Result<(), CompassError> {
+    pub(crate) fn validate(&self) -> Result<(), CompassError> {
         let bad = |name: &'static str| Err(CompassError::Setting(name));
         if !(self.delta.is_finite() && self.delta > 0.0) {
             return bad("delta");
@@ -341,7 +349,7 @@ impl Compass {
 
     /// The replications every active design has at step k: n(1 + ⌊ln k⌋), or 1 without
     /// randomness.
-    fn level(&self, k: u64) -> u64 {
+    pub(crate) fn level(&self, k: u64) -> u64 {
         if self.exact {
             return 1;
         }
@@ -368,12 +376,27 @@ pub enum Ended {
     Stopped,
 }
 
+/// A design as the procedures here handle it: whole numbers for COMPASS, a point of a
+/// continuous range for Nelder–Mead ([`crate::simplex`]). `show` names it in messages.
+pub trait Design: Clone {
+    fn show(&self) -> String;
+}
+
+impl Design for Vec<i64> {
+    fn show(&self) -> String {
+        self.iter()
+            .map(i64::to_string)
+            .collect::<Vec<_>>()
+            .join(", ")
+    }
+}
+
 /// What became of one start.
 #[derive(Debug, Clone, PartialEq)]
-pub struct StartReport {
-    pub start: Vec<i64>,
+pub struct StartReport<D = Vec<i64>> {
+    pub start: D,
     /// The best design of this start when the search ended (`None` if it never ran).
-    pub end: Option<Vec<i64>>,
+    pub end: Option<D>,
     /// Its local test kept it.
     pub local_optimum: bool,
     /// Steps taken.
@@ -394,8 +417,8 @@ pub struct TracePoint {
 
 /// A design compared at the end.
 #[derive(Debug, Clone, PartialEq)]
-pub struct Finalist {
-    pub design: Vec<i64>,
+pub struct Finalist<D = Vec<i64>> {
+    pub design: D,
     /// The objective's mean over the search's replications (`None` if the search did not run it).
     pub search_mean: Option<f64>,
     pub search_replications: u64,
@@ -403,7 +426,7 @@ pub struct Finalist {
     pub cleanup: BTreeMap<u64, Vec<f64>>,
 }
 
-impl Finalist {
+impl<D> Finalist<D> {
     /// The clean-up's objective values, in replication order.
     pub fn objective(&self) -> Vec<f64> {
         self.cleanup
@@ -415,7 +438,7 @@ impl Finalist {
 
 /// The answer of [`optimise`].
 #[derive(Debug, Clone, PartialEq)]
-pub struct Answer {
+pub struct Answer<D = Vec<i64>> {
     /// [`Outcome::Selected`] with the confidence, [`Outcome::ComparedExactly`] without
     /// randomness, or [`Outcome::NotProven`]: the clean-up's budget could not settle it, or no
     /// finalist was found feasible.
@@ -427,7 +450,7 @@ pub struct Answer {
     pub confidence: Option<f64>,
     /// Every design of the space was a finalist.
     pub all_designs: bool,
-    pub finalists: Vec<Finalist>,
+    pub finalists: Vec<Finalist<D>>,
     /// When not proven: the finalists still in contention.
     pub in_contention: Vec<usize>,
     /// With constraints: each finalist's feasibility decision and its decision on each
@@ -441,16 +464,56 @@ pub struct Answer {
     pub search_runs: u64,
     pub cleanup_runs: u64,
     pub ended: Ended,
-    pub starts: Vec<StartReport>,
+    pub starts: Vec<StartReport<D>>,
     pub trace: Vec<TracePoint>,
     /// The number of designs in the space, when it was counted (at most
     /// [`Compass::all_designs_up_to`]).
     pub space: Option<u64>,
 }
 
-impl Answer {
+impl<D> Answer<D> {
     pub fn total_runs(&self) -> u64 {
         self.search_runs.saturating_add(self.cleanup_runs)
+    }
+
+    /// The same answer with each design mapped by `f` (whole numbers to the caller's designs).
+    pub fn map<E>(self, f: impl Fn(D) -> E) -> Answer<E> {
+        Answer {
+            outcome: self.outcome,
+            chosen: self.chosen,
+            confidence: self.confidence,
+            all_designs: self.all_designs,
+            finalists: self
+                .finalists
+                .into_iter()
+                .map(|x| Finalist {
+                    design: f(x.design),
+                    search_mean: x.search_mean,
+                    search_replications: x.search_replications,
+                    cleanup: x.cleanup,
+                })
+                .collect(),
+            in_contention: self.in_contention,
+            feasibility: self.feasibility,
+            by_constraint: self.by_constraint,
+            tried: self.tried,
+            search_runs: self.search_runs,
+            cleanup_runs: self.cleanup_runs,
+            ended: self.ended,
+            starts: self
+                .starts
+                .into_iter()
+                .map(|r| StartReport {
+                    start: f(r.start),
+                    end: r.end.map(&f),
+                    local_optimum: r.local_optimum,
+                    steps: r.steps,
+                    visited: r.visited,
+                })
+                .collect(),
+            trace: self.trace,
+            space: self.space,
+        }
     }
 }
 
@@ -465,13 +528,14 @@ pub enum CompassError {
     NoStart,
     /// The sampler failed, with its message.
     Sampler(String),
+    /// The design is named as [`Design::show`] gives it.
     WrongCount {
-        design: Vec<i64>,
+        design: String,
         expected: u64,
         got: u64,
     },
     NotFinite {
-        design: Vec<i64>,
+        design: String,
         replication: u64,
     },
     Select(SelectError),
@@ -479,7 +543,6 @@ pub enum CompassError {
 
 impl std::fmt::Display for CompassError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        let show = |x: &[i64]| x.iter().map(i64::to_string).collect::<Vec<_>>().join(", ");
         match self {
             CompassError::Setting(name) => write!(f, "the search's setting {name} is out of range"),
             CompassError::Space(m) => write!(f, "{m}"),
@@ -492,16 +555,14 @@ impl std::fmt::Display for CompassError {
                 got,
             } => write!(
                 f,
-                "design ({}) gave {got} rows where {expected} were asked for, or a row of the wrong length",
-                show(design)
+                "design ({design}) gave {got} rows where {expected} were asked for, or a row of the wrong length"
             ),
             CompassError::NotFinite {
                 design,
                 replication,
             } => write!(
                 f,
-                "design ({}) gave a value that is not a number in replication {replication}",
-                show(design)
+                "design ({design}) gave a value that is not a number in replication {replication}"
             ),
             CompassError::Select(e) => write!(f, "{e}"),
         }
@@ -876,14 +937,14 @@ where
         let rows = (self.sample)(stream, x, reps.clone()).map_err(CompassError::Sampler)?;
         if rows.len() as u64 != expected || rows.iter().any(|r| r.len() != self.width) {
             return Err(CompassError::WrongCount {
-                design: x.to_vec(),
+                design: x.to_vec().show(),
                 expected,
                 got: rows.len() as u64,
             });
         }
         if let Some(j) = rows.iter().position(|r| r.iter().any(|v| !v.is_finite())) {
             return Err(CompassError::NotFinite {
-                design: x.to_vec(),
+                design: x.to_vec().show(),
                 replication: reps.start + j as u64,
             });
         }
@@ -970,27 +1031,7 @@ where
     /// How `x` stands: whether its constraint means meet every limit, and a score where larger
     /// is better (the objective's mean in the better direction, or minus the violation).
     fn standing(&self, x: &[i64]) -> Option<(bool, f64)> {
-        let m = self.means(x)?;
-        let objective = m.first().copied()?;
-        let mut violation = 0.0;
-        for (c, &v) in self.setup.constraints.iter().zip(m.iter().skip(1)) {
-            let over = match c.bound {
-                crate::select::Bound::AtMost => v - c.limit,
-                crate::select::Bound::AtLeast => c.limit - v,
-            };
-            if over > 0.0 {
-                violation += over / c.tolerance;
-            }
-        }
-        let sign = match self.setup.sense {
-            Sense::Maximise => 1.0,
-            Sense::Minimise => -1.0,
-        };
-        Some(if violation > 0.0 {
-            (false, -violation)
-        } else {
-            (true, sign * objective)
-        })
+        standing(self.setup, &self.means(x)?)
     }
 
     /// Whether `a` stands better than `b` (looks feasible first, then score, then the
@@ -1022,6 +1063,32 @@ where
     }
 }
 
+/// How a design with the means `m` (the objective, then each constraint) stands: whether its
+/// constraint means meet every limit, and a score where larger is better (the objective's mean in
+/// the better direction, or minus the violation in units of each tolerance).
+pub(crate) fn standing(setup: &Compass, m: &[f64]) -> Option<(bool, f64)> {
+    let objective = m.first().copied()?;
+    let mut violation = 0.0;
+    for (c, &v) in setup.constraints.iter().zip(m.iter().skip(1)) {
+        let over = match c.bound {
+            crate::select::Bound::AtMost => v - c.limit,
+            crate::select::Bound::AtLeast => c.limit - v,
+        };
+        if over > 0.0 {
+            violation += over / c.tolerance;
+        }
+    }
+    let sign = match setup.sense {
+        Sense::Maximise => 1.0,
+        Sense::Minimise => -1.0,
+    };
+    Some(if violation > 0.0 {
+        (false, -violation)
+    } else {
+        (true, sign * objective)
+    })
+}
+
 /// One start's search.
 struct Local {
     start: Vec<i64>,
@@ -1035,11 +1102,21 @@ struct Local {
     failed_at: Option<Vec<i64>>,
     /// The designs active around the best at the last step.
     active: Vec<Vec<i64>>,
+    /// The space this start searches: the whole space with the held decisions fixed at the
+    /// start's values.
+    space: Space,
 }
 
 impl Local {
-    fn new(start: Vec<i64>, index: usize, seed: u64) -> Self {
+    fn new(start: Vec<i64>, index: usize, seed: u64, space: &Space, held: &[usize]) -> Self {
+        let mut own = space.clone();
+        for &i in held {
+            if let (Some(b), Some(&v)) = (own.bounds.get_mut(i), start.get(i)) {
+                *b = (v, v);
+            }
+        }
         Self {
+            space: own,
             visited: BTreeSet::new(),
             best: start.clone(),
             start,
@@ -1054,14 +1131,11 @@ impl Local {
 }
 
 /// One step of start `s`.
-fn step<F>(
-    runner: &mut Runner<'_, F>,
-    space: &Space,
-    s: &mut Local,
-) -> Result<StepEnd, CompassError>
+fn step<F>(runner: &mut Runner<'_, F>, s: &mut Local) -> Result<StepEnd, CompassError>
 where
     F: FnMut(Stream, &[i64], Range<u64>) -> Result<Vec<Vec<f64>>, String>,
 {
+    let space = &s.space.clone();
     let setup = runner.setup;
     if runner.runs >= runner.budget {
         return Ok(StepEnd::Exhausted);
@@ -1182,17 +1256,18 @@ where
 }
 
 /// The clean-up's replications of the finalists, by replication index, run as asked.
-struct CleanUp<'a, F> {
+struct CleanUp<'a, D, F> {
     sample: &'a mut F,
     width: usize,
-    finalists: Vec<Finalist>,
+    finalists: Vec<Finalist<D>>,
     runs: u64,
     error: Option<CompassError>,
 }
 
-impl<F> CleanUp<'_, F>
+impl<D, F> CleanUp<'_, D, F>
 where
-    F: FnMut(Stream, &[i64], Range<u64>) -> Result<Vec<Vec<f64>>, String>,
+    D: Design,
+    F: FnMut(Stream, &D, Range<u64>) -> Result<Vec<Vec<f64>>, String>,
 {
     fn rows(&mut self, p: usize, reps: Range<u64>) -> Vec<Vec<f64>> {
         let Some(f) = self.finalists.get(p) else {
@@ -1223,7 +1298,7 @@ where
             };
             if rows.len() as u64 != expected || rows.iter().any(|r| r.len() != self.width) {
                 self.error.get_or_insert(CompassError::WrongCount {
-                    design: design.clone(),
+                    design: design.show(),
                     expected,
                     got: rows.len() as u64,
                 });
@@ -1231,12 +1306,12 @@ where
             }
             if let Some(j) = rows.iter().position(|r| r.iter().any(|v| !v.is_finite())) {
                 self.error.get_or_insert(CompassError::NotFinite {
-                    design: design.clone(),
+                    design: design.show(),
                     replication: a + j as u64,
                 });
                 return Vec::new();
             }
-            self.runs += expected;
+            self.runs = self.runs.saturating_add(expected);
             if let Some(f) = self.finalists.get_mut(p) {
                 for (j, row) in (a..b).zip(rows) {
                     f.cleanup.insert(j, row);
@@ -1272,6 +1347,9 @@ where
             return Err(CompassError::Start(i));
         }
     }
+    if setup.held.iter().any(|&i| i >= space.bounds.len()) {
+        return Err(CompassError::Setting("held"));
+    }
     let width = 1 + setup.constraints.len();
     let per_design = if setup.exact { 1 } else { setup.first_stage };
 
@@ -1290,7 +1368,8 @@ where
                 cleanup: BTreeMap::new(),
             })
             .collect();
-        let mut answer = clean_up(setup, finalists, setup.max_runs, &mut sample, width)?;
+        let mut whole = |st: Stream, x: &Vec<i64>, r: Range<u64>| sample(st, x, r);
+        let mut answer = clean_up(setup, finalists, setup.max_runs, &mut whole, width)?;
         answer.all_designs = true;
         answer.ended = Ended::AllDesigns;
         answer.space = Some(count);
@@ -1311,7 +1390,13 @@ where
     let mut locals: Vec<Local> = Vec::new();
     for s in starts {
         if !locals.iter().any(|l| &l.start == s) {
-            locals.push(Local::new(s.clone(), locals.len(), setup.seed));
+            locals.push(Local::new(
+                s.clone(),
+                locals.len(),
+                setup.seed,
+                space,
+                &setup.held,
+            ));
         }
     }
     let mut trace = Vec::new();
@@ -1320,7 +1405,7 @@ where
             break Ended::LocalOptima;
         }
         for s in locals.iter_mut().filter(|l| !l.done) {
-            match step(&mut runner, space, s)? {
+            match step(&mut runner, s)? {
                 StepEnd::Exhausted => break 'search Ended::Budget,
                 // A step that ran replications is traced and followed by a look at `stop`,
                 // whether or not it ended its start.
@@ -1351,7 +1436,7 @@ where
     for l in locals.iter_mut().filter(|l| !l.visited.is_empty()) {
         if let Some(b) = runner.best_of(l.visited.iter()) {
             let mut act = vec![b.clone()];
-            act.extend(active(space, &b, &l.visited).into_iter().map(|(y, _)| y));
+            act.extend(active(&l.space, &b, &l.visited).into_iter().map(|(y, _)| y));
             l.best = b;
             l.active = act;
         }
@@ -1428,7 +1513,8 @@ where
         }
     }
     let budget = setup.max_runs.saturating_sub(search_runs);
-    let mut answer = clean_up(setup, finalists, budget, &mut sample, width)?;
+    let mut whole = |st: Stream, x: &Vec<i64>, r: Range<u64>| sample(st, x, r);
+    let mut answer = clean_up(setup, finalists, budget, &mut whole, width)?;
     answer.tried = tried;
     answer.search_runs = search_runs;
     answer.ended = ended;
@@ -1449,16 +1535,20 @@ fn meets(setup: &Compass, row: &[f64]) -> bool {
         })
 }
 
-/// The clean-up of `finalists` with `budget` replications.
-fn clean_up<F>(
+/// The clean-up of `finalists` with `budget` replications, on the sampler's [`Stream::CleanUp`]
+/// rows (each the objective, then one value per constraint: `width` values). A finalist that
+/// already has rows (a search's single replication, without randomness) keeps them. The answer's
+/// search fields (`tried`, `search_runs`, `ended`, `starts`, `trace`) are the caller's to fill.
+pub fn clean_up<D, F>(
     setup: &Compass,
-    finalists: Vec<Finalist>,
+    finalists: Vec<Finalist<D>>,
     budget: u64,
     sample: &mut F,
     width: usize,
-) -> Result<Answer, CompassError>
+) -> Result<Answer<D>, CompassError>
 where
-    F: FnMut(Stream, &[i64], Range<u64>) -> Result<Vec<Vec<f64>>, String>,
+    D: Design,
+    F: FnMut(Stream, &D, Range<u64>) -> Result<Vec<Vec<f64>>, String>,
 {
     let k = finalists.len();
     let sign = match setup.sense {
@@ -1551,7 +1641,7 @@ where
         sampling: Sampling::Common,
         max_runs: Some(budget),
     };
-    let best_search = |fs: &[Finalist]| -> Option<usize> {
+    let best_search = |fs: &[Finalist<D>]| -> Option<usize> {
         fs.iter()
             .enumerate()
             .filter_map(|(p, f)| f.search_mean.map(|m| (p, sign * m)))
@@ -1818,6 +1908,56 @@ mod tests {
         assert_eq!(answer.starts.len(), 2);
         // The starting design is a finalist.
         assert!(answer.finalists.iter().any(|f| f.design == vec![30, 30]));
+    }
+
+    /// A held decision (a rule's level) is never moved: each start searches the other decision
+    /// at its own level, and the levels meet in the clean-up, where the better one is chosen.
+    #[test]
+    fn a_held_decision_stays_at_each_starts_level() {
+        let space = Space {
+            bounds: vec![(0, 1), (0, 60)],
+            limits: Vec::new(),
+        };
+        let f = |x: &[i64]| {
+            let shift = if x[0] == 1 { -5.0 } else { 0.0 };
+            ((x[1] - 10) * (x[1] - 10)) as f64 + shift
+        };
+        let mut setup = Compass::new(0.5, Sense::Minimise, 6000);
+        setup.held = vec![0];
+        let answer = optimise(
+            &setup,
+            &space,
+            &[vec![0, 50], vec![1, 50]],
+            |stream, x, reps| {
+                Ok(reps
+                    .map(|j| {
+                        let salt = if stream == Stream::Search { 1 } else { 2 };
+                        let mut r = Rng::keyed(j, &format!("{salt}"));
+                        let mut own = Rng::keyed(j, &format!("{salt}/{x:?}"));
+                        vec![f(x) + (r.uniform() - 0.5) + 0.3 * (own.uniform() - 0.5)]
+                    })
+                    .collect())
+            },
+            || false,
+        )
+        .unwrap();
+        for s in &answer.starts {
+            let end = s.end.clone().unwrap();
+            assert_eq!(end[0], s.start[0], "{:?}", answer.starts);
+        }
+        let chosen = &answer.finalists[answer.chosen.unwrap()].design;
+        assert_eq!(chosen, &vec![1, 10], "{answer:?}");
+        assert!(answer.finalists.iter().any(|f| f.design[0] == 0));
+        // A held position outside the space is refused.
+        setup.held = vec![2];
+        let e = optimise(
+            &setup,
+            &space,
+            &[vec![0, 50]],
+            |_, _, _| Ok(vec![]),
+            || false,
+        );
+        assert_eq!(e.unwrap_err(), CompassError::Setting("held"));
     }
 
     /// A search stopped by the caller after S runs is repeated exactly with `search_runs` = S.

@@ -4136,7 +4136,7 @@ See D21: the sorter (M5) first, alongside M3.7; then line balancing (M7.1), the 
 
 ## M8: optimisation
 
-**Status:** in progress (#272); O1 (Selection and feasibility, model-free) in #290; O2 (Whole-number decisions) in #294; O3 to O6 not built yet.
+**Status:** in progress (#272); O1 (Selection and feasibility, model-free) in #290; O2 (Whole-number decisions) in #294; O4 (Rules and a continuous mean) in #298; O3, O5 and O6 not built yet.
 
 **Outcome:** a search over several decisions at once, followed by a selection of the best design
 that says how sure it is. M2.8 varies one parameter (`experiment.sweep`), evaluates a grid or a
@@ -4373,6 +4373,18 @@ catalogs.
     plus a cost of −4 per unit of s (a slower machine is cheaper). The objective is
     s / (1 − s) − 4s, with its least value −1 at s = 0.5, against −0.933 at 0.4 and −0.9 at 0.6.
     The search ends within 0.05 of 0.5 and within δ = 0.05 of −1.
+  - *Built in #298:* rules (`routing`, `on_shift_end`, `after_job`) held by COMPASS at each
+    combination of their levels, and one or two means by Nelder–Mead with Barton and Ivey's RS +
+    S9 (`stochcraft_experiment::simplex`), restarted once, both cleaned up by KN as in O2;
+    `decisions.set` and `experiment.evaluate` take a rule's level by name. A routing compares
+    `standard` and `shortest_queue` unless `values` names others. Under common random numbers
+    the re-evaluation at a shrink adds replications to the best vertex and to the shrunk ones
+    alike, so the vertices stay paired. With counts or rules beside a mean, the simplex runs for
+    each combination of their values only when there are at most 8 (within the cap); a larger
+    space beside a mean, and a cap on a mean's cost, are refused for now. The gateway check holds
+    the choice of the shortest queue to 95 of 100 seeds, and the random split's interval covering
+    the exact 2 to 88 of 100, since a 95% interval covers in about 95% of seeds at best. Progress,
+    Cancel and the window are O6's.
 - **O5 Trade-offs between results** (`experiment`, `engine::optimize`, CLI, MCP): two or three
   objectives, each a result or the decisions' costs, and the designs that trade them off (the
   Pareto front: designs none of which is at least as good in every objective and better in one).
