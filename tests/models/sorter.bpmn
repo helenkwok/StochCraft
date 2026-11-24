@@ -5,8 +5,10 @@
      Apache-2.0). Time is in seconds, lengths in metres.
      The layout (stochcraft:path, stochcraft:place, stochcraft:scene): the infeed merges at 30
      degrees onto a 30 m racetrack loop (two 10.5 m straights, two half circles); the divert sits
-     where the infeed joins, and the four 4 m lanes leave the straight after it at right angles,
-     2 m apart, each ending at its packing station. Each conveyor's length is its path's. -->
+     at the end of the loop (30 m along it, where it closes and the infeed joins), so the loop
+     sends into it there as a parcel comes round; the four 4 m lanes leave the straight after it
+     at right angles, 2 m apart, each ending at its packing station. Each conveyor's length is
+     its path's. -->
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:bpsim="http://www.bpsim.org/schemas/2.0" id="definitions" name="Parcel sorter" targetNamespace="https://github.com/helenkwok/StochCraft/model" exporter="StochCraft" exporterVersion="0.1.0">
   <bpmn:resource id="pack_red_resource" name="Packer red"/>
   <bpmn:resource id="pack_blue_resource" name="Packer blue"/>
@@ -276,7 +278,7 @@
           <bpsim:ElementParameters elementRef="sorter">
             <bpsim:VendorExtension name="stochcraft:routing" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1" stochcraft:value="divert"/>
             <bpsim:VendorExtension name="stochcraft:place" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1">
-              <stochcraft:place path="loop" s="0"/>
+              <stochcraft:place path="loop" s="30"/>
             </bpsim:VendorExtension>
           </bpsim:ElementParameters>
           <bpsim:ElementParameters elementRef="loop">

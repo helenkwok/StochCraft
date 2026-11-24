@@ -6,7 +6,10 @@ use std::collections::BTreeMap;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 use stochcraft_model::site::default_width;
-use stochcraft_model::{ElementId, Frame, LengthUnit, Path, Place, Scenery, Segment, Site, Track};
+use stochcraft_model::{
+    ElementId, Frame, Junction, JunctionKind, LengthUnit, Path, Place, Scenery, Segment, Site,
+    Track,
+};
 
 /// A point on the floor, its height and the way it faces.
 #[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize, JsonSchema)]
@@ -136,6 +139,57 @@ pub enum PlaceDoc {
     At(FrameDoc),
 }
 
+/// How two conveyors' sections join at a junction.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default, Serialize, Deserialize, JsonSchema)]
+#[serde(rename_all = "snake_case")]
+pub enum JunctionKindDoc {
+    /// End to start, the same heading.
+    #[default]
+    Inline,
+    /// At an angle: the item turns.
+    Side,
+    /// A turntable between them.
+    Turntable,
+}
+
+/// A junction on a flow from one conveyor to another: its kind and the time across it.
+#[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
+pub struct JunctionDoc {
+    /// `inline` when left out.
+    #[serde(default)]
+    pub kind: JunctionKindDoc,
+    /// In the model's time unit; 0 when left out.
+    #[serde(default, skip_serializing_if = "is_zero")]
+    pub transfer: f64,
+}
+
+impl From<Junction> for JunctionDoc {
+    fn from(j: Junction) -> Self {
+        Self {
+            kind: match j.kind {
+                JunctionKind::Inline => JunctionKindDoc::Inline,
+                JunctionKind::Side => JunctionKindDoc::Side,
+                JunctionKind::Turntable => JunctionKindDoc::Turntable,
+            },
+            transfer: j.transfer,
+        }
+    }
+}
+
+impl From<JunctionDoc> for Junction {
+    fn from(j: JunctionDoc) -> Self {
+        Self {
+            kind: match j.kind {
+                JunctionKindDoc::Inline => JunctionKind::Inline,
+                JunctionKindDoc::Side => JunctionKind::Side,
+                JunctionKindDoc::Turntable => JunctionKind::Turntable,
+            },
+            transfer: j.transfer,
+        }
+    }
+}
+
 /// A look-only object of the scene.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, JsonSchema)]
 #[serde(deny_unknown_fields)]
@@ -147,7 +201,7 @@ pub struct SceneryDoc {
     pub size: [f64; 3],
 }
 
-/// The physical layout: tracks and places by element id, and scenery.
+/// The physical layout: tracks and places by element id, junctions by flow id, and scenery.
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize, JsonSchema)]
 #[serde(deny_unknown_fields)]
 pub struct SiteDoc {
@@ -155,6 +209,8 @@ pub struct SiteDoc {
     pub paths: BTreeMap<String, TrackDoc>,
     #[serde(default, skip_serializing_if = "BTreeMap::is_empty")]
     pub places: BTreeMap<String, PlaceDoc>,
+    #[serde(default, skip_serializing_if = "BTreeMap::is_empty")]
+    pub junctions: BTreeMap<String, JunctionDoc>,
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub scene: Vec<SceneryDoc>,
 }
@@ -162,7 +218,10 @@ pub struct SiteDoc {
 impl SiteDoc {
     /// Whether there is no layout (a model without one leaves `site` out).
     pub fn is_empty(&self) -> bool {
-        self.paths.is_empty() && self.places.is_empty() && self.scene.is_empty()
+        self.paths.is_empty()
+            && self.places.is_empty()
+            && self.junctions.is_empty()
+            && self.scene.is_empty()
     }
 }
 
@@ -196,6 +255,11 @@ impl From<&Site> for SiteDoc {
                     };
                     (id.to_string(), doc)
                 })
+                .collect(),
+            junctions: s
+                .junctions
+                .iter()
+                .map(|(id, j)| (id.to_string(), (*j).into()))
                 .collect(),
             scene: s
                 .scene
@@ -258,6 +322,11 @@ impl SiteDoc {
                     };
                     (ElementId::unchecked(&id), place)
                 })
+                .collect(),
+            junctions: s
+                .junctions
+                .into_iter()
+                .map(|(id, j)| (ElementId::unchecked(&id), j.into()))
                 .collect(),
             scene,
         }

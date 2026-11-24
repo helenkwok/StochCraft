@@ -1223,6 +1223,7 @@ pub fn write_new(model: &Model) -> Vec<u8> {
         scenario.push(ep);
     }
     for c in &model.connections {
+        let junction = site.junctions.get(&c.id);
         if c.probability.is_none()
             && c.condition.is_none()
             && c.quantity.is_none()
@@ -1230,6 +1231,7 @@ pub fn write_new(model: &Model) -> Vec<u8> {
             && !c.abandoned
             && !c.turned_away
             && !c.balked
+            && junction.is_none()
         {
             continue;
         }
@@ -1258,6 +1260,9 @@ pub fn write_new(model: &Model) -> Vec<u8> {
         }
         if c.balked {
             ep.push(balked_element());
+        }
+        if let Some(j) = junction {
+            ep.push(crate::layout::junction_element(j));
         }
         scenario.push(ep);
     }
