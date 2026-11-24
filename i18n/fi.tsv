@@ -1470,3 +1470,9 @@ connection	Flow	Virta
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	Lohko {block} on sijoitettu {s} etäisyydelle kuljettimen {conveyor} reitillä, jonka pituus on {length}. Sijoita se välille 0–{length} reitillä.
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	Entiteetit kuljettimella {conveyor} saavuttavat kohdan {before} ennen kohtaa {block}, mutta {block} on sijoitettu lähemmäs alkua ({s} reitillä, {before} kohdassa {before_s}). Sijoita {block} reitillä kauemmas kuin {before} tai vaihda niiden paikat virroissa.
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	Liitoskohdan ylittäminen virrassa {flow} kestää {time}. Aseta sen siirtoaika arvoon 0 tai suuremmaksi.
+	Search examples	Hae esimerkeistä
+	Clear search	Tyhjennä haku
+	Logistics and warehousing	Logistiikka ja varastointi
+	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	Postipakettien lajittelu: silmukka syöttää neljää rataa tuotteen mukaan, ja ohjaimet lähettävät paketin uudelle kierrokselle, kun sen rata on täynnä.
+	How many parcels go round the loop because their lane is full?	Montako pakettia kiertää silmukan uudelleen, koska niiden rata on täynnä?
+	Conveyors and diverts: parcels sent round the loop when their lane is full.	Kuljettimet ja ohjaimet: paketit kiertävät silmukan uudelleen, kun niiden rata on täynnä.

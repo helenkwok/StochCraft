@@ -34,7 +34,9 @@ re-graded. Since then:
 - **Start screen (area 1):** a start page that asks "What do you want to find out?", with examples
   by question and industry (#170), a "Start from a blank model" link, and a guided first model
   on the real canvas (#172). The examples went from three to eleven: five with checked answers
-  (#171) and a parcel sorter (#207). Models have a length unit beside the time unit (#198).
+  (#171) and a parcel sorter (#207). Models have a length unit beside the time unit (#198). A
+  search box looks through every example, and See all groups them under a heading per field,
+  with a Logistics and warehousing field for the parcel sorter.
 - **Library (area 2):** ten kinds in the palette, with the Conveyor (#198). The library is still
   a strip of chips; its redesign is M5.5's U3.
 - **Distributions (area 5):** fitting measured data by maximum likelihood, ranked by

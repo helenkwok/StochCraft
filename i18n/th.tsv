@@ -1470,3 +1470,9 @@ connection	Flow	โฟลว์
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	{block} ถูกวางที่ {s} ตามสายพานลำเลียง {conveyor} ซึ่งเส้นทางยาว {length} ให้วางไว้ระหว่าง 0 ถึง {length} ตามเส้นทาง
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	เอนทิตีบนสายพานลำเลียง {conveyor} ไปถึง {before} ก่อน {block} แต่ {block} ถูกวางใกล้จุดเริ่มต้นมากกว่า ({s} ตามสายพาน, {before} อยู่ที่ {before_s}) ให้วาง {block} ไว้ไกลกว่า {before} ตามเส้นทาง หรือสลับกันในโฟลว์
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	ข้อต่อบนโฟลว์ {flow} ใช้เวลา {time} ในการข้าม ให้ตั้งเวลาขนย้ายของมันเป็น 0 หรือมากกว่า
+	Search examples	ค้นหาตัวอย่าง
+	Clear search	ล้างการค้นหา
+	Logistics and warehousing	โลจิสติกส์และคลังสินค้า
+	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	การคัดแยกพัสดุไปรษณีย์: วงรอบป้อนพัสดุเข้าสี่ช่องตามสินค้า และตัวเบี่ยงทางส่งพัสดุวนอีกรอบเมื่อช่องของมันเต็ม
+	How many parcels go round the loop because their lane is full?	มีพัสดุกี่ชิ้นที่วนอีกรอบเพราะช่องของมันเต็ม?
+	Conveyors and diverts: parcels sent round the loop when their lane is full.	สายพานลำเลียงและตัวเบี่ยงทาง: พัสดุวนอีกรอบเมื่อช่องของมันเต็ม

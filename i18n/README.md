@@ -1033,6 +1033,14 @@ fields (`“Service time”`) are named in the messages by their own rows.
   for a junction, so each uses a plain word for a joint or crossing point. Not checked against any
   other source and not reviewed by native speakers; the least certain are lo, th, ta, te, bn, ka,
   kk and hi.
+- The rows for the start page's search and its new field (Search examples, Clear search,
+  Logistics and warehousing) and for the parcel sorter example's line about it, its question and
+  what it teaches (which had no rows before) were machine-drafted from the plain meaning of the
+  English, with each catalog's own words for conveyor, divert and parcel sorter from its existing
+  rows and its "Search help and terms" wording. "Lane" is the language's plain word for a sorter
+  lane or track, and "divert" a plain word for a deflecting device where the catalog had only the
+  verb. Not checked against any other source and not reviewed by native speakers; the least
+  certain are lo, th, ta, te, bn, ka, kk and sq.
 
 **Adding or changing a string:** add the English in the code through `i18n::t` (or `tf`, `tn`),
 then add its row to each catalog here, or leave it out to show English until it is translated.

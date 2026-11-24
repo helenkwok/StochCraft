@@ -1470,3 +1470,9 @@ connection	Flow	Folyamat
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	A(z) {block} blokk a(z) {conveyor} szállítószalag mentén {s} távolságra van elhelyezve, amelynek útvonala {length} hosszú. Helyezze 0 és {length} közé az útvonal mentén.
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	A(z) {conveyor} szállítószalagon az entitások a(z) {before} elemet előbb érik el, mint a(z) {block} blokkot, de a(z) {block} közelebb van elhelyezve az elejéhez ({s} távolságra rajta, a(z) {before} pedig {before_s} távolságra). Helyezze a(z) {block} blokkot az útvonalon a(z) {before} után, vagy cserélje fel őket a folyamatokban.
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	A(z) {flow} folyamat csatlakozásának átlépése {time} ideig tart. Állítsa a továbbítási időt 0 vagy nagyobb értékre.
+	Search examples	Keresés a példákban
+	Clear search	Keresés törlése
+	Logistics and warehousing	Logisztika és raktározás
+	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	Postai csomagok válogatása: egy körpálya termék szerint négy sávot táplál, a terelők pedig újabb körre küldik a csomagot, ha a sávja tele van.
+	How many parcels go round the loop because their lane is full?	Hány csomag tesz újabb kört, mert tele van a sávja?
+	Conveyors and diverts: parcels sent round the loop when their lane is full.	Szállítószalagok és terelők: a csomagok újabb kört tesznek, ha tele van a sávjuk.
