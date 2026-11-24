@@ -3511,8 +3511,8 @@ layout. The flagship example is a parcel super hub.
     length (metres), not a count, since case lengths differ, and each gate's share of time busy.
     From R. C. Stuebing, *Monte Carlo Simulation of Full Case Conveying Systems*, Digest of the
     Second Conference on Applications of Simulation, 1968, pp. 272–273, and D. A. Heimburger,
-    *A Cased Goods Conveyor Simulator*, pp. 112–127 (whose events, OPEN.GATE, PASS.GATE and
-    SHUT.ARM, define the rule; venue and year to confirm).
+    *A Cased Goods Conveyor Simulator*, Proceedings of the 1973 Winter Simulation Conference,
+    pp. 112–127 (whose events, OPEN.GATE, PASS.GATE and SHUT.ARM, define the rule).
 - **Lane full, stay on the loop.** Built in: when the chosen lane cannot take the item, it stays
   on the loop and is offered again next time round. Each item counts its rounds; after a set
   number it goes to an exception lane. Results report the recirculation count per divert and
