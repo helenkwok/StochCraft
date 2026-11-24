@@ -279,3 +279,119 @@ fn a_table_made_with_commands_is_saved_beside_the_model() {
     assert_eq!(again.model().decisions, e.model().decisions);
     assert_eq!(again.model().dmn, e.model().dmn);
 }
+
+/// A save that writes the table file and then fails (here the model's own file cannot be
+/// written) leaves the table file recorded as written: saving again, unchanged or after undoing
+/// the edit, finds it as this engine left it and goes ahead, rather than taking it for a change
+/// made by another program.
+#[test]
+fn a_table_file_written_by_a_failed_save_is_not_taken_for_a_change() {
+    let dir = folder("failed-save");
+    let (bpmn, dmn) = write_sorter(&dir);
+    let (bpmn_bytes, dmn_bytes) = (read(&bpmn), read(&dmn));
+    let mut e = Engine::new();
+    ok(
+        &mut e,
+        "file.open",
+        json!({ "path": bpmn.to_string_lossy() }),
+    );
+    let got = ok(&mut e, "dmn.get", json!({ "file": "sorting.dmn" }));
+    let mut t = got["files"][0]["decisions"][0]["table"].clone();
+    t["rules"][0]["outputs"][0] = json!("\"chute_b\"");
+    t["rules"][1]["outputs"][0] = json!("\"chute_a\"");
+    ok(
+        &mut e,
+        "dmn.set",
+        json!({ "file": "sorting.dmn", "decision": "chute", "table": t }),
+    );
+    // The model's file cannot be written: a folder stands in its place.
+    let block = |there: bool| {
+        if there {
+            std::fs::remove_file(&bpmn).unwrap_or_else(|err| panic!("{err}"));
+            std::fs::create_dir(&bpmn).unwrap_or_else(|err| panic!("{err}"));
+        } else {
+            std::fs::remove_dir(&bpmn).unwrap_or_else(|err| panic!("{err}"));
+            std::fs::write(&bpmn, &bpmn_bytes).unwrap_or_else(|err| panic!("{err}"));
+        }
+    };
+    block(true);
+    assert!(e.execute("file.save", json!({})).is_err());
+    let edited = read(&dmn);
+    assert_ne!(edited, dmn_bytes, "the table file was written first");
+    // Saved again as it is: it goes ahead.
+    block(false);
+    ok(&mut e, "file.save", json!({}));
+    assert_eq!(read(&dmn), edited);
+    // Failed again, then saved after undoing the edit: the table goes back.
+    t["rules"][0]["outputs"][0] = json!("\"chute_a\"");
+    ok(
+        &mut e,
+        "dmn.set",
+        json!({ "file": "sorting.dmn", "decision": "chute", "table": t }),
+    );
+    block(true);
+    assert!(e.execute("file.save", json!({})).is_err());
+    block(false);
+    ok(&mut e, "undo", json!({}));
+    ok(&mut e, "file.save", json!({}));
+    assert_eq!(read(&dmn), edited);
+}
+
+/// A table file that could not be read stops a run only while a block uses it.
+#[test]
+fn a_missing_table_stops_a_run_only_while_a_block_uses_it() {
+    let dir = folder("missing");
+    let (bpmn, dmn) = write_sorter(&dir);
+    std::fs::remove_file(&dmn).unwrap_or_else(|err| panic!("{err}"));
+    let mut e = Engine::new();
+    let opened = ok(
+        &mut e,
+        "file.open",
+        json!({ "path": bpmn.to_string_lossy() }),
+    );
+    assert!(opened["notes"].to_string().contains("sorting.dmn"));
+    let run = json!({ "replications": 1 });
+    assert!(e.execute("run", run.clone()).is_err());
+    ok(&mut e, "dmn.use", json!({ "element": "sort" }));
+    ok(&mut e, "run", run);
+}
+
+/// What `dmn.set` and `dmn.use` take is kept as the files read it back, so the model saves:
+/// spaces around a cell, an empty id, a blank route.
+#[test]
+fn edits_are_kept_as_the_files_read_them_back() {
+    let dir = folder("kept");
+    let (bpmn, dmn) = write_sorter(&dir);
+    let mut e = Engine::new();
+    ok(
+        &mut e,
+        "file.open",
+        json!({ "path": bpmn.to_string_lossy() }),
+    );
+    let got = ok(&mut e, "dmn.get", json!({ "file": "sorting.dmn" }));
+    let mut t = got["files"][0]["decisions"][0]["table"].clone();
+    t["rules"][0]["outputs"][0] = json!("  \"chute_a\"  ");
+    t["rules"][0]["id"] = json!("");
+    t["rules"][1]["inputs"][0] = json!(" >= 10 ");
+    ok(
+        &mut e,
+        "dmn.set",
+        json!({ "file": "sorting.dmn", "decision": "chute", "table": t }),
+    );
+    let rules = &e.model().dmn["sorting.dmn"].decisions[0].table.rules;
+    assert_eq!(rules[0].outputs[0], "\"chute_a\"");
+    assert_eq!(rules[0].id, None);
+    assert_eq!(rules[1].inputs[0], ">= 10");
+    ok(
+        &mut e,
+        "dmn.use",
+        json!({ "element": "sort", "file": "sorting.dmn", "decision": "chute", "route": " " }),
+    );
+    assert_eq!(
+        e.model().decisions[&ElementId::unchecked("sort")].route,
+        None
+    );
+    ok(&mut e, "file.save", json!({}));
+    let back = stochcraft_io::dmn::read_dmn(&read(&dmn)).unwrap_or_else(|err| panic!("{err}"));
+    assert_eq!(back, e.model().dmn["sorting.dmn"]);
+}

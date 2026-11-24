@@ -225,33 +225,52 @@ impl From<&Table> for TableDoc {
     }
 }
 
+/// A cell's text as a `.dmn` file gives it back: without the whitespace around it (spaces
+/// inside a quoted string stay).
+fn cell(s: String) -> String {
+    s.trim().to_owned()
+}
+
+/// An optional text (an input's or output's values, a default) as a file gives it back.
+fn text(s: Option<String>) -> Option<String> {
+    s.map(cell)
+}
+
+/// An optional attribute (an id, a label, a type) as a file gives it back: none when empty.
+fn attr(s: Option<String>) -> Option<String> {
+    s.filter(|v| !v.is_empty())
+}
+
+/// A table as given to `dmn.set` (or in a model's JSON), as it reads back from the file it is
+/// saved into: what the file does not keep (spaces around a cell, an empty id) is not kept here
+/// either, so saving can check that the file reads back as the model.
 impl From<TableDoc> for Table {
     fn from(t: TableDoc) -> Self {
         Self {
-            id: t.id,
+            id: attr(t.id),
             hit_policy: t.hit_policy.into(),
             aggregation: t.aggregation.map(Into::into),
             inputs: t
                 .inputs
                 .into_iter()
                 .map(|i| Input {
-                    id: i.id,
-                    label: i.label,
-                    expression: i.expression,
-                    type_ref: i.type_ref,
-                    values: i.values,
+                    id: attr(i.id),
+                    label: attr(i.label),
+                    expression: cell(i.expression),
+                    type_ref: attr(i.type_ref),
+                    values: text(i.values),
                 })
                 .collect(),
             outputs: t
                 .outputs
                 .into_iter()
                 .map(|o| Output {
-                    id: o.id,
-                    label: o.label,
-                    name: o.name,
-                    type_ref: o.type_ref,
-                    values: o.values,
-                    default: o.default,
+                    id: attr(o.id),
+                    label: attr(o.label),
+                    name: attr(o.name),
+                    type_ref: attr(o.type_ref),
+                    values: text(o.values),
+                    default: text(o.default),
                 })
                 .collect(),
             annotations: t.annotations,
@@ -259,11 +278,11 @@ impl From<TableDoc> for Table {
                 .rules
                 .into_iter()
                 .map(|r| Rule {
-                    id: r.id,
-                    description: r.description,
-                    inputs: r.inputs,
-                    outputs: r.outputs,
-                    annotations: r.annotations,
+                    id: attr(r.id),
+                    description: text(r.description).filter(|d| !d.is_empty()),
+                    inputs: r.inputs.into_iter().map(cell).collect(),
+                    outputs: r.outputs.into_iter().map(cell).collect(),
+                    annotations: r.annotations.into_iter().map(cell).collect(),
                 })
                 .collect(),
         }
@@ -427,7 +446,10 @@ pub(crate) fn load(
         .map(|u| u.file.clone())
         .collect();
     for href in hrefs {
-        let note = |message: String| stochcraft_io::Note::error(None, message);
+        // A warning, not an error: the model has no stand-in for the table, and each block
+        // still using it is an error of the model itself (`decision_unusable`), which stops a
+        // run while the block uses it and no longer once it does not.
+        let note = |message: String| stochcraft_io::Note::warning(None, message);
         if !is_dmn_reference(&href) {
             loaded.notes.push(note(format!(
                 "`{href}` is not a relative reference to a .dmn file beside the model (no `..`, root, drive, scheme or device name); the blocks that use it cannot run"
@@ -622,7 +644,8 @@ pub(crate) fn use_table(e: &mut Engine, p: Value) -> Result<Value, CommandError>
             Some(DecisionUse {
                 file,
                 decision,
-                route: p.route,
+                // A blank route is none, as the model's file reads it back.
+                route: p.route.filter(|r| !r.trim().is_empty()),
             })
         }
         (None, None) => None,
