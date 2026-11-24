@@ -360,7 +360,8 @@ pub enum Delay {
     /// A rate (an extension, `stochcraft:rate`): the delay is exponential with mean 1 / rate,
     /// drawn again whenever a variable the rate expression reads has changed at the end of a
     /// macrostep, so the event comes at the current rate. A rate of 0 waits until the rate
-    /// becomes positive.
+    /// becomes positive. The expression reads only the agent's own variables: not a
+    /// population, `time()`, `In()` or the event, whose changes would not redraw it.
     Rate(String),
 }
 
@@ -751,9 +752,9 @@ impl Chart {
     /// states have at least one child; every expression must parse and read only declared
     /// variables (or `getProperty('_event.name')` and `getProperty('_event.data')`, the current
     /// event's name and data); population functions name their population, state and variable
-    /// in quotes (checked by a [`Model`](crate::Model)); a rate reads no population and not
-    /// `time()`; a message to other agents has no delay; a fixed delay is
-    /// a time of 0 or more; an internal send has no delay.
+    /// in quotes (checked by a [`Model`](crate::Model)); a rate reads only the agent's own
+    /// variables (no population, `time()`, `In()` or event); a message to other agents has no
+    /// delay; a fixed delay is a time of 0 or more; an internal send has no delay.
     ///
     /// `In('id')` with a quoted name is checked to name a state. A name the expression computes
     /// (`In(concat('a', 'b'))`) is not checked: one that names no state reads as false.
@@ -1539,12 +1540,53 @@ impl Compiler<'_> {
                     Delay::Expr(e) => DelayExec::Expr(self.code(e, place, site)?),
                     Delay::Rate(e) => {
                         let code = self.code(e, place, site)?;
-                        if !code.populations.is_empty() || code.reads_time {
+                        // The scheduler draws a rate again only when a variable it reads has
+                        // changed, so anything else it read would leave the delay stale.
+                        if let Some(p) = code.populations.first() {
                             return fail(
                                 place,
                                 format!(
-                                    "the rate `{e}` reads a population or the time, but a rate \
-                                     is drawn again only when the agent's own variables change"
+                                    "the rate `{e}` reads the population `{p}`, but a rate is \
+                                     drawn again only when the agent's own variables change, not \
+                                     when a population does"
+                                ),
+                            );
+                        }
+                        if code.reads_time {
+                            return fail(
+                                place,
+                                format!(
+                                    "the rate `{e}` reads time(), but a rate is drawn again only \
+                                     when the agent's own variables change, not as time passes"
+                                ),
+                            );
+                        }
+                        let mut reads_in = false;
+                        data::walk(&code.expr, &mut |x| {
+                            if let Expr::Provided(f, _) = x
+                                && f == "In"
+                            {
+                                reads_in = true;
+                            }
+                        });
+                        if reads_in {
+                            return fail(
+                                place,
+                                format!(
+                                    "the rate `{e}` reads In(), but a rate is drawn again only \
+                                     when the agent's own variables change, not when its active \
+                                     states do"
+                                ),
+                            );
+                        }
+                        let names = code.expr.references();
+                        if names.contains(&data::EVENT_NAME) || names.contains(&data::EVENT_DATA) {
+                            return fail(
+                                place,
+                                format!(
+                                    "the rate `{e}` reads the event, but a rate is drawn again \
+                                     only when the agent's own variables change, not when \
+                                     another event comes"
                                 ),
                             );
                         }
