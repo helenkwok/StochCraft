@@ -236,14 +236,22 @@ fn a_way_the_table_names_must_exist_and_a_file_must_be_read() {
 }
 
 /// A table that leaves sizes from 10 to 15 uncovered is a warning; such parcels get no band,
-/// so the gateway's default takes them.
+/// so the gateway's default takes them: 10 parcels of size 12 besides the usual mix.
 #[test]
 fn inputs_no_rule_covers_are_a_warning() {
     let mut m = Builder::new();
     let classify = m.delay("classify", Dist::Constant(0.0));
     parcels(&mut m, classify);
-    let sink = m.sink("out");
-    m.connect(classify, sink);
+    let medium = m.source("medium", Dist::Constant(1.0), Some(10));
+    m.property(medium, "size", None, PropertyValue::Number(12.0));
+    m.connect(medium, classify);
+    let split = m.exclusive("split");
+    m.connect(classify, split);
+    let (light, heavy, unbanded) = (m.sink("light"), m.sink("heavy"), m.sink("unbanded"));
+    m.route(split, light, None, Some("getProperty('band') = 'light'"));
+    m.route(split, heavy, None, Some("getProperty('band') = 'heavy'"));
+    m.connect(split, unbanded);
+    m.default_route(split, unbanded);
     let model = with_table(
         m.build(experiment()),
         "classify",
@@ -259,5 +267,157 @@ fn inputs_no_rule_covers_are_a_warning() {
     assert_eq!(ds[0].severity, Severity::Warning);
     assert_eq!(ds[0].problem.code(), "decision_gap");
     assert!(ds[0].to_string().contains("size = 10"), "{}", ds[0]);
-    assert_eq!(entered(&run(&model), "out"), 100);
+    let r = run(&model);
+    assert_eq!(entered(&r, "light"), 30);
+    assert_eq!(entered(&r, "heavy"), 70);
+    assert_eq!(entered(&r, "unbanded"), 10);
+}
+
+/// Gives block `id` the name `name`.
+fn name(model: &mut Model, id: &str, name: &str) {
+    if let Some(e) = model.elements.iter_mut().find(|e| e.id.as_str() == id) {
+        e.name = name.into();
+    }
+}
+
+/// A table giving `true` and `false` routes each to the block of that name, compared exactly: a
+/// boolean is not equal to every other non-empty name (as XPath's `=` would have it), so the
+/// first way, to "Reject", takes none.
+#[test]
+fn a_boolean_output_routes_by_its_own_name_only() {
+    let mut m = Builder::new();
+    let sort = m.exclusive("sort");
+    parcels(&mut m, sort);
+    let (reject, yes, no) = (m.sink("reject"), m.sink("yes"), m.sink("no"));
+    m.connect(sort, reject);
+    m.connect(sort, yes);
+    m.connect(sort, no);
+    let mut model = with_table(
+        m.build(experiment()),
+        "sort",
+        decision(
+            "small",
+            HitPolicy::First,
+            "small",
+            &[("< 10", "true"), ("-", "false")],
+        ),
+    );
+    name(&mut model, "reject", "Reject");
+    name(&mut model, "yes", "true");
+    name(&mut model, "no", "false");
+    assert_eq!(model.validate(), vec![]);
+    let r = run(&model);
+    assert_eq!(entered(&r, "reject"), 0);
+    assert_eq!(entered(&r, "yes"), 30);
+    assert_eq!(entered(&r, "no"), 70);
+}
+
+/// A value that names two ways (one block's id, another's name) is an error, not a choice
+/// made by the order of the ways.
+#[test]
+fn a_value_that_names_two_ways_is_an_error() {
+    let mut m = Builder::new();
+    let sort = m.exclusive("sort");
+    parcels(&mut m, sort);
+    let (a, b) = (m.sink("chute_a"), m.sink("chute_b"));
+    m.connect(sort, a);
+    m.connect(sort, b);
+    let mut model = with_table(
+        m.build(experiment()),
+        "sort",
+        decision(
+            "chute",
+            HitPolicy::Unique,
+            "chute",
+            &[("< 10", "\"chute_a\""), (">= 10", "\"chute_b\"")],
+        ),
+    );
+    assert_eq!(model.validate(), vec![]);
+    name(&mut model, "chute_b", "chute_a");
+    let ds = model.validate();
+    assert_eq!(ds.len(), 1, "{ds:?}");
+    assert_eq!(ds[0].problem.code(), "decision_unusable");
+    assert!(ds[0].to_string().contains("more than one"), "{}", ds[0]);
+}
+
+/// A table writing text into a property declared boolean is an error: the text would be held as
+/// true, and a later test for that text would never match.
+#[test]
+fn an_output_must_fit_its_property_s_type() {
+    let mut m = Builder::new();
+    let classify = m.delay("classify", Dist::Constant(0.0));
+    parcels(&mut m, classify);
+    let start = m.source("start", Dist::Constant(1.0), Some(1));
+    m.property(
+        start,
+        "band",
+        Some(stochcraft_model::PropertyType::Boolean),
+        PropertyValue::Boolean(false),
+    );
+    m.connect(start, classify);
+    let sink = m.sink("out");
+    m.connect(classify, sink);
+    let model = with_table(
+        m.build(experiment()),
+        "classify",
+        decision(
+            "band",
+            HitPolicy::First,
+            "band",
+            &[(">= 10", "\"heavy\""), ("-", "\"light\"")],
+        ),
+    );
+    let ds = model.validate();
+    assert_eq!(ds.len(), 1, "{ds:?}");
+    assert_eq!(ds[0].problem.code(), "decision_unusable");
+    assert!(ds[0].to_string().contains("cannot hold"), "{}", ds[0]);
+    // A whole-number property takes whole numbers, not fractions.
+    let mut whole = model.clone();
+    for p in whole.elements.iter_mut().flat_map(|e| &mut e.properties) {
+        if p.name == "band" {
+            p.ty = Some(stochcraft_model::PropertyType::Long);
+            p.value = PropertyValue::Number(0.0);
+        }
+    }
+    if let Some(t) = whole.dmn.get_mut(FILE).map(|f| &mut f.decisions[0].table) {
+        t.rules[0].outputs[0] = "2".into();
+        t.rules[1].outputs[0] = "1".into();
+    }
+    assert_eq!(whole.validate(), vec![]);
+    if let Some(t) = whole.dmn.get_mut(FILE).map(|f| &mut f.decisions[0].table) {
+        t.rules[1].outputs[0] = "1.5".into();
+    }
+    let codes: Vec<&str> = whole.validate().iter().map(|d| d.problem.code()).collect();
+    assert_eq!(codes, vec!["decision_unusable"]);
+}
+
+/// What a decision table writes is in its block's statistics, as an assignment's values are:
+/// a score of 7 for the 70 large parcels and 3 for the 30 small ones, a mean of 5.8.
+#[test]
+fn a_table_s_outputs_are_in_its_block_s_statistics() {
+    let mut m = Builder::new();
+    let classify = m.delay("classify", Dist::Constant(0.0));
+    parcels(&mut m, classify);
+    let sink = m.sink("out");
+    m.connect(classify, sink);
+    let model = with_table(
+        m.build(experiment()),
+        "classify",
+        decision(
+            "score",
+            HitPolicy::First,
+            "score",
+            &[(">= 10", "7"), ("-", "3")],
+        ),
+    );
+    assert_eq!(model.validate(), vec![]);
+    let r = run(&model);
+    let properties = r
+        .element("classify")
+        .map(|e| e.properties.clone())
+        .unwrap_or_default();
+    assert_eq!(properties.len(), 1, "{properties:?}");
+    assert_eq!(properties[0].0, "score");
+    let mean = properties[0].1.unwrap_or(f64::NAN);
+    assert!((mean - 5.8).abs() < 1e-12, "{mean}");
 }

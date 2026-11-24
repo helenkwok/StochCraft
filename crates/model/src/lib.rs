@@ -3734,6 +3734,19 @@ impl Model {
         )
     }
 
+    /// The ways out among `ways` ([`Model::decision_ways`]) that the output value `key` names: by
+    /// a way's flow id, the id of the block it leads to, or that block's name, compared exactly.
+    /// A valid model has each value its table can give name exactly one.
+    pub fn ways_named<'a>(
+        ways: &[(&'a Connection, Vec<String>)],
+        key: &str,
+    ) -> Vec<&'a Connection> {
+        ways.iter()
+            .filter(|(_, keys)| keys.iter().any(|k| k == key))
+            .map(|(c, _)| *c)
+            .collect()
+    }
+
     /// The output a gateway routed directly by its decision table routes by: the one its
     /// decision use names, else the table's only output; `Err` with the reason otherwise.
     pub fn route_output(u: &dmn::DecisionUse, table: &dmn::Compiled) -> Result<usize, String> {
@@ -3815,6 +3828,37 @@ impl Model {
                     ));
                 }
             }
+            // Each output must fit the property it writes: a string written into a boolean
+            // would read as true, and no rule testing for that string would match it again.
+            let whole = |j: usize| {
+                table.aggregation() == Some(dmn::Aggregation::Count)
+                    || table.output_values(j).iter().all(|v| match v {
+                        dmn::Literal::Number(x) => x.fract() == 0.0,
+                        _ => true,
+                    })
+            };
+            for (j, (name, kind)) in table.outputs().into_iter().enumerate() {
+                let Some(&ty) = types.get(name) else {
+                    continue;
+                };
+                let gives = match kind {
+                    Some(dmn::Kind::Number) if !ty.is_numeric() => "numbers",
+                    Some(dmn::Kind::Number) if ty == PropertyType::Long && !whole(j) => {
+                        "fractional numbers"
+                    }
+                    Some(dmn::Kind::Text)
+                        if !matches!(ty, PropertyType::String | PropertyType::DateTime) =>
+                    {
+                        "text"
+                    }
+                    Some(dmn::Kind::Boolean) if ty != PropertyType::Boolean => "true or false",
+                    _ => continue,
+                };
+                out.push(unusable(format!(
+                    "its output “{name}” gives {gives}, which the property “{name}”, of type {}, cannot hold.",
+                    ty.bpsim_name()
+                )));
+            }
             if let Some(ways) = self.decision_ways(id) {
                 match Self::route_output(u, &table) {
                     // An aggregation's value is not among the cells, so it is not checked here.
@@ -3822,14 +3866,18 @@ impl Model {
                     Ok(j) => {
                         for v in table.output_values(j) {
                             let key = v.text();
-                            if !ways.iter().any(|(_, keys)| keys.contains(&key)) {
-                                out.push(Diagnostic::error(
+                            match Self::ways_named(&ways, &key).len() {
+                                1 => {}
+                                0 => out.push(Diagnostic::error(
                                     Some(id),
                                     Problem::DecisionRoute {
                                         decision: label.clone(),
                                         value: key,
                                     },
-                                ));
+                                )),
+                                _ => out.push(unusable(format!(
+                                    "the output it routes by can give “{key}”, which names more than one of the gateway's ways out (a way's id, or the id or name of the block it leads to); make it name one."
+                                ))),
                             }
                         }
                     }
@@ -3841,7 +3889,7 @@ impl Model {
                 .iter()
                 .map(|n| types.get(*n) == Some(&PropertyType::Long))
                 .collect();
-            for f in table.check(&integer) {
+            for f in table.check_bound(&integer) {
                 out.push(match f {
                     dmn::Finding::Overlap {
                         first,

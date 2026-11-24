@@ -1461,7 +1461,7 @@ unit	yr	年
 	{block} uses the decision table “{decision}” of the file {file}, which it cannot use: {reason} Correct the table, or take it off the block.	{block} はファイル {file} の決定表「{decision}」を使っていますが、使えません: {reason} 表を直すか、ブロックから外してください。
 	{block} uses the decision table “{decision}”, whose rules {first} and {second} both match {example}, but under its hit policy Unique only one may. Change the rules so that only one matches, or choose another hit policy.	{block} は決定表「{decision}」を使っており、そのルール {first} と {second} がどちらも {example} に一致しますが、ヒットポリシー Unique では一つしか一致できません。一つだけが一致するようにルールを変えるか、別のヒットポリシーを選んでください。
 	{block} uses the decision table “{decision}”, in which no rule matches {example}, so such an entity gets no result there. Add a rule or a default output, if that is not intended.	{block} は決定表「{decision}」を使っていますが、どのルールも {example} に一致しないため、そのようなエンティティはそこで結果を得られません。意図したものでなければ、ルールか既定の出力を追加してください。
-	{block} routes by the decision table “{decision}”, which can give “{value}”, the name of none of its ways out. Make each output the name or id of a block the gateway leads to.	{block} は決定表「{decision}」で振り分けますが、表は「{value}」を返すことがあり、これはどの出口の名前でもありません。各出力を、ゲートウェイの行き先となるブロックの名前か ID にしてください。
+	{block} routes by the decision table “{decision}”, which can give “{value}”, the name of none of its ways out. Make each value of the output it routes by the id of a way out, or the id or name of a block it leads to.	{block} は決定表「{decision}」で振り分けますが、表は「{value}」を返すことがあり、これはどの出口の名前でもありません。振り分けに使う出力の各値を、出口の ID、または行き先となるブロックの ID か名前にしてください。
 	Decision table	決定表
 	Open decision table	決定表を開く
 	Hit policy	ヒットポリシー

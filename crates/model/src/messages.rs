@@ -488,7 +488,7 @@ pub const TEMPLATES: &[(&str, &str)] = &[
     ),
     (
         "decision_route",
-        "{block} routes by the decision table “{decision}”, which can give “{value}”, the name of none of its ways out. Make each output the name or id of a block the gateway leads to.",
+        "{block} routes by the decision table “{decision}”, which can give “{value}”, the name of none of its ways out. Make each value of the output it routes by the id of a way out, or the id or name of a block it leads to.",
     ),
     (
         "transport_pool_missing",

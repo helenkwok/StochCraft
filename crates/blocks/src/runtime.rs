@@ -67,11 +67,23 @@ impl Assigner {
                 };
                 d.table.properties(&read)
             };
-            for (to, v) in d.outputs.iter().zip(values.unwrap_or_default()) {
+            let mut s = stats.get(index).map(RefCell::borrow_mut);
+            for ((to, tally), v) in d
+                .outputs
+                .iter()
+                .zip(&d.tally)
+                .zip(values.unwrap_or_default())
+            {
                 if let Some((slot, ty)) = to
                     && let Some(p) = e.properties.get_mut(*slot)
                 {
                     *p = v.as_ref().and_then(|v| Held::of(v, *ty));
+                    if let (Some(s), Some(k), Some(x)) =
+                        (&mut s, tally, p.as_ref().and_then(Held::statistic))
+                        && let Some(t) = s.properties.get_mut(*k)
+                    {
+                        t.add(x);
+                    }
                 }
             }
         }
@@ -177,7 +189,7 @@ impl Compiled {
         let mut sim = Sim::new();
         let ctx = sim.ctx();
         let stats: Rc<Vec<RefCell<BlockStats>>> = Rc::new(
-            self.assigns
+            self.reported
                 .iter()
                 .map(|a| RefCell::new(BlockStats::new(0.0, a.len())))
                 .collect(),
@@ -1256,7 +1268,7 @@ impl Live<'_> {
             .elements
             .iter()
             .zip(self.stats.iter())
-            .zip(&self.compiled.assigns)
+            .zip(&self.compiled.reported)
             .zip(self.feeds_buffer.iter().zip(&self.feeds_transfer))
             .zip(&self.compiled.inputs)
             .map(|((((e, s), a), (&blocks, &transfers)), &inputs)| {
@@ -1819,7 +1831,7 @@ impl BlockStats {
     pub(crate) fn report(
         &self,
         element: &Element,
-        assigns: &[Assign],
+        properties: &[String],
         sends: Sends,
         join: bool,
         end: f64,
@@ -2156,10 +2168,10 @@ impl BlockStats {
             }),
             time_restarting: checked
                 .and_then(|(c, _)| self.states.restarting.average(end).map(|x| x / c)),
-            properties: assigns
+            properties: properties
                 .iter()
                 .zip(&self.properties)
-                .map(|(a, t)| (a.name.clone(), t.mean()))
+                .map(|(name, t)| (name.clone(), t.mean()))
                 .collect(),
             inside_at_start: self.inside_at_start,
             inside_at_end: self.inside(),

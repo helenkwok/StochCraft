@@ -1461,7 +1461,7 @@ unit	yr	年
 	{block} uses the decision table “{decision}” of the file {file}, which it cannot use: {reason} Correct the table, or take it off the block.	{block} 使用文件 {file} 中的决策表“{decision}”，但无法使用它：{reason} 请更正该表，或将它从块上移除。
 	{block} uses the decision table “{decision}”, whose rules {first} and {second} both match {example}, but under its hit policy Unique only one may. Change the rules so that only one matches, or choose another hit policy.	{block} 使用决策表“{decision}”，其规则 {first} 和 {second} 都匹配 {example}，但在其命中策略 Unique 下只能有一条匹配。请修改规则使只有一条匹配，或选择其他命中策略。
 	{block} uses the decision table “{decision}”, in which no rule matches {example}, so such an entity gets no result there. Add a rule or a default output, if that is not intended.	{block} 使用决策表“{decision}”，其中没有规则匹配 {example}，因此这样的实体在那里得不到结果。如非有意，请添加规则或默认输出。
-	{block} routes by the decision table “{decision}”, which can give “{value}”, the name of none of its ways out. Make each output the name or id of a block the gateway leads to.	{block} 按决策表“{decision}”分流，该表可能给出“{value}”，这不是它任何出口的名称。请让每个输出都是网关通往的某个块的名称或 id。
+	{block} routes by the decision table “{decision}”, which can give “{value}”, the name of none of its ways out. Make each value of the output it routes by the id of a way out, or the id or name of a block it leads to.	{block} 按决策表“{decision}”分流，该表可能给出“{value}”，这不是它任何出口的名称。请让用于分流的输出的每个值都是某个出口的 id，或它通往的某个块的 id 或名称。
 	Decision table	决策表
 	Open decision table	打开决策表
 	Hit policy	命中策略
