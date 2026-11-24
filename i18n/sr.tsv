@@ -1487,3 +1487,9 @@ connection	Flow	Ток
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	Блок {block} је постављен на {s} дуж транспортера {conveyor}, чија је путања дугачка {length}. Поставите га између 0 и {length} дуж путање.
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	Ентитети на транспортеру {conveyor} стижу до {before} пре {block}, али је {block} постављен ближе почетку ({s} дуж њега, {before} на {before_s}). Поставите {block} даље дуж путање него {before} или их замените у токовима.
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	Прелазак преко споја на току {flow} траје {time}. Поставите његово време преноса на 0 или више.
+	Search examples	Претражи примере
+	Clear search	Обриши претрагу
+	Logistics and warehousing	Логистика и складиштење
+	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	Сортирање поштанских пакета: петља пуни четири траке према производу, а скретнице шаљу пакет на нови круг када је његова трака пуна.
+	How many parcels go round the loop because their lane is full?	Колико пакета иде на нови круг петље јер им је трака пуна?
+	Conveyors and diverts: parcels sent round the loop when their lane is full.	Транспортери и скретнице: пакети иду на нови круг петље када им је трака пуна.

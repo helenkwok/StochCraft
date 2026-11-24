@@ -1487,3 +1487,9 @@ connection	Flow	प्रवाह
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	{block} को कन्वेयर {conveyor} के रास्ते पर {s} की दूरी पर रखा गया है, जबकि उसका रास्ता केवल {length} लंबा है। उसे रास्ते पर 0 और {length} के बीच रखें।
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	कन्वेयर {conveyor} पर इकाइयाँ {block} से पहले {before} तक पहुँचती हैं, पर {block} को शुरुआत के अधिक पास रखा गया है (रास्ते पर {s}, जबकि {before} {before_s} पर है)। {block} को रास्ते पर {before} से आगे रखें, या प्रवाहों में उनकी अदला-बदली करें।
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	प्रवाह {flow} पर जंक्शन को पार करने में {time} लगता है। उसका स्थानांतरण समय 0 या अधिक रखें।
+	Search examples	उदाहरण खोजें
+	Clear search	खोज साफ़ करें
+	Logistics and warehousing	लॉजिस्टिक्स और भंडारण
+	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	डाक पार्सल छँटाई: एक लूप उत्पाद के अनुसार चार लेनों में पार्सल भेजता है, और लेन भरी होने पर डाइवर्ट पार्सल को फिर से चक्कर पर भेजते हैं।
+	How many parcels go round the loop because their lane is full?	लेन भरी होने के कारण कितने पार्सल लूप का फिर से चक्कर लगाते हैं?
+	Conveyors and diverts: parcels sent round the loop when their lane is full.	कन्वेयर और डाइवर्ट: लेन भरी होने पर पार्सल लूप का फिर से चक्कर लगाते हैं।

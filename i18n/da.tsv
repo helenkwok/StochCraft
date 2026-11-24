@@ -1487,3 +1487,9 @@ connection	Flow	Flow
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	{block} er placeret {s} langs transportbåndet {conveyor}, hvis bane er {length} lang. Placer den mellem 0 og {length} langs banen.
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	Enheder på transportbåndet {conveyor} når {before} før {block}, men {block} er placeret tættere på starten ({s} langs det, {before} ved {before_s}). Placer {block} længere ude ad banen end {before}, eller byt dem om i flowene.
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	Overgangen på flowet {flow} tager {time} at passere. Sæt dens overførselstid til 0 eller mere.
+	Search examples	Søg i eksempler
+	Clear search	Ryd søgning
+	Logistics and warehousing	Logistik og lager
+	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	Sortering af postpakker: en sløjfe fører pakker til fire baner efter produkt, og omstyringer sender en pakke en runde til, når dens bane er fuld.
+	How many parcels go round the loop because their lane is full?	Hvor mange pakker kører en runde til i sløjfen, fordi deres bane er fuld?
+	Conveyors and diverts: parcels sent round the loop when their lane is full.	Transportbånd og omstyringer: pakker sendt en runde til i sløjfen, når deres bane er fuld.

@@ -1487,3 +1487,9 @@ connection	Flow	Flusso
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	{block} è posizionato a {s} lungo il nastro trasportatore {conveyor}, il cui percorso è lungo {length}. Posizionalo tra 0 e {length} lungo il percorso.
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	Le entità sul nastro trasportatore {conveyor} raggiungono {before} prima di {block}, ma {block} è posizionato più vicino all'inizio ({s} lungo il nastro, {before} a {before_s}). Posiziona {block} più avanti lungo il percorso rispetto a {before}, oppure scambiali nei flussi.
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	La giunzione sul flusso {flow} richiede {time} per essere attraversata. Imposta il suo tempo di trasferimento a 0 o più.
+	Search examples	Cerca negli esempi
+	Clear search	Cancella la ricerca
+	Logistics and warehousing	Logistica e magazzino
+	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	Smistamento di pacchi postali: un anello alimenta quattro corsie per prodotto, e i deviatori rimandano un pacco per un altro giro quando la sua corsia è piena.
+	How many parcels go round the loop because their lane is full?	Quanti pacchi fanno un altro giro dell'anello perché la loro corsia è piena?
+	Conveyors and diverts: parcels sent round the loop when their lane is full.	Nastri trasportatori e deviatori: pacchi rimandati per un altro giro quando la loro corsia è piena.

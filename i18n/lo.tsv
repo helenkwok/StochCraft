@@ -1487,3 +1487,9 @@ connection	Flow	ເສັ້ນທາງ
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	{block} ຖືກວາງຢູ່ທີ່ {s} ຕາມສາຍພານລຳລຽງ {conveyor} ເຊິ່ງເສັ້ນທາງຍາວ {length} ໃຫ້ວາງມັນລະຫວ່າງ 0 ຫາ {length} ຕາມເສັ້ນທາງ
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	ເອນທິຕີເທິງສາຍພານລຳລຽງ {conveyor} ໄປຮອດ {before} ກ່ອນ {block} ແຕ່ {block} ຖືກວາງໃກ້ຈຸດເລີ່ມຕົ້ນກວ່າ ({s} ຕາມສາຍພານ, {before} ຢູ່ທີ່ {before_s}) ໃຫ້ວາງ {block} ໄປຕາມເສັ້ນທາງໄກກວ່າ {before} ຫຼື ສະຫຼັບກັນໃນເສັ້ນທາງ
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	ຈຸດເຊື່ອມຕໍ່ຢູ່ເສັ້ນທາງ {flow} ໃຊ້ເວລາ {time} ເພື່ອຂ້າມ ໃຫ້ຕັ້ງເວລາຂົນຍ້າຍຂອງມັນເປັນ 0 ຫຼືຫຼາຍກວ່າ
+	Search examples	ຊອກຫາຕົວຢ່າງ
+	Clear search	ລ້າງການຊອກຫາ
+	Logistics and warehousing	ໂລຈິສຕິກ ແລະ ສາງສິນຄ້າ
+	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	ການຄັດແຍກພັດສະດຸໄປສະນີ: ວົງຮອບປ້ອນພັດສະດຸເຂົ້າສີ່ຊ່ອງຕາມສິນຄ້າ ແລະ ຕົວປ່ຽນທາງສົ່ງພັດສະດຸໄປອີກຮອບເມື່ອຊ່ອງຂອງມັນເຕັມ.
+	How many parcels go round the loop because their lane is full?	ມີພັດສະດຸຈັກອັນທີ່ວຽນອີກຮອບເພາະຊ່ອງຂອງມັນເຕັມ?
+	Conveyors and diverts: parcels sent round the loop when their lane is full.	ສາຍພານລຳລຽງ ແລະ ຕົວປ່ຽນທາງ: ພັດສະດຸວຽນອີກຮອບເມື່ອຊ່ອງຂອງມັນເຕັມ.

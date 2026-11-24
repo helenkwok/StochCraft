@@ -1487,3 +1487,9 @@ connection	Flow	フロー
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	{block} はコンベヤ {conveyor} に沿って {s} の位置に置かれていますが、その経路の長さは {length} です。経路に沿って 0 から {length} の間に配置してください。
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	コンベヤ {conveyor} 上のエンティティは {block} より先に {before} に到達しますが、{block} はより始点に近い位置（コンベヤに沿って {s}、{before} は {before_s}）に置かれています。{block} を経路上で {before} より先に配置するか、フローで入れ替えてください。
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	フロー {flow} 上の接合部の通過に {time} かかります。搬送時間を 0 以上にしてください。
+	Search examples	例を検索
+	Clear search	検索をクリア
+	Logistics and warehousing	物流・倉庫
+	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	郵便小包の仕分け：ループが製品別の4つのレーンに小包を送り、レーンが満杯のときは分岐装置が小包をもう一周させます。
+	How many parcels go round the loop because their lane is full?	レーンが満杯のためにループをもう一周する小包はいくつですか？
+	Conveyors and diverts: parcels sent round the loop when their lane is full.	コンベヤと分岐装置：レーンが満杯の小包はループをもう一周します。

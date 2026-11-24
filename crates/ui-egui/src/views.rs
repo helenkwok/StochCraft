@@ -567,7 +567,14 @@ impl App {
 
     /// The start page, for an empty model not being built: examples by question, and ways in.
     pub(crate) fn start_page(&mut self, ui: &mut egui::Ui) {
-        let cards: Vec<&start::Card> = EXAMPLES.iter().map(|e| &e.card).collect();
+        let cards: Vec<start::Item> = EXAMPLES
+            .iter()
+            .map(|e| start::Item {
+                title: e.title,
+                about: e.about,
+                card: &e.card,
+            })
+            .collect();
         let recent: Vec<String> = self
             .recent
             .iter()

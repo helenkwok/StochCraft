@@ -1487,3 +1487,9 @@ connection	Flow	Ағын
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	{block} блогы {conveyor} конвейері бойымен {s} қашықтыққа орналастырылған, ал оның жолының ұзындығы {length}. Оны жол бойымен 0 мен {length} аралығына орналастырыңыз.
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	{conveyor} конвейеріндегі нысандар {before} блогына {block} блогынан бұрын жетеді, бірақ {block} басына жақынырақ орналастырылған (оның бойымен {s}, {before} {before_s} жерінде). {block} блогын жол бойымен {before} блогынан әрі қарай орналастырыңыз немесе оларды ағындарда ауыстырыңыз.
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	{flow} ағынындағы түйіспеден өту {time} алады. Тасымалдау уақытын 0 немесе одан көп етіңіз.
+	Search examples	Мысалдардан іздеу
+	Clear search	Іздеуді тазарту
+	Logistics and warehousing	Логистика және қойма
+	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	Пошта сәлемдемелерін сұрыптау: айналма конвейер өнім бойынша төрт жолақты толтырады, ал бұрғыштар жолағы толы сәлемдемені тағы бір айналымға жібереді.
+	How many parcels go round the loop because their lane is full?	Жолағы толы болғандықтан қанша сәлемдеме тағы бір айналым жасайды?
+	Conveyors and diverts: parcels sent round the loop when their lane is full.	Конвейерлер мен бұрғыштар: жолағы толы сәлемдемелер тағы бір айналым жасайды.

@@ -1487,3 +1487,9 @@ connection	Flow	Przepływ
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	Blok {block} jest umieszczony {s} wzdłuż przenośnika {conveyor}, którego ścieżka ma długość {length}. Umieść go między 0 a {length} wzdłuż ścieżki.
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	Jednostki na przenośniku {conveyor} docierają do {before} przed {block}, ale {block} jest umieszczony bliżej początku ({s} wzdłuż niego, {before} przy {before_s}). Umieść {block} dalej na ścieżce niż {before} albo zamień je miejscami w przepływach.
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	Złącze na przepływie {flow} przekracza się w czasie {time}. Ustaw jego czas transferu na 0 lub więcej.
+	Search examples	Szukaj w przykładach
+	Clear search	Wyczyść wyszukiwanie
+	Logistics and warehousing	Logistyka i magazynowanie
+	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	Sortowanie paczek pocztowych: pętla zasila cztery tory według produktu, a zwrotnice wysyłają paczkę na kolejne okrążenie, gdy jej tor jest pełny.
+	How many parcels go round the loop because their lane is full?	Ile paczek robi kolejne okrążenie pętli, bo ich tor jest pełny?
+	Conveyors and diverts: parcels sent round the loop when their lane is full.	Przenośniki i zwrotnice: paczki robią kolejne okrążenie pętli, gdy ich tor jest pełny.

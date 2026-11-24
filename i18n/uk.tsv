@@ -1487,3 +1487,9 @@ connection	Flow	Потік
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	Блок {block} розміщено на відстані {s} уздовж конвеєра {conveyor}, шлях якого має довжину {length}. Розмістіть його між 0 і {length} уздовж шляху.
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	Сутності на конвеєрі {conveyor} доходять до {before} раніше, ніж до {block}, але {block} розміщено ближче до початку ({s} уздовж нього, {before} на {before_s}). Розмістіть {block} далі шляхом, ніж {before}, або поміняйте їх місцями в потоках.
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	Стик на потоці {flow} проходиться за {time}. Задайте час передачі 0 або більше.
+	Search examples	Пошук у прикладах
+	Clear search	Очистити пошук
+	Logistics and warehousing	Логістика і склад
+	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	Сортування поштових посилок: кільцевий конвеєр подає посилки на чотири лінії за продуктом, а відвідники відправляють посилку на нове коло, коли її лінія заповнена.
+	How many parcels go round the loop because their lane is full?	Скільки посилок іде на нове коло, бо їхня лінія заповнена?
+	Conveyors and diverts: parcels sent round the loop when their lane is full.	Конвеєри й відвідники: посилки йдуть на нове коло, коли їхня лінія заповнена.

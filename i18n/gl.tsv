@@ -1487,3 +1487,9 @@ connection	Flow	Fluxo
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	{block} está colocado a {s} ao longo da cinta transportadora {conveyor}, cuxo trazado mide {length}. Colóqueo entre 0 e {length} ao longo do trazado.
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	As entidades da cinta transportadora {conveyor} chegan a {before} antes ca a {block}, pero {block} está colocado máis preto do inicio ({s} ao longo dela, {before} a {before_s}). Coloque {block} máis adiante no trazado ca {before} ou intercámbieos nos fluxos.
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	A unión no fluxo {flow} tarda {time} en cruzarse. Faga que o seu tempo de transferencia sexa 0 ou máis.
+	Search examples	Buscar nos exemplos
+	Clear search	Borrar a busca
+	Logistics and warehousing	Loxística e almacenaxe
+	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	Clasificación de paquetes postais: un circuíto alimenta catro carrís por produto, e os desviadores fan dar outra volta a un paquete cando o seu carril está cheo.
+	How many parcels go round the loop because their lane is full?	Cantos paquetes dan outra volta ao circuíto porque o seu carril está cheo?
+	Conveyors and diverts: parcels sent round the loop when their lane is full.	Cintas transportadoras e desviadores: paquetes que dan outra volta ao circuíto cando o seu carril está cheo.

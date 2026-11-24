@@ -1487,3 +1487,9 @@ connection	Flow	Srautas
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	Blokas {block} yra pastatytas {s} atstumu išilgai konvejerio {conveyor}, kurio kelias yra {length} ilgio. Pastatykite jį tarp 0 ir {length} išilgai kelio.
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	Objektai ant konvejerio {conveyor} pasiekia {before} anksčiau nei {block}, bet {block} yra pastatytas arčiau pradžios ({s} išilgai jo, {before} ties {before_s}). Pastatykite {block} toliau keliu nei {before} arba sukeiskite juos srautuose.
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	Sandūra sraute {flow} kertama per {time}. Padarykite jos perdavimo laiką 0 arba didesnį.
+	Search examples	Ieškoti pavyzdžiuose
+	Clear search	Išvalyti paiešką
+	Logistics and warehousing	Logistika ir sandėliavimas
+	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	Pašto siuntų rūšiavimas: žiedas tiekia keturias juostas pagal produktą, o nukreipikliai siunčia siuntą dar vienam ratui, kai jos juosta pilna.
+	How many parcels go round the loop because their lane is full?	Kiek siuntų važiuoja dar vieną ratą, nes jų juosta pilna?
+	Conveyors and diverts: parcels sent round the loop when their lane is full.	Konvejeriai ir nukreipikliai: siuntos važiuoja dar vieną ratą, kai jų juosta pilna.
