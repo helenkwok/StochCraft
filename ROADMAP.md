@@ -3911,8 +3911,10 @@ straight to its divert point needs L5's points along a section). U1, the run bar
 with a reset per field, one undo step each; a model opened in a scenario that inherits from
 another is measured against that scenario instead; a selected flow has its own page; and
 several selected blocks show the parameters they share, values that differ marked as mixed,
-an edit to all of them one undo step. Left from U2: units typed with the value, and the
-experiment fields and connections table leaving the model page (with U5).
+an edit to all of them one undo step. Left from U2: collapsible groups for the parameters,
+flows and shared properties (the folds below them already collapse), units typed with the
+value, a scenario picker in the window, and the experiment fields and connections table
+leaving the model page (with U5).
 
 #### Sources
 
