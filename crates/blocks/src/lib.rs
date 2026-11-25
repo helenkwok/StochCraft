@@ -186,23 +186,21 @@ fn decision_conditions(model: &Model, gateway: &ElementId) -> Option<Vec<(Elemen
     let (d, table) = model.decision_table(u).ok()?;
     let j = Model::route_output(u, &table).ok()?;
     let output = d.output_name(j);
-    // The values the output can give, each with its text: the table's own; for an aggregation
-    // (which can give any number), the ways' names that are numbers.
-    let values: Vec<(Literal, String)> = if table.aggregation().is_some() {
-        ways.iter()
-            .flat_map(|(_, keys)| keys.iter())
-            .filter_map(|k| {
-                let x = k.trim().parse::<f64>().ok().filter(|x| x.is_finite())?;
-                Some((Literal::Number(x), k.clone()))
-            })
+    // The values the output can give, each with the ways out it names: the table's own, by
+    // their text; for an aggregation (which can give any number), the numbers the ways' names
+    // read as, compared as numbers (as validation compares them).
+    let values: Vec<(Literal, Vec<&Connection>)> = if table.aggregation().is_some() {
+        Model::ways_by_number(&ways)
+            .into_iter()
+            .map(|(x, _, named)| (Literal::Number(x), named))
             .collect()
     } else {
         table
             .output_values(j)
             .into_iter()
             .map(|v| {
-                let key = v.text();
-                (v, key)
+                let named = Model::ways_named(&ways, &v.text());
+                (v, named)
             })
             .collect()
     };
@@ -211,9 +209,7 @@ fn decision_conditions(model: &Model, gateway: &ElementId) -> Option<Vec<(Elemen
             .map(|(c, _)| {
                 let condition = values
                     .iter()
-                    .filter(|(_, key)| {
-                        matches!(Model::ways_named(&ways, key).as_slice(), [only] if only.id == c.id)
-                    })
+                    .filter(|(_, named)| matches!(named.as_slice(), [only] if only.id == c.id))
                     .map(|(v, _)| equals(&output, v))
                     .reduce(|a, b| expr::Expr::Binary(expr::BinOp::Or, Box::new(a), Box::new(b)))
                     .unwrap_or_else(|| expr::Expr::Call(expr::Func::False, Vec::new()));

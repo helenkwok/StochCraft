@@ -3747,6 +3747,32 @@ impl Model {
             .collect()
     }
 
+    /// The numbers among the names of `ways` ([`Model::decision_ways`]), for a table whose
+    /// aggregation gives a number that is not among its cells: each number once, with the name
+    /// it was first written as and the ways out a name of which reads as it. Names are compared
+    /// as numbers, so `1` and `1.0` name the same number; a valid model has each name one way.
+    pub fn ways_by_number<'a>(
+        ways: &[(&'a Connection, Vec<String>)],
+    ) -> Vec<(f64, String, Vec<&'a Connection>)> {
+        let mut out: Vec<(f64, String, Vec<&'a Connection>)> = Vec::new();
+        for (c, keys) in ways {
+            for k in keys {
+                let Some(x) = k.trim().parse::<f64>().ok().filter(|x| x.is_finite()) else {
+                    continue;
+                };
+                match out.iter_mut().find(|(y, _, _)| *y == x) {
+                    Some((_, _, named)) => {
+                        if !named.iter().any(|d| d.id == c.id) {
+                            named.push(c);
+                        }
+                    }
+                    None => out.push((x, k.clone(), vec![*c])),
+                }
+            }
+        }
+        out
+    }
+
     /// The output a gateway routed directly by its decision table routes by: the one its
     /// decision use names, else the table's only output; `Err` with the reason otherwise.
     pub fn route_output(u: &dmn::DecisionUse, table: &dmn::Compiled) -> Result<usize, String> {
@@ -3830,39 +3856,66 @@ impl Model {
             }
             // Each output must fit the property it writes: a string written into a boolean
             // would read as true, and no rule testing for that string would match it again.
-            let whole = |j: usize| {
-                table.aggregation() == Some(dmn::Aggregation::Count)
-                    || table.output_values(j).iter().all(|v| match v {
-                        dmn::Literal::Number(x) => x.fract() == 0.0,
-                        _ => true,
-                    })
+            let whole = |vs: &[dmn::Literal]| {
+                vs.iter().all(|v| match v {
+                    dmn::Literal::Number(x) => x.fract() == 0.0,
+                    _ => true,
+                })
+            };
+            // What values of `kind` (all whole numbers, or not) give that the property's type
+            // `ty` cannot hold, if anything.
+            let misfit = |kind: Option<dmn::Kind>, whole: bool, ty: PropertyType| match kind {
+                Some(dmn::Kind::Number) if !ty.is_numeric() => Some("numbers"),
+                Some(dmn::Kind::Number) if ty == PropertyType::Long && !whole => {
+                    Some("fractional numbers")
+                }
+                Some(dmn::Kind::Text)
+                    if !matches!(ty, PropertyType::String | PropertyType::DateTime) =>
+                {
+                    Some("text")
+                }
+                Some(dmn::Kind::Boolean) if ty != PropertyType::Boolean => Some("true or false"),
+                _ => None,
             };
             for (j, (name, kind)) in table.outputs().into_iter().enumerate() {
                 let Some(&ty) = types.get(name) else {
                     continue;
                 };
-                let gives = match kind {
-                    Some(dmn::Kind::Number) if !ty.is_numeric() => "numbers",
-                    Some(dmn::Kind::Number) if ty == PropertyType::Long && !whole(j) => {
-                        "fractional numbers"
-                    }
-                    Some(dmn::Kind::Text)
-                        if !matches!(ty, PropertyType::String | PropertyType::DateTime) =>
-                    {
-                        "text"
-                    }
-                    Some(dmn::Kind::Boolean) if ty != PropertyType::Boolean => "true or false",
-                    _ => continue,
-                };
-                out.push(unusable(format!(
-                    "its output “{name}” gives {gives}, which the property “{name}”, of type {}, cannot hold.",
-                    ty.bpsim_name()
-                )));
+                // An aggregation's result: COUNT is always whole; SUM, MIN and MAX of the cells.
+                let cells = table.aggregation() == Some(dmn::Aggregation::Count)
+                    || whole(&table.output_values(j));
+                if let Some(gives) = misfit(kind, cells, ty) {
+                    out.push(unusable(format!(
+                        "its output “{name}” gives {gives}, which the property “{name}”, of type {}, cannot hold.",
+                        ty.bpsim_name()
+                    )));
+                    continue;
+                }
+                // With an aggregation, the default is given as it is when no rule matches, not
+                // aggregated, so it is checked on its own.
+                if table.aggregation().is_some()
+                    && let Some(d) = table.default_value(j)
+                    && let Some(gives) = misfit(Some(d.kind()), whole(std::slice::from_ref(d)), ty)
+                {
+                    out.push(unusable(format!(
+                        "its output “{name}” gives {gives} by default, when no rule matches, which the property “{name}”, of type {}, cannot hold.",
+                        ty.bpsim_name()
+                    )));
+                }
             }
             if let Some(ways) = self.decision_ways(id) {
                 match Self::route_output(u, &table) {
-                    // An aggregation's value is not among the cells, so it is not checked here.
-                    Ok(_) if table.aggregation().is_some() => {}
+                    // An aggregation's value is not among the cells: the numbers the ways are
+                    // named by are what it can route to, compared as routing compares them.
+                    Ok(_) if table.aggregation().is_some() => {
+                        for (_, key, named) in Self::ways_by_number(&ways) {
+                            if named.len() > 1 {
+                                out.push(unusable(format!(
+                                    "its aggregation can give {key}, which names more than one of the gateway's ways out (a way's id, or the id or name of the block it leads to, read as a number: 1 and 1.0 are the same); make each number name one."
+                                )));
+                            }
+                        }
+                    }
                     Ok(j) => {
                         for v in table.output_values(j) {
                             let key = v.text();

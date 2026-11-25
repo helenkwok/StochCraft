@@ -340,6 +340,80 @@ fn a_value_that_names_two_ways_is_an_error() {
     assert!(ds[0].to_string().contains("more than one"), "{}", ds[0]);
 }
 
+/// A count routes to the way whose name reads as that number, compared as numbers, as routing
+/// compares them: ways named `1` and `1.0` both name 1, which is an error, not a choice made by
+/// the order of the ways.
+#[test]
+fn a_count_that_names_two_ways_as_numbers_is_an_error() {
+    let mut m = Builder::new();
+    let split = m.exclusive("split");
+    parcels(&mut m, split);
+    let (one, two) = (m.sink("one"), m.sink("two"));
+    m.connect(split, one);
+    m.connect(split, two);
+    let mut d = decision(
+        "count",
+        HitPolicy::Collect,
+        "matches",
+        &[("> 0", "1"), ("> 10", "1")],
+    );
+    d.table.aggregation = Some(stochcraft_model::dmn::Aggregation::Count);
+    let mut model = with_table(m.build(experiment()), "split", d);
+    // Named "1.0" and "2": routed as 1 and 2.
+    name(&mut model, "one", "1.0");
+    name(&mut model, "two", "2");
+    assert_eq!(model.validate(), vec![]);
+    let r = run(&model);
+    assert_eq!(entered(&r, "one"), 30);
+    assert_eq!(entered(&r, "two"), 70);
+    // Named "1.0" and "1": both name 1.
+    name(&mut model, "two", "1");
+    let ds = model.validate();
+    assert_eq!(ds.len(), 1, "{ds:?}");
+    assert_eq!(ds[0].problem.code(), "decision_unusable");
+    assert!(ds[0].to_string().contains("more than one"), "{}", ds[0]);
+    assert!(compile(&model).is_err());
+}
+
+/// With an aggregation, a table gives its default as it is when no rule matches, so the default
+/// must fit the property too: a COUNT into a whole-number property takes a default of 2, but not
+/// 1.5 (which would be rounded) or text.
+#[test]
+fn an_aggregation_s_default_must_fit_its_property_s_type() {
+    let mut m = Builder::new();
+    let classify = m.delay("classify", Dist::Constant(0.0));
+    parcels(&mut m, classify);
+    let start = m.source("start", Dist::Constant(1.0), Some(1));
+    m.property(
+        start,
+        "matches",
+        Some(stochcraft_model::PropertyType::Long),
+        PropertyValue::Number(0.0),
+    );
+    m.connect(start, classify);
+    let sink = m.sink("out");
+    m.connect(classify, sink);
+    let mut d = decision(
+        "count",
+        HitPolicy::Collect,
+        "matches",
+        &[("> 0", "1"), ("> 10", "1")],
+    );
+    d.table.aggregation = Some(stochcraft_model::dmn::Aggregation::Count);
+    d.table.outputs[0].default = Some("2".into());
+    let model = with_table(m.build(experiment()), "classify", d);
+    assert_eq!(model.validate(), vec![]);
+    for default in ["1.5", "\"none\""] {
+        let mut bad = model.clone();
+        if let Some(t) = bad.dmn.get_mut(FILE).map(|f| &mut f.decisions[0].table) {
+            t.outputs[0].default = Some(default.into());
+        }
+        let ds = bad.validate();
+        let codes: Vec<&str> = ds.iter().map(|d| d.problem.code()).collect();
+        assert_eq!(codes, vec!["decision_unusable"], "{default}: {ds:?}");
+    }
+}
+
 /// A table writing text into a property declared boolean is an error: the text would be held as
 /// true, and a later test for that text would never match.
 #[test]

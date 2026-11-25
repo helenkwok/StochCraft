@@ -1183,6 +1183,12 @@ impl Compiled {
         out
     }
 
+    /// Output `j`'s default (DMN's default output entry), given when no rule matches, before any
+    /// aggregation: a COLLECT table with an aggregation gives it as it is.
+    pub fn default_value(&self, j: usize) -> Option<&Literal> {
+        self.outputs.get(j)?.default.as_ref()
+    }
+
     /// Whether the table has a default output, so that every input gets a result.
     pub fn has_default(&self) -> bool {
         self.outputs.iter().any(|o| o.default.is_some())
