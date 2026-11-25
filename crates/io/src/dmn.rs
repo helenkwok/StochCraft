@@ -727,7 +727,7 @@ impl Patch<'_> {
     fn set_text(&self, c: &mut Element, text: &str) {
         match c.child_mut(&[self.ns], "text") {
             Some(t) => t.children = vec![Node::Text(xml::escape(text))],
-            None => c.push(el(self.prefix, "text").with_text(text)),
+            None => c.push(el(&prefix_of(c), "text").with_text(text)),
         }
     }
 
@@ -882,13 +882,20 @@ impl Patch<'_> {
     }
 
     fn input(&self, e: &mut Element, old: &Input, new: &Input, fallback: &str) {
+        // New children are named with `e`'s own prefix, which is bound to DMN's namespace
+        // where `e` is (the table's may be bound to another there).
+        let own = prefix_of(e);
+        let this = Patch {
+            ns: self.ns,
+            prefix: &own,
+        };
         set_changed(e, "id", old.id.as_deref(), new.id.as_deref());
         set_changed(e, "label", old.label.as_deref(), new.label.as_deref());
         let indent = closing_indent(e).unwrap_or_else(|| fallback.to_owned());
         let (mut parts, slots) = self.split(e, &["inputExpression", "inputValues"]);
         let first =
             |parts: &mut [Vec<Option<Element>>], k: usize| parts.get_mut(k)?.first_mut()?.take();
-        let (mut x, x_same) = self.optional(
+        let (mut x, x_same) = this.optional(
             first(parts.as_mut_slice(), 0),
             "inputExpression",
             Some(old.expression.as_str()),
@@ -902,7 +909,7 @@ impl Patch<'_> {
                 new.type_ref.as_deref(),
             );
         }
-        let (values, values_same) = self.optional(
+        let (values, values_same) = this.optional(
             first(parts.as_mut_slice(), 1),
             "inputValues",
             old.values.as_deref(),
@@ -912,6 +919,13 @@ impl Patch<'_> {
     }
 
     fn output(&self, e: &mut Element, old: &Output, new: &Output, fallback: &str) {
+        // New children are named with `e`'s own prefix, which is bound to DMN's namespace
+        // where `e` is (the table's may be bound to another there).
+        let own = prefix_of(e);
+        let this = Patch {
+            ns: self.ns,
+            prefix: &own,
+        };
         set_changed(e, "id", old.id.as_deref(), new.id.as_deref());
         set_changed(e, "label", old.label.as_deref(), new.label.as_deref());
         set_changed(e, "name", old.name.as_deref(), new.name.as_deref());
@@ -925,13 +939,13 @@ impl Patch<'_> {
         let (mut parts, slots) = self.split(e, &["outputValues", "defaultOutputEntry"]);
         let first =
             |parts: &mut [Vec<Option<Element>>], k: usize| parts.get_mut(k)?.first_mut()?.take();
-        let (values, values_same) = self.optional(
+        let (values, values_same) = this.optional(
             first(parts.as_mut_slice(), 0),
             "outputValues",
             old.values.as_deref(),
             new.values.as_deref(),
         );
-        let (default, default_same) = self.optional(
+        let (default, default_same) = this.optional(
             first(parts.as_mut_slice(), 1),
             "defaultOutputEntry",
             old.default.as_deref(),
@@ -957,6 +971,13 @@ impl Patch<'_> {
         columns: &[&[Option<usize>]; 3],
         fallback: &str,
     ) {
+        // New children are named with `e`'s own prefix, which is bound to DMN's namespace
+        // where `e` is (the table's may be bound to another there).
+        let own = prefix_of(e);
+        let this = Patch {
+            ns: self.ns,
+            prefix: &own,
+        };
         set_changed(e, "id", old.id.as_deref(), new.id.as_deref());
         let indent = closing_indent(e).unwrap_or_else(|| fallback.to_owned());
         let kinds = ["inputEntry", "outputEntry", "annotationEntry"];
@@ -976,7 +997,7 @@ impl Patch<'_> {
             }
             (None, Some(text)) => {
                 same = false;
-                vec![el(self.prefix, "description").with_text(text)]
+                vec![el(this.prefix, "description").with_text(text)]
             }
             (None, None) => Vec::new(),
         };
@@ -999,17 +1020,26 @@ impl Patch<'_> {
                         match kept {
                             Some((i, mut c)) => {
                                 if was.get(i) != Some(text) {
-                                    self.set_text(&mut c, text);
+                                    this.set_text(&mut c, text);
                                 }
                                 c
                             }
-                            None => texted(self.prefix, local, text),
+                            None => texted(this.prefix, local, text),
                         }
                     })
                     .collect(),
             );
         }
         Self::put(e, slots, built, same, 1, &indent);
+    }
+}
+
+/// The prefix to name a new child of `e`, an element of DMN's namespace, with: `e`'s own (with
+/// its colon), which is bound to that namespace where `e` is.
+fn prefix_of(e: &Element) -> String {
+    match e.prefix() {
+        "" => String::new(),
+        p => format!("{p}:"),
     }
 }
 
@@ -1368,6 +1398,51 @@ mod tests {
             String::from_utf8_lossy(&bytes),
             FILE.replace("&lt; 10", "&lt; 12")
         );
+    }
+
+    /// A column or rule kept from the file may name DMN's namespace with a prefix of its own and
+    /// bind the table's prefix to another namespace: what is added inside it takes its prefix.
+    #[test]
+    fn what_is_added_inside_a_kept_element_is_in_dmn_s_namespace() {
+        let other =
+            "xmlns:d=\"https://www.omg.org/spec/DMN/20240513/MODEL/\" xmlns:dmn=\"urn:other\"";
+        let file = FILE
+            .replace(
+                r#"<dmn:output id="o1"/>"#,
+                &format!(r#"<d:output {other} id="o1"/>"#),
+            )
+            .replace(
+                "<dmn:rule id=\"r_rest\">
+        <dmn:inputEntry><dmn:text>-</dmn:text></dmn:inputEntry>
+        <dmn:outputEntry><dmn:text>\"large\"</dmn:text></dmn:outputEntry>
+        <dmn:annotationEntry><dmn:text></dmn:text></dmn:annotationEntry>
+      </dmn:rule>",
+                &format!(
+                    "<d:rule {other} id=\"r_rest\">
+        <d:inputEntry><d:text>-</d:text></d:inputEntry>
+        <d:outputEntry><d:text>\"large\"</d:text></d:outputEntry>
+        <d:annotationEntry><d:text></d:text></d:annotationEntry>
+      </d:rule>"
+                ),
+            );
+        let before = read(&file);
+        assert_eq!(before, read(FILE));
+        let mut after = before.clone();
+        after.decisions[0].table.outputs[0].default = Some("\"none\"".into());
+        after.decisions[0].table.rules[1].description = Some("the rest".into());
+        let bytes = save_dmn(file.as_bytes(), &before, &after).unwrap_or_else(|e| panic!("{e}"));
+        let text = String::from_utf8_lossy(&bytes);
+        assert!(text.contains("<d:defaultOutputEntry>"), "{text}");
+        assert!(
+            text.contains("<d:description>the rest</d:description>"),
+            "{text}"
+        );
+        // The declarations are as they were.
+        assert!(
+            text.contains(&format!(r#"<d:output {other} id="o1">"#)),
+            "{text}"
+        );
+        assert_eq!(read(&text), after);
     }
 
     #[test]
