@@ -978,8 +978,11 @@ impl Editor {
         // An element written again as another kind: the opened scenario's parameters for it go
         // (they are written afresh below), and the other scenarios keep those that still apply.
         let opened = scenario_id(root, scenario);
-        for id in replaced.iter().filter(|id| new.contains_key(*id)) {
-            keep_params_for_any_kind(root, opened.as_deref(), id);
+        for (id, e) in replaced
+            .iter()
+            .filter_map(|id| new.get(*id).map(|e| (*id, *e)))
+        {
+            keep_params_for_any_kind(root, opened.as_deref(), id, e.kind.reads_decisions());
         }
         for e in &added {
             self.add_node(root, after, e)?;
@@ -3970,21 +3973,23 @@ fn remove_params(root: &mut Element, id: &str) {
 /// removes its parameters in the opened scenario (`opened`), which are written afresh, and in
 /// every other scenario keeps only what applies to any kind of element: its properties, its
 /// place on the floor and a stop condition on it (which validation reports if the new kind
-/// cannot hold it). The rest (times, arrivals, resources, costs and StochCraft's settings for
-/// the old kind) went with the old kind, as a BPMN editor's replace keeps only the properties
-/// the new type allows.
-fn keep_params_for_any_kind(root: &mut Element, opened: Option<&str>, id: &str) {
-    use crate::bpsim::{PLACE, STOP_COUNT, STOP_WHEN_EMPTY};
+/// cannot hold it), and the decision table it uses if the new kind can use one (`decision`: a
+/// task made an exclusive gateway, say). The rest (times, arrivals, resources, costs and
+/// StochCraft's settings for the old kind) went with the old kind, as a BPMN editor's replace
+/// keeps only the properties the new type allows.
+fn keep_params_for_any_kind(root: &mut Element, opened: Option<&str>, id: &str, decision: bool) {
+    use crate::bpsim::{DECISION, PLACE, STOP_COUNT, STOP_WHEN_EMPTY};
     let is_ep = |e: &Element| {
         e.is_any(&NSS, "ElementParameters") && e.attr("elementRef").as_deref() == Some(id)
     };
     let applies = |p: &Element| {
         p.is_any(&NSS, "PropertyParameters")
             || (p.is_any(&NSS, "VendorExtension")
-                && matches!(
-                    p.attr("name").as_deref(),
-                    Some(PLACE | STOP_COUNT | STOP_WHEN_EMPTY)
-                ))
+                && match p.attr("name").as_deref() {
+                    Some(PLACE | STOP_COUNT | STOP_WHEN_EMPTY) => true,
+                    Some(DECISION) => decision,
+                    _ => false,
+                })
     };
     let Some(data) = data_mut(root) else {
         return;

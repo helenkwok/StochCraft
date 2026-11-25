@@ -2340,3 +2340,43 @@ fn a_replaced_element_keeps_what_still_applies_and_a_removed_one_nothing() {
         );
     }
 }
+
+/// A task made an exclusive gateway can still use a decision table, so another scenario that
+/// names one for it keeps it; the scenario opened writes its own afresh.
+#[test]
+fn a_replaced_element_keeps_another_scenario_s_decision_table_if_it_can_use_one() {
+    let original = text(&file("mm1.bpmn")).replace(
+        r#"<bpsim:SetupTime><bpsim:FloatingParameter value="0"/></bpsim:SetupTime>
+            </bpsim:TimeParameters>"#,
+        r#"<bpsim:SetupTime><bpsim:FloatingParameter value="0"/></bpsim:SetupTime>
+            </bpsim:TimeParameters>
+            <bpsim:VendorExtension name="stochcraft:decision" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1">
+              <stochcraft:decision file="sorting.dmn" decision="chute"/>
+            </bpsim:VendorExtension>"#,
+    );
+    assert!(
+        original.contains("stochcraft:decision"),
+        "the fixture changed"
+    );
+    let saved = edit_bytes("mm1.bpmn", original.as_bytes(), Some("two-clerks"), |m| {
+        element(m, "serve").kind = ElementKind::ExclusiveGateway {
+            default: None,
+            routing: stochcraft_model::Routing::Standard,
+        };
+    });
+    for scenario in ["base", "two-clerks"] {
+        let back = read_scenario(&saved, Some(scenario)).unwrap_or_else(|e| panic!("{e}"));
+        assert!(
+            matches!(
+                back.model.element(&id("serve")).map(|e| &e.kind),
+                Some(ElementKind::ExclusiveGateway { .. })
+            ),
+            "{scenario}"
+        );
+        assert!(
+            back.model.decisions.contains_key(&id("serve")),
+            "{scenario}: the table is lost:\n{}",
+            text(&saved)
+        );
+    }
+}

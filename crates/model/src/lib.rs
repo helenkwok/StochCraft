@@ -1169,6 +1169,20 @@ impl ElementKind {
         )
     }
 
+    /// Whether this kind of block can use a decision table ([`Model::decisions`]): a task, a
+    /// delay, or an exclusive gateway that does not send each entity to the shortest queue.
+    pub fn reads_decisions(&self) -> bool {
+        match self {
+            ElementKind::ExclusiveGateway { routing, .. } => {
+                !matches!(routing, Routing::ShortestQueue)
+            }
+            ElementKind::Server { .. }
+            | ElementKind::SharedTask { .. }
+            | ElementKind::Delay { .. } => true,
+            _ => false,
+        }
+    }
+
     /// A server's units in all: the most its timetable ever puts on shift (its `capacity`, or
     /// a shift's units if more). `None` for other elements.
     pub fn most_units(&self) -> Option<u32> {
@@ -3817,27 +3831,15 @@ impl Model {
                     },
                 )
             };
-            match &e.kind {
-                ElementKind::ExclusiveGateway {
-                    routing: Routing::ShortestQueue,
-                    ..
-                } => {
-                    out.push(unusable(
+            if !e.kind.reads_decisions() {
+                let reason = match &e.kind {
+                    ElementKind::ExclusiveGateway { .. } => {
                         "a gateway that sends each entity to the shortest queue reads no decision table."
-                            .to_owned(),
-                    ));
-                    continue;
-                }
-                ElementKind::ExclusiveGateway { .. }
-                | ElementKind::Server { .. }
-                | ElementKind::SharedTask { .. }
-                | ElementKind::Delay { .. } => {}
-                _ => {
-                    out.push(unusable(
-                        "only a task or an exclusive gateway can use a decision table.".to_owned(),
-                    ));
-                    continue;
-                }
+                    }
+                    _ => "only a task or an exclusive gateway can use a decision table.",
+                };
+                out.push(unusable(reason.to_owned()));
+                continue;
             }
             let (d, table) = match self.decision_table(u) {
                 Ok(x) => x,

@@ -951,3 +951,34 @@ fn an_undo_keeps_the_decisions_of_a_file_written_since() {
     assert_eq!(e.model().dmn["desk.dmn"].decisions.len(), 2);
     ok(&mut e, "file.save", json!({}));
 }
+
+/// A removed block takes its decision table use with it: a block added later with the same id
+/// does not pick up the table, and an undo of the removal gives it back.
+#[test]
+fn a_removed_block_s_table_is_not_taken_by_a_new_block_of_its_id() {
+    let dir = folder("reused-id");
+    let (bpmn, _) = write_sorter(&dir);
+    let mut e = Engine::new();
+    ok(
+        &mut e,
+        "file.open",
+        json!({ "path": bpmn.to_string_lossy() }),
+    );
+    let sort = ElementId::unchecked("sort");
+    let used = e.model().decisions.get(&sort).cloned();
+    assert!(used.is_some(), "opened with its table");
+    ok(&mut e, "block.remove", json!({ "id": "sort" }));
+    assert!(!e.model().decisions.contains_key(&sort));
+    ok(
+        &mut e,
+        "block.add",
+        json!({ "kind": "delay", "id": "sort" }),
+    );
+    assert!(
+        !e.model().decisions.contains_key(&sort),
+        "taken by the new block"
+    );
+    ok(&mut e, "undo", json!({}));
+    ok(&mut e, "undo", json!({}));
+    assert_eq!(e.model().decisions.get(&sort), used.as_ref());
+}

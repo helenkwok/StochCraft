@@ -1240,7 +1240,8 @@ fn clear_dangling_defaults(model: &Model, gone: &[ElementId], keep: Option<&Elem
 fn block_remove(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
     let p: Id = parse(p)?;
     let id = existing_element(e.model(), &p.id)?;
-    // Its estimate and starting contents go with it, and a stop condition watching it.
+    // Its estimate, starting contents and decision table use go with it, and a stop condition
+    // watching it: a block added later with the same id starts without them.
     let gone: Vec<ElementId> = e
         .model()
         .connections
@@ -1254,6 +1255,9 @@ fn block_remove(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
     }
     if e.model().starting.contains_key(&id) {
         ops.push(Op::SetStarting(id.clone(), None));
+    }
+    if e.model().decisions.contains_key(&id) {
+        ops.push(Op::SetDecisionUse(id.clone(), None));
     }
     let x = &e.model().experiment;
     if x.stop.as_ref().is_some_and(|s| s.element() == &id) {
