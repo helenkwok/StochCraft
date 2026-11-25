@@ -847,3 +847,37 @@ fn a_hard_link_to_a_table_file_that_keeps_the_old_contents_is_not_taken_as_saved
     assert_eq!(read(&dmn), dmn_bytes);
     assert!(e.is_dirty());
 }
+
+/// A model holding a table file without an id, saved (the file takes a generated id), then put
+/// back by an undo to the model as it was before, without the id: the next save takes the
+/// file's id again, and goes ahead.
+#[test]
+fn a_table_file_without_an_id_saves_again_after_an_undo() {
+    let dir = folder("undo-bare-root");
+    let path = dir.join("sorter.bpmn");
+    let bare = ok(
+        &mut Engine::with_model(sorter_with_bare_table()),
+        "model.get",
+        json!({}),
+    );
+    let mut e = Engine::new();
+    ok(&mut e, "model.set", json!({ "model": bare }));
+    ok(&mut e, "model.set", json!({ "model": bare }));
+    assert!(e.model().dmn["sorting.dmn"].id.is_empty());
+    ok(
+        &mut e,
+        "file.save",
+        json!({ "path": path.to_string_lossy() }),
+    );
+    let written = read(&dir.join("sorting.dmn"));
+    assert!(!e.model().dmn["sorting.dmn"].id.is_empty());
+    ok(&mut e, "undo", json!({}));
+    assert!(
+        e.model().dmn["sorting.dmn"].id.is_empty(),
+        "the undo gives back no id"
+    );
+    ok(&mut e, "file.save", json!({}));
+    // The table is as it was: its file is unchanged, byte for byte.
+    assert_eq!(read(&dir.join("sorting.dmn")), written);
+    assert!(!e.model().dmn["sorting.dmn"].id.is_empty());
+}

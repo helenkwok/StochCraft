@@ -2606,8 +2606,9 @@ fn file_save(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         };
         canon(from).is_some() && canon(from) == canon(&dir)
     });
-    // A new table file without an id or namespace is written with generated ones: the model
-    // takes them first, so it records what is written.
+    // A table file the model holds without an id or namespace (new, or come back without them
+    // by an undo) is written with those of the file or generated ones: the model takes them
+    // first, so it records what is written and what the save reads back is what it holds.
     e.dmn_as_written();
     let mut files: Vec<crate::dmn::Companion> = e
         .agent_files()

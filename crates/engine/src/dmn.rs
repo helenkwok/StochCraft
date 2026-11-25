@@ -521,23 +521,37 @@ impl Engine {
         self.model.dmn != self.saved.dmn || self.dmn_unsaved()
     }
 
-    /// Gives each table file the model holds that is not read from disk yet, and has no id or
-    /// namespace of its own, the ones [`stochcraft_io::dmn::write_dmn`] writes for it, in the model
-    /// and in what it was last saved as: so the tables recorded as written are those the file
-    /// reads back as, and a later save into the file finds it as recorded.
+    /// Gives each table file the model holds without an id or namespace of its own the ones it is
+    /// written with, in the model and in what it was last saved as, so the tables recorded as
+    /// written are those the file reads back as: a file read or written before keeps its own
+    /// (saving writes its root as it is), a new one takes those
+    /// [`stochcraft_io::dmn::write_dmn`] gives it. `file.save` does this every time, so a model
+    /// that comes back without them (an undo or redo, `model.set`) saves as well. An id or
+    /// namespace of the model's own is kept, and a file whose root is as the model holds it is
+    /// written byte for byte as before.
     pub(crate) fn dmn_as_written(&mut self) {
+        let records = &self.dmn;
+        let fill = |href: &str, d: &Definitions| match records.get(href) {
+            Some(f) => {
+                let mut out = d.clone();
+                if out.id.is_empty() {
+                    out.id.clone_from(&f.read.id);
+                }
+                if out.namespace.is_empty() {
+                    out.namespace.clone_from(&f.read.namespace);
+                }
+                out
+            }
+            None => stochcraft_io::dmn::as_written(d),
+        };
         let mut changed = false;
         for (href, d) in &mut self.model.dmn {
-            if !self.dmn.contains_key(href) {
-                let w = stochcraft_io::dmn::as_written(d);
-                changed |= w != *d;
-                *d = w;
-            }
+            let w = fill(href, d);
+            changed |= w != *d;
+            *d = w;
         }
         for (href, d) in &mut self.saved.dmn {
-            if !self.dmn.contains_key(href) {
-                *d = stochcraft_io::dmn::as_written(d);
-            }
+            *d = fill(href, d);
         }
         if changed {
             self.revision += 1;
